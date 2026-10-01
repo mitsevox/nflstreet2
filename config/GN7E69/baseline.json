@@ -1,0 +1,18 @@
+{
+  "sha1": "3561e946e9ff785b68692f87d2ba85d81fd2dcf4",
+  "size": 3171840,
+  "entry": "0x80003100",
+  "sda_base": "0x803F22A0",
+  "sda2_base": "0x804022A0",
+  "sections": {
+    ".init": "0x80003100",
+    ".text": "0x800034A0",
+    ".data2": "0x80289A20",
+    ".data3": "0x80289C80",
+    ".data4": "0x802C2A00",
+    ".bss": "0x803064C0",
+    ".data5": "0x803EA2A0",
+    ".sbss": "0x803EC5E0",
+    ".data6": "0x803ED6A0"
+  }
+}
