@@ -54,5 +54,10 @@ jobs:
           sudo chmod 600 /swap-analysis
           sudo mkswap /swap-analysis
           sudo swapon /swap-analysis
-          docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
-            "$BUILD_ENVIRONMENT" python3 tools/analyze.py --original /orig/main.dol
+          oom_before=$(awk '$1 == "oom_kill" { print $2 }' /proc/vmstat)
+          if ! docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
+            "$BUILD_ENVIRONMENT" python3 tools/analyze.py --original /orig/main.dol; then
+            oom_after=$(awk '$1 == "oom_kill" { print $2 }' /proc/vmstat)
+            echo "Out-of-memory kill events during analysis: $((oom_after - oom_before))"
+            exit 1
+          fi
