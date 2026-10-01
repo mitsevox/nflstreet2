@@ -4,7 +4,6 @@
 import argparse
 import hashlib
 import json
-import os
 import platform
 import re
 import shutil
@@ -20,10 +19,10 @@ ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "build" / "analysis"
 
 
-def run(command, log, environment=None):
+def run(command, log):
     with log.open("w") as output:
         result = subprocess.run(command, cwd=ROOT, stdout=output,
-                                stderr=subprocess.STDOUT, timeout=600, env=environment)
+                                stderr=subprocess.STDOUT, timeout=600)
     if result.returncode:
         raise RuntimeError(f"Command failed ({result.returncode}); see {log}")
 
@@ -73,11 +72,8 @@ def main():
         + "".join(f"  - source: .text:{r['start']}\n    end: .text:{r['end']}\n"
                   for r in plan["data_ranges"])
     )
-    environment = dict(os.environ)
-    if platform.system() == "Linux":
-        environment.update(MIMALLOC_PURGE_DELAY="0", MIMALLOC_ARENA_EAGER_COMMIT="0")
     run([str(dtk), "dol", "split", "-j", "1", str(config), str(split)],
-        BUILD / "analysis.log", environment)
+        BUILD / "analysis.log")
     rows = symbols.read_text().splitlines()
     functions = [r for r in rows if "type:function" in r]
     for region in plan["data_ranges"]:

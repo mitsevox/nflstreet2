@@ -47,12 +47,3 @@ jobs:
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/baseline.py --original /orig/main.dol \
               --sn-linker build/toolchain/ProDG/3.9.3/ngcld.exe --wrapper build/toolchain/wibo
-      - name: Verify analyzed relink against complete target
-        run: |
-          oom_before=$(awk '$1 == "oom_kill" { print $2 }' /proc/vmstat)
-          if ! docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
-            "$BUILD_ENVIRONMENT" python3 tools/analyze.py --original /orig/main.dol; then
-            oom_after=$(awk '$1 == "oom_kill" { print $2 }' /proc/vmstat)
-            echo "Out-of-memory kill events during analysis: $((oom_after - oom_before))"
-            exit 1
-          fi

@@ -14,6 +14,8 @@ The baseline uses `quick_analysis`; relocation processing and the complete execu
 
 ## Function analysis
 
+Discovery is a research task, separate from PR CI. The command below has reproduced the complete target on macOS ARM64, including from a fresh source directory. Full discovery currently exceeds available memory on hosted Linux runners; Linux analysis remains unresolved. Normal builds will consume a curated symbol and split map once its claims have passed review, rather than rediscovering boundaries on every PR.
+
 Run `python3 tools/analyze.py --original /path/to/main.dol` to generate a provisional inventory and verify its complete original-object relink with the pinned tools. Each run starts from the small seed set in `analysis.json`, rather than reusing a previous inferred inventory. Results and logs stay in `build/analysis/`.
 
 Three constant/string ranges in `.text` are annotated as data. Function inference and inferred relocations are disabled only within those ranges; every byte remains linked and compared. A separate loop routine is seeded so exception code branching to it does not acquire an oversized function extent. The [evidence table](evidence.tsv) records these annotations and unresolved thunk edges.
