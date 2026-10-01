@@ -49,5 +49,10 @@ jobs:
               --sn-linker build/toolchain/ProDG/3.9.3/ngcld.exe --wrapper build/toolchain/wibo
       - name: Verify analyzed relink against complete target
         run: |
+          free -m
+          sudo fallocate -l 8G /swap-analysis
+          sudo chmod 600 /swap-analysis
+          sudo mkswap /swap-analysis
+          sudo swapon /swap-analysis
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/analyze.py --original /orig/main.dol

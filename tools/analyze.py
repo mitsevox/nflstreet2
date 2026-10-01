@@ -72,7 +72,7 @@ def main():
         + "".join(f"  - source: .text:{r['start']}\n    end: .text:{r['end']}\n"
                   for r in plan["data_ranges"])
     )
-    run([str(dtk), "dol", "split", str(config), str(split)], BUILD / "analysis.log")
+    run([str(dtk), "dol", "split", "-j", "1", str(config), str(split)], BUILD / "analysis.log")
     rows = symbols.read_text().splitlines()
     functions = [r for r in rows if "type:function" in r]
     for region in plan["data_ranges"]:
