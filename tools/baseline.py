@@ -46,7 +46,11 @@ def get_tool(name, lock, system):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--original", type=Path, required=True)
+    parser.add_argument("--sn-linker", type=Path)
+    parser.add_argument("--wrapper", type=Path)
     args = parser.parse_args()
+    if bool(args.sn_linker) != bool(args.wrapper):
+        parser.error("--sn-linker and --wrapper must be supplied together")
     target = json.loads((ROOT / "config/GN7E69/baseline.json").read_text())
     original = args.original.resolve()
     if original.stat().st_size != target["size"] or digest(original, "sha1") != target["sha1"]:
@@ -78,7 +82,7 @@ def main():
     units = json.loads((split / "config.json").read_text())["units"]
     script = BUILD / "link.ld"
     script.write_text(
-        "SECTIONS {\n"
+        f"ENTRY(__start)\nSECTIONS {{\n__start = {target['entry']};\n"
         f"_SDA_BASE_ = {target['sda_base']};\n"
         f"_SDA2_BASE_ = {target['sda2_base']};\n"
         + "".join(f"{name} {address} : {{ *({name}) }}\n" for name, address in target["sections"].items())
@@ -86,8 +90,10 @@ def main():
     )
     elf = BUILD / "main.elf"
     output = BUILD / "main.dol"
+    command = ([str(args.wrapper.resolve()), str(args.sn_linker.resolve())]
+               if args.sn_linker else [str(linker), "-e", target["entry"]])
     subprocess.run(
-        [str(linker), "-T", str(script), "-e", target["entry"], "-o", str(elf)]
+        command + ["-T", str(script), "-o", str(elf)]
         + [unit["object"] for unit in units], check=True, cwd=ROOT,
     )
     subprocess.run([str(dtk), "elf2dol", str(elf), str(output)], check=True, cwd=ROOT)

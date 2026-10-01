@@ -26,6 +26,15 @@ python3 tools/baseline.py --original /path/to/main.dol
 
 This relinks and verifies the complete executable. Source compilation and matching-progress checks are still pending; see the [baseline scope](config/GN7E69/README.md).
 
+To prepare the pinned working compiler and verify its stages:
+
+```sh
+python3 tools/setup_compiler.py
+python3 -m unittest discover -s tests -v
+```
+
+Compiler verification does not establish flags for reconstructed source units.
+
 ## Contributing
 
 The project owner is **Lucas ([mitsevox](https://github.com/mitsevox))**, the sole merge authority.

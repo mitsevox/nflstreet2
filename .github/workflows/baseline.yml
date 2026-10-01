@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   baseline:
-    name: Original-object relink
+    name: Toolchain baseline
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
@@ -38,3 +38,12 @@ jobs:
           printf '%s' "$GH_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/baseline.py --original /orig/main.dol
+      - name: Verify compiler stages
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
+            "$BUILD_ENVIRONMENT" python3 -m unittest discover -s tests -v
+      - name: Verify SN linker against complete target
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
+            "$BUILD_ENVIRONMENT" python3 tools/baseline.py --original /orig/main.dol \
+              --sn-linker build/toolchain/ProDG/3.9.3/ngcld.exe --wrapper build/toolchain/wibo
