@@ -20,6 +20,7 @@ jobs:
     timeout-minutes: 20
     permissions:
       contents: read
+      packages: read
     env:
       BUILD_ENVIRONMENT: ghcr.io/mitsevox/nflstreet2-build@sha256:2b4967b77a5d74fb4575ec522ca0a60d8769605e7f5c9c162fb4e55959250aae
     steps:
@@ -32,9 +33,8 @@ jobs:
           persist-credentials: false
       - name: Verify complete original-object relink
         env:
-          GH_TOKEN: ${{ secrets.BUILD_ENVIRONMENT_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
-          test -n "$GH_TOKEN" || { echo "BUILD_ENVIRONMENT_TOKEN is required for baseline validation."; exit 1; }
           printf '%s' "$GH_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/baseline.py --original /orig/main.dol
