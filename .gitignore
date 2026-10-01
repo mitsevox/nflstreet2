@@ -1,0 +1,53 @@
+# Local inputs and the nested private repository are outside public Git.
+/GAME VERSIONS/
+/private/
+/reference/
+/orig/
+/build/
+/scratch/
+
+# Full audit exports and legacy output paths are excluded.
+/docs/debug-inventory.json
+/docs/debug-supplement.json
+/docs/disc-extraction-check.json
+
+# Original executables, debug databases, object files, and library archives.
+# Case-insensitive patterns cover names from all three console filesystems.
+*.[dD][oO][lL]
+*.[rR][eE][lL]
+*.[eE][lL][fF]
+*.[xX][bB][eE]
+*.[iI][rR][xX]
+*.[pP][dD][bB]
+*.[dD][bB][gG]
+*.[oO]
+*.[oO][bB][jJ]
+*.[aA]
+*.[lL][iI][bB]
+
+# Disc images, including compound names such as .nkit.iso and .xiso.iso.
+*.[iI][sS][oO]
+*.[gG][cC][mM]
+*.[cC][iI][sS][oO]
+*.[rR][vV][zZ]
+*.[wW][iI][aA]
+*.[wW][bB][fF][sS]
+*.[nN][fF][sS]
+*.[gG][cC][zZ]
+*.[tT][gG][cC]
+
+# Game asset containers and banners.
+*.[dD][aA][tT]
+*.[qQ][kK][lL]
+*.[bB][nN][rR]
+*.[iI][mM][gG]
+
+# Local filesystem metadata and Python caches.
+.DS_Store
+__pycache__/
+.mypy_cache/
+.cache/
+
+# Local IDE state. Shared .vscode configuration remains eligible for review.
+.idea/
+.vs/
