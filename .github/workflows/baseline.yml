@@ -31,6 +31,8 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
+      - name: Verify review clearance logic
+        run: node --test tests/review_gate.mjs
       - name: Verify complete original-object relink
         env:
           GH_TOKEN: ${{ github.token }}
