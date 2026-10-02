@@ -51,4 +51,7 @@ struct ModuleDependency {
 DECLARE_MODULE(AnmsCelebration);
 DECLARE_MODULE(Celebration);
 
+extern AnmsCelebration gAnmsCelebration;
+extern Celebration gCelebration;
+
 #endif
