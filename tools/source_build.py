@@ -464,8 +464,10 @@ def retained_layout(unit, compiler, wrapper):
     partial = native.with_suffix(".layout.o")
     partial.unlink(missing_ok=True)
     script = native.with_suffix(".layout.ld")
-    script.write_text("SECTIONS {\n_SDA_BASE_ = 0;\n_SDA2_BASE_ = 0;\n" +
-                      "\n".join(f"{name} : {{ *({name}) }}" for name in sorted(allowed)) + "\n}\n")
+    # A zero SDA anchor underflows SN's range check. These addresses are only for
+    # relocatable layout inspection; the final native-object link uses target bases.
+    script.write_text("SECTIONS {\n_SDA_BASE_ = 0x8000;\n_SDA2_BASE_ = 0x8000;\n" +
+                      "\n".join(f"{name} 0 : {{ *({name}) }}" for name in sorted(allowed)) + "\n}\n")
     before = sha256(native)
     run("SDK retained-layout link", [str(wrapper), str(compiler / "ngcld.exe"), "-r",
         "-T", str(script), "-strip-unused", "-keep", str(keep), "-o", str(partial), str(native)],

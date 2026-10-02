@@ -255,6 +255,14 @@
     "__CARDWritePage": {
       "address": "0x80253FD4",
       "evidence": "evidence.tsv retained CARD external __CARDWritePage: target callback and scheduler calls."
+    },
+    "ARStartDMA": {
+      "address": "0x80248220",
+      "evidence": "evidence.tsv ARAM queue external row: target call operand and independently inspected SDK callee role."
+    },
+    "ARRegisterDMACallback": {
+      "address": "0x802481A0",
+      "evidence": "evidence.tsv ARAM queue external row: target call operand and independently inspected SDK callee role."
     }
   },
   "units": [
@@ -585,6 +593,79 @@
           "placement": ".text",
           "start": "0x8024AAE4",
           "end": "0x8024AB8C"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ar/arq.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv ARAM queue/PAD rows: native source, target-retained code and complete static data; original file attribution provisional.",
+      "link_roots": {
+        "symbols": [
+          "__ARQServiceQueueLo",
+          "__ARQCallbackHack",
+          "__ARQInterruptServiceRoutine",
+          "ARQInit",
+          "ARQPostRequest",
+          "ARQRemoveRequest"
+        ],
+        "evidence": "evidence.tsv Nintendo SDK retention row; actual SN liveness and complete target output."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80249C78",
+          "end": "0x8024A0FC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDDA0",
+          "end": "0x802FDDE5"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED2D8",
+          "end": "0x803ED308"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC240",
+          "end": "0x803EC244"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/pad/Padclamp.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv ARAM queue/PAD rows: native source, target-retained code and complete static data; original file attribution provisional.",
+      "link_roots": {
+        "symbols": [
+          "PADClamp"
+        ],
+        "evidence": "evidence.tsv Nintendo SDK retention row; actual SN liveness and complete target output."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024648C",
+          "end": "0x802466D0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7258",
+          "end": "0x802B7262"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED718",
+          "end": "0x803ED738"
         }
       ]
     }
