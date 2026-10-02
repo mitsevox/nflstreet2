@@ -1,61 +1,54 @@
 #ifndef GAME_MODULE_H
 #define GAME_MODULE_H
 
-/* Game modules: classes with one static instance each, a dependency table and a link to
-   another module. Names are descriptive; no original names are recovered. */
+/* Game modules: classes with one static instance each, a dependency table and a link
+   table naming other modules. Names are descriptive; no original names are recovered. */
 
-/* Non-polymorphic 12-byte base provided by library code. */
-class LibraryNode {
+/* Abstract base: its constructor registers the object in a global table. */
+class ModuleNode {
 public:
-    LibraryNode();
-    ~LibraryNode();
+    ModuleNode();
+    virtual ~ModuleNode();
+    virtual void Virtual_80025F24() = 0;
+    virtual int Virtual_80025F28(void *pArg) = 0;
+    virtual void Virtual_80025F5C() = 0;
+    virtual void Virtual_80025F60() = 0;
+    virtual int Init() = 0;
+    virtual int Shutdown() = 0;
+    virtual struct ModuleDependency *GetDependencies() = 0;
+    virtual struct ModuleDependency *GetLinks() = 0;
+    virtual const char *GetName() = 0;
 
 private:
     int mUnknown0;
     int mUnknown4;
-    int mUnknown8;
+    unsigned char mUnknown8;
 };
 
-class Module : public LibraryNode {
+class Module : public ModuleNode {
 public:
     Module() {}
     virtual ~Module() {}
     virtual void Virtual_80025F24();
-    virtual void Virtual_80025F28();
+    virtual int Virtual_80025F28(void *pArg);
     virtual void Virtual_80025F5C();
     virtual void Virtual_80025F60();
-    virtual int Init() = 0;
-    virtual int Shutdown() = 0;
-    virtual void *GetDependencies() = 0;
-    virtual void *GetLink() = 0;
-    virtual const char *GetName() = 0;
 };
 
-/* One entry of a module's zero-terminated dependency table. */
+/* One entry of a zero-terminated table of objects. */
 struct ModuleDependency {
     ModuleDependency(void *pTarget) : mpTarget(pTarget) {}
     void *mpTarget;
 };
 
-struct ModuleLinkState {
-    ModuleLinkState() : mValue(0) {}
-    int mValue;
-};
-
-struct ModuleLink {
-    ModuleLink(Module *pModule) : mpModule(pModule) {}
-    Module *mpModule;
-    ModuleLinkState mState;
-};
-
-#define DECLARE_MODULE(Name)                    \
-    class Name : public Module {                \
-    public:                                     \
-        virtual int Init();                     \
-        virtual int Shutdown();                 \
-        virtual void *GetDependencies();        \
-        virtual void *GetLink();                \
-        virtual const char *GetName();          \
+#define DECLARE_MODULE(Name)                            \
+    class Name : public Module {                        \
+    public:                                             \
+        virtual int Init();                             \
+        virtual int Shutdown();                         \
+        virtual ModuleDependency *GetDependencies();    \
+        virtual ModuleDependency *GetLinks();           \
+        virtual const char *GetName();                  \
     }
 
 DECLARE_MODULE(AnmsCelebration);

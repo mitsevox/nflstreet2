@@ -55,7 +55,7 @@
         "-O2",
         "-fno-weak"
       ],
-      "evidence": "evidence.tsv compiler row game_cpp: ProDG 3.9.3 cc1plus -O2 -fno-weak reproduces every instruction of the Celebration unit 0x8008BB30-0x8008BCF0 and of the neighbouring module 0x8008B974-0x8008BB30; -O1, -O3, -Os, -fno-schedule-insns, -fno-schedule-insns2, -G0 and -fexceptions change the code, omitting -fno-weak moves the class functions into linkonce sections, and -fvtable-thunks changes the vtable size. -fno-rtti, -fno-exceptions and -fno-implement-inlines are not discriminated."
+      "evidence": "evidence.tsv compiler row game_cpp: ProDG 3.9.3 cc1plus -O2 -fno-weak reproduces every instruction of the module units 0x8008BB30-0x8008BCF0 and 0x8008B974-0x8008BB30. -O1, -O3, -Os, -fno-schedule-insns, -fno-schedule-insns2, -G0, -fexceptions and -frtti change the output; without -fno-weak the class functions and vtable move to linkonce sections, while the target keeps the destructor 0x8008BC68 inside the contiguous .text run and the vtable in rodata; -fvtable-thunks changes the vtable layout."
     }
   },
   "externals": {
@@ -301,31 +301,31 @@
     },
     "Virtual_80025F24__6Module": {
       "address": "0x80025F24",
-      "evidence": "evidence.tsv external row for 0x80025F24 (Virtual_80025F24__6Module); descriptive inferred name."
+      "evidence": "evidence.tsv external row for 0x80025F24 (Virtual_80025F24__6Module); descriptive name."
     },
-    "Virtual_80025F28__6Module": {
+    "Virtual_80025F28__6ModulePv": {
       "address": "0x80025F28",
-      "evidence": "evidence.tsv external row for 0x80025F28 (Virtual_80025F28__6Module); descriptive inferred name."
+      "evidence": "evidence.tsv external row for 0x80025F28 (Virtual_80025F28__6ModulePv); descriptive name."
     },
     "Virtual_80025F5C__6Module": {
       "address": "0x80025F5C",
-      "evidence": "evidence.tsv external row for 0x80025F5C (Virtual_80025F5C__6Module); descriptive inferred name."
+      "evidence": "evidence.tsv external row for 0x80025F5C (Virtual_80025F5C__6Module); descriptive name."
     },
     "Virtual_80025F60__6Module": {
       "address": "0x80025F60",
-      "evidence": "evidence.tsv external row for 0x80025F60 (Virtual_80025F60__6Module); descriptive inferred name."
+      "evidence": "evidence.tsv external row for 0x80025F60 (Virtual_80025F60__6Module); descriptive name."
     },
     "_vt.6Module": {
       "address": "0x80289C80",
-      "evidence": "evidence.tsv external row for 0x80289C80 (_vt.6Module); descriptive inferred name."
+      "evidence": "evidence.tsv external row for 0x80289C80 (_vt.6Module); descriptive name."
     },
-    "__11LibraryNode": {
+    "__10ModuleNode": {
       "address": "0x801CC700",
-      "evidence": "evidence.tsv external row for 0x801CC700 (__11LibraryNode); descriptive inferred name."
+      "evidence": "evidence.tsv external row for 0x801CC700 (__10ModuleNode); descriptive name."
     },
-    "_._11LibraryNode": {
+    "_._10ModuleNode": {
       "address": "0x801CC740",
-      "evidence": "evidence.tsv external row for 0x801CC740 (_._11LibraryNode); descriptive inferred name."
+      "evidence": "evidence.tsv external row for 0x801CC740 (_._10ModuleNode); descriptive name."
     }
   },
   "units": [
@@ -351,7 +351,7 @@
     {
       "source": "src/game/Celebration.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8008BB30-0x8008BCF0 (Celebration) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8008BB30-0x8008BCF0 (src/game/Celebration.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
