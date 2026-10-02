@@ -18,7 +18,7 @@ Uint32 UISFindRateFnc(UISInfoT *pInfo, UISControlInfoT *pControlInfo, Uint32 Rat
 }
 
 /* Loads (or replaces) a rate function that moves the value selected by animType
-   to targValue over MSDur milliseconds. */
+   to targValue over MSDur (in the time unit of pInfo->MSPerTick). */
 void UISLoadAdvRateFnc(UISInfoT *pInfo, UISScreenT *pScreen, UISControlInfoT *pControlInfo,
                        UISControlInfoT *pSubControlInfo, Uint32 RateFncID, Uint8 *pEndFnc,
                        Uint8 *pAcelFnc, Uint32 MSDur, Float32 targValue, Uint32 animType)
@@ -54,7 +54,7 @@ void UISLoadAdvRateFnc(UISInfoT *pInfo, UISScreenT *pScreen, UISControlInfoT *pC
         ((Float32)MSDur / (Float32)pInfo->MSPerTick);
 }
 
-/* Loads (or replaces) a rate function that runs pFnc every MSRate milliseconds. */
+/* Loads (or replaces) a rate function that runs pFnc at a period derived from MSRate. */
 void UISLoadRateFnc(UISInfoT *pInfo, UISScreenT *pScreen, UISControlInfoT *pControlInfo,
                     Uint32 RateFncID, Uint8 *pFnc, Uint32 MSRate)
 {

@@ -11,17 +11,17 @@ typedef struct UISControlInfo_t UISControlInfoT;
 typedef struct UISScreen_t {
     Uint8 unk_00[0x0C];
     Int32 bWaitingToBeUnloaded; /* 0x0C */
+    /* Remaining fields not yet established. */
 } UISScreenT;
 
 typedef struct UISAnimateData_t {
-    Uint32 iType;                     /* 0x00: UIS_ACTION_* value */
+    Uint32 iType;                     /* 0x00: selector passed to UISGetActionPtrValue */
     Float32 fEndValue;                /* 0x04 */
-    Float32 fStepValue;               /* 0x08: change per tick */
+    Float32 fStepValue;               /* 0x08: change per firing */
     Uint8 *pEndFnc;                   /* 0x0C */
     UISControlInfoT *pSubControlInfo; /* 0x10 */
 } UISAnimateDataT;
 
-/* A script routine run at a fixed rate on behalf of a control. */
 typedef struct UISRateFnc_t {
     Uint32 RateFncID;               /* 0x00 */
     Uint8 *pFnc;                    /* 0x04 */
@@ -49,7 +49,7 @@ enum {
     UISRATE_ACTIVE = 2
 };
 
-/* Called with a level, source file, line number and message. */
+/* Called with an integer (0 at all known call sites), source file, line number and message. */
 typedef void UISRuntimeErrorFncT(Int32, const char *, Int32, const char *);
 
 extern UISRuntimeErrorFncT *RuntimeErrorFnc;
