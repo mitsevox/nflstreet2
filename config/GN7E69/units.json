@@ -172,10 +172,6 @@
       "address": "0x8023931C",
       "evidence": "evidence.tsv AX external OSRegisterVersion; branch instruction destination and upstream role."
     },
-    "__AXAllocInit": {
-      "address": "0x8028677C",
-      "evidence": "evidence.tsv AX external __AXAllocInit; branch instruction destination and upstream role."
-    },
     "__AXVPBInit": {
       "address": "0x80288E2C",
       "evidence": "evidence.tsv AX external __AXVPBInit; branch instruction destination and upstream role."
@@ -195,10 +191,6 @@
     "__AXOutInit": {
       "address": "0x80287B54",
       "evidence": "evidence.tsv AX external __AXOutInit; branch instruction destination and upstream role."
-    },
-    "__AXAllocQuit": {
-      "address": "0x80286830",
-      "evidence": "evidence.tsv AX external __AXAllocQuit; branch instruction destination and upstream role."
     },
     "__AXVPBQuit": {
       "address": "0x8028902C",
@@ -263,6 +255,42 @@
     "ARRegisterDMACallback": {
       "address": "0x802481A0",
       "evidence": "evidence.tsv ARAM queue external row: target call operand and independently inspected SDK callee role."
+    },
+    "__AXSetPBDefault": {
+      "address": "0x80288DEC",
+      "evidence": "Target AXFreeVoice/AXAcquireVoice direct branch destinations, SDK default parameter-block behavior at callee."
+    },
+    "__DSP_curr_task": {
+      "address": "0x803ED508",
+      "evidence": "Target SDA-relative instructions and pinned SDK global layouts; original storage remains linked because native alignment not accepted."
+    },
+    "__DSP_first_task": {
+      "address": "0x803ED504",
+      "evidence": "Target SDA-relative instructions and pinned SDK global layouts; original storage remains linked because native alignment not accepted."
+    },
+    "__DSP_last_task": {
+      "address": "0x803ED500",
+      "evidence": "Target SDA-relative instructions and pinned SDK global layouts; original storage remains linked because native alignment not accepted."
+    },
+    "DSPSendMailToDSP": {
+      "address": "0x80285B20",
+      "evidence": "DSP task target branch destinations and SDK reference signatures."
+    },
+    "DSPCheckMailToDSP": {
+      "address": "0x80285AE8",
+      "evidence": "DSP task target branch destinations and SDK reference signatures."
+    },
+    "DSPCheckMailFromDSP": {
+      "address": "0x80285AF8",
+      "evidence": "DSP task target branch destinations and SDK reference signatures."
+    },
+    "DSPReadMailFromDSP": {
+      "address": "0x80285B08",
+      "evidence": "DSP task target branch destinations and SDK reference signatures."
+    },
+    "__DSP_debug_printf": {
+      "address": "0x80285D78",
+      "evidence": "DSP task target branch destinations and SDK reference signatures."
     }
   },
   "units": [
@@ -666,6 +694,59 @@
           "placement": ".data6",
           "start": "0x803ED718",
           "end": "0x803ED738"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ax/AXAlloc.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv AXAlloc.c unit, function, layout and data rows; CREDITS.md pinned donor provenance.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x802866F0",
+          "end": "0x80286BB8",
+          "placement": ".text"
+        },
+        {
+          "section": ".bss",
+          "start": "0x803BAB70",
+          "end": "0x803BAC70",
+          "placement": ".bss"
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED510",
+          "end": "0x803ED514",
+          "placement": ".sbss"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/dsp/dsp_task.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv dsp_task.c unit, function, layout and data rows; CREDITS.md pinned donor provenance.",
+      "link_roots": {
+        "symbols": [
+          "__DSP_exec_task",
+          "__DSP_boot_task",
+          "__DSP_insert_task",
+          "__DSP_remove_task"
+        ],
+        "evidence": "Target retained functions; native SN liveness removes unmatched handler and unused add-task."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802861EC",
+          "end": "0x8028664C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80302548",
+          "end": "0x80302683"
         }
       ]
     }
