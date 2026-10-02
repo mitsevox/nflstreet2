@@ -271,7 +271,8 @@ function leaves(items) {
 function mapItems() {
   const roots = sections.filter(section => section.kind === mapKind);
   const query = search.value.trim().toLocaleLowerCase();
-  if (query) return leaves(roots).filter(item => item.name.toLocaleLowerCase().includes(query));
+  if (query) return roots.flatMap(item => item.name.toLocaleLowerCase().includes(query)
+    ? [item] : leaves([item]).filter(leaf => leaf.name.toLocaleLowerCase().includes(query))); 
   return path.at(-1)?.children || roots;
 }
 search.addEventListener('input', () => {
@@ -295,7 +296,7 @@ function hideTooltip() {
   activeTile = null;
 }
 function showTooltip(block, item, x, y) {
-  showTooltipText(block, item.name + ' · ' + percent(item), x, y);
+  showTooltipText(block, (item.source && item.source !== item.name ? item.source + ' · ' : '') + item.name + ' · ' + percent(item), x, y);
 }
 function showTooltipText(block, text, x, y) {
   hideTooltip();
@@ -522,7 +523,12 @@ function renderFunctions(functions) {
 
 function validMeasure(m){return m&&Number.isSafeInteger(m.total)&&m.total>0&&Number.isSafeInteger(m.linked)&&m.linked>=0&&m.linked<=m.total&&Number.isSafeInteger(m.matched)&&m.matched>=0&&m.matched<=m.linked;}
 async function loadProgress(){try{const response=await fetch('./progress.json',{cache:'no-cache'});if(!response.ok)throw new Error('Progress unavailable');const data=await response.json();if(data.schema!==1||data.target!=='GN7E69'||data.basis!=='executable-sections'||data.baseline!=='verified'||!(/^[a-f0-9]{40}$/).test(data.revision)||!validMeasure(data.measures?.code)||!validMeasure(data.measures?.data)||!Array.isArray(data.sections)||!data.sections.length)throw new Error('Invalid progress');for(const item of data.sections){if(!['code','data'].includes(item.kind)||typeof item.name!=='string'||!/^0x[0-9A-F]{8}$/.test(item.address)||!validMeasure({total:item.size,linked:item.linked,matched:item.matched}))throw new Error('Invalid section');}for(const kind of ['code','data']){for(const field of ['total','linked','matched']){const sum=data.sections.filter(s=>s.kind===kind).reduce((n,s)=>n+s[field==='total'?'size':field],0);if(sum!==data.measures[kind][field])throw new Error('Inconsistent progress');}}
-if(!validMap(data.sections))throw new Error('Invalid map');renderFunctions(data.functions);sections=data.sections;document.querySelectorAll('.progress-element').forEach(element => {
+const files=data.files || data.sections;
+if(!validMap(data.sections)||!validMap(files))throw new Error('Invalid map');
+for(const kind of ['code','data']){for(const field of ['total','linked','matched']){
+  if(files.filter(item=>item.kind===kind).reduce((sum,item)=>sum+item[field==='total'?'size':field],0)!==data.measures[kind][field])throw new Error('Inconsistent file map');
+}}
+renderFunctions(data.functions);sections=files;document.querySelectorAll('.progress-element').forEach(element => {
   const kind = element.dataset.progress;
   const measures = data.measures[kind];
   const linked = measures.linked / measures.total * 100;
