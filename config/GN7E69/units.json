@@ -15,8 +15,15 @@
     }
   },
   "externals": {
-    "RuntimeErrorFnc": {"address": "0x803EBF30", "evidence": "evidence.tsv name/data rows for 0x803EBF30 (related name, target .sdata word)."},
-    "UISGetActionPtrValue": {"address": "0x8021C8B4", "evidence": "evidence.tsv function/name rows for 0x8021C8B4 (target extent, related name)."}
+    "UISGetActionPtrValue": {"address": "0x8021C8B4", "evidence": "evidence.tsv function/name rows for 0x8021C8B4 (target extent, related name)."},
+    "UISInternalLoadScreen": {"address": "0x80218AF0", "evidence": "evidence.tsv function/name rows for 0x80218AF0 (target extent, related name)."},
+    "UISInternalUnloadScreen": {"address": "0x802191F0", "evidence": "evidence.tsv function/name rows for 0x802191F0 (target extent, related name)."},
+    "UISProcessInternalEvents": {"address": "0x80219854", "evidence": "evidence.tsv function/name rows for 0x80219854 (target extent, related name)."},
+    "UISInternalActivateControl": {"address": "0x80219BA0", "evidence": "evidence.tsv function/name rows for 0x80219BA0 (target extent, related name)."},
+    "UISInternalActivateScreen": {"address": "0x80219E18", "evidence": "evidence.tsv function/name rows for 0x80219E18 (target extent, related name)."},
+    "UISFindScreen": {"address": "0x8021C5EC", "evidence": "evidence.tsv function/name rows for 0x8021C5EC (target extent, related name)."},
+    "UISMoveScreenDrawPosition": {"address": "0x8021D404", "evidence": "evidence.tsv function/name rows for 0x8021D404 (target extent, related name)."},
+    "UISDoHint": {"address": "0x8021D718", "evidence": "evidence.tsv function/name rows for 0x8021D718 (target extent, related name)."}
   },
   "units": [
     {
@@ -26,6 +33,23 @@
       "sections": [
         {"section": ".text", "placement": ".text", "start": "0x8021A068", "end": "0x8021A438"},
         {"section": ".rodata", "placement": ".data3", "start": "0x802B1DF0", "end": "0x802B1E78"}
+      ]
+    },
+    {
+      "source": "src/Common/UIStudio/UISError.c",
+      "profile": "uistudio",
+      "evidence": "evidence.tsv unit row 0x8021D880-0x8021D888 (provisional start edge) and data row 0x803EBF30-0x803EBF34.",
+      "sections": [
+        {"section": ".text", "placement": ".text", "start": "0x8021D880", "end": "0x8021D888"},
+        {"section": ".sdata", "placement": ".data5", "start": "0x803EBF30", "end": "0x803EBF34"}
+      ]
+    },
+    {
+      "source": "src/Common/UIStudio/UISActionProcess.c",
+      "profile": "uistudio",
+      "evidence": "evidence.tsv unit row 0x8021D888-0x8021DE9C (provisional end edge).",
+      "sections": [
+        {"section": ".text", "placement": ".text", "start": "0x8021D888", "end": "0x8021DE9C"}
       ]
     }
   ]

@@ -3,9 +3,15 @@
 
 /* EA scalar type names, as used by the related Madden NFL 2003 UI Studio build. */
 typedef unsigned char Uint8;
+typedef short Int16;
+typedef unsigned short Uint16;
 typedef int Int32;
 typedef unsigned int Uint32;
 typedef float Float32;
+typedef Uint8 Bool;
+
+#define FALSE 0
+#define TRUE 1
 
 #ifndef NULL
 #define NULL 0
