@@ -21,12 +21,9 @@ ranges. Original-object relinking earns no source progress. Code/data totals
 include the entire executable's loaded sections and non-overlapping BSS; only
 verified source ranges earn matched and complete byte credit.
 
-The treemap units are explicitly named **Executable sections** and marked
-`auto_generated`: they are placeholders, not recovered translation units.
-Unit counts describe these section placeholders; a placeholder is complete only
-when all of its bytes are source-linked. Function counts are omitted because the
-complete function inventory has not been established (protobuf consumers may
-show their default zero). Fuzzy progress is a conservative byte-weighted score
-using only fully matched bytes; no partial instruction similarity is claimed.
-Replace placeholders with evidenced object/function boundaries when available,
-while preserving the full executable denominator.
+Both maps display measured source units, SDK mappings, and bounded candidate
+unit records from `evidence.tsv`. Candidate names do not claim recovered source
+paths; their units remain incomplete and `auto_generated`. Ambiguous overlapping
+candidate ranges remain unmapped. Mapping never grants source progress or alters
+the executable denominator. The Baseline workflow checks both exports against
+current mapping before uploading either artifact, on PRs and every merge to `main`.
