@@ -310,5 +310,62 @@ class FunctionInventoryTests(ProgressBase):
         self.assertNotIn(str(self.root), json.dumps(data))
 
 
+class FileMapTests(ProgressBase):
+    write_source = SourceReportTests.write_source
+    save = SourceReportTests.save
+    write_inventory = FunctionInventoryTests.write_inventory
+    def test_file_map_groups_measured_functions_and_data(self):
+        self.write_inventory()
+        data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+        source = [item for item in data["files"] if item.get("source") == "src/unit.c"]
+        self.assertEqual([(item["kind"], item["size"]) for item in source], [("code", 8), ("data", 4)])
+        self.assertTrue(all(item["complete"] is False for item in source))
+        self.assertTrue(all(item["boundary"] == "provisional" for item in source))
+        self.assertEqual(source[0]["children"][0]["name"], "Example")
+        self.assertEqual(source[0]["children"][0]["source"], "src/unit.c")
+        unknown = next(item for item in data["files"] if item["name"] == "Unmapped / Code section 1")
+        self.assertEqual(unknown["size"], 8)
+        self.assertEqual(unknown["matched"], 0)
+        unknown_function = next(child for child in unknown["children"] if child.get("type") == "function")
+        self.assertEqual(unknown_function["name"], "fn_8000310C")
+        self.assertNotIn("source", unknown_function)
+        for kind in ("code", "data"):
+            for field, measure in (("size", "total"), ("linked", "linked"), ("matched", "matched")):
+                self.assertEqual(sum(item[field] for item in data["files"] if item["kind"] == kind),
+                                 data["measures"][kind][measure])
+        for item in data["files"]:
+            for field in ("size", "linked", "matched"):
+                self.assertEqual(sum(child[field] for child in item["children"]), item[field])
+
+    def test_crossing_candidates_are_partitioned_without_false_ownership(self):
+        self.write_inventory()
+        sections = [{"name": "Code", "kind": "code", "address": "0x80003100", "size": 16,
+                     "linked": 8, "matched": 8}]
+        functions = [{"name": "Candidate", "kind": "code", "address": "0x80003100", "size": 16,
+                      "linked": 8, "matched": 8}]
+        files = progress.file_map(sections, self.report_path, functions)
+        source = next(item for item in files if item.get("source"))
+        self.assertEqual(source["children"][0]["type"], "function-fragment")
+        self.assertEqual(source["children"][0]["size"], 8)
+        unknown = next(item for item in files if item.get("auto_generated"))
+        self.assertEqual([child["size"] for child in unknown["children"]], [4, 4])
+        self.assertTrue(all(child["matched"] == 0 for child in unknown["children"]))
+        self.assertEqual(sum(child["size"] for item in files for child in item["children"]), 16)
+
+    def test_disjoint_ranges_of_one_file_combine(self):
+        self.write_inventory()
+        unit = self.source_report["units"][0]
+        unit["sections"] = [dict(unit["sections"][0], start="0x80003100", end="0x80003104"),
+                            dict(unit["sections"][0], start="0x8000310C", end="0x80003110")]
+        self.save()
+        sections = [{"name": "Code", "kind": "code", "address": "0x80003100", "size": 16,
+                     "linked": 8, "matched": 8}]
+        files = progress.file_map(sections, self.report_path, [])
+        source = [item for item in files if item.get("source")]
+        self.assertEqual(len(source), 1)
+        self.assertEqual(source[0]["size"], 8)
+        self.assertEqual(len(source[0]["children"]), 2)
+
+
 if __name__ == "__main__":
     unittest.main()
