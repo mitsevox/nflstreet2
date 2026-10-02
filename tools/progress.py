@@ -2,6 +2,7 @@
 """Export public section-level progress from the verified target and the measured source build."""
 
 import argparse
+import csv
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -84,7 +85,106 @@ def source_ranges(target, source_report):
     return ranges, len(units)
 
 
-def report(binary, revision, source_report=None):
+def function_inventory(target, ranges, analysis_dir):
+    """Count candidates from a bound analysis and curated names, never address labels."""
+    if analysis_dir is None:
+        return {"total": None, "exact": None, "named": None, "basis": "unavailable"}, []
+    summary = json.loads((analysis_dir / "summary.json").read_text())
+    symbols = analysis_dir / "symbols.txt"
+    inputs = {path: digest(ROOT / path) for path in
+              ("tools/analyze.py", "tools/baseline-tools.json", "config/GN7E69/analysis.json")}
+    if summary.get("target_sha1") != target["sha1"] or summary.get("complete_relink") != "identical" \
+            or summary.get("inventory") != "provisional" or summary.get("inputs") != inputs \
+            or summary.get("symbols_sha256") != digest(symbols):
+        raise ValueError("Function inventory is stale or unverified")
+    candidates = {}
+    for line in symbols.read_text().splitlines():
+        if "type:function" not in line:
+            continue
+        match = re.search(r"= [^:]+:(0x[0-9A-Fa-f]+);.*type:function.*size:(0x[0-9A-Fa-f]+)", line)
+        if not match:
+            raise ValueError("Malformed function candidate")
+        start, size = (int(value, 16) for value in match.groups())
+        if start in candidates or size <= 0:
+            raise ValueError("Invalid function candidate")
+        candidates[start] = size
+    if len(candidates) != summary["candidate_counts"]["function"]:
+        raise ValueError("Function inventory count is inconsistent")
+    evidence_path = ROOT / "config/GN7E69/evidence.tsv"
+    records = []
+    if evidence_path.exists():
+        with evidence_path.open() as file:
+            records = list(csv.DictReader(file, delimiter="\t"))
+    names, extents = {}, {}
+    neutral = re.compile(r"(?:fn|lbl|data)_[0-9A-Fa-f]{8}$")
+    for row in records:
+        if row["kind"] not in ("name", "function") or row["start"] == "-":
+            continue
+        start = int(row["start"], 16)
+        if start not in candidates:
+            continue
+        if not neutral.fullmatch(row["subject"]):
+            if start in names and names[start] != row["subject"]:
+                raise ValueError("Conflicting function names")
+            names[start] = row["subject"]
+        if row["kind"] == "function" and row["start_boundary"] == row["end_boundary"] == "exact":
+            end = int(row["end"], 16)
+            if end <= start or (start in extents and extents[start] != end):
+                raise ValueError("Invalid or conflicting function extent")
+            extents[start] = end
+    ordered = sorted(extents.items())
+    if any(right[0] < left[1] for left, right in zip(ordered, ordered[1:])):
+        raise ValueError("Exact function extents overlap")
+    exact = {start: end for start, end in extents.items() if any(
+        kind == "code" and left <= start < end <= right for kind, left, right in ranges)}
+    ordered_candidates = sorted(candidates.items())
+    if any(right[0] < left[0] + left[1] for left, right in zip(ordered_candidates, ordered_candidates[1:])):
+        raise ValueError("Function candidates overlap")
+    functions = []
+    for start, size in ordered_candidates:
+        covered = sum(max(0, min(start + size, right) - max(start, left))
+                      for kind, left, right in ranges if kind == "code")
+        functions.append({"name": names.get(start, f"fn_{start:08X}"), "kind": "code",
+                          "address": f"0x{start:08X}", "size": size,
+                          "linked": covered, "matched": covered})
+    return {"total": len(candidates), "exact": len(exact), "named": len(names),
+            "basis": "provisional-analysis"}, functions
+
+
+def source_map(sections, source_report, functions):
+    """Expose measured source ownership; unclaimed bytes remain explicitly unmapped."""
+    units = json.loads(source_report.read_text())["units"] if source_report and source_report.exists() else []
+    for section in sections:
+        left = int(section["address"], 16)
+        right = left + section["size"]
+        if section["kind"] == "code":
+            children = [f for f in functions if left <= int(f["address"], 16)
+                        and int(f["address"], 16) + f["size"] <= right]
+            section["children"] = children + remainder(section, children)
+            continue
+        children = []
+        for unit in units:
+            for extent in unit["sections"]:
+                start, end = int(extent["start"], 16), int(extent["end"], 16)
+                if extent["kind"] != section["kind"] or not left <= start < end <= right:
+                    continue
+                item = {"name": unit["source"], "kind": section["kind"],
+                        "address": extent["start"], "size": end - start,
+                        "linked": end - start, "matched": end - start}
+                children.append(item)
+        section["children"] = children + remainder(section, children)
+
+
+def remainder(parent, children):
+    remaining = {field: parent[field] - sum(c[field] for c in children)
+                 for field in ("size", "linked", "matched")}
+    if not 0 <= remaining["matched"] <= remaining["linked"] <= remaining["size"]:
+        raise ValueError("Map children exceed measured parent bytes")
+    return [{"name": "Other bytes in " + parent["name"], "kind": parent["kind"], **remaining}] \
+        if remaining["size"] else []
+
+
+def report(binary, revision, source_report=None, analysis_dir=None):
     target = json.loads((ROOT / "config/GN7E69/baseline.json").read_text())
     if len(binary) != target["size"] or hashlib.sha1(binary).hexdigest() != target["sha1"]:
         raise ValueError("Progress requires the verified target executable")
@@ -142,13 +242,19 @@ def report(binary, revision, source_report=None):
     for kind in ("code", "data"):
         if measures[kind]["linked"] != sum(right - left for k, left, right in ranges if k == kind):
             raise ValueError("Measured source ranges fall outside the executable sections")
+    functions, function_items = function_inventory(target, ranges, analysis_dir)
+    source_map(sections, source_report, function_items)
+    mapped_functions = sum(1 for section in sections if section["kind"] == "code"
+                           for child in section["children"] if "address" in child)
+    if mapped_functions != len(function_items):
+        raise ValueError("Function candidates fall outside executable sections")
     return {"schema": 1, "revision": revision,
             "built_at": datetime.now(timezone.utc).isoformat(),
             "target": "GN7E69", "target_sha1": target["sha1"],
             "basis": "executable-sections", "baseline": "verified",
             "source": {"units": unit_count, "report": "measured" if source_report and
                        source_report.exists() else "absent"},
-            "measures": measures, "sections": sections}
+            "functions": functions, "measures": measures, "sections": sections}
 
 
 def main():
@@ -156,9 +262,10 @@ def main():
     parser.add_argument("--dol", type=Path, required=True)
     parser.add_argument("--revision", required=True)
     parser.add_argument("--source-report", type=Path, default=ROOT / "build/source/report.json")
+    parser.add_argument("--analysis-dir", type=Path)
     parser.add_argument("--output", type=Path, default=ROOT / "build/site")
     args = parser.parse_args()
-    data = report(args.dol.read_bytes(), args.revision, args.source_report)
+    data = report(args.dol.read_bytes(), args.revision, args.source_report, args.analysis_dir)
     args.output.mkdir(parents=True, exist_ok=True)
     for name in ("index.html", "style.css", "progress.js", "cover.jpg"):
         shutil.copyfile(ROOT / "web" / name, args.output / name)

@@ -220,5 +220,95 @@ class SourceReportTests(ProgressBase):
         self.assertEqual(progress.TRUSTED_TOOLS, source_build.TRUSTED_TOOLS)
 
 
+class FunctionInventoryTests(ProgressBase):
+    write_source = SourceReportTests.write_source
+    save = SourceReportTests.save
+    def write_inventory(self):
+        self.write_source()
+        for path in ("tools/analyze.py", "tools/baseline-tools.json", "config/GN7E69/analysis.json"):
+            (self.root / path).write_text("inventory input")
+        # Refresh the source report's tool hashes after changing shared inputs.
+        self.source_report["tools"] = {path: progress.digest(self.root / path)
+                                       if (self.root / path).is_file() else None
+                                       for path in progress.TRUSTED_TOOLS}
+        self.save()
+        self.analysis = self.root / "build/analysis"
+        self.analysis.mkdir(parents=True)
+        (self.analysis / "symbols.txt").write_text(
+            "fn_80003104 = .text:0x80003104; // type:function size:0x8\n"
+            "fn_8000310C = .text:0x8000310C; // type:function size:0x4\n")
+        summary = {"target_sha1": hashlib.sha1(self.binary).hexdigest(),
+                   "complete_relink": "identical", "inventory": "provisional",
+                   "candidate_counts": {"function": 2},
+                   "symbols_sha256": progress.digest(self.analysis / "symbols.txt"),
+                   "inputs": {path: progress.digest(self.root / path) for path in
+                              ("tools/analyze.py", "tools/baseline-tools.json", "config/GN7E69/analysis.json")}}
+        (self.analysis / "summary.json").write_text(json.dumps(summary))
+        (self.root / "config/GN7E69/evidence.tsv").write_text(
+            "kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
+            "function\t0x80003104\t0x8000310C\tfn_80003104\ttarget\texact\texact\tfixture\n"
+            "name\t0x80003104\t-\tExample\trelated\t-\t-\tfixture\n"
+            "name\t0x80003104\t-\tExample\trelated\t-\t-\tduplicate\n"
+            "function\t0x8000310C\t0x80003110\tfn_8000310C\tinferred\tprovisional\topen\tfixture\n"
+            "name\t0x80005008\t-\tDataName\trelated\t-\t-\tfixture\n")
+
+    def test_counts_require_measured_code_and_function_name_evidence(self):
+        self.write_inventory()
+        data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+        self.assertEqual(data["functions"], {"total": 2, "exact": 1, "named": 1,
+                                             "basis": "provisional-analysis"})
+        data = progress.report(self.binary, "a" * 40, self.report_path)
+        self.assertIsNone(data["functions"]["total"])
+
+    def test_stale_inventory_is_rejected(self):
+        self.write_inventory()
+        with (self.analysis / "symbols.txt").open("a") as file:
+            file.write("modified")
+        with self.assertRaisesRegex(ValueError, "stale or unverified"):
+            progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+
+    def test_overlapping_evidence_is_rejected_before_counting(self):
+        self.write_inventory()
+        path = self.root / "config/GN7E69/evidence.tsv"
+        with path.open("a") as file:
+            file.write("function\t0x8000310C\t0x80003110\tfn_8000310C\ttarget\texact\texact\tfixture\n")
+        path.write_text(path.read_text().replace("0x80003104\t0x8000310C", "0x80003104\t0x80003110"))
+        with self.assertRaisesRegex(ValueError, "overlap"):
+            progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+
+    def test_overlapping_candidates_are_rejected(self):
+        self.write_inventory()
+        symbols = self.analysis / "symbols.txt"
+        symbols.write_text(symbols.read_text().replace("size:0x8", "size:0xC"))
+        summary = self.analysis / "summary.json"
+        data = json.loads(summary.read_text())
+        data["symbols_sha256"] = progress.digest(symbols)
+        summary.write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError, "candidates overlap"):
+            progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+
+    def test_code_section_opens_matched_and_unmatched_functions_directly(self):
+        self.write_inventory()
+        data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+        functions = [item for item in data["sections"][0]["children"] if "address" in item]
+        self.assertEqual([(item["name"], item["matched"]) for item in functions],
+                         [("Example", 8), ("fn_8000310C", 0)])
+        self.assertTrue(all("children" not in item for item in functions))
+
+    def test_map_children_preserve_all_byte_counts(self):
+        self.write_inventory()
+        data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+        def check(items):
+            for item in items:
+                if "children" in item:
+                    for field in ("size", "linked", "matched"):
+                        self.assertEqual(sum(child[field] for child in item["children"]), item[field])
+                    check(item["children"])
+        check(data["sections"])
+        function = data["sections"][0]["children"][0]
+        self.assertEqual(function["name"], "Example")
+        self.assertNotIn(str(self.root), json.dumps(data))
+
+
 if __name__ == "__main__":
     unittest.main()
