@@ -12,6 +12,71 @@ const tooltip = document.querySelector('#map-tooltip');
 const back = document.querySelector('#map-back');
 const search = document.querySelector('#map-search');
 const kindPicker = document.querySelector('#map-kind');
+const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+const countAnimations = new WeakMap();
+let mapAnimation = null;
+let lineOverlay = null;
+function countUp(element, value, decimals = 0, suffix = '') {
+  const previous = countAnimations.get(element);
+  if (previous) cancelAnimationFrame(previous);
+  const format = number => decimals ? number.toFixed(decimals) + suffix : Math.round(number).toLocaleString() + suffix;
+  if (motionPreference.matches) {
+    element.textContent = format(value);
+    return;
+  }
+  const start = performance.now();
+  const step = now => {
+    const t = motionPreference.matches ? 1 : Math.min((now - start) / 780, 1);
+    element.textContent = format(value * (1 - Math.pow(1 - t, 3)));
+    if (t < 1) countAnimations.set(element, requestAnimationFrame(step));
+    else countAnimations.delete(element);
+  };
+  element.textContent = format(0);
+  countAnimations.set(element, requestAnimationFrame(step));
+}
+function fillTo(element, percent) {
+  if (motionPreference.matches) element.style.width = percent + '%';
+  else requestAnimationFrame(() => requestAnimationFrame(() => { element.style.width = percent + '%'; }));
+}
+function clearMapMotion() {
+  mapAnimation?.cancel();
+  mapAnimation = null;
+  lineOverlay?.remove();
+  lineOverlay = null;
+}
+motionPreference.addEventListener('change', () => {
+  if (motionPreference.matches) clearMapMotion();
+});
+function animateMap(layout, direction, origin) {
+  if (!direction || motionPreference.matches || !layout.length) return;
+  // One surface fade and at most 48 decorative paths, even for a 14,000-function map.
+  mapAnimation = canvas.animate([{opacity: 0.6}, {opacity: 1}], {
+    duration: direction === 'search' ? 180 : 360, easing: 'cubic-bezier(.22,1,.36,1)'
+  });
+  if (direction === 'search') return;
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.classList.add('map-lines');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('viewBox', `0 0 ${canvas.clientWidth} ${canvas.clientHeight}`);
+  svg.setAttribute('preserveAspectRatio', 'none');
+  svg.style.transformOrigin = origin || '50% 50%';
+  svg.style.setProperty('--line-scale', direction === 'back' ? '0.975' : '1.025');
+  for (const [index, item] of layout.filter(item => item.w >= 3 && item.h >= 3).slice(0, 48).entries()) {
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    line.setAttribute('d', `M${item.x},${item.y}h${item.w}v${item.h}h${-item.w}Z`);
+    line.setAttribute('pathLength', '1');
+    line.style.animationDelay = Math.min(index * 7, 180) + 'ms';
+    svg.append(line);
+  }
+  lineOverlay = svg;
+  canvas.parentElement.append(svg);
+  svg.addEventListener('animationend', event => {
+    if (event.target === svg) {
+      svg.remove();
+      if (lineOverlay === svg) lineOverlay = null;
+    }
+  });
+}
 const path = [];
 let mapKind = 'code';
 function leaves(items) {
@@ -25,7 +90,7 @@ function mapItems() {
 }
 search.addEventListener('input', () => {
   path.length = 0;
-  render();
+  render('search');
 });
 kindPicker.querySelectorAll('button').forEach(button => {
   button.addEventListener('click', () => {
@@ -33,7 +98,7 @@ kindPicker.querySelectorAll('button').forEach(button => {
     kindPicker.dataset.selected = mapKind;
     kindPicker.querySelectorAll('button').forEach(option => option.setAttribute('aria-pressed', option === button));
     path.length = 0;
-    render();
+    render('switch');
   });
 });
 let activeTile = null;
@@ -56,8 +121,9 @@ function showTooltipText(block, text, x, y) {
   tooltip.style.left = Math.max(8, Math.min(x + gap, window.innerWidth - tooltip.offsetWidth - 8)) + 'px';
   tooltip.style.top = Math.max(8, Math.min(y + gap, window.innerHeight - tooltip.offsetHeight - 8)) + 'px';
 }
-function render() {
+function render(direction = null, origin = null) {
   if (!sections.length) return;
+  clearMapMotion();
   const focusedName = canvas.contains(document.activeElement) ? document.activeElement.dataset.name : null;
   hideTooltip();
   const current = path.at(-1);
@@ -97,7 +163,7 @@ function render() {
       hideTooltip();
       if (item.children?.length) {
         path.push(item);
-        render();
+        render('enter', `${item.x + item.w / 2}px ${item.y + item.h / 2}px`);
         back.focus();
       } else {
         const rect = block.getBoundingClientRect();
@@ -108,10 +174,11 @@ function render() {
     canvas.append(block);
     if (item.name === focusedName) block.focus();
   }
+  animateMap(layout, direction, origin);
 }
 back.addEventListener('click', () => {
   const previous = path.pop();
-  render();
+  render('back');
   const tile = [...canvas.children].find(block => block.dataset.name === previous?.name);
   tile?.focus();
 });
@@ -141,11 +208,13 @@ function renderFunctions(functions) {
   for (const field of ['exact', 'named']) {
     const stat = document.querySelector('[data-function="' + field + '"]');
     const value = available ? functions[field] / functions.total * 100 : 0;
-    stat.querySelector('strong').textContent = available ? functions[field].toLocaleString() : '—';
+    if (available) countUp(stat.querySelector('strong'), functions[field]);
+    else stat.querySelector('strong').textContent = '—';
     stat.querySelector('.function-total span').textContent = available ? functions.total.toLocaleString() : '—';
-    stat.querySelector('.function-percent').textContent = available ? value.toFixed(2) + '%' : '—';
+    if (available) countUp(stat.querySelector('.function-percent'), value, 2, '%');
+    else stat.querySelector('.function-percent').textContent = '—';
     const track = stat.querySelector('.function-track');
-    track.firstElementChild.style.width = value + '%';
+    fillTo(track.firstElementChild, value);
     if (available) {
       track.setAttribute('aria-valuenow', value);
       track.removeAttribute('aria-valuetext');
@@ -165,11 +234,11 @@ if(!validMap(data.sections))throw new Error('Invalid map');renderFunctions(data.
   const matched = measures.matched / measures.total * 100;
   const track = element.querySelector('.track');
   const description = `${kind === 'code' ? 'Code' : 'Data'} · Linked ${linked.toFixed(2)}% · Matched ${matched.toFixed(2)}%`;
-  element.querySelector('.progress-value').textContent = matched.toFixed(2) + '%';
+  countUp(element.querySelector('.progress-value'), matched, 2, '%');
   track.setAttribute('aria-valuenow', matched);
   track.setAttribute('aria-valuetext', `Linked ${linked.toFixed(2)}%, matched ${matched.toFixed(2)}%`);
-  track.querySelector('.progress-linked').style.width = linked + '%';
-  track.querySelector('.progress-matched').style.width = matched + '%';
+  fillTo(track.querySelector('.progress-linked'), linked);
+  fillTo(track.querySelector('.progress-matched'), matched);
   element.addEventListener('pointerenter', event => {
     if (event.pointerType !== 'touch') showTooltipText(track, description, event.clientX, event.clientY);
   });
@@ -187,4 +256,4 @@ if(!validMap(data.sections))throw new Error('Invalid map');renderFunctions(data.
     showTooltipText(track, description, rect.left, rect.bottom);
   });
 });const link=document.querySelector('#build-link');link.href='https://github.com/mitsevox/nflstreet2/commit/'+data.revision;link.textContent='Baseline verified · '+data.revision.slice(0,7);link.title='Built '+data.built_at;render();}catch(error){renderFunctions(null);document.querySelector('#build-link').textContent='Progress unavailable';canvas.textContent='Progress unavailable';document.querySelectorAll('.track').forEach(track=>track.setAttribute('aria-valuetext','Unavailable'));}}
-new ResizeObserver(render).observe(canvas);loadProgress();
+new ResizeObserver(() => render()).observe(canvas);loadProgress();
