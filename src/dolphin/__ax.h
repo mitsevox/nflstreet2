@@ -7,6 +7,14 @@
 extern "C" {
 #endif
 
+AXVPB* __AXGetStackHead(u32 priority);
+void __AXServiceCallbackStack(void);
+void __AXPushFreeStack(AXVPB* p);
+void __AXPushCallbackStack(AXVPB* p);
+AXVPB* __AXPopCallbackStack(void);
+void __AXRemoveFromStack(AXVPB* p);
+void __AXSetPBDefault(AXVPB* p);
+
 void __AXAllocInit(void);
 void __AXAllocQuit(void);
 void __AXVPBInit(void);

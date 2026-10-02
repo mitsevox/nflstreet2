@@ -14,6 +14,9 @@ The Nintendo SDK reconstruction is reused from [MVP 2005](https://github.com/mit
 | `src/dolphin/__card.h` | re4 `src/lib/__card.h` |
 | `src/dolphin/ax/AX.c` | re4 `src/lib/AX.c`; release version string restored to target April 2003 build |
 | `include/dolphin/ax.h`, `src/dolphin/__ax.h` | Used declarations from re4 AX public and internal headers |
+| `src/dolphin/ax/AXAlloc.c`, `include/dolphin/ax/AXVPB.h` | [bfbbdecomp/bfbb](https://github.com/bfbbdecomp/bfbb/tree/8fb1c232addcacf44932c10c4cede41b43f98f40/src/dolphin); source and shared parameter-block structures; redundant pointer conversions omitted |
+| `src/dolphin/dsp/dsp_task.c`, `src/dolphin/__dsp.h` | Same pinned BFBB revision; four retained task helpers and diagnostic data; interrupt handler and global storage remain unreconstructed |
+| `src/dolphin/os/OSSemaphore.c` | [doldecomp/dolsdk2004](https://github.com/doldecomp/dolsdk2004/blob/2328b4164b1a98422a2255d83ce9a5a7548990cc/src/os/OSSemaphore.c); existing shared semaphore/thread-queue declarations; umbrella include narrowed and redundant wait-loop self-assignment omitted |
 | `src/dolphin/os/OSSync.c` | re4 `src/lib/OSSync.c` |
 | `include/dolphin/`, `include/libc/`, `include/cmath.h` | MVP's SDK header dependency closure, credited to re4/dolsdk2004 |
 | `src/dolphin/__os.h` | The used declaration from re4 `src/lib/__os.h` |
@@ -25,3 +28,5 @@ These are public reverse-engineered SDK reconstructions. Their Nintendo symbol n
 Validation covers the imported release code and used declarations, not every declaration or debug configuration in the reference headers. See `config/GN7E69/evidence.tsv` for target addresses, ownership and compiler evidence.
 
 `CARDRdwr.c` restores the target’s fixed 128-byte write pages instead of the later reference’s variable page-size behavior. The earlier source form is corroborated by [doldecomp/dolsdk2001](https://github.com/doldecomp/dolsdk2001/blob/eb1234c45e6df75757c652c835507ca89674f9a8/src/card/CARDRdwr.c), revision `eb1234c45e6df75757c652c835507ca89674f9a8`. Compiler objects remain unchanged; SN linker retention removes unused functions as part of linking.
+
+AXAlloc validation establishes the accessed fields and complete native allocated sections. Other AXVPB/AXPB fields remain reference declarations. DSP task timing fields and volatile qualifiers are reference-derived; retained code establishes the accessed offsets, not every declaration. The unused handler local is omitted; the handler and original DSP global storage receive no source progress. Related SDK file attribution remains provisional.
