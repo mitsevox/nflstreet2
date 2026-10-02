@@ -53,6 +53,12 @@ jobs:
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/source_build.py --original /orig/main.dol
+      - name: Provide memory headroom for full inventory analysis
+        run: |
+          sudo fallocate -l 8G /swap-inventory
+          sudo chmod 600 /swap-inventory
+          sudo mkswap /swap-inventory
+          sudo swapon /swap-inventory
       - name: Verify provisional function inventory
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
