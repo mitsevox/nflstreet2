@@ -1,9 +1,6 @@
 #ifndef GAME_MODULE_H
 #define GAME_MODULE_H
 
-/* Game modules: classes with one static instance each, a dependency table and a link
-   table naming other modules. Names are descriptive; no original names are recovered. */
-
 /* Abstract base: its constructor registers the object in a global table. */
 class ModuleNode {
 public:
@@ -35,7 +32,7 @@ public:
     virtual void Virtual_80025F60();
 };
 
-/* One entry of a zero-terminated table of objects. */
+/* A module table entry holding a target pointer. */
 struct ModuleDependency {
     ModuleDependency(void *pTarget) : mpTarget(pTarget) {}
     void *mpTarget;
