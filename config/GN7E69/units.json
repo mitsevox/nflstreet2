@@ -501,6 +501,92 @@
           "end": "0x80257CF4"
         }
       ]
+    },
+    {
+      "source": "src/dolphin/dvd/dvdqueue.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv SDK DVD/matrix unit rows: reference source order, complete retained code/data and target references; file ownership provisional.",
+      "link_roots": {
+        "symbols": [
+          "__DVDClearWaitingQueue",
+          "__DVDPushWaitingQueue",
+          "__DVDPopWaitingQueue",
+          "__DVDCheckWaitingQueue",
+          "__DVDDequeueWaitingQueue"
+        ],
+        "evidence": "evidence.tsv SDK linker retention row; target-used functions and their data retained through actual SN linker."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80241B90",
+          "end": "0x80241D88"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A55D8",
+          "end": "0x803A55F8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FD278",
+          "end": "0x802FD3DB"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC1A0",
+          "end": "0x803EC1D6"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/dvd/dvderror.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv SDK DVD/matrix unit rows: reference source order, complete retained code/data and target references; file ownership provisional.",
+      "link_roots": {
+        "symbols": [
+          "__DVDStoreErrorCode"
+        ],
+        "evidence": "evidence.tsv SDK linker retention row; target-used functions and their data retained through actual SN linker."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80241D88",
+          "end": "0x80241F20"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FD3E0",
+          "end": "0x802FD428"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/mtx/mtxvec.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv SDK DVD/matrix unit rows: reference source order, complete retained code/data and target references; file ownership provisional.",
+      "link_roots": {
+        "symbols": [
+          "PSMTXMultVec",
+          "PSMTXMultVecSR"
+        ],
+        "evidence": "evidence.tsv SDK linker retention row; target-used functions and their data retained through actual SN linker."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024AAE4",
+          "end": "0x8024AB8C"
+        }
+      ]
     }
   ]
 }
