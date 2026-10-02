@@ -52,7 +52,8 @@ static Bool _UISCanDoUnloadAction(Uint16 GroupID, Uint16 ScreenID, UISInfoT *pIn
         Action = (pLocalThreadInfo--)->iValue;
         ActionGroupID = (pLocalThreadInfo--)->iValue;
         ActionScreenID = (pLocalThreadInfo--)->iValue;
-        if (Action > UISThreadAction_Unload && ActionGroupID == GroupID
+        if (Action != UISThreadAction_Load && Action != UISThreadAction_Unload
+            && ActionGroupID == GroupID
             && ActionScreenID == ScreenID) {
             return FALSE;
         }
