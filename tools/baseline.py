@@ -90,13 +90,19 @@ def main():
     )
     elf = BUILD / "main.elf"
     output = BUILD / "main.dol"
+    elf.unlink(missing_ok=True)
+    output.unlink(missing_ok=True)
     command = ([str(args.wrapper.resolve()), str(args.sn_linker.resolve())]
                if args.sn_linker else [str(linker), "-e", target["entry"]])
     subprocess.run(
         command + ["-T", str(script), "-o", str(elf)]
         + [unit["object"] for unit in units], check=True, cwd=ROOT,
     )
+    if not elf.is_file() or not elf.stat().st_size:
+        raise RuntimeError("Linker did not produce a fresh ELF")
     subprocess.run([str(dtk), "elf2dol", str(elf), str(output)], check=True, cwd=ROOT)
+    if not output.is_file() or not output.stat().st_size:
+        raise RuntimeError("Converter did not produce a fresh DOL")
     if output.read_bytes() != original.read_bytes() or digest(output, "sha1") != target["sha1"]:
         raise RuntimeError("Relinked executable differs from the complete target")
     print(f"Baseline verified: {target['size']} bytes, SHA-1 {target['sha1']}")

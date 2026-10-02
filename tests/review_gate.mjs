@@ -62,3 +62,14 @@ test('justified accuracy N/A record is allowed for owner evaluation', async () =
 test('foreign contribution is never given clearance', async () => {
   assert.equal(await check({ mutate: ({ pr }) => { pr.head.repo.full_name = 'other/nflstreet2'; } }), undefined);
 });
+for (const [name, mutate] of [
+  ['later hostile FIX cannot coexist with SHIP', ({ records }) => { records[2].body += '\nHostile: FIX - unresolved defect'; }],
+  ['historical SHA cannot substitute for declared revision', ({ records }) => { records[1].body = `Revision: ${'b'.repeat(40)}\nAccuracy: PASS\nPrevious revision: ${sha}`; }],
+  ['unexplained N/A fails', ({ records }) => { records[1].body = `Revision: ${sha}\nAccuracy: N/A`; }],
+  ['blank N/A explanation fails', ({ records }) => { records[1].body = `Revision: ${sha}\nAccuracy: N/A -   `; }],
+  ['quoted example cannot supply review headers', ({ records }) => { records[2].body = 'Example only:\n```text\n' + records[2].body + '\n```'; }],
+  ['duplicate owner revision invalidates clearance', ({ clearance }) => { clearance.body += `\nRevision: ${'b'.repeat(40)}`; }],
+  ['conflicting accuracy verdict invalidates clearance', ({ records }) => { records[1].body += '\nAccuracy: FAIL'; }],
+]) {
+  test(name, async () => assert.equal(await check({ mutate }), 'pending'));
+}

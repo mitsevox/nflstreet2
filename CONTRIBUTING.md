@@ -90,7 +90,7 @@ After fixes, the same reviewer rechecks previous findings and affected code. New
 
 ## Review records and owner clearance
 
-Post each pass as a separate PR discussion comment. Include reviewer identity, the full reviewed commit SHA, scope, evidence, findings, and recheck results. The accuracy record contains a line `Accuracy: PASS`, or `Accuracy: N/A` with a scope-based explanation. The hostile record contains the checklist results and a final line `Hostile: SHIP`, `Hostile: FIX`, `Hostile: REDO`, or `Hostile: BLOCKED`. Link any longer review evidence from that record. Do not write a successful record before the review happens.
+Post each pass as a separate PR discussion comment. Start with `Revision: FULL_COMMIT_SHA`, followed immediately by `Accuracy: PASS` or `Accuracy: N/A - scope-based explanation` for accuracy; use `Hostile: SHIP`, `Hostile: FIX`, `Hostile: REDO`, or `Hostile: BLOCKED` for hostile review. Each header field occurs once, outside quotes or code fences. Then include reviewer identity, scope, evidence, findings, checklist results where applicable, and recheck results. Link any longer review evidence from that record. Do not write a successful record before the review happens.
 
 After checking reviewer independence, coverage, and resolution of findings, only the owner posts clearance in this form:
 
