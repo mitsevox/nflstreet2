@@ -23,3 +23,7 @@ Three constant/string ranges in `.text` are annotated as data. Function inferenc
 For the analyzed relink, ngcld requires small-data output section names. Absolute references `lbl_803ED681` and the toolkit's `_stack_end` resolve to `0x803ED681`, the target value loaded at `0x8000315C`–`0x80003160`; this is not a recovered stack-symbol name. The script does not substitute a generated SDK stack formula.
 
 An identical analyzed relink validates the mechanics, not the inventory's names, total function count, source units, or reconstructed source. Toolkit signatures and assembly boundary guesses still require review. In particular, the twelve branch/return pairs at `0x801AC9A0`–`0x801AC9FC` retain unresolved ownership of their unreachable returns; no source split is made there.
+
+## Public progress
+
+Successful builds of `main` publish the progress page. Until reviewed file/function mapping and source builds exist, its map represents executable sections, not original source units. Code totals use executable section sizes; data totals include loaded data and uninitialized memory, with overlapping loaded ranges excluded from BSS. Linked and matched measure recovered source-object bytes, so the original-object baseline contributes zero to both. The exporter stops if source files appear without a measured source-build report; it never carries the initial zeros forward silently.
