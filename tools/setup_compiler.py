@@ -28,21 +28,37 @@ def fetch(spec, path):
     temporary.replace(path)
 
 
-def setup():
-    lock = json.loads((ROOT / "tools/compiler-tools.json").read_text())
-    archive = DESTINATION / "compilers.zip"
-    fetch(lock["compilers"], archive)
-    directory = DESTINATION / "ProDG" / lock["compiler_version"]
-    prefix = f"ProDG/{lock['compiler_version']}/"
+def extract(archive, version):
+    directory = DESTINATION / version
+    prefix = version + "/"
     with zipfile.ZipFile(archive) as package:
-        for name in package.namelist():
-            if not name.startswith(prefix) or name.endswith("/"):
-                continue
+        members = [name for name in package.namelist() if name.startswith(prefix) and not name.endswith("/")]
+        if not members:
+            raise RuntimeError(f"Pinned archive does not contain compiler {version}")
+        for name in members:
             output = directory / name[len(prefix):]
             if not output.resolve().is_relative_to(directory.resolve()):
                 raise RuntimeError("Invalid compiler archive path")
             output.parent.mkdir(parents=True, exist_ok=True)
             output.write_bytes(package.read(name))
+    return directory
+
+
+def setup_sdk():
+    lock = json.loads((ROOT / "tools/compiler-tools.json").read_text())
+    version = lock.get("sdk_compiler_version")
+    if version != "GC/1.2.5n":
+        raise RuntimeError("Unsupported pinned SDK compiler")
+    archive = DESTINATION / "compilers.zip"
+    fetch(lock["compilers"], archive)
+    return extract(archive, version)
+
+
+def setup():
+    lock = json.loads((ROOT / "tools/compiler-tools.json").read_text())
+    archive = DESTINATION / "compilers.zip"
+    fetch(lock["compilers"], archive)
+    directory = extract(archive, f"ProDG/{lock['compiler_version']}")
     system = f"{platform.system().lower()}-{platform.machine().lower()}"
     system = {"darwin-arm64": "macos-arm64", "linux-amd64": "linux-x86_64"}.get(system, system)
     if system not in lock["wibo"]:

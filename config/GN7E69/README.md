@@ -44,3 +44,15 @@ dtk 1.8.4 quick analysis was evaluated for cutting original sections. With unit 
 ## Public progress
 
 Successful builds of `main` publish the progress page. Until reviewed file/function mapping exists, its map represents executable sections, not original source units. Code totals use executable section sizes; data totals include loaded data and uninitialized memory, with overlapping loaded ranges excluded from BSS. Linked and matched measure source-object bytes from the source-build report, attributed to the executable sections that contain them; original bytes contribute zero. The report records SHA-256 hashes of the build inputs it trusts: `source_build.py`, `prodg_cc.py`, `setup_compiler.py`, `baseline.py`, both tool locks, `baseline.json` and `analysis.json`. The exporter rejects a report whose tooling hashes differ, whose unit ranges are not exactly the manifest's configured sections, or whose ranges overlap. It also rejects a report for another target or unit manifest, a report without an identical complete output, stale source or dependency hashes, and files under `src/` that are neither unit sources nor recorded dependencies. Configured units or source files without a report also stop the export. With no units, it reports zero.
+
+### Nintendo SDK reuse
+
+SDK imports retain the provenance in [CREDITS.md](../../CREDITS.md) and target ownership evidence in `evidence.tsv`. The public source build selects a reviewed library compiler profile: ProDG for the existing EA unit and CodeWarrior GC/1.2.5n for the imported Nintendo units. Both compilers come from the same pinned archive and use the same pinned Wibo; supporting build dependencies remain unchanged. The SDK path preserves native compiler objects, tracks source/header dependencies, and uses the existing complete-target comparison and measured progress checks.
+
+To screen existing compiled SDK objects for reuse, write the candidate inventory to local research:
+
+```sh
+python3 tools/sdk_scan.py --original /path/to/main.dol --object-root /path/to/compiled/sdk --output scratch/sdk/candidates.json
+```
+
+The scanner masks only recognized relocation fields and distinguishes unique, ambiguous and absent fingerprints. A unique hit requires inspection of calls, globals, used types, data ownership and original unit boundaries before import. Short functions below 32 bytes need separate evidence. An absent hit can reflect dead stripping or a different SDK version. Candidate output is private research and never supplies progress. Matching SDK code still receives the accuracy and hostile-review passes; unsupported matching tricks in a reference remain excluded.

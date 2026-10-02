@@ -2,21 +2,96 @@
   "schema": 1,
   "target": "GN7E69",
   "compiler": "3.9.3",
-  "include_dirs": ["include"],
+  "include_dirs": [
+    "include"
+  ],
   "profiles": {
     "uistudio": {
-      "flags": ["-O2"],
+      "flags": [
+        "-O2"
+      ],
       "evidence": "UI Studio library probe record: https://github.com/mitsevox/nflstreet2/pull/7#issuecomment-5945092269 . ProDG 3.9.3 -O2 reproduces neighbouring functions 0x8021A020 and 0x8021C654 exactly; -O1, -Os and -fno-schedule-insns2 change both. -O3 is excluded by inference (it inlines same-file callees the target keeps as calls); -fno-strength-reduce changes 0x8021C654; -ffloat-store changes 0x8021CA54; -G0 changes 0x8021D880 and -G 16 changes 0x8021CA54 (default -G 8 fits). Not discriminated: -fno-schedule-insns and ProDG 3.5-3.9.3. Library scope rests on the target call graph and the shared error callback 0x803EBF30, with related-build file order.",
       "source_root": {
         "directory": "src",
         "file_prefix": "../../../Source",
         "evidence": "Target source-path strings 0x802B1DC4 and 0x802B1DF0 (evidence.tsv unit-anchor rows) both begin ../../../Source/Common/UIStudio/."
       }
+    },
+    "dolphin_release": {
+      "compiler": "mwcc",
+      "flags": [
+        "-nodefaults",
+        "-proc",
+        "gekko",
+        "-fp",
+        "hard",
+        "-Cpp_exceptions",
+        "off",
+        "-enum",
+        "int",
+        "-char",
+        "unsigned",
+        "-warn",
+        "pragmas",
+        "-requireprotos",
+        "-pragma",
+        "cats off",
+        "-O4,p",
+        "-inline",
+        "auto",
+        "-I-",
+        "-D__GEKKO__",
+        "-DSDK_REVISION=1",
+        "-lang=c"
+      ],
+      "include_dirs": [
+        "include/libc",
+        "src/dolphin"
+      ],
+      "evidence": "evidence.tsv compiler row for Nintendo SDK; MVP and upstream release-library profile. Whole-file flags validated by complete target relink; original compiler version not uniquely identified."
     }
   },
   "externals": {
-    "RuntimeErrorFnc": {"address": "0x803EBF30", "evidence": "evidence.tsv name/data rows for 0x803EBF30 (related name, target .sdata word)."},
-    "UISGetActionPtrValue": {"address": "0x8021C8B4", "evidence": "evidence.tsv function/name rows for 0x8021C8B4 (target extent, related name)."}
+    "RuntimeErrorFnc": {
+      "address": "0x803EBF30",
+      "evidence": "evidence.tsv name/data rows for 0x803EBF30 (related name, target .sdata word)."
+    },
+    "UISGetActionPtrValue": {
+      "address": "0x8021C8B4",
+      "evidence": "evidence.tsv function/name rows for 0x8021C8B4 (target extent, related name)."
+    },
+    "OSDisableInterrupts": {
+      "address": "0x8023B1F4",
+      "evidence": "evidence.tsv external row: sampling-rate target call, validated callee behavior and SDK reference."
+    },
+    "OSRestoreInterrupts": {
+      "address": "0x8023B21C",
+      "evidence": "evidence.tsv external row: sampling-rate target call, validated callee behavior and SDK reference."
+    },
+    "VIGetTvFormat": {
+      "address": "0x80244BF8",
+      "evidence": "evidence.tsv external row: sampling-rate target call, validated callee behavior and SDK reference."
+    },
+    "OSReport": {
+      "address": "0x8023AB48",
+      "evidence": "evidence.tsv external row: sampling-rate target call, validated callee behavior and SDK reference."
+    },
+    "SISetXY": {
+      "address": "0x8025C98C",
+      "evidence": "evidence.tsv external row: sampling-rate target call, validated callee behavior and SDK reference."
+    },
+    "memcpy": {
+      "address": "0x801C1FBC",
+      "evidence": "evidence.tsv external row: system-call installation target call and inspected callee behavior, with SDK reference provenance."
+    },
+    "DCFlushRangeNoSync": {
+      "address": "0x80239D4C",
+      "evidence": "evidence.tsv external row: system-call installation target call and inspected callee behavior, with SDK reference provenance."
+    },
+    "ICInvalidateRange": {
+      "address": "0x80239D78",
+      "evidence": "evidence.tsv external row: system-call installation target call and inspected callee behavior, with SDK reference provenance."
+    }
   },
   "units": [
     {
@@ -24,8 +99,56 @@
       "profile": "uistudio",
       "evidence": "evidence.tsv unit row 0x8021A068-0x8021A438 (provisional edges) and data row 0x802B1DF0-0x802B1E78.",
       "sections": [
-        {"section": ".text", "placement": ".text", "start": "0x8021A068", "end": "0x8021A438"},
-        {"section": ".rodata", "placement": ".data3", "start": "0x802B1DF0", "end": "0x802B1E78"}
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021A068",
+          "end": "0x8021A438"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1DF0",
+          "end": "0x802B1E78"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/si/SISamplingRate.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit/data rows for sampling-rate code, tables, diagnostic and BSS state; CREDITS.md for import provenance.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025D598",
+          "end": "0x8025D6A0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF408",
+          "end": "0x802FF49B"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED3F0",
+          "end": "0x803ED3F4"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSSync.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit and assembly provenance rows; CREDITS.md upstream OSSync.c and partial __os.h declarations.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023D3F4",
+          "end": "0x8023D478"
+        }
       ]
     }
   ]

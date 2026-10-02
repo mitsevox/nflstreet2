@@ -15,6 +15,7 @@ from pathlib import Path
 import baseline
 import prodg_cc
 import setup_compiler
+import sdk_cc
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,7 +25,7 @@ SAFE_PATH = re.compile(r"[A-Za-z0-9_./+-]+")
 LINKER_SYMBOLS = {"__start", "_SDA_BASE_", "_SDA2_BASE_"}
 LINK_TIMEOUT = 600
 # Build inputs the report is bound to; tools/progress.py rejects reports from other versions.
-TRUSTED_TOOLS = ("tools/source_build.py", "tools/prodg_cc.py", "tools/setup_compiler.py",
+TRUSTED_TOOLS = ("tools/source_build.py", "tools/prodg_cc.py", "tools/sdk_cc.py", "tools/setup_compiler.py",
                  "tools/baseline.py", "tools/compiler-tools.json", "tools/baseline-tools.json",
                  "config/GN7E69/baseline.json", "config/GN7E69/analysis.json")
 
@@ -171,15 +172,23 @@ def load_manifest(manifest, sections, compiler_version):
         repository_path(directory)
     profiles = manifest.get("profiles", {})
     for name, profile in profiles.items():
-        if set(profile) - {"source_root"} != {"flags", "evidence"} or not profile["evidence"].strip():
+        if set(profile) - {"source_root", "compiler", "include_dirs"} != {"flags", "evidence"} or not profile["evidence"].strip():
             raise ValueError(f"Profile {name} needs flags, an evidence locator and optionally source_root")
         if "source_root" in profile:
             source_root(profile["source_root"])
+        compiler = profile.get("compiler", "prodg")
+        if compiler not in {"prodg", "mwcc"}:
+            raise ValueError(f"Profile {name} uses an unsupported compiler")
+        for directory in profile.get("include_dirs", []):
+            repository_path(directory)
         flags = profile["flags"]
         if not all(isinstance(flag, str) for flag in flags) or prodg_cc.OPTIONS & set(flags) \
-                or any(flag.startswith("-I") for flag in flags):
+                or any(flag.startswith("-I") and not (compiler == "mwcc" and flag == "-I-") for flag in flags):
             raise ValueError(f"Profile {name} contains wrapper options or include paths")
-        prodg_cc.parse(flags + ["--dir", ".", "-c", "unit.c", "-o", "unit.o"])
+        if compiler == "mwcc":
+            sdk_cc.validate_flags(flags)
+        else:
+            prodg_cc.parse(flags + ["--dir", ".", "-c", "unit.c", "-o", "unit.o"])
     externals = {}
     for name, entry in manifest.get("externals", {}).items():
         if NEUTRAL.fullmatch(name) or name in LINKER_SYMBOLS or set(entry) != {"address", "evidence"} \
@@ -224,6 +233,8 @@ def load_manifest(manifest, sections, compiler_version):
             compile_path = f"{prefix}/{relative.as_posix()}"
         units.append({"source": unit["source"], "path": source, "profile": unit["profile"],
                       "flags": profiles[unit["profile"]]["flags"], "sections": placed,
+                      "compiler": profiles[unit["profile"]].get("compiler", "prodg"),
+                      "include_dirs": profiles[unit["profile"]].get("include_dirs", []),
                       "source_root": root, "compile_path": compile_path})
     ranges.sort()
     for left, right in zip(ranges, ranges[1:]):
@@ -434,21 +445,27 @@ def build(original, manifest_path, report_path):
     system = baseline_system()
     dtk = baseline.get_tool("dtk", json.loads((ROOT / "tools/baseline-tools.json").read_text()), system)
     objects = {}
+    sdk_directory = setup_compiler.setup_sdk() if any(u["compiler"] == "mwcc" for u in units) else None
     for index, unit in enumerate(units):
         stem = re.sub(r"[^A-Za-z0-9]+", "_", unit["source"]).strip("_")
         unit["object"] = BUILD / "obj" / f"unit{index:03d}_{stem}.o"
         unit["depfile"] = unit["object"].with_suffix(".d")
-        command = [sys.executable, str(ROOT / "tools/prodg_cc.py"), "--dir", str(compiler),
-                   "--wrapper", str(wrapper), "--depfile", str(unit["depfile"])]
-        for directory in include_dirs:
-            command += ["-I", str(ROOT / directory)]
         workdir, source = ROOT, str(unit["path"])
         if unit["compile_path"]:
             workdir, source = stage(unit), unit["compile_path"]
-        command += unit["flags"] + ["-c", source, "-o", str(unit["object"])]
-        result = subprocess.run(command, cwd=workdir, stdin=subprocess.DEVNULL)
-        if result.returncode or not unit["object"].is_file():
-            raise RuntimeError(f"Compilation failed for {unit['source']}")
+        includes = [ROOT / directory for directory in include_dirs + unit["include_dirs"]]
+        if unit["compiler"] == "mwcc":
+            sdk_cc.compile(sdk_directory, wrapper, source, unit["object"], unit["depfile"],
+                           unit["flags"], includes, workdir)
+        else:
+            command = [sys.executable, str(ROOT / "tools/prodg_cc.py"), "--dir", str(compiler),
+                       "--wrapper", str(wrapper), "--depfile", str(unit["depfile"])]
+            for directory in includes:
+                command += ["-I", str(directory)]
+            command += unit["flags"] + ["-c", source, "-o", str(unit["object"])]
+            result = subprocess.run(command, cwd=workdir, stdin=subprocess.DEVNULL)
+            if result.returncode or not unit["object"].is_file():
+                raise RuntimeError(f"Compilation failed for {unit['source']}")
         objects[unit["source"]] = read_elf(unit["object"].read_bytes())
         unit["dependencies"] = dependencies(unit["depfile"], workdir)
     pieces, defined, resolved = plan(sections, units, objects, externals)
@@ -513,7 +530,12 @@ def dol_bytes(binary, start, end):
 def measure(target, sections, units, manifest_bytes, result, identical, resolved):
     totals = {kind: {"linked": 0, "matched": 0} for kind in ("code", "data")}
     measured = []
+    lock = json.loads((ROOT / "tools/compiler-tools.json").read_text())
+    compilers = {}
     for unit in units:
+        family = unit["compiler"]
+        version = lock["sdk_compiler_version"] if family == "mwcc" else lock["compiler_version"]
+        compilers[family] = version
         entries = []
         for entry in unit["sections"]:
             size = entry["end"] - entry["start"]
@@ -535,11 +557,12 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
         measured.append({"source": unit["source"], "compile_path": unit["compile_path"],
                          "source_sha256": sha256(unit["path"]),
                          "profile": unit["profile"], "flags": unit["flags"],
+                         "compiler": {"family": family, "version": version},
                          "dependencies": unit["dependencies"],
                          "status": "matched" if identical else "unverified", "sections": entries})
     return {"schema": 1, "target": "GN7E69", "target_sha1": target["sha1"],
             "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
-            "compiler": "ProDG " + json.loads((ROOT / "tools/compiler-tools.json").read_text())["compiler_version"],
+            "compilers": dict(sorted(compilers.items())),
             "linker": "ngcld (ProDG) via wibo", "complete": "identical" if identical else "mismatch",
             "output_sha1": hashlib.sha1(result).hexdigest(),
             "tools": {path: sha256(ROOT / path) if (ROOT / path).is_file() else None
