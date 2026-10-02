@@ -256,18 +256,6 @@
       "address": "0x802481A0",
       "evidence": "evidence.tsv ARAM queue external row: target call operand and independently inspected SDK callee role."
     },
-    "OSInitThreadQueue": {
-      "address": "0x8023D5D4",
-      "evidence": "evidence.tsv OSSemaphore external OSInitThreadQueue: target call destination, inspected queue behavior and reference signature."
-    },
-    "OSSleepThread": {
-      "address": "0x8023E438",
-      "evidence": "evidence.tsv OSSemaphore external OSSleepThread: target call destination, inspected queue behavior and reference signature."
-    },
-    "OSWakeupThread": {
-      "address": "0x8023E524",
-      "evidence": "evidence.tsv OSSemaphore external OSWakeupThread: target call destination, inspected queue behavior and reference signature."
-    },
     "__AXSetPBDefault": {
       "address": "0x80288DEC",
       "evidence": "Target AXFreeVoice/AXAcquireVoice direct branch destinations, SDK default parameter-block behavior at callee."
@@ -706,27 +694,6 @@
           "placement": ".data6",
           "start": "0x803ED718",
           "end": "0x803ED738"
-        }
-      ]
-    },
-    {
-      "source": "src/dolphin/os/OSSemaphore.c",
-      "profile": "dolphin_release",
-      "evidence": "evidence.tsv OSSemaphore rows: native code and used semaphore/thread-queue ABI; source-file ownership remains reference-derived and provisional.",
-      "link_roots": {
-        "symbols": [
-          "OSInitSemaphore",
-          "OSWaitSemaphore",
-          "OSSignalSemaphore"
-        ],
-        "evidence": "Target three-function interval and unchanged native SN retention; unused try/count APIs are not established target matches."
-      },
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8023D2CC",
-          "end": "0x8023D3F4"
         }
       ]
     },

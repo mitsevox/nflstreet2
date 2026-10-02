@@ -16,7 +16,6 @@ The Nintendo SDK reconstruction is reused from [MVP 2005](https://github.com/mit
 | `include/dolphin/ax.h`, `src/dolphin/__ax.h` | Used declarations from re4 AX public and internal headers |
 | `src/dolphin/ax/AXAlloc.c`, `include/dolphin/ax/AXVPB.h` | [bfbbdecomp/bfbb](https://github.com/bfbbdecomp/bfbb/tree/8fb1c232addcacf44932c10c4cede41b43f98f40/src/dolphin); source and shared parameter-block structures; redundant pointer conversions omitted |
 | `src/dolphin/dsp/dsp_task.c`, `src/dolphin/__dsp.h` | Same pinned BFBB revision; four retained task helpers and diagnostic data; interrupt handler and global storage remain unreconstructed |
-| `src/dolphin/os/OSSemaphore.c` | [doldecomp/dolsdk2004](https://github.com/doldecomp/dolsdk2004/blob/2328b4164b1a98422a2255d83ce9a5a7548990cc/src/os/OSSemaphore.c); existing shared semaphore/thread-queue declarations; umbrella include narrowed and redundant wait-loop self-assignment omitted |
 | `src/dolphin/os/OSSync.c` | re4 `src/lib/OSSync.c` |
 | `include/dolphin/`, `include/libc/`, `include/cmath.h` | MVP's SDK header dependency closure, credited to re4/dolsdk2004 |
 | `src/dolphin/__os.h` | The used declaration from re4 `src/lib/__os.h` |
