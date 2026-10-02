@@ -38,7 +38,7 @@ typedef struct UISInfo_t {
     Uint8 unk_00[0x08];
     Uint32 MSPerTick;               /* 0x08 */
     Uint8 unk_0C[0x54];
-    Uint32 NumRateFncs;             /* 0x60 */
+    Int32 NumRateFncs;              /* 0x60 */
     UISRateFncT *RateFncs;          /* 0x64 */
     /* Remaining fields not yet established. */
 } UISInfoT;
