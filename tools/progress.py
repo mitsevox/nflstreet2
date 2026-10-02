@@ -11,6 +11,9 @@ import re
 import shutil
 import struct
 
+import sdk_map
+import source_build
+
 ROOT = Path(__file__).resolve().parents[1]
 # Files the source build trusts; a report is valid only for the same versions.
 TRUSTED_TOOLS = ("tools/source_build.py", "tools/prodg_cc.py", "tools/sdk_cc.py", "tools/setup_compiler.py",
@@ -91,8 +94,7 @@ def function_inventory(target, ranges, analysis_dir):
         return {"total": None, "exact": None, "named": None, "basis": "unavailable"}, []
     summary = json.loads((analysis_dir / "summary.json").read_text())
     symbols = analysis_dir / "symbols.txt"
-    inputs = {path: digest(ROOT / path) for path in
-              ("tools/analyze.py", "tools/baseline-tools.json", "config/GN7E69/analysis.json")}
+    inputs = sdk_map.analysis_inputs(ROOT)
     if summary.get("target_sha1") != target["sha1"] or summary.get("complete_relink") != "identical" \
             or summary.get("inventory") != "provisional" or summary.get("inputs") != inputs \
             or summary.get("symbols_sha256") != digest(symbols):
@@ -175,46 +177,63 @@ def source_map(sections, source_report, functions):
         section["children"] = children + remainder(section, children)
 
 
-def file_map(sections, source_report, functions):
-    """Partition executable bytes by measured source ownership, not inferred file extents."""
+def file_map(sections, source_report, functions, ownership=()):
+    """Partition mapped ownership while crediting only verified compiled-source ranges."""
     units = json.loads(source_report.read_text())["units"] if source_report and source_report.exists() else []
     files = {}
     unknown = []
     for section in sections:
         left = int(section["address"], 16)
         right = left + section["size"]
-        owned = []
-        for unit in units:
-            for extent in unit["sections"]:
-                start, end = int(extent["start"], 16), int(extent["end"], 16)
-                if extent["kind"] == section["kind"] and left <= start < end <= right:
-                    owned.append((start, end, unit["source"]))
+        measured = [(int(extent["start"], 16), int(extent["end"], 16), unit["source"])
+                    for unit in units for extent in unit["sections"]
+                    if extent["kind"] == section["kind"]
+                    and left <= int(extent["start"], 16) < int(extent["end"], 16) <= right]
+        owned = [(int(extent["start"], 16), int(extent["end"], 16), unit["name"], unit.get("source"))
+                 for unit in ownership for extent in unit["sections"]
+                 if left <= int(extent["start"], 16) < int(extent["end"], 16) <= right]
+        for start, end, source in measured:
+            overlaps = [item for item in owned if start < item[1] and item[0] < end]
+            if overlaps:
+                if len(overlaps) != 1 or not overlaps[0][0] <= start < end <= overlaps[0][1] \
+                        or overlaps[0][3] != source:
+                    raise ValueError("SDK ownership conflicts with a measured source range")
+            else:
+                owned.append((start, end, source, source))
         cursor = left
         partitions = []
-        for start, end, source in sorted(owned):
+        for start, end, name, source in sorted(owned):
+            if start < cursor:
+                raise ValueError("Mapped file extents overlap")
             if cursor < start:
-                partitions.append((cursor, start, None))
-            partitions.append((start, end, source))
+                partitions.append((cursor, start, None, None))
+            partitions.append((start, end, name, source))
             cursor = end
         if cursor < right:
-            partitions.append((cursor, right, None))
+            partitions.append((cursor, right, None, None))
+
+        def covered(start, end):
+            return sum(max(0, min(end, finish) - max(start, begin)) for begin, finish, _ in measured)
         unmapped = {"name": "Unmapped / " + section["name"], "kind": section["kind"],
                     "auto_generated": True, "complete": False,
                     "size": 0, "linked": 0, "matched": 0, "children": []}
-        for start, end, source in partitions:
-            key = (source, section["kind"])
-            if source is None:
+        for start, end, name, source in partitions:
+            key = (name, section["kind"])
+            if name is None:
                 item = unmapped
             else:
                 item = files.setdefault(key, {
-                    "name": source, "source": source, "kind": section["kind"],
-                    "boundary": "provisional", "scope": "measured-ranges", "complete": False,
+                    "name": name, "kind": section["kind"],
+                    "boundary": "provisional", "scope": "mapped-ranges" if ownership else "measured-ranges", "complete": False,
                     "size": 0, "linked": 0, "matched": 0, "children": []})
             size = end - start
             item["size"] += size
             if source:
-                item["linked"] += size
-                item["matched"] += size
+                item["source"] = source
+            elif name:
+                item["auto_generated"] = True
+            item["linked"] += covered(start, end)
+            item["matched"] += covered(start, end)
             children = []
             for function in functions if section["kind"] == "code" else []:
                 function_start = int(function["address"], 16)
@@ -223,8 +242,8 @@ def file_map(sections, source_report, functions):
                 if begin >= finish:
                     continue
                 child = {**function, "address": f"0x{begin:08X}", "size": finish - begin,
-                         "linked": finish - begin if source else 0,
-                         "matched": finish - begin if source else 0,
+                         "linked": covered(begin, finish),
+                         "matched": covered(begin, finish),
                          "type": "function" if (begin, finish) == (function_start, function_end)
                                  else "function-fragment",
                          "function_address": function["address"], "original_size": function["size"]}
@@ -232,7 +251,7 @@ def file_map(sections, source_report, functions):
                     child["source"] = source
                 children.append(child)
             parent = {"name": "Source bytes" if source else "Unmapped bytes", "kind": section["kind"],
-                      "size": size, "linked": size if source else 0, "matched": size if source else 0}
+                      "size": size, "linked": covered(start, end), "matched": covered(start, end)}
             children += remainder(parent, children)
             if source:
                 for child in children:
@@ -337,7 +356,9 @@ def report(binary, revision, source_report=None, analysis_dir=None):
             "source": {"units": unit_count, "report": "measured" if source_report and
                        source_report.exists() else "absent"},
             "functions": functions, "measures": measures, "sections": sections,
-            "files": file_map(sections, source_report, function_items)}
+            "files": file_map(sections, source_report, function_items,
+                              sdk_map.load(ROOT, source_build.target_sections(binary, target, {}))
+                              if (ROOT / sdk_map.MAP_PATH).exists() else [])}
 
 
 def main():
