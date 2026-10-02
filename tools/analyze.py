@@ -105,6 +105,10 @@ def main():
         "target_sha1": target["sha1"], "toolkit": lock["dtk"]["version"],
         "complete_relink": "identical", "inventory": "provisional",
         "candidate_counts": counts,
+        "symbols_sha256": hashlib.sha256(symbols.read_bytes()).hexdigest(),
+        "inputs": {path: hashlib.sha256((ROOT / path).read_bytes()).hexdigest()
+                   for path in ("tools/analyze.py", "tools/baseline-tools.json",
+                                "config/GN7E69/analysis.json")},
     }, indent=2) + "\n")
     print(f"Analyzed relink verified: {len(result)} bytes, SHA-1 {target['sha1']}")
     print("Generated names, function boundaries and source ownership remain provisional.")
