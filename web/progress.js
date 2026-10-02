@@ -296,7 +296,7 @@ function hideTooltip() {
   activeTile = null;
 }
 function showTooltip(block, item, x, y) {
-  showTooltipText(block, (item.source && item.source !== item.name ? item.source + ' · ' : '') + item.name + ' · ' + percent(item) + (item.source === item.name && item.complete === false ? ' · partial file' : ''), x, y);
+  showTooltipText(block, (item.source && !item.name.includes(item.source) ? item.source + ' · ' : '') + item.name + ' · ' + percent(item) + (item.source === item.name && item.complete === false ? ' · partial file' : ''), x, y);
 }
 function showTooltipText(block, text, x, y) {
   hideTooltip();
@@ -427,7 +427,7 @@ function render(direction = null, origin = null) {
   const items = mapItems();
   back.hidden = !current;
   canvas.setAttribute('aria-description', 'Use arrow keys to move between blocks, Home or End to reach the first or last block, and Enter to select.');
-  canvas.setAttribute('aria-label', current ? current.name + ' contents' : (mapKind === 'code' ? 'Code' : 'Data') + ' section map');
+  canvas.setAttribute('aria-label', current ? current.name + ' contents' : (mapKind === 'code' ? 'Code' : 'Data') + ' file map');
   const layout = [];
   partition([...items].sort((a, b) => b.size - a.size), 0, 0, canvas.clientWidth, canvas.clientHeight, layout);
   canvas.replaceChildren();
