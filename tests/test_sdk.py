@@ -136,5 +136,133 @@ class NativeCompiler(unittest.TestCase):
             self.assertFalse(depfile.exists())
 
 
+
+
+class LinkerRetention(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.compiler, cls.wrapper = setup_compiler.setup()
+        cls.sdk = setup_compiler.setup_sdk()
+
+    def fixture(self, root, data=False):
+        source = root / "retention.c"
+        source.write_text(("extern int stored;\n" if data else "") +
+                          "int Keep(void); int Drop(void); int Missing(void);\n" +
+                          ("int Keep(void) {return stored;}\n" if data else "int Keep(void) {return 17;}\n") +
+                          "int Drop(void) {return Missing();}\n" +
+                          ("int stored = 1;\n" if data else ""))
+        obj = root / "retention.o"
+        sdk_cc.compile(self.sdk, self.wrapper, source, obj, obj.with_suffix(".d"), FLAGS, [], ROOT)
+        return {"source": source.name, "object": obj,
+                "link_roots": {"symbols": ["Keep"], "evidence": "test retention root"}}
+
+    def test_original_linker_retains_code_without_modifying_native_input(self):
+        with tempfile.TemporaryDirectory(prefix="SDK retention ", dir=ROOT / "build") as temporary:
+            unit = self.fixture(Path(temporary))
+            before = unit["object"].read_bytes()
+            sections, symbols = source_build.retained_layout(unit, self.compiler, self.wrapper)
+            self.assertEqual(unit["object"].read_bytes(), before)
+            self.assertEqual(sections[0]["size"], 8)
+            self.assertEqual([s["name"] for s in symbols if s["type"] == 2], ["Keep"])
+            # The unused routine and its unresolved callee are not part of the retained layout.
+            self.assertNotIn("Missing", [s["name"] for s in symbols])
+            self.assertEqual(unit["native_object_sha256"], source_build.sha256(unit["object"]))
+
+    def test_absent_roots_are_rejected(self):
+        with tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
+            root = Path(temporary)
+            unit = self.fixture(root)
+            unit["link_roots"]["symbols"] = ["Missing"]
+            with self.assertRaisesRegex(ValueError, "defined global function"):
+                source_build.retained_layout(unit, self.compiler, self.wrapper)
+
+    def test_native_static_sections_preserve_symbols_and_references(self):
+        with tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
+            root = Path(temporary)
+            unit = self.fixture(root, data=True)
+            source = root / "retention.c"
+            source.write_text(source.read_text() +
+                              "int table[10] = {1,2,3};\nint (*entry)(void) = Missing;\n")
+            sdk_cc.compile(self.sdk, self.wrapper, source, unit["object"],
+                           unit["object"].with_suffix(".d"), FLAGS, [], ROOT)
+            before = unit["object"].read_bytes()
+            sections, symbols = source_build.retained_layout(unit, self.compiler, self.wrapper)
+            self.assertEqual(unit["object"].read_bytes(), before)
+            self.assertEqual(next(s["size"] for s in sections if s["name"] == ".data"), 40)
+            self.assertEqual(next(s["size"] for s in sections if s["name"] == ".sdata"), 8)
+            self.assertIn("Missing", [s["name"] for s in symbols])
+            self.assertIn("table", [s["name"] for s in symbols])
+            self.assertNotIn("__sn__bss__tag__address__", [s["name"] for s in symbols])
+            self.assertNotIn("__sn__bss__tag__", [s["name"] for s in symbols])
+
+    def test_changed_static_symbol_and_generated_tag_are_rejected(self):
+        for name, expected in (("stored", "static symbol"),
+                               ("__sn__bss__tag__address__", "BSS tag")):
+            with self.subTest(name=name), tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
+                unit = self.fixture(Path(temporary), data=True)
+                native = unit["object"].read_bytes()
+                original_read = source_build.read_elf
+
+                def changed(binary):
+                    sections, symbols = original_read(binary)
+                    if binary != native:
+                        next(s for s in symbols if s["name"] == name)["value"] += 4
+                    return sections, symbols
+
+                with patch.object(source_build, "read_elf", changed), self.assertRaisesRegex(ValueError, expected):
+                    source_build.retained_layout(unit, self.compiler, self.wrapper)
+
+    def test_mutated_compiler_input_cannot_supply_a_layout(self):
+        with tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
+            unit = self.fixture(Path(temporary))
+            original_run = source_build.run
+
+            def mutate(label, command, log):
+                original_run(label, command, log)
+                with unit["object"].open("ab") as output:
+                    output.write(b"changed")
+
+            with patch.object(source_build, "run", mutate), self.assertRaisesRegex(RuntimeError, "changed"):
+                source_build.retained_layout(unit, self.compiler, self.wrapper)
+
+    def test_missing_roots_and_unexpected_allocated_output_fail(self):
+        from test_source_build import text, rodata
+        for missing, extra in ((True, False), (False, True)):
+            with self.subTest(missing=missing, extra=extra), tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
+                unit = self.fixture(Path(temporary))
+
+                def substitute(label, command, log):
+                    sections = [text(8)] + ([rodata(4)] if extra else [])
+                    source_build.write_object(unit["object"].with_suffix(".layout.o"), sections,
+                                              [{"name": "Other" if missing else "Keep", "value": 0,
+                                                "size": 8, "type": 2, "shndx": 1}])
+                    log.write_text("")
+
+                with patch.object(source_build, "run", substitute), self.assertRaisesRegex(
+                        ValueError, "omitted required|Unexpected allocated"):
+                    source_build.retained_layout(unit, self.compiler, self.wrapper)
+
+    def test_retention_metadata_cannot_inject_arguments_or_apply_to_prodg(self):
+        import json
+        manifest = json.loads((ROOT / "config/GN7E69/units.json").read_text())
+        binary = synthetic_dol()
+        # A tiny source range is enough to exercise manifest validation before real placement.
+        unit = manifest["units"][-1]
+        unit["sections"] = [{"section": ".text", "placement": ".init",
+                             "start": "0x80003100", "end": "0x80003108"}]
+        manifest["units"] = [unit]
+        sections = source_build.target_sections(binary, TARGET, {})
+        for roots in ({"symbols": ["Keep", "Keep"], "evidence": "x"},
+                      {"symbols": ["Keep\n-o other"], "evidence": "x"},
+                      {"symbols": ["Keep"], "evidence": ""}):
+            bad = copy.deepcopy(manifest)
+            bad["units"][0]["link_roots"] = roots
+            with self.subTest(roots=roots), self.assertRaisesRegex(ValueError, "link_roots"):
+                source_build.load_manifest(bad, sections, "3.9.3")
+        manifest["units"][0]["profile"] = "uistudio"
+        with self.assertRaisesRegex(ValueError, "link_roots"):
+            source_build.load_manifest(manifest, sections, "3.9.3")
+
+
 if __name__ == "__main__":
     unittest.main()
