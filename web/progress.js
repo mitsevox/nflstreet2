@@ -347,6 +347,7 @@ function selectItem(item, block, event) {
   const origin = clickOrigin(event, block);
   hideTooltip();
   if (item.children?.length) {
+    search.value = '';
     path.push(item);
     render('enter', origin);
     back.focus();
