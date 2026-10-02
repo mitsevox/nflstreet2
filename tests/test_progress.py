@@ -276,6 +276,25 @@ class FunctionInventoryTests(ProgressBase):
         with self.assertRaisesRegex(ValueError, "overlap"):
             progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
 
+    def test_overlapping_candidates_are_rejected(self):
+        self.write_inventory()
+        symbols = self.analysis / "symbols.txt"
+        symbols.write_text(symbols.read_text().replace("size:0x8", "size:0xC"))
+        summary = self.analysis / "summary.json"
+        data = json.loads(summary.read_text())
+        data["symbols_sha256"] = progress.digest(symbols)
+        summary.write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError, "candidates overlap"):
+            progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+
+    def test_code_section_opens_matched_and_unmatched_functions_directly(self):
+        self.write_inventory()
+        data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+        functions = [item for item in data["sections"][0]["children"] if "address" in item]
+        self.assertEqual([(item["name"], item["matched"]) for item in functions],
+                         [("Example", 8), ("fn_8000310C", 0)])
+        self.assertTrue(all("children" not in item for item in functions))
+
     def test_map_children_preserve_all_byte_counts(self):
         self.write_inventory()
         data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
@@ -286,7 +305,7 @@ class FunctionInventoryTests(ProgressBase):
                         self.assertEqual(sum(child[field] for child in item["children"]), item[field])
                     check(item["children"])
         check(data["sections"])
-        function = data["sections"][0]["children"][0]["children"][0]
+        function = data["sections"][0]["children"][0]
         self.assertEqual(function["name"], "Example")
         self.assertNotIn(str(self.root), json.dumps(data))
 

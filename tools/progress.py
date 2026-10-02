@@ -137,10 +137,16 @@ def function_inventory(target, ranges, analysis_dir):
         raise ValueError("Exact function extents overlap")
     exact = {start: end for start, end in extents.items() if any(
         kind == "code" and left <= start < end <= right for kind, left, right in ranges)}
-    functions = [{"name": names.get(start, f"fn_{start:08X}"), "kind": "code",
-                  "address": f"0x{start:08X}", "size": end - start,
-                  "linked": end - start, "matched": end - start}
-                 for start, end in sorted(exact.items())]
+    ordered_candidates = sorted(candidates.items())
+    if any(right[0] < left[0] + left[1] for left, right in zip(ordered_candidates, ordered_candidates[1:])):
+        raise ValueError("Function candidates overlap")
+    functions = []
+    for start, size in ordered_candidates:
+        covered = sum(max(0, min(start + size, right) - max(start, left))
+                      for kind, left, right in ranges if kind == "code")
+        functions.append({"name": names.get(start, f"fn_{start:08X}"), "kind": "code",
+                          "address": f"0x{start:08X}", "size": size,
+                          "linked": covered, "matched": covered})
     return {"total": len(candidates), "exact": len(exact), "named": len(names),
             "basis": "provisional-analysis"}, functions
 
@@ -151,6 +157,11 @@ def source_map(sections, source_report, functions):
     for section in sections:
         left = int(section["address"], 16)
         right = left + section["size"]
+        if section["kind"] == "code":
+            children = [f for f in functions if left <= int(f["address"], 16)
+                        and int(f["address"], 16) + f["size"] <= right]
+            section["children"] = children + remainder(section, children)
+            continue
         children = []
         for unit in units:
             for extent in unit["sections"]:
@@ -160,21 +171,17 @@ def source_map(sections, source_report, functions):
                 item = {"name": unit["source"], "kind": section["kind"],
                         "address": extent["start"], "size": end - start,
                         "linked": end - start, "matched": end - start}
-                owned = [f for f in functions if start <= int(f["address"], 16)
-                         and int(f["address"], 16) + f["size"] <= end]
-                if owned:
-                    item["children"] = owned + unmapped(item, sum(f["size"] for f in owned))
                 children.append(item)
-        section["children"] = children + unmapped(section, sum(c["size"] for c in children))
+        section["children"] = children + remainder(section, children)
 
 
-def unmapped(parent, covered):
-    size = parent["size"] - covered
-    if covered > parent["matched"] or size < 0:
+def remainder(parent, children):
+    remaining = {field: parent[field] - sum(c[field] for c in children)
+                 for field in ("size", "linked", "matched")}
+    if not 0 <= remaining["matched"] <= remaining["linked"] <= remaining["size"]:
         raise ValueError("Map children exceed measured parent bytes")
-    return [{"name": ("Other bytes in " if parent["name"].startswith("src/") else "Unmapped ") + parent["name"], "kind": parent["kind"],
-             "size": size, "linked": parent["linked"] - covered,
-             "matched": parent["matched"] - covered}] if size else []
+    return [{"name": "Other bytes in " + parent["name"], "kind": parent["kind"], **remaining}] \
+        if remaining["size"] else []
 
 
 def report(binary, revision, source_report=None, analysis_dir=None):
@@ -237,6 +244,10 @@ def report(binary, revision, source_report=None, analysis_dir=None):
             raise ValueError("Measured source ranges fall outside the executable sections")
     functions, function_items = function_inventory(target, ranges, analysis_dir)
     source_map(sections, source_report, function_items)
+    mapped_functions = sum(1 for section in sections if section["kind"] == "code"
+                           for child in section["children"] if "address" in child)
+    if mapped_functions != len(function_items):
+        raise ValueError("Function candidates fall outside executable sections")
     return {"schema": 1, "revision": revision,
             "built_at": datetime.now(timezone.utc).isoformat(),
             "target": "GN7E69", "target_sha1": target["sha1"],

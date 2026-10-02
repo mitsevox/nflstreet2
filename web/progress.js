@@ -5,8 +5,6 @@ function color(item){return item.matched===item.size?'var(--done)':item.matched>
 function partition(items,x,y,w,h,out){if(!items.length)return;if(items.length===1){out.push({...items[0],x,y,w,h});return;}let total=items.reduce((s,a)=>s+a.size,0),sum=0,split=1;for(let i=0;i<items.length-1;i++){sum+=items[i].size;split=i+1;if(sum>=total/2)break;}const ratio=sum/total;if(w>=h){partition(items.slice(0,split),x,y,w*ratio,h,out);partition(items.slice(split),x+w*ratio,y,w*(1-ratio),h,out);}else{partition(items.slice(0,split),x,y,w,h*ratio,out);partition(items.slice(split),x,y+h*ratio,w,h*(1-ratio),out);}}
 const tooltip = document.querySelector('#map-tooltip');
 const back = document.querySelector('#map-back');
-const locationLabel = document.querySelector('#map-location');
-const smallTiles = document.querySelector('#map-small-tiles');
 const path = [];
 let activeTile = null;
 const percent = item => (item.matched / item.size * 100).toFixed(2) + '% matched';
@@ -27,18 +25,15 @@ function showTooltip(block, item, x, y) {
 }
 function render() {
   if (!sections.length) return;
-  const focusedSmall = smallTiles.contains(document.activeElement);
-  const focusedName = (focusedSmall || canvas.contains(document.activeElement)) ? document.activeElement.dataset.name : null;
+  const focusedName = canvas.contains(document.activeElement) ? document.activeElement.dataset.name : null;
   hideTooltip();
   const current = path.at(-1);
   const items = current ? current.children : sections;
   back.hidden = !current;
-  locationLabel.textContent = current ? current.name : 'Executable sections';
+  canvas.setAttribute('aria-label', current ? current.name + ' contents' : 'Executable section map');
   const layout = [];
   partition([...items].sort((a, b) => b.size - a.size), 0, 0, canvas.clientWidth, canvas.clientHeight, layout);
   canvas.replaceChildren();
-  smallTiles.replaceChildren();
-  smallTiles.hidden = true;
   for (const item of layout) {
     const block = document.createElement('button');
     block.type = 'button';
@@ -46,9 +41,6 @@ function render() {
     block.dataset.name = item.name;
     Object.assign(block.style, {left: item.x + 'px', top: item.y + 'px', width: item.w + 'px', height: item.h + 'px', background: color(item)});
     block.setAttribute('aria-label', item.name + ' · ' + percent(item));
-    const label = document.createElement('span');
-    label.textContent = item.name;
-    block.append(label);
     block.addEventListener('pointerenter', event => {
       if (event.pointerType !== 'touch') showTooltip(block, item, event.clientX, event.clientY);
     });
@@ -68,33 +60,13 @@ function render() {
         render();
         back.focus();
       } else {
-        locationLabel.textContent = item.name + ' · ' + percent(item);
+        const rect = block.getBoundingClientRect();
+        showTooltip(block, item, rect.left, rect.top);
       }
     };
     block.addEventListener('click', select);
-    // Keep byte areas exact; offer a full-size target for subpixel rectangles.
-    if (item.w < 24 || item.h < 24) {
-      const target = document.createElement('button');
-      target.type = 'button';
-      target.dataset.name = item.name;
-      target.textContent = item.name.replace(/^src\//, '');
-      target.setAttribute('aria-label', item.name + ' · ' + percent(item));
-      target.addEventListener('click', select);
-      target.addEventListener('pointerenter', event => {
-        if (event.pointerType !== 'touch') showTooltip(target, item, event.clientX, event.clientY);
-      });
-      target.addEventListener('pointerleave', hideTooltip);
-      target.addEventListener('focus', () => {
-        const rect = target.getBoundingClientRect();
-        showTooltip(target, item, rect.left, rect.top);
-      });
-      target.addEventListener('blur', hideTooltip);
-      smallTiles.append(target);
-      smallTiles.hidden = false;
-      if (focusedSmall && item.name === focusedName) target.focus();
-    }
     canvas.append(block);
-    if (!focusedSmall && item.name === focusedName) block.focus();
+    if (item.name === focusedName) block.focus();
   }
 }
 back.addEventListener('click', () => {
@@ -121,22 +93,27 @@ function validMap(items, kind = null) {
   });
 }
 function renderFunctions(functions) {
-  if (!functions || functions.basis === 'unavailable') {
-    document.querySelector('#functions-exact').textContent = 'Unavailable';
-    document.querySelector('#functions-named').textContent = 'Unavailable';
-    document.querySelector('#function-note').textContent = 'Function inventory unavailable for this build.';
-    return;
-  }
-  if (functions.basis !== 'provisional-analysis' || !Number.isSafeInteger(functions.total) || functions.total <= 0 ||
-      !['exact', 'named'].every(field => Number.isSafeInteger(functions[field]) && functions[field] >= 0 && functions[field] <= functions.total)) {
+  const available = functions && functions.basis !== 'unavailable';
+  if (available && (functions.basis !== 'provisional-analysis' || !Number.isSafeInteger(functions.total) || functions.total <= 0 ||
+      !['exact', 'named'].every(field => Number.isSafeInteger(functions[field]) && functions[field] >= 0 && functions[field] <= functions.total))) {
     throw new Error('Invalid function progress');
   }
   for (const field of ['exact', 'named']) {
-    document.querySelector('#functions-' + field).textContent =
-      functions[field].toLocaleString() + ' of ' + functions.total.toLocaleString() +
-      ' · ' + (functions[field] / functions.total * 100).toFixed(2) + '%';
+    const stat = document.querySelector('[data-function="' + field + '"]');
+    const value = available ? functions[field] / functions.total * 100 : 0;
+    stat.querySelector('strong').textContent = available ? functions[field].toLocaleString() : '—';
+    stat.querySelector('.function-total span').textContent = available ? functions.total.toLocaleString() : '—';
+    stat.querySelector('.function-percent').textContent = available ? value.toFixed(2) + '%' : '—';
+    const track = stat.querySelector('.function-track');
+    track.firstElementChild.style.width = value + '%';
+    if (available) {
+      track.setAttribute('aria-valuenow', value);
+      track.removeAttribute('aria-valuetext');
+    } else {
+      track.removeAttribute('aria-valuenow');
+      track.setAttribute('aria-valuetext', 'Unavailable');
+    }
   }
-  document.querySelector('#function-note').textContent = 'Provisional function total. Named includes evidence-backed reference and inferred names.';
 }
 
 function validMeasure(m){return m&&Number.isSafeInteger(m.total)&&m.total>0&&Number.isSafeInteger(m.linked)&&m.linked>=0&&m.linked<=m.total&&Number.isSafeInteger(m.matched)&&m.matched>=0&&m.matched<=m.linked;}
