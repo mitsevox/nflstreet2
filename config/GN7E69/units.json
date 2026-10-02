@@ -6,7 +6,7 @@
   "profiles": {
     "uistudio": {
       "flags": ["-O2"],
-      "evidence": "UI Studio library profile (issue #6): ProDG 3.9.3 -O2 reproduces 0x8021A020, 0x8021A060, 0x8021C8B4 and 0x8021C654 outside the unit; -O1, -Os and -fno-schedule-insns2 each break one of these, -O3 inlines calls the target keeps, -fno-strength-reduce breaks 0x8021C654, -G0 is excluded by r13 small-data use. ProDG 3.5-3.9.3 are indistinguishable on these probes.",
+      "evidence": "UI Studio library probe record: https://github.com/mitsevox/nflstreet2/pull/7#issuecomment-5945092269 . ProDG 3.9.3 -O2 reproduces neighbouring functions 0x8021A020 and 0x8021C654 exactly; -O1, -Os and -fno-schedule-insns2 change both. -O3 is excluded by inference (it inlines same-file callees the target keeps as calls); -fno-strength-reduce changes 0x8021C654; -ffloat-store changes 0x8021CA54; -G0 changes 0x8021D880 and -G 16 changes 0x8021CA54 (default -G 8 fits). Not discriminated: -fno-schedule-insns and ProDG 3.5-3.9.3. Library scope rests on the target call graph and the shared error callback 0x803EBF30, with related-build file order.",
       "source_root": {
         "directory": "src",
         "file_prefix": "../../../Source",
