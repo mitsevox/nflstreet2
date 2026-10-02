@@ -272,7 +272,7 @@ function mapItems() {
   const roots = sections.filter(section => section.kind === mapKind);
   const query = search.value.trim().toLocaleLowerCase();
   if (query) return roots.flatMap(item => item.name.toLocaleLowerCase().includes(query)
-    ? [item] : leaves([item]).filter(leaf => leaf.name.toLocaleLowerCase().includes(query))); 
+    ? [item] : leaves([item]).filter(leaf => leaf.name.toLocaleLowerCase().includes(query)));
   return path.at(-1)?.children || roots;
 }
 search.addEventListener('input', () => {
