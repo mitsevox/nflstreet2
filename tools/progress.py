@@ -11,6 +11,10 @@ import shutil
 import struct
 
 ROOT = Path(__file__).resolve().parents[1]
+# Files the source build trusts; a report is valid only for the same versions.
+TRUSTED_TOOLS = ("tools/source_build.py", "tools/prodg_cc.py", "tools/setup_compiler.py",
+                 "tools/baseline.py", "tools/compiler-tools.json", "tools/baseline-tools.json",
+                 "config/GN7E69/baseline.json", "config/GN7E69/analysis.json")
 
 
 def digest(path):
@@ -37,12 +41,22 @@ def source_ranges(target, source_report):
         raise ValueError("Measured source-build report does not verify the complete target")
     if not manifest_path.exists() or data.get("manifest_sha256") != digest(manifest_path):
         raise ValueError("Measured source-build report is for a different unit manifest")
+    tools = {path: digest(ROOT / path) if (ROOT / path).is_file() else None for path in TRUSTED_TOOLS}
+    if data.get("tools") != tools:
+        raise ValueError("Measured source-build report was produced by different build tooling")
     units = data.get("units", [])
     if [unit["source"] for unit in units] != configured:
         raise ValueError("Measured source-build report does not cover the configured units")
     measured, ranges = set(), []
     totals = {"code": [0, 0], "data": [0, 0]}
-    for unit in units:
+    for unit, configured_unit in zip(units, manifest["units"]):
+        # The report's ranges must be exactly the configured ranges of the hashed manifest.
+        claimed = [(s["section"], s["placement"], int(s["start"], 16), int(s["end"], 16))
+                   for s in unit["sections"]]
+        expected = [(s["section"], s["placement"], int(s["start"], 16), int(s["end"], 16))
+                    for s in configured_unit["sections"]]
+        if claimed != expected:
+            raise ValueError(f"Source unit {unit['source']} ranges differ from the unit manifest")
         for path, expected in [(unit["source"], unit["source_sha256"])] + sorted(unit["dependencies"].items()):
             if not (ROOT / path).is_file() or digest(ROOT / path) != expected:
                 raise ValueError(f"Measured source-build report is stale for {path}")
@@ -61,6 +75,9 @@ def source_ranges(target, source_report):
     for kind, (linked, matched) in totals.items():
         if data["totals"][kind] != {"linked": linked, "matched": matched}:
             raise ValueError("Measured source-build totals are inconsistent")
+    ordered = sorted((start, end) for _, start, end in ranges)
+    if any(right[0] < left[1] for left, right in zip(ordered, ordered[1:])):
+        raise ValueError("Measured source ranges overlap")
     unmeasured = [path for path in files if path not in measured]
     if unmeasured:
         raise ValueError(f"Source files are not measured by the source-build report: {unmeasured}")
@@ -117,7 +134,7 @@ def report(binary, revision, source_report=None):
         end = start + section["size"]
         covered = sum(max(0, min(end, right) - max(start, left)) for kind, left, right in ranges
                       if kind == section["kind"])
-        section["linked"] = section["matched"] = covered
+        section["linked"] = section["matched"] = min(covered, section["size"])
     measures = {kind: {"total": sum(s["size"] for s in sections if s["kind"] == kind),
                        "linked": sum(s["linked"] for s in sections if s["kind"] == kind),
                        "matched": sum(s["matched"] for s in sections if s["kind"] == kind)}

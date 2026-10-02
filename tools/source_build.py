@@ -23,6 +23,10 @@ NEUTRAL = re.compile(r"(?:fn|lbl)_([0-9A-F]{8})")
 SAFE_PATH = re.compile(r"[A-Za-z0-9_./+-]+")
 LINKER_SYMBOLS = {"__start", "_SDA_BASE_", "_SDA2_BASE_"}
 LINK_TIMEOUT = 600
+# Build inputs the report is bound to; tools/progress.py rejects reports from other versions.
+TRUSTED_TOOLS = ("tools/source_build.py", "tools/prodg_cc.py", "tools/setup_compiler.py",
+                 "tools/baseline.py", "tools/compiler-tools.json", "tools/baseline-tools.json",
+                 "config/GN7E69/baseline.json", "config/GN7E69/analysis.json")
 
 SHT_PROGBITS, SHT_SYMTAB, SHT_STRTAB, SHT_NOBITS = 1, 2, 3, 8
 SHF_WRITE, SHF_ALLOC, SHF_EXECINSTR = 1, 2, 4
@@ -538,6 +542,8 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
             "compiler": "ProDG " + json.loads((ROOT / "tools/compiler-tools.json").read_text())["compiler_version"],
             "linker": "ngcld (ProDG) via wibo", "complete": "identical" if identical else "mismatch",
             "output_sha1": hashlib.sha1(result).hexdigest(),
+            "tools": {path: sha256(ROOT / path) if (ROOT / path).is_file() else None
+                      for path in TRUSTED_TOOLS},
             "externals": {name: f"0x{value:08X}" for name, value in sorted(resolved.items())},
             "units": measured, "totals": totals}
 
