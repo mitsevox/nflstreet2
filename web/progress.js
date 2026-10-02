@@ -30,6 +30,7 @@ search.addEventListener('input', () => {
 kindPicker.querySelectorAll('button').forEach(button => {
   button.addEventListener('click', () => {
     mapKind = button.dataset.kind;
+    kindPicker.dataset.selected = mapKind;
     kindPicker.querySelectorAll('button').forEach(option => option.setAttribute('aria-pressed', option === button));
     path.length = 0;
     render();
