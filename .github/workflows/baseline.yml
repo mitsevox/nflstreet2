@@ -53,10 +53,14 @@ jobs:
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/source_build.py --original /orig/main.dol
+      - name: Verify provisional function inventory
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
+            "$BUILD_ENVIRONMENT" python3 tools/analyze.py --original /orig/main.dol
       - name: Export public progress page
         run: |
           python3 tools/progress.py --dol build/source/main.dol --revision "$GITHUB_SHA" \
-            --source-report build/source/report.json
+            --source-report build/source/report.json --analysis-dir build/analysis
       - uses: actions/upload-pages-artifact@98ef48e41587a300b82de4cf298aa98b57b2faae
         with:
           path: build/site
