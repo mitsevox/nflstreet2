@@ -30,7 +30,7 @@ Contribution branches, PRs, reviews, and required CI checks belong in this repos
 
 1. **Claim a bounded task.** Use an issue or draft PR to state the unit, scope, and shared-file dependencies. Work on a dedicated branch from current `main`, in your own checkout or worktree. Coordinate overlapping changes before starting.
 2. **Establish boundaries and types.** Inspect the target and reference evidence before reconstructing the unit. Use shared declarations; do not invent local substitutes to obtain a match. Record unknowns explicitly. A related build is corroboration, not proof of the target layout.
-3. **Reconstruct and match.** Recover source in the original codebase's style. Keep trial variants local. Per-function comparisons are diagnostic; the combined build is the final output check.
+3. **Reconstruct and match.** Recover source in the original codebase's style. Compile, compare instructions and data, and use the [investigation loop](#investigation-and-escalation) when needed. Keep trial variants local. Per-function comparisons are diagnostic; the combined build is the final output check.
 4. **Name and explain.** Include provenance for recovered names, types, fields, and boundaries in reviewed metadata using the [evidence format](config/README.md). Keep readable names distinct from claims of original names. Comments follow the standard below.
 5. **Self-check.** Verify the complete target binary, unit code and data, and regressions against the base revision. List unresolved functions and shared-file changes. Do not claim a function score proves a complete unit.
 6. **Blind accuracy review.** An independent reviewer examines the scoped functions with proposed names and comments withheld, then reconciles its interpretation against the evidence. Record disagreements and their resolution in the PR.
@@ -40,6 +40,20 @@ Contribution branches, PRs, reviews, and required CI checks belong in this repos
 Partial units follow the same accuracy and hostile-review gates. Their original assembly remains linked until replacement is validated; partial source is not reported as a completed unit. Retain unresolved identifiers when evidence is insufficient rather than fabricate recovery.
 
 For changes with dependencies on other PRs, identify those dependencies and tested revisions. Documentation-only changes require appropriate checks, not an invented binary-validation result.
+
+## Investigation and escalation
+
+Contributors and agents choose investigations according to the unresolved question. Additional tools are not required for every function. Escalate when controlled experiments stop yielding useful evidence, or when uncertainty about behavior, types, or boundaries could invalidate the reconstruction. A high matching percentage does not resolve those uncertainties.
+
+| Question | Useful investigation |
+| --- | --- |
+| What does the target do, reference, or own? | Inspect disassembly, references, and available debug information; use Ghidra for bounded static analysis. |
+| Why does plausible source produce different instructions? | Inspect relevant ProDG RTL dumps for optimization, scheduling, or register allocation. |
+| Which behavioral interpretation fits an observed execution? | Capture a bounded runtime trace with a debugger, such as headless Dolphin. |
+
+State the question before investigating. Check decompiler output against instructions; record runtime observations with their inputs and conditions. Neither establishes original source by itself. Record the tested revision, tool version and settings, conclusion, supporting evidence, and remaining uncertainty in the task's evidence or review record. Keep databases, dumps, and detailed experiments private.
+
+Return to reconstruction and comparison when the question is resolved. If evidence remains insufficient, retain the original assembly and report the gap. Tool choice does not relax matching integrity, combined-build validation, independent reviews, or owner approval. Reviewers may require further investigation when submitted evidence is insufficient.
 
 ## Matching integrity
 

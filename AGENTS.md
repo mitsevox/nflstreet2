@@ -1,6 +1,6 @@
 # Agent instructions
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before working. It defines the contribution passes, matching integrity, source comments, and approval process. Consult the [README](README.md) for the target and build entry point.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before working. It defines the contribution passes, [investigation and escalation](CONTRIBUTING.md#investigation-and-escalation), matching integrity, source comments, and approval process. Consult the [README](README.md) for the target and build entry point.
 
 - Work within the assigned scope on a dedicated branch and your own checkout or worktree. Preserve unrelated changes; coordinate shared-file edits with the other contributors.
 - Use authorized reference material when relevant. Keep raw binaries, complete debug exports, and trial output out of public Git. If required evidence or tools are unavailable, report the gap rather than invent a result.
