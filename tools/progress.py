@@ -12,6 +12,7 @@ import shutil
 import struct
 
 import sdk_map
+import game_map
 import source_build
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -224,8 +225,12 @@ def file_map(sections, source_report, functions, ownership=()):
             else:
                 item = files.setdefault(key, {
                     "name": name, "kind": section["kind"],
-                    "boundary": "provisional", "scope": "mapped-ranges" if ownership else "measured-ranges", "complete": False,
+                    "boundary": "provisional", "scope": ("candidate-ranges" if any(u.get("candidate") and u["name"] == name
+                               for u in ownership) else "mapped-ranges" if ownership else "measured-ranges"), "complete": False,
                     "size": 0, "linked": 0, "matched": 0, "children": []})
+            if name:
+                item.setdefault("mapped_extents", []).append({
+                    "start": f"0x{start:08X}", "end": f"0x{end:08X}"})
             size = end - start
             item["size"] += size
             if source:
@@ -349,6 +354,11 @@ def report(binary, revision, source_report=None, analysis_dir=None):
                            for child in section["children"] if "address" in child)
     if mapped_functions != len(function_items):
         raise ValueError("Function candidates fall outside executable sections")
+    ownership = sdk_map.load(ROOT, source_build.target_sections(binary, target, {})) \
+        if (ROOT / sdk_map.MAP_PATH).exists() else []
+    measured_units = json.loads(source_report.read_text())["units"] \
+        if source_report and source_report.exists() else []
+    ownership += game_map.load(ROOT, sections, ownership + measured_units)
     return {"schema": 1, "revision": revision,
             "built_at": datetime.now(timezone.utc).isoformat(),
             "target": "GN7E69", "target_sha1": target["sha1"],
@@ -357,8 +367,7 @@ def report(binary, revision, source_report=None, analysis_dir=None):
                        source_report.exists() else "absent"},
             "functions": functions, "measures": measures, "sections": sections,
             "files": file_map(sections, source_report, function_items,
-                              sdk_map.load(ROOT, source_build.target_sections(binary, target, {}))
-                              if (ROOT / sdk_map.MAP_PATH).exists() else [])}
+                              ownership)}
 
 
 def main():
@@ -371,7 +380,7 @@ def main():
     args = parser.parse_args()
     data = report(args.dol.read_bytes(), args.revision, args.source_report, args.analysis_dir)
     args.output.mkdir(parents=True, exist_ok=True)
-    for name in ("index.html", "style.css", "progress.js", "cover.jpg"):
+    for name in ("index.html", "style.css", "progress.js", "cover.jpg", "logo.png"):
         shutil.copyfile(ROOT / "web" / name, args.output / name)
     (args.output / "progress.json").write_text(json.dumps(data, indent=2) + "\n")
 
