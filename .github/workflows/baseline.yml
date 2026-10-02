@@ -61,8 +61,14 @@ jobs:
           sudo swapon /swap-inventory
       - name: Verify provisional function inventory
         run: |
-          docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
-            "$BUILD_ENVIRONMENT" python3 tools/analyze.py --original /orig/main.dol
+          docker run --rm --memory=5g --memory-swap=13g --env MIMALLOC_PURGE_DELAY=0 \
+            --env MIMALLOC_SHOW_STATS=1 --user "$(id -u):$(id -g)" \
+            --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
+            "$BUILD_ENVIRONMENT" python3 tools/analyze.py --original /orig/main.dol || {
+              tail -80 build/analysis/analysis.log
+              sudo dmesg | tail -20
+              exit 1
+            }
       - name: Export public progress page
         run: |
           python3 tools/progress.py --dol build/source/main.dol --revision "$GITHUB_SHA" \
