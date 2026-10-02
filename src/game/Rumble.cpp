@@ -7,9 +7,6 @@ void fn_80194D70(void);
 void fn_80194DB8(void);
 }
 
-/* Empty dependency table. Unlike the ModuleDependency tables of other modules it is
-   initialized data (.sdata), not written by the static initializer, so its element
-   type has no constructor here. */
 static void *sDependencies[] = { 0 };
 Rumble gRumble;
 
