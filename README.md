@@ -24,7 +24,7 @@ You will need your own copy of the game. The initial original-object baseline su
 python3 tools/baseline.py --original /path/to/main.dol
 ```
 
-This relinks and verifies the complete executable. Source compilation and matching-progress checks are still pending; see the [baseline scope](config/GN7E69/README.md).
+This relinks and verifies the complete executable from original objects; see the [baseline scope](config/GN7E69/README.md).
 
 To prepare the pinned working compiler and verify its stages:
 
@@ -34,6 +34,14 @@ python3 -m unittest discover -s tests -v
 ```
 
 Compiler verification does not establish flags for reconstructed source units.
+
+To build the reconstructed source units listed in [`config/GN7E69/units.json`](config/GN7E69/units.json) in place of their original bytes and verify the complete executable:
+
+```sh
+python3 tools/source_build.py --original /path/to/main.dol
+```
+
+The [source build](config/GN7E69/README.md#source-build) writes its measured report to `build/source/report.json`; public progress counts only bytes from that report.
 
 ## Contributing
 
