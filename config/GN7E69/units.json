@@ -49,6 +49,13 @@
         "src/dolphin"
       ],
       "evidence": "evidence.tsv compiler row for Nintendo SDK; MVP and upstream release-library profile. Whole-file flags validated by complete target relink; original compiler version not uniquely identified."
+    },
+    "game_cpp": {
+      "flags": [
+        "-O2",
+        "-fno-weak"
+      ],
+      "evidence": "evidence.tsv compiler row game_cpp: ProDG 3.9.3 cc1plus -O2 -fno-weak reproduces every instruction of the module units 0x8008BB30-0x8008BCF0 and 0x8008B974-0x8008BB30. -O1, -O3, -Os, -fno-schedule-insns, -fno-schedule-insns2, -G0, -fexceptions and -frtti change the output; without -fno-weak the class functions and vtable move to linkonce sections, while the target keeps the destructor 0x8008BC68 inside the contiguous .text run and the vtable in rodata; -fvtable-thunks changes the vtable layout."
     }
   },
   "externals": {
@@ -291,6 +298,34 @@
     "__DSP_debug_printf": {
       "address": "0x80285D78",
       "evidence": "DSP task target branch destinations and SDK reference signatures."
+    },
+    "Virtual_80025F24__6Module": {
+      "address": "0x80025F24",
+      "evidence": "evidence.tsv external row for 0x80025F24 (Virtual_80025F24__6Module); descriptive name."
+    },
+    "Virtual_80025F28__6ModulePv": {
+      "address": "0x80025F28",
+      "evidence": "evidence.tsv external row for 0x80025F28 (Virtual_80025F28__6ModulePv); descriptive name."
+    },
+    "Virtual_80025F5C__6Module": {
+      "address": "0x80025F5C",
+      "evidence": "evidence.tsv external row for 0x80025F5C (Virtual_80025F5C__6Module); descriptive name."
+    },
+    "Virtual_80025F60__6Module": {
+      "address": "0x80025F60",
+      "evidence": "evidence.tsv external row for 0x80025F60 (Virtual_80025F60__6Module); descriptive name."
+    },
+    "_vt.6Module": {
+      "address": "0x80289C80",
+      "evidence": "evidence.tsv external row for 0x80289C80 (_vt.6Module); descriptive name."
+    },
+    "__10ModuleNode": {
+      "address": "0x801CC700",
+      "evidence": "evidence.tsv external row for 0x801CC700 (__10ModuleNode); descriptive name."
+    },
+    "_._10ModuleNode": {
+      "address": "0x801CC740",
+      "evidence": "evidence.tsv external row for 0x801CC740 (_._10ModuleNode); descriptive name."
     }
   },
   "units": [
@@ -310,6 +345,49 @@
           "placement": ".data3",
           "start": "0x802B1DF0",
           "end": "0x802B1E78"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Celebration.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8008BB30-0x8008BCF0 (src/game/Celebration.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8008BB30",
+          "end": "0x8008BCF0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80295660",
+          "end": "0x802956D0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BE88",
+          "end": "0x8030BEA8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC8A8",
+          "end": "0x803EC8B0"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289ABC",
+          "end": "0x80289AC0"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BFC",
+          "end": "0x80289C00"
         }
       ]
     },
