@@ -74,6 +74,35 @@ class Fingerprints(unittest.TestCase):
             sdk_scan.code_sections(synthetic_dol()[:0x13F])
 
 
+class CompilerReporting(unittest.TestCase):
+    def test_mixed_report_attributes_each_unit_to_its_pinned_compiler(self):
+        import hashlib
+        import json
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "tools").mkdir()
+            (root / "tools/compiler-tools.json").write_text(json.dumps({
+                "compiler_version": "3.9.3", "sdk_compiler_version": "GC/1.2.5n"}))
+            binary = synthetic_dol()
+            target = dict(TARGET, sha1=hashlib.sha1(binary).hexdigest())
+            sections = source_build.target_sections(binary, target, {})
+            units = []
+            for index, family in enumerate(("prodg", "mwcc")):
+                path = root / f"unit{index}.c"
+                path.write_text("int value;\n")
+                units.append({"source": path.name, "path": path, "compile_path": None,
+                              "compiler": family, "profile": family, "flags": [], "dependencies": {},
+                              "sections": [{"section": ".text", "placement": ".init", "kind": "code",
+                                            "start": 0x80003100 + index * 4,
+                                            "end": 0x80003104 + index * 4, "compiled": 4}]})
+            with patch.object(source_build, "ROOT", root):
+                result = source_build.measure(target, sections, units, b"{}", binary, True, {})
+            self.assertEqual(result["compilers"], {"prodg": "3.9.3", "mwcc": "GC/1.2.5n"})
+            self.assertEqual([unit["compiler"] for unit in result["units"]], [
+                {"family": "prodg", "version": "3.9.3"}, {"family": "mwcc", "version": "GC/1.2.5n"}])
+            self.assertNotIn("compiler", result)
+
+
 class NativeCompiler(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

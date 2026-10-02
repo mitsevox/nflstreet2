@@ -530,7 +530,12 @@ def dol_bytes(binary, start, end):
 def measure(target, sections, units, manifest_bytes, result, identical, resolved):
     totals = {kind: {"linked": 0, "matched": 0} for kind in ("code", "data")}
     measured = []
+    lock = json.loads((ROOT / "tools/compiler-tools.json").read_text())
+    compilers = {}
     for unit in units:
+        family = unit["compiler"]
+        version = lock["sdk_compiler_version"] if family == "mwcc" else lock["compiler_version"]
+        compilers[family] = version
         entries = []
         for entry in unit["sections"]:
             size = entry["end"] - entry["start"]
@@ -552,11 +557,12 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
         measured.append({"source": unit["source"], "compile_path": unit["compile_path"],
                          "source_sha256": sha256(unit["path"]),
                          "profile": unit["profile"], "flags": unit["flags"],
+                         "compiler": {"family": family, "version": version},
                          "dependencies": unit["dependencies"],
                          "status": "matched" if identical else "unverified", "sections": entries})
     return {"schema": 1, "target": "GN7E69", "target_sha1": target["sha1"],
             "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
-            "compiler": "ProDG " + json.loads((ROOT / "tools/compiler-tools.json").read_text())["compiler_version"],
+            "compilers": dict(sorted(compilers.items())),
             "linker": "ngcld (ProDG) via wibo", "complete": "identical" if identical else "mismatch",
             "output_sha1": hashlib.sha1(result).hexdigest(),
             "tools": {path: sha256(ROOT / path) if (ROOT / path).is_file() else None
