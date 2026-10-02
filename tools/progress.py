@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export public section-level progress from the verified target and the measured source build."""
+"""Export public byte and source-file progress from the verified measured source build."""
 
 import argparse
 import csv
@@ -175,6 +175,88 @@ def source_map(sections, source_report, functions):
         section["children"] = children + remainder(section, children)
 
 
+def file_map(sections, source_report, functions):
+    """Partition executable bytes by measured source ownership, not inferred file extents."""
+    units = json.loads(source_report.read_text())["units"] if source_report and source_report.exists() else []
+    files = {}
+    unknown = []
+    for section in sections:
+        left = int(section["address"], 16)
+        right = left + section["size"]
+        owned = []
+        for unit in units:
+            for extent in unit["sections"]:
+                start, end = int(extent["start"], 16), int(extent["end"], 16)
+                if extent["kind"] == section["kind"] and left <= start < end <= right:
+                    owned.append((start, end, unit["source"]))
+        cursor = left
+        partitions = []
+        for start, end, source in sorted(owned):
+            if cursor < start:
+                partitions.append((cursor, start, None))
+            partitions.append((start, end, source))
+            cursor = end
+        if cursor < right:
+            partitions.append((cursor, right, None))
+        unmapped = {"name": "Unmapped / " + section["name"], "kind": section["kind"],
+                    "auto_generated": True, "complete": False,
+                    "size": 0, "linked": 0, "matched": 0, "children": []}
+        for start, end, source in partitions:
+            key = (source, section["kind"])
+            if source is None:
+                item = unmapped
+            else:
+                item = files.setdefault(key, {
+                    "name": source, "source": source, "kind": section["kind"],
+                    "boundary": "provisional", "scope": "measured-ranges", "complete": False,
+                    "size": 0, "linked": 0, "matched": 0, "children": []})
+            size = end - start
+            item["size"] += size
+            if source:
+                item["linked"] += size
+                item["matched"] += size
+            children = []
+            for function in functions if section["kind"] == "code" else []:
+                function_start = int(function["address"], 16)
+                function_end = function_start + function["size"]
+                begin, finish = max(start, function_start), min(end, function_end)
+                if begin >= finish:
+                    continue
+                child = {**function, "address": f"0x{begin:08X}", "size": finish - begin,
+                         "linked": finish - begin if source else 0,
+                         "matched": finish - begin if source else 0,
+                         "type": "function" if (begin, finish) == (function_start, function_end)
+                                 else "function-fragment",
+                         "function_address": function["address"], "original_size": function["size"]}
+                if source:
+                    child["source"] = source
+                children.append(child)
+            parent = {"name": "Source bytes" if source else "Unmapped bytes", "kind": section["kind"],
+                      "size": size, "linked": size if source else 0, "matched": size if source else 0}
+            children += remainder(parent, children)
+            if source:
+                for child in children:
+                    child["source"] = source
+            item["children"].extend(children)
+        if unmapped["size"]:
+            unknown.append(unmapped)
+    result = list(files.values()) + unknown
+    for kind in ("code", "data"):
+        for field in ("size", "linked", "matched"):
+            if sum(item[field] for item in result if item["kind"] == kind) != sum(
+                    section[field] for section in sections if section["kind"] == kind):
+                raise ValueError("File map does not preserve executable byte totals")
+    represented = {}
+    for item in result:
+        for child in item["children"]:
+            if "function_address" in child:
+                address = child["function_address"]
+                represented[address] = represented.get(address, 0) + child["size"]
+    if represented != {function["address"]: function["size"] for function in functions}:
+        raise ValueError("File map does not preserve function candidates")
+    return result
+
+
 def remainder(parent, children):
     remaining = {field: parent[field] - sum(c[field] for c in children)
                  for field in ("size", "linked", "matched")}
@@ -254,7 +336,8 @@ def report(binary, revision, source_report=None, analysis_dir=None):
             "basis": "executable-sections", "baseline": "verified",
             "source": {"units": unit_count, "report": "measured" if source_report and
                        source_report.exists() else "absent"},
-            "functions": functions, "measures": measures, "sections": sections}
+            "functions": functions, "measures": measures, "sections": sections,
+            "files": file_map(sections, source_report, function_items)}
 
 
 def main():
