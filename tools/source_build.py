@@ -198,7 +198,7 @@ def load_manifest(manifest, sections, compiler_version):
     by_name = {section["name"]: section for section in sections}
     units, ranges, sources = [], [], set()
     for unit in manifest.get("units", []):
-        if set(unit) != {"source", "profile", "evidence", "sections"} or not unit["evidence"].strip():
+        if set(unit) - {"link_roots"} != {"source", "profile", "evidence", "sections"} or not unit["evidence"].strip():
             raise ValueError("Each unit needs exactly source, profile, evidence and sections; "
                              "flags belong to a profile")
         source = repository_path(unit["source"])
@@ -207,6 +207,17 @@ def load_manifest(manifest, sections, compiler_version):
         sources.add(unit["source"])
         if unit["profile"] not in profiles:
             raise ValueError(f"Unit {unit['source']} uses unknown profile {unit['profile']}")
+        roots = unit.get("link_roots")
+        if roots is not None:
+            if profiles[unit["profile"]].get("compiler", "prodg") != "mwcc" \
+                    or not isinstance(roots, dict) or set(roots) != {"symbols", "evidence"} \
+                    or not isinstance(roots["evidence"], str) or not roots["evidence"].strip() \
+                    or not isinstance(roots["symbols"], list) or not roots["symbols"] \
+                    or not all(isinstance(n, str) and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", n)
+                               and n not in LINKER_SYMBOLS and not n.startswith("__original_")
+                               for n in roots["symbols"]) \
+                    or len(set(roots["symbols"])) != len(roots["symbols"]):
+                raise ValueError("SDK link_roots need distinct symbol names and retention evidence")
         placed = []
         for entry in unit["sections"]:
             if set(entry) != {"section", "placement", "start", "end"}:
@@ -235,7 +246,7 @@ def load_manifest(manifest, sections, compiler_version):
                       "flags": profiles[unit["profile"]]["flags"], "sections": placed,
                       "compiler": profiles[unit["profile"]].get("compiler", "prodg"),
                       "include_dirs": profiles[unit["profile"]].get("include_dirs", []),
-                      "source_root": root, "compile_path": compile_path})
+                      "source_root": root, "compile_path": compile_path, "link_roots": roots})
     ranges.sort()
     for left, right in zip(ranges, ranges[1:]):
         if right[0] < left[1]:
@@ -423,6 +434,69 @@ def run(label, command, log):
         raise RuntimeError(f"{label} failed or reported diagnostics; see {log}")
 
 
+def retained_layout(unit, compiler, wrapper):
+    """Inspect SN's retained layout; final linking still consumes the untouched compiler object.
+
+    This initially supports code-only SDK objects. SN's partial link adds its own BSS tag;
+    that generated metadata is absent from the compiler input and is not a source section.
+    """
+    native = unit["object"]
+    sections, symbols = read_elf(native.read_bytes())
+    allocated = [section for section in sections if section["flags"] & SHF_ALLOC and section["size"]]
+    if len(allocated) != 1 or allocated[0]["name"] != ".text" \
+            or not allocated[0]["flags"] & SHF_EXECINSTR:
+        raise ValueError(f"{unit['source']}: linker retention currently requires a code-only SDK object")
+    functions = {symbol["name"]: symbol for symbol in symbols if symbol["type"] == 2}
+    roots = unit["link_roots"]["symbols"]
+    if any(name not in functions or functions[name]["bind"] != STB_GLOBAL
+           or functions[name]["shndx"] != allocated[0]["index"] for name in roots):
+        raise ValueError(f"{unit['source']}: retention root is not a defined global function")
+    keep = native.with_suffix(".keep")
+    keep.write_text("\n".join(roots) + "\n")
+    partial = native.with_suffix(".layout.o")
+    partial.unlink(missing_ok=True)
+    before = sha256(native)
+    run("SDK retained-layout link", [str(wrapper), str(compiler / "ngcld.exe"), "-r",
+        "-strip-unused", "-keep", str(keep), "-o", str(partial), str(native)],
+        native.with_suffix(".layout.log"))
+    if sha256(native) != before or not partial.is_file() or not partial.stat().st_size:
+        raise RuntimeError("Retained-layout linker changed its compiler input or produced no fresh object")
+    linked_sections, linked_symbols = read_elf(partial.read_bytes())
+    text = next((section for section in linked_sections if section["name"] == ".text"), None)
+    retained = [symbol for symbol in linked_symbols if symbol["type"] == 2]
+    if text is None or not retained or not set(roots) <= {symbol["name"] for symbol in retained}:
+        raise ValueError("Retained-layout linker omitted required functions")
+    for symbol in retained:
+        original = functions.get(symbol["name"])
+        if original is None or symbol["size"] != original["size"] \
+                or symbol["shndx"] != text["index"]:
+            raise ValueError("Retained-layout linker changed a function's identity or size")
+    # Only the compiler's code participates in the placement plan. Unknown generated sections fail.
+    for section in linked_sections:
+        if not section["flags"] & SHF_ALLOC or not section["size"] or section is text:
+            continue
+        if section["name"] != ".data" or section["size"] != 4:
+            raise ValueError("Unexpected allocated section from retained-layout linker")
+        tag = next((symbol for symbol in linked_symbols
+                    if symbol["name"] == "__sn__bss__tag__address__"), None)
+        if tag is None or tag["shndx"] != section["index"] or tag["value"] != 0:
+            raise ValueError("Unrecognized generated SN BSS tag")
+    referenced = set()
+    linked_bytes = partial.read_bytes()
+    for section in linked_sections:
+        if section["type"] == 4 and section["info"] == text["index"]:
+            for offset in range(section["offset"], section["offset"] + section["size"], 12):
+                index = struct.unpack_from(">I", linked_bytes, offset + 4)[0] >> 8
+                if index == 0 or index > len(linked_symbols):
+                    raise ValueError("Invalid retained-layout relocation symbol")
+                referenced.add(linked_symbols[index - 1]["name"])
+    # SN preserves some unused undefined symbol-table entries after removing their relocations.
+    used_symbols = [symbol for symbol in linked_symbols if symbol["shndx"] == text["index"]
+                    or (symbol["shndx"] == SHN_UNDEF and symbol["name"] in referenced)]
+    unit["native_object_sha256"] = before
+    return [text], used_symbols
+
+
 # Build ------------------------------------------------------------------------------------
 
 def build(original, manifest_path, report_path):
@@ -445,6 +519,8 @@ def build(original, manifest_path, report_path):
     system = baseline_system()
     dtk = baseline.get_tool("dtk", json.loads((ROOT / "tools/baseline-tools.json").read_text()), system)
     objects = {}
+    strip_unused = any(unit["link_roots"] is not None for unit in units)
+    original_roots = []
     sdk_directory = setup_compiler.setup_sdk() if any(u["compiler"] == "mwcc" for u in units) else None
     for index, unit in enumerate(units):
         stem = re.sub(r"[^A-Za-z0-9]+", "_", unit["source"]).strip("_")
@@ -466,7 +542,9 @@ def build(original, manifest_path, report_path):
             result = subprocess.run(command, cwd=workdir, stdin=subprocess.DEVNULL)
             if result.returncode or not unit["object"].is_file():
                 raise RuntimeError(f"Compilation failed for {unit['source']}")
-        objects[unit["source"]] = read_elf(unit["object"].read_bytes())
+        unit["native_object_sha256"] = sha256(unit["object"])
+        objects[unit["source"]] = (retained_layout(unit, compiler, wrapper) if unit["link_roots"]
+                                   else read_elf(unit["object"].read_bytes()))
         unit["dependencies"] = dependencies(unit["depfile"], workdir)
     pieces, defined, resolved = plan(sections, units, objects, externals)
     for section in sections:
@@ -484,18 +562,38 @@ def build(original, manifest_path, report_path):
             if section["kind"] != "bss":
                 offset = piece["start"] - section["start"]
                 entry["data"] = section["contents"][offset:offset + size]
-            write_object(piece["object"], [entry],
-                         [{"name": s["name"], "value": s["value"], "shndx": 1} for s in piece["symbols"]])
+            symbols = [{"name": s["name"], "value": s["value"], "shndx": 1} for s in piece["symbols"]]
+            if strip_unused:
+                marker = "__original_" + piece["object"].stem
+                original_roots.append(marker)
+                symbols.append({"name": marker, "value": 0, "size": size, "shndx": 1})
+            write_object(piece["object"], [entry], symbols)
     inputs = [piece["object"] for section in sections for piece in pieces[section["name"]]]
     inputs = list(dict.fromkeys(inputs))
     check_basenames(inputs)
     script = BUILD / "link.ld"
     script.write_text(link_script(target, sections, pieces))
     elf, output = BUILD / "main.elf", BUILD / "main.dol"
-    run("ngcld", [str(wrapper), str(compiler / "ngcld.exe"), "-T", str(script), "-o", str(elf)]
-        + [str(path) for path in inputs], BUILD / "link.log")
+    linker_flags = []
+    if strip_unused:
+        roots = set(original_roots)
+        for unit in units:
+            roots.update(unit["link_roots"]["symbols"] if unit["link_roots"] else
+                         [symbol["name"] for symbol in objects[unit["source"]][1]
+                          if symbol["bind"] == STB_GLOBAL and symbol["shndx"] != SHN_UNDEF])
+        keep = BUILD / "keep.txt"
+        keep.write_text("\n".join(sorted(roots)) + "\n")
+        linker_flags = ["-strip-unused", "-keep", str(keep)]
+    arguments = [*linker_flags, "-T", str(script), "-o", str(elf)] + [str(path) for path in inputs]
+    response = BUILD / "link.rsp"
+    if any(any(character in argument for character in '\0\n\r"') for argument in arguments):
+        raise ValueError("Linker argument cannot be represented safely in a response file")
+    response.write_text("\n".join('"' + argument + '"' for argument in arguments) + "\n")
+    run("ngcld", [str(wrapper), str(compiler / "ngcld.exe"), "@" + str(response)], BUILD / "link.log")
     if not elf.is_file() or not elf.stat().st_size:
         raise RuntimeError("Linker did not produce a fresh ELF")
+    if any(sha256(unit["object"]) != unit["native_object_sha256"] for unit in units):
+        raise RuntimeError("Final linker input no longer equals the native compiler object")
     final = {s["name"]: s["value"] for s in read_elf(elf.read_bytes())[1] if s["bind"] != STB_LOCAL}
     for name, (value, source) in defined.items():
         if final.get(name) != value:
@@ -559,6 +657,8 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                          "profile": unit["profile"], "flags": unit["flags"],
                          "compiler": {"family": family, "version": version},
                          "dependencies": unit["dependencies"],
+                         "link_roots": unit.get("link_roots"),
+                         "native_object_sha256": unit.get("native_object_sha256"),
                          "status": "matched" if identical else "unverified", "sections": entries})
     return {"schema": 1, "target": "GN7E69", "target_sha1": target["sha1"],
             "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
