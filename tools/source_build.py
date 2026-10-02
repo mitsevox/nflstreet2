@@ -437,27 +437,38 @@ def run(label, command, log):
 def retained_layout(unit, compiler, wrapper):
     """Inspect SN's retained layout; final linking still consumes the untouched compiler object.
 
-    This initially supports code-only SDK objects. SN's partial link adds its own BSS tag;
-    that generated metadata is absent from the compiler input and is not a source section.
+    Static sections retain their native identity and offsets. SN's generated BSS tag
+    is linker metadata, absent from the compiler input and excluded from source ownership.
     """
     native = unit["object"]
     sections, symbols = read_elf(native.read_bytes())
     allocated = [section for section in sections if section["flags"] & SHF_ALLOC and section["size"]]
-    if len(allocated) != 1 or allocated[0]["name"] != ".text" \
-            or not allocated[0]["flags"] & SHF_EXECINSTR:
-        raise ValueError(f"{unit['source']}: linker retention currently requires a code-only SDK object")
+    allowed = {".text", ".rodata", ".data", ".bss", ".sdata", ".sdata2", ".sbss", ".sbss2"}
+    native_sections = {section["name"]: section for section in allocated}
+    native_text = native_sections.get(".text")
+    if native_text is None or not native_text["flags"] & SHF_EXECINSTR \
+            or len(native_sections) != len(allocated) or set(native_sections) - allowed:
+        raise ValueError(f"{unit['source']}: unsupported native SDK sections")
+    for section in allocated:
+        expected_type = SHT_NOBITS if section["name"] in {".bss", ".sbss", ".sbss2"} else SHT_PROGBITS
+        if section["type"] != expected_type \
+                or bool(section["flags"] & SHF_EXECINSTR) != (section["name"] == ".text"):
+            raise ValueError(f"{unit['source']}: unsupported native SDK section type")
     functions = {symbol["name"]: symbol for symbol in symbols if symbol["type"] == 2}
     roots = unit["link_roots"]["symbols"]
     if any(name not in functions or functions[name]["bind"] != STB_GLOBAL
-           or functions[name]["shndx"] != allocated[0]["index"] for name in roots):
+           or functions[name]["shndx"] != native_text["index"] for name in roots):
         raise ValueError(f"{unit['source']}: retention root is not a defined global function")
     keep = native.with_suffix(".keep")
     keep.write_text("\n".join(roots) + "\n")
     partial = native.with_suffix(".layout.o")
     partial.unlink(missing_ok=True)
+    script = native.with_suffix(".layout.ld")
+    script.write_text("SECTIONS {\n_SDA_BASE_ = 0;\n_SDA2_BASE_ = 0;\n" +
+                      "\n".join(f"{name} : {{ *({name}) }}" for name in sorted(allowed)) + "\n}\n")
     before = sha256(native)
     run("SDK retained-layout link", [str(wrapper), str(compiler / "ngcld.exe"), "-r",
-        "-strip-unused", "-keep", str(keep), "-o", str(partial), str(native)],
+        "-T", str(script), "-strip-unused", "-keep", str(keep), "-o", str(partial), str(native)],
         native.with_suffix(".layout.log"))
     if sha256(native) != before or not partial.is_file() or not partial.stat().st_size:
         raise RuntimeError("Retained-layout linker changed its compiler input or produced no fresh object")
@@ -471,30 +482,64 @@ def retained_layout(unit, compiler, wrapper):
         if original is None or symbol["size"] != original["size"] \
                 or symbol["shndx"] != text["index"]:
             raise ValueError("Retained-layout linker changed a function's identity or size")
-    # Only the compiler's code participates in the placement plan. Unknown generated sections fail.
+    mapped = [text]
+    by_index = {section["index"]: section for section in allocated}
+    tag = next((symbol for symbol in linked_symbols
+                if symbol["name"] == "__sn__bss__tag__address__"), None)
     for section in linked_sections:
         if not section["flags"] & SHF_ALLOC or not section["size"] or section is text:
             continue
-        if section["name"] != ".data" or section["size"] != 4:
+        original = native_sections.get(section["name"])
+        native_size = original["size"] if original else 0
+        expected_size = native_size
+        if section["name"] == ".data":
+            if tag is None or tag["shndx"] != section["index"] \
+                    or tag["value"] != ((native_size + 3) & ~3):
+                raise ValueError("Unrecognized generated SN BSS tag")
+            expected_size = tag["value"] + 4
+        if section["size"] != expected_size or (original is None and section["name"] != ".data"):
             raise ValueError("Unexpected allocated section from retained-layout linker")
-        tag = next((symbol for symbol in linked_symbols
-                    if symbol["name"] == "__sn__bss__tag__address__"), None)
-        if tag is None or tag["shndx"] != section["index"] or tag["value"] != 0:
-            raise ValueError("Unrecognized generated SN BSS tag")
+        if original:
+            if section["type"] != original["type"] or section["flags"] != original["flags"]:
+                raise ValueError("Retained-layout linker changed a static section's type or flags")
+            section["size"] = native_size
+            if "data" in section:
+                section["data"] = section["data"][:native_size]
+            mapped.append(section)
+    if {section["name"] for section in mapped} != set(native_sections):
+        raise ValueError("Retained-layout linker omitted a native static section")
+    mapped_indices = {section["index"] for section in mapped}
+    linked_by_name = {section["name"]: section for section in mapped}
+    for symbol in symbols:
+        original = by_index.get(symbol["shndx"])
+        if original is None or original["name"] == ".text" or symbol["type"] not in {1, 2}:
+            continue
+        retained_symbol = next((other for other in linked_symbols
+                                if other["name"] == symbol["name"]), None)
+        if retained_symbol is None or retained_symbol["size"] != symbol["size"] \
+                or retained_symbol["value"] != symbol["value"] \
+                or retained_symbol["shndx"] != linked_by_name[original["name"]]["index"]:
+            raise ValueError("Retained-layout linker changed a static symbol's identity or offset")
     referenced = set()
     linked_bytes = partial.read_bytes()
     for section in linked_sections:
-        if section["type"] == 4 and section["info"] == text["index"]:
+        if section["type"] == 4 and section["info"] in mapped_indices:
             for offset in range(section["offset"], section["offset"] + section["size"], 12):
-                index = struct.unpack_from(">I", linked_bytes, offset + 4)[0] >> 8
+                at, info = struct.unpack_from(">II", linked_bytes, offset)
+                owned = next(entry for entry in mapped if entry["index"] == section["info"])
+                if at >= owned["size"]:
+                    continue
+                index = info >> 8
                 if index == 0 or index > len(linked_symbols):
                     raise ValueError("Invalid retained-layout relocation symbol")
                 referenced.add(linked_symbols[index - 1]["name"])
     # SN preserves some unused undefined symbol-table entries after removing their relocations.
-    used_symbols = [symbol for symbol in linked_symbols if symbol["shndx"] == text["index"]
-                    or (symbol["shndx"] == SHN_UNDEF and symbol["name"] in referenced)]
+    generated = {"__sn__bss__tag__address__", "__sn__bss__tag__"}
+    used_symbols = [symbol for symbol in linked_symbols if symbol["name"] not in generated
+                    and (symbol["shndx"] in mapped_indices
+                         or (symbol["shndx"] == SHN_UNDEF and symbol["name"] in referenced))]
     unit["native_object_sha256"] = before
-    return [text], used_symbols
+    return mapped, used_symbols
 
 
 # Build ------------------------------------------------------------------------------------

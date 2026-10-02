@@ -167,16 +167,49 @@ class LinkerRetention(unittest.TestCase):
             self.assertNotIn("Missing", [s["name"] for s in symbols])
             self.assertEqual(unit["native_object_sha256"], source_build.sha256(unit["object"]))
 
-    def test_absent_roots_and_data_bearing_inputs_are_rejected(self):
+    def test_absent_roots_are_rejected(self):
         with tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
             root = Path(temporary)
             unit = self.fixture(root)
             unit["link_roots"]["symbols"] = ["Missing"]
             with self.assertRaisesRegex(ValueError, "defined global function"):
                 source_build.retained_layout(unit, self.compiler, self.wrapper)
+
+    def test_native_static_sections_preserve_symbols_and_references(self):
+        with tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
+            root = Path(temporary)
             unit = self.fixture(root, data=True)
-            with self.assertRaisesRegex(ValueError, "code-only"):
-                source_build.retained_layout(unit, self.compiler, self.wrapper)
+            source = root / "retention.c"
+            source.write_text(source.read_text() +
+                              "int table[10] = {1,2,3};\nint (*entry)(void) = Missing;\n")
+            sdk_cc.compile(self.sdk, self.wrapper, source, unit["object"],
+                           unit["object"].with_suffix(".d"), FLAGS, [], ROOT)
+            before = unit["object"].read_bytes()
+            sections, symbols = source_build.retained_layout(unit, self.compiler, self.wrapper)
+            self.assertEqual(unit["object"].read_bytes(), before)
+            self.assertEqual(next(s["size"] for s in sections if s["name"] == ".data"), 40)
+            self.assertEqual(next(s["size"] for s in sections if s["name"] == ".sdata"), 8)
+            self.assertIn("Missing", [s["name"] for s in symbols])
+            self.assertIn("table", [s["name"] for s in symbols])
+            self.assertNotIn("__sn__bss__tag__address__", [s["name"] for s in symbols])
+            self.assertNotIn("__sn__bss__tag__", [s["name"] for s in symbols])
+
+    def test_changed_static_symbol_and_generated_tag_are_rejected(self):
+        for name, expected in (("stored", "static symbol"),
+                               ("__sn__bss__tag__address__", "BSS tag")):
+            with self.subTest(name=name), tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
+                unit = self.fixture(Path(temporary), data=True)
+                native = unit["object"].read_bytes()
+                original_read = source_build.read_elf
+
+                def changed(binary):
+                    sections, symbols = original_read(binary)
+                    if binary != native:
+                        next(s for s in symbols if s["name"] == name)["value"] += 4
+                    return sections, symbols
+
+                with patch.object(source_build, "read_elf", changed), self.assertRaisesRegex(ValueError, expected):
+                    source_build.retained_layout(unit, self.compiler, self.wrapper)
 
     def test_mutated_compiler_input_cannot_supply_a_layout(self):
         with tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
