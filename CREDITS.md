@@ -5,6 +5,10 @@ The Nintendo SDK reconstruction is reused from [MVP 2005](https://github.com/mit
 | Imported source | Upstream source |
 | --- | --- |
 | `src/dolphin/si/SISamplingRate.c` | re4 `src/lib/SISamplingRate.c` |
+| `src/dolphin/card/{CARDBlock,CARDCreate,CARDDelete,CARDDir,CARDStat,CARDWrite}.c` | Corresponding re4 `src/lib/` CARD units |
+| `src/dolphin/__card.h` | re4 `src/lib/__card.h` |
+| `src/dolphin/ax/AX.c` | re4 `src/lib/AX.c`; release version string restored to target April 2003 build |
+| `include/dolphin/ax.h`, `src/dolphin/__ax.h` | Used declarations from re4 AX public and internal headers |
 | `src/dolphin/os/OSSync.c` | re4 `src/lib/OSSync.c` |
 | `include/dolphin/`, `include/libc/`, `include/cmath.h` | MVP's SDK header dependency closure, credited to re4/dolsdk2004 |
 | `src/dolphin/__os.h` | The used declaration from re4 `src/lib/__os.h` |
