@@ -94,91 +94,91 @@
     },
     "__CARDBlock": {
       "address": "0x803A6508",
-      "evidence": "evidence.tsv CARD external row __CARDBlock: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __CARDBlock: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__CARDPutControlBlock": {
       "address": "0x80254374",
-      "evidence": "evidence.tsv CARD external row __CARDPutControlBlock: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __CARDPutControlBlock: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__CARDWrite": {
       "address": "0x80259D24",
-      "evidence": "evidence.tsv CARD external row __CARDWrite: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __CARDWrite: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__CARDCheckSum": {
       "address": "0x80254CA8",
-      "evidence": "evidence.tsv CARD external row __CARDCheckSum: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __CARDCheckSum: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "DCStoreRange": {
       "address": "0x80239D1C",
-      "evidence": "evidence.tsv CARD external row DCStoreRange: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row DCStoreRange: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__CARDEraseSector": {
       "address": "0x802540F0",
-      "evidence": "evidence.tsv CARD external row __CARDEraseSector: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __CARDEraseSector: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "OSGetTime": {
       "address": "0x8023E794",
-      "evidence": "evidence.tsv CARD external row OSGetTime: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row OSGetTime: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__div2i": {
       "address": "0x801AD470",
-      "evidence": "evidence.tsv CARD external row __div2i: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __div2i: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "strlen": {
       "address": "0x801C3180",
-      "evidence": "evidence.tsv CARD external row strlen: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row strlen: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__CARDGetControlBlock": {
       "address": "0x802542BC",
-      "evidence": "evidence.tsv CARD external row __CARDGetControlBlock: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __CARDGetControlBlock: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "memcmp": {
       "address": "0x801C1FEC",
-      "evidence": "evidence.tsv CARD external row memcmp: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row memcmp: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__CARDCompareFileName": {
       "address": "0x80256F14",
-      "evidence": "evidence.tsv CARD external row __CARDCompareFileName: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __CARDCompareFileName: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__CARDDefaultApiCallback": {
       "address": "0x8025335C",
-      "evidence": "evidence.tsv CARD external row __CARDDefaultApiCallback: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __CARDDefaultApiCallback: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "strncpy": {
       "address": "0x801C2EF0",
-      "evidence": "evidence.tsv CARD external row strncpy: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row strncpy: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__CARDSyncCallback": {
       "address": "0x80253360",
-      "evidence": "evidence.tsv CARD external row __CARDSyncCallback: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __CARDSyncCallback: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__CARDSync": {
       "address": "0x80254558",
-      "evidence": "evidence.tsv CARD external row __CARDSync: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __CARDSync: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__CARDIsWritable": {
       "address": "0x80257010",
-      "evidence": "evidence.tsv CARD external row __CARDIsWritable: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __CARDIsWritable: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__CARDIsOpened": {
       "address": "0x802574E0",
-      "evidence": "evidence.tsv CARD external row __CARDIsOpened: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __CARDIsOpened: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "memset": {
       "address": "0x801C1F94",
-      "evidence": "evidence.tsv CARD external row memset: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row memset: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__CARDGetFileNo": {
       "address": "0x80257238",
-      "evidence": "evidence.tsv CARD external row __CARDGetFileNo: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __CARDGetFileNo: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__CARDIsReadable": {
       "address": "0x80257144",
-      "evidence": "evidence.tsv CARD external row __CARDIsReadable: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __CARDIsReadable: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__CARDSeek": {
       "address": "0x80257880",
-      "evidence": "evidence.tsv CARD external row __CARDSeek: target relocation fields and SDK source reference; callee validation pending independent pass."
+      "evidence": "evidence.tsv CARD external row __CARDSeek: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "OSRegisterVersion": {
       "address": "0x8023931C",
