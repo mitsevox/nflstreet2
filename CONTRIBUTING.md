@@ -8,6 +8,20 @@ Contributions contain source, tools, and reviewed metadata. Do not publish origi
 
 Clone the repository and follow the [build setup](README.md#building). Arrange access to any required reference material with the project owner. Checkout locations are a local choice; a contributor workflow must not depend on another person's absolute paths.
 
+Use your own checkout and contribution branch:
+
+```sh
+git clone https://github.com/mitsevox/nflstreet2.git
+cd nflstreet2
+git switch -c your-task
+python3 tools/setup_compiler.py
+python3 -m unittest discover -s tests -v
+python3 tools/baseline.py --original /path/to/main.dol
+python3 tools/baseline.py --original /path/to/main.dol --sn-linker build/toolchain/ProDG/3.9.3/ngcld.exe --wrapper build/toolchain/wibo
+```
+
+The supported hosts and target hash are in the README. macOS requires existing Rosetta support for Wibo. Missing reference access is a setup issue for the owner, not a reason to change supporting dependencies. Claim your scope in an issue or draft PR before editing shared files; identify dependency branches and coordinate overlapping changes there.
+
 Contribution branches, PRs, reviews, and required CI checks belong in this repository. Use the owner-approved build environment at its pinned version. Supporting build dependencies are maintained by the owner; contributors and agents must not change them to accommodate a patch. Report missing inputs or tooling problems in an issue here for the owner's decision.
 
 **Only the project owner authorizes and performs merges into `main`.** Contributors and agents may prepare branches, submit PRs, and review changes. A reviewer verdict or passing CI never grants merge authority. Contributors must not push directly to `main` or enable automatic merging.
@@ -17,7 +31,7 @@ Contribution branches, PRs, reviews, and required CI checks belong in this repos
 1. **Claim a bounded task.** Use an issue or draft PR to state the unit, scope, and shared-file dependencies. Work on a dedicated branch from current `main`, in your own checkout or worktree. Coordinate overlapping changes before starting.
 2. **Establish boundaries and types.** Inspect the target and reference evidence before reconstructing the unit. Use shared declarations; do not invent local substitutes to obtain a match. Record unknowns explicitly. A related build is corroboration, not proof of the target layout.
 3. **Reconstruct and match.** Recover source in the original codebase's style. Keep trial variants local. Per-function comparisons are diagnostic; the combined build is the final output check.
-4. **Name and explain.** Include provenance for recovered names, types, fields, and boundaries in reviewed metadata. Keep readable names distinct from claims of original names. Comments follow the standard below.
+4. **Name and explain.** Include provenance for recovered names, types, fields, and boundaries in reviewed metadata using the [evidence format](config/README.md). Keep readable names distinct from claims of original names. Comments follow the standard below.
 5. **Self-check.** Verify the complete target binary, unit code and data, and regressions against the base revision. List unresolved functions and shared-file changes. Do not claim a function score proves a complete unit.
 6. **Blind accuracy review.** An independent reviewer examines the scoped functions with proposed names and comments withheld, then reconciles its interpretation against the evidence. Record disagreements and their resolution in the PR.
 7. **Hostile review.** A fresh reviewer applies the checklist below. Resolve every finding by fixing it or providing evidence. The same reviewer rechecks findings and affected code after fixes; substantive reconstruction changes return through the relevant passes.
@@ -73,6 +87,25 @@ Report `PASS`, `FAIL`, `BLOCKED`, or a justified `N/A` for each check. Findings 
 End with the reviewed revision and one verdict: `SHIP` (no unresolved failures or blocked checks), `FIX` (localized corrections), `REDO` (unsupported tricks or fundamental reconstruction problems), or `BLOCKED` (essential evidence or validation unavailable). A verdict does not authorize merging.
 
 After fixes, the same reviewer rechecks previous findings and affected code. Newly discovered defects may still be reported on unchanged code. Additional changes require review coverage and validation for the resulting revision; an old verdict does not cover new changes.
+
+## Review records and owner clearance
+
+Post each pass as a separate PR discussion comment. Start with `Revision: FULL_COMMIT_SHA`, followed immediately by `Accuracy: PASS` or `Accuracy: N/A - scope-based explanation` for accuracy; use `Hostile: SHIP`, `Hostile: FIX`, `Hostile: REDO`, or `Hostile: BLOCKED` for hostile review. Each header field occurs once, outside quotes or code fences. Then include reviewer identity, scope, evidence, findings, checklist results where applicable, and recheck results. Link any longer review evidence from that record. Do not write a successful record before the review happens.
+
+After checking reviewer independence, coverage, and resolution of findings, only the owner posts clearance in this form:
+
+```text
+<!-- owner-review-clearance -->
+Revision: FULL_COMMIT_SHA
+Accuracy: https://github.com/mitsevox/nflstreet2/pull/NUMBER#issuecomment-ID
+Hostile: https://github.com/mitsevox/nflstreet2/pull/NUMBER#issuecomment-ID
+```
+
+`Owner review clearance` checks that the latest owner clearance identifies the current head, points to two distinct records on that PR, and that those records contain the same revision and passing verdicts. It remains pending for drafts, absent clearance, stale revisions, or invalid records. New commits require reviews covering the resulting revision and new owner clearance. Edit the latest clearance to remove its revision or evidence links to withdraw it; changes to linked discussion records also trigger revalidation.
+
+The check authenticates the owner's clearance and record references; it cannot prove reviewer independence or reasoning quality. Those judgments remain the owner's responsibility. Agents must not post clearance on the owner's behalf without explicit authorization. Clearance never authorizes a contributor or agent to merge.
+
+The workflow evaluates trusted base-branch code with read access to PR records and permission to publish the status. It does not check out or execute a contribution branch or use build/reference credentials. Its comment triggers become available after the owner merges the bootstrap workflow into the default branch.
 
 ## Feedback
 

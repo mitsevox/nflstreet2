@@ -1,0 +1,20 @@
+{
+  "data_ranges": [
+    {"start": "0x80022F28", "end": "0x80022FF0", "symbol": "data_80022F28"},
+    {"start": "0x800236BC", "end": "0x8002373C", "symbol": "data_800236BC"},
+    {"start": "0x80025DE8", "end": "0x80025E00", "symbol": "data_80025DE8"}
+  ],
+  "function_seeds": [
+    {"start": "0x8023877C", "end": "0x80238790", "symbol": "fn_8023877C"}
+  ],
+  "absolute_symbols": {
+    "lbl_803ED681": "0x803ED681",
+    "_stack_end": "0x803ED681"
+  },
+  "section_kinds": {
+    ".init": "code", ".text": "code", ".data2": "rodata",
+    ".data3": "rodata", ".data4": "data", ".bss": "bss",
+    ".data5": "data", ".sbss": "bss", ".data6": "rodata"
+  },
+  "output_sections": {".data5": ".sdata", ".data6": ".sdata2"}
+}

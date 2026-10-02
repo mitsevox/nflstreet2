@@ -18,7 +18,22 @@ Original `main.dol` SHA-1:
 
 ## Building
 
-Build instructions will be added when the toolchain is established. You will need your own copy of the game.
+You will need your own copy of the game. The initial original-object baseline supports Python 3.9 or newer on macOS ARM64 and Linux x86-64:
+
+```sh
+python3 tools/baseline.py --original /path/to/main.dol
+```
+
+This relinks and verifies the complete executable. Source compilation and matching-progress checks are still pending; see the [baseline scope](config/GN7E69/README.md).
+
+To prepare the pinned working compiler and verify its stages:
+
+```sh
+python3 tools/setup_compiler.py
+python3 -m unittest discover -s tests -v
+```
+
+Compiler verification does not establish flags for reconstructed source units.
 
 ## Contributing
 
