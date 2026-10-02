@@ -71,11 +71,19 @@ class SourceReportTests(ProgressBase):
     """Linked and matched bytes come only from a current, complete source-build report."""
 
     def write_source(self, units=True):
-        manifest = {"schema": 1, "units": [{"source": "src/unit.c"}] if units else []}
+        configured = [{"section": ".text", "placement": ".init", "start": "0x80003104", "end": "0x8000310C"},
+                      {"section": ".bss", "placement": ".bss", "start": "0x80005008", "end": "0x8000500C"}]
+        manifest = {"schema": 1, "units": [{"source": "src/unit.c", "sections": configured}] if units else []}
         manifest_path = self.root / "config/GN7E69/units.json"
         manifest_path.write_text(json.dumps(manifest))
         self.report_path = self.root / "build/source/report.json"
         self.report_path.parent.mkdir(parents=True, exist_ok=True)
+        (self.root / "tools").mkdir(exist_ok=True)
+        for path in progress.TRUSTED_TOOLS:
+            if path.startswith("tools/"):
+                (self.root / path).write_text(f"synthetic {path}\n")
+        tools = {path: hashlib.sha256((self.root / path).read_bytes()).hexdigest()
+                 if (self.root / path).is_file() else None for path in progress.TRUSTED_TOOLS}
         measured = []
         if units:
             (self.root / "src").mkdir(exist_ok=True)
@@ -88,13 +96,12 @@ class SourceReportTests(ProgressBase):
             measured = [{"source": "src/unit.c", "source_sha256": digest(source), "status": "matched",
                          "dependencies": {"include/unit.h": digest(header), "src/unit.c": digest(source)},
                          "sections": [
-                             {"kind": "code", "start": "0x80003104", "end": "0x8000310C",
-                              "linked": 8, "matched": 8, "status": "matched"},
-                             {"kind": "data", "start": "0x80005008", "end": "0x8000500C",
-                              "linked": 4, "matched": 4, "status": "matched"}]}]
+                             dict(configured[0], kind="code", linked=8, matched=8, status="matched"),
+                             dict(configured[1], kind="data", linked=4, matched=4, status="matched")]}]
         self.source_report = {
             "schema": 1, "target": "GN7E69", "target_sha1": hashlib.sha1(self.binary).hexdigest(),
             "manifest_sha256": hashlib.sha256(manifest_path.read_bytes()).hexdigest(),
+            "tools": tools,
             "complete": "identical", "output_sha1": hashlib.sha1(self.binary).hexdigest(),
             "units": measured,
             "totals": {"code": {"linked": 8 if units else 0, "matched": 8 if units else 0},
@@ -163,11 +170,54 @@ class SourceReportTests(ProgressBase):
         self.save()
         with self.assertRaisesRegex(ValueError, "inconsistent"):
             progress.report(self.binary, "a" * 40, self.report_path)
+
+    def test_report_ranges_must_equal_the_manifest(self):
+        # Moving a range away from its configured placement (review E10).
         self.write_source()
-        self.source_report["units"][0]["sections"][0].update(start="0x80003200", end="0x80003208")
+        self.source_report["units"][0]["sections"][0].update(start="0x80005010", end="0x80005018")
         self.save()
-        with self.assertRaisesRegex(ValueError, "outside the executable"):
+        with self.assertRaisesRegex(ValueError, "differ from the unit manifest"):
             progress.report(self.binary, "a" * 40, self.report_path)
+        # Duplicating a range with adjusted totals (review E9).
+        self.write_source()
+        unit = self.source_report["units"][0]
+        unit["sections"].append(dict(unit["sections"][0]))
+        self.source_report["totals"]["code"] = {"linked": 16, "matched": 16}
+        self.save()
+        with self.assertRaisesRegex(ValueError, "differ from the unit manifest"):
+            progress.report(self.binary, "a" * 40, self.report_path)
+
+    def test_overlapping_ranges_are_rejected(self):
+        self.write_source()
+        manifest_path = self.root / "config/GN7E69/units.json"
+        manifest = json.loads(manifest_path.read_text())
+        second = dict(manifest["units"][0], source="src/second.c")
+        second["sections"] = [dict(manifest["units"][0]["sections"][0])]
+        manifest["units"].append(second)
+        manifest_path.write_text(json.dumps(manifest))
+        (self.root / "src/second.c").write_text("int second;\n")
+        digest = hashlib.sha256((self.root / "src/second.c").read_bytes()).hexdigest()
+        self.source_report["units"].append({
+            "source": "src/second.c", "source_sha256": digest, "status": "matched",
+            "dependencies": {"src/second.c": digest},
+            "sections": [dict(self.source_report["units"][0]["sections"][0])]})
+        self.source_report["totals"]["code"] = {"linked": 16, "matched": 16}
+        self.source_report["manifest_sha256"] = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+        self.save()
+        with self.assertRaisesRegex(ValueError, "overlap"):
+            progress.report(self.binary, "a" * 40, self.report_path)
+
+    def test_report_is_bound_to_the_build_tooling(self):
+        # Changing the build tool after the report was written (review E11).
+        self.write_source()
+        (self.root / "tools/source_build.py").write_text("modified\n")
+        with self.assertRaisesRegex(ValueError, "different build tooling"):
+            progress.report(self.binary, "a" * 40, self.report_path)
+
+    def test_trusted_tool_lists_agree(self):
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
+        import source_build
+        self.assertEqual(progress.TRUSTED_TOOLS, source_build.TRUSTED_TOOLS)
 
 
 if __name__ == "__main__":
