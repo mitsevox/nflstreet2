@@ -225,7 +225,7 @@ class FunctionInventoryTests(ProgressBase):
     save = SourceReportTests.save
     def write_inventory(self):
         self.write_source()
-        for path in ("tools/analyze.py", "tools/baseline-tools.json", "config/GN7E69/analysis.json"):
+        for path in progress.sdk_map.BASE_INPUTS:
             (self.root / path).write_text("inventory input")
         # Refresh the source report's tool hashes after changing shared inputs.
         self.source_report["tools"] = {path: progress.digest(self.root / path)
@@ -241,8 +241,7 @@ class FunctionInventoryTests(ProgressBase):
                    "complete_relink": "identical", "inventory": "provisional",
                    "candidate_counts": {"function": 2},
                    "symbols_sha256": progress.digest(self.analysis / "symbols.txt"),
-                   "inputs": {path: progress.digest(self.root / path) for path in
-                              ("tools/analyze.py", "tools/baseline-tools.json", "config/GN7E69/analysis.json")}}
+                   "inputs": progress.sdk_map.analysis_inputs(self.root)}
         (self.analysis / "summary.json").write_text(json.dumps(summary))
         (self.root / "config/GN7E69/evidence.tsv").write_text(
             "kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
@@ -314,6 +313,45 @@ class FileMapTests(ProgressBase):
     write_source = SourceReportTests.write_source
     save = SourceReportTests.save
     write_inventory = FunctionInventoryTests.write_inventory
+
+    def test_mapped_unreconstructed_bytes_never_gain_source_credit(self):
+        self.write_inventory()
+        ownership = [{"name": "src/unit.c", "source": "src/unit.c", "sections": [
+            {"section": ".init", "start": "0x80003100", "end": "0x80003110"}]}]
+        sections = [{"name": "Code", "kind": "code", "address": "0x80003100", "size": 16,
+                     "linked": 8, "matched": 8}]
+        functions = [{"name": "Candidate", "address": "0x80003100", "size": 16}]
+        files = progress.file_map(sections, self.report_path, functions, ownership)
+        self.assertEqual(len(files), 1)
+        self.assertEqual((files[0]["size"], files[0]["linked"], files[0]["matched"]), (16, 8, 8))
+        self.assertFalse(files[0]["complete"])
+        self.assertEqual(files[0]["scope"], "mapped-ranges")
+        self.assertEqual(files[0]["children"][0]["matched"], 8)
+
+    def test_zero_source_file_ownership_is_visible_with_zero_progress(self):
+        sections = [{"name": "Code", "kind": "code", "address": "0x80003100", "size": 16,
+                     "linked": 0, "matched": 0}]
+        ownership = [{"name": "src/dolphin/os/OS.c", "source": "src/dolphin/os/OS.c",
+                      "sections": [{"section": ".init", "start": "0x80003100", "end": "0x80003108"}]},
+                     {"name": "sdk/unassigned/80003108", "source": None,
+                      "sections": [{"section": ".init", "start": "0x80003108", "end": "0x80003110"}]}]
+        files = progress.file_map(sections, None, [], ownership)
+        self.assertEqual(len(files), 2)
+        self.assertEqual(files[0]["source"], "src/dolphin/os/OS.c")
+        self.assertNotIn("source", files[1])
+        self.assertTrue(files[1]["auto_generated"])
+        self.assertTrue(all(item["matched"] == item["linked"] == 0 for item in files))
+
+    def test_mapping_cannot_reassign_or_cut_through_verified_source(self):
+        self.write_inventory()
+        sections = [{"name": "Code", "kind": "code", "address": "0x80003100", "size": 16,
+                     "linked": 8, "matched": 8}]
+        for source, end in (("src/other.c", "0x80003110"), ("src/unit.c", "0x80003108")):
+            with self.subTest(source=source, end=end):
+                ownership = [{"name": source, "source": source, "sections": [
+                    {"section": ".init", "start": "0x80003100", "end": end}]}]
+                with self.assertRaisesRegex(ValueError, "conflicts"):
+                    progress.file_map(sections, self.report_path, [], ownership)
     def test_file_map_groups_measured_functions_and_data(self):
         self.write_inventory()
         data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)

@@ -1,0 +1,2656 @@
+{
+  "schema": 1,
+  "target_sha1": "3561e946e9ff785b68692f87d2ba85d81fd2dcf4",
+  "scope": "Provisional original SDK file ownership. Mapping is not reconstructed source or matching progress; unassigned intervals have no SDK membership claim.",
+  "references": [
+    {
+      "repository": "https://github.com/doldecomp/dolsdk2004",
+      "revision": "2328b4164b1a98422a2255d83ce9a5a7548990cc"
+    },
+    {
+      "repository": "https://github.com/bfbbdecomp/bfbb",
+      "revision": "8fb1c232addcacf44932c10c4cede41b43f98f40"
+    },
+    {
+      "repository": "https://github.com/zeldaret/tww",
+      "revision": "87b7c37bc23aae331d48318b68141d005157ecce"
+    },
+    {
+      "repository": "https://github.com/PrimeDecomp/prime",
+      "revision": "aae2e3747391984107d0c61d9f745ea9f6eb6c5f"
+    },
+    {
+      "repository": "https://github.com/zcanann/FFCC-Decomp",
+      "revision": "5e70e03f0776f6bd74db72d20b73f5856a54bbbb"
+    },
+    {
+      "repository": "https://github.com/mitsevox/mvp2005",
+      "revision": "1a61d5adf81a14bef749c0b2b7e803aabc2f98b3"
+    }
+  ],
+  "coverage": [
+    {
+      "section": ".text",
+      "start": "0x8023873C",
+      "end": "0x8025D6A0"
+    },
+    {
+      "section": ".text",
+      "start": "0x80285A90",
+      "end": "0x802898FC"
+    },
+    {
+      "section": ".init",
+      "start": "0x80003468",
+      "end": "0x8000348C"
+    }
+  ],
+  "units": [
+    {
+      "name": "src/dolphin/os/__ppc_eabi_init.c",
+      "source": "src/dolphin/os/__ppc_eabi_init.c",
+      "library": "OS",
+      "evidence": "Constructor/destructor-table iteration and user-init/abort/exit glue; targettable802DC668/670; native exit anchor and inspected callers distinguish identical generic wrapper fingerprints.",
+      "sections": [
+        {
+          "section": ".init",
+          "start": "0x80003468",
+          "end": "0x8000348C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Target hardware initializer enables FP and calls SDK PSInit/FPRInit/CacheInit; matches donor __init_hardware source ownership. Rest of.init unresolvedruntime source."
+        },
+        {
+          "section": ".text",
+          "start": "0x8023E818",
+          "end": "0x8023E920",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Constructor/destructor-table iteration and user-init/abort/exit glue; targettable802DC668/670; native exit anchor and inspected callers distinguish identical generic wrapper fingerprints. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/base/PPCArch.c",
+      "source": "src/dolphin/base/PPCArch.c",
+      "library": "OS",
+      "evidence": "PowerPC SPR/MSR/FPSCR helper sequence; direct native PPCMffpscr/PPCMtfpscr matches and speculation-disable calls into HID0 accessors.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8023873C",
+          "end": "0x8023885C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "PowerPC SPR/MSR/FPSCR helper sequence; direct native PPCMffpscr/PPCMtfpscr matches and speculation-disable calls into HID0 accessors. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OS.c",
+      "source": "src/dolphin/os/OS.c",
+      "library": "OS",
+      "evidence": "Unique __OSFPRInit, OSGetConsoleType, InquiryCallback, OSExceptionInit, OSDefaultExceptionHandler, __OSPSInit, OSRegisterVersion anchors; following alarm initializer installs exception vector8.",
+      "sections": [
+        {
+          "section": ".data5",
+          "start": "0x803EC154",
+          "end": "0x803EC158",
+          "evidence": "Native symbol@160 complete4-byte initializedpayload byte-identical; matching targetfunction referenceOSRegisterVersion at0x80239330.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED038",
+          "end": "0x803ED03C",
+          "evidence": "Native BootInfo storage slot4 bytes referenced consistently by matching targetfunction(s), e.g OSGetConsoleType at0x80238984. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED03C",
+          "end": "0x803ED040",
+          "evidence": "Native BI2DebugFlag storage slot4 bytes referenced consistently by matching targetfunction(s), e.g OSExceptionInit at0x80238FB4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED048",
+          "end": "0x803ED050",
+          "evidence": "Native ZeroF storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSFPRInit at0x802388FC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED050",
+          "end": "0x803ED058",
+          "evidence": "Native ZeroPS storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSFPRInit at0x80238878. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED05C",
+          "end": "0x803ED060",
+          "evidence": "Native OSExceptionTable storage slot4 bytes referenced consistently by matching targetfunction(s), e.g OSExceptionInit at0x8023910C. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8023885C",
+          "end": "0x80239348",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Unique __OSFPRInit, OSGetConsoleType, InquiryCallback, OSExceptionInit, OSDefaultExceptionHandler, __OSPSInit, OSRegisterVersion anchors; following alarm initializer installs exception vector8. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSAlarm.c",
+      "source": "src/dolphin/os/OSAlarm.c",
+      "library": "OS",
+      "evidence": "Initializer at39348 installs DecrementerExceptionHandler399A8; create at39394 clears alarm fields; InsertAlarm, SetAlarm, CancelAlarm, callback and exception handler anchors. Duplicate exception-handler bytes at3BA10 are interrupt handler, not alarm.",
+      "sections": [
+        {
+          "section": ".sbss",
+          "start": "0x803ED078",
+          "end": "0x803ED080",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "AlarmQueue two-pointer8-byte queue; InsertAlarm and alarm init masked native references consistently resolve803ED078. Both first/lastpointer words used. No neighboring allocation ownership inferred.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x80239348",
+          "end": "0x802399F8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Initializer at39348 installs DecrementerExceptionHandler399A8; create at39394 clears alarm fields; InsertAlarm, SetAlarm, CancelAlarm, callback and exception handler anchors. Duplicate exception-handler bytes at3BA10 are interrupt handler, not alarm. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSArena.c",
+      "source": "src/dolphin/os/OSArena.c",
+      "library": "OS",
+      "evidence": "Four consecutive 8-byte getters/setters at399F8/39A00/39A08/39A10 access two shared SDA pointers; OSInit and reboot/runtime consumers corroborate arena behavior. No allocator-size extrapolation.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x802399F8",
+          "end": "0x80239A18",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Four consecutive 8-byte getters/setters at399F8/39A00/39A08/39A10 access two shared SDA pointers; OSInit and reboot/runtime consumers corroborate arena behavior. No allocator-size extrapolation. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSAudioSystem.c",
+      "source": "src/dolphin/os/OSAudioSystem.c",
+      "library": "OS",
+      "evidence": "Unique init444 and stop216 anchors cover contiguous target interval.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FBC48",
+          "end": "0x802FBCC8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Native128-byte DSPInitCode array completely byte-identical; target OS audio initialization materializes this address at80239A40 and copies64halfwords.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x80239A18",
+          "end": "0x80239CAC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Unique init444 and stop216 anchors cover contiguous target interval. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSCache.c",
+      "source": "src/dolphin/os/OSCache.c",
+      "library": "OS",
+      "evidence": "Cache enable and range operations, __LCEnable, L2GlobalInvalidate, DMAErrorHandler, __OSCacheInit unique native anchors; __OSCacheInit endsA2D8 before FPU context loader.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FBCC8",
+          "end": "0x802FBEF2",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Entire native.data554-byte diagnosticpool byte-identical; target DMAErrorHandler/L2 invalidation references resolve native pool base, including8023A048. No trailing alignment ownership inferred.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x80239CAC",
+          "end": "0x8023A2D8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Cache enable and range operations, __LCEnable, L2GlobalInvalidate, DMAErrorHandler, __OSCacheInit unique native anchors; __OSCacheInit endsA2D8 before FPU context loader. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSContext.c",
+      "source": "src/dolphin/os/OSContext.c",
+      "library": "OS",
+      "evidence": "FPU load/save plus unique current-context, save/load, clear/init, dump, switch and context-init anchors; duplicate FPU bodies at801AC088/801AC1B0 remain unassigned outside this library run.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FBEF8",
+          "end": "0x802FC0CF",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Entire native.data471-byte diagnosticpool byte-identical; masked-native OSDumpContext references base; __OSContextInit also references local diagnostic802FC0AC at8023AB30. No trailing padding included.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8023A2D8",
+          "end": "0x8023AB48",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "FPU load/save plus unique current-context, save/load, clear/init, dump, switch and context-init anchors; duplicate FPU bodies at801AC088/801AC1B0 remain unassigned outside this library run. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSError.c",
+      "source": "src/dolphin/os/OSError.c",
+      "library": "OS",
+      "evidence": "Unique report, panic, error-handler, unhandled-exception anchors ending before interrupt MSR helper atB1F4.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FC0D0",
+          "end": "0x802FC3EC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "First732 diagnostic bytes completely byte-identical, all16 ADDR32 jump-table entries resolved from native __OSUnhandledException symbol-relative positions to target8023AF0C and match target tablewords. Entire796-byte pool validated without touching output."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC160",
+          "end": "0x803EC164",
+          "evidence": "Native symbol__OSFpscrEnableBits complete4-byte initializedpayload byte-identical; matching targetfunction referenceOSSetErrorHandler at0x8023AE34.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC164",
+          "end": "0x803EC166",
+          "evidence": "Native symbol@81 complete2-byte initializedpayload byte-identical; matching targetfunction reference__OSUnhandledException at0x8023B0B8.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8023AB48",
+          "end": "0x8023B1F4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Unique report, panic, error-handler, unhandled-exception anchors ending before interrupt MSR helper atB1F4. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSInterrupt.c",
+      "source": "src/dolphin/os/OSInterrupt.c",
+      "library": "OS",
+      "evidence": "MSR disable/enable/restore prefix and SetInterruptMask, mask/unmask, dispatch anchors; external-exception bridgeBA10 branches to dispatchB6CC and endsBA60.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FC3F0",
+          "end": "0x802FC41C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Entire44-byte InterruptPrioTable byte-identical; target dispatch reference at8023B95C plus native symbol relocations establishes exact table address/length.",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED088",
+          "end": "0x803ED08C",
+          "evidence": "Native InterruptHandlerTable storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSSetInterruptHandler at0x8023B244. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED08C",
+          "end": "0x803ED090",
+          "evidence": "Native __OSLastInterruptSrr0 storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSDispatchInterrupt at0x8023B9C0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED090",
+          "end": "0x803ED092",
+          "evidence": "Native __OSLastInterrupt storage slot2 bytes referenced consistently by matching targetfunction(s), e.g __OSDispatchInterrupt at0x8023B9AC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED098",
+          "end": "0x803ED0A0",
+          "evidence": "Native __OSLastInterruptTime storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSDispatchInterrupt at0x8023B9B4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8023B1F4",
+          "end": "0x8023BA60",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "MSR disable/enable/restore prefix and SetInterruptMask, mask/unmask, dispatch anchors; external-exception bridgeBA10 branches to dispatchB6CC and endsBA60. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSLink.c",
+      "source": "src/dolphin/os/OSLink.c",
+      "library": "OS",
+      "evidence": "Target singleton clears physical module-list head/tail/string-table words800030C8/CC/D0 exactly as donor __OSModuleInit; remaining linker functions not evidenced in this run.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8023BA60",
+          "end": "0x8023BA78",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Target singleton clears physical module-list head/tail/string-table words800030C8/CC/D0 exactly as donor __OSModuleInit; remaining linker functions not evidenced in this run. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSMemory.c",
+      "source": "src/dolphin/os/OSMemory.c",
+      "library": "OS",
+      "evidence": "Unique reset callback, memory interrupt, Config24MB/48MB, memory-protection initializer anchors. Donor unsupported stack padding is irrelevant to mapping and grants no source-match claim.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8023BA78",
+          "end": "0x8023BD50",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Unique reset callback, memory interrupt, Config24MB/48MB, memory-protection initializer anchors. Donor unsupported stack padding is irrelevant to mapping and grants no source-match claim. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSMutex.c",
+      "source": "src/dolphin/os/OSMutex.c",
+      "library": "OS",
+      "evidence": "Unique init/lock/unlock/unlock-all anchors, final32-byte routineBF9C. Do not assign OSInitCond or OSSignalCond from generic32-byte fingerprint collisions.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8023BD50",
+          "end": "0x8023BFBC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Unique init/lock/unlock/unlock-all anchors, final32-byte routineBF9C. Do not assign OSInitCond or OSSignalCond from generic32-byte fingerprint collisions. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSReset.c",
+      "source": "src/dolphin/os/OSReset.c",
+      "library": "OS",
+      "evidence": "Reset registration, raw reset and hot-reset anchors; finalC3B0 reads reboot indicator800030E2 and reset codePI registerCC003024 matching OSGetResetCode donor behavior.",
+      "sections": [
+        {
+          "section": ".sbss",
+          "start": "0x803ED0A0",
+          "end": "0x803ED0A8",
+          "evidence": "Native ResetFunctionQueue storage slot8 bytes referenced consistently by matching targetfunction(s), e.g OSRegisterResetFunction at0x8023BFBC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8023BFBC",
+          "end": "0x8023C3E0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Reset registration, raw reset and hot-reset anchors; finalC3B0 reads reboot indicator800030E2 and reset codePI registerCC003024 matching OSGetResetCode donor behavior. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSResetSW.c",
+      "source": "src/dolphin/os/OSResetSW.c",
+      "library": "OS",
+      "evidence": "Unique reset-switch interrupt and callback setter anchors; state routineC548 reads switch timing/state after setter, before SRAM first callback.",
+      "sections": [
+        {
+          "section": ".sbss",
+          "start": "0x803ED0B0",
+          "end": "0x803ED0B4",
+          "evidence": "Native ResetCallback storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSResetSWInterruptHandler at0x8023C490. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED0B4",
+          "end": "0x803ED0B8",
+          "evidence": "Native Down storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSResetSWInterruptHandler at0x8023C480. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED0B8",
+          "end": "0x803ED0BC",
+          "evidence": "Native LastState storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSResetSWInterruptHandler at0x8023C488. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED0C8",
+          "end": "0x803ED0D0",
+          "evidence": "Native HoldDown storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSResetSWInterruptHandler at0x8023C400. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8023C3E0",
+          "end": "0x8023C7E0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Unique reset-switch interrupt and callback setter anchors; state routineC548 reads switch timing/state after setter, before SRAM first callback. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSRtc.c",
+      "source": "src/dolphin/os/OSRtc.c",
+      "library": "OS",
+      "evidence": "SRAM write/init/lock/unlock/sound/progressive/wireless/gameboy-mode native anchors ordered coherently to semaphore initializer.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8023C7E0",
+          "end": "0x8023D2CC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "SRAM write/init/lock/unlock/sound/progressive/wireless/gameboy-mode native anchors ordered coherently to semaphore initializer. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSSemaphore.c",
+      "source": "src/dolphin/os/OSSemaphore.c",
+      "library": "OS",
+      "evidence": "Three native semaphore init/wait/signal anchors; prior scratch relocation-resolved296-byte equality corroborates scope, source is still not integrated and earns no credit.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8023D2CC",
+          "end": "0x8023D3F4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Three native semaphore init/wait/signal anchors; prior scratch relocation-resolved296-byte equality corroborates scope, source is still not integrated and earns no credit. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSSync.c",
+      "source": "src/dolphin/os/OSSync.c",
+      "library": "OS",
+      "evidence": "Accepted native SystemCallVector+__OSInitSystemCall source interval, exact whole-target validation; original-file grouping remains reference-derived.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8023D3F4",
+          "end": "0x8023D478",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted native SystemCallVector+__OSInitSystemCall source interval, exact whole-target validation; original-file grouping remains reference-derived. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSThread.c",
+      "source": "src/dolphin/os/OSThread.c",
+      "library": "OS",
+      "evidence": "First4-byte switch callback atD478; thread initializationD47C, queues/scheduler/priority/run-selection/create/exit/cancel/resume/suspend/sleep/wake native anchors. Finalclear-stackE6E8 endsE794.",
+      "sections": [
+        {
+          "section": ".sbss",
+          "start": "0x803ED0D0",
+          "end": "0x803ED0D4",
+          "evidence": "Native RunQueueBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSThreadInit at0x8023D544. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED0D4",
+          "end": "0x803ED0D8",
+          "evidence": "Native RunQueueHint storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSThreadInit at0x8023D550. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED0D8",
+          "end": "0x803ED0DC",
+          "evidence": "Native Reschedule storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSThreadInit at0x8023D5B0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8023D478",
+          "end": "0x8023E794",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "First4-byte switch callback atD478; thread initializationD47C, queues/scheduler/priority/run-selection/create/exit/cancel/resume/suspend/sleep/wake native anchors. Finalclear-stackE6E8 endsE794. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSTime.c",
+      "source": "src/dolphin/os/OSTime.c",
+      "library": "OS",
+      "evidence": "Target stable TBU/TBL/TBU64-bit readE794, tick readE7AC, unique __OSGetSystemTimeE7B4 native anchor endingE818.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8023E794",
+          "end": "0x8023E818",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Target stable TBU/TBL/TBU64-bit readE794, tick readE7AC, unique __OSGetSystemTimeE7B4 native anchor endingE818. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSReboot.c",
+      "source": "src/dolphin/os/OSReboot.c",
+      "library": "OS",
+      "evidence": "Target Run sync/isync/mtlr16, Prepared callback12, reboot832 uses physical reboot/region words, apploader and DVD path; corroborated BFBB donor OSReboot.c function order and body semantics.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8023E920",
+          "end": "0x8023EC7C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Target Run sync/isync/mtlr16, Prepared callback12, reboot832 uses physical reboot/region words, apploader and DVD path; corroborated BFBB donor OSReboot.c function order and body semantics. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/db/db.c",
+      "source": "src/dolphin/db/db.c",
+      "library": "DB",
+      "evidence": "DBInit40 atEC7C, exceptionAux72 atECA4, exception-entry16 atECEC native anchors; final28-byte ECFC checks interface+4 exceptionmask against1<<(u8)exception, matching __DBIsExceptionMarked. Original source-group boundary provisional; ED18 varargs register-saving helper is runtime code.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FCCF0",
+          "end": "0x802FCD08",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Entire24-byte diagnostic symbol byte-identical and referenced by DB exception auxiliary at8023ECB0; native unchanged DB reference corroboration.",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED0F0",
+          "end": "0x803ED0F8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Two contiguous4-byte target-native-referenced globals __DBInterface andDBVerbose, both writtenDBInit; donor extents4each corroborated by targetlwz/stw operations.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8023EC7C",
+          "end": "0x8023ED18",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "DBInit40 atEC7C, exceptionAux72 atECA4, exception-entry16 atECEC native anchors; final28-byte ECFC checks interface+4 exceptionmask against1<<(u8)exception, matching __DBIsExceptionMarked. Original source-group boundary provisional; ED18 varargs register-saving helper is runtime code."
+        }
+      ]
+    },
+    {
+      "name": "sdk/unassigned/8023ED18",
+      "source": null,
+      "library": "unassigned",
+      "evidence": "SDK-adjacent interval has no established Nintendo source-file ownership; retained under neutral address label.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8023ED18",
+          "end": "0x8023ED68",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Bounded by adjacent target-backed units; runtime/middleware ownership unresolved. No SDK membership or source completion claim."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/dvd/dvdfs.c",
+      "source": "src/dolphin/dvd/dvdfs.c",
+      "library": "DVD",
+      "evidence": "Multiple distinct filesystem anchors; target order and final 48-byte callback. Callback is compatible with three donor names; exact callback identity unresolved.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8023ED68",
+          "end": "0x8023F494",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Multiple distinct filesystem anchors; target order and final 48-byte callback. Callback is compatible with three donor names; exact callback identity unresolved."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/dvd/dvd.c",
+      "source": "src/dolphin/dvd/dvd.c",
+      "library": "DVD",
+      "evidence": "Target DVD state-machine/cancel/read cluster; multiple nontrivial anchors; first empty optional checker inferred from adjacent source order. Published native retained-layout base is invalid because unrelated cbForCancelAllSync alias matched AX; do not use its base.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8023F494",
+          "end": "0x80241B90",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Target DVD state-machine/cancel/read cluster; multiple nontrivial anchors; first empty optional checker inferred from adjacent source order. Published native retained-layout base is invalid because unrelated cbForCancelAllSync alias matched AX; do not use its base."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/dvd/dvdqueue.c",
+      "source": "src/dolphin/dvd/dvdqueue.c",
+      "library": "DVD",
+      "evidence": "Accepted complete retained target interval and five distinct functions.",
+      "sections": [
+        {
+          "section": ".bss",
+          "start": "0x803A55D8",
+          "end": "0x803A55F8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "evidence.tsv SDK DVD/matrix unit rows: reference source order, complete retained code/data and target references; file ownership provisional."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FD278",
+          "end": "0x802FD3DB",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "evidence.tsv SDK DVD/matrix unit rows: reference source order, complete retained code/data and target references; file ownership provisional."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC1A0",
+          "end": "0x803EC1D6",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "evidence.tsv SDK DVD/matrix unit rows: reference source order, complete retained code/data and target references; file ownership provisional."
+        },
+        {
+          "section": ".text",
+          "start": "0x80241B90",
+          "end": "0x80241D88",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted complete retained target interval and five distinct functions."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/dvd/dvderror.c",
+      "source": "src/dolphin/dvd/dvderror.c",
+      "library": "DVD",
+      "evidence": "Accepted complete retained interval with ErrorCode2Num and StoreErrorCode.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FD3E0",
+          "end": "0x802FD428",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "evidence.tsv SDK DVD/matrix unit rows: reference source order, complete retained code/data and target references; file ownership provisional."
+        },
+        {
+          "section": ".text",
+          "start": "0x80241D88",
+          "end": "0x80241F20",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted complete retained interval with ErrorCode2Num and StoreErrorCode."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/dvd/dvdidutils.c",
+      "source": "src/dolphin/dvd/dvdidutils.c",
+      "library": "DVD",
+      "evidence": "Target first function compares game-name[4],company[2],disk/version with zero/FF wildcard handling: DVDCompareDiskID. Remaining function before fstload is inferred same original file; ownership provisional.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80241F20",
+          "end": "0x80242048",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Target first function compares game-name[4],company[2],disk/version with zero/FF wildcard handling: DVDCompareDiskID. Remaining function before fstload is inferred same original file; ownership provisional."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/dvd/fstload.c",
+      "source": "src/dolphin/dvd/fstload.c",
+      "library": "DVD",
+      "evidence": "cb unique 216-byte fingerprint at42048; target next360-byte function handles FST loading. Adjacent dvdlow start independently anchored. Original source object edges inferred.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80242048",
+          "end": "0x80242288",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "cb unique 216-byte fingerprint at42048; target next360-byte function handles FST loading. Adjacent dvdlow start independently anchored. Original source object edges inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/dvd/dvdlow.c",
+      "source": "src/dolphin/dvd/dvdlow.c",
+      "library": "DVD",
+      "evidence": "Twenty retained donor function instruction layouts cover3652 bytes continuously including workarounds then final LowSetWAType43088..430CC; VI begins430CC. Masked comparison establishes ownership corroboration, not source match.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80242288",
+          "end": "0x802430CC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Twenty retained donor function instruction layouts cover3652 bytes continuously including workarounds then final LowSetWAType43088..430CC; VI begins430CC. Masked comparison establishes ownership corroboration, not source match."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/vi/vi.c",
+      "source": "src/dolphin/vi/vi.c",
+      "library": "VI",
+      "evidence": "Unique retained retrace-handler starts430CC after DVDlow43088; callbacks, VIInit, register setup, flush, frame buffer, black/field/line/status, display XY/current-position anchors. CurrentPositionEB8+60 ends44F18; next SN timer constructor is not VI.",
+      "sections": [
+        {
+          "section": ".sbss",
+          "start": "0x803ED1D0",
+          "end": "0x803ED1D4",
+          "evidence": "Native IsInitialized storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VIInit at0x80243694. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED1D4",
+          "end": "0x803ED1D8",
+          "evidence": "Native retraceCount storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VIRetraceHandler at0x802431C0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED1D8",
+          "end": "0x803ED1DC",
+          "evidence": "Native flushFlag storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VIRetraceHandler at0x802431F4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED1DC",
+          "end": "0x803ED1E4",
+          "evidence": "Native retraceQueue storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __VIRetraceHandler at0x80243314. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED1E4",
+          "end": "0x803ED1E8",
+          "evidence": "Native PreCB storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VIRetraceHandler at0x802431DC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED1E8",
+          "end": "0x803ED1EC",
+          "evidence": "Native PostCB storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VIRetraceHandler at0x802432F0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED1EC",
+          "end": "0x803ED1F0",
+          "evidence": "Native PositionCallback storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VIRetraceHandler at0x80243180. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED1F0",
+          "end": "0x803ED1F4",
+          "evidence": "Native encoderType storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VIInit at0x802436B8. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED1F4",
+          "end": "0x803ED1F6",
+          "evidence": "Native displayOffsetH storage slot2 bytes referenced consistently by matching targetfunction(s), e.g VIInit at0x8024383C. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED1F6",
+          "end": "0x803ED1F8",
+          "evidence": "Native displayOffsetV storage slot2 bytes referenced consistently by matching targetfunction(s), e.g VIInit at0x80243838. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED1F8",
+          "end": "0x803ED1FC",
+          "evidence": "Native changeMode storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VIInit at0x802436F4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED200",
+          "end": "0x803ED208",
+          "evidence": "Native changed storage slot8 bytes referenced consistently by matching targetfunction(s), e.g VIInit at0x802436E0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED208",
+          "end": "0x803ED20C",
+          "evidence": "Native shdwChangeMode storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VIRetraceHandler at0x80243200. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED210",
+          "end": "0x803ED218",
+          "evidence": "Native shdwChanged storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __VIRetraceHandler at0x80243224. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED218",
+          "end": "0x803ED21C",
+          "evidence": "Native CurrTiming storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VIRetraceHandler at0x802432C4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED21C",
+          "end": "0x803ED220",
+          "evidence": "Native CurrTvMode storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VIRetraceHandler at0x802432CC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED220",
+          "end": "0x803ED224",
+          "evidence": "Native NextBufAddr storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VIRetraceHandler at0x802432BC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED224",
+          "end": "0x803ED228",
+          "evidence": "Native CurrBufAddr storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VIRetraceHandler at0x802432D0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED228",
+          "end": "0x803ED22C",
+          "evidence": "Native FBSet storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VISetNextFrameBuffer at0x80244968. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x802430CC",
+          "end": "0x80244F18",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Unique retained retrace-handler starts430CC after DVDlow43088; callbacks, VIInit, register setup, flush, frame buffer, black/field/line/status, display XY/current-position anchors. CurrentPositionEB8+60 ends44F18; next SN timer constructor is not VI. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/vm/VM.c",
+      "library": "VM",
+      "sections": [
+        {
+          "section": ".data5",
+          "start": "0x803EC208",
+          "end": "0x803EC20C",
+          "evidence": "Native symbolsARAMStart complete4-byte initializedpayload byte-identical; matching targetfunction referenceVMInit at0x80244F68.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED230",
+          "end": "0x803ED234",
+          "evidence": "Native sMRAMSize storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMInit at0x80244F74. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED234",
+          "end": "0x803ED238",
+          "evidence": "Native sMRAMSwapSpace storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VMAllocMRAMSwapSpace at0x80244FE0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED238",
+          "end": "0x803ED23C",
+          "evidence": "Native sARAMSize storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMInit at0x80244F70. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED23C",
+          "end": "0x803ED240",
+          "evidence": "Native sMRAMPages storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMInit at0x80244F78. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED244",
+          "end": "0x803ED248",
+          "evidence": "Native sInitialized storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMInit at0x80244F40. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x80244F18",
+          "end": "0x80245200",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "VMInit same-sized native156-byte fingerprint, __VMSwapPageIn508, arena-swap allocation48, getters; targetcalls connect VMBASE initialization and VM mappingallocators."
+        }
+      ],
+      "evidence": "MVP2005 pinned1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 nativeproductionobject fingerprint + reconstructedsource andlinked_names.tsv provenance; originalNFLfileownershipprovisional. Names are reference-derived, nottargetdebug recovered. VMInit same-sized native156-byte fingerprint, __VMSwapPageIn508, arena-swap allocation48, getters; targetcalls connect VMBASE initialization and VM mappingallocators.",
+      "name": "src/dolphin/vm/VM.c"
+    },
+    {
+      "source": "src/dolphin/vm/VMPageReplacement.c",
+      "library": "VM",
+      "sections": [
+        {
+          "section": ".data5",
+          "start": "0x803EC210",
+          "end": "0x803EC214",
+          "evidence": "Native symbolsFirstPass complete4-byte initializedpayload byte-identical; matching targetfunction reference__VMPageReplacementLRU at0x80245258.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC214",
+          "end": "0x803EC218",
+          "evidence": "Native symbolsPolicy complete4-byte initializedpayload byte-identical; matching targetfunction reference__VMGetPageToReplace at0x8024520C.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED250",
+          "end": "0x803ED254",
+          "evidence": "Native sCurrentPage storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VMPageReplacementLRU at0x80245260. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x80245200",
+          "end": "0x80245514",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "All four retained functions native fingerprint uniquely match: dispatch68, LRU464, random148,FIFO108; complete788-byte contiguous target run."
+        }
+      ],
+      "evidence": "MVP2005 pinned1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 nativeproductionobject fingerprint + reconstructedsource andlinked_names.tsv provenance; originalNFLfileownershipprovisional. Names are reference-derived, nottargetdebug recovered. All four retained functions native fingerprint uniquely match: dispatch68, LRU464, random148,FIFO108; complete788-byte contiguous target run.",
+      "name": "src/dolphin/vm/VMPageReplacement.c"
+    },
+    {
+      "source": "src/dolphin/vm/VMMapping.c",
+      "library": "VM",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FDC98",
+          "end": "0x802FDCFF",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Exact103-byte VMAlloc allocation-error diagnostic includingterminator; target80245688 materializes this address, sprintf at45694 andPPCHalt at45698. NativeMVP VMMapping.o symbol payload completely byte-identical.",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED258",
+          "end": "0x803ED25C",
+          "evidence": "Native sARAMToVirtualLUT storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMAlloc at0x80245594. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED25C",
+          "end": "0x803ED260",
+          "evidence": "Native sVirtualToARAMLUT storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMAlloc at0x802455D4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED260",
+          "end": "0x803ED264",
+          "evidence": "Native sAllocatedARAM storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMAlloc at0x80245560. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED264",
+          "end": "0x803ED268",
+          "evidence": "Native sARAMPageCursor storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMAlloc at0x80245544. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x80245514",
+          "end": "0x80245820",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "VMAlloc256, translate64, mapped32, alert56, set24, inARAM20, virtual-LUT168,ARAM-LUT160 complete780-byte run; unique diagnostic target802FDC98."
+        }
+      ],
+      "evidence": "MVP2005 pinned1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 nativeproductionobject fingerprint + reconstructedsource andlinked_names.tsv provenance; originalNFLfileownershipprovisional. Names are reference-derived, nottargetdebug recovered. VMAlloc256, translate64, mapped32, alert56, set24, inARAM20, virtual-LUT168,ARAM-LUT160 complete780-byte run; unique diagnostic target802FDC98.",
+      "name": "src/dolphin/vm/VMMapping.c"
+    },
+    {
+      "source": "src/dolphin/vmbase/VMBase.c",
+      "library": "VMBASE",
+      "sections": [
+        {
+          "section": ".sbss",
+          "start": "0x803ED268",
+          "end": "0x803ED26C",
+          "evidence": "Native sPageTable storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VMBASEInitPageTable at0x80245B9C. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED26C",
+          "end": "0x803ED270",
+          "evidence": "Native sReversePageTable storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VMBASEGetVirtualAddr at0x80245B24. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED270",
+          "end": "0x803ED274",
+          "evidence": "Native sLockedPageTable storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VMBASEIsPageLocked at0x80245B44. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED274",
+          "end": "0x803ED278",
+          "evidence": "Native sPageFaultHandler storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VMBASESetPageFaultHandler at0x80245B78. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED278",
+          "end": "0x803ED27C",
+          "evidence": "Native sInitialized storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMBASEInit at0x80245838. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED27C",
+          "end": "0x803ED280",
+          "evidence": "Native sSavedSR7 storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VMBASESetupVMRegisters at0x80245F4C. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED280",
+          "end": "0x803ED284",
+          "evidence": "Native sSavedSDR1 storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VMBASESetupVMRegisters at0x80245F60. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x80245820",
+          "end": "0x8024648C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Existing native MVP object fingerprints targettable initialization/lookup/mutation, memoryregisters/realmode, exceptionvectorpatcher45FD0, DSIhandler4614C andISIhandler462F4 plusservice46434; entiretail through4648C belongsVMBase, notDebugDriver."
+        }
+      ],
+      "evidence": "MVP2005 pinned1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 nativeproductionobject fingerprint + reconstructedsource andlinked_names.tsv provenance; originalNFLfileownershipprovisional. Names are reference-derived, nottargetdebug recovered. Existing native MVP object fingerprints targettable initialization/lookup/mutation, memoryregisters/realmode, exceptionvectorpatcher45FD0, DSIhandler4614C andISIhandler462F4 plusservice46434; entiretail through4648C belongsVMBase, notDebugDriver.",
+      "name": "src/dolphin/vmbase/VMBase.c"
+    },
+    {
+      "name": "src/dolphin/pad/Padclamp.c",
+      "source": "src/dolphin/pad/Padclamp.c",
+      "library": "PAD",
+      "evidence": "Accepted clamp source and native target/data validation, contiguous ClampStick+PADClamp anchors.",
+      "sections": [
+        {
+          "section": ".data3",
+          "start": "0x802B7258",
+          "end": "0x802B7262",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted native source section and complete target output verified in current units.json/evidence.tsv; original source ownership remains reference-derived."
+        },
+        {
+          "section": ".data6",
+          "start": "0x803ED718",
+          "end": "0x803ED738",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted native source section and complete target output verified in current units.json/evidence.tsv; original source ownership remains reference-derived."
+        },
+        {
+          "section": ".text",
+          "start": "0x8024648C",
+          "end": "0x802466D0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted clamp source and native target/data validation, contiguous ClampStick+PADClamp anchors. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/pad/Pad.c",
+      "source": "src/dolphin/pad/Pad.c",
+      "library": "PAD",
+      "evidence": "Unique origin/type/probe/spec/sampling handlers; target last48124 toggles bootbyte30E3 bit40 matching __PADDisableRecalibration, ends481A0 before AR callback setter.",
+      "sections": [
+        {
+          "section": ".data5",
+          "start": "0x803EC21C",
+          "end": "0x803EC220",
+          "evidence": "Native symbolResettingChan complete4-byte initializedpayload byte-identical; matching targetfunction referencePADOriginCallback at0x8024688C.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC220",
+          "end": "0x803EC224",
+          "evidence": "Native symbolXPatchBits complete4-byte initializedpayload byte-identical; matching targetfunction referenceUpdateOrigin at0x80246828.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC224",
+          "end": "0x803EC228",
+          "evidence": "Native symbolAnalogMode complete4-byte initializedpayload byte-identical; matching targetfunction referenceUpdateOrigin at0x802466F0.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC228",
+          "end": "0x803EC22C",
+          "evidence": "Native symbolSpec complete4-byte initializedpayload byte-identical; matching targetfunction referencePADTypeAndStatusCallback at0x80246BE4.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC230",
+          "end": "0x803EC234",
+          "evidence": "Native symbolCmdReadOrigin complete4-byte initializedpayload byte-identical; matching targetfunction referencePADTypeAndStatusCallback at0x80246CD0.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC234",
+          "end": "0x803EC238",
+          "evidence": "Native symbolCmdCalibrate complete4-byte initializedpayload byte-identical; matching targetfunction referencePADTypeAndStatusCallback at0x80246C9C.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED28C",
+          "end": "0x803ED290",
+          "evidence": "Native EnabledBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADOriginCallback at0x8024689C. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED290",
+          "end": "0x803ED294",
+          "evidence": "Native ResettingBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADOriginCallback at0x802468D0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED294",
+          "end": "0x803ED298",
+          "evidence": "Native RecalibrateBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADTypeAndStatusCallback at0x80246B00. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED298",
+          "end": "0x803ED29C",
+          "evidence": "Native WaitingBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADProbeCallback at0x80246A54. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED2A0",
+          "end": "0x803ED2A4",
+          "evidence": "Native PendingBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADTypeAndStatusCallback at0x80246D84. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED2A8",
+          "end": "0x803ED2AC",
+          "evidence": "Native SamplingCallback storage slot4 bytes referenced consistently by matching targetfunction(s), e.g SamplingHandler at0x80248084. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED2B0",
+          "end": "0x803ED2B4",
+          "evidence": "Native __PADSpec storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADSetSpec at0x802477A4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x802466D0",
+          "end": "0x802481A0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Unique origin/type/probe/spec/sampling handlers; target last48124 toggles bootbyte30E3 bit40 matching __PADDisableRecalibration, ends481A0 before AR callback setter. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/ar/ar.c",
+      "source": "src/dolphin/ar/ar.c",
+      "library": "AR",
+      "evidence": "First 68-byte registration routine481A0 is ambiguous by itself; contiguous unique DMA/GetStatus/Init/Handler/Checksize6132-byte anchors support ownership. PAD ends481A0; init/calls reference callback. Retained screen AR base481E0 is invalid and must not be used.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x802481A0",
+          "end": "0x80249C78",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "First 68-byte registration routine481A0 is ambiguous by itself; contiguous unique DMA/GetStatus/Init/Handler/Checksize6132-byte anchors support ownership. PAD ends481A0; init/calls reference callback. Retained screen AR base481E0 is invalid and must not be used."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/ar/arq.c",
+      "source": "src/dolphin/ar/arq.c",
+      "library": "ARQ",
+      "evidence": "Accepted retained original ARAM queue functions; full1156 bytes and reviewed data; ends before AIcallback.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FDDA0",
+          "end": "0x802FDDE5",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "evidence.tsv ARAM queue/PAD rows: native source, target-retained code and complete static data; original file attribution provisional."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC240",
+          "end": "0x803EC244",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "evidence.tsv ARAM queue/PAD rows: native source, target-retained code and complete static data; original file attribution provisional."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED2D8",
+          "end": "0x803ED308",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "evidence.tsv ARAM queue/PAD rows: native source, target-retained code and complete static data; original file attribution provisional."
+        },
+        {
+          "section": ".text",
+          "start": "0x80249C78",
+          "end": "0x8024A0FC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted retained original ARAM queue functions; full1156 bytes and reviewed data; ends before AIcallback."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/ai/ai.c",
+      "source": "src/dolphin/ai/ai.c",
+      "library": "AI",
+      "evidence": "First68-byte registration callback atA0FC ambiguous by itself; subsequent unique AI DMA/stream/DSPrate/interrupt/SRC functions contiguous. Retained AI screen beginsA140 and therefore omits registration prefix; total mapped ownership includes prefix. No claim this routine is AIReset.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8024A0FC",
+          "end": "0x8024A9EC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "First68-byte registration callback atA0FC ambiguous by itself; subsequent unique AI DMA/stream/DSPrate/interrupt/SRC functions contiguous. Retained AI screen beginsA140 and therefore omits registration prefix; total mapped ownership includes prefix. No claim this routine is AIReset."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/mtx/mtx.c",
+      "source": "src/dolphin/mtx/mtx.c",
+      "library": "MTX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".data5",
+          "start": "0x803EC250",
+          "end": "0x803EC258",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "PSMTXConcat at0x8024AA28/34 materializes0x803EC250 and paired-single loads the0.0/1.0 array. Pinned donor mtx.c static array corroborates8bytes, but complete data-pool ownership remains unknown. Attribution remains provisional; no source-match credit. Neutral object seed bounds only these typed target data cells/arrays; independently checked against target access widths, initial values and donor declarations. It does not extend ownership into neighboring padding.",
+          "object_seed": true
+        },
+        {
+          "section": ".data6",
+          "start": "0x803ED778",
+          "end": "0x803ED780",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "PSMTXIdentity lfs uses r13 offsets0xB4D8/0xB4DC; target SDA base0x803F22A0 resolves1.0/0.0 float cells803ED778/77C. Only referenced cells assigned, not whole native constant pool. Attribution remains provisional; no source-match credit. Neutral object seed bounds only these typed target data cells/arrays; independently checked against target access widths, initial values and donor declarations. It does not extend ownership into neighboring padding.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8024A9EC",
+          "end": "0x8024AAE4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 2 uniquely located function anchors in this interval; target has a function entry at 0x8024A9EC, previous instruction is blr, and previous interval ends at 0x8024AAE4 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/mtx/mtxvec.c",
+      "source": "src/dolphin/mtx/mtxvec.c",
+      "library": "MTX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8024AAE4",
+          "end": "0x8024AB8C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 2 uniquely located function anchors in this interval; target has a function entry at 0x8024AAE4, previous instruction is blr, and previous interval ends at 0x8024AB8C with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/mtx/mtx44.c",
+      "source": "src/dolphin/mtx/mtx44.c",
+      "library": "MTX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".data6",
+          "start": "0x803ED7D8",
+          "end": "0x803ED7E8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Both frustum and ortho at8024AB8C/AC28 use r13 offsets0xB538/B53C/B540/B544 resolving four float cells1.0,2.0,0.0,-1.0. Only directly referenced16bytes assigned; adjoining unused math-header constants remain unassigned. Attribution remains provisional; no source-match credit. Neutral object seed bounds only these typed target data cells/arrays; independently checked against target access widths, initial values and donor declarations. It does not extend ownership into neighboring padding.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8024AB8C",
+          "end": "0x8024ACC0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 2 uniquely located function anchors in this interval; target has a function entry at 0x8024AB8C, previous instruction is blr, and previous interval ends at 0x8024ACC0 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gx/GXInit.c",
+      "source": "src/dolphin/gx/GXInit.c",
+      "library": "GX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8024ACC0",
+          "end": "0x8024C038",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 4 uniquely located function anchors in this interval; target has a function entry at 0x8024ACC0, previous instruction is blr, and previous interval ends at 0x8024C038 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gx/GXFifo.c",
+      "source": "src/dolphin/gx/GXFifo.c",
+      "library": "GX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8024C038",
+          "end": "0x8024CB90",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 15 uniquely located function anchors in this interval; target has a function entry at 0x8024C038, previous instruction is blr, and previous interval ends at 0x8024CB90 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gx/GXAttr.c",
+      "source": "src/dolphin/gx/GXAttr.c",
+      "library": "GX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8024CB90",
+          "end": "0x8024DFA0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 11 uniquely located function anchors in this interval; target has a function entry at 0x8024CB90, previous instruction is blr, and previous interval ends at 0x8024DFA0 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gx/GXMisc.c",
+      "source": "src/dolphin/gx/GXMisc.c",
+      "library": "GX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8024DFA0",
+          "end": "0x8024E888",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 17 uniquely located function anchors in this interval; target has a function entry at 0x8024DFA0, previous instruction is blr, and previous interval ends at 0x8024E888 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gx/GXGeometry.c",
+      "source": "src/dolphin/gx/GXGeometry.c",
+      "library": "GX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8024E888",
+          "end": "0x8024EBC4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 8 uniquely located function anchors in this interval; target has a function entry at 0x8024E888, previous instruction is blr, and previous interval ends at 0x8024EBC4 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gx/GXFrameBuf.c",
+      "source": "src/dolphin/gx/GXFrameBuf.c",
+      "library": "GX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FE350",
+          "end": "0x802FEAD0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "The renderer selects 60-byte render modes at 802FE350 plus multiples of 60 in 801CE3F0..801CE43C, and uses copy size 60 at 801CE468. All 32 donor GXFrameBuf exported render modes, each 60 bytes, equal the 1920-byte target block.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8024EBC4",
+          "end": "0x8024F648",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 13 uniquely located function anchors in this interval; target has a function entry at 0x8024EBC4, previous instruction is blr, and previous interval ends at 0x8024F648 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes. Start0x8024EBC4 copies a0x3C-byte render-mode object when input/output differ, subtracts horizontal overscan from widths/origins and scales vertical correction by EFB/XFB heights. This independently supports GXAdjustForOverscan ownership before uniquely fingerprinted GXSetDispCopySrc0x8024ECE4."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gx/GXLight.c",
+      "source": "src/dolphin/gx/GXLight.c",
+      "library": "GX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".data6",
+          "start": "0x803ED898",
+          "end": "0x803ED8DC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "GXLight float/double loads at 8024F680/8024F690/8024F6A0/8024F6A4 and later sites reference the local constant pool. The donor local typed symbols at offsets 0x20..0x64 equal target 803ED898..803ED8DC. The preceding 32-byte weak sqrt pool is excluded.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8024F648",
+          "end": "0x8024FD3C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 13 uniquely located function anchors in this interval; target has a function entry at 0x8024F648, previous instruction is blr, and previous interval ends at 0x8024FD3C with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes. Start0x8024F648 is a28-byte leaf storing f1..f6 at offsets0x10..0x24, consistent with six light attenuation coefficients. The unchanged donor GXInitLightAttn matches all28bytes exactly with zero relocations and a single whole-target hit."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gx/GXTexture.c",
+      "source": "src/dolphin/gx/GXTexture.c",
+      "library": "GX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".data5",
+          "start": "0x803EC270",
+          "end": "0x803EC2AE",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Target GXTexture 0x80250430\u20130x802504C4 indexes seven 8-byte register-ID arrays; 0x802502C8 indexes the six-byte filter conversion table. Native dolsdk2004 types and bytes corroborate the 62-byte extent. Alignment bytes and the unused reverse-conversion table remain unassigned.",
+          "object_seed": true
+        },
+        {
+          "section": ".data6",
+          "start": "0x803ED8E0",
+          "end": "0x803ED8E4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Retained GXTexture float/double loads at 0x80250098, 0x802500A0, 0x8025025C and 0x80250270 corroborate typed local constants in the pinned native donor. Only referenced typed intervals are assigned; alignment gaps and unused constants remain unassigned.",
+          "object_seed": true
+        },
+        {
+          "section": ".data6",
+          "start": "0x803ED8E8",
+          "end": "0x803ED908",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Retained GXTexture float/double loads at 0x80250098, 0x802500A0, 0x8025025C and 0x80250270 corroborate typed local constants in the pinned native donor. Only referenced typed intervals are assigned; alignment gaps and unused constants remain unassigned.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8024FD3C",
+          "end": "0x8025115C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 19 uniquely located function anchors in this interval; target has a function entry at 0x8024FD3C, previous instruction is blr, and previous interval ends at 0x8025115C with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gx/GXBump.c",
+      "source": "src/dolphin/gx/GXBump.c",
+      "library": "GX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".data6",
+          "start": "0x803ED918",
+          "end": "0x803ED91C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "GXBump 80251224 loads a float at 803ED918. The donor four-byte local float at offset zero equals it. Remaining donor constants have no confirmed retained target references and remain unassigned.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8025115C",
+          "end": "0x80251604",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 7 uniquely located function anchors in this interval; target has a function entry at 0x8025115C, previous instruction is blr, and previous interval ends at 0x80251604 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gx/GXTev.c",
+      "source": "src/dolphin/gx/GXTev.c",
+      "library": "GX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FEE08",
+          "end": "0x802FEE7C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "GXTev forms 802FEE08 at 8025160C and 802FEE58 at 80251BE8/80251C58. The donor pool consists of four u32[5] operation tables and one u32[9] component-to-register table. All 116 bytes equal the target.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x80251604",
+          "end": "0x80251CEC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 15 uniquely located function anchors in this interval; target has a function entry at 0x80251604, previous instruction is blr, and previous interval ends at 0x80251CEC with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gx/GXPixel.c",
+      "source": "src/dolphin/gx/GXPixel.c",
+      "library": "GX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".data6",
+          "start": "0x803ED950",
+          "end": "0x803ED95C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Retained GXPixel fog calculations at 0x80251D34, 0x80251D48, 0x80251D7C and 0x80251D80 reference local float/double constants corroborated by pinned native donor types and bytes. Independent target-reference review excludes alignment gaps, weak globals and unused constants.",
+          "object_seed": true
+        },
+        {
+          "section": ".data6",
+          "start": "0x803ED960",
+          "end": "0x803ED96C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Retained GXPixel fog calculations at 0x80251D34, 0x80251D48, 0x80251D7C and 0x80251D80 reference local float/double constants corroborated by pinned native donor types and bytes. Independent target-reference review excludes alignment gaps, weak globals and unused constants.",
+          "object_seed": true
+        },
+        {
+          "section": ".data6",
+          "start": "0x803ED970",
+          "end": "0x803ED97C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Retained GXPixel fog calculations at 0x80251D34, 0x80251D48, 0x80251D7C and 0x80251D80 reference local float/double constants corroborated by pinned native donor types and bytes. Independent target-reference review excludes alignment gaps, weak globals and unused constants.",
+          "object_seed": true
+        },
+        {
+          "section": ".data6",
+          "start": "0x803ED980",
+          "end": "0x803ED988",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Retained GXPixel fog calculations at 0x80251D34, 0x80251D48, 0x80251D7C and 0x80251D80 reference local float/double constants corroborated by pinned native donor types and bytes. Independent target-reference review excludes alignment gaps, weak globals and unused constants.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x80251CEC",
+          "end": "0x80252334",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 11 uniquely located function anchors in this interval; target has a function entry at 0x80251CEC, previous instruction is blr, and previous interval ends at 0x80252334 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes. Start0x80251CEC takes fog mode bits plus start/end/near/far floats, branches by projection bit, computes fog A/B/C and emits BP fog registers. Followed by uniquely fingerprinted GXSetFogRangeAdj0x80251F10. No compiler-equivalence claim for the fog body."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gx/GXDisplayList.c",
+      "source": "src/dolphin/gx/GXDisplayList.c",
+      "library": "GX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80252334",
+          "end": "0x802523A4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 1 uniquely located function anchors in this interval; target has a function entry at 0x80252334, previous instruction is blr, and previous interval ends at 0x802523A4 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gx/GXTransform.c",
+      "source": "src/dolphin/gx/GXTransform.c",
+      "library": "GX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".data6",
+          "start": "0x803ED9B0",
+          "end": "0x803ED9C0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Target GXTransform loads at 0x80252448, 0x802524E4 and 0x802526AC corroborate four local floats in the pinned native donor. The unused fifth float remains unassigned.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x802523A4",
+          "end": "0x8025295C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 15 uniquely located function anchors in this interval; target has a function entry at 0x802523A4, previous instruction is blr, and previous interval ends at 0x8025295C with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gx/GXPerf.c",
+      "source": "src/dolphin/gx/GXPerf.c",
+      "library": "GX",
+      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8025295C",
+          "end": "0x8025335C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 3 uniquely located function anchors in this interval; target has a function entry at 0x8025295C, previous instruction is blr, and previous interval ends at 0x8025335C with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/card/CARDBios.c",
+      "source": "src/dolphin/card/CARDBios.c",
+      "library": "CARD",
+      "evidence": "Initial empty default API callback5335C corroborated source order; numerous distinct sync/EXI/status/segment/API anchors through OnReset545F0..54640. GX ends5335C. Native retained-screen base53474 is invalid; rejected as boundary evidence.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8025335C",
+          "end": "0x80254640",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Initial empty default API callback5335C corroborated source order; numerous distinct sync/EXI/status/segment/API anchors through OnReset545F0..54640. GX ends5335C. Native retained-screen base53474 is invalid; rejected as boundary evidence."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/card/CARDBlock.c",
+      "source": "src/dolphin/card/CARDBlock.c",
+      "library": "CARD",
+      "evidence": "Accepted retained interval incl8-byte getter prefix, then Write/Erase/Alloc/Free/Fat anchors.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80254640",
+          "end": "0x80254A44",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted retained interval incl8-byte getter prefix, then Write/Erase/Alloc/Free/Fat anchors."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/card/CARDDir.c",
+      "source": "src/dolphin/card/CARDDir.c",
+      "library": "CARD",
+      "evidence": "Accepted retained interval incl8-byte getter prefix, then directory-write callbacks.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80254A44",
+          "end": "0x80254CA8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted retained interval incl8-byte getter prefix, then directory-write callbacks."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/card/CARDCheck.c",
+      "source": "src/dolphin/card/CARDCheck.c",
+      "library": "CARD",
+      "evidence": "Accepted retained CheckSum/VerifyID/Dir/FAT/check interval.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80254CA8",
+          "end": "0x80255C38",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted retained CheckSum/VerifyID/Dir/FAT/check interval."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/card/CARDMount.c",
+      "source": "src/dolphin/card/CARDMount.c",
+      "library": "CARD",
+      "evidence": "Distinct IsCard,Probe,ProbeEx,MountCallback,MountAsync,Unmount anchor sequence between accepted Check and Format. Native retained-screen base55BF4 invalid and not used.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FF040",
+          "end": "0x802FF080",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "CARDMount forms 802FF040 at 80255CC8/80255E78/80255F44 and 802FF060 at 80255F50. The donor SectorSizeTable[8] and LatencyTable[8] are u32 arrays; both 32-byte arrays equal the target.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x80255C38",
+          "end": "0x80256730",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Distinct IsCard,Probe,ProbeEx,MountCallback,MountAsync,Unmount anchor sequence between accepted Check and Format. Native retained-screen base55BF4 invalid and not used."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/card/CARDFormat.c",
+      "source": "src/dolphin/card/CARDFormat.c",
+      "library": "CARD",
+      "evidence": "Accepted retained complete code interval.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80256730",
+          "end": "0x80256F14",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted retained complete code interval."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/card/CARDOpen.c",
+      "source": "src/dolphin/card/CARDOpen.c",
+      "library": "CARD",
+      "evidence": "First104-byte GetFileNo/helper contextual inferred; access/readability/open/close anchors through Close5748C..574E0 and following8-byte leaf. Native retained-screen Open base56F7C incomplete; not used as whole file.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80256F14",
+          "end": "0x802574E8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "First104-byte GetFileNo/helper contextual inferred; access/readability/open/close anchors through Close5748C..574E0 and following8-byte leaf. Native retained-screen Open base56F7C incomplete; not used as whole file."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/card/CARDCreate.c",
+      "source": "src/dolphin/card/CARDCreate.c",
+      "library": "CARD",
+      "evidence": "Accepted retained code interval.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x802574E8",
+          "end": "0x80257880",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted retained code interval."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/card/CARDRead.c",
+      "source": "src/dolphin/card/CARDRead.c",
+      "library": "CARD",
+      "evidence": "Accepted retained code interval. CARDProgram donor callback matches same retained Read callback, not separate original source ownership.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80257880",
+          "end": "0x80257CF4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted retained code interval. CARDProgram donor callback matches same retained Read callback, not separate original source ownership."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/card/CARDWrite.c",
+      "source": "src/dolphin/card/CARDWrite.c",
+      "library": "CARD",
+      "evidence": "Accepted retained code interval. CARDErase donor callback duplicates Write callback, not an extra source file.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80257CF4",
+          "end": "0x80258070",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted retained code interval. CARDErase donor callback duplicates Write callback, not an extra source file."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/card/CARDDelete.c",
+      "source": "src/dolphin/card/CARDDelete.c",
+      "library": "CARD",
+      "evidence": "Accepted retained code interval.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80258070",
+          "end": "0x802583E0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted retained code interval."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/card/CARDStat.c",
+      "source": "src/dolphin/card/CARDStat.c",
+      "library": "CARD",
+      "evidence": "Accepted retained code interval.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x802583E0",
+          "end": "0x802588A8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted retained code interval."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/card/CARDUnlock.c",
+      "source": "src/dolphin/card/CARDUnlock.c",
+      "library": "CARD",
+      "evidence": "Six distinct retained donor functions continuously cover4704bytes, followed by independently accepted Rdwr.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FF080",
+          "end": "0x802FF1E0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "CARDUnlock forms 802FF080 at 80259708, converts it to a physical DSP task pointer at 8025970C/80259710, and stores length 352 at 80259714/8025971C. The full donor CardData u8[352] equals the target.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x802588A8",
+          "end": "0x80259B08",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Six distinct retained donor functions continuously cover4704bytes, followed by independently accepted Rdwr."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/card/CARDRdwr.c",
+      "source": "src/dolphin/card/CARDRdwr.c",
+      "library": "CARD",
+      "evidence": "Accepted retained code interval incl native callback dependencies; EXI next starts59D88.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80259B08",
+          "end": "0x80259D88",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted retained code interval incl native callback dependencies; EXI next starts59D88."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/exi/EXIBios.c",
+      "source": "src/dolphin/exi/EXIBios.c",
+      "library": "EXI",
+      "evidence": "Target interrupt-mask helperD88, CompleteTransferE7C, EXI transfer/sync/interrupt/probe/select/lock/id sequence; unique EXIClearInterruptsA4B0 native anchor. Preceding59B08..59D88 is accepted CARDRdwr, not EXI.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80259D88",
+          "end": "0x8025B764",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Target interrupt-mask helperD88, CompleteTransferE7C, EXI transfer/sync/interrupt/probe/select/lock/id sequence; unique EXIClearInterruptsA4B0 native anchor. Preceding59B08..59D88 is accepted CARDRdwr, not EXI. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/exi/EXIUart.c",
+      "source": "src/dolphin/exi/EXIUart.c",
+      "library": "EXI",
+      "evidence": "Unique ProbeBarnacle396, __OSEnableBarnacle444, InitializeUART112; followingWriteUARTN atBB1C540 calls EXIBios samechannel registers; ends SI busy initializer.",
+      "sections": [
+        {
+          "section": ".sbss",
+          "start": "0x803ED3D0",
+          "end": "0x803ED3D4",
+          "evidence": "Native Chan storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSEnableBarnacle at0x8025BA80. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED3D4",
+          "end": "0x803ED3D8",
+          "evidence": "Native Dev storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSEnableBarnacle at0x8025BA88. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED3D8",
+          "end": "0x803ED3DC",
+          "evidence": "Native Enabled storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSEnableBarnacle at0x8025BA90. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED3DC",
+          "end": "0x803ED3E0",
+          "evidence": "Native BarnacleEnabled storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSEnableBarnacle at0x8025BA8C. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8025B764",
+          "end": "0x8025BD38",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Unique ProbeBarnacle396, __OSEnableBarnacle444, InitializeUART112; followingWriteUARTN atBB1C540 calls EXIBios samechannel registers; ends SI busy initializer. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/si/SIBios.c",
+      "source": "src/dolphin/si/SIBios.c",
+      "library": "SI",
+      "evidence": "Unique SI busy/chanbusy/transfer/interrupt/polling/init/status/type/response anchors; lastSIProbeD57436 endsD598.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FF334",
+          "end": "0x802FF358",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "NativeSi20-byte channel/transfer state andType16-byte four-channel type array arebothrawbyte-identical anddirectly referenced by matching SI functions. Adjacent20+16=36-byte records; surroundingversion/diagnosticpoolleft unresolved.",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED3E0",
+          "end": "0x803ED3E4",
+          "evidence": "Native cmdTypeAndStatus$79 storage slot4 bytes referenced consistently by matching targetfunction(s), e.g SIInterruptHandler at0x8025C23C. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED3E4",
+          "end": "0x803ED3E8",
+          "evidence": "Native cmdTypeAndStatus$375 storage slot4 bytes referenced consistently by matching targetfunction(s), e.g SIGetType at0x8025D2B8. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED3E8",
+          "end": "0x803ED3EC",
+          "evidence": "Native __PADFixBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g GetTypeCallback at0x8025CEF8. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x8025BD38",
+          "end": "0x8025D598",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Unique SI busy/chanbusy/transfer/interrupt/polling/init/status/type/response anchors; lastSIProbeD57436 endsD598. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/si/SISamplingRate.c",
+      "source": "src/dolphin/si/SISamplingRate.c",
+      "library": "SI",
+      "evidence": "Accepted sampling-rate228 and refresh36 code, complete147-byte data plus4-byte state exact validation.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FF408",
+          "end": "0x802FF49B",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted native source section and complete target output verified in current units.json/evidence.tsv; original source ownership remains reference-derived."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED3F0",
+          "end": "0x803ED3F4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted native source section and complete target output verified in current units.json/evidence.tsv; original source ownership remains reference-derived."
+        },
+        {
+          "section": ".text",
+          "start": "0x8025D598",
+          "end": "0x8025D6A0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted sampling-rate228 and refresh36 code, complete147-byte data plus4-byte state exact validation. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/os/OSFont.c",
+      "source": "src/dolphin/os/OSFont.c",
+      "library": "OS",
+      "evidence": "Direct inspected target body and BFBB OSFont.c352..374; donor name/reference-derived originalfile ownership provisional; no sourcecompile/matchcredit.",
+      "sections": [
+        {
+          "section": ".data5",
+          "start": "0x803EC5A8",
+          "end": "0x803EC5AA",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Target function loads/stores u16 r13-23800; r13=803F22A0 gives803EC5A8; initial targetvalueFFFFmatchescached FontEncode. No neighboring source-data ownership extrapolation. Neutral object seed bounds only these typed target data cells/arrays; independently checked against target access widths, initial values and donor declarations. It does not extend ownership into neighboring padding.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x80285A90",
+          "end": "0x80285AE8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Target88-byte OSGetFontEncode body exactly follows BFBB OSFont.c lines352..374: cached u16<=1, NTSC physical TVformat800000CC, VI_DTV_STAT bit2 selectsSJIS/ANSI, otherformatsANSI. Separately retained SDK source afterruntime/libraryrun, not contiguouscoreOS."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/dsp/dsp.c",
+      "source": "src/dolphin/dsp/dsp.c",
+      "library": "DSP",
+      "evidence": "Four DSPmailbox register leaves85AE8..85B34 plus Init/AddTask/CancelTask/AssertTask through85D78. Source-order/native and retained contiguous580-byte tail corroboration. Earlier85A90 cached hardware-config query is NOT DSP mailbox API.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80285AE8",
+          "end": "0x80285D78",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Four DSPmailbox register leaves85AE8..85B34 plus Init/AddTask/CancelTask/AssertTask through85D78. Source-order/native and retained contiguous580-byte tail corroboration. Earlier85A90 cached hardware-config query is NOT DSP mailbox API."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/dsp/dsp_debug.c",
+      "source": "src/dolphin/dsp/dsp_debug.c",
+      "library": "DSP",
+      "evidence": "Target accepted external __DSP_debug_printf regular empty varargs stub80bytes; task-boot calls exact address. Separate donor debug.c file defines printer (GetCurrentTask not retained).",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80285D78",
+          "end": "0x80285DC8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Target accepted external __DSP_debug_printf regular empty varargs stub80bytes; task-boot calls exact address. Separate donor debug.c file defines printer (GetCurrentTask not retained)."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/dsp/dsp_task.c",
+      "source": "src/dolphin/dsp/dsp_task.c",
+      "library": "DSP",
+      "evidence": "Original Handler1060bytes at85DC8 and accepted four helpers1120bytes at861EC..8664C. Source unit partial; unmatched Handler and original SBSS remain opaque. Retained five-function pattern/order corroborates full mapped interval.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x80302548",
+          "end": "0x80302683",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "evidence.tsv dsp_task.c unit, function, layout and data rows; CREDITS.md pinned donor provenance."
+        },
+        {
+          "section": ".text",
+          "start": "0x80285DC8",
+          "end": "0x8028664C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Original Handler1060bytes at85DC8 and accepted four helpers1120bytes at861EC..8664C. Source unit partial; unmatched Handler and original SBSS remain opaque. Retained five-function pattern/order corroborates full mapped interval."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/ax/AX.c",
+      "source": "src/dolphin/ax/AX.c",
+      "library": "AX",
+      "evidence": "Accepted retained code interval.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x80302688",
+          "end": "0x803026CC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "evidence.tsv AX unit and data rows; CREDITS.md reference provenance and target version-string restoration."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC5B8",
+          "end": "0x803EC5BC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "evidence.tsv AX unit and data rows; CREDITS.md reference provenance and target version-string restoration."
+        },
+        {
+          "section": ".text",
+          "start": "0x8028664C",
+          "end": "0x802866F0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted retained code interval."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/ax/AXAlloc.c",
+      "source": "src/dolphin/ax/AXAlloc.c",
+      "library": "AX",
+      "evidence": "Accepted ten native retained functions; reviewed code/staticdata. Dolsdk retained screen base86654 invalid and rejected; use accepted manifest.",
+      "sections": [
+        {
+          "section": ".bss",
+          "start": "0x803BAB70",
+          "end": "0x803BAC70",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "evidence.tsv AXAlloc.c unit, function, layout and data rows; CREDITS.md pinned donor provenance."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED510",
+          "end": "0x803ED514",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "evidence.tsv AXAlloc.c unit, function, layout and data rows; CREDITS.md pinned donor provenance."
+        },
+        {
+          "section": ".text",
+          "start": "0x802866F0",
+          "end": "0x80286BB8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Accepted ten native retained functions; reviewed code/staticdata. Dolsdk retained screen base86654 invalid and rejected; use accepted manifest."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/ax/AXAux.c",
+      "source": "src/dolphin/ax/AXAux.c",
+      "library": "AX",
+      "evidence": "Thirteen retained native donor routines cover1160bytes continuously; additional12-byte AXRegisterAuxACallback87040..8704C writes same callback/context SDA globals used by AuxInit/Process. Strong init/process anchors. Exact original file ownership remains provisional.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80286BB8",
+          "end": "0x8028704C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Thirteen retained native donor routines cover1160bytes continuously; additional12-byte AXRegisterAuxACallback87040..8704C writes same callback/context SDA globals used by AuxInit/Process. Strong init/process anchors. Exact original file ownership remains provisional."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/ax/AXCL.c",
+      "source": "src/dolphin/ax/AXCL.c",
+      "library": "AX",
+      "evidence": "Target GetCommandListCycles8-byte getter at8704C, GetCommandListAddress87054 flips2x768-byte buffers and writes sharedCLpointer, CommandListDSP generator87090 uses16-bitcommands/cyclecounter; init87740/quit87764/modesetters through87784. AXCL source and call/global relationships corroborate file; no native whole layout success claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x8028704C",
+          "end": "0x80287784",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Target GetCommandListCycles8-byte getter at8704C, GetCommandListAddress87054 flips2x768-byte buffers and writes sharedCLpointer, CommandListDSP generator87090 uses16-bitcommands/cyclecounter; init87740/quit87764/modesetters through87784. AXCL source and call/global relationships corroborate file; no native whole layout success claimed."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/ax/AXOut.c",
+      "source": "src/dolphin/ax/AXOut.c",
+      "library": "AX",
+      "evidence": "Eight retained donor functions cover1992bytes continuously; distinct NewFrame/AIcallback/DSPcallbacks/init/quit anchors.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80287784",
+          "end": "0x80287F58",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Eight retained donor functions cover1992bytes continuously; distinct NewFrame/AIcallback/DSPcallbacks/init/quit anchors."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/ax/AXSPB.c",
+      "source": "src/dolphin/ax/AXSPB.c",
+      "library": "AX",
+      "evidence": "Four retained donor functions cover1212bytes continuously; studio-print/depop anchors.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80287F58",
+          "end": "0x80288414",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Four retained donor functions cover1212bytes continuously; studio-print/depop anchors."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/ax/AXVPB.c",
+      "source": "src/dolphin/ax/AXVPB.c",
+      "library": "AX",
+      "evidence": "Initial8-byte GetPBs leaf followed by distinctive service/sync/default/init/voice setter anchors through ADPCMloop ending89408. BFBB native Init and Default additionally corroborate. Dolsdk retained base8865C invalid; not used.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x803026D0",
+          "end": "0x803027A4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "AXVPB 80288B84/80288B8C forms 803026D0. Source-cycle indexing at 80288C18 and offsets 20/84 at 80288C48/80288C5C select three u32 tables of 5, 16 and 32 entries. The complete 212-byte donor pool equals the target.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x80288414",
+          "end": "0x80289408",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Initial8-byte GetPBs leaf followed by distinctive service/sync/default/init/voice setter anchors through ADPCMloop ending89408. BFBB native Init and Default additionally corroborate. Dolsdk retained base8865C invalid; not used."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/ax/AXProf.c",
+      "source": "src/dolphin/ax/AXProf.c",
+      "library": "AX",
+      "evidence": "Unique72-byte current profile routine; following GBA channel functions establish different library.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80289408",
+          "end": "0x80289450",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Unique72-byte current profile routine; following GBA channel functions establish different library."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gba/GBA.c",
+      "source": "src/dolphin/gba/GBA.c",
+      "library": "GBA",
+      "evidence": "FFCC donor ShortCommandProc input[0:1]==0,4 andstatusmask0x3A; GBAInit fourchannels stride0x100/paramstride0x40,delay60us,threadqueues,alarm/DSP/resetfunction; GBAGetStatus andreset callback behavior corroborate.",
+      "sections": [
+        {
+          "section": ".bss",
+          "start": "0x803D4260",
+          "end": "0x803D4760",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Four param records, addresses populated by target GBAInit64-byte stride fourtimes. Extent/layout corroborated; ownership not recovered from a target map. Four GBA controls, target GBAInit256-byte stride fourtimes; FFCC GBAControl layout corroboration. Extent/layout corroborated; ownership not recovered from a target map. Neutral object seed bounds only these typed target data cells/arrays; independently checked against target access widths, initial values and donor declarations. It does not extend ownership into neighboring padding.",
+          "object_seed": true
+        },
+        {
+          "section": ".data4",
+          "start": "0x803060C0",
+          "end": "0x803060D0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "GBAInit passes this reset record; targetdata callback802895D8,priority127,zero next/prev. Extent/layout corroborated; ownership not recovered from a target map. Seeded 16-byte OSResetFunctionInfo: four target words at 0x803060C0 are OnReset pointer 0x802895D8, priority 127, and two zero link fields; GBAInit references this address and OSRegisterResetFunction consumes this structure. The seed bounds the typed record, not neighboring data. Neutral object seed bounds only these typed target data cells/arrays; independently checked against target access widths, initial values and donor declarations. It does not extend ownership into neighboring padding.",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED5E8",
+          "end": "0x803ED5EC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "GBAReset stores / transferhandler reads r13-19640, with r13base803F22A0. Extent/layout corroborated; ownership not recovered from a target map. Neutral object seed bounds only these typed target data cells/arrays; independently checked against target access widths, initial values and donor declarations. It does not extend ownership into neighboring padding.",
+          "object_seed": true
+        },
+        {
+          "section": ".text",
+          "start": "0x80289450",
+          "end": "0x802895E8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "FFCC donor ShortCommandProc input[0:1]==0,4 andstatusmask0x3A; GBAInit fourchannels stride0x100/paramstride0x40,delay60us,threadqueues,alarm/DSP/resetfunction; GBAGetStatus andreset callback behavior corroborate. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/gba/GBAXfer.c",
+      "source": "src/dolphin/gba/GBAXfer.c",
+      "library": "GBA",
+      "evidence": "FFCC donor transferhandler,cancel/context, synchronization callback/threadsleep,wakeup, type/status discriminator and asyncSI transfer behavior match all five retained functions. Subsequent898FC/89928 SN middleware wrappers not SDK.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x802895E8",
+          "end": "0x802898FC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "FFCC donor transferhandler,cancel/context, synchronization callback/threadsleep,wakeup, type/status discriminator and asyncSI transfer behavior match all five retained functions. Subsequent898FC/89928 SN middleware wrappers not SDK. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/ax/AXComp.c",
+      "source": "src/dolphin/ax/AXComp.c",
+      "library": "AX",
+      "evidence": "AXCL forms 803027C0 at 802875FC/80287600 and writes pointer halves to DSP compressor command 0x12 at 80287618..8028765C. All 6720 bytes equal the pinned dolsdk2004 u16[3360] AXComp table. Data-only file attribution remains provisional.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x803027C0",
+          "end": "0x80304200",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "AXCL forms 803027C0 at 802875FC/80287600 and writes pointer halves to DSP compressor command 0x12 at 80287618..8028765C. All 6720 bytes equal the pinned dolsdk2004 u16[3360] AXComp table. Data-only file attribution remains provisional.",
+          "object_seed": true
+        }
+      ]
+    },
+    {
+      "name": "src/dolphin/ax/DSPCode.c",
+      "source": "src/dolphin/ax/DSPCode.c",
+      "library": "AX",
+      "evidence": "AXOut forms 80304200 at 80287A94/80287A98 and stores the DSP task IRAM pointer at 80287AB4. The loaded length is 0x1EC0. All 7872 bytes equal the pinned BFBB DSPCode.c u16 array; the image ends at 803060C0. This file contributes no PPC code.",
+      "sections": [
+        {
+          "section": ".data4",
+          "start": "0x80304200",
+          "end": "0x803060C0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "AXOut forms 80304200 at 80287A94/80287A98 and stores the DSP task IRAM pointer at 80287AB4. The loaded length is 0x1EC0. All 7872 bytes equal the pinned BFBB DSPCode.c u16 array; the image ends at 803060C0. This file contributes no PPC code.",
+          "object_seed": true
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC5C0",
+          "end": "0x803EC5C2",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "AXOut 80287AC0 loads a halfword from SDA-relative 803EC5C0; its value 0x1EC0 is stored as DSP task IRAM length at 80287ACC. BFBB DSPCode.c declares the corresponding length as u16.",
+          "object_seed": true
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Original SDK file boundaries and reference-derived filenames remain provisional; this map does not establish recovered original object completeness.",
+    "Only bounded, supported static data/BSS ownership is assigned. Unassigned executable data remains visible; complete original SDK data pools and data-only object inventory are not established.",
+    "The neutral varargs interval has no SDK membership claim. Startup code outside the mapped initializer and the middleware tail remain unassigned."
+  ]
+}
