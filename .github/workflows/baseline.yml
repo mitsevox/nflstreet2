@@ -61,6 +61,16 @@ jobs:
         run: |
           python3 tools/progress.py --dol build/source/main.dol --revision "$GITHUB_SHA" \
             --source-report build/source/report.json --analysis-dir build/analysis
+      - name: Export decomp.dev report
+        run: |
+          python3 tools/decomp_report.py --dol build/source/main.dol --revision "$GITHUB_SHA" \
+            --source-report build/source/report.json
+      - name: Upload decomp.dev report
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: GN7E69_report
+          path: build/GN7E69/report.json
+          if-no-files-found: error
       - uses: actions/upload-pages-artifact@98ef48e41587a300b82de4cf298aa98b57b2faae
         with:
           path: build/site
