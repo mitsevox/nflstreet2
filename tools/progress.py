@@ -12,7 +12,7 @@ import struct
 
 ROOT = Path(__file__).resolve().parents[1]
 # Files the source build trusts; a report is valid only for the same versions.
-TRUSTED_TOOLS = ("tools/source_build.py", "tools/prodg_cc.py", "tools/setup_compiler.py",
+TRUSTED_TOOLS = ("tools/source_build.py", "tools/prodg_cc.py", "tools/sdk_cc.py", "tools/setup_compiler.py",
                  "tools/baseline.py", "tools/compiler-tools.json", "tools/baseline-tools.json",
                  "config/GN7E69/baseline.json", "config/GN7E69/analysis.json")
 
