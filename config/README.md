@@ -4,7 +4,7 @@ Each target keeps curated claims in `evidence.tsv`, alongside its build configur
 
 | Column | Meaning |
 | --- | --- |
-| `kind` | `name`, `function`, `data`, `unit-anchor`, `unit`, `type`, or `field`. |
+| `kind` | `name`, `function`, `data`, `unit-anchor`, `unit`, `type`, `field`, `external`, `compiler`, `assembly`, `source-form`, or `linker`. |
 | `start`, `end` | Target virtual addresses in hexadecimal; range ends are exclusive. Use `-` for unknown or inapplicable addresses. |
 | `subject` | Symbol, source path, type, or field concerned. Neutral address labels do not claim original names. |
 | `origin` | `target`, `signature`, `related`, or `inferred`, as defined below. |

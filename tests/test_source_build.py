@@ -270,7 +270,7 @@ class Placement(Fixture):
 class Build(unittest.TestCase):
     """Drive the complete build with mocked tool stages."""
 
-    def run_build(self, output_bytes, link=True, units=True):
+    def run_build(self, output_bytes, link=True, units=True, mutate_native=False):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         root = Path(temporary.name)
@@ -298,6 +298,9 @@ class Build(unittest.TestCase):
         report = build / "report.json"
 
         def stage(command, **kwargs):
+            if command[-1].startswith("@"):
+                import shlex
+                command = command[:2] + shlex.split(Path(command[-1][1:]).read_text())
             if "-c" in command:
                 obj = Path(command[command.index("-o") + 1])
                 sb.write_object(obj, [text(8)], [{"name": "Unit_Function", "value": 0, "shndx": 1}])
@@ -306,6 +309,10 @@ class Build(unittest.TestCase):
             elif "-T" in command and link:
                 sb.write_object(Path(command[command.index("-o") + 1]), [text(4)],
                                 [{"name": "Unit_Function", "value": 0x80003110, "shndx": sb.SHN_ABS}])
+                if mutate_native:
+                    native = next((build / "obj").glob("*.o"))
+                    with native.open("ab") as output:
+                        output.write(b"changed by tool")
             elif "elf2dol" in command:
                 Path(command[-1]).write_bytes(output_bytes(binary))
             return type("Result", (), {"returncode": 0})()
@@ -343,6 +350,11 @@ class Build(unittest.TestCase):
         self.assertEqual(report["complete"], "mismatch")
         self.assertEqual(report["totals"]["code"], {"linked": 8, "matched": 0})
         self.assertEqual(report["units"][0]["sections"][0]["status"], "range-identical")
+
+    def test_changed_native_linker_input_is_rejected_before_progress(self):
+        error, path = self.run_build(lambda binary: binary, mutate_native=True)
+        self.assertRegex(str(error), "native compiler object")
+        self.assertFalse(path.exists())
 
     def test_linker_must_produce_a_fresh_elf(self):
         error, path = self.run_build(lambda binary: binary, link=False)

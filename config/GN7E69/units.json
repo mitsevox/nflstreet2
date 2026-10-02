@@ -100,14 +100,6 @@
       "address": "0x80254374",
       "evidence": "evidence.tsv CARD external row __CARDPutControlBlock: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
-    "__CARDWrite": {
-      "address": "0x80259D24",
-      "evidence": "evidence.tsv CARD external row __CARDWrite: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
-    "__CARDCheckSum": {
-      "address": "0x80254CA8",
-      "evidence": "evidence.tsv CARD external row __CARDCheckSum: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
     "DCStoreRange": {
       "address": "0x80239D1C",
       "evidence": "evidence.tsv CARD external row DCStoreRange: target relocation fields, independently inspected callee behavior and SDK source signature."
@@ -176,10 +168,6 @@
       "address": "0x80257144",
       "evidence": "evidence.tsv CARD external row __CARDIsReadable: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
-    "__CARDSeek": {
-      "address": "0x80257880",
-      "evidence": "evidence.tsv CARD external row __CARDSeek: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
     "OSRegisterVersion": {
       "address": "0x8023931C",
       "evidence": "evidence.tsv AX external OSRegisterVersion; branch instruction destination and upstream role."
@@ -231,6 +219,42 @@
     "__AXOutQuit": {
       "address": "0x80287EF4",
       "evidence": "evidence.tsv AX external __AXOutQuit; branch instruction destination and upstream role."
+    },
+    "__OSLockSramEx": {
+      "address": "0x8023CAF0",
+      "evidence": "evidence.tsv retained CARD external __OSLockSramEx: branch or address-load operands and reference signature."
+    },
+    "__shr2i": {
+      "address": "0x801AD47C",
+      "evidence": "evidence.tsv retained CARD external __shr2i: branch or address-load operands and reference signature."
+    },
+    "__OSUnlockSramEx": {
+      "address": "0x8023CEAC",
+      "evidence": "evidence.tsv retained CARD external __OSUnlockSramEx: branch or address-load operands and reference signature."
+    },
+    "__CARDGetFontEncode": {
+      "address": "0x8025427C",
+      "evidence": "evidence.tsv retained CARD external __CARDGetFontEncode: branch or address-load operands and reference signature."
+    },
+    "__OSLockSram": {
+      "address": "0x8023CA94",
+      "evidence": "evidence.tsv retained CARD external __OSLockSram: branch or address-load operands and reference signature."
+    },
+    "__OSUnlockSram": {
+      "address": "0x8023CE88",
+      "evidence": "evidence.tsv retained CARD external __OSUnlockSram: branch or address-load operands and reference signature."
+    },
+    "__CARDReadSegment": {
+      "address": "0x80253EA0",
+      "evidence": "evidence.tsv retained CARD external __CARDReadSegment: branch or address-load operands and reference signature."
+    },
+    "DCInvalidateRange": {
+      "address": "0x80239CC0",
+      "evidence": "evidence.tsv retained CARD external DCInvalidateRange: branch or address-load operands and reference signature."
+    },
+    "__CARDWritePage": {
+      "address": "0x80253FD4",
+      "evidence": "evidence.tsv retained CARD external __CARDWritePage: target callback and scheduler calls."
     }
   },
   "units": [
@@ -391,6 +415,90 @@
           "placement": ".data5",
           "start": "0x803EC5B8",
           "end": "0x803EC5BC"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/card/CARDCheck.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv CARDCheck.c target code and retention; CREDITS.md reference source.",
+      "link_roots": {
+        "symbols": [
+          "__CARDCheckSum",
+          "__CARDVerify",
+          "CARDCheckExAsync",
+          "CARDCheckAsync",
+          "CARDCheck"
+        ],
+        "evidence": "evidence.tsv CARDCheck.c: target retains listed entry points and their actual callback dependencies; native unused functions are removed by SN linker."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80254CA8",
+          "end": "0x80255C38"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/card/CARDFormat.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv CARDFormat.c target code and retention; CREDITS.md reference source.",
+      "link_roots": {
+        "symbols": [
+          "__CARDFormatRegionAsync",
+          "CARDFormatAsync"
+        ],
+        "evidence": "evidence.tsv CARDFormat.c: target retains listed entry points and their actual callback dependencies; native unused functions are removed by SN linker."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80256730",
+          "end": "0x80256F14"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/card/CARDRdwr.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv CARDRdwr.c target code and retention; CREDITS.md reference source.",
+      "link_roots": {
+        "symbols": [
+          "__CARDRead",
+          "__CARDWrite"
+        ],
+        "evidence": "evidence.tsv CARDRdwr.c: target retains listed entry points and their actual callback dependencies; native unused functions are removed by SN linker."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80259B08",
+          "end": "0x80259D88"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/card/CARDRead.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv CARDRead.c target code and retention; CREDITS.md reference source.",
+      "link_roots": {
+        "symbols": [
+          "__CARDSeek",
+          "CARDReadAsync",
+          "CARDRead"
+        ],
+        "evidence": "evidence.tsv CARDRead.c: target retains listed entry points and their actual callback dependencies; native unused functions are removed by SN linker."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80257880",
+          "end": "0x80257CF4"
         }
       ]
     }
