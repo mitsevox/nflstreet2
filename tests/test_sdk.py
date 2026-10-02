@@ -146,8 +146,9 @@ class LinkerRetention(unittest.TestCase):
 
     def fixture(self, root, data=False):
         source = root / "retention.c"
-        source.write_text("int Keep(void); int Drop(void); int Missing(void);\n"
-                          "int Keep(void) {return 17;}\n"
+        source.write_text(("extern int stored;\n" if data else "") +
+                          "int Keep(void); int Drop(void); int Missing(void);\n" +
+                          ("int Keep(void) {return stored;}\n" if data else "int Keep(void) {return 17;}\n") +
                           "int Drop(void) {return Missing();}\n" +
                           ("int stored = 1;\n" if data else ""))
         obj = root / "retention.o"
