@@ -296,7 +296,7 @@ function hideTooltip() {
   activeTile = null;
 }
 function showTooltip(block, item, x, y) {
-  showTooltipText(block, (item.source && item.source !== item.name ? item.source + ' · ' : '') + item.name + ' · ' + percent(item), x, y);
+  showTooltipText(block, (item.source && item.source !== item.name ? item.source + ' · ' : '') + item.name + ' · ' + percent(item) + (item.source === item.name && item.complete === false ? ' · partial file' : ''), x, y);
 }
 function showTooltipText(block, text, x, y) {
   hideTooltip();
