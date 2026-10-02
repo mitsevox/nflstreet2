@@ -121,6 +121,50 @@ class TargetAndManifest(Fixture):
         with self.assertRaisesRegex(ValueError, "0xXXXXXXXX"):
             self.load(manifest)
 
+    def test_source_root_maps_units_to_relative_compile_paths(self):
+        manifest = copy.deepcopy(self.manifest)
+        manifest["units"][0]["source"] = "src/Common/Lib/unit.c"
+        manifest["profiles"]["library"]["source_root"] = {
+            "directory": "src", "file_prefix": "../../../Source", "evidence": "target path strings"}
+        units, _, _ = self.load(manifest)
+        self.assertEqual(units[0]["compile_path"], "../../../Source/Common/Lib/unit.c")
+        for prefix in ("Source", "../Source/Extra", "../../x/Source", "/abs/Source", "../../"):
+            bad = copy.deepcopy(manifest)
+            bad["profiles"]["library"]["source_root"]["file_prefix"] = prefix
+            with self.subTest(prefix=prefix), self.assertRaisesRegex(ValueError, "file_prefix"):
+                self.load(bad)
+        bad = copy.deepcopy(manifest)
+        bad["units"][0]["source"] = "other/unit.c"
+        with self.assertRaisesRegex(ValueError, "outside its profile's source root"):
+            self.load(bad)
+        bad = copy.deepcopy(manifest)
+        del bad["profiles"]["library"]["source_root"]["evidence"]
+        with self.assertRaisesRegex(ValueError, "evidence"):
+            self.load(bad)
+
+    def test_staged_compile_directory_reaches_repository_source(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "src/Common").mkdir(parents=True)
+            (root / "src/Common/unit.c").write_text("int unit;\n")
+            (root / "include").mkdir()
+            (root / "include/unit.h").write_text("extern int unit;\n")
+            unit = {"profile": "library", "path": root / "src/Common/unit.c",
+                    "source": "src/Common/unit.c", "compile_path": "../../../Source/Common/unit.c",
+                    "source_root": {"directory": "src", "file_prefix": "../../../Source",
+                                    "evidence": "x"}}
+            with patch.object(sb, "ROOT", root), patch.object(sb, "BUILD", root / "build/source"):
+                workdir = sb.stage(unit)
+                self.assertEqual(workdir.relative_to(root / "build/source/stage/library"),
+                                 Path("level1/level2/level3"))
+                depfile = root / "unit.d"
+                depfile.write_text(f"unit.o: ../../../Source/Common/unit.c \\\n {root}/include/unit.h\n")
+                self.assertEqual(sorted(sb.dependencies(depfile, workdir)),
+                                 ["include/unit.h", "src/Common/unit.c"])
+                unit["compile_path"] = "../../../Source/Common/other.c"
+                with self.assertRaisesRegex(RuntimeError, "does not reach"):
+                    sb.stage(unit)
+
     def test_manifest_identity_and_paths(self):
         with self.assertRaisesRegex(ValueError, "pinned compiler"):
             sb.load_manifest(self.manifest, self.sections, "3.9.4")

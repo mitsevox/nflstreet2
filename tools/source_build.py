@@ -167,8 +167,10 @@ def load_manifest(manifest, sections, compiler_version):
         repository_path(directory)
     profiles = manifest.get("profiles", {})
     for name, profile in profiles.items():
-        if set(profile) != {"flags", "evidence"} or not profile["evidence"].strip():
-            raise ValueError(f"Profile {name} needs exactly flags and an evidence locator")
+        if set(profile) - {"source_root"} != {"flags", "evidence"} or not profile["evidence"].strip():
+            raise ValueError(f"Profile {name} needs flags, an evidence locator and optionally source_root")
+        if "source_root" in profile:
+            source_root(profile["source_root"])
         flags = profile["flags"]
         if not all(isinstance(flag, str) for flag in flags) or prodg_cc.OPTIONS & set(flags) \
                 or any(flag.startswith("-I") for flag in flags):
@@ -207,13 +209,42 @@ def load_manifest(manifest, sections, compiler_version):
             ranges.append((start, end, unit["source"]))
         if not placed:
             raise ValueError(f"Unit {unit['source']} has no configured ranges")
+        root = profiles[unit["profile"]].get("source_root")
+        compile_path = None
+        if root:
+            directory, prefix, depth = source_root(root)
+            relative = Path(unit["source"]).relative_to(directory) \
+                if Path(unit["source"]).is_relative_to(directory) else None
+            if relative is None:
+                raise ValueError(f"Unit {unit['source']} is outside its profile's source root {directory}")
+            compile_path = f"{prefix}/{relative.as_posix()}"
         units.append({"source": unit["source"], "path": source, "profile": unit["profile"],
-                      "flags": profiles[unit["profile"]]["flags"], "sections": placed})
+                      "flags": profiles[unit["profile"]]["flags"], "sections": placed,
+                      "source_root": root, "compile_path": compile_path})
     ranges.sort()
     for left, right in zip(ranges, ranges[1:]):
         if right[0] < left[1]:
             raise ValueError(f"Configured ranges overlap: {left[2]} and {right[2]}")
     return units, externals, [directory for directory in manifest.get("include_dirs", [])]
+
+
+def source_root(root):
+    """Validate a library-level source root; return (directory, file prefix, build depth).
+
+    Units under `directory` are compiled as `file_prefix/<path below directory>` from a
+    staging directory `depth` levels below a `<name>` link to the repository directory,
+    so __FILE__ carries the original build's relative spelling."""
+    if not isinstance(root, dict) or set(root) != {"directory", "file_prefix", "evidence"} \
+            or not isinstance(root["evidence"], str) or not root["evidence"].strip():
+        raise ValueError("source_root needs exactly directory, file_prefix and evidence")
+    repository_path(root["directory"])
+    prefix = root["file_prefix"]
+    parts = prefix.split("/") if isinstance(prefix, str) else []
+    depth = len(parts) - 1
+    if depth < 1 or any(part != ".." for part in parts[:-1]) \
+            or not re.fullmatch(r"[A-Za-z0-9_][A-Za-z0-9_.+-]*", parts[-1]):
+        raise ValueError("source_root file_prefix must be '../' repeated, then one directory name")
+    return Path(root["directory"]), prefix, depth
 
 
 def repository_path(text):
@@ -338,13 +369,29 @@ def check_basenames(paths):
             raise ValueError(f"Object name {name} is ambiguous in linker patterns")
 
 
-def dependencies(depfile):
+def stage(unit):
+    """Create the build directory for a source-root unit; return it after checking the mapping."""
+    directory, prefix, depth = source_root(unit["source_root"])
+    staging = BUILD / "stage" / re.sub(r"[^A-Za-z0-9]+", "_", unit["profile"])
+    link = staging / prefix.split("/")[-1]
+    workdir = staging.joinpath(*[f"level{index}" for index in range(1, depth + 1)])
+    if not link.is_symlink():
+        staging.mkdir(parents=True, exist_ok=True)
+        link.symlink_to(ROOT / directory, target_is_directory=True)
+    workdir.mkdir(parents=True, exist_ok=True)
+    if (workdir / unit["compile_path"]).resolve() != unit["path"].resolve():
+        raise RuntimeError(f"Compile path {unit['compile_path']} does not reach {unit['source']}")
+    return workdir
+
+
+def dependencies(depfile, base):
+    """Map preprocessor dependencies (relative to the compile directory) to repository files."""
     text = depfile.read_text().replace("\\\n", " ")
     items = re.split(r"(?<!\\)\s+", text.split(":", 1)[1].strip()) if ":" in text else []
     result = {}
     for item in filter(None, items):
         path = Path(item.replace("\\ ", " "))
-        path = (path if path.is_absolute() else ROOT / path).resolve()
+        path = (path if path.is_absolute() else base / path).resolve()
         if not path.is_relative_to(ROOT.resolve()):
             raise ValueError(f"Dependency outside the repository: {path}")
         result[path.relative_to(ROOT.resolve()).as_posix()] = sha256(path)
@@ -391,12 +438,15 @@ def build(original, manifest_path, report_path):
                    "--wrapper", str(wrapper), "--depfile", str(unit["depfile"])]
         for directory in include_dirs:
             command += ["-I", str(ROOT / directory)]
-        command += unit["flags"] + ["-c", str(unit["path"]), "-o", str(unit["object"])]
-        result = subprocess.run(command, cwd=ROOT, stdin=subprocess.DEVNULL)
+        workdir, source = ROOT, str(unit["path"])
+        if unit["compile_path"]:
+            workdir, source = stage(unit), unit["compile_path"]
+        command += unit["flags"] + ["-c", source, "-o", str(unit["object"])]
+        result = subprocess.run(command, cwd=workdir, stdin=subprocess.DEVNULL)
         if result.returncode or not unit["object"].is_file():
             raise RuntimeError(f"Compilation failed for {unit['source']}")
         objects[unit["source"]] = read_elf(unit["object"].read_bytes())
-        unit["dependencies"] = dependencies(unit["depfile"])
+        unit["dependencies"] = dependencies(unit["depfile"], workdir)
     pieces, defined, resolved = plan(sections, units, objects, externals)
     for section in sections:
         for piece in pieces[section["name"]]:
@@ -478,7 +528,8 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                             "start": f"0x{entry['start']:08X}", "end": f"0x{entry['end']:08X}",
                             "compiled": entry["compiled"], "linked": size,
                             "matched": size if identical else 0, "status": status})
-        measured.append({"source": unit["source"], "source_sha256": sha256(unit["path"]),
+        measured.append({"source": unit["source"], "compile_path": unit["compile_path"],
+                         "source_sha256": sha256(unit["path"]),
                          "profile": unit["profile"], "flags": unit["flags"],
                          "dependencies": unit["dependencies"],
                          "status": "matched" if identical else "unverified", "sections": entries})
