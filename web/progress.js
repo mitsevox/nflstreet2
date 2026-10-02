@@ -1,11 +1,35 @@
 let sections=[];
 const canvas=document.querySelector('#canvas');
-function color(item){return item.matched===item.size?'var(--done)':item.matched>0?'var(--warm)':'var(--empty)'}
+function color(item) {
+  if (item.matched === item.size) return 'var(--done)';
+  if (!item.matched) return 'var(--empty)';
+  const blend = Math.min(item.matched / item.size / 0.99, 1) * 100;
+  return `color-mix(in srgb, var(--empty), var(--warm) ${blend}%)`;
+}
 // Balanced area partitioning keeps byte proportions exact across viewport sizes.
 function partition(items,x,y,w,h,out){if(!items.length)return;if(items.length===1){out.push({...items[0],x,y,w,h});return;}let total=items.reduce((s,a)=>s+a.size,0),sum=0,split=1;for(let i=0;i<items.length-1;i++){sum+=items[i].size;split=i+1;if(sum>=total/2)break;}const ratio=sum/total;if(w>=h){partition(items.slice(0,split),x,y,w*ratio,h,out);partition(items.slice(split),x+w*ratio,y,w*(1-ratio),h,out);}else{partition(items.slice(0,split),x,y,w,h*ratio,out);partition(items.slice(split),x,y+h*ratio,w,h*(1-ratio),out);}}
 const tooltip = document.querySelector('#map-tooltip');
 const back = document.querySelector('#map-back');
+const search = document.querySelector('#map-search');
+const kindPicker = document.querySelector('#map-kind');
 const path = [];
+function leaves(items) {
+  return items.flatMap(item => item.children?.length ? leaves(item.children) : [item]);
+}
+function mapItems() {
+  const roots = sections.filter(section => section.kind === kindPicker.value);
+  const query = search.value.trim().toLocaleLowerCase();
+  if (query) return leaves(roots).filter(item => item.name.toLocaleLowerCase().includes(query));
+  return path.at(-1)?.children || roots;
+}
+search.addEventListener('input', () => {
+  path.length = 0;
+  render();
+});
+kindPicker.addEventListener('change', () => {
+  path.length = 0;
+  render();
+});
 let activeTile = null;
 const percent = item => (item.matched / item.size * 100).toFixed(2) + '% matched';
 function hideTooltip() {
@@ -28,12 +52,19 @@ function render() {
   const focusedName = canvas.contains(document.activeElement) ? document.activeElement.dataset.name : null;
   hideTooltip();
   const current = path.at(-1);
-  const items = current ? current.children : sections.filter(section => section.kind === 'code');
+  const items = mapItems();
   back.hidden = !current;
-  canvas.setAttribute('aria-label', current ? current.name + ' contents' : 'Code section map');
+  canvas.setAttribute('aria-label', current ? current.name + ' contents' : (kindPicker.value === 'code' ? 'Code' : 'Data') + ' section map');
   const layout = [];
   partition([...items].sort((a, b) => b.size - a.size), 0, 0, canvas.clientWidth, canvas.clientHeight, layout);
   canvas.replaceChildren();
+  if (!items.length) {
+    const empty = document.createElement('div');
+    empty.className = 'empty-search';
+    empty.textContent = 'No matches';
+    canvas.append(empty);
+    return;
+  }
   for (const item of layout) {
     const block = document.createElement('button');
     block.type = 'button';
