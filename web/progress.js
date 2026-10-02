@@ -28,9 +28,9 @@ function render() {
   const focusedName = canvas.contains(document.activeElement) ? document.activeElement.dataset.name : null;
   hideTooltip();
   const current = path.at(-1);
-  const items = current ? current.children : sections;
+  const items = current ? current.children : sections.filter(section => section.kind === 'code');
   back.hidden = !current;
-  canvas.setAttribute('aria-label', current ? current.name + ' contents' : 'Executable section map');
+  canvas.setAttribute('aria-label', current ? current.name + ' contents' : 'Code section map');
   const layout = [];
   partition([...items].sort((a, b) => b.size - a.size), 0, 0, canvas.clientWidth, canvas.clientHeight, layout);
   canvas.replaceChildren();
