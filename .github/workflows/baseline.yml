@@ -49,8 +49,14 @@ jobs:
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/baseline.py --original /orig/main.dol \
               --sn-linker build/toolchain/ProDG/3.9.3/ngcld.exe --wrapper build/toolchain/wibo
+      - name: Verify source build against complete target
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
+            "$BUILD_ENVIRONMENT" python3 tools/source_build.py --original /orig/main.dol
       - name: Export public progress page
-        run: python3 tools/progress.py --dol build/baseline/main.dol --revision "$GITHUB_SHA"
+        run: |
+          python3 tools/progress.py --dol build/source/main.dol --revision "$GITHUB_SHA" \
+            --source-report build/source/report.json
       - uses: actions/upload-pages-artifact@98ef48e41587a300b82de4cf298aa98b57b2faae
         with:
           path: build/site

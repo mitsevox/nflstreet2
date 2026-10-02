@@ -92,7 +92,11 @@ def stage(command, output):
 
 
 def compile_unit(options, cpp_flags, compiler_flags, language):
-    source = Path(options["-c"]).resolve()
+    # A relative source path reaches the preprocessor as given (relative to the working
+    # directory), so __FILE__ keeps the build's relative spelling.
+    source = Path(options["-c"])
+    if source.is_absolute():
+        source = source.resolve()
     directory = Path(options["--dir"]).resolve()
     output = Path(options["-o"]).resolve()
     depfile = Path(options["--depfile"]).resolve() if "--depfile" in options else None

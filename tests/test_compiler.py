@@ -113,6 +113,28 @@ class CompilerChecks(unittest.TestCase):
         self.assertNotIn(b"\r", dependencies)
         self.assertIn(b"values\\ header.h", dependencies)
 
+    def test_relative_source_path_reaches_file_macro(self):
+        source_dir = self.work / "Source" / "Lib"
+        source_dir.mkdir(parents=True)
+        (source_dir / "named.c").write_text('const char *Where(void) { return __FILE__; }\n')
+        build_dir = self.work / "a" / "b" / "c"
+        build_dir.mkdir(parents=True)
+        relative = "../../../Source/Lib/named.c"
+        output = self.work / "relative.o"
+        result = subprocess.run([
+            sys.executable, str(ROOT / "tools/prodg_cc.py"),
+            "--dir", str(self.directory), "--wrapper", str(self.wrapper),
+            "-O2", "-c", relative, "-o", str(output),
+        ], cwd=build_dir, capture_output=True, text=True, timeout=40)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(b"\0" + relative.encode() + b"\0", b"\0" + output.read_bytes())
+        absolute = self.work / "absolute.o"
+        result = self.compile(source_dir / "named.c", absolute)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        # Absolute sources keep their previous resolved spelling.
+        self.assertIn(b"/Source/Lib/named.c\0", absolute.read_bytes())
+        self.assertNotIn(relative.encode(), absolute.read_bytes())
+
     def test_timeout_stops_descendant_writes(self):
         late_output = self.work / "late-output"
         runner = self.work / "hang.py"
