@@ -1,3 +1,4 @@
+#include "game/Class_801CBC50.h"
 #include "game/InGame.h"
 #include "game/ModuleGroup_80033A5C.h"
 
@@ -5,7 +6,6 @@ extern "C" {
 double fabs(double);
 extern char lbl_8030716C[];
 extern char lbl_803072C4[];
-extern char lbl_803067B0[];
 extern float lbl_803EA2C4;
 extern void *lbl_803EA368;
 extern void *lbl_803EAA8C;
@@ -485,7 +485,7 @@ int fn_80028934()
 int fn_8002894C()
 {
     int result = 0;
-    char *p = lbl_803067B0;
+    Class_803067B0 *p = &lbl_803067B0;
 
     if (fn_801CBE9C(p, 1)) {
         result = !fn_801CBE9C(p, 3);

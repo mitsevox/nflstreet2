@@ -1,7 +1,7 @@
+#include "game/Class_801CBC50.h"
 #include "game/Module.h"
 
 extern "C" {
-extern char lbl_803067B0[];
 
 void fn_80023048(void);
 void fn_801CBCD0(void *pObject);
@@ -21,7 +21,7 @@ float lbl_803EA2C4 = 1.0f;
 
 void fn_80026AD0(void)
 {
-    fn_801CBFA8(lbl_803067B0);
+    fn_801CBFA8(&lbl_803067B0);
 }
 
 void fn_80026AF8(void)
@@ -30,7 +30,7 @@ void fn_80026AF8(void)
     fn_801CC7FC(pModule);
     fn_801CC820(pModule, 0);
 
-    char *pObject = lbl_803067B0;
+    Class_803067B0 *pObject = &lbl_803067B0;
     fn_801CBCD0(pObject);
     fn_801CC054(pObject, 0);
     fn_801CBD80(pObject, 0, -1);

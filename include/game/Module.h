@@ -101,6 +101,7 @@ DECLARE_MODULE(FMSndgMusic);
 
 extern AnmsCelebration gAnmsCelebration;
 extern Celebration gCelebration;
+extern Debug gDebug;
 extern FileIO gFileIO;
 extern Vpt gVpt;
 extern GLIB gGLIB;
@@ -111,7 +112,8 @@ extern Obj gObj;
 extern Res gRes;
 extern Tex gTex;
 extern Vec gVec;
-
 extern Snd gSnd;
+extern Font gFont;
+extern Render gRender;
 
 #endif
