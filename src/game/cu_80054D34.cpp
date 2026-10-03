@@ -4,7 +4,7 @@ struct Args_80054E08 {
     int mUnknown8;
 };
 
-struct Message_80054E08 {
+struct Block_80054E08 {
     int mUnknown0;
     Args_80054E08 *mpArgs;
 };
@@ -12,7 +12,7 @@ struct Message_80054E08 {
 extern "C" {
 extern void *lbl_803EA368;
 
-void fn_8002CA74(void *p, int a, int b);
+int fn_8002CA74(void *p, int a, int b);
 int fn_8002D0D0(void *p);
 int fn_8002D0FC(void *p);
 void fn_8017DBCC(void);
@@ -46,7 +46,7 @@ extern "C" int fn_80054DE0(void) { return fn_8002D0FC(lbl_803EA368); }
 
 extern "C" void fn_80054E04(int a, int b, int c) {}
 
-extern "C" int fn_80054E08(unsigned int id, Message_80054E08 *pMessage, int c, int *pResult)
+extern "C" int fn_80054E08(unsigned int id, Block_80054E08 *pBlock, int c, int *pResult)
 {
     switch (id) {
     case 0x80000001:
@@ -62,7 +62,7 @@ extern "C" int fn_80054E08(unsigned int id, Message_80054E08 *pMessage, int c, i
         *pResult = fn_80054DE0();
         break;
     case 0x80000005:
-        fn_80054E04(pMessage->mUnknown0, pMessage->mpArgs->mUnknown8, pMessage->mpArgs->mUnknown4);
+        fn_80054E04(pBlock->mUnknown0, pBlock->mpArgs->mUnknown8, pBlock->mpArgs->mUnknown4);
         break;
     default:
         return 0;
