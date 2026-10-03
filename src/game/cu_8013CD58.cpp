@@ -141,7 +141,7 @@ int fn_801CFE40(float y, float x);
 float fn_802270D4(float *pV);
 void fn_802272DC(float *pOut, float *pIn, float scale);
 void fn_802273E8(float *pOut, float *pIn, int x, int y, int z);
-void fn_80227490(float *pOut, float *pIn, int x, int y, int z);
+void fn_80227490(float *pOut, float *pIn, int z, int y, int x);
 void fn_80227638(float *pOut, float *pA, float *pB);
 void fn_8022765C(float *pOut, float *pA, float *pB);
 void fn_802276B4(float *pOut, float *pA, float *pB);
@@ -344,11 +344,11 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
     Record_8002E7C0 *pRecord;
     View_8002E7C0 *pView;
     float *pFrom;
-    float *pOffset;
+    float *pPoint;
     int mode;
     int duration;
     Object_8013E168 *p;
-    int snap;
+    int smooth;
     Target_8013825C *pTarget;
     float dist;
 
@@ -358,7 +358,7 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
     target[0] = pTarget->mUnknown04[0];
     target[1] = pTarget->mUnknown04[1];
     target[2] = pTarget->mUnknown04[2];
-    snap = !pState->mUnknown28;
+    smooth = !pState->mUnknown28;
     pState->mUnknown28 = 0;
     pRecord = fn_8002E7C0(&pCamera->mUnknown128);
     timer = pRecord->mUnknown04;
@@ -367,13 +367,13 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
         mode = pRecord->mUnknown1C.mUnknown34;
         pView = &pRecord->mUnknown1C;
         pFrom = pRecord->mUnknown1C.mUnknown1C;
-        pOffset = pRecord->mUnknown1C.mUnknown28;
+        pPoint = pRecord->mUnknown1C.mUnknown28;
         duration = pRecord->mUnknown1C.mUnknown3C;
     } else {
         mode = pRecord->mUnknown5C.mUnknown34;
         pView = &pRecord->mUnknown5C;
         pFrom = pRecord->mUnknown5C.mUnknown1C;
-        pOffset = pRecord->mUnknown5C.mUnknown28;
+        pPoint = pRecord->mUnknown5C.mUnknown28;
         duration = pRecord->mUnknown5C.mUnknown3C;
     }
     if (pRecord->mUnknown18 & 0x20) {
@@ -411,7 +411,7 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
         fn_8013DDF4(pCamera, pRecord, out);
         pState->mUnknown24 = fn_8013E298(pos, out, angles);
         pState->mUnknown1C = 45.0f;
-        fn_8013E0D0(pCamera, snap);
+        fn_8013E0D0(pCamera, smooth);
         pState->mUnknown24 = fn_8013E298(pos, out, angles);
         break;
     case 2:
@@ -426,13 +426,13 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
         fn_8013DDF4(pCamera, pRecord, out);
         pState->mUnknown24 = fn_8013E298(pos, out, angles);
         pState->mUnknown1C = 45.0f;
-        fn_8013E0D0(pCamera, snap);
+        fn_8013E0D0(pCamera, smooth);
         pState->mUnknown24 = fn_8013E298(pos, out, angles);
         break;
     case 4:
-        dir4[0] = pOffset[0];
-        dir4[1] = pOffset[1];
-        dir4[2] = pOffset[2];
+        dir4[0] = pPoint[0];
+        dir4[1] = pPoint[1];
+        dir4[2] = pPoint[2];
         if (fn_801784C4()) {
             dir4[0] = -dir4[0];
             dir4[1] = -dir4[1];
@@ -446,14 +446,14 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
         pCamera->mUnknown04[2] = pos[2];
         pState->mUnknown24 = fn_8013E298(pos, dir4, angles);
         pState->mUnknown1C = 45.0f;
-        fn_8013E0D0(pCamera, snap);
+        fn_8013E0D0(pCamera, smooth);
         pState->mUnknown24 = fn_8013E298(pos, dir4, angles);
         break;
     case 7:
     case 8:
     case 14:
         fn_8013DDF4(pCamera, pRecord, out);
-        snap = 0;
+        smooth = 0;
         pos[0] = out[0];
         pos[1] = out[1];
         pos[2] = out[2];
@@ -478,7 +478,7 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
     case 5:
     case 6:
         fn_8013DDF4(pCamera, pRecord, out);
-        snap = 0;
+        smooth = 0;
         fn_8013DA60(pRecord, out, pos);
         pCamera->mUnknown04[0] = pos[0];
         pCamera->mUnknown04[1] = pos[1];
@@ -513,23 +513,23 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
         pCamera->mUnknown04[0] = pState->mUnknown00[0];
         pCamera->mUnknown04[1] = pState->mUnknown00[1];
         pCamera->mUnknown04[2] = pState->mUnknown00[2];
-        snap = 0;
+        smooth = 0;
         switch (mode) {
         case 12:
             fn_8013E168(pRecord->mUnknown1C.mUnknown38, out, 0.0f);
-            fn_8022765C(out, out, pOffset);
+            fn_8022765C(out, out, pPoint);
             break;
         case 13:
             out[0] = target[0];
             out[1] = target[1];
             out[2] = target[2];
-            fn_8022765C(out, out, pOffset);
+            fn_8022765C(out, out, pPoint);
             break;
         case 11:
         default:
-            out[0] = pOffset[0];
-            out[1] = pOffset[1];
-            out[2] = pOffset[2];
+            out[0] = pPoint[0];
+            out[1] = pPoint[1];
+            out[2] = pPoint[2];
             break;
         }
         out[0] = pFrom[0] * (1.0f - t) + out[0] * t;
@@ -545,7 +545,7 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
         fn_801C1F94(out, 0, sizeof(out));
         break;
     }
-    fn_8013E1E4(pCamera, angles, snap);
+    fn_8013E1E4(pCamera, angles, smooth);
     pView->mUnknown0C[0] = out[0];
     pView->mUnknown0C[1] = out[1];
     pView->mUnknown0C[2] = out[2];
