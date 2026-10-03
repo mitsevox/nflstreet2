@@ -41,6 +41,12 @@ Partial units follow the same accuracy and hostile-review gates. Their original 
 
 For changes with dependencies on other PRs, identify those dependencies and tested revisions. Documentation-only changes require appropriate checks, not an invented binary-validation result.
 
+Use existing independent accuracy and hostile reviews when their revision, reviewer independence, scope and supporting evidence are adequate. Add focused review for missing coverage or new questions rather than repeat an adequate initial pass. New reconstruction, materially changed behavior, types or boundaries, compiler-profile or comparison changes, insufficient evidence and suspicious matches return through the relevant full passes.
+
+After refreshing from `main`, carry findings forward only after explicitly verifying the diff and affected dependencies. Recheck conflict resolutions and affected shared declarations and units. Post final-revision review records that cite the earlier records, identify the checked delta and explain why unchanged findings still apply; an earlier verdict alone does not cover the new head.
+
+Required CI must verify the final revision's complete target binary, unit code/data, regressions and applicable progress exports. Share validation artifacts tied to that exact revision so reviewers can assess coverage and results without each duplicating complete builds and test suites. Focused review and shared validation do not relax independence, evidence, review records, CI or owner approval.
+
 ## Investigation and escalation
 
 Contributors and agents choose investigations according to the unresolved question. Additional tools are not required for every function. Escalate when controlled experiments stop yielding useful evidence, or when uncertainty about behavior, types, or boundaries could invalidate the reconstruction. A high matching percentage does not resolve those uncertainties.
