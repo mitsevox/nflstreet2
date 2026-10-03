@@ -22,12 +22,12 @@ int fn_80178308(void);
 unsigned int fn_80178D18(int a);
 int fn_80178320(void);
 int fn_801AE5D4(int a, int b, int c);
-float fn_8022785C(Position_80074F38 *pPosition, int b);
+float fn_8022785C(Position_80074F38 *pPosition, Position_80074F38 *pOther);
 }
 
 static int lbl_803EA74C = 0;
 
-extern "C" void fn_80074F38(int b)
+extern "C" void fn_80074F38(Position_80074F38 *pOther)
 {
     Position_80074F38 position;
     unsigned short i;
@@ -47,7 +47,7 @@ extern "C" void fn_80074F38(int b)
             break;
         }
     }
-    if (fn_8022785C(&position, b) <= 4.0f) {
+    if (fn_8022785C(&position, pOther) <= 4.0f) {
         return;
     }
     fn_80075550(&result, lbl_803EA74C);
