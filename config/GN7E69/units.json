@@ -660,6 +660,43 @@
       ]
     },
     {
+      "source": "src/game/LoadingFEToInGame.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80038194-0x8003830C (src/game/LoadingFEToInGame.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80038194",
+          "end": "0x8003830C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028CF28",
+          "end": "0x8028CFA0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80307480",
+          "end": "0x8030749C"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A78",
+          "end": "0x80289A7C"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BB8",
+          "end": "0x80289BBC"
+        }
+      ]
+    },
+    {
       "source": "src/game/LoadingFE.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8008CA8C-0x8008CC74 (src/game/LoadingFE.cpp) and its data rows.",
