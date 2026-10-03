@@ -1626,6 +1626,37 @@
       ]
     },
     {
+      "source": "src/game/cu_8002306C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8002306C-0x800231B0 (src/game/cu_8002306C.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002306C",
+          "end": "0x800231B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037DEA4",
+          "end": "0x8037DED0"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B3C",
+          "end": "0x80289B40"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C64",
+          "end": "0x80289C68"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/si/SISamplingRate.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv unit/data rows for sampling-rate code, tables, diagnostic and BSS state; CREDITS.md for import provenance.",
