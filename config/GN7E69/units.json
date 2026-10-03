@@ -53,12 +53,13 @@
     "game_cpp": {
       "flags": [
         "-O2",
-        "-fno-weak"
+        "-fno-weak",
+        "-ffast-math"
       ],
       "include_dirs": [
         "include/libc"
       ],
-      "evidence": "evidence.tsv compiler row game_cpp: ProDG 3.9.3 cc1plus -O2 -fno-weak reproduces every instruction of the module units 0x8008BB30-0x8008BCF0 and 0x8008B974-0x8008BB30. -O1, -O3, -Os, -fno-schedule-insns, -fno-schedule-insns2, -G0, -fexceptions and -frtti change the output; without -fno-weak the class functions and vtable move to linkonce sections, while the target keeps the destructor 0x8008BC68 inside the contiguous .text run and the vtable in rodata; -fvtable-thunks changes the vtable layout."
+      "evidence": "evidence.tsv compiler row game_cpp: ProDG 3.9.3 cc1plus -O2 -fno-weak reproduces every instruction of the module units 0x8008BB30-0x8008BCF0 and 0x8008B974-0x8008BB30. -O1, -O3, -Os, -fno-schedule-insns, -fno-schedule-insns2, -G0, -fexceptions and -frtti change the output; without -fno-weak the class functions and vtable move to linkonce sections, while the target keeps the destructor 0x8008BC68 inside the contiguous .text run and the vtable in rodata; -fvtable-thunks changes the vtable layout. -ffast-math: evidence.tsv compiler row 0x800034A0-0x801AA640 (game_cpp). Every floating-point compare in game code 0x800034A0-0x801AA640 branches in the ordered form -ffast-math emits; none uses the unordered form ProDG emits without it (cror+bns, or ble/bge after fcmpu). Every earlier game_cpp unit compiles to an identical native object with or without the flag. Open item: the flag turns division by a constant into a reciprocal multiply, while fn_801470F0 divides by the literal 35.0f at 0x80147440 and 0x801474AC; see that row."
     }
   },
   "externals": {
