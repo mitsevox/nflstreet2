@@ -354,6 +354,10 @@
     "__AXClMode": {
       "address": "0x803ED560",
       "evidence": "AXAux target lwz r13-19776 at 0x80286E58/0x80286F2C; shared related SDK mode declaration, original storage remains linked."
+    },
+    "__builtin_delete": {
+      "address": "0x801D3C18",
+      "evidence": "evidence.tsv external row for 0x801D3C18 (descriptive mangled name: operator delete(void *))."
     }
   },
   "units": [
@@ -1099,6 +1103,55 @@
           "placement": ".data2",
           "start": "0x80289C3C",
           "end": "0x80289C40"
+        }
+      ]
+    },
+    {
+      "source": "src/game/GameState.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80028E70-0x80029224 (src/game/GameState.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80028E70",
+          "end": "0x80029224"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028A200",
+          "end": "0x8028A2E0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA318",
+          "end": "0x803EA31C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803065C0",
+          "end": "0x803065E4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC604",
+          "end": "0x803EC60C"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A4C",
+          "end": "0x80289A50"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289B8C",
+          "end": "0x80289B90"
         }
       ]
     },
