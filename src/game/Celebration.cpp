@@ -1,15 +1,14 @@
 #include "game/GameState.h"
+#include "game/ModuleGroup_80033A5C.h"
 
 extern "C" {
-extern char lbl_80306D28[];
 extern char lbl_80306DFC[];
 
-void *fn_80033AF8(void *);
 void fn_8009B720(void *);
 void fn_8009B7E0(void);
 }
 
-static ModuleDependency sDependencies[] = { &gGameState, lbl_80306D28, lbl_80306DFC, 0 };
+static ModuleDependency sDependencies[] = { &gGameState, &gAnimData, lbl_80306DFC, 0 };
 static ModuleDependency sLinks[] = { &gAnmsCelebration, 0 };
 Celebration gCelebration;
 
@@ -19,7 +18,7 @@ const char *Celebration::GetName() { return "Celebration"; }
 
 int Celebration::Init()
 {
-    fn_8009B720(fn_80033AF8(lbl_80306D28));
+    fn_8009B720(gAnimData.fn_80033AF8());
     return 1;
 }
 
