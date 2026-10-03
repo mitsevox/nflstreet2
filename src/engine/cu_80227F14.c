@@ -1,3 +1,4 @@
+#include <dolphin/mtx.h>
 #include "engine/cu_80227F14.h"
 
 typedef struct Entry_80228474 {

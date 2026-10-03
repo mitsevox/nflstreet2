@@ -1,3 +1,4 @@
+#include "engine/cu_80227F14.h"
 #include "game/GameVpt.h"
 #include "game/GameObjList.h"
 
@@ -12,11 +13,6 @@ int fn_801CEA14(void);
 int fn_801CEB4C(void);
 int fn_801CEC74(void);
 int fn_801CEC7C(void);
-Object_80228224 *fn_80228224(Desc_80228224 *pDesc);
-void fn_802283FC(Object_80228224 *pObject);
-void fn_802286CC(Object_80228224 *pObject, int handle, int unknown);
-void fn_802286D8(Object_80228224 *pObject, float a, float b, float c, float d);
-void fn_80228780(Object_80228224 *pObject, float a);
 }
 
 static ModuleDependency sDependencies[] = { &gSys, &gGLIB, &gVpt, &gGameObjList, 0 };
