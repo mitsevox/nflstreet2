@@ -16,6 +16,8 @@ public:
     virtual struct ModuleDependency *GetLinks() = 0;
     virtual const char *GetName() = 0;
 
+    int fn_801CC96C();
+
 private:
     int mUnknown0;
     int mUnknown4;

@@ -358,6 +358,10 @@
     "__builtin_delete": {
       "address": "0x801D3C18",
       "evidence": "evidence.tsv external row for 0x801D3C18 (descriptive mangled name: operator delete(void *))."
+    },
+    "fn_801CC96C__10ModuleNode": {
+      "address": "0x801CC96C",
+      "evidence": "evidence.tsv external row for 0x801CC96C (fn_801CC96C__10ModuleNode); neutral address label of a ModuleNode member."
     }
   },
   "units": [
@@ -1336,6 +1340,61 @@
           "placement": ".data2",
           "start": "0x80289B88",
           "end": "0x80289B8C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/SndgCrowd.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8006F1F4-0x8006F54C (src/game/SndgCrowd.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8006F1F4",
+          "end": "0x8006F54C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80290AE8",
+          "end": "0x80290B58"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6350",
+          "end": "0x802D63D0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA6B8",
+          "end": "0x803EA6C0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030AA68",
+          "end": "0x8030AA7C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC818",
+          "end": "0x803EC820"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A98",
+          "end": "0x80289A9C"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BD8",
+          "end": "0x80289BDC"
         }
       ]
     },
