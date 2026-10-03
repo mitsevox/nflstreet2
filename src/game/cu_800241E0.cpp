@@ -131,9 +131,7 @@ static void fn_8002425C(void)
     }
 }
 
-/* When fn_80244C60 is non-zero and either fn_8023CF60 returned 1 or a pad held the
-   lbl_803EBD6D button, shows the screen display message chosen by fn_80063AA0;
-   otherwise passes 0 to fn_8023CFD0. */
+/* Shows the progressive/interlaced display-mode message. */
 static void fn_800242AC(void)
 {
     unsigned int i = 0;
@@ -299,10 +297,8 @@ static void fn_80024840(int a)
     int status;
 
     for (i = 0; i < 4; i++) {
-        unsigned char port = i;
-
-        fn_801E1C38(port);
-        if (fn_801E1CE0(port)) {
+        fn_801E1C38(i);
+        if (fn_801E1CE0(i)) {
             fn_801E15D0(i);
             if (fn_801E19B4(i) >> 16 && fn_801E195C(i) == 2 && a == 1) {
                 fn_801E17D0(i, pState);

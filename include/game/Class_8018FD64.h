@@ -1,8 +1,10 @@
 #ifndef GAME_CLASS_8018FD64_H
 #define GAME_CLASS_8018FD64_H
 
-/* Class defined outside this unit; only the members called from game code
-   reconstructed so far are declared, and its storage is kept opaque. */
+/* Class defined outside this unit. The target class is polymorphic: its
+   vtable pointer is at +0 and an Object_8007A334 follows at +4, and the
+   destructor, fn_8018FE10, fn_8018FF54 and fn_8018FFE4 are virtual. Only the
+   48-byte size and the called members are declared; the layout is opaque. */
 class Class_8018FD64 {
 public:
     Class_8018FD64();

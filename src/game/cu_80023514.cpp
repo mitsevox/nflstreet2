@@ -8,9 +8,9 @@ struct QueryCursor {
 
 extern "C" {
 int fn_801FCE10(int a, const char *pFormat, ...);
-void fn_801FCFA0(QueryCursor *pCursor);
+int fn_801FCFA0(QueryCursor *pCursor);
 int fn_8022EF8C(int a, int tag);
-void fn_8022EFBC(int a, int tag);
+int fn_8022EFBC(int a, int tag);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 }
 
