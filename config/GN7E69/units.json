@@ -1399,6 +1399,43 @@
       ]
     },
     {
+      "source": "src/game/GameVpt.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80029224-0x80029500 (src/game/GameVpt.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80029224",
+          "end": "0x80029500"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028A2E0",
+          "end": "0x8028A360"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803065E4",
+          "end": "0x8030660C"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A50",
+          "end": "0x80289A54"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289B90",
+          "end": "0x80289B94"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/si/SISamplingRate.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv unit/data rows for sampling-rate code, tables, diagnostic and BSS state; CREDITS.md for import provenance.",

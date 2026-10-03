@@ -2,6 +2,7 @@
 #define GAME_FMCAPPORT_H
 
 #include "game/Module.h"
+#include "game/Object_80228224.h"
 
 struct FMCAPPORTText {
     char mChars[25];
@@ -49,24 +50,6 @@ struct Object_8008A9F8 {
     int mUnknown340[6];
     int mUnknown364;
     char mUnknown368[1268];
-};
-
-/* Object returned by fn_80228224. */
-struct Object_80228224 {
-    char mUnknown0[28];
-    unsigned int mUnknown28;
-};
-
-/* Argument of fn_80228224. */
-struct Desc_80228224 {
-    short mUnknown0;
-    char mUnknown2;
-    char mUnknown3;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
-    short mUnknown16;
-    short mUnknown18;
 };
 
 class Class_8008B284 {
