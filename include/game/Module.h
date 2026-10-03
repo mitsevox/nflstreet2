@@ -52,6 +52,7 @@ DECLARE_MODULE(AnmsCelebration);
 DECLARE_MODULE(Celebration);
 DECLARE_MODULE(Rumble);
 DECLARE_MODULE(Timg);
+DECLARE_MODULE(LoadingFE);
 
 extern AnmsCelebration gAnmsCelebration;
 extern Celebration gCelebration;
