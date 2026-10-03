@@ -1,5 +1,6 @@
 #include "game/Module.h"
 #include "game/Object_8007A334.h"
+#include "game/PaletteColor.h"
 
 /* One entry of the column list passed to fn_801FA228, which fills in mValue.
    The list ends with an entry whose mColumnTag is -1. */
@@ -8,14 +9,6 @@ struct ColumnValue_802D6424 {
     int mTableTag;
     int mColumnTag;
     int mUnknown12;
-};
-
-/* The fourth byte of each colour is never accessed. */
-struct PaletteColor {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-    unsigned char a;
 };
 
 struct ColorPalette {
@@ -115,7 +108,7 @@ void fn_80079FBC(int index, ColorPalette *pPalette)
     pPalette->mColors[3].b = sPalettes[index].mColors[3].b;
 }
 
-void fn_8007A068(int index, PaletteColor *pColor)
+void fn_8007A068(unsigned char index, PaletteColor *pColor)
 {
     pColor->r = sPalettes[index].mColors[0].r;
     pColor->g = sPalettes[index].mColors[0].g;

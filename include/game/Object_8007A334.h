@@ -23,12 +23,16 @@ struct Object_8007A334 {
 };
 
 extern "C" {
-void fn_8007A334(Object_8007A334 *pObject, int a, int b, void *c, int d, int e);
+void fn_8007A334(Object_8007A334 *pObject, int a, int b, void *c, void *d, int e);
 void fn_8007A3C4(Object_8007A334 *pObject);
 int fn_8007A444(Object_8007A334 *pObject);
 int fn_8007A510(Object_8007A334 *pObject);
+int fn_8007A600(Object_8007A334 *pObject, int a);
 int fn_8007A7F4(Object_8007A334 *pObject, int a, int b, int c, int *pResult);
+int fn_8007A894(Object_8007A334 *pObject, int a, int b, int c, int *pResult);
+int fn_8007A98C(void *pObject, int a);
 void fn_8007AA3C(Object_8007A334 *pObject, int a, int b, int c);
+int fn_8007ABA4(void *pObject, int a, int b);
 }
 
 #endif
