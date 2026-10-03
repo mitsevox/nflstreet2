@@ -1023,6 +1023,49 @@
       ]
     },
     {
+      "source": "src/game/Snd.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019A4F0-0x8019A70C (src/game/Snd.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019A4F0",
+          "end": "0x8019A70C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADD90",
+          "end": "0x802ADDF8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB7A0",
+          "end": "0x803EB7A4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803653C4",
+          "end": "0x803653D4"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B10",
+          "end": "0x80289B14"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C3C",
+          "end": "0x80289C40"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/si/SISamplingRate.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv unit/data rows for sampling-rate code, tables, diagnostic and BSS state; CREDITS.md for import provenance.",
