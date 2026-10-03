@@ -39,13 +39,15 @@ static const char *sName = "FMCAPPORT";
 static void *sDependencies[] = { 0 };
 FMCAPPORT gFMCAPPORT;
 
-static int Callback_8008BFE4()
+extern "C" {
+static int fn_8008BFE4()
 {
-    gFMCAPPORT.Method_8008C870();
+    gFMCAPPORT.fn_8008C870();
     return 0;
 }
+}
 
-void FMCAPPORT::Method_8008C010()
+void FMCAPPORT::fn_8008C010()
 {
     Desc_80228224 desc;
 
@@ -63,23 +65,23 @@ void FMCAPPORT::Method_8008C010()
     fn_8022864C(mpState.mp->mUnknown4088, 0.0f, 0.0f, 1.0f);
 }
 
-void FMCAPPORT::Method_8008C0EC()
+void FMCAPPORT::fn_8008C0EC()
 {
     fn_802283FC(mpState.mp->mUnknown4088);
     mpState.mp->mUnknown4088 = 0;
 }
 
-void FMCAPPORT::Method_8008C12C()
+void FMCAPPORT::fn_8008C12C()
 {
     fn_801DCF0C(32, 20, 1, 0, 0);
     mpState.mp->mUnknown4092 = fn_801DCFF0(1, 1, 0, 0, 0, 1, 0, -1);
-    fn_801DD0C8(mpState.mp->mUnknown4092, 32, 0, Callback_8008BFE4);
+    fn_801DD0C8(mpState.mp->mUnknown4092, 32, 0, fn_8008BFE4);
     fn_802286CC(mpState.mp->mUnknown4088, mpState.mp->mUnknown4092, 0);
     mpState.mp->mUnknown4096 = fn_801DD268(mpState.mp->mUnknown4092, 32, 0, 0);
     fn_801DD3AC(mpState.mp->mUnknown4092, mpState.mp->mUnknown4096, 15);
 }
 
-void FMCAPPORT::Method_8008C1FC()
+void FMCAPPORT::fn_8008C1FC()
 {
     fn_801DD320(mpState.mp->mUnknown4092, mpState.mp->mUnknown4096);
     fn_80228D58(mpState.mp->mUnknown4096);
@@ -178,8 +180,8 @@ void FMCAPPORT::Update()
         object->mValues52 = entry->mValues88;
         object->mValues52.mValues[entry->mUnknown300 + 1] = 1.0f;
         object->mUnknown364 = entry->mUnknown300;
-        Method_8008C010();
-        Method_8008C12C();
+        fn_8008C010();
+        fn_8008C12C();
         fn_8008A9F8(object);
         fn_8008AA48(object);
         fn_80199968(object);
@@ -197,8 +199,8 @@ void FMCAPPORT::Update()
         break;
     case 5:
         if (state->mUnknown8) {
-            Method_8008C1FC();
-            Method_8008C0EC();
+            fn_8008C1FC();
+            fn_8008C0EC();
             mpState.mp->mState = 6;
         }
         break;
@@ -221,7 +223,7 @@ void FMCAPPORT::Update()
     }
 }
 
-void FMCAPPORT::Method_8008C870()
+void FMCAPPORT::fn_8008C870()
 {
     if (mpState.mp->mState == 5 && !mpState.mp->mUnknown8) {
         fn_801999F4(&mpState.mp->mObject);

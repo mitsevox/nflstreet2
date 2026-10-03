@@ -104,10 +104,10 @@ public:
     virtual ModuleDependency *GetLinks();
     virtual const char *GetName();
 
-    void Method_8008C010();
-    void Method_8008C0EC();
-    void Method_8008C12C();
-    void Method_8008C1FC();
+    void fn_8008C010();
+    void fn_8008C0EC();
+    void fn_8008C12C();
+    void fn_8008C1FC();
     void SetEntry(int id, int unknown4, int unknown8, int unknown12, int unknown16,
                   const FMCAPPORTText *pText20, int unknown48, int unknown52, int unknown56,
                   const FMCAPPORTText *pText60, const FMCAPPORTValues *pValues88, int unknown300);
@@ -115,7 +115,7 @@ public:
     int IsBusy();
     void Start();
     void Update();
-    void Method_8008C870();
+    void fn_8008C870();
 
 private:
     FMCAPPORTStatePtr mpState;
