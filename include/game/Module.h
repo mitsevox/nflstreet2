@@ -80,6 +80,7 @@ DECLARE_MODULE(Timg);
 DECLARE_MODULE(LoadingFE);
 DECLARE_MODULE(LoadingFEToInGame);
 DECLARE_MODULE(UIListener);
+DECLARE_MODULE(Render);
 
 extern AnmsCelebration gAnmsCelebration;
 extern Celebration gCelebration;
