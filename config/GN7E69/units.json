@@ -1021,6 +1021,25 @@
       ]
     },
     {
+      "source": "src/game/MainLoop.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80026AD0-0x80026BB0 (src/game/MainLoop.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80026AD0",
+          "end": "0x80026BB0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA2C0",
+          "end": "0x803EA2C8"
+        }
+      ]
+    },
+    {
       "source": "src/game/GRender.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80199FA4-0x8019A110 (src/game/GRender.cpp) and its data rows.",
