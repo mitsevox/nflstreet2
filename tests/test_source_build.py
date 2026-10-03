@@ -522,5 +522,62 @@ class CompilerFunctionCoverageTests(unittest.TestCase):
                     sb.compiled_functions(self.unit(), ([], [symbol]))
 
 
+
+class SNBssContainerTests(unittest.TestCase):
+    def setUp(self):
+        self.native = {"name": ".bss", "type": sb.SHT_NOBITS, "flags": 3,
+                       "size": 54, "align": 32, "index": 1}
+        self.linked = {**self.native, "size": 56}
+        self.object = {"name": "studio", "shndx": 1, "value": 0,
+                       "size": 54, "type": 1}
+        self.tag = {"name": "__sn__bss__tag__", "shndx": 1, "value": 56,
+                    "size": 0, "type": 0, "bind": sb.STB_GLOBAL}
+
+    def check(self, native=None, linked=None, symbols=None):
+        return sb.sn_bss_container_size(native or self.native, linked or self.linked,
+                                       symbols if symbols is not None else [self.object, self.tag])
+
+    def test_recognizes_only_container_and_does_not_mutate_native_allocation(self):
+        for size in (9, 10, 11, 13, 14, 15, 54):
+            with self.subTest(size=size):
+                native = {**self.native, "size": size}
+                linked = {**self.linked, "size": (size + 3) & ~3}
+                symbols = [{**self.object, "size": size},
+                           {**self.tag, "value": linked["size"]}]
+                self.assertEqual(self.check(native, linked, symbols), linked["size"])
+                self.assertEqual(native["size"], size)
+
+    def test_rejects_extra_padding_or_shortening(self):
+        for size in (52, 55, 57, 64):
+            with self.subTest(size=size), self.assertRaises(ValueError):
+                self.check(linked={**self.linked, "size": size})
+
+    def test_rejects_initialized_data_and_changed_flags_or_alignment(self):
+        for changes in ({"type": sb.SHT_PROGBITS}, {"name": ".data"},
+                        {"flags": 1}, {"align": 4}):
+            with self.subTest(changes=changes), self.assertRaises(ValueError):
+                self.check(linked={**self.linked, **changes})
+
+    def test_requires_exact_unique_zero_size_end_tag(self):
+        for symbols in ([self.object], [self.object, self.tag, self.tag],
+                        [self.object, {**self.tag, "value": 54}],
+                        [self.object, {**self.tag, "size": 2}],
+                        [self.object, {**self.tag, "type": 1}],
+                        [self.object, {**self.tag, "bind": sb.STB_LOCAL}]):
+            with self.subTest(symbols=symbols), self.assertRaises(ValueError):
+                self.check(symbols=symbols)
+
+    def test_rejects_owned_symbols_in_container_tail(self):
+        for symbol in ({**self.object, "size": 56},
+                       {**self.object, "value": 1},
+                       {**self.object, "name": "padding", "value": 54, "size": 2},
+                       {**self.object, "name": "end", "value": 55, "size": 0}):
+            with self.subTest(symbol=symbol), self.assertRaises(ValueError):
+                self.check(symbols=[symbol, self.tag])
+
+    def test_rejects_aligned_native_size_as_a_rounding_exception(self):
+        with self.assertRaises(ValueError):
+            self.check(native={**self.native, "size": 56})
+
 if __name__ == "__main__":
     unittest.main()

@@ -19,6 +19,11 @@ void __AXAllocInit(void);
 void __AXAllocQuit(void);
 void __AXVPBInit(void);
 void __AXVPBQuit(void);
+u32 __AXGetStudio(void);
+void __AXDepopFade(s32* hostSum, s32* dspVolume, s16* dspDelta);
+void __AXPrintStudio(void);
+void __AXDepopVoice(AXPB* p);
+
 void __AXSPBInit(void);
 void __AXSPBQuit(void);
 extern u32 __AXClMode;

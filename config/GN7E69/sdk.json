@@ -1759,6 +1759,15 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 13 uniquely located function anchors in this interval; target has a function entry at 0x8024F648, previous instruction is blr, and previous interval ends at 0x8024FD3C with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes. Start0x8024F648 is a28-byte leaf storing f1..f6 at offsets0x10..0x24, consistent with six light attenuation coefficients. The unchanged donor GXInitLightAttn matches all28bytes exactly with zero relocations and a single whole-target hit."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FEAD0",
+          "end": "0x802FEAEC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "GXInitLightSpot target lis/addi at 0x8024F6BC/0x8024F6C0 reference seven-word switch table here. Native compiler local table entries resolve to the same seven target branch labels. Complete allocated source section; original file ownership remains provisional.",
+          "object_seed": true
         }
       ]
     },
@@ -2555,15 +2564,15 @@
       "name": "src/dolphin/ax/AXOut.c",
       "source": "src/dolphin/ax/AXOut.c",
       "library": "AX",
-      "evidence": "Eight retained donor functions cover1992bytes continuously; distinct NewFrame/AIcallback/DSPcallbacks/init/quit anchors.",
+      "evidence": "Eight coherent native AXOut routines end at 0x80287F4C; following twelve-byte __AXGetStudio getter belongs to pinned AXSPB source and resolves its studio base. Original file edges remain provisional.",
       "sections": [
         {
           "section": ".text",
           "start": "0x80287784",
-          "end": "0x80287F58",
+          "end": "0x80287F4C",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Eight retained donor functions cover1992bytes continuously; distinct NewFrame/AIcallback/DSPcallbacks/init/quit anchors."
+          "evidence": "Eight coherent native AXOut routines end at 0x80287F4C; following twelve-byte __AXGetStudio getter belongs to pinned AXSPB source and resolves its studio base. Original file edges remain provisional."
         }
       ]
     },
@@ -2571,15 +2580,31 @@
       "name": "src/dolphin/ax/AXSPB.c",
       "source": "src/dolphin/ax/AXSPB.c",
       "library": "AX",
-      "evidence": "Four retained donor functions cover1212bytes continuously; studio-print/depop anchors.",
+      "evidence": "Five target-retained AXSPB routines total 1224 contiguous bytes including twelve-byte studio getter omitted by broad screen. Complete native studio and accumulation storage placement validated separately. Original file attribution remains provisional.",
       "sections": [
         {
           "section": ".text",
-          "start": "0x80287F58",
+          "start": "0x80287F4C",
           "end": "0x80288414",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Four retained donor functions cover1212bytes continuously; studio-print/depop anchors."
+          "evidence": "Five target-retained AXSPB routines total 1224 contiguous bytes including twelve-byte studio getter omitted by broad screen. Complete native studio and accumulation storage placement validated separately. Original file attribution remains provisional."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803C2A20",
+          "end": "0x803C2A56",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Complete native AXSPB section, donor types/alignment and target access anchors; original source-file storage ownership remains reference-derived."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED5A0",
+          "end": "0x803ED5C4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Complete native AXSPB section, donor types/alignment and target access anchors; original source-file storage ownership remains reference-derived."
         }
       ]
     },
