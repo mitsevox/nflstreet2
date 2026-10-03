@@ -2962,6 +2962,31 @@
       ]
     },
     {
+      "source": "src/game/cu_8017F584.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8017F584-0x8017F670 (src/game/cu_8017F584.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8017F584",
+          "end": "0x8017F670"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A585C",
+          "end": "0x802A5880"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB4C0",
+          "end": "0x803EB4C4"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/gx/GXLight.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv GXLight function/type/source/data rows and CREDITS.md; original file ownership remains provisional.",
