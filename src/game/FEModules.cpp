@@ -1,10 +1,10 @@
 #include "game/Module.h"
+#include "game/ModuleGroup_8008CC74.h"
 #include "game/GameState.h"
 #include "game/ModuleGroup_80033A5C.h"
 
 extern "C" {
 extern char lbl_803071E8[];
-extern char lbl_8030C024[];
 
 void fn_80003C94(void);
 void fn_80003CC4(void);
@@ -13,7 +13,6 @@ void fn_80022328(void);
 void fn_80022FF0(void);
 void fn_80023048(void);
 void fn_8004613C(void);
-void fn_8008D4A8(void *);
 void fn_8008FBA0(void);
 void fn_8015E654(int);
 void fn_8015E6C4(void);
@@ -127,7 +126,7 @@ int FMMainFEInit::Init()
     fn_8017F664();
     if (sFirstInit) {
         sFirstInit = 0;
-        fn_8008D4A8(lbl_8030C024);
+        gSysPreLoad.fn_8008D4A8();
         fn_801F2798("DynClutInitStart");
         fn_8004613C();
         fn_801F2798("DynClutInitFinish");

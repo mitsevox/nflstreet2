@@ -914,6 +914,61 @@
       ]
     },
     {
+      "source": "src/game/ModuleGroup_8008CC74.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8008CC74-0x8008DF00 (src/game/ModuleGroup_8008CC74.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8008CC74",
+          "end": "0x8008DF00"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802958A8",
+          "end": "0x80296000"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D7064",
+          "end": "0x802D7094"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA888",
+          "end": "0x803EA8AC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BEF8",
+          "end": "0x8030C070"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC8B8",
+          "end": "0x803EC900"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AD0",
+          "end": "0x80289AD4"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C10",
+          "end": "0x80289C14"
+        }
+      ]
+    },
+    {
       "source": "src/game/Font.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80025F94-0x8002613C (src/game/Font.cpp) and its data rows.",
@@ -1187,6 +1242,25 @@
           "placement": ".data2",
           "start": "0x80289B7C",
           "end": "0x80289B80"
+        }
+      ]
+    },
+    {
+      "source": "src/game/MainLoop.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80026AD0-0x80026BB0 (src/game/MainLoop.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80026AD0",
+          "end": "0x80026BB0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA2C0",
+          "end": "0x803EA2C8"
         }
       ]
     },
@@ -1672,6 +1746,55 @@
           "placement": ".data2",
           "start": "0x80289C64",
           "end": "0x80289C68"
+        }
+      ]
+    },
+    {
+      "source": "src/game/InGame.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80027FE0-0x80028AE4 (src/game/InGame.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80027FE0",
+          "end": "0x80028AE4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028A0C0",
+          "end": "0x8028A178"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA2F0",
+          "end": "0x803EA304"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80306580",
+          "end": "0x803065A0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC5F4",
+          "end": "0x803EC604"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A44",
+          "end": "0x80289A48"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289B84",
+          "end": "0x80289B88"
         }
       ]
     },

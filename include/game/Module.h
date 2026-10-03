@@ -81,6 +81,23 @@ DECLARE_MODULE(LoadingFE);
 DECLARE_MODULE(LoadingFEToInGame);
 DECLARE_MODULE(UIListener);
 DECLARE_MODULE(Render);
+DECLARE_MODULE(ARes);
+DECLARE_MODULE(Cam);
+DECLARE_MODULE(Context);
+DECLARE_MODULE(Curve);
+DECLARE_MODULE(Db);
+DECLARE_MODULE(DbGame);
+DECLARE_MODULE(DbgPrint);
+DECLARE_MODULE(Event);
+DECLARE_MODULE(Loading);
+DECLARE_MODULE(Math);
+DECLARE_MODULE(MemCard);
+DECLARE_MODULE(Periph);
+DECLARE_MODULE(Remap);
+DECLARE_MODULE(Sort);
+DECLARE_MODULE(Task);
+DECLARE_MODULE(VRAM);
+DECLARE_MODULE(FMSndgMusic);
 
 extern AnmsCelebration gAnmsCelebration;
 extern Celebration gCelebration;
@@ -92,6 +109,8 @@ extern GRender gGRender;
 extern Mat gMat;
 extern Obj gObj;
 extern Res gRes;
+extern Tex gTex;
+extern Vec gVec;
 
 extern Snd gSnd;
 
