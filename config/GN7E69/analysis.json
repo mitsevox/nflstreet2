@@ -2,6 +2,8 @@
   "data_ranges": [
     {"start": "0x80022F28", "end": "0x80022FF0", "symbol": "data_80022F28"},
     {"start": "0x800236BC", "end": "0x8002373C", "symbol": "data_800236BC"},
+    {"start": "0x80023888", "end": "0x800238A0", "symbol": "data_80023888"},
+    {"start": "0x80023D90", "end": "0x80023E08", "symbol": "data_80023D90"},
     {"start": "0x80025DE8", "end": "0x80025E00", "symbol": "data_80025DE8"}
   ],
   "function_seeds": [
