@@ -1254,6 +1254,55 @@
       ]
     },
     {
+      "source": "src/game/FileIO.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80199DF0-0x80199FA4 (src/game/FileIO.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80199DF0",
+          "end": "0x80199FA4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADBB0",
+          "end": "0x802ADC30"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EDFA4",
+          "end": "0x802EE418"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB780",
+          "end": "0x803EB784"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80365378",
+          "end": "0x80365394"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B00",
+          "end": "0x80289B04"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C2C",
+          "end": "0x80289C30"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/si/SISamplingRate.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv unit/data rows for sampling-rate code, tables, diagnostic and BSS state; CREDITS.md for import provenance.",
