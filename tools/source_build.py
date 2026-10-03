@@ -33,7 +33,7 @@ SHT_PROGBITS, SHT_SYMTAB, SHT_STRTAB, SHT_NOBITS = 1, 2, 3, 8
 SHF_WRITE, SHF_ALLOC, SHF_EXECINSTR = 1, 2, 4
 SHN_UNDEF, SHN_ABS, SHN_COMMON = 0, 0xFFF1, 0xFFF2
 STB_LOCAL, STB_GLOBAL = 0, 1
-STT_SECTION, STT_FILE = 3, 4
+STT_FUNC, STT_SECTION, STT_FILE = 2, 3, 4
 
 
 def address(text):
@@ -650,7 +650,7 @@ def build(original, manifest_path, report_path):
         raise RuntimeError("Converter did not produce a fresh DOL")
     result = output.read_bytes()
     identical = result == binary and hashlib.sha1(result).hexdigest() == target["sha1"]
-    report = measure(target, sections, units, manifest_bytes, result, identical, resolved)
+    report = measure(target, sections, units, manifest_bytes, result, identical, resolved, objects)
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(json.dumps(report, indent=2) + "\n")
     if not identical:
@@ -672,7 +672,25 @@ def dol_bytes(binary, start, end):
     return None
 
 
-def measure(target, sections, units, manifest_bytes, result, identical, resolved):
+def compiled_functions(unit, obj):
+    """Inventory retained compiler functions, including local and generated symbols."""
+    placements = {entry["index"]: entry for entry in unit["sections"]}
+    functions = []
+    for symbol in obj[1]:
+        if symbol["type"] != STT_FUNC or symbol["shndx"] == SHN_UNDEF or symbol["size"] <= 0:
+            continue
+        entry = placements.get(symbol["shndx"])
+        if entry is None or entry["kind"] != "code":
+            raise ValueError(f"{unit['source']}: compiler function {symbol['name']} has no code placement")
+        if not symbol["name"] or symbol["value"] < 0 or symbol["value"] + symbol["size"] > entry["compiled"]:
+            raise ValueError(f"{unit['source']}: compiler function {symbol['name']} exceeds its section")
+        functions.append({"symbol": symbol["name"],
+                          "address": f"0x{entry['start'] + symbol['value']:08X}",
+                          "size": symbol["size"]})
+    return sorted(functions, key=lambda function: (function["address"], function["symbol"]))
+
+
+def measure(target, sections, units, manifest_bytes, result, identical, resolved, objects):
     totals = {kind: {"linked": 0, "matched": 0} for kind in ("code", "data")}
     measured = []
     lock = json.loads((ROOT / "tools/compiler-tools.json").read_text())
@@ -706,7 +724,8 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                          "dependencies": unit["dependencies"],
                          "link_roots": unit.get("link_roots"),
                          "native_object_sha256": unit.get("native_object_sha256"),
-                         "status": "matched" if identical else "unverified", "sections": entries})
+                         "status": "matched" if identical else "unverified", "sections": entries,
+                         "functions": compiled_functions(unit, objects[unit["source"]])})
     return {"schema": 1, "target": "GN7E69", "target_sha1": target["sha1"],
             "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
             "compilers": dict(sorted(compilers.items())),

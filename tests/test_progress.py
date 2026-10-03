@@ -1,5 +1,6 @@
 import hashlib
 import json
+import shutil
 from pathlib import Path
 import struct
 import sys
@@ -95,6 +96,7 @@ class SourceReportTests(ProgressBase):
             digest = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
             measured = [{"source": "src/unit.c", "source_sha256": digest(source), "status": "matched",
                          "dependencies": {"include/unit.h": digest(header), "src/unit.c": digest(source)},
+                         "functions": [{"symbol": "fn_80003104", "address": "0x80003104", "size": 8}],
                          "sections": [
                              dict(configured[0], kind="code", linked=8, matched=8, status="matched"),
                              dict(configured[1], kind="data", linked=4, matched=4, status="matched")]}]
@@ -200,6 +202,7 @@ class SourceReportTests(ProgressBase):
         self.source_report["units"].append({
             "source": "src/second.c", "source_sha256": digest, "status": "matched",
             "dependencies": {"src/second.c": digest},
+            "functions": [{"symbol": "fn_80003104", "address": "0x80003104", "size": 8}],
             "sections": [dict(self.source_report["units"][0]["sections"][0])]})
         self.source_report["totals"]["code"] = {"linked": 16, "matched": 16}
         self.source_report["manifest_sha256"] = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
@@ -258,6 +261,63 @@ class FunctionInventoryTests(ProgressBase):
                                              "basis": "provisional-analysis"})
         data = progress.report(self.binary, "a" * 40, self.report_path)
         self.assertIsNone(data["functions"]["total"])
+
+    def test_compiled_methods_and_generated_functions_require_names(self):
+        for symbol in ("Update__8UIScreenFv", "I.src_game_UIScreen_cpp"):
+            with self.subTest(symbol=symbol):
+                self.write_inventory()
+                self.source_report["units"][0]["functions"][0]["symbol"] = symbol
+                self.save()
+                path = self.root / "config/GN7E69/evidence.tsv"
+                path.write_text("\n".join(line for line in path.read_text().splitlines()
+                                           if "\tExample\t" not in line) + "\n")
+                with self.assertRaisesRegex(ValueError, "missing curated name evidence"):
+                    progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+                with path.open("a") as file:
+                    file.write("name\t0x80003104\t-\tReviewedName\tinferred\t-\t-\tfixture\n")
+                data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+                self.assertEqual(data["sections"][0]["children"][0]["name"], "ReviewedName")
+                source = next(item for item in data["files"] if item.get("source") == "src/unit.c"
+                              and item["kind"] == "code")
+                self.assertEqual(source["children"][0]["name"], "ReviewedName")
+                import decomp_report
+                exported = decomp_report.objdiff_report(data)
+                unit = next(item for item in exported["units"] if item["name"] == "src/unit.c")
+                self.assertEqual(unit["functions"][0]["name"], "ReviewedName")
+                shutil.rmtree(self.analysis)
+
+    def test_neutral_compiler_function_can_remain_explicitly_unknown(self):
+        self.write_inventory()
+        path = self.root / "config/GN7E69/evidence.tsv"
+        path.write_text("\n".join(line for line in path.read_text().splitlines()
+                                   if "\tExample\t" not in line) + "\n")
+        data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+        self.assertEqual(data["sections"][0]["children"][0]["name"], "fn_80003104")
+        self.assertEqual(data["functions"]["named"], 0)
+
+    def test_missing_malformed_or_out_of_bounds_compiler_coverage_fails(self):
+        cases = (None, [], [{"symbol": "Example", "address": "0x8000310C", "size": 4}],
+                 [{"symbol": "Example", "address": "0x80003104", "size": 12}],
+                 [{"symbol": "Example", "address": "0x80003104", "size": 0}], [{}])
+        for functions in cases:
+            with self.subTest(functions=functions):
+                self.write_source()
+                self.source_report["units"][0]["functions"] = functions
+                self.save()
+                with self.assertRaisesRegex(ValueError, "compiler function coverage"):
+                    progress.report(self.binary, "a" * 40, self.report_path)
+
+    def test_compiler_functions_must_have_candidate_bounds_and_inventory(self):
+        self.write_inventory()
+        function = self.source_report["units"][0]["functions"][0]
+        function["symbol"] = "Example"
+        self.save()
+        with self.assertRaisesRegex(ValueError, "require a verified function inventory"):
+            progress.report(self.binary, "a" * 40, self.report_path)
+        function["size"] = 4
+        self.save()
+        with self.assertRaisesRegex(ValueError, "inconsistent bounds"):
+            progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
 
     def test_stale_inventory_is_rejected(self):
         self.write_inventory()
