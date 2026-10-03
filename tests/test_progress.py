@@ -295,6 +295,39 @@ class FunctionInventoryTests(ProgressBase):
         self.assertEqual(data["sections"][0]["children"][0]["name"], "fn_80003104")
         self.assertEqual(data["functions"]["named"], 0)
 
+    def test_mangled_address_methods_remain_unknown_in_both_exports(self):
+        self.write_inventory()
+        path = self.root / "config/GN7E69/evidence.tsv"
+        path.write_text("\n".join(line for line in path.read_text().splitlines()
+                                   if "\tExample\t" not in line) + "\n")
+        self.source_report["units"][0]["functions"][0]["symbol"] = "fn_80003104__8UIScreenFv"
+        self.save()
+        data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+        self.assertEqual(data["functions"]["named"], 0)
+        import decomp_report
+        exported = decomp_report.objdiff_report(data)
+        unit = next(item for item in exported["units"] if item["name"] == "src/unit.c")
+        self.assertEqual(unit["functions"][0]["name"], "fn_80003104")
+
+    def test_plain_and_mangled_neutral_addresses_must_match_placement(self):
+        self.write_source()
+        for symbol in ("fn_80003108", "fn_80003108__8UIScreenFv"):
+            with self.subTest(symbol=symbol):
+                self.source_report["units"][0]["functions"][0]["symbol"] = symbol
+                self.save()
+                with self.assertRaisesRegex(ValueError, "misplaced neutral function"):
+                    progress.report(self.binary, "a" * 40, self.report_path)
+
+    def test_address_suffix_does_not_make_descriptive_methods_neutral(self):
+        self.write_inventory()
+        path = self.root / "config/GN7E69/evidence.tsv"
+        path.write_text("\n".join(line for line in path.read_text().splitlines()
+                                   if "\tExample\t" not in line) + "\n")
+        self.source_report["units"][0]["functions"][0]["symbol"] = "Method_80003104__8UIScreenFv"
+        self.save()
+        with self.assertRaisesRegex(ValueError, "missing curated name evidence"):
+            progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+
     def test_missing_malformed_or_out_of_bounds_compiler_coverage_fails(self):
         cases = (None, [], [{"symbol": "Example", "address": "0x8000310C", "size": 4}],
                  [{"symbol": "Example", "address": "0x80003104", "size": 12}],

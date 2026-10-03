@@ -110,6 +110,8 @@ def source_functions(source_report):
                                                               for left, right in code):
                 raise ValueError(f"Source unit {unit['source']} has invalid compiler function coverage")
             neutral = re.fullmatch(r"(?:fn|lbl|data)_([0-9A-Fa-f]{8})", symbol)
+            if neutral is None:
+                neutral = re.fullmatch(r"fn_([0-9A-Fa-f]{8})__[A-Za-z0-9_]+", symbol)
             if neutral and int(neutral[1], 16) != start:
                 raise ValueError(f"Source unit {unit['source']} has a misplaced neutral function")
             seen.add((symbol, start))
