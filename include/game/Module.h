@@ -98,6 +98,7 @@ DECLARE_MODULE(Sort);
 DECLARE_MODULE(Task);
 DECLARE_MODULE(VRAM);
 DECLARE_MODULE(FMSndgMusic);
+DECLARE_MODULE(DbColPal);
 
 extern AnmsCelebration gAnmsCelebration;
 extern Celebration gCelebration;
