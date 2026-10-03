@@ -1,21 +1,4 @@
-/* Argument of fn_8007A334 and fn_8007A3C4. The constructor sets the same
-   values fn_8007A3C4 stores at its end. */
-struct Object_8007A334 {
-    Object_8007A334() : mUnknown0(0), mUnknown4(0), mUnknown8(-1), mUnknown12(-1), mUnknown16(-1) {}
-    ~Object_8007A334() {}
-
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
-    int mUnknown16;
-    char mUnknown20[24];
-};
-
-extern "C" {
-void fn_8007A334(Object_8007A334 *pObject, int a, int b, int c, int d, int e);
-void fn_8007A3C4(Object_8007A334 *pObject);
-}
+#include "game/Object_8007A334.h"
 
 static Object_8007A334 lbl_8037DEA4;
 
