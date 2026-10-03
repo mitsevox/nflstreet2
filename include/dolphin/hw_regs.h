@@ -113,4 +113,15 @@ volatile u32 __AIRegs[8]      AT_ADDRESS(0xCC006C00);
 
 #define DSP_DMA_START_FLAG (0x8000) // set to start DSP
 
+
+// Offsets for __SIRegs
+#define SI_POLL (12)
+#define SI_CC_STAT (13)
+#define SI_STAT (14)
+#define SI_IO_BUFFER (32)
+#define DSP_CSR_DSPINT (1 << 7)
+#define DSP_CSR_ARINT (1 << 5)
+#define DSP_CSR_AIDINT (1 << 3)
+#define DSP_CSR_PIINT (1 << 1)
+
 #endif
