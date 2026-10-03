@@ -1,7 +1,6 @@
-#include "game/Module.h"
+#include "game/GameState.h"
 
 extern "C" {
-extern char lbl_803065C0[];
 extern char lbl_80306D28[];
 extern char lbl_80306DFC[];
 
@@ -10,7 +9,7 @@ void fn_8009B720(void *);
 void fn_8009B7E0(void);
 }
 
-static ModuleDependency sDependencies[] = { lbl_803065C0, lbl_80306D28, lbl_80306DFC, 0 };
+static ModuleDependency sDependencies[] = { &gGameState, lbl_80306D28, lbl_80306DFC, 0 };
 static ModuleDependency sLinks[] = { &gAnmsCelebration, 0 };
 Celebration gCelebration;
 
