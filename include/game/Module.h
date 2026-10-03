@@ -56,12 +56,14 @@ DECLARE_MODULE(Res);
 DECLARE_MODULE(Tex);
 DECLARE_MODULE(Vec);
 DECLARE_MODULE(Vpt);
+DECLARE_MODULE(GRender);
 DECLARE_MODULE(Rumble);
 DECLARE_MODULE(Timg);
 DECLARE_MODULE(LoadingFE);
 
 extern AnmsCelebration gAnmsCelebration;
 extern Celebration gCelebration;
+extern GRender gGRender;
 extern Mat gMat;
 extern Obj gObj;
 extern Res gRes;
