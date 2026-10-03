@@ -43,8 +43,8 @@ public:
 class Class_80184190 {
 public:
     virtual void vfn_01(int a, int *pCount, int *pValue) = 0;
-    virtual int vfn_02(int a, int b, void **ppNext) = 0;
-    virtual void vfn_03(int id) = 0;
+    virtual int vfn_02(int a, int b, void **ppResult) = 0;
+    virtual void vfn_03(int index) = 0;
     virtual void vfn_04(int index, int *pId) = 0;
     virtual void vfn_05(int index, Entry_80182CC8 *pEntry) = 0;
     virtual Class_802A6BB0 *vfn_06();
@@ -55,7 +55,7 @@ public:
 class Class_802A6B60 : public Class_80184190 {
 public:
     virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppNext);
+    virtual int vfn_02(int a, int b, void **ppResult);
     virtual void vfn_03(int id);
     virtual void vfn_04(int index, int *pId);
     virtual void vfn_05(int index, Entry_80182CC8 *pEntry);

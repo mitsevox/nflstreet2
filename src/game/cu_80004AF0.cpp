@@ -43,7 +43,7 @@ void fn_801C3284(char *pDest, const char *pSource, int size);
 class Class_80005618 : public Class_802A6B60 {
 public:
     virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppNext);
+    virtual int vfn_02(int a, int b, void **ppResult);
     virtual void vfn_03(int id);
     virtual void vfn_05(int index, Entry_80182CC8 *pEntry);
     virtual Class_802A6BB0 *vfn_06();
@@ -56,8 +56,8 @@ public:
 class Class_800055D8 : public Class_80184190 {
 public:
     virtual void vfn_01(int a, int *pCount, int *pValue);
-    virtual int vfn_02(int a, int b, void **ppNext);
-    virtual void vfn_03(int id);
+    virtual int vfn_02(int a, int b, void **ppResult);
+    virtual void vfn_03(int index);
     virtual void vfn_04(int index, int *pId) { *pId = index; }
     virtual void vfn_05(int index, Entry_80182CC8 *pEntry);
 
@@ -129,9 +129,9 @@ void Class_80005618::vfn_01(int a, int *pCount, int *pValue)
     fn_80182E04("");
 }
 
-int Class_80005618::vfn_02(int a, int b, void **ppNext)
+int Class_80005618::vfn_02(int a, int b, void **ppResult)
 {
-    int result = Class_802A6B60::vfn_02(a, b, ppNext);
+    int result = Class_802A6B60::vfn_02(a, b, ppResult);
 
     if (b != 0) {
         result = -1;
@@ -143,7 +143,7 @@ int Class_80005618::vfn_02(int a, int b, void **ppNext)
         case 7:
             result = 1;
             fn_80005438()->mUnknown8 = a;
-            *ppNext = fn_80005438();
+            *ppResult = fn_80005438();
             break;
         case 0:
             switch (fn_80183948()) {
@@ -158,7 +158,7 @@ int Class_80005618::vfn_02(int a, int b, void **ppNext)
             }
             fn_801832A4();
             result = -3;
-            *ppNext = fn_800088C8();
+            *ppResult = fn_800088C8();
             fn_800053A8();
             break;
         }
@@ -245,7 +245,7 @@ void Class_800055D8::vfn_01(int a, int *pCount, int *pValue)
     }
 }
 
-int Class_800055D8::vfn_02(int a, int b, void **ppNext)
+int Class_800055D8::vfn_02(int a, int b, void **ppResult)
 {
     int value;
 
@@ -282,18 +282,18 @@ int Class_800055D8::vfn_02(int a, int b, void **ppNext)
     return -1;
 }
 
-void Class_800055D8::vfn_03(int id)
+void Class_800055D8::vfn_03(int index)
 {
     switch (mUnknown8) {
     case 6:
-        if (id == 0) {
+        if (index == 0) {
             fn_80182E9C(0);
         } else {
             fn_80182E9C(-1);
         }
         break;
     case 1:
-        fn_8007A600(&lbl_80369D70, id);
+        fn_8007A600(&lbl_80369D70, index);
         fn_80182E88(4, fn_8007F0C8(&lbl_80369D70));
         break;
     case 7:
