@@ -2962,6 +2962,31 @@
       ]
     },
     {
+      "source": "src/game/cu_801A133C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A133C-0x801A13A8 (src/game/cu_801A133C.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A133C",
+          "end": "0x801A13A8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80365574",
+          "end": "0x80365AB4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECBFC",
+          "end": "0x803ECC00"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/gx/GXLight.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv GXLight function/type/source/data rows and CREDITS.md; original file ownership remains provisional.",
