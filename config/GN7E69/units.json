@@ -60,6 +60,15 @@
         "include/libc"
       ],
       "evidence": "evidence.tsv compiler row game_cpp: ProDG 3.9.3 cc1plus -O2 -fno-weak reproduces every instruction of the module units 0x8008BB30-0x8008BCF0 and 0x8008B974-0x8008BB30. -O1, -O3, -Os, -fno-schedule-insns, -fno-schedule-insns2, -G0, -fexceptions and -frtti change the output; without -fno-weak the class functions and vtable move to linkonce sections, while the target keeps the destructor 0x8008BC68 inside the contiguous .text run and the vtable in rodata; -fvtable-thunks changes the vtable layout. -ffast-math: evidence.tsv compiler row 0x800034A0-0x801AA640 (game_cpp). Every floating-point compare in game code 0x800034A0-0x801AA640 branches in the ordered form -ffast-math emits; none uses the unordered form ProDG emits without it (cror+bns, or ble/bge after fcmpu). Every earlier game_cpp unit compiles to an identical native object with or without the flag. Open item: the flag turns division by a constant into a reciprocal multiply, while fn_801470F0 divides by the literal 35.0f at 0x80147440 and 0x801474AC; see that row."
+    },
+    "engine_c": {
+      "flags": [
+        "-O2"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler row 0x80227F14-0x802288F8 (engine_c): ProDG 3.9.3 cc1 -O2 (default -G 8) reproduces every instruction and data byte of the unit; -O1, -O3, -Os and -G0 change them. Same flags as the uistudio profile; a separate profile because uistudio's scope evidence and source root are the UI Studio library, and this unit includes SDK headers that need include/libc."
     }
   },
   "externals": {
@@ -3087,6 +3096,37 @@
           "placement": ".data2",
           "start": "0x80289C60",
           "end": "0x80289C64"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80227F14.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80227F14-0x802288F8 (src/engine/cu_80227F14.c) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80227F14",
+          "end": "0x802288F8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B20C8",
+          "end": "0x802B20F8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF90",
+          "end": "0x803EBFA0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED66C",
+          "end": "0x803ED674"
         }
       ]
     }

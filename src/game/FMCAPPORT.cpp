@@ -54,8 +54,8 @@ void FMCAPPORT::fn_8008C010()
     desc.mUnknown0 = 1;
     desc.mUnknown2 = 0;
     desc.mUnknown3 = 2;
-    desc.mUnknown4 = 0;
-    desc.mUnknown8 = 0;
+    desc.mUnknown4[0] = 0;
+    desc.mUnknown4[1] = 0;
     desc.mUnknown18 = 640;
     desc.mUnknown16 = 448;
     mpState.mp->mUnknown4088 = fn_80228224(&desc);
