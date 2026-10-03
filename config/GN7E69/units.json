@@ -55,6 +55,9 @@
         "-O2",
         "-fno-weak"
       ],
+      "include_dirs": [
+        "include/libc"
+      ],
       "evidence": "evidence.tsv compiler row game_cpp: ProDG 3.9.3 cc1plus -O2 -fno-weak reproduces every instruction of the module units 0x8008BB30-0x8008BCF0 and 0x8008B974-0x8008BB30. -O1, -O3, -Os, -fno-schedule-insns, -fno-schedule-insns2, -G0, -fexceptions and -frtti change the output; without -fno-weak the class functions and vtable move to linkonce sections, while the target keeps the destructor 0x8008BC68 inside the contiguous .text run and the vtable in rodata; -fvtable-thunks changes the vtable layout."
     }
   },

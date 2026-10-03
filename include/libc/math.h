@@ -27,7 +27,13 @@ extern inline float sqrtf(float x)
 
 #pragma cplusplus reset
 #else
+#ifdef __cplusplus
+extern "C" {
+#endif
 float sqrtf(float x);
+#ifdef __cplusplus
+}
+#endif
 #endif
 
 #endif
