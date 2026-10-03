@@ -1602,15 +1602,15 @@
       "name": "src/dolphin/mtx/mtx44.c",
       "source": "src/dolphin/mtx/mtx44.c",
       "library": "MTX",
-      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "evidence": "Retained frustum/ortho functions from the pinned re4 source (dolsdk2001 three-function file); complete source-build validation supplies measured credit. Original SDK file ownership remains provisional.",
       "sections": [
         {
           "section": ".data6",
           "start": "0x803ED7D8",
-          "end": "0x803ED7E8",
+          "end": "0x803ED7F0",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Both frustum and ortho at8024AB8C/AC28 use r13 offsets0xB538/B53C/B540/B544 resolving four float cells1.0,2.0,0.0,-1.0. Only directly referenced16bytes assigned; adjoining unused math-header constants remain unassigned. Attribution remains provisional; no source-match credit. Neutral object seed bounds only these typed target data cells/arrays; independently checked against target access widths, initial values and donor declarations. It does not extend ownership into neighboring padding.",
+          "evidence": "Complete native .sdata2 of the three-function mtx44.c object: 1.0, 2.0, 0.0, -1.0 used by frustum/ortho through r13 offsets 0xB538-0xB544, then perspective's 0.5 and degree-to-radian constants retained with the pool although perspective is discarded. Equals target bytes 0x803ED7D8-0x803ED7F0; following 3.0f belongs to the next object. Attribution remains provisional.",
           "object_seed": true
         },
         {
@@ -1619,7 +1619,7 @@
           "end": "0x8024ACC0",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 2 uniquely located function anchors in this interval; target has a function entry at 0x8024AB8C, previous instruction is blr, and previous interval ends at 0x8024ACC0 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+          "evidence": "Retained frustum/ortho functions from the pinned re4 source; complete source-build validation supplies measured credit. Target code cuts follow actual analysis function starts/ends; original object boundaries remain provisional."
         }
       ]
     },
@@ -1691,7 +1691,7 @@
       "name": "src/dolphin/gx/GXGeometry.c",
       "source": "src/dolphin/gx/GXGeometry.c",
       "library": "GX",
-      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "evidence": "Nine retained geometry, cull-mode and generation-mode functions from the pinned BFBB source; complete source-build validation supplies measured credit. Original SDK file ownership remains provisional.",
       "sections": [
         {
           "section": ".text",
@@ -1699,7 +1699,7 @@
           "end": "0x8024EBC4",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 8 uniquely located function anchors in this interval; target has a function entry at 0x8024E888, previous instruction is blr, and previous interval ends at 0x8024EBC4 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+          "evidence": "Nine retained functions from the pinned BFBB GXGeometry.c; complete source-build validation supplies measured credit. Target code cuts follow actual analysis function starts/ends; original object boundaries remain provisional."
         }
       ]
     },
@@ -1765,7 +1765,7 @@
           "end": "0x803EC2AE",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Target GXTexture 0x80250430\u20130x802504C4 indexes seven 8-byte register-ID arrays; 0x802502C8 indexes the six-byte filter conversion table. Native dolsdk2004 types and bytes corroborate the 62-byte extent. Alignment bytes and the unused reverse-conversion table remain unassigned.",
+          "evidence": "Target GXTexture 0x80250430–0x802504C4 indexes seven 8-byte register-ID arrays; 0x802502C8 indexes the six-byte filter conversion table. Native dolsdk2004 types and bytes corroborate the 62-byte extent. Alignment bytes and the unused reverse-conversion table remain unassigned.",
           "object_seed": true
         },
         {

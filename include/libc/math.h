@@ -26,6 +26,8 @@ extern inline float sqrtf(float x)
 }
 
 #pragma cplusplus reset
+
+float tanf(float x);
 #else
 #ifdef __cplusplus
 extern "C" {
