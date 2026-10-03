@@ -3414,6 +3414,25 @@
           "end": "0x80363180"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8002B5B0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8002B5B0-0x8002B5C0 (src/game/cu_8002B5B0.cpp) and its data row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002B5B0",
+          "end": "0x8002B5C0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC60C",
+          "end": "0x803EC610"
+        }
+      ]
     }
   ]
 }
