@@ -189,6 +189,35 @@ class SourceReportTests(ProgressBase):
         with self.assertRaisesRegex(ValueError, "differ from the unit manifest"):
             progress.report(self.binary, "a" * 40, self.report_path)
 
+    def test_read_only_data_after_code_counts_in_its_code_section_without_functions(self):
+        self.write_source()
+        follower = {"section": ".rodata", "placement": ".init", "start": "0x8000310C", "end": "0x80003110",
+                    "follows": ".text"}
+        manifest_path = self.root / "config/GN7E69/units.json"
+        manifest = json.loads(manifest_path.read_text())
+        manifest["units"][0]["sections"].insert(1, follower)
+        manifest_path.write_text(json.dumps(manifest))
+        self.source_report["manifest_sha256"] = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+        unit = self.source_report["units"][0]
+        unit["sections"].insert(1, dict(follower, kind="code", linked=4, matched=4, status="matched"))
+        self.source_report["totals"]["code"] = {"linked": 12, "matched": 12}
+        self.save()
+        (self.root / "config/GN7E69/evidence.tsv").write_text(
+            "kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
+            "data\t0x8000310C\t0x80003110\tdata_8000310C\ttarget\texact\texact\tfixture\n")
+        data = progress.report(self.binary, "a" * 40, self.report_path)
+        self.assertEqual(data["measures"]["code"], {"total": 16, "linked": 12, "matched": 12})
+        # A report must carry the manifest's configuration, and no function may sit in the data.
+        del unit["sections"][1]["follows"]
+        self.save()
+        with self.assertRaisesRegex(ValueError, "differ from the unit manifest"):
+            progress.report(self.binary, "a" * 40, self.report_path)
+        unit["sections"][1]["follows"] = ".text"
+        unit["functions"].append({"symbol": "fn_8000310C", "address": "0x8000310C", "size": 4})
+        self.save()
+        with self.assertRaisesRegex(ValueError, "invalid compiler function coverage"):
+            progress.report(self.binary, "a" * 40, self.report_path)
+
     def test_overlapping_ranges_are_rejected(self):
         self.write_source()
         manifest_path = self.root / "config/GN7E69/units.json"
@@ -253,6 +282,75 @@ class FunctionInventoryTests(ProgressBase):
             "name\t0x80003104\t-\tExample\trelated\t-\t-\tduplicate\n"
             "function\t0x8000310C\t0x80003110\tfn_8000310C\tinferred\tprovisional\topen\tfixture\n"
             "name\t0x80005008\t-\tDataName\trelated\t-\t-\tfixture\n")
+
+    def add_follower(self):
+        """Configure read-only data after the unit's code over 0x8000310C-0x80003110."""
+        follower = {"section": ".rodata", "placement": ".init", "start": "0x8000310C", "end": "0x80003110",
+                    "follows": ".text"}
+        manifest_path = self.root / "config/GN7E69/units.json"
+        manifest = json.loads(manifest_path.read_text())
+        manifest["units"][0]["sections"].insert(1, follower)
+        manifest_path.write_text(json.dumps(manifest))
+        self.source_report["manifest_sha256"] = progress.digest(manifest_path)
+        self.source_report["units"][0]["sections"].insert(
+            1, dict(follower, kind="code", linked=4, matched=4, status="matched"))
+        self.source_report["totals"]["code"] = {"linked": 12, "matched": 12}
+        self.save()
+
+    def without_evidence_function(self, start):
+        path = self.root / "config/GN7E69/evidence.tsv"
+        path.write_text("\n".join(line for line in path.read_text().splitlines()
+                                   if not line.startswith(f"function\t{start}\t")) + "\n")
+
+    def test_data_after_code_cannot_cover_a_function_candidate(self):
+        # Review of PR #78: instruction words compiled as data after code claimed matched code.
+        self.write_inventory()
+        self.without_evidence_function("0x8000310C")
+        self.add_data_row()
+        self.add_follower()
+        with self.assertRaisesRegex(ValueError, "overlaps function candidate fn_8000310C"):
+            progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+
+    def test_data_after_code_cannot_cover_an_evidence_function(self):
+        self.write_inventory()
+        self.add_data_row()
+        self.add_follower()
+        for analysis in (self.analysis, None):
+            with self.subTest(analysis=analysis), \
+                    self.assertRaisesRegex(ValueError, "overlaps function fn_8000310C 0x8000310C-0x80003110"):
+                progress.report(self.binary, "a" * 40, self.report_path, analysis)
+
+    def add_data_row(self, edges="exact\texact"):
+        with (self.root / "config/GN7E69/evidence.tsv").open("a") as file:
+            file.write(f"data\t0x8000310C\t0x80003110\tdata_8000310C\ttarget\t{edges}\tfixture\n")
+
+    def single_candidate_inventory(self):
+        """Inventory and evidence with no candidate or function over 0x8000310C-0x80003110."""
+        self.write_inventory()
+        self.without_evidence_function("0x8000310C")
+        symbols = self.analysis / "symbols.txt"
+        symbols.write_text("fn_80003104 = .text:0x80003104; // type:function size:0x8\n")
+        self.add_follower()
+        summary = json.loads((self.analysis / "summary.json").read_text())
+        summary.update(candidate_counts={"function": 1}, symbols_sha256=progress.digest(symbols),
+                       inputs=progress.sdk_map.analysis_inputs(self.root))
+        (self.analysis / "summary.json").write_text(json.dumps(summary))
+
+    def test_data_after_code_must_be_an_exact_evidence_data_block(self):
+        # Hostile recheck of PR #78: code the inventory missed (no candidate, no evidence row)
+        # must not be claimable as data after code.
+        self.single_candidate_inventory()
+        for analysis in (self.analysis, None):
+            with self.subTest(analysis=analysis), \
+                    self.assertRaisesRegex(ValueError, "does not equal an evidence data row with exact edges"):
+                progress.report(self.binary, "a" * 40, self.report_path, analysis)
+        self.add_data_row("exact\tprovisional")
+        with self.assertRaisesRegex(ValueError, "does not equal an evidence data row with exact edges"):
+            progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+        self.add_data_row()
+        data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+        self.assertEqual(data["measures"]["code"], {"total": 16, "linked": 12, "matched": 12})
+        self.assertEqual(data["functions"]["total"], 1)
 
     def test_counts_require_measured_code_and_function_name_evidence(self):
         self.write_inventory()
