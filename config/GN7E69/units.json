@@ -1678,6 +1678,61 @@
       ]
     },
     {
+      "source": "src/game/SndgPathfinder.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80068154-0x8006F1F4 (src/game/SndgPathfinder.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80068154",
+          "end": "0x8006F1F4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802904C8",
+          "end": "0x80290AE8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D50A4",
+          "end": "0x802D6350"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA67C",
+          "end": "0x803EA6B8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030A518",
+          "end": "0x8030AA68"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC80C",
+          "end": "0x803EC818"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A94",
+          "end": "0x80289A98"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BD4",
+          "end": "0x80289BD8"
+        }
+      ]
+    },
+    {
       "source": "src/game/SndgCrowd.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8006F1F4-0x8006F54C (src/game/SndgCrowd.cpp) and its data rows.",

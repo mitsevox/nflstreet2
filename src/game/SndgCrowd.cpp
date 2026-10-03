@@ -1,9 +1,9 @@
 #include "game/SndgCrowd.h"
+#include "game/SndgPathfinder.h"
 
 void *operator new(unsigned int size, int unknown);
 
 extern "C" {
-extern char lbl_8030A60C[];
 extern char lbl_802EC018[];
 
 void *memset(void *pDest, int value, unsigned int size);
@@ -12,16 +12,9 @@ int fn_801EEFAC(int handle);
 int fn_801F3E28(void);
 int fn_800A350C(void);
 int fn_800B65A0(int unknown);
-int fn_8006DBF8(int handle, int unknown);
-int fn_8006DC4C(int handle);
-int fn_8006DC98(int handle, int unknown, int id, float value);
-int fn_8006DD24(int id);
-void fn_8006DD70(int id, unsigned char value);
-int fn_8006DE00(int id, int unknown);
-int fn_8006DE54(int id, int unknown);
 }
 
-static ModuleDependency sDependencies[] = { lbl_8030A60C, 0 };
+static ModuleDependency sDependencies[] = { &gSndgPathfinder, 0 };
 static void *sLinks[] = { 0 };
 static unsigned char sUnknownByte = 100;
 static int sIds[2][16] = {
