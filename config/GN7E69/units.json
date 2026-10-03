@@ -2962,6 +2962,25 @@
       ]
     },
     {
+      "source": "src/game/cu_8008973C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8008973C-0x8008977C (src/game/cu_8008973C.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8008973C",
+          "end": "0x8008977C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6C40",
+          "end": "0x802D6EA0"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/gx/GXLight.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv GXLight function/type/source/data rows and CREDITS.md; original file ownership remains provisional.",
