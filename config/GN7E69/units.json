@@ -3414,6 +3414,37 @@
           "end": "0x80363180"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8017F718.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8017F718-0x8017F7B0 (src/game/cu_8017F718.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8017F718",
+          "end": "0x8017F7B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803629E8",
+          "end": "0x80362A14"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AF4",
+          "end": "0x80289AF8"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C20",
+          "end": "0x80289C24"
+        }
+      ]
     }
   ]
 }
