@@ -1,13 +1,12 @@
 #include "game/Module.h"
 
 extern "C" {
-extern char lbl_803653D4[];
 
 int fn_801DCE74(int);
 int fn_801DCEC8(void);
 }
 
-static ModuleDependency sDependencies[] = { lbl_803653D4, 0 };
+static ModuleDependency sDependencies[] = { &gSys, 0 };
 Obj gObj;
 
 ModuleDependency *Obj::GetDependencies() { return sDependencies; }

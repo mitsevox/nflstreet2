@@ -1,7 +1,6 @@
 #include "game/Module.h"
 
 extern "C" {
-extern char lbl_803653D4[];
 extern char lbl_802CC740[];
 extern char lbl_802EBE50[];
 
@@ -10,7 +9,7 @@ void fn_801CAEC8(const char *, int);
 int fn_801CCD0C(void);
 }
 
-static ModuleDependency sDependencies[] = { lbl_803653D4, &gRes, 0 };
+static ModuleDependency sDependencies[] = { &gSys, &gRes, 0 };
 Font gFont;
 
 ModuleDependency *Font::GetDependencies() { return sDependencies; }

@@ -2,7 +2,6 @@
 #include "game/Record_802CC680.h"
 
 extern "C" {
-extern char lbl_803653D4[];
 extern char lbl_80365384[];
 
 int fn_801EE970(int);
@@ -14,7 +13,7 @@ void fn_801F2BF0(void);
 int fn_801EEA60(void);
 }
 
-static ModuleDependency sDependencies[] = { lbl_803653D4, lbl_80365384, 0 };
+static ModuleDependency sDependencies[] = { &gSys, lbl_80365384, 0 };
 Res gRes;
 
 ModuleDependency *Res::GetDependencies() { return sDependencies; }
