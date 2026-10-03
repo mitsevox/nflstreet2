@@ -2881,7 +2881,7 @@
           "section": ".data",
           "placement": ".data4",
           "start": "0x802D6424",
-          "end": "0x802D64F4"
+          "end": "0x802D6504"
         },
         {
           "section": ".sdata",

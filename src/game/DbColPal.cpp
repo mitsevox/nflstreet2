@@ -1,16 +1,16 @@
 #include "game/Module.h"
 #include "game/Object_8007A334.h"
 
-/* One entry of the record passed to fn_801FA228. Only mValue is read back;
-   the two tag words are fixed in the initializer. */
+/* One entry of the column list passed to fn_801FA228, which fills in mValue.
+   The list ends with an entry whose mColumnTag is -1. */
 struct ColumnValue_802D6424 {
     int mValue;
-    int mTag0;
-    int mTag1;
+    int mTableTag;
+    int mColumnTag;
     int mUnknown12;
 };
 
-/* The alpha byte of each colour is never written. */
+/* The fourth byte of each colour is never accessed. */
 struct PaletteColor {
     unsigned char r;
     unsigned char g;
@@ -23,7 +23,7 @@ struct ColorPalette {
 };
 
 static void *sDependencies[] = { 0 };
-static ColumnValue_802D6424 sRecord[13] = {
+static ColumnValue_802D6424 sRecord[14] = {
     { 0, 0x4C415043, 0x494C5043, 0 },
     { 0, 0x4C415043, 0x44525043, 0 },
     { 0, 0x4C415043, 0x52475043, 0 },
@@ -37,6 +37,7 @@ static ColumnValue_802D6424 sRecord[13] = {
     { 0, 0x4C415043, 0x44524843, 0 },
     { 0, 0x4C415043, 0x52474843, 0 },
     { 0, 0x4C415043, 0x4C424843, 0 },
+    { 0, -1, -1, 0 },
 };
 DbColPal gDbColPal;
 static ColorPalette sPalettes[140];
@@ -68,7 +69,7 @@ int DbColPal::Init()
             sPalettes[index].mColors[3].r = sRecord[10].mValue;
             sPalettes[index].mColors[3].g = sRecord[11].mValue;
             sPalettes[index].mColors[3].b = sRecord[12].mValue;
-        } while (cursor.Next());
+        } while (fn_8007A510(&cursor));
     }
     fn_8007A3C4(&cursor);
 
@@ -89,7 +90,7 @@ int DbColPal::Init()
             sPalettes[(unsigned char)(index + 128)].mColors[3].r = sRecord[10].mValue;
             sPalettes[(unsigned char)(index + 128)].mColors[3].g = sRecord[11].mValue;
             sPalettes[(unsigned char)(index + 128)].mColors[3].b = sRecord[12].mValue;
-        } while (cursor.Next());
+        } while (fn_8007A510(&cursor));
     }
     fn_8007A3C4(&cursor);
     return 1;
