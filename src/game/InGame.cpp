@@ -15,7 +15,7 @@ extern void *lbl_803EB690;
 
 int fn_80026CC4(int a);
 void fn_80026DD4(int a);
-void fn_8002728C(void (*pCallback)());
+void fn_8002728C(int (*pCallback)());
 char *fn_8002739C(void);
 int fn_800273A4(void);
 void fn_80028CF4(void);
@@ -74,7 +74,7 @@ int fn_800C8704(int *pA, int *pB);
 void fn_80139168(void);
 void fn_8013CF98(void);
 void fn_8013FC58(void);
-void fn_8013FCD4();
+int fn_8013FCD4();
 void fn_80144EDC(float a);
 void fn_80145E64(float a);
 void fn_80173C2C(void);
@@ -118,7 +118,7 @@ int fn_801FCE10(int a, const char *pFormat, ...);
 void fn_80218FC4(void *p, int a, int b, int c, int d);
 void fn_8021956C(void *p, int a, int b, int c);
 void fn_802285CC(void);
-void fn_802345C4(struct Desc_802345C4 *pDesc, int a);
+void fn_802345C4(struct Desc_802345C4 *pDesc, int count);
 void fn_80236F34(void);
 void fn_80237830(int a);
 unsigned int fn_802378C8(void);
@@ -138,7 +138,7 @@ struct Desc_802345C4 {
 };
 
 static unsigned char sUnknown803EA2F0 = 0;
-/* Called by fn_8002854C when set; no code in the executable assigns it. */
+/* Called by fn_8002854C when non-null. */
 static void (*sCallback)() = 0;
 static unsigned char sUnknown803EA2F8 = 0;
 static unsigned int sUnknown803EA2FC = 0;
