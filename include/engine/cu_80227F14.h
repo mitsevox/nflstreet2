@@ -1,7 +1,6 @@
 #ifndef ENGINE_CU_80227F14_H
 #define ENGINE_CU_80227F14_H
 
-#include <dolphin/mtx.h>
 #include "game/Object_80228224.h"
 
 /* Argument of fn_802280B0. */
@@ -14,6 +13,10 @@ typedef struct Init_802280B0 {
 } Init_802280B0;
 
 typedef void (*Callback_80228474)(Object_80228224 *pObject);
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* src/engine/cu_80227F14.c */
 int fn_802280B0(Init_802280B0 *pInit);
@@ -44,13 +47,17 @@ int fn_802288F8(Init_802280B0 *pInit);
 int fn_80228948(void);
 int fn_80228978(Desc_80228224 *pDesc, Object_80228224 *pObject);
 int fn_80228980(Object_80228224 *pObject);
-void fn_80228988(Mtx44 m, float x, float y, float w, float h, float d);
-void fn_802289FC(Mtx44 m, float l, float r, float b, float t, float n, float f, float s);
-void fn_80228A34(Mtx44 m, float l, float r, float b, float t, float n, float f);
-void fn_80228AD4(Mtx44 m, float fovy, float aspect, float n, float f);
+void fn_80228988(float m[4][4], float x, float y, float w, float h, float d);
+void fn_802289FC(float m[4][4], float l, float r, float b, float t, float n, float f, float s);
+void fn_80228A34(float m[4][4], float l, float r, float b, float t, float n, float f);
+void fn_80228AD4(float m[4][4], float fovy, float aspect, float n, float f);
 void fn_80228B74(Object_80228224 *pObject);
 void fn_80228D58(int handle);
 void fn_80228DD4(void);
 void fn_80228E18(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
