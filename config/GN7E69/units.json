@@ -326,6 +326,18 @@
     "_._10ModuleNode": {
       "address": "0x801CC740",
       "evidence": "evidence.tsv external row for 0x801CC740 (_._10ModuleNode); descriptive name."
+    },
+    "__nw__FUii": {
+      "address": "0x801D3BD0",
+      "evidence": "evidence.tsv external row for 0x801D3BD0 (__nw__FUii); descriptive name."
+    },
+    "__14Class_8008B284": {
+      "address": "0x8008B284",
+      "evidence": "evidence.tsv external row for 0x8008B284 (__14Class_8008B284); descriptive name."
+    },
+    "_._14Class_8008B284": {
+      "address": "0x8008B2E8",
+      "evidence": "evidence.tsv external row for 0x8008B2E8 (_._14Class_8008B284); descriptive name."
     }
   },
   "units": [
@@ -517,6 +529,49 @@
           "placement": ".data2",
           "start": "0x80289C04",
           "end": "0x80289C08"
+        }
+      ]
+    },
+    {
+      "source": "src/game/FMCAPPORT.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8008BFE4-0x8008CA8C (src/game/FMCAPPORT.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8008BFE4",
+          "end": "0x8008CA8C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802957A0",
+          "end": "0x80295838"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA878",
+          "end": "0x803EA880"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BEC8",
+          "end": "0x8030BEDC"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AC8",
+          "end": "0x80289ACC"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C08",
+          "end": "0x80289C0C"
         }
       ]
     },
