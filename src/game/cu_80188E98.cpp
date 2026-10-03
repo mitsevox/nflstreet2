@@ -1,5 +1,9 @@
 #include "game/Object_80228224.h"
 
+extern "C" {
+#include "engine/cu_80227F14.h"
+}
+
 /* One of the eight 56-byte records at 0x80362FC0. */
 struct Record_80362FC0 {
     float mUnknown0[10];
@@ -74,7 +78,7 @@ void fn_8018AD78(void);
 void fn_8018AFD0(int a);
 unsigned char fn_8018AFD8(unsigned char value);
 unsigned char fn_8018AFE8(void);
-void fn_80191378(void);
+void fn_80191378(Object_80228224 *pObject);
 void fn_80196174(Object_80228224 *pObject, int a);
 void fn_80196204(void);
 void fn_801A139C(void);
@@ -138,17 +142,6 @@ void fn_802212C8(void);
 void fn_80222220(void);
 void fn_80223460(void);
 void fn_80225654(void);
-Object_80228224 *fn_80228224(Desc_80228224 *pDesc);
-void fn_802283FC(Object_80228224 *pObject);
-void fn_80228474(Object_80228224 *pObject, int a, void (*pCallback)(), int b);
-void fn_802284EC(Object_80228224 *pObject, void (*pCallback)());
-void fn_802285CC(void);
-int fn_8022863C(void);
-void fn_8022864C(Object_80228224 *pObject, float a, float b, float c);
-void fn_802286CC(Object_80228224 *pObject, int handle, int unknown);
-void fn_802286D8(Object_80228224 *pObject, float a, float b, float c, float d);
-void fn_80228D58(int handle);
-void fn_80228E18(void);
 void fn_802363B0(Object_80228224 *pObject);
 void fn_802363E0(Object_80228224 *pObject);
 int fn_80236EC0(int a);
@@ -437,25 +430,23 @@ int fn_801895EC(int *pA, unsigned int *pId, float *pValue)
         if (value > 0.0f) {
             result = pRecord->mUnknown0[a] == 0.0f;
             pRecord->mUnknown0[a] += value * pRecord->mUnknown52;
-            if (pRecord->mUnknown0[a] <= pRecord->mUnknown40[a]) {
-                goto done;
-            }
-            pRecord->mUnknown0[a] -= pRecord->mUnknown40[a];
-            if (pRecord->mUnknown40[a] > pRecord->mUnknown53) {
-                pRecord->mUnknown40[a] -= pRecord->mUnknown55;
-                if (pRecord->mUnknown40[a] < pRecord->mUnknown53) {
-                    pRecord->mUnknown40[a] = pRecord->mUnknown53;
+            if (pRecord->mUnknown0[a] > pRecord->mUnknown40[a]) {
+                pRecord->mUnknown0[a] -= pRecord->mUnknown40[a];
+                if (pRecord->mUnknown40[a] > pRecord->mUnknown53) {
+                    pRecord->mUnknown40[a] -= pRecord->mUnknown55;
+                    if (pRecord->mUnknown40[a] < pRecord->mUnknown53) {
+                        pRecord->mUnknown40[a] = pRecord->mUnknown53;
+                    }
                 }
+                result = 1;
             }
-        } else {
-            if (pRecord->mUnknown0[a] <= 0.0f) {
-                goto done;
-            }
+        } else if (pRecord->mUnknown0[a] > 0.0f) {
             fn_80189290(a, record);
+            result = 1;
         }
+    } else {
+        result = 1;
     }
-    result = 1;
-done:
     if (id - 12 <= 1 && result == 1) {
         result = 0;
         fn_80219650(lbl_803EB688, &unknown0, &unknown1);
@@ -599,12 +590,11 @@ void fn_80189F64(void) {}
 void fn_80189F68(void)
 {
     Desc_80188688 desc;
-    int flag;
-    int result;
     int i;
+    int flag = fn_80033144(lbl_80306B34);
+    int result = 0;
 
-    flag = fn_80033144(lbl_80306B34);
-    lbl_803EB680 = result = 0;
+    lbl_803EB680 = 0;
     fn_8021D880(fn_80188EA0);
     fn_801DCF0C(21, 20, 4, fn_80188EA4, fn_80188EA8);
     desc.mUnknown0 = 1;
