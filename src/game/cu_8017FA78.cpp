@@ -1,3 +1,5 @@
+#include "game/PaletteColor.h"
+
 struct Block_8017FAE8 {
     int mUnknown0;
     int mUnknown4;
@@ -5,8 +7,6 @@ struct Block_8017FAE8 {
     int *mpUnknownC;
     int *mpUnknown10;
 };
-
-extern "C" void fn_8007A068(unsigned char index, unsigned char *pOut);
 
 static int lbl_803EB518 = -1;
 static int lbl_803EB51C = -1;
@@ -23,14 +23,14 @@ void fn_8017FA78(int a, int b)
 
 void fn_8017FA84(int a, int b, int *pOut0, int *pOut1, int *pOut2)
 {
-    unsigned char bytes[4];
+    PaletteColor color;
     int value = fn_8017FB54(a, b);
 
     lbl_803EB520 = value;
-    fn_8007A068(value, bytes);
-    *pOut0 = bytes[0];
-    *pOut2 = bytes[2];
-    *pOut1 = bytes[1];
+    fn_8007A068(value, &color);
+    *pOut0 = color.r;
+    *pOut2 = color.b;
+    *pOut1 = color.g;
 }
 
 int fn_8017FAE8(int id, Block_8017FAE8 *pBlock)
