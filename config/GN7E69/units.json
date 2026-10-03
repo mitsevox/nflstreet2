@@ -183,10 +183,6 @@
       "address": "0x80288350",
       "evidence": "evidence.tsv AX external __AXSPBInit; branch instruction destination and upstream role."
     },
-    "__AXAuxInit": {
-      "address": "0x80286BB8",
-      "evidence": "evidence.tsv AX external __AXAuxInit; branch instruction destination and upstream role."
-    },
     "__AXClInit": {
       "address": "0x80287740",
       "evidence": "evidence.tsv AX external __AXClInit; branch instruction destination and upstream role."
@@ -202,10 +198,6 @@
     "__AXSPBQuit": {
       "address": "0x8028837C",
       "evidence": "evidence.tsv AX external __AXSPBQuit; branch instruction destination and upstream role."
-    },
-    "__AXAuxQuit": {
-      "address": "0x80286C9C",
-      "evidence": "evidence.tsv AX external __AXAuxQuit; branch instruction destination and upstream role."
     },
     "__AXClQuit": {
       "address": "0x80287764",
@@ -358,6 +350,10 @@
     "__DSP_rude_task_pending": {
       "address": "0x803ED4F4",
       "evidence": "evidence.tsv DSP init external records: target operands and pinned BFBB reference role."
+    },
+    "__AXClMode": {
+      "address": "0x803ED560",
+      "evidence": "AXAux target lwz r13-19776 at 0x80286E58/0x80286F2C; shared related SDK mode declaration, original storage remains linked."
     }
   },
   "units": [
@@ -1485,6 +1481,50 @@
           "placement": ".sbss",
           "start": "0x803ED4E0",
           "end": "0x803ED4E4"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ax/AXAux.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv AXAux unit/functions/buffer/state/type records and CREDITS.md pinned donor.",
+      "link_roots": {
+        "symbols": [
+          "__AXAuxInit",
+          "__AXAuxQuit",
+          "__AXGetAuxAInput",
+          "__AXGetAuxAInputDpl2",
+          "__AXGetAuxAOutput",
+          "__AXGetAuxAOutputDpl2R",
+          "__AXGetAuxAOutputDpl2Ls",
+          "__AXGetAuxAOutputDpl2Rs",
+          "__AXGetAuxBInput",
+          "__AXGetAuxBOutput",
+          "__AXGetAuxBForDPL2",
+          "__AXGetAuxBOutputDPL2",
+          "__AXProcessAux",
+          "AXRegisterAuxACallback"
+        ],
+        "evidence": "Target retains fourteen functions through AXRegisterAuxACallback; AXRegisterAuxBCallback is absent before AXCL getter at 0x8028704C. Native SN liveness preserves all target functions and entire native static sections."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80286BB8",
+          "end": "0x8028704C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803BAC80",
+          "end": "0x803BD980"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED518",
+          "end": "0x803ED54C"
         }
       ]
     }
