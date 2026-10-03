@@ -32,7 +32,7 @@ extern char lbl_802F94D0[];
 extern char lbl_803653D4[];
 extern char lbl_8030A60C[];
 
-void fn_80026D50(void);
+int fn_80026D50(void);
 void fn_80026DA8(void);
 void fn_80026DD4(void);
 void fn_80027114(int a, int b);
@@ -241,8 +241,8 @@ int Db::Shutdown()
     return 1;
 }
 
-static int sEVASTable[] = { 'EVAS', 'EVAS', -1 };
-static int sTPOSTable[] = { 'TPOS', 'TPOG', -1 };
+static int sDbGameTable_802D7064[] = { 0x45564153, 0x45564153, -1 };
+static int sDbGameTable_802D7070[] = { 0x54504F53, 0x54504F47, -1 };
 static ModuleDependency sDbGameDependencies[] = { lbl_803653D4, &gRes, &gDb, 0 };
 DbGame gDbGame;
 
@@ -265,7 +265,7 @@ int DbGame::Init()
     fn_8022F028(0x3000, lbl_802EBE24, 5);
     fn_8022F4C4();
     fn_80229094(lbl_802EBE40);
-    fn_801F9430('TATS', sTPOSTable, sEVASTable);
+    fn_801F9430(0x54415453, sDbGameTable_802D7070, sDbGameTable_802D7064);
     fn_8007F328(1);
     fn_801EEFAC(data);
     return 1;
