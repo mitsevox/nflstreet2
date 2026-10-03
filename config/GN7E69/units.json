@@ -2975,6 +2975,113 @@
       ]
     },
     {
+      "source": "src/game/cu_8007355C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007355C-0x80073620 (src/game/cu_8007355C.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007355C",
+          "end": "0x80073620"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA710",
+          "end": "0x803EA714"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800895EC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800895EC-0x8008973C (src/game/cu_800895EC.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800895EC",
+          "end": "0x8008973C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC87C",
+          "end": "0x803EC884"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8008973C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8008973C-0x8008977C (src/game/cu_8008973C.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8008973C",
+          "end": "0x8008977C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6C40",
+          "end": "0x802D6EA0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801A133C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A133C-0x801A13A8 (src/game/cu_801A133C.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A133C",
+          "end": "0x801A13A8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80365574",
+          "end": "0x80365AB4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECBFC",
+          "end": "0x803ECC00"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80063BE4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80063BE4-0x80063C7C (src/game/cu_80063BE4.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80063BE4",
+          "end": "0x80063C7C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D4FB0",
+          "end": "0x802D5030"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA630",
+          "end": "0x803EA634"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/gx/GXLight.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv GXLight function/type/source/data rows and CREDITS.md; original file ownership remains provisional.",
