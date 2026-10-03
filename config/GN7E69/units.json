@@ -3158,6 +3158,37 @@
           "end": "0x803EBFA8"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80188E98.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80188E98-0x8018A908 (src/game/cu_80188E98.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80188E98",
+          "end": "0x8018A908"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A8340",
+          "end": "0x802A8400"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB640",
+          "end": "0x803EB6A4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80362F84",
+          "end": "0x80363180"
+        }
+      ]
     }
   ]
 }
