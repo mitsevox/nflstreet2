@@ -26,6 +26,36 @@ typedef struct AX_AUX_DATA_DPL2 {
 void AXRegisterAuxACallback(void (*callback)(void*, void*), void* context);
 void AXRegisterAuxBCallback(void (*callback)(void*, void*), void* context);
 
+typedef struct _AXSPB {
+    /* 0x00 */ u16 dpopLHi;
+    /* 0x02 */ u16 dpopLLo;
+    /* 0x04 */ s16 dpopLDelta;
+    /* 0x06 */ u16 dpopRHi;
+    /* 0x08 */ u16 dpopRLo;
+    /* 0x0A */ s16 dpopRDelta;
+    /* 0x0C */ u16 dpopSHi;
+    /* 0x0E */ u16 dpopSLo;
+    /* 0x10 */ s16 dpopSDelta;
+    /* 0x12 */ u16 dpopALHi;
+    /* 0x14 */ u16 dpopALLo;
+    /* 0x16 */ s16 dpopALDelta;
+    /* 0x18 */ u16 dpopARHi;
+    /* 0x1A */ u16 dpopARLo;
+    /* 0x1C */ s16 dpopARDelta;
+    /* 0x1E */ u16 dpopASHi;
+    /* 0x20 */ u16 dpopASLo;
+    /* 0x22 */ s16 dpopASDelta;
+    /* 0x24 */ u16 dpopBLHi;
+    /* 0x26 */ u16 dpopBLLo;
+    /* 0x28 */ s16 dpopBLDelta;
+    /* 0x2A */ u16 dpopBRHi;
+    /* 0x2C */ u16 dpopBRLo;
+    /* 0x2E */ s16 dpopBRDelta;
+    /* 0x30 */ u16 dpopBSHi;
+    /* 0x32 */ u16 dpopBSLo;
+    /* 0x34 */ s16 dpopBSDelta;
+} AXSPB;
+
 void AXInit(void);
 void AXInitEx(u32 outputBufferMode);
 void AXQuit(void);

@@ -183,10 +183,6 @@
       "address": "0x80288E2C",
       "evidence": "evidence.tsv AX external __AXVPBInit; branch instruction destination and upstream role."
     },
-    "__AXSPBInit": {
-      "address": "0x80288350",
-      "evidence": "evidence.tsv AX external __AXSPBInit; branch instruction destination and upstream role."
-    },
     "__AXClInit": {
       "address": "0x80287740",
       "evidence": "evidence.tsv AX external __AXClInit; branch instruction destination and upstream role."
@@ -198,10 +194,6 @@
     "__AXVPBQuit": {
       "address": "0x8028902C",
       "evidence": "evidence.tsv AX external __AXVPBQuit; branch instruction destination and upstream role."
-    },
-    "__AXSPBQuit": {
-      "address": "0x8028837C",
-      "evidence": "evidence.tsv AX external __AXSPBQuit; branch instruction destination and upstream role."
     },
     "__AXClQuit": {
       "address": "0x80287764",
@@ -418,6 +410,14 @@
     "__GXCalculateVLim": {
       "address": "0x8024D140",
       "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
+    },
+    "cosf": {
+      "address": "0x80260EE8",
+      "evidence": "evidence.tsv GXLight external cosf: target branch at 0x8024F6B0 and related SDK source call/prototype."
+    },
+    "DCFlushRange": {
+      "address": "0x80239CEC",
+      "evidence": "evidence.tsv AXSPB cache external; actual REL24 from PrintStudio and pinned OSCache signature."
     }
   },
   "units": [
@@ -2958,6 +2958,79 @@
           "placement": ".sbss",
           "start": "0x803EC870",
           "end": "0x803EC878"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXLight.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv GXLight function/type/source/data rows and CREDITS.md; original file ownership remains provisional.",
+      "link_roots": {
+        "symbols": [
+          "GXInitLightAttn",
+          "GXInitLightSpot",
+          "GXInitLightDistAttn",
+          "GXInitLightPos",
+          "GXInitLightDir",
+          "GXInitSpecularDir",
+          "GXInitLightColor",
+          "GXGetLightColor"
+        ],
+        "evidence": "evidence.tsv GXLight linker row: eight contiguous prefix functions; unused GXInitLightAttnA removed by ordinary SN retention; full following tail remains original."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024F648",
+          "end": "0x8024F9EC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FEAD0",
+          "end": "0x802FEAEC"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED898",
+          "end": "0x803ED8DC"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ax/AXSPB.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv AXSPB function/name/type/field/storage/source-form records and CREDITS.md pinned donor.",
+      "link_roots": {
+        "symbols": [
+          "__AXGetStudio",
+          "__AXPrintStudio",
+          "__AXSPBInit",
+          "__AXSPBQuit",
+          "__AXDepopVoice"
+        ],
+        "evidence": "Target retains five contiguous functions; donor DepopFade is compiled then removed by ordinary SN liveness after inlining."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80287F4C",
+          "end": "0x80288414"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803C2A20",
+          "end": "0x803C2A56"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED5A0",
+          "end": "0x803ED5C4"
         }
       ]
     }

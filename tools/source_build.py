@@ -518,6 +518,28 @@ def run(label, command, log):
         raise RuntimeError(f"{label} failed or reported diagnostics; see {log}")
 
 
+def sn_bss_container_size(native, linked, symbols):
+    """Recognize SN's word-aligned relocatable BSS tag without source allocation."""
+    expected = (native["size"] + 3) & ~3
+    if native["name"] != ".bss" or linked["name"] != ".bss" \
+            or native["type"] != SHT_NOBITS or linked["type"] != SHT_NOBITS \
+            or linked["flags"] != native["flags"] or linked["align"] != native["align"] \
+            or linked["size"] != expected or expected == native["size"]:
+        raise ValueError("Unrecognized SN BSS container extent")
+    owned = [symbol for symbol in symbols if symbol["shndx"] == linked["index"]]
+    tags = [symbol for symbol in owned if symbol["name"] == "__sn__bss__tag__"]
+    if len(tags) != 1 or tags[0]["value"] != expected or tags[0]["size"] != 0 \
+            or tags[0]["type"] != 0 or tags[0]["bind"] != STB_GLOBAL:
+        raise ValueError("Unrecognized SN BSS end tag")
+    for symbol in owned:
+        if symbol is tags[0]:
+            continue
+        if symbol["value"] > native["size"] \
+                or symbol["value"] + symbol["size"] > native["size"]:
+            raise ValueError("Retained BSS symbol extends beyond native allocation")
+    return expected
+
+
 def retained_layout(unit, compiler, wrapper):
     """Inspect SN's retained layout; final linking still consumes the untouched compiler object.
 
@@ -578,6 +600,8 @@ def retained_layout(unit, compiler, wrapper):
         original = native_sections.get(section["name"])
         native_size = original["size"] if original else 0
         expected_size = native_size
+        if original and section["name"] == ".bss" and section["size"] != native_size:
+            expected_size = sn_bss_container_size(original, section, linked_symbols)
         if section["name"] == ".data":
             if tag is None or tag["shndx"] != section["index"] \
                     or tag["value"] != ((native_size + 3) & ~3):
