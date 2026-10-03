@@ -14,6 +14,7 @@ The Nintendo SDK reconstruction is reused from [MVP 2005](https://github.com/mit
 | `src/dolphin/__card.h` | re4 `src/lib/__card.h` |
 | `src/dolphin/ax/AX.c` | re4 `src/lib/AX.c`; release version string restored to target April 2003 build |
 | `include/dolphin/ax.h`, `src/dolphin/__ax.h` | Used declarations from re4 AX public and internal headers |
+| `src/dolphin/ax/AXAux.c`, auxiliary types/prototypes in `include/dolphin/ax.h` and `src/dolphin/__ax.h` | [dolsdk2004](https://github.com/doldecomp/dolsdk2004/tree/2328b4164b1a98422a2255d83ce9a5a7548990cc); fourteen retained auxiliary functions, two cache-aligned buffers and complete auxiliary state |
 | `src/dolphin/ax/AXAlloc.c`, `include/dolphin/ax/AXVPB.h` | [bfbbdecomp/bfbb](https://github.com/bfbbdecomp/bfbb/tree/8fb1c232addcacf44932c10c4cede41b43f98f40/src/dolphin); source and shared parameter-block structures; redundant pointer conversions omitted |
 | `src/dolphin/dsp/dsp.c` | Same pinned BFBB revision; all nine mailbox/init/task-control functions and native version/diagnostic/init state; unsupported weak directive omitted, original handler referenced by neutral address |
 | `src/dolphin/dsp/dsp_task.c`, `src/dolphin/__dsp.h` | Same pinned BFBB revision; four retained task helpers and diagnostic data; interrupt handler and global storage remain unreconstructed |

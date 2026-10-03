@@ -2498,7 +2498,7 @@
       "name": "src/dolphin/ax/AXAux.c",
       "source": "src/dolphin/ax/AXAux.c",
       "library": "AX",
-      "evidence": "Thirteen retained native donor routines cover1160bytes continuously; additional12-byte AXRegisterAuxACallback87040..8704C writes same callback/context SDA globals used by AuxInit/Process. Strong init/process anchors. Exact original file ownership remains provisional.",
+      "evidence": "Fourteen retained native routines cover1172bytes continuously, including AXRegisterAuxACallback87040..8704C. Complete native buffers and state verified by target accesses and fullDOL link. Original source-file edges remain provisional.",
       "sections": [
         {
           "section": ".text",
@@ -2506,7 +2506,23 @@
           "end": "0x8028704C",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Thirteen retained native donor routines cover1160bytes continuously; additional12-byte AXRegisterAuxACallback87040..8704C writes same callback/context SDA globals used by AuxInit/Process. Strong init/process anchors. Exact original file ownership remains provisional."
+          "evidence": "Fourteen retained native routines cover1172bytes continuously, including AXRegisterAuxACallback87040..8704C. Complete native buffers and state verified by target accesses and fullDOL link. Original source-file edges remain provisional."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803BAC80",
+          "end": "0x803BD980",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Native AXAux compiler static section extent, symbol offsets, target access bases and complete source-build verification; original file-level ownership remains reference-derived."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED518",
+          "end": "0x803ED54C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Native AXAux compiler static section extent, symbol offsets, target access bases and complete source-build verification; original file-level ownership remains reference-derived."
         }
       ]
     },

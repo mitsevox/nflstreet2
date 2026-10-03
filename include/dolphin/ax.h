@@ -10,6 +10,22 @@
 extern "C" {
 #endif
 
+typedef struct AX_AUX_DATA {
+    s32* l;
+    s32* r;
+    s32* s;
+} AX_AUX_DATA;
+
+typedef struct AX_AUX_DATA_DPL2 {
+    s32* l;
+    s32* r;
+    s32* ls;
+    s32* rs;
+} AX_AUX_DATA_DPL2;
+
+void AXRegisterAuxACallback(void (*callback)(void*, void*), void* context);
+void AXRegisterAuxBCallback(void (*callback)(void*, void*), void* context);
+
 void AXInit(void);
 void AXInitEx(u32 outputBufferMode);
 void AXQuit(void);
