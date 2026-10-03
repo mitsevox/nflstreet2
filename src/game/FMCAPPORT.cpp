@@ -11,7 +11,7 @@ void fn_802286CC(Object_80228224 *pObject, int handle, int unknown);
 void fn_802286D8(Object_80228224 *pObject, float a, float b, float c, float d);
 void fn_80228D58(int handle);
 void fn_80228E18(void);
-int fn_801DCF0C(int a, int b, int c, int d, int e);
+int fn_801DCF0C(int a, int b, int c, void (*pA)(), void (*pB)());
 void fn_801DCF8C(int a);
 int fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);
 void fn_801DD0C8(int handle, int a, int b, int (*pCallback)());

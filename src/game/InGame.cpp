@@ -84,7 +84,7 @@ int fn_8017CEDC(float a);
 unsigned int fn_8017F584(void);
 void fn_8017F664(void);
 void fn_80187C0C(void);
-void fn_8018A4BC(int a, int b, float c);
+void fn_8018A4BC(int a, unsigned int id, float value);
 void fn_8018A6C4(int a, int b);
 void fn_8018A710(int a, int b);
 void fn_8018A740(void);
