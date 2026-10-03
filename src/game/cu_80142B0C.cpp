@@ -1,13 +1,15 @@
+typedef void (*Callback_802DCF9C)(void *pRecord);
+
 struct Entry_802DCF9C {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
-    void (*mpUnknown4)();
+    Callback_802DCF9C mpUnknown4;
 };
 
 extern "C" {
-void fn_8003A628();
-void fn_801380DC();
-void fn_8003EDD8(unsigned char a, unsigned char b, void (*pCallback)());
+void fn_8003A628(void *pRecord);
+void fn_801380DC(void *pRecord);
+void fn_8003EDD8(unsigned char a, unsigned char b, Callback_802DCF9C pCallback);
 void fn_8003EE00(unsigned char a);
 
 static Entry_802DCF9C lbl_802DCF9C[6] = {
