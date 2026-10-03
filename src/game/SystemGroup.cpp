@@ -44,10 +44,10 @@ static ModuleDependency sModules[] = {
 };
 
 const char *SystemGroup::GetName() { return "System Group"; }
-Record_802CCBAC *SystemGroup::fn_800324BC() { return sStages; }
-Record_803EA3A8 *SystemGroup::fn_800324C8() { return sRecords; }
+Record_802CCBAC *SystemGroup::vfn_04() { return sStages; }
+Record_803EA3A8 *SystemGroup::vfn_05() { return sRecords; }
 
-ModuleDependency *SystemGroup::fn_800324D0(int id)
+ModuleDependency *SystemGroup::vfn_06(int id)
 {
     if (id == 0) {
         return sModules;
@@ -55,5 +55,5 @@ ModuleDependency *SystemGroup::fn_800324D0(int id)
     return 0;
 }
 
-void SystemGroup::fn_800324E4() {}
-int SystemGroup::fn_800324E8() { return 1; }
+void SystemGroup::vfn_02() {}
+int SystemGroup::vfn_03() { return 1; }

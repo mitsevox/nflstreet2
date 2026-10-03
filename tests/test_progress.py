@@ -309,6 +309,40 @@ class FunctionInventoryTests(ProgressBase):
         unit = next(item for item in exported["units"] if item["name"] == "src/unit.c")
         self.assertEqual(unit["functions"][0]["name"], "fn_80003104")
 
+    def test_inherited_virtual_slots_remain_unknown_in_both_exports(self):
+        self.write_inventory()
+        path = self.root / "config/GN7E69/evidence.tsv"
+        path.write_text("\n".join(line for line in path.read_text().splitlines()
+                                   if "\tExample\t" not in line) + "\n")
+        import decomp_report
+        for symbol in ("vfn_04", "vfn_04__10DebugGroup", "vfn_04__11SystemGroup"):
+            with self.subTest(symbol=symbol):
+                self.source_report["units"][0]["functions"][0]["symbol"] = symbol
+                self.save()
+                data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+                self.assertEqual(data["functions"]["named"], 0)
+                self.assertEqual(data["sections"][0]["children"][0]["name"], "fn_80003104")
+                exported = decomp_report.objdiff_report(data)
+                unit = next(item for item in exported["units"] if item["name"] == "src/unit.c")
+                self.assertEqual(unit["functions"][0]["name"], "fn_80003104")
+
+    def test_inherited_method_address_labels_still_require_correct_placement(self):
+        self.write_source()
+        self.source_report["units"][0]["functions"][0]["symbol"] = "fn_80003108__11SystemGroup"
+        self.save()
+        with self.assertRaisesRegex(ValueError, "misplaced neutral function"):
+            progress.report(self.binary, "a" * 40, self.report_path)
+
+    def test_descriptive_virtual_slot_suffix_still_requires_name_evidence(self):
+        self.write_inventory()
+        path = self.root / "config/GN7E69/evidence.tsv"
+        path.write_text("\n".join(line for line in path.read_text().splitlines()
+                                   if "\tExample\t" not in line) + "\n")
+        self.source_report["units"][0]["functions"][0]["symbol"] = "vfn_04Meaning__11SystemGroup"
+        self.save()
+        with self.assertRaisesRegex(ValueError, "missing curated name evidence"):
+            progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+
     def test_plain_and_mangled_neutral_addresses_must_match_placement(self):
         self.write_source()
         for symbol in ("fn_80003108", "fn_80003108__8UIScreenFv"):
