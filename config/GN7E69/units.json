@@ -2637,6 +2637,25 @@
           "end": "0x803EBADC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80054D34.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80054D34-0x80054EDC (src/game/cu_80054D34.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80054D34",
+          "end": "0x80054EDC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA568",
+          "end": "0x803EA570"
+        }
+      ]
     }
   ]
 }
