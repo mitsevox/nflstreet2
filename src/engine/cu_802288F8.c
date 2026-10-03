@@ -58,10 +58,10 @@ int fn_80228980(Object_80228224 *pObject)
 void fn_80228988(Mtx44 m, float x, float y, float w, float h, float d)
 {
     float sx = w * 0.5f, sy = h * 0.5f, sz = d * 0.5f;
-    float tx = x + sx, ty = y + sy, nz = -sz;
+    float tx = x + sx, ty = y + sy;
     m[0][0] = sx;   m[1][0] = 0.0f; m[2][0] = 0.0f; m[3][0] = 0.0f;
     m[0][1] = 0.0f; m[1][1] = sy;   m[2][1] = 0.0f; m[3][1] = 0.0f;
-    m[0][2] = 0.0f; m[1][2] = 0.0f; m[2][2] = nz;   m[3][2] = 0.0f;
+    m[0][2] = 0.0f; m[1][2] = 0.0f; m[2][2] = -sz;  m[3][2] = 0.0f;
     m[0][3] = tx;   m[1][3] = ty;   m[2][3] = sz;   m[3][3] = 1.0f;
 }
 

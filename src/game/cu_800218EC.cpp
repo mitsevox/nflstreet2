@@ -195,7 +195,7 @@ int fn_801BE648(void *a);
 void fn_801CE9E0(int a);
 float fn_801CFD28(int a);
 int fn_801CFFF0(int a, int b, float c);
-void fn_801D0470(void);
+void fn_801D0470(int);
 void fn_801D04C4(void);
 void fn_801D0508(void);
 void fn_801D0544(void);
@@ -389,8 +389,7 @@ static void fn_80021F60(int index, float a, float b, float c, float d)
 
     fn_8018A8C8(3);
     fn_801CE9E0(1);
-    fn_80228668();
-    fn_801D0470();
+    fn_801D0470(fn_80228668());
     fn_801D1288(2, projection);
     fn_801D1288(6, view);
     fn_801D04C4();
