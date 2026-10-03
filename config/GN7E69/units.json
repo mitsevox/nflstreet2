@@ -291,6 +291,22 @@
       "address": "0x8008B2E8",
       "evidence": "evidence.tsv external row for 0x8008B2E8 (_._14Class_8008B284); descriptive name."
     },
+    "__14Class_801CC350": {
+      "address": "0x801CC350",
+      "evidence": "evidence.tsv external row for 0x801CC350 (__14Class_801CC350); descriptive name."
+    },
+    "_._14Class_801CC350": {
+      "address": "0x801CC38C",
+      "evidence": "evidence.tsv external row for 0x801CC38C (_._14Class_801CC350); descriptive name."
+    },
+    "fn_801CC6F8__14Class_801CC350": {
+      "address": "0x801CC6F8",
+      "evidence": "evidence.tsv external row for 0x801CC6F8 (fn_801CC6F8__14Class_801CC350); descriptive name."
+    },
+    "fn_801CC6FC__14Class_801CC350": {
+      "address": "0x801CC6FC",
+      "evidence": "evidence.tsv external row for 0x801CC6FC (fn_801CC6FC__14Class_801CC350); descriptive name."
+    },
     "__pure_virtual": {
       "address": "0x8025F088",
       "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
@@ -1432,6 +1448,61 @@
           "placement": ".data2",
           "start": "0x80289B90",
           "end": "0x80289B94"
+        }
+      ]
+    },
+    {
+      "source": "src/game/DebugGroup.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800324B0-0x800325E8 (src/game/DebugGroup.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800324B0",
+          "end": "0x800325E8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028AC70",
+          "end": "0x8028ACE0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCBAC",
+          "end": "0x802CCBBC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA3A8",
+          "end": "0x803EA3B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80306890",
+          "end": "0x803068B4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC678",
+          "end": "0x803EC680"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A58",
+          "end": "0x80289A5C"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289B98",
+          "end": "0x80289B9C"
         }
       ]
     },

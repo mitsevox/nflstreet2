@@ -71,6 +71,7 @@ DECLARE_MODULE(LoadingFEToInGame);
 
 extern AnmsCelebration gAnmsCelebration;
 extern Celebration gCelebration;
+extern Debug gDebug;
 extern FileIO gFileIO;
 extern Vpt gVpt;
 extern GLIB gGLIB;
