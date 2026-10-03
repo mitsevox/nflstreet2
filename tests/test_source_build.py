@@ -47,9 +47,9 @@ def text(size, align=4):
             "size": size, "align": align, "data": bytes(size)}
 
 
-def rodata(size):
+def rodata(size, align=4):
     return {"name": ".rodata", "type": sb.SHT_PROGBITS, "flags": sb.SHF_ALLOC, "size": size,
-            "align": 4, "data": bytes(size)}
+            "align": align, "data": bytes(size)}
 
 
 class Fixture(unittest.TestCase):
@@ -267,10 +267,107 @@ class Placement(Fixture):
             sb.check_basenames([Path("a/unit (1).o")])
 
 
+class ReadOnlyDataAfterCode(Fixture):
+    """A unit's read-only data may be configured directly after its own code in a code section."""
+
+    def setUp(self):
+        super().setUp()
+        binary = bytearray(self.binary)
+        binary[0x11C:0x120] = bytes(4)  # zero padding 0x8000311C-0x80003120 in .init
+        self.sections = sb.target_sections(bytes(binary), TARGET, {})
+        self.manifest["units"][0]["sections"] = [
+            {"section": ".text", "placement": ".init", "start": "0x80003110", "end": "0x8000311C"},
+            {"section": ".rodata", "placement": ".init", "start": "0x80003120", "end": "0x80003128",
+             "follows": ".text"}]
+
+    def objects(self, data=None):
+        symbols = [{"name": "Unit_Function", "value": 0, "shndx": 1, "type": sb.STT_FUNC, "size": 12},
+                   {"name": "Unit_Table", "value": 0, "shndx": 2, "type": 1, "size": 8}]
+        return {"src/unit.c": compiled([text(12), data or rodata(8, align=8)], symbols)}
+
+    def test_configured_read_only_data_follows_its_code(self):
+        units, externals, _ = self.load()
+        objects = self.objects()
+        pieces, defined, _ = sb.plan(self.sections, units, objects, externals)
+        layout = [(hex(p["start"]), hex(p["end"]), p.get("unit")) for p in pieces[".init"]]
+        # No original piece covers the padding: the data's own alignment produces it.
+        self.assertEqual(layout, [("0x80003100", "0x80003110", None),
+                                  ("0x80003110", "0x8000311c", "src/unit.c"),
+                                  ("0x80003120", "0x80003128", "src/unit.c"),
+                                  ("0x80003128", "0x80003140", None)])
+        self.assertEqual(defined, {"Unit_Function": (0x80003110, "src/unit.c"),
+                                   "Unit_Table": (0x80003120, "src/unit.c")})
+        functions = sb.compiled_functions(units[0], objects["src/unit.c"])
+        self.assertEqual([f["symbol"] for f in functions], ["Unit_Function"])
+        function = {"name": "Misplaced", "value": 0, "shndx": 2, "type": sb.STT_FUNC, "size": 4}
+        with self.assertRaisesRegex(ValueError, "no code placement"):
+            sb.compiled_functions(units[0], ([], [function]))
+
+    def test_data_in_code_needs_an_explicit_read_only_configuration(self):
+        manifest = copy.deepcopy(self.manifest)
+        del manifest["units"][0]["sections"][1]["follows"]
+        with self.assertRaisesRegex(ValueError, "cannot be placed in code section .init"):
+            self.plan(self.objects(), manifest)
+        writable = {"name": ".rodata", "type": sb.SHT_PROGBITS, "flags": sb.SHF_ALLOC | sb.SHF_WRITE,
+                    "size": 8, "align": 8, "data": bytes(8)}
+        with self.assertRaisesRegex(ValueError, "cannot be placed in code section .init"):
+            self.plan(self.objects(writable))
+        uninitialized = {"name": ".rodata", "type": sb.SHT_NOBITS, "flags": sb.SHF_ALLOC,
+                         "size": 8, "align": 8}
+        with self.assertRaisesRegex(ValueError, "cannot be placed in code section .init"):
+            self.plan(self.objects(uninitialized))
+        executable = dict(rodata(8, align=8), flags=sb.SHF_ALLOC | sb.SHF_EXECINSTR)
+        with self.assertRaisesRegex(ValueError, "cannot be placed in code section .init"):
+            self.plan(self.objects(executable))
+
+    def test_follows_names_earlier_code_of_the_same_unit(self):
+        cases = [(1, {"follows": ".missing"}, "must follow another configured section"),
+                 (1, {"follows": ".rodata"}, "must follow another configured section"),
+                 (1, {"follows": 1}, "applies only to data placed in a code section"),
+                 (0, {"start": "0x80003128", "end": "0x80003134"}, "must follow another configured section"),
+                 (1, {"placement": ".data2", "start": "0x80004000", "end": "0x80004008"},
+                  "applies only to data placed in a code section")]
+        for index, change, message in cases:
+            manifest = copy.deepcopy(self.manifest)
+            manifest["units"][0]["sections"][index].update(change)
+            if index == 0:
+                manifest["units"][0]["sections"][1].update(start="0x80003110", end="0x80003118")
+            with self.subTest(change=change), self.assertRaisesRegex(ValueError, message):
+                self.load(manifest)
+        manifest = copy.deepcopy(self.manifest)
+        manifest["units"].append({"source": "src/other.c", "profile": "library", "evidence": "x",
+                                  "sections": [{"section": ".text", "placement": ".init",
+                                                "start": "0x8000311C", "end": "0x80003120"}]})
+        with self.assertRaisesRegex(ValueError, "lies between it and the code it follows"):
+            self.load(manifest)
+        manifest = copy.deepcopy(self.manifest)
+        manifest["units"][0]["sections"][0]["follows"] = ".rodata"
+        with self.assertRaisesRegex(ValueError, "must follow another configured section"):
+            self.load(manifest)
+
+    def test_data_must_start_at_its_alignment_after_the_code(self):
+        manifest = copy.deepcopy(self.manifest)
+        manifest["units"][0]["sections"][1].update(start="0x80003128", end="0x80003130")
+        with self.assertRaisesRegex(ValueError, "must start at 0x80003120, its 8-byte alignment"):
+            self.plan(self.objects(), manifest)
+        manifest = copy.deepcopy(self.manifest)
+        manifest["units"][0]["sections"][1].update(start="0x8000311C", end="0x80003124")
+        with self.assertRaisesRegex(ValueError, "alignment 8 does not fit"):
+            self.plan(self.objects(), manifest)
+        # With 4-byte alignment the data would start directly after the code.
+        with self.assertRaisesRegex(ValueError, "must start at 0x8000311C, its 4-byte alignment"):
+            self.plan(self.objects(rodata(8, align=4)))
+
+    def test_padding_before_the_data_must_be_zero_in_the_target(self):
+        self.sections = sb.target_sections(self.binary, TARGET, {})
+        with self.assertRaisesRegex(ValueError, "padding 0x8000311C-0x80003120 before .rodata is not zero"):
+            self.plan(self.objects())
+
+
 class Build(unittest.TestCase):
     """Drive the complete build with mocked tool stages."""
 
-    def run_build(self, output_bytes, link=True, units=True, mutate_native=False):
+    def run_build(self, output_bytes, link=True, units=True, mutate_native=False, extra=(), evidence=None):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         root = Path(temporary.name)
@@ -288,10 +385,12 @@ class Build(unittest.TestCase):
                     "profiles": {"library": {"flags": ["-O2"], "evidence": "locator"}}, "externals": {},
                     "units": [{"source": "src/unit.c", "profile": "library", "evidence": "locator",
                                "sections": [{"section": ".text", "placement": ".init",
-                                             "start": "0x80003110", "end": "0x80003118"}]}]
+                                             "start": "0x80003110", "end": "0x80003118"}, *extra]}]
                     if units else []}
         manifest_path = root / "config/GN7E69/units.json"
         manifest_path.write_text(json.dumps(manifest))
+        if evidence:
+            (root / "config/GN7E69/evidence.tsv").write_text(evidence)
         original = root / "main.dol"
         original.write_bytes(binary)
         build = root / "build/source"
@@ -360,6 +459,33 @@ class Build(unittest.TestCase):
         error, path = self.run_build(lambda binary: binary, link=False)
         self.assertRegex(str(error), "fresh ELF")
         self.assertFalse(path.exists())
+
+    def test_data_after_code_cannot_cover_an_evidence_function(self):
+        # Review of PR #78: target instruction words compiled as a const array must not be
+        # credited as matched data after code where evidence records a function.
+        follower = {"section": ".rodata", "placement": ".init", "start": "0x80003118", "end": "0x80003120",
+                    "follows": ".text"}
+        header = "kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
+        block = "data\t0x80003118\t0x80003120\tdata_80003118\ttarget\texact\texact\tfixture\n"
+        function = "function\t0x8000311C\t0x80003124\tfn_8000311C\ttarget\texact\texact\tfixture\n"
+        with self.assertRaisesRegex(ValueError, "overlaps function fn_8000311C 0x8000311C-0x80003124"):
+            self.run_build(lambda binary: binary, extra=[follower], evidence=header + block + function)
+
+    def test_data_after_code_must_be_an_exact_evidence_data_block(self):
+        # Hostile recheck of PR #78: code with no inventory candidate and no evidence row must not
+        # be claimable as data after code.
+        follower = {"section": ".rodata", "placement": ".init", "start": "0x80003118", "end": "0x80003120",
+                    "follows": ".text"}
+        header = "kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
+        for rows in ("", "data\t0x80003118\t0x8000311C\tdata_80003118\ttarget\texact\texact\tfixture\n",
+                     "data\t0x80003118\t0x80003120\tdata_80003118\ttarget\texact\tprovisional\tfixture\n"):
+            with self.subTest(rows=rows), \
+                    self.assertRaisesRegex(ValueError, "does not equal an evidence data row with exact edges"):
+                self.run_build(lambda binary: binary, extra=[follower], evidence=header + rows)
+        # An exact data row passes the evidence gate; this mocked compiler then emits no .rodata.
+        block = "data\t0x80003118\t0x80003120\tdata_80003118\ttarget\texact\texact\tfixture\n"
+        with self.assertRaisesRegex(ValueError, "configured section .rodata was not produced"):
+            self.run_build(lambda binary: binary, extra=[follower], evidence=header + block)
 
 
 

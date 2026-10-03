@@ -2,6 +2,7 @@
 """Link compiled source units in place of their configured original ranges and verify the target."""
 
 import argparse
+import csv
 import hashlib
 import json
 import platform
@@ -196,7 +197,7 @@ def load_manifest(manifest, sections, compiler_version):
             raise ValueError(f"External {name} must be a non-neutral name with address and evidence")
         externals[name] = address(entry["address"])
     by_name = {section["name"]: section for section in sections}
-    units, ranges, sources = [], [], set()
+    units, ranges, sources, followed = [], [], set(), []
     for unit in manifest.get("units", []):
         if set(unit) - {"link_roots"} != {"source", "profile", "evidence", "sections"} or not unit["evidence"].strip():
             raise ValueError("Each unit needs exactly source, profile, evidence and sections; "
@@ -220,19 +221,34 @@ def load_manifest(manifest, sections, compiler_version):
                 raise ValueError("SDK link_roots need distinct symbol names and retention evidence")
         placed = []
         for entry in unit["sections"]:
-            if set(entry) != {"section", "placement", "start", "end"}:
-                raise ValueError(f"Unit {unit['source']} section entries need section, placement, start, end")
+            if set(entry) - {"follows"} != {"section", "placement", "start", "end"}:
+                raise ValueError(f"Unit {unit['source']} section entries need section, placement, start, end "
+                                 "and optionally follows")
             target = by_name.get(entry["placement"])
             start, end = address(entry["start"]), address(entry["end"])
             if target is None or not target["start"] <= start < end <= target["end"]:
                 raise ValueError(f"{unit['source']} {entry['section']} range is outside {entry['placement']}")
             if any(entry["section"] == other["section"] for other in placed):
                 raise ValueError(f"{unit['source']} maps {entry['section']} more than once")
+            follows = entry.get("follows")
+            if "follows" in entry and (target["kind"] != "code" or not isinstance(follows, str)):
+                raise ValueError(f"{unit['source']} {entry['section']}: follows names the unit's own code "
+                                 "section and applies only to data placed in a code section")
             placed.append({"section": entry["section"], "placement": entry["placement"],
-                           "start": start, "end": end, "kind": target["kind"]})
+                           "start": start, "end": end, "kind": target["kind"], "follows": follows})
             ranges.append((start, end, unit["source"]))
         if not placed:
             raise ValueError(f"Unit {unit['source']} has no configured ranges")
+        for entry in placed:
+            if entry["follows"] is None:
+                continue
+            code = next((other for other in placed if other["section"] == entry["follows"]
+                         and other is not entry), None)
+            if code is None or code["follows"] is not None or code["placement"] != entry["placement"] \
+                    or not code["end"] <= entry["start"]:
+                raise ValueError(f"{unit['source']} {entry['section']} must follow another configured section "
+                                 f"of the same unit earlier in {entry['placement']}")
+            followed.append((code["end"], entry["start"], unit["source"], entry["section"]))
         root = profiles[unit["profile"]].get("source_root")
         compile_path = None
         if root:
@@ -251,7 +267,49 @@ def load_manifest(manifest, sections, compiler_version):
     for left, right in zip(ranges, ranges[1:]):
         if right[0] < left[1]:
             raise ValueError(f"Configured ranges overlap: {left[2]} and {right[2]}")
+    for gap_start, gap_end, source, name in followed:
+        if any(gap_start < end and start < gap_end for start, end, _ in ranges):
+            raise ValueError(f"{source} {name}: another configured range lies between it and the code it follows")
     return units, externals, [directory for directory in manifest.get("include_dirs", [])]
+
+
+def evidence_rows(root, kind):
+    """Bounded rows of one kind in the target's evidence table, as (start, end, subject, edges)."""
+    path = Path(root) / "config/GN7E69/evidence.tsv"
+    if not path.exists():
+        return []
+    with path.open() as file:
+        return [(int(row["start"], 16), int(row["end"], 16), row["subject"],
+                 (row["start_boundary"], row["end_boundary"]))
+                for row in csv.DictReader(file, delimiter="\t")
+                if row["kind"] == kind and row["start"] != "-" and row["end"] != "-"]
+
+
+def function_extents(root):
+    """Bounded function extents recorded in the target's evidence table."""
+    return [(start, end, subject) for start, end, subject, _ in evidence_rows(root, "function")]
+
+
+def data_extents(root):
+    """Data extents whose both edges the evidence table records as exact."""
+    return {(start, end) for start, end, _, edges in evidence_rows(root, "data") if edges == ("exact", "exact")}
+
+
+def check_data_in_code(spans, functions, data=None):
+    """Reject data placed in a code section that is not an exact evidence data block, or that
+    overlaps any known function extent.
+
+    `spans` are (start, end, owner) data ranges, `functions` are (start, end, name) extents and
+    `data`, when given, the (start, end) extents of exact evidence `data` rows. Data after code
+    may only claim a recorded constant block that no function analysis or evidence treats as code."""
+    for start, end, owner in spans:
+        if data is not None and (start, end) not in data:
+            raise ValueError(f"{owner}: data 0x{start:08X}-0x{end:08X} placed after code does not equal "
+                             "an evidence data row with exact edges")
+        for left, right, name in functions:
+            if left < end and start < right:
+                raise ValueError(f"{owner}: data 0x{start:08X}-0x{end:08X} placed after code overlaps "
+                                 f"function {name} 0x{left:08X}-0x{right:08X}")
 
 
 def source_root(root):
@@ -300,7 +358,14 @@ def plan(sections, units, objects, externals):
             entry["align"] = max(section["align"], 1)
             expected = {"code": SHT_PROGBITS, "data": SHT_PROGBITS, "bss": SHT_NOBITS}[entry["kind"]]
             executable = bool(section["flags"] & SHF_EXECINSTR)
-            if section["type"] != expected or executable != (entry["kind"] == "code"):
+            entry["executable"] = executable
+            # Only read-only initialized data configured to follow the unit's own code may sit
+            # inside a code section; everything else keeps the section-kind rule.
+            read_only_after_code = entry["kind"] == "code" and entry.get("follows") is not None \
+                and not executable and not section["flags"] & SHF_WRITE
+            if section["type"] != expected or (executable != (entry["kind"] == "code")
+                                               and not read_only_after_code) \
+                    or (entry.get("follows") is not None and not read_only_after_code):
                 raise ValueError(f"{unit['source']}: {section['name']} cannot be placed in "
                                  f"{entry['kind']} section {entry['placement']}")
             if section["size"] != entry["end"] - entry["start"]:
@@ -313,6 +378,24 @@ def plan(sections, units, objects, externals):
         for entry in unit["sections"]:
             if "index" not in entry:
                 raise ValueError(f"{unit['source']}: configured section {entry['section']} was not produced")
+        for entry in unit["sections"]:
+            if entry.get("follows") is None:
+                continue
+            code = mapped[entry["follows"]]
+            if not code["executable"]:
+                raise ValueError(f"{unit['source']}: {entry['section']} must follow the unit's own code")
+            # The data starts at the first boundary of its own alignment after the code; the
+            # linker supplies that padding, which the target must hold as zero bytes.
+            aligned = -(-code["end"] // entry["align"]) * entry["align"]
+            if entry["start"] != aligned:
+                raise ValueError(f"{unit['source']}: {entry['section']} must start at 0x{aligned:08X}, its "
+                                 f"{entry['align']}-byte alignment after {code['section']} ends at "
+                                 f"0x{code['end']:08X}")
+            section = next(s for s in sections if s["name"] == entry["placement"])
+            padding = section["contents"][code["end"] - section["start"]:entry["start"] - section["start"]]
+            if any(padding):
+                raise ValueError(f"{unit['source']}: target padding 0x{code['end']:08X}-0x{entry['start']:08X} "
+                                 f"before {entry['section']} is not zero")
         by_index = {entry["index"]: entry for entry in unit["sections"]}
         for symbol in symbols:
             if symbol["shndx"] == SHN_COMMON:
@@ -337,7 +420,8 @@ def plan(sections, units, objects, externals):
         for start, end, source, entry in ranges:
             if entry["placement"] != section["name"]:
                 continue
-            if start > cursor:
+            # Padding before data that follows its unit's code comes from that data's alignment.
+            if start > cursor and entry.get("follows") is None:
                 pieces[section["name"]].append({"start": cursor, "end": start, "symbols": []})
             pieces[section["name"]].append({"start": start, "end": end, "unit": source, "entry": entry})
             cursor = end
@@ -558,6 +642,9 @@ def build(original, manifest_path, report_path):
     manifest_bytes = manifest_path.read_bytes()
     units, externals, include_dirs = load_manifest(json.loads(manifest_bytes), sections,
                                                    compiler_lock["compiler_version"])
+    check_data_in_code([(entry["start"], entry["end"], unit["source"]) for unit in units
+                        for entry in unit["sections"] if entry["follows"] is not None],
+                       function_extents(ROOT), data_extents(ROOT))
     if BUILD.exists():
         shutil.rmtree(BUILD)
     (BUILD / "obj").mkdir(parents=True)
@@ -680,7 +767,7 @@ def compiled_functions(unit, obj):
         if symbol["type"] != STT_FUNC or symbol["shndx"] == SHN_UNDEF or symbol["size"] <= 0:
             continue
         entry = placements.get(symbol["shndx"])
-        if entry is None or entry["kind"] != "code":
+        if entry is None or entry["kind"] != "code" or entry.get("executable") is False:
             raise ValueError(f"{unit['source']}: compiler function {symbol['name']} has no code placement")
         if not symbol["name"] or symbol["value"] < 0 or symbol["value"] + symbol["size"] > entry["compiled"]:
             raise ValueError(f"{unit['source']}: compiler function {symbol['name']} exceeds its section")
@@ -717,6 +804,8 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                             "start": f"0x{entry['start']:08X}", "end": f"0x{entry['end']:08X}",
                             "compiled": entry["compiled"], "linked": size,
                             "matched": size if identical else 0, "status": status})
+            if entry.get("follows") is not None:
+                entries[-1]["follows"] = entry["follows"]
         measured.append({"source": unit["source"], "compile_path": unit["compile_path"],
                          "source_sha256": sha256(unit["path"]),
                          "profile": unit["profile"], "flags": unit["flags"],

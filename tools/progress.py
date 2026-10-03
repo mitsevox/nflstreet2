@@ -56,9 +56,9 @@ def source_ranges(target, source_report):
     totals = {"code": [0, 0], "data": [0, 0]}
     for unit, configured_unit in zip(units, manifest["units"]):
         # The report's ranges must be exactly the configured ranges of the hashed manifest.
-        claimed = [(s["section"], s["placement"], int(s["start"], 16), int(s["end"], 16))
+        claimed = [(s["section"], s["placement"], int(s["start"], 16), int(s["end"], 16), s.get("follows"))
                    for s in unit["sections"]]
-        expected = [(s["section"], s["placement"], int(s["start"], 16), int(s["end"], 16))
+        expected = [(s["section"], s["placement"], int(s["start"], 16), int(s["end"], 16), s.get("follows"))
                     for s in configured_unit["sections"]]
         if claimed != expected:
             raise ValueError(f"Source unit {unit['source']} ranges differ from the unit manifest")
@@ -97,8 +97,10 @@ def source_functions(source_report):
         rows = unit.get("functions")
         if not isinstance(rows, list):
             raise ValueError(f"Source unit {unit['source']} lacks compiler function coverage")
+        # Read-only data configured to follow its unit's code is credited to the code section
+        # that contains it, but holds no compiled functions.
         code = [(int(section["start"], 16), int(section["end"], 16))
-                for section in unit["sections"] if section["kind"] == "code"]
+                for section in unit["sections"] if section["kind"] == "code" and not section.get("follows")]
         seen = set()
         for row in rows:
             try:
@@ -122,8 +124,17 @@ def source_functions(source_report):
     return functions
 
 
-def function_inventory(target, ranges, analysis_dir, compiled=()):
-    """Count candidates from a bound analysis and curated names, never address labels."""
+def data_in_code(source_report):
+    """Read-only data ranges configured to follow their unit's code, from a validated report."""
+    units = json.loads(source_report.read_text())["units"] if source_report and source_report.exists() else []
+    return [(int(section["start"], 16), int(section["end"], 16), unit["source"])
+            for unit in units for section in unit["sections"] if section.get("follows")]
+
+
+def function_inventory(target, ranges, analysis_dir, compiled=(), data_spans=()):
+    """Count candidates from a bound analysis and curated names, never address labels.
+
+    Data placed after code (`data_spans`) must not overlap a candidate."""
     if analysis_dir is None:
         if any(not function["neutral"] for function in compiled):
             raise ValueError("Named compiler functions require a verified function inventory")
@@ -148,6 +159,8 @@ def function_inventory(target, ranges, analysis_dir, compiled=()):
         candidates[start] = size
     if len(candidates) != summary["candidate_counts"]["function"]:
         raise ValueError("Function inventory count is inconsistent")
+    source_build.check_data_in_code(data_spans, [(start, start + size, f"candidate fn_{start:08X}")
+                                                 for start, size in candidates.items()])
     evidence_path = ROOT / "config/GN7E69/evidence.tsv"
     records = []
     if evidence_path.exists():
@@ -391,7 +404,11 @@ def report(binary, revision, source_report=None, analysis_dir=None):
     for kind in ("code", "data"):
         if measures[kind]["linked"] != sum(right - left for k, left, right in ranges if k == kind):
             raise ValueError("Measured source ranges fall outside the executable sections")
-    functions, function_items = function_inventory(target, ranges, analysis_dir, source_functions(source_report))
+    data_spans = data_in_code(source_report)
+    source_build.check_data_in_code(data_spans, source_build.function_extents(ROOT),
+                                    source_build.data_extents(ROOT))
+    functions, function_items = function_inventory(target, ranges, analysis_dir, source_functions(source_report),
+                                                   data_spans)
     source_map(sections, source_report, function_items)
     mapped_functions = sum(1 for section in sections if section["kind"] == "code"
                            for child in section["children"] if "address" in child)
