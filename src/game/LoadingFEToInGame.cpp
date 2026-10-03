@@ -1,12 +1,10 @@
-#include "game/Module.h"
+#include "game/ModuleGroup_8008CC74.h"
 
 extern "C" {
-extern char lbl_8030BFB4[];
-
 void fn_80194858(int);
 }
 
-static ModuleDependency sDependencies[] = { lbl_8030BFB4, &gGRender, 0 };
+static ModuleDependency sDependencies[] = { &gLoading, &gGRender, 0 };
 LoadingFEToInGame gLoadingFEToInGame;
 
 ModuleDependency *LoadingFEToInGame::GetDependencies() { return sDependencies; }

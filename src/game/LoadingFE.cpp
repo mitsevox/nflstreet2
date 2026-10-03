@@ -1,8 +1,6 @@
-#include "game/Module.h"
+#include "game/ModuleGroup_8008CC74.h"
 
 extern "C" {
-extern char lbl_8030BFB4[];
-
 int fn_8007F828(int);
 void fn_8013CF98(void);
 void fn_80194858(int);
@@ -11,7 +9,7 @@ void fn_801C3A3C(float);
 int fn_801CEB4C(void);
 }
 
-static ModuleDependency sDependencies[] = { lbl_8030BFB4, &gGRender, 0 };
+static ModuleDependency sDependencies[] = { &gLoading, &gGRender, 0 };
 LoadingFE gLoadingFE;
 static unsigned char sFirstInit = 1;
 
