@@ -1205,6 +1205,55 @@
       ]
     },
     {
+      "source": "src/game/GLIB.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019A110-0x8019A2B4 (src/game/GLIB.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019A110",
+          "end": "0x8019A2B4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADC98",
+          "end": "0x802ADD00"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EE418",
+          "end": "0x802EE444"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB790",
+          "end": "0x803EB794"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803653A4",
+          "end": "0x803653B4"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B08",
+          "end": "0x80289B0C"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C34",
+          "end": "0x80289C38"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/si/SISamplingRate.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv unit/data rows for sampling-rate code, tables, diagnostic and BSS state; CREDITS.md for import provenance.",
