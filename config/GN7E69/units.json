@@ -2861,6 +2861,55 @@
       ]
     },
     {
+      "source": "src/game/DbColPal.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80079CD8-0x8007A24C (src/game/DbColPal.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80079CD8",
+          "end": "0x8007A24C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80291AC8",
+          "end": "0x80291B58"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6424",
+          "end": "0x802D64F4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA798",
+          "end": "0x803EA79C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030B098",
+          "end": "0x8030B968"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AA0",
+          "end": "0x80289AA4"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BE0",
+          "end": "0x80289BE4"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800545B4.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800545B4-0x80054628 (src/game/cu_800545B4.cpp) and its data rows.",
