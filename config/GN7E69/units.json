@@ -385,6 +385,25 @@
       ]
     },
     {
+      "source": "src/game/ArenaSetup.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80025E00-0x80025E50 (src/game/ArenaSetup.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80025E00",
+          "end": "0x80025E50"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA2A0",
+          "end": "0x803EA2A4"
+        }
+      ]
+    },
+    {
       "source": "src/game/Module.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80025F24-0x80025F94 (src/game/Module.cpp) and its data rows.",
