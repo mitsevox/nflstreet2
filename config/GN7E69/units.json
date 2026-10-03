@@ -502,6 +502,55 @@
       ]
     },
     {
+      "source": "src/game/ModuleGroup_80033A5C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80033A5C-0x8003450C (src/game/ModuleGroup_80033A5C.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80033A5C",
+          "end": "0x8003450C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028AF90",
+          "end": "0x8028B3F0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA3C8",
+          "end": "0x803EA3CC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80306D28",
+          "end": "0x80306DE0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC690",
+          "end": "0x803EC6D0"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A70",
+          "end": "0x80289A74"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BB0",
+          "end": "0x80289BB4"
+        }
+      ]
+    },
+    {
       "source": "src/game/AnmsCelebration.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8008B974-0x8008BB30 (src/game/AnmsCelebration.cpp) and its data rows.",
