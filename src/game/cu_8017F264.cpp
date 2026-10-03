@@ -1,3 +1,5 @@
+#include "game/cu_8017F264.h"
+
 static unsigned char lbl_803EB4A0 = 0;
 static unsigned char lbl_803EB4A1 = 0;
 static unsigned char lbl_803EB4A2 = 0;
