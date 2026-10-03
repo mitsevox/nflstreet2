@@ -362,5 +362,39 @@ class Build(unittest.TestCase):
         self.assertFalse(path.exists())
 
 
+
+
+class CompilerFunctionCoverageTests(unittest.TestCase):
+    def unit(self):
+        return {"source": "src/game/example.cpp", "sections": [
+            {"index": 1, "kind": "code", "start": 0x80003100, "compiled": 16}]}
+
+    def test_local_generated_and_mangled_functions_are_resolved_from_placements(self):
+        symbols = [{"name": name, "type": sb.STT_FUNC, "bind": bind,
+                    "shndx": 1, "value": index * 4, "size": 4}
+                   for index, (name, bind) in enumerate([
+                       ("Update__8UIScreenFv", sb.STB_GLOBAL),
+                       ("I.src_game_example_cpp", sb.STB_LOCAL),
+                       ("D.src_game_example_cpp", sb.STB_LOCAL),
+                       ("fn_8000310C", sb.STB_GLOBAL)])]
+        symbols += [{"name": "external", "type": sb.STT_FUNC, "bind": sb.STB_GLOBAL,
+                     "shndx": sb.SHN_UNDEF, "value": 0, "size": 4},
+                    {"name": "zero", "type": sb.STT_FUNC, "bind": sb.STB_LOCAL,
+                     "shndx": 1, "value": 0, "size": 0}]
+        functions = sb.compiled_functions(self.unit(), ([], symbols))
+        self.assertEqual([function["address"] for function in functions],
+                         [f"0x{0x80003100 + index * 4:08X}" for index in range(4)])
+        self.assertEqual([function["symbol"] for function in functions],
+                         [symbol["name"] for symbol in symbols[:4]])
+
+    def test_defined_functions_outside_placed_code_are_rejected(self):
+        for shndx, value, size in ((2, 0, 4), (1, 14, 4), (1, -4, 4)):
+            with self.subTest(shndx=shndx, value=value, size=size):
+                symbol = {"name": "Example", "type": sb.STT_FUNC, "shndx": shndx,
+                          "value": value, "size": size}
+                with self.assertRaises(ValueError):
+                    sb.compiled_functions(self.unit(), ([], [symbol]))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -94,12 +94,17 @@ class CompilerReporting(unittest.TestCase):
                               "compiler": family, "profile": family, "flags": [], "dependencies": {},
                               "sections": [{"section": ".text", "placement": ".init", "kind": "code",
                                             "start": 0x80003100 + index * 4,
-                                            "end": 0x80003104 + index * 4, "compiled": 4}]})
+                                            "end": 0x80003104 + index * 4, "compiled": 4, "index": 1}]})
             with patch.object(source_build, "ROOT", root):
-                result = source_build.measure(target, sections, units, b"{}", binary, True, {})
+                objects = {unit["source"]: ([], [{"name": f"Unit{index}", "type": source_build.STT_FUNC,
+                                                "shndx": 1, "value": 0, "size": 4}])
+                           for index, unit in enumerate(units)}
+                result = source_build.measure(target, sections, units, b"{}", binary, True, {}, objects)
             self.assertEqual(result["compilers"], {"prodg": "3.9.3", "mwcc": "GC/1.2.5n"})
             self.assertEqual([unit["compiler"] for unit in result["units"]], [
                 {"family": "prodg", "version": "3.9.3"}, {"family": "mwcc", "version": "GC/1.2.5n"}])
+            self.assertEqual(result["units"][0]["functions"],
+                             [{"symbol": "Unit0", "address": "0x80003100", "size": 4}])
             self.assertNotIn("compiler", result)
 
 
