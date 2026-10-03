@@ -3414,6 +3414,25 @@
           "end": "0x80363180"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8017FA78.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8017FA78-0x8017FB90 (src/game/cu_8017FA78.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8017FA78",
+          "end": "0x8017FB90"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB518",
+          "end": "0x803EB524"
+        }
+      ]
     }
   ]
 }
