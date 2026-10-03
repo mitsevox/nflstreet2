@@ -3,7 +3,6 @@
 
 extern "C" {
 extern char lbl_80306B34[];
-extern char lbl_80306C64[];
 extern char lbl_803068B4[];
 }
 
@@ -23,7 +22,7 @@ void *Class_803067B0::fn_80032348(int index)
 {
     switch (index) {
     case 0:
-        return lbl_80306C64;
+        return &gSystemGroup;
     case 1:
         return lbl_803068B4;
     case 2:

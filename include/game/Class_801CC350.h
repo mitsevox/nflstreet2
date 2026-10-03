@@ -42,6 +42,17 @@ public:
     virtual const char *GetName();
 };
 
+class SystemGroup : public Class_801CC350 {
+public:
+    virtual void fn_800324E4();
+    virtual int fn_800324E8();
+    virtual Record_802CCBAC *fn_800324BC();
+    virtual Record_803EA3A8 *fn_800324C8();
+    virtual ModuleDependency *fn_800324D0(int id);
+    virtual const char *GetName();
+};
+
 extern DebugGroup gDebugGroup;
+extern SystemGroup gSystemGroup;
 
 #endif

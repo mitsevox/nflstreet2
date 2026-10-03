@@ -80,5 +80,9 @@ extern GRender gGRender;
 extern Mat gMat;
 extern Obj gObj;
 extern Res gRes;
+extern Font gFont;
+extern Snd gSnd;
+extern Tex gTex;
+extern Vec gVec;
 
 #endif
