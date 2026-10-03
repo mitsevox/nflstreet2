@@ -30,9 +30,9 @@ int fn_8007A510(Object_8007A334 *pObject);
 int fn_8007A600(Object_8007A334 *pObject, int a);
 int fn_8007A7F4(Object_8007A334 *pObject, int a, int b, int c, int *pResult);
 int fn_8007A894(Object_8007A334 *pObject, int a, int b, int c, int *pResult);
-int fn_8007A98C(Object_8007A334 *pObject, int a);
+int fn_8007A98C(void *pObject, int a);
 void fn_8007AA3C(Object_8007A334 *pObject, int a, int b, int c);
-void fn_8007ABA4(Object_8007A334 *pObject, int a, int b);
+int fn_8007ABA4(void *pObject, int a, int b);
 }
 
 #endif
