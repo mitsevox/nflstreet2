@@ -99,8 +99,8 @@ struct Target_8013825C {
 };
 
 struct Mode_8013D1C0 {
-    void (*mInit)(Camera_8013D1C0 *pCamera);
-    void (*mExit)(Camera_8013D1C0 *pCamera);
+    void (*mUnknown00)(Camera_8013D1C0 *pCamera);
+    void (*mUnknown04)(Camera_8013D1C0 *pCamera);
     int mUnknown08;
 };
 
