@@ -11,7 +11,6 @@ struct FMCAPPORTValues {
     float mValues[53];
 };
 
-/* One queued request, replaced in place when its id is queued again. */
 struct FMCAPPORTEntry {
     int mId;
     int mUnknown4;
@@ -44,7 +43,7 @@ struct Object_8008A9F8 {
     int mUnknown44;
     int mUnknown48;
     FMCAPPORTValues mValues52;
-    FMCAPPORTText mText264;
+    char mUnknown264[25];
     FMCAPPORTText mText289;
     FMCAPPORTText mText314;
     int mUnknown340[6];
@@ -119,7 +118,7 @@ public:
     void Method_8008C870();
 
 private:
-    FMCAPPORTStatePtr mState;
+    FMCAPPORTStatePtr mpState;
 };
 
 extern FMCAPPORT gFMCAPPORT;
