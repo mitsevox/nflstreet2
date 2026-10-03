@@ -51,6 +51,10 @@ struct ModuleDependency {
 
 DECLARE_MODULE(AnmsCelebration);
 DECLARE_MODULE(Celebration);
+DECLARE_MODULE(FEPlyBk);
+DECLARE_MODULE(FEPlyr);
+DECLARE_MODULE(FESnd);
+DECLARE_MODULE(FMMainFEInit);
 DECLARE_MODULE(Font);
 DECLARE_MODULE(Mat);
 DECLARE_MODULE(Obj);
@@ -71,9 +75,11 @@ DECLARE_MODULE(MemAudit);
 DECLARE_MODULE(ScrmRule);
 DECLARE_MODULE(UIS);
 DECLARE_MODULE(Rumble);
+DECLARE_MODULE(StatGen);
 DECLARE_MODULE(Timg);
 DECLARE_MODULE(LoadingFE);
 DECLARE_MODULE(LoadingFEToInGame);
+DECLARE_MODULE(UIListener);
 
 extern AnmsCelebration gAnmsCelebration;
 extern Celebration gCelebration;
@@ -85,5 +91,7 @@ extern GRender gGRender;
 extern Mat gMat;
 extern Obj gObj;
 extern Res gRes;
+
+extern Snd gSnd;
 
 #endif
