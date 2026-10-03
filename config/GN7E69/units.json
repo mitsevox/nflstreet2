@@ -307,6 +307,14 @@
       "address": "0x801CC6FC",
       "evidence": "evidence.tsv external row for 0x801CC6FC (fn_801CC6FC__14Class_801CC350); descriptive name."
     },
+    "__14Class_801CBC50": {
+      "address": "0x801CBC50",
+      "evidence": "evidence.tsv external row for 0x801CBC50 (__14Class_801CBC50); descriptive name."
+    },
+    "_._14Class_801CBC50": {
+      "address": "0x801CBC9C",
+      "evidence": "evidence.tsv external row for 0x801CBC9C (_._14Class_801CBC50); descriptive name."
+    },
     "__pure_virtual": {
       "address": "0x8025F088",
       "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
@@ -1503,6 +1511,43 @@
           "placement": ".data2",
           "start": "0x80289B98",
           "end": "0x80289B9C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80032340.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80032340-0x800324B0 (src/game/cu_80032340.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80032340",
+          "end": "0x800324B0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028AC40",
+          "end": "0x8028AC70"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803067B0",
+          "end": "0x80306890"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A54",
+          "end": "0x80289A58"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289B94",
+          "end": "0x80289B98"
         }
       ]
     },
