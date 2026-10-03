@@ -3414,6 +3414,25 @@
           "end": "0x80363180"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80080F20.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80080F20-0x80080FD4 (src/game/cu_80080F20.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80080F20",
+          "end": "0x80080FD4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D69E0",
+          "end": "0x802D69F0"
+        }
+      ]
     }
   ]
 }
