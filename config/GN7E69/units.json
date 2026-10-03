@@ -291,6 +291,10 @@
       "address": "0x8008B2E8",
       "evidence": "evidence.tsv external row for 0x8008B2E8 (_._14Class_8008B284); descriptive name."
     },
+    "__14Class_801B8D9C": {
+      "address": "0x801B8D9C",
+      "evidence": "evidence.tsv external row for 0x801B8D9C (__14Class_801B8D9C); descriptive name."
+    },
     "__pure_virtual": {
       "address": "0x8025F088",
       "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
@@ -1579,6 +1583,31 @@
           "placement": ".data2",
           "start": "0x80289B90",
           "end": "0x80289B94"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801AA24C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801AA24C-0x801AA2FC (src/game/cu_801AA24C.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AA24C",
+          "end": "0x801AA2FC"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECC54",
+          "end": "0x803ECCA4"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B18",
+          "end": "0x80289B1C"
         }
       ]
     },
