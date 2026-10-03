@@ -61,6 +61,7 @@ DECLARE_MODULE(Debug);
 DECLARE_MODULE(Snd);
 DECLARE_MODULE(Sys);
 DECLARE_MODULE(GLIB);
+DECLARE_MODULE(FileIO);
 DECLARE_MODULE(Rumble);
 DECLARE_MODULE(Timg);
 DECLARE_MODULE(LoadingFE);
@@ -68,6 +69,8 @@ DECLARE_MODULE(LoadingFEToInGame);
 
 extern AnmsCelebration gAnmsCelebration;
 extern Celebration gCelebration;
+extern FileIO gFileIO;
+extern Vpt gVpt;
 extern GLIB gGLIB;
 extern Sys gSys;
 extern GRender gGRender;
