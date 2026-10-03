@@ -1,15 +1,12 @@
-struct Args_800625DC {
+union Word_80062714 {
     int *mpOut;
-};
-
-struct Args_800626A4 {
-    int mIndex;
-    int *mpOut;
-    int *mpFlag;
-};
-
-struct Args_80062714 {
     int mValue;
+};
+
+struct Block_80062714 {
+    Word_80062714 mUnknown0;
+    int *mpUnknown4;
+    int *mpUnknown8;
 };
 
 extern "C" {
@@ -63,18 +60,20 @@ int fn_8006270C(void)
     return lbl_803EC800;
 }
 
-int fn_80062714(unsigned int id, void *pArgs, int unused, int *pResult)
+int fn_80062714(unsigned int id, Block_80062714 *pBlock, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_800625DC(((Args_800625DC *)pArgs)->mpOut);
+        fn_800625DC(pBlock->mUnknown0.mpOut);
         lbl_803EC800 = -1;
         break;
+    case 0x80000002:
+        break;
     case 0x80000003:
-        fn_800626A4(((Args_800626A4 *)pArgs)->mIndex, ((Args_800626A4 *)pArgs)->mpOut, ((Args_800626A4 *)pArgs)->mpFlag);
+        fn_800626A4(pBlock->mUnknown0.mValue, pBlock->mpUnknown4, pBlock->mpUnknown8);
         break;
     case 0x80000004:
-        lbl_803EC800 = ((Args_80062714 *)pArgs)->mValue;
+        lbl_803EC800 = pBlock->mUnknown0.mValue;
         break;
     case 0x80000005:
         if (fn_8018F3D8(fn_80186B38(fn_8022F4BC())) == -1) {
@@ -83,10 +82,9 @@ int fn_80062714(unsigned int id, void *pArgs, int unused, int *pResult)
         } else {
             *pResult = 0;
         }
+        return 0;
     default:
         return 0;
-    case 0x80000002:
-        break;
     }
     return 1;
 }
