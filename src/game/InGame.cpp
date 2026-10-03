@@ -1,5 +1,6 @@
 #include "game/Class_801CBC50.h"
 #include "game/InGame.h"
+#include "game/TimeScale.h"
 #include "game/ModuleGroup_80033A5C.h"
 
 extern "C" {
@@ -18,8 +19,6 @@ void fn_80026DD4(int a);
 void fn_8002728C(int (*pCallback)());
 char *fn_8002739C(void);
 int fn_800273A4(void);
-void fn_80028CF4(void);
-void fn_80028D40(void);
 void fn_8002B598(void);
 void fn_8002CBB0(void *p, int a, float c, int b);
 void fn_8002CF34(void *p);
@@ -359,7 +358,7 @@ unsigned char InGame::fn_8002854C()
         sUnknown803EA2FC++;
     }
     fn_80194E04();
-    fn_80028D40();
+    TimeScaleUpdate();
     if (sUnknown803EC5FC == 0) {
         sUnknown803EC5F8++;
         fn_80237830(1);
@@ -406,7 +405,7 @@ unsigned char InGame::fn_8002854C()
 
 int InGame::Shutdown()
 {
-    fn_80028CF4();
+    TimeScaleReset();
     fn_800A8EB8();
     if (sUnknown803EA2F8) {
         sUnknown803EA2FC = 0;

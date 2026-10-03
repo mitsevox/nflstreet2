@@ -1383,6 +1383,31 @@
       ]
     },
     {
+      "source": "src/game/TimeScale.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80028CF4-0x80028E70 (src/game/TimeScale.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80028CF4",
+          "end": "0x80028E70"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028A1E8",
+          "end": "0x8028A200"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA308",
+          "end": "0x803EA314"
+        }
+      ]
+    },
+    {
       "source": "src/game/GameState.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80028E70-0x80029224 (src/game/GameState.cpp) and its data rows.",
