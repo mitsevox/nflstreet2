@@ -6,10 +6,10 @@ class ModuleNode {
 public:
     ModuleNode();
     virtual ~ModuleNode();
-    virtual void Virtual_80025F24() = 0;
-    virtual int Virtual_80025F28(void *pArg) = 0;
-    virtual void Virtual_80025F5C() = 0;
-    virtual void Virtual_80025F60() = 0;
+    virtual void fn_80025F24() = 0;
+    virtual void fn_80025F28(void *pArg) = 0;
+    virtual void fn_80025F5C() = 0;
+    virtual void fn_80025F60() = 0;
     virtual int Init() = 0;
     virtual int Shutdown() = 0;
     virtual struct ModuleDependency *GetDependencies() = 0;
@@ -24,12 +24,11 @@ private:
 
 class Module : public ModuleNode {
 public:
-    Module() {}
     virtual ~Module() {}
-    virtual void Virtual_80025F24();
-    virtual int Virtual_80025F28(void *pArg);
-    virtual void Virtual_80025F5C();
-    virtual void Virtual_80025F60();
+    virtual void fn_80025F24();
+    virtual void fn_80025F28(void *pArg);
+    virtual void fn_80025F5C();
+    virtual void fn_80025F60();
 };
 
 /* A module table entry holding a target pointer. */
@@ -50,6 +49,7 @@ struct ModuleDependency {
 
 DECLARE_MODULE(AnmsCelebration);
 DECLARE_MODULE(Celebration);
+DECLARE_MODULE(Font);
 DECLARE_MODULE(Rumble);
 DECLARE_MODULE(Timg);
 DECLARE_MODULE(LoadingFE);
