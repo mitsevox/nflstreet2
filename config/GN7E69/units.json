@@ -453,6 +453,55 @@
       ]
     },
     {
+      "source": "src/game/FEDLL.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80033868-0x80033A5C (src/game/FEDLL.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80033868",
+          "end": "0x80033A5C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028AF28",
+          "end": "0x8028AF90"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA3C0",
+          "end": "0x803EA3C4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80306D18",
+          "end": "0x80306D28"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC688",
+          "end": "0x803EC690"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A6C",
+          "end": "0x80289A70"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BAC",
+          "end": "0x80289BB0"
+        }
+      ]
+    },
+    {
       "source": "src/game/AnmsCelebration.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8008B974-0x8008BB30 (src/game/AnmsCelebration.cpp) and its data rows.",
