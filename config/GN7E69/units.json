@@ -2266,6 +2266,31 @@
           "end": "0x803ED54C"
         }
       ]
+    },
+    {
+      "source": "src/game/CardStream.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80023E08-0x800241E0 (src/game/CardStream.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80023E08",
+          "end": "0x800241E0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F46C4",
+          "end": "0x802F46E0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBAD8",
+          "end": "0x803EBADC"
+        }
+      ]
     }
   ]
 }
