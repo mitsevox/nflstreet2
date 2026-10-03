@@ -51,6 +51,7 @@ struct ModuleDependency {
 DECLARE_MODULE(AnmsCelebration);
 DECLARE_MODULE(Celebration);
 DECLARE_MODULE(Rumble);
+DECLARE_MODULE(Timg);
 
 extern AnmsCelebration gAnmsCelebration;
 extern Celebration gCelebration;
