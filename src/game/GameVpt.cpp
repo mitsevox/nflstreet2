@@ -34,8 +34,8 @@ int GameVpt::Init()
     desc.mUnknown0 = 4;
     desc.mUnknown2 = 0;
     desc.mUnknown3 = 2;
-    desc.mUnknown4 = 0;
-    desc.mUnknown8 = 0;
+    desc.mUnknown4[0] = 0;
+    desc.mUnknown4[1] = 0;
     if (fn_8007F828(6) == 1 || fn_801CEB4C() == 1) {
         desc.mUnknown16 = fn_801CEC74();
         desc.mUnknown18 = fn_801CEC7C();
