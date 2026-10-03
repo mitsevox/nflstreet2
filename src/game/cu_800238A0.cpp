@@ -1,0 +1,131 @@
+#include "game/Object_8007A334.h"
+#include "game/QueryStatus.h"
+
+extern "C" {
+int fn_8022F358(int index);
+int fn_8022F3D4(int a);
+int fn_801FCE10(int a, const char *pQuery, ...);
+}
+
+/* Eight-byte slot written either as a long long or as an int. */
+union Union_80023BBC {
+    Union_80023BBC() {}
+    Union_80023BBC(long long value) : mLong(value) {}
+
+    int mInt;
+    long long mLong;
+};
+
+/* Fifth argument of fn_8007A334; it is stored at +28 of the cursor. */
+struct Object_80023BBC {
+    Object_80023BBC(int a, long long b)
+    {
+        mUnknown32 = 0x10003;
+        mUnknown0 = a;
+        mUnknown8 = b;
+        mUnknown16 = 3;
+    }
+
+    int mUnknown0;
+    Union_80023BBC mUnknown8;
+    int mUnknown16;
+    Union_80023BBC mUnknown24;
+    int mUnknown32;
+};
+
+static int lbl_802F4684[8] = { 0x4C43444C, 0x494C4344, 0, 0, -1, -1, 3, 0 };
+static int lbl_802F46A4[8] = { 0x4C43444C, 0x494C4344, 0, 0, -1, -1, 3, 0 };
+
+extern "C" {
+int fn_800238A0(int index)
+{
+    int count;
+    int result = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'LCDL' where 'LLCD' = 0\n",
+                             fn_8022F3D4(fn_8022F358(index)), &count);
+
+    if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
+        return count;
+    }
+    return 0;
+}
+
+int fn_80023914(int index)
+{
+    int count;
+    int result = fn_801FCE10(0, "use \x8c select count(*) into \x85 from 'LCDL' where 'WNRG' != 0\n",
+                             fn_8022F3D4(fn_8022F358(index)), &count);
+
+    if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
+        return count;
+    }
+    return 0;
+}
+
+void fn_80023988(int a, int b, int c)
+{
+    Object_8007A334 cursor;
+
+    fn_8007A334(&cursor, 0x4C414344, 0x494C4344, 0, 0, 0x54415453);
+    fn_8007A894(&cursor, 0x494C4344, a, 0, 0);
+    fn_8007AA3C(&cursor, 0x4E4C4344, b, c);
+    fn_8007A3C4(&cursor);
+}
+
+unsigned char fn_80023A3C(int index, int a)
+{
+    Object_8007A334 cursor;
+    unsigned char result = 0;
+
+    fn_8007A334(&cursor, 0x4C43444C, 0x494C4344, 0, 0, fn_8022F3D4(fn_8022F358(index)));
+    if (fn_8007A894(&cursor, 0x494C4344, a, 0, 0)) {
+        result = fn_8007A98C(&cursor, 0x574E5247) != 0;
+    }
+    fn_8007A3C4(&cursor);
+    return result;
+}
+
+void fn_80023B08(int index, int a)
+{
+    Object_8007A334 cursor;
+
+    fn_8007A334(&cursor, 0x4C43444C, 0x494C4344, 0, 0, fn_8022F3D4(fn_8022F358(index)));
+    if (fn_8007A894(&cursor, 0x494C4344, a, 0, 0)) {
+        fn_8007ABA4(&cursor, 0x574E5247, 0);
+    }
+    fn_8007A3C4(&cursor);
+}
+
+int fn_80023BBC(int index, int a)
+{
+    Object_8007A334 cursor;
+    int value;
+    int found;
+    int handle = fn_8022F3D4(fn_8022F358(index));
+    Object_80023BBC arg(6, 0x4C43444C4C4C4344LL);
+
+    arg.mUnknown24.mInt = 0;
+    fn_8007A334(&cursor, 0x4C43444C, 0x494C4344, lbl_802F4684, &arg, handle);
+    found = fn_8007A7F4(&cursor, 0x494C4344, a, 0, &value);
+    fn_8007A3C4(&cursor);
+    if (found) {
+        return value;
+    }
+    return -1;
+}
+
+int fn_80023CA4(int index, int a)
+{
+    int result = 0x1F;
+    Object_8007A334 cursor;
+    int handle = fn_8022F3D4(fn_8022F358(index));
+    Object_80023BBC arg(6, 0x4C43444C4C4C4344LL);
+
+    arg.mUnknown24.mInt = 0;
+    fn_8007A334(&cursor, 0x4C43444C, 0x494C4344, lbl_802F46A4, &arg, handle);
+    if (fn_8007A600(&cursor, a)) {
+        result = fn_8007A98C(&cursor, 0x494C4344);
+    }
+    fn_8007A3C4(&cursor);
+    return result;
+}
+}
