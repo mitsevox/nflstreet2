@@ -218,6 +218,53 @@ class SourceReportTests(ProgressBase):
         with self.assertRaisesRegex(ValueError, "invalid compiler function coverage"):
             progress.report(self.binary, "a" * 40, self.report_path)
 
+    def write_partial(self):
+        """A 12-byte code range whose middle function stays original code."""
+        self.write_source()
+        manifest_path = self.root / "config/GN7E69/units.json"
+        manifest = json.loads(manifest_path.read_text())
+        manifest["units"][0]["sections"][0]["end"] = "0x80003110"
+        manifest["units"][0]["original_code"] = {
+            "ranges": [{"start": "0x80003108", "end": "0x8000310C", "symbol": "fn_80003108"}], "evidence": "x"}
+        manifest_path.write_text(json.dumps(manifest))
+        self.source_report["manifest_sha256"] = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+        unit = self.source_report["units"][0]
+        unit["status"] = "partial"
+        unit["sections"][0].update(end="0x80003110", linked=8, matched=8,
+                                   original=[{"start": "0x80003108", "end": "0x8000310C", "symbol": "fn_80003108"}])
+        unit["functions"] = [{"symbol": "fn_80003104", "address": "0x80003104", "size": 4},
+                             {"symbol": "fn_8000310C", "address": "0x8000310C", "size": 4}]
+        self.save()
+        return unit
+
+    def test_partial_unit_credits_only_source_linked_code(self):
+        self.write_partial()
+        data = progress.report(self.binary, "a" * 40, self.report_path)
+        self.assertEqual(data["measures"]["code"], {"total": 16, "linked": 8, "matched": 8})
+        files = [f for f in data["files"] if f.get("source") == "src/unit.c" and f["kind"] == "code"]
+        self.assertEqual([(f["size"], f["linked"], f["matched"], f["mapped_extents"]) for f in files],
+                         [(12, 8, 8, [{"start": "0x80003104", "end": "0x80003110"}])])
+        self.assertFalse(files[0]["complete"])
+
+    def test_partial_unit_report_must_match_the_manifest(self):
+        cases = [
+            (lambda unit: unit["sections"][0].pop("original"), "original code differs"),
+            (lambda unit: unit["sections"][0]["original"][0].update(end="0x80003110"), "original code differs"),
+            (lambda unit: unit.update(status="matched"), "not verified"),
+            (lambda unit: unit["sections"][0].update(linked=12, matched=12), "unverified range"),
+            (lambda unit: unit["functions"].append(
+                {"symbol": "fn_80003108", "address": "0x80003108", "size": 4}), "invalid compiler function"),
+        ]
+        for change, message in cases:
+            with self.subTest(message=message):
+                unit = self.write_partial()
+                change(unit)
+                if message == "unverified range":
+                    self.source_report["totals"]["code"] = {"linked": 12, "matched": 12}
+                self.save()
+                with self.assertRaisesRegex(ValueError, message):
+                    progress.report(self.binary, "a" * 40, self.report_path)
+
     def test_overlapping_ranges_are_rejected(self):
         self.write_source()
         manifest_path = self.root / "config/GN7E69/units.json"
@@ -301,6 +348,32 @@ class FunctionInventoryTests(ProgressBase):
         path = self.root / "config/GN7E69/evidence.tsv"
         path.write_text("\n".join(line for line in path.read_text().splitlines()
                                    if not line.startswith(f"function\t{start}\t")) + "\n")
+
+    def test_original_code_function_gets_no_credit_in_either_export(self):
+        self.write_inventory()
+        SourceReportTests.write_partial(self)
+        (self.analysis / "symbols.txt").write_text(
+            "fn_80003104 = .text:0x80003104; // type:function size:0x4\n"
+            "fn_80003108 = .text:0x80003108; // type:function size:0x4\n"
+            "fn_8000310C = .text:0x8000310C; // type:function size:0x4\n")
+        (self.root / "config/GN7E69/evidence.tsv").write_text(
+            "kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
+            "function\t0x80003108\t0x8000310C\tfn_80003108\ttarget\texact\texact\tfixture\n")
+        summary = json.loads((self.analysis / "summary.json").read_text())
+        summary.update(candidate_counts={"function": 3}, symbols_sha256=progress.digest(self.analysis / "symbols.txt"),
+                       inputs=progress.sdk_map.analysis_inputs(self.root))
+        (self.analysis / "summary.json").write_text(json.dumps(summary))
+        data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+        children = {c["function_address"]: (c["linked"], c["matched"])
+                    for f in data["files"] for c in f["children"] if "function_address" in c}
+        self.assertEqual(children, {"0x80003104": (4, 4), "0x80003108": (0, 0), "0x8000310C": (4, 4)})
+        self.assertEqual(data["functions"]["exact"], 0)
+        import decomp_report
+        unit = next(u for u in decomp_report.objdiff_report(data)["units"] if u["name"] == "src/unit.c")
+        self.assertEqual({f["name"]: f["fuzzy_match_percent"] for f in unit["functions"]},
+                         {"fn_80003104": 100.0, "fn_80003108": 0.0, "fn_8000310C": 100.0})
+        self.assertEqual((unit["measures"]["total_code"], unit["measures"]["matched_code"]), ("12", "8"))
+        self.assertFalse(unit["metadata"]["complete"])
 
     def test_data_after_code_cannot_cover_a_function_candidate(self):
         # Review of PR #78: instruction words compiled as data after code claimed matched code.

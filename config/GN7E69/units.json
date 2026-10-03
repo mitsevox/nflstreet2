@@ -3158,6 +3158,47 @@
           "end": "0x803EBFA8"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801890F0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801890F0-0x8018A85C (src/game/cu_801890F0.cpp) and its data rows. Partial unit: see original_code.",
+      "original_code": {
+        "ranges": [
+          {
+            "start": "0x80189F68",
+            "end": "0x8018A274",
+            "symbol": "fn_80189F68"
+          }
+        ],
+        "evidence": "Unfinished: evidence.tsv source-form row 0x80189F68-0x8018A274 (fn_80189F68). The source definition compiles to the target except for the register holding the zero stored to lbl_803EB680 (r0 for the target's r4 at 0x80189F90 and 0x80189F98); it stays in the source so the unit's other code, constants and data compile to their original layout. Its compiled code is not linked or credited; the original instructions remain linked."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801890F0",
+          "end": "0x8018A85C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A8340",
+          "end": "0x802A8400"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB640",
+          "end": "0x803EB6A4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80362F84",
+          "end": "0x80363180"
+        }
+      ]
     }
   ]
 }

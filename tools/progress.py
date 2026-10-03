@@ -26,6 +26,22 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def credited(section):
+    """Source-linked extents of a measured section: its range less any original-linked code."""
+    start, end = int(section["start"], 16), int(section["end"], 16)
+    pieces, cursor = [], start
+    for item in sorted(section.get("original", []), key=lambda item: int(item["start"], 16)):
+        left, right = int(item["start"], 16), int(item["end"], 16)
+        if not cursor <= left < right <= end:
+            raise ValueError("Original code falls outside its measured section or overlaps")
+        if cursor < left:
+            pieces.append((cursor, left))
+        cursor = right
+    if cursor < end:
+        pieces.append((cursor, end))
+    return pieces
+
+
 def source_ranges(target, source_report):
     """Validate the source-build report against the current tree; return its matched ranges."""
     source = ROOT / "src"
@@ -66,17 +82,26 @@ def source_ranges(target, source_report):
             if not (ROOT / path).is_file() or digest(ROOT / path) != expected:
                 raise ValueError(f"Measured source-build report is stale for {path}")
             measured.add(path)
-        if unit.get("status") != "matched" or not unit["sections"]:
+        # A partial unit keeps configured functions linked from the original executable.
+        original = [(r["start"], r["end"], r["symbol"])
+                    for r in configured_unit.get("original_code", {}).get("ranges", [])]
+        reported = [(r["start"], r["end"], r["symbol"]) for s in unit["sections"] for r in s.get("original", [])]
+        if sorted(reported) != sorted(original) \
+                or any(s.get("original") and (s["kind"] != "code" or s.get("follows")) for s in unit["sections"]):
+            raise ValueError(f"Source unit {unit['source']} original code differs from the unit manifest")
+        if unit.get("status") != ("partial" if original else "matched") or not unit["sections"]:
             raise ValueError(f"Source unit {unit['source']} is not verified")
         for section in unit["sections"]:
             start, end = int(section["start"], 16), int(section["end"], 16)
             size = end - start
+            pieces = credited(section)
+            linked = sum(right - left for left, right in pieces)
             if section.get("status") != "matched" or section["kind"] not in totals or size <= 0 \
-                    or section["linked"] != size or section["matched"] != size:
+                    or not pieces or section["linked"] != linked or section["matched"] != linked:
                 raise ValueError(f"Source unit {unit['source']} has an unverified range")
-            totals[section["kind"]][0] += size
-            totals[section["kind"]][1] += size
-            ranges.append((section["kind"], start, end))
+            totals[section["kind"]][0] += linked
+            totals[section["kind"]][1] += linked
+            ranges.extend((section["kind"], left, right) for left, right in pieces)
     for kind, (linked, matched) in totals.items():
         if data["totals"][kind] != {"linked": linked, "matched": matched}:
             raise ValueError("Measured source-build totals are inconsistent")
@@ -99,8 +124,9 @@ def source_functions(source_report):
             raise ValueError(f"Source unit {unit['source']} lacks compiler function coverage")
         # Read-only data configured to follow its unit's code is credited to the code section
         # that contains it, but holds no compiled functions.
-        code = [(int(section["start"], 16), int(section["end"], 16))
-                for section in unit["sections"] if section["kind"] == "code" and not section.get("follows")]
+        # Original-linked functions are excluded: no compiled function may claim them.
+        code = [piece for section in unit["sections"] if section["kind"] == "code" and not section.get("follows")
+                for piece in credited(section)]
         seen = set()
         for row in rows:
             try:
@@ -269,8 +295,14 @@ def file_map(sections, source_report, functions, ownership=()):
         if cursor < right:
             partitions.append((cursor, right, None, None))
 
+        # A partial unit owns its whole range, but its original-linked code earns no credit.
+        credit = [piece for unit in units for extent in unit["sections"]
+                  if extent["kind"] == section["kind"]
+                  and left <= int(extent["start"], 16) < int(extent["end"], 16) <= right
+                  for piece in credited(extent)]
+
         def covered(start, end):
-            return sum(max(0, min(end, finish) - max(start, begin)) for begin, finish, _ in measured)
+            return sum(max(0, min(end, finish) - max(start, begin)) for begin, finish in credit)
         unmapped = {"name": "Unmapped / " + section["name"], "kind": section["kind"],
                     "auto_generated": True, "complete": False,
                     "size": 0, "linked": 0, "matched": 0, "children": []}

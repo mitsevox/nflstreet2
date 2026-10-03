@@ -19,6 +19,8 @@ For a `name` claim, `target` requires explicit target name evidence; behavior al
 
 Evidence must be usable by another contributor: identify target addresses and observations, or a reference's revision/hash and symbol or record. Include a tool version and signature identifier for signature claims. A local absolute path or an unexplained score is insufficient. Keep raw exports out of the table.
 
+A partial unit's function kept in its original bytes (`original_code` in `units.json`) needs an exact `function` row for its extent and a `source-form` row stating that it is unresolved and why; it receives no source credit.
+
 These records describe evidence, not matching progress or approval. Function and name rows supply public function labels; they do not rename executable symbols or alter build splits. Record descriptive method names and compiler-generated lifecycle roles as inferred, not recovered original symbols. The source build records compiler function symbols, and progress export rejects supported source functions without a corresponding name record. Changes to executable symbols and unit splits require corresponding evidence and the contribution review passes. Review findings, tested revisions, and the owner's acceptance remain in the PR.
 
 Bounded `unit` rows automatically feed both published project maps on every merge. They appear as candidate groupings, not recovered source files; overlapping claims remain unmapped and established SDK/source ownership takes precedence. Record data extents explicitly rather than relying on prose references. Mapping alone grants no linked or matched credit and does not change build splits. CI verifies that both exports contain the current mapping.

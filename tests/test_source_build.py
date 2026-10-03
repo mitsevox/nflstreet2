@@ -364,10 +364,157 @@ class ReadOnlyDataAfterCode(Fixture):
             self.plan(self.objects())
 
 
+def function_section(name, size=4):
+    return {"name": f".text.{name}", "type": sb.SHT_PROGBITS, "flags": sb.SHF_ALLOC | sb.SHF_EXECINSTR,
+            "size": size, "align": 4, "data": bytes(range(size))}
+
+
+def partial_object(relocate_into_original=False):
+    """Three function sections; .text.fn_80003114 is the original-code function. With
+    `relocate_into_original`, the first function refers to the second's symbol."""
+    sections = [function_section("fn_80003110"), function_section("fn_80003114"),
+                function_section("fn_80003118"), rodata(4)]
+    symbols = [{"name": name, "value": 0, "shndx": index + 1, "type": sb.STT_FUNC, "size": 4}
+               for index, name in enumerate(["fn_80003110", "fn_80003114", "fn_80003118"])]
+    symbols.append({"name": "fn_80003104", "value": 0, "shndx": 0})
+    # write_object symbols: null, file, one per section (5 with the relocation), then these.
+    first_global = 2 + len(sections) + 1
+    target = first_global + (1 if relocate_into_original else 2)
+    relocation = struct.pack(">IIi", 0, target << 8 | 10, 0)
+    sections.append({"name": ".rela.text.fn_80003110", "type": sb.SHT_RELA, "flags": 0, "size": 12,
+                     "align": 4, "data": relocation, "link": len(sections) + 2, "info": 1, "entsize": 12})
+    with tempfile.TemporaryDirectory() as temporary:
+        path = Path(temporary) / "unit.o"
+        sb.write_object(path, sections, symbols)
+        return path.read_bytes()
+
+
+class PartialUnit(Fixture):
+    """Functions kept as original code inside a partial unit."""
+
+    def setUp(self):
+        super().setUp()
+        unit = self.manifest["units"][0]
+        unit["sections"][0]["end"] = "0x8000311C"
+        unit["original_code"] = {"ranges": [{"start": "0x80003114", "end": "0x80003118",
+                                             "symbol": "fn_80003114"}], "evidence": "unresolved"}
+
+    def objects(self, **options):
+        return {"src/unit.c": sb.read_elf(partial_object(**options))}
+
+    def test_manifest_validation(self):
+        units, _, _ = self.load()
+        self.assertEqual([(r["start"], r["end"], r["symbol"]) for r in units[0]["original_code"]],
+                         [(0x80003114, 0x80003118, "fn_80003114")])
+        cases = [({"ranges": []}, "needs ranges and evidence"),
+                 ({"evidence": " "}, "needs ranges and evidence"),
+                 ({"ranges": [{"start": "0x80003114", "end": "0x80003118"}]}, "needs start, end and symbol"),
+                 ({"ranges": [{"start": "0x80003114", "end": "0x80003118", "symbol": "fn_80003110"}]},
+                  "does not start at 0x80003114"),
+                 ({"ranges": [{"start": "0x80003110", "end": "0x8000311C", "symbol": "Whole"}]}, "word-aligned part"),
+                 ({"ranges": [{"start": "0x80003116", "end": "0x8000311A", "symbol": "Odd"}]}, "word-aligned part"),
+                 ({"ranges": [{"start": "0x80004008", "end": "0x8000400C", "symbol": "Data"}]}, "word-aligned part"),
+                 ({"ranges": [{"start": "0x80003110", "end": "0x80003118", "symbol": "A"},
+                              {"start": "0x80003114", "end": "0x80003118", "symbol": "B"}]}, "overlap")]
+        for change, message in cases:
+            manifest = copy.deepcopy(self.manifest)
+            manifest["units"][0]["original_code"].update(change)
+            with self.subTest(change=change), self.assertRaisesRegex(ValueError, message):
+                self.load(manifest)
+        manifest = copy.deepcopy(self.manifest)
+        manifest["profiles"]["library"]["compiler"] = "mwcc"
+        manifest["profiles"]["library"]["flags"] = ["-O4,p"]
+        with self.assertRaisesRegex(ValueError, "ProDG profile"):
+            self.load(manifest)
+
+    def test_original_code_must_be_an_exact_evidence_function(self):
+        units, _, _ = self.load()
+        header = "kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "config/GN7E69").mkdir(parents=True)
+            for edges, ok in (("exact\texact", True), ("exact\tprovisional", False)):
+                (root / "config/GN7E69/evidence.tsv").write_text(
+                    header + f"function\t0x80003114\t0x80003118\tfn_80003114\ttarget\t{edges}\tx\n")
+                with self.subTest(edges=edges):
+                    if ok:
+                        sb.check_original_code(units, root)
+                    else:
+                        with self.assertRaisesRegex(ValueError, "exact edges"):
+                            sb.check_original_code(units, root)
+
+    def test_function_sections_surround_the_original_bytes(self):
+        units, externals, _ = self.load()
+        objects = self.objects()
+        pieces, defined, resolved = sb.plan(self.sections, units, objects, externals)
+        layout = [(hex(p["start"]), hex(p["end"]), p.get("unit"), p.get("names")) for p in pieces[".init"]]
+        self.assertEqual(layout, [("0x80003100", "0x80003110", None, None),
+                                  ("0x80003110", "0x80003114", "src/unit.c", [".text.fn_80003110"]),
+                                  ("0x80003114", "0x80003118", None, None),
+                                  ("0x80003118", "0x8000311c", "src/unit.c", [".text.fn_80003118"]),
+                                  ("0x8000311c", "0x80003140", None, None)])
+        self.assertEqual(defined, {"fn_80003110": (0x80003110, "src/unit.c"),
+                                   "fn_80003118": (0x80003118, "src/unit.c")})
+        self.assertEqual(list(units[0]["excluded"]), [2])
+        functions = sb.compiled_functions(units[0], objects["src/unit.c"])
+        self.assertEqual([f["address"] for f in functions], ["0x80003110", "0x80003118"])
+        self.assertEqual(units[0]["sections"][0]["compiled"], 8)
+        self.assertEqual(resolved, {"fn_80003104": 0x80003104})
+
+    def test_layout_must_reach_the_original_range_and_configured_end(self):
+        manifest = copy.deepcopy(self.manifest)
+        manifest["units"][0]["sections"][0]["end"] = "0x80003120"
+        with self.assertRaisesRegex(ValueError, "end at 0x8000311C"):
+            self.plan(self.objects(), manifest)
+        manifest = copy.deepcopy(self.manifest)
+        manifest["units"][0]["sections"][0].update(start="0x8000310C", end="0x80003118")
+        manifest["units"][0]["original_code"]["ranges"][0].update(start="0x80003110", end="0x80003114",
+                                                                  symbol="Other")
+        with self.assertRaisesRegex(ValueError, "fn_80003114 overlaps original_code Other"):
+            self.plan(self.objects(), manifest)
+        manifest = copy.deepcopy(self.manifest)
+        manifest["units"][0]["sections"][0].update(start="0x8000310C", end="0x80003118")
+        with self.assertRaisesRegex(ValueError, "fn_80003114 must be the only function of its section and "
+                                                "start at 0x80003110"):
+            self.plan(self.objects(), manifest)
+        manifest = copy.deepcopy(self.manifest)
+        manifest["units"][0]["original_code"]["ranges"][0]["symbol"] = "Missing"
+        with self.assertRaisesRegex(ValueError, "fn_80003114 overlaps original_code Missing"):
+            self.plan(self.objects(), manifest)
+
+    def test_linked_code_cannot_refer_to_the_excluded_function(self):
+        with self.assertRaisesRegex(ValueError, "refers to fn_80003114 of original_code fn_80003114"):
+            self.plan(self.objects(relocate_into_original=True))
+
+    def test_plain_text_is_rejected_for_a_partial_unit(self):
+        with self.assertRaisesRegex(ValueError, "must be compiled as function sections"):
+            self.plan({"src/unit.c": compiled([text(12), rodata(4)], [])})
+
+    def test_discarded_copy_keeps_everything_else(self):
+        native = partial_object()
+        sections, _ = sb.read_elf(native)
+        excluded = {s["index"] for s in sections if s["name"] == ".text.fn_80003114"}
+        derived = sb.discard_sections(native, excluded)
+        sb.check_discarded(native, derived, excluded)
+        kept, symbols = sb.read_elf(derived)
+        self.assertNotIn(".text.fn_80003114", [s["name"] for s in kept])
+        self.assertNotIn("fn_80003114", [s["name"] for s in symbols])
+        relocation = next(s for s in kept if s["type"] == sb.SHT_RELA)
+        info = struct.unpack_from(">I", relocation["data"], 4)[0]
+        self.assertEqual(symbols[(info >> 8) - 1]["name"], "fn_80003118")
+        self.assertEqual(kept[relocation["info"]]["name"], ".text.fn_80003110")
+        # Any other difference is rejected.
+        with self.assertRaisesRegex(ValueError, "beyond the discarded sections"):
+            sb.check_discarded(native, sb.discard_sections(native, excluded | {4}), excluded)
+        with self.assertRaisesRegex(ValueError, "discarded symbol"):
+            sb.discard_sections(partial_object(relocate_into_original=True), excluded)
+
+
 class Build(unittest.TestCase):
     """Drive the complete build with mocked tool stages."""
 
-    def run_build(self, output_bytes, link=True, units=True, mutate_native=False, extra=(), evidence=None):
+    def run_build(self, output_bytes, link=True, units=True, mutate_native=False, extra=(), evidence=None,
+                  partial=False):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         root = Path(temporary.name)
@@ -387,6 +534,12 @@ class Build(unittest.TestCase):
                                "sections": [{"section": ".text", "placement": ".init",
                                              "start": "0x80003110", "end": "0x80003118"}, *extra]}]
                     if units else []}
+        if partial:
+            manifest["units"][0]["sections"][0]["end"] = "0x8000311C"
+            manifest["units"][0]["original_code"] = {
+                "ranges": [{"start": "0x80003114", "end": "0x80003118", "symbol": "fn_80003114"}],
+                "evidence": "unresolved"}
+        self.commands = []
         manifest_path = root / "config/GN7E69/units.json"
         manifest_path.write_text(json.dumps(manifest))
         if evidence:
@@ -400,14 +553,20 @@ class Build(unittest.TestCase):
             if command[-1].startswith("@"):
                 import shlex
                 command = command[:2] + shlex.split(Path(command[-1][1:]).read_text())
+            self.commands.append(command)
             if "-c" in command:
                 obj = Path(command[command.index("-o") + 1])
-                sb.write_object(obj, [text(8)], [{"name": "Unit_Function", "value": 0, "shndx": 1}])
+                if partial:
+                    obj.write_bytes(partial_object())
+                else:
+                    sb.write_object(obj, [text(8)], [{"name": "Unit_Function", "value": 0, "shndx": 1}])
                 Path(command[command.index("--depfile") + 1]).write_text(
                     f"unit.o: {root / 'src/unit.c'}\n")
             elif "-T" in command and link:
+                defined = [("fn_80003110", 0x80003110), ("fn_80003118", 0x80003118)] if partial \
+                    else [("Unit_Function", 0x80003110)]
                 sb.write_object(Path(command[command.index("-o") + 1]), [text(4)],
-                                [{"name": "Unit_Function", "value": 0x80003110, "shndx": sb.SHN_ABS}])
+                                [{"name": name, "value": value, "shndx": sb.SHN_ABS} for name, value in defined])
                 if mutate_native:
                     native = next((build / "obj").glob("*.o"))
                     with native.open("ab") as output:
@@ -432,6 +591,34 @@ class Build(unittest.TestCase):
                                             "data": {"linked": 0, "matched": 0}})
         self.assertEqual(result["units"][0]["dependencies"], {"src/unit.c": result["units"][0]["source_sha256"]})
         self.assertEqual(json.loads(path.read_text()), result)
+
+    def test_partial_unit_links_original_code_without_credit(self):
+        header = "kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
+        function = "function\t0x80003114\t0x80003118\tfn_80003114\ttarget\texact\texact\tfixture\n"
+        rodata_range = {"section": ".rodata", "placement": ".data2", "start": "0x80004008", "end": "0x8000400C"}
+        result, path = self.run_build(lambda binary: binary, partial=True, extra=[rodata_range],
+                                      evidence=header + function)
+        compile_command = next(c for c in self.commands if "-c" in c)
+        self.assertIn("-ffunction-sections", compile_command)
+        link_inputs = [Path(a).name for a in next(c for c in self.commands if "-T" in c) if a.endswith(".o")]
+        self.assertIn("unit000_src_unit_c.linked.o", link_inputs)
+        self.assertNotIn("unit000_src_unit_c.o", link_inputs)
+        self.assertIn("orig_init_80003114.o", link_inputs)
+        script = (path.parent / "link.ld").read_text()
+        self.assertIn("*unit000_src_unit_c.linked.o(.text.fn_80003110) *orig_init_80003114.o(.init) "
+                      "*unit000_src_unit_c.linked.o(.text.fn_80003118)", script)
+        self.assertNotIn(".text.fn_80003114", script)
+        unit = result["units"][0]
+        self.assertEqual(unit["status"], "partial")
+        self.assertEqual(unit["flags"], ["-O2", "-ffunction-sections"])
+        self.assertEqual(unit["sections"][0]["original"],
+                         [{"start": "0x80003114", "end": "0x80003118", "symbol": "fn_80003114"}])
+        self.assertEqual((unit["sections"][0]["linked"], unit["sections"][0]["matched"]), (8, 8))
+        self.assertEqual([f["symbol"] for f in unit["functions"]], ["fn_80003110", "fn_80003118"])
+        self.assertEqual(result["totals"]["code"], {"linked": 8, "matched": 8})
+        # Without an exact function row the original range is refused.
+        with self.assertRaisesRegex(ValueError, "exact edges"):
+            self.run_build(lambda binary: binary, partial=True, extra=[rodata_range], evidence=header)
 
     def test_zero_units_still_verify_the_complete_target(self):
         result, _ = self.run_build(lambda binary: binary, units=False)

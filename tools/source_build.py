@@ -25,12 +25,14 @@ NEUTRAL = re.compile(r"(?:fn|lbl)_([0-9A-F]{8})")
 SAFE_PATH = re.compile(r"[A-Za-z0-9_./+-]+")
 LINKER_SYMBOLS = {"__start", "_SDA_BASE_", "_SDA2_BASE_"}
 LINK_TIMEOUT = 600
+# Added for units with original_code so their other functions link around the original bytes.
+FUNCTION_SECTIONS = "-ffunction-sections"
 # Build inputs the report is bound to; tools/progress.py rejects reports from other versions.
 TRUSTED_TOOLS = ("tools/source_build.py", "tools/prodg_cc.py", "tools/sdk_cc.py", "tools/setup_compiler.py",
                  "tools/baseline.py", "tools/compiler-tools.json", "tools/baseline-tools.json",
                  "config/GN7E69/baseline.json", "config/GN7E69/analysis.json")
 
-SHT_PROGBITS, SHT_SYMTAB, SHT_STRTAB, SHT_NOBITS = 1, 2, 3, 8
+SHT_PROGBITS, SHT_SYMTAB, SHT_STRTAB, SHT_RELA, SHT_NOBITS = 1, 2, 3, 4, 8
 SHF_WRITE, SHF_ALLOC, SHF_EXECINSTR = 1, 2, 4
 SHN_UNDEF, SHN_ABS, SHN_COMMON = 0, 0xFFF1, 0xFFF2
 STB_LOCAL, STB_GLOBAL = 0, 1
@@ -69,7 +71,7 @@ def read_elf(data):
     for index, header in enumerate(headers):
         header["index"] = index
         header["name"] = string(shstrndx, header["name"]) if index else ""
-        if header["type"] == SHT_PROGBITS:
+        if header["type"] in (SHT_PROGBITS, SHT_RELA):
             header["data"] = data[header["offset"]:header["offset"] + header["size"]]
         sections.append(header)
     symbols = []
@@ -112,7 +114,8 @@ def write_object(path, sections, symbols=()):
             body += section["data"]
         body += b"\0" * (-len(body) % 4)
         headers.append((intern(names, section["name"]), section["type"], section["flags"], 0, offset,
-                        section["size"], 0, 0, section.get("align", 1), 0))
+                        section["size"], section.get("link", 0), section.get("info", 0), section.get("align", 1),
+                        section.get("entsize", 0)))
     symtab_index = len(headers)
     for name, kind, content, link, info, align, entsize in (
             (".symtab", SHT_SYMTAB, b"".join(entries), symtab_index + 1, local_count, 4, 16),
@@ -128,6 +131,102 @@ def write_object(path, sections, symbols=()):
     for header in headers:
         body += struct.pack(">IIIIIIIIII", *header)
     Path(path).write_bytes(bytes(body))
+
+
+def discard_sections(data, removed):
+    """Copy a relocatable ELF without the sections `removed`, their relocation sections and the
+    symbols they define. Other contents are copied unchanged; indices are renumbered."""
+    shoff = struct.unpack_from(">I", data, 32)[0]
+    shentsize, shnum, shstrndx = struct.unpack_from(">HHH", data, 46)
+    if struct.unpack_from(">H", data, 16)[0] != 1 or shentsize != 40:
+        raise ValueError("Only relocatable ELF objects can have sections discarded")
+    headers = [list(struct.unpack_from(">IIIIIIIIII", data, shoff + index * 40)) for index in range(shnum)]
+    removed = set(removed) | {index for index, header in enumerate(headers)
+                              if header[1] == SHT_RELA and header[7] in removed}
+    if 0 in removed or shstrndx in removed or any(headers[index][1] in (SHT_SYMTAB, SHT_STRTAB)
+                                                  for index in removed):
+        raise ValueError("Cannot discard ELF bookkeeping sections")
+    sections = {old: new for new, old in enumerate(i for i in range(shnum) if i not in removed)}
+    symbols = {0: 0}
+    contents = {}
+    for index, header in enumerate(headers):
+        contents[index] = bytearray(data[header[4]:header[4] + header[5]]) if header[1] != SHT_NOBITS else b""
+    for index, header in enumerate(headers):
+        if header[1] != SHT_SYMTAB or index in removed:
+            continue
+        table, kept, local = contents[index], bytearray(), 0
+        for number in range(header[5] // 16):
+            entry = bytearray(table[number * 16:number * 16 + 16])
+            shndx = struct.unpack_from(">H", entry, 14)[0]
+            if number and shndx in removed:
+                continue
+            if 0 < shndx < 0xFF00:
+                struct.pack_into(">H", entry, 14, sections[shndx])
+            symbols[number] = len(kept) // 16
+            local += number < header[7]
+            kept += entry
+        contents[index], header[7] = kept, local
+        header[5] = len(kept)
+    for index, header in enumerate(headers):
+        if header[1] != SHT_RELA or index in removed:
+            continue
+        for offset in range(0, header[5], 12):
+            info = struct.unpack_from(">I", contents[index], offset + 4)[0]
+            if info >> 8 not in symbols:
+                raise ValueError("A kept relocation refers to a discarded symbol")
+            struct.pack_into(">I", contents[index], offset + 4, symbols[info >> 8] << 8 | info & 0xFF)
+        header[6], header[7] = sections[header[6]], sections[header[7]]
+    for header in headers:
+        if header[1] == SHT_SYMTAB:
+            header[6] = sections[header[6]]
+    body = bytearray(data[:52])
+    kept_headers = [headers[0]]
+    for index in range(1, shnum):
+        if index in removed:
+            continue
+        header = headers[index]
+        body += b"\0" * (-len(body) % max(header[8], 4))
+        header[4] = len(body)
+        body += contents[index]
+        kept_headers.append(header)
+    body += b"\0" * (-len(body) % 4)
+    struct.pack_into(">I", body, 32, len(body))
+    struct.pack_into(">HH", body, 48, len(kept_headers), sections[shstrndx])
+    for header in kept_headers:
+        body += struct.pack(">IIIIIIIIII", *header)
+    return bytes(body)
+
+
+def check_discarded(native, derived, removed):
+    """Verify that a derived object equals the native one apart from the removed sections."""
+    def described(data, drop):
+        sections, symbols = read_elf(data)
+        names = {section["index"]: section["name"] for section in sections}
+        gone = set(drop) | {s["index"] for s in sections if s["type"] == SHT_RELA and s["info"] in drop}
+
+        def symbol(entry):
+            return (entry["name"], entry["value"], entry["size"], entry["bind"], entry["type"],
+                    names.get(entry["shndx"], entry["shndx"]) if 0 < entry["shndx"] < 0xFF00 else entry["shndx"])
+        kept = [symbol(entry) for entry in symbols if entry["shndx"] not in gone]
+        layout = []
+        for section in sections:
+            if section["index"] in gone or section["type"] in (SHT_SYMTAB, SHT_STRTAB):
+                continue
+            item = (section["name"], section["type"], section["flags"], section["size"], section["align"])
+            if section["type"] == SHT_RELA:
+                relocations = [struct.unpack_from(">IIi", section["data"], offset)
+                               for offset in range(0, section["size"], 12)]
+                item += (names[section["info"]], tuple((at, info & 0xFF, addend, symbol(symbols[(info >> 8) - 1]))
+                                                       for at, info, addend in relocations))
+            elif "data" in section:
+                item += (section["data"],)
+            layout.append(item)
+        return layout, sorted(kept), {names[index] for index in gone}
+    expected, expected_symbols, dropped = described(native, removed)
+    actual, actual_symbols, nothing = described(derived, ())
+    if actual != expected or actual_symbols != expected_symbols or nothing \
+            or any(name in {s[0] for s in actual} for name in dropped):
+        raise ValueError("Partial-unit object differs from its native object beyond the discarded sections")
 
 
 # Target and manifest ----------------------------------------------------------------------
@@ -199,7 +298,8 @@ def load_manifest(manifest, sections, compiler_version):
     by_name = {section["name"]: section for section in sections}
     units, ranges, sources, followed = [], [], set(), []
     for unit in manifest.get("units", []):
-        if set(unit) - {"link_roots"} != {"source", "profile", "evidence", "sections"} or not unit["evidence"].strip():
+        if set(unit) - {"link_roots", "original_code"} != {"source", "profile", "evidence", "sections"} \
+                or not unit["evidence"].strip():
             raise ValueError("Each unit needs exactly source, profile, evidence and sections; "
                              "flags belong to a profile")
         source = repository_path(unit["source"])
@@ -249,6 +349,7 @@ def load_manifest(manifest, sections, compiler_version):
                 raise ValueError(f"{unit['source']} {entry['section']} must follow another configured section "
                                  f"of the same unit earlier in {entry['placement']}")
             followed.append((code["end"], entry["start"], unit["source"], entry["section"]))
+        original = original_code(unit, placed, profiles[unit["profile"]].get("compiler", "prodg"))
         root = profiles[unit["profile"]].get("source_root")
         compile_path = None
         if root:
@@ -262,7 +363,8 @@ def load_manifest(manifest, sections, compiler_version):
                       "flags": profiles[unit["profile"]]["flags"], "sections": placed,
                       "compiler": profiles[unit["profile"]].get("compiler", "prodg"),
                       "include_dirs": profiles[unit["profile"]].get("include_dirs", []),
-                      "source_root": root, "compile_path": compile_path, "link_roots": roots})
+                      "source_root": root, "compile_path": compile_path, "link_roots": roots,
+                      "original_code": original})
     ranges.sort()
     for left, right in zip(ranges, ranges[1:]):
         if right[0] < left[1]:
@@ -271,6 +373,60 @@ def load_manifest(manifest, sections, compiler_version):
         if any(gap_start < end and start < gap_end for start, end, _ in ranges):
             raise ValueError(f"{source} {name}: another configured range lies between it and the code it follows")
     return units, externals, [directory for directory in manifest.get("include_dirs", [])]
+
+
+def original_code(unit, placed, compiler):
+    """Validate a partial unit's functions that stay linked from the original executable.
+
+    Each range keeps the target's own bytes in place of the named function. The source still
+    defines that function, so the unit's other code and data compile to their original layout,
+    but its compiled code is never linked or credited. The unit is compiled with function
+    sections so that its other functions link, unchanged, around the original bytes.
+    Returns the ranges and attaches them to their code entries."""
+    for entry in placed:
+        entry["original"] = []
+    config = unit.get("original_code")
+    if config is None:
+        return []
+    if compiler != "prodg" or not isinstance(config, dict) or set(config) != {"ranges", "evidence"} \
+            or not isinstance(config["evidence"], str) or not config["evidence"].strip() \
+            or not isinstance(config["ranges"], list) or not config["ranges"]:
+        raise ValueError(f"{unit['source']}: original_code needs ranges and evidence, and a ProDG profile")
+    ranges = []
+    for item in config["ranges"]:
+        if not isinstance(item, dict) or set(item) != {"start", "end", "symbol"} \
+                or not isinstance(item["symbol"], str) \
+                or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", item["symbol"]):
+            raise ValueError(f"{unit['source']}: each original_code range needs start, end and symbol")
+        start, end = address(item["start"]), address(item["end"])
+        match = NEUTRAL.fullmatch(item["symbol"])
+        if match and int(match[1], 16) != start:
+            raise ValueError(f"{unit['source']}: original_code symbol {item['symbol']} does not start "
+                             f"at 0x{start:08X}")
+        code = [entry for entry in placed if entry["kind"] == "code" and entry["follows"] is None
+                and entry["start"] <= start < end <= entry["end"]]
+        if len(code) != 1 or start % 4 or end % 4 or (start, end) == (code[0]["start"], code[0]["end"]):
+            raise ValueError(f"{unit['source']}: original_code 0x{start:08X}-0x{end:08X} must be a "
+                             "word-aligned part of one of the unit's code ranges")
+        ranges.append({"start": start, "end": end, "symbol": item["symbol"], "section": code[0]["section"]})
+    ranges.sort(key=lambda item: item["start"])
+    if any(right["start"] < left["end"] for left, right in zip(ranges, ranges[1:])) \
+            or len({item["symbol"] for item in ranges}) != len(ranges):
+        raise ValueError(f"{unit['source']}: original_code ranges overlap or repeat a symbol")
+    for entry in placed:
+        entry["original"] = [item for item in ranges if item["section"] == entry["section"]]
+    return ranges
+
+
+def check_original_code(units, root):
+    """Each original-linked range must equal a function extent recorded with exact edges."""
+    exact = {(start, end) for start, end, _, edges in evidence_rows(root, "function")
+             if edges == ("exact", "exact")}
+    for unit in units:
+        for item in unit["original_code"]:
+            if (item["start"], item["end"]) not in exact:
+                raise ValueError(f"{unit['source']}: original_code 0x{item['start']:08X}-0x{item['end']:08X} "
+                                 "does not equal an evidence function row with exact edges")
 
 
 def evidence_rows(root, kind):
@@ -340,14 +496,94 @@ def repository_path(text):
 
 # Placement plan ---------------------------------------------------------------------------
 
+def place_function_sections(unit, entry, compiled, symbols):
+    """Lay out a partial unit's function sections in compiler order around its original ranges.
+
+    The section defining each original range's symbol is excluded from the link; the next
+    section must continue at the range's end. Returns {excluded section index: original range}."""
+    pending = list(entry["original"])
+    cursor, inputs, excluded = entry["start"], [], {}
+    for section in sorted(compiled, key=lambda item: item["index"]):
+        if section["type"] != SHT_PROGBITS or not section["flags"] & SHF_EXECINSTR:
+            raise ValueError(f"{unit['source']}: {section['name']} cannot be placed in code section "
+                             f"{entry['placement']}")
+        names = [s["name"] for s in symbols if s["shndx"] == section["index"] and s["type"] == STT_FUNC]
+        if cursor % max(section["align"], 1):
+            raise ValueError(f"{unit['source']}: {section['name']} alignment {section['align']} "
+                             f"does not fit 0x{cursor:08X}")
+        if pending and pending[0]["symbol"] in names:
+            item = pending.pop(0)
+            if names != [item["symbol"]] or cursor != item["start"]:
+                raise ValueError(f"{unit['source']}: original_code {item['symbol']} must be the only "
+                                 f"function of its section and start at 0x{cursor:08X}")
+            excluded[section["index"]] = item
+            cursor = item["end"]
+            continue
+        inputs.append({"index": section["index"], "name": section["name"], "start": cursor,
+                       "size": section["size"]})
+        cursor += section["size"]
+        if pending and cursor > pending[0]["start"]:
+            raise ValueError(f"{unit['source']}: compiled {section['name']} overlaps original_code "
+                             f"{pending[0]['symbol']}")
+    if pending:
+        raise ValueError(f"{unit['source']}: original_code symbol {pending[0]['symbol']} was not compiled")
+    if cursor != entry["end"] or not inputs:
+        raise ValueError(f"{unit['source']}: compiled {entry['section']} function sections and original_code "
+                         f"end at 0x{cursor:08X}; configured range 0x{entry['start']:08X}-0x{entry['end']:08X}")
+    entry.update(index=None, inputs=inputs, executable=True, align=max(s["align"] for s in compiled),
+                 compiled=sum(item["size"] for item in inputs))
+    return excluded
+
+
+def check_excluded_references(unit, elf_sections, symbols, placed, excluded):
+    """Linked code and data must not refer to anything defined in an excluded function section."""
+    if not excluded:
+        return
+    for section in elf_sections:
+        if section["type"] != SHT_RELA or section["info"] not in placed:
+            continue
+        for offset in range(0, section["size"], 12):
+            index = struct.unpack_from(">I", section["data"], offset + 4)[0] >> 8
+            if index == 0 or index > len(symbols):
+                raise ValueError(f"{unit['source']}: invalid relocation symbol in {section['name']}")
+            target = symbols[index - 1]
+            if target["shndx"] in excluded:
+                raise ValueError(f"{unit['source']}: linked code or data refers to {target['name'] or 'the section'} "
+                                 f"of original_code {excluded[target['shndx']]['symbol']}")
+
+
+def source_runs(entry):
+    """Contiguous compiled extents of an entry as (start, end, input section names)."""
+    if not entry.get("original"):
+        return [(entry["start"], entry["end"], [entry["section"]])]
+    runs = []
+    for item in entry["inputs"]:
+        if runs and runs[-1][1] == item["start"]:
+            runs[-1] = (runs[-1][0], item["start"] + item["size"], runs[-1][2] + [item["name"]])
+        else:
+            runs.append((item["start"], item["start"] + item["size"], [item["name"]]))
+    return runs
+
+
 def plan(sections, units, objects, externals):
     """Resolve placements and symbols. `objects` maps unit source to (sections, symbols)."""
     defined = {}
     for unit in units:
         elf_sections, symbols = objects[unit["source"]]
         mapped = {entry["section"]: entry for entry in unit["sections"]}
+        split = {entry["section"]: entry for entry in unit["sections"] if entry.get("original")}
+        functions = {name: [] for name in split}
         for section in elf_sections:
             if not section["flags"] & SHF_ALLOC or (not section["size"] and section["name"] not in mapped):
+                continue
+            owner = next((name for name in split if section["name"].startswith(name + ".")), None)
+            if owner is not None:
+                functions[owner].append(section)
+                continue
+            if section["name"] in split:
+                if section["size"]:
+                    raise ValueError(f"{unit['source']}: {section['name']} with original_code must be "
+                                     "compiled as function sections")
                 continue
             entry = mapped.get(section["name"])
             if entry is None:
@@ -375,6 +611,11 @@ def plan(sections, units, objects, externals):
             if entry["start"] % entry["align"]:
                 raise ValueError(f"{unit['source']}: {section['name']} alignment {entry['align']} "
                                  f"does not fit 0x{entry['start']:08X}")
+            entry["inputs"] = [{"index": section["index"], "name": section["name"],
+                                "start": entry["start"], "size": section["size"]}]
+        excluded = {}
+        for name, entry in split.items():
+            excluded.update(place_function_sections(unit, entry, functions[name], symbols))
         for entry in unit["sections"]:
             if "index" not in entry:
                 raise ValueError(f"{unit['source']}: configured section {entry['section']} was not produced")
@@ -396,11 +637,13 @@ def plan(sections, units, objects, externals):
             if any(padding):
                 raise ValueError(f"{unit['source']}: target padding 0x{code['end']:08X}-0x{entry['start']:08X} "
                                  f"before {entry['section']} is not zero")
-        by_index = {entry["index"]: entry for entry in unit["sections"]}
+        by_index = {item["index"]: item for entry in unit["sections"] for item in entry["inputs"]}
+        check_excluded_references(unit, elf_sections, symbols, by_index, excluded)
+        unit["excluded"] = excluded
         for symbol in symbols:
             if symbol["shndx"] == SHN_COMMON:
                 raise ValueError(f"{unit['source']}: common symbol {symbol['name']} has no placement")
-            if symbol["bind"] == STB_LOCAL or symbol["shndx"] == SHN_UNDEF:
+            if symbol["bind"] == STB_LOCAL or symbol["shndx"] == SHN_UNDEF or symbol["shndx"] in excluded:
                 continue
             if symbol["shndx"] not in by_index:
                 raise ValueError(f"{unit['source']}: {symbol['name']} is defined outside a placed section")
@@ -412,18 +655,21 @@ def plan(sections, units, objects, externals):
             if match and int(match[1], 16) != final:
                 raise ValueError(f"{unit['source']}: neutral label {name} would be placed at 0x{final:08X}")
             defined[name] = (final, unit["source"])
-    ranges = sorted((entry["start"], entry["end"], unit["source"], entry)
-                    for unit in units for entry in unit["sections"])
+    # Original-linked ranges inside a unit's code become ordinary original pieces between its runs.
+    ranges = sorted(((start, end, unit["source"], entry, names)
+                     for unit in units for entry in unit["sections"]
+                     for start, end, names in source_runs(entry)), key=lambda item: item[0])
     pieces = {section["name"]: [] for section in sections}
     for section in sections:
         cursor = section["start"]
-        for start, end, source, entry in ranges:
+        for start, end, source, entry, names in ranges:
             if entry["placement"] != section["name"]:
                 continue
             # Padding before data that follows its unit's code comes from that data's alignment.
             if start > cursor and entry.get("follows") is None:
                 pieces[section["name"]].append({"start": cursor, "end": start, "symbols": []})
-            pieces[section["name"]].append({"start": start, "end": end, "unit": source, "entry": entry})
+            pieces[section["name"]].append({"start": start, "end": end, "unit": source, "entry": entry,
+                                            "names": names})
             cursor = end
         if cursor < section["end"]:
             pieces[section["name"]].append({"start": cursor, "end": section["end"], "symbols": []})
@@ -465,7 +711,8 @@ def link_script(target, sections, pieces):
     lines = ["ENTRY(__start)", "SECTIONS {", f"__start = {target['entry']};",
              f"_SDA_BASE_ = {target['sda_base']};", f"_SDA2_BASE_ = {target['sda2_base']};"]
     for section in sections:
-        inputs = " ".join(f"*{piece['object'].name}({piece['input']})" for piece in pieces[section["name"]])
+        inputs = " ".join(f"*{piece['object'].name}({name})" for piece in pieces[section["name"]]
+                          for name in ([piece["input"]] if isinstance(piece["input"], str) else piece["input"]))
         lines.append(f"{section['output']} 0x{section['start']:08X} : {{ {inputs} }}")
     return "\n".join(lines + ["}"]) + "\n"
 
@@ -669,6 +916,10 @@ def build(original, manifest_path, report_path):
     check_data_in_code([(entry["start"], entry["end"], unit["source"]) for unit in units
                         for entry in unit["sections"] if entry["follows"] is not None],
                        function_extents(ROOT), data_extents(ROOT))
+    check_original_code(units, ROOT)
+    for unit in units:
+        if unit["original_code"]:
+            unit["flags"] = unit["flags"] + [FUNCTION_SECTIONS]
     if BUILD.exists():
         shutil.rmtree(BUILD)
     (BUILD / "obj").mkdir(parents=True)
@@ -705,11 +956,21 @@ def build(original, manifest_path, report_path):
                                    else read_elf(unit["object"].read_bytes()))
         unit["dependencies"] = dependencies(unit["depfile"], workdir)
     pieces, defined, resolved = plan(sections, units, objects, externals)
+    for unit in units:
+        unit["link_object"] = unit["object"]
+        if unit["excluded"]:
+            # The SN linker cannot discard an input section, so the excluded function sections
+            # are removed from a copy; every other section, symbol and relocation is unchanged.
+            unit["link_object"] = unit["object"].with_suffix(".linked.o")
+            native = unit["object"].read_bytes()
+            unit["link_object"].write_bytes(discard_sections(native, set(unit["excluded"])))
+            check_discarded(native, unit["link_object"].read_bytes(), set(unit["excluded"]))
+            unit["linked_object_sha256"] = sha256(unit["link_object"])
     for section in sections:
         for piece in pieces[section["name"]]:
             if "unit" in piece:
                 unit = next(u for u in units if u["source"] == piece["unit"])
-                piece["object"], piece["input"] = unit["object"], piece["entry"]["section"]
+                piece["object"], piece["input"] = unit["link_object"], piece["names"]
                 continue
             piece["object"] = BUILD / "original" / f"orig_{section['name'].strip('.')}_{piece['start']:08X}.o"
             piece["input"] = section["output"]
@@ -738,7 +999,8 @@ def build(original, manifest_path, report_path):
         for unit in units:
             roots.update(unit["link_roots"]["symbols"] if unit["link_roots"] else
                          [symbol["name"] for symbol in objects[unit["source"]][1]
-                          if symbol["bind"] == STB_GLOBAL and symbol["shndx"] != SHN_UNDEF])
+                          if symbol["bind"] == STB_GLOBAL and symbol["shndx"] != SHN_UNDEF
+                          and symbol["shndx"] not in unit["excluded"]])
         keep = BUILD / "keep.txt"
         keep.write_text("\n".join(sorted(roots)) + "\n")
         linker_flags = ["-strip-unused", "-keep", str(keep)]
@@ -752,6 +1014,8 @@ def build(original, manifest_path, report_path):
         raise RuntimeError("Linker did not produce a fresh ELF")
     if any(sha256(unit["object"]) != unit["native_object_sha256"] for unit in units):
         raise RuntimeError("Final linker input no longer equals the native compiler object")
+    if any(sha256(unit["link_object"]) != unit["linked_object_sha256"] for unit in units if unit["excluded"]):
+        raise RuntimeError("Final linker input no longer equals the checked partial-unit object")
     final = {s["name"]: s["value"] for s in read_elf(elf.read_bytes())[1] if s["bind"] != STB_LOCAL}
     for name, (value, source) in defined.items():
         if final.get(name) != value:
@@ -785,18 +1049,25 @@ def dol_bytes(binary, start, end):
 
 def compiled_functions(unit, obj):
     """Inventory retained compiler functions, including local and generated symbols."""
-    placements = {entry["index"]: entry for entry in unit["sections"]}
+    placements = {}
+    for entry in unit["sections"]:
+        for item in entry.get("inputs") or [{"index": entry["index"], "start": entry["start"],
+                                              "size": entry["compiled"]}]:
+            placements[item["index"]] = (entry, item["start"], item["size"])
+    # Functions kept as original code are compiled but never linked or credited.
+    excluded = unit.get("excluded", {})
     functions = []
     for symbol in obj[1]:
-        if symbol["type"] != STT_FUNC or symbol["shndx"] == SHN_UNDEF or symbol["size"] <= 0:
+        if symbol["type"] != STT_FUNC or symbol["shndx"] == SHN_UNDEF or symbol["size"] <= 0 \
+                or symbol["shndx"] in excluded:
             continue
-        entry = placements.get(symbol["shndx"])
+        entry, start, size = placements.get(symbol["shndx"], (None, 0, 0))
         if entry is None or entry["kind"] != "code" or entry.get("executable") is False:
             raise ValueError(f"{unit['source']}: compiler function {symbol['name']} has no code placement")
-        if not symbol["name"] or symbol["value"] < 0 or symbol["value"] + symbol["size"] > entry["compiled"]:
+        if not symbol["name"] or symbol["value"] < 0 or symbol["value"] + symbol["size"] > size:
             raise ValueError(f"{unit['source']}: compiler function {symbol['name']} exceeds its section")
         functions.append({"symbol": symbol["name"],
-                          "address": f"0x{entry['start'] + symbol['value']:08X}",
+                          "address": f"0x{start + symbol['value']:08X}",
                           "size": symbol["size"]})
     return sorted(functions, key=lambda function: (function["address"], function["symbol"]))
 
@@ -822,14 +1093,19 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                 same = dol_bytes(result, entry["start"], entry["end"]) == expected
             status = "matched" if identical else ("range-identical" if same else "differs")
             kind = "code" if entry["kind"] == "code" else "data"
-            totals[kind]["linked"] += size
-            totals[kind]["matched"] += size if identical else 0
+            # Original-linked bytes inside the range are neither source-linked nor matched.
+            linked = size - sum(item["end"] - item["start"] for item in entry.get("original", []))
+            totals[kind]["linked"] += linked
+            totals[kind]["matched"] += linked if identical else 0
             entries.append({"section": entry["section"], "placement": entry["placement"], "kind": kind,
                             "start": f"0x{entry['start']:08X}", "end": f"0x{entry['end']:08X}",
-                            "compiled": entry["compiled"], "linked": size,
-                            "matched": size if identical else 0, "status": status})
+                            "compiled": entry["compiled"], "linked": linked,
+                            "matched": linked if identical else 0, "status": status})
             if entry.get("follows") is not None:
                 entries[-1]["follows"] = entry["follows"]
+            if entry.get("original"):
+                entries[-1]["original"] = [{"start": f"0x{item['start']:08X}", "end": f"0x{item['end']:08X}",
+                                            "symbol": item["symbol"]} for item in entry["original"]]
         measured.append({"source": unit["source"], "compile_path": unit["compile_path"],
                          "source_sha256": sha256(unit["path"]),
                          "profile": unit["profile"], "flags": unit["flags"],
@@ -837,8 +1113,11 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                          "dependencies": unit["dependencies"],
                          "link_roots": unit.get("link_roots"),
                          "native_object_sha256": unit.get("native_object_sha256"),
-                         "status": "matched" if identical else "unverified", "sections": entries,
+                         "status": ("partial" if unit.get("original_code") else "matched") if identical
+                         else "unverified", "sections": entries,
                          "functions": compiled_functions(unit, objects[unit["source"]])})
+        if unit.get("linked_object_sha256"):
+            measured[-1]["linked_object_sha256"] = unit["linked_object_sha256"]
     return {"schema": 1, "target": "GN7E69", "target_sha1": target["sha1"],
             "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
             "compilers": dict(sorted(compilers.items())),
