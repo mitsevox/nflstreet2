@@ -213,7 +213,7 @@ void fn_8021D7B8(void *a, int b, int c, int *d);
 void fn_80227490(float *pOut, float *pIn, int a, int b, int c);
 int fn_80228668(void);
 void fn_80228AD4(float (*pMatrix)[4], float a, float b, float c, float d);
-void fn_80228D58(Object_801DD168 *pObject);
+void fn_80228D58(int handle);
 void fn_80234424(int a);
 }
 
@@ -490,7 +490,7 @@ void fn_80022328(void)
     fn_8008FD88(1);
     fn_8008056C(&lbl_8036B4F0);
     lbl_803EBAC8->mUnknown20 &= ~2;
-    fn_80228D58(lbl_803EBAC8);
+    fn_80228D58((int)lbl_803EBAC8);
     lbl_803EBAC8 = 0;
     fn_8003FB2C();
 }

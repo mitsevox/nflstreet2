@@ -206,14 +206,14 @@ int fn_802283FC(Object_80228224 *pObject)
     return err;
 }
 
-int fn_80228474(Object_80228224 *pObject, int event, Callback_80228474 fn, int user)
+int fn_80228474(Object_80228224 *pObject, int event, Callback_80228474 fn, int key)
 {
     Entry_80228474 *pEntry;
     int err = 0;
 
     pEntry = fn_801C6A20(lbl_803EBF98);
     if (pEntry) {
-        pEntry->mUnknown0 = user;
+        pEntry->mUnknown0 = key;
         pEntry->mUnknown4 = event;
         pEntry->mUnknown8 = fn;
         pEntry->mUnknown12 = pObject;

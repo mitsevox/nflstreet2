@@ -20,7 +20,7 @@ int fn_802280B0(Init_802280B0 *pInit);
 int fn_80228194(void);
 Object_80228224 *fn_80228224(Desc_80228224 *pDesc);
 int fn_802283FC(Object_80228224 *pObject);
-int fn_80228474(Object_80228224 *pObject, int event, Callback_80228474 fn, int user);
+int fn_80228474(Object_80228224 *pObject, int event, Callback_80228474 fn, int key);
 void fn_802284EC(Object_80228224 *pObject, Callback_80228474 fn);
 void fn_80228530(Object_80228224 *pObject);
 void fn_80228594(Object_80228224 *pObject);
