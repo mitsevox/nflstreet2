@@ -576,6 +576,49 @@
       ]
     },
     {
+      "source": "src/game/LoadingFE.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8008CA8C-0x8008CC74 (src/game/LoadingFE.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8008CA8C",
+          "end": "0x8008CC74"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80295838",
+          "end": "0x802958A8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA880",
+          "end": "0x803EA884"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BEDC",
+          "end": "0x8030BEF8"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289ACC",
+          "end": "0x80289AD0"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C0C",
+          "end": "0x80289C10"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/si/SISamplingRate.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv unit/data rows for sampling-rate code, tables, diagnostic and BSS state; CREDITS.md for import provenance.",
