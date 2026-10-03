@@ -394,6 +394,30 @@
     "__14Class_801B8D9C": {
       "address": "0x801B8D9C",
       "evidence": "evidence.tsv external row for 0x801B8D9C (__14Class_801B8D9C); descriptive name."
+    },
+    "__GXData": {
+      "address": "0x803ED840",
+      "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
+    },
+    "__GXSetSUTexRegs": {
+      "address": "0x80250C8C",
+      "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
+    },
+    "__GXUpdateBPMask": {
+      "address": "0x802515DC",
+      "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
+    },
+    "__GXSetVCD": {
+      "address": "0x8024D084",
+      "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
+    },
+    "__GXSetVAT": {
+      "address": "0x8024D92C",
+      "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
+    },
+    "__GXCalculateVLim": {
+      "address": "0x8024D140",
+      "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
     }
   },
   "units": [
@@ -2329,6 +2353,65 @@
           "placement": ".text",
           "start": "0x8024AAE4",
           "end": "0x8024AB8C"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/mtx/mtx44.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv mtx44.c unit, function and data rows: native source reproduces both retained projection functions, the mtxUnit table and the complete native constant pool; original file attribution provisional.",
+      "link_roots": {
+        "symbols": [
+          "C_MTXFrustum",
+          "C_MTXOrtho"
+        ],
+        "evidence": "evidence.tsv SDK linker retention row; target-used functions and their data retained through actual SN linker."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024AB8C",
+          "end": "0x8024ACC0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDE30",
+          "end": "0x802FDE40"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED7D8",
+          "end": "0x803ED7F4"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXGeometry.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv GXGeometry.c unit and function rows: native source reproduces all nine retained geometry, cull-mode and generation-mode functions; original file attribution provisional.",
+      "link_roots": {
+        "symbols": [
+          "__GXSetDirtyState",
+          "GXBegin",
+          "__GXSendFlushPrim",
+          "GXSetLineWidth",
+          "GXSetPointSize",
+          "GXEnableTexOffsets",
+          "GXSetCullMode",
+          "GXSetCoPlanar",
+          "__GXSetGenMode"
+        ],
+        "evidence": "evidence.tsv SDK linker retention row; target-used functions retained through actual SN linker."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024E888",
+          "end": "0x8024EBC4"
         }
       ]
     },
