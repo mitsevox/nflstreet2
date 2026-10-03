@@ -701,6 +701,246 @@
       ]
     },
     {
+      "source": "src/game/Mat.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8002613C-0x800262E0 (src/game/Mat.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002613C",
+          "end": "0x800262E0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80289D48",
+          "end": "0x80289DB0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA2B0",
+          "end": "0x803EA2B4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803064DC",
+          "end": "0x803064EC"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A28",
+          "end": "0x80289A2C"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289B68",
+          "end": "0x80289B6C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Obj.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800262E0-0x8002645C (src/game/Obj.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800262E0",
+          "end": "0x8002645C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80289DB0",
+          "end": "0x80289E18"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803064EC",
+          "end": "0x803064FC"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC5E0",
+          "end": "0x803EC5E8"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A2C",
+          "end": "0x80289A30"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289B6C",
+          "end": "0x80289B70"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Res.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8002645C-0x8002662C (src/game/Res.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002645C",
+          "end": "0x8002662C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80289E18",
+          "end": "0x80289E80"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803064FC",
+          "end": "0x80306518"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A30",
+          "end": "0x80289A34"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289B70",
+          "end": "0x80289B74"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Tex.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8002662C-0x800267C8 (src/game/Tex.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002662C",
+          "end": "0x800267C8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80289E80",
+          "end": "0x80289EE8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80306518",
+          "end": "0x80306534"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A34",
+          "end": "0x80289A38"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289B74",
+          "end": "0x80289B78"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Vec.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800267C8-0x8002692C (src/game/Vec.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800267C8",
+          "end": "0x8002692C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80289EE8",
+          "end": "0x80289F50"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA2B8",
+          "end": "0x803EA2BC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80306534",
+          "end": "0x80306544"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A38",
+          "end": "0x80289A3C"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289B78",
+          "end": "0x80289B7C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/Vpt.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8002692C-0x80026AD0 (src/game/Vpt.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002692C",
+          "end": "0x80026AD0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80289F50",
+          "end": "0x80289FB8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80306544",
+          "end": "0x80306564"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A3C",
+          "end": "0x80289A40"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289B7C",
+          "end": "0x80289B80"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/si/SISamplingRate.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv unit/data rows for sampling-rate code, tables, diagnostic and BSS state; CREDITS.md for import provenance.",

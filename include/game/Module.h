@@ -50,11 +50,20 @@ struct ModuleDependency {
 DECLARE_MODULE(AnmsCelebration);
 DECLARE_MODULE(Celebration);
 DECLARE_MODULE(Font);
+DECLARE_MODULE(Mat);
+DECLARE_MODULE(Obj);
+DECLARE_MODULE(Res);
+DECLARE_MODULE(Tex);
+DECLARE_MODULE(Vec);
+DECLARE_MODULE(Vpt);
 DECLARE_MODULE(Rumble);
 DECLARE_MODULE(Timg);
 DECLARE_MODULE(LoadingFE);
 
 extern AnmsCelebration gAnmsCelebration;
 extern Celebration gCelebration;
+extern Mat gMat;
+extern Obj gObj;
+extern Res gRes;
 
 #endif
