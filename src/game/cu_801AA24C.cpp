@@ -1,0 +1,18 @@
+class Class_801B8D9C {
+public:
+    Class_801B8D9C();
+
+private:
+    char mUnknown0[8];
+};
+
+Class_801B8D9C lbl_803ECC54;
+Class_801B8D9C lbl_803ECC5C;
+Class_801B8D9C lbl_803ECC64;
+Class_801B8D9C lbl_803ECC6C;
+Class_801B8D9C lbl_803ECC74;
+Class_801B8D9C lbl_803ECC7C;
+Class_801B8D9C lbl_803ECC84;
+Class_801B8D9C lbl_803ECC8C;
+Class_801B8D9C lbl_803ECC94;
+Class_801B8D9C lbl_803ECC9C;
