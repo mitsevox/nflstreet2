@@ -696,13 +696,13 @@ extern "C" void fn_8013DDF4(Camera_8013D1C0 *pCamera, Record_8002E7C0 *pRecord, 
 
 extern "C" void fn_8013E0D0(Camera_8013D1C0 *pCamera, int smooth)
 {
-    float rate = 0.02f;
-    float minStep = 0.01f;
+    float argA = 0.02f;
+    float argB = 0.01f;
     CameraState_8013D1C0 *pState = &pCamera->mUnknownF8;
 
     if (!smooth
         || (pState->mUnknown18 != pState->mUnknown1C
-            && fn_801C384C(&pState->mUnknown18, &pState->mUnknown20, pState->mUnknown1C, rate, minStep))) {
+            && fn_801C384C(&pState->mUnknown18, &pState->mUnknown20, pState->mUnknown1C, argA, argB))) {
         pState->mUnknown18 = pState->mUnknown1C;
     }
     fn_801C3990(pCamera, pState->mUnknown18 > 2796202.0f ? 2796202.0f : pState->mUnknown18, pCamera->mUnknown24);
