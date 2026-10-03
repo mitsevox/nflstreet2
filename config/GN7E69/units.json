@@ -68,7 +68,7 @@
       "include_dirs": [
         "include/libc"
       ],
-      "evidence": "evidence.tsv compiler row 0x80227F14-0x802288F8 (engine_c): ProDG 3.9.3 cc1 -O2 (default -G 8) reproduces every instruction and data byte of the unit; -O1, -O3, -Os and -G0 change them. Same flags as the uistudio profile; a separate profile because uistudio's scope evidence and source root are the UI Studio library, and this unit includes SDK headers that need include/libc."
+      "evidence": "evidence.tsv compiler rows 0x80227F14-0x802288F8 and 0x802288F8-0x80228E44 (engine_c): ProDG 3.9.3 cc1 -O2 (default -G 8) reproduces every instruction and data byte of both units; -O1, -O3, -Os and -G0 change them. Same flags as the uistudio profile; a separate profile because uistudio's scope evidence and source root are the UI Studio library, and these units include SDK headers that need include/libc."
     }
   },
   "externals": {
@@ -427,6 +427,10 @@
     "DCFlushRange": {
       "address": "0x80239CEC",
       "evidence": "evidence.tsv AXSPB cache external; actual REL24 from PrintStudio and pinned OSCache signature."
+    },
+    "GXSetViewport": {
+      "address": "0x8025278C",
+      "evidence": "evidence.tsv external row GXSetViewport: target REL24 branch at 0x80228C90 and SDK GXTransform.c body."
     }
   },
   "units": [
@@ -3127,6 +3131,31 @@
           "placement": ".sbss",
           "start": "0x803ED66C",
           "end": "0x803ED674"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_802288F8.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802288F8-0x80228E44 (src/engine/cu_802288F8.c) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802288F8",
+          "end": "0x80228E44"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B20F8",
+          "end": "0x802B2138"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBFA0",
+          "end": "0x803EBFA8"
         }
       ]
     }
