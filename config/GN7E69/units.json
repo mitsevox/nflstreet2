@@ -402,6 +402,49 @@
       ]
     },
     {
+      "source": "src/game/Debug.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8003373C-0x80033868 (src/game/Debug.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003373C",
+          "end": "0x80033868"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028AEC0",
+          "end": "0x8028AF28"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA3B8",
+          "end": "0x803EA3BC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80306D08",
+          "end": "0x80306D18"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A68",
+          "end": "0x80289A6C"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BA8",
+          "end": "0x80289BAC"
+        }
+      ]
+    },
+    {
       "source": "src/game/AnmsCelebration.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8008B974-0x8008BB30 (src/game/AnmsCelebration.cpp) and its data rows.",
