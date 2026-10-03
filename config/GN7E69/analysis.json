@@ -1,5 +1,6 @@
 {
   "data_ranges": [
+    {"start": "0x80004868", "end": "0x80004AF0", "symbol": "data_80004868"},
     {"start": "0x80005510", "end": "0x80005668", "symbol": "data_80005510"},
     {"start": "0x80022F28", "end": "0x80022FF0", "symbol": "data_80022F28"},
     {"start": "0x800236BC", "end": "0x8002373C", "symbol": "data_800236BC"},

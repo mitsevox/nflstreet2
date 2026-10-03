@@ -1,8 +1,7 @@
 #ifndef GAME_CU_80181330_H
 #define GAME_CU_80181330_H
 
-/* Classes whose implementations lie in 0x80181330-0x8018422C. Virtual
-   functions are named vfn_NN after their vtable entry. */
+/* Classes whose implementations lie in 0x80181330-0x8018422C. */
 
 /* 44-byte list entry. */
 struct Entry_80182CC8 {
@@ -38,8 +37,7 @@ public:
     virtual void vfn_10(int a, Params_80005284 **ppParams);
 };
 
-/* Common base of Class_802A6B60 and Class_800055D8, named after its sixth
-   entry 0x80184190; no vtable of its own is present in the target. */
+/* Common base of Class_802A6B60 and Class_800055D8. */
 class Class_80184190 {
 public:
     virtual void vfn_01(int a, int *pCount, int *pValue) = 0;
