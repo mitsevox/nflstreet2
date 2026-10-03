@@ -2359,7 +2359,7 @@
     {
       "source": "src/dolphin/mtx/mtx44.c",
       "profile": "dolphin_release",
-      "evidence": "evidence.tsv mtx44.c unit, function and data rows: native source reproduces both retained projection functions and the complete native constant pool; original file attribution provisional.",
+      "evidence": "evidence.tsv mtx44.c unit, function and data rows: native source reproduces both retained projection functions, the mtxUnit table and the complete native constant pool; original file attribution provisional.",
       "link_roots": {
         "symbols": [
           "C_MTXFrustum",
@@ -2375,10 +2375,16 @@
           "end": "0x8024ACC0"
         },
         {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDE30",
+          "end": "0x802FDE40"
+        },
+        {
           "section": ".sdata2",
           "placement": ".data6",
           "start": "0x803ED7D8",
-          "end": "0x803ED7F0"
+          "end": "0x803ED7F4"
         }
       ]
     },

@@ -1602,15 +1602,24 @@
       "name": "src/dolphin/mtx/mtx44.c",
       "source": "src/dolphin/mtx/mtx44.c",
       "library": "MTX",
-      "evidence": "Retained frustum/ortho functions from the pinned re4 source (dolsdk2001 three-function file); complete source-build validation supplies measured credit. Original SDK file ownership remains provisional.",
+      "evidence": "Retained frustum/ortho functions from the pinned re4/dolsdk2004 source; complete source-build validation supplies measured credit. Original SDK file ownership remains provisional.",
       "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FDE30",
+          "end": "0x802FDE40",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Native .data of the same object: the mtxUnit table 0.0, 1.0, 0.5, 3.0, equal to target bytes 0x802FDE30-0x802FDE40 between the preceding SDK build string and the GX build string. No retained code references it; attribution remains provisional."
+        },
         {
           "section": ".data6",
           "start": "0x803ED7D8",
-          "end": "0x803ED7F0",
+          "end": "0x803ED7F4",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete native .sdata2 of the three-function mtx44.c object: 1.0, 2.0, 0.0, -1.0 used by frustum/ortho through r13 offsets 0xB538-0xB544, then perspective's 0.5 and degree-to-radian constants retained with the pool although perspective is discarded. Equals target bytes 0x803ED7D8-0x803ED7F0; following 3.0f belongs to the next object. Attribution remains provisional.",
+          "evidence": "Complete native .sdata2 of the re4/dolsdk2004 mtx44.c object: 1.0, 2.0, 0.0, -1.0 used by frustum/ortho through r13 offsets 0xB538-0xB544, then 0.5, the degree-to-radian factor and 3.0 used only by functions discarded at link. Equals target bytes 0x803ED7D8-0x803ED7F4. Attribution remains provisional.",
           "object_seed": true
         },
         {
@@ -1619,7 +1628,7 @@
           "end": "0x8024ACC0",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Retained frustum/ortho functions from the pinned re4 source; complete source-build validation supplies measured credit. Target code cuts follow actual analysis function starts/ends; original object boundaries remain provisional."
+          "evidence": "Retained frustum/ortho functions from the pinned re4/dolsdk2004 source; complete source-build validation supplies measured credit. Target code cuts follow actual analysis function starts/ends; original object boundaries remain provisional."
         }
       ]
     },
@@ -1765,7 +1774,7 @@
           "end": "0x803EC2AE",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Target GXTexture 0x80250430–0x802504C4 indexes seven 8-byte register-ID arrays; 0x802502C8 indexes the six-byte filter conversion table. Native dolsdk2004 types and bytes corroborate the 62-byte extent. Alignment bytes and the unused reverse-conversion table remain unassigned.",
+          "evidence": "Target GXTexture 0x80250430\u20130x802504C4 indexes seven 8-byte register-ID arrays; 0x802502C8 indexes the six-byte filter conversion table. Native dolsdk2004 types and bytes corroborate the 62-byte extent. Alignment bytes and the unused reverse-conversion table remain unassigned.",
           "object_seed": true
         },
         {

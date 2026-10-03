@@ -25,9 +25,12 @@ extern inline float sqrtf(float x)
     return x;
 }
 
-#pragma cplusplus reset
+extern inline float fabsf(float x)
+{
+    return __fabsf(x);
+}
 
-float tanf(float x);
+#pragma cplusplus reset
 #else
 #ifdef __cplusplus
 extern "C" {
