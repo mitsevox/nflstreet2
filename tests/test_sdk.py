@@ -252,7 +252,8 @@ class LinkerRetention(unittest.TestCase):
         manifest = json.loads((ROOT / "config/GN7E69/units.json").read_text())
         binary = synthetic_dol()
         # A tiny source range is enough to exercise manifest validation before real placement.
-        unit = manifest["units"][-1]
+        unit = next(unit for unit in manifest["units"]
+                    if unit["source"] == "src/dolphin/dsp/dsp_task.c")
         unit["sections"] = [{"section": ".text", "placement": ".init",
                              "start": "0x80003100", "end": "0x80003108"}]
         manifest["units"] = [unit]

@@ -83,10 +83,6 @@
       "address": "0x8023AB48",
       "evidence": "evidence.tsv external row: sampling-rate target call, validated callee behavior and SDK reference."
     },
-    "SISetXY": {
-      "address": "0x8025C98C",
-      "evidence": "evidence.tsv external row: sampling-rate target call, validated callee behavior and SDK reference."
-    },
     "memcpy": {
       "address": "0x801C1FBC",
       "evidence": "evidence.tsv external row: system-call installation target call and inspected callee behavior, with SDK reference provenance."
@@ -279,22 +275,6 @@
       "address": "0x803ED500",
       "evidence": "Target SDA-relative instructions and pinned SDK global layouts; original storage remains linked because native alignment not accepted."
     },
-    "DSPSendMailToDSP": {
-      "address": "0x80285B20",
-      "evidence": "DSP task target branch destinations and SDK reference signatures."
-    },
-    "DSPCheckMailToDSP": {
-      "address": "0x80285AE8",
-      "evidence": "DSP task target branch destinations and SDK reference signatures."
-    },
-    "DSPCheckMailFromDSP": {
-      "address": "0x80285AF8",
-      "evidence": "DSP task target branch destinations and SDK reference signatures."
-    },
-    "DSPReadMailFromDSP": {
-      "address": "0x80285B08",
-      "evidence": "DSP task target branch destinations and SDK reference signatures."
-    },
     "__DSP_debug_printf": {
       "address": "0x80285D78",
       "evidence": "DSP task target branch destinations and SDK reference signatures."
@@ -322,6 +302,62 @@
     "__pure_virtual": {
       "address": "0x8025F088",
       "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
+    },
+    "OSSetWirelessID": {
+      "address": "0x8023D0F8",
+      "evidence": "evidence.tsv SIBios external row: target call relocation and related SDK declaration."
+    },
+    "VIGetCurrentLine": {
+      "address": "0x80244B60",
+      "evidence": "evidence.tsv SIBios external row: target call relocation and related SDK declaration."
+    },
+    "OSInitThreadQueue": {
+      "address": "0x8023D5D4",
+      "evidence": "evidence.tsv semaphore external row OSInitThreadQueue: target REL24 calls and related SDK callee fingerprint."
+    },
+    "OSSleepThread": {
+      "address": "0x8023E438",
+      "evidence": "evidence.tsv semaphore external row OSSleepThread: target REL24 calls and related SDK callee fingerprint."
+    },
+    "OSGetWirelessID": {
+      "address": "0x8023D074",
+      "evidence": "evidence.tsv SIBios external row: target call relocation and related SDK declaration."
+    },
+    "__OSSetInterruptHandler": {
+      "address": "0x8023B240",
+      "evidence": "evidence.tsv DSP init external records: target operands and pinned BFBB reference role."
+    },
+    "__OSGetSystemTime": {
+      "address": "0x8023E7B4",
+      "evidence": "evidence.tsv SIBios external row: target call relocation and related SDK declaration."
+    },
+    "OSSetAlarm": {
+      "address": "0x802395F4",
+      "evidence": "evidence.tsv SIBios external row: target call relocation and related SDK declaration."
+    },
+    "__OSUnmaskInterrupts": {
+      "address": "0x8023B644",
+      "evidence": "evidence.tsv DSP init external records: target operands and pinned BFBB reference role."
+    },
+    "OSCancelAlarm": {
+      "address": "0x8023965C",
+      "evidence": "evidence.tsv SIBios external row: target call relocation and related SDK declaration."
+    },
+    "__DSP_rude_task": {
+      "address": "0x803ED4F8",
+      "evidence": "evidence.tsv DSP init external records: target operands and pinned BFBB reference role."
+    },
+    "__DSP_tmp_task": {
+      "address": "0x803ED4FC",
+      "evidence": "evidence.tsv DSP init external records: target operands and pinned BFBB reference role."
+    },
+    "OSWakeupThread": {
+      "address": "0x8023E524",
+      "evidence": "evidence.tsv semaphore external row OSWakeupThread: target REL24 calls and related SDK callee fingerprint."
+    },
+    "__DSP_rude_task_pending": {
+      "address": "0x803ED4F4",
+      "evidence": "evidence.tsv DSP init external records: target operands and pinned BFBB reference role."
     }
   },
   "units": [
@@ -1098,6 +1134,117 @@
           "placement": ".data4",
           "start": "0x80302548",
           "end": "0x80302683"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSSemaphore.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv semaphore source/type/function rows; CREDITS.md donor provenance. Original file ownership remains provisional.",
+      "link_roots": {
+        "symbols": [
+          "OSInitSemaphore",
+          "OSWaitSemaphore",
+          "OSSignalSemaphore"
+        ],
+        "evidence": "evidence.tsv semaphore linker row: target contains the three retained functions, unused try-wait/count routines discarded by normal native-object linking."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023D2CC",
+          "end": "0x8023D3F4"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/si/SIBios.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv SIBios rows: pinned Pikmin 2 donor; target retained code and complete static data; original file boundary remains provisional.",
+      "link_roots": {
+        "symbols": [
+          "SIBusy",
+          "SIIsChanBusy",
+          "SITransfer",
+          "SIRegisterPollingHandler",
+          "SIUnregisterPollingHandler",
+          "SIInit",
+          "SIGetType",
+          "SIGetStatus",
+          "SISetCommand",
+          "SITransferCommands",
+          "SISetXY",
+          "SIEnablePolling",
+          "SIDisablePolling",
+          "SIGetResponse",
+          "SIGetTypeAsync",
+          "SIDecodeType",
+          "SIProbe"
+        ],
+        "evidence": "evidence.tsv SIBios retention row: target-kept public entry points; native SN liveness and complete target link."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025BD38",
+          "end": "0x8025D598"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6808",
+          "end": "0x803A6A08"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF2F0",
+          "end": "0x802FF401"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED3E0",
+          "end": "0x803ED3EC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC308",
+          "end": "0x803EC30C"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/dsp/dsp.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv DSP init functions, storage, external and source-form records; CREDITS.md pinned BFBB donor.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80285AE8",
+          "end": "0x80285D78"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x803024C8",
+          "end": "0x80302545"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC5B0",
+          "end": "0x803EC5B4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED4E0",
+          "end": "0x803ED4E4"
         }
       ]
     }
