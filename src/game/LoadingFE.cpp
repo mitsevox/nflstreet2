@@ -2,7 +2,6 @@
 
 extern "C" {
 extern char lbl_8030BFB4[];
-extern char lbl_80365394[];
 
 int fn_8007F828(int);
 void fn_8013CF98(void);
@@ -12,7 +11,7 @@ void fn_801C3A3C(float);
 int fn_801CEB4C(void);
 }
 
-static ModuleDependency sDependencies[] = { lbl_8030BFB4, lbl_80365394, 0 };
+static ModuleDependency sDependencies[] = { lbl_8030BFB4, &gGRender, 0 };
 LoadingFE gLoadingFE;
 static unsigned char sFirstInit = 1;
 
