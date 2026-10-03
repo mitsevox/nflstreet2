@@ -2795,6 +2795,88 @@
           "end": "0x803EA564"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80054CA8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80054CA8-0x80054D34 (src/game/cu_80054CA8.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80054CA8",
+          "end": "0x80054D34"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80309E34",
+          "end": "0x80309E6C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80054D34.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80054D34-0x80054EDC (src/game/cu_80054D34.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80054D34",
+          "end": "0x80054EDC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA568",
+          "end": "0x803EA570"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8017F7B0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8017F7B0-0x8017F90C (src/game/cu_8017F7B0.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8017F7B0",
+          "end": "0x8017F90C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB500",
+          "end": "0x803EB50C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80088E8C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80088E8C-0x80088F2C (src/game/cu_80088E8C.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80088E8C",
+          "end": "0x80088F2C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA818",
+          "end": "0x803EA81C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC870",
+          "end": "0x803EC878"
+        }
+      ]
     }
   ]
 }
