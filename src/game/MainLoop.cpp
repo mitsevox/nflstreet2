@@ -18,16 +18,16 @@ int fn_801F3D2C(void);
 static unsigned char sDone = 0;
 float lbl_803EA2C4 = 1.0f;
 
-static void fn_80026AD0(void)
+void fn_80026AD0(void)
 {
     fn_801CBFA8(lbl_803067B0);
 }
 
 void fn_80026AF8(void)
 {
-    char *pRoot = lbl_803653D4;
-    fn_801CC7FC(pRoot);
-    fn_801CC820(pRoot, 0);
+    char *pModule = lbl_803653D4;
+    fn_801CC7FC(pModule);
+    fn_801CC820(pModule, 0);
 
     char *pObject = lbl_803067B0;
     fn_801CBCD0(pObject);
