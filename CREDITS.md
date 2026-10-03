@@ -22,6 +22,7 @@ The Nintendo SDK reconstruction is reused from [MVP 2005](https://github.com/mit
 | `src/dolphin/os/OSSync.c` | re4 `src/lib/OSSync.c` |
 | `include/dolphin/`, `include/libc/`, `include/cmath.h` | MVP's SDK header dependency closure, credited to re4/dolsdk2004 |
 | `src/dolphin/__os.h` | The used declaration from re4 `src/lib/__os.h` |
+| GCC 2.95 branch of `include/libc/stdarg.h` | GCC 2.95.3 [`gcc/ginclude/va-ppc.h`](https://github.com/gcc-mirror/gcc/blob/releases/gcc-2.95.3/gcc/ginclude/va-ppc.h), System V.4 `<stdarg.h>` path only: `va_list` structure, register save area, `va_start`, `va_arg` and `va_end`. ProDG's GCC 2.95 front end has no `__builtin_va_list`. The soft-float case, `__va_copy`, the `varargs.h` path and the header guards are omitted; `__va_overflow(AP)` is spelled out as `(AP)->overflow_arg_area` |
 
 Only headers needed by these units are included. Unused umbrella includes were narrowed, and provenance/process comments were moved here. Copyright and license notices in imported files remain intact. The sampling-rate table's second NTSC entry is restored to Street's target values `(15, 18)`; MVP's later SDK uses `(14, 19)`. The system-call exception stub and paired-single matrix-vector routines retain the assembly forms present in the upstream SDK reconstruction. The matrix unit does not use the reference’s `fake_tgmath.h` include, which is omitted.
 
