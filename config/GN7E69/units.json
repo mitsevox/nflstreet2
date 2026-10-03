@@ -2637,6 +2637,82 @@
           "end": "0x803EBADC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80074D70.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80074D70-0x80074E08 (src/game/cu_80074D70.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80074D70",
+          "end": "0x80074E08"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA740",
+          "end": "0x803EA744"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80074684.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80074684-0x800747DC (src/game/cu_80074684.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80074684",
+          "end": "0x800747DC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA73C",
+          "end": "0x803EA740"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80074E08.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80074E08-0x80074EA0 (src/game/cu_80074E08.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80074E08",
+          "end": "0x80074EA0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA744",
+          "end": "0x803EA748"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80074EA0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80074EA0-0x80074F38 (src/game/cu_80074EA0.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80074EA0",
+          "end": "0x80074F38"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA748",
+          "end": "0x803EA74C"
+        }
+      ]
     }
   ]
 }
