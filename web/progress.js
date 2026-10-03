@@ -6,6 +6,7 @@ function color(item) {
   const blend = Math.min(item.matched / item.size / 0.99, 1) * 100;
   return `color-mix(in srgb, var(--empty), var(--warm) ${blend}%)`;
 }
+// Preserve report order so neighboring files and functions stay together.
 // Balanced area partitioning keeps byte proportions exact across viewport sizes.
 function partition(items,x,y,w,h,out){if(!items.length)return;if(items.length===1){out.push({...items[0],x,y,w,h});return;}let total=items.reduce((s,a)=>s+a.size,0),sum=0,split=1;for(let i=0;i<items.length-1;i++){sum+=items[i].size;split=i+1;if(sum>=total/2)break;}const ratio=sum/total;if(w>=h){partition(items.slice(0,split),x,y,w*ratio,h,out);partition(items.slice(split),x+w*ratio,y,w*(1-ratio),h,out);}else{partition(items.slice(0,split),x,y,w,h*ratio,out);partition(items.slice(split),x,y+h*ratio,w,h*(1-ratio),out);}}
 const tooltip = document.querySelector('#map-tooltip');
@@ -429,7 +430,7 @@ function render(direction = null, origin = null) {
   canvas.setAttribute('aria-description', 'Use arrow keys to move between blocks, Home or End to reach the first or last block, and Enter to select.');
   canvas.setAttribute('aria-label', current ? current.name + ' contents' : (mapKind === 'code' ? 'Code' : 'Data') + ' file map');
   const layout = [];
-  partition([...items].sort((a, b) => b.size - a.size), 0, 0, canvas.clientWidth, canvas.clientHeight, layout);
+  partition(items, 0, 0, canvas.clientWidth, canvas.clientHeight, layout);
   canvas.replaceChildren();
   hoverTarget = null;
   rippleSurface = null;
