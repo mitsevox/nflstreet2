@@ -2,15 +2,7 @@
 
 #include "game/fn_801FCE10.h"
 #include "game/Object_8007A334.h"
-
-#if defined(DECOMP_COMPARE)
-/* Record filled by 0x8018EDF0; 0x8018E6E0 reads only the byte at +0x50. */
-struct Record_8018EDF0 {
-    char mUnknown0[80];
-    unsigned char mId;
-    char mUnknown81[19];
-};
-#endif
+#include "game/cu_8018EC68.h"
 
 extern "C" {
 int fn_8022F358(int index);
@@ -252,9 +244,6 @@ int fn_8018E598(int index)
 #if defined(DECOMP_COMPARE)
 /* Draft bodies of the rest of this file (0x8018E5F4-0x8018E9A4); the original
    bytes of this range stay linked. */
-int fn_8018EDF0(int a, int b, Record_8018EDF0 *pRecord);
-unsigned int fn_8018EE44(int a);
-int fn_8018EE78(int index);
 
 /* Partial: ProDG turns this test into subfic/adde, while the target keeps
    li/cmpwi/bne/li (see the cu_8018DF98 draft functions evidence row). */
@@ -278,12 +267,12 @@ void fn_8018E658(int index, int id)
 
 int fn_8018E6A4(int index)
 {
-    return fn_8018EE78(index) - fn_8018E598(index);
+    return fn_8018EE78() - fn_8018E598(index);
 }
 
 int fn_8018E6E0(int index, int a)
 {
-    Record_8018EDF0 record;
+    VetsRow_8018EC68 row;
     int result = 1;
     unsigned int count = fn_8018EE44(a);
 
@@ -291,7 +280,7 @@ int fn_8018E6E0(int index, int a)
         unsigned int i;
 
         for (i = 0; i < count; i++) {
-            if (fn_8018EDF0(a, i, &record) && !fn_8018E5F4(index, record.mId)) {
+            if (fn_8018EDF0(a, i, &row) && !fn_8018E5F4(index, row.mNets)) {
                 result = 0;
                 break;
             }
