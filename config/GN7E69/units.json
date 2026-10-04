@@ -5887,6 +5887,55 @@
           "end": "0x803EB6D4"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80060948.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80061520-0x80061F04 (src/game/cu_80060948.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80061520",
+          "end": "0x80061F04"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028F4D8",
+          "end": "0x8028F58C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D4E28",
+          "end": "0x802D4EB0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA5E8",
+          "end": "0x803EA600"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030A2BC",
+          "end": "0x8030A3B0"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A90",
+          "end": "0x80289A94"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BD0",
+          "end": "0x80289BD4"
+        }
+      ]
     }
   ]
 }
