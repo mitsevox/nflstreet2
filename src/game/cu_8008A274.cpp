@@ -57,7 +57,7 @@ void fn_8020E2B0(void *p);
 Object_8020E52C *fn_8020E52C(void *p, int index);
 void *fn_8020E5F8(void *p, int index);
 void fn_80221BE8(void (*pCallback)(int, unsigned int, Object_8008AAF8 *));
-int fn_8022F358(signed char index);
+int fn_8022F358(int index);
 int fn_8022F3D4(int a);
 int fn_8022F4BC(void);
 void fn_802336C4(void *pObject, int a, int b);
@@ -379,7 +379,7 @@ void fn_8008AAF8(unsigned int id, Object_8008AAF8 *pObject)
         fn_801FCE10(0,
                     "use \x8c select 'XTPP' into \x89 and 'LPPP' into \x89 from 'PPRC' where "
                     "'PXSP' = \x85\n",
-                    fn_8022F3D4(fn_8022F358(sSlots->mSlots[id - 0x277].mValue)), pUnknown12, pBuffer, id);
+                    fn_8022F3D4(fn_8022F358((signed char)sSlots->mSlots[id - 0x277].mValue)), pUnknown12, pBuffer, id);
         memcpy(pObject->mpUnknown20, pBuffer, 0x200);
         fn_801D2BD0(pBuffer);
     }
