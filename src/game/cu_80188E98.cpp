@@ -1,3 +1,4 @@
+#include "game/fn_8018AB0C.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
 #include "game/fn_8007F828.h"
@@ -72,8 +73,6 @@ void fn_8018A8B0(unsigned char value);
 unsigned char fn_8018A8B8(void);
 void fn_8018A8C8(int a);
 void fn_8018A910(void);
-void fn_8018AB0C(void);
-void fn_8018AB3C(void);
 void fn_8018AB64(void);
 void fn_8018ACBC(void);
 void fn_8018AD78(void);

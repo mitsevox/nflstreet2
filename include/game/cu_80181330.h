@@ -10,13 +10,24 @@ struct Entry_80182CC8 {
     int mUnknown32;
     int mUnknown36;
     unsigned char mUnknown40;
+    unsigned char mUnknown41;
 };
 
-/* Argument of the last two entries of the Class_802A6BB0 vtable. */
+/* Text argument record reached through Arg_8018399C::pParams. */
 struct Params_80005284 {
     int mUnknown0;
     int mLength;
     char *mpText;
+};
+
+/* One argument or result slot of the message handler fn_8018399C. Text
+   arguments are passed on to the Class_802A6BB0 entries by value. */
+union Arg_8018399C {
+    int i;
+    float f;
+    int *pi;
+    float *pf;
+    Params_80005284 *pParams;
 };
 
 /* Vtable 0x802A6BB0: ten entries, each an empty function except the seventh,
@@ -25,14 +36,15 @@ class Class_802A6BB0 {
 public:
     virtual void vfn_01(int a, int *pResult);
     virtual void vfn_02(int a, int b, int c);
-    virtual void vfn_03();
-    virtual void vfn_04();
-    virtual void vfn_05();
-    virtual void vfn_06();
-    virtual int vfn_07();
-    virtual void vfn_08();
-    virtual void vfn_09(int a, int *pResult, Params_80005284 **ppParams);
-    virtual void vfn_10(int a, Params_80005284 **ppParams);
+    virtual void vfn_03(int a, int *pB, int *pC);
+    virtual void vfn_04(int a, int b, int c);
+    virtual void vfn_05(int a, int b, Arg_8018399C text);
+    virtual void vfn_06(int a, int b, int c, int *pD, int *pE, Arg_8018399C textF,
+                        Arg_8018399C textG, Arg_8018399C textH);
+    virtual int vfn_07(int a, int b, Arg_8018399C text);
+    virtual void vfn_08(int a, int b, int c);
+    virtual void vfn_09(int a, int *pResult, Arg_8018399C text);
+    virtual void vfn_10(int a, Arg_8018399C text);
 };
 
 class Class_80184190 {

@@ -4805,6 +4805,62 @@
       }
     },
     {
+      "source": "src/game/cu_80073620.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80073620",
+        "0x8007371C",
+        "0x80073764",
+        "0x800737B8",
+        "0x800737C0",
+        "0x800737C8"
+      ],
+      "provenance": {
+        "pull_request": 278,
+        "merged_via": 276,
+        "commit": "7109aa2e02a721603e36167cdc1011c95cacf3b1",
+        "introduced_blob": "8111b7cedb1bf0fbe5ec7e3e9163927220c434df"
+      }
+    },
+    {
+      "source": "src/game/cu_800857D0.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x800857D0",
+        "0x80085810",
+        "0x800858C8"
+      ],
+      "provenance": {
+        "pull_request": 282,
+        "merged_via": 276,
+        "commit": "5d992eeee247a9c14f910e33a5706afa7ad6714a",
+        "introduced_blob": "067601f26e3a79c963cf2c9bc0628b10bd2afe1d"
+      }
+    },
+    {
+      "source": "src/game/cu_8019CE3C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8019CE3C",
+        "0x8019CEE8",
+        "0x8019CF5C",
+        "0x8019CFD0",
+        "0x8019CFF4"
+      ],
+      "provenance": {
+        "pull_request": 287,
+        "merged_via": 276,
+        "commit": "628867fd7e87afb0e7431b135a182dbf6ec2fe61",
+        "introduced_blob": "029ac931ada455e78b1f10594c4aeb2f664ac625"
+      }
+    },
+    {
       "source": "src/game/cu_80190208.cpp",
       "contributors": [
         "lifewillbeokay"

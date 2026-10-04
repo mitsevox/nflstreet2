@@ -578,7 +578,7 @@ void fn_80022778(void)
     }
 }
 
-void fn_80022870(int index, int flag, float x, float y, float z, float angle, float scale)
+void fn_80022870(int index, float x, float y, float z, float angle, float scale, int flag)
 {
     int value;
 
