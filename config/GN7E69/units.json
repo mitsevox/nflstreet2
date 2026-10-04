@@ -5387,6 +5387,19 @@
           "end": "0x803EB24C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80020CF8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80020CF8-0x80020E80 and its type, field and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80020CF8",
+          "end": "0x80020E80"
+        }
+      ]
     }
   ]
 }
