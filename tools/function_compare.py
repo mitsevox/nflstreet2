@@ -90,6 +90,32 @@ def accepted_data_symbols(objects, externals):
     return resolved, ambiguous
 
 
+def resolve_undefined(symbols, externals, data_symbols, ambiguous):
+    """Resolve a comparison object's undefined references.
+
+    Configured externals and accepted function addresses win; public data of accepted source
+    fills the remaining names; neutral fn_/lbl_ labels resolve by their address. An ambiguous
+    accepted data name always fails closed, as does any other unknown name."""
+    known = dict(data_symbols)
+    known.update(externals)
+    defined = {s['name'] for s in symbols if s['shndx'] != sb.SHN_UNDEF}
+    resolved = {}
+    for symbol in symbols:
+        name = symbol['name']
+        if symbol['shndx'] != sb.SHN_UNDEF or not name or name in defined:
+            continue
+        if name in ambiguous:
+            raise ValueError(f'Ambiguous comparison symbol {name}')
+        neutral = sb.NEUTRAL.fullmatch(name)
+        if name in known:
+            resolved[name] = known[name]
+        elif neutral:
+            resolved[name] = int(neutral[1], 16)
+        else:
+            raise ValueError(f'Unresolved comparison symbol {name}')
+    return resolved
+
+
 def configured(root, binary):
     config = json.loads((root / CONFIG).read_text())
     if set(config) != {'schema', 'units'} or config['schema'] != 2 or not isinstance(config['units'], list):
@@ -173,7 +199,6 @@ def generate(original, source_report, tool):
         accepted_objects.append((u['sections'], native_sections, native_symbols))
     # Public data objects of accepted source resolve at their verified linked placements.
     data_symbols, ambiguous = accepted_data_symbols(accepted_objects, externals)
-    externals.update({name: value for name, value in data_symbols.items() if name not in externals})
     compiler, wrapper = sb.setup_compiler.setup()
     sdk = sb.setup_compiler.setup_sdk() if any(u['compiler'] == 'mwcc' for u in units) else None
     work = root / 'build/matching/candidates'
@@ -209,21 +234,7 @@ def generate(original, source_report, tool):
                     sb.SHT_NOBITS if kind == 'bss' else sb.SHT_PROGBITS):
                 raise ValueError('Comparison section type differs from placement')
         functions = {s['name']: s for s in symbols if s['type'] == 2 and s['size'] and s['shndx'] != sb.SHN_UNDEF}
-        resolved = {}
-        defined = {s['name'] for s in symbols if s['shndx'] != sb.SHN_UNDEF}
-        for symbol in symbols:
-            name = symbol['name']
-            if symbol['shndx'] != sb.SHN_UNDEF or not name or name in defined:
-                continue
-            neutral = sb.NEUTRAL.fullmatch(name)
-            if name in ambiguous:
-                raise ValueError(f'Ambiguous comparison symbol {name}')
-            if name in externals:
-                resolved[name] = externals[name]
-            elif neutral:
-                resolved[name] = int(neutral[1], 16)
-            else:
-                raise ValueError(f'Unresolved comparison symbol {name}')
+        resolved = resolve_undefined(symbols, externals, data_symbols, ambiguous)
         targets = {f['symbol']: (int(f['address'],16), int(f['address'],16)+f['size'])
                    for u in accepted if u['source'] == unit['source'] for f in u['functions']}
         targets.update({r['symbol']: (sb.address(r['start']), sb.address(r['end'])) for r in unit['functions']})

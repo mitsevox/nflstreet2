@@ -5,6 +5,7 @@ import shutil
 import struct
 import sys
 import tempfile
+import inspect
 import unittest
 from unittest.mock import patch
 
@@ -104,6 +105,50 @@ class AcceptedDataSymbols(unittest.TestCase):
         resolved, ambiguous = function_compare.accepted_data_symbols(
             [self.object([self.symbol('gData', 3, value=4)])], {'gData': 0x80300004})
         self.assertEqual((resolved, ambiguous), ({'gData': 0x80300004}, set()))
+
+
+    def test_filters_non_data_unnamed_and_reserved_index_symbols(self):
+        cases = {
+            'function type': self.symbol('gData', 3, kind=2),
+            'section type': self.symbol('gData', 3, kind=3),
+            'unnamed': self.symbol('', 3),
+            'absolute': self.symbol('gData', sb.SHN_ABS),
+            'common': self.symbol('gData', sb.SHN_COMMON),
+            'index past sections': self.symbol('gData', len(self.SECTIONS)),
+            'weak': self.symbol('gData', 3, bind=2),
+        }
+        for label, symbol in cases.items():
+            with self.subTest(label):
+                self.assertEqual(function_compare.accepted_data_symbols([self.object([symbol])], {}), ({}, set()))
+
+
+class ResolveUndefined(unittest.TestCase):
+    """Undefined comparison references: externals first, then accepted data, then neutral labels."""
+
+    @staticmethod
+    def undefined(*names, defined=()):
+        return ([{'name': n, 'shndx': sb.SHN_UNDEF} for n in names] +
+                [{'name': n, 'shndx': 2} for n in defined])
+
+    def test_externals_win_over_data_and_data_resolves_otherwise(self):
+        resolved = function_compare.resolve_undefined(
+            self.undefined('gData', 'gOther', 'fn_80001234', 'lbl_80300000', 'gLocal', defined=['gLocal']),
+            {'gData': 0x80100000}, {'gData': 0x80200000, 'gOther': 0x80200010}, set())
+        self.assertEqual(resolved, {'gData': 0x80100000, 'gOther': 0x80200010,
+                                    'fn_80001234': 0x80001234, 'lbl_80300000': 0x80300000})
+
+    def test_ambiguous_and_unknown_names_fail_closed(self):
+        with self.assertRaisesRegex(ValueError, 'Ambiguous comparison symbol gData'):
+            function_compare.resolve_undefined(self.undefined('gData'), {}, {}, {'gData'})
+        with self.assertRaisesRegex(ValueError, 'Ambiguous comparison symbol lbl_80300000'):
+            function_compare.resolve_undefined(self.undefined('lbl_80300000'), {}, {}, {'lbl_80300000'})
+        with self.assertRaisesRegex(ValueError, 'Unresolved comparison symbol gMissing'):
+            function_compare.resolve_undefined(self.undefined('gMissing'), {}, {}, set())
+
+    def test_generate_routes_undefined_references_through_the_resolver(self):
+        source = inspect.getsource(function_compare.generate)
+        self.assertIn('accepted_data_symbols(accepted_objects, externals)', source)
+        self.assertIn('resolve_undefined(symbols, externals, data_symbols, ambiguous)', source)
 
 
 class InPlaceComparisons(unittest.TestCase):
