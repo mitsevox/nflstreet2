@@ -3995,6 +3995,24 @@
         "commit": "e0c45d7ff7d8da33b9b4b319a875d47c7c75a556",
         "introduced_blob": "5db8911be59e28a6179a7338b8dde250607fa036"
       }
+    },
+    {
+      "source": "src/game/cu_80176C58.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80176C58",
+        "0x80176C90",
+        "0x80176CC8",
+        "0x80176E34"
+      ],
+      "provenance": {
+        "pull_request": 238,
+        "merged_via": 238,
+        "commit": "09ceadd8ffd879181ca49952eb47a16e50c25053",
+        "introduced_blob": "60b6116109778293393a9e2c642b487671950c3b"
+      }
     }
   ],
   "target": "GN7E69",
