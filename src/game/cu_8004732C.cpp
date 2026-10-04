@@ -10,8 +10,9 @@ struct Quad_801CD308 {
     float mValues[4];
 };
 
-/* 36-byte instance of object type 11 (registered by fn_80047578). */
-struct Instance_8004732C {
+/* 36-byte instance of object type 11 (registered by fn_80047578); the
+   player object keeps one at +988 (include/game/Object_8003DEC4.h). */
+struct Item_800476DC {
     char mUnknown0[4];
     float mUnknown4[3];
     char mUnknown16[4];
@@ -41,11 +42,11 @@ void fn_801D0C58(void *a);
 void fn_801D1258(int which, float (*pMatrix)[4]);
 void fn_801D1288(int which, float (*pMatrix)[4]);
 void fn_801D12BC(int a);
-int fn_801DCF0C(int a, int b, int c, void (*pA)(Instance_8004732C *), void (*pB)(Instance_8004732C *));
+int fn_801DCF0C(int a, int b, int c, void (*pA)(Item_800476DC *), void (*pB)(Item_800476DC *));
 void fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Instance_8004732C *));
-Instance_8004732C *fn_801DD268(int handle, int a, int b, int *pInit);
-void fn_801DD320(int handle, Instance_8004732C *pInstance);
+void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Item_800476DC *));
+Item_800476DC *fn_801DD268(int handle, int a, int b, int *pInit);
+void fn_801DD320(int handle, Item_800476DC *pInstance);
 void fn_80227E40(float *pOut, float *pIn);
 int fn_80236EC0(int a);
 
@@ -60,7 +61,7 @@ void fn_8004732C(void)
     lbl_803EC7CC = fn_8018AD34(0, 1);
 }
 
-void fn_80047358(Instance_8004732C *pInstance)
+void fn_80047358(Item_800476DC *pInstance)
 {
     pInstance->mUnknown4[0] = 0.0f;
     pInstance->mUnknown4[1] = 0.0f;
@@ -74,14 +75,14 @@ void fn_80047358(Instance_8004732C *pInstance)
     pInstance->mUnknown28 = 0;
 }
 
-void fn_80047398(Instance_8004732C *pInstance)
+void fn_80047398(Item_800476DC *pInstance)
 {
     pInstance->mUnknown20 = 0;
     pInstance->mpUnknown24 = 0;
     pInstance->mUnknown28 = 0;
 }
 
-int fn_800473AC(Instance_8004732C *pInstance)
+int fn_800473AC(Item_800476DC *pInstance)
 {
     if (lbl_803EA4C8 && fn_8007F828(17)) {
         int mode = fn_800AD9B4();
@@ -140,12 +141,12 @@ void fn_800475D4(void)
     fn_801DCF8C(11);
 }
 
-Instance_8004732C *fn_800475FC(int value)
+Item_800476DC *fn_800475FC(int value)
 {
     return fn_801DD268(lbl_803EA4C0, 11, 0, &value);
 }
 
-void fn_80047630(Instance_8004732C *pInstance)
+void fn_80047630(Item_800476DC *pInstance)
 {
     if (pInstance) {
         fn_801DD320(lbl_803EA4C0, pInstance);
@@ -167,15 +168,16 @@ void fn_80047698(void)
     lbl_803EA4C9 = 0;
 }
 
-void fn_800476CC(Instance_8004732C *pInstance, const char *pName)
+void fn_800476CC(Item_800476DC *pInstance, const char *pName)
 {
     if (pInstance) {
         pInstance->mpUnknown24 = pName;
     }
 }
 
-void fn_800476DC(Instance_8004732C *pInstance, float *pPosition)
+void fn_800476DC(Item_800476DC *pInstance, void *p)
 {
+    float *pPosition = (float *)p;
     float clip[4];
     float view[4];
     float position[3];
