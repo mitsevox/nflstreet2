@@ -81,7 +81,37 @@ def check_ancestor(root, commit, revision):
         raise ValueError('Activity provenance is outside this revision history')
 
 
-def contributors(root, ledger, build, revision):
+def provenance_commit(root, commit, fetch_missing=False):
+    if not SHA.fullmatch(commit):
+        raise ValueError('Invalid source provenance commit')
+    def present():
+        return subprocess.run(['git','cat-file','-e',commit+'^{commit}'], cwd=root,
+                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
+    if not present() and fetch_missing:
+        # Explicit host-side opt-in: retrieve only the pinned object from this checkout's origin.
+        subprocess.run(['git','fetch','--no-tags','origin',commit], cwd=root,
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+    if not present():
+        raise ValueError('Source provenance commit is unavailable; fetch the pinned commit from origin')
+
+
+def source_blob(root, commit, source):
+    result = subprocess.run(['git','rev-parse',commit+':'+source], cwd=root,
+                            capture_output=True, text=True)
+    if result.returncode:
+        raise ValueError('Source provenance commit lacks the recorded source')
+    return result.stdout.strip()
+
+
+def historical_source_blob(root, revision, source, blob):
+    # The current revision alone is insufficient: prove an actual source-path tree in its history.
+    commits = subprocess.check_output(['git','rev-list',revision,'--',source], cwd=root, text=True).splitlines()
+    return any(source_blob(root, commit, source) == blob for commit in commits
+               if subprocess.run(['git','cat-file','-e',commit+':'+source], cwd=root,
+                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0)
+
+
+def contributors(root, ledger, build, revision, fetch_missing=False):
     if ledger.get('schema') != 1 or ledger.get('target') != 'GN7E69' or build.get('complete') != 'identical':
         raise ValueError('Function credit requires the verified source build')
     profiles = ledger.get('contributors', {})
@@ -110,11 +140,16 @@ def contributors(root, ledger, build, revision):
         for key in ('pull_request','merged_via'):
             if type(provenance.get(key)) is not int or provenance[key] <= 0:
                 raise ValueError('Attribution lacks contribution PR provenance')
-        check_ancestor(root, provenance['commit'], revision)
-        blob = subprocess.check_output(['git','rev-parse',provenance['commit']+':'+entry['source']],
-                                       cwd=root, text=True).strip()
-        if blob != provenance['introduced_blob']:
+        commit = provenance['commit']
+        provenance_commit(root, commit, fetch_missing)
+        if source_blob(root, commit, source) != provenance['introduced_blob']:
             raise ValueError('Attribution differs from the introduced source')
+        original_commit = provenance.get('original_commit', commit)
+        provenance_commit(root, original_commit, fetch_missing)
+        if source_blob(root, original_commit, source) != original:
+            raise ValueError('Attribution differs from the original source')
+        if not historical_source_blob(root, revision, source, provenance['introduced_blob']):
+            raise ValueError('Introduced source is absent from this revision history')
         for address in entry['functions']:
             if not re.fullmatch(r'0x[0-9A-F]{8}', address):
                 raise ValueError('Invalid credited function address')
@@ -136,7 +171,7 @@ def contributors(root, ledger, build, revision):
             for login, functions in sorted(counts.items(), key=lambda pair:(-len(pair[1]), pair[0])) if functions]
 
 
-def export(root, site, source_report, previous=None, append=False):
+def export(root, site, source_report, previous=None, append=False, fetch_missing=False):
     import hashlib
     build = json.loads(source_report.read_text())
     if site.get('baseline') != 'verified' or site.get('target_sha1') != build.get('target_sha1'):
@@ -171,7 +206,7 @@ def export(root, site, source_report, previous=None, append=False):
     ledger = json.loads((root/'config/GN7E69/contributors.json').read_text())
     return {'schema':1, 'target':'GN7E69', 'target_sha1':site['target_sha1'],
             'revision':site['revision'], 'snapshots':history,
-            'contributors':contributors(root, ledger, build, site['revision'])}
+            'contributors':contributors(root, ledger, build, site['revision'], fetch_missing)}
 
 
 def main():
@@ -181,12 +216,14 @@ def main():
     parser.add_argument('--output', type=Path, default=ROOT/'build/site/activity.json')
     parser.add_argument('--previous', type=Path)
     parser.add_argument('--append-current', action='store_true')
+    parser.add_argument('--fetch-provenance', action='store_true',
+                        help='Fetch unavailable pinned source provenance commits from origin (CI host only)')
     args = parser.parse_args()
     site = json.loads(args.site.read_text())
     previous = json.loads(args.previous.read_text()) if args.previous else None
     if args.append_current and previous is None:
         raise ValueError('Main publication requires restored prior deployment history')
-    result = export(ROOT, site, args.source_report, previous, args.append_current)
+    result = export(ROOT, site, args.source_report, previous, args.append_current, args.fetch_provenance)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2)+'\n')
     print(f"Exported {len(result['snapshots'])} verified snapshots and {len(result['contributors'])} contributors")
