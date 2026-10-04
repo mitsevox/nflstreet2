@@ -2745,6 +2745,109 @@
       ]
     },
     {
+      "source": "src/game/cu_8004732C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv bounded unit row for src/game/cu_8004732C.cpp, individual exact function extents and owned .rodata/.sdata/.sbss data rows. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004732C",
+          "end": "0x800478DC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D600",
+          "end": "0x8028D654"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA4C0",
+          "end": "0x803EA4CA"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC7CC",
+          "end": "0x803EC7D0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8004732C",
+          "start": "0x8004732C",
+          "end": "0x80047358"
+        },
+        {
+          "symbol": "fn_80047358",
+          "start": "0x80047358",
+          "end": "0x80047398"
+        },
+        {
+          "symbol": "fn_80047398",
+          "start": "0x80047398",
+          "end": "0x800473AC"
+        },
+        {
+          "symbol": "fn_800473AC",
+          "start": "0x800473AC",
+          "end": "0x80047578"
+        },
+        {
+          "symbol": "fn_80047578",
+          "start": "0x80047578",
+          "end": "0x800475D4"
+        },
+        {
+          "symbol": "fn_800475D4",
+          "start": "0x800475D4",
+          "end": "0x800475FC"
+        },
+        {
+          "symbol": "fn_800475FC",
+          "start": "0x800475FC",
+          "end": "0x80047630"
+        },
+        {
+          "symbol": "fn_80047630",
+          "start": "0x80047630",
+          "end": "0x80047670"
+        },
+        {
+          "symbol": "fn_80047670",
+          "start": "0x80047670",
+          "end": "0x80047698"
+        },
+        {
+          "symbol": "fn_80047698",
+          "start": "0x80047698",
+          "end": "0x800476CC"
+        },
+        {
+          "symbol": "fn_800476CC",
+          "start": "0x800476CC",
+          "end": "0x800476DC"
+        },
+        {
+          "symbol": "fn_800476DC",
+          "start": "0x800476DC",
+          "end": "0x80047874"
+        },
+        {
+          "symbol": "fn_80047874",
+          "start": "0x80047874",
+          "end": "0x8004787C"
+        },
+        {
+          "symbol": "fn_8004787C",
+          "start": "0x8004787C",
+          "end": "0x800478DC"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8007F12C.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv bounded unit row for src/game/cu_8007F12C.cpp, individual exact function extents, owned data spans, inferred layouts and lifecycle names. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
