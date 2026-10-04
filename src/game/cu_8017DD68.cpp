@@ -1,18 +1,7 @@
 #include <string.h>
-
-/* One argument slot of a message posted through fn_8021D7B8. */
-union Arg_8021D7B8 {
-    int i;
-    float f;
-    void *p;
-};
-
-/* Text argument passed by address: a string pointer and a length word. */
-struct Text_8017E0CC {
-    int mUnknown0;
-    int mLength;
-    char *mpText;
-};
+#include "game/Entry_80219044.h"
+#include "game/cu_8017DD68.h"
+#include "game/fn_8021D7B8.h"
 
 /* Only +8 is read here. */
 struct Object_8017E46C {
@@ -29,7 +18,6 @@ int fn_800A83E0(int a);
 unsigned char fn_800C1E48(void);
 int fn_80162E40(int a);
 int fn_80188030(int a);
-void fn_8021D7B8(void *p, int id, int count, Arg_8021D7B8 *pArgs);
 
 unsigned char fn_8017E608(int index);
 unsigned char fn_8017E614(int index);
@@ -39,15 +27,15 @@ int fn_8017E570(int key, unsigned char *pRed, unsigned char *pGreen, unsigned ch
 static unsigned char lbl_803EB48C[4] = { 0 };
 static unsigned char lbl_803EB490[4] = { 0 };
 
-static Text_8017E0CC lbl_80362598[2];
+static Entry_80219044 lbl_80362598[2];
 static char lbl_803625B0[2][32];
-static Text_8017E0CC lbl_803625F0[6];
+static Entry_80219044 lbl_803625F0[6];
 static char lbl_80362638[6][32];
-static Text_8017E0CC lbl_803626F8[6];
+static Entry_80219044 lbl_803626F8[6];
 static char lbl_80362740[6][32];
-static Text_8017E0CC lbl_80362800[6];
+static Entry_80219044 lbl_80362800[6];
 static char lbl_80362848[6][32];
-static Text_8017E0CC lbl_80362908;
+static Entry_80219044 lbl_80362908;
 static char lbl_80362914[80];
 
 static const int lbl_802A57C4[4] = { 0, 1, 7, 3 };

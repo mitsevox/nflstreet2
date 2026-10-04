@@ -1,26 +1,10 @@
+#include "game/Class_80148A58.h"
 #include "game/FELoop.h"
 #include "game/Object_8008044C.h"
+#include "game/cu_8003AEA8.h"
 #include "game/cu_8003E214.h"
+#include "game/fn_8003B6BC.h"
 #include "game/fn_801C1F94.h"
-
-/* Object returned by fn_80148A58; its vtable pointer is at offset 0x18. */
-class Class_80148A58 {
-public:
-    virtual void vfn_01();
-    virtual void vfn_02();
-    virtual void vfn_03();
-    virtual void vfn_04();
-    virtual void vfn_05();
-    virtual void vfn_06();
-    virtual void vfn_07();
-    virtual void vfn_08();
-    virtual void vfn_09();
-    virtual void vfn_10(int value, int *list, int *ids);
-    virtual void vfn_11(int value, int *list, int *ids, int a, int b);
-
-private:
-    char mUnknown0[24];
-};
 
 /* Passed by pointer; only the words at +4 and +8 are read. */
 struct Pair_8003AEA8 {
@@ -29,18 +13,7 @@ struct Pair_8003AEA8 {
     int mUnknown8;
 };
 
-/* Second argument of fn_8008044C and fn_8008040C. */
-struct Desc_8008044C {
-    Desc_8008044C() : mUnknown0(0), mUnknown4(0), mUnknown8(0), mUnknown12(0) {}
-
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
-};
-
 extern "C" {
-void fn_8008040C(Object_8008044C *pObject, Desc_8008044C *pDesc);
 int fn_800808F8(Object_8008044C *pObject);
 int fn_800809FC(Object_8008044C *pObject, int a, int *pResult);
 void fn_80080A68(Object_8008044C *pObject, int a, int b);
@@ -55,7 +28,6 @@ int fn_80085C94(int a, int *values);
 int fn_80085D54(void);
 int fn_800B4A18(int a, int b, int c);
 int fn_801485D4(void);
-Class_80148A58 *fn_80148A58(void);
 int fn_80187C6C(void);
 int fn_80187C8C(void);
 int fn_8022D874(int tag, int a, int b, int c);
@@ -210,7 +182,7 @@ int fn_8003B3AC(int group)
     return fn_80085C3C(group);
 }
 
-int fn_8003B3F8(int group, int *list, int value)
+void fn_8003B3F8(int group, int *list, int value)
 {
     if (fn_801485D4()) {
         fn_80148A58()->vfn_10(value, list, lbl_80307538[group]);
@@ -218,7 +190,7 @@ int fn_8003B3F8(int group, int *list, int value)
         fn_8003E8FC(value, list, lbl_80307538[group]);
     }
     fn_80085C94(group, lbl_80307538[group]);
-    return fn_80085BE4(group);
+    fn_80085BE4(group);
 }
 
 int fn_8003B4A4(int group, int *list, int value, int a, int b)
@@ -281,12 +253,12 @@ void fn_8003B688(int group, int *values)
     }
 }
 
-void fn_8003B6BC(int group, int *values)
+void fn_8003B6BC(int group, Record_8003B6BC *pRecord)
 {
     int i;
 
     for (i = 0; i < 14; i++) {
-        values[i] = lbl_80307538[group][i];
+        pRecord->mUnknown[i] = lbl_80307538[group][i];
     }
 }
 

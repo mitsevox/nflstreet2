@@ -1,15 +1,11 @@
 #include <string.h>
 #include "game/Object_80039F5C.h"
+#include "game/Entry_80219044.h"
 #include "game/cu_80067C10.h"
+#include "game/cu_8017DD68.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80218FC4.h"
-
-/* Text argument referenced from a message argument list. */
-struct Entry_80219044 {
-    int mUnknown0;
-    int mLength;
-    char *mpText;
-};
+#include "game/fn_8021D7B8.h"
 
 /* Block that fn_800785C0 returns. */
 struct Object_800785C0 {
@@ -36,12 +32,7 @@ int fn_80178308(void);
 int fn_80179138(void);
 int fn_80188044(int index);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
-void fn_8017DE54(int a, int b, int c, float d);
-void fn_8017DF6C(int a, int b);
-void fn_8017E380(int a);
-void fn_8017E620(int a, int b);
 void fn_8021956C(void *p, int a, int b, int c);
-void fn_8021D7B8(void *p, int id, int count, void *pArgs);
 
 unsigned char fn_8017D0E0(int id);
 void fn_8017D670(unsigned char value);
@@ -207,8 +198,8 @@ void fn_8017D4AC(void)
     lbl_803EB485 = 4;
     lbl_803EB487 = 0;
     lbl_803EB488 = 0;
-    fn_8017DE54(0, 0, 0, 0.0f);
-    fn_8017DE54(1, 0, 0, 0.0f);
+    fn_8017DE54(0, 0, 0.0f, 0);
+    fn_8017DE54(1, 0, 0.0f, 0);
     fn_8017E620(0, 0);
     fn_8017E620(1, 0);
     if (fn_80025708()) {
@@ -218,8 +209,8 @@ void fn_8017D4AC(void)
         fn_8017D6B8(0, 0);
         fn_8017D6B8(1, 0);
     }
-    fn_8017DE54(1, 0, 0, 0.0f);
-    fn_8017DE54(0, 0, 0, 0.0f);
+    fn_8017DE54(1, 0, 0.0f, 0);
+    fn_8017DE54(0, 0, 0.0f, 0);
     fn_8017DF6C(0, 0);
     fn_8017DF6C(1, 0);
     fn_8017E380(0);

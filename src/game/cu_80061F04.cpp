@@ -1,4 +1,7 @@
 #include "game/Object_8007A334.h"
+#include "game/cu_8002ACB4.h"
+#include "game/fn_800624B0.h"
+#include "game/fn_8018BE68.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
 
@@ -6,13 +9,6 @@ struct Setup_802D4EB0 {
     float mPosition[3];
     float mScale;
     int mUnknown16;
-};
-
-/* 0x8018BE68 and 0x8018BECC fall back to a 32-byte local of their own when
-   this pointer is null; only the first word is read here. */
-struct Result_8018BE68 {
-    int mUnknown0;
-    char mUnknown4[28];
 };
 
 struct Pair_800624B8 {
@@ -42,8 +38,6 @@ void fn_80022534(int index, float scale);
 void fn_80022580(int index, int a, int b);
 void fn_80022680(int index, int a, int b);
 void fn_80022730(int index, int value);
-void fn_8002ADAC(void);
-void fn_8002ADE0(int a, int b);
 void fn_80061DDC(void);
 int fn_800841AC(Object_8007A334 *pObject);
 int fn_800841D8(Object_8007A334 *pObject);
@@ -52,9 +46,7 @@ int fn_80183950(void);
 void fn_80185264(unsigned char value);
 unsigned char fn_8018526C(void);
 unsigned char fn_8018527C(void);
-void fn_80188CBC(int, int, int, int, char *);
-int fn_8018BE68(int a, int b, Result_8018BE68 *pOut);
-int fn_8018BECC(int a, int b, Result_8018BE68 *pOut);
+void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
 void fn_8018BF3C(void);
 int fn_8018C0E8(int a, int *p);
 void fn_8018C48C(int tag);
@@ -160,7 +152,7 @@ void fn_80062160(int *pId)
             fn_80083E40(&cursor, 0, 0x54415453);
             fn_80084034(&cursor, *pId, 0);
             if (!fn_80084438(&cursor)) {
-                char values[3];
+                unsigned char values[3];
                 values[0] = fn_800841AC(&cursor);
                 values[1] = fn_800841D8(&cursor);
                 values[2] = fn_80084204(&cursor);

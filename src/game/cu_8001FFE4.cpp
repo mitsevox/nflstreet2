@@ -1,4 +1,5 @@
 #include "game/Object_8007A334.h"
+#include "game/fn_8021D7B8.h"
 
 struct Buffer_80020170 {
     char mUnknown0[4];
@@ -54,7 +55,6 @@ unsigned int fn_801568F0(void);
 int fn_801801B4(void);
 void fn_801801C4(void);
 void fn_80186F30(signed char a, int b);
-void fn_8021D7B8(void *a, int b, int c, int *d);
 signed char fn_8022F384(int a);
 int fn_8022F478(int a);
 int fn_8022F4BC(void);

@@ -8,4 +8,13 @@ struct Message_800F01CC {
     unsigned char mUnknown1[3];
 };
 
+struct Object_80039F5C;
+struct State_80039F5C;
+
+extern "C" {
+void fn_800F01CC(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void fn_800F03D8(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void fn_800F053C(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+}
+
 #endif

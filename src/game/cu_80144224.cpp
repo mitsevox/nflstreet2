@@ -1,18 +1,9 @@
+#include "game/cu_8003EC04.h"
 #include "game/fn_80238174.h"
-
-/* 0x1C-byte header saved and restored by the 'scol' stream callbacks. */
-struct Header_803ECA0C {
-    void *mpEntries;
-    int mEntryCount;
-    int mUnknown8;
-    int mPairCount;
-    int mUnknown10;
-    void *mpPairs[2];
-};
 
 /* Eight-byte state allocated through fn_80238174 under the id 'scol'. */
 struct State_803ECA0C {
-    Header_803ECA0C *mpHeader;
+    Set_8003EE6C *mpSet;
     int *mpValues;
 };
 
@@ -25,13 +16,14 @@ int fn_8014421C(void *p, void *pBuffer);
 
 static State_803ECA0C *lbl_803ECA0C;
 
-/* Size of the saved image: the state, then the header, entries, both pair arrays and the values. */
+/* Size of the saved image: the state, then the record pool, its records, both sub-record arrays and the values. */
 int fn_80144224(void *p)
 {
     if (lbl_803ECA0C->mpValues != 0) {
-        Header_803ECA0C *pHeader = lbl_803ECA0C->mpHeader;
+        Set_8003EE6C *pSet = lbl_803ECA0C->mpSet;
 
-        return sizeof(State_803ECA0C) + sizeof(Header_803ECA0C) + pHeader->mEntryCount * 0x30 + pHeader->mPairCount * 0x30 * 2 + pHeader->mEntryCount * 4;
+        return sizeof(State_803ECA0C) + sizeof(Set_8003EE6C) + pSet->mUnknown4 * sizeof(Record_8003EC04) +
+               pSet->mUnknownC * sizeof(Sub_8003EC54) * 2 + pSet->mUnknown4 * 4;
     }
     return sizeof(State_803ECA0C);
 }
@@ -45,8 +37,8 @@ void fn_80144264(void)
     fn_802381E0(pHandle);
 }
 
-Header_803ECA0C *fn_801442F0(void)
+Set_8003EE6C *fn_801442F0(void)
 {
-    return lbl_803ECA0C->mpHeader;
+    return lbl_803ECA0C->mpSet;
 }
 }

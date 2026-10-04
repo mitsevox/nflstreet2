@@ -1,10 +1,13 @@
+#include "engine/cu_80227F14.h"
+#include "game/fn_801EF390.h"
+
 /* 228-byte object allocated through fn_801DCF0C by fn_80030F38; a single
    instance is kept in sObject. */
 struct Object_80030D50 {
     int mUnknown0;
     float mUnknown4[3];
     int mUnknown16;
-    int mUnknown20;
+    void *mUnknown20;
     int mUnknown24;
     unsigned char mUnknown28[192];
     int mUnknown220;
@@ -25,13 +28,7 @@ void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Object_80030D50 *));
 int fn_801DD268(int handle, int a, int b, int *pDesc);
 void fn_801DD320(int handle, Object_80030D50 *pObject);
 void fn_801DD3AC(int handle, Object_80030D50 *pObject, int b);
-int fn_801EF390(int a, int b, int c);
-void fn_801F010C(int a, int b);
-int fn_801F0DB8(int a, int b);
 void fn_80210814(int a, int b, int c);
-int fn_80228668(void);
-void fn_80228D58(Object_80030D50 *pObject);
-void fn_80228E18(void);
 void fn_802353D8(void *p, int flags);
 void fn_80235588(void *p, int a);
 void fn_802355E4(void *p);
@@ -52,7 +49,7 @@ void fn_80030D50(Object_80030D50 *pObject, int *pArgs)
     pObject->mUnknown4[1] = 0.0f;
     pObject->mUnknown4[2] = 0.01f;
     pObject->mUnknown224 = 0;
-    pObject->mUnknown20 = pArgs[0];
+    pObject->mUnknown20 = (void *)pArgs[0];
     pObject->mUnknown24 = pArgs[1];
     pObject->mUnknown220 = fn_801EF390(pObject->mUnknown20, pObject->mUnknown24, 1);
     fn_80235DB8(pObject->mUnknown220);
@@ -109,7 +106,7 @@ void fn_80030FD8(int handle)
 {
     if (sObject != 0) {
         fn_801DD320(handle, sObject);
-        fn_80228D58(sObject);
+        fn_80228D58((int)sObject);
     }
     fn_80228E18();
     fn_801DCF8C(10);

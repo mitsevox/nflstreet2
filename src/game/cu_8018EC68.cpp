@@ -1,23 +1,9 @@
 #include "game/fn_801FCE10.h"
 #include "game/QueryStatus.h"
 
-#include <string.h>
+#include "game/cu_8018EC68.h"
 
-/* Row of table 'VETS' filled by fn_8018EC68. */
-struct VetsRow_8018EC68 {
-    char mIuve[64];
-    short mQrxe;
-    short mPewr;
-    short mPdwr;
-    short mCswr;
-    int mDive;
-    int mItes;
-    unsigned char mNets;
-    unsigned char mDroe;
-    char mCsis;
-    char mCsos;
-    int mPes[4];
-};
+#include <string.h>
 
 extern "C" {
 void fn_800731D0(int a);

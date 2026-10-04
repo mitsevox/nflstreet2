@@ -1,7 +1,9 @@
 #include "engine/cu_80227F14.h"
 #include "game/FELoop.h"
 #include "game/Object_8007A334.h"
+#include "game/Object_8003DEC4.h"
 #include "game/Object_8008044C.h"
+#include "game/fn_800624B0.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C3284.h"
@@ -107,21 +109,6 @@ struct Row_8007BC34 {
     char mUnknown7C[4];
 };
 
-/* Object returned by fn_8003DEC4. */
-struct Player_8003DEC4 {
-    char mUnknown0000[4];
-    char mUnknown0004[984];
-    struct Item_800476DC *mUnknown03DC;
-    char mUnknown03E0[3192];
-    char mUnknown1058[772];
-    int mUnknown135C;
-    char mUnknown1360[10];
-    unsigned char mUnknown136A;
-    unsigned char mUnknown136B;
-    char mUnknown136C[216];
-    char mUnknown1444[1452];
-};
-
 struct Item_800476DC {
     char mUnknown00[28];
     unsigned char mUnknown1C;
@@ -158,9 +145,8 @@ extern unsigned char lbl_803EA4CA;
 
 int fn_8001E4F4(void);
 int fn_8003DEB4(void);
-Player_8003DEC4 *fn_8003DEC4(int index);
-void fn_80042610(Player_8003DEC4 *pPlayer, int a, void *b, int c, int d);
-void fn_800428A8(Player_8003DEC4 *pPlayer);
+void fn_80042610(Object_8003DEC4 *pPlayer, int a, void *b, int c, int d);
+void fn_800428A8(Object_8003DEC4 *pPlayer);
 int fn_80046898(Block_80307980 *pBlock);
 void fn_800476DC(Item_800476DC *pItem, void *p);
 void fn_800478DC(unsigned char *pColors);
@@ -170,7 +156,6 @@ int fn_80047C84(Row_8007BC34 *pRow);
 void fn_80047CA4(int *pIds, Record_803078E8 *pRecord);
 unsigned char fn_80054D24(int index);
 int fn_8005FC7C(void);
-int fn_800624B0(void);
 void fn_8007BA48(Object_8007A334 *pObject);
 void fn_8007BA88(Object_8007A334 *pObject, int a);
 void fn_8007BB04(Object_8007A334 *pObject);
@@ -179,7 +164,6 @@ void fn_8007BC34(Object_8007A334 *pObject, Row_8007BC34 *pRow);
 unsigned int fn_8007BDF8(Object_8007A334 *pObject);
 int fn_8007BF14(int index);
 int fn_8007CB6C(int index);
-void fn_8008040C(Object_8008044C *pObject, int a);
 int fn_80080970(Object_8008044C *pObject);
 void fn_80080A9C(Object_8008044C *pObject, char *pBuffer, int size);
 int fn_80080CB0(Object_8008044C *pObject);
@@ -209,16 +193,16 @@ void fn_8016139C(int a, int *pId, int *pPalette);
 int fn_801835A0(void);
 void fn_801A34B0(int a, int b, int c, int d);
 void fn_801A3520(void);
-void fn_801A3588(Player_8003DEC4 *pPlayer, Init_8004A040 *pInit);
-void fn_801A3C40(Player_8003DEC4 *pPlayer);
-void fn_801A3F48(Player_8003DEC4 *pPlayer);
-void fn_801A4AD4(Player_8003DEC4 *pPlayer);
+void fn_801A3588(Object_8003DEC4 *pPlayer, Init_8004A040 *pInit);
+void fn_801A3C40(Object_8003DEC4 *pPlayer);
+void fn_801A3F48(Object_8003DEC4 *pPlayer);
+void fn_801A4AD4(Object_8003DEC4 *pPlayer);
 int fn_801486A0(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C302C(const char *s1, const char *s2, int n);
-int fn_801DCF0C(int a, int b, int c, void (*pA)(Player_8003DEC4 *, Init_8004A040 *), void (*pB)(Player_8003DEC4 *));
+int fn_801DCF0C(int a, int b, int c, void (*pA)(Object_8003DEC4 *, Init_8004A040 *), void (*pB)(Object_8003DEC4 *));
 void fn_801DCF8C(int a);
-void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Player_8003DEC4 *));
+void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Object_8003DEC4 *, int));
 }
 
 extern "C" void fn_80049F10(int index, Block_80307980 *pBlock);
@@ -788,11 +772,11 @@ extern "C" void fn_80048FE8(int index, int unused, int id)
 
 extern "C" void fn_800490A0(int player, int slot, int value)
 {
-    Player_8003DEC4 *pPlayer = fn_8003DEC4(player);
+    Object_8003DEC4 *pPlayer = fn_8003DEC4(player);
 
-    lbl_803078E8[pPlayer->mUnknown136B].mInfo.mValues[slot] = value;
-    lbl_803078E8[pPlayer->mUnknown136B].mUnknown70 = fn_80048AFC(pPlayer->mUnknown136B);
-    lbl_803078E8[pPlayer->mUnknown136B].mUnknown75 = fn_80048B84(pPlayer->mUnknown136B);
+    lbl_803078E8[pPlayer->mUnknown4971].mInfo.mValues[slot] = value;
+    lbl_803078E8[pPlayer->mUnknown4971].mUnknown70 = fn_80048AFC(pPlayer->mUnknown4971);
+    lbl_803078E8[pPlayer->mUnknown4971].mUnknown75 = fn_80048B84(pPlayer->mUnknown4971);
 }
 
 extern "C" void fn_80049124(int player)
@@ -806,7 +790,7 @@ extern "C" void fn_80049124(int player)
     int id2;
     int palette2;
     int clearLogo;
-    Player_8003DEC4 *pPlayer;
+    Object_8003DEC4 *pPlayer;
     unsigned char key;
     unsigned char index;
     int i;
@@ -816,8 +800,8 @@ extern "C" void fn_80049124(int player)
 
     pPlayer = fn_8003DEC4(player);
     clearLogo = 0;
-    key = pPlayer->mUnknown136A;
-    index = pPlayer->mUnknown136B;
+    key = pPlayer->mUnknown4970;
+    index = pPlayer->mUnknown4971;
     for (i = 0; i < 32; i++) {
         if (i != 31) {
             ids[i] = -1;
@@ -921,7 +905,7 @@ extern "C" void fn_80049124(int player)
         fn_80160E94(index, 7, id2, -1, 0);
         fn_80160E94(index, 8, palette2, -1, 0);
     }
-    fn_801C3284(pPlayer->mUnknown1058, lbl_803078E8[index].mName, 31);
+    fn_801C3284(pPlayer->mUnknown4184, lbl_803078E8[index].mName, 31);
     fn_801A4AD4(pPlayer);
 }
 
@@ -1222,7 +1206,7 @@ extern "C" void fn_80049E6C(void)
     unsigned int i;
 
     for (i = 0; i < count; i++) {
-        fn_8015FFC8(fn_8003DEC4(i)->mUnknown136A, 28, 255);
+        fn_8015FFC8(fn_8003DEC4(i)->mUnknown4970, 28, 255);
     }
 }
 
@@ -1255,16 +1239,16 @@ extern "C" void fn_80049FC8(int index, Block_80307980 *pBlock)
     *pBlock = lbl_803078E8[index].mBlock;
 }
 
-extern "C" void fn_8004A040(Player_8003DEC4 *pPlayer, Init_8004A040 *pInit)
+extern "C" void fn_8004A040(Object_8003DEC4 *pPlayer, Init_8004A040 *pInit)
 {
     fn_801C1F94(pPlayer, 0x19F0, 0);
     fn_80042610(pPlayer, pInit->mUnknown04, pInit->mUnknown08, pInit->mUnknown10, pInit->mUnknown14);
-    pPlayer->mUnknown135C = pInit->mUnknown18;
-    fn_80146094(pPlayer->mUnknown1444);
+    pPlayer->mUnknown4956 = pInit->mUnknown18;
+    fn_80146094(pPlayer->mUnknown5188);
     fn_801A3588(pPlayer, pInit);
 }
 
-extern "C" void fn_8004A0AC(Player_8003DEC4 *pPlayer)
+extern "C" void fn_8004A0AC(Object_8003DEC4 *pPlayer)
 {
     fn_801A3F48(pPlayer);
     fn_800428A8(pPlayer);
@@ -1282,8 +1266,6 @@ extern "C" void fn_8004A118(void)
     fn_801A3520();
 }
 
-extern "C" int fn_8004A1A8(Player_8003DEC4 *pPlayer);
-
 extern "C" void fn_8004A140(int owner, int type, int count)
 {
     fn_801DCF0C(type, 0x19F0, count, fn_8004A040, fn_8004A0AC);
@@ -1292,12 +1274,12 @@ extern "C" void fn_8004A140(int owner, int type, int count)
     }
 }
 
-extern "C" int fn_8004A1A8(Player_8003DEC4 *pPlayer)
+extern "C" int fn_8004A1A8(Object_8003DEC4 *pPlayer, int unused)
 {
-    Item_800476DC *pItem = pPlayer->mUnknown03DC;
+    Item_800476DC *pItem = pPlayer->mUnknown988;
 
     if (pItem && pItem->mUnknown1C) {
-        fn_800476DC(pItem, pPlayer->mUnknown0004);
+        fn_800476DC(pItem, pPlayer->mUnknown4);
     }
     fn_801A3C40(pPlayer);
     return 0;

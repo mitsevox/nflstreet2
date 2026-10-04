@@ -1,6 +1,7 @@
 #include "game/PaletteColor.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
+#include "game/fn_801EF390.h"
 
 struct Item_80045F64 {
     int mUnknown0;
@@ -31,8 +32,6 @@ void fn_800450A8(void *p, State_80045084 *pState);
 void fn_80045F64(Item_80045F64 *pItem, State_80045084 *pState, Palettes_8004605C *pPalettes);
 char *fn_801C3084(const char *pString, int c);
 int fn_801C9DC8(int value);
-int fn_801EF390(void *pData, int index, int a);
-int fn_801F010C(void *pData, int index);
 int fn_801F02AC(void *pData, int a, int b);
 int fn_801F08FC(void *pData);
 int fn_801F0A8C(void *pData, char *pName);

@@ -100,8 +100,6 @@ void fn_800D69A4(int team, int a, int b);
 void fn_800D782C(Object_80039F5C *p);
 int fn_800E0EF0(Object_80039F5C *p);
 int fn_800E0F40(Object_80039F5C *p);
-void fn_800F01CC(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-void fn_800F053C(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_801039D8(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 Record_8011F4F8 *fn_8011F4F8(int index);

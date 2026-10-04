@@ -1,20 +1,14 @@
 #include "game/Object_8007A334.h"
 #include "game/Object_8008044C.h"
 #include "game/cu_80181330.h"
+#include "game/cu_8003AEA8.h"
+#include "game/cu_8018EC68.h"
+#include "game/fn_80061AD4.h"
+#include "game/fn_8018BE68.h"
 #include "game/fn_8007F6F8.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_801FCE10.h"
 #include "game/FELoop.h"
-
-/* Record filled by fn_8018EDF0. */
-struct Record_8030A340 {
-    char mUnknown0[72];
-    int mUnknown72;
-    int mUnknown76;
-    char mUnknown80[3];
-    signed char mUnknown83;
-    char mUnknown84[16];
-};
 
 /* Teams and round of the current match, set by fn_80061520. */
 struct Match_8030A3A4 {
@@ -59,11 +53,8 @@ void fn_80011600(int a, int b, int c);
 void fn_80015D28(int a);
 void fn_8001B260(int a, int b);
 void fn_8001B330(int a);
-void fn_8003B3F8(int a, int *pList, int b);
-void fn_8003B6F0(int a);
-void fn_8003B8BC(void);
 void fn_8005BE54(unsigned char value);
-int fn_80060354(Record_8030A340 *pRecord, int *pList);
+int fn_80060354(VetsRow_8018EC68 *pRow, int *pList);
 void fn_80060410(int index, int *pList);
 void fn_8007CAEC(int index, int value);
 void fn_80084A8C(int a, int *pList, int b, int c);
@@ -89,13 +80,8 @@ void fn_80087C3C(Object_8007A334 *pObject);
 int fn_80178AE0(void);
 int fn_801801B4(void);
 void fn_80186F30(signed char a, int b);
-int fn_8018BE68(int a, int b, int *pList);
 void fn_8018C48C(int tag);
 int fn_8018E7CC(int a);
-int fn_8018EDF0(int a, int b, Record_8030A340 *pRecord);
-int fn_8018EE44(int a);
-int fn_8018EEAC(void);
-int fn_8018EEF0(void);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int fn_8022C8F0(unsigned int low, unsigned int high);
 int fn_8022F358(int index);
@@ -107,11 +93,11 @@ int fn_8022F4BC(void);
 Object_8008044C lbl_8030A2BC;
 Object_8007A334 lbl_8030A2E8;
 Object_8007A334 lbl_8030A314;
-Record_8030A340 lbl_8030A340;
+VetsRow_8018EC68 lbl_8030A340;
 Match_8030A3A4 lbl_8030A3A4;
 
 static unsigned char lbl_803EA5E8 = 0;
-static Record_8030A340 *lbl_803EA5EC = 0;
+static VetsRow_8018EC68 *lbl_803EA5EC = 0;
 static Object_8008044C *lbl_803EA5F0 = 0;
 static Object_8007A334 *lbl_803EA5F4 = 0;
 static State_803EA5F8 lbl_803EA5F8 = {0, -1, 0, 0};
@@ -506,24 +492,24 @@ int fn_80061390(int digt)
 
 int fn_80061408(int digt)
 {
-    int picks[8];
+    Result_8018BE68 picks;
     int list[14];
     int digt2;
     int count;
     int i;
 
-    digt2 = fn_8018BE68(lbl_803EA5F8.mIndex, 1, picks);
-    if (fn_800809C4(lbl_803EA5F0, picks[0], 0)) {
-        fn_8007ABA4(lbl_803EA5F0, 0x44494F50, picks[0]);
+    digt2 = fn_8018BE68(lbl_803EA5F8.mIndex, 1, &picks);
+    if (fn_800809C4(lbl_803EA5F0, picks.mUnknown0, 0)) {
+        fn_8007ABA4(lbl_803EA5F0, 0x44494F50, picks.mUnknown0);
         fn_8007ABA4(lbl_803EA5F0, 0x44494754, digt2);
     }
     count = fn_80086960(digt, list);
-    for (i = 0; i < count && list[i] != picks[0]; i++) {
+    for (i = 0; i < count && list[i] != picks.mUnknown0; i++) {
     }
     list[7] = 0x7FFF;
     fn_80060410(1, list);
     fn_8003B3F8(1, list, 4);
-    fn_80061274(1, picks, 1, lbl_803EA5F0);
+    fn_80061274(1, &picks.mUnknown0, 1, lbl_803EA5F0);
     fn_80084A8C(digt, list, 1, 7);
     return digt;
 }
@@ -548,17 +534,17 @@ void fn_80061584(void)
 
     fn_800611C0(0, 0x24);
     if (fn_800869C8(1) == 0) {
-        lbl_803EA5EC->mUnknown83 = -1;
+        lbl_803EA5EC->mCsos = -1;
     }
     fn_80061088(&dit1, &dit2, &lvlt);
     fn_80061520(dit1, dit2, lvlt);
-    if (lbl_803EA5EC->mUnknown72) {
-        lbl_803EA5EC->mUnknown72 = 0;
+    if (lbl_803EA5EC->mDive) {
+        lbl_803EA5EC->mDive = 0;
     }
     fn_80011600(-1, fn_8000FCCC(), saved);
     fn_80186F30(lbl_803EA5F8.mIndex, 1);
     fn_8007CAEC(2, 1);
-    fn_80015D28(lbl_803EA5EC->mUnknown72);
+    fn_80015D28(lbl_803EA5EC->mDive);
 }
 
 int fn_8006164C(void)
@@ -579,7 +565,7 @@ int fn_8006167C(void)
 
 void fn_800616D8(void)
 {
-    switch (lbl_803EA5EC->mUnknown76) {
+    switch (lbl_803EA5EC->mItes) {
     case 0:
     case 1:
     case 2:
@@ -723,7 +709,7 @@ int fn_800619FC(unsigned int id, Block_800619FC *pBlock, int unused, int *pResul
     return 1;
 }
 
-Record_8030A340 *fn_80061AD4(void)
+VetsRow_8018EC68 *fn_80061AD4(void)
 {
     return lbl_803EA5EC;
 }

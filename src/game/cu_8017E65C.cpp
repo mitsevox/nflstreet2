@@ -19,6 +19,10 @@ struct State_8017EB94 {
     short mTimer;
 };
 
+/* Easing value of src/game/cu_8013CD58.cpp; fn_8013CC7C and fn_8013CD58
+   update it. */
+struct Interp_8013CC14;
+
 struct Pair_8017E754 {
     float mX;
     float mY;
@@ -48,9 +52,9 @@ struct Shot_8013F090 {
     float mUnknown68;
     float mUnknown6C;
     float mUnknown70;
-    void *mpUnknown74;
-    void *mpUnknown78;
-    void *mpUnknown7C;
+    void (*mpUnknown74)(Interp_8013CC14 *pInterp, int steps);
+    void (*mpUnknown78)(Interp_8013CC14 *pInterp, int steps);
+    void (*mpUnknown7C)(Interp_8013CC14 *pInterp, int steps);
     short mUnknown80;
     short mUnknown82;
     int mUnknown84;
@@ -66,16 +70,14 @@ struct ShotEntry_8013F374 {
 
 extern "C" {
 void fn_800CC560(int a);
-void fn_800F03D8(int a, unsigned char *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p);
-void fn_800F053C(int a, unsigned char *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800FF6D8(Object_80039F5C *p);
 void fn_800A3B5C(Object_80039F5C *p);
 void fn_80028918(int unknown);
 int fn_80027DF0(void);
 void fn_8009BD48(int *pRef, int a, int b, int c);
 int fn_800B65A0(int unknown);
-void fn_8013CC7C(void);
-void fn_8013CD58(void);
+void fn_8013CC7C(Interp_8013CC14 *pInterp, int steps);
+void fn_8013CD58(Interp_8013CC14 *pInterp, int steps);
 void fn_8013F374(ShotEntry_8013F374 *pEntries);
 void fn_8013F3FC(void);
 void fn_80177E6C(int a, int b);
@@ -85,7 +87,7 @@ void fn_8017833C(int value);
 int fn_801784C4(void);
 void fn_8017CFB4(int a);
 void fn_8018A798(int value);
-void fn_8018A7A0(void);
+int fn_8018A7A0(void);
 int fn_801CFE40(float y, float x);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_8022DDB4(int tag, void *data);
@@ -163,9 +165,9 @@ static Shot_8013F090 lbl_802E9B84 = {
     0.0f,
     350.0f,
     -1.0f,
-    (void *)fn_8013CD58,
-    (void *)fn_8013CD58,
-    (void *)fn_8013CC7C,
+    fn_8013CD58,
+    fn_8013CD58,
+    fn_8013CC7C,
     0,
     0,
     0,
@@ -255,19 +257,19 @@ void fn_8017E754(unsigned char *pUnused, Spot_8017E754 *pA, Spot_8017E754 *pB)
             message.mUnknown1[1] = (int)(pTable[i].mPos.mY + pTable[i].mPos.mY);
             message.mId = 0x3F;
             message.mUnknown1[2] = angle;
-            fn_800F053C(0, p->mUnknown3048, &message, p);
+            fn_800F053C(0, &p->mUnknown3048, &message, p);
 
             fn_801C1F94(&message, 0, sizeof(message));
             message.mId = 6;
             message.mUnknown1[0] = angle;
-            fn_800F03D8(0, p->mUnknown3048, &message, p);
+            fn_800F03D8(0, &p->mUnknown3048, &message, p);
 
             fn_801C1F94(&message, 0, sizeof(message));
             message.mId = 9;
             message.mUnknown1[0] = 0xCB;
             message.mUnknown1[1] = 0;
             message.mUnknown1[2] = 0xFF;
-            fn_800F03D8(0, p->mUnknown3048, &message, p);
+            fn_800F03D8(0, &p->mUnknown3048, &message, p);
         }
     }
 }

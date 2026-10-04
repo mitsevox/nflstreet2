@@ -1,3 +1,4 @@
+#include "game/Class_80148A58.h"
 #include "game/fn_8016871C.h"
 #include "game/Object_8007A334.h"
 #include "game/fn_800670B4.h"
@@ -55,11 +56,6 @@ struct Desc_80169DF8 {
     void *mUnknownC;
 };
 
-struct Class_80148A58 {
-    int mUnknown0;
-    int mUnknown4;
-};
-
 extern "C" {
 int fn_80066D74(unsigned int id, int a, int b, int c, int d, int e);
 void fn_80066DC8(unsigned int id, int a);
@@ -88,7 +84,6 @@ void fn_80169DF8(Desc_80169DF8 *pDesc);
 void fn_8016BAD8(int team);
 int fn_801485D4(void);
 int fn_801486A0(void);
-Class_80148A58 *fn_80148A58(void);
 int fn_80177F70(void);
 Point_80167910 fn_80177FE0(void);
 int fn_80178308(void);

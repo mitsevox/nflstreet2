@@ -1,3 +1,4 @@
+#include "game/Class_80148A58.h"
 #include "game/cu_80064864.h"
 #include "game/fn_800AD9B4.h"
 
@@ -7,36 +8,6 @@ struct Request_8030A50C {
     unsigned short mUnknown2;
     int mUnknown4;
     unsigned char mPending;
-};
-
-/* Object returned by fn_80148A58; its vtable pointer is at offset 0x18. */
-class Class_80148A58 {
-public:
-    virtual void vfn_01();
-    virtual void vfn_02();
-    virtual void vfn_03();
-    virtual void vfn_04();
-    virtual void vfn_05();
-    virtual void vfn_06();
-    virtual void vfn_07();
-    virtual void vfn_08();
-    virtual void vfn_09();
-    virtual void vfn_10();
-    virtual void vfn_11();
-    virtual void vfn_12();
-    virtual void vfn_13();
-    virtual void vfn_14();
-    virtual void vfn_15();
-    virtual void vfn_16();
-    virtual void vfn_17();
-    virtual void vfn_18();
-    virtual void vfn_19();
-    virtual void vfn_20();
-    virtual void vfn_21();
-    virtual int vfn_22(int a);
-
-private:
-    char mUnknown0[24];
 };
 
 extern void *lbl_803EA368;
@@ -49,7 +20,6 @@ int fn_800A7FD8(void);
 int fn_800B65A0(int a);
 int fn_800B6644(int a);
 int fn_800BA6F8(void);
-Class_80148A58 *fn_80148A58(void);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801788D8(int *pValue);

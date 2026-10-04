@@ -1,4 +1,5 @@
 #include "engine/cu_80227F14.h"
+#include "game/fn_801EF390.h"
 
 /* 0x1D0-byte item of the type-13 pool created by fn_801615EC. */
 struct Instance_801614D0 {
@@ -16,7 +17,7 @@ struct Instance_801614D0 {
 };
 
 extern "C" {
-int fn_800A336C(void);
+void *fn_800A336C(void);
 int fn_800A338C(void);
 void fn_801A5478(Instance_801614D0 *pInstance);
 void fn_801A553C(Instance_801614D0 *pInstance);
@@ -27,7 +28,6 @@ void fn_801DD0C8(int handle, int type, int a, int (*pCallback)(int, int));
 int fn_801DD268(int handle, int type, int a, void *pInit);
 void fn_801DD320(int handle, int item);
 void fn_801DD3AC(int handle, int item, int a);
-int fn_801EF390(int a, int b, int c);
 void fn_80234DFC(int a, void *pB, int c, int d, const char *pName, int e);
 void fn_80234EA0(void *p, int a);
 void fn_802355E4(void *p);
