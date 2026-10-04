@@ -5093,9 +5093,9 @@
           "fn_8018E598"
         ],
         "discarded": [
-          "DeleteYptsRows"
+          "ResetSeasonTables"
         ],
-        "evidence": "evidence.tsv linker row 0x802AAE74-0x802AAEA0: the target keeps every listed function, each called from outside the unit or from inside it; the file-static DeleteYptsRows has no code in the target, while its query string remains in rodata."
+        "evidence": "evidence.tsv linker row 0x802AAE74-0x802AAEA0: the target keeps every listed function, each called from outside the unit or from inside it; the file-static ResetSeasonTables has no code in the target, while its query string remains in rodata."
       },
       "sections": [
         {

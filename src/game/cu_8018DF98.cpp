@@ -15,6 +15,7 @@ void fn_80086BA4(int index);
 void fn_80086A64(void);
 void fn_80086994(void);
 void fn_80086B50(void);
+void fn_8018B8B0(Object_8007A334 *pCursor);
 
 void fn_8018E55C(int index);
 void fn_8018E7A0(int index, int value);
@@ -176,10 +177,27 @@ void fn_8018E474(int index)
                 fn_8022F3D4(fn_8022F358(index)), 0);
 }
 
-static void DeleteYptsRows(int index)
+/* Deletes the 'YPTS' rows with a non-zero 'DIGP', clears this file's 'TADS'
+   and 'CETS' state and rewrites the defaults of the 'DIGP' 0 row. */
+static void ResetSeasonTables(void)
 {
-    fn_801FCE10(0, "use \x8c delete from 'YPTS' where 'DIGP' > 0\n",
-                fn_8022F3D4(fn_8022F358(index)));
+    Object_8007A334 cursor;
+    int index = fn_8022F384(fn_8022F4BC());
+
+    fn_801FCE10(0, "use \x8c delete from 'YPTS' where 'DIGP' > 0\n", fn_8022F3D4(fn_8022F4BC()));
+    fn_8018E55C(index);
+    fn_8018E428(index, 250);
+    fn_8018E390(index, 0);
+    fn_8018E474(index);
+    fn_8018E7A0(index, 1);
+    fn_8018E828(index, -1);
+    fn_8018E11C(&cursor, index);
+    if (fn_8007A7F4(&cursor, 0x44494750, 0, 0, 0)) {
+        fn_8018B8B0(&cursor);
+    }
+    fn_8018E174(&cursor);
+    fn_80086BA4(index);
+    fn_80086B50();
 }
 
 int fn_8018E4B4(void)
