@@ -3089,6 +3089,35 @@
         "original_blob": "13aca0c6f132fd456deda54f602f24016d2ff327",
         "integration_adjustment": "Reused the accepted Record_80021154 header instead of duplicating its partial layout; function bodies unchanged."
       }
+    },
+    {
+      "source": "src/game/cu_8003E214.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x8003E214",
+        "0x8003E24C",
+        "0x8003E294",
+        "0x8003E3FC",
+        "0x8003E454",
+        "0x8003E48C",
+        "0x8003E4E0",
+        "0x8003E5E0",
+        "0x8003E710",
+        "0x8003E8B8",
+        "0x8003E8FC",
+        "0x8003EA28",
+        "0x8003EB2C",
+        "0x8003EBC4",
+        "0x8003EBE4"
+      ],
+      "provenance": {
+        "pull_request": 221,
+        "merged_via": 221,
+        "commit": "7f459cc44faf713c3c12aa6a18c928f4f186b9fc",
+        "introduced_blob": "e5e11de724030d068f23bcd53cbad2fdb217edfe"
+      }
     }
   ],
   "target": "GN7E69",
