@@ -27,29 +27,27 @@ struct FMCAPPORTEntry {
     int mUnknown300;
 };
 
+struct Desc_802347EC {
+    char *mpName;
+    char mUnknown4[28];
+};
+
 /* Argument of fn_8008A9F8, fn_8008AA48, fn_8008AA7C, fn_8008AA9C, fn_8008AAD0,
    fn_8008AAF0, fn_8008ABA4, fn_80199968, fn_801999B0 and fn_801999F4. */
 struct Object_8008A9F8 {
     int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
-    int mUnknown16;
-    int mUnknown20;
-    int mUnknown24;
-    int mUnknown28;
-    int mUnknown32;
-    int mUnknown36;
-    int mUnknown40;
-    int mUnknown44;
-    int mUnknown48;
+    void *mpUnknown4;
+    void *mpUnknown8;
+    int mUnknown12[4];
+    int mUnknown28[4];
+    int mUnknown44[2];
     FMCAPPORTValues mValues52;
-    char mUnknown264[25];
-    FMCAPPORTText mText289;
-    FMCAPPORTText mText314;
-    int mUnknown340[6];
+    FMCAPPORTText mText264[4];
     int mUnknown364;
-    char mUnknown368[1268];
+    void *mpUnknown368[4];
+    Desc_802347EC mUnknown384[4];
+    void *mpUnknown512[2];
+    char mUnknown520[1116];
 };
 
 class Class_8008B284 {
