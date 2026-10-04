@@ -95,6 +95,14 @@ def generate(original, source_report, tool):
         unit['object'] = folder / 'native.o'
         unit['depfile'] = folder / 'native.d'
         sb.compile_unit(unit, compiler, wrapper, sdk, manifest['include_dirs'], comparison=True)
+        # compile_unit has checked the raw compiler dependencies against this checkout.
+        # Keep that file for diagnostics; bind a repository-relative copy so the same
+        # receipt can be validated on the CI host after compilation inside /work.
+        unit['depfile'] = folder / 'repository.d'
+        unit['depfile'].write_text('native.o: ' + ' '.join(
+            path.replace(' ', '\\ ') for path in unit['dependencies']) + '\n')
+        if sb.dependencies(unit['depfile'], root) != unit['dependencies']:
+            raise ValueError('Portable comparison dependencies differ from compiler inputs')
         native_hash = sb.sha256(unit['object'])
         sections, symbols = sb.read_elf(unit['object'].read_bytes())
         allocated = {s['name']: s for s in sections if s['flags'] & sb.SHF_ALLOC and s['size']}
@@ -218,8 +226,7 @@ def load(receipts, binary, root):
         for path, digest in [(receipt['object'], receipt['object_sha256']), (receipt['depfile'], receipt['depfile_sha256'])] + [(p['path'], p['sha256']) for p in receipt['pairs']]:
             if not path.startswith('build/matching/candidates/') or sb.sha256(root / sb.repository_path(path)) != digest:
                 raise ValueError('Stale or foreign comparison output')
-        base = sb.stage(unit) if unit['compile_path'] else root
-        if sb.dependencies(root / receipt['depfile'], base) != receipt['dependencies']:
+        if sb.dependencies(root / receipt['depfile'], root) != receipt['dependencies']:
             raise ValueError('Comparison dependencies differ from compiler receipt')
         expected_rows = {(r['symbol'], r['start'], r['end']) for r in unit['functions'] if not any(
             a <= sb.address(r['start']) < sb.address(r['end']) <= b for a, b in linked_bounds)}

@@ -218,6 +218,57 @@ class InPlaceComparisons(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'target identity'):
             function_compare.generate(self.original,self.root/'build/source/report.json',self.tool)
 
+    def check_transported_receipt(self, staged):
+        if not self.compiler_available:
+            self.skipTest('Pinned compiler and objdiff are installed by CI')
+        header = self.root / 'include/value.h'
+        header.parent.mkdir()
+        header.write_text('#define VALUE 1\n')
+        self.source.write_text('#include "value.h"\nint fn_80000000(void) { return VALUE; }\n')
+        self.manifest['include_dirs'] = ['include']
+        if staged:
+            self.manifest['profiles']['test']['source_root'] = {
+                'directory':'src', 'file_prefix':'../../../Source', 'evidence':'staged test fixture'}
+        self.write_config()
+        receipts = function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
+        receipt = receipts[0]
+        self.assertEqual(set(receipt['dependencies']), {'src/unit.c', 'include/value.h'})
+        self.assertEqual(sb.sha256(self.root/receipt['object']), receipt['object_sha256'])
+        self.assertNotIn(str(self.root), (self.root/receipt['depfile']).read_text())
+
+        with tempfile.TemporaryDirectory() as directory:
+            moved = Path(directory) / 'checkout with spaces'
+            shutil.copytree(self.root, moved, symlinks=True)
+            shutil.rmtree(self.root)
+            # A transported staged checkout also retains the original, now dangling
+            # source-root symlink. Receipt validation must not need that build path.
+            with patch.object(sb, 'ROOT', moved), patch.object(sb, 'BUILD', moved/'build/source'), \
+                    patch.object(sb, 'stage', side_effect=AssertionError('load must not stage sources')):
+                entries = function_compare.load(receipts, self.binary, moved)
+                self.assertEqual([(e['matched'], e['linked']) for e in entries], [(8, False)])
+                self.assertEqual(sb.sha256(moved/receipt['object']), receipt['object_sha256'])
+                (moved/'include/value.h').write_text('#define VALUE 2\n')
+                with self.assertRaisesRegex(ValueError, 'Stale comparison source or dependencies'):
+                    function_compare.load(receipts, self.binary, moved)
+                (moved/'include/value.h').write_text('#define VALUE 1\n')
+
+                depfile = moved / receipt['depfile']
+                for text, error in (
+                        ('native.o: src/unit.c\n', 'dependencies differ'),
+                        ('native.o: src/unit.c ../foreign.h\n', 'outside the repository')):
+                    with self.subTest(depfile=text):
+                        depfile.write_text(text)
+                        changed = copy.deepcopy(receipts)
+                        changed[0]['depfile_sha256'] = sb.sha256(depfile)
+                        with self.assertRaisesRegex(ValueError, error):
+                            function_compare.load(changed, self.binary, moved)
+
+    def test_receipt_survives_checkout_move(self):
+        self.check_transported_receipt(staged=False)
+
+    def test_staged_receipt_survives_checkout_move(self):
+        self.check_transported_receipt(staged=True)
+
     def test_same_file_small_data_relocations_and_data_scores(self):
         if not self.compiler_available:
             self.skipTest('Pinned compiler and objdiff are installed by CI')
