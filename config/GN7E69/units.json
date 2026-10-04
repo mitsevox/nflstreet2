@@ -4194,6 +4194,25 @@
           "end": "0x803EB8EC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8002AE90.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8002AE90-0x8002B5B0 (src/game/cu_8002AE90.cpp) and its data row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002AE90",
+          "end": "0x8002B5B0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA348",
+          "end": "0x803EA34C"
+        }
+      ]
     }
   ]
 }
