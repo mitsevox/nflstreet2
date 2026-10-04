@@ -112,23 +112,23 @@ struct Sound0 : SoundObject {
         mVolume = volume;
     }
 
-    void SetPitch(int pitch)
+    void SetPan(int pan)
     {
-        if (pitch < 0) {
-            pitch = 0;
-        } else if (pitch > 0xfffe) {
-            pitch = 0xfffe;
+        if (pan < 0) {
+            pan = 0;
+        } else if (pan > 0xfffe) {
+            pan = 0xfffe;
         }
-        mPitch = pitch;
+        mPan = pan;
     }
 
-    Sound0(int volume, unsigned short pitch)
+    Sound0(int volume, unsigned short pan)
     {
         mUnknown4 = 0;
         SetVolume(volume);
         mUnknownC = 0;
         mUnknown10 = 0;
-        SetPitch(pitch);
+        SetPan(pan);
         AddSound(&lbl_803ECC54, &lbl_803EB878, &mUnknown4, &mHandle);
     }
 
@@ -150,7 +150,7 @@ struct Sound0 : SoundObject {
     int mVolume;
     int mUnknownC;
     int mUnknown10;
-    int mPitch;
+    int mPan;
 };
 
 struct SoundVP : SoundObject {
@@ -164,20 +164,20 @@ struct SoundVP : SoundObject {
         mVolume = volume;
     }
 
-    void SetPitch(int pitch)
+    void SetPan(int pan)
     {
-        if (pitch < 0) {
-            pitch = 0;
-        } else if (pitch > 0xfffe) {
-            pitch = 0xfffe;
+        if (pan < 0) {
+            pan = 0;
+        } else if (pan > 0xfffe) {
+            pan = 0xfffe;
         }
-        mPitch = pitch;
+        mPan = pan;
     }
 
-    SoundVP(Class_801B8D9C *list, Struct_803EB878 *desc, int volume, unsigned short pitch)
+    SoundVP(Class_801B8D9C *list, Struct_803EB878 *desc, int volume, unsigned short pan)
     {
         SetVolume(volume);
-        SetPitch(pitch);
+        SetPan(pan);
         AddSound(list, desc, &mVolume, &mHandle);
     }
 
@@ -196,7 +196,7 @@ struct SoundVP : SoundObject {
     }
 
     int mVolume;
-    int mPitch;
+    int mPan;
 };
 
 struct SoundVFP : SoundObject {
@@ -220,21 +220,21 @@ struct SoundVFP : SoundObject {
         mUnknown8 = value;
     }
 
-    void SetPitch(int pitch)
+    void SetPan(int pan)
     {
-        if (pitch < 0) {
-            pitch = 0;
-        } else if (pitch > 0xfffe) {
-            pitch = 0xfffe;
+        if (pan < 0) {
+            pan = 0;
+        } else if (pan > 0xfffe) {
+            pan = 0xfffe;
         }
-        mPitch = pitch;
+        mPan = pan;
     }
 
-    SoundVFP(Class_801B8D9C *list, Struct_803EB878 *desc, int volume, int f, unsigned short pitch)
+    SoundVFP(Class_801B8D9C *list, Struct_803EB878 *desc, int volume, int f, unsigned short pan)
     {
         SetVolume(volume);
         SetUnknown8(f);
-        SetPitch(pitch);
+        SetPan(pan);
         AddSound(list, desc, &mVolume, &mHandle);
     }
 
@@ -254,7 +254,7 @@ struct SoundVFP : SoundObject {
 
     int mVolume;
     int mUnknown8;
-    int mPitch;
+    int mPan;
 };
 
 struct Sound3 : SoundObject {
@@ -268,14 +268,14 @@ struct Sound3 : SoundObject {
         mVolume = volume;
     }
 
-    void SetPitch(int pitch)
+    void SetPan(int pan)
     {
-        if (pitch < 0) {
-            pitch = 0;
-        } else if (pitch > 0xfffe) {
-            pitch = 0xfffe;
+        if (pan < 0) {
+            pan = 0;
+        } else if (pan > 0xfffe) {
+            pan = 0xfffe;
         }
-        mPitch = pitch;
+        mPan = pan;
     }
 
     void SetMode(int mode)
@@ -288,10 +288,10 @@ struct Sound3 : SoundObject {
         mMode = mode;
     }
 
-    Sound3(int volume, unsigned short pitch, int mode)
+    Sound3(int volume, unsigned short pan, int mode)
     {
         SetVolume(volume);
-        SetPitch(pitch);
+        SetPan(pan);
         SetMode(mode);
         AddSound(&lbl_803ECC64, &lbl_803EB888, &mVolume, &mHandle);
     }
@@ -311,7 +311,7 @@ struct Sound3 : SoundObject {
     }
 
     int mVolume;
-    int mPitch;
+    int mPan;
     int mMode;
 };
 
@@ -520,8 +520,6 @@ struct Struct_8030A518Entry {
 };
 
 struct Struct_8030A518 {
-    Struct_8030A518() {}
-
     Struct_8030A518Entry mEntries[12];
     unsigned char mCount;
 };
@@ -1487,12 +1485,12 @@ static inline unsigned int SoundVolume(int type)
 extern "C" void fn_800691E8(int index, Vec3 *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound0[index] == 0) {
-        unsigned short pitch;
+        unsigned short pan;
         short unk;
-        fn_80068ED0(pPos, &pitch, &unk);
+        fn_80068ED0(pPos, &pan, &unk);
         lbl_803EA684 = SoundVolume(4);
         if (lbl_803EA684 != 0) {
-            lbl_803EA67C->mSound0[index] = new Sound0(lbl_803EA684, pitch);
+            lbl_803EA67C->mSound0[index] = new Sound0(lbl_803EA684, pan);
             fn_80068FE8(lbl_803EA67C->mSound0[index], pObject, index, 1);
             lbl_803EA67C->mSound0[index]->Commit();
         }
@@ -1503,10 +1501,10 @@ extern "C" void fn_80069398(int index, Vec3 *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound0[index] != 0) {
         int volume = lbl_803EA684;
-        unsigned short pitch;
+        unsigned short pan;
         short unk;
-        fn_80068ED0(pPos, &pitch, &unk);
-        lbl_803EA67C->mSound0[index]->SetPitch(pitch);
+        fn_80068ED0(pPos, &pan, &unk);
+        lbl_803EA67C->mSound0[index]->SetPan(pan);
         lbl_803EA67C->mSound0[index]->SetVolume(volume);
         if (fn_80068FE8(lbl_803EA67C->mSound0[index], pObject, index, 0)) {
             lbl_803EA67C->mSound0[index]->Commit();
@@ -1547,12 +1545,12 @@ extern "C" void fn_800695F0(int index)
 extern "C" void fn_800696A4(int index, Vec3 *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound1[index] == 0) {
-        unsigned short pitch = 0;
+        unsigned short pan = 0;
         short unk = 0;
         unsigned int volume = SoundVolume(5);
         float f = fn_80068F70(pPos);
-        fn_80068ED0(pPos, &pitch, &unk);
-        lbl_803EA67C->mSound1[index] = new SoundVFP(&lbl_803ECC9C, &lbl_803EB8C0, volume, (int)f, pitch);
+        fn_80068ED0(pPos, &pan, &unk);
+        lbl_803EA67C->mSound1[index] = new SoundVFP(&lbl_803ECC9C, &lbl_803EB8C0, volume, (int)f, pan);
         lbl_803EA67C->mSound1[index]->Commit();
     }
 }
@@ -1560,11 +1558,11 @@ extern "C" void fn_800696A4(int index, Vec3 *pPos, void *pObject)
 extern "C" void fn_80069858(int index, Vec3 *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound2[index] == 0) {
-        unsigned short pitch = 0;
+        unsigned short pan = 0;
         short unk = 0;
         unsigned int volume = SoundVolume(6);
-        fn_80068ED0(pPos, &pitch, &unk);
-        lbl_803EA67C->mSound2[index] = new SoundVP(&lbl_803ECC94, &lbl_803EB8B8, volume, pitch);
+        fn_80068ED0(pPos, &pan, &unk);
+        lbl_803EA67C->mSound2[index] = new SoundVP(&lbl_803ECC94, &lbl_803EB8B8, volume, pan);
         lbl_803EA67C->mSound2[index]->Commit();
     }
 }
@@ -1573,11 +1571,11 @@ extern "C" void fn_800699C8(int index, Vec3 *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound3[index] == 0) {
         unsigned int volume = SoundVolume(7);
-        unsigned short pitch = 0;
+        unsigned short pan = 0;
         short unk = 0;
         int mode = 2;
-        fn_80068ED0(pPos, &pitch, &unk);
-        lbl_803EA67C->mSound3[index] = new Sound3(volume, pitch, mode);
+        fn_80068ED0(pPos, &pan, &unk);
+        lbl_803EA67C->mSound3[index] = new Sound3(volume, pan, mode);
         lbl_803EA67C->mSound3[index]->Commit();
     }
 }
@@ -1585,12 +1583,12 @@ extern "C" void fn_800699C8(int index, Vec3 *pPos, void *pObject)
 extern "C" void fn_80069B4C(int index, Vec3 *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound4[index] == 0) {
-        unsigned short pitch = 0;
+        unsigned short pan = 0;
         short unk = 0;
         unsigned int volume = SoundVolume(8);
         float f = fn_80068F70(pPos);
-        fn_80068ED0(pPos, &pitch, &unk);
-        lbl_803EA67C->mSound4[index] = new SoundVFP(&lbl_803ECC6C, &lbl_803EB890, volume, (int)f, pitch);
+        fn_80068ED0(pPos, &pan, &unk);
+        lbl_803EA67C->mSound4[index] = new SoundVFP(&lbl_803ECC6C, &lbl_803EB890, volume, (int)f, pan);
         lbl_803EA67C->mSound4[index]->Commit();
     }
 }
@@ -1598,12 +1596,12 @@ extern "C" void fn_80069B4C(int index, Vec3 *pPos, void *pObject)
 extern "C" void fn_80069D00(int index, Vec3 *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound5[index] == 0) {
-        unsigned short pitch = 0;
+        unsigned short pan = 0;
         short unk = 0;
         unsigned int volume = SoundVolume(9);
         float f = fn_80068F70(pPos);
-        fn_80068ED0(pPos, &pitch, &unk);
-        lbl_803EA67C->mSound5[index] = new SoundVFP(&lbl_803ECC84, &lbl_803EB8A8, volume, (int)f, pitch);
+        fn_80068ED0(pPos, &pan, &unk);
+        lbl_803EA67C->mSound5[index] = new SoundVFP(&lbl_803ECC84, &lbl_803EB8A8, volume, (int)f, pan);
         lbl_803EA67C->mSound5[index]->Commit();
     }
 }
@@ -1611,12 +1609,12 @@ extern "C" void fn_80069D00(int index, Vec3 *pPos, void *pObject)
 extern "C" void fn_80069EB4(int index, Vec3 *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound6[index] == 0) {
-        unsigned short pitch = 0;
+        unsigned short pan = 0;
         short unk = 0;
         unsigned int volume = SoundVolume(10);
         float f = fn_80068F70(pPos);
-        fn_80068ED0(pPos, &pitch, &unk);
-        lbl_803EA67C->mSound6[index] = new SoundVFP(&lbl_803ECC8C, &lbl_803EB8B0, volume, (int)f, pitch);
+        fn_80068ED0(pPos, &pan, &unk);
+        lbl_803EA67C->mSound6[index] = new SoundVFP(&lbl_803ECC8C, &lbl_803EB8B0, volume, (int)f, pan);
         lbl_803EA67C->mSound6[index]->Commit();
     }
 }
@@ -1624,12 +1622,12 @@ extern "C" void fn_80069EB4(int index, Vec3 *pPos, void *pObject)
 extern "C" void fn_8006A068(int index, Vec3 *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound7[index] == 0) {
-        unsigned short pitch = 0;
+        unsigned short pan = 0;
         short unk = 0;
         unsigned int volume = SoundVolume(11);
         float f = fn_80068F70(pPos);
-        fn_80068ED0(pPos, &pitch, &unk);
-        lbl_803EA67C->mSound7[index] = new SoundVFP(&lbl_803ECC7C, &lbl_803EB8A0, volume, (int)f, pitch);
+        fn_80068ED0(pPos, &pan, &unk);
+        lbl_803EA67C->mSound7[index] = new SoundVFP(&lbl_803ECC7C, &lbl_803EB8A0, volume, (int)f, pan);
         lbl_803EA67C->mSound7[index]->Commit();
     }
 }
@@ -1637,11 +1635,11 @@ extern "C" void fn_8006A068(int index, Vec3 *pPos, void *pObject)
 extern "C" void fn_8006A21C(int index, Vec3 *pPos, void *pObject)
 {
     if (lbl_803EA67C->mSound8[index] == 0) {
-        unsigned short pitch = 0;
+        unsigned short pan = 0;
         short unk = 0;
         unsigned int volume = SoundVolume(12);
-        fn_80068ED0(pPos, &pitch, &unk);
-        lbl_803EA67C->mSound8[index] = new SoundVP(&lbl_803ECC74, &lbl_803EB898, volume, pitch);
+        fn_80068ED0(pPos, &pan, &unk);
+        lbl_803EA67C->mSound8[index] = new SoundVP(&lbl_803ECC74, &lbl_803EB898, volume, pan);
         lbl_803EA67C->mSound8[index]->Commit();
     }
 }
@@ -1650,13 +1648,13 @@ extern "C" void fn_8006A21C(int index, Vec3 *pPos, void *pObject)
     extern "C" void name(int index, Vec3 *pPos, void *pObject)                 \
     {                                                             \
         if (lbl_803EA67C->list[index] != 0) {                     \
-            unsigned short pitch = 0;                             \
+            unsigned short pan = 0;                             \
             short unk = 0;                               \
             unsigned int volume = SoundVolume(type);              \
             float f = fn_80068F70(pPos);                        \
-            fn_80068ED0(pPos, &pitch, &unk);                    \
+            fn_80068ED0(pPos, &pan, &unk);                    \
             lbl_803EA67C->list[index]->SetUnknown8((int)f);       \
-            lbl_803EA67C->list[index]->SetPitch(pitch);           \
+            lbl_803EA67C->list[index]->SetPan(pan);           \
             lbl_803EA67C->list[index]->SetVolume(volume);         \
             lbl_803EA67C->list[index]->Commit();                  \
         }                                                         \
@@ -1666,11 +1664,11 @@ extern "C" void fn_8006A21C(int index, Vec3 *pPos, void *pObject)
     extern "C" void name(int index, Vec3 *pPos, void *pObject)                 \
     {                                                             \
         if (lbl_803EA67C->list[index] != 0) {                     \
-            unsigned short pitch;                                 \
+            unsigned short pan;                                 \
             short unk;                                   \
             unsigned int volume = SoundVolume(type);              \
-            fn_80068ED0(pPos, &pitch, &unk);                    \
-            lbl_803EA67C->list[index]->SetPitch(pitch);           \
+            fn_80068ED0(pPos, &pan, &unk);                    \
+            lbl_803EA67C->list[index]->SetPan(pan);           \
             lbl_803EA67C->list[index]->SetVolume(volume);         \
             lbl_803EA67C->list[index]->Commit();                  \
         }                                                         \
@@ -1793,6 +1791,7 @@ static inline int IsSlotSet(int type, unsigned int index)
     case 12:
         return lbl_803EA67C->mSound8[index] != 0;
     }
+    return 0;
 }
 
 extern "C" int fn_8006B810(int type, unsigned int index)
@@ -2748,14 +2747,6 @@ ModuleDependency *SndgPathfinder::GetDependencies() { return sDependencies; }
 ModuleDependency *SndgPathfinder::GetLinks() { return (ModuleDependency *)sLinks; }
 const char *SndgPathfinder::GetName() { return "SndgPathfinder"; }
 
-#define SNDG_START_801E0AEC(unknown0, unknown4) \
-    do {                                      \
-        Struct_801E0AEC desc;                 \
-        desc.mUnknown0 = (unknown0);          \
-        desc.mUnknown4 = (unknown4);          \
-        fn_801E0AEC(&desc);                   \
-    } while (0)
-
 int SndgPathfinder::Init()
 {
     lbl_803EA698 = new (0) SndgPathfinderState;
@@ -2764,7 +2755,10 @@ int SndgPathfinder::Init()
     lbl_803EA698->mpPool[1] = fn_801C68FC(1, 0, 4, 4, 0, 0);
     lbl_803EA698->mpPool[2] = fn_801C68FC(1, 0, 4, 4, 0, 0);
     if (fn_801F3E28()) {
-        SNDG_START_801E0AEC(1, 3);
+        Struct_801E0AEC desc;
+        desc.mUnknown0 = 1;
+        desc.mUnknown4 = 3;
+        fn_801E0AEC(&desc);
         fn_801B2F18(fn_8006D91C, fn_8006D98C, fn_8006D9FC);
     }
     return 1;
