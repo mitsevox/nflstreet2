@@ -2,6 +2,8 @@
 
 #include "game/SndgPathfinder.h"
 #include "game/Camera_8013F738.h"
+#include "game/Class_801B8D9C.h"
+#include "game/cu_80067C10.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_8017F584.h"
@@ -9,6 +11,7 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801EF390.h"
+#include "game/fn_801F40F4.h"
 #include "game/fn_802270D4.h"
 
 void *operator new(unsigned int size, int unknown);
@@ -37,11 +40,6 @@ struct Struct_803EB878 {
     unsigned int mHash;
 };
 
-class Class_801B8D9C {
-public:
-    char mUnknown0[8];
-};
-
 extern "C" {
 int fn_801B90CC(Allocator **out);
 int fn_801B9148(void);
@@ -51,15 +49,6 @@ int fn_801B8DA8(Class_801B8D9C *list, Struct_803EB878 *desc);
 void fn_801B983C(int handle, void *params);
 void fn_801B96E4(int handle);
 
-extern Class_801B8D9C lbl_803ECC54;
-extern Class_801B8D9C lbl_803ECC64;
-extern Class_801B8D9C lbl_803ECC6C;
-extern Class_801B8D9C lbl_803ECC74;
-extern Class_801B8D9C lbl_803ECC7C;
-extern Class_801B8D9C lbl_803ECC84;
-extern Class_801B8D9C lbl_803ECC8C;
-extern Class_801B8D9C lbl_803ECC94;
-extern Class_801B8D9C lbl_803ECC9C;
 extern Struct_803EB878 lbl_803EB878;
 extern Struct_803EB878 lbl_803EB888;
 extern Struct_803EB878 lbl_803EB890;
@@ -384,12 +373,6 @@ struct Entry_8030A660 {
     int m14;
 };
 
-struct Struct_802D611C {
-    int mUnknown0;
-    unsigned int mUnknown4;
-    unsigned int mUnknown8;
-};
-
 struct Struct_8006C2C8 {
     unsigned int m0;
     unsigned int m4;
@@ -419,34 +402,6 @@ struct Node_8006BF4C {
     void *m4;
     int m8;
     Callback_8006C548 mC;
-};
-
-/* Filled in by fn_801F40F4. */
-struct Struct_801F40F4 {
-    signed char mVolume;
-    unsigned char mUnknown1[7];
-    unsigned short mPan;
-    short mSpan;
-    short mUnknownC;
-    short mUnknownE;
-    short mUnknown10;
-    short mUnknown12;
-    short mUnknown14;
-    short mUnknown16;
-};
-
-/* Game event passed to fn_8006CE84 and its handlers. */
-struct Struct_8006CCD0 {
-    int mUnknown0;
-    Vector_80039F5C mPosition;
-    union {
-        unsigned int mValue;
-        void *mpObject;
-    } mUnknown10;
-    int mUnknown14;
-    int mUnknown18;
-    int mUnknown1C;
-    unsigned short mType;
 };
 
 /* Record whose address Block_80170E64 keeps in its word at +0x294. */
@@ -487,12 +442,6 @@ struct Struct_802D62D8 {
     unsigned char mScale;
     Struct_802D62B8 *mParams;
     Callback_8030A688 mUpdate;
-};
-
-struct Struct_801F4834 {
-    int mStatus;
-    int m04;
-    int m08;
 };
 
 struct Struct_803EA698Entry {
@@ -568,7 +517,7 @@ extern char lbl_802EBFE4[];
 extern char lbl_802EBFF4[];
 extern char lbl_802EC000[];
 extern char lbl_802EC00C[];
-extern Struct_803EA368 *lbl_803EA368;
+extern void *lbl_803EA368;
 
 int abs(int value);
 int fn_8002D060(void *p);
@@ -577,10 +526,10 @@ void fn_800300D4(void *pStream, float *pValues, int bits, float scale);
 void fn_80030490(void *pStream, float *pValues, int bits, float scale);
 void fn_80030ACC(void (*write)(void *), void (*read)(void *, void *, void *, void *, float), int size,
                  const char *pName);
-int fn_80031054(Vector_80039F5C *pPos);
+int fn_80031054(float *pValue);
 void fn_8006F344(unsigned char value);
-void fn_8006F850(Struct_8006CCD0 *pEvent);
-void fn_80070C40(Struct_8006CCD0 *pEvent);
+void fn_8006F850(Record_80067CA8 *pEvent);
+void fn_80070C40(Record_80067CA8 *pEvent);
 void fn_800717E0(Vector_80039F5C *pPos);
 int fn_80071BA0(int a, int b);
 void fn_800728F8(void);
@@ -590,8 +539,8 @@ void fn_80073620(int a, int b, int c);
 void fn_8007371C(void);
 void fn_80073764(void);
 void fn_80074358(int a);
-int fn_800744A8(void);
-int fn_800744B8(void);
+unsigned char fn_800744A8(void);
+unsigned char fn_800744B8(void);
 void fn_80074684(int a, int b);
 void fn_800746E0(void);
 void fn_80074734(void);
@@ -650,11 +599,11 @@ void *fn_801C6A20(void *pool);
 void *fn_801C6B4C(void *pool, void *item);
 void fn_801C6C0C(void *pool, void *item);
 void *fn_801C6C84(void *pool, void *item);
-void fn_801C6DCC(void *pool, int a, int key, void *pResult, int (*match)(Item_8006DA6C *, int, Item_8006DA6C **));
+int fn_801C6DCC(void *pool, int a, int key, void *pResult, int (*match)(Item_8006DA6C *, int, Item_8006DA6C **));
 void fn_801CE7D0(int a);
 int fn_801CFE40(float y, float x);
 unsigned int fn_801D27F4(int a);
-void fn_801D34D0(void *p, int size, int value, int align);
+int fn_801D34D0(void *p, int size, int value, int align);
 int fn_801E0AE4(void);
 void fn_801E0AEC(Struct_801E0AEC *pDesc);
 void fn_801E0BE4(void);
@@ -678,8 +627,6 @@ int fn_801F3E40(void *pData, int b, int c);
 void fn_801F3ED8(void *pData, int *pSlot, int b, int c, Callback_8006C548 cb);
 void fn_801F3F74(int handle);
 int fn_801F4024(int handle);
-int fn_801F4050(int a, int b, Struct_801F40F4 *pParams);
-void fn_801F40F4(Struct_801F40F4 *pParams);
 void fn_801F4130(int handle);
 int fn_801F41A0(int handle);
 void fn_801F421C(int handle, int value);
@@ -691,7 +638,6 @@ void fn_801F45D4(int handle);
 void fn_801F4638(int handle);
 void fn_801F4678(int handle, int a, int volume);
 void fn_801F4770(int handle, int pan, int c);
-void fn_801F4834(int handle, Struct_801F4834 *pStatus);
 int fn_801F48B8(int handle);
 void fn_801F49B8(int handle, int a, int b);
 void fn_801F4A38(int handle, int a);
@@ -701,10 +647,10 @@ void fn_801F4B88(void *pData, int a, int b);
 void fn_801F4C5C(void);
 int fn_801F4DAC(void *pData, int b, int c);
 void fn_801F4F28(int handle);
-unsigned int fn_801F7ABC(void);
+int fn_801F7ABC(void);
 int fn_80227040(Vector_80039F5C *a, Vector_80039F5C *b);
 int fn_802275D8(Vector_80039F5C *a, Vector_80039F5C *b, float eps);
-void fn_80227690(Vec2 *pOut, Vector_80039F5C *a, Vector_80039F5C *b);
+void fn_80227690(void *pOut, void *a, void *b);
 float fn_8022785C(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
 unsigned int fn_802372EC(int a, int b);
 void fn_8006E3F0(Struct_8030A518Entry *pEntry, void *pStream0, void *pStream1, void *pStream2, void *pStream3,
@@ -793,8 +739,8 @@ unsigned char fn_8006CC48(void);
 int fn_8006CC54(int index);
 unsigned char fn_8006CC90(int index);
 void fn_8006CCA8(float value);
-void fn_8006CCD0(Struct_8006CCD0 *p);
-void fn_8006CE84(Struct_8006CCD0 *p);
+void fn_8006CCD0(Record_80067CA8 *p);
+void fn_8006CE84(Record_80067CA8 *p);
 void fn_8006CEC8(Struct_8030A688 *src);
 void fn_8006CF9C(Vector_80039F5C *origin, Vector_80039F5C *pos, unsigned short *pan, short *span);
 void fn_8006D0F8(void);
@@ -806,7 +752,7 @@ void fn_8006D314(void);
 void fn_8006D338(void);
 void fn_8006D358(int unknown);
 unsigned char fn_8006D408(Struct_8030A688 *src, Vector_80039F5C *pos, unsigned char volume);
-void fn_8006D540(int idx, Vector_80039F5C *pos, Struct_801F40F4 *out);
+void fn_8006D540(int idx, Vector_80039F5C *pos, Info_801F40F4 *out);
 unsigned char fn_8006D5FC(int idx, unsigned char volume);
 int fn_8006D65C(int idx);
 void fn_8006D670(int idx, int handle);
@@ -830,7 +776,7 @@ void fn_8006E010(int value);
 void fn_8006E08C(void);
 void fn_8006E0DC(int unknown);
 void fn_8006E134(int flags);
-void fn_8006E148(Struct_8006CCD0 *pEvent);
+void fn_8006E148(Record_80067CA8 *pEvent);
 int fn_8006E25C(void);
 void fn_8006E2A8(void);
 void fn_8006E308(Struct_8030A518Entry *pEntry);
@@ -848,14 +794,14 @@ void fn_8006E918(void);
 void fn_8006E924(int unknown);
 void fn_8006EA04(unsigned int index, unsigned int value);
 void fn_8006EC24(void);
-void fn_8006ECB4(Struct_8006CCD0 *pEvent);
+void fn_8006ECB4(Record_80067CA8 *pEvent);
 void fn_8006F0B8(int flags);
 void fn_8006F0C8(int flags);
 int fn_8006F0D8(void);
 
 void fn_80071748(int unknown);
-void fn_80073F5C(int unknown);
-void fn_8007418C(int unknown);
+void fn_80073F5C(void);
+void fn_8007418C(void);
 void fn_801860E4(int unknown);
 
 }
@@ -1091,7 +1037,7 @@ Struct_802D611C lbl_802D611C[20] = {
     { 18, 0xffd800, 0x1000000 },
     { -1, 0xFFFFFFFF, 0xFFFFFFFF },
 };
-Handler_8030A668 lbl_802D620C[] = { fn_8006D358, fn_8006E0DC, fn_80073F5C, fn_80071748, fn_8006E924, fn_801860E4, 0 };
+Handler_8030A668 lbl_802D620C[] = { fn_8006D358, fn_8006E0DC, (Handler_8030A668)fn_80073F5C, fn_80071748, fn_8006E924, fn_801860E4, 0 };
 
 Struct_8006C2C8 lbl_802D6228 = { 18, 1, lbl_802D518C, lbl_802D611C, lbl_802D5F24, lbl_802D620C };
 
@@ -1100,7 +1046,7 @@ Entry_8030A664 lbl_802D6240[3] = {
     { 1, lbl_802EBFCC, 0, 1, 0, 0, 0 },
     { 0, 0, 0, 0, 3, 0, 0 },
 };
-Handler_8030A668 lbl_802D6294[] = { fn_8007418C, fn_801860E4, 0 };
+Handler_8030A668 lbl_802D6294[] = { (Handler_8030A668)fn_8007418C, fn_801860E4, 0 };
 
 Struct_8006C2C8 lbl_802D62A0 = { 18, 1, lbl_802D518C, lbl_802D611C, lbl_802D6240, lbl_802D6294 };
 
@@ -2216,7 +2162,7 @@ extern "C" int fn_8006C8A4(int index, Vector_80039F5C *pPos, unsigned char c)
     int result = 0x7FFFFFFF;
     Entry_8030A660 *pEntry;
     unsigned int now;
-    Struct_801F40F4 params;
+    Info_801F40F4 params;
 
     if (!lbl_8030A654.m20) {
         return 0x7FFFFFFF;
@@ -2329,7 +2275,7 @@ extern "C" void fn_8006CCA8(float value)
     lbl_803EA690 = (int)(value * 4096.0f);
 }
 
-extern "C" void fn_8006CCD0(Struct_8006CCD0 *p)
+extern "C" void fn_8006CCD0(Record_80067CA8 *p)
 {
     switch (p->mType) {
     case 0x1F:
@@ -2340,9 +2286,9 @@ extern "C" void fn_8006CCD0(Struct_8006CCD0 *p)
                 if (pBall != 0 && pBall->mpUnknown00 != 0 && pBall->mpUnknown00->mUnknown660 != 0) {
                     id = ((Record_80170E64_294 *)pBall->mpUnknown00->mUnknown660)->m8;
                 }
-                fn_8006C854(fn_80071BA0(fn_800A3444(), id), &p->mPosition);
+                fn_8006C854(fn_80071BA0(fn_800A3444(), id), &p->mPos);
             } else {
-                fn_8006C854(0x69, &p->mPosition);
+                fn_8006C854(0x69, &p->mPos);
             }
         }
         break;
@@ -2350,37 +2296,37 @@ extern "C" void fn_8006CCD0(Struct_8006CCD0 *p)
         Vector_80039F5C vec;
         fn_80137EC4((Object_80137ABC *)p->mUnknown10.mpObject, &vec);
         if (fn_802270D4(&vec) > 0.42f) {
-            fn_800717E0(&p->mPosition);
+            fn_800717E0(&p->mPos);
         }
-        fn_8006B91C(4, (unsigned char)p->mUnknown18, &p->mPosition, p->mUnknown10.mpObject);
+        fn_8006B91C(4, (unsigned char)p->mUnknown18, &p->mPos, p->mUnknown10.mpObject);
         break;
     }
     case 0x21:
-        fn_8006B9AC(4, (unsigned char)p->mUnknown18, &p->mPosition, p->mUnknown10.mpObject);
+        fn_8006B9AC(4, (unsigned char)p->mUnknown18, &p->mPos, p->mUnknown10.mpObject);
         break;
     case 0x22:
         fn_8006BC30(4, (unsigned char)p->mUnknown18);
         break;
     case 0x1D:
         fn_8006BC30(4, (unsigned char)p->mUnknown18);
-        fn_8006C854(4, &p->mPosition);
+        fn_8006C854(4, &p->mPos);
         break;
     case 0x1C:
         fn_8006BC30(4, (unsigned char)p->mUnknown18);
-        fn_8006C854(3, &p->mPosition);
+        fn_8006C854(3, &p->mPos);
         break;
     case 0x1E:
         fn_8009BCE8(&p->mUnknown0);
         if (p->mUnknown10.mValue != 0) {
-            fn_8006C854(2, &p->mPosition);
+            fn_8006C854(2, &p->mPos);
         } else {
-            fn_8006C854(3, &p->mPosition);
+            fn_8006C854(3, &p->mPos);
         }
         break;
     }
 }
 
-extern "C" void fn_8006CE84(Struct_8006CCD0 *p)
+extern "C" void fn_8006CE84(Record_80067CA8 *p)
 {
     fn_8006CCD0(p);
     fn_8006F850(p);
@@ -2406,7 +2352,7 @@ extern "C" void fn_8006CEC8(Struct_8030A688 *src)
             angle = (angle + 0x800000) & 0xFFFFFF;
         }
         src->mAngle = angle;
-    } else if (fn_80031054(&src->mOrigin) == 0) {
+    } else if (fn_80031054(&src->mOrigin.mX) == 0) {
         Block_80170E64 *pBlock = fn_8013825C(fn_801374BC());
 
         src->mOrigin.mX = pBlock->mUnknown4.mX;
@@ -2564,7 +2510,7 @@ extern "C" unsigned char fn_8006D408(Struct_8030A688 *src, Vector_80039F5C *pos,
     return volume;
 }
 
-extern "C" void fn_8006D540(int idx, Vector_80039F5C *pos, Struct_801F40F4 *out)
+extern "C" void fn_8006D540(int idx, Vector_80039F5C *pos, Info_801F40F4 *out)
 {
     Struct_8030A680 *e = &lbl_8030A680[idx];
 
@@ -2650,10 +2596,10 @@ extern "C" void fn_8006D7CC(int idx)
 extern "C" int fn_8006D884(int idx)
 {
     if (fn_8006D65C(idx)) {
-        Struct_801F4834 status;
+        Status_801F4834 status;
 
         fn_801F4834(fn_8006D65C(idx), &status);
-        if (status.mStatus == 0) {
+        if (status.mUnknown0 == 0) {
             return 0;
         }
     }
@@ -2894,7 +2840,7 @@ extern "C" void fn_8006E134(int flags)
     lbl_803EA69C->mFlags |= flags;
 }
 
-extern "C" void fn_8006E148(Struct_8006CCD0 *pEvent)
+extern "C" void fn_8006E148(Record_80067CA8 *pEvent)
 {
     switch (pEvent->mType) {
     case 0x1F:
@@ -2904,8 +2850,8 @@ extern "C" void fn_8006E148(Struct_8006CCD0 *pEvent)
         lbl_803EA69C->mFlags |= 1;
         break;
     case 0x8F:
-        lbl_803EA69C->mUnknown1C = pEvent->mPosition.mX;
-        lbl_803EA69C->mUnknown20 = pEvent->mPosition.mY;
+        lbl_803EA69C->mUnknown1C = pEvent->mPos.mX;
+        lbl_803EA69C->mUnknown20 = pEvent->mPos.mY;
         break;
     case 0x8C: {
         Vec2 v;
@@ -2930,7 +2876,7 @@ extern "C" int fn_8006E25C(void)
 {
     unsigned int i;
 
-    if (lbl_803EA368->mUnknownD94 & 0x10000) {
+    if (((Struct_803EA368 *)lbl_803EA368)->mUnknownD94 & 0x10000) {
         return 0;
     }
     for (i = 0; i < 128; i++) {
@@ -3031,7 +2977,7 @@ extern "C" void fn_8006E5B4(void *pStream0, void *pStream1, void *pStream2, void
     if (pStream3) {
         fn_80190F18(pStream3, 4);
     }
-    frames = lbl_803EA368->mUnknownD74 - lbl_803EA368->mUnknownD70;
+    frames = ((Struct_803EA368 *)lbl_803EA368)->mUnknownD74 - ((Struct_803EA368 *)lbl_803EA368)->mUnknownD70;
     half = frames / 2;
     parity = frames % 2;
     for (i = 0; i < 12; i++) {
@@ -3119,7 +3065,7 @@ extern "C" void fn_8006E918(void)
 
 extern "C" void fn_8006E924(int unknown)
 {
-    Struct_803EA368 *p = lbl_803EA368;
+    Struct_803EA368 *p = (Struct_803EA368 *)lbl_803EA368;
     int rate;
     unsigned int i;
 
@@ -3203,7 +3149,7 @@ extern "C" void fn_8006EC24(void)
     }
 }
 
-extern "C" void fn_8006ECB4(Struct_8006CCD0 *pEvent)
+extern "C" void fn_8006ECB4(Record_80067CA8 *pEvent)
 {
     if (!fn_800BA6F8() && fn_800744A8()) {
         if (fn_8017F584() == 11 && fn_801568F0() <= 4) {
@@ -3311,7 +3257,7 @@ extern "C" void fn_8006ECB4(Struct_8006CCD0 *pEvent)
                     break;
                 case 0x2F:
                     fn_80075058(pEvent->mUnknown0);
-                    fn_80074F38(&pEvent->mPosition);
+                    fn_80074F38(&pEvent->mPos);
                     break;
                 case 0x65:
                     fn_800750F0(pEvent->mUnknown10.mValue);
