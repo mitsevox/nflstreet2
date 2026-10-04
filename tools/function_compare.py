@@ -169,7 +169,7 @@ def storage_symbols(sections, symbols, entries):
     """Bind a comparison object's uninitialized symbols to their mapped target addresses.
 
     Returns {symbol list index: address}, or None when the unit has no storage map. With a
-    map, every COMMON symbol and every named object in an uninitialized section must be
+    map, every COMMON symbol and every named, sized object in an uninitialized section must be
     mapped exactly once, at its compiled size and, for COMMON, its required alignment; every
     mapped name must be such a symbol."""
     if entries is None:

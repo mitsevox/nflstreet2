@@ -1,6 +1,7 @@
 #include <string.h>
 #include "game/Object_8007A334.h"
 #include "game/Object_8008044C.h"
+#include "game/fn_8021D7B8.h"
 #include "game/cu_80181330.h"
 
 /* Element of lbl_8000F5EC, passed to fn_80183740. */
@@ -243,9 +244,9 @@ int fn_8007BECC(int a, const char *pName);
 int fn_8007BF28(int index);
 void fn_8007CC50(Object_8007A334 *pObject);
 void fn_8007CCC4(Object_8007A334 *pObject);
-int fn_800808F8(Object_8007A334 *pObject);
-int fn_80080E98(Object_8007A334 *pObject);
-void fn_800817CC(Object_8007A334 *pObject, Record_800817CC *pOut);
+int fn_800808F8(Object_8008044C *pObject);
+int fn_80080E98(Object_8008044C *pObject);
+void fn_800817CC(Object_8008044C *pObject, Record_800817CC *pOut);
 int fn_800872E8(int a);
 void fn_8008731C(int a, int id, int *pOut1, int *pOut2, char *pBuffer, int size);
 int fn_8008736C(int a, int b);
@@ -265,7 +266,6 @@ void fn_801835C0(int a);
 void fn_801835C8(void);
 void fn_80183704(void);
 void fn_80183740(const Record_8000F5EC *pRecord);
-void fn_8021D7B8(void *a, int b, int c, int *d);
 int fn_8022F4BC(void);
 }
 
@@ -407,7 +407,7 @@ void Class_8000F540::vfn_01(int a, int *pCount, int *pOut)
         fn_801835C8();
         fn_8007CC50(&fn_8000EC44()->mUnknown16);
         fn_8007A444(fn_80182DC8());
-        value = fn_800808F8(fn_80182DC8());
+        value = fn_800808F8((Object_8008044C *)fn_80182DC8());
         fn_8000EC44()->mUnknown12 = value;
         fn_800809C4((Object_8008044C *)fn_80182DC8(), value, 0);
         fn_80022680(fn_80022D78(), value, 1);
@@ -745,7 +745,7 @@ static void fn_8000E784(Record_8036AD78 *pOut)
 {
     Record_800817CC record;
 
-    fn_800817CC(fn_80182DC8(), &record);
+    fn_800817CC((Object_8008044C *)fn_80182DC8(), &record);
     pOut->mUnknown0[0] = record.mUnknown16.mUnknown0[0];
     pOut->mUnknown0[1] = record.mUnknown16.mUnknown0[1];
     pOut->mUnknown0[2] = record.mUnknown16.mUnknown0[2];
@@ -760,7 +760,7 @@ static void fn_8000E784(Record_8036AD78 *pOut)
     pOut->mUnknown0[11] = record.mUnknown16.mUnknown0[11];
     pOut->mUnknown0[12] = record.mUnknown16.mUnknown0[12];
     pOut->mUnknown0[13] = record.mUnknown16.mUnknown0[13];
-    lbl_803ECE30 = fn_80080E98(fn_80182DC8());
+    lbl_803ECE30 = fn_80080E98((Object_8008044C *)fn_80182DC8());
 }
 
 static void fn_8000E834(Record_8036AD78 *pRecord)
