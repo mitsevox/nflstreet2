@@ -140,6 +140,395 @@ void fn_800611C0(int value14, int value1);
 int fn_80061390(int digt);
 int fn_80061408(int digt);
 
+#if defined(DECOMP_COMPARE)
+void fn_80060948(int id, char *pName, int size)
+{
+    char name[18];
+
+    if (id < 0) {
+        *pName = 0;
+        return;
+    }
+    if (fn_80084034(&lbl_8030A314, id, 0) == 0) {
+        fn_801C2EF0(pName, "NFL Draft Team", size);
+    } else {
+        fn_8007AA3C(&lbl_8030A314, 0x414E4454, (int)name, sizeof(name));
+        name[17] = 0;
+        fn_801C2EF0(pName, name, size);
+    }
+}
+
+/* Row of the next round's game that the team won, or 0. */
+int fn_800609EC(int team, int lvlt)
+{
+    int dit1;
+    int dit2;
+    int tniw;
+    int next;
+    int count;
+    int row;
+
+    if (lvlt <= 3) {
+        next = lvlt + 1;
+        count = 1 << next;
+        for (row = 0; row < count; row++) {
+            if (fn_800869FC(next, row, &dit1, &dit2, &tniw)) {
+                if ((dit1 == team && tniw == 1) || (dit2 == team && tniw == 2)) {
+                    return row;
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+void fn_80060A9C(void)
+{
+    fn_80083F68(&lbl_8030A314);
+    if (lbl_803EA5F8.mOpen) {
+        fn_80086B50();
+        lbl_803EA5F8.mOpen = 0;
+    }
+    fn_80086154();
+    fn_8008056C(lbl_803EA5F0);
+    lbl_803EA5F0 = 0;
+    fn_8018EEAC();
+    fn_80087C3C(lbl_803EA5F4);
+    lbl_803EA5F4 = 0;
+}
+
+void fn_80060B0C(void)
+{
+    lbl_803EA5F8.mIndex = fn_8022F384(fn_8022F4BC());
+    lbl_803EA5F0 = &lbl_8030A2BC;
+    fn_8008044C(&lbl_8030A2BC, 0, 0x54415453);
+    fn_8018EEF0();
+    fn_80086174();
+    lbl_803EA5F8.mUnknown2 = 0x7FFF;
+    lbl_803EA5F4 = &lbl_8030A2E8;
+    fn_80087BE4(&lbl_8030A2E8, lbl_803EA5F8.mIndex);
+    lbl_803EA5F8.mOpen = fn_80086BA4(lbl_803EA5F8.mIndex);
+    fn_80083E40(&lbl_8030A314, 0, 0x54415453);
+}
+
+void fn_80060BB4(void)
+{
+    lbl_803EA5F8.mUnknown1 = fn_8018E7CC(lbl_803EA5F8.mIndex);
+}
+
+void fn_80060BE0(void)
+{
+    fn_8018C48C(0x54415453);
+    fn_8018C48C(0x454D4147);
+}
+
+int fn_80060C14(int game, int *pLvlt, int *pRow)
+{
+    if (game >= 0 && game <= 14) {
+        *pLvlt = lbl_802D4E38[game];
+        *pRow = lbl_802D4E74[game];
+        return 1;
+    }
+    return 0;
+}
+
+/* Winner ('TNIW') of a game the player does not take part in. */
+int fn_80060C50(int dit1, int dit2)
+{
+    if (dit1 == 0x31) {
+        return 1;
+    }
+    if (dit2 == 0x31) {
+        return 2;
+    }
+    return fn_8022C8F0(1, 3);
+}
+
+int fn_80060C94(void)
+{
+    int teams[8];
+    int team = 0;
+
+    if (fn_80086ACC(teams) == 8) {
+        team = teams[0];
+    }
+    return team;
+}
+
+/* Draws the first round of the bracket. */
+void fn_80060CD4(void)
+{
+    int teams[8];
+    int order[8];
+    int i;
+    int j;
+    int tmp;
+    int first;
+    int second;
+    int lvlt;
+    int team;
+    int dit1;
+    int dit2;
+    int half = 4;
+
+    fn_80086ACC(teams);
+    for (i = 0; i < 8; i++) {
+        order[i] = i;
+    }
+    for (i = 0; i <= 7; i++) {
+        do {
+            j = fn_8022C8F0(0, 8);
+        } while (j == i);
+        int swap = order[i];
+        order[i] = order[j];
+        order[j] = swap;
+    }
+    first = 0;
+    while (first < 8 && teams[order[first]] != 0x2E) {
+        first++;
+    }
+    second = 0;
+    while (second < 8 && teams[order[second]] != 0x31) {
+        second++;
+    }
+    if (second < half) {
+        if (first < half) {
+            tmp = order[second];
+            order[second] = order[second + half];
+            order[second + half] = tmp;
+        }
+    } else if (first >= half) {
+        tmp = order[second];
+        order[second] = order[second - half];
+        order[second - half] = tmp;
+    }
+    lvlt = fn_80086AEC(8);
+    team = fn_80060C94();
+    for (i = 0; i < 8; i += 2) {
+        dit1 = teams[order[i]];
+        dit2 = teams[order[i + 1]];
+        if (dit1 == team) {
+            dit1 = dit2;
+            dit2 = team;
+        }
+        fn_80086A30(lvlt, dit1, dit2, 0);
+    }
+}
+
+/* Records the current match as won by its second team and plays the rest of
+   the round. Returns 1 when that match was the final. */
+int fn_80060E7C(void)
+{
+    int dit1;
+    int dit2;
+    int tniw;
+    int lvlt = lbl_8030A3A4.mLvlt;
+    int done = 0;
+    int count;
+    int row;
+    int team;
+    int winner1;
+    int winner2;
+    int next;
+    int games;
+
+    dit1 = lbl_8030A3A4.mDit1;
+    dit2 = lbl_8030A3A4.mDit2;
+    fn_80086A30(lvlt, dit1, dit2, 2);
+    if (lvlt == 1) {
+        fn_80086A30(0, dit2, dit2, 2);
+        done = 1;
+    } else {
+        row = 0;
+        count = fn_800869C8(lvlt);
+        next = lvlt - 1;
+        for (; row < count; row++) {
+            if (fn_800869FC(lvlt, row, &dit1, &dit2, &tniw) && tniw == 0) {
+                tniw = fn_80060C50(dit1, dit2);
+                fn_80086A30(lvlt, dit1, dit2, tniw);
+            }
+        }
+        team = fn_80060C94();
+        games = fn_800869C8(lvlt);
+        for (row = 0; row < games; row += 2) {
+            fn_800869FC(lvlt, row, &dit1, &dit2, &tniw);
+            if (tniw == 1) {
+                winner1 = dit1;
+            } else {
+                winner1 = dit2;
+            }
+            fn_800869FC(lvlt, row + 1, &dit1, &dit2, &tniw);
+            if (tniw == 1) {
+                winner2 = dit1;
+            } else {
+                winner2 = dit2;
+            }
+            if (winner1 == team) {
+                winner1 = winner2;
+                winner2 = team;
+            }
+            fn_80086A30(next, winner1, winner2, 0);
+        }
+    }
+    return done;
+}
+
+int fn_8006102C(void)
+{
+    int dit1;
+    int dit2;
+    int tniw;
+    int done = 0;
+
+    if (fn_800869FC(0, 0, &dit1, &dit2, &tniw)) {
+        done = tniw == 2;
+    }
+    return done;
+}
+
+/* Finds the player's game in the earliest round that has games. */
+void fn_80061088(int *pDit1, int *pDit2, int *pLvlt)
+{
+    int tniw;
+    int last = fn_80086AEC(8);
+    int lvlt = 1;
+    int team = fn_80060C94();
+    int count = last + 1;
+    int row;
+
+    for (; lvlt <= last; lvlt++) {
+        count = fn_800869C8(lvlt);
+        if (count > 0) {
+            break;
+        }
+    }
+    if (lvlt > 0 && lvlt <= last) {
+        for (row = 0; row < count; row++) {
+            if (fn_800869FC(lvlt, row, pDit1, pDit2, &tniw) && *pDit2 == team) {
+                *pLvlt = lvlt;
+                break;
+            }
+        }
+    }
+}
+
+void fn_80061154(void)
+{
+    if (lbl_802D4E28.mSaved) {
+        fn_8007F6F8(14, lbl_802D4E28.mValue14);
+        fn_8007F6F8(1, lbl_802D4E28.mValue1);
+        if (lbl_802D4E28.mValue0 > -1) {
+            fn_8007F6F8(0, lbl_802D4E28.mValue0);
+        }
+        lbl_802D4E28.mSaved = 0;
+    }
+}
+
+void fn_800611C0(int value14, int value1)
+{
+    if (!lbl_802D4E28.mSaved) {
+        lbl_802D4E28.mSaved = 1;
+        lbl_802D4E28.mValue14 = fn_8007F828(14);
+        lbl_802D4E28.mValue1 = fn_8007F828(1);
+        if (lbl_803EA5F8.mUnknown1 > -1) {
+            lbl_802D4E28.mValue0 = fn_8007F828(0);
+        } else {
+            lbl_802D4E28.mValue0 = lbl_803EA5F8.mUnknown1;
+        }
+    }
+    fn_8007F6F8(14, value14);
+    fn_8007F6F8(1, value1);
+    if (lbl_803EA5F8.mUnknown1 > -1) {
+        fn_8007F6F8(0, lbl_803EA5F8.mUnknown1);
+    }
+}
+
+void fn_80061274(int a, int *pList, int count, Object_8008044C *pObject)
+{
+    int *pSlots = 0;
+    int list;
+    int i;
+    int id;
+    int slot;
+    int j;
+    int tmp;
+
+    list = fn_80085620(0, 1);
+    if (list) {
+        pSlots = fn_80085744(list, a);
+    }
+    if (pSlots) {
+        for (i = 0; i < count; i++) {
+            id = pList[i];
+            if (!fn_800809C4(pObject, id, 0)) {
+                continue;
+            }
+            slot = fn_80080ECC(pObject);
+            if (pSlots[slot] == id) {
+                continue;
+            }
+            if (slot <= 6) {
+                for (j = 0; j <= 6; j++) {
+                    if (pSlots[j] == id) {
+                        tmp = pSlots[slot];
+                        pSlots[slot] = pSlots[j];
+                        pSlots[j] = tmp;
+                        break;
+                    }
+                }
+            } else {
+                for (j = 7; j <= 13; j++) {
+                    if (id == pSlots[j]) {
+                        tmp = pSlots[slot];
+                        pSlots[slot] = pSlots[j];
+                        pSlots[j] = tmp;
+                        break;
+                    }
+                }
+            }
+        }
+        fn_80085C94(a, pSlots);
+    }
+}
+
+int fn_80061390(int digt)
+{
+    int list[14];
+
+    fn_80086960(digt, list);
+    fn_80060354(lbl_803EA5EC, list);
+    list[7] = 0x7FFF;
+    fn_80060410(0, list);
+    fn_8003B3F8(0, list, 4);
+    fn_80084A8C(digt, list, 0, 7);
+    return digt;
+}
+
+int fn_80061408(int digt)
+{
+    int picks[8];
+    int list[14];
+    int digt2;
+    int count;
+    int i;
+
+    digt2 = fn_8018BE68(lbl_803EA5F8.mIndex, 1, picks);
+    if (fn_800809C4(lbl_803EA5F0, picks[0], 0)) {
+        fn_8007ABA4(lbl_803EA5F0, 0x44494F50, picks[0]);
+        fn_8007ABA4(lbl_803EA5F0, 0x44494754, digt2);
+    }
+    count = fn_80086960(digt, list);
+    for (i = 0; i < count && list[i] != picks[0]; i++) {
+    }
+    list[7] = 0x7FFF;
+    fn_80060410(1, list);
+    fn_8003B3F8(1, list, 4);
+    fn_80061274(1, picks, 1, lbl_803EA5F0);
+    fn_80084A8C(digt, list, 1, 7);
+    return digt;
+}
+#endif
+
 void fn_80061520(int dit1, int dit2, int lvlt)
 {
     fn_8003B6F0(1);
