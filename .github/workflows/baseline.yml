@@ -99,9 +99,9 @@ jobs:
         run: |
           if [ "$PUBLISH_MAIN" = true ]; then
             python3 tools/restore_history.py
-            python3 tools/activity.py --append-current --previous build/activity/previous.json
+            python3 tools/activity.py --fetch-provenance --append-current --previous build/activity/previous.json
           else
-            python3 tools/activity.py
+            python3 tools/activity.py --fetch-provenance
           fi
           python3 -m unittest discover -s tests -p test_activity.py -v
       - name: Upload decomp.dev report

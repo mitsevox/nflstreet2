@@ -1,3 +1,4 @@
+#include "game/fn_801C3660.h"
 #include "game/Object_80228224.h"
 
 extern "C" {
@@ -85,7 +86,6 @@ void fn_801A139C(void);
 void fn_801A6730(void);
 void *fn_801C3610(int a, int b);
 void fn_801C3640(void *p);
-void fn_801C3660(Object_80228224 *pObject, void *p);
 void fn_801C3A10(void *p, float a);
 void fn_801C3EA4(void *p, float a, float b, float c);
 void fn_801C3ED0(void *p, int a, int b, int c);

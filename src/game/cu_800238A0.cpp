@@ -1,10 +1,10 @@
+#include "game/fn_801FCE10.h"
 #include "game/Object_8007A334.h"
 #include "game/QueryStatus.h"
 
 extern "C" {
 int fn_8022F358(int index);
 int fn_8022F3D4(int a);
-int fn_801FCE10(int a, const char *pQuery, ...);
 }
 
 /* Eight-byte slot written either as a long long or as an int. */

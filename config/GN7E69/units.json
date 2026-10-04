@@ -4076,6 +4076,181 @@
           "end": "0x8036B4A0"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8016CF40.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8016CEEC-0x8016DB94 (src/game/cu_8016CF40.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8016CEEC",
+          "end": "0x8016DB94"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4D68",
+          "end": "0x802A4E38"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB428",
+          "end": "0x803EB42C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECB04",
+          "end": "0x803ECB24"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AEC",
+          "end": "0x80289AF0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8016C170.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8016C170-0x8016C70C (src/game/cu_8016C170.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8016C170",
+          "end": "0x8016C70C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4C48",
+          "end": "0x802A4D00"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB418",
+          "end": "0x803EB428"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECAF8",
+          "end": "0x803ECB04"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AE8",
+          "end": "0x80289AEC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8017055C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80170198-0x8017319C (src/game/cu_8017055C.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80170198",
+          "end": "0x8017319C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4EE0",
+          "end": "0x802A5098"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB438",
+          "end": "0x803EB440"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80003F10.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80003F10-0x80003F30 (src/game/cu_80003F10.cpp) and its data/source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80003F10",
+          "end": "0x80003F30"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB8E8",
+          "end": "0x803EB8EC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8002AE90.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8002AE90-0x8002B5B0 (src/game/cu_8002AE90.cpp) and its data row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002AE90",
+          "end": "0x8002B5B0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA348",
+          "end": "0x803EA34C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80021270.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80021270-0x8002132C and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80021270",
+          "end": "0x8002132C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036B4A0",
+          "end": "0x8036B4B4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80076DB4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80076DB4-0x80076F6C and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80076DB4",
+          "end": "0x80076F6C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA780",
+          "end": "0x803EA788"
+        }
+      ]
     }
   ]
 }

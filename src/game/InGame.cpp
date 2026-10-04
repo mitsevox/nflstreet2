@@ -1,3 +1,4 @@
+#include "game/fn_801FCE10.h"
 #include "game/Class_801CBC50.h"
 #include "game/InGame.h"
 #include "game/TimeScale.h"
@@ -113,7 +114,6 @@ int fn_801E17D0(int a, char *p);
 void fn_801E1C38(unsigned char a);
 int fn_801E1CE0(unsigned char a);
 float fn_801EC418(int a, int b, char *p);
-int fn_801FCE10(int a, const char *pFormat, ...);
 void fn_80218FC4(void *p, int a, int b, int c, int d);
 void fn_8021956C(void *p, int a, int b, int c);
 void fn_802285CC(void);

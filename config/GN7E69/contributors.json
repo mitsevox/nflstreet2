@@ -793,7 +793,8 @@
         "commit": "eea63283091a9ae13d70aed6f8fb100e2231a5d1",
         "introduced_blob": "fe606362a98e6eac9e23d56a95ffbc6f97e9894b",
         "original_blob": "845f42caedafadb2e6d5dcfed5c11bedd7d9a975",
-        "integration_adjustment": "Original PR74 is inherited by dependent PR76 and PR81; neutral virtual-slot names reconciled in integration."
+        "integration_adjustment": "Original PR74 is inherited by dependent PR76 and PR81; neutral virtual-slot names reconciled in integration.",
+        "original_commit": "48293c05d9de0b1ccba308d8810f43ebb0faa692"
       }
     },
     {
@@ -1117,7 +1118,8 @@
         "commit": "42d5e72b863c1935eb84c187d734a9dcfc2a916e",
         "introduced_blob": "21716194dbbdbc924064abd457816c70f6ce2bbe",
         "original_blob": "49c5d6f3b54634bfc641e6fb406d3cefbd6ede78",
-        "integration_adjustment": "Accepted shared UIS dependency reconciled in integration."
+        "integration_adjustment": "Accepted shared UIS dependency reconciled in integration.",
+        "original_commit": "21e15473caafb12c8c8bbcb8820ad36556d1e224"
       }
     },
     {
@@ -1182,7 +1184,8 @@
         "commit": "42d5e72b863c1935eb84c187d734a9dcfc2a916e",
         "introduced_blob": "c7c397348051c6a46f83e263e443efc953f1a393",
         "original_blob": "99a7a78efdea229d22ade00e97183d77470f9971",
-        "integration_adjustment": "Accepted shared Sys declaration reconciled in integration."
+        "integration_adjustment": "Accepted shared Sys declaration reconciled in integration.",
+        "original_commit": "2b413d3bf0748ecae1eba9afa0696054cfd9a68d"
       }
     },
     {
@@ -1427,7 +1430,8 @@
         "commit": "42d5e72b863c1935eb84c187d734a9dcfc2a916e",
         "introduced_blob": "9bed88c244925fdb34d9b31dc54e07948bf1fdcb",
         "original_blob": "91466d288f0ad3666231225fec288d50b43f82d4",
-        "integration_adjustment": "Accepted shared object references reconciled in integration."
+        "integration_adjustment": "Accepted shared object references reconciled in integration.",
+        "original_commit": "5c330f73fe8a6d54f17d0beece65053e143b7051"
       }
     },
     {
@@ -1617,7 +1621,8 @@
         "commit": "eea63283091a9ae13d70aed6f8fb100e2231a5d1",
         "introduced_blob": "4a5b780776370769badfa9a8649ebf35227011ab",
         "original_blob": "95f6f9fda4efe86d1f2b08f101b2cf466131c599",
-        "integration_adjustment": "Shared object references and neutral virtual-slot names reconciled in integration."
+        "integration_adjustment": "Shared object references and neutral virtual-slot names reconciled in integration.",
+        "original_commit": "c05a535b3719431781e9140c6673b83b9db99b51"
       }
     },
     {
@@ -1769,7 +1774,8 @@
         "commit": "736e65e2050d88fb88b6b0c62f34c858ff9d41a8",
         "introduced_blob": "d7d90449776904c2bc07ebef181e817ca9d147d7",
         "original_blob": "0d528ef00c2e7c1a8861c4d244a4981f374f1e37",
-        "integration_adjustment": "Opaque field representation reconciled in integration."
+        "integration_adjustment": "Opaque field representation reconciled in integration.",
+        "original_commit": "3e3952b401820b447f7fed34c108b47f000a8b55"
       }
     },
     {
@@ -2031,7 +2037,8 @@
         "commit": "eea63283091a9ae13d70aed6f8fb100e2231a5d1",
         "introduced_blob": "18b7a1290b03f7fcad848b4386de078312d6b403",
         "original_blob": "9887e4c165c65a47e6c3a17152dacdf50d44cea3",
-        "integration_adjustment": "Original PR76 is inherited by dependent PR81; neutral virtual-slot names reconciled in integration."
+        "integration_adjustment": "Original PR76 is inherited by dependent PR81; neutral virtual-slot names reconciled in integration.",
+        "original_commit": "f28c52ea3ab5e2c15261be945e75d390868eca2d"
       }
     },
     {
@@ -2090,7 +2097,8 @@
         "commit": "5b8ac6524dfd4776e9cc0d88c77c56abd4ea49a5",
         "introduced_blob": "f471e6de7737dd2cfebd546eb5913aadd4b0b512",
         "original_blob": "fa762da52a8678c5b339e219b36e48b7ea02603e",
-        "integration_adjustment": "Shared argument-prefix declaration reconciled in integration."
+        "integration_adjustment": "Shared argument-prefix declaration reconciled in integration.",
+        "original_commit": "822c6020715c02e4423a55ce5ffe296946512105"
       }
     },
     {
@@ -2313,7 +2321,8 @@
         "commit": "df7ae9c0812ba421a398d9ff5b87b2d3f3924eb3",
         "introduced_blob": "faecd0082676c7457d12e01c6979d3f6c7316585",
         "original_blob": "05b587b58c5e2f4693875ee7f104577f0b6c117c",
-        "integration_adjustment": "Shared tag-operation declarations and wrapper returns reconciled in integration; no new functions."
+        "integration_adjustment": "Shared tag-operation declarations and wrapper returns reconciled in integration; no new functions.",
+        "original_commit": "50c7ea0cd80200e8322e63861631c5bfc906ed16"
       }
     },
     {
@@ -2423,7 +2432,8 @@
         "commit": "df7ae9c0812ba421a398d9ff5b87b2d3f3924eb3",
         "introduced_blob": "d76ddd92825d975925d2cc8c57a7a7013c338787",
         "original_blob": "fc0c5c85b559038451b8a24870111e0428f23fb3",
-        "integration_adjustment": "Shared function declaration reconciled in integration."
+        "integration_adjustment": "Shared function declaration reconciled in integration.",
+        "original_commit": "c7e7bb07d96184d221d0284076f2c399b012f1ba"
       }
     },
     {
@@ -2442,7 +2452,8 @@
         "commit": "2e49e27fc5b160eee26390017d8c4ae89f557041",
         "introduced_blob": "9c6b26930a6a6911ca401c91badd5f21b03c7a8e",
         "original_blob": "597b5950c7a27c1625dcdb3c37ccb54f464dbcd6",
-        "integration_adjustment": "Shared matrix function declaration reconciled in integration."
+        "integration_adjustment": "Shared matrix function declaration reconciled in integration.",
+        "original_commit": "1445e7b6cde7db833c0beea7c2f4bc25ef98de08"
       }
     },
     {
@@ -2479,7 +2490,8 @@
         "commit": "2e49e27fc5b160eee26390017d8c4ae89f557041",
         "introduced_blob": "66334feebf1481315d1b5efd41b6eced34dcfc56",
         "original_blob": "6da8148783667e88fb56c8ca249b5641e0a9b749",
-        "integration_adjustment": "Shared memory and matrix function declarations reconciled in integration."
+        "integration_adjustment": "Shared memory and matrix function declarations reconciled in integration.",
+        "original_commit": "63f2389aec8ed3ee3cdfda92b3f5250c83c4c96e"
       }
     },
     {
@@ -2619,7 +2631,8 @@
         "commit": "5b8ac6524dfd4776e9cc0d88c77c56abd4ea49a5",
         "introduced_blob": "a6adf44149ef9f29052581ec94510e378f60cddf",
         "original_blob": "8933c11bcacb391f529e7926806b96974587c01d",
-        "integration_adjustment": "Shared argument-prefix declaration reconciled in integration."
+        "integration_adjustment": "Shared argument-prefix declaration reconciled in integration.",
+        "original_commit": "f02197acb203827a2cd8136aa2d575335b36d2d5"
       }
     },
     {
@@ -2754,6 +2767,186 @@
         "introduced_blob": "10d520cb8aff33490081a383b6471a7dab2a2a61",
         "original_blob": "10d520cb8aff33490081a383b6471a7dab2a2a61"
       }
+    },
+    {
+      "source": "src/game/cu_8016C170.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8016C170",
+        "0x8016C1DC",
+        "0x8016C264",
+        "0x8016C3FC",
+        "0x8016C434",
+        "0x8016C550",
+        "0x8016C690",
+        "0x8016C6E0"
+      ],
+      "provenance": {
+        "pull_request": 192,
+        "merged_via": 216,
+        "commit": "12e0fcb93f12f54dacfee2ee3152d63da1802e9e",
+        "introduced_blob": "46d38a326e694ab73e9d85e9eb196aec0ab2dce2",
+        "original_blob": "46d38a326e694ab73e9d85e9eb196aec0ab2dce2"
+      }
+    },
+    {
+      "source": "src/game/cu_8016CF40.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8016CEEC",
+        "0x8016CF00",
+        "0x8016CF40",
+        "0x8016D344",
+        "0x8016D4D8",
+        "0x8016D8B0",
+        "0x8016D8F0",
+        "0x8016D9D0",
+        "0x8016D9F4",
+        "0x8016DA5C",
+        "0x8016DA98",
+        "0x8016DAA4",
+        "0x8016DAE0",
+        "0x8016DB68"
+      ],
+      "provenance": {
+        "pull_request": 192,
+        "merged_via": 216,
+        "commit": "12e0fcb93f12f54dacfee2ee3152d63da1802e9e",
+        "introduced_blob": "79eacf6416228b44800be01d28d6ba01de6dc29a",
+        "original_blob": "79eacf6416228b44800be01d28d6ba01de6dc29a"
+      }
+    },
+    {
+      "source": "src/game/cu_8017055C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80170198",
+        "0x80170294",
+        "0x80170374",
+        "0x8017055C",
+        "0x80170754",
+        "0x80170864",
+        "0x80170B30",
+        "0x80170E64",
+        "0x80170F40",
+        "0x80171068",
+        "0x801712D0",
+        "0x80171450",
+        "0x80171824",
+        "0x801718E8",
+        "0x80171DB0",
+        "0x80171E30",
+        "0x801720B4",
+        "0x80172154",
+        "0x801726F8",
+        "0x801729F8",
+        "0x80172F9C",
+        "0x80172FB0"
+      ],
+      "provenance": {
+        "pull_request": 192,
+        "merged_via": 216,
+        "commit": "12e0fcb93f12f54dacfee2ee3152d63da1802e9e",
+        "introduced_blob": "4354442fd659245d08c307774fbc0dda43b0921f",
+        "original_blob": "4354442fd659245d08c307774fbc0dda43b0921f"
+      }
+    },
+    {
+      "source": "src/game/cu_80003F10.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x80003F10",
+        "0x80003F18"
+      ],
+      "provenance": {
+        "pull_request": 194,
+        "merged_via": 216,
+        "commit": "922b66e174cc308a917f134c490091b1b46c45ea",
+        "introduced_blob": "bcb781ed83a8b55af7f809532dbb6db4438cac77",
+        "original_blob": "bcb781ed83a8b55af7f809532dbb6db4438cac77"
+      }
+    },
+    {
+      "source": "src/game/cu_8002AE90.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8002AE90",
+        "0x8002AEE4",
+        "0x8002AF24",
+        "0x8002AF80",
+        "0x8002AFF4",
+        "0x8002B02C",
+        "0x8002B048",
+        "0x8002B068",
+        "0x8002B070",
+        "0x8002B13C",
+        "0x8002B1DC",
+        "0x8002B1E4",
+        "0x8002B270",
+        "0x8002B2D0",
+        "0x8002B2D4",
+        "0x8002B3DC",
+        "0x8002B494",
+        "0x8002B550",
+        "0x8002B598",
+        "0x8002B59C",
+        "0x8002B5A4",
+        "0x8002B5A8"
+      ],
+      "provenance": {
+        "pull_request": 197,
+        "merged_via": 216,
+        "commit": "e9f8d9da01ddeccc15c526bf316ba4638cde84fa",
+        "introduced_blob": "4ae082fa81b532b58c8867a2a44f76d44930817d",
+        "original_blob": "4ae082fa81b532b58c8867a2a44f76d44930817d"
+      }
+    },
+    {
+      "source": "src/game/cu_80021270.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80021270",
+        "0x8002129C",
+        "0x800212C8"
+      ],
+      "provenance": {
+        "pull_request": 200,
+        "merged_via": 216,
+        "commit": "21a34832d498af5db11afd2b7f9b1fdd3ba7bd40",
+        "introduced_blob": "6c84c49562308113180454e36d7d794e15b8c809",
+        "original_blob": "6c84c49562308113180454e36d7d794e15b8c809"
+      }
+    },
+    {
+      "source": "src/game/cu_80076DB4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80076DB4",
+        "0x80076EA4",
+        "0x80076EE8",
+        "0x80076F40"
+      ],
+      "provenance": {
+        "pull_request": 202,
+        "merged_via": 216,
+        "commit": "fca7cb358e81b49f8a6426ee26b1ede3683247de",
+        "introduced_blob": "64191dfd4313b87b41d8701e5b77f10bc89b7030",
+        "original_blob": "64191dfd4313b87b41d8701e5b77f10bc89b7030"
+      }
     }
   ],
   "target": "GN7E69",
@@ -2763,6 +2956,9 @@
     },
     "adampreddy": {
       "id": 188915146
+    },
+    "lifewillbeokay": {
+      "id": 337463583
     }
   }
 }
