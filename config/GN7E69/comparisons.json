@@ -460,6 +460,31 @@
           "end": "0x8018EC68"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8019D83C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019D83C-0x8019D994; two target function rows. Code-only unlinked reconstruction, original table storage retained.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019D83C",
+          "end": "0x8019D994"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8019D83C",
+          "start": "0x8019D83C",
+          "end": "0x8019D8AC"
+        },
+        {
+          "symbol": "fn_8019D8AC",
+          "start": "0x8019D8AC",
+          "end": "0x8019D994"
+        }
+      ]
     }
   ]
 }
