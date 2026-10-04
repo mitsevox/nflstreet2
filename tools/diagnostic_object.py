@@ -3,7 +3,8 @@ import struct
 import source_build as sb
 
 
-def fragment(native, section, offset, size, target_start, functions, targets, placements, externals, output, target_sections):
+def fragment(native, section, offset, size, target_start, functions, targets, placements, externals, output, target_sections,
+             storage=None):
     sections, symbols = sb.read_elf(native)
     referenced = {}
     relocations = []
@@ -23,7 +24,12 @@ def fragment(native, section, offset, size, target_start, functions, targets, pl
             symbol = symbols[index - 1]
             name = symbol['name']
             value = symbol['value'] + addend
-            if symbol['shndx'] == sb.SHN_UNDEF:
+            if symbol['shndx'] == sb.SHN_COMMON:
+                # COMMON storage has no section; only an evidenced storage address locates it.
+                if storage is None or index - 1 not in storage:
+                    raise ValueError(f'Comparison common symbol {name} lacks an evidenced storage address')
+                address = storage[index - 1] + addend
+            elif symbol['shndx'] == sb.SHN_UNDEF:
                 neutral = sb.NEUTRAL.fullmatch(name)
                 if name in externals:
                     address = externals[name] + addend
@@ -48,6 +54,13 @@ def fragment(native, section, offset, size, target_start, functions, targets, pl
                         address = a + value - function['value']
                         if not a <= address < b:
                             raise ValueError('Same-file code reference exceeds evidenced target function')
+                elif storage is not None and owned['type'] == sb.SHT_NOBITS:
+                    # With a storage map, uninitialized objects resolve individually, not by section.
+                    mapped = [i for i in storage if symbols[i]['shndx'] == owned['index']
+                              and symbols[i]['value'] <= value < symbols[i]['value'] + symbols[i]['size']]
+                    if len(mapped) != 1:
+                        raise ValueError('Uninitialized data reference lacks an evidenced storage address')
+                    address = storage[mapped[0]] + value - symbols[mapped[0]]['value']
                 else:
                     placement = placements.get(owned['name'])
                     if placement is None or not 0 <= value < placement['end'] - placement['start']:
