@@ -499,6 +499,10 @@
     "vfn_04__14Class_802A6B60iPi": {
       "address": "0x80182C78",
       "evidence": "evidence.tsv external row 0x80182C78 (vfn_04__14Class_802A6B60iPi) and type row Class_802A6B60."
+    },
+    "strcpy": {
+      "address": "0x801C2EB4",
+      "evidence": "evidence.tsv external row strcpy: target byte-copy loop and preserved destination; conventional library interface, original symbol not recovered."
     }
   },
   "units": [
@@ -4032,6 +4036,44 @@
           "placement": ".sbss",
           "start": "0x803EC9E0",
           "end": "0x803EC9E8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80020E80.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80020E80-0x80021270 and data/type/source-form rows for src/game/cu_80020E80.cpp.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80020E80",
+          "end": "0x8002125C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x8002125C",
+          "end": "0x80021270",
+          "follows": ".text"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F462C",
+          "end": "0x802F4640"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBAB0",
+          "end": "0x803EBAB4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036B360",
+          "end": "0x8036B4A0"
         }
       ]
     }
