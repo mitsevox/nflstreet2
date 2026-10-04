@@ -1178,10 +1178,10 @@ static const Struct_80290788 lbl_80290788[12][9] = {
     { { 3, 0.0f }, { 6, 0.0f }, { 0, 0.0f }, { 0, 0.0f }, { 0, 0.0f }, { 0, 0.0f }, { 0, 0.0f }, { 0, 0.0f }, { 0, 0.0f } },
 };
 
-#define ALLOC_LIST(list, Type, slot)                                                       \
-    if (lbl_803EA67C->mCounts[slot] != 0) {                                                \
-        lbl_803EA67C->list = (Type **)fn_801D2B7C(lbl_803EA67C->mCounts[slot] * 4, 0, 0);  \
-        memset(lbl_803EA67C->list, 0, lbl_803EA67C->mCounts[slot] * 4);               \
+#define ALLOC_LIST(list, Type, slot)                                                      \
+    if (lbl_803EA67C->mCounts[slot] != 0) {                                               \
+        lbl_803EA67C->list = (Type **)fn_801D2B7C(lbl_803EA67C->mCounts[slot] * 4, 0, 0); \
+        memset(lbl_803EA67C->list, 0, lbl_803EA67C->mCounts[slot] * 4);                   \
     }
 
 extern "C" void fn_80068154(void)
@@ -1208,17 +1208,17 @@ extern "C" void fn_80068154(void)
     ALLOC_LIST(mSound8, SoundVP, 8);
 }
 
-#define FREE_LIST(list, Type, slot)                                 \
-    if (lbl_803EA67C->mCounts[slot] != 0) {                         \
-        unsigned int i;                                             \
-        for (i = 0; i < lbl_803EA67C->mCounts[slot]; i++) {         \
-            Type *s = lbl_803EA67C->list[i];                        \
-            if (s != 0) {                                           \
-                delete s;                                           \
-            }                                                       \
-        }                                                           \
-        fn_801D2BD0(lbl_803EA67C->list);                            \
-        lbl_803EA67C->list = 0;                                     \
+#define FREE_LIST(list, Type, slot)                         \
+    if (lbl_803EA67C->mCounts[slot] != 0) {                 \
+        unsigned int i;                                     \
+        for (i = 0; i < lbl_803EA67C->mCounts[slot]; i++) { \
+            Type *s = lbl_803EA67C->list[i];                \
+            if (s != 0) {                                   \
+                delete s;                                   \
+            }                                               \
+        }                                                   \
+        fn_801D2BD0(lbl_803EA67C->list);                    \
+        lbl_803EA67C->list = 0;                             \
     }
 
 extern "C" void fn_80068418(void)
@@ -1606,34 +1606,34 @@ extern "C" void fn_8006A21C(int index, Vector_80039F5C *pPos, void *pObject)
     }
 }
 
-#define UPDATE_VFP(name, list, type)                              \
-    extern "C" void name(int index, Vector_80039F5C *pPos, void *pObject)                 \
-    {                                                             \
-        if (lbl_803EA67C->list[index] != 0) {                     \
-            unsigned short pan = 0;                             \
-            short unk = 0;                               \
-            unsigned int volume = SoundVolume(type);              \
-            float f = fn_80068F70(pPos);                        \
-            fn_80068ED0(pPos, &pan, &unk);                    \
-            lbl_803EA67C->list[index]->SetUnknown8((int)f);       \
-            lbl_803EA67C->list[index]->SetPan(pan);           \
-            lbl_803EA67C->list[index]->SetVolume(volume);         \
-            lbl_803EA67C->list[index]->Commit();                  \
-        }                                                         \
+#define UPDATE_VFP(name, list, type)                                      \
+    extern "C" void name(int index, Vector_80039F5C *pPos, void *pObject) \
+    {                                                                     \
+        if (lbl_803EA67C->list[index] != 0) {                             \
+            unsigned short pan = 0;                                       \
+            short unk = 0;                                                \
+            unsigned int volume = SoundVolume(type);                      \
+            float f = fn_80068F70(pPos);                                  \
+            fn_80068ED0(pPos, &pan, &unk);                                \
+            lbl_803EA67C->list[index]->SetUnknown8((int)f);               \
+            lbl_803EA67C->list[index]->SetPan(pan);                       \
+            lbl_803EA67C->list[index]->SetVolume(volume);                 \
+            lbl_803EA67C->list[index]->Commit();                          \
+        }                                                                 \
     }
 
-#define UPDATE_VP(name, list, type)                               \
-    extern "C" void name(int index, Vector_80039F5C *pPos, void *pObject)                 \
-    {                                                             \
-        if (lbl_803EA67C->list[index] != 0) {                     \
-            unsigned short pan;                                 \
-            short unk;                                   \
-            unsigned int volume = SoundVolume(type);              \
-            fn_80068ED0(pPos, &pan, &unk);                    \
-            lbl_803EA67C->list[index]->SetPan(pan);           \
-            lbl_803EA67C->list[index]->SetVolume(volume);         \
-            lbl_803EA67C->list[index]->Commit();                  \
-        }                                                         \
+#define UPDATE_VP(name, list, type)                                       \
+    extern "C" void name(int index, Vector_80039F5C *pPos, void *pObject) \
+    {                                                                     \
+        if (lbl_803EA67C->list[index] != 0) {                             \
+            unsigned short pan;                                           \
+            short unk;                                                    \
+            unsigned int volume = SoundVolume(type);                      \
+            fn_80068ED0(pPos, &pan, &unk);                                \
+            lbl_803EA67C->list[index]->SetPan(pan);                       \
+            lbl_803EA67C->list[index]->SetVolume(volume);                 \
+            lbl_803EA67C->list[index]->Commit();                          \
+        }                                                                 \
     }
 
 UPDATE_VFP(fn_8006A38C, mSound1, 5)
@@ -1645,14 +1645,14 @@ UPDATE_VFP(fn_8006A950, mSound6, 10)
 UPDATE_VFP(fn_8006AA9C, mSound7, 11)
 UPDATE_VP(fn_8006ABE8, mSound8, 12)
 
-#define SILENCE(list, type)                                                       \
-    if (lbl_803EA67C->list != 0) {                                                \
-        for (unsigned int i = 0; i < lbl_80290788[level][type].mCount; i++) {     \
-            if (lbl_803EA67C->list[i] != 0) {                                     \
-                lbl_803EA67C->list[i]->SetVolume(0);                              \
-                lbl_803EA67C->list[i]->Commit();                                  \
-            }                                                                     \
-        }                                                                         \
+#define SILENCE(list, type)                                                   \
+    if (lbl_803EA67C->list != 0) {                                            \
+        for (unsigned int i = 0; i < lbl_80290788[level][type].mCount; i++) { \
+            if (lbl_803EA67C->list[i] != 0) {                                 \
+                lbl_803EA67C->list[i]->SetVolume(0);                          \
+                lbl_803EA67C->list[i]->Commit();                              \
+            }                                                                 \
+        }                                                                     \
     }
 
 extern "C" void fn_8006ACD8(void)
@@ -1669,14 +1669,14 @@ extern "C" void fn_8006ACD8(void)
     SILENCE(mSound8, 8)
 }
 
-#define STOP(name, list, Type)                      \
-    extern "C" void name(int index)             \
-    {                                           \
-        Type *s = lbl_803EA67C->list[index];   \
-        if (s != 0) {                           \
-            delete s;                           \
-            lbl_803EA67C->list[index] = 0;      \
-        }                                       \
+#define STOP(name, list, Type)               \
+    extern "C" void name(int index)          \
+    {                                        \
+        Type *s = lbl_803EA67C->list[index]; \
+        if (s != 0) {                        \
+            delete s;                        \
+            lbl_803EA67C->list[index] = 0;   \
+        }                                    \
     }
 
 STOP(fn_8006B1CC, mSound1, SoundVFP)
