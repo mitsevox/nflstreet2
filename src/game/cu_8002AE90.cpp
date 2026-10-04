@@ -2,6 +2,7 @@
 #include "engine/cu_80227F14.h"
 #include "game/fn_80238174.h"
 #include "game/fn_801C3660.h"
+#include "game/fn_801C68FC.h"
 
 struct Record_8002AE90 {
     void *mpObject;
@@ -10,10 +11,8 @@ struct Record_8002AE90 {
 };
 struct State_8002AE90 { Object_80228224 *mpObject; void *mpList; };
 extern "C" {
-void *fn_801C68FC(int, int, int, int, int, void *);
 void fn_801C69E4(void *);
 void *fn_801C6A20(void *);
-void *fn_801C6AA4(void *, void *, int);
 void *fn_801C6B4C(void *, void *);
 void fn_801C6BC0(void *, Record_8002AE90 *);
 void fn_801C6C0C(void *, void *);
