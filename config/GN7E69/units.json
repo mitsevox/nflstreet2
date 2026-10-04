@@ -460,17 +460,17 @@
       "address": "0x80182CC8",
       "evidence": "evidence.tsv external row 0x80182CC8 (vfn_05__14Class_802A6B60iP14Entry_80182CC8) and type row Class_802A6B60."
     },
-    "vfn_03__14Class_802A6BB0": {
+    "vfn_03__14Class_802A6BB0iPiT2": {
       "address": "0x80182A88",
-      "evidence": "evidence.tsv external row 0x80182A88 (vfn_03__14Class_802A6BB0) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182A88 (vfn_03__14Class_802A6BB0iPiT2) and type row Class_802A6BB0."
     },
-    "vfn_04__14Class_802A6BB0": {
+    "vfn_04__14Class_802A6BB0iii": {
       "address": "0x80182A8C",
-      "evidence": "evidence.tsv external row 0x80182A8C (vfn_04__14Class_802A6BB0) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182A8C (vfn_04__14Class_802A6BB0iii) and type row Class_802A6BB0."
     },
-    "vfn_08__14Class_802A6BB0": {
+    "vfn_08__14Class_802A6BB0iii": {
       "address": "0x80182AA0",
-      "evidence": "evidence.tsv external row 0x80182AA0 (vfn_08__14Class_802A6BB0) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182AA0 (vfn_08__14Class_802A6BB0iii) and type row Class_802A6BB0."
     },
     "vfn_02__14Class_802A6B60iiPPv": {
       "address": "0x80182B84",
@@ -484,17 +484,17 @@
       "address": "0x80182B40",
       "evidence": "evidence.tsv external row 0x80182B40 (vfn_01__14Class_802A6B60iPiT2) and type row Class_802A6B60."
     },
-    "vfn_06__14Class_802A6BB0": {
+    "vfn_06__14Class_802A6BB0iiiPiT4G12Arg_8018399CN26": {
       "address": "0x80182A94",
-      "evidence": "evidence.tsv external row 0x80182A94 (vfn_06__14Class_802A6BB0) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182A94 (vfn_06__14Class_802A6BB0iiiPiT4G12Arg_8018399CN26) and type row Class_802A6BB0."
     },
-    "vfn_05__14Class_802A6BB0": {
+    "vfn_05__14Class_802A6BB0iiG12Arg_8018399C": {
       "address": "0x80182A90",
-      "evidence": "evidence.tsv external row 0x80182A90 (vfn_05__14Class_802A6BB0) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182A90 (vfn_05__14Class_802A6BB0iiG12Arg_8018399C) and type row Class_802A6BB0."
     },
-    "vfn_07__14Class_802A6BB0": {
+    "vfn_07__14Class_802A6BB0iiG12Arg_8018399C": {
       "address": "0x80182A98",
-      "evidence": "evidence.tsv external row 0x80182A98 (vfn_07__14Class_802A6BB0) and type row Class_802A6BB0."
+      "evidence": "evidence.tsv external row 0x80182A98 (vfn_07__14Class_802A6BB0iiG12Arg_8018399C) and type row Class_802A6BB0."
     },
     "vfn_04__14Class_802A6B60iPi": {
       "address": "0x80182C78",
