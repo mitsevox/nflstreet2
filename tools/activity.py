@@ -188,7 +188,8 @@ def export(root, site, source_report, previous=None, append=False, fetch_missing
         raise ValueError('Activity target differs from the public progress build')
     import progress
     verified = progress.report((source_report.parent/'main.dol').read_bytes(), site['revision'],
-                               source_report, root/'build/analysis')
+                               source_report, root/'build/analysis',
+                               root/'build/matching/report.json' if json.loads((root/'config/GN7E69/comparisons.json').read_text())['units'] else None)
     if site.get('source') != verified['source'] or any(
             site['measures'][kind][field] != verified['measures'][kind][field]
             for kind in ('code','data') for field in ('linked','total')):

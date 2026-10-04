@@ -14,7 +14,7 @@ import source_build
 ROOT = source_build.ROOT
 CONFIG = 'config/GN7E69/comparisons.json'
 INPUTS = ('tools/matching.py', 'tools/matching-tools.json', CONFIG,
-          'config/GN7E69/units.json', 'config/GN7E69/evidence.tsv', *source_build.TRUSTED_TOOLS)
+          'config/GN7E69/units.json', 'config/GN7E69/evidence.tsv', 'tools/function_compare.py', 'tools/diagnostic_object.py', *source_build.TRUSTED_TOOLS)
 
 
 def bindings():
@@ -22,29 +22,21 @@ def bindings():
 
 
 def manifest():
-    result = json.loads((ROOT / 'config/GN7E69/units.json').read_text())
-    candidates = json.loads((ROOT / CONFIG).read_text())
-    if set(candidates) != {'schema', 'units'} or candidates['schema'] != 1 or not isinstance(candidates['units'], list):
-        raise ValueError('Invalid comparison manifest')
-    for unit in candidates['units']:
-        # Candidate sources do not enter the accepted source inventory or final build.
-        if not unit.get('source', '').startswith('nonmatching/'):
-            raise ValueError('Unlinked comparison sources must live under nonmatching/')
-        result['units'].append(unit)
-    return result
+    return json.loads((ROOT / 'config/GN7E69/units.json').read_text())
 
 
 def score_pair(tool, expected, actual, symbols, kind, directory):
     """Compare resolved bytes; exactness uses bytes, fuzzy similarity uses objdiff."""
     size = len(expected)
-    if len(actual) != size or not size:
+    if not actual or not size:
         raise ValueError('Comparison requires a complete bounded range')
     if kind == 'data':
         symbols = [{'name': 'data', 'value': 0, 'size': size, 'shndx': 1, 'type': 1}]
     section = {'name': '.text' if kind == 'code' else '.data', 'flags': 6 if kind == 'code' else 3,
                'size': size, 'align': 4 if kind == 'code' else 1, 'type': 1}
     for label, data in (('target', expected), ('base', actual)):
-        source_build.write_object(directory / (label + '.o'), [dict(section, data=data)], symbols)
+        pair_symbols = [dict(s, size=len(data)) for s in symbols] if len(symbols) == 1 else symbols
+        source_build.write_object(directory / (label + '.o'), [dict(section, data=data, size=len(data))], pair_symbols)
     output = directory / 'diff.json'
     output.unlink(missing_ok=True)
     subprocess.run([str(tool), 'diff', '-1', str(directory / 'target.o'), '-2', str(directory / 'base.o'),
@@ -76,30 +68,10 @@ def generate(original, source_report, output):
         raise ValueError('Comparison target is not the configured original executable')
     work = ROOT / 'build/matching'
     work.mkdir(parents=True, exist_ok=True)
-    combined = manifest()
-    candidate_units = json.loads((ROOT / CONFIG).read_text())['units']
-    if candidate_units:
-        manifest_path = work / 'units.json'
-        manifest_path.write_text(json.dumps(combined))
-        previous = source_build.BUILD
-        source_build.BUILD = work / 'compiled'
-        comparison_path = work / 'compiled/report.json'
-        try:
-            try:
-                source_build.build(original, manifest_path, comparison_path)
-            except RuntimeError as error:
-                # The standard builder still rejects this diagnostic output as a final build.
-                if str(error) != f'Source build differs from the complete target; see {comparison_path}':
-                    raise
-        finally:
-            source_build.BUILD = previous
-        build_report = json.loads(comparison_path.read_text())
-        compiled = work / 'compiled/main.dol'
-    else:
-        import progress
-        progress.source_ranges(target, source_report)
-        build_report = json.loads(source_report.read_text())
-        compiled = source_report.parent / 'main.dol'
+    import progress
+    progress.source_ranges(target, source_report)
+    build_report = json.loads(source_report.read_text())
+    compiled = source_report.parent / 'main.dol'
     result_binary = compiled.read_bytes()
     if hashlib.sha1(result_binary).hexdigest() != build_report['output_sha1']:
         raise ValueError('Comparison output differs from its build report')
@@ -150,8 +122,10 @@ def generate(original, source_report, output):
                'objdiff': json.loads((ROOT / 'tools/matching-tools.json').read_text())['objdiff']['version'],
                'sources': {u['source']: {'sha256': u['source_sha256'], 'dependencies': u['dependencies']}
                            for u in build_report['units']}, 'entries': entries,
-               'build_receipt': {'path': (comparison_path if candidate_units else source_report).relative_to(ROOT).as_posix(),
-                                 'sha256': source_build.sha256(comparison_path if candidate_units else source_report)}}
+               'build_receipt': {'path': source_report.relative_to(ROOT).as_posix(),
+                                 'sha256': source_build.sha256(source_report)}}
+    import function_compare
+    payload['candidates'] = function_compare.generate(original, source_report, tool)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(payload, indent=2) + '\n')
     return payload
@@ -172,8 +146,7 @@ def load(path, target, original):
     if source_build.sha256(receipt_path) != receipt.get('sha256'):
         raise ValueError('Stale comparison build receipt')
     build = json.loads(receipt_path.read_text())
-    expected_manifest = hashlib.sha256(json.dumps(manifest()).encode()).hexdigest() if \
-        json.loads((ROOT/CONFIG).read_text())['units'] else source_build.sha256(ROOT/'config/GN7E69/units.json')
+    expected_manifest = source_build.sha256(ROOT/'config/GN7E69/units.json')
     if build.get('manifest_sha256') != expected_manifest or build.get('target_sha1') != target['sha1'] or \
         build.get('tools') != {p:source_build.sha256(ROOT/p) for p in source_build.TRUSTED_TOOLS}:
         raise ValueError('Foreign comparison build receipt')
@@ -186,11 +159,6 @@ def load(path, target, original):
         raise ValueError('Comparison output differs from receipt')
     function_bounds = {(u['source'], f['address'], f"0x{int(f['address'],16)+f['size']:08X}")
                        for u in build['units'] for f in u['functions']}
-    candidate_sources = {u['source'] for u in json.loads((ROOT/CONFIG).read_text())['units']}
-    evidenced = {(start, end) for start, end, _ in source_build.function_extents(ROOT)}
-    for source, start, end in function_bounds:
-        if source in candidate_sources and (int(start,16),int(end,16)) not in evidenced:
-            raise ValueError('Comparison function lacks evidenced boundaries')
     for source, entry in data['sources'].items():
         if source_build.sha256(ROOT / source) != entry['sha256'] or any(
                 source_build.sha256(ROOT / name) != digest for name, digest in entry['dependencies'].items()):
@@ -239,13 +207,16 @@ def load(path, target, original):
                       if int(start,16)<=a<b<=int(end,16))
         if covered != int(end,16)-int(start,16):
             raise ValueError('Comparison report omits configured bytes')
-    return data
+    import function_compare
+    candidate_entries = function_compare.load(data.get('candidates', []), original, ROOT)
+    result = dict(data, entries=[dict(e, linked=True) for e in data['entries']] + candidate_entries)
+    return result
 
 
 def apply(data, measurement):
     """Roll up unlinked comparison credit without changing ownership or linked credit."""
     accepted = {u['source'] for u in json.loads((ROOT / 'config/GN7E69/units.json').read_text())['units']}
-    entries = [e for e in measurement['entries'] if e['source'] not in accepted]
+    entries = [e for e in measurement['entries'] if not e.get('linked', e['source'] in accepted)]
 
     def subtract(spans, cuts):
         for left, right in cuts:
