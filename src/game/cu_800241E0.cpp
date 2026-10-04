@@ -1,3 +1,4 @@
+#include "game/Entry_80219044.h"
 #include "engine/cu_80227F14.h"
 #include "game/fn_801801F0.h"
 #include "game/fn_801D2B7C.h"
@@ -77,13 +78,6 @@ struct PadState_801E17D0 {
 struct Desc_801F6D54 {
     void *mpUnknown0;
     int mUnknown4;
-};
-
-/* Entry of the list passed to fn_80219044. */
-struct Entry_80219044 {
-    int mUnknown0;
-    int mLength;
-    char *mpText;
 };
 
 static char lbl_803EBAE0[] = " ";

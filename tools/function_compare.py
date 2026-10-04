@@ -44,6 +44,85 @@ def linked_ranges(units, address=lambda value: value):
     return [(u['source'], address(s['start']), address(s['end'])) for u in units for s in u['sections']]
 
 
+STT_NOTYPE, STT_OBJECT = 0, 1
+
+
+def accepted_data_symbols(objects, externals):
+    """Resolve public data objects defined by accepted (linked) source.
+
+    `objects` holds (report sections, ELF sections, ELF symbols) for each accepted native object.
+    A public data symbol (STT_OBJECT, or STT_NOTYPE as ProDG emits for .bss
+    variables) resolves to its linked target address: the verified placement start
+    of its compiled section plus the symbol value. Symbols in code sections are
+    left to the function inventory. Sections whose compiled size differs from their
+    placement, data placed after code, repeated section names and symbols outside their section
+    resolve nothing. A name defined more than once, or also known at a different address from
+    `externals`, is returned as ambiguous so a comparison that references it fails closed."""
+    resolved, ambiguous = {}, set()
+    for placements, sections, symbols in objects:
+        by_name = {}
+        for placement in placements:
+            name = placement.get('section')
+            if name is None:
+                continue
+            start, end = sb.address(placement['start']), sb.address(placement['end'])
+            exact = placement.get('compiled') == end - start and not placement.get('follows')
+            by_name[name] = None if name in by_name or not exact else (start, end)
+        for symbol in symbols:
+            if symbol['bind'] != sb.STB_GLOBAL or symbol['type'] not in (STT_NOTYPE, STT_OBJECT) or not symbol['name']:
+                continue
+            if symbol['shndx'] in (sb.SHN_UNDEF, sb.SHN_ABS, sb.SHN_COMMON) or symbol['shndx'] >= len(sections):
+                continue
+            if sections[symbol['shndx']]['flags'] & sb.SHF_EXECINSTR:
+                continue
+            place = by_name.get(sections[symbol['shndx']]['name'])
+            name = symbol['name']
+            if place is None or symbol['value'] + symbol['size'] > place[1] - place[0]:
+                ambiguous.add(name)
+                continue
+            value = place[0] + symbol['value']
+            if name in resolved and resolved[name] != value:
+                ambiguous.add(name)
+            resolved[name] = value
+    for name, value in resolved.items():
+        if name in externals and externals[name] != value:
+            ambiguous.add(name)
+    for name in ambiguous:
+        resolved.pop(name, None)
+    return resolved, ambiguous
+
+
+def comparison_references(externals, data_symbols):
+    """Addresses that another file's references may resolve to: public data of accepted source,
+    overridden by configured externals and accepted function addresses."""
+    references = dict(data_symbols)
+    references.update(externals)
+    return references
+
+
+def resolve_undefined(symbols, references, ambiguous):
+    """Resolve a comparison object's undefined references.
+
+    Names in `references` resolve to their address and neutral fn_/lbl_ labels resolve by their
+    address. An ambiguous accepted data name always fails closed, as does any other unknown name."""
+    defined = {s['name'] for s in symbols if s['shndx'] != sb.SHN_UNDEF}
+    resolved = {}
+    for symbol in symbols:
+        name = symbol['name']
+        if symbol['shndx'] != sb.SHN_UNDEF or not name or name in defined:
+            continue
+        if name in ambiguous:
+            raise ValueError(f'Ambiguous comparison symbol {name}')
+        neutral = sb.NEUTRAL.fullmatch(name)
+        if name in references:
+            resolved[name] = references[name]
+        elif neutral:
+            resolved[name] = int(neutral[1], 16)
+        else:
+            raise ValueError(f'Unresolved comparison symbol {name}')
+    return resolved
+
+
 def configured(root, binary):
     config = json.loads((root / CONFIG).read_text())
     if set(config) != {'schema', 'units'} or config['schema'] != 2 or not isinstance(config['units'], list):
@@ -113,6 +192,7 @@ def generate(original, source_report, tool):
     accepted_bounds = [(int(s['start'], 16), int(s['end'], 16)) for u in accepted for s in u['sections']]
     accepted_linked = linked_ranges(accepted, sb.address)
     externals = {name: int(e['address'], 16) for name, e in manifest['externals'].items()}
+    accepted_objects = []
     for u in accepted:
         # Only public definitions may resolve another file's undefined reference.
         stem = re.sub(r'[^A-Za-z0-9]+', '_', u['source']).strip('_')
@@ -120,8 +200,13 @@ def generate(original, source_report, tool):
         native = root / 'build/source/obj' / f'unit{index:03d}_{stem}.o'
         if sb.sha256(native) != u['native_object_sha256']:
             raise ValueError('Accepted external object differs from verified compiler receipt')
-        public = {s['name'] for s in sb.read_elf(native.read_bytes())[1] if s['bind'] == sb.STB_GLOBAL and s['shndx'] != sb.SHN_UNDEF}
+        native_sections, native_symbols = sb.read_elf(native.read_bytes())
+        public = {s['name'] for s in native_symbols if s['bind'] == sb.STB_GLOBAL and s['shndx'] != sb.SHN_UNDEF}
         externals.update({f['symbol']: int(f['address'], 16) for f in u['functions'] if f['symbol'] in public})
+        accepted_objects.append((u['sections'], native_sections, native_symbols))
+    # Public data objects of accepted source resolve at their verified linked placements.
+    data_symbols, ambiguous = accepted_data_symbols(accepted_objects, externals)
+    addresses = comparison_references(externals, data_symbols)
     compiler, wrapper = sb.setup_compiler.setup()
     sdk = sb.setup_compiler.setup_sdk() if any(u['compiler'] == 'mwcc' for u in units) else None
     work = root / 'build/matching/candidates'
@@ -157,19 +242,7 @@ def generate(original, source_report, tool):
                     sb.SHT_NOBITS if kind == 'bss' else sb.SHT_PROGBITS):
                 raise ValueError('Comparison section type differs from placement')
         functions = {s['name']: s for s in symbols if s['type'] == 2 and s['size'] and s['shndx'] != sb.SHN_UNDEF}
-        resolved = {}
-        defined = {s['name'] for s in symbols if s['shndx'] != sb.SHN_UNDEF}
-        for symbol in symbols:
-            name = symbol['name']
-            if symbol['shndx'] != sb.SHN_UNDEF or not name or name in defined:
-                continue
-            neutral = sb.NEUTRAL.fullmatch(name)
-            if name in externals:
-                resolved[name] = externals[name]
-            elif neutral:
-                resolved[name] = int(neutral[1], 16)
-            else:
-                raise ValueError(f'Unresolved comparison symbol {name}')
+        resolved = resolve_undefined(symbols, addresses, ambiguous)
         targets = {f['symbol']: (int(f['address'],16), int(f['address'],16)+f['size'])
                    for u in accepted if u['source'] == unit['source'] for f in u['functions']}
         targets.update({r['symbol']: (sb.address(r['start']), sb.address(r['end'])) for r in unit['functions']})
@@ -190,7 +263,7 @@ def generate(original, source_report, tool):
             pair.mkdir()
             fragment = pair / 'fragment.o'
             fragment_symbol, references, reference_script = diagnostic_object.fragment(unit['object'].read_bytes(), section, symbol['value'],
-                symbol['size'], a, functions, targets, placements, externals, fragment, target_sections)
+                symbol['size'], a, functions, targets, placements, addresses, fragment, target_sections)
             script = pair / 'link.ld'
             script.write_text(f"SECTIONS {{\n_SDA_BASE_ = {target['sda_base']};\n_SDA2_BASE_ = {target['sda2_base']};\n" +
                               f"{section['name']} 0x{a:08X} : {{ *({section['name']}) }}\n" + '\n'.join(reference_script) + '\n}\n')
@@ -229,7 +302,7 @@ def generate(original, source_report, tool):
                 raise ValueError('Comparison data with linked bytes must compile to its full target placement')
             data_fragment = pair / ('data' + name + '.o')
             data_symbol, references, reference_script = diagnostic_object.fragment(unit['object'].read_bytes(), section, 0, section['size'],
-                a, functions, targets, placements, externals, data_fragment, target_sections)
+                a, functions, targets, placements, addresses, data_fragment, target_sections)
             data_script = pair / ('data' + name + '.ld')
             data_script.write_text(f"SECTIONS {{\n_SDA_BASE_ = {target['sda_base']};\n_SDA2_BASE_ = {target['sda2_base']};\n{name} 0x{a:08X} : {{ *({name}) }}\n" + '\n'.join(reference_script) + '\n}\n')
             data_output = pair / ('data' + name + '.elf')
