@@ -3910,6 +3910,29 @@
         "commit": "721d4c010b76c1ff650b360cf9093081052a117e",
         "introduced_blob": "ceaec7ab5c2f47ba3da50d2462d5ac037e26c392"
       }
+    },
+    {
+      "source": "src/game/cu_80159F10.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80159F10",
+        "0x80159F70",
+        "0x80159F74",
+        "0x8015A0D0",
+        "0x8015A110",
+        "0x8015A17C",
+        "0x8015A1A8",
+        "0x8015A204",
+        "0x8015A240"
+      ],
+      "provenance": {
+        "pull_request": 241,
+        "merged_via": 241,
+        "commit": "dac02340db9e1a4da1ed1c3fdbb6fd26ed3f8664",
+        "introduced_blob": "40852d423a0238a903511919439b25fb531e207a"
+      }
     }
   ],
   "target": "GN7E69",
