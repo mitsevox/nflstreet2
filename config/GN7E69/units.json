@@ -4175,6 +4175,25 @@
           "end": "0x803EB440"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80003F10.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80003F10-0x80003F30 (src/game/cu_80003F10.cpp) and its data/source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80003F10",
+          "end": "0x80003F30"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB8E8",
+          "end": "0x803EB8EC"
+        }
+      ]
     }
   ]
 }
