@@ -455,6 +455,50 @@
     "__14Class_8018FD64": {
       "address": "0x8018FD64",
       "evidence": "evidence.tsv external row 0x8018FD64 (__14Class_8018FD64) and type row Class_8018FD64."
+    },
+    "vfn_05__14Class_802A6B60iP14Entry_80182CC8": {
+      "address": "0x80182CC8",
+      "evidence": "evidence.tsv external row 0x80182CC8 (vfn_05__14Class_802A6B60iP14Entry_80182CC8) and type row Class_802A6B60."
+    },
+    "vfn_03__14Class_802A6BB0": {
+      "address": "0x80182A88",
+      "evidence": "evidence.tsv external row 0x80182A88 (vfn_03__14Class_802A6BB0) and type row Class_802A6BB0."
+    },
+    "vfn_04__14Class_802A6BB0": {
+      "address": "0x80182A8C",
+      "evidence": "evidence.tsv external row 0x80182A8C (vfn_04__14Class_802A6BB0) and type row Class_802A6BB0."
+    },
+    "vfn_08__14Class_802A6BB0": {
+      "address": "0x80182AA0",
+      "evidence": "evidence.tsv external row 0x80182AA0 (vfn_08__14Class_802A6BB0) and type row Class_802A6BB0."
+    },
+    "vfn_02__14Class_802A6B60iiPPv": {
+      "address": "0x80182B84",
+      "evidence": "evidence.tsv external row 0x80182B84 (vfn_02__14Class_802A6B60iiPPv) and type row Class_802A6B60."
+    },
+    "vfn_06__14Class_80184190": {
+      "address": "0x80184190",
+      "evidence": "evidence.tsv external row 0x80184190 (vfn_06__14Class_80184190) and type row Class_80184190."
+    },
+    "vfn_01__14Class_802A6B60iPiT2": {
+      "address": "0x80182B40",
+      "evidence": "evidence.tsv external row 0x80182B40 (vfn_01__14Class_802A6B60iPiT2) and type row Class_802A6B60."
+    },
+    "vfn_06__14Class_802A6BB0": {
+      "address": "0x80182A94",
+      "evidence": "evidence.tsv external row 0x80182A94 (vfn_06__14Class_802A6BB0) and type row Class_802A6BB0."
+    },
+    "vfn_05__14Class_802A6BB0": {
+      "address": "0x80182A90",
+      "evidence": "evidence.tsv external row 0x80182A90 (vfn_05__14Class_802A6BB0) and type row Class_802A6BB0."
+    },
+    "vfn_07__14Class_802A6BB0": {
+      "address": "0x80182A98",
+      "evidence": "evidence.tsv external row 0x80182A98 (vfn_07__14Class_802A6BB0) and type row Class_802A6BB0."
+    },
+    "vfn_04__14Class_802A6B60iPi": {
+      "address": "0x80182C78",
+      "evidence": "evidence.tsv external row 0x80182C78 (vfn_04__14Class_802A6B60iPi) and type row Class_802A6B60."
     }
   },
   "units": [
@@ -474,6 +518,62 @@
           "placement": ".data3",
           "start": "0x802B1DF0",
           "end": "0x802B1E78"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80004AF0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80004AF0-0x80005668 (src/game/cu_80004AF0.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80004AF0",
+          "end": "0x80005510"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x80005510",
+          "end": "0x80005668",
+          "follows": ".text"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F3E7C",
+          "end": "0x802F400C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB900",
+          "end": "0x803EB910"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80369D64",
+          "end": "0x80369D9C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECCA8",
+          "end": "0x803ECCC4"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B1C",
+          "end": "0x80289B20"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C44",
+          "end": "0x80289C48"
         }
       ]
     },
