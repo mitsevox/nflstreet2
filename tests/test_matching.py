@@ -3,6 +3,7 @@ import hashlib
 import json
 from pathlib import Path
 import sys
+import struct
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -125,15 +126,23 @@ class CandidateReceiptTests(unittest.TestCase):
             (root/matching.CONFIG).write_text(json.dumps({'schema':1,'units':[unit]}))
             (root/'tools/matching-tools.json').write_text(json.dumps({'objdiff':{'version':'v3.8.2'}}))
             compiled = root/'build/matching/compiled'
-            (compiled/'main.dol').write_bytes(b'compiled output')
+            def dol(payload):
+                header = bytearray(256)
+                struct.pack_into('>I', header, 0, 256)
+                struct.pack_into('>I', header, 0x48, 0x80000000)
+                struct.pack_into('>I', header, 0x90, len(payload))
+                return bytes(header) + payload
+            original = dol(bytes.fromhex('386000014e800020'))
+            (compiled/'main.dol').write_bytes(dol(bytes.fromhex('386000024e800020')))
+            target = {'sha1': hashlib.sha1(original).hexdigest()}
             source_binding = {'sha256':matching.source_build.sha256(root/source), 'dependencies':{}}
             receipt = {'manifest_sha256':hashlib.sha256(json.dumps(manifest).encode()).hexdigest(),
-                       'target_sha1':'target', 'tools':{},
+                       'target_sha1':target['sha1'], 'tools':{},
                        'output_sha1':matching.baseline.digest(compiled/'main.dol','sha1'),
                        'units':[{'source':source,'source_sha256':source_binding['sha256'],'dependencies':{},
                                  'functions':[{'address':'0x80000000','size':8}]}]}
             (compiled/'report.json').write_text(json.dumps(receipt))
-            data = {'schema':1,'target_sha1':'target','inputs':{},'sources':{source:source_binding},
+            data = {'schema':1,'target_sha1':target['sha1'],'inputs':{},'sources':{source:source_binding},
                     'build_receipt':{'path':'build/matching/compiled/report.json',
                                      'sha256':matching.source_build.sha256(compiled/'report.json')},
                     'objdiff':'v3.8.2', 'entries':[{'source':source,'type':'function','kind':'code',
@@ -144,10 +153,27 @@ class CandidateReceiptTests(unittest.TestCase):
                     patch.object(matching,'manifest',return_value=manifest), \
                     patch.object(matching.source_build,'TRUSTED_TOOLS',()), \
                     patch.object(matching.source_build,'function_extents',return_value=[(0x80000000,0x80000008,'function')]):
-                self.assertEqual(matching.load(report,{'sha1':'target'}),data)
+                self.assertEqual(matching.load(report, target, original),data)
+                invalid = copy.deepcopy(data)
+                invalid['entries'][0].update(matched=8, fuzzy=8)
+                report.write_text(json.dumps(invalid))
+                with self.assertRaisesRegex(ValueError, 'exact score differs'):
+                    matching.load(report, target, original)
+                (compiled/'main.dol').write_bytes(original)
+                receipt['output_sha1'] = target['sha1']
+                (compiled/'report.json').write_text(json.dumps(receipt))
+                data['build_receipt']['sha256'] = matching.source_build.sha256(compiled/'report.json')
+                report.write_text(json.dumps(data))
+                with self.assertRaisesRegex(ValueError, 'exact score differs'):
+                    matching.load(report, target, original)
+                data['entries'][0].update(matched=8, fuzzy=8)
+                report.write_text(json.dumps(data))
+                self.assertEqual(matching.load(report, target, original), data)
+                with self.assertRaisesRegex(ValueError, 'target bytes differ'):
+                    matching.load(report, target, original[:-1])
                 with patch.object(matching.source_build,'function_extents',return_value=[]):
                     with self.assertRaisesRegex(ValueError,'evidenced boundaries'):
-                        matching.load(report,{'sha1':'target'})
+                        matching.load(report, target, original)
 
 
 class ReportValidationTests(unittest.TestCase):
@@ -157,7 +183,8 @@ class ReportValidationTests(unittest.TestCase):
             self.skipTest('Measurement integration step creates the bound report')
         payload = json.loads(report.read_text())
         target = {'sha1': payload['target_sha1']}
-        matching.load(report, target)
+        original = (matching.ROOT/'build/source/main.dol').read_bytes()
+        matching.load(report, target, original)
         mutations = []
         wrong_version = copy.deepcopy(payload)
         wrong_version['objdiff'] = 'untrusted'
@@ -183,7 +210,7 @@ class ReportValidationTests(unittest.TestCase):
                 with self.subTest(mutation=number):
                     path.write_text(json.dumps(invalid))
                     with self.assertRaises(ValueError):
-                        matching.load(path, target)
+                        matching.load(path, target, original)
 
 
 if __name__ == '__main__':

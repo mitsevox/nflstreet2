@@ -157,7 +157,9 @@ def generate(original, source_report, output):
     return payload
 
 
-def load(path, target):
+def load(path, target, original):
+    if hashlib.sha1(original).hexdigest() != target['sha1']:
+        raise ValueError('Comparison target bytes differ from configured executable')
     data = json.loads(path.read_text())
     configured = manifest()['units']
     if data.get('schema') != 1 or data.get('target_sha1') != target['sha1'] or data.get('inputs') != bindings() \
@@ -179,7 +181,8 @@ def load(path, target):
     if data['sources'] != expected_sources:
         raise ValueError('Comparison source bindings differ from compiler receipt')
     output_path = receipt_path.parent/'main.dol'
-    if baseline.digest(output_path,'sha1') != build['output_sha1']:
+    result_binary = output_path.read_bytes()
+    if hashlib.sha1(result_binary).hexdigest() != build['output_sha1']:
         raise ValueError('Comparison output differs from receipt')
     function_bounds = {(u['source'], f['address'], f"0x{int(f['address'],16)+f['size']:08X}")
                        for u in build['units'] for f in u['functions']}
@@ -214,6 +217,13 @@ def load(path, target):
                 type(entry['fuzzy']) not in (int,float) or not math.isfinite(entry['fuzzy']) or \
                 not entry['matched'] <= entry['fuzzy'] <= size:
             raise ValueError('Invalid measured match score')
+        expected = source_build.dol_bytes(original, a, b)
+        actual = source_build.dol_bytes(result_binary, a, b)
+        if expected is None or actual is None or len(expected) != size or len(actual) != size:
+            raise ValueError('Comparison extent lacks resolved executable bytes')
+        exact = size if expected == actual else 0
+        if entry['matched'] != exact:
+            raise ValueError('Comparison exact score differs from resolved bytes')
         intervals.append((a,b))
     scored_functions = {(e['source'],e['start'],e['end']) for e in data['entries'] if e['type']=='function'}
     if scored_functions != function_bounds:

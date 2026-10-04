@@ -450,7 +450,7 @@ def report(binary, revision, source_report=None, analysis_dir=None, comparison_r
                               ownership)}
     if comparison_report is not None:
         import matching
-        matching.apply(data, matching.load(comparison_report, target))
+        matching.apply(data, matching.load(comparison_report, target, binary))
     return data
 
 
