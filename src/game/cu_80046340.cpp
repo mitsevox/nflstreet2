@@ -28,8 +28,8 @@ float fn_80146F0C(unsigned int index);
 float fn_80146F40(unsigned int index);
 void fn_801A582C(Object_80046340 *pObject);
 void fn_801A5CA4(Object_80046340 *pObject);
-void fn_801A5D0C(void *pObject);
-void fn_801A5E90(void *pObject);
+int fn_801A5D0C(void *pObject);
+int fn_801A5E90(void *pObject);
 int fn_801DCF0C(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
 void fn_801DCF8C(int a);
 void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(void *));
@@ -111,14 +111,14 @@ void fn_80046504(int handle)
 void fn_8004659C(void)
 {
     unsigned int i;
-    void *pSprite;
+    void *pElement;
     float a;
     float b;
     int state;
     float value;
 
     for (i = 0; i < 10; i++) {
-        pSprite = lbl_803EA4B0->mUnknown6E4[i];
+        pElement = lbl_803EA4B0->mUnknown6E4[i];
         a = fn_80146F0C(i);
         b = fn_80146F40(i);
         state = fn_80146EDC(i);
@@ -133,7 +133,7 @@ void fn_8004659C(void)
         } else {
             value = a * 0.5f / b + 0.5f;
         }
-        fn_80235C90(pSprite, 0, 1.0f, 1.0f, 1.0f, value * 0.5f);
+        fn_80235C90(pElement, 0, 1.0f, 1.0f, 1.0f, value * 0.5f);
     }
 }
 }
