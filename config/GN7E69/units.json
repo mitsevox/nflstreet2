@@ -1577,6 +1577,71 @@
       ]
     },
     {
+      "source": "src/game/cu_80026BB0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80026BB0-0x800273AC (src/game/cu_80026BB0.cpp) and its data rows.",
+      "link_roots": {
+        "symbols": [
+          "fn_80026BB0",
+          "fn_80026BE8",
+          "fn_80026C5C",
+          "fn_80026CC4",
+          "fn_80026D50",
+          "fn_80026DA8",
+          "fn_80026DD4",
+          "fn_80027114",
+          "fn_800271A4",
+          "fn_800271D4",
+          "fn_80027230",
+          "fn_8002728C",
+          "fn_80027294",
+          "fn_800272EC",
+          "fn_80027358",
+          "fn_8002739C",
+          "fn_800273A4"
+        ],
+        "evidence": "evidence.tsv linker row 0x80289FC8-0x80289FE0: the target keeps every listed function, all reached from outside the unit or from each other; the file-static DequantizeStep has no code in the target, while its constant pool remains in rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80026BB0",
+          "end": "0x800273AC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80289FB8",
+          "end": "0x8028A028"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CC760",
+          "end": "0x802CC780"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA2C8",
+          "end": "0x803EA2CC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80306564",
+          "end": "0x80306570"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC5E8",
+          "end": "0x803EC5EC"
+        }
+      ]
+    },
+    {
       "source": "src/game/GRender.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80199FA4-0x8019A110 (src/game/GRender.cpp) and its data rows.",
