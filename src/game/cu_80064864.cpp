@@ -12,6 +12,9 @@
 
 typedef void (*Callback_8030A4A8)(int value);
 
+/* Camera returned by fn_8013FA04 (defined in src/game/cu_8013F460.cpp). */
+struct Camera_8013F738;
+
 /* mId is also read as one word, compared with 0x10002, 0x30001 and 0x30016;
    mArgs holds mArgCount words for fn_80218FC4. */
 struct State_8030A478 {
@@ -77,11 +80,11 @@ int fn_800BF718(int a);
 void fn_800C0330(void *p);
 void fn_800C1CA0(void);
 int fn_800C1E40(void);
-int fn_8013C678(void);
-void fn_8013C6F0(void);
+int fn_8013C678(Camera_8013F738 *pCamera);
+void fn_8013C6F0(Camera_8013F738 *pCamera);
 void fn_8013F97C(int a);
 int fn_8013F9F8(void);
-void fn_8013FA04(int a);
+Camera_8013F738 *fn_8013FA04(int index);
 void fn_8013FA24(void);
 void fn_8013FA8C(int a);
 void fn_8013FB44(void);
@@ -187,8 +190,7 @@ void fn_800649AC(void)
     fn_800B43C8();
     lbl_8030A478.mUnknown136 = -1;
     lbl_8030A478.mUnknown140 = fn_8013F9F8();
-    fn_8013FA04(5);
-    lbl_8030A478.mUnknown144 = fn_8013C678();
+    lbl_8030A478.mUnknown144 = fn_8013C678(fn_8013FA04(5));
     fn_801C1F94(&params, 0, sizeof(params));
     params.mUnknown40 = 0xFFFF;
     params.mUnknown42 = 0xFFFF;
@@ -269,8 +271,7 @@ int fn_80064BF8(void)
             fn_80162780(lbl_803EA646, lbl_803EA646);
             fn_8013F97C(lbl_8030A478.mUnknown140);
             fn_8013FA8C(lbl_8030A478.mUnknown144);
-            fn_8013FA04(lbl_8030A478.mUnknown140);
-            fn_8013C6F0();
+            fn_8013C6F0(fn_8013FA04(lbl_8030A478.mUnknown140));
         }
         if (fn_800AD9B4() == 5 && !fn_80059004() && !fn_8005900C()) {
             fn_800B4408();

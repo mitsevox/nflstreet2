@@ -1,4 +1,5 @@
 #include <dolphin/mtx.h>
+#include "game/cu_80136B1C.h"
 #include "game/fn_801C68FC.h"
 
 /* Object returned by fn_80144CE0 and released by fn_80144E38. */
@@ -35,13 +36,6 @@ struct Event_801459F0 {
 struct Entry_80145EFC {
     Mtx44 mMatrix;
     Object_80144CE0 *mUnknown40;
-};
-
-struct Object_801374BC {
-    char mPad00[0x54];
-    float mUnknown54;
-    float mUnknown58;
-    float mUnknown5C;
 };
 
 struct Object_803ECA10 {
@@ -92,7 +86,6 @@ void fn_80146FD8(void);
 void fn_80146FDC(Object_80146094 *pObject);
 void fn_801475F4(void);
 void fn_801478A8(void);
-Object_801374BC *fn_801374BC(void);
 void *fn_801C6A20(void *pool);
 void *fn_801C6B4C(void *pool, void *item);
 void fn_801C6C0C(void *pool, void *item);
@@ -180,14 +173,14 @@ static int fn_80145B40(void *pItem, void *pContext)
 
 static void fn_80145B5C(void)
 {
-    Object_801374BC *pBall = fn_801374BC();
+    Object_80137ABC *pBall = fn_801374BC();
     unsigned int i;
 
     for (i = 0; i < 2; i++) {
         if (lbl_803ECA10[i] != 0) {
-            lbl_803ECA10[i]->mUnknown39C = pBall->mUnknown54;
-            lbl_803ECA10[i]->mUnknown3A0 = pBall->mUnknown58;
-            lbl_803ECA10[i]->mUnknown3A4 = pBall->mUnknown5C;
+            lbl_803ECA10[i]->mUnknown39C = pBall->mState.mUnknown54.mX;
+            lbl_803ECA10[i]->mUnknown3A0 = pBall->mState.mUnknown54.mY;
+            lbl_803ECA10[i]->mUnknown3A4 = pBall->mState.mUnknown54.mZ;
         }
     }
 }
@@ -258,17 +251,17 @@ void fn_80145D64(int type, int a, int b, int c)
     }
 }
 
-void fn_80145DE4(int type, int *p)
+void fn_80145DE4(int type, Object_80137ABC *pBall)
 {
     Event_801459F0 *pEvent = (Event_801459F0 *)fn_801C6A20(lbl_803EB24C);
 
     if (pEvent != 0) {
         pEvent->mType = type;
         pEvent->mUnknown04 = 0;
-        pEvent->mUnknown08 = *p + 0x20;
+        pEvent->mUnknown08 = (int)pBall->mpUnknown00 + 0x20;
         pEvent->mUnknown18 = 0;
         pEvent->mUnknown0C = 0;
-        pEvent->mUnknown10 = p;
+        pEvent->mUnknown10 = pBall;
         pEvent->mUnknown14 = 0;
         pEvent->mUnknown1C = 21;
         fn_801C6AA4(lbl_803EB24C, pEvent, 0);

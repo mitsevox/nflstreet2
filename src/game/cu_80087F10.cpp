@@ -13,7 +13,10 @@ int fn_80088224(int id);
 void fn_80088294(int id);
 }
 
-/* Open flags of the 'LPUT' and 'FNIT' tables. */
+/* lbl_803EA810 and lbl_803EA811: open flags of the 'LPUT' and 'FNIT' tables.
+   lbl_803EA812: set by fn_80088294 when fn_800881B8 succeeds after the
+   'RUUT' update, read and cleared by fn_80088628. lbl_803EA814: database index set by fn_80088638 (-1 when
+   unset). */
 static unsigned char lbl_803EA810 = 0;
 static unsigned char lbl_803EA811 = 0;
 static unsigned char lbl_803EA812 = 0;

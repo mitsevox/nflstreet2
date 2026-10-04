@@ -67,10 +67,10 @@ int fn_80136B1C(void *p, int value)
 
         fn_801D34D0(pBall, sizeof(Object_80137ABC), 0, 4);
         pBall->mState.mIndex = i;
-        pBall->mState.mUnknownA4 = 0;
-        pBall->mState.mUnknownA8 = 0;
-        pBall->mState.mUnknownAC = 0;
-        pBall->mState.mUnknownB0 = 0;
+        pBall->mState.mState = 0;
+        pBall->mState.mStateArg = 0;
+        pBall->mState.mPrevState = 0;
+        pBall->mState.mPrevStateArg = 0;
         fn_8009BD2C(0, &pBall->mState.mUnknownB4);
         fn_8009BD2C(0, &pBall->mState.mUnknownC8);
         pBall->mState.mPos.mX = i * 5.0f + 15.0f;
