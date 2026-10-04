@@ -1,3 +1,4 @@
+#include "game/cu_80159F10.h"
 #include <math.h>
 #include "engine/cu_80227F14.h"
 #include "game/Camera_8013F738.h"
@@ -46,7 +47,6 @@ void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Instance_80159F10 *)
 int fn_801DD268(int handle, int a, int b, Init_80159F10 *pInit);
 void fn_801DD320(int handle, int a);
 void fn_801DD3AC(int handle, int a, int b);
-void fn_8015A240(Instance_80159F10 *pInstance, unsigned char value);
 }
 
 static unsigned char lbl_803ECA5C;
@@ -101,10 +101,10 @@ extern "C" void fn_8015A0D0(int value)
     }
 }
 
-extern "C" void fn_8015A110(int handle)
+extern "C" void fn_8015A110(void *pOwner)
 {
     fn_801DCF0C(12, 36, 3, fn_80159F10, fn_80159F70);
-    fn_801DD0C8(handle, 12, 0, fn_80159F74);
+    fn_801DD0C8((int)pOwner, 12, 0, fn_80159F74);
     fn_8019FBEC();
     lbl_803ECA5C = 1;
 }
@@ -116,24 +116,24 @@ extern "C" void fn_8015A17C(void)
     fn_801DCF8C(12);
 }
 
-extern "C" int fn_8015A1A8(int handle, unsigned char c, int a, int b)
+extern "C" Instance_80159F10 *fn_8015A1A8(void *pOwner, unsigned char c, int a, int b)
 {
     Init_80159F10 init;
-    int id;
+    Instance_80159F10 *pItem;
 
     init.mUnknown0 = a;
     init.mUnknown4 = b;
     init.mUnknown8 = c;
-    id = fn_801DD268(handle, 12, 0, &init);
-    fn_801DD3AC(handle, id, 11);
-    return id;
+    pItem = (Instance_80159F10 *)fn_801DD268((int)pOwner, 12, 0, &init);
+    fn_801DD3AC((int)pOwner, (int)pItem, 11);
+    return pItem;
 }
 
-extern "C" void fn_8015A204(int handle, int id)
+extern "C" void fn_8015A204(void *pOwner, Instance_80159F10 *pItem)
 {
-    if (id != 0) {
-        fn_801DD320(handle, id);
-        fn_80228D58(id);
+    if (pItem != 0) {
+        fn_801DD320((int)pOwner, (int)pItem);
+        fn_80228D58((int)pItem);
     }
 }
 

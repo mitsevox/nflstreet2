@@ -1,3 +1,4 @@
+#include "game/fn_8016871C.h"
 #include "game/Object_8007A334.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_801C1F94.h"
@@ -126,7 +127,6 @@ void fn_80168418(int a, int b, int c, int d, int e, int f, int g);
 void fn_801684B8(int a);
 void fn_80168640(int team, int kind);
 Object_800670B4 *fn_80168708(int team);
-Record_80067338 *fn_8016871C(int team);
 Record_80067338 *fn_80168730(int team);
 void fn_80168744(int team, unsigned int a, unsigned int b, unsigned int c);
 void fn_801687E4(int team, int a, int b, int c);
