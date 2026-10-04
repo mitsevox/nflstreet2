@@ -1,19 +1,16 @@
 #include "game/Callees_801D57E0.h"
 #include "game/cu_8018422C.h"
+#include "game/Callees_8002A138.h"
 #include "game/fn_8007F828.h"
 #include "game/Record_80021154.h"
 
 extern "C" {
-void fn_801D6650(int id);
-void fn_801D6680(int slot);
 unsigned int fn_801D6724(void);
 unsigned int fn_801D6730(void);
 void fn_801D6754(int a);
 void fn_801D689C(const char *pSuffix, const char *pPrefix, int unused, int selector, char *pOut, int size);
 int fn_801D6AC8(int a);
 int fn_801D6B14(int a);
-void fn_801D6B24(char *pBuf, int size);
-int fn_801D6CF4(const char *pName, int a, unsigned char *pFlag);
 unsigned int fn_801D85A8(int a);
 int fn_801D4400(int *pA, int *pB);
 void fn_801D46E8(int slot);
@@ -26,8 +23,6 @@ void fn_80032250(short a, char *pBuf);
 unsigned int fn_80029838(int a);
 int fn_80029B48(int a);
 void fn_80029E6C(int a, int b);
-int fn_8002A138(int a, int b);
-int fn_8002A190(int a, int b);
 void fn_8002A238(int a, int b, int slot, int index);
 void fn_8002A260(int a, int b, char *pBuf, int size);
 void fn_8002A44C(int a, int b);
@@ -41,7 +36,7 @@ void fn_80187FDC(void);
 void fn_80191948(int a, int b, int c, int d);
 }
 
-static void *(*lbl_803EB590)(int, int *) = 0;
+static void (*lbl_803EB590)(int, int *) = 0;
 static void (*lbl_803EB594)() = 0;
 static int (*lbl_803EB598)(int *, int *, int *, int *) = 0;
 static void (*lbl_803EB59C)(int, int) = 0;
