@@ -177,7 +177,7 @@ void fn_8018E474(int index)
                 fn_8022F3D4(fn_8022F358(index)), 0);
 }
 
-/* Deletes the 'YPTS' rows with a non-zero 'DIGP', clears this file's 'TADS'
+/* Deletes the 'YPTS' rows whose 'DIGP' is greater than 0, clears this file's 'TADS'
    and 'CETS' state and rewrites the defaults of the 'DIGP' 0 row. */
 static void ResetYptsTadsCetsTables(void)
 {

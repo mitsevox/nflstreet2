@@ -30,9 +30,8 @@ struct State_80137ABC {
     Vector_80039F5C mUnknown88;
     Vector_80039F5C mUnknown94;
     char mUnknownA0[4];
-    /* State machine of src/game/cu_8013B874.cpp (inferred from fn_8013B9C0,
-       fn_8013BA58 and fn_8013BA70): current state and its argument, then
-       the previous state and its argument. */
+    /* State machine of src/game/cu_8013B874.cpp: current state and its
+       argument, then the previous state and its argument. */
     int mState;
     int mStateArg;
     int mPrevState;
