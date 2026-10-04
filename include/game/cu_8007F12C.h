@@ -3,9 +3,9 @@
 
 extern "C" {
 void fn_8007F328(int reset);
-void fn_8007F374(void);
+int fn_8007F374(void);
 void fn_8007F394(int defer);
-void fn_8007F548(void);
+int fn_8007F548(void);
 void fn_8007F6F8(int id, int value);
 void fn_8007F97C(void);
 }

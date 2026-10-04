@@ -116,8 +116,8 @@ extern "C" {
 
 static void fn_8007F3D8(void);
 
-static inline void WriteRecord(Object_8007A334 *pCursor,
-                               ColumnValue_802D6424 *pList)
+static inline int WriteRecord(Object_8007A334 *pCursor,
+                              ColumnValue_802D6424 *pList)
 {
     Expression_8007F19C expression;
     Result_8007F19C result;
@@ -134,7 +134,7 @@ static inline void WriteRecord(Object_8007A334 *pCursor,
                    0x00010003, key[0].mValue);
     tables[0].Set(table);
     tables[1].Set(-1);
-    fn_801FA428(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
+    return fn_801FA428(pCursor->mUnknown4, tables, &expression, pList, &result, 0);
 }
 
 static void fn_8007F12C(void)
@@ -142,19 +142,19 @@ static void fn_8007F12C(void)
     fn_8007A334(&sCursor, 0x5354504F, 0x554E554F, 0, 0, 0x45564153);
 }
 
-static void fn_8007F174(void)
+static int fn_8007F174(void)
 {
-    fn_8007A3C4(&sCursor);
+    return fn_8007A3C4(&sCursor);
 }
 
 /* Writes the whole record back to the row the cursor's key column selects. */
-static void fn_8007F19C(void)
+static int fn_8007F19C(void)
 {
-    WriteRecord(&sCursor, sRecord);
+    return WriteRecord(&sCursor, sRecord);
 }
 
 /* Fills the record with the defaults and replaces them with the stored row. */
-static void fn_8007F298(void)
+static int fn_8007F298(void)
 {
     ColumnValue_802D6424 *pEnd;
     int i;
@@ -168,7 +168,7 @@ static void fn_8007F298(void)
     pEnd->mValue = 0;
     pEnd->mColumnTag = -1;
     pEnd->mTableTag = -1;
-    sCursor.Read(sRecord);
+    return sCursor.Read(sRecord);
 }
 
 void fn_8007F328(int reset)
@@ -183,9 +183,9 @@ void fn_8007F328(int reset)
     fn_8006EC24();
 }
 
-void fn_8007F374(void)
+int fn_8007F374(void)
 {
-    fn_8007F174();
+    return fn_8007F174();
 }
 
 void fn_8007F394(int defer)
@@ -222,7 +222,7 @@ static void fn_8007F3D8(void)
 }
 
 /* Resets the marked options to their defaults and stores the result. */
-void fn_8007F548(void)
+int fn_8007F548(void)
 {
     unsigned char reset[23] = {
         1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,
@@ -242,7 +242,7 @@ void fn_8007F548(void)
     pEnd->mColumnTag = -1;
     pEnd->mTableTag = -1;
 
-    WriteRecord(&sCursor, sRecord);
+    return WriteRecord(&sCursor, sRecord);
 }
 
 void fn_8007F6F8(int id, int value)
