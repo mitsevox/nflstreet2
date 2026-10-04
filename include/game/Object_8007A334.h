@@ -12,7 +12,7 @@ int fn_801FA228(int handle, int a, int b, void *pRecord);
 struct Object_8007A334 {
     Object_8007A334() : mUnknown0(0), mUnknown4(0), mUnknown8(-1), mUnknown12(-1), mUnknown16(-1) {}
     ~Object_8007A334() {}
-    void Read(void *pRecord) { fn_801FA228(mUnknown0, 0, 0, pRecord); }
+    int Read(void *pRecord) { return fn_801FA228(mUnknown0, 0, 0, pRecord); }
 
     int mUnknown0;
     int mUnknown4;
@@ -26,6 +26,19 @@ struct Object_8007A334 {
    The list ends with an entry whose mColumnTag is -1. */
 struct ColumnValue_802D6424 {
     void Set(int table, int column) { mColumnTag = column; mTableTag = table; }
+    void Set(int table, int column, int value)
+    {
+        mTableTag = table;
+        mColumnTag = column;
+        mValue = value;
+    }
+
+    void SetEnd()
+    {
+        mColumnTag = -1;
+        mTableTag = -1;
+        mValue = 0;
+    }
 
     int mValue;
     int mTableTag;
@@ -36,7 +49,7 @@ struct ColumnValue_802D6424 {
 extern "C" {
 void fn_8007A308(Object_8007A334 *pObject, int a, int b);
 void fn_8007A334(Object_8007A334 *pObject, int a, int b, void *c, void *d, int e);
-void fn_8007A3C4(Object_8007A334 *pObject);
+int fn_8007A3C4(Object_8007A334 *pObject);
 int fn_8007A410(Object_8007A334 *pObject);
 int fn_8007A444(Object_8007A334 *pObject);
 int fn_8007A510(Object_8007A334 *pObject);

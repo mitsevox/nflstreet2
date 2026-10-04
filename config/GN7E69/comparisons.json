@@ -44,6 +44,132 @@
           "end": "0x8017D1D0"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8007F12C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv bounded unit row for src/game/cu_8007F12C.cpp, individual exact function extents, owned data spans, inferred layouts and lifecycle names. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007F12C",
+          "end": "0x8007FA48"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80292930",
+          "end": "0x80292948"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6798",
+          "end": "0x802D6850"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA7B8",
+          "end": "0x803EA7D0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BA80",
+          "end": "0x8030BC2C"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AAC",
+          "end": "0x80289AB0"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BEC",
+          "end": "0x80289BF0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8007F12C",
+          "start": "0x8007F12C",
+          "end": "0x8007F174"
+        },
+        {
+          "symbol": "fn_8007F174",
+          "start": "0x8007F174",
+          "end": "0x8007F19C"
+        },
+        {
+          "symbol": "fn_8007F19C",
+          "start": "0x8007F19C",
+          "end": "0x8007F298"
+        },
+        {
+          "symbol": "fn_8007F298",
+          "start": "0x8007F298",
+          "end": "0x8007F328"
+        },
+        {
+          "symbol": "fn_8007F328",
+          "start": "0x8007F328",
+          "end": "0x8007F374"
+        },
+        {
+          "symbol": "fn_8007F374",
+          "start": "0x8007F374",
+          "end": "0x8007F394"
+        },
+        {
+          "symbol": "fn_8007F394",
+          "start": "0x8007F394",
+          "end": "0x8007F3D8"
+        },
+        {
+          "symbol": "fn_8007F3D8",
+          "start": "0x8007F3D8",
+          "end": "0x8007F548"
+        },
+        {
+          "symbol": "fn_8007F548",
+          "start": "0x8007F548",
+          "end": "0x8007F6F8"
+        },
+        {
+          "symbol": "fn_8007F6F8",
+          "start": "0x8007F6F8",
+          "end": "0x8007F828"
+        },
+        {
+          "symbol": "fn_8007F828",
+          "start": "0x8007F828",
+          "end": "0x8007F97C"
+        },
+        {
+          "symbol": "fn_8007F97C",
+          "start": "0x8007F97C",
+          "end": "0x8007F9B0"
+        },
+        {
+          "symbol": "__static_initialization_and_destruction_0",
+          "start": "0x8007F9B0",
+          "end": "0x8007F9F0"
+        },
+        {
+          "symbol": "_GLOBAL_.I.fn_8007F328",
+          "start": "0x8007F9F0",
+          "end": "0x8007FA1C"
+        },
+        {
+          "symbol": "_GLOBAL_.D.fn_8007F328",
+          "start": "0x8007FA1C",
+          "end": "0x8007FA48"
+        }
+      ]
     }
   ]
 }

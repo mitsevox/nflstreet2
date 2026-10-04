@@ -12,6 +12,36 @@ import diagnostic_object
 CONFIG = 'config/GN7E69/comparisons.json'
 
 
+def data_slices(source, placement, linked):
+    """Return the target slices of a comparison data placement that lie outside linked source.
+
+    `linked` holds (source, start, end) ranges of the accepted build. The full placement still
+    positions the compiled section for relocating draft code; only these slices are measured.
+    Linked bytes inside the placement must belong to the same source file and lie wholly within
+    it, so every placement byte is either linked source of that file or a measured slice."""
+    a, b = placement['start'], placement['end']
+    cuts = []
+    for owner, left, right in linked:
+        if left < b and a < right:
+            if owner != source:
+                raise ValueError("Comparison data overlaps another file's linked source")
+            if not a <= left < right <= b:
+                raise ValueError('Comparison data partially overlaps linked source')
+            cuts.append((left, right))
+    slices, cursor = [], a
+    for left, right in sorted(cuts):
+        if left > cursor:
+            slices.append((cursor, left))
+        cursor = max(cursor, right)
+    if cursor < b:
+        slices.append((cursor, b))
+    return slices
+
+
+def linked_ranges(units, address=lambda value: value):
+    return [(u['source'], address(s['start']), address(s['end'])) for u in units for s in u['sections']]
+
+
 def configured(root, binary):
     config = json.loads((root / CONFIG).read_text())
     if set(config) != {'schema', 'units'} or config['schema'] != 2 or not isinstance(config['units'], list):
@@ -21,6 +51,7 @@ def configured(root, binary):
     sections = sb.target_sections(binary, target, {})
     evidence = {(a, b) for a, b, _ in sb.function_extents(root)}
     data_evidence = {(a, b) for a, b in sb.data_extents(root)}
+    accepted_linked = linked_ranges(accepted['units'], sb.address)
     units, seen = [], []
     for candidate in config['units']:
         if set(candidate) != {'source', 'profile', 'evidence', 'sections', 'functions'}:
@@ -46,13 +77,19 @@ def configured(root, binary):
             seen.append((a, b))
         if len({r['symbol'] for r in candidate['functions']}) != len(candidate['functions']):
             raise ValueError('Duplicate comparison function symbol')
+        unit['data_slices'] = {}
         for section in unit['sections']:
-            if section['kind'] == 'data' and (section['start'], section['end']) not in data_evidence:
-                raise ValueError('Comparison data needs evidenced boundaries')
-            if section['kind'] == 'data':
-                seen.append((section['start'], section['end']))
             if section['follows']:
                 raise ValueError('Comparison data in code requires a separately supported target object')
+            if section['kind'] != 'data':
+                continue
+            # Every placement byte is linked source of this file or an evidenced unlinked slice;
+            # without linked bytes the single slice is the whole placement, as before.
+            slices = data_slices(candidate['source'], section, accepted_linked)
+            if any(piece not in data_evidence for piece in slices):
+                raise ValueError('Comparison data needs evidenced boundaries')
+            unit['data_slices'][section['section']] = slices
+            seen.append((section['start'], section['end']))
         unit['functions'] = candidate['functions']
         units.append(unit)
     seen.sort()
@@ -72,6 +109,7 @@ def generate(original, source_report, tool):
     target_sections = sb.target_sections(binary, target, json.loads((root/'config/GN7E69/analysis.json').read_text())['output_sections'])
     accepted = json.loads(source_report.read_text())['units']
     accepted_bounds = [(int(s['start'], 16), int(s['end'], 16)) for u in accepted for s in u['sections']]
+    accepted_linked = linked_ranges(accepted, sb.address)
     externals = {name: int(e['address'], 16) for name, e in manifest['externals'].items()}
     for u in accepted:
         # Only public definitions may resolve another file's undefined reference.
@@ -179,11 +217,14 @@ def generate(original, source_report, tool):
             if placement['kind'] != 'data':
                 continue
             a, b = placement['start'], placement['end']
-            overlaps = [(left, right) for left, right in accepted_bounds if a < right and left < b]
-            if overlaps:
-                if not any(left <= a < b <= right for left, right in overlaps):
-                    raise ValueError('Comparison data partially overlaps linked source')
+            slices = data_slices(unit['source'], placement, accepted_linked)
+            if slices != unit['data_slices'][name]:
+                raise ValueError('Linked source differs from configured accepted placements')
+            if not slices:
                 continue
+            sliced = slices != [(a, b)]
+            if sliced and section['size'] != b - a:
+                raise ValueError('Comparison data with linked bytes must compile to its full target placement')
             data_fragment = pair / ('data' + name + '.o')
             data_symbol, references, reference_script = diagnostic_object.fragment(unit['object'].read_bytes(), section, 0, section['size'],
                 a, functions, targets, placements, externals, data_fragment, target_sections)
@@ -196,13 +237,17 @@ def generate(original, source_report, tool):
             linked_section = next(s for s in data_sections if s['name'] == name)
             if linked_section['addr'] != a or linked_section['size'] != section['size']:
                 raise ValueError('Diagnostic link changed data placement or size')
-            pair_folder = folder / ('data-' + name.lstrip('.'))
-            pair_folder.mkdir()
-            expected, actual = sb.dol_bytes(binary, a, b), linked_section['data']
-            score = matching.score_pair(tool, expected, actual, [], 'data', pair_folder)
-            row = {'symbol': name, 'start': f'0x{a:08X}', 'end': f'0x{b:08X}'}
-            entries.append(dict(row, **score, type='bytes', kind='data', source=unit['source'], linked=False))
-            pairs.append(dict(row, output_symbol=data_symbol, path=data_output.relative_to(root).as_posix(), sha256=sb.sha256(data_output)))
+            if sliced:
+                check_native_placement(binary, linked_section['data'], a, b, slices)
+            for start, end in slices:
+                pair_folder = folder / (f'data-{name.lstrip(".")}' + (f'-{start:08X}' if sliced else ''))
+                pair_folder.mkdir()
+                expected = sb.dol_bytes(binary, start, end)
+                actual = linked_section['data'][start - a:end - a] if sliced else linked_section['data']
+                score = matching.score_pair(tool, expected, actual, [], 'data', pair_folder)
+                row = {'symbol': name, 'start': f'0x{start:08X}', 'end': f'0x{end:08X}'}
+                entries.append(dict(row, **score, type='bytes', kind='data', source=unit['source'], linked=False))
+                pairs.append(dict(row, output_symbol=data_symbol, path=data_output.relative_to(root).as_posix(), sha256=sb.sha256(data_output)))
         if sb.sha256(unit['object']) != native_hash:
             raise ValueError('Diagnostic linker modified native compiler input')
         result.append({'source': unit['source'], 'sha256': sb.sha256(unit['path']),
@@ -212,12 +257,22 @@ def generate(original, source_report, tool):
     return result
 
 
+def check_native_placement(binary, compiled, start, end, slices):
+    """A sliced placement must keep the native layout: its linked bytes compile identically."""
+    cursor = start
+    for left, right in slices + [(end, end)]:
+        if cursor < left and compiled[cursor - start:left - start] != sb.dol_bytes(binary, cursor, left):
+            raise ValueError('Comparison data does not reproduce its linked bytes at their native placement')
+        cursor = right
+
+
 def load(receipts, binary, root):
     _, units = configured(root, binary)
     if not isinstance(receipts, list) or [r['source'] for r in receipts] != [u['source'] for u in units]:
         raise ValueError('Comparison receipt omits configured draft source')
     accepted = json.loads((root / 'build/source/report.json').read_text())['units']
     linked_bounds = [(int(s['start'], 16), int(s['end'], 16)) for u in accepted for s in u['sections']]
+    accepted_linked = linked_ranges(accepted, sb.address)
     result = []
     for receipt, unit in zip(receipts, units):
         if receipt['sha256'] != sb.sha256(unit['path']) or not receipt.get('dependencies') or any(
@@ -230,11 +285,22 @@ def load(receipts, binary, root):
             raise ValueError('Comparison dependencies differ from compiler receipt')
         expected_rows = {(r['symbol'], r['start'], r['end']) for r in unit['functions'] if not any(
             a <= sb.address(r['start']) < sb.address(r['end']) <= b for a, b in linked_bounds)}
-        expected_rows |= {(s['section'], f"0x{s['start']:08X}", f"0x{s['end']:08X}") for s in unit['sections']
-                          if s['kind'] == 'data' and not any(a <= s['start'] < s['end'] <= b for a, b in linked_bounds)}
+        # Recompute the measured data slices from this receipt's linked build, independently of
+        # the generator: each must be credited exactly once and no linked byte may be credited.
+        placements = {s['section']: s for s in unit['sections'] if s['kind'] == 'data'}
+        for name, placement in placements.items():
+            if data_slices(unit['source'], placement, accepted_linked) != unit['data_slices'][name]:
+                raise ValueError('Linked source differs from configured accepted placements')
+        expected_rows |= {(name, f"0x{a:08X}", f"0x{b:08X}") for name, slices in unit['data_slices'].items()
+                          for a, b in slices}
         actual_rows = [(e['symbol'], e['start'], e['end']) for e in receipt['entries']]
-        if len(set(actual_rows)) != len(actual_rows) or set(actual_rows) != expected_rows:
-            raise ValueError('Comparison receipt omits configured functions')
+        if len(set(actual_rows)) != len(actual_rows):
+            raise ValueError('Comparison receipt credits an extent more than once')
+        if any(left < sb.address(e['end']) and sb.address(e['start']) < right
+               for e in receipt['entries'] for left, right in linked_bounds):
+            raise ValueError('Comparison receipt credits linked source bytes')
+        if set(actual_rows) != expected_rows:
+            raise ValueError('Comparison receipt omits configured functions or data slices')
         if len(receipt['entries']) != len(receipt['pairs']):
             raise ValueError('Comparison pairs do not cover measured functions')
         for entry, pair in zip(receipt['entries'], receipt['pairs']):
@@ -253,11 +319,19 @@ def load(receipts, binary, root):
                 actual = section['data'][offset:offset + symbol['size']]
                 if offset < 0 or len(actual) != symbol['size']:
                     raise ValueError('Comparison output lacks complete function bytes')
-            elif entry['type'] == 'bytes' and entry['kind'] == 'data':
+            elif entry['type'] == 'bytes' and entry['kind'] == 'data' and row['symbol'] in placements:
+                placement = placements[row['symbol']]
                 section = next(s for s in sections if s['name'] == row['symbol'])
-                if section['addr'] != a:
+                if section['addr'] != placement['start']:
                     raise ValueError('Comparison data differs from configured address')
-                actual = section['data']
+                if (a, b) == (placement['start'], placement['end']):
+                    actual = section['data']
+                else:
+                    if section['size'] != placement['end'] - placement['start']:
+                        raise ValueError('Comparison data with linked bytes must compile to its full target placement')
+                    check_native_placement(binary, section['data'], placement['start'], placement['end'],
+                                           unit['data_slices'][row['symbol']])
+                    actual = section['data'][a - placement['start']:b - placement['start']]
             else:
                 raise ValueError('Invalid comparison kind')
             expected = sb.dol_bytes(binary, a, b)
@@ -266,4 +340,7 @@ def load(receipts, binary, root):
                     or not math.isfinite(entry['fuzzy']) or not exact <= entry['fuzzy'] <= b-a:
                 raise ValueError('Invalid comparison score or exact bytes')
             result.append(entry)
+    spans = sorted((sb.address(e['start']), sb.address(e['end'])) for e in result)
+    if any(b > c for (_, b), (c, _) in zip(spans, spans[1:])):
+        raise ValueError('Comparison receipt credits an extent more than once')
     return result

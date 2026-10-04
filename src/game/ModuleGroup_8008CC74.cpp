@@ -1,3 +1,4 @@
+#include "game/cu_8007F12C.h"
 #include "game/fn_801EEB44.h"
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/Record_802CC680.h"
@@ -42,8 +43,6 @@ void fn_800460DC(void);
 void fn_800461E0(void);
 void fn_8007272C(void);
 void fn_80072890(void);
-void fn_8007F328(int a);
-void fn_8007F374(void);
 void fn_8008A88C(void);
 void fn_8008A8D0(void);
 void fn_8008FAA8(void);
