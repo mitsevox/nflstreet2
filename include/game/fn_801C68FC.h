@@ -6,6 +6,7 @@ extern "C" {
 #endif
 void *fn_801C68FC(int a, int b, int count, int size,
                    int (*cmp)(void *, void *), void *storage);
+int fn_801C69E4(void *pool);
 void *fn_801C6AA4(void *pool, void *item, int c);
 #ifdef __cplusplus
 }

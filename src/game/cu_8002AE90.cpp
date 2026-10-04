@@ -11,13 +11,12 @@ struct Record_8002AE90 {
 };
 struct State_8002AE90 { Object_80228224 *mpObject; void *mpList; };
 extern "C" {
-void fn_801C69E4(void *);
 void *fn_801C6A20(void *);
 void *fn_801C6B4C(void *, void *);
 void fn_801C6BC0(void *, Record_8002AE90 *);
 void fn_801C6C0C(void *, void *);
 void *fn_801C6C84(void *, void *);
-void fn_801C6DCC(void *, void *, void *, Record_8002AE90 **, int (*)(Record_8002AE90 *,void *,Record_8002AE90 **));
+int fn_801C6DCC(void *, void *, void *, Record_8002AE90 **, int (*)(Record_8002AE90 *,void *,Record_8002AE90 **));
 void fn_801C36B0(Object_80228224 *, void *);
 static State_8002AE90 *lbl_803EA348 = 0;
 

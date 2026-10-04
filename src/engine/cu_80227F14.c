@@ -15,7 +15,6 @@ typedef struct Match_80228474 {
     int mUnknown8;
 } Match_80228474;
 
-extern void fn_801C69E4(void *pool);
 extern void *fn_801C6A20(void *pool);
 extern void fn_801C6C0C(void *pool, void *item);
 extern void fn_801C6D34(void *pool, int b, void *ctx, int d, int (*fn)(void *, void *), int f);
