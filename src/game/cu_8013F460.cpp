@@ -1,37 +1,13 @@
 #include <string.h>
 #include "game/Object_80228224.h"
 #include "game/fn_800AD9B4.h"
+#include "game/Camera_8013F738.h"
 #include "game/fn_80238174.h"
-
-/* Leading block of a camera that a saved state restores. */
-struct CameraHeader_8013F628 {
-    unsigned char mUnknown00;
-    unsigned char mType;
-    char mPad02[2];
-    float mUnknown04[3];
-    char mPad10[4];
-    int mUnknown14;
-    int mUnknown18;
-    int mUnknown1C;
-    char mPad20[4];
-    float mUnknown24;
-};
 
 /* One camera in a saved state; only mHeader is restored. */
 struct CameraSave_8013F56C {
     CameraHeader_8013F628 mHeader;
     int mUnknown28;
-};
-
-struct Camera_8013F738 {
-    CameraHeader_8013F628 mHeader;
-    char mPad28[0x6C];
-    int mUnknown94;
-    char mPad98[0x10];
-    int mUnknownA8;
-    char mPadAC[4];
-    int mUnknownB0;
-    int mUnknownB4;
 };
 
 /* Argument of fn_801C3610 when it creates a camera. */
