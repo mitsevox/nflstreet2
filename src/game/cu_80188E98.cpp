@@ -1,3 +1,4 @@
+#include "game/fn_801D2B7C.h"
 #include "game/Object_80228224.h"
 
 extern "C" {
@@ -101,8 +102,6 @@ int fn_801CEC7C(void);
 int fn_801CECCC(int index);
 void fn_801CECDC(int a);
 float fn_801CFD28(int a);
-void *fn_801D2B7C(void *p, int a, int b);
-void fn_801D2BD0(void *p);
 void fn_801D339C(int a);
 void fn_801D342C(int a);
 int fn_801DCF0C(int a, int b, int c, void (*pA)(), void (*pB)());
@@ -112,7 +111,7 @@ void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(int, int));
 void fn_801DD0E8(int handle);
 int fn_801DD268(int handle, int a, int b, int c);
 void fn_801DD320(int handle, int a);
-void *fn_802188A0(int a, int b, int c, int d, int e, int f);
+int fn_802188A0(int a, int b, int c, int d, int e, int f);
 void fn_802188D4(void *p, int a, int b, int c, int d, int e, int f, unsigned int g);
 void fn_80218A34(void *p);
 void fn_80218AA8(void *p, void (*pCallback)());

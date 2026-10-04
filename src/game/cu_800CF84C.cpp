@@ -1,3 +1,4 @@
+#include "game/fn_801D2B7C.h"
 #include "game/fn_801C1F94.h"
 
 #include "game/cu_8017F264.h"
@@ -107,7 +108,6 @@ void fn_8017CFB4(int a);
 void fn_8017DB44(void);
 void fn_8017F048(void);
 void fn_80195EFC(int a, int b, int c, int d);
-void fn_801D2BD0(void *p);
 int fn_801F0F18(int a);
 void fn_80218FC4(void *p, int a, int b, int c, int d);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);

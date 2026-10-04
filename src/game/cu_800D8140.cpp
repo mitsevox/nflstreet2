@@ -1,9 +1,5 @@
+#include "game/Object_800D81C8.h"
 #include "game/fn_80227638.h"
-
-struct Pair_802270A4 {
-    float mUnknown0;
-    float mUnknown4;
-};
 
 struct State_800D8140 {
     Pair_802270A4 mUnknown0;
@@ -16,36 +12,6 @@ struct State_800D8140 {
     unsigned char mUnknown17;
 };
 
-struct Block_801BD6D4 {
-    void *mpUnknown0;
-    float mUnknown4;
-    float mUnknown8;
-};
-
-struct Record_800D81C8 {
-    char mUnknown0[76];
-    Block_801BD6D4 mUnknown4C;
-    char mUnknown58[36];
-};
-
-struct Object_800D81C8 {
-    char mUnknown0[12];
-    unsigned int mUnknownC;
-    char mUnknown10[320];
-    char mUnknown150[88];
-    Pair_802270A4 mUnknown1A8;
-    char mUnknown1B0[20];
-    float mUnknown1C4;
-    char mUnknown1C8[8];
-    Pair_802270A4 mUnknown1D0;
-    char mUnknown1D8[308];
-    void *mpUnknown30C;
-    char mUnknown310[8];
-    void *mpUnknown318;
-    char mUnknown31C[4];
-    Record_800D81C8 *mpUnknown320;
-};
-
 struct Block_801BE60C {
     char mUnknown0[32];
     State_800D8140 mUnknown20;
@@ -54,7 +20,6 @@ struct Block_801BE60C {
 extern "C" {
 float fn_800C4A2C(Object_800D81C8 *p);
 void fn_80044854(Object_800D81C8 *p, State_800D8140 *pState);
-Object_800D81C8 *fn_8009BCE8(void *p);
 Object_800D81C8 *fn_80137B40(void);
 int fn_801784C4(void);
 int fn_801787A0(void);

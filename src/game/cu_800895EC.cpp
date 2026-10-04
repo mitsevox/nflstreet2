@@ -1,6 +1,5 @@
+#include "game/fn_801D2B7C.h"
 extern "C" {
-void *fn_801D2B7C(int size, int a, int b);
-void fn_801D2BD0(void *p);
 }
 
 struct Object_803EC87C {
