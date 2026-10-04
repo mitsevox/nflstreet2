@@ -5528,6 +5528,37 @@
           "end": "0x803ECB40"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8017E65C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8017E65C-0x8017F264 (src/game/cu_8017E65C.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8017E65C",
+          "end": "0x8017F264"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A57D4",
+          "end": "0x802A57D8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802E9AF4",
+          "end": "0x802E9C28"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB498",
+          "end": "0x803EB4A0"
+        }
+      ]
     }
   ]
 }

@@ -8,6 +8,7 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
+#include "game/Message_800F01CC.h"
 
 struct Pair_8017055C {
     float mX;
@@ -31,11 +32,6 @@ struct Record_8011F518 {
 struct Record_8011F4F8 {
     char mUnknown0[11];
     unsigned char mUnknownB;
-};
-
-struct Message_800F01CC {
-    unsigned char mId;
-    char mUnknown1[3];
 };
 
 struct Object_80172FB0 {

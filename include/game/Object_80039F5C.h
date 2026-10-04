@@ -133,6 +133,9 @@ struct Object_80039F5C {
     unsigned char mUnknown2916;
     char mUnknown2917[83];
     short mRatings[10];
+    char mUnknown3020[28];
+    /* Message queue passed to fn_800F03D8 and fn_800F053C. */
+    unsigned char mUnknown3048[4];
 };
 
 extern "C" {
