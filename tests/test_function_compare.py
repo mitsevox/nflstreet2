@@ -289,6 +289,124 @@ class InPlaceComparisons(unittest.TestCase):
         entries=function_compare.load(measured,self.binary,self.root)
         self.assertEqual([(e['kind'],e['matched']) for e in entries],[('code',8),('data',4)])
 
+    def partial_data_fixture(self, linked_rodata=b'linked\0\0'):
+        """Draft and linked functions share one compiled .rodata; only its leading slice is unlinked."""
+        self.source.write_text('#if defined(DECOMP_COMPARE)\n'
+                               'const char *fn_80000000(void) { return "draft text"; }\n#endif\n'
+                               'const char *fn_80000100(void) { return "linked"; }\n')
+        rodata = b'draft TEXT\0\0' + linked_rodata
+        binary = bytearray(self.dol(bytes.fromhex('3c60801038630000' '4e800020') + bytes(0xF4) +
+                                    bytes.fromhex('3c6080103863000c4e800020')))
+        for offset, value in ((0x1C, len(binary)), (0x64, 0x80100000), (0xAC, len(rodata))):
+            struct.pack_into('>I', binary, offset, value)
+        self.binary = bytes(binary + rodata); self.original.write_bytes(self.binary)
+        self.target['sections']['.data3'] = '0x80100000'
+        (self.root/'config/GN7E69/baseline.json').write_text(json.dumps(self.target))
+        accepted = {'source':'src/unit.c', 'profile':'test', 'evidence':'test fixture', 'sections':[
+            {'section':'.text','placement':'.text','start':'0x80000100','end':'0x8000010C'},
+            {'section':'.rodata','placement':'.data3','start':'0x8010000C','end':'0x80100014'}]}
+        self.manifest['units'] = [accepted]
+        self.unit['sections'] = [{'section':'.text','placement':'.text','start':'0x80000000','end':'0x8000010C'},
+                                 {'section':'.rodata','placement':'.data3','start':'0x80100000','end':'0x80100014'}]
+        self.unit['functions'] = [{'symbol':'fn_80000000','start':'0x80000000','end':'0x8000000C'}]
+        self.write_config()
+        (self.root/'config/GN7E69/evidence.tsv').write_text(
+            'kind\tstart\tend\tstart_boundary\tend_boundary\tsubject\n'
+            'function\t0x80000000\t0x8000000C\texact\texact\tfn_80000000\n'
+            'function\t0x80000100\t0x8000010C\texact\texact\tfn_80000100\n'
+            'data\t0x80100000\t0x8010000C\texact\texact\tdraft strings\n')
+        manifest, units = function_compare.configured(self.root, self.binary)
+        unit = dict(units[0], sections=accepted['sections'])
+        compiler, wrapper = sb.setup_compiler.setup()
+        accepted_object = self.root/'build/source/obj/unit000_src_unit_c.o'
+        accepted_object.parent.mkdir(exist_ok=True)
+        unit['object'] = accepted_object; unit['depfile'] = self.root/'build/source/normal.d'
+        sb.compile_unit(unit, compiler, wrapper, None, [], comparison=False)
+        self.report = {'units':[{'source':'src/unit.c', 'native_object_sha256':sb.sha256(accepted_object),
+            'functions':[{'symbol':'fn_80000100','address':'0x80000100','size':12}],
+            'sections':[{'start':s['start'],'end':s['end']} for s in accepted['sections']]}]}
+        (self.root/'build/source/report.json').write_text(json.dumps(self.report))
+
+    def test_data_slices_are_the_placement_outside_same_file_linked_source(self):
+        placement = {'start': 0x100, 'end': 0x200}
+        self.assertEqual(function_compare.data_slices('a', placement, []), [(0x100, 0x200)])
+        self.assertEqual(function_compare.data_slices('a', placement, [('a', 0x140, 0x180), ('b', 0x200, 0x210)]),
+                         [(0x100, 0x140), (0x180, 0x200)])
+        self.assertEqual(function_compare.data_slices('a', placement, [('a', 0x100, 0x200)]), [])
+        with self.assertRaisesRegex(ValueError, 'partially overlaps'):
+            function_compare.data_slices('a', placement, [('a', 0x1F0, 0x210)])
+        with self.assertRaisesRegex(ValueError, "another file"):
+            function_compare.data_slices('a', placement, [('b', 0x140, 0x180)])
+
+    def test_partial_data_overlap_keeps_full_placement_and_measures_unlinked_slice(self):
+        if not self.compiler_available:
+            self.skipTest('Pinned compiler and objdiff are installed by CI')
+        self.partial_data_fixture()
+        receipts = function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
+        entries = function_compare.load(receipts, self.binary, self.root)
+        self.assertEqual([(e['kind'], e['start'], e['end'], e['linked']) for e in entries],
+                         [('code', '0x80000000', '0x8000000C', False), ('data', '0x80100000', '0x8010000C', False)])
+        # The draft's string reference relocates against the full native placement.
+        self.assertEqual(entries[0]['matched'], 12)
+        self.assertEqual(entries[1]['matched'], 0)
+        self.assertLess(entries[1]['fuzzy'], 12)
+        sections, _ = sb.read_elf((self.root/receipts[0]['pairs'][1]['path']).read_bytes())
+        section = next(s for s in sections if s['name'] == '.rodata')
+        self.assertEqual((section['addr'], section['size']), (0x80100000, 20))
+
+    def test_partial_data_receipt_rejects_missing_duplicate_and_linked_byte_credit(self):
+        if not self.compiler_available:
+            self.skipTest('Pinned compiler and objdiff are installed by CI')
+        self.partial_data_fixture()
+        receipts = function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
+        function_compare.load(receipts, self.binary, self.root)
+        data = [i for i, e in enumerate(receipts[0]['entries']) if e['kind'] == 'data']
+        self.assertEqual(len(data), 1)
+        index = data[0]
+        cases = {}
+        missing = copy.deepcopy(receipts)
+        del missing[0]['entries'][index], missing[0]['pairs'][index]
+        cases['missing'] = (missing, 'omits')
+        duplicate = copy.deepcopy(receipts)
+        duplicate[0]['entries'].append(duplicate[0]['entries'][index])
+        duplicate[0]['pairs'].append(duplicate[0]['pairs'][index])
+        cases['duplicate'] = (duplicate, 'more than once')
+        for end in ('0x80100014', '0x80100010'):
+            whole = copy.deepcopy(receipts)
+            for row in (whole[0]['entries'][index], whole[0]['pairs'][index]):
+                row['end'] = end
+            cases['linked ' + end] = (whole, 'linked source bytes')
+        extra = copy.deepcopy(receipts)
+        for row in (extra[0]['entries'], extra[0]['pairs']):
+            row.append(dict(row[index], start='0x8010000C', end='0x80100014'))
+        cases['linked extra'] = (extra, 'linked source bytes')
+        for name, (corrupt, error) in cases.items():
+            with self.subTest(mutation=name), self.assertRaisesRegex(ValueError, error):
+                function_compare.load(corrupt, self.binary, self.root)
+        # A receipt measured against different linked placements is not reused.
+        changed = copy.deepcopy(self.report)
+        changed['units'][0]['sections'].pop()
+        (self.root/'build/source/report.json').write_text(json.dumps(changed))
+        with self.assertRaisesRegex(ValueError, 'Linked source differs'):
+            function_compare.load(receipts, self.binary, self.root)
+
+    def test_partial_data_overlap_requires_evidenced_slices_and_native_layout(self):
+        if not self.compiler_available:
+            self.skipTest('Pinned compiler and objdiff are installed by CI')
+        self.partial_data_fixture(linked_rodata=b'linkee\0\0')
+        with self.assertRaisesRegex(ValueError, 'linked bytes at their native placement'):
+            function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
+        evidence = self.root/'config/GN7E69/evidence.tsv'
+        evidence.write_text(evidence.read_text().replace('0x8010000C\texact\texact', '0x8010000C\texact\tprovisional'))
+        with self.assertRaisesRegex(ValueError, 'evidenced'):
+            function_compare.configured(self.root, self.binary)
+        evidence.write_text(evidence.read_text().replace('0x8010000C\texact\tprovisional', '0x80100014\texact\texact'))
+        with self.assertRaisesRegex(ValueError, 'evidenced'):
+            function_compare.configured(self.root, self.binary)
+        self.manifest['units'][0]['sections'][1]['end'] = '0x80100018'; self.write_config()
+        with self.assertRaisesRegex(ValueError, 'partially overlaps'):
+            function_compare.configured(self.root, self.binary)
+
     def test_reserved_macro_cannot_be_set_through_any_profile_flag_form(self):
         for flags in (['-DDECOMP_COMPARE=1'], ['-D','DECOMP_COMPARE=1'], ['-U','DECOMP_COMPARE'],
                       ['-Wp,-DDECOMP_COMPARE=1']):
