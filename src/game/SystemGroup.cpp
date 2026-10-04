@@ -1,6 +1,9 @@
 #include "game/Class_801CC350.h"
 #include "game/ModuleGroup_8008CC74.h"
-#include "game/SndgPathfinder.h"
+
+extern "C" {
+extern char lbl_8030A60C[];
+}
 
 static Record_802CCBAC sStages[] = { { 0, "System Stage" }, { -1, 0 } };
 static Record_803EA3A8 sRecords[] = { { -1, -1 } };
@@ -13,7 +16,7 @@ static ModuleDependency sModules[] = {
     &gGLIB,
     &gRender,
     &gSnd,
-    &gSndgPathfinder,
+    lbl_8030A60C,
     &gFMSndgMusic,
     &gARes,
     &gCam,
