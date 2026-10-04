@@ -130,25 +130,32 @@ class ResolveUndefined(unittest.TestCase):
         return ([{'name': n, 'shndx': sb.SHN_UNDEF} for n in names] +
                 [{'name': n, 'shndx': 2} for n in defined])
 
-    def test_externals_win_over_data_and_data_resolves_otherwise(self):
+    def test_externals_win_over_data_symbols(self):
+        self.assertEqual(function_compare.comparison_references(
+            {'gData': 0x80100000, 'fn_A': 0x80001000}, {'gData': 0x80200000, 'gOther': 0x80200010}),
+            {'gData': 0x80100000, 'fn_A': 0x80001000, 'gOther': 0x80200010})
+
+    def test_known_and_neutral_names_resolve(self):
         resolved = function_compare.resolve_undefined(
-            self.undefined('gData', 'gOther', 'fn_80001234', 'lbl_80300000', 'gLocal', defined=['gLocal']),
-            {'gData': 0x80100000}, {'gData': 0x80200000, 'gOther': 0x80200010}, set())
-        self.assertEqual(resolved, {'gData': 0x80100000, 'gOther': 0x80200010,
-                                    'fn_80001234': 0x80001234, 'lbl_80300000': 0x80300000})
+            self.undefined('gData', 'fn_80001234', 'lbl_80300000', 'gLocal', defined=['gLocal']),
+            {'gData': 0x80100000}, set())
+        self.assertEqual(resolved, {'gData': 0x80100000, 'fn_80001234': 0x80001234, 'lbl_80300000': 0x80300000})
 
     def test_ambiguous_and_unknown_names_fail_closed(self):
         with self.assertRaisesRegex(ValueError, 'Ambiguous comparison symbol gData'):
-            function_compare.resolve_undefined(self.undefined('gData'), {}, {}, {'gData'})
+            function_compare.resolve_undefined(self.undefined('gData'), {'gData': 1}, {'gData'})
         with self.assertRaisesRegex(ValueError, 'Ambiguous comparison symbol lbl_80300000'):
-            function_compare.resolve_undefined(self.undefined('lbl_80300000'), {}, {}, {'lbl_80300000'})
+            function_compare.resolve_undefined(self.undefined('lbl_80300000'), {}, {'lbl_80300000'})
         with self.assertRaisesRegex(ValueError, 'Unresolved comparison symbol gMissing'):
-            function_compare.resolve_undefined(self.undefined('gMissing'), {}, {}, set())
+            function_compare.resolve_undefined(self.undefined('gMissing'), {}, set())
 
-    def test_generate_routes_undefined_references_through_the_resolver(self):
+    def test_generate_uses_the_same_addresses_for_symbols_and_fragment_relocations(self):
         source = inspect.getsource(function_compare.generate)
         self.assertIn('accepted_data_symbols(accepted_objects, externals)', source)
-        self.assertIn('resolve_undefined(symbols, externals, data_symbols, ambiguous)', source)
+        self.assertIn('addresses = comparison_references(externals, data_symbols)', source)
+        self.assertIn('resolve_undefined(symbols, addresses, ambiguous)', source)
+        self.assertEqual(source.count('placements, addresses,'), 2)
+        self.assertNotIn('placements, externals,', source)
 
 
 class InPlaceComparisons(unittest.TestCase):
@@ -289,6 +296,40 @@ class InPlaceComparisons(unittest.TestCase):
         self.assertEqual([(e['start'],e['matched'],e['linked']) for e in entries], [('0x80000100',8,False)])
         self.assertEqual(self.source.read_text().count('fn_80000100'),1)
         self.assertEqual(sb.sha256(accepted_object),receipt['native_object_sha256'])
+
+    def test_draft_relocation_to_another_files_public_data_uses_its_linked_address(self):
+        if not self.compiler_available:
+            self.skipTest('Pinned compiler and objdiff are installed by CI')
+        other=self.root/'src/other.c'
+        other.write_text('int gShared[4] = {1, 2, 3, 4};\n')
+        self.source.write_text('extern int gShared[4];\nint fn_80000000(void) { return gShared[1]; }\n')
+        self.binary=self.dol(bytes(0x10));self.original.write_bytes(self.binary)
+        self.unit['sections'][0]['end']='0x80000010';self.unit['functions'][0]['end']='0x80000010'
+        self.write_config()
+        evidence=self.root/'config/GN7E69/evidence.tsv'
+        evidence.write_text(evidence.read_text().replace('0x80000008','0x80000010'))
+        manifest, units=function_compare.configured(self.root,self.binary)
+        compiler, wrapper=sb.setup_compiler.setup()
+        accepted=dict(units[0], source='src/other.c', path=other)
+        accepted['object']=self.root/'build/source/other.o';accepted['depfile']=self.root/'build/source/other.d'
+        sb.compile_unit(accepted,compiler,wrapper,None,[],comparison=False)
+        accepted_object=self.root/'build/source/obj/unit000_src_other_c.o'
+        accepted_object.parent.mkdir();shutil.copy(accepted['object'],accepted_object)
+        data=next(s for s in sb.read_elf(accepted_object.read_bytes())[0] if s['name']=='.data')
+        receipt={'source':'src/other.c','native_object_sha256':sb.sha256(accepted_object),'functions':[],
+                 'sections':[{'section':data['name'],'start':'0x80001230','end':'0x80001240','compiled':16}]}
+        (self.root/'build/source/report.json').write_text(json.dumps({'units':[receipt]}))
+        measured=function_compare.generate(self.original,self.root/'build/source/report.json',self.tool)
+        sections,symbols=sb.read_elf((self.root/measured[0]['pairs'][0]['path']).read_bytes())
+        function=next(s for s in symbols if s['name']=='function')
+        code=next(s for s in sections if s['index']==function['shndx'])['data']
+        words=[struct.unpack_from('>I',code,o)[0] for o in range(0,function['size'],4)]
+        self.assertTrue(any(w>>26==15 and w&0xFFFF==0x8000 for w in words))   # lis rN,0x8000
+        self.assertTrue(any(w>>26==32 and w&0xFFFF==0x1234 for w in words))   # lwz r3,0x1234(rN)
+        # Without the accepted data symbol the draft must fail closed.
+        (self.root/'build/source/report.json').write_text(json.dumps({'units':[]}))
+        with self.assertRaisesRegex(ValueError,'Unresolved comparison symbol gShared'):
+            function_compare.generate(self.original,self.root/'build/source/report.json',self.tool)
 
     def test_same_file_call_uses_evidenced_callee_address(self):
         if not self.compiler_available:
