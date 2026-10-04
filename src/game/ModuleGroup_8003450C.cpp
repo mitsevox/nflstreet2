@@ -27,7 +27,7 @@ void fn_80030BC0(int a);
 void fn_800397D0(int a);
 void fn_80039890(void);
 void fn_80039A1C(void);
-int fn_8003DA94(int a, int b, int c);
+int fn_8003DA94(unsigned short count, int a, int b);
 int fn_8003DCC0(int a);
 void fn_8003E118(void);
 void fn_80040558(int a, int b);
@@ -146,8 +146,8 @@ void fn_8015E994(void);
 void fn_80160874(int a);
 void fn_80160A80(void);
 void fn_80160B6C(void);
-void fn_801615EC(int a);
-void fn_801616C0(int a);
+void fn_801615EC(void *pOwner);
+void fn_801616C0(void *pOwner);
 void fn_80162D78(void);
 void fn_8016781C(void *p);
 void fn_80167860(void);
@@ -155,7 +155,7 @@ void fn_801679B4(void);
 void fn_801681A8(void);
 void fn_80168210(void);
 void fn_80168264(void);
-void fn_80168324(void *p, int a, int b, int c, int d, int e, int f, int g);
+void fn_80168324(int a, int b, int c, int d, int e, int f, int g, int h);
 void fn_80168418(int a, int b, int c, int d, int e, int f, int g);
 void fn_801684B8(int a);
 void fn_8016B04C(void);
@@ -547,7 +547,7 @@ int Env::Init()
     fn_801F2798("EnvMgrInitStart");
     fn_800A2F48();
     fn_801F2798("EnvMgrInitFinish");
-    fn_801615EC(GameObjList::fn_80028BB4());
+    fn_801615EC((void *)GameObjList::fn_80028BB4());
     fn_801F2798("EnvObjAddObjTypeStart");
     fn_800463FC(GameObjList::fn_80028BB4());
     fn_801F2798("EnvObjAddObjTypeFinish");
@@ -564,7 +564,7 @@ int Env::Init()
 int Env::Shutdown()
 {
     fn_800A30B8();
-    fn_801616C0(GameObjList::fn_80028BB4());
+    fn_801616C0((void *)GameObjList::fn_80028BB4());
     return 1;
 }
 
@@ -925,7 +925,7 @@ void PlayBook::fn_8003549C(int flag)
         fn_801FCE10(0, "select 'IPHG' into \x85 and 'IPAG' into \x85 and 'PDHG' into \x85 and 'PDAG' into \x85 from 'FNIG'\n", &c, &d, &e, &f);
     }
     if (flag) {
-        fn_80168324(gIGMisc.mData.mp, a, b, c, d, e, f, 1);
+        fn_80168324((int)gIGMisc.mData.mp, a, b, c, d, e, f, 1);
     } else {
         fn_80168418(a, b, c, d, e, f, 1);
     }

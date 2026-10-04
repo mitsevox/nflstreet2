@@ -17,7 +17,7 @@ extern void *lbl_803EA368;
 int fn_8002D060(void *p);
 int fn_800A9680(void);
 int fn_8018AD34(int a, int b);
-int fn_801CD2A4(void);
+void fn_801CD2A4(void);
 int fn_801CD308(int index, Quad_801CD308 value);
 void fn_801CD3B0(int a);
 void fn_801CDB5C(int a, const char *b, int c, float d, float *pPosition);
@@ -34,7 +34,7 @@ void fn_801D12BC(int a);
 int fn_801DCF0C(int a, int b, int c, void (*pA)(Item_800476DC *), void (*pB)(Item_800476DC *));
 void fn_801DCF8C(int a);
 void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Item_800476DC *));
-Item_800476DC *fn_801DD268(int handle, int a, int b, int *pInit);
+int fn_801DD268(int handle, int a, int b, int *pInit);
 void fn_801DD320(int handle, Item_800476DC *pInstance);
 void fn_80227E40(float *pOut, float *pIn);
 int fn_80236EC0(int a);
@@ -132,7 +132,7 @@ void fn_800475D4(void)
 
 Item_800476DC *fn_800475FC(int value)
 {
-    return fn_801DD268(lbl_803EA4C0, 11, 0, &value);
+    return (Item_800476DC *)fn_801DD268(lbl_803EA4C0, 11, 0, &value);
 }
 
 void fn_80047630(Item_800476DC *pInstance)
