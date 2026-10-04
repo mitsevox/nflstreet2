@@ -13,8 +13,8 @@ def measures(sections):
               "complete_units": 0}
     total = sum(s["size"] for s in sections)
     matched = sum(s["matched"] for s in sections)
-    # No partial instruction similarity is measured: use only verified matched bytes.
-    result["fuzzy_match_percent"] = 100 * matched / total if total else 0
+    fuzzy = sum(s.get("fuzzy", s["matched"]) for s in sections)
+    result["fuzzy_match_percent"] = 100 * fuzzy / total if total else 0
     for kind in ("code", "data"):
         selected = [s for s in sections if s["kind"] == kind]
         size = sum(s["size"] for s in selected)
@@ -41,7 +41,7 @@ def objdiff_report(data):
         if source:
             metadata["source_path"] = source
         functions = [{"name": child["name"], "size": str(child["size"]),
-                      "fuzzy_match_percent": 100 * child["matched"] / child["size"],
+                      "fuzzy_match_percent": 100 * child.get("fuzzy", child["matched"]) / child["size"],
                       "metadata": {"virtual_address": str(int(child["address"], 16))}}
                      for item in items for child in item["children"]
                      if child.get("type") == "function"]
@@ -59,11 +59,12 @@ def main():
     parser.add_argument("--dol", type=Path, required=True)
     parser.add_argument("--revision", required=True)
     parser.add_argument("--analysis-dir", type=Path)
+    parser.add_argument("--comparison-report", type=Path)
     parser.add_argument("--source-report", type=Path, default=progress.ROOT / "build/source/report.json")
     parser.add_argument("--output", type=Path, default=progress.ROOT / "build/GN7E69/report.json")
     args = parser.parse_args()
     args.output.unlink(missing_ok=True)
-    data = progress.report(args.dol.read_bytes(), args.revision, args.source_report, args.analysis_dir)
+    data = progress.report(args.dol.read_bytes(), args.revision, args.source_report, args.analysis_dir, args.comparison_report)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(objdiff_report(data), indent=2) + "\n")
 
