@@ -1,6 +1,6 @@
+#include "game/cu_8007F12C.h"
 #include "game/Block_80063910.h"
 #include "game/fn_80063A0C.h"
-#include "game/fn_8007F6F8.h"
 #include "game/FELoop.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
@@ -9,7 +9,6 @@
 extern "C" {
 extern void *lbl_803EB688;
 
-void fn_8007F548(void);
 int fn_801C6458(int a, int b);
 int fn_801E195C(int a);
 void fn_80194C5C(int a, int b, int c);
