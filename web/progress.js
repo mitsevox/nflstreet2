@@ -497,14 +497,14 @@ function validMap(items, kind = null) {
     return true;
   });
 }
-function renderFunctions(functions) {
-  const available = functions && functions.basis !== 'unavailable';
-  if (available && (functions.basis !== 'provisional-analysis' || !Number.isSafeInteger(functions.total) || functions.total <= 0 ||
+function renderCounts(functions, type, basis) {
+  const available = functions && functions.basis !== 'unavailable' && functions.total > 0;
+  if (functions && functions.basis !== 'unavailable' && (functions.basis !== basis || !Number.isSafeInteger(functions.total) || functions.total < 0 || (type === 'function' && functions.total === 0) ||
       !['exact', 'named'].every(field => Number.isSafeInteger(functions[field]) && functions[field] >= 0 && functions[field] <= functions.total))) {
     throw new Error('Invalid function progress');
   }
   for (const field of ['exact', 'named']) {
-    const stat = document.querySelector('[data-function="' + field + '"]');
+    const stat = document.querySelector('[data-' + type + '="' + field + '"]');
     const value = available ? functions[field] / functions.total * 100 : 0;
     if (available) countUp(stat.querySelector('strong'), functions[field]);
     else stat.querySelector('strong').textContent = '—';
@@ -530,7 +530,7 @@ if(!validMap(data.sections)||!validMap(files))throw new Error('Invalid map');
 for(const kind of ['code','data']){for(const field of ['total','linked','matched',...(data.measures[kind].fuzzy===undefined?[]:['fuzzy'])]){
   if(Math.abs(files.filter(item=>item.kind===kind).reduce((sum,item)=>sum+item[field==='total'?'size':field],0)-data.measures[kind][field])>1e-6)throw new Error('Inconsistent file map');
 }}
-renderFunctions(data.functions);sections=files;document.querySelectorAll('.progress-element').forEach(element => {
+renderCounts(data.functions, 'function', 'provisional-analysis');renderCounts(data.file_counts, 'file', 'mapped-file-inventory');sections=files;document.querySelectorAll('.progress-element').forEach(element => {
   const kind = element.dataset.progress;
   const measures = data.measures[kind];
   const linked = measures.linked / measures.total * 100;
@@ -560,5 +560,5 @@ renderFunctions(data.functions);sections=files;document.querySelectorAll('.progr
     const rect = track.getBoundingClientRect();
     showTooltipText(track, description, rect.left, rect.bottom);
   });
-});const link=document.querySelector('#build-link');link.href='https://github.com/mitsevox/nflstreet2/commit/'+data.revision;link.textContent='Baseline verified · '+data.revision.slice(0,7);link.title='Built '+data.built_at;render();}catch(error){renderFunctions(null);document.querySelector('#build-link').textContent='Progress unavailable';canvas.textContent='Progress unavailable';document.querySelectorAll('.track').forEach(track=>track.setAttribute('aria-valuetext','Unavailable'));}}
+});const link=document.querySelector('#build-link');link.href='https://github.com/mitsevox/nflstreet2/commit/'+data.revision;link.textContent='Baseline verified · '+data.revision.slice(0,7);link.title='Built '+data.built_at;render();}catch(error){renderCounts(null, 'function', 'provisional-analysis');renderCounts(null, 'file', 'mapped-file-inventory');document.querySelector('#build-link').textContent='Progress unavailable';canvas.textContent='Progress unavailable';document.querySelectorAll('.track').forEach(track=>track.setAttribute('aria-valuetext','Unavailable'));}}
 new ResizeObserver(() => render()).observe(canvas);loadProgress();

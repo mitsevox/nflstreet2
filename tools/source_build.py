@@ -654,6 +654,30 @@ def retained_layout(unit, compiler, wrapper):
 
 # Build ------------------------------------------------------------------------------------
 
+def compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs, comparison=False):
+    if any("DECOMP_COMPARE" in flag for flag in unit["flags"]):
+        raise ValueError("DECOMP_COMPARE is a reserved global build mode")
+    workdir, source = ROOT, str(unit["path"])
+    if unit["compile_path"]:
+        workdir, source = stage(unit), unit["compile_path"]
+    includes = [ROOT / directory for directory in include_dirs + unit["include_dirs"]]
+    if unit["compiler"] == "mwcc":
+        sdk_cc.compile(sdk_directory, wrapper, source, unit["object"], unit["depfile"],
+                       unit["flags"], includes, workdir, comparison=comparison)
+    else:
+        command = [sys.executable, str(ROOT / "tools/prodg_cc.py"), "--dir", str(compiler),
+                   "--wrapper", str(wrapper), "--depfile", str(unit["depfile"])]
+        for directory in includes:
+            command += ["-I", str(directory)]
+        if comparison:
+            command += ["-DDECOMP_COMPARE=1"]
+        command += unit["flags"] + ["-c", source, "-o", str(unit["object"])]
+        result = subprocess.run(command, cwd=workdir, stdin=subprocess.DEVNULL)
+        if result.returncode or not unit["object"].is_file():
+            raise RuntimeError(f"Compilation failed for {unit['source']}")
+    unit["dependencies"] = dependencies(unit["depfile"], workdir)
+
+
 def build(original, manifest_path, report_path):
     report_path.unlink(missing_ok=True)
     target = json.loads((ROOT / "config/GN7E69/baseline.json").read_text())
@@ -684,26 +708,10 @@ def build(original, manifest_path, report_path):
         stem = re.sub(r"[^A-Za-z0-9]+", "_", unit["source"]).strip("_")
         unit["object"] = BUILD / "obj" / f"unit{index:03d}_{stem}.o"
         unit["depfile"] = unit["object"].with_suffix(".d")
-        workdir, source = ROOT, str(unit["path"])
-        if unit["compile_path"]:
-            workdir, source = stage(unit), unit["compile_path"]
-        includes = [ROOT / directory for directory in include_dirs + unit["include_dirs"]]
-        if unit["compiler"] == "mwcc":
-            sdk_cc.compile(sdk_directory, wrapper, source, unit["object"], unit["depfile"],
-                           unit["flags"], includes, workdir)
-        else:
-            command = [sys.executable, str(ROOT / "tools/prodg_cc.py"), "--dir", str(compiler),
-                       "--wrapper", str(wrapper), "--depfile", str(unit["depfile"])]
-            for directory in includes:
-                command += ["-I", str(directory)]
-            command += unit["flags"] + ["-c", source, "-o", str(unit["object"])]
-            result = subprocess.run(command, cwd=workdir, stdin=subprocess.DEVNULL)
-            if result.returncode or not unit["object"].is_file():
-                raise RuntimeError(f"Compilation failed for {unit['source']}")
+        compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs)
         unit["native_object_sha256"] = sha256(unit["object"])
         objects[unit["source"]] = (retained_layout(unit, compiler, wrapper) if unit["link_roots"]
                                    else read_elf(unit["object"].read_bytes()))
-        unit["dependencies"] = dependencies(unit["depfile"], workdir)
     pieces, defined, resolved = plan(sections, units, objects, externals)
     for section in sections:
         for piece in pieces[section["name"]]:

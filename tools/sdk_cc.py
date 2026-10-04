@@ -51,13 +51,15 @@ def dependency_paths(text):
     return list(dict.fromkeys(paths))
 
 
-def compile(directory, wrapper, source, output, depfile, flags, includes, workdir):
+def compile(directory, wrapper, source, output, depfile, flags, includes, workdir, comparison=False):
     validate_flags(flags)
     output, depfile = Path(output), Path(depfile)
     output.unlink(missing_ok=True)
     depfile.unlink(missing_ok=True)
     with tempfile.TemporaryDirectory(prefix="sdk-", dir=output.parent) as temporary:
         command = [str(wrapper), str(directory / "mwcceppc.exe"), *flags]
+        if comparison:
+            command.append("-DDECOMP_COMPARE=1")
         for include in includes:
             command += ["-i", str(include)]
         command += ["-MD", "-c", str(source), "-o", temporary]

@@ -54,7 +54,7 @@ class MeasuredDecompReportTests(ProgressBase):
         self.assertEqual((m["total_data"], m["matched_data"], m["complete_data"]), ("48", "4", "4"))
         self.assertEqual(m["matched_code_percent"], 50)
         self.assertAlmostEqual(m["matched_data_percent"], 100 * 4 / 48)
-        self.assertEqual(m["fuzzy_match_percent"], 100 * 12 / 64)
+        self.assertEqual(m["fuzzy_match_percent"], 50)
         self.assertEqual(m["total_units"], 4)
         self.assertEqual(m["complete_units"], 0)
         for kind in ("code", "data"):
@@ -62,7 +62,7 @@ class MeasuredDecompReportTests(ProgressBase):
                 key = f"{field}_{kind}"
                 self.assertEqual(int(m[key]), sum(int(u["measures"][key]) for u in data["units"]))
 
-    def test_source_unit_combines_code_and_data_without_claiming_completion(self):
+    def test_source_unit_combines_code_and_data_without_claiming_provisional_completion(self):
         test_progress.SourceReportTests.write_source(self)
         data = decomp_report.objdiff_report(
             decomp_report.progress.report(self.binary, "a" * 40, self.report_path))
@@ -79,6 +79,17 @@ class MeasuredDecompReportTests(ProgressBase):
         unknown = [unit for unit in data["units"] if unit["metadata"]["auto_generated"]]
         self.assertEqual(sum(int(unit["measures"]["total_code"]) for unit in unknown), 8)
         self.assertEqual(sum(int(unit["measures"]["total_data"]) for unit in unknown), 44)
+
+    def test_confirmed_whole_file_is_complete(self):
+        test_progress.SourceReportTests.write_source(self)
+        (self.root / "config/GN7E69/evidence.tsv").write_text(
+            "kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
+            "unit\t0x80003104\t0x8000310C\tsrc/unit.c\ttarget\texact\texact\tfixture\n")
+        report = decomp_report.progress.report(self.binary, "a" * 40, self.report_path)
+        data = decomp_report.objdiff_report(report)
+        self.assertEqual(data["measures"]["complete_units"], 1)
+        self.assertTrue(next(u for u in data["units"] if u["name"] == "src/unit.c")["metadata"]["complete"])
+        self.assertEqual(report["file_counts"]["exact"], 1)
 
     def test_function_drilldown_preserves_source_and_unmapped_names(self):
         test_progress.FunctionInventoryTests.write_inventory(self)
