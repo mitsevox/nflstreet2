@@ -1,24 +1,9 @@
 #include "engine/cu_80227F14.h"
+#include "game/Object_8003DEC4.h"
 #include "game/Object_8008044C.h"
 #include "game/fn_8007F828.h"
+#include "game/fn_8021D7B8.h"
 #include <string.h>
-
-/* Object returned by fn_8003DEC4. */
-struct Object_8003DEC4 {
-    char mUnknown0[4];
-    char mUnknown4[16];
-    int mUnknown20;
-    float mUnknown24;
-    char mUnknown28[4];
-    int mUnknown32;
-    int mUnknown36;
-    char mUnknown40[76];
-    char mUnknown116[792];
-    char mUnknown908[4048];
-    int mUnknown4956;
-    char mUnknown4960[8];
-    unsigned char mUnknown4968;
-};
 
 /* Object returned by fn_801DD168. */
 struct Object_801DD168 {
@@ -122,7 +107,6 @@ extern void *lbl_803EB688;
 void fn_8003AB40(Record_8036B55C *pRecord);
 int fn_8003DA94(unsigned short count, int a, int b);
 int fn_8003DCC0(int a);
-Object_8003DEC4 *fn_8003DEC4(int index);
 void fn_8003E174(int a);
 void fn_8003FAC4(int a);
 void fn_8003FB2C(void);
@@ -135,7 +119,6 @@ void fn_80042508(Object_8003DEC4 *pObject, int a, unsigned int b);
 void fn_80042530(Object_8003DEC4 *pObject, int a);
 void fn_80042928(Object_8003DEC4 *pObject);
 void fn_800490A0(int index, int a, int b);
-int fn_8004A1A8(Object_8003DEC4 *pObject, int a);
 void fn_80089A84(Record_8036B55C *pRecord, unsigned int a);
 void fn_8008A248(void);
 void fn_8008FCB4(int a);
@@ -189,7 +172,6 @@ void fn_801D12BC(int a);
 void fn_801D12EC(int a);
 void fn_801D131C(int a);
 Object_801DD168 *fn_801DD168(int a, int b, Desc_801DD168 *pDesc);
-void fn_8021D7B8(void *a, int b, int c, int *d);
 void fn_80227490(float *pOut, float *pIn, int a, int b, int c);
 void fn_80234424(int a);
 }

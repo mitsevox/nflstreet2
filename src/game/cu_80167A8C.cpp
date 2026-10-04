@@ -1,3 +1,6 @@
+#include "game/fn_801EF390.h"
+#include "game/Desc_80169DF8.h"
+#include "game/Class_80148A58.h"
 #include "game/fn_8016871C.h"
 #include "game/Object_8007A334.h"
 #include "game/fn_800670B4.h"
@@ -47,18 +50,7 @@ struct Object_80167A8C {
     unsigned char mUnknownD314[43][4];
 };
 
-/* Argument of fn_80169DF8 (fn_80168324). */
-struct Desc_80169DF8 {
-    int mUnknown0;
-    void *mUnknown4;
-    void *mUnknown8;
-    void *mUnknownC;
-};
 
-struct Class_80148A58 {
-    int mUnknown0;
-    int mUnknown4;
-};
 
 extern "C" {
 int fn_80066D74(unsigned int id, int a, int b, int c, int d, int e);
@@ -82,13 +74,9 @@ int fn_80164ED8(Object_800670B4 *pObject, Record_80067338 *pRecord, int index, u
 int fn_80165000(Object_800670B4 *pObject, Record_80067338 *pRecord, int index, unsigned char *pOut, unsigned char flag);
 void fn_80167794(signed char team, int a, int b);
 void fn_80167910(Point_80167910 *pPoints, int count);
-int fn_80169308(void);
-int fn_801694C8(void);
-void fn_80169DF8(Desc_80169DF8 *pDesc);
 void fn_8016BAD8(int team);
 int fn_801485D4(void);
 int fn_801486A0(void);
-Class_80148A58 *fn_80148A58(void);
 int fn_80177F70(void);
 Point_80167910 fn_80177FE0(void);
 int fn_80178308(void);
@@ -97,7 +85,6 @@ int fn_80178E10(void);
 void fn_80179144(int a);
 void fn_8017916C(void);
 int fn_801D34D0(void *pDest, int size, int value, int width);
-int fn_801EF390(int a, int b, int c);
 void fn_801F9FA4(int tag, int index, int column);
 int fn_801FA038(int tag, int index, int column);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
@@ -421,10 +408,10 @@ void fn_80168324(int a, int b, int c, int d, int e, int f, int g, int h)
     if (h) {
         Desc_80169DF8 desc;
 
-        desc.mUnknown0 = fn_801EF390(a, 4, 1);
-        desc.mUnknown4 = lbl_803ECAF4->mUnknownD2EC;
-        desc.mUnknown8 = (void *)fn_80169308;
-        desc.mUnknownC = (void *)fn_801694C8;
+        desc.mUnknown0 = fn_801EF390((void *)a, 4, 1);
+        desc.mUnknown4 = (short *)lbl_803ECAF4->mUnknownD2EC;
+        desc.mUnknown8 = fn_80169308;
+        desc.mUnknownC = fn_801694C8;
         fn_80169DF8(&desc);
     }
 }

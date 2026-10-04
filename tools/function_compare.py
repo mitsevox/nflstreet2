@@ -25,6 +25,8 @@ def data_slices(source, placement, linked):
         if left < b and a < right:
             if owner != source:
                 raise ValueError("Comparison data overlaps another file's linked source")
+            if left <= a and b <= right and (left, right) != (a, b):
+                raise ValueError('Comparison data lies inside linked source')
             if not a <= left < right <= b:
                 raise ValueError('Comparison data partially overlaps linked source')
             cuts.append((left, right))
@@ -358,8 +360,8 @@ def load(receipts, binary, root):
             raise ValueError('Comparison dependencies differ from compiler receipt')
         expected_rows = {(r['symbol'], r['start'], r['end']) for r in unit['functions'] if not any(
             a <= sb.address(r['start']) < sb.address(r['end']) <= b for a, b in linked_bounds)}
-        # Recompute the measured data slices from this receipt's linked build, independently of
-        # the generator: each must be credited exactly once and no linked byte may be credited.
+        # Recompute the measured data slices from build/source/report.json, independently of the
+        # generator: each must be credited exactly once and no linked byte may be credited.
         placements = {s['section']: s for s in unit['sections'] if s['kind'] == 'data'}
         for name, placement in placements.items():
             if data_slices(unit['source'], placement, accepted_linked) != unit['data_slices'][name]:
@@ -413,6 +415,9 @@ def load(receipts, binary, root):
                     or not math.isfinite(entry['fuzzy']) or not exact <= entry['fuzzy'] <= b-a:
                 raise ValueError('Invalid comparison score or exact bytes')
             result.append(entry)
+    # Defensive only: configured() already rejects overlapping functions and data placements across
+    # units, and each receipt's rows must equal its configured functions and slices, so this check
+    # is not reachable through a receipt that passes the checks above.
     spans = sorted((sb.address(e['start']), sb.address(e['end'])) for e in result)
     if any(b > c for (_, b), (c, _) in zip(spans, spans[1:])):
         raise ValueError('Comparison receipt credits an extent more than once')

@@ -428,14 +428,24 @@ class InPlaceComparisons(unittest.TestCase):
         entries=function_compare.load(measured,self.binary,self.root)
         self.assertEqual([(e['kind'],e['matched']) for e in entries],[('code',8),('data',4)])
 
-    def partial_data_fixture(self, linked_rodata=b'linked\0\0'):
-        """Draft and linked functions share one compiled .rodata; only its leading slice is unlinked."""
+    def partial_data_fixture(self, linked_rodata=b'linked\0\0', middle=False, tail_source=False):
+        """Draft and linked functions share one compiled .rodata; only the unlinked slices are measured.
+
+        By default the leading 12 bytes are unlinked. `middle` adds a guarded draft after the linked
+        function and registers both slices around the linked bytes. `tail_source` compiles that extra
+        draft while registering only the leading placement, so the compiled section is longer."""
+        tail = middle or tail_source
         self.source.write_text('#if defined(DECOMP_COMPARE)\n'
                                'const char *fn_80000000(void) { return "draft text"; }\n#endif\n'
-                               'const char *fn_80000100(void) { return "linked"; }\n')
-        rodata = b'draft TEXT\0\0' + linked_rodata
-        binary = bytearray(self.dol(bytes.fromhex('3c60801038630000' '4e800020') + bytes(0xF4) +
-                                    bytes.fromhex('3c6080103863000c4e800020')))
+                               'const char *fn_80000100(void) { return "linked"; }\n' +
+                               ('#if defined(DECOMP_COMPARE)\n'
+                                'const char *fn_80000200(void) { return "tail"; }\n#endif\n' if tail else ''))
+        rodata = b'draft TEXT\0\0' + linked_rodata + (b'taiL\0\0\0\0' if middle else b'')
+        code = (bytes.fromhex('3c608010386300004e800020') + bytes(0xF4) +
+                bytes.fromhex('3c6080103863000c4e800020'))
+        if middle:
+            code += bytes(0xF4) + bytes.fromhex('3c608010386300144e800020')
+        binary = bytearray(self.dol(code))
         for offset, value in ((0x1C, len(binary)), (0x64, 0x80100000), (0xAC, len(rodata))):
             struct.pack_into('>I', binary, offset, value)
         self.binary = bytes(binary + rodata); self.original.write_bytes(self.binary)
@@ -445,15 +455,21 @@ class InPlaceComparisons(unittest.TestCase):
             {'section':'.text','placement':'.text','start':'0x80000100','end':'0x8000010C'},
             {'section':'.rodata','placement':'.data3','start':'0x8010000C','end':'0x80100014'}]}
         self.manifest['units'] = [accepted]
-        self.unit['sections'] = [{'section':'.text','placement':'.text','start':'0x80000000','end':'0x8000010C'},
-                                 {'section':'.rodata','placement':'.data3','start':'0x80100000','end':'0x80100014'}]
+        end = 0x80100000 + len(rodata)
+        self.unit['sections'] = [{'section':'.text','placement':'.text','start':'0x80000000',
+                                  'end':'0x8000020C' if middle else '0x8000010C'},
+                                 {'section':'.rodata','placement':'.data3','start':'0x80100000','end':f'0x{end:08X}'}]
         self.unit['functions'] = [{'symbol':'fn_80000000','start':'0x80000000','end':'0x8000000C'}]
+        evidence = ('kind\tstart\tend\tstart_boundary\tend_boundary\tsubject\n'
+                    'function\t0x80000000\t0x8000000C\texact\texact\tfn_80000000\n'
+                    'function\t0x80000100\t0x8000010C\texact\texact\tfn_80000100\n'
+                    'data\t0x80100000\t0x8010000C\texact\texact\tdraft strings\n')
+        if middle:
+            self.unit['functions'].append({'symbol':'fn_80000200','start':'0x80000200','end':'0x8000020C'})
+            evidence += ('function\t0x80000200\t0x8000020C\texact\texact\tfn_80000200\n'
+                         'data\t0x80100014\t0x8010001C\texact\texact\ttail string\n')
         self.write_config()
-        (self.root/'config/GN7E69/evidence.tsv').write_text(
-            'kind\tstart\tend\tstart_boundary\tend_boundary\tsubject\n'
-            'function\t0x80000000\t0x8000000C\texact\texact\tfn_80000000\n'
-            'function\t0x80000100\t0x8000010C\texact\texact\tfn_80000100\n'
-            'data\t0x80100000\t0x8010000C\texact\texact\tdraft strings\n')
+        (self.root/'config/GN7E69/evidence.tsv').write_text(evidence)
         manifest, units = function_compare.configured(self.root, self.binary)
         unit = dict(units[0], sections=accepted['sections'])
         compiler, wrapper = sb.setup_compiler.setup()
@@ -474,6 +490,10 @@ class InPlaceComparisons(unittest.TestCase):
         self.assertEqual(function_compare.data_slices('a', placement, [('a', 0x100, 0x200)]), [])
         with self.assertRaisesRegex(ValueError, 'partially overlaps'):
             function_compare.data_slices('a', placement, [('a', 0x1F0, 0x210)])
+        with self.assertRaisesRegex(ValueError, 'lies inside linked source'):
+            function_compare.data_slices('a', placement, [('a', 0x0F0, 0x210)])
+        with self.assertRaisesRegex(ValueError, "another file"):
+            function_compare.data_slices('a', placement, [('b', 0x0F0, 0x210)])
         with self.assertRaisesRegex(ValueError, "another file"):
             function_compare.data_slices('a', placement, [('b', 0x140, 0x180)])
 
@@ -532,7 +552,8 @@ class InPlaceComparisons(unittest.TestCase):
     def test_partial_data_overlap_requires_evidenced_slices_and_native_layout(self):
         if not self.compiler_available:
             self.skipTest('Pinned compiler and objdiff are installed by CI')
-        self.partial_data_fixture(linked_rodata=b'linkee\0\0')
+        # The last linked byte differs, so the native-layout check must cover the whole linked range.
+        self.partial_data_fixture(linked_rodata=b'linked\0\1')
         with self.assertRaisesRegex(ValueError, 'linked bytes at their native placement'):
             function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
         evidence = self.root/'config/GN7E69/evidence.tsv'
@@ -545,6 +566,87 @@ class InPlaceComparisons(unittest.TestCase):
         self.manifest['units'][0]['sections'][1]['end'] = '0x80100018'; self.write_config()
         with self.assertRaisesRegex(ValueError, 'partially overlaps'):
             function_compare.configured(self.root, self.binary)
+
+    def rewrite_sliced_data(self, receipts, change):
+        """Rewrite the sliced .rodata ELF of a receipt and refresh every pair hash that names it."""
+        pair = next(p for p in receipts[0]['pairs'] if p['symbol'] == '.rodata')
+        path = self.root/pair['path']
+        data = bytearray(path.read_bytes())
+        sections, _ = sb.read_elf(bytes(data))
+        section = next(s for s in sections if s['name'] == '.rodata')
+        shoff = struct.unpack_from('>I', data, 32)[0]
+        shentsize = struct.unpack_from('>H', data, 46)[0]
+        change(data, section, shoff + section['index'] * shentsize)
+        path.write_bytes(bytes(data))
+        changed = copy.deepcopy(receipts)
+        for row in changed[0]['pairs']:
+            if row['path'] == pair['path']:
+                row['sha256'] = sb.sha256(path)
+        return changed
+
+    def test_partial_data_reload_rechecks_native_bytes_and_size(self):
+        if not self.compiler_available:
+            self.skipTest('Pinned compiler and objdiff are installed by CI')
+        self.partial_data_fixture()
+        receipts = function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
+        path = self.root/next(p for p in receipts[0]['pairs'] if p['symbol'] == '.rodata')['path']
+        original = path.read_bytes()
+
+        def last_linked_byte(data, section, header):
+            data[section['offset'] + 0x13] ^= 1
+
+        def longer(data, section, header):
+            struct.pack_into('>I', data, header + 20, section['size'] + 4)
+
+        for change, error in ((last_linked_byte, 'linked bytes at their native placement'),
+                              (longer, 'must compile to its full target placement')):
+            with self.subTest(change=change.__name__):
+                try:
+                    changed = self.rewrite_sliced_data(receipts, change)
+                    with self.assertRaisesRegex(ValueError, error):
+                        function_compare.load(changed, self.binary, self.root)
+                finally:
+                    path.write_bytes(original)
+        function_compare.load(receipts, self.binary, self.root)
+
+    def test_partial_data_generation_rejects_longer_section_and_changed_linked_placements(self):
+        if not self.compiler_available:
+            self.skipTest('Pinned compiler and objdiff are installed by CI')
+        # The extra draft's string follows the linked bytes, beyond the registered placement.
+        self.partial_data_fixture(tail_source=True)
+        with self.assertRaisesRegex(ValueError, 'must compile to its full target placement'):
+            function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
+        self.partial_data_fixture()
+        changed = copy.deepcopy(self.report)
+        changed['units'][0]['sections'].pop()
+        (self.root/'build/source/report.json').write_text(json.dumps(changed))
+        with self.assertRaisesRegex(ValueError, 'Linked source differs'):
+            function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
+
+    def test_linked_bytes_in_the_middle_leave_two_measured_slices(self):
+        if not self.compiler_available:
+            self.skipTest('Pinned compiler and objdiff are installed by CI')
+        self.partial_data_fixture(middle=True)
+        receipts = function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
+        entries = function_compare.load(receipts, self.binary, self.root)
+        self.assertEqual([(e['kind'], e['start'], e['end'], e['matched']) for e in entries],
+                         [('code', '0x80000000', '0x8000000C', 12), ('code', '0x80000200', '0x8000020C', 12),
+                          ('data', '0x80100000', '0x8010000C', 0), ('data', '0x80100014', '0x8010001C', 0)])
+        data_pairs = [p for p in receipts[0]['pairs'] if p['symbol'] == '.rodata']
+        self.assertEqual(len({p['path'] for p in data_pairs}), 1)
+        folder = self.root/'build/matching/candidates/0'
+        self.assertTrue((folder/'data-rodata-80100000').is_dir())
+        self.assertTrue((folder/'data-rodata-80100014').is_dir())
+        index = next(i for i, e in enumerate(receipts[0]['entries']) if e['start'] == '0x80100014')
+        missing = copy.deepcopy(receipts)
+        del missing[0]['entries'][index], missing[0]['pairs'][index]
+        with self.assertRaisesRegex(ValueError, 'omits'):
+            function_compare.load(missing, self.binary, self.root)
+        bridged = copy.deepcopy(receipts)
+        for row in (bridged[0]['entries'][index], bridged[0]['pairs'][index]):
+            row['start'] = '0x80100010'
+        with self.assertRaisesRegex(ValueError, 'linked source bytes'):
+            function_compare.load(bridged, self.binary, self.root)
 
     def test_reserved_macro_cannot_be_set_through_any_profile_flag_form(self):
         for flags in (['-DDECOMP_COMPARE=1'], ['-D','DECOMP_COMPARE=1'], ['-U','DECOMP_COMPARE'],
