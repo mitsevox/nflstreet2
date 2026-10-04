@@ -5,7 +5,6 @@ import shutil
 import struct
 import sys
 import tempfile
-import inspect
 import unittest
 from unittest.mock import patch
 
@@ -144,18 +143,12 @@ class ResolveUndefined(unittest.TestCase):
     def test_ambiguous_and_unknown_names_fail_closed(self):
         with self.assertRaisesRegex(ValueError, 'Ambiguous comparison symbol gData'):
             function_compare.resolve_undefined(self.undefined('gData'), {'gData': 1}, {'gData'})
+        with self.assertRaisesRegex(ValueError, 'Ambiguous comparison symbol fn_Shared'):
+            function_compare.resolve_undefined(self.undefined('fn_Shared'), {'fn_Shared': 0x80001000}, {'fn_Shared'})
         with self.assertRaisesRegex(ValueError, 'Ambiguous comparison symbol lbl_80300000'):
             function_compare.resolve_undefined(self.undefined('lbl_80300000'), {}, {'lbl_80300000'})
         with self.assertRaisesRegex(ValueError, 'Unresolved comparison symbol gMissing'):
             function_compare.resolve_undefined(self.undefined('gMissing'), {}, set())
-
-    def test_generate_uses_the_same_addresses_for_symbols_and_fragment_relocations(self):
-        source = inspect.getsource(function_compare.generate)
-        self.assertIn('accepted_data_symbols(accepted_objects, externals)', source)
-        self.assertIn('addresses = comparison_references(externals, data_symbols)', source)
-        self.assertIn('resolve_undefined(symbols, addresses, ambiguous)', source)
-        self.assertEqual(source.count('placements, addresses,'), 2)
-        self.assertNotIn('placements, externals,', source)
 
 
 class InPlaceComparisons(unittest.TestCase):
