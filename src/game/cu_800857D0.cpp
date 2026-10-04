@@ -19,7 +19,7 @@ int fn_800855C8(int a);
 int fn_80085620(int index, int a);
 int *fn_80085744(int formation, int team);
 int fn_8022D8F8(int a, int *pValues, int tag);
-void fn_80085BE4(int team);
+int fn_80085BE4(int team);
 
 int fn_800857D0(int formation, int team)
 {
@@ -120,16 +120,16 @@ void fn_80085AA0(int firstTeam, Record_8003B6BC *pFirst, int secondTeam,
     fn_800850E8();
 }
 
-void fn_80085BE4(int team)
+int fn_80085BE4(int team)
 {
     fn_801FCE10(0, "use 'EMAG' delete from 'BLMF' where ( 'DIGT' = \x85 )\n", team);
-    fn_801FCE10(0, "use 'EMAG' insert into 'BLMF' * select * from 'ULMF' where ( 'DIGT' = \x85 )\n", team);
+    return fn_801FCE10(0, "use 'EMAG' insert into 'BLMF' * select * from 'ULMF' where ( 'DIGT' = \x85 )\n", team);
 }
 
-void fn_80085C3C(int team)
+int fn_80085C3C(int team)
 {
     fn_801FCE10(0, "use 'EMAG' delete from 'ULMF' where ( 'DIGT' = \x85 )\n", team);
-    fn_801FCE10(0, "use 'EMAG' insert into 'ULMF' * select * from 'BLMF' where ( 'DIGT' = \x85 )\n", team);
+    return fn_801FCE10(0, "use 'EMAG' insert into 'ULMF' * select * from 'BLMF' where ( 'DIGT' = \x85 )\n", team);
 }
 
 int fn_80085C94(int team, int *pValues)
