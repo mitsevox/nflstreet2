@@ -266,7 +266,7 @@
           "end": "0x8000E744"
         },
         {
-          "symbol": "fn_8000E744__FPCcN20",
+          "symbol": "fn_8000E744__FPcPCcT1",
           "start": "0x8000E744",
           "end": "0x8000E784"
         },
@@ -443,12 +443,12 @@
           "end": "0x8036ADB0"
         },
         {
-          "symbol": "_.tmp_0.21",
+          "symbol": "_.tmp_0.27",
           "start": "0x803ECDE0",
           "end": "0x803ECDE4"
         },
         {
-          "symbol": "_.tmp_1.76",
+          "symbol": "_.tmp_1.82",
           "start": "0x803ECDE4",
           "end": "0x803ECDE8"
         },
@@ -458,7 +458,7 @@
           "end": "0x803ECDF0"
         },
         {
-          "symbol": "_.tmp_2.86",
+          "symbol": "_.tmp_2.92",
           "start": "0x803ECDF0",
           "end": "0x803ECDF4"
         },
@@ -468,7 +468,7 @@
           "end": "0x803ECDFC"
         },
         {
-          "symbol": "_.tmp_3.96",
+          "symbol": "_.tmp_3.102",
           "start": "0x803ECDFC",
           "end": "0x803ECE00"
         },
@@ -478,7 +478,7 @@
           "end": "0x803ECE08"
         },
         {
-          "symbol": "_.tmp_4.103",
+          "symbol": "_.tmp_4.109",
           "start": "0x803ECE08",
           "end": "0x803ECE0C"
         },
@@ -488,7 +488,7 @@
           "end": "0x803ECE14"
         },
         {
-          "symbol": "_.tmp_5.110",
+          "symbol": "_.tmp_5.116",
           "start": "0x803ECE14",
           "end": "0x803ECE18"
         },
@@ -498,7 +498,7 @@
           "end": "0x803ECE20"
         },
         {
-          "symbol": "_.tmp_6.117",
+          "symbol": "_.tmp_6.123",
           "start": "0x803ECE20",
           "end": "0x803ECE24"
         },
@@ -508,7 +508,7 @@
           "end": "0x803ECE2C"
         },
         {
-          "symbol": "_.tmp_7.124",
+          "symbol": "_.tmp_7.130",
           "start": "0x803ECE2C",
           "end": "0x803ECE30"
         },

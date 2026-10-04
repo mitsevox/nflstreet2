@@ -1,5 +1,6 @@
 #include <string.h>
 #include "game/Object_8007A334.h"
+#include "game/Object_8008044C.h"
 #include "game/cu_80181330.h"
 
 /* Element of lbl_8000F5EC, passed to fn_80183740. */
@@ -243,7 +244,6 @@ int fn_8007BF28(int index);
 void fn_8007CC50(Object_8007A334 *pObject);
 void fn_8007CCC4(Object_8007A334 *pObject);
 int fn_800808F8(Object_8007A334 *pObject);
-void fn_800809C4(Object_8007A334 *pObject, int a, int b);
 int fn_80080E98(Object_8007A334 *pObject);
 void fn_800817CC(Object_8007A334 *pObject, Record_800817CC *pOut);
 int fn_800872E8(int a);
@@ -260,7 +260,7 @@ void fn_8015D38C(int a);
 Object_8007A334 *fn_80182DC8(void);
 void fn_80182DD4(const char *pText);
 void fn_80182E04(const char *pText);
-void fn_80182E34(const char *pText);
+void fn_80182E34(char *pText);
 void fn_801835C0(int a);
 void fn_801835C8(void);
 void fn_80183704(void);
@@ -306,7 +306,7 @@ static int lbl_803ECE34;
 static Record_8036AD78 lbl_8036AD78;
 
 static void fn_8000E70C();
-static void fn_8000E744(const char *a, const char *b, const char *c);
+static void fn_8000E744(char *a, const char *b, const char *c);
 static void fn_8000E784(Record_8036AD78 *pOut);
 static void fn_8000E834(Record_8036AD78 *pRecord);
 static void fn_8000E8FC(int index, int value);
@@ -409,7 +409,7 @@ void Class_8000F540::vfn_01(int a, int *pCount, int *pOut)
         fn_8007A444(fn_80182DC8());
         value = fn_800808F8(fn_80182DC8());
         fn_8000EC44()->mUnknown12 = value;
-        fn_800809C4(fn_80182DC8(), value, 0);
+        fn_800809C4((Object_8008044C *)fn_80182DC8(), value, 0);
         fn_80022680(fn_80022D78(), value, 1);
         fn_80022680(fn_80022D80(), value, 1);
         fn_8015D38C(0);
@@ -734,7 +734,7 @@ static void fn_8000E70C()
     fn_8000E744("", "", "");
 }
 
-static void fn_8000E744(const char *a, const char *b, const char *c)
+static void fn_8000E744(char *a, const char *b, const char *c)
 {
     fn_80182E34(a);
     fn_80182DD4(b);
