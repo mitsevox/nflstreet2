@@ -7,6 +7,7 @@
 #include "game/fn_801801F0.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
+#include "game/fn_801C3284.h"
 
 /* Filled by fn_80152940 for one index; the constructor leaves mUnknown8 unset. */
 struct Info_80152940 {
@@ -95,14 +96,10 @@ int fn_80025708(void);
 int fn_80025718(void);
 int fn_8017F60C(void);
 void fn_80083E1C(Object_8007A334 *pObject, int a);
-void fn_80083E40(Object_8007A334 *pObject, int a, int tag);
-int fn_80084034(Object_8007A334 *pObject, int a, int b);
 int fn_8008400C(Object_8007A334 *pObject);
 int fn_80084360(Object_8007A334 *pObject);
-void fn_80083F68(Object_8007A334 *pObject);
 void fn_8008040C(Object_8008044C *pObject, int a);
 int fn_80080D10(Object_8008044C *pObject);
-void fn_801C3284(char *pDest, const char *pSource, int size);
 void fn_80010150(int a);
 int fn_8000FCDC(void);
 void fn_80011600(int a, int b, int c);

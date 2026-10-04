@@ -1,5 +1,6 @@
 #include "game/Object_8007A334.h"
 #include "game/cu_80181330.h"
+#include "game/fn_801C3284.h"
 
 extern "C" {
 void *fn_800088C8(void);
@@ -32,7 +33,6 @@ int fn_80183948(void);
 void fn_80183990(void);
 void fn_8018D358(int a, int b, int c);
 int fn_8018D70C(int a);
-void fn_801C3284(char *pDest, const char *pSource, int size);
 }
 
 class Class_80005618 : public Class_802A6B60 {
