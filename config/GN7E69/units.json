@@ -4567,6 +4567,31 @@
           "end": "0x802D670C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80067C10.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80067C10-0x80067F18 (src/game/cu_80067C10.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80067C10",
+          "end": "0x80067F18"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D5098",
+          "end": "0x802D50A4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA670",
+          "end": "0x803EA678"
+        }
+      ]
     }
   ]
 }
