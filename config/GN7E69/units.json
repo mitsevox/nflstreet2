@@ -6237,6 +6237,43 @@
           "end": "0x802943DC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8019CE3C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019CE3C-0x8019D2EC (src/game/cu_8019CE3C.cpp) and its data, type, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019CE3C",
+          "end": "0x8019D2EC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADF18",
+          "end": "0x802ADF3C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F2574",
+          "end": "0x802F2684"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB7C0",
+          "end": "0x803EB7C4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803653E4",
+          "end": "0x80365448"
+        }
+      ]
     }
   ]
 }
