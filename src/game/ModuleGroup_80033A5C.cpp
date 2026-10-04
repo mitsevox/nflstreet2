@@ -1,3 +1,4 @@
+#include "game/fn_801FCE10.h"
 #include "game/ModuleGroup_80033A5C.h"
 #include "game/GameState.h"
 
@@ -32,7 +33,6 @@ int fn_801EEFAC(void *p);
 void fn_801F2798(const char *pText);
 int fn_801F2C54(const char *pName, int unknown);
 int fn_801F2CD4(const char *pName);
-int fn_801FCE10(int unknown, const char *pQuery, ...);
 void fn_802371B0(int unknown, int seed);
 void fn_8023725C(void);
 }

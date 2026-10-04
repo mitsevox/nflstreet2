@@ -1,14 +1,5 @@
-/* Bound to the \x8a placeholder of the 'LRDC' queries. */
-struct QueryCursor {
-    int mUnknown0;
-    short mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
-};
-
+#include "game/fn_801FCE10.h"
 extern "C" {
-int fn_801FCE10(int a, const char *pFormat, ...);
-int fn_801FCFA0(QueryCursor *pCursor);
 int fn_8022EF8C(int a, int tag);
 int fn_8022EFBC(int a, int tag);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
