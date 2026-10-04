@@ -4,7 +4,7 @@
     {
       "source": "src/game/cu_8007F12C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded unit row for src/game/cu_8007F12C.cpp, individual exact function extents, owned data spans, inferred layouts and lifecycle names. Draft comparisons only; original assembly remains linked until the complete unit is validated.",
+      "evidence": "evidence.tsv bounded unit row for src/game/cu_8007F12C.cpp, individual exact function extents, owned data spans, inferred layouts and lifecycle names. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
       "sections": [
         {
           "section": ".text",
