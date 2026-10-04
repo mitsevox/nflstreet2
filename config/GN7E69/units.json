@@ -6210,6 +6210,25 @@
           "end": "0x8030BCE0"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800857D0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv bounded record-update group and exact linked prefix/data rows; remaining eight functions are preserved in-place for comparison. Original-file edges remain open.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800857D0",
+          "end": "0x8008593C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80294150",
+          "end": "0x802943DC"
+        }
+      ]
     }
   ]
 }
