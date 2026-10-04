@@ -2087,6 +2087,55 @@
       ]
     },
     {
+      "source": "src/game/FELoop.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800273AC-0x80027FE0 (src/game/FELoop.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800273AC",
+          "end": "0x80027FE0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028A028",
+          "end": "0x8028A0C0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA2D8",
+          "end": "0x803EA2F0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80306570",
+          "end": "0x80306580"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC5EC",
+          "end": "0x803EC5F4"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A40",
+          "end": "0x80289A44"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289B80",
+          "end": "0x80289B84"
+        }
+      ]
+    },
+    {
       "source": "src/game/InGame.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80027FE0-0x80028AE4 (src/game/InGame.cpp) and its data rows.",
