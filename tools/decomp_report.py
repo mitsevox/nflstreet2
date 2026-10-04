@@ -11,9 +11,9 @@ import progress
 def measures(sections):
     result = {"total_units": len(sections),
               "complete_units": 0}
-    total = sum(s["size"] for s in sections)
-    matched = sum(s["matched"] for s in sections)
-    fuzzy = sum(s.get("fuzzy", s["matched"]) for s in sections)
+    code = [s for s in sections if s["kind"] == "code"]
+    total = sum(s["size"] for s in code)
+    fuzzy = sum(s.get("fuzzy", s["matched"]) for s in code)
     result["fuzzy_match_percent"] = 100 * fuzzy / total if total else 0
     for kind in ("code", "data"):
         selected = [s for s in sections if s["kind"] == kind]
@@ -37,7 +37,9 @@ def objdiff_report(data):
         source = items[0].get("source")
         unit_measures = measures(items)
         unit_measures["total_units"] = 1
-        metadata = {"auto_generated": source is None, "complete": False}
+        complete = bool(source) and all(item.get("complete") is True and item["size"] > 0 and item["linked"] == item["size"] for item in items)
+        unit_measures["complete_units"] = int(complete)
+        metadata = {"auto_generated": source is None, "complete": complete}
         if source:
             metadata["source_path"] = source
         functions = [{"name": child["name"], "size": str(child["size"]),
@@ -45,12 +47,17 @@ def objdiff_report(data):
                       "metadata": {"virtual_address": str(int(child["address"], 16))}}
                      for item in items for child in item["children"]
                      if child.get("type") == "function"]
-        unit = {"name": name, "measures": unit_measures, "metadata": metadata}
+        section_items = [{"name": item["kind"].title(), "size": str(item["size"]),
+                          "fuzzy_match_percent": 100 * item.get("fuzzy", item["matched"]) / item["size"]}
+                         for item in items]
+        unit = {"name": name, "measures": unit_measures, "metadata": metadata,
+                "sections": section_items}
         if functions:
             unit["functions"] = functions
         units.append(unit)
     totals = measures(data["files"])
     totals["total_units"] = len(units)
+    totals["complete_units"] = sum(u["metadata"]["complete"] for u in units)
     return {"version": 2, "measures": totals, "units": units}
 
 
