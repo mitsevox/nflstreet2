@@ -5,6 +5,7 @@
 #include "game/Callees_8002A138.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
+#include "game/fn_801EF390.h"
 #include "game/fn_8022F478.h"
 
 struct SaveSlot {
@@ -56,7 +57,6 @@ extern char lbl_802D6C24[];
 extern char lbl_802EBE50[];
 
 void fn_80193D48(void *, int, int, int);
-void fn_801F010C(void *, int);
 void fn_801D646C(void);
 void fn_801D6938(SaveFileDesc *, int);
 void fn_80193CEC(void);
