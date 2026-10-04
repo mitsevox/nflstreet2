@@ -1,3 +1,4 @@
+#include "game/fn_802372EC.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_80227638.h"
@@ -188,7 +189,6 @@ float fn_802270D4(Vector_80039F5C *pV);
 float fn_8022781C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 float fn_802278D0(Vector_80039F5C *pA, Vector_80039F5C *pB);
 float fn_80237260(int stream);
-unsigned int fn_802372EC(int stream, int n);
 
 int fn_80170198(Object_80039F5C *p);
 int fn_80170294(Object_80039F5C *p);

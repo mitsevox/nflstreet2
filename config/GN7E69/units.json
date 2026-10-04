@@ -4320,6 +4320,37 @@
           "end": "0x80307720"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8003E214.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8003E214-0x8003EC04 and associated record/callback/data evidence; open/provisional original-file edges.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003E214",
+          "end": "0x8003EC04"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D338",
+          "end": "0x8028D350"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA440",
+          "end": "0x803EA47C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC780",
+          "end": "0x803EC784"
+        }
+      ]
     }
   ]
 }
