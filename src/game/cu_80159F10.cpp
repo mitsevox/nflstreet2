@@ -1,12 +1,7 @@
 #include <math.h>
 #include "engine/cu_80227F14.h"
 #include "game/Camera_8013F738.h"
-
-struct Vec3_80159F10 {
-    float x;
-    float y;
-    float z;
-};
+#include "game/Object_80039F5C.h"
 
 struct Init_80159F10 {
     int mUnknown0;
@@ -16,7 +11,7 @@ struct Init_80159F10 {
 
 struct Instance_80159F10 {
     char mPad00[4];
-    Vec3_80159F10 mUnknown04;
+    Vector_80039F5C mUnknown04;
     char mPad10[4];
     int mUnknown14;
     int mUnknown18;
@@ -32,7 +27,7 @@ int fn_8006560C(void);
 int fn_8013F9F8(void);
 Camera_8013F738 *fn_8013FA04(int index);
 int fn_801481B0(void);
-int fn_8014830C(int a, Vec3_80159F10 *pPos);
+int fn_8014830C(int index, Vector_80039F5C *pOut);
 int fn_801483F8(void);
 float fn_80178A44(void);
 void fn_8019FBEC(void);
@@ -51,16 +46,16 @@ void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Instance_80159F10 *)
 int fn_801DD268(int handle, int a, int b, Init_80159F10 *pInit);
 void fn_801DD320(int handle, int a);
 void fn_801DD3AC(int handle, int a, int b);
-void fn_8015A240(Instance_80159F10 *pInstance, int value);
+void fn_8015A240(Instance_80159F10 *pInstance, unsigned char value);
 }
 
 static unsigned char lbl_803ECA5C;
 
 extern "C" void fn_80159F10(Instance_80159F10 *pInstance, const Init_80159F10 *pInit)
 {
-    pInstance->mUnknown04.x = 0.0f;
-    pInstance->mUnknown04.y = 0.0f;
-    pInstance->mUnknown04.z = 0.01f;
+    pInstance->mUnknown04.mX = 0.0f;
+    pInstance->mUnknown04.mY = 0.0f;
+    pInstance->mUnknown04.mZ = 0.01f;
     pInstance->mUnknown14 = pInit->mUnknown0;
     pInstance->mUnknown18 = pInit->mUnknown4;
     pInstance->mUnknown1C = pInit->mUnknown8;
@@ -72,18 +67,18 @@ extern "C" void fn_80159F70(void) {}
 extern "C" int fn_80159F74(Instance_80159F10 *pInstance)
 {
     if ((fn_801481B0() == 1 || fn_801483F8() == 1) && lbl_803ECA5C == 1 && fn_8006560C() == 0) {
-        Vec3_80159F10 *pPos = &pInstance->mUnknown04;
+        Vector_80039F5C *pPos = &pInstance->mUnknown04;
         if (fn_8014830C(pInstance->mUnknown1C, pPos) == 1) {
             Camera_8013F738 *pCamera;
             float scale = 1.0f;
-            Vec3_80159F10 pos;
+            Vector_80039F5C pos;
 
             pCamera = fn_8013FA04(fn_8013F9F8());
-            scale = fabsf(pInstance->mUnknown04.y - pCamera->mHeader.mUnknown04[1]) / (fn_80178A44() * 2.0f) * 2.0f + 0.3f;
+            scale = fabsf(pInstance->mUnknown04.mY - pCamera->mHeader.mUnknown04[1]) / (fn_80178A44() * 2.0f) * 2.0f + 0.3f;
             fn_801D0470(fn_80228668());
             fn_801D04C4();
             pos = *pPos;
-            pos.z += scale * 0.5;
+            pos.mZ += scale * 0.5;
             fn_801D0C58(&pos);
             fn_801D0ADC(-pCamera->mHeader.mUnknown1C);
             fn_801D08FC(0xC00000 - pCamera->mHeader.mUnknown14);
@@ -142,7 +137,7 @@ extern "C" void fn_8015A204(int handle, int id)
     }
 }
 
-extern "C" void fn_8015A240(Instance_80159F10 *pInstance, int value)
+extern "C" void fn_8015A240(Instance_80159F10 *pInstance, unsigned char value)
 {
     pInstance->mUnknown1D = value;
 }
