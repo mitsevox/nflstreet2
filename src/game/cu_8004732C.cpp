@@ -3,23 +3,12 @@
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801FCE10.h"
+#include "game/Item_800476DC.h"
 
 /* Four floats passed by value to fn_801CD308, which copies them into one of
    two slots selected by its first argument. */
 struct Quad_801CD308 {
     float mValues[4];
-};
-
-/* 36-byte instance of object type 11 (registered by fn_80047578); the
-   player object keeps one at +988 (include/game/Object_8003DEC4.h). */
-struct Item_800476DC {
-    char mUnknown0[4];
-    float mUnknown4[3];
-    char mUnknown16[4];
-    int mUnknown20;
-    const char *mpUnknown24;
-    unsigned char mUnknown28;
-    float mUnknown32;
 };
 
 extern "C" {
