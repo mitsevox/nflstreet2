@@ -3910,6 +3910,155 @@
         "commit": "721d4c010b76c1ff650b360cf9093081052a117e",
         "introduced_blob": "ceaec7ab5c2f47ba3da50d2462d5ac037e26c392"
       }
+    },
+    {
+      "source": "src/game/cu_80167A8C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801679B4",
+        "0x801679B8",
+        "0x801679F4",
+        "0x80167A40",
+        "0x80167A6C",
+        "0x80167A8C",
+        "0x80167AD8",
+        "0x80167B70",
+        "0x80167C1C",
+        "0x80167C8C",
+        "0x80167D1C",
+        "0x80167EA0",
+        "0x80167FF0",
+        "0x801681A8",
+        "0x80168210",
+        "0x80168264",
+        "0x80168324",
+        "0x80168418",
+        "0x801684B8",
+        "0x80168640",
+        "0x80168708",
+        "0x8016871C",
+        "0x80168730",
+        "0x80168744",
+        "0x801687E4",
+        "0x80168898",
+        "0x801688AC",
+        "0x801688C0",
+        "0x801688D4",
+        "0x801688E0",
+        "0x801688F4",
+        "0x80168908",
+        "0x8016898C",
+        "0x801689AC",
+        "0x80168A14",
+        "0x80168A7C",
+        "0x80168B04",
+        "0x80168B5C",
+        "0x80168C10",
+        "0x80168C40",
+        "0x80168D10",
+        "0x80168D74",
+        "0x80168D98",
+        "0x80168E00",
+        "0x80168E54",
+        "0x80168EA8",
+        "0x80168EBC"
+      ],
+      "provenance": {
+        "pull_request": 234,
+        "merged_via": 248,
+        "commit": "9db3f8e6a11633e4ab554ec90b3b465a0c4af016",
+        "introduced_blob": "c68cd0bbfe963f1d1ee6bc4e142e00c3fd8a30ac",
+        "original_commit": "03b75e31c939e6946099bb550954c12bc14cdde5",
+        "original_blob": "aebfd15c977d5138d4f7647630dd7a1d9a6c9ae5",
+        "integration_adjustment": "Reviewed integration includes the canonical Record_80067338 pointer getter declaration shared with its accepted consumer; no reconstructed body or layout change."
+      }
+    },
+    {
+      "source": "src/game/cu_80076F6C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80076F6C",
+        "0x80077010",
+        "0x80077080",
+        "0x800771C0",
+        "0x800771D8",
+        "0x800771DC",
+        "0x80077258",
+        "0x8007732C",
+        "0x80077488",
+        "0x8007753C"
+      ],
+      "provenance": {
+        "pull_request": 236,
+        "merged_via": 248,
+        "commit": "e0c45d7ff7d8da33b9b4b319a875d47c7c75a556",
+        "introduced_blob": "5db8911be59e28a6179a7338b8dde250607fa036"
+      }
+    },
+    {
+      "source": "src/game/cu_80176C58.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80176C58",
+        "0x80176C90",
+        "0x80176CC8",
+        "0x80176E34"
+      ],
+      "provenance": {
+        "pull_request": 238,
+        "merged_via": 248,
+        "commit": "09ceadd8ffd879181ca49952eb47a16e50c25053",
+        "introduced_blob": "60b6116109778293393a9e2c642b487671950c3b"
+      }
+    },
+    {
+      "source": "src/game/cu_80159F10.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80159F10",
+        "0x80159F70",
+        "0x80159F74",
+        "0x8015A0D0",
+        "0x8015A110",
+        "0x8015A17C",
+        "0x8015A1A8",
+        "0x8015A204",
+        "0x8015A240"
+      ],
+      "provenance": {
+        "pull_request": 241,
+        "merged_via": 248,
+        "commit": "9db3f8e6a11633e4ab554ec90b3b465a0c4af016",
+        "introduced_blob": "28f816c3136381d9d9de0dc1e300412353771404",
+        "original_commit": "dac02340db9e1a4da1ed1c3fdbb6fd26ed3f8664",
+        "original_blob": "40852d423a0238a903511919439b25fb531e207a",
+        "integration_adjustment": "Reviewed integration exposes shared owner/item pointer wrapper contracts and uses explicit address-word conversions only at established engine int interfaces. Target allocation and item dereferences support pointer semantics; native before/after objects are identical."
+      }
+    },
+    {
+      "source": "src/game/cu_80139308.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80139308",
+        "0x80139370",
+        "0x80139400"
+      ],
+      "provenance": {
+        "pull_request": 243,
+        "merged_via": 248,
+        "commit": "ceb153888f744d2510179938e02631b497bacd66",
+        "introduced_blob": "b403a0f962750f3b8123feae030e86b44fb536f4"
+      }
     }
   ],
   "target": "GN7E69",
