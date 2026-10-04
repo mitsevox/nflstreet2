@@ -8,6 +8,7 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
+#include "game/Message_800F01CC.h"
 
 struct Pair_8017055C {
     float mX;
@@ -31,11 +32,6 @@ struct Record_8011F518 {
 struct Record_8011F4F8 {
     char mUnknown0[11];
     unsigned char mUnknownB;
-};
-
-struct Message_800F01CC {
-    unsigned char mId;
-    char mUnknown1[3];
 };
 
 struct Object_80172FB0 {
@@ -104,8 +100,6 @@ void fn_800D69A4(int team, int a, int b);
 void fn_800D782C(Object_80039F5C *p);
 int fn_800E0EF0(Object_80039F5C *p);
 int fn_800E0F40(Object_80039F5C *p);
-void fn_800F01CC(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-void fn_800F053C(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_801039D8(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 Record_8011F4F8 *fn_8011F4F8(int index);
