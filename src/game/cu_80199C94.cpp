@@ -1,9 +1,9 @@
+#include "game/fn_801D2B7C.h"
+
 extern "C" {
 void fn_801C1D98(void *pDst, char *pSrc, int size);
 void fn_801C1E78(char *pDst, void *pSrc, int size);
-void *fn_801D2B7C(int size, int a, int b);
 void *fn_801D2BB0(int a, int size, int c, int d);
-void fn_801D2BD0(void *p);
 }
 
 static unsigned int lbl_803EB778 = 0;

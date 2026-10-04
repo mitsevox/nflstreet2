@@ -2947,6 +2947,35 @@
         "introduced_blob": "64191dfd4313b87b41d8701e5b77f10bc89b7030",
         "original_blob": "64191dfd4313b87b41d8701e5b77f10bc89b7030"
       }
+    },
+    {
+      "source": "src/game/cu_8003EC04.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x8003EC04",
+        "0x8003EC54",
+        "0x8003ED30",
+        "0x8003EDB8",
+        "0x8003EDD8",
+        "0x8003EE00",
+        "0x8003EE2C",
+        "0x8003EE6C",
+        "0x8003EF5C",
+        "0x8003EFB8",
+        "0x8003F04C",
+        "0x8003F0AC",
+        "0x8003F1B8",
+        "0x8003F4E8",
+        "0x8003F60C"
+      ],
+      "provenance": {
+        "pull_request": 209,
+        "merged_via": 209,
+        "commit": "510c663170c7ff06bc297ddc7b408671e532562f",
+        "introduced_blob": "94fcc30f2ed70084cdb4c32282d53fc12391c988"
+      }
     }
   ],
   "target": "GN7E69",
