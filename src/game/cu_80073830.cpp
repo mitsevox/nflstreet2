@@ -4,6 +4,7 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801EEB44.h"
+#include "game/fn_801F40F4.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
 #include "game/Object_80039F5C.h"
@@ -42,18 +43,6 @@ struct Pair_80073CB0 {
     int mUnknown4;
 };
 
-struct Status_801F4834 {
-    int mUnknown0;
-    int mUnknown4;
-    char mUnknown8[8];
-};
-
-struct Info_801F40F4 {
-    char mUnknown0[12];
-    unsigned short mUnknownC;
-    char mUnknownE[10];
-};
-
 struct Slot_8030AAB8 {
     int mUnknown0;
     int mUnknown4;
@@ -72,7 +61,7 @@ extern "C" {
 extern char lbl_802EBE04[];
 
 int fn_8006D65C(int a);
-void fn_8006D684(int a, int b);
+void fn_8006D684(int idx, unsigned char percent);
 void fn_8006D6F4(int a, int b, int c);
 void fn_8006D758(int a, Vector_80039F5C *pPos);
 void fn_8006EA04(int a, unsigned char b);
@@ -95,11 +84,9 @@ int fn_80076DA4(void);
 int fn_80076F40(int index);
 void fn_801AF364(int a);
 void *fn_801EECD0(void *pData, int a, int b, int c);
-void fn_801F40F4(Info_801F40F4 *pInfo);
 int fn_801F4580(int handle, Pair_80073CB0 *pPair, int a, int b);
 void fn_801F4638(int handle);
 void fn_801F46F8(int handle, int a);
-void fn_801F4834(int handle, Status_801F4834 *pStatus);
 void fn_801F4AB0(int a, int b);
 void fn_801F5B30(Params_802D63DC *pParams);
 void fn_801F5C34(void);
