@@ -633,5 +633,42 @@ class FileMapTests(ProgressBase):
         self.assertEqual(len(source[0]["children"]), 2)
 
 
+
+
+class FileInventoryTests(ProgressBase):
+    def test_named_files_include_descriptive_names_and_count_siblings_once(self):
+        def item(name, kind="code"):
+            return {"name": name, "kind": kind, "size": 8, "matched": 0}
+        rows = [item("src/game/cu_80003100.cpp"), item("src/game/Player.cpp"),
+                item("src/game/Player.cpp", "data"), item("Candidate / src/game/Player.cpp"),
+                item("Candidate / src/game/Camera.cpp"),
+                item("Unmapped / Code section 1"), item("sdk/unassigned/8023ED18")]
+        self.assertEqual(progress.file_inventory(rows),
+                         {"total": 3, "exact": 0, "named": 2, "basis": "mapped-file-inventory"})
+
+    def test_exact_files_require_boundaries_and_all_matched_siblings_not_linked(self):
+        path = self.root / "config/GN7E69/evidence.tsv"
+        path.write_text("kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
+                        "unit\t0x80003100\t0x80003108\tsrc/game/Player.cpp\ttarget\texact\texact\tfixture\n")
+        rows = [{"name": "src/game/Player.cpp", "source": "src/game/Player.cpp", "kind": "code",
+                 "size": 8, "matched": 8, "linked": 0,
+                 "mapped_extents": [{"start": "0x80003100", "end": "0x80003108"}]},
+                {"name": "src/game/Player.cpp", "kind": "data", "size": 4, "matched": 4, "linked": 0}]
+        self.assertEqual(progress.file_inventory(rows)["exact"], 1)
+        rows[1]["matched"] = 3
+        self.assertEqual(progress.file_inventory(rows)["exact"], 0)
+        rows[1]["matched"] = 4
+        path.write_text(path.read_text().replace("exact\texact", "provisional\texact"))
+        self.assertEqual(progress.file_inventory(rows)["exact"], 0)
+
+    def test_data_only_file_can_be_exact_with_confirmed_unit_boundaries(self):
+        (self.root / "config/GN7E69/evidence.tsv").write_text(
+            "kind\tstart\tend\tsubject\torigin\tstart_boundary\tend_boundary\tevidence\n"
+            "unit\t0x80004100\t0x80004108\tsrc/game/Tables.c\ttarget\texact\texact\tfixture\n")
+        rows = [{"name": "src/game/Tables.c", "kind": "data", "size": 8, "matched": 8,
+                 "mapped_extents": [{"start": "0x80004100", "end": "0x80004108"}]}]
+        self.assertEqual(progress.file_inventory(rows)["exact"], 1)
+
+
 if __name__ == "__main__":
     unittest.main()

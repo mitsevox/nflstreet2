@@ -80,6 +80,8 @@ jobs:
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/matching.py --original /orig/main.dol
           python3 -m unittest discover -s tests -p test_matching.py -v
+          docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
+            "$BUILD_ENVIRONMENT" python3 -m unittest discover -s tests -p test_function_compare.py -v
       - name: Export public progress page
         run: |
           python3 tools/progress.py --dol build/source/main.dol --revision "$GITHUB_SHA" \

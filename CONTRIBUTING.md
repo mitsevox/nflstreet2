@@ -37,6 +37,8 @@ Contribution branches, PRs, reviews, and required CI checks belong in this repos
 7. **Hostile review.** A fresh reviewer applies the checklist below. Resolve every finding by fixing it or providing evidence. The same reviewer rechecks findings and affected code after fixes; substantive reconstruction changes return through the relevant passes.
 8. **Submit for the owner's decision.** Required CI must pass on the final PR revision, with no unexplained regression. Attach the reviewed revision, validation results, accuracy review, and hostile-review verdict. Only the project owner may accept and merge it.
 
+Draft function bodies stay in their normal source files; register their comparison ranges and use the fixed comparison-build guard where the file already contributes accepted source. See [in-place comparison workflow](config/GN7E69/README.md#independent-exact-and-fuzzy-comparisons). CI measures partial similarity and exact unlinked functions independently of the verified linked build. Promotion changes configuration and removes the guard; it does not move the source file.
+
 Partial units follow the same accuracy and hostile-review gates. Their original assembly remains linked until replacement is validated; partial source is not reported as a completed unit. Retain unresolved identifiers when evidence is insufficient rather than fabricate recovery.
 
 For changes with dependencies on other PRs, identify those dependencies and tested revisions. Documentation-only changes require appropriate checks, not an invented binary-validation result.

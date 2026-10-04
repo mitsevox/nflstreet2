@@ -1,4 +1,5 @@
 #include "engine/cu_80227F14.h"
+#include "game/cu_80026BB0.h"
 #include "game/Class_801CBC50.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
@@ -23,11 +24,6 @@ extern void *lbl_803EAB90;
 extern void *lbl_803EB688;
 extern void *lbl_803EB690;
 
-int fn_80026CC4(int a);
-void fn_80026DD4(int a);
-void fn_8002728C(int (*pCallback)());
-char *fn_8002739C(void);
-int fn_800273A4(void);
 void fn_8002B598(void);
 void fn_8002CBB0(void *p, int a, float c, int b);
 void fn_8002CF34(void *p);
@@ -183,7 +179,7 @@ static void fn_80027FE0(int a, int b, float c)
 static void fn_80028244();
 static void fn_800282B8();
 
-static void fn_80028140(int a)
+static void fn_80028140(int a, InputValues *pPrevious, InputValues *pCurrent)
 {
     char *p;
     int count;
@@ -191,7 +187,7 @@ static void fn_80028140(int a)
     int i;
     int done;
 
-    fn_80026DD4(a);
+    fn_80026DD4(a, pPrevious, pCurrent);
     p = fn_8002739C();
     count = fn_800273A4();
     handle = fn_801C6458(a, 0);

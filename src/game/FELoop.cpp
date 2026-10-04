@@ -3,6 +3,7 @@
 #include "game/FELoop.h"
 #include "game/FMCAPPORT.h"
 #include "game/cu_80003F10.h"
+#include "game/cu_80026BB0.h"
 #include "game/cu_8007C9D4.h"
 #include "game/fn_8003B6BC.h"
 #include "game/fn_8007F828.h"
@@ -29,7 +30,6 @@ void fn_80022778(void);
 void fn_800244E4(void);
 void fn_80024560(void);
 void fn_80024608(void);
-void fn_800271A4(void);
 int fn_80033124(void *p);
 void fn_8003E1F0(void);
 int fn_8005FC7C(void);

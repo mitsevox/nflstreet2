@@ -83,7 +83,10 @@ def source_ranges(target, source_report):
     ordered = sorted((start, end) for _, start, end in ranges)
     if any(right[0] < left[1] for left, right in zip(ordered, ordered[1:])):
         raise ValueError("Measured source ranges overlap")
-    unmeasured = [path for path in files if path not in measured]
+    comparison_config = ROOT / "config/GN7E69/comparisons.json"
+    drafts = json.loads(comparison_config.read_text())["units"] if comparison_config.exists() else []
+    draft_sources = {unit["source"] for unit in drafts}
+    unmeasured = [path for path in files if path not in measured and path not in draft_sources]
     if unmeasured:
         raise ValueError(f"Source files are not measured by the source-build report: {unmeasured}")
     return ranges, len(units)
@@ -336,7 +339,42 @@ def file_map(sections, source_report, functions, ownership=()):
                 represented[address] = represented.get(address, 0) + child["size"]
     if represented != {function["address"]: function["size"] for function in functions}:
         raise ValueError("File map does not preserve function candidates")
+    exact_units = {(start, end, source) for start, end, source, edges in source_build.evidence_rows(ROOT, "unit")
+                   if edges == ("exact", "exact")}
+    for item in result:
+        source = item.get("source")
+        siblings = [other for other in result if source and other.get("source") == source]
+        code_extents = [(int(e["start"],16), int(e["end"],16), source) for other in siblings
+                        if other["kind"] == "code" for e in other.get("mapped_extents", [])]
+        item["complete"] = bool(code_extents) and all(extent in exact_units for extent in code_extents) and all(
+            other["size"] > 0 and other["linked"] == other["size"] for other in siblings)
     return result
+
+
+
+def file_inventory(files):
+    """Count distinct mapped files, not code/data splits or unknown section buckets."""
+    groups = {}
+    for item in files:
+        if item["name"].startswith(("Unmapped / ", "sdk/unassigned/")):
+            continue
+        groups.setdefault(item["name"].removeprefix("Candidate / "), []).append(item)
+    exact_units = {(start, end, subject) for start, end, subject, edges in source_build.evidence_rows(ROOT, "unit")
+                   if edges == ("exact", "exact")}
+    exact = named = 0
+    for name, items in groups.items():
+        subject = name.removeprefix("Candidate / ")
+        basename = Path(subject).stem
+        if not re.fullmatch(r"(?:(?:cu|fn|unit|file|data|lbl)_)?[0-9A-Fa-f]{8}", basename):
+            named += 1
+        code = [(int(e["start"], 16), int(e["end"], 16), item.get("source", subject))
+                for item in items if item["kind"] == "code" for e in item.get("mapped_extents", [])]
+        boundaries = code or [(int(e["start"], 16), int(e["end"], 16), item.get("source", subject))
+                              for item in items for e in item.get("mapped_extents", [])]
+        if boundaries and all(extent in exact_units for extent in boundaries) and all(
+                item["size"] > 0 and item["matched"] == item["size"] for item in items):
+            exact += 1
+    return {"total": len(groups), "exact": exact, "named": named, "basis": "mapped-file-inventory"}
 
 
 def remainder(parent, children):
@@ -448,9 +486,13 @@ def report(binary, revision, source_report=None, analysis_dir=None, comparison_r
             "functions": functions, "measures": measures, "sections": sections,
             "files": file_map(sections, source_report, function_items,
                               ownership)}
+    comparison_config = ROOT / "config/GN7E69/comparisons.json"
+    if comparison_config.exists() and json.loads(comparison_config.read_text())["units"] and comparison_report is None:
+        raise ValueError("Draft source requires a current comparison report")
     if comparison_report is not None:
         import matching
         matching.apply(data, matching.load(comparison_report, target, binary))
+    data["file_counts"] = file_inventory(data["files"])
     return data
 
 
