@@ -1,5 +1,6 @@
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/Record_802CC680.h"
+#include "game/cu_80026BB0.h"
 
 /* Argument of fn_801F8A0C and fn_801F8A54. */
 struct Desc_801F8A0C {
@@ -31,12 +32,6 @@ extern char lbl_802EBE40[];
 extern char lbl_802F94D0[];
 extern char lbl_8030A60C[];
 
-int fn_80026D50(void);
-void fn_80026DA8(void);
-void fn_80026DD4(void);
-void fn_80027114(int a, int b);
-void fn_800271A4(void);
-int fn_800273A4(void);
 void fn_800296B0(void);
 void fn_800297D0(void);
 void fn_80029C2C(int a, int b, int c);
