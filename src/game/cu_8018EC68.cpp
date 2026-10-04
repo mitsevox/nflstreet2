@@ -1,8 +1,6 @@
 #include "game/fn_801FCE10.h"
 #include "game/QueryStatus.h"
 
-#include <string.h>
-
 /* Row of table 'VETS' filled by fn_8018EC68. */
 struct VetsRow_8018EC68 {
     char mIuve[64];
@@ -24,78 +22,14 @@ void fn_800731D0(int a);
 char *fn_801C310C(char *pText, const char *pPattern);
 int fn_8022EF8C(int a, int tag);
 int fn_8022EFBC(int a, int tag);
-int fn_8022F3D4(int a);
-int fn_8022F4BC(void);
 }
 
 static unsigned char sVetsOpen = 0;
 
 extern "C" {
-#if defined(DECOMP_COMPARE)
-int fn_8018EA3C(void)
-{
-    int count;
-    int total = 0;
-    int result = fn_801FCE10(0, "select count(*) into \x85 from 'VETS'\n", &count);
-
-    if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
-        total = count;
-    }
-    return total;
-}
-
-int fn_8018EAAC(int dive)
-{
-    int count;
-    int total = 0;
-    int result = fn_801FCE10(0, "select count(*) into \x85 from 'VETS' where 'DIVE' = \x85\n", &count, dive);
-
-    if (QUERY_STATUS_ACCEPTED(result) && result != 0x17) {
-        total = count;
-    }
-    return total;
-}
-
-int fn_8018EB20(unsigned int index, int *pLglt, char *pEtnr, int size)
-{
-    QueryCursor cursor;
-    int count;
-    int lglt;
-    int found = 0;
-    int handle = fn_8022F3D4(fn_8022F4BC());
-    char etnr[33] = {0};
-
-    fn_801FCE10(0, "use \x8c select count(*) into \x82 from 'LTSS'\n", handle, &count);
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    fn_801FCE10(0, "use \x8c declare \x8a cursor for select * from 'LTSS'\n", handle, &cursor);
-    if (count > 0) {
-        cursor.mUnknown4 = index % count;
-    } else {
-        cursor.mUnknown4 = index;
-    }
-    fn_801FCE10(0, "use \x8c fetch from \x8a 'LGLT' into \x82 and 'ETNR' into \x88\n", handle, &cursor, &lglt, etnr);
-    if (cursor.mUnknown0 != 0) {
-        fn_801FCFA0(&cursor);
-    }
-    if (strlen(etnr)) {
-        if (pLglt) {
-            *pLglt = lglt;
-        }
-        if (pEtnr) {
-            strncpy(pEtnr, etnr, size);
-        }
-        found = 1;
-    }
-    return found;
-}
-#else
 int fn_8018EA3C(void);
 int fn_8018EAAC(int dive);
 int fn_8018EB20(unsigned int index, int *pLglt, char *pEtnr, int size);
-#endif
 
 int fn_8018EC68(int nets, VetsRow_8018EC68 *pRow)
 {
