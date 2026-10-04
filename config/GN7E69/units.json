@@ -4407,6 +4407,44 @@
       ]
     },
     {
+      "source": "src/game/cu_8002132C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8002132C-0x800218EC (src/game/cu_8002132C.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002132C",
+          "end": "0x800218E4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x800218E4",
+          "end": "0x800218EC",
+          "follows": ".text"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4640",
+          "end": "0x802F4654"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBAB8",
+          "end": "0x803EBAC0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036B4B4",
+          "end": "0x8036B4F0"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80076DB4.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80076DB4-0x80076F6C and its data, compiler and source-form rows.",
