@@ -1,7 +1,8 @@
-#include "game/fn_80238174.h"
-#include "game/fn_801D2B7C.h"
 #include "game/fn_801C1F94.h"
+#include "game/fn_801D2B7C.h"
 #include "game/fn_80218FC4.h"
+#include "game/fn_802372EC.h"
+#include "game/fn_80238174.h"
 
 #include "game/cu_8017F264.h"
 
@@ -113,7 +114,6 @@ void fn_80195EFC(int a, int b, int c, int d);
 int fn_801F0F18(int a);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 void fn_8021956C(void *p, int a, int b, int c);
-int fn_802372EC(int a, int b);
 void *fn_8023816C(void *pHandle);
 }
 

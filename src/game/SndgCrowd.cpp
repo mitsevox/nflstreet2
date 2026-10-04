@@ -1,3 +1,4 @@
+#include "game/fn_801EEB44.h"
 #include "game/SndgCrowd.h"
 
 void *operator new(unsigned int size, int unknown);
@@ -7,14 +8,12 @@ extern char lbl_8030A60C[];
 extern char lbl_802EC018[];
 
 void *memset(void *pDest, int value, unsigned int size);
-int fn_801EEB44(const char *pName, int unknown);
-int fn_801EEFAC(int handle);
 int fn_801F3E28(void);
 int fn_800A350C(void);
 int fn_800B65A0(int unknown);
-int fn_8006DBF8(int handle, int unknown);
+int fn_8006DBF8(void *pData, int unknown);
 int fn_8006DC4C(int handle);
-int fn_8006DC98(int handle, int unknown, int id, float value);
+int fn_8006DC98(void *pData, int unknown, int id, float value);
 int fn_8006DD24(int id);
 void fn_8006DD70(int id, unsigned char value);
 int fn_8006DE00(int id, int unknown);
@@ -40,10 +39,10 @@ int SndgCrowd::Init()
 {
     mpState.mp = new (0) SndgCrowdState;
     memset(mpState.mp, 0, sizeof(SndgCrowdState));
-    mpState.mp->mUnknown0 = fn_801EEB44(lbl_802EC018, 44);
+    mpState.mp->mpUnknown0 = fn_801EEB44(lbl_802EC018, 44);
     if (fn_801F3E28()) {
-        mpState.mp->mUnknown4 = fn_8006DBF8(mpState.mp->mUnknown0, 1);
-        fn_8006DC98(mpState.mp->mUnknown0, 2, 0x14000001, 1.0f);
+        mpState.mp->mUnknown4 = fn_8006DBF8(mpState.mp->mpUnknown0, 1);
+        fn_8006DC98(mpState.mp->mpUnknown0, 2, 0x14000001, 1.0f);
         fn_8006DD70(0x14000001, sUnknownByte);
         fn_8006DE54(0x14000001, 127);
     }
@@ -56,7 +55,7 @@ int SndgCrowd::Shutdown()
         fn_8006DD24(0x14000001);
         fn_8006DC4C(mpState.mp->mUnknown4);
     }
-    fn_801EEFAC(mpState.mp->mUnknown0);
+    fn_801EEFAC(mpState.mp->mpUnknown0);
     delete mpState.mp;
     mpState.mp = 0;
     return 1;

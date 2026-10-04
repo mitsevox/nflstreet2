@@ -1,3 +1,10 @@
+#include "game/fn_8007F828.h"
+#include "game/fn_800AD9B4.h"
+#include "game/fn_80178D18.h"
+#include "game/fn_8017F584.h"
+#include "game/fn_801EEB44.h"
+#include "game/fn_802270D4.h"
+#include "game/fn_802372EC.h"
 #include "game/Object_80039F5C.h"
 
 /* Block passed to fn_801F5B30; its first word holds fn_80073CB0. */
@@ -30,7 +37,7 @@ struct Event_80073C24 {
 };
 
 struct Pair_80073CB0 {
-    int mUnknown0;
+    void *mpUnknown0;
     int mUnknown4;
 };
 
@@ -54,8 +61,8 @@ struct Slot_8030AAB8 {
 
 struct State_8030AAA8 {
     int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
+    void *mpUnknown4;
+    void *mpUnknown8;
     int mUnknownC;
     Slot_8030AAB8 mSlots[3];
 };
@@ -63,7 +70,6 @@ struct State_8030AAA8 {
 extern "C" {
 extern char lbl_802EBE04[];
 
-Object_80039F5C *fn_80039F5C(int team, unsigned short index);
 void fn_80067EC8(void (*pFunc)(void));
 void fn_80067EF0(void (*pFunc)(void));
 int fn_8006D65C(int a);
@@ -88,17 +94,8 @@ int fn_80076D84(void);
 int fn_80076D94(void);
 int fn_80076DA4(void);
 int fn_80076F40(int index);
-int fn_8007F828(int a);
-Object_80039F5C *fn_8009BCE8(int *pHandle);
-void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, int a);
-int fn_800AD9B4(void);
-unsigned int fn_8017F584(void);
-unsigned int fn_80178D18(int team);
-int fn_80178D70(int team);
 void fn_801AF364(int a);
-int fn_801EEB44(const char *pName, int unknown);
-int fn_801EECD0(int handle, int a, int b, int c);
-int fn_801EEFAC(int handle);
+void *fn_801EECD0(void *pData, int a, int b, int c);
 void fn_801F40F4(Info_801F40F4 *pInfo);
 int fn_801F4580(int handle, Pair_80073CB0 *pPair, int a, int b);
 void fn_801F4638(int handle);
@@ -107,14 +104,11 @@ void fn_801F4834(int handle, Status_801F4834 *pStatus);
 void fn_801F4AB0(int a, int b);
 void fn_801F5B30(Params_802D63DC *pParams);
 void fn_801F5C34(void);
-void fn_801F5C6C(int a, int b, int c, int d);
-void fn_801F5C94(int handle, int a, int b);
+void fn_801F5C6C(void *a, int b, void *c, int d);
+void fn_801F5C94(void *pData, int a, int b);
 void fn_801F5CCC(int (*pA)(void), void (*pB)(void));
 void fn_801F5CEC(int (*pFunc)(Event_80073C24 *));
 void fn_801F5D0C(void);
-float fn_802270D4(Vector_80039F5C *pV);
-void fn_802276B4(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
-unsigned int fn_802372EC(int stream, int n);
 
 int fn_80073CB0(Record_80073CB0 *pRecord);
 int fn_80074490(int side);
@@ -144,7 +138,7 @@ static unsigned short lbl_8030AADC[386];
 
 static Params_802D63DC lbl_802D63DC = { fn_80073CB0, 0, 24000, 16, 1, 4084, 0, 0, 0 };
 
-extern "C" void fn_80073830(int a, int b, int c, int d)
+extern "C" void fn_80073830(void *a, int b, void *c, int d)
 {
     fn_801F5C6C(a, b, c, d);
 }
@@ -354,7 +348,7 @@ extern "C" int fn_80073CB0(Record_80073CB0 *pRecord)
     int value;
 
     fn_80073B64((unsigned char)pRecord->mUnknown10, pRecord->mUnknownC);
-    pair.mUnknown0 = lbl_8030AAA8.mUnknown4;
+    pair.mpUnknown0 = lbl_8030AAA8.mpUnknown4;
     if (pRecord->mUnknown0 >= lbl_803EC84C) {
         pair.mUnknown4 = lbl_8030AADC[pRecord->mUnknown0 - lbl_803EC84C];
     } else {
@@ -382,16 +376,16 @@ extern "C" void fn_80073DA8(Params_802D63DC *pParams, int unused)
 
     lbl_803EA722 = fn_8017F584() == 11;
     lbl_803EA728 = 1;
-    lbl_8030AAA8.mUnknown4 = fn_801EEB44(lbl_802EBE04, 44);
-    lbl_8030AAA8.mUnknown8 = fn_801EECD0(lbl_8030AAA8.mUnknown4, 0, 1, 1);
+    lbl_8030AAA8.mpUnknown4 = fn_801EEB44(lbl_802EBE04, 44);
+    lbl_8030AAA8.mpUnknown8 = fn_801EECD0(lbl_8030AAA8.mpUnknown4, 0, 1, 1);
     fn_801F5B30(pParams);
     fn_801F5CEC(fn_80073C24);
     lbl_8030AAA8.mUnknown0 = pParams->mUnknown14;
-    fn_801F5C94(lbl_8030AAA8.mUnknown4, 1, 0);
-    fn_801F5C94(lbl_8030AAA8.mUnknown4, 2, 1);
-    fn_801F5C94(lbl_8030AAA8.mUnknown4, 3, 2);
+    fn_801F5C94(lbl_8030AAA8.mpUnknown4, 1, 0);
+    fn_801F5C94(lbl_8030AAA8.mpUnknown4, 2, 1);
+    fn_801F5C94(lbl_8030AAA8.mpUnknown4, 3, 2);
     for (i = 0; i < 895; i++) {
-        fn_80073830(lbl_8030AAA8.mUnknown8, i, lbl_8030AAA8.mUnknown4, i + 4);
+        fn_80073830(lbl_8030AAA8.mpUnknown8, i, lbl_8030AAA8.mpUnknown4, i + 4);
     }
     lbl_803EC84C = i;
     lbl_8030AAA8.mUnknownC = 4;
@@ -506,13 +500,13 @@ extern "C" void fn_80074190(void)
     fn_80067EF0(fn_8006ECB4);
     fn_801F5D0C();
     fn_801F5C34();
-    if (lbl_8030AAA8.mUnknown8 != 0) {
-        fn_801EEFAC(lbl_8030AAA8.mUnknown8);
-        lbl_8030AAA8.mUnknown8 = 0;
+    if (lbl_8030AAA8.mpUnknown8 != 0) {
+        fn_801EEFAC(lbl_8030AAA8.mpUnknown8);
+        lbl_8030AAA8.mpUnknown8 = 0;
     }
-    if (lbl_8030AAA8.mUnknown4 != 0) {
-        fn_801EEFAC(lbl_8030AAA8.mUnknown4);
-        lbl_8030AAA8.mUnknown4 = 0;
+    if (lbl_8030AAA8.mpUnknown4 != 0) {
+        fn_801EEFAC(lbl_8030AAA8.mpUnknown4);
+        lbl_8030AAA8.mpUnknown4 = 0;
     }
 }
 

@@ -1,3 +1,4 @@
+#include "game/fn_801EEB44.h"
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/Record_802CC680.h"
 
@@ -78,8 +79,6 @@ int fn_801E1478(Desc_801E1478 *pDesc);
 int fn_801E153C(void);
 int fn_801EC1B4(int a, int b, int c);
 int fn_801EC298(void);
-void *fn_801EEB44(const char *pName, int unknown);
-int fn_801EEFAC(void *p);
 int fn_801F512C(void);
 int fn_801F518C(void);
 void fn_801F8A0C(Desc_801F8A0C *pDesc);

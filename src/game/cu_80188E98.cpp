@@ -1,3 +1,5 @@
+#include "game/fn_8007F828.h"
+#include "game/fn_8017F584.h"
 #include "game/fn_801C3660.h"
 #include "game/fn_801D2B7C.h"
 #include "game/Object_80228224.h"
@@ -45,14 +47,12 @@ void fn_800545C0(void);
 void fn_800545E8(void);
 void fn_80064690(void);
 void fn_8006CA84(int a);
-int fn_8007F828(int a);
 void fn_8013CF98(void);
 float fn_8013D050(void);
 void fn_8017CED4(unsigned int a);
 void fn_8017CFAC(void);
 void fn_8017F264(void);
 void fn_8017F284(void);
-unsigned int fn_8017F584(void);
 void *fn_80188688(Desc_80188688 *pDesc);
 void fn_80188728(void *p);
 void fn_80188784(void *p, int a);

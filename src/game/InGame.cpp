@@ -1,8 +1,11 @@
-#include "game/fn_801FCE10.h"
 #include "game/Class_801CBC50.h"
+#include "game/fn_8007F828.h"
+#include "game/fn_800AD9B4.h"
+#include "game/fn_8017F584.h"
+#include "game/fn_801FCE10.h"
 #include "game/InGame.h"
-#include "game/TimeScale.h"
 #include "game/ModuleGroup_80033A5C.h"
+#include "game/TimeScale.h"
 #include "game/fn_8003B6BC.h"
 #include "game/fn_80191804.h"
 #include "game/fn_80218FC4.h"
@@ -46,7 +49,6 @@ void fn_800728F8(void);
 void fn_80072C90(int a, int b);
 void fn_8007F394(int a);
 void fn_8007F6F8(int a, int b);
-int fn_8007F828(int a);
 void fn_80085A7C(void);
 void fn_80085AA0(int a, Record_8003B6BC *pRecord0, int b, Record_8003B6BC *pRecord1);
 void fn_80089754(void);
@@ -62,7 +64,6 @@ int fn_800A9680(void);
 void fn_800AB944(void *p);
 void fn_800AD888(float a);
 void fn_800AD910(int a, float b);
-int fn_800AD9B4(void);
 void fn_800AE8B4(void);
 void fn_800AFD58(int a, int b, float c);
 void fn_800B3AF4(float a);
@@ -84,7 +85,6 @@ void fn_80173D10(void);
 void fn_80176C58(void);
 void fn_80176C90(void);
 int fn_8017CEDC(float a);
-unsigned int fn_8017F584(void);
 void fn_8017F664(void);
 void fn_80187C0C(void);
 void fn_8018A4BC(int a, unsigned int id, float value);

@@ -1,3 +1,4 @@
+#include "game/fn_8007F828.h"
 #include <string.h>
 
 /* First argument of fn_8008044C, fn_8008056C, fn_80080948, fn_800809C4,
@@ -148,7 +149,6 @@ void fn_80042530(Object_8003DEC4 *pObject, int a);
 void fn_80042928(Object_8003DEC4 *pObject);
 void fn_800490A0(int index, int a, int b);
 int fn_8004A1A8(Object_8003DEC4 *pObject, int a);
-int fn_8007F828(int a);
 void fn_8008044C(Object_8008044C *pObject, void *pDesc, int tag);
 void fn_8008056C(Object_8008044C *pObject);
 int fn_80080948(Object_8008044C *pObject);

@@ -1,6 +1,7 @@
+#include "game/fn_801EEB44.h"
 #include "game/fn_801FCE10.h"
-#include "game/ModuleGroup_80033A5C.h"
 #include "game/GameState.h"
+#include "game/ModuleGroup_80033A5C.h"
 
 extern "C" {
 extern char lbl_80306B34[];
@@ -28,8 +29,6 @@ int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int fn_801CF7AC(void);
-void *fn_801EEB44(const char *pName, int unknown);
-int fn_801EEFAC(void *p);
 void fn_801F2798(const char *pText);
 int fn_801F2C54(const char *pName, int unknown);
 int fn_801F2CD4(const char *pName);

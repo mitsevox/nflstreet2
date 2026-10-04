@@ -4,7 +4,7 @@
 #include "game/Module.h"
 
 struct SndgCrowdState {
-    int mUnknown0;
+    void *mpUnknown0;
     int mUnknown4;
 };
 

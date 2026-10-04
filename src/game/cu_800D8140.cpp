@@ -1,5 +1,6 @@
-#include "game/Object_800D81C8.h"
 #include "game/fn_80227638.h"
+#include "game/Object_80039F5C.h"
+#include "game/Object_800D81C8.h"
 
 struct State_800D8140 {
     Pair_802270A4 mUnknown0;
@@ -121,9 +122,9 @@ extern "C" void fn_800D84DC(State_800D8140 *p, Object_800D81C8 *pOther)
         if (p->mUnknown17 == 255) return;
         if ((pOther->mUnknownC & 8) && p->mUnknown16) return;
         int id = fn_801BE648(pOther->mpUnknown318);
-        Object_800D81C8 *pThird = fn_8009BCE8(pOther->mUnknown150);
+        Object_80039F5C *pThird = fn_8009BCE8(&pOther->mUnknown150);
         if (!pThird) return;
-        Block_801BE60C *pResult = fn_801BE60C(pThird->mpUnknown318, id);
+        Block_801BE60C *pResult = fn_801BE60C(pThird->mpUnknown792, id);
         if (!pResult) return;
         State_800D8140 *pState = &pResult->mUnknown20;
         int flag;
@@ -194,7 +195,7 @@ extern "C" void fn_800D84DC(State_800D8140 *p, Object_800D81C8 *pOther)
             fn_80227638(&pOther->mUnknown1A8, &pOther->mUnknown1A8, &other);
             fn_80227248(&p->mUnknown0, &p->mUnknown0, 0.85f);
             if ((pOther->mUnknownC & 8) && !fn_801787A0()) {
-                fn_80227638(&pThird->mUnknown1A8, &pThird->mUnknown1A8, &other);
+                fn_80227638(&pThird->mMotion.mPos, &pThird->mMotion.mPos, &other);
                 pState->mUnknown0.mUnknown0 = p->mUnknown0.mUnknown0;
                 pState->mUnknown0.mUnknown4 = p->mUnknown0.mUnknown4;
             }

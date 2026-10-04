@@ -1,5 +1,6 @@
-#include "game/fn_801D2B7C.h"
 #include "game/fn_801801F0.h"
+#include "game/fn_801D2B7C.h"
+#include "game/fn_801EEB44.h"
 #include "game/fn_80218FC4.h"
 #include <string.h>
 
@@ -43,8 +44,6 @@ int fn_801E195C(int a);
 unsigned int fn_801E19B4(int a);
 void fn_801E1C38(unsigned char a);
 int fn_801E1CE0(unsigned char a);
-void *fn_801EEB44(const char *pName, int unknown);
-int fn_801EEFAC(void *p);
 int fn_801F687C(int a, int b, int c, void *pBuffer, int size);
 void fn_801F6AC8(int a, int b, int c, int d, int e);
 void fn_801F6B84(int a);

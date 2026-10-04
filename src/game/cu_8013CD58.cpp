@@ -1,4 +1,6 @@
+#include "game/fn_8007F828.h"
 #include "game/fn_801C1F94.h"
+#include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 
 /* A value easing from mStart to mTarget; mUpdate advances it. */
@@ -124,7 +126,6 @@ int fn_8002E7D0(RecordList_8002E7C0 *pList);
 void fn_8002E7EC(void *p, RecordList_8002E7C0 *pList);
 Object_8013E168 *fn_80030C70(int a, int b);
 void fn_80042380(int a, int id, float *pOut, int b);
-int fn_8007F828(int a);
 void fn_8009BD2C(Object_8013E168 *pObject, int *pOut);
 void *fn_801374BC(void);
 Target_8013825C *fn_8013825C(void *p);
@@ -140,12 +141,10 @@ int fn_801CEB40(void);
 int fn_801CEB4C(void);
 float fn_801CFB74(float x);
 int fn_801CFE40(float y, float x);
-float fn_802270D4(float *pV);
 void fn_802272DC(float *pOut, float *pIn, float scale);
 void fn_802273E8(float *pOut, float *pIn, int a0, int a1, int a2);
 void fn_80227490(float *pOut, float *pIn, int a0, int a1, int a2);
 void fn_8022765C(float *pOut, float *pA, float *pB);
-void fn_802276B4(float *pOut, float *pA, float *pB);
 void fn_80227930(float *pOut, float *pA, float *pB, float t);
 float fn_80260B1C(float x);
 

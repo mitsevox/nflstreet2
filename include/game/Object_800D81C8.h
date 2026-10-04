@@ -18,14 +18,13 @@ struct Record_800D81C8 {
     char mUnknown58[36];
 };
 
-/* Object returned by the packed-reference decoder fn_8009BCE8. Partial view. */
+/* Partial view of the object that fn_8009BCE8 decodes a packed reference to. */
 struct Object_800D81C8 {
-    char mUnknown0[2];
-    unsigned char mUnknown2;
-    char mUnknown3[9];
+    char mUnknown0[12];
     unsigned int mUnknownC;
     char mUnknown10[320];
-    char mUnknown150[88];
+    int mUnknown150;
+    char mUnknown154[84];
     Pair_802270A4 mUnknown1A8;
     char mUnknown1B0[20];
     float mUnknown1C4;
@@ -38,9 +37,5 @@ struct Object_800D81C8 {
     char mUnknown31C[4];
     Record_800D81C8 *mpUnknown320;
 };
-
-extern "C" {
-Object_800D81C8 *fn_8009BCE8(void *p);
-}
 
 #endif
