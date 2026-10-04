@@ -2,11 +2,11 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_8017F584.h"
 #include "game/cu_80067C10.h"
+#include "game/fn_802372EC.h"
+#include "game/Object_80039F5C.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
-#include "game/fn_802372EC.h"
-#include "game/Object_80039F5C.h"
 
 struct Pair_8017055C {
     float mX;

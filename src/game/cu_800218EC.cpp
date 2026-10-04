@@ -1,20 +1,6 @@
+#include "game/Object_8008044C.h"
 #include "game/fn_8007F828.h"
 #include <string.h>
-
-/* First argument of fn_8008044C, fn_8008056C, fn_80080948, fn_800809C4,
-   fn_80080D38, fn_80080E20 and fn_800811E0. The constructor sets the same five
-   words as Object_8007A334 in cu_8002306C. */
-struct Object_8008044C {
-    Object_8008044C() : mUnknown0(0), mUnknown4(0), mUnknown8(-1), mUnknown12(-1), mUnknown16(-1) {}
-    ~Object_8008044C() {}
-
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
-    int mUnknown16;
-    char mUnknown20[24];
-};
 
 /* Object returned by fn_8003DEC4. */
 struct Object_8003DEC4 {
@@ -149,13 +135,6 @@ void fn_80042530(Object_8003DEC4 *pObject, int a);
 void fn_80042928(Object_8003DEC4 *pObject);
 void fn_800490A0(int index, int a, int b);
 int fn_8004A1A8(Object_8003DEC4 *pObject, int a);
-void fn_8008044C(Object_8008044C *pObject, void *pDesc, int tag);
-void fn_8008056C(Object_8008044C *pObject);
-int fn_80080948(Object_8008044C *pObject);
-void fn_800809C4(Object_8008044C *pObject, int a, int b);
-int fn_80080D38(Object_8008044C *pObject, char *pBuffer, int size);
-void fn_80080E20(Object_8008044C *pObject);
-int fn_800811E0(Object_8008044C *pObject);
 void fn_80089A84(Record_8036B55C *pRecord, unsigned int a);
 void fn_8008A248(void);
 void fn_8008FCB4(int a);
