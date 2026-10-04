@@ -19,7 +19,7 @@ union Params_800217AC {
 
 extern "C" {
 int fn_801869F0();
-void fn_80186ED8(int);
+void fn_80186ED8(signed char);
 void fn_8002A574(int, int);
 void fn_8002A5C4();
 int fn_801E15D0(int a);

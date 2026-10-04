@@ -2,23 +2,6 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 
-/* Seven-word stream operation table, the shape of the CardStream table at 0x802F46C4. */
-struct StreamOps_8002ACB4 {
-    int (*mpOpen)(void *pStream, int a, int target, unsigned char reading);
-    int (*mpClose)(void *pStream);
-    int (*mpRead)(void *pStream, void *pData, unsigned int size, unsigned int *pDone);
-    int (*mpWrite)(void *pStream, void *pData, unsigned int size, unsigned int *pDone);
-    void (*mpUnknown10)(void *pStream, unsigned int count);
-    int (*mpUnknown14)(unsigned int size);
-    unsigned int mUnknown18;
-};
-
-struct Request_8002AD64 {
-    char mUnknown0[12];
-    int mTarget;
-    unsigned char mUnknown10;
-};
-
 extern "C" {
 void fn_80029C2C(int a, int b, int c);
 void fn_8002A1D4(int a, int b, char *pBuf);
