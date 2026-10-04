@@ -3,6 +3,7 @@
 #include "game/fn_801EEB44.h"
 #include "game/fn_801FCE10.h"
 #include "game/FMCAPPORT.h"
+#include "game/Object_80233EAC.h"
 
 struct Slot_8008A900 {
     unsigned char mUsed;
@@ -21,10 +22,6 @@ struct Desc_80233EAC {
     char mUnknown16[76];
     int mUnknown92;
     char mUnknown96[64];
-};
-
-struct Object_80233EAC {
-    int mUnknown0[5];
 };
 
 struct Object_8008AAF8 {
@@ -65,7 +62,6 @@ void fn_80233728(void *pObject);
 void fn_80233760(void *pObject, short *pValues, int count);
 void fn_80233EAC(Object_80233EAC *pObject, Desc_80233EAC *pDesc, const char *pName, int a,
                  void *pArchive, int b, void **ppData, int c);
-void *fn_8023417C(Object_80233EAC *pObject, int a);
 void fn_802347EC(void *pData, Desc_802347EC *pDesc, int a, int b);
 void fn_80234844(Desc_802347EC *pDesc);
 

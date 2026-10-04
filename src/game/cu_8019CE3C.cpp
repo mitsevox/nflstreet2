@@ -1,14 +1,11 @@
 #include "game/fn_8017F584.h"
 #include "game/fn_801EF390.h"
+#include "game/Object_80233EAC.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXStruct.h>
 
 struct Element_8019CE3C {
     char mUnknown0[0x28];
-};
-
-struct Object_80233EAC {
-    int mUnknown0[5];
 };
 
 struct Desc_80233D64 {
@@ -23,11 +20,6 @@ struct Desc_80233D64 {
     char mUnknown60[0x4C];
     int mUnknownAC;
     char mUnknownB0[0x40];
-};
-
-struct Object_8023417C {
-    char mUnknown0[0x18];
-    int mUnknown18;
 };
 
 struct Object_80144310 {
@@ -53,7 +45,7 @@ struct Object_8019CE3C {
     float mUnknown29C;
     float mUnknown2A0;
     char mUnknown2A4[8];
-    char mUnknown2AC[4];
+    char mUnknown2AC[8];
 };
 
 extern "C" {
@@ -67,7 +59,7 @@ void fn_801D0544(void);
 void fn_801D0664(Mtx44 m);
 void fn_801D0CFC(float a);
 void fn_8020FA38(int a, void *b);
-void fn_802100C0(void *p, int a);
+void fn_802100C0(void *p, void *q);
 void fn_80210114(void *p);
 void fn_80210388(void);
 void fn_80210654(Object_8023417C *pObject);
@@ -82,9 +74,6 @@ void fn_80211FF0(void);
 void fn_80212018(const char *pName, Element_8019CE3C *pElement);
 void fn_80233D64(Object_80233EAC *pObject, Desc_80233D64 *pDesc, const char *pName, int a,
                  void *pData, int b);
-void fn_80233FCC(Object_80233EAC *pObject);
-int fn_80234144(Object_80233EAC *pObject, void *p);
-Object_8023417C *fn_8023417C(Object_80233EAC *pObject, int a);
 int fn_80234D4C(float *pBox, void *m, void *p, void *q);
 void *fn_80236384(int a);
 int fn_80236B98(int a, float x, float y, float z);
@@ -134,7 +123,7 @@ void fn_8019CF5C(Object_8019CE3C *pObject, int index)
     fn_80211FF0();
     fn_80212018("model", &lbl_803653E4[index]);
     pResult = fn_8023417C(&lbl_80365434, 0);
-    fn_802100C0(pObject->mUnknown284, pResult->mUnknown18);
+    fn_802100C0(pObject->mUnknown284, pResult->mpUnknown18);
 }
 
 void fn_8019CFD0(Object_8019CE3C *pObject)
@@ -145,8 +134,8 @@ void fn_8019CFD0(Object_8019CE3C *pObject)
 void fn_8019CFF4(Object_8019CE3C *pObject)
 {
     char buffer[32];
-    float unknown28[4];
-    float unknown38[4];
+    float unknown28[3];
+    float unknown38[3];
     GXColor color = { 255, 255, 255, 255 };
     void *pUnknown;
     float x;
