@@ -3910,6 +3910,26 @@
         "commit": "721d4c010b76c1ff650b360cf9093081052a117e",
         "introduced_blob": "ceaec7ab5c2f47ba3da50d2462d5ac037e26c392"
       }
+    },
+    {
+      "source": "src/game/cu_80020A34.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80020A34",
+        "0x80020A58",
+        "0x80020A94",
+        "0x80020AD4",
+        "0x80020AD8",
+        "0x80020ADC"
+      ],
+      "provenance": {
+        "pull_request": 247,
+        "merged_via": 247,
+        "commit": "8772eae8dbdc71053a7f2ae43e6229e6f7138ca9",
+        "introduced_blob": "af3e438970365288c9f8c48cfab5cbb6f12df585"
+      }
     }
   ],
   "target": "GN7E69",
