@@ -242,11 +242,6 @@ int fn_8018E598(int index)
 }
 
 #if defined(DECOMP_COMPARE)
-/* Draft bodies of the rest of this file (0x8018E5F4-0x8018E9A4); the original
-   bytes of this range stay linked. */
-
-/* Partial: ProDG turns this test into subfic/adde, while the target keeps
-   li/cmpwi/bne/li (see the cu_8018DF98 draft functions evidence row). */
 int fn_8018E5F4(int index, int id)
 {
     int value;

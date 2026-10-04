@@ -3,12 +3,9 @@
 
 #include "game/Object_8007A334.h"
 
-/* Data-less polymorphic base of Class_8018FD64. ProDG 3.9.3 puts the vtable
-   pointer of a class without a polymorphic base after its data members, so the
-   pointer at +0 of Class_8018FD64 needs one. It has no destructor of its own
-   (the destructor 0x8018FD94 stores no second vtable). Which of the slots it
-   introduces is not established; it is written with the entries 1-17 of the
-   vtable 0x802AB4F8, the slots before the destructor. */
+/* Data-less polymorphic base of Class_8018FD64, without a destructor of its
+   own. It declares entries 1-17 of the vtable 0x802AB4F8, the slots before
+   the destructor. */
 class Class_8018FD64Base {
 public:
     virtual int fn_8018FE34() = 0;

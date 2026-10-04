@@ -23,7 +23,7 @@ struct Log_80361694 {
     unsigned char mUnknown1EB;
 };
 
-/* Returned in memory by fn_80177FE0 (as declared by src/game/cu_8017055C.cpp). */
+/* Returned in memory by fn_80177FE0. */
 struct Pair_80173E24 {
     float mX;
     float mY;
@@ -169,6 +169,5 @@ void fn_8017417C(void)
 }
 }
 
-/* Joint names read in order by fn_80176630 (addi at 0x801766EC). In the target
- * the last four point to identical literals of earlier ranges; see evidence. */
+/* Joint names read in order by fn_80176630. */
 const char *lbl_802E99F0[5] = {"headend", "rwrist", "lwrist", "lball", "rball"};
