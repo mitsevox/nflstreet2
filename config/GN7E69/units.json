@@ -5068,6 +5068,49 @@
           "end": "0x8031BD10"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8018DF98.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018DF98-0x8018E5F4 (src/game/cu_8018DF98.cpp) and its data, linker, compiler and source-form rows.",
+      "link_roots": {
+        "symbols": [
+          "fn_8018DFE4",
+          "fn_8018E02C",
+          "fn_8018E0D8",
+          "fn_8018E11C",
+          "fn_8018E174",
+          "fn_8018E194",
+          "fn_8018E20C",
+          "fn_8018E284",
+          "fn_8018E344",
+          "fn_8018E390",
+          "fn_8018E3DC",
+          "fn_8018E428",
+          "fn_8018E474",
+          "fn_8018E4B4",
+          "fn_8018E55C",
+          "fn_8018E598"
+        ],
+        "discarded": [
+          "DeleteYptsRows"
+        ],
+        "evidence": "evidence.tsv linker row 0x802AAE74-0x802AAEA0: the target keeps every listed function, each called from outside the unit or from inside it; the file-static DeleteYptsRows has no code in the target, while its query string remains in rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018DF98",
+          "end": "0x8018E5F4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AAD90",
+          "end": "0x802AAEE8"
+        }
+      ]
     }
   ]
 }
