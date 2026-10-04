@@ -4400,6 +4400,43 @@
           "end": "0x80307720"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8007B4C8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007B4C8-0x8007BA48 (src/game/cu_8007B4C8.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007B4C8",
+          "end": "0x8007BA48"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80291B58",
+          "end": "0x80291BCC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030B968",
+          "end": "0x8030B994"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AA4",
+          "end": "0x80289AA8"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BE4",
+          "end": "0x80289BE8"
+        }
+      ]
     }
   ]
 }
