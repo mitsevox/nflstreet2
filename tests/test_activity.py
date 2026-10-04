@@ -163,6 +163,25 @@ class ContributorTests(unittest.TestCase):
             self.assertEqual(subprocess.check_output(['git','remote','get-url','origin'],cwd=checkout,
                              text=True).strip(),str(self.root))
 
+    def test_squash_preflight_rejects_branch_only_old_blob_until_corrected(self):
+        def commit(tree, parent, message):
+            args=['-c','user.name=Test','-c','user.email=test@example.invalid','commit-tree',tree]
+            if parent:args += ['-p',parent]
+            return self.git(*args,text=message+'\n')
+        empty=commit(self.git('mktree',text=''),None,'Actual base')
+        original=commit(self.git('rev-parse',self.commit+'^{tree}'),empty,'Original source')
+        changed=self.commit_source('int function(void) { return 2; }')
+        revision=commit(self.git('rev-parse',changed+'^{tree}'),original,'Reviewed correction')
+        self.entry['provenance']['commit']=original
+        self.assertEqual(activity.contributors(self.root,self.ledger,self.build,revision)[0]['functions'],1)
+        with self.assertRaisesRegex(ValueError,'absent from this revision history'):
+            activity.squash_preflight(self.root,self.ledger,self.build,revision,empty)
+        self.entry['provenance'].update(
+            original_commit=original,original_blob=self.blob,commit=revision,
+            introduced_blob=self.git('rev-parse',revision+':src/test.c'),
+            integration_adjustment='Reviewed correction retained in the final source.')
+        self.assertEqual(activity.squash_preflight(self.root,self.ledger,self.build,revision,empty)[0]['login'],'alice')
+
     def test_unverified_build_cannot_supply_function_credit(self):
         self.build['complete']='mismatch'
         with self.assertRaisesRegex(ValueError,'verified source build'):self.credits()

@@ -2977,7 +2977,7 @@
         "introduced_blob": "fa2dc07143a111e232822f3ee0463096b74cebf4",
         "original_commit": "510c663170c7ff06bc297ddc7b408671e532562f",
         "original_blob": "94fcc30f2ed70084cdb4c32282d53fc12391c988",
-        "integration_adjustment": "PR217 renamed the fn_8003EFB8 parameter and its use from owner to value; function behavior and original contributor are unchanged."
+        "integration_adjustment": "The reviewed author correction renamed the unsupported owner parameter to neutral value in fn_8003EFB8 and its assignment; function logic unchanged."
       }
     },
     {
@@ -3018,6 +3018,76 @@
         "merged_via": 217,
         "commit": "fd7df3c22227547d4131ae87cd3cd0703032d573",
         "introduced_blob": "3d25706ff0c3d422923dd9151b31e3f71d8e7215"
+      }
+    },
+    {
+      "source": "src/game/cu_8018422C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8018422C",
+        "0x80184234",
+        "0x801842AC",
+        "0x8018430C",
+        "0x80184340",
+        "0x80184398",
+        "0x80184408",
+        "0x80184488",
+        "0x801844E0",
+        "0x80184528",
+        "0x80184548",
+        "0x8018459C",
+        "0x80184600",
+        "0x8018463C",
+        "0x80184660",
+        "0x80184690",
+        "0x801846B4",
+        "0x8018473C",
+        "0x80184770",
+        "0x801847A4",
+        "0x80184858",
+        "0x801848FC",
+        "0x8018491C",
+        "0x8018498C",
+        "0x801849B0",
+        "0x801849D4",
+        "0x80184A24",
+        "0x80184A58",
+        "0x80184A7C",
+        "0x80184A90",
+        "0x80184ABC",
+        "0x80184AE0",
+        "0x80184B00",
+        "0x80184B3C",
+        "0x80184C78",
+        "0x80184D10",
+        "0x80184D68",
+        "0x80184E7C",
+        "0x80184ED0",
+        "0x80184F14",
+        "0x80184F3C",
+        "0x80184F60",
+        "0x80184FB8",
+        "0x80185038",
+        "0x801850CC",
+        "0x801850F4",
+        "0x80185130",
+        "0x80185150",
+        "0x80185170",
+        "0x801851A4",
+        "0x801851D0",
+        "0x801851EC",
+        "0x8018521C"
+      ],
+      "provenance": {
+        "pull_request": 213,
+        "merged_via": 219,
+        "commit": "b4577b5407b011b5e76dcceefb4da316360071eb",
+        "introduced_blob": "242e53fa89ba02e5547011937a8a0089df11619d",
+        "original_commit": "2e43b8d76b85f9102d3da7e9c9b0d27230bc948f",
+        "original_blob": "13aca0c6f132fd456deda54f602f24016d2ff327",
+        "integration_adjustment": "Reused the accepted Record_80021154 header instead of duplicating its partial layout; function bodies unchanged."
       }
     }
   ],
