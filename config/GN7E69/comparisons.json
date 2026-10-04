@@ -2,128 +2,1888 @@
   "schema": 2,
   "units": [
     {
-      "source": "src/game/cu_8007F12C.cpp",
+      "source": "src/game/ModuleGroup_8003450C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded unit row for src/game/cu_8007F12C.cpp, individual exact function extents, owned data spans, inferred layouts and lifecycle names. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "evidence": "evidence.tsv provisional unit row for src/game/ModuleGroup_8003450C.cpp (candidate range cu_8003450C), individual exact function extents, exact data rows for its rodata, empty-table .sdata words and .ctors/.dtors words, the storage, declaration and static-initializer source-form rows, and name rows. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8007F12C",
-          "end": "0x8007FA48"
+          "start": "0x8003450C",
+          "end": "0x80038194"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x80292930",
-          "end": "0x80292948"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802D6798",
-          "end": "0x802D6850"
+          "start": "0x8028B3F0",
+          "end": "0x8028CF24"
         },
         {
           "section": ".sdata",
           "placement": ".data5",
-          "start": "0x803EA7B8",
-          "end": "0x803EA7D0"
+          "start": "0x803EA3D0",
+          "end": "0x803EA3EC"
         },
         {
           "section": ".bss",
           "placement": ".bss",
-          "start": "0x8030BA80",
-          "end": "0x8030BC2C"
+          "start": "0x80306DE0",
+          "end": "0x80307480"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC6D0",
+          "end": "0x803EC780"
         },
         {
           "section": ".ctors",
           "placement": ".data2",
-          "start": "0x80289AAC",
-          "end": "0x80289AB0"
+          "start": "0x80289A74",
+          "end": "0x80289A78"
         },
         {
           "section": ".dtors",
           "placement": ".data2",
-          "start": "0x80289BEC",
-          "end": "0x80289BF0"
+          "start": "0x80289BB4",
+          "end": "0x80289BB8"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_8007F12C",
-          "start": "0x8007F12C",
-          "end": "0x8007F174"
+          "symbol": "GetDependencies__8Animintf",
+          "start": "0x8003450C",
+          "end": "0x80034518"
         },
         {
-          "symbol": "fn_8007F174",
-          "start": "0x8007F174",
-          "end": "0x8007F19C"
+          "symbol": "GetLinks__8Animintf",
+          "start": "0x80034518",
+          "end": "0x80034520"
         },
         {
-          "symbol": "fn_8007F19C",
-          "start": "0x8007F19C",
-          "end": "0x8007F298"
+          "symbol": "GetName__8Animintf",
+          "start": "0x80034520",
+          "end": "0x8003452C"
         },
         {
-          "symbol": "fn_8007F298",
-          "start": "0x8007F298",
-          "end": "0x8007F328"
+          "symbol": "Init__8Animintf",
+          "start": "0x8003452C",
+          "end": "0x80034558"
         },
         {
-          "symbol": "fn_8007F328",
-          "start": "0x8007F328",
-          "end": "0x8007F374"
+          "symbol": "Shutdown__8Animintf",
+          "start": "0x80034558",
+          "end": "0x80034580"
         },
         {
-          "symbol": "fn_8007F374",
-          "start": "0x8007F374",
-          "end": "0x8007F394"
+          "symbol": "GetDependencies__13AnimScriptMan",
+          "start": "0x80034580",
+          "end": "0x80034588"
         },
         {
-          "symbol": "fn_8007F394",
-          "start": "0x8007F394",
-          "end": "0x8007F3D8"
+          "symbol": "GetLinks__13AnimScriptMan",
+          "start": "0x80034588",
+          "end": "0x80034590"
         },
         {
-          "symbol": "fn_8007F3D8",
-          "start": "0x8007F3D8",
-          "end": "0x8007F548"
+          "symbol": "GetName__13AnimScriptMan",
+          "start": "0x80034590",
+          "end": "0x8003459C"
         },
         {
-          "symbol": "fn_8007F548",
-          "start": "0x8007F548",
-          "end": "0x8007F6F8"
+          "symbol": "Init__13AnimScriptMan",
+          "start": "0x8003459C",
+          "end": "0x800345C0"
         },
         {
-          "symbol": "fn_8007F6F8",
-          "start": "0x8007F6F8",
-          "end": "0x8007F828"
+          "symbol": "Shutdown__13AnimScriptMan",
+          "start": "0x800345C0",
+          "end": "0x800345E4"
         },
         {
-          "symbol": "fn_8007F828",
-          "start": "0x8007F828",
-          "end": "0x8007F97C"
+          "symbol": "GetDependencies__5Arrow",
+          "start": "0x800345E4",
+          "end": "0x800345F0"
         },
         {
-          "symbol": "fn_8007F97C",
-          "start": "0x8007F97C",
-          "end": "0x8007F9B0"
+          "symbol": "GetLinks__5Arrow",
+          "start": "0x800345F0",
+          "end": "0x800345F8"
+        },
+        {
+          "symbol": "GetName__5Arrow",
+          "start": "0x800345F8",
+          "end": "0x80034604"
+        },
+        {
+          "symbol": "Init__5Arrow",
+          "start": "0x80034604",
+          "end": "0x80034634"
+        },
+        {
+          "symbol": "Shutdown__5Arrow",
+          "start": "0x80034634",
+          "end": "0x8003465C"
+        },
+        {
+          "symbol": "GetDependencies__3Ass",
+          "start": "0x8003465C",
+          "end": "0x80034668"
+        },
+        {
+          "symbol": "GetLinks__3Ass",
+          "start": "0x80034668",
+          "end": "0x80034670"
+        },
+        {
+          "symbol": "GetName__3Ass",
+          "start": "0x80034670",
+          "end": "0x8003467C"
+        },
+        {
+          "symbol": "Init__3Ass",
+          "start": "0x8003467C",
+          "end": "0x800346A8"
+        },
+        {
+          "symbol": "Shutdown__3Ass",
+          "start": "0x800346A8",
+          "end": "0x800346D0"
+        },
+        {
+          "symbol": "GetDependencies__6AssJoy",
+          "start": "0x800346D0",
+          "end": "0x800346DC"
+        },
+        {
+          "symbol": "GetLinks__6AssJoy",
+          "start": "0x800346DC",
+          "end": "0x800346E4"
+        },
+        {
+          "symbol": "GetName__6AssJoy",
+          "start": "0x800346E4",
+          "end": "0x800346F0"
+        },
+        {
+          "symbol": "Init__6AssJoy",
+          "start": "0x800346F0",
+          "end": "0x80034718"
+        },
+        {
+          "symbol": "Shutdown__6AssJoy",
+          "start": "0x80034718",
+          "end": "0x8003473C"
+        },
+        {
+          "symbol": "GetDependencies__4Ball",
+          "start": "0x8003473C",
+          "end": "0x80034748"
+        },
+        {
+          "symbol": "GetLinks__4Ball",
+          "start": "0x80034748",
+          "end": "0x80034750"
+        },
+        {
+          "symbol": "GetName__4Ball",
+          "start": "0x80034750",
+          "end": "0x8003475C"
+        },
+        {
+          "symbol": "Init__4Ball",
+          "start": "0x8003475C",
+          "end": "0x800347B4"
+        },
+        {
+          "symbol": "Shutdown__4Ball",
+          "start": "0x800347B4",
+          "end": "0x800347DC"
+        },
+        {
+          "symbol": "GetDependencies__6Banner",
+          "start": "0x800347DC",
+          "end": "0x800347E4"
+        },
+        {
+          "symbol": "GetLinks__6Banner",
+          "start": "0x800347E4",
+          "end": "0x800347EC"
+        },
+        {
+          "symbol": "GetName__6Banner",
+          "start": "0x800347EC",
+          "end": "0x800347F8"
+        },
+        {
+          "symbol": "Init__6Banner",
+          "start": "0x800347F8",
+          "end": "0x8003481C"
+        },
+        {
+          "symbol": "Shutdown__6Banner",
+          "start": "0x8003481C",
+          "end": "0x80034840"
+        },
+        {
+          "symbol": "GetDependencies__6BigObj",
+          "start": "0x80034840",
+          "end": "0x8003484C"
+        },
+        {
+          "symbol": "GetLinks__6BigObj",
+          "start": "0x8003484C",
+          "end": "0x80034854"
+        },
+        {
+          "symbol": "GetName__6BigObj",
+          "start": "0x80034854",
+          "end": "0x80034860"
+        },
+        {
+          "symbol": "Init__6BigObj",
+          "start": "0x80034860",
+          "end": "0x8003491C"
+        },
+        {
+          "symbol": "Shutdown__6BigObj",
+          "start": "0x8003491C",
+          "end": "0x8003494C"
+        },
+        {
+          "symbol": "GetDependencies__5Block",
+          "start": "0x8003494C",
+          "end": "0x80034954"
+        },
+        {
+          "symbol": "GetLinks__5Block",
+          "start": "0x80034954",
+          "end": "0x8003495C"
+        },
+        {
+          "symbol": "GetName__5Block",
+          "start": "0x8003495C",
+          "end": "0x80034968"
+        },
+        {
+          "symbol": "Init__5Block",
+          "start": "0x80034968",
+          "end": "0x8003498C"
+        },
+        {
+          "symbol": "Shutdown__5Block",
+          "start": "0x8003498C",
+          "end": "0x800349B0"
+        },
+        {
+          "symbol": "GetDependencies__7CamGame",
+          "start": "0x800349B0",
+          "end": "0x800349BC"
+        },
+        {
+          "symbol": "GetLinks__7CamGame",
+          "start": "0x800349BC",
+          "end": "0x800349C4"
+        },
+        {
+          "symbol": "GetName__7CamGame",
+          "start": "0x800349C4",
+          "end": "0x800349D0"
+        },
+        {
+          "symbol": "Init__7CamGame",
+          "start": "0x800349D0",
+          "end": "0x800349F8"
+        },
+        {
+          "symbol": "Shutdown__7CamGame",
+          "start": "0x800349F8",
+          "end": "0x80034A00"
+        },
+        {
+          "symbol": "GetDependencies__9CamScript",
+          "start": "0x80034A00",
+          "end": "0x80034A08"
+        },
+        {
+          "symbol": "GetLinks__9CamScript",
+          "start": "0x80034A08",
+          "end": "0x80034A10"
+        },
+        {
+          "symbol": "GetName__9CamScript",
+          "start": "0x80034A10",
+          "end": "0x80034A1C"
+        },
+        {
+          "symbol": "Init__9CamScript",
+          "start": "0x80034A1C",
+          "end": "0x80034A4C"
+        },
+        {
+          "symbol": "Shutdown__9CamScript",
+          "start": "0x80034A4C",
+          "end": "0x80034A70"
+        },
+        {
+          "symbol": "GetDependencies__5Catch",
+          "start": "0x80034A70",
+          "end": "0x80034A7C"
+        },
+        {
+          "symbol": "GetLinks__5Catch",
+          "start": "0x80034A7C",
+          "end": "0x80034A84"
+        },
+        {
+          "symbol": "GetName__5Catch",
+          "start": "0x80034A84",
+          "end": "0x80034A90"
+        },
+        {
+          "symbol": "Init__5Catch",
+          "start": "0x80034A90",
+          "end": "0x80034AB4"
+        },
+        {
+          "symbol": "Shutdown__5Catch",
+          "start": "0x80034AB4",
+          "end": "0x80034AD8"
+        },
+        {
+          "symbol": "GetDependencies__7CatchUp",
+          "start": "0x80034AD8",
+          "end": "0x80034AE0"
+        },
+        {
+          "symbol": "GetLinks__7CatchUp",
+          "start": "0x80034AE0",
+          "end": "0x80034AE8"
+        },
+        {
+          "symbol": "GetName__7CatchUp",
+          "start": "0x80034AE8",
+          "end": "0x80034AF4"
+        },
+        {
+          "symbol": "Init__7CatchUp",
+          "start": "0x80034AF4",
+          "end": "0x80034B18"
+        },
+        {
+          "symbol": "Shutdown__7CatchUp",
+          "start": "0x80034B18",
+          "end": "0x80034B3C"
+        },
+        {
+          "symbol": "GetDependencies__3Cld",
+          "start": "0x80034B3C",
+          "end": "0x80034B44"
+        },
+        {
+          "symbol": "GetLinks__3Cld",
+          "start": "0x80034B44",
+          "end": "0x80034B4C"
+        },
+        {
+          "symbol": "GetName__3Cld",
+          "start": "0x80034B4C",
+          "end": "0x80034B58"
+        },
+        {
+          "symbol": "Init__3Cld",
+          "start": "0x80034B58",
+          "end": "0x80034B84"
+        },
+        {
+          "symbol": "Shutdown__3Cld",
+          "start": "0x80034B84",
+          "end": "0x80034BAC"
+        },
+        {
+          "symbol": "GetDependencies__5Clock",
+          "start": "0x80034BAC",
+          "end": "0x80034BB8"
+        },
+        {
+          "symbol": "GetLinks__5Clock",
+          "start": "0x80034BB8",
+          "end": "0x80034BC0"
+        },
+        {
+          "symbol": "GetName__5Clock",
+          "start": "0x80034BC0",
+          "end": "0x80034BCC"
+        },
+        {
+          "symbol": "Init__5Clock",
+          "start": "0x80034BCC",
+          "end": "0x80034BF8"
+        },
+        {
+          "symbol": "Shutdown__5Clock",
+          "start": "0x80034BF8",
+          "end": "0x80034C20"
+        },
+        {
+          "symbol": "GetDependencies__8CoinToss",
+          "start": "0x80034C20",
+          "end": "0x80034C28"
+        },
+        {
+          "symbol": "GetLinks__8CoinToss",
+          "start": "0x80034C28",
+          "end": "0x80034C30"
+        },
+        {
+          "symbol": "GetName__8CoinToss",
+          "start": "0x80034C30",
+          "end": "0x80034C3C"
+        },
+        {
+          "symbol": "Init__8CoinToss",
+          "start": "0x80034C3C",
+          "end": "0x80034C60"
+        },
+        {
+          "symbol": "Shutdown__8CoinToss",
+          "start": "0x80034C60",
+          "end": "0x80034C84"
+        },
+        {
+          "symbol": "GetDependencies__7Effects",
+          "start": "0x80034C84",
+          "end": "0x80034C8C"
+        },
+        {
+          "symbol": "GetLinks__7Effects",
+          "start": "0x80034C8C",
+          "end": "0x80034C94"
+        },
+        {
+          "symbol": "GetName__7Effects",
+          "start": "0x80034C94",
+          "end": "0x80034CA0"
+        },
+        {
+          "symbol": "Init__7Effects",
+          "start": "0x80034CA0",
+          "end": "0x80034CC4"
+        },
+        {
+          "symbol": "Shutdown__7Effects",
+          "start": "0x80034CC4",
+          "end": "0x80034CE8"
+        },
+        {
+          "symbol": "GetDependencies__3Env",
+          "start": "0x80034CE8",
+          "end": "0x80034CF4"
+        },
+        {
+          "symbol": "GetLinks__3Env",
+          "start": "0x80034CF4",
+          "end": "0x80034CFC"
+        },
+        {
+          "symbol": "GetName__3Env",
+          "start": "0x80034CFC",
+          "end": "0x80034D08"
+        },
+        {
+          "symbol": "Init__3Env",
+          "start": "0x80034D08",
+          "end": "0x80034DA0"
+        },
+        {
+          "symbol": "Shutdown__3Env",
+          "start": "0x80034DA0",
+          "end": "0x80034DCC"
+        },
+        {
+          "symbol": "GetDependencies__7GameBrk",
+          "start": "0x80034DCC",
+          "end": "0x80034DD8"
+        },
+        {
+          "symbol": "GetLinks__7GameBrk",
+          "start": "0x80034DD8",
+          "end": "0x80034DE0"
+        },
+        {
+          "symbol": "GetName__7GameBrk",
+          "start": "0x80034DE0",
+          "end": "0x80034DEC"
+        },
+        {
+          "symbol": "Init__7GameBrk",
+          "start": "0x80034DEC",
+          "end": "0x80034E10"
+        },
+        {
+          "symbol": "Shutdown__7GameBrk",
+          "start": "0x80034E10",
+          "end": "0x80034E34"
+        },
+        {
+          "symbol": "GetDependencies__8GameIntf",
+          "start": "0x80034E34",
+          "end": "0x80034E3C"
+        },
+        {
+          "symbol": "GetLinks__8GameIntf",
+          "start": "0x80034E3C",
+          "end": "0x80034E44"
+        },
+        {
+          "symbol": "GetName__8GameIntf",
+          "start": "0x80034E44",
+          "end": "0x80034E50"
+        },
+        {
+          "symbol": "Init__8GameIntf",
+          "start": "0x80034E50",
+          "end": "0x80034E74"
+        },
+        {
+          "symbol": "Shutdown__8GameIntf",
+          "start": "0x80034E74",
+          "end": "0x80034E7C"
+        },
+        {
+          "symbol": "GetDependencies__8GamePlay",
+          "start": "0x80034E7C",
+          "end": "0x80034E88"
+        },
+        {
+          "symbol": "GetLinks__8GamePlay",
+          "start": "0x80034E88",
+          "end": "0x80034E90"
+        },
+        {
+          "symbol": "GetName__8GamePlay",
+          "start": "0x80034E90",
+          "end": "0x80034E9C"
+        },
+        {
+          "symbol": "Init__8GamePlay",
+          "start": "0x80034E9C",
+          "end": "0x80034EC8"
+        },
+        {
+          "symbol": "Shutdown__8GamePlay",
+          "start": "0x80034EC8",
+          "end": "0x80034EEC"
+        },
+        {
+          "symbol": "GetDependencies__9GameSkill",
+          "start": "0x80034EEC",
+          "end": "0x80034EF8"
+        },
+        {
+          "symbol": "GetLinks__9GameSkill",
+          "start": "0x80034EF8",
+          "end": "0x80034F00"
+        },
+        {
+          "symbol": "GetName__9GameSkill",
+          "start": "0x80034F00",
+          "end": "0x80034F0C"
+        },
+        {
+          "symbol": "Init__9GameSkill",
+          "start": "0x80034F0C",
+          "end": "0x80034F30"
+        },
+        {
+          "symbol": "Shutdown__9GameSkill",
+          "start": "0x80034F30",
+          "end": "0x80034F54"
+        },
+        {
+          "symbol": "GetDependencies__5HotRt",
+          "start": "0x80034F54",
+          "end": "0x80034F5C"
+        },
+        {
+          "symbol": "GetLinks__5HotRt",
+          "start": "0x80034F5C",
+          "end": "0x80034F64"
+        },
+        {
+          "symbol": "GetName__5HotRt",
+          "start": "0x80034F64",
+          "end": "0x80034F70"
+        },
+        {
+          "symbol": "Init__5HotRt",
+          "start": "0x80034F70",
+          "end": "0x80034F94"
+        },
+        {
+          "symbol": "Shutdown__5HotRt",
+          "start": "0x80034F94",
+          "end": "0x80034FB8"
+        },
+        {
+          "symbol": "GetDependencies__7ID3Read",
+          "start": "0x80034FB8",
+          "end": "0x80034FC0"
+        },
+        {
+          "symbol": "GetLinks__7ID3Read",
+          "start": "0x80034FC0",
+          "end": "0x80034FC8"
+        },
+        {
+          "symbol": "GetName__7ID3Read",
+          "start": "0x80034FC8",
+          "end": "0x80034FD4"
+        },
+        {
+          "symbol": "Init__7ID3Read",
+          "start": "0x80034FD4",
+          "end": "0x80035000"
+        },
+        {
+          "symbol": "Shutdown__7ID3Read",
+          "start": "0x80035000",
+          "end": "0x80035024"
+        },
+        {
+          "symbol": "GetDependencies__10IGNetEvent",
+          "start": "0x80035024",
+          "end": "0x80035030"
+        },
+        {
+          "symbol": "GetLinks__10IGNetEvent",
+          "start": "0x80035030",
+          "end": "0x80035038"
+        },
+        {
+          "symbol": "GetName__10IGNetEvent",
+          "start": "0x80035038",
+          "end": "0x80035044"
+        },
+        {
+          "symbol": "Init__10IGNetEvent",
+          "start": "0x80035044",
+          "end": "0x8003504C"
+        },
+        {
+          "symbol": "Shutdown__10IGNetEvent",
+          "start": "0x8003504C",
+          "end": "0x80035054"
+        },
+        {
+          "symbol": "GetDependencies__8IGOnline",
+          "start": "0x80035054",
+          "end": "0x8003505C"
+        },
+        {
+          "symbol": "GetLinks__8IGOnline",
+          "start": "0x8003505C",
+          "end": "0x80035064"
+        },
+        {
+          "symbol": "GetName__8IGOnline",
+          "start": "0x80035064",
+          "end": "0x80035070"
+        },
+        {
+          "symbol": "Init__8IGOnline",
+          "start": "0x80035070",
+          "end": "0x80035078"
+        },
+        {
+          "symbol": "Shutdown__8IGOnline",
+          "start": "0x80035078",
+          "end": "0x80035080"
+        },
+        {
+          "symbol": "GetDependencies__6JoyMsg",
+          "start": "0x80035080",
+          "end": "0x80035088"
+        },
+        {
+          "symbol": "GetLinks__6JoyMsg",
+          "start": "0x80035088",
+          "end": "0x80035090"
+        },
+        {
+          "symbol": "GetName__6JoyMsg",
+          "start": "0x80035090",
+          "end": "0x8003509C"
+        },
+        {
+          "symbol": "Init__6JoyMsg",
+          "start": "0x8003509C",
+          "end": "0x800350C4"
+        },
+        {
+          "symbol": "Shutdown__6JoyMsg",
+          "start": "0x800350C4",
+          "end": "0x800350E8"
+        },
+        {
+          "symbol": "GetDependencies__5Light",
+          "start": "0x800350E8",
+          "end": "0x800350F4"
+        },
+        {
+          "symbol": "GetLinks__5Light",
+          "start": "0x800350F4",
+          "end": "0x800350FC"
+        },
+        {
+          "symbol": "GetName__5Light",
+          "start": "0x800350FC",
+          "end": "0x80035108"
+        },
+        {
+          "symbol": "Init__5Light",
+          "start": "0x80035108",
+          "end": "0x80035134"
+        },
+        {
+          "symbol": "Shutdown__5Light",
+          "start": "0x80035134",
+          "end": "0x8003515C"
+        },
+        {
+          "symbol": "GetDependencies__3MiM",
+          "start": "0x8003515C",
+          "end": "0x80035164"
+        },
+        {
+          "symbol": "GetLinks__3MiM",
+          "start": "0x80035164",
+          "end": "0x8003516C"
+        },
+        {
+          "symbol": "GetName__3MiM",
+          "start": "0x8003516C",
+          "end": "0x80035178"
+        },
+        {
+          "symbol": "Init__3MiM",
+          "start": "0x80035178",
+          "end": "0x8003519C"
+        },
+        {
+          "symbol": "Shutdown__3MiM",
+          "start": "0x8003519C",
+          "end": "0x800351C0"
+        },
+        {
+          "symbol": "GetDependencies__7Monitor",
+          "start": "0x800351C0",
+          "end": "0x800351C8"
+        },
+        {
+          "symbol": "GetLinks__7Monitor",
+          "start": "0x800351C8",
+          "end": "0x800351D0"
+        },
+        {
+          "symbol": "GetName__7Monitor",
+          "start": "0x800351D0",
+          "end": "0x800351DC"
+        },
+        {
+          "symbol": "Init__7Monitor",
+          "start": "0x800351DC",
+          "end": "0x80035200"
+        },
+        {
+          "symbol": "Shutdown__7Monitor",
+          "start": "0x80035200",
+          "end": "0x80035224"
+        },
+        {
+          "symbol": "GetDependencies__9Particles",
+          "start": "0x80035224",
+          "end": "0x80035230"
+        },
+        {
+          "symbol": "GetLinks__9Particles",
+          "start": "0x80035230",
+          "end": "0x80035238"
+        },
+        {
+          "symbol": "GetName__9Particles",
+          "start": "0x80035238",
+          "end": "0x80035244"
+        },
+        {
+          "symbol": "Init__9Particles",
+          "start": "0x80035244",
+          "end": "0x8003526C"
+        },
+        {
+          "symbol": "Shutdown__9Particles",
+          "start": "0x8003526C",
+          "end": "0x80035294"
+        },
+        {
+          "symbol": "GetDependencies__5Pause",
+          "start": "0x80035294",
+          "end": "0x800352A0"
+        },
+        {
+          "symbol": "GetLinks__5Pause",
+          "start": "0x800352A0",
+          "end": "0x800352A8"
+        },
+        {
+          "symbol": "GetName__5Pause",
+          "start": "0x800352A8",
+          "end": "0x800352B4"
+        },
+        {
+          "symbol": "Init__5Pause",
+          "start": "0x800352B4",
+          "end": "0x800352D8"
+        },
+        {
+          "symbol": "Shutdown__5Pause",
+          "start": "0x800352D8",
+          "end": "0x800352FC"
+        },
+        {
+          "symbol": "GetDependencies__7Penalty",
+          "start": "0x800352FC",
+          "end": "0x80035304"
+        },
+        {
+          "symbol": "GetLinks__7Penalty",
+          "start": "0x80035304",
+          "end": "0x8003530C"
+        },
+        {
+          "symbol": "GetName__7Penalty",
+          "start": "0x8003530C",
+          "end": "0x80035318"
+        },
+        {
+          "symbol": "Init__7Penalty",
+          "start": "0x80035318",
+          "end": "0x8003533C"
+        },
+        {
+          "symbol": "Shutdown__7Penalty",
+          "start": "0x8003533C",
+          "end": "0x80035360"
+        },
+        {
+          "symbol": "GetDependencies__10PlayArtMem",
+          "start": "0x80035360",
+          "end": "0x8003536C"
+        },
+        {
+          "symbol": "GetLinks__10PlayArtMem",
+          "start": "0x8003536C",
+          "end": "0x80035374"
+        },
+        {
+          "symbol": "GetName__10PlayArtMem",
+          "start": "0x80035374",
+          "end": "0x80035380"
+        },
+        {
+          "symbol": "Init__10PlayArtMem",
+          "start": "0x80035380",
+          "end": "0x800353AC"
+        },
+        {
+          "symbol": "Shutdown__10PlayArtMem",
+          "start": "0x800353AC",
+          "end": "0x800353D0"
+        },
+        {
+          "symbol": "GetDependencies__8PlayInfo",
+          "start": "0x800353D0",
+          "end": "0x800353DC"
+        },
+        {
+          "symbol": "GetLinks__8PlayInfo",
+          "start": "0x800353DC",
+          "end": "0x800353E4"
+        },
+        {
+          "symbol": "GetName__8PlayInfo",
+          "start": "0x800353E4",
+          "end": "0x800353F0"
+        },
+        {
+          "symbol": "Init__8PlayInfo",
+          "start": "0x800353F0",
+          "end": "0x80035414"
+        },
+        {
+          "symbol": "Shutdown__8PlayInfo",
+          "start": "0x80035414",
+          "end": "0x80035438"
+        },
+        {
+          "symbol": "GetDependencies__9PlayTrack",
+          "start": "0x80035438",
+          "end": "0x80035440"
+        },
+        {
+          "symbol": "GetLinks__9PlayTrack",
+          "start": "0x80035440",
+          "end": "0x80035448"
+        },
+        {
+          "symbol": "GetName__9PlayTrack",
+          "start": "0x80035448",
+          "end": "0x80035454"
+        },
+        {
+          "symbol": "Init__9PlayTrack",
+          "start": "0x80035454",
+          "end": "0x80035478"
+        },
+        {
+          "symbol": "Shutdown__9PlayTrack",
+          "start": "0x80035478",
+          "end": "0x8003549C"
+        },
+        {
+          "symbol": "fn_8003549C__8PlayBooki",
+          "start": "0x8003549C",
+          "end": "0x8003556C"
+        },
+        {
+          "symbol": "GetDependencies__8PlayBook",
+          "start": "0x8003556C",
+          "end": "0x80035578"
+        },
+        {
+          "symbol": "GetLinks__8PlayBook",
+          "start": "0x80035578",
+          "end": "0x80035580"
+        },
+        {
+          "symbol": "GetName__8PlayBook",
+          "start": "0x80035580",
+          "end": "0x8003558C"
+        },
+        {
+          "symbol": "Init__8PlayBook",
+          "start": "0x8003558C",
+          "end": "0x800355D4"
+        },
+        {
+          "symbol": "Shutdown__8PlayBook",
+          "start": "0x800355D4",
+          "end": "0x800355FC"
+        },
+        {
+          "symbol": "fn_800355FC__8PlayBook",
+          "start": "0x800355FC",
+          "end": "0x80035620"
+        },
+        {
+          "symbol": "GetDependencies__4Plyr",
+          "start": "0x80035620",
+          "end": "0x8003562C"
+        },
+        {
+          "symbol": "GetLinks__4Plyr",
+          "start": "0x8003562C",
+          "end": "0x80035634"
+        },
+        {
+          "symbol": "GetName__4Plyr",
+          "start": "0x80035634",
+          "end": "0x80035640"
+        },
+        {
+          "symbol": "Init__4Plyr",
+          "start": "0x80035640",
+          "end": "0x800356E4"
+        },
+        {
+          "symbol": "Shutdown__4Plyr",
+          "start": "0x800356E4",
+          "end": "0x80035718"
+        },
+        {
+          "symbol": "GetDependencies__8PlyrCtrl",
+          "start": "0x80035718",
+          "end": "0x80035720"
+        },
+        {
+          "symbol": "GetLinks__8PlyrCtrl",
+          "start": "0x80035720",
+          "end": "0x80035728"
+        },
+        {
+          "symbol": "GetName__8PlyrCtrl",
+          "start": "0x80035728",
+          "end": "0x80035734"
+        },
+        {
+          "symbol": "Init__8PlyrCtrl",
+          "start": "0x80035734",
+          "end": "0x80035760"
+        },
+        {
+          "symbol": "Shutdown__8PlyrCtrl",
+          "start": "0x80035760",
+          "end": "0x80035784"
+        },
+        {
+          "symbol": "GetDependencies__7PlyrMsg",
+          "start": "0x80035784",
+          "end": "0x8003578C"
+        },
+        {
+          "symbol": "GetLinks__7PlyrMsg",
+          "start": "0x8003578C",
+          "end": "0x80035794"
+        },
+        {
+          "symbol": "GetName__7PlyrMsg",
+          "start": "0x80035794",
+          "end": "0x800357A0"
+        },
+        {
+          "symbol": "Init__7PlyrMsg",
+          "start": "0x800357A0",
+          "end": "0x800357C8"
+        },
+        {
+          "symbol": "Shutdown__7PlyrMsg",
+          "start": "0x800357C8",
+          "end": "0x800357EC"
+        },
+        {
+          "symbol": "GetDependencies__8Practice",
+          "start": "0x800357EC",
+          "end": "0x800357F8"
+        },
+        {
+          "symbol": "GetLinks__8Practice",
+          "start": "0x800357F8",
+          "end": "0x80035800"
+        },
+        {
+          "symbol": "GetName__8Practice",
+          "start": "0x80035800",
+          "end": "0x8003580C"
+        },
+        {
+          "symbol": "Init__8Practice",
+          "start": "0x8003580C",
+          "end": "0x80035830"
+        },
+        {
+          "symbol": "Shutdown__8Practice",
+          "start": "0x80035830",
+          "end": "0x80035854"
+        },
+        {
+          "symbol": "GetDependencies__7Pursuit",
+          "start": "0x80035854",
+          "end": "0x8003585C"
+        },
+        {
+          "symbol": "GetLinks__7Pursuit",
+          "start": "0x8003585C",
+          "end": "0x80035864"
+        },
+        {
+          "symbol": "GetName__7Pursuit",
+          "start": "0x80035864",
+          "end": "0x80035870"
+        },
+        {
+          "symbol": "Init__7Pursuit",
+          "start": "0x80035870",
+          "end": "0x80035898"
+        },
+        {
+          "symbol": "Shutdown__7Pursuit",
+          "start": "0x80035898",
+          "end": "0x800358BC"
+        },
+        {
+          "symbol": "GetDependencies__9RenderBin",
+          "start": "0x800358BC",
+          "end": "0x800358C8"
+        },
+        {
+          "symbol": "GetLinks__9RenderBin",
+          "start": "0x800358C8",
+          "end": "0x800358D0"
+        },
+        {
+          "symbol": "GetName__9RenderBin",
+          "start": "0x800358D0",
+          "end": "0x800358DC"
+        },
+        {
+          "symbol": "Init__9RenderBin",
+          "start": "0x800358DC",
+          "end": "0x800358E4"
+        },
+        {
+          "symbol": "Shutdown__9RenderBin",
+          "start": "0x800358E4",
+          "end": "0x800358EC"
+        },
+        {
+          "symbol": "GetDependencies__6Replay",
+          "start": "0x800358EC",
+          "end": "0x800358F8"
+        },
+        {
+          "symbol": "GetLinks__6Replay",
+          "start": "0x800358F8",
+          "end": "0x80035900"
+        },
+        {
+          "symbol": "GetName__6Replay",
+          "start": "0x80035900",
+          "end": "0x8003590C"
+        },
+        {
+          "symbol": "Init__6Replay",
+          "start": "0x8003590C",
+          "end": "0x80035938"
+        },
+        {
+          "symbol": "Shutdown__6Replay",
+          "start": "0x80035938",
+          "end": "0x80035970"
+        },
+        {
+          "symbol": "GetDependencies__11ReplayFrame",
+          "start": "0x80035970",
+          "end": "0x80035978"
+        },
+        {
+          "symbol": "GetLinks__11ReplayFrame",
+          "start": "0x80035978",
+          "end": "0x80035980"
+        },
+        {
+          "symbol": "GetName__11ReplayFrame",
+          "start": "0x80035980",
+          "end": "0x8003598C"
+        },
+        {
+          "symbol": "Init__11ReplayFrame",
+          "start": "0x8003598C",
+          "end": "0x800359DC"
+        },
+        {
+          "symbol": "Shutdown__11ReplayFrame",
+          "start": "0x800359DC",
+          "end": "0x800359E4"
+        },
+        {
+          "symbol": "GetDependencies__10ScreenTint",
+          "start": "0x800359E4",
+          "end": "0x800359F0"
+        },
+        {
+          "symbol": "GetLinks__10ScreenTint",
+          "start": "0x800359F0",
+          "end": "0x800359F8"
+        },
+        {
+          "symbol": "GetName__10ScreenTint",
+          "start": "0x800359F8",
+          "end": "0x80035A04"
+        },
+        {
+          "symbol": "Init__10ScreenTint",
+          "start": "0x80035A04",
+          "end": "0x80035A2C"
+        },
+        {
+          "symbol": "Shutdown__10ScreenTint",
+          "start": "0x80035A2C",
+          "end": "0x80035A54"
+        },
+        {
+          "symbol": "GetDependencies__7Shadows",
+          "start": "0x80035A54",
+          "end": "0x80035A60"
+        },
+        {
+          "symbol": "GetLinks__7Shadows",
+          "start": "0x80035A60",
+          "end": "0x80035A68"
+        },
+        {
+          "symbol": "GetName__7Shadows",
+          "start": "0x80035A68",
+          "end": "0x80035A74"
+        },
+        {
+          "symbol": "Init__7Shadows",
+          "start": "0x80035A74",
+          "end": "0x80035A7C"
+        },
+        {
+          "symbol": "Shutdown__7Shadows",
+          "start": "0x80035A7C",
+          "end": "0x80035A84"
+        },
+        {
+          "symbol": "GetDependencies__9SideAvoid",
+          "start": "0x80035A84",
+          "end": "0x80035A8C"
+        },
+        {
+          "symbol": "GetLinks__9SideAvoid",
+          "start": "0x80035A8C",
+          "end": "0x80035A94"
+        },
+        {
+          "symbol": "GetName__9SideAvoid",
+          "start": "0x80035A94",
+          "end": "0x80035AA0"
+        },
+        {
+          "symbol": "Init__9SideAvoid",
+          "start": "0x80035AA0",
+          "end": "0x80035AC4"
+        },
+        {
+          "symbol": "Shutdown__9SideAvoid",
+          "start": "0x80035AC4",
+          "end": "0x80035ACC"
+        },
+        {
+          "symbol": "GetDependencies__10SimpShadow",
+          "start": "0x80035ACC",
+          "end": "0x80035AD8"
+        },
+        {
+          "symbol": "GetLinks__10SimpShadow",
+          "start": "0x80035AD8",
+          "end": "0x80035AE0"
+        },
+        {
+          "symbol": "GetName__10SimpShadow",
+          "start": "0x80035AE0",
+          "end": "0x80035AEC"
+        },
+        {
+          "symbol": "Init__10SimpShadow",
+          "start": "0x80035AEC",
+          "end": "0x80035B10"
+        },
+        {
+          "symbol": "Shutdown__10SimpShadow",
+          "start": "0x80035B10",
+          "end": "0x80035B34"
+        },
+        {
+          "symbol": "GetDependencies__6SndgIG",
+          "start": "0x80035B34",
+          "end": "0x80035B40"
+        },
+        {
+          "symbol": "GetLinks__6SndgIG",
+          "start": "0x80035B40",
+          "end": "0x80035B48"
+        },
+        {
+          "symbol": "GetName__6SndgIG",
+          "start": "0x80035B48",
+          "end": "0x80035B54"
+        },
+        {
+          "symbol": "Init__6SndgIG",
+          "start": "0x80035B54",
+          "end": "0x80035B78"
+        },
+        {
+          "symbol": "Shutdown__6SndgIG",
+          "start": "0x80035B78",
+          "end": "0x80035B9C"
+        },
+        {
+          "symbol": "GetDependencies__10SndgReplay",
+          "start": "0x80035B9C",
+          "end": "0x80035BA4"
+        },
+        {
+          "symbol": "GetLinks__10SndgReplay",
+          "start": "0x80035BA4",
+          "end": "0x80035BAC"
+        },
+        {
+          "symbol": "GetName__10SndgReplay",
+          "start": "0x80035BAC",
+          "end": "0x80035BB8"
+        },
+        {
+          "symbol": "Init__10SndgReplay",
+          "start": "0x80035BB8",
+          "end": "0x80035BDC"
+        },
+        {
+          "symbol": "Shutdown__10SndgReplay",
+          "start": "0x80035BDC",
+          "end": "0x80035C00"
+        },
+        {
+          "symbol": "GetDependencies__8Statcoll",
+          "start": "0x80035C00",
+          "end": "0x80035C08"
+        },
+        {
+          "symbol": "GetLinks__8Statcoll",
+          "start": "0x80035C08",
+          "end": "0x80035C10"
+        },
+        {
+          "symbol": "GetName__8Statcoll",
+          "start": "0x80035C10",
+          "end": "0x80035C1C"
+        },
+        {
+          "symbol": "Init__8Statcoll",
+          "start": "0x80035C1C",
+          "end": "0x80035C40"
+        },
+        {
+          "symbol": "Shutdown__8Statcoll",
+          "start": "0x80035C40",
+          "end": "0x80035C48"
+        },
+        {
+          "symbol": "GetDependencies__7Statics",
+          "start": "0x80035C48",
+          "end": "0x80035C54"
+        },
+        {
+          "symbol": "GetLinks__7Statics",
+          "start": "0x80035C54",
+          "end": "0x80035C5C"
+        },
+        {
+          "symbol": "GetName__7Statics",
+          "start": "0x80035C5C",
+          "end": "0x80035C68"
+        },
+        {
+          "symbol": "Init__7Statics",
+          "start": "0x80035C68",
+          "end": "0x80035CA8"
+        },
+        {
+          "symbol": "Shutdown__7Statics",
+          "start": "0x80035CA8",
+          "end": "0x80035CD4"
+        },
+        {
+          "symbol": "GetDependencies__3Sub",
+          "start": "0x80035CD4",
+          "end": "0x80035CDC"
+        },
+        {
+          "symbol": "GetLinks__3Sub",
+          "start": "0x80035CDC",
+          "end": "0x80035CE4"
+        },
+        {
+          "symbol": "GetName__3Sub",
+          "start": "0x80035CE4",
+          "end": "0x80035CF0"
+        },
+        {
+          "symbol": "Init__3Sub",
+          "start": "0x80035CF0",
+          "end": "0x80035D14"
+        },
+        {
+          "symbol": "Shutdown__3Sub",
+          "start": "0x80035D14",
+          "end": "0x80035D38"
+        },
+        {
+          "symbol": "GetDependencies__3Trk",
+          "start": "0x80035D38",
+          "end": "0x80035D44"
+        },
+        {
+          "symbol": "GetLinks__3Trk",
+          "start": "0x80035D44",
+          "end": "0x80035D4C"
+        },
+        {
+          "symbol": "GetName__3Trk",
+          "start": "0x80035D4C",
+          "end": "0x80035D58"
+        },
+        {
+          "symbol": "Init__3Trk",
+          "start": "0x80035D58",
+          "end": "0x80035D7C"
+        },
+        {
+          "symbol": "Shutdown__3Trk",
+          "start": "0x80035D7C",
+          "end": "0x80035DA0"
+        },
+        {
+          "symbol": "fn_80035DA0__FPUcT0",
+          "start": "0x80035DA0",
+          "end": "0x80035E68"
+        },
+        {
+          "symbol": "GetDependencies__5Turbo",
+          "start": "0x80035E68",
+          "end": "0x80035E70"
+        },
+        {
+          "symbol": "GetLinks__5Turbo",
+          "start": "0x80035E70",
+          "end": "0x80035E78"
+        },
+        {
+          "symbol": "GetName__5Turbo",
+          "start": "0x80035E78",
+          "end": "0x80035E84"
+        },
+        {
+          "symbol": "Init__5Turbo",
+          "start": "0x80035E84",
+          "end": "0x80035EBC"
+        },
+        {
+          "symbol": "Shutdown__5Turbo",
+          "start": "0x80035EBC",
+          "end": "0x80035EE0"
+        },
+        {
+          "symbol": "fn_80035EE0__5Turbo",
+          "start": "0x80035EE0",
+          "end": "0x80035F14"
+        },
+        {
+          "symbol": "GetDependencies__10ColorStyle",
+          "start": "0x80035F14",
+          "end": "0x80035F1C"
+        },
+        {
+          "symbol": "GetLinks__10ColorStyle",
+          "start": "0x80035F1C",
+          "end": "0x80035F24"
+        },
+        {
+          "symbol": "GetName__10ColorStyle",
+          "start": "0x80035F24",
+          "end": "0x80035F30"
+        },
+        {
+          "symbol": "Init__10ColorStyle",
+          "start": "0x80035F30",
+          "end": "0x80035F6C"
+        },
+        {
+          "symbol": "Shutdown__10ColorStyle",
+          "start": "0x80035F6C",
+          "end": "0x80035F94"
+        },
+        {
+          "symbol": "GetDependencies__6VptMgr",
+          "start": "0x80035F94",
+          "end": "0x80035F9C"
+        },
+        {
+          "symbol": "GetLinks__6VptMgr",
+          "start": "0x80035F9C",
+          "end": "0x80035FA4"
+        },
+        {
+          "symbol": "GetName__6VptMgr",
+          "start": "0x80035FA4",
+          "end": "0x80035FB0"
+        },
+        {
+          "symbol": "Init__6VptMgr",
+          "start": "0x80035FB0",
+          "end": "0x80035FD4"
+        },
+        {
+          "symbol": "Shutdown__6VptMgr",
+          "start": "0x80035FD4",
+          "end": "0x80035FF8"
+        },
+        {
+          "symbol": "GetDependencies__8MiniGame",
+          "start": "0x80035FF8",
+          "end": "0x80036004"
+        },
+        {
+          "symbol": "GetLinks__8MiniGame",
+          "start": "0x80036004",
+          "end": "0x8003600C"
+        },
+        {
+          "symbol": "GetName__8MiniGame",
+          "start": "0x8003600C",
+          "end": "0x80036018"
+        },
+        {
+          "symbol": "Init__8MiniGame",
+          "start": "0x80036018",
+          "end": "0x80036048"
+        },
+        {
+          "symbol": "Shutdown__8MiniGame",
+          "start": "0x80036048",
+          "end": "0x80036078"
+        },
+        {
+          "symbol": "GetDependencies__12TutorialGame",
+          "start": "0x80036078",
+          "end": "0x80036084"
+        },
+        {
+          "symbol": "GetLinks__12TutorialGame",
+          "start": "0x80036084",
+          "end": "0x8003608C"
+        },
+        {
+          "symbol": "GetName__12TutorialGame",
+          "start": "0x8003608C",
+          "end": "0x80036098"
+        },
+        {
+          "symbol": "Init__12TutorialGame",
+          "start": "0x80036098",
+          "end": "0x800360C8"
+        },
+        {
+          "symbol": "Shutdown__12TutorialGame",
+          "start": "0x800360C8",
+          "end": "0x800360F8"
         },
         {
           "symbol": "__static_initialization_and_destruction_0",
-          "start": "0x8007F9B0",
-          "end": "0x8007F9F0"
+          "start": "0x800360F8",
+          "end": "0x800375FC"
         },
         {
-          "symbol": "_GLOBAL_.I.fn_8007F328",
-          "start": "0x8007F9F0",
-          "end": "0x8007FA1C"
+          "symbol": "_._8Animintf",
+          "start": "0x800375FC",
+          "end": "0x8003762C"
         },
         {
-          "symbol": "_GLOBAL_.D.fn_8007F328",
-          "start": "0x8007FA1C",
-          "end": "0x8007FA48"
+          "symbol": "_._13AnimScriptMan",
+          "start": "0x8003762C",
+          "end": "0x8003765C"
+        },
+        {
+          "symbol": "_._5Arrow",
+          "start": "0x8003765C",
+          "end": "0x8003768C"
+        },
+        {
+          "symbol": "_._3Ass",
+          "start": "0x8003768C",
+          "end": "0x800376BC"
+        },
+        {
+          "symbol": "_._6AssJoy",
+          "start": "0x800376BC",
+          "end": "0x800376EC"
+        },
+        {
+          "symbol": "_._4Ball",
+          "start": "0x800376EC",
+          "end": "0x8003771C"
+        },
+        {
+          "symbol": "_._6Banner",
+          "start": "0x8003771C",
+          "end": "0x8003774C"
+        },
+        {
+          "symbol": "_._6BigObj",
+          "start": "0x8003774C",
+          "end": "0x8003777C"
+        },
+        {
+          "symbol": "_._5Block",
+          "start": "0x8003777C",
+          "end": "0x800377AC"
+        },
+        {
+          "symbol": "_._7CamGame",
+          "start": "0x800377AC",
+          "end": "0x800377DC"
+        },
+        {
+          "symbol": "_._9CamScript",
+          "start": "0x800377DC",
+          "end": "0x8003780C"
+        },
+        {
+          "symbol": "_._5Catch",
+          "start": "0x8003780C",
+          "end": "0x8003783C"
+        },
+        {
+          "symbol": "_._7CatchUp",
+          "start": "0x8003783C",
+          "end": "0x8003786C"
+        },
+        {
+          "symbol": "_._3Cld",
+          "start": "0x8003786C",
+          "end": "0x8003789C"
+        },
+        {
+          "symbol": "_._5Clock",
+          "start": "0x8003789C",
+          "end": "0x800378CC"
+        },
+        {
+          "symbol": "_._8CoinToss",
+          "start": "0x800378CC",
+          "end": "0x800378FC"
+        },
+        {
+          "symbol": "_._7Effects",
+          "start": "0x800378FC",
+          "end": "0x8003792C"
+        },
+        {
+          "symbol": "_._3Env",
+          "start": "0x8003792C",
+          "end": "0x8003795C"
+        },
+        {
+          "symbol": "_._7GameBrk",
+          "start": "0x8003795C",
+          "end": "0x8003798C"
+        },
+        {
+          "symbol": "_._8GameIntf",
+          "start": "0x8003798C",
+          "end": "0x800379BC"
+        },
+        {
+          "symbol": "_._8GamePlay",
+          "start": "0x800379BC",
+          "end": "0x800379EC"
+        },
+        {
+          "symbol": "_._9GameSkill",
+          "start": "0x800379EC",
+          "end": "0x80037A1C"
+        },
+        {
+          "symbol": "_._5HotRt",
+          "start": "0x80037A1C",
+          "end": "0x80037A4C"
+        },
+        {
+          "symbol": "_._7ID3Read",
+          "start": "0x80037A4C",
+          "end": "0x80037A7C"
+        },
+        {
+          "symbol": "_._10IGNetEvent",
+          "start": "0x80037A7C",
+          "end": "0x80037AAC"
+        },
+        {
+          "symbol": "_._6JoyMsg",
+          "start": "0x80037AAC",
+          "end": "0x80037ADC"
+        },
+        {
+          "symbol": "_._5Light",
+          "start": "0x80037ADC",
+          "end": "0x80037B0C"
+        },
+        {
+          "symbol": "_._3MiM",
+          "start": "0x80037B0C",
+          "end": "0x80037B3C"
+        },
+        {
+          "symbol": "_._7Monitor",
+          "start": "0x80037B3C",
+          "end": "0x80037B6C"
+        },
+        {
+          "symbol": "_._9Particles",
+          "start": "0x80037B6C",
+          "end": "0x80037B9C"
+        },
+        {
+          "symbol": "_._5Pause",
+          "start": "0x80037B9C",
+          "end": "0x80037BCC"
+        },
+        {
+          "symbol": "_._7Penalty",
+          "start": "0x80037BCC",
+          "end": "0x80037BFC"
+        },
+        {
+          "symbol": "_._10PlayArtMem",
+          "start": "0x80037BFC",
+          "end": "0x80037C2C"
+        },
+        {
+          "symbol": "_._8PlayInfo",
+          "start": "0x80037C2C",
+          "end": "0x80037C5C"
+        },
+        {
+          "symbol": "_._9PlayTrack",
+          "start": "0x80037C5C",
+          "end": "0x80037C8C"
+        },
+        {
+          "symbol": "_._4Plyr",
+          "start": "0x80037C8C",
+          "end": "0x80037CBC"
+        },
+        {
+          "symbol": "_._8PlyrCtrl",
+          "start": "0x80037CBC",
+          "end": "0x80037CEC"
+        },
+        {
+          "symbol": "_._7PlyrMsg",
+          "start": "0x80037CEC",
+          "end": "0x80037D1C"
+        },
+        {
+          "symbol": "_._8Practice",
+          "start": "0x80037D1C",
+          "end": "0x80037D4C"
+        },
+        {
+          "symbol": "_._7Pursuit",
+          "start": "0x80037D4C",
+          "end": "0x80037D7C"
+        },
+        {
+          "symbol": "_._9RenderBin",
+          "start": "0x80037D7C",
+          "end": "0x80037DAC"
+        },
+        {
+          "symbol": "_._6Replay",
+          "start": "0x80037DAC",
+          "end": "0x80037DDC"
+        },
+        {
+          "symbol": "_._11ReplayFrame",
+          "start": "0x80037DDC",
+          "end": "0x80037E0C"
+        },
+        {
+          "symbol": "_._10ScreenTint",
+          "start": "0x80037E0C",
+          "end": "0x80037E3C"
+        },
+        {
+          "symbol": "_._7Shadows",
+          "start": "0x80037E3C",
+          "end": "0x80037E6C"
+        },
+        {
+          "symbol": "_._9SideAvoid",
+          "start": "0x80037E6C",
+          "end": "0x80037E9C"
+        },
+        {
+          "symbol": "_._10SimpShadow",
+          "start": "0x80037E9C",
+          "end": "0x80037ECC"
+        },
+        {
+          "symbol": "_._6SndgIG",
+          "start": "0x80037ECC",
+          "end": "0x80037EFC"
+        },
+        {
+          "symbol": "_._10SndgReplay",
+          "start": "0x80037EFC",
+          "end": "0x80037F2C"
+        },
+        {
+          "symbol": "_._8Statcoll",
+          "start": "0x80037F2C",
+          "end": "0x80037F5C"
+        },
+        {
+          "symbol": "_._7Statics",
+          "start": "0x80037F5C",
+          "end": "0x80037F8C"
+        },
+        {
+          "symbol": "_._3Sub",
+          "start": "0x80037F8C",
+          "end": "0x80037FBC"
+        },
+        {
+          "symbol": "_._3Trk",
+          "start": "0x80037FBC",
+          "end": "0x80037FEC"
+        },
+        {
+          "symbol": "_._10ColorStyle",
+          "start": "0x80037FEC",
+          "end": "0x8003801C"
+        },
+        {
+          "symbol": "_._6VptMgr",
+          "start": "0x8003801C",
+          "end": "0x8003804C"
+        },
+        {
+          "symbol": "_._8MiniGame",
+          "start": "0x8003804C",
+          "end": "0x8003807C"
+        },
+        {
+          "symbol": "_._12TutorialGame",
+          "start": "0x8003807C",
+          "end": "0x800380AC"
+        },
+        {
+          "symbol": "_._8IGOnline",
+          "start": "0x800380AC",
+          "end": "0x800380DC"
+        },
+        {
+          "symbol": "_._8PlayBook",
+          "start": "0x800380DC",
+          "end": "0x8003810C"
+        },
+        {
+          "symbol": "_._5Turbo",
+          "start": "0x8003810C",
+          "end": "0x8003813C"
+        },
+        {
+          "symbol": "_GLOBAL_.I.GetDependencies__8Animintf",
+          "start": "0x8003813C",
+          "end": "0x80038168"
+        },
+        {
+          "symbol": "_GLOBAL_.D.GetDependencies__8Animintf",
+          "start": "0x80038168",
+          "end": "0x80038194"
         }
       ]
     },
@@ -981,6 +2741,132 @@
           "symbol": "_GLOBAL_.D.lbl_802D50A4",
           "start": "0x8006F1C8",
           "end": "0x8006F1F4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8007F12C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv bounded unit row for src/game/cu_8007F12C.cpp, individual exact function extents, owned data spans, inferred layouts and lifecycle names. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007F12C",
+          "end": "0x8007FA48"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80292930",
+          "end": "0x80292948"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6798",
+          "end": "0x802D6850"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA7B8",
+          "end": "0x803EA7D0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BA80",
+          "end": "0x8030BC2C"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AAC",
+          "end": "0x80289AB0"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BEC",
+          "end": "0x80289BF0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8007F12C",
+          "start": "0x8007F12C",
+          "end": "0x8007F174"
+        },
+        {
+          "symbol": "fn_8007F174",
+          "start": "0x8007F174",
+          "end": "0x8007F19C"
+        },
+        {
+          "symbol": "fn_8007F19C",
+          "start": "0x8007F19C",
+          "end": "0x8007F298"
+        },
+        {
+          "symbol": "fn_8007F298",
+          "start": "0x8007F298",
+          "end": "0x8007F328"
+        },
+        {
+          "symbol": "fn_8007F328",
+          "start": "0x8007F328",
+          "end": "0x8007F374"
+        },
+        {
+          "symbol": "fn_8007F374",
+          "start": "0x8007F374",
+          "end": "0x8007F394"
+        },
+        {
+          "symbol": "fn_8007F394",
+          "start": "0x8007F394",
+          "end": "0x8007F3D8"
+        },
+        {
+          "symbol": "fn_8007F3D8",
+          "start": "0x8007F3D8",
+          "end": "0x8007F548"
+        },
+        {
+          "symbol": "fn_8007F548",
+          "start": "0x8007F548",
+          "end": "0x8007F6F8"
+        },
+        {
+          "symbol": "fn_8007F6F8",
+          "start": "0x8007F6F8",
+          "end": "0x8007F828"
+        },
+        {
+          "symbol": "fn_8007F828",
+          "start": "0x8007F828",
+          "end": "0x8007F97C"
+        },
+        {
+          "symbol": "fn_8007F97C",
+          "start": "0x8007F97C",
+          "end": "0x8007F9B0"
+        },
+        {
+          "symbol": "__static_initialization_and_destruction_0",
+          "start": "0x8007F9B0",
+          "end": "0x8007F9F0"
+        },
+        {
+          "symbol": "_GLOBAL_.I.fn_8007F328",
+          "start": "0x8007F9F0",
+          "end": "0x8007FA1C"
+        },
+        {
+          "symbol": "_GLOBAL_.D.fn_8007F328",
+          "start": "0x8007FA1C",
+          "end": "0x8007FA48"
         }
       ]
     }
