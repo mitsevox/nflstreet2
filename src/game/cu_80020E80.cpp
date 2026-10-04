@@ -1,4 +1,5 @@
 #include "game/fn_801801F0.h"
+#include "game/Record_80021154.h"
 #include "game/fn_801C1F94.h"
 #include <string.h>
 
@@ -9,12 +10,6 @@ struct Record_80020F5C {
     char mUnknown12[4];
     unsigned char mUnknown16;
     char mUnknown17[3];
-};
-
-struct Record_80021154 {
-    char mUnknown0[4];
-    int mUnknown4;
-    char *mUnknown8;
 };
 
 union Word_800211B4 {
