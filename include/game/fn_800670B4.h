@@ -7,7 +7,7 @@ struct Object_8006719C {
     int mUnknown4;
     char mUnknown8[7];
     unsigned char mUnknownF;
-    int mUnknown10;
+    char mUnknown10[4];
     unsigned int mUnknown14;
     char mUnknown18[0xC90];
 };
