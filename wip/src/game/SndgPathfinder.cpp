@@ -462,8 +462,8 @@ struct Struct_801374BC {
 struct Struct_802D62B8 {
     float mDistance;
     float mFactor;
-    float mScaleNear;
-    float mScaleFar;
+    float mScaleNoPos;
+    float mScalePositional;
 };
 
 struct Struct_8030A688;
@@ -2592,9 +2592,9 @@ extern "C" unsigned char fn_8006D408(Struct_8030A688 *src, Vec3 *pos, unsigned c
                 float t = (dist + (1.0f - params->mFactor) * (params->mDistance - dist)) / params->mDistance;
                 level /= t * t;
             }
-            level *= src->mParams->mScaleFar;
+            level *= src->mParams->mScalePositional;
         } else {
-            level *= src->mParams->mScaleNear;
+            level *= src->mParams->mScaleNoPos;
         }
         volume = (int)(level > 127.0f ? 127.0f : level);
     }
