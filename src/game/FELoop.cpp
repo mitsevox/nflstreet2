@@ -1,6 +1,10 @@
+#include "engine/cu_80227F14.h"
 #include "game/Class_801CBC50.h"
 #include "game/FELoop.h"
 #include "game/FMCAPPORT.h"
+#include "game/fn_8003B6BC.h"
+#include "game/fn_80191804.h"
+#include "game/fn_80218FC4.h"
 
 extern "C" {
 extern char lbl_80306B34[];
@@ -25,7 +29,6 @@ void fn_80024560(void);
 void fn_80024608(void);
 void fn_800271A4(void);
 int fn_80033124(void *p);
-void fn_8003B6BC(int a, struct Record_8003B6BC *pRecord);
 void fn_8003E1F0(void);
 int fn_8005FC7C(void);
 int fn_800602E8(void);
@@ -58,7 +61,6 @@ void fn_80188E14(void);
 void fn_80188E8C(void);
 void fn_8018A4BC(int a, unsigned int id, float value);
 void fn_8018A740(void);
-void fn_80191804(int a, int b, float c);
 void fn_80194E04(void);
 int fn_801C601C(int a);
 int fn_801C60BC(int a);
@@ -71,27 +73,14 @@ void fn_801CE910(void);
 int fn_801CEB4C(void);
 void fn_801D6F58(void);
 void fn_801F2798(const char *pText);
-int fn_80218FC4(void *p, short a, short b, int c, void *pD);
 void fn_8021956C(void *p, int a, int b, int c);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 void fn_8021D7B8(void *a, int b, int c, int *d);
-void fn_802285CC(void);
 int fn_802294F4(void);
 int fn_80229554(void);
 void fn_802297B0(void);
-int fn_80232FD4(struct Record_8003B6BC *pRecord0, struct Record_8003B6BC *pRecord1);
+int fn_80232FD4(Record_8003B6BC *pRecord0, Record_8003B6BC *pRecord1);
 }
-
-/* Record copied out by fn_8003B6BC. */
-struct Record_8003B6BC {
-    int mUnknown[14];
-};
-
-/* Last argument of fn_80218FC4. */
-struct Arg_80218FC4 {
-    int mUnknown0;
-    int mUnknown4;
-};
 
 static unsigned char sUnknown803EA2D8 = 0;
 static unsigned char sUnknown803EA2D9 = 0;

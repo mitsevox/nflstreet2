@@ -1,5 +1,6 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801801F0.h"
+#include "game/fn_80218FC4.h"
 #include <string.h>
 
 #include "game/Record_802CC680.h"
@@ -52,7 +53,6 @@ int fn_801F6D54(int a, struct Desc_801F6D54 *pDesc, int b, int c);
 int fn_801F8758(int a);
 void fn_801F8768(void);
 void fn_801F87FC(int a);
-int fn_80218FC4(void *p, short a, short b, int c, void *pD);
 int fn_80219044(void *p, int a, int b, int c, struct Entry_80219044 **ppEntries);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
