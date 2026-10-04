@@ -3,6 +3,15 @@
 #include "game/fn_801FCE10.h"
 #include "game/Object_8007A334.h"
 
+#if defined(DECOMP_COMPARE)
+/* Record filled by 0x8018EDF0; 0x8018E6E0 reads only the byte at +0x50. */
+struct Record_8018EDF0 {
+    char mUnknown0[80];
+    unsigned char mId;
+    char mUnknown81[19];
+};
+#endif
+
 extern "C" {
 int fn_8022F358(int index);
 int fn_8022F3D4(int a);
@@ -239,4 +248,116 @@ int fn_8018E598(int index)
     }
     return result;
 }
+
+#if defined(DECOMP_COMPARE)
+/* Draft bodies of the rest of this file (0x8018E5F4-0x8018E9A4); the original
+   bytes of this range stay linked. */
+int fn_8018EDF0(int a, int b, Record_8018EDF0 *pRecord);
+unsigned int fn_8018EE44(int a);
+int fn_8018EE78(int index);
+
+/* Partial: ProDG turns this test into subfic/adde, while the target keeps
+   li/cmpwi/bne/li (see the cu_8018DF98 draft functions evidence row). */
+int fn_8018E5F4(int index, int id)
+{
+    int value;
+    int found = 0;
+
+    if (fn_801FCE10(0, "use \x8c select 'NETS' into \x82 from 'CETS' where 'NETS' = \x82\n",
+                    fn_8022F3D4(fn_8022F358(index)), &value, id) == 0) {
+        found = 1;
+    }
+    return found;
+}
+
+void fn_8018E658(int index, int id)
+{
+    fn_801FCE10(0, "use \x8c insert into 'CETS' set 'NETS' = \x82\n",
+                fn_8022F3D4(fn_8022F358(index)), id);
+}
+
+int fn_8018E6A4(int index)
+{
+    return fn_8018EE78(index) - fn_8018E598(index);
+}
+
+int fn_8018E6E0(int index, int a)
+{
+    Record_8018EDF0 record;
+    int result = 1;
+    unsigned int count = fn_8018EE44(a);
+
+    if (count) {
+        unsigned int i;
+
+        for (i = 0; i < count; i++) {
+            if (fn_8018EDF0(a, i, &record) && !fn_8018E5F4(index, record.mId)) {
+                result = 0;
+                break;
+            }
+        }
+    } else if (a == 11) {
+        result = 0;
+    }
+    return result;
+}
+
+int fn_8018E774(int index)
+{
+    return !fn_8018DFE4(index, 1);
+}
+
+void fn_8018E7A0(int index, int value)
+{
+    fn_8018E02C(index, 1, !value);
+}
+
+int fn_8018E7CC(int index)
+{
+    int value;
+    int result = -1;
+
+    if (fn_801FCE10(0, "use \x8c select 'LKSS' into \x82 from 'TADS'\n",
+                    fn_8022F3D4(fn_8022F358(index)), &value) == 0) {
+        result = value;
+    }
+    return result;
+}
+
+void fn_8018E828(int index, int value)
+{
+    fn_801FCE10(0, "use \x8c update 'TADS' set 'LKSS' = \x82\n",
+                fn_8022F3D4(fn_8022F358(index)), value);
+}
+
+int fn_8018E874(int index, int n)
+{
+    return fn_8018DFE4(index, fn_8018E0D8(n));
+}
+
+void fn_8018E8B0(int index, int n, int set)
+{
+    fn_8018E02C(index, fn_8018E0D8(n), set);
+}
+
+int fn_8018E8F4(int index)
+{
+    return !fn_8018DFE4(index, 0x100);
+}
+
+void fn_8018E920(int index, int value)
+{
+    fn_8018E02C(index, 0x100, !value);
+}
+
+int fn_8018E94C(int index)
+{
+    return !fn_8018DFE4(index, 0x200);
+}
+
+void fn_8018E978(int index, int value)
+{
+    fn_8018E02C(index, 0x200, !value);
+}
+#endif
 }

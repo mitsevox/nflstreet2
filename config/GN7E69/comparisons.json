@@ -519,6 +519,97 @@
       ]
     },
     {
+      "source": "src/game/cu_8018DF98.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018DF98-0x8018E5F4 (src/game/cu_8018DF98.cpp), which places 0x8018E5F4-0x8018E9A4 in the same source file, the individual exact function extents of that range, the data row 0x802AAEE8-0x802AAF9C and the cu_8018DF98 draft source-form row. Draft comparisons only; the accepted build keeps 0x8018DF98-0x8018E5F4 and 0x802AAD90-0x802AAEE8 linked and the original bytes of the draft range.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018DF98",
+          "end": "0x8018E9A4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AAD90",
+          "end": "0x802AAF9C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8018E5F4",
+          "start": "0x8018E5F4",
+          "end": "0x8018E658"
+        },
+        {
+          "symbol": "fn_8018E658",
+          "start": "0x8018E658",
+          "end": "0x8018E6A4"
+        },
+        {
+          "symbol": "fn_8018E6A4",
+          "start": "0x8018E6A4",
+          "end": "0x8018E6E0"
+        },
+        {
+          "symbol": "fn_8018E6E0",
+          "start": "0x8018E6E0",
+          "end": "0x8018E774"
+        },
+        {
+          "symbol": "fn_8018E774",
+          "start": "0x8018E774",
+          "end": "0x8018E7A0"
+        },
+        {
+          "symbol": "fn_8018E7A0",
+          "start": "0x8018E7A0",
+          "end": "0x8018E7CC"
+        },
+        {
+          "symbol": "fn_8018E7CC",
+          "start": "0x8018E7CC",
+          "end": "0x8018E828"
+        },
+        {
+          "symbol": "fn_8018E828",
+          "start": "0x8018E828",
+          "end": "0x8018E874"
+        },
+        {
+          "symbol": "fn_8018E874",
+          "start": "0x8018E874",
+          "end": "0x8018E8B0"
+        },
+        {
+          "symbol": "fn_8018E8B0",
+          "start": "0x8018E8B0",
+          "end": "0x8018E8F4"
+        },
+        {
+          "symbol": "fn_8018E8F4",
+          "start": "0x8018E8F4",
+          "end": "0x8018E920"
+        },
+        {
+          "symbol": "fn_8018E920",
+          "start": "0x8018E920",
+          "end": "0x8018E94C"
+        },
+        {
+          "symbol": "fn_8018E94C",
+          "start": "0x8018E94C",
+          "end": "0x8018E978"
+        },
+        {
+          "symbol": "fn_8018E978",
+          "start": "0x8018E978",
+          "end": "0x8018E9A4"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8018EC68.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8018EC68-0x8018EF6C (src/game/cu_8018EC68.cpp), source-form row 0x8018EA3C-0x8018EF6C, exact function rows 0x8018EA3C-0x8018EC68 and the exact .rodata slice row 0x802AAF9C-0x802AB08C. Draft comparisons only; the full native placements are kept for relocation, only the unlinked .rodata slice is measured, and original bytes remain linked for the 3 unlinked functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",
