@@ -3118,6 +3118,27 @@
         "commit": "7f459cc44faf713c3c12aa6a18c928f4f186b9fc",
         "introduced_blob": "e5e11de724030d068f23bcd53cbad2fdb217edfe"
       }
+    },
+    {
+      "source": "src/game/cu_80062810.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80062810",
+        "0x80062840",
+        "0x80062910",
+        "0x8006291C",
+        "0x80062A58",
+        "0x80062A60",
+        "0x80062A68"
+      ],
+      "provenance": {
+        "pull_request": 228,
+        "merged_via": 228,
+        "commit": "7e35a62f224e1543f9316a5604535531ea3e2a53",
+        "introduced_blob": "6b03be9a49f5550308a98f4e5cef7c41b0b609aa"
+      }
     }
   ],
   "target": "GN7E69",
