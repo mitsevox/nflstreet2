@@ -1,10 +1,4 @@
-struct Object_8017886C {
-    char mUnknown00[0x14];
-    float mUnknown14;
-    int mUnknown18;
-    char mUnknown1C;
-    signed char mUnknown1D;
-};
+#include "game/Object_8017886C.h"
 
 extern "C" {
 extern void (*lbl_803EBB10)(int, int, ...);
@@ -20,7 +14,6 @@ int fn_80177F7C(void);
 int fn_80178194(void);
 int fn_80178308(void);
 int fn_80178360(void);
-Object_8017886C *fn_8017886C(void);
 int fn_801AE5D4(int a, int b, int c);
 int fn_801F7ABC(void);
 float fn_80237260(int stream);
