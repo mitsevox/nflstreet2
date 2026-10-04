@@ -12,7 +12,11 @@ import sdk_map
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def verify(root, site, decomp, source_units):
+def verify(root, site, decomp, source_units, comparison_site=None):
+    if comparison_site is not None:
+        for key in ("sections", "files", "measures", "functions", "comparison"):
+            if site.get(key) != comparison_site.get(key):
+                raise ValueError("Public map differs from validated source comparisons")
     sdk_units = sdk_map.load(root)
     candidates = game_map.load(root, site['sections'], sdk_units + source_units)
     expected = {u['name']: sum(int(e['end'], 16) - int(e['start'], 16)
@@ -37,7 +41,7 @@ def verify(root, site, decomp, source_units):
                 (e["start"], e["end"]) for e in item.get("mapped_extents", []))
         if item.get('scope') != 'candidate-ranges':
             continue
-        if item.get('source') or item['linked'] or item['matched']:
+        if item.get('source') or item['linked'] or (comparison_site is None and item['matched']):
             raise ValueError('Candidate mapping received source credit')
         actual[item['name']] = actual.get(item['name'], 0) + item['size']
     if actual != expected or actual_extents != expected_extents:
@@ -52,7 +56,7 @@ def verify(root, site, decomp, source_units):
         m = unit['measures']
         if sum(int(m['total_' + k]) for k in ('code', 'data')) != size \
                 or any(int(m[f'{field}_{k}']) for k in ('code', 'data')
-                       for field in ('matched', 'complete')) \
+                       for field in (('matched', 'complete') if comparison_site is None else ('complete',))) \
                 or not unit['metadata'].get('auto_generated') \
                 or unit['metadata'].get('source_path'):
             raise ValueError('decomp.dev candidate coverage or source credit differs')
@@ -68,9 +72,17 @@ def main():
     parser.add_argument('--site', type=Path, default=ROOT / 'build/site/progress.json')
     parser.add_argument('--decomp', type=Path, default=ROOT / 'build/GN7E69/report.json')
     parser.add_argument('--source-report', type=Path, default=ROOT / 'build/source/report.json')
+    parser.add_argument('--comparison-report', type=Path)
     args = parser.parse_args()
+    comparison_site = None
+    if args.comparison_report is not None:
+        import progress
+        comparison_site = progress.report(
+            (args.source_report.parent / 'main.dol').read_bytes(),
+            json.loads(args.site.read_text())['revision'], args.source_report,
+            ROOT / 'build/analysis', args.comparison_report)
     count = verify(ROOT, json.loads(args.site.read_text()), json.loads(args.decomp.read_text()),
-                   json.loads(args.source_report.read_text())['units'])
+                   json.loads(args.source_report.read_text())['units'], comparison_site)
     print(f'Both progress maps cover {count} current candidate groupings; source credit is unchanged.')
 
 

@@ -21,6 +21,7 @@ jobs:
     permissions:
       contents: read
       packages: read
+      actions: read
     env:
       BUILD_ENVIRONMENT: ghcr.io/mitsevox/nflstreet2-build@sha256:2b4967b77a5d74fb4575ec522ca0a60d8769605e7f5c9c162fb4e55959250aae
     steps:
@@ -31,6 +32,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
+          fetch-depth: 0
       - name: Verify review clearance logic
         run: node --test tests/review_gate.mjs
       - name: Verify complete original-object relink
@@ -40,6 +42,10 @@ jobs:
           printf '%s' "$GH_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/baseline.py --original /orig/main.dol
+      - name: Verify activity and Git provenance on the host
+        run: |
+          command -v git
+          python3 -m unittest discover -s tests -p test_activity.py -v
       - name: Verify compiler stages
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
@@ -69,16 +75,35 @@ jobs:
               sudo dmesg | tail -20
               exit 1
             }
+      - name: Measure exact and fuzzy source comparisons
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
+            "$BUILD_ENVIRONMENT" python3 tools/matching.py --original /orig/main.dol
+          python3 -m unittest discover -s tests -p test_matching.py -v
       - name: Export public progress page
         run: |
           python3 tools/progress.py --dol build/source/main.dol --revision "$GITHUB_SHA" \
-            --source-report build/source/report.json --analysis-dir build/analysis
+            --source-report build/source/report.json --analysis-dir build/analysis \
+            --comparison-report build/matching/report.json
       - name: Export decomp.dev report
         run: |
           python3 tools/decomp_report.py --dol build/source/main.dol --revision "$GITHUB_SHA" \
-            --source-report build/source/report.json --analysis-dir build/analysis
+            --source-report build/source/report.json --analysis-dir build/analysis \
+            --comparison-report build/matching/report.json
       - name: Verify current mapping in both progress exports
-        run: python3 tools/check_progress_maps.py
+        run: python3 tools/check_progress_maps.py --comparison-report build/matching/report.json
+      - name: Export verified history and contributor credits
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PUBLISH_MAIN: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
+        run: |
+          if [ "$PUBLISH_MAIN" = true ]; then
+            python3 tools/restore_history.py
+            python3 tools/activity.py --append-current --previous build/activity/previous.json
+          else
+            python3 tools/activity.py
+          fi
+          python3 -m unittest discover -s tests -p test_activity.py -v
       - name: Upload decomp.dev report
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:

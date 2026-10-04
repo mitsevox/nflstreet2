@@ -487,11 +487,11 @@ window.addEventListener('scroll', hideTooltip, {passive: true});
 function validMap(items, kind = null) {
   return Array.isArray(items) && items.length > 0 && items.every(item => {
     if (!['code', 'data'].includes(item.kind) || (kind && item.kind !== kind) ||
-        typeof item.name !== 'string' || !validMeasure({total: item.size, linked: item.linked, matched: item.matched})) return false;
+        typeof item.name !== 'string' || !validMeasure({total: item.size, linked: item.linked, matched: item.matched, fuzzy: item.fuzzy})) return false;
     if (item.children) {
       if (!validMap(item.children, item.kind)) return false;
-      for (const field of ['size', 'linked', 'matched']) {
-        if (item.children.reduce((sum, child) => sum + child[field], 0) !== item[field]) return false;
+      for (const field of ['size', 'linked', 'matched', ...(item.fuzzy === undefined ? [] : ['fuzzy'])]) {
+        if (Math.abs(item.children.reduce((sum, child) => sum + child[field], 0) - item[field]) > 1e-6) return false;
       }
     }
     return true;
@@ -523,25 +523,27 @@ function renderFunctions(functions) {
   }
 }
 
-function validMeasure(m){return m&&Number.isSafeInteger(m.total)&&m.total>0&&Number.isSafeInteger(m.linked)&&m.linked>=0&&m.linked<=m.total&&Number.isSafeInteger(m.matched)&&m.matched>=0&&m.matched<=m.linked;}
-async function loadProgress(){try{const response=await fetch('./progress.json',{cache:'no-cache'});if(!response.ok)throw new Error('Progress unavailable');const data=await response.json();if(data.schema!==1||data.target!=='GN7E69'||data.basis!=='executable-sections'||data.baseline!=='verified'||!(/^[a-f0-9]{40}$/).test(data.revision)||!validMeasure(data.measures?.code)||!validMeasure(data.measures?.data)||!Array.isArray(data.sections)||!data.sections.length)throw new Error('Invalid progress');for(const item of data.sections){if(!['code','data'].includes(item.kind)||typeof item.name!=='string'||!/^0x[0-9A-F]{8}$/.test(item.address)||!validMeasure({total:item.size,linked:item.linked,matched:item.matched}))throw new Error('Invalid section');}for(const kind of ['code','data']){for(const field of ['total','linked','matched']){const sum=data.sections.filter(s=>s.kind===kind).reduce((n,s)=>n+s[field==='total'?'size':field],0);if(sum!==data.measures[kind][field])throw new Error('Inconsistent progress');}}
+function validMeasure(m){return m&&Number.isSafeInteger(m.total)&&m.total>0&&Number.isSafeInteger(m.linked)&&m.linked>=0&&m.linked<=m.total&&Number.isSafeInteger(m.matched)&&m.matched>=0&&m.linked<=m.matched&&m.matched<=m.total&&(m.fuzzy===undefined||(Number.isFinite(m.fuzzy)&&m.matched<=m.fuzzy&&m.fuzzy<=m.total));}
+async function loadProgress(){try{const response=await fetch('./progress.json',{cache:'no-cache'});if(!response.ok)throw new Error('Progress unavailable');const data=await response.json();if(data.schema!==1||data.target!=='GN7E69'||data.basis!=='executable-sections'||data.baseline!=='verified'||!(/^[a-f0-9]{40}$/).test(data.revision)||!validMeasure(data.measures?.code)||!validMeasure(data.measures?.data)||!Array.isArray(data.sections)||!data.sections.length)throw new Error('Invalid progress');for(const item of data.sections){if(!['code','data'].includes(item.kind)||typeof item.name!=='string'||!/^0x[0-9A-F]{8}$/.test(item.address)||!validMeasure({total:item.size,linked:item.linked,matched:item.matched,fuzzy:item.fuzzy}))throw new Error('Invalid section');}for(const kind of ['code','data']){for(const field of ['total','linked','matched',...(data.measures[kind].fuzzy===undefined?[]:['fuzzy'])]){const sum=data.sections.filter(s=>s.kind===kind).reduce((n,s)=>n+s[field==='total'?'size':field],0);if(Math.abs(sum-data.measures[kind][field])>1e-6)throw new Error('Inconsistent progress');}}
 const files=data.files || data.sections;
 if(!validMap(data.sections)||!validMap(files))throw new Error('Invalid map');
-for(const kind of ['code','data']){for(const field of ['total','linked','matched']){
-  if(files.filter(item=>item.kind===kind).reduce((sum,item)=>sum+item[field==='total'?'size':field],0)!==data.measures[kind][field])throw new Error('Inconsistent file map');
+for(const kind of ['code','data']){for(const field of ['total','linked','matched',...(data.measures[kind].fuzzy===undefined?[]:['fuzzy'])]){
+  if(Math.abs(files.filter(item=>item.kind===kind).reduce((sum,item)=>sum+item[field==='total'?'size':field],0)-data.measures[kind][field])>1e-6)throw new Error('Inconsistent file map');
 }}
 renderFunctions(data.functions);sections=files;document.querySelectorAll('.progress-element').forEach(element => {
   const kind = element.dataset.progress;
   const measures = data.measures[kind];
   const linked = measures.linked / measures.total * 100;
   const matched = measures.matched / measures.total * 100;
+  const fuzzy = (measures.fuzzy ?? measures.matched) / measures.total * 100;
   const track = element.querySelector('.track');
-  const description = `${kind === 'code' ? 'Code' : 'Data'} · Linked ${linked.toFixed(2)}% · Matched ${matched.toFixed(2)}%`;
+  const description = `${kind === 'code' ? 'Code' : 'Data'} · Linked ${linked.toFixed(2)}% · Matched ${matched.toFixed(2)}% · Fuzzy ${fuzzy.toFixed(2)}%`;
   countUp(element.querySelector('.progress-value'), matched, 2, '%');
   track.setAttribute('aria-valuenow', matched);
-  track.setAttribute('aria-valuetext', `Linked ${linked.toFixed(2)}%, matched ${matched.toFixed(2)}%`);
+  track.setAttribute('aria-valuetext', `Linked ${linked.toFixed(2)}%, matched ${matched.toFixed(2)}%, fuzzy ${fuzzy.toFixed(2)}%`);
   fillTo(track.querySelector('.progress-linked'), linked);
   fillTo(track.querySelector('.progress-matched'), matched);
+  fillTo(track.querySelector('.progress-fuzzy'), fuzzy);
   element.addEventListener('pointerenter', event => {
     if (event.pointerType !== 'touch') showTooltipText(track, description, event.clientX, event.clientY);
   });
