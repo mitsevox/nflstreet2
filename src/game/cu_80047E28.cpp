@@ -1,5 +1,6 @@
 #include "engine/cu_80227F14.h"
 #include "game/FELoop.h"
+#include "game/Item_800476DC.h"
 #include "game/Object_8007A334.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_8008044C.h"
@@ -109,11 +110,6 @@ struct Row_8007BC34 {
     char mUnknown7C[4];
 };
 
-struct Item_800476DC {
-    char mUnknown00[28];
-    unsigned char mUnknown1C;
-};
-
 /* Creation argument of fn_8004A040. */
 struct Init_8004A040 {
     int mUnknown00;
@@ -148,7 +144,6 @@ int fn_8003DEB4(void);
 void fn_80042610(Object_8003DEC4 *pPlayer, int a, void *b, int c, int d);
 void fn_800428A8(Object_8003DEC4 *pPlayer);
 int fn_80046898(Block_80307980 *pBlock);
-void fn_800476DC(Item_800476DC *pItem, void *p);
 void fn_800478DC(unsigned char *pColors);
 void fn_8004795C(unsigned char *pColors, unsigned char flag);
 void fn_800479B0(Row_8007BC34 *pRow, Record_803078E8 *pRecord, int *pIds, int *pPalettes, int slot);
@@ -1278,7 +1273,7 @@ extern "C" int fn_8004A1A8(Object_8003DEC4 *pPlayer, int unused)
 {
     Item_800476DC *pItem = pPlayer->mUnknown988;
 
-    if (pItem && pItem->mUnknown1C) {
+    if (pItem && pItem->mUnknown28) {
         fn_800476DC(pItem, pPlayer->mUnknown4);
     }
     fn_801A3C40(pPlayer);

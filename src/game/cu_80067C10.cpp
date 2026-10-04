@@ -72,7 +72,7 @@ extern "C" void fn_80067D4C(int type, Vector_80039F5C *pPos)
     Record_80067CA8 *p = fn_80067CA8();
 
     fn_801D34D0(p, sizeof(*p), 0, 4);
-    p->mUnknown20 = type;
+    p->mType = type;
     if (pPos) {
         p->mPos.mX = pPos->mX;
         p->mPos.mY = pPos->mY;
@@ -86,8 +86,8 @@ extern "C" void fn_80067DB8(int type, Vector_80039F5C *pPos, int a, int b, int c
     Record_80067CA8 *p = fn_80067CA8();
 
     fn_801D34D0(p, sizeof(*p), 0, 4);
-    p->mUnknown20 = type;
-    p->mUnknown10 = a;
+    p->mType = type;
+    p->mUnknown10.mValue = a;
     p->mUnknown14 = b;
     p->mUnknown18 = c;
     if (pPos) {
@@ -103,9 +103,9 @@ extern "C" void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int 
     Record_80067CA8 *p = fn_80067CA8();
 
     fn_801D34D0(p, sizeof(*p), 0, 4);
-    p->mUnknown20 = type;
+    p->mType = type;
     p->mUnknown0 = id;
-    p->mUnknown10 = a;
+    p->mUnknown10.mValue = a;
     p->mUnknown14 = b;
     p->mUnknown18 = c;
     if (pPos) {

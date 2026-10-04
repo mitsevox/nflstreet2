@@ -1,10 +1,4 @@
-class Class_801B8D9C {
-public:
-    Class_801B8D9C();
-
-private:
-    char mUnknown0[8];
-};
+#include "game/Class_801B8D9C.h"
 
 Class_801B8D9C lbl_803ECC54;
 Class_801B8D9C lbl_803ECC5C;
