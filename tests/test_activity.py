@@ -6,6 +6,7 @@ import zipfile
 from unittest.mock import patch
 from pathlib import Path
 import subprocess
+import shutil
 import sys
 import tempfile
 import unittest
@@ -49,6 +50,7 @@ class HistoryTests(unittest.TestCase):
                 activity.validate_history(data,'c'*40)
 
 
+@unittest.skipUnless(shutil.which("git"), "Git provenance tests run on the CI host")
 class ContributorTests(unittest.TestCase):
     def setUp(self):
         self.directory=tempfile.TemporaryDirectory();self.addCleanup(self.directory.cleanup)
