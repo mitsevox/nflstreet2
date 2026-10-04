@@ -1,7 +1,7 @@
+#include "game/fn_801FCE10.h"
 #include "game/InGame.h"
 
 extern "C" {
-int fn_801FCE10(int a, const char *pFormat, ...);
 int fn_802294F4(void);
 }
 
