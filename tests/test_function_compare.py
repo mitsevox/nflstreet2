@@ -10,6 +10,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))
 import function_compare
+import diagnostic_object
 import matching
 import source_build as sb
 import decomp_report
@@ -151,7 +152,9 @@ class ResolveUndefined(unittest.TestCase):
             function_compare.resolve_undefined(self.undefined('gMissing'), {}, set())
 
 
-class InPlaceComparisons(unittest.TestCase):
+class ComparisonFixture(unittest.TestCase):
+    """A temporary checkout with one registered draft unit and a synthetic DOL."""
+
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
@@ -200,6 +203,8 @@ class InPlaceComparisons(unittest.TestCase):
             struct.pack_into('>I',header,offset,value)
         return bytes(header)+payload
 
+
+class InPlaceComparisons(ComparisonFixture):
     def test_normal_source_path_and_same_profile_are_required(self):
         self.unit['source']='nonmatching/unit.c';self.write_config()
         with self.assertRaisesRegex(ValueError,'normal src'):
@@ -654,5 +659,235 @@ class InPlaceComparisons(unittest.TestCase):
             with self.subTest(flags=flags),self.assertRaisesRegex(ValueError,'reserved global'):
                 sb.compile_unit({'flags':flags},None,None,None,[])
 
+
+
+class StorageMap(unittest.TestCase):
+    """Validation of the optional evidenced address map for uninitialized comparison symbols."""
+    PLACEMENTS = [{'section': '.text', 'kind': 'code', 'start': 0x80000000, 'end': 0x80000100},
+                  {'section': '.sbss', 'kind': 'bss', 'start': 0x803EC5E0, 'end': 0x803EC5F0}]
+    EVIDENCE = {(0x803EC5E0, 0x803EC5E4), (0x803EC5E4, 0x803EC5EC), (0x803EC5E8, 0x803EC5F0),
+                (0x80000000, 0x80000004), (0x803EC5EC, 0x803EC5F4)}
+
+    @staticmethod
+    def row(symbol, start, end):
+        return {'symbol': symbol, 'start': f'0x{start:08X}', 'end': f'0x{end:08X}'}
+
+    def entries(self, rows):
+        return function_compare.storage_entries(rows, self.PLACEMENTS, self.EVIDENCE)
+
+    def test_valid_rows_and_absent_map(self):
+        self.assertIsNone(self.entries(None))
+        self.assertEqual(self.entries([self.row('b', 0x803EC5E4, 0x803EC5EC), self.row('a', 0x803EC5E0, 0x803EC5E4)]),
+                         {'a': (0x803EC5E0, 0x803EC5E4), 'b': (0x803EC5E4, 0x803EC5EC)})
+
+    def test_malformed_unevidenced_misplaced_duplicate_and_overlapping_rows_fail(self):
+        cases = {
+            'empty list': ([], 'must list'),
+            'not a list': ({'a': 1}, 'must list'),
+            'extra key': ([dict(self.row('a', 0x803EC5E0, 0x803EC5E4), size=4)], 'symbol, start and end'),
+            'empty name': ([self.row('', 0x803EC5E0, 0x803EC5E4)], 'symbol, start and end'),
+            'lowercase address': ([{'symbol': 'a', 'start': '0x803ec5e0', 'end': '0x803EC5E4'}], 'uppercase'),
+            'unevidenced': ([self.row('a', 0x803EC5E0, 0x803EC5E8)], 'lacks an exact evidence data row'),
+            'outside placements': ([self.row('a', 0x803EC5EC, 0x803EC5F4)], 'outside'),
+            'in code placement': ([self.row('a', 0x80000000, 0x80000004)], 'outside'),
+            'duplicate symbol': ([self.row('a', 0x803EC5E0, 0x803EC5E4), self.row('a', 0x803EC5E8, 0x803EC5F0)],
+                                 'Duplicate comparison storage symbol a'),
+            'overlapping': ([self.row('a', 0x803EC5E4, 0x803EC5EC), self.row('b', 0x803EC5E8, 0x803EC5F0)],
+                            'Overlapping comparison storage'),
+        }
+        for label, (rows, error) in cases.items():
+            with self.subTest(label), self.assertRaisesRegex(ValueError, error):
+                self.entries(rows)
+
+
+class StorageSymbols(unittest.TestCase):
+    SECTIONS = [{'index': 0, 'name': '', 'type': 0, 'flags': 0},
+                {'index': 1, 'name': '.text', 'type': sb.SHT_PROGBITS, 'flags': sb.SHF_ALLOC | sb.SHF_EXECINSTR},
+                {'index': 2, 'name': '.sbss', 'type': sb.SHT_NOBITS, 'flags': sb.SHF_ALLOC | sb.SHF_WRITE},
+                {'index': 3, 'name': '.sdata', 'type': sb.SHT_PROGBITS, 'flags': sb.SHF_ALLOC | sb.SHF_WRITE}]
+
+    @staticmethod
+    def symbol(name, shndx, value=0, size=4, kind=1):
+        return {'name': name, 'shndx': shndx, 'value': value, 'size': size, 'type': kind, 'bind': 0}
+
+    def symbols(self):
+        return [self.symbol('', 2, size=0, kind=3), self.symbol('fn', 1, kind=2), self.symbol('gData', 3),
+                self.symbol('gCommon', sb.SHN_COMMON, value=8, size=8), self.symbol('sLocal', 2, kind=0),
+                self.symbol('sEmpty', 2, size=0)]
+
+    def entries(self, **changes):
+        entries = {'gCommon': (0x803EC5E8, 0x803EC5F0), 'sLocal': (0x803EC5E0, 0x803EC5E4)}
+        entries.update(changes)
+        return {k: v for k, v in entries.items() if v is not None}
+
+    def test_binds_common_and_uninitialized_objects_by_symbol_index(self):
+        self.assertIsNone(function_compare.storage_symbols(self.SECTIONS, self.symbols(), None))
+        self.assertEqual(function_compare.storage_symbols(self.SECTIONS, self.symbols(), self.entries()),
+                         {3: 0x803EC5E8, 4: 0x803EC5E0})
+
+    def test_unmapped_ambiguous_resized_misaligned_and_foreign_names_fail(self):
+        symbols = self.symbols()
+        cases = {
+            'unmapped common': (symbols, self.entries(gCommon=None), 'omits uninitialized symbol gCommon'),
+            'unmapped local': (symbols, self.entries(sLocal=None), 'omits uninitialized symbol sLocal'),
+            'ambiguous': (symbols + [self.symbol('sLocal', 3)], self.entries(), 'Ambiguous comparison storage symbol sLocal'),
+            'size': (symbols, self.entries(sLocal=(0x803EC5E0, 0x803EC5E8)), 'size or alignment'),
+            'alignment': (symbols, self.entries(gCommon=(0x803EC5E4, 0x803EC5EC)), 'size or alignment'),
+            'initialized name': (symbols, self.entries(gData=(0x803EC5F0, 0x803EC5F4)), 'not compiled uninitialized'),
+            'missing name': (symbols, self.entries(gMissing=(0x803EC5F0, 0x803EC5F4)), 'not compiled uninitialized'),
+        }
+        for label, (symbols_, entries, error) in cases.items():
+            with self.subTest(label), self.assertRaisesRegex(ValueError, error):
+                function_compare.storage_symbols(self.SECTIONS, symbols_, entries)
+
+
+class CodeDataAndStorageComparisons(ComparisonFixture):
+    """End-to-end draft comparisons with read-only data after code and mapped uninitialized storage."""
+
+    def evidence(self, *rows):
+        (self.root/'config/GN7E69/evidence.tsv').write_text(
+            'kind\tstart\tend\tstart_boundary\tend_boundary\tsubject\n' +
+            ''.join(f'{kind}\t0x{a:08X}\t0x{b:08X}\texact\texact\tfixture\n' for kind, a, b in rows))
+
+    def write_binary(self, text, bss=None):
+        binary = bytearray(self.dol(text))
+        if bss:
+            struct.pack_into('>II', binary, 0xD8, *bss)
+        self.binary = bytes(binary); self.original.write_bytes(self.binary)
+
+    def follows_fixture(self, source='static const double sTable[2] = {1.0, 2.0};\n', padding='00000000',
+                        start=0x80000018):
+        # lis/addi of the table at 0x80000018: eight-byte .rodata alignment after 20 bytes of code.
+        self.source.write_text(source + 'double fn_80000000(int i) { return sTable[i]; }\n')
+        self.write_binary(bytes.fromhex('3d208000546318383929' + f'{start & 0xFFFF:04x}' + '7c291cae4e800020' + padding +
+                                        '3ff00000000000004000000000000000'))
+        self.unit['sections'] = [{'section': '.text', 'placement': '.text', 'start': '0x80000000', 'end': '0x80000014'},
+                                 {'section': '.rodata', 'placement': '.text', 'start': f'0x{start:08X}',
+                                  'end': f'0x{start + 16:08X}', 'follows': '.text'}]
+        self.unit['functions'] = [{'symbol': 'fn_80000000', 'start': '0x80000000', 'end': '0x80000014'}]
+        self.write_config()
+        self.evidence(('function', 0x80000000, 0x80000014), ('data', start, start + 16))
+
+    def measure(self):
+        receipts = function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
+        return receipts, function_compare.load(receipts, self.binary, self.root)
+
+    def test_read_only_data_after_code_is_measured_as_code_bytes(self):
+        if not self.compiler_available:
+            self.skipTest('Pinned compiler and objdiff are installed by CI')
+        self.follows_fixture()
+        receipts, entries = self.measure()
+        self.assertEqual([(e['symbol'], e['type'], e['kind'], e['start'], e['end'], e['matched']) for e in entries],
+                         [('fn_80000000', 'function', 'code', '0x80000000', '0x80000014', 20),
+                          ('.rodata', 'bytes', 'code', '0x80000018', '0x80000028', 16)])
+        # The data entry keeps its code-section credit kind; a receipt claiming data credit is rejected.
+        relabelled = copy.deepcopy(receipts)
+        relabelled[0]['entries'][1]['kind'] = 'data'
+        with self.assertRaisesRegex(ValueError, 'Invalid comparison kind'):
+            function_compare.load(relabelled, self.binary, self.root)
+
+    def test_data_after_code_requires_native_alignment_zero_padding_and_read_only_data(self):
+        if not self.compiler_available:
+            self.skipTest('Pinned compiler and objdiff are installed by CI')
+        cases = {
+            'unaligned start': (dict(start=0x80000014, padding=''), 'alignment after the code'),
+            'nonzero padding': (dict(padding='60000000'), 'padding before comparison data'),
+            'writable data': (dict(source='double sTable[2] = {1.0, 2.0};\n'), 'section type differs'),
+        }
+        for label, (changes, error) in cases.items():
+            with self.subTest(label):
+                self.follows_fixture(**changes)
+                if label == 'writable data':
+                    self.unit['sections'][1]['section'] = '.data'; self.write_config()
+                with self.assertRaisesRegex(ValueError, error):
+                    function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
+
+    def test_data_after_code_requires_evidence_registered_code_and_no_function_overlap(self):
+        self.follows_fixture()
+        function_compare.configured(self.root, self.binary)
+        self.evidence(('function', 0x80000000, 0x80000014), ('data', 0x80000018, 0x80000020))
+        with self.assertRaisesRegex(ValueError, 'evidenced boundaries'):
+            function_compare.configured(self.root, self.binary)
+        self.evidence(('function', 0x80000000, 0x80000014), ('data', 0x80000018, 0x80000028),
+                      ('function', 0x80000020, 0x80000028))
+        with self.assertRaisesRegex(ValueError, 'overlaps function'):
+            function_compare.configured(self.root, self.binary)
+        # Data that follows a code section without registered functions is not draft data.
+        self.unit['sections'][0]['end'] = '0x80000010'
+        self.unit['sections'][1:1] = [{'section': '.text.b', 'placement': '.text', 'start': '0x80000010', 'end': '0x80000018'}]
+        self.unit['sections'][2]['follows'] = '.text.b'
+        self.unit['functions'][0]['end'] = '0x80000010'
+        self.write_config()
+        self.evidence(('function', 0x80000000, 0x80000010), ('data', 0x80000018, 0x80000028))
+        with self.assertRaisesRegex(ValueError, 'follow registered comparison code'):
+            function_compare.configured(self.root, self.binary)
+
+    def storage_fixture(self, storage=True):
+        # gCommon (COMMON) and the file-local sLocal are interleaved in the opposite order to the
+        # compiled layout: sLocal is the only .sbss object, but its target follows gCommon. The
+        # read-only pointer table after the code refers to both.
+        self.source.write_text('int gCommon;\nstatic int sLocal[2];\nint *const gSlots[4] = {&gCommon, &sLocal[1], 0, 0};\n'
+                               'int fn_80000000(void) { return gCommon + sLocal[0]; }\n'
+                               'void fn_80000010(int v) { sLocal[1] = v; }\n')
+        self.write_binary(bytes.fromhex('800da340806da3447c601a144e800020906da3484e800020'
+                                        '803ec5e0803ec5e80000000000000000'), bss=(0x803EC5E0, 12))
+        self.target['sections']['.sbss'] = '0x803EC5E0'
+        (self.root/'config/GN7E69/baseline.json').write_text(json.dumps(self.target))
+        self.unit['sections'] = [{'section': '.text', 'placement': '.text', 'start': '0x80000000', 'end': '0x80000018'},
+                                 {'section': '.rodata', 'placement': '.text', 'start': '0x80000018', 'end': '0x80000028',
+                                  'follows': '.text'},
+                                 {'section': '.sbss', 'placement': '.sbss', 'start': '0x803EC5E0', 'end': '0x803EC5EC'}]
+        self.unit['functions'] = [{'symbol': 'fn_80000000', 'start': '0x80000000', 'end': '0x80000010'},
+                                  {'symbol': 'fn_80000010', 'start': '0x80000010', 'end': '0x80000018'}]
+        if storage:
+            self.unit['storage'] = [{'symbol': 'gCommon', 'start': '0x803EC5E0', 'end': '0x803EC5E4'},
+                                    {'symbol': 'sLocal', 'start': '0x803EC5E4', 'end': '0x803EC5EC'}]
+        self.write_config()
+        self.evidence(('function', 0x80000000, 0x80000010), ('function', 0x80000010, 0x80000018),
+                      ('data', 0x80000018, 0x80000028), ('data', 0x803EC5E0, 0x803EC5E4), ('data', 0x803EC5E4, 0x803EC5EC))
+
+    def test_mapped_common_and_local_storage_resolve_to_evidenced_addresses(self):
+        if not self.compiler_available:
+            self.skipTest('Pinned compiler and objdiff are installed by CI')
+        self.storage_fixture()
+        receipts, entries = self.measure()
+        # Code (SDA21) and data-after-code (ADDR32) references, including offsets into mapped objects.
+        self.assertEqual([(e['symbol'], e['matched']) for e in entries],
+                         [('fn_80000000', 16), ('fn_80000010', 8), ('.rodata', 16)])
+        # Uninitialized storage earns no credit, even when a receipt claims it.
+        credited = copy.deepcopy(receipts)
+        for rows in (credited[0]['entries'], credited[0]['pairs']):
+            rows.append(dict(rows[1], symbol='sLocal', start='0x803EC5E4', end='0x803EC5EC'))
+        with self.assertRaises(ValueError):
+            function_compare.load(credited, self.binary, self.root)
+
+    def test_unmapped_storage_fails_closed(self):
+        if not self.compiler_available:
+            self.skipTest('Pinned compiler and objdiff are installed by CI')
+        self.storage_fixture(storage=False)
+        with self.assertRaisesRegex(ValueError, 'common symbol gCommon lacks an evidenced storage address'):
+            function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
+        self.storage_fixture()
+        self.unit['storage'].pop(); self.write_config()
+        with self.assertRaisesRegex(ValueError, 'omits uninitialized symbol sLocal'):
+            function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
+        # A reference into a mapped unit's uninitialized section never falls back to the section placement.
+        self.storage_fixture()
+        _, units = function_compare.configured(self.root, self.binary)
+        unit = units[0]
+        compiler, wrapper = sb.setup_compiler.setup()
+        unit['object'] = self.root/'build/source/storage.o'; unit['depfile'] = self.root/'build/source/storage.d'
+        sb.compile_unit(unit, compiler, wrapper, None, [], comparison=True)
+        native = unit['object'].read_bytes()
+        sections, symbols = sb.read_elf(native)
+        text = next(s for s in sections if s['name'] == '.text')
+        writer = next(s for s in symbols if s['name'] == 'fn_80000010')
+        placements = {s['section']: s for s in unit['sections']}
+        target = sb.target_sections(self.binary, self.target, {})
+        arguments = (native, text, writer['value'], writer['size'], 0x80000010, {}, {}, placements, {},
+                     self.root/'build/source/fragment.o', target)
+        diagnostic_object.fragment(*arguments)
+        with self.assertRaisesRegex(ValueError, 'Uninitialized data reference lacks an evidenced storage address'):
+            diagnostic_object.fragment(*arguments, {})
 
 if __name__=='__main__':unittest.main()

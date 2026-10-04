@@ -748,7 +748,7 @@ extern "C" void fn_80048FB8(int index, unsigned char value)
     lbl_803078E8[index].mInfo.mUnknown0C = value;
 }
 
-extern "C" void fn_80048FD0(int index, unsigned short value)
+extern "C" void fn_80048FD0(int index, int value)
 {
     lbl_803078E8[index].mUnknown6A = value;
 }
@@ -1055,7 +1055,7 @@ extern "C" void fn_80049AE8(int index, unsigned char value)
     lbl_803078E8[index].mInfo.mUnknown0B = value;
 }
 
-extern "C" void fn_80049B00(int index, unsigned char value)
+extern "C" void fn_80049B00(int index, int value)
 {
     lbl_803078E8[index].mInfo.mUnknown09 = value;
 }
@@ -1085,7 +1085,7 @@ extern "C" void fn_80049B78(int index, unsigned short value)
     lbl_803078E8[index].mUnknown6C = value;
 }
 
-extern "C" void fn_80049B90(int index, unsigned short value)
+extern "C" void fn_80049B90(int index, int value)
 {
     lbl_803078E8[index].mUnknown6E = value;
 }
@@ -1169,7 +1169,7 @@ extern "C" void fn_80049D50(int index, unsigned char value)
     lbl_803078E8[index].mUnknown7A[19] = value + 0x80;
 }
 
-extern "C" void fn_80049D6C(int index, unsigned int which, unsigned char value)
+extern "C" void fn_80049D6C(int index, unsigned int which, int value)
 {
     switch (which) {
     case 1:

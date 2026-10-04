@@ -123,6 +123,78 @@ def resolve_undefined(symbols, references, ambiguous):
     return resolved
 
 
+def measured_data(placement):
+    """Initialized data placements are measured, including read-only data placed after code."""
+    return placement['kind'] == 'data' or bool(placement['follows'])
+
+
+def entry_kind(placement):
+    """Data after code is credited to the code section that holds it, as for linked source."""
+    return 'code' if placement['follows'] else 'data'
+
+
+def storage_entries(rows, placements, data_evidence):
+    """Validate a comparison unit's optional address map for its uninitialized symbols.
+
+    Function-local statics in public inline functions become COMMON symbols under -fno-weak,
+    and the target can interleave them with the file's own .sbss/.bss objects, so contiguous
+    section placement cannot locate them. Each row names one symbol and its target extent,
+    which must equal an exact evidence data row and lie inside one of the unit's own
+    uninitialized placements; names are unique and extents do not overlap. The map only
+    positions references; uninitialized storage is never measured."""
+    if rows is None:
+        return None
+    if not isinstance(rows, list) or not rows:
+        raise ValueError('Comparison storage must list evidenced uninitialized symbols')
+    entries = {}
+    for row in rows:
+        if not isinstance(row, dict) or set(row) != {'symbol', 'start', 'end'} \
+                or not isinstance(row['symbol'], str) or not row['symbol']:
+            raise ValueError('Comparison storage needs symbol, start and end')
+        a, b = sb.address(row['start']), sb.address(row['end'])
+        if (a, b) not in data_evidence:
+            raise ValueError(f"Comparison storage {row['symbol']} lacks an exact evidence data row")
+        if not any(p['kind'] == 'bss' and p['start'] <= a < b <= p['end'] for p in placements):
+            raise ValueError(f"Comparison storage {row['symbol']} lies outside the unit's uninitialized placements")
+        if row['symbol'] in entries:
+            raise ValueError(f"Duplicate comparison storage symbol {row['symbol']}")
+        entries[row['symbol']] = (a, b)
+    spans = sorted(entries.values())
+    if any(b > c for (_, b), (c, _) in zip(spans, spans[1:])):
+        raise ValueError('Overlapping comparison storage')
+    return entries
+
+
+def storage_symbols(sections, symbols, entries):
+    """Bind a comparison object's uninitialized symbols to their mapped target addresses.
+
+    Returns {symbol list index: address}, or None when the unit has no storage map. With a
+    map, every COMMON symbol and every named, sized object in an uninitialized section must be
+    mapped exactly once, at its compiled size and, for COMMON, its required alignment; every
+    mapped name must be such a symbol."""
+    if entries is None:
+        return None
+    nobits = {s['index'] for s in sections if s['type'] == sb.SHT_NOBITS and s['flags'] & sb.SHF_ALLOC}
+    bound = {}
+    for index, symbol in enumerate(symbols):
+        name = symbol['name']
+        common = symbol['shndx'] == sb.SHN_COMMON
+        if not common and not (symbol['shndx'] in nobits and symbol['type'] in (STT_NOTYPE, STT_OBJECT)
+                               and name and symbol['size']):
+            continue
+        if name not in entries:
+            raise ValueError(f'Comparison storage omits uninitialized symbol {name}')
+        if sum(s['name'] == name for s in symbols) != 1:
+            raise ValueError(f'Ambiguous comparison storage symbol {name}')
+        a, b = entries[name]
+        if b - a != symbol['size'] or (common and a % max(symbol['value'], 1)):
+            raise ValueError(f'Comparison storage {name} differs from its compiled size or alignment')
+        bound[index] = a
+    if set(entries) != {symbols[index]['name'] for index in bound}:
+        raise ValueError('Comparison storage names a symbol that is not compiled uninitialized storage')
+    return bound
+
+
 def configured(root, binary):
     config = json.loads((root / CONFIG).read_text())
     if set(config) != {'schema', 'units'} or config['schema'] != 2 or not isinstance(config['units'], list):
@@ -130,19 +202,21 @@ def configured(root, binary):
     accepted = json.loads((root / 'config/GN7E69/units.json').read_text())
     target = json.loads((root / 'config/GN7E69/baseline.json').read_text())
     sections = sb.target_sections(binary, target, {})
-    evidence = {(a, b) for a, b, _ in sb.function_extents(root)}
+    function_extents = sb.function_extents(root)
+    evidence = {(a, b) for a, b, _ in function_extents}
     data_evidence = {(a, b) for a, b in sb.data_extents(root)}
     accepted_linked = linked_ranges(accepted['units'], sb.address)
     units, seen = [], []
     for candidate in config['units']:
-        if set(candidate) != {'source', 'profile', 'evidence', 'sections', 'functions'}:
-            raise ValueError('Comparison units need source, profile, evidence, sections and functions')
+        if set(candidate) - {'storage'} != {'source', 'profile', 'evidence', 'sections', 'functions'}:
+            raise ValueError('Comparison units need source, profile, evidence, sections and functions, '
+                             'and optionally storage')
         if not candidate['source'].startswith('src/'):
             raise ValueError('Comparison source belongs in its normal src/ location')
         if not isinstance(candidate['functions'], list) or not candidate['functions']:
             raise ValueError('Comparison units require explicit target functions')
         compiled = copy.deepcopy(accepted)
-        compiled['units'] = [{k: v for k, v in candidate.items() if k != 'functions'}]
+        compiled['units'] = [{k: v for k, v in candidate.items() if k not in ('functions', 'storage')}]
         validated, _, _ = sb.load_manifest(compiled, sections, accepted['compiler'])
         unit = validated[0]
         existing = next((u for u in accepted['units'] if u['source'] == candidate['source']), None)
@@ -160,17 +234,25 @@ def configured(root, binary):
             raise ValueError('Duplicate comparison function symbol')
         unit['data_slices'] = {}
         for section in unit['sections']:
-            if section['follows']:
-                raise ValueError('Comparison data in code requires a separately supported target object')
-            if section['kind'] != 'data':
+            if not measured_data(section):
                 continue
             # Every placement byte is linked source of this file or an evidenced unlinked slice;
             # without linked bytes the single slice is the whole placement, as before.
             slices = data_slices(candidate['source'], section, accepted_linked)
             if any(piece not in data_evidence for piece in slices):
                 raise ValueError('Comparison data needs evidenced boundaries')
+            if section['follows']:
+                # Read-only data after code: the code it follows holds registered functions, and
+                # each slice is a recorded constant block that no function extent treats as code.
+                code = next(s for s in unit['sections'] if s['section'] == section['follows'])
+                if not any(code['start'] <= sb.address(r['start']) < sb.address(r['end']) <= code['end']
+                           for r in candidate['functions']):
+                    raise ValueError('Comparison data in code must follow registered comparison code')
+                sb.check_data_in_code([(a, b, candidate['source']) for a, b in slices],
+                                      function_extents, data_evidence)
             unit['data_slices'][section['section']] = slices
             seen.append((section['start'], section['end']))
+        unit['storage'] = storage_entries(candidate.get('storage'), unit['sections'], data_evidence)
         unit['functions'] = candidate['functions']
         units.append(unit)
     seen.sort()
@@ -237,12 +319,17 @@ def generate(original, source_report, tool):
         if any(not re.fullmatch(r'\.[A-Za-z0-9_.]+', name) for name in allocated):
             raise ValueError('Unsafe comparison section name')
         for name, section in allocated.items():
-            kind = placements[name]['kind']
-            if bool(section['flags'] & sb.SHF_EXECINSTR) != (kind == 'code') or section['type'] != (
-                    sb.SHT_NOBITS if kind == 'bss' else sb.SHT_PROGBITS):
+            kind, follows = placements[name]['kind'], placements[name]['follows']
+            if bool(section['flags'] & sb.SHF_EXECINSTR) != (kind == 'code' and not follows) or section['type'] != (
+                    sb.SHT_NOBITS if kind == 'bss' else sb.SHT_PROGBITS) or (follows and section['flags'] & sb.SHF_WRITE):
                 raise ValueError('Comparison section type differs from placement')
+        for name, section in allocated.items():
+            follows = placements[name]['follows']
+            if follows:
+                check_follows(binary, placements[name], placements[follows], section['align'])
         functions = {s['name']: s for s in symbols if s['type'] == 2 and s['size'] and s['shndx'] != sb.SHN_UNDEF}
         resolved = resolve_undefined(symbols, addresses, ambiguous)
+        storage = storage_symbols(sections, symbols, unit['storage'])
         targets = {f['symbol']: (int(f['address'],16), int(f['address'],16)+f['size'])
                    for u in accepted if u['source'] == unit['source'] for f in u['functions']}
         targets.update({r['symbol']: (sb.address(r['start']), sb.address(r['end'])) for r in unit['functions']})
@@ -263,7 +350,7 @@ def generate(original, source_report, tool):
             pair.mkdir()
             fragment = pair / 'fragment.o'
             fragment_symbol, references, reference_script = diagnostic_object.fragment(unit['object'].read_bytes(), section, symbol['value'],
-                symbol['size'], a, functions, targets, placements, addresses, fragment, target_sections)
+                symbol['size'], a, functions, targets, placements, addresses, fragment, target_sections, storage)
             script = pair / 'link.ld'
             script.write_text(f"SECTIONS {{\n_SDA_BASE_ = {target['sda_base']};\n_SDA2_BASE_ = {target['sda2_base']};\n" +
                               f"{section['name']} 0x{a:08X} : {{ *({section['name']}) }}\n" + '\n'.join(reference_script) + '\n}\n')
@@ -289,7 +376,7 @@ def generate(original, source_report, tool):
                           'symbol': row['symbol'], 'output_symbol': fragment_symbol, 'start': row['start'], 'end': row['end']})
         for name, section in allocated.items():
             placement = placements[name]
-            if placement['kind'] != 'data':
+            if not measured_data(placement):
                 continue
             a, b = placement['start'], placement['end']
             slices = data_slices(unit['source'], placement, accepted_linked)
@@ -302,7 +389,7 @@ def generate(original, source_report, tool):
                 raise ValueError('Comparison data with linked bytes must compile to its full target placement')
             data_fragment = pair / ('data' + name + '.o')
             data_symbol, references, reference_script = diagnostic_object.fragment(unit['object'].read_bytes(), section, 0, section['size'],
-                a, functions, targets, placements, addresses, data_fragment, target_sections)
+                a, functions, targets, placements, addresses, data_fragment, target_sections, storage)
             data_script = pair / ('data' + name + '.ld')
             data_script.write_text(f"SECTIONS {{\n_SDA_BASE_ = {target['sda_base']};\n_SDA2_BASE_ = {target['sda2_base']};\n{name} 0x{a:08X} : {{ *({name}) }}\n" + '\n'.join(reference_script) + '\n}\n')
             data_output = pair / ('data' + name + '.elf')
@@ -321,7 +408,7 @@ def generate(original, source_report, tool):
                 actual = linked_section['data'][start - a:end - a] if sliced else linked_section['data']
                 score = matching.score_pair(tool, expected, actual, [], 'data', pair_folder)
                 row = {'symbol': name, 'start': f'0x{start:08X}', 'end': f'0x{end:08X}'}
-                entries.append(dict(row, **score, type='bytes', kind='data', source=unit['source'], linked=False))
+                entries.append(dict(row, **score, type='bytes', kind=entry_kind(placement), source=unit['source'], linked=False))
                 pairs.append(dict(row, output_symbol=data_symbol, path=data_output.relative_to(root).as_posix(), sha256=sb.sha256(data_output)))
         if sb.sha256(unit['object']) != native_hash:
             raise ValueError('Diagnostic linker modified native compiler input')
@@ -330,6 +417,17 @@ def generate(original, source_report, tool):
             'object_sha256': native_hash, 'depfile': unit['depfile'].relative_to(root).as_posix(),
             'depfile_sha256': sb.sha256(unit['depfile']), 'entries': entries, 'pairs': pairs})
     return result
+
+
+def check_follows(binary, placement, code, align):
+    """Data after code starts at its first alignment boundary after the code placement, as the
+    linker places it, and the target holds that padding as zero bytes."""
+    align = max(align, 1)
+    aligned = -(-code['end'] // align) * align
+    if placement['start'] != aligned:
+        raise ValueError('Comparison data must start at its alignment after the code it follows')
+    if any(sb.dol_bytes(binary, code['end'], aligned)):
+        raise ValueError('Target padding before comparison data after code is not zero')
 
 
 def check_native_placement(binary, compiled, start, end, slices):
@@ -362,7 +460,7 @@ def load(receipts, binary, root):
             a <= sb.address(r['start']) < sb.address(r['end']) <= b for a, b in linked_bounds)}
         # Recompute the measured data slices from build/source/report.json, independently of the
         # generator: each must be credited exactly once and no linked byte may be credited.
-        placements = {s['section']: s for s in unit['sections'] if s['kind'] == 'data'}
+        placements = {s['section']: s for s in unit['sections'] if measured_data(s)}
         for name, placement in placements.items():
             if data_slices(unit['source'], placement, accepted_linked) != unit['data_slices'][name]:
                 raise ValueError('Linked source differs from configured accepted placements')
@@ -394,7 +492,7 @@ def load(receipts, binary, root):
                 actual = section['data'][offset:offset + symbol['size']]
                 if offset < 0 or len(actual) != symbol['size']:
                     raise ValueError('Comparison output lacks complete function bytes')
-            elif entry['type'] == 'bytes' and entry['kind'] == 'data' and row['symbol'] in placements:
+            elif entry['type'] == 'bytes' and row['symbol'] in placements and entry['kind'] == entry_kind(placements[row['symbol']]):
                 placement = placements[row['symbol']]
                 section = next(s for s in sections if s['name'] == row['symbol'])
                 if section['addr'] != placement['start']:
