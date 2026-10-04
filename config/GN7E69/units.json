@@ -4476,21 +4476,33 @@
       ]
     },
     {
-      "source": "src/game/cu_8019F9F0.cpp",
+      "source": "src/game/cu_8019F508.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019F9F0-0x8019FBEC (src/game/cu_8019F9F0.cpp) and its data and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8019F508-0x8019FBEC (src/game/cu_8019F508.cpp) and its data and source-form rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8019F9F0",
+          "start": "0x8019F508",
           "end": "0x8019FBEC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADFE0",
+          "end": "0x802AE008"
         },
         {
           "section": ".data",
           "placement": ".data4",
           "start": "0x802F2714",
           "end": "0x802F2734"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECBF4",
+          "end": "0x803ECBFC"
         }
       ]
     }
