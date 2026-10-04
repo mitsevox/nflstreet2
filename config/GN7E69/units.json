@@ -5330,6 +5330,38 @@
           "end": "0x8030BD80"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80020BAC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80020BAC-0x80020CF8 and its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80020BAC",
+          "end": "0x80020CA4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x80020CA4",
+          "end": "0x80020CF8",
+          "follows": ".text"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4614",
+          "end": "0x802F462C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBAA8",
+          "end": "0x803EBAAC"
+        }
+      ]
     }
   ]
 }

@@ -4104,6 +4104,22 @@
         "commit": "a5f9e8577e888e635a29b26969fb1e65cb99b397",
         "introduced_blob": "2926ab873ee07599b81f588f08367e1410688808"
       }
+    },
+    {
+      "source": "src/game/cu_80020BAC.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80020BAC",
+        "0x80020C44"
+      ],
+      "provenance": {
+        "pull_request": 253,
+        "merged_via": 253,
+        "commit": "f48210ae27647194c314c746bca8604dbd66d55b",
+        "introduced_blob": "2d059dc9c9b4f6075c2683ae34c6e5574de5f0db"
+      }
     }
   ],
   "target": "GN7E69",
