@@ -22,6 +22,8 @@ typedef int BOOL;
 
 #if defined(__MWERKS__)
 #define AT_ADDRESS(addr) : (addr)
+#elif defined(__SN__)
+#define AT_ADDRESS(addr) __attribute__((address(addr)))
 #elif defined(__GNUC__)
 #define AT_ADDRESS(addr)
 #else
