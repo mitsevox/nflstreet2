@@ -1,3 +1,4 @@
+#include "game/fn_801D2B7C.h"
 #include "engine/cu_80227F14.h"
 #include "game/FMCAPPORT.h"
 
@@ -13,7 +14,6 @@ int fn_801DD268(int handle, int a, int b, int c);
 void fn_801DD320(int handle, int a);
 void fn_801DD3AC(int handle, int a, int b);
 void *fn_801D2BB0(int a, int size, int c, int d);
-void fn_801D2BD0(void *p);
 void fn_80187DD8(int a);
 void fn_80187E08(int a, const char *pText, int b, int c);
 void fn_8008A9F8(Object_8008A9F8 *pObject);
