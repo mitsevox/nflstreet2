@@ -1,3 +1,5 @@
+#include "game/Callees_801D57E0.h"
+#include "game/cu_8018422C.h"
 #include "game/fn_801801F0.h"
 #include "game/Record_80021154.h"
 #include "game/fn_801C1F94.h"
@@ -23,30 +25,9 @@ struct Params_800211B4 {
     Record_80021154 *mUnknown8;
 };
 
-struct Callbacks_802F462C {
-    void *(*mUnknown0)(int, int *);
-    void (*mUnknown4)();
-    int (*mUnknown8)(int *, int *, int *, int *);
-    void (*mUnknown12)(int, int);
-    int (*mUnknown16)(int, int);
-};
-
 extern "C" {
-void fn_801D685C(const char *, int);
-void fn_801D65B4(int);
-void fn_801D654C(int);
-void fn_801D6714(int);
-void fn_801851D0();
 int fn_801869F0();
 void fn_8002A574(int, int);
-int fn_801D6B74(int, int, char *, int, char *, int, unsigned char *);
-void fn_801D6C70(int, int, char *, int);
-void fn_801D67E4(const char *, const char *);
-void fn_801D6838(int);
-int fn_801D6DA8(int, int);
-int fn_801D671C();
-int fn_801D57E0(int, char *, int);
-void fn_801851A4(Callbacks_802F462C *);
 void fn_8002118C();
 void *fn_80020F18(int, int *);
 void fn_80020F50();
