@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "game/SndgPathfinder.h"
+#include "game/Camera_8013F738.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_8017F584.h"
@@ -498,11 +499,6 @@ struct Struct_803EA698Entry {
     void (*mFunc)(int, int);
 };
 
-struct Struct_8013FA04 {
-    unsigned char m00[4];
-    Vector_80039F5C mPosition;
-};
-
 struct Item_8006DA6C {
     int mKey;
 };
@@ -632,17 +628,17 @@ void fn_8007732C(int a);
 void fn_80077488(void);
 void fn_8007753C(void);
 int fn_8007F828(int a);
-unsigned char fn_8009D86C(void);
-short fn_8009D990(int a);
+int fn_8009D86C(void);
+int fn_8009D990(int a);
 int fn_800A3444(void);
 int fn_800A8444(int a);
 int fn_800AD9B4(void);
 int fn_800BA6F8(void);
 int fn_8013F9F8(void);
-Struct_8013FA04 *fn_8013FA04(int index);
+Camera_8013F738 *fn_8013FA04(int index);
 int fn_8013FD0C(int index);
 unsigned int fn_801568F0(void);
-Vec2 fn_80177FE0(...);
+Vec2 fn_80177FE0(void);
 int fn_80178308(void);
 int fn_80178348(void);
 int fn_801784C4(void);
@@ -1360,13 +1356,13 @@ extern "C" void fn_80068E00(void)
 extern "C" void fn_80068ED0(Vector_80039F5C *pPos, unsigned short *pPan, short *pSpan)
 {
     Vector_80039F5C position;
-    Struct_8013FA04 *pCamera;
+    Camera_8013F738 *pCamera;
     int angle;
 
     pCamera = fn_8013FA04(fn_8013F9F8());
-    position.mX = pCamera->mPosition.mX;
-    position.mY = pCamera->mPosition.mY;
-    position.mZ = pCamera->mPosition.mZ;
+    position.mX = pCamera->mHeader.mUnknown04[0];
+    position.mY = pCamera->mHeader.mUnknown04[1];
+    position.mZ = pCamera->mHeader.mUnknown04[2];
     angle = fn_8013FD0C(fn_8013F9F8());
     if (fn_801784C4()) {
         angle = (angle + 0x800000) & 0xFFFFFF;
@@ -1379,12 +1375,12 @@ extern "C" void fn_80068ED0(Vector_80039F5C *pPos, unsigned short *pPan, short *
 extern "C" float fn_80068F70(Vector_80039F5C *pPos)
 {
     Vector_80039F5C position;
-    Struct_8013FA04 *pCamera;
+    Camera_8013F738 *pCamera;
 
     pCamera = fn_8013FA04(fn_8013F9F8());
-    position.mX = pCamera->mPosition.mX;
-    position.mY = pCamera->mPosition.mY;
-    position.mZ = pCamera->mPosition.mZ;
+    position.mX = pCamera->mHeader.mUnknown04[0];
+    position.mY = pCamera->mHeader.mUnknown04[1];
+    position.mZ = pCamera->mHeader.mUnknown04[2];
     if (fn_801784C4()) {
         position.mX = -position.mX;
         position.mY = -position.mY;
@@ -2395,12 +2391,12 @@ extern "C" void fn_8006CE84(Struct_8006CCD0 *p)
 extern "C" void fn_8006CEC8(Struct_8030A688 *src)
 {
     if (fn_8002D060(lbl_803EA368) == 0) {
-        Struct_8013FA04 *obj = fn_8013FA04(fn_8013F9F8());
+        Camera_8013F738 *obj = fn_8013FA04(fn_8013F9F8());
         int angle;
 
-        src->mOrigin.mX = obj->mPosition.mX;
-        src->mOrigin.mY = obj->mPosition.mY;
-        src->mOrigin.mZ = obj->mPosition.mZ;
+        src->mOrigin.mX = obj->mHeader.mUnknown04[0];
+        src->mOrigin.mY = obj->mHeader.mUnknown04[1];
+        src->mOrigin.mZ = obj->mHeader.mUnknown04[2];
         if (fn_801784C4()) {
             src->mOrigin.mX = -src->mOrigin.mX;
             src->mOrigin.mY = -src->mOrigin.mY;
