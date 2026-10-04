@@ -117,7 +117,7 @@ def source_functions(source_report):
             if neutral and int(neutral[1], 16) != start:
                 raise ValueError(f"Source unit {unit['source']} has a misplaced neutral function")
             seen.add((symbol, start))
-            slot = re.fullmatch(r"vfn_0[2-6](?:__[A-Za-z0-9_]+)?", symbol)
+            slot = re.fullmatch(r"vfn_[0-9]{2}(?:__[A-Za-z0-9_]+)?", symbol)
             functions.append(dict(row, source=unit["source"], neutral=bool(neutral or slot)))
         if any(not any(left <= int(row["address"], 16) < right for row in rows) for left, right in code):
             raise ValueError(f"Source unit {unit['source']} lacks compiler function coverage for code")

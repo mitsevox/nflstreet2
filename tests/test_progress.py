@@ -413,7 +413,8 @@ class FunctionInventoryTests(ProgressBase):
         path.write_text("\n".join(line for line in path.read_text().splitlines()
                                    if "\tExample\t" not in line) + "\n")
         import decomp_report
-        for symbol in ("vfn_04", "vfn_04__10DebugGroup", "vfn_04__11SystemGroup"):
+        for symbol in ("vfn_04", "vfn_04__10DebugGroup", "vfn_04__11SystemGroup",
+                       "vfn_01__14Class_802A6B60", "vfn_10__14Class_802A6BB0"):
             with self.subTest(symbol=symbol):
                 self.source_report["units"][0]["functions"][0]["symbol"] = symbol
                 self.save()
@@ -436,10 +437,12 @@ class FunctionInventoryTests(ProgressBase):
         path = self.root / "config/GN7E69/evidence.tsv"
         path.write_text("\n".join(line for line in path.read_text().splitlines()
                                    if "\tExample\t" not in line) + "\n")
-        self.source_report["units"][0]["functions"][0]["symbol"] = "vfn_04Meaning__11SystemGroup"
-        self.save()
-        with self.assertRaisesRegex(ValueError, "missing curated name evidence"):
-            progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
+        for symbol in ("vfn_04Meaning__11SystemGroup", "vfn_1__11SystemGroup", "vfn_100__11SystemGroup"):
+            with self.subTest(symbol=symbol):
+                self.source_report["units"][0]["functions"][0]["symbol"] = symbol
+                self.save()
+                with self.assertRaisesRegex(ValueError, "missing curated name evidence"):
+                    progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
 
     def test_plain_and_mangled_neutral_addresses_must_match_placement(self):
         self.write_source()
