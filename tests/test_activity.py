@@ -93,13 +93,75 @@ class ContributorTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'introduced source'):self.credits()
         self.entry['provenance']['introduced_blob']=self.blob
         self.entry['provenance']['commit']='b'*40
-        with self.assertRaisesRegex(ValueError,'outside this revision'):self.credits()
+        with self.assertRaisesRegex(ValueError,'unavailable'):self.credits()
 
-    def test_integration_source_changes_require_explanation(self):
-        self.entry['provenance']['original_blob']='a'*40
+    def git(self, *args, text=None):
+        return subprocess.check_output(['git',*args],cwd=self.root,input=text,text=True,
+                                       stderr=subprocess.DEVNULL).strip()
+
+    def commit_source(self, content):
+        (self.root/'src/test.c').write_text(content)
+        self.git('add','src/test.c')
+        self.git('-c','user.name=Test','-c','user.email=test@example.invalid','commit','-qm','Integration')
+        return self.git('rev-parse','HEAD')
+
+    def test_squash_preserves_original_credit_with_dual_source_proof(self):
+        original=self.commit
+        tree=self.git('rev-parse',original+'^{tree}')
+        self.commit=self.git('-c','user.name=Test','-c','user.email=test@example.invalid',
+                             'commit-tree',tree,text='Independent squash root\n')
+        self.assertNotEqual(original,self.commit)
+        self.assertEqual(self.credits()[0]['login'],'alice')
+
+    def test_foreign_source_commit_without_historical_blob_fails(self):
+        foreign=self.commit_source('int function(void) { return 2; }')
+        self.entry['provenance'].update(commit=foreign,introduced_blob=self.git('rev-parse',foreign+':src/test.c'))
+        with self.assertRaisesRegex(ValueError,'absent from this revision history'):self.credits()
+
+    def test_integration_source_changes_require_explanation_and_original_proof(self):
+        original=self.commit
+        integrated=self.commit_source('int function(void) { return 2; }')
+        q=self.entry['provenance'];q.update(commit=integrated,original_blob=self.blob,
+                                         introduced_blob=self.git('rev-parse',integrated+':src/test.c'))
+        self.commit=integrated
         with self.assertRaisesRegex(ValueError,'Unexplained'):self.credits()
-        self.entry['provenance']['integration_adjustment']='Shared declaration reconciled; original function preserved.'
+        q['integration_adjustment']='Shared declaration reconciled; original function preserved.'
+        with self.assertRaisesRegex(ValueError,'original source'):self.credits()
+        q['original_commit']=original
         self.assertEqual(self.credits()[0]['functions'],1)
+        q['original_blob']='a'*40
+        with self.assertRaisesRegex(ValueError,'original source'):self.credits()
+
+    def test_historical_introduction_survives_later_source_changes(self):
+        self.commit=self.commit_source('int function(void) { return 3; }')
+        self.assertEqual(self.credits()[0]['functions'],1)
+
+    def test_fetch_is_explicit_pinned_same_origin_and_fail_closed(self):
+        missing='b'*40
+        with patch.object(activity.subprocess,'run',return_value=subprocess.CompletedProcess([],1)) as run:
+            with self.assertRaisesRegex(ValueError,'unavailable'):
+                activity.provenance_commit(self.root,missing)
+            self.assertFalse(any(call.args[0][1]=='fetch' for call in run.call_args_list))
+            with self.assertRaisesRegex(ValueError,'unavailable'):
+                activity.provenance_commit(self.root,missing,True)
+            self.assertIn(['git','fetch','--no-tags','origin',missing],
+                          [call.args[0] for call in run.call_args_list])
+
+    def test_opt_in_fetches_missing_original_commit_from_real_origin(self):
+        tree=self.git('rev-parse',self.commit+'^{tree}')
+        squash=self.git('-c','user.name=Test','-c','user.email=test@example.invalid',
+                        'commit-tree',tree,text='Squashed source\n')
+        self.git('update-ref','refs/heads/squashed',squash)
+        with tempfile.TemporaryDirectory() as directory:
+            checkout=Path(directory)/'clone'
+            subprocess.run(['git','clone','--quiet','--no-local','--single-branch','--branch','squashed',
+                            str(self.root),str(checkout)],check=True,stderr=subprocess.DEVNULL)
+            with self.assertRaisesRegex(ValueError,'unavailable'):
+                activity.contributors(checkout,self.ledger,self.build,squash)
+            result=activity.contributors(checkout,self.ledger,self.build,squash,fetch_missing=True)
+            self.assertEqual(result[0]['login'],'alice')
+            self.assertEqual(subprocess.check_output(['git','remote','get-url','origin'],cwd=checkout,
+                             text=True).strip(),str(self.root))
 
     def test_unverified_build_cannot_supply_function_credit(self):
         self.build['complete']='mismatch'
