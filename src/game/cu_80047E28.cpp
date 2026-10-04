@@ -35,27 +35,6 @@ struct Block_80307980 {
     int mUnknown0[10];
 };
 
-/* Fields at +0x20 of Record_803078E8 that fn_800817CC fills (bytes +0x00 to
-   +0x0D and the 14 words at +0x10); fn_80047FA4 and fn_80048704 receive its
-   address. */
-struct Info_80307908 {
-    unsigned char mUnknown00;
-    unsigned char mUnknown01;
-    unsigned char mUnknown02;
-    unsigned char mUnknown03;
-    unsigned char mUnknown04;
-    unsigned char mUnknown05;
-    char mUnknown06[2];
-    unsigned char mUnknown08;
-    unsigned char mUnknown09;
-    unsigned char mUnknown0A;
-    unsigned char mUnknown0B;
-    unsigned char mUnknown0C;
-    unsigned char mUnknown0D;
-    char mUnknown0E[2];
-    unsigned int mValues[14];
-};
-
 /* Element of lbl_803078E8 (14 records of 0xC0 bytes). */
 struct Record_803078E8 {
     char mName[32];
@@ -159,7 +138,7 @@ int fn_8005FC7C(void);
 void fn_8007BA48(Object_8007A334 *pObject);
 void fn_8007BA88(Object_8007A334 *pObject, int a);
 void fn_8007BB04(Object_8007A334 *pObject);
-int fn_8007BB84(Object_8007A334 *pObject, int a, int b, int c);
+int fn_8007BB84(Object_8007A334 *pCursor, int a, int b, int *pResult);
 void fn_8007BC34(Object_8007A334 *pObject, Row_8007BC34 *pRow);
 unsigned int fn_8007BDF8(Object_8007A334 *pObject);
 int fn_8007BF14(int index);
@@ -172,7 +151,6 @@ int fn_80080E70(Object_8008044C *pObject);
 int fn_80080E98(Object_8008044C *pObject);
 int fn_8008125C(Object_8008044C *pObject);
 void fn_80081440(Object_8008044C *pObject, unsigned short *pValues);
-void fn_800817CC(Object_8008044C *pObject, Info_80307908 *pInfo);
 void fn_80081C10(Object_8008044C *pObject, unsigned char *p);
 void fn_80081CDC(void);
 void fn_80081D24(void);

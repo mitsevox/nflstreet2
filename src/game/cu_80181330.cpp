@@ -5,6 +5,7 @@
 #include "game/PaletteColor.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C3284.h"
+#include "game/fn_8021D7B8.h"
 
 /* One entry of the screen stack lbl_80362B14. */
 struct StackEntry_80362B14 {
@@ -43,8 +44,6 @@ struct Layout_802EA9E0 {
 
 extern "C" {
 extern void *lbl_803EB688;
-/* gFMCAPPORT (FMCAPPORT.cpp); the comparison harness resolves only neutral data labels. */
-extern FMCAPPORT lbl_8030BEC8;
 
 Class_80184190 *fn_800053D0(void);
 Class_80184190 *fn_800088C8(void);
@@ -67,13 +66,13 @@ void fn_800223E4(int index, float x, float y, float z);
 void fn_800224A4(int index, float angle);
 void fn_80022534(int index, float scale);
 void fn_80022580(int index, int a, int b);
-void fn_800225F4(int index, int a);
+void fn_800225F4(int index, unsigned int value);
 void fn_80022730(int index, int a);
-void fn_80022870(int index, float a, float b, float c, float d, float e, unsigned char f);
+void fn_80022870(int index, float x, float y, float z, float angle, float scale, int flag);
 int fn_800229D8(void);
 float fn_80022BA0(float a);
 void fn_80022D0C(int a);
-void fn_80022D3C(int a, int b, int c);
+unsigned char fn_80022D3C(unsigned char enable, int a, int b);
 void fn_80029CE0(int a, int b);
 void fn_8005F29C(void);
 void fn_80077F24(void);
@@ -85,15 +84,14 @@ int fn_800841D8(Object_8007A334 *pObject);
 int fn_80084204(Object_8007A334 *pObject);
 void fn_8007BA48(Object_8007A334 *pObject);
 void fn_8007BB04(Object_8007A334 *pObject);
-void fn_8007BB84(Object_8007A334 *pObject, int a, int b, int c);
-void fn_8007BE20(Object_8007A334 *pObject, char *pBuffer, int size);
+int fn_8007BB84(Object_8007A334 *pCursor, int a, int b, int *pResult);
+void fn_8007BE20(Object_8007A334 *pCursor, char *pBuffer, int size);
 int fn_8007BF14(int a);
-int fn_8007C690(Object_8007A334 *pObject, int a);
+int fn_8007C690(Object_8007A334 *pCursor, short *pOut);
 void fn_80080B08(Object_8008044C *pObject, char *pBuffer, int size);
 void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size);
 void fn_800816C4(Object_8008044C *pObject, int a, int *pValues);
 void fn_8008174C(Object_8008044C *pObject, short *pValues);
-void fn_800817CC(Object_8008044C *pObject, int *pValues);
 void fn_80082534(int a, int b);
 void fn_80082558(int a, int b);
 int fn_8008775C(void);
@@ -104,7 +102,7 @@ void fn_8017FB64(int value, int *pQuotient, int *pRemainder);
 int fn_8017FB88(void);
 int fn_801801B4(void);
 int fn_80186B38(int a);
-void fn_80188CBC(int a, int b, int c, int d, unsigned char *pColors);
+void fn_80188CBC(int index, int a, int b, int c, const unsigned char *pColor);
 int fn_80188DF0(int a);
 int fn_8018BD9C(int a);
 int fn_8018BDFC(int a, int b, int c, int *pD);
@@ -134,7 +132,6 @@ int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int fn_801C302C(const char *s1, const char *s2, int n);
 unsigned int fn_801C3180(const char *pText);
-void fn_8021D7B8(void *a, int b, int c, Arg_8018399C *pArgs);
 void *fn_8021EA44(int index);
 unsigned int fn_80225F88(void *a, int b, int c, const char *pText);
 int fn_8022F384(int a);
@@ -486,7 +483,7 @@ void fn_8018196C(void)
 
 void fn_80181A88(void)
 {
-    int busy = lbl_8030BEC8.IsBusy();
+    int busy = gFMCAPPORT.IsBusy();
 
     if (!busy) {
         fn_80027E98(0);
@@ -521,7 +518,7 @@ void fn_80181AD4(unsigned char a)
             fn_8018196C();
             break;
         }
-        lbl_8030BEC8.ClearEntries();
+        gFMCAPPORT.ClearEntries();
     }
     fn_801813F4();
     fn_801835C0(-1);
@@ -818,7 +815,7 @@ void fn_8018275C(int *pCount, Arg_8018399C *pList)
         fn_801C3284(pList[i].pParams->mpText, "", pList[i].pParams->mLength);
     }
     if (fn_800089D8() != 0x7FFF) {
-        int values[18];
+        Info_80307908 info;
         Object_8007A334 query;
         char buffer[32];
         int type;
@@ -827,10 +824,10 @@ void fn_8018275C(int *pCount, Arg_8018399C *pList)
         fn_8007BA48(&query);
         seen = 0;
         fn_800809C4(fn_80182DC8(), fn_800089D8(), 0);
-        fn_800817CC(fn_80182DC8(), values);
+        fn_800817CC(fn_80182DC8(), &info);
         for (i = 0; i < 14; i++) {
             type = fn_8007BF14(i);
-            fn_8007BB84(&query, type, values[i + 4], 0);
+            fn_8007BB84(&query, type, info.mValues[i], 0);
             if (fn_8007C690(&query, 0)) {
                 if ((type != 6 || !seen) && *pCount < 10) {
                     fn_8007BE20(&query, buffer, 32);
@@ -882,7 +879,7 @@ void fn_80182964(void)
         }
     }
     if (fn_80183950() || fn_80183968()) {
-        lbl_8030BEC8.Start();
+        gFMCAPPORT.Start();
     }
 }
 

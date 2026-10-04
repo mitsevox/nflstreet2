@@ -24,6 +24,26 @@ struct Desc_8008044C {
     int mUnknown12;
 };
 
+/* Row filled by fn_800817CC: bytes +0x00 to +0x0D and the 14 words at +0x10.
+   Record_803078E8 (src/game/cu_80047E28.cpp) holds one at +0x20. */
+struct Info_80307908 {
+    unsigned char mUnknown00;
+    unsigned char mUnknown01;
+    unsigned char mUnknown02;
+    unsigned char mUnknown03;
+    unsigned char mUnknown04;
+    unsigned char mUnknown05;
+    char mUnknown06[2];
+    unsigned char mUnknown08;
+    unsigned char mUnknown09;
+    unsigned char mUnknown0A;
+    unsigned char mUnknown0B;
+    unsigned char mUnknown0C;
+    unsigned char mUnknown0D;
+    char mUnknown0E[2];
+    unsigned int mValues[14];
+};
+
 extern "C" {
 void fn_8008040C(Object_8008044C *pObject, Desc_8008044C *pDesc);
 void fn_8008044C(Object_8008044C *pObject, Desc_8008044C *pDesc, int tag);
@@ -35,6 +55,7 @@ int fn_80080E20(Object_8008044C *pObject);
 int fn_800811E0(Object_8008044C *pObject);
 int fn_80080ECC(Object_8008044C *pObject);
 void fn_80081788(Object_8008044C *pObject, int *pValues);
+void fn_800817CC(Object_8008044C *pObject, Info_80307908 *pInfo);
 }
 
 #endif

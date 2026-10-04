@@ -3,7 +3,7 @@
 #include "game/fn_801C3284.h"
 
 extern "C" {
-void *fn_800088C8(void);
+Class_80184190 *fn_800088C8(void);
 void fn_8000890C(int value);
 int fn_8007E5EC(int a);
 void fn_8007E69C(int a);
@@ -395,7 +395,7 @@ static void fn_800053A8()
     fn_8007F064(&lbl_80369D70);
 }
 
-extern "C" Class_80005618 *fn_800053D0()
+extern "C" Class_80184190 *fn_800053D0()
 {
     return fn_80005490();
 }

@@ -3,6 +3,7 @@
 #include "game/fn_801FCE10.h"
 #include "game/Class_8018FD64Inline.h"
 #include "game/Object_8007A334.h"
+#include "game/Object_8008044C.h"
 
 extern "C" {
 int fn_8022F384(int a);
@@ -16,17 +17,11 @@ void fn_8007E274(int key);
 void fn_8007E324(int key);
 void fn_8018DF20(Object_8007A334 *pCursor, int index);
 void fn_8018DF78(Object_8007A334 *pCursor);
+char *fn_801C3084(const char *pString, int c);
 }
 
-/* Row read by fn_800817CC and written back by fn_8008199C. */
-struct Record_800817CC {
-    unsigned char mUnknown0[16];
-    int mUnknown16[14];
-};
-
 extern "C" {
-void fn_800817CC(Object_8007A334 *pCursor, Record_800817CC *pRecord);
-void fn_8008199C(Object_8007A334 *pCursor, Record_800817CC *pRecord);
+void fn_8008199C(Object_8008044C *pObject, Info_80307908 *pInfo);
 }
 
 /* Values copied out of one 'RAEG' row by fn_8007BC34. */
@@ -167,7 +162,7 @@ void fn_8007BC34(Object_8007A334 *pCursor, Record_8007BC34 *pOut)
     pOut->mUnknown118 = list[32].mValue != 0;
     pOut->mUnknown108 = 0;
 
-    pSpace = strchr(pOut->mUnknown49, ' ');
+    pSpace = fn_801C3084(pOut->mUnknown49, ' ');
     if (pSpace) {
         *pSpace = 0;
     }
@@ -181,9 +176,9 @@ int fn_8007BDF8(Object_8007A334 *pCursor)
     return fn_8007A98C(pCursor, 0x49535247);
 }
 
-void fn_8007BE20(Object_8007A334 *pCursor, int a, int b)
+void fn_8007BE20(Object_8007A334 *pCursor, char *pBuffer, int size)
 {
-    fn_8007AA3C(pCursor, 0x4D4E5247, a, b);
+    fn_8007AA3C(pCursor, 0x4D4E5247, (int)pBuffer, size);
 }
 
 int fn_8007BE54(Object_8007A334 *pCursor)
@@ -297,22 +292,22 @@ void fn_8007BF60(int id)
         }
         {
             Object_8007A334 teams;
-            Record_800817CC record;
+            Info_80307908 record;
 
             fn_8018DF20(&teams, index);
             if (fn_8007A444(&teams)) {
                 do {
-                    fn_800817CC(&teams, &record);
+                    fn_800817CC((Object_8008044C *)&teams, &record);
                     for (i = 0; i < 14; i++) {
                         int type = fn_8007BF14(i);
 
                         for (j = 0; j < 2; j++) {
-                            if (type == types[j] && record.mUnknown16[i] == oldIds[j]) {
-                                record.mUnknown16[i] = newIds[j];
+                            if (type == types[j] && record.mValues[i] == oldIds[j]) {
+                                record.mValues[i] = newIds[j];
                             }
                         }
                     }
-                    fn_8008199C(&teams, &record);
+                    fn_8008199C((Object_8008044C *)&teams, &record);
                 } while (fn_8007A510(&teams));
             }
             fn_8018DF78(&teams);
