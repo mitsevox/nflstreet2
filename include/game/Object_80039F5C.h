@@ -10,12 +10,17 @@ struct Vector_80039F5C {
     float mZ;
 };
 
-/* Block at +4 of the player object. */
+/* Block at +4 of the player object; the entries of src/game/cu_80136B1C.cpp
+   hold one at +0. */
 struct Block_80170E64 {
     char mUnknown0[4];
     Vector_80039F5C mUnknown4;
-    char mUnknown16[84];
+    char mUnknown16[4];
+    unsigned int mUnknown20;
+    char mUnknown24[76];
     void *mpUnknown100;
+    char mUnknown104[556];
+    int mUnknown660;
 };
 
 /* Motion block at +424, passed to fn_800B26B0, fn_800B26D0, fn_800B26E0,
@@ -122,7 +127,9 @@ struct Object_80039F5C {
     char mUnknown1215[3];
     unsigned char mUnknown1218;
     unsigned char mUnknown1219;
-    char mUnknown1220[1696];
+    char mUnknown1220[1694];
+    unsigned char mUnknown2914;
+    char mUnknown2915[1];
     unsigned char mUnknown2916;
     char mUnknown2917[83];
     short mRatings[10];

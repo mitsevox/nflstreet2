@@ -62,27 +62,27 @@ int fn_8002B048(Record_8002AE90 *r,void *p,Record_8002AE90 **out) {
     return -1;
 }
 int fn_8002B068(void *p,void *q) { return 0; }
-int fn_8002B070(void *p,char *data) {
+int fn_8002B070(void *p,void *data) {
     State_8002AE90 *s=(State_8002AE90 *)p;
     short count=0;
     void *r=fn_801C6B4C(s->mpList,0);
     while(r) {count++;r=fn_801C6C84(s->mpList,r);}
-    *(short *)data=count;data+=2;
+    *(short *)data=count;data=(char *)data+2;
     for(short remaining=count;remaining>0;remaining--) {
         r=fn_801C6B4C(s->mpList,0);
         for(short i=1;i<remaining;i++) r=fn_801C6C84(s->mpList,r);
-        memcpy(data,r,12);data+=12;
+        memcpy(data,r,12);data=(char *)data+12;
     }
     return 1;
 }
-int fn_8002B13C(void *p,char *data) {
+int fn_8002B13C(void *p,void *data) {
     State_8002AE90 *s=(State_8002AE90 *)p;
     void *r;
     while((r=fn_801C6B4C(s->mpList,0))!=0) fn_801C6C0C(s->mpList,r);
-    short count=*(short *)data;data+=2;
+    short count=*(short *)data;data=(char *)data+2;
     while(count>0) {
         r=fn_801C6A20(s->mpList);
-        memcpy(r,data,12);data+=12;
+        memcpy(r,data,12);data=(char *)data+12;
         fn_801C6AA4(s->mpList,r,0);count--;
     }
     return 1;

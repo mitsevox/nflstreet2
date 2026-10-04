@@ -46,8 +46,7 @@ struct Set_8003EE6C {
     int mUnknown8;
     int mUnknownC;
     int mUnknown10;
-    Sub_8003EC54 *mpUnknown14;
-    Sub_8003EC54 *mpUnknown18;
+    Sub_8003EC54 *mpUnknown14[2];
 };
 
 typedef void (*Callback_802DCF9C)(Record_8003EC04 *pRecord);

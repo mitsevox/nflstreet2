@@ -1,6 +1,7 @@
 #include "game/fn_802372EC.h"
 #include "game/fn_80238174.h"
 #include "game/fn_801D2B7C.h"
+#include "game/fn_80096A58.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_80218FC4.h"
 
@@ -42,20 +43,6 @@ struct Params_80092E54 {
     int mUnknown232;
 };
 
-struct Params_80096A58 {
-    int mUnknown0;
-    char mUnknown4[8];
-    int mUnknown12;
-    char mUnknown16[4];
-    int mUnknown20;
-    int mUnknown24;
-    int mUnknown28;
-    char mUnknown32[8];
-    short mUnknown40;
-    short mUnknown42;
-    char mUnknown44[4];
-};
-
 struct Pair_802DA864 {
     int mUnknown0;
     int mUnknown4;
@@ -84,9 +71,6 @@ void fn_80092F98(int handle);
 void fn_80093348(int handle);
 void fn_80093410(int handle);
 void fn_800940F0(int handle);
-int fn_80096A58(Params_80096A58 *pParams);
-int fn_80096B1C(int handle);
-void fn_80096D14(int handle);
 int fn_8009D86C(void);
 int fn_800A3444(void);
 void fn_800AD910(int a, float b);
@@ -319,8 +303,8 @@ void fn_800CFDA4(void)
 
     fn_800B43C8();
     fn_801C1F94(&params, 0, sizeof(params));
-    params.mUnknown40 = -1;
-    params.mUnknown42 = -1;
+    params.mUnknown40 = 0xFFFF;
+    params.mUnknown42 = 0xFFFF;
     switch (fn_800A3444()) {
     case 0:
         params.mUnknown0 = 14;

@@ -112,22 +112,22 @@ extern "C" Set_8003EE6C *fn_8003EE6C(int count, int subCount)
     fn_801C1F94(pSet->mpUnknown0, 0, pSet->mUnknown4 * sizeof(Record_8003EC04));
     pSet->mUnknownC = subCount;
     pSet->mUnknown10 = 0;
-    pSet->mpUnknown14 = 0;
-    pSet->mpUnknown18 = 0;
+    pSet->mpUnknown14[0] = 0;
+    pSet->mpUnknown14[1] = 0;
     if (subCount) {
-        pSet->mpUnknown14 = (Sub_8003EC54 *)fn_801D2B7C(subCount * sizeof(Sub_8003EC54), 0, 0);
-        fn_801C1F94(pSet->mpUnknown14, 0, pSet->mUnknownC * sizeof(Sub_8003EC54));
-        pSet->mpUnknown18 = (Sub_8003EC54 *)fn_801D2B7C(pSet->mUnknownC * sizeof(Sub_8003EC54), 0, 0);
-        fn_801C1F94(pSet->mpUnknown18, 0, pSet->mUnknownC * sizeof(Sub_8003EC54));
+        pSet->mpUnknown14[0] = (Sub_8003EC54 *)fn_801D2B7C(subCount * sizeof(Sub_8003EC54), 0, 0);
+        fn_801C1F94(pSet->mpUnknown14[0], 0, pSet->mUnknownC * sizeof(Sub_8003EC54));
+        pSet->mpUnknown14[1] = (Sub_8003EC54 *)fn_801D2B7C(pSet->mUnknownC * sizeof(Sub_8003EC54), 0, 0);
+        fn_801C1F94(pSet->mpUnknown14[1], 0, pSet->mUnknownC * sizeof(Sub_8003EC54));
     }
     return pSet;
 }
 
 extern "C" void fn_8003EF5C(Set_8003EE6C *pSet)
 {
-    if (pSet->mpUnknown14 && pSet->mpUnknown18) {
-        fn_801D2BD0(pSet->mpUnknown14);
-        fn_801D2BD0(pSet->mpUnknown18);
+    if (pSet->mpUnknown14[0] && pSet->mpUnknown14[1]) {
+        fn_801D2BD0(pSet->mpUnknown14[0]);
+        fn_801D2BD0(pSet->mpUnknown14[1]);
     }
     fn_801D2BD0(pSet->mpUnknown0);
     fn_801D2BD0(pSet);
@@ -143,8 +143,8 @@ extern "C" Record_8003EC04 *fn_8003EFB8(Set_8003EE6C *pSet, unsigned char type, 
     pRecord->mUnknown28 = value;
     pRecord->mUnknown2F = count;
     if (count) {
-        pRecord->mpUnknown20 = &pSet->mpUnknown14[pSet->mUnknown10];
-        pRecord->mpUnknown24 = &pSet->mpUnknown18[pSet->mUnknown10];
+        pRecord->mpUnknown20 = &pSet->mpUnknown14[0][pSet->mUnknown10];
+        pRecord->mpUnknown24 = &pSet->mpUnknown14[1][pSet->mUnknown10];
     } else {
         pRecord->mpUnknown20 = 0;
         pRecord->mpUnknown24 = 0;
