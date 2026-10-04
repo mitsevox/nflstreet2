@@ -1,3 +1,4 @@
+#include "game/fn_801D2B7C.h"
 #include "game/fn_801801F0.h"
 #include <string.h>
 
@@ -30,8 +31,6 @@ int fn_801CEA08(void);
 void fn_801CEA84(void);
 void fn_801CEADC(int a);
 int fn_801CEC84(void);
-void *fn_801D2B7C(int size, int a, int b);
-void fn_801D2BD0(void *p);
 void fn_801D6F58(void);
 void fn_801D9360(int a, int b, int c, int (*pCallback)(int), int d);
 int fn_801D9494(void (*pCallback)(void));

@@ -1,4 +1,4 @@
-typedef void (*Callback_802DCF9C)(void *pRecord);
+#include "game/cu_8003EC04.h"
 
 struct Entry_802DCF9C {
     unsigned char mUnknown0;
@@ -7,10 +7,8 @@ struct Entry_802DCF9C {
 };
 
 extern "C" {
-void fn_8003A628(void *pRecord);
-void fn_801380DC(void *pRecord);
-void fn_8003EDD8(unsigned char a, unsigned char b, Callback_802DCF9C pCallback);
-void fn_8003EE00(unsigned char a);
+void fn_8003A628(Record_8003EC04 *pRecord);
+void fn_801380DC(Record_8003EC04 *pRecord);
 
 static Entry_802DCF9C lbl_802DCF9C[6] = {
     { 0, 11, fn_8003A628 },
