@@ -1,3 +1,4 @@
+#include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_800D81C8.h"
@@ -28,7 +29,6 @@ float fn_801BD660(void *p, int key);
 float fn_801BD6D4(Block_801BD6D4 *p);
 Block_801BE60C *fn_801BE60C(void *p, int key);
 int fn_801BE648(void *p);
-float fn_802270A4(Pair_802270A4 *p);
 void fn_80227248(Pair_802270A4 *p, Pair_802270A4 *pOther, float value);
 void fn_8022728C(Pair_802270A4 *p, Pair_802270A4 *pOther, float value);
 }

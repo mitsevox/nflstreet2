@@ -1,3 +1,4 @@
+#include "game/cu_80067C10.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
@@ -70,14 +71,12 @@ struct State_8030AAA8 {
 extern "C" {
 extern char lbl_802EBE04[];
 
-void fn_80067EC8(void (*pFunc)(void));
-void fn_80067EF0(void (*pFunc)(void));
 int fn_8006D65C(int a);
 void fn_8006D684(int a, int b);
 void fn_8006D6F4(int a, int b, int c);
 void fn_8006D758(int a, Vector_80039F5C *pPos);
 void fn_8006EA04(int a, unsigned char b);
-void fn_8006ECB4(void);
+void fn_8006ECB4(Record_80067CA8 *pRecord);
 void fn_8006F0C8(int a);
 int fn_800737B8(void);
 unsigned char fn_800737C0(void);

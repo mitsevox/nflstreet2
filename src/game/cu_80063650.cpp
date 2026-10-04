@@ -1,3 +1,4 @@
+#include "game/FELoop.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
 #include "game/Object_80228224.h"
@@ -11,7 +12,6 @@ struct Block_80063910 {
 extern "C" {
 extern void *lbl_803EB688;
 
-int fn_80027DF0(void);
 void fn_8007F6F8(int a, int b);
 void fn_8007F548(void);
 int fn_801C6458(int a, int b);

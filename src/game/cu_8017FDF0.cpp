@@ -1,5 +1,10 @@
+#include "game/FELoop.h"
+#include "game/InGame.h"
 #include "game/Object_8007A334.h"
+#include "game/Object_8008044C.h"
 #include "game/cu_80181330.h"
+#include "game/fn_8007F828.h"
+#include "game/fn_8017F584.h"
 
 /* Filled by fn_80152940 for one index; the constructor leaves mUnknown8 unset. */
 struct Info_80152940 {
@@ -45,16 +50,13 @@ union Arg_801801F8 {
 };
 
 extern "C" {
-unsigned int fn_8017F584(void);
 int fn_8022F4BC(void);
 int fn_80186B38(int a);
 int fn_8018F2F4(int a, int b);
-int fn_8007F828(int a);
 int fn_8001194C(int a);
 int fn_801869F0(void);
 int fn_80186D64(int a);
 void fn_80186F9C(int a, char *pText, int c);
-int fn_80027DF0(void);
 int fn_801486A0(void);
 Class_80148A58 *fn_80148A58(void);
 void fn_80152940(Class_80148A58 *pObject, int index, Info_80152940 *pInfo);
@@ -81,7 +83,6 @@ int fn_8022F358(int index);
 void fn_8022F478(int a);
 void fn_80186F30(signed char a, int b);
 void fn_80186F8C(int a);
-unsigned char fn_8002892C(void);
 unsigned char fn_80062A60(void);
 int fn_80063BE4(char *pDest, int count);
 void fn_80063C2C(const char *pSource, int count);
@@ -94,17 +95,11 @@ int fn_8017F60C(void);
 void fn_80083E1C(Object_8007A334 *pObject, int a);
 void fn_80083E40(Object_8007A334 *pObject, int a, int tag);
 int fn_80084034(Object_8007A334 *pObject, int a, int b);
-void fn_80083F88(Object_8007A334 *pObject, char *pBuffer, int size);
 int fn_8008400C(Object_8007A334 *pObject);
-int fn_80084158(Object_8007A334 *pObject);
 int fn_80084360(Object_8007A334 *pObject);
-int fn_80084438(Object_8007A334 *pObject);
 void fn_80083F68(Object_8007A334 *pObject);
-void fn_8008040C(Object_8007A334 *pObject, int a);
-void fn_8008044C(Object_8007A334 *pObject, int a, int tag);
-int fn_800809C4(Object_8007A334 *pObject, int a, int b);
-int fn_80080D10(Object_8007A334 *pObject);
-void fn_8008056C(Object_8007A334 *pObject);
+void fn_8008040C(Object_8008044C *pObject, int a);
+int fn_80080D10(Object_8008044C *pObject);
 void fn_801C3284(char *pDest, const char *pSource, int size);
 void fn_80010150(int a);
 int fn_8000FCDC(void);
@@ -112,8 +107,6 @@ void fn_80011600(int a, int b, int c);
 void fn_8018A8C0(unsigned char value);
 int fn_80065650(void);
 int fn_8022F384(int a);
-void fn_80028920(void);
-void fn_80027AD8(int a, int b, int c, int d, int e, int f);
 void *fn_8021EA44(int index);
 int fn_8021E984(void *p, int a);
 int fn_801F0DB8(int a, int b);
@@ -722,7 +715,7 @@ void fn_80180BE4(int id, int *pStatus, int *pTeam)
 
 int fn_80180EF8(int id)
 {
-    Object_8007A334 cursor;
+    Object_8008044C cursor;
     int result = 0;
 
     if (fn_80027DF0()) {

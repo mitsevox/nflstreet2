@@ -1,3 +1,4 @@
+#include "engine/cu_80227F14.h"
 #include "game/Class_801CBC50.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
@@ -116,7 +117,6 @@ void fn_801E1C38(unsigned char a);
 int fn_801E1CE0(unsigned char a);
 float fn_801EC418(int a, int b, char *p);
 void fn_8021956C(void *p, int a, int b, int c);
-void fn_802285CC(void);
 void fn_802345C4(struct Desc_802345C4 *pDesc, int count);
 void fn_80236F34(void);
 void fn_80237830(int a);

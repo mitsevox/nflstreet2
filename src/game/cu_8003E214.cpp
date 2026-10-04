@@ -1,13 +1,13 @@
+#include "game/FELoop.h"
+#include "game/fn_8017F584.h"
 #include "game/fn_802372EC.h"
 #include "game/cu_8003E214.h"
 #include "game/Object_8008044C.h"
 #include "game/fn_801D2B7C.h"
 
 extern "C" {
-unsigned int fn_8017F584(void);
 int fn_801486A0(void);
 unsigned int fn_80178DC8(void);
-int fn_80027DF0(void);
 void fn_80085020(Object_8007A334 *pObject);
 void fn_80085060(Object_8007A334 *pObject);
 int fn_80085080(Object_8007A334 *pObject, int value, int *pResult);

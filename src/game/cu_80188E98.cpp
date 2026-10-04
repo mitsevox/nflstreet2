@@ -1,3 +1,5 @@
+#include "game/FELoop.h"
+#include "game/InGame.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801C3660.h"
@@ -37,8 +39,6 @@ extern float lbl_803EA2C4;
 double fabs(double);
 
 void fn_80024654(void);
-int fn_80027DF0(void);
-int fn_8002894C(void);
 int fn_80033144(void *p);
 void fn_8000FCD4(int a);
 void fn_80047670(int handle);

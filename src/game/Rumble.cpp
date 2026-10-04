@@ -1,7 +1,7 @@
+#include "game/FELoop.h"
 #include "game/Module.h"
 
 extern "C" {
-int fn_80027DF0(void);
 void fn_80194D20(void);
 void fn_80194D70(void);
 void fn_80194DB8(void);

@@ -1,3 +1,4 @@
+#include "engine/cu_80227F14.h"
 #include "game/fn_801801F0.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
@@ -55,7 +56,6 @@ void fn_801F87FC(int a);
 int fn_80219044(void *p, int a, int b, int c, struct Entry_80219044 **ppEntries);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
-void fn_802285CC(void);
 int fn_802399F8(void);
 int fn_80239A00(void);
 void fn_80239CEC(int a, int b);

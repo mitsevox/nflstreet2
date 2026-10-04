@@ -3,6 +3,8 @@
 #include "game/FELoop.h"
 #include "game/FMCAPPORT.h"
 #include "game/fn_8003B6BC.h"
+#include "game/fn_8007F828.h"
+#include "game/fn_8017F584.h"
 #include "game/fn_80191804.h"
 #include "game/fn_80218FC4.h"
 
@@ -47,11 +49,9 @@ void fn_8007CAB4(void);
 int fn_8007CAE4(void);
 void fn_8007F328(int a);
 void fn_8007F374(void);
-int fn_8007F828(int a);
 void fn_8009418C(void);
 void fn_8013CF98(void);
 void fn_8015CDA4(void);
-unsigned int fn_8017F584(void);
 void fn_801801E8(int a);
 void fn_80186EF4(void);
 void fn_80187C0C(void);

@@ -1,3 +1,5 @@
+#include "game/FELoop.h"
+#include "game/InGame.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801FCE10.h"
 #include "game/cu_80067C10.h"
@@ -12,8 +14,6 @@ extern char lbl_802EBFC0[];
 extern char lbl_803EB6F0[];
 extern char lbl_803EB6F8[];
 
-int fn_80027DF0(void);
-int fn_8002894C(void);
 int fn_80033124(void *pObject);
 void fn_800A1A58(void);
 void fn_800A1A80(void);
