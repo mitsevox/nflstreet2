@@ -4276,6 +4276,25 @@
           "end": "0x803ECBF0"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8002B8F8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8002B8F8-0x8002B960 and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002B8F8",
+          "end": "0x8002B960"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA36C",
+          "end": "0x803EA370"
+        }
+      ]
     }
   ]
 }
