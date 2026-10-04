@@ -171,7 +171,17 @@ def contributors(root, ledger, build, revision, fetch_missing=False):
             for login, functions in sorted(counts.items(), key=lambda pair:(-len(pair[1]), pair[0])) if functions]
 
 
-def export(root, site, source_report, previous=None, append=False, fetch_missing=False):
+def squash_preflight(root, ledger, build, revision, base):
+    # Model the repository's squash merge: no contribution-branch ancestors survive.
+    check_ancestor(root, base, revision)
+    tree = subprocess.check_output(['git','rev-parse',revision+'^{tree}'], cwd=root, text=True).strip()
+    squashed = subprocess.check_output(
+        ['git','-c','user.name=Attribution preflight','-c','user.email=preflight@example.invalid',
+         'commit-tree',tree,'-p',base], cwd=root, input='Private attribution squash preflight\n', text=True).strip()
+    return contributors(root, ledger, build, squashed)
+
+
+def export(root, site, source_report, previous=None, append=False, fetch_missing=False, squash_base=None):
     import hashlib
     build = json.loads(source_report.read_text())
     if site.get('baseline') != 'verified' or site.get('target_sha1') != build.get('target_sha1'):
@@ -204,9 +214,13 @@ def export(root, site, source_report, previous=None, append=False, fetch_missing
     for row in history:
         check_ancestor(root, row['revision'], site['revision'])
     ledger = json.loads((root/'config/GN7E69/contributors.json').read_text())
+    credits = contributors(root, ledger, build, site['revision'], fetch_missing)
+    if squash_base:
+        if squash_preflight(root, ledger, build, site['revision'], squash_base) != credits:
+            raise ValueError('Squash preflight changes original source attribution')
     return {'schema':1, 'target':'GN7E69', 'target_sha1':site['target_sha1'],
             'revision':site['revision'], 'snapshots':history,
-            'contributors':contributors(root, ledger, build, site['revision'], fetch_missing)}
+            'contributors':credits}
 
 
 def main():
@@ -218,12 +232,13 @@ def main():
     parser.add_argument('--append-current', action='store_true')
     parser.add_argument('--fetch-provenance', action='store_true',
                         help='Fetch unavailable pinned source provenance commits from origin (CI host only)')
+    parser.add_argument('--squash-base', help='Verify attribution after a synthetic squash onto the actual PR base SHA')
     args = parser.parse_args()
     site = json.loads(args.site.read_text())
     previous = json.loads(args.previous.read_text()) if args.previous else None
     if args.append_current and previous is None:
         raise ValueError('Main publication requires restored prior deployment history')
-    result = export(ROOT, site, args.source_report, previous, args.append_current, args.fetch_provenance)
+    result = export(ROOT, site, args.source_report, previous, args.append_current, args.fetch_provenance, args.squash_base)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2)+'\n')
     print(f"Exported {len(result['snapshots'])} verified snapshots and {len(result['contributors'])} contributors")
