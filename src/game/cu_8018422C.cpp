@@ -1,36 +1,21 @@
+#include "game/Callees_801D57E0.h"
+#include "game/cu_80020E80.h"
 #include "game/cu_8018422C.h"
 
-struct Buffer_80184ED0 {
-    int mUnknown0;
-    int mSize;
-    char *mpData;
-};
-
 extern "C" {
-void fn_801D654C(int a);
-void fn_801D65B4(int a);
 void fn_801D6650(int id);
 void fn_801D6680(int slot);
-void fn_801D6714(int slot);
-int fn_801D671C(void);
 unsigned int fn_801D6724(void);
 unsigned int fn_801D6730(void);
 void fn_801D6754(int a);
-void fn_801D67E4(char *pA, char *pB);
-void fn_801D6838(int slot);
-void fn_801D685C(const char *pName, int a);
-void fn_801D689C(char *pOut, const char *pFormat, signed char slot, int a, char *pName, int size);
+void fn_801D689C(const char *pSuffix, const char *pPrefix, int unused, int selector, char *pOut, int size);
 int fn_801D6AC8(int a);
 int fn_801D6B14(int a);
 void fn_801D6B24(char *pBuf, int size);
-int fn_801D6B74(signed char slot, int a, char *pBuf, int size, int b, int c, unsigned char *pFlag);
-void fn_801D6C70(signed char slot, int a, char *pBuf, int size);
 int fn_801D6CF4(const char *pName, int a, unsigned char *pFlag);
-int fn_801D6DA8(int slot, int a);
 unsigned int fn_801D85A8(int a);
 int fn_801D4400(int *pA, int *pB);
 void fn_801D46E8(int slot);
-void fn_801D57E0(int a, char *pBuf, int size);
 char *fn_801C2EF0(char *pDst, const char *pSrc, int size);
 int fn_801F7ABC(void);
 void fn_801F8838(void);
@@ -38,7 +23,7 @@ void fn_80032220(void);
 void fn_80032240(short a);
 void fn_80032250(short a, char *pBuf);
 unsigned int fn_80029838(int a);
-int fn_80029B48(void);
+int fn_80029B48(int a);
 void fn_80029E6C(int a, int b);
 int fn_8002A138(int a, int b);
 int fn_8002A190(int a, int b);
@@ -53,7 +38,7 @@ void fn_8007F6F8(int a, int b);
 int fn_8007F828(int a);
 void fn_80187FD0(void);
 void fn_80187FDC(void);
-void fn_80191948(void);
+void fn_80191948(int a, int b, int c, int d);
 }
 
 static void *(*lbl_803EB590)(int, int *) = 0;
@@ -69,7 +54,7 @@ static int lbl_803ECB80;
 
 extern "C" {
 
-int fn_8018422C(int id, void *pBlock)
+int fn_8018422C(void)
 {
     return 0;
 }
@@ -140,7 +125,7 @@ int fn_80184408(int a, int count)
     int i;
 
     for (i = 0; i < fn_801D6B14(a); i++) {
-        if (fn_801D6B74(i, a, 0, 0, 0, 0, 0) != 0) {
+        if (fn_801D6B74((signed char)i, a, 0, 0, 0, 0, 0) != 0) {
             count--;
         }
         if (count < 0) {
@@ -172,9 +157,9 @@ int fn_801844E0(int a)
     return 1;
 }
 
-void fn_80184528(void)
+void fn_80184528(int a, int b, int c, int d)
 {
-    fn_80191948();
+    fn_80191948(a, b, c, d);
 }
 
 void fn_80184548(void)
@@ -227,16 +212,16 @@ void fn_80184690(void)
     fn_801D6650(11);
 }
 
-void fn_801846B4(int a, int slot)
+void fn_801846B4(int a, int index)
 {
     char other[32];
     char name[32];
 
     fn_801D6754(a);
-    fn_801D6B74(slot, a, name, 32, 0, -1, 0);
-    fn_801D6C70(slot, a, other, 32);
+    fn_801D6B74((signed char)index, a, name, 32, 0, -1, 0);
+    fn_801D6C70((signed char)index, a, other, 32);
     fn_801D67E4(name, other);
-    fn_801D6838(slot);
+    fn_801D6838(index);
     fn_801D6650(6);
 }
 
@@ -252,18 +237,18 @@ void fn_80184770(void)
     fn_801D6650(7);
 }
 
-int fn_801847A4(int a, int slot)
+int fn_801847A4(int a, int index)
 {
     char other[32];
     char name[32];
 
     fn_801D6754(a);
-    if (fn_801D6B74(slot, a, name, 32, 0, -1, 0) != 0) {
-        fn_801D6C70(slot, a, other, 32);
+    if (fn_801D6B74((signed char)index, a, name, 32, 0, -1, 0) != 0) {
+        fn_801D6C70((signed char)index, a, other, 32);
         fn_801D67E4(name, other);
-        fn_801D6838(slot);
+        fn_801D6838(index);
         if (lbl_803EB59C != 0) {
-            lbl_803EB59C(a, slot);
+            lbl_803EB59C(a, index);
         }
         fn_8002A5C4();
         return 1;
@@ -271,35 +256,35 @@ int fn_801847A4(int a, int slot)
     return 0;
 }
 
-int fn_80184858(int a, int slot)
+int fn_80184858(int a, int index)
 {
     char other[32];
     char name[32];
     int result = 0;
 
     fn_801D6754(a);
-    fn_801D6B74(slot, a, name, 32, 0, -1, 0);
-    fn_801D6C70(slot, a, other, 32);
+    fn_801D6B74((signed char)index, a, name, 32, 0, -1, 0);
+    fn_801D6C70((signed char)index, a, other, 32);
     fn_801D67E4(0, other);
-    fn_801D6838(slot);
+    fn_801D6838(index);
     if (lbl_803EB5A0 != 0) {
-        result = lbl_803EB5A0(a, slot);
+        result = lbl_803EB5A0(a, index);
     }
     return result;
 }
 
-int fn_801848FC(void)
+int fn_801848FC(int a)
 {
-    return fn_80029B48();
+    return fn_80029B48(a);
 }
 
-int fn_8018491C(int a, int slot)
+int fn_8018491C(int a, int index)
 {
     char name[17];
-    int result = fn_801D6DA8(slot, a);
+    int result = fn_801D6DA8(index, a);
 
     if (result != 0) {
-        fn_801D6B74(slot, a, name, 17, 0, 0, 0);
+        fn_801D6B74((signed char)index, a, name, 17, 0, 0, 0);
         fn_801D67E4(name, 0);
     }
     return result;
@@ -370,7 +355,7 @@ int fn_80184B00(int a, const char *pName)
     return fn_801D6CF4(pName, a, &flag) == -1;
 }
 
-int fn_80184B3C(int a, int slot, int b)
+int fn_80184B3C(int a, int index, int b)
 {
     char path[32];
     char name[32];
@@ -383,28 +368,28 @@ int fn_80184B3C(int a, int slot, int b)
         ok = fn_801D6CF4("Options", 1, &flag) >= 0;
     } else if (fn_8002A138(a, b) != 0) {
         ok = fn_801D6CF4(path, a, &flag) >= 0;
-    } else if (fn_801D6B74(slot, a, 0, 0, 0, -1, &flag) == 0 || flag != 0) {
+    } else if (fn_801D6B74((signed char)index, a, 0, 0, 0, -1, &flag) == 0 || flag != 0) {
         fn_8002A5F0(a, path, 0);
     }
-    fn_801D689C(path, "GN7E-69", slot, a, name, 32);
+    fn_801D689C(path, "GN7E-69", (signed char)index, a, name, 32);
     fn_801D67E4(path, name);
-    fn_801D6838(slot);
+    fn_801D6838(index);
     fn_8002A49C(ok);
     return 1;
 }
 
-int fn_80184C78(int a, int slot, int b)
+int fn_80184C78(int a, int index, int b)
 {
     char name[32];
     char other[32];
     int result;
 
     fn_8002A44C(a, b);
-    result = fn_801D6B74(slot, a, name, 32, 0, -1, 0);
+    result = fn_801D6B74((signed char)index, a, name, 32, 0, -1, 0);
     if (result != 0) {
-        fn_801D6C70(slot, a, other, 32);
+        fn_801D6C70((signed char)index, a, other, 32);
         fn_801D67E4(name, other);
-        fn_801D6838(slot);
+        fn_801D6838(index);
         fn_8002A49C(result);
     }
     return result;
@@ -437,7 +422,7 @@ int fn_80184D68(int a, int b, int *pError)
     }
     if (ok) {
         for (i = 0; i < fn_801D6B14(a); i++) {
-            if (fn_801D6B74(i, a, 0, 0, 0, 0, 0) == 0) {
+            if (fn_801D6B74((signed char)i, a, 0, 0, 0, 0, 0) == 0) {
                 break;
             }
         }
@@ -462,12 +447,12 @@ void fn_80184E7C(int a, int b)
     }
 }
 
-void fn_80184ED0(Buffer_80184ED0 *pBuffer)
+void fn_80184ED0(Record_80021154 *pRecord)
 {
     char name[32];
 
     fn_801D6B24(name, 32);
-    fn_801C2EF0(pBuffer->mpData, name, pBuffer->mSize);
+    fn_801C2EF0(pRecord->mUnknown8, name, pRecord->mUnknown4);
 }
 
 void fn_80184F14(int slot)
@@ -530,9 +515,9 @@ int fn_80185038(int *pSlot)
     return 1;
 }
 
-void fn_801850CC(int a, Buffer_80184ED0 *pBuffer)
+void fn_801850CC(int a, Record_80021154 *pRecord)
 {
-    fn_801D57E0(a, pBuffer->mpData, pBuffer->mSize);
+    fn_801D57E0(a, pRecord->mUnknown8, pRecord->mUnknown4);
 }
 
 void fn_801850F4(int a, int b, int *pOut)

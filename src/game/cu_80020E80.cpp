@@ -1,3 +1,5 @@
+#include "game/Callees_801D57E0.h"
+#include "game/cu_80020E80.h"
 #include "game/cu_8018422C.h"
 #include "game/fn_801801F0.h"
 #include "game/fn_801C1F94.h"
@@ -12,12 +14,6 @@ struct Record_80020F5C {
     char mUnknown17[3];
 };
 
-struct Record_80021154 {
-    char mUnknown0[4];
-    int mUnknown4;
-    char *mUnknown8;
-};
-
 union Word_800211B4 {
     int mUnknownValue;
     Record_80021154 *mUnknownPointer;
@@ -30,19 +26,8 @@ struct Params_800211B4 {
 };
 
 extern "C" {
-void fn_801D685C(const char *, int);
-void fn_801D65B4(int);
-void fn_801D654C(int);
-void fn_801D6714(int);
 int fn_801869F0();
 void fn_8002A574(int, int);
-int fn_801D6B74(int, int, char *, int, char *, int, unsigned char *);
-void fn_801D6C70(int, int, char *, int);
-void fn_801D67E4(const char *, const char *);
-void fn_801D6838(int);
-int fn_801D6DA8(int, int);
-int fn_801D671C();
-int fn_801D57E0(int, char *, int);
 void fn_8002118C();
 void *fn_80020F18(int, int *);
 void fn_80020F50();
