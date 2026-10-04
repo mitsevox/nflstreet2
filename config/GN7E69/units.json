@@ -5429,6 +5429,68 @@
           "end": "0x80289BC0"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8001FFE4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8001FFE4-0x8002053C (src/game/cu_8001FFE4.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8001FFE4",
+          "end": "0x8002053C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBA98",
+          "end": "0x803EBA9C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036B334",
+          "end": "0x8036B360"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B34",
+          "end": "0x80289B38"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C5C",
+          "end": "0x80289C60"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80046004.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80046004-0x80046340 (src/game/cu_80046004.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80046004",
+          "end": "0x80046340"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA4AC",
+          "end": "0x803EA4B0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC7B0",
+          "end": "0x803EC7B8"
+        }
+      ]
     }
   ]
 }

@@ -9,7 +9,12 @@ struct PaletteColor {
     unsigned char a;
 };
 
+struct ColorPalette {
+    PaletteColor mColors[4];
+};
+
 extern "C" {
+void fn_80079FBC(int index, ColorPalette *pPalette);
 void fn_8007A068(unsigned char index, PaletteColor *pColor);
 }
 
