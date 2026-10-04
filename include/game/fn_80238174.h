@@ -3,9 +3,9 @@
 
 typedef int (*Callback_80238234)(void *p, int value);
 typedef int (*Callback1C_80238234)(void *p, void *q);
-typedef int (*Callback20_80238248)(void *p, char *pBuffer);
+typedef int (*Callback20_80238248)(void *p, void *pBuffer);
 typedef int (*Callback24_80238248)(void *p);
-typedef int (*Callback28_80238248)(void *p, char *pBuffer);
+typedef int (*Callback28_80238248)(void *p, void *pBuffer);
 
 #ifdef __cplusplus
 extern "C" {

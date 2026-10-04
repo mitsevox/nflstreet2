@@ -122,17 +122,17 @@ int fn_8013F564(void *p, void *q)
     return 0;
 }
 
-int fn_8013F56C(void *p, char *pBuffer)
+int fn_8013F56C(void *p, void *pBuffer)
 {
     State_803ECA00 *pState = (State_803ECA00 *)p;
 
     memcpy(pBuffer, p, sizeof(State_803ECA00));
-    pBuffer += sizeof(State_803ECA00);
+    pBuffer = (char *)pBuffer + sizeof(State_803ECA00);
     memcpy(pBuffer, pState->mpObject, sizeof(Object_80228224));
-    pBuffer += sizeof(Object_80228224);
+    pBuffer = (char *)pBuffer + sizeof(Object_80228224);
     for (short i = 0; i < 4; i++) {
         memcpy(pBuffer, pState->mSet.mpCameras[i], sizeof(CameraSave_8013F56C));
-        pBuffer += sizeof(CameraSave_8013F56C);
+        pBuffer = (char *)pBuffer + sizeof(CameraSave_8013F56C);
     }
     return 1;
 }
@@ -149,14 +149,14 @@ void fn_8013F5F4(Object_80228224 *pObject, char *pBuffer)
     pObject->mUnknown72 = saved;
 }
 
-int fn_8013F628(void *p, char *pBuffer)
+int fn_8013F628(void *p, void *pBuffer)
 {
     State_803ECA00 *pState = (State_803ECA00 *)p;
 
     pState->mSet = ((State_803ECA00 *)pBuffer)->mSet;
-    pBuffer += sizeof(State_803ECA00);
-    fn_8013F5F4((Object_80228224 *)pState->mpObject, pBuffer);
-    pBuffer += sizeof(Object_80228224);
+    pBuffer = (char *)pBuffer + sizeof(State_803ECA00);
+    fn_8013F5F4((Object_80228224 *)pState->mpObject, (char *)pBuffer);
+    pBuffer = (char *)pBuffer + sizeof(Object_80228224);
     CameraSave_8013F56C *pSaved = (CameraSave_8013F56C *)pBuffer;
     for (short i = 0; i < 4; i++, pSaved++) {
         *(CameraHeader_8013F628 *)pState->mSet.mpCameras[i] = pSaved->mHeader;

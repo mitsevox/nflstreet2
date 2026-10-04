@@ -179,7 +179,7 @@ void fn_8018E474(int index)
 
 /* Deletes the 'YPTS' rows with a non-zero 'DIGP', clears this file's 'TADS'
    and 'CETS' state and rewrites the defaults of the 'DIGP' 0 row. */
-static void ResetSeasonTables(void)
+static void ResetYptsTadsCetsTables(void)
 {
     Object_8007A334 cursor;
     int index = fn_8022F384(fn_8022F4BC());
@@ -197,6 +197,8 @@ static void ResetSeasonTables(void)
     }
     fn_8018E174(&cursor);
     fn_80086BA4(index);
+    fn_80086A64();
+    fn_80086994();
     fn_80086B50();
 }
 

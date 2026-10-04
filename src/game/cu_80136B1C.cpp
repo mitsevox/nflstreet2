@@ -4,7 +4,6 @@
 #include "game/cu_80136B1C.h"
 #include "game/cu_80089330.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_801C1FBC.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_80238174.h"
@@ -149,28 +148,28 @@ int fn_80136E78(void *p, int value)
 }
 
 /* Saves the block followed by its record set, records and sub-records. */
-int fn_80136EB0(void *p, char *pBuffer)
+int fn_80136EB0(void *p, void *pBuffer)
 {
     Set_80137F98 *pSet = (Set_80137F98 *)p;
     Set_8003EE6C *pRecords;
     short i;
 
-    fn_801C1FBC(pBuffer, pSet, sizeof(Set_80137F98) + (pSet->mHeader.mCount - 1) * sizeof(Object_80137ABC));
+    memcpy(pBuffer, pSet, sizeof(Set_80137F98) + (pSet->mHeader.mCount - 1) * sizeof(Object_80137ABC));
     pRecords = pSet->mHeader.mpRecords;
-    pBuffer += sizeof(Set_80137F98) + (pSet->mHeader.mCount - 1) * sizeof(Object_80137ABC);
-    fn_801C1FBC(pBuffer, pRecords, sizeof(Set_8003EE6C));
-    pBuffer += sizeof(Set_8003EE6C);
-    fn_801C1FBC(pBuffer, pRecords->mpUnknown0, pRecords->mUnknown4 * sizeof(Record_8003EC04));
-    pBuffer += pRecords->mUnknown4 * sizeof(Record_8003EC04);
+    pBuffer = (char *)pBuffer + sizeof(Set_80137F98) + (pSet->mHeader.mCount - 1) * sizeof(Object_80137ABC);
+    memcpy(pBuffer, pRecords, sizeof(Set_8003EE6C));
+    pBuffer = (char *)pBuffer + sizeof(Set_8003EE6C);
+    memcpy(pBuffer, pRecords->mpUnknown0, pRecords->mUnknown4 * sizeof(Record_8003EC04));
+    pBuffer = (char *)pBuffer + pRecords->mUnknown4 * sizeof(Record_8003EC04);
     for (i = 0; i < 2; i++) {
-        fn_801C1FBC(pBuffer, pRecords->mpUnknown14[i], pRecords->mUnknownC * sizeof(Sub_8003EC54));
-        pBuffer += pRecords->mUnknownC * sizeof(Sub_8003EC54);
+        memcpy(pBuffer, pRecords->mpUnknown14[i], pRecords->mUnknownC * sizeof(Sub_8003EC54));
+        pBuffer = (char *)pBuffer + pRecords->mUnknownC * sizeof(Sub_8003EC54);
     }
     return 1;
 }
 
 /* Restores what fn_80136EB0 saved, keeping each entry's first word. */
-int fn_80136F7C(void *p, char *pBuffer)
+int fn_80136F7C(void *p, void *pBuffer)
 {
     Set_80137F98 *pSet = (Set_80137F98 *)p;
     Set_80137F98 *pSaved = (Set_80137F98 *)pBuffer;
@@ -189,11 +188,11 @@ int fn_80136F7C(void *p, char *pBuffer)
     }
     pRecords = pSet->mHeader.mpRecords;
     pBuffer = (char *)pSrc + sizeof(Set_8003EE6C);
-    fn_801C1FBC(pRecords->mpUnknown0, pBuffer, pRecords->mUnknown4 * sizeof(Record_8003EC04));
-    pBuffer += pRecords->mUnknown4 * sizeof(Record_8003EC04);
+    memcpy(pRecords->mpUnknown0, pBuffer, pRecords->mUnknown4 * sizeof(Record_8003EC04));
+    pBuffer = (char *)pBuffer + pRecords->mUnknown4 * sizeof(Record_8003EC04);
     for (i = 0; i < 2; i++) {
-        fn_801C1FBC(pRecords->mpUnknown14[i], pBuffer, pRecords->mUnknownC * sizeof(Sub_8003EC54));
-        pBuffer += pRecords->mUnknownC * sizeof(Sub_8003EC54);
+        memcpy(pRecords->mpUnknown14[i], pBuffer, pRecords->mUnknownC * sizeof(Sub_8003EC54));
+        pBuffer = (char *)pBuffer + pRecords->mUnknownC * sizeof(Sub_8003EC54);
     }
     return 1;
 }
