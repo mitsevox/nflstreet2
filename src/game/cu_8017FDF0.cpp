@@ -3,6 +3,8 @@
 #include "game/Object_8007A334.h"
 #include "game/Object_8008044C.h"
 #include "game/cu_80181330.h"
+#include "game/cu_8007C9D4.h"
+#include "game/fn_801801F0.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
 
@@ -118,7 +120,6 @@ void fn_80156E74(float *pX, float *pY, float *pZ);
 int fn_8005902C(void);
 int fn_8007B324(void);
 int fn_80188DF0(int a);
-int fn_8007CB6C(int a);
 int fn_8022E558(void);
 int fn_8022E560(void);
 }
@@ -613,14 +614,14 @@ void fn_80180BE4(int id, int *pStatus, int *pTeam)
     Object_8007A334 cursor;
     int team = 2;
     int mode;
-    int online;
+    int result;
 
     *pStatus = 0;
     *pTeam = fn_80188DF0(-1);
     mode = fn_8017F584();
-    online = fn_80027DF0();
+    result = fn_80027DF0();
     if (mode == 7) {
-        if (online) {
+        if (result) {
             fn_8007A334(&cursor, 0x4D414554, 0x44494754, 0, 0, 0x54415453);
         } else {
             fn_80083E1C(&cursor, 0);
@@ -634,7 +635,7 @@ void fn_80180BE4(int id, int *pStatus, int *pTeam)
                     *pStatus = 0x86;
                 }
             } else if (!fn_80084438(&cursor)) {
-                if (online) {
+                if (result) {
                     team = fn_80084360(&cursor);
                     if (team != 0 && team != 1) {
                         team = 2;
@@ -676,13 +677,13 @@ void fn_80180BE4(int id, int *pStatus, int *pTeam)
     } else if (id == 10001) {
         *pStatus = 0x8E;
     } else {
-        if (online) {
+        if (result) {
             fn_80083E40(&cursor, 0, 0x54415453);
         } else {
             fn_80083E1C(&cursor, 0);
         }
         if (fn_80084034(&cursor, id, 0)) {
-            if (!online) {
+            if (!result) {
                 if (fn_8008400C(&cursor) != 5) {
                     team = 2;
                 } else if (fn_8022E558() == id) {

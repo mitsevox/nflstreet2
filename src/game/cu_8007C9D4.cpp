@@ -1,4 +1,5 @@
 #include "game/Object_8007A334.h"
+#include "game/cu_8007C9D4.h"
 
 extern "C" {
 void fn_8022DBF4(int value);
@@ -13,8 +14,6 @@ static ColumnValue_802D6424 sRecord[4];
 static unsigned char sInitialized = 0;
 
 extern "C" {
-
-void fn_8007CA28(void);
 
 void fn_8007C9D4(void)
 {

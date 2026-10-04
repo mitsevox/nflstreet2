@@ -2,6 +2,8 @@
 #include "game/Class_801CBC50.h"
 #include "game/FELoop.h"
 #include "game/FMCAPPORT.h"
+#include "game/cu_80003F10.h"
+#include "game/cu_8007C9D4.h"
 #include "game/fn_8003B6BC.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
@@ -14,8 +16,6 @@ extern float lbl_803EA2C4;
 extern void *lbl_803EB688;
 extern void *lbl_803EB690;
 
-void fn_80003F10(unsigned char a);
-int fn_80003F18(void);
 int fn_80003F30(void);
 void fn_80010150(int a);
 int fn_80010194(void);
@@ -44,9 +44,6 @@ void fn_8006EC24(void);
 void fn_80072AA8(void);
 void fn_80072C90(int a, int b);
 void fn_800731D0(int a);
-void fn_8007CA28(void);
-void fn_8007CAB4(void);
-int fn_8007CAE4(void);
 void fn_8007F328(int a);
 void fn_8007F374(void);
 void fn_8009418C(void);
@@ -371,7 +368,7 @@ unsigned char FELoop::fn_80027C58()
 {
     unsigned short a;
     unsigned short b;
-    int active = 1;
+    int flag = 1;
 
     fn_80024608();
     fn_8018A740();
@@ -387,7 +384,7 @@ unsigned char FELoop::fn_80027C58()
         fn_8001442C();
     }
     fn_80194E04();
-    if (active) {
+    if (flag) {
         fn_802285CC();
         fn_801CAF24();
         fn_8006CA84(1);
@@ -396,7 +393,7 @@ unsigned char FELoop::fn_80027C58()
             sCallback();
         }
         if (fn_80010194() || fn_80015F2C()) {
-            if (++sUnknown803EA2DC > (unsigned int)(int)(60.0f / lbl_803EA2C4) * 75) {
+            if (++sUnknown803EA2DC > (int)(60.0f / lbl_803EA2C4) * 75) {
                 fn_8021D7B8(lbl_803EB688, 0x80000038, 0, 0);
                 fn_80072C90(0xFA, 1);
                 sUnknown803EA2E0 = 1;
