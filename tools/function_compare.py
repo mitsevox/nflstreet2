@@ -42,6 +42,54 @@ def linked_ranges(units, address=lambda value: value):
     return [(u['source'], address(s['start']), address(s['end'])) for u in units for s in u['sections']]
 
 
+STT_NOTYPE, STT_OBJECT = 0, 1
+
+
+def accepted_data_symbols(objects, externals):
+    """Resolve public data objects defined by accepted (linked) source.
+
+    `objects` holds (report sections, ELF sections, ELF symbols) for each accepted native object.
+    A public data symbol (STT_OBJECT, or STT_NOTYPE as ProDG emits for .bss
+    variables) resolves to its linked target address: the verified placement start
+    of its compiled section plus the symbol value. Symbols in code sections are
+    left to the function inventory. Sections whose compiled size differs from their
+    placement, data placed after code, repeated section names and symbols outside their section
+    resolve nothing. A name defined more than once, or also known at a different address from
+    `externals`, is returned as ambiguous so a comparison that references it fails closed."""
+    resolved, ambiguous = {}, set()
+    for placements, sections, symbols in objects:
+        by_name = {}
+        for placement in placements:
+            name = placement.get('section')
+            if name is None:
+                continue
+            start, end = sb.address(placement['start']), sb.address(placement['end'])
+            exact = placement.get('compiled') == end - start and not placement.get('follows')
+            by_name[name] = None if name in by_name or not exact else (start, end)
+        for symbol in symbols:
+            if symbol['bind'] != sb.STB_GLOBAL or symbol['type'] not in (STT_NOTYPE, STT_OBJECT) or not symbol['name']:
+                continue
+            if symbol['shndx'] in (sb.SHN_UNDEF, sb.SHN_ABS, sb.SHN_COMMON) or symbol['shndx'] >= len(sections):
+                continue
+            if sections[symbol['shndx']]['flags'] & sb.SHF_EXECINSTR:
+                continue
+            place = by_name.get(sections[symbol['shndx']]['name'])
+            name = symbol['name']
+            if place is None or symbol['value'] + symbol['size'] > place[1] - place[0]:
+                ambiguous.add(name)
+                continue
+            value = place[0] + symbol['value']
+            if name in resolved and resolved[name] != value:
+                ambiguous.add(name)
+            resolved[name] = value
+    for name, value in resolved.items():
+        if name in externals and externals[name] != value:
+            ambiguous.add(name)
+    for name in ambiguous:
+        resolved.pop(name, None)
+    return resolved, ambiguous
+
+
 def configured(root, binary):
     config = json.loads((root / CONFIG).read_text())
     if set(config) != {'schema', 'units'} or config['schema'] != 2 or not isinstance(config['units'], list):
@@ -111,6 +159,7 @@ def generate(original, source_report, tool):
     accepted_bounds = [(int(s['start'], 16), int(s['end'], 16)) for u in accepted for s in u['sections']]
     accepted_linked = linked_ranges(accepted, sb.address)
     externals = {name: int(e['address'], 16) for name, e in manifest['externals'].items()}
+    accepted_objects = []
     for u in accepted:
         # Only public definitions may resolve another file's undefined reference.
         stem = re.sub(r'[^A-Za-z0-9]+', '_', u['source']).strip('_')
@@ -118,8 +167,13 @@ def generate(original, source_report, tool):
         native = root / 'build/source/obj' / f'unit{index:03d}_{stem}.o'
         if sb.sha256(native) != u['native_object_sha256']:
             raise ValueError('Accepted external object differs from verified compiler receipt')
-        public = {s['name'] for s in sb.read_elf(native.read_bytes())[1] if s['bind'] == sb.STB_GLOBAL and s['shndx'] != sb.SHN_UNDEF}
+        native_sections, native_symbols = sb.read_elf(native.read_bytes())
+        public = {s['name'] for s in native_symbols if s['bind'] == sb.STB_GLOBAL and s['shndx'] != sb.SHN_UNDEF}
         externals.update({f['symbol']: int(f['address'], 16) for f in u['functions'] if f['symbol'] in public})
+        accepted_objects.append((u['sections'], native_sections, native_symbols))
+    # Public data objects of accepted source resolve at their verified linked placements.
+    data_symbols, ambiguous = accepted_data_symbols(accepted_objects, externals)
+    externals.update({name: value for name, value in data_symbols.items() if name not in externals})
     compiler, wrapper = sb.setup_compiler.setup()
     sdk = sb.setup_compiler.setup_sdk() if any(u['compiler'] == 'mwcc' for u in units) else None
     work = root / 'build/matching/candidates'
@@ -162,6 +216,8 @@ def generate(original, source_report, tool):
             if symbol['shndx'] != sb.SHN_UNDEF or not name or name in defined:
                 continue
             neutral = sb.NEUTRAL.fullmatch(name)
+            if name in ambiguous:
+                raise ValueError(f'Ambiguous comparison symbol {name}')
             if name in externals:
                 resolved[name] = externals[name]
             elif neutral:

@@ -46,6 +46,66 @@ class ExportSemantics(unittest.TestCase):
         self.assertEqual(units['src/done.c']['measures']['complete_units'], 1)
 
 
+class AcceptedDataSymbols(unittest.TestCase):
+    """Public data of linked source resolves at its verified placement, and fails closed otherwise."""
+    SECTIONS = [{'name': ''}, {'name': '.text', 'flags': sb.SHF_EXECINSTR | sb.SHF_ALLOC},
+                {'name': '.rodata', 'flags': sb.SHF_ALLOC}, {'name': '.bss', 'flags': sb.SHF_ALLOC | 1}]
+
+    @staticmethod
+    def placement(section, start, end, compiled=None):
+        return {'section': section, 'start': start, 'end': end,
+                'compiled': int(end, 16) - int(start, 16) if compiled is None else compiled}
+
+    @staticmethod
+    def symbol(name, shndx, value=0, size=4, kind=1, bind=sb.STB_GLOBAL):
+        return {'name': name, 'shndx': shndx, 'value': value, 'size': size, 'type': kind, 'bind': bind}
+
+    def object(self, symbols, placements=None):
+        return (placements or [self.placement('.text', '0x80001000', '0x80001010'),
+                               self.placement('.rodata', '0x80200000', '0x80200040'),
+                               self.placement('.bss', '0x80300000', '0x80300020')], self.SECTIONS, symbols)
+
+    def test_resolves_public_object_and_notype_data_at_placement(self):
+        resolved, ambiguous = function_compare.accepted_data_symbols([self.object([
+            self.symbol('_vt.4Base', 2, value=8, size=24),
+            self.symbol('gObject', 3, value=0x10, size=16, kind=0),
+            self.symbol('sLocal', 3, bind=sb.STB_LOCAL),
+            self.symbol('Code__4Base', 1, kind=2),
+            self.symbol('label_in_code', 1, kind=0),
+            self.symbol('gExternal', sb.SHN_UNDEF),
+            self.symbol('gCommon', sb.SHN_COMMON)])], {})
+        self.assertEqual(resolved, {'_vt.4Base': 0x80200008, 'gObject': 0x80300010})
+        self.assertEqual(ambiguous, set())
+
+    def test_unverified_placements_and_conflicts_fail_closed(self):
+        cases = {
+            'compiled size differs': ([self.object([self.symbol('gData', 3)], [
+                self.placement('.bss', '0x80300000', '0x80300020', compiled=0x10)])], {}),
+            'data follows code': ([self.object([self.symbol('gData', 3)], [
+                dict(self.placement('.bss', '0x80300000', '0x80300020'), follows='.text')])], {}),
+            'unplaced section': ([self.object([self.symbol('gData', 3)], [
+                self.placement('.rodata', '0x80200000', '0x80200040')])], {}),
+            'repeated section name': ([self.object([self.symbol('gData', 3)], [
+                self.placement('.bss', '0x80300000', '0x80300020'),
+                self.placement('.bss', '0x80310000', '0x80310020')])], {}),
+            'outside section': ([self.object([self.symbol('gData', 3, value=0x1C, size=8)])], {}),
+            'two definitions': ([self.object([self.symbol('gData', 3)]),
+                                 self.object([self.symbol('gData', 3)], [
+                                     self.placement('.bss', '0x80310000', '0x80310020')])], {}),
+            'external elsewhere': ([self.object([self.symbol('gData', 3)])], {'gData': 0x80310000}),
+        }
+        for label, (objects, externals) in cases.items():
+            with self.subTest(label):
+                resolved, ambiguous = function_compare.accepted_data_symbols(objects, externals)
+                self.assertNotIn('gData', resolved)
+                self.assertIn('gData', ambiguous)
+
+    def test_agreeing_external_is_not_a_conflict(self):
+        resolved, ambiguous = function_compare.accepted_data_symbols(
+            [self.object([self.symbol('gData', 3, value=4)])], {'gData': 0x80300004})
+        self.assertEqual((resolved, ambiguous), ({'gData': 0x80300004}, set()))
+
+
 class InPlaceComparisons(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
