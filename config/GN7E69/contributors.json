@@ -3688,8 +3688,11 @@
       "provenance": {
         "pull_request": 232,
         "merged_via": 232,
-        "commit": "d261d8ade6831f344237b3a359a3faa8318477a6",
-        "introduced_blob": "6b4a58e907134ad343821f00f58216e7a13031d0"
+        "commit": "92cda69aab53a8a581fe310816db864eed03a516",
+        "introduced_blob": "eedb82e115d508a81c8bfcc6b123614edf76fc99",
+        "original_commit": "d261d8ade6831f344237b3a359a3faa8318477a6",
+        "original_blob": "6b4a58e907134ad343821f00f58216e7a13031d0",
+        "integration_adjustment": "Reviewed integration reuses the accepted int(int) declaration for fn_8022F358 and explicitly converts the caller slot value to signed char, matching the target extsb without asserting a byte callee parameter. The pinned before/after compiled native object is byte-identical."
       }
     },
     {
