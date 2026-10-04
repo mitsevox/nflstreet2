@@ -1,12 +1,12 @@
-#include "engine/cu_80227F14.h"
-#include "game/GameVpt.h"
+#include "game/fn_8007F828.h"
 #include "game/GameObjList.h"
+#include "game/GameVpt.h"
+#include "engine/cu_80227F14.h"
 
 void *operator new(unsigned int size, int unknown);
 
 extern "C" {
 
-int fn_8007F828(int a);
 void fn_801422C0(int a);
 int fn_801CEA08(void);
 int fn_801CEA14(void);

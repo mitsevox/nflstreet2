@@ -1,7 +1,8 @@
-#include "game/fn_801D2B7C.h"
 #include "game/cu_8003EC04.h"
+#include "game/fn_800AD9B4.h"
 #include "game/fn_801C1F94.h"
-#include "game/Object_800D81C8.h"
+#include "game/fn_801D2B7C.h"
+#include "game/Object_80039F5C.h"
 
 /* Registration of one record type: active flag, sub-record count and update callback. */
 struct Entry_803075E0 {
@@ -11,7 +12,6 @@ struct Entry_803075E0 {
 };
 
 extern "C" {
-int fn_800AD9B4(void);
 int fn_80178320(void);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 }
@@ -214,10 +214,10 @@ extern "C" void fn_8003F1B8(Record_8003EC04 *pA, Record_8003EC04 *pB)
     radiusA = pA->mUnknown18;
     radiusB = pB->mUnknown18;
     if (fn_800AD9B4() == 2 && pA->mUnknown2E == 0 && pB->mUnknown2E == 0) {
-        Object_800D81C8 *pObjectA = fn_8009BCE8(&pA->mUnknown28);
-        Object_800D81C8 *pObjectB = fn_8009BCE8(&pB->mUnknown28);
+        Object_80039F5C *pObjectA = fn_8009BCE8(&pA->mUnknown28);
+        Object_80039F5C *pObjectB = fn_8009BCE8(&pB->mUnknown28);
 
-        if (pObjectA->mUnknown2 == fn_80178320() && pObjectB->mUnknown2 == fn_80178320()) {
+        if ((pObjectA->mId >> 8 & 0xFF) == fn_80178320() && (pObjectB->mId >> 8 & 0xFF) == fn_80178320()) {
             pA->mUnknown18 += 0.4f;
             pB->mUnknown18 += 0.4f;
             detail = 0;

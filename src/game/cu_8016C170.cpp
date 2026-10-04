@@ -1,9 +1,9 @@
+#include "game/fn_800AD9B4.h"
 #include "game/Object_80039F5C.h"
 
 extern "C" {
 extern float lbl_803EA2C4;
 
-int fn_800AD9B4(void);
 void fn_800B26D0(Object_800B26B0 *pMotion, int a, int b, float c);
 void fn_8016C264(Object_80039F5C *pObject);
 void fn_8016C70C(Object_80039F5C *pObject);

@@ -210,15 +210,23 @@ def load_manifest(manifest, sections, compiler_version):
             raise ValueError(f"Unit {unit['source']} uses unknown profile {unit['profile']}")
         roots = unit.get("link_roots")
         if roots is not None:
-            if profiles[unit["profile"]].get("compiler", "prodg") != "mwcc" \
-                    or not isinstance(roots, dict) or set(roots) != {"symbols", "evidence"} \
+            # SDK libraries discard unknown library code; any other unit names each function
+            # the linker discards, and retained_layout checks that list exactly.
+            keys = {"symbols", "evidence"}
+            if profiles[unit["profile"]].get("compiler", "prodg") != "mwcc":
+                keys = keys | {"discarded"}
+            def names(values):
+                return isinstance(values, list) and bool(values) and len(set(values)) == len(values) \
+                    and all(isinstance(n, str) and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", n)
+                            and n not in LINKER_SYMBOLS and not n.startswith("__original_") for n in values)
+            if not isinstance(roots, dict) or set(roots) != keys \
                     or not isinstance(roots["evidence"], str) or not roots["evidence"].strip() \
-                    or not isinstance(roots["symbols"], list) or not roots["symbols"] \
-                    or not all(isinstance(n, str) and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", n)
-                               and n not in LINKER_SYMBOLS and not n.startswith("__original_")
-                               for n in roots["symbols"]) \
-                    or len(set(roots["symbols"])) != len(roots["symbols"]):
-                raise ValueError("SDK link_roots need distinct symbol names and retention evidence")
+                    or not names(roots["symbols"]) \
+                    or ("discarded" in keys and (not names(roots["discarded"])
+                                                 or set(roots["discarded"]) & set(roots["symbols"]))):
+                raise ValueError("link_roots need distinct symbol names and retention evidence"
+                                 + ("" if "discarded" not in keys else
+                                    ", and a list of the discarded functions"))
         placed = []
         for entry in unit["sections"]:
             if set(entry) - {"follows"} != {"section", "placement", "start", "end"}:
@@ -554,12 +562,12 @@ def retained_layout(unit, compiler, wrapper):
     native_text = native_sections.get(".text")
     if native_text is None or not native_text["flags"] & SHF_EXECINSTR \
             or len(native_sections) != len(allocated) or set(native_sections) - allowed:
-        raise ValueError(f"{unit['source']}: unsupported native SDK sections")
+        raise ValueError(f"{unit['source']}: unsupported native sections for link_roots")
     for section in allocated:
         expected_type = SHT_NOBITS if section["name"] in {".bss", ".sbss", ".sbss2"} else SHT_PROGBITS
         if section["type"] != expected_type \
                 or bool(section["flags"] & SHF_EXECINSTR) != (section["name"] == ".text"):
-            raise ValueError(f"{unit['source']}: unsupported native SDK section type")
+            raise ValueError(f"{unit['source']}: unsupported native section type for link_roots")
     functions = {symbol["name"]: symbol for symbol in symbols if symbol["type"] == 2}
     roots = unit["link_roots"]["symbols"]
     if any(name not in functions or functions[name]["bind"] != STB_GLOBAL
@@ -575,7 +583,7 @@ def retained_layout(unit, compiler, wrapper):
     script.write_text("SECTIONS {\n_SDA_BASE_ = 0x8000;\n_SDA2_BASE_ = 0x8000;\n" +
                       "\n".join(f"{name} 0 : {{ *({name}) }}" for name in sorted(allowed)) + "\n}\n")
     before = sha256(native)
-    run("SDK retained-layout link", [str(wrapper), str(compiler / "ngcld.exe"), "-r",
+    run("Retained-layout link", [str(wrapper), str(compiler / "ngcld.exe"), "-r",
         "-T", str(script), "-strip-unused", "-keep", str(keep), "-o", str(partial), str(native)],
         native.with_suffix(".layout.log"))
     if sha256(native) != before or not partial.is_file() or not partial.stat().st_size:
@@ -590,6 +598,12 @@ def retained_layout(unit, compiler, wrapper):
         if original is None or symbol["size"] != original["size"] \
                 or symbol["shndx"] != text["index"]:
             raise ValueError("Retained-layout linker changed a function's identity or size")
+    discarded = unit["link_roots"].get("discarded")
+    if discarded is not None:
+        native_functions = {symbol["name"] for symbol in symbols if symbol["type"] == 2
+                            and symbol["shndx"] == native_text["index"] and symbol["size"] > 0}
+        if native_functions - {symbol["name"] for symbol in retained} != set(discarded):
+            raise ValueError(f"{unit['source']}: discarded functions differ from link_roots discarded")
     mapped = [text]
     by_index = {section["index"]: section for section in allocated}
     tag = next((symbol for symbol in linked_symbols

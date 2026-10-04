@@ -1,7 +1,6 @@
 #include "game/Object_8007A334.h"
 
 extern "C" {
-int fn_8007AA90(Object_8007A334 *pObject, int key, int value);
 int fn_8007A934(Object_8007A334 *pObject, int key);
 }
 

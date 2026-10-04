@@ -1,6 +1,11 @@
+#include "game/fn_800AD9B4.h"
+#include "game/fn_80178D18.h"
+#include "game/fn_8017F584.h"
+#include "game/cu_80067C10.h"
 #include "game/fn_802372EC.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_801C1F94.h"
+#include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 
 struct Pair_8017055C {
@@ -50,10 +55,8 @@ double fabs(double);
 void fn_80031328(void *p, int a);
 void fn_800310C0(void *p, int a, Object_80039F5C *pObject, Vector_80039F5C *pPos, int *pFacing);
 void fn_8003AB08(Object_80039F5C *p, int a);
-Object_80039F5C *fn_80039F5C(int team, unsigned short index);
 unsigned char fn_80054D24(int index);
 void fn_80053A70(Object_80039F5C *p);
-void fn_80067E3C(int a, Vector_80039F5C *pPos, int id, int b, int c, int d);
 void fn_8006F0B8(int a);
 void fn_80071458(Object_80039F5C *p, void *pBall);
 void fn_80071540(Object_80039F5C *p, void *pBall);
@@ -66,9 +69,7 @@ int fn_8009A578(int handle);
 int fn_8009A5D4(int handle);
 void fn_8009A5DC(int a, int b, int *pA, int *pB);
 int fn_8009AD38(int team, int value);
-Object_80039F5C *fn_8009BCE8(int *pHandle);
 void fn_8009BD2C(Object_80039F5C *p, int *pOut);
-void fn_8009BF5C(Object_80039F5C *p, void *pJoint, Vector_80039F5C *pOut, int a);
 void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pA, Vector_80039F5C *pB, int a);
 int fn_8009D86C(void);
 void fn_8009E458(void);
@@ -85,7 +86,6 @@ float fn_800AC6BC(int team, float value);
 float fn_800AC734(Object_80039F5C *p, float value);
 float fn_800AC7E0(int team, float value);
 void fn_800ACE90(Object_80039F5C *p, unsigned int *pValue);
-int fn_800AD9B4(void);
 void fn_800B1508(void);
 Record_800B15FC *fn_800B15FC(void);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -169,23 +169,18 @@ int fn_801787A0(void);
 float fn_80178A08(void);
 float fn_80178A2C(void);
 float fn_80178A68(Pair_8017055C *pPos);
-unsigned int fn_80178D18(int team);
-int fn_80178D70(int team);
-int fn_8017CFB4(int a);
+void fn_8017CFB4(int a);
 int fn_8017D064(int a);
 void fn_8017D0A4(int a, int b, const char *pText);
 void fn_8017D7C4(const char *pText);
 void fn_8017D844(const char *pText);
-unsigned int fn_8017F584(void);
 int fn_801BE648(void *p);
-void *fn_801C4E98(void *p, const char *pName);
+int fn_801C4E98(void *p, const char *pName);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 void fn_80227538(Pair_8017055C *pOut, int angle, float length);
 float fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
-float fn_802270A4(Vector_80039F5C *pV);
-float fn_802270D4(Vector_80039F5C *pV);
 float fn_8022781C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 float fn_802278D0(Vector_80039F5C *pA, Vector_80039F5C *pB);
 float fn_80237260(int stream);

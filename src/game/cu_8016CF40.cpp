@@ -1,10 +1,11 @@
-#include "game/Object_80039F5C.h"
+#include "game/fn_800AD9B4.h"
+#include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
+#include "game/Object_80039F5C.h"
 
 extern "C" {
 extern float lbl_803EA2C4;
 
-int fn_800AD9B4(void);
 void fn_800B26B0(Object_800B26B0 *pObject);
 void fn_800B26E0(Object_800B26B0 *pObject);
 void fn_800B2A14(Object_800B26B0 *pObject, unsigned char *a);
@@ -28,7 +29,6 @@ int fn_8016CDD4(Object_80039F5C *p);
 void fn_8016CEEC(Object_80039F5C *p);
 void fn_8016CF00(Object_80039F5C *p);
 int fn_80178308(void);
-unsigned int fn_80178D18(int a);
 float fn_801CFB18(int angle);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);

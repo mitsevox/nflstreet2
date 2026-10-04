@@ -1,5 +1,8 @@
-#include "game/fn_801D2B7C.h"
+#include "engine/cu_80227F14.h"
 #include "game/fn_801801F0.h"
+#include "game/fn_801D2B7C.h"
+#include "game/fn_801EEB44.h"
+#include "game/fn_80218FC4.h"
 #include <string.h>
 
 #include "game/Record_802CC680.h"
@@ -42,8 +45,6 @@ int fn_801E195C(int a);
 unsigned int fn_801E19B4(int a);
 void fn_801E1C38(unsigned char a);
 int fn_801E1CE0(unsigned char a);
-void *fn_801EEB44(const char *pName, int unknown);
-int fn_801EEFAC(void *p);
 int fn_801F687C(int a, int b, int c, void *pBuffer, int size);
 void fn_801F6AC8(int a, int b, int c, int d, int e);
 void fn_801F6B84(int a);
@@ -52,11 +53,9 @@ int fn_801F6D54(int a, struct Desc_801F6D54 *pDesc, int b, int c);
 int fn_801F8758(int a);
 void fn_801F8768(void);
 void fn_801F87FC(int a);
-int fn_80218FC4(void *p, short a, short b, int c, void *pD);
 int fn_80219044(void *p, int a, int b, int c, struct Entry_80219044 **ppEntries);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
-void fn_802285CC(void);
 int fn_802399F8(void);
 int fn_80239A00(void);
 void fn_80239CEC(int a, int b);

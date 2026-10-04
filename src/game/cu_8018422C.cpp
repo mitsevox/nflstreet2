@@ -1,7 +1,8 @@
-#include "game/Record_80021154.h"
 #include "game/Callees_801D57E0.h"
 #include "game/cu_8018422C.h"
 #include "game/Callees_8002A138.h"
+#include "game/fn_8007F828.h"
+#include "game/Record_80021154.h"
 
 extern "C" {
 unsigned int fn_801D6724(void);
@@ -30,7 +31,6 @@ void fn_8002A5C4(void);
 void fn_8002A5F0(int a, char *pBuf, int b);
 int fn_8002A824(void);
 void fn_8007F6F8(int a, int b);
-int fn_8007F828(int a);
 void fn_80187FD0(void);
 void fn_80187FDC(void);
 void fn_80191948(int a, int b, int c, int d);
