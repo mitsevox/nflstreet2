@@ -1,3 +1,4 @@
+#include "game/cu_8007F12C.h"
 #include "engine/cu_80227F14.h"
 #include "game/cu_80026BB0.h"
 #include "game/Class_801CBC50.h"
@@ -44,8 +45,6 @@ void fn_8006CA84(int a);
 void fn_800726B8(void);
 void fn_800728F8(void);
 void fn_80072C90(int a, int b);
-void fn_8007F394(int a);
-void fn_8007F6F8(int a, int b);
 void fn_80085A7C(void);
 void fn_80085AA0(int a, Record_8003B6BC *pRecord0, int b, Record_8003B6BC *pRecord1);
 void fn_80089754(void);

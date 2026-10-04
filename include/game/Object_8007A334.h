@@ -26,6 +26,19 @@ struct Object_8007A334 {
    The list ends with an entry whose mColumnTag is -1. */
 struct ColumnValue_802D6424 {
     void Set(int table, int column) { mColumnTag = column; mTableTag = table; }
+    void Set(int table, int column, int value)
+    {
+        mTableTag = table;
+        mColumnTag = column;
+        mValue = value;
+    }
+
+    void SetEnd()
+    {
+        mColumnTag = -1;
+        mTableTag = -1;
+        mValue = 0;
+    }
 
     int mValue;
     int mTableTag;
