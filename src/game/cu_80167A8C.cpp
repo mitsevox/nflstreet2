@@ -127,6 +127,7 @@ void fn_80168908(int team, unsigned int index);
 Record_80067338 *fn_8016898C(int team, int index);
 void fn_801689AC(int team);
 void fn_80168A14(int team);
+void GetPlayerPosition(unsigned char team, int index, float *pX, float *pY);
 void fn_80168A7C(int team, int kind, unsigned int a, unsigned int b, unsigned int c);
 void fn_80168B04(int team, int a);
 void fn_80168B5C(int team, int kind);
@@ -139,6 +140,14 @@ int fn_80168E00(int team, int index, unsigned char *pOut);
 int fn_80168E54(int team, int index, unsigned char *pOut);
 int fn_80168EA8(int team);
 Team_80167A8C *fn_80168EBC(int team);
+}
+
+void fn_80167910(Point_80167910 *pPoints, int count)
+{
+    while (count--) {
+        pPoints[count].mX = (int)pPoints[count].mX - 100;
+        pPoints[count].mY = (int)pPoints[count].mY - 150;
+    }
 }
 
 void fn_801679B4(void)
@@ -593,6 +602,24 @@ void fn_80168A14(int team)
     Team_80167A8C *pTeam = &lbl_803ECAF4->mUnknown4[team];
 
     pTeam->mUnknown20 = pTeam->mUnknown1E28;
+}
+
+void GetPlayerPosition(unsigned char team, int index, float *pX, float *pY)
+{
+    Team_80167A8C *pTeam = &lbl_803ECAF4->mUnknown4[team];
+
+    if (pTeam->mUnknown20.mUnknown10 == 1) {
+        index = pTeam->mUnknown20.mUnknown14.mUnknown8.mUnknown84[index].mUnknownB;
+    }
+    if (pX) {
+        *pX = pTeam->mUnknown693C[index].mX;
+        if (pTeam->mUnknown20.mUnknown10 == 1) {
+            *pX *= -1.0f;
+        }
+    }
+    if (pY) {
+        *pY = pTeam->mUnknown693C[index].mY + 9.0f;
+    }
 }
 
 void fn_80168A7C(int team, int kind, unsigned int a, unsigned int b, unsigned int c)
