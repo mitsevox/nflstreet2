@@ -1,4 +1,5 @@
 #include "game/cu_8007F12C.h"
+#include "game/fn_80072AA8.h"
 #include "engine/cu_80227F14.h"
 #include "game/Class_801CBC50.h"
 #include "game/FELoop.h"
@@ -42,7 +43,6 @@ int fn_80066D74(unsigned int id, int a, int b, int c, int d, int e);
 void fn_80066DC8(unsigned int id, int a);
 void fn_8006CA84(int a);
 void fn_8006EC24(void);
-void fn_80072AA8(void);
 void fn_80072C90(int a, int b);
 void fn_800731D0(int a);
 void fn_8009418C(void);

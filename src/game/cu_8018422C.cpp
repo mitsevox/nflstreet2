@@ -1,4 +1,4 @@
-#include "game/cu_8007F12C.h"
+#include "game/fn_8007F6F8.h"
 #include "game/Callees_801D57E0.h"
 #include "game/cu_8018422C.h"
 #include "game/Callees_8002A138.h"

@@ -1,14 +1,10 @@
 #include "game/cu_8007F12C.h"
+#include "game/Block_80063910.h"
+#include "game/fn_80063A0C.h"
 #include "game/FELoop.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
 #include "game/Object_80228224.h"
-
-struct Block_80063910 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-};
 
 extern "C" {
 extern void *lbl_803EB688;
@@ -21,7 +17,6 @@ void fn_80185F4C(int a, int b);
 void fn_8021D7B8(void *a, int b, int c, int *d);
 Object_80228224 *fn_8018A854(void);
 void fn_8018A7F8(Object_80228224 *pObject, int mode);
-int fn_80063A0C(unsigned int index);
 
 static int lbl_803EA620 = 3;
 static int lbl_803EA624 = -1;
