@@ -1,3 +1,4 @@
+#include "game/fn_80238174.h"
 #include "game/fn_801C1F94.h"
 
 #include "game/cu_8017F264.h"
@@ -114,8 +115,6 @@ void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 void fn_8021956C(void *p, int a, int b, int c);
 int fn_802372EC(int a, int b);
 void *fn_8023816C(void *pHandle);
-void *fn_80238174(int a, void **ppData, int size, int b, unsigned int id);
-void fn_802381E0(void *pHandle);
 }
 
 static State_803EAC98 *lbl_803EAC98 = 0;

@@ -300,13 +300,13 @@ void fn_80228670(Object_80228224 *pObject)
     fn_801D0F80(pObject->mUnknown76);
 }
 
-void fn_802286A8(Object_80228224 *pObject, Callback_80228224 fn, int arg)
+void fn_802286A8(Object_80228224 *pObject, Callback_80228224 fn, void *arg)
 {
     pObject->mUnknown60 = fn;
     pObject->mUnknown64 = arg;
 }
 
-int fn_802286B4(Object_80228224 *pObject)
+void *fn_802286B4(Object_80228224 *pObject)
 {
     return pObject->mUnknown64;
 }

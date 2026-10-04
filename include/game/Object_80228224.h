@@ -4,8 +4,8 @@
 typedef struct Object_80228224 Object_80228224;
 typedef struct Desc_80228224 Desc_80228224;
 
-/* Callback stored at +60 and called with the object and the word at +64. */
-typedef void (*Callback_80228224)(Object_80228224 *pObject, int arg);
+/* Callback stored at +60 and called with the object and the pointer at +64. */
+typedef void (*Callback_80228224)(Object_80228224 *pObject, void *arg);
 
 /* Object returned by fn_80228224: a 248-byte element of the pool created by fn_802280B0. */
 struct Object_80228224 {
@@ -25,7 +25,7 @@ struct Object_80228224 {
     unsigned char mUnknown47;
     int mUnknown48[3];
     Callback_80228224 mUnknown60;
-    int mUnknown64;
+    void *mUnknown64;
     unsigned char mUnknown68;
     unsigned char mUnknown69;
     int mUnknown72;
