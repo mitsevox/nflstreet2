@@ -4505,6 +4505,49 @@
           "end": "0x803ECBFC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8007C9D4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007C9D4-0x8007CC50 (src/game/cu_8007C9D4.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007C9D4",
+          "end": "0x8007CC50"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D670C",
+          "end": "0x802D6718"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA7A0",
+          "end": "0x803EA7A4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030B994",
+          "end": "0x8030BA00"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AA8",
+          "end": "0x80289AAC"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BE8",
+          "end": "0x80289BEC"
+        }
+      ]
     }
   ]
 }

@@ -2,15 +2,6 @@
 #include "game/Object_8007A334.h"
 #include "game/PaletteColor.h"
 
-/* One entry of the column list passed to fn_801FA228, which fills in mValue.
-   The list ends with an entry whose mColumnTag is -1. */
-struct ColumnValue_802D6424 {
-    int mValue;
-    int mTableTag;
-    int mColumnTag;
-    int mUnknown12;
-};
-
 struct ColorPalette {
     PaletteColor mColors[4];
 };
