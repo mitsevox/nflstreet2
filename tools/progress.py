@@ -465,7 +465,7 @@ def main():
     args = parser.parse_args()
     data = report(args.dol.read_bytes(), args.revision, args.source_report, args.analysis_dir, args.comparison_report)
     args.output.mkdir(parents=True, exist_ok=True)
-    for name in ("index.html", "style.css", "progress.js", "cover.jpg", "logo.png"):
+    for name in ("index.html", "style.css", "progress.js", "activity.js", "cover.jpg", "logo.png"):
         shutil.copyfile(ROOT / "web" / name, args.output / name)
     (args.output / "progress.json").write_text(json.dumps(data, indent=2) + "\n")
 
