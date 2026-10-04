@@ -1,6 +1,5 @@
 #include "game/fn_801EEB44.h"
 #include "game/fn_801FCE10.h"
-#include "game/ModuleGroup_80033A5C.h"
 #include "game/cu_80067C10.h"
 #include "game/GameState.h"
 #include "game/ModuleGroup_80033A5C.h"
