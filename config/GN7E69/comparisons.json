@@ -233,6 +233,67 @@
           "end": "0x80169F80"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800857D0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv open unit row, exact per-function boundaries and data slice 0x802943DC-0x80294568. First three functions and native rodata prefix are linked; comparison preserves the remaining eight whole functions and measures only the evidenced unlinked literal slice. No excluded mismatches or completed-original-file claim.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800857D0",
+          "end": "0x80085D7C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80294150",
+          "end": "0x80294568"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8008593C",
+          "start": "0x8008593C",
+          "end": "0x80085A34"
+        },
+        {
+          "symbol": "fn_80085A34",
+          "start": "0x80085A34",
+          "end": "0x80085A7C"
+        },
+        {
+          "symbol": "fn_80085A7C",
+          "start": "0x80085A7C",
+          "end": "0x80085AA0"
+        },
+        {
+          "symbol": "fn_80085AA0",
+          "start": "0x80085AA0",
+          "end": "0x80085BE4"
+        },
+        {
+          "symbol": "fn_80085BE4",
+          "start": "0x80085BE4",
+          "end": "0x80085C3C"
+        },
+        {
+          "symbol": "fn_80085C3C",
+          "start": "0x80085C3C",
+          "end": "0x80085C94"
+        },
+        {
+          "symbol": "fn_80085C94",
+          "start": "0x80085C94",
+          "end": "0x80085D54"
+        },
+        {
+          "symbol": "fn_80085D54",
+          "start": "0x80085D54",
+          "end": "0x80085D7C"
+        }
+      ]
     }
   ]
 }
