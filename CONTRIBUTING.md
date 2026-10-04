@@ -55,6 +55,8 @@ After refreshing from `main`, carry findings forward only after explicitly verif
 
 Required CI must verify the final revision's complete target binary, unit code/data, regressions and applicable progress exports. Share validation artifacts tied to that exact revision so reviewers can assess coverage and results without each duplicating complete builds and test suites. Run focused checks while resolving findings, then complete required CI on the final integrated revision. Review comments and clearance records alone do not require another build. When source or build inputs change, earlier CI cannot substitute for final-revision validation. Retest unchanged checks locally only to investigate a failure, changed dependency or evidence gap, and record the reason. Focused review and shared validation do not relax independence, evidence, review records, CI or owner approval.
 
+CI may reuse inventory metadata from an exact-input cache produced on `main`. Validate the target, generation inputs, environment and metadata digest before reuse; stale or damaged metadata must regenerate. Cache reuse does not substitute for the final source build, comparisons, progress exports or contributor provenance checks. Contributions must not publish raw game binaries or assembly through a cache.
+
 Compatible bounded contributions may be integrated in a batch with each original PR, author revision and review coverage identified. Review the combined delta and affected dependencies, and require final-revision records and CI. Link the originals and close them as incorporated only after the combined PR merges. Compiler-profile and comparison changes require separate review and validation.
 
 ## Investigation and escalation

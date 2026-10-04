@@ -15,6 +15,7 @@ import baseline
 import setup_compiler
 import sdk_map
 import source_build
+import inventory_cache
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -181,8 +182,10 @@ def byte_aligned_split_text(units):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--original", type=Path, required=True)
+    parser.add_argument("--reuse-inventory", action="store_true",
+                        help="Reuse validated metadata from a trusted inventory cache")
+    parser.add_argument("--cache-context", default="", help="Pinned build environment identity")
     args = parser.parse_args()
-    (BUILD / "summary.json").unlink(missing_ok=True)
     original = args.original.resolve()
     target_dir = ROOT / "config" / "GN7E69"
     target = json.loads((target_dir / "baseline.json").read_text())
@@ -190,6 +193,10 @@ def main():
     data = original.read_bytes()
     if len(data) != target["size"] or hashlib.sha1(data).hexdigest() != target["sha1"]:
         raise RuntimeError("Original executable does not match the configured target")
+    if args.reuse_inventory and inventory_cache.reusable(ROOT, BUILD, data, args.cache_context):
+        print("Reused verified inventory metadata; generation inputs are unchanged.")
+        return
+    (BUILD / "summary.json").unlink(missing_ok=True)
     sections = source_build.target_sections(data, target, plan["output_sections"])
     logical_sdk_units = sdk_map.load(ROOT, sections)
     sdk_units = sdk_map.object_units(logical_sdk_units)
@@ -277,6 +284,7 @@ def main():
         "candidate_counts": counts,
         "symbols_sha256": hashlib.sha256(symbols.read_bytes()).hexdigest(),
         "inputs": sdk_map.analysis_inputs(ROOT),
+        "cache_inputs": inventory_cache.inputs(ROOT, args.cache_context),
         "sdk_units": len(logical_sdk_units),
         "sdk_objects": len(sdk_units),
     }, indent=2) + "\n")
