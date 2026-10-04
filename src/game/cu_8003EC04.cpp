@@ -133,14 +133,14 @@ extern "C" void fn_8003EF5C(Set_8003EE6C *pSet)
     fn_801D2BD0(pSet);
 }
 
-extern "C" Record_8003EC04 *fn_8003EFB8(Set_8003EE6C *pSet, unsigned char type, int owner)
+extern "C" Record_8003EC04 *fn_8003EFB8(Set_8003EE6C *pSet, unsigned char type, int value)
 {
     Record_8003EC04 *pRecord = &pSet->mpUnknown0[pSet->mUnknown8];
     unsigned char count = lbl_803075E0[type].mUnknown1;
 
     pRecord->mUnknown2C = 1;
     pRecord->mUnknown2E = type;
-    pRecord->mUnknown28 = owner;
+    pRecord->mUnknown28 = value;
     pRecord->mUnknown2F = count;
     if (count) {
         pRecord->mpUnknown20 = &pSet->mpUnknown14[pSet->mUnknown10];

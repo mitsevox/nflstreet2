@@ -3,9 +3,8 @@
 
 #include "game/cu_80089330.h"
 
-/* 48-byte sub-record of a collision record: three 16-byte float groups. The
-   first holds a sphere (centre, radius at +12); the second and third hold the
-   two ends of a capsule (radius at +28). */
+/* Collision sub-record: centre and radius at +0..+12, capsule endpoints at
+   +16..+24 and +32..+40, and capsule radius at +28. */
 struct Sub_8003EC54 {
     float mUnknown0;
     float mUnknown4;
@@ -64,7 +63,7 @@ void fn_8003EE00(unsigned char type);
 void fn_8003EE2C(unsigned char a, unsigned char b, Callback_8003EE2C pCallback);
 Set_8003EE6C *fn_8003EE6C(int count, int subCount);
 void fn_8003EF5C(Set_8003EE6C *pSet);
-Record_8003EC04 *fn_8003EFB8(Set_8003EE6C *pSet, unsigned char type, int owner);
+Record_8003EC04 *fn_8003EFB8(Set_8003EE6C *pSet, unsigned char type, int value);
 void fn_8003F04C(Set_8003EE6C *pSet);
 void fn_8003F0AC(Set_8003EE6C *pA, Set_8003EE6C *pB);
 void fn_8003F1B8(Record_8003EC04 *pA, Record_8003EC04 *pB);
