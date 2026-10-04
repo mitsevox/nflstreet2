@@ -174,7 +174,7 @@ static int lbl_803EC9FC;
 static float lbl_8031B6A0[3];
 
 #if defined(DECOMP_COMPARE)
-/* Draft: accelerate to mid-way, then decelerate (peak speed 2 over the split point 0.5). */
+/* accelerate to mid-way, then decelerate (peak speed 2 over the split point 0.5). */
 extern "C" void fn_8013CC7C(Interp_8013CC14 *pInterp, int steps)
 {
     float split = 0.5f;
