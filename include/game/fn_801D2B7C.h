@@ -3,7 +3,7 @@
 
 extern "C" {
 void *fn_801D2B7C(int size, int a, int b);
-void fn_801D2BD0(void *p);
+int fn_801D2BD0(void *p);
 }
 
 #endif
