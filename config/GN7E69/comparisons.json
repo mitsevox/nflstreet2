@@ -4680,6 +4680,37 @@
           "end": "0x80085D7C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8018AB0C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv: src/game/cu_8018AB0C.cpp",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018AB0C",
+          "end": "0x8018AB64"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB6B0",
+          "end": "0x803EB6B1"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8018AB0C",
+          "start": "0x8018AB0C",
+          "end": "0x8018AB3C"
+        },
+        {
+          "symbol": "fn_8018AB3C",
+          "start": "0x8018AB3C",
+          "end": "0x8018AB64"
+        }
+      ]
     }
   ]
 }
