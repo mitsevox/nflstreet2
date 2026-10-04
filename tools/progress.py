@@ -287,6 +287,8 @@ def file_map(sections, source_report, functions, ownership=()):
             if name:
                 item.setdefault("mapped_extents", []).append({
                     "start": f"0x{start:08X}", "end": f"0x{end:08X}"})
+            if name is None:
+                item.setdefault("mapped_extents", []).append({"start": f"0x{start:08X}", "end": f"0x{end:08X}"})
             size = end - start
             item["size"] += size
             if source:
@@ -312,7 +314,7 @@ def file_map(sections, source_report, functions, ownership=()):
                     child["source"] = source
                 children.append(child)
             parent = {"name": "Source bytes" if source else "Unmapped bytes", "kind": section["kind"],
-                      "size": size, "linked": covered(start, end), "matched": covered(start, end)}
+                      "address": f"0x{start:08X}", "size": size, "linked": covered(start, end), "matched": covered(start, end)}
             children += remainder(parent, children)
             if source:
                 for child in children:
@@ -342,11 +344,29 @@ def remainder(parent, children):
                  for field in ("size", "linked", "matched")}
     if not 0 <= remaining["matched"] <= remaining["linked"] <= remaining["size"]:
         raise ValueError("Map children exceed measured parent bytes")
-    return [{"name": "Other bytes in " + parent["name"], "kind": parent["kind"], **remaining}] \
-        if remaining["size"] else []
+    if not remaining['size']:
+        return []
+    item = {"name": "Other bytes in " + parent["name"], "kind": parent["kind"], **remaining}
+    if 'address' in parent:
+        start = int(parent['address'],16)
+        end = start + parent['size']
+        cursor = start
+        spans = []
+        for left,right in sorted((int(c['address'],16),int(c['address'],16)+c['size'])
+                                 for c in children if 'address' in c):
+            if cursor < left:
+                spans.append({'start':f'0x{cursor:08X}','end':f'0x{left:08X}'})
+            cursor = right
+        if cursor < end:
+            spans.append({'start':f'0x{cursor:08X}','end':f'0x{end:08X}'})
+        if sum(int(e['end'],16)-int(e['start'],16) for e in spans) != remaining['size']:
+            raise ValueError('Unaddressed children cannot establish residual extents')
+        item['mapped_extents'] = spans
+    return [item]
 
 
-def report(binary, revision, source_report=None, analysis_dir=None):
+
+def report(binary, revision, source_report=None, analysis_dir=None, comparison_report=None):
     target = json.loads((ROOT / "config/GN7E69/baseline.json").read_text())
     if len(binary) != target["size"] or hashlib.sha1(binary).hexdigest() != target["sha1"]:
         raise ValueError("Progress requires the verified target executable")
@@ -419,7 +439,7 @@ def report(binary, revision, source_report=None, analysis_dir=None):
     measured_units = json.loads(source_report.read_text())["units"] \
         if source_report and source_report.exists() else []
     ownership += game_map.load(ROOT, sections, ownership + measured_units)
-    return {"schema": 1, "revision": revision,
+    data = {"schema": 1, "revision": revision,
             "built_at": datetime.now(timezone.utc).isoformat(),
             "target": "GN7E69", "target_sha1": target["sha1"],
             "basis": "executable-sections", "baseline": "verified",
@@ -428,6 +448,10 @@ def report(binary, revision, source_report=None, analysis_dir=None):
             "functions": functions, "measures": measures, "sections": sections,
             "files": file_map(sections, source_report, function_items,
                               ownership)}
+    if comparison_report is not None:
+        import matching
+        matching.apply(data, matching.load(comparison_report, target, binary))
+    return data
 
 
 def main():
@@ -436,11 +460,12 @@ def main():
     parser.add_argument("--revision", required=True)
     parser.add_argument("--source-report", type=Path, default=ROOT / "build/source/report.json")
     parser.add_argument("--analysis-dir", type=Path)
+    parser.add_argument("--comparison-report", type=Path)
     parser.add_argument("--output", type=Path, default=ROOT / "build/site")
     args = parser.parse_args()
-    data = report(args.dol.read_bytes(), args.revision, args.source_report, args.analysis_dir)
+    data = report(args.dol.read_bytes(), args.revision, args.source_report, args.analysis_dir, args.comparison_report)
     args.output.mkdir(parents=True, exist_ok=True)
-    for name in ("index.html", "style.css", "progress.js", "cover.jpg", "logo.png"):
+    for name in ("index.html", "style.css", "progress.js", "activity.js", "cover.jpg", "logo.png"):
         shutil.copyfile(ROOT / "web" / name, args.output / name)
     (args.output / "progress.json").write_text(json.dumps(data, indent=2) + "\n")
 

@@ -1,0 +1,7 @@
+{
+  "objdiff": {
+    "version": "v3.8.2",
+    "macos-arm64": {"url": "https://github.com/encounter/objdiff/releases/download/v3.8.2/objdiff-cli-macos-arm64", "sha256": "767c67e13b7b5e6ca545e7d2235e47c7bceac07d47a52776f74a52914cb4085a"},
+    "linux-x86_64": {"url": "https://github.com/encounter/objdiff/releases/download/v3.8.2/objdiff-cli-linux-x86_64", "sha256": "e5445089a6f707e30cb5e02992451b604619cedfd2660ee2373a86bfefd9e718"}
+  }
+}
