@@ -1,10 +1,7 @@
 #include <string.h>
 
 #include "game/Record_80021154.h"
-
-extern "C" {
-void fn_801C3284(char *pDest, const char *pSource, int size);
-}
+#include "game/fn_801C3284.h"
 
 static char lbl_8036B4A0[20];
 
