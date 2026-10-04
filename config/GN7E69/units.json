@@ -5305,6 +5305,31 @@
           "end": "0x80020BAC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80145224.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80145224-0x8014529C (src/game/cu_80145224.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80145224",
+          "end": "0x8014529C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0400",
+          "end": "0x802A040C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB244",
+          "end": "0x803EB24C"
+        }
+      ]
     }
   ]
 }
