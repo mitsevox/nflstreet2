@@ -460,6 +460,37 @@
           "end": "0x8018EC68"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8015FFC8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit/data rows; whole code-only source plus observed 31-pair table, original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015FFC8",
+          "end": "0x8016014C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802E32B0",
+          "end": "0x802E33A8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8015FFC8",
+          "start": "0x8015FFC8",
+          "end": "0x801600FC"
+        },
+        {
+          "symbol": "fn_801600FC",
+          "start": "0x801600FC",
+          "end": "0x8016014C"
+        }
+      ]
     }
   ]
 }
