@@ -5173,6 +5173,19 @@
           "end": "0x803EC9F8"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80020A34.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv: src/game/cu_80020A34.cpp unit and compiler rows",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80020A34",
+          "end": "0x80020BAC"
+        }
+      ]
     }
   ]
 }
