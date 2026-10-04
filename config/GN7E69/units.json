@@ -5012,6 +5012,37 @@
           "end": "0x8030A50C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801459F0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801459F0-0x80146134 (src/game/cu_801459F0.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801459F0",
+          "end": "0x80146134"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0440",
+          "end": "0x802A044C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB24C",
+          "end": "0x803EB258"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA10",
+          "end": "0x803ECA18"
+        }
+      ]
     }
   ]
 }
