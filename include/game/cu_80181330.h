@@ -21,8 +21,7 @@ struct Params_80005284 {
 };
 
 /* One argument or result slot of the message handler fn_8018399C. Text
-   arguments are passed on to the Class_802A6BB0 entries by value: each caller
-   copies the slot to its own stack and passes the copy's address. */
+   arguments are passed on to the Class_802A6BB0 entries by value. */
 union Arg_8018399C {
     int i;
     float f;

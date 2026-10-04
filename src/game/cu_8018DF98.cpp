@@ -12,10 +12,10 @@ int fn_8022F4BC(void);
 void fn_8018C48C(int tag);
 int fn_8018BA4C(void);
 void fn_8018BB24(int index, int a);
-void fn_80086BA4(int index);
-void fn_80086A64(void);
-void fn_80086994(void);
-void fn_80086B50(void);
+int fn_80086BA4(int index);
+int fn_80086A64(void);
+int fn_80086994(void);
+int fn_80086B50(void);
 void fn_8018B8B0(Object_8007A334 *pCursor);
 
 void fn_8018E55C(int index);

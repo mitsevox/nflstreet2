@@ -704,7 +704,6 @@ void fn_801822DC(int a)
 
 void fn_80182320(int a, int b, Arg_8018399C text)
 {
-
     switch (b) {
     case 3:
         if (--lbl_803EB560 < 0) {

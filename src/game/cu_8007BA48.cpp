@@ -4,6 +4,7 @@
 #include "game/Class_8018FD64Inline.h"
 #include "game/Object_8007A334.h"
 #include "game/Object_8008044C.h"
+#include "game/Row_8007BC34.h"
 
 extern "C" {
 int fn_8022F384(int a);
@@ -23,28 +24,6 @@ char *fn_801C3084(const char *pString, int c);
 extern "C" {
 void fn_8008199C(Object_8008044C *pObject, Info_80307908 *pInfo);
 }
-
-/* Values copied out of one 'RAEG' row by fn_8007BC34. */
-struct Record_8007BC34 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
-    char mUnknown16[33];
-    char mUnknown49[33];
-    char mUnknown82[16];
-    int mUnknown100;
-    int mUnknown104;
-    int mUnknown108;
-    unsigned char mUnknown112;
-    unsigned char mUnknown113;
-    unsigned char mUnknown114;
-    unsigned char mUnknown115;
-    unsigned char mUnknown116;
-    unsigned char mUnknown117;
-    unsigned char mUnknown118;
-    int mUnknown120;
-};
 
 /* Sort/key entry list passed as the third argument of fn_8007A334. */
 struct Key_8007A334 {
@@ -130,7 +109,7 @@ int fn_8007BBFC(Object_8007A334 *pCursor, int key, int *pResult)
     return fn_8007A7F4(pCursor, 0x44494547, key, 0, pResult);
 }
 
-void fn_8007BC34(Object_8007A334 *pCursor, Record_8007BC34 *pOut)
+void fn_8007BC34(Object_8007A334 *pCursor, Row_8007BC34 *pOut)
 {
     ColumnValue_802D6424 list[34];
     char *pSpace;
@@ -142,36 +121,36 @@ void fn_8007BC34(Object_8007A334 *pCursor, Record_8007BC34 *pOut)
     }
     list[33].Set(-1, -1);
     list[33].mValue = 0;
-    list[18].mValue = (int)pOut->mUnknown16;
-    list[19].mValue = (int)pOut->mUnknown49;
+    list[18].mValue = (int)pOut->mUnknown10;
+    list[19].mValue = (int)pOut->mName;
     pCursor->Read(list);
 
-    pOut->mUnknown0 = list[16].mValue;
-    pOut->mUnknown12 = list[17].mValue;
-    pOut->mUnknown4 = list[20].mValue;
-    pOut->mUnknown8 = list[21].mValue;
-    pOut->mUnknown100 = list[22].mValue;
-    pOut->mUnknown104 = list[23].mValue;
-    pOut->mUnknown120 = list[25].mValue;
-    pOut->mUnknown112 = list[26].mValue != 0;
-    pOut->mUnknown113 = list[27].mValue != 0;
-    pOut->mUnknown114 = list[28].mValue != 0;
-    pOut->mUnknown115 = list[29].mValue != 0;
-    pOut->mUnknown116 = list[30].mValue != 0;
-    pOut->mUnknown117 = list[31].mValue != 0;
-    pOut->mUnknown118 = list[32].mValue != 0;
-    pOut->mUnknown108 = 0;
+    pOut->mUnknown00 = list[16].mValue;
+    pOut->mUnknown0C = list[17].mValue;
+    pOut->mUnknown04 = list[20].mValue;
+    pOut->mUnknown08 = list[21].mValue;
+    pOut->mUnknown64 = list[22].mValue;
+    pOut->mUnknown68 = list[23].mValue;
+    pOut->mUnknown78 = list[25].mValue;
+    pOut->mUnknown70 = list[26].mValue != 0;
+    pOut->mUnknown71 = list[27].mValue != 0;
+    pOut->mUnknown72 = list[28].mValue != 0;
+    pOut->mUnknown73 = list[29].mValue != 0;
+    pOut->mUnknown74 = list[30].mValue != 0;
+    pOut->mUnknown75 = list[31].mValue != 0;
+    pOut->mUnknown76 = list[32].mValue != 0;
+    pOut->mUnknown6C = 0;
 
-    pSpace = fn_801C3084(pOut->mUnknown49, ' ');
+    pSpace = fn_801C3084(pOut->mName, ' ');
     if (pSpace) {
         *pSpace = 0;
     }
     for (i = 0; i < 16; i++) {
-        pOut->mUnknown82[i] = list[i].mValue;
+        pOut->mUnknown52[i] = list[i].mValue;
     }
 }
 
-int fn_8007BDF8(Object_8007A334 *pCursor)
+unsigned int fn_8007BDF8(Object_8007A334 *pCursor)
 {
     return fn_8007A98C(pCursor, 0x49535247);
 }
@@ -362,9 +341,9 @@ int fn_8007C538(int id)
     return result;
 }
 
-int fn_8007C67C(Record_8007BC34 *pRecord)
+int fn_8007C67C(Row_8007BC34 *pRow)
 {
-    return pRecord->mUnknown100 == 5;
+    return pRow->mUnknown64 == 5;
 }
 
 int fn_8007C690(Object_8007A334 *pCursor, short *pOut)

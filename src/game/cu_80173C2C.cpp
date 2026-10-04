@@ -132,9 +132,7 @@ void fn_80174074(void)
 {
     lbl_80361C58[lbl_803ECB30] = fn_80173CAC();
 }
-}
 
-extern "C" {
 int fn_801740A8(void)
 {
     return lbl_80361694[lbl_803ECB30].mUnknown1EA;

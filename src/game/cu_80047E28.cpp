@@ -3,6 +3,7 @@
 #include "game/Object_8007A334.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_8008044C.h"
+#include "game/Row_8007BC34.h"
 #include "game/fn_800624B0.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801C1F94.h"
@@ -67,27 +68,6 @@ struct Entry_80308368 {
     unsigned short mValues[10];
 };
 
-/* 128-byte row read by fn_8007BC34. */
-struct Row_8007BC34 {
-    char mUnknown00[8];
-    int mUnknown08;
-    char mUnknown0C[37];
-    char mName[33];
-    char mUnknown52[18];
-    int mUnknown64;
-    char mUnknown68[8];
-    unsigned char mUnknown70;
-    unsigned char mUnknown71;
-    unsigned char mUnknown72;
-    unsigned char mUnknown73;
-    unsigned char mUnknown74;
-    unsigned char mUnknown75;
-    unsigned char mUnknown76;
-    unsigned char mUnknown77;
-    int mUnknown78;
-    char mUnknown7C[4];
-};
-
 struct Item_800476DC {
     char mUnknown00[28];
     unsigned char mUnknown1C;
@@ -139,8 +119,6 @@ void fn_8007BA48(Object_8007A334 *pObject);
 void fn_8007BA88(Object_8007A334 *pObject, int a);
 void fn_8007BB04(Object_8007A334 *pObject);
 int fn_8007BB84(Object_8007A334 *pCursor, int a, int b, int *pResult);
-void fn_8007BC34(Object_8007A334 *pObject, Row_8007BC34 *pRow);
-unsigned int fn_8007BDF8(Object_8007A334 *pObject);
 int fn_8007BF14(int index);
 int fn_8007CB6C(int index);
 int fn_80080970(Object_8008044C *pObject);
