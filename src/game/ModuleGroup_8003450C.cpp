@@ -13,8 +13,6 @@
 #include "game/fn_801FCE10.h"
 
 extern "C" {
-/* Word at +16 of gIGMisc (0x80306D68): the data block IGMisc::Init loads. */
-extern void *lbl_80306D78[];
 extern char lbl_8030A60C[];
 extern char lbl_8030C070[];
 extern void *lbl_803EA368;
@@ -860,7 +858,7 @@ const char *PlayArtMem::GetName() { return "PlayArtMem"; }
 
 int PlayArtMem::Init()
 {
-    fn_8016781C(lbl_80306D78[0]);
+    fn_8016781C(gIGMisc.mData.mp);
     return 1;
 }
 
@@ -927,7 +925,7 @@ void PlayBook::fn_8003549C(int flag)
         fn_801FCE10(0, "select 'IPHG' into \x85 and 'IPAG' into \x85 and 'PDHG' into \x85 and 'PDAG' into \x85 from 'FNIG'\n", &c, &d, &e, &f);
     }
     if (flag) {
-        fn_80168324(lbl_80306D78[0], a, b, c, d, e, f, 1);
+        fn_80168324(gIGMisc.mData.mp, a, b, c, d, e, f, 1);
     } else {
         fn_80168418(a, b, c, d, e, f, 1);
     }

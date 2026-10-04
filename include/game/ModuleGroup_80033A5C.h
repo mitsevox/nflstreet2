@@ -37,7 +37,7 @@ public:
     virtual ModuleDependency *GetLinks();
     virtual const char *GetName();
 
-private:
+    /* Read directly by PlayArtMem::Init and PlayBook::fn_8003549C. */
     ModuleDataPtr mData;
 };
 
