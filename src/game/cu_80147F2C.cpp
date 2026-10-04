@@ -1,3 +1,6 @@
+#include "game/cu_80159F10.h"
+#include "game/fn_8016871C.h"
+#include "game/fn_800F06F4.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_800AD9B4.h"
 
@@ -5,23 +8,15 @@ extern "C" {
 void *fn_80147F18(int value);
 int fn_8011E9D8(State_80039F5C *pState);
 int fn_8011F1F4(void);
-int fn_80164EC8(int a, int b, unsigned short index);
-int fn_8016871C(int team);
 int fn_80168E00(int team, int index, unsigned char *pOut);
 int fn_80178308(void);
 int fn_801784C4(void);
 int fn_800C47C4(void);
-int fn_800F06F4(int a, int b, int c, int d);
-void fn_8015A110(void *pOwner);
-void fn_8015A17C(void);
-void *fn_8015A1A8(void *pOwner, unsigned char index, int a, int b);
-void fn_8015A204(void *pOwner, void *pItem);
-void fn_8015A240(void *pItem, unsigned char value);
 }
 
 static float lbl_803EB2A0 = 2.5f;
 static unsigned char lbl_803EB2A4[3] = { 2, 1, 3 };
-static void *lbl_8031BD04[3];
+static Instance_80159F10 *lbl_8031BD04[3];
 
 extern "C" {
 
@@ -48,9 +43,9 @@ static int fn_80147F2C(Object_80039F5C *pPlayer)
             for (i = 0; i < 7 && result; i++) {
                 Object_80039F5C *pOther = fn_80039F5C(1, i);
                 if (pOther != 0) {
-                    int a = fn_8016871C(fn_80178308());
-                    int b = fn_80164EC8(a, fn_80178308(), i);
-                    if (fn_800F06F4(0, b, 0x12, 0xFFFF) != 0xFFFF && pPlayer == pOther
+                    Record_80067338 *pRecord = fn_8016871C(fn_80178308());
+                    void *pResult = fn_80164EC8(pRecord, fn_80178308(), i);
+                    if (fn_800F06F4(0, pResult, 0x12, 0xFFFF) != 0xFFFF && pPlayer == pOther
                         && pPlayer->mUnknown2914 == 0) {
                         result = 0;
                     }

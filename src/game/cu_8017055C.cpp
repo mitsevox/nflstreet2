@@ -1,3 +1,4 @@
+#include "game/fn_800F06F4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_8017F584.h"
@@ -105,7 +106,6 @@ int fn_800E0EF0(Object_80039F5C *p);
 int fn_800E0F40(Object_80039F5C *p);
 void fn_800F01CC(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F053C(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-int fn_800F06F4(int a, State_80039F5C *pState, int id, int b);
 void fn_801039D8(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 Record_8011F4F8 *fn_8011F4F8(int index);
@@ -151,7 +151,7 @@ void fn_80173D10(void);
 void fn_80173EE0(int a, int b, int c, int d, int e);
 void fn_80174074(void);
 void fn_80177C50(int a);
-void fn_80177F70(void);
+int fn_80177F70(void);
 Pair_8017055C fn_80177FE0(void);
 void fn_80178264(Pair_8017055C pos);
 Pair_8017055C fn_8017827C(void);
