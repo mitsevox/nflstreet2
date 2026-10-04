@@ -46,6 +46,111 @@ class ExportSemantics(unittest.TestCase):
         self.assertEqual(units['src/done.c']['measures']['complete_units'], 1)
 
 
+class AcceptedDataSymbols(unittest.TestCase):
+    """Public data of linked source resolves at its verified placement, and fails closed otherwise."""
+    SECTIONS = [{'name': ''}, {'name': '.text', 'flags': sb.SHF_EXECINSTR | sb.SHF_ALLOC},
+                {'name': '.rodata', 'flags': sb.SHF_ALLOC}, {'name': '.bss', 'flags': sb.SHF_ALLOC | 1}]
+
+    @staticmethod
+    def placement(section, start, end, compiled=None):
+        return {'section': section, 'start': start, 'end': end,
+                'compiled': int(end, 16) - int(start, 16) if compiled is None else compiled}
+
+    @staticmethod
+    def symbol(name, shndx, value=0, size=4, kind=1, bind=sb.STB_GLOBAL):
+        return {'name': name, 'shndx': shndx, 'value': value, 'size': size, 'type': kind, 'bind': bind}
+
+    def object(self, symbols, placements=None):
+        return (placements or [self.placement('.text', '0x80001000', '0x80001010'),
+                               self.placement('.rodata', '0x80200000', '0x80200040'),
+                               self.placement('.bss', '0x80300000', '0x80300020')], self.SECTIONS, symbols)
+
+    def test_resolves_public_object_and_notype_data_at_placement(self):
+        resolved, ambiguous = function_compare.accepted_data_symbols([self.object([
+            self.symbol('_vt.4Base', 2, value=8, size=24),
+            self.symbol('gObject', 3, value=0x10, size=16, kind=0),
+            self.symbol('sLocal', 3, bind=sb.STB_LOCAL),
+            self.symbol('Code__4Base', 1, kind=2),
+            self.symbol('label_in_code', 1, kind=0),
+            self.symbol('gExternal', sb.SHN_UNDEF),
+            self.symbol('gCommon', sb.SHN_COMMON)])], {})
+        self.assertEqual(resolved, {'_vt.4Base': 0x80200008, 'gObject': 0x80300010})
+        self.assertEqual(ambiguous, set())
+
+    def test_unverified_placements_and_conflicts_fail_closed(self):
+        cases = {
+            'compiled size differs': ([self.object([self.symbol('gData', 3)], [
+                self.placement('.bss', '0x80300000', '0x80300020', compiled=0x10)])], {}),
+            'data follows code': ([self.object([self.symbol('gData', 3)], [
+                dict(self.placement('.bss', '0x80300000', '0x80300020'), follows='.text')])], {}),
+            'unplaced section': ([self.object([self.symbol('gData', 3)], [
+                self.placement('.rodata', '0x80200000', '0x80200040')])], {}),
+            'repeated section name': ([self.object([self.symbol('gData', 3)], [
+                self.placement('.bss', '0x80300000', '0x80300020'),
+                self.placement('.bss', '0x80310000', '0x80310020')])], {}),
+            'outside section': ([self.object([self.symbol('gData', 3, value=0x1C, size=8)])], {}),
+            'two definitions': ([self.object([self.symbol('gData', 3)]),
+                                 self.object([self.symbol('gData', 3)], [
+                                     self.placement('.bss', '0x80310000', '0x80310020')])], {}),
+            'external elsewhere': ([self.object([self.symbol('gData', 3)])], {'gData': 0x80310000}),
+        }
+        for label, (objects, externals) in cases.items():
+            with self.subTest(label):
+                resolved, ambiguous = function_compare.accepted_data_symbols(objects, externals)
+                self.assertNotIn('gData', resolved)
+                self.assertIn('gData', ambiguous)
+
+    def test_agreeing_external_is_not_a_conflict(self):
+        resolved, ambiguous = function_compare.accepted_data_symbols(
+            [self.object([self.symbol('gData', 3, value=4)])], {'gData': 0x80300004})
+        self.assertEqual((resolved, ambiguous), ({'gData': 0x80300004}, set()))
+
+
+    def test_filters_non_data_unnamed_and_reserved_index_symbols(self):
+        cases = {
+            'function type': self.symbol('gData', 3, kind=2),
+            'section type': self.symbol('gData', 3, kind=3),
+            'unnamed': self.symbol('', 3),
+            'absolute': self.symbol('gData', sb.SHN_ABS),
+            'common': self.symbol('gData', sb.SHN_COMMON),
+            'index past sections': self.symbol('gData', len(self.SECTIONS)),
+            'weak': self.symbol('gData', 3, bind=2),
+        }
+        for label, symbol in cases.items():
+            with self.subTest(label):
+                self.assertEqual(function_compare.accepted_data_symbols([self.object([symbol])], {}), ({}, set()))
+
+
+class ResolveUndefined(unittest.TestCase):
+    """Undefined comparison references: externals first, then accepted data, then neutral labels."""
+
+    @staticmethod
+    def undefined(*names, defined=()):
+        return ([{'name': n, 'shndx': sb.SHN_UNDEF} for n in names] +
+                [{'name': n, 'shndx': 2} for n in defined])
+
+    def test_externals_win_over_data_symbols(self):
+        self.assertEqual(function_compare.comparison_references(
+            {'gData': 0x80100000, 'fn_A': 0x80001000}, {'gData': 0x80200000, 'gOther': 0x80200010}),
+            {'gData': 0x80100000, 'fn_A': 0x80001000, 'gOther': 0x80200010})
+
+    def test_known_and_neutral_names_resolve(self):
+        resolved = function_compare.resolve_undefined(
+            self.undefined('gData', 'fn_80001234', 'lbl_80300000', 'gLocal', defined=['gLocal']),
+            {'gData': 0x80100000}, set())
+        self.assertEqual(resolved, {'gData': 0x80100000, 'fn_80001234': 0x80001234, 'lbl_80300000': 0x80300000})
+
+    def test_ambiguous_and_unknown_names_fail_closed(self):
+        with self.assertRaisesRegex(ValueError, 'Ambiguous comparison symbol gData'):
+            function_compare.resolve_undefined(self.undefined('gData'), {'gData': 1}, {'gData'})
+        with self.assertRaisesRegex(ValueError, 'Ambiguous comparison symbol fn_Shared'):
+            function_compare.resolve_undefined(self.undefined('fn_Shared'), {'fn_Shared': 0x80001000}, {'fn_Shared'})
+        with self.assertRaisesRegex(ValueError, 'Ambiguous comparison symbol lbl_80300000'):
+            function_compare.resolve_undefined(self.undefined('lbl_80300000'), {}, {'lbl_80300000'})
+        with self.assertRaisesRegex(ValueError, 'Unresolved comparison symbol gMissing'):
+            function_compare.resolve_undefined(self.undefined('gMissing'), {}, set())
+
+
 class InPlaceComparisons(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
@@ -184,6 +289,40 @@ class InPlaceComparisons(unittest.TestCase):
         self.assertEqual([(e['start'],e['matched'],e['linked']) for e in entries], [('0x80000100',8,False)])
         self.assertEqual(self.source.read_text().count('fn_80000100'),1)
         self.assertEqual(sb.sha256(accepted_object),receipt['native_object_sha256'])
+
+    def test_draft_relocation_to_another_files_public_data_uses_its_linked_address(self):
+        if not self.compiler_available:
+            self.skipTest('Pinned compiler and objdiff are installed by CI')
+        other=self.root/'src/other.c'
+        other.write_text('int gShared[4] = {1, 2, 3, 4};\n')
+        self.source.write_text('extern int gShared[4];\nint fn_80000000(void) { return gShared[1]; }\n')
+        self.binary=self.dol(bytes(0x10));self.original.write_bytes(self.binary)
+        self.unit['sections'][0]['end']='0x80000010';self.unit['functions'][0]['end']='0x80000010'
+        self.write_config()
+        evidence=self.root/'config/GN7E69/evidence.tsv'
+        evidence.write_text(evidence.read_text().replace('0x80000008','0x80000010'))
+        manifest, units=function_compare.configured(self.root,self.binary)
+        compiler, wrapper=sb.setup_compiler.setup()
+        accepted=dict(units[0], source='src/other.c', path=other)
+        accepted['object']=self.root/'build/source/other.o';accepted['depfile']=self.root/'build/source/other.d'
+        sb.compile_unit(accepted,compiler,wrapper,None,[],comparison=False)
+        accepted_object=self.root/'build/source/obj/unit000_src_other_c.o'
+        accepted_object.parent.mkdir();shutil.copy(accepted['object'],accepted_object)
+        data=next(s for s in sb.read_elf(accepted_object.read_bytes())[0] if s['name']=='.data')
+        receipt={'source':'src/other.c','native_object_sha256':sb.sha256(accepted_object),'functions':[],
+                 'sections':[{'section':data['name'],'start':'0x80001230','end':'0x80001240','compiled':16}]}
+        (self.root/'build/source/report.json').write_text(json.dumps({'units':[receipt]}))
+        measured=function_compare.generate(self.original,self.root/'build/source/report.json',self.tool)
+        sections,symbols=sb.read_elf((self.root/measured[0]['pairs'][0]['path']).read_bytes())
+        function=next(s for s in symbols if s['name']=='function')
+        code=next(s for s in sections if s['index']==function['shndx'])['data']
+        words=[struct.unpack_from('>I',code,o)[0] for o in range(0,function['size'],4)]
+        self.assertTrue(any(w>>26==15 and w&0xFFFF==0x8000 for w in words))   # lis rN,0x8000
+        self.assertTrue(any(w>>26==32 and w&0xFFFF==0x1234 for w in words))   # lwz r3,0x1234(rN)
+        # Without the accepted data symbol the draft must fail closed.
+        (self.root/'build/source/report.json').write_text(json.dumps({'units':[]}))
+        with self.assertRaisesRegex(ValueError,'Unresolved comparison symbol gShared'):
+            function_compare.generate(self.original,self.root/'build/source/report.json',self.tool)
 
     def test_same_file_call_uses_evidenced_callee_address(self):
         if not self.compiler_available:
