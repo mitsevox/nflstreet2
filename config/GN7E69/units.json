@@ -5752,6 +5752,141 @@
           "end": "0x803EC800"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80030D50.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80030D50-0x8003108C (src/game/cu_80030D50.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80030D50",
+          "end": "0x8003108C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028AC28",
+          "end": "0x8028AC40"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA398",
+          "end": "0x803EA39C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80085D7C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80085D7C-0x80086194 (src/game/cu_80085D7C.cpp) and its data rows.",
+      "link_roots": {
+        "symbols": [
+          "fn_80085D7C",
+          "fn_80085E3C",
+          "fn_80085EB0",
+          "fn_80085F24",
+          "fn_80085FB0",
+          "fn_80085FFC",
+          "fn_80086080",
+          "fn_800860B4",
+          "fn_800860E8",
+          "fn_8008611C",
+          "fn_80086154",
+          "fn_80086174"
+        ],
+        "discarded": [
+          "SelectLpxePpxe"
+        ],
+        "evidence": "evidence.tsv linker row 0x802945DC-0x80294610: the target keeps every listed function, all reached from outside the unit or from each other; one query function has no code in the target, while its string remains in the unit's rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80085D7C",
+          "end": "0x80086194"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80294568",
+          "end": "0x802946AC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA7F8",
+          "end": "0x803EA7FC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80188A30.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80188A30-0x80188E98 (src/game/cu_80188A30.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80188A30",
+          "end": "0x80188E98"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB638",
+          "end": "0x803EB640"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80362F64",
+          "end": "0x80362F84"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8018EC68.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018EC68-0x8018EF6C (src/game/cu_8018EC68.cpp) and its data rows.",
+      "link_roots": {
+        "symbols": [
+          "fn_8018EC68",
+          "fn_8018ED78",
+          "fn_8018EDF0",
+          "fn_8018EE44",
+          "fn_8018EE78",
+          "fn_8018EEAC",
+          "fn_8018EEF0"
+        ],
+        "discarded": [
+          "SelectTopVetsNets"
+        ],
+        "evidence": "evidence.tsv linker row 0x802AB1B0-0x802AB210: the target keeps every listed function, all reached from outside the unit or from each other; one cursor query function has no code in the target, while its strings remain in the unit's rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018EC68",
+          "end": "0x8018EF6C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AB08C",
+          "end": "0x802AB254"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB6D0",
+          "end": "0x803EB6D4"
+        }
+      ]
     }
   ]
 }
