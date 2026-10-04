@@ -19,7 +19,7 @@ void fn_8008056C(Object_8008044C *pObject);
 int fn_80080948(Object_8008044C *pObject);
 int fn_800809C4(Object_8008044C *pObject, int a, int *pResult);
 int fn_80080D38(Object_8008044C *pObject, char *pBuffer, int size);
-void fn_80080E20(Object_8008044C *pObject);
+int fn_80080E20(Object_8008044C *pObject);
 int fn_800811E0(Object_8008044C *pObject);
 int fn_80080ECC(Object_8008044C *pObject);
 void fn_80081788(Object_8008044C *pObject, int *pValues);
