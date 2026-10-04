@@ -117,7 +117,7 @@ int DeleteLtfnRow(int lvlt, int dit1, int dit2)
 {
     return fn_801FCE10(0,
                        "use \x8c delete from 'LTFN' where 'LVLT' = \x82 and '1DIT' = \x85 and '2DIT' = \x85\n",
-                       sHandle, lvlt, dit1, dit2) == 0;
+                       sHandle, lvlt, dit1, dit2) != 0x17;
 }
 
 int fn_80086534(void)
@@ -143,8 +143,11 @@ int fn_8008656C(int digp, int munt, int digt)
 
 int SelectPtfnRow(int digp, int *pMunt, int *pDigt)
 {
-    return fn_801FCE10(0, "use \x8c select 'MUNT' into \x85 and 'DIGT' into \x85 from 'PTFN' where 'DIGP' = \x85\n",
-                       sHandle, pMunt, pDigt, digp) == 0;
+    int result = fn_801FCE10(0,
+                             "use \x8c select 'MUNT' into \x85 and 'DIGT' into \x85 from 'PTFN' where 'DIGP' = \x85\n",
+                             sHandle, pMunt, pDigt, digp);
+
+    return QUERY_STATUS_ACCEPTED(result) && result != 0x17;
 }
 
 int fn_8008660C(int digt, int *pList)
