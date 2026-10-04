@@ -3968,8 +3968,11 @@
       "provenance": {
         "pull_request": 234,
         "merged_via": 234,
-        "commit": "03b75e31c939e6946099bb550954c12bc14cdde5",
-        "introduced_blob": "aebfd15c977d5138d4f7647630dd7a1d9a6c9ae5"
+        "commit": "9db3f8e6a11633e4ab554ec90b3b465a0c4af016",
+        "introduced_blob": "c68cd0bbfe963f1d1ee6bc4e142e00c3fd8a30ac",
+        "original_commit": "03b75e31c939e6946099bb550954c12bc14cdde5",
+        "original_blob": "aebfd15c977d5138d4f7647630dd7a1d9a6c9ae5",
+        "integration_adjustment": "Reviewed integration includes the canonical Record_80067338 pointer getter declaration shared with its accepted consumer; no reconstructed body or layout change."
       }
     },
     {
@@ -4033,8 +4036,11 @@
       "provenance": {
         "pull_request": 241,
         "merged_via": 241,
-        "commit": "dac02340db9e1a4da1ed1c3fdbb6fd26ed3f8664",
-        "introduced_blob": "40852d423a0238a903511919439b25fb531e207a"
+        "commit": "9db3f8e6a11633e4ab554ec90b3b465a0c4af016",
+        "introduced_blob": "28f816c3136381d9d9de0dc1e300412353771404",
+        "original_commit": "dac02340db9e1a4da1ed1c3fdbb6fd26ed3f8664",
+        "original_blob": "40852d423a0238a903511919439b25fb531e207a",
+        "integration_adjustment": "Reviewed integration exposes shared owner/item pointer wrapper contracts and uses explicit address-word conversions only at established engine int interfaces. Target allocation and item dereferences support pointer semantics; native before/after objects are identical."
       }
     },
     {
