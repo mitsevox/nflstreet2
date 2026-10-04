@@ -1,3 +1,4 @@
+#include "game/fn_801801F0.h"
 #include <string.h>
 
 #include "game/Record_802CC680.h"
@@ -16,7 +17,6 @@ extern int lbl_803ED5EC;
 
 int fn_80063AA0(void);
 int fn_80185274(void);
-void fn_801801F0(int a);
 void fn_8018A740(void);
 int fn_801C1D54(void);
 void fn_801C1D84(void);
