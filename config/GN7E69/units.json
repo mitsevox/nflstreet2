@@ -3834,21 +3834,27 @@
       ]
     },
     {
-      "source": "src/game/cu_8017FE4C.cpp",
+      "source": "src/game/cu_8017FDF0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017FE4C-0x801801E0 (src/game/cu_8017FE4C.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8017FDF0-0x80180FA4 (src/game/cu_8017FDF0.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8017FE4C",
-          "end": "0x801801E0"
+          "start": "0x8017FDF0",
+          "end": "0x80180FA4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A6ABC",
+          "end": "0x802A6AC0"
         },
         {
           "section": ".sdata",
           "placement": ".data5",
           "start": "0x803EB530",
-          "end": "0x803EB540"
+          "end": "0x803EB548"
         }
       ]
     },
