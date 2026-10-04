@@ -432,9 +432,9 @@
       "address": "0x8025278C",
       "evidence": "evidence.tsv external row GXSetViewport: target REL24 branch at 0x80228C90 and SDK GXTransform.c body."
     },
-    "fn_8018FDEC__14Class_8018FD64iiPvii": {
+    "fn_8018FDEC__14Class_8018FD64iiPvT3i": {
       "address": "0x8018FDEC",
-      "evidence": "evidence.tsv external row 0x8018FDEC (fn_8018FDEC__14Class_8018FD64iiPvii) and type row Class_8018FD64."
+      "evidence": "evidence.tsv external row 0x8018FDEC (fn_8018FDEC__14Class_8018FD64iiPvT3i) and type row Class_8018FD64."
     },
     "fn_8018FF54__14Class_8018FD64iiiPi": {
       "address": "0x8018FF54",
@@ -455,6 +455,38 @@
     "__14Class_8018FD64": {
       "address": "0x8018FD64",
       "evidence": "evidence.tsv external row 0x8018FD64 (__14Class_8018FD64) and type row Class_8018FD64."
+    },
+    "_vt.14Class_8018FD64": {
+      "address": "0x802AB4F8",
+      "evidence": "evidence.tsv external row 0x802AB4F8 (_vt.14Class_8018FD64) and type row Class_8018FD64."
+    },
+    "fn_8018FE34__14Class_8018FD64": {
+      "address": "0x8018FE34",
+      "evidence": "evidence.tsv external row 0x8018FE34 (fn_8018FE34__14Class_8018FD64) and type row Class_8018FD64."
+    },
+    "fn_8018FE7C__14Class_8018FD64": {
+      "address": "0x8018FE7C",
+      "evidence": "evidence.tsv external row 0x8018FE7C (fn_8018FE7C__14Class_8018FD64) and type row Class_8018FD64."
+    },
+    "fn_8018FEC4__14Class_8018FD64": {
+      "address": "0x8018FEC4",
+      "evidence": "evidence.tsv external row 0x8018FEC4 (fn_8018FEC4__14Class_8018FD64) and type row Class_8018FD64."
+    },
+    "fn_8018FF78__14Class_8018FD64i": {
+      "address": "0x8018FF78",
+      "evidence": "evidence.tsv external row 0x8018FF78 (fn_8018FF78__14Class_8018FD64i) and type row Class_8018FD64."
+    },
+    "fn_8018FF9C__14Class_8018FD64i": {
+      "address": "0x8018FF9C",
+      "evidence": "evidence.tsv external row 0x8018FF9C (fn_8018FF9C__14Class_8018FD64i) and type row Class_8018FD64."
+    },
+    "fn_80190008__14Class_8018FD64ii": {
+      "address": "0x80190008",
+      "evidence": "evidence.tsv external row 0x80190008 (fn_80190008__14Class_8018FD64ii) and type row Class_8018FD64."
+    },
+    "strchr": {
+      "address": "0x801C3084",
+      "evidence": "evidence.tsv external row strchr: target byte-scan loop returning the first match or null; conventional library interface, original symbol not recovered."
     },
     "vfn_05__14Class_802A6B60iP14Entry_80182CC8": {
       "address": "0x80182CC8",

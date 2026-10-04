@@ -7,32 +7,6 @@ int fn_8022F358(int index);
 int fn_8022F3D4(int a);
 }
 
-/* Eight-byte slot written either as a long long or as an int. */
-union Union_80023BBC {
-    Union_80023BBC() {}
-    Union_80023BBC(long long value) : mLong(value) {}
-
-    int mInt;
-    long long mLong;
-};
-
-/* Fifth argument of fn_8007A334; it is stored at +28 of the cursor. */
-struct Object_80023BBC {
-    Object_80023BBC(int a, long long b)
-    {
-        mUnknown32 = 0x10003;
-        mUnknown0 = a;
-        mUnknown8 = b;
-        mUnknown16 = 3;
-    }
-
-    int mUnknown0;
-    Union_80023BBC mUnknown8;
-    int mUnknown16;
-    Union_80023BBC mUnknown24;
-    int mUnknown32;
-};
-
 static int lbl_802F4684[8] = { 0x4C43444C, 0x494C4344, 0, 0, -1, -1, 3, 0 };
 static int lbl_802F46A4[8] = { 0x4C43444C, 0x494C4344, 0, 0, -1, -1, 3, 0 };
 
@@ -101,8 +75,9 @@ int fn_80023BBC(int index, int a)
     int value;
     int found;
     int handle = fn_8022F3D4(fn_8022F358(index));
-    Object_80023BBC arg(6, 0x4C43444C4C4C4344LL);
+    Object_80023BBC arg;
 
+    arg.Set(6, 0x4C43444C4C4C4344LL, 3);
     arg.mUnknown24.mInt = 0;
     fn_8007A334(&cursor, 0x4C43444C, 0x494C4344, lbl_802F4684, &arg, handle);
     found = fn_8007A7F4(&cursor, 0x494C4344, a, 0, &value);
@@ -118,8 +93,9 @@ int fn_80023CA4(int index, int a)
     int result = 0x1F;
     Object_8007A334 cursor;
     int handle = fn_8022F3D4(fn_8022F358(index));
-    Object_80023BBC arg(6, 0x4C43444C4C4C4344LL);
+    Object_80023BBC arg;
 
+    arg.Set(6, 0x4C43444C4C4C4344LL, 3);
     arg.mUnknown24.mInt = 0;
     fn_8007A334(&cursor, 0x4C43444C, 0x494C4344, lbl_802F46A4, &arg, handle);
     if (fn_8007A600(&cursor, a)) {
