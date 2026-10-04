@@ -1,9 +1,17 @@
-#include "game/fn_801FCE10.h"
+#include "engine/cu_80227F14.h"
 #include "game/cu_80026BB0.h"
 #include "game/Class_801CBC50.h"
+#include "game/fn_8007F828.h"
+#include "game/fn_800AD9B4.h"
+#include "game/fn_8017F584.h"
+#include "game/fn_801FCE10.h"
 #include "game/InGame.h"
-#include "game/TimeScale.h"
 #include "game/ModuleGroup_80033A5C.h"
+#include "game/TimeScale.h"
+#include "game/fn_8003B6BC.h"
+#include "game/fn_80191804.h"
+#include "game/fn_80218FC4.h"
+#include "game/cu_80067C10.h"
 
 extern "C" {
 double fabs(double);
@@ -21,7 +29,6 @@ void fn_8002CBB0(void *p, int a, float c, int b);
 void fn_8002CF34(void *p);
 int fn_8002D060(void *p);
 int fn_8002D2C0(void);
-void fn_8003B6BC(int a, struct Record_8003B6BC *pRecord);
 void fn_8003E1F0(void);
 void fn_80043F50(void);
 void fn_80057F28(void);
@@ -33,16 +40,14 @@ void fn_800652A8(void);
 int fn_8006560C(void);
 void fn_8006587C(int a, int b, float c);
 void fn_80066D5C(void);
-void fn_80067D4C(int a, int b);
 void fn_8006CA84(int a);
 void fn_800726B8(void);
 void fn_800728F8(void);
 void fn_80072C90(int a, int b);
 void fn_8007F394(int a);
 void fn_8007F6F8(int a, int b);
-int fn_8007F828(int a);
 void fn_80085A7C(void);
-void fn_80085AA0(int a, struct Record_8003B6BC *pRecord0, int b, struct Record_8003B6BC *pRecord1);
+void fn_80085AA0(int a, Record_8003B6BC *pRecord0, int b, Record_8003B6BC *pRecord1);
 void fn_80089754(void);
 void fn_8008FE5C(int a);
 void fn_80099568(int a);
@@ -56,7 +61,6 @@ int fn_800A9680(void);
 void fn_800AB944(void *p);
 void fn_800AD888(float a);
 void fn_800AD910(int a, float b);
-int fn_800AD9B4(void);
 void fn_800AE8B4(void);
 void fn_800AFD58(int a, int b, float c);
 void fn_800B3AF4(float a);
@@ -78,14 +82,12 @@ void fn_80173D10(void);
 void fn_80176C58(void);
 void fn_80176C90(void);
 int fn_8017CEDC(float a);
-unsigned int fn_8017F584(void);
 void fn_8017F664(void);
 void fn_80187C0C(void);
 void fn_8018A4BC(int a, unsigned int id, float value);
 void fn_8018A6C4(int a, int b);
 void fn_8018A710(int a, int b);
 void fn_8018A740(void);
-void fn_80191804(void);
 void fn_80191808(void);
 void fn_8019180C(void);
 void fn_80194AEC(int a);
@@ -110,9 +112,7 @@ int fn_801E17D0(int a, char *p);
 void fn_801E1C38(unsigned char a);
 int fn_801E1CE0(unsigned char a);
 float fn_801EC418(int a, int b, char *p);
-void fn_80218FC4(void *p, int a, int b, int c, int d);
 void fn_8021956C(void *p, int a, int b, int c);
-void fn_802285CC(void);
 void fn_802345C4(struct Desc_802345C4 *pDesc, int count);
 void fn_80236F34(void);
 void fn_80237830(int a);
@@ -120,11 +120,6 @@ unsigned int fn_802378C8(void);
 int fn_802399F8(void);
 void fn_80239CEC(int a, int b);
 }
-
-/* Record copied out by fn_8003B6BC. */
-struct Record_8003B6BC {
-    int mUnknown[14];
-};
 
 /* Argument of fn_802345C4. */
 struct Desc_802345C4 {
@@ -148,7 +143,7 @@ InGame gInGame;
 
 static void fn_80027FE0(int a, int b, float c)
 {
-    fn_80191804();
+    fn_80191804(a, b, c);
     if (b != 0x8F) {
         sUnknown803EA2FC = 0;
     }

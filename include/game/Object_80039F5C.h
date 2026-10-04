@@ -128,4 +128,10 @@ struct Object_80039F5C {
     short mRatings[10];
 };
 
+extern "C" {
+Object_80039F5C *fn_80039F5C(int team, unsigned short index);
+Object_80039F5C *fn_8009BCE8(int *pRef);
+void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, int a);
+}
+
 #endif

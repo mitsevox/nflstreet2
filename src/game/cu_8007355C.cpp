@@ -1,10 +1,10 @@
+#include "game/fn_8017F584.h"
 extern "C" {
 void fn_80073EE4(void);
 void fn_80074190(void);
 void fn_800744C0(unsigned char value);
 int fn_801486A0(void);
 unsigned int fn_801568F0(void);
-unsigned int fn_8017F584(void);
 }
 
 static int lbl_803EA710 = 0;

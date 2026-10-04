@@ -1,26 +1,21 @@
 #include "game/Object_8007A334.h"
 #include "game/cu_80181330.h"
 
-struct Object_80362A2C;
-
 extern "C" {
 void *fn_800088C8(void);
 void fn_8000890C(int value);
 int fn_8007E5EC(int a);
 void fn_8007E69C(int a);
-void fn_80083F88(Object_80362A2C *pObject, char *pBuffer, int size);
-int fn_80084158(Object_80362A2C *pObject);
-void fn_80084180(Object_80362A2C *pObject, int value);
-int fn_800841AC(Object_80362A2C *pObject);
-int fn_800841D8(Object_80362A2C *pObject);
-int fn_80084204(Object_80362A2C *pObject);
-void fn_80084230(Object_80362A2C *pObject, unsigned char value);
-void fn_8008425C(Object_80362A2C *pObject, unsigned char value);
-void fn_80084288(Object_80362A2C *pObject, unsigned char value);
-void fn_800842B4(Object_80362A2C *pObject, char *pText, int length);
-int fn_80084438(Object_80362A2C *pObject);
-void fn_80084470(Object_80362A2C *pObject, int value);
-Object_80362A2C *fn_80182DBC(void);
+void fn_80084180(Object_8007A334 *pObject, int value);
+int fn_800841AC(Object_8007A334 *pObject);
+int fn_800841D8(Object_8007A334 *pObject);
+int fn_80084204(Object_8007A334 *pObject);
+void fn_80084230(Object_8007A334 *pObject, unsigned char value);
+void fn_8008425C(Object_8007A334 *pObject, unsigned char value);
+void fn_80084288(Object_8007A334 *pObject, unsigned char value);
+void fn_800842B4(Object_8007A334 *pObject, char *pText, int length);
+void fn_80084470(Object_8007A334 *pObject, int value);
+Object_8007A334 *fn_80182DBC(void);
 void fn_80182DD4(const char *pText);
 void fn_80182E04(const char *pText);
 void fn_80182E34(char *pText);

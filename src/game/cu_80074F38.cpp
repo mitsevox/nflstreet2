@@ -1,35 +1,21 @@
-struct Position_80074F38 {
-    float mX;
-    float mY;
-    float mZ;
-};
-
-struct Object_80039F5C {
-    char mUnknown0[12];
-    unsigned int mFlags;
-    char mUnknown16[408];
-    float mX;
-    float mY;
-    float mZ;
-};
+#include "game/fn_80178D18.h"
+#include "game/Object_80039F5C.h"
 
 extern "C" {
 extern void (*lbl_803EBB10)(int, int, ...);
 
-Object_80039F5C *fn_80039F5C(int a, int index);
 void fn_80075550(int *pResult, int value);
 int fn_80178308(void);
-unsigned int fn_80178D18(int a);
 int fn_80178320(void);
 int fn_801AE5D4(int a, int b, int c);
-float fn_8022785C(Position_80074F38 *pPosition, Position_80074F38 *pOther);
+float fn_8022785C(Vector_80039F5C *pPosition, Vector_80039F5C *pOther);
 }
 
 static int lbl_803EA74C = 0;
 
-extern "C" void fn_80074F38(Position_80074F38 *pOther)
+extern "C" void fn_80074F38(Vector_80039F5C *pOther)
 {
-    Position_80074F38 position;
+    Vector_80039F5C position;
     unsigned short i;
     int a;
     unsigned int count;
@@ -41,9 +27,9 @@ extern "C" void fn_80074F38(Position_80074F38 *pOther)
     for (i = 0; i < count; i++) {
         Object_80039F5C *pObject = fn_80039F5C(a, i);
         if (pObject->mFlags & 0x10000000) {
-            position.mX = pObject->mX;
-            position.mY = pObject->mY;
-            position.mZ = pObject->mZ;
+            position.mX = pObject->mMotion.mPos.mX;
+            position.mY = pObject->mMotion.mPos.mY;
+            position.mZ = pObject->mMotion.mPos.mZ;
             break;
         }
     }

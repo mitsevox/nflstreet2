@@ -1,7 +1,7 @@
+#include "game/fn_8007F828.h"
 #include "game/ModuleGroup_8008CC74.h"
 
 extern "C" {
-int fn_8007F828(int);
 void fn_8013CF98(void);
 void fn_80194858(int);
 void fn_80194AEC(int);

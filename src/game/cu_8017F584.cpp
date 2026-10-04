@@ -1,3 +1,4 @@
+#include "game/fn_8017F584.h"
 #include "game/fn_801FCE10.h"
 #include "game/InGame.h"
 
