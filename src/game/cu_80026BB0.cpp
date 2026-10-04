@@ -1,5 +1,6 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801C1F94.h"
+#include "game/cu_80026BB0.h"
 
 struct PadState_801E17D0;
 
@@ -22,10 +23,6 @@ float fn_801EC418(int a, int b, char *p);
 int fn_8023790C(void);
 }
 
-struct InputValues {
-    float mValue[34];
-};
-
 static char *lbl_802CC760[4] = {lbl_802EC198, lbl_802EC198, lbl_802EC198, lbl_802EC198};
 static char *lbl_802CC770[4] = {lbl_802EC264, lbl_802EC264, lbl_802EC264, lbl_802EC264};
 static unsigned char lbl_80306564[10];
@@ -33,8 +30,6 @@ static char *sPadState = 0;
 static int (*sCallback)();
 
 extern "C" {
-
-float fn_80027294(int value);
 
 float fn_80026BB0(int port)
 {
