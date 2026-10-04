@@ -2302,6 +2302,37 @@
       ]
     },
     {
+      "source": "src/game/cu_8018422C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018422C-0x80185264 (src/game/cu_8018422C.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018422C",
+          "end": "0x80185264"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A6C10",
+          "end": "0x802A6C20"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB590",
+          "end": "0x803EB5B0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECB80",
+          "end": "0x803ECB84"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/si/SISamplingRate.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv unit/data rows for sampling-rate code, tables, diagnostic and BSS state; CREDITS.md for import provenance.",
