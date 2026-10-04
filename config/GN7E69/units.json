@@ -4866,6 +4866,25 @@
           "end": "0x803EA818"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8013B874.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8013B874-0x8013BAE0 (src/game/cu_8013B874.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8013B874",
+          "end": "0x8013BAE0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DBC28",
+          "end": "0x802DBD24"
+        }
+      ]
     }
   ]
 }
