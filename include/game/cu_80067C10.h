@@ -7,11 +7,14 @@
 struct Record_80067CA8 {
     int mUnknown0;
     Vector_80039F5C mPos;
-    int mUnknown10;
+    union {
+        unsigned int mValue;
+        void *mpObject;
+    } mUnknown10;
     int mUnknown14;
     int mUnknown18;
     int mUnknown1C;
-    unsigned short mUnknown20;
+    unsigned short mType;
 };
 
 typedef void (*Callback_80067EC8)(Record_80067CA8 *pRecord);
