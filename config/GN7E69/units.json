@@ -500,6 +500,14 @@
       "address": "0x80182C78",
       "evidence": "evidence.tsv external row 0x80182C78 (vfn_04__14Class_802A6B60iPi) and type row Class_802A6B60."
     },
+    "sprintf": {
+      "address": "0x801C2E18",
+      "evidence": "evidence.tsv external row sprintf: target call sites in src/game/cu_80029500.cpp and inspected callee behavior."
+    },
+    "strcmp": {
+      "address": "0x801C2FE4",
+      "evidence": "evidence.tsv external row strcmp: target call sites in src/game/cu_80029500.cpp and inspected callee behavior."
+    },
     "strcpy": {
       "address": "0x801C2EB4",
       "evidence": "evidence.tsv external row strcpy: target byte-copy loop and preserved destination; conventional library interface, original symbol not recovered."
