@@ -151,7 +151,7 @@ void fn_80173D10(void);
 void fn_80173EE0(int a, int b, int c, int d, int e);
 void fn_80174074(void);
 void fn_80177C50(int a);
-void fn_80177F70(void);
+int fn_80177F70(void);
 Pair_8017055C fn_80177FE0(void);
 void fn_80178264(Pair_8017055C pos);
 Pair_8017055C fn_8017827C(void);
