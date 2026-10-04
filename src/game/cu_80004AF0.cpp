@@ -3,7 +3,7 @@
 #include "game/fn_801C3284.h"
 
 extern "C" {
-void *fn_800088C8(void);
+Class_80184190 *fn_800088C8(void);
 void fn_8000890C(int value);
 int fn_8007E5EC(int a);
 void fn_8007E69C(int a);
@@ -64,8 +64,8 @@ class Class_80005578 : public Class_802A6BB0 {
 public:
     virtual void vfn_01(int a, int *pResult);
     virtual void vfn_02(int a, int b, int c);
-    virtual void vfn_09(int a, int *pResult, Params_80005284 **ppParams);
-    virtual void vfn_10(int a, Params_80005284 **ppParams);
+    virtual void vfn_09(int a, int *pResult, Arg_8018399C text);
+    virtual void vfn_10(int a, Arg_8018399C text);
 
     char mUnknown4[4];
 };
@@ -352,9 +352,9 @@ void Class_80005578::vfn_02(int a, int b, int c)
     }
 }
 
-void Class_80005578::vfn_09(int a, int *pResult, Params_80005284 **ppParams)
+void Class_80005578::vfn_09(int a, int *pResult, Arg_8018399C text)
 {
-    Params_80005284 *pParams = *ppParams;
+    Params_80005284 *pParams = text.pParams;
     char buffer[24];
 
     if (a == 2) {
@@ -364,9 +364,9 @@ void Class_80005578::vfn_09(int a, int *pResult, Params_80005284 **ppParams)
     }
 }
 
-void Class_80005578::vfn_10(int a, Params_80005284 **ppParams)
+void Class_80005578::vfn_10(int a, Arg_8018399C text)
 {
-    Params_80005284 *pParams = *ppParams;
+    Params_80005284 *pParams = text.pParams;
     char buffer[24];
 
     if (a == 2) {
@@ -395,7 +395,7 @@ static void fn_800053A8()
     fn_8007F064(&lbl_80369D70);
 }
 
-extern "C" Class_80005618 *fn_800053D0()
+extern "C" Class_80184190 *fn_800053D0()
 {
     return fn_80005490();
 }

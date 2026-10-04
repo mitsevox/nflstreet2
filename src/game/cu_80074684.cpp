@@ -1,7 +1,7 @@
 extern "C" {
 extern void (*lbl_803EBB10)(int, int, ...);
 
-int fn_800737C8(int a, int b);
+int fn_800737C8(unsigned int a, int b);
 int fn_801AE5D4(int a, int b, int c);
 }
 

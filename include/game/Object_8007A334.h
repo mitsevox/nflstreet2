@@ -46,6 +46,46 @@ struct ColumnValue_802D6424 {
     int mUnknown12;
 };
 
+/* Eight-byte slot written either as a long long or as an int. */
+union Union_80023BBC {
+    Union_80023BBC() {}
+    Union_80023BBC(long long value) : mLong(value) {}
+
+    int mInt;
+    long long mLong;
+    struct Object_80023BBC *mNode;
+};
+
+/* Fifth argument of fn_8007A334; it is stored at +28 of the cursor. */
+struct Object_80023BBC {
+    void Set(int a, long long b, int type)
+    {
+        mUnknown32 = 0x10003;
+        mUnknown0 = a;
+        mUnknown8 = b;
+        mUnknown16 = type;
+    }
+    void Set(int a, long long b, int type, int c)
+    {
+        Set(a, b, type);
+        mUnknown24.mInt = c;
+    }
+    void Set(int a, Object_80023BBC *pLeft, Object_80023BBC *pRight)
+    {
+        mUnknown32 = 0x20009;
+        mUnknown0 = a;
+        mUnknown8.mNode = pLeft;
+        mUnknown16 = 11;
+        mUnknown24.mNode = pRight;
+    }
+
+    int mUnknown0;
+    Union_80023BBC mUnknown8;
+    int mUnknown16;
+    Union_80023BBC mUnknown24;
+    int mUnknown32;
+};
+
 extern "C" {
 void fn_8007A308(Object_8007A334 *pObject, int a, int b);
 void fn_8007A334(Object_8007A334 *pObject, int a, int b, void *c, void *d, int e);
