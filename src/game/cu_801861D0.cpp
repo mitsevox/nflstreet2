@@ -20,7 +20,7 @@ struct Params_80186324 {
 };
 
 extern "C" {
-int fn_8006C854(int a, int b);
+int fn_8006C854(int index, Vector_80039F5C *pPos);
 int fn_801800D0(void);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 int fn_801C6458(int a, int b);

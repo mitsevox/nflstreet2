@@ -1,5 +1,6 @@
 #include "game/fn_801EEB44.h"
 #include "game/SndgCrowd.h"
+#include "game/SndgPathfinder.h"
 
 void *operator new(unsigned int size, int unknown);
 
@@ -11,13 +12,6 @@ void *memset(void *pDest, int value, unsigned int size);
 int fn_801F3E28(void);
 int fn_800A350C(void);
 int fn_800B65A0(int unknown);
-int fn_8006DBF8(void *pData, int unknown);
-int fn_8006DC4C(int handle);
-int fn_8006DC98(void *pData, int unknown, int id, float value);
-int fn_8006DD24(int id);
-void fn_8006DD70(int id, unsigned char value);
-int fn_8006DE00(int id, int unknown);
-int fn_8006DE54(int id, int unknown);
 }
 
 static ModuleDependency sDependencies[] = { lbl_8030A60C, 0 };

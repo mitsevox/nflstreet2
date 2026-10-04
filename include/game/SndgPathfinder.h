@@ -14,7 +14,16 @@ public:
 
 extern SndgPathfinder gSndgPathfinder;
 
+/* Entry of the 20-entry table lbl_802D611C. */
+struct Struct_802D611C {
+    int mUnknown0;
+    unsigned int mUnknown4;
+    unsigned int mUnknown8;
+};
+
 extern "C" {
+extern Struct_802D611C lbl_802D611C[];
+
 int fn_8006DBF8(void *pData, int unknown);
 int fn_8006DC4C(int handle);
 int fn_8006DC98(void *pData, int unknown, int id, float value);
