@@ -234,7 +234,7 @@ void fn_80048FD0(int a, int b);
 void fn_800490A0(int index, int a, int b);
 void fn_80049B00(int a, int b);
 void fn_80049B90(int a, int b);
-void fn_80049D6C(int a, int b, int c);
+void fn_80049D6C(int a, unsigned int b, int c);
 void fn_8007BA48(Object_8007A334 *pObject);
 void fn_8007BB04(Object_8007A334 *pObject);
 int fn_8007BB4C(Object_8007A334 *pObject, int a, int b);
