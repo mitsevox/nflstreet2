@@ -210,14 +210,23 @@ def load_manifest(manifest, sections, compiler_version):
             raise ValueError(f"Unit {unit['source']} uses unknown profile {unit['profile']}")
         roots = unit.get("link_roots")
         if roots is not None:
-            if not isinstance(roots, dict) or set(roots) != {"symbols", "evidence"} \
+            # SDK libraries discard unknown library code; any other unit names each function
+            # the linker discards, and retained_layout checks that list exactly.
+            keys = {"symbols", "evidence"}
+            if profiles[unit["profile"]].get("compiler", "prodg") != "mwcc":
+                keys = keys | {"discarded"}
+            def names(values):
+                return isinstance(values, list) and bool(values) and len(set(values)) == len(values) \
+                    and all(isinstance(n, str) and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", n)
+                            and n not in LINKER_SYMBOLS and not n.startswith("__original_") for n in values)
+            if not isinstance(roots, dict) or set(roots) != keys \
                     or not isinstance(roots["evidence"], str) or not roots["evidence"].strip() \
-                    or not isinstance(roots["symbols"], list) or not roots["symbols"] \
-                    or not all(isinstance(n, str) and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", n)
-                               and n not in LINKER_SYMBOLS and not n.startswith("__original_")
-                               for n in roots["symbols"]) \
-                    or len(set(roots["symbols"])) != len(roots["symbols"]):
-                raise ValueError("link_roots need distinct symbol names and retention evidence")
+                    or not names(roots["symbols"]) \
+                    or ("discarded" in keys and (not names(roots["discarded"])
+                                                 or set(roots["discarded"]) & set(roots["symbols"]))):
+                raise ValueError("link_roots need distinct symbol names and retention evidence"
+                                 + ("" if "discarded" not in keys else
+                                    ", and a list of the discarded functions"))
         placed = []
         for entry in unit["sections"]:
             if set(entry) - {"follows"} != {"section", "placement", "start", "end"}:
@@ -589,6 +598,12 @@ def retained_layout(unit, compiler, wrapper):
         if original is None or symbol["size"] != original["size"] \
                 or symbol["shndx"] != text["index"]:
             raise ValueError("Retained-layout linker changed a function's identity or size")
+    discarded = unit["link_roots"].get("discarded")
+    if discarded is not None:
+        native_functions = {symbol["name"] for symbol in symbols if symbol["type"] == 2
+                            and symbol["shndx"] == native_text["index"] and symbol["size"] > 0}
+        if native_functions - {symbol["name"] for symbol in retained} != set(discarded):
+            raise ValueError(f"{unit['source']}: discarded functions differ from link_roots discarded")
     mapped = [text]
     by_index = {section["index"]: section for section in allocated}
     tag = next((symbol for symbol in linked_symbols

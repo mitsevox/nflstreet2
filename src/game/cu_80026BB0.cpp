@@ -31,7 +31,7 @@ static int (*sCallback)();
 
 extern "C" {
 
-float fn_80026BB0(int port)
+float fn_80026BB0(int slot)
 {
     int value = 0;
 
@@ -116,7 +116,7 @@ void fn_80026DA8(void)
     sPadState = 0;
 }
 
-void fn_80026DD4(int port, InputValues *pPrevious, InputValues *pCurrent)
+void fn_80026DD4(int slot, InputValues *pPrevious, InputValues *pCurrent)
 {
     char *pState = sPadState;
     unsigned int i;
@@ -125,7 +125,7 @@ void fn_80026DD4(int port, InputValues *pPrevious, InputValues *pCurrent)
     int ready;
 
     fn_8023790C();
-    handle = fn_801C6458(port, 0);
+    handle = fn_801C6458(slot, 0);
     ready = fn_80026CC4(handle);
     if (ready) {
         fn_801E17D0(handle, (PadState_801E17D0 *)pState);
@@ -133,21 +133,21 @@ void fn_80026DD4(int port, InputValues *pPrevious, InputValues *pCurrent)
         fn_801C1F94(pState, 0, 12);
     }
     if (ready) {
-        if (!lbl_80306564[port]) {
+        if (!lbl_80306564[slot]) {
             fn_80026C5C(pPrevious, pCurrent);
         }
         for (i = 0; i <= 22; i++) {
-            pCurrent->mValue[i] = fn_801EC418(port, i, pState + 8);
+            pCurrent->mValue[i] = fn_801EC418(slot, i, pState + 8);
         }
         for (; i <= 32; i++) {
-            step = (unsigned int)((fn_80026BE8(fn_801EC418(port, i, pState + 8)) + 1.0001f) * 7.0f);
+            step = (unsigned int)((fn_80026BE8(fn_801EC418(slot, i, pState + 8)) + 1.0001f) * 7.0f);
             Dequantize(&pCurrent->mValue[i], step);
         }
-        step = (unsigned int)((fn_80026BB0(port) + 1.0001f) * 7.0f);
+        step = (unsigned int)((fn_80026BB0(slot) + 1.0001f) * 7.0f);
         Dequantize(&pCurrent->mValue[33], step);
-        if (lbl_80306564[port]) {
+        if (lbl_80306564[slot]) {
             fn_80026C5C(pPrevious, pCurrent);
-            lbl_80306564[port] = 0;
+            lbl_80306564[slot] = 0;
         }
     } else {
         *pPrevious = *pCurrent;
@@ -155,15 +155,15 @@ void fn_80026DD4(int port, InputValues *pPrevious, InputValues *pCurrent)
     }
 }
 
-void fn_80027114(int port, int index)
+void fn_80027114(int slot, int index)
 {
-    switch (fn_801E19B4(fn_801C6458(port, 0)) >> 16) {
+    switch (fn_801E19B4(fn_801C6458(slot, 0)) >> 16) {
     case 2:
-        fn_801EC314(port, 0, 34, lbl_802CC770[index]);
+        fn_801EC314(slot, 0, 34, lbl_802CC770[index]);
         break;
     case 1:
     default:
-        fn_801EC314(port, 0, 34, lbl_802CC760[index]);
+        fn_801EC314(slot, 0, 34, lbl_802CC760[index]);
         break;
     }
 }
@@ -216,16 +216,16 @@ int fn_800272EC(float x)
     return (int)x & 0xFFFFFF;
 }
 
-void fn_80027358(int port)
+void fn_80027358(int slot)
 {
     unsigned int i;
 
-    if (port == -1) {
+    if (slot == -1) {
         for (i = 0; i < 10; i++) {
             lbl_80306564[i] = 1;
         }
     } else {
-        lbl_80306564[port] = 1;
+        lbl_80306564[slot] = 1;
     }
 }
 

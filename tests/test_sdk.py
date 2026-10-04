@@ -268,16 +268,27 @@ class LinkerRetention(unittest.TestCase):
                 source_build.load_manifest(bad, sections, "3.9.3")
         # The same validation applies to ProDG units, which may now name retention roots.
         manifest["units"][0]["profile"] = "game_cpp"
-        for roots in ({"symbols": ["Keep", "Keep"], "evidence": "x"}, {"symbols": [], "evidence": "x"},
-                      {"symbols": ["Keep"], "evidence": " "}, ["Keep"]):
+        # A ProDG unit must also name the functions the linker discards.
+        for roots in ({"symbols": ["Keep", "Keep"], "evidence": "x", "discarded": ["Drop"]},
+                      {"symbols": [], "evidence": "x", "discarded": ["Drop"]},
+                      {"symbols": ["Keep"], "evidence": " ", "discarded": ["Drop"]},
+                      {"symbols": ["Keep"], "evidence": "x"},
+                      {"symbols": ["Keep"], "evidence": "x", "discarded": []},
+                      {"symbols": ["Keep"], "evidence": "x", "discarded": ["Keep"]},
+                      {"symbols": ["Keep"], "evidence": "x", "discarded": ["Drop", "Drop"]},
+                      ["Keep"]):
             bad = copy.deepcopy(manifest)
             bad["units"][0]["link_roots"] = roots
             with self.subTest(prodg_roots=roots), self.assertRaisesRegex(ValueError, "link_roots"):
                 source_build.load_manifest(bad, sections, "3.9.3")
-        manifest["units"][0]["link_roots"] = {"symbols": ["Keep"], "evidence": "x"}
+        manifest["units"][0]["link_roots"] = {"symbols": ["Keep"], "evidence": "x", "discarded": ["Drop"]}
         units = source_build.load_manifest(manifest, sections, "3.9.3")[0]
         self.assertEqual(units[0]["compiler"], "prodg")
-        self.assertEqual(units[0]["link_roots"]["symbols"], ["Keep"])
+        self.assertEqual(units[0]["link_roots"]["discarded"], ["Drop"])
+        # SDK units keep the original form; a discard list is not accepted there.
+        manifest["units"][0]["profile"] = "dolphin_release"
+        with self.assertRaisesRegex(ValueError, "link_roots"):
+            source_build.load_manifest(manifest, sections, "3.9.3")
 
 
 class ProdgRetention(unittest.TestCase):
@@ -298,15 +309,18 @@ class ProdgRetention(unittest.TestCase):
         return {"source": source.name, "object": obj,
                 "link_roots": {"symbols": ["Keep"], "evidence": "test retention root"}}
 
+    TEXT = ('extern "C" {\n'
+            "static float Helper(float x) { return x * 7.0f; }\n"
+            "float Keep(float x) { return Helper(x) * 3.0f; }\n"
+            "static float Unused(unsigned int s) { return s * 0.25f - 1.0f; }\n"
+            "float Last(float x) { return x * 5.0f; }\n"
+            "}\n")
+
     def test_discarded_function_keeps_rodata_offsets(self):
-        text = ('extern "C" {\n'
-                "float Keep(float x) { return x * 3.0f; }\n"
-                "static float Unused(unsigned int s) { return s * 0.25f - 1.0f; }\n"
-                "float Last(float x) { return x * 5.0f; }\n"
-                "}\n")
         with tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
-            unit = self.compile(Path(temporary), text)
+            unit = self.compile(Path(temporary), self.TEXT)
             unit["link_roots"]["symbols"] = ["Keep", "Last"]
+            unit["link_roots"]["discarded"] = ["Unused"]
             native_sections, native_symbols = source_build.read_elf(unit["object"].read_bytes())
             native = {s["name"]: s for s in native_sections}
             before = unit["object"].read_bytes()
@@ -317,7 +331,25 @@ class ProdgRetention(unittest.TestCase):
             self.assertEqual(linked[".text"]["size"], native[".text"]["size"] - unused["size"])
             self.assertEqual(linked[".rodata"]["size"], native[".rodata"]["size"])
             self.assertEqual(linked[".rodata"]["data"], native[".rodata"]["data"])
-            self.assertEqual(sorted(s["name"] for s in symbols if s["type"] == 2), ["Keep", "Last"])
+            self.assertEqual(sorted(s["name"] for s in symbols if s["type"] == 2), ["Helper", "Keep", "Last"])
+
+    def test_discarded_list_must_match_exactly(self):
+        cases = (
+            # Last is discarded as well, but only Unused is declared.
+            (["Keep"], ["Unused"]),
+            # Helper is declared discarded, but Keep's call retains it.
+            (["Keep", "Last"], ["Unused", "Helper"]),
+            # Nothing is declared, but Unused is discarded.
+            (["Keep", "Last"], []),
+        )
+        for roots, discarded in cases:
+            with self.subTest(roots=roots, discarded=discarded), \
+                    tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
+                unit = self.compile(Path(temporary), self.TEXT)
+                unit["link_roots"]["symbols"] = roots
+                unit["link_roots"]["discarded"] = discarded
+                with self.assertRaisesRegex(ValueError, "discarded functions differ"):
+                    source_build.retained_layout(unit, self.compiler, self.wrapper)
 
 
 if __name__ == "__main__":

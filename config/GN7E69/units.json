@@ -1600,6 +1600,9 @@
           "fn_8002739C",
           "fn_800273A4"
         ],
+        "discarded": [
+          "DequantizeStep"
+        ],
         "evidence": "evidence.tsv linker row 0x80289FC8-0x80289FE0: the target keeps every listed function, all reached from outside the unit or from each other; the file-static DequantizeStep has no code in the target, while its constant pool remains in rodata."
       },
       "sections": [
