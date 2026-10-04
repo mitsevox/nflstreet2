@@ -3,6 +3,7 @@
 #include "game/fn_80063A0C.h"
 #include "game/FELoop.h"
 #include "game/fn_8007F828.h"
+#include "game/fn_8021D7B8.h"
 #include "game/fn_8017F584.h"
 #include "game/Object_80228224.h"
 
@@ -14,7 +15,6 @@ int fn_801E195C(int a);
 void fn_80194C5C(int a, int b, int c);
 int fn_800B6644(int a);
 void fn_80185F4C(int a, int b);
-void fn_8021D7B8(void *a, int b, int c, int *d);
 Object_80228224 *fn_8018A854(void);
 void fn_8018A7F8(Object_80228224 *pObject, int mode);
 

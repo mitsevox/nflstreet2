@@ -2,10 +2,6 @@
 #include "game/Object_8007A334.h"
 #include "game/PaletteColor.h"
 
-struct ColorPalette {
-    PaletteColor mColors[4];
-};
-
 static void *sDependencies[] = { 0 };
 static ColumnValue_802D6424 sRecord[14] = {
     { 0, 0x4C415043, 0x494C5043, 0 },

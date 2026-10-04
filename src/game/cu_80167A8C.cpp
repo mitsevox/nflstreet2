@@ -1,4 +1,6 @@
+#include "game/fn_801EF390.h"
 #include "game/Desc_80169DF8.h"
+#include "game/Class_80148A58.h"
 #include "game/fn_8016871C.h"
 #include "game/Object_8007A334.h"
 #include "game/fn_800670B4.h"
@@ -48,10 +50,7 @@ struct Object_80167A8C {
     unsigned char mUnknownD314[43][4];
 };
 
-struct Class_80148A58 {
-    int mUnknown0;
-    int mUnknown4;
-};
+
 
 extern "C" {
 int fn_80066D74(unsigned int id, int a, int b, int c, int d, int e);
@@ -78,7 +77,6 @@ void fn_80167910(Point_80167910 *pPoints, int count);
 void fn_8016BAD8(int team);
 int fn_801485D4(void);
 int fn_801486A0(void);
-Class_80148A58 *fn_80148A58(void);
 int fn_80177F70(void);
 Point_80167910 fn_80177FE0(void);
 int fn_80178308(void);
@@ -87,7 +85,6 @@ int fn_80178E10(void);
 void fn_80179144(int a);
 void fn_8017916C(void);
 int fn_801D34D0(void *pDest, int size, int value, int width);
-int fn_801EF390(int a, int b, int c);
 void fn_801F9FA4(int tag, int index, int column);
 int fn_801FA038(int tag, int index, int column);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
@@ -411,7 +408,7 @@ void fn_80168324(int a, int b, int c, int d, int e, int f, int g, int h)
     if (h) {
         Desc_80169DF8 desc;
 
-        desc.mUnknown0 = fn_801EF390(a, 4, 1);
+        desc.mUnknown0 = fn_801EF390((void *)a, 4, 1);
         desc.mUnknown4 = (short *)lbl_803ECAF4->mUnknownD2EC;
         desc.mUnknown8 = fn_80169308;
         desc.mUnknownC = fn_801694C8;

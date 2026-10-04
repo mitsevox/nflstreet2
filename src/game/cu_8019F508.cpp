@@ -1,3 +1,4 @@
+#include "game/fn_801EF390.h"
 #include "game/fn_801D2B7C.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXStruct.h>
@@ -41,8 +42,6 @@ extern "C" {
 int fn_80044528(int index);
 int fn_80044544(void);
 int fn_80044564(int index, int i);
-int fn_801EF390(int a, int b, int c);
-void fn_801F010C(int a, int b);
 void fn_80211E08(Element_8019F508 *pElement, int a);
 void fn_80211EFC(Element_8019F508 *pElement);
 int fn_802120E4(Element_8019F508 *pElement, int a);
@@ -89,7 +88,7 @@ void fn_8019F508(int index)
         pElement = lbl_803ECBF4[index] = (Element_8019F508 *)fn_801D2B7C(fn_80044528(index) * sizeof(Element_8019F508), 0, 0);
         handle = fn_80044544();
         for (; i < fn_80044528(index); i++) {
-            fn_80211E08(pElement, fn_801EF390(handle, fn_80044564(index, i), 1));
+            fn_80211E08(pElement, fn_801EF390((void *)handle, fn_80044564(index, i), 1));
             pElement->mUnknown28 = fn_802120E4(pElement, 0xFF000000);
             pElement->mUnknown2C = fn_80212124(pElement, 0xFF000000, 0);
             pElement++;
@@ -105,7 +104,7 @@ void fn_8019F5D8(int index)
 
         for (i = 0; i < fn_80044528(index); i++) {
             fn_80211EFC(&pElements[i]);
-            fn_801F010C(fn_80044544(), fn_80044564(index, i));
+            fn_801F010C((void *)fn_80044544(), fn_80044564(index, i));
         }
         fn_801D2BD0(pElements);
         lbl_803ECBF4[index] = 0;
