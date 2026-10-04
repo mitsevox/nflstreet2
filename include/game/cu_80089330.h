@@ -32,7 +32,7 @@ struct Plane_800894B8 {
 };
 
 extern "C" {
-void fn_80089330(float *pCapsuleA, float *pCapsuleB, int index);
+void fn_80089330(float *pCapsuleA, float *pCapsuleB, unsigned int index);
 int fn_800893F0(Record_8003EC04 *pA, Record_8003EC04 *pB);
 int fn_80089464(float *pSphereA, float *pSphereB);
 void fn_800894B8(Plane_800894B8 *pPlane, Record_8003EC04 *pA, Record_8003EC04 *pB);
