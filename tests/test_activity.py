@@ -136,6 +136,30 @@ class ContributorTests(unittest.TestCase):
         self.commit=self.commit_source('int function(void) { return 3; }')
         self.assertEqual(self.credits()[0]['functions'],1)
 
+    def test_historical_lookup_batches_deleted_and_restored_paths(self):
+        self.git('rm', 'src/test.c')
+        self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                 'commit', '-qm', 'Delete source')
+        (self.root/'src').mkdir(exist_ok=True)
+        revision = self.commit_source('int function(void) { return 3; }')
+        real_run = activity.subprocess.run
+        with patch.object(activity.subprocess, 'run', wraps=real_run) as run:
+            self.assertTrue(activity.historical_source_blob(self.root, revision, 'src/test.c', self.blob))
+        queries = [call for call in run.call_args_list if call.args[0][:2] == ['git', 'cat-file']]
+        self.assertEqual(len(queries), 1)
+        self.assertFalse(activity.historical_source_blob(self.root, revision, 'src/test.c', 'a' * 40))
+        self.assertFalse(activity.historical_source_blob(self.root, revision, 'src/absent.c', self.blob))
+
+    def test_historical_lookup_rejects_protocol_injection_and_invalid_responses(self):
+        for source in ('src/a\n' + self.blob, 'src/a\r', 'src/a\0'):
+            with self.subTest(source=source), self.assertRaisesRegex(ValueError, 'source path'):
+                activity.historical_source_blob(self.root, self.commit, source, self.blob)
+        for output in ('', self.blob + '\n' + self.blob + '\n', 'wrong missing\n', 'invalid\n'):
+            with patch.object(activity.subprocess, 'check_output', return_value=self.commit + '\n'), \
+                    patch.object(activity.subprocess, 'run', return_value=subprocess.CompletedProcess([], 0, output)), \
+                    self.subTest(output=output), self.assertRaisesRegex(ValueError, 'response'):
+                activity.historical_source_blob(self.root, self.commit, 'src/test.c', self.blob)
+
     def test_fetch_is_explicit_pinned_same_origin_and_fail_closed(self):
         missing='b'*40
         with patch.object(activity.subprocess,'run',return_value=subprocess.CompletedProcess([],1)) as run:
