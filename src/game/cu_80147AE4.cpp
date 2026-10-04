@@ -17,10 +17,10 @@ struct Object_80147AE4 {
 extern "C" {
 void fn_80147908(unsigned int a, unsigned int b, unsigned int *pColor, float *pValue, float t, float x,
                  float y);
-void fn_80196EF8(void *p, unsigned int color, float value);
-void fn_80196F20(void *p, unsigned int color, float value);
-void *fn_801CECCC(int index);
-int fn_801DCF0C(int a, int size, int c, void (*pInit)(Object_80147AE4 *),
+void fn_80196EF8(int a, unsigned int color, float value);
+void fn_80196F20(int a, unsigned int color, float value);
+int fn_801CECCC(int index);
+int fn_801DCF0C(int a, int size, int c, void (*pInit)(Object_80147AE4 *, int *),
                 void (*pRelease)(Object_80147AE4 *));
 void fn_801DCF8C(int a);
 void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Object_80147AE4 *));
@@ -67,7 +67,7 @@ int fn_80147C14(Object_80147AE4 *pObject)
 {
     unsigned int color;
     float value;
-    void *p;
+    int result;
 
     if (pObject->mUnknown31 != 0) {
         color = pObject->mUnknown14;
@@ -85,13 +85,13 @@ int fn_80147C14(Object_80147AE4 *pObject)
                 }
             }
         }
-        p = fn_801CECCC(lbl_803EB28C[pObject->mUnknown32]);
+        result = fn_801CECCC(lbl_803EB28C[pObject->mUnknown32]);
         switch (pObject->mUnknown2C) {
         case 0:
-            fn_80196EF8(p, color, value);
+            fn_80196EF8(result, color, value);
             break;
         case 1:
-            fn_80196F20(p, color, value);
+            fn_80196F20(result, color, value);
             break;
         }
     }
