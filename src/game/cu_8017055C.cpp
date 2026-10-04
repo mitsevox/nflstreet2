@@ -1,6 +1,8 @@
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_8017F584.h"
+#include "game/Object_80039F5C.h"
+#include "game/cu_80067C10.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
@@ -56,7 +58,6 @@ void fn_800310C0(void *p, int a, Object_80039F5C *pObject, Vector_80039F5C *pPos
 void fn_8003AB08(Object_80039F5C *p, int a);
 unsigned char fn_80054D24(int index);
 void fn_80053A70(Object_80039F5C *p);
-void fn_80067E3C(int a, Vector_80039F5C *pPos, int id, int b, int c, int d);
 void fn_8006F0B8(int a);
 void fn_80071458(Object_80039F5C *p, void *pBall);
 void fn_80071540(Object_80039F5C *p, void *pBall);

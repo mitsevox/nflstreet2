@@ -1,4 +1,4 @@
-#include "game/Object_80039F5C.h"
+#include "game/cu_80067C10.h"
 
 /* Descriptor passed to fn_80238424, which allocates mUnknown0 records of
    mUnknown4 bytes after mUnknown8 callback slots. */
@@ -8,19 +8,7 @@ struct Desc_80238424 {
     int mUnknown8;
 };
 
-/* Record returned by fn_80067CA8 and handed to the registered callbacks. */
-struct Record_80067CA8 {
-    int mUnknown0;
-    Vector_80039F5C mPos;
-    int mUnknown10;
-    int mUnknown14;
-    int mUnknown18;
-    int mUnknown1C;
-    unsigned short mUnknown20;
-};
-
 typedef int (*Fn_803EA674)(int);
-typedef void (*Callback_80067EC8)(Record_80067CA8 *pRecord);
 
 extern "C" {
 int fn_8009D990(int index);

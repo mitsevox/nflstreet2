@@ -9,6 +9,7 @@
 #include "game/fn_8003B6BC.h"
 #include "game/fn_80191804.h"
 #include "game/fn_80218FC4.h"
+#include "game/cu_80067C10.h"
 
 extern "C" {
 double fabs(double);
@@ -42,7 +43,6 @@ void fn_800652A8(void);
 int fn_8006560C(void);
 void fn_8006587C(int a, int b, float c);
 void fn_80066D5C(void);
-void fn_80067D4C(int a, int b);
 void fn_8006CA84(int a);
 void fn_800726B8(void);
 void fn_800728F8(void);
