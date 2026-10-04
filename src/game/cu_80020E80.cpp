@@ -29,7 +29,7 @@ extern "C" {
 int fn_801869F0();
 void fn_8002A574(int, int);
 void fn_8002118C();
-void *fn_80020F18(int, int *);
+void fn_80020F18(int, int *);
 void fn_80020F50();
 int fn_80020F5C(int *, int *, int *, int *);
 void fn_80021004(int, int);
@@ -60,10 +60,10 @@ extern "C" void fn_80020ED0()
     fn_801851D0();
 }
 
-extern "C" void *fn_80020F18(int value, int *pCount)
+extern "C" void fn_80020F18(int value, int *pCount)
 {
     *pCount = 16;
-    return fn_801C1F94(lbl_8036B360, 0, 320);
+    fn_801C1F94(lbl_8036B360, 0, 320);
 }
 
 extern "C" void fn_80020F50()

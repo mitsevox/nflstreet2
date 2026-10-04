@@ -3,7 +3,7 @@
 
 /* Five callbacks registered with fn_801851A4 and cleared by fn_801851D0. */
 struct Callbacks_802F462C {
-    void *(*mUnknown0)(int, int *);
+    void (*mUnknown0)(int, int *);
     void (*mUnknown4)();
     int (*mUnknown8)(int *, int *, int *, int *);
     void (*mUnknown12)(int, int);

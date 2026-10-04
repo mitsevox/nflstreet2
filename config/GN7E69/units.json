@@ -4382,6 +4382,37 @@
           "end": "0x803EC784"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80062810.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80062810-0x80062B90 (src/game/cu_80062810.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80062810",
+          "end": "0x80062B90"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D4EC4",
+          "end": "0x802D4ED8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA608",
+          "end": "0x803EA610"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC804",
+          "end": "0x803EC80C"
+        }
+      ]
     }
   ]
 }
