@@ -4711,6 +4711,403 @@
           "end": "0x8018AB64"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8000DCD8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row src/game/cu_8000DCD8.cpp, the function rows 0x8000DCD8-0x8000EE78, the data row 0x8000EE78-0x8000F870 and the data rows of its .sdata, .sbss and .bss objects.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8000DCD8",
+          "end": "0x8000EE78"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x8000EE78",
+          "end": "0x8000F870",
+          "follows": ".text"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB948",
+          "end": "0x803EB950"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036AD28",
+          "end": "0x8036ADB0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECDE0",
+          "end": "0x803ECE38"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__tcf_0",
+          "start": "0x8000DCD8",
+          "end": "0x8000DD04"
+        },
+        {
+          "symbol": "vfn_01__14Class_8000F500iPiT2",
+          "start": "0x8000DD04",
+          "end": "0x8000DDC0"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000F500iiPPv",
+          "start": "0x8000DDC0",
+          "end": "0x8000DE24"
+        },
+        {
+          "symbol": "vfn_04__14Class_8000F500iPi",
+          "start": "0x8000DE24",
+          "end": "0x8000DE2C"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000F500iP14Entry_80182CC8",
+          "start": "0x8000DE2C",
+          "end": "0x8000DEEC"
+        },
+        {
+          "symbol": "vfn_03__14Class_8000F500i",
+          "start": "0x8000DEEC",
+          "end": "0x8000DFB0"
+        },
+        {
+          "symbol": "vfn_01__14Class_8000F540iPiT2",
+          "start": "0x8000DFB0",
+          "end": "0x8000E07C"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000F540iP14Entry_80182CC8",
+          "start": "0x8000E07C",
+          "end": "0x8000E0CC"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000F4B0iP14Entry_80182CC8",
+          "start": "0x8000E0CC",
+          "end": "0x8000E11C"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000F410iP14Entry_80182CC8",
+          "start": "0x8000E11C",
+          "end": "0x8000E16C"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000F460iP14Entry_80182CC8",
+          "start": "0x8000E16C",
+          "end": "0x8000E1BC"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000F3C0iP14Entry_80182CC8",
+          "start": "0x8000E1BC",
+          "end": "0x8000E20C"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000F370iP14Entry_80182CC8",
+          "start": "0x8000E20C",
+          "end": "0x8000E25C"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000F540iiPPv",
+          "start": "0x8000E25C",
+          "end": "0x8000E390"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000F4B0iiPPv",
+          "start": "0x8000E390",
+          "end": "0x8000E478"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000F460iiPPv",
+          "start": "0x8000E478",
+          "end": "0x8000E588"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000F410iiPPv",
+          "start": "0x8000E588",
+          "end": "0x8000E600"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000F3C0iiPPv",
+          "start": "0x8000E600",
+          "end": "0x8000E694"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000F370iiPPv",
+          "start": "0x8000E694",
+          "end": "0x8000E70C"
+        },
+        {
+          "symbol": "fn_8000E70C__Fv",
+          "start": "0x8000E70C",
+          "end": "0x8000E744"
+        },
+        {
+          "symbol": "fn_8000E744__FPcPCcT1",
+          "start": "0x8000E744",
+          "end": "0x8000E784"
+        },
+        {
+          "symbol": "fn_8000E784__FP15Record_8036AD78",
+          "start": "0x8000E784",
+          "end": "0x8000E834"
+        },
+        {
+          "symbol": "fn_8000E834__FP15Record_8036AD78",
+          "start": "0x8000E834",
+          "end": "0x8000E8FC"
+        },
+        {
+          "symbol": "fn_8000E8FC__Fii",
+          "start": "0x8000E8FC",
+          "end": "0x8000EB3C"
+        },
+        {
+          "symbol": "fn_8000EB3C__Fv",
+          "start": "0x8000EB3C",
+          "end": "0x8000EB5C"
+        },
+        {
+          "symbol": "fn_8000EB5C__Fv",
+          "start": "0x8000EB5C",
+          "end": "0x8000EB80"
+        },
+        {
+          "symbol": "fn_8000EB80__Fv",
+          "start": "0x8000EB80",
+          "end": "0x8000EBA4"
+        },
+        {
+          "symbol": "fn_8000EBA4__Fi",
+          "start": "0x8000EBA4",
+          "end": "0x8000EC14"
+        },
+        {
+          "symbol": "fn_8000EC14__Fv",
+          "start": "0x8000EC14",
+          "end": "0x8000EC38"
+        },
+        {
+          "symbol": "fn_8000EC38__Fv",
+          "start": "0x8000EC38",
+          "end": "0x8000EC44"
+        },
+        {
+          "symbol": "fn_8000EC44__Fv",
+          "start": "0x8000EC44",
+          "end": "0x8000EC94"
+        },
+        {
+          "symbol": "_._15Record_8036AD28",
+          "start": "0x8000EC94",
+          "end": "0x8000ECBC"
+        },
+        {
+          "symbol": "vfn_07__14Class_8000F540",
+          "start": "0x8000ECBC",
+          "end": "0x8000ECC4"
+        },
+        {
+          "symbol": "vfn_08__14Class_8000F540",
+          "start": "0x8000ECC4",
+          "end": "0x8000ECD0"
+        },
+        {
+          "symbol": "vfn_07__14Class_8000F4B0",
+          "start": "0x8000ECD0",
+          "end": "0x8000ECD8"
+        },
+        {
+          "symbol": "vfn_08__14Class_8000F4B0",
+          "start": "0x8000ECD8",
+          "end": "0x8000ECE4"
+        },
+        {
+          "symbol": "vfn_07__14Class_8000F460",
+          "start": "0x8000ECE4",
+          "end": "0x8000ECEC"
+        },
+        {
+          "symbol": "vfn_08__14Class_8000F460",
+          "start": "0x8000ECEC",
+          "end": "0x8000ECF8"
+        },
+        {
+          "symbol": "vfn_07__14Class_8000F410",
+          "start": "0x8000ECF8",
+          "end": "0x8000ED00"
+        },
+        {
+          "symbol": "vfn_08__14Class_8000F410",
+          "start": "0x8000ED00",
+          "end": "0x8000ED0C"
+        },
+        {
+          "symbol": "vfn_07__14Class_8000F3C0",
+          "start": "0x8000ED0C",
+          "end": "0x8000ED14"
+        },
+        {
+          "symbol": "vfn_08__14Class_8000F3C0",
+          "start": "0x8000ED14",
+          "end": "0x8000ED20"
+        },
+        {
+          "symbol": "vfn_07__14Class_8000F370",
+          "start": "0x8000ED20",
+          "end": "0x8000ED28"
+        },
+        {
+          "symbol": "vfn_08__14Class_8000F370",
+          "start": "0x8000ED28",
+          "end": "0x8000ED34"
+        },
+        {
+          "symbol": "fn_8000ED34__Fv",
+          "start": "0x8000ED34",
+          "end": "0x8000ED64"
+        },
+        {
+          "symbol": "fn_8000ED64__Fv",
+          "start": "0x8000ED64",
+          "end": "0x8000ED8C"
+        },
+        {
+          "symbol": "fn_8000ED8C__Fv",
+          "start": "0x8000ED8C",
+          "end": "0x8000EDB4"
+        },
+        {
+          "symbol": "fn_8000EDB4__Fv",
+          "start": "0x8000EDB4",
+          "end": "0x8000EDDC"
+        },
+        {
+          "symbol": "fn_8000EDDC__Fv",
+          "start": "0x8000EDDC",
+          "end": "0x8000EE04"
+        },
+        {
+          "symbol": "fn_8000EE04__Fv",
+          "start": "0x8000EE04",
+          "end": "0x8000EE2C"
+        },
+        {
+          "symbol": "fn_8000EE2C__Fv",
+          "start": "0x8000EE2C",
+          "end": "0x8000EE54"
+        },
+        {
+          "symbol": "__15Record_8036AD28",
+          "start": "0x8000EE54",
+          "end": "0x8000EE78"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_17fn_8000EC44__Fv.0.sRecord",
+          "start": "0x8036AD28",
+          "end": "0x8036AD64"
+        },
+        {
+          "symbol": "_17fn_8000ED34__Fv.0.sInstance",
+          "start": "0x8036AD64",
+          "end": "0x8036AD78"
+        },
+        {
+          "symbol": "lbl_8036AD78",
+          "start": "0x8036AD78",
+          "end": "0x8036ADB0"
+        },
+        {
+          "symbol": "_.tmp_0.30",
+          "start": "0x803ECDE0",
+          "end": "0x803ECDE4"
+        },
+        {
+          "symbol": "_.tmp_1.85",
+          "start": "0x803ECDE4",
+          "end": "0x803ECDE8"
+        },
+        {
+          "symbol": "_17fn_8000ED64__Fv.0.sInstance",
+          "start": "0x803ECDE8",
+          "end": "0x803ECDF0"
+        },
+        {
+          "symbol": "_.tmp_2.95",
+          "start": "0x803ECDF0",
+          "end": "0x803ECDF4"
+        },
+        {
+          "symbol": "_17fn_8000ED8C__Fv.0.sInstance",
+          "start": "0x803ECDF4",
+          "end": "0x803ECDFC"
+        },
+        {
+          "symbol": "_.tmp_3.105",
+          "start": "0x803ECDFC",
+          "end": "0x803ECE00"
+        },
+        {
+          "symbol": "_17fn_8000EDB4__Fv.0.sInstance",
+          "start": "0x803ECE00",
+          "end": "0x803ECE08"
+        },
+        {
+          "symbol": "_.tmp_4.112",
+          "start": "0x803ECE08",
+          "end": "0x803ECE0C"
+        },
+        {
+          "symbol": "_17fn_8000EDDC__Fv.0.sInstance",
+          "start": "0x803ECE0C",
+          "end": "0x803ECE14"
+        },
+        {
+          "symbol": "_.tmp_5.119",
+          "start": "0x803ECE14",
+          "end": "0x803ECE18"
+        },
+        {
+          "symbol": "_17fn_8000EE04__Fv.0.sInstance",
+          "start": "0x803ECE18",
+          "end": "0x803ECE20"
+        },
+        {
+          "symbol": "_.tmp_6.126",
+          "start": "0x803ECE20",
+          "end": "0x803ECE24"
+        },
+        {
+          "symbol": "_17fn_8000EE2C__Fv.0.sInstance",
+          "start": "0x803ECE24",
+          "end": "0x803ECE2C"
+        },
+        {
+          "symbol": "_.tmp_7.133",
+          "start": "0x803ECE2C",
+          "end": "0x803ECE30"
+        },
+        {
+          "symbol": "lbl_803ECE30",
+          "start": "0x803ECE30",
+          "end": "0x803ECE34"
+        },
+        {
+          "symbol": "lbl_803ECE34",
+          "start": "0x803ECE34",
+          "end": "0x803ECE38"
+        }
+      ]
     }
   ]
 }

@@ -539,6 +539,14 @@
     "strcpy": {
       "address": "0x801C2EB4",
       "evidence": "evidence.tsv external row strcpy: target byte-copy loop and preserved destination; conventional library interface, original symbol not recovered."
+    },
+    "vfn_03__14Class_802A6B60i": {
+      "address": "0x80182BC4",
+      "evidence": "evidence.tsv external row 0x80182BC4 (vfn_03__14Class_802A6B60i) and type row Class_802A6B60."
+    },
+    "atexit": {
+      "address": "0x80262310",
+      "evidence": "evidence.tsv external row atexit: called from the function-local static guard path at 0x8000EC78 with the destructor stub 0x8000DCD8, as ProDG cc1plus registers local-static destructors; target body matches the newlib exit-procedure registration."
     }
   },
   "units": [
