@@ -5111,6 +5111,37 @@
           "end": "0x802AAEE8"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80136B1C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80136B1C-0x80138590 (src/game/cu_80136B1C.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80136B1C",
+          "end": "0x80138590"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FE28",
+          "end": "0x8029FE98"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB1A0",
+          "end": "0x803EB1A4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC9F4",
+          "end": "0x803EC9F8"
+        }
+      ]
     }
   ]
 }
