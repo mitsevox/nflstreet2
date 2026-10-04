@@ -4885,6 +4885,65 @@
           "end": "0x802DBD24"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80086194.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80086194-0x80086C10 (src/game/cu_80086194.cpp) and its data rows.",
+      "link_roots": {
+        "symbols": [
+          "fn_80086194",
+          "fn_800862AC",
+          "fn_80086320",
+          "fn_80086398",
+          "fn_8008648C",
+          "fn_80086534",
+          "fn_8008656C",
+          "fn_8008660C",
+          "fn_8008671C",
+          "fn_80086754",
+          "fn_80086868",
+          "fn_800868A8",
+          "fn_800868E8",
+          "fn_80086960",
+          "fn_80086994",
+          "fn_800869C8",
+          "fn_800869FC",
+          "fn_80086A30",
+          "fn_80086A64",
+          "fn_80086A98",
+          "fn_80086ACC",
+          "fn_80086AEC",
+          "fn_80086B50",
+          "fn_80086BA4"
+        ],
+        "discarded": [
+          "DeleteLtfnRow",
+          "SelectPtfnRow",
+          "ListPtfnByMunt"
+        ],
+        "evidence": "evidence.tsv linker rows 0x802948CC-0x80294918, 0x802949C0-0x80294A0C and 0x80294A60-0x80294AB4: the target keeps every listed function, all reached from outside the unit or from each other; three query functions have no code in the target, while their strings remain in the unit's rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80086194",
+          "end": "0x80086C10"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802946E4",
+          "end": "0x80294B38"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA800",
+          "end": "0x803EA808"
+        }
+      ]
     }
   ]
 }
