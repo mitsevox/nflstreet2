@@ -6,15 +6,6 @@
 #include "game/cu_80181330.h"
 #include "game/fn_801C3284.h"
 
-/* Descriptor passed to fn_8008044C; zeroed before use. */
-struct Desc_8008044C {
-    Desc_8008044C() : mUnknown0(0), mUnknown4(0), mUnknown8(0), mUnknown12(0) {}
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
-};
-
 /* One entry of the screen stack lbl_80362B14. */
 struct StackEntry_80362B14 {
     int mUnknown0;
