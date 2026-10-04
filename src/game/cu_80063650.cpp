@@ -1,6 +1,6 @@
 #include "game/Block_80063910.h"
 #include "game/fn_80063A0C.h"
-#include "game/cu_8007F12C.h"
+#include "game/fn_8007F6F8.h"
 #include "game/FELoop.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"

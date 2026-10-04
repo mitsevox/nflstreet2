@@ -1,4 +1,4 @@
-#include "game/cu_8007F12C.h"
+#include "game/fn_8007F6F8.h"
 #include "engine/cu_80227F14.h"
 #include "game/cu_80026BB0.h"
 #include "game/Class_801CBC50.h"
