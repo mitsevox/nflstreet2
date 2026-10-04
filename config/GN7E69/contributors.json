@@ -4080,6 +4080,7 @@
       ],
       "provenance": {
         "pull_request": 251,
+        "merged_via": 251,
         "commit": "a5f9e8577e888e635a29b26969fb1e65cb99b397",
         "introduced_blob": "2926ab873ee07599b81f588f08367e1410688808"
       }
