@@ -3438,6 +3438,41 @@
       }
     },
     {
+      "source": "src/game/cu_80062B90.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80062B90",
+        "0x80062BA0",
+        "0x80062BE4",
+        "0x80062C24",
+        "0x80062C84",
+        "0x80062CC8",
+        "0x80062D54",
+        "0x80062E34",
+        "0x80062F94",
+        "0x80063034",
+        "0x80063078",
+        "0x800630A4",
+        "0x80063118",
+        "0x80063144",
+        "0x80063170",
+        "0x80063278",
+        "0x80063330",
+        "0x800634B4",
+        "0x800634E4",
+        "0x800634F8",
+        "0x80063578"
+      ],
+      "provenance": {
+        "pull_request": 231,
+        "merged_via": 231,
+        "commit": "2f520224d219ead72105baeb7a867d143e106ed4",
+        "introduced_blob": "139640a4f887b4824b0ef7105b430082aa89fed9"
+      }
+    },
+    {
       "source": "src/game/cu_80194B6C.cpp",
       "contributors": [
         "mitsevox"
