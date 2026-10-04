@@ -87,7 +87,9 @@ def provenance_commit(root, commit, fetch_missing=False):
     def present():
         return subprocess.run(['git','cat-file','-e',commit+'^{commit}'], cwd=root,
                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
-    if not present() and fetch_missing:
+    if present():
+        return
+    if fetch_missing:
         # Explicit host-side opt-in: retrieve only the pinned object from this checkout's origin.
         subprocess.run(['git','fetch','--no-tags','origin',commit], cwd=root,
                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
@@ -105,10 +107,22 @@ def source_blob(root, commit, source):
 
 def historical_source_blob(root, revision, source, blob):
     # The current revision alone is insufficient: prove an actual source-path tree in its history.
+    if any(character in source for character in ('\r', '\n', '\0')):
+        raise ValueError('Invalid attribution source path')
     commits = subprocess.check_output(['git','rev-list',revision,'--',source], cwd=root, text=True).splitlines()
-    return any(source_blob(root, commit, source) == blob for commit in commits
-               if subprocess.run(['git','cat-file','-e',commit+':'+source], cwd=root,
-                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0)
+    if not commits:
+        return False
+    # Query real historical trees together; missing paths remain missing evidence.
+    queries = [commit + ':' + source for commit in commits]
+    result = subprocess.run(['git', 'cat-file', '--batch-check=%(objectname)'], cwd=root,
+                            input=''.join(query + '\n' for query in queries),
+                            capture_output=True, text=True, check=True)
+    rows = result.stdout.splitlines()
+    if len(rows) != len(queries) or any(
+            not SHA.fullmatch(row) and row != query + ' missing'
+            for query, row in zip(queries, rows)):
+        raise ValueError('Invalid Git historical source response')
+    return blob in rows
 
 
 def contributors(root, ledger, build, revision, fetch_missing=False):
