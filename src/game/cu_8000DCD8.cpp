@@ -20,11 +20,6 @@ struct Record_8036AD78 {
     int mUnknown0[14];
 };
 
-/* Record filled by fn_800817CC. */
-struct Record_800817CC {
-    char mUnknown0[16];
-    Record_8036AD78 mUnknown16;
-};
 
 /* Object returned by fn_8000EC44. */
 struct Record_8036AD28 {
@@ -246,7 +241,6 @@ void fn_8007CC50(Object_8007A334 *pObject);
 void fn_8007CCC4(Object_8007A334 *pObject);
 int fn_800808F8(Object_8008044C *pObject);
 int fn_80080E98(Object_8008044C *pObject);
-void fn_800817CC(Object_8008044C *pObject, Record_800817CC *pOut);
 int fn_800872E8(int a);
 void fn_8008731C(int a, int id, int *pOut1, int *pOut2, char *pBuffer, int size);
 int fn_8008736C(int a, int b);
@@ -743,23 +737,23 @@ static void fn_8000E744(char *a, const char *b, const char *c)
 
 static void fn_8000E784(Record_8036AD78 *pOut)
 {
-    Record_800817CC record;
+    Info_80307908 record;
 
     fn_800817CC((Object_8008044C *)fn_80182DC8(), &record);
-    pOut->mUnknown0[0] = record.mUnknown16.mUnknown0[0];
-    pOut->mUnknown0[1] = record.mUnknown16.mUnknown0[1];
-    pOut->mUnknown0[2] = record.mUnknown16.mUnknown0[2];
-    pOut->mUnknown0[3] = record.mUnknown16.mUnknown0[3];
-    pOut->mUnknown0[4] = record.mUnknown16.mUnknown0[4];
-    pOut->mUnknown0[5] = record.mUnknown16.mUnknown0[5];
-    pOut->mUnknown0[6] = record.mUnknown16.mUnknown0[6];
-    pOut->mUnknown0[7] = record.mUnknown16.mUnknown0[7];
-    pOut->mUnknown0[8] = record.mUnknown16.mUnknown0[8];
-    pOut->mUnknown0[9] = record.mUnknown16.mUnknown0[9];
-    pOut->mUnknown0[10] = record.mUnknown16.mUnknown0[10];
-    pOut->mUnknown0[11] = record.mUnknown16.mUnknown0[11];
-    pOut->mUnknown0[12] = record.mUnknown16.mUnknown0[12];
-    pOut->mUnknown0[13] = record.mUnknown16.mUnknown0[13];
+    pOut->mUnknown0[0] = record.mValues[0];
+    pOut->mUnknown0[1] = record.mValues[1];
+    pOut->mUnknown0[2] = record.mValues[2];
+    pOut->mUnknown0[3] = record.mValues[3];
+    pOut->mUnknown0[4] = record.mValues[4];
+    pOut->mUnknown0[5] = record.mValues[5];
+    pOut->mUnknown0[6] = record.mValues[6];
+    pOut->mUnknown0[7] = record.mValues[7];
+    pOut->mUnknown0[8] = record.mValues[8];
+    pOut->mUnknown0[9] = record.mValues[9];
+    pOut->mUnknown0[10] = record.mValues[10];
+    pOut->mUnknown0[11] = record.mValues[11];
+    pOut->mUnknown0[12] = record.mValues[12];
+    pOut->mUnknown0[13] = record.mValues[13];
     lbl_803ECE30 = fn_80080E98((Object_8008044C *)fn_80182DC8());
 }
 

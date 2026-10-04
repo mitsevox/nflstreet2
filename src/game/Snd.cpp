@@ -1,4 +1,5 @@
 #include "game/Module.h"
+#include "game/SndgPathfinder.h"
 
 /* Argument of fn_801F393C. */
 struct Desc_801F393C {
@@ -23,8 +24,6 @@ struct Desc_801F393C {
 };
 
 extern "C" {
-extern char lbl_802D611C[];
-
 void fn_801F76E8(void);
 void fn_801F7710(void);
 unsigned long fn_8023CEE0(void);

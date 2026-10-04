@@ -116,5 +116,7 @@ extern Vec gVec;
 extern Snd gSnd;
 extern Font gFont;
 extern Render gRender;
+extern Rumble gRumble;
+extern FEPlyBk gFEPlyBk;
 
 #endif
