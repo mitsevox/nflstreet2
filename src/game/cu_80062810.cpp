@@ -1,3 +1,4 @@
+#include "game/fn_8007F6F8.h"
 #include "game/Callees_801D57E0.h"
 #include "game/Callees_8002A138.h"
 #include "game/cu_8018422C.h"
@@ -7,7 +8,6 @@ extern "C" {
 int fn_8002A1B0(int, int);
 void fn_8002A330(int, int, int *, int *, int);
 void fn_8002A478(int *, int *);
-void fn_8007F6F8(int a, int b);
 void fn_80062840(int, int *);
 void fn_80062910();
 int fn_8006291C(int *, int *, int *, int *);

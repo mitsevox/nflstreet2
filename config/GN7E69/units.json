@@ -5294,6 +5294,19 @@
       ]
     },
     {
+      "source": "src/game/cu_80020A34.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv: src/game/cu_80020A34.cpp unit and compiler rows",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80020A34",
+          "end": "0x80020BAC"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80089330.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80089330-0x800895EC (src/game/cu_80089330.cpp) and its data, type, compiler and source-form rows.",
