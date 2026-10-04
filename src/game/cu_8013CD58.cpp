@@ -173,6 +173,35 @@ static unsigned char lbl_803EC9F8;
 static int lbl_803EC9FC;
 static float lbl_8031B6A0[3];
 
+#if defined(DECOMP_COMPARE)
+/* Draft: accelerate to mid-way, then decelerate (peak speed 2 over the split point 0.5). */
+extern "C" void fn_8013CC7C(Interp_8013CC14 *pInterp, int steps)
+{
+    float split = 0.5f;
+    float speed = 2.0f;
+
+    while (steps--) {
+        if (pInterp->mValue != pInterp->mTarget) {
+            pInterp->mTime += pInterp->mRate;
+            if (pInterp->mTime < 1.0f) {
+                float t = pInterp->mTime;
+                float ease;
+                if (t < split) {
+                    ease = speed * t * t / (split + split);
+                } else {
+                    ease = speed * split * 0.5f +
+                           (t - t * t * 0.5f - split + split * split * 0.5f) * speed / (1.0f - split);
+                }
+                pInterp->mValue = pInterp->mStart + (pInterp->mTarget - pInterp->mStart) * ease;
+            } else {
+                pInterp->mValue = pInterp->mTarget;
+                pInterp->mTime = 0.0f;
+            }
+        }
+    }
+}
+#endif
+
 extern "C" void fn_8013CD58(Interp_8013CC14 *pInterp, int steps)
 {
     while (steps--) {

@@ -3976,6 +3976,21 @@
       }
     },
     {
+      "source": "src/game/cu_80167A8C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80167910"
+      ],
+      "provenance": {
+        "pull_request": 277,
+        "merged_via": 277,
+        "commit": "6a7b99e68b35853b01e4ae968e6c91429037ebec",
+        "introduced_blob": "0214a4a098d1d39407a03998c099465518d4f3db"
+      }
+    },
+    {
       "source": "src/game/cu_80076F6C.cpp",
       "contributors": [
         "adampreddy"
