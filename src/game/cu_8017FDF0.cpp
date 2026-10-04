@@ -1,4 +1,6 @@
+#include "game/fn_801EF390.h"
 #include "game/fn_8022F478.h"
+#include "game/Class_80148A58.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
 #include "game/Object_8007A334.h"
@@ -23,27 +25,6 @@ struct Info_80152940 {
     unsigned char mUnknown21;
 };
 
-/* Object returned by fn_80148A58; its vtable pointer is at offset 0x18. */
-class Class_80148A58 {
-public:
-    virtual void vfn_01();
-    virtual void vfn_02();
-    virtual void vfn_03();
-    virtual void vfn_04();
-    virtual void vfn_05();
-    virtual void vfn_06();
-    virtual void vfn_07();
-    virtual void vfn_08();
-    virtual void vfn_09();
-    virtual void vfn_10();
-    virtual void vfn_11();
-    virtual void vfn_12();
-    virtual int vfn_13();
-
-private:
-    char mUnknown0[24];
-};
-
 /* One argument or result slot of the message handler fn_801801F8. */
 union Arg_801801F8 {
     int i;
@@ -62,7 +43,6 @@ int fn_801869F0(void);
 int fn_80186D64(int a);
 void fn_80186F9C(int a, char *pText, int c);
 int fn_801486A0(void);
-Class_80148A58 *fn_80148A58(void);
 void fn_80152940(Class_80148A58 *pObject, int index, Info_80152940 *pInfo);
 int fn_800B65A0(int a);
 int fn_80178AE0(void);
@@ -98,7 +78,6 @@ int fn_8017F60C(void);
 void fn_80083E1C(Object_8007A334 *pObject, int a);
 int fn_8008400C(Object_8007A334 *pObject);
 int fn_80084360(Object_8007A334 *pObject);
-void fn_8008040C(Object_8008044C *pObject, int a);
 int fn_80080D10(Object_8008044C *pObject);
 void fn_80010150(int a);
 int fn_8000FCDC(void);
@@ -108,7 +87,6 @@ int fn_80065650(void);
 int fn_8022F384(int a);
 void *fn_8021EA44(int index);
 int fn_8021E984(void *p, int a);
-int fn_801F0DB8(int a, int b);
 void fn_8000FCD4(int a);
 int fn_8000FCCC(void);
 unsigned char fn_80187C64(void);
@@ -510,7 +488,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         int high = pArgs[1].i >> 16;
         int low = pArgs[1].i & 0xFFFF;
 
-        pResult->i = fn_801F0DB8(fn_8021E984(pObject, high), low);
+        pResult->i = fn_801F0DB8((void *)fn_8021E984(pObject, high), low);
 
         break;
     }

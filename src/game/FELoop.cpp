@@ -8,10 +8,12 @@
 #include "game/cu_80026BB0.h"
 #include "game/cu_8007C9D4.h"
 #include "game/fn_8003B6BC.h"
+#include "game/fn_80061AD4.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_80191804.h"
 #include "game/fn_80218FC4.h"
+#include "game/fn_8021D7B8.h"
 
 extern "C" {
 extern char lbl_80306B34[];
@@ -36,7 +38,6 @@ int fn_80033124(void *p);
 void fn_8003E1F0(void);
 int fn_8005FC7C(void);
 int fn_800602E8(void);
-int fn_80061AD4(void);
 int fn_80061CAC(void);
 void fn_80062A58(unsigned char a);
 int fn_80066D74(unsigned int id, int a, int b, int c, int d, int e);
@@ -71,7 +72,6 @@ void fn_801D6F58(void);
 void fn_801F2798(const char *pText);
 void fn_8021956C(void *p, int a, int b, int c);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
-void fn_8021D7B8(void *a, int b, int c, int *d);
 int fn_802294F4(void);
 int fn_80229554(void);
 void fn_802297B0(void);
