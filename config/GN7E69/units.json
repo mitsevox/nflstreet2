@@ -4437,6 +4437,43 @@
           "end": "0x80289BE8"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80073830.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80073830-0x80074684 (src/game/cu_80073830.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80073830",
+          "end": "0x80074684"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D63DC",
+          "end": "0x802D6400"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA720",
+          "end": "0x803EA73C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030AAA8",
+          "end": "0x8030ADE0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC84C",
+          "end": "0x803EC850"
+        }
+      ]
     }
   ]
 }
