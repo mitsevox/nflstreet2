@@ -69,16 +69,23 @@ jobs:
               sudo dmesg | tail -20
               exit 1
             }
+      - name: Measure exact and fuzzy source comparisons
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
+            "$BUILD_ENVIRONMENT" python3 tools/matching.py --original /orig/main.dol
+          python3 -m unittest discover -s tests -p test_matching.py -v
       - name: Export public progress page
         run: |
           python3 tools/progress.py --dol build/source/main.dol --revision "$GITHUB_SHA" \
-            --source-report build/source/report.json --analysis-dir build/analysis
+            --source-report build/source/report.json --analysis-dir build/analysis \
+            --comparison-report build/matching/report.json
       - name: Export decomp.dev report
         run: |
           python3 tools/decomp_report.py --dol build/source/main.dol --revision "$GITHUB_SHA" \
-            --source-report build/source/report.json --analysis-dir build/analysis
+            --source-report build/source/report.json --analysis-dir build/analysis \
+            --comparison-report build/matching/report.json
       - name: Verify current mapping in both progress exports
-        run: python3 tools/check_progress_maps.py
+        run: python3 tools/check_progress_maps.py --comparison-report build/matching/report.json
       - name: Upload decomp.dev report
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
