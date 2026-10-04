@@ -5198,6 +5198,31 @@
           "end": "0x803ECAF8"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80076F6C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80076F6C-0x800775F0 (src/game/cu_80076F6C.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80076F6C",
+          "end": "0x800775F0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80290C28",
+          "end": "0x80290C48"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA788",
+          "end": "0x803EA790"
+        }
+      ]
     }
   ]
 }
