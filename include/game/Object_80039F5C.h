@@ -122,7 +122,9 @@ struct Object_80039F5C {
     char mUnknown1215[3];
     unsigned char mUnknown1218;
     unsigned char mUnknown1219;
-    char mUnknown1220[1696];
+    char mUnknown1220[1694];
+    unsigned char mUnknown2914;
+    char mUnknown2915[1];
     unsigned char mUnknown2916;
     char mUnknown2917[83];
     short mRatings[10];

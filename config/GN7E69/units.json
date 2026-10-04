@@ -5043,6 +5043,31 @@
           "end": "0x803ECA18"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80147F2C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80147F2C-0x80148424 (src/game/cu_80147F2C.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80147F2C",
+          "end": "0x80148424"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB2A0",
+          "end": "0x803EB2A8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031BD04",
+          "end": "0x8031BD10"
+        }
+      ]
     }
   ]
 }
