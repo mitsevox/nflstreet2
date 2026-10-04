@@ -3,6 +3,7 @@
 import copy
 from pathlib import Path
 import struct
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -247,7 +248,7 @@ class LinkerRetention(unittest.TestCase):
                         ValueError, "omitted required|Unexpected allocated"):
                     source_build.retained_layout(unit, self.compiler, self.wrapper)
 
-    def test_retention_metadata_cannot_inject_arguments_or_apply_to_prodg(self):
+    def test_retention_metadata_cannot_inject_arguments(self):
         import json
         manifest = json.loads((ROOT / "config/GN7E69/units.json").read_text())
         binary = synthetic_dol()
@@ -265,9 +266,58 @@ class LinkerRetention(unittest.TestCase):
             bad["units"][0]["link_roots"] = roots
             with self.subTest(roots=roots), self.assertRaisesRegex(ValueError, "link_roots"):
                 source_build.load_manifest(bad, sections, "3.9.3")
-        manifest["units"][0]["profile"] = "uistudio"
-        with self.assertRaisesRegex(ValueError, "link_roots"):
-            source_build.load_manifest(manifest, sections, "3.9.3")
+        # The same validation applies to ProDG units, which may now name retention roots.
+        manifest["units"][0]["profile"] = "game_cpp"
+        for roots in ({"symbols": ["Keep", "Keep"], "evidence": "x"}, {"symbols": [], "evidence": "x"},
+                      {"symbols": ["Keep"], "evidence": " "}, ["Keep"]):
+            bad = copy.deepcopy(manifest)
+            bad["units"][0]["link_roots"] = roots
+            with self.subTest(prodg_roots=roots), self.assertRaisesRegex(ValueError, "link_roots"):
+                source_build.load_manifest(bad, sections, "3.9.3")
+        manifest["units"][0]["link_roots"] = {"symbols": ["Keep"], "evidence": "x"}
+        units = source_build.load_manifest(manifest, sections, "3.9.3")[0]
+        self.assertEqual(units[0]["compiler"], "prodg")
+        self.assertEqual(units[0]["link_roots"]["symbols"], ["Keep"])
+
+
+class ProdgRetention(unittest.TestCase):
+    """SN retention of a ProDG object: a discarded function leaves its constant pool behind."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.compiler, cls.wrapper = setup_compiler.setup()
+
+    def compile(self, root, text):
+        source = root / "retention.cpp"
+        source.write_text(text)
+        obj = root / "retention.o"
+        subprocess.run([sys.executable, str(ROOT / "tools/prodg_cc.py"), "--dir", str(self.compiler),
+                        "--wrapper", str(self.wrapper), "-O2", "-fno-weak", "-ffast-math",
+                        "-c", str(source), "-o", str(obj)], check=True, cwd=ROOT,
+                       stdin=subprocess.DEVNULL, capture_output=True)
+        return {"source": source.name, "object": obj,
+                "link_roots": {"symbols": ["Keep"], "evidence": "test retention root"}}
+
+    def test_discarded_function_keeps_rodata_offsets(self):
+        text = ('extern "C" {\n'
+                "float Keep(float x) { return x * 3.0f; }\n"
+                "static float Unused(unsigned int s) { return s * 0.25f - 1.0f; }\n"
+                "float Last(float x) { return x * 5.0f; }\n"
+                "}\n")
+        with tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
+            unit = self.compile(Path(temporary), text)
+            unit["link_roots"]["symbols"] = ["Keep", "Last"]
+            native_sections, native_symbols = source_build.read_elf(unit["object"].read_bytes())
+            native = {s["name"]: s for s in native_sections}
+            before = unit["object"].read_bytes()
+            sections, symbols = source_build.retained_layout(unit, self.compiler, self.wrapper)
+            self.assertEqual(unit["object"].read_bytes(), before)
+            linked = {s["name"]: s for s in sections}
+            unused = next(s for s in native_symbols if s["name"] == "Unused")
+            self.assertEqual(linked[".text"]["size"], native[".text"]["size"] - unused["size"])
+            self.assertEqual(linked[".rodata"]["size"], native[".rodata"]["size"])
+            self.assertEqual(linked[".rodata"]["data"], native[".rodata"]["data"])
+            self.assertEqual(sorted(s["name"] for s in symbols if s["type"] == 2), ["Keep", "Last"])
 
 
 if __name__ == "__main__":
