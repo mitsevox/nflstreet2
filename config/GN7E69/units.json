@@ -5307,6 +5307,31 @@
       ]
     },
     {
+      "source": "src/game/cu_80089330.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80089330-0x800895EC (src/game/cu_80089330.cpp) and its data, type, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80089330",
+          "end": "0x800895EC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80295224",
+          "end": "0x80295228"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BD74",
+          "end": "0x8030BD80"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80020BAC.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80020BAC-0x80020CF8 and its data, type and source-form rows.",
