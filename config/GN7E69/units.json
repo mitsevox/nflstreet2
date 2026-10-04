@@ -4076,6 +4076,43 @@
           "end": "0x8036B4A0"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8016CF40.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8016CEEC-0x8016DB94 (src/game/cu_8016CF40.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8016CEEC",
+          "end": "0x8016DB94"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4D68",
+          "end": "0x802A4E38"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB428",
+          "end": "0x803EB42C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECB04",
+          "end": "0x803ECB24"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AEC",
+          "end": "0x80289AF0"
+        }
+      ]
     }
   ]
 }
