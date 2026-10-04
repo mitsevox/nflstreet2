@@ -4136,6 +4136,45 @@
         "commit": "0527167d98d1c13b30c8b841a0f50272f4ce8057",
         "introduced_blob": "9434a48abef82d05369c107624e5bbaa95adc325"
       }
+    },
+    {
+      "source": "src/game/cu_80020CF8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80020CF8",
+        "0x80020DC0"
+      ],
+      "provenance": {
+        "pull_request": 257,
+        "merged_via": 266,
+        "commit": "4bec1b5999485ebad662afb3f161703ffbf7250e",
+        "introduced_blob": "c46b832a9cdb4db80b0241e1462203f90f4d688b"
+      }
+    },
+    {
+      "source": "src/game/cu_80085208.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x80085148",
+        "0x80085208",
+        "0x8008535C",
+        "0x800853A0",
+        "0x80085428",
+        "0x800855C8",
+        "0x80085620",
+        "0x80085744",
+        "0x8008576C"
+      ],
+      "provenance": {
+        "pull_request": 263,
+        "merged_via": 266,
+        "commit": "db95198ebc2c8be08ce5f8e4367ea93f44afaaa5",
+        "introduced_blob": "5841e9b208d85debf8d85869f41492c4c0503ecd"
+      }
     }
   ],
   "target": "GN7E69",

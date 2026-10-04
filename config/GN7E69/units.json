@@ -5387,6 +5387,50 @@
           "end": "0x803EB24C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80020CF8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80020CF8-0x80020E80 and its type, field and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80020CF8",
+          "end": "0x80020E80"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80085208.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80085148-0x800857D0 and its data, declaration and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80085148",
+          "end": "0x800857D0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80293D88",
+          "end": "0x80294150"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA7F0",
+          "end": "0x803EA7F4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BCA8",
+          "end": "0x8030BCE0"
+        }
+      ]
     }
   ]
 }
