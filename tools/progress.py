@@ -199,6 +199,7 @@ def function_inventory(target, ranges, analysis_dir, compiled=(), data_spans=())
         if start not in candidates or function["size"] != candidates[start]:
             raise ValueError(f"Compiler function {function['symbol']} in {function['source']} "
                              "is missing from the function inventory or has inconsistent bounds")
+        exact[start] = start + function["size"]
         if not function["neutral"] and start not in names:
             raise ValueError(f"Compiler function {function['symbol']} in {function['source']} "
                              "is missing curated name evidence")

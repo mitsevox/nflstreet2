@@ -72,6 +72,23 @@ class ContributorTests(unittest.TestCase):
     def test_original_contributor_gets_function_credit_not_merger(self):
         self.assertEqual(self.credits(),[{'login':'alice','id':1,'functions':1,'pull_requests':[1]}])
 
+    def test_exact_unlinked_credit_survives_promotion_and_retires_after_regression(self):
+        self.entry['functions'].append('0x80000004')
+        exact = {('src/test.c', '0x80000000'), ('src/test.c', '0x80000004')}
+        result = activity.contributors(self.root, self.ledger, self.build, self.commit, exact_inventory=exact)
+        self.assertEqual(result[0]['functions'], 2)
+        self.build['units'][0]['functions'].append({'address':'0x80000004'})
+        self.assertEqual(activity.contributors(self.root, self.ledger, self.build, self.commit,
+                         exact_inventory=exact), result)
+        self.build['units'][0]['functions'].pop()
+        self.assertEqual(activity.contributors(self.root, self.ledger, self.build, self.commit,
+                         exact_inventory={('src/test.c', '0x80000000')})[0]['functions'], 1)
+
+    def test_exact_unlinked_function_requires_original_attribution(self):
+        with self.assertRaisesRegex(ValueError, 'Unattributed exact function'):
+            activity.contributors(self.root, self.ledger, self.build, self.commit,
+                exact_inventory={('src/test.c', '0x80000000'), ('src/test.c', '0x80000004')})
+
     def test_explicit_joint_credit_counts_once_per_person(self):
         self.entry['contributors'].append('bob')
         self.assertEqual([(c['login'],c['functions']) for c in self.credits()],[('alice',1),('bob',1)])
@@ -82,7 +99,7 @@ class ContributorTests(unittest.TestCase):
 
     def test_new_functions_require_explicit_attribution(self):
         self.build['units'][0]['functions'].append({'address':'0x80000004'})
-        with self.assertRaisesRegex(ValueError,'Unattributed compiled function'):self.credits()
+        with self.assertRaisesRegex(ValueError,'Unattributed exact function'):self.credits()
 
     def test_retired_function_does_not_keep_rank_credit(self):
         self.entry['functions'].append('0x80000004')
@@ -259,6 +276,37 @@ class RestoreTests(unittest.TestCase):
             restore_history.published_run([{'id':1}],lambda n:[{'state':'failure'}])
 
 
+class ExactInventoryTests(unittest.TestCase):
+    def site(self):
+        def function(address, matched, linked):
+            return {'type':'function', 'source':'src/test.c', 'function_address':address,
+                    'size':4, 'original_size':4, 'matched':matched, 'linked':linked}
+        return {'functions':{'exact':2}, 'files':[{'children':[
+            function('0x80000000',4,4), function('0x80000004',4,0),
+            function('0x80000008',3,0)]}]}
+
+    def test_counts_exact_linked_and_unlinked_but_not_fuzzy(self):
+        self.assertEqual(activity.exact_functions(self.site()),
+                         {('src/test.c','0x80000000'),('src/test.c','0x80000004')})
+
+    def test_candidate_without_owned_source_uses_verified_comparison_source(self):
+        site=self.site();leaf=site['files'][0]['children'][1]
+        del leaf['source'];leaf['comparison_source']='src/test.c'
+        self.assertIn(('src/test.c','0x80000004'), activity.exact_functions(site))
+        del leaf['comparison_source']
+        with self.assertRaisesRegex(ValueError, 'count differs'):
+            activity.exact_functions(site)
+
+    def test_missing_duplicate_or_fragment_identity_fails_reconciliation(self):
+        for mode in ('count', 'duplicate', 'fragment'):
+            site=self.site()
+            if mode=='count':site['functions']['exact']+=1
+            elif mode=='duplicate':site['files'][0]['children'].append(copy.deepcopy(site['files'][0]['children'][0]))
+            else:site['files'][0]['children'][1]['type']='function-fragment'
+            with self.subTest(mode=mode), self.assertRaises(ValueError):
+                activity.exact_functions(site)
+
+
 class LiveReceiptTests(unittest.TestCase):
     def test_activity_rejects_stale_receipts_and_mismatched_linked_counts(self):
         root=activity.ROOT;report=root/'build/source/report.json';site_path=root/'build/site/progress.json'
@@ -278,6 +326,12 @@ class LiveReceiptTests(unittest.TestCase):
                 with self.subTest(stale=stale.keys()),self.assertRaises(ValueError):
                     activity.export(root,site,path)
         bad=copy.deepcopy(site);bad['measures']['code']['linked']+=1
+        with self.assertRaisesRegex(ValueError,'measurements differ'):
+            activity.export(root,bad,report)
+        bad=copy.deepcopy(site);bad['functions']['exact']+=1
+        with self.assertRaisesRegex(ValueError,'measurements differ'):
+            activity.export(root,bad,report)
+        bad=copy.deepcopy(site);bad['measures']['code']['fuzzy']+=1
         with self.assertRaisesRegex(ValueError,'measurements differ'):
             activity.export(root,bad,report)
         branch_site=copy.deepcopy(site);branch_site['revision']='0'*40

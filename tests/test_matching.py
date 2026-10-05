@@ -73,6 +73,21 @@ class OverlayTests(unittest.TestCase):
         matching.apply(result,measurement)
         self.assertEqual(result['functions']['exact'],1)
 
+    def test_candidate_identity_comes_from_full_registered_comparison_not_display_name(self):
+        data=self.data()
+        for root in data['files']+data['sections']:
+            root['linked']=root['matched']=0
+            root['children'][0].update(type='function', function_address='0x80000000',
+                                       original_size=8, linked=0, matched=0)
+        data['measures']['code'].update(linked=0,matched=0)
+        measured={'objdiff':'v3.8.2','entries':[{'source':'src/test.c','type':'function',
+            'kind':'code','start':'0x80000000','end':'0x80000008','matched':8,'fuzzy':8}]}
+        result=matching.apply(data,measured)
+        self.assertEqual(result['files'][0]['children'][0]['comparison_source'],'src/test.c')
+        self.assertNotIn('source',result['files'][0]['children'][0])
+        matching.apply(result,{'objdiff':'v3.8.2','entries':[]})
+        self.assertNotIn('comparison_source', result['files'][0]['children'][0])
+
     def test_repeat_application_does_not_duplicate_credit(self):
         result = matching.apply(self.data(), self.measurement())
         first = copy.deepcopy(result)

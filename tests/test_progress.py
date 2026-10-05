@@ -352,6 +352,18 @@ class FunctionInventoryTests(ProgressBase):
         self.assertEqual(data["measures"]["code"], {"total": 16, "linked": 12, "matched": 12})
         self.assertEqual(data["functions"]["total"], 1)
 
+    def test_verified_compiler_extent_counts_without_a_separate_function_boundary_row(self):
+        self.write_inventory()
+        path=self.root / 'config/GN7E69/evidence.tsv'
+        path.write_text('\n'.join(line for line in path.read_text().splitlines()
+                         if not line.startswith('function\t0x80003104')) + '\n')
+        data=progress.report(self.binary, 'a'*40, self.report_path, self.analysis)
+        self.assertEqual(data['functions']['exact'], 1)
+        self.source_report['units'][0]['functions'][0]['size']=4
+        self.save()
+        with self.assertRaisesRegex(ValueError, 'inconsistent bounds'):
+            progress.report(self.binary, 'a'*40, self.report_path, self.analysis)
+
     def test_counts_require_measured_code_and_function_name_evidence(self):
         self.write_inventory()
         data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)
