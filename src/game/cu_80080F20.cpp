@@ -14,13 +14,13 @@ int fn_80080F48(void *pObject, int index)
     return fn_8007A98C(pObject, lbl_802D69E0[index]);
 }
 
-int fn_80080F78(void *pObject, int value)
+void fn_80080F78(void *pObject, int value)
 {
-    return fn_8007ABA4(pObject, 0x4E535050, value);
+    fn_8007ABA4(pObject, 0x4E535050, value);
 }
 
-int fn_80080FA4(void *pObject, int index, int value)
+void fn_80080FA4(void *pObject, int index, int value)
 {
-    return fn_8007ABA4(pObject, lbl_802D69E0[index], value);
+    fn_8007ABA4(pObject, lbl_802D69E0[index], value);
 }
 }

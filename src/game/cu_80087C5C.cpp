@@ -12,9 +12,9 @@ static int lbl_802D6BD8[15] = {
     0x42475355, 0x54424755, 0x43535355
 };
 
-extern "C" int fn_80087C5C(Object_8007A334 *pObject, unsigned int index, int value)
+extern "C" void fn_80087C5C(Object_8007A334 *pObject, unsigned int index, int value)
 {
-    return fn_8007AA90(pObject, lbl_802D6BD8[index], value);
+    fn_8007AA90(pObject, lbl_802D6BD8[index], value);
 }
 
 extern "C" int fn_80087C8C(Object_8007A334 *pObject, unsigned int index)
