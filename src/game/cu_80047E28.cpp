@@ -80,15 +80,6 @@ struct Init_8004A040 {
     int mUnknown18;
 };
 
-/* Query passed to fn_80083E40; fn_80083E40 builds the same default. */
-struct Query_80083E40 {
-    Query_80083E40() : mUnknown0(1), mUnknown4(0), mUnknown8(0) {}
-
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-};
-
 extern "C" {
 extern Record_803078E8 lbl_803078E8[14];
 extern Entry_80308368 lbl_80308368[14];
@@ -690,12 +681,12 @@ extern "C" void fn_80048F6C(int index, const char *pName)
     fn_801C3284(lbl_803078E8[index].mName, pName, 31);
 }
 
-extern "C" void fn_80048FA0(int index, unsigned char value)
+extern "C" void fn_80048FA0(int index, int value)
 {
     lbl_803078E8[index].mInfo.mUnknown0D = value;
 }
 
-extern "C" void fn_80048FB8(int index, unsigned char value)
+extern "C" void fn_80048FB8(int index, int value)
 {
     lbl_803078E8[index].mInfo.mUnknown0C = value;
 }

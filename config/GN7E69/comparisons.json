@@ -4713,6 +4713,742 @@
       ]
     },
     {
+      "source": "src/game/cu_8000A360.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row src/game/cu_8000A360.cpp, the function rows 0x8000A360-0x8000D2D0, the data row 0x8000D2D0-0x8000DCD8 and the data rows of its .data, .sdata, .sdata2, .bss and .sbss objects.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8000A360",
+          "end": "0x8000D2D0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x8000D2D0",
+          "end": "0x8000DCD8",
+          "follows": ".text"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4140",
+          "end": "0x802F41BC"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B24",
+          "end": "0x80289B28"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C4C",
+          "end": "0x80289C50"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB940",
+          "end": "0x803EB944"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED6D8",
+          "end": "0x803ED6E0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036A1C4",
+          "end": "0x8036AD28"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECD60",
+          "end": "0x803ECDE0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8000A360__Fii",
+          "start": "0x8000A360",
+          "end": "0x8000A434"
+        },
+        {
+          "symbol": "fn_8000A434__Fii",
+          "start": "0x8000A434",
+          "end": "0x8000A528"
+        },
+        {
+          "symbol": "fn_8000A528__Fv",
+          "start": "0x8000A528",
+          "end": "0x8000A5B0"
+        },
+        {
+          "symbol": "fn_8000A5B0__Fv",
+          "start": "0x8000A5B0",
+          "end": "0x8000A620"
+        },
+        {
+          "symbol": "fn_8000A620__Fv",
+          "start": "0x8000A620",
+          "end": "0x8000A7B0"
+        },
+        {
+          "symbol": "fn_8000A7B0__Fv",
+          "start": "0x8000A7B0",
+          "end": "0x8000A7D8"
+        },
+        {
+          "symbol": "fn_8000A7D8__Fi",
+          "start": "0x8000A7D8",
+          "end": "0x8000A838"
+        },
+        {
+          "symbol": "fn_8000A838__Fii",
+          "start": "0x8000A838",
+          "end": "0x8000A890"
+        },
+        {
+          "symbol": "fn_8000A890__Fi",
+          "start": "0x8000A890",
+          "end": "0x8000A8B4"
+        },
+        {
+          "symbol": "fn_8000A8B4__Fi",
+          "start": "0x8000A8B4",
+          "end": "0x8000A8E0"
+        },
+        {
+          "symbol": "fn_8000A8E0__Fi",
+          "start": "0x8000A8E0",
+          "end": "0x8000A970"
+        },
+        {
+          "symbol": "fn_8000A970__Fiii",
+          "start": "0x8000A970",
+          "end": "0x8000AA38"
+        },
+        {
+          "symbol": "fn_8000AA38__FiPiUi",
+          "start": "0x8000AA38",
+          "end": "0x8000AA7C"
+        },
+        {
+          "symbol": "fn_8000AA7C__FPUcT0",
+          "start": "0x8000AA7C",
+          "end": "0x8000AB70"
+        },
+        {
+          "symbol": "fn_8000AB70__Fv",
+          "start": "0x8000AB70",
+          "end": "0x8000AC04"
+        },
+        {
+          "symbol": "fn_8000AC04__Fv",
+          "start": "0x8000AC04",
+          "end": "0x8000AC98"
+        },
+        {
+          "symbol": "fn_8000AC98__Fv",
+          "start": "0x8000AC98",
+          "end": "0x8000AD18"
+        },
+        {
+          "symbol": "fn_8000AD18__Fv",
+          "start": "0x8000AD18",
+          "end": "0x8000ADB4"
+        },
+        {
+          "symbol": "fn_8000ADB4__Fv",
+          "start": "0x8000ADB4",
+          "end": "0x8000AE0C"
+        },
+        {
+          "symbol": "fn_8000AE0C__Fi",
+          "start": "0x8000AE0C",
+          "end": "0x8000AE7C"
+        },
+        {
+          "symbol": "fn_8000AE7C__Fi",
+          "start": "0x8000AE7C",
+          "end": "0x8000AF48"
+        },
+        {
+          "symbol": "fn_8000AF48__Fi",
+          "start": "0x8000AF48",
+          "end": "0x8000AFFC"
+        },
+        {
+          "symbol": "vfn_01__14Class_8000DBA0iPiT2",
+          "start": "0x8000AFFC",
+          "end": "0x8000B048"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000DBA0iiPPv",
+          "start": "0x8000B048",
+          "end": "0x8000B12C"
+        },
+        {
+          "symbol": "vfn_03__14Class_8000DBA0i",
+          "start": "0x8000B12C",
+          "end": "0x8000B154"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000DBA0iP14Entry_80182CC8",
+          "start": "0x8000B154",
+          "end": "0x8000B1E0"
+        },
+        {
+          "symbol": "vfn_01__14Class_8000DBF0iPiT2",
+          "start": "0x8000B1E0",
+          "end": "0x8000B268"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000DBF0iiPPv",
+          "start": "0x8000B268",
+          "end": "0x8000B2D4"
+        },
+        {
+          "symbol": "vfn_03__14Class_8000DBF0i",
+          "start": "0x8000B2D4",
+          "end": "0x8000B350"
+        },
+        {
+          "symbol": "vfn_04__14Class_8000DBF0iPi",
+          "start": "0x8000B350",
+          "end": "0x8000B3B0"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000DBF0iP14Entry_80182CC8",
+          "start": "0x8000B3B0",
+          "end": "0x8000B4A8"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000DB50iiPPv",
+          "start": "0x8000B4A8",
+          "end": "0x8000B540"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000DB50iP14Entry_80182CC8",
+          "start": "0x8000B540",
+          "end": "0x8000B600"
+        },
+        {
+          "symbol": "fn_8000B600__14Class_8000DB50",
+          "start": "0x8000B600",
+          "end": "0x8000B680"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000DB00iiPPv",
+          "start": "0x8000B680",
+          "end": "0x8000B6E8"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000DB00iP14Entry_80182CC8",
+          "start": "0x8000B6E8",
+          "end": "0x8000B760"
+        },
+        {
+          "symbol": "fn_8000B760__14Class_8000DB00",
+          "start": "0x8000B760",
+          "end": "0x8000B7B8"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000DAB0iiPPv",
+          "start": "0x8000B7B8",
+          "end": "0x8000B87C"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000DAB0iP14Entry_80182CC8",
+          "start": "0x8000B87C",
+          "end": "0x8000B984"
+        },
+        {
+          "symbol": "fn_8000B984__14Class_8000DAB0",
+          "start": "0x8000B984",
+          "end": "0x8000BA24"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000DA60iiPPv",
+          "start": "0x8000BA24",
+          "end": "0x8000BA90"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000DA60iP14Entry_80182CC8",
+          "start": "0x8000BA90",
+          "end": "0x8000BADC"
+        },
+        {
+          "symbol": "fn_8000BADC__14Class_8000DA60",
+          "start": "0x8000BADC",
+          "end": "0x8000BB1C"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000DA10iiPPv",
+          "start": "0x8000BB1C",
+          "end": "0x8000BB88"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000DA10iP14Entry_80182CC8",
+          "start": "0x8000BB88",
+          "end": "0x8000BBD0"
+        },
+        {
+          "symbol": "fn_8000BBD0__14Class_8000DA10",
+          "start": "0x8000BBD0",
+          "end": "0x8000BC2C"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000D9C0iiPPv",
+          "start": "0x8000BC2C",
+          "end": "0x8000BC98"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000D9C0iP14Entry_80182CC8",
+          "start": "0x8000BC98",
+          "end": "0x8000BCE0"
+        },
+        {
+          "symbol": "fn_8000BCE0__14Class_8000D9C0",
+          "start": "0x8000BCE0",
+          "end": "0x8000BD3C"
+        },
+        {
+          "symbol": "vfn_01__14Class_8000D980iPiT2",
+          "start": "0x8000BD3C",
+          "end": "0x8000BE2C"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000D980iiPPv",
+          "start": "0x8000BE2C",
+          "end": "0x8000C078"
+        },
+        {
+          "symbol": "vfn_03__14Class_8000D980i",
+          "start": "0x8000C078",
+          "end": "0x8000C240"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000D980iP14Entry_80182CC8",
+          "start": "0x8000C240",
+          "end": "0x8000C33C"
+        },
+        {
+          "symbol": "vfn_01__14Class_8000D940iPiT2",
+          "start": "0x8000C33C",
+          "end": "0x8000C430"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000D940iiPPv",
+          "start": "0x8000C430",
+          "end": "0x8000C558"
+        },
+        {
+          "symbol": "vfn_03__14Class_8000D940i",
+          "start": "0x8000C558",
+          "end": "0x8000C5F4"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000D940iP14Entry_80182CC8",
+          "start": "0x8000C5F4",
+          "end": "0x8000C648"
+        },
+        {
+          "symbol": "fn_8000C648__Fv",
+          "start": "0x8000C648",
+          "end": "0x8000C678"
+        },
+        {
+          "symbol": "fn_8000C678__Fi",
+          "start": "0x8000C678",
+          "end": "0x8000C6CC"
+        },
+        {
+          "symbol": "fn_8000C6CC__Fv",
+          "start": "0x8000C6CC",
+          "end": "0x8000C708"
+        },
+        {
+          "symbol": "vfn_01__14Class_8000D900iPiT2",
+          "start": "0x8000C708",
+          "end": "0x8000C7E4"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000D900iiPPv",
+          "start": "0x8000C7E4",
+          "end": "0x8000C8CC"
+        },
+        {
+          "symbol": "vfn_03__14Class_8000D900i",
+          "start": "0x8000C8CC",
+          "end": "0x8000C9C8"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000D900iP14Entry_80182CC8",
+          "start": "0x8000C9C8",
+          "end": "0x8000CAA4"
+        },
+        {
+          "symbol": "vfn_01__14Class_8000D8C0iPiT2",
+          "start": "0x8000CAA4",
+          "end": "0x8000CB84"
+        },
+        {
+          "symbol": "vfn_02__14Class_8000D8C0iiPPv",
+          "start": "0x8000CB84",
+          "end": "0x8000CC94"
+        },
+        {
+          "symbol": "vfn_03__14Class_8000D8C0i",
+          "start": "0x8000CC94",
+          "end": "0x8000CDB0"
+        },
+        {
+          "symbol": "vfn_05__14Class_8000D8C0iP14Entry_80182CC8",
+          "start": "0x8000CDB0",
+          "end": "0x8000CEB4"
+        },
+        {
+          "symbol": "fn_8000CEB4__Fi",
+          "start": "0x8000CEB4",
+          "end": "0x8000CF24"
+        },
+        {
+          "symbol": "fn_8000CF24__Fv",
+          "start": "0x8000CF24",
+          "end": "0x8000CF5C"
+        },
+        {
+          "symbol": "fn_8000CF5C__Fv",
+          "start": "0x8000CF5C",
+          "end": "0x8000CF7C"
+        },
+        {
+          "symbol": "__static_initialization_and_destruction_0",
+          "start": "0x8000CF7C",
+          "end": "0x8000CFF4"
+        },
+        {
+          "symbol": "vfn_07__14Class_8000DBA0",
+          "start": "0x8000CFF4",
+          "end": "0x8000CFFC"
+        },
+        {
+          "symbol": "vfn_08__14Class_8000DBA0",
+          "start": "0x8000CFFC",
+          "end": "0x8000D008"
+        },
+        {
+          "symbol": "vfn_07__14Class_8000DB50",
+          "start": "0x8000D008",
+          "end": "0x8000D010"
+        },
+        {
+          "symbol": "vfn_08__14Class_8000DB50",
+          "start": "0x8000D010",
+          "end": "0x8000D01C"
+        },
+        {
+          "symbol": "vfn_07__14Class_8000DB00",
+          "start": "0x8000D01C",
+          "end": "0x8000D024"
+        },
+        {
+          "symbol": "vfn_08__14Class_8000DB00",
+          "start": "0x8000D024",
+          "end": "0x8000D030"
+        },
+        {
+          "symbol": "vfn_07__14Class_8000DAB0",
+          "start": "0x8000D030",
+          "end": "0x8000D038"
+        },
+        {
+          "symbol": "vfn_08__14Class_8000DAB0",
+          "start": "0x8000D038",
+          "end": "0x8000D044"
+        },
+        {
+          "symbol": "vfn_07__14Class_8000DA60",
+          "start": "0x8000D044",
+          "end": "0x8000D04C"
+        },
+        {
+          "symbol": "vfn_08__14Class_8000DA60",
+          "start": "0x8000D04C",
+          "end": "0x8000D058"
+        },
+        {
+          "symbol": "vfn_07__14Class_8000DA10",
+          "start": "0x8000D058",
+          "end": "0x8000D060"
+        },
+        {
+          "symbol": "vfn_08__14Class_8000DA10",
+          "start": "0x8000D060",
+          "end": "0x8000D06C"
+        },
+        {
+          "symbol": "vfn_07__14Class_8000D9C0",
+          "start": "0x8000D06C",
+          "end": "0x8000D074"
+        },
+        {
+          "symbol": "vfn_08__14Class_8000D9C0",
+          "start": "0x8000D074",
+          "end": "0x8000D080"
+        },
+        {
+          "symbol": "vfn_04__14Class_8000D980iPi",
+          "start": "0x8000D080",
+          "end": "0x8000D088"
+        },
+        {
+          "symbol": "vfn_04__14Class_8000D940iPi",
+          "start": "0x8000D088",
+          "end": "0x8000D090"
+        },
+        {
+          "symbol": "vfn_04__14Class_8000D900iPi",
+          "start": "0x8000D090",
+          "end": "0x8000D098"
+        },
+        {
+          "symbol": "vfn_04__14Class_8000D8C0iPi",
+          "start": "0x8000D098",
+          "end": "0x8000D0A0"
+        },
+        {
+          "symbol": "fn_8000D0A0__Fv",
+          "start": "0x8000D0A0",
+          "end": "0x8000D0C8"
+        },
+        {
+          "symbol": "fn_8000D0C8__Fv",
+          "start": "0x8000D0C8",
+          "end": "0x8000D0F0"
+        },
+        {
+          "symbol": "fn_8000D0F0__Fv",
+          "start": "0x8000D0F0",
+          "end": "0x8000D118"
+        },
+        {
+          "symbol": "fn_8000D118__Fv",
+          "start": "0x8000D118",
+          "end": "0x8000D140"
+        },
+        {
+          "symbol": "fn_8000D140__Fv",
+          "start": "0x8000D140",
+          "end": "0x8000D168"
+        },
+        {
+          "symbol": "fn_8000D168__Fv",
+          "start": "0x8000D168",
+          "end": "0x8000D198"
+        },
+        {
+          "symbol": "fn_8000D198__Fv",
+          "start": "0x8000D198",
+          "end": "0x8000D1C8"
+        },
+        {
+          "symbol": "fn_8000D1C8__Fv",
+          "start": "0x8000D1C8",
+          "end": "0x8000D1F0"
+        },
+        {
+          "symbol": "fn_8000D1F0__Fv",
+          "start": "0x8000D1F0",
+          "end": "0x8000D220"
+        },
+        {
+          "symbol": "fn_8000D220__Fv",
+          "start": "0x8000D220",
+          "end": "0x8000D248"
+        },
+        {
+          "symbol": "fn_8000D248__Fv",
+          "start": "0x8000D248",
+          "end": "0x8000D278"
+        },
+        {
+          "symbol": "_GLOBAL_.I.lbl_8000D2D0",
+          "start": "0x8000D278",
+          "end": "0x8000D2A4"
+        },
+        {
+          "symbol": "_GLOBAL_.D.lbl_8000D2D0",
+          "start": "0x8000D2A4",
+          "end": "0x8000D2D0"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_17fn_8000D168__Fv.0.sInstance",
+          "start": "0x8036A1C4",
+          "end": "0x8036A1D4"
+        },
+        {
+          "symbol": "_17fn_8000D198__Fv.0.sInstance",
+          "start": "0x8036A1D4",
+          "end": "0x8036A1E0"
+        },
+        {
+          "symbol": "_17fn_8000D1F0__Fv.0.sInstance",
+          "start": "0x8036A1E0",
+          "end": "0x8036A1EC"
+        },
+        {
+          "symbol": "_17fn_8000D248__Fv.0.sInstance",
+          "start": "0x8036A1EC",
+          "end": "0x8036A1FC"
+        },
+        {
+          "symbol": "lbl_8036A1FC",
+          "start": "0x8036A1FC",
+          "end": "0x8036A228"
+        },
+        {
+          "symbol": "lbl_8036A228",
+          "start": "0x8036A228",
+          "end": "0x8036A254"
+        },
+        {
+          "symbol": "lbl_8036A254",
+          "start": "0x8036A254",
+          "end": "0x8036A280"
+        },
+        {
+          "symbol": "lbl_8036A280",
+          "start": "0x8036A280",
+          "end": "0x8036A2C8"
+        },
+        {
+          "symbol": "lbl_8036A2C8",
+          "start": "0x8036A2C8",
+          "end": "0x8036AD28"
+        },
+        {
+          "symbol": "_17fn_8000D0A0__Fv.0.sInstance",
+          "start": "0x803ECD60",
+          "end": "0x803ECD68"
+        },
+        {
+          "symbol": "_.tmp_0.105",
+          "start": "0x803ECD68",
+          "end": "0x803ECD6C"
+        },
+        {
+          "symbol": "_17fn_8000D0C8__Fv.0.sInstance",
+          "start": "0x803ECD6C",
+          "end": "0x803ECD74"
+        },
+        {
+          "symbol": "_.tmp_1.118",
+          "start": "0x803ECD74",
+          "end": "0x803ECD78"
+        },
+        {
+          "symbol": "_17fn_8000D0F0__Fv.0.sInstance",
+          "start": "0x803ECD78",
+          "end": "0x803ECD80"
+        },
+        {
+          "symbol": "_.tmp_2.125",
+          "start": "0x803ECD80",
+          "end": "0x803ECD84"
+        },
+        {
+          "symbol": "_17fn_8000D118__Fv.0.sInstance",
+          "start": "0x803ECD84",
+          "end": "0x803ECD8C"
+        },
+        {
+          "symbol": "_.tmp_3.132",
+          "start": "0x803ECD8C",
+          "end": "0x803ECD90"
+        },
+        {
+          "symbol": "_17fn_8000D140__Fv.0.sInstance",
+          "start": "0x803ECD90",
+          "end": "0x803ECD98"
+        },
+        {
+          "symbol": "_.tmp_4.139",
+          "start": "0x803ECD98",
+          "end": "0x803ECD9C"
+        },
+        {
+          "symbol": "_.tmp_5.146",
+          "start": "0x803ECD9C",
+          "end": "0x803ECDA0"
+        },
+        {
+          "symbol": "_.tmp_6.153",
+          "start": "0x803ECDA0",
+          "end": "0x803ECDA4"
+        },
+        {
+          "symbol": "_17fn_8000D1C8__Fv.0.sInstance",
+          "start": "0x803ECDA4",
+          "end": "0x803ECDAC"
+        },
+        {
+          "symbol": "_.tmp_7.160",
+          "start": "0x803ECDAC",
+          "end": "0x803ECDB0"
+        },
+        {
+          "symbol": "_.tmp_8.167",
+          "start": "0x803ECDB0",
+          "end": "0x803ECDB4"
+        },
+        {
+          "symbol": "_17fn_8000D220__Fv.0.sInstance",
+          "start": "0x803ECDB4",
+          "end": "0x803ECDBC"
+        },
+        {
+          "symbol": "_.tmp_9.174",
+          "start": "0x803ECDBC",
+          "end": "0x803ECDC0"
+        },
+        {
+          "symbol": "_.tmp_10.181",
+          "start": "0x803ECDC0",
+          "end": "0x803ECDC4"
+        },
+        {
+          "symbol": "lbl_803ECDD0",
+          "start": "0x803ECDD0",
+          "end": "0x803ECDD4"
+        },
+        {
+          "symbol": "lbl_803ECDD4",
+          "start": "0x803ECDD4",
+          "end": "0x803ECDD8"
+        },
+        {
+          "symbol": "lbl_803ECDD8",
+          "start": "0x803ECDD8",
+          "end": "0x803ECDDC"
+        },
+        {
+          "symbol": "lbl_803ECDDC",
+          "start": "0x803ECDDC",
+          "end": "0x803ECDE0"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8000DCD8.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row src/game/cu_8000DCD8.cpp, the function rows 0x8000DCD8-0x8000EE78, the data row 0x8000EE78-0x8000F870 and the data rows of its .sdata, .sbss and .bss objects.",
@@ -5028,12 +5764,12 @@
           "end": "0x8036ADB0"
         },
         {
-          "symbol": "_.tmp_0.45",
+          "symbol": "_.tmp_0.48",
           "start": "0x803ECDE0",
           "end": "0x803ECDE4"
         },
         {
-          "symbol": "_.tmp_1.100",
+          "symbol": "_.tmp_1.103",
           "start": "0x803ECDE4",
           "end": "0x803ECDE8"
         },
@@ -5043,7 +5779,7 @@
           "end": "0x803ECDF0"
         },
         {
-          "symbol": "_.tmp_2.110",
+          "symbol": "_.tmp_2.113",
           "start": "0x803ECDF0",
           "end": "0x803ECDF4"
         },
@@ -5053,7 +5789,7 @@
           "end": "0x803ECDFC"
         },
         {
-          "symbol": "_.tmp_3.120",
+          "symbol": "_.tmp_3.123",
           "start": "0x803ECDFC",
           "end": "0x803ECE00"
         },
@@ -5063,7 +5799,7 @@
           "end": "0x803ECE08"
         },
         {
-          "symbol": "_.tmp_4.127",
+          "symbol": "_.tmp_4.130",
           "start": "0x803ECE08",
           "end": "0x803ECE0C"
         },
@@ -5073,7 +5809,7 @@
           "end": "0x803ECE14"
         },
         {
-          "symbol": "_.tmp_5.134",
+          "symbol": "_.tmp_5.137",
           "start": "0x803ECE14",
           "end": "0x803ECE18"
         },
@@ -5083,7 +5819,7 @@
           "end": "0x803ECE20"
         },
         {
-          "symbol": "_.tmp_6.141",
+          "symbol": "_.tmp_6.144",
           "start": "0x803ECE20",
           "end": "0x803ECE24"
         },
@@ -5093,7 +5829,7 @@
           "end": "0x803ECE2C"
         },
         {
-          "symbol": "_.tmp_7.148",
+          "symbol": "_.tmp_7.151",
           "start": "0x803ECE2C",
           "end": "0x803ECE30"
         },
@@ -5147,6 +5883,79 @@
           "symbol": "fn_8018B6F0",
           "start": "0x8018B6F0",
           "end": "0x8018B8B0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8018C344.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv cu_8018C344 bounded unit, exact function and query-pool rows, declarations, source forms and compiler profile. All four bodies are comparisons; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018C344",
+          "end": "0x8018C688"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AA1FC",
+          "end": "0x802AA334"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8018C344",
+          "start": "0x8018C344",
+          "end": "0x8018C3EC"
+        },
+        {
+          "symbol": "fn_8018C3EC",
+          "start": "0x8018C3EC",
+          "end": "0x8018C438"
+        },
+        {
+          "symbol": "fn_8018C438",
+          "start": "0x8018C438",
+          "end": "0x8018C48C"
+        },
+        {
+          "symbol": "fn_8018C48C",
+          "start": "0x8018C48C",
+          "end": "0x8018C688"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80144224.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80143F40-0x801442FC (src/game/cu_80144224.cpp), its function rows and its .sdata and .sbss data rows. 0x80143F8C-0x801442FC and both data words are linked; the comparison measures only the draft function 0x80143F40.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80143F40",
+          "end": "0x801442FC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB220",
+          "end": "0x803EB224"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA0C",
+          "end": "0x803ECA10"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80143F40",
+          "start": "0x80143F40",
+          "end": "0x80143F8C"
         }
       ]
     }
