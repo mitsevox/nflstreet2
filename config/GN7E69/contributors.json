@@ -5978,6 +5978,23 @@
         "commit": "1729767d7a29bc94a2b7386079e365383669597f",
         "introduced_blob": "4bc457727b40643f416a10d8277aa5a936f151f1"
       }
+    },
+    {
+      "source": "src/game/cu_80067F18.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80067F18",
+        "0x80068030",
+        "0x800680A8"
+      ],
+      "provenance": {
+        "pull_request": 318,
+        "merged_via": 318,
+        "commit": "07d788ac932fbd4d55b6a5942d0b982d7222b5c4",
+        "introduced_blob": "2e19076173121cf636ff42bd3cec592f02139694"
+      }
     }
   ],
   "target": "GN7E69",
