@@ -28,7 +28,7 @@ static float lbl_803651E4[7];
 static unsigned char lbl_803ECBE0;
 
 extern "C" {
-void fn_801981D8(void)
+void fn_801981D8(void *p, int value)
 {
     Mtx44 mtx;
 
@@ -55,7 +55,7 @@ void fn_801981D8(void)
     lbl_803ECBE0 = fn_80236EC0(0);
 }
 
-void fn_8019831C(void)
+void fn_8019831C(void *p, int value)
 {
     Mtx44 mtx;
 
