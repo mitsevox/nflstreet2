@@ -13,7 +13,8 @@ def inputs(root, context):
     paths = set(sdk_map.analysis_inputs(root))
     paths.update(str(path.relative_to(root)) for path in (root / 'tools').rglob('*.py'))
     paths.update(('config/GN7E69/baseline.json', 'tools/compiler-tools.json'))
-    return {'files': {path: hashlib.sha256((root / path).read_bytes()).hexdigest()
+    return {'files': {path: (sdk_map.unit_input_digest(root) if path == 'config/GN7E69/units.json'
+                             else hashlib.sha256((root / path).read_bytes()).hexdigest())
                       for path in sorted(paths)},
             'context': context, 'host': platform.system() + '-' + platform.machine(),
             'python': list(sys.version_info[:2])}

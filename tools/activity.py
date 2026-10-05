@@ -81,13 +81,28 @@ def check_ancestor(root, commit, revision):
         raise ValueError('Activity provenance is outside this revision history')
 
 
+_HISTORICAL_BLOBS_CACHE = {}
+_SOURCE_BLOB_CACHE = {}
+_VERIFIED_COMMITS_CACHE = set()
+
+
+def clear_cache():
+    _HISTORICAL_BLOBS_CACHE.clear()
+    _SOURCE_BLOB_CACHE.clear()
+    _VERIFIED_COMMITS_CACHE.clear()
+
+
 def provenance_commit(root, commit, fetch_missing=False):
     if not SHA.fullmatch(commit):
         raise ValueError('Invalid source provenance commit')
+    key = (str(root), commit)
+    if key in _VERIFIED_COMMITS_CACHE:
+        return
     def present():
         return subprocess.run(['git','cat-file','-e',commit+'^{commit}'], cwd=root,
                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
     if present():
+        _VERIFIED_COMMITS_CACHE.add(key)
         return
     if fetch_missing:
         # Explicit host-side opt-in: retrieve only the pinned object from this checkout's origin.
@@ -95,23 +110,33 @@ def provenance_commit(root, commit, fetch_missing=False):
                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
     if not present():
         raise ValueError('Source provenance commit is unavailable; fetch the pinned commit from origin')
+    _VERIFIED_COMMITS_CACHE.add(key)
 
 
 def source_blob(root, commit, source):
+    key = (str(root), commit, source)
+    if key in _SOURCE_BLOB_CACHE:
+        return _SOURCE_BLOB_CACHE[key]
     result = subprocess.run(['git','rev-parse',commit+':'+source], cwd=root,
                             capture_output=True, text=True)
     if result.returncode:
         raise ValueError('Source provenance commit lacks the recorded source')
-    return result.stdout.strip()
+    blob = result.stdout.strip()
+    _SOURCE_BLOB_CACHE[key] = blob
+    return blob
 
 
-def historical_source_blob(root, revision, source, blob):
+def historical_source_blobs(root, revision, source):
     # The current revision alone is insufficient: prove an actual source-path tree in its history.
     if any(character in source for character in ('\r', '\n', '\0')):
         raise ValueError('Invalid attribution source path')
+    key = (str(root), revision, source)
+    if key in _HISTORICAL_BLOBS_CACHE:
+        return _HISTORICAL_BLOBS_CACHE[key]
     commits = subprocess.check_output(['git','rev-list',revision,'--',source], cwd=root, text=True).splitlines()
     if not commits:
-        return False
+        _HISTORICAL_BLOBS_CACHE[key] = set()
+        return set()
     # Query real historical trees together; missing paths remain missing evidence.
     queries = [commit + ':' + source for commit in commits]
     result = subprocess.run(['git', 'cat-file', '--batch-check=%(objectname)'], cwd=root,
@@ -122,7 +147,13 @@ def historical_source_blob(root, revision, source, blob):
             not SHA.fullmatch(row) and row != query + ' missing'
             for query, row in zip(queries, rows)):
         raise ValueError('Invalid Git historical source response')
-    return blob in rows
+    blobs = set(rows)
+    _HISTORICAL_BLOBS_CACHE[key] = blobs
+    return blobs
+
+
+def historical_source_blob(root, revision, source, blob):
+    return blob in historical_source_blobs(root, revision, source)
 
 
 def contributors(root, ledger, build, revision, fetch_missing=False, exact_inventory=None):
@@ -220,7 +251,6 @@ def squash_preflight(root, ledger, build, revision, base, exact_inventory=None):
 
 
 def export(root, site, source_report, previous=None, append=False, fetch_missing=False, squash_base=None):
-    import hashlib
     build = json.loads(source_report.read_text())
     if site.get('baseline') != 'verified' or site.get('target_sha1') != build.get('target_sha1'):
         raise ValueError('Activity target differs from the public progress build')
@@ -232,11 +262,18 @@ def export(root, site, source_report, previous=None, append=False, fetch_missing
             site['measures'][kind].get(field) != verified['measures'][kind].get(field)
             for kind in ('code','data') for field in ('linked','matched','fuzzy','total')):
         raise ValueError('Activity measurements differ from the verified source receipt')
+    return _export_verified(root, verified, source_report, previous, append, fetch_missing, squash_base)
+
+
+def _export_verified(root, site, source_report, previous=None, append=False, fetch_missing=False, squash_base=None):
+    """Internal pipeline stage; site must come directly from progress.report in this process."""
+    import hashlib
+    build = json.loads(source_report.read_text())
     def mapped_functions(item):
         if item.get('type') == 'function' and item.get('linked',0) > 0:
             return {(item['source'],item['function_address'],item['original_size'])}
         return set().union(*(mapped_functions(child) for child in item.get('children',[])))
-    mapped = set().union(*(mapped_functions(item) for item in verified['files']))
+    mapped = set().union(*(mapped_functions(item) for item in site['files']))
     compiled = {(u['source'],f['address'],f['size']) for u in build['units'] for f in u['functions']}
     if mapped != compiled:
         raise ValueError('Compiler function receipt differs from the verified public inventory')
@@ -252,7 +289,7 @@ def export(root, site, source_report, previous=None, append=False, fetch_missing
     history = merge_history(seed, previous, current)
     for row in history:
         check_ancestor(root, row['revision'], site['revision'])
-    exact = exact_functions(verified)
+    exact = exact_functions(site)
     ledger = json.loads((root/'config/GN7E69/contributors.json').read_text())
     credits = contributors(root, ledger, build, site['revision'], fetch_missing, exact)
     if squash_base:

@@ -3,6 +3,7 @@ from pathlib import Path
 import subprocess
 import sys
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 import decomp_report
@@ -44,6 +45,31 @@ class DecompReportTests(ProgressBase):
 
 
 class MeasuredDecompReportTests(ProgressBase):
+    def test_cli_stale_default_site_cannot_bypass_requested_inputs(self):
+        self.write_source()
+        stale = self.root / "build/site/progress.json"
+        stale.parent.mkdir(parents=True)
+        stale.write_text(json.dumps(decomp_report.progress.report(
+            self.binary, "b" * 40, self.report_path)))
+        binary = self.root / "main.dol"
+        binary.write_bytes(self.binary)
+        output = self.root / "report.json"
+        for mode in ("missing-target", "wrong-revision", "missing-receipt"):
+            argv = ["decomp_report.py", "--dol", str(binary), "--revision", "a" * 40,
+                    "--source-report", str(self.report_path), "--output", str(output)]
+            error = ValueError
+            if mode == "missing-target":
+                argv[2] = str(self.root / "missing.dol")
+                error = FileNotFoundError
+            elif mode == "wrong-revision":
+                argv[4] = "main"
+            else:
+                argv[6] = str(self.root / "missing-receipt.json")
+            output.write_text("stale")
+            with self.subTest(mode=mode), patch.object(sys, "argv", argv), self.assertRaises(error):
+                decomp_report.main()
+            self.assertFalse(output.exists())
+
     def test_verified_bytes_and_unmapped_remainder_are_preserved(self):
         # Reuse the measured-build fixture, including its source/dependency hashes.
         test_progress.SourceReportTests.write_source(self)

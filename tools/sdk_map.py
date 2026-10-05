@@ -11,11 +11,33 @@ BASE_INPUTS = ("tools/analyze.py", "tools/sdk_map.py", "tools/source_build.py",
                "tools/baseline-tools.json", "config/GN7E69/analysis.json")
 
 
+def unit_input_digest(root):
+    path = root / "config/GN7E69/units.json"
+    if not path.exists():
+        return hashlib.sha256(b"").hexdigest()
+    try:
+        data = json.loads(path.read_text())
+        if isinstance(data, dict) and "units" in data:
+            extents = sorted(
+                (unit.get("source"), extent.get("placement"), extent.get("start"), extent.get("end"))
+                for unit in data.get("units", [])
+                for extent in unit.get("sections", [])
+                if extent.get("placement") not in (".text", ".init")
+            )
+            return hashlib.sha256(json.dumps(extents).encode()).hexdigest()
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+    except (OSError, ValueError, TypeError):
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def analysis_inputs(root):
     paths = BASE_INPUTS
     if (root / MAP_PATH).exists():
-        paths += (MAP_PATH, "config/GN7E69/units.json")
-    return {path: hashlib.sha256((root / path).read_bytes()).hexdigest() for path in paths}
+        paths += (MAP_PATH,)
+    result = {path: hashlib.sha256((root / path).read_bytes()).hexdigest() for path in paths}
+    if (root / "config/GN7E69/units.json").exists():
+        result["config/GN7E69/units.json"] = unit_input_digest(root)
+    return result
 
 
 def address(value):

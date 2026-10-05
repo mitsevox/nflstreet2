@@ -14,6 +14,10 @@ import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 import activity
 import restore_history
+import progress
+import check_progress_maps
+import matching
+import test_export_progress
 
 
 class HistoryTests(unittest.TestCase):
@@ -53,6 +57,7 @@ class HistoryTests(unittest.TestCase):
 @unittest.skipUnless(shutil.which("git"), "Git provenance tests run on the CI host")
 class ContributorTests(unittest.TestCase):
     def setUp(self):
+        activity.clear_cache()
         self.directory=tempfile.TemporaryDirectory();self.addCleanup(self.directory.cleanup)
         self.root=Path(self.directory.name);(self.root/'src').mkdir()
         (self.root/'src/test.c').write_text('int function(void) { return 1; }')
@@ -228,6 +233,7 @@ class ContributorTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'verified source build'):self.credits()
 
 
+
 class RestoreTests(unittest.TestCase):
     def archive(self, document=None):
         tar_bytes=io.BytesIO()
@@ -307,36 +313,142 @@ class ExactInventoryTests(unittest.TestCase):
                 activity.exact_functions(site)
 
 
+class ReceiptRejectionTests(test_export_progress.ReceiptFixture):
+    def setUp(self):
+        super().setUp()
+        self.site = progress.report(self.binary, self.revision, self.report_path, self.analysis)
+
+    def export(self, site=None, **options):
+        return activity.export(self.root, self.site if site is None else site,
+                               self.report_path, **options)
+
+    def test_bound_receipt_supplies_real_credit(self):
+        result = self.export()
+        self.assertEqual(result['credited_functions'], 1)
+        self.assertEqual(result['contributors'][0]['login'], 'alice')
+
+    def test_stale_manifest_is_rejected(self):
+        self.source_report['manifest_sha256'] = '0'*64; self.save()
+        with self.assertRaisesRegex(ValueError, 'different unit manifest'):
+            self.export()
+
+    def test_changed_build_tools_are_rejected(self):
+        self.source_report['tools'] = {}; self.save()
+        with self.assertRaisesRegex(ValueError, 'different build tooling'):
+            self.export()
+
+    def test_missing_compiler_function_is_rejected(self):
+        self.source_report['units'][0]['functions'].pop(); self.save()
+        with self.assertRaisesRegex(ValueError, 'lacks compiler function coverage'):
+            self.export()
+
+    def test_omitting_one_of_two_compiler_functions_is_rejected(self):
+        rows = self.source_report['units'][0]['functions']
+        rows[0]['size'] = 4
+        rows.append({'symbol':'fn_80003108', 'address':'0x80003108', 'size':4})
+        self.save()
+        symbols = self.analysis/'symbols.txt'
+        symbols.write_text('fn_80003104 = .text:0x80003104; // type:function size:0x4\n'
+                           'fn_80003108 = .text:0x80003108; // type:function size:0x4\n'
+                           'fn_8000310C = .text:0x8000310C; // type:function size:0x4\n')
+        summary_path = self.analysis/'summary.json'
+        summary = json.loads(summary_path.read_text())
+        summary['candidate_counts']['function'] = 3
+        summary['symbols_sha256'] = progress.digest(symbols)
+        summary_path.write_text(json.dumps(summary))
+        evidence = self.root/'config/GN7E69/evidence.tsv'
+        evidence.write_text(evidence.read_text().replace(
+            'function\t0x80003104\t0x8000310C', 'function\t0x80003104\t0x80003108') +
+            'function\t0x80003108\t0x8000310C\tfn_80003108\ttarget\texact\texact\tfixture\n')
+        self.ledger['entries'][0]['functions'].append('0x80003108')
+        self.ledger_path.write_text(json.dumps(self.ledger))
+        self.site = progress.report(self.binary, self.revision, self.report_path, self.analysis)
+        self.assertEqual(self.export()['credited_functions'], 2)
+        # Leave a valid function in the code extent: this must reject missing coverage,
+        # rather than merely reject an empty inventory.
+        rows.pop(); self.save()
+        with self.assertRaisesRegex(ValueError, 'Compiler function receipt differs'):
+            self.export()
+
+    def test_stale_source_hash_is_rejected(self):
+        self.source_report['units'][0]['source_sha256'] = '0'*64; self.save()
+        with self.assertRaisesRegex(ValueError, 'stale for src/unit.c'):
+            self.export()
+
+    def test_forged_linked_exact_and_fuzzy_counts_are_rejected(self):
+        for mode in ('linked', 'exact', 'fuzzy'):
+            bad = copy.deepcopy(self.site)
+            if mode == 'exact':
+                bad['functions']['exact'] += 1
+            else:
+                bad['measures']['code'][mode] = bad['measures']['code'].get(mode, 0) + 1
+            with self.subTest(mode=mode), self.assertRaisesRegex(ValueError, 'measurements differ'):
+                self.export(bad)
+
+    def test_forged_numeric_fuzzy_count_is_rejected(self):
+        # An accepted comparison receipt gives the fixture a real numeric fuzzy measure.
+        (self.root/'tools/matching-tools.json').write_text(json.dumps(
+            {'objdiff':{'version':'fixture'}}))
+        for name in matching.INPUTS:
+            path = self.root/name
+            if not path.exists():
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text('fixture '+name)
+        target_path = self.root/'config/GN7E69/baseline.json'
+        target = json.loads(target_path.read_text())
+        target['sections'] = {'.init':'0x80003100', '.data':'0x80004100', '.bss':'0x80005000'}
+        target_path.write_text(json.dumps(target))
+        self.source_report['tools']['config/GN7E69/baseline.json'] = progress.digest(target_path)
+        self.save()
+        with patch.object(matching, 'ROOT', self.root):
+            payload = {'schema':1, 'target_sha1':self.target, 'inputs':matching.bindings(),
+                'objdiff':'fixture', 'sources':{'src/unit.c':{
+                    'sha256':self.source_report['units'][0]['source_sha256'],
+                    'dependencies':self.source_report['units'][0]['dependencies']}},
+                'build_receipt':{'path':'build/source/report.json',
+                                 'sha256':progress.digest(self.report_path)},
+                'entries':[{'source':'src/unit.c', 'type':'function', 'kind':'code',
+                            'start':'0x80003104', 'end':'0x8000310C', 'matched':8, 'fuzzy':8}],
+                'candidates':[]}
+            comparison = self.root/'build/matching/report.json'
+            comparison.parent.mkdir(parents=True, exist_ok=True)
+            comparison.write_text(json.dumps(payload))
+            real_report = progress.report
+            def measured_report(binary, revision, source_report, analysis_dir, comparison_report=None):
+                # Supply the optional accepted measurement; do not substitute a result.
+                return real_report(binary, revision, source_report, analysis_dir, comparison)
+            self.site = measured_report(self.binary, self.revision, self.report_path, self.analysis)
+            self.assertEqual(self.site['measures']['code']['fuzzy'], 8)
+            with patch.object(progress, 'report', side_effect=measured_report):
+                self.assertEqual(self.export()['credited_functions'], 1)
+                bad = copy.deepcopy(self.site); bad['measures']['code']['fuzzy'] += 1
+                with self.assertRaisesRegex(ValueError, 'measurements differ'):
+                    self.export(bad)
+
+    def test_foreign_revision_cannot_append_history(self):
+        bad = copy.deepcopy(self.site); bad['revision'] = '0'*40
+        previous = json.loads((self.root/'config/GN7E69/history.json').read_text())
+        with self.assertRaisesRegex(ValueError, 'outside this revision history'):
+            self.export(bad, previous=previous, append=True)
+
+
 class LiveReceiptTests(unittest.TestCase):
-    def test_activity_rejects_stale_receipts_and_mismatched_linked_counts(self):
-        root=activity.ROOT;report=root/'build/source/report.json';site_path=root/'build/site/progress.json'
+    def test_real_build_reconciles_maps_and_exact_function_credit(self):
+        root = activity.ROOT
+        report = root/'build/source/report.json'
+        site_path = root/'build/site/progress.json'
         if not report.exists() or not site_path.exists():
             self.skipTest('Integration export step supplies the verified build and public map')
-        site=json.loads(site_path.read_text());build=json.loads(report.read_text())
-        activity.export(root,site,report)
-        mutations=[]
-        stale=copy.deepcopy(build);stale['manifest_sha256']='0'*64;mutations.append(stale)
-        stale=copy.deepcopy(build);stale['tools']={};mutations.append(stale)
-        stale=copy.deepcopy(build);stale['units'][0]['functions'].pop();mutations.append(stale)
-        stale=copy.deepcopy(build);stale['units'][0]['source_sha256']='0'*64;mutations.append(stale)
-        with tempfile.TemporaryDirectory() as directory:
-            path=Path(directory)/'report.json';(path.parent/'main.dol').symlink_to(report.parent/'main.dol')
-            for stale in mutations:
-                path.write_text(json.dumps(stale))
-                with self.subTest(stale=stale.keys()),self.assertRaises(ValueError):
-                    activity.export(root,site,path)
-        bad=copy.deepcopy(site);bad['measures']['code']['linked']+=1
-        with self.assertRaisesRegex(ValueError,'measurements differ'):
-            activity.export(root,bad,report)
-        bad=copy.deepcopy(site);bad['functions']['exact']+=1
-        with self.assertRaisesRegex(ValueError,'measurements differ'):
-            activity.export(root,bad,report)
-        bad=copy.deepcopy(site);bad['measures']['code']['fuzzy']+=1
-        with self.assertRaisesRegex(ValueError,'measurements differ'):
-            activity.export(root,bad,report)
-        branch_site=copy.deepcopy(site);branch_site['revision']='0'*40
-        with self.assertRaises(ValueError):
-            activity.export(root,branch_site,report,previous=json.loads((root/'config/GN7E69/history.json').read_text()),append=True)
+        site = json.loads(site_path.read_text())
+        # Validate the actual receipts and inventory once; corruption cases use bound fixtures.
+        result = activity.export(root, site, report)
+        published = json.loads((site_path.parent/'activity.json').read_text())
+        decomp = json.loads((root/'build/GN7E69/report.json').read_text())
+        check_progress_maps.verify(root, site, decomp, json.loads(report.read_text())['units'], site)
+        self.assertEqual(result['revision'], site['revision'])
+        self.assertEqual(result['credited_functions'], site['functions']['exact'])
+        self.assertEqual(result['contributors'], published['contributors'])
+        self.assertEqual(result['credited_functions'], published['credited_functions'])
 
 
 if __name__=='__main__':unittest.main()

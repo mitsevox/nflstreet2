@@ -12,7 +12,7 @@ import sdk_map
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def verify(root, site, decomp, source_units, comparison_site=None):
+def verify(root, site, decomp, source_units, comparison_site=None, *, authenticated_comparisons=False):
     if comparison_site is not None:
         for key in ("sections", "files", "measures", "functions", "comparison"):
             if site.get(key) != comparison_site.get(key):
@@ -41,7 +41,7 @@ def verify(root, site, decomp, source_units, comparison_site=None):
                 (e["start"], e["end"]) for e in item.get("mapped_extents", []))
         if item.get('scope') != 'candidate-ranges':
             continue
-        if item.get('source') or item['linked'] or (comparison_site is None and item['matched']):
+        if item.get('source') or item['linked'] or (comparison_site is None and not authenticated_comparisons and item['matched']):
             raise ValueError('Candidate mapping received source credit')
         actual[item['name']] = actual.get(item['name'], 0) + item['size']
     if actual != expected or actual_extents != expected_extents:
@@ -56,7 +56,7 @@ def verify(root, site, decomp, source_units, comparison_site=None):
         m = unit['measures']
         if sum(int(m['total_' + k]) for k in ('code', 'data')) != size \
                 or any(int(m[f'{field}_{k}']) for k in ('code', 'data')
-                       for field in (('matched', 'complete') if comparison_site is None else ('complete',))) \
+                       for field in (('matched', 'complete') if comparison_site is None and not authenticated_comparisons else ('complete',))) \
                 or not unit['metadata'].get('auto_generated') \
                 or unit['metadata'].get('source_path'):
             raise ValueError('decomp.dev candidate coverage or source credit differs')
