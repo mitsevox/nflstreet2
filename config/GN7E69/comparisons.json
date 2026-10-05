@@ -5915,6 +5915,37 @@
           "end": "0x80020A34"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80003C94.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv bounded provisional/open unit row, observed pointer word, whole-function extents, neutral labels and target-supported declaration/source-form rows. Both bodies and storage are unlinked comparisons.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80003C94",
+          "end": "0x80003CF0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB8D8",
+          "end": "0x803EB8DC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80003C94",
+          "start": "0x80003C94",
+          "end": "0x80003CC4"
+        },
+        {
+          "symbol": "fn_80003CC4",
+          "start": "0x80003CC4",
+          "end": "0x80003CF0"
+        }
+      ]
     }
   ]
 }

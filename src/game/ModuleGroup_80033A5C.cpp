@@ -1,4 +1,5 @@
 #include "game/FELoop.h"
+#include "game/cu_801CF5BC.h"
 #include "game/InGame.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801FCE10.h"
@@ -27,7 +28,6 @@ void fn_8018A40C(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
-int fn_801CF7AC(void);
 void fn_801F2798(const char *pText);
 int fn_801F2C54(const char *pName, int unknown);
 int fn_801F2CD4(const char *pName);
