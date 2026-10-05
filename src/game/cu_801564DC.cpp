@@ -923,13 +923,13 @@ void fn_80156F30(void)
 
 float fn_80157000(void)
 {
-    float time = fn_80178A2C();
-    float elapsed = fn_800885E8(fn_801568F0(), fn_801568E8());
+    float base = fn_80178A2C();
+    float offset = fn_800885E8(fn_801568F0(), fn_801568E8());
 
-    if (elapsed >= time + time) {
-        elapsed = time + time;
+    if (offset >= base + base) {
+        offset = base + base;
     }
-    return time - elapsed;
+    return base - offset;
 }
 
 }
@@ -1223,8 +1223,8 @@ void Class_802A3958::vfn_04(float dt)
 
     if (step == 3) {
         Class_80297AB8::vfn_04(dt);
-        unsigned char busy = fn_80156D14();
-        if (busy == 0) {
+        unsigned char done = fn_80156D14();
+        if (done == 0) {
             unsigned char button = fn_80156960();
             pStep = fn_801568F8()->vfn_07();
             unsigned int prompts = pStep->mPrompts;
@@ -1232,7 +1232,7 @@ void Class_802A3958::vfn_04(float dt)
                 if (button != fn_801569B4()) {
                     fn_80156E9C(pStep->mPrompts, 0, 1);
                     if (++lbl_803EB31C > 2) {
-                        lbl_803EB31C = busy;
+                        lbl_803EB31C = done;
                     }
                     switch (lbl_803EB31C) {
                     case 0:
@@ -1266,8 +1266,8 @@ void Class_802A3958::vfn_04(float dt)
         }
     } else if (step == 4) {
         Class_80297AB8::vfn_04(dt);
-        unsigned char busy = fn_80156D14();
-        if (busy != 0) {
+        unsigned char done = fn_80156D14();
+        if (done != 0) {
             return;
         }
         unsigned char button = fn_80156960();
@@ -1277,7 +1277,7 @@ void Class_802A3958::vfn_04(float dt)
             if (button != fn_801569B4()) {
                 fn_80156E9C(pStep->mPrompts, 0, 0);
                 if (++lbl_803EB31C > 1) {
-                    lbl_803EB31C = busy;
+                    lbl_803EB31C = done;
                 }
                 switch (lbl_803EB31C) {
                 case 0:
@@ -1414,8 +1414,8 @@ void Class_802A3820::vfn_04(float dt)
 
     if (fn_801568E8() == 6) {
         Class_80297AB8::vfn_04(dt);
-        unsigned char busy = fn_80156D14();
-        if (busy != 0) {
+        unsigned char done = fn_80156D14();
+        if (done != 0) {
             return;
         }
         unsigned char button = fn_80156960();
@@ -1425,7 +1425,7 @@ void Class_802A3820::vfn_04(float dt)
             if (button != fn_801569B4()) {
                 fn_80156E9C(pStep->mPrompts, 0, 1);
                 if (++lbl_803EB320 > 2) {
-                    lbl_803EB320 = busy;
+                    lbl_803EB320 = done;
                 }
                 switch (lbl_803EB320) {
                 case 0:
@@ -1452,8 +1452,8 @@ void Class_802A3820::vfn_04(float dt)
         }
     } else if (fn_801568E8() == 7) {
         Class_80297AB8::vfn_04(dt);
-        unsigned char busy = fn_80156D14();
-        if (busy == 0) {
+        unsigned char done = fn_80156D14();
+        if (done == 0) {
             unsigned char button = fn_80156960();
             pStep = fn_801568F8()->vfn_07();
             unsigned int prompts = pStep->mPrompts;
@@ -1461,7 +1461,7 @@ void Class_802A3820::vfn_04(float dt)
                 if (button != fn_801569B4()) {
                     fn_80156E9C(pStep->mPrompts, 0, 0);
                     if (++lbl_803EB320 > 2) {
-                        lbl_803EB320 = busy;
+                        lbl_803EB320 = done;
                     }
                     switch (lbl_803EB320) {
                     case 0:
@@ -1745,9 +1745,9 @@ void fn_80158AA8(void)
 
 void fn_80158BB4(unsigned int mask)
 {
-    unsigned char lesson = fn_80156960();
-    if (lesson != fn_801569B4()) {
-        fn_80156E9C(mask, lesson, 1);
+    unsigned char state = fn_80156960();
+    if (state != fn_801569B4()) {
+        fn_80156E9C(mask, state, 1);
         fn_801569BC();
     }
 }
