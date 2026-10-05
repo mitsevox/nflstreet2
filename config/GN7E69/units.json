@@ -5762,8 +5762,14 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80144224",
+          "start": "0x80143F8C",
           "end": "0x801442FC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB220",
+          "end": "0x803EB224"
         },
         {
           "section": ".sbss",
@@ -6353,6 +6359,131 @@
           "placement": ".data3",
           "start": "0x802A98B4",
           "end": "0x802A9A50"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80147AE4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80147AE4-0x80147E94 (src/game/cu_80147AE4.cpp) and its data, type, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80147AE4",
+          "end": "0x80147E94"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0540",
+          "end": "0x802A0558"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB28C",
+          "end": "0x803EB294"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA1C",
+          "end": "0x803ECA24"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80163D9C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80163D9C-0x80163E94 (src/game/cu_80163D9C.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80163D9C",
+          "end": "0x80163E94"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB3A8",
+          "end": "0x803EB3AC"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECAF0",
+          "end": "0x803ECAF4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80190208.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80190208-0x80190A7C and its data, declaration and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80190208",
+          "end": "0x80190A7C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AB5A0",
+          "end": "0x802AB840"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB6D8",
+          "end": "0x803EB6DC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801981D8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801981D8-0x80198378 (src/game/cu_801981D8.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801981D8",
+          "end": "0x80198378"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803651E4",
+          "end": "0x80365200"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECBE0",
+          "end": "0x803ECBE4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80067F18.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80067F18-0x80068154 (src/game/cu_80067F18.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80067F18",
+          "end": "0x80068154"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA678",
+          "end": "0x803EA67C"
         }
       ]
     },
