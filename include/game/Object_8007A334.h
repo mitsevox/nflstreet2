@@ -86,6 +86,16 @@ struct Object_80023BBC {
     int mUnknown32;
 };
 
+/* Query passed to fn_80083E40; fn_80083E40 builds the same default when
+   none is passed. */
+struct Query_80083E40 {
+    Query_80083E40() : mUnknown0(1), mUnknown4(0), mUnknown8(0) {}
+
+    int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+};
+
 extern "C" {
 void fn_8007A308(Object_8007A334 *pObject, int a, int b);
 void fn_8007A334(Object_8007A334 *pObject, int a, int b, void *c, void *d, int e);

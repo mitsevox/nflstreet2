@@ -4,17 +4,6 @@
 #include "game/fn_8021D7B8.h"
 #include "game/cu_80181330.h"
 
-/* Element of lbl_8000F5EC, passed to fn_80183740. */
-struct Record_8000F5EC {
-    float mUnknown0;
-    float mUnknown4;
-    float mUnknown8;
-    float mUnknown12;
-    float mUnknown16;
-    int mUnknown20;
-    unsigned char mUnknown24;
-};
-
 /* lbl_8036AD78: fourteen words copied from the record filled by fn_800817CC. */
 struct Record_8036AD78 {
     int mUnknown0[14];
@@ -252,14 +241,13 @@ unsigned int fn_800886BC(int a);
 void fn_800888D0(int a, int b);
 void fn_8015D180(int a, int b);
 void fn_8015D38C(int a);
-Object_8007A334 *fn_80182DC8(void);
+Object_8008044C *fn_80182DC8(void);
 void fn_80182DD4(const char *pText);
 void fn_80182E04(const char *pText);
 void fn_80182E34(char *pText);
 void fn_801835C0(int a);
 void fn_801835C8(void);
 void fn_80183704(void);
-void fn_80183740(const Record_8000F5EC *pRecord);
 int fn_8022F4BC(void);
 }
 
@@ -267,7 +255,7 @@ static const int lbl_8000F590[] = {
     10, 0, 10, 8, 1, 11, 11, 2, 3, 4, 5, 6, 9, 10, 14, 14, 12, 13, 14, 14, 14, 14, 14,
 };
 
-static const Record_8000F5EC lbl_8000F5EC[] = {
+static const Layout_802EA9E0 lbl_8000F5EC[] = {
     { 0.0f, 255.0f, 0.0f, 348.0f, 0.9f, 15, 0 },
     { 23.0f, 975.0f, 0.0f, 338.0f, 3.1f, 15, 0 },
     { 0.0f, 255.0f, 0.0f, 348.0f, 0.9f, 15, 0 },
@@ -400,10 +388,10 @@ void Class_8000F540::vfn_01(int a, int *pCount, int *pOut)
         fn_8000EC44()->mUnknown8 = 0;
         fn_801835C8();
         fn_8007CC50(&fn_8000EC44()->mUnknown16);
-        fn_8007A444(fn_80182DC8());
-        value = fn_800808F8((Object_8008044C *)fn_80182DC8());
+        fn_8007A444((Object_8007A334 *)fn_80182DC8());
+        value = fn_800808F8(fn_80182DC8());
         fn_8000EC44()->mUnknown12 = value;
-        fn_800809C4((Object_8008044C *)fn_80182DC8(), value, 0);
+        fn_800809C4(fn_80182DC8(), value, 0);
         fn_80022680(fn_80022D78(), value, 1);
         fn_80022680(fn_80022D80(), value, 1);
         fn_8015D38C(0);
@@ -739,7 +727,7 @@ static void fn_8000E784(Record_8036AD78 *pOut)
 {
     Info_80307908 record;
 
-    fn_800817CC((Object_8008044C *)fn_80182DC8(), &record);
+    fn_800817CC(fn_80182DC8(), &record);
     pOut->mUnknown0[0] = record.mValues[0];
     pOut->mUnknown0[1] = record.mValues[1];
     pOut->mUnknown0[2] = record.mValues[2];
@@ -754,7 +742,7 @@ static void fn_8000E784(Record_8036AD78 *pOut)
     pOut->mUnknown0[11] = record.mValues[11];
     pOut->mUnknown0[12] = record.mValues[12];
     pOut->mUnknown0[13] = record.mValues[13];
-    lbl_803ECE30 = fn_80080E98((Object_8008044C *)fn_80182DC8());
+    lbl_803ECE30 = fn_80080E98(fn_80182DC8());
 }
 
 static void fn_8000E834(Record_8036AD78 *pRecord)
