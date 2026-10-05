@@ -16,6 +16,7 @@ import activity
 import restore_history
 import progress
 import check_progress_maps
+import matching
 import test_export_progress
 
 
@@ -383,6 +384,46 @@ class ReceiptRejectionTests(test_export_progress.ReceiptFixture):
                 bad['measures']['code'][mode] = bad['measures']['code'].get(mode, 0) + 1
             with self.subTest(mode=mode), self.assertRaisesRegex(ValueError, 'measurements differ'):
                 self.export(bad)
+
+    def test_forged_numeric_fuzzy_count_is_rejected(self):
+        # An accepted comparison receipt gives the fixture a real numeric fuzzy measure.
+        (self.root/'tools/matching-tools.json').write_text(json.dumps(
+            {'objdiff':{'version':'fixture'}}))
+        for name in matching.INPUTS:
+            path = self.root/name
+            if not path.exists():
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text('fixture '+name)
+        target_path = self.root/'config/GN7E69/baseline.json'
+        target = json.loads(target_path.read_text())
+        target['sections'] = {'.init':'0x80003100', '.data':'0x80004100', '.bss':'0x80005000'}
+        target_path.write_text(json.dumps(target))
+        self.source_report['tools']['config/GN7E69/baseline.json'] = progress.digest(target_path)
+        self.save()
+        with patch.object(matching, 'ROOT', self.root):
+            payload = {'schema':1, 'target_sha1':self.target, 'inputs':matching.bindings(),
+                'objdiff':'fixture', 'sources':{'src/unit.c':{
+                    'sha256':self.source_report['units'][0]['source_sha256'],
+                    'dependencies':self.source_report['units'][0]['dependencies']}},
+                'build_receipt':{'path':'build/source/report.json',
+                                 'sha256':progress.digest(self.report_path)},
+                'entries':[{'source':'src/unit.c', 'type':'function', 'kind':'code',
+                            'start':'0x80003104', 'end':'0x8000310C', 'matched':8, 'fuzzy':8}],
+                'candidates':[]}
+            comparison = self.root/'build/matching/report.json'
+            comparison.parent.mkdir(parents=True, exist_ok=True)
+            comparison.write_text(json.dumps(payload))
+            real_report = progress.report
+            def measured_report(binary, revision, source_report, analysis_dir, comparison_report=None):
+                # Supply the optional accepted measurement; do not substitute a result.
+                return real_report(binary, revision, source_report, analysis_dir, comparison)
+            self.site = measured_report(self.binary, self.revision, self.report_path, self.analysis)
+            self.assertEqual(self.site['measures']['code']['fuzzy'], 8)
+            with patch.object(progress, 'report', side_effect=measured_report):
+                self.assertEqual(self.export()['credited_functions'], 1)
+                bad = copy.deepcopy(self.site); bad['measures']['code']['fuzzy'] += 1
+                with self.assertRaisesRegex(ValueError, 'measurements differ'):
+                    self.export(bad)
 
     def test_foreign_revision_cannot_append_history(self):
         bad = copy.deepcopy(self.site); bad['revision'] = '0'*40

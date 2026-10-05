@@ -36,7 +36,7 @@ class ReceiptFixture(ProgressBase):
         self.dol = self.report_path.parent/'main.dol'
         self.dol.write_bytes(self.binary)
         config = self.root/'config/GN7E69'
-        (config/'comparisons.json').write_text(json.dumps({'schema':1, 'units':[]}))
+        (config/'comparisons.json').write_text(json.dumps({'schema':2, 'units':[]}))
         (config/'history.json').write_text(json.dumps(
             {'schema':1, 'target':'GN7E69', 'target_sha1':self.target, 'snapshots':[]}))
         self.ledger = {'schema':1, 'target':'GN7E69', 'contributors':{'alice':{'id':1}},
