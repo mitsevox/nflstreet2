@@ -431,7 +431,7 @@ int fn_80029FD8(int type, int index)
     return changed;
 }
 
-int fn_8002A130(void)
+int fn_8002A130(int a, int b)
 {
     return 0;
 }

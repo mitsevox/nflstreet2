@@ -1775,9 +1775,6 @@ static inline Class_8000D940 *fn_8000D248()
     return &sInstance;
 }
 
-/* Accessor that nothing calls, recovered from the Xbox prototype (NFLBig.xbe
-   0x15AD60). The compiler emits no code for it, but its static and guard
-   word still take their place in .sbss. */
 static inline Class_8000DBF0 *GetClass_8000DBF0()
 {
     static Class_8000DBF0 sInstance;
