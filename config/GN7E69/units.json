@@ -688,25 +688,25 @@
       "address": "0x80177410",
       "evidence": "evidence.tsv external row for 0x80177410 (vfn_01__14Class_802A56E8)."
     },
-    "vfn_03__14Class_802A56E8": {
+    "vfn_03__14Class_802A56E8i": {
       "address": "0x801774C0",
-      "evidence": "evidence.tsv external row for 0x801774C0 (vfn_03__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x801774C0 (vfn_03__14Class_802A56E8i)."
     },
-    "vfn_04__14Class_802A56E8": {
+    "vfn_04__14Class_802A56E8i": {
       "address": "0x8017755C",
-      "evidence": "evidence.tsv external row for 0x8017755C (vfn_04__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x8017755C (vfn_04__14Class_802A56E8i)."
     },
-    "vfn_05__14Class_802A56E8": {
+    "vfn_05__14Class_802A56E8i": {
       "address": "0x80177600",
-      "evidence": "evidence.tsv external row for 0x80177600 (vfn_05__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x80177600 (vfn_05__14Class_802A56E8i)."
     },
     "vfn_06__14Class_802A56E8": {
       "address": "0x80177638",
       "evidence": "evidence.tsv external row for 0x80177638 (vfn_06__14Class_802A56E8)."
     },
-    "vfn_07__14Class_802A56E8": {
+    "vfn_07__14Class_802A56E8i": {
       "address": "0x80177640",
-      "evidence": "evidence.tsv external row for 0x80177640 (vfn_07__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x80177640 (vfn_07__14Class_802A56E8i)."
     },
     "vfn_09__14Class_802A56E8": {
       "address": "0x80177674",
@@ -724,21 +724,21 @@
       "address": "0x8017CAFC",
       "evidence": "evidence.tsv external row for 0x8017CAFC (vfn_16__14Class_802A56E8)."
     },
-    "vfn_17__14Class_802A56E8": {
+    "vfn_17__14Class_802A56E8i": {
       "address": "0x8017CB04",
-      "evidence": "evidence.tsv external row for 0x8017CB04 (vfn_17__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x8017CB04 (vfn_17__14Class_802A56E8i)."
     },
-    "vfn_18__14Class_802A56E8": {
+    "vfn_18__14Class_802A56E8i": {
       "address": "0x8017CB0C",
-      "evidence": "evidence.tsv external row for 0x8017CB0C (vfn_18__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x8017CB0C (vfn_18__14Class_802A56E8i)."
     },
     "vfn_19__14Class_802A56E8": {
       "address": "0x801777FC",
       "evidence": "evidence.tsv external row for 0x801777FC (vfn_19__14Class_802A56E8)."
     },
-    "vfn_20__14Class_802A56E8": {
+    "vfn_20__14Class_802A56E8i": {
       "address": "0x8017894C",
-      "evidence": "evidence.tsv external row for 0x8017894C (vfn_20__14Class_802A56E8)."
+      "evidence": "evidence.tsv external row for 0x8017894C (vfn_20__14Class_802A56E8i)."
     },
     "vfn_21__14Class_802A56E8": {
       "address": "0x8017766C",
