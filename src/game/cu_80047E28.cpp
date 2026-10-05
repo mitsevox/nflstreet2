@@ -1,10 +1,12 @@
 #include "engine/cu_80227F14.h"
+#include "game/Block_80307980.h"
 #include "game/FELoop.h"
 #include "game/Item_800476DC.h"
 #include "game/Object_8007A334.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_8008044C.h"
 #include "game/Row_8007BC34.h"
+#include "game/cu_80047E28.h"
 #include "game/fn_800624B0.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801C1F94.h"
@@ -30,11 +32,6 @@ struct Rgb_800840A4 {
 struct Pair_802CF382 {
     unsigned short mKey;
     unsigned short mValue;
-};
-
-/* 40-byte block filled by fn_80082138 and read by fn_80046898. */
-struct Block_80307980 {
-    int mUnknown0[10];
 };
 
 /* Element of lbl_803078E8 (14 records of 0xC0 bytes). */
@@ -94,7 +91,6 @@ int fn_8001E4F4(void);
 int fn_8003DEB4(void);
 void fn_80042610(Object_8003DEC4 *pPlayer, int a, void *b, int c, int d);
 void fn_800428A8(Object_8003DEC4 *pPlayer);
-int fn_80046898(Block_80307980 *pBlock);
 void fn_800478DC(unsigned char *pColors);
 void fn_8004795C(unsigned char *pColors, unsigned char flag);
 void fn_800479B0(Row_8007BC34 *pRow, Record_803078E8 *pRecord, int *pIds, int *pPalettes, int slot);
@@ -122,7 +118,6 @@ void fn_80081D24(void);
 int fn_80081D4C(Object_8008044C *pObject, unsigned char *p);
 int fn_80081E3C(Object_8008044C *pObject);
 int fn_80081FD4(Object_8008044C *pObject, int a);
-void fn_80082138(Object_8008044C *pObject, Block_80307980 *pBlock);
 int fn_80082280(Object_8008044C *pObject);
 int fn_800822D4(Object_8008044C *pObject);
 void fn_800840A4(Object_8007A334 *pObject, void *pBuffer);
@@ -147,8 +142,6 @@ int fn_801DCF0C(int a, int b, int c, void (*pA)(Object_8003DEC4 *, Init_8004A040
 void fn_801DCF8C(int a);
 void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Object_8003DEC4 *, int));
 }
-
-extern "C" void fn_80049F10(int index, Block_80307980 *pBlock);
 
 static Object_8008044C lbl_80307720;
 static Object_8007A334 lbl_8030774C;
@@ -1008,22 +1001,22 @@ extern "C" void fn_80049B18(int index, unsigned char value)
     lbl_803078E8[index].mInfo.mUnknown0A = value;
 }
 
-extern "C" void fn_80049B30(int index, unsigned char value)
+extern "C" void fn_80049B30(int index, int value)
 {
     lbl_803078E8[index].mUnknown72 = value;
 }
 
-extern "C" void fn_80049B48(int index, unsigned char value)
+extern "C" void fn_80049B48(int index, int value)
 {
     lbl_803078E8[index].mUnknown73 = value;
 }
 
-extern "C" void fn_80049B60(int index, unsigned char value)
+extern "C" void fn_80049B60(int index, int value)
 {
     lbl_803078E8[index].mUnknown74 = value;
 }
 
-extern "C" void fn_80049B78(int index, unsigned short value)
+extern "C" void fn_80049B78(int index, int value)
 {
     lbl_803078E8[index].mUnknown6C = value;
 }
@@ -1033,7 +1026,7 @@ extern "C" void fn_80049B90(int index, int value)
     lbl_803078E8[index].mUnknown6E = value;
 }
 
-extern "C" void fn_80049BA8(int index, unsigned char value)
+extern "C" void fn_80049BA8(int index, int value)
 {
     lbl_803078E8[index].mUnknown78 = value;
 }
@@ -1043,12 +1036,12 @@ extern "C" unsigned char fn_80049BC0(int index)
     return lbl_803078E8[index].mUnknown78;
 }
 
-extern "C" void fn_80049BD8(int index, unsigned char value)
+extern "C" void fn_80049BD8(int index, int value)
 {
     lbl_803078E8[index].mInfo.mUnknown03 = value;
 }
 
-extern "C" void fn_80049BF0(int index, unsigned char value)
+extern "C" void fn_80049BF0(int index, int value)
 {
     lbl_803078E8[index].mUnknown77 = value;
 }
@@ -1058,7 +1051,7 @@ extern "C" unsigned short fn_80049C08(int index)
     return lbl_803078E8[index].mUnknown6C;
 }
 
-extern "C" void fn_80049C20(int index, unsigned char value)
+extern "C" void fn_80049C20(int index, int value)
 {
     lbl_803078E8[index].mUnknown76 = value;
 }
@@ -1102,12 +1095,12 @@ extern "C" unsigned char fn_80049D1C(int index)
     return lbl_803078E8[index].mUnknown95;
 }
 
-extern "C" void fn_80049D34(int index, unsigned char value)
+extern "C" void fn_80049D34(int index, unsigned int value)
 {
     lbl_803078E8[index].mUnknown7A[18] = value + 0x80;
 }
 
-extern "C" void fn_80049D50(int index, unsigned char value)
+extern "C" void fn_80049D50(int index, unsigned int value)
 {
     lbl_803078E8[index].mUnknown7A[19] = value + 0x80;
 }
