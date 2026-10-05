@@ -6,7 +6,7 @@
 extern "C" {
 int fn_8001E2C0(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_8001ED98(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
-int fn_8001FE10(unsigned int id, void *pArgs, int unused, int *pResult);
+int fn_8001FE10(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
 int fn_80020170(unsigned int id, void *pArgs, int unused, int *pResult);
 int fn_80020ADC(unsigned int id, Block_80063910 *pBlock, int unused, int *pResult);
 int fn_80063578(unsigned int id, void *pArgs, int unused, int *pResult);
