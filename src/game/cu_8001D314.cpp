@@ -50,11 +50,11 @@ void fn_8018D8EC(int a, int b);
 void fn_8018DC18(int a, int b);
 void fn_8018DD4C(int a, int b, int c);
 int fn_8018E8F4(int a);
-int fn_8018E920(int a, int b);
+void fn_8018E920(int index, int value);
 int fn_8018E94C(int a);
-int fn_8018E978(int a, int b);
+void fn_8018E978(int index, int value);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-void fn_801F967C(int handle, int table);
+int fn_801F967C(int handle, int table);
 int fn_801F9980(int handle, int *pTable);
 int fn_8021E2B4(void *pObject, int a, int b);
 int fn_8021E72C(void *pObject, int a, int b);
@@ -171,8 +171,8 @@ void fn_8001D5A8(int db)
     int n;
     int handle;
     int i;
-    int teams;
-    int roster;
+    int rows;
+    int value;
 
     lbl_803ECE78 = fn_8018BDFC(db, 1, ids, &n);
     fn_801FCE10(&result, "use 'TATS' insert into 'MAET' * select * from \x8c\n", fn_800602E0());
@@ -188,11 +188,11 @@ void fn_8001D5A8(int db)
     fn_8008044C(&lbl_8036B308, &desc, 0x54415453);
     fn_801FCE10(&result, "use 'TATS' select 'LGLT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &lbl_803ECE84,
                 lbl_803ECE78);
-    teams = fn_8007A410((Object_8007A334 *)&lbl_8036B2DC);
-    lbl_803ECE89 = teams == 0;
-    lbl_803ECE70 = teams == 6;
-    roster = fn_800602D8();
-    fn_8007A334(&cursor, roster, 0x44494750, 0, 0, 0x54415453);
+    rows = fn_8007A410((Object_8007A334 *)&lbl_8036B2DC);
+    lbl_803ECE89 = rows == 0;
+    lbl_803ECE70 = rows == 6;
+    value = fn_800602D8();
+    fn_8007A334(&cursor, value, 0x44494750, 0, 0, 0x54415453);
     n = fn_8007A410(&cursor);
     fn_80229AA4(0x54415453, 0x59414C50, ids, &count);
     n = count;
@@ -205,7 +205,7 @@ void fn_8001D5A8(int db)
             fn_8007ABA4(&cursor, 0x44494754, lbl_803ECE80);
         }
     }
-    fn_801FCE10(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", roster);
+    fn_801FCE10(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", value);
     fn_8007A3C4(&cursor);
     desc.mUnknown12 = 0;
     desc.mUnknown4 = 1;
@@ -272,14 +272,14 @@ void fn_8001D9EC(int direction)
     fn_80022680(0, lbl_803ECE6C, 0);
 }
 
-void fn_8001DAB0(int *pId, int *pLocked, int *pPosition, int *pValues)
+void fn_8001DAB0(int *pId, int *pFlag, int *pPosition, int *pValues)
 {
     pPosition[0] = lbl_803ECE68 + 1;
     pPosition[1] = lbl_803ECE64;
     *pId = lbl_803ECE6C;
-    *pLocked = 0;
+    *pFlag = 0;
     if (lbl_803EBA6C == 0 && lbl_803ECE88 == 0 && fn_800809FC(&lbl_8036B2DC, *pId, 0)) {
-        *pLocked = 1;
+        *pFlag = 1;
     }
     pValues[0] = fn_800812E0(lbl_803ECE74, 6);
     pValues[1] = fn_800812E0(lbl_803ECE74, 4);
@@ -365,7 +365,7 @@ unsigned char fn_8001DD9C(void)
         Object_80023BBC left;
         Object_80023BBC right;
         int count;
-        int teams;
+        int rows;
         int i;
 
         lbl_803ECE88 = 0;
@@ -386,10 +386,10 @@ unsigned char fn_8001DD9C(void)
         fn_8008044C(&lbl_8036B308, &desc, 0x54415453);
         count = fn_8007A410((Object_8007A334 *)&lbl_8036B2B0);
         lbl_803ECE89 = count == 0;
-        teams = fn_8007A410((Object_8007A334 *)&lbl_8036B2DC);
-        if (teams == 15) {
+        rows = fn_8007A410((Object_8007A334 *)&lbl_8036B2DC);
+        if (rows == 15) {
             lbl_803ECE70 = 1;
-        } else if (teams <= 13) {
+        } else if (rows <= 13) {
             lbl_803ECE70 = 0;
         } else {
             lbl_803ECE70 = 1;
@@ -504,10 +504,10 @@ int fn_8001E2C0(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
         int *pValues = (int *)(pArgs[6].i + (*pArgs[6].pi + 1) * 4);
         int direction = pArgs[0].i;
         int *pId = pArgs[1].pi;
-        int *pLocked = pArgs[5].pi;
+        int *pFlag = pArgs[5].pi;
 
         fn_8001D9EC(direction);
-        fn_8001DAB0(pId, pLocked, pPosition, pValues);
+        fn_8001DAB0(pId, pFlag, pPosition, pValues);
         fn_8001DBDC(pArgs[2].pParams->mpText, pArgs[2].pParams->mLength);
         fn_8001DC0C(pArgs[4].pParams->mpText, pArgs[4].pParams->mLength);
         fn_8001DC44(pArgs[7].pParams->mpText, pArgs[7].pParams->mLength);
