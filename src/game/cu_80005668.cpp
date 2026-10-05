@@ -224,7 +224,8 @@ const Entry_80182CC8 lbl_8000944C[] = {
     { 3, 0, "Right Arm Tattoo", 1 },
 };
 
-/* fn_800233F0 table type of each Class_80009DC8 entry; 3 is the skin tone. */
+/* Part of each Class_80009DC8 entry: 3 selects the skin tone; 0-2 are the
+   fn_800233F0 tattoo types (right arm, left arm, back). */
 const int lbl_800094FC[] = { 3, 2, 1, 0 };
 
 const Entry_80182CC8 lbl_8000950C[] = {
@@ -279,7 +280,9 @@ static int lbl_802F40EC[7] = { 0, 1, 2, 4, 7, 9, 11 };
 /* Value stored to lbl_803EB938 for each result of fn_80080ECC. */
 static int lbl_802F4108[] = { 0, 1, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6, 6, 6 };
 
-/* Top-level entry states while fn_80183950 reports set / clear. */
+/* Enabled byte of each top-level entry: lbl_803ED6D4 while fn_80183950 is
+   nonzero and the player id is nonzero, lbl_803ED6D0 while it is zero and a
+   player is selected. */
 static const unsigned char lbl_803ED6D0[] = { 0, 0, 0, 1 };
 static const unsigned char lbl_803ED6D4[] = { 0, 0, 0, 1 };
 

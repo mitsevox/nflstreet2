@@ -7149,7 +7149,7 @@
     {
       "source": "src/game/cu_80005668.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_80005668.cpp, the function rows 0x80005668-0x80008F0C, the data rows 0x80008F10-0x8000A2B8, 0x802F400C-0x802F4140, 0x803EB910-0x803EB93C and 0x803ED6D0-0x803ED6D8, the .ctors/.dtors words and the data rows of its .bss and .sbss objects. Draft comparison only: the static initializer differs by one call target and the target's copy of vtable 0x802938C0 at 0x8000A2B8-0x8000A360 is not produced (see the source-form row cu_80005668 Class_802938C0 linkage).",
+      "evidence": "evidence.tsv unit row src/game/cu_80005668.cpp, the function rows 0x80005668-0x80008F0C, the data rows 0x80008F10-0x8000A360 (data_80008F10), 0x802F400C-0x802F4140, 0x803EB910-0x803EB93C and 0x803ED6D0-0x803ED6D8, the .ctors/.dtors words and the data rows of its .bss and .sbss objects. Draft comparison only: the static initializer differs by one call target and the target's copy of vtable 0x802938C0 at 0x8000A2B8-0x8000A360 is not produced, so .rodata measures fuzzy (see the source-form row cu_80005668 Class_802938C0 linkage).",
       "sections": [
         {
           "section": ".text",
@@ -7161,7 +7161,7 @@
           "section": ".rodata",
           "placement": ".text",
           "start": "0x80008F10",
-          "end": "0x8000A2B8",
+          "end": "0x8000A360",
           "follows": ".text"
         },
         {
