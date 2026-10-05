@@ -16,6 +16,16 @@
       "symbol": "data_8000D2D0"
     },
     {
+      "start": "0x8001BE84",
+      "end": "0x8001BF24",
+      "symbol": "data_8001BE84"
+    },
+    {
+      "start": "0x8001CDC8",
+      "end": "0x8001D0F4",
+      "symbol": "data_8001CDC8"
+    },
+    {
       "start": "0x80022F28",
       "end": "0x80022FF0",
       "symbol": "data_80022F28"
