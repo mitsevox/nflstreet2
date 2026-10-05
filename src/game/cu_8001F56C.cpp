@@ -23,7 +23,7 @@ extern "C" {
 extern char lbl_802EBFCC[];
 
 void fn_8006DF2C(int a);
-void fn_8006EA04(int channel, unsigned int level);
+void fn_8006EA04(unsigned int index, unsigned int value);
 void fn_80072AD8(unsigned char a);
 void fn_80072B84(int a, int b, int c);
 int fn_80072E6C(void);
@@ -36,7 +36,7 @@ int fn_8007B404(Object_8007A334 *pObject);
 void fn_8007B42C(Object_8007A334 *pObject, char *pText, int length);
 void fn_8007B460(Object_8007A334 *pObject, char *pText, int length);
 void fn_8007B494(Object_8007A334 *pObject, char *pText, int length);
-void fn_8008352C(Object_8007A334 *pObject, Query_80083E40 *pQuery);
+void fn_8008352C(Object_8007A334 *pObject, void *pQuery);
 void fn_800835D0(Object_8007A334 *pObject);
 void fn_80083644(Object_8007A334 *pObject);
 int fn_80083664(Object_8007A334 *pObject);
