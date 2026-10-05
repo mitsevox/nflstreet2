@@ -5926,6 +5926,38 @@
           "end": "0x8018C688"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80144224.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80143F40-0x801442FC (src/game/cu_80144224.cpp), its function rows and its .sdata and .sbss data rows. 0x80143F8C-0x801442FC and both data words are linked; the comparison measures only the draft function 0x80143F40.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80143F40",
+          "end": "0x801442FC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB220",
+          "end": "0x803EB224"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA0C",
+          "end": "0x803ECA10"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80143F40",
+          "start": "0x80143F40",
+          "end": "0x80143F8C"
+        }
+      ]
     }
   ]
 }

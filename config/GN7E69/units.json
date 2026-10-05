@@ -5762,8 +5762,14 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80144224",
+          "start": "0x80143F8C",
           "end": "0x801442FC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB220",
+          "end": "0x803EB224"
         },
         {
           "section": ".sbss",
