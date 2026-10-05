@@ -81,13 +81,28 @@ def check_ancestor(root, commit, revision):
         raise ValueError('Activity provenance is outside this revision history')
 
 
+_HISTORICAL_BLOBS_CACHE = {}
+_SOURCE_BLOB_CACHE = {}
+_VERIFIED_COMMITS_CACHE = set()
+
+
+def clear_cache():
+    _HISTORICAL_BLOBS_CACHE.clear()
+    _SOURCE_BLOB_CACHE.clear()
+    _VERIFIED_COMMITS_CACHE.clear()
+
+
 def provenance_commit(root, commit, fetch_missing=False):
     if not SHA.fullmatch(commit):
         raise ValueError('Invalid source provenance commit')
+    key = (str(root), commit)
+    if key in _VERIFIED_COMMITS_CACHE:
+        return
     def present():
         return subprocess.run(['git','cat-file','-e',commit+'^{commit}'], cwd=root,
                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
     if present():
+        _VERIFIED_COMMITS_CACHE.add(key)
         return
     if fetch_missing:
         # Explicit host-side opt-in: retrieve only the pinned object from this checkout's origin.
@@ -95,23 +110,33 @@ def provenance_commit(root, commit, fetch_missing=False):
                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
     if not present():
         raise ValueError('Source provenance commit is unavailable; fetch the pinned commit from origin')
+    _VERIFIED_COMMITS_CACHE.add(key)
 
 
 def source_blob(root, commit, source):
+    key = (str(root), commit, source)
+    if key in _SOURCE_BLOB_CACHE:
+        return _SOURCE_BLOB_CACHE[key]
     result = subprocess.run(['git','rev-parse',commit+':'+source], cwd=root,
                             capture_output=True, text=True)
     if result.returncode:
         raise ValueError('Source provenance commit lacks the recorded source')
-    return result.stdout.strip()
+    blob = result.stdout.strip()
+    _SOURCE_BLOB_CACHE[key] = blob
+    return blob
 
 
-def historical_source_blob(root, revision, source, blob):
+def historical_source_blobs(root, revision, source):
     # The current revision alone is insufficient: prove an actual source-path tree in its history.
     if any(character in source for character in ('\r', '\n', '\0')):
         raise ValueError('Invalid attribution source path')
+    key = (str(root), revision, source)
+    if key in _HISTORICAL_BLOBS_CACHE:
+        return _HISTORICAL_BLOBS_CACHE[key]
     commits = subprocess.check_output(['git','rev-list',revision,'--',source], cwd=root, text=True).splitlines()
     if not commits:
-        return False
+        _HISTORICAL_BLOBS_CACHE[key] = set()
+        return set()
     # Query real historical trees together; missing paths remain missing evidence.
     queries = [commit + ':' + source for commit in commits]
     result = subprocess.run(['git', 'cat-file', '--batch-check=%(objectname)'], cwd=root,
@@ -122,7 +147,13 @@ def historical_source_blob(root, revision, source, blob):
             not SHA.fullmatch(row) and row != query + ' missing'
             for query, row in zip(queries, rows)):
         raise ValueError('Invalid Git historical source response')
-    return blob in rows
+    blobs = set(rows)
+    _HISTORICAL_BLOBS_CACHE[key] = blobs
+    return blobs
+
+
+def historical_source_blob(root, revision, source, blob):
+    return blob in historical_source_blobs(root, revision, source)
 
 
 def contributors(root, ledger, build, revision, fetch_missing=False, exact_inventory=None):
@@ -264,6 +295,33 @@ def export(root, site, source_report, previous=None, append=False, fetch_missing
             'contributors':credits}
 
 
+def unlinked_exact_functions(comparison_report):
+    if not comparison_report or not comparison_report.exists():
+        return set()
+    data = json.loads(comparison_report.read_text())
+    exact = set()
+    for candidate in data.get('candidates', []):
+        for entry in candidate.get('entries', []):
+            if entry.get('type') == 'function':
+                start, end = int(entry['start'], 16), int(entry['end'], 16)
+                if entry.get('matched') == end - start:
+                    exact.add((entry['source'], entry['start']))
+    return exact
+
+
+def verify_attribution(root, source_report, ledger_path, fetch_missing=False, squash_base=None, comparison_report=None):
+    build = json.loads(source_report.read_text())
+    ledger = json.loads(ledger_path.read_text())
+    revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip()
+    exact_inventory = {(u['source'], f['address']) for u in build['units'] for f in u['functions']}
+    exact_inventory.update(unlinked_exact_functions(comparison_report))
+    credits = contributors(root, ledger, build, revision, fetch_missing, exact_inventory)
+    if squash_base:
+        if squash_preflight(root, ledger, build, revision, squash_base, exact_inventory) != credits:
+            raise ValueError('Squash preflight changes original source attribution')
+    return credits
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--site', type=Path, default=ROOT/'build/site/progress.json')
@@ -274,7 +332,13 @@ def main():
     parser.add_argument('--fetch-provenance', action='store_true',
                         help='Fetch unavailable pinned source provenance commits from origin (CI host only)')
     parser.add_argument('--squash-base', help='Verify attribution after a synthetic squash onto the actual PR base SHA')
+    parser.add_argument('--comparison-report', type=Path)
     args = parser.parse_args()
+    if not args.site.exists() and not args.append_current:
+        credits = verify_attribution(ROOT, args.source_report, ROOT/'config/GN7E69/contributors.json',
+                                     args.fetch_provenance, args.squash_base, args.comparison_report)
+        print(f"Verified {len(credits)} contributor identities and Git provenance (squash preflight: {args.squash_base or 'none'})")
+        return
     site = json.loads(args.site.read_text())
     previous = json.loads(args.previous.read_text()) if args.previous else None
     if args.append_current and previous is None:

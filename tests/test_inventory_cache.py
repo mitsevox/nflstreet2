@@ -90,6 +90,34 @@ class InventoryCacheTests(unittest.TestCase):
             self.assertFalse(self.reusable())
             path.write_text('{}')
 
+    def test_game_code_unit_addition_does_not_invalidate_inventory(self):
+        units_path = self.root / 'config/GN7E69/units.json'
+        units_path.write_text(json.dumps({
+            'schema': 2,
+            'units': [{'source': 'src/dolphin/os/OS.c', 'sections': [{'placement': '.text', 'section': '.text', 'start': '0x8000', 'end': '0x8010'}]}]
+        }))
+        self.summary['inputs'] = sdk_map.analysis_inputs(self.root)
+        self.summary['cache_inputs'] = inventory_cache.inputs(self.root, 'pinned-container')
+        self.write_summary()
+        self.assertTrue(self.reusable())
+        # Adding game code (.text) unit retains cache reuse:
+        units_path.write_text(json.dumps({
+            'schema': 2,
+            'units': [
+                {'source': 'src/dolphin/os/OS.c', 'sections': [{'placement': '.text', 'section': '.text', 'start': '0x8000', 'end': '0x8010'}]},
+                {'source': 'src/game/play.c', 'sections': [{'placement': '.text', 'section': '.text', 'start': '0x8020', 'end': '0x8040'}]}
+            ]
+        }))
+        self.assertTrue(self.reusable())
+        # Modifying non-code extent invalidates inventory:
+        units_path.write_text(json.dumps({
+            'schema': 2,
+            'units': [
+                {'source': 'src/dolphin/os/OS.c', 'sections': [{'placement': '.data', 'section': '.data', 'start': '0x8000', 'end': '0x8010'}]}
+            ]
+        }))
+        self.assertFalse(self.reusable())
+
 
 class LiveInventoryCacheTests(unittest.TestCase):
     def test_generated_inventory_reuses_without_modifying_metadata(self):

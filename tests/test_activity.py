@@ -53,6 +53,7 @@ class HistoryTests(unittest.TestCase):
 @unittest.skipUnless(shutil.which("git"), "Git provenance tests run on the CI host")
 class ContributorTests(unittest.TestCase):
     def setUp(self):
+        activity.clear_cache()
         self.directory=tempfile.TemporaryDirectory();self.addCleanup(self.directory.cleanup)
         self.root=Path(self.directory.name);(self.root/'src').mkdir()
         (self.root/'src/test.c').write_text('int function(void) { return 1; }')
@@ -226,6 +227,16 @@ class ContributorTests(unittest.TestCase):
     def test_unverified_build_cannot_supply_function_credit(self):
         self.build['complete']='mismatch'
         with self.assertRaisesRegex(ValueError,'verified source build'):self.credits()
+
+    def test_verify_attribution_succeeds_without_site_bundle(self):
+        source_report = self.root / 'build/source/report.json'
+        source_report.parent.mkdir(parents=True, exist_ok=True)
+        source_report.write_text(json.dumps(self.build))
+        ledger_path = self.root / 'config/GN7E69/contributors.json'
+        ledger_path.parent.mkdir(parents=True, exist_ok=True)
+        ledger_path.write_text(json.dumps(self.ledger))
+        result = activity.verify_attribution(self.root, source_report, ledger_path)
+        self.assertEqual(result, [{'login':'alice','id':1,'functions':1,'pull_requests':[1]}])
 
 
 class RestoreTests(unittest.TestCase):
