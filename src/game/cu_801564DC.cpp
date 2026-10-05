@@ -11,6 +11,7 @@
 #include "game/ModuleGroup_8003450C.h"
 #include "game/SndgCrowd.h"
 #include "game/cu_80064864.h"
+#include "game/Camera_8013F738.h"
 #include "game/Class_80148A58.h"
 #include "game/InGame.h"
 #include "game/cu_80067C10.h"
@@ -259,12 +260,6 @@ struct Pair_80177FE0 {
     float mY;
 };
 
-/* Camera returned by fn_8013FA04. */
-struct Camera_8013FA04 {
-    char mUnknown0[0xA0];
-    int mUnknownA0;
-};
-
 struct Team_80168EBC {
     char mUnknown0[0x40];
     int mUnknown40;
@@ -350,11 +345,11 @@ void fn_8011DF90(void);
 void fn_80138590(Object_80137ABC *pBall);
 void fn_8013A910(Object_80137ABC *pBall, int *pAngles);
 void fn_8013AD9C(Object_80137ABC *pBall, int a);
-int fn_8013BA58(Object_80137ABC *pBall, int a);
-void fn_8013C6F0(Camera_8013FA04 *pCamera);
+int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+void fn_8013C6F0(Camera_8013F738 *pCamera);
 void fn_8013F97C(int a);
-Camera_8013FA04 * fn_8013FA04(int index);
-void fn_8013FA58(int a, unsigned char b);
+Camera_8013F738 *fn_8013FA04(int index);
+void fn_8013FA58(int a, int b);
 void fn_8013FA8C(int a);
 void fn_801485B4(void);
 void fn_801485EC(int mode);
@@ -392,7 +387,7 @@ void fn_8017D9D8(int a);
 void fn_8017DB44(void);
 int fn_801801D0(void);
 void fn_80194CBC(void);
-void fn_80194F1C(int a);
+void fn_80194F1C(unsigned char enabled);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 char * fn_801C2EF0(char *pDest, const char *pSource, int count);
@@ -1933,7 +1928,7 @@ void Class_802A3B10::vfn_06(float dt)
 void Class_802A3B10::vfn_05(float dt)
 {
     if (fn_80156DC4()) {
-        Camera_8013FA04 *pCamera = fn_8013FA04(5);
+        Camera_8013F738 *pCamera = fn_8013FA04(5);
         Step_802DEC08 *pEntry = fn_801568F8()->vfn_07();
 
         if (pCamera->mUnknownA0 == 5 && lbl_803EB324 != 0) {
