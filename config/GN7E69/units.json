@@ -6920,6 +6920,38 @@
           "end": "0x803EBA8C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80025E50.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80025E50-0x80025F24 (src/game/cu_80025E50.cpp) and its data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80025E50",
+          "end": "0x80025F24"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CC680",
+          "end": "0x802CC740"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80022FF0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80022FF0-0x8002306C (src/game/cu_80022FF0.cpp) and its source-form row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80022FF0",
+          "end": "0x8002306C"
+        }
+      ]
     }
   ]
 }
