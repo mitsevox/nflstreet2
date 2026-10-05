@@ -188,6 +188,8 @@ public:
     virtual void vfn_03(int index);
     virtual void vfn_04(int index, int *pOut);
     virtual void vfn_05(int index, Entry_80182CC8 *pOut);
+
+    char mUnknown4[4];
 };
 
 class Class_8000DBA0 : public Class_802A6B60 {
@@ -318,71 +320,17 @@ public:
     int mUnknown8;
 };
 
-inline Class_8000DB50 *fn_8000D0A0()
-{
-    static Class_8000DB50 sInstance;
-    return &sInstance;
-}
-
-inline Class_8000DAB0 *fn_8000D0C8()
-{
-    static Class_8000DAB0 sInstance;
-    return &sInstance;
-}
-
-inline Class_8000DA10 *fn_8000D0F0()
-{
-    static Class_8000DA10 sInstance;
-    return &sInstance;
-}
-
-inline Class_8000D9C0 *fn_8000D118()
-{
-    static Class_8000D9C0 sInstance;
-    return &sInstance;
-}
-
-inline Class_8000DBA0 *fn_8000D140()
-{
-    static Class_8000DBA0 sInstance;
-    return &sInstance;
-}
-
-inline Class_8000D980 *fn_8000D168()
-{
-    static Class_8000D980 sInstance;
-    return &sInstance;
-}
-
-inline Class_8000D900 *fn_8000D198()
-{
-    static Class_8000D900 sInstance;
-    return &sInstance;
-}
-
-inline Class_8000DA60 *fn_8000D1C8()
-{
-    static Class_8000DA60 sInstance;
-    return &sInstance;
-}
-
-inline Class_8000D8C0 *fn_8000D1F0()
-{
-    static Class_8000D8C0 sInstance;
-    return &sInstance;
-}
-
-inline Class_8000DB00 *fn_8000D220()
-{
-    static Class_8000DB00 sInstance;
-    return &sInstance;
-}
-
-inline Class_8000D940 *fn_8000D248()
-{
-    static Class_8000D940 sInstance;
-    return &sInstance;
-}
+static inline Class_8000DB50 *fn_8000D0A0();
+static inline Class_8000DAB0 *fn_8000D0C8();
+static inline Class_8000DA10 *fn_8000D0F0();
+static inline Class_8000D9C0 *fn_8000D118();
+static inline Class_8000DBA0 *fn_8000D140();
+static inline Class_8000D980 *fn_8000D168();
+static inline Class_8000D900 *fn_8000D198();
+static inline Class_8000DA60 *fn_8000D1C8();
+static inline Class_8000D8C0 *fn_8000D1F0();
+static inline Class_8000DB00 *fn_8000D220();
+static inline Class_8000D940 *fn_8000D248();
 
 static Object_8007A334 lbl_8036A1FC;
 static Object_8007A334 lbl_8036A228;
@@ -1761,3 +1709,74 @@ Class_8000DBA0 *fn_8000CF5C()
     return fn_8000D140();
 }
 
+static inline Class_8000DB50 *fn_8000D0A0()
+{
+    static Class_8000DB50 sInstance;
+    return &sInstance;
+}
+
+static inline Class_8000DAB0 *fn_8000D0C8()
+{
+    static Class_8000DAB0 sInstance;
+    return &sInstance;
+}
+
+static inline Class_8000DA10 *fn_8000D0F0()
+{
+    static Class_8000DA10 sInstance;
+    return &sInstance;
+}
+
+static inline Class_8000D9C0 *fn_8000D118()
+{
+    static Class_8000D9C0 sInstance;
+    return &sInstance;
+}
+
+static inline Class_8000DBA0 *fn_8000D140()
+{
+    static Class_8000DBA0 sInstance;
+    return &sInstance;
+}
+
+static inline Class_8000D980 *fn_8000D168()
+{
+    static Class_8000D980 sInstance;
+    return &sInstance;
+}
+
+static inline Class_8000D900 *fn_8000D198()
+{
+    static Class_8000D900 sInstance;
+    return &sInstance;
+}
+
+static inline Class_8000DA60 *fn_8000D1C8()
+{
+    static Class_8000DA60 sInstance;
+    return &sInstance;
+}
+
+static inline Class_8000D8C0 *fn_8000D1F0()
+{
+    static Class_8000D8C0 sInstance;
+    return &sInstance;
+}
+
+static inline Class_8000DB00 *fn_8000D220()
+{
+    static Class_8000DB00 sInstance;
+    return &sInstance;
+}
+
+static inline Class_8000D940 *fn_8000D248()
+{
+    static Class_8000D940 sInstance;
+    return &sInstance;
+}
+
+static inline Class_8000DBF0 *GetClass_8000DBF0()
+{
+    static Class_8000DBF0 sInstance;
+    return &sInstance;
+}
