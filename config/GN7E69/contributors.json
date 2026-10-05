@@ -4581,44 +4581,6 @@
       }
     },
     {
-      "source": "src/game/cu_80060948.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x80061520",
-        "0x80061584",
-        "0x8006164C",
-        "0x8006167C",
-        "0x800616D8",
-        "0x8006171C",
-        "0x8006182C",
-        "0x80061918",
-        "0x8006199C",
-        "0x800619FC",
-        "0x80061AD4",
-        "0x80061ADC",
-        "0x80061AE8",
-        "0x80061B90",
-        "0x80061C44",
-        "0x80061CAC",
-        "0x80061D14",
-        "0x80061D64",
-        "0x80061DA0",
-        "0x80061DDC",
-        "0x80061DE8",
-        "0x80061E34",
-        "0x80061EAC",
-        "0x80061ED8"
-      ],
-      "provenance": {
-        "pull_request": 259,
-        "merged_via": 259,
-        "commit": "80030d98940c7ce8460f441e3c5e80985d3f2c98",
-        "introduced_blob": "48db810a0f242faab140983948e77991b02b0fd5"
-      }
-    },
-    {
       "source": "src/game/cu_80047E28.cpp",
       "contributors": [
         "mitsevox"
@@ -6526,6 +6488,84 @@
         "merged_via": 343,
         "commit": "a368d4ae4d8af8c9a7781fd6c97ac41bcdaba518",
         "introduced_blob": "1650555f04a6d6cd3c3dab98cd7079a729d9d983"
+      }
+    },
+    {
+      "source": "src/game/cu_80060948.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80061408",
+        "0x80061520",
+        "0x80061584",
+        "0x8006164C",
+        "0x8006167C",
+        "0x800616D8",
+        "0x8006171C",
+        "0x8006182C",
+        "0x80061918",
+        "0x8006199C",
+        "0x800619FC",
+        "0x80061AD4",
+        "0x80061ADC",
+        "0x80061AE8",
+        "0x80061B90",
+        "0x80061C44",
+        "0x80061CAC",
+        "0x80061D14",
+        "0x80061D64",
+        "0x80061DA0",
+        "0x80061DDC",
+        "0x80061DE8",
+        "0x80061E34",
+        "0x80061EAC",
+        "0x80061ED8"
+      ],
+      "provenance": {
+        "pull_request": 259,
+        "merged_via": 259,
+        "commit": "80030d98940c7ce8460f441e3c5e80985d3f2c98",
+        "introduced_blob": "48db810a0f242faab140983948e77991b02b0fd5"
+      }
+    },
+    {
+      "source": "src/game/cu_8001D314.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8001D314",
+        "0x8001D3D0",
+        "0x8001D464",
+        "0x8001D49C",
+        "0x8001D4D4",
+        "0x8001D5A8",
+        "0x8001D930",
+        "0x8001D9EC",
+        "0x8001DAB0",
+        "0x8001DBDC",
+        "0x8001DC0C",
+        "0x8001DC44",
+        "0x8001DCAC",
+        "0x8001DCFC",
+        "0x8001DD84",
+        "0x8001DD8C",
+        "0x8001DD9C",
+        "0x8001E100",
+        "0x8001E16C",
+        "0x8001E204",
+        "0x8001E2C0",
+        "0x8001E4F4",
+        "0x8001E4FC",
+        "0x8001E574",
+        "0x8001E5A0"
+      ],
+      "provenance": {
+        "pull_request": 339,
+        "merged_via": 339,
+        "commit": "dca1f4bb80cd4d4f492f4431c2e6d3c11c3cd30a",
+        "introduced_blob": "d647c6c95e64fccd80a52f1b533e0b477b1d90f0"
       }
     }
   ],
