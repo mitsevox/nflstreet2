@@ -31,8 +31,15 @@ struct Object_800670B4 {
 
 /* Filled by fn_80067338, which clears all 0x20C bytes first. */
 struct Record_80067338 {
-    char mUnknown0[0x17];
-    unsigned char mUnknown17;
+    char mUnknown0[0x14];
+    /* Read both as a word and as its last byte. */
+    union {
+        int mUnknown14;
+        struct {
+            char mUnknown14Pad[3];
+            unsigned char mUnknown17;
+        };
+    };
     unsigned int mUnknown18;
     char mUnknown1C[0x1D4];
     char mUnknown1F0[0x1C];

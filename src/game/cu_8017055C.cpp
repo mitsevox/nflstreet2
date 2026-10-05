@@ -9,19 +9,11 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include "game/Message_800F01CC.h"
+#include "game/Record_800B15FC.h"
 
 struct Pair_8017055C {
     float mX;
     float mY;
-};
-
-struct Record_800B15FC {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    float mUnknownC;
-    float mUnknown10;
-    unsigned short mUnknown14;
 };
 
 struct Record_8011F518 {
@@ -83,8 +75,6 @@ float fn_800AC6BC(int team, float value);
 float fn_800AC734(Object_80039F5C *p, float value);
 float fn_800AC7E0(int team, float value);
 void fn_800ACE90(Object_80039F5C *p, unsigned int *pValue);
-void fn_800B1508(void);
-Record_800B15FC *fn_800B15FC(void);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_800B65A0(int team);
 void fn_800B6714(Object_80039F5C *p, int port);
@@ -156,7 +146,7 @@ int fn_80178360(void);
 void fn_80178370(void);
 int fn_801783AC(int bit);
 void fn_801783D0(int bit, int on);
-int fn_80178508(void *pPos, int *pOut, int a);
+int fn_80178508(void *pPos, float *pOut, int a);
 void fn_80178718(Object_80039F5C *p);
 Object_80039F5C *fn_8017876C(void);
 int fn_801787A0(void);
@@ -198,7 +188,7 @@ int lbl_803EB43C = 0;
 extern "C" {
 int fn_80170198(Object_80039F5C *p)
 {
-    int zoneInfo;
+    float zoneInfo;
     Pair_8017055C point;
 
     if (!fn_800A7F44(p->mId >> 8 & 0xFF)) {
@@ -1263,7 +1253,7 @@ int fn_801729F8(void *pBall, Pair_8017055C *pPos)
     if (pBall == fn_801374BC()) {
         Vector_80039F5C pos;
         int unknown;
-        int zoneInfo;
+        float zoneInfo;
         int state;
         int zone;
         Record_800B15FC *pRecord;

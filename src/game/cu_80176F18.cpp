@@ -4,13 +4,16 @@
 #include "game/Class_80148A58.h"
 #include "game/FELoop.h"
 #include "game/Object_80039F5C.h"
+#include "game/Object_800785C0.h"
 #include "game/Object_8017886C.h"
+#include "game/Record_800B15FC.h"
 #include "game/cu_8003EC04.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_8007C9D4.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
+#include "game/fn_8016871C.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801FCE10.h"
@@ -106,44 +109,6 @@ struct Object_80054130 {
     Record_80054130 *mUnknown8C;
 };
 
-struct Object_800785C0 {
-    char mUnknown000[0x1AA];
-    short mUnknown1AA;
-    char mUnknown1AC[0x1AE - 0x1AC];
-    unsigned short mUnknown1AE;
-    int mUnknown1B0;
-    int mUnknown1B4;
-    char mUnknown1B8[0x1C1 - 0x1B8];
-    unsigned char mUnknown1C1;
-};
-
-struct Object_800B15FC {
-    char mUnknown00[0xC];
-    float mUnknown0C;
-    float mUnknown10;
-    short mUnknown14;
-};
-
-/* Entry returned by fn_800B1648. */
-struct Record_800B1648 {
-    union {
-        int mHandle;
-        unsigned char mBytes[4];
-    } mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    float mUnknownC;
-    float mUnknown10;
-    unsigned short mUnknown14;
-    unsigned short mUnknown16;
-};
-
-/* Team record returned by fn_8016871C; only the accessed field is declared. */
-struct Record_8016871C {
-    char mUnknown00[0x14];
-    int mUnknown14;
-};
-
 /* Per-team stat values read back in fn_8017C4B8. */
 struct Baseline_802E9ADC {
     int mTp;
@@ -163,7 +128,6 @@ void fn_800535FC(void);
 Object_80054130 *fn_80054130(void);
 void fn_800541AC(Record_80054130 *pRecord, Point_8017886C *pA, Point_8017886C *pB);
 void fn_8006F0B8(int a);
-Object_800785C0 *fn_800785C0(void);
 void fn_8007B684(int id);
 void fn_8007B6D4(void);
 int fn_8007B974(void);
@@ -177,17 +141,13 @@ float fn_800A32CC(void);
 float fn_800A32D8(void);
 float fn_800A32E4(void);
 int fn_800A3444(void);
-void fn_800A8954(int a, int b, int c);
+void fn_800A8954(int event, int team, Object_80039F5C *p);
 void fn_800AD910(int a, float b);
-void fn_800B1508(void);
 void fn_800B1584(int a, int b);
-unsigned short fn_800B15D4(void);
-Object_800B15FC *fn_800B15FC(void);
-Record_800B1648 *fn_800B1648(unsigned short index);
 void fn_800B2314(void);
 int fn_800B65A0(int team);
 int fn_800BA6F8(void);
-Point_8017886C fn_800BA7A0(...);
+Point_8017886C fn_800BA7A0(void);
 int fn_800BAAB8(void);
 int fn_800C8704(int *pA, int *pB);
 int fn_800C8744(int team);
@@ -205,8 +165,7 @@ void fn_8013FAC0(void);
 void fn_8013FB44(void);
 Set_8003EE6C *fn_801442F0(void);
 int fn_801486A0(void);
-int fn_801650DC(Record_8016871C *pRecord);
-Record_8016871C *fn_8016871C(int team);
+int fn_801650DC(Record_80067338 *pRecord);
 void fn_8016F7F8(void);
 int fn_8016FAD8(float *pOut);
 void fn_801732D0(void);
@@ -263,7 +222,7 @@ float fn_80178298(void);
 float fn_801782A4(void);
 void fn_801782B0(void);
 void fn_801782F4(float line);
-int IsShortOfLineToGain(float range, unsigned char *pWithinRange);
+unsigned char IsShortOfLineToGain(float range, unsigned char *pWithinRange);
 int fn_80178308(void);
 int fn_80178320(void);
 void fn_8017833C(int value);
@@ -340,7 +299,7 @@ void fn_801795EC(int id, float from, float to);
 void fn_801796C8(int id, float from, float catchY, float to, float time);
 void fn_80179874(int id, float from, float to, float time);
 void fn_80179A54(int id, float from, float to);
-void fn_80179AF0(int id, float from, float to, int noSafety, float spot);
+void fn_80179AF0(int id, float from, float to, int flag, float spot);
 void fn_80179C74(int id, float from, float to);
 void fn_80179D98(int id, float from, float to);
 void fn_80179EBC(int ref);
@@ -663,11 +622,11 @@ void Class_802A56E8::vfn_19()
         return;
     }
     if (fn_801486A0() || fn_80177C38() || fn_801783AC(3)) {
-        Object_800B15FC *p = fn_800B15FC();
+        Record_800B15FC *p = fn_800B15FC();
         Object_80039F5C *pPlayer;
 
         p->mUnknown14 = 2;
-        p->mUnknown10 = p->mUnknown0C = 0.0f;
+        p->mUnknown10 = p->mUnknownC = 0.0f;
         fn_800B1508();
         fn_800A8954(0x16, fn_80178308(), 0);
         fn_800535FC();
@@ -726,8 +685,8 @@ extern "C" void fn_801779D8(void)
     pState->mUnknown0C.mY = 0.0f;
     pState->mUnknownB0 = pState->mUnknown38 = fn_8007CB6C(2);
     if (fn_80025708()) {
-        pState->mUnknown3C = fn_800785C0()->mUnknown1AE;
-        pState->mUnknown3E = fn_800785C0()->mUnknown1AA;
+        pState->mUnknown3C = fn_800785C0()->mUnknown1AC;
+        pState->mUnknown3E = fn_800785C0()->mUnknown1A8;
         fn_801FCE10(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n", pState->mUnknown3E, pState->mUnknown3C);
         pState->mUnknown30 = fn_800785C0()->mUnknown1C1;
     } else {
@@ -990,9 +949,9 @@ extern "C" void fn_801782F4(float line)
     lbl_803EB444->mUnknown08 = line;
 }
 
-extern "C" int IsShortOfLineToGain(float range, unsigned char *pWithinRange)
+extern "C" unsigned char IsShortOfLineToGain(float range, unsigned char *pWithinRange)
 {
-    int isShort = 0;
+    unsigned char isShort = 0;
     float distance;
 
     *pWithinRange = 0;
@@ -1701,7 +1660,7 @@ extern "C" void fn_80179A54(int id, float from, float to)
     }
 }
 
-extern "C" void fn_80179AF0(int id, float from, float to, int noSafety, float spot)
+extern "C" void fn_80179AF0(int id, float from, float to, int flag, float spot)
 {
     int yards;
 
@@ -1713,10 +1672,10 @@ extern "C" void fn_80179AF0(int id, float from, float to, int noSafety, float sp
     fn_8017937C(id, 0x4E6C7067, yards);
     fn_8017937C(id, 0x61797067, yards);
     fn_801794B4(id, 0x64507374, yards);
-    if (to <= -30.0f && to > -fn_80178A2C() && noSafety == 0) {
+    if (to <= -30.0f && to > -fn_80178A2C() && flag == 0) {
         fn_8017937C(id, 0x74707067, 1);
     }
-    if (to <= -fn_80178A2C() && noSafety == 0) {
+    if (to <= -fn_80178A2C() && flag == 0) {
         fn_8017937C(id, 0x62747067, 1);
         to = 20.0f - fn_80178A2C();
     }
@@ -1804,8 +1763,8 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
     unsigned char turnovers;
     int lateral;
     int scored;
-    int touchback;
-    int blocked;
+    int zeroFlagA;
+    int zeroFlagB;
 
     markY = 0.0f;
     startY = 0.0f;
@@ -1835,17 +1794,17 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
     catchY = 0.0f;
     catchX = 0.0f;
     sideX = 0.0f;
-    touchback = 0;
-    blocked = 0;
+    zeroFlagA = 0;
+    zeroFlagB = 0;
     turnovers = 0;
     kickTeam = 0xFF;
 
     for (i = 0; i < count; i++) {
-        Record_800B1648 *pRecord = fn_800B1648(i);
+        Record_800B15FC *pRecord = fn_800B1648(i);
 
         switch (pRecord->mUnknown14) {
         case 3: {
-            int who = pRecord->mUnknown0.mHandle;
+            int who = pRecord->mUnknown0;
 
             markY = pRecord->mUnknown10;
             fn_8009BD2C(0, &id);
@@ -1875,12 +1834,12 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             }
             break;
         case 4:
-            id = pRecord->mUnknown0.mHandle;
+            id = pRecord->mUnknown0;
             state = 0x61797567;
             break;
         case 5:
             if (fn_801783AC(13)) {
-                carrier = id = pRecord->mUnknown0.mHandle;
+                carrier = id = pRecord->mUnknown0;
                 if (!taFlag) {
                     fn_8017937C(carrier, 0x74616167, 1);
                     fn_801794B4(id, 0x61707374, 1);
@@ -1909,7 +1868,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                 if (pRecord->mUnknown10 < startY && turnovers == 0 && mode != 0) {
                     int handled = 0;
 
-                    if (fn_80179244() && (fn_8009BCE8(&pRecord->mUnknown0.mHandle)->mFlags & 0x10000000) &&
+                    if (fn_80179244() && (fn_8009BCE8(&pRecord->mUnknown0)->mFlags & 0x10000000) &&
                         !fn_801783AC(13)) {
                         Object_80039F5C *p = fn_8009BCE8(&receiver);
 
@@ -1918,7 +1877,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                         if (!scored) {
                             fn_8017937C(receiver, 0x6B736C67, 1);
                             fn_801794B4(receiver, 0x6B737374, 1);
-                            fn_8017937C(pRecord->mUnknown0.mHandle, 0x61736167, 1);
+                            fn_8017937C(pRecord->mUnknown0, 0x61736167, 1);
                             if (pRecord->mUnknown8) {
                                 fn_801794B4(receiver, 0x73757374, 1);
                             }
@@ -1929,9 +1888,9 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                         result = 1;
                         fn_80067DB8(0x63, 0, fn_80178320(), 0, 0);
                         fn_8006F0B8(1);
-                        fn_801794B4(pRecord->mUnknown0.mHandle, 0x706F7374, (int)(pRecord->mUnknown10 - startY));
-                        fn_801794B4(pRecord->mUnknown0.mHandle, 0x796F7374, (int)(pRecord->mUnknown10 - startY));
-                        fn_801794B4(pRecord->mUnknown0.mHandle, 0x79547374, (int)(pRecord->mUnknown10 - startY));
+                        fn_801794B4(pRecord->mUnknown0, 0x706F7374, (int)(pRecord->mUnknown10 - startY));
+                        fn_801794B4(pRecord->mUnknown0, 0x796F7374, (int)(pRecord->mUnknown10 - startY));
+                        fn_801794B4(pRecord->mUnknown0, 0x79547374, (int)(pRecord->mUnknown10 - startY));
                         if (mode != 6) {
                             fn_80173EE0(12, startY, pRecord->mUnknown10 - startY, id, 0);
                         }
@@ -1967,7 +1926,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
         case 49:
             i = count;
             if (pRecord->mUnknown14 == 45) {
-                carrier = pRecord->mUnknown0.mHandle;
+                carrier = pRecord->mUnknown0;
             }
         case 21:
             fn_8017952C(carrier, 0, pRecord->mUnknownC, 0.0f);
@@ -1998,19 +1957,19 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             fn_801794B4(id, 0x63707374, 1);
             caught = 1;
             state = 0x61796367;
-            id = pRecord->mUnknown0.mHandle;
+            id = pRecord->mUnknown0;
             catchX = pRecord->mUnknownC;
             catchY = pRecord->mUnknown10;
             break;
         case 20:
             state = 0x79697367;
-            fn_80093C3C(1, 3, fn_8009BCE8(&pRecord->mUnknown0.mHandle));
+            fn_80093C3C(1, 3, fn_8009BCE8(&pRecord->mUnknown0));
             returned = 1;
             fn_8017937C(id, 0x6E696167, 1);
             fn_801794B4(id, 0x61677374, 1);
             fn_801794B4(id, 0x69707374, 1);
             fn_8017952C(carrier, 0, pRecord->mUnknownC, 0.0f);
-            id = pRecord->mUnknown0.mHandle;
+            id = pRecord->mUnknown0;
             fn_8017937C(id, 0x6E697367, 1);
             fn_801794B4(id, 0x61747374, 1);
             fn_801794B4(id, 0x69447374, 1);
@@ -2021,7 +1980,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             break;
         case 18:
             if ((id & 0xFF)) {
-                if (pRecord->mUnknown0.mHandle && !scored && fn_80179244() &&
+                if (pRecord->mUnknown0 && !scored && fn_80179244() &&
                     (fn_8009BCE8(&id)->mFlags & 0x10000000) && pRecord->mUnknown10 < startY &&
                     !fn_801783AC(13)) {
                     recovered = 1;
@@ -2041,7 +2000,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                     case 0x796B7267:
                         if (ballY < -fn_80178A2C()) {
                             fn_8017937C(kicker, 0x62746B67, 1);
-                        } else if (!touchback) {
+                        } else if (!zeroFlagA) {
                             fn_80179D98(id, markY, pRecord->mUnknown10);
                         }
                         break;
@@ -2050,7 +2009,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                             fn_80179AF0(kicker, startY, pRecord->mUnknown10, kicked, markY);
                             lateral = 1;
                         }
-                        if (pRecord->mUnknown10 > -fn_80178A2C() && !touchback) {
+                        if (pRecord->mUnknown10 > -fn_80178A2C() && !zeroFlagA) {
                             fn_80179C74(id, markY, pRecord->mUnknown10);
                         }
                         break;
@@ -2064,18 +2023,18 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             }
             state = 0;
             markY = pRecord->mUnknown10;
-            if (pRecord->mUnknown0.mHandle) {
-                fn_8017937C(pRecord->mUnknown0.mHandle, 0x66666C67, 1);
-                fn_801794B4(pRecord->mUnknown0.mHandle, 0x66667374, 1);
+            if (pRecord->mUnknown0) {
+                fn_8017937C(pRecord->mUnknown0, 0x66666C67, 1);
+                fn_801794B4(pRecord->mUnknown0, 0x66667374, 1);
                 if ((id & 0xFF) && recovered == 1) {
-                    fn_8017937C(pRecord->mUnknown0.mHandle, 0x6B736C67, 1);
-                    fn_801794B4(pRecord->mUnknown0.mHandle, 0x6B737374, 1);
+                    fn_8017937C(pRecord->mUnknown0, 0x6B736C67, 1);
+                    fn_801794B4(pRecord->mUnknown0, 0x6B737374, 1);
                     fn_8017937C(id, 0x61736167, 1);
                     if (pRecord->mUnknown4) {
-                        fn_801794B4(pRecord->mUnknown0.mHandle, 0x73757374, 1);
+                        fn_801794B4(pRecord->mUnknown0, 0x73757374, 1);
                     }
                     scored = 1;
-                    fn_80179EBC(pRecord->mUnknown0.mHandle);
+                    fn_80179EBC(pRecord->mUnknown0);
                 }
             }
             break;
@@ -2091,19 +2050,19 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
                 } else {
                     fn_801794B4(kicker, 0x61677374, 1);
                 }
-                fn_801794B4(pRecord->mUnknown0.mHandle, 0x61747374, 1);
+                fn_801794B4(pRecord->mUnknown0, 0x61747374, 1);
                 if (flips & 1) {
-                    fn_80093C3C(1, 7, fn_8009BCE8(&pRecord->mUnknown0.mHandle));
+                    fn_80093C3C(1, 7, fn_8009BCE8(&pRecord->mUnknown0));
                 } else {
-                    fn_80093C3C(1, 6, fn_8009BCE8(&pRecord->mUnknown0.mHandle));
+                    fn_80093C3C(1, 6, fn_8009BCE8(&pRecord->mUnknown0));
                 }
             }
             kicked = 0;
             if (flips && flipped) {
-                fn_8017937C(pRecord->mUnknown0.mHandle, 0x72666C67, 1);
-                fn_801794B4(pRecord->mUnknown0.mHandle, 0x72667374, 1);
+                fn_8017937C(pRecord->mUnknown0, 0x72666C67, 1);
+                fn_801794B4(pRecord->mUnknown0, 0x72667374, 1);
                 if (lbl_803EB450) {
-                    lbl_803EB450(7, fn_8017932C(pRecord->mUnknown0.mHandle), 0);
+                    lbl_803EB450(7, fn_8017932C(pRecord->mUnknown0), 0);
                 }
                 state = 0x79666C67;
             } else if (!muffed) {
@@ -2111,26 +2070,26 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             }
             flipped = 0;
             muffed = 0;
-            id = pRecord->mUnknown0.mHandle;
+            id = pRecord->mUnknown0;
             markY = pRecord->mUnknown10;
             break;
         case 8:
-            if (fn_8009BCE8(&id)->mIdBytes[2] != fn_8009BCE8(&pRecord->mUnknown0.mHandle)->mIdBytes[2]) {
+            if (fn_8009BCE8(&id)->mIdBytes[2] != fn_8009BCE8(&pRecord->mUnknown0)->mIdBytes[2]) {
                 fn_8017937C(id, 0x75667567, 1);
                 fn_801794B4(id, 0x75667374, 1);
                 fn_801794B4(id, 0x6C667374, 1);
                 fn_801794B4(id, 0x61677374, 1);
-                fn_8017937C(pRecord->mUnknown0.mHandle, 0x72666C67, 1);
-                fn_801794B4(pRecord->mUnknown0.mHandle, 0x72667374, 1);
-                fn_801794B4(pRecord->mUnknown0.mHandle, 0x61747374, 1);
+                fn_8017937C(pRecord->mUnknown0, 0x72666C67, 1);
+                fn_801794B4(pRecord->mUnknown0, 0x72667374, 1);
+                fn_801794B4(pRecord->mUnknown0, 0x61747374, 1);
                 if (lbl_803EB450) {
-                    lbl_803EB450(6, fn_8017932C(pRecord->mUnknown0.mHandle), 0);
+                    lbl_803EB450(6, fn_8017932C(pRecord->mUnknown0), 0);
                 }
                 state = 0x79666C67;
             } else if (state != 0x79697367 && state != 0x61796367 && state != 0x79666C67) {
                 state = 0x61797567;
             }
-            id = pRecord->mUnknown0.mHandle;
+            id = pRecord->mUnknown0;
             break;
         case 32:
             if (pRecord->mUnknown4 == 7) {
@@ -2142,7 +2101,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
         case 14:
             result = 3;
             state = 0;
-            id = kicker = pRecord->mUnknown0.mHandle;
+            id = kicker = pRecord->mUnknown0;
             toGo = fn_80178A44() - pRecord->mUnknown10;
             if (startY > 30.0f && !fn_801740A8()) {
                 fn_8017417C();
@@ -2151,7 +2110,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             fn_8017937C(kicker, 0x61666B67, 1);
             break;
         case 17:
-            id = pRecord->mUnknown0.mHandle;
+            id = pRecord->mUnknown0;
             fn_8017937C(id, 0x6C626C67, 1);
             kicked = 1;
             if (state == 0x61797067) {
@@ -2163,7 +2122,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             }
             break;
         case 9:
-            id = kicker = pRecord->mUnknown0.mHandle;
+            id = kicker = pRecord->mUnknown0;
             if (mode != 0) {
                 fn_8017937C(kicker, 0x74617067, 1);
                 fn_801794B4(kicker, 0x75707374, 1);
@@ -2172,7 +2131,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             result = 3;
             break;
         case 12:
-            id = kicker = pRecord->mUnknown0.mHandle;
+            id = kicker = pRecord->mUnknown0;
             kickTeam = id >> 8 & 0xFF;
             fn_8017937C(id, 0x6B6E6B67, 1);
             state = 1;
@@ -2186,7 +2145,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             break;
         case 55:
             muffed = 1;
-            id = pRecord->mUnknown0.mHandle;
+            id = pRecord->mUnknown0;
             ballY = pRecord->mUnknown10;
             if (state == 0x61797067 && mode != 0) {
                 fn_80179AF0(kicker, startY, ballY, kicked, ballY);
@@ -2196,15 +2155,15 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             markY = pRecord->mUnknown10;
             break;
         case 10:
-            id = pRecord->mUnknown0.mHandle;
+            id = pRecord->mUnknown0;
             markY = pRecord->mUnknown10;
-            if (touchback) {
+            if (zeroFlagA) {
                 ballY = markY;
             }
             state = 0x79707267;
             break;
         case 13:
-            id = pRecord->mUnknown0.mHandle;
+            id = pRecord->mUnknown0;
             markY = pRecord->mUnknown10;
             if (kickTeam == (id >> 8 & 0xFF)) {
                 kickOut = 1;
@@ -2228,24 +2187,24 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
         case 61:
             break;
         case 33:
-            fn_801794B4(pRecord->mUnknown0.mHandle, 0x68717374, 1);
+            fn_801794B4(pRecord->mUnknown0, 0x68717374, 1);
             break;
         case 34:
-            fn_801794B4(pRecord->mUnknown0.mHandle, 0x6B717374, 1);
+            fn_801794B4(pRecord->mUnknown0, 0x6B717374, 1);
             break;
         case 35:
-            fn_8017937C(pRecord->mUnknown0.mHandle, 0x64706467, 1);
+            fn_8017937C(pRecord->mUnknown0, 0x64706467, 1);
             dpFlag = 1;
-            fn_801794B4(pRecord->mUnknown0.mHandle, 0x64707374, 1);
+            fn_801794B4(pRecord->mUnknown0, 0x64707374, 1);
             break;
         case 36: {
-            Record_800B1648 *pNext = fn_800B1648(i + 1);
+            Record_800B15FC *pNext = fn_800B1648(i + 1);
 
-            if (!((pNext->mUnknown14 == 6 || pNext->mUnknown14 == 36) && pNext->mUnknown0.mHandle == pRecord->mUnknown0.mHandle) &&
+            if (!((pNext->mUnknown14 == 6 || pNext->mUnknown14 == 36) && pNext->mUnknown0 == pRecord->mUnknown0) &&
                 !rdFlag) {
-                fn_8017937C(pRecord->mUnknown0.mHandle, 0x72646367, 1);
+                fn_8017937C(pRecord->mUnknown0, 0x72646367, 1);
                 rdFlag = 1;
-                fn_801794B4(pRecord->mUnknown0.mHandle, 0x70447374, 1);
+                fn_801794B4(pRecord->mUnknown0, 0x70447374, 1);
             }
             if (pRecord->mUnknown4 == 1) {
                 fn_80067DB8(0x63, 0, fn_80178320(), 0, 0);
@@ -2253,35 +2212,35 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
             break;
         }
         case 37:
-            if (!blocked && mode != 0 && turnovers == 0) {
-                fn_8017937C(pRecord->mUnknown0.mHandle, 0x61706F67, 1);
+            if (!zeroFlagB && mode != 0 && turnovers == 0) {
+                fn_8017937C(pRecord->mUnknown0, 0x61706F67, 1);
             }
             break;
         case 38:
-            fn_8017937C(pRecord->mUnknown0.mHandle, 0x74627567, 1);
+            fn_8017937C(pRecord->mUnknown0, 0x74627567, 1);
             break;
         case 57:
-            fn_801794B4(pRecord->mUnknown0.mHandle, 0x6A737374, 1);
+            fn_801794B4(pRecord->mUnknown0, 0x6A737374, 1);
             if (pRecord->mUnknown4) {
-                fn_801794B4(pRecord->mUnknown0.mHandle, 0x6F667374, 1);
+                fn_801794B4(pRecord->mUnknown0, 0x6F667374, 1);
             }
             if (pRecord->mUnknown8 == 4) {
-                fn_801794B4(pRecord->mUnknown0.mHandle, 0x6A777374, 1);
+                fn_801794B4(pRecord->mUnknown0, 0x6A777374, 1);
             }
             break;
         case 58:
-            fn_801794B4(pRecord->mUnknown0.mHandle, 0x61737374, 1);
+            fn_801794B4(pRecord->mUnknown0, 0x61737374, 1);
             break;
         case 59:
-            fn_801794B4(pRecord->mUnknown0.mHandle, 0x68647374, 1);
+            fn_801794B4(pRecord->mUnknown0, 0x68647374, 1);
             break;
         case 60:
             if (!scored) {
-                fn_8017937C(pRecord->mUnknown0.mHandle, 0x6B736C67, 1);
-                fn_801794B4(pRecord->mUnknown0.mHandle, 0x6B737374, 1);
+                fn_8017937C(pRecord->mUnknown0, 0x6B736C67, 1);
+                fn_801794B4(pRecord->mUnknown0, 0x6B737374, 1);
                 fn_8017937C(pRecord->mUnknown8, 0x61736167, 1);
                 if (pRecord->mUnknown4) {
-                    fn_801794B4(pRecord->mUnknown0.mHandle, 0x73757374, 1);
+                    fn_801794B4(pRecord->mUnknown0, 0x73757374, 1);
                 }
                 scored = 1;
             }
@@ -2348,7 +2307,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
     case 0x796B7267:
         if (ballY < -fn_80178A2C()) {
             fn_8017937C(kicker, 0x62746B67, 1);
-        } else if (!touchback && !kickOut) {
+        } else if (!zeroFlagA && !kickOut) {
             fn_80179D98(id, markY, ballY);
         }
         break;
@@ -2356,7 +2315,7 @@ extern "C" int fn_80179F2C(unsigned char *pOut)
         if (mode != 0 && !lateral) {
             fn_80179AF0(kicker, startY, ballY, kicked, markY);
         }
-        if (ballY > -fn_80178A2C() && !touchback) {
+        if (ballY > -fn_80178A2C() && !zeroFlagA) {
             fn_80179C74(id, markY, ballY);
         }
         break;
@@ -2433,7 +2392,7 @@ extern "C" int fn_8017B83C(void)
     tackler = 0;
 
     for (i = 0; i < count; i++) {
-        Record_800B1648 *pRecord = fn_800B1648(i);
+        Record_800B15FC *pRecord = fn_800B1648(i);
 
         switch (pRecord->mUnknown14) {
         case 3:
@@ -2445,11 +2404,11 @@ extern "C" int fn_8017B83C(void)
             yards = -yards;
             break;
         case 4:
-            carrier = pRecord->mUnknown0.mHandle;
+            carrier = pRecord->mUnknown0;
             kind = 0x61797567;
             break;
         case 5:
-            passer = carrier = pRecord->mUnknown0.mHandle;
+            passer = carrier = pRecord->mUnknown0;
             kind = 0x61796167;
             result = 1;
             break;
@@ -2465,33 +2424,33 @@ extern "C" int fn_8017B83C(void)
             fn_80173D10();
             break;
         case 6:
-            carrier = pRecord->mUnknown0.mHandle;
+            carrier = pRecord->mUnknown0;
             kind = 0x61796367;
             break;
         case 20:
-            fn_80093C3C(1, 3, fn_8009BCE8(&pRecord->mUnknown0.mHandle));
+            fn_80093C3C(1, 3, fn_8009BCE8(&pRecord->mUnknown0));
             kind = 0x79697367;
-            carrier = pRecord->mUnknown0.mHandle;
+            carrier = pRecord->mUnknown0;
             break;
         case 18:
             if (team == 2) {
-                team = pRecord->mUnknown0.mBytes[2] ^ 1;
+                team = pRecord->mUnknown0Bytes[2] ^ 1;
             }
             break;
         case 19:
-            carrier = pRecord->mUnknown0.mHandle;
+            carrier = pRecord->mUnknown0;
             kind = 0x79666C67;
             sameTeam = team == (carrier >> 8 & 0xFF);
             break;
         case 8:
-            carrier = pRecord->mUnknown0.mHandle;
+            carrier = pRecord->mUnknown0;
             if (kind != 0x79697367 && kind != 0x61796367 && kind != 0x79666C67) {
                 kind = 0x61797567;
             }
             break;
         case 9:
         case 14:
-            tackler = pRecord->mUnknown0.mHandle;
+            tackler = pRecord->mUnknown0;
             fn_8017937C(tackler, 0x61656B67, 1);
             result = 3;
         case 21:
@@ -2508,7 +2467,7 @@ extern "C" int fn_8017B83C(void)
             reported = 1;
             break;
         case 17:
-            carrier = pRecord->mUnknown0.mHandle;
+            carrier = pRecord->mUnknown0;
             fn_8017937C(carrier, 0x6C626C67, 1);
             if (kind == 0x61797067) {
                 fn_8017937C(tackler, 0x6C627067, 1);

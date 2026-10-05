@@ -6022,7 +6022,7 @@
     {
       "source": "src/game/cu_80176F18.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row for src/game/cu_80176F18.cpp (replacing candidate cu_80176F18), individual exact function extents, exact data rows for its .rodata literals and vtables, .sdata, .bss and .sbss objects and .ctors word, the compiler, type, source-form, name and linker rows (the linker rows record the two functions the target discarded, which the source keeps unregistered). Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "evidence": "evidence.tsv provisional unit row for src/game/cu_80176F18.cpp (replacing candidate cu_80176F18), individual exact function extents, exact data rows for its .rodata literals and vtables, .sdata, .bss and .sbss objects and .ctors word, the compiler, type, source-form, name and linker rows (the linker rows record the two functions the target discarded, which the source keeps unregistered). The .sbss entry 0x803ECB24-0x803ECB38 is a bounding range for the storage list, which places the unit's three .sbss objects individually; its words 0x803ECB2C (src/game/cu_80173298.cpp) and 0x803ECB30 (src/game/cu_80173C2C.cpp) belong to other units and are not claimed, and the unit's .sbss membership and placement are provisional. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
       "sections": [
         {
           "section": ".text",
