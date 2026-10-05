@@ -5222,6 +5222,32 @@
           "end": "0x80143F8C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80003FF8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv existing six-function grouping, complete accessor extent and observed byte. Only the accessor is reconstructed; five other bodies and all literals remain original-linked. Native rounding is measured without ownership of adjacent zeros.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8000485C",
+          "end": "0x80004864"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB8FC",
+          "end": "0x803EB8FD"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8000485C",
+          "start": "0x8000485C",
+          "end": "0x80004864"
+        }
+      ]
     }
   ]
 }
