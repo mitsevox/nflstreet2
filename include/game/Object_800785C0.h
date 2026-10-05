@@ -33,7 +33,9 @@ struct Object_800785C0 {
     int mUnknown1AC;
     int mUnknown1B0;
     int mUnknown1B4;
-    char mUnknown1B8[0x1C1 - 0x1B8];
+    char mUnknown1B8[4];
+    int mUnknown1BC;
+    char mUnknown1C0[1];
     unsigned char mUnknown1C1;
     char mUnknown1C2[0x1F4 - 0x1C2];
     Entry_80079864 mUnknown1F4[2];
