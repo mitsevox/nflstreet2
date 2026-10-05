@@ -6,6 +6,8 @@
 union Word_80020904 {
     int mUnknown0;
     int *mpUnknown0;
+    const char *mpCode;
+    char *mpText;
     struct Record_80021154 *mpRecord;
     union Word_80020904 *mpWords;
 };

@@ -1,4 +1,5 @@
 #include "game/fn_80020904.h"
+#include "game/cu_80190208.h"
 
 static signed char lbl_803EBAA0 = -1;
 
@@ -6,19 +7,7 @@ extern "C" {
 int fn_801869F0(void);
 int fn_80186DF0(signed char *pIndices, int length);
 int fn_80186A10(int index, char *pText);
-void fn_80186ED8(int index);
-void fn_80190280(int index);
-void fn_80190288(void);
-int fn_80190294(void);
-int fn_80190310(void);
-int fn_80190420(int a, int b, int *pResult, int d);
-int fn_801904E0(int value);
-int fn_801905E0(int value, int *pCount, char *pText, int length, int *pResult);
-int fn_80190768(int value);
-void fn_80190808(int value);
-int fn_801908A0(int value);
-void fn_8019094C(int value);
-void fn_801909E4(int value);
+void fn_80186ED8(signed char index);
 void fn_80054964(int index, int value);
 void fn_80054628(int index, int value);
 
@@ -28,11 +17,11 @@ int fn_8002053C(int control)
     int count = result;
     if (lbl_803EBAA0 == -1 && count > 0) {
         signed char indices[2];
-        unsigned char flags[2];
+        unsigned char auxiliary[2];
         result = fn_80186DF0(indices, 2);
         for (int i = 0; i < 2; ++i) {
             if (indices[i] != -1) {
-                flags[i] = 1;
+                auxiliary[i] = 1;
             }
         }
         lbl_803EBAA0 = indices[0];
@@ -70,9 +59,9 @@ int fn_80020680(int value, char *pText, int length, int *pResult)
     return fn_801905E0(value, &count, pText, length, pResult);
 }
 
-int fn_800206B4(int a, int b, int *pResult, int d)
+int fn_800206B4(const char *pCode, int unused, char *pName, int d)
 {
-    unsigned int value = fn_80190420(a, b, pResult, d);
+    unsigned int value = fn_80190420(pCode, unused, pName);
     fn_80186ED8(lbl_803EBAA0);
     if (value > 54) {
         return 0;
@@ -184,8 +173,8 @@ int fn_80020904(unsigned int id, Word_80020904 *pArgs, int c, int *pResult)
     {
         Word_80020904 *pFirst = pArgs[0].mpWords;
         Word_80020904 *pSecond = pArgs[1].mpWords;
-        *pResult = fn_800206B4(pFirst[2].mUnknown0, pFirst[1].mUnknown0,
-                               pSecond[2].mpUnknown0, pSecond[1].mUnknown0);
+        *pResult = fn_800206B4(pFirst[2].mpCode, pFirst[1].mUnknown0,
+                               pSecond[2].mpText, pSecond[1].mUnknown0);
         break;
     }
     case 0x80000005:

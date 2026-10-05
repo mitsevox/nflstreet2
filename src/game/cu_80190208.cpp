@@ -1,3 +1,4 @@
+#include "game/cu_80190208.h"
 #include "game/Object_8007A334.h"
 #include "game/fn_801FCE10.h"
 #include "game/QueryStatus.h"
@@ -149,14 +150,14 @@ unsigned char fn_80190768(int id)
     return value;
 }
 
-void fn_80190808(int id)
+int fn_80190808(int id)
 {
     Object_8007A334 cursor;
     fn_80190208(&cursor, sIndex);
     if (fn_8007A894(&cursor, 0x58494843, id, 0, 0)) {
         fn_8007AA90(&cursor, 0x4C554843, 1);
     }
-    fn_80190260(&cursor);
+    return fn_80190260(&cursor);
 }
 
 int fn_801908A0(int id)
@@ -172,23 +173,23 @@ int fn_801908A0(int id)
     return 0;
 }
 
-void fn_8019094C(int id)
+int fn_8019094C(int id)
 {
     Object_8007A334 cursor;
     fn_80190208(&cursor, sIndex);
     if (fn_8007A894(&cursor, 0x58494843, id, 0, 0)) {
         fn_8007AA90(&cursor, 0x4E454843, 1);
     }
-    fn_80190260(&cursor);
+    return fn_80190260(&cursor);
 }
 
-void fn_801909E4(int id)
+int fn_801909E4(int id)
 {
     Object_8007A334 cursor;
     fn_80190208(&cursor, sIndex);
     if (fn_8007A894(&cursor, 0x58494843, id, 0, 0)) {
         fn_8007AA90(&cursor, 0x4E454843, 0);
     }
-    fn_80190260(&cursor);
+    return fn_80190260(&cursor);
 }
 }
