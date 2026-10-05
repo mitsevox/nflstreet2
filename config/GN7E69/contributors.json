@@ -6856,6 +6856,78 @@
         "commit": "158ce600508731befcb961f58ecffa16562b8616",
         "introduced_blob": "05189ed8fe9a11751974ffd9dc90665755754fe3"
       }
+    },
+    {
+      "source": "src/game/cu_8001E73C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8001E73C",
+        "0x8001E780",
+        "0x8001E83C",
+        "0x8001E894",
+        "0x8001E8F4",
+        "0x8001ECBC",
+        "0x8001ED34",
+        "0x8001ED80",
+        "0x8001ED88",
+        "0x8001ED90",
+        "0x8001ED98"
+      ],
+      "provenance": {
+        "pull_request": 358,
+        "merged_via": 358,
+        "commit": "8b6e906976d002cd7fe2fbaa79f5c7f6273cf2d7",
+        "introduced_blob": "0262dd660fadc6222d16d8dffcc02f9a178b3f34"
+      }
+    },
+    {
+      "source": "src/game/cu_8001F020.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8001F020",
+        "0x8001F074",
+        "0x8001F120",
+        "0x8001F1D8",
+        "0x8001F500",
+        "0x8001F504"
+      ],
+      "provenance": {
+        "pull_request": 360,
+        "merged_via": 360,
+        "commit": "25dc6986bf188f9e67ba0d6f6c8004c6ee1f4702",
+        "introduced_blob": "029a745e14c9bbee3a079fee1a06f0f29343170f",
+        "original_blob": "eccab847b49de4fcbc4ee7a1c0a1f20fbc675563",
+        "integration_adjustment": "Dependent PR363 changed the 0x8001FE10 declaration from void * to Arg_8018399C * to match its definition in src/game/cu_8001F56C.cpp; the object is unchanged.",
+        "original_commit": "631353c91fcace5fe4dacb5cb2444706f988520a"
+      }
+    },
+    {
+      "source": "src/game/cu_8001F56C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8001F704",
+        "0x8001F850",
+        "0x8001F900",
+        "0x8001F90C",
+        "0x8001FA90",
+        "0x8001FB3C",
+        "0x8001FBE8",
+        "0x8001FD48",
+        "0x8001FDB8",
+        "0x8001FE10"
+      ],
+      "provenance": {
+        "pull_request": 363,
+        "merged_via": 363,
+        "commit": "67774c02d9dc3a9ee3bfa50cab24df030a3b31ab",
+        "introduced_blob": "b719a8e73a8d78d4646b678de5a6f770c870cebc"
+      }
     }
   ],
   "target": "GN7E69",
