@@ -6920,6 +6920,19 @@
           "end": "0x802CC740"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80022FF0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80022FF0-0x8002306C (src/game/cu_80022FF0.cpp) and its source-form row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80022FF0",
+          "end": "0x8002306C"
+        }
+      ]
     }
   ]
 }
