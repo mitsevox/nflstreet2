@@ -1,19 +1,9 @@
-#include "game/Class_8018FD64.h"
+#include "game/Class_8002373C.h"
 
 extern "C" {
 int fn_8022EF8C(int a, int b);
 int fn_8022EFBC(int a, int b);
 }
-
-class Class_8002373C {
-public:
-    Class_8002373C();
-    virtual ~Class_8002373C();
-    void fn_80023820(int a, int b, int c);
-
-private:
-    Class_8018FD64 mUnknown0;
-};
 
 Class_8002373C::Class_8002373C()
 {
