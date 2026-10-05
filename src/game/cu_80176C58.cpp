@@ -25,7 +25,7 @@ int fn_801740A8(void);
 void fn_801740C4(int value);
 int fn_80174114(int id);
 int fn_801787DC(int a);
-void fn_8017C344(int a, int b);
+void fn_8017C344(unsigned short team, int play);
 int fn_8022DDB4(int tag, void *data);
 }
 
@@ -43,7 +43,7 @@ extern "C" void fn_80176C90(void)
     fn_8022DDB4(0x4D535347, &lbl_80361C64);
 }
 
-extern "C" void fn_80176CC8(int a, int b, int c, int d)
+extern "C" void fn_80176CC8(int a, short b, int c, int d)
 {
     if (a != 9) {
         fn_801740C4(1);
