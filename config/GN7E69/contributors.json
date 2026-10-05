@@ -4861,6 +4861,48 @@
       }
     },
     {
+      "source": "src/game/cu_8019AD24.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8019AD24",
+        "0x8019AD5C",
+        "0x8019AEE8",
+        "0x8019AF7C",
+        "0x8019B088",
+        "0x8019B174",
+        "0x8019B25C",
+        "0x8019B320"
+      ],
+      "provenance": {
+        "pull_request": 290,
+        "merged_via": 290,
+        "commit": "1373704eb4d13c0009a4c51b56665541c46bd413",
+        "introduced_blob": "ec70a1c9b25c9ec27b269d96418942cb07c3185e"
+      }
+    },
+    {
+      "source": "src/game/cu_80046340.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80046340",
+        "0x800463B4",
+        "0x800463D8",
+        "0x800463FC",
+        "0x80046504",
+        "0x8004659C"
+      ],
+      "provenance": {
+        "pull_request": 292,
+        "merged_via": 290,
+        "commit": "3e6ca438b511a4184a305b6869ede7e5cddc8a9b",
+        "introduced_blob": "08c313288b0a5402c435bb312d62b4a8ae69a117"
+      }
+    },
+    {
       "source": "src/game/cu_80190208.cpp",
       "contributors": [
         "lifewillbeokay"
