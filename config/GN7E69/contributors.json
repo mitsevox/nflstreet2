@@ -816,8 +816,11 @@
       "provenance": {
         "pull_request": 58,
         "merged_via": 58,
-        "commit": "838a55b1989c9f207190443f1f565a433bc5e189",
-        "introduced_blob": "29c976b829264f5395fd2ac196844a4780937bc7"
+        "commit": "fe27f3bb7111bccd61e96c0a0f59e8e365226b85",
+        "introduced_blob": "16c58d38be42ba17dd4c962bbe3553f8c10337ed",
+        "original_blob": "29c976b829264f5395fd2ac196844a4780937bc7",
+        "original_commit": "838a55b1989c9f207190443f1f565a433bc5e189",
+        "integration_adjustment": "PR373 (src/game/cu_80024B20.cpp) replaced the external label lbl_80024B20 with (char *)fn_80024B20, because 0x80024B20 now lies inside that unit; the object is unchanged."
       }
     },
     {
@@ -1961,9 +1964,11 @@
       "provenance": {
         "pull_request": 144,
         "merged_via": 161,
-        "commit": "f9aaf8ec9a6d46aa0c7789eb3ee9f796ae07c7e7",
-        "introduced_blob": "cad527fdb1b630273a3312e9f0ef36d9e6131ea3",
-        "original_blob": "cad527fdb1b630273a3312e9f0ef36d9e6131ea3"
+        "commit": "fe27f3bb7111bccd61e96c0a0f59e8e365226b85",
+        "introduced_blob": "b696b737329b3d69b417365f814b05b61820e120",
+        "original_blob": "cad527fdb1b630273a3312e9f0ef36d9e6131ea3",
+        "original_commit": "f9aaf8ec9a6d46aa0c7789eb3ee9f796ae07c7e7",
+        "integration_adjustment": "PR373 (src/game/cu_80024B20.cpp) replaced the external label lbl_80024B20 with (char *)fn_80024B20, because 0x80024B20 now lies inside that unit; the object is unchanged."
       }
     },
     {
@@ -7090,6 +7095,52 @@
         "merged_via": 369,
         "commit": "b2703fd09d5533f82fa8ef9ed617ca9641109ef4",
         "introduced_blob": "cf111b67f9c45128b5f07418a348710760580843"
+      }
+    },
+    {
+      "source": "src/game/cu_80024B20.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80024B20",
+        "0x80024C24",
+        "0x80024C70",
+        "0x80024CA8",
+        "0x80024D18",
+        "0x80024D94",
+        "0x80024DCC",
+        "0x80024E08",
+        "0x80024EC0",
+        "0x80024EFC",
+        "0x80024FA8",
+        "0x80025030",
+        "0x8002509C",
+        "0x80025148",
+        "0x80025238",
+        "0x800252A8",
+        "0x80025354",
+        "0x8002544C",
+        "0x800254B4",
+        "0x800254E8",
+        "0x80025508",
+        "0x80025640",
+        "0x8002568C",
+        "0x800256F8",
+        "0x80025700",
+        "0x80025708",
+        "0x80025718",
+        "0x8002572C",
+        "0x800257B4",
+        "0x80025ACC",
+        "0x80025B18",
+        "0x80025C88"
+      ],
+      "provenance": {
+        "pull_request": 373,
+        "merged_via": 373,
+        "commit": "fe27f3bb7111bccd61e96c0a0f59e8e365226b85",
+        "introduced_blob": "8b22ffa8ce5eec90bb8b5b037a84d686b7054697"
       }
     }
   ],
