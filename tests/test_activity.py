@@ -15,6 +15,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 import activity
 import restore_history
 import progress
+import check_progress_maps
 import test_export_progress
 
 
@@ -340,6 +341,34 @@ class ReceiptRejectionTests(test_export_progress.ReceiptFixture):
         with self.assertRaisesRegex(ValueError, 'lacks compiler function coverage'):
             self.export()
 
+    def test_omitting_one_of_two_compiler_functions_is_rejected(self):
+        rows = self.source_report['units'][0]['functions']
+        rows[0]['size'] = 4
+        rows.append({'symbol':'fn_80003108', 'address':'0x80003108', 'size':4})
+        self.save()
+        symbols = self.analysis/'symbols.txt'
+        symbols.write_text('fn_80003104 = .text:0x80003104; // type:function size:0x4\n'
+                           'fn_80003108 = .text:0x80003108; // type:function size:0x4\n'
+                           'fn_8000310C = .text:0x8000310C; // type:function size:0x4\n')
+        summary_path = self.analysis/'summary.json'
+        summary = json.loads(summary_path.read_text())
+        summary['candidate_counts']['function'] = 3
+        summary['symbols_sha256'] = progress.digest(symbols)
+        summary_path.write_text(json.dumps(summary))
+        evidence = self.root/'config/GN7E69/evidence.tsv'
+        evidence.write_text(evidence.read_text().replace(
+            'function\t0x80003104\t0x8000310C', 'function\t0x80003104\t0x80003108') +
+            'function\t0x80003108\t0x8000310C\tfn_80003108\ttarget\texact\texact\tfixture\n')
+        self.ledger['entries'][0]['functions'].append('0x80003108')
+        self.ledger_path.write_text(json.dumps(self.ledger))
+        self.site = progress.report(self.binary, self.revision, self.report_path, self.analysis)
+        self.assertEqual(self.export()['credited_functions'], 2)
+        # Leave a valid function in the code extent: this must reject missing coverage,
+        # rather than merely reject an empty inventory.
+        rows.pop(); self.save()
+        with self.assertRaisesRegex(ValueError, 'Compiler function receipt differs'):
+            self.export()
+
     def test_stale_source_hash_is_rejected(self):
         self.source_report['units'][0]['source_sha256'] = '0'*64; self.save()
         with self.assertRaisesRegex(ValueError, 'stale for src/unit.c'):
@@ -373,6 +402,8 @@ class LiveReceiptTests(unittest.TestCase):
         # Validate the actual receipts and inventory once; corruption cases use bound fixtures.
         result = activity.export(root, site, report)
         published = json.loads((site_path.parent/'activity.json').read_text())
+        decomp = json.loads((root/'build/GN7E69/report.json').read_text())
+        check_progress_maps.verify(root, site, decomp, json.loads(report.read_text())['units'], site)
         self.assertEqual(result['revision'], site['revision'])
         self.assertEqual(result['credited_functions'], site['functions']['exact'])
         self.assertEqual(result['contributors'], published['contributors'])
