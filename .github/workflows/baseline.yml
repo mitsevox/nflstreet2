@@ -35,18 +35,15 @@ jobs:
           fetch-depth: 0
       - name: Verify review clearance logic
         run: node --test tests/review_gate.mjs
-      - name: Verify complete original-object relink
-        if: github.event_name == 'pull_request'
+      - name: Authenticate pinned build environment
         env:
           GH_TOKEN: ${{ github.token }}
+        run: printf '%s' "$GH_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+      - name: Verify complete original-object relink
+        if: github.event_name == 'pull_request'
         run: |
-          printf '%s' "$GH_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/baseline.py --original /orig/main.dol
-      - name: Verify activity and Git provenance on the host
-        run: |
-          command -v git
-          python3 -m unittest discover -s tests -p test_activity.py -v
       - name: Verify compiler stages
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
@@ -61,6 +58,16 @@ jobs:
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/source_build.py --original /orig/main.dol
+      - name: Bind inventory key to reviewed data extents
+        id: inventory-inputs
+        run: |
+          python3 - <<'PYKEY' >> "$GITHUB_OUTPUT"
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, 'tools')
+          import sdk_map
+          print('units=' + sdk_map.unit_input_digest(Path('.')))
+          PYKEY
       - name: Restore verified inventory metadata
         id: inventory-cache
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
@@ -68,7 +75,7 @@ jobs:
           path: |
             build/analysis/summary.json
             build/analysis/symbols.txt
-          key: inventory-v1-${{ runner.os }}-${{ env.BUILD_ENVIRONMENT }}-${{ hashFiles('tools/**/*.py', 'tools/*.json', 'config/GN7E69/baseline.json', 'config/GN7E69/analysis.json', 'config/GN7E69/sdk.json') }}
+          key: inventory-v1-${{ runner.os }}-${{ env.BUILD_ENVIRONMENT }}-${{ steps.inventory-inputs.outputs.units }}-${{ hashFiles('tools/**/*.py', 'tools/*.json', 'config/GN7E69/baseline.json', 'config/GN7E69/analysis.json', 'config/GN7E69/sdk.json') }}
           restore-keys: |
             inventory-v1-${{ runner.os }}-${{ env.BUILD_ENVIRONMENT }}-
       - name: Provide memory headroom for full inventory analysis
@@ -99,39 +106,29 @@ jobs:
           python3 -m unittest discover -s tests -p test_matching.py -v
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 -m unittest discover -s tests -p test_function_compare.py -v
-      - name: Export public progress page
-        if: github.ref == 'refs/heads/main'
-        run: |
-          python3 tools/progress.py --dol build/source/main.dol --revision "$GITHUB_SHA" \
-            --source-report build/source/report.json --analysis-dir build/analysis \
-            --comparison-report build/matching/report.json
-      - name: Export decomp.dev report
-        if: github.ref == 'refs/heads/main'
-        run: |
-          python3 tools/decomp_report.py --dol build/source/main.dol --revision "$GITHUB_SHA" \
-            --source-report build/source/report.json --analysis-dir build/analysis \
-            --comparison-report build/matching/report.json
-      - name: Verify current mapping in both progress exports
-        if: github.ref == 'refs/heads/main'
-        run: python3 tools/check_progress_maps.py --comparison-report build/matching/report.json
-      - name: Export verified history and contributor credits
+      - name: Verify both progress exports, maps, history and contributor credits
         env:
           GH_TOKEN: ${{ github.token }}
           PUBLISH_MAIN: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
           SQUASH_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || '' }}
         run: |
-          activity_args=(--fetch-provenance --comparison-report build/matching/report.json)
+          export_args=(--dol build/source/main.dol --revision "$GITHUB_SHA"
+            --source-report build/source/report.json --analysis-dir build/analysis
+            --comparison-report build/matching/report.json --fetch-provenance)
           if [ -n "$SQUASH_BASE" ]; then
-            activity_args+=(--squash-base "$SQUASH_BASE")
+            export_args+=(--squash-base "$SQUASH_BASE")
           fi
           if [ "$PUBLISH_MAIN" = true ]; then
             python3 tools/restore_history.py
-            python3 tools/activity.py "${activity_args[@]}" --append-current --previous build/activity/previous.json
-          else
-            python3 tools/activity.py "${activity_args[@]}"
+            export_args+=(--append-current --previous build/activity/previous.json)
           fi
+          python3 tools/export_progress.py "${export_args[@]}"
+      - name: Verify activity and live receipts on the host
+        run: |
+          command -v git
+          python3 -m unittest discover -s tests -p test_activity.py -v
       - name: Save verified inventory metadata
-        if: steps.inventory-cache.outputs.cache-hit != 'true'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.inventory-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: |

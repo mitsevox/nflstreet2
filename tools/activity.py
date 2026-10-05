@@ -251,7 +251,6 @@ def squash_preflight(root, ledger, build, revision, base, exact_inventory=None):
 
 
 def export(root, site, source_report, previous=None, append=False, fetch_missing=False, squash_base=None):
-    import hashlib
     build = json.loads(source_report.read_text())
     if site.get('baseline') != 'verified' or site.get('target_sha1') != build.get('target_sha1'):
         raise ValueError('Activity target differs from the public progress build')
@@ -263,11 +262,18 @@ def export(root, site, source_report, previous=None, append=False, fetch_missing
             site['measures'][kind].get(field) != verified['measures'][kind].get(field)
             for kind in ('code','data') for field in ('linked','matched','fuzzy','total')):
         raise ValueError('Activity measurements differ from the verified source receipt')
+    return _export_verified(root, verified, source_report, previous, append, fetch_missing, squash_base)
+
+
+def _export_verified(root, site, source_report, previous=None, append=False, fetch_missing=False, squash_base=None):
+    """Internal pipeline stage; site must come directly from progress.report in this process."""
+    import hashlib
+    build = json.loads(source_report.read_text())
     def mapped_functions(item):
         if item.get('type') == 'function' and item.get('linked',0) > 0:
             return {(item['source'],item['function_address'],item['original_size'])}
         return set().union(*(mapped_functions(child) for child in item.get('children',[])))
-    mapped = set().union(*(mapped_functions(item) for item in verified['files']))
+    mapped = set().union(*(mapped_functions(item) for item in site['files']))
     compiled = {(u['source'],f['address'],f['size']) for u in build['units'] for f in u['functions']}
     if mapped != compiled:
         raise ValueError('Compiler function receipt differs from the verified public inventory')
@@ -283,7 +289,7 @@ def export(root, site, source_report, previous=None, append=False, fetch_missing
     history = merge_history(seed, previous, current)
     for row in history:
         check_ancestor(root, row['revision'], site['revision'])
-    exact = exact_functions(verified)
+    exact = exact_functions(site)
     ledger = json.loads((root/'config/GN7E69/contributors.json').read_text())
     credits = contributors(root, ledger, build, site['revision'], fetch_missing, exact)
     if squash_base:
@@ -293,33 +299,6 @@ def export(root, site, source_report, previous=None, append=False, fetch_missing
             'revision':site['revision'], 'snapshots':history,
             'contribution_basis':'exact-functions', 'credited_functions':len(exact),
             'contributors':credits}
-
-
-def unlinked_exact_functions(comparison_report):
-    if not comparison_report or not comparison_report.exists():
-        return set()
-    data = json.loads(comparison_report.read_text())
-    exact = set()
-    for candidate in data.get('candidates', []):
-        for entry in candidate.get('entries', []):
-            if entry.get('type') == 'function':
-                start, end = int(entry['start'], 16), int(entry['end'], 16)
-                if entry.get('matched') == end - start:
-                    exact.add((entry['source'], entry['start']))
-    return exact
-
-
-def verify_attribution(root, source_report, ledger_path, fetch_missing=False, squash_base=None, comparison_report=None):
-    build = json.loads(source_report.read_text())
-    ledger = json.loads(ledger_path.read_text())
-    revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip()
-    exact_inventory = {(u['source'], f['address']) for u in build['units'] for f in u['functions']}
-    exact_inventory.update(unlinked_exact_functions(comparison_report))
-    credits = contributors(root, ledger, build, revision, fetch_missing, exact_inventory)
-    if squash_base:
-        if squash_preflight(root, ledger, build, revision, squash_base, exact_inventory) != credits:
-            raise ValueError('Squash preflight changes original source attribution')
-    return credits
 
 
 def main():
@@ -332,13 +311,7 @@ def main():
     parser.add_argument('--fetch-provenance', action='store_true',
                         help='Fetch unavailable pinned source provenance commits from origin (CI host only)')
     parser.add_argument('--squash-base', help='Verify attribution after a synthetic squash onto the actual PR base SHA')
-    parser.add_argument('--comparison-report', type=Path)
     args = parser.parse_args()
-    if not args.site.exists() and not args.append_current:
-        credits = verify_attribution(ROOT, args.source_report, ROOT/'config/GN7E69/contributors.json',
-                                     args.fetch_provenance, args.squash_base, args.comparison_report)
-        print(f"Verified {len(credits)} contributor identities and Git provenance (squash preflight: {args.squash_base or 'none'})")
-        return
     site = json.loads(args.site.read_text())
     previous = json.loads(args.previous.read_text()) if args.previous else None
     if args.append_current and previous is None:

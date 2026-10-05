@@ -68,14 +68,10 @@ def main():
     parser.add_argument("--analysis-dir", type=Path)
     parser.add_argument("--comparison-report", type=Path)
     parser.add_argument("--source-report", type=Path, default=progress.ROOT / "build/source/report.json")
-    parser.add_argument("--site", type=Path, default=progress.ROOT / "build/site/progress.json")
     parser.add_argument("--output", type=Path, default=progress.ROOT / "build/GN7E69/report.json")
     args = parser.parse_args()
     args.output.unlink(missing_ok=True)
-    if args.site and args.site.exists():
-        data = json.loads(args.site.read_text())
-    else:
-        data = progress.report(args.dol.read_bytes(), args.revision, args.source_report, args.analysis_dir, args.comparison_report)
+    data = progress.report(args.dol.read_bytes(), args.revision, args.source_report, args.analysis_dir, args.comparison_report)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(objdiff_report(data), indent=2) + "\n")
 
