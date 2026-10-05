@@ -6856,6 +6856,22 @@
         "commit": "158ce600508731befcb961f58ecffa16562b8616",
         "introduced_blob": "05189ed8fe9a11751974ffd9dc90665755754fe3"
       }
+    },
+    {
+      "source": "src/game/cu_80025E50.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80025E50",
+        "0x80025F20"
+      ],
+      "provenance": {
+        "pull_request": 365,
+        "merged_via": 365,
+        "commit": "3e6c16f55b65844617353a68f523db8a4e456da5",
+        "introduced_blob": "80ba7dba3e48202c1bce3a4eaaeca5c4b8e5849b"
+      }
     }
   ],
   "target": "GN7E69",
