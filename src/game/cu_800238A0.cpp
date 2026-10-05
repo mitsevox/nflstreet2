@@ -35,13 +35,13 @@ int fn_80023914(int index)
     return 0;
 }
 
-void fn_80023988(int a, int b, int c)
+void fn_80023988(int a, char *pBuffer, int size)
 {
     Object_8007A334 cursor;
 
     fn_8007A334(&cursor, 0x4C414344, 0x494C4344, 0, 0, 0x54415453);
     fn_8007A894(&cursor, 0x494C4344, a, 0, 0);
-    fn_8007AA3C(&cursor, 0x4E4C4344, b, c);
+    fn_8007AA3C(&cursor, 0x4E4C4344, (int)pBuffer, size);
     fn_8007A3C4(&cursor);
 }
 
