@@ -5999,6 +5999,23 @@
         "commit": "9be1dfdaa720569241afd1c19dd1bfd71a88b44b",
         "introduced_blob": "d6571c87b9ad64ee48479d8c62f07a17e9add216"
       }
+    },
+    {
+      "source": "src/game/cu_80163D9C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80163D9C",
+        "0x80163DD0",
+        "0x80163E54"
+      ],
+      "provenance": {
+        "pull_request": 296,
+        "merged_via": 296,
+        "commit": "87cc775478a1b2fb73a7ce62502d05cf31a4d8d1",
+        "introduced_blob": "79f199903b4bc4b70733ed8d05948f28777a741a"
+      }
     }
   ],
   "target": "GN7E69",
