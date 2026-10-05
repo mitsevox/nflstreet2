@@ -106,7 +106,7 @@ void fn_80173E24(void)
     fn_8022DDB4(0x4D534447, &lbl_80361694[lbl_803ECB30]);
 }
 
-void fn_80173EE0(int type, int a, int b, int c, int d)
+void fn_80173EE0(int type, short a, short b, int c, int d)
 {
     Log_80361694 *pLog = &lbl_80361694[lbl_803ECB30];
 

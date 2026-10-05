@@ -29,7 +29,7 @@ unsigned int fn_8009D990(int index);
 int fn_8009D9A8(int index);
 int fn_8009D9D8(int index);
 void fn_800AD910(int a, float b);
-unsigned int fn_800B15D4(void);
+unsigned short fn_800B15D4(void);
 Record_800B1648 *fn_800B1648(unsigned short index);
 int fn_800B232C(int a);
 int fn_800B2624(void);
@@ -76,7 +76,7 @@ void fn_80173320(void)
 {
 }
 
-void fn_80173324(int a)
+void fn_80173324(unsigned int a)
 {
     int flags;
 
