@@ -1,14 +1,6 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_8003B6BC.h"
 
-struct Result_8008593C {
-    short mUnknown0;
-    short mUnknown2;
-    int mUnknown4;
-    int mUnknown8;
-    unsigned char mUnknown12[4];
-};
-
 extern "C" {
 int fn_80168ED0(int a);
 void fn_800850E8(void);
@@ -55,7 +47,7 @@ extern const char lbl_802942A4[] = "use 'EMAG' select 'ZBQF' into \x85 and 'ZBRF
 /* Continue fetching after a failed swap, without attempting further swaps. */
 int fn_8008593C(int a, int team, int first, int second)
 {
-    Result_8008593C result;
+    QueryResult result;
     QueryCursor cursor;
     int formation;
     int mode = fn_80168ED0(a);
