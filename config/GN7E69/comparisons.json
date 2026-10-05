@@ -6018,6 +6018,156 @@
           "end": "0x800DAC88"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800E3CC0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp, exact whole-function rows and inferred name/source-form/compiler rows for five complete constant-return bodies. Original bytes remain linked; all other bodies and static data are unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E3CC0",
+          "end": "0x800EF834"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E8740",
+          "start": "0x800E8740",
+          "end": "0x800E8748"
+        },
+        {
+          "symbol": "fn_800EA1D0",
+          "start": "0x800EA1D0",
+          "end": "0x800EA1D8"
+        },
+        {
+          "symbol": "fn_800EAFFC",
+          "start": "0x800EAFFC",
+          "end": "0x800EB004"
+        },
+        {
+          "symbol": "fn_800ECE28",
+          "start": "0x800ECE28",
+          "end": "0x800ECE30"
+        },
+        {
+          "symbol": "fn_800ECE30",
+          "start": "0x800ECE30",
+          "end": "0x800ECE38"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained open/provisional grouping row for src/game/cu_800EFC68.cpp; ten exact complete function extents with individual inferred name/source-form/compiler rows. Only these bodies are measured; all other bodies and mapped static storage remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800EFC68",
+          "end": "0x80125F3C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800F08F8",
+          "start": "0x800F08F8",
+          "end": "0x800F0900"
+        },
+        {
+          "symbol": "fn_800F0900",
+          "start": "0x800F0900",
+          "end": "0x800F0908"
+        },
+        {
+          "symbol": "fn_800F0908",
+          "start": "0x800F0908",
+          "end": "0x800F0910"
+        },
+        {
+          "symbol": "fn_800F2C14",
+          "start": "0x800F2C14",
+          "end": "0x800F2C1C"
+        },
+        {
+          "symbol": "fn_800F8D24",
+          "start": "0x800F8D24",
+          "end": "0x800F8D2C"
+        },
+        {
+          "symbol": "fn_800F9CAC",
+          "start": "0x800F9CAC",
+          "end": "0x800F9CB4"
+        },
+        {
+          "symbol": "fn_800FF860",
+          "start": "0x800FF860",
+          "end": "0x800FF868"
+        },
+        {
+          "symbol": "fn_8010FD8C",
+          "start": "0x8010FD8C",
+          "end": "0x8010FD94"
+        },
+        {
+          "symbol": "fn_80113C18",
+          "start": "0x80113C18",
+          "end": "0x80113C20"
+        },
+        {
+          "symbol": "fn_80125508",
+          "start": "0x80125508",
+          "end": "0x80125510"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800D0D4C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained open/open grouping row for src/game/cu_800D0D4C.cpp, six exact complete function extents and individual inferred name/source-form/compiler rows, plus four target-width external scalar-access footprints. Only these six whole bodies are measured; all static storage and 111 other bodies remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800D0D4C",
+          "end": "0x800D760C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800D3D64",
+          "start": "0x800D3D64",
+          "end": "0x800D3D68"
+        },
+        {
+          "symbol": "fn_800D3D8C",
+          "start": "0x800D3D8C",
+          "end": "0x800D3D94"
+        },
+        {
+          "symbol": "fn_800D3E68",
+          "start": "0x800D3E68",
+          "end": "0x800D3E70"
+        },
+        {
+          "symbol": "fn_800D42CC",
+          "start": "0x800D42CC",
+          "end": "0x800D42D4"
+        },
+        {
+          "symbol": "fn_800D750C",
+          "start": "0x800D750C",
+          "end": "0x800D7520"
+        },
+        {
+          "symbol": "fn_800D7520",
+          "start": "0x800D7520",
+          "end": "0x800D7528"
+        }
+      ]
     }
   ]
 }
