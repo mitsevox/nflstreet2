@@ -7145,6 +7145,94 @@
           "end": "0x8012A38C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8001E73C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8001E73C-0x8001F020 (src/game/cu_8001E73C.cpp), its function rows, the data rows data_8001EF9C and 0x803EBA70-0x803EBA88, and the source-form row 0x8001E73C-0x8001F020.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8001E73C",
+          "end": "0x8001EF9C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x8001EF9C",
+          "end": "0x8001F020",
+          "follows": ".text"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBA70",
+          "end": "0x803EBA88"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8001E73C",
+          "start": "0x8001E73C",
+          "end": "0x8001E780"
+        },
+        {
+          "symbol": "fn_8001E780",
+          "start": "0x8001E780",
+          "end": "0x8001E83C"
+        },
+        {
+          "symbol": "fn_8001E83C",
+          "start": "0x8001E83C",
+          "end": "0x8001E894"
+        },
+        {
+          "symbol": "fn_8001E894",
+          "start": "0x8001E894",
+          "end": "0x8001E8F4"
+        },
+        {
+          "symbol": "fn_8001E8F4",
+          "start": "0x8001E8F4",
+          "end": "0x8001EA08"
+        },
+        {
+          "symbol": "fn_8001EA08",
+          "start": "0x8001EA08",
+          "end": "0x8001ECBC"
+        },
+        {
+          "symbol": "fn_8001ECBC",
+          "start": "0x8001ECBC",
+          "end": "0x8001ED34"
+        },
+        {
+          "symbol": "fn_8001ED34",
+          "start": "0x8001ED34",
+          "end": "0x8001ED80"
+        },
+        {
+          "symbol": "fn_8001ED80",
+          "start": "0x8001ED80",
+          "end": "0x8001ED88"
+        },
+        {
+          "symbol": "fn_8001ED88",
+          "start": "0x8001ED88",
+          "end": "0x8001ED90"
+        },
+        {
+          "symbol": "fn_8001ED90",
+          "start": "0x8001ED90",
+          "end": "0x8001ED98"
+        },
+        {
+          "symbol": "fn_8001ED98",
+          "start": "0x8001ED98",
+          "end": "0x8001EF9C"
+        }
+      ]
     }
   ]
 }
