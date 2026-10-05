@@ -74,11 +74,6 @@ jobs:
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/baseline.py --original /orig/main.dol
-      - name: Verify compiler stages
-        if: steps.publication.outputs.reused != 'true'
-        run: |
-          docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
-            "$BUILD_ENVIRONMENT" python3 -m unittest discover -s tests -v
       - name: Verify SN linker against complete target
         if: github.event_name == 'pull_request'
         run: |
@@ -109,6 +104,11 @@ jobs:
               sudo dmesg | tail -20
               exit 1
             }
+      - name: Verify compiler stages
+        if: steps.publication.outputs.reused != 'true'
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
+            "$BUILD_ENVIRONMENT" python3 -m unittest discover -s tests -v
       - name: Verify inventory cache invalidation and real warm reuse
         if: steps.publication.outputs.reused != 'true'
         run: |
