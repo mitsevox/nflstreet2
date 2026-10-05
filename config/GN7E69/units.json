@@ -767,6 +767,54 @@
     "vfn_10__14Class_80297BF8": {
       "address": "0x800BCA00",
       "evidence": "evidence.tsv external row for 0x800BCA00 (vfn_10__14Class_80297BF8)."
+    },
+    "_vt.14Class_802938C0": {
+      "address": "0x802938C0",
+      "evidence": "evidence.tsv external row 0x802938C0 (_vt.14Class_802938C0) and type row Class_802938C0."
+    },
+    "_._14Class_802938C0": {
+      "address": "0x80083454",
+      "evidence": "evidence.tsv external row 0x80083454 (_._14Class_802938C0) and type row Class_802938C0."
+    },
+    "fn_80190098__14Class_802938C0": {
+      "address": "0x80190098",
+      "evidence": "evidence.tsv external row 0x80190098 (fn_80190098__14Class_802938C0) and type row Class_802938C0."
+    },
+    "fn_801900D4__14Class_802938C0iPi": {
+      "address": "0x801900D4",
+      "evidence": "evidence.tsv external row 0x801900D4 (fn_801900D4__14Class_802938C0iPi) and type row Class_802938C0."
+    },
+    "fn_80190120__14Class_802938C0": {
+      "address": "0x80190120",
+      "evidence": "evidence.tsv external row 0x80190120 (fn_80190120__14Class_802938C0) and type row Class_802938C0."
+    },
+    "fn_8019015C__14Class_802938C0Pci": {
+      "address": "0x8019015C",
+      "evidence": "evidence.tsv external row 0x8019015C (fn_8019015C__14Class_802938C0Pci) and type row Class_802938C0."
+    },
+    "fn_801901A4__14Class_802938C0": {
+      "address": "0x801901A4",
+      "evidence": "evidence.tsv external row 0x801901A4 (fn_801901A4__14Class_802938C0) and type row Class_802938C0."
+    },
+    "fn_8018FF0C__14Class_8018FD64i": {
+      "address": "0x8018FF0C",
+      "evidence": "evidence.tsv external row 0x8018FF0C (fn_8018FF0C__14Class_8018FD64i) and type row Class_8018FD64."
+    },
+    "vfn_01__14Class_802A6BB0iPi": {
+      "address": "0x80182A80",
+      "evidence": "evidence.tsv external row 0x80182A80 (vfn_01__14Class_802A6BB0iPi) and type row Class_802A6BB0."
+    },
+    "vfn_02__14Class_802A6BB0iii": {
+      "address": "0x80182A84",
+      "evidence": "evidence.tsv external row 0x80182A84 (vfn_02__14Class_802A6BB0iii) and type row Class_802A6BB0."
+    },
+    "vfn_09__14Class_802A6BB0iPiG12Arg_8018399C": {
+      "address": "0x80182AA4",
+      "evidence": "evidence.tsv external row 0x80182AA4 (vfn_09__14Class_802A6BB0iPiG12Arg_8018399C) and type row Class_802A6BB0."
+    },
+    "vfn_10__14Class_802A6BB0iG12Arg_8018399C": {
+      "address": "0x80182AA8",
+      "evidence": "evidence.tsv external row 0x80182AA8 (vfn_10__14Class_802A6BB0iG12Arg_8018399C) and type row Class_802A6BB0."
     }
   },
   "units": [
@@ -6899,6 +6947,57 @@
           "placement": ".sbss",
           "start": "0x803ECB84",
           "end": "0x803ECB88"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8001F020.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8001F020-0x8001F56C (src/game/cu_8001F020.cpp) and its data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8001F020",
+          "end": "0x8001F56C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBA88",
+          "end": "0x803EBA8C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80025E50.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80025E50-0x80025F24 (src/game/cu_80025E50.cpp) and its data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80025E50",
+          "end": "0x80025F24"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CC680",
+          "end": "0x802CC740"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80022FF0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80022FF0-0x8002306C (src/game/cu_80022FF0.cpp) and its source-form row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80022FF0",
+          "end": "0x8002306C"
         }
       ]
     }

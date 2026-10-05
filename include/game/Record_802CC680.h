@@ -9,6 +9,6 @@ struct Record_802CC680 {
     int mUnknown14;
 };
 
-extern "C" Record_802CC680 *fn_80025E50(int);
+extern "C" Record_802CC680 *fn_80025E50(unsigned int id);
 
 #endif

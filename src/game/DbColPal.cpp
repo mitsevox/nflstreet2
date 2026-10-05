@@ -102,13 +102,13 @@ void fn_8007A068(unsigned char index, PaletteColor *pColor)
     pColor->b = sPalettes[index].mColors[0].b;
 }
 
-void fn_8007A098(int a, int b, int c)
+void fn_8007A098(int index, char *pBuffer, int size)
 {
     Object_8007A334 cursor;
 
     fn_8007A334(&cursor, 0x52485043, 0x494C5043, 0, 0, 0x54415453);
-    fn_8007A7F4(&cursor, 0x494C5043, a, 0, 0);
-    fn_8007AA3C(&cursor, 0x44435043, b, c);
+    fn_8007A7F4(&cursor, 0x494C5043, index, 0, 0);
+    fn_8007AA3C(&cursor, 0x44435043, (int)pBuffer, size);
     fn_8007A3C4(&cursor);
 }
 }

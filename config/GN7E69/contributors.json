@@ -6856,6 +6856,241 @@
         "commit": "158ce600508731befcb961f58ecffa16562b8616",
         "introduced_blob": "05189ed8fe9a11751974ffd9dc90665755754fe3"
       }
+    },
+    {
+      "source": "src/game/cu_8001E73C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8001E73C",
+        "0x8001E780",
+        "0x8001E83C",
+        "0x8001E894",
+        "0x8001E8F4",
+        "0x8001ECBC",
+        "0x8001ED34",
+        "0x8001ED80",
+        "0x8001ED88",
+        "0x8001ED90",
+        "0x8001ED98"
+      ],
+      "provenance": {
+        "pull_request": 358,
+        "merged_via": 369,
+        "commit": "8b6e906976d002cd7fe2fbaa79f5c7f6273cf2d7",
+        "introduced_blob": "0262dd660fadc6222d16d8dffcc02f9a178b3f34"
+      }
+    },
+    {
+      "source": "src/game/cu_8001F020.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8001F020",
+        "0x8001F074",
+        "0x8001F120",
+        "0x8001F1D8",
+        "0x8001F500",
+        "0x8001F504"
+      ],
+      "provenance": {
+        "pull_request": 360,
+        "merged_via": 369,
+        "commit": "25dc6986bf188f9e67ba0d6f6c8004c6ee1f4702",
+        "introduced_blob": "029a745e14c9bbee3a079fee1a06f0f29343170f",
+        "original_blob": "eccab847b49de4fcbc4ee7a1c0a1f20fbc675563",
+        "integration_adjustment": "Dependent PR363 changed the 0x8001FE10 declaration from void * to Arg_8018399C * to match its definition in src/game/cu_8001F56C.cpp; the object is unchanged.",
+        "original_commit": "631353c91fcace5fe4dacb5cb2444706f988520a"
+      }
+    },
+    {
+      "source": "src/game/cu_8001F56C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8001F704",
+        "0x8001F850",
+        "0x8001F900",
+        "0x8001F90C",
+        "0x8001FA90",
+        "0x8001FB3C",
+        "0x8001FBE8",
+        "0x8001FD48",
+        "0x8001FDB8",
+        "0x8001FE10"
+      ],
+      "provenance": {
+        "pull_request": 363,
+        "merged_via": 369,
+        "commit": "67774c02d9dc3a9ee3bfa50cab24df030a3b31ab",
+        "introduced_blob": "b719a8e73a8d78d4646b678de5a6f770c870cebc"
+      }
+    },
+    {
+      "source": "src/game/cu_80025E50.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80025E50",
+        "0x80025F20"
+      ],
+      "provenance": {
+        "pull_request": 365,
+        "merged_via": 369,
+        "commit": "78eb97f5db341d19e104ce09a7256a4c7035a41a",
+        "introduced_blob": "656c604db1bf952d7c4d757248fdb5874870d6b3"
+      }
+    },
+    {
+      "source": "src/game/cu_80022FF0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80022FF0",
+        "0x80023024",
+        "0x80023048"
+      ],
+      "provenance": {
+        "pull_request": 367,
+        "merged_via": 369,
+        "commit": "dae7f43973a91716cfc441b5836d032e28af2269",
+        "introduced_blob": "fda8393745f0b602e86f17420d9c7ce01ff34cdb"
+      }
+    },
+    {
+      "source": "src/game/cu_80005668.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80005668",
+        "0x800056A4",
+        "0x800057C0",
+        "0x80005868",
+        "0x8000587C",
+        "0x80005890",
+        "0x80005904",
+        "0x80005980",
+        "0x800059EC",
+        "0x80005A24",
+        "0x80005BE4",
+        "0x80005CAC",
+        "0x80005D88",
+        "0x80005E64",
+        "0x80005EB4",
+        "0x80005EF8",
+        "0x80005F34",
+        "0x80005F5C",
+        "0x80005FA0",
+        "0x80005FF4",
+        "0x80006014",
+        "0x8000607C",
+        "0x80006190",
+        "0x80006204",
+        "0x80006304",
+        "0x8000636C",
+        "0x800064A8",
+        "0x8000651C",
+        "0x800065D4",
+        "0x80006604",
+        "0x80006690",
+        "0x8000670C",
+        "0x8000672C",
+        "0x80006794",
+        "0x800067FC",
+        "0x80006824",
+        "0x800068F8",
+        "0x80006920",
+        "0x800069D8",
+        "0x800069F8",
+        "0x80006AB8",
+        "0x80006BD8",
+        "0x80006C70",
+        "0x80006D28",
+        "0x80006DC4",
+        "0x80006EE8",
+        "0x80006FF4",
+        "0x80007220",
+        "0x80007338",
+        "0x80007434",
+        "0x800074D8",
+        "0x8000764C",
+        "0x800076D4",
+        "0x8000779C",
+        "0x80007880",
+        "0x80007A00",
+        "0x80007AFC",
+        "0x80007BDC",
+        "0x80007C38",
+        "0x80007CB0",
+        "0x80007D10",
+        "0x80007D54",
+        "0x80008068",
+        "0x80008390",
+        "0x80008750",
+        "0x800087BC",
+        "0x80008860",
+        "0x800088C8",
+        "0x800088E8",
+        "0x8000890C",
+        "0x80008914",
+        "0x8000891C",
+        "0x80008924",
+        "0x80008978",
+        "0x800089C0",
+        "0x800089D8",
+        "0x800089E0",
+        "0x80008B44",
+        "0x80008B4C",
+        "0x80008B58",
+        "0x80008B60",
+        "0x80008B6C",
+        "0x80008B74",
+        "0x80008B80",
+        "0x80008B88",
+        "0x80008B94",
+        "0x80008B9C",
+        "0x80008BA8",
+        "0x80008BB0",
+        "0x80008BBC",
+        "0x80008BC4",
+        "0x80008BD0",
+        "0x80008BD8",
+        "0x80008BE4",
+        "0x80008BEC",
+        "0x80008BF4",
+        "0x80008BFC",
+        "0x80008C04",
+        "0x80008C0C",
+        "0x80008C34",
+        "0x80008C64",
+        "0x80008C8C",
+        "0x80008CB4",
+        "0x80008CDC",
+        "0x80008D04",
+        "0x80008D2C",
+        "0x80008D5C",
+        "0x80008D84",
+        "0x80008DB4",
+        "0x80008DE4",
+        "0x80008E14",
+        "0x80008E3C",
+        "0x80008E64",
+        "0x80008E8C",
+        "0x80008EB4",
+        "0x80008EE0"
+      ],
+      "provenance": {
+        "pull_request": 368,
+        "merged_via": 369,
+        "commit": "b2703fd09d5533f82fa8ef9ed617ca9641109ef4",
+        "introduced_blob": "cf111b67f9c45128b5f07418a348710760580843"
+      }
     }
   ],
   "target": "GN7E69",

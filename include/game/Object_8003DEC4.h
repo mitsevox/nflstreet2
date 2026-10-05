@@ -1,6 +1,8 @@
 #ifndef GAME_OBJECT_8003DEC4_H
 #define GAME_OBJECT_8003DEC4_H
 
+#include "game/FMCAPPORT.h"
+
 struct Item_800476DC;
 
 /* Object returned by fn_8003DEC4 (0x19F0 bytes, the size fn_8004A140 passes
@@ -25,7 +27,8 @@ struct Object_8003DEC4 {
     char mUnknown4969[1];
     unsigned char mUnknown4970;
     unsigned char mUnknown4971;
-    char mUnknown4972[216];
+    char mUnknown4972[4];
+    FMCAPPORTValues mUnknown4976;
     char mUnknown5188[1452];
 };
 
