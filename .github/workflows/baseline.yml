@@ -127,6 +127,7 @@ jobs:
         run: |
           command -v git
           python3 -m unittest discover -s tests -p test_activity.py -v
+          python3 -m unittest discover -s tests -p test_export_progress.py -v
       - name: Save verified inventory metadata
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.inventory-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
