@@ -9,9 +9,9 @@ public:
     virtual void vfn_01();
     virtual void vfn_02();
     virtual void vfn_03();
-    virtual void vfn_04();
-    virtual void vfn_05();
-    virtual void vfn_06();
+    virtual unsigned int vfn_04(int team);
+    virtual int vfn_05(int team);
+    virtual unsigned int vfn_06();
     virtual void vfn_07(int a, int b);
     virtual void vfn_08();
     virtual void vfn_09();

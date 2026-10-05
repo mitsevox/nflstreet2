@@ -1,25 +1,18 @@
 #include <string.h>
 #include "game/Object_80039F5C.h"
 #include "game/Entry_80219044.h"
+#include "game/Object_800785C0.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_8017DD68.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80218FC4.h"
 #include "game/fn_8021D7B8.h"
 
-/* Block that fn_800785C0 returns. */
-struct Object_800785C0 {
-    char mUnknown0[0x1A8];
-    int mUnknown1A8;
-    int mUnknown1AC;
-};
-
 extern "C" {
 extern void *lbl_803EB688;
 
 int fn_80025708(void);
 int fn_8002B5A8(void);
-Object_800785C0 *fn_800785C0(void);
 int fn_800A8444(int team);
 int fn_800A8488(int team);
 Object_80039F5C *fn_800B6544(int index);

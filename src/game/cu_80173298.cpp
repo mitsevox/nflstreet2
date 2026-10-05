@@ -4,14 +4,7 @@
 #include "game/fn_80238174.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
-
-/* Entry returned by fn_800B1648; only the accessed fields are declared. */
-struct Record_800B1648 {
-    int mUnknown0;
-    char mUnknown4[16];
-    unsigned short mUnknown14;
-    unsigned int mUnknown18;
-};
+#include "game/Record_800B15FC.h"
 
 extern "C" {
 extern void *lbl_803EAB84;
@@ -29,8 +22,6 @@ unsigned int fn_8009D990(int index);
 int fn_8009D9A8(int index);
 int fn_8009D9D8(int index);
 void fn_800AD910(int a, float b);
-unsigned int fn_800B15D4(void);
-Record_800B1648 *fn_800B1648(unsigned short index);
 int fn_800B232C(int a);
 int fn_800B2624(void);
 int fn_800B9A90(void *pHandle);
@@ -76,7 +67,7 @@ void fn_80173320(void)
 {
 }
 
-void fn_80173324(int a)
+void fn_80173324(unsigned int a)
 {
     int flags;
 
@@ -242,7 +233,7 @@ void fn_80173794(void)
     unsigned short i;
 
     for (i = 0; i < count; i++) {
-        Record_800B1648 *pRecord = fn_800B1648(i);
+        Record_800B15FC *pRecord = fn_800B1648(i);
 
         switch (pRecord->mUnknown14) {
         case 3:

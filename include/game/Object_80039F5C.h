@@ -89,7 +89,11 @@ struct Object_8016D9B8 {
 };
 
 struct Object_80039F5C {
-    int mId;
+    /* Read both as a word and byte by byte (+1 index, +2 team). */
+    union {
+        int mId;
+        unsigned char mIdBytes[4];
+    };
     Block_80170E64 *mpUnknown4;
     unsigned char mUnknown8;
     char mUnknown9[3];
@@ -120,7 +124,9 @@ struct Object_80039F5C {
     Object_8016D9B8 *mpUnknown796;
     char mUnknown800[232];
     int mUnknown1032;
-    char mUnknown1036[124];
+    char mUnknown1036[8];
+    int mUnknown1044;
+    char mUnknown1048[112];
     Block_801718E8 mUnknown1160;
     unsigned char mUnknown1213;
     unsigned char mUnknown1214;
