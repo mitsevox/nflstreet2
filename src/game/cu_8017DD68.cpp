@@ -73,7 +73,7 @@ extern "C" void fn_8017DDDC(int index)
     }
 }
 
-extern "C" void fn_8017DE54(int a, int b, float t, int direct)
+extern "C" void fn_8017DE54(int a, float t, int b, int direct)
 {
     Arg_8021D7B8 args[3];
     float first;

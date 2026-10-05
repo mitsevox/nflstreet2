@@ -1,4 +1,5 @@
 #include "game/Module.h"
+#include "game/cu_80003C94.h"
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/GameState.h"
 #include "game/ModuleGroup_80033A5C.h"
@@ -6,8 +7,6 @@
 extern "C" {
 extern char lbl_803071E8[];
 
-void fn_80003C94(void);
-void fn_80003CC4(void);
 void fn_800221CC(int);
 void fn_80022328(void);
 void fn_80022FF0(void);

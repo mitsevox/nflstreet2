@@ -38,11 +38,6 @@ struct Event_80073C24 {
     unsigned char mUnknown3;
 };
 
-struct Pair_80073CB0 {
-    void *mpUnknown0;
-    int mUnknown4;
-};
-
 struct Slot_8030AAB8 {
     int mUnknown0;
     int mUnknown4;
@@ -84,7 +79,6 @@ int fn_80076DA4(void);
 int fn_80076F40(int index);
 void fn_801AF364(int a);
 void *fn_801EECD0(void *pData, int a, int b, int c);
-int fn_801F4580(int handle, Pair_80073CB0 *pPair, int a, int b);
 void fn_801F4638(int handle);
 void fn_801F46F8(int handle, int a);
 void fn_801F4AB0(int a, int b);

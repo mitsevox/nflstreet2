@@ -5028,12 +5028,12 @@
           "end": "0x8036ADB0"
         },
         {
-          "symbol": "_.tmp_0.48",
+          "symbol": "_.tmp_0.51",
           "start": "0x803ECDE0",
           "end": "0x803ECDE4"
         },
         {
-          "symbol": "_.tmp_1.103",
+          "symbol": "_.tmp_1.106",
           "start": "0x803ECDE4",
           "end": "0x803ECDE8"
         },
@@ -5043,7 +5043,7 @@
           "end": "0x803ECDF0"
         },
         {
-          "symbol": "_.tmp_2.113",
+          "symbol": "_.tmp_2.116",
           "start": "0x803ECDF0",
           "end": "0x803ECDF4"
         },
@@ -5053,7 +5053,7 @@
           "end": "0x803ECDFC"
         },
         {
-          "symbol": "_.tmp_3.123",
+          "symbol": "_.tmp_3.126",
           "start": "0x803ECDFC",
           "end": "0x803ECE00"
         },
@@ -5063,7 +5063,7 @@
           "end": "0x803ECE08"
         },
         {
-          "symbol": "_.tmp_4.130",
+          "symbol": "_.tmp_4.133",
           "start": "0x803ECE08",
           "end": "0x803ECE0C"
         },
@@ -5073,7 +5073,7 @@
           "end": "0x803ECE14"
         },
         {
-          "symbol": "_.tmp_5.137",
+          "symbol": "_.tmp_5.140",
           "start": "0x803ECE14",
           "end": "0x803ECE18"
         },
@@ -5083,7 +5083,7 @@
           "end": "0x803ECE20"
         },
         {
-          "symbol": "_.tmp_6.144",
+          "symbol": "_.tmp_6.147",
           "start": "0x803ECE20",
           "end": "0x803ECE24"
         },
@@ -5093,7 +5093,7 @@
           "end": "0x803ECE2C"
         },
         {
-          "symbol": "_.tmp_7.151",
+          "symbol": "_.tmp_7.154",
           "start": "0x803ECE2C",
           "end": "0x803ECE30"
         },
@@ -5220,6 +5220,802 @@
           "symbol": "fn_80143F40",
           "start": "0x80143F40",
           "end": "0x80143F8C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801564DC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row for src/game/cu_801564DC.cpp (replacing candidate range cu_801566EC and the unassigned span before it), individual exact function extents, exact data rows for its .rodata vtables and constants, .data step tables and strings, .sdata, .bss and .sbss storage and .ctors/.dtors words, the type, source-form and name rows. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801564DC",
+          "end": "0x80159F10"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A3078",
+          "end": "0x802A3E20"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DEBD0",
+          "end": "0x802DF180"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB300",
+          "end": "0x803EB328"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031BEE4",
+          "end": "0x8031C02C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA2C",
+          "end": "0x803ECA5C"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AE4",
+          "end": "0x80289AE8"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C1C",
+          "end": "0x80289C20"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801564DC",
+          "start": "0x801564DC",
+          "end": "0x8015651C"
+        },
+        {
+          "symbol": "fn_8015651C",
+          "start": "0x8015651C",
+          "end": "0x801566DC"
+        },
+        {
+          "symbol": "fn_801566DC",
+          "start": "0x801566DC",
+          "end": "0x801566E4"
+        },
+        {
+          "symbol": "fn_801566E4",
+          "start": "0x801566E4",
+          "end": "0x801566EC"
+        },
+        {
+          "symbol": "fn_801566EC",
+          "start": "0x801566EC",
+          "end": "0x801566F8"
+        },
+        {
+          "symbol": "fn_801566F8",
+          "start": "0x801566F8",
+          "end": "0x80156704"
+        },
+        {
+          "symbol": "fn_80156704",
+          "start": "0x80156704",
+          "end": "0x80156724"
+        },
+        {
+          "symbol": "fn_80156724",
+          "start": "0x80156724",
+          "end": "0x8015672C"
+        },
+        {
+          "symbol": "fn_8015672C",
+          "start": "0x8015672C",
+          "end": "0x80156734"
+        },
+        {
+          "symbol": "fn_80156734",
+          "start": "0x80156734",
+          "end": "0x8015673C"
+        },
+        {
+          "symbol": "fn_8015673C",
+          "start": "0x8015673C",
+          "end": "0x80156854"
+        },
+        {
+          "symbol": "fn_80156854",
+          "start": "0x80156854",
+          "end": "0x801568E8"
+        },
+        {
+          "symbol": "fn_801568E8",
+          "start": "0x801568E8",
+          "end": "0x801568F0"
+        },
+        {
+          "symbol": "fn_801568F0",
+          "start": "0x801568F0",
+          "end": "0x801568F8"
+        },
+        {
+          "symbol": "fn_801568F8",
+          "start": "0x801568F8",
+          "end": "0x80156900"
+        },
+        {
+          "symbol": "fn_80156900",
+          "start": "0x80156900",
+          "end": "0x80156928"
+        },
+        {
+          "symbol": "fn_80156928",
+          "start": "0x80156928",
+          "end": "0x80156960"
+        },
+        {
+          "symbol": "fn_80156960",
+          "start": "0x80156960",
+          "end": "0x801569B4"
+        },
+        {
+          "symbol": "fn_801569B4",
+          "start": "0x801569B4",
+          "end": "0x801569BC"
+        },
+        {
+          "symbol": "fn_801569BC",
+          "start": "0x801569BC",
+          "end": "0x801569C8"
+        },
+        {
+          "symbol": "fn_801569C8",
+          "start": "0x801569C8",
+          "end": "0x80156AB0"
+        },
+        {
+          "symbol": "fn_80156AB0",
+          "start": "0x80156AB0",
+          "end": "0x80156C48"
+        },
+        {
+          "symbol": "fn_80156C48",
+          "start": "0x80156C48",
+          "end": "0x80156C78"
+        },
+        {
+          "symbol": "fn_80156C78",
+          "start": "0x80156C78",
+          "end": "0x80156C8C"
+        },
+        {
+          "symbol": "fn_80156C8C",
+          "start": "0x80156C8C",
+          "end": "0x80156D14"
+        },
+        {
+          "symbol": "fn_80156D14",
+          "start": "0x80156D14",
+          "end": "0x80156D1C"
+        },
+        {
+          "symbol": "fn_80156D1C",
+          "start": "0x80156D1C",
+          "end": "0x80156D24"
+        },
+        {
+          "symbol": "fn_80156D24",
+          "start": "0x80156D24",
+          "end": "0x80156DC4"
+        },
+        {
+          "symbol": "fn_80156DC4",
+          "start": "0x80156DC4",
+          "end": "0x80156E74"
+        },
+        {
+          "symbol": "fn_80156E74",
+          "start": "0x80156E74",
+          "end": "0x80156E9C"
+        },
+        {
+          "symbol": "fn_80156E9C",
+          "start": "0x80156E9C",
+          "end": "0x80156F30"
+        },
+        {
+          "symbol": "fn_80156F30",
+          "start": "0x80156F30",
+          "end": "0x80157000"
+        },
+        {
+          "symbol": "fn_80157000",
+          "start": "0x80157000",
+          "end": "0x80157060"
+        },
+        {
+          "symbol": "vfn_03__15Lesson_802A3DC8",
+          "start": "0x80157060",
+          "end": "0x80157068"
+        },
+        {
+          "symbol": "vfn_04__15Lesson_802A3DC8",
+          "start": "0x80157068",
+          "end": "0x80157070"
+        },
+        {
+          "symbol": "vfn_05__15Lesson_802A3DC8",
+          "start": "0x80157070",
+          "end": "0x80157078"
+        },
+        {
+          "symbol": "vfn_06__15Lesson_802A3DC8",
+          "start": "0x80157078",
+          "end": "0x80157080"
+        },
+        {
+          "symbol": "fn_80157080",
+          "start": "0x80157080",
+          "end": "0x80157448"
+        },
+        {
+          "symbol": "fn_80157448",
+          "start": "0x80157448",
+          "end": "0x801574DC"
+        },
+        {
+          "symbol": "fn_801574DC",
+          "start": "0x801574DC",
+          "end": "0x80157514"
+        },
+        {
+          "symbol": "fn_80157514",
+          "start": "0x80157514",
+          "end": "0x80157550"
+        },
+        {
+          "symbol": "fn_80157550",
+          "start": "0x80157550",
+          "end": "0x80157558"
+        },
+        {
+          "symbol": "vfn_01__15Lesson_802A3BE8",
+          "start": "0x80157558",
+          "end": "0x80157620"
+        },
+        {
+          "symbol": "vfn_02__15Lesson_802A3BE8",
+          "start": "0x80157620",
+          "end": "0x801576A8"
+        },
+        {
+          "symbol": "vfn_07__15Lesson_802A3BE8",
+          "start": "0x801576A8",
+          "end": "0x801576D8"
+        },
+        {
+          "symbol": "vfn_08__15Lesson_802A3BE8",
+          "start": "0x801576D8",
+          "end": "0x801576E4"
+        },
+        {
+          "symbol": "vfn_09__15Lesson_802A3BE8",
+          "start": "0x801576E4",
+          "end": "0x801576F0"
+        },
+        {
+          "symbol": "vfn_01__15Lesson_802A3D08",
+          "start": "0x801576F0",
+          "end": "0x801577AC"
+        },
+        {
+          "symbol": "vfn_02__15Lesson_802A3D08",
+          "start": "0x801577AC",
+          "end": "0x80157834"
+        },
+        {
+          "symbol": "vfn_07__15Lesson_802A3D08",
+          "start": "0x80157834",
+          "end": "0x80157864"
+        },
+        {
+          "symbol": "vfn_08__15Lesson_802A3D08",
+          "start": "0x80157864",
+          "end": "0x80157870"
+        },
+        {
+          "symbol": "vfn_09__15Lesson_802A3D08",
+          "start": "0x80157870",
+          "end": "0x8015787C"
+        },
+        {
+          "symbol": "vfn_04__14Class_802A3858f",
+          "start": "0x8015787C",
+          "end": "0x80157928"
+        },
+        {
+          "symbol": "vfn_05__14Class_802A3858f",
+          "start": "0x80157928",
+          "end": "0x801579A0"
+        },
+        {
+          "symbol": "vfn_04__14Class_802A3958f",
+          "start": "0x801579A0",
+          "end": "0x80157C48"
+        },
+        {
+          "symbol": "vfn_03__14Class_802A38C8f",
+          "start": "0x80157C48",
+          "end": "0x80157D00"
+        },
+        {
+          "symbol": "vfn_01__15Lesson_802A3CA8",
+          "start": "0x80157D00",
+          "end": "0x80157DB8"
+        },
+        {
+          "symbol": "vfn_02__15Lesson_802A3CA8",
+          "start": "0x80157DB8",
+          "end": "0x80157E40"
+        },
+        {
+          "symbol": "vfn_07__15Lesson_802A3CA8",
+          "start": "0x80157E40",
+          "end": "0x80157E70"
+        },
+        {
+          "symbol": "vfn_08__15Lesson_802A3CA8",
+          "start": "0x80157E70",
+          "end": "0x80157E7C"
+        },
+        {
+          "symbol": "vfn_09__15Lesson_802A3CA8",
+          "start": "0x80157E7C",
+          "end": "0x80157E88"
+        },
+        {
+          "symbol": "vfn_01__15Lesson_802A3D68",
+          "start": "0x80157E88",
+          "end": "0x80157F40"
+        },
+        {
+          "symbol": "vfn_02__15Lesson_802A3D68",
+          "start": "0x80157F40",
+          "end": "0x80157FC8"
+        },
+        {
+          "symbol": "vfn_07__15Lesson_802A3D68",
+          "start": "0x80157FC8",
+          "end": "0x80157FF8"
+        },
+        {
+          "symbol": "vfn_08__15Lesson_802A3D68",
+          "start": "0x80157FF8",
+          "end": "0x80158004"
+        },
+        {
+          "symbol": "vfn_09__15Lesson_802A3D68",
+          "start": "0x80158004",
+          "end": "0x80158010"
+        },
+        {
+          "symbol": "vfn_04__14Class_802A3820f",
+          "start": "0x80158010",
+          "end": "0x801582C4"
+        },
+        {
+          "symbol": "vfn_01__15Lesson_802A3C48",
+          "start": "0x801582C4",
+          "end": "0x8015837C"
+        },
+        {
+          "symbol": "vfn_02__15Lesson_802A3C48",
+          "start": "0x8015837C",
+          "end": "0x80158404"
+        },
+        {
+          "symbol": "vfn_07__15Lesson_802A3C48",
+          "start": "0x80158404",
+          "end": "0x80158434"
+        },
+        {
+          "symbol": "vfn_08__15Lesson_802A3C48",
+          "start": "0x80158434",
+          "end": "0x80158440"
+        },
+        {
+          "symbol": "vfn_09__15Lesson_802A3C48",
+          "start": "0x80158440",
+          "end": "0x8015844C"
+        },
+        {
+          "symbol": "fn_8015844C",
+          "start": "0x8015844C",
+          "end": "0x80158A4C"
+        },
+        {
+          "symbol": "fn_80158A4C",
+          "start": "0x80158A4C",
+          "end": "0x80158AA8"
+        },
+        {
+          "symbol": "fn_80158AA8",
+          "start": "0x80158AA8",
+          "end": "0x80158BB4"
+        },
+        {
+          "symbol": "fn_80158BB4",
+          "start": "0x80158BB4",
+          "end": "0x80158C04"
+        },
+        {
+          "symbol": "fn_80158C04__14Class_802A3A48",
+          "start": "0x80158C04",
+          "end": "0x80158DA0"
+        },
+        {
+          "symbol": "vfn_03__14Class_802A3B80",
+          "start": "0x80158DA0",
+          "end": "0x80158DE4"
+        },
+        {
+          "symbol": "vfn_04__14Class_802A3B80f",
+          "start": "0x80158DE4",
+          "end": "0x80158EC4"
+        },
+        {
+          "symbol": "vfn_11__14Class_802A3B80f",
+          "start": "0x80158EC4",
+          "end": "0x80158EE8"
+        },
+        {
+          "symbol": "vfn_06__14Class_802A3B80",
+          "start": "0x80158EE8",
+          "end": "0x80158FC4"
+        },
+        {
+          "symbol": "vfn_07__14Class_802A3B80",
+          "start": "0x80158FC4",
+          "end": "0x80158FE8"
+        },
+        {
+          "symbol": "vfn_04__14Class_802A3B10f",
+          "start": "0x80158FE8",
+          "end": "0x80159230"
+        },
+        {
+          "symbol": "vfn_06__14Class_802A3B10f",
+          "start": "0x80159230",
+          "end": "0x80159278"
+        },
+        {
+          "symbol": "vfn_05__14Class_802A3B10f",
+          "start": "0x80159278",
+          "end": "0x801593AC"
+        },
+        {
+          "symbol": "vfn_12__14Class_802A3B10",
+          "start": "0x801593AC",
+          "end": "0x80159404"
+        },
+        {
+          "symbol": "vfn_03__14Class_802A3AD8",
+          "start": "0x80159404",
+          "end": "0x80159478"
+        },
+        {
+          "symbol": "vfn_04__14Class_802A3AD8f",
+          "start": "0x80159478",
+          "end": "0x80159528"
+        },
+        {
+          "symbol": "vfn_03__14Class_802A3A48f",
+          "start": "0x80159528",
+          "end": "0x801595BC"
+        },
+        {
+          "symbol": "vfn_04__14Class_802A3A48f",
+          "start": "0x801595BC",
+          "end": "0x80159924"
+        },
+        {
+          "symbol": "vfn_06__14Class_802A3A48",
+          "start": "0x80159924",
+          "end": "0x80159928"
+        },
+        {
+          "symbol": "vfn_05__14Class_802A3A48",
+          "start": "0x80159928",
+          "end": "0x80159A34"
+        },
+        {
+          "symbol": "vfn_07__14Class_802A3A48",
+          "start": "0x80159A34",
+          "end": "0x80159A38"
+        },
+        {
+          "symbol": "vfn_10__14Class_802A3A48",
+          "start": "0x80159A38",
+          "end": "0x80159A3C"
+        },
+        {
+          "symbol": "vfn_11__14Class_802A3A48",
+          "start": "0x80159A3C",
+          "end": "0x80159A60"
+        },
+        {
+          "symbol": "vfn_12__14Class_802A3A48",
+          "start": "0x80159A60",
+          "end": "0x80159A84"
+        },
+        {
+          "symbol": "vfn_14__14Class_802A3A48f",
+          "start": "0x80159A84",
+          "end": "0x80159B04"
+        },
+        {
+          "symbol": "vfn_11__14Class_802A3990i",
+          "start": "0x80159B04",
+          "end": "0x80159B24"
+        },
+        {
+          "symbol": "vfn_12__14Class_802A3990",
+          "start": "0x80159B24",
+          "end": "0x80159B2C"
+        },
+        {
+          "symbol": "vfn_10__14Class_802A3990",
+          "start": "0x80159B2C",
+          "end": "0x80159BC8"
+        },
+        {
+          "symbol": "vfn_02__14Class_802A3990",
+          "start": "0x80159BC8",
+          "end": "0x80159BD0"
+        },
+        {
+          "symbol": "vfn_08__14Class_802A3990",
+          "start": "0x80159BD0",
+          "end": "0x80159BD8"
+        },
+        {
+          "symbol": "__static_initialization_and_destruction_0",
+          "start": "0x80159BD8",
+          "end": "0x80159CD4"
+        },
+        {
+          "symbol": "_._15Lesson_802A3D68",
+          "start": "0x80159CD4",
+          "end": "0x80159D08"
+        },
+        {
+          "symbol": "_._15Lesson_802A3D08",
+          "start": "0x80159D08",
+          "end": "0x80159D3C"
+        },
+        {
+          "symbol": "_._15Lesson_802A3CA8",
+          "start": "0x80159D3C",
+          "end": "0x80159D70"
+        },
+        {
+          "symbol": "_._15Lesson_802A3C48",
+          "start": "0x80159D70",
+          "end": "0x80159DA4"
+        },
+        {
+          "symbol": "_._15Lesson_802A3BE8",
+          "start": "0x80159DA4",
+          "end": "0x80159DD8"
+        },
+        {
+          "symbol": "_._14Class_802A3B10",
+          "start": "0x80159DD8",
+          "end": "0x80159E0C"
+        },
+        {
+          "symbol": "vfn_08__14Class_802A3B10",
+          "start": "0x80159E0C",
+          "end": "0x80159E14"
+        },
+        {
+          "symbol": "_._14Class_802A3A48",
+          "start": "0x80159E14",
+          "end": "0x80159E48"
+        },
+        {
+          "symbol": "vfn_14__14Class_802A3990",
+          "start": "0x80159E48",
+          "end": "0x80159E50"
+        },
+        {
+          "symbol": "_._14Class_802A38C8",
+          "start": "0x80159E50",
+          "end": "0x80159E84"
+        },
+        {
+          "symbol": "_._14Class_802A3858",
+          "start": "0x80159E84",
+          "end": "0x80159EB8"
+        },
+        {
+          "symbol": "_GLOBAL_.I.lbl_802DEBD0",
+          "start": "0x80159EB8",
+          "end": "0x80159EE4"
+        },
+        {
+          "symbol": "_GLOBAL_.D.lbl_802DEBD0",
+          "start": "0x80159EE4",
+          "end": "0x80159F10"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8002053C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv: src/game/cu_8002053C.cpp; seven whole unlinked bodies and the single observed initialized byte.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002053C",
+          "end": "0x80020A34"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBAA0",
+          "end": "0x803EBAA1"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8002053C",
+          "start": "0x8002053C",
+          "end": "0x80020620"
+        },
+        {
+          "symbol": "fn_80020620",
+          "start": "0x80020620",
+          "end": "0x80020680"
+        },
+        {
+          "symbol": "fn_80020680",
+          "start": "0x80020680",
+          "end": "0x800206B4"
+        },
+        {
+          "symbol": "fn_800206B4",
+          "start": "0x800206B4",
+          "end": "0x80020718"
+        },
+        {
+          "symbol": "fn_80020718",
+          "start": "0x80020718",
+          "end": "0x80020870"
+        },
+        {
+          "symbol": "fn_80020870",
+          "start": "0x80020870",
+          "end": "0x80020904"
+        },
+        {
+          "symbol": "fn_80020904",
+          "start": "0x80020904",
+          "end": "0x80020A34"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80003C94.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv bounded provisional/open unit row, observed pointer word, whole-function extents, neutral labels and target-supported declaration/source-form rows. Both bodies and storage are unlinked comparisons.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80003C94",
+          "end": "0x80003CF0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB8D8",
+          "end": "0x803EB8DC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80003C94",
+          "start": "0x80003C94",
+          "end": "0x80003CC4"
+        },
+        {
+          "symbol": "fn_80003CC4",
+          "start": "0x80003CC4",
+          "end": "0x80003CF0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80003FF8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv existing six-function grouping, complete accessor extent and observed byte. Only the accessor is reconstructed; five other bodies and all literals remain original-linked. Native rounding is measured without ownership of adjacent zeros.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8000485C",
+          "end": "0x80004864"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB8FC",
+          "end": "0x803EB8FD"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8000485C",
+          "start": "0x8000485C",
+          "end": "0x80004864"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800DBB74.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv inferred unit row 0x800DBB74-0x800DC584, exact function row 0x800DC578-0x800DC584, and exact initialized data row 0x803EAD1C-0x803EAD20. Only the reset is reconstructed; five other bodies remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DC578",
+          "end": "0x800DC584"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EAD1C",
+          "end": "0x803EAD20"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800DC578",
+          "start": "0x800DC578",
+          "end": "0x800DC584"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800D949C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained inferred sixteen-function grouping and exact complete helper 0x800DAC78-0x800DAC88. Only this whole body is reconstructed; fifteen other functions and all static data remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DAC78",
+          "end": "0x800DAC88"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800DAC78",
+          "start": "0x800DAC78",
+          "end": "0x800DAC88"
         }
       ]
     }

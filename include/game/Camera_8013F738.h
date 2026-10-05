@@ -19,7 +19,9 @@ struct Camera_8013F738 {
     CameraHeader_8013F628 mHeader;
     char mPad28[0x6C];
     int mUnknown94;
-    char mPad98[0x10];
+    char mPad98[8];
+    int mUnknownA0;
+    char mPadA4[4];
     int mUnknownA8;
     char mPadAC[4];
     int mUnknownB0;

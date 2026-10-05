@@ -70,6 +70,13 @@ struct Object_80023BBC {
         Set(a, b, type);
         mUnknown24.mInt = c;
     }
+    void SetUnknown32(int a, long long b, int type, int unknown32)
+    {
+        mUnknown32 = unknown32;
+        mUnknown0 = a;
+        mUnknown8 = b;
+        mUnknown16 = type;
+    }
     void Set(int a, Object_80023BBC *pLeft, Object_80023BBC *pRight)
     {
         mUnknown32 = 0x20009;
@@ -109,9 +116,9 @@ int fn_8007A7F4(Object_8007A334 *pObject, int a, int b, int c, int *pResult);
 int fn_8007A894(Object_8007A334 *pObject, int a, int b, int c, int *pResult);
 int fn_8007A98C(void *pObject, int a);
 float fn_8007A9E4(Object_8007A334 *pObject, int a);
-int fn_8007AA90(Object_8007A334 *pObject, int key, int value);
+void fn_8007AA90(Object_8007A334 *pObject, int key, int value);
 void fn_8007AA3C(Object_8007A334 *pObject, int a, int b, int c);
-int fn_8007ABA4(void *pObject, int a, int b);
+void fn_8007ABA4(void *pObject, int a, int b);
 void fn_8007EEFC(Object_8007A334 *pObject);
 void fn_8007F064(Object_8007A334 *pObject);
 void fn_8007F094(Object_8007A334 *pObject, char *pBuffer, int size);
