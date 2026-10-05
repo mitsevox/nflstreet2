@@ -1,7 +1,7 @@
 #ifndef GAME_CU_80181330_H
 #define GAME_CU_80181330_H
 
-/* Camera layout returned by fn_80183734; fn_80183740 adds an optional
+/* Layout returned by fn_80183734; fn_80183740 adds an optional
    offset record of the same layout to it. */
 struct Layout_802EA9E0 {
     float mUnknown0;

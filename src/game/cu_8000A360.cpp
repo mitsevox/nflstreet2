@@ -97,7 +97,7 @@ extern const int lbl_8000D798[];
 extern const int lbl_8000D7AC[];
 extern const int lbl_8000D7BC[];
 
-/* Entries of the four body-area menus. */
+/* Entries of the body-area menu and its submenus. */
 const Entry_80182CC8 lbl_8000D2D0[] = {
     { 0, 0, "Head", 1 },
     { 1, 0, "Arms", 1 },
@@ -176,7 +176,7 @@ static const Layout_802EA9E0 lbl_8000DC30[] = {
 
 static const unsigned short lbl_8000DCBC[] = { 2, 2, 14, 11, 11, 12, 8, 12, 15, 15, 2, 9, 2, 2 };
 
-static inline bool HasDecals()
+static inline bool AnyDecalFlagged()
 {
     return fn_80023914(fn_80183354()) != 0;
 }
@@ -497,11 +497,11 @@ static int fn_8000A620()
         if (id == 0 || lbl_803ECDD4 == set) {
             int key = fn_8007BB24(&lbl_8036A1FC);
             int unique = fn_8007BF3C(&lbl_8036A1FC);
-            unsigned char hidden;
+            unsigned char locked;
             unsigned char flag;
 
-            fn_8007DE40(&lbl_8036A228, key, &hidden, &flag);
-            if (!hidden && (showUnique || !unique)) {
+            fn_8007DE40(&lbl_8036A228, key, &locked, &flag);
+            if (!locked && (showUnique || !unique)) {
                 lbl_8036A2C8[lbl_803ECDD8].mUnknown12 = flag;
                 if (unique) {
                     lbl_8036A2C8[lbl_803ECDD8].mOwner = fn_8000A434(type, id);
@@ -986,7 +986,7 @@ void Class_8000DB50::vfn_05(int id, Entry_80182CC8 *pOut)
 {
     Class_802A6B60::vfn_05(id, pOut);
     if (id == 2) {
-        pOut->mUnknown40 = HasDecals();
+        pOut->mUnknown40 = AnyDecalFlagged();
     } else {
         pOut->mUnknown40 = fn_8000A890(lbl_8000D774[id]);
     }
@@ -1015,7 +1015,7 @@ int Class_8000DB50::fn_8000B600()
         }
     }
     if (!result) {
-        result = HasDecals();
+        result = AnyDecalFlagged();
     }
     return result;
 }
@@ -1107,7 +1107,7 @@ void Class_8000DAB0::vfn_05(int id, Entry_80182CC8 *pOut)
         break;
     case 1:
     case 2:
-        pOut->mUnknown40 = HasDecals();
+        pOut->mUnknown40 = AnyDecalFlagged();
         break;
     default:
         pOut->mUnknown40 = fn_8000A890(lbl_8000D784[id]);
@@ -1145,7 +1145,7 @@ int Class_8000DAB0::fn_8000B984()
         if (!result) {
             result = fn_8000D220()->fn_8000B760();
             if (!result) {
-                result = HasDecals();
+                result = AnyDecalFlagged();
             }
         }
     }
