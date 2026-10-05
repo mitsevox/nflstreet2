@@ -5274,6 +5274,26 @@
           "end": "0x800DC584"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800D949C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained inferred sixteen-function grouping and exact complete helper 0x800DAC78-0x800DAC88. Only this whole body is reconstructed; fifteen other functions and all static data remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DAC78",
+          "end": "0x800DAC88"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800DAC78",
+          "start": "0x800DAC78",
+          "end": "0x800DAC88"
+        }
+      ]
     }
   ]
 }
