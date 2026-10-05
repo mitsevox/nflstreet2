@@ -174,9 +174,7 @@ void fn_80185D78(void)
         if (fn_8007F828(6) == 1) {
             fn_8018A7F8(fn_8018A854(), 0);
         } else {
-            Object_80228224 *pObject = fn_8018A854();
-
-            fn_8018A7F8(pObject, fn_8007F828(6));
+            fn_8018A7F8(fn_8018A854(), fn_8007F828(6));
         }
         fn_8013CF98();
     }
