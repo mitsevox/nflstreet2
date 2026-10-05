@@ -6018,6 +6018,46 @@
           "end": "0x800DAC88"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800E3CC0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp, exact whole-function rows and inferred name/source-form/compiler rows for five complete constant-return bodies. Original bytes remain linked; all other bodies and static data are unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E3CC0",
+          "end": "0x800EF834"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E8740",
+          "start": "0x800E8740",
+          "end": "0x800E8748"
+        },
+        {
+          "symbol": "fn_800EA1D0",
+          "start": "0x800EA1D0",
+          "end": "0x800EA1D8"
+        },
+        {
+          "symbol": "fn_800EAFFC",
+          "start": "0x800EAFFC",
+          "end": "0x800EB004"
+        },
+        {
+          "symbol": "fn_800ECE28",
+          "start": "0x800ECE28",
+          "end": "0x800ECE30"
+        },
+        {
+          "symbol": "fn_800ECE30",
+          "start": "0x800ECE30",
+          "end": "0x800ECE38"
+        }
+      ]
     }
   ]
 }
