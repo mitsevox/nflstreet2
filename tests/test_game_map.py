@@ -99,6 +99,22 @@ class GameMapTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'source credit'):
             check_progress_maps.verify(self.root, site, decomp, [])
 
+    def test_authenticated_comparison_map_preserves_measured_partial_credit(self):
+        self.write([('cu_a', '0x1000', '0x1020')])
+        files = progress.file_map([self.section], None, [], game_map.load(self.root, [self.section]))
+        files[0]['matched'] = 4
+        site = {'files': files, 'sections': [self.section], 'measures': {
+            'code': {'total': 64, 'matched': 4, 'linked': 0},
+            'data': {'total': 0, 'matched': 0, 'linked': 0}}}
+        decomp = decomp_report.objdiff_report(site)
+        with self.assertRaisesRegex(ValueError, 'source credit'):
+            check_progress_maps.verify(self.root, site, decomp, [])
+        self.assertEqual(check_progress_maps.verify(self.root, site, decomp, [],
+                         authenticated_comparisons=True), 1)
+        files[0]['source'] = 'src/invented.c'
+        with self.assertRaisesRegex(ValueError, 'source credit'):
+            check_progress_maps.verify(self.root, site, decomp, [], authenticated_comparisons=True)
+
     def test_publish_guard_rejects_same_size_boundary_move(self):
         self.write([('cu_a', '0x1000', '0x1020')])
         files = progress.file_map([self.section], None, [], game_map.load(self.root, [self.section]))
