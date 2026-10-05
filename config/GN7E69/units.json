@@ -6901,6 +6901,25 @@
           "end": "0x803ECB88"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8001F020.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8001F020-0x8001F56C (src/game/cu_8001F020.cpp) and its data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8001F020",
+          "end": "0x8001F56C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBA88",
+          "end": "0x803EBA8C"
+        }
+      ]
     }
   ]
 }
