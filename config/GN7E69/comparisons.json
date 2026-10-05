@@ -5946,6 +5946,78 @@
           "end": "0x80003CF0"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80003FF8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv existing six-function grouping, complete accessor extent and observed byte. Only the accessor is reconstructed; five other bodies and all literals remain original-linked. Native rounding is measured without ownership of adjacent zeros.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8000485C",
+          "end": "0x80004864"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB8FC",
+          "end": "0x803EB8FD"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8000485C",
+          "start": "0x8000485C",
+          "end": "0x80004864"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800DBB74.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv inferred unit row 0x800DBB74-0x800DC584, exact function row 0x800DC578-0x800DC584, and exact initialized data row 0x803EAD1C-0x803EAD20. Only the reset is reconstructed; five other bodies remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DC578",
+          "end": "0x800DC584"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EAD1C",
+          "end": "0x803EAD20"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800DC578",
+          "start": "0x800DC578",
+          "end": "0x800DC584"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800D949C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained inferred sixteen-function grouping and exact complete helper 0x800DAC78-0x800DAC88. Only this whole body is reconstructed; fifteen other functions and all static data remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DAC78",
+          "end": "0x800DAC88"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800DAC78",
+          "start": "0x800DAC78",
+          "end": "0x800DAC88"
+        }
+      ]
     }
   ]
 }
