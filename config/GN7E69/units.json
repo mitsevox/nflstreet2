@@ -6467,6 +6467,25 @@
           "end": "0x803ECBE4"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80067F18.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80067F18-0x80068154 (src/game/cu_80067F18.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80067F18",
+          "end": "0x80068154"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA678",
+          "end": "0x803EA67C"
+        }
+      ]
     }
   ]
 }
