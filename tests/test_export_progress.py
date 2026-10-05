@@ -17,7 +17,7 @@ import test_progress
 
 
 @unittest.skipUnless(shutil.which('git'), 'Contributor integration requires host Git')
-class ExportTests(ProgressBase):
+class ReceiptFixture(ProgressBase):
     save = test_progress.SourceReportTests.save
     write_source = test_progress.SourceReportTests.write_source
 
@@ -36,6 +36,7 @@ class ExportTests(ProgressBase):
         self.dol = self.report_path.parent/'main.dol'
         self.dol.write_bytes(self.binary)
         config = self.root/'config/GN7E69'
+        (config/'comparisons.json').write_text(json.dumps({'schema':1, 'units':[]}))
         (config/'history.json').write_text(json.dumps(
             {'schema':1, 'target':'GN7E69', 'target_sha1':self.target, 'snapshots':[]}))
         self.ledger = {'schema':1, 'target':'GN7E69', 'contributors':{'alice':{'id':1}},
@@ -47,6 +48,8 @@ class ExportTests(ProgressBase):
         scope = patch.object(export_progress, 'ROOT', self.root)
         scope.start(); self.addCleanup(scope.stop)
 
+
+class ExportTests(ReceiptFixture):
     def export(self, **options):
         return export_progress.export(self.dol, self.revision, self.report_path,
                                       self.analysis, None, **options)

@@ -14,6 +14,8 @@ import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 import activity
 import restore_history
+import progress
+import test_export_progress
 
 
 class HistoryTests(unittest.TestCase):
@@ -309,36 +311,72 @@ class ExactInventoryTests(unittest.TestCase):
                 activity.exact_functions(site)
 
 
+class ReceiptRejectionTests(test_export_progress.ReceiptFixture):
+    def setUp(self):
+        super().setUp()
+        self.site = progress.report(self.binary, self.revision, self.report_path, self.analysis)
+
+    def export(self, site=None, **options):
+        return activity.export(self.root, self.site if site is None else site,
+                               self.report_path, **options)
+
+    def test_bound_receipt_supplies_real_credit(self):
+        result = self.export()
+        self.assertEqual(result['credited_functions'], 1)
+        self.assertEqual(result['contributors'][0]['login'], 'alice')
+
+    def test_stale_manifest_is_rejected(self):
+        self.source_report['manifest_sha256'] = '0'*64; self.save()
+        with self.assertRaisesRegex(ValueError, 'different unit manifest'):
+            self.export()
+
+    def test_changed_build_tools_are_rejected(self):
+        self.source_report['tools'] = {}; self.save()
+        with self.assertRaisesRegex(ValueError, 'different build tooling'):
+            self.export()
+
+    def test_missing_compiler_function_is_rejected(self):
+        self.source_report['units'][0]['functions'].pop(); self.save()
+        with self.assertRaisesRegex(ValueError, 'lacks compiler function coverage'):
+            self.export()
+
+    def test_stale_source_hash_is_rejected(self):
+        self.source_report['units'][0]['source_sha256'] = '0'*64; self.save()
+        with self.assertRaisesRegex(ValueError, 'stale for src/unit.c'):
+            self.export()
+
+    def test_forged_linked_exact_and_fuzzy_counts_are_rejected(self):
+        for mode in ('linked', 'exact', 'fuzzy'):
+            bad = copy.deepcopy(self.site)
+            if mode == 'exact':
+                bad['functions']['exact'] += 1
+            else:
+                bad['measures']['code'][mode] = bad['measures']['code'].get(mode, 0) + 1
+            with self.subTest(mode=mode), self.assertRaisesRegex(ValueError, 'measurements differ'):
+                self.export(bad)
+
+    def test_foreign_revision_cannot_append_history(self):
+        bad = copy.deepcopy(self.site); bad['revision'] = '0'*40
+        previous = json.loads((self.root/'config/GN7E69/history.json').read_text())
+        with self.assertRaisesRegex(ValueError, 'outside this revision history'):
+            self.export(bad, previous=previous, append=True)
+
+
 class LiveReceiptTests(unittest.TestCase):
-    def test_activity_rejects_stale_receipts_and_mismatched_linked_counts(self):
-        root=activity.ROOT;report=root/'build/source/report.json';site_path=root/'build/site/progress.json'
+    def test_real_build_reconciles_maps_and_exact_function_credit(self):
+        root = activity.ROOT
+        report = root/'build/source/report.json'
+        site_path = root/'build/site/progress.json'
         if not report.exists() or not site_path.exists():
             self.skipTest('Integration export step supplies the verified build and public map')
-        site=json.loads(site_path.read_text());build=json.loads(report.read_text())
-        activity.export(root,site,report)
-        mutations=[]
-        stale=copy.deepcopy(build);stale['manifest_sha256']='0'*64;mutations.append(stale)
-        stale=copy.deepcopy(build);stale['tools']={};mutations.append(stale)
-        stale=copy.deepcopy(build);stale['units'][0]['functions'].pop();mutations.append(stale)
-        stale=copy.deepcopy(build);stale['units'][0]['source_sha256']='0'*64;mutations.append(stale)
-        with tempfile.TemporaryDirectory() as directory:
-            path=Path(directory)/'report.json';(path.parent/'main.dol').symlink_to(report.parent/'main.dol')
-            for stale in mutations:
-                path.write_text(json.dumps(stale))
-                with self.subTest(stale=stale.keys()),self.assertRaises(ValueError):
-                    activity.export(root,site,path)
-        bad=copy.deepcopy(site);bad['measures']['code']['linked']+=1
-        with self.assertRaisesRegex(ValueError,'measurements differ'):
-            activity.export(root,bad,report)
-        bad=copy.deepcopy(site);bad['functions']['exact']+=1
-        with self.assertRaisesRegex(ValueError,'measurements differ'):
-            activity.export(root,bad,report)
-        bad=copy.deepcopy(site);bad['measures']['code']['fuzzy']+=1
-        with self.assertRaisesRegex(ValueError,'measurements differ'):
-            activity.export(root,bad,report)
-        branch_site=copy.deepcopy(site);branch_site['revision']='0'*40
-        with self.assertRaises(ValueError):
-            activity.export(root,branch_site,report,previous=json.loads((root/'config/GN7E69/history.json').read_text()),append=True)
+        site = json.loads(site_path.read_text())
+        # Validate the actual receipts and inventory once; corruption cases use bound fixtures.
+        result = activity.export(root, site, report)
+        published = json.loads((site_path.parent/'activity.json').read_text())
+        self.assertEqual(result['revision'], site['revision'])
+        self.assertEqual(result['credited_functions'], site['functions']['exact'])
+        self.assertEqual(result['contributors'], published['contributors'])
+        self.assertEqual(result['credited_functions'], published['credited_functions'])
 
 
 if __name__=='__main__':unittest.main()
