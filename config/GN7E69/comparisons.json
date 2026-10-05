@@ -5222,6 +5222,62 @@
           "end": "0x80143F8C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8002053C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv: src/game/cu_8002053C.cpp; seven whole unlinked bodies and the single observed initialized byte.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002053C",
+          "end": "0x80020A34"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBAA0",
+          "end": "0x803EBAA1"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8002053C",
+          "start": "0x8002053C",
+          "end": "0x80020620"
+        },
+        {
+          "symbol": "fn_80020620",
+          "start": "0x80020620",
+          "end": "0x80020680"
+        },
+        {
+          "symbol": "fn_80020680",
+          "start": "0x80020680",
+          "end": "0x800206B4"
+        },
+        {
+          "symbol": "fn_800206B4",
+          "start": "0x800206B4",
+          "end": "0x80020718"
+        },
+        {
+          "symbol": "fn_80020718",
+          "start": "0x80020718",
+          "end": "0x80020870"
+        },
+        {
+          "symbol": "fn_80020870",
+          "start": "0x80020870",
+          "end": "0x80020904"
+        },
+        {
+          "symbol": "fn_80020904",
+          "start": "0x80020904",
+          "end": "0x80020A34"
+        }
+      ]
     }
   ]
 }
