@@ -6899,7 +6899,10 @@
         "pull_request": 360,
         "merged_via": 360,
         "commit": "25dc6986bf188f9e67ba0d6f6c8004c6ee1f4702",
-        "introduced_blob": "029a745e14c9bbee3a079fee1a06f0f29343170f"
+        "introduced_blob": "029a745e14c9bbee3a079fee1a06f0f29343170f",
+        "original_blob": "eccab847b49de4fcbc4ee7a1c0a1f20fbc675563",
+        "integration_adjustment": "Dependent PR363 changed the 0x8001FE10 declaration from void * to Arg_8018399C * to match its definition in src/game/cu_8001F56C.cpp; the object is unchanged.",
+        "original_commit": "631353c91fcace5fe4dacb5cb2444706f988520a"
       }
     },
     {
