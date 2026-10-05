@@ -243,10 +243,18 @@ def apply(data, measurement):
                 item[field] = sum(child[field] for child in item['children'])
         else:
             matched = fuzzy = item['linked']
+            item.pop('comparison_source', None)
             for entry in entries:
                 if entry['kind'] != item['kind']:
                     continue
                 start,end = int(entry['start'],16),int(entry['end'],16)
+                if item.get('type') == 'function' and entry.get('type') == 'function' \
+                        and item.get('function_address') == entry['start'] \
+                        and item['size'] == item['original_size'] == end - start:
+                    previous = item.get('comparison_source')
+                    if previous is not None and previous != entry['source']:
+                        raise ValueError('Ambiguous comparison function source')
+                    item['comparison_source'] = entry['source']
                 overlap = sum(max(0,min(b,end)-max(a,start)) for a,b in spans)
                 matched += overlap if entry['matched'] else 0
                 fuzzy += overlap * entry['fuzzy']/(end-start)
