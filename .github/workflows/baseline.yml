@@ -54,18 +54,25 @@ jobs:
           restore-keys: |
             inventory-v1-${{ runner.os }}-${{ env.BUILD_ENVIRONMENT }}-
       - name: Verify publication handoff rules
-        run: python3 -m unittest discover -s tests -p test_publication.py -v
+        run: |
+          python3 -m unittest discover -s tests -p test_ci_policy.py -v
+          python3 -m unittest discover -s tests -p test_publication.py -v
       - name: Select verified final-integration reports
         id: publication
-        if: github.ref == 'refs/heads/main' && steps.inventory-cache.outputs.cache-hit == 'true'
+        if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 tools/publication.py select
+      - name: Decide required validation lanes
+        id: validation
+        run: |
+          python3 tools/ci_policy.py --reused "${{ steps.publication.outputs.reused || 'false' }}" \
+            --cache-hit "${{ steps.inventory-cache.outputs.cache-hit || 'false' }}"
       - name: Verify review clearance logic
-        if: steps.publication.outputs.reused != 'true'
+        if: steps.validation.outputs.full == 'true'
         run: node --test tests/review_gate.mjs
       - name: Authenticate pinned build environment
-        if: steps.publication.outputs.reused != 'true'
+        if: steps.validation.outputs.inventory == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: printf '%s' "$GH_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
@@ -75,7 +82,7 @@ jobs:
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/baseline.py --original /orig/main.dol
       - name: Prepare pinned compiler stages
-        if: steps.publication.outputs.reused != 'true'
+        if: steps.validation.outputs.full == 'true'
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/setup_compiler.py
@@ -86,19 +93,19 @@ jobs:
             "$BUILD_ENVIRONMENT" python3 tools/baseline.py --original /orig/main.dol \
               --sn-linker build/toolchain/ProDG/3.9.3/ngcld.exe --wrapper build/toolchain/wibo
       - name: Verify source build against complete target
-        if: steps.publication.outputs.reused != 'true'
+        if: steps.validation.outputs.full == 'true'
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/source_build.py --original /orig/main.dol
       - name: Provide memory headroom for full inventory analysis
-        if: steps.publication.outputs.reused != 'true'
+        if: steps.validation.outputs.inventory == 'true'
         run: |
           sudo fallocate -l 8G /swap-inventory
           sudo chmod 600 /swap-inventory
           sudo mkswap /swap-inventory
           sudo swapon /swap-inventory
       - name: Verify provisional function inventory
-        if: steps.publication.outputs.reused != 'true'
+        if: steps.validation.outputs.inventory == 'true'
         run: |
           docker run --rm --memory=5g --memory-swap=13g --env MIMALLOC_PURGE_DELAY=0 \
             --env MIMALLOC_SHOW_STATS=1 --user "$(id -u):$(id -g)" \
@@ -110,17 +117,17 @@ jobs:
               exit 1
             }
       - name: Verify compiler stages
-        if: steps.publication.outputs.reused != 'true'
+        if: steps.validation.outputs.full == 'true'
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 -m unittest discover -s tests -v
       - name: Verify inventory cache invalidation and real warm reuse
-        if: steps.publication.outputs.reused != 'true'
+        if: steps.validation.outputs.inventory == 'true'
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 -m unittest discover -s tests -p test_inventory_cache.py -v
       - name: Measure exact and fuzzy source comparisons
-        if: steps.publication.outputs.reused != 'true'
+        if: steps.validation.outputs.full == 'true'
         run: |
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 tools/matching.py --original /orig/main.dol
@@ -128,7 +135,7 @@ jobs:
           docker run --rm --user "$(id -u):$(id -g)" --volume "$GITHUB_WORKSPACE:/work" --workdir /work \
             "$BUILD_ENVIRONMENT" python3 -m unittest discover -s tests -p test_function_compare.py -v
       - name: Verify both progress exports, maps, history and contributor credits
-        if: steps.publication.outputs.reused != 'true'
+        if: steps.validation.outputs.full == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           PUBLISH_MAIN: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
@@ -146,7 +153,7 @@ jobs:
           fi
           python3 tools/export_progress.py "${export_args[@]}"
       - name: Verify activity and live receipts on the host
-        if: steps.publication.outputs.reused != 'true'
+        if: steps.validation.outputs.full == 'true'
         run: |
           command -v git
           python3 -m unittest discover -s tests -p test_activity.py -v
