@@ -9,11 +9,6 @@
 #include "game/fn_801F40F4.h"
 #include "game/fn_8021D7B8.h"
 
-struct Pair_80073CB0 {
-    void *mpUnknown0;
-    int mUnknown4;
-};
-
 struct Params_80186010 {
     int mUnknown0;
     int mUnknown4;
@@ -26,11 +21,11 @@ void fn_8006D670(int idx, int handle);
 void fn_8006D6F4(int idx, int a, int volume);
 void fn_8006D758(int idx, Vector_80039F5C *pos);
 void fn_8006D8DC(int idx);
-int fn_80072ACC(void);
+unsigned char fn_80072ACC(void);
 void fn_80072B84(int a, int b, int c);
 void fn_80072E84(void);
 void fn_80072F04(void);
-int fn_80072F84(void);
+unsigned char fn_80072F84(void);
 void fn_80073094(void);
 void fn_8007420C(int index);
 void fn_80074250(int index);
@@ -40,7 +35,6 @@ int fn_800745D4(unsigned int index);
 void fn_8013CF98(void);
 void fn_8018A7F8(Object_80228224 *pObject, int mode);
 Object_80228224 *fn_8018A854(void);
-int fn_801F4580(int handle, Pair_80073CB0 *pPair, int a, int b);
 int fn_801F48B8(int handle);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 
@@ -167,16 +161,16 @@ void fn_80185CA8(int mode)
 
 void fn_80185D78(void)
 {
-    int enable;
+    int value;
 
     fn_80185B70();
     if (lbl_803EB5C8 != fn_8007F828(6)) {
         if (fn_8007F828(6) == 0) {
-            enable = 0;
+            value = 0;
         } else {
-            enable = 1;
+            value = 1;
         }
-        fn_8021D7B8(lbl_803EB688, 0x8000000F, 1, &enable);
+        fn_8021D7B8(lbl_803EB688, 0x8000000F, 1, &value);
         if (fn_8007F828(6) == 1) {
             fn_8018A7F8(fn_8018A854(), 0);
         } else {
@@ -203,15 +197,15 @@ void fn_80185D78(void)
 
 void fn_80185E88(void)
 {
-    int inGame;
+    int result;
 
     lbl_803EB5C0 = -1;
-    inGame = fn_80027DF0();
+    result = fn_80027DF0();
     lbl_803EB5B8 = 0;
     fn_80072E84();
     lbl_803EB5C8 = fn_8007F828(6);
     lbl_803EB5BC = fn_801EEB44(lbl_802EBFCC, 44);
-    if (inGame != 0 || fn_800744C8(0) != 0) {
+    if (result != 0 || fn_800744C8(0) != 0) {
         lbl_803EB5CC = 0;
     } else {
         lbl_803EB5CC = 1;
@@ -219,7 +213,7 @@ void fn_80185E88(void)
     fn_80074358(lbl_803EB5CC);
     fn_80074250(lbl_803EB5CC);
     fn_8006D670(1, fn_800745D4(lbl_803EB5CC));
-    lbl_803ECB84 = fn_80072ACC() != 0 ? 1 : 0;
+    lbl_803ECB84 = fn_80072ACC() != 0;
 }
 
 void fn_80185F4C(int mode, int flag)
