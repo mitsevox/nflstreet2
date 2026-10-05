@@ -31,17 +31,6 @@ struct State_80362A84 {
     int mUnknown140;
 };
 
-/* Constants returned by fn_80183734. */
-struct Layout_802EA9E0 {
-    float mUnknown0;
-    float mUnknown4;
-    float mUnknown8;
-    float mUnknown12;
-    float mUnknown16;
-    int mUnknown20;
-    unsigned char mUnknown24;
-};
-
 extern "C" {
 extern void *lbl_803EB688;
 
@@ -90,7 +79,7 @@ int fn_8007BF14(int a);
 int fn_8007C690(Object_8007A334 *pCursor, short *pOut);
 void fn_80080B08(Object_8008044C *pObject, char *pBuffer, int size);
 void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size);
-void fn_800816C4(Object_8008044C *pObject, int a, int *pValues);
+void fn_800816C4(Object_8008044C *pObject, Info_80307908 *pInfo, int *pValues);
 void fn_8008174C(Object_8008044C *pObject, short *pValues);
 void fn_80082534(int a, int b);
 void fn_80082558(int a, int b);
@@ -1086,9 +1075,9 @@ void fn_80182EFC(void)
     }
 }
 
-void fn_80182F24(int a)
+void fn_80182F24(Info_80307908 *pInfo)
 {
-    fn_800816C4(fn_80182DC8(), a, lbl_80362A84.mValues);
+    fn_800816C4(fn_80182DC8(), pInfo, lbl_80362A84.mValues);
 }
 
 void fn_80182F60(int index, int delta)
@@ -1357,7 +1346,7 @@ Layout_802EA9E0 *fn_80183734(void)
     return &lbl_802EA9E0;
 }
 
-void fn_80183740(Layout_802EA9E0 *pOffset)
+void fn_80183740(const Layout_802EA9E0 *pOffset)
 {
     if (!pOffset) {
         fn_80022870(0, fn_80183734()->mUnknown0, fn_80183734()->mUnknown4, fn_80183734()->mUnknown8,

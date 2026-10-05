@@ -1,6 +1,20 @@
 #ifndef GAME_CU_80181330_H
 #define GAME_CU_80181330_H
 
+/* Camera layout returned by fn_80183734; fn_80183740 adds an optional
+   offset record of the same layout to it. */
+struct Layout_802EA9E0 {
+    float mUnknown0;
+    float mUnknown4;
+    float mUnknown8;
+    float mUnknown12;
+    float mUnknown16;
+    int mUnknown20;
+    unsigned char mUnknown24;
+};
+
+extern "C" void fn_80183740(const Layout_802EA9E0 *pOffset);
+
 /* 44-byte list entry. */
 struct Entry_80182CC8 {
     int mId;
