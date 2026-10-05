@@ -1,16 +1,24 @@
 #include "game/fn_8007F6F8.h"
+#include "game/FELoop.h"
+#include "game/cu_8007F12C.h"
 #include "game/Callees_801D57E0.h"
 #include "game/cu_8018422C.h"
 #include "game/Callees_8002A138.h"
 #include "game/fn_8007F828.h"
 #include "game/Record_80021154.h"
 
+struct Name_801859C8 {
+    char mUnknown0[8];
+    const char *mpUnknown8;
+};
+
 struct Params_80185284 {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
     int mUnknownC;
-    int mUnknown10;
+    char mUnknown10[3];
+    unsigned char mUnknown13;
 };
 
 extern "C" {
@@ -41,15 +49,12 @@ void fn_8002A5F0(int a, char *pBuf, int b);
 int fn_8002A824(void);
 void fn_80187FD0(void);
 void fn_80187FDC(void);
-int fn_80027DF0(void);
 int fn_80029D74(int type, int index);
 void fn_80029CE0(int type, int index);
 void fn_80029D28(int type, int index);
 int fn_8002A130(int a, int b);
 int fn_8002A2A4(int type, int index);
 int fn_8002A86C(int value, int type, const char *name, unsigned int *pIndex);
-void fn_8007F328(int reset);
-int fn_8007F374(void);
 int fn_80191810(int a);
 void fn_80193DC4(int *pA, int *pB);
 int fn_801D6850(void);
@@ -612,7 +617,7 @@ unsigned char fn_8018526C(void)
     return lbl_803EB5B4;
 }
 
-unsigned char fn_80185274(void)
+int fn_80185274(void)
 {
     return lbl_803EB5B5;
 }
@@ -833,7 +838,7 @@ int fn_80185284(unsigned int id, Params_80185284 *pParams, int c, int *pResult)
         fn_80185170(pParams->mUnknown0, pParams->mUnknown4);
         break;
     case 39:
-        *pResult = fn_8002A86C(pParams->mUnknown0, pParams->mUnknown4, ((const char **)pParams->mUnknown8)[2],
+        *pResult = fn_8002A86C(pParams->mUnknown0, pParams->mUnknown4, ((Name_801859C8 *)pParams->mUnknown8)->mpUnknown8,
                                (unsigned int *)pParams->mUnknownC);
         break;
     case 92:
@@ -841,7 +846,7 @@ int fn_80185284(unsigned int id, Params_80185284 *pParams, int c, int *pResult)
         break;
     case 131:
         fn_80184FB8(pParams->mUnknown0, (int *)pParams->mUnknown4, pParams->mUnknown8, pParams->mUnknownC,
-                    (unsigned char)pParams->mUnknown10);
+                    pParams->mUnknown13);
         break;
     case 130:
         *pResult = fn_80185038((int *)pParams->mUnknown0);
