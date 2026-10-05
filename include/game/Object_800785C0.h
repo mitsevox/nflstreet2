@@ -10,6 +10,16 @@ struct Entry_80079864 {
     char mUnknown6[2];
 };
 
+/* 12-byte entry of the four-entry list at +452 of Object_800785C0:
+   fn_800257B4 dispatches on mType and passes mValue to the selected test,
+   and fn_80025B18 skips entries whose mUnknown8 is zero. */
+struct Entry_800257B4 {
+    int mType;
+    int mValue;
+    unsigned char mUnknown8;
+    char mUnknown9[3];
+};
+
 /* 40-byte block at +524 of Object_800785C0; fn_8007984C tests mUnknown0. */
 struct Info_8007984C {
     int mUnknown0;
@@ -28,14 +38,18 @@ struct Object_800785C0 {
     char mUnknownCB[203];
     unsigned short mUnknown196;
     unsigned char mUnknown198;
-    char mUnknown199[15];
+    char mUnknown199[0x1A4 - 0x199];
+    unsigned short mUnknown1A4;
+    char mUnknown1A6[2];
     int mUnknown1A8;
     int mUnknown1AC;
     int mUnknown1B0;
     int mUnknown1B4;
     char mUnknown1B8[0x1C1 - 0x1B8];
     unsigned char mUnknown1C1;
-    char mUnknown1C2[0x1F4 - 0x1C2];
+    char mUnknown1C2;
+    unsigned char mUnknown1C3;
+    Entry_800257B4 mUnknown1C4[4];
     Entry_80079864 mUnknown1F4[2];
     char mUnknown204[4];
     int mUnknown208;

@@ -10,7 +10,6 @@
 
 extern "C" {
 extern char lbl_800034A0[];
-extern char lbl_80024B20[];
 extern char lbl_802EC09C[];
 extern void *lbl_803EB688;
 extern unsigned char lbl_803EBD6C;
@@ -20,6 +19,7 @@ extern unsigned char lbl_803EBD6F;
 extern unsigned char lbl_803EBD70;
 extern int lbl_803ED5EC;
 
+int fn_80024B20(int team, int margin, int flag);
 int fn_80063AA0(void);
 int fn_80185274(void);
 void fn_8018A740(void);
@@ -271,7 +271,7 @@ void fn_800246C0(void)
         pDebug->mUnknown10 = 0;
     }
     pUnload->mUnknownC = (int)lbl_800034A0;
-    pUnload->mUnknown10 = lbl_80024B20 - lbl_800034A0;
+    pUnload->mUnknown10 = (char *)fn_80024B20 - lbl_800034A0;
     pAuxRam->mUnknownC = fn_801C1D54();
     pAuxRam->mUnknown10 = 0xAFC000 - pAuxRam->mUnknownC;
 }

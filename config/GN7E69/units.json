@@ -7000,6 +7000,38 @@
           "end": "0x8002306C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80024B20.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80024B20-0x80025E00 (src/game/cu_80024B20.cpp), its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80024B20",
+          "end": "0x80025DE8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x80025DE8",
+          "end": "0x80025E00",
+          "follows": ".text"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBAF0",
+          "end": "0x803EBAF4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037DF58",
+          "end": "0x8037E0A0"
+        }
+      ]
     }
   ]
 }
