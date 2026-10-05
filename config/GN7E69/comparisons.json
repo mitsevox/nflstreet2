@@ -6123,6 +6123,51 @@
           "end": "0x80125510"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800D0D4C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained open/open grouping row for src/game/cu_800D0D4C.cpp, six exact complete function extents and individual inferred name/source-form/compiler rows, plus four target-width external scalar-access footprints. Only these six whole bodies are measured; all static storage and 111 other bodies remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800D0D4C",
+          "end": "0x800D760C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800D3D64",
+          "start": "0x800D3D64",
+          "end": "0x800D3D68"
+        },
+        {
+          "symbol": "fn_800D3D8C",
+          "start": "0x800D3D8C",
+          "end": "0x800D3D94"
+        },
+        {
+          "symbol": "fn_800D3E68",
+          "start": "0x800D3E68",
+          "end": "0x800D3E70"
+        },
+        {
+          "symbol": "fn_800D42CC",
+          "start": "0x800D42CC",
+          "end": "0x800D42D4"
+        },
+        {
+          "symbol": "fn_800D750C",
+          "start": "0x800D750C",
+          "end": "0x800D7520"
+        },
+        {
+          "symbol": "fn_800D7520",
+          "start": "0x800D7520",
+          "end": "0x800D7528"
+        }
+      ]
     }
   ]
 }
