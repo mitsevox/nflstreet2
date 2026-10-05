@@ -5844,6 +5844,47 @@
           "end": "0x803ECE38"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8018B0BC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv open unit row, exact whole-function boundaries and unlinked data slice 0x802A9A50-0x802A9DFC. The native first function/literal prefix is linked; full comparison placements retain its offsets and measure only unlinked ranges. Two wrapper bodies are exact but unlinked; no complete-file claim.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018B0BC",
+          "end": "0x8018B8B0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A98B4",
+          "end": "0x802A9DFC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8018B2A8",
+          "start": "0x8018B2A8",
+          "end": "0x8018B5E4"
+        },
+        {
+          "symbol": "fn_8018B5E4",
+          "start": "0x8018B5E4",
+          "end": "0x8018B66C"
+        },
+        {
+          "symbol": "fn_8018B66C",
+          "start": "0x8018B66C",
+          "end": "0x8018B6F0"
+        },
+        {
+          "symbol": "fn_8018B6F0",
+          "start": "0x8018B6F0",
+          "end": "0x8018B8B0"
+        }
+      ]
     }
   ]
 }

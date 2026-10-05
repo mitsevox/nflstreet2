@@ -6078,6 +6078,23 @@
         "commit": "dd307312bd19947950fc33e449087b7d633939c3",
         "introduced_blob": "d8ed41545371febf9f0d9b11c38d39faf43f86cd"
       }
+    },
+    {
+      "source": "src/game/cu_8018B0BC.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x8018B0BC",
+        "0x8018B5E4",
+        "0x8018B66C"
+      ],
+      "provenance": {
+        "pull_request": 301,
+        "merged_via": 301,
+        "commit": "1729767d7a29bc94a2b7386079e365383669597f",
+        "introduced_blob": "4bc457727b40643f416a10d8277aa5a936f151f1"
+      }
     }
   ],
   "target": "GN7E69",
