@@ -5248,6 +5248,32 @@
           "end": "0x80004864"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800DBB74.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv inferred unit row 0x800DBB74-0x800DC584, exact function row 0x800DC578-0x800DC584, and exact initialized data row 0x803EAD1C-0x803EAD20. Only the reset is reconstructed; five other bodies remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DC578",
+          "end": "0x800DC584"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EAD1C",
+          "end": "0x803EAD20"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800DC578",
+          "start": "0x800DC578",
+          "end": "0x800DC584"
+        }
+      ]
     }
   ]
 }
