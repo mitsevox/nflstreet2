@@ -7125,6 +7125,26 @@
           "end": "0x803ECB38"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801260D4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained inferred twenty-nine-function grouping and exact complete helper 0x8012A384-0x8012A38C. Only the whole constant-return body is reconstructed; twenty-eight other functions and all static data remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012A384",
+          "end": "0x8012A38C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8012A384",
+          "start": "0x8012A384",
+          "end": "0x8012A38C"
+        }
+      ]
     }
   ]
 }

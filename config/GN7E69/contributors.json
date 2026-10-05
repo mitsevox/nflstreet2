@@ -6841,6 +6841,21 @@
         "commit": "a30c66d3eb905c9749ee332d72de494cafb4b2ee",
         "introduced_blob": "fcb0b7a66db79b59d63d9b0d0901fa0bfde2c249"
       }
+    },
+    {
+      "source": "src/game/cu_801260D4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8012A384"
+      ],
+      "provenance": {
+        "pull_request": 346,
+        "merged_via": 346,
+        "commit": "158ce600508731befcb961f58ecffa16562b8616",
+        "introduced_blob": "05189ed8fe9a11751974ffd9dc90665755754fe3"
+      }
     }
   ],
   "target": "GN7E69",
