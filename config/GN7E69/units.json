@@ -6355,6 +6355,37 @@
           "end": "0x802A9A50"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80147AE4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80147AE4-0x80147E94 (src/game/cu_80147AE4.cpp) and its data, type, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80147AE4",
+          "end": "0x80147E94"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0540",
+          "end": "0x802A0558"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB28C",
+          "end": "0x803EB294"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA1C",
+          "end": "0x803ECA24"
+        }
+      ]
     }
   ]
 }
