@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export linked-build history and function credits from recorded evidence."""
+"""Export linked-build history and exact-function credits from recorded evidence."""
 import argparse
 from datetime import datetime
 import json
@@ -125,7 +125,7 @@ def historical_source_blob(root, revision, source, blob):
     return blob in rows
 
 
-def contributors(root, ledger, build, revision, fetch_missing=False):
+def contributors(root, ledger, build, revision, fetch_missing=False, exact_inventory=None):
     if ledger.get('schema') != 1 or ledger.get('target') != 'GN7E69' or build.get('complete') != 'identical':
         raise ValueError('Function credit requires the verified source build')
     profiles = ledger.get('contributors', {})
@@ -135,6 +135,10 @@ def contributors(root, ledger, build, revision, fetch_missing=False):
     inventory = {(u['source'], f['address']) for u in build['units'] for f in u['functions']}
     if sum(len(u['functions']) for u in build['units']) != len(inventory):
         raise ValueError('Compiler inventory duplicates a function')
+    if exact_inventory is not None:
+        if not inventory <= exact_inventory:
+            raise ValueError('Exact inventory omits a verified linked function')
+        inventory = exact_inventory
     counts = {login:set() for login in profiles}
     references = {login:set() for login in profiles}
     seen = set()
@@ -179,20 +183,40 @@ def contributors(root, ledger, build, revision, fetch_missing=False):
     missing = inventory - seen
     if missing:
         source, address = sorted(missing)[0]
-        raise ValueError(f'Unattributed compiled function {source} {address}; update contributors.json')
+        raise ValueError(f'Unattributed exact function {source} {address}; update contributors.json')
     return [{'login':login, 'id':profiles[login]['id'], 'functions':len(functions),
              'pull_requests':sorted(references[login])}
             for login, functions in sorted(counts.items(), key=lambda pair:(-len(pair[1]), pair[0])) if functions]
 
 
-def squash_preflight(root, ledger, build, revision, base):
+def exact_functions(site):
+    """Use full function identities from an independently validated progress receipt."""
+    inventory = set()
+    def visit(item):
+        source = item.get('comparison_source') or item.get('source')
+        if item.get('type') == 'function' and source and item['size'] > 0 \
+                and item['size'] == item['original_size'] and item['matched'] == item['size']:
+            key = (source, item['function_address'])
+            if key in inventory:
+                raise ValueError('Exact function appears more than once in the public map')
+            inventory.add(key)
+        for child in item.get('children', []):
+            visit(child)
+    for item in site['files']:
+        visit(item)
+    if len(inventory) != site['functions']['exact']:
+        raise ValueError('Exact function count differs from the attribution inventory')
+    return inventory
+
+
+def squash_preflight(root, ledger, build, revision, base, exact_inventory=None):
     # Model the repository's squash merge: no contribution-branch ancestors survive.
     check_ancestor(root, base, revision)
     tree = subprocess.check_output(['git','rev-parse',revision+'^{tree}'], cwd=root, text=True).strip()
     squashed = subprocess.check_output(
         ['git','-c','user.name=Attribution preflight','-c','user.email=preflight@example.invalid',
          'commit-tree',tree,'-p',base], cwd=root, input='Private attribution squash preflight\n', text=True).strip()
-    return contributors(root, ledger, build, squashed)
+    return contributors(root, ledger, build, squashed, exact_inventory=exact_inventory)
 
 
 def export(root, site, source_report, previous=None, append=False, fetch_missing=False, squash_base=None):
@@ -204,9 +228,9 @@ def export(root, site, source_report, previous=None, append=False, fetch_missing
     verified = progress.report((source_report.parent/'main.dol').read_bytes(), site['revision'],
                                source_report, root/'build/analysis',
                                root/'build/matching/report.json' if json.loads((root/'config/GN7E69/comparisons.json').read_text())['units'] else None)
-    if site.get('source') != verified['source'] or any(
-            site['measures'][kind][field] != verified['measures'][kind][field]
-            for kind in ('code','data') for field in ('linked','total')):
+    if site.get('source') != verified['source'] or site.get('functions') != verified['functions'] or any(
+            site['measures'][kind].get(field) != verified['measures'][kind].get(field)
+            for kind in ('code','data') for field in ('linked','matched','fuzzy','total')):
         raise ValueError('Activity measurements differ from the verified source receipt')
     def mapped_functions(item):
         if item.get('type') == 'function' and item.get('linked',0) > 0:
@@ -228,13 +252,15 @@ def export(root, site, source_report, previous=None, append=False, fetch_missing
     history = merge_history(seed, previous, current)
     for row in history:
         check_ancestor(root, row['revision'], site['revision'])
+    exact = exact_functions(verified)
     ledger = json.loads((root/'config/GN7E69/contributors.json').read_text())
-    credits = contributors(root, ledger, build, site['revision'], fetch_missing)
+    credits = contributors(root, ledger, build, site['revision'], fetch_missing, exact)
     if squash_base:
-        if squash_preflight(root, ledger, build, site['revision'], squash_base) != credits:
+        if squash_preflight(root, ledger, build, site['revision'], squash_base, exact) != credits:
             raise ValueError('Squash preflight changes original source attribution')
     return {'schema':1, 'target':'GN7E69', 'target_sha1':site['target_sha1'],
             'revision':site['revision'], 'snapshots':history,
+            'contribution_basis':'exact-functions', 'credited_functions':len(exact),
             'contributors':credits}
 
 
