@@ -46,7 +46,7 @@ Record_802CC680 *fn_80025E50(unsigned int id)
     return pRecord;
 }
 
-void fn_80025F20(void)
+void fn_80025F20(int a)
 {
 }
 
