@@ -6548,6 +6548,32 @@
           "end": "0x803ECDE0"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8001BB84.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8001BB84-0x8001BF24 (src/game/cu_8001BB84.cpp) and its data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8001BB84",
+          "end": "0x8001BE84"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x8001BE84",
+          "end": "0x8001BF24",
+          "follows": ".text"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBA48",
+          "end": "0x803EBA54"
+        }
+      ]
     }
   ]
 }
