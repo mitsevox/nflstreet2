@@ -6336,6 +6336,25 @@
           "end": "0x803EA4B8"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8018B0BC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv bounded team/player copy group; exact linked first function and native literal prefix. The four later bodies remain registered for comparison; original-file edges stay open.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018B0BC",
+          "end": "0x8018B2A8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A98B4",
+          "end": "0x802A9A50"
+        }
+      ]
     }
   ]
 }

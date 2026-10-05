@@ -1,6 +1,14 @@
 #ifndef GAME_FN_801FCE10_H
 #define GAME_FN_801FCE10_H
 
+struct QueryResult {
+    unsigned short mUnknown0;
+    short mUnknown2;
+    int mUnknown4;
+    int mUnknown8;
+    unsigned char mUnknown12[4];
+};
+
 struct QueryCursor {
     int mUnknown0;
     short mUnknown4;
