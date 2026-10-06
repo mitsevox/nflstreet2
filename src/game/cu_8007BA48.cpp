@@ -5,6 +5,7 @@
 #include "game/Object_8007A334.h"
 #include "game/Object_8008044C.h"
 #include "game/Row_8007BC34.h"
+#include "game/Key_8007A334.h"
 
 extern "C" {
 int fn_8022F384(int a);
@@ -24,21 +25,6 @@ char *fn_801C3084(const char *pString, int c);
 extern "C" {
 void fn_8008199C(Object_8008044C *pObject, Info_80307908 *pInfo);
 }
-
-/* Sort/key entry list passed as the third argument of fn_8007A334. */
-struct Key_8007A334 {
-    void Set(int table, int column, int value)
-    {
-        mTable = table;
-        mColumn = column;
-        mUnknown8 = value;
-    }
-
-    int mTable;
-    int mColumn;
-    int mUnknown8;
-    int mUnknown12;
-};
 
 static int sColumnTags[33] = {
     0x48545247, 0x54485447, 0x4C475447, 0x52545447, 0x50535447, 0x43425447, 0x424C5447,

@@ -5759,8 +5759,11 @@
       "provenance": {
         "pull_request": 278,
         "merged_via": 276,
-        "commit": "35af101f989d963f27eb631377ee385d1750d085",
-        "introduced_blob": "f7f50c92c7d883c26c7cce932cd677af3c6454fe"
+        "commit": "523f4fbc31bed7f232143c6660bde0ac9cad3e98",
+        "introduced_blob": "8cefb2c01a73bb1e32c52ad52e9e2e1072a62531",
+        "original_blob": "f7f50c92c7d883c26c7cce932cd677af3c6454fe",
+        "original_commit": "35af101f989d963f27eb631377ee385d1750d085",
+        "integration_adjustment": "Shared by dependent PR409, which moves Key_8007A334 unchanged into include/game/Key_8007A334.h; the object is unchanged."
       }
     },
     {
@@ -7542,6 +7545,168 @@
         "merged_via": 399,
         "commit": "9efce86109a724c982796ce309e9b0406582a8c2",
         "introduced_blob": "23f573f226d27d94fa427ad337121fcc85683b4d"
+      }
+    },
+    {
+      "source": "src/game/cu_8007EEFC.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8007EEFC",
+        "0x8007F064",
+        "0x8007F094",
+        "0x8007F0C8",
+        "0x8007F0F4"
+      ],
+      "provenance": {
+        "pull_request": 403,
+        "merged_via": 416,
+        "commit": "82c97df84f81e3762b53ebd6f3af6da2a350e9ac",
+        "introduced_blob": "742475669d9ab94791644967d7c480ebdd1b39be"
+      }
+    },
+    {
+      "source": "src/game/cu_8007E514.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8007E514",
+        "0x8007E56C",
+        "0x8007E58C",
+        "0x8007E5B4",
+        "0x8007E5EC",
+        "0x8007E69C",
+        "0x8007E738",
+        "0x8007E7D4",
+        "0x8007E828",
+        "0x8007E888",
+        "0x8007E8A8",
+        "0x8007E954",
+        "0x8007EA04",
+        "0x8007EBDC",
+        "0x8007EC34",
+        "0x8007EC54",
+        "0x8007ECBC",
+        "0x8007ED50",
+        "0x8007EDE4",
+        "0x8007EE70"
+      ],
+      "provenance": {
+        "pull_request": 405,
+        "merged_via": 416,
+        "commit": "2a1503f6a4c1dd07a16437ab9c9074b35374def7",
+        "introduced_blob": "cf480bc492b5666ea61bbf364430e0c8dcdd058c",
+        "original_blob": "4e1e7d39220559d58d329892bba02d4a60be0155",
+        "original_commit": "429a1780bfa529d526c6db29cb0b879883429661",
+        "integration_adjustment": "Original PR405 is inherited by dependent PR407, which generalizes the shared 0x801FA844 declaration to void * table and filter parameters; the object is unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_8007DDC8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8007DDC8",
+        "0x8007DE20",
+        "0x8007DE40",
+        "0x8007DEE0",
+        "0x8007DF4C",
+        "0x8007DFC4",
+        "0x8007E020",
+        "0x8007E274",
+        "0x8007E324",
+        "0x8007E3D4",
+        "0x8007E474"
+      ],
+      "provenance": {
+        "pull_request": 407,
+        "merged_via": 416,
+        "commit": "28d1774152e1b8cbe5240be0b449fc951de6cc69",
+        "introduced_blob": "dbefbb0f8ccd015d9ee6e5d6978c8c9f757a9b43"
+      }
+    },
+    {
+      "source": "src/game/cu_8007CC50.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8007CC50",
+        "0x8007CCC4",
+        "0x8007CCE4",
+        "0x8007CD1C",
+        "0x8007CD50",
+        "0x8007CD78"
+      ],
+      "provenance": {
+        "pull_request": 409,
+        "merged_via": 416,
+        "commit": "523f4fbc31bed7f232143c6660bde0ac9cad3e98",
+        "introduced_blob": "6a00c84f6689f5aaa66f8bc63a1c7a28ca59b272"
+      }
+    },
+    {
+      "source": "src/game/cu_8007CDA0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8007CDA0",
+        "0x8007CEA4",
+        "0x8007D26C",
+        "0x8007D298",
+        "0x8007D2E8",
+        "0x8007D448",
+        "0x8007D4E8",
+        "0x8007D52C",
+        "0x8007D5A0",
+        "0x8007D654",
+        "0x8007DB74",
+        "0x8007DBB4",
+        "0x8007DDC0"
+      ],
+      "provenance": {
+        "pull_request": 411,
+        "merged_via": 416,
+        "commit": "0d9c13e8fb8173698fc8205de97cccfc04b76035",
+        "introduced_blob": "95addf48061ab41a752dad884e3c87348bfff5c4"
+      }
+    },
+    {
+      "source": "src/game/cu_8005272C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8005272C",
+        "0x800527FC",
+        "0x800528E8"
+      ],
+      "provenance": {
+        "pull_request": 413,
+        "merged_via": 416,
+        "commit": "478035bf8b89c86b8e0ad99ca5dcf4c21aa8aac0",
+        "introduced_blob": "39d5dc229f5bc45ad79faf54498fd760b3aeb5d1"
+      }
+    },
+    {
+      "source": "src/game/cu_8019B460.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8019B460",
+        "0x8019B5D4",
+        "0x8019B614"
+      ],
+      "provenance": {
+        "pull_request": 415,
+        "merged_via": 416,
+        "commit": "99169454ba21f310d6a6bc0124ba334662a210da",
+        "introduced_blob": "e20ae2142b98e45e060538f9f33aad90adde216f"
       }
     }
   ],
