@@ -46,7 +46,8 @@ struct Object_800785C0 {
     int mUnknown1B0;
     int mUnknown1B4;
     int mUnknown1B8;
-    char mUnknown1BC[0x1C1 - 0x1BC];
+    int mUnknown1BC;
+    char mUnknown1C0[1];
     unsigned char mUnknown1C1;
     char mUnknown1C2;
     unsigned char mUnknown1C3;

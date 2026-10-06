@@ -257,7 +257,7 @@ int fn_801801BC(void)
     return lbl_803EB538;
 }
 
-void fn_801801C4(void)
+void fn_801801C4(int a)
 {
 }
 

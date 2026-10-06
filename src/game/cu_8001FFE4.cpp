@@ -53,7 +53,7 @@ void fn_8015672C(int value);
 void fn_80156734(int value);
 unsigned int fn_801568F0(void);
 int fn_801801B4(void);
-void fn_801801C4(void);
+void fn_801801C4(int a);
 void fn_80186F30(signed char a, int b);
 signed char fn_8022F384(int a);
 int fn_8022F478(int a);
@@ -108,7 +108,7 @@ void fn_800200A4(int index, BufferRef_80020170 first, BufferRef_80020170 second,
 void fn_80020130(int value)
 {
     if (value != -1) {
-        fn_801801C4();
+        fn_801801C4(value);
     }
     fn_8021D7B8(lbl_803EB688, 0x80000036, 0, 0);
 }

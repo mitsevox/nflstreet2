@@ -471,7 +471,7 @@ unsigned char fn_80027EAC()
     return sUnknown803EA2E0;
 }
 
-void fn_80027EB4()
+void fn_80027EB4(int a)
 {
     if (sUnknown803EC5F0) {
         fn_80003F30();
