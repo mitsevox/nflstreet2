@@ -9160,7 +9160,7 @@
     {
       "source": "src/game/cu_8002B8F8.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8002B8F8-0x80030D50 (src/game/cu_8002B8F8.cpp), its compiler, source-form, name, type and linker rows, the 117 function extents 0x8002B960-0x80030D50 and the exact .rodata row 0x8028A9C8-0x8028AC28. Draft comparisons only; .data, .sdata, .sbss and .bss and the four functions 0x8002B8F8-0x8002B960 are linked from the same file, the full native placements are kept for relocation, only the unlinked .rodata is measured, and original bytes remain linked for the 117 draft functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "evidence": "evidence.tsv unit row 0x8002B8F8-0x80030D50 (src/game/cu_8002B8F8.cpp), its compiler, source-form, name, type and linker rows, the 117 function extents 0x8002B960-0x80030D50 and the .rodata row 0x8028A9C8-0x8028AC28, whose extent is exact; the draft reproduces 604 of its 608 bytes (not 0x8028AC24, the 4/3 of its linker row). Draft comparisons only; .data, .sdata, .sbss and .bss and the four functions 0x8002B8F8-0x8002B960 are linked from the same file, the full native placements are kept for relocation, only the unlinked .rodata is measured, and original bytes remain linked for the 117 draft functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",
       "sections": [
         {
           "section": ".text",

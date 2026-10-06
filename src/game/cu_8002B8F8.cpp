@@ -1,7 +1,7 @@
 /* Replay camera and replay recorder of the in-game loop (Xbox data string
    "REPLAY.C" heads this file's .data; neutral file name). The data and the
    first four functions are linked from source; the remaining functions
-   0x8002B960-0x80030D50 and the two discarded functions are draft
+   0x8002B960-0x80030D50 and the four discarded functions are draft
    reconstructions compiled only for comparison. */
 #include <math.h>
 #include <stdio.h>
@@ -1008,7 +1008,7 @@ extern "C" void fn_8002CBB0(Type_803EA368 *p, int a, unsigned int id, float valu
         if (p->mUnknownD94 & 0x10000) {
             if (p->mUnknownD90 == 4) {
                 switch (id) {
-                case 0:
+                case 0: /* 0 and 1: the cmplwi 1 test at 0x8002CC10 */
                 case 1:
                     break;
                 case 6:
@@ -1037,8 +1037,8 @@ extern "C" void fn_8002CBB0(Type_803EA368 *p, int a, unsigned int id, float valu
                         fn_8013C624(p->mpUnknownDA0, 8, 0, 0);
                     }
                     break;
-                case 10:
-                case 11:
+                case 10: /* placeholder values: the compare tree needs two */
+                case 11: /* empty labels above 9; values not recovered */
                     break;
                 }
             }
@@ -1260,8 +1260,11 @@ extern "C" void fn_8002D2C8(Type_803EA368 *p, unsigned char value) { p->mUnknown
    build reads the two animation tables through out-of-line getters of the
    fn_800D77F0 file (0x271490, 0x2714C0) that GameCube also discards; with
    no GameCube address for them, the tables are read directly here, as the
-   Xbox build does after inlining. This code is not measured. */
-extern "C" void PrintPlayerDebugLine(int line, char *pBuf, int)
+   Xbox build does after inlining. State is taken from the lower table as on
+   PS2 (Xbox reads the two the other way round). Xbox and PS2 take only
+   (line, buf) here; the GameCube caller fn_8017F7B0 forwards r3-r5 without
+   setting them, so it gives no parameter count. This code is not measured. */
+extern "C" void PrintPlayerDebugLine(int line, char *pBuf)
 {
     int id;
     Object_80039F5C *p;
@@ -1519,7 +1522,7 @@ extern "C" int fn_8002D4A0(Cond_8002D4A0 *pCond)
         case 10:
             maxDy = pCond->mArg;
             break;
-        case 12:
+        case 12: /* placeholder values; see the source-form row */
         case 13:
             break;
         case 14:
@@ -1791,6 +1794,8 @@ extern "C" void fn_8002DC00(Type_803EA368 *p, RecordList_8002E7C0 *pList)
         case 8:
             lbl_803EA37C = pCmd->mArg;
             break;
+        /* Placeholder label values: the compare tree needs empty labels
+           at 0, 0x20-0x23 and one value above 0x3F; 0x40 is not recovered. */
         case 0:
         case 0x20:
         case 0x21:
