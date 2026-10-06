@@ -7458,6 +7458,31 @@
           "end": "0x803EB6AC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80055318.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80055318-0x800554FC (src/game/cu_80055318.cpp) and its .rodata and .sbss rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80055318",
+          "end": "0x800554FC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028DF58",
+          "end": "0x8028E008"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC7E8",
+          "end": "0x803EC7EC"
+        }
+      ]
     }
   ]
 }
