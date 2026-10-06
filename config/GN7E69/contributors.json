@@ -7543,6 +7543,25 @@
         "commit": "9efce86109a724c982796ce309e9b0406582a8c2",
         "introduced_blob": "23f573f226d27d94fa427ad337121fcc85683b4d"
       }
+    },
+    {
+      "source": "src/game/cu_8007EEFC.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8007EEFC",
+        "0x8007F064",
+        "0x8007F094",
+        "0x8007F0C8",
+        "0x8007F0F4"
+      ],
+      "provenance": {
+        "pull_request": 403,
+        "merged_via": 403,
+        "commit": "82c97df84f81e3762b53ebd6f3af6da2a350e9ac",
+        "introduced_blob": "742475669d9ab94791644967d7c480ebdd1b39be"
+      }
     }
   ],
   "target": "GN7E69",
