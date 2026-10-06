@@ -2,16 +2,16 @@
 #include "game/FMCAPPORT.h"
 #include "game/fn_801C1F94.h"
 
-struct FaceWeight_802CD190 {
+struct Pair_802CD190 {
     int mIndex;
     float mWeight;
 };
 
-struct FacePreset_802CD190 {
-    FaceWeight_802CD190 mWeights[9];
+struct Row_802CD190 {
+    Pair_802CD190 mWeights[9];
 };
 
-FacePreset_802CD190 lbl_802CD190[108] = {
+Row_802CD190 lbl_802CD190[108] = {
     { { { 18, 1.0f }, { 0xFFFF } } },
     { { { 15, 1.0f }, { 17, 0.5f }, { 18, 0.75f }, { 0xFFFF } } },
     { { { 15, 0.5f }, { 17, 1.0f }, { 18, 1.0f }, { 0xFFFF } } },
