@@ -816,11 +816,8 @@
       "provenance": {
         "pull_request": 58,
         "merged_via": 58,
-        "commit": "fe27f3bb7111bccd61e96c0a0f59e8e365226b85",
-        "introduced_blob": "16c58d38be42ba17dd4c962bbe3553f8c10337ed",
-        "original_blob": "29c976b829264f5395fd2ac196844a4780937bc7",
-        "original_commit": "838a55b1989c9f207190443f1f565a433bc5e189",
-        "integration_adjustment": "PR373 (src/game/cu_80024B20.cpp) replaced the external label lbl_80024B20 with (char *)fn_80024B20, because 0x80024B20 now lies inside that unit; the object is unchanged."
+        "commit": "838a55b1989c9f207190443f1f565a433bc5e189",
+        "introduced_blob": "29c976b829264f5395fd2ac196844a4780937bc7"
       }
     },
     {
@@ -1964,11 +1961,9 @@
       "provenance": {
         "pull_request": 144,
         "merged_via": 161,
-        "commit": "fe27f3bb7111bccd61e96c0a0f59e8e365226b85",
-        "introduced_blob": "b696b737329b3d69b417365f814b05b61820e120",
-        "original_blob": "cad527fdb1b630273a3312e9f0ef36d9e6131ea3",
-        "original_commit": "f9aaf8ec9a6d46aa0c7789eb3ee9f796ae07c7e7",
-        "integration_adjustment": "PR373 (src/game/cu_80024B20.cpp) replaced the external label lbl_80024B20 with (char *)fn_80024B20, because 0x80024B20 now lies inside that unit; the object is unchanged."
+        "commit": "f9aaf8ec9a6d46aa0c7789eb3ee9f796ae07c7e7",
+        "introduced_blob": "cad527fdb1b630273a3312e9f0ef36d9e6131ea3",
+        "original_blob": "cad527fdb1b630273a3312e9f0ef36d9e6131ea3"
       }
     },
     {
@@ -7139,8 +7134,8 @@
       "provenance": {
         "pull_request": 373,
         "merged_via": 373,
-        "commit": "fe27f3bb7111bccd61e96c0a0f59e8e365226b85",
-        "introduced_blob": "8b22ffa8ce5eec90bb8b5b037a84d686b7054697"
+        "commit": "0bd379183cb21f5b7c8bf85321501f6ec2e72fd8",
+        "introduced_blob": "7d66356103cbe328e1362acea172a861025de12a"
       }
     }
   ],

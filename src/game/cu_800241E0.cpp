@@ -19,7 +19,7 @@ extern unsigned char lbl_803EBD6F;
 extern unsigned char lbl_803EBD70;
 extern int lbl_803ED5EC;
 
-int fn_80024B20(int team, int margin, int flag);
+int fn_80024B20(int side, int limit, int flag);
 int fn_80063AA0(void);
 int fn_80185274(void);
 void fn_8018A740(void);
