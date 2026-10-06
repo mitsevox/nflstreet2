@@ -7708,6 +7708,91 @@
         "commit": "99169454ba21f310d6a6bc0124ba334662a210da",
         "introduced_blob": "e20ae2142b98e45e060538f9f33aad90adde216f"
       }
+    },
+    {
+      "source": "src/game/cu_8001BB20.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8001BB20"
+      ],
+      "provenance": {
+        "pull_request": 420,
+        "commit": "57367cd7280e2cc3aae7a0ef04549a606636db45",
+        "introduced_blob": "2c1856b34d627179ffd753c002895f97bbd2d921"
+      }
+    },
+    {
+      "source": "src/game/cu_8001D0F4.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8001D0F4",
+        "0x8001D180"
+      ],
+      "provenance": {
+        "pull_request": 420,
+        "commit": "57367cd7280e2cc3aae7a0ef04549a606636db45",
+        "introduced_blob": "12342659fa3201b500c1375b6dbef195fc080878"
+      }
+    },
+    {
+      "source": "src/game/cu_8001D2D8.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8001D2D8"
+      ],
+      "provenance": {
+        "pull_request": 420,
+        "commit": "57367cd7280e2cc3aae7a0ef04549a606636db45",
+        "introduced_blob": "b464716a3970a88b2ddf4ff7a979942c8caa02e9"
+      }
+    },
+    {
+      "source": "src/game/cu_800231B0.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800231B0",
+        "0x800231E8",
+        "0x80023210",
+        "0x80023238",
+        "0x80023260",
+        "0x80023294",
+        "0x800232C8",
+        "0x8002333C",
+        "0x8002335C",
+        "0x80023394",
+        "0x800233C8",
+        "0x800233F0",
+        "0x80023498",
+        "0x800234B8",
+        "0x800234EC"
+      ],
+      "provenance": {
+        "pull_request": 420,
+        "commit": "57367cd7280e2cc3aae7a0ef04549a606636db45",
+        "introduced_blob": "fa9d609c024d30c9b6b02f8aeabdd12c2923c18c"
+      }
+    },
+    {
+      "source": "src/game/cu_8002A9B8.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8002A9B8"
+      ],
+      "provenance": {
+        "pull_request": 420,
+        "commit": "57367cd7280e2cc3aae7a0ef04549a606636db45",
+        "introduced_blob": "3de053f725cb56c0bfacade1f8f868917a861512"
+      }
     }
   ],
   "target": "GN7E69",
