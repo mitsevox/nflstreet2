@@ -5759,8 +5759,11 @@
       "provenance": {
         "pull_request": 278,
         "merged_via": 276,
-        "commit": "35af101f989d963f27eb631377ee385d1750d085",
-        "introduced_blob": "f7f50c92c7d883c26c7cce932cd677af3c6454fe"
+        "commit": "523f4fbc31bed7f232143c6660bde0ac9cad3e98",
+        "introduced_blob": "8cefb2c01a73bb1e32c52ad52e9e2e1072a62531",
+        "original_blob": "f7f50c92c7d883c26c7cce932cd677af3c6454fe",
+        "original_commit": "35af101f989d963f27eb631377ee385d1750d085",
+        "integration_adjustment": "Shared by dependent PR409, which moves Key_8007A334 unchanged into include/game/Key_8007A334.h; the object is unchanged."
       }
     },
     {
@@ -7641,8 +7644,8 @@
       "provenance": {
         "pull_request": 409,
         "merged_via": 409,
-        "commit": "d7ec968e6e8a6684cc9d1f4c7c85d67f1131c4fb",
-        "introduced_blob": "0d2468b420cc08a8630d4314c068bdf3b02b82ca"
+        "commit": "523f4fbc31bed7f232143c6660bde0ac9cad3e98",
+        "introduced_blob": "6a00c84f6689f5aaa66f8bc63a1c7a28ca59b272"
       }
     }
   ],
