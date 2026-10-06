@@ -5,7 +5,7 @@ extern "C" {
 extern char lbl_800034A0[];
 
 int fn_801D2130(Record_802CC680 *pObject);
-int fn_80024B20(int team, int margin, int flag);
+int fn_80024B20(int side, int limit, int flag);
 int fn_801D2570(int id);
 void fn_80088E8C(char *pStart, char *pEnd);
 void fn_80088EC8(char *pStart, char *pEnd);
