@@ -23,12 +23,10 @@ void fn_8002B71C(void)
 
     fn_80179150();
     if (fn_80025708()) {
-        int csag;
-
         fn_801787FC(0, fn_800785C0()->mUnknown1AC);
         fn_801787FC(1, fn_800785C0()->mUnknown1A8);
-        csag = fn_800785C0()->mUnknown1A8;
-        fn_801FCE10(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n", csag, fn_800785C0()->mUnknown1AC);
+        fn_801FCE10(0, "update 'FNIG' set 'CSAG' = \x82 and 'CSHG' = \x82\n",
+                    fn_800785C0()->mUnknown1A8, fn_800785C0()->mUnknown1AC);
         fn_8017885C();
         fn_801C1F94(&info, 0, sizeof(info));
         fn_80178878(&info);
