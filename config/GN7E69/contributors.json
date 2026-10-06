@@ -8030,11 +8030,10 @@
       ],
       "provenance": {
         "pull_request": 432,
-        "merged_via": 432,
+        "merged_via": 434,
         "commit": "96c44ff72420e4abbc8319d13e103e90a321fe9d",
         "introduced_blob": "c8dd5d265f8e3b87f41e2732a1b151681f46e017"
-      },
-      "merged_via": 434
+      }
     },
     {
       "source": "src/game/cu_801422C8.cpp",
@@ -8047,11 +8046,10 @@
       ],
       "provenance": {
         "pull_request": 433,
-        "merged_via": 433,
+        "merged_via": 434,
         "commit": "10c2524769b5245be6b639a6ee026f23364cc9da",
         "introduced_blob": "a91cbcca9b8dfafb5bfe3d9f5b468fd46ddeb0ac"
-      },
-      "merged_via": 434
+      }
     },
     {
       "source": "src/game/cu_801422EC.cpp",
@@ -8070,11 +8068,10 @@
       ],
       "provenance": {
         "pull_request": 433,
-        "merged_via": 433,
+        "merged_via": 434,
         "commit": "10c2524769b5245be6b639a6ee026f23364cc9da",
         "introduced_blob": "035b7a79105f4805965a63bc0e85a1ed490d9cb0"
-      },
-      "merged_via": 434
+      }
     },
     {
       "source": "src/game/cu_8005406C.cpp",
@@ -8087,11 +8084,10 @@
       ],
       "provenance": {
         "pull_request": 433,
-        "merged_via": 433,
+        "merged_via": 434,
         "commit": "10c2524769b5245be6b639a6ee026f23364cc9da",
         "introduced_blob": "705c5b902c3a3b83c0d2b2df43e3c573960a9734"
-      },
-      "merged_via": 434
+      }
     },
     {
       "source": "src/game/cu_80164568.cpp",
@@ -8109,11 +8105,10 @@
       ],
       "provenance": {
         "pull_request": 433,
-        "merged_via": 433,
+        "merged_via": 434,
         "commit": "10c2524769b5245be6b639a6ee026f23364cc9da",
         "introduced_blob": "740113709300f5b1e0ca5cb0d97252785a3010b9"
-      },
-      "merged_via": 434
+      }
     }
   ],
   "target": "GN7E69",
