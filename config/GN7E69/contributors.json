@@ -8131,6 +8131,26 @@
         "commit": "02d67e5ea9005904728b63b4a11026b1f8125fab",
         "introduced_blob": "da2b4d543660a15d4a6722eec3dd23d980bc53ea"
       }
+    },
+    {
+      "source": "src/game/cu_801962CC.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801962CC",
+        "0x8019634C",
+        "0x80196414",
+        "0x80196480",
+        "0x8019651C",
+        "0x80196564"
+      ],
+      "provenance": {
+        "pull_request": 438,
+        "merged_via": 438,
+        "commit": "74fe2dec38b55fca84e01b74430166be087adcc5",
+        "introduced_blob": "4c9a19212d36ea391fba667236aa8f9e51118f8f"
+      }
     }
   ],
   "target": "GN7E69",
