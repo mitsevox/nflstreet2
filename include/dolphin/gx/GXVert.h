@@ -28,6 +28,27 @@ volatile PPCWGPipe GXWGFifo AT_ADDRESS(GXFIFO_ADDR);
 #define GXWGFifo (*(volatile PPCWGPipe *)GXFIFO_ADDR)
 #endif
 
+static inline void GXPosition3f32(f32 x, f32 y, f32 z)
+{
+    GXWGFifo.f32 = x;
+    GXWGFifo.f32 = y;
+    GXWGFifo.f32 = z;
+}
+
+static inline void GXColor4u8(u8 r, u8 g, u8 b, u8 a)
+{
+    GXWGFifo.u8 = r;
+    GXWGFifo.u8 = g;
+    GXWGFifo.u8 = b;
+    GXWGFifo.u8 = a;
+}
+
+static inline void GXTexCoord2f32(f32 s, f32 t)
+{
+    GXWGFifo.f32 = s;
+    GXWGFifo.f32 = t;
+}
+
 #ifdef __cplusplus
 }
 #endif
