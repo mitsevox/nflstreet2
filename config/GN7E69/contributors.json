@@ -7593,8 +7593,11 @@
       "provenance": {
         "pull_request": 405,
         "merged_via": 405,
-        "commit": "429a1780bfa529d526c6db29cb0b879883429661",
-        "introduced_blob": "4e1e7d39220559d58d329892bba02d4a60be0155"
+        "commit": "2a1503f6a4c1dd07a16437ab9c9074b35374def7",
+        "introduced_blob": "cf480bc492b5666ea61bbf364430e0c8dcdd058c",
+        "original_blob": "4e1e7d39220559d58d329892bba02d4a60be0155",
+        "original_commit": "429a1780bfa529d526c6db29cb0b879883429661",
+        "integration_adjustment": "Original PR405 is inherited by dependent PR407, which generalizes the shared 0x801FA844 declaration to void * table and filter parameters; the object is unchanged."
       }
     },
     {
