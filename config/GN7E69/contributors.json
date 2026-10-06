@@ -2875,7 +2875,7 @@
       }
     },
     {
-      "source": "src/game/cu_8002AE90.cpp",
+      "source": "src/engine/vptmanager.cpp",
       "contributors": [
         "adampreddy"
       ],
@@ -2908,7 +2908,8 @@
         "merged_via": 216,
         "commit": "e9f8d9da01ddeccc15c526bf316ba4638cde84fa",
         "introduced_blob": "4ae082fa81b532b58c8867a2a44f76d44930817d",
-        "original_blob": "4ae082fa81b532b58c8867a2a44f76d44930817d"
+        "original_blob": "4ae082fa81b532b58c8867a2a44f76d44930817d",
+        "original_source": "src/game/cu_8002AE90.cpp"
       }
     },
     {

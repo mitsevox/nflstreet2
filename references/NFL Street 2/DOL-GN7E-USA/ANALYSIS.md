@@ -24,12 +24,12 @@ This build represents the **primary reverse-engineering and decompilation target
 * **Primary Executable (`main.dol`)**: 3.17 MB (3,171,840 bytes) 32-bit PowerPC Gekko executable.
   * Section layout: `.init` at `0x80003100`, `.text` at `0x800034A0` (2,647,424 bytes), `.data2` through `.data6` covering small-data bases `r13` (`0x803F22A0`) and `r2` (`0x804022A0`).
   * Like standard GameCube retail masters, symbols and DWARF debug sections were stripped by the release pipeline.
-* **191 Recovered Functions from Sibling DWARF & Linker Maps (`symbols/matched_dwarf_symbols.tsv`)**:
-  * Cross-referencing against **NASCAR 2005 (Tiburon DWARF 1)**, **UEFA Champions League (SN Linker Map)**, and **Medal of Honor (DWARF 1)** recovered **191 unique functions with 100% mathematical certainty** via relocation-blind instruction fingerprinting.
-  * Recovered modules include the complete **`VptManager` camera stack** (`_VptManagerCreateStack`, `VptManagerPushCamera`, `VptManagerPopCamera`), character motion streaming (`_AnimExtnRelocateMotion`, `ReadBitStream`), texture registries (`TMTexLibRegistryInit`), and the **Style Points gameplay system** (`StylePointsManager::SetAchievementCompleted`).
+* **191 Candidate Functions from Sibling DWARF & Linker Maps (`symbols/matched_dwarf_symbols.tsv`)**:
+  * Cross-referencing against **NASCAR 2005 (Tiburon DWARF 1)**, **UEFA Champions League (SN Linker Map)**, and **Medal of Honor (DWARF 1)** identified **191 candidate functions** via normalized opcode sequences and relocation-masked comparisons.
+  * Candidate modules include the **`VptManager` camera stack** (`_VptManagerCreateStack`, `VptManagerPushCamera`, `VptManagerPopCamera`), character motion streaming (`_AnimExtnRelocateMotion`, `ReadBitStream`), and texture registries (`TMTexLibRegistryInit`). (Note: `StylePointsManager` was unmasked as an instruction-match false positive for an audio callback in `SndgPathfinder.cpp`).
 * **Source Filename Anchors Recovered**:
   * Core gameplay: `BALL.C`, `AASSIGN.C`, `REPLAY.C`, `CUSTOMAI.C`.
-  * Menu subsystem: `UIStudio.c` (at `0x802633FC`, matching European PAL `0x802639D4` within `-0x5D8` bytes).
+  * Menu subsystem: `UIStudio.c` (at `0x802B1DC4`, with call site at `0x80219F58`; legacy `0x802633FC` was an offset calculation artifact falling in libc `vfprintf`).
 * **Object Schemas (`strings/objdefs_schema.txt`)**:
   * 15,892 readable lines of Tiburon Object Definition File (ODF) XML specifications extracted from `root/objdefs.dat`.
 
@@ -54,4 +54,4 @@ references/NFL Street 2/DOL-GN7E-USA/
 ## Decompilation Alignment & Target Matching
 1. **European PAL Alignment (`DOL-GN7P-UKV`)**: The European GameCube build matches this target almost 1:1, differing by only `+0x5D8` bytes due to minor PAL language tables.
 2. **ProDG Toolchain Verification**: The small-data layout (`0x803F22A0` / `0x804022A0`) and instruction sequences match ProDG 3.9.3 compilation profiles with `-O2` optimization.
-3. **Reference Library Coverage**: 100% of the shared EA middleware block is mapped to identical C functions in sister builds (`NASCAR 2005`, `UEFA 2004`).
+3. **Reference Library Coverage**: Shared EA middleware blocks correspond to matching C functions in sister builds (`NASCAR 2005`, `UEFA 2004`) based on normalized opcode analysis.

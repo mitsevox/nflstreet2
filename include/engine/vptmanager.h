@@ -7,7 +7,6 @@
 extern "C" {
 #endif
 
-/* Stack and camera management routines (recovered from NASCAR 2005 DWARF: vptmanager.cpp) */
 int fn_8002AE90(void *p, int a);
 int fn_8002AEE4(void *p, int a);
 void fn_8002B1E4(void);

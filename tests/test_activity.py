@@ -158,6 +158,16 @@ class ContributorTests(unittest.TestCase):
         self.commit=self.commit_source('int function(void) { return 3; }')
         self.assertEqual(self.credits()[0]['functions'],1)
 
+    def test_path_migration_preserves_original_source_provenance(self):
+        self.git('mv', 'src/test.c', 'src/moved.c')
+        self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                 'commit', '-qm', 'Move source')
+        self.commit = self.git('rev-parse', 'HEAD')
+        self.build['units'][0]['source'] = 'src/moved.c'
+        self.entry['source'] = 'src/moved.c'
+        self.entry['provenance']['original_source'] = 'src/test.c'
+        self.assertEqual(self.credits()[0]['login'], 'alice')
+
     def test_historical_lookup_batches_deleted_and_restored_paths(self):
         self.git('rm', 'src/test.c')
         self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
