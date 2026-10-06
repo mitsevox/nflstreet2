@@ -2467,6 +2467,19 @@
       ]
     },
     {
+      "source": "src/game/cu_800231B0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800231B0-0x80023514 (src/game/cu_800231B0.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800231B0",
+          "end": "0x80023514"
+        }
+      ]
+    },
+    {
       "source": "src/game/FELoop.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800273AC-0x80027FE0 (src/game/FELoop.cpp) and its data rows.",
@@ -5979,6 +5992,25 @@
       ]
     },
     {
+      "source": "src/game/cu_8002A9B8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8002A9B8-0x8002ACB4 (src/game/cu_8002A9B8.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002A9B8",
+          "end": "0x8002ACB4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028A3C0",
+          "end": "0x8028A990"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8002ACB4.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv: src/game/cu_8002ACB4.cpp unit, data, compiler and source-form rows",
@@ -6843,6 +6875,19 @@
       ]
     },
     {
+      "source": "src/game/cu_8001BB20.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8001BB20-0x8001BB84 (src/game/cu_8001BB20.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8001BB20",
+          "end": "0x8001BB84"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8001BB84.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8001BB84-0x8001BF24 (src/game/cu_8001BB84.cpp) and its data and source-form rows.",
@@ -6891,6 +6936,19 @@
           "placement": ".data5",
           "start": "0x803EBA58",
           "end": "0x803EBA60"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8001D2D8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8001D2D8-0x8001D314 (src/game/cu_8001D2D8.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8001D2D8",
+          "end": "0x8001D314"
         }
       ]
     },
