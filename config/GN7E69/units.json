@@ -7393,7 +7393,7 @@
     {
       "source": "src/game/cu_8019B460.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019B460-0x8019B644 (src/game/cu_8019B460.cpp) and its data row.",
+      "evidence": "evidence.tsv unit row 0x8019B460-0x8019B644 (src/game/cu_8019B460.cpp) and its two .sdata rows.",
       "sections": [
         {
           "section": ".text",
