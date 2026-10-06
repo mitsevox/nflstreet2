@@ -3,9 +3,9 @@
 
 extern "C" {
 extern char lbl_800034A0[];
-extern char lbl_80024B20[];
 
 int fn_801D2130(Record_802CC680 *pObject);
+int fn_80024B20(int side, int limit, int flag);
 int fn_801D2570(int id);
 void fn_80088E8C(char *pStart, char *pEnd);
 void fn_80088EC8(char *pStart, char *pEnd);
@@ -24,19 +24,19 @@ int FEDLL::Init()
 {
     if (sShutdown) {
         fn_801D2570(0x40);
-        fn_80088E8C(lbl_800034A0, lbl_80024B20);
+        fn_80088E8C(lbl_800034A0, (char *)fn_80024B20);
         sShutdown = 0;
     }
     return 1;
 }
 
-/* Copies the code range lbl_800034A0-lbl_80024B20 to ARAM, then passes record
+/* Copies the code range lbl_800034A0-fn_80024B20 to ARAM, then passes record
    0x40 to fn_801D2130. */
 int FEDLL::Shutdown()
 {
     Record_802CC680 *pObject = fn_80025E50(0x40);
-    pObject->mUnknown10 = lbl_80024B20 - lbl_800034A0;
-    fn_80088EC8(lbl_800034A0, lbl_80024B20);
+    pObject->mUnknown10 = (char *)fn_80024B20 - lbl_800034A0;
+    fn_80088EC8(lbl_800034A0, (char *)fn_80024B20);
     pObject->mUnknown10 = 0x209C0;
     fn_801D2130(pObject);
     sShutdown = 1;
