@@ -7032,6 +7032,38 @@
           "end": "0x8037E0A0"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8002B5D0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8002B5D0-0x8002B70C (src/game/cu_8002B5D0.cpp) and its source-form row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002B5D0",
+          "end": "0x8002B70C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8002B71C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8002B71C-0x8002B8F8 (src/game/cu_8002B71C.cpp), its data row and its source-form row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002B71C",
+          "end": "0x8002B8F8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028A990",
+          "end": "0x8028A9C4"
+        }
+      ]
     }
   ]
 }
