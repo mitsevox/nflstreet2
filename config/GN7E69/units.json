@@ -7108,6 +7108,56 @@
           "end": "0x803EB1AC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801A4CBC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A4CBC-0x801A5478 (src/game/cu_801A4CBC.cpp), its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A4CBC",
+          "end": "0x801A5478"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE73C",
+          "end": "0x802AE764"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB830",
+          "end": "0x803EB840"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803664C0",
+          "end": "0x803666A0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECC18",
+          "end": "0x803ECC1C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801A60D8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A60D8-0x801A679C (src/game/cu_801A60D8.cpp), its type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A60D8",
+          "end": "0x801A679C"
+        }
+      ]
     }
   ]
 }
