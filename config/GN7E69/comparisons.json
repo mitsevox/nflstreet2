@@ -8704,7 +8704,7 @@
     {
       "source": "src/game/cu_800170E0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_800170E0.cpp, the function rows 0x800170E0-0x8001B8E8, the data rows 0x8001B8E8-0x8001BB20 (data_8001B8E8), 0x802F43F4-0x802F4504 and 0x803EBA08-0x803EBA44, the .ctors/.dtors words and the data rows of its .bss and .sbss objects. Draft comparison only: one function body differs in register numbering (see the source-form row cu_800170E0 unmatched functions), so the unit stays unlinked.",
+      "evidence": "evidence.tsv unit row src/game/cu_800170E0.cpp, the function rows 0x800170E0-0x8001B8E8, the data rows 0x8001B8E8-0x8001BB20 (data_8001B8E8), 0x802F43F4-0x802F4504 and 0x803EBA08-0x803EBA44, the .ctors/.dtors words and the data rows of its .bss and .sbss objects. Draft comparison only: the source does not reproduce the two unreferenced 'THCD' strings at 0x8001BA6C-0x8001BADC, so the .rodata from 0x8001BA6C differs and five function bodies differ only in the string relocations after it; one more body differs in register numbering (see the source-form rows cu_800170E0 unreproduced THCD strings and cu_800170E0 unmatched functions), so the unit stays unlinked.",
       "sections": [
         {
           "section": ".text",

@@ -200,7 +200,7 @@ void fn_80018B60(int group, int *pList);
 void fn_80018E14(unsigned char count, unsigned char size);
 void fn_80018EF0(void);
 void fn_8001AA8C(int id, int *pSlot);
-int fn_8001AC48(int *pDays, int *pResult);
+int fn_8001AC48(int *pGroupDelta, int *pResult);
 void fn_8001B228(void);
 
 void fn_800170E0(void)
@@ -458,8 +458,7 @@ int fn_800179EC(int start, int teamId, float scale)
     for (; n < lbl_803EBA10; n++) {
         int pick;
         if (lbl_803EBA34 == 2) {
-            pick = seq++;
-            if (pick < total) {
+            if ((pick = seq++) < total) {
                 if (pick < count0) {
                     fn_8008082C(pick, 0);
                     fn_8008079C(0);
@@ -535,7 +534,7 @@ int fn_800179EC(int start, int teamId, float scale)
 
 int fn_80017DF4(void)
 {
-    int teams[8];
+    int ids[8];
     int others[56];
     int index;
     int digt;
@@ -545,32 +544,32 @@ int fn_80017DF4(void)
     unsigned int j;
 
     index = fn_8022F384(fn_8022F4BC());
-    digt = fn_8018BE68(index, 1, (Result_8018BE68 *)teams);
-    if (fn_800809C4(&lbl_8036B168, teams[0], 0)) {
-        fn_8007ABA4(&lbl_8036B168, 0x44494F50, teams[0]);
+    digt = fn_8018BE68(index, 1, (Result_8018BE68 *)ids);
+    if (fn_800809C4(&lbl_8036B168, ids[0], 0)) {
+        fn_8007ABA4(&lbl_8036B168, 0x44494F50, ids[0]);
         fn_8007ABA4(&lbl_8036B168, 0x44494754, digt);
         fn_8007ABA4(&lbl_8036B168, 0x49544754, digt);
-        lbl_802F43F4[0].mValue = teams[0];
+        lbl_802F43F4[0].mValue = ids[0];
         fn_8007A934((Object_8007A334 *)&lbl_8036B168, 0x50585350);
         fn_8007A98C(&lbl_8036B168, 0x4F504250);
     }
     fn_80086BA4(index);
     fn_80086ACC(lbl_8036B1F0);
-    fn_80086868(&teams[1], 7);
+    fn_80086868(&ids[1], 7);
     count = fn_800868A8(others, 56);
     fn_80086B50();
     lbl_803EBA10 = count + 8;
     lbl_803EBA0C = (Entry_803EBA0C *)fn_801D2B7C(lbl_803EBA10 * sizeof(Entry_803EBA0C), 0, 0);
     n = 0;
     for (i = 0; i < 8; i++) {
-        lbl_803EBA0C[n].mId = teams[i];
+        lbl_803EBA0C[n].mId = ids[i];
         lbl_803EBA0C[n].mUnknown8 = 0;
         lbl_803EBA0C[n].mUnknownC = 0;
         lbl_803EBA0C[n].mUnknown10 = 0xFF;
         lbl_803EBA0C[n].mSlot = -1;
         lbl_803EBA0C[n].mTeam = 8;
         lbl_803EBA0C[n].mUnknown15 = 0xFF;
-        if (fn_800809C4(&lbl_8036B168, teams[i], 0)) {
+        if (fn_800809C4(&lbl_8036B168, ids[i], 0)) {
             int value8 = fn_8007A934((Object_8007A334 *)&lbl_8036B168, 0x50585350);
             int valueC = fn_8007A98C(&lbl_8036B168, 0x4F504250);
             lbl_803EBA0C[n].mUnknown8 = value8;
@@ -601,15 +600,15 @@ int fn_80017DF4(void)
         while (j < 8 && lbl_802F43F4[j].mKey != lbl_8036B1F0[i]) {
             j++;
         }
-        fn_8001AA8C(teams[j], 0);
+        fn_8001AA8C(ids[j], 0);
     }
-    lbl_803EBA28 = teams[0];
+    lbl_803EBA28 = ids[0];
     return n;
 }
 
 int fn_80018114(void)
 {
-    Result_8018BE68 picks;
+    Result_8018BE68 ids;
     int index;
     int digt;
     int value8;
@@ -617,15 +616,15 @@ int fn_80018114(void)
     int ok = 0;
 
     index = fn_8022F384(fn_8022F4BC());
-    digt = fn_8018BE68(index, 1, &picks);
-    if (fn_800809C4(&lbl_8036B168, picks.mUnknown0, 0)) {
-        fn_8007ABA4(&lbl_8036B168, 0x44494F50, picks.mUnknown0);
+    digt = fn_8018BE68(index, 1, &ids);
+    if (fn_800809C4(&lbl_8036B168, ids.mUnknown0, 0)) {
+        fn_8007ABA4(&lbl_8036B168, 0x44494F50, ids.mUnknown0);
         ok = 1;
         fn_8007ABA4(&lbl_8036B168, 0x44494754, digt);
         fn_8007ABA4(&lbl_8036B168, 0x49544754, digt);
         value8 = fn_8007A934((Object_8007A334 *)&lbl_8036B168, 0x50585350);
         valueC = fn_8007A98C(&lbl_8036B168, 0x4F504250);
-        lbl_803EBA0C[0].mId = picks.mUnknown0;
+        lbl_803EBA0C[0].mId = ids.mUnknown0;
         lbl_803EBA0C[0].mUnknown8 = value8;
         lbl_803EBA0C[0].mUnknownC = valueC;
         lbl_803EBA0C[0].mUnknown10 = 0xFF;
@@ -634,8 +633,8 @@ int fn_80018114(void)
         lbl_803EBA0C[0].mUnknown15 = 0xFF;
         lbl_803EBA08->mUnknown15 = 1;
         lbl_803EBA08->mUnknown19 = 1;
-        fn_8001AA8C(picks.mUnknown0, 0);
-        lbl_803EBA28 = picks.mUnknown0;
+        fn_8001AA8C(ids.mUnknown0, 0);
+        lbl_803EBA28 = ids.mUnknown0;
     }
     return ok;
 }
@@ -666,17 +665,13 @@ void fn_80018230(void)
         if (lbl_803EBA38[3]) {
             n = fn_80017380(team);
         }
-        if (lbl_803EBA34 != 2) {
-            if (n >= lbl_803EBA10) {
-                goto done;
-            }
+        if (lbl_803EBA34 != 2 && n < lbl_803EBA10) {
             n = fn_80017610(n, team, scale);
         }
         if (n < lbl_803EBA10) {
             fn_800179EC(n, team, scale);
         }
     }
-done:
     if (lbl_803EBA38[2]) {
         fn_800829D8();
     }
@@ -796,13 +791,13 @@ void fn_800186CC(void)
 
 void fn_80018848(void)
 {
-    void *pFont;
+    void *pList;
     int i;
 
-    pFont = fn_8021EA44(1);
+    pList = fn_8021EA44(1);
     for (i = 0; i < lbl_803EBA10; i++) {
         if (lbl_803EBA0C[i].mUnknown8 > 630) {
-            fn_8021E2B4(pFont, 10, lbl_803EBA0C[i].mUnknown8);
+            fn_8021E2B4(pList, 10, lbl_803EBA0C[i].mUnknown8);
         }
     }
     lbl_803EBA08->mUnknown1B = 1;
@@ -810,14 +805,14 @@ void fn_80018848(void)
 
 void fn_800188CC(void)
 {
-    void *pFont;
+    void *pList;
     int i;
 
     if (lbl_803EBA08->mUnknown1B) {
-        pFont = fn_8021EA44(1);
+        pList = fn_8021EA44(1);
         for (i = 0; i < lbl_803EBA10; i++) {
             if (lbl_803EBA0C[i].mUnknown8 > 630) {
-                fn_8021E72C(pFont, 10, lbl_803EBA0C[i].mUnknown8);
+                fn_8021E72C(pList, 10, lbl_803EBA0C[i].mUnknown8);
             }
             if (i % 10 == 9) {
                 fn_80023024(1);
@@ -969,21 +964,6 @@ void fn_80018CA4(int *pTeam, int *pIds, const char *pName)
     fn_80018C10(oldIds, newIds, pIds);
 }
 
-void CopyThcdRows(int team, int *pOldIds, int *pNewIds)
-{
-    int handle = -1;
-    unsigned int i;
-
-    for (i = 0; i < 7; i++) {
-        fn_801F9980(0x54415453, &handle);
-        fn_801FCE10(0, "use 'TATS' select into \x8c * from 'THCD' where ('DIGP' = \x82)\n", handle, pOldIds[i]);
-        fn_801FCE10(0, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIGP' = \x82 where ('DIGP' = \x82)\n", handle,
-                    team, pNewIds[i], pOldIds[i]);
-        fn_801FCE10(0, "use 'TATS' insert into \x8c.'THCD' * select * from \x8c\n", 0x54415453, handle);
-        fn_801F967C(0x54415453, handle);
-    }
-}
-
 void fn_80018E14(unsigned char count, unsigned char size)
 {
     unsigned char i;
@@ -1019,7 +999,6 @@ void fn_80018EF0(void)
 
 void fn_80018F9C(unsigned char size)
 {
-    unsigned char i;
     unsigned char team;
     unsigned char other;
 
@@ -1102,7 +1081,6 @@ void fn_800191E4(void)
 
 void fn_80019380(void)
 {
-    unsigned char i;
     unsigned int count = fn_80178D70(0) * 2;
     unsigned char team = fn_8007CB6C(2);
     unsigned char other = team == 0;
@@ -1453,7 +1431,7 @@ int fn_8001A024(int group, int count)
     return n;
 }
 
-void fn_8001A0A4(int row, int *pId, int *pPosition, int *pValues, char *pHeight, int heightSize,
+void fn_8001A0A4(int row, int *pId, int *pTeam, int *pValues, char *pHeight, int heightSize,
                  char *pWeight, int weightSize)
 {
     int values[10];
@@ -1463,9 +1441,9 @@ void fn_8001A0A4(int row, int *pId, int *pPosition, int *pValues, char *pHeight,
     *pId = lbl_803EBA0C[index].mId;
     if (fn_800809C4(&lbl_8036B168, *pId, 0)) {
         if (fn_80080CB0(&lbl_8036B168) == 2) {
-            *pPosition = -19;
+            *pTeam = -19;
         } else {
-            *pPosition = fn_80080948(&lbl_8036B168);
+            *pTeam = fn_80080948(&lbl_8036B168);
         }
         fn_80081788(&lbl_8036B168, values);
         pValues[0] = values[6];
@@ -1704,14 +1682,14 @@ void fn_8001A8C8(int index, Arg_8018399C text)
     }
 }
 
-int fn_8001A948(int *pPad)
+int fn_8001A948(int *pController)
 {
-    unsigned char pad = lbl_803EBA08->mpUnknown08[lbl_803EBA08->mUnknown15];
+    unsigned char controller = lbl_803EBA08->mpUnknown08[lbl_803EBA08->mUnknown15];
 
-    if (pad != 0xFF) {
-        *pPad = fn_80188030(pad);
+    if (controller != 0xFF) {
+        *pController = fn_80188030(controller);
     } else {
-        *pPad = -1;
+        *pController = -1;
     }
     return fn_80018A88() == 0;
 }
@@ -1791,7 +1769,7 @@ void fn_8001AA8C(int id, int *pSlot)
     }
 }
 
-int fn_8001AC48(int *pDays, int *pResult)
+int fn_8001AC48(int *pGroupDelta, int *pResult)
 {
     int count = 0;
     int allowedCount = 0;
@@ -1818,29 +1796,29 @@ int fn_8001AC48(int *pDays, int *pResult)
     fn_8003EB2C(lbl_803EBA18, pList, allowed, &id, &category);
     fn_801D2BD0(pList);
 
-    unsigned char day = lbl_803EBA08->mUnknown17;
+    unsigned char group = lbl_803EBA08->mUnknown17;
     pEntry = fn_800172C4(id, &index);
-    unsigned char pickDay = fn_80017278(index);
-    unsigned char b = fn_80017260(pickDay, index);
+    unsigned char pickGroup = fn_80017278(index);
+    unsigned char b = fn_80017260(pickGroup, index);
 
-    if (pDays) {
-        if (day <= pickDay) {
-            *pDays = pickDay - day;
+    if (pGroupDelta) {
+        if (group <= pickGroup) {
+            *pGroupDelta = pickGroup - group;
         } else {
-            *pDays = 7 - (day - pickDay);
+            *pGroupDelta = 7 - (group - pickGroup);
         }
     }
     if (pResult) {
-        *pResult = fn_8001A024(pickDay, b);
+        *pResult = fn_8001A024(pickGroup, b);
     }
     pEntry->mUnknown10 = category;
     return id;
 }
 
-void fn_8001ADD4(int dir, int *pResult, Arg_8018399C prevText, Arg_8018399C dayText, Arg_8018399C nextText)
+void fn_8001ADD4(int dir, int *pResult, Arg_8018399C prevText, Arg_8018399C groupText, Arg_8018399C nextText)
 {
     Params_80005284 *pPrev = prevText.pParams;
-    Params_80005284 *pDay = dayText.pParams;
+    Params_80005284 *pGroup = groupText.pParams;
     Params_80005284 *pNext = nextText.pParams;
     unsigned short prev;
     unsigned short next;
@@ -1878,16 +1856,16 @@ void fn_8001ADD4(int dir, int *pResult, Arg_8018399C prevText, Arg_8018399C dayT
 
     *pResult = fn_80017208(lbl_803EBA08->mUnknown17);
     fn_8017F670(lbl_802F4488[prev][0], pPrev->mpText);
-    fn_8017F670(lbl_802F4488[lbl_803EBA08->mUnknown17][0], pDay->mpText);
+    fn_8017F670(lbl_802F4488[lbl_803EBA08->mUnknown17][0], pGroup->mpText);
     fn_8017F670(lbl_802F4488[next][0], pNext->mpText);
 }
 
-void fn_8001AF08(int index, int group, int *pValid, int *pId, Arg_8018399C name, Arg_8018399C text)
+void fn_8001AF08(int index, int team, int *pValid, int *pId, Arg_8018399C name, Arg_8018399C text)
 {
-    if (index < lbl_803EBA08->mpCounts[group]) {
+    if (index < lbl_803EBA08->mpCounts[team]) {
         *pValid = 1;
         for (unsigned short i = 0; i < lbl_803EBA10; i++) {
-            if (lbl_803EBA0C[i].mTeam == group && lbl_803EBA0C[i].mSlot == index) {
+            if (lbl_803EBA0C[i].mTeam == team && lbl_803EBA0C[i].mSlot == index) {
                 fn_800809C4(&lbl_8036B168, lbl_803EBA0C[i].mId, 0);
                 *pId = fn_80080D10(&lbl_8036B168);
                 fn_80080A68(&lbl_8036B168, name.pParams->mpText, name.pParams->mLength);
