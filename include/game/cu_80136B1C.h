@@ -76,7 +76,7 @@ extern "C" {
 void fn_80137314(int a);
 void fn_8013737C(int a, int b, int c, int d, float e);
 void fn_8013740C(void);
-void fn_8013745C(int index);
+void fn_8013745C(unsigned char index);
 Object_80137ABC *fn_801374BC(void);
 unsigned char fn_801374D4(void);
 unsigned char fn_801374E0(Object_80137ABC *pBall);

@@ -112,7 +112,7 @@ void fn_80030FD8(int handle)
     fn_801DCF8C(10);
 }
 
-void fn_80031018(const float *pValue)
+void fn_80031018(const float *pValue, int)
 {
     Object_80030D50 *pObject = sObject;
 

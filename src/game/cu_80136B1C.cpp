@@ -306,7 +306,7 @@ void fn_8013740C(void)
     fn_80030ACC(fn_80137314, fn_8013737C, sEntrySize * sSet->mHeader.mCount, "Balls");
 }
 
-void fn_8013745C(int index)
+void fn_8013745C(unsigned char index)
 {
     Object_80137ABC *pBall = fn_801374BC();
 

@@ -1,6 +1,8 @@
 #ifndef GAME_CAMERA_8013F738_H
 #define GAME_CAMERA_8013F738_H
 
+#include "game/RecordList_8002E7C0.h"
+
 /* Leading block of a camera that a saved state restores. */
 struct CameraHeader_8013F628 {
     unsigned char mUnknown00;
@@ -17,7 +19,23 @@ struct CameraHeader_8013F628 {
 
 struct Camera_8013F738 {
     CameraHeader_8013F628 mHeader;
-    char mPad28[0x6C];
+    char mPad28[8];
+    float mUnknown30;
+    char mPad34[4];
+    int mUnknown38;
+    char mPad3C[0x28];
+    float mUnknown64;
+    float mUnknown68;
+    float mUnknown6C;
+    float mUnknown70;
+    float mUnknown74;
+    float mUnknown78;
+    float mUnknown7C;
+    float mUnknown80;
+    int mUnknown84;
+    int mUnknown88;
+    int mUnknown8C;
+    int mUnknown90;
     int mUnknown94;
     char mPad98[8];
     int mUnknownA0;
@@ -26,6 +44,14 @@ struct Camera_8013F738 {
     char mPadAC[4];
     int mUnknownB0;
     int mUnknownB4;
+    char mPadB8[0x14];
+    float mUnknownCC;
+    int mUnknownD0;
+    char mPadD4[0x54];
+    /* Script records of the replay camera (type 3). */
+    RecordList_8002E7C0 mUnknown128;
+    char mPad6B0[0x8AC];
+    int mUnknownF5C;
 };
 
 #endif
