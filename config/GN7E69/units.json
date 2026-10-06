@@ -7064,6 +7064,25 @@
           "end": "0x8028A9C4"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800812B0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800812B0-0x80081440 (src/game/cu_800812B0.cpp), its data row and its source-form row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800812B0",
+          "end": "0x80081440"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6928",
+          "end": "0x802D6950"
+        }
+      ]
     }
   ]
 }
