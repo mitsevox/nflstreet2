@@ -6,7 +6,7 @@
 
 struct Pool_803EA488 {
     Object_80041904 *mObjects;
-    Extra_80041490 *mExtras;
+    Extra_8004149C *mExtras;
     unsigned short mCount;
     unsigned short mMaxObjects;
     unsigned short mExtraCount;
@@ -18,7 +18,7 @@ int fn_80040A70(Object_80041904 *pObject, int index);
 int fn_80040F18(int index);
 int fn_80041094(int index);
 int fn_800410B8(int index);
-void fn_8004A8C4(Extra_80041490 *pExtra, int entry, int a);
+void fn_8004A8C4(Extra_8004149C *pExtra, int entry, int a);
 void fn_8004A8E8(int entry, void *a, int b, void *c);
 void fn_8004A908(Object_80041904 *pObject, int index);
 void fn_8004C684(void *pOwner, Object_80041904 *pObject);
@@ -43,7 +43,7 @@ int fn_80041210(void *p, int value)
 
     pPool->mObjects = (Object_80041904 *)fn_801D2B7C(pPool->mMaxObjects * 432, 0, 0);
     memset(pPool->mObjects, 0, pPool->mMaxObjects * 432);
-    pPool->mExtras = (Extra_80041490 *)fn_801D2B7C(pPool->mMaxExtras * 1712, 0, 0);
+    pPool->mExtras = (Extra_8004149C *)fn_801D2B7C(pPool->mMaxExtras * 1712, 0, 0);
     memset(pPool->mExtras, 0, pPool->mMaxExtras * 1712);
     for (i = 0; i < pPool->mMaxObjects; i++) {
     }
@@ -170,7 +170,7 @@ int fn_800416CC(float dt)
     for (i = 0; i < lbl_803EA488->mCount; i++) {
         if (fn_80041094(i) != 0) {
             Object_80041904 *pObject = &lbl_803EA488->mObjects[i];
-            Extra_80041490 *pExtra = pObject->mUnknown428;
+            Extra_8004149C *pExtra = pObject->mUnknown428;
             int a;
 
             if (pExtra->mUnknown1708 & 8) {
