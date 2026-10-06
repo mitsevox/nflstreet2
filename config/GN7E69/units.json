@@ -7314,6 +7314,19 @@
           "end": "0x80292888"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8007CC50.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007CC50-0x8007CDA0 (src/game/cu_8007CC50.cpp), its type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007CC50",
+          "end": "0x8007CDA0"
+        }
+      ]
     }
   ]
 }
