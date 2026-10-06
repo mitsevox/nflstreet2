@@ -1,0 +1,116 @@
+# Extracted Debug & Diagnostic Strings from NFL Street 3 (USA PSP) (BOOT.BIN)
+# Total unique strings extracted: 113
+
+NFLStreet
+screens\glue\glue
+_global.Glue
+ShutScreen
+InitScreen
+streetart
+minigames\minigamemenu\minigamemenu
+LoadScreenStrings
+StreetPSP_SCORE
+StreetPSP_TRICKTEXT
+StreetPSP_SUB
+StreetPSP_SUBOUTLINE
+Save Failed. There is no Memory Stick Duo
+Hair Style
+Save Failed. The Memory Stick Duo
+MINIGAME.dat
+minigamepics.dat
+Hat Trick
+Style Grab
+My Catch My Style
+Trick off the Brick
+Stolen Cookies with Style
+My Germs with Style
+Style Move
+Headwear Style
+NFL STREET 3
+FEFlash
+Adapt
+CamGame
+CamScript
+MiniGame
+Style Point Rules
+In a Style Point Game, the goal is to rack up as many Style Points as possible. For each possession, each team will start at the same spot allowing them the entire field to score big.
+Conversion Failed
+Correctly Predicted Trick
+Incorrectly Predicted Trick
+MarketCam-Pass Icons On
+MarketCam-Pass Icons Off
+Game Modifier: Additional %d style points when scoring on this possession
+Game Modifier: Extra %d style points when scoring on this possession
+Street Legend
+Catch as many passes as possible. The NFL STREET 3 ball is worth double points.
+You failed.
+There are a lot of sweet skills to learn in NFL STREET 3, and you are going to need to master them all.
+You are going to need to learn to show your Style and earn a Game Breaker in order to be great.
+Showcase your Style!
+ASSERT
+WARNING
+MinigameLogo
+Warning
+Load Failed
+Glue
+Trick
+ingame\bighud\bighud
+SetReturnScreen
+ingame\minigamehud\minigamehud
+_level1.StyleBanner
+ingame\postminigame_topsix\postminigame_topsix
+ingame\postminigame_teams\postminigame_teams
+ingame\postminigame_pairs\postminigame_pairs
+ingame\pausescreen\pause
+MiniGameLineup
+MiniGameNoLineup
+StreetRules
+ingame\playcall\playcall
+_level2.PlayCallHeader.Clock
+Trick Plays
+InitScreenNFLChallenge
+streetEvent
+_global.Flow
+streetfeats
+mainflow\s3streeteventsummary\s3streeteventsummary
+No team created.  Your created team will be used in Respect The Street mode.
+mainflow\streetfeats\streetfeats
+UpdateScreenElements
+SetScreenName
+minigames\minigamesetup\minigamesetup
+SetMiniGameText
+SetMiniGameType
+minigames\s3rtsgametype\s3rtsgametype
+Backing out of this screen
+SetMiniGameMode
+StreetPSP_BODY
+Street Balls
+HidePlayCallScreen
+ShowPlayCallScreen
+Style Points: %d
+Style Points One Play Best: %d
+Stylin' Style Points: %d
+ScreenTint
+ColorStyle
+minigames\s3singlegamemenu\s3singlegamemenu
+Select the length of the Street Event, or play to score.
+Select the Length of the Street Event.
+Select the Game Type for the Street Event.
+Select the Number of Rounds for the Street Event.
+NFLStreet-PSP
+StreetPSPPlayer
+StreetPSPPlayerCached
+StreetPSPPlayerIndexed
+StreetPSPGameBall
+dlopen: Failed to find a symbol table. Aborting
+ERROR: DynamicLoader::Resolve - Failed to resolve the following undefined
+<WARNING> Actionscript error message:-- %s --
+<WARNING> Actionscript un-caught exception encountered
+AptTrace: 
+--AptWarning-- Actionscript is attempting to use invalid objects in Extends Opcode.
+_global
+adaptFmv
+adaptPalettedImage
+adaptImage
+Csis::IAllocatorToICoreAdaptor
+Csis::ICoreToIAllocatorAdaptor

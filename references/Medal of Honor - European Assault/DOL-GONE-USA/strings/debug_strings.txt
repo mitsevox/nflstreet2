@@ -1,0 +1,653 @@
+# Debug strings from Medal of Honor - European Assault (MOH4RDVD.ELF)
+
+Unknown (non-debug)
+WARNING: XmlVehicleHandler: unknown vehicle element
+WARNING: XmlVehicleHandler: unknown wheeled vehicle element
+Failed to allocate %d bytes for %s
+FAILED TO ALLOCATE MEMORY FOR STUB
+Caricamento
+CScreen::CaptureCB() does nothing...
+../../MOH4/Screen.cpp:992
+EAGL::Device initialization failed
+Setting screen mode: NTSC
+Setting screen mode: PAL
+Setting screen mode: MPAL
+../../MOH4/Screen.cpp:1392
+../../MOH4/Screen.cpp:1426
+Camera::CameraPosition
+Camera::CameraToWorld
+Camera::WorldToCamera
+CSprite::CSprite(%s):  File_Load... FAILED!!!
+CSprite::CSprite(%s):  File_Open... FAILED!!!
+WARNING: Unknown field in FontType,  field id is %d
+CParticleSystem::pCameraZTransform
+CParticleSystem::pCameraToPointOfInterest
+WARNING: Unknown field in Decal field id is 0x%08X
+WARNING: Cannot find decal texture!
+WARNING: Unknown field in Strip field id is %d
+WARNING: Cannot find strip texture!
+ BackBufferCopy::pScreenTexture
+The animation system failed to allocate from a pool.
+WARNING: no skybox mesh specified in level .xdd file. Skybox drawing is disabled.
+JO_meatShieldCam
+GameObjectFactory::Init: failed to allocate pool of %d bytes!
+Warning: GameObjectFactory::AllocateGameObject: max number of objects (%d) are already allocated.
+WARNING - didn't find a valid animation range for angle: %f
+CameraAttachNode
+* WARNING! String table found no match for "%s" with a crc of 0x%x 
+* WARNING! String table found no match for crc of 0x%x 
+Warning: failed to create SOB rigid render node (pool is full)!
+MMG: %s needs to removed or you will keep being annoyed by this green screen!
+Warning! AI::RuntimeRig::RigManagerPrivate::CreateCollection() - Unable to find CollisionTemplate 0x%X!
+Warning! AI::RuntimeRig::RigManagerPrivate::CreateCollection() - Out Of Collection Instances!
+Warning! AI::RuntimeRig::RigManagerPrivate::CreateCollection() - Out Of Rig Instances!
+UNKNOWN, USE DEBUG BUILD
+ASTAR DIRECT PATH FAILED!!!!!  CHECK FOR BAD ASTAR NEAR %f, %f or %f, %f
+WARNING:WARNING: I tried to NonVisDestruct %d soldiers because there
+WARNING:WARNING: are too many in existance, but I was only able to
+WARNING:WARNING: NonVisDestruct %d soldiers.  I'll try again later
+zzzMission Failed!
+Failed to load music pathfinder file mpf or the mus file.
+AmbientTrack_Start():  SendEvent() FAILED!!! (error == %d)
+!!! WARNING !!!
+AmbientTrack_Stop():  EndEvent() FAILED!!! (error == %d)
+PATH_addmapfile failed %d
+Failed creating music track (%d)
+SOUND WARNING! %d SOUND ENTRIES EXIST FOR AMBIENT STREAM ALIAS %X. MUST ONLY BE 1. BAILING OUT!
+SOUND WARNING! ZERO SOUND ENTRIES EXIST FOR AMBIENT STREAM ALIAS %X. MUST BE 1 AT LEAST 1. BAILING OUT!
+Invalid campaign and mission number (%d:%d).
+Debug
+Pause Screen
+CGAMESETTINGS::ACCUMULATEFINISHEDLEVELDATA - Setting (Campaign %i, Mission %i) as completed and collecting stats!
+AWARDCAMPAIGNMEDALS - Awarding campaign medals!
+!!!HUD Object with CRC of 0x%x failed to link!
+Failed to load %s
+campmenu
+CUIManager::PlaySound SendEvent failed %s!
+?333campaignMedalStats
+CUIManager::AppendVictoryScreenInfo - Compiling completed objectives info!
+CUIManager::AppendVictoryScreenInfo - Finished!
+campaign
+campaignName
+Warning: Apt- Unrecognized Flash FScommand: %s (%s)
+Warning: Apt- Unrecognized Flash LoadVariables command: %s 
+APT_LOADVAR_GetPlayerScreenID
+APT_LOADVAR_GetPlayerIDFromScreenID
+PostStartMemoryCardCallback - Memory card boot sequence failed!
+StartUpOnInteractive - Performing memory card start-up at the first interactive screen!
+LOADVARLEVELSCOMPLETEDINFO - Campaign %i, Mission %i is an invalid mission!
+BackBufferCopy::pScreenTexture
+ERROR: Failed to load static mesh animated shape %s
+../../MOH4/shell/StaticScreen.cpp:122
+../../MOH4/shell/StaticScreen.cpp:183
+../../MOH4/shell/StaticScreen.cpp:190
+../../MOH4/shell/StaticScreen.cpp:346
+../../MOH4/shell/StaticScreen.cpp:787
+Warning: Unable to locate movie file "%s"
+$MEMNGC_Autosave_warning
+$MEM_Change_profile_warning
+* WARNING! String table found no match for string with a crc of 0x%x 
+../../MOH4/gamescripts/CameraShaker.cpp:257
+* WARNING! EndLevelTrigger DiplayPrompt functionality Does not exist *
+WARNING - Attempting to play a Looping sound in a ParticleSystem's Activate!  The sound won't be played. 
+MEMORY ALLOCATION ERROR: MEM_alloc failed for %d bytes. Out of memory?: Largest unused == %d, Total free ==  %d.
+MEMORY ALLOCATION ERROR: MEM_allocalign failed for %d bytes. Out of memory?: Largest unused == %d, Total free ==  %d.
+Resizing 0x%08X to %d  -   WARNING! System::Registry::Section::Resize is SLOOOWWWW, this should not be called during gameplay
+../../MOH4/system/debug_stream_display.cpp:294
+ASSERT - Display List address is out of bounds
+ASSERT - Coordinate address is out of bounds
+ASSERT - Colour address is out of bounds
+ASSERT - Normal address is out of bounds
+ASSERT - Texture0 UV address is out of bounds
+ASSERT - Texture1 UV address is out of bounds
+ASSERT - Texture2 UV address is out of bounds
+ASSERT - Colour1 address is out of bounds
+wASSERT - Coordinate address is out of bounds
+ASSERT - external frame buffer address is out of bounds
+EAGL::RenderContextExtension::SendDebugToken -- Your token breakpoint has been reached.
+ERROR: DynamicLoader::Resolve - Failed to resolve the following undefined
+dlopen: Failed to find a symbol table. Aborting
+debugger
+qhull warning: no maximum cosine angle given for option 'An'.  Ignored.
+qhull warning: no centrum radius given for option 'Cn'.  Ignored.
+qhull warning: negative maximum roundoff given for option 'An'.  Ignored.
+qhull warning: no maximum roundoff given for option 'En'.  Ignored.
+qhull warning: origin for Halfspace intersection should be 'Hn,n,n,...'
+qhull warning: missing random perturbation for option 'Rn'.  Ignored
+qhull warning: missing visible distance for option 'Vn'.  Ignored
+qhull warning: missing coplanar distance for option 'Un'.  Ignored
+qhull warning: negative outside width for option 'Wn'.  Ignored.
+qhull warning: missing outside width for option 'Wn'.  Ignored
+qhull warning: unknown 'F' output option %c, rest ignored
+qhull warning: can only drop one dimension.  Previous 'GD%d' ignored
+qhull warning: unknown 'G' print option %c, rest ignored
+qhull warning: unknown 'P' print option %c, rest ignored
+qhull warning: unknown 'Q' qhull option 1%c, rest ignored
+qhull warning: can not follow '1', '2', or '3' with a digit.  '%c' skipped.
+qhull warning: good point already defined for option 'QGn'.  Ignored
+qhull warning: missing good point id for option 'QGn'.  Ignored
+qhull warning: missing random seed for option 'QRn'.  Ignored
+qhull warning: good vertex already defined for option 'QVn'.  Ignored
+qhull warning: no good point id given for option 'QVn'.  Ignored
+qhull warning: unknown 'Q' qhull option %c, rest ignored
+qhull warning: output file undefined (stdout).  Option 'Tz' ignored.
+qhull warning: missing point id for cone for trace option 'TCn'.  Ignored
+qhull warning: missing frequency count for trace option 'TFn'.  Ignored
+qhull warning: option 'TI' mistyped.
+qhull warning: option 'TO' mistyped.
+qhull warning: missing point id for trace option 'TPn'.  Ignored
+qhull warning: missing merge id for trace option 'TMn'.  Ignored
+qhull warning: missing rerun count for trace option 'TRn'.  Ignored
+qhull warning: missing furthest point id for trace option 'TVn'.  Ignored
+qhull warning: missing max width for trace option 'TWn'.  Ignored
+qhull warning: unknown 'T' trace option %c, rest ignored
+qhull warning: unknown flag %c (%x)
+qhull warning: missing space after flag %c (%x); reserved for menu. Skipped.
+qhull warning: additional output formats are not compatible with Geomview
+qhull warning: joggle ('QJ') always produces simplicial output.  Triangulated output ('Qt') does nothing.
+qhull warning: real epsilon, %2.2g, is probably too large for joggle ('QJn')
+qhull input warning: option 'Qbb' (scale-last-coordinate) is normally used with 'd' or 'v'
+qhull configuration warning (qh_RANDOMmax in user.h):
+qhull input warning: 'QJ' (joggle) will usually prevent coincident input sites for options 'Fc' and 'FP'
+qhull input warning: coplanars, vertices, and centrums output not
+qhull input warning: drop dimension 'GD%d' is only available for 3-d/4-d Geomview
+qhull warning: no dimension given for Print option '%c' at: %s.  Ignored
+qhull warning: dimension %d for Print option '%c' is >= %d.  Ignored
+qhull warning: value %2.4g for Print option %c is > +1 or < -1.  Ignored
+qhull warning: no dimension given for Qhull option %c.  Ignored
+qhull warning: dimension %d for Qhull option %c is >= %d.  Ignored
+qhull warning (memsize): free list table has room for only %d sizes
+qhull warning: more than %d ridges.  ID field overflows and two ridges
+qhull input warning: merging without checking outer planes ('Q5' or 'Po').
+qhull input warning: exact merge ('Qx').  Verify may report that a point
+qhull input warning: no outer plane check ('Q5') or no processing of
+qhull warning (qh_check_points): missing normal for facet f%d
+qhull warning: #vertices %d + #facets %d - #edges %d != 2
+qhull warning: good vertex p%d does not match last good facet f%d.  Ignored.
+qhull warning: point p%d is not a vertex ('QV%d').
+qhull warning: point p%d is a vertex for every facet ('QV-%d').
+qhull precision warning: 
+or 'Qbb' (scale last coordinate) may remove this warning.  Use 'Pp' to skip
+this warning.  See 'Limitations' in qh-impre.htm.
+qhull internal warning (point_add): unknown point %p id %d
+intersections failed to find a redundant vertex
+qhull input warning: minimum visibility V%.2g is greater than 
+qhull warning: output for ridges and intersections not implemented in 2-d
+qhull warning: output for outer/inner planes and centrums not implemented in 4-d
+qhull warning: output for vertices not implemented in 4-d
+qhull warning: 'Gnh' generates no output in 4-d
+qhull warning: writing Delaunay.  Use 'p' or 'o' for Voronoi centers
+qhull warning: output is the Delaunay triangulation
+qhull warning: no facets printed
+qhull warning: CDD format is not available for centrums, halfspace
+qhull input warning: feasible point (dim 1 coords) overrides 'Hn,n,n' feasible point for halfspace intersection
+qhull input warning: the input appears to be in cdd format.  If so, use 'Fd'
+qhull warning: instead of %d %d-dimensional points, input contains
+qhull input warning: more coordinates for 'H%s' than dimension %d
+DebugDisplay
+VisualDebugger: [
+HK GCN FIO: Write failed with error #
+HK GCN FIO: Read failed with error #
+<WARNING> Actionscript un-caught exception encountered during "%s"
+<WARNING> Actionscript error message: "%s"
+<WARNING> Actionscript un-caught exception encountered
+--AptWarning-- Actionscript is attempting to use invalid objects in Extends Opcode.
+failed
+Waiting for SN Debugger...
+File server function not available in non debug mode
+Warning: DVDOpen(): file '%s' was not found under %s.
+Warning: DVDOpenDir(): file '%s' was not found under %s.
+>>> OSINIT: exception %d vectored to debugger
+OSCheckAlarmQueue: Failed AlarmQueue.head == NULL && AlarmQueue.tail == NULL || AlarmQueue.head != NULL && AlarmQueue.tail != NULL in %d
+OSCheckAlarmQueue: Failed AlarmQueue.head == NULL || AlarmQueue.head->prev == NULL in %d
+OSCheckAlarmQueue: Failed AlarmQueue.tail == NULL || AlarmQueue.tail->next == NULL in %d
+OSCheckAlarmQueue: Failed alarm->next == NULL || alarm->next->prev == alarm in %d
+OSCheckAlarmQueue: Failed alarm->next != NULL || AlarmQueue.tail == alarm in %d
+OSCheckHeap: Failed HeapArray in %d
+OSCheckHeap: Failed 0 <= heap && heap < NumHeaps in %d
+OSCheckHeap: Failed 0 <= hd->size in %d
+OSCheckHeap: Failed hd->allocated == NULL || hd->allocated->prev == NULL in %d
+OSCheckHeap: Failed InRange(cell, ArenaStart, ArenaEnd) in %d
+OSCheckHeap: Failed OFFSET(cell, ALIGNMENT) == 0 in %d
+OSCheckHeap: Failed cell->next == NULL || cell->next->prev == cell in %d
+OSCheckHeap: Failed MINOBJSIZE <= cell->size in %d
+OSCheckHeap: Failed OFFSET(cell->size, ALIGNMENT) == 0 in %d
+OSCheckHeap: Failed 0 < total && total <= hd->size in %d
+OSCheckHeap: Failed hd->free == NULL || hd->free->prev == NULL in %d
+OSCheckHeap: Failed cell->next == NULL || (char*) cell + cell->size < (char*) cell->next in %d
+OSCheckHeap: Failed total == hd->size in %d
+OSCheckActiveThreads: Failed RunQueue[prio].head != NULL && RunQueue[prio].tail != NULL in %d
+OSCheckActiveThreads: Failed RunQueue[prio].head == NULL && RunQueue[prio].tail == NULL in %d
+OSCheckActiveThreads: Failed CheckThreadQueue(&RunQueue[prio]) in %d
+OSCheckActiveThreads: Failed __OSActiveThreadQueue.head == NULL || __OSActiveThreadQueue.head->linkActive.prev == NULL in %d
+OSCheckActiveThreads: Failed __OSActiveThreadQueue.tail == NULL || __OSActiveThreadQueue.tail->linkActive.next == NULL in %d
+OSCheckActiveThreads: Failed thread->linkActive.next == NULL || thread == thread->linkActive.next->linkActive.prev in %d
+OSCheckActiveThreads: Failed thread->linkActive.prev == NULL || thread == thread->linkActive.prev->linkActive.next in %d
+OSCheckActiveThreads: Failed *(thread->stackEnd) == OS_THREAD_STACK_MAGIC in %d
+OSCheckActiveThreads: Failed OS_PRIORITY_MIN <= thread->priority && thread->priority <= OS_PRIORITY_MAX+1 in %d
+OSCheckActiveThreads: Failed 0 <= thread->suspend in %d
+OSCheckActiveThreads: Failed CheckThreadQueue(&thread->queueJoin) in %d
+OSCheckActiveThreads: Failed thread->queue == &RunQueue[thread->priority] in %d
+OSCheckActiveThreads: Failed IsMember(&RunQueue[thread->priority], thread) in %d
+OSCheckActiveThreads: Failed thread->priority == __OSGetEffectivePriority(thread) in %d
+OSCheckActiveThreads: Failed !IsSuspended(thread->suspend) in %d
+OSCheckActiveThreads: Failed thread->queue == NULL in %d
+OSCheckActiveThreads: Failed thread->queue != NULL in %d
+OSCheckActiveThreads: Failed CheckThreadQueue(thread->queue) in %d
+OSCheckActiveThreads: Failed IsMember(thread->queue, thread) in %d
+OSCheckActiveThreads: Failed thread->priority == 32 in %d
+OSCheckActiveThreads: Failed !__OSCheckDeadLock(thread) in %d
+OSCheckActiveThreads: Failed thread->queueMutex.head == NULL && thread->queueMutex.tail == NULL in %d
+OSCheckActiveThreads: Failed. unkown thread state (%d) of thread %p
+OSCheckActiveThreads: Failed __OSCheckMutexes(thread) in %d
+This TV format "DEBUG_PAL" is only for 
+VI_TVMODE_DEBUG_PAL_DS
+VI_TVMODE_DEBUG_PAL_INT
+VI_TVMODE_DEBUG_INT
+PRINT_DEBUG
+PRINT_DEBUGGER
+8DEBUGINFO
+8MaxSizeOfDebugString
+8AssertValidMemAddress
+8gScreenColour
+8mFullScreen
+8gDoScreenClear
+8gIsDebugTokenEnabled
+8mScreenWidth
+8mScreenHeight
+8gEnableDebugTrap
+8gScreenWidth
+8GXWarningLevel
+8GINIT_FULLSCREEN
+CS_MOUNT_FAILED
+CS_WRITE_FAILED
+CS_READ_FAILED
+CS_FAILED
+wTS_FAILED_CARD_REMOVED_WAIT_FOR_USER_REPLY
+vTS_FAILED_CARD_REMOVED_INFORM_USER
+uTS_DELETE_FAILED_WAIT_FOR_USER_REPLY
+tTS_DELETE_FAILED_INFORM_USER
+sTS_LOAD_FAILED_WAIT_FOR_USER_REPLY
+rTS_LOAD_FAILED_INFORM_USER
+KTS_SHOW_LOAD_WARNING_MSG
+HTS_SAVE_FAILED_WAIT_FOR_USER_REPLY
+GTS_SAVE_FAILED_INFORM_USER
+FTS_SAVE_FAILED
+@TS_SHOW_SAVE_WARNING
+<TS_SAVE_FAILED_ASK_USER
+TS_FAILED
+8TrcSingletonAssert
+8mReadFailed
+8mWriteFailed
+8mNoCheckingCardWarning
+MCR_FAILED
+QF_ASSERT_ON_ERROR
+8SetDebugPrintFunc
+8PATHDebugPrintFunc
+8debugchannels
+8PATH_setdebugchannels
+8PATH_getdebugchannels
+8Z:/moh4/external/pathfinder/5.01.00/source/library/cmn/pathdebug.c
+8PATHI_SetDebuggingChannels
+8PATHI_GetDebuggingChannels
+8debugpad
+8VP6_IssueWarning
+8WarningMessage
+DXL_ALLOC_FAILED
+8vScreen
+8DXL_VSCREEN_HANDLE
+Z:/moh4/external/pathfinder/5.01.00/source/library/cmn/pathdebug.c
+mReadFailed
+6mWriteFailed
+dmNoCheckingCardWarning
+,lPATH_setdebugchannels
+PATH_getdebugchannels
+debugchannels
+SetDebugPrintFunc
+(PATHI_SetDebuggingChannels
+PATHI_GetDebuggingChannels
++.VP6_IssueWarning
+Screen.cpp
+g_prevScreen
+g_bCameraReady
+_31_GLOBAL_.N._7CCamera.ASPECT_4x3.g_ProjectorTypeHandler
+g_pScreenSprite
+_11CFontModule.g_pScreen
+_31_GLOBAL_.N._7CCamera.ASPECT_4x3.g_COLOR
+_GLOBAL_.I._7CCamera.ASPECT_4x3
+g_pScreen
+g_pScreenProjectileBullet
+s_CameraAttachNodePropLoader
+MMG_CAMERA_TRANSLATION_X
+MMG_CAMERA_TRANSLATION_Z
+s_v3LeanCameraOffsetLeft.17675
+s_v3LeanCameraOffsetRight.17677
+warningMsgToggle.13604
+free_fly_camera.cpp
+g_bFlyCamEnabled
+g_bFlyCamHalted
+g_initialCameraPosition
+_GLOBAL_.I.SetFreeFlyCamera__Fb
+TimerEndMusicAmbience
+MusicAmbienceTimer
+Campaign.cpp
+g_pCamera
+UNLOCK_DEBUG_PROFILES
+DebugSetScreenGrabPending__FPCc
+DebugAddSavedInput__FP19AptSavedInputRecordi
+StaticScreen.cpp
+g_szChangeProfileWarningMsgKey
+_GLOBAL_.I.g_szAutosaveWarningMsgKey
+CameraShaker.cpp
+_GLOBAL_.I._12CameraShaker.s_state_Active
+all_in_one_debug.cpp
+_29_GLOBAL_.N._8qProfile.s_level.failed_shape
+_12EAGLInternal.failed_shape
+camera.cpp
+BIG_debuginfo__FPCvPiPUi
+debugger.cpp
+PRINT_debuggerfunc__F12PRINTCHANNELPCc
+pathdebug.c
+hkDebugDisplay.cpp
+hkSingletonRegisterhkDebugDisplay
+hkDebugDisplaycreate__Fv
+_GLOBAL_.I._._14hkDebugDisplay
+hkDebugDisplayViewer.cpp
+hkVisualDebuggerDebugOutput.cpp
+ldebug.c
+_addScreenGrabToSavedInputs__Fv
+__AXDebugSteppingMode
+dsp_debug.c
+BI2DebugFlag
+BI2DebugFlagHolder
+ScreenReport
+DebuggerDriver.c
+__12GCScreenText
+SetRenderModeObj__12GCScreenTextP16_GXRenderModeObj
+SetCurrLine__12GCScreenTexti
+DetermineFirstLine__12GCScreenTexti
+GetLineYPos__12GCScreenTexti
+SkipLines__12GCScreenTexti
+WriteLine__12GCScreenTextPCcQ212GCScreenText14eJustification
+g_screen
+GcDisplayLoadingScreen__Fv
+g_StaticScreen
+Instance__12GCScreenText
+g_PauseScreen
+DrawLoadingScreen__13CStaticScreenR7CSpriteUc
+GetGlobalCamera__Fv
+InitClass__7CCamera
+InitClass__12CCompartmentP7CScreen
+InitClass__11CStaticMeshP7CScreen
+InitClass__7CSpriteP7CScreen
+InitClass__11CAnimObjectP7CScreen
+InitClass__17CProjectileBulletP7CScreen
+InitClass__10CPSManagerP7CScreen
+InitClass__5CFontP7CScreen
+Init__7CScreen
+SetCurrent__11CScreenEAGL
+SetClearColor__7CScreenRC6CColor
+SetClear__11CScreenEAGLb
+Init__8Campaign
+Init__13CStaticScreenP7CScreen
+Shutdown__11CScreenEAGL
+_7CScreen.m_spScreen
+_7CScreen.m_sWidth
+_7CScreen.m_sHeight
+_7CScreen.m_sVideoMode
+SetOrthographicScreenSpace__Q24EAGL8ViewPortff
+GetGXRenderModeObj__11CScreenEAGL
+WaitScreen__Fv
+StartLoading__13CStaticScreen
+DrawScreens__13CStaticScreen
+Gameloop_LoadLevel__FP13CStaticScreen
+StopLoading__13CStaticScreen
+Gameloop_Update__FP13CStaticScreen
+GetOrthographicDrawContext__C11CScreenEAGL
+DrawLoadingText__13CStaticScreen
+GetCurrentCampaignMission__C8CampaignRiT1
+AwardCampaignMedals__13CGameSettings
+__13CStaticScreen
+__11CScreenEAGL12EScreenWidth12EFrameFormat12EDepthFormat
+_7CScreen.m_sFrameNum
+_7CScreen.m_sTickValue
+_7CScreen.m_sTickPerSecond
+_7CScreen.m_sTickPerSecondInv
+_7CScreen.m_2dXScale
+_7CScreen.m_2dYScale
+_7CScreen.m_2dXDisp
+_7CScreen.m_2dYDisp
+_7CScreen.m_VblanksToWait
+SetupSafeArea__7CScreen
+__7CScreen12EScreenWidthi12EFrameFormat12EDepthFormat
+_vt.7CScreen
+_._7CScreen
+SetCurrent__7CScreen
+_7CScreen.m_sWidthScale
+_7CScreen.m_sHeightScale
+Flip__7CScreen
+Wait__7CScreen
+ResetTimer__7CScreen
+GetVSyncs__7CScreen
+SetClear__7CScreenb
+GetDepthBufferMax__C7CScreen
+GetClear__C7CScreen
+GetClearColor__C7CScreen
+Clear__7CScreen
+GetTMViewToScreen__C7CScreen
+CaptureCB__7CScreen
+_vt.11CScreenEAGL
+_._11CScreenEAGL
+Wait__11CScreenEAGL
+MemInit__11CScreenEAGL
+NewDrawContext__C11CScreenEAGLRC7CCameraRC9CViewport
+NewTextureContext__C11CScreenEAGLRC7CCameraRC9CViewport
+DeleteDrawContext__C11CScreenEAGLP12CDrawContext
+SetScreenClearOptimization__Q24EAGL22RenderContextExtensionb
+_vt.7CCamera.14IBasicObserver
+_vt.7CCamera
+__13CCameraShaker
+_._7CCamera
+SetOrthographic__7CCameraff
+__16CDrawContextEAGLRC7CCameraRC9CViewportRC7CScreenPQ24EAGL8ViewPortf
+_7CCamera.ASPECT_4x3
+_7CCamera.ASPECT_16x9
+_7CCamera.g_CameraToWorld
+_7CCamera.g_WorldToCamera
+Initialize__7CCamerai
+Reset__7CCamera
+UpdateRendermethodGlobals__7CCamera
+BeginUpdate__7CCameraf
+UpdateWorldToCamera__7CCamera
+UpdateCameraToClip__7CCamera
+UpdateWorldToClip__7CCamera
+PostUpdate__7CCameraf
+update__13CCameraShakerfR7CMatrix
+Draw__7CCameraR12CDrawContext
+IsDrawEnabled__C7CCamera
+IsVisible__C7CCameraR12CDrawContext
+PreTransform__7CCameraRC7CMatrix
+Transform__7CCameraRC7CMatrix
+SetTMLocalToWorld__7CCameraRC7CMatrix
+SetPosition__7CCameraRC8CVector3
+GetCameraShakeParams__7CCamera15CameraShakeTypeRQ213CCameraShaker21CameraShakeInitalizer
+getshakeparams__13CCameraShaker15CameraShakeTypeRQ213CCameraShaker21CameraShakeInitalizer
+StartCameraShake__7CCamera15CameraShakeTypePC8CVector3
+start__13CCameraShakerGQ213CCameraShaker21CameraShakeInitalizerPC8CVector3
+StartCameraShake__7CCameraGQ213CCameraShaker21CameraShakeInitalizerPC8CVector3
+SetBasis__7CCameraRC8CVector3N21
+Move__7CCameraRC8CVector3
+Rotate__7CCameraRC8CVector3f
+Pitch__7CCameraf
+Roll__7CCameraf
+Yaw__7CCameraf
+Orthonormalize__7CCamera
+SetPerspective__7CCameraff
+CalculateAndSetPerspective__7CCameraf
+Set__8CFrustumRC7CCameraR7CScreenR9CViewport
+__12CDrawContextRC7CCameraRC9CViewportRC7CScreen
+SetCamera__12CDrawContextR7CCamera
+g_debug_blob_shadow_tar
+IsQuadFullScreen__FP6COORD4
+InitClass__15CParticleSystemP7CScreen
+GetScreenThisFrame__11CRefractionR12CDrawContext
+SetScreen__5CFontP7CScreen
+DrawFullScreen__6CFaderf
+DrawSplitScreen__6CFaderPC9CViewportf
+DrawFullScreen__6CFaderG6CColor
+GetFullscreenState__6CFader
+SetFullscreenState__6CFaderRC10SFaderData
+InitStrip__16CStripSetPrivateRQ231_GLOBAL_.N._7CCamera.ASPECT_4x35StripRC8CVector3N22b
+GetCameraRelativePosition__C6CGlareR12CDrawContext
+IsFreeFlyCameraOn__Fv
+GetCamera__6CScenei
+_GetAngleToCamera__22AcquireRequestSortPredRC14AcquireRequest
+CreateInstance__7CSkyBoxR7CScreen
+__7CSkyBoxR7CScreen
+SetStaticCameraInUse__11CAvatarBodyb
+SetStaticCameraInUse__15CAvatarBodyPairb
+Init__14ReferencePointP7CCamerai
+GetReferencePointId__10LODManagerP7CCamera
+EnterSniperMode__10LODManagerP7CCamera
+ExitSniperMode__10LODManagerP7CCamera
+_16CameraAttachNode.s_nNumNodes
+GetMatrix__C16CameraAttachNodeR7CMatrix
+GetAttachNode__16CameraAttachNodei
+_16CameraAttachNode.s_aCameraAttachNodes
+LoadCameraAttachNodePropertiesTrigger__16CameraAttachNodeP13TriggerObject
+GetCamera__C14IAvatarContext
+AttachCamera__6PlayerR7CCamera
+GetCamera__C6Player
+SetStaticCameraInUse__6Playerbi
+StartDeathCamera__8PlayerMP
+EndDeathCamera__8PlayerMP
+UpdateDeathCamera__8PlayerMPf
+SetStaticCameraInUse__8PlayerMPbi
+g_debug_fly_keymap
+DebugDraw__Q32AI10RuntimeRig18RigInstancePrivateUi
+GetDebugName__CQ32AI10RuntimeRig18RigInstancePrivate
+DebugDraw__Q32AI10RuntimeRig20RigCollectionPrivateRC8CVector3fUi
+DebugDraw__Q32AI10RuntimeRig17RigManagerPrivateRC8CVector3fUi
+DebugDraw__Q32AI11Pathfinding20PathfinderControllerUcUcUc
+__17ActionScreenFlashR13TriggerObject
+_vt.17ActionScreenFlash
+Create__17ActionScreenFlashR13TriggerObject
+StartGagAction__17ActionScreenFlashR9IGagActorRb
+__17ActionCameraShakeR13TriggerObject
+_vt.17ActionCameraShake
+Create__17ActionCameraShakeR13TriggerObject
+StartGagAction__17ActionCameraShakeR9IGagActorRb
+__18ActionStaticCameraR13TriggerObject
+_vt.18ActionStaticCamera
+Create__18ActionStaticCameraR13TriggerObject
+StartGagAction__18ActionStaticCameraR9IGagActorRb
+_._18ActionStaticCamera
+_._17ActionCameraShake
+_._17ActionScreenFlash
+AddCamera__6CSceneP7CCamera
+AddCamera_now__6CSceneRQ26CScene11SModCommand
+SetFreeFlyCamera__Fb
+FreeFlyCameraUpdate__Fv
+__8Campaign
+IsLevelInCampaign__C8CampaignUi
+GetLevelID__C8Campaignii
+GetCampaignName__C8Campaigni
+GetMissionName__C8Campaignii
+GetNumGameObjectives__8Campaign
+GetCampaignName__C5Level
+PlayDemoMovie_Update__FfP13CStaticScreen
+Gameloop_WaitLoadLevelDone__FP13CStaticScreenbPvi
+Gameloop_LoadLevelPlayIntroMovie__FP13CStaticScreen
+Reset__16CameraAttachNode
+DrawLoadingProgress__13CStaticScreenf
+ReturnAnyBorrowedMemory__13CStaticScreen
+LoadScreen__10CUIManagerPCc
+IsUsingStaticCam__21MultiPlayerLevelEnder
+SetAllStaticCameraPosition__64_GLOBAL_.N..._.._MOH4_game_logic_MultiPlayerLevelEnder.cppiWaaaabi
+GetCamIndex__18ObjectiveBaseClassQ218ObjectiveBaseClass9eCamIndex
+AddStaticCamMessage__18TextMessageHandlerPCc
+ReplayCurrentLevel__Q212GameSettings8MapCycle
+GetWarningMessage__10CUnpluggediPwiQ210CUnplugged7ePrompt
+__Q23hud22SpriteMotionBlurScreen
+_vt.Q23hud22SpriteMotionBlurScreen
+_._Q23hud22SpriteMotionBlurScreen
+Update__Q23hud22SpriteMotionBlurScreenPQ23hud20AnimatedSpriteObjectf
+DoesNeedUpdate__Q23hud22SpriteMotionBlurScreenf
+Reset__Q23hud22SpriteMotionBlurScreen
+GetRunTimeType__Q23hud22SpriteMotionBlurScreen
+_Q23hud22SpriteMotionBlurScreen.ms_SpriteMotionBlurScreenrttiobject
+LoadVarGetCampaignName__10CUIManagerR10URLDecoder
+LoadVarCampaignMedalStats__10CUIManagerR10URLDecoder
+AppendVictoryScreenInfo__10CUIManagerR10URLEncoder
+LoadScreen__11CAptManagerPCcT1
+AptAuxEAGLREAL_DebugPrint
+GetScreenWidthScale__11CAptManager
+GetScreenHeightScale__11CAptManager
+GetPlayerScreenID__12CMPUIHandlerR10URLDecoder
+GetPlayerIDFromScreenID__12CMPUIHandlerR10URLDecoder
+_vt.13CStaticScreen
+_._13CStaticScreen
+g_szAutosaveWarningMsgKey
+_12CameraShaker.s_state_Active
+_12CameraShaker.s_transitions_Active
+Action_DoNothing__12CameraShakerRQ216LeanStateMachine8IContextRC6IEventRCQ216LeanStateMachine10Transition
+Guard_NonActivatable__12CameraShakerRQ216LeanStateMachine8IContextRC6IEventRCQ216LeanStateMachine10Transition
+Action_StartShake__12CameraShakerRQ216LeanStateMachine8IContextRC6IEventRCQ216LeanStateMachine10Transition
+Guard_ActivateOnly__12CameraShakerRQ216LeanStateMachine8IContextRC6IEventRCQ216LeanStateMachine10Transition
+_12CameraShaker.s_state_Inactive
+_12CameraShaker.s_state_OneShotFired
+_12CameraShaker.s_transitions_Inactive
+_12CameraShaker.s_transitions_OneShotFired
+GetFlexProp__C12CameraShaker
+GetTrigger__C12CameraShaker
+ShakeCamera__12CameraShakeriffi
+__12CameraShakerP8BSObject
+_vt.12CameraShaker.Q216LeanStateMachine8IContext
+_vt.12CameraShaker
+_._12CameraShaker
+HandleEventOrMessage__12CameraShakerR6IEvent
+CameraShakerLifeManager__FP8BSObjectUi19BSObjectCallbackMsgPv
+GetStateName__C12CameraShaker
+GetBSObject__C12CameraShaker
+g_CameraShakerConstructor
+_19CDebugStreamDisplay.ms_mapFileRead
+_19CDebugStreamDisplay.ms_vecFileRead
+SNDebugInit
+SNDebugBoot
+DEBUG_break
+_Q212EAGLInternal15ViewPortPrivate.gScreenColour
+_Q24EAGL22RenderContextExtension.gDoScreenClear
+_Q24EAGL22RenderContextExtension.gIsDebugTokenEnabled
+_Q212EAGLInternal20RenderContextPrivate.gEnableDebugTrap
+_Q24EAGL14ProfilerRegion.gScreenWidth
+GetDebugTokenEnable__Q24EAGL22RenderContextExtension
+SendDebugToken__Q24EAGL22RenderContextExtension
+GetScreenClearOptimization__Q24EAGL22RenderContextExtension
+_Q26Realmc11GCInterface.mReadFailed
+_Q26Realmc11GCInterface.mWriteFailed
+_Q26Realmc11GCInterface.mNoCheckingCardWarning
+TrcSingletonAssert__Q26Realmc11TaskManagerPQ26Realmc4Task
+debugexit
+_4Path.debugchannels
+SetDebugPrintFunc__Q24Path11IPathToRealPFPCce_i
+_t11hkSingleton1Z14hkDebugDisplay.s_instance
+_._14hkDebugDisplay
+_vt.14hkDebugDisplay
+assertMessage__14hkDefaultErrorPCciT1T1i
+warningMessage__14hkDefaultErrorPCciT1T1i
+disableWarning__14hkDefaultErrorPCci
+disableAssert__14hkDefaultErrorPCci
+enableWarning__14hkDefaultErrorPCci
+enableAssert__14hkDefaultErrorPCci
+find__Ct5hkMap3ZQ214hkDefaultError13hkAssertPointZUiZt7hkArray1Zt6hkPair2ZQ214hkDefaultError13hkAssertPointZUiRCQ214hkDefaultError13hkAssertPoint
+__vc__t5hkMap3ZQ214hkDefaultError13hkAssertPointZUiZt7hkArray1Zt6hkPair2ZQ214hkDefaultError13hkAssertPointZUiRCQ214hkDefaultError13hkAssertPoint
+erase__t5hkMap3ZQ214hkDefaultError13hkAssertPointZUiZt7hkArray1Zt6hkPair2ZQ214hkDefaultError13hkAssertPointZUiRCQ214hkDefaultError13hkAssertPoint
+_Q29GoldMedal8SoundMan.m_pSoundDebugData
+DSPAssertTask
+__DSP_debug_printf
+__OSIsGcam
+.debug
+.debug_srcinfo
+.debug_sfnames
+.debug_aranges
+.debug_pubnames

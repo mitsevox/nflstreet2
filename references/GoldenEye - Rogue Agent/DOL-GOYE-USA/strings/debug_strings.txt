@@ -1,0 +1,952 @@
+# Debug strings from GoldenEye - Rogue Agent (GE2RDVD.ELF)
+
+Failed to allocate %d bytes for %s
+FAILED TO ALLOCATE MEMORY FOR STUB
+CScreen::CaptureCB() does nothing...
+../../GE2/Screen.cpp:1209
+EAGL::Device initialization failed
+../../GE2/Screen.cpp:1682
+../../GE2/Screen.cpp:1715
+CSprite::CSprite(%s):  TLT_LoadFile... FAILED!!!
+Non Camera-Facing Particle's Normal Must be Normalized!
+WARNING: Hash collision particle def CRC %u
+WARNING: Cannot find decal texture "%s".
+ BackBufferCopy::pScreenTexture
+WARNING: Empty selection operator expression in %s::%s.
+CHideAndCampBehavior
+NPC HAS FAILED TO MAKE PROGRESS DURING A MOVE!!!
+FailedToMakeProgressDuringMove
+Failed to find ASG entrypoint:
+WEAPON WARNING WEAPON WARNING WEAPON WARNING
+WARNING: no skybox mesh specified in level .crp file. Skybox drawing is disabled.
+WARNING: Unable to force backface culling state on the skybox.
+ ############### Warning: Weapon >%s< not localized!
+JO_meatShieldCam
+CGameObjectFactory::Init: failed to allocate pool of %d bytes!
+WARN: Failed to load anim state load graph %s
+WARNING: Static Object 0x%x not loaded.  Defaulting to CRATE
+PlayerCameraStandHeight
+PlayerCameraCrouchHeight
+PlayerCameraFOV
+SwitchToCameraDelay
+BoostWarning
+WarningSound
+deathCamStartOffsetZ
+deathCamStartDistance
+deathCamInitialCameraSpeed
+deathCamDeceleration
+deathCamRotationSpeed
+deathCamPlayerViewOffsetZ
+deathCamCollisionDodgeSpeedZ
+deathCamCollisionDeceleratation
+deathCamFarThresholdDistance
+deathCamFarSpeed
+deathCamFarMaxSpeed
+FailedToStartGroupFireAndAdvance
+Attack_HideAndCamp_Weight
+ASTAR DIRECT PATH OK FAILED!!!!!  CHECK FOR BAD ASTAR NEAR %f, %f or %f, %f
+Attack_HideAndCamp_CoolDown
+Action_CameraShake
+Action_ScreenFlash
+Action_CameraFOV
+LockCamera
+WARNING: Tried to restore collision on an object that has never had its collision type stored with Action_ChangeCollision(false), bailing out!
+Failed to find connection between:
+FailedTooManyBehaviors
+ScriptedGagSetCameraShake
+ScriptedGagCameraShakeDone
+WARNING:WARNING: I tried to NonVisDestruct %d soldiers because there
+WARNING:WARNING: are too many in existance, but I was only able to
+WARNING:WARNING: NonVisDestruct %d soldiers.  I'll try again later
+WARNING: Couldn't find flexprop int field %x
+WARNING: Couldn't find flexprop enum field %x
+WARNING: Couldn't find flexprop float field %x
+WARNING: Couldn't find flexprop string field %x
+WARNING: Couldn't find flexprop bool field %x
+WARNING: Couldn't find flexprop list field %x
+WARNING: Couldn't find flexprop rgba field %x
+MSGID_WarningTrigger
+Camera::CameraPosition
+Camera::WorldToCamera
+MinCamSwitchDelayTicks
+MaxCamSwitchDelayTicks
+CameraAttachNode
+SurveillanceCameraTuning
+FATAL ERROR: Failed to load tracer texture %s
+SOUND WARNING! %d SOUND ENTRIES EXIST FOR AMBIENT STREAM ALIAS %X. MUST ONLY BE 1. BAILING OUT!
+SOUND WARNING! ZERO SOUND ENTRIES EXIST FOR AMBIENT STREAM ALIAS %X. MUST BE 1 AT LEAST 1. BAILING OUT!
+!!! WARNING !!!
+AmbientTrack_Start():  SendEvent() FAILED!!! (error == %d)
+AmbientTrack_Stop():  EndEvent() FAILED!!! (error == %d)
+PATH_addmapfile failed %d
+Failed creating music track (%d)
+Failed to set variable %s
+Failed to read message text
+CActionDisplayDebugMessage
+Failed to find property 'MessageID'
+Failed to find property 'DummyArg'
+Failed to find property 'Arg0'
+Failed to find property 'Arg1'
+Failed to create new object!
+Failed to copy object
+Failed to read object name
+Failed to find number of operands
+Failed to find operand property (#%d)
+Failed to find operator
+Failed to write operator
+Failed to find number of Predicates
+Failed to find Predicate property %d
+Failed to read DisableOnFire
+Failed to read DisableOnlyForExecutor
+Failed to find number of actions
+Failed to find action property %d
+Failed to write DisableOnFire
+Failed to write DisableOnlyForExecutor
+Failed to get game var %s
+Failed to find property '%s'
+Failed to create primitive '%s'
+Failed to find sub-argument %d
+Failed to find class in database '%s'
+Failed to find C++ class corresponding to class %s
+GEARS Failed to create instance of class %s
+Object failed in PostCreate()
+Failed to load object. Some Results may not function correctly.
+Failed to find object in owner Gearbox
+Failed to find object in owner Gearbox CRC map
+Failed to find rule %s
+GEARS WARNING: %s
+Failed to load GearBox '%s'
+Failed to find class with CRC =0x%08x
+Failed to find GearsOb with CRC= 0x%08x
+Failed to read Timer name
+Failed to read Timeout time
+Failed to read message to post
+Failed to allocate timer
+Failed to read GAG name
+Failed to find timer %s
+Failed to read TIMER name
+Failed to read message ID
+Failed to read message group
+Failed to read radius.
+Failed to read position.
+Failed to read test time
+Failed to read squad name
+Failed to read num guys in squad.
+Failed to read Encounter name
+Failed to read percentage of guys left in encounter.
+Failed to read player num.
+Failed to read trigger name
+Failed to read weapon name
+Failed to read health percentage of squad.
+Failed to read shield percentage of squad.
+Failed to read node group name
+Failed to read action
+Failed to read node group %d
+Failed to find squad '%s'
+Failed to read Sound name
+Failed to read Squad name
+Failed to read creation group
+Failed to find encounter '%s'
+6StaticScreens
+CGameSettings::RestorePlayerStats - Invalid CStatsTracker::CStatsObject passed in.
+DebugPlayerWarpPoint
+Widescreen
+Fullscreen
+2SplitScreen
+4SplitScreen
+HorizSplitScreen
+Warning: no 'fonts.txt' file found! Font rendering disabled.
+** Could not load stats screen menu SWF **
+CUIManager::PlaySound SendEvent failed!
+CUIManager::LoadProfile: Player has chosen to load the 'Default' profile in Splitscreen!
+CUIManager::LoadProfile: Loading a profile in the Splitscreen Profile Select Screen!
+CUIManager::LoadProfile: Loading a profile in from the single-player Profile Select Screen!
+unloadScreen
+splitScreenControllers
+setSplitScreenPlayerTeam
+getSplitScreenPlayers
+wideScreen
+screenOffsetX
+screenOffsetY
+bShowLanguageScreen
+bShowOnlineScreen
+isDebug
+splitScreenPlayers
+ASSERT FAILED '%s' at %s:%d
+BackBufferCopy::pScreenTexture
+../../GE2/shell/StaticScreen.cpp:137
+../../GE2/shell/StaticScreen.cpp:224
+../../GE2/shell/StaticScreen.cpp:235
+../../GE2/shell/StaticScreen.cpp:236
+../../GE2/shell/StaticScreen.cpp:237
+../../GE2/shell/StaticScreen.cpp:843
+CameraShakeTrigger
+CameraShakeTrigger::Too many players in the trigger at the same time!
+CameraShakeTriggerPoolSize
+WARNING: Infinite lifetime particles are not supported on Particle Area Triggers!
+DeathCameraIndex
+ScreenType
+AnimatedCameraMech
+ScreenFlashBegining
+ScreenFlashEnd
+NoCameraSheer
+UseMovieCamera
+AnimatedCameraMechPoolSize
+WARNING - Attempting to play a Looping sound in a ParticleSystem's Activate!  The sound won't be played. 
+WARNING - Attempting to play a Looping sound in a ParticleArea's Activate!  The sound won't be played. 
+WARNING: World broadphase information not present in the comp viv.
+MEMORY ALLOCATION ERROR: MEM_allocalign failed for %d bytes. Out of memory!
+!!!! File %s not found in debug bigfile
+Error: version check failed on level contents file
+AttachCameraComponent
+AttachCameraComponentInstance
+AttachCameraComponentMax
+WARNING - Attempting to play a Looping sound in a ImpactComponent!  The sound won't be played. 
+Failed to find in-game-message CRC=0x%08x
+HUDIMAGEMAP: Failed to find sprite image CRC=0x%08x
+ASSERT - Display List address is out of bounds
+ASSERT - Coordinate address is out of bounds
+ASSERT - Colour address is out of bounds
+ASSERT - Normal address is out of bounds
+ASSERT - Texture0 UV address is out of bounds
+ASSERT - Texture1 UV address is out of bounds
+ASSERT - Texture2 UV address is out of bounds
+ASSERT - Colour1 address is out of bounds
+wASSERT - Coordinate address is out of bounds
+ASSERT - external frame buffer address is out of bounds
+EAGL::RenderContextExtension::SendDebugToken -- Your token breakpoint has been reached.
+ERROR: DynamicLoader::Resolve - Failed to resolve the following undefined
+dlopen: Failed to find a symbol table. Aborting
+debugger
+DebugDisplay
+VisualDebugger: [
+failed
+Waiting for SN Debugger...
+File server function not available in non debug mode
+Warning: DVDOpen(): file '%s' was not found under %s.
+Warning: DVDOpenDir(): file '%s' was not found under %s.
+>>> OSINIT: exception %d vectored to debugger
+OSCheckAlarmQueue: Failed AlarmQueue.head == NULL && AlarmQueue.tail == NULL || AlarmQueue.head != NULL && AlarmQueue.tail != NULL in %d
+OSCheckAlarmQueue: Failed AlarmQueue.head == NULL || AlarmQueue.head->prev == NULL in %d
+OSCheckAlarmQueue: Failed AlarmQueue.tail == NULL || AlarmQueue.tail->next == NULL in %d
+OSCheckAlarmQueue: Failed alarm->next == NULL || alarm->next->prev == alarm in %d
+OSCheckAlarmQueue: Failed alarm->next != NULL || AlarmQueue.tail == alarm in %d
+OSCheckHeap: Failed HeapArray in %d
+OSCheckHeap: Failed 0 <= heap && heap < NumHeaps in %d
+OSCheckHeap: Failed 0 <= hd->size in %d
+OSCheckHeap: Failed hd->allocated == NULL || hd->allocated->prev == NULL in %d
+OSCheckHeap: Failed InRange(cell, ArenaStart, ArenaEnd) in %d
+OSCheckHeap: Failed OFFSET(cell, ALIGNMENT) == 0 in %d
+OSCheckHeap: Failed cell->next == NULL || cell->next->prev == cell in %d
+OSCheckHeap: Failed MINOBJSIZE <= cell->size in %d
+OSCheckHeap: Failed OFFSET(cell->size, ALIGNMENT) == 0 in %d
+OSCheckHeap: Failed 0 < total && total <= hd->size in %d
+OSCheckHeap: Failed hd->free == NULL || hd->free->prev == NULL in %d
+OSCheckHeap: Failed cell->next == NULL || (char*) cell + cell->size < (char*) cell->next in %d
+OSCheckHeap: Failed total == hd->size in %d
+OSCheckActiveThreads: Failed RunQueue[prio].head != NULL && RunQueue[prio].tail != NULL in %d
+OSCheckActiveThreads: Failed RunQueue[prio].head == NULL && RunQueue[prio].tail == NULL in %d
+OSCheckActiveThreads: Failed CheckThreadQueue(&RunQueue[prio]) in %d
+OSCheckActiveThreads: Failed __OSActiveThreadQueue.head == NULL || __OSActiveThreadQueue.head->linkActive.prev == NULL in %d
+OSCheckActiveThreads: Failed __OSActiveThreadQueue.tail == NULL || __OSActiveThreadQueue.tail->linkActive.next == NULL in %d
+OSCheckActiveThreads: Failed thread->linkActive.next == NULL || thread == thread->linkActive.next->linkActive.prev in %d
+OSCheckActiveThreads: Failed thread->linkActive.prev == NULL || thread == thread->linkActive.prev->linkActive.next in %d
+OSCheckActiveThreads: Failed *(thread->stackEnd) == OS_THREAD_STACK_MAGIC in %d
+OSCheckActiveThreads: Failed OS_PRIORITY_MIN <= thread->priority && thread->priority <= OS_PRIORITY_MAX+1 in %d
+OSCheckActiveThreads: Failed 0 <= thread->suspend in %d
+OSCheckActiveThreads: Failed CheckThreadQueue(&thread->queueJoin) in %d
+OSCheckActiveThreads: Failed thread->queue == &RunQueue[thread->priority] in %d
+OSCheckActiveThreads: Failed IsMember(&RunQueue[thread->priority], thread) in %d
+OSCheckActiveThreads: Failed thread->priority == __OSGetEffectivePriority(thread) in %d
+OSCheckActiveThreads: Failed !IsSuspended(thread->suspend) in %d
+OSCheckActiveThreads: Failed thread->queue == NULL in %d
+OSCheckActiveThreads: Failed thread->queue != NULL in %d
+OSCheckActiveThreads: Failed CheckThreadQueue(thread->queue) in %d
+OSCheckActiveThreads: Failed IsMember(thread->queue, thread) in %d
+OSCheckActiveThreads: Failed thread->priority == 32 in %d
+OSCheckActiveThreads: Failed !__OSCheckDeadLock(thread) in %d
+OSCheckActiveThreads: Failed thread->queueMutex.head == NULL && thread->queueMutex.tail == NULL in %d
+OSCheckActiveThreads: Failed. unkown thread state (%d) of thread %p
+OSCheckActiveThreads: Failed __OSCheckMutexes(thread) in %d
+This TV format "DEBUG_PAL" is only for 
+VI_TVMODE_DEBUG_PAL_DS
+VI_TVMODE_DEBUG_PAL_INT
+VI_TVMODE_DEBUG_INT
+PRINT_DEBUG
+PRINT_DEBUGGER
+8DEBUGINFO
+8MaxSizeOfDebugString
+8AssertValidMemAddress
+8gScreenColour
+8mFullScreen
+8gDoScreenClear
+8gIsDebugTokenEnabled
+8mScreenWidth
+8mScreenHeight
+8gEnableDebugTrap
+8gScreenWidth
+8GXWarningLevel
+8GINIT_FULLSCREEN
+8debugpad
+8SetDebugPrintFunc
+8PATHDebugPrintFunc
+8debugchannels
+8D:/audio/libs/path/50000/source/library/cmn/pathdebug.c
+8PATHI_SetDebuggingChannels
+8PATHI_GetDebuggingChannels
+8IsDebugTag
+8PATH_setdebugchannels
+8PATH_getdebugchannels
+QAT_USER_DEBUG_TAG
+QAT_ASSERT_MATCHING_NEW_DELETE
+QAT_DEBUG_TAG
+QF_ASSERT_ON_ERROR
+8fnt_DEBUG
+8VP6_IssueWarning
+8WarningMessage
+DXL_ALLOC_FAILED
+8vScreen
+8DXL_VSCREEN_HANDLE
+D:/audio/libs/path/50000/source/library/cmn/pathdebug.c
+"SetDebugPrintFunc
+hPATHI_SetDebuggingChannels
+PATHI_GetDebuggingChannels
+rPATH_setdebugchannels
+PATH_getdebugchannels
+debugchannels
+VP6_IssueWarning
+Screen.cpp
+g_prevScreen
+_GLOBAL_.I._6Sprite.g_pScreen
+g_pScreen
+FAILED_TO_MAKE_PROGRESS_DURING_MOVE
+_3ASB.FAILED_TO_MAKE_PROGRESS_DURING_MOVE
+_4MTFS.FAILED_TO_MAKE_PROGRESS_DURING_MOVE
+_3CMB.FAILED_TO_MAKE_PROGRESS_DURING_MOVE
+_3GTB.FAILED_TO_MAKE_PROGRESS_DURING_MOVE
+_3MWS.FAILED_TO_MAKE_PROGRESS_DURING_MOVE
+_4Peek.FAILED_TO_MAKE_PROGRESS_DURING_MOVE
+_4UIOB.FAILED_TO_MAKE_PROGRESS_DURING_MOVE
+_28UseMeatShieldBehaviorStatics.FAILED_TO_MAKE_PROGRESS_DURING_MOVE
+_3MSM.FAILED_TO_MAKE_PROGRESS_DURING_MOVE
+_8RPG_MTFO.FAILED_TO_MAKE_PROGRESS_DURING_MOVE
+_7RPG_CPB.FAILED_TO_MAKE_PROGRESS_DURING_MOVE
+_3GFB.FAILED_TO_MAKE_PROGRESS_DURING_MOVE
+_5GFAAB.FAILED_TO_MAKE_PROGRESS_DURING_MOVE
+_3ATC.FAILED_TO_MAKE_PROGRESS_DURING_MOVE
+FAILED_TOO_MANY_BEHAVIORS
+SCRIPTED_GAG_SET_CAMERASHAKE
+SCRIPTED_GAG_CAMERASHAKE_DONE
+_3NPC.FAILED_TOO_MANY_BEHAVIORS
+MSGID_WarningTriggerCRC
+g_bCameraReady
+_GLOBAL_.I._7CCamera.ASPECT_4x3
+s_MinCamSwitchDelayTicksCRC.18025
+s_MaxCamSwitchDelayTicksCRC.18027
+s_CameraAttachNodePropLoader
+s_SurveillanceCameraPropLoader
+gdebugserver.cpp
+AddInitialCamera__Fv
+DestroyInitialCamera__Fv
+debugwarppoints.cpp
+s_DebugWarpPlayerPoint
+_GLOBAL_.I._22CDebugWarpPointManager.ms_instance
+BuildScreenMatrix__FP7CMatrixffffff
+BuildShearScreenMatrix__FP7CMatrixff
+_iCommandCRC_UnloadScreen
+_5UICRC.s_uiWideScreen
+_iExternCRC_ScreenOffsetX
+_iExternCRC_ScreenOffsetY
+_iExternCRC_BShowLanguageScreen
+_iExternCRC_BShowOnlineScreen
+_iExternCRC_IsDebug
+_iExternCRC_SplitScreenPlayers
+_iCommandCRC_SplitScreenControllers
+_iCommandCRC_SetSplitScreenPlayerTeam
+_iCommandCRC_GetSplitScreenPlayers
+DebugSetScreenGrabPending__FPCc
+DebugAddSavedInput__FP19AptSavedInputRecordi
+StaticScreen.cpp
+LOADING_SCREEN_PATH_ROOT
+CAMERASHAKETRIGGER_NAME
+_23CameraShakeTriggerEnums.s_StartActiveCRC
+_23CameraShakeTriggerEnums.s_FrequencyCRC
+_23CameraShakeTriggerEnums.s_IntensityCRC
+_23CameraShakeTriggerEnums.s_DurationCRC
+_23CameraShakeTriggerEnums.s_DoDistanceIntensityFalloffCRC
+_23CameraShakeTriggerEnums.s_DistFalloff_QuadTermCRC
+_23CameraShakeTriggerEnums.s_DistFalloff_LinTermCRC
+_23CameraShakeTriggerEnums.s_DistFalloff_ConstTermCRC
+_23CameraShakeTriggerEnums.s_OneShotCRC
+_23CameraShakeTriggerEnums.s_StartShakeOnPlayerEnterCRC
+_23CameraShakeTriggerEnums.s_StopShakeOnPlayerExitCRC
+_23CameraShakeTriggerEnums.s_StartShakeOnActivateCRC
+_23CameraShakeTriggerEnums.s_StopShakeOnDeactivateCRC
+_23CameraShakeTriggerEnums.s_GroupCRC
+CameraShakeTriggerPoolSize.20603
+CreateCameraShakeTriggerPool__Fv
+_23CameraShakeTriggerEnums.s_ActivateMessageCRC
+_23CameraShakeTriggerEnums.s_DeactivateMessageCRC
+ANIMATEDCAMERAMECH_NAME
+AnimatedCameraMechPoolSize.14338
+CreateAnimatedMovingCameraMechPool__Fv
+_6params.NoCameraSheer
+_23_GLOBAL_.N.__9ThreadJob.failed_shape
+debug_prof.cpp
+debug_budget.cpp
+AttachCameraComponent.cpp
+COMPONENTDEF_NAME_ATTACHCAMERA
+AttachCameraComponentMax.12705
+_GLOBAL_.I.__24AttachCameraComponentDefRC8FlexProp
+_12EAGLInternal.failed_shape
+camera.cpp
+BIG_debuginfo__FPCvPiPUi
+debugger.cpp
+PRINT_debuggerfunc__F12PRINTCHANNELPCc
+pathdebug.c
+hkDebugDisplay.cpp
+hkSingletonRegisterhkDebugDisplay
+hkDebugDisplaycreate__Fv
+_GLOBAL_.I._._14hkDebugDisplay
+hkDebugDisplayViewer.cpp
+hkVisualDebuggerDebugOutput.cpp
+_addScreenGrabToSavedInputs__Fv
+fnt_DEBUG
+__AXDebugSteppingMode
+dsp_debug.c
+BI2DebugFlag
+BI2DebugFlagHolder
+ScreenReport
+DebuggerDriver.c
+_7CScreen.m_spScreen
+_7CScreen.m_sWidth
+_7CScreen.m_sHeight
+__12GCScreenText
+SetRenderModeObj__12GCScreenTextP16_GXRenderModeObj
+SetCurrLine__12GCScreenTexti
+DetermineFirstLine__12GCScreenTexti
+GetLineYPos__12GCScreenTexti
+SkipLines__12GCScreenTexti
+WriteLine__12GCScreenTextPCcQ212GCScreenText14eJustification
+g_screen
+GcDisplayLoadingScreen__FPCc
+g_StaticScreen
+Instance__12GCScreenText
+g_PauseScreen
+Shutdown__11CScreenEAGL
+Init__7CScreen
+SetCurrent__11CScreenEAGL
+SetClearColor__7CScreenRC6CColor
+SetClear__11CScreenEAGLb
+InitClass__7CCamera
+InitClass__12CCompartmentP7CScreen
+InitClass__11CStaticMeshP7CScreen
+InitClass__7CSpriteP7CScreen
+InitClass__11CAnimObjectP7CScreen
+Init__10CPSManagerP7CScreenP6CScene
+InitClass__5CFontP7CScreen
+Init__13CStaticScreenP7CScreen
+_7CScreen.m_sVideoMode
+SetOrthographicScreenSpace__Q24EAGL8ViewPortff
+GetGXRenderModeObj__11CScreenEAGL
+WaitScreen__Fv
+StartLoading__13CStaticScreenii10ELanguagesb
+DrawScreens__13CStaticScreeni
+DrawLoadingProgress__13CStaticScreenfPc
+Gameloop_LoadLevel__FP13CStaticScreen
+StopLoading__13CStaticScreen
+ActivateColorConv__11CScreenEAGLb
+RestorePlayerData__13CGameSettingsb
+Gameloop_Update_Shell__FP13CStaticScreen
+Gameloop_Update_Simulator__FP13CStaticScreen
+Gameloop_Update_PauseShell__FP13CStaticScreen
+Gameloop_Update_FadeToMovie__FP13CStaticScreen
+Gameloop_Update_HelpCard__FP13CStaticScreen
+Gameloop_Update_Movie__FP13CStaticScreen
+DrawLoadingText__13CStaticScreen
+__13CStaticScreen
+__11CScreenEAGL12EScreenWidth12EFrameFormat12EDepthFormat
+_7CScreen.m_sFrameNum
+_7CScreen.m_sTickValue
+_7CScreen.m_sTickPerSecond
+_7CScreen.m_2dXScale
+_7CScreen.m_2dYScale
+_7CScreen.m_2dXDisp
+_7CScreen.m_2dYDisp
+SetupSafeArea__7CScreen
+__7CScreen12EScreenWidthi12EFrameFormat12EDepthFormat
+_vt.7CScreen
+_._7CScreen
+SetCurrent__7CScreen
+_7CScreen.m_sWidthScale
+_7CScreen.m_sHeightScale
+Flip__7CScreen
+Wait__7CScreen
+ResetTimer__7CScreen
+GetVSyncs__7CScreen
+SetClear__7CScreenb
+GetDepthBufferMax__C7CScreen
+GetClear__C7CScreen
+GetClearColor__C7CScreen
+Clear__7CScreen
+GetTMViewToScreen__C7CScreen
+CaptureCB__7CScreen
+_11CScreenEAGL.s_pCustomNewCallback
+_vt.11CScreenEAGL
+_._11CScreenEAGL
+Wait__11CScreenEAGL
+GetCustomNewCallback__11CScreenEAGL
+MemInit__11CScreenEAGL
+SetCustomNewCallback__11CScreenEAGLPFUi_Pv
+GetOrthographicDrawContext__C11CScreenEAGL
+NewDrawContext__C11CScreenEAGLRC7CCameraRC9CViewport
+NewTextureContext__C11CScreenEAGLRC7CCameraRC9CViewport
+DeleteDrawContext__C11CScreenEAGLP12CDrawContext
+_11CScreenEAGL.bColorConvActive
+SetScreenClearOptimization__Q24EAGL22RenderContextExtensionb
+__7CCamera
+_._7CCamera
+SetOrthographic__7CCameraff
+__16CDrawContextEAGLRC7CCameraRC9CViewportRC7CScreenPQ24EAGL8ViewPortf
+_6Sprite.g_pScreen
+InitClass__15CParticleSystemP7CScreenP6CScene
+GetScreenThisFrame__11CRefractionR12CDrawContext
+_4Font.g_pScreen
+SetScreen__5CFontP7CScreen
+_12CBloomFilter.s_bDebugging
+_11CRefraction.bGetScreenThisFrame
+_11CRefraction.m_pScreen128TAR
+GrabScreenTAR__11CRefractionR12CDrawContextPPv
+ReleaseScreenTAR__11CRefractionR12CDrawContextPPv
+IsNonCameraFacing__C15CParticleSystem
+_3PSD.g_EAGL_ParticleModelDrawNonCameraFace
+SetShadowDistanceToCamera__11CAnimObjectf
+CreateInstance__7CSkyBoxR7CScreen
+__7CSkyBoxR7CScreen
+_vt.21CFullScreenRenderNode
+SetPlayerIndexOnCamera__16CFirstPersonViewi
+UpdateCameraLevel__16CFirstPersonViewf
+GetCamera__16CFirstPersonView
+UpdateDeathCamera__16CFirstPersonViewf
+SetStaticCamera__16CFirstPersonViewi
+UnsetStaticCamera__16CFirstPersonView
+AttachCameraToBone__16CFirstPersonView
+DetachCameraFromBone__16CFirstPersonView
+Draw__21CFullScreenRenderNodeR12CDrawContext
+ExecuteDraw__21CFullScreenRenderNodeR12CDrawContextPPv
+SetSplitScreenLOD__16CThirdPersonView
+SetAttachedCamera__22CMountedMachineGunViewP7CCamera
+TexturedScreen__10CEyeEffectR12CDrawContextPPv
+ComputeObjectDistance__10LODManagerP11CAnimObjectP7CCamera
+iShowControlDebug
+GetCamera__14IAvatarContext
+_._21CFullScreenRenderNode
+g_debug_light_pos
+GetCamera__C6CScenei
+StartCameraShake__7CCamera15CameraShakeTypeP8CVector3
+_16CameraAttachNode.s_nNumNodes
+_16CameraAttachNode.s_aCameraAttachNodes
+GetMatrix__C16CameraAttachNodeR7CMatrix
+g_camera
+RestorePlayerVitalInfo__C13CGameSettingsiQ216SPlayerVitalInfo8InfoType
+PushAttachment__7CCameraP10ISceneNodePC7CMatrixT2Ui
+SetCamera__12CDrawContextR7CCamera
+SetFOV__10CCameraFOVf
+PopAttachment__7CCamera
+Initialize__7CCamera
+AddCamera__6CSceneP7CCamera
+ResetHUD__7CCamera
+RemoveCamera__6CSceneP7CCamera
+_7CCamera.ASPECT_16x9
+_7CCamera.ASPECT_4x3
+SetPerspective__7CCameraff
+__20CHideAndCampBehavior
+_vt.20CHideAndCampBehavior.Q23ESM6CState
+_vt.20CHideAndCampBehavior
+_._20CHideAndCampBehavior
+GetCurrentHeuristicScore__20CHideAndCampBehavior
+GetHeuristicUpdateFrequency__20CHideAndCampBehavior
+UpdateHeuristicScore__20CHideAndCampBehavior
+FindHidePosition__20CHideAndCampBehavior
+StartBehavior__20CHideAndCampBehavior
+OnMoveDone__20CHideAndCampBehaviorPQ23ESM5Event
+StopBehavior__20CHideAndCampBehavior
+GetCapabilities__20CHideAndCampBehavior11ECapability
+SetStance__20CHideAndCampBehavior
+OnStandDone__20CHideAndCampBehaviorPQ23ESM5Event
+OnFailedToStart__27GroupFireAndAdvanceBehaviorPQ23ESM5Event
+GetType__20CHideAndCampBehavior
+GetEventReceiver__20CHideAndCampBehavior
+GetCRC__C20CHideAndCampBehavior
+DeliverToStaticEventHandlers__20CHideAndCampBehaviorPQ23ESM5Event
+_20CHideAndCampBehavior.s_StaticEventHandlers
+_20CHideAndCampBehavior.s_event_handlers
+_vt.Q23ESMt20EventHandlerTemplate1Z20CHideAndCampBehavior
+CRC__20CHideAndCampBehavior
+Call__CQ23ESMt20EventHandlerTemplate1Z20CHideAndCampBehaviorPQ23ESM5EventPQ23ESM6CState
+GetEventID__CQ23ESMt20EventHandlerTemplate1Z20CHideAndCampBehavior
+Valid__CQ23ESMt20EventHandlerTemplate1Z20CHideAndCampBehavior
+GetHandlerMethod__CQ23ESMt20EventHandlerTemplate1Z20CHideAndCampBehavior
+OnFailedToMakeProgress__9CBehaviorPQ23ESM5Event
+DebugDraw__16AIPressureVolume
+Create__17ActionCameraShakeP13TriggerObject
+Create__17ActionScreenFlashP13TriggerObject
+Create__15ActionCameraFOVP13TriggerObject
+__17ActionCameraShakeP13TriggerObject
+_vt.17ActionCameraShake
+_17ActionCameraShake.s_event_handlers
+StartGagAction__17ActionCameraShakeP9IGagActor
+__17ActionScreenFlashP13TriggerObject
+_vt.17ActionScreenFlash
+_17ActionScreenFlash.s_event_handlers
+StartGagAction__17ActionScreenFlashP9IGagActor
+__15ActionCameraFOVP13TriggerObject
+_vt.15ActionCameraFOV
+_15ActionCameraFOV.s_event_handlers
+StartGagAction__15ActionCameraFOVP9IGagActor
+DebugDraw__18CAIAreaPathFinding
+GearsHooksDisplayOnScreenUserDebugMessage__FPCc
+Init__14GearsDebugMenu
+Reset__14GearsDebugMenu
+Shutdown__14GearsDebugMenu
+DebugDraw__21CAIVehiclePathFinding
+_._15ActionCameraFOV
+RegisterEventHandlers__15ActionCameraFOV
+_._17ActionScreenFlash
+RegisterEventHandlers__17ActionScreenFlash
+_._17ActionCameraShake
+RegisterEventHandlers__17ActionCameraShake
+OnFailedTooManyBehaviors__Q216CNPCStateMachine12CAttackStatePQ23ESM5Event
+_vt.t29GagActionEventHandlerTemplate1Z17ActionCameraShake
+_vt.t29GagActionEventHandlerTemplate1Z17ActionScreenFlash
+_vt.t29GagActionEventHandlerTemplate1Z15ActionCameraFOV
+Call__Ct29GagActionEventHandlerTemplate1Z15ActionCameraFOVPQ23ESM5EventP18CScriptedGagAction
+GetEventID__Ct29GagActionEventHandlerTemplate1Z15ActionCameraFOV
+GetHandlerMethod__Ct29GagActionEventHandlerTemplate1Z15ActionCameraFOV
+Call__Ct29GagActionEventHandlerTemplate1Z17ActionScreenFlashPQ23ESM5EventP18CScriptedGagAction
+GetEventID__Ct29GagActionEventHandlerTemplate1Z17ActionScreenFlash
+GetHandlerMethod__Ct29GagActionEventHandlerTemplate1Z17ActionScreenFlash
+Call__Ct29GagActionEventHandlerTemplate1Z17ActionCameraShakePQ23ESM5EventP18CScriptedGagAction
+GetEventID__Ct29GagActionEventHandlerTemplate1Z17ActionCameraShake
+GetHandlerMethod__Ct29GagActionEventHandlerTemplate1Z17ActionCameraShake
+_Q25GEARS8CGearBox.s_pDisplayUserDebugMessageFunc
+_vt.7CCamera
+__13CCameraShaker
+__10CCameraFOV
+_._10CCameraFOV
+_7CCamera.g_CameraPosition
+_7CCamera.g_WorldToCamera
+BeginUpdate__7CCameraf
+UpdateWorldToCamera__7CCamera
+UpdateCameraToClip__7CCamera
+UpdateWorldToClip__7CCamera
+SetGlobalRenderParams__7CCamera
+PostUpdate__7CCameraf
+UpdateFOV__10CCameraFOVf
+update__13CCameraShakerfR7CMatrix
+Draw__7CCameraR12CDrawContext
+GetTMLocalToWorld__C7CCameraR7CMatrix
+GetPosition__C7CCameraR8CVector3
+GetRightward__C7CCameraR8CVector3
+GetForward__C7CCameraR8CVector3
+GetUpward__C7CCameraR8CVector3
+IsDrawEnabled__C7CCamera
+IsVisible__C7CCameraR12CDrawContext
+PreTransform__7CCameraRC7CMatrix
+Reset__7CCamera
+Transform__7CCameraRC7CMatrix
+SetTMLocalToWorld__7CCameraRC7CMatrix
+SetPosition__7CCameraRC8CVector3
+start__13CCameraShaker15CameraShakeTypeP8CVector3
+StopCameraShake__7CCamera
+StartCameraShake__7CCameraRCQ213CCameraShaker21CameraShakeInitalizer
+_M_insert_overflow__Q24_STLt6vector2ZQ27CCamera16CameraAttachmentZQ24_STLt9allocator1ZQ27CCamera16CameraAttachmentPQ27CCamera16CameraAttachmentRCQ27CCamera16CameraAttachmentRCQ24_STL12__false_typeUib
+Detach__7CCamera
+start__13CCameraShakerRCQ213CCameraShaker21CameraShakeInitalizerP8CVector3
+SetBasis__7CCameraRC8CVector3N21
+Move__7CCameraRC8CVector3
+Rotate__7CCameraRC8CVector3f
+Pitch__7CCameraf
+Roll__7CCameraf
+Yaw__7CCameraf
+Orthonormalize__7CCamera
+GetHFOV__C7CCamera
+Set__8CFrustumRC7CCameraR7CScreenR9CViewport
+__12CDrawContextRC7CCameraRC9CViewportRC7CScreen
+g_debug_blob_shadow_tar
+AddCamera_now__6CSceneRQ26CScene11SModCommand
+RemoveCamera_now__6CSceneRQ26CScene11SModCommand
+IsSplitScreen__Fv
+GetCurrentCameraIndex__18CSkinnedRenderNodeR12CDrawContext
+Shutdown__16CameraAttachNode
+Reset__16CameraAttachNode
+LoadCameraAttachNodePropertiesTrigger__16CameraAttachNodeP13TriggerObject
+_18SurveillanceCamera.s_fMinCamSwitchDelayTicks
+_18SurveillanceCamera.s_fMaxCamSwitchDelayTicks
+_18SurveillanceCamera.s_fIdleTimeBeforeDeactivation
+_18SurveillanceCamera.s_nIdleTimeBeforeDeactivation
+_18SurveillanceCamera.s_bPlayerDeactivationEnabled
+LoadTuningPropertiesTrigger__18SurveillanceCameraP13TriggerObject
+_17OpCodesSoundEvent.s_splitscreenPlayerActiveFootsteps
+__Q25GEARS26CActionDisplayDebugMessage
+_vt.Q25GEARS26CActionDisplayDebugMessage
+_._Q25GEARS26CActionDisplayDebugMessage
+PerformMarkup__Q25GEARS26CActionDisplayDebugMessagePciPCc
+Execute__Q25GEARS26CActionDisplayDebugMessage
+Serialize__Q25GEARS26CActionDisplayDebugMessageRQ25GEARS10ISerializei
+GetClass__CQ25GEARS26CActionDisplayDebugMessage
+GetNumArgs__Q25GEARS26CActionDisplayDebugMessage
+_Q25GEARS26CActionDisplayDebugMessage.s_GearsClass
+Create__Q25GEARS26CActionDisplayDebugMessage
+DisplayUserDebugMessage__Q25GEARS8CGearBoxPCc
+ReportWarning__CQ25GEARS8CGearsObPCce
+_ReportWarning__CQ25GEARS8CGearBoxPCc
+ReportWarning__CQ25GEARS8CGearBoxPCce
+g_bMultiplayerFullscreen
+PlayDemoMovie_Update__FfP13CStaticScreen
+Gameloop_WaitLoadLevelDone__FP13CStaticScreenbPvi
+Gameloop_LoadLevelPlayIntroMovie__FP13CStaticScreen
+DisplayLevelTooBigWarning__Fv
+Gameloop_PreUpdate__FP13CStaticScreen
+Gameloop_PostUpdate__FP13CStaticScreen
+SetScreenMatrix__9HudObject
+_10HudManager.s_fullScreenHudObject
+_10HudManager.s_fullScreenHudObject2
+RestorePlayerStats__13CGameSettingsPQ213CStatsTracker12CStatsObject
+RestorePlayerStartInformation__13CGameSettingsUi
+PrepareStatsForUIScreen__13CStatsTracker
+GetSafeLogicalScreenCoords__9HudObjectRfN31
+_9HudObject.m_shearScreenMatrix
+_9HudObject.m_screenMatrix
+__Q23hud22SpriteMotionBlurScreen
+_vt.Q23hud22SpriteMotionBlurScreen
+_._Q23hud22SpriteMotionBlurScreen
+Update__Q23hud22SpriteMotionBlurScreenPQ23hud20AnimatedSpriteObjectf
+DoesNeedUpdate__Q23hud22SpriteMotionBlurScreenf
+Reset__Q23hud22SpriteMotionBlurScreen
+GetRunTimeType__Q23hud22SpriteMotionBlurScreen
+_Q23hud22SpriteMotionBlurScreen.ms_SpriteMotionBlurScreenrttiobject
+SplitScreenControllers__10CUIManagerPCcT1
+SetSplitScreenPlayerTeam__10CUIManagerPCcT1
+GetSplitScreenPlayers__10CUIManagerPCcT1
+RestoreSPSettingsInSplitscreen__10CUIManager
+_vt.13CStaticScreen
+_._13CStaticScreen
+GetLoadingScreen__13CStaticScreenPc
+DrawLoadingScreen__13CStaticScreenR7CSpriteUc
+CalculatePoints__13CStaticScreenfP8CVector3
+_12DirectDamage.s_PlayerDeathCameraIndexLookup
+__18CameraShakeTriggerG8FlexPropP8BSObject
+_vt.18CameraShakeTrigger
+_vt.Q218CameraShakeTrigger11ActiveState
+_vt.Q218CameraShakeTrigger13InActiveState
+OnInit__18CameraShakeTrigger
+InitalStateTransition__18CameraShakeTrigger
+ActiveStateCRC__18CameraShakeTrigger
+InActiveStateCRC__18CameraShakeTrigger
+FindPlayerInside__C18CameraShakeTriggerP8BSObject
+AddPlayerInside__18CameraShakeTriggerP8BSObject
+RemovePlayerInside__18CameraShakeTriggerP8BSObject
+GetCameraFromPlayer__18CameraShakeTriggerP8BSObject
+DoTheShake__18CameraShakeTriggerP8BSObject
+StopTheShake__18CameraShakeTriggerP8BSObject
+OnSerialize__Q218CameraShakeTrigger11ActiveStatePQ23ESM5Event
+OnPlayerEnter__Q218CameraShakeTrigger11ActiveStatePQ23ESM5Event
+OnPlayerExit__Q218CameraShakeTrigger11ActiveStatePQ23ESM5Event
+OnNPCEnter__Q218CameraShakeTrigger11ActiveStatePQ23ESM5Event
+OnNPCExit__Q218CameraShakeTrigger11ActiveStatePQ23ESM5Event
+OnActivate__Q218CameraShakeTrigger11ActiveStatePQ23ESM5Event
+OnTimeOut__Q218CameraShakeTrigger11ActiveStatePQ23ESM5Event
+OnDeactivateMessage__Q218CameraShakeTrigger11ActiveStatePQ23ESM5Event
+OnSerialize__Q218CameraShakeTrigger13InActiveStatePQ23ESM5Event
+RegisterTimer__18CameraShakeTrigger
+OnActivateMessage__Q218CameraShakeTrigger13InActiveStatePQ23ESM5Event
+OnPlayerEnter__Q218CameraShakeTrigger13InActiveStatePQ23ESM5Event
+OnPlayerExit__Q218CameraShakeTrigger13InActiveStatePQ23ESM5Event
+CreateCameraShakeTrigger__FP8BSObjectUi19BSObjectCallbackMsgPv
+_._18CameraShakeTrigger
+GetCRC__C18CameraShakeTrigger
+DeliverToStaticEventHandlers__18CameraShakeTriggerPQ23ESM5Event
+_._Q218CameraShakeTrigger13InActiveState
+GetCRC__CQ218CameraShakeTrigger13InActiveState
+DeliverToStaticEventHandlers__Q218CameraShakeTrigger13InActiveStatePQ23ESM5Event
+_._Q218CameraShakeTrigger11ActiveState
+GetCRC__CQ218CameraShakeTrigger11ActiveState
+DeliverToStaticEventHandlers__Q218CameraShakeTrigger11ActiveStatePQ23ESM5Event
+_18CameraShakeTrigger.s_StaticEventHandlers
+_18CameraShakeTrigger.s_event_handlers
+_Q218CameraShakeTrigger11ActiveState.s_StaticEventHandlers
+_Q218CameraShakeTrigger11ActiveState.s_event_handlers
+_Q218CameraShakeTrigger13InActiveState.s_StaticEventHandlers
+_Q218CameraShakeTrigger13InActiveState.s_event_handlers
+s_CameraShakeTriggerConstructor
+_vt.Q23ESMt20EventHandlerTemplate1Z18CameraShakeTrigger
+_vt.Q23ESMt20EventHandlerTemplate1ZQ218CameraShakeTrigger11ActiveState
+_vt.Q23ESMt20EventHandlerTemplate1ZQ218CameraShakeTrigger13InActiveState
+CRC__18CameraShakeTrigger
+CRC__Q218CameraShakeTrigger11ActiveState
+CRC__Q218CameraShakeTrigger13InActiveState
+Call__CQ23ESMt20EventHandlerTemplate1ZQ218CameraShakeTrigger13InActiveStatePQ23ESM5EventPQ23ESM6CState
+GetEventID__CQ23ESMt20EventHandlerTemplate1ZQ218CameraShakeTrigger13InActiveState
+Valid__CQ23ESMt20EventHandlerTemplate1ZQ218CameraShakeTrigger13InActiveState
+GetHandlerMethod__CQ23ESMt20EventHandlerTemplate1ZQ218CameraShakeTrigger13InActiveState
+Call__CQ23ESMt20EventHandlerTemplate1ZQ218CameraShakeTrigger11ActiveStatePQ23ESM5EventPQ23ESM6CState
+GetEventID__CQ23ESMt20EventHandlerTemplate1ZQ218CameraShakeTrigger11ActiveState
+Valid__CQ23ESMt20EventHandlerTemplate1ZQ218CameraShakeTrigger11ActiveState
+GetHandlerMethod__CQ23ESMt20EventHandlerTemplate1ZQ218CameraShakeTrigger11ActiveState
+Call__CQ23ESMt20EventHandlerTemplate1Z18CameraShakeTriggerPQ23ESM5EventPQ23ESM6CState
+GetEventID__CQ23ESMt20EventHandlerTemplate1Z18CameraShakeTrigger
+Valid__CQ23ESMt20EventHandlerTemplate1Z18CameraShakeTrigger
+GetHandlerMethod__CQ23ESMt20EventHandlerTemplate1Z18CameraShakeTrigger
+__18AnimatedCameraMechG8FlexPropP8BSObject
+_vt.18AnimatedCameraMech
+_vt.Q218AnimatedCameraMech9StateWait
+_vt.Q218AnimatedCameraMech9StateMove
+_vt.Q218AnimatedCameraMech12StateStopped
+_vt.Q218AnimatedCameraMech8StateDie
+OnInit__18AnimatedCameraMech
+OnEnter__18AnimatedCameraMech
+StateMoveCRC__18AnimatedCameraMech
+StateWaitCRC__18AnimatedCameraMech
+OnExit__18AnimatedCameraMech
+Enable__18AnimatedCameraMechPQ23ESM5Event
+Disable__18AnimatedCameraMechPQ23ESM5Event
+DestroyMyself__18AnimatedCameraMechPQ23ESM5Event
+MatchGroupWithFilter__18AnimatedCameraMechP14BSMessageEventUi
+Destroy__18AnimatedCameraMechPQ23ESM5Event
+OnInit__Q218AnimatedCameraMech9StateWait
+OnEnter__Q218AnimatedCameraMech9StateWait
+OnExit__Q218AnimatedCameraMech9StateWait
+OnActivate__Q218AnimatedCameraMech9StateWaitPQ23ESM5Event
+OnInit__Q218AnimatedCameraMech9StateMove
+OnEnter__Q218AnimatedCameraMech9StateMove
+StartMotion__Q218AnimatedCameraMech9StateMove
+OnExit__Q218AnimatedCameraMech9StateMove
+OnDeactivate__Q218AnimatedCameraMech9StateMovePQ23ESM5Event
+StateStoppedCRC__18AnimatedCameraMech
+OnMoveDone__Q218AnimatedCameraMech9StateMovePQ23ESM5Event
+OnInit__Q218AnimatedCameraMech12StateStopped
+OnEnter__Q218AnimatedCameraMech12StateStopped
+StateDieCRC__18AnimatedCameraMech
+OnExit__Q218AnimatedCameraMech12StateStopped
+OnInit__Q218AnimatedCameraMech8StateDie
+OnEnter__Q218AnimatedCameraMech8StateDie
+OnExit__Q218AnimatedCameraMech8StateDie
+CreateAnimatedMovingCameraMechScript__FP8BSObjectUi19BSObjectCallbackMsgPv
+_._18AnimatedCameraMech
+GetCRC__C18AnimatedCameraMech
+DeliverToStaticEventHandlers__18AnimatedCameraMechPQ23ESM5Event
+_._Q218AnimatedCameraMech8StateDie
+GetCRC__CQ218AnimatedCameraMech8StateDie
+DeliverToStaticEventHandlers__Q218AnimatedCameraMech8StateDiePQ23ESM5Event
+_._Q218AnimatedCameraMech12StateStopped
+GetCRC__CQ218AnimatedCameraMech12StateStopped
+DeliverToStaticEventHandlers__Q218AnimatedCameraMech12StateStoppedPQ23ESM5Event
+_._Q218AnimatedCameraMech9StateMove
+GetCRC__CQ218AnimatedCameraMech9StateMove
+DeliverToStaticEventHandlers__Q218AnimatedCameraMech9StateMovePQ23ESM5Event
+_._Q218AnimatedCameraMech9StateWait
+GetCRC__CQ218AnimatedCameraMech9StateWait
+DeliverToStaticEventHandlers__Q218AnimatedCameraMech9StateWaitPQ23ESM5Event
+_18AnimatedCameraMech.s_StaticEventHandlers
+_18AnimatedCameraMech.s_event_handlers
+_Q218AnimatedCameraMech9StateWait.s_StaticEventHandlers
+_Q218AnimatedCameraMech9StateWait.s_event_handlers
+_Q218AnimatedCameraMech9StateMove.s_StaticEventHandlers
+_Q218AnimatedCameraMech9StateMove.s_event_handlers
+_Q218AnimatedCameraMech12StateStopped.s_StaticEventHandlers
+_Q218AnimatedCameraMech12StateStopped.s_event_handlers
+_Q218AnimatedCameraMech8StateDie.s_StaticEventHandlers
+_Q218AnimatedCameraMech8StateDie.s_event_handlers
+s_CreateAnimatedCameraMechCallback
+_vt.Q23ESMt20EventHandlerTemplate1Z18AnimatedCameraMech
+_vt.Q23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech9StateWait
+_vt.Q23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech9StateMove
+_vt.Q23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech12StateStopped
+_vt.Q23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech8StateDie
+CRC__18AnimatedCameraMech
+CRC__Q218AnimatedCameraMech9StateWait
+CRC__Q218AnimatedCameraMech9StateMove
+CRC__Q218AnimatedCameraMech12StateStopped
+CRC__Q218AnimatedCameraMech8StateDie
+Call__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech8StateDiePQ23ESM5EventPQ23ESM6CState
+GetEventID__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech8StateDie
+Valid__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech8StateDie
+GetHandlerMethod__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech8StateDie
+Call__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech12StateStoppedPQ23ESM5EventPQ23ESM6CState
+GetEventID__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech12StateStopped
+Valid__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech12StateStopped
+GetHandlerMethod__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech12StateStopped
+Call__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech9StateMovePQ23ESM5EventPQ23ESM6CState
+GetEventID__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech9StateMove
+Valid__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech9StateMove
+GetHandlerMethod__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech9StateMove
+Call__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech9StateWaitPQ23ESM5EventPQ23ESM6CState
+GetEventID__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech9StateWait
+Valid__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech9StateWait
+GetHandlerMethod__CQ23ESMt20EventHandlerTemplate1ZQ218AnimatedCameraMech9StateWait
+Call__CQ23ESMt20EventHandlerTemplate1Z18AnimatedCameraMechPQ23ESM5EventPQ23ESM6CState
+GetEventID__CQ23ESMt20EventHandlerTemplate1Z18AnimatedCameraMech
+Valid__CQ23ESMt20EventHandlerTemplate1Z18AnimatedCameraMech
+GetHandlerMethod__CQ23ESMt20EventHandlerTemplate1Z18AnimatedCameraMech
+__24AttachCameraComponentDefRC8FlexProp
+_vt.24AttachCameraComponentDef
+CreateInstance__24AttachCameraComponentDefP19IComponentContainer
+__29AttachCameraComponentInstanceP24AttachCameraComponentDefP19IComponentContainer
+_vt.29AttachCameraComponentInstance.Q23ESM6CState
+_vt.29AttachCameraComponentInstance
+_vt.Q23ESMt20EventHandlerTemplate1Z29AttachCameraComponentInstance
+OnAttachMessage__29AttachCameraComponentInstancePQ23ESM5Event
+OnDetachMessage__29AttachCameraComponentInstancePQ23ESM5Event
+OnEnter__29AttachCameraComponentInstance
+PostUpdate__29AttachCameraComponentInstancef
+CreateAttachCameraComponentDefPool__Fi
+CreateAttachCameraComponentDef__FP13TriggerObject
+_._29AttachCameraComponentInstance
+ComponentSendEvent__29AttachCameraComponentInstancePQ23ESM5Event
+GetCRC__C29AttachCameraComponentInstance
+DeliverToStaticEventHandlers__29AttachCameraComponentInstancePQ23ESM5Event
+Call__CQ23ESMt20EventHandlerTemplate1Z29AttachCameraComponentInstancePQ23ESM5EventPQ23ESM6CState
+GetEventID__CQ23ESMt20EventHandlerTemplate1Z29AttachCameraComponentInstance
+Valid__CQ23ESMt20EventHandlerTemplate1Z29AttachCameraComponentInstance
+GetHandlerMethod__CQ23ESMt20EventHandlerTemplate1Z29AttachCameraComponentInstance
+_._24AttachCameraComponentDef
+_29AttachCameraComponentInstance.s_StaticEventHandlers
+_29AttachCameraComponentInstance.s_event_handlers
+s_AttachCameraComponentCallback
+CRC__29AttachCameraComponentInstance
+SNDebugInit
+SNDebugBoot
+DEBUG_break
+_Q212EAGLInternal15ViewPortPrivate.gScreenColour
+_Q24EAGL22RenderContextExtension.gDoScreenClear
+_Q24EAGL22RenderContextExtension.gIsDebugTokenEnabled
+_Q212EAGLInternal20RenderContextPrivate.gEnableDebugTrap
+_Q24EAGL14ProfilerRegion.gScreenWidth
+GetDebugTokenEnable__Q24EAGL22RenderContextExtension
+SendDebugToken__Q24EAGL22RenderContextExtension
+GetScreenClearOptimization__Q24EAGL22RenderContextExtension
+TrcSingletonAssert__Q26Realmc11TaskManagerPQ26Realmc4Task
+debugexit
+SetDebugPrintFunc__Q24Path11IPathToRealPFPCce_i
+_t11hkSingleton1Z14hkDebugDisplay.s_instance
+_._14hkDebugDisplay
+_vt.14hkDebugDisplay
+__vc__t5hkMap3ZQ214hkDefaultError13hkAssertPointZiZt7hkArray1Zt6hkPair2ZQ214hkDefaultError13hkAssertPointZiRCQ214hkDefaultError13hkAssertPoint
+assertMessage__14hkDefaultErrorPCciT1T1i
+warningMessage__14hkDefaultErrorPCciT1T1i
+disableWarning__14hkDefaultErrorPCci
+disableAssert__14hkDefaultErrorPCci
+enableWarning__14hkDefaultErrorPCci
+enableAssert__14hkDefaultErrorPCci
+find__Ct5hkMap3ZQ214hkDefaultError13hkAssertPointZiZt7hkArray1Zt6hkPair2ZQ214hkDefaultError13hkAssertPointZiRCQ214hkDefaultError13hkAssertPoint
+erase__t5hkMap3ZQ214hkDefaultError13hkAssertPointZiZt7hkArray1Zt6hkPair2ZQ214hkDefaultError13hkAssertPointZiRCQ214hkDefaultError13hkAssertPoint
+_Q29GoldMedal8SoundMan.m_pSoundDebugData
+DSPAssertTask
+__DSP_debug_printf
+__OSIsGcam
+.debug
+.debug_srcinfo
+.debug_sfnames
+.debug_aranges
+.debug_pubnames

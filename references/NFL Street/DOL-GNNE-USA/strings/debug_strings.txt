@@ -1,0 +1,115 @@
+# Extracted Debug & Diagnostic Strings from GameCube main.dol (DOL-GNNE-USA)
+# Total unique strings extracted: 112
+
+REPLAY MODE: EDIT
+REPLAY MODE: VIEW
+EDIT MODE: DEFAULT
+EDIT MODE: CAMLOCK
+  CAMLOCK: %d
+EDIT MODE: ADD/DEL
+EDIT MODE: TRANS EDIT
+EDIT MODE: FOV EDIT
+EDIT MODE: PLAY SPEED
+EDIT MODE: ROLL
+EDIT MODE: ADJUST TARGET POSITIONAL OFFSET
+EDIT MODE: ADVANCE FOCUS TARGET / GREENSCREEN
+ GREEN SCREEN MODE: OFF
+ GREEN SCREEN MODE: ON / RED
+ GREEN SCREEN MODE: ON / GREEN
+ GREEN SCREEN MODE: ON / BLUE
+REPLAY TIME: %d
+scrcap%02d-
+J.Porter KickCam
+Conversion Failed
+MarketCam-Pass Icons On
+MarketCam-Pass Icons Off
+Replay Particles
+2pt conversion by %s failed
+ (Extra Point failed)
+ (Conversion failed)
+Replay
+uis_grp_DEBUG.dat
+no error found.
+unexpected error has occured.
+StatError Code: %x
+Error: Cannot open %s
+screen%02d.bmp
+Error checking %s in %s.
+Error saving %s to %s in %s.
+Error deleting %s from %s in %s.
+Error formatting %s in %s.
+%s failed!
+Save failed! Wrong device in %s. Please insert a %s.%s
+Save failed! The %s in %s is incompatible with this game.%s
+Save failed! The %s in %s is damaged and cannot be used.%s
+WARNING! Not saving may lose your current files.
+%s failed.  No %s was found on the %s in %s.
+%s failed.  No %s was found in %s.
+%s failed!  The %s in %s is damaged and cannot be used.
+Repair failed.  No %s was found on the %s in %s.
+Repair failed.  No %s was found in %s.
+Load failed.  Please check the %s in %s and try again.
+%s failed.  Please check the %s in %s and try again.
+SCREENTRANS
+UISTUDIO
+An error has occurred.
+memory.lib: pAlloc %d bytes failed: free list follows:
+!!Warning: MEM_MAX_NUM_GROUPS=%d groups exceeded; Results inaccurate
+Attempting to activate screen (Group ID: %d, Screen ID: %d) which is waiting to be unloaded.
+../../../Source/Common/UIStudio/UIStudio.c
+../../../Source/Common/UIStudio/UISEvent.c
+Attempting to load a rate function while it's screen is being unloaded.
+Error: Invalid Controller ID.
+Error: Out of bounds array access.
+*** Library error ***
+( %.8s )  SNDSTRM_create error %d: maxrequests %d, maxchunks %d, memsize %d.
+( %.8s )  SNDBANK_play error %d patch %d (subbank %d, beat %d)
+REPLAY.C
+Hit_Camper
+Screen display has been set to progressive scan mode.
+Screen display has been set to interlaced mode.
+DEBUG
+Waiting for SN Debugger...
+*** CMD READ ERROR ***
+Fatal error: Can't patch exc vector
+Comms Error
+*** FS CMD READ ERROR ***
+File server function not available in non debug mode
+>>> OSINIT: exception %d vectored to debugger
+OSCheckAlarmQueue: Failed AlarmQueue.head == NULL && AlarmQueue.tail == NULL || AlarmQueue.head != NULL && AlarmQueue.tail != NULL in %d
+OSCheckAlarmQueue: Failed AlarmQueue.head == NULL || AlarmQueue.head->prev == NULL in %d
+OSCheckAlarmQueue: Failed AlarmQueue.tail == NULL || AlarmQueue.tail->next == NULL in %d
+OSCheckAlarmQueue: Failed alarm->next == NULL || alarm->next->prev == alarm in %d
+OSCheckAlarmQueue: Failed alarm->next != NULL || AlarmQueue.tail == alarm in %d
+DMAErrorHandler(): An error occurred while processing DMA.
+The following errors have been detected and cleared :
+OSCheckActiveThreads: Failed RunQueue[prio].head != NULL && RunQueue[prio].tail != NULL in %d
+OSCheckActiveThreads: Failed RunQueue[prio].head == NULL && RunQueue[prio].tail == NULL in %d
+OSCheckActiveThreads: Failed CheckThreadQueue(&RunQueue[prio]) in %d
+OSCheckActiveThreads: Failed __OSActiveThreadQueue.head == NULL || __OSActiveThreadQueue.head->linkActive.prev == NULL in %d
+OSCheckActiveThreads: Failed __OSActiveThreadQueue.tail == NULL || __OSActiveThreadQueue.tail->linkActive.next == NULL in %d
+OSCheckActiveThreads: Failed thread->linkActive.next == NULL || thread == thread->linkActive.next->linkActive.prev in %d
+OSCheckActiveThreads: Failed thread->linkActive.prev == NULL || thread == thread->linkActive.prev->linkActive.next in %d
+OSCheckActiveThreads: Failed *(thread->stackEnd) == OS_THREAD_STACK_MAGIC in %d
+OSCheckActiveThreads: Failed OS_PRIORITY_MIN <= thread->priority && thread->priority <= OS_PRIORITY_MAX+1 in %d
+OSCheckActiveThreads: Failed 0 <= thread->suspend in %d
+OSCheckActiveThreads: Failed CheckThreadQueue(&thread->queueJoin) in %d
+OSCheckActiveThreads: Failed thread->queue == &RunQueue[thread->priority] in %d
+OSCheckActiveThreads: Failed IsMember(&RunQueue[thread->priority], thread) in %d
+OSCheckActiveThreads: Failed thread->priority == __OSGetEffectivePriority(thread) in %d
+OSCheckActiveThreads: Failed !IsSuspended(thread->suspend) in %d
+OSCheckActiveThreads: Failed thread->queue == NULL in %d
+OSCheckActiveThreads: Failed thread->queue != NULL in %d
+OSCheckActiveThreads: Failed CheckThreadQueue(thread->queue) in %d
+OSCheckActiveThreads: Failed IsMember(thread->queue, thread) in %d
+OSCheckActiveThreads: Failed thread->priority == 32 in %d
+OSCheckActiveThreads: Failed !__OSCheckDeadLock(thread) in %d
+OSCheckActiveThreads: Failed thread->queueMutex.head == NULL && thread->queueMutex.tail == NULL in %d
+OSCheckActiveThreads: Failed. unkown thread state (%d) of thread %p
+OSCheckActiveThreads: Failed __OSCheckMutexes(thread) in %d
+Warning: DVDOpen(): file '%s' was not found under %s.
+Warning: DVDOpenDir(): file '%s' was not found under %s.
+REQUEST_AUDIO_ERROR
+Se ha producido un error.
+ verificato un errore.
+This TV format "DEBUG_PAL" is only for 

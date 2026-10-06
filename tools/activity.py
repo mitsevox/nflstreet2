@@ -191,13 +191,16 @@ def contributors(root, ledger, build, revision, fetch_missing=False, exact_inven
                 raise ValueError('Attribution lacks contribution PR provenance')
         commit = provenance['commit']
         provenance_commit(root, commit, fetch_missing)
-        if source_blob(root, commit, source) != provenance['introduced_blob']:
+        historical_source = provenance.get('original_source', source)
+        if not isinstance(historical_source, str) or not historical_source.startswith('src/') or '..' in Path(historical_source).parts:
+            raise ValueError('Invalid attribution original source path')
+        if source_blob(root, commit, historical_source) != provenance['introduced_blob']:
             raise ValueError('Attribution differs from the introduced source')
         original_commit = provenance.get('original_commit', commit)
         provenance_commit(root, original_commit, fetch_missing)
-        if source_blob(root, original_commit, source) != original:
+        if source_blob(root, original_commit, historical_source) != original:
             raise ValueError('Attribution differs from the original source')
-        if not historical_source_blob(root, revision, source, provenance['introduced_blob']):
+        if not historical_source_blob(root, revision, historical_source, provenance['introduced_blob']):
             raise ValueError('Introduced source is absent from this revision history')
         for address in entry['functions']:
             if not re.fullmatch(r'0x[0-9A-F]{8}', address):

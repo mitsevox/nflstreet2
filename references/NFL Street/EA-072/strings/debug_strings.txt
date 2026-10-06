@@ -1,0 +1,70 @@
+# Extracted Debug & Diagnostic Strings from Xbox default.xbe (EA-072)
+# Total unique strings extracted: 67
+
+GPU generated an error!
+Try reproing with D3D8I.LIB or D3D8D.LIB for more debugging help.
+createfile error - st=%08x
+GetDiskFreeSpaceEx failed with %08x
+Unable to open file (%s):  error %x
+\Proj\Ll_api\Source\Common\UIStudio\UIStudio.c
+Attempting to activate screen (Group ID: %d, Screen ID: %d) which is waiting to be unloaded.
+Error: Invalid Controller ID.
+Error: Out of bounds array access.
+\Proj\Ll_api\Source\Common\UIStudio\UISEvent.c
+Attempting to load a rate function while it's screen is being unloaded.
+A security error of unknown cause has been detected which has
+runtime error 
+TLOSS error
+SING error
+DOMAIN error
+- unexpected heap error
+- unexpected multithread lock error
+( %.8s )  SNDSTRM_create error %d: maxrequests %d, maxchunks %d, memsize %d.
+( %.8s )  SNDBANK_play error %d patch %d (subbank %d, beat %d)
+REPLAY.C
+REPLAY MODE: EDIT
+REPLAY MODE: VIEW
+EDIT MODE: DEFAULT
+EDIT MODE: CAMLOCK
+  CAMLOCK: %d
+EDIT MODE: ADD/DEL
+EDIT MODE: TRANS EDIT
+EDIT MODE: FOV EDIT
+EDIT MODE: PLAY SPEED
+EDIT MODE: ROLL
+EDIT MODE: ADJUST TARGET POSITIONAL OFFSET
+EDIT MODE: ADVANCE FOCUS TARGET / GREENSCREEN
+ GREEN SCREEN MODE: OFF
+ GREEN SCREEN MODE: ON / RED
+ GREEN SCREEN MODE: ON / GREEN
+ GREEN SCREEN MODE: ON / BLUE
+REPLAY TIME: %d
+scrcap%02d-
+J.Porter KickCam
+Replay
+Conversion Failed
+MarketCam-Pass Icons On
+MarketCam-Pass Icons Off
+Hit_Camper
+2pt conversion by %s failed
+ (Extra Point failed)
+ (Conversion failed)
+Replay Particles
+no error found.
+unexpected error has occured.
+StatError Code: %x
+Error: Cannot open %s
+Error: Cannot malloc %d bytes
+D:\screen%02d.bmp
+ (Replay)   
+%s failed! The %s was removed during use.
+%s failed! The %s was removed during use.%s
+The %s was removed during use. %s failed.
+WARNING! Not saving may lose your current files.
+%s failed.  No %s was found on the %s.
+Repair failed.  No %s was found on the %s.
+Load failed.  The memory unit %s was removed during use.
+Load failed.  The selected %s file is damaged and cannot be loaded.
+Save failed! Please check the %s in %s and try again.%s
+%s failed.  Please check the %s in %s and try again.
+uis_grp_DEBUG.dat

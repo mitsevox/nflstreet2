@@ -1,0 +1,10 @@
+Address	FileOffset	Path
+0x80204e66	0x201e66	0.h
+0x802b239c	0x2af39c	../../../Source/Common/UIStudio/UIStudio.c
+0x802b23c8	0x2af3c8	../../../Source/Common/UIStudio/UISEvent.c
+0x802fc9e0	0x2f99e0	OSThread.c
+0x802fe7f8	0x2fb7f8	GXMisc.c
+0x80306980	0x303980	GBAKey.c
+0x803ec638	0x305898	dvdfs.c
+0x803ec64c	0x3058ac	dvd.c
+0x803ec6bc	0x30591c	vi.c
