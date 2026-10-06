@@ -2,8 +2,6 @@
 #include "game/Object_8008044C.h"
 
 extern "C" {
-int fn_8007A98C(void *pObject, int a);
-void fn_8007ABA4(void *pObject, int a, int b);
 void fn_800814BC(Info_80307908 *pInfo, short *pValues);
 
 static int lbl_802D6928[10] = {
@@ -19,7 +17,7 @@ int fn_800812B0(Object_8008044C *pObject, int index)
 int fn_800812E0(Object_8008044C *pObject, int index)
 {
     unsigned int value = fn_800812B0(pObject, index);
-    short values[12];
+    short values[10];
     Info_80307908 info;
 
     fn_800817CC(pObject, &info);
