@@ -1,0 +1,165 @@
+# Extracted Debug & Diagnostic Strings from NFL Street 2 - Unleashed (USA PSP) (BOOT.BIN)
+# Total unique strings extracted: 162
+
+screens\glue\glue
+ShutScreen
+InitScreen
+minigame
+MiniGameMenuC
+minigames\minigamemenu\minigamemenu
+LoadScreenStrings
+Screen Printing
+MINIGAME.dat
+minigamepics.dat
+PrePlayStateC
+Conversion Failed
+MarketCam-Pass Icons On
+MarketCam-Pass Icons Off
+y %s failed
+MiniGameObstacleCourseC
+MiniGameObstacleCoursePreGameC
+MiniGameObstacleCourseRulesC
+MiniGameObstacleCoursePostPlayC
+MiniGameObstacleCoursePrePlayC
+MiniGameObstacleCoursePostGameC
+MiniGameObstacleCourseDuringPlayC
+MiniGameC
+MiniGame2MinuteC
+MiniGame4On4C
+MiniGame4On4C::DataT
+MiniGameCrushCarrierC
+MiniGameCrushCarrierC::DataT
+MiniGameCrushCarrierC::PointsT
+MiniGameQuickStrikeC
+MiniGameQuickStrikeC::DriveInfoT
+MiniGameJumpBallC
+MiniGameOpenFieldC
+MiniGame2MinutePreGameC
+MiniGame2MinutePlayCallC
+MiniGame2MinutePrePlayC
+MiniGame2MinuteDuringPlayC
+MiniGame2MinutePostPlayC
+MiniGame2MinuteScrmRulesC
+MiniGame2MinuteGameEndC
+MiniGame4On4PreGameC
+MiniGame4On4PlayCallC
+MiniGame4On4PrePlayC
+MiniGame4On4DuringPlayC
+MiniGame4On4PostPlayC
+MiniGame4On4ScrmRulesC
+MiniGame4On4GameEndC
+MiniGameCrushCarrierRulesC
+MiniGameCrushCarrierPreGameC
+MiniGameCrushCarrierPrePlayC
+MiniGameCrushCarrierDuringPlayC
+MiniGameCrushCarrierPostPlayC
+MiniGameCrushCarrierGameEndC
+MiniGameJumpBallRulesC
+MiniGameJumpBallPreGameC
+MiniGameJumpBallPrePlayC
+MiniGameJumpBallDuringPlayC
+MiniGameJumpBallPostPlayC
+MiniGameJumpBallGameEndC
+MiniGameOpenFieldPreGameC
+MiniGameOpenFieldPrePlayC
+MiniGameOpenFieldPlayCallC
+MiniGameOpenFieldDuringPlayC
+MiniGameOpenFieldPostPlayC
+MiniGameOpenFieldGameEndC
+MiniGameOpenFieldRulesC
+MiniGameQuickStrikePreGameC
+MiniGameQuickStrikeGameEndC
+MiniGameQuickStrikeRulesC
+MiniGameTargetPassingPreGameC
+MiniGameTargetPassingPrePlayC
+MiniGameTargetPassingDuringPlayC
+MiniGameTargetPassingPostPlayC
+MiniGameTargetPassingRulesC
+MiniGameStyleStandoffC
+MiniGameStyleStandoffPreGameC
+MiniGameStyleStandoffRulesC
+MiniGameStyleStandoffPostPlayC
+MiniGameStyleStandoffPrePlayC
+MiniGameStyleStandoffPostGameC
+MiniGameStyleStandoffDuringPlayC
+You failed.
+MiniGameTrickChallengeC
+MiniGameTrickChallengePreGameC
+MiniGameTrickChallengePlayCallC
+MiniGameTrickChallengePrePlayC
+MiniGameTrickChallengeDuringPlayC
+MiniGameTrickChallengePostPlayC
+MiniGameTrickChallengePostGameC
+MiniGameTrickChallengeRulesC
+TutorialCommonPrePlayC
+TutorialGameBreakerPrePlayC
+GGMCTStoreSelectorScreenPrintingCatC
+GGMCreateTeamStaticSingleton<GGMCTStoreSelectorScreenPrintingCatC>
+HidePlayCallScreen
+ShowPlayCallScreen
+Failed
+ASSERT
+WARNING
+MinigameLogo
+Warning
+FlashScreenC
+GauntletMainScreenC
+gauntlet\gauntletmainscreen\gauntletmainscreen
+MiniGameHUDC
+ingame\minigamehud\minigamehud
+Challenge Failed
+MiniGameRecordsC
+ingame\postminigame_topsix\postminigame_topsix
+ingame\postminigame_teams\postminigame_teams
+ingame\postminigame_pairs\postminigame_pairs
+ingame\postminigame_drives\postminigame_drives
+ingame\pausescreen\pause
+MiniGameLineup
+MiniGameNoLineLay
+MiniGameNoLineup
+InitScreenNFLChallenge
+UpdateScreenElements
+MiniGameSetupC
+minigames\minigamesetup\minigamesetup
+SetMiniGameText
+SetMiniGameType
+NetworkMiniGameSetupC
+Backing out of this screen
+HideScreen
+SetMiniGameMode
+ShowScreen
+FMCamC
+FMCamGameC
+CamGame
+FMCamScriptC
+CamScript
+FMMiniGameC
+MiniGame
+FMScreenTintC
+ScreenTint
+Load failed.
+Save failed.
+dlopen: Failed to find a symbol table. Aborting
+ERROR: DynamicLoader::Resolve - Failed to resolve the following undefined
+<WARNING> Actionscript error message:-- %s --
+<WARNING> Actionscript un-caught exception encountered
+--AptWarning-- Actionscript is attempting to use invalid objects in Extends Opcode.
+.debug
+.rel.debug
+.debug_srcinfo
+.rel.debug_srcinfo
+.debug_sfnames
+.mdebug.eabi32
+.debug_aranges
+.rel.debug_aranges
+.debug_pubnames
+.rel.debug_pubnames
+.debug_info
+.rel.debug_info
+.debug_abbrev
+.debug_line
+.rel.debug_line
+.debug_frame
+.rel.debug_frame
+.debug_ranges
+.debug_str

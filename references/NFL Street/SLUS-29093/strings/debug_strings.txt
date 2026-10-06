@@ -1,0 +1,106 @@
+# Extracted Debug & Diagnostic Strings from SLUS_290.93 .rodata
+# Total strings extracted: 103
+
+Quick Match Failed.
+REPLAY MODE: EDIT
+REPLAY MODE: VIEW
+EDIT MODE: DEFAULT
+EDIT MODE: CAMLOCK
+  CAMLOCK: %d
+EDIT MODE: ADD/DEL
+EDIT MODE: TRANS EDIT
+EDIT MODE: FOV EDIT
+EDIT MODE: PLAY SPEED
+EDIT MODE: ROLL
+EDIT MODE: ADJUST TARGET POSITIONAL OFFSET
+EDIT MODE: ADVANCE FOCUS TARGET / GREENSCREEN
+ GREEN SCREEN MODE: OFF
+ GREEN SCREEN MODE: ON / RED
+ GREEN SCREEN MODE: ON / GREEN
+ GREEN SCREEN MODE: ON / BLUE
+REPLAY TIME: %d
+scrcap%02d-
+J.Porter KickCam
+Conversion Failed
+MarketCam-Pass Icons On
+MarketCam-Pass Icons Off
+Replay Particles
+2pt conversion by %s failed
+ (Extra Point failed)
+ (Conversion failed)
+uis_grp_DEBUG.dat
+no error found.
+unexpected error has occured.
+StatError Code: %x
+debug=00
+host:screen%02d.bmp
+Error checking %s in %s.
+Error loading %s from %s in %s.
+Error saving %s to %s in %s.
+Error deleting %s from %s in %s.
+%s failed! The %s in %s was removed during use.
+%s failed! The %s in %s was removed during use.%s
+Error formatting %s in %s.
+Load failed.  The selected %s file is corrupt and cannot be loaded.
+WARNING! Not saving may lose your current files.
+%s failed.  No %s was found on the %s in %s.
+%s failed.  No %s was found in %s.
+Repair failed.  No %s was found on the %s in %s.
+Repair failed.  No %s was found in %s.
+Load failed.  Please check the %s in %s and try again.
+Save failed! Please check the %s in %s and try again.%s
+%s failed.  Please check the %s in %s and try again.
+LegalScreen
+UISTUDIO2
+SCREENTRANS
+UISTUDIO
+Unknown error
+CDVD_init() Failed to read sector 16!
+memory.lib: pAlloc %d bytes failed: free list follows:
+!!Warning: MEM_MAX_NUM_GROUPS=%d groups exceeded; Results inaccurate
+[MPEG ERROR]%s
+Error code detected(BDEC)
+_sliceA0(): error happens
+CSC handler error
+libmtap: bind failed
+sceMtapPortOpen: rpc error
+sceMtapPortClose: rpc error
+sceMtapGetConnection: rpc error
+sceMtapChangeThreadPriority: rpc error
+sceMtapGetModVersion: rpc error
+?Attempting to activate screen (Group ID: %d, Screen ID: %d) which is waiting to be unloaded.
+../../../Source/Common/UIStudio\UIStudio.c
+../../../Source/Common/UIStudio\UISEvent.c
+Attempting to load a rate function while it's screen is being unloaded.
+Error: Invalid Controller ID.
+Error: Out of bounds array access.
+## internel error in libkernl.a!
+TTY: receive error
+bind error libmc 
+libusbkb : CreateSema Error
+libusbkb.a : RemoveIntcHandler() --> error
+libusbkb.a : DeleteSema() --> error
+Arrangement error!
+ERROR
+FAILED
+( %.8s )  SNDSTRM_create error %d: maxrequests %d, maxchunks %d, memsize %d.
+( %.8s )  SNDBANK_play error %d patch %d (subbank %d, beat %d)
+7~bind Error
+USBLINK_ERROR_SIFRPC_BINDERROR
+USBLINK_ERROR_OK
+USBLINK_ERROR_DRIVER_ALREADY_OPEN
+USBLINK_ERROR_REGLDD_FAILED
+USBLINK_ERROR_DRIVER_NOT_OPEN
+USBLINK_ERROR_BAD_DEVICE_NUM
+USBLINK_ERROR_BAD_DEVICE_DATA
+USBLINK_ERROR_INVALID_CONTROL_PIPE
+USBLINK_ERROR_INVALID_READ_PIPE
+USBLINK_ERROR_INVALID_WRITE_PIPE
+USBLINK_ERROR_TIME_OUT
+USBLINK_ERROR_ID_MISMATCH
+USBLINK_ERROR_FNO_MISMATCH
+USBLINK_ERROR_NOT_A_RESPONCE
+USBLINK_ERROR_UNKNOWN_SIFRPC
+sceUsbd_ERROR /* Error (unknown reason) */
+USBLINK_ERROR_PENDING
+Unknown Error.

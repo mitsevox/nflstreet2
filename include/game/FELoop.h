@@ -29,7 +29,7 @@ unsigned char fn_80027E90(void);
 void fn_80027E98(FELoopCallback pCallback);
 void fn_80027EA0(void);
 unsigned char fn_80027EAC(void);
-void fn_80027EB4(void);
+void fn_80027EB4(int a);
 }
 
 extern FELoop gFELoop;

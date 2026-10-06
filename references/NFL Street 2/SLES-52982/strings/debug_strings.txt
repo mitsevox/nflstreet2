@@ -1,0 +1,100 @@
+# Extracted Debug, Assert & Diagnostic Strings from SLES_529.82 (NFL Street 2 Europe PAL)
+# Total unique strings extracted: 97
+
+Screen Printing
+DEBUG
+REPLAY.C
+CPALCPLI
+CPALCPRD
+CPALCPGR
+CPALCPBU
+CPALCSRD
+CPALCSGR
+CPALCSBU
+CPALCMRD
+CPALCMGR
+CPALCMBL
+CPALCHRD
+CPALCHGR
+CPALCHBL
+moviepal.dat
+host:
+Highlight a player for debug info.
+Highlight a player for debug info
+Debug Stage
+Debug Group
+CamScript
+ReplayFrame
+ScreenTint
+SndgReplay
+palindex
+DbColPal
+Conversion Failed
+MarketCam-Pass Icons On
+MarketCam-Pass Icons Off
+Replay Particles
+2pt conversion by %s failed
+ (Extra Point failed)
+ (Conversion failed)
+uis_grp_DEBUG.dat
+no error found.
+unexpected error has occured.
+host:screen%02d.bmp
+Error checking %s in %s.
+Error loading %s from %s in %s.  The save file is corrupt and cannot be loaded.
+Error saving %s to %s in %s.
+Error deleting %s from %s in %s.
+%s failed! The %s in %s was removed during use.
+%s failed! The %s in %s was removed during use.%s
+Error formatting %s in %s.
+Load failed.  The selected %s file is corrupt and cannot be loaded.
+WARNING! Not saving may lose your current files.
+%s failed.  No %s was found on the %s in %s.
+%s failed.  No %s was found in %s.
+Repair failed.  No %s was found on the %s in %s.
+Repair failed.  No %s was found in %s.
+Load failed.  Please check the %s in %s and try again.
+Save failed! Please check the %s in %s and try again.%s
+%s failed.  Please check the %s in %s and try again.
+UISTUDIO
+SCREENTRANS
+UISTUDIO2
+BUS ERROR (LOAD OR STORE)
+BUS ERROR (FETCH)
+UNKNOWN LOOP ERROR
+CDVD_init() Failed to read sector 16!
+memory.lib: pAlloc %d bytes failed: free list follows:
+!!Warning: MEM_MAX_NUM_GROUPS=%d groups exceeded; Results inaccurate
+scrcap%02d-
+?Attempting to activate screen (Group ID: %d, Screen ID: %d) which is waiting to be unloaded.
+../../../Source/Common/UIStudio/UIStudio.c
+../../../Source/Common/UIStudio/UISEvent.c
+Attempting to load a rate function while it's screen is being unloaded.
+Error: Invalid Controller ID.
+Error: Out of bounds array access.
+## internel error in libkernl.a!
+TTY: receive error
+bind error libmc 
+[MPEG ERROR]%s
+Error code detected(BDEC)
+_sliceA0(): error happens
+CSC handler error
+libmtap: bind failed
+sceMtapPortOpen: rpc error
+sceMtapPortClose: rpc error
+sceMtapGetConnection: rpc error
+sceMtapChangeThreadPriority: rpc error
+sceMtapGetModVersion: rpc error
+ERROR
+FAILED
+libusbkb : CreateSema Error
+libusbkb.a : RemoveIntcHandler() --> error
+libusbkb.a : DeleteSema() --> error
+Arrangement error!
+Debug
+CamGame
+Replay
+animPal
+Failed
+AnimPal
+.mdebug.eabi64

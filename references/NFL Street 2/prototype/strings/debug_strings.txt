@@ -1,0 +1,141 @@
+# Extracted Debug & Diagnostic Strings from NFLBig.xbe (Street 2 Xbox Prototype)
+# Total unique strings extracted: 138
+
+hxcam
+=xcamu0
+Qt4=ssapt
+=tuamt>=tuapt'=tuart
+NV097_SET_WARNING_ENABLE
+GPU generated an error!
+Try reproing with D3D8I.LIB or D3D8D.LIB for more debugging help.
+createfile error - st=%08x
+GetDiskFreeSpaceEx failed with %08x
+Unable to open file (%s):  error %x
+cAMD3
+** Internal Error: sizeof(tWMAFileHdrStateInternal) = %d.
+Source Route Failed
+!!Warning: MEM_MAX_NUM_GROUPS=%d groups exceeded; Results inaccurate
+memory.lib: pAlloc %d bytes failed: free list follows:
+\dev\cg\Proj\Ll_api\Source\Common\UIStudio\UIStudio.c
+Attempting to activate screen (Group ID: %d, Screen ID: %d) which is waiting to be unloaded.
+Error: Invalid Controller ID.
+Error: Out of bounds array access.
+\dev\cg\Proj\Ll_api\Source\Common\UIStudio\UISEvent.c
+Attempting to load a rate function while it's screen is being unloaded.
+A security error of unknown cause has been detected which has
+runtime error 
+TLOSS error
+SING error
+DOMAIN error
+- unexpected heap error
+- unexpected multithread lock error
+adaptImage
+adaptFmv
+f:\usr\local\packages\apt\nflstreet\source\apt\_AptVector.h
+Apt-GC---------------------- Sweeping of %d objects
+MbP?AptTrace: 
+TITLE ERROR
+BODY ERROR
+BUTTON ERROR
+Alerts::STATUS_PANIC_ASSERTION
+Error
+EA server connection failed.
+ScoutReport::STATUS_PANIC_ASSERTION
+EA Server Error
+A database error has occured.
+An unknown error occurred.
+Unknown Error
+Error Loading
+Sign-In Error
+Account Error
+ ERROR: XOnlineTaskContinue(hFriends) returned FAILURE
+ ERROR: XOnlineFriendsStartup returned FAILURE
+Error: Version mismatch in XVoice block (block version=%X, code version=%X)
+Error: NNX file block did not end with %s
+Error: XVoice file block did not begin with %s
+Error: Version mismatch in voice user block (block version=%X, code version=%X)
+Error: Voice user file block did not end with %s
+Error: Voice block did not end with %s
+Error: Voice user file block did not begin with %s
+Error: Version mismatch in vocab block (block version=%X, code version=%X)
+Error: XVocab file block did not end with %s
+Error: XVocab block did not start with '%s'
+LoadNNet: Error: Didn't reach the end of neural net file %s
+Failed to read vector %ld of %ld in feature file %s
+Error: %ld features according to config file, but %ld features in .feat file
+Memory error, heapID=%d, blockSize=%d
+host0:\PROJ\NFLBIG\project\ps2\demodebug\nflbig.elf
+Highlight a player for debug info.
+Highlight a player for debug info
+REPLAY MODE: EDIT
+REPLAY MODE: VIEW
+EDIT MODE: DEFAULT
+EDIT MODE: CAMLOCK
+  CAMLOCK: %s
+EDIT MODE: ADD/DEL
+EDIT MODE: TRANS EDIT
+EDIT MODE: FOV EDIT
+EDIT MODE: PLAY SPEED
+EDIT MODE: ROLL
+EDIT MODE: ADJUST TARGET POSITIONAL OFFSET
+EDIT MODE: ADVANCE FOCUS TARGET / GREENSCREEN
+ GREEN SCREEN MODE: OFF
+ GREEN SCREEN MODE: ON / RED
+ GREEN SCREEN MODE: ON / GREEN
+ GREEN SCREEN MODE: ON / BLUE
+EDIT MODE: LIGHTING
+REPLAY TIME: %d
+SNAPT
+GMOnline: NONE => ERROR
+GMOnline: READY => READY (ABORT failed)
+GMOnline: READY => ERROR
+GMOnline: ABORT => ERROR
+GMOnline: SEND => ERROR
+GMOnline: WAITING => ERROR
+Conversion Failed
+MarketCam-Pass Icons On
+MarketCam-Pass Icons Off
+2pt conversion by %s failed
+ (Extra Point failed)
+ (Conversion failed)
+Replay Particles
+Counter Failed
+Screen Printing
+Failed
+Replay
+PauseExit SyncFailed: %d
+no error found.
+unexpected error has occured.
+screens\general\loader
+Debug
+CamGame
+CamScript
+ReplayFrame
+ScreenTint
+SndgReplay
+Debug Stage
+Debug Group
+Error: Cannot open %s
+Error: Cannot malloc %d bytes
+D:\screen%02d.bmp
+ (Replay)   
+%s failed! The %s was removed during use.
+%s failed! The %s was removed during use.%s
+The %s was removed during use. %s failed.
+WARNING! Not saving may lose your current files.
+%s failed.  No %s was found on the %s.
+Repair failed.  No %s was found on the %s.
+Load failed.  The memory unit %s was removed during use.
+Load failed.  The selected %s save is damaged and cannot be loaded.
+Save failed! Please check the %s in %s and try again.%s
+%s failed.  Please check the %s in %s and try again.
+uis_grp_DEBUG.dat
+scrcap%02d-
+DEBUG
+REPLAY.C
+Host: %d.%d.%d.%d
+UPnPError
+Host:239.255.255.250:1900
+errorDescription
+errorCode
+HOST: %u.%u.%u.%u:%u

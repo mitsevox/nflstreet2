@@ -1,0 +1,11 @@
+Thanks for visiting The Vault at Vimm's Lair.
+
+	vimm.net
+
+This GameCube CISO was created with NKit2 alpha 64 from the following Redump ISO.
+
+NFL Street (USA).iso
+CRC:   1864E9AC
+MD5:   78A89ED4BAF2602FEFF65B61B63B2134
+SHA-1: 813C4511BA3135059A13DE424555647E8252254B
+Date:  2022-09-23
