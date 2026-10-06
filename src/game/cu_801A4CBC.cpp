@@ -236,7 +236,7 @@ void fn_801A5104(void)
     }
 }
 
-void fn_801A5434(Vector_80039F5C *p, unsigned char value)
+void fn_801A5434(void *p, int value)
 {
     unsigned int i;
 
