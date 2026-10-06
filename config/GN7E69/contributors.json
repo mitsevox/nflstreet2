@@ -4879,7 +4879,7 @@
       ],
       "provenance": {
         "pull_request": 398,
-        "merged_via": 398,
+        "merged_via": 399,
         "commit": "6abf6856b566f5f987e5bab0c3160c85840f5652",
         "introduced_blob": "f81bfddd8ac564ad189337f046f2eee557287cd0"
       }
@@ -7539,7 +7539,7 @@
       ],
       "provenance": {
         "pull_request": 396,
-        "merged_via": 396,
+        "merged_via": 399,
         "commit": "9efce86109a724c982796ce309e9b0406582a8c2",
         "introduced_blob": "23f573f226d27d94fa427ad337121fcc85683b4d"
       }
