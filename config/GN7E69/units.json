@@ -7698,6 +7698,25 @@
           "end": "0x80365198"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80196AF0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80196AF0-0x80196F48 (src/game/cu_80196AF0.cpp) and its .rodata row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80196AF0",
+          "end": "0x80196F48"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADA20",
+          "end": "0x802ADA3C"
+        }
+      ]
     }
   ]
 }
