@@ -7108,6 +7108,112 @@
           "end": "0x803EB1AC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801A4CBC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A4CBC-0x801A5478 (src/game/cu_801A4CBC.cpp), its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A4CBC",
+          "end": "0x801A5478"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE73C",
+          "end": "0x802AE764"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB830",
+          "end": "0x803EB840"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803664C0",
+          "end": "0x803666A0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECC18",
+          "end": "0x803ECC1C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801A60D8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A60D8-0x801A679C (src/game/cu_801A60D8.cpp), its type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A60D8",
+          "end": "0x801A679C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800314E0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800314E0-0x80032340 (src/game/cu_800314E0.cpp), its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800314E0",
+          "end": "0x80032340"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCB18",
+          "end": "0x802CCBAC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA3A0",
+          "end": "0x803EA3A4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80306620",
+          "end": "0x803067B0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC670",
+          "end": "0x803EC678"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801631EC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv bounded cu_801631EC unit, readonly pool, shared-state view, callback item layout, declarations and source-form rows. Original translation-unit extent remains provisional; the shared mutable state and preceding helper stay external.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801631EC",
+          "end": "0x80163674"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A45B4",
+          "end": "0x802A45D4"
+        }
+      ]
     }
   ]
 }

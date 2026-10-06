@@ -8660,6 +8660,48 @@
       ]
     },
     {
+      "source": "src/game/cu_8018C688.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv bounded cu_8018C688 unit, existing exact function extents, float/query-pool and weight-table data rows, shared types, source forms and compiler row. Complete comparison bodies remain unlinked; the native rodata size mismatch is retained.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018C688",
+          "end": "0x8018CA80"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AA348",
+          "end": "0x802AA3C4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EAEF4",
+          "end": "0x802EAF6C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8018C688",
+          "start": "0x8018C688",
+          "end": "0x8018C7B8"
+        },
+        {
+          "symbol": "fn_8018C7B8",
+          "start": "0x8018C7B8",
+          "end": "0x8018CA14"
+        },
+        {
+          "symbol": "fn_8018CA14",
+          "start": "0x8018CA14",
+          "end": "0x8018CA80"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800170E0.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row src/game/cu_800170E0.cpp, the function rows 0x800170E0-0x8001B8E8, the data rows 0x8001B8E8-0x8001BB20 (data_8001B8E8), 0x802F43F4-0x802F4504 and 0x803EBA08-0x803EBA44, the .ctors/.dtors words and the data rows of its .bss and .sbss objects. Draft comparison only: one function body differs in register numbering (see the source-form row cu_800170E0 unmatched functions), so the unit stays unlinked.",
