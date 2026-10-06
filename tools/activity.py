@@ -202,6 +202,13 @@ def contributors(root, ledger, build, revision, fetch_missing=False, exact_inven
             raise ValueError('Attribution differs from the original source')
         if not historical_source_blob(root, revision, historical_source, provenance['introduced_blob']):
             raise ValueError('Introduced source is absent from this revision history')
+        if historical_source != source:
+            renamed_blob = provenance.get('renamed_blob', provenance['introduced_blob'])
+            if not isinstance(renamed_blob, str) or not SHA.fullmatch(renamed_blob):
+                raise ValueError('Invalid renamed source blob')
+            if not all(historical_source_blob(root, revision, path, renamed_blob)
+                       for path in (historical_source, source)):
+                raise ValueError('Renamed source is absent from old or current path history')
         for address in entry['functions']:
             if not re.fullmatch(r'0x[0-9A-F]{8}', address):
                 raise ValueError('Invalid credited function address')

@@ -2909,7 +2909,8 @@
         "commit": "e9f8d9da01ddeccc15c526bf316ba4638cde84fa",
         "introduced_blob": "4ae082fa81b532b58c8867a2a44f76d44930817d",
         "original_blob": "4ae082fa81b532b58c8867a2a44f76d44930817d",
-        "original_source": "src/game/cu_8002AE90.cpp"
+        "original_source": "src/game/cu_8002AE90.cpp",
+        "renamed_blob": "6d503ca42c846a8eb8492040810df2320b226cf1"
       }
     },
     {

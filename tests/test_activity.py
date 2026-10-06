@@ -168,6 +168,33 @@ class ContributorTests(unittest.TestCase):
         self.entry['provenance']['original_source'] = 'src/test.c'
         self.assertEqual(self.credits()[0]['login'], 'alice')
 
+    def test_path_migration_after_source_edits_preserves_credit(self):
+        self.commit_source('int function(void) { return 2; }')
+        renamed_blob = self.git('rev-parse', 'HEAD:src/test.c')
+        self.git('mv', 'src/test.c', 'src/moved.c')
+        self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                 'commit', '-qm', 'Move edited source')
+        self.commit = self.git('rev-parse', 'HEAD')
+        self.build['units'][0]['source'] = 'src/moved.c'
+        self.entry['source'] = 'src/moved.c'
+        self.entry['provenance'].update(original_source='src/test.c', renamed_blob=renamed_blob)
+        self.assertEqual(self.credits()[0]['login'], 'alice')
+
+    def test_path_migration_rejects_unrelated_current_source(self):
+        (self.root/'src/unrelated.c').write_text('int function(void) { return 99; }')
+        self.git('add', 'src/unrelated.c')
+        self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                 'commit', '-qm', 'Unrelated source')
+        self.commit = self.git('rev-parse', 'HEAD')
+        self.build['units'][0]['source'] = 'src/unrelated.c'
+        self.entry['source'] = 'src/unrelated.c'
+        self.entry['provenance']['original_source'] = 'src/test.c'
+        with self.assertRaisesRegex(ValueError, 'Renamed source'):
+            self.credits()
+        self.entry['provenance']['renamed_blob'] = self.git('rev-parse', 'HEAD:src/unrelated.c')
+        with self.assertRaisesRegex(ValueError, 'Renamed source'):
+            self.credits()
+
     def test_historical_lookup_batches_deleted_and_restored_paths(self):
         self.git('rm', 'src/test.c')
         self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
