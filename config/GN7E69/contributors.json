@@ -5800,13 +5800,9 @@
         "lifewillbeokay"
       ],
       "functions": [
-        "0x80085A34",
-        "0x80085A7C",
-        "0x80085AA0",
-        "0x80085BE4",
-        "0x80085C3C",
-        "0x80085C94",
-        "0x80085D54"
+        "0x800857D0",
+        "0x80085810",
+        "0x800858C8"
       ],
       "provenance": {
         "pull_request": 282,
@@ -6061,8 +6057,13 @@
         "mitsevox"
       ],
       "functions": [
-        "0x8018EA3C",
-        "0x8018EAAC"
+        "0x8018EC68",
+        "0x8018ED78",
+        "0x8018EDF0",
+        "0x8018EE44",
+        "0x8018EE78",
+        "0x8018EEAC",
+        "0x8018EEF0"
       ],
       "provenance": {
         "pull_request": 259,
@@ -6519,31 +6520,22 @@
         "mitsevox"
       ],
       "functions": [
-        "0x80061408",
-        "0x80061520",
-        "0x80061584",
-        "0x8006164C",
-        "0x8006167C",
-        "0x800616D8",
-        "0x8006171C",
-        "0x8006182C",
-        "0x80061918",
-        "0x8006199C",
-        "0x800619FC",
-        "0x80061AD4",
-        "0x80061ADC",
-        "0x80061AE8",
-        "0x80061B90",
-        "0x80061C44",
-        "0x80061CAC",
-        "0x80061D14",
-        "0x80061D64",
-        "0x80061DA0",
-        "0x80061DDC",
-        "0x80061DE8",
-        "0x80061E34",
-        "0x80061EAC",
-        "0x80061ED8"
+        "0x80060948",
+        "0x800609EC",
+        "0x80060A9C",
+        "0x80060B0C",
+        "0x80060BB4",
+        "0x80060BE0",
+        "0x80060C14",
+        "0x80060C50",
+        "0x80060C94",
+        "0x80060CD4",
+        "0x80060E7C",
+        "0x8006102C",
+        "0x80061088",
+        "0x80061154",
+        "0x800611C0",
+        "0x80061390"
       ],
       "provenance": {
         "pull_request": 259,
@@ -7875,6 +7867,23 @@
         "merged_via": 428,
         "commit": "87b2620b6803b0377aff96932503044c7cfdc3d3",
         "introduced_blob": "230728cc55f736eee18457894e4a88d71d79e1d1"
+      }
+    },
+    {
+      "source": "src/game/cu_8019FBEC.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8019FBEC",
+        "0x8019FD38",
+        "0x8019FD80"
+      ],
+      "provenance": {
+        "pull_request": 430,
+        "merged_via": 430,
+        "commit": "e3b89a611344fdf7ccface0a10bd950b8a78b78f",
+        "introduced_blob": "9ebba77b4d757227a843c06cd853fd645bbb85ce"
       }
     },
     {
