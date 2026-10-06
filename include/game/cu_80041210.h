@@ -1,7 +1,7 @@
 #ifndef GAME_CU_80041210_H
 #define GAME_CU_80041210_H
 
-struct Extra_80041490 {
+struct Extra_8004149C {
     char mUnknown0[32];
     unsigned char mUnknown32;
     unsigned char mUnknown33;
@@ -47,7 +47,7 @@ struct Object_80041904 {
     char mUnknown192[228];
     void *mUnknown420;
     char mUnknown424[4];
-    Extra_80041490 *mUnknown428;
+    Extra_8004149C *mUnknown428;
 };
 
 struct Desc_8004149C {
