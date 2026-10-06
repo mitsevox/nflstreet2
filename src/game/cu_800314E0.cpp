@@ -24,7 +24,7 @@ struct Entry_80306620 {
 extern "C" {
 int fn_800A3444(void);
 int fn_800D41F8(int side);
-int fn_800D7550(int a, int b);
+int fn_800D7550(int a, unsigned int b);
 void fn_80083E1C(Object_8007A334 *pObject, Query_80083E40 *pQuery);
 int fn_80083FE4(Object_8007A334 *pObject);
 void fn_80087BE4(Object_8007A334 *pObject, int index);
