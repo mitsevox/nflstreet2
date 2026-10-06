@@ -1,4 +1,5 @@
 #include "game/cu_8007F12C.h"
+#include "game/cu_80191398.h"
 #include "game/fn_801EEB44.h"
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/Record_802CC680.h"
@@ -55,8 +56,6 @@ void fn_801607F0(int a);
 void fn_80191200(void);
 void fn_80191224(void);
 void fn_801912A4(void);
-void fn_80191414(void);
-void fn_80191418(void);
 void fn_80194794(void);
 void fn_801C1710(int a);
 void fn_801C17BC(void);
