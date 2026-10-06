@@ -1261,10 +1261,12 @@ extern "C" void fn_8002D2C8(Type_803EA368 *p, unsigned char value) { p->mUnknown
    fn_800D77F0 file (0x271490, 0x2714C0) that GameCube also discards; with
    no GameCube address for them, the tables are read directly here, as the
    Xbox build does after inlining. State is taken from the lower table as on
-   PS2 (Xbox reads the two the other way round). Xbox and PS2 take only
-   (line, buf) here; the GameCube caller fn_8017F7B0 forwards r3-r5 without
-   setting them, so it gives no parameter count. This code is not measured. */
-extern "C" void PrintPlayerDebugLine(int line, char *pBuf)
+   PS2 (Xbox reads the two the other way round). The window calls this slot
+   with three arguments on both platforms (GameCube fn_8017F868 sets r3-r5
+   before the call at 0x8017F8CC; Xbox 0x17C502 pushes three through
+   0x623644); the bodies read only the first two. This code is not
+   measured. */
+extern "C" void PrintPlayerDebugLine(int line, char *pBuf, int)
 {
     int id;
     Object_80039F5C *p;
