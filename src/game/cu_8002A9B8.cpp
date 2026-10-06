@@ -48,7 +48,7 @@ struct Record_8002A9B8 {
     unsigned char mUnknown2E;
     unsigned char mUnknown2F;
     unsigned char mUnknown30;
-    unsigned char mUnknown31;
+    char mUnknown31;
     unsigned short mUnknown32;
     unsigned char mUnknown34;
     unsigned char mUnknown35;
