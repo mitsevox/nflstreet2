@@ -9122,7 +9122,7 @@
     {
       "source": "src/game/cu_8001D0F4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8001D0F4.cpp, the function rows 0x8001D0F4-0x8001D1BC, the data row 0x8001D1BC-0x8001D2D8 (data_8001D1BC) and the data rows 0x802F4504-0x802F4598. Draft comparison only: the source does not reproduce the unreferenced tail 0x8001D2AC-0x8001D2D8 (six strings of functions discarded from this build, whose Xbox prototype counterparts call Xbox library code, and one zero word), so the .rodata from 0x8001D2AC differs (see the source-form row cu_8001D0F4 unreproduced strings), and the unit stays unlinked.",
+      "evidence": "evidence.tsv unit row src/game/cu_8001D0F4.cpp, the function rows 0x8001D0F4-0x8001D1BC, the data row 0x8001D1BC-0x8001D2D8 (data_8001D1BC) and the data rows 0x802F4504-0x802F4598. Draft comparison only: the source does not reproduce the unreferenced tail 0x8001D2AC-0x8001D2D8 (six strings of functions discarded from this build, whose Xbox prototype counterparts 0x179250 and 0x179310 (the users of \"/\", \"%d_%d\" and \"%s %d\") call Xbox library code, and one zero word), so the .rodata from 0x8001D2AC differs (see the source-form row cu_8001D0F4 unreproduced strings), and the unit stays unlinked.",
       "sections": [
         {
           "section": ".text",
