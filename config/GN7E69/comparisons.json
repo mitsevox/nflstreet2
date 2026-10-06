@@ -7974,7 +7974,7 @@
     {
       "source": "src/game/cu_8000F870.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8000F870.cpp, the function rows 0x8000F870-0x8001701C, the data rows 0x8001701C-0x800170E0 (data_8001701C), 0x802F41BC-0x802F43F4 and 0x803EB950-0x803EBA08, the .ctors/.dtors words and the data rows of its .bss and .sbss objects. Draft comparison only: six function bodies differ (see the source-form row cu_8000F870 unmatched functions), so the unit stays unlinked.",
+      "evidence": "evidence.tsv unit row src/game/cu_8000F870.cpp, the function rows 0x8000F870-0x8001701C, the data rows 0x8001701C-0x800170E0 (data_8001701C), 0x802F41BC-0x802F43F4 and 0x803EB950-0x803EBA08, the .ctors/.dtors words and the data rows of its .bss and .sbss objects. Draft comparison only: seven function bodies differ (see the source-form row cu_8000F870 unmatched functions), so the unit stays unlinked.",
       "sections": [
         {
           "section": ".text",
