@@ -7327,6 +7327,49 @@
           "end": "0x8007CDA0"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8007CDA0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007CDA0-0x8007DDC8 (src/game/cu_8007CDA0.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007CDA0",
+          "end": "0x8007DDC8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80291D18",
+          "end": "0x80292848"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6718",
+          "end": "0x802D6778"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA7A8",
+          "end": "0x803EA7AC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BA00",
+          "end": "0x8030BA80"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC854",
+          "end": "0x803EC868"
+        }
+      ]
     }
   ]
 }
