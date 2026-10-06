@@ -50,6 +50,7 @@ void fn_8008044C(Object_8008044C *pObject, Desc_8008044C *pDesc, int tag);
 void fn_8008056C(Object_8008044C *pObject);
 int fn_80080948(Object_8008044C *pObject);
 int fn_800809C4(Object_8008044C *pObject, int a, int *pResult);
+void fn_80080A68(Object_8008044C *pObject, char *pBuffer, int size);
 int fn_80080D38(Object_8008044C *pObject, char *pBuffer, int size);
 int fn_80080E20(Object_8008044C *pObject);
 int fn_800811E0(Object_8008044C *pObject);

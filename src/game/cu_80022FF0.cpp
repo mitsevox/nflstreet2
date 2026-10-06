@@ -20,7 +20,7 @@ void fn_80022FF0(void)
     fn_8006EC24();
 }
 
-void fn_80023024(void)
+void fn_80023024(int a)
 {
     fn_800728F8();
     fn_801F4B20();
