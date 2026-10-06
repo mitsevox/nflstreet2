@@ -7295,6 +7295,25 @@
           "end": "0x803EA7B8"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8007DDC8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007DDC8-0x8007E514 (src/game/cu_8007DDC8.cpp), its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007DDC8",
+          "end": "0x8007E514"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80292848",
+          "end": "0x80292888"
+        }
+      ]
     }
   ]
 }

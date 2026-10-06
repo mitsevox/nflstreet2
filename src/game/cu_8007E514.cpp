@@ -3,7 +3,7 @@
 #include "game/QueryStatus.h"
 
 extern "C" {
-int fn_801FA844(int a, char *b, int c, unsigned long long key, QueryResult *pValue, QueryResult *pResult);
+int fn_801FA844(int a, void *b, void *c, unsigned long long key, QueryResult *pValue, QueryResult *pResult);
 int fn_8007A934(Object_8007A334 *pObject, int key);
 int fn_8022F358(int index);
 int fn_8022F384(int a);
