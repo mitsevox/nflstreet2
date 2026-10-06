@@ -6612,6 +6612,31 @@
       ]
     },
     {
+      "source": "src/game/cu_8004669C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8004669C-0x80046898 (src/game/cu_8004669C.cpp) and its data, type, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004669C",
+          "end": "0x80046898"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D5A4",
+          "end": "0x8028D5AC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CD190",
+          "end": "0x802CEFF0"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8018B0BC.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv bounded team/player copy group; exact linked first function and native literal prefix. The four later bodies remain registered for comparison; original-file edges stay open.",
