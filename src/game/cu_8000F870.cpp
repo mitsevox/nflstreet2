@@ -20,7 +20,7 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_802372EC.h"
 
-/* Argument block passed to fn_802329F0 when saving the roster file (template.dat). */
+/* Argument block passed to fn_802329F0 with the file name template.dat. */
 struct Request_802329F0 {
     int mMode;
     int mSize;
@@ -28,13 +28,13 @@ struct Request_802329F0 {
     int mCount;
 };
 
-/* Controller index of each of the two teams. */
+/* One signed byte per side, copied as a pair. */
 struct Pair_803ECE48 {
     signed char mIndex[2];
 };
 
 /* One roster row of a team: the player id, the pick slot it fills (-1 when
-   not picked), its position in the list and an auto-pick key (0xFF unset). */
+   not picked), its position in the list and a key byte (0xFF unset). */
 struct Entry_8036AE60 {
     int mId;
     int mSlot;
@@ -55,7 +55,7 @@ struct Scroll_8036B0E8 {
 };
 
 /* Pair of bytes saved by fn_80014430 from the two fn_80011C1C results. */
-struct Pair_803EB9D0 {
+struct Pair_80014430 {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
 };
@@ -1443,19 +1443,19 @@ void fn_80011600(int pad0, int pad1, int keep)
 void fn_80011894(int removed)
 {
     for (unsigned char i = 0; i <= 3; i++) {
-        unsigned char team = lbl_803EB96C[i];
-        if (team > 1) {
+        unsigned char selection = lbl_803EB96C[i];
+        if (selection > 1) {
             continue;
         }
-        if (lbl_803ECE48.mIndex[team] > removed) {
-            unsigned char want = lbl_803ECE48.mIndex[team] - 1;
+        if (lbl_803ECE48.mIndex[selection] > removed) {
+            unsigned char want = lbl_803ECE48.mIndex[selection] - 1;
             for (unsigned char j = 0; j <= 1; j++) {
                 if (lbl_803ECE48.mIndex[j] == want) {
                     lbl_803EB96C[i] = j;
                     break;
                 }
             }
-        } else if (lbl_803ECE48.mIndex[team] == removed) {
+        } else if (lbl_803ECE48.mIndex[selection] == removed) {
             lbl_803EB96C[i] = 3;
         }
     }
@@ -1998,7 +1998,7 @@ void fn_80012D50(int team, int unused, int delta, int *pOut)
     GetRow(team, list, row, pOut);
 }
 
-void fn_80012F3C(int team, int row, char *pName, int nameLength, char *pPosition, int positionLength,
+void fn_80012F3C(int team, int row, char *pName, int nameLength, char *pRole, int roleLength,
                  int *pValues)
 {
     int list = 1;
@@ -2010,7 +2010,7 @@ void fn_80012F3C(int team, int row, char *pName, int nameLength, char *pPosition
     if (row != -1) {
         fn_8007A600((Object_8007A334 *)&lbl_8036AE08[list], row);
         fn_800127E4(list, pName, nameLength, 0);
-        fn_8017F670(fn_80080ECC(&lbl_8036AE08[list]), pPosition);
+        fn_8017F670(fn_80080ECC(&lbl_8036AE08[list]), pRole);
         if (pValues) {
             int values[10];
 
@@ -2028,7 +2028,7 @@ void fn_80012F3C(int team, int row, char *pName, int nameLength, char *pPosition
         }
     } else {
         fn_801C2E18(pName, " ");
-        fn_801C2E18(pPosition, " ");
+        fn_801C2E18(pRole, " ");
         if (pValues) {
             unsigned char i;
 
@@ -2199,7 +2199,7 @@ void fn_80013438(int team)
     }
 }
 
-/* An array argument points at a header of pArray[0] + 1 words; its data follows the header. */
+/* An array argument points at a header of p[0] + 1 words; its data follows the header. */
 int fn_80013614(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
 {
     switch (id) {
@@ -2609,7 +2609,7 @@ void fn_8001442C(void)
 int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
 {
     Query_80083E40 query;
-    Pair_803EB9D0 pair = { 0, 0 };
+    Pair_80014430 pair = { 0, 0 };
     unsigned char color[3];
     int mode;
     unsigned int i;
@@ -2774,9 +2774,9 @@ int fn_80014430(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         fn_80011CEC(&lbl_8036ADB0[1]);
     }
 
-    void *pFont = fn_8021EA44(1);
-    fn_8021E2B4(pFont, 10, 1);
-    fn_8021E2B4(pFont, 10, 1);
+    void *pList = fn_8021EA44(1);
+    fn_8021E2B4(pList, 10, 1);
+    fn_8021E2B4(pList, 10, 1);
     fn_8003B6F0(fn_801801B4() == 1);
     lbl_803EB9AC[0] = lbl_803EB9AC[1] = fn_801801B4() == 1;
     if (fn_801801B4() == 1) {
@@ -2818,7 +2818,7 @@ void fn_80014AA8(int team, int id)
             lbl_803EB9C4[team] = fn_802372EC(0, 5);
             lbl_803EB9C0[team] = 1;
             lbl_803EB9B0[team] = 0;
-            lbl_803EB9BC[team] = lbl_803EB9BC[team] = 1;
+            lbl_803EB9BC[team] = 1;
         }
         lbl_803EB9AC[team] = 1;
     }
@@ -2828,25 +2828,25 @@ void fn_80014B98(void)
 {
     Record_8003B6BC records[2];
     int ids[2][7];
-    int texture0 = 0;
-    int texture1 = 0;
+    int value0 = 0;
+    int value1 = 0;
     int id0 = 0;
     int id1 = 0;
 
     lbl_803EB9D2 = 1;
     fn_80012634(0);
     fn_80012634(1);
-    void *pFont = fn_8021EA44(1);
-    fn_8021E72C(pFont, 10, 1);
-    fn_8021E72C(pFont, 10, 1);
+    void *pList = fn_8021EA44(1);
+    fn_8021E72C(pList, 10, 1);
+    fn_8021E72C(pList, 10, 1);
 
     if (fn_801801B4() == 1) {
         id0 = lbl_803EB97C[0];
         fn_80084034(&lbl_8036ADB0[0], id0, 0);
-        texture0 = fn_8007A98C(&lbl_8036ADB0[0], 0x49524454);
+        value0 = fn_8007A98C(&lbl_8036ADB0[0], 0x49524454);
         id1 = lbl_803EB97C[1];
         fn_80084034(&lbl_8036ADB0[1], id1, 0);
-        texture1 = fn_8007A98C(&lbl_8036ADB0[1], 0x49524454);
+        value1 = fn_8007A98C(&lbl_8036ADB0[1], 0x49524454);
     }
     if (lbl_8036ADB0[0].mUnknown0) {
         fn_80083F68(&lbl_8036ADB0[0]);
@@ -2858,8 +2858,8 @@ void fn_80014B98(void)
     if (fn_801801B4() == 1) {
         fn_8007CAEC(0, id0);
         fn_8007CAEC(1, id1);
-        fn_8022A508(0, id0, id0, 0, texture0);
-        fn_8022A508(1, id1, id1, 0, texture1);
+        fn_8022A508(0, id0, id0, 0, value0);
+        fn_8022A508(1, id1, id1, 0, value1);
         fn_8022DC7C(0);
         fn_8022DCB0(0);
         fn_8022DCE4(0);
@@ -3465,7 +3465,8 @@ int fn_8001642C(unsigned int id, Arg_8018399C *pArgs, int count, int *pResult)
     return 1;
 }
 
-/* Replaces Windows-1252 symbols and curly quotes with their plain forms. */
+/* Remaps the Windows-1252 trademark, registered and copyright signs to 0xB0-0xB2
+   and replaces curly quotes with plain ones. */
 void fn_800164F0(char *pText)
 {
     signed char length = fn_801C3180(pText);
