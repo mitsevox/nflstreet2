@@ -5,8 +5,10 @@
 #include "game/Object_8007A334.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_8008044C.h"
+#include "game/Record_803078E8.h"
 #include "game/Row_8007BC34.h"
 #include "game/cu_80047E28.h"
+#include "game/cu_800478DC.h"
 #include "game/fn_800624B0.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801C1F94.h"
@@ -32,32 +34,6 @@ struct Rgb_800840A4 {
 struct Pair_802CF382 {
     unsigned short mKey;
     unsigned short mValue;
-};
-
-/* Element of lbl_803078E8 (14 records of 0xC0 bytes). */
-struct Record_803078E8 {
-    char mName[32];
-    Info_80307908 mInfo;
-    unsigned char mUnknown68;
-    char mUnknown69;
-    unsigned short mUnknown6A;
-    unsigned short mUnknown6C;
-    unsigned short mUnknown6E;
-    unsigned short mUnknown70;
-    unsigned char mUnknown72;
-    unsigned char mUnknown73;
-    unsigned char mUnknown74;
-    unsigned char mUnknown75;
-    unsigned char mUnknown76;
-    unsigned char mUnknown77;
-    unsigned char mUnknown78;
-    char mUnknown79;
-    unsigned char mUnknown7A[25];
-    unsigned char mUnknown93;
-    unsigned char mUnknown94;
-    unsigned char mUnknown95;
-    char mUnknown96[2];
-    Block_80307980 mBlock;
 };
 
 /* Element of lbl_80308368 (14 records of 0x18 bytes). */
@@ -91,11 +67,6 @@ int fn_8001E4F4(void);
 int fn_8003DEB4(void);
 void fn_80042610(Object_8003DEC4 *pPlayer, int a, void *b, int c, int d);
 void fn_800428A8(Object_8003DEC4 *pPlayer);
-void fn_800478DC(unsigned char *pColors);
-void fn_8004795C(unsigned char *pColors, unsigned char flag);
-void fn_800479B0(Row_8007BC34 *pRow, Record_803078E8 *pRecord, int *pIds, int *pPalettes, int slot);
-int fn_80047C84(Row_8007BC34 *pRow);
-void fn_80047CA4(int *pIds, Record_803078E8 *pRecord);
 unsigned char fn_80054D24(int index);
 int fn_8005FC7C(void);
 void fn_8007BA48(Object_8007A334 *pObject);
