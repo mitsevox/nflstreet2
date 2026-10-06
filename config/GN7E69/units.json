@@ -7483,6 +7483,31 @@
           "end": "0x803EC7EC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80041210.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80041210-0x80041930 (src/game/cu_80041210.cpp) and its .rodata and .sdata rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80041210",
+          "end": "0x80041930"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D400",
+          "end": "0x8028D408"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA488",
+          "end": "0x803EA490"
+        }
+      ]
     }
   ]
 }

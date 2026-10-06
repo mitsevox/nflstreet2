@@ -7,6 +7,7 @@
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/SndgCrowd.h"
 #include "game/cu_8003EC04.h"
+#include "game/cu_80041210.h"
 #include "game/cu_80064864.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_80178D18.h"
@@ -35,8 +36,6 @@ void fn_800405F0(int a);
 void fn_80040B88(int a);
 void fn_80040C90(int a);
 void fn_800410FC(void);
-void fn_800413F0(int a, int b);
-void fn_80041490(void);
 void fn_80043AE4(void);
 void fn_80044378(void);
 void fn_80044B2C(int a);
