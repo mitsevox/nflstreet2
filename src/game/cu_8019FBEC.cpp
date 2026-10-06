@@ -16,8 +16,8 @@ struct Texture_80365470 {
 };
 
 struct Palette_803654DC {
-    int mUnknown0;
-    char mUnknown4[0xC];
+    char mUnknown0[4];
+    char mUnknown4[4];
 };
 
 extern "C" {
