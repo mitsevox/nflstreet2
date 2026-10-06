@@ -56,7 +56,7 @@ void fn_80196B20(void)
 {
 }
 
-void fn_80196B24(Entry_80196B24 *pEntries, int *pIds, void *pData)
+void fn_80196B24(Entry_80196B24 *pEntries, int *pValues, void *pData)
 {
     unsigned char i;
 
@@ -66,19 +66,19 @@ void fn_80196B24(Entry_80196B24 *pEntries, int *pIds, void *pData)
             void *pBuffer = fn_801D2BB0(1, fn_801F0C50(pEntries[i].mpUnknown0, pEntries[i].mUnknown4), 4, 0);
 
             fn_801EF7BC(pEntries[i].mpUnknown0, pEntries[i].mUnknown4, pBuffer);
-            pIds[i] = fn_801C0BA8(&pEntries[i], 0);
+            pValues[i] = fn_801C0BA8(&pEntries[i], 0);
             fn_801D2BD0(pBuffer);
         }
     }
 }
 
-void fn_80196BD4(int *pIds)
+void fn_80196BD4(int *pValues)
 {
     unsigned char i;
 
     for (i = 0; i <= 7; i++) {
         if (fn_800A34F8(i)) {
-            fn_801C0CCC(pIds[i]);
+            fn_801C0CCC(pValues[i]);
         }
     }
 }
