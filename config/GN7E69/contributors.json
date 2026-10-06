@@ -4867,6 +4867,24 @@
       }
     },
     {
+      "source": "src/game/cu_8004669C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8004669C",
+        "0x80046704",
+        "0x80046798",
+        "0x80046804"
+      ],
+      "provenance": {
+        "pull_request": 398,
+        "merged_via": 398,
+        "commit": "2af0bed10a0af3b59a7d35d1d95f452f36496aef",
+        "introduced_blob": "fcc5f7b0a38b1cfba6b5d5650938cafae9c6e4e3"
+      }
+    },
+    {
       "source": "src/game/ModuleGroup_8003450C.cpp",
       "contributors": [
         "mitsevox"
