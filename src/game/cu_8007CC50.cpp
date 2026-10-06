@@ -1,24 +1,11 @@
 #include "game/Object_8007A334.h"
-
-struct Key_8007CC50 {
-    void Set(int table, int column, int value)
-    {
-        mTable = table;
-        mColumn = column;
-        mUnknown8 = value;
-    }
-
-    int mTable;
-    int mColumn;
-    int mUnknown8;
-    int mUnknown12;
-};
+#include "game/Key_8007A334.h"
 
 extern "C" {
 
 void fn_8007CC50(Object_8007A334 *pObject)
 {
-    Key_8007CC50 keys[2];
+    Key_8007A334 keys[2];
 
     keys[0].Set(0x52494148, 0x524F5248, 0);
     keys[1].Set(-1, -1, 3);
