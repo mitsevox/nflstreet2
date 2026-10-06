@@ -7145,6 +7145,19 @@
           "end": "0x803ECC1C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801A60D8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A60D8-0x801A679C (src/game/cu_801A60D8.cpp), its type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A60D8",
+          "end": "0x801A679C"
+        }
+      ]
     }
   ]
 }
