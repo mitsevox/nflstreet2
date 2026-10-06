@@ -7108,6 +7108,43 @@
           "end": "0x803EB1AC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800314E0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800314E0-0x80032340 (src/game/cu_800314E0.cpp), its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800314E0",
+          "end": "0x80032340"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCB18",
+          "end": "0x802CCBAC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA3A0",
+          "end": "0x803EA3A4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80306620",
+          "end": "0x803067B0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC670",
+          "end": "0x803EC678"
+        }
+      ]
     }
   ]
 }
