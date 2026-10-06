@@ -1,4 +1,5 @@
 #include "game/cu_80159F10.h"
+#include "game/cu_8019FBEC.h"
 #include <math.h>
 #include "engine/cu_80227F14.h"
 #include "game/Camera_8013F738.h"
@@ -10,18 +11,6 @@ struct Init_80159F10 {
     unsigned char mUnknown8;
 };
 
-struct Instance_80159F10 {
-    char mPad00[4];
-    Vector_80039F5C mUnknown04;
-    char mPad10[4];
-    int mUnknown14;
-    int mUnknown18;
-    unsigned char mUnknown1C;
-    unsigned char mUnknown1D;
-    char mPad1E[2];
-    float mUnknown20;
-};
-
 extern "C" {
 int fn_8002B5A8(void);
 int fn_8006560C(void);
@@ -31,9 +20,6 @@ int fn_801481B0(void);
 int fn_8014830C(int index, Vector_80039F5C *pOut);
 int fn_801483F8(void);
 float fn_80178A44(void);
-void fn_8019FBEC(void);
-void fn_8019FD38(void);
-void fn_8019FD80(Instance_80159F10 *pInstance);
 void fn_801D0470(int a);
 void fn_801D04C4(void);
 void fn_801D0544(void);

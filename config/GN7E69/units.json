@@ -7508,6 +7508,37 @@
           "end": "0x803EA490"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8019FBEC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019FBEC-0x801A0088 (src/game/cu_8019FBEC.cpp) and its .rodata, .bss and .sdata rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019FBEC",
+          "end": "0x801A0088"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE008",
+          "end": "0x802AE01C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB7D0",
+          "end": "0x803EB7D8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80365448",
+          "end": "0x8036550C"
+        }
+      ]
     }
   ]
 }
