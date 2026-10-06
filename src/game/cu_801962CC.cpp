@@ -5,16 +5,29 @@
 #include <dolphin/gx/GXVert.h>
 
 struct Table_80212850 {
+    int mCapacity;
     int mCount;
-    int mUnknown4;
     void *mpEntries;
     unsigned char mUnknownC;
     unsigned char mUnknownD;
 };
 
+struct Pass_80211638 {
+    char mName[16];
+    unsigned char mUnknown10;
+    unsigned short mUnknown12;
+};
+
 struct Shader_80196480 {
-    char mName[24];
-    int mUnknown18;
+    char mName[16];
+    int mUnknown10;
+    int mUnknown14;
+    int mCount;
+};
+
+struct ShaderPasses_802EDDC0 {
+    Shader_80196480 mShader;
+    Pass_80211638 mPasses[1];
 };
 
 struct Texture_80196564 {
@@ -96,8 +109,8 @@ static Vector_80039F5C lbl_802EDD74[4] = {
     { 1.0f, 1.0f, 0.0f },
     { 1.0f, -1.0f, 0.0f },
 };
-static Shader_80196480 lbl_802EDDA4 = { "ParticleOnePass", 0 };
-static Shader_80196480 lbl_802EDDC0 = { "ParticleFlat", 1 };
+static Shader_80196480 lbl_802EDDA4 = { "ParticleOnePass", 0, 0, 0 };
+static ShaderPasses_802EDDC0 lbl_802EDDC0 = { { "ParticleFlat", 0, 0, 1 }, { { "base", 1, 0 } } };
 
 static Table_80212850 lbl_80365188;
 
@@ -152,7 +165,7 @@ void fn_80196480(void)
 {
     lbl_803EB740 = 1;
     fn_802117C8(&lbl_80365188, 2);
-    fn_80211860(&lbl_80365188, &lbl_802EDDC0, fn_80196414);
+    fn_80211860(&lbl_80365188, &lbl_802EDDC0.mShader, fn_80196414);
     fn_80211860(&lbl_80365188, &lbl_802EDDA4, fn_8019634C);
     fn_80211928("Particles", &lbl_80365188);
     lbl_803EB744 = fn_80211984("ParticleOnePass");

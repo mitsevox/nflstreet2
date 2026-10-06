@@ -7683,7 +7683,7 @@
           "section": ".data",
           "placement": ".data4",
           "start": "0x802EDD74",
-          "end": "0x802EDDDC"
+          "end": "0x802EDDF0"
         },
         {
           "section": ".sdata",
