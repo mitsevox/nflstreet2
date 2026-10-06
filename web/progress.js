@@ -1,5 +1,9 @@
 let sections=[];
 const canvas=document.querySelector('#canvas');
+const mapLift = document.createElement('div');
+mapLift.className = 'map-lift';
+mapLift.setAttribute('aria-hidden', 'true');
+canvas.parentElement.append(mapLift);
 const similarity = item => (item.fuzzy ?? item.matched) / item.size;
 function color(item) {
   if (item.matched === item.size) return 'var(--done)';
@@ -294,12 +298,14 @@ let activeTile = null;
 const percent = item => (similarity(item) * 100).toFixed(2) +
   (item.matched === item.size ? '% matched' : '% similarity');
 function hideTooltip() {
+  mapLift.classList.remove('is-active');
   tooltip.hidden = true;
   activeTile?.removeAttribute('aria-describedby');
   activeTile = null;
 }
 function showTooltip(block, item, x, y) {
   showTooltipText(block, (item.source && !item.name.includes(item.source) ? item.source + ' · ' : '') + item.name + ' · ' + percent(item) + (item.source === item.name && item.complete === false ? ' · partial file' : ''), x, y);
+  liftMapBlock(item);
 }
 function showTooltipText(block, text, x, y) {
   hideTooltip();
@@ -317,6 +323,18 @@ function colorValue(item) {
   if (!similarity(item)) return palette.empty;
   const fraction = Math.min(similarity(item) / 0.99, 1);
   return `rgb(${palette.emptyRGB.map((value, index) => Math.round(value + (palette.warmRGB[index] - value) * fraction)).join(',')})`;
+}
+function liftMapBlock(item) {
+  if (!palette || !(item.w > 0 && item.h > 0)) return;
+  const growX = Math.min(4, Math.max(1, item.w * .04));
+  const growY = Math.min(4, Math.max(1, item.h * .04));
+  Object.assign(mapLift.style, {
+    left: item.x + 'px', top: item.y + 'px', width: item.w + 'px', height: item.h + 'px',
+    background: colorValue(item)
+  });
+  mapLift.style.setProperty('--lift-x', 1 + growX * 2 / item.w);
+  mapLift.style.setProperty('--lift-y', 1 + growY * 2 / item.h);
+  mapLift.classList.add('is-active');
 }
 function drawMap(layout) {
   const ratio = Math.min(window.devicePixelRatio || 1, 2);
@@ -546,21 +564,49 @@ renderCounts(data.functions, 'function', 'provisional-analysis');renderCounts(da
   fillTo(track.querySelector('.progress-linked'), linked);
   fillTo(track.querySelector('.progress-matched'), matched);
   fillTo(track.querySelector('.progress-fuzzy'), fuzzy);
-  element.addEventListener('pointerenter', event => {
-    if (event.pointerType !== 'touch') showTooltipText(track, description, event.clientX, event.clientY);
+  const strips = [
+    {field: 'linked', label: 'Linked', value: linked},
+    {field: 'matched', label: 'Matched', value: matched},
+    {field: 'fuzzy', label: 'Fuzzy', value: fuzzy}
+  ];
+  const lift = document.createElement('div');
+  lift.className = 'progress-hover';
+  lift.setAttribute('aria-hidden', 'true');
+  track.append(lift);
+  function clearHover() {
+    lift.classList.remove('is-active');
+    hideTooltip();
+  }
+  function hoverStrip(event) {
+    const rect = track.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    let start = 0;
+    for (const strip of strips) {
+      const end = track.querySelector('i.progress-' + strip.field).getBoundingClientRect().width;
+      if (x >= start && x < end) {
+        lift.className = 'progress-hover progress-' + strip.field + ' is-active';
+        lift.style.left = start + 'px';
+        lift.style.width = (end - start) + 'px';
+        showTooltipText(track, `${strip.label} ${strip.value.toFixed(2)}%`, event.clientX, event.clientY);
+        return;
+      }
+      start = end;
+    }
+    clearHover();
+  }
+  track.addEventListener('pointerenter', event => {
+    if (event.pointerType !== 'touch') hoverStrip(event);
   });
-  element.addEventListener('pointermove', event => {
-    if (event.pointerType !== 'touch') showTooltipText(track, description, event.clientX, event.clientY);
+  track.addEventListener('pointermove', event => {
+    if (event.pointerType !== 'touch') hoverStrip(event);
   });
-  element.addEventListener('pointerleave', hideTooltip);
+  track.addEventListener('pointerleave', clearHover);
   track.addEventListener('focus', () => {
+    if (!track.matches(':focus-visible')) return;
     const rect = track.getBoundingClientRect();
     showTooltipText(track, description, rect.left, rect.bottom);
   });
-  track.addEventListener('blur', hideTooltip);
-  track.addEventListener('click', () => {
-    const rect = track.getBoundingClientRect();
-    showTooltipText(track, description, rect.left, rect.bottom);
-  });
+  track.addEventListener('blur', clearHover);
+  track.addEventListener('click', hoverStrip);
 });const link=document.querySelector('#build-link');link.href='https://github.com/mitsevox/nflstreet2/commit/'+data.revision;link.textContent='Baseline verified · '+data.revision.slice(0,7);link.title='Built '+data.built_at;render();}catch(error){renderCounts(null, 'function', 'provisional-analysis');renderCounts(null, 'file', 'mapped-file-inventory');document.querySelector('#build-link').textContent='Progress unavailable';canvas.textContent='Progress unavailable';document.querySelectorAll('.track').forEach(track=>track.setAttribute('aria-valuetext','Unavailable'));}}
 new ResizeObserver(() => render()).observe(canvas);loadProgress();
