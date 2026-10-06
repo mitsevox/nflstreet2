@@ -1,0 +1,6 @@
+Source_File	Address	Description
+BALL.C	0x8001F094	Ball physics & trajectory calculations
+AASSIGN.C	0x80084320	Animation assignment & player skeleton blend
+REPLAY.C	0x8009A4D0	Replay system state machine & camera scripting
+CUSTOMAI.C	0x8010E8B0	Custom player & team AI routines
+UIStudio.c	0x802633FC	UIStudio menu engine glue anchor (0x802633FC)

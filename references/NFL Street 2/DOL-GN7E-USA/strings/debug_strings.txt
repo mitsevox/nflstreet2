@@ -1,0 +1,85 @@
+# Extracted Debug & Diagnostic Strings from NFL Street 2 (USA GameCube - GN7E69)
+# Total unique strings extracted: 82
+
+Screen Printing
+Replay
+Highlight a player for debug info.
+Highlight a player for debug info
+Debug Stage
+Debug Group
+Debug
+CamGame
+CamScript
+ReplayFrame
+ScreenTint
+SndgReplay
+MiniGame
+Failed
+Conversion Failed
+MarketCam-Pass Icons On
+MarketCam-Pass Icons Off
+Replay Particles
+2pt conversion by %s failed
+ (Extra Point failed)
+ (Conversion failed)
+uis_grp_DEBUG.dat
+uis_grp_MINIGAMES.dat
+uis_lib_minigamepics.dat
+screen%02d.bmp
+%s failed!
+Save failed!
+WARNING! Not saving may lose your current files.
+%s failed.  No %s was found on the %s in %s.
+%s failed.  No %s was found in %s.
+%s failed!  The %s in %s is damaged and cannot be used.
+Repair failed.  No %s was found on the %s in %s.
+Repair failed.  No %s was found in %s.
+Load failed.  Please check the %s in %s and try again.
+%s failed.  Please check the %s in %s and try again.
+UISTUDIO
+SCREENTRANS
+memory.lib: pAlloc %d bytes failed: free list follows:
+!!Warning: MEM_MAX_NUM_GROUPS=%d groups exceeded; Results inaccurate
+Attempting to activate screen (Group ID: %d, Screen ID: %d) which is waiting to be unloaded.
+../../../Source/Common/UIStudio/UIStudio.c
+../../../Source/Common/UIStudio/UISEvent.c
+Attempting to load a rate function while it's screen is being unloaded.
+Waiting for SN Debugger...
+File server function not available in non debug mode
+DEBUG
+REPLAY.C
+Screen display has been set to
+Screen display has been set to Interlaced Mode.
+>>> OSINIT: exception %d vectored to debugger
+OSCheckAlarmQueue: Failed AlarmQueue.head == NULL && AlarmQueue.tail == NULL || AlarmQueue.head != NULL && AlarmQueue.tail != NULL in %d
+OSCheckAlarmQueue: Failed AlarmQueue.head == NULL || AlarmQueue.head->prev == NULL in %d
+OSCheckAlarmQueue: Failed AlarmQueue.tail == NULL || AlarmQueue.tail->next == NULL in %d
+OSCheckAlarmQueue: Failed alarm->next == NULL || alarm->next->prev == alarm in %d
+OSCheckAlarmQueue: Failed alarm->next != NULL || AlarmQueue.tail == alarm in %d
+OSCheckActiveThreads: Failed RunQueue[prio].head != NULL && RunQueue[prio].tail != NULL in %d
+OSCheckActiveThreads: Failed RunQueue[prio].head == NULL && RunQueue[prio].tail == NULL in %d
+OSCheckActiveThreads: Failed CheckThreadQueue(&RunQueue[prio]) in %d
+OSCheckActiveThreads: Failed __OSActiveThreadQueue.head == NULL || __OSActiveThreadQueue.head->linkActive.prev == NULL in %d
+OSCheckActiveThreads: Failed __OSActiveThreadQueue.tail == NULL || __OSActiveThreadQueue.tail->linkActive.next == NULL in %d
+OSCheckActiveThreads: Failed thread->linkActive.next == NULL || thread == thread->linkActive.next->linkActive.prev in %d
+OSCheckActiveThreads: Failed thread->linkActive.prev == NULL || thread == thread->linkActive.prev->linkActive.next in %d
+OSCheckActiveThreads: Failed *(thread->stackEnd) == OS_THREAD_STACK_MAGIC in %d
+OSCheckActiveThreads: Failed OS_PRIORITY_MIN <= thread->priority && thread->priority <= OS_PRIORITY_MAX+1 in %d
+OSCheckActiveThreads: Failed 0 <= thread->suspend in %d
+OSCheckActiveThreads: Failed CheckThreadQueue(&thread->queueJoin) in %d
+OSCheckActiveThreads: Failed thread->queue == &RunQueue[thread->priority] in %d
+OSCheckActiveThreads: Failed IsMember(&RunQueue[thread->priority], thread) in %d
+OSCheckActiveThreads: Failed thread->priority == __OSGetEffectivePriority(thread) in %d
+OSCheckActiveThreads: Failed !IsSuspended(thread->suspend) in %d
+OSCheckActiveThreads: Failed thread->queue == NULL in %d
+OSCheckActiveThreads: Failed thread->queue != NULL in %d
+OSCheckActiveThreads: Failed CheckThreadQueue(thread->queue) in %d
+OSCheckActiveThreads: Failed IsMember(thread->queue, thread) in %d
+OSCheckActiveThreads: Failed thread->priority == 32 in %d
+OSCheckActiveThreads: Failed !__OSCheckDeadLock(thread) in %d
+OSCheckActiveThreads: Failed thread->queueMutex.head == NULL && thread->queueMutex.tail == NULL in %d
+OSCheckActiveThreads: Failed. unkown thread state (%d) of thread %p
+OSCheckActiveThreads: Failed __OSCheckMutexes(thread) in %d
+Warning: DVDOpen(): file '%s' was not found under %s.
+Warning: DVDOpenDir(): file '%s' was not found under %s.
+This TV format "DEBUG_PAL" is only for 

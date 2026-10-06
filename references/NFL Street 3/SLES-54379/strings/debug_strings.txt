@@ -1,0 +1,181 @@
+# Extracted Debug & Diagnostic Strings from SLES_543.79 (NFL Street 3 PAL)
+# Total unique strings extracted: 178
+
+InitScreen
+ShutScreen
+Load Failed
+Backing out of this screen
+LoadScreenStrings
+SetPalette
+<WARNING> Actionscript un-caught exception encountered during "%s"
+<WARNING> Actionscript error message: "%s"
+<WARNING> Actionscript un-caught exception encountered
+AptTrace: 
+Error! Defining Function from Unloaded CIH Context!!!
+--AptWarning-- Actionscript is attempting to use invalid objects in Extends Opcode.
+Implements Opcode attempting to mess with invalid object.
+11AptRegister
+9AptLookup
+15AptStringObject
+12AptMovieClip
+12AptValueNoGC
+25AptCharacterAnimationInst
+17AptNativeFunction
+8AptArray
+16AptCharacterInst
+26AptCharacterSpriteInstBase
+20AptCharacterTextInst
+10AptValueGC
+7AptDate
+21AptCharacterShapeInst
+26AptCharacterStaticTextInst
+21AptCharacterMorphInst
+22AptCharacterSpriteInst
+10AptMathObj
+11AptLoadVars
+8AptError
+8AptStage
+22AptValueGlobalWithHash
+8AptSound
+9AptString
+13AptTextFormat
+8AptValue
+16AptValueWithHash
+7AptNone
+9AptExtern
+24AptGlobalExtensionObject
+9AptGlobal
+12AptPrototype
+9AptObject
+15AptScriptColour
+21AptScriptFunctionBase
+18AptScriptFunction1
+18AptScriptFunction2
+30AptScriptFunctionByteCodeBlock
+13AptFrameStack
+10AptXmlNode
+10AptBoolean
+8AptFloat
+10AptInteger
+22AptCharacterButtonInst
+16AptXmlAttributes
+12AptExtObject
+15AdaptExtMessage
+adaptFmv
+adaptPalettedImage
+_nPalette
+15AdaptRenderUnit
+10AdaptAsset
+10AdaptSound
+adaptImage
+?18AdaptRenderUnitPS2
+AdaptTexture
+15AdaptTexturePS2
+12AdaptTexture
+DEBUG
+REPLAY.C
+CPALCPLI
+CPALCPRD
+CPALCPGR
+CPALCPBU
+CPALCSRD
+CPALCSGR
+CPALCSBU
+CPALCMRD
+CPALCMGR
+CPALCMBL
+CPALCHRD
+CPALCHGR
+CPALCHBL
+Save Failed. The memory card (PS2) inserted in MEMORY CARD slot %s is not formatted.  Would you like to format?
+Save Failed. There is insufficient space on the memory card (PS2) in MEMORY CARD slot %s.  At least %d KB is required to save this game data.
+Load Failed. There is no Options file on the memory card (PS2) inserted in MEMORY CARD slot %s.  Retry?
+Load Failed. There is no User ID file on the memory card (PS2) inserted in MEMORY CARD slot %s.  Retry?
+Load Failed. User ID '%s' could not be found on the memory card (PS2) inserted in MEMORY CARD slot %s.  Retry?
+Load Failed. The Options on memory card (PS2) in MEMORY CARD slot %s may be corrupted. Retry?
+Load Failed. The User ID on memory card (PS2) in MEMORY CARD slot %s may be corrupted. Retry?
+Format Failed. The memory card (PS2) has been removed from MEMORY CARD slot %s.
+moviepal.dat
+host:
+Highlight a player for debug info.
+Highlight a player for debug info
+SndgReplay
+CamScript
+ReplayFrame
+ScreenTint
+palindex
+DbColPal
+UpdateScreenElements
+SetScreenName
+screens\glue\glue
+Conversion Failed
+MarketCam-Pass Icons On
+MarketCam-Pass Icons Off
+Replay Particles
+2pt conversion by %s failed
+ (Extra Point failed)
+ (Conversion failed)
+uis_grp_DEBUG.dat
+no error found.
+unexpected error has occured.
+host:screen%02d.bmp
+Error checking %s in %s.
+Error loading %s from %s in %s.  The save file is corrupt and cannot be loaded.
+Error saving %s to %s in %s.
+Error deleting %s from %s in %s.
+%s failed! The %s in %s was removed during use.
+%s failed! The %s in %s was removed during use.%s
+Error formatting %s in %s.
+Load failed.  The selected %s file is corrupt and cannot be loaded.
+WARNING! Not saving may lose your current files.
+%s failed.  No %s was found on the %s in %s.
+%s failed.  No %s was found in %s.
+Repair failed.  No %s was found on the %s in %s.
+Repair failed.  No %s was found in %s.
+Load failed.  Please check the %s in %s and try again.
+Save failed! Please check the %s in %s and try again.%s
+%s failed.  Please check the %s in %s and try again.
+APTADAPT
+UISTUDIO
+SCREENTRANS
+UISTUDIO2
+13bad_exception
+9exception
+CDVD_init() Failed to read sector 16!
+memory.lib: pAlloc %d bytes failed: free list follows:
+!!Warning: MEM_MAX_NUM_GROUPS=%d groups exceeded; Results inaccurate
+scrcap%02d-
+?Attempting to activate screen (Group ID: %d, Screen ID: %d) which is waiting to be unloaded.
+../../../Source/Common/UIStudio/UIStudio.c
+../../../Source/Ps2/UIStudio/UISEvent.c
+Attempting to load a rate function while it's screen is being unloaded.
+Error: Invalid Controller ID.
+Error: Out of bounds array access.
+## internel error in libkernl.a!
+TTY: receive error
+bind error libmc 
+[MPEG ERROR]%s
+Error code detected(BDEC)
+_sliceA0(): error happens
+CSC handler error
+libmtap: bind failed
+sceMtapPortOpen: rpc error
+sceMtapPortClose: rpc error
+sceMtapGetConnection: rpc error
+sceMtapChangeThreadPriority: rpc error
+sceMtapGetModVersion: rpc error
+ERROR
+FAILED
+CamGame
+Replay
+animPal
+Warning
+Adapt
+AnimPal
+ASSERT
+WARNING
+Error
+6AptCIH
+6AptKey
+6AptXml
+.mdebug.eabi64

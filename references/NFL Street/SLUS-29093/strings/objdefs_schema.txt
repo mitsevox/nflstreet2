@@ -1,0 +1,1031 @@
+# Tiburon Object Definition & Schema Strings (OBJDEFS.DAT)
+
+TERF
+HSH1
+~#49y
+s~h&y
+@llx
+Z\HBZLG
+2=@m
+:8Bm=p
+ZmTuBm-
+lf<v&lD|
+DIR1
+DATA
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Building01" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "Building01" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+<event name = "Sign01" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "Building01" tideRef = "EARS_Building01_Volume" >
+<primitive name = "Sign01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-5.166227818 1.048480988 -53.52220154" PRIM_BOX_MAX = "-2.188274622 2.244077682 -53.43209076" >
+</primitive>
+<primitive name = "Sign01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-4.795470238 -0.1035331711 -53.58163071" PRIM_BOX_MAX = "-4.54969883 1.092063427 -53.4414711" >
+</primitive>
+<primitive name = "Sign01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-2.772418737 -0.1035331711 -53.58163071" PRIM_BOX_MAX = "-2.526647568 1.092063427 -53.4414711" >
+</primitive>
+<primitive name = "Sign01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "1.140988231 1.048480988 -53.41986084" PRIM_BOX_MAX = "4.118941307 2.244077682 -53.32975006" >
+</primitive>
+<primitive name = "Sign01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "1.511745811 -0.1035331711 -53.47929001" PRIM_BOX_MAX = "1.757517219 1.092063427 -53.3391304" >
+</primitive>
+<primitive name = "Sign01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "3.534797668 -0.1035331711 -53.47929001 " PRIM_BOX_MAX = "3.7805686 1.092063427 -53.3391304 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Building02" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "Building02" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "Building02" tideRef = "EARS_Building02_Volume" >
+<primitive name = "Building02" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-6.876224676 -1.087057352 -20.61282817 " PRIM_BOX_MAX = "6.876226425 1 15.40840062 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Building03" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "Building01" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "Building01" tideRef = "EARS_Building01_Volume" >
+<primitive name = "Building01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "22.51754692 -0.004999995232 -29.98374958" PRIM_BOX_MAX = "36.27999809 2.004999995 11.850704" >
+</primitive>
+<primitive name = "Building01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "22.51005674 -0.0920573473 19.20039252" PRIM_BOX_MAX = "36.27250792 2.004999995 55.23161963" >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Building04" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 " iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "Building04" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "Building04" tideRef = "EARS_Building04_Volume" >
+<primitive name = "Building04" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-2.983250034 -1.367426378 -0.2696091636 " PRIM_BOX_MAX = "2.983250034 1.367426378 0.2696091636 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Building05" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 " iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "Building05" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "Building05" tideRef = "EARS_Building05_Volume" >
+<primitive name = "Building05" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-2.061326956 -0.5 -6.004529922 " PRIM_BOX_MAX = "2.061326956 0.5 6.004529922 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Building06" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 " iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "EARS_Building06" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "EARS_Building06" tideRef = "EARS_Building06_Volume">
+<primitive name = "EARS_Building06" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "24.09386718 -0.3193356915 -30.00881339 " PRIM_BOX_MAX = "31.65504199 13.54462258 54.72222085 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Building07" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "EARS_Building07" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "EARS_Building07" tideRef = "EARS_Building07_Volume">
+<primitive name = "EARS_Building07" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-33.52468773 -0.8316529362 -50.47986018 " PRIM_BOX_MAX = "-28.43959092 5.473981202 28.39871134 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Building08" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "Building08" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "EARS_Building08" tideRef = "EARS_Building08_Volume" >
+<primitive name = "EARS_Building08" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-6.12700125 -0.908071772 -5.193735013 " PRIM_BOX_MAX = "6.12700125 0.908071772 5.193735013 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Building09" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "Building09" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "EARS_Building09" tideRef = "EARS_Building09_Volume" >
+<primitive name = "EARS_Building09" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-28.06909018 -4.492280863 -6.50275198 " PRIM_BOX_MAX = "28.06909018 4.492280863 6.50275198 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Building10" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "Building10" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "EARS_Building10" tideRef = "EARS_Building10_Volume" >
+<primitive name = "EARS_Building10" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-19.84448622 -0.1719748923 -1.12711269 " PRIM_BOX_MAX = "19.84448622 0.1719748923 1.12711269 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "GarbageCan" type = "DYNAMIC" >
+<render tideRef = "EARS_GarbageCan" type = "DYNAMIC_RENDER" >
+<shadow tideRef = "default" >
+</shadow>
+</render>
+<physics mass = "8" moi = "0.6201496956 0.0 0.0 0.0 0.4895935048 0.0 0.0 0.0 0.6556058111 " iVel = "0.0" iAngVel = "0.0" dThres = "0.5" enable = "0" >
+</physics>
+<collision name = "GarbageCanCollide" tideRef = "EARS_GarbageCan_Volume">
+<primitive name = "GarbageCanCollide" friction = "0.6" bounce = "0.2" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-0.3588864504 -0.4416109985 -0.3405250891 " PRIM_BOX_MAX = "0.3657166275 0.4450467719 0.3333720761 " >
+</primitive>
+</collision>
+</object>
+<behavior type = "BASIC" reset = "ON_FIELD_IF_OFF_FIELD">
+<event name = "GarbageCanCollide" type = "COLLIDE" delay = "0.0" >
+<swapPart force = "0.0f" id = "EARS_GarbageCan" swapState = "Damaged" delay = "0.0f" >
+</swapPart>
+<particle emitPoint = "BASE" psf = "PSF_TRASH" delay = "0.0" emitTranslate = "0.0 0.327 0.0" emitRotate = "0.0 0.0 0.0" >
+</particle>
+<particle emitPoint = "IMPACT" psf = "PSF_DUST_FOOTSTEP" delay = "0.0" >
+</particle>
+<sound name = "Hit_Can" delay = "0" >
+</sound>
+</event>
+</behavior>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Bench" type = "STATIC" >
+<render tideRef = "EARS_Bench" type = "DYNAMIC_RENDER" >
+<skeleton tideRef = "Bron_Bench_Skel" >
+</skeleton>
+</render>
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<collision name = "Hit_Bench" tideRef = "Bron_Bench_Volume" >
+<primitive name = "Hit_Bench_Middle" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-1.176594761 -0.01790152178 -0.002965857929 " PRIM_BOX_MAX = "1.175774157 1.123618427 0.8306933952 " >
+</primitive>
+<primitive name = "Hit_Bench_Right" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-1.947161011 -0.01401517757 -0.003207935215 " PRIM_BOX_MAX = "-1.196693722 1.1257085 0.8311002357 " >
+</primitive>
+<primitive name = "Hit_Bench_Left" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "1.197151873 -0.0153665207 -0.002415030953 " PRIM_BOX_MAX = "1.947327983 1.123922137 0.8311977653 " >
+</primitive>
+</collision>
+<behavior type = "BASIC" >
+<event name = "Bench_Idle" type = "IDLE" delay = "0" >
+<anim emotion2State = "ANIM_STATE_BENCHIDLE" delay = "0" >
+<parameter emotion2Type = "enum" >
+</parameter>
+</anim>
+</event>
+<event name = "Hit_Bench_Left" type = "COLLIDE" delay = "0" >
+<anim emotion2State = "ANIM_STATE_BENCHCOLLIDELEFT" delay = "0" >
+<parameter emotion2Type = "enum" >
+</parameter>
+</anim>
+<sound name = "Hit_Bench" delay = "0">
+</sound>
+</event>
+<event name = "Hit_Bench_Middle" type = "COLLIDE" delay = "0" >
+<anim emotion2State = "ANIM_STATE_BENCHCOLLIDE" delay = "0" >
+<parameter emotion2Type = "enum" >
+</parameter>
+</anim>
+<sound name = "Hit_Bench" delay = "0">
+</sound>
+</event>
+<event name = "Hit_Bench_Right" type = "COLLIDE" delay = "0" >
+<anim emotion2State = "ANIM_STATE_BENCHCOLLIDERIGHT" delay = "0" >
+<parameter emotion2Type = "enum" >
+</parameter>
+</anim>
+<sound name = "Hit_Bench" delay = "0">
+</sound>
+</event>
+</behavior>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF) CrowdA 
+Description:
+  Template file for defining objects for NFL "Big" Object system
+Usage:
+  Fill in appropriate fields with required data. Only include tags that 
+are needed. 
+History:
+        Ver.
+Description
+        1.0     12/04/02 (Wes Grandmont) First version
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE 
+                       All rights reserved.
+*****************************************************************-->
+<odf xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml"> 
+   <object name = "EARS_Spectator_A" type = "STATIC">
+       <render tideRef = "EARS_Spectator_A" type = "DYNAMIC_RENDER">
+<skeleton tideRef = "Bron_Crowd_Standing_Skel"/>
+   </render>
+   <behavior type = "BASIC">
+<event name = "Bron_Spectator_A_motion" type = "IDLE" delay = "0" >
+<anim emotion2State = "ANIM_STATE_BRONCROWDSTANDIDLES" delay = "0">
+<parameter emotion2Type = "enum"/>
+</anim>
+</event>
+   </behavior>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF) CrowdA 
+Description:
+  Template file for defining objects for NFL "Big" Object system
+Usage:
+  Fill in appropriate fields with required data. Only include tags that 
+are needed. 
+History:
+        Ver.
+Description
+        1.0     12/04/02 (Wes Grandmont) First version
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE 
+                       All rights reserved.
+*****************************************************************-->
+<odf xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml"> 
+   <object name = "EARS_Spectator_B" type = "STATIC">
+       <render tideRef = "EARS_Spectator_B" type = "DYNAMIC_RENDER">
+<skeleton tideRef = "Bron_Crowd_Standing_Skel"/>
+   </render>
+   <behavior type = "BASIC">
+<event name = "Bron_Spectator_B_motion" type = "IDLE" delay = "0" >
+<anim emotion2State = "ANIM_STATE_BRONCROWDSTANDIDLES" delay = "0">
+<parameter emotion2Type = "enum"/>
+</anim>
+</event>
+   </behavior>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF) CrowdA 
+Description:
+  Template file for defining objects for NFL "Big" Object system
+Usage:
+  Fill in appropriate fields with required data. Only include tags that 
+are needed. 
+History:
+        Ver.
+Description
+        1.0     12/04/02 (Wes Grandmont) First version
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE 
+                       All rights reserved.
+*****************************************************************-->
+<odf xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml"> 
+   <object name = "EARS_Spectator_C" type = "STATIC">
+       <render tideRef = "EARS_Spectator_C" type = "DYNAMIC_RENDER">
+<skeleton tideRef = "Bron_Crowd_Standing_Skel"/>
+   </render>
+   <behavior type = "BASIC">
+<event name = "Bron_Spectator_C_motion" type = "IDLE" delay = "0" >
+<anim emotion2State = "ANIM_STATE_BRONCROWDSTANDIDLES" delay = "0">
+<parameter emotion2Type = "enum"/>
+</anim>
+</event>
+   </behavior>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF) CrowdA 
+Description:
+  Template file for defining objects for NFL "Big" Object system
+Usage:
+  Fill in appropriate fields with required data. Only include tags that 
+are needed. 
+History:
+        Ver.
+Description
+        1.0     12/04/02 (Wes Grandmont) First version
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE 
+                       All rights reserved.
+*****************************************************************-->
+<odf xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml"> 
+   <object name = "EARS_Spectator_D" type = "STATIC">
+       <render tideRef = "EARS_Spectator_D" type = "DYNAMIC_RENDER">
+<skeleton tideRef = "Bron_Crowd_Standing_Skel"/>
+   </render>
+   <behavior type = "BASIC">
+<event name = "Bron_Spectator_D_motion" type = "IDLE" delay = "0" >
+<anim emotion2State = "ANIM_STATE_BRONCROWDSTANDIDLES" delay = "0">
+<parameter emotion2Type = "enum"/>
+</anim>
+</event>
+   </behavior>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF) CrowdA 
+Description:
+  Template file for defining objects for NFL "Big" Object system
+Usage:
+  Fill in appropriate fields with required data. Only include tags that 
+are needed. 
+History:
+        Ver.
+Description
+        1.0     12/04/02 (Wes Grandmont) First version
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE 
+                       All rights reserved.
+*****************************************************************-->
+<odf xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml"> 
+   <object name = "EARS_Spectator_E" type = "STATIC">
+       <render tideRef = "EARS_Spectator_E" type = "DYNAMIC_RENDER">
+<skeleton tideRef = "Bron_Crowd_Standing_Skel"/>
+   </render>
+   <behavior type = "BASIC">
+<event name = "Bron_Spectator_E_motion" type = "IDLE" delay = "0" >
+<anim emotion2State = "ANIM_STATE_BRONCROWDSTANDIDLES" delay = "0">
+<parameter emotion2Type = "enum"/>
+</anim>
+</event>
+   </behavior>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF) CrowdA 
+Description:
+  Template file for defining objects for NFL "Big" Object system
+Usage:
+  Fill in appropriate fields with required data. Only include tags that 
+are needed. 
+History:
+        Ver.
+Description
+        1.0     12/04/02 (Wes Grandmont) First version
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE 
+                       All rights reserved.
+*****************************************************************-->
+<odf xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml"> 
+   <object name = "EARS_Spectator_F" type = "STATIC">
+       <render tideRef = "EARS_Spectator_F" type = "DYNAMIC_RENDER">
+<skeleton tideRef = "Bron_Crowd_Standing_Skel"/>
+   </render>
+   <behavior type = "BASIC">
+<event name = "Bron_Spectator_E_motion" type = "IDLE" delay = "0" >
+<anim emotion2State = "ANIM_STATE_BRONCROWDSTANDIDLES" delay = "0">
+<parameter emotion2Type = "enum"/>
+</anim>
+</event>
+   </behavior>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF) CrowdA 
+Description:
+  Template file for defining objects for NFL "Big" Object system
+Usage:
+  Fill in appropriate fields with required data. Only include tags that 
+are needed. 
+History:
+        Ver.
+Description
+        1.0     12/04/02 (Wes Grandmont) First version
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE 
+                       All rights reserved.
+*****************************************************************-->
+<odf xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml"> 
+   <object name = "EARS_Spectator_G" type = "STATIC">
+       <render tideRef = "EARS_Spectator_G" type = "DYNAMIC_RENDER">
+<skeleton tideRef = "Bron_Crowd_Standing_Skel"/>
+   </render>
+   <behavior type = "BASIC">
+<event name = "Bron_Spectator_E_motion" type = "IDLE" delay = "0" >
+<anim emotion2State = "ANIM_STATE_BRONCROWDSTANDIDLES" delay = "0">
+<parameter emotion2Type = "enum"/>
+</anim>
+</event>
+   </behavior>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF) CrowdA 
+Description:
+  Template file for defining objects for NFL "Big" Object system
+Usage:
+  Fill in appropriate fields with required data. Only include tags that 
+are needed. 
+History:
+        Ver.
+Description
+        1.0     12/04/02 (Wes Grandmont) First version
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE 
+                       All rights reserved.
+*****************************************************************-->
+<odf xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml"> 
+   <object name = "EARS_Spectator_H" type = "STATIC">
+       <render tideRef = "EARS_Spectator_H" type = "DYNAMIC_RENDER">
+<skeleton tideRef = "Bron_Crowd_Standing_Skel"/>
+   </render>
+   <behavior type = "BASIC">
+<event name = "Bron_Spectator_E_motion" type = "IDLE" delay = "0" >
+<anim emotion2State = "ANIM_STATE_BRONCROWDSTANDIDLES" delay = "0">
+<parameter emotion2Type = "enum"/>
+</anim>
+</event>
+   </behavior>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF) CrowdA 
+Description:
+  Template file for defining objects for NFL "Big" Object system
+Usage:
+  Fill in appropriate fields with required data. Only include tags that 
+are needed. 
+History:
+        Ver.
+Description
+        1.0     12/04/02 (Wes Grandmont) First version
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE 
+                       All rights reserved.
+*****************************************************************-->
+<odf xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml"> 
+   <object name = "EARS_Spectator_I" type = "STATIC">
+       <render tideRef = "EARS_Spectator_I" type = "DYNAMIC_RENDER">
+<skeleton tideRef = "Bron_Crowd_Standing_Skel"/>
+   </render>
+   <behavior type = "BASIC">
+<event name = "Bron_Spectator_E_motion" type = "IDLE" delay = "0" >
+<anim emotion2State = "ANIM_STATE_BRONCROWDSTANDIDLES" delay = "0">
+<parameter emotion2Type = "enum"/>
+</anim>
+</event>
+   </behavior>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF) CrowdA 
+Description:
+  Template file for defining objects for NFL "Big" Object system
+Usage:
+  Fill in appropriate fields with required data. Only include tags that 
+are needed. 
+History:
+        Ver.
+Description
+        1.0     12/04/02 (Wes Grandmont) First version
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE 
+                       All rights reserved.
+*****************************************************************-->
+<odf xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml"> 
+   <object name = "EARS_Spectator_J" type = "STATIC">
+       <render tideRef = "EARS_Spectator_J" type = "DYNAMIC_RENDER">
+<skeleton tideRef = "Bron_Crowd_Standing_Skel"/>
+   </render>
+   <behavior type = "BASIC">
+<event name = "Bron_Spectator_E_motion" type = "IDLE" delay = "0" >
+<anim emotion2State = "ANIM_STATE_BRONCROWDSTANDIDLES" delay = "0">
+<parameter emotion2Type = "enum"/>
+</anim>
+</event>
+   </behavior>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF) CrowdA 
+Description:
+  Template file for defining objects for NFL "Big" Object system
+Usage:
+  Fill in appropriate fields with required data. Only include tags that 
+are needed. 
+History:
+        Ver.
+Description
+        1.0     12/04/02 (Wes Grandmont) First version
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE 
+                       All rights reserved.
+*****************************************************************-->
+<odf xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml"> 
+   <object name = "EARS_Spectator_K" type = "STATIC">
+       <render tideRef = "EARS_Spectator_K" type = "DYNAMIC_RENDER">
+<skeleton tideRef = "Bron_Crowd_Standing_Skel"/>
+   </render>
+   <behavior type = "BASIC">
+<event name = "Bron_Spectator_E_motion" type = "IDLE" delay = "0" >
+<anim emotion2State = "ANIM_STATE_BRONCROWDSTANDIDLES" delay = "0">
+<parameter emotion2Type = "enum"/>
+</anim>
+</event>
+   </behavior>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_bush_01" type = "STATIC" >
+<physics mass = "0" moi = "0 0 0 0 0 0 0 0 0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0" enable = "1" >
+</physics>
+<collision name = "Hit_Bush" tideRef = "EARS_Bush_01_Volume" >
+<primitive name = "Hit_Bush" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-28.57925987 -0.03222826868 -50.66580548 " PRIM_BOX_MAX = "26.54934883 1.004999995 -50.12972437 " >
+</primitive>
+</collision>
+<behavior type = "BASIC" >
+<event name = "Hit_Bush" type = "COLLIDE" delay = "0" >
+<particle emitPoint = "IMPACT" psf = "PSF_EARSSHRUBS" delay = "0" >
+</particle>
+<sound name = "Hit_Bush" delay = "0" >
+</sound>
+</event>
+</behavior>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_bush_03" type = "STATIC" >
+<physics mass = "0" moi = "0 0 0 0 0 0 0 0 0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0" enable = "1" >
+</physics>
+<collision name = "Hit_Bush" tideRef = "EARS_Bush_01_Volume" >
+<primitive name = "Hit_Bush" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-23.34185972 -0.01866454259 49.93349837" PRIM_BOX_MAX = "22.63854418 1.004999995 50.46550362" >
+</primitive>
+</collision>
+<behavior type = "BASIC" >
+<event name = "Hit_Bush" type = "COLLIDE" delay = "0" >
+<particle emitPoint = "IMPACT" psf = "PSF_EARSSHRUBS" delay = "0" >
+</particle>
+<sound name = "Hit_Bush" delay = "0" >
+</sound>
+</event>
+</behavior>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_banner01" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "banner01" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "banner01" tideRef = "EARS_banner01_Volume" >
+<primitive name = "banner01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-0.5677833539 -0.708769416 -1.321795465 " PRIM_BOX_MAX = "0.5677833539 0.708769416 1.321795465 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_banner02" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "banner02" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "banner02" tideRef = "EARS_banner02_Volume" >
+<primitive name = "banner02" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-0.5677833539 -0.708769416 -1.484583006 " PRIM_BOX_MAX = "0.5677833539 0.708769416 1.484583006 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_banner03" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "banner03" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "banner03" tideRef = "EARS_banner03_Volume" >
+<primitive name = "banner03" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-0.5677833539 -0.8431494532 -1.771243213 " PRIM_BOX_MAX = "0.5677833539 0.8431494532 1.771243213 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_banner04" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "banner04" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "banner04" tideRef = "EARS_banner04_Volume" >
+<primitive name = "banner04" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-0.5677833539 -0.9439897405 -0.8299858734 " PRIM_BOX_MAX = "0.5677833539 0.9439897405 0.8299858734 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_banner05" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "banner05" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "banner05" tideRef = "EARS_banner05_Volume" >
+<primitive name = "banner05" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-0.5677833539 -0.9439897405 -0.7586352309 " PRIM_BOX_MAX = "0.5677833539 0.9439897405 0.7586352309 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_banner05" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "banner05" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "banner05" tideRef = "EARS_banner05_Volume" >
+<primitive name = "banner06" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-0.5677833539 -1.660638869 -1.951520794 " PRIM_BOX_MAX = "0.5677833539 1.660638869 1.951520794 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Sideline" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "Building01" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Wall" delay = "0" >
+</sound>
+</event>
+<event name = "Trunk01" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Tree" delay = "0" >
+</sound>
+</event>
+<event name = "Table01" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Bench" delay = "0" >
+</sound>
+</event>
+<event name = "Sidewalk01" type = "COLLIDE" delay = "0" >
+<sound name = "Hit_Sidewalk" delay = "0" >
+</sound>
+</event>
+</behavior>
+<collision name = "Sideline" tideRef = "EARS_Sideline_Volume" >
+<primitive name = "Building01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-44.42023721 -0.1249518342 -19.57989085" PRIM_BOX_MAX = "-33.91104491 12.68769431 30.6444688" >
+</primitive>
+<primitive name = "Building01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-34.06549225 3.411517668 -11.47517354" PRIM_BOX_MAX = "-31.46598674 11.63238105 22.7321601" >
+</primitive>
+<primitive name = "Sidewalk01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-34.53321432 -0.07185728472 -50.3256121" PRIM_BOX_MAX = "-30.58830284 0.3756686338 22.251008" >
+</primitive>
+<primitive name = "Sidewalk01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-30.77052879 -0.07185728472 -50.3256121" PRIM_BOX_MAX = "-28.60366821 0.4513875135 18.80150041" >
+</primitive>
+<primitive name = "Building01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "CYLINDER" PRIM_CYL_END1 = "-31.96073875 3.517356167 17.44874032" PRIM_CYL_END2 = "-31.96073875 0.2815658344 17.44874032" PRIM_CYL_RADIUS = "0.5259075802" >
+</primitive>
+<primitive name = "Building01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "CYLINDER" PRIM_CYL_END1 = "-31.96073875 3.517356167 14.01262729" PRIM_CYL_END2 = "-31.96073875 0.2815658344 14.01262729" PRIM_CYL_RADIUS = "0.5600817642" >
+</primitive>
+<primitive name = "Building01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "CYLINDER" PRIM_CYL_END1 = "-31.96073875 3.517356167 10.23336846" PRIM_CYL_END2 = "-31.96073875 0.2815658344 10.23336846" PRIM_CYL_RADIUS = "0.5546677553" >
+</primitive>
+<primitive name = "Building01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "CYLINDER" PRIM_CYL_END1 = "-31.96073875 3.517356167 6.482532478" PRIM_CYL_END2 = "-31.96073875 0.2815658344 6.482532478" PRIM_CYL_RADIUS = "0.5614684992" >
+</primitive>
+<primitive name = "Building01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "CYLINDER" PRIM_CYL_END1 = "-31.96073875 3.517356167 2.664731828" PRIM_CYL_END2 = "-31.96073875 0.2815658344 2.664731828" PRIM_CYL_RADIUS = "0.5566685181" >
+</primitive>
+<primitive name = "Building01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "CYLINDER" PRIM_CYL_END1 = "-31.96073875 3.517356167 -1.00392333" PRIM_CYL_END2 = "-31.96073875 0.2815658344 -1.00392333" PRIM_CYL_RADIUS = "0.5651444448" >
+</primitive>
+<primitive name = "Building01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "CYLINDER" PRIM_CYL_END1 = "-31.96073875 3.517356167 -4.762773919" PRIM_CYL_END2 = "-31.96073875 0.2815658344 -4.762773919" PRIM_CYL_RADIUS = "0.5492155043" >
+</primitive>
+<primitive name = "Trunk01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "CYLINDER" PRIM_CYL_END1 = "-29.40312753 6.334410931 10.16037115" PRIM_CYL_END2 = "-29.40312753 0.4008486537 10.16037115" PRIM_CYL_RADIUS = "0.3333602901" >
+</primitive>
+<primitive name = "Trunk01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "CYLINDER" PRIM_CYL_END1 = "-29.48364801 3.714584855 2.373988486" PRIM_CYL_END2 = "-29.48364801 0.4202852195 2.373988486" PRIM_CYL_RADIUS = "0.2884611182" >
+</primitive>
+<primitive name = "Trunk01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "CYLINDER" PRIM_CYL_END1 = "-28.98822376 6.624087708 -4.510893733" PRIM_CYL_END2 = "-28.98822376 0.4121428926 -4.510893733" PRIM_CYL_RADIUS = "0.303014265" >
+</primitive>
+<primitive name = "Trunk01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "CYLINDER" PRIM_CYL_END1 = "-28.93074496 6.624087708 -17.59227917" PRIM_CYL_END2 = "-28.93074496 0.4121428926 -17.59227917" PRIM_CYL_RADIUS = "0.3153208284" >
+</primitive>
+<primitive name = "Building01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "CYLINDER" PRIM_CYL_END1 = "-37.32516934 8.200617036 -45.23328983" PRIM_CYL_END2 = "-37.32516934 0.3287299247 -45.23328983" PRIM_CYL_RADIUS = "9.165336254" >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Ground_01" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "Ground_01" type = "COLLIDE" delay = "0" >
+</event>
+</behavior>
+<collision name = "Ground_01" tideRef = "EARS_Ground_01_Volume" >
+<primitive name = "Ground_01" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-26.00296767 -0.5 -2.624220659 " PRIM_BOX_MAX = "26.00296767 0.5 2.624220659 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Ground_02" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "Ground_02" type = "COLLIDE" delay = "0" >
+</event>
+</behavior>
+<collision name = "Ground_02" tideRef = "EARS_Ground_02_Volume" >
+<primitive name = "Ground_02" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-4.2389928 -0.5 -2.650339428 " PRIM_BOX_MAX = "4.2389928 0.5 2.650339428 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Ground_03" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "Ground_03" type = "COLLIDE" delay = "0" >
+</event>
+</behavior>
+<collision name = "Ground_03" tideRef = "EARS_Ground_03_Volume" >
+<primitive name = "Ground_03" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-4.2389928 -0.5 -4.935040212 " PRIM_BOX_MAX = "4.2389928 0.5 4.935040212 " >
+</primitive>
+</collision>
+</object>
+</odf>
+<!--*****************************************************************
+Object Definition File (ODF)
+Description:
+This ODF describes object attributes for the NFL Street object system
+       Copyright (C) 2002-2003 Electronic Arts - Tiburon
+           FOR EA INTERNAL USE ONLY - DO NOT DISTRIBUTE
+                    All rights reserved.
+*****************************************************************-->
+<odf  xmlns="x-schema:G:\BIG\Art\Common\Tools\scripts\ODFSchema.xml" >
+<object name = "EARS_Ground_04" type = "DYNAMIC" >
+<physics mass = "0" moi = "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" iVel = "0 0 0" iAngVel = "0 0 0" dThres = "0.0" enable = "1" >
+</physics>
+<behavior type = "BASIC" >
+<event name = "Ground_04" type = "COLLIDE" delay = "0" >
+</event>
+</behavior>
+<collision name = "Ground_04" tideRef = "EARS_Ground_04_Volume" >
+<primitive name = "Ground_04" friction = "0.0" bounce = "0.0" PRIM_TYPE = "BOX" PRIM_BOX_MIN = "-4.2389928 -0.5 -1.787738338 " PRIM_BOX_MAX = "4.2389928 0.5 1.787738338 " >
+</primitive>
+</collision>
+</object>
+</odf>

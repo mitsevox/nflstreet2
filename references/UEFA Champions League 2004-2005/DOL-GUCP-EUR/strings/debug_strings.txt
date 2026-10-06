@@ -1,0 +1,223 @@
+# Debug strings from UEFA Champions League 2004-2005 (fifa_z.elf)
+
+AUDIO_TOURNAMENT_DEBUG
+Overlay test failed
+camkick.dat
+be_initLoadScreen
+GUI/UNPLUG_RETURN_SCREEN
+String,Language,OversizePct,OversizePixel,ScreenName
+ENABLE_STADIUM_SCREENSHOTS
+GUI/FE_RETURN_SCREEN
+DEBUG_MAINLOOP
+CAMERA_SCHEME
+OPTIONS/CAMERA
+OPTIONS/CAMERA_HEIGHT
+OPTIONS/CAMERA_ZOOM
+ALLOW_DEBUG_FREE_CAM
+CAM_TRANSITION_SPEED
+CAM_OVERRIDE_BOUNDING_BOX
+%s_CAMERA
+Mid Walk Cam Broad
+Walk Cam Broad
+Mid Walk Cam End
+Walk Cam End
+Mid Walk Cam Side
+Walk Cam Side
+Walk Cam Action
+Mid Walk Cam Tele
+Walk Cam Tele
+Walk Cam
+Mid Walk Cam
+camera.dat
+replay.dat
+PRES::Camera
+data\cmn\be\replayz.bin
+GUI/BE_RETURN_SCREEN
+SITUATION/DEBUG
+CAMERA/OVERRIDE
+CAMERA/PITCH
+CAMERA/HEADING
+CAMERA/LENSANGLE
+CAMERA/X
+CAMERA/Y
+CAMERA/Z
+USE_DEBUG_CAMERA
+C:/UEFA-BetaNGC/src/cmn/dbg/dbgcam.cpp
+// Warning this file was generated automatically
+CMD_DEBUG_BALLPOS
+CMD_DEBUG_FRAMENUM
+CMD_DEBUG_FRAMETIME
+CMD_DEBUG_STUPIDTEAM
+CMD_DEBUG_STUPIDGOALIE
+CMD_DEBUG_ENDHALF
+CMD_DEBUG_SETPIECE
+DEBUG_TASK
+DEBUG_SHOOTOUT
+C:/UEFA-BetaNGC/src/cmn/gui/handlers/SeasonDebug/QASeasonDebug.cpp
+GuiSeasonDebugSetGoal
+GuiSeasonDebugSetShots
+GuiSeasonDebugSetCard
+GuiSeasonDebugSetInjury
+GuiSeasonDebugSetTime
+GuiSeasonDebugSetSituationItems
+LOADING_SCREEN
+GUI::Preloaded Loading Screen
+cameraId
+>>>Free Camera
+GuiDebugChangeScreen
+GuiSetQADebug1InjuryType
+GuiPopulateCamera
+GuiPreloadLoadingScreen
+GuiTrashLoadingScreen
+GuiSetQADebug1Audio
+GuiSetQADebug1ProbBadCall
+camera
+camera_down
+replay_speed
+REPLAY
+GuiEnterReplay
+C:/UEFA-BetaNGC/src/cmn/gui/handlers/fereplay.cpp
+GuiExitReplay
+GuiReplayPlay
+GuiReplayStop
+GuiReplayFF
+GuiReplayFR
+GuiReplaySR
+GuiReplaySF
+GuiResetReplay
+GuiSetReplayCamera
+GuiReplayZoomIn
+GuiReplayZoomOut
+GuiReplayEndZoom
+GuiGetReplayData
+GuiHideReplay
+GuiShowReplay
+GuiSetNextReplayCam
+GuiIsReplayActive
+GuiSaveReplayEnabled
+instantreplay
+replaymatch
+GuiIsReplayAvailable
+GuiSetCamera
+GUI/ALLOW_SCREEN_DEBUG
+DEBUG_SLOW_FRAME_INDICATOR_ENABLE
+GuiGetOffscreenMenuOffset
+82_cam
+ChangeMainScreen
+gSM.getCurrentScreenID
+SINGLE_SCREEN_GREMLINS
+OPTIONS/WIDESCREEN
+gWidescreenMode
+GuiAssertFailure
+MEMCARD/REPLAYID
+GUI::MC_SaveReplay
+GUI::MC_LoadReplay
+GuiMemCard_GetFailedReason
+PRES::ReplayManager::Buffer
+PRES::UEFAPipManagerCam
+data\mancam.big
+BLUESCREEN_MODE
+LOCK_DEBUG_CAMERA
+FE Animation and camera init
+RMSCREENFX_init
+RMSCREENFX_render
+RMSCREENFX_renderSkyFog
+RMSCREENFX_purge
+RMCAMERAOP_setForPitch
+RMCAMERAOP_resetToDefault
+WARNING: couldn't bind '%s' to a variable!
+%s_2_CAMERA
+FONTS_DEBUG_PLACEMENT
+warning: more then one IrradBlock in model '%s', using first one only
+warning: more then one LightBlock in model '%s', using first one only
+warning: attempting to read perspective matrix outside begin/end frame pair
+warning: more then one TAR references target '%s', using first TAR only
+warning: no TAR of target '%s' could be found in object '%s'
+warning: SGR_getModel should only be used for debugging, speak to your nearest SGSM rep to figure out how to properly do it
+warning: couldn't find model %s
+WARNING: couldn't EAGL variable '%s'! This probably means that a material is not named with an _all_XXX name.
+Total Debug texture size: %.3f MB
+Warning: SGRDA_setPrimType : Unsupported Prim Type!
+warning: mipmapping paletted shape, results probably wont be very good
+WARNING: Swap semantics is not completely legal between the old page and the new page.
+warning: couldn't find hotspots in texture '%s'
+warning: couldn't find shape '%s' in texture '%s'
+%s<clear> clears the debug window
+%s<assertdemo> causes an assert to trigger for testing purposes
+DebugAssistant: Connected to USB
+ASSERT - Coordinate address is out of bounds
+ASSERT - Colour address is out of bounds
+ASSERT - Texture0 UV address is out of bounds
+ASSERT - Display List address is out of bounds
+ASSERT - Normal address is out of bounds
+ASSERT - Texture1 UV address is out of bounds
+ASSERT - Vertex normals address is out of bounds
+RM2D::ScreenMatrix
+ASSERT FAILED '%s' at %s:%d
+ASSERT - external frame buffer address is out of bounds
+EAGL::RenderContextExtension::SendDebugToken -- Your token breakpoint has been reached.
+ERROR: DynamicLoader::Resolve - Failed to resolve the following undefined
+dlopen: Failed to find a symbol table. Aborting
+Assert: %s:%i %s (%s)
+Failed assertion __THIS
+Failed assertion !"ARAMStartAddress is not Aligned"
+Failed assertion !"ARAMMemorySize is not Aligned"
+ DebugString %s
+Failed assertion !"Out of ARAM"
+Alloc Adr  |  Size    |  Debug:                       |  File:Line 
+Free Adr   |  Size    |  Debug:
+Failed assertion AllocedBlock!=NULL
+Failed assertion NewPool != NULL
+Failed assertion mb->signature == MEMSIGNATUREMB
+debugger
+assertion "%s" failed: file "%s", line %d
+*** Library warning ***
+failed
+Waiting for SN Debugger...
+File server function not available in non debug mode
+Warning: DVDOpen(): file '%s' was not found under %s.
+Warning: DVDOpenDir(): file '%s' was not found under %s.
+>>> OSINIT: exception %d vectored to debugger
+OSCheckAlarmQueue: Failed AlarmQueue.head == NULL && AlarmQueue.tail == NULL || AlarmQueue.head != NULL && AlarmQueue.tail != NULL in %d
+OSCheckAlarmQueue: Failed AlarmQueue.head == NULL || AlarmQueue.head->prev == NULL in %d
+OSCheckAlarmQueue: Failed AlarmQueue.tail == NULL || AlarmQueue.tail->next == NULL in %d
+OSCheckAlarmQueue: Failed alarm->next == NULL || alarm->next->prev == alarm in %d
+OSCheckAlarmQueue: Failed alarm->next != NULL || AlarmQueue.tail == alarm in %d
+OSCheckHeap: Failed HeapArray in %d
+OSCheckHeap: Failed 0 <= heap && heap < NumHeaps in %d
+OSCheckHeap: Failed 0 <= hd->size in %d
+OSCheckHeap: Failed hd->allocated == NULL || hd->allocated->prev == NULL in %d
+OSCheckHeap: Failed InRange(cell, ArenaStart, ArenaEnd) in %d
+OSCheckHeap: Failed OFFSET(cell, ALIGNMENT) == 0 in %d
+OSCheckHeap: Failed cell->next == NULL || cell->next->prev == cell in %d
+OSCheckHeap: Failed MINOBJSIZE <= cell->size in %d
+OSCheckHeap: Failed OFFSET(cell->size, ALIGNMENT) == 0 in %d
+OSCheckHeap: Failed 0 < total && total <= hd->size in %d
+OSCheckHeap: Failed hd->free == NULL || hd->free->prev == NULL in %d
+OSCheckHeap: Failed cell->next == NULL || (char*) cell + cell->size < (char*) cell->next in %d
+OSCheckHeap: Failed total == hd->size in %d
+OSCheckActiveThreads: Failed RunQueue[prio].head != NULL && RunQueue[prio].tail != NULL in %d
+OSCheckActiveThreads: Failed RunQueue[prio].head == NULL && RunQueue[prio].tail == NULL in %d
+OSCheckActiveThreads: Failed CheckThreadQueue(&RunQueue[prio]) in %d
+OSCheckActiveThreads: Failed __OSActiveThreadQueue.head == NULL || __OSActiveThreadQueue.head->linkActive.prev == NULL in %d
+OSCheckActiveThreads: Failed __OSActiveThreadQueue.tail == NULL || __OSActiveThreadQueue.tail->linkActive.next == NULL in %d
+OSCheckActiveThreads: Failed thread->linkActive.next == NULL || thread == thread->linkActive.next->linkActive.prev in %d
+OSCheckActiveThreads: Failed thread->linkActive.prev == NULL || thread == thread->linkActive.prev->linkActive.next in %d
+OSCheckActiveThreads: Failed *(thread->stackEnd) == OS_THREAD_STACK_MAGIC in %d
+OSCheckActiveThreads: Failed OS_PRIORITY_MIN <= thread->priority && thread->priority <= OS_PRIORITY_MAX+1 in %d
+OSCheckActiveThreads: Failed 0 <= thread->suspend in %d
+OSCheckActiveThreads: Failed CheckThreadQueue(&thread->queueJoin) in %d
+OSCheckActiveThreads: Failed thread->queue == &RunQueue[thread->priority] in %d
+OSCheckActiveThreads: Failed IsMember(&RunQueue[thread->priority], thread) in %d
+OSCheckActiveThreads: Failed thread->priority == __OSGetEffectivePriority(thread) in %d
+OSCheckActiveThreads: Failed !IsSuspended(thread->suspend) in %d
+OSCheckActiveThreads: Failed thread->queue == NULL in %d
+OSCheckActiveThreads: Failed thread->queue != NULL in %d
+OSCheckActiveThreads: Failed CheckThreadQueue(thread->queue) in %d
+OSCheckActiveThreads: Failed IsMember(thread->queue, thread) in %d
+OSCheckActiveThreads: Failed thread->priority == 32 in %d
+OSCheckActiveThreads: Failed !__OSCheckDeadLock(thread) in %d
+OSCheckActiveThreads: Failed thread->queueMutex.head == NULL && thread->queueMutex.tail == NULL in %d
+OSCheckActiveThreads: Failed. unkown thread state (%d) of thread %p
+OSCheckActiveThreads: Failed __OSCheckMutexes(thread) in %d
+This TV format "DEBUG_PAL" is only for 
