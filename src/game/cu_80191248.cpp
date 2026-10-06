@@ -1,10 +1,8 @@
 #include <dolphin/gx/GXStruct.h>
+#include "game/cu_80191398.h"
 #include "game/fn_801C1F94.h"
 
 extern "C" {
-void fn_80191424(unsigned char r, unsigned char g, unsigned char b);
-void fn_8019143C(int a, unsigned short y, int c, char *pText, int e);
-
 /* Text screen of 24 rows of 80 columns plus a terminator; a row is drawn only while its flag is set. */
 static char lbl_802EAF6C[24 * 81] = { 0 };
 static unsigned char lbl_80364F40[24];

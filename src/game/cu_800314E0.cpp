@@ -1,4 +1,5 @@
 #include "game/Object_8007A334.h"
+#include "game/cu_800314E0.h"
 #include "game/cu_80190208.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
@@ -12,13 +13,6 @@ struct Record_80088CE0 {
     int mUnknown140;
     unsigned int mUnknown144;
     int mUnknown148;
-};
-
-/* 168-byte entry allocated through fn_801D2B7C and kept in lbl_80306620. */
-struct Entry_80306620 {
-    char mName[132];
-    char mText[32];
-    int mUnknown164;
 };
 
 extern "C" {

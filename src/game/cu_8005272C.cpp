@@ -1,13 +1,7 @@
 #include <string.h>
 
+#include "game/cu_80041210.h"
 #include "game/fn_801D2B7C.h"
-
-struct Object_80041904 {
-    char mPad00[188];
-    int mUnknown188;
-    char mPadC0[228];
-    void *mUnknown420;
-};
 
 struct Data_8005272C {
     int mUnknown0;
@@ -27,7 +21,6 @@ struct Data_800528E8 {
 extern "C" {
 int fn_80040F10(void);
 int fn_80040F18(int index);
-Object_80041904 *fn_80041904(int index);
 void fn_8004D498(int handle);
 int fn_8004D4B0(int handle, const char *pName);
 int fn_8004D508(int handle, const char *pName);
