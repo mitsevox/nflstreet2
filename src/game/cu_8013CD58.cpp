@@ -2,6 +2,7 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
+#include "game/RecordList_8002E7C0.h"
 
 /* A value easing from mStart to mTarget; mUpdate advances it. */
 struct Interp_8013CC14 {
@@ -11,47 +12,6 @@ struct Interp_8013CC14 {
     float mTime;
     float mRate;
     void (*mUpdate)(Interp_8013CC14 *pInterp, int steps);
-};
-
-/* Object handed to fn_8013E168. */
-struct Object_8013E168 {
-    char mPad00[4];
-    int mUnknown04;
-};
-
-/* Timing block at Record_8002E7C0 +0x04. */
-struct Timer_8002E7C0 {
-    int mUnknown00;
-    int mUnknown04;
-    int mUnknown08;
-    int mUnknown0C;
-    int mUnknown10;
-};
-
-struct View_8002E7C0 {
-    float mUnknown00[3];
-    float mUnknown0C[3];
-    char mPad18[4];
-    float mUnknown1C[3];
-    float mUnknown28[3];
-    int mUnknown34;
-    Object_8013E168 *mUnknown38;
-    int mUnknown3C;
-};
-
-/* One 0x9C-byte entry of RecordList_8002E7C0. */
-struct Record_8002E7C0 {
-    char mPad00[4];
-    Timer_8002E7C0 mUnknown04;
-    int mUnknown18;
-    View_8002E7C0 mUnknown1C;
-    View_8002E7C0 mUnknown5C;
-};
-
-struct RecordList_8002E7C0 {
-    Record_8002E7C0 mUnknown000[9];
-    int mUnknown57C;
-    int mUnknown580;
 };
 
 struct CameraState_8013D1C0 {
@@ -124,9 +84,9 @@ void fn_8002D198(void *p);
 Record_8002E7C0 *fn_8002E7C0(RecordList_8002E7C0 *pList);
 int fn_8002E7D0(RecordList_8002E7C0 *pList);
 void fn_8002E7EC(void *p, RecordList_8002E7C0 *pList);
-Object_8013E168 *fn_80030C70(int a, int b);
-void fn_80042380(int a, int id, float *pOut, int b);
-void fn_8009BD2C(Object_8013E168 *pObject, int *pOut);
+Object_80039F5C *fn_80030C70(Object_80039F5C **ppA, Object_80039F5C **ppB);
+void fn_80042380(Block_80170E64 *pBlock, int id, float *pOut, int b);
+void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void *fn_801374BC(void);
 Target_8013825C *fn_8013825C(void *p);
 void fn_8013C624(Camera_8013D1C0 *pCamera, int mode, int a, int b);
@@ -155,7 +115,7 @@ void fn_8013D2A8(Camera_8013D1C0 *pCamera);
 void fn_8013DA60(Record_8002E7C0 *pRecord, float *pOrigin, float *pOut);
 void fn_8013DDF4(Camera_8013D1C0 *pCamera, Record_8002E7C0 *pRecord, float *pOut);
 void fn_8013E0D0(Camera_8013D1C0 *pCamera, int smooth);
-void fn_8013E168(Object_8013E168 *pObject, float *pOut, float t);
+void fn_8013E168(Object_80039F5C *pObject, float *pOut, float t);
 void fn_8013E1E4(Camera_8013D1C0 *pCamera, int *pAngles, int smooth);
 float fn_8013E298(float *pFrom, float *pTo, int *pAngles);
 void fn_8013E33C(float *pPos);
@@ -337,7 +297,7 @@ extern "C" void fn_8013D1F4(Camera_8013D1C0 *pCamera)
 {
     CameraState_8013D1C0 *pState = &pCamera->mUnknownF8;
     RecordList_8002E7C0 *pList = &pCamera->mUnknown128;
-    Object_8013E168 *p;
+    Object_80039F5C *p;
 
     pState->mUnknown28 = 1;
     pState->mUnknown29 = 0;
@@ -376,7 +336,7 @@ extern "C" void fn_8013D2A8(Camera_8013D1C0 *pCamera)
     float *pPoint;
     int mode;
     int duration;
-    Object_8013E168 *p;
+    Object_80039F5C *p;
     int smooth;
     Target_8013825C *pTarget;
     float dist;
@@ -637,7 +597,7 @@ extern "C" void fn_8013DA60(Record_8002E7C0 *pRecord, float *pOrigin, float *pOu
 extern "C" void fn_8013DDF4(Camera_8013D1C0 *pCamera, Record_8002E7C0 *pRecord, float *pOut)
 {
     CameraState_8013D1C0 *pState = &pCamera->mUnknownF8;
-    Object_8013E168 *pObject = fn_80030C70(0, 0);
+    Object_80039F5C *pObject = fn_80030C70(0, 0);
     float target[3];
     float tracked[3];
     int id;
@@ -737,15 +697,15 @@ extern "C" void fn_8013E0D0(Camera_8013D1C0 *pCamera, int smooth)
     fn_801C3990(pCamera, pState->mUnknown18 > 2796202.0f ? 2796202.0f : pState->mUnknown18, pCamera->mUnknown24);
 }
 
-extern "C" void fn_8013E168(Object_8013E168 *pObject, float *pOut, float t)
+extern "C" void fn_8013E168(Object_80039F5C *pObject, float *pOut, float t)
 {
     Entry_8013E168 *pFirst = lbl_802DBDC4;
     Entry_8013E168 *pSecond = pFirst + 1;
     float a[3];
     float b[3];
 
-    fn_80042380(pObject->mUnknown04, pFirst->mUnknown04, a, 0);
-    fn_80042380(pObject->mUnknown04, pSecond->mUnknown04, b, 0);
+    fn_80042380(pObject->mpUnknown4, pFirst->mUnknown04, a, 0);
+    fn_80042380(pObject->mpUnknown4, pSecond->mUnknown04, b, 0);
     fn_80227930(pOut, b, a, 0.5f);
 }
 

@@ -548,6 +548,14 @@
       "address": "0x80262310",
       "evidence": "evidence.tsv external row atexit: called from the function-local static guard path at 0x8000EC78 with the destructor stub 0x8000DCD8, as ProDG cc1plus registers local-static destructors; target body matches the newlib exit-procedure registration."
     },
+    "__ashldi3": {
+      "address": "0x8025E210",
+      "evidence": "evidence.tsv external row for 0x8025E210 (__ashldi3)."
+    },
+    "__ashrdi3": {
+      "address": "0x8025E250",
+      "evidence": "evidence.tsv external row for 0x8025E250 (__ashrdi3)."
+    },
     "__lshrdi3": {
       "address": "0x8025EB14",
       "evidence": "evidence.tsv external row for 0x8025EB14 (__lshrdi3)."
@@ -4860,7 +4868,7 @@
     {
       "source": "src/game/cu_8002B8F8.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8002B8F8-0x8002B960 and its data, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8002B8F8-0x80030D50 (src/game/cu_8002B8F8.cpp) and its data, compiler and source-form rows; the functions 0x8002B960-0x80030D50 are draft comparisons only.",
       "sections": [
         {
           "section": ".text",
@@ -4869,10 +4877,28 @@
           "end": "0x8002B960"
         },
         {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CC830",
+          "end": "0x802CCA34"
+        },
+        {
           "section": ".sdata",
           "placement": ".data5",
-          "start": "0x803EA36C",
-          "end": "0x803EA370"
+          "start": "0x803EA358",
+          "end": "0x803EA394"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC614",
+          "end": "0x803EC670"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030660C",
+          "end": "0x80306620"
         }
       ]
     },
