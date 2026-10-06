@@ -1,9 +1,10 @@
 let sections=[];
 const canvas=document.querySelector('#canvas');
+const similarity = item => (item.fuzzy ?? item.matched) / item.size;
 function color(item) {
   if (item.matched === item.size) return 'var(--done)';
-  if (!item.matched) return 'var(--empty)';
-  const blend = Math.min(item.matched / item.size / 0.99, 1) * 100;
+  if (!similarity(item)) return 'var(--empty)';
+  const blend = Math.min(similarity(item) / 0.99, 1) * 100;
   return `color-mix(in srgb, var(--empty), var(--warm) ${blend}%)`;
 }
 // Preserve report order so neighboring files and functions stay together.
@@ -290,7 +291,8 @@ kindPicker.querySelectorAll('button').forEach(button => {
   });
 });
 let activeTile = null;
-const percent = item => (item.matched / item.size * 100).toFixed(2) + '% matched';
+const percent = item => (similarity(item) * 100).toFixed(2) +
+  (item.matched === item.size ? '% matched' : '% similarity');
 function hideTooltip() {
   tooltip.hidden = true;
   activeTile?.removeAttribute('aria-describedby');
@@ -312,8 +314,8 @@ function showTooltipText(block, text, x, y) {
 let palette = null;
 function colorValue(item) {
   if (item.matched === item.size) return palette.done;
-  if (!item.matched) return palette.empty;
-  const fraction = Math.min(item.matched / item.size / 0.99, 1);
+  if (!similarity(item)) return palette.empty;
+  const fraction = Math.min(similarity(item) / 0.99, 1);
   return `rgb(${palette.emptyRGB.map((value, index) => Math.round(value + (palette.warmRGB[index] - value) * fraction)).join(',')})`;
 }
 function drawMap(layout) {
