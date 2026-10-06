@@ -111,10 +111,9 @@ int fn_8007E020(int type, int a, int b)
             pFilter = &both;
         }
         if (b == 0) {
-            unsigned int t2 = table;
             unsigned long long column2 = 0x4B4C4347;
             pExtra = &extra;
-            pExtra->Set(6, ((unsigned long long)t2 << 32) | column2, 3, 0);
+            pExtra->Set(6, ((unsigned long long)table << 32) | column2, 3, 0);
         }
         tables[0].Set(0x52414547, 0, pFilter);
         tables[1].Set(table, 2, &join);
