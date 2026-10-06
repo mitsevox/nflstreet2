@@ -16,7 +16,6 @@ struct Pair_8003AEA8 {
 extern "C" {
 int fn_800808F8(Object_8008044C *pObject);
 int fn_800809FC(Object_8008044C *pObject, int a, int *pResult);
-void fn_80080A68(Object_8008044C *pObject, int a, int b);
 int fn_80080D10(Object_8008044C *pObject);
 int fn_800812E0(Object_8008044C *pObject, int a);
 int fn_80085620(int a, int b);
@@ -55,7 +54,7 @@ static unsigned char lbl_803EA409 = 0;
 extern "C" {
 void fn_8003AEA8(int a, int b, int c)
 {
-    fn_80080A68(&lbl_8030749C, a, b);
+    fn_80080A68(&lbl_8030749C, (char *)a, b);
 }
 
 void fn_8003AED8(int kind, int index, int value)

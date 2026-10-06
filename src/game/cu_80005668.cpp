@@ -57,7 +57,6 @@ int fn_8007CD50(Object_8007A334 *pObject);
 int fn_800808F8(Object_8008044C *pObject);
 int fn_80080920(Object_8008044C *pObject);
 void fn_80080A34(Object_8008044C *pObject, char *pBuffer, int size);
-void fn_80080A68(Object_8008044C *pObject, int a, int b);
 void fn_80080A9C(Object_8008044C *pObject, char *pBuffer, int size);
 int fn_80080CD8(Object_8008044C *pObject);
 int fn_80080D10(Object_8008044C *pObject);
@@ -1314,7 +1313,7 @@ void Class_80009D28::vfn_09(int a, int *pResult, Arg_8018399C text)
         break;
     case 1:
         *pResult = 2;
-        fn_80080A68(fn_80182DC8(), (int)buffer2, 15);
+        fn_80080A68(fn_80182DC8(), buffer2, 15);
         fn_801C3284(pParams->mpText, buffer2, pParams->mLength + 1);
         break;
     }
