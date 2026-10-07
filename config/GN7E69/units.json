@@ -1308,10 +1308,6 @@
       "address": "0x80239A10",
       "evidence": "Original complete OSInit call instruction0x80238C68 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
-    "__OSInitSystemCall": {
-      "address": "0x8023D414",
-      "evidence": "Original complete OSInit call instruction0x80238C90 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
     "__OSModuleInit": {
       "address": "0x8023BA60",
       "evidence": "Original complete OSInit call instruction0x80238C98 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
@@ -1327,14 +1323,6 @@
     "__OSCacheInit": {
       "address": "0x8023A1E4",
       "evidence": "Original complete OSInit call instruction0x80238CB4 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "EXIInit": {
-      "address": "0x8025AFD0",
-      "evidence": "Original complete OSInit call instruction0x80238CB8 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "SIInit": {
-      "address": "0x8025C62C",
-      "evidence": "Original complete OSInit call instruction0x80238CBC identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
     "__OSInitSram": {
       "address": "0x8023C958",
@@ -1636,28 +1624,12 @@
       "address": "0x80245B24",
       "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
     },
-    "ARGetDMAStatus": {
-      "address": "0x802481E4",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
-    },
-    "__ARGetInterruptStatus": {
-      "address": "0x80248474",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
-    },
     "__VMBASEIsPageChanged": {
       "address": "0x80245A5C",
       "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
     },
-    "ARStartDMA": {
-      "address": "0x80248220",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
-    },
     "VMBASEClearPageTableEntry": {
       "address": "0x80245980",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
-    },
-    "__ARClearInterrupt": {
-      "address": "0x80248454",
       "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
     },
     "VMBASESetPageTableEntry": {
@@ -1690,18 +1662,6 @@
     },
     "__GBATransfer": {
       "address": "0x80289888",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for GBA."
-    },
-    "DSPInit": {
-      "address": "0x80285B34",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for GBA."
-    },
-    "SITransfer": {
-      "address": "0x8025CD24",
-      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for GBA."
-    },
-    "SIGetTypeAsync": {
-      "address": "0x8025D2EC",
       "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for GBA."
     },
     "__GBA": {
