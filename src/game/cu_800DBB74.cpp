@@ -300,7 +300,7 @@ extern "C" int fn_800DC36C(List_800DC36C *pList, unsigned short key, void *pA,
     case 2:
         if (pBlock->mUnknown4 != p->mMotion.mFacing) {
             p->mpUnknown800[pBlock->mUnknown0].mUnknownC =
-                (p->mpUnknown800[pBlock->mUnknown0].mUnknownC +(p->mMotion.mFacing - pBlock->mUnknown4))
+                (p->mpUnknown800[pBlock->mUnknown0].mUnknownC + (p->mMotion.mFacing - pBlock->mUnknown4))
                 & 0xFFFFFF;
             pBlock->mUnknown4 = p->mMotion.mFacing;
         }
