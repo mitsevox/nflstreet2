@@ -6545,8 +6545,11 @@
       "provenance": {
         "pull_request": 551,
         "merged_via": 551,
-        "commit": "306d453dc1aa129686ff0543bd279b9cedd3dc2e",
-        "introduced_blob": "1f2f9a1525675ba90198d5095c5d6af29216d7eb"
+        "commit": "ffa729783ae95e016e430831f05435176a7c855b",
+        "introduced_blob": "0e10c84237a10c01ff2b7de7ffb2b3cd60da6c62",
+        "original_blob": "1f2f9a1525675ba90198d5095c5d6af29216d7eb",
+        "integration_adjustment": "Reviewed corrections in PR551 share the player +0x320 element type and the fn_801BA2A8 declaration; function bodies and objects unchanged.",
+        "original_commit": "306d453dc1aa129686ff0543bd279b9cedd3dc2e"
       }
     },
     {
