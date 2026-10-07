@@ -103,7 +103,9 @@ struct Object_80039F5C {
     int mUnknown16;
     char mUnknown20[316];
     int mUnknown336;
-    char mUnknown340[20];
+    char mUnknown340[14];
+    unsigned char mUnknown354;
+    char mUnknown355[5];
     unsigned char mUnknown360;
     char mUnknown361[31];
     unsigned char mUnknown392;
@@ -127,7 +129,9 @@ struct Object_80039F5C {
     char mUnknown788[4];
     void *mpUnknown792;
     Object_8016D9B8 *mpUnknown796;
-    char mUnknown800[232];
+    char mUnknown800[208];
+    unsigned char mUnknown1008;
+    char mUnknown1009[23];
     int mUnknown1032;
     char mUnknown1036[8];
     int mUnknown1044;

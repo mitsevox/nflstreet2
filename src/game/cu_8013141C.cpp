@@ -1,5 +1,6 @@
 #include <math.h>
 #include "game/Message_800F01CC.h"
+#include "game/Input_800B6D34.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/cu_80136B1C.h"
@@ -28,15 +29,6 @@ struct Control_80132090 {
     char mUnknown82[6];
 };
 
-struct Input_800B6D34 {
-    char mUnknown0[93];
-    unsigned char mUnknown93;
-    char mUnknown94[1];
-    unsigned char mUnknown95;
-    unsigned char mUnknown96;
-    char mUnknown97[7];
-};
-
 struct Record_80163E94 {
     char mUnknown0[11];
     unsigned char mUnknownB;
@@ -44,7 +36,6 @@ struct Record_80163E94 {
 
 extern "C" {
 unsigned char *fn_8003AB38(Object_80039F5C *p);
-void fn_800B6D34(Object_80039F5C *p, Input_800B6D34 *pInput);
 void fn_800B76E8(Object_80039F5C *p);
 void fn_800B7CA4(Object_80039F5C *p);
 void fn_800B8344(Object_80039F5C *p);
@@ -58,7 +49,7 @@ int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_801067D8(Object_80039F5C *p);
 int fn_8010A2DC(Object_80039F5C *p, int a, int b);
-void fn_8011E1BC(Object_80039F5C *p, int a, int b, int c);
+void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 void fn_8011F45C(int a);
 int fn_801231E4(Object_80039F5C *p, int angle);
