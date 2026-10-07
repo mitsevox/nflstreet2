@@ -10291,6 +10291,140 @@
       ]
     },
     {
+      "source": "src/game/cu_801444D8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801444D8-0x80145224 (src/game/cu_801444D8.cpp), its 19 exact function extents, the exact .rodata/.data/.sdata/.bss data rows and the compiler and source-form rows, which state the unresolved .rodata bytes. Draft comparisons only; the original assembly remains linked until the .rodata placement is reproduced.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801444D8",
+          "end": "0x80145224"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A03A8",
+          "end": "0x802A0400"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DCFF8",
+          "end": "0x802DD170"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB228",
+          "end": "0x803EB244"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031B6D0",
+          "end": "0x8031B7D0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801444D8",
+          "start": "0x801444D8",
+          "end": "0x80144564"
+        },
+        {
+          "symbol": "fn_80144564",
+          "start": "0x80144564",
+          "end": "0x801445A8"
+        },
+        {
+          "symbol": "fn_801445A8",
+          "start": "0x801445A8",
+          "end": "0x80144660"
+        },
+        {
+          "symbol": "fn_80144660",
+          "start": "0x80144660",
+          "end": "0x80144704"
+        },
+        {
+          "symbol": "fn_80144704",
+          "start": "0x80144704",
+          "end": "0x80144718"
+        },
+        {
+          "symbol": "fn_80144718",
+          "start": "0x80144718",
+          "end": "0x801447E8"
+        },
+        {
+          "symbol": "fn_801447E8",
+          "start": "0x801447E8",
+          "end": "0x80144B50"
+        },
+        {
+          "symbol": "fn_80144B50",
+          "start": "0x80144B50",
+          "end": "0x80144C6C"
+        },
+        {
+          "symbol": "fn_80144C6C",
+          "start": "0x80144C6C",
+          "end": "0x80144CE0"
+        },
+        {
+          "symbol": "fn_80144CE0",
+          "start": "0x80144CE0",
+          "end": "0x80144E38"
+        },
+        {
+          "symbol": "fn_80144E38",
+          "start": "0x80144E38",
+          "end": "0x80144E64"
+        },
+        {
+          "symbol": "fn_80144E64",
+          "start": "0x80144E64",
+          "end": "0x80144EDC"
+        },
+        {
+          "symbol": "fn_80144EDC",
+          "start": "0x80144EDC",
+          "end": "0x80144FE8"
+        },
+        {
+          "symbol": "fn_80144FE8",
+          "start": "0x80144FE8",
+          "end": "0x80145074"
+        },
+        {
+          "symbol": "fn_80145074",
+          "start": "0x80145074",
+          "end": "0x80145100"
+        },
+        {
+          "symbol": "fn_80145100",
+          "start": "0x80145100",
+          "end": "0x80145118"
+        },
+        {
+          "symbol": "fn_80145118",
+          "start": "0x80145118",
+          "end": "0x8014512C"
+        },
+        {
+          "symbol": "fn_8014512C",
+          "start": "0x8014512C",
+          "end": "0x8014516C"
+        },
+        {
+          "symbol": "fn_8014516C",
+          "start": "0x8014516C",
+          "end": "0x80145224"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80041930.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row 0x80041930-0x80042F54 (src/game/cu_80041930.cpp), its compiler, type and source-form rows, the 27 exact function extents and the exact data rows 0x8028D408-0x8028D438 (.rodata), 0x802CCDDC-0x802CCF30 (.data) and 0x803EA490-0x803EA494 (.sdata). Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",

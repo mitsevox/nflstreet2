@@ -1,24 +1,8 @@
 #include <dolphin/mtx.h>
+#include "game/cu_801444D8.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801C68FC.h"
 #include "game/Object_80146094.h"
-
-/* Object returned by fn_80144CE0 and released by fn_80144E38. */
-struct Object_80144CE0 {
-    char mPad000[0x2B4];
-    unsigned char mUnknown2B4;
-    char mPad2B5[0x3B8 - 0x2B5];
-    unsigned int mUnknown3B8;
-};
-
-/* Arguments block passed to fn_80144CE0. */
-struct Args_80144CE0 {
-    int mUnknown00;
-    void *mUnknown04;
-    Mtx44 *mUnknown08;
-    int mUnknown0C;
-    int mUnknown10;
-};
 
 /* One 0x60-byte entry of the pool at lbl_803EB24C. */
 struct Event_801459F0 {
@@ -53,8 +37,6 @@ struct Vec_801EBC18 {
 };
 
 extern "C" {
-Object_80144CE0 *fn_80144CE0(Args_80144CE0 *pArgs, int b, int c);
-void fn_80144E38(Object_80144CE0 *pObject);
 void fn_80145224(void);
 void fn_80145314(Event_801459F0 *pEvent);
 void fn_801454DC(Event_801459F0 *pEvent);
@@ -266,7 +248,7 @@ void fn_80145EB8(void)
     }
 }
 
-void fn_80145EFC(int a, void *b, void *c, int d)
+void fn_80145EFC(int a, void *b, void *c, Source_80144CE0 *d)
 {
     Args_80144CE0 args;
     Mtx44 m;
@@ -292,7 +274,7 @@ void fn_80145EFC(int a, void *b, void *c, int d)
     fn_801D0544();
     args.mUnknown0C = 0;
     args.mUnknown10 = 0;
-    args.mUnknown04 = pEntry;
+    args.mUnknown04 = &pEntry->mMatrix;
     args.mUnknown08 = &m;
     args.mUnknown00 = a;
     pEntry->mUnknown40 = fn_80144CE0(&args, 0, d);
