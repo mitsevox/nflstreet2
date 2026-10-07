@@ -1,5 +1,17 @@
+#include "game/Object_8008044C.h"
 #include "game/Table_8007E020.h"
+#include "game/fn_8018BE68.h"
 #include "game/fn_801FCE10.h"
+
+#if defined(DECOMP_COMPARE)
+int lbl_802EADE4[16] = {
+    0x44494754, 0x44494F54, 0x50595454, 0x44524F54, 0x45445254, 0x464F5254, 0x564F5254, 0x4C474C54,
+    0x49524454, 0x31434D54, 0x32434D54, 0x33434D54, 0x4C445443, 0x414E5354, 0x414E4C54, 0x414E4454,
+};
+char *lbl_802EAE24[3] = {"Story", "Story Team", "Story Team"};
+int lbl_802EAE30[10] = {0, 4, 1, 3, 2, 5, 6, 7, 8, 9};
+int lbl_802EAE58[7] = {0, 1, 2, 4, 8, 9, 13};
+#endif
 
 extern "C" {
 int fn_8022F358(int index);
@@ -156,6 +168,142 @@ void fn_8018B6F0(int index)
     }
     if (!state) fn_80029CE0(2, index);
     if (cursor.mUnknown0) fn_801FCFA0(&cursor);
+}
+
+int fn_8008454C(int a, int b, int c);
+unsigned int fn_801C3180(const char *pText);
+void fn_8018C48C(int handle);
+void fn_8018C344(int database, int firstTable, int secondTable,
+                 int *pFirstCopy, int *pSecondCopy);
+void fn_8018C3EC(int firstTable, int secondTable);
+int fn_80186F7C(unsigned char index);
+int fn_8018E874(int index, int n);
+int fn_801F9D70(int handle, int table, Object_80023BBC *pFilter, unsigned short *pCount);
+int fn_8007A934(Object_8007A334 *pObject, int key);
+void fn_8018B8B0(Object_8008044C *pObject);
+
+void fn_8018B950(int index)
+{
+    Object_8008044C object;
+    fn_8008044C(&object, 0, 0x54415453);
+    if (fn_800809C4(&object, index, 0)) fn_8018B8B0(&object);
+    fn_8008056C(&object);
+}
+
+void fn_8018B9D4(Object_8007A334 *pCursor, int index)
+{
+    fn_8007A334(pCursor, 0x4D455453, 0x44494754, 0, 0, fn_8022F3D4(fn_8022F358(index)));
+}
+
+void fn_8018BA2C(Object_8007A334 *pCursor)
+{
+    fn_8007A3C4(pCursor);
+}
+
+int fn_8018BA4C(void)
+{
+    Object_8007A334 cursor;
+    int id = fn_8008454C(6, -1, 0);
+    fn_80083E40(&cursor, 0, 0x54415453);
+    if (fn_80084034(&cursor, id, 0)) {
+        for (int i = 0; i < 3; i++) {
+            char *pText = lbl_802EAE24[i];
+            int length = fn_801C3180(pText);
+            fn_8007ADD4(&cursor, lbl_802EADE4[i + 13], pText, length);
+        }
+    }
+    fn_80083F68(&cursor);
+    return id;
+}
+
+int fn_8018BD9C(int index)
+{
+    unsigned short count = 0;
+    int found = 0;
+    fn_801F9D70(fn_8022F3D4(fn_8022F358(index)), 0x4D455453, 0, &count);
+    if (count) found = 1;
+    return found;
+}
+
+int fn_8018BDFC(int index, int rumt, int *pIds, int *pCount)
+{
+    int ids[8];
+    int *p;
+    if (pIds) p = pIds;
+    else p = ids;
+    fn_8018C48C(0x54415453);
+    return fn_8018B5E4(0x54415453, rumt, index, p, pCount, 1);
+}
+
+int fn_8018BE68(int index, int rumt, Result_8018BE68 *pOut)
+{
+    Result_8018BE68 result;
+    Result_8018BE68 *p;
+    if (pOut) p = pOut;
+    else p = &result;
+    fn_8018C48C(0x54415453);
+    return fn_8018B66C(0x54415453, rumt, index, &p->mUnknown0, 1);
+}
+
+int fn_8018BECC(int index, int rumt, Result_8018BE68 *pOut)
+{
+    Result_8018BE68 result;
+    Result_8018BE68 *p;
+    if (pOut) p = pOut;
+    else p = &result;
+    return fn_8018B66C(0x54415453, rumt, index, &p->mUnknown0, 1);
+}
+
+void fn_8018BF10(int index, int team)
+{
+    fn_8018B0BC(0x54415453, team, index);
+}
+
+void fn_8018C008(int *pFirstCopy, int *pSecondCopy, int database)
+{
+    fn_8018C344(database, 0x4D455453, 0x59505453, pFirstCopy, pSecondCopy);
+}
+
+void fn_8018C044(int firstTable, int secondTable)
+{
+    fn_8018C3EC(firstTable, secondTable);
+}
+
+int fn_8018C0E8(int index, int *pTeam)
+{
+    Object_8007A334 cursor;
+    fn_8018B9D4(&cursor, index);
+    *pTeam = fn_8007A98C(&cursor, 0x44494754);
+    fn_8018BA2C(&cursor);
+    return 1;
+}
+
+int fn_8018C1E0(Object_8007A334 *pCursor)
+{
+    int value = 132;
+    if (fn_8007A444(pCursor)) value = fn_8007A934(pCursor, 0x4C474C54);
+    return value;
+}
+
+void fn_8018C230(int reset, int count)
+{
+    int ids[8];
+    if (reset) {
+        fn_8018C48C(0x54415453);
+        fn_8018C48C(0x454D4147);
+    }
+    for (unsigned char i = 0; i <= 1; i++) {
+        int index = fn_80186F7C(i);
+        if (index == -1) continue;
+        int skip;
+        if (!reset && count == 1) skip = fn_8018E874(index, 1);
+        else skip = 0;
+        if (index != -1 && fn_8018BD9C(index) && !skip) {
+            fn_8018B6F0(index);
+            fn_8018B2A8(fn_8022F3D4(fn_8022F358(index)), 0x4D455453, 0x59505453, 0x54415453,
+                        i, &count, ids, 0);
+        }
+    }
 }
 #endif
 }
