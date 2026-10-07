@@ -10060,6 +10060,106 @@
         "original_blob": "747612f16ada46555e9610dc7b63098261c390d0",
         "integration_adjustment": "Remove five inherited reconstruction/process comments only; complete donor bodies and original contribution attribution preserved."
       }
+    },
+    {
+      "source": "src/dolphin/os/OSMutex.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023BD50",
+        "0x8023BD88",
+        "0x8023BE64",
+        "0x8023BF2C",
+        "0x8023BF9C"
+      ],
+      "provenance": {
+        "pull_request": 503,
+        "merged_via": 503,
+        "commit": "23e50a0c16dd944cb7f80f59fbbabed3b1aebd84",
+        "introduced_blob": "6d0965ae5a8e1940461592fbbfdbdef160891917"
+      }
+    },
+    {
+      "source": "src/dolphin/dvd/dvdfs.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023ED68",
+        "0x8023F094",
+        "0x8023F15C",
+        "0x8023F2E0",
+        "0x8023F3A4",
+        "0x8023F464"
+      ],
+      "provenance": {
+        "pull_request": 503,
+        "merged_via": 503,
+        "commit": "a731c25b5046c3a0ab1ca4f6839e7b50433b73dd",
+        "introduced_blob": "80bcfd552c0d64379a0f576a2428b1cf97de783b"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXPerf.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8025295C",
+        "0x8025334C"
+      ],
+      "provenance": {
+        "pull_request": 503,
+        "merged_via": 503,
+        "commit": "4af405fcb7b0553e2442756031c0a01cdcec3f40",
+        "introduced_blob": "259e479db82c1a5cb63541e999ab03d4de0848f5"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXTexture.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024FD3C",
+        "0x8024FDA0",
+        "0x8024FEFC",
+        "0x8024FFC4",
+        "0x80250210",
+        "0x80250258",
+        "0x802503BC",
+        "0x802503D8",
+        "0x802503E0",
+        "0x802503EC",
+        "0x802503FC",
+        "0x8025040C",
+        "0x80250414",
+        "0x8025042C",
+        "0x802505A8",
+        "0x802505FC",
+        "0x80250634",
+        "0x80250640",
+        "0x8025064C",
+        "0x80250654",
+        "0x802506EC",
+        "0x802507E0",
+        "0x80250864",
+        "0x8025089C",
+        "0x802508E4",
+        "0x802508F8",
+        "0x8025090C",
+        "0x80250B70",
+        "0x80250BEC",
+        "0x80250C8C",
+        "0x80250E08"
+      ],
+      "provenance": {
+        "pull_request": 503,
+        "merged_via": 503,
+        "commit": "f24d9ef121bed8156dc106bef4c5b42c311d8aa2",
+        "introduced_blob": "54910b2091b686e5ec86779e61a9963ad28818a2"
+      }
     }
   ],
   "target": "GN7E69",
