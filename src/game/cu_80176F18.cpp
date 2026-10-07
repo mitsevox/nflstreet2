@@ -1707,11 +1707,11 @@ extern "C" void fn_80179D98(int id, float from, float to)
 
 extern "C" void fn_80179EBC(int ref)
 {
-    int other = fn_8009BCE8(&ref)->mUnknown1044;
+    int other = fn_8009BCE8(&ref)->mUnknown1032.mUnknown12;
 
     if (other != 0) {
         Object_80039F5C *p = fn_8009BCE8(&other);
-        if (p->mUnknown1044 == ref && other == p->mId) {
+        if (p->mUnknown1032.mUnknown12 == ref && other == p->mId) {
             fn_8017937C(other, 0x61736F67, 1);
         }
     }

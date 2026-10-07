@@ -17,18 +17,9 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/Object_8017886C.h"
+#include "game/State_803EB098.h"
 #include <stdio.h>
 #include <string.h>
-
-struct Record_8011F518 {
-    char mUnknown0[4];
-    unsigned char mUnknown4;
-};
-
-struct Record_8011F4F8 {
-    char mUnknown0[11];
-    unsigned char mUnknownB;
-};
 
 struct Object_80172FB0 {
     char mUnknown0[12];
@@ -1363,7 +1354,7 @@ void fn_80172154(Object_80039F5C *p, void *pBall)
             switch (pMate->mpState->mId) {
             case 0x1F:
             case 0x21:
-                if (pMate->mUnknown1032 != 4) {
+                if (pMate->mUnknown1032.mUnknown0 != 4) {
                     fn_800F053C(0, pMate->mpState, &message, pMate);
                 }
                 break;

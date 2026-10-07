@@ -90,6 +90,37 @@ struct Object_8016D9B8 {
     int mUnknown8;
 };
 
+/* Block at Block_8011E240 +40, passed to fn_8011DBC8. Its extent past +54
+   is not established. */
+struct Block_8011DBC8 {
+    char mUnknown0[52];
+    short mUnknown52;
+    unsigned char mUnknown54;
+    char mUnknown55[1];
+};
+
+/* 108-byte block at +1032, cleared as a whole by fn_8011DF90. +4, +8 and
+   +12 hold references resolved through fn_8009BCE8 and written by
+   fn_8009BD2C. */
+struct Block_8011E240 {
+    int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    int mUnknown12;
+    int mUnknown16;
+    int mUnknown20;
+    char mUnknown24[16];
+    Block_8011DBC8 mUnknown40;
+    char mUnknown96[4];
+    unsigned char mUnknown100;
+    char mUnknown101[1];
+    short mUnknown102;
+    unsigned char mUnknown104;
+    unsigned char mUnknown105;
+    unsigned char mUnknown106;
+    unsigned char mUnknown107;
+};
+
 struct Object_80039F5C {
     /* Read both as a word and byte by byte (+1 index, +2 team). */
     union {
@@ -128,10 +159,8 @@ struct Object_80039F5C {
     void *mpUnknown792;
     Object_8016D9B8 *mpUnknown796;
     char mUnknown800[232];
-    int mUnknown1032;
-    char mUnknown1036[8];
-    int mUnknown1044;
-    char mUnknown1048[112];
+    Block_8011E240 mUnknown1032;
+    char mUnknown1140[20];
     Block_801718E8 mUnknown1160;
     unsigned char mUnknown1213;
     unsigned char mUnknown1214;
