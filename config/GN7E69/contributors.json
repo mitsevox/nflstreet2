@@ -9983,6 +9983,83 @@
         "pull_request": 491,
         "merged_via": 491
       }
+    },
+    {
+      "source": "src/dolphin/ar/ar.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x802481A0",
+        "0x802481E4",
+        "0x80248220",
+        "0x80248310",
+        "0x802483D4",
+        "0x802483DC",
+        "0x80248454",
+        "0x80248474",
+        "0x80248484"
+      ],
+      "provenance": {
+        "pull_request": 499,
+        "merged_via": 499,
+        "commit": "974ed715e3607737db2c81a8dc2fd7fc17740651",
+        "introduced_blob": "fbd97ceca7b607f489d901d3e6ea770de4fda370"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXDisplayList.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80252334"
+      ],
+      "provenance": {
+        "pull_request": 499,
+        "merged_via": 499,
+        "commit": "de3cb36a6b4b03b5f4a67b60388173fee234e4da",
+        "introduced_blob": "01d913efd2d156f41899556ba51fdbba8e23a55b"
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSThread.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023D478",
+        "0x8023D670",
+        "0x8023D714",
+        "0x8023D924",
+        "0x8023D47C",
+        "0x8023D5D4",
+        "0x8023E6E8",
+        "0x8023D5E4",
+        "0x8023D5F0",
+        "0x8023D630",
+        "0x8023D6D8",
+        "0x8023D8D4",
+        "0x8023DB4C",
+        "0x8023DB7C",
+        "0x8023DBB8",
+        "0x8023DDA0",
+        "0x8023E524",
+        "0x8023DE84",
+        "0x8023E438",
+        "0x8023E040",
+        "0x8023E2C8",
+        "0x8023E628"
+      ],
+      "provenance": {
+        "pull_request": 499,
+        "merged_via": 499,
+        "commit": "c82a8444770fe675f9e39d7a38376f10c74c8441",
+        "introduced_blob": "cfa77a86c89e07b7dc763a606a0ae333a4b8f484",
+        "original_commit": "8682f128d999eb25a112d91ff4bfe31f23dd8ad3",
+        "original_blob": "747612f16ada46555e9610dc7b63098261c390d0",
+        "integration_adjustment": "Remove five inherited reconstruction/process comments only; complete donor bodies and original contribution attribution preserved."
+      }
     }
   ],
   "target": "GN7E69",
