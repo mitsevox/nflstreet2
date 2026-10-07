@@ -5922,7 +5922,7 @@
     {
       "source": "src/game/cu_800EFC68.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional grouping row for src/game/cu_800EFC68.cpp; ten exact complete function extents with individual inferred name/source-form/compiler rows. Only these bodies are measured; all other bodies and mapped static storage remain original and unmeasured.",
+      "evidence": "evidence.tsv retained open/provisional grouping row for src/game/cu_800EFC68.cpp; individual exact function extents with inferred name/source-form/compiler rows for the ten constant-return bodies and the 24 follow-up bodies in 0x800F5208-0x800FD708. Only these bodies are measured; all other bodies and mapped static storage remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
@@ -5953,14 +5953,134 @@
           "end": "0x800F2C1C"
         },
         {
+          "symbol": "fn_800F62A4",
+          "start": "0x800F62A4",
+          "end": "0x800F6370"
+        },
+        {
+          "symbol": "fn_800F6790",
+          "start": "0x800F6790",
+          "end": "0x800F67CC"
+        },
+        {
+          "symbol": "fn_800F67CC",
+          "start": "0x800F67CC",
+          "end": "0x800F67E8"
+        },
+        {
+          "symbol": "fn_800F67E8",
+          "start": "0x800F67E8",
+          "end": "0x800F6878"
+        },
+        {
+          "symbol": "fn_800F722C",
+          "start": "0x800F722C",
+          "end": "0x800F7314"
+        },
+        {
           "symbol": "fn_800F8D24",
           "start": "0x800F8D24",
           "end": "0x800F8D2C"
         },
         {
+          "symbol": "fn_800F93D0",
+          "start": "0x800F93D0",
+          "end": "0x800F9440"
+        },
+        {
+          "symbol": "fn_800F9440",
+          "start": "0x800F9440",
+          "end": "0x800F9480"
+        },
+        {
+          "symbol": "fn_800F9AF0",
+          "start": "0x800F9AF0",
+          "end": "0x800F9BD8"
+        },
+        {
+          "symbol": "fn_800F9BD8",
+          "start": "0x800F9BD8",
+          "end": "0x800F9CAC"
+        },
+        {
           "symbol": "fn_800F9CAC",
           "start": "0x800F9CAC",
           "end": "0x800F9CB4"
+        },
+        {
+          "symbol": "fn_800FA014",
+          "start": "0x800FA014",
+          "end": "0x800FA098"
+        },
+        {
+          "symbol": "fn_800FAD10",
+          "start": "0x800FAD10",
+          "end": "0x800FAD2C"
+        },
+        {
+          "symbol": "fn_800FB768",
+          "start": "0x800FB768",
+          "end": "0x800FB824"
+        },
+        {
+          "symbol": "fn_800FB824",
+          "start": "0x800FB824",
+          "end": "0x800FB844"
+        },
+        {
+          "symbol": "fn_800FB844",
+          "start": "0x800FB844",
+          "end": "0x800FB9D4"
+        },
+        {
+          "symbol": "fn_800FBAA8",
+          "start": "0x800FBAA8",
+          "end": "0x800FBB70"
+        },
+        {
+          "symbol": "fn_800FBF74",
+          "start": "0x800FBF74",
+          "end": "0x800FC014"
+        },
+        {
+          "symbol": "fn_800FC014",
+          "start": "0x800FC014",
+          "end": "0x800FC070"
+        },
+        {
+          "symbol": "fn_800FC070",
+          "start": "0x800FC070",
+          "end": "0x800FC0C4"
+        },
+        {
+          "symbol": "fn_800FC0C4",
+          "start": "0x800FC0C4",
+          "end": "0x800FC128"
+        },
+        {
+          "symbol": "fn_800FC128",
+          "start": "0x800FC128",
+          "end": "0x800FC1DC"
+        },
+        {
+          "symbol": "fn_800FC1DC",
+          "start": "0x800FC1DC",
+          "end": "0x800FC290"
+        },
+        {
+          "symbol": "fn_800FCC24",
+          "start": "0x800FCC24",
+          "end": "0x800FCE58"
+        },
+        {
+          "symbol": "fn_800FD3F0",
+          "start": "0x800FD3F0",
+          "end": "0x800FD41C"
+        },
+        {
+          "symbol": "fn_800FD650",
+          "start": "0x800FD650",
+          "end": "0x800FD68C"
         },
         {
           "symbol": "fn_800FF860",
@@ -14042,7 +14162,7 @@
     {
       "source": "src/game/cu_80086C10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u2013800878D8 and existing exact function extents. Complete fourteen-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
+      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10–800878D8 and existing exact function extents. Complete fourteen-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
       "sections": [
         {
           "section": ".text",
