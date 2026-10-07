@@ -12489,6 +12489,197 @@
           "end": "0x8004732C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8016174C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv source, pool registration, per-function extents and literal rows for cu_8016174C; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8016174C",
+          "end": "0x80163074"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A44EC",
+          "end": "0x802A4598"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8016174C",
+          "start": "0x8016174C",
+          "end": "0x801618D8"
+        },
+        {
+          "symbol": "fn_801618D8",
+          "start": "0x801618D8",
+          "end": "0x80161A34"
+        },
+        {
+          "symbol": "fn_80161A34",
+          "start": "0x80161A34",
+          "end": "0x80161A88"
+        },
+        {
+          "symbol": "fn_80161A88",
+          "start": "0x80161A88",
+          "end": "0x80161AD4"
+        },
+        {
+          "symbol": "fn_80161AD4",
+          "start": "0x80161AD4",
+          "end": "0x80161B38"
+        },
+        {
+          "symbol": "fn_80161B38",
+          "start": "0x80161B38",
+          "end": "0x80161E7C"
+        },
+        {
+          "symbol": "fn_80161E7C",
+          "start": "0x80161E7C",
+          "end": "0x80161ED4"
+        },
+        {
+          "symbol": "fn_80161ED4",
+          "start": "0x80161ED4",
+          "end": "0x80161EDC"
+        },
+        {
+          "symbol": "fn_80161EDC",
+          "start": "0x80161EDC",
+          "end": "0x80161F5C"
+        },
+        {
+          "symbol": "fn_80161F5C",
+          "start": "0x80161F5C",
+          "end": "0x80162074"
+        },
+        {
+          "symbol": "fn_80162074",
+          "start": "0x80162074",
+          "end": "0x801620D4"
+        },
+        {
+          "symbol": "fn_801620D4",
+          "start": "0x801620D4",
+          "end": "0x8016216C"
+        },
+        {
+          "symbol": "fn_8016216C",
+          "start": "0x8016216C",
+          "end": "0x801621AC"
+        },
+        {
+          "symbol": "fn_801621AC",
+          "start": "0x801621AC",
+          "end": "0x801621B8"
+        },
+        {
+          "symbol": "fn_801621B8",
+          "start": "0x801621B8",
+          "end": "0x8016239C"
+        },
+        {
+          "symbol": "fn_8016239C",
+          "start": "0x8016239C",
+          "end": "0x80162404"
+        },
+        {
+          "symbol": "fn_80162404",
+          "start": "0x80162404",
+          "end": "0x80162434"
+        },
+        {
+          "symbol": "fn_80162434",
+          "start": "0x80162434",
+          "end": "0x80162494"
+        },
+        {
+          "symbol": "fn_80162494",
+          "start": "0x80162494",
+          "end": "0x801624D0"
+        },
+        {
+          "symbol": "fn_801624D0",
+          "start": "0x801624D0",
+          "end": "0x801626A4"
+        },
+        {
+          "symbol": "fn_801626A4",
+          "start": "0x801626A4",
+          "end": "0x80162780"
+        },
+        {
+          "symbol": "fn_80162780",
+          "start": "0x80162780",
+          "end": "0x8016278C"
+        },
+        {
+          "symbol": "fn_8016278C",
+          "start": "0x8016278C",
+          "end": "0x80162794"
+        },
+        {
+          "symbol": "fn_80162794",
+          "start": "0x80162794",
+          "end": "0x8016295C"
+        },
+        {
+          "symbol": "fn_8016295C",
+          "start": "0x8016295C",
+          "end": "0x80162D78"
+        },
+        {
+          "symbol": "fn_80162D78",
+          "start": "0x80162D78",
+          "end": "0x80162DBC"
+        },
+        {
+          "symbol": "fn_80162DBC",
+          "start": "0x80162DBC",
+          "end": "0x80162DD0"
+        },
+        {
+          "symbol": "fn_80162DD0",
+          "start": "0x80162DD0",
+          "end": "0x80162E40"
+        },
+        {
+          "symbol": "fn_80162E40",
+          "start": "0x80162E40",
+          "end": "0x80162F28"
+        },
+        {
+          "symbol": "fn_80162F28",
+          "start": "0x80162F28",
+          "end": "0x80162FB8"
+        },
+        {
+          "symbol": "fn_80162FB8",
+          "start": "0x80162FB8",
+          "end": "0x80163020"
+        },
+        {
+          "symbol": "fn_80163020",
+          "start": "0x80163020",
+          "end": "0x80163064"
+        },
+        {
+          "symbol": "fn_80163064",
+          "start": "0x80163064",
+          "end": "0x8016306C"
+        },
+        {
+          "symbol": "fn_8016306C",
+          "start": "0x8016306C",
+          "end": "0x80163074"
+        }
+      ]
     }
   ]
 }
