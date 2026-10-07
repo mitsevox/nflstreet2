@@ -364,10 +364,6 @@
       "address": "0x803ED840",
       "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
     },
-    "__GXSetSUTexRegs": {
-      "address": "0x80250C8C",
-      "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
-    },
     "__GXSetVCD": {
       "address": "0x8024D084",
       "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
@@ -924,10 +920,6 @@
       "address": "0x801C2030",
       "evidence": "evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
     },
-    "__GetImageTileCount": {
-      "address": "0x8024FEFC",
-      "evidence": "evidence.tsv target operand and pinned donor declaration rows."
-    },
     "__shr2u": {
       "address": "0x801AD46C",
       "evidence": "evidence.tsv actual target retained relocation and pinned donor declaration rows."
@@ -1051,6 +1043,14 @@
     "__OSGetEffectivePriority": {
       "address": "0x8023D6D8",
       "evidence": "evidence.tsv OSMutex actual retained target branch operand; existing canonical OSThread source declaration and target implementation."
+    },
+    "tolower": {
+      "address": "0x801C1F74",
+      "evidence": "Original target ConvertPath callsites8023EFB4/8023EFC8 both actual branch destination801C1F74; genuine BFBB isSame uses tolower(int), shared canonical libc declaration. Target body semantics still independently reviewed, no linked source imported."
+    },
+    "__cpReg": {
+      "address": "0x803ED35C",
+      "evidence": "evidence.tsv GXPerf original counter access operands establish shared register pointer; genuine pinned SDK declaration."
     }
   },
   "units": [
@@ -8905,6 +8905,71 @@
           "placement": ".text",
           "start": "0x8023BD50",
           "end": "0x8023BFBC"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXTexture.c",
+      "profile": "dolphin_release",
+      "evidence": "Private faithful full donor reference file/current shared headers; all actual target operands and pools independently resolved.",
+      "link_roots": {
+        "symbols": [
+          "GXGetTexBufferSize",
+          "__GetImageTileCount",
+          "GXInitTexObj",
+          "GXInitTexObjCI",
+          "GXInitTexObjLOD",
+          "GXInitTexObjWrapMode",
+          "GXInitTexObjTlut",
+          "GXGetTexObjData",
+          "GXGetTexObjWidth",
+          "GXGetTexObjHeight",
+          "GXGetTexObjFmt",
+          "GXGetTexObjMipMap",
+          "GXLoadTexObjPreLoaded",
+          "GXLoadTexObj",
+          "GXInitTlutObj",
+          "GXGetTlutObjData",
+          "GXGetTlutObjFmt",
+          "GXGetTlutObjNumEntries",
+          "GXLoadTlut",
+          "GXInitTexCacheRegion",
+          "GXInitTexPreLoadRegion",
+          "GXInitTlutRegion",
+          "GXInvalidateTexAll",
+          "GXSetTexRegionCallback",
+          "GXSetTlutRegionCallback",
+          "GXPreLoadEntireTexture",
+          "GXSetTexCoordScaleManually",
+          "__GXSetSUTexRegs",
+          "__GXSetTmemConfig"
+        ],
+        "evidence": "Genuine target public roots; local helpers natural callgraph retention."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024FD3C",
+          "end": "0x8025115C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FEAF0",
+          "end": "0x802FEE08"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC270",
+          "end": "0x803EC2B8"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED8E0",
+          "end": "0x803ED918"
         }
       ]
     }

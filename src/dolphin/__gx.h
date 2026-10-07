@@ -59,6 +59,88 @@ extern void* __peReg;
 void __GetImageTileCount(GXTexFmt fmt, u16 wd, u16 ht, u32* rowTiles, u32* colTiles, u32* cmpTiles);
 void __GXSetSUTexRegs(void);
 
+#define VERIF_XF_REG(addr, value) ((void)0)
+#define GX_WRITE_XF_REG(addr, value) \
+do { \
+    GX_WRITE_U8(0x10); \
+    GX_WRITE_U32(0x1000 + (addr)); \
+    GX_WRITE_U32(value); \
+    VERIF_XF_REG(addr, value); \
+} while (0)
+
+#define GX_WRITE_SOME_REG4(a, b, c, addr) \
+do { \
+    long regAddr; \
+    GX_WRITE_U8(a); \
+    GX_WRITE_U8(b); \
+    GX_WRITE_U32(c); \
+    regAddr = addr; \
+} while (0)
+
+extern void* __cpReg;
+extern void* __memReg;
+extern void* __piReg;
+#define GX_GET_MEM_REG(offset) (*(volatile u16*)((volatile u16*)(__memReg) + (offset)))
+#define GX_GET_CP_REG(offset)  (*(volatile u16*)((volatile u16*)(__cpReg) + (offset)))
+#define GX_GET_PI_REG(offset)  (*(volatile u32*)((volatile u32*)(__piReg) + (offset)))
+#define GX_SET_MEM_REG(offset, val) (*(volatile u16*)((volatile u16*)(__memReg) + (offset)) = val)
+#define GX_SET_CP_REG(offset, val)  (*(volatile u16*)((volatile u16*)(__cpReg) + (offset)) = val)
+#define GX_SET_PE_REG(offset, val)  (*(volatile u16*)((volatile u16*)(__peReg) + (offset)) = val)
+#define GX_SET_PI_REG(offset, val)  (*(volatile u32*)((volatile u32*)(__piReg) + (offset)) = val)
+
+void GXDrawDone(void);
+void __GXSetBWDials(u16 cpDial, u16 tcDial, u16 peDial, u16 cpuRdDial, u16 cpuWrDial);
+static inline u32 __GXReadCPCounterU32(u32 regAddrL, u32 regAddrH) {
+    u32 ctrH0;
+    u32 ctrH1;
+    u32 ctrL;
+
+    ctrH0 = GX_GET_CP_REG(regAddrH);
+
+    do {
+        ctrH1 = ctrH0;
+        ctrL = GX_GET_CP_REG(regAddrL);
+        ctrH0 = GX_GET_CP_REG(regAddrH);
+    } while (ctrH0 != ctrH1);
+
+    return (ctrH0 << 0x10) | ctrL;
+}
+
+static inline u32 __GXReadMEMCounterU32(u32 regAddrL, u32 regAddrH) {
+    u32 ctrH0;
+    u32 ctrH1;
+    u32 ctrL;
+
+    ctrH0 = GX_GET_MEM_REG(regAddrH);
+
+    do {
+        ctrH1 = ctrH0;
+        ctrL = GX_GET_MEM_REG(regAddrL);
+        ctrH0 = GX_GET_MEM_REG(regAddrH);
+    } while (ctrH0 != ctrH1);
+
+    return (ctrH0 << 0x10) | ctrL;
+}
+
+static inline u32 __GXReadPECounterU32(u32 regAddrL, u32 regAddrH) {
+    u32 ctrH0;
+    u32 ctrH1;
+    u32 ctrL;
+
+    ctrH0 = GX_GET_PE_REG(regAddrH);
+
+    do {
+        ctrH1 = ctrH0;
+        ctrL = GX_GET_PE_REG(regAddrL);
+        ctrH0 = GX_GET_PE_REG(regAddrH);
+    } while (ctrH0 != ctrH1);
+
+    return (ctrH0 << 0x10) | ctrL;
+}
+
+void __GXGetSUTexSize(GXTexCoordID coord, u16* width, u16* height);
+void __GXSetTmemConfig(u32 config);
+
 typedef struct __GXData_struct {
     u16 vNumNot;
     u16 bpSentNot;

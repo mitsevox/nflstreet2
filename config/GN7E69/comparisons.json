@@ -14533,6 +14533,137 @@
         "OSSetThreadSpecific",
         "OSGetThreadSpecific"
       ]
+    },
+    {
+      "source": "src/dolphin/dvd/dvdfs.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete BFBB8fb1c232 source13 emitted bodies; eight original target identities by actual API/call operands, no flags or body exclusions. Five extra bodies retain source but no original target identities. Current whole original output remains linked until full promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023ED68",
+          "end": "0x8023F494"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FCD08",
+          "end": "0x802FCE93"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC178",
+          "end": "0x803EC180"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED0F8",
+          "end": "0x803ED118"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__DVDFSInit",
+          "start": "0x8023ED68",
+          "end": "0x8023EDA0"
+        },
+        {
+          "symbol": "DVDConvertPathToEntrynum",
+          "start": "0x8023EDA0",
+          "end": "0x8023F094"
+        },
+        {
+          "symbol": "DVDOpen",
+          "start": "0x8023F094",
+          "end": "0x8023F15C"
+        },
+        {
+          "symbol": "DVDClose",
+          "start": "0x8023F15C",
+          "end": "0x8023F180"
+        },
+        {
+          "symbol": "entryToPath",
+          "start": "0x8023F180",
+          "end": "0x8023F2E0"
+        },
+        {
+          "symbol": "DVDGetCurrentDir",
+          "start": "0x8023F2E0",
+          "end": "0x8023F3A4"
+        },
+        {
+          "symbol": "DVDReadAsyncPrio",
+          "start": "0x8023F3A4",
+          "end": "0x8023F464"
+        },
+        {
+          "symbol": "cbForReadAsync",
+          "start": "0x8023F464",
+          "end": "0x8023F494"
+        }
+      ],
+      "discarded": [
+        "DVDFastOpen",
+        "DVDReadPrio",
+        "cbForReadSync",
+        "DVDSeekAsyncPrio",
+        "cbForSeekAsync"
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXPerf.c",
+      "profile": "dolphin_release",
+      "evidence": "Private complete genuine bodies under ordinary approved profile, original scheduling controls preserved reference-only and explicitly omitted here; no forced matching.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025295C",
+          "end": "0x8025335C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FEEA0",
+          "end": "0x802FEFE8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GXSetGPMetric",
+          "start": "0x8025295C",
+          "end": "0x802531A4"
+        },
+        {
+          "symbol": "GXReadGPMetric",
+          "start": "0x802531A4",
+          "end": "0x8025334C"
+        },
+        {
+          "symbol": "GXClearGPMetric",
+          "start": "0x8025334C",
+          "end": "0x8025335C"
+        }
+      ],
+      "discarded": [
+        "GXReadGP0Metric",
+        "GXReadGP1Metric",
+        "GXReadMemMetric",
+        "GXClearMemMetric",
+        "GXReadPixMetric",
+        "GXClearPixMetric",
+        "GXSetVCacheMetric",
+        "GXReadVCacheMetric",
+        "GXClearVCacheMetric",
+        "GXInitXfRasMetric",
+        "GXReadXfRasMetric",
+        "GXReadClksPerVtx",
+        "__GXSetBWDials"
+      ]
     }
   ]
 }
