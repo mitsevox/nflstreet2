@@ -9852,6 +9852,22 @@
         "commit": "57349faa1a85aec9e958340e0d8d9466c6e4a89b",
         "introduced_blob": "66f80c7e7e5d34683aefb3071a3ff781b9a95f67"
       }
+    },
+    {
+      "source": "src/game/cu_801A6870.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801A6870",
+        "0x801A6924"
+      ],
+      "provenance": {
+        "pull_request": 478,
+        "merged_via": 478,
+        "commit": "66b94bed45f1c57a8bbe84f3ae50812e505ee419",
+        "introduced_blob": "39129b397c668e0cc9ee1945d408deeb5cbd85ba"
+      }
     }
   ],
   "target": "GN7E69",

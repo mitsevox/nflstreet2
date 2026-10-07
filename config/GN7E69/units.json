@@ -8462,6 +8462,19 @@
           "end": "0x8029FF1C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801A6870.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A6870-0x801A69A8 (src/game/cu_801A6870.cpp) and its source-form and compiler rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A6870",
+          "end": "0x801A69A8"
+        }
+      ]
     }
   ]
 }
