@@ -1,3 +1,4 @@
+#include "game/Control_80132090.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_800D81C8.h"
@@ -24,12 +25,6 @@ struct State_8012C7E0 {
     int mUnknown20;
 };
 
-/* Player block at +336 as used by fn_8012FEAC. Only the accessed field is
-   declared; the size is unknown. */
-struct State_8012FEAC {
-    Object_80039F5C *mpUnknown0;
-};
-
 extern "C" {
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 void fn_800A5A8C(int a, void *pA, void *pB);
@@ -44,8 +39,6 @@ int fn_8011E9B4(Object_80039F5C *p);
 void fn_8012B2E0(Object_80039F5C *p, Point_8017886C *pOut);
 void fn_8012C3A4(Object_80039F5C *p);
 void fn_8012CB98(int a, int b, int angle, Point_8017886C *pOut);
-Object_80039F5C *fn_8012FA64(Object_80039F5C *p);
-void fn_80130338(Object_80039F5C *p, State_8012FEAC *pState);
 void fn_8013FA8C(int a);
 void fn_80148154(void);
 int fn_801481B0(void);
@@ -338,12 +331,12 @@ extern "C" int fn_8012F524(Object_80039F5C *p)
 
 extern "C" int fn_8012FEAC(Object_80039F5C *p)
 {
-    State_8012FEAC *state = (State_8012FEAC *)&p->mUnknown336;
+    Control_80132090 *pControl = (Control_80132090 *)&p->mUnknown336;
 
-    fn_80130338(p, state);
+    fn_80130338(p, pControl);
     fn_80031404(p);
     if (fn_800AD9B4() == 3) {
-        state->mpUnknown0 = fn_8012FA64(p);
+        pControl->mUnknown0 = fn_8012FA64(p);
         if (fn_80137B40() == p) {
             if (fn_801481B0()) {
                 fn_8013FA8C(1);
