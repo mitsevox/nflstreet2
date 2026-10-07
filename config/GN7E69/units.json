@@ -6131,6 +6131,49 @@
       ]
     },
     {
+      "source": "src/game/cu_8016014C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8016014C-0x801614D0 (src/game/cu_8016014C.cpp) and its data, type, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8016014C",
+          "end": "0x801614D0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4010",
+          "end": "0x802A44E0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802E33A8",
+          "end": "0x802E9780"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB368",
+          "end": "0x803EB37C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031C864",
+          "end": "0x8031D2A4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECAE8",
+          "end": "0x803ECAEC"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_801614D0.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv: src/game/cu_801614D0.cpp unit, data, compiler and source-form rows",

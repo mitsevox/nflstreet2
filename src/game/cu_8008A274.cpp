@@ -4,6 +4,7 @@
 #include "game/fn_801FCE10.h"
 #include "game/FMCAPPORT.h"
 #include "game/Object_80233EAC.h"
+#include "game/Object_8020E52C.h"
 
 struct Slot_8008A900 {
     unsigned char mUsed;
@@ -31,11 +32,6 @@ struct Object_8008AAF8 {
     void *mpUnknown20;
 };
 
-struct Object_8020E52C {
-    int mUnknown0[2];
-    unsigned short mUnknown8;
-};
-
 extern "C" {
 int fn_8003E028(void);
 int fn_8003E030(void);
@@ -50,9 +46,6 @@ void fn_801A4690(int a);
 void fn_801A46BC(void);
 int fn_801EFF80(void *pArchive, int id, void *pDest);
 int fn_801F0C50(void *pArchive, int id);
-void fn_8020E2B0(void *p);
-Object_8020E52C *fn_8020E52C(void *p, int index);
-void *fn_8020E5F8(void *p, int index);
 void fn_80221BE8(void (*pCallback)(int, unsigned int, Object_8008AAF8 *));
 int fn_8022F358(int index);
 int fn_8022F3D4(int a);
