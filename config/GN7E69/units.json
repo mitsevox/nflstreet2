@@ -9090,6 +9090,25 @@
           "end": "0x803EC848"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8018AC38.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018AC38-0x8018AD34 (src/game/cu_8018AC38.cpp) and its .data row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018AC38",
+          "end": "0x8018AD34"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EAD64",
+          "end": "0x802EADE4"
+        }
+      ]
     }
   ]
 }
