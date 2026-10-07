@@ -5,6 +5,7 @@
 #include "game/cu_80067C10.h"
 #include "game/fn_802372EC.h"
 #include "game/Object_80039F5C.h"
+#include "game/Pair_8017055C.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
@@ -16,11 +17,6 @@
 #include "game/Object_8017886C.h"
 #include <stdio.h>
 #include <string.h>
-
-struct Pair_8017055C {
-    float mX;
-    float mY;
-};
 
 struct Record_8011F518 {
     char mUnknown0[4];
