@@ -3,7 +3,9 @@
 #include "game/fn_801EEB44.h"
 #include "game/fn_801FCE10.h"
 #include "game/FMCAPPORT.h"
+#include "game/cu_8008A274.h"
 #include "game/Object_80233EAC.h"
+#include "game/Object_8020E52C.h"
 
 struct Slot_8008A900 {
     unsigned char mUsed;
@@ -31,14 +33,9 @@ struct Object_8008AAF8 {
     void *mpUnknown20;
 };
 
-struct Object_8020E52C {
-    int mUnknown0[2];
-    unsigned short mUnknown8;
-};
-
 extern "C" {
-int fn_8003E028(void);
-int fn_8003E030(void);
+Skeleton_80041930 *fn_8003E028(void);
+Skeleton_80041930 *fn_8003E030(void);
 void fn_8004625C(void *p, int id, FMCAPPORTText *pText);
 int fn_8015E2FC(int a, int b, int c);
 void fn_8015E73C(int id);
@@ -50,9 +47,6 @@ void fn_801A4690(int a);
 void fn_801A46BC(void);
 int fn_801EFF80(void *pArchive, int id, void *pDest);
 int fn_801F0C50(void *pArchive, int id);
-void fn_8020E2B0(void *p);
-Object_8020E52C *fn_8020E52C(void *p, int index);
-void *fn_8020E5F8(void *p, int index);
 void fn_80221BE8(void (*pCallback)(int, unsigned int, Object_8008AAF8 *));
 int fn_8022F358(int index);
 int fn_8022F3D4(int a);
@@ -61,7 +55,7 @@ void fn_802336C4(void *pObject, int a, int b);
 void fn_80233728(void *pObject);
 void fn_80233760(void *pObject, short *pValues, int count);
 void fn_80233EAC(Object_80233EAC *pObject, Desc_80233EAC *pDesc, const char *pName, int a,
-                 void *pArchive, int b, void **ppData, int c);
+                 void *pArchive, Skeleton_80041930 *pSkeleton, void **ppData, int c);
 void fn_802347EC(void *pData, Desc_802347EC *pDesc, int a, int b);
 void fn_80234844(Desc_802347EC *pDesc);
 
@@ -72,7 +66,7 @@ extern char lbl_802EC080[];
 }
 
 static SlotTable_8008A900 *sSlots = 0;
-static int (*sCallbacks[2])(void) = { fn_8003E028, fn_8003E030 };
+static Skeleton_80041930 *(*sCallbacks[2])(void) = { fn_8003E028, fn_8003E030 };
 static int sUnknown[2] = { 15, 32 };
 static const char *sFileNames[2] = { lbl_802EC038, lbl_802EC044 };
 static Desc_80233EAC sDesc0 = { 0.5f, 1000, 100000, 0xFFFF, { 0 }, 0xFFFF };
@@ -83,7 +77,6 @@ static Object_80233EAC sObjects[2];
 extern "C" {
 
 int fn_8008A800(void);
-int fn_8008A84C(int index);
 void fn_8008A988(int id);
 void fn_8008A9BC(void);
 void fn_8008AAF8(unsigned int id, Object_8008AAF8 *pObject);
@@ -206,8 +199,8 @@ void fn_8008A590(Object_8008A9F8 *pObject)
             }
             pObject->mpUnknown512[i] = fn_801D2B7C(fn_801F0C50(pArchive, id), 0, 0);
             sDescs[i]->mUnknown12 = id;
-            int value = fn_8008A84C(i);
-            fn_80233EAC(&sObjects[i], sDescs[i], "CAPPORT", 0, pArchive, value,
+            Skeleton_80041930 *pSkeleton = fn_8008A84C(i);
+            fn_80233EAC(&sObjects[i], sDescs[i], "CAPPORT", 0, pArchive, pSkeleton,
                         &pObject->mpUnknown512[i], 1);
         } else {
             pObject->mpUnknown512[i] = 0;
@@ -258,7 +251,7 @@ void *fn_8008A808(Object_8008A9F8 *pObject, int index)
     return pObject->mUnknown520;
 }
 
-int fn_8008A84C(int index)
+Skeleton_80041930 *fn_8008A84C(int index)
 {
     return sCallbacks[index]();
 }

@@ -57,6 +57,7 @@ int fn_800811E0(Object_8008044C *pObject);
 int fn_80080ECC(Object_8008044C *pObject);
 void fn_80081788(Object_8008044C *pObject, int *pValues);
 void fn_800817CC(Object_8008044C *pObject, Info_80307908 *pInfo);
+void fn_80081F50(Object_8008044C *pObject, unsigned char side, int a);
 }
 
 #endif

@@ -1,4 +1,5 @@
 #include "game/Object_80039F5C.h"
+#include "game/cu_801962CC.h"
 #include <dolphin/gx/GXEnum.h>
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXGeometry.h>
@@ -47,33 +48,14 @@ struct Particle_80196564 {
     float mUnknown50;
 };
 
-struct Emitter_80196564 {
-    char mUnknown0[69];
-    unsigned char mUnknown45;
-    char mUnknown46[2];
-    unsigned short mUnknown48;
-    char mUnknown4A[22];
-    int mUnknown60;
-    char mUnknown64[584];
-    Texture_80196564 *mpUnknown2AC;
-    char mUnknown2B0[4];
-    unsigned char mUnknown2B4;
-    char mUnknown2B5[166];
-    unsigned char mUnknown35B;
-    char mUnknown35C[92];
-    int mUnknown3B8;
-    char mUnknown3BC[4];
-    Particle_80196564 **mppUnknown3C0;
-};
-
 extern "C" {
 void fn_801C0A38(Texture_80196564 *pTexture, int a, int b, int c, float *pCoords);
 void fn_801D04C4(void);
 void fn_801D0508(void);
 void fn_801D0544(void);
 void fn_801D0ADC(int a);
-void fn_801DF064(float *pColor, Emitter_80196564 *pEmitter, Particle_80196564 *pParticle);
-float fn_801DF184(Emitter_80196564 *pEmitter, Particle_80196564 *pParticle);
+void fn_801DF064(float *pColor, Object_80144CE0 *pEmitter, Particle_80196564 *pParticle);
+float fn_801DF184(Object_80144CE0 *pEmitter, Particle_80196564 *pParticle);
 void fn_8021077C(int a);
 void fn_80210BD8(int a);
 void fn_802117C8(Table_80212850 *pTable, int count);
@@ -161,7 +143,7 @@ void fn_80196414(void)
     fn_80251604(0, 4);
 }
 
-void fn_80196480(void)
+void fn_80196480(int a)
 {
     lbl_803EB740 = 1;
     fn_802117C8(&lbl_80365188, 2);
@@ -181,7 +163,7 @@ void fn_8019651C(void)
     lbl_803EB748 = 0;
 }
 
-int fn_80196564(Emitter_80196564 *pEmitter)
+int fn_80196564(Object_80144CE0 *pEmitter, int mode)
 {
     int count;
     Texture_80196564 *pTexture;

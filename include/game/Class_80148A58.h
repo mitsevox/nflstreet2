@@ -13,7 +13,7 @@ public:
     virtual int vfn_05(int team);
     virtual unsigned int vfn_06();
     virtual void vfn_07(int a, int b);
-    virtual void vfn_08();
+    virtual int vfn_08(int a);
     virtual void vfn_09();
     virtual void vfn_10(int value, int *list, int *ids);
     virtual void vfn_11(int value, int *list, int *ids, int a, int b);
