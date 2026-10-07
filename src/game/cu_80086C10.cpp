@@ -12,10 +12,10 @@ struct Descriptor_80086CE8 {
     int mNameSize;
     unsigned int mPriceColumn;
     unsigned int mSortColumn;
-    unsigned int mOwnedTable;
+    unsigned int mProfileTable;
     unsigned int mLockedColumn;
     int mLockedValue;
-    unsigned int mOwnedColumn;
+    unsigned int mFlagColumn36;
 };
 
 struct Sort_80086D0C {
@@ -226,10 +226,10 @@ int fn_8008736C(int index, int id)
     int status;
     if (category != 3) {
         status = fn_801FCE10(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85 and \x8c = \x82\n", db, &count,
-                pDescriptor->mOwnedTable, pDescriptor->mIdColumn, id, pDescriptor->mLockedColumn, pDescriptor->mLockedValue, 0x4C544154, category);
+                pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mLockedColumn, pDescriptor->mLockedValue, 0x4C544154, category);
     } else {
         status = fn_801FCE10(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85\n", db, &count,
-                pDescriptor->mOwnedTable, pDescriptor->mIdColumn, id, pDescriptor->mLockedColumn, pDescriptor->mLockedValue);
+                pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mLockedColumn, pDescriptor->mLockedValue);
     }
     if (status == 0) {
         if (count == 0) result = 0;
@@ -247,10 +247,10 @@ int fn_80087460(int index, int id)
     int status;
     if (category != 3) {
         status = fn_801FCE10(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85 and \x8c = \x82\n", db, &count,
-                pDescriptor->mOwnedTable, pDescriptor->mIdColumn, id, pDescriptor->mOwnedColumn, 1, 0x4C544154, category);
+                pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mFlagColumn36, 1, 0x4C544154, category);
     } else {
         status = fn_801FCE10(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85\n", db, &count,
-                pDescriptor->mOwnedTable, pDescriptor->mIdColumn, id, pDescriptor->mOwnedColumn, 1);
+                pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mFlagColumn36, 1);
     }
     if (status == 0) {
         if (count == 0) result = 0;
@@ -265,10 +265,10 @@ void fn_8008754C(int index, int id)
     int category = fn_80087BA0(index);
     if (category != 3) {
         fn_801FCE10(0, "use \x8c update \x8c set \x8c = 0 where \x8c = \x85 and \x8c = \x82\n", db,
-                pDescriptor->mOwnedTable, pDescriptor->mOwnedColumn, pDescriptor->mIdColumn, id, 0x4C544154, category);
+                pDescriptor->mProfileTable, pDescriptor->mFlagColumn36, pDescriptor->mIdColumn, id, 0x4C544154, category);
     } else {
         fn_801FCE10(0, "use \x8c update \x8c set \x8c = 0 where \x8c = \x85\n", db,
-                pDescriptor->mOwnedTable, pDescriptor->mOwnedColumn, pDescriptor->mIdColumn, id);
+                pDescriptor->mProfileTable, pDescriptor->mFlagColumn36, pDescriptor->mIdColumn, id);
     }
 }
 
@@ -279,10 +279,10 @@ void fn_80087600(int index, int id)
     int category = fn_80087BA0(index);
     if (category != 3) {
         fn_801FCE10(0, "use \x8c update \x8c set \x8c = 0 and \x8c = 1 where \x8c = \x85 and \x8c = \x82\n", db,
-                pDescriptor->mOwnedTable, pDescriptor->mLockedColumn, pDescriptor->mOwnedColumn, pDescriptor->mIdColumn, id, 0x4C544154, category);
+                pDescriptor->mProfileTable, pDescriptor->mLockedColumn, pDescriptor->mFlagColumn36, pDescriptor->mIdColumn, id, 0x4C544154, category);
     } else {
         fn_801FCE10(0, "use \x8c update \x8c set \x8c = 0 and \x8c = 1 where \x8c = \x85\n", db,
-                pDescriptor->mOwnedTable, pDescriptor->mLockedColumn, pDescriptor->mOwnedColumn, pDescriptor->mIdColumn, id);
+                pDescriptor->mProfileTable, pDescriptor->mLockedColumn, pDescriptor->mFlagColumn36, pDescriptor->mIdColumn, id);
     }
 }
 
