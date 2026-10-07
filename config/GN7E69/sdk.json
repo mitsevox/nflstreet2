@@ -841,7 +841,7 @@
       "name": "src/dolphin/dvd/dvdlow.c",
       "source": "src/dolphin/dvd/dvdlow.c",
       "library": "DVD",
-      "evidence": "Twenty retained donor function instruction layouts cover3652 bytes continuously including workarounds then final LowSetWAType43088..430CC; VI begins430CC. Masked comparison establishes ownership corroboration, not source match.",
+      "evidence": "Twenty retained native SDK functions and all relocation operands resolve continuously at 0x80242288-0x802430CC; native BSS/sdata/SBSS placement and initialized FirstRead word are verified. Original archive member boundaries remain provisional.",
       "sections": [
         {
           "section": ".text",
@@ -849,7 +849,31 @@
           "end": "0x802430CC",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Twenty retained donor function instruction layouts cover3652 bytes continuously including workarounds then final LowSetWAType43088..430CC; VI begins430CC. Masked comparison establishes ownership corroboration, not source match."
+          "evidence": "Twenty retained native SDK functions and all relocation operands resolve continuously at 0x80242288-0x802430CC; native BSS/sdata/SBSS placement and initialized FirstRead word are verified. Original archive member boundaries remain provisional."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803A5668",
+          "end": "0x803A5738",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Complete unchanged native DVDLow allocation and target operands establish the section extent; see evidence.tsv DVDLow data rows. Native unused break-alarm storage is preserved without claiming target behavior; no inter-file padding credited."
+        },
+        {
+          "section": ".sdata",
+          "start": "0x803EC1F0",
+          "end": "0x803EC1F4",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Complete unchanged native DVDLow allocation and target operands establish the section extent; see evidence.tsv DVDLow data rows. Native unused break-alarm storage is preserved without claiming target behavior; no inter-file padding credited."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED188",
+          "end": "0x803ED1D0",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Complete unchanged native DVDLow allocation and target operands establish the section extent; see evidence.tsv DVDLow data rows. Native unused break-alarm storage is preserved without claiming target behavior; no inter-file padding credited."
         }
       ]
     },
