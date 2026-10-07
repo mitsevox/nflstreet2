@@ -10054,6 +10054,49 @@
           "end": "0x800314E0"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800400CC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80040154-0x80041210 (src/game/cu_800400CC.cpp), the cu_800400CC draft source-form row 0x800400CC-0x80040154 and the exact function rows 0x800400CC-0x80040154. Draft comparisons only; the file's .rodata, .sdata and .sbss placements are fully covered by its linked source and used only for relocation, and original bytes remain linked for the two unlinked functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800400CC",
+          "end": "0x80041210"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D38C",
+          "end": "0x8028D400"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA480",
+          "end": "0x803EA488"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC784",
+          "end": "0x803EC790"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800400CC",
+          "start": "0x800400CC",
+          "end": "0x800400D4"
+        },
+        {
+          "symbol": "fn_800400D4",
+          "start": "0x800400D4",
+          "end": "0x80040154"
+        }
+      ]
     }
   ]
 }

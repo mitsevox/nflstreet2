@@ -7785,6 +7785,37 @@
           "end": "0x802ADA3C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800400CC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80040154-0x80041210 (src/game/cu_800400CC.cpp) and its .rodata, .sdata and .sbss rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80040154",
+          "end": "0x80041210"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D38C",
+          "end": "0x8028D400"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA480",
+          "end": "0x803EA488"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC784",
+          "end": "0x803EC790"
+        }
+      ]
     }
   ]
 }
