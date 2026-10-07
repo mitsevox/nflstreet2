@@ -1095,6 +1095,14 @@
     "__GXSetMatrixIndex": {
       "address": "0x802528D8",
       "evidence": "GXAttr actualoriginalTexCoordGen2REL24 binds sharedhelper; genuine internalGXAttrmatIdxAttr prototype/currenttypedGXData fields."
+    },
+    "OSGetArenaHi": {
+      "address": "0x802399F8",
+      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
+    },
+    "OSSetArenaHi": {
+      "address": "0x80239A08",
+      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
     }
   },
   "units": [
@@ -9105,40 +9113,6 @@
           "placement": ".sbss",
           "start": "0x803ED380",
           "end": "0x803ED3A0"
-        }
-      ]
-    },
-    {
-      "source": "src/dolphin/os/OSArena.c",
-      "profile": "dolphin_release",
-      "evidence": "Complete faithful related SDK source; actual target operands/callers and focused full-DOL proof support retained roots and storage. Original archive boundaries remain provisional.",
-      "link_roots": {
-        "symbols": [
-          "OSGetArenaHi",
-          "OSGetArenaLo",
-          "OSSetArenaHi",
-          "OSSetArenaLo"
-        ],
-        "evidence": "Four actual target getter/setter entry points; full two allocator helper source bodies preserved and naturally unretained."
-      },
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802399F8",
-          "end": "0x80239A18"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EC158",
-          "end": "0x803EC15C"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ED080",
-          "end": "0x803ED084"
         }
       ]
     }
