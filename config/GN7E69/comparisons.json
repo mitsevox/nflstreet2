@@ -11892,6 +11892,130 @@
           "end": "0x80167910"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80194060.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv source unit and membership anchors, individual exact function boundaries, directly accessed data and SDK storage types. Partial comparisons only, original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80193FB0",
+          "end": "0x80194B6C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AD7E8",
+          "end": "0x802AD850"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB728",
+          "end": "0x803EB730"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECB9C",
+          "end": "0x803ECBAC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80364F58",
+          "end": "0x803650A8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80193FB0",
+          "start": "0x80193FB0",
+          "end": "0x80194054"
+        },
+        {
+          "symbol": "fn_80194054",
+          "start": "0x80194054",
+          "end": "0x80194060"
+        },
+        {
+          "symbol": "fn_80194060",
+          "start": "0x80194060",
+          "end": "0x80194108"
+        },
+        {
+          "symbol": "fn_80194108",
+          "start": "0x80194108",
+          "end": "0x80194248"
+        },
+        {
+          "symbol": "fn_80194248",
+          "start": "0x80194248",
+          "end": "0x8019424C"
+        },
+        {
+          "symbol": "fn_8019424C",
+          "start": "0x8019424C",
+          "end": "0x80194278"
+        },
+        {
+          "symbol": "fn_80194278",
+          "start": "0x80194278",
+          "end": "0x80194280"
+        },
+        {
+          "symbol": "fn_80194280",
+          "start": "0x80194280",
+          "end": "0x80194314"
+        },
+        {
+          "symbol": "fn_80194314",
+          "start": "0x80194314",
+          "end": "0x801943D4"
+        },
+        {
+          "symbol": "fn_801943D4",
+          "start": "0x801943D4",
+          "end": "0x80194508"
+        },
+        {
+          "symbol": "fn_80194508",
+          "start": "0x80194508",
+          "end": "0x801946C4"
+        },
+        {
+          "symbol": "fn_801946C4",
+          "start": "0x801946C4",
+          "end": "0x8019471C"
+        },
+        {
+          "symbol": "fn_8019471C",
+          "start": "0x8019471C",
+          "end": "0x80194754"
+        },
+        {
+          "symbol": "fn_80194754",
+          "start": "0x80194754",
+          "end": "0x80194794"
+        },
+        {
+          "symbol": "fn_80194794",
+          "start": "0x80194794",
+          "end": "0x80194858"
+        },
+        {
+          "symbol": "fn_80194858",
+          "start": "0x80194858",
+          "end": "0x80194AEC"
+        },
+        {
+          "symbol": "fn_80194AEC",
+          "start": "0x80194AEC",
+          "end": "0x80194B6C"
+        }
+      ]
     }
   ]
 }
