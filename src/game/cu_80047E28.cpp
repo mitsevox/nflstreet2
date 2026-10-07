@@ -93,7 +93,7 @@ int fn_80082280(Object_8008044C *pObject);
 int fn_800822D4(Object_8008044C *pObject);
 void fn_800840A4(Object_8007A334 *pObject, void *pBuffer);
 void fn_80146094(void *p);
-void fn_8015F6E8(int a, int b, int c, int d, int e);
+void fn_8015F6E8(const char *pName, int b, int c, int d, Ids_8015F6E8 *pIds);
 void fn_8015FFC8(int player, int key, int value);
 void fn_80160E94(int index, int slot, int id, int palette, int d);
 int fn_80161048(char *pName);
@@ -1101,10 +1101,10 @@ extern "C" void fn_80049DE8(int index, unsigned char value)
     lbl_803078E8[index].mInfo.mUnknown01 = value;
 }
 
-extern "C" void fn_80049E00(int index, int a, int b)
+extern "C" void fn_80049E00(int index, const char *pName, Ids_8015F6E8 *pIds)
 {
     fn_80049C08(index);
-    fn_8015F6E8(a, fn_80049AB8(index), fn_80049C08(index), fn_80049CD8(index), b);
+    fn_8015F6E8(pName, fn_80049AB8(index), fn_80049C08(index), fn_80049CD8(index), pIds);
 }
 
 extern "C" void fn_80049E6C(void)

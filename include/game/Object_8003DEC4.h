@@ -24,10 +24,11 @@ struct Object_8003DEC4 {
     int mUnknown4956;
     char mUnknown4960[8];
     unsigned char mUnknown4968;
-    char mUnknown4969[1];
+    unsigned char mUnknown4969;
     unsigned char mUnknown4970;
     unsigned char mUnknown4971;
-    char mUnknown4972[4];
+    unsigned char mUnknown4972;
+    char mUnknown4973[3];
     FMCAPPORTValues mUnknown4976;
     char mUnknown5188[1452];
 };

@@ -10056,6 +10056,158 @@
       ]
     },
     {
+      "source": "src/game/cu_8015C25C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x8015C25C-0x8015D3EC (src/game/cu_8015C25C.cpp), its type and source-form rows, the 25 exact function extents, the exact .rodata row 0x802A3EF8-0x802A3F10 and the exact .sdata row 0x803EB328-0x803EB330. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015C25C",
+          "end": "0x8015D3EC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A3EF8",
+          "end": "0x802A3F10"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB328",
+          "end": "0x803EB330"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8015C25C",
+          "start": "0x8015C25C",
+          "end": "0x8015C2E0"
+        },
+        {
+          "symbol": "fn_8015C2E0",
+          "start": "0x8015C2E0",
+          "end": "0x8015C34C"
+        },
+        {
+          "symbol": "fn_8015C34C",
+          "start": "0x8015C34C",
+          "end": "0x8015C3B8"
+        },
+        {
+          "symbol": "fn_8015C3B8",
+          "start": "0x8015C3B8",
+          "end": "0x8015C43C"
+        },
+        {
+          "symbol": "fn_8015C43C",
+          "start": "0x8015C43C",
+          "end": "0x8015C498"
+        },
+        {
+          "symbol": "fn_8015C498",
+          "start": "0x8015C498",
+          "end": "0x8015C5E8"
+        },
+        {
+          "symbol": "fn_8015C5E8",
+          "start": "0x8015C5E8",
+          "end": "0x8015C9B4"
+        },
+        {
+          "symbol": "fn_8015C9B4",
+          "start": "0x8015C9B4",
+          "end": "0x8015C9E0"
+        },
+        {
+          "symbol": "fn_8015C9E0",
+          "start": "0x8015C9E0",
+          "end": "0x8015CB18"
+        },
+        {
+          "symbol": "fn_8015CB18",
+          "start": "0x8015CB18",
+          "end": "0x8015CBC8"
+        },
+        {
+          "symbol": "fn_8015CBC8",
+          "start": "0x8015CBC8",
+          "end": "0x8015CC1C"
+        },
+        {
+          "symbol": "fn_8015CC1C",
+          "start": "0x8015CC1C",
+          "end": "0x8015CCB4"
+        },
+        {
+          "symbol": "fn_8015CCB4",
+          "start": "0x8015CCB4",
+          "end": "0x8015CD9C"
+        },
+        {
+          "symbol": "fn_8015CD9C",
+          "start": "0x8015CD9C",
+          "end": "0x8015CDA4"
+        },
+        {
+          "symbol": "fn_8015CDA4",
+          "start": "0x8015CDA4",
+          "end": "0x8015D060"
+        },
+        {
+          "symbol": "fn_8015D060",
+          "start": "0x8015D060",
+          "end": "0x8015D180"
+        },
+        {
+          "symbol": "fn_8015D180",
+          "start": "0x8015D180",
+          "end": "0x8015D1CC"
+        },
+        {
+          "symbol": "fn_8015D1CC",
+          "start": "0x8015D1CC",
+          "end": "0x8015D1FC"
+        },
+        {
+          "symbol": "fn_8015D1FC",
+          "start": "0x8015D1FC",
+          "end": "0x8015D224"
+        },
+        {
+          "symbol": "fn_8015D224",
+          "start": "0x8015D224",
+          "end": "0x8015D254"
+        },
+        {
+          "symbol": "fn_8015D254",
+          "start": "0x8015D254",
+          "end": "0x8015D2E8"
+        },
+        {
+          "symbol": "fn_8015D2E8",
+          "start": "0x8015D2E8",
+          "end": "0x8015D32C"
+        },
+        {
+          "symbol": "fn_8015D32C",
+          "start": "0x8015D32C",
+          "end": "0x8015D38C"
+        },
+        {
+          "symbol": "fn_8015D38C",
+          "start": "0x8015D38C",
+          "end": "0x8015D3B0"
+        },
+        {
+          "symbol": "fn_8015D3B0",
+          "start": "0x8015D3B0",
+          "end": "0x8015D3EC"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80198C54.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80198C54-0x80199C94 (src/game/cu_80198C54.cpp), source-form row cu_80198C54 draft functions 0x80199A68-0x80199C94 and the exact function rows 0x80199A68-0x80199C94. Draft comparisons only; the full native placements are kept for relocation and are fully covered by the file's linked source, and original bytes remain linked for the 3 unlinked functions.",
