@@ -13107,6 +13107,161 @@
           "end": "0x801A1338"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80186A44.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv open/provisional membership, exact function extents and instruction-supported query/state/caller contracts. Twenty-two unlinked native comparisons; original assembly and unspecified external recency array remain linked. Issue #386 nominal conflicts remain unresolved.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80186A44",
+          "end": "0x80187AD4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A6EC8",
+          "end": "0x802A7910"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EAA40",
+          "end": "0x802EAB80"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB5E0",
+          "end": "0x803EB5E4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80362B7C",
+          "end": "0x80362BB0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECB88",
+          "end": "0x803ECB8C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80186A44",
+          "start": "0x80186A44",
+          "end": "0x80186B38"
+        },
+        {
+          "symbol": "fn_80186B38",
+          "start": "0x80186B38",
+          "end": "0x80186BAC"
+        },
+        {
+          "symbol": "fn_80186BAC",
+          "start": "0x80186BAC",
+          "end": "0x80186CE8"
+        },
+        {
+          "symbol": "fn_80186CE8",
+          "start": "0x80186CE8",
+          "end": "0x80186D64"
+        },
+        {
+          "symbol": "fn_80186D64",
+          "start": "0x80186D64",
+          "end": "0x80186DF0"
+        },
+        {
+          "symbol": "fn_80186DF0",
+          "start": "0x80186DF0",
+          "end": "0x80186ED8"
+        },
+        {
+          "symbol": "fn_80186ED8",
+          "start": "0x80186ED8",
+          "end": "0x80186EF4"
+        },
+        {
+          "symbol": "fn_80186EF4",
+          "start": "0x80186EF4",
+          "end": "0x80186F30"
+        },
+        {
+          "symbol": "fn_80186F30",
+          "start": "0x80186F30",
+          "end": "0x80186F7C"
+        },
+        {
+          "symbol": "fn_80186F7C",
+          "start": "0x80186F7C",
+          "end": "0x80186F8C"
+        },
+        {
+          "symbol": "fn_80186F8C",
+          "start": "0x80186F8C",
+          "end": "0x80186F9C"
+        },
+        {
+          "symbol": "fn_80186F9C",
+          "start": "0x80186F9C",
+          "end": "0x80187038"
+        },
+        {
+          "symbol": "fn_80187038",
+          "start": "0x80187038",
+          "end": "0x80187400"
+        },
+        {
+          "symbol": "fn_80187400",
+          "start": "0x80187400",
+          "end": "0x80187500"
+        },
+        {
+          "symbol": "fn_80187500",
+          "start": "0x80187500",
+          "end": "0x80187580"
+        },
+        {
+          "symbol": "fn_80187580",
+          "start": "0x80187580",
+          "end": "0x80187614"
+        },
+        {
+          "symbol": "fn_80187614",
+          "start": "0x80187614",
+          "end": "0x801876A8"
+        },
+        {
+          "symbol": "fn_801876A8",
+          "start": "0x801876A8",
+          "end": "0x801877E8"
+        },
+        {
+          "symbol": "fn_801877E8",
+          "start": "0x801877E8",
+          "end": "0x8018787C"
+        },
+        {
+          "symbol": "fn_8018787C",
+          "start": "0x8018787C",
+          "end": "0x80187A28"
+        },
+        {
+          "symbol": "fn_80187A28",
+          "start": "0x80187A28",
+          "end": "0x80187A78"
+        },
+        {
+          "symbol": "fn_80187A78",
+          "start": "0x80187A78",
+          "end": "0x80187AD4"
+        }
+      ]
     }
   ]
 }
