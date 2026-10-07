@@ -9180,7 +9180,8 @@
         "commit": "2152119fdb74c02f28474426426844a5e851c73b",
         "introduced_blob": "8894ffc14f02a2ae09e04473145404a529810e18",
         "original_commit": "16f61b4a0b780056f79f9a3110ec9d38579c5ea3",
-        "original_blob": "2653f6f5b9622cfec3ef8fd78a4c6f00f71119c9"
+        "original_blob": "2653f6f5b9622cfec3ef8fd78a4c6f00f71119c9",
+        "integration_adjustment": "Corrected final GX helper argument from4 to255 after independent target review; original source contributor and origin retained."
       }
     },
     {
@@ -9228,7 +9229,8 @@
         "commit": "2152119fdb74c02f28474426426844a5e851c73b",
         "introduced_blob": "648d9399e64ac174a91cbc7f3ee780a0494dcb5a",
         "original_commit": "705bb0ff04dfa99c00a2d49a6d69c638301c2f5e",
-        "original_blob": "7f20b61e30dcdc6a6c6a7bb6401b2541f25dee6e"
+        "original_blob": "7f20b61e30dcdc6a6c6a7bb6401b2541f25dee6e",
+        "integration_adjustment": "Moved unresolved nominal callback ABI commentary to evidence metadata without changing generated behavior; original source contributor and origin retained."
       }
     },
     {
@@ -9267,7 +9269,8 @@
         "commit": "2152119fdb74c02f28474426426844a5e851c73b",
         "introduced_blob": "e78f59fa2156a475df20a927a5e8a506267bfe41",
         "original_commit": "a7a3a30001abb674ccbfc1e61f81695e6ea3c263",
-        "original_blob": "de39c1601c334815addb20ddc5d5c443e8c36323"
+        "original_blob": "de39c1601c334815addb20ddc5d5c443e8c36323",
+        "integration_adjustment": "Corrected target-supported asset, texture and instance-context pointer chains plus integer angle contract after independent hostile and blind accuracy reviews; original source contributor and origin retained."
       }
     },
     {
@@ -9294,7 +9297,7 @@
         "introduced_blob": "0afa93615ed017e192db5d2825a27730fba4906f",
         "original_commit": "d4821a1d57cd08363d1afa1f7db003c327b1fc99",
         "original_blob": "839af371f889124a86493c6c8e4a7445dde830e7",
-        "integration_adjustment": "Centralized established query/callback declarations and corrected the opaque query-token interface after independent accuracy findings. Original source contributor retained; target access and callback contracts support the corrections."
+        "integration_adjustment": "Centralized established query/callback declarations, then corrected the target reset inequality and two under-limit input-float writes after independent reviews; original source contributor and origin retained."
       }
     },
     {
@@ -9318,7 +9321,8 @@
         "commit": "2152119fdb74c02f28474426426844a5e851c73b",
         "introduced_blob": "cc072ed0d71b3a743fe0f058005141a652195925",
         "original_commit": "dd1b024e7d79b05dc605ce870a09d546b9a1eddd",
-        "original_blob": "d5ae71d578e60bb8d33f222f92ef98f0118ed340"
+        "original_blob": "d5ae71d578e60bb8d33f222f92ef98f0118ed340",
+        "integration_adjustment": "Reused canonical engine integer return, corrected numeric handle argument and moved source-grouping provenance into evidence after independent reviews; original source contributor and origin retained."
       }
     },
     {
