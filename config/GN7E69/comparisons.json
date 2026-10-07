@@ -15141,6 +15141,179 @@
         "OSAllocFromArenaLo",
         "OSAllocFromArenaHi"
       ]
+    },
+    {
+      "source": "src/dolphin/card/CARDOpen.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete coherent pinned dSDK nine-body source/current canonical headers, fixed dolphin_release profile. Eight full target bodies1492; plain-char filename instruction partials preserved, genuine unassigned CARDOpen helper retained. Original bytes remain linked until separately validated promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80256F14",
+          "end": "0x802574E8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__CARDCompareFileName",
+          "start": "0x80256F14",
+          "end": "0x80256F7C"
+        },
+        {
+          "symbol": "__CARDAccess",
+          "start": "0x80256F7C",
+          "end": "0x80257010"
+        },
+        {
+          "symbol": "__CARDIsWritable",
+          "start": "0x80257010",
+          "end": "0x80257144"
+        },
+        {
+          "symbol": "__CARDIsReadable",
+          "start": "0x80257144",
+          "end": "0x80257238"
+        },
+        {
+          "symbol": "__CARDGetFileNo",
+          "start": "0x80257238",
+          "end": "0x80257388"
+        },
+        {
+          "symbol": "CARDFastOpen",
+          "start": "0x80257388",
+          "end": "0x8025748C"
+        },
+        {
+          "symbol": "CARDClose",
+          "start": "0x8025748C",
+          "end": "0x802574E0"
+        },
+        {
+          "symbol": "__CARDIsOpened",
+          "start": "0x802574E0",
+          "end": "0x802574E8"
+        }
+      ],
+      "discarded": [
+        "CARDOpen"
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXMisc.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete pinned BFBB twenty-body source/currentcanonical headers. Eighteen presenttarget bodies1576 independently resolved, full2280 provisional ownership retains other unrecovered original functions. No version body splicing.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024DFA0",
+          "end": "0x8024E888"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED3A0",
+          "end": "0x803ED3B4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GXSetMisc",
+          "start": "0x8024DFA0",
+          "end": "0x8024E034"
+        },
+        {
+          "symbol": "GXFlush",
+          "start": "0x8024E034",
+          "end": "0x8024E090"
+        },
+        {
+          "symbol": "__GXAbort",
+          "start": "0x8024E090",
+          "end": "0x8024E1FC"
+        },
+        {
+          "symbol": "GXDrawDone",
+          "start": "0x8024E450",
+          "end": "0x8024E4D0"
+        },
+        {
+          "symbol": "GXPixModeSync",
+          "start": "0x8024E4D0",
+          "end": "0x8024E4F4"
+        },
+        {
+          "symbol": "GXPokeAlphaMode",
+          "start": "0x8024E518",
+          "end": "0x8024E52C"
+        },
+        {
+          "symbol": "GXPokeAlphaRead",
+          "start": "0x8024E52C",
+          "end": "0x8024E54C"
+        },
+        {
+          "symbol": "GXPokeAlphaUpdate",
+          "start": "0x8024E54C",
+          "end": "0x8024E564"
+        },
+        {
+          "symbol": "GXPokeBlendMode",
+          "start": "0x8024E564",
+          "end": "0x8024E5C8"
+        },
+        {
+          "symbol": "GXPokeColorUpdate",
+          "start": "0x8024E5C8",
+          "end": "0x8024E5E0"
+        },
+        {
+          "symbol": "GXPokeDstAlpha",
+          "start": "0x8024E5E0",
+          "end": "0x8024E604"
+        },
+        {
+          "symbol": "GXPokeDither",
+          "start": "0x8024E604",
+          "end": "0x8024E61C"
+        },
+        {
+          "symbol": "GXPokeZMode",
+          "start": "0x8024E61C",
+          "end": "0x8024E63C"
+        },
+        {
+          "symbol": "GXSetDrawSyncCallback",
+          "start": "0x8024E684",
+          "end": "0x8024E6C8"
+        },
+        {
+          "symbol": "GXTokenInterruptHandler",
+          "start": "0x8024E6C8",
+          "end": "0x8024E750"
+        },
+        {
+          "symbol": "GXSetDrawDoneCallback",
+          "start": "0x8024E750",
+          "end": "0x8024E794"
+        },
+        {
+          "symbol": "GXFinishInterruptHandler",
+          "start": "0x8024E794",
+          "end": "0x8024E814"
+        },
+        {
+          "symbol": "__GXPEInit",
+          "start": "0x8024E814",
+          "end": "0x8024E888"
+        }
+      ],
+      "discarded": [
+        "GXSetDrawSync",
+        "GXReadDrawSync"
+      ]
     }
   ]
 }

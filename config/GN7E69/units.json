@@ -1103,6 +1103,38 @@
     "OSSetArenaHi": {
       "address": "0x80239A08",
       "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
+    },
+    "__CARDPermMask": {
+      "address": "0x803EC2C2",
+      "evidence": "CARDOpen actual original complete retained native relocation operand proof and current canonical API signature; related SDK identity."
+    },
+    "__CARDAccess": {
+      "address": "0x80256F7C",
+      "evidence": "CARDOpen actual original complete retained native relocation operand proof and current canonical API signature; related SDK identity."
+    },
+    "__CARDGetDirBlock": {
+      "address": "0x80254A44",
+      "evidence": "CARDOpen actual original complete retained native relocation operand proof and current canonical API signature; related SDK identity."
+    },
+    "__CARDDiskNone": {
+      "address": "0x803A6728",
+      "evidence": "CARDOpen actual original complete retained native relocation operand proof and current canonical API signature; related SDK identity."
+    },
+    "__GXSetDirtyState": {
+      "address": "0x8024E888",
+      "evidence": "Actual original GXMisc complete-body operand proof, current established canonical signature reused; related API identity."
+    },
+    "GXGetGPFifo": {
+      "address": "0x8024C8E0",
+      "evidence": "Actual original GXMisc complete-body operand proof, current established canonical signature reused; related API identity."
+    },
+    "__memReg": {
+      "address": "0x803ED364",
+      "evidence": "Actual original GXMisc complete-body operand proof, current established canonical signature reused; related API identity."
+    },
+    "__peReg": {
+      "address": "0x803ED360",
+      "evidence": "Actual original GXMisc complete-body operand proof, current established canonical signature reused; related API identity."
     }
   },
   "units": [

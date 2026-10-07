@@ -89,6 +89,8 @@ extern void* __piReg;
 #define GX_SET_PE_REG(offset, val)  (*(volatile u16*)((volatile u16*)(__peReg) + (offset)) = val)
 #define GX_SET_PI_REG(offset, val)  (*(volatile u32*)((volatile u32*)(__piReg) + (offset)) = val)
 
+void __GXAbort(void);
+void __GXPEInit(void);
 void GXDrawDone(void);
 void __GXSetBWDials(u16 cpDial, u16 tcDial, u16 peDial, u16 cpuRdDial, u16 cpuWrDial);
 static inline u32 __GXReadCPCounterU32(u32 regAddrL, u32 regAddrH) {
