@@ -8,6 +8,11 @@
 extern "C" {
 #endif
 
+void GXGetVtxDesc(GXAttr attr, GXAttrType* type);
+void GXGetVtxDescv(GXVtxDescList* vcd);
+void GXGetVtxAttrFmt(GXVtxFmt fmt, GXAttr attr, GXCompCnt* cnt, GXCompType* type, u8* frac);
+void GXGetVtxAttrFmtv(GXVtxFmt fmt, GXVtxAttrFmtList* vat);
+
 void GXGetCullMode(GXCullMode* mode);
 
 // Texture

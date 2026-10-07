@@ -104,21 +104,9 @@
       "address": "0x80239D78",
       "evidence": "evidence.tsv external row: system-call installation target call and inspected callee behavior, with SDK reference provenance."
     },
-    "__CARDBlock": {
-      "address": "0x803A6508",
-      "evidence": "evidence.tsv CARD external row __CARDBlock: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
-    "__CARDPutControlBlock": {
-      "address": "0x80254374",
-      "evidence": "evidence.tsv CARD external row __CARDPutControlBlock: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
     "DCStoreRange": {
       "address": "0x80239D1C",
       "evidence": "evidence.tsv CARD external row DCStoreRange: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
-    "__CARDEraseSector": {
-      "address": "0x802540F0",
-      "evidence": "evidence.tsv CARD external row __CARDEraseSector: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "OSGetTime": {
       "address": "0x8023E794",
@@ -132,10 +120,6 @@
       "address": "0x801C3180",
       "evidence": "evidence.tsv CARD external row strlen: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
-    "__CARDGetControlBlock": {
-      "address": "0x802542BC",
-      "evidence": "evidence.tsv CARD external row __CARDGetControlBlock: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
     "memcmp": {
       "address": "0x801C1FEC",
       "evidence": "evidence.tsv CARD external row memcmp: target relocation fields, independently inspected callee behavior and SDK source signature."
@@ -144,21 +128,9 @@
       "address": "0x80256F14",
       "evidence": "evidence.tsv CARD external row __CARDCompareFileName: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
-    "__CARDDefaultApiCallback": {
-      "address": "0x8025335C",
-      "evidence": "evidence.tsv CARD external row __CARDDefaultApiCallback: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
     "strncpy": {
       "address": "0x801C2EF0",
       "evidence": "evidence.tsv CARD external row strncpy: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
-    "__CARDSyncCallback": {
-      "address": "0x80253360",
-      "evidence": "evidence.tsv CARD external row __CARDSyncCallback: target relocation fields, independently inspected callee behavior and SDK source signature."
-    },
-    "__CARDSync": {
-      "address": "0x80254558",
-      "evidence": "evidence.tsv CARD external row __CARDSync: target relocation fields, independently inspected callee behavior and SDK source signature."
     },
     "__CARDIsWritable": {
       "address": "0x80257010",
@@ -204,10 +176,6 @@
       "address": "0x8023CEAC",
       "evidence": "evidence.tsv retained CARD external __OSUnlockSramEx: branch or address-load operands and reference signature."
     },
-    "__CARDGetFontEncode": {
-      "address": "0x8025427C",
-      "evidence": "evidence.tsv retained CARD external __CARDGetFontEncode: branch or address-load operands and reference signature."
-    },
     "__OSLockSram": {
       "address": "0x8023CA94",
       "evidence": "evidence.tsv retained CARD external __OSLockSram: branch or address-load operands and reference signature."
@@ -216,17 +184,9 @@
       "address": "0x8023CE88",
       "evidence": "evidence.tsv retained CARD external __OSUnlockSram: branch or address-load operands and reference signature."
     },
-    "__CARDReadSegment": {
-      "address": "0x80253EA0",
-      "evidence": "evidence.tsv retained CARD external __CARDReadSegment: branch or address-load operands and reference signature."
-    },
     "DCInvalidateRange": {
       "address": "0x80239CC0",
       "evidence": "evidence.tsv retained CARD external DCInvalidateRange: branch or address-load operands and reference signature."
-    },
-    "__CARDWritePage": {
-      "address": "0x80253FD4",
-      "evidence": "evidence.tsv retained CARD external __CARDWritePage: target callback and scheduler calls."
     },
     "__AXSetPBDefault": {
       "address": "0x80288DEC",
@@ -840,10 +800,6 @@
       "address": "0x801AD424",
       "evidence": "evidence.tsv external row for GXPixel resolved caller and related SDK/runtime callee identity."
     },
-    "__CARDReadStatus": {
-      "address": "0x80253770",
-      "evidence": "evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
-    },
     "AIInitDMA": {
       "address": "0x8024A140",
       "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
@@ -1072,21 +1028,73 @@
       "address": "0x8024122C",
       "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
     },
-    "OSGetArenaHi": {
-      "address": "0x802399F8",
-      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
-    },
     "DVDGetDriveStatus": {
       "address": "0x8024151C",
+      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
+    },
+    "strncmp": {
+      "address": "0x801C302C",
+      "evidence": "Actual original248body REL24 at80241F60/80241F98 length4/2; callee801C302C..3084 bounded NUL stopping byte comparison. Relatedlibc spelling, no originalsource/debugname claim."
+    },
+    "OSResumeThread": {
+      "address": "0x8023E040",
+      "evidence": "Actual target operands and canonical accepted API signatures in GXFifo, relatedSDK identity."
+    },
+    "OSSuspendThread": {
+      "address": "0x8023E2C8",
+      "evidence": "Actual target operands and canonical accepted API signatures in GXFifo, relatedSDK identity."
+    },
+    "__piReg": {
+      "address": "0x803ED358",
+      "evidence": "Actual target operands and canonical accepted API signatures in GXFifo, relatedSDK identity."
+    },
+    "__GXSetMatrixIndex": {
+      "address": "0x802528D8",
+      "evidence": "GXAttr actualoriginalTexCoordGen2REL24 binds sharedhelper; genuine internalGXAttrmatIdxAttr prototype/currenttypedGXData fields."
+    },
+    "OSGetArenaHi": {
+      "address": "0x802399F8",
       "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
     },
     "OSSetArenaHi": {
       "address": "0x80239A08",
       "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
     },
-    "strncmp": {
-      "address": "0x801C302C",
-      "evidence": "Actual original248body REL24 at80241F60/80241F98 length4/2; callee801C302C..3084 bounded NUL stopping byte comparison. Relatedlibc spelling, no originalsource/debugname claim."
+    "__CARDPermMask": {
+      "address": "0x803EC2C2",
+      "evidence": "CARDOpen actual original complete retained native relocation operand proof and current canonical API signature; related SDK identity."
+    },
+    "__CARDAccess": {
+      "address": "0x80256F7C",
+      "evidence": "CARDOpen actual original complete retained native relocation operand proof and current canonical API signature; related SDK identity."
+    },
+    "GXGetGPFifo": {
+      "address": "0x8024C8E0",
+      "evidence": "Actual original GXMisc complete-body operand proof, current established canonical signature reused; related API identity."
+    },
+    "__memReg": {
+      "address": "0x803ED364",
+      "evidence": "Actual original GXMisc complete-body operand proof, current established canonical signature reused; related API identity."
+    },
+    "__peReg": {
+      "address": "0x803ED360",
+      "evidence": "Actual original GXMisc complete-body operand proof, current established canonical signature reused; related API identity."
+    },
+    "OSGetFontEncode": {
+      "address": "0x80285A90",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "OSRegisterResetFunction": {
+      "address": "0x8023BFBC",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "CARDUnmount": {
+      "address": "0x80256684",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "__CARDVendorID": {
+      "address": "0x803EC2C0",
+      "evidence": "Complete BFBB CARDMount native retained operand resolved against original target; source name corroborated by pinned donor declaration and actual call/access context."
     }
   },
   "units": [
@@ -9139,6 +9147,102 @@
           "placement": ".data5",
           "start": "0x803EB6B8",
           "end": "0x803EB6C0"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXFifo.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete faithful related SDK source; actual target operands/callers and focused full-DOL proof support retained roots and storage. Original archive boundaries remain provisional.",
+      "link_roots": {
+        "symbols": [
+          "GXInitFifoBase",
+          "GXInitFifoLimits",
+          "GXInitFifoPtrs",
+          "GXSetCPUFifo",
+          "GXSetGPFifo",
+          "GXGetFifoPtrs",
+          "GXSetBreakPtCallback",
+          "GXEnableBreakPt",
+          "GXDisableBreakPt",
+          "__GXFifoInit"
+        ],
+        "evidence": "Only real target global functions; sixstatic routines naturally reachable through existingsourcecallgraph/addressrefs; extra3body92sourcepreserved"
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024C038",
+          "end": "0x8024C7D8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED380",
+          "end": "0x803ED3A0"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/card/CARDBios.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete BFBB CARDBios source with current canonical headers; all 25 retained target functions and full initialized/NOBITS allocations validated. Original archive boundary remains provisional.",
+      "link_roots": {
+        "symbols": [
+          "__CARDDefaultApiCallback",
+          "__CARDSyncCallback",
+          "__CARDExtHandler",
+          "__CARDExiHandler",
+          "__CARDReadStatus",
+          "__CARDClearStatus",
+          "__CARDTxHandler",
+          "__CARDUnlockedHandler",
+          "__CARDEnableInterrupt",
+          "__CARDReadSegment",
+          "__CARDWritePage",
+          "__CARDEraseSector",
+          "CARDInit",
+          "__CARDSetDiskID",
+          "__CARDGetFontEncode",
+          "__CARDGetControlBlock",
+          "__CARDPutControlBlock",
+          "CARDGetResultCode",
+          "CARDFreeBlocks",
+          "__CARDSync"
+        ],
+        "evidence": "Twenty target global functions retain five genuine static helpers through the original callgraph and address references; two additional donor APIs remain in source without established target identity."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025335C",
+          "end": "0x80254640"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED3C0",
+          "end": "0x803ED3C2"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC2B8",
+          "end": "0x803EC2BC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6508",
+          "end": "0x803A6748"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FEFE8",
+          "end": "0x802FF040"
         }
       ]
     }

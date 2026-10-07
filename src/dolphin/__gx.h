@@ -39,6 +39,7 @@ do { \
 #define CHECK_GXBEGIN(line, name) ASSERTMSGLINE(line, !__GXinBegin, "'" name "' is not allowed between GXBegin/GXEnd")
 
 /* GXAttr */
+void __GXSetMatrixIndex(GXAttr matIdxAttr);
 void __GXSetVCD(void);
 void __GXSetVAT(void);
 void __GXCalculateVLim(void);
@@ -88,6 +89,8 @@ extern void* __piReg;
 #define GX_SET_PE_REG(offset, val)  (*(volatile u16*)((volatile u16*)(__peReg) + (offset)) = val)
 #define GX_SET_PI_REG(offset, val)  (*(volatile u32*)((volatile u32*)(__piReg) + (offset)) = val)
 
+void __GXAbort(void);
+void __GXPEInit(void);
 void GXDrawDone(void);
 void __GXSetBWDials(u16 cpDial, u16 tcDial, u16 peDial, u16 cpuRdDial, u16 cpuWrDial);
 static inline u32 __GXReadCPCounterU32(u32 regAddrL, u32 regAddrH) {
@@ -227,8 +230,66 @@ extern GXData* const __GXData;
 extern GXBool __GXinBegin;
 #endif
 
+typedef struct __GXFifoObj
+{
+    u8* base;
+    u8* top;
+    u32 size;
+    u32 hiWatermark;
+    u32 loWatermark;
+    void* rdPtr;
+    void* wrPtr;
+    s32 count;
+    u8 bind_cpu;
+    u8 bind_gp;
+} __GXFifoObj;
+
+void __GXFifoInit(void);
+
 #ifdef __cplusplus
 }
+#endif
+
+#ifdef DEBUG
+#define GX_WRITE_SOME_REG2(a, b, c, addr) \
+do { \
+    long regAddr; \
+    GX_WRITE_U8(a); \
+    GX_WRITE_U8(b); \
+    GX_WRITE_U32(c); \
+    regAddr = addr; \
+    if (regAddr >= 0 && regAddr < 4) { \
+        __GXData->indexBase[regAddr] = c; \
+    } \
+} while (0)
+#else
+#define GX_WRITE_SOME_REG2(a, b, c, addr) \
+do { \
+    GX_WRITE_U8(a); \
+    GX_WRITE_U8(b); \
+    GX_WRITE_U32(c); \
+} while (0)
+#endif
+
+#ifdef DEBUG
+#define GX_WRITE_SOME_REG3(a, b, c, addr) \
+do { \
+    long regAddr; \
+    GX_WRITE_U8(a); \
+    GX_WRITE_U8(b); \
+    GX_WRITE_U32(c); \
+    regAddr = addr; \
+    if (regAddr >= 0 && regAddr < 4) { \
+        __GXData->indexStride[regAddr] = c; \
+    } \
+} while (0)
+#else
+#define GX_WRITE_SOME_REG3(a, b, c, addr) \
+do { \
+    GX_WRITE_U8(a); \
+    GX_WRITE_U8(b); \
+    GX_WRITE_U32(c); \
+} while (0)
 #endif
 
 #endif
