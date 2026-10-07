@@ -2738,6 +2738,22 @@
           "object_seed": true
         }
       ]
+    },
+    {
+      "name": "sdk/unassigned/80242018",
+      "source": null,
+      "library": "unassigned",
+      "evidence": "Original48-byte indirect callback follows the disk-ID comparator. Source-file and subsystem ownership are unresolved; no reconstructed source or identity credit.",
+      "sections": [
+        {
+          "section": ".text",
+          "start": "0x80242018",
+          "end": "0x80242048",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Actual prologue80242018 and return80242044 enclose a nullable indirect call through803ED170; caller8023F6B0. Adjacent donor comparator ends80242018 and does not establish callback source ownership."
+        }
+      ]
     }
   ],
   "limitations": [
