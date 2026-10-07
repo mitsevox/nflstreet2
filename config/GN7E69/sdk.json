@@ -738,7 +738,7 @@
       "name": "src/dolphin/dvd/dvd.c",
       "source": "src/dolphin/dvd/dvd.c",
       "library": "DVD",
-      "evidence": "Target DVD state-machine/cancel/read cluster; multiple nontrivial anchors; first empty optional checker inferred from adjacent source order. Published native retained-layout base is invalid because unrelated cbForCancelAllSync alias matched AX; do not use its base.",
+      "evidence": "Complete coherent BFBB 50-body source with 46 target bodies across 9,980 bytes; normal comparisons retain exact and partial results. Four extra source bodies remain unassigned. Small-global target placement differs from full native packing; original archive membership remains provisional.",
       "sections": [
         {
           "section": ".text",
@@ -747,6 +747,60 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Target DVD state-machine/cancel/read cluster; multiple nontrivial anchors; first empty optional checker inferred from adjacent source order. Published native retained-layout base is invalid because unrelated cbForCancelAllSync alias matched AX; do not use its base."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC180",
+          "end": "0x803EC198",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native allocation and actual original operands/pointers: initialized pools 384+24 bytes; scratch BB2/disk ID/dummy/alarm 32+32+48+40 bytes. No source storage credit for unlinked NOBITS."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FD0F8",
+          "end": "0x802FD278",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native allocation and actual original operands/pointers: initialized pools 384+24 bytes; scratch BB2/disk ID/dummy/alarm 32+32+48+40 bytes. No source storage credit for unlinked NOBITS."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803A5540",
+          "end": "0x803A55D8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native allocation and actual original operands/pointers: initialized pools 384+24 bytes; scratch BB2/disk ID/dummy/alarm 32+32+48+40 bytes. No source storage credit for unlinked NOBITS."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED118",
+          "end": "0x803ED154",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Fifteen actual four-byte small globals established by retained target operands; intervening unused cells remain unassigned. Native diagnostic 76-byte packing is not an original target allocation and is not promoted."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED15C",
+          "end": "0x803ED164",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Original boot/init flag cells established by retained target operands; intervening unused cells remain unassigned. Native diagnostic 76-byte packing is not an original target allocation and is not promoted."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED16C",
+          "end": "0x803ED170",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Original LastState pointer cell established by retained target operands; intervening unused cells remain unassigned. Native diagnostic 76-byte packing is not an original target allocation and is not promoted."
         }
       ]
     },

@@ -15375,6 +15375,281 @@
           "end": "0x80256730"
         }
       ]
+    },
+    {
+      "source": "src/dolphin/dvd/dvd.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete coherent BFBB DVD core source; all 46 target functions in the full 9,980-byte range are measured. Unsupported unused stack local omitted. Native small-BSS packing remains a diagnostic placement: target trailing globals differ, so partials remain and no NOBITS source credit or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023F494",
+          "end": "0x80241B90"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC180",
+          "end": "0x803EC198"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FD0F8",
+          "end": "0x802FD278"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A5540",
+          "end": "0x803A55D8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED118",
+          "end": "0x803ED164"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "defaultOptionalCommandChecker",
+          "start": "0x8023F494",
+          "end": "0x8023F498"
+        },
+        {
+          "symbol": "DVDInit",
+          "start": "0x8023F498",
+          "end": "0x8023F564"
+        },
+        {
+          "symbol": "stateReadingFST",
+          "start": "0x8023F564",
+          "end": "0x8023F5F8"
+        },
+        {
+          "symbol": "cbForStateReadingFST",
+          "start": "0x8023F5F8",
+          "end": "0x8023F684"
+        },
+        {
+          "symbol": "cbForStateError",
+          "start": "0x8023F684",
+          "end": "0x8023F730"
+        },
+        {
+          "symbol": "stateTimeout",
+          "start": "0x8023F730",
+          "end": "0x8023F764"
+        },
+        {
+          "symbol": "stateGettingError",
+          "start": "0x8023F764",
+          "end": "0x8023F78C"
+        },
+        {
+          "symbol": "CategorizeError",
+          "start": "0x8023F78C",
+          "end": "0x8023F840"
+        },
+        {
+          "symbol": "cbForStateGettingError",
+          "start": "0x8023F840",
+          "end": "0x8023FAD4"
+        },
+        {
+          "symbol": "cbForUnrecoveredError",
+          "start": "0x8023FAD4",
+          "end": "0x8023FB3C"
+        },
+        {
+          "symbol": "cbForUnrecoveredErrorRetry",
+          "start": "0x8023FB3C",
+          "end": "0x8023FBD4"
+        },
+        {
+          "symbol": "stateGoToRetry",
+          "start": "0x8023FBD4",
+          "end": "0x8023FBFC"
+        },
+        {
+          "symbol": "cbForStateGoToRetry",
+          "start": "0x8023FBFC",
+          "end": "0x8023FD54"
+        },
+        {
+          "symbol": "stateCheckID",
+          "start": "0x8023FD54",
+          "end": "0x8023FE34"
+        },
+        {
+          "symbol": "stateCheckID3",
+          "start": "0x8023FE34",
+          "end": "0x8023FE68"
+        },
+        {
+          "symbol": "stateCheckID2a",
+          "start": "0x8023FE68",
+          "end": "0x8023FE9C"
+        },
+        {
+          "symbol": "cbForStateCheckID2a",
+          "start": "0x8023FE9C",
+          "end": "0x8023FF10"
+        },
+        {
+          "symbol": "stateCheckID2",
+          "start": "0x8023FF10",
+          "end": "0x8023FF48"
+        },
+        {
+          "symbol": "cbForStateCheckID1",
+          "start": "0x8023FF48",
+          "end": "0x8024005C"
+        },
+        {
+          "symbol": "cbForStateCheckID2",
+          "start": "0x8024005C",
+          "end": "0x80240140"
+        },
+        {
+          "symbol": "cbForStateCheckID3",
+          "start": "0x80240140",
+          "end": "0x8024023C"
+        },
+        {
+          "symbol": "AlarmHandler",
+          "start": "0x8024023C",
+          "end": "0x80240280"
+        },
+        {
+          "symbol": "stateCoverClosed",
+          "start": "0x80240280",
+          "end": "0x8024034C"
+        },
+        {
+          "symbol": "stateCoverClosed_CMD",
+          "start": "0x8024034C",
+          "end": "0x8024037C"
+        },
+        {
+          "symbol": "cbForStateCoverClosed",
+          "start": "0x8024037C",
+          "end": "0x802403EC"
+        },
+        {
+          "symbol": "stateMotorStopped",
+          "start": "0x802403EC",
+          "end": "0x80240414"
+        },
+        {
+          "symbol": "cbForStateMotorStopped",
+          "start": "0x80240414",
+          "end": "0x802404F8"
+        },
+        {
+          "symbol": "stateReady",
+          "start": "0x802404F8",
+          "end": "0x80240728"
+        },
+        {
+          "symbol": "stateBusy",
+          "start": "0x80240728",
+          "end": "0x80240A48"
+        },
+        {
+          "symbol": "cbForStateBusy",
+          "start": "0x80240A48",
+          "end": "0x80241080"
+        },
+        {
+          "symbol": "DVDReadAbsAsyncPrio",
+          "start": "0x80241080",
+          "end": "0x8024115C"
+        },
+        {
+          "symbol": "DVDReadAbsAsyncForBS",
+          "start": "0x8024115C",
+          "end": "0x8024122C"
+        },
+        {
+          "symbol": "DVDReadDiskID",
+          "start": "0x8024122C",
+          "end": "0x80241300"
+        },
+        {
+          "symbol": "DVDCancelStreamAsync",
+          "start": "0x80241300",
+          "end": "0x802413BC"
+        },
+        {
+          "symbol": "DVDInquiryAsync",
+          "start": "0x802413BC",
+          "end": "0x8024148C"
+        },
+        {
+          "symbol": "DVDReset",
+          "start": "0x8024148C",
+          "end": "0x802414D0"
+        },
+        {
+          "symbol": "DVDGetCommandBlockStatus",
+          "start": "0x802414D0",
+          "end": "0x8024151C"
+        },
+        {
+          "symbol": "DVDGetDriveStatus",
+          "start": "0x8024151C",
+          "end": "0x802415C8"
+        },
+        {
+          "symbol": "DVDSetAutoInvalidation",
+          "start": "0x802415C8",
+          "end": "0x802415D8"
+        },
+        {
+          "symbol": "DVDResume",
+          "start": "0x802415D8",
+          "end": "0x80241628"
+        },
+        {
+          "symbol": "DVDCancelAsync",
+          "start": "0x80241628",
+          "end": "0x802418A4"
+        },
+        {
+          "symbol": "DVDCancel",
+          "start": "0x802418A4",
+          "end": "0x80241950"
+        },
+        {
+          "symbol": "cbForCancelSync",
+          "start": "0x80241950",
+          "end": "0x80241974"
+        },
+        {
+          "symbol": "DVDGetCurrentDiskID",
+          "start": "0x80241974",
+          "end": "0x8024197C"
+        },
+        {
+          "symbol": "DVDCheckDisk",
+          "start": "0x8024197C",
+          "end": "0x80241A74"
+        },
+        {
+          "symbol": "__DVDPrepareResetAsync",
+          "start": "0x80241A74",
+          "end": "0x80241B90"
+        }
+      ],
+      "discarded": [
+        "cbForCancelAllSync",
+        "DVDSeekAbsAsyncPrio",
+        "DVDCancelAllAsync",
+        "DVDCancelAll"
+      ]
     }
   ]
 }
