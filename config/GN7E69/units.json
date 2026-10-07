@@ -872,42 +872,6 @@
       "address": "0x803EC5C0",
       "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
     },
-    "EXIAttach": {
-      "address": "0x8025A81C",
-      "evidence": "evidence.tsv external EXIAttach: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
-    },
-    "EXILock": {
-      "address": "0x8025B1A4",
-      "evidence": "evidence.tsv external EXILock: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
-    },
-    "EXISelect": {
-      "address": "0x8025A9E4",
-      "evidence": "evidence.tsv external EXISelect: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source.; evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
-    },
-    "EXIImm": {
-      "address": "0x80259E7C",
-      "evidence": "evidence.tsv external EXIImm: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
-    },
-    "EXISync": {
-      "address": "0x8025A264",
-      "evidence": "evidence.tsv external EXISync: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
-    },
-    "EXIDeselect": {
-      "address": "0x8025AB10",
-      "evidence": "evidence.tsv external EXIDeselect: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source.; evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
-    },
-    "EXIUnlock": {
-      "address": "0x8025B298",
-      "evidence": "evidence.tsv external EXIUnlock: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source.; evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
-    },
-    "EXIDetach": {
-      "address": "0x8025A928",
-      "evidence": "evidence.tsv external EXIDetach: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
-    },
-    "EXIGetID": {
-      "address": "0x8025B3B4",
-      "evidence": "evidence.tsv external EXIGetID: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
-    },
     "OSGetConsoleType": {
       "address": "0x80238984",
       "evidence": "evidence.tsv external OSGetConsoleType: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source. evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
@@ -919,10 +883,6 @@
     "__AXCompressorTable": {
       "address": "0x803027C0",
       "evidence": "evidence.tsv AXCL retainedcall/globaloperand and pinned donor declaration."
-    },
-    "EXIImmEx": {
-      "address": "0x8025A0D8",
-      "evidence": "evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
     },
     "OSGetTick": {
       "address": "0x8023E7AC",
@@ -936,16 +896,8 @@
       "address": "0x80253770",
       "evidence": "evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
     },
-    "EXIProbe": {
-      "address": "0x8025A6E8",
-      "evidence": "evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
-    },
     "__cvt_fp2unsigned": {
       "address": "0x801AD424",
-      "evidence": "evidence.tsv external row for GXPixel resolved caller and related SDK/runtime callee identity."
-    },
-    "__GXFlushTextureState": {
-      "address": "0x802515E0",
       "evidence": "evidence.tsv external row for GXPixel resolved caller and related SDK/runtime callee identity."
     },
     "__OSStartTime": {
