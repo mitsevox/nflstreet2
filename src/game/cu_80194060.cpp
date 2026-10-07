@@ -41,11 +41,11 @@ void fn_80211E08(Element_80194108 *, int);
 void fn_80211EFC(Element_80194108 *);
 Texture_80194108 *fn_802120E4(Element_80194108 *, int);
 Palette_80194108 *fn_80212124(Element_80194108 *, int, int);
-void fn_8025090C(Texture_80194108 *, GXTexRegion *);
+extern "C" void GXPreLoadEntireTexture(Texture_80194108 *, GXTexRegion *);
 void fn_8024E450(void);
-void fn_80250654(GXTlutObj *, int);
-void fn_802503D8(Texture_80194108 *, int);
-void fn_8025042C(Texture_80194108 *, GXTexRegion *, int);
+extern "C" void GXLoadTlut(GXTlutObj *, int);
+extern "C" void GXInitTexObjTlut(Texture_80194108 *, int);
+extern "C" void GXLoadTexObjPreLoaded(Texture_80194108 *, GXTexRegion *, int);
 void fn_80251604(int, int);
 void fn_8024E908(int, int, int);
 void fn_8024FB58(int, GXColor);
@@ -70,9 +70,9 @@ void fn_8025251C(Mtx44,int);
 void fn_802525BC(int);
 void fn_801CE720(void);
 void fn_801CE774(void);
-void fn_802507E0(GXTexRegion *,int,int,int,int);
+extern "C" void GXInitTexPreLoadRegion(GXTexRegion *,int,int,int,int);
 int fn_801CF6D4(void *,int);
-void fn_8025089C(void);
+extern "C" void GXInvalidateTexAll(void);
 void fn_8024E4F4(void);
 void fn_801CEA7C(int);
 int fn_801CEA08(void);
@@ -80,8 +80,8 @@ int fn_801CEA14(void);
 void fn_801CEC48(int,int,int,int);
 void fn_801CE22C(void (*)(void));
 void fn_801CE23C(void);
-void fn_802506EC(GXTexRegion *,int,unsigned int,int,unsigned int,int);
-RegionCallback_80194054 fn_802508E4(RegionCallback_80194054);
+extern "C" void GXInitTexCacheRegion(GXTexRegion *,int,unsigned int,int,unsigned int,int);
+extern "C" RegionCallback_80194054 GXSetTexRegionCallback(RegionCallback_80194054);
 int fn_801CE930(void);
 int fn_801CE944(int);
 void GXCopyDisp(int,int);
@@ -128,11 +128,11 @@ void fn_80194108(int index, Texture_80194108 *out, int region)
     Texture_80194108 *texture = fn_802120E4(&element, 0xFF000000);
     Palette_80194108 *palette = fn_80212124(&element, 0xFF000000, 0);
     out->mUnknown54 = &lbl_80365038[region];
-    fn_8025090C(texture, out->mUnknown54);
+    GXPreLoadEntireTexture(texture, out->mUnknown54);
     fn_8024E450();
     if (palette) {
-        fn_80250654(&palette->mUnknown4, region + 4);
-        fn_802503D8(texture, region + 4);
+        GXLoadTlut(&palette->mUnknown4, region + 4);
+        GXInitTexObjTlut(texture, region + 4);
     }
     memcpy(out, texture, 0x2C);
     fn_80211EFC(&element);
@@ -161,7 +161,7 @@ void fn_80194280(Quad_8019424C *quad, int, unsigned int x, unsigned int y, unsig
 void fn_80194314(Quad_8019424C *quad)
 {
     if (quad->mUnknown0) {
-        fn_8025042C(quad->mUnknown0, quad->mUnknown0->mUnknown54, 0);
+        GXLoadTexObjPreLoaded(quad->mUnknown0, quad->mUnknown0->mUnknown54, 0);
         fn_80251604(0, 0);
     } else {
         fn_80251604(0, 4);
@@ -176,7 +176,7 @@ void fn_801943D4(void)
 {
     GXColor color = {255, 0, 0, 255};
     fn_8024FB58(4, color);
-    fn_8025042C(lbl_80364FB0.mUnknown0, lbl_80364FB0.mUnknown0->mUnknown54, 0);
+    GXLoadTexObjPreLoaded(lbl_80364FB0.mUnknown0, lbl_80364FB0.mUnknown0->mUnknown54, 0);
     fn_80251604(0, 4);
     fn_8024E908(0x98, 0, 4);
     float x = lbl_803ECB9C.mX;
@@ -245,8 +245,8 @@ void fn_80194794(void)
 {
     fn_8019424C(&lbl_80364FB0,1.0f,1.0f);
     fn_8019424C(&lbl_80364FF4,1.0f,1.0f);
-    fn_802507E0(&lbl_80365038[0],0,0x60000,0,0);
-    fn_802507E0(&lbl_80365038[1],0x60000,0x20000,0,0);
+    GXInitTexPreLoadRegion(&lbl_80365038[0],0,0x60000,0,0);
+    GXInitTexPreLoadRegion(&lbl_80365038[1],0x60000,0x20000,0,0);
     void *p = fn_801CF5BC(0,fn_801CF7AC());
     lbl_803EB72C[2] = fn_801CF6D4(p,2);
     lbl_803EB72C[3] = fn_801CF6D4(p,40) + 4;
@@ -255,7 +255,7 @@ void fn_80194794(void)
 void fn_80194858(int mode)
 {
     lbl_803EB728 = fn_801EEB44(lbl_802EBE14,44);
-    fn_8025089C();
+    GXInvalidateTexAll();
     fn_8024E4F4();
     fn_801CEA7C(0);
     lbl_803EB72C[1] = 0;
@@ -307,8 +307,8 @@ void fn_80194858(int mode)
     fn_80194754(mode,128);
     fn_80194508(128);
     fn_801CE22C(fn_80194060);
-    fn_802506EC(&lbl_80365098,0,0x80000,1,0x80000,1);
-    lbl_803ECBA8 = fn_802508E4(fn_80194054);
+    GXInitTexCacheRegion(&lbl_80365098,0,0x80000,1,0x80000,1);
+    lbl_803ECBA8 = GXSetTexRegionCallback(fn_80194054);
     lbl_803EB72C[0] = mode;
 }
 void fn_80194AEC(int a)
@@ -323,7 +323,7 @@ void fn_80194AEC(int a)
     fn_801946C4();
     fn_801CEA7C(1);
     fn_80194248(&lbl_80364F58);
-    fn_802508E4(lbl_803ECBA8);
+    GXSetTexRegionCallback(lbl_803ECBA8);
     lbl_803EB72C[0] = 0;
 }
 const signed char lbl_802AD828[40] = {

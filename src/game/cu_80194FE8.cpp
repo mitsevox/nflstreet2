@@ -45,7 +45,7 @@ void fn_802520E0(int, int, int);
 void fn_8024EB28(int);
 void fn_802528B0(int);
 void fn_80252034(int, int, int, int);
-void fn_802505A8(GXTexObj *, int);
+extern "C" void GXLoadTexObj(GXTexObj *, int);
 void fn_802524D4(float *);
 void fn_8024AC28(Mtx44, float, float, float, float, float, float);
 void fn_802523A4(Mtx44, int);
@@ -53,7 +53,7 @@ void fn_801D03D0(Mtx44);
 void fn_8025251C(Mtx44, int);
 void fn_802525BC(int);
 void *fn_801D2BB0(int, int, int, int);
-void fn_8024FFC4(GXTexObj *, void *, int, int, int, int, int, int);
+extern "C" void GXInitTexObj(GXTexObj *, void *, int, int, int, int, int, int);
 void fn_80195B28(int, unsigned int, float);
 void fn_80195E0C(void);
 void fn_80195F80(void);
@@ -306,7 +306,7 @@ void fn_80195B28(int textured, unsigned int value, float alpha) {
         fn_8024EB28(0);
         fn_802528B0(1);
         fn_80252034(1, 4, 5, 5);
-        fn_802505A8(&lbl_80365168, 0);
+        GXLoadTexObj(&lbl_80365168, 0);
     } else {
         fn_80251CC4(1);
         fn_80251B28(0, 0, 0, 4);
@@ -398,7 +398,7 @@ void fn_80196174(Object_80228224 *object) {
     lbl_802EDCD0.mUnknown4 = lbl_802EDCD0.mUnknown8 = 0;
     if (!lbl_803EB738) {
         lbl_803EB738 = fn_801D2BB0(1, 0x23000, 0, 0);
-        fn_8024FFC4(&lbl_80365168, lbl_803EB738, 320, 224, 4, 0, 0, 0);
+        GXInitTexObj(&lbl_80365168, lbl_803EB738, 320, 224, 4, 0, 0, 0);
     }
 }
 void fn_80196204(void) {

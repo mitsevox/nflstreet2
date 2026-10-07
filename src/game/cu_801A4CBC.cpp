@@ -58,8 +58,8 @@ void fn_8024DF64(int a);
 void fn_8024FB58(int a, GXColor color);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_8024FFC4(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
-void fn_802505A8(GXTexObj *pObj, int a);
+extern "C" void GXInitTexObj(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
+extern "C" void GXLoadTexObj(GXTexObj *pObj, int a);
 void fn_80251604(int a, int b);
 void fn_80251B28(int a, int b, int c, int d);
 void fn_80251CC4(int a);
@@ -132,7 +132,7 @@ void fn_801A4E9C(void)
     lbl_803EB834 = 0;
     lbl_803EB83C = 1;
     lbl_803ECC18 = 1;
-    fn_8024FFC4(&lbl_80366680, lbl_80366640[0].mpUnknown14, lbl_80366640[0].mUnknown8,
+    GXInitTexObj(&lbl_80366680, lbl_80366640[0].mpUnknown14, lbl_80366640[0].mUnknown8,
                 lbl_80366640[0].mUnknownA, lbl_80366640[0].mUnknown10, 0, 0, 0);
 }
 
@@ -200,7 +200,7 @@ void fn_801A5104(void)
         fn_80251CC4(1);
         fn_80251B28(0, 0, 0, 4);
         fn_801D0470(fn_80228668());
-        fn_802505A8(&lbl_80366680, 0);
+        GXLoadTexObj(&lbl_80366680, 0);
         fn_801D04C4();
         fn_801D0664((float (*)[4])fn_80236384(0));
         fn_80236408(0, &scale);

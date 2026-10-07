@@ -37,14 +37,14 @@ void fn_8024DCE4(int a, int b, int c, int d, int e, int f);
 void fn_8024DF64(int a);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_80250210(GXTexObj *pObject, void *pData, int width, int height, int a, int b, int c, int d, int e);
-void *fn_802503E0(void *p);
-void fn_802505A8(GXTexObj *pObject, int a);
-void fn_802505FC(GXTlutObj *pObject, int a, int b, int c);
-int fn_80250634(void *p);
-int fn_80250640(void *p);
-int fn_8025064C(void *p);
-void fn_80250654(GXTlutObj *pObject, int a);
+extern "C" void GXInitTexObjCI(GXTexObj *pObject, void *pData, int width, int height, int a, int b, int c, int d, int e);
+extern "C" void *GXGetTexObjData(void *p);
+extern "C" void GXLoadTexObj(GXTexObj *pObject, int a);
+extern "C" void GXInitTlutObj(GXTlutObj *pObject, int a, int b, int c);
+extern "C" int GXGetTlutObjData(void *p);
+extern "C" int GXGetTlutObjFmt(void *p);
+extern "C" int GXGetTlutObjNumEntries(void *p);
+extern "C" void GXLoadTlut(GXTlutObj *pObject, int a);
 void fn_80251604(int a, int b);
 void fn_80251A58(int a, int b, int c, int d, int e);
 void fn_80251B28(int a, int b, int c, int d);
@@ -69,13 +69,13 @@ void fn_8019FBEC(void)
     fn_80211E08(&lbl_80365448, lbl_803EB7D4);
     for (i = 0; i < 3; i++) {
         lbl_80365470[i] = fn_802120E4(&lbl_80365448, 0xFF000000 + i);
-        fn_80250210(&lbl_8036547C[i], fn_802503E0(lbl_80365470[i]), lbl_80365470[i]->mUnknown24,
+        GXInitTexObjCI(&lbl_8036547C[i], GXGetTexObjData(lbl_80365470[i]), lbl_80365470[i]->mUnknown24,
                     lbl_80365470[i]->mUnknown26, 9, 0, 0, 0, 0);
     }
     for (i = 0; i < 3; i++) {
         lbl_803654DC[i] = fn_80212124(&lbl_80365448, 0xFF000000, i);
-        fn_802505FC(&lbl_803654E8[i], fn_80250634(lbl_803654DC[i]->mUnknown4),
-                    fn_80250640(lbl_803654DC[i]->mUnknown4), fn_8025064C(lbl_803654DC[i]->mUnknown4));
+        GXInitTlutObj(&lbl_803654E8[i], GXGetTlutObjData(lbl_803654DC[i]->mUnknown4),
+                    GXGetTlutObjFmt(lbl_803654DC[i]->mUnknown4), GXGetTlutObjNumEntries(lbl_803654DC[i]->mUnknown4));
     }
     lbl_803EB7D0 = 1;
 }
@@ -112,8 +112,8 @@ void fn_8019FD80(Instance_80159F10 *pInstance)
     GXSetZCompLoc(GX_DISABLE);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
     fn_80251A58(4, 32, 0, 4, 32);
-    fn_80250654(&lbl_803654E8[pInstance->mUnknown1D], 0);
-    fn_802505A8(&lbl_8036547C[pInstance->mUnknown1C], 0);
+    GXLoadTlut(&lbl_803654E8[pInstance->mUnknown1D], 0);
+    GXLoadTexObj(&lbl_8036547C[pInstance->mUnknown1C], 0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.8f, 0.0f, -0.8f);
     GXColor4u8(255, 255, 255, pInstance->mUnknown20 * 255.0f);
