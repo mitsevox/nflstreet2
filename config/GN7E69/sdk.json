@@ -800,15 +800,15 @@
       "name": "src/dolphin/dvd/dvdidutils.c",
       "source": "src/dolphin/dvd/dvdidutils.c",
       "library": "DVD",
-      "evidence": "Target first function compares game-name[4],company[2],disk/version with zero/FF wildcard handling: DVDCompareDiskID. Remaining function before fstload is inferred same original file; ownership provisional.",
+      "evidence": "Related complete donor disk-ID comparator occupies target248-byte function; adjacent48-byte indirect callback has unresolved source ownership and is excluded from this provisional file mapping.",
       "sections": [
         {
           "section": ".text",
           "start": "0x80241F20",
-          "end": "0x80242048",
+          "end": "0x80242018",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Target first function compares game-name[4],company[2],disk/version with zero/FF wildcard handling: DVDCompareDiskID. Remaining function before fstload is inferred same original file; ownership provisional."
+          "evidence": "Actual prologue at80241F20 and return at80242014 bound248-byte comparator; independent next prologue80242018 starts an unowned48-byte callback. Related donor file does not establish callback ownership. Original archive edges remain provisional."
         }
       ]
     },

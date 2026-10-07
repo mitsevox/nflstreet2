@@ -1083,6 +1083,10 @@
     "OSSetArenaHi": {
       "address": "0x80239A08",
       "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
+    },
+    "strncmp": {
+      "address": "0x801C302C",
+      "evidence": "Actual original248body REL24 at80241F60/80241F98 length4/2; callee801C302C..3084 bounded NUL stopping byte comparison. Relatedlibc spelling, no originalsource/debugname claim."
     }
   },
   "units": [

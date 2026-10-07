@@ -14933,6 +14933,61 @@
         "OSGetEuRgb60Mode",
         "OSSetEuRgb60Mode"
       ]
+    },
+    {
+      "source": "src/dolphin/os/OSAudioSystem.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete pinned dolsdk2004 2328b4164b1a98422a2255d83ce9a5a7548990cc source; ordinary dolphin_release profile; full target functions measured independently, original bytes linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80239A18",
+          "end": "0x80239CAC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FBC48",
+          "end": "0x802FBCC8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__OSInitAudioSystem",
+          "start": "0x80239A18",
+          "end": "0x80239BD4"
+        },
+        {
+          "symbol": "__OSStopAudioSystem",
+          "start": "0x80239BD4",
+          "end": "0x80239CAC"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/dvd/dvdidutils.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete pinned dolsdk2004 2328b4164b1a98422a2255d83ce9a5a7548990cc source; ordinary dolphin_release profile; full target functions measured independently, original bytes linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80241F20",
+          "end": "0x80242018"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "DVDCompareDiskID",
+          "start": "0x80241F20",
+          "end": "0x80242018"
+        }
+      ],
+      "discarded": [
+        "strnlen",
+        "DVDGenerateDiskID"
+      ]
     }
   ]
 }
