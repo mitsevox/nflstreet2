@@ -876,10 +876,6 @@
       "address": "0x80288414",
       "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
     },
-    "__AXGetCurrentProfile": {
-      "address": "0x80289408",
-      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
-    },
     "AIRegisterDMACallback": {
       "address": "0x8024A0FC",
       "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
@@ -8148,6 +8144,31 @@
           "placement": ".sbss",
           "start": "0x803ED3D0",
           "end": "0x803ED3E0"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ax/AXProf.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv AXProf retained getter and native16byte profilingstate.",
+      "link_roots": {
+        "symbols": [
+          "__AXGetCurrentProfile"
+        ],
+        "evidence": "Only current-profile getter has retained targetcode; initialization/readout entrypoints naturally unreferenced library functions. Complete native16byte profile state remains unchanged."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80289408",
+          "end": "0x80289450"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED5D8",
+          "end": "0x803ED5E8"
         }
       ]
     }

@@ -2686,6 +2686,14 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Unique72-byte current profile routine; following GBA channel functions establish different library."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED5D8",
+          "end": "0x803ED5E8",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "AXProf complete16byte nativeprofile-state section; all seven targetSDAreferences agree, original file edges remainprovisional."
         }
       ]
     },

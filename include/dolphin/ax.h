@@ -73,6 +73,8 @@ extern AXPROFILE __AXLocalProfile;
 extern u16 axDspSlaveLength;
 extern u16 axDspSlave[];
 
+void AXInitProfile(AXPROFILE* profile, u32 maxProfiles);
+u32 AXGetProfile(void);
 void AXInit(void);
 void AXInitEx(u32 outputBufferMode);
 void AXQuit(void);
