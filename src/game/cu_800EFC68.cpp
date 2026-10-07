@@ -26,7 +26,7 @@ struct Record_8011F4E0 {
     unsigned char mUnknown40[8];
 };
 
-/* Views of the per-state block at player +336. Only the accessed fields
+/* Views of the block at player +336. Only the accessed fields
    are declared. */
 struct Block_800FBAA8 {
     char mUnknown0[36];
@@ -278,14 +278,14 @@ extern "C" void fn_800FB768(void) {
     if (!(pRecord->mUnknown2 & 0x8000)) {
         pRecord->mUnknown2--;
         if (pRecord->mUnknown2 & 0x8000) {
-            
+
             int team = fn_80178308();
             int swapped;
             do {
                 unsigned char i;
                 swapped = 0;
                 for (i = 0; i < 2; i++) {
-                    
+
                     Object_80039F5C *pA = fn_80039F5C(team, pRecord->mUnknown12[i]);
                     Object_80039F5C *pB = fn_80039F5C(team, pRecord->mUnknown12[i + 1]);
                     if (pA->mMotion.mPos.mX < pB->mMotion.mPos.mX) {
