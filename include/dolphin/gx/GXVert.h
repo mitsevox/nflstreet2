@@ -42,6 +42,26 @@ static inline void GXPosition3s16(s16 x, s16 y, s16 z)
     GXWGFifo.s16 = z;
 }
 
+static inline void GXMatrixIndex1x8(u8 index)
+{
+    GXWGFifo.u8 = index;
+}
+
+static inline void GXPosition1x8(u8 index)
+{
+    GXWGFifo.u8 = index;
+}
+
+static inline void GXColor1x8(u8 index)
+{
+    GXWGFifo.u8 = index;
+}
+
+static inline void GXTexCoord1x8(u8 index)
+{
+    GXWGFifo.u8 = index;
+}
+
 static inline void GXColor4u8(u8 r, u8 g, u8 b, u8 a)
 {
     GXWGFifo.u8 = r;
