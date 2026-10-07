@@ -10388,6 +10388,56 @@
         "commit": "db90e9be8ae89dfb86311ee769a9728d380ebc62",
         "introduced_blob": "2253aae1130888881fbe0ecacf8d7f1fae0192b0"
       }
+    },
+    {
+      "source": "src/dolphin/card/CARDOpen.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80256F7C",
+        "0x80257010",
+        "0x80257144",
+        "0x80257388",
+        "0x8025748C",
+        "0x802574E0"
+      ],
+      "provenance": {
+        "pull_request": 518,
+        "commit": "e41764df10133c40bb021486fe67fae9d00c7532",
+        "introduced_blob": "bd86568291ba7f3e478b30f4a247cb27a256712f"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXMisc.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024DFA0",
+        "0x8024E034",
+        "0x8024E090",
+        "0x8024E450",
+        "0x8024E4D0",
+        "0x8024E518",
+        "0x8024E52C",
+        "0x8024E54C",
+        "0x8024E564",
+        "0x8024E5C8",
+        "0x8024E5E0",
+        "0x8024E604",
+        "0x8024E61C",
+        "0x8024E684",
+        "0x8024E6C8",
+        "0x8024E750",
+        "0x8024E794",
+        "0x8024E814"
+      ],
+      "provenance": {
+        "pull_request": 518,
+        "commit": "f44d5e9ea92e987aaa5a66cda3e34f1357b0406c",
+        "introduced_blob": "4f19805bc617e38287ac26c1f0580402120c369e"
+      }
     }
   ],
   "target": "GN7E69",
