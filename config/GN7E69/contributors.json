@@ -8825,6 +8825,20 @@
         "commit": "aa86edce3869d51dc54292d2a5898e3ed00b8212",
         "introduced_blob": "865dacd3ec8be12e329888e9b9e2c79affce8f66"
       }
+    },
+    {
+      "source": "src/game/cu_800D0D4C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D7604"
+      ],
+      "provenance": {
+        "pull_request": 465,
+        "commit": "7872d50470ab3dfb0ea5084ebdad5afe31ba4b23",
+        "introduced_blob": "645a6f90e41a1aefbd2f1eaed3f23518f5a3b3bb"
+      }
     }
   ],
   "target": "GN7E69",
