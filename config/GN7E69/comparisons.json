@@ -11855,7 +11855,7 @@
     {
       "source": "src/game/cu_8015A39C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional 24-function grouping and full provisional original pool association; two complete store bodies, individual neutral name/type/field/source-form/compiler rows. Only whole 16/8-byte functions and four-byte compiled read-only float literal are measured; 22 other bodies, external byte and all other storage remain original and unmeasured. Canonical int/void C contract is preserved.",
+      "evidence": "evidence.tsv retained open/provisional24-function grouping and full provisional original pool association; three complete bodies with individual neutral name/type/field/source-form/compiler rows. Whole44/16/8-byte functions and four-byte compiled read-only float literal are measured;21 other bodies, all external storage and all other pool bytes remain original/unmeasured. Canonical player pointer and existing int/void contracts preserved; entire original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -11871,6 +11871,11 @@
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_8015C218",
+          "start": "0x8015C218",
+          "end": "0x8015C244"
+        },
         {
           "symbol": "fn_8015C244",
           "start": "0x8015C244",
