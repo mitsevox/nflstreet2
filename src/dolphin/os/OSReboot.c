@@ -1,6 +1,8 @@
 #include "dolphin/dvd.h"
 #include "dolphin/os.h"
-#include "dolphin/os/OSBootInfo.h"
+#include "__os.h"
+
+extern void Run(void* entry);
 #include "dolphin/ai.h"
 
 // Struct for Apploader header (size 0x20).
@@ -12,7 +14,7 @@ typedef struct _ApploaderHeader {
     u32 reserved2;  // _1C
 } ApploaderHeader;
 
-static ApploaderHeader Header ALIGN(32);
+static ApploaderHeader Header ATTRIBUTE_ALIGN(32);
 
 extern void* __OSSavedRegionStart;
 extern void* __OSSavedRegionEnd;
@@ -25,11 +27,13 @@ extern u32 UNK_817FFFFC AT_ADDRESS(0x817FFFFC);
 extern u32 BOOT_REGION_START AT_ADDRESS(0x812FDFF0);
 extern u32 BOOT_REGION_END AT_ADDRESS(0x812FDFEC);
 extern u32 OS_RESET_CODE AT_ADDRESS(0x800030F0);
-extern u8 OS_REBOOT_BOOL AT_ADDRESS(0x800030E2); // unknown function, set to true by __OSReboot
+extern u8 OS_REBOOT_BOOL AT_ADDRESS(0x800030E2);
 
 static BOOL Prepared = FALSE;
 
-void __OSDoHotReset(int);
+#define OS_BOOTROM_ADDR 0x81300000
+
+void __DVDPrepareResetAsync(DVDCBCallback callback);
 
 inline void ReadApploader(OSTime time1) {
     if (DVDCheckDisk() == DVD_RESULT_GOOD || OSGetTime() - time1 > OS_TIMER_CLOCK) {
@@ -37,15 +41,7 @@ inline void ReadApploader(OSTime time1) {
     }
 }
 
-ASM void Run() {
-#ifdef __MWERKS__ // clang-format off
-    nofralloc
-    sync
-    isync
-    mtlr r3
-    blr
-#endif // clang-format on
-}
+
 
 static void Callback() { Prepared = TRUE; }
 

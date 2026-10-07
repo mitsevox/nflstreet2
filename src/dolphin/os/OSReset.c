@@ -1,24 +1,10 @@
-#include "dolphin/OSRtcPriv.h"
+#include "__os.h"
+extern void Reset(s32 resetCode);
 #include "dolphin/os.h"
 #include "dolphin/vi.h"
 #include "dolphin/hw_regs.h"
 
 volatile u8 DAT_800030e2 : 0x800030e2;
-typedef struct Unk
-{
-    u8 pad[0x24];
-    u32 resetCode;
-} Unk;
-volatile Unk DAT_cc003000 : 0xcc003000;
-
-typedef struct Unk2
-{
-    u16 _0;
-    u16 _2;
-} Unk2;
-
-volatile Unk2 DAT_cc002000 : 0xcc002000;
-
 typedef struct OSResetQueue
 {
     OSResetFunctionInfo* first;
@@ -83,51 +69,9 @@ inline BOOL __OSCallResetFunctions(u32 arg0)
     return 1;
 }
 
-asm void Reset(register s32 resetCode)
-{
-    // clang-format off
-    nofralloc
-    b lbl_8038315C
-lbl_80383140:
-    mfspr r8, HID0
-    ori r8, r8, 8
-    mtspr HID0, r8
-    isync 
-    sync
-    nop 
-    b lbl_80383160
-lbl_8038315C:
-    b lbl_8038317C
-lbl_80383160:
-    mftb r5, 268
-lbl_80383164:
-    mftb r6, 268
-    subf r7, r5, r6
-    cmplwi r7, 0x1124
-    blt lbl_80383164
-    nop 
-    b lbl_80383180
-lbl_8038317C:
-    b lbl_8038319C
-lbl_80383180:
-    lis r8, 0xCC003000@h
-    ori r8, r8, 0xCC003000@l
-    li r4, 3
-    stw r4, 0x24(r8)
-    stw r3, 0x24(r8)
-    nop 
-    b lbl_803831A0
-lbl_8038319C:
-    b lbl_803831A8
-lbl_803831A0:
-    nop 
-    b lbl_803831A0
-lbl_803831A8:
-    b lbl_80383140
-    // clang-format on
-}
 
-OSThreadQueue __OSActiveThreadQueue : (OS_BASE_CACHED | 0x00DC);
+
+
 
 inline void KillThreads(void)
 {
@@ -161,7 +105,6 @@ void OSResetSystem(int reset, u32 resetCode, BOOL forceMenu)
 {
     BOOL rc;
     BOOL disableRecalibration;
-    u32 unk[3]; // dumb compiler
 
     OSDisableScheduler();
     __OSStopAudioSystem();
@@ -225,5 +168,5 @@ u32 OSGetResetCode(void)
     {
         return 0x80000000;
     }
-    return ((DAT_cc003000.resetCode & ~7) >> 3);
+    return ((__PIRegs[9] & ~7) >> 3);
 }
