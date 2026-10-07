@@ -10331,6 +10331,36 @@
         "commit": "c6f0d63e57f466bdede4955484e568ef53c5c3c7",
         "introduced_blob": "17c7d07e057fb3f271c0298260ca7e63bbd21f35"
       }
+    },
+    {
+      "source": "src/game/cu_80080F20.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80080FD4",
+        "0x80081000",
+        "0x8008105C",
+        "0x80081088",
+        "0x800810B4",
+        "0x800810E0",
+        "0x80081108",
+        "0x80081134",
+        "0x8008115C",
+        "0x80081188",
+        "0x800811B4",
+        "0x800811E0",
+        "0x80081208",
+        "0x80081230",
+        "0x8008125C",
+        "0x80081284"
+      ],
+      "provenance": {
+        "pull_request": 515,
+        "merged_via": 515,
+        "commit": "be8b6f77865ca9d752dd385b0cefb52092a1540d",
+        "introduced_blob": "9e1658a097cf1be6232219aa98455ef3e4639900"
+      }
     }
   ],
   "target": "GN7E69",
