@@ -853,17 +853,31 @@
           "end": "0x80244F18",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": true,
           "evidence": "Complete native measured 7756-byte allocation with actual target operands; ordinary compiler alignment and literal initialized data preserved. Original archive ownership provisional."
         },
         {
           "section": ".data4",
           "start": "0x802FD8C8",
+          "end": "0x802FDABC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Complete native 976-byte VI .data allocation is mapped without gaps across three adjacent target slices. The retained getTiming switch table occupies 0x802FDABC..0x802FDB28; the surrounding literal/timing payloads occupy the other slices. Symbol partition preserves DTK jump-table identity; original archive edges remain provisional."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FDABC",
+          "end": "0x802FDB28",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Complete native 976-byte VI .data allocation is mapped without gaps across three adjacent target slices. The retained getTiming switch table occupies 0x802FDABC..0x802FDB28; the surrounding literal/timing payloads occupy the other slices. Symbol partition preserves DTK jump-table identity; original archive edges remain provisional."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FDB28",
           "end": "0x802FDC98",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": true,
-          "evidence": "Complete native measured 976-byte allocation with actual target operands; ordinary compiler alignment and literal initialized data preserved. Original archive ownership provisional."
+          "evidence": "Complete native 976-byte VI .data allocation is mapped without gaps across three adjacent target slices. The retained getTiming switch table occupies 0x802FDABC..0x802FDB28; the surrounding literal/timing payloads occupy the other slices. Symbol partition preserves DTK jump-table identity; original archive edges remain provisional."
         },
         {
           "section": ".bss",
