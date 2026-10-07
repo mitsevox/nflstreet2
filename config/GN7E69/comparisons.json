@@ -14812,6 +14812,127 @@
       "discarded": [
         "GXSetTevColorS10"
       ]
+    },
+    {
+      "source": "src/dolphin/os/OSRtc.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete34body pinned donor ordinarysource; unsupported3dummy arrays omitted;16target2796allcompared,80Baccessed stateprefix only; extra callbackword targetownership unresolved.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023C7E0",
+          "end": "0x8023D2CC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A3AC0",
+          "end": "0x803A3B10"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "WriteSramCallback",
+          "start": "0x8023C7E0",
+          "end": "0x8023C840"
+        },
+        {
+          "symbol": "WriteSram",
+          "start": "0x8023C840",
+          "end": "0x8023C958"
+        },
+        {
+          "symbol": "UnlockSram",
+          "start": "0x8023CB4C",
+          "end": "0x8023CE88"
+        },
+        {
+          "symbol": "__OSInitSram",
+          "start": "0x8023C958",
+          "end": "0x8023CA94"
+        },
+        {
+          "symbol": "OSGetGbsMode",
+          "start": "0x8023D1A4",
+          "end": "0x8023D214"
+        },
+        {
+          "symbol": "__OSLockSram",
+          "start": "0x8023CA94",
+          "end": "0x8023CAF0"
+        },
+        {
+          "symbol": "__OSLockSramEx",
+          "start": "0x8023CAF0",
+          "end": "0x8023CB4C"
+        },
+        {
+          "symbol": "__OSUnlockSram",
+          "start": "0x8023CE88",
+          "end": "0x8023CEAC"
+        },
+        {
+          "symbol": "__OSUnlockSramEx",
+          "start": "0x8023CEAC",
+          "end": "0x8023CED0"
+        },
+        {
+          "symbol": "__OSSyncSram",
+          "start": "0x8023CED0",
+          "end": "0x8023CEE0"
+        },
+        {
+          "symbol": "OSGetSoundMode",
+          "start": "0x8023CEE0",
+          "end": "0x8023CF60"
+        },
+        {
+          "symbol": "OSGetProgressiveMode",
+          "start": "0x8023CF60",
+          "end": "0x8023CFD0"
+        },
+        {
+          "symbol": "OSSetProgressiveMode",
+          "start": "0x8023CFD0",
+          "end": "0x8023D074"
+        },
+        {
+          "symbol": "OSGetWirelessID",
+          "start": "0x8023D074",
+          "end": "0x8023D0F8"
+        },
+        {
+          "symbol": "OSSetWirelessID",
+          "start": "0x8023D0F8",
+          "end": "0x8023D1A4"
+        },
+        {
+          "symbol": "OSSetGbsMode",
+          "start": "0x8023D214",
+          "end": "0x8023D2CC"
+        }
+      ],
+      "discarded": [
+        "GetRTC",
+        "ReadSram",
+        "LockSram",
+        "__OSReadROMCallback",
+        "__OSGetRTC",
+        "__OSSetRTC",
+        "__OSCheckSram",
+        "__OSReadROM",
+        "__OSReadROMAsync",
+        "OSSetSoundMode",
+        "OSGetVideoMode",
+        "OSSetVideoMode",
+        "OSGetLanguage",
+        "OSSetLanguage",
+        "__OSGetBootMode",
+        "__OSSetBootMode",
+        "OSGetEuRgb60Mode",
+        "OSSetEuRgb60Mode"
+      ]
     }
   ]
 }
