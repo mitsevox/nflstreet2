@@ -2826,6 +2826,23 @@
         "mitsevox"
       ],
       "functions": [
+        "0x8016FB10",
+        "0x80170140",
+        "0x8017319C"
+      ],
+      "provenance": {
+        "pull_request": 446,
+        "merged_via": 446,
+        "commit": "23e34483fd7b14c9b9bbf913e9e333d7f8a15733",
+        "introduced_blob": "e0b35297bbe91980bef86ac74b2aa248a9a6dbe8"
+      }
+    },
+    {
+      "source": "src/game/cu_8016FB10.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
         "0x80170198",
         "0x80170294",
         "0x80170374",
