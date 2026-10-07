@@ -2252,48 +2252,21 @@
       "evidence": "Unique ProbeBarnacle396, __OSEnableBarnacle444, InitializeUART112; followingWriteUARTN atBB1C540 calls EXIBios samechannel registers; ends SI busy initializer.",
       "sections": [
         {
-          "section": ".sbss",
-          "start": "0x803ED3D0",
-          "end": "0x803ED3D4",
-          "evidence": "Native Chan storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSEnableBarnacle at0x8025BA80. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED3D4",
-          "end": "0x803ED3D8",
-          "evidence": "Native Dev storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSEnableBarnacle at0x8025BA88. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED3D8",
-          "end": "0x803ED3DC",
-          "evidence": "Native Enabled storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSEnableBarnacle at0x8025BA90. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED3DC",
-          "end": "0x803ED3E0",
-          "evidence": "Native BarnacleEnabled storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSEnableBarnacle at0x8025BA8C. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
           "section": ".text",
           "start": "0x8025B764",
           "end": "0x8025BD38",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Unique ProbeBarnacle396, __OSEnableBarnacle444, InitializeUART112; followingWriteUARTN atBB1C540 calls EXIBios samechannel registers; ends SI busy initializer. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED3D0",
+          "end": "0x803ED3E0",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "object_seed": true,
+          "evidence": "Complete unchanged native EXIUart SBSS allocation contains the four individually evidenced four-byte objects Chan, Dev, Enabled and BarnacleEnabled at offsets0,4,8,12. Target operands establish each slot; no padding is claimed. A single native section extent replaces the earlier four research seeds without changing source ownership or addresses."
         }
       ]
     },
@@ -2570,7 +2543,7 @@
           "end": "0x80287784",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Target GetCommandListCycles8-byte getter at8704C, GetCommandListAddress87054 flips2x768-byte buffers and writes sharedCLpointer, CommandListDSP generator87090 uses16-bitcommands/cyclecounter; init87740/quit87764/modesetters through87784. AXCL source and call/global relationships corroborate file; no native whole layout success claimed."
+          "evidence": "Seven retained AXCL native routines cover 0x8028704C-0x80287784 continuously; all operands and full native storage resolve and link byte-identically. Actual target function edges are evidenced individually; original archive-member edges remain provisional."
         },
         {
           "section": ".bss",
