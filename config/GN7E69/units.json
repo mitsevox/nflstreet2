@@ -7674,12 +7674,12 @@
     {
       "source": "src/game/cu_8018B0BC.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded team/player copy group; exact linked first function and native literal prefix. The four later bodies remain registered for comparison; original-file edges stay open.",
+      "evidence": "evidence.tsv bounded team/player copy group; exact linked first two functions and native literal prefix. The four later bodies remain registered for comparison; original-file edges stay open.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8018B0BC",
+          "start": "0x8018B014",
           "end": "0x8018B2A8"
         },
         {

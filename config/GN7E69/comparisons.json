@@ -4972,12 +4972,12 @@
     {
       "source": "src/game/cu_8018B0BC.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open unit row, exact whole-function boundaries and unlinked data slice 0x802A9A50-0x802A9DFC. The native first function/literal prefix is linked; full comparison placements retain its offsets and measure only unlinked ranges. Two wrapper bodies are exact but unlinked; no complete-file claim.",
+      "evidence": "evidence.tsv open unit row, exact whole-function boundaries and unlinked data slice 0x802A9A50-0x802A9DFC. The native first two functions and literal prefix are linked; full comparison placements retain its offsets and measure only unlinked ranges. Two wrapper bodies are exact but unlinked; no complete-file claim.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8018B0BC",
+          "start": "0x8018B014",
           "end": "0x8018B8B0"
         },
         {
