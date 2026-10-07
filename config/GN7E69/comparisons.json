@@ -15375,6 +15375,52 @@
           "end": "0x80256730"
         }
       ]
+    },
+    {
+      "source": "src/dolphin/dsp/dsp_task.c",
+      "profile": "dolphin_release",
+      "evidence": "Full coherent BFBB handler already imported clean; fixed comparison guard registers complete original extent; existing4 linkedhelpers unchanged.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80285DC8",
+          "end": "0x8028664C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80302548",
+          "end": "0x80302683"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__DSPHandler",
+          "start": "0x80285DC8",
+          "end": "0x802861EC"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/dsp/dsp_debug.c",
+      "profile": "dolphin_release",
+      "evidence": "Coherent dSDK2328 full debug TU preserves unassigned getter.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80285D78",
+          "end": "0x80285DC8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__DSP_debug_printf",
+          "start": "0x80285D78",
+          "end": "0x80285DC8"
+        }
+      ]
     }
   ]
 }

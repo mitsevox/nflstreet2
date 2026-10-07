@@ -2682,7 +2682,7 @@
       "name": "src/dolphin/ax/AXVPB.c",
       "source": "src/dolphin/ax/AXVPB.c",
       "library": "AX",
-      "evidence": "Initial8-byte GetPBs leaf followed by distinctive service/sync/default/init/voice setter anchors through ADPCMloop ending89408. BFBB native Init and Default additionally corroborate. Dolsdk retained base8865C invalid; not used.",
+      "evidence": "Coherent pinned BFBB AXVPB source: thirteen complete target functions, typed parameter/update/voice/ITD arrays, three cycle/count words, complete cycle tables and ratio constant. Six donor-only setter functions remain unassigned. Original source/archive attribution is reference-derived; code/file edges remain provisional.",
       "sections": [
         {
           "section": ".data4",
@@ -2691,7 +2691,79 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "AXVPB 80288B84/80288B8C forms 803026D0. Source-cycle indexing at 80288C18 and offsets 20/84 at 80288C48/80288C5C select three u32 tables of 5, 16 and 32 entries. The complete 212-byte donor pool equals the target.",
-          "object_seed": true
+          "object_seed": false
+        },
+        {
+          "section": ".bss",
+          "start": "0x803C2A60",
+          "end": "0x803C6760",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__AXPB complete coherent BFBB typedarray, nativeoffset0/size15616; actual Init64iterations/cacheextent/stride and starting base803C2A60 established in ordinary exact code. Original archive allocation edges remain provisional; no padding absorbed."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803C6760",
+          "end": "0x803C7760",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__AXITD complete coherent BFBB typedarray, nativeoffset15616/size4096; actual Init64iterations/cacheextent/stride and starting base803C2A60 established in ordinary exact code. Original archive allocation edges remain provisional; no padding absorbed."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803C7760",
+          "end": "0x803CB760",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__AXUpdates complete coherent BFBB typedarray, nativeoffset19712/size16384; actual Init64iterations/cacheextent/stride and starting base803C2A60 established in ordinary exact code. Original archive allocation edges remain provisional; no padding absorbed."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803CB760",
+          "end": "0x803D4260",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__AXVPB complete coherent BFBB typedarray, nativeoffset36096/size35584; actual Init64iterations/cacheextent/stride and starting base803C2A60 established in ordinary exact code. Original archive allocation edges remain provisional; no padding absorbed."
+        },
+        {
+          "section": ".data6",
+          "start": "0x803EE4A8",
+          "end": "0x803EE4AC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native float65536.0 initialized4-byte pool, original ratio load8028932C r13 SDA803EE4A8 independently observed, exact normalinitializedbytes. Archiveedges provisional."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED5C8",
+          "end": "0x803ED5CC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__AXMaxDspCycles native u32 4bytes, original SDA references verified; archiveallocationedge provisional."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED5CC",
+          "end": "0x803ED5D0",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__AXRecDspCycles native u32 4bytes, original SDA references verified; archiveallocationedge provisional."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED5D0",
+          "end": "0x803ED5D4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__AXNumVoices native u32 4bytes, original SDA references verified; archiveallocationedge provisional."
         },
         {
           "section": ".text",

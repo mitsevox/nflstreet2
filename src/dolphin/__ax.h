@@ -43,6 +43,7 @@ void __AXAuxInit(void);
 void __AXAuxQuit(void);
 void __AXClInit(void);
 void __AXClQuit(void);
+void __AXServiceVPB(AXVPB* pvpb);
 void __AXSyncPBs(u32 lessDspCycles);
 u32 __AXGetCommandListAddress(void);
 u32 __AXGetCommandListCycles(void);
