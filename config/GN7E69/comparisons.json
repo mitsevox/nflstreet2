@@ -14188,6 +14188,118 @@
           "end": "0x80146F40"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8018CB28.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv open-edge unit cu_8018CB28 source row, exact function extents, measured data placements and source-form/type rows. Normal partial source; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018CB28",
+          "end": "0x8018DE40"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AA3C4",
+          "end": "0x802AAD2C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EAE74",
+          "end": "0x802EAEF4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8018CB28",
+          "start": "0x8018CB28",
+          "end": "0x8018CD1C"
+        },
+        {
+          "symbol": "fn_8018CD1C",
+          "start": "0x8018CD1C",
+          "end": "0x8018D018"
+        },
+        {
+          "symbol": "fn_8018D018",
+          "start": "0x8018D018",
+          "end": "0x8018D07C"
+        },
+        {
+          "symbol": "fn_8018D07C",
+          "start": "0x8018D07C",
+          "end": "0x8018D23C"
+        },
+        {
+          "symbol": "fn_8018D23C",
+          "start": "0x8018D23C",
+          "end": "0x8018D358"
+        },
+        {
+          "symbol": "fn_8018D358",
+          "start": "0x8018D358",
+          "end": "0x8018D70C"
+        },
+        {
+          "symbol": "fn_8018D70C",
+          "start": "0x8018D70C",
+          "end": "0x8018D720"
+        },
+        {
+          "symbol": "fn_8018D720",
+          "start": "0x8018D720",
+          "end": "0x8018D780"
+        },
+        {
+          "symbol": "fn_8018D780",
+          "start": "0x8018D780",
+          "end": "0x8018D7E0"
+        },
+        {
+          "symbol": "fn_8018D7E0",
+          "start": "0x8018D7E0",
+          "end": "0x8018D890"
+        },
+        {
+          "symbol": "fn_8018D890",
+          "start": "0x8018D890",
+          "end": "0x8018D8EC"
+        },
+        {
+          "symbol": "fn_8018D8EC",
+          "start": "0x8018D8EC",
+          "end": "0x8018D918"
+        },
+        {
+          "symbol": "fn_8018D918",
+          "start": "0x8018D918",
+          "end": "0x8018DC18"
+        },
+        {
+          "symbol": "fn_8018DC18",
+          "start": "0x8018DC18",
+          "end": "0x8018DCBC"
+        },
+        {
+          "symbol": "fn_8018DCBC",
+          "start": "0x8018DCBC",
+          "end": "0x8018DD04"
+        },
+        {
+          "symbol": "fn_8018DD04",
+          "start": "0x8018DD04",
+          "end": "0x8018DD4C"
+        },
+        {
+          "symbol": "fn_8018DD4C",
+          "start": "0x8018DD4C",
+          "end": "0x8018DE40"
+        }
+      ]
     }
   ]
 }
