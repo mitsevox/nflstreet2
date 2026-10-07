@@ -2833,8 +2833,11 @@
       "provenance": {
         "pull_request": 446,
         "merged_via": 451,
-        "commit": "6b9568388dd7b308e5a07c4c661604f66fa4bb37",
-        "introduced_blob": "0bfd1060e21ea190ad7c135bb0ac71b8a7983da4"
+        "commit": "792bbf9102953665d2a096614e648608e8103620",
+        "introduced_blob": "c6c6fad76e556cc8f65ae280ad0640ef5e3c3e6d",
+        "original_commit": "6b9568388dd7b308e5a07c4c661604f66fa4bb37",
+        "original_blob": "0bfd1060e21ea190ad7c135bb0ac71b8a7983da4",
+        "integration_adjustment": "Carry PR #445 shared replay declarations into the merged source; reconstructed function bodies are unchanged."
       }
     },
     {
