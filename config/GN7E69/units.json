@@ -4675,13 +4675,13 @@
     {
       "source": "src/game/cu_80080F20.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80080F20-0x80080FD4 (src/game/cu_80080F20.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80080F20-0x800812B0 (src/game/cu_80080F20.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80080F20",
-          "end": "0x80080FD4"
+          "end": "0x800812B0"
         },
         {
           "section": ".data",
@@ -9088,19 +9088,6 @@
           "placement": ".sbss",
           "start": "0x803EC844",
           "end": "0x803EC848"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80080FD4.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80080FD4-0x800812B0 (src/game/cu_80080FD4.cpp).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80080FD4",
-          "end": "0x800812B0"
         }
       ]
     }
