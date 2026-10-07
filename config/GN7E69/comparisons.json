@@ -5836,13 +5836,19 @@
     {
       "source": "src/game/cu_800DBB74.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv inferred unit row 0x800DBB74-0x800DC584, exact function row 0x800DC578-0x800DC584, and exact initialized data row 0x803EAD1C-0x803EAD20. Only the reset is reconstructed; five other bodies remain original and unmeasured.",
+      "evidence": "evidence.tsv inferred unit row 0x800DBB74-0x800DC584, exact function rows 0x800DBB74-0x800DC584, exact .rodata data row 0x8029D914-0x8029D92C and exact initialized data row 0x803EAD1C-0x803EAD20. All six bodies are reconstructed as unlinked comparison source; the original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800DC578",
+          "start": "0x800DBB74",
           "end": "0x800DC584"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029D914",
+          "end": "0x8029D92C"
         },
         {
           "section": ".sdata",
@@ -5852,6 +5858,31 @@
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_800DBB74",
+          "start": "0x800DBB74",
+          "end": "0x800DBC4C"
+        },
+        {
+          "symbol": "fn_800DBC4C",
+          "start": "0x800DBC4C",
+          "end": "0x800DC080"
+        },
+        {
+          "symbol": "fn_800DC080",
+          "start": "0x800DC080",
+          "end": "0x800DC21C"
+        },
+        {
+          "symbol": "fn_800DC21C",
+          "start": "0x800DC21C",
+          "end": "0x800DC36C"
+        },
+        {
+          "symbol": "fn_800DC36C",
+          "start": "0x800DC36C",
+          "end": "0x800DC578"
+        },
         {
           "symbol": "fn_800DC578",
           "start": "0x800DC578",

@@ -53,8 +53,8 @@ void fn_801BBC3C(unsigned short a, unsigned short b, Table_80089904 *pTable);
 Object_801BBD5C *fn_801BBD5C(unsigned short a, unsigned short b);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, Record_8036B55C *pRecord, float e);
 void fn_801BE760(void *a, unsigned short b, int c);
-void fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d,
-                unsigned short e, Record_8036B55C *pRecord, float f);
+int fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d,
+               unsigned short e, Record_8036B55C *pRecord, float f);
 int fn_8008A20C(unsigned int value);
 }
 

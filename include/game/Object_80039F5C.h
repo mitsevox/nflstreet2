@@ -84,6 +84,14 @@ struct State_80039F5C {
     unsigned char mUnknown6;
 };
 
+/* 124-byte element of the array that +800 points to. */
+struct Record_800DC36C {
+    char mUnknown0[12];
+    int mUnknown12;
+    char mUnknown16[60];
+    char mUnknown76[48];
+};
+
 /* Object that +796 points to. */
 struct Object_8016D9B8 {
     char mUnknown0[8];
@@ -127,7 +135,10 @@ struct Object_80039F5C {
     char mUnknown788[4];
     void *mpUnknown792;
     Object_8016D9B8 *mpUnknown796;
-    char mUnknown800[232];
+    Record_800DC36C *mpUnknown800;
+    char mUnknown804[204];
+    unsigned char mUnknown1008;
+    char mUnknown1009[23];
     int mUnknown1032;
     char mUnknown1036[8];
     int mUnknown1044;
