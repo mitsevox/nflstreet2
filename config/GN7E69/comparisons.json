@@ -13238,6 +13238,97 @@
           "end": "0x801962CC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801A69A8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv target group/types and literal rows for cu_801A69A8; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A69A8",
+          "end": "0x801A7C20"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE810",
+          "end": "0x802AE898"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801A69A8",
+          "start": "0x801A69A8",
+          "end": "0x801A6AF8"
+        },
+        {
+          "symbol": "fn_801A6AF8",
+          "start": "0x801A6AF8",
+          "end": "0x801A6CF8"
+        },
+        {
+          "symbol": "fn_801A6CF8",
+          "start": "0x801A6CF8",
+          "end": "0x801A6E78"
+        },
+        {
+          "symbol": "fn_801A6E78",
+          "start": "0x801A6E78",
+          "end": "0x801A6F88"
+        },
+        {
+          "symbol": "fn_801A6F88",
+          "start": "0x801A6F88",
+          "end": "0x801A6FC8"
+        },
+        {
+          "symbol": "fn_801A6FC8",
+          "start": "0x801A6FC8",
+          "end": "0x801A7170"
+        },
+        {
+          "symbol": "fn_801A7170",
+          "start": "0x801A7170",
+          "end": "0x801A7324"
+        },
+        {
+          "symbol": "fn_801A7324",
+          "start": "0x801A7324",
+          "end": "0x801A7460"
+        },
+        {
+          "symbol": "fn_801A7460",
+          "start": "0x801A7460",
+          "end": "0x801A74BC"
+        },
+        {
+          "symbol": "fn_801A74BC",
+          "start": "0x801A74BC",
+          "end": "0x801A762C"
+        },
+        {
+          "symbol": "fn_801A762C",
+          "start": "0x801A762C",
+          "end": "0x801A7778"
+        },
+        {
+          "symbol": "fn_801A7778",
+          "start": "0x801A7778",
+          "end": "0x801A7784"
+        },
+        {
+          "symbol": "fn_801A7784",
+          "start": "0x801A7784",
+          "end": "0x801A7880"
+        },
+        {
+          "symbol": "fn_801A7880",
+          "start": "0x801A7880",
+          "end": "0x801A7C20"
+        }
+      ]
     }
   ]
 }
