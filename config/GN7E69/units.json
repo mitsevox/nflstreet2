@@ -484,6 +484,10 @@
       "address": "0x80190008",
       "evidence": "evidence.tsv external row 0x80190008 (fn_80190008__14Class_8018FD64ii) and type row Class_8018FD64."
     },
+    "fn_8019002C__14Class_8018FD64ii": {
+      "address": "0x8019002C",
+      "evidence": "evidence.tsv external row 0x8019002C (fn_8019002C__14Class_8018FD64ii) and type row Class_8018FD64."
+    },
     "vfn_05__14Class_802A6B60iP14Entry_80182CC8": {
       "address": "0x80182CC8",
       "evidence": "evidence.tsv external row 0x80182CC8 (vfn_05__14Class_802A6B60iP14Entry_80182CC8) and type row Class_802A6B60."
