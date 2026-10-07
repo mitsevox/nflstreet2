@@ -9,8 +9,8 @@ static u32 sCurrentPage;
 static BOOL sFirstPass = TRUE;
 static s32 sPolicy = 1;
 
-/* Picks the main-memory page to reuse, by the current policy: 0 LRU, 1 random (the default,
- * nothing here changes it), anything else FIFO. */
+/* Picks the main-memory page to reuse, by the current policy: 0 LRU, 1 random (the default),
+ * anything else FIFO. */
 u32 __VMGetPageToReplace(void) {
     if (sPolicy == 0) {
         return __VMPageReplacementLRU();
