@@ -14988,6 +14988,393 @@
         "strnlen",
         "DVDGenerateDiskID"
       ]
+    },
+    {
+      "source": "src/dolphin/gx/GXAttr.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete pinned dSDK seventeen-body source with conservative omission of explicit matching artifact and seven uninitialized no-effect expressions; ordinary current canonical headers. Fourteen full target bodies5136, SetVAT/Array version partial preserved without splicing.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024CB90",
+          "end": "0x8024DFA0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FE080",
+          "end": "0x802FE2F4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC260",
+          "end": "0x803EC26C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GXSetVtxDesc",
+          "start": "0x8024CB90",
+          "end": "0x8024CDFC"
+        },
+        {
+          "symbol": "GXSetVtxDescv",
+          "start": "0x8024CDFC",
+          "end": "0x8024D084"
+        },
+        {
+          "symbol": "__GXSetVCD",
+          "start": "0x8024D084",
+          "end": "0x8024D140"
+        },
+        {
+          "symbol": "__GXCalculateVLim",
+          "start": "0x8024D140",
+          "end": "0x8024D264"
+        },
+        {
+          "symbol": "GXGetVtxDesc",
+          "start": "0x8024D264",
+          "end": "0x8024D418"
+        },
+        {
+          "symbol": "GXClearVtxDesc",
+          "start": "0x8024D418",
+          "end": "0x8024D450"
+        },
+        {
+          "symbol": "GXSetVtxAttrFmt",
+          "start": "0x8024D450",
+          "end": "0x8024D6AC"
+        },
+        {
+          "symbol": "GXSetVtxAttrFmtv",
+          "start": "0x8024D6AC",
+          "end": "0x8024D92C"
+        },
+        {
+          "symbol": "__GXSetVAT",
+          "start": "0x8024D92C",
+          "end": "0x8024D9C8"
+        },
+        {
+          "symbol": "GXGetVtxAttrFmt",
+          "start": "0x8024D9C8",
+          "end": "0x8024DC48"
+        },
+        {
+          "symbol": "GXSetArray",
+          "start": "0x8024DC48",
+          "end": "0x8024DCD4"
+        },
+        {
+          "symbol": "GXInvalidateVtxCache",
+          "start": "0x8024DCD4",
+          "end": "0x8024DCE4"
+        },
+        {
+          "symbol": "GXSetTexCoordGen2",
+          "start": "0x8024DCE4",
+          "end": "0x8024DF64"
+        },
+        {
+          "symbol": "GXSetNumTexGens",
+          "start": "0x8024DF64",
+          "end": "0x8024DFA0"
+        }
+      ],
+      "discarded": [
+        "__GXXfVtxSpecs",
+        "GXGetVtxDescv",
+        "GXGetVtxAttrFmtv"
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSArena.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete6body donor source; actual4/32 target getters/setters and full4initializedsdata+4referenceSBSS. Existinggamecalls neutral integer-return view unresolved, comparison-only pending genuine caller ABI reconciliation. Helpers remain source, unassigned target identities.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802399F8",
+          "end": "0x80239A18"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC158",
+          "end": "0x803EC15C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED080",
+          "end": "0x803ED084"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OSGetArenaHi",
+          "start": "0x802399F8",
+          "end": "0x80239A00"
+        },
+        {
+          "symbol": "OSGetArenaLo",
+          "start": "0x80239A00",
+          "end": "0x80239A08"
+        },
+        {
+          "symbol": "OSSetArenaHi",
+          "start": "0x80239A08",
+          "end": "0x80239A10"
+        },
+        {
+          "symbol": "OSSetArenaLo",
+          "start": "0x80239A10",
+          "end": "0x80239A18"
+        }
+      ],
+      "discarded": [
+        "OSAllocFromArenaLo",
+        "OSAllocFromArenaHi"
+      ]
+    },
+    {
+      "source": "src/dolphin/card/CARDOpen.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete coherent pinned dSDK nine-body source/current canonical headers, fixed dolphin_release profile. Eight full target bodies1492; plain-char filename instruction partials preserved, genuine unassigned CARDOpen helper retained. Original bytes remain linked until separately validated promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80256F14",
+          "end": "0x802574E8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__CARDCompareFileName",
+          "start": "0x80256F14",
+          "end": "0x80256F7C"
+        },
+        {
+          "symbol": "__CARDAccess",
+          "start": "0x80256F7C",
+          "end": "0x80257010"
+        },
+        {
+          "symbol": "__CARDIsWritable",
+          "start": "0x80257010",
+          "end": "0x80257144"
+        },
+        {
+          "symbol": "__CARDIsReadable",
+          "start": "0x80257144",
+          "end": "0x80257238"
+        },
+        {
+          "symbol": "__CARDGetFileNo",
+          "start": "0x80257238",
+          "end": "0x80257388"
+        },
+        {
+          "symbol": "CARDFastOpen",
+          "start": "0x80257388",
+          "end": "0x8025748C"
+        },
+        {
+          "symbol": "CARDClose",
+          "start": "0x8025748C",
+          "end": "0x802574E0"
+        },
+        {
+          "symbol": "__CARDIsOpened",
+          "start": "0x802574E0",
+          "end": "0x802574E8"
+        }
+      ],
+      "discarded": [
+        "CARDOpen"
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXMisc.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete pinned BFBB twenty-body source/currentcanonical headers. Eighteen presenttarget bodies1576 independently resolved, full2280 provisional ownership retains other unrecovered original functions. No version body splicing.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024DFA0",
+          "end": "0x8024E888"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED3A0",
+          "end": "0x803ED3B4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GXSetMisc",
+          "start": "0x8024DFA0",
+          "end": "0x8024E034"
+        },
+        {
+          "symbol": "GXFlush",
+          "start": "0x8024E034",
+          "end": "0x8024E090"
+        },
+        {
+          "symbol": "__GXAbort",
+          "start": "0x8024E090",
+          "end": "0x8024E1FC"
+        },
+        {
+          "symbol": "GXDrawDone",
+          "start": "0x8024E450",
+          "end": "0x8024E4D0"
+        },
+        {
+          "symbol": "GXPixModeSync",
+          "start": "0x8024E4D0",
+          "end": "0x8024E4F4"
+        },
+        {
+          "symbol": "GXPokeAlphaMode",
+          "start": "0x8024E518",
+          "end": "0x8024E52C"
+        },
+        {
+          "symbol": "GXPokeAlphaRead",
+          "start": "0x8024E52C",
+          "end": "0x8024E54C"
+        },
+        {
+          "symbol": "GXPokeAlphaUpdate",
+          "start": "0x8024E54C",
+          "end": "0x8024E564"
+        },
+        {
+          "symbol": "GXPokeBlendMode",
+          "start": "0x8024E564",
+          "end": "0x8024E5C8"
+        },
+        {
+          "symbol": "GXPokeColorUpdate",
+          "start": "0x8024E5C8",
+          "end": "0x8024E5E0"
+        },
+        {
+          "symbol": "GXPokeDstAlpha",
+          "start": "0x8024E5E0",
+          "end": "0x8024E604"
+        },
+        {
+          "symbol": "GXPokeDither",
+          "start": "0x8024E604",
+          "end": "0x8024E61C"
+        },
+        {
+          "symbol": "GXPokeZMode",
+          "start": "0x8024E61C",
+          "end": "0x8024E63C"
+        },
+        {
+          "symbol": "GXSetDrawSyncCallback",
+          "start": "0x8024E684",
+          "end": "0x8024E6C8"
+        },
+        {
+          "symbol": "GXTokenInterruptHandler",
+          "start": "0x8024E6C8",
+          "end": "0x8024E750"
+        },
+        {
+          "symbol": "GXSetDrawDoneCallback",
+          "start": "0x8024E750",
+          "end": "0x8024E794"
+        },
+        {
+          "symbol": "GXFinishInterruptHandler",
+          "start": "0x8024E794",
+          "end": "0x8024E814"
+        },
+        {
+          "symbol": "__GXPEInit",
+          "start": "0x8024E814",
+          "end": "0x8024E888"
+        }
+      ],
+      "discarded": [
+        "GXSetDrawSync",
+        "GXReadDrawSync"
+      ]
+    },
+    {
+      "source": "src/dolphin/card/CARDMount.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete BFBB CARDMount file with current canonical headers; eight full target bodies and both complete initialized tables. The adjacent 56-byte probe remains unrecovered in the full mapped span; no source splice or compiler changes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80255C38",
+          "end": "0x80256730"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF040",
+          "end": "0x802FF080"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "IsCard",
+          "start": "0x80255C38",
+          "end": "0x80255D04"
+        },
+        {
+          "symbol": "CARDProbeEx",
+          "start": "0x80255D3C",
+          "end": "0x80255EB8"
+        },
+        {
+          "symbol": "DoMount",
+          "start": "0x80255EB8",
+          "end": "0x802562C8"
+        },
+        {
+          "symbol": "__CARDMountCallback",
+          "start": "0x802562C8",
+          "end": "0x80256400"
+        },
+        {
+          "symbol": "CARDMountAsync",
+          "start": "0x80256400",
+          "end": "0x802565A0"
+        },
+        {
+          "symbol": "CARDMount",
+          "start": "0x802565A0",
+          "end": "0x802565E8"
+        },
+        {
+          "symbol": "DoUnmount",
+          "start": "0x802565E8",
+          "end": "0x80256684"
+        },
+        {
+          "symbol": "CARDUnmount",
+          "start": "0x80256684",
+          "end": "0x80256730"
+        }
+      ]
     }
   ]
 }

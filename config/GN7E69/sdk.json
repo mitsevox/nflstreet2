@@ -197,6 +197,24 @@
       "evidence": "Four consecutive 8-byte getters/setters at399F8/39A00/39A08/39A10 access two shared SDA pointers; OSInit and reboot/runtime consumers corroborate arena behavior. No allocator-size extrapolation.",
       "sections": [
         {
+          "section": ".sbss",
+          "start": "0x803ED080",
+          "end": "0x803ED084",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Arena-high pointer word, actualgetter/setter operands/callers; NOBITS allocation, not initialized-zero byte credit.",
+          "object_seed": true
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC158",
+          "end": "0x803EC15C",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Arena-low initializedFFFFFFFF word; originalgetter/setter/caller roles and actualSDA operand establish extent.",
+          "object_seed": true
+        },
+        {
           "section": ".text",
           "start": "0x802399F8",
           "end": "0x80239A18",
@@ -1586,12 +1604,21 @@
       "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
       "sections": [
         {
+          "section": ".sbss",
+          "start": "0x803ED380",
+          "end": "0x803ED3A0",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Natural32-byte state allocation and all118 retained operands; scalar/pointer offsets and widths from actual target accesses, not donor-only tails.",
+          "object_seed": true
+        },
+        {
           "section": ".text",
           "start": "0x8024C038",
           "end": "0x8024CB90",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 15 uniquely located function anchors in this interval; target has a function entry at 0x8024C038, previous instruction is blr, and previous interval ends at 0x8024CB90 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+          "evidence": "Sixteen independently reviewed functions span8024C038..8024C7D8 (1952bytes) and are linked from complete BFBB source. Remaining8024C7D8..8024CB90 is only a provisional GX family/file partition; no remaining body or dSDK Clean tail is promoted or claimed reconstructed."
         }
       ]
     },
@@ -1601,6 +1628,24 @@
       "library": "GX",
       "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
       "sections": [
+        {
+          "section": ".data5",
+          "start": "0x803EC260",
+          "end": "0x803EC26C",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Full12-byte donor lookup pool; all actualsource storage bytes and original indexedloads supported.",
+          "object_seed": true
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FE080",
+          "end": "0x802FE2F4",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Full628-byte native jump-table pool;157 actual relocated pointers resolve to original target blocks in full registeredfunctions. Preserve independently inferred jump-table symbols; this ownership extent is not one monolithic data symbol.",
+          "object_seed": false
+        },
         {
           "section": ".text",
           "start": "0x8024CB90",
@@ -1615,7 +1660,7 @@
       "name": "src/dolphin/gx/GXMisc.c",
       "source": "src/dolphin/gx/GXMisc.c",
       "library": "GX",
-      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "evidence": "Complete pinned BFBB source/current canonical layouts establish18 exact comparison-only target bodies1576 and native20-byte callback/draw-finish SBSS. Six other original functions in full2280 provisional file extent remain unrecovered; donor draw-sync write/read bodies are preserved unassigned. No invented GXPoke split or source splice.",
       "sections": [
         {
           "section": ".text",
@@ -1623,7 +1668,16 @@
           "end": "0x8024E888",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 17 uniquely located function anchors in this interval; target has a function entry at 0x8024DFA0, previous instruction is blr, and previous interval ends at 0x8024E888 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+          "evidence": "Complete pinned BFBB source/current canonical layouts establish18 exact comparison-only target bodies1576 and native20-byte callback/draw-finish SBSS. Six other original functions in full2280 provisional file extent remain unrecovered; donor draw-sync write/read bodies are preserved unassigned. No invented GXPoke split or source splice."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED3A0",
+          "end": "0x803ED3B4",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Actual original operands bind TokenCB pointer+0, DrawDoneCB pointer+4, DrawDone u8+8 and aligned OSThreadQueue two pointers+12. Complete native20 allocation; natural alignment, no invented padding. Unlinked NOBITS placement receives no initialized-byte/source-storage credit. Seed the independently proven complete20-byte native allocation; do not extend it to neighboring inferred DTK labels.",
+          "object_seed": true
         }
       ]
     },
@@ -1908,7 +1962,7 @@
       "name": "src/dolphin/card/CARDBios.c",
       "source": "src/dolphin/card/CARDBios.c",
       "library": "CARD",
-      "evidence": "Initial empty default API callback5335C corroborated source order; numerous distinct sync/EXI/status/segment/API anchors through OnReset545F0..54640. GX ends5335C. Native retained-screen base53474 is invalid; rejected as boundary evidence.",
+      "evidence": "Complete BFBB CARDBios source with current canonical headers; all 25 retained target functions and full initialized/NOBITS allocations validated. Original archive boundary remains provisional.",
       "sections": [
         {
           "section": ".text",
@@ -1917,6 +1971,42 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Initial empty default API callback5335C corroborated source order; numerous distinct sync/EXI/status/segment/API anchors through OnReset545F0..54640. GX ends5335C. Native retained-screen base53474 is invalid; rejected as boundary evidence."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED3C0",
+          "end": "0x803ED3C2",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native allocation corroborated by original operands: 544-byte control array, 32-byte fallback disk ID, 72-byte version string plus 16-byte reset descriptor, four-byte version pointer and two-byte encoding value. No invented padding."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC2B8",
+          "end": "0x803EC2BC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native allocation corroborated by original operands: 544-byte control array, 32-byte fallback disk ID, 72-byte version string plus 16-byte reset descriptor, four-byte version pointer and two-byte encoding value. No invented padding."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803A6508",
+          "end": "0x803A6748",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native allocation corroborated by original operands: 544-byte control array, 32-byte fallback disk ID, 72-byte version string plus 16-byte reset descriptor, four-byte version pointer and two-byte encoding value. No invented padding."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FEFE8",
+          "end": "0x802FF040",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native allocation corroborated by original operands: 544-byte control array, 32-byte fallback disk ID, 72-byte version string plus 16-byte reset descriptor, four-byte version pointer and two-byte encoding value. No invented padding."
         }
       ]
     },
@@ -2013,7 +2103,7 @@
       "name": "src/dolphin/card/CARDOpen.c",
       "source": "src/dolphin/card/CARDOpen.c",
       "library": "CARD",
-      "evidence": "First104-byte GetFileNo/helper contextual inferred; access/readability/open/close anchors through Close5748C..574E0 and following8-byte leaf. Native retained-screen Open base56F7C incomplete; not used as whole file.",
+      "evidence": "Complete pinned dolsdk2004 source and actual original caller/operand evidence establish eight target bodies1492 at80256F14..802574E8. File edges remain provisional. Six exact comparison-only bodies1052 and two measured plain-char partials; genuine additional donor CARDOpen body is preserved unassigned.",
       "sections": [
         {
           "section": ".text",
@@ -2021,7 +2111,7 @@
           "end": "0x802574E8",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "First104-byte GetFileNo/helper contextual inferred; access/readability/open/close anchors through Close5748C..574E0 and following8-byte leaf. Native retained-screen Open base56F7C incomplete; not used as whole file."
+          "evidence": "Complete pinned dolsdk2004 source and actual original caller/operand evidence establish eight target bodies1492 at80256F14..802574E8. File edges remain provisional. Six exact comparison-only bodies1052 and two measured plain-char partials; genuine additional donor CARDOpen body is preserved unassigned."
         }
       ]
     },
