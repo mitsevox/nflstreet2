@@ -358,10 +358,10 @@ def fold_object(native, folded, output):
             index = info >> 8
             if index in folds:
                 struct.pack_into(">I", data, at + 4, folds[index][3] << 8 | info & 255)
-            elif 0 < index <= len(symbols) and symbols[index - 1]["type"] == STT_SECTION and any(
-                    shndx == symbols[index - 1]["shndx"] and start <= addend < end
+            elif 0 < index <= len(symbols) and any(
+                    shndx == symbols[index - 1]["shndx"] and start <= symbols[index - 1]["value"] + addend < end
                     for shndx, start, end in extents):
-                raise ValueError("A relocation reaches a folded symbol through its section")
+                raise ValueError("A relocation reaches a folded extent through another symbol")
     # Append the extended symbol and string tables and a new section header table.
     shoff = struct.unpack_from(">I", data, 32)[0]
     _, shnum = struct.unpack_from(">HH", data, 46)
@@ -652,6 +652,30 @@ def sn_bss_container_size(native, linked, symbols):
     return expected
 
 
+def check_retention(unit, native, retained):
+    """Check which of the native code functions the retention link kept.
+
+    A folded function's references resolve to the copy it folds into, so its body must go; the
+    other functions the linker drops must be exactly the unit's listed discarded ones, if any."""
+    folded = set(unit.get("folded") or ())
+    if folded & retained:
+        raise ValueError(f"{unit['source']}: the linker retained a folded function")
+    discarded = unit["link_roots"].get("discarded")
+    if discarded is not None and native - retained - folded != set(discarded):
+        raise ValueError(f"{unit['source']}: discarded functions differ from link_roots discarded")
+
+
+def link_object(unit):
+    """Set the object the unit links: the native object, or its folded derivative."""
+    unit["link_object"], unit["folds"] = unit["object"], {}
+    if unit["folded"]:
+        unit["link_object"] = unit["object"].with_suffix(".folded.o")
+        unit["folds"] = fold_object(unit["object"].read_bytes(), unit["folded"], unit["link_object"])
+        if not unit["link_roots"] and any(symbol["type"] == STT_FUNC for symbol, _ in unit["folds"].values()):
+            raise ValueError(f"{unit['source']}: a folded function needs link_roots so the linker drops its body")
+    unit["link_object_sha256"] = sha256(unit["link_object"])
+
+
 def retained_layout(unit, compiler, wrapper):
     """Inspect SN's retained layout; final linking still consumes the untouched compiler object.
 
@@ -702,16 +726,9 @@ def retained_layout(unit, compiler, wrapper):
         if original is None or symbol["size"] != original["size"] \
                 or symbol["shndx"] != text["index"]:
             raise ValueError("Retained-layout linker changed a function's identity or size")
-    # A folded function's references now resolve to the copy it folds into; its body must go.
-    folded = set(unit.get("folded") or ())
-    if folded & {symbol["name"] for symbol in retained}:
-        raise ValueError(f"{unit['source']}: the linker retained a folded function")
-    discarded = unit["link_roots"].get("discarded")
-    if discarded is not None:
-        native_functions = {symbol["name"] for symbol in symbols if symbol["type"] == 2
-                            and symbol["shndx"] == native_text["index"] and symbol["size"] > 0}
-        if native_functions - {symbol["name"] for symbol in retained} - folded != set(discarded):
-            raise ValueError(f"{unit['source']}: discarded functions differ from link_roots discarded")
+    check_retention(unit, {symbol["name"] for symbol in symbols if symbol["type"] == 2
+                           and symbol["shndx"] == native_text["index"] and symbol["size"] > 0},
+                    {symbol["name"] for symbol in retained})
     mapped = [text]
     by_index = {section["index"]: section for section in allocated}
     tag = next((symbol for symbol in linked_symbols
@@ -832,13 +849,7 @@ def build(original, manifest_path, report_path):
         unit["depfile"] = unit["object"].with_suffix(".d")
         compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs)
         unit["native_object_sha256"] = sha256(unit["object"])
-        unit["link_object"], unit["folds"] = unit["object"], {}
-        if unit["folded"]:
-            unit["link_object"] = unit["object"].with_suffix(".folded.o")
-            unit["folds"] = fold_object(unit["object"].read_bytes(), unit["folded"], unit["link_object"])
-            if not unit["link_roots"] and any(symbol["type"] == STT_FUNC for symbol, _ in unit["folds"].values()):
-                raise ValueError(f"{unit['source']}: a folded function needs link_roots so the linker drops its body")
-        unit["link_object_sha256"] = sha256(unit["link_object"])
+        link_object(unit)
         objects[unit["source"]] = (retained_layout(dict(unit, object=unit["link_object"]), compiler, wrapper)
                                    if unit["link_roots"] else read_elf(unit["link_object"].read_bytes()))
     pieces, defined, resolved = plan(sections, units, objects, externals)
@@ -892,7 +903,8 @@ def build(original, manifest_path, report_path):
         raise RuntimeError("Linker did not produce a fresh ELF")
     if any(sha256(unit["object"]) != unit["native_object_sha256"]
            or sha256(unit["link_object"]) != unit["link_object_sha256"] for unit in units):
-        raise RuntimeError("Final linker input no longer equals the native compiler object")
+        raise RuntimeError("Final linker input no longer equals the native compiler object "
+                           "or its derived link object")
     final = {s["name"]: s["value"] for s in read_elf(elf.read_bytes())[1] if s["bind"] != STB_LOCAL}
     for name, (value, source) in defined.items():
         if final.get(name) != value:
@@ -1028,6 +1040,7 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                          "folded": {name: f"0x{value:08X}" for name, value in unit["folded"].items()}
                          if unit.get("folded") else None,
                          "native_object_sha256": unit.get("native_object_sha256"),
+                         "link_object_sha256": unit.get("link_object_sha256"),
                          "status": "matched" if identical else "unverified", "sections": entries,
                          "functions": compiled_functions(unit, objects[unit["source"]])})
     return {"schema": 1, "target": "GN7E69", "target_sha1": target["sha1"],

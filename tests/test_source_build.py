@@ -366,13 +366,50 @@ class FoldedDuplicates(Fixture):
 
     def test_references_by_section_or_alias_are_ambiguous(self):
         native, output = self.native(rodata_relocations=((0, 2, 1, 4),))
-        with self.assertRaisesRegex(ValueError, "through its section"):
+        with self.assertRaisesRegex(ValueError, "through another symbol"):
             sb.fold_object(native, {"Destroy": 0x80003124}, output)
+        # So does a named symbol whose addend reaches into the folded extent.
+        with self.assertRaisesRegex(ValueError, "through another symbol"):
+            sb.fold_object(self.native(rodata_relocations=((0, 4, 1, 6),))[0], {"Destroy": 0x80003124}, output)
+        sb.fold_object(self.native(rodata_relocations=((0, 4, 1, 0),))[0], {"Destroy": 0x80003124}, output)
         # The same section relocation outside the folded extent is unaffected.
         sb.fold_object(self.native(rodata_relocations=((0, 2, 1, 0),))[0], {"Destroy": 0x80003124}, output)
         alias = self.SYMBOLS + [{"name": "Alias", "value": 6, "size": 0, "shndx": 1, "bind": sb.STB_LOCAL}]
         with self.assertRaisesRegex(ValueError, "aliases a folded symbol"):
             sb.fold_object(self.native(alias)[0], {"Destroy": 0x80003124}, output)
+
+    def test_folded_functions_must_leave_the_retained_layout(self):
+        unit = {"source": "src/unit.c", "folded": {"Destroy": 0x80003124},
+                "link_roots": {"symbols": ["Unit_Function"], "discarded": ["Unused"]}}
+        native = {"Unit_Function", "Destroy", "Unused"}
+        sb.check_retention(unit, native, {"Unit_Function"})
+        with self.assertRaisesRegex(ValueError, "retained a folded function"):
+            sb.check_retention(unit, native, {"Unit_Function", "Destroy"})
+        # A folded function is not a discarded one, and every other dropped function is listed.
+        for discarded in (["Unused", "Destroy"], ["Destroy"]):
+            with self.assertRaisesRegex(ValueError, "discarded functions differ"):
+                sb.check_retention(dict(unit, link_roots={"symbols": [], "discarded": discarded}),
+                                   native, {"Unit_Function"})
+        with self.assertRaisesRegex(ValueError, "discarded functions differ"):
+            sb.check_retention(unit, native, {"Unit_Function", "Unused"})
+
+    def test_folded_function_needs_link_roots(self):
+        native, output = self.native()
+        path = output.with_name("native.o")
+        path.write_bytes(native)
+        unit = {"source": "src/unit.c", "object": path, "link_roots": None,
+                "folded": {"Destroy": 0x80003124, "Table": 0x80004010}}
+        with self.assertRaisesRegex(ValueError, "folded function needs link_roots"):
+            sb.link_object(unit)
+        # Folding only an object needs no retention link; the native object stays untouched.
+        unit["folded"] = {"Table": 0x80004010}
+        sb.link_object(unit)
+        self.assertEqual(unit["link_object"], path.with_suffix(".folded.o"))
+        self.assertEqual(unit["link_object_sha256"], sb.sha256(unit["link_object"]))
+        self.assertEqual(path.read_bytes(), native)
+        unit["folded"] = None
+        sb.link_object(unit)
+        self.assertEqual((unit["link_object"], unit["folds"]), (path, {}))
 
     def test_folded_references_resolve_to_their_configured_address(self):
         symbols = [{"name": "Unit_Function", "value": 0, "shndx": 1, "type": 2},

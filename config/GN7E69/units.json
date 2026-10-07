@@ -780,14 +780,6 @@
       "address": "0x800BCA00",
       "evidence": "evidence.tsv external row for 0x800BCA00 (vfn_10__14Class_80297BF8)."
     },
-    "_vt.14Class_802938C0": {
-      "address": "0x802938C0",
-      "evidence": "evidence.tsv external row 0x802938C0 (_vt.14Class_802938C0) and type row Class_802938C0."
-    },
-    "_._14Class_802938C0": {
-      "address": "0x80083454",
-      "evidence": "evidence.tsv external row 0x80083454 (_._14Class_802938C0) and type row Class_802938C0."
-    },
     "fn_80190098__14Class_802938C0": {
       "address": "0x80190098",
       "evidence": "evidence.tsv external row 0x80190098 (fn_80190098__14Class_802938C0) and type row Class_802938C0."
