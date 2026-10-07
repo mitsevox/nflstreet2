@@ -404,10 +404,6 @@
       "address": "0x80250C8C",
       "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
     },
-    "__GXUpdateBPMask": {
-      "address": "0x802515DC",
-      "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
-    },
     "__GXSetVCD": {
       "address": "0x8024D084",
       "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
@@ -7934,6 +7930,38 @@
           "placement": ".sbss",
           "start": "0x803EC784",
           "end": "0x803EC790"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXBump.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv GXBump unit/function/data/source-form rows; pinned dolsdk2004 2328b4164b1a98422a2255d83ce9a5a7548990cc and original target operands.",
+      "link_roots": {
+        "symbols": [
+          "GXSetTevIndirect",
+          "GXSetIndTexMtx",
+          "GXSetIndTexCoordScale",
+          "GXSetIndTexOrder",
+          "GXSetNumIndStages",
+          "GXSetTevDirect",
+          "__GXUpdateBPMask",
+          "__GXFlushTextureState"
+        ],
+        "evidence": "Target retained range 0x8025115C..0x80251604 contains eight native bodies; all16 retained relocations resolve target code/data. __GXUpdateBPMask has original calls at0x8024E8B4/0x8024E954; remaining genuine donor bodies are naturally unretained."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025115C",
+          "end": "0x80251604"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED918",
+          "end": "0x803ED930"
         }
       ]
     }
