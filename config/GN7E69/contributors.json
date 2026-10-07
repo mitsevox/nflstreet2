@@ -10631,7 +10631,8 @@
         "original_blob": "5281160427fbb2fc2e914ba8a1c73c4c5d39667f",
         "integration_adjustment": "Removed the donor no-effect dst expression explicitly marked as register-allocation scaffolding and inaccurate COPYALL commentary; complete coherent source and pinned-profile compiler output remain unchanged.",
         "original_commit": "274ebccaaf265cbdbc1f111d9d26272fed80ccae"
-      }
+      },
+      "merged_via": 560
     },
     {
       "source": "src/dolphin/dsp/dsp_debug.c",
@@ -10646,7 +10647,8 @@
         "merged_via": 542,
         "commit": "df9d8be5a779874c7938a7b9a3068054f13411a3",
         "introduced_blob": "3cb3fb098f31ebfba52dfbdfc00906c8a203c707"
-      }
+      },
+      "merged_via": 560
     },
     {
       "source": "src/dolphin/dvd/dvd.c",
@@ -10701,7 +10703,8 @@
         "original_commit": "05efcc947b8a8cb11ab2fbb0a8ab05d6990348ed",
         "original_blob": "11288d899e338df40f5846b759dcc1194be3980d",
         "integration_adjustment": "Remove the unsupported unused cancellation stack local and inherited process comments; preserve function behavior and ordinary compiler settings. Cancellation frame instructions remain measured partial."
-      }
+      },
+      "merged_via": 560
     },
     {
       "source": "src/dolphin/pad/Pad.c",
@@ -10732,7 +10735,8 @@
         "original_commit": "36572653d679b7adb854d105cb2cadaa5f7e582f",
         "original_blob": "cb51040943529f811f6532d20c835f782d282246",
         "integration_adjustment": "Reuse canonical os/string includes and fixed boot globals; omit redundant offsetof macro and unsupported foreign-compiler push/inline-all/pop directives under the unchanged pinned profile. Complete coherent C bodies retained; native tail-SDA packing remains measured partial."
-      }
+      },
+      "merged_via": 560
     },
     {
       "source": "src/dolphin/ai/ai.c",
@@ -10763,7 +10767,8 @@
         "merged_via": 529,
         "commit": "0c1b26d92daa749bec20fcde3f74940c517e29f3",
         "introduced_blob": "dfc630bfb306a68a9c2970b7c9c09d299f9b9bdc"
-      }
+      },
+      "merged_via": 560
     }
   ],
   "target": "GN7E69",
