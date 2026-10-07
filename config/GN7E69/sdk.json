@@ -236,8 +236,8 @@
           "end": "0x802FBA5F",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": false,
-          "evidence": "Complete native .data initialized allocation of 503 bytes is directly compared with target0x802FB868..0x802FBA5F; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional. Initialized pool ownership is a comparison allocation, not a single original object-symbol claim. Preserve DTK-discovered individual original literals, tables and relocations; do not inject an overlapping aggregate analysis symbol."
+          "object_seed": true,
+          "evidence": "Complete native .data initialized allocation of 503 bytes is directly compared with target0x802FB868..0x802FBA5F; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct."
         },
         {
           "section": ".data5",
@@ -245,8 +245,8 @@
           "end": "0x803EC158",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": false,
-          "evidence": "Complete native 16-byte initialized .sdata pool: version pointer at 0x803EC148, %08x newline format plus two alignment bytes at 0x803EC14C..0x803EC154, and %s newline format at 0x803EC154..0x803EC158. Actual OSInit load at 0x80238E50 references the version pointer; OSRegisterVersion uses the final format. Complete resolved initialized pool equals target; individual symbol proof remains in evidence.tsv; original archive membership provisional. Initialized pool ownership is a comparison allocation, not a single original object-symbol claim. Preserve DTK-discovered individual original literals, tables and relocations; do not inject an overlapping aggregate analysis symbol."
+          "object_seed": true,
+          "evidence": "Complete native 16-byte initialized .sdata pool: version pointer at 0x803EC148, %08x newline format plus two alignment bytes at 0x803EC14C..0x803EC154, and %s newline format at 0x803EC154..0x803EC158. Actual OSInit load at 0x80238E50 references the version pointer; OSRegisterVersion uses the final format. Complete resolved initialized pool equals target; individual symbol proof remains in evidence.tsv; original archive membership provisional. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct."
         }
       ]
     },
@@ -346,8 +346,8 @@
           "end": "0x802FBEF2",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Entire native.data554-byte diagnosticpool byte-identical; target DMAErrorHandler/L2 invalidation references resolve native pool base, including8023A048. No trailing alignment ownership inferred. Complete native .data initialized allocation of 554 bytes is directly compared with target0x802FBCC8..0x802FBEF2; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional. Initialized pool ownership is a comparison allocation, not a single original object-symbol claim. Preserve DTK-discovered individual original literals, tables and relocations; do not inject an overlapping aggregate analysis symbol.",
-          "object_seed": false
+          "evidence": "Entire native.data554-byte diagnosticpool byte-identical; target DMAErrorHandler/L2 invalidation references resolve native pool base, including8023A048. No trailing alignment ownership inferred. Complete native .data initialized allocation of 554 bytes is directly compared with target0x802FBCC8..0x802FBEF2; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct.",
+          "object_seed": true
         },
         {
           "section": ".text",
@@ -371,8 +371,8 @@
           "end": "0x802FC0CF",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Entire native.data471-byte diagnosticpool byte-identical; masked-native OSDumpContext references base; __OSContextInit also references local diagnostic802FC0AC at8023AB30. No trailing padding included. Complete native .data initialized allocation of 471 bytes is directly compared with target0x802FBEF8..0x802FC0CF; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional. Initialized pool ownership is a comparison allocation, not a single original object-symbol claim. Preserve DTK-discovered individual original literals, tables and relocations; do not inject an overlapping aggregate analysis symbol.",
-          "object_seed": false
+          "evidence": "Entire native.data471-byte diagnosticpool byte-identical; masked-native OSDumpContext references base; __OSContextInit also references local diagnostic802FC0AC at8023AB30. No trailing padding included. Complete native .data initialized allocation of 471 bytes is directly compared with target0x802FBEF8..0x802FC0CF; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct.",
+          "object_seed": true
         },
         {
           "section": ".text",
@@ -438,8 +438,8 @@
           "end": "0x802FC41C",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Entire44-byte InterruptPrioTable byte-identical; target dispatch reference at8023B95C plus native symbol relocations establishes exact table address/length. Complete native .data initialized allocation of 44 bytes is directly compared with target0x802FC3F0..0x802FC41C; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional. Initialized pool ownership is a comparison allocation, not a single original object-symbol claim. Preserve DTK-discovered individual original literals, tables and relocations; do not inject an overlapping aggregate analysis symbol.",
-          "object_seed": false
+          "evidence": "Entire44-byte InterruptPrioTable byte-identical; target dispatch reference at8023B95C plus native symbol relocations establishes exact table address/length. Complete native .data initialized allocation of 44 bytes is directly compared with target0x802FC3F0..0x802FC41C; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct.",
+          "object_seed": true
         },
         {
           "section": ".sbss",
@@ -523,8 +523,8 @@
           "end": "0x802FC480",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": false,
-          "evidence": "Complete native .data initialized allocation of 16 bytes is directly compared with target0x802FC470..0x802FC480; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional. Initialized pool ownership is a comparison allocation, not a single original object-symbol claim. Preserve DTK-discovered individual original literals, tables and relocations; do not inject an overlapping aggregate analysis symbol."
+          "object_seed": true,
+          "evidence": "Complete native .data initialized allocation of 16 bytes is directly compared with target0x802FC470..0x802FC480; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct."
         }
       ]
     },
@@ -1175,10 +1175,10 @@
           "section": ".data5",
           "start": "0x803EC208",
           "end": "0x803EC20C",
-          "evidence": "Native symbolsARAMStart complete4-byte initializedpayload byte-identical; matching targetfunction referenceVMInit at0x80244F68. Initialized pool ownership is a comparison allocation, not a single original object-symbol claim. Preserve DTK-discovered individual original literals, tables and relocations; do not inject an overlapping aggregate analysis symbol.",
+          "evidence": "Native symbolsARAMStart complete4-byte initializedpayload byte-identical; matching targetfunction referenceVMInit at0x80244F68. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": false
+          "object_seed": true
         },
         {
           "section": ".sbss",
@@ -1273,8 +1273,8 @@
           "end": "0x803EC218",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": false,
-          "evidence": "Complete native eight-byte initialized .sdata pool contains FirstPass at 0x803EC210 and Policy at 0x803EC214. Actual __VMPageReplacementLRU load at 0x80245258 and __VMGetPageToReplace load at 0x8024520C establish the two words. Whole resolved pool equals target; individual typed evidence retained; related MVP names do not establish original target symbols or archive edges. Initialized pool ownership is a comparison allocation, not a single original object-symbol claim. Preserve DTK-discovered individual original literals, tables and relocations; do not inject an overlapping aggregate analysis symbol."
+          "object_seed": true,
+          "evidence": "Complete native eight-byte initialized .sdata pool contains FirstPass at 0x803EC210 and Policy at 0x803EC214. Actual __VMPageReplacementLRU load at 0x80245258 and __VMGetPageToReplace load at 0x8024520C establish the two words. Whole resolved pool equals target; individual typed evidence retained; related MVP names do not establish original target symbols or archive edges. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct."
         }
       ],
       "evidence": "Related MVP2005 revision 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 reconstructed C and reference names corroborate actual target function cuts, call order and accessed storage. Original target compiler and archive membership remain unresolved; normal complete-body comparisons distinguish exact functions from measured partials.",
@@ -1290,8 +1290,8 @@
           "end": "0x802FDCFF",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Exact103-byte VMAlloc allocation-error diagnostic includingterminator; target80245688 materializes this address, sprintf at45694 andPPCHalt at45698. NativeMVP VMMapping.o symbol payload completely byte-identical. Initialized pool ownership is a comparison allocation, not a single original object-symbol claim. Preserve DTK-discovered individual original literals, tables and relocations; do not inject an overlapping aggregate analysis symbol.",
-          "object_seed": false
+          "evidence": "Exact103-byte VMAlloc allocation-error diagnostic includingterminator; target80245688 materializes this address, sprintf at45694 andPPCHalt at45698. NativeMVP VMMapping.o symbol payload completely byte-identical. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct.",
+          "object_seed": true
         },
         {
           "section": ".sbss",
@@ -3031,8 +3031,8 @@
           "end": "0x803060D0",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "GBAInit passes this reset record; targetdata callback802895D8,priority127,zero next/prev. Extent/layout corroborated; ownership not recovered from a target map. Seeded 16-byte OSResetFunctionInfo: four target words at 0x803060C0 are OnReset pointer 0x802895D8, priority 127, and two zero link fields; GBAInit references this address and OSRegisterResetFunction consumes this structure. The seed bounds the typed record, not neighboring data. Neutral object seed bounds only these typed target data cells/arrays; independently checked against target access widths, initial values and donor declarations. It does not extend ownership into neighboring padding. Initialized pool ownership is a comparison allocation, not a single original object-symbol claim. Preserve DTK-discovered individual original literals, tables and relocations; do not inject an overlapping aggregate analysis symbol.",
-          "object_seed": false
+          "evidence": "GBAInit passes this reset record; targetdata callback802895D8,priority127,zero next/prev. Extent/layout corroborated; ownership not recovered from a target map. Seeded 16-byte OSResetFunctionInfo: four target words at 0x803060C0 are OnReset pointer 0x802895D8, priority 127, and two zero link fields; GBAInit references this address and OSRegisterResetFunction consumes this structure. The seed bounds the typed record, not neighboring data. Neutral object seed bounds only these typed target data cells/arrays; independently checked against target access widths, initial values and donor declarations. It does not extend ownership into neighboring padding. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct.",
+          "object_seed": true
         },
         {
           "section": ".sbss",
