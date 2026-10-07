@@ -84,6 +84,8 @@ struct State_80039F5C {
     unsigned char mUnknown6;
 };
 
+struct Record_800D81C8;
+
 /* Object that +796 points to. */
 struct Object_8016D9B8 {
     char mUnknown0[8];
@@ -127,7 +129,8 @@ struct Object_80039F5C {
     char mUnknown788[4];
     void *mpUnknown792;
     Object_8016D9B8 *mpUnknown796;
-    char mUnknown800[232];
+    Record_800D81C8 *mpUnknown800;
+    char mUnknown804[228];
     int mUnknown1032;
     char mUnknown1036[8];
     int mUnknown1044;
