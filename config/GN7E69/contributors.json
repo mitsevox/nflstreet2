@@ -10480,7 +10480,7 @@
         "introduced_blob": "73f8e080b345edf287274516553df4a0b55e6479",
         "original_commit": "11c3bb1e91d5ab1133bcab3a28e60152bcc33d67",
         "original_blob": "98f59bcddf3345c3d2c88736fc398debcd031dc8",
-        "integration_adjustment": "Remove inherited implementation TODO comment only; source bodies, compiler inputs and native object unchanged."
+        "integration_adjustment": "Remove inherited implementation TODO comment only; source bodies, compiler settings and native object unchanged."
       }
     },
     {
