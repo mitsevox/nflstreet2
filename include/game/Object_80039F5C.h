@@ -60,7 +60,9 @@ struct Block_80170374 {
     Flags_80170374 mFlags;
     char mUnknown4[24];
     float mUnknown28;
-    char mUnknown32[16];
+    char mUnknown32[8];
+    int mUnknown40;
+    int mUnknown44;
     int mUnknown48;
     char mUnknown52[2];
     unsigned char mUnknown54;
@@ -71,6 +73,13 @@ struct Block_80170374 {
 struct Block_801718E8 {
     char mUnknown0[52];
     unsigned char mUnknown52;
+};
+
+/* Three bytes at +1008, compared field by field by fn_80110630. */
+struct Key_80110630 {
+    unsigned char mUnknown0;
+    unsigned char mUnknown1;
+    unsigned char mUnknown2;
 };
 
 /* Record that +784 points to. */
@@ -127,7 +136,9 @@ struct Object_80039F5C {
     char mUnknown788[4];
     void *mpUnknown792;
     Object_8016D9B8 *mpUnknown796;
-    char mUnknown800[232];
+    char mUnknown800[208];
+    Key_80110630 mUnknown1008;
+    char mUnknown1011[21];
     int mUnknown1032;
     char mUnknown1036[8];
     int mUnknown1044;
