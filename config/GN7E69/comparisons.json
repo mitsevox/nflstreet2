@@ -15090,6 +15090,57 @@
         "GXGetVtxDescv",
         "GXGetVtxAttrFmtv"
       ]
+    },
+    {
+      "source": "src/dolphin/os/OSArena.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete6body donor source; actual4/32 target getters/setters and full4initializedsdata+4referenceSBSS. Existinggamecalls neutral integer-return view unresolved, comparison-only pending genuine caller ABI reconciliation. Helpers remain source, unassigned target identities.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802399F8",
+          "end": "0x80239A18"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC158",
+          "end": "0x803EC15C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED080",
+          "end": "0x803ED084"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OSGetArenaHi",
+          "start": "0x802399F8",
+          "end": "0x80239A00"
+        },
+        {
+          "symbol": "OSGetArenaLo",
+          "start": "0x80239A00",
+          "end": "0x80239A08"
+        },
+        {
+          "symbol": "OSSetArenaHi",
+          "start": "0x80239A08",
+          "end": "0x80239A10"
+        },
+        {
+          "symbol": "OSSetArenaLo",
+          "start": "0x80239A10",
+          "end": "0x80239A18"
+        }
+      ],
+      "discarded": [
+        "OSAllocFromArenaLo",
+        "OSAllocFromArenaHi"
+      ]
     }
   ]
 }
