@@ -3787,50 +3787,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8017D0E0.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017D0E0-0x8017DD68 (src/game/cu_8017D0E0.cpp), function row 0x8017D0E0-0x8017D1D0 and source-form row 0x8017D0E0-0x8017DD68.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8017D0E0",
-          "end": "0x8017DD68"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A57B4",
-          "end": "0x802A57BC"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB468",
-          "end": "0x803EB48C"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x80362964",
-          "end": "0x803629E8"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ECB3C",
-          "end": "0x803ECB40"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8017D0E0",
-          "start": "0x8017D0E0",
-          "end": "0x8017D1D0"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_80181330.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row for src/game/cu_80181330.cpp, its 115 exact function extents, exact data rows 0x802A6AC0-0x802A6C10, 0x802EA988-0x802EAA40, 0x803EB548-0x803EB590 and the .ctors/.dtors words 0x80289AF8/0x80289C24, and its source-form rows. Wholly unlinked draft source: the original assembly remains linked.",
