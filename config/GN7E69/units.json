@@ -835,6 +835,10 @@
     "__floatdisf": {
       "address": "0x8025EA64",
       "evidence": "evidence.tsv external row for 0x8025EA64 (__floatdisf)."
+    },
+    "ReadBitStream__FP11BitStream_tUi": {
+      "address": "0x80190F18",
+      "evidence": "evidence.tsv external row 0x80190F18 (ReadBitStream__FP11BitStream_tUi), name row 0x80190F18 and type row BitStream_t."
     }
   },
   "units": [

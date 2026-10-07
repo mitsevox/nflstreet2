@@ -6,12 +6,15 @@
    used by the dynamic palette code that follows it. */
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
+#include "game/bitstream.h"
+#include "game/fn_80054138.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_802372EC.h"
 
 #define DIVOT_NUM_TYPES 1
-#define DIVOT_TYPE_NONE 0
+#define DIVOT_TYPE_0 0
+#define DIVOT_TYPE_1 1
 #define DIVOT_NUM_SURFACES 14
 #define DIVOT_SURFACE_NONE 15
 #define DIVOT_MAX_REFS 16
@@ -68,17 +71,10 @@ struct DivotHandlers {
     void (*mpUpdate)(Divot *p);
 };
 
-/* Last stepped position of each foot of one player. */
+/* Last stepped position of each of the two feet of one player. */
 struct DivotFeet {
-    float mLeft[2];
-    float mRight[2];
-};
-
-/* Area record returned by fn_80054138 for a position; +8 is its surface. */
-struct Area_80054138 {
-    int mUnknown0;
-    int mUnknown4;
-    int mSurface;
+    float mFoot0[2];
+    float mFoot1[2];
 };
 
 /* Colour entry parsed by fn_80044C88. */
@@ -95,7 +91,8 @@ extern void *lbl_803EA368;
 
 void fn_80030554(void *pStream, float *pValues, int bits, float scale);
 void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
-void fn_80030ACC(void (*pWrite)(void *), void (*pRead)(void *, void *, void *, void *, float),
+void fn_80030ACC(void (*pWrite)(BitStream_t *),
+                 void (*pRead)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float),
                  unsigned int size, const char *pName);
 int fn_80028934(void);
 int fn_8002894C(void);
@@ -104,7 +101,6 @@ void fn_8003F66C(void *p);
 void fn_8003F6B0(void *p);
 void fn_8003F6B4(void *p, void *pData, int a);
 void fn_8003F744(void *p);
-Area_80054138 *fn_80054138(Vector_80039F5C *pPos);
 int fn_8006560C(void);
 void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 void *fn_800A336C(void);
@@ -114,8 +110,6 @@ Object_80039F5C *fn_80137B40(void);
 int fn_801784C4(void);
 float fn_80178A08(void);
 float fn_80178A44(void);
-long long fn_80190F18(void *pStream, int bits);
-void fn_80191068(void *pStream, unsigned long long value, int bits);
 void fn_8019CBC0(void *p);
 void fn_8019F9F0(void);
 void fn_8019FA3C(void);
@@ -157,6 +151,7 @@ unsigned char fn_800446E0(Divot *p);
 void fn_800435B4(Divot *p);
 void fn_800435B0(Divot *p);
 void fn_800436D8(Divot *p);
+void fn_800441F0(void);
 }
 
 static int lbl_803EA494[DIVOT_NUM_TYPES] = { 130 };
@@ -211,33 +206,34 @@ float fn_80042F54(float x, float hi, float vhi, float lo, float vlo)
     return (x - lo) / (hi - lo) * (vhi - vlo) + vlo;
 }
 
-void fn_80042FA8(Divot *p, void *pStream)
+void fn_80042FA8(Divot *p, BitStream_t *pStream)
 {
-    if (p->mType != DIVOT_TYPE_NONE) {
+    if (p->mType != DIVOT_TYPE_0) {
         fn_80030554(pStream, p->mScale, 6, 10.0f);
         fn_80191068(pStream, (unsigned int)(int)(p->mAlpha * 15.0f), 4);
     }
 }
 
-void fn_80043028(Divot *p, void *pStream0, void *pStream1, void *pStream2, void *pStream3, float t)
+void fn_80043028(Divot *p, BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2, BitStream_t *pStream3,
+                 float t)
 {
     float scale1[3];
     float scale0[3];
     float alpha1;
     float alpha0;
 
-    if (p->mType != DIVOT_TYPE_NONE) {
+    if (p->mType != DIVOT_TYPE_0) {
         if (pStream2) {
-            fn_80190F18(pStream2, 22);
+            ReadBitStream(pStream2, 22);
         }
         if (pStream3) {
-            fn_80190F18(pStream3, 22);
+            ReadBitStream(pStream3, 22);
         }
         fn_800301C4(pStream1, scale1, 6, 10.0f);
         fn_800301C4(pStream0, scale0, 6, 10.0f);
         fn_80227930(p->mScale, scale0, scale1, t);
-        alpha1 = (float)fn_80190F18(pStream1, 4) * (1.0f / 15.0f);
-        alpha0 = (float)fn_80190F18(pStream0, 4) * (1.0f / 15.0f);
+        alpha1 = (float)ReadBitStream(pStream1, 4) * (1.0f / 15.0f);
+        alpha0 = (float)ReadBitStream(pStream0, 4) * (1.0f / 15.0f);
         p->mAlpha = (alpha0 - alpha1) * t + alpha1;
     }
 }
@@ -248,7 +244,7 @@ int fn_80043130(void)
     return 31;
 }
 
-void fn_80043158(void *pStream)
+void fn_80043158(BitStream_t *pStream)
 {
     for (int type = 0; type < DIVOT_NUM_TYPES; type++) {
         Divot *p = lbl_803EC794[type];
@@ -261,7 +257,7 @@ void fn_80043158(void *pStream)
     fn_80191068(pStream, lbl_803EC79C, 31);
 }
 
-void fn_800431DC(void *pStream0, void *pStream1, void *pStream2, void *pStream3, float t)
+void fn_800431DC(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2, BitStream_t *pStream3, float t)
 {
     int count0;
     int count1;
@@ -278,13 +274,13 @@ void fn_800431DC(void *pStream0, void *pStream1, void *pStream2, void *pStream3,
         }
     }
     if (pStream2) {
-        fn_80190F18(pStream2, 31);
+        ReadBitStream(pStream2, 31);
     }
     if (pStream3) {
-        fn_80190F18(pStream3, 31);
+        ReadBitStream(pStream3, 31);
     }
-    count1 = fn_80190F18(pStream1, 31);
-    count0 = fn_80190F18(pStream0, 31);
+    count1 = ReadBitStream(pStream1, 31);
+    count0 = ReadBitStream(pStream0, 31);
     count = (int)((float)(count0 - count1) * t + (float)count1);
     active = 0;
     p = lbl_803EC794[0];
@@ -324,7 +320,7 @@ void fn_800433D4(Divot *p)
 
 void fn_80043464(Divot *p)
 {
-    if (p->mType != DIVOT_TYPE_NONE) {
+    if (p->mType != DIVOT_TYPE_0) {
         p->mFlags = DIVOT_FADING;
         p->mTimer = 2.0f;
         p->mActive = 0;
@@ -391,7 +387,7 @@ int fn_800436DC(Divot *pDivot, float radius)
     int free = 1;
 
     for (int type = 0; type < DIVOT_NUM_TYPES && free; type++) {
-        if (type != DIVOT_TYPE_NONE) {
+        if (type != DIVOT_TYPE_0) {
             float range = radius + lbl_803EA498[type];
             Divot *p = lbl_803EC794[type];
 
@@ -411,7 +407,7 @@ int fn_800437A8(Divot *p)
 {
     int ok = 1;
 
-    if (p->mType != DIVOT_TYPE_NONE) {
+    if (p->mType != DIVOT_TYPE_0) {
         float margin = lbl_803EA498[p->mType] + 1.0f;
 
         if (p->mPos.mX - margin < -fn_80178A08() || p->mPos.mX + margin > fn_80178A08() ||
@@ -429,7 +425,7 @@ int fn_800437A8(Divot *p)
 
 void fn_8004389C(Divot *p)
 {
-    if (p->mType == DIVOT_TYPE_NONE) {
+    if (p->mType == DIVOT_TYPE_0) {
         return;
     }
     switch (p->mMode) {
@@ -472,12 +468,12 @@ void fn_80043954(void)
         int surface = fn_80217070(pSurface, "surfType", DIVOT_SURFACE_NONE);
 
         for (pDivot = fn_80216BFC(pSurface, "divot"); pDivot; pDivot = fn_80216E34(pDivot)) {
-            int type = fn_80217070(pDivot, "type", 1);
+            int type = fn_80217070(pDivot, "type", DIVOT_TYPE_1);
             int ref;
 
             fn_80216F3C(pDivot, "tideRef", name, 31, "");
             ref = fn_801F0A8C((void *)fn_80044544(), name);
-            if (surface != DIVOT_SURFACE_NONE && type != 1 && ref != -1) {
+            if (surface != DIVOT_SURFACE_NONE && type != DIVOT_TYPE_1 && ref != -1) {
                 lbl_803077B8[type][surface]++;
                 lbl_80307778[type][counts[type]] = ref;
                 counts[type]++;
@@ -536,15 +532,13 @@ void fn_80043AE4(void)
     lbl_803EC7A0 = 0;
     lbl_803EC7A4 = (DivotRecord *)fn_801D2BB0(1, fn_80044518(0) * sizeof(DivotRecord), 0, 0);
     for (i = 0; i < DIVOT_NUM_PLAYERS; i++) {
-        lbl_803077D8[i].mLeft[0] = 0.0f;
-        lbl_803077D8[i].mLeft[1] = 0.0f;
-        lbl_803077D8[i].mRight[0] = 0.0f;
-        lbl_803077D8[i].mRight[1] = 0.0f;
+        lbl_803077D8[i].mFoot0[0] = 0.0f;
+        lbl_803077D8[i].mFoot0[1] = 0.0f;
+        lbl_803077D8[i].mFoot1[0] = 0.0f;
+        lbl_803077D8[i].mFoot1[1] = 0.0f;
     }
     fn_8019F9F0();
 }
-
-void fn_800441F0(void);
 
 void fn_80043D68(void)
 {
@@ -574,7 +568,7 @@ void fn_80043DD8(void)
             pos.mX = (fn_80237260(1) * 2.0f - 1.0f) * width;
             pos.mY = (fn_80237260(1) * 2.0f - 1.0f) * length;
             pos.mZ = 0.0f;
-            pArea = fn_80054138(&pos);
+            pArea = fn_80054138(&pos.mX);
             if (pArea) {
                 Divot *p = fn_80044580(type);
 
@@ -590,7 +584,6 @@ void fn_80043DD8(void)
     }
 }
 
-void fn_8004389C(Divot *p);
 
 void fn_80043F50(void)
 {
@@ -658,7 +651,6 @@ void fn_80044114(void)
     }
 }
 
-void fn_80043464(Divot *p);
 
 void fn_800441F0(void)
 {
@@ -707,7 +699,7 @@ void fn_80044264(void)
 
 void fn_80044378(void)
 {
-    fn_80030ACC((void (*)(void *))fn_80043158, fn_800431DC, fn_80043130(), "Divots");
+    fn_80030ACC(fn_80043158, fn_800431DC, fn_80043130(), "Divots");
 }
 
 void fn_800443B8(void)
@@ -820,11 +812,10 @@ Divot *fn_80044580(int type)
     return 0;
 }
 
-int fn_800437A8(Divot *p);
 
 unsigned char fn_800446E0(Divot *p)
 {
-    if (p->mType != DIVOT_TYPE_NONE && fn_801784C4()) {
+    if (p->mType != DIVOT_TYPE_0 && fn_801784C4()) {
         p->mPos.mX = -p->mPos.mX;
         p->mPos.mY = -p->mPos.mY;
         p->mAngle = (p->mAngle + 0x800000) & 0xFFFFFF;
@@ -850,7 +841,7 @@ unsigned char fn_800446E0(Divot *p)
 
 void fn_80044854(void *p, void *pState) {}
 
-void fn_80044858(Object_80039F5C *pPlayer, Vector_80039F5C *pPos, int left)
+void fn_80044858(Object_80039F5C *pPlayer, Vector_80039F5C *pPos, int foot0)
 {
     Object_8003DEC4 *pBody;
     int slot;
@@ -860,11 +851,11 @@ void fn_80044858(Object_80039F5C *pPlayer, Vector_80039F5C *pPos, int left)
     if (pPos->mZ < 0.09f) {
         pBody = (Object_8003DEC4 *)pPlayer->mpUnknown4;
         slot = pBody->mUnknown4968 * 7 + pBody->mUnknown4969;
-        if (left) {
-            pLast = lbl_803077D8[slot].mLeft;
+        if (foot0) {
+            pLast = lbl_803077D8[slot].mFoot0;
             pSkip = &lbl_803078B8[slot][0];
         } else {
-            pLast = lbl_803077D8[slot].mRight;
+            pLast = lbl_803077D8[slot].mFoot1;
             pSkip = &lbl_803078B8[slot][1];
         }
         if (fn_80227890(pPos, pLast) >= 0.65f * 0.65f) {

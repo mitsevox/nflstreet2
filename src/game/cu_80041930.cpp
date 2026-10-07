@@ -1,5 +1,6 @@
 #include "game/Object_8003DEC4.h"
 #include "game/Record_8036B55C.h"
+#include "game/bitstream.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
@@ -12,7 +13,7 @@ struct Quant_802CCDF8 {
 };
 
 /* Blend description passed to fn_80042530: an entry count and 44-byte
-   entries holding a weight, two halfwords and the animation handle. */
+   entries holding a weight, two halfwords and the fn_801BAD70 result. */
 struct BlendEntry_80042530 {
     char mUnknown0[4];
     float mUnknown4;
@@ -31,8 +32,6 @@ struct Blend_80042530 {
 };
 
 extern "C" {
-long long fn_80190F18(void *pStream, int bits);
-void fn_80191068(void *pStream, unsigned long long value, int bits);
 void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
 void fn_80030554(void *pStream, float *pValues, int bits, float scale);
 void fn_800ADDFC(Object_8003DEC4 *pObject, Element_80041BF8 *pElement, int a);
@@ -107,7 +106,7 @@ void fn_80041930(Pose_80041930 *pPose, Skeleton_80041930 *pSkeleton)
     }
 }
 
-void fn_8004199C(Pose_80041930 *pPose, void *pStream)
+void fn_8004199C(Pose_80041930 *pPose, BitStream_t *pStream)
 {
     short saved75[3];
     short saved57[3];
@@ -156,7 +155,7 @@ void fn_8004199C(Pose_80041930 *pPose, void *pStream)
     fn_80191068(pStream, pPose->mUnknown32 >> 8, 16);
 }
 
-void fn_80041B48(Pose_80041930 *pPose, void *pStream)
+void fn_80041B48(Pose_80041930 *pPose, BitStream_t *pStream)
 {
     short *pValue = pPose->mUnknown48;
     Quant_802CCDF8 *pQuant = lbl_802CCDF8;
@@ -166,15 +165,15 @@ void fn_80041B48(Pose_80041930 *pPose, void *pStream)
         unsigned long long value = 0;
 
         if (pQuant->mUnknown2) {
-            value = fn_80190F18(pStream, pQuant->mUnknown2);
+            value = ReadBitStream(pStream, pQuant->mUnknown2);
         }
         *pValue = value * 16 - pQuant->mUnknown0 * 16;
     }
     fn_800301C4(pStream, pPose->mUnknown8, 16, 2048.0f);
-    pPose->mUnknown32 = (int)fn_80190F18(pStream, 16) << 8;
+    pPose->mUnknown32 = (int)ReadBitStream(pStream, 16) << 8;
 }
 
-void fn_80041BF8(Object_8003DEC4 *pObject, unsigned int index, void *pStream)
+void fn_80041BF8(Object_8003DEC4 *pObject, unsigned int index, BitStream_t *pStream)
 {
     unsigned long long bits = 1;
 
@@ -189,9 +188,9 @@ void fn_80041BF8(Object_8003DEC4 *pObject, unsigned int index, void *pStream)
     fn_80191068(pStream, bits, 22);
 }
 
-int fn_80041CEC(Element_80041BF8 *pElement, void *pStream)
+int fn_80041CEC(Element_80041BF8 *pElement, BitStream_t *pStream)
 {
-    unsigned long long bits = fn_80190F18(pStream, 22);
+    unsigned long long bits = ReadBitStream(pStream, 22);
 
     pElement->mUnknown4 = (bits >> 1) & 0xF;
     pElement->mUnknown5 = (bits >> 5) & 0xF;
@@ -203,17 +202,18 @@ int fn_80041CEC(Element_80041BF8 *pElement, void *pStream)
 
 void fn_80042508(Object_8003DEC4 *pObject, int a, unsigned int index);
 
-void fn_80041D88(Object_8003DEC4 *pObject, void *pStreamA, void *pStreamB, float t, unsigned int index, int skip)
+void fn_80041D88(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *pStreamB, float t, unsigned int index,
+                 int skip)
 {
     Element_80041BF8 from;
     Element_80041BF8 to;
 
     if (skip) {
         if (pStreamA) {
-            fn_80190F18(pStreamA, 22);
+            ReadBitStream(pStreamA, 22);
         }
         if (pStreamB) {
-            fn_80190F18(pStreamB, 22);
+            ReadBitStream(pStreamB, 22);
         }
         return;
     }
@@ -230,7 +230,7 @@ void fn_80041D88(Object_8003DEC4 *pObject, void *pStreamA, void *pStreamB, float
     }
 }
 
-void fn_80041EB0(Object_8003DEC4 *pObject, void *pStream)
+void fn_80041EB0(Object_8003DEC4 *pObject, BitStream_t *pStream)
 {
     unsigned int count = pObject->mUnknown828 > 7 ? 7 : pObject->mUnknown828;
     unsigned int blends = pObject->mUnknown260 > 2 ? 2 : pObject->mUnknown260;
@@ -245,7 +245,7 @@ void fn_80041EB0(Object_8003DEC4 *pObject, void *pStream)
 void fn_80042530(Object_8003DEC4 *pObject, Blend_80042530 *pBlend);
 void fn_800425D4(Object_8003DEC4 *pObject);
 
-void fn_80041F74(Object_8003DEC4 *pObject, void *pStreamA, void *pStreamB, float t, int skip)
+void fn_80041F74(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *pStreamB, float t, int skip)
 {
     Blend_80042530 blend;
     float from;
@@ -257,20 +257,20 @@ void fn_80041F74(Object_8003DEC4 *pObject, void *pStreamA, void *pStreamB, float
 
     if (skip) {
         if (pStreamA) {
-            fn_80190F18(pStreamA, 64);
-            fn_80190F18(pStreamA, 5);
+            ReadBitStream(pStreamA, 64);
+            ReadBitStream(pStreamA, 5);
         }
         if (pStreamB) {
-            fn_80190F18(pStreamB, 69);
-            fn_80190F18(pStreamB, 5);
+            ReadBitStream(pStreamB, 69);
+            ReadBitStream(pStreamB, 5);
         }
         return;
     }
-    from = (int)fn_80190F18(pStreamB, 3);
-    to = (int)fn_80190F18(pStreamA, 3);
+    from = (int)ReadBitStream(pStreamB, 3);
+    to = (int)ReadBitStream(pStreamA, 3);
     pObject->mUnknown828 = (int)((to - from) * t + from);
-    value = fn_80190F18(pStreamB, 2);
-    count = fn_80190F18(pStreamA, 2);
+    value = ReadBitStream(pStreamB, 2);
+    count = ReadBitStream(pStreamA, 2);
     if (count > (int)value) {
         count = value;
     }
@@ -278,25 +278,25 @@ void fn_80041F74(Object_8003DEC4 *pObject, void *pStreamA, void *pStreamB, float
     pObject->mUnknown260 = blend.mUnknown0;
     if (blend.mUnknown0) {
         handle = fn_801BBE5C(3, 0);
-        fn_80190F18(pStreamA, 16);
-        value = fn_80190F18(pStreamB, 16);
-        fn_80190F18(pStreamA, 32);
-        weight = fn_80190F18(pStreamB, 32);
+        ReadBitStream(pStreamA, 16);
+        value = ReadBitStream(pStreamB, 16);
+        ReadBitStream(pStreamA, 32);
+        weight = ReadBitStream(pStreamB, 32);
         blend.mUnknown4[0].mUnknown40 = fn_801BAD70(fn_801BC084(handle), 0, handle, value);
         blend.mUnknown4[0].mUnknown4 = 1.0f;
         pObject->mUnknown260 = 1;
         if (blend.mUnknown0 > 1) {
-            fn_80190F18(pStreamA, 16);
-            value = fn_80190F18(pStreamB, 16);
+            ReadBitStream(pStreamA, 16);
+            value = ReadBitStream(pStreamB, 16);
             blend.mUnknown4[1].mUnknown40 = fn_801BAD70(fn_801BC084(handle), 0, handle, value);
             blend.mUnknown4[1].mUnknown4 = weight;
         } else {
-            fn_80190F18(pStreamA, 16);
-            fn_80190F18(pStreamB, 16);
+            ReadBitStream(pStreamA, 16);
+            ReadBitStream(pStreamB, 16);
         }
     } else {
-        fn_80190F18(pStreamA, 64);
-        fn_80190F18(pStreamB, 64);
+        ReadBitStream(pStreamA, 64);
+        ReadBitStream(pStreamB, 64);
     }
     if ((pObject->mUnknown828 >= 0 && pObject->mUnknown828 <= 6) || pObject->mUnknown260) {
         fn_80042530(pObject, &blend);
@@ -575,15 +575,15 @@ int fn_800429CC(int skip)
     return bits + 124;
 }
 
-void fn_80042A08(Object_8003DEC4 *pObject, void *pStream)
+void fn_80042A08(Object_8003DEC4 *pObject, BitStream_t *pStream)
 {
-    unsigned int still;
+    unsigned int bit11;
 
     fn_80191068(pStream, pObject->mUnknown20 & 1, 1);
     fn_80191068(pStream, (pObject->mUnknown20 >> 17) & 1, 1);
-    still = (pObject->mUnknown20 >> 11) & 1;
-    fn_80191068(pStream, still, 1);
-    if (!still) {
+    bit11 = (pObject->mUnknown20 >> 11) & 1;
+    fn_80191068(pStream, bit11, 1);
+    if (!bit11) {
         fn_8004199C(&pObject->mUnknown44, pStream);
         fn_80041BF8(pObject, 0, pStream);
         fn_80041BF8(pObject, 1, pStream);
@@ -593,7 +593,8 @@ void fn_80042A08(Object_8003DEC4 *pObject, void *pStream)
     fn_80191068(pStream, (pObject->mUnknown36 >> 12) & 0xFFF, 12);
 }
 
-void fn_80042AF4(Object_8003DEC4 *pObject, void *pStreamA, void *pStreamB, void *pStreamC, void *pStreamD, float t)
+void fn_80042AF4(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *pStreamB, BitStream_t *pStreamC,
+                 BitStream_t *pStreamD, float t)
 {
     short valuesB[192];
     short valuesC[192];
@@ -611,13 +612,13 @@ void fn_80042AF4(Object_8003DEC4 *pObject, void *pStreamA, void *pStreamB, void 
     poseD.mUnknown48 = valuesD;
     poseC.mUnknown48 = valuesC;
 
-    flag = fn_80190F18(pStreamB, 1);
-    fn_80190F18(pStreamA, 1);
+    flag = ReadBitStream(pStreamB, 1);
+    ReadBitStream(pStreamA, 1);
     if (pStreamD) {
-        fn_80190F18(pStreamD, 1);
+        ReadBitStream(pStreamD, 1);
     }
     if (pStreamC) {
-        fn_80190F18(pStreamC, 1);
+        ReadBitStream(pStreamC, 1);
     }
     if (flag == 1) {
         pObject->mUnknown20 |= 1;
@@ -625,13 +626,13 @@ void fn_80042AF4(Object_8003DEC4 *pObject, void *pStreamA, void *pStreamB, void 
         pObject->mUnknown20 &= ~1;
     }
 
-    flag = fn_80190F18(pStreamB, 1);
-    fn_80190F18(pStreamA, 1);
+    flag = ReadBitStream(pStreamB, 1);
+    ReadBitStream(pStreamA, 1);
     if (pStreamD) {
-        fn_80190F18(pStreamD, 1);
+        ReadBitStream(pStreamD, 1);
     }
     if (pStreamC) {
-        fn_80190F18(pStreamC, 1);
+        ReadBitStream(pStreamC, 1);
     }
     if (flag == 1) {
         fn_801477F0(pObject);
@@ -639,13 +640,13 @@ void fn_80042AF4(Object_8003DEC4 *pObject, void *pStreamA, void *pStreamB, void 
         fn_80147840(pObject);
     }
 
-    flag = fn_80190F18(pStreamB, 1);
-    fn_80190F18(pStreamA, 1);
+    flag = ReadBitStream(pStreamB, 1);
+    ReadBitStream(pStreamA, 1);
     if (pStreamC) {
-        fn_80190F18(pStreamC, 1);
+        ReadBitStream(pStreamC, 1);
     }
     if (pStreamD) {
-        fn_80190F18(pStreamD, 1);
+        ReadBitStream(pStreamD, 1);
     }
     if (flag == 0) {
         fn_80041B48(&poseB, pStreamB);
@@ -673,17 +674,17 @@ void fn_80042AF4(Object_8003DEC4 *pObject, void *pStreamA, void *pStreamB, void 
 
     if (pStreamC) {
         fn_800301C4(pStreamC, posB, 16, 256.0f);
-        fn_80190F18(pStreamC, 12);
+        ReadBitStream(pStreamC, 12);
     }
     if (pStreamD) {
         fn_800301C4(pStreamD, posB, 16, 256.0f);
-        fn_80190F18(pStreamD, 12);
+        ReadBitStream(pStreamD, 12);
     }
     fn_800301C4(pStreamB, posB, 16, 256.0f);
     fn_800301C4(pStreamA, posA, 16, 256.0f);
     fn_80227930(pObject->mUnknown4, posA, posB, t);
-    angleB = (int)(fn_80190F18(pStreamB, 12) << 52 >> 40) & 0xFFF000;
-    angleA = (int)(fn_80190F18(pStreamA, 12) << 52 >> 40) & 0xFFF000;
+    angleB = (int)(ReadBitStream(pStreamB, 12) << 52 >> 40) & 0xFFF000;
+    angleA = (int)(ReadBitStream(pStreamA, 12) << 52 >> 40) & 0xFFF000;
     fn_801CF8A8(&pObject->mUnknown36, angleA, angleB, t);
 
     if (!pStreamC) {

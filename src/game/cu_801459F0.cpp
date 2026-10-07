@@ -248,7 +248,7 @@ void fn_80145EB8(void)
     }
 }
 
-void fn_80145EFC(int a, void *b, void *c, Source_80144CE0 *d)
+void fn_80145EFC(int a, float *pPos, float *pRot, Source_80144CE0 *pSource)
 {
     Args_80144CE0 args;
     Mtx44 m;
@@ -264,9 +264,9 @@ void fn_80145EFC(int a, void *b, void *c, Source_80144CE0 *d)
     fn_801D03D0(m);
     m[2][3] = m[1][3] = m[0][3] = 0.0f;
     fn_801D0508();
-    fn_801D0C58(b);
-    if (c != 0) {
-        Vec_801EBC18 v = fn_801EBC18(c);
+    fn_801D0C58(pPos);
+    if (pRot != 0) {
+        Vec_801EBC18 v = fn_801EBC18(pRot);
 
         fn_801D0BCC(v.mUnknown8, v.mUnknown4, v.mUnknown0);
     }
@@ -277,7 +277,7 @@ void fn_80145EFC(int a, void *b, void *c, Source_80144CE0 *d)
     args.mUnknown04 = &pEntry->mMatrix;
     args.mUnknown08 = &m;
     args.mUnknown00 = a;
-    pEntry->mUnknown40 = fn_80144CE0(&args, 0, d);
+    pEntry->mUnknown40 = fn_80144CE0(&args, 0, pSource);
     fn_801C6AA4(lbl_803EB254, pEntry, 0);
 }
 

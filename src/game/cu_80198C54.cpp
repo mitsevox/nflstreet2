@@ -1,6 +1,8 @@
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/FMCAPPORT.h"
+#include "game/Object_8003DEC4.h"
+#include "game/cu_8008A274.h"
 #include "engine/cu_80227F14.h"
 #include <dolphin/gx/GXEnum.h>
 #include <dolphin/gx/GXStruct.h>
@@ -14,14 +16,6 @@ struct Triple_802EDF8C {
     float mUnknown0;
     float mUnknown4;
     float mUnknown8;
-};
-
-/* Table returned by fn_8008A84C: a halfword count at +6 and halfword triples from +0x410. */
-struct Data_8008A84C {
-    char mUnknown0[6];
-    unsigned short mUnknown6;
-    char mUnknown8[1032];
-    Triple_80198D98 mUnknown1040[30];
 };
 
 struct Object_8015E2FC {
@@ -54,8 +48,6 @@ void fn_801D1258(int a, Matrix_80198C54 m);
 void fn_801D12BC(int a);
 void fn_801D12EC(int a);
 void fn_801D131C(int a);
-void *fn_8008A808(Object_8008A9F8 *pObject, int index);
-Data_8008A84C *fn_8008A84C(int index);
 int fn_8008A87C(int index);
 void fn_8008B09C(Class_8008B284 *pObject, void *pImage, int width, int height);
 void fn_8008B134(Class_8008B284 *pObject, void *pOut, void *p, int *pCount);
@@ -69,10 +61,10 @@ void fn_80210CC4(float a, float b);
 void fn_80211FF0(void);
 void fn_80212018(const char *pName, void *p);
 void fn_802337D4(void *a, void *b, Triple_80198D98 *pTriples, int c);
-void fn_802338D4(Object_802338D4 *pObject, Data_8008A84C *pData, Matrix_80198C54 *pOut);
+void fn_802338D4(Object_802338D4 *pObject, Skeleton_80041930 *pData, Matrix_80198C54 *pOut);
 void fn_80233BB8(Object_80233BB8 *pObject, int a, int b);
 void fn_80233BD8(Object_80233BB8 *pObject);
-void fn_80233BDC(Object_80233BB8 *pObject, Data_8008A84C *pData);
+void fn_80233BDC(Object_80233BB8 *pObject, Skeleton_80041930 *pData);
 void fn_80233CBC(void *pObject, int a, int b);
 void fn_8023465C(Object_8023488C *pObject, Object_8015E2FC *p, Desc_802347EC *pDesc);
 void fn_8023488C(Object_8023488C *pObject, int a);
@@ -159,11 +151,11 @@ void fn_80198D98(Object_8008A9F8 *pObject)
 {
     unsigned int i;
     unsigned int j;
-    Data_8008A84C *pData0;
-    Data_8008A84C *pData1;
+    Skeleton_80041930 *pData0;
+    Skeleton_80041930 *pData1;
 
     for (i = 0; i <= 1; i++) {
-        Data_8008A84C *pData = fn_8008A84C(i);
+        Skeleton_80041930 *pData = fn_8008A84C(i);
         int value = fn_8008A87C(i);
 
         fn_80233BB8(&pObject->mUnknown588[i], value, 0);
@@ -175,14 +167,14 @@ void fn_80198D98(Object_8008A9F8 *pObject)
     pData1 = fn_8008A84C(1);
     memset(pObject->mUnknown1520, 0, sizeof(pObject->mUnknown1520));
     for (j = 0; j < pData0->mUnknown6; j++) {
-        pObject->mUnknown1340[j].mUnknown0 = pData0->mUnknown1040[j].mUnknown0;
-        pObject->mUnknown1340[j].mUnknown2 = pData0->mUnknown1040[j].mUnknown2;
-        pObject->mUnknown1340[j].mUnknown4 = pData0->mUnknown1040[j].mUnknown4;
+        pObject->mUnknown1340[j].mUnknown0 = pData0->mUnknown1040[j][0];
+        pObject->mUnknown1340[j].mUnknown2 = pData0->mUnknown1040[j][1];
+        pObject->mUnknown1340[j].mUnknown4 = pData0->mUnknown1040[j][2];
     }
     for (j = 0; j < 19; j++) {
-        pObject->mUnknown1520[j].mUnknown0 = pData1->mUnknown1040[j].mUnknown0;
-        pObject->mUnknown1520[j].mUnknown2 = pData1->mUnknown1040[j].mUnknown2;
-        pObject->mUnknown1520[j].mUnknown4 = pData1->mUnknown1040[j].mUnknown4;
+        pObject->mUnknown1520[j].mUnknown0 = pData1->mUnknown1040[j][0];
+        pObject->mUnknown1520[j].mUnknown2 = pData1->mUnknown1040[j][1];
+        pObject->mUnknown1520[j].mUnknown4 = pData1->mUnknown1040[j][2];
     }
 }
 
@@ -238,8 +230,8 @@ void fn_8019905C(Object_8008A9F8 *pObject)
     Object_802338D4 desc;
     Matrix_80198C54 matrices[40];
     Triple_80198D98 triples[19];
-    Data_8008A84C *pData0;
-    Data_8008A84C *pData1;
+    Skeleton_80041930 *pData0;
+    Skeleton_80041930 *pData1;
     unsigned int i;
     Object_8023488C *pUnknown612 = &pObject->mUnknown612;
 

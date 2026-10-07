@@ -1,6 +1,7 @@
 #include "game/Block_80307980.h"
 #include "game/Object_8003DEC4.h"
 #include "game/cu_80047E28.h"
+#include "game/cu_8015C25C.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80233CBC.h"
 
@@ -402,8 +403,8 @@ extern "C" unsigned char fn_8015CD9C(void)
     return lbl_803EB328;
 }
 
-/* Per-frame update: steps the two per-player fade values and starts the next
-   queued request once the current one has finished. */
+/* Per-frame update: steps the two per-player 0..1 ramp values and starts the
+   next queued request once the current one has finished. */
 extern "C" void fn_8015CDA4(void)
 {
     unsigned int i;
@@ -485,7 +486,7 @@ extern "C" void fn_8015CDA4(void)
 
 /* Queues a request for player index; it counts as changed when forced or when
    the stored name or the compared player values differ. */
-extern "C" void fn_8015D060(int index, const char *pName, unsigned int priority, int force)
+extern "C" void fn_8015D060(int index, const char *pName, unsigned char priority, int force)
 {
     Entry_803EB32C *pEntry;
     Object_8003DEC4 *pPlayer;
@@ -512,7 +513,7 @@ extern "C" void fn_8015D060(int index, const char *pName, unsigned int priority,
     fn_8015C9E0(index, priority, flag);
 }
 
-extern "C" void fn_8015D180(int index, unsigned int priority)
+extern "C" void fn_8015D180(int index, unsigned char priority)
 {
     Entry_803EB32C *pEntry;
 
@@ -525,7 +526,7 @@ extern "C" void fn_8015D180(int index, unsigned int priority)
     fn_8015C9E0(index, priority, 1);
 }
 
-extern "C" void fn_8015D1CC(int index, unsigned int priority)
+extern "C" void fn_8015D1CC(int index, unsigned char priority)
 {
     if (lbl_803EB328) {
         fn_8015C9E0(index, priority, 0);

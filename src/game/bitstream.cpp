@@ -20,7 +20,7 @@ int CloseBitStream(BitStream_t *pStream)
     return size;
 }
 
-unsigned long long ReadBitStream(BitStream_t *pStream, unsigned int bits)
+long long ReadBitStream(BitStream_t *pStream, unsigned int bits)
 {
     int word = pStream->mWord;
     int bit = pStream->mBit;

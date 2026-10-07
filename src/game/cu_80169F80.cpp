@@ -6,11 +6,7 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/Object_800785C0.h"
-
-struct Point_8016AD80 {
-    float mX;
-    float mY;
-};
+#include "game/Object_8017886C.h"
 
 /* One 12-byte candidate passed with its count to fn_8016B364; the
    halfword at +4 is the weight these functions rescale or clear. */
@@ -60,7 +56,7 @@ int fn_801485D4(void);
 Object_800670B4 *fn_80168708(int team);
 int fn_80168EA8(int team);
 int fn_80177F70(void);
-Point_8016AD80 fn_80177FE0(void);
+Point_8017886C fn_80177FE0(void);
 int fn_80178308(void);
 float fn_80178A5C(void);
 int fn_80187C6C(void);
@@ -94,7 +90,7 @@ void fn_8016A7DC(int team, Candidate_8016B364 *pList, unsigned int count);
 void fn_8016A9B4(int team, Candidate_8016B364 *pList, unsigned int count);
 void fn_8016AC24(int team, Candidate_8016B364 *pList, unsigned int count);
 void fn_8016ACD8(int team, Candidate_8016B364 *pList, unsigned int count, int mode);
-unsigned int fn_8016AD80(int kind, Point_8016AD80 from, Point_8016AD80 *pTo, int flag);
+unsigned int fn_8016AD80(int kind, Point_8017886C from, Point_8017886C *pTo, int flag);
 void fn_8016AF34(int team, float *pA, float *pB);
 void fn_8016B04C(void);
 void fn_8016B0AC(void);
@@ -102,7 +98,7 @@ void fn_8016B0B0(void);
 void fn_8016B144(int team, int value);
 void fn_8016B210(int team, int value);
 void fn_8016B22C(int team, signed char value);
-void fn_8016B248(int team, Point_8016AD80 from, Point_8016AD80 to, int flag);
+void fn_8016B248(int team, Point_8017886C from, Point_8017886C to, int flag);
 void fn_8016B2B8(int team, float value);
 void fn_8016B2E8(int team, unsigned char value);
 void fn_8016B310(int team, unsigned char value);
@@ -110,7 +106,7 @@ void fn_8016B32C(int team, unsigned char value);
 void fn_8016B348(int team, unsigned char value);
 void fn_8016B364(int team, Candidate_8016B364 *pList, unsigned int count);
 void fn_8016B438(int team, unsigned char *pOut, unsigned int *pFlags);
-unsigned char fn_8016B7C4(Point_8016AD80 *pTo);
+unsigned char fn_8016B7C4(Point_8017886C *pTo);
 void fn_8016B82C(int team, Record_80067338 *pRecord, unsigned char *pOut, unsigned int *pFlags);
 float fn_8016B8C8(int team, int value);
 float fn_8016B938(void);
@@ -118,8 +114,8 @@ float fn_8016B974(void);
 float GetTrackerFloat8(void);
 float fn_8016B9B0(void);
 float fn_8016B9EC(void);
-void SumRunWeightsBit28(int team, float *pClear, float *pSet);
-void SumRunWeightsBit30(int team, float *pSet, float *pClear);
+void SumKind1WeightsBit28(int team, float *pBit29, float *pBit28);
+void SumKind1WeightsBit30(int team, float *pSet, float *pClear);
 void fn_8016BA28(unsigned char *pOut);
 void fn_8016BA80(void);
 void fn_8016BAAC(void);
@@ -154,17 +150,17 @@ void fn_80169FCC(int team, unsigned char *pOut, unsigned int *pFlags)
     *pOut = 0;
     *pFlags = 0;
 
-    float pass = 0.0f;
+    float kind2 = 0.0f;
     float other = 0.0f;
     float other4 = 0.0f;
     float other8 = 0.0f;
     float other2 = 0.0f;
-    float pass100 = 0.0f;
-    float pass200 = 0.0f;
-    float pass80 = 0.0f;
-    float pass40 = 0.0f;
-    float pass20 = 0.0f;
-    float pass10 = 0.0f;
+    float kind2Flag100 = 0.0f;
+    float kind2Flag200 = 0.0f;
+    float kind2Flag80 = 0.0f;
+    float kind2Flag40 = 0.0f;
+    float kind2Flag20 = 0.0f;
+    float kind2Flag10 = 0.0f;
     Entry_8016B144 *pEntries = lbl_803EB40C->mUnknown1C[team];
     float total = lbl_803EB40C->mUnknown3DC[team];
 
@@ -174,20 +170,20 @@ void fn_80169FCC(int team, unsigned char *pOut, unsigned int *pFlags)
     for (unsigned char i = 0; i < total; i++) {
         unsigned int flags = pEntries[i].mUnknown8;
         if (pEntries[i].mUnknownF == 2) {
-            pass += 1.0f;
+            kind2 += 1.0f;
             if (pEntries[i].mUnknownE != 4) {
                 if (flags & 0x10)
-                    pass10 += 1.0f;
+                    kind2Flag10 += 1.0f;
                 if (flags & 0x20)
-                    pass20 += 1.0f;
+                    kind2Flag20 += 1.0f;
                 if (flags & 0x40)
-                    pass40 += 1.0f;
+                    kind2Flag40 += 1.0f;
                 if (flags & 0x80)
-                    pass80 += 1.0f;
+                    kind2Flag80 += 1.0f;
                 if (flags & 0x100)
-                    pass100 += 1.0f;
+                    kind2Flag100 += 1.0f;
                 if (flags & 0x200)
-                    pass200 += 1.0f;
+                    kind2Flag200 += 1.0f;
             }
         } else {
             other += 1.0f;
@@ -202,7 +198,7 @@ void fn_80169FCC(int team, unsigned char *pOut, unsigned int *pFlags)
 
     if (other / total > 0.65f)
         *pOut = 1;
-    else if (pass / total > 0.65f)
+    else if (kind2 / total > 0.65f)
         *pOut = 2;
 
     if (other != 0.0f) {
@@ -214,19 +210,19 @@ void fn_80169FCC(int team, unsigned char *pOut, unsigned int *pFlags)
             *pFlags |= 4;
     }
 
-    if (pass != 0.0f) {
-        if (pass10 / pass > 0.5f)
+    if (kind2 != 0.0f) {
+        if (kind2Flag10 / kind2 > 0.5f)
             *pFlags |= 0x10;
-        else if (pass20 / pass > 0.5f)
+        else if (kind2Flag20 / kind2 > 0.5f)
             *pFlags |= 0x20;
-        else if (pass40 / pass > 0.5f)
+        else if (kind2Flag40 / kind2 > 0.5f)
             *pFlags |= 0x40;
 
-        if (pass80 / pass > 0.5f)
+        if (kind2Flag80 / kind2 > 0.5f)
             *pFlags |= 0x80;
-        else if (pass200 / pass > 0.5f)
+        else if (kind2Flag200 / kind2 > 0.5f)
             *pFlags |= 0x200;
-        else if (pass100 / pass > 0.5f)
+        else if (kind2Flag100 / kind2 > 0.5f)
             *pFlags |= 0x100;
     }
 }
@@ -374,13 +370,13 @@ float fn_8016A770(unsigned int mask, unsigned int flags, unsigned int other, flo
 
 void fn_8016A7DC(int team, Candidate_8016B364 *pList, unsigned int count)
 {
-    float runBias;
-    float passBias;
+    float group1Bias;
+    float group2Bias;
     unsigned char kind;
     unsigned int flags;
     int preferred = 0;
 
-    fn_8016AF34(team, &runBias, &passBias);
+    fn_8016AF34(team, &group1Bias, &group2Bias);
     fn_8016B438(team, &kind, &flags);
     if (fn_801485D4())
         preferred = fn_80148A58()->vfn_08(1);
@@ -391,9 +387,9 @@ void fn_8016A7DC(int team, Candidate_8016B364 *pList, unsigned int count)
 
         scale += fn_8016A2D4(team, kind, flags, group, pList[i].mUnknown6);
         if (group == 2)
-            scale += passBias;
+            scale += group2Bias;
         else if (group == 1)
-            scale += runBias;
+            scale += group1Bias;
         if (scale < 0.0f)
             scale = 0.0f;
 
@@ -427,8 +423,8 @@ void fn_8016A9B4(int team, Candidate_8016B364 *pList, unsigned int count)
     fn_8016B82C(opponent, pRecord, &kind, &mask);
     fn_80169FCC(opponent, &trend, &flags);
     float history = fn_8016B8C8(opponent, id);
-    float runRate = fn_8016A334(opponent);
-    float passRate = fn_8016A408(opponent);
+    float result5Rate = fn_8016A334(opponent);
+    float result6Rate = fn_8016A408(opponent);
 
     int key = team == 0 ? fn_80187C8C() : fn_80187C6C();
     if (fn_801FCE10(0, "select 'ZBMT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &rating, key) != 0)
@@ -443,9 +439,9 @@ void fn_8016A9B4(int team, Candidate_8016B364 *pList, unsigned int count)
         scale += fn_8016A618(opponent, pList[i].mUnknown0, id);
         scale += fn_8016A770(pList[i].mUnknown6, flags, mask, history);
         if ((pList[i].mUnknown6 & 0x400) && kind == 2)
-            scale += runRate;
+            scale += result5Rate;
         if ((pList[i].mUnknown6 & 0x800) && kind == 1)
-            scale += passRate;
+            scale += result6Rate;
 
         float adjust = ((float)rating - 50.0f) * 0.02f;
         if (pList[i].mUnknown8 == 0x1F)
@@ -489,7 +485,7 @@ void fn_8016ACD8(int team, Candidate_8016B364 *pList, unsigned int count, int mo
     }
 }
 
-unsigned int fn_8016AD80(int kind, Point_8016AD80 from, Point_8016AD80 *pTo, int flag)
+unsigned int fn_8016AD80(int kind, Point_8017886C from, Point_8017886C *pTo, int flag)
 {
     unsigned int result = 0;
 
@@ -513,10 +509,10 @@ unsigned int fn_8016AD80(int kind, Point_8016AD80 from, Point_8016AD80 *pTo, int
     }
 
     if (kind == 2) {
-        float depth = pTo->mY - from.mY;
-        if (depth < 7.0f)
+        float distance = pTo->mY - from.mY;
+        if (distance < 7.0f)
             result |= 0x10;
-        else if (depth < 15.0f)
+        else if (distance < 15.0f)
             result |= 0x20;
         else
             result |= 0x40;
@@ -607,7 +603,7 @@ void fn_8016B22C(int team, signed char value)
     lbl_803EB40C->mUnknown1C[team][0].mUnknownC = value;
 }
 
-void fn_8016B248(int team, Point_8016AD80 from, Point_8016AD80 to, int flag)
+void fn_8016B248(int team, Point_8017886C from, Point_8017886C to, int flag)
 {
     Entry_8016B144 *pEntry = &lbl_803EB40C->mUnknown1C[team][0];
     pEntry->mUnknown8 = fn_8016AD80(pEntry->mUnknownF, from, &to, flag);
@@ -658,19 +654,19 @@ void fn_8016B364(int team, Candidate_8016B364 *pList, unsigned int count)
 
 void fn_8016B438(int team, unsigned char *pOut, unsigned int *pFlags)
 {
-    float passGain = 0.0f;
-    float pass = 0.0f;
-    float runGain = 0.0f;
-    float run = 0.0f;
-    float run4 = 0.0f;
-    float run8 = 0.0f;
-    float run2 = 0.0f;
-    float pass100 = 0.0f;
-    float pass200 = 0.0f;
-    float pass80 = 0.0f;
-    float pass40 = 0.0f;
-    float pass20 = 0.0f;
-    float pass10 = 0.0f;
+    float kind2Gain = 0.0f;
+    float kind2 = 0.0f;
+    float kind1Gain = 0.0f;
+    float kind1 = 0.0f;
+    float kind1Flag4 = 0.0f;
+    float kind1Flag8 = 0.0f;
+    float kind1Flag2 = 0.0f;
+    float kind2Flag100 = 0.0f;
+    float kind2Flag200 = 0.0f;
+    float kind2Flag80 = 0.0f;
+    float kind2Flag40 = 0.0f;
+    float kind2Flag20 = 0.0f;
+    float kind2Flag10 = 0.0f;
     Entry_8016B144 *pEntries = lbl_803EB40C->mUnknown1C[team];
     unsigned short count = lbl_803EB40C->mUnknown3DC[team];
 
@@ -695,71 +691,71 @@ void fn_8016B438(int team, unsigned char *pOut, unsigned int *pFlags)
         }
 
         if (pEntries[i].mUnknownF == 1) {
-            run += 1.0f;
+            kind1 += 1.0f;
             if (gain > 4.9f) {
-                runGain += 1.0f;
+                kind1Gain += 1.0f;
                 if (flags & 2)
-                    run2 += 1.0f;
+                    kind1Flag2 += 1.0f;
                 if (flags & 4)
-                    run4 += 1.0f;
+                    kind1Flag4 += 1.0f;
                 if (flags & 8)
-                    run8 += 1.0f;
+                    kind1Flag8 += 1.0f;
             }
         } else {
-            pass += 1.0f;
+            kind2 += 1.0f;
             if (gain > 9.0f) {
-                passGain += 1.0f;
+                kind2Gain += 1.0f;
                 if (flags & 0x80)
-                    pass80 += 1.0f;
+                    kind2Flag80 += 1.0f;
                 if (flags & 0x100)
-                    pass100 += 1.0f;
+                    kind2Flag100 += 1.0f;
                 if (flags & 0x200)
-                    pass200 += 1.0f;
+                    kind2Flag200 += 1.0f;
                 if (flags & 0x10)
-                    pass10 += 1.0f;
+                    kind2Flag10 += 1.0f;
                 if (flags & 0x20)
-                    pass20 += 1.0f;
+                    kind2Flag20 += 1.0f;
                 if (flags & 0x40)
-                    pass40 += 1.0f;
+                    kind2Flag40 += 1.0f;
             }
         }
     }
 
-    if (run <= 7.0f || pass <= 7.0f)
+    if (kind1 <= 7.0f || kind2 <= 7.0f)
         return;
 
-    float runRate = runGain / run;
-    float passRate = passGain / pass;
-    if (fabsf(runRate - passRate) > 0.35f)
-        *pOut = runRate > passRate ? 1 : 2;
+    float kind1Rate = kind1Gain / kind1;
+    float kind2Rate = kind2Gain / kind2;
+    if (fabsf(kind1Rate - kind2Rate) > 0.35f)
+        *pOut = kind1Rate > kind2Rate ? 1 : 2;
 
-    if (runGain != 0.0f) {
-        if (run2 / runGain > 0.4f)
+    if (kind1Gain != 0.0f) {
+        if (kind1Flag2 / kind1Gain > 0.4f)
             *pFlags |= 2;
-        else if (run8 / runGain > 0.4f)
+        else if (kind1Flag8 / kind1Gain > 0.4f)
             *pFlags |= 8;
-        else if (run4 / runGain > 0.4f)
+        else if (kind1Flag4 / kind1Gain > 0.4f)
             *pFlags |= 4;
     }
 
-    if (passGain != 0.0f) {
-        if (pass10 / passGain > 0.4f)
+    if (kind2Gain != 0.0f) {
+        if (kind2Flag10 / kind2Gain > 0.4f)
             *pFlags |= 0x10;
-        else if (pass20 / passGain > 0.4f)
+        else if (kind2Flag20 / kind2Gain > 0.4f)
             *pFlags |= 0x20;
-        else if (pass40 / passGain > 0.4f)
+        else if (kind2Flag40 / kind2Gain > 0.4f)
             *pFlags |= 0x40;
 
-        if (pass80 / passGain > 0.4f)
+        if (kind2Flag80 / kind2Gain > 0.4f)
             *pFlags |= 0x80;
-        else if (pass200 / passGain > 0.4f)
+        else if (kind2Flag200 / kind2Gain > 0.4f)
             *pFlags |= 0x200;
-        else if (pass100 / passGain > 0.4f)
+        else if (kind2Flag100 / kind2Gain > 0.4f)
             *pFlags |= 0x100;
     }
 }
 
-unsigned char fn_8016B7C4(Point_8016AD80 *pTo)
+unsigned char fn_8016B7C4(Point_8017886C *pTo)
 {
     int kind = 1;
 
@@ -830,40 +826,40 @@ float fn_8016B9EC(void)
     return lbl_803EB40C->mUnknown10;
 }
 
-void SumRunWeightsBit28(int team, float *pClear, float *pSet)
+void SumKind1WeightsBit28(int team, float *pBit29, float *pBit28)
 {
     unsigned short count = lbl_803EB40C->mUnknown3DC[team];
     Entry_8016B144 *pEntries = lbl_803EB40C->mUnknown1C[team];
-    unsigned short runs = 0;
+    unsigned short kind1Count = 0;
 
-    *pClear = 0.0f;
-    *pSet = 0.0f;
+    *pBit29 = 0.0f;
+    *pBit28 = 0.0f;
     for (unsigned short i = 0; i < count; i++) {
         if (pEntries[i].mUnknownF == 1) {
-            runs++;
+            kind1Count++;
             if (pEntries[i].mUnknown8 & 0x10000000)
-                *pSet += lbl_802E99AC[runs / 8];
+                *pBit28 += lbl_802E99AC[kind1Count / 8];
             else if (pEntries[i].mUnknown8 & 0x20000000)
-                *pClear += lbl_802E99AC[runs / 8];
+                *pBit29 += lbl_802E99AC[kind1Count / 8];
         }
     }
 }
 
-void SumRunWeightsBit30(int team, float *pSet, float *pClear)
+void SumKind1WeightsBit30(int team, float *pSet, float *pClear)
 {
     unsigned short count = lbl_803EB40C->mUnknown3DC[team];
     Entry_8016B144 *pEntries = lbl_803EB40C->mUnknown1C[team];
-    unsigned short runs = 0;
+    unsigned short kind1Count = 0;
 
     *pSet = 0.0f;
     *pClear = 0.0f;
     for (unsigned short i = 0; i < count; i++) {
         if (pEntries[i].mUnknownF == 1) {
-            runs++;
+            kind1Count++;
             if (pEntries[i].mUnknown8 & 0x40000000)
-                *pSet += lbl_802E99B8[runs / 8];
+                *pSet += lbl_802E99B8[kind1Count / 8];
             else
-                *pClear += lbl_802E99B8[runs / 8];
+                *pClear += lbl_802E99B8[kind1Count / 8];
         }
     }
 }

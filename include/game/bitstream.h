@@ -18,7 +18,7 @@ struct BitStream_t {
 
 void OpenBitStream(BitStream_t *pStream, void *pBuffer, BitStreamMode_t mode);
 int CloseBitStream(BitStream_t *pStream);
-unsigned long long ReadBitStream(BitStream_t *pStream, unsigned int bits);
+long long ReadBitStream(BitStream_t *pStream, unsigned int bits);
 
 extern "C" void fn_80191068(BitStream_t *pStream, unsigned long long value, unsigned int bits);
 

@@ -1,10 +1,12 @@
 #include <string.h>
 
+#include "game/bitstream.h"
 #include "game/cu_80041210.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
+#include "game/fn_80054138.h"
 
 struct Anim_8004AA34 {
     int mUnknown0;
@@ -48,7 +50,7 @@ struct Object_80040818 {
     int mUnknown308;
     char mUnknown312[16];
     int mUnknown328;
-    int mUnknown332;
+    Area_80054138 *mUnknown332;
     float mUnknown336;
     float mUnknown340;
     char mName[128];
@@ -107,9 +109,10 @@ void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
 void fn_80030304(void *pStream, float *pValues, int bits, float scale);
 void fn_80030554(void *pStream, float *pValues, int bits, float scale);
 void fn_8003065C(void *pStream, float *pValues, int bits, float scale);
-void fn_80030ACC(void (*pSave)(void *pStream),
-                 void (*pLoad)(void *pStream0, void *pStream1, void *pStream2, void *pStream3, float t), int size,
-                 const char *pName);
+void fn_80030ACC(void (*pSave)(BitStream_t *pStream),
+                 void (*pLoad)(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
+                               BitStream_t *pStream3, float t),
+                 int size, const char *pName);
 void fn_800400BC(Block_80170E64 *pBlock, Object_80041904 *pLinked);
 void fn_8004AA34(Anim_8004AA34 *pAnim, void *pStream, int count);
 void fn_8004ABF4(Object_80040818 *pObject, Object_80041904 *pLinked, void *pStream0, void *pStream1, void *pStream2,
@@ -134,10 +137,7 @@ void fn_800504EC(void);
 void fn_80051308(void);
 void fn_80053A1C(void);
 Level_80054130 *fn_80054130(void);
-int fn_80054138(float *pPos);
 void fn_800B2A14(float *pPos, unsigned char *pAngles);
-unsigned long long fn_80190F18(void *pStream, int bits);
-void fn_80191068(void *pStream, unsigned long long value, int bits);
 char *fn_801C310C(char *pText, const char *pPattern);
 int fn_801C9DC8(int value);
 int fn_801DCF0C(int type, int size, int count, void (*pInit)(Object_80040818 *, Desc_800408E4 *),
@@ -206,7 +206,7 @@ void fn_800400D4(Object_80040818 *pObject, unsigned int count)
 }
 #endif
 
-void fn_80040154(void *pStream)
+void fn_80040154(BitStream_t *pStream)
 {
     unsigned int i;
 
@@ -227,7 +227,7 @@ void fn_80040154(void *pStream)
 
 /* Load callback: reads each object back from two saved streams and blends
    position and rotation by t; the last two streams are read and skipped. */
-void fn_8004023C(void *pStream0, void *pStream1, void *pStream2, void *pStream3, float t)
+void fn_8004023C(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2, BitStream_t *pStream3, float t)
 {
     unsigned int i;
 
@@ -246,15 +246,15 @@ void fn_8004023C(void *pStream0, void *pStream1, void *pStream2, void *pStream3,
                 fn_8004AF84(pObject->mUnknown472->mUnknown428);
                 fn_8004ABF4(pObject, fn_80041904(i), pStream0, pStream1, pStream2, pStream3, t);
             }
-            bit = fn_80190F18(pStream1, 1);
-            fn_80190F18(pStream0, 1);
+            bit = ReadBitStream(pStream1, 1);
+            ReadBitStream(pStream0, 1);
             if (bit) {
                 pObject->mUnknown232_29 = 1;
             } else {
                 pObject->mUnknown232_29 = 0;
             }
-            value = fn_80190F18(pStream1, 8);
-            fn_80190F18(pStream0, 8);
+            value = ReadBitStream(pStream1, 8);
+            ReadBitStream(pStream0, 8);
             fn_8004E0CC(pObject, 0, value);
             fn_800301C4(pStream1, &pos1.mX, 17, 256.0f);
             fn_800301C4(pStream0, &pos0.mX, 17, 256.0f);
@@ -269,14 +269,14 @@ void fn_8004023C(void *pStream0, void *pStream1, void *pStream2, void *pStream3,
             fn_80030304(pStream0, &rot0.mX, 12, 1024.0f);
             fn_801EC048(&pObject->mRot, &rot0, &rot1, t);
             if (pStream2 != 0) {
-                fn_80190F18(pStream2, 1);
-                fn_80190F18(pStream2, 8);
+                ReadBitStream(pStream2, 1);
+                ReadBitStream(pStream2, 8);
                 fn_800301C4(pStream2, &pos1.mX, 17, 256.0f);
                 fn_80030304(pStream2, &rot1.mX, 12, 1024.0f);
             }
             if (pStream3 != 0) {
-                fn_80190F18(pStream3, 1);
-                fn_80190F18(pStream3, 8);
+                ReadBitStream(pStream3, 1);
+                ReadBitStream(pStream3, 8);
                 fn_800301C4(pStream3, &pos1.mX, 17, 256.0f);
                 fn_80030304(pStream3, &rot1.mX, 12, 1024.0f);
             }

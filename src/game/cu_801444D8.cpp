@@ -1,7 +1,9 @@
 #include "game/cu_801444D8.h"
+#include "game/bitstream.h"
 #include "game/cu_8002B8F8.h"
 #include <math.h>
 #include <string.h>
+#include "game/cu_801962CC.h"
 #include "game/fn_801D2B7C.h"
 
 /* Header of the emitter list built by fn_801444D8 and filled by fn_80144EDC. */
@@ -78,19 +80,14 @@ void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
 void fn_80030304(void *pStream, float *pValues, int bits, float scale);
 void fn_80030554(void *pStream, float *pValues, int bits, float scale);
 void fn_8003065C(void *pStream, float *pValues, int bits, float scale);
-void fn_80030ACC(void (*pWrite)(void *), void (*pRead)(void *, void *, void *, void *, float), int size,
+void fn_80030ACC(void (*pWrite)(BitStream_t *),
+                 void (*pRead)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float), int size,
                  const char *pName);
 int fn_8004CB98(int index);
 void fn_800A3170(void);
 void fn_800A3450(void);
 int fn_800A34C8(int index);
 void *fn_800C47C4(void);
-void fn_80145EFC(int a, float *pPos, float *pRot, Source_80144CE0 *pSource);
-unsigned long long fn_80190F18(void *pStream, int bits);
-void fn_80191068(void *pStream, unsigned long long value, int bits);
-void fn_80196480(int a);
-void fn_8019651C(void);
-int fn_80196564(Object_80144CE0 *pObject, int mode);
 void fn_80196AF0(void);
 void fn_80196B20(void);
 void fn_80196B24(Entry_80196B24 *pEntries, int *pValues, void *pData);
@@ -136,8 +133,8 @@ void fn_80144564(void);
 void fn_801445A8(int index, int id);
 void fn_80144660(void);
 int fn_80144704(void);
-void fn_80144718(void *pStream);
-void fn_801447E8(void *pStream0, void *pStream1, void *pStream2, void *pStream3, float t);
+void fn_80144718(BitStream_t *pStream);
+void fn_801447E8(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2, BitStream_t *pStream3, float t);
 void fn_80144B50(int handle);
 void fn_80144C6C(int handle);
 int fn_80144E64(void *pContext);
@@ -252,7 +249,7 @@ int fn_80144704(void)
 
 /* Replay channel writer: the record count and the six spawn records, after
    which the pending count is cleared. */
-void fn_80144718(void *pStream)
+void fn_80144718(BitStream_t *pStream)
 {
     unsigned int i;
 
@@ -268,7 +265,7 @@ void fn_80144718(void *pStream)
 
 /* Replay channel reader: every stream holds the same layout; the records of
    pStream1 are spawned again when the stored counts change. */
-void fn_801447E8(void *pStream0, void *pStream1, void *pStream2, void *pStream3, float t)
+void fn_801447E8(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2, BitStream_t *pStream3, float t)
 {
     Record_8031B6F8 record;
     Counts_801447E8 last;
@@ -276,63 +273,63 @@ void fn_801447E8(void *pStream0, void *pStream1, void *pStream2, void *pStream3,
     signed char value;
     unsigned int i;
 
-    count = fn_80190F18(pStream1, 8);
-    value = fn_80190F18(pStream0, 8);
+    count = ReadBitStream(pStream1, 8);
+    value = ReadBitStream(pStream0, 8);
     last.mUnknown0 = lbl_803EB240[0];
     last.mUnknown1 = lbl_803EB240[1];
     lbl_803EB240[1] = value;
     lbl_803EB240[0] = count;
     if (pStream2 != 0) {
-        fn_80190F18(pStream2, 8);
+        ReadBitStream(pStream2, 8);
     }
     if (pStream3 != 0) {
-        fn_80190F18(pStream3, 8);
+        ReadBitStream(pStream3, 8);
     }
     for (i = 0; i < count; i++) {
-        record.mId = fn_80190F18(pStream1, 16);
+        record.mId = ReadBitStream(pStream1, 16);
         fn_800301C4(pStream1, record.mPos, 16, 256.0f);
         fn_80030304(pStream1, record.mRot, 12, 1024.0f);
-        record.mpSource = (Source_80144CE0 *)(unsigned int)fn_80190F18(pStream1, 32);
+        record.mpSource = (Source_80144CE0 *)(unsigned int)ReadBitStream(pStream1, 32);
         if (lbl_803EB240[0] != last.mUnknown0 || lbl_803EB240[1] != last.mUnknown1) {
             fn_80145EFC(record.mId, record.mPos, record.mRot, record.mpSource);
         }
-        fn_80190F18(pStream0, 16);
+        ReadBitStream(pStream0, 16);
         fn_800301C4(pStream0, record.mPos, 16, 256.0f);
         fn_80030304(pStream0, record.mRot, 12, 1024.0f);
-        fn_80190F18(pStream0, 32);
+        ReadBitStream(pStream0, 32);
         if (pStream2 != 0) {
-            fn_80190F18(pStream2, 16);
+            ReadBitStream(pStream2, 16);
             fn_800301C4(pStream2, record.mPos, 16, 256.0f);
             fn_80030304(pStream2, record.mRot, 12, 1024.0f);
-            fn_80190F18(pStream2, 32);
+            ReadBitStream(pStream2, 32);
         }
         if (pStream3 != 0) {
-            fn_80190F18(pStream3, 16);
+            ReadBitStream(pStream3, 16);
             fn_800301C4(pStream3, record.mPos, 16, 256.0f);
             fn_80030304(pStream3, record.mRot, 12, 1024.0f);
-            fn_80190F18(pStream3, 32);
+            ReadBitStream(pStream3, 32);
         }
     }
     for (i = count; i <= 5; i++) {
-        fn_80190F18(pStream1, 16);
+        ReadBitStream(pStream1, 16);
         fn_800301C4(pStream1, record.mPos, 16, 256.0f);
         fn_80030304(pStream1, record.mRot, 12, 1024.0f);
-        fn_80190F18(pStream1, 32);
-        fn_80190F18(pStream0, 16);
+        ReadBitStream(pStream1, 32);
+        ReadBitStream(pStream0, 16);
         fn_800301C4(pStream0, record.mPos, 16, 256.0f);
         fn_80030304(pStream0, record.mRot, 12, 1024.0f);
-        fn_80190F18(pStream0, 32);
+        ReadBitStream(pStream0, 32);
         if (pStream2 != 0) {
-            fn_80190F18(pStream2, 16);
+            ReadBitStream(pStream2, 16);
             fn_800301C4(pStream2, record.mPos, 16, 256.0f);
             fn_80030304(pStream2, record.mRot, 12, 1024.0f);
-            fn_80190F18(pStream2, 32);
+            ReadBitStream(pStream2, 32);
         }
         if (pStream3 != 0) {
-            fn_80190F18(pStream3, 16);
+            ReadBitStream(pStream3, 16);
             fn_800301C4(pStream3, record.mPos, 16, 256.0f);
             fn_80030304(pStream3, record.mRot, 12, 1024.0f);
-            fn_80190F18(pStream3, 32);
+            ReadBitStream(pStream3, 32);
         }
     }
 }

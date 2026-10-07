@@ -625,16 +625,16 @@ int fn_8016128C(int index)
     return id;
 }
 
-void fn_8016130C(int player, int index, int facialHair, int eyebrow, int force)
+void fn_8016130C(int player, int index, int row, int column, int force)
 {
     int id = fn_8016128C(index);
 
     if (id == -1) {
         id = fn_80161048("PLATEX_TEMPLATE_FACE");
     }
-    facialHair = facialHair * 3 + eyebrow + 0x33BA;
+    row = row * 3 + column + 0x33BA;
     fn_80160E94(player, 5, id, -1, force);
-    fn_80160E94(player, 6, facialHair, 0xA7, force);
+    fn_80160E94(player, 6, row, 0xA7, force);
 }
 
 void fn_8016139C(int style, int *pId, int *pPalette)

@@ -11136,8 +11136,8 @@
       ],
       "discarded": [
         "GetTrackerFloat8",
-        "SumRunWeightsBit28",
-        "SumRunWeightsBit30"
+        "SumKind1WeightsBit28",
+        "SumKind1WeightsBit30"
       ]
     },
     {
