@@ -16,7 +16,7 @@ void *fn_800A336C(void);
 int fn_800A3380(void);
 void fn_80053C70(void);
 Vector_8005406C *fn_800A3438(void);
-float fn_80227264(Vector_8005406C *pOut, Vector_8005406C *pV, float scale);
+void fn_80227264(Vector_8005406C *pOut, Vector_8005406C *pV, float scale);
 void fn_80053BC8(Object_8005406C *pObject);
 void fn_800543D4(void);
 void fn_80054478(void);

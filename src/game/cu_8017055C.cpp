@@ -163,7 +163,7 @@ int fn_801C4E98(void *p, const char *pName);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 void fn_80227538(Pair_8017055C *pOut, int angle, float length);
-float fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
+void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_8022781C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 float fn_802278D0(Vector_80039F5C *pA, Vector_80039F5C *pB);

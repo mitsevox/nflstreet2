@@ -25,7 +25,7 @@ struct Desc_8008044C {
 };
 
 /* Row filled by fn_800817CC: bytes +0x00 to +0x0D and the 14 words at +0x10.
-   Record_803078E8 (src/game/cu_80047E28.cpp) holds one at +0x20. */
+   Record_803078E8 (include/game/Record_803078E8.h) holds one at +0x20. */
 struct Info_80307908 {
     unsigned char mUnknown00;
     unsigned char mUnknown01;

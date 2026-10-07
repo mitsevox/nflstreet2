@@ -113,13 +113,13 @@ void fn_8004625C(void *p, int id, const unsigned char *pPaletteIndices)
     fn_8004605C(p, &lbl_803EC7B0[id], &palettes);
 }
 
-void fn_800462F4(char *pName)
+int fn_800462F4(char *pName)
 {
     char *pSpace;
 
     if ((pSpace = fn_801C3084(pName, ' ')) != 0) {
         *pSpace = 0;
     }
-    fn_801F0A8C(lbl_803EC7B4, pName);
+    return fn_801F0A8C(lbl_803EC7B4, pName);
 }
 }

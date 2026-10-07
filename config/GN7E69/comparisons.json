@@ -9958,6 +9958,72 @@
           "end": "0x80164B78"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800478DC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800478DC-0x80047E28 (src/game/cu_800478DC.cpp), its source-form rows and the .rodata data row 0x8028D674-0x8028D73C. Draft comparison: 8 of 9 functions exact; fn_80047BD0 is partial (compare tree); original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800478DC",
+          "end": "0x80047E28"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D674",
+          "end": "0x8028D73C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800478DC",
+          "start": "0x800478DC",
+          "end": "0x80047954"
+        },
+        {
+          "symbol": "fn_80047954",
+          "start": "0x80047954",
+          "end": "0x8004795C"
+        },
+        {
+          "symbol": "fn_8004795C",
+          "start": "0x8004795C",
+          "end": "0x800479B0"
+        },
+        {
+          "symbol": "fn_800479B0",
+          "start": "0x800479B0",
+          "end": "0x80047BD0"
+        },
+        {
+          "symbol": "fn_80047BD0",
+          "start": "0x80047BD0",
+          "end": "0x80047C74"
+        },
+        {
+          "symbol": "fn_80047C74",
+          "start": "0x80047C74",
+          "end": "0x80047C84"
+        },
+        {
+          "symbol": "fn_80047C84",
+          "start": "0x80047C84",
+          "end": "0x80047CA4"
+        },
+        {
+          "symbol": "fn_80047CA4",
+          "start": "0x80047CA4",
+          "end": "0x80047DAC"
+        },
+        {
+          "symbol": "fn_80047DAC",
+          "start": "0x80047DAC",
+          "end": "0x80047E28"
+        }
+      ]
     }
   ]
 }
