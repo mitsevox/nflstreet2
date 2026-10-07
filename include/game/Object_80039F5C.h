@@ -80,6 +80,8 @@ struct State_80039F5C {
     unsigned char mUnknown2;
     char mUnknown3[1];
     unsigned char mUnknown4;
+    char mUnknown5[1];
+    unsigned char mUnknown6;
 };
 
 /* Object that +796 points to. */
@@ -98,7 +100,8 @@ struct Object_80039F5C {
     unsigned char mUnknown8;
     char mUnknown9[3];
     unsigned int mFlags;
-    char mUnknown16[320];
+    int mUnknown16;
+    char mUnknown20[316];
     int mUnknown336;
     char mUnknown340[20];
     unsigned char mUnknown360;

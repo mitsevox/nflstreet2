@@ -94,7 +94,7 @@ void fn_801039D8(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 Record_8011F4F8 *fn_8011F4F8(int index);
 Record_8011F518 *fn_8011F518(void);
-Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, int *pOut, int b);
+Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, float *pOut, int b);
 void *fn_801374BC(void);
 int fn_801374E0(void *pBall);
 void fn_801379B4(void *pBall, int a, int b);
@@ -1321,12 +1321,12 @@ int fn_801729F8(void *pBall, Pair_8017055C *pPos)
                                 Record_800B15FC *pEntry;
                                 Object_80039F5C *pOpponent;
                                 int other;
-                                int slot;
+                                float dist;
 
                                 pEntry = fn_800B15FC();
                                 pEntry->mUnknown14 = 0x3C;
                                 other = (pCarrier->mId >> 8 & 0xFF) ^ 1;
-                                pOpponent = fn_801244F0(pCarrier, other, 0, fn_80178D18(other), &slot, 0);
+                                pOpponent = fn_801244F0(pCarrier, other, 0, fn_80178D18(other), &dist, 0);
                                 fn_8009BD2C(pOpponent, &pEntry->mUnknown0);
                                 if (pOpponent) {
                                     pEntry->mUnknown4 = pOpponent->mUnknown8 != 0xFF;

@@ -4,6 +4,7 @@
 #include "game/Class_80148A58.h"
 #include "game/FELoop.h"
 #include "game/Object_80039F5C.h"
+#include "game/Object_80054130.h"
 #include "game/Object_800785C0.h"
 #include "game/Object_8017886C.h"
 #include "game/Record_800B15FC.h"
@@ -99,16 +100,6 @@ struct Entry_80361F88 {
     signed char mKind;
 };
 
-struct Record_80054130 {
-    char mUnknown00[0x3C];
-};
-
-struct Object_80054130 {
-    char mUnknown00[0x8B];
-    unsigned char mUnknown8B;
-    Record_80054130 *mUnknown8C;
-};
-
 /* Per-team stat values read back in fn_8017C4B8. */
 struct Baseline_802E9ADC {
     int mTp;
@@ -125,8 +116,6 @@ void fn_800310C0(void *p, int a, Object_80039F5C *pObject, Vector_80039F5C *pPos
 Set_8003EE6C *fn_8003A078(void);
 void fn_8003A090(void);
 void fn_800535FC(void);
-Object_80054130 *fn_80054130(void);
-void fn_800541AC(Record_80054130 *pRecord, Point_8017886C *pA, Point_8017886C *pB);
 void fn_8006F0B8(int a);
 void fn_8007B684(int id);
 void fn_8007B6D4(void);
@@ -425,7 +414,7 @@ extern "C" void fn_8017710C(void)
 
     if (fn_80054130()) {
         unsigned char i;
-        unsigned char total = fn_80054130()->mUnknown8B;
+        unsigned char total = fn_80054130()->mUnknown88;
         Record_80054130 *pRecord = fn_80054130()->mUnknown8C;
 
         for (i = 0; i < total; i++, pRecord++) {
