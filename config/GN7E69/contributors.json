@@ -10314,6 +10314,80 @@
         "commit": "0cc1c6d83d7ed812648c2fb384f231d2d327447d",
         "introduced_blob": "65de8ecb9af00d8d375adc451048c110674a9d44"
       }
+    },
+    {
+      "source": "src/dolphin/gx/GXFifo.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024C038",
+        "0x8024C16C",
+        "0x8024C1D8",
+        "0x8024C248",
+        "0x8024C254",
+        "0x8024C37C",
+        "0x8024C4F4",
+        "0x8024C58C",
+        "0x8024C5D0",
+        "0x8024C65C",
+        "0x8024C6B0",
+        "0x8024C6FC",
+        "0x8024C720",
+        "0x8024C744",
+        "0x8024C778",
+        "0x8024C7A8"
+      ],
+      "provenance": {
+        "pull_request": 510,
+        "merged_via": 510,
+        "commit": "74b8a51b6a95ba03d4b08507f93e440fc4ad3019",
+        "introduced_blob": "2e3ed684a6b3eb28b4d8b21a5689bb12b71237f9"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXAttr.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024CB90",
+        "0x8024CDFC",
+        "0x8024D084",
+        "0x8024D140",
+        "0x8024D264",
+        "0x8024D418",
+        "0x8024D450",
+        "0x8024D6AC",
+        "0x8024D9C8",
+        "0x8024DCD4",
+        "0x8024DCE4",
+        "0x8024DF64"
+      ],
+      "provenance": {
+        "pull_request": 510,
+        "merged_via": 510,
+        "commit": "25bb1f507f6dddc498e716be764bdf93e1425c12",
+        "introduced_blob": "9bf05936c88407bd952b2fe5aafe62b8d8791283"
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSArena.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x802399F8",
+        "0x80239A00",
+        "0x80239A08",
+        "0x80239A10"
+      ],
+      "provenance": {
+        "pull_request": 510,
+        "merged_via": 510,
+        "commit": "db90e9be8ae89dfb86311ee769a9728d380ebc62",
+        "introduced_blob": "2253aae1130888881fbe0ecacf8d7f1fae0192b0"
+      }
     }
   ],
   "target": "GN7E69",
