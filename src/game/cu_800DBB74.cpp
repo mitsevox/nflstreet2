@@ -2,6 +2,7 @@
 #include "game/cu_80136B1C.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
+#include "game/fn_801BA2A8.h"
 #include "game/Object_80039F5C.h"
 
 struct Object_800DC36C {
@@ -45,8 +46,6 @@ Object_80039F5C *fn_8016444C(Object_800670B4 *p);
 Object_800670B4 *fn_80168708(int team);
 float fn_8016D9F4(Object_80039F5C *p, float a, float b);
 int fn_801783AC(int bit);
-int fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d,
-                unsigned short key, Object_80039F5C *p, float value);
 void fn_801BD81C(void *p, float value);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float value);
 int fn_801BE648(void *p);
@@ -269,7 +268,7 @@ extern "C" int fn_800DC21C(Object_80039F5C *p)
 }
 
 extern "C" int fn_800DC36C(List_800DC36C *pList, unsigned short key, void *pA,
-                           Record_800DC36C *pRecords, Object_80039F5C *p, unsigned int phase)
+                           Record_800D81C8 *pRecords, Object_80039F5C *p, unsigned int phase)
 {
     Block_801BE60C *pBlock = fn_801BE60C(p->mpUnknown792, key);
     int side;
@@ -300,16 +299,16 @@ extern "C" int fn_800DC36C(List_800DC36C *pList, unsigned short key, void *pA,
         break;
     case 2:
         if (pBlock->mUnknown4 != p->mMotion.mFacing) {
-            p->mpUnknown800[pBlock->mUnknown0].mUnknown12 =
-                (p->mpUnknown800[pBlock->mUnknown0].mUnknown12 + (p->mMotion.mFacing - pBlock->mUnknown4))
+            p->mpUnknown800[pBlock->mUnknown0].mUnknownC =
+                (p->mpUnknown800[pBlock->mUnknown0].mUnknownC +(p->mMotion.mFacing - pBlock->mUnknown4))
                 & 0xFFFFFF;
             pBlock->mUnknown4 = p->mMotion.mFacing;
         }
-        fn_801BD81C(pRecords[pBlock->mUnknown0].mUnknown76, fn_801CFFA0(fn_800C495C(p, 1.0f)));
+        fn_801BD81C(&pRecords[pBlock->mUnknown0].mUnknown4C, fn_801CFFA0(fn_800C495C(p, 1.0f)));
         if (fn_800A7EF4(p->mIdBytes[2]) == 2) {
-            fn_801BD81C(pRecords[pBlock->mUnknown0].mUnknown76, fn_801CFFA0(2.0f));
+            fn_801BD81C(&pRecords[pBlock->mUnknown0].mUnknown4C, fn_801CFFA0(2.0f));
         } else if (fn_800A7EF4(p->mIdBytes[2]) == 0) {
-            fn_801BD81C(pRecords[pBlock->mUnknown0].mUnknown76, fn_801CFFA0(0.5f));
+            fn_801BD81C(&pRecords[pBlock->mUnknown0].mUnknown4C, fn_801CFFA0(0.5f));
         }
         break;
     }

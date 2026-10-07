@@ -1,21 +1,11 @@
 #ifndef GAME_OBJECT_800D81C8_H
 #define GAME_OBJECT_800D81C8_H
 
+#include "game/Record_800D81C8.h"
+
 struct Pair_802270A4 {
     float mUnknown0;
     float mUnknown4;
-};
-
-struct Block_801BD6D4 {
-    void *mpUnknown0;
-    float mUnknown4;
-    float mUnknown8;
-};
-
-struct Record_800D81C8 {
-    char mUnknown0[76];
-    Block_801BD6D4 mUnknown4C;
-    char mUnknown58[36];
 };
 
 /* Partial view of the object that fn_8009BCE8 decodes a packed reference to. */
