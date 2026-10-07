@@ -80,7 +80,7 @@ extern "C" void fn_8018AD78(Header_8018AD78 *pHeader, unsigned int message, int 
                 count = pHeader->mpGroups[pArgs->mUnknown0].mCount;
                 if (pArgs->mUnknown4 < count) {
                     strcpy(pArgs->mpResult->mpUnknown8,
-                                pHeader->mppItems[pHeader->mpEntries[pArgs->mUnknown4].mUnknown[3]]->mpUnknown8);
+                           pHeader->mppItems[pHeader->mpEntries[pArgs->mUnknown4].mUnknown[3]]->mpUnknown8);
                     break;
                 }
             }
