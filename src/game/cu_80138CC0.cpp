@@ -1,12 +1,4 @@
-#include "game/Object_80039F5C.h"
-
-/* Two points 16 bytes apart; fn_80138CC0 passes both points of two of
-   these to fn_80088FFC. */
-struct Segment_80138CC0 {
-    Vector_80039F5C mUnknown0;
-    char mUnknownC[4];
-    Vector_80039F5C mUnknown10;
-};
+#include "game/cu_80138CC0.h"
 
 extern "C" {
 float fn_80088FFC(Vector_80039F5C *pA0, Vector_80039F5C *pA1, Vector_80039F5C *pB0, Vector_80039F5C *pB1, Vector_80039F5C *pOut);
