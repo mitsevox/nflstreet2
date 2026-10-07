@@ -1040,9 +1040,17 @@
       "address": "0x803EC160",
       "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
     },
-    "__OSUnlockAllMutex": {
-      "address": "0x8023BF2C",
-      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    "OSGetCurrentThread": {
+      "address": "0x8023D5E4",
+      "evidence": "evidence.tsv OSMutex actual retained target branch operand; existing canonical OSThread source declaration and target implementation."
+    },
+    "__OSPromoteThread": {
+      "address": "0x8023D8D4",
+      "evidence": "evidence.tsv OSMutex actual retained target branch operand; existing canonical OSThread source declaration and target implementation."
+    },
+    "__OSGetEffectivePriority": {
+      "address": "0x8023D6D8",
+      "evidence": "evidence.tsv OSMutex actual retained target branch operand; existing canonical OSThread source declaration and target implementation."
     }
   },
   "units": [
@@ -8874,6 +8882,29 @@
           "placement": ".text",
           "start": "0x80252334",
           "end": "0x802523A4"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSMutex.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv OSMutex pinned donor, actual five target functions and thirteen branch operands; full genuine twelve-body source retained under fixed profile.",
+      "link_roots": {
+        "symbols": [
+          "OSInitMutex",
+          "OSLockMutex",
+          "OSUnlockMutex",
+          "__OSUnlockAllMutex",
+          "OSSignalCond"
+        ],
+        "evidence": "Five contiguous target functions 0x8023BD50..0x8023BFBC; complete native twelve-body source preserved, seven other bodies have no established target identity."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023BD50",
+          "end": "0x8023BFBC"
         }
       ]
     }

@@ -420,7 +420,7 @@
       "name": "src/dolphin/os/OSMutex.c",
       "source": "src/dolphin/os/OSMutex.c",
       "library": "OS",
-      "evidence": "Unique init/lock/unlock/unlock-all anchors, final32-byte routineBF9C. Do not assign OSInitCond or OSSignalCond from generic32-byte fingerprint collisions.",
+      "evidence": "Five retained target functions620bytes exact after13 actual REL24 operands; OSSignalCond identified by actual OSWakeupThread callee and caller queue argument, not generic fingerprint. Full donor twelve-body source preserved; original archive boundaries remain provisional.",
       "sections": [
         {
           "section": ".text",
@@ -428,7 +428,7 @@
           "end": "0x8023BFBC",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Unique init/lock/unlock/unlock-all anchors, final32-byte routineBF9C. Do not assign OSInitCond or OSSignalCond from generic32-byte fingerprint collisions. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+          "evidence": "Five retained target functions620bytes exact after13 actual REL24 operands; OSSignalCond identified by actual OSWakeupThread callee and caller queue argument, not generic fingerprint. Full donor twelve-body source preserved; original archive boundaries remain provisional."
         }
       ]
     },
