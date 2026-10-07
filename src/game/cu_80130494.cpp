@@ -35,7 +35,7 @@ struct Block_80130494 {
 extern "C" {
 void fn_8009A8D4(void *p);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
-void fn_8009CE88(Object_80039F5C *p, int *pRef, int a);
+void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
 void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b);
 int fn_8009F0B8(Object_80039F5C *p, int angle);
 void fn_800F0BF8(Object_80039F5C *p, int a, int angle);
@@ -58,7 +58,7 @@ float fn_80237260(int stream);
 float fn_8022781C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80227970(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pPoint, Vector_80039F5C *pOut, float *pDist,
                  float *pT);
-int fn_800FD724(Object_80039F5C *p);
+void fn_800FD724(Object_80039F5C *p);
 }
 
 static float lbl_803EB128 = 4.0f;
@@ -168,10 +168,10 @@ extern "C" int fn_80130764(Object_80039F5C *p, Block_80130494 *pBlock)
     }
     if (pBest) {
         float dist = fn_8022781C(&p->mMotion.mPos, &pBest->mMotion.mPos);
-        float scale = 17.0f;
+        float value = 17.0f;
 
-        scale += (3.75f - dist) * 2.1333334f;
-        scale = CLAMP(scale, 17.0f, 25.0f);
+        value += (3.75f - dist) * 2.1333334f;
+        value = CLAMP(value, 17.0f, 25.0f);
 
         if (dist < 3.75f && bestDiff <= 0xC16C0) {
             if (pBest->mMotion.mPos.mX <= p->mMotion.mPos.mX) {
