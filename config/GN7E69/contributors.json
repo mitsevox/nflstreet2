@@ -10434,7 +10434,9 @@
         "0x8024C720",
         "0x8024C744",
         "0x8024C778",
-        "0x8024C7A8"
+        "0x8024C7A8",
+        "0x8024C8D8",
+        "0x8024C8E0"
       ],
       "provenance": {
         "pull_request": 510,
@@ -10763,6 +10765,246 @@
         "merged_via": 560,
         "commit": "0c1b26d92daa749bec20fcde3f74940c517e29f3",
         "introduced_blob": "dfc630bfb306a68a9c2970b7c9c09d299f9b9bdc"
+      }
+    },
+    {
+      "source": "src/dolphin/vm/VM.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80244FB4",
+        "0x80244FBC",
+        "0x80244FC4"
+      ],
+      "provenance": {
+        "commit": "8cc209687defe2b75e7162c0ee976d3f7ee5f5bc",
+        "introduced_blob": "0fb5dc3fff743e98914dad5889f856e296ab73c3",
+        "original_commit": "c68d0e5d6b1cced6d40d5d660d7546a948140ce5",
+        "original_blob": "51312b5fa9ca264467ed1b8f9b86235ec4a4e598",
+        "integration_adjustment": "Canonical OS/PPC/stdio and established __ar header closure; removed inherited decompilation process introduction. Complete function bodies and behavior comments unchanged. Relocate byte-identical internal VM header under include/dolphin and use the explicit canonical header include; complete C bodies unchanged.",
+        "pull_request": 567,
+        "merged_via": 567
+      }
+    },
+    {
+      "source": "src/dolphin/vm/VMMapping.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x802456AC",
+        "0x802456C4"
+      ],
+      "provenance": {
+        "commit": "8cc209687defe2b75e7162c0ee976d3f7ee5f5bc",
+        "introduced_blob": "3d92cd521bef2accaba10fee482afe64433055c2",
+        "original_commit": "c68d0e5d6b1cced6d40d5d660d7546a948140ce5",
+        "original_blob": "1cc038dec490e9ebd63d0d0cf38b52e26a517c15",
+        "integration_adjustment": "Canonical OS/PPC/stdio and established __ar header closure; removed inherited decompilation process introduction. Complete function bodies and behavior comments unchanged. Relocate byte-identical internal VM header under include/dolphin and use the explicit canonical header include; complete C bodies unchanged.",
+        "pull_request": 567,
+        "merged_via": 567
+      }
+    },
+    {
+      "source": "src/dolphin/gba/GBA.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80289450",
+        "0x802894A4",
+        "0x80289548",
+        "0x802895D8"
+      ],
+      "provenance": {
+        "commit": "faf63377fbb0917e1f2e2de9d18b572d941a5dd9",
+        "introduced_blob": "bb7e885df1e0027980afe9eae003230521b50b95",
+        "original_commit": "f336c88dcaaf8d76fbf7052c5dc196b514395d05",
+        "original_blob": "52c1c810d93c1e37a65ced32d568550ea30dd34e",
+        "integration_adjustment": "Canonical includes/NULL and existing OS reset BOOL callback/reschedule declarations; removed donor-address process comments.; Keep target-accessed channel fields and opaque unaccessed regions; native channel256/sec64 extents corroborate actual original stride.; GBAInit omits absent Initialized guard and version registration; actual original DSPInit call retained.; Reset record priority127 follows original16-byte record, instead of related donor126.",
+        "pull_request": 567,
+        "merged_via": 567
+      }
+    },
+    {
+      "source": "src/dolphin/gba/GBAXfer.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x802895E8",
+        "0x802896C4",
+        "0x802896F8",
+        "0x80289764",
+        "0x80289888"
+      ],
+      "provenance": {
+        "commit": "d3a64dce78d258477d39706d64e8ecc3fb18e99b",
+        "introduced_blob": "f39357fbc5f17e8ea49c36685b605181a2840bc9",
+        "original_commit": "f336c88dcaaf8d76fbf7052c5dc196b514395d05",
+        "original_blob": "9803d9ec108c0278d1434eec00e644ea72e3f6e3",
+        "integration_adjustment": "Canonical includes/NULL and existing OS reset BOOL callback/reschedule declarations; removed donor-address process comments.; Keep target-accessed channel fields and opaque unaccessed regions; native channel256/sec64 extents corroborate actual original stride.; GBAInit omits absent Initialized guard and version registration; actual original DSPInit call retained.; Reset record priority127 follows original16-byte record, instead of related donor126.",
+        "pull_request": 567,
+        "merged_via": 567
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXTransform.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x802525BC",
+        "0x802528D8",
+        "0x802526A4",
+        "0x80252734",
+        "0x8025278C",
+        "0x802527F8",
+        "0x80252870",
+        "0x802528B0"
+      ],
+      "provenance": {
+        "commit": "a6d9b688dd61fb9d6733b394a8b2a8e63a418b89",
+        "introduced_blob": "a79eee599c69cf14cf12210c6614d4f721b21422",
+        "original_commit": "48a3a568a0c7a90d515e74a4c66668fa66735862",
+        "original_blob": "835144e27205e760b19ff936788c460321153d02",
+        "integration_adjustment": "Canonical headers and genuine release FIFO float macros. Entire inline-assembly helpers and assembly-dependent consumer APIs omitted; eight complete C logical bodies retained in normal file. No interior-body holes or version-splices; full mapped file denominator retained.",
+        "pull_request": 567,
+        "merged_via": 567
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSMemory.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023BA78",
+        "0x8023BAB4"
+      ],
+      "provenance": {
+        "commit": "05ebfb6f188babdd884763a77026f1b7de87fac4",
+        "introduced_blob": "de9e2f48914e4ce200d6e821bd1316c409874285",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "9fed89b6d24102bd0fe636160bcdafb6270e85f8",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Remove unsupported padding[12] declaration; whole initializer retained and honestly partial.",
+        "pull_request": 567,
+        "merged_via": 567
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSContext.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023A588"
+      ],
+      "provenance": {
+        "commit": "05ebfb6f188babdd884763a77026f1b7de87fac4",
+        "introduced_blob": "74afb344dd9de1bc07f04a845639edcd851c7fbc",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "35542bcfc72779991f353aa900bd4c329e951756",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Whole canonical-layout C bodies; original context/FPU assembly stays external.",
+        "pull_request": 567,
+        "merged_via": 567
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSReboot.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023E930"
+      ],
+      "provenance": {
+        "commit": "05ebfb6f188babdd884763a77026f1b7de87fac4",
+        "introduced_blob": "e04e649112208cb895e84d83b1239b32f5596497",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "4fd3bf22e513e6870fd262ccf6257eb8e3529864",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Canonical actual s32 reset argument and32-byte alignment; original Run provider, full DVD stack objects preserved.",
+        "pull_request": 567,
+        "merged_via": 567
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSReset.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023BFBC"
+      ],
+      "provenance": {
+        "commit": "05ebfb6f188babdd884763a77026f1b7de87fac4",
+        "introduced_blob": "2d7c6f1947435f6b8ee5307a0fc8b6e8c6922a40",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "2b87ffd2a286f4009c59907b5828854a674de721",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Remove unsupported unused unk[3] compiler scaffold and fake hardware layouts; reuse canonical MMIO registers.",
+        "pull_request": 567,
+        "merged_via": 567
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSInterrupt.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023B240",
+        "0x8023B25C"
+      ],
+      "provenance": {
+        "commit": "05ebfb6f188babdd884763a77026f1b7de87fac4",
+        "introduced_blob": "2b86552771d8bae52e895085f8045335823c3378",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "12cedc3fabf04c7b11bcf8778b460a3cc0344527",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Whole canonical-layout C bodies; original context/FPU assembly stays external.",
+        "pull_request": 567,
+        "merged_via": 567
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSLink.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023BA60"
+      ],
+      "provenance": {
+        "commit": "1ce575998a77b1d0a8d0f99e8fa03c0a5577c373",
+        "introduced_blob": "2d3fc5154a451ea156b16e512cafa26fc7d1f601",
+        "original_commit": "513cea7088efd02b94f589ba17ffefcfe8f3e78a",
+        "original_blob": "c035ef60e1cbce22d6bd800b9c9f515f7910cf38",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Add missing prototype for genuine complete module initializer; original lowmemory globals unchanged.",
+        "pull_request": 567,
+        "merged_via": 567
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSAlarm.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80239348",
+        "0x80239394",
+        "0x802393A4",
+        "0x802395F4",
+        "0x8023965C",
+        "0x80239778"
+      ],
+      "provenance": {
+        "commit": "dbe9ae7d3e2795d393dbddc0c7c446394331b003",
+        "introduced_blob": "53bdc5b5de576cab0607b4c867cf008073f0c14f",
+        "original_commit": "58b140374ae59b2135fdcc295d18496e1b76a26c",
+        "original_blob": "ae99ea535a89734d6d26224cbeb48a8736a0f218",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. OSPriv\u2192__os.h and original external exception bridge; retain compiled genuine PeriodicAlarm unassigned.",
+        "pull_request": 567,
+        "merged_via": 567
       }
     }
   ],
