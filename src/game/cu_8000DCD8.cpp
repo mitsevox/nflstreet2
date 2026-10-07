@@ -1,6 +1,7 @@
 #include <string.h>
 #include "game/Object_8007A334.h"
 #include "game/Object_8008044C.h"
+#include "game/cu_8015C25C.h"
 #include "game/fn_8021D7B8.h"
 #include "game/cu_80181330.h"
 
@@ -239,8 +240,6 @@ void fn_80087704(void);
 int fn_80087BA0(int index);
 unsigned int fn_800886BC(int a);
 void fn_800888D0(int a, int b);
-void fn_8015D180(int a, int b);
-void fn_8015D38C(int a);
 Object_8008044C *fn_80182DC8(void);
 void fn_80182DD4(const char *pText);
 void fn_80182E04(const char *pText);
