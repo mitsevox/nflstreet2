@@ -156,23 +156,20 @@ def historical_source_blob(root, revision, source, blob):
     return blob in historical_source_blobs(root, revision, source)
 
 
-def merged_source(root, revision, historical_source, source):
-    # A merge into a combined source: some commit in this history writes the current
-    # path while removing the original path that its first parent still had. A pure
-    # rename (the parent's original content moved unchanged) must use renamed_blob.
-    # Provenance commits are contribution-branch commits that squash merges leave
-    # outside main, so ancestry from them is not required.
+def merged_source(root, revision, historical_source, source, migration_commit, merged_blob):
+    """Authenticate a reviewed structural migration receipt, including squash history.
+
+    This binds paths and Git blobs; independent review establishes which function bodies
+    were transferred. It does not infer semantic ownership from a coincident deletion."""
     if any(character in path for path in (historical_source, source)
            for character in ('\r', '\n', '\0')):
         raise ValueError('Invalid attribution source path')
-    commits = subprocess.check_output(['git','rev-list',revision,'--',historical_source],
+    commits = subprocess.check_output(['git', 'rev-list', '--full-history', revision, '--', historical_source],
                                       cwd=root, text=True).splitlines()
     queries = []
-    for commit in commits:
+    for commit in [migration_commit, *commits]:
         queries += [commit + ':' + source, commit + '^:' + source,
                     commit + ':' + historical_source, commit + '^:' + historical_source]
-    if not queries:
-        return False
     result = subprocess.run(['git', 'cat-file', '--batch-check=%(objectname)'], cwd=root,
                             input=''.join(query + '\n' for query in queries),
                             capture_output=True, text=True, check=True)
@@ -181,9 +178,17 @@ def merged_source(root, revision, historical_source, source):
             not SHA.fullmatch(row) and row != query + ' missing'
             for query, row in zip(queries, rows)):
         raise ValueError('Invalid Git historical source response')
-    return any(SHA.fullmatch(rows[i]) and rows[i] != rows[i + 1] and rows[i] != rows[i + 3]
-               and not SHA.fullmatch(rows[i + 2]) and SHA.fullmatch(rows[i + 3])
-               for i in range(0, len(rows), 4))
+
+    def transition(at):
+        return rows[at] == merged_blob and rows[at] != rows[at + 1] \
+            and rows[at] != rows[at + 3] and not SHA.fullmatch(rows[at + 2]) \
+            and bool(SHA.fullmatch(rows[at + 3]))
+
+    # The pinned commit must perform this migration. A reachable transition must bind
+    # the same old and new blobs, so a dangling proof cannot authorize another path.
+    # Squash commits may have a different identity while preserving this transition.
+    return transition(0) and any(transition(at) and rows[at + 3] == rows[3]
+                                for at in range(4, len(rows), 4))
 
 
 def contributors(root, ledger, build, revision, fetch_missing=False, exact_inventory=None):
@@ -234,9 +239,15 @@ def contributors(root, ledger, build, revision, fetch_missing=False, exact_inven
             raise ValueError('Introduced source is absent from this revision history')
         if 'merged_source' in provenance:
             if provenance['merged_source'] is not True or historical_source == source \
-                    or 'renamed_blob' in provenance:
+                    or 'renamed_blob' in provenance \
+                    or not isinstance(provenance.get('migration_commit'), str) \
+                    or not SHA.fullmatch(provenance['migration_commit']) \
+                    or not isinstance(provenance.get('merged_blob'), str) \
+                    or not SHA.fullmatch(provenance['merged_blob']):
                 raise ValueError('Invalid merged source provenance')
-            if not merged_source(root, revision, historical_source, source):
+            provenance_commit(root, provenance['migration_commit'], fetch_missing)
+            if not merged_source(root, revision, historical_source, source,
+                                 provenance['migration_commit'], provenance['merged_blob']):
                 raise ValueError('Merged source lacks a commit that replaces the original path')
         elif historical_source != source:
             renamed_blob = provenance.get('renamed_blob', provenance['introduced_blob'])

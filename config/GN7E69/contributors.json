@@ -2873,7 +2873,9 @@
         "introduced_blob": "4354442fd659245d08c307774fbc0dda43b0921f",
         "original_blob": "4354442fd659245d08c307774fbc0dda43b0921f",
         "original_source": "src/game/cu_8017055C.cpp",
-        "merged_source": true
+        "merged_source": true,
+        "migration_commit": "792bbf9102953665d2a096614e648608e8103620",
+        "merged_blob": "c6c6fad76e556cc8f65ae280ad0640ef5e3c3e6d"
       }
     },
     {
@@ -4149,7 +4151,9 @@
         "commit": "80030d98940c7ce8460f441e3c5e80985d3f2c98",
         "introduced_blob": "850f9b8d529dc5705a0ba99e0f1d234c06c22058",
         "original_source": "src/game/cu_80173298.cpp",
-        "merged_source": true
+        "merged_source": true,
+        "migration_commit": "792bbf9102953665d2a096614e648608e8103620",
+        "merged_blob": "c6c6fad76e556cc8f65ae280ad0640ef5e3c3e6d"
       }
     },
     {
@@ -5905,7 +5909,9 @@
         "commit": "35af101f989d963f27eb631377ee385d1750d085",
         "introduced_blob": "e31716f4a4e4abdfa4979712844dc19e71929ce2",
         "original_source": "src/game/cu_80173C2C.cpp",
-        "merged_source": true
+        "merged_source": true,
+        "migration_commit": "792bbf9102953665d2a096614e648608e8103620",
+        "merged_blob": "c6c6fad76e556cc8f65ae280ad0640ef5e3c3e6d"
       }
     },
     {
