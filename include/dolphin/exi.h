@@ -96,6 +96,10 @@ int EXISelectSD(s32 chan, u32 dev, u32 freq);
 s32 EXIGetType(s32 chan, u32 dev, u32* type);
 char* EXIGetTypeString(u32 type);
 
+void __OSEnableBarnacle(s32 chan, u32 dev);
+u32 InitializeUART(u32 baudRate);
+u32 WriteUARTN(const void* buf, unsigned long len);
+
 #ifdef __cplusplus
 }
 #endif

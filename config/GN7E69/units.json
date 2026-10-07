@@ -899,6 +899,46 @@
     "axDspSlaveLength": {
       "address": "0x803EC5C0",
       "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "EXIAttach": {
+      "address": "0x8025A81C",
+      "evidence": "evidence.tsv external EXIAttach: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
+    },
+    "EXILock": {
+      "address": "0x8025B1A4",
+      "evidence": "evidence.tsv external EXILock: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
+    },
+    "EXISelect": {
+      "address": "0x8025A9E4",
+      "evidence": "evidence.tsv external EXISelect: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
+    },
+    "EXIImm": {
+      "address": "0x80259E7C",
+      "evidence": "evidence.tsv external EXIImm: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
+    },
+    "EXISync": {
+      "address": "0x8025A264",
+      "evidence": "evidence.tsv external EXISync: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
+    },
+    "EXIDeselect": {
+      "address": "0x8025AB10",
+      "evidence": "evidence.tsv external EXIDeselect: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
+    },
+    "EXIUnlock": {
+      "address": "0x8025B298",
+      "evidence": "evidence.tsv external EXIUnlock: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
+    },
+    "EXIDetach": {
+      "address": "0x8025A928",
+      "evidence": "evidence.tsv external EXIDetach: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
+    },
+    "EXIGetID": {
+      "address": "0x8025B3B4",
+      "evidence": "evidence.tsv external EXIGetID: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
+    },
+    "OSGetConsoleType": {
+      "address": "0x80238984",
+      "evidence": "evidence.tsv external OSGetConsoleType: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
     }
   },
   "units": [
@@ -8081,6 +8121,33 @@
           "placement": ".sbss",
           "start": "0x803ED568",
           "end": "0x803ED59C"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/exi/EXIUart.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit/source-form rows for EXIUart; four retained functions and four native .sbss objects. BFBB 8fb1c232 with target-supported signed character access corroborated by dolsdk2004 2328b416.",
+      "link_roots": {
+        "symbols": [
+          "__OSEnableBarnacle",
+          "InitializeUART",
+          "WriteUARTN"
+        ],
+        "evidence": "Target retains ProbeBarnacle396, __OSEnableBarnacle444, InitializeUART112 and WriteUARTN540 contiguously; BFBB QueueLength is fully inlined and its standalone copy naturally deadstripped by ordinary SN liveness."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025B764",
+          "end": "0x8025BD38"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED3D0",
+          "end": "0x803ED3E0"
         }
       ]
     }
