@@ -76,7 +76,7 @@ void fn_80146F74(Object_8003DEC4 *pObject, int index, Point_80146FDC *pOut)
 {
     fn_801D04C4();
     fn_801D06D4(pObject->mUnknown908);
-    fn_801D0664(pObject->mUnknown96[index]);
+    fn_801D0664(pObject->mUnknown44.mUnknown52[index]);
     fn_801D0FB8(pOut);
     fn_801D0544();
 }
@@ -140,13 +140,13 @@ void fn_801470F0(Object_8003DEC4 *pObject)
             pData->mUnknown554 = 1;
         }
         fn_801D0424(pData->mUnknown260[pData->mUnknown554], pObject->mUnknown908);
-        pData->mUnknown2E0[pData->mUnknown554] = *pObject->mUnknown92;
-        pData->mUnknown448[pData->mUnknown554].x = pObject->mUnknown52;
-        pData->mUnknown448[pData->mUnknown554].y = pObject->mUnknown56;
-        pData->mUnknown448[pData->mUnknown554].z = pObject->mUnknown60;
-        pData->mUnknown460[pData->mUnknown554] = pObject->mUnknown76;
-        pData->mUnknown468[pData->mUnknown554] = *pObject->mUnknown584;
-        fn_801D0424(pData->mUnknown4D4[pData->mUnknown554], pObject->mUnknown96[13]);
+        pData->mUnknown2E0[pData->mUnknown554] = *(Block_801470F0 *)pObject->mUnknown44.mUnknown48;
+        pData->mUnknown448[pData->mUnknown554].x = pObject->mUnknown44.mUnknown8[0];
+        pData->mUnknown448[pData->mUnknown554].y = pObject->mUnknown44.mUnknown8[1];
+        pData->mUnknown448[pData->mUnknown554].z = pObject->mUnknown44.mUnknown8[2];
+        pData->mUnknown460[pData->mUnknown554] = pObject->mUnknown44.mUnknown32;
+        pData->mUnknown468[pData->mUnknown554] = *(Half_801470F0 *)pObject->mUnknown280.mUnknown256.mUnknown48;
+        fn_801D0424(pData->mUnknown4D4[pData->mUnknown554], pObject->mUnknown44.mUnknown52[13]);
         if (pData->mUnknown560 == 0) {
             if (pData->mUnknown558 != 0) {
                 pData->mUnknown558--;

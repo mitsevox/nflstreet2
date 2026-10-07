@@ -10291,6 +10291,174 @@
       ]
     },
     {
+      "source": "src/game/cu_80041930.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x80041930-0x80042F54 (src/game/cu_80041930.cpp), its compiler, type and source-form rows, the 27 exact function extents and the exact data rows 0x8028D408-0x8028D438 (.rodata), 0x802CCDDC-0x802CCF30 (.data) and 0x803EA490-0x803EA494 (.sdata). Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80041930",
+          "end": "0x80042F54"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D408",
+          "end": "0x8028D438"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCDDC",
+          "end": "0x802CCF30"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA490",
+          "end": "0x803EA494"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80041930",
+          "start": "0x80041930",
+          "end": "0x8004199C"
+        },
+        {
+          "symbol": "fn_8004199C",
+          "start": "0x8004199C",
+          "end": "0x80041B48"
+        },
+        {
+          "symbol": "fn_80041B48",
+          "start": "0x80041B48",
+          "end": "0x80041BF8"
+        },
+        {
+          "symbol": "fn_80041BF8",
+          "start": "0x80041BF8",
+          "end": "0x80041CEC"
+        },
+        {
+          "symbol": "fn_80041CEC",
+          "start": "0x80041CEC",
+          "end": "0x80041D88"
+        },
+        {
+          "symbol": "fn_80041D88",
+          "start": "0x80041D88",
+          "end": "0x80041EB0"
+        },
+        {
+          "symbol": "fn_80041EB0",
+          "start": "0x80041EB0",
+          "end": "0x80041F74"
+        },
+        {
+          "symbol": "fn_80041F74",
+          "start": "0x80041F74",
+          "end": "0x80042208"
+        },
+        {
+          "symbol": "fn_80042208",
+          "start": "0x80042208",
+          "end": "0x80042270"
+        },
+        {
+          "symbol": "fn_80042270",
+          "start": "0x80042270",
+          "end": "0x80042310"
+        },
+        {
+          "symbol": "fn_80042310",
+          "start": "0x80042310",
+          "end": "0x80042380"
+        },
+        {
+          "symbol": "fn_80042380",
+          "start": "0x80042380",
+          "end": "0x800423F8"
+        },
+        {
+          "symbol": "fn_800423F8",
+          "start": "0x800423F8",
+          "end": "0x800424C0"
+        },
+        {
+          "symbol": "fn_800424C0",
+          "start": "0x800424C0",
+          "end": "0x800424E8"
+        },
+        {
+          "symbol": "fn_800424E8",
+          "start": "0x800424E8",
+          "end": "0x80042508"
+        },
+        {
+          "symbol": "fn_80042508",
+          "start": "0x80042508",
+          "end": "0x80042530"
+        },
+        {
+          "symbol": "fn_80042530",
+          "start": "0x80042530",
+          "end": "0x800425D4"
+        },
+        {
+          "symbol": "fn_800425D4",
+          "start": "0x800425D4",
+          "end": "0x80042610"
+        },
+        {
+          "symbol": "fn_80042610",
+          "start": "0x80042610",
+          "end": "0x800428A8"
+        },
+        {
+          "symbol": "fn_800428A8",
+          "start": "0x800428A8",
+          "end": "0x80042928"
+        },
+        {
+          "symbol": "fn_80042928",
+          "start": "0x80042928",
+          "end": "0x80042998"
+        },
+        {
+          "symbol": "fn_80042998",
+          "start": "0x80042998",
+          "end": "0x800429C0"
+        },
+        {
+          "symbol": "fn_800429C0",
+          "start": "0x800429C0",
+          "end": "0x800429CC"
+        },
+        {
+          "symbol": "fn_800429CC",
+          "start": "0x800429CC",
+          "end": "0x80042A08"
+        },
+        {
+          "symbol": "fn_80042A08",
+          "start": "0x80042A08",
+          "end": "0x80042AF4"
+        },
+        {
+          "symbol": "fn_80042AF4",
+          "start": "0x80042AF4",
+          "end": "0x80042F4C"
+        },
+        {
+          "symbol": "fn_80042F4C",
+          "start": "0x80042F4C",
+          "end": "0x80042F54"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80169F80.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80169F80-0x8016BAD8 for src/game/cu_80169F80.cpp, its 40 exact function extents, the exact data rows for the three initialized placements and the linker row for the three discarded functions (Xbox 0x120CD0, 0x120D60, 0x120DE0); they are compiled with the file but not measured. Draft comparisons only; the original assembly remains linked.",
