@@ -3691,105 +3691,6 @@
       ]
     },
     {
-      "source": "src/game/cu_80173C2C.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded unit row for src/game/cu_80173C2C.cpp, its exact function extents, data rows and source-form rows. Draft comparisons only: .text is exact, but the joint-name table at 0x802E99F0 points to four literals that the target shares with earlier units, which separate objects cannot reproduce; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80173C2C",
-          "end": "0x8017419C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A5168",
-          "end": "0x802A5348"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802E99F0",
-          "end": "0x802E9A04"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x80361694",
-          "end": "0x80361C64"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ECB30",
-          "end": "0x803ECB34"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80173C2C",
-          "start": "0x80173C2C",
-          "end": "0x80173C68"
-        },
-        {
-          "symbol": "fn_80173C68",
-          "start": "0x80173C68",
-          "end": "0x80173CAC"
-        },
-        {
-          "symbol": "fn_80173CAC",
-          "start": "0x80173CAC",
-          "end": "0x80173D10"
-        },
-        {
-          "symbol": "fn_80173D10",
-          "start": "0x80173D10",
-          "end": "0x80173E24"
-        },
-        {
-          "symbol": "fn_80173E24",
-          "start": "0x80173E24",
-          "end": "0x80173EE0"
-        },
-        {
-          "symbol": "fn_80173EE0",
-          "start": "0x80173EE0",
-          "end": "0x80174074"
-        },
-        {
-          "symbol": "fn_80174074",
-          "start": "0x80174074",
-          "end": "0x801740A8"
-        },
-        {
-          "symbol": "fn_801740A8",
-          "start": "0x801740A8",
-          "end": "0x801740C4"
-        },
-        {
-          "symbol": "fn_801740C4",
-          "start": "0x801740C4",
-          "end": "0x80174114"
-        },
-        {
-          "symbol": "fn_80174114",
-          "start": "0x80174114",
-          "end": "0x80174160"
-        },
-        {
-          "symbol": "fn_80174160",
-          "start": "0x80174160",
-          "end": "0x8017417C"
-        },
-        {
-          "symbol": "fn_8017417C",
-          "start": "0x8017417C",
-          "end": "0x8017419C"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_80181330.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row for src/game/cu_80181330.cpp, its 115 exact function extents, exact data rows 0x802A6AC0-0x802A6C10, 0x802EA988-0x802EAA40, 0x803EB548-0x803EB590 and the .ctors/.dtors words 0x80289AF8/0x80289C24, and its source-form rows. Wholly unlinked draft source: the original assembly remains linked.",
@@ -6131,7 +6032,7 @@
     {
       "source": "src/game/cu_80176F18.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row for src/game/cu_80176F18.cpp (replacing candidate cu_80176F18), individual exact function extents, exact data rows for its .rodata literals and vtables, .sdata, .bss and .sbss objects and .ctors word, the compiler, type, source-form, name and linker rows (the linker rows record the two functions the target discarded, which the source keeps unregistered). The .sbss entry 0x803ECB24-0x803ECB38 is a bounding range for the storage list, which places the unit's three .sbss objects individually; its words 0x803ECB2C (src/game/cu_80173298.cpp) and 0x803ECB30 (src/game/cu_80173C2C.cpp) belong to other units and are not claimed, and the unit's .sbss membership and placement are provisional. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "evidence": "evidence.tsv provisional unit row for src/game/cu_80176F18.cpp (replacing candidate cu_80176F18), individual exact function extents, exact data rows for its .rodata literals and vtables, .sdata, .bss and .sbss objects and .ctors word, the compiler, type, source-form, name and linker rows (the linker rows record the two functions the target discarded, which the source keeps unregistered). The .sbss entry 0x803ECB24-0x803ECB38 is a bounding range for the storage list, which places the unit's three .sbss objects individually; its words 0x803ECB2C and 0x803ECB30 belong to src/game/cu_8016FB10.cpp and are not claimed, and the unit's .sbss membership and placement are provisional. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
       "sections": [
         {
           "section": ".text",
