@@ -156,14 +156,6 @@
       "address": "0x8023931C",
       "evidence": "evidence.tsv AX external OSRegisterVersion; branch instruction destination and upstream role."
     },
-    "__AXVPBInit": {
-      "address": "0x80288E2C",
-      "evidence": "evidence.tsv AX external __AXVPBInit; branch instruction destination and upstream role."
-    },
-    "__AXVPBQuit": {
-      "address": "0x8028902C",
-      "evidence": "evidence.tsv AX external __AXVPBQuit; branch instruction destination and upstream role."
-    },
     "__OSLockSramEx": {
       "address": "0x8023CAF0",
       "evidence": "evidence.tsv retained CARD external __OSLockSramEx: branch or address-load operands and reference signature."
@@ -187,10 +179,6 @@
     "DCInvalidateRange": {
       "address": "0x80239CC0",
       "evidence": "evidence.tsv retained CARD external DCInvalidateRange: branch or address-load operands and reference signature."
-    },
-    "__AXSetPBDefault": {
-      "address": "0x80288DEC",
-      "evidence": "Target AXFreeVoice/AXAcquireVoice direct branch destinations, SDK default parameter-block behavior at callee."
     },
     "__DSP_curr_task": {
       "address": "0x803ED508",
@@ -776,21 +764,9 @@
       "address": "0x80190074",
       "evidence": "evidence.tsv external row 0x80190074 (fn_80190074__14Class_8018FD64ii) and type row Class_8018FD64."
     },
-    "__AXGetNumVoices": {
-      "address": "0x80288414",
-      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
-    },
-    "__AXSyncPBs": {
-      "address": "0x80288B68",
-      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
-    },
     "AIStartDMA": {
       "address": "0x8024A1C8",
       "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
-    },
-    "__AXGetPBs": {
-      "address": "0x80288DE0",
-      "evidence": "evidence.tsv AXCL retainedcall/globaloperand and pinned donor declaration."
     },
     "AIRegisterDMACallback": {
       "address": "0x8024A0FC",
@@ -1095,6 +1071,30 @@
     "__CARDVendorID": {
       "address": "0x803EC2C0",
       "evidence": "Complete BFBB CARDMount native retained operand resolved against original target; source name corroborated by pinned donor declaration and actual call/access context."
+    },
+    "__DVDFSInit": {
+      "address": "0x8023ED68",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "__DVDThreadQueue": {
+      "address": "0x803ED110",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "__fstLoad": {
+      "address": "0x80242120",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "__DVDPrintFatalMessage": {
+      "address": "0x80242018",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "DVDCompareDiskID": {
+      "address": "0x80241F20",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "__AICallbackStackSwitch": {
+      "address": "0x8024A7B0",
+      "evidence": "Original AID handler directcall passes callbackcodepointerr3, original88bytes changesr1 andcallsnoargs thenrestores; sourceimplementation unresolved."
     }
   },
   "units": [
@@ -9245,6 +9245,61 @@
           "end": "0x802FF040"
         }
       ]
+    },
+    {
+      "source": "src/dolphin/ax/AXVPB.c",
+      "profile": "dolphin_release",
+      "evidence": "Pinned BFBB coherent AXVPB source, thirteen complete target functions and typed native allocations; normal thirteen-root SN retention and full original-output validation required. See evidence.tsv; original archive edges remain provisional.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80288414",
+          "end": "0x80289408"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x803026D0",
+          "end": "0x803027A4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803C2A60",
+          "end": "0x803D4260"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED5C8",
+          "end": "0x803ED5D4"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EE4A8",
+          "end": "0x803EE4AC"
+        }
+      ],
+      "link_roots": {
+        "symbols": [
+          "__AXGetNumVoices",
+          "__AXServiceVPB",
+          "__AXSyncPBs",
+          "__AXGetPBs",
+          "__AXSetPBDefault",
+          "__AXVPBInit",
+          "__AXVPBQuit",
+          "AXSetVoiceSrcType",
+          "AXSetVoiceState",
+          "AXSetVoiceAddr",
+          "AXSetVoiceAdpcm",
+          "AXSetVoiceSrcRatio",
+          "AXSetVoiceAdpcmLoop"
+        ],
+        "evidence": "Thirteen original complete target functions retain coherent native bodies in source order. Six donor public setters have no target identities and are naturally removed by SN library retention; no source splicing or synthetic boundary."
+      }
     }
   ]
 }

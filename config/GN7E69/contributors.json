@@ -10602,6 +10602,168 @@
         "commit": "bcf05077005fe09d851b9d02fec33532b2e90323",
         "introduced_blob": "b0b26f6633f4db968f2d53f9936539f7e278828c"
       }
+    },
+    {
+      "source": "src/dolphin/ax/AXVPB.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80288414",
+        "0x8028841C",
+        "0x80288B68",
+        "0x80288DE0",
+        "0x80288DEC",
+        "0x80288E2C",
+        "0x8028902C",
+        "0x80289030",
+        "0x802890F4",
+        "0x80289150",
+        "0x80289260",
+        "0x80289304",
+        "0x8028939C"
+      ],
+      "provenance": {
+        "pull_request": 542,
+        "merged_via": 560,
+        "commit": "82922e85957d61a1787ca4f12b7a57e128a1b476",
+        "introduced_blob": "7f4279abde0f17a93b58782ac5bff59fe6f082f4",
+        "original_blob": "5281160427fbb2fc2e914ba8a1c73c4c5d39667f",
+        "integration_adjustment": "Removed the donor no-effect dst expression explicitly marked as register-allocation scaffolding and inaccurate COPYALL commentary; complete coherent source and pinned-profile compiler output remain unchanged.",
+        "original_commit": "274ebccaaf265cbdbc1f111d9d26272fed80ccae"
+      }
+    },
+    {
+      "source": "src/dolphin/dsp/dsp_debug.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80285D78"
+      ],
+      "provenance": {
+        "pull_request": 542,
+        "merged_via": 560,
+        "commit": "df9d8be5a779874c7938a7b9a3068054f13411a3",
+        "introduced_blob": "3cb3fb098f31ebfba52dfbdfc00906c8a203c707"
+      }
+    },
+    {
+      "source": "src/dolphin/dvd/dvd.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023F494",
+        "0x8023F5F8",
+        "0x8023F684",
+        "0x8023F730",
+        "0x8023F764",
+        "0x8023F78C",
+        "0x8023FAD4",
+        "0x8023FB3C",
+        "0x8023FBD4",
+        "0x8023FBFC",
+        "0x8023FE34",
+        "0x8023FE68",
+        "0x8023FE9C",
+        "0x8023FF10",
+        "0x8023FF48",
+        "0x80240140",
+        "0x80240280",
+        "0x8024034C",
+        "0x8024037C",
+        "0x802403EC",
+        "0x80240414",
+        "0x802404F8",
+        "0x80240A48",
+        "0x80241080",
+        "0x8024115C",
+        "0x8024122C",
+        "0x80241300",
+        "0x802413BC",
+        "0x8024148C",
+        "0x802414D0",
+        "0x8024151C",
+        "0x802415C8",
+        "0x802415D8",
+        "0x802418A4",
+        "0x80241950",
+        "0x80241974",
+        "0x8024197C",
+        "0x80241A74"
+      ],
+      "provenance": {
+        "pull_request": 527,
+        "merged_via": 560,
+        "commit": "5c19415814ce282c0d01b93fa456f4523fd7c19f",
+        "introduced_blob": "2cdc1c316e5529133e258cae7d31b1bf9cb0a6b7",
+        "original_commit": "05efcc947b8a8cb11ab2fbb0a8ab05d6990348ed",
+        "original_blob": "11288d899e338df40f5846b759dcc1194be3980d",
+        "integration_adjustment": "Remove the unsupported unused cancellation stack local and inherited process comments; preserve function behavior and ordinary compiler settings. Cancellation frame instructions remain measured partial."
+      }
+    },
+    {
+      "source": "src/dolphin/pad/Pad.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x802466D0",
+        "0x80246874",
+        "0x80246938",
+        "0x802469F8",
+        "0x80246AD0",
+        "0x80246DFC",
+        "0x80246F30",
+        "0x80247030",
+        "0x8024734C",
+        "0x802476F8",
+        "0x802477FC",
+        "0x80247970",
+        "0x80247AE4",
+        "0x80248124"
+      ],
+      "provenance": {
+        "pull_request": 529,
+        "merged_via": 560,
+        "commit": "1097f87ed6ddf20b4a9937f3a270d054be75a262",
+        "introduced_blob": "f0eec07fb657a4ab7264fca9a996828ab1d8e19f",
+        "original_commit": "36572653d679b7adb854d105cb2cadaa5f7e582f",
+        "original_blob": "cb51040943529f811f6532d20c835f782d282246",
+        "integration_adjustment": "Reuse canonical os/string includes and fixed boot globals; omit redundant offsetof macro and unsupported foreign-compiler push/inline-all/pop directives under the unchanged pinned profile. Complete coherent C bodies retained; native tail-SDA packing remains measured partial."
+      }
+    },
+    {
+      "source": "src/dolphin/ai/ai.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024A0FC",
+        "0x8024A140",
+        "0x8024A1C8",
+        "0x8024A1E0",
+        "0x8024A1F8",
+        "0x8024A2D0",
+        "0x8024A2E0",
+        "0x8024A3C0",
+        "0x8024A3D4",
+        "0x8024A4A8",
+        "0x8024A4B8",
+        "0x8024A4D4",
+        "0x8024A4E4",
+        "0x8024A500",
+        "0x8024A510",
+        "0x8024A688",
+        "0x8024A704"
+      ],
+      "provenance": {
+        "pull_request": 529,
+        "merged_via": 560,
+        "commit": "0c1b26d92daa749bec20fcde3f74940c517e29f3",
+        "introduced_blob": "dfc630bfb306a68a9c2970b7c9c09d299f9b9bdc"
+      }
     }
   ],
   "target": "GN7E69",
