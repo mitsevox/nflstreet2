@@ -151,6 +151,37 @@ class ResolveUndefined(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Unresolved comparison symbol gMissing'):
             function_compare.resolve_undefined(self.undefined('gMissing'), {}, set())
 
+    def test_discarded_only_names_may_stay_unresolved(self):
+        resolved = function_compare.resolve_undefined(
+            self.undefined('GetScores', 'gData'), {'gData': 0x80100000}, set(), {'GetScores'})
+        self.assertEqual(resolved, {'gData': 0x80100000})
+        # The real caller drops ambiguous names from the references; they still fail closed.
+        with self.assertRaisesRegex(ValueError, 'Ambiguous comparison symbol gData'):
+            function_compare.resolve_undefined(self.undefined('gData'), {}, {'gData'}, {'gData'})
+        # A neutral callee of a discarded body still resolves by its address.
+        self.assertEqual(function_compare.resolve_undefined(
+            self.undefined('fn_80001000'), {}, set(), {'fn_80001000'}), {'fn_80001000': 0x80001000})
+
+    @staticmethod
+    def relocations(*entries):
+        # One SHT_RELA section (index 3) for .text (index 1); entries are (offset, symbol index).
+        native = b''.join(struct.pack('>IIi', offset, index << 8 | 10, 0) for offset, index in entries)
+        return native, [{'index': 3, 'type': 4, 'info': 1, 'offset': 0, 'size': len(native)}]
+
+    def test_discarded_references_need_every_use_inside_a_discarded_body(self):
+        symbols = [{'name': 'Discarded', 'value': 0x40, 'size': 0x20, 'type': 2, 'shndx': 1},
+                   {'name': 'Kept', 'value': 0, 'size': 0x40, 'type': 2, 'shndx': 1},
+                   {'name': 'GetScores', 'value': 0, 'size': 0, 'type': 0, 'shndx': sb.SHN_UNDEF},
+                   {'name': 'fn_80001000', 'value': 0, 'size': 0, 'type': 0, 'shndx': sb.SHN_UNDEF}]
+        native, sections = self.relocations((0x44, 3), (0x48, 4), (0x10, 4))
+        self.assertEqual(function_compare.discarded_references(native, sections, symbols, ['Discarded']),
+                         {'GetScores'})
+        native, sections = self.relocations((0x44, 3), (0x10, 3))
+        self.assertEqual(function_compare.discarded_references(native, sections, symbols, ['Discarded']), set())
+        self.assertEqual(function_compare.discarded_references(native, sections, symbols, []), set())
+        with self.assertRaisesRegex(ValueError, 'discarded functions must be defined once'):
+            function_compare.discarded_references(native, sections, symbols, ['Missing'])
+
 
 class ComparisonFixture(unittest.TestCase):
     """A temporary checkout with one registered draft unit and a synthetic DOL."""
@@ -213,6 +244,14 @@ class InPlaceComparisons(ComparisonFixture):
         self.manifest['units']=[dict(self.unit,profile='different')];self.write_config()
         with self.assertRaisesRegex(ValueError,'same compiler profile'):
             function_compare.configured(self.root,self.binary)
+
+    def test_discarded_lists_need_distinct_unregistered_descriptive_names(self):
+        for bad in ([], ['fn_80000000'], ['Dropped', 'Dropped'], ['fn_80001000'], [''], 'Dropped'):
+            self.unit['discarded'] = bad; self.write_config()
+            with self.assertRaisesRegex(ValueError, 'discarded functions need'):
+                function_compare.configured(self.root, self.binary)
+        self.unit['discarded'] = ['Dropped']; self.write_config()
+        self.assertEqual(function_compare.configured(self.root, self.binary)[1][0]['discarded'], ['Dropped'])
 
     def test_evidence_and_unique_target_coverage_are_required(self):
         self.unit['functions'][0]['end']='0x80000004';self.write_config()

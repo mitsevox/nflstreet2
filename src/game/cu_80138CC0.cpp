@@ -10,7 +10,7 @@ struct Segment_80138CC0 {
 
 extern "C" {
 float fn_80088FFC(Vector_80039F5C *pA0, Vector_80039F5C *pA1, Vector_80039F5C *pB0, Vector_80039F5C *pB1, Vector_80039F5C *pOut);
-float fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
+void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_80227350(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_802276B4(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);

@@ -4,6 +4,7 @@ import json
 import math
 import re
 import shutil
+import struct
 from pathlib import Path
 
 import source_build as sb
@@ -100,11 +101,43 @@ def comparison_references(externals, data_symbols):
     return references
 
 
-def resolve_undefined(symbols, references, ambiguous):
+def discarded_references(native, sections, symbols, discarded):
+    """Undefined names that only the listed discarded functions reference.
+
+    A discarded function is compiled with its file but is neither registered nor measured, so a
+    callee that the target also discarded may stay unresolved. Every relocation to such a name
+    must lie inside one of these functions; any other use still has to resolve."""
+    if not discarded:
+        return set()
+    bodies = [s for s in symbols if s['name'] in discarded and s['type'] == 2 and s['size']
+              and s['shndx'] != sb.SHN_UNDEF]
+    if {s['name'] for s in bodies} != set(discarded) or len(bodies) != len(discarded):
+        raise ValueError('Comparison discarded functions must be defined once in the compiled source')
+    inside, outside = set(), set()
+    for relocation_section in sections:
+        if relocation_section['type'] != 4:
+            continue
+        for at in range(relocation_section['offset'], relocation_section['offset'] + relocation_section['size'], 12):
+            position, info, _ = struct.unpack_from('>IIi', native, at)
+            index = info >> 8
+            if not 0 < index <= len(symbols):
+                raise ValueError('Invalid native relocation symbol')
+            symbol = symbols[index - 1]
+            if symbol['shndx'] != sb.SHN_UNDEF:
+                continue
+            within = any(b['shndx'] == relocation_section['info'] and b['value'] <= position < b['value'] + b['size']
+                         for b in bodies)
+            (inside if within else outside).add(symbol['name'])
+    return inside - outside
+
+
+def resolve_undefined(symbols, references, ambiguous, discarded_only=frozenset()):
     """Resolve a comparison object's undefined references.
 
     Names in `references` resolve to their address and neutral fn_/lbl_ labels resolve by their
-    address. An ambiguous accepted data name always fails closed, as does any other unknown name."""
+    address. An ambiguous accepted data name always fails closed, as does any other unknown name,
+    except an unambiguous one that only listed discarded functions reference (see
+    discarded_references); such a name is left out of the result."""
     defined = {s['name'] for s in symbols if s['shndx'] != sb.SHN_UNDEF}
     resolved = {}
     for symbol in symbols:
@@ -113,6 +146,8 @@ def resolve_undefined(symbols, references, ambiguous):
             continue
         if name in ambiguous:
             raise ValueError(f'Ambiguous comparison symbol {name}')
+        if name in discarded_only and name not in references and not sb.NEUTRAL.fullmatch(name):
+            continue
         neutral = sb.NEUTRAL.fullmatch(name)
         if name in references:
             resolved[name] = references[name]
@@ -208,15 +243,21 @@ def configured(root, binary):
     accepted_linked = linked_ranges(accepted['units'], sb.address)
     units, seen = [], []
     for candidate in config['units']:
-        if set(candidate) - {'storage'} != {'source', 'profile', 'evidence', 'sections', 'functions'}:
+        if set(candidate) - {'storage', 'discarded'} != {'source', 'profile', 'evidence', 'sections', 'functions'}:
             raise ValueError('Comparison units need source, profile, evidence, sections and functions, '
-                             'and optionally storage')
+                             'and optionally storage and discarded')
+        discarded = candidate.get('discarded', [])
+        if 'discarded' in candidate and (not isinstance(discarded, list) or not discarded
+                or not all(isinstance(n, str) and n for n in discarded) or len(set(discarded)) != len(discarded)
+                or set(discarded) & {r.get('symbol') for r in candidate['functions']}
+                or any(sb.NEUTRAL.fullmatch(n) for n in discarded)):
+            raise ValueError('Comparison discarded functions need distinct unregistered descriptive symbols')
         if not candidate['source'].startswith('src/'):
             raise ValueError('Comparison source belongs in its normal src/ location')
         if not isinstance(candidate['functions'], list) or not candidate['functions']:
             raise ValueError('Comparison units require explicit target functions')
         compiled = copy.deepcopy(accepted)
-        compiled['units'] = [{k: v for k, v in candidate.items() if k not in ('functions', 'storage')}]
+        compiled['units'] = [{k: v for k, v in candidate.items() if k not in ('functions', 'storage', 'discarded')}]
         validated, _, _ = sb.load_manifest(compiled, sections, accepted['compiler'])
         unit = validated[0]
         existing = next((u for u in accepted['units'] if u['source'] == candidate['source']), None)
@@ -254,6 +295,7 @@ def configured(root, binary):
             seen.append((section['start'], section['end']))
         unit['storage'] = storage_entries(candidate.get('storage'), unit['sections'], data_evidence)
         unit['functions'] = candidate['functions']
+        unit['discarded'] = discarded
         units.append(unit)
     seen.sort()
     if any(b > c for (_, b), (c, _) in zip(seen, seen[1:])) or len({u['source'] for u in units}) != len(units):
@@ -328,7 +370,8 @@ def generate(original, source_report, tool):
             if follows:
                 check_follows(binary, placements[name], placements[follows], section['align'])
         functions = {s['name']: s for s in symbols if s['type'] == 2 and s['size'] and s['shndx'] != sb.SHN_UNDEF}
-        resolved = resolve_undefined(symbols, addresses, ambiguous)
+        resolved = resolve_undefined(symbols, addresses, ambiguous, discarded_references(
+            unit['object'].read_bytes(), sections, symbols, unit['discarded']))
         storage = storage_symbols(sections, symbols, unit['storage'])
         targets = {f['symbol']: (int(f['address'],16), int(f['address'],16)+f['size'])
                    for u in accepted if u['source'] == unit['source'] for f in u['functions']}

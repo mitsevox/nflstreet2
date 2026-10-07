@@ -1890,7 +1890,7 @@
     {
       "source": "src/game/SndgPathfinder.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80068154-0x8006F1F4 for src/game/SndgPathfinder.cpp, its 160 exact function extents, exact data rows for every initialized placement and the source-form rows that state the remaining differences. Draft comparisons only; the original assembly remains linked until the whole unit reproduces the target in the complete source build.",
+      "evidence": "evidence.tsv unit row 0x80068154-0x8006F1F4 for src/game/SndgPathfinder.cpp, its 160 exact function extents, exact data rows for every initialized placement and the source-form rows that state the remaining differences. The discarded entry UpdateGameSituation follows the linker row for this unit (Xbox 0x1AA590); it is compiled with the file but not measured. Draft comparisons only; the original assembly remains linked until the whole unit reproduces the target in the complete source build.",
       "sections": [
         {
           "section": ".text",
@@ -2742,6 +2742,9 @@
           "start": "0x8006F1C8",
           "end": "0x8006F1F4"
         }
+      ],
+      "discarded": [
+        "UpdateGameSituation"
       ]
     },
     {
@@ -3783,50 +3786,6 @@
           "symbol": "fn_8017417C",
           "start": "0x8017417C",
           "end": "0x8017419C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8017D0E0.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017D0E0-0x8017DD68 (src/game/cu_8017D0E0.cpp), function row 0x8017D0E0-0x8017D1D0 and source-form row 0x8017D0E0-0x8017DD68.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8017D0E0",
-          "end": "0x8017DD68"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A57B4",
-          "end": "0x802A57BC"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB468",
-          "end": "0x803EB48C"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x80362964",
-          "end": "0x803629E8"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ECB3C",
-          "end": "0x803ECB40"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8017D0E0",
-          "start": "0x8017D0E0",
-          "end": "0x8017D1D0"
         }
       ]
     },
@@ -9956,6 +9915,143 @@
           "symbol": "fn_80164B64",
           "start": "0x80164B64",
           "end": "0x80164B78"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800478DC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800478DC-0x80047E28 (src/game/cu_800478DC.cpp), its source-form rows and the .rodata data row 0x8028D674-0x8028D73C. Draft comparison: 8 of 9 functions exact; fn_80047BD0 is partial (compare tree); original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800478DC",
+          "end": "0x80047E28"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D674",
+          "end": "0x8028D73C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800478DC",
+          "start": "0x800478DC",
+          "end": "0x80047954"
+        },
+        {
+          "symbol": "fn_80047954",
+          "start": "0x80047954",
+          "end": "0x8004795C"
+        },
+        {
+          "symbol": "fn_8004795C",
+          "start": "0x8004795C",
+          "end": "0x800479B0"
+        },
+        {
+          "symbol": "fn_800479B0",
+          "start": "0x800479B0",
+          "end": "0x80047BD0"
+        },
+        {
+          "symbol": "fn_80047BD0",
+          "start": "0x80047BD0",
+          "end": "0x80047C74"
+        },
+        {
+          "symbol": "fn_80047C74",
+          "start": "0x80047C74",
+          "end": "0x80047C84"
+        },
+        {
+          "symbol": "fn_80047C84",
+          "start": "0x80047C84",
+          "end": "0x80047CA4"
+        },
+        {
+          "symbol": "fn_80047CA4",
+          "start": "0x80047CA4",
+          "end": "0x80047DAC"
+        },
+        {
+          "symbol": "fn_80047DAC",
+          "start": "0x80047DAC",
+          "end": "0x80047E28"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8003108C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x8003108C-0x800314E0 (src/game/cu_8003108C.cpp), its compiler, type and source-form rows, the ten exact function extents and the exact .data row 0x802CCA34-0x802CCB18. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003108C",
+          "end": "0x800314E0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCA34",
+          "end": "0x802CCB18"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8003108C",
+          "start": "0x8003108C",
+          "end": "0x800310C0"
+        },
+        {
+          "symbol": "fn_800310C0",
+          "start": "0x800310C0",
+          "end": "0x800311E4"
+        },
+        {
+          "symbol": "fn_800311E4",
+          "start": "0x800311E4",
+          "end": "0x8003122C"
+        },
+        {
+          "symbol": "fn_8003122C",
+          "start": "0x8003122C",
+          "end": "0x80031294"
+        },
+        {
+          "symbol": "fn_80031294",
+          "start": "0x80031294",
+          "end": "0x800312DC"
+        },
+        {
+          "symbol": "fn_800312DC",
+          "start": "0x800312DC",
+          "end": "0x800312FC"
+        },
+        {
+          "symbol": "fn_800312FC",
+          "start": "0x800312FC",
+          "end": "0x80031328"
+        },
+        {
+          "symbol": "fn_80031328",
+          "start": "0x80031328",
+          "end": "0x80031404"
+        },
+        {
+          "symbol": "fn_80031404",
+          "start": "0x80031404",
+          "end": "0x8003145C"
+        },
+        {
+          "symbol": "fn_8003145C",
+          "start": "0x8003145C",
+          "end": "0x800314E0"
         }
       ]
     }
