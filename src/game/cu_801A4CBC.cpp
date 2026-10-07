@@ -1,3 +1,4 @@
+#include <dolphin/gx/GXPixel.h>
 #include "engine/cu_80227F14.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_801D2B7C.h"
@@ -62,9 +63,6 @@ void fn_802505A8(GXTexObj *pObj, int a);
 void fn_80251604(int a, int b);
 void fn_80251B28(int a, int b, int c, int d);
 void fn_80251CC4(int a);
-void fn_80252034(int a, int b, int c, int d);
-void fn_802520E0(int a, int b, int c);
-void fn_80252114(int a);
 void fn_8025251C(Mtx44 m, int a);
 void fn_802525BC(int a);
 }
@@ -184,9 +182,9 @@ void fn_801A5104(void)
 
         fn_80210388();
         GXSetCullMode(GX_CULL_NONE);
-        fn_80252034(1, 4, 5, 5);
-        fn_80252114(0);
-        fn_802520E0(0, 3, 0);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
+        GXSetZCompLoc(GX_DISABLE);
+        GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
         fn_8024D418();
         fn_8024CB90(9, 1);
         fn_8024D450(0, 9, 1, 4, 0);
@@ -231,7 +229,7 @@ void fn_801A5104(void)
             }
         }
         lbl_803EBC98 = cursor;
-        fn_802520E0(1, 3, 1);
+        GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
         fn_8024FB58(4, color);
     }
 }

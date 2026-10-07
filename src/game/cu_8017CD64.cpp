@@ -101,7 +101,7 @@ void fn_8017CFAC(void)
 {
 }
 
-void fn_8017CFB0(void)
+void fn_8017CFB0(unsigned short, unsigned short, int, int)
 {
 }
 

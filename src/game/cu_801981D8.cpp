@@ -1,3 +1,4 @@
+#include <dolphin/gx/GXPixel.h>
 #include <dolphin/mtx.h>
 
 extern "C" {
@@ -17,7 +18,6 @@ void fn_80251604(int a, int b);
 void fn_80251A58(int a, int b, int c, int d, int e);
 void fn_80251B28(int a, int b, int c, int d);
 void fn_80251CC4(int a);
-void fn_80252034(int a, int b, int c, int d);
 void fn_80252448(float *p);
 void fn_802524D4(float *p);
 void fn_8025251C(Mtx44 m, int a);
@@ -50,7 +50,7 @@ void fn_801981D8(void *p, int value)
     fn_80251604(0, 0);
     fn_8024DF64(1);
     fn_8024DCE4(0, 0, 4, 60, 0, 125);
-    fn_80252034(1, 4, 1, 5);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_ONE, GX_LO_NOOP);
     fn_802524D4(lbl_803651E4);
     lbl_803ECBE0 = fn_80236EC0(0);
 }
@@ -62,7 +62,7 @@ void fn_8019831C(void *p, int value)
     fn_801D0544();
     fn_801D0F80(mtx);
     fn_8025251C(mtx, 0);
-    fn_80252034(0, 0, 0, 5);
+    GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_NOOP);
     fn_80252448(lbl_803651E4);
     fn_80236EC0(lbl_803ECBE0);
 }

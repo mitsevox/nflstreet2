@@ -1,3 +1,4 @@
+#include <dolphin/gx/GXPixel.h>
 #include "game/Object_80039F5C.h"
 #include "game/cu_801962CC.h"
 #include <dolphin/gx/GXEnum.h>
@@ -82,8 +83,6 @@ void fn_80251718(int a, int b, int c, int d, int e, int f);
 void fn_80251780(int a, int b, int c, int d, int e, int f);
 void fn_80251B28(int a, int b, int c, int d);
 void fn_80251CC4(int a);
-void fn_80252034(int a, int b, int c, int d);
-void fn_802520E0(int a, int b, int c);
 
 static Vector_80039F5C lbl_802EDD74[4] = {
     { -1.0f, -1.0f, 0.0f },
@@ -114,7 +113,7 @@ void fn_801962CC(int mode)
         break;
     case 2:
         fn_80210BD8(0);
-        fn_80252034(1, 1, 3, 5);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_ONE, GX_BL_INVSRCCLR, GX_LO_NOOP);
         break;
     default:
         fn_80210BD8(6);
@@ -177,7 +176,7 @@ int fn_80196564(Object_80144CE0 *pEmitter, int mode)
     pTexture = pEmitter->mpUnknown2AC;
     if (count) {
         fn_801D04C4();
-        fn_802520E0(1, 3, 0);
+        GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
         fn_801962CC(pEmitter->mUnknown60);
         if (pEmitter->mUnknown45 && pTexture) {
             fn_80250654(&pTexture->mTlutObj, 0);

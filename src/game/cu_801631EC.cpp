@@ -1,3 +1,4 @@
+#include <dolphin/gx/GXPixel.h>
 #include "engine/cu_80227F14.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801EF390.h"
@@ -58,7 +59,6 @@ void fn_80235764(void *p, int a);
 void fn_80235C48(void *p, int a);
 void fn_80235C90(void *p, int a, float b, float c, float d, float e);
 void fn_80235DB8(int a);
-void fn_802520E0(int a, int b, int c);
 void fn_80163358(Object_80163358 *pObject, int *pArgs);
 void fn_80163414(Object_80163358 *pObject);
 int fn_8016345C(Object_80163358 *pObject);
@@ -128,7 +128,7 @@ void fn_80163414(Object_80163358 *pObject)
 int fn_8016345C(Object_80163358 *pObject)
 {
     if (pObject->mUnknownD8 != 0 && pObject->mUnknown10C != 0) {
-        fn_802520E0(1, 3, 0);
+        GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
         fn_80210814(0, 0, 0);
         for (unsigned int i = 0; i < lbl_802E989C.mCount; i++) {
             if (lbl_802E989C.mEntries[i].mEnabled != 0) {
@@ -150,7 +150,7 @@ int fn_8016345C(Object_80163358 *pObject)
                 fn_80235764(pObject->mUnknown18, fn_801C657C());
             }
         }
-        fn_802520E0(1, 3, 1);
+        GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
     }
     return 0;
 }

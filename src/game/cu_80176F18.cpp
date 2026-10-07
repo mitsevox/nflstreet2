@@ -1,9 +1,11 @@
+#include "game/fn_80177FE0.h"
 #include <math.h>
 #include <string.h>
 #include "game/Class_802A56E8.h"
 #include "game/Class_80148A58.h"
 #include "game/FELoop.h"
 #include "game/Object_80039F5C.h"
+#include "game/Level_80054130.h"
 #include "game/Object_800785C0.h"
 #include "game/Object_8017886C.h"
 #include "game/Record_800B15FC.h"
@@ -100,16 +102,6 @@ struct Entry_80361F88 {
     signed char mKind;
 };
 
-struct Record_80054130 {
-    char mUnknown00[0x3C];
-};
-
-struct Object_80054130 {
-    char mUnknown00[0x8B];
-    unsigned char mUnknown8B;
-    Record_80054130 *mUnknown8C;
-};
-
 /* Per-team stat values read back in fn_8017C4B8. */
 struct Baseline_802E9ADC {
     int mTp;
@@ -124,8 +116,6 @@ int fn_80025708(void);
 Set_8003EE6C *fn_8003A078(void);
 void fn_8003A090(void);
 void fn_800535FC(void);
-Object_80054130 *fn_80054130(void);
-void fn_800541AC(Record_80054130 *pRecord, Point_8017886C *pA, Point_8017886C *pB);
 void fn_8006F0B8(int a);
 void fn_8007B684(int id);
 void fn_8007B6D4(void);
@@ -208,7 +198,6 @@ int fn_80177F70(void);
 int fn_80177F7C(void);
 void fn_80177F88(int value);
 void fn_80177FD4(int value);
-Point_8017886C fn_80177FE0(void);
 Point_8017886C fn_80177FFC(int team);
 Point_8017886C fn_80178070(void);
 Point_8017886C fn_8017808C(void);
@@ -216,7 +205,6 @@ void fn_801780A8(Point_8017886C pos);
 void fn_8017813C(Point_8017886C pos);
 int fn_80178194(void);
 void fn_80178264(Point_8017886C pos);
-Point_8017886C fn_8017827C(void);
 float fn_80178298(void);
 float fn_801782A4(void);
 void fn_801782B0(void);
@@ -337,7 +325,7 @@ void fn_8017C98C(unsigned short team, int value);
 void fn_8017C9B8(unsigned short team, int value);
 void fn_8017C9E4(unsigned short team, int value);
 void fn_8017CA10(unsigned short team, int value);
-void fn_8017CA3C(unsigned short team, int value);
+void fn_8017CA3C(int id, int value);
 void fn_8017CA68(unsigned short team, int value);
 void fn_8017CA94(unsigned short team, int value);
 void fn_8017CAC0(void (*pCallback)(int kind, int a, int b));
@@ -424,8 +412,8 @@ extern "C" void fn_8017710C(void)
 
     if (fn_80054130()) {
         unsigned char i;
-        unsigned char total = fn_80054130()->mUnknown8B;
-        Record_80054130 *pRecord = fn_80054130()->mUnknown8C;
+        unsigned char total = fn_80054130()->mUnknown136;
+        Record_80054130 *pRecord = fn_80054130()->mUnknown140;
 
         for (i = 0; i < total; i++, pRecord++) {
             Point_8017886C a;
@@ -2889,9 +2877,9 @@ extern "C" void fn_8017CA10(unsigned short team, int value)
     fn_801794F0(team, 0x77777374, value);
 }
 
-extern "C" void fn_8017CA3C(unsigned short team, int value)
+extern "C" void fn_8017CA3C(int id, int value)
 {
-    fn_801794B4(team, 0x73687374, value);
+    fn_801794B4(id, 0x73687374, value);
 }
 
 extern "C" void fn_8017CA68(unsigned short team, int value)

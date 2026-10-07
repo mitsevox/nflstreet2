@@ -1,9 +1,4 @@
-#include "game/fn_8019D800.h"
-
-struct Record_8019D8AC {
-    unsigned char mUnknown0[12];
-    Pair_8019D800 mUnknownC;
-};
+#include "game/Record_8019D8AC.h"
 
 extern "C" {
 

@@ -192,25 +192,9 @@
       "address": "0x80288E2C",
       "evidence": "evidence.tsv AX external __AXVPBInit; branch instruction destination and upstream role."
     },
-    "__AXClInit": {
-      "address": "0x80287740",
-      "evidence": "evidence.tsv AX external __AXClInit; branch instruction destination and upstream role."
-    },
-    "__AXOutInit": {
-      "address": "0x80287B54",
-      "evidence": "evidence.tsv AX external __AXOutInit; branch instruction destination and upstream role."
-    },
     "__AXVPBQuit": {
       "address": "0x8028902C",
       "evidence": "evidence.tsv AX external __AXVPBQuit; branch instruction destination and upstream role."
-    },
-    "__AXClQuit": {
-      "address": "0x80287764",
-      "evidence": "evidence.tsv AX external __AXClQuit; branch instruction destination and upstream role."
-    },
-    "__AXOutQuit": {
-      "address": "0x80287EF4",
-      "evidence": "evidence.tsv AX external __AXOutQuit; branch instruction destination and upstream role."
     },
     "__OSLockSramEx": {
       "address": "0x8023CAF0",
@@ -356,10 +340,6 @@
       "address": "0x803ED4F4",
       "evidence": "evidence.tsv DSP init external records: target operands and pinned BFBB reference role."
     },
-    "__AXClMode": {
-      "address": "0x803ED560",
-      "evidence": "AXAux target lwz r13-19776 at 0x80286E58/0x80286F2C; shared related SDK mode declaration, original storage remains linked."
-    },
     "__builtin_delete": {
       "address": "0x801D3C18",
       "evidence": "evidence.tsv external row for 0x801D3C18 (descriptive mangled name: operator delete(void *))."
@@ -402,10 +382,6 @@
     },
     "__GXSetSUTexRegs": {
       "address": "0x80250C8C",
-      "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
-    },
-    "__GXUpdateBPMask": {
-      "address": "0x802515DC",
       "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
     },
     "__GXSetVCD": {
@@ -839,6 +815,110 @@
     "ReadBitStream__FP11BitStream_tUi": {
       "address": "0x80190F18",
       "evidence": "evidence.tsv external row 0x80190F18 (ReadBitStream__FP11BitStream_tUi), name row 0x80190F18 and type row BitStream_t."
+    },
+    "OSCreateAlarm": {
+      "address": "0x80239394",
+      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration."
+    },
+    "__OSMaskInterrupts": {
+      "address": "0x8023B5BC",
+      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration. evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
+    },
+    "OSClearContext": {
+      "address": "0x8023A6F4",
+      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration. evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
+    },
+    "OSSetCurrentContext": {
+      "address": "0x8023A52C",
+      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration. evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
+    },
+    "OSInitAlarm": {
+      "address": "0x80239348",
+      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration."
+    },
+    "DVDGetCurrentDiskID": {
+      "address": "0x80241974",
+      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration."
+    },
+    "__AXSyncPBs": {
+      "address": "0x80288B68",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "AIInitDMA": {
+      "address": "0x8024A140",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "__AXGetNumVoices": {
+      "address": "0x80288414",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "AIRegisterDMACallback": {
+      "address": "0x8024A0FC",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "AIStartDMA": {
+      "address": "0x8024A1C8",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "AIStopDMA": {
+      "address": "0x8024A1E0",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "axDspSlave": {
+      "address": "0x80304200",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "axDspSlaveLength": {
+      "address": "0x803EC5C0",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "OSGetConsoleType": {
+      "address": "0x80238984",
+      "evidence": "evidence.tsv external OSGetConsoleType: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source. evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
+    },
+    "__AXGetPBs": {
+      "address": "0x80288DE0",
+      "evidence": "evidence.tsv AXCL retainedcall/globaloperand and pinned donor declaration."
+    },
+    "__AXCompressorTable": {
+      "address": "0x803027C0",
+      "evidence": "evidence.tsv AXCL retainedcall/globaloperand and pinned donor declaration."
+    },
+    "OSGetTick": {
+      "address": "0x8023E7AC",
+      "evidence": "evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
+    },
+    "__CARDMountCallback": {
+      "address": "0x802562C8",
+      "evidence": "evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
+    },
+    "__CARDReadStatus": {
+      "address": "0x80253770",
+      "evidence": "evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
+    },
+    "__cvt_fp2unsigned": {
+      "address": "0x801AD424",
+      "evidence": "evidence.tsv external row for GXPixel resolved caller and related SDK/runtime callee identity."
+    },
+    "__OSStartTime": {
+      "address": "0x803ED070",
+      "evidence": "evidence.tsv OSResetSW external/type rows: actual retained target operands and pinned SDK declarations."
+    },
+    "__OSGetDIConfig": {
+      "address": "0x80239308",
+      "evidence": "evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
+    },
+    "__OSGetInterruptHandler": {
+      "address": "0x8023B25C",
+      "evidence": "evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
+    },
+    "__OSInIPL": {
+      "address": "0x803ED068",
+      "evidence": "evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
+    },
+    "memmove": {
+      "address": "0x801C2030",
+      "evidence": "evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
     }
   },
   "units": [
@@ -7384,13 +7464,13 @@
     {
       "source": "src/game/cu_80138CC0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80138CC0-0x80138F64 (src/game/cu_80138CC0.cpp), its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80138CC0-0x801390D0 (src/game/cu_80138CC0.cpp), its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80138CC0",
-          "end": "0x80138F64"
+          "end": "0x801390D0"
         },
         {
           "section": ".rodata",
@@ -7402,7 +7482,7 @@
           "section": ".sdata",
           "placement": ".data5",
           "start": "0x803EB1A8",
-          "end": "0x803EB1AC"
+          "end": "0x803EB1B0"
         }
       ]
     },
@@ -7934,6 +8014,432 @@
           "placement": ".sbss",
           "start": "0x803EC784",
           "end": "0x803EC790"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80130494.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80130494-0x8013141C (src/game/cu_80130494.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80130494",
+          "end": "0x8013141C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FB20",
+          "end": "0x8029FBA8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB128",
+          "end": "0x803EB13C"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/dvd/dvdlow.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv DVDLow retained functions, native storage and related source/type rows; original file ownership remains provisional.",
+      "link_roots": {
+        "symbols": [
+          "__DVDInitWA",
+          "__DVDInterruptHandler",
+          "DVDLowRead",
+          "DVDLowSeek",
+          "DVDLowWaitCoverClose",
+          "DVDLowReadDiskID",
+          "DVDLowStopMotor",
+          "DVDLowRequestError",
+          "DVDLowInquiry",
+          "DVDLowAudioStream",
+          "DVDLowRequestAudioStatus",
+          "DVDLowAudioBufferConfig",
+          "DVDLowReset",
+          "DVDLowBreak",
+          "DVDLowClearCallback",
+          "__DVDLowSetWAType"
+        ],
+        "evidence": "evidence.tsv DVDLow linker row: twenty target-visible functions; other native bodies naturally removed by ordinary SN linker after inlining or no target root."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80242288",
+          "end": "0x802430CC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A5668",
+          "end": "0x803A5738"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC1F0",
+          "end": "0x803EC1F4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED188",
+          "end": "0x803ED1D0"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ax/AXOut.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv AXOut native retention, relocation, function and static-layout rows.",
+      "link_roots": {
+        "symbols": [
+          "__AXOutNewFrame",
+          "__AXOutAiCallback",
+          "__AXOutInitDSP",
+          "__AXOutInit",
+          "__AXOutQuit"
+        ],
+        "evidence": "Target retains contiguous eight-function 1992-byte layout; native AXSetStepMode and AXRegisterCallback are unused library entry points, discarded by ordinary SN retention."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80287784",
+          "end": "0x80287F4C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803BDF80",
+          "end": "0x803C2A08"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED568",
+          "end": "0x803ED59C"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/exi/EXIUart.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit/source-form rows for EXIUart; four retained functions and four native .sbss objects. BFBB 8fb1c232 with target-supported signed character access corroborated by dolsdk2004 2328b416.",
+      "link_roots": {
+        "symbols": [
+          "__OSEnableBarnacle",
+          "InitializeUART",
+          "WriteUARTN"
+        ],
+        "evidence": "Target retains ProbeBarnacle396, __OSEnableBarnacle444, InitializeUART112 and WriteUARTN540 contiguously; BFBB QueueLength is fully inlined and its standalone copy naturally deadstripped by ordinary SN liveness."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025B764",
+          "end": "0x8025BD38"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED3D0",
+          "end": "0x803ED3E0"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ax/AXProf.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv AXProf retained getter and native16byte profilingstate.",
+      "link_roots": {
+        "symbols": [
+          "__AXGetCurrentProfile"
+        ],
+        "evidence": "Only current-profile getter has retained targetcode; initialization/readout entrypoints naturally unreferenced library functions. Complete native16byte profile state remains unchanged."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80289408",
+          "end": "0x80289450"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED5D8",
+          "end": "0x803ED5E8"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ax/AXCL.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv AXCL contiguous native216relocation proof and complete staticstorage.",
+      "link_roots": {
+        "symbols": [
+          "__AXGetCommandListCycles",
+          "__AXGetCommandListAddress",
+          "__AXNextFrame",
+          "__AXClInit",
+          "__AXClQuit",
+          "AXSetMode",
+          "AXSetCompressor"
+        ],
+        "evidence": "Target retains seven routines1848bytes; helper writerinlines and unusedAXGetMode naturally discarded; whole native1536BSS20SBSS unchanged."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8028704C",
+          "end": "0x80287784"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803BD980",
+          "end": "0x803BDF80"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED550",
+          "end": "0x803ED564"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/card/CARDUnlock.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv CARDUnlock functions, static-data and shared CARD/DSP layout rows; archive file ownership provisional.",
+      "link_roots": {
+        "symbols": [
+          "__CARDUnlock"
+        ],
+        "evidence": "Six whole target functions retained naturally from sole global root; other helpers inline and are removed by ordinary SN linker."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802588A8",
+          "end": "0x80259B08"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF080",
+          "end": "0x802FF1E0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC2C8",
+          "end": "0x803EC2CC"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXPixel.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv GXPixel unit/function/data/source-form rows; BFBB8fb1c23212functions, complete native p2f32 and constantpool56 match target under existing profile.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80251CEC",
+          "end": "0x80252334"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FEE80",
+          "end": "0x802FEEA0"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED950",
+          "end": "0x803ED988"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXBump.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv GXBump unit/function/data/source-form rows; pinned dolsdk2004 2328b4164b1a98422a2255d83ce9a5a7548990cc and original target operands.",
+      "link_roots": {
+        "symbols": [
+          "GXSetTevIndirect",
+          "GXSetIndTexMtx",
+          "GXSetIndTexCoordScale",
+          "GXSetIndTexOrder",
+          "GXSetNumIndStages",
+          "GXSetTevDirect",
+          "__GXUpdateBPMask",
+          "__GXFlushTextureState"
+        ],
+        "evidence": "Target retained range 0x8025115C..0x80251604 contains eight native bodies; all16 retained relocations resolve target code/data. __GXUpdateBPMask has original calls at0x8024E8B4/0x8024E954; remaining genuine donor bodies are naturally unretained."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025115C",
+          "end": "0x80251604"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED918",
+          "end": "0x803ED930"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/exi/EXIBios.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv EXIBios unit/functions/data/type/source-form rows; pinned BFBB8fb1c232addcacf44932c10c4cede41b43f98f40 and target Apr17 2003 EXI version string0x802FF1E0.",
+      "link_roots": {
+        "symbols": [
+          "EXIImm",
+          "EXIClearInterrupts",
+          "EXIImmEx",
+          "EXISync",
+          "EXIDma",
+          "EXISetExiCallback",
+          "EXIProbe",
+          "EXIGetID",
+          "EXIProbeEx",
+          "EXIAttach",
+          "EXIDetach",
+          "EXISelect",
+          "EXIDeselect",
+          "EXIInit",
+          "EXILock",
+          "EXIUnlock",
+          "EXIGetState"
+        ],
+        "evidence": "All17 target-retained global entrypoints; local handlers/probe selected by ordinary linker reachability. Unreferenced type-string helper is not target-retained."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80259D88",
+          "end": "0x8025B764"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF1E0",
+          "end": "0x802FF2EA"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6748",
+          "end": "0x803A6808"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC2D0",
+          "end": "0x803EC2D4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED3C8",
+          "end": "0x803ED3CC"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSResetSW.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv OSResetSW unit/function/data/source-form rows; dolsdk2004 2328b416 and BFBB8fb1c232 whole-body version reconciliation.",
+      "link_roots": {
+        "symbols": [
+          "__OSResetSWInterruptHandler",
+          "OSSetResetCallback",
+          "OSGetResetButtonState"
+        ],
+        "evidence": "Target contiguous interrupt handler0x8023C3E0,callback setter0x8023C4D4,button-state body0x8023C548; all46 actual retained target operands resolve full native layout. Unused switch/timer bodies remain genuine source and are naturally discarded."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023C3E0",
+          "end": "0x8023C7E0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED0B0",
+          "end": "0x803ED0D0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801390D0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801390D0-0x80139308 (src/game/cu_801390D0.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801390D0",
+          "end": "0x80139308"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FF08",
+          "end": "0x8029FF1C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801A6870.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A6870-0x801A69A8 (src/game/cu_801A6870.cpp) and its source-form and compiler rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A6870",
+          "end": "0x801A69A8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80063A30.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80063A30-0x80063BE4 (src/game/cu_80063A30.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80063A30",
+          "end": "0x80063BE4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA628",
+          "end": "0x803EA62C"
         }
       ]
     }
