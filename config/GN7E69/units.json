@@ -943,6 +943,14 @@
     "EXIProbe": {
       "address": "0x8025A6E8",
       "evidence": "evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
+    },
+    "__cvt_fp2unsigned": {
+      "address": "0x801AD424",
+      "evidence": "evidence.tsv external row for GXPixel resolved caller and related SDK/runtime callee identity."
+    },
+    "__GXFlushTextureState": {
+      "address": "0x802515E0",
+      "evidence": "evidence.tsv external row for GXPixel resolved caller and related SDK/runtime callee identity."
     }
   },
   "units": [
@@ -8245,6 +8253,31 @@
           "placement": ".data5",
           "start": "0x803EC2C8",
           "end": "0x803EC2CC"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXPixel.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv GXPixel unit/function/data/source-form rows; BFBB8fb1c23212functions, complete native p2f32 and constantpool56 match target under existing profile.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80251CEC",
+          "end": "0x80252334"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FEE80",
+          "end": "0x802FEEA0"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED950",
+          "end": "0x803ED988"
         }
       ]
     }
