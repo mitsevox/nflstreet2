@@ -1051,6 +1051,14 @@
     "__cpReg": {
       "address": "0x803ED35C",
       "evidence": "evidence.tsv GXPerf original counter access operands establish shared register pointer; genuine pinned SDK declaration."
+    },
+    "DVDCancel": {
+      "address": "0x802418A4",
+      "evidence": "evidence.tsv DVDfs actual retained branch operands and canonical shared declaration; target implementation remains original bytes."
+    },
+    "DVDReadAbsAsyncPrio": {
+      "address": "0x80241080",
+      "evidence": "evidence.tsv DVDfs actual retained branch operands and canonical shared declaration; target implementation remains original bytes."
     }
   },
   "units": [
