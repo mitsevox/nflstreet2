@@ -1676,8 +1676,8 @@
           "end": "0x803ED3B4",
           "start_boundary": "exact",
           "end_boundary": "exact",
-          "evidence": "Actual original operands bind TokenCB pointer+0, DrawDoneCB pointer+4, DrawDone u8+8 and aligned OSThreadQueue two pointers+12. Complete native20 allocation; natural alignment, no invented padding. Unlinked NOBITS placement receives no initialized-byte/source-storage credit. DTK inferred lbl_803ED3AC extends to0x803ED3C0 across the proven allocation end; retain full20 ownership/comparison while disabling optional original object seed, without extending ownership into neighboring storage.",
-          "object_seed": false
+          "evidence": "Actual original operands bind TokenCB pointer+0, DrawDoneCB pointer+4, DrawDone u8+8 and aligned OSThreadQueue two pointers+12. Complete native20 allocation; natural alignment, no invented padding. Unlinked NOBITS placement receives no initialized-byte/source-storage credit. Seed the independently proven complete20-byte native allocation; do not extend it to neighboring inferred DTK labels.",
+          "object_seed": true
         }
       ]
     },
