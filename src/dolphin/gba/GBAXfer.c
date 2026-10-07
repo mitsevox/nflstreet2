@@ -1,6 +1,7 @@
 #include "dolphin/gba.h"
 #include "dolphin/os.h"
 #include "dolphin/si.h"
+#include "__os.h"
 
 static void __GBAHandler(s32 chan, u32 flag, OSContext* context)
 {

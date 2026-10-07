@@ -1,6 +1,6 @@
 #include "dolphin/gba.h"
 
-static int OnReset(void);
+static int OnReset(BOOL final);
 static void ShortCommandProc(s32 chan);
 
 char* __GBAVersion                           = "<< Dolphin SDK - GBA\trelease build: Dec  3 2003 18:41:55 (0x2301) >>";
@@ -84,7 +84,7 @@ int GBAReset(s32 chan, u8* statusPtr)
 	return (status != 0) ? status : __GBASync(chan);
 }
 
-static int OnReset(void)
+static int OnReset(BOOL final)
 {
 	__GBAReset = TRUE;
 	return 1;
