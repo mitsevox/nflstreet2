@@ -11886,7 +11886,7 @@
     {
       "source": "src/game/cu_8006F810.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional 37-function grouping; eight complete 52-byte bodies with individual neutral name/source-form rows and external one-byte access footprints. Accepted C signatures are preserved, including unused int at 0x800711DC. No storage emitted; 29 other functions and all storage remain original/unmeasured; entire original assembly remains linked.",
+      "evidence": "evidence.tsv retained open/provisional37-function grouping; twelve complete240-byte bodies with individual neutral name/source-form rows and external one-byte access footprints. Canonical callee and vector declarations reused. No storage emitted;25 other functions and all storage remain original/unmeasured; entire original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -11907,6 +11907,11 @@
           "end": "0x8006F824"
         },
         {
+          "symbol": "fn_8006F824",
+          "start": "0x8006F824",
+          "end": "0x8006F850"
+        },
+        {
           "symbol": "fn_800711DC",
           "start": "0x800711DC",
           "end": "0x800711E0"
@@ -11925,6 +11930,21 @@
           "symbol": "fn_80071790",
           "start": "0x80071790",
           "end": "0x80071794"
+        },
+        {
+          "symbol": "fn_80071974",
+          "start": "0x80071974",
+          "end": "0x800719A4"
+        },
+        {
+          "symbol": "fn_800719A4",
+          "start": "0x800719A4",
+          "end": "0x800719D4"
+        },
+        {
+          "symbol": "fn_800719D4",
+          "start": "0x800719D4",
+          "end": "0x80071A04"
         },
         {
           "symbol": "fn_80071C2C",
