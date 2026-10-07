@@ -8836,6 +8836,7 @@
       ],
       "provenance": {
         "pull_request": 465,
+        "merged_via": 465,
         "commit": "7872d50470ab3dfb0ea5084ebdad5afe31ba4b23",
         "introduced_blob": "645a6f90e41a1aefbd2f1eaed3f23518f5a3b3bb"
       }
