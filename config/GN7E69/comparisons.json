@@ -10425,6 +10425,41 @@
       ]
     },
     {
+      "source": "src/game/bitstream.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80190ED4-0x80191200 (src/game/bitstream.cpp), its four exact function extents, the related NASCAR 2005 name rows for the first three functions and the compiler and source-form rows. The file has no data sections. Draft comparisons only; the original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80190ED4",
+          "end": "0x80191200"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OpenBitStream__FP11BitStream_tPv15BitStreamMode_t",
+          "start": "0x80190ED4",
+          "end": "0x80190EF0"
+        },
+        {
+          "symbol": "CloseBitStream__FP11BitStream_t",
+          "start": "0x80190EF0",
+          "end": "0x80190F18"
+        },
+        {
+          "symbol": "ReadBitStream__FP11BitStream_tUi",
+          "start": "0x80190F18",
+          "end": "0x80191068"
+        },
+        {
+          "symbol": "fn_80191068",
+          "start": "0x80191068",
+          "end": "0x80191200"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80041930.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row 0x80041930-0x80042F54 (src/game/cu_80041930.cpp), its compiler, type and source-form rows, the 27 exact function extents and the exact data rows 0x8028D408-0x8028D438 (.rodata), 0x802CCDDC-0x802CCF30 (.data) and 0x803EA490-0x803EA494 (.sdata). Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
