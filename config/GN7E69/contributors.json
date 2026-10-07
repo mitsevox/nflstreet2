@@ -8194,6 +8194,54 @@
         "commit": "80d0d5f176dc098be5c1c7e41c5a975c4388c593",
         "introduced_blob": "8f1230ec6271a0cd2a1eade0da401ecfd5760911"
       }
+    },
+    {
+      "source": "src/game/cu_8017D0E0.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8017D0E0"
+      ],
+      "provenance": {
+        "pull_request": 443,
+        "merged_via": 443,
+        "commit": "c9c67cefd428303c16a3bc6c0c997d1953a8b0b4",
+        "introduced_blob": "c29c17b29206eb4e4549578bf52313da22ae7ae9"
+      }
+    },
+    {
+      "source": "src/game/SndgPathfinder.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80069398",
+        "0x8006E370",
+        "0x8006E3F0",
+        "0x8006E78C"
+      ],
+      "provenance": {
+        "pull_request": 443,
+        "merged_via": 443,
+        "commit": "6e379d85355d583701b9c8b1cf5a0006f5d2cd6e",
+        "introduced_blob": "b1e1462dde48d31eeacb6ba5565546bff3ad5a4f"
+      }
+    },
+    {
+      "source": "src/game/cu_80181330.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8018399C"
+      ],
+      "provenance": {
+        "pull_request": 443,
+        "merged_via": 443,
+        "commit": "aba19d2e55b383755058b4adc45b0d9941b2c374",
+        "introduced_blob": "ee4f73502abb0fecfc93ef60349555fd07cb10b7"
+      }
     }
   ],
   "target": "GN7E69",

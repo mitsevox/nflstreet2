@@ -1436,7 +1436,8 @@ int fn_8018399C(unsigned int id, Arg_8018399C *pArgs, int unused, Arg_8018399C *
         fn_80181EAC(pArgs[0].i, pArgs[1].pi, pArgs[2].pi, pArgs[3].pi);
         break;
     case 0x95:
-        fn_80181F60(pArgs[0].i, &pArgs[1].pi[pArgs[1].pi[0] + 1], pArgs[2].pi, pArgs[3], pArgs[4], pArgs[5]);
+        fn_80181F60(pArgs[0].i, (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4), pArgs[2].pi, pArgs[3], pArgs[4],
+                    pArgs[5]);
         break;
     case 0x15:
         fn_801820A0(pArgs[0].i, pArgs[1].pi, pArgs[2].pi, pArgs[3].pi, pArgs[4], pArgs[5].pi, pArgs[6].pi,

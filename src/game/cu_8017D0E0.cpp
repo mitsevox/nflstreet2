@@ -53,19 +53,18 @@ static char lbl_803ECB3C[4];
 
 extern "C" {
 
-#if defined(DECOMP_COMPARE)
 /* Returns the slot of controller id: in modes above 1, controllers whose
    fn_800B6644 value is 1 fill the slots from the front and those with 0 from
    the back; otherwise each controller keeps its own index. */
 unsigned char fn_8017D0E0(int id)
 {
-    unsigned char order[4];
+    char order[4];
     int first = 0;
     int last = 3;
     unsigned char i;
 
     for (i = 0; i <= 3; i++) {
-        order[i] = 0xFF;
+        order[i] = -1;
     }
     for (i = 0; i <= 3; i++) {
         int index = fn_80188044(i);
@@ -86,13 +85,12 @@ unsigned char fn_8017D0E0(int id)
         }
     }
     for (i = 0; i <= 3; i++) {
-        if (order[i] == id) {
+        if ((unsigned char)order[i] == id) {
             return i;
         }
     }
     return 0;
 }
-#endif
 
 int fn_8017D1D0(unsigned char id)
 {

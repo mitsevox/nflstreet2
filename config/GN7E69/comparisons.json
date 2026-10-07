@@ -1890,7 +1890,7 @@
     {
       "source": "src/game/SndgPathfinder.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80068154-0x8006F1F4 for src/game/SndgPathfinder.cpp, its 160 exact function extents, exact data rows for every initialized placement and the source-form rows that state the remaining differences. Draft comparisons only; the original assembly remains linked until the whole unit reproduces the target in the complete source build.",
+      "evidence": "evidence.tsv unit row 0x80068154-0x8006F1F4 for src/game/SndgPathfinder.cpp, its 160 exact function extents, exact data rows for every initialized placement and the source-form rows that state the remaining differences. The discarded entry UpdateGameSituation follows the linker row for this unit (Xbox 0x1AA590); it is compiled with the file but not measured. Draft comparisons only; the original assembly remains linked until the whole unit reproduces the target in the complete source build.",
       "sections": [
         {
           "section": ".text",
@@ -2742,6 +2742,9 @@
           "start": "0x8006F1C8",
           "end": "0x8006F1F4"
         }
+      ],
+      "discarded": [
+        "UpdateGameSituation"
       ]
     },
     {
@@ -3783,50 +3786,6 @@
           "symbol": "fn_8017417C",
           "start": "0x8017417C",
           "end": "0x8017419C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8017D0E0.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017D0E0-0x8017DD68 (src/game/cu_8017D0E0.cpp), function row 0x8017D0E0-0x8017D1D0 and source-form row 0x8017D0E0-0x8017DD68.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8017D0E0",
-          "end": "0x8017DD68"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A57B4",
-          "end": "0x802A57BC"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB468",
-          "end": "0x803EB48C"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x80362964",
-          "end": "0x803629E8"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ECB3C",
-          "end": "0x803ECB40"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8017D0E0",
-          "start": "0x8017D0E0",
-          "end": "0x8017D1D0"
         }
       ]
     },
