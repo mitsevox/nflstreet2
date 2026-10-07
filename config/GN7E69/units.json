@@ -1059,6 +1059,30 @@
     "DVDReadAbsAsyncPrio": {
       "address": "0x80241080",
       "evidence": "evidence.tsv DVDfs actual retained branch operands and canonical shared declaration; target implementation remains original bytes."
+    },
+    "DVDReadAbsAsyncForBS": {
+      "address": "0x8024115C",
+      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
+    },
+    "DVDReset": {
+      "address": "0x8024148C",
+      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
+    },
+    "DVDReadDiskID": {
+      "address": "0x8024122C",
+      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
+    },
+    "OSGetArenaHi": {
+      "address": "0x802399F8",
+      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
+    },
+    "DVDGetDriveStatus": {
+      "address": "0x8024151C",
+      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
+    },
+    "OSSetArenaHi": {
+      "address": "0x80239A08",
+      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
     }
   },
   "units": [

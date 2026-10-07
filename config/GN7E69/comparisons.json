@@ -14664,6 +14664,55 @@
         "GXReadClksPerVtx",
         "__GXSetBWDials"
       ]
+    },
+    {
+      "source": "src/dolphin/dvd/fstload.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete genuine dolsdk2328b416 source2bodies, callback216exact and loader360target/336native honestpartial; current canonicalheaders/libraryprofile unchanged. No casts/directives/exclusions.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80242048",
+          "end": "0x80242288"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FD858",
+          "end": "0x802FD8C8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC1E0",
+          "end": "0x803EC1EB"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A55F8",
+          "end": "0x803A5668"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED178",
+          "end": "0x803ED184"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "cb",
+          "start": "0x80242048",
+          "end": "0x80242120"
+        },
+        {
+          "symbol": "__fstLoad",
+          "start": "0x80242120",
+          "end": "0x80242288"
+        }
+      ]
     }
   ]
 }

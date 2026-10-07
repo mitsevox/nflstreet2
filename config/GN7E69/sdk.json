@@ -816,7 +816,7 @@
       "name": "src/dolphin/dvd/fstload.c",
       "source": "src/dolphin/dvd/fstload.c",
       "library": "DVD",
-      "evidence": "cb unique 216-byte fingerprint at42048; target next360-byte function handles FST loading. Adjacent dvdlow start independently anchored. Original source object edges inferred.",
+      "evidence": "Full2body faithful donor; actualwhole576target mapped, callbackexact/loaderpartial and123initialized exact, originalarchive edgesprovisional.",
       "sections": [
         {
           "section": ".text",
@@ -824,7 +824,43 @@
           "end": "0x80242288",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "cb unique 216-byte fingerprint at42048; target next360-byte function handles FST loading. Adjacent dvdlow start independently anchored. Original source object edges inferred."
+          "evidence": "Complete actual native allocated pool/layout; initialized measured123, NOBITS124 actualreference/allocation only, no adjacentstorage absorption."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FD858",
+          "end": "0x802FD8C8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Complete actual native allocated pool/layout; initialized measured123, NOBITS124 actualreference/allocation only, no adjacentstorage absorption.",
+          "object_seed": true
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC1E0",
+          "end": "0x803EC1EB",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Complete actual native allocated pool/layout; initialized measured123, NOBITS124 actualreference/allocation only, no adjacentstorage absorption.",
+          "object_seed": true
+        },
+        {
+          "section": ".bss",
+          "start": "0x803A55F8",
+          "end": "0x803A5668",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Complete actual native allocated pool/layout; initialized measured123, NOBITS124 actualreference/allocation only, no adjacentstorage absorption.",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED178",
+          "end": "0x803ED184",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Complete actual native allocated pool/layout; initialized measured123, NOBITS124 actualreference/allocation only, no adjacentstorage absorption.",
+          "object_seed": true
         }
       ]
     },
