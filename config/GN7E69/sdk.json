@@ -1618,7 +1618,7 @@
           "end": "0x8024CB90",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 15 uniquely located function anchors in this interval; target has a function entry at 0x8024C038, previous instruction is blr, and previous interval ends at 0x8024CB90 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+          "evidence": "Sixteen independently reviewed functions span8024C038..8024C7D8 (1952bytes) and are linked from complete BFBB source. Remaining8024C7D8..8024CB90 is only a provisional GX family/file partition; no remaining body or dSDK Clean tail is promoted or claimed reconstructed."
         }
       ]
     },
