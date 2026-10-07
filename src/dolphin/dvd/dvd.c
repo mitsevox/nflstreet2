@@ -826,7 +826,6 @@ static void stateBusy(DVDCommandBlock* block)
 }
 
 static u32 ImmCommand[] = { 0xffffffff, 0xffffffff, 0xffffffff };
-/* Somehow this got included even though the function is stripped? O.o */
 static char string_DVDChangeDiskAsyncMsg[] =
     "DVDChangeDiskAsync(): You can't specify NULL to company name.  \n";
 static u32 DmaCommand[] = { 0xffffffff };
@@ -1260,8 +1259,6 @@ BOOL DVDCancelAsync(DVDCommandBlock* block, DVDCBCallback callback)
 {
     BOOL enabled;
     DVDLowCallback old;
-    DVDCommandBlock*
-        finished; // needed for stack? maybe it actually gets used but not bothered to figure that out
 
     enabled = OSDisableInterrupts();
 
