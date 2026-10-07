@@ -1,11 +1,11 @@
 #include <dolphin/pad.h>
-#include <dolphin/sipriv.h>
+#include <dolphin/os.h>
+#include <string.h>
 #include <dolphin/si.h>
 
 const char* __PADVersion = "<< Dolphin SDK - PAD\trelease build: Apr 17 2003 12:33:44 (0x2301) >>";
 
-u8 UnkVal : (OS_BASE_CACHED | 0x30E3);
-u16 __OSWirelessPadFixMode : (OS_BASE_CACHED | 0x30E0);
+
 
 static void PADTypeAndStatusCallback(s32 chan, u32 type);
 static void PADOriginCallback(s32 chan, u32 error, OSContext* context);
@@ -293,7 +293,6 @@ static void PADReceiveCheckCallback(s32 chan, u32 type)
     }
 }
 
-#pragma push
 
 BOOL PADReset(u32 mask)
 {
@@ -338,7 +337,7 @@ BOOL PADRecalibrate(u32 mask)
     disableBits = ResettingBits & EnabledBits;
     EnabledBits &= ~mask;
 
-    if (!(UnkVal & 0x40))
+    if (!(__gUnknown800030E3 & 0x40))
     {
         RecalibrateBits |= mask;
     }
@@ -387,11 +386,9 @@ BOOL PADInit()
     SIRefreshSamplingRate();
     OSRegisterResetFunction(&ResetFunctionInfo);
 
-#pragma inline all
     return PADReset((PAD_CHAN0_BIT | PAD_CHAN1_BIT | PAD_CHAN2_BIT | PAD_CHAN3_BIT));
 }
 
-#define offsetof(type, memb) ((u32) & ((type*)0)->memb)
 
 u32 PADRead(PADStatus* status)
 {
@@ -509,7 +506,6 @@ u32 PADRead(PADStatus* status)
     return motor;
 }
 
-#pragma pop
 
 void PADControlMotor(s32 chan, u32 command)
 {
@@ -792,11 +788,11 @@ BOOL __PADDisableRecalibration(BOOL disable)
     BOOL prev;
 
     enabled = OSDisableInterrupts();
-    prev = (UnkVal & 0x40) ? TRUE : FALSE;
-    UnkVal &= 0xbf;
+    prev = (__gUnknown800030E3 & 0x40) ? TRUE : FALSE;
+    __gUnknown800030E3 &= 0xbf;
     if (disable)
     {
-        UnkVal |= 0x40;
+        __gUnknown800030E3 |= 0x40;
     }
     OSRestoreInterrupts(enabled);
     return prev;
