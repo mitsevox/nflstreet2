@@ -198,7 +198,7 @@ void FMCAPPORT::Update()
         }
         break;
     case 6:
-        state->mUnknown4084 = new (0) Class_8008B284;
+        state->mObject.mpUnknown1636 = new (0) Class_8008B284;
         fn_8008AAD0(object);
         mpState.mp->mState = 7;
         break;
@@ -207,8 +207,8 @@ void FMCAPPORT::Update()
             fn_8008ABA4(object);
             fn_801999B0(object);
             fn_8008AA9C(object);
-            delete mpState.mp->mUnknown4084;
-            mpState.mp->mUnknown4084 = 0;
+            delete mpState.mp->mObject.mpUnknown1636;
+            mpState.mp->mObject.mpUnknown1636 = 0;
             mpState.mp->mCount--;
             mpState.mp->mState = 2;
         }

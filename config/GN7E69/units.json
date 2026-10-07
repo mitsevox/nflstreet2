@@ -6888,6 +6888,49 @@
       ]
     },
     {
+      "source": "src/game/cu_80198C54.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80198C54-0x80199C94 (src/game/cu_80198C54.cpp) and its data and source-form rows. The linked range ends at 0x80199A68; the last three functions are draft comparisons (comparisons.json) and their original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80198C54",
+          "end": "0x80199A68"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADB40",
+          "end": "0x802ADB94"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EDF8C",
+          "end": "0x802EDFA4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB770",
+          "end": "0x803EB778"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80365298",
+          "end": "0x80365378"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECBE4",
+          "end": "0x803ECBE8"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80067F18.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80067F18-0x80068154 (src/game/cu_80067F18.cpp) and its data, compiler and source-form rows.",
