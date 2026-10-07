@@ -1892,51 +1892,33 @@
       "name": "src/dolphin/gx/GXPixel.c",
       "source": "src/dolphin/gx/GXPixel.c",
       "library": "GX",
-      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "evidence": "BFBB 8fb1c232 full twelve-function native unit reproduces all target code, p2f table and complete constant pool under the existing profile. Original archive-member edges remain provisional.",
       "sections": [
-        {
-          "section": ".data6",
-          "start": "0x803ED950",
-          "end": "0x803ED95C",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "evidence": "Retained GXPixel fog calculations at 0x80251D34, 0x80251D48, 0x80251D7C and 0x80251D80 reference local float/double constants corroborated by pinned native donor types and bytes. Independent target-reference review excludes alignment gaps, weak globals and unused constants.",
-          "object_seed": true
-        },
-        {
-          "section": ".data6",
-          "start": "0x803ED960",
-          "end": "0x803ED96C",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "evidence": "Retained GXPixel fog calculations at 0x80251D34, 0x80251D48, 0x80251D7C and 0x80251D80 reference local float/double constants corroborated by pinned native donor types and bytes. Independent target-reference review excludes alignment gaps, weak globals and unused constants.",
-          "object_seed": true
-        },
-        {
-          "section": ".data6",
-          "start": "0x803ED970",
-          "end": "0x803ED97C",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "evidence": "Retained GXPixel fog calculations at 0x80251D34, 0x80251D48, 0x80251D7C and 0x80251D80 reference local float/double constants corroborated by pinned native donor types and bytes. Independent target-reference review excludes alignment gaps, weak globals and unused constants.",
-          "object_seed": true
-        },
-        {
-          "section": ".data6",
-          "start": "0x803ED980",
-          "end": "0x803ED988",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "evidence": "Retained GXPixel fog calculations at 0x80251D34, 0x80251D48, 0x80251D7C and 0x80251D80 reference local float/double constants corroborated by pinned native donor types and bytes. Independent target-reference review excludes alignment gaps, weak globals and unused constants.",
-          "object_seed": true
-        },
         {
           "section": ".text",
           "start": "0x80251CEC",
           "end": "0x80252334",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 11 uniquely located function anchors in this interval; target has a function entry at 0x80251CEC, previous instruction is blr, and previous interval ends at 0x80252334 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes. Start0x80251CEC takes fog mode bits plus start/end/near/far floats, branches by projection bit, computes fog A/B/C and emits BP fog registers. Followed by uniquely fingerprinted GXSetFogRangeAdj0x80251F10. No compiler-equivalence claim for the fog body."
+          "evidence": "BFBB 8fb1c232 full twelve-function native unit reproduces all target code, p2f table and complete constant pool under the existing profile. Original archive-member edges remain provisional."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FEE80",
+          "end": "0x802FEEA0",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "object_seed": true,
+          "evidence": "Complete unchanged BFBB native table/constant allocation, target accesses and all initialized bytes establish this extent; see evidence.tsv GXPixel data rows. Native constant alignment bytes are preserved without invented source padding."
+        },
+        {
+          "section": ".data6",
+          "start": "0x803ED950",
+          "end": "0x803ED988",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "object_seed": true,
+          "evidence": "Complete unchanged BFBB native table/constant allocation, target accesses and all initialized bytes establish this extent; see evidence.tsv GXPixel data rows. Native constant alignment bytes are preserved without invented source padding."
         }
       ]
     },
@@ -2202,14 +2184,14 @@
       "name": "src/dolphin/card/CARDUnlock.c",
       "source": "src/dolphin/card/CARDUnlock.c",
       "library": "CARD",
-      "evidence": "Six distinct retained donor functions continuously cover4704bytes, followed by independently accepted Rdwr.",
+      "evidence": "Six retained SDK functions and unchanged native CardData firmware/random state resolve completely; original archive-member ownership remains provisional.",
       "sections": [
         {
           "section": ".data4",
           "start": "0x802FF080",
           "end": "0x802FF1E0",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
           "evidence": "CARDUnlock forms 802FF080 at 80259708, converts it to a physical DSP task pointer at 8025970C/80259710, and stores length 352 at 80259714/8025971C. The full donor CardData u8[352] equals the target.",
           "object_seed": true
         },
@@ -2219,7 +2201,15 @@
           "end": "0x80259B08",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Six distinct retained donor functions continuously cover4704bytes, followed by independently accepted Rdwr."
+          "evidence": "Six retained SDK functions and unchanged native CardData firmware/random state resolve completely; original archive-member ownership remains provisional."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC2C8",
+          "end": "0x803EC2CC",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Native initialized four-byte random state equals target word 1; retained target operands establish its address. See evidence.tsv next data row."
         }
       ]
     },
