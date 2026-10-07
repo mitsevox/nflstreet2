@@ -1,7 +1,7 @@
 /* Event list of the replay object (lbl_803EA368): 60 slots at +0xDFC that
-   record an event id with a time stamp, a position, a facing value and a
-   player. The replay code in src/game/cu_8002B8F8.cpp adds and queries
-   events through these functions. Neutral file name; the whole file is a
+   record an event id with the fn_8023790C value, a position, a facing
+   value and a player. The replay code in src/game/cu_8002B8F8.cpp adds and
+   queries events through these functions. Neutral file name; the whole file is a
    draft compiled only for comparison. */
 #include "game/cu_8002B8F8.h"
 
@@ -16,7 +16,7 @@ extern "C" {
 int fn_8002D0AC(Type_803EA368 *p);
 int fn_8002D0D0(Type_803EA368 *p);
 int fn_8002D158(Type_803EA368 *p);
-int fn_8011F1A4(Object_80039F5C *p);
+int fn_8011F1A4(void);
 int fn_8023790C(void);
 
 unsigned int fn_8003108C(Type_803EA368 *p, int id);
@@ -172,7 +172,7 @@ int fn_80031328(Type_803EA368 *p, int id)
 
 void fn_80031404(Object_80039F5C *p)
 {
-    if (fn_8011F1A4(p) || !p->mUnknown2914) {
+    if (fn_8011F1A4() || !p->mUnknown2914) {
         fn_800310C0(lbl_803EA368, 0x13, p, &p->mMotion.mPos, 0);
     }
 }
