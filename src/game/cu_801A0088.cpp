@@ -62,9 +62,9 @@ void fn_80252114(int);
 void fn_802520E0(int, int, int);
 void fn_80251A58(int, int, int, int, int);
 void fn_80251B28(int, int, int, int);
-void fn_802503D8(GXTexObj *, int);
-void fn_80250654(GXTlutObj *, int);
-void fn_802505A8(GXTexObj *, int);
+extern "C" void GXInitTexObjTlut(GXTexObj *, int);
+extern "C" void GXLoadTlut(GXTlutObj *, int);
+extern "C" void GXLoadTexObj(GXTexObj *, int);
 void fn_8025251C(Mtx44, int);
 void fn_80252034(int, int, int, int);
 }
@@ -74,8 +74,8 @@ extern "C" int fn_801A0088(int)
     fn_80251CC4(1);
     Entry_801A0088 *p = lbl_80365534;
     for (unsigned int i = 0; i <= 7; ++i, ++p) {
-        if (p->mpPalette) { fn_802503D8(p->mpTexture, i); fn_80250654(&p->mpPalette->mUnknown4, i); }
-        fn_802505A8(p->mpTexture, i);
+        if (p->mpPalette) { GXInitTexObjTlut(p->mpTexture, i); GXLoadTlut(&p->mpPalette->mUnknown4, i); }
+        GXLoadTexObj(p->mpTexture, i);
     }
     return 0;
 }

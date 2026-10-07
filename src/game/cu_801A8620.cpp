@@ -4,6 +4,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8020E52C.h"
 #include "game/Object_80233EAC.h"
+#include "game/cu_801442FC.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EF390.h"
@@ -45,7 +46,7 @@ struct Packet_801A8620 {
 struct Instance_801A8D9C {
     Cache_801A8D9C *mpUnknown0; Context_801A8620 mUnknown4;
     Packet_801A8620 mUnknownC; unsigned char mUnknownF8[4];
-    unsigned char mUnknownFC[12]; float mUnknown108[2];
+    unsigned char mUnknownFC[12]; Tracker_801442FC mUnknown108;
 };
 struct Pose_801A8B84 { unsigned char mUnknown0[8]; Vector_80039F5C mUnknown8; unsigned char mUnknown14[0x4C]; Vector_80039F5C mUnknown60; };
 struct Env_801A8D9C { void *mpUnknown0; };
@@ -113,7 +114,6 @@ int fn_8004D5B8(int, const char *, char *, int); void fn_8004D498(int);
 int fn_8004D4B0(int, const char *); int fn_8004D508(int, const char *);
 void fn_8004E090(Object_801A8620 *, int, int);
 int fn_801F0A8C(void *, const char *); char *fn_801C310C(char *, const char *);
-void fn_801442FC(float *);
 void fn_8024FB58(int, GXColor); void fn_8024FC48(int); void fn_8024FC84(int, int, int, int, int, int, int);
 void fn_80251A58(int, int, int, int, int); void fn_80252114(int); void fn_802520E0(int, int, int);
 void fn_8024EB28(int); void fn_8024DF64(int); void fn_80251CC4(int); void fn_80251B28(int, int, int, int);
@@ -134,7 +134,7 @@ int fn_801A8620(Object_801A8620 *p, int arg)
     Instance_801A8D9C *s = p->mpUnknown12C;
     Model_801A8620 *model = s->mUnknownC.mpUnknownC;
     fn_801C657C();
-    int value = fn_801A854C(s->mUnknown108,p->mpUnknown14C);
+    int value = fn_801A854C(&s->mUnknown108,p->mpUnknown14C);
     copy=color; fn_8024FB58(0,copy); fn_8024FC48(1);
     fn_8024FC84(0,1,0,0,value,2,2); fn_8024FC84(2,0,0,0,value,0,2);
     fn_80251A58(6,16,0,7,0); fn_80252114(0); fn_802520E0(1,3,1); fn_8024EB28(1);
@@ -280,7 +280,7 @@ void fn_801A8D9C(void *data,int handle,Object_801A8620 *p)
     } else fn_80233BB8(s->mUnknownFC,0,1);
     fn_8004E090(p,0,0);p->mUnknownE8.mWord=1;
     if(fn_8004D5B8(handle,"tideEnvMapRef",name,256))p->mUnknownE8.mWord=2;
-    p->mUnknown14=fn_801A8620;fn_801442FC(s->mUnknown108);
+    p->mUnknown14=fn_801A8620;fn_801442FC(&s->mUnknown108);
 }
 void fn_801A9184(Object_801A8620 *p)
 {

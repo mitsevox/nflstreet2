@@ -74,8 +74,8 @@ void fn_8024D418(void);
 void fn_8024D450(int a, int b, int c, int d, int e);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_802505A8(GXTexObj *pObj, int a);
-void fn_80250654(GXTlutObj *pObject, int a);
+extern "C" void GXLoadTexObj(GXTexObj *pObj, int a);
+extern "C" void GXLoadTlut(GXTlutObj *pObject, int a);
 void fn_80251604(int a, int b);
 void fn_80251690(int a, int b, int c, int d, int e);
 void fn_802516D4(int a, int b, int c, int d, int e);
@@ -179,8 +179,8 @@ int fn_80196564(Object_80144CE0 *pEmitter, int mode)
         GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
         fn_801962CC(pEmitter->mUnknown60);
         if (pEmitter->mUnknown45 && pTexture) {
-            fn_80250654(&pTexture->mTlutObj, 0);
-            fn_802505A8(&pTexture->mTexObj, 0);
+            GXLoadTlut(&pTexture->mTlutObj, 0);
+            GXLoadTexObj(&pTexture->mTexObj, 0);
             fn_8021077C(lbl_803EB744);
             fn_8024D418();
             fn_8024CB90(9, 1);

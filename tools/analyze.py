@@ -114,7 +114,7 @@ def sdk_data_seeds(sdk_units, source_units):
         f"sdk_data_{extent['start'][2:]} = {extent['section']}:{extent['start']}; "
         f"// type:object size:0x{int(extent['end'], 16) - int(extent['start'], 16):X}\n"
         for unit in sdk_units for extent in unit["sections"]
-        if extent["section"] not in (".text", ".init") and (extent.get("object_seed") or
+        if extent["section"] not in (".text", ".init") and extent.get("object_seed",
         (unit.get("source"), extent["section"], extent["start"], extent["end"]) in accepted))
 
 

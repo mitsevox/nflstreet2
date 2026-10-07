@@ -1,3 +1,4 @@
+#include <dolphin/vi.h>
 #include "game/Entry_80219044.h"
 #include "engine/cu_80227F14.h"
 #include "game/fn_801801F0.h"
@@ -64,7 +65,6 @@ void fn_80239CEC(int a, int b);
 int fn_8023CF60(void);
 void fn_8023CFD0(int a);
 int fn_8024151C(void);
-int fn_80244C60(void);
 }
 
 /* Filled by fn_801E17D0; the byte array at +8 is indexed by lbl_803ED5EC + 1. */
@@ -139,7 +139,7 @@ static void fn_800242AC(void)
         }
     }
     fn_801D2BD0(pState);
-    if (fn_80244C60() && found) {
+    if (VIGetDTVStatus() && found) {
         void *p;
 
         fn_801801F0(1);

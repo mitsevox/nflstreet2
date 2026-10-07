@@ -86,8 +86,8 @@ int fn_800A33B8(void);
 int fn_800A3444(void);
 float fn_800A33C4(void);
 float fn_800A33F4(void);
-void fn_80250654(GXTlutObj *, int);
-void fn_802505A8(GXTexObj *, int);
+extern "C" void GXLoadTlut(GXTlutObj *, int);
+extern "C" void GXLoadTexObj(GXTexObj *, int);
 void fn_801D1288(int, void *);
 void fn_80214140(int);
 void fn_801D131C(int);
@@ -433,8 +433,8 @@ void fn_801A7880(void) {
   if (!lbl_803ECC34)
     return;
   lbl_803ECC50 = -1;
-  fn_80250654(&lbl_803ECC4C->mUnknown9C, 0);
-  fn_802505A8(&lbl_803ECC4C->mUnknown7C, 0);
+  GXLoadTlut(&lbl_803ECC4C->mUnknown9C, 0);
+  GXLoadTexObj(&lbl_803ECC4C->mUnknown7C, 0);
   fn_801D0470(fn_80228668());
   Mtx44 matrix;
   fn_801D1288(2, matrix);

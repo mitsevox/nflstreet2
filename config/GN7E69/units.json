@@ -88,10 +88,6 @@
       "address": "0x8023B21C",
       "evidence": "evidence.tsv external row: sampling-rate target call, validated callee behavior and SDK reference."
     },
-    "VIGetTvFormat": {
-      "address": "0x80244BF8",
-      "evidence": "evidence.tsv external row: sampling-rate target call, validated callee behavior and SDK reference."
-    },
     "OSReport": {
       "address": "0x8023AB48",
       "evidence": "evidence.tsv external row: sampling-rate target call, validated callee behavior and SDK reference."
@@ -232,14 +228,6 @@
       "address": "0x80253FD4",
       "evidence": "evidence.tsv retained CARD external __CARDWritePage: target callback and scheduler calls."
     },
-    "ARStartDMA": {
-      "address": "0x80248220",
-      "evidence": "evidence.tsv ARAM queue external row: target call operand and independently inspected SDK callee role."
-    },
-    "ARRegisterDMACallback": {
-      "address": "0x802481A0",
-      "evidence": "evidence.tsv ARAM queue external row: target call operand and independently inspected SDK callee role."
-    },
     "__AXSetPBDefault": {
       "address": "0x80288DEC",
       "evidence": "Target AXFreeVoice/AXAcquireVoice direct branch destinations, SDK default parameter-block behavior at callee."
@@ -286,10 +274,6 @@
     },
     "OSSetWirelessID": {
       "address": "0x8023D0F8",
-      "evidence": "evidence.tsv SIBios external row: target call relocation and related SDK declaration."
-    },
-    "VIGetCurrentLine": {
-      "address": "0x80244B60",
       "evidence": "evidence.tsv SIBios external row: target call relocation and related SDK declaration."
     },
     "OSInitThreadQueue": {
@@ -378,10 +362,6 @@
     },
     "__GXData": {
       "address": "0x803ED840",
-      "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
-    },
-    "__GXSetSUTexRegs": {
-      "address": "0x80250C8C",
       "evidence": "evidence.tsv GXGeometry external row: target branch destination or SDA-relative load operand; SDK source supplies reference-derived name and role."
     },
     "__GXSetVCD": {
@@ -939,6 +919,174 @@
     "memmove": {
       "address": "0x801C2030",
       "evidence": "evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
+    },
+    "__shr2u": {
+      "address": "0x801AD46C",
+      "evidence": "evidence.tsv actual target retained relocation and pinned donor declaration rows."
+    },
+    "__shl2i": {
+      "address": "0x801AD474",
+      "evidence": "evidence.tsv actual target retained relocation and pinned donor declaration rows."
+    },
+    "OSPanic": {
+      "address": "0x8023ABC8",
+      "evidence": "evidence.tsv actual target retained relocation and pinned donor declaration rows."
+    },
+    "vprintf": {
+      "address": "0x802622DC",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "OSGetStackPointer": {
+      "address": "0x8023A6EC",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "PPCHalt": {
+      "address": "0x8023877C",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "PPCMfmsr": {
+      "address": "0x8023873C",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "PPCMtmsr": {
+      "address": "0x80238744",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "PPCMffpscr": {
+      "address": "0x802387C0",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "PPCMtfpscr": {
+      "address": "0x802387E0",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "OSSaveFPUContext": {
+      "address": "0x8023A524",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "OSDisableScheduler": {
+      "address": "0x8023D5F0",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "OSEnableScheduler": {
+      "address": "0x8023D630",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "__OSReschedule": {
+      "address": "0x8023DB4C",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "OSLoadContext": {
+      "address": "0x8023A614",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "OSDumpContext": {
+      "address": "0x8023A7D4",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "__OSLastInterrupt": {
+      "address": "0x803ED090",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "__OSLastInterruptSrr0": {
+      "address": "0x803ED08C",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "__OSLastInterruptTime": {
+      "address": "0x803ED098",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "PPCSync": {
+      "address": "0x80238774",
+      "evidence": "Actual retained AR native relocation resolves target0x80238774; pinned related SDK declaration; original symbol name not claimed."
+    },
+    "_stack_addr": {
+      "address": "0x803FE4C0",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "_stack_end": {
+      "address": "0x803EE4C0",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "OSGetCurrentContext": {
+      "address": "0x8023A588",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "OSSaveContext": {
+      "address": "0x8023A594",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "OSEnableInterrupts": {
+      "address": "0x8023B208",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "OSInitContext": {
+      "address": "0x8023A718",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "__OSErrorTable": {
+      "address": "0x803A3A70",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "__OSFpscrEnableBits": {
+      "address": "0x803EC160",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "OSGetCurrentThread": {
+      "address": "0x8023D5E4",
+      "evidence": "evidence.tsv OSMutex actual retained target branch operand; existing canonical OSThread source declaration and target implementation."
+    },
+    "__OSPromoteThread": {
+      "address": "0x8023D8D4",
+      "evidence": "evidence.tsv OSMutex actual retained target branch operand; existing canonical OSThread source declaration and target implementation."
+    },
+    "__OSGetEffectivePriority": {
+      "address": "0x8023D6D8",
+      "evidence": "evidence.tsv OSMutex actual retained target branch operand; existing canonical OSThread source declaration and target implementation."
+    },
+    "tolower": {
+      "address": "0x801C1F74",
+      "evidence": "Original target ConvertPath callsites8023EFB4/8023EFC8 both actual branch destination801C1F74; genuine BFBB isSame uses tolower(int), shared canonical libc declaration. Target body semantics still independently reviewed, no linked source imported."
+    },
+    "__cpReg": {
+      "address": "0x803ED35C",
+      "evidence": "evidence.tsv GXPerf original counter access operands establish shared register pointer; genuine pinned SDK declaration."
+    },
+    "DVDCancel": {
+      "address": "0x802418A4",
+      "evidence": "evidence.tsv DVDfs actual retained branch operands and canonical shared declaration; target implementation remains original bytes."
+    },
+    "DVDReadAbsAsyncPrio": {
+      "address": "0x80241080",
+      "evidence": "evidence.tsv DVDfs actual retained branch operands and canonical shared declaration; target implementation remains original bytes."
+    },
+    "DVDReadAbsAsyncForBS": {
+      "address": "0x8024115C",
+      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
+    },
+    "DVDReset": {
+      "address": "0x8024148C",
+      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
+    },
+    "DVDReadDiskID": {
+      "address": "0x8024122C",
+      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
+    },
+    "OSGetArenaHi": {
+      "address": "0x802399F8",
+      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
+    },
+    "DVDGetDriveStatus": {
+      "address": "0x8024151C",
+      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
+    },
+    "OSSetArenaHi": {
+      "address": "0x80239A08",
+      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
+    },
+    "strncmp": {
+      "address": "0x801C302C",
+      "evidence": "Actual original248body REL24 at80241F60/80241F98 length4/2; callee801C302C..3084 bounded NUL stopping byte comparison. Relatedlibc spelling, no originalsource/debugname claim."
     }
   },
   "units": [
@@ -7765,12 +7913,12 @@
     {
       "source": "src/game/cu_8019B460.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019B460-0x8019B644 (src/game/cu_8019B460.cpp) and its two .sdata rows.",
+      "evidence": "evidence.tsv unit row 0x8019B43C-0x8019B644 (src/game/cu_8019B460.cpp) and its two .sdata rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8019B460",
+          "start": "0x8019B43C",
           "end": "0x8019B644"
         },
         {
@@ -8614,6 +8762,307 @@
           "placement": ".data5",
           "start": "0x803EA628",
           "end": "0x803EA62C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800554FC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800554FC-0x80055584 (src/game/cu_800554FC.cpp) and its source-form and compiler rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800554FC",
+          "end": "0x80055584"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80087CBC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80087CBC-0x80087F10 (src/game/cu_80087CBC.cpp) and its .rodata and .data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80087CBC",
+          "end": "0x80087F10"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80294F0C",
+          "end": "0x80294F5C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6C14",
+          "end": "0x802D6C24"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801442FC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801442FC-0x801444D8 (src/game/cu_801442FC.cpp) and its .rodata row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801442FC",
+          "end": "0x801444D8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0398",
+          "end": "0x802A03A8"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXFrameBuf.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv GXFrameBuf source-form/native ownership and individual retained function rows; complete original-layout DOL equality.",
+      "link_roots": {
+        "symbols": [
+          "GXSetDispCopySrc",
+          "GXSetTexCopySrc",
+          "GXSetDispCopyDst",
+          "GXSetTexCopyDst",
+          "GXSetDispCopyFrame2Field",
+          "GXSetCopyClamp",
+          "GXSetDispCopyYScale",
+          "GXSetCopyClear",
+          "GXSetCopyFilter",
+          "GXSetDispCopyGamma",
+          "GXCopyDisp",
+          "GXCopyTex",
+          "GXClearBoundingBox"
+        ],
+        "evidence": "All thirteen target-retained native entrypoints; four other helper bodies remain genuine source and naturally unretained in scoped link; target-present overscan is DECOMP_COMPARE partial."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024ECE4",
+          "end": "0x8024F648"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FE350",
+          "end": "0x802FEAD0"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED868",
+          "end": "0x803ED878"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/vi/vi.c",
+      "profile": "dolphin_release",
+      "evidence": "Pinned BFBB Apr17 VI source, explicit literal diagnostic1908 and dolsdk VIGetDTVStatus; actual native operands/full storage proof. Existing accepted shared declarations reused.",
+      "link_roots": {
+        "symbols": [
+          "__VIGetCurrentPosition",
+          "VISetPreRetraceCallback",
+          "VISetPostRetraceCallback",
+          "__VIInit",
+          "VIInit",
+          "VIWaitForRetrace",
+          "VIConfigure",
+          "VIFlush",
+          "VISetNextFrameBuffer",
+          "VISetBlack",
+          "VIGetNextField",
+          "VIGetCurrentLine",
+          "VIGetTvFormat",
+          "VIGetDTVStatus",
+          "__VIDisplayPositionToXY"
+        ],
+        "evidence": "All native public roots plus ordinary local handler reachability."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802430CC",
+          "end": "0x80244F18"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FD8C8",
+          "end": "0x802FDC98"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A5738",
+          "end": "0x803A5880"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC1F8",
+          "end": "0x803EC201"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED1D0",
+          "end": "0x803ED230"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ar/ar.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv AR whole-source, individual retained-function extents and complete native allocation rows; pinned donor source plus target April-2003 initializer.",
+      "link_roots": {
+        "symbols": [
+          "ARRegisterDMACallback",
+          "ARGetDMAStatus",
+          "ARStartDMA",
+          "ARInit",
+          "ARGetBaseAddress",
+          "__ARClearInterrupt",
+          "__ARGetInterruptStatus"
+        ],
+        "evidence": "Actual seven global retained roots naturally retain two genuine static handler/checksize dependencies, nine complete contiguous functions."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802481A0",
+          "end": "0x80249C78"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDD58",
+          "end": "0x802FDD9C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC238",
+          "end": "0x803EC23C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED2B8",
+          "end": "0x803ED2D8"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXDisplayList.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv complete pinned BFBB file and actual GXCallDisplayList target operands; normal fixed-profile full original-DOL validation.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80252334",
+          "end": "0x802523A4"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSMutex.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv OSMutex pinned donor, actual five target functions and thirteen branch operands; full genuine twelve-body source retained under fixed profile.",
+      "link_roots": {
+        "symbols": [
+          "OSInitMutex",
+          "OSLockMutex",
+          "OSUnlockMutex",
+          "__OSUnlockAllMutex",
+          "OSSignalCond"
+        ],
+        "evidence": "Five contiguous target functions 0x8023BD50..0x8023BFBC; complete native twelve-body source preserved, seven other bodies have no established target identity."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023BD50",
+          "end": "0x8023BFBC"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXTexture.c",
+      "profile": "dolphin_release",
+      "evidence": "Private faithful full donor reference file/current shared headers; all actual target operands and pools independently resolved.",
+      "link_roots": {
+        "symbols": [
+          "GXGetTexBufferSize",
+          "__GetImageTileCount",
+          "GXInitTexObj",
+          "GXInitTexObjCI",
+          "GXInitTexObjLOD",
+          "GXInitTexObjWrapMode",
+          "GXInitTexObjTlut",
+          "GXGetTexObjData",
+          "GXGetTexObjWidth",
+          "GXGetTexObjHeight",
+          "GXGetTexObjFmt",
+          "GXGetTexObjMipMap",
+          "GXLoadTexObjPreLoaded",
+          "GXLoadTexObj",
+          "GXInitTlutObj",
+          "GXGetTlutObjData",
+          "GXGetTlutObjFmt",
+          "GXGetTlutObjNumEntries",
+          "GXLoadTlut",
+          "GXInitTexCacheRegion",
+          "GXInitTexPreLoadRegion",
+          "GXInitTlutRegion",
+          "GXInvalidateTexAll",
+          "GXSetTexRegionCallback",
+          "GXSetTlutRegionCallback",
+          "GXPreLoadEntireTexture",
+          "GXSetTexCoordScaleManually",
+          "__GXSetSUTexRegs",
+          "__GXSetTmemConfig"
+        ],
+        "evidence": "Genuine target public roots; local helpers natural callgraph retention."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024FD3C",
+          "end": "0x8025115C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FEAF0",
+          "end": "0x802FEE08"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC270",
+          "end": "0x803EC2B8"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED8E0",
+          "end": "0x803ED918"
         }
       ]
     }
