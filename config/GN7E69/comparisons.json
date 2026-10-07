@@ -15375,6 +15375,229 @@
           "end": "0x80256730"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800D0474.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv inferred open/open grouping row 0x800D0474-0x800D0D4C, exact function rows of its fourteen registered bodies, and exact .rodata data row 0x80298090-0x80298098 (literals of fn_800D0474 and fn_800D0694). All original bytes and static storage remain linked; bodies are measured only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800D0474",
+          "end": "0x800D0D4C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80298090",
+          "end": "0x80298098"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800D0474",
+          "start": "0x800D0474",
+          "end": "0x800D0550"
+        },
+        {
+          "symbol": "fn_800D0550",
+          "start": "0x800D0550",
+          "end": "0x800D058C"
+        },
+        {
+          "symbol": "fn_800D058C",
+          "start": "0x800D058C",
+          "end": "0x800D0660"
+        },
+        {
+          "symbol": "fn_800D0660",
+          "start": "0x800D0660",
+          "end": "0x800D0694"
+        },
+        {
+          "symbol": "fn_800D0694",
+          "start": "0x800D0694",
+          "end": "0x800D0A38"
+        },
+        {
+          "symbol": "fn_800D0A38",
+          "start": "0x800D0A38",
+          "end": "0x800D0B08"
+        },
+        {
+          "symbol": "fn_800D0B08",
+          "start": "0x800D0B08",
+          "end": "0x800D0B90"
+        },
+        {
+          "symbol": "fn_800D0B90",
+          "start": "0x800D0B90",
+          "end": "0x800D0B98"
+        },
+        {
+          "symbol": "fn_800D0B98",
+          "start": "0x800D0B98",
+          "end": "0x800D0BF4"
+        },
+        {
+          "symbol": "fn_800D0BF4",
+          "start": "0x800D0BF4",
+          "end": "0x800D0C0C"
+        },
+        {
+          "symbol": "fn_800D0C0C",
+          "start": "0x800D0C0C",
+          "end": "0x800D0D00"
+        },
+        {
+          "symbol": "fn_800D0D00",
+          "start": "0x800D0D00",
+          "end": "0x800D0D1C"
+        },
+        {
+          "symbol": "fn_800D0D1C",
+          "start": "0x800D0D1C",
+          "end": "0x800D0D48"
+        },
+        {
+          "symbol": "fn_800D0D48",
+          "start": "0x800D0D48",
+          "end": "0x800D0D4C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800D760C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, exact function rows of its seven registered bodies, and exact .rodata data row 0x8029D790-0x8029D7B0 (literals of fn_800D7BC4 and fn_800D7D78). Four other bodies and all static storage remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800D760C",
+          "end": "0x800D8140"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029D790",
+          "end": "0x8029D7B0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800D760C",
+          "start": "0x800D760C",
+          "end": "0x800D7708"
+        },
+        {
+          "symbol": "fn_800D7708",
+          "start": "0x800D7708",
+          "end": "0x800D77F0"
+        },
+        {
+          "symbol": "fn_800D782C",
+          "start": "0x800D782C",
+          "end": "0x800D78C4"
+        },
+        {
+          "symbol": "fn_800D7A0C",
+          "start": "0x800D7A0C",
+          "end": "0x800D7A18"
+        },
+        {
+          "symbol": "fn_800D7A18",
+          "start": "0x800D7A18",
+          "end": "0x800D7A4C"
+        },
+        {
+          "symbol": "fn_800D7BC4",
+          "start": "0x800D7BC4",
+          "end": "0x800D7D78"
+        },
+        {
+          "symbol": "fn_800D7D78",
+          "start": "0x800D7D78",
+          "end": "0x800D7E9C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800D8A24.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv inferred provisional/open grouping row 0x800D8A24-0x800D949C, exact function rows of its eleven registered bodies, and exact .rodata data row 0x8029D7E8-0x8029D7F8 (literals of fn_800D8E68, fn_800D8F8C and fn_800D9078). fn_800D8A24 and all static storage remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800D8A24",
+          "end": "0x800D949C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029D7E8",
+          "end": "0x8029D7F8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800D8B84",
+          "start": "0x800D8B84",
+          "end": "0x800D8CB4"
+        },
+        {
+          "symbol": "fn_800D8CB4",
+          "start": "0x800D8CB4",
+          "end": "0x800D8D34"
+        },
+        {
+          "symbol": "fn_800D8D34",
+          "start": "0x800D8D34",
+          "end": "0x800D8DD8"
+        },
+        {
+          "symbol": "fn_800D8DD8",
+          "start": "0x800D8DD8",
+          "end": "0x800D8E68"
+        },
+        {
+          "symbol": "fn_800D8E68",
+          "start": "0x800D8E68",
+          "end": "0x800D8F8C"
+        },
+        {
+          "symbol": "fn_800D8F8C",
+          "start": "0x800D8F8C",
+          "end": "0x800D8FFC"
+        },
+        {
+          "symbol": "fn_800D8FFC",
+          "start": "0x800D8FFC",
+          "end": "0x800D9078"
+        },
+        {
+          "symbol": "fn_800D9078",
+          "start": "0x800D9078",
+          "end": "0x800D9188"
+        },
+        {
+          "symbol": "fn_800D9188",
+          "start": "0x800D9188",
+          "end": "0x800D91D8"
+        },
+        {
+          "symbol": "fn_800D91D8",
+          "start": "0x800D91D8",
+          "end": "0x800D91E0"
+        },
+        {
+          "symbol": "fn_800D91E0",
+          "start": "0x800D91E0",
+          "end": "0x800D949C"
+        }
+      ]
     }
   ]
 }

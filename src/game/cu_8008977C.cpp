@@ -1,42 +1,12 @@
 #include "game/Record_8036B55C.h"
 #include "game/Object_8008044C.h"
+#include "game/Table_80089904.h"
 #include "game/fn_802372EC.h"
 #include <string.h>
-
-struct Info_80089904 {
-    unsigned char mUnknown0[4];
-    unsigned char mValue;
-    unsigned char mType;
-    unsigned char mUnknown6;
-};
-
-struct Entry_80089904 {
-    unsigned short mUnknown0;
-    unsigned short mUnknown2;
-    Info_80089904 *mpInfo;
-};
-
-struct Table_80089904 {
-    unsigned short mCount;
-    unsigned char mUnknown2[2];
-    Entry_80089904 mEntries[1];
-};
 
 struct Header_8008977C {
     unsigned char mUnknown0[2];
     unsigned short mUnknown2;
-};
-
-struct Value_801BBD5C {
-    float mValue;
-    unsigned char mUnknown4[8];
-};
-
-struct Object_801BBD5C {
-    unsigned char mUnknown0[4];
-    unsigned int mCount;
-    unsigned char mUnknown8[20];
-    Value_801BBD5C mValues[1];
 };
 
 struct Transition_80089A84 {

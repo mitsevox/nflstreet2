@@ -73,6 +73,18 @@ struct Block_801718E8 {
     unsigned char mUnknown52;
 };
 
+/* 12-byte block at +1228; fn_800D0B90 returns its first word. */
+struct Block_800D0B90 {
+    int mUnknown0;
+    unsigned char mUnknown4;
+    unsigned char mUnknown5;
+    char mUnknown6[2];
+    unsigned char mUnknown8;
+    unsigned char mUnknown9;
+    unsigned char mUnknown10;
+    unsigned char mUnknown11;
+};
+
 /* Record that +784 points to. */
 struct State_80039F5C {
     unsigned char mId;
@@ -86,9 +98,14 @@ struct State_80039F5C {
 
 /* Object that +796 points to. */
 struct Object_8016D9B8 {
-    char mUnknown0[8];
+    char mUnknown0[2];
+    unsigned short mUnknown2;
+    unsigned short mUnknown4;
+    char mUnknown6[2];
     int mUnknown8;
 };
+
+struct Record_800D81C8;
 
 struct Object_80039F5C {
     /* Read both as a word and byte by byte (+1 index, +2 team). */
@@ -109,7 +126,9 @@ struct Object_80039F5C {
     unsigned char mUnknown392;
     char mUnknown393[31];
     Object_800B26B0 mMotion;
-    char mUnknown488[24];
+    float mUnknown488;
+    float mUnknown492;
+    char mUnknown496[16];
     Object_8016D8B0 mUnknown512;
     Object_8016D8B0 mUnknown528;
     unsigned char mUnknown544;
@@ -122,23 +141,31 @@ struct Object_80039F5C {
     float mUnknown768;
     char mUnknown772[4];
     unsigned char mUnknown776;
-    char mUnknown777[7];
+    unsigned char mUnknown777;
+    unsigned short mUnknown778;
+    char mUnknown780[4];
     State_80039F5C *mpState;
     char mUnknown788[4];
     void *mpUnknown792;
     Object_8016D9B8 *mpUnknown796;
-    char mUnknown800[232];
+    Record_800D81C8 *mpUnknown800;
+    char mUnknown804[228];
     int mUnknown1032;
-    char mUnknown1036[8];
+    int mUnknown1036;
+    char mUnknown1040[4];
     int mUnknown1044;
-    char mUnknown1048[112];
+    char mUnknown1048[4];
+    int mUnknown1052;
+    char mUnknown1056[104];
     Block_801718E8 mUnknown1160;
     unsigned char mUnknown1213;
     unsigned char mUnknown1214;
     char mUnknown1215[3];
     unsigned char mUnknown1218;
     unsigned char mUnknown1219;
-    char mUnknown1220[1680];
+    char mUnknown1220[8];
+    Block_800D0B90 mUnknown1228;
+    char mUnknown1240[1660];
     float mUnknown2900;
     char mUnknown2904[4];
     unsigned short mUnknown2908;
@@ -146,7 +173,11 @@ struct Object_80039F5C {
     unsigned char mUnknown2914;
     char mUnknown2915[1];
     unsigned char mUnknown2916;
-    char mUnknown2917[83];
+    char mUnknown2917[4];
+    unsigned char mUnknown2921;
+    char mUnknown2922[1];
+    unsigned char mUnknown2923[4];
+    char mUnknown2927[73];
     short mRatings[10];
     char mUnknown3020[28];
     /* Message queue that mpState points to; passed to fn_800F03D8 and
