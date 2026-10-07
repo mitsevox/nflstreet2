@@ -10602,6 +10602,192 @@
         "commit": "bcf05077005fe09d851b9d02fec33532b2e90323",
         "introduced_blob": "b0b26f6633f4db968f2d53f9936539f7e278828c"
       }
+    },
+    {
+      "source": "src/dolphin/pad/Pad.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        {
+          "symbol": "UpdateOrigin",
+          "address": "0x802466D0",
+          "size": 420
+        },
+        {
+          "symbol": "PADOriginCallback",
+          "address": "0x80246874",
+          "size": 196
+        },
+        {
+          "symbol": "PADOriginUpdateCallback",
+          "address": "0x80246938",
+          "size": 192
+        },
+        {
+          "symbol": "PADProbeCallback",
+          "address": "0x802469F8",
+          "size": 216
+        },
+        {
+          "symbol": "PADTypeAndStatusCallback",
+          "address": "0x80246AD0",
+          "size": 812
+        },
+        {
+          "symbol": "PADReceiveCheckCallback",
+          "address": "0x80246DFC",
+          "size": 308
+        },
+        {
+          "symbol": "PADReset",
+          "address": "0x80246F30",
+          "size": 256
+        },
+        {
+          "symbol": "PADRecalibrate",
+          "address": "0x80247030",
+          "size": 260
+        },
+        {
+          "symbol": "PADRead",
+          "address": "0x8024734C",
+          "size": 940
+        },
+        {
+          "symbol": "PADControlMotor",
+          "address": "0x802476F8",
+          "size": 164
+        },
+        {
+          "symbol": "SPEC0_MakeStatus",
+          "address": "0x802477FC",
+          "size": 372
+        },
+        {
+          "symbol": "SPEC1_MakeStatus",
+          "address": "0x80247970",
+          "size": 372
+        },
+        {
+          "symbol": "SPEC2_MakeStatus",
+          "address": "0x80247AE4",
+          "size": 1016
+        },
+        {
+          "symbol": "__PADDisableRecalibration",
+          "address": "0x80248124",
+          "size": 124
+        }
+      ],
+      "provenance": {
+        "pull_request": 529,
+        "merged_via": 529,
+        "commit": "1097f87ed6ddf20b4a9937f3a270d054be75a262",
+        "introduced_blob": "f0eec07fb657a4ab7264fca9a996828ab1d8e19f",
+        "original_commit": "36572653d679b7adb854d105cb2cadaa5f7e582f",
+        "original_blob": "cb51040943529f811f6532d20c835f782d282246",
+        "integration_adjustment": "Reuse canonical os/string includes and fixed boot globals; omit redundant offsetof macro and unsupported foreign-compiler push/inline-all/pop directives under the unchanged pinned profile. Complete coherent C bodies retained; native tail-SDA packing remains measured partial."
+      }
+    },
+    {
+      "source": "src/dolphin/ai/ai.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        {
+          "address": "0x8024A0FC",
+          "symbol": "AIRegisterDMACallback",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A140",
+          "symbol": "AIInitDMA",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A1C8",
+          "symbol": "AIStartDMA",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A1E0",
+          "symbol": "AIStopDMA",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A1F8",
+          "symbol": "AISetStreamPlayState",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A2D0",
+          "symbol": "AIGetStreamPlayState",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A2E0",
+          "symbol": "AISetDSPSampleRate",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A3C0",
+          "symbol": "AIGetDSPSampleRate",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A3D4",
+          "symbol": "__AI_set_stream_sample_rate",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A4A8",
+          "symbol": "AIGetStreamSampleRate",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A4B8",
+          "symbol": "AISetStreamVolLeft",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A4D4",
+          "symbol": "AIGetStreamVolLeft",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A4E4",
+          "symbol": "AISetStreamVolRight",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A500",
+          "symbol": "AIGetStreamVolRight",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A510",
+          "symbol": "AIInit",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A688",
+          "symbol": "__AISHandler",
+          "source": "src/dolphin/ai/ai.c"
+        },
+        {
+          "address": "0x8024A704",
+          "symbol": "__AIDHandler",
+          "source": "src/dolphin/ai/ai.c"
+        }
+      ],
+      "provenance": {
+        "pull_request": 529,
+        "merged_via": 529,
+        "commit": "0c1b26d92daa749bec20fcde3f74940c517e29f3",
+        "introduced_blob": "dfc630bfb306a68a9c2970b7c9c09d299f9b9bdc"
+      }
     }
   ],
   "target": "GN7E69",
