@@ -1098,7 +1098,7 @@
     },
     "__PADFixBits": {
       "address": "0x803ED3E8",
-      "evidence": "Original PAD actual REL24/nativecall identity supported by coherent pinnedBFBB source and originalcallercallee instructions."
+      "evidence": "Original PADInit at0x80247178 loads this four-byte SDA word at0x803ED3E8; existing canonical include/dolphin/si.h declares u32 __PADFixBits. Wireless reset handling reads this state; no function/callee identity is claimed."
     },
     "__AICallbackStackSwitch": {
       "address": "0x8024A7B0",
