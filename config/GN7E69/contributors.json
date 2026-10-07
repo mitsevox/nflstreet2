@@ -10609,76 +10609,20 @@
         "mitsevox"
       ],
       "functions": [
-        {
-          "symbol": "UpdateOrigin",
-          "address": "0x802466D0",
-          "size": 420
-        },
-        {
-          "symbol": "PADOriginCallback",
-          "address": "0x80246874",
-          "size": 196
-        },
-        {
-          "symbol": "PADOriginUpdateCallback",
-          "address": "0x80246938",
-          "size": 192
-        },
-        {
-          "symbol": "PADProbeCallback",
-          "address": "0x802469F8",
-          "size": 216
-        },
-        {
-          "symbol": "PADTypeAndStatusCallback",
-          "address": "0x80246AD0",
-          "size": 812
-        },
-        {
-          "symbol": "PADReceiveCheckCallback",
-          "address": "0x80246DFC",
-          "size": 308
-        },
-        {
-          "symbol": "PADReset",
-          "address": "0x80246F30",
-          "size": 256
-        },
-        {
-          "symbol": "PADRecalibrate",
-          "address": "0x80247030",
-          "size": 260
-        },
-        {
-          "symbol": "PADRead",
-          "address": "0x8024734C",
-          "size": 940
-        },
-        {
-          "symbol": "PADControlMotor",
-          "address": "0x802476F8",
-          "size": 164
-        },
-        {
-          "symbol": "SPEC0_MakeStatus",
-          "address": "0x802477FC",
-          "size": 372
-        },
-        {
-          "symbol": "SPEC1_MakeStatus",
-          "address": "0x80247970",
-          "size": 372
-        },
-        {
-          "symbol": "SPEC2_MakeStatus",
-          "address": "0x80247AE4",
-          "size": 1016
-        },
-        {
-          "symbol": "__PADDisableRecalibration",
-          "address": "0x80248124",
-          "size": 124
-        }
+        "0x802466D0",
+        "0x80246874",
+        "0x80246938",
+        "0x802469F8",
+        "0x80246AD0",
+        "0x80246DFC",
+        "0x80246F30",
+        "0x80247030",
+        "0x8024734C",
+        "0x802476F8",
+        "0x802477FC",
+        "0x80247970",
+        "0x80247AE4",
+        "0x80248124"
       ],
       "provenance": {
         "pull_request": 529,
@@ -10696,91 +10640,23 @@
         "mitsevox"
       ],
       "functions": [
-        {
-          "address": "0x8024A0FC",
-          "symbol": "AIRegisterDMACallback",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A140",
-          "symbol": "AIInitDMA",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A1C8",
-          "symbol": "AIStartDMA",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A1E0",
-          "symbol": "AIStopDMA",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A1F8",
-          "symbol": "AISetStreamPlayState",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A2D0",
-          "symbol": "AIGetStreamPlayState",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A2E0",
-          "symbol": "AISetDSPSampleRate",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A3C0",
-          "symbol": "AIGetDSPSampleRate",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A3D4",
-          "symbol": "__AI_set_stream_sample_rate",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A4A8",
-          "symbol": "AIGetStreamSampleRate",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A4B8",
-          "symbol": "AISetStreamVolLeft",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A4D4",
-          "symbol": "AIGetStreamVolLeft",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A4E4",
-          "symbol": "AISetStreamVolRight",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A500",
-          "symbol": "AIGetStreamVolRight",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A510",
-          "symbol": "AIInit",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A688",
-          "symbol": "__AISHandler",
-          "source": "src/dolphin/ai/ai.c"
-        },
-        {
-          "address": "0x8024A704",
-          "symbol": "__AIDHandler",
-          "source": "src/dolphin/ai/ai.c"
-        }
+        "0x8024A0FC",
+        "0x8024A140",
+        "0x8024A1C8",
+        "0x8024A1E0",
+        "0x8024A1F8",
+        "0x8024A2D0",
+        "0x8024A2E0",
+        "0x8024A3C0",
+        "0x8024A3D4",
+        "0x8024A4A8",
+        "0x8024A4B8",
+        "0x8024A4D4",
+        "0x8024A4E4",
+        "0x8024A500",
+        "0x8024A510",
+        "0x8024A688",
+        "0x8024A704"
       ],
       "provenance": {
         "pull_request": 529,
