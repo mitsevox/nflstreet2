@@ -12154,6 +12154,98 @@
           "end": "0x80194B6C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80052F54.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv open/open bounded group row, exact target function extents, readonly/small-data rows and scoped target layout/source-form records. Thirteen unlinked function comparisons; original assembly and external mutable arrays remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80052F54",
+          "end": "0x80053B4C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028DDFC",
+          "end": "0x8028DEA0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA540",
+          "end": "0x803EA54C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80052F54",
+          "start": "0x80052F54",
+          "end": "0x80053084"
+        },
+        {
+          "symbol": "fn_80053084",
+          "start": "0x80053084",
+          "end": "0x800530E8"
+        },
+        {
+          "symbol": "fn_800530E8",
+          "start": "0x800530E8",
+          "end": "0x80053258"
+        },
+        {
+          "symbol": "fn_80053258",
+          "start": "0x80053258",
+          "end": "0x80053554"
+        },
+        {
+          "symbol": "fn_80053554",
+          "start": "0x80053554",
+          "end": "0x800535A8"
+        },
+        {
+          "symbol": "fn_800535A8",
+          "start": "0x800535A8",
+          "end": "0x800535FC"
+        },
+        {
+          "symbol": "fn_800535FC",
+          "start": "0x800535FC",
+          "end": "0x80053650"
+        },
+        {
+          "symbol": "fn_80053650",
+          "start": "0x80053650",
+          "end": "0x80053674"
+        },
+        {
+          "symbol": "fn_80053674",
+          "start": "0x80053674",
+          "end": "0x800538E0"
+        },
+        {
+          "symbol": "fn_800538E0",
+          "start": "0x800538E0",
+          "end": "0x800539F8"
+        },
+        {
+          "symbol": "fn_800539F8",
+          "start": "0x800539F8",
+          "end": "0x80053A1C"
+        },
+        {
+          "symbol": "fn_80053A1C",
+          "start": "0x80053A1C",
+          "end": "0x80053A70"
+        },
+        {
+          "symbol": "fn_80053A70",
+          "start": "0x80053A70",
+          "end": "0x80053B4C"
+        }
+      ]
     }
   ]
 }

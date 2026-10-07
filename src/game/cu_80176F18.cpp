@@ -337,7 +337,7 @@ void fn_8017C98C(unsigned short team, int value);
 void fn_8017C9B8(unsigned short team, int value);
 void fn_8017C9E4(unsigned short team, int value);
 void fn_8017CA10(unsigned short team, int value);
-void fn_8017CA3C(unsigned short team, int value);
+void fn_8017CA3C(int id, int value);
 void fn_8017CA68(unsigned short team, int value);
 void fn_8017CA94(unsigned short team, int value);
 void fn_8017CAC0(void (*pCallback)(int kind, int a, int b));
@@ -2889,9 +2889,9 @@ extern "C" void fn_8017CA10(unsigned short team, int value)
     fn_801794F0(team, 0x77777374, value);
 }
 
-extern "C" void fn_8017CA3C(unsigned short team, int value)
+extern "C" void fn_8017CA3C(int id, int value)
 {
-    fn_801794B4(team, 0x73687374, value);
+    fn_801794B4(id, 0x73687374, value);
 }
 
 extern "C" void fn_8017CA68(unsigned short team, int value)
