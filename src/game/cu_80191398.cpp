@@ -18,9 +18,9 @@ void fn_8024DCE4(int a, int b, int c, int d, int e, int f);
 void fn_8024DF64(int a);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_8024FFC4(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
-void fn_80250258(GXTexObj *pObj, int a, int b, float c, float d, float e, int f, int g, int h);
-void fn_802505A8(GXTexObj *pObj, int a);
+extern "C" void GXInitTexObj(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
+extern "C" void GXInitTexObjLOD(GXTexObj *pObj, int a, int b, float c, float d, float e, int f, int g, int h);
+extern "C" void GXLoadTexObj(GXTexObj *pObj, int a);
 void fn_80251604(int a, int b);
 void fn_80251A58(int a, int b, int c, int d, int e);
 void fn_80251B28(int a, int b, int c, int d);
@@ -177,9 +177,9 @@ void fn_80191398(void)
 {
     GXTexObj obj;
 
-    fn_8024FFC4(&obj, lbl_802EB720, 64, 96, 0, 0, 0, 0);
-    fn_80250258(&obj, 0, 0, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-    fn_802505A8(&obj, 0);
+    GXInitTexObj(&obj, lbl_802EB720, 64, 96, 0, 0, 0, 0);
+    GXInitTexObjLOD(&obj, 0, 0, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+    GXLoadTexObj(&obj, 0);
 }
 
 void fn_80191414(void)

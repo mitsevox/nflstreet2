@@ -179,6 +179,16 @@ class ReviewedSDKDataSeeds(unittest.TestCase):
         self.unit["sections"][0]["end"] = "0x802B7264"
         self.assertEqual(analyze.sdk_data_seeds([self.unit], self.accepted), "")
 
+    def test_explicit_false_preserves_reviewed_extent_without_aggregate_symbol(self):
+        self.unit["sections"][0]["object_seed"] = False
+        self.assertEqual(analyze.sdk_data_seeds([self.unit], self.accepted), "")
+        self.assertEqual(self.unit["sections"][0]["end"], "0x802B7262")
+
+    def test_explicit_true_seeds_unlinked_reviewed_extent(self):
+        self.unit["sections"][0]["object_seed"] = True
+        self.assertEqual(analyze.sdk_data_seeds([self.unit], []),
+                         "sdk_data_802B7258 = .data3:0x802B7258; // type:object size:0xA\n")
+
     def test_native_data_cannot_seed_a_code_boundary(self):
         self.unit["sections"][0]["section"] = ".text"
         self.accepted[0]["sections"][0]["placement"] = ".text"

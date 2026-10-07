@@ -91,8 +91,8 @@ void fn_8024E660(unsigned short x, unsigned short y, unsigned int *pDepth);
 void fn_8024FB58(int a, GXColor color);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_8024FFC4(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
-void fn_802505A8(GXTexObj *pObj, int a);
+extern "C" void GXInitTexObj(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
+extern "C" void GXLoadTexObj(GXTexObj *pObj, int a);
 void fn_80251604(int a, int b);
 void fn_80251A58(int a, int b, int c, int d, int e);
 void fn_80251B28(int a, int b, int c, int d);
@@ -137,7 +137,7 @@ void fn_80198C54(Object_80234A30 *pObject, unsigned int index)
 void fn_80198CFC(void **ppBuffer)
 {
     *ppBuffer = fn_801D2B7C(0x80000, 0x100, 0);
-    fn_8024FFC4(&lbl_80365298, lbl_803ECBE4, 128, 128, 6, 0, 0, 0);
+    GXInitTexObj(&lbl_80365298, lbl_803ECBE4, 128, 128, 6, 0, 0, 0);
 }
 
 void fn_80198D60(void **ppBuffer)
@@ -363,7 +363,7 @@ void fn_801993B8(int textured, unsigned int color, GXTexObj *pTexture, float alp
         GXSetCullMode(GX_CULL_NONE);
         fn_802528B0(1);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
-        fn_802505A8(pTexture, 0);
+        GXLoadTexObj(pTexture, 0);
     } else {
         fn_80251CC4(1);
         fn_80251B28(0, 0, 0, 4);
