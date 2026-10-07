@@ -1643,8 +1643,8 @@
           "end": "0x802FE2F4",
           "start_boundary": "exact",
           "end_boundary": "exact",
-          "evidence": "Full628-byte native jump-table pool;157 actual relocated pointers resolve to original target blocks in full registeredfunctions.",
-          "object_seed": true
+          "evidence": "Full628-byte native jump-table pool;157 actual relocated pointers resolve to original target blocks in full registeredfunctions. Preserve independently inferred jump-table symbols; this ownership extent is not one monolithic data symbol.",
+          "object_seed": false
         },
         {
           "section": ".text",
