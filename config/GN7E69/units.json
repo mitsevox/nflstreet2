@@ -88,10 +88,6 @@
       "address": "0x8023B21C",
       "evidence": "evidence.tsv external row: sampling-rate target call, validated callee behavior and SDK reference."
     },
-    "VIGetTvFormat": {
-      "address": "0x80244BF8",
-      "evidence": "evidence.tsv external row: sampling-rate target call, validated callee behavior and SDK reference."
-    },
     "OSReport": {
       "address": "0x8023AB48",
       "evidence": "evidence.tsv external row: sampling-rate target call, validated callee behavior and SDK reference."
@@ -286,10 +282,6 @@
     },
     "OSSetWirelessID": {
       "address": "0x8023D0F8",
-      "evidence": "evidence.tsv SIBios external row: target call relocation and related SDK declaration."
-    },
-    "VIGetCurrentLine": {
-      "address": "0x80244B60",
       "evidence": "evidence.tsv SIBios external row: target call relocation and related SDK declaration."
     },
     "OSInitThreadQueue": {
@@ -939,6 +931,86 @@
     "memmove": {
       "address": "0x801C2030",
       "evidence": "evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
+    },
+    "__GetImageTileCount": {
+      "address": "0x8024FEFC",
+      "evidence": "evidence.tsv target operand and pinned donor declaration rows."
+    },
+    "__shr2u": {
+      "address": "0x801AD46C",
+      "evidence": "evidence.tsv actual target retained relocation and pinned donor declaration rows."
+    },
+    "__shl2i": {
+      "address": "0x801AD474",
+      "evidence": "evidence.tsv actual target retained relocation and pinned donor declaration rows."
+    },
+    "OSPanic": {
+      "address": "0x8023ABC8",
+      "evidence": "evidence.tsv actual target retained relocation and pinned donor declaration rows."
+    },
+    "vprintf": {
+      "address": "0x802622DC",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "OSGetStackPointer": {
+      "address": "0x8023A6EC",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "PPCHalt": {
+      "address": "0x8023877C",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "PPCMfmsr": {
+      "address": "0x8023873C",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "PPCMtmsr": {
+      "address": "0x80238744",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "PPCMffpscr": {
+      "address": "0x802387C0",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "PPCMtfpscr": {
+      "address": "0x802387E0",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "OSSaveFPUContext": {
+      "address": "0x8023A524",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "OSDisableScheduler": {
+      "address": "0x8023D5F0",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "OSEnableScheduler": {
+      "address": "0x8023D630",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "__OSReschedule": {
+      "address": "0x8023DB4C",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "OSLoadContext": {
+      "address": "0x8023A614",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "OSDumpContext": {
+      "address": "0x8023A7D4",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "__OSLastInterrupt": {
+      "address": "0x803ED090",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "__OSLastInterruptSrr0": {
+      "address": "0x803ED08C",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "__OSLastInterruptTime": {
+      "address": "0x803ED098",
+      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
     }
   },
   "units": [
@@ -8614,6 +8686,106 @@
           "placement": ".data5",
           "start": "0x803EA628",
           "end": "0x803EA62C"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXFrameBuf.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv GXFrameBuf source-form/native ownership and individual retained function rows; complete original-layout DOL equality.",
+      "link_roots": {
+        "symbols": [
+          "GXSetDispCopySrc",
+          "GXSetTexCopySrc",
+          "GXSetDispCopyDst",
+          "GXSetTexCopyDst",
+          "GXSetDispCopyFrame2Field",
+          "GXSetCopyClamp",
+          "GXSetDispCopyYScale",
+          "GXSetCopyClear",
+          "GXSetCopyFilter",
+          "GXSetDispCopyGamma",
+          "GXCopyDisp",
+          "GXCopyTex",
+          "GXClearBoundingBox"
+        ],
+        "evidence": "All thirteen target-retained native entrypoints; four other helper bodies remain genuine source and naturally unretained in scoped link; target-present overscan is DECOMP_COMPARE partial."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024ECE4",
+          "end": "0x8024F648"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FE350",
+          "end": "0x802FEAD0"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED868",
+          "end": "0x803ED878"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/vi/vi.c",
+      "profile": "dolphin_release",
+      "evidence": "Pinned BFBB Apr17 VI source, explicit literal diagnostic1908 and dolsdk VIGetDTVStatus; actual native operands/full storage proof. Existing accepted shared declarations reused.",
+      "link_roots": {
+        "symbols": [
+          "__VIGetCurrentPosition",
+          "VISetPreRetraceCallback",
+          "VISetPostRetraceCallback",
+          "__VIInit",
+          "VIInit",
+          "VIWaitForRetrace",
+          "VIConfigure",
+          "VIFlush",
+          "VISetNextFrameBuffer",
+          "VISetBlack",
+          "VIGetNextField",
+          "VIGetCurrentLine",
+          "VIGetTvFormat",
+          "VIGetDTVStatus",
+          "__VIDisplayPositionToXY"
+        ],
+        "evidence": "All native public roots plus ordinary local handler reachability."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802430CC",
+          "end": "0x80244F18"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FD8C8",
+          "end": "0x802FDC98"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A5738",
+          "end": "0x803A5880"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC1F8",
+          "end": "0x803EC201"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED1D0",
+          "end": "0x803ED230"
         }
       ]
     }

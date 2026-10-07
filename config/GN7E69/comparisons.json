@@ -14274,6 +14274,97 @@
           "end": "0x80132630"
         }
       ]
+    },
+    {
+      "source": "src/dolphin/gx/GXFrameBuf.c",
+      "profile": "dolphin_release",
+      "evidence": "Pinned faithful older donor GXAdjustForOverscan target-present variant mismatch, original body stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024EBC4",
+          "end": "0x8024F648"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FE350",
+          "end": "0x802FEAD0"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED868",
+          "end": "0x803ED878"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GXAdjustForOverscan",
+          "start": "0x8024EBC4",
+          "end": "0x8024ECE4"
+        }
+      ],
+      "discarded": [
+        "__GXGetNumXfbLines",
+        "GXGetNumXfbLines",
+        "GXGetYScaleFactor",
+        "GXReadBoundingBox"
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSError.c",
+      "profile": "dolphin_release",
+      "evidence": "Comparison-only faithful SDK source; original code remains linked. Four exact target function extents; native data/handler table sections and external operands supported by target and pinned donor. Unit source-file boundary provisional.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023AB48",
+          "end": "0x8023B1F4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FC0D0",
+          "end": "0x802FC3EC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A3A70",
+          "end": "0x803A3AB4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC160",
+          "end": "0x803EC166"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OSReport",
+          "start": "0x8023AB48",
+          "end": "0x8023ABC8"
+        },
+        {
+          "symbol": "OSPanic",
+          "start": "0x8023ABC8",
+          "end": "0x8023ACF4"
+        },
+        {
+          "symbol": "OSSetErrorHandler",
+          "start": "0x8023ACF4",
+          "end": "0x8023AF0C"
+        },
+        {
+          "symbol": "__OSUnhandledException",
+          "start": "0x8023AF0C",
+          "end": "0x8023B1F4"
+        }
+      ]
     }
   ]
 }

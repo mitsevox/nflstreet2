@@ -1,3 +1,4 @@
+#include <dolphin/gx/GXFrameBuffer.h>
 #include "game/fn_80195EFC.h"
 #include "engine/cu_80227F14.h"
 #include "game/fn_8007F828.h"
@@ -26,10 +27,6 @@ extern GXTexObj lbl_80365168;
 extern unsigned int lbl_803ECBB0;
 extern float lbl_803ECBB4;
 extern int lbl_803ECBB8;
-void fn_8024ED60(int, int, int, int);
-void fn_8024EE10(int, int, int, int);
-void fn_8024F100(int, int, int, int);
-void fn_8024F484(void *, int);
 void fn_8024E4D0(void);
 void fn_801CEA44(int);
 int fn_801CEC74(void);
@@ -66,10 +63,10 @@ int fn_8019623C(int);
 int fn_80194FE8(void) {
     if (!lbl_803EB738)
         return 0;
-    fn_8024ED60(0, 0, 640, 448);
-    fn_8024EE10(320, 224, 4, 1);
-    fn_8024F100(0, 0, 0, 0);
-    fn_8024F484(lbl_803EB738, 0);
+    GXSetTexCopySrc(0, 0, 640, 448);
+    GXSetTexCopyDst(320, 224, GX_TF_RGB565, GX_TRUE);
+    GXSetCopyFilter(0, 0, 0, 0);
+    GXCopyTex(lbl_803EB738, 0);
     fn_8024E4D0();
     fn_801CEA44(1);
     return 1;

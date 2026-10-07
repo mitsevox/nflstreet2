@@ -1,3 +1,4 @@
+#include <dolphin/vi.h>
 #include "game/fn_801EF390.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_8007F828.h"
@@ -83,10 +84,9 @@ void fn_802506EC(GXTexRegion *,int,unsigned int,int,unsigned int,int);
 RegionCallback_80194054 fn_802508E4(RegionCallback_80194054);
 int fn_801CE930(void);
 int fn_801CE944(int);
-void fn_8024F31C(int,int);
+void GXCopyDisp(int,int);
 void fn_8024E4D0(void);
 void fn_8024E034(void);
-void fn_80243B18(void);
 
 void fn_80194508(int);
 void fn_8019471C(void);
@@ -116,7 +116,7 @@ void fn_80194060(void)
         }
         fn_80194508(128);
         fn_8019471C();
-        fn_8024F31C(fn_801CE944((unsigned char)fn_801CE930()), 1);
+        GXCopyDisp(fn_801CE944((unsigned char)fn_801CE930()), 1);
         fn_8024E4D0();
         fn_8024E034();
     }
@@ -313,11 +313,11 @@ void fn_80194858(int mode)
 }
 void fn_80194AEC(int a)
 {
-    fn_80243B18();
+    VIWaitForRetrace();
     fn_801CE23C();
     fn_80194508(128);
     fn_8019471C();
-    fn_8024F31C(fn_801CE944((unsigned char)fn_801CE930()),a);
+    GXCopyDisp(fn_801CE944((unsigned char)fn_801CE930()),a);
     fn_8024E4D0();
     fn_8024E034();
     fn_801946C4();
