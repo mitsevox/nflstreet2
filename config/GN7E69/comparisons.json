@@ -9958,6 +9958,77 @@
           "end": "0x80164B78"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8003108C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x8003108C-0x800314E0 (src/game/cu_8003108C.cpp), its compiler, type and source-form rows, the ten exact function extents and the exact .data row 0x802CCA34-0x802CCB18. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003108C",
+          "end": "0x800314E0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCA34",
+          "end": "0x802CCB18"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8003108C",
+          "start": "0x8003108C",
+          "end": "0x800310C0"
+        },
+        {
+          "symbol": "fn_800310C0",
+          "start": "0x800310C0",
+          "end": "0x800311E4"
+        },
+        {
+          "symbol": "fn_800311E4",
+          "start": "0x800311E4",
+          "end": "0x8003122C"
+        },
+        {
+          "symbol": "fn_8003122C",
+          "start": "0x8003122C",
+          "end": "0x80031294"
+        },
+        {
+          "symbol": "fn_80031294",
+          "start": "0x80031294",
+          "end": "0x800312DC"
+        },
+        {
+          "symbol": "fn_800312DC",
+          "start": "0x800312DC",
+          "end": "0x800312FC"
+        },
+        {
+          "symbol": "fn_800312FC",
+          "start": "0x800312FC",
+          "end": "0x80031328"
+        },
+        {
+          "symbol": "fn_80031328",
+          "start": "0x80031328",
+          "end": "0x80031404"
+        },
+        {
+          "symbol": "fn_80031404",
+          "start": "0x80031404",
+          "end": "0x8003145C"
+        },
+        {
+          "symbol": "fn_8003145C",
+          "start": "0x8003145C",
+          "end": "0x800314E0"
+        }
+      ]
     }
   ]
 }
