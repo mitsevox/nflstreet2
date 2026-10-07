@@ -11821,6 +11821,36 @@
           "end": "0x80040154"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800325E8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained provisional/provisional ten-function hull, three complete function extents and inferred name/type/source-form/compiler rows. Only three whole getter bodies are measured; seven other bodies and all original storage remain unmeasured. Canonical Class_801CC350 and record contracts are reused without changing shared declarations.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800325E8",
+          "end": "0x80032EE8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GetName__14Class_800325E8",
+          "start": "0x800325E8",
+          "end": "0x800325F4"
+        },
+        {
+          "symbol": "vfn_04__14Class_800325E8",
+          "start": "0x800325F4",
+          "end": "0x80032600"
+        },
+        {
+          "symbol": "vfn_05__14Class_800325E8",
+          "start": "0x80032600",
+          "end": "0x8003260C"
+        }
+      ]
     }
   ]
 }
