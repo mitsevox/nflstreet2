@@ -129,12 +129,12 @@ extern "C" int fn_80131474(Object_80039F5C *p, int a, int b)
             if (fabsf(p->mMotion.mPos.mX - fn_80177FE0().mX) > 3.0f) {
                 result = 1;
             } else {
-                int behind = 0;
+                int flag = 0;
 
                 if (fabsf(p->mMotion.mPos.mX - fn_80177FE0().mX) > 1.0f) {
-                    behind = p->mMotion.mPos.mY < fn_80177FE0().mY - 5.0f;
+                    flag = p->mMotion.mPos.mY < fn_80177FE0().mY - 5.0f;
                 }
-                if (behind) {
+                if (flag) {
                     result = 1;
                 }
             }
@@ -242,16 +242,16 @@ extern "C" int fn_801317F8(Object_80039F5C *p, Control_80132090 *pControl)
                 result = 2;
             }
         } else {
-            int deep = 0;
+            int flag = 0;
             Point_8017886C spot;
             float limit;
 
             spot = fn_80177FE0();
             limit = fn_80178A2C() - 5.0f;
             if (spot.mY < limit && fn_8013141C(p)) {
-                deep = own < 12.0f;
+                flag = own < 12.0f;
             }
-            if (deep) {
+            if (flag) {
                 result = 6;
             } else if (own > 65.0f) {
                 if (target < 30.0f && fn_801066D0(p, pTarget, 9) &&
@@ -276,19 +276,19 @@ extern "C" int fn_80131B3C(Object_80039F5C *p, int kind, int arg)
     Control_80132090 *pControl = (Control_80132090 *)&p->mUnknown336;
     Object_80039F5C *pTarget = fn_8009BCE8(&pControl->mUnknown64);
     int result = 0;
-    Object_80039F5C *pBall = fn_80137B40();
+    Object_80039F5C *pCurrent = fn_80137B40();
 
-    if (pBall == p) {
-        if (fn_80105E90(pBall, pTarget, kind)) {
+    if (pCurrent == p) {
+        if (fn_80105E90(pCurrent, pTarget, kind)) {
             Message_800F01CC message;
 
             result = 1;
-            fn_800D0BF4(pBall, arg, 25);
+            fn_800D0BF4(pCurrent, arg, 25);
             fn_801C1F94(&message, 0, 4);
             message.mId = 25;
             message.mUnknown1[0] = pTarget->mIdBytes[1];
             message.mUnknown1[1] = kind;
-            fn_800F00D4(0, pBall->mpState, &message, pBall);
+            fn_800F00D4(0, pCurrent->mpState, &message, pCurrent);
         }
         if (kind == 9) {
             if (pControl->mUnknown68 == 0) {
