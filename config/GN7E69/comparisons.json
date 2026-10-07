@@ -14988,6 +14988,108 @@
         "strnlen",
         "DVDGenerateDiskID"
       ]
+    },
+    {
+      "source": "src/dolphin/gx/GXAttr.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete pinned dSDK seventeen-body source with conservative omission of explicit matching artifact and seven uninitialized no-effect expressions; ordinary current canonical headers. Fourteen full target bodies5136, SetVAT/Array version partial preserved without splicing.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024CB90",
+          "end": "0x8024DFA0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FE080",
+          "end": "0x802FE2F4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC260",
+          "end": "0x803EC26C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GXSetVtxDesc",
+          "start": "0x8024CB90",
+          "end": "0x8024CDFC"
+        },
+        {
+          "symbol": "GXSetVtxDescv",
+          "start": "0x8024CDFC",
+          "end": "0x8024D084"
+        },
+        {
+          "symbol": "__GXSetVCD",
+          "start": "0x8024D084",
+          "end": "0x8024D140"
+        },
+        {
+          "symbol": "__GXCalculateVLim",
+          "start": "0x8024D140",
+          "end": "0x8024D264"
+        },
+        {
+          "symbol": "GXGetVtxDesc",
+          "start": "0x8024D264",
+          "end": "0x8024D418"
+        },
+        {
+          "symbol": "GXClearVtxDesc",
+          "start": "0x8024D418",
+          "end": "0x8024D450"
+        },
+        {
+          "symbol": "GXSetVtxAttrFmt",
+          "start": "0x8024D450",
+          "end": "0x8024D6AC"
+        },
+        {
+          "symbol": "GXSetVtxAttrFmtv",
+          "start": "0x8024D6AC",
+          "end": "0x8024D92C"
+        },
+        {
+          "symbol": "__GXSetVAT",
+          "start": "0x8024D92C",
+          "end": "0x8024D9C8"
+        },
+        {
+          "symbol": "GXGetVtxAttrFmt",
+          "start": "0x8024D9C8",
+          "end": "0x8024DC48"
+        },
+        {
+          "symbol": "GXSetArray",
+          "start": "0x8024DC48",
+          "end": "0x8024DCD4"
+        },
+        {
+          "symbol": "GXInvalidateVtxCache",
+          "start": "0x8024DCD4",
+          "end": "0x8024DCE4"
+        },
+        {
+          "symbol": "GXSetTexCoordGen2",
+          "start": "0x8024DCE4",
+          "end": "0x8024DF64"
+        },
+        {
+          "symbol": "GXSetNumTexGens",
+          "start": "0x8024DF64",
+          "end": "0x8024DFA0"
+        }
+      ],
+      "discarded": [
+        "__GXXfVtxSpecs",
+        "GXGetVtxDescv",
+        "GXGetVtxAttrFmtv"
+      ]
     }
   ]
 }

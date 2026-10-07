@@ -39,6 +39,7 @@ do { \
 #define CHECK_GXBEGIN(line, name) ASSERTMSGLINE(line, !__GXinBegin, "'" name "' is not allowed between GXBegin/GXEnd")
 
 /* GXAttr */
+void __GXSetMatrixIndex(GXAttr matIdxAttr);
 void __GXSetVCD(void);
 void __GXSetVAT(void);
 void __GXCalculateVLim(void);
@@ -227,8 +228,66 @@ extern GXData* const __GXData;
 extern GXBool __GXinBegin;
 #endif
 
+typedef struct __GXFifoObj
+{
+    u8* base;
+    u8* top;
+    u32 size;
+    u32 hiWatermark;
+    u32 loWatermark;
+    void* rdPtr;
+    void* wrPtr;
+    s32 count;
+    u8 bind_cpu;
+    u8 bind_gp;
+} __GXFifoObj;
+
+void __GXFifoInit(void);
+
 #ifdef __cplusplus
 }
+#endif
+
+#ifdef DEBUG
+#define GX_WRITE_SOME_REG2(a, b, c, addr) \
+do { \
+    long regAddr; \
+    GX_WRITE_U8(a); \
+    GX_WRITE_U8(b); \
+    GX_WRITE_U32(c); \
+    regAddr = addr; \
+    if (regAddr >= 0 && regAddr < 4) { \
+        __GXData->indexBase[regAddr] = c; \
+    } \
+} while (0)
+#else
+#define GX_WRITE_SOME_REG2(a, b, c, addr) \
+do { \
+    GX_WRITE_U8(a); \
+    GX_WRITE_U8(b); \
+    GX_WRITE_U32(c); \
+} while (0)
+#endif
+
+#ifdef DEBUG
+#define GX_WRITE_SOME_REG3(a, b, c, addr) \
+do { \
+    long regAddr; \
+    GX_WRITE_U8(a); \
+    GX_WRITE_U8(b); \
+    GX_WRITE_U32(c); \
+    regAddr = addr; \
+    if (regAddr >= 0 && regAddr < 4) { \
+        __GXData->indexStride[regAddr] = c; \
+    } \
+} while (0)
+#else
+#define GX_WRITE_SOME_REG3(a, b, c, addr) \
+do { \
+    GX_WRITE_U8(a); \
+    GX_WRITE_U8(b); \
+    GX_WRITE_U32(c); \
+} while (0)
 #endif
 
 #endif

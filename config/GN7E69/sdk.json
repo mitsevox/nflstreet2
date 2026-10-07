@@ -197,6 +197,24 @@
       "evidence": "Four consecutive 8-byte getters/setters at399F8/39A00/39A08/39A10 access two shared SDA pointers; OSInit and reboot/runtime consumers corroborate arena behavior. No allocator-size extrapolation.",
       "sections": [
         {
+          "section": ".sbss",
+          "start": "0x803ED080",
+          "end": "0x803ED084",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Arena-high pointer word, actualgetter/setter operands/callers; NOBITS allocation, not initialized-zero byte credit.",
+          "object_seed": true
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC158",
+          "end": "0x803EC15C",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Arena-low initializedFFFFFFFF word; originalgetter/setter/caller roles and actualSDA operand establish extent.",
+          "object_seed": true
+        },
+        {
           "section": ".text",
           "start": "0x802399F8",
           "end": "0x80239A18",
@@ -1586,6 +1604,15 @@
       "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
       "sections": [
         {
+          "section": ".sbss",
+          "start": "0x803ED380",
+          "end": "0x803ED3A0",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Natural32-byte state allocation and all118 retained operands; scalar/pointer offsets and widths from actual target accesses, not donor-only tails.",
+          "object_seed": true
+        },
+        {
           "section": ".text",
           "start": "0x8024C038",
           "end": "0x8024CB90",
@@ -1601,6 +1628,24 @@
       "library": "GX",
       "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
       "sections": [
+        {
+          "section": ".data5",
+          "start": "0x803EC260",
+          "end": "0x803EC26C",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Full12-byte donor lookup pool; all actualsource storage bytes and original indexedloads supported.",
+          "object_seed": true
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FE080",
+          "end": "0x802FE2F4",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Full628-byte native jump-table pool;157 actual relocated pointers resolve to original target blocks in full registeredfunctions.",
+          "object_seed": true
+        },
         {
           "section": ".text",
           "start": "0x8024CB90",

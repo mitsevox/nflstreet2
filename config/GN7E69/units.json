@@ -1072,21 +1072,29 @@
       "address": "0x8024122C",
       "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
     },
-    "OSGetArenaHi": {
-      "address": "0x802399F8",
-      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
-    },
     "DVDGetDriveStatus": {
       "address": "0x8024151C",
-      "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
-    },
-    "OSSetArenaHi": {
-      "address": "0x80239A08",
       "evidence": "fstload actual target complete operand proof/currentcanonicalheaders; relatedSDK API spelling."
     },
     "strncmp": {
       "address": "0x801C302C",
       "evidence": "Actual original248body REL24 at80241F60/80241F98 length4/2; callee801C302C..3084 bounded NUL stopping byte comparison. Relatedlibc spelling, no originalsource/debugname claim."
+    },
+    "OSResumeThread": {
+      "address": "0x8023E040",
+      "evidence": "Actual target operands and canonical accepted API signatures in GXFifo, relatedSDK identity."
+    },
+    "OSSuspendThread": {
+      "address": "0x8023E2C8",
+      "evidence": "Actual target operands and canonical accepted API signatures in GXFifo, relatedSDK identity."
+    },
+    "__piReg": {
+      "address": "0x803ED358",
+      "evidence": "Actual target operands and canonical accepted API signatures in GXFifo, relatedSDK identity."
+    },
+    "__GXSetMatrixIndex": {
+      "address": "0x802528D8",
+      "evidence": "GXAttr actualoriginalTexCoordGen2REL24 binds sharedhelper; genuine internalGXAttrmatIdxAttr prototype/currenttypedGXData fields."
     }
   },
   "units": [
@@ -9063,6 +9071,74 @@
           "placement": ".data6",
           "start": "0x803ED8E0",
           "end": "0x803ED918"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXFifo.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete faithful related SDK source; actual target operands/callers and focused full-DOL proof support retained roots and storage. Original archive boundaries remain provisional.",
+      "link_roots": {
+        "symbols": [
+          "GXInitFifoBase",
+          "GXInitFifoLimits",
+          "GXInitFifoPtrs",
+          "GXSetCPUFifo",
+          "GXSetGPFifo",
+          "GXGetFifoPtrs",
+          "GXSetBreakPtCallback",
+          "GXEnableBreakPt",
+          "GXDisableBreakPt",
+          "__GXFifoInit"
+        ],
+        "evidence": "Only real target global functions; sixstatic routines naturally reachable through existingsourcecallgraph/addressrefs; extra3body92sourcepreserved"
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024C038",
+          "end": "0x8024C7D8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED380",
+          "end": "0x803ED3A0"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSArena.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete faithful related SDK source; actual target operands/callers and focused full-DOL proof support retained roots and storage. Original archive boundaries remain provisional.",
+      "link_roots": {
+        "symbols": [
+          "OSGetArenaHi",
+          "OSGetArenaLo",
+          "OSSetArenaHi",
+          "OSSetArenaLo"
+        ],
+        "evidence": "Four actual target getter/setter entry points; full two allocator helper source bodies preserved and naturally unretained."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802399F8",
+          "end": "0x80239A18"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC158",
+          "end": "0x803EC15C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED080",
+          "end": "0x803ED084"
         }
       ]
     }
