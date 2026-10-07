@@ -1,23 +1,8 @@
 #include <dolphin/mtx.h>
+#include "game/cu_801444D8.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801C68FC.h"
-
-/* Object returned by fn_80144CE0 and released by fn_80144E38. */
-struct Object_80144CE0 {
-    char mPad000[0x2B4];
-    unsigned char mUnknown2B4;
-    char mPad2B5[0x3B8 - 0x2B5];
-    unsigned int mUnknown3B8;
-};
-
-/* Arguments block passed to fn_80144CE0. */
-struct Args_80144CE0 {
-    int mUnknown00;
-    void *mUnknown04;
-    Mtx44 *mUnknown08;
-    int mUnknown0C;
-    int mUnknown10;
-};
+#include "game/Object_80146094.h"
 
 /* One 0x60-byte entry of the pool at lbl_803EB24C. */
 struct Event_801459F0 {
@@ -51,30 +36,7 @@ struct Vec_801EBC18 {
     int mUnknown8;
 };
 
-struct Object_80146094 {
-    char mPad000[0x568];
-    unsigned char mUnknown568;
-    float mUnknown56C;
-    float mUnknown570;
-    float mUnknown574;
-    char mPad578[0x57C - 0x578];
-    unsigned char mUnknown57C;
-    float mUnknown580;
-    float mUnknown584;
-    float mUnknown588;
-    char mPad58C[0x590 - 0x58C];
-    float mUnknown590;
-    float mUnknown594;
-    float mUnknown598;
-    char mPad59C[0x5A0 - 0x59C];
-    int mUnknown5A0;
-    int mUnknown5A4;
-    int mUnknown5A8;
-};
-
 extern "C" {
-Object_80144CE0 *fn_80144CE0(Args_80144CE0 *pArgs, int b, int c);
-void fn_80144E38(Object_80144CE0 *pObject);
 void fn_80145224(void);
 void fn_80145314(Event_801459F0 *pEvent);
 void fn_801454DC(Event_801459F0 *pEvent);
@@ -286,7 +248,7 @@ void fn_80145EB8(void)
     }
 }
 
-void fn_80145EFC(int a, void *b, void *c, int d)
+void fn_80145EFC(int a, float *pPos, float *pRot, Source_80144CE0 *pSource)
 {
     Args_80144CE0 args;
     Mtx44 m;
@@ -302,9 +264,9 @@ void fn_80145EFC(int a, void *b, void *c, int d)
     fn_801D03D0(m);
     m[2][3] = m[1][3] = m[0][3] = 0.0f;
     fn_801D0508();
-    fn_801D0C58(b);
-    if (c != 0) {
-        Vec_801EBC18 v = fn_801EBC18(c);
+    fn_801D0C58(pPos);
+    if (pRot != 0) {
+        Vec_801EBC18 v = fn_801EBC18(pRot);
 
         fn_801D0BCC(v.mUnknown8, v.mUnknown4, v.mUnknown0);
     }
@@ -312,10 +274,10 @@ void fn_80145EFC(int a, void *b, void *c, int d)
     fn_801D0544();
     args.mUnknown0C = 0;
     args.mUnknown10 = 0;
-    args.mUnknown04 = pEntry;
+    args.mUnknown04 = &pEntry->mMatrix;
     args.mUnknown08 = &m;
     args.mUnknown00 = a;
-    pEntry->mUnknown40 = fn_80144CE0(&args, 0, d);
+    pEntry->mUnknown40 = fn_80144CE0(&args, 0, pSource);
     fn_801C6AA4(lbl_803EB254, pEntry, 0);
 }
 

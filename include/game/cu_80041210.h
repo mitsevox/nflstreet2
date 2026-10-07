@@ -17,12 +17,13 @@ struct Extra_8004149C {
     int mUnknown1708;
 };
 
+struct Object_80040818;
 struct Object_80041904;
 typedef void (*Callback_80041904)(Object_80041904 *pObject, int entry, int mode);
 
 struct Object_80041904 {
     int mUnknown0;
-    char mUnknown4[4];
+    int mUnknown4;
     float mUnknown8;
     float mUnknown12;
     float mUnknown16;
@@ -41,7 +42,10 @@ struct Object_80041904 {
     float mUnknown132;
     float mUnknown136;
     int mUnknown140;
-    char mUnknown144[40];
+    int mUnknown144;
+    unsigned short mUnknown148;
+    char mUnknown150[2];
+    Object_80040818 *mUnknown152[8];
     Callback_80041904 mUnknown184;
     int mUnknown188;
     char mUnknown192[228];

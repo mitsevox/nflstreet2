@@ -118,7 +118,9 @@ struct Object_80039F5C {
     int mUnknown548;
     char mUnknown552[8];
     Block_80170374 mUnknown560;
-    char mUnknown616[160];
+    char mUnknown616[152];
+    float mUnknown768;
+    char mUnknown772[4];
     unsigned char mUnknown776;
     char mUnknown777[7];
     State_80039F5C *mpState;
@@ -153,7 +155,7 @@ struct Object_80039F5C {
 extern "C" {
 Object_80039F5C *fn_80039F5C(int team, unsigned short index);
 Object_80039F5C *fn_8009BCE8(int *pRef);
-void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, int a);
+void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pA);
 }
 
 #endif

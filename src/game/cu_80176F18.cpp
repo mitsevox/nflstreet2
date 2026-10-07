@@ -12,6 +12,7 @@
 #include "game/cu_80067C10.h"
 #include "game/cu_8007C9D4.h"
 #include "game/cu_80136B1C.h"
+#include "game/cu_8003108C.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_8016871C.h"
@@ -109,10 +110,8 @@ struct Baseline_802E9ADC {
 
 extern "C" {
 extern Baseline_802E9ADC lbl_802E9ADC[2];
-extern void *lbl_803EA368;
 
 int fn_80025708(void);
-void fn_800310C0(void *p, int a, Object_80039F5C *pObject, Vector_80039F5C *pPos, int *pFacing);
 Set_8003EE6C *fn_8003A078(void);
 void fn_8003A090(void);
 void fn_800535FC(void);

@@ -3,7 +3,7 @@
    value and a player. The replay code in src/game/cu_8002B8F8.cpp adds and
    queries events through these functions. Neutral file name; the whole file is a
    draft compiled only for comparison. */
-#include "game/cu_8002B8F8.h"
+#include "game/cu_8003108C.h"
 
 /* One row of lbl_802CCA34: fn_8003145C maps mCode to the event id mEvent. */
 struct Row_802CCA34 {
@@ -18,10 +18,6 @@ int fn_8002D0D0(Type_803EA368 *p);
 int fn_8002D158(Type_803EA368 *p);
 int fn_8011F1A4(void);
 int fn_8023790C(void);
-
-unsigned int fn_8003108C(Type_803EA368 *p, int id);
-void fn_800310C0(Type_803EA368 *p, int id, Object_80039F5C *pObject, Vector_80039F5C *pPos, int *pFacing);
-int fn_800312FC(Type_803EA368 *p, int id);
 }
 
 static Row_802CCA34 lbl_802CCA34[] = {

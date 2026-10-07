@@ -180,6 +180,107 @@ class ContributorTests(unittest.TestCase):
         self.entry['provenance'].update(original_source='src/test.c', renamed_blob=renamed_blob)
         self.assertEqual(self.credits()[0]['login'], 'alice')
 
+    def test_source_merge_preserves_original_source_provenance(self):
+        (self.root/'src/merged.c').write_text('int other(void) { return 2; }\n'
+                                             'int function(void) { return 1; }\n')
+        self.git('add', 'src/merged.c')
+        self.git('rm', '-q', 'src/test.c')
+        self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                 'commit', '-qm', 'Merge sources')
+        self.commit = self.git('rev-parse', 'HEAD')
+        self.build['units'][0]['source'] = 'src/merged.c'
+        self.entry['source'] = 'src/merged.c'
+        self.entry['provenance'].update(original_source='src/test.c', merged_source=True,
+                                      migration_commit=self.commit,
+                                      merged_blob=self.git('rev-parse', self.commit + ':src/merged.c'))
+        self.assertEqual(self.credits()[0]['login'], 'alice')
+        self.entry['provenance']['renamed_blob'] = self.git('rev-parse', 'HEAD:src/merged.c')
+        with self.assertRaisesRegex(ValueError, 'merged source provenance'):
+            self.credits()
+        del self.entry['provenance']['renamed_blob']
+        self.entry['provenance']['merged_source'] = 1
+        with self.assertRaisesRegex(ValueError, 'merged source provenance'):
+            self.credits()
+
+    def test_source_merge_needs_a_commit_that_replaces_the_original_path(self):
+        (self.root/'src/merged.c').write_text('int function(void) { return 1; }\n')
+        self.git('add', 'src/merged.c')
+        self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                 'commit', '-qm', 'Add a second source')
+        self.commit = self.git('rev-parse', 'HEAD')
+        self.build['units'][0]['source'] = 'src/merged.c'
+        self.entry['source'] = 'src/merged.c'
+        self.entry['provenance'].update(original_source='src/test.c', merged_source=True,
+                                      migration_commit=self.commit,
+                                      merged_blob=self.git('rev-parse', self.commit + ':src/merged.c'))
+        with self.assertRaisesRegex(ValueError, 'Merged source lacks'):
+            self.credits()
+        self.git('rm', '-q', 'src/test.c')
+        self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                 'commit', '-qm', 'Remove the original later')
+        self.commit = self.git('rev-parse', 'HEAD')
+        activity.clear_cache()
+        with self.assertRaisesRegex(ValueError, 'Merged source lacks'):
+            self.credits()
+
+    def test_source_merge_rejects_a_pure_rename(self):
+        self.git('mv', 'src/test.c', 'src/merged.c')
+        self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                 'commit', '-qm', 'Rename the source')
+        self.commit = self.git('rev-parse', 'HEAD')
+        self.build['units'][0]['source'] = 'src/merged.c'
+        self.entry['source'] = 'src/merged.c'
+        self.entry['provenance'].update(original_source='src/test.c', merged_source=True,
+                                      migration_commit=self.commit,
+                                      merged_blob=self.git('rev-parse', self.commit + ':src/merged.c'))
+        with self.assertRaisesRegex(ValueError, 'Merged source lacks'):
+            self.credits()
+
+    def test_source_merge_root_commit_has_no_parent_to_replace(self):
+        self.assertFalse(activity.merged_source(self.root, self.commit, 'src/test.c',
+                                                'src/merged.c', self.commit, self.blob))
+        self.assertFalse(activity.merged_source(self.root, self.commit, 'src/test.c',
+                                                'src/test.c', self.commit, self.blob))
+
+    def test_source_merge_requires_an_explicit_receipt(self):
+        (self.root/'src/merged.c').write_text('int unrelated(void) { return 99; }\n')
+        self.git('add', 'src/merged.c'); self.git('rm', '-q', 'src/test.c')
+        self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                 'commit', '-qm', 'Unrelated replacement')
+        self.commit = self.git('rev-parse', 'HEAD')
+        self.build['units'][0]['source'] = 'src/merged.c'
+        self.entry['source'] = 'src/merged.c'
+        self.entry['provenance'].update(original_source='src/test.c', merged_source=True)
+        with self.assertRaisesRegex(ValueError, 'Invalid merged source provenance'):
+            self.credits()
+
+    def test_source_merge_pinned_receipt_needs_the_same_reachable_transition(self):
+        original = self.commit
+        (self.root/'src/merged.c').write_text('int function(void) { return 1; }\nint other;\n')
+        self.git('add', 'src/merged.c'); self.git('rm', '-q', 'src/test.c')
+        self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                 'commit', '-qm', 'Reviewed migration')
+        migration = self.git('rev-parse', 'HEAD')
+        merged_blob = self.git('rev-parse', 'HEAD:src/merged.c')
+        self.entry['source'] = self.build['units'][0]['source'] = 'src/merged.c'
+        self.entry['provenance'].update(original_source='src/test.c', merged_source=True,
+                                      migration_commit=migration, merged_blob=merged_blob)
+        # A squash with the same parent blobs and transition preserves the receipt.
+        tree = self.git('rev-parse', 'HEAD^{tree}')
+        self.commit = self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                               'commit-tree', tree, '-p', original, text='Squash migration\n')
+        self.assertEqual(self.credits()[0]['functions'], 1)
+        # The proof object still exists, but a different reachable replacement cannot use it.
+        self.git('reset', '--hard', original)
+        (self.root/'src/merged.c').write_text('int unrelated(void) { return 99; }\n')
+        self.git('add', 'src/merged.c'); self.git('rm', '-q', 'src/test.c')
+        self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                 'commit', '-qm', 'Unrelated replacement')
+        self.commit = self.git('rev-parse', 'HEAD')
+        activity.clear_cache()
+        with self.assertRaisesRegex(ValueError, 'Merged source lacks'):
+            self.credits()
+
     def test_path_migration_rejects_unrelated_current_source(self):
         (self.root/'src/unrelated.c').write_text('int function(void) { return 99; }')
         self.git('add', 'src/unrelated.c')
