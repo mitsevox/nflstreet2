@@ -12421,6 +12421,74 @@
           "end": "0x80135CEC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800469EC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv target membership, layout and literal rows; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80046920",
+          "end": "0x8004732C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D5AC",
+          "end": "0x8028D600"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803078D4",
+          "end": "0x803078E8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC7B8",
+          "end": "0x803EC7CC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80046920",
+          "start": "0x80046920",
+          "end": "0x800469EC"
+        },
+        {
+          "symbol": "fn_800469EC",
+          "start": "0x800469EC",
+          "end": "0x80046DEC"
+        },
+        {
+          "symbol": "fn_80046DEC",
+          "start": "0x80046DEC",
+          "end": "0x80046E30"
+        },
+        {
+          "symbol": "fn_80046E30",
+          "start": "0x80046E30",
+          "end": "0x80046FD0"
+        },
+        {
+          "symbol": "fn_80046FD0",
+          "start": "0x80046FD0",
+          "end": "0x80047050"
+        },
+        {
+          "symbol": "fn_80047050",
+          "start": "0x80047050",
+          "end": "0x8004730C"
+        },
+        {
+          "symbol": "fn_8004730C",
+          "start": "0x8004730C",
+          "end": "0x8004732C"
+        }
+      ]
     }
   ]
 }
