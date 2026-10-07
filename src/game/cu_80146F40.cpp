@@ -1,3 +1,4 @@
+#include "game/Record_803EB25C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_8007A334.h"
 #include "game/PaletteColor.h"
@@ -7,12 +8,6 @@ struct Rgb_800840A4 {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
     unsigned char mUnknown2;
-};
-
-/* 0x24-byte record of the array lbl_803EB25C. */
-struct Record_803EB25C {
-    char mUnknown0[0x20];
-    float mUnknown20;
 };
 
 /* Argument of fn_801476C8. */

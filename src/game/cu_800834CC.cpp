@@ -1,20 +1,13 @@
 #include <string.h>
 
 #include "game/Object_8007A334.h"
+#include "game/Query_8008352C.h"
 #include "game/Object_8008044C.h"
 #include "game/cu_8003E214.h"
 #include "game/fn_8003B6BC.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_802372EC.h"
-
-/* Optional second argument of fn_8008352C: three words, copied only when
-   the pointer is non-null. */
-struct Query_8008352C {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-};
 
 extern "C" {
 void fn_8003DE74(unsigned char side, int *pList);

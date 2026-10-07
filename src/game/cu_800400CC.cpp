@@ -1,3 +1,4 @@
+#include "game/fn_8022781C.h"
 #include <string.h>
 
 #include "game/bitstream.h"
@@ -153,7 +154,6 @@ void fn_801EC048(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, floa
 int fn_801F1520(int value);
 int fn_801F7C88(void);
 int fn_80227594(float *pA, float *pB, float tolerance);
-float fn_8022781C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
 void fn_80228D58(Object_80040818 *pObject);
