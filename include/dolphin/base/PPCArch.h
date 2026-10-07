@@ -7,6 +7,11 @@
 extern "C" {
 #endif
 
+u32 PPCMfhid2(void);
+void PPCMthid2(u32 val);
+void PPCMtwpar(u32 val);
+
+
 #define MSR_FP          0x00002000  // floating point available
 #define MSR_FE0         0x00000800  // floating point exception enable
 #define MSR_FE1         0x00000100  // floating point exception enable
