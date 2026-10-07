@@ -8654,6 +8654,25 @@
           "end": "0x802D6C24"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801442FC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801442FC-0x801444D8 (src/game/cu_801442FC.cpp) and its .rodata row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801442FC",
+          "end": "0x801444D8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0398",
+          "end": "0x802A03A8"
+        }
+      ]
     }
   ]
 }
