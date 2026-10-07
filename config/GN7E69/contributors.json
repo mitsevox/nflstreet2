@@ -9525,8 +9525,11 @@
       "provenance": {
         "pull_request": 453,
         "merged_via": 453,
-        "commit": "dffa4e4569b473b505012f9851e71debc6c6523f",
-        "introduced_blob": "24c85e1efbb4c3b4eb29a808fc02f1d55bbf5642"
+        "commit": "42a61471d3410c7c17d0a3acb7170a73e3c07c1e",
+        "introduced_blob": "da6cc66e412f0ed76d1260996290f9cc69439703",
+        "original_commit": "dffa4e4569b473b505012f9851e71debc6c6523f",
+        "original_blob": "24c85e1efbb4c3b4eb29a808fc02f1d55bbf5642",
+        "integration_adjustment": "Reconcile shared Level_80054130 declaration and field names; function behavior and target layouts unchanged."
       }
     },
     {
