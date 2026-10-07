@@ -10405,7 +10405,8 @@
       "provenance": {
         "pull_request": 518,
         "commit": "e41764df10133c40bb021486fe67fae9d00c7532",
-        "introduced_blob": "bd86568291ba7f3e478b30f4a247cb27a256712f"
+        "introduced_blob": "bd86568291ba7f3e478b30f4a247cb27a256712f",
+        "merged_via": 518
       }
     },
     {
@@ -10436,7 +10437,8 @@
       "provenance": {
         "pull_request": 518,
         "commit": "f44d5e9ea92e987aaa5a66cda3e34f1357b0406c",
-        "introduced_blob": "4f19805bc617e38287ac26c1f0580402120c369e"
+        "introduced_blob": "4f19805bc617e38287ac26c1f0580402120c369e",
+        "merged_via": 518
       }
     }
   ],
