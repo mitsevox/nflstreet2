@@ -9903,6 +9903,86 @@
         "commit": "49c3648b69faca0aea3938a518e006d4912278d4",
         "introduced_blob": "811ee0a277af96f379445df26487d930ba13e83f"
       }
+    },
+    {
+      "source": "src/dolphin/vi/vi.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x802430CC",
+        "0x80243340",
+        "0x80243384",
+        "0x802433C8",
+        "0x80243468",
+        "0x80243668",
+        "0x80243B18",
+        "0x80243B6C",
+        "0x80243E40",
+        "0x80243FE0",
+        "0x80244808",
+        "0x80244938",
+        "0x802449A4",
+        "0x80244A20",
+        "0x80244A5C",
+        "0x80244AC4",
+        "0x80244B60",
+        "0x80244BF8",
+        "0x80244C60",
+        "0x80244C9C",
+        "0x80244EB8"
+      ],
+      "provenance": {
+        "commit": "8f798ac82e3d9e24bdc1d7bb65942455e2d14d5c",
+        "introduced_blob": "56051c4a358cfa8560a22afd657413d0e4a2aa8d",
+        "pull_request": 491,
+        "merged_via": 491
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXFrameBuf.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024ECE4",
+        "0x8024ED60",
+        "0x8024EDDC",
+        "0x8024EE10",
+        "0x8024EF40",
+        "0x8024EF64",
+        "0x8024EFBC",
+        "0x8024F088",
+        "0x8024F100",
+        "0x8024F308",
+        "0x8024F31C",
+        "0x8024F484",
+        "0x8024F610"
+      ],
+      "provenance": {
+        "commit": "6d2d36c28b674a9d3c2604f6456bde44b30b9367",
+        "introduced_blob": "7e9067e8a7c9d14f14b8dd05d7e09dbcdf9602fc",
+        "pull_request": 491,
+        "merged_via": 491
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSError.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023AB48",
+        "0x8023ABC8",
+        "0x8023ACF4",
+        "0x8023AF0C"
+      ],
+      "provenance": {
+        "commit": "14664b2231ba3e842837f28886179f4ab1c8fe52",
+        "introduced_blob": "b8081ca942a9c06b1d7eb7d87e5ac0550139d0f7",
+        "pull_request": 491,
+        "merged_via": 491
+      }
     }
   ],
   "target": "GN7E69",
