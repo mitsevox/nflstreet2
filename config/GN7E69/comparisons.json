@@ -15696,6 +15696,263 @@
         "DVDCancelAllAsync",
         "DVDCancelAll"
       ]
+    },
+    {
+      "source": "src/dolphin/pad/Pad.c",
+      "profile": "dolphin_release",
+      "evidence": "Pinned BFBB8fb1c232 coherent PAD source, full nineteen target bodies and initialized pools; explicit foreign compiler directive adaptation under unchanged target profile. See evidence.tsv; native tail-SDA layout remains measured partial.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802466D0",
+          "end": "0x802481A0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC218",
+          "end": "0x803EC238"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A5880",
+          "end": "0x803A58D0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDD00",
+          "end": "0x802FDD58"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED288",
+          "end": "0x803ED2B0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "UpdateOrigin",
+          "start": "0x802466D0",
+          "end": "0x80246874"
+        },
+        {
+          "symbol": "PADOriginCallback",
+          "start": "0x80246874",
+          "end": "0x80246938"
+        },
+        {
+          "symbol": "PADOriginUpdateCallback",
+          "start": "0x80246938",
+          "end": "0x802469F8"
+        },
+        {
+          "symbol": "PADProbeCallback",
+          "start": "0x802469F8",
+          "end": "0x80246AD0"
+        },
+        {
+          "symbol": "PADTypeAndStatusCallback",
+          "start": "0x80246AD0",
+          "end": "0x80246DFC"
+        },
+        {
+          "symbol": "PADReceiveCheckCallback",
+          "start": "0x80246DFC",
+          "end": "0x80246F30"
+        },
+        {
+          "symbol": "PADReset",
+          "start": "0x80246F30",
+          "end": "0x80247030"
+        },
+        {
+          "symbol": "PADRecalibrate",
+          "start": "0x80247030",
+          "end": "0x80247134"
+        },
+        {
+          "symbol": "PADInit",
+          "start": "0x80247134",
+          "end": "0x8024734C"
+        },
+        {
+          "symbol": "PADRead",
+          "start": "0x8024734C",
+          "end": "0x802476F8"
+        },
+        {
+          "symbol": "PADControlMotor",
+          "start": "0x802476F8",
+          "end": "0x8024779C"
+        },
+        {
+          "symbol": "PADSetSpec",
+          "start": "0x8024779C",
+          "end": "0x802477FC"
+        },
+        {
+          "symbol": "SPEC0_MakeStatus",
+          "start": "0x802477FC",
+          "end": "0x80247970"
+        },
+        {
+          "symbol": "SPEC1_MakeStatus",
+          "start": "0x80247970",
+          "end": "0x80247AE4"
+        },
+        {
+          "symbol": "SPEC2_MakeStatus",
+          "start": "0x80247AE4",
+          "end": "0x80247EDC"
+        },
+        {
+          "symbol": "OnReset",
+          "start": "0x80247EDC",
+          "end": "0x80248070"
+        },
+        {
+          "symbol": "SamplingHandler",
+          "start": "0x80248070",
+          "end": "0x802480D0"
+        },
+        {
+          "symbol": "PADSetSamplingCallback",
+          "start": "0x802480D0",
+          "end": "0x80248124"
+        },
+        {
+          "symbol": "__PADDisableRecalibration",
+          "start": "0x80248124",
+          "end": "0x802481A0"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ai/ai.c",
+      "profile": "dolphin_release",
+      "evidence": "Pinned BFBB8fb1c232 coherent AI C source; all eighteen complete C functions measured, SRC timing routine remains partial. Original flag-clear and stack-switch functions are wholly unresolved and remain mapped/unlinked. See evidence.tsv.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024A0FC",
+          "end": "0x8024A9EC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDDE8",
+          "end": "0x802FDE2C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC248",
+          "end": "0x803EC24C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED308",
+          "end": "0x803ED348"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "AIRegisterDMACallback",
+          "start": "0x8024A0FC",
+          "end": "0x8024A140"
+        },
+        {
+          "symbol": "AIInitDMA",
+          "start": "0x8024A140",
+          "end": "0x8024A1C8"
+        },
+        {
+          "symbol": "AIStartDMA",
+          "start": "0x8024A1C8",
+          "end": "0x8024A1E0"
+        },
+        {
+          "symbol": "AIStopDMA",
+          "start": "0x8024A1E0",
+          "end": "0x8024A1F8"
+        },
+        {
+          "symbol": "AISetStreamPlayState",
+          "start": "0x8024A1F8",
+          "end": "0x8024A2D0"
+        },
+        {
+          "symbol": "AIGetStreamPlayState",
+          "start": "0x8024A2D0",
+          "end": "0x8024A2E0"
+        },
+        {
+          "symbol": "AISetDSPSampleRate",
+          "start": "0x8024A2E0",
+          "end": "0x8024A3C0"
+        },
+        {
+          "symbol": "AIGetDSPSampleRate",
+          "start": "0x8024A3C0",
+          "end": "0x8024A3D4"
+        },
+        {
+          "symbol": "__AI_set_stream_sample_rate",
+          "start": "0x8024A3D4",
+          "end": "0x8024A4A8"
+        },
+        {
+          "symbol": "AIGetStreamSampleRate",
+          "start": "0x8024A4A8",
+          "end": "0x8024A4B8"
+        },
+        {
+          "symbol": "AISetStreamVolLeft",
+          "start": "0x8024A4B8",
+          "end": "0x8024A4D4"
+        },
+        {
+          "symbol": "AIGetStreamVolLeft",
+          "start": "0x8024A4D4",
+          "end": "0x8024A4E4"
+        },
+        {
+          "symbol": "AISetStreamVolRight",
+          "start": "0x8024A4E4",
+          "end": "0x8024A500"
+        },
+        {
+          "symbol": "AIGetStreamVolRight",
+          "start": "0x8024A500",
+          "end": "0x8024A510"
+        },
+        {
+          "symbol": "AIInit",
+          "start": "0x8024A510",
+          "end": "0x8024A67C"
+        },
+        {
+          "symbol": "__AISHandler",
+          "start": "0x8024A688",
+          "end": "0x8024A704"
+        },
+        {
+          "symbol": "__AIDHandler",
+          "start": "0x8024A704",
+          "end": "0x8024A7B0"
+        },
+        {
+          "symbol": "__AI_SRC_INIT",
+          "start": "0x8024A808",
+          "end": "0x8024A9EC"
+        }
+      ]
     }
   ]
 }

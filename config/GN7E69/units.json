@@ -1091,6 +1091,10 @@
     "DVDCompareDiskID": {
       "address": "0x80241F20",
       "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "__AICallbackStackSwitch": {
+      "address": "0x8024A7B0",
+      "evidence": "Original AID handler directcall passes callbackcodepointerr3, original88bytes changesr1 andcallsnoargs thenrestores; sourceimplementation unresolved."
     }
   },
   "units": [

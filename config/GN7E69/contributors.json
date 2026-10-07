@@ -10702,6 +10702,68 @@
         "original_blob": "11288d899e338df40f5846b759dcc1194be3980d",
         "integration_adjustment": "Remove the unsupported unused cancellation stack local and inherited process comments; preserve function behavior and ordinary compiler settings. Cancellation frame instructions remain measured partial."
       }
+    },
+    {
+      "source": "src/dolphin/pad/Pad.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x802466D0",
+        "0x80246874",
+        "0x80246938",
+        "0x802469F8",
+        "0x80246AD0",
+        "0x80246DFC",
+        "0x80246F30",
+        "0x80247030",
+        "0x8024734C",
+        "0x802476F8",
+        "0x802477FC",
+        "0x80247970",
+        "0x80247AE4",
+        "0x80248124"
+      ],
+      "provenance": {
+        "pull_request": 529,
+        "merged_via": 529,
+        "commit": "1097f87ed6ddf20b4a9937f3a270d054be75a262",
+        "introduced_blob": "f0eec07fb657a4ab7264fca9a996828ab1d8e19f",
+        "original_commit": "36572653d679b7adb854d105cb2cadaa5f7e582f",
+        "original_blob": "cb51040943529f811f6532d20c835f782d282246",
+        "integration_adjustment": "Reuse canonical os/string includes and fixed boot globals; omit redundant offsetof macro and unsupported foreign-compiler push/inline-all/pop directives under the unchanged pinned profile. Complete coherent C bodies retained; native tail-SDA packing remains measured partial."
+      }
+    },
+    {
+      "source": "src/dolphin/ai/ai.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024A0FC",
+        "0x8024A140",
+        "0x8024A1C8",
+        "0x8024A1E0",
+        "0x8024A1F8",
+        "0x8024A2D0",
+        "0x8024A2E0",
+        "0x8024A3C0",
+        "0x8024A3D4",
+        "0x8024A4A8",
+        "0x8024A4B8",
+        "0x8024A4D4",
+        "0x8024A4E4",
+        "0x8024A500",
+        "0x8024A510",
+        "0x8024A688",
+        "0x8024A704"
+      ],
+      "provenance": {
+        "pull_request": 529,
+        "merged_via": 529,
+        "commit": "0c1b26d92daa749bec20fcde3f74940c517e29f3",
+        "introduced_blob": "dfc630bfb306a68a9c2970b7c9c09d299f9b9bdc"
+      }
     }
   ],
   "target": "GN7E69",
