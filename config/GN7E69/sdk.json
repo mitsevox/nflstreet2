@@ -559,7 +559,8 @@
           "end": "0x803A4510",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete native .bss allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional."
+          "evidence": "Complete native .bss allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional.",
+          "object_seed": true
         },
         {
           "section": ".data4",
@@ -567,7 +568,8 @@
           "end": "0x802FCC8D",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete native .data allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional."
+          "evidence": "Complete native .data allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional.",
+          "object_seed": true
         },
         {
           "section": ".sbss",
@@ -575,7 +577,8 @@
           "end": "0x803ED0DC",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete native .sbss allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional."
+          "evidence": "Complete native .sbss allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional.",
+          "object_seed": true
         },
         {
           "section": ".data5",
@@ -583,7 +586,8 @@
           "end": "0x803EC16D",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete native .sdata allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional."
+          "evidence": "Complete native .sdata allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional.",
+          "object_seed": true
         }
       ]
     },
