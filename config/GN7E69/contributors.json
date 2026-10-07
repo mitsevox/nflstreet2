@@ -8840,6 +8840,23 @@
         "commit": "7872d50470ab3dfb0ea5084ebdad5afe31ba4b23",
         "introduced_blob": "645a6f90e41a1aefbd2f1eaed3f23518f5a3b3bb"
       }
+    },
+    {
+      "source": "src/game/cu_800325E8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800325E8",
+        "0x800325F4",
+        "0x80032600"
+      ],
+      "provenance": {
+        "pull_request": 467,
+        "merged_via": 467,
+        "commit": "771a8506195b2ced10b28a0cedd813d38cd6c2b1",
+        "introduced_blob": "d6ee8c7d4f53d9d8c48d9b7fd300dc024a06ffee"
+      }
     }
   ],
   "target": "GN7E69",
