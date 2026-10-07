@@ -10602,6 +10602,51 @@
         "commit": "bcf05077005fe09d851b9d02fec33532b2e90323",
         "introduced_blob": "b0b26f6633f4db968f2d53f9936539f7e278828c"
       }
+    },
+    {
+      "source": "src/dolphin/ax/AXVPB.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80288414",
+        "0x8028841C",
+        "0x80288B68",
+        "0x80288DE0",
+        "0x80288DEC",
+        "0x80288E2C",
+        "0x8028902C",
+        "0x80289030",
+        "0x802890F4",
+        "0x80289150",
+        "0x80289260",
+        "0x80289304",
+        "0x8028939C"
+      ],
+      "provenance": {
+        "pull_request": 542,
+        "merged_via": 542,
+        "commit": "82922e85957d61a1787ca4f12b7a57e128a1b476",
+        "introduced_blob": "7f4279abde0f17a93b58782ac5bff59fe6f082f4",
+        "original_blob": "5281160427fbb2fc2e914ba8a1c73c4c5d39667f",
+        "integration_adjustment": "Removed the donor no-effect dst expression explicitly marked as register-allocation scaffolding and inaccurate COPYALL commentary; complete coherent source and pinned-profile compiler output remain unchanged.",
+        "original_commit": "274ebccaaf265cbdbc1f111d9d26272fed80ccae"
+      }
+    },
+    {
+      "source": "src/dolphin/dsp/dsp_debug.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80285D78"
+      ],
+      "provenance": {
+        "pull_request": 542,
+        "merged_via": 542,
+        "commit": "df9d8be5a779874c7938a7b9a3068054f13411a3",
+        "introduced_blob": "3cb3fb098f31ebfba52dfbdfc00906c8a203c707"
+      }
     }
   ],
   "target": "GN7E69",
