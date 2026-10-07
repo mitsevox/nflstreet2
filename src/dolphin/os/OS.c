@@ -167,7 +167,7 @@ void OSInit(void)
         else if (BootInfo->arenaHi)
         {
             BI2DebugFlagHolder =
-                (u32*)*((u8*)DEBUGFLAG_ADDR);
+                *((u8*)DEBUGFLAG_ADDR);
             BI2DebugFlag = &BI2DebugFlagHolder;
             __PADSpec = (u32) * ((u8*)OS_DEBUG_ADDRESS_2);
         }
