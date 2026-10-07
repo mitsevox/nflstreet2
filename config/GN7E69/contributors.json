@@ -8913,6 +8913,21 @@
         "commit": "9309229de46b802347f0d845f9041a7a37d60830",
         "introduced_blob": "135ae1212e5532a13d8066147b568349536ffeee"
       }
+    },
+    {
+      "source": "src/game/cu_8015A39C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8015C218"
+      ],
+      "provenance": {
+        "pull_request": 483,
+        "merged_via": 483,
+        "commit": "1562a06526704677b109a45004a18d8b0fb5455e",
+        "introduced_blob": "973b91a351935a9654519ed4b6f9c83440be4893"
+      }
     }
   ],
   "target": "GN7E69",
