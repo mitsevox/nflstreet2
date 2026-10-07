@@ -839,6 +839,30 @@
     "ReadBitStream__FP11BitStream_tUi": {
       "address": "0x80190F18",
       "evidence": "evidence.tsv external row 0x80190F18 (ReadBitStream__FP11BitStream_tUi), name row 0x80190F18 and type row BitStream_t."
+    },
+    "OSCreateAlarm": {
+      "address": "0x80239394",
+      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration."
+    },
+    "__OSMaskInterrupts": {
+      "address": "0x8023B5BC",
+      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration."
+    },
+    "OSClearContext": {
+      "address": "0x8023A6F4",
+      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration."
+    },
+    "OSSetCurrentContext": {
+      "address": "0x8023A52C",
+      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration."
+    },
+    "OSInitAlarm": {
+      "address": "0x80239348",
+      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration."
+    },
+    "DVDGetCurrentDiskID": {
+      "address": "0x80241974",
+      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration."
     }
   },
   "units": [
@@ -7934,6 +7958,58 @@
           "placement": ".sbss",
           "start": "0x803EC784",
           "end": "0x803EC790"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/dvd/dvdlow.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv DVDLow retained functions, native storage and related source/type rows; original file ownership remains provisional.",
+      "link_roots": {
+        "symbols": [
+          "__DVDInitWA",
+          "__DVDInterruptHandler",
+          "DVDLowRead",
+          "DVDLowSeek",
+          "DVDLowWaitCoverClose",
+          "DVDLowReadDiskID",
+          "DVDLowStopMotor",
+          "DVDLowRequestError",
+          "DVDLowInquiry",
+          "DVDLowAudioStream",
+          "DVDLowRequestAudioStatus",
+          "DVDLowAudioBufferConfig",
+          "DVDLowReset",
+          "DVDLowBreak",
+          "DVDLowClearCallback",
+          "__DVDLowSetWAType"
+        ],
+        "evidence": "evidence.tsv DVDLow linker row: twenty target-visible functions; other native bodies naturally removed by ordinary SN linker after inlining or no target root."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80242288",
+          "end": "0x802430CC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A5668",
+          "end": "0x803A5738"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC1F0",
+          "end": "0x803EC1F4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED188",
+          "end": "0x803ED1D0"
         }
       ]
     }
