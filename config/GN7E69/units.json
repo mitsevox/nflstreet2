@@ -7384,13 +7384,13 @@
     {
       "source": "src/game/cu_80138CC0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80138CC0-0x80138F64 (src/game/cu_80138CC0.cpp), its data, type and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80138CC0-0x801390D0 (src/game/cu_80138CC0.cpp), its data, type and source-form rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80138CC0",
-          "end": "0x80138F64"
+          "end": "0x801390D0"
         },
         {
           "section": ".rodata",
@@ -7402,7 +7402,7 @@
           "section": ".sdata",
           "placement": ".data5",
           "start": "0x803EB1A8",
-          "end": "0x803EB1AC"
+          "end": "0x803EB1B0"
         }
       ]
     },
@@ -7938,14 +7938,14 @@
       ]
     },
     {
-      "source": "src/game/cu_80138F64.cpp",
+      "source": "src/game/cu_801390D0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80138F64-0x80139308 (src/game/cu_80138F64.cpp) and its data, type, compiler and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x801390D0-0x80139308 (src/game/cu_801390D0.cpp) and its data, compiler and source-form rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80138F64",
+          "start": "0x801390D0",
           "end": "0x80139308"
         },
         {
@@ -7953,12 +7953,6 @@
           "placement": ".data3",
           "start": "0x8029FF08",
           "end": "0x8029FF1C"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB1AC",
-          "end": "0x803EB1B0"
         }
       ]
     }

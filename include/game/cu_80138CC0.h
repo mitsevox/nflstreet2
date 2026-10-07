@@ -5,8 +5,9 @@
 
 /* Two points 16 bytes apart with a float after the first; fn_80138CC0
    passes both points of two of these to fn_80088FFC, and fn_80138F64 copies
-   one as a 32-byte block from +16 of a collision sub-record and adds the
-   floats at +12 of two of them. */
+   one as a 32-byte block from +16 of a Sub_8003EC54 and adds the floats at
+   +12 of two of them. These 32 bytes are the region +16..+48 that
+   include/game/cu_8003EC04.h declares as separate floats. */
 struct Segment_80138CC0 {
     Vector_80039F5C mUnknown0;
     float mUnknownC;
