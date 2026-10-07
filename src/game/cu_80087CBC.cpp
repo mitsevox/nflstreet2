@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "game/Object_8007A334.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_801FCE10.h"
@@ -5,7 +7,6 @@
 extern "C" {
 int fn_8007A934(Object_8007A334 *pObject, int key);
 int fn_80168ED0(int a);
-int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 int fn_801C302C(const char *s1, const char *s2, int n);
 
 void fn_80087CBC(Object_8007A334 *pCursor);
@@ -76,7 +77,7 @@ unsigned char fn_80087DA4(Object_8007A334 *pCursor, int column)
     if (match) {
         signed char number = fn_8007A934(pCursor, lbl_802D6C14[column]);
 
-        fn_801C2E18(text, "%02d", number);
+        sprintf(text, "%02d", number);
         fn_800670B4(tag, mode, 0, &object);
         fn_801FCE10(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n",
                     tag, &handle, 1, object.mUnknown0);
