@@ -10440,6 +10440,70 @@
         "introduced_blob": "4f19805bc617e38287ac26c1f0580402120c369e",
         "merged_via": 518
       }
+    },
+    {
+      "source": "src/dolphin/card/CARDBios.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8025335C",
+        "0x80253360",
+        "0x80253394",
+        "0x8025346C",
+        "0x80253584",
+        "0x8025362C",
+        "0x802536B0",
+        "0x80253770",
+        "0x80253860",
+        "0x8025390C",
+        "0x802539B0",
+        "0x80253BDC",
+        "0x80253CEC",
+        "0x80253EA0",
+        "0x80253FD4",
+        "0x802540F0",
+        "0x802541D0",
+        "0x8025427C",
+        "0x80254284",
+        "0x802542BC",
+        "0x80254374",
+        "0x802543D8",
+        "0x80254408",
+        "0x80254558",
+        "0x802545F0"
+      ],
+      "provenance": {
+        "pull_request": 524,
+        "merged_via": 524,
+        "commit": "02000eca79bbfd616b21944bfb8a77a54bd35ae7",
+        "introduced_blob": "73f8e080b345edf287274516553df4a0b55e6479",
+        "original_commit": "11c3bb1e91d5ab1133bcab3a28e60152bcc33d67",
+        "original_blob": "98f59bcddf3345c3d2c88736fc398debcd031dc8",
+        "integration_adjustment": "Remove inherited implementation TODO comment only; source bodies, compiler inputs and native object unchanged."
+      }
+    },
+    {
+      "source": "src/dolphin/card/CARDMount.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80255C38",
+        "0x80255D3C",
+        "0x80255EB8",
+        "0x802562C8",
+        "0x80256400",
+        "0x802565A0",
+        "0x802565E8",
+        "0x80256684"
+      ],
+      "provenance": {
+        "pull_request": 524,
+        "merged_via": 524,
+        "commit": "bcf05077005fe09d851b9d02fec33532b2e90323",
+        "introduced_blob": "b0b26f6633f4db968f2d53f9936539f7e278828c"
+      }
     }
   ],
   "target": "GN7E69",
