@@ -82,12 +82,20 @@ struct Key_80110630 {
     unsigned char mUnknown2;
 };
 
+/* Record at +1240; only bytes +0..+3 are accessed (fn_800CE674 and
+   fn_800CE684 store -1 to them). Size not established. */
+struct Record_800CE674 {
+    short mUnknown0;
+    char mUnknown2;
+    char mUnknown3;
+};
+
 /* Record that +784 points to. */
 struct State_80039F5C {
     unsigned char mId;
     unsigned char mUnknown1;
     unsigned char mUnknown2;
-    char mUnknown3[1];
+    unsigned char mUnknown3[1];
     unsigned char mUnknown4;
     char mUnknown5[1];
     unsigned char mUnknown6;
@@ -116,7 +124,9 @@ struct Object_80039F5C {
     unsigned char mUnknown360;
     char mUnknown361[31];
     unsigned char mUnknown392;
-    char mUnknown393[31];
+    char mUnknown393[9];
+    unsigned char mUnknown402;
+    char mUnknown403[21];
     Object_800B26B0 mMotion;
     char mUnknown488[24];
     Object_8016D8B0 mUnknown512;
@@ -140,16 +150,27 @@ struct Object_80039F5C {
     Key_80110630 mUnknown1008;
     char mUnknown1011[21];
     int mUnknown1032;
-    char mUnknown1036[8];
+    int mUnknown1036;
+    int mUnknown1040;
     int mUnknown1044;
-    char mUnknown1048[112];
+    char mUnknown1048[16];
+    short mUnknown1064;
+    char mUnknown1066[60];
+    unsigned char mUnknown1126;
+    char mUnknown1127[7];
+    unsigned short mUnknown1134;
+    unsigned char mUnknown1136;
+    unsigned char mUnknown1137;
+    char mUnknown1138[22];
     Block_801718E8 mUnknown1160;
     unsigned char mUnknown1213;
     unsigned char mUnknown1214;
     char mUnknown1215[3];
     unsigned char mUnknown1218;
     unsigned char mUnknown1219;
-    char mUnknown1220[1680];
+    char mUnknown1220[20];
+    Record_800CE674 mUnknown1240;
+    char mUnknown1244[1656];
     float mUnknown2900;
     char mUnknown2904[4];
     unsigned short mUnknown2908;

@@ -6196,6 +6196,166 @@
           "symbol": "fn_800FD650",
           "start": "0x800FD650",
           "end": "0x800FD68C"
+        },
+        {
+          "symbol": "fn_80111F80",
+          "start": "0x80111F80",
+          "end": "0x80111FBC"
+        },
+        {
+          "symbol": "fn_80112E10",
+          "start": "0x80112E10",
+          "end": "0x80112E8C"
+        },
+        {
+          "symbol": "fn_80112E8C",
+          "start": "0x80112E8C",
+          "end": "0x80112F8C"
+        },
+        {
+          "symbol": "fn_80113088",
+          "start": "0x80113088",
+          "end": "0x80113208"
+        },
+        {
+          "symbol": "fn_80113208",
+          "start": "0x80113208",
+          "end": "0x801133FC"
+        },
+        {
+          "symbol": "fn_801133FC",
+          "start": "0x801133FC",
+          "end": "0x80113478"
+        },
+        {
+          "symbol": "fn_80113478",
+          "start": "0x80113478",
+          "end": "0x80113498"
+        },
+        {
+          "symbol": "fn_801135E4",
+          "start": "0x801135E4",
+          "end": "0x80113604"
+        },
+        {
+          "symbol": "fn_80113604",
+          "start": "0x80113604",
+          "end": "0x80113680"
+        },
+        {
+          "symbol": "fn_80113AAC",
+          "start": "0x80113AAC",
+          "end": "0x80113B28"
+        },
+        {
+          "symbol": "fn_80113BCC",
+          "start": "0x80113BCC",
+          "end": "0x80113C18"
+        },
+        {
+          "symbol": "fn_801147D4",
+          "start": "0x801147D4",
+          "end": "0x80114838"
+        },
+        {
+          "symbol": "fn_80114D14",
+          "start": "0x80114D14",
+          "end": "0x80114D50"
+        },
+        {
+          "symbol": "fn_80114D50",
+          "start": "0x80114D50",
+          "end": "0x80114DD8"
+        },
+        {
+          "symbol": "fn_80114DD8",
+          "start": "0x80114DD8",
+          "end": "0x80114DE0"
+        },
+        {
+          "symbol": "fn_80114DE0",
+          "start": "0x80114DE0",
+          "end": "0x80114DF4"
+        },
+        {
+          "symbol": "fn_80114DF4",
+          "start": "0x80114DF4",
+          "end": "0x80114E7C"
+        },
+        {
+          "symbol": "fn_80114E7C",
+          "start": "0x80114E7C",
+          "end": "0x80114EE4"
+        },
+        {
+          "symbol": "fn_801163B4",
+          "start": "0x801163B4",
+          "end": "0x80116410"
+        },
+        {
+          "symbol": "fn_801167C4",
+          "start": "0x801167C4",
+          "end": "0x80116880"
+        },
+        {
+          "symbol": "fn_80116880",
+          "start": "0x80116880",
+          "end": "0x80116984"
+        },
+        {
+          "symbol": "fn_80116AB8",
+          "start": "0x80116AB8",
+          "end": "0x80116B98"
+        },
+        {
+          "symbol": "fn_801170A0",
+          "start": "0x801170A0",
+          "end": "0x801170E8"
+        },
+        {
+          "symbol": "fn_80118704",
+          "start": "0x80118704",
+          "end": "0x8011875C"
+        },
+        {
+          "symbol": "fn_8011875C",
+          "start": "0x8011875C",
+          "end": "0x8011876C"
+        },
+        {
+          "symbol": "fn_8011876C",
+          "start": "0x8011876C",
+          "end": "0x80118778"
+        },
+        {
+          "symbol": "fn_80118778",
+          "start": "0x80118778",
+          "end": "0x801187CC"
+        },
+        {
+          "symbol": "fn_80118894",
+          "start": "0x80118894",
+          "end": "0x8011893C"
+        },
+        {
+          "symbol": "fn_8011893C",
+          "start": "0x8011893C",
+          "end": "0x80118B4C"
+        },
+        {
+          "symbol": "fn_80119478",
+          "start": "0x80119478",
+          "end": "0x801194F0"
+        },
+        {
+          "symbol": "fn_8011AFCC",
+          "start": "0x8011AFCC",
+          "end": "0x8011B138"
+        },
+        {
+          "symbol": "fn_8011B138",
+          "start": "0x8011B138",
+          "end": "0x8011B2A4"
         }
       ]
     },
