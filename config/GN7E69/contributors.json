@@ -11102,6 +11102,152 @@
         "commit": "db2dc7c503876d274162b028ce183a79513d47d4",
         "introduced_blob": "503d4255b0e47be2d11c341a65e5bc630efeb3c4"
       }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8010BE54",
+        "0x8010BEA4",
+        "0x8010C864",
+        "0x8010CFD4",
+        "0x8010D6D4",
+        "0x8010DA38",
+        "0x8010EF40",
+        "0x8010FB10",
+        "0x801100A0",
+        "0x801105B0",
+        "0x80110630",
+        "0x80110824",
+        "0x80110EB0",
+        "0x80110EE4",
+        "0x80110FE4",
+        "0x80111090",
+        "0x80111354",
+        "0x80111580",
+        "0x80111964"
+      ],
+      "provenance": {
+        "pull_request": 540,
+        "merged_via": 540,
+        "commit": "2e522b7ec765df9d1cb99e2fec9239df936f3d3c",
+        "introduced_blob": "a46529fd3654904589d9635abd7de2c25986bd1a"
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800F62A4",
+        "0x800F6790",
+        "0x800F67CC",
+        "0x800F67E8",
+        "0x800F93D0",
+        "0x800F9440",
+        "0x800F9AF0",
+        "0x800FA014",
+        "0x800FAD10",
+        "0x800FB768",
+        "0x800FB824",
+        "0x800FB844",
+        "0x800FBAA8",
+        "0x800FC014",
+        "0x800FC070",
+        "0x800FC0C4",
+        "0x800FC128",
+        "0x800FC1DC",
+        "0x800FCC24",
+        "0x800FD3F0",
+        "0x800FD650"
+      ],
+      "provenance": {
+        "pull_request": 556,
+        "merged_via": 556,
+        "commit": "a10d9ae965815037bad1084e7ca2661469fc3895",
+        "introduced_blob": "a73f9e0cd1ffdfbaf2ce0e1027def659043c7cbe"
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80111F80",
+        "0x80112E10",
+        "0x80112E8C",
+        "0x80113088",
+        "0x80113208",
+        "0x801133FC",
+        "0x80113478",
+        "0x801135E4",
+        "0x80113604",
+        "0x80113AAC",
+        "0x80113BCC",
+        "0x801147D4",
+        "0x80114D14",
+        "0x80114D50",
+        "0x80114DD8",
+        "0x80114DE0",
+        "0x80114DF4",
+        "0x80114E7C",
+        "0x801163B4",
+        "0x80116880",
+        "0x80116AB8",
+        "0x801170A0",
+        "0x80118704",
+        "0x8011875C",
+        "0x8011876C",
+        "0x80118778",
+        "0x80118894",
+        "0x80119478",
+        "0x8011AFCC",
+        "0x8011B138"
+      ],
+      "provenance": {
+        "pull_request": 557,
+        "merged_via": 557,
+        "commit": "d40ff6e9c0cf611b978b9d84cc545d953845b977",
+        "introduced_blob": "e6c396e9cbd91bc07deab487974253d591d8c909"
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80104C3C",
+        "0x8010531C",
+        "0x801064A4",
+        "0x80106618",
+        "0x80106794",
+        "0x801067D8",
+        "0x801076F0",
+        "0x8010A07C",
+        "0x8010A1C4",
+        "0x8010A220",
+        "0x8010A254",
+        "0x8010AEA0",
+        "0x8010AEC4",
+        "0x8010B1B4",
+        "0x8010B1FC",
+        "0x8010B5B0",
+        "0x8010B738",
+        "0x8010B924",
+        "0x8010BA00",
+        "0x8010BC48"
+      ],
+      "provenance": {
+        "pull_request": 558,
+        "merged_via": 558,
+        "commit": "fa2066a7feab31e4fe4bc6a0c3e0d9f24c8d09ab",
+        "introduced_blob": "471e72470a3864eff0f5f3bf4605dd90da2a9306"
+      }
     }
   ],
   "target": "GN7E69",

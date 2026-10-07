@@ -62,7 +62,7 @@ struct Block_80170374 {
     float mUnknown28;
     char mUnknown32[8];
     int mUnknown40;
-    char mUnknown44[4];
+    int mUnknown44;
     int mUnknown48;
     char mUnknown52[2];
     unsigned char mUnknown54;
@@ -73,6 +73,13 @@ struct Block_80170374 {
 struct Block_801718E8 {
     char mUnknown0[52];
     unsigned char mUnknown52;
+};
+
+/* Three bytes at +1008, compared field by field by fn_80110630. */
+struct Key_80110630 {
+    unsigned char mUnknown0;
+    unsigned char mUnknown1;
+    unsigned char mUnknown2;
 };
 
 /* Block at +1240, reset by fn_800CE674 and fn_800CE684. Only the accessed
@@ -95,7 +102,7 @@ struct State_80039F5C {
     unsigned char mId;
     unsigned char mUnknown1;
     unsigned char mUnknown2;
-    char mUnknown3[1];
+    unsigned char mUnknown3[1];
     unsigned char mUnknown4;
     char mUnknown5[1];
     unsigned char mUnknown6;
@@ -118,13 +125,22 @@ struct Object_80039F5C {
     unsigned char mUnknown9[3];
     unsigned int mFlags;
     int mUnknown16;
-    char mUnknown20[316];
+    char mUnknown20[88];
+    int mUnknown108;
+    char mUnknown112[88];
+    int mUnknown200;
+    char mUnknown204[132];
     int mUnknown336;
-    char mUnknown340[20];
+    short mUnknown340;
+    unsigned char mUnknown342;
+    char mUnknown343[17];
     unsigned char mUnknown360;
-    char mUnknown361[31];
+    char mUnknown361[27];
+    unsigned int mUnknown388;
     unsigned char mUnknown392;
-    char mUnknown393[31];
+    char mUnknown393[9];
+    unsigned char mUnknown402;
+    char mUnknown403[21];
     Object_800B26B0 mMotion;
     char mUnknown488[24];
     Object_8016D8B0 mUnknown512;
@@ -145,12 +161,22 @@ struct Object_80039F5C {
     void *mpUnknown792;
     Object_8016D9B8 *mpUnknown796;
     Entry_800EAC9C *mpUnknown800;
-    char mUnknown804[228];
+    char mUnknown804[204];
+    Key_80110630 mUnknown1008;
+    char mUnknown1011[21];
     int mUnknown1032;
     int mUnknown1036;
-    char mUnknown1040[4];
+    int mUnknown1040;
     int mUnknown1044;
-    char mUnknown1048[112];
+    char mUnknown1048[16];
+    short mUnknown1064;
+    char mUnknown1066[60];
+    unsigned char mUnknown1126;
+    char mUnknown1127[7];
+    unsigned short mUnknown1134;
+    unsigned char mUnknown1136;
+    unsigned char mUnknown1137;
+    char mUnknown1138[22];
     Block_801718E8 mUnknown1160;
     unsigned char mUnknown1213;
     unsigned char mUnknown1214;
