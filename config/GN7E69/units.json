@@ -1112,17 +1112,9 @@
       "address": "0x80256F7C",
       "evidence": "CARDOpen actual original complete retained native relocation operand proof and current canonical API signature; related SDK identity."
     },
-    "__CARDGetDirBlock": {
-      "address": "0x80254A44",
-      "evidence": "CARDOpen actual original complete retained native relocation operand proof and current canonical API signature; related SDK identity."
-    },
     "__CARDDiskNone": {
       "address": "0x803A6728",
       "evidence": "CARDOpen actual original complete retained native relocation operand proof and current canonical API signature; related SDK identity."
-    },
-    "__GXSetDirtyState": {
-      "address": "0x8024E888",
-      "evidence": "Actual original GXMisc complete-body operand proof, current established canonical signature reused; related API identity."
     },
     "GXGetGPFifo": {
       "address": "0x8024C8E0",
