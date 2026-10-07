@@ -4,6 +4,7 @@
 #include "game/Item_800476DC.h"
 #include "game/Object_8007A334.h"
 #include "game/Object_8003DEC4.h"
+#include "game/Init_8004A040.h"
 #include "game/Object_8008044C.h"
 #include "game/Record_803078E8.h"
 #include "game/Row_8007BC34.h"
@@ -40,17 +41,6 @@ struct Pair_802CF382 {
 struct Entry_80308368 {
     int mId;
     unsigned short mValues[10];
-};
-
-
-/* Creation argument of fn_8004A040. */
-struct Init_8004A040 {
-    int mUnknown00;
-    int mUnknown04;
-    char mUnknown08[8];
-    int mUnknown10;
-    int mUnknown14;
-    int mUnknown18;
 };
 
 extern "C" {
