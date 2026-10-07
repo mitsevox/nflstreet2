@@ -14,6 +14,7 @@
 #include "game/RecordList_8002E7C0.h"
 #include "game/cu_80136B1C.h"
 #include "game/cu_8002B8F8.h"
+#include "game/cu_8003108C.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_80191804.h"
@@ -116,13 +117,6 @@ void fn_800288B0(void);
 unsigned char fn_8002892C(void);
 void fn_80031018(const float *pValue, int a);
 void fn_80031040(unsigned char value);
-void fn_800310C0(void *p, int a, Object_80039F5C *pObject, Vector_80039F5C *pPos, int *pFacing);
-int fn_800311E4(Type_803EA368 *p, int id);
-int fn_8003122C(Type_803EA368 *p, int id, float *pOut);
-Object_80039F5C *fn_80031294(Type_803EA368 *p, int id);
-void fn_800312DC(Type_803EA368 *p);
-int fn_800312FC(Type_803EA368 *p, int id);
-int fn_80031328(Type_803EA368 *p, int id);
 void fn_8003A5A8(void);
 void fn_8003A5E8(void);
 void fn_8003AC10(void);
