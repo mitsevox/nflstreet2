@@ -1,12 +1,12 @@
 extern "C" {
-int fn_80020C44(int id, void *pArgs, int c, int *pResult);
-int fn_80020DC0(int id, void *pArgs, int c, int *pResult);
-int fn_800211B4(int id, void *pArgs, int c, int *pResult);
+int fn_80020C44(unsigned int id, void *pArgs, int c, int *pResult);
+int fn_80020DC0(unsigned int id, void *pArgs, int c, int *pResult);
+int fn_800211B4(unsigned int id, void *pArgs, int c, int *pResult);
 int fn_800212C8(int id, void *pArgs, int c, int *pResult);
-int fn_800217AC(int id, void *pArgs, int c, int *pResult);
+int fn_800217AC(unsigned int id, void *pArgs, int c, int *pResult);
 int fn_80063A30(int id, int *pArgs, int c, int *pResult);
 int fn_80063D48(int id, void *pArgs, int c, int *pResult);
-int fn_80186324(int id, void *pArgs, int c, int *pResult);
+int fn_80186324(unsigned int id, void *pArgs, int c, int *pResult);
 void fn_801CEB58(int a);
 void fn_8023CFD0(int a);
 }
