@@ -1095,6 +1095,14 @@
     "__CARDVendorID": {
       "address": "0x803EC2C0",
       "evidence": "Complete BFBB CARDMount native retained operand resolved against original target; source name corroborated by pinned donor declaration and actual call/access context."
+    },
+    "__PADFixBits": {
+      "address": "0x803ED3E8",
+      "evidence": "Original PAD actual REL24/nativecall identity supported by coherent pinnedBFBB source and originalcallercallee instructions."
+    },
+    "__AICallbackStackSwitch": {
+      "address": "0x8024A7B0",
+      "evidence": "Original AID handler directcall passes callbackcodepointerr3, original88bytes changesr1 andcallsnoargs thenrestores; sourceimplementation unresolved."
     }
   },
   "units": [

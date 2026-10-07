@@ -1263,133 +1263,52 @@
       "name": "src/dolphin/pad/Pad.c",
       "source": "src/dolphin/pad/Pad.c",
       "library": "PAD",
-      "evidence": "Unique origin/type/probe/spec/sampling handlers; target last48124 toggles bootbyte30E3 bit40 matching __PADDisableRecalibration, ends481A0 before AR callback setter.",
+      "evidence": "Coherent pinned BFBB April 2003 C source: nineteen complete target functions and observed typed storage; source unit attribution remains related and archive edges provisional. Native tail-SDA packing differences remain measured partial; original bytes remain linked.",
       "sections": [
         {
-          "section": ".bss",
-          "start": "0x803A5890",
-          "end": "0x803A58C0",
+          "section": ".data5",
+          "start": "0x803EC218",
+          "end": "0x803EC238",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "PAD UpdateOrigin forms 803A5890 at 802466E4 and multiplies channel by 12 at 802466DC. PADRead independently forms this base at 80247370, processes exactly four channels at 802476C8/802476D4, and advances its Origin pointer by 12 at 802476CC. Reset handling clears a full 12-byte record at 80248004..80248018, not merely the 10-byte wire reply. Four 12-byte PADStatus records require 48 bytes."
+          "evidence": "Complete coherent BFBB native .sdata extent 32 bytes, original references/pointers and observed typed accesses establish base; exact initialized equality separately verified, NOBITS no raw-byte credit."
         },
         {
-          "section": ".data5",
-          "start": "0x803EC21C",
-          "end": "0x803EC220",
-          "evidence": "Native symbolResettingChan complete4-byte initializedpayload byte-identical; matching targetfunction referencePADOriginCallback at0x8024688C.",
+          "section": ".bss",
+          "start": "0x803A5880",
+          "end": "0x803A58D0",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": true
+          "object_seed": true,
+          "evidence": "Complete coherent BFBB native .bss extent 80 bytes, original references/pointers and observed typed accesses establish base; exact initialized equality separately verified, NOBITS no raw-byte credit."
         },
         {
-          "section": ".data5",
-          "start": "0x803EC220",
-          "end": "0x803EC224",
-          "evidence": "Native symbolXPatchBits complete4-byte initializedpayload byte-identical; matching targetfunction referenceUpdateOrigin at0x80246828.",
+          "section": ".data4",
+          "start": "0x802FDD00",
+          "end": "0x802FDD58",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".data5",
-          "start": "0x803EC224",
-          "end": "0x803EC228",
-          "evidence": "Native symbolAnalogMode complete4-byte initializedpayload byte-identical; matching targetfunction referenceUpdateOrigin at0x802466F0.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".data5",
-          "start": "0x803EC228",
-          "end": "0x803EC22C",
-          "evidence": "Native symbolSpec complete4-byte initializedpayload byte-identical; matching targetfunction referencePADTypeAndStatusCallback at0x80246BE4.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".data5",
-          "start": "0x803EC230",
-          "end": "0x803EC234",
-          "evidence": "Native symbolCmdReadOrigin complete4-byte initializedpayload byte-identical; matching targetfunction referencePADTypeAndStatusCallback at0x80246CD0.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".data5",
-          "start": "0x803EC234",
-          "end": "0x803EC238",
-          "evidence": "Native symbolCmdCalibrate complete4-byte initializedpayload byte-identical; matching targetfunction referencePADTypeAndStatusCallback at0x80246C9C.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
+          "object_seed": false,
+          "evidence": "Complete coherent BFBB native .data extent 88 bytes, original references/pointers and observed typed accesses establish base; exact initialized equality separately verified, NOBITS no raw-byte credit."
         },
         {
           "section": ".sbss",
-          "start": "0x803ED28C",
-          "end": "0x803ED290",
-          "evidence": "Native EnabledBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADOriginCallback at0x8024689C. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED290",
-          "end": "0x803ED294",
-          "evidence": "Native ResettingBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADOriginCallback at0x802468D0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED294",
-          "end": "0x803ED298",
-          "evidence": "Native RecalibrateBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADTypeAndStatusCallback at0x80246B00. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED298",
-          "end": "0x803ED29C",
-          "evidence": "Native WaitingBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADProbeCallback at0x80246A54. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED2A0",
+          "start": "0x803ED288",
           "end": "0x803ED2A4",
-          "evidence": "Native PendingBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADTypeAndStatusCallback at0x80246D84. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": true
+          "object_seed": true,
+          "evidence": "Observed original SDA word accesses; scalar and pointer widths from coherent source/call behavior. Unknown word at803ED2A4 remains unowned; native tail ordering differs and comparison remains partial."
         },
         {
           "section": ".sbss",
           "start": "0x803ED2A8",
-          "end": "0x803ED2AC",
-          "evidence": "Native SamplingCallback storage slot4 bytes referenced consistently by matching targetfunction(s), e.g SamplingHandler at0x80248084. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED2B0",
           "end": "0x803ED2B4",
-          "evidence": "Native __PADSpec storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADSetSpec at0x802477A4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": true
+          "object_seed": true,
+          "evidence": "Observed original SDA word accesses; scalar and pointer widths from coherent source/call behavior. Unknown word at803ED2A4 remains unowned; native tail ordering differs and comparison remains partial."
         },
         {
           "section": ".text",
@@ -1397,7 +1316,7 @@
           "end": "0x802481A0",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Unique origin/type/probe/spec/sampling handlers; target last48124 toggles bootbyte30E3 bit40 matching __PADDisableRecalibration, ends481A0 before AR callback setter. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+          "evidence": "Nineteen complete contiguous original functions, individual19native extents6864 match observedcuts; original archiveedges remain inferred."
         }
       ]
     },
@@ -1485,8 +1404,35 @@
       "name": "src/dolphin/ai/ai.c",
       "source": "src/dolphin/ai/ai.c",
       "library": "AI",
-      "evidence": "First68-byte registration callback atA0FC ambiguous by itself; subsequent unique AI DMA/stream/DSPrate/interrupt/SRC functions contiguous. Retained AI screen beginsA140 and therefore omits registration prefix; total mapped ownership includes prefix. No claim this routine is AIReset.",
+      "evidence": "Coherent pinned BFBB April 2003 C functions corroborate callback/DMA/stream/rate/SRC behavior. All eighteen C bodies measured, SRC routine partial; original twelve-byte flag-clear and eighty-eight-byte stack-switch routines remain unrecovered within unchanged complete mapped range. Stack-switch assembly provenance unresolved; no new assembly implementation or whole-unit promotion.",
       "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FDDE8",
+          "end": "0x802FDE2C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Neutral typedextent corroborated by originaloperand accesses and complete coherentBFBB native allocation. full68byteversionstring; no additional archiveextent/padding."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC248",
+          "end": "0x803EC24C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Neutral typedextent corroborated by originaloperand accesses and complete coherentBFBB native allocation. versionpointer802FDDE8; no additional archiveextent/padding."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED308",
+          "end": "0x803ED348",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Neutral typedextent corroborated by originaloperand accesses and complete coherentBFBB native allocation. six4bytecallback/stack/flags plusfive8bytetimingvalues, including original savedstackcell; no additional archiveextent/padding."
+        },
         {
           "section": ".text",
           "start": "0x8024A0FC",
