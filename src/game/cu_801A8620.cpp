@@ -24,9 +24,9 @@ struct MeshRef_801A93C0 { unsigned char mUnknown0[8]; MeshData_801A93C0 *mpUnkno
 struct Offset_801A8620 { int mUnknown0; unsigned char *mpUnknown4; };
 struct Asset_801A8620;
 struct Geometry_801A8620 { Asset_801A8620 *mpUnknown0; unsigned char mUnknown4[0xC]; Offset_801A8620 *mpUnknown10; };
-struct ModelData_801A8620 { unsigned char mUnknown0[8]; Geometry_801A8620 *mpUnknown8; unsigned char mUnknownC[0x64]; MeshRef_801A93C0 *mpUnknown70; };
+struct ModelData_801A8620 { Asset_801A8620 *mpUnknown0; unsigned char mUnknown4[0x6C]; MeshRef_801A93C0 *mpUnknown70; };
 struct Model_801A8620 { unsigned char mUnknown0[8]; ModelData_801A8620 *mpUnknown8; unsigned char mUnknownC[0x10]; int mUnknown1C; };
-struct Asset_801A8620 { unsigned char mUnknown0[0x11]; unsigned char mUnknown11; unsigned char mUnknown12[0x132]; Texture_801A8D08 *mpUnknown144; };
+struct Asset_801A8620 { unsigned char mUnknown0[0x11]; unsigned char mUnknown11; };
 struct ModelRef_801A8620 { Geometry_801A8620 *mpUnknown0; };
 struct Context_801A8620 { unsigned int mUnknown0; ModelRef_801A8620 *mpUnknown4; };
 struct Element_801A8620 { unsigned char mUnknown0[0x28]; };
@@ -61,7 +61,7 @@ struct Object_801A8620 {
     unsigned char mUnknown0[4]; Vector_80039F5C mUnknown4;
     unsigned char mUnknown10[4]; int (*mUnknown14)(Object_801A8620 *, int); Vector_80039F5C mUnknown18;
     unsigned char mUnknown24[0x84]; void *mpUnknownA8; unsigned char mUnknownAC[8]; Vector_80039F5C mUnknownB4;
-    unsigned char mUnknownC0[12]; void *mpUnknownCC;
+    unsigned char mUnknownC0[12]; int mUnknownCC;
     unsigned char mUnknownD0[12]; int mUnknownDC; unsigned char mUnknownE0[8];
     union { unsigned int mWord; unsigned char mBytes[4]; } mUnknownE8;
     unsigned char mUnknownEC[8]; int mUnknownF4; int mUnknownF8;
@@ -84,7 +84,7 @@ void fn_801A7F10(Mesh_801A93C0 *);
 void fn_801D0470(int); void fn_801D04C4(void); void fn_801D0508(void);
 void fn_801D0544(void); void fn_801D0558(void); void fn_801D06D4(Mtx44);
 void fn_801D0C58(void *); void fn_801D0860(void *); void fn_801D08FC(int);
-void fn_801D09EC(void *); void fn_801D0F80(Mtx44);
+void fn_801D09EC(int); void fn_801D0F80(Mtx44);
 void fn_8020FA38(int, void *); void fn_8020FA8C(int);
 void fn_8020EBB0(void *); void fn_8020F4D0(void *, void *);
 void *fn_8020EC50(void *, unsigned int, int);
@@ -140,9 +140,9 @@ int fn_801A8620(Object_801A8620 *p, int arg)
     fn_80251A58(6,16,0,7,0); fn_80252114(0); fn_802520E0(1,3,1); fn_8024EB28(1);
     fn_80210BD8(2); fn_801D0470(fn_80228668()); fn_801D04C4(); fn_801D0508();
     fn_801D0C58(&p->mUnknown4); fn_801D0860(&p->mUnknown18); fn_801D08FC(0x400000);
-    fn_801D0C58(&p->mUnknownB4); fn_801D09EC(p->mpUnknownCC); fn_801D0F80(m1);
+    fn_801D0C58(&p->mUnknownB4); fn_801D09EC(p->mUnknownCC); fn_801D0F80(m1);
     fn_801D0544(); fn_801D0C58(&p->mUnknown4); fn_801D0860(&p->mUnknown18);
-    fn_801D08FC(0x400000); fn_801D0C58(&p->mUnknownB4); fn_801D09EC(p->mpUnknownCC);
+    fn_801D08FC(0x400000); fn_801D0C58(&p->mUnknownB4); fn_801D09EC(p->mUnknownCC);
     fn_801D0F80(m2); fn_8020FA38(0,m2); fn_8020FA8C(0);
     unsigned int flags=fn_80234D4C(lbl_802F3B20,m1,0,0);
     if(fn_801A8B84(p)) flags|=0x3F;
@@ -165,7 +165,7 @@ int fn_801A8620(Object_801A8620 *p, int arg)
         unsigned int enabled=fn_8002D060(lbl_803EA368)?(p->mUnknownE8.mBytes[3]&4):(p->mUnknownE8.mBytes[3]&1);
         if(enabled) {
             if(p->mpUnknown130) {
-                if(model->mpUnknown8->mpUnknown8->mpUnknown0->mUnknown11&8) {
+                if(model->mpUnknown8->mpUnknown0->mUnknown11&8) {
                     fn_80210BA4(s->mUnknownC.mpUnknownE8); fn_80234B88(&s->mUnknownC);
                     if(!p->mUnknown138) {
                         p->mUnknown138=1;
@@ -178,10 +178,10 @@ int fn_801A8620(Object_801A8620 *p, int arg)
                     fn_802525BC(0);fn_8025251C(m2,0);fn_8025256C(m2,0);
                     fn_8024DF64(1);fn_80251CC4(1);fn_80251B28(0,0,0,4);
                     if(p->mUnknownE8.mWord&16) {
-                        ModelRef_801A8620 *r=s->mpUnknown0->mUnknown4.mpUnknown4;
+                        ModelRef_801A8620 *r=s->mUnknown4.mpUnknown4;
                         r->mpUnknown0->mpUnknown10->mpUnknown4+=p->mUnknownFC*40;
                         fn_80211350();
-                        r=s->mpUnknown0->mUnknown4.mpUnknown4;
+                        r=s->mUnknown4.mpUnknown4;
                         r->mpUnknown0->mpUnknown10->mpUnknown4-=p->mUnknownFC*40;
                     } else fn_802112DC(s->mUnknownC.mUnknown60,s->mUnknownC.mUnknown5C);
                 } else {
@@ -227,11 +227,11 @@ int fn_801A8C48(Child_801A9430 *p)
 void fn_801A8D08(Child_801A9430 *p,Object_801A8620 *owner)
 {
     Cache_801A8D9C *resource=owner->mpUnknown12C->mpUnknown0;
-    unsigned int index=fn_802372EC(1,resource->mpUnknown0->mpUnknown144->mUnknown10);
+    unsigned int index=fn_802372EC(1,resource->mpUnknown144->mUnknown10);
     p->mUnknown6C=index;
-    if((unsigned char)index==owner->mUnknownFC && resource->mpUnknown0->mpUnknown144->mUnknown10>1) {
+    if((unsigned char)index==owner->mUnknownFC && resource->mpUnknown144->mUnknown10>1) {
         p->mUnknown6C=index+1;
-        if(p->mUnknown6C>=resource->mpUnknown0->mpUnknown144->mUnknown10) p->mUnknown6C=index-1;
+        if(p->mUnknown6C>=resource->mpUnknown144->mUnknown10) p->mUnknown6C=index-1;
     }
 }
 void fn_801A8D9C(void *data,int handle,Object_801A8620 *p)
@@ -333,16 +333,16 @@ int fn_801A9430(Child_801A9430 *p,int arg)
     fn_8024FC84(0,1,0,0,value,2,2);fn_8024FC84(2,0,0,0,value,0,2);
     fn_801D0470(fn_80228668());fn_801D0508();
     fn_801D0C58(&p->mUnknown30);fn_801D0860(&p->mUnknown3C);fn_801D08FC(0x400000);
-    fn_801D0C58(&p->mpUnknown50->mUnknownB4);fn_801D09EC(p->mpUnknown50->mpUnknownCC);fn_801D0F80(m1);
+    fn_801D0C58(&p->mpUnknown50->mUnknownB4);fn_801D09EC(p->mpUnknown50->mUnknownCC);fn_801D0F80(m1);
     fn_801D0544();fn_801D04C4();fn_801D0C58(&p->mUnknown30);fn_801D0860(&p->mUnknown3C);
-    fn_801D08FC(0x400000);fn_801D0C58(&p->mpUnknown50->mUnknownB4);fn_801D09EC(p->mpUnknown50->mpUnknownCC);fn_801D0F80(m2);
+    fn_801D08FC(0x400000);fn_801D0C58(&p->mpUnknown50->mUnknownB4);fn_801D09EC(p->mpUnknown50->mUnknownCC);fn_801D0F80(m2);
     unsigned int flags=fn_80234D4C(lbl_802F3B20,m1,0,0);if(fn_801A8C48(p))flags|=0x3F;
     if(!(flags&0x3F)) {
         fn_80234AFC(work);fn_80234DC8(work,flags&0xF2000);fn_80234B1C(work);fn_80234B20(work,m1,0);
         fn_80234B80(work);fn_80234DC4(work,0);s->mUnknownC.mUnknown5C=1;
         unsigned int enabled=fn_8002D060(lbl_803EA368)?(p->mpUnknown50->mUnknownE8.mBytes[3]&4):(p->mpUnknown50->mUnknownE8.mBytes[3]&1);
         if(enabled) {
-            if(model->mpUnknown8->mpUnknown8->mpUnknown0->mUnknown11&8) {
+            if(model->mpUnknown8->mpUnknown0->mUnknown11&8) {
                 fn_80234B88(&s->mUnknownC);fn_80210BA4(s->mUnknownC.mpUnknownE8);
                 if(!p->mpUnknown50->mUnknown138) {
                     p->mpUnknown50->mUnknown138=1;
@@ -353,11 +353,11 @@ int fn_801A9430(Child_801A9430 *p,int arg)
                 }
                 fn_802525BC(0);fn_8025251C(m2,0);fn_8025256C(m2,0);
                 if(p->mpUnknown50->mUnknownE8.mWord&16) {
-                    ModelRef_801A8620 *r=s->mpUnknown0->mUnknown4.mpUnknown4;
+                    ModelRef_801A8620 *r=s->mUnknown4.mpUnknown4;
                     r->mpUnknown0->mpUnknown10->mpUnknown4+=p->mUnknown6C*40;
-                    r=s->mpUnknown0->mUnknown4.mpUnknown4;
+                    r=s->mUnknown4.mpUnknown4;
                     fn_80210814(0,r->mpUnknown0->mpUnknown10->mUnknown0,r->mpUnknown0->mpUnknown10->mpUnknown4);
-                    fn_80211350();r=s->mpUnknown0->mUnknown4.mpUnknown4;
+                    fn_80211350();r=s->mUnknown4.mpUnknown4;
                     r->mpUnknown0->mpUnknown10->mpUnknown4-=p->mUnknown6C*40;
                 } else fn_802112DC(s->mUnknownC.mUnknown60,s->mUnknownC.mUnknown5C);
             } else {

@@ -140,7 +140,7 @@ void fn_80174204(Input_80174868 *in, Output_80174868 *out, int type,
     return;
   }
   if (team != fn_80178308() && in->mUnknown21 == 1 &&
-      in->mUnknown20 == fn_80178308()) {
+      in->mUnknown20 != fn_80178308()) {
     out->mUnknown14 = 0;
     out->mUnknown10 = 0;
     out->mUnknown15 ^= 1;
@@ -254,7 +254,7 @@ void fn_80174868(Input_80174868 *in, Output_80174868 *out) {
         if (!(in->mUnknown8 <= -fn_80178A2C()))
           out->mUnknown8 = in->mUnknown0;
         else {
-          out->mUnknown8 = in->mUnknown0;
+          out->mUnknown8 = in->mUnknown8;
           out->mUnknown14 = -2;
         }
       }
@@ -315,7 +315,7 @@ void fn_80174868(Input_80174868 *in, Output_80174868 *out) {
       if (!(in->mUnknown8 <= -fn_80178A2C()))
         out->mUnknown8 = in->mUnknown0;
       else {
-        out->mUnknown8 = in->mUnknown0;
+        out->mUnknown8 = in->mUnknown8;
         out->mUnknown14 = -2;
       }
     }

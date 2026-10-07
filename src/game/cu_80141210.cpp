@@ -275,8 +275,6 @@ extern "C" void fn_80142110(Camera_8013F738 *camera,int event,int argument)
 }
 extern "C" void fn_801421C4(Camera_8013F738 *camera)
 {
-    /* Target's dispatcher forwards three registers, while the established
-       shared callback declaration is two-argument. Nominal ABI unresolved. */
     camera->mUnknownDC=reinterpret_cast<void (*)(Camera_8013F738 *,int)>(fn_80142110);
     int *angles=reinterpret_cast<int *>(&camera->mUnknown74);
     angles[3]=0xCCCCC;

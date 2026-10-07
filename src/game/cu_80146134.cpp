@@ -1,3 +1,4 @@
+#include "engine/cu_80227F14.h"
 #include "game/Record_803EB25C.h"
 
 /* Local access views. Preset and input identities remain unknown. */
@@ -84,8 +85,7 @@ int fn_800A33B0(void);
 int fn_800A33B8(void);
 int fn_800A3420(void);
 Vector_80146134 *fn_800A3438(void);
-void *fn_80228668(void);
-void fn_801D0470(void *);
+void fn_801D0470(int);
 void fn_801D04C4(void);
 void fn_801D0558(void);
 void fn_801D0544(void);
@@ -159,7 +159,6 @@ Description_801463D8 *fn_801463D8(const char *name)
     return p;
 }
 }
-/* Source grouping inferred from duplicated initialization; no extra target boundary. */
 static inline void InitializeSpecial(void)
 {
     lbl_803EB278 = fn_80146C4C(0, &lbl_802DD3DC);
