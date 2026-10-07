@@ -9109,6 +9109,19 @@
           "end": "0x802EADE4"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8018AD78.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018AD78-0x8018AFD0 (src/game/cu_8018AD78.cpp).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018AD78",
+          "end": "0x8018AFD0"
+        }
+      ]
     }
   ]
 }
