@@ -8966,8 +8966,11 @@
       "provenance": {
         "pull_request": 464,
         "merged_via": 464,
-        "commit": "7d9c697376d48e75e9fd5bcefe645fa195f44d39",
-        "introduced_blob": "096538f8b635d79a9581ab44f2000a98af2e4545"
+        "commit": "62ac7bdbe2dcb647be24a46a242e68cbe53816fe",
+        "introduced_blob": "594ac84d2d46abd686b4d0d074e44e1d99899498",
+        "original_commit": "7d9c697376d48e75e9fd5bcefe645fa195f44d39",
+        "original_blob": "096538f8b635d79a9581ab44f2000a98af2e4545",
+        "integration_adjustment": "Centralized established query/callback declarations and corrected the opaque query-token interface after independent accuracy findings. Original source contributor retained; target access and callback contracts support the corrections."
       }
     },
     {
@@ -8982,8 +8985,11 @@
       "provenance": {
         "pull_request": 464,
         "merged_via": 464,
-        "commit": "8a94a68f86d18630a0520e0daba1353946688021",
-        "introduced_blob": "74d3aa423e41cd69219d3203df84bb74cf21e292"
+        "commit": "62ac7bdbe2dcb647be24a46a242e68cbe53816fe",
+        "introduced_blob": "c35666486cb54e4493b60ff6749090793974f660",
+        "original_commit": "8a94a68f86d18630a0520e0daba1353946688021",
+        "original_blob": "74d3aa423e41cd69219d3203df84bb74cf21e292",
+        "integration_adjustment": "Centralized established query/callback declarations and corrected the opaque query-token interface after independent accuracy findings. Original source contributor retained; target access and callback contracts support the corrections."
       }
     },
     {
@@ -9006,8 +9012,11 @@
       "provenance": {
         "pull_request": 464,
         "merged_via": 464,
-        "commit": "72f21f188a223a8a49f0ba8f0c7b95cfa97dffa1",
-        "introduced_blob": "890d3168b5d2b854a84ce6ca0b054a58b49b0576"
+        "commit": "62ac7bdbe2dcb647be24a46a242e68cbe53816fe",
+        "introduced_blob": "ed59437700f1518c2ef9647053e80497f626479a",
+        "original_commit": "72f21f188a223a8a49f0ba8f0c7b95cfa97dffa1",
+        "original_blob": "890d3168b5d2b854a84ce6ca0b054a58b49b0576",
+        "integration_adjustment": "Centralized established query/callback declarations and corrected the opaque query-token interface after independent accuracy findings. Original source contributor retained; target access and callback contracts support the corrections."
       }
     },
     {
@@ -9095,8 +9104,11 @@
       "provenance": {
         "pull_request": 464,
         "merged_via": 464,
-        "commit": "a29d282c2fbba6771b23e7ff3ce754e476f98903",
-        "introduced_blob": "e8c281eb9d67385387014c5047060edb5169b2e8"
+        "commit": "62ac7bdbe2dcb647be24a46a242e68cbe53816fe",
+        "introduced_blob": "21b35d34f479f6b3f92c2f74cfa5e7a8904c9f8f",
+        "original_commit": "a29d282c2fbba6771b23e7ff3ce754e476f98903",
+        "original_blob": "e8c281eb9d67385387014c5047060edb5169b2e8",
+        "integration_adjustment": "Centralized established query/callback declarations and corrected the opaque query-token interface after independent accuracy findings. Original source contributor retained; target access and callback contracts support the corrections."
       }
     },
     {
@@ -9119,8 +9131,11 @@
       "provenance": {
         "pull_request": 464,
         "merged_via": 464,
-        "commit": "524709ee0e63b2dd442495f4dc9386b5efeb228b",
-        "introduced_blob": "68586436bc9a4d6b4d6017bc4f173fedd54321c1"
+        "commit": "62ac7bdbe2dcb647be24a46a242e68cbe53816fe",
+        "introduced_blob": "f638f16e41e5887bda78d0f1c93962bfce1d404f",
+        "original_commit": "524709ee0e63b2dd442495f4dc9386b5efeb228b",
+        "original_blob": "68586436bc9a4d6b4d6017bc4f173fedd54321c1",
+        "integration_adjustment": "Centralized established query/callback declarations and corrected the opaque query-token interface after independent accuracy findings. Original source contributor retained; target access and callback contracts support the corrections."
       }
     },
     {
@@ -9188,8 +9203,11 @@
       "provenance": {
         "pull_request": 464,
         "merged_via": 464,
-        "commit": "99e539825aa3e7ccad632274f6864cfc5e978e1c",
-        "introduced_blob": "fa125369e89cc4893b048de0242e459423d79b36"
+        "commit": "62ac7bdbe2dcb647be24a46a242e68cbe53816fe",
+        "introduced_blob": "9664d01a5f1b01ab3dd0ac44a78b5ea8efaf35df",
+        "original_commit": "99e539825aa3e7ccad632274f6864cfc5e978e1c",
+        "original_blob": "fa125369e89cc4893b048de0242e459423d79b36",
+        "integration_adjustment": "Centralized established query/callback declarations and corrected the opaque query-token interface after independent accuracy findings. Original source contributor retained; target access and callback contracts support the corrections."
       }
     },
     {
@@ -9266,8 +9284,11 @@
       "provenance": {
         "pull_request": 464,
         "merged_via": 464,
-        "commit": "d4821a1d57cd08363d1afa1f7db003c327b1fc99",
-        "introduced_blob": "839af371f889124a86493c6c8e4a7445dde830e7"
+        "commit": "62ac7bdbe2dcb647be24a46a242e68cbe53816fe",
+        "introduced_blob": "8d72b11019c183e5d530172152204ce99379152d",
+        "original_commit": "d4821a1d57cd08363d1afa1f7db003c327b1fc99",
+        "original_blob": "839af371f889124a86493c6c8e4a7445dde830e7",
+        "integration_adjustment": "Centralized established query/callback declarations and corrected the opaque query-token interface after independent accuracy findings. Original source contributor retained; target access and callback contracts support the corrections."
       }
     },
     {
@@ -9347,8 +9368,11 @@
       "provenance": {
         "pull_request": 464,
         "merged_via": 464,
-        "commit": "c00fb15c8ef679875e0f1e78818167cc67e87bb6",
-        "introduced_blob": "f531c1f3426e08e4ff26de426d1ad70ba59cd91b"
+        "commit": "62ac7bdbe2dcb647be24a46a242e68cbe53816fe",
+        "introduced_blob": "ca2afabc6bf8674e0269cf4cd13821c71d265ce6",
+        "original_commit": "c00fb15c8ef679875e0f1e78818167cc67e87bb6",
+        "original_blob": "f531c1f3426e08e4ff26de426d1ad70ba59cd91b",
+        "integration_adjustment": "Centralized established query/callback declarations and corrected the opaque query-token interface after independent accuracy findings. Original source contributor retained; target access and callback contracts support the corrections."
       }
     }
   ],
