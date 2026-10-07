@@ -3,7 +3,7 @@
 static int OnReset(BOOL final);
 static void ShortCommandProc(s32 chan);
 
-static OSResetFunctionInfo ResetFunctionInfo = { OnReset, 0x7E };
+static OSResetFunctionInfo ResetFunctionInfo = { OnReset, 0x7F };
 static GBASecParam SecParams[4] ATTRIBUTE_ALIGN(32);
 GBAControl __GBA[4];
 BOOL __GBAReset;
