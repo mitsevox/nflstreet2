@@ -8109,6 +8109,28 @@
         "commit": "10c2524769b5245be6b639a6ee026f23364cc9da",
         "introduced_blob": "740113709300f5b1e0ca5cb0d97252785a3010b9"
       }
+    },
+    {
+      "source": "src/game/cu_8003108C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8003108C",
+        "0x800311E4",
+        "0x80031294",
+        "0x800312DC",
+        "0x800312FC",
+        "0x80031328",
+        "0x80031404",
+        "0x8003145C"
+      ],
+      "provenance": {
+        "pull_request": 442,
+        "merged_via": 442,
+        "commit": "578727653bc9f71a26e0a47775f53b32b5ef4d5d",
+        "introduced_blob": "9da97872fcc46bae0403e63c1f576eb29610cab5"
+      }
     }
   ],
   "target": "GN7E69",
