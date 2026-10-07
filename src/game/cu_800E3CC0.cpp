@@ -5,14 +5,10 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_800F06F4.h"
+#include "game/fn_80163E94.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
-
-struct Record_80163E94 {
-    char mUnknown0[11];
-    unsigned char mUnknownB;
-};
 
 struct Block_800E7588 {
     char mUnknown0[4];
@@ -61,7 +57,6 @@ void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int a);
 int fn_8011F1A4(void);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 int fn_801486A0(void);
-Record_80163E94 *fn_80163E94(Object_800670B4 *pObject, unsigned int index, void *pArg);
 Object_800670B4 *fn_80168708(int team);
 Point_8017886C fn_80177FE0(void);
 int fn_80177F70(void);

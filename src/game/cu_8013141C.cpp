@@ -5,6 +5,7 @@
 #include "game/Object_8017886C.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_800670B4.h"
+#include "game/fn_80163E94.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_80178D18.h"
 
@@ -27,11 +28,6 @@ struct Control_80132090 {
     unsigned char mUnknown80;
     unsigned char mUnknown81;
     char mUnknown82[6];
-};
-
-struct Record_80163E94 {
-    char mUnknown0[11];
-    unsigned char mUnknownB;
 };
 
 extern "C" {
@@ -68,7 +64,6 @@ void fn_80130338(Object_80039F5C *p, Control_80132090 *pControl);
 int fn_80132630(Object_80039F5C *p, Vector_80039F5C *pPos, int a);
 void fn_8013FA8C(int a);
 void fn_80148108(int mode);
-Record_80163E94 *fn_80163E94(Object_800670B4 *pObject, unsigned int index, void *pArg);
 Object_800670B4 *fn_80168708(int team);
 Point_8017886C fn_80177FE0(void);
 int fn_80178308(void);
