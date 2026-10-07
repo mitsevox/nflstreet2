@@ -14713,6 +14713,105 @@
           "end": "0x80242288"
         }
       ]
+    },
+    {
+      "source": "src/dolphin/gx/GXTev.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete pureC BFBB source; explicit unsupported release-only matchingtemporary removed using genuine directarrayindex sourcepath. All15targetbodies registered1768 plus116data; mismatch measured without sourcepromotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80251604",
+          "end": "0x80251CEC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FEE08",
+          "end": "0x802FEE7C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GXSetTevOp",
+          "start": "0x80251604",
+          "end": "0x80251690"
+        },
+        {
+          "symbol": "GXSetTevColorIn",
+          "start": "0x80251690",
+          "end": "0x802516D4"
+        },
+        {
+          "symbol": "GXSetTevAlphaIn",
+          "start": "0x802516D4",
+          "end": "0x80251718"
+        },
+        {
+          "symbol": "GXSetTevColorOp",
+          "start": "0x80251718",
+          "end": "0x80251780"
+        },
+        {
+          "symbol": "GXSetTevAlphaOp",
+          "start": "0x80251780",
+          "end": "0x802517E8"
+        },
+        {
+          "symbol": "GXSetTevColor",
+          "start": "0x802517E8",
+          "end": "0x80251864"
+        },
+        {
+          "symbol": "GXSetTevKColor",
+          "start": "0x80251864",
+          "end": "0x802518D8"
+        },
+        {
+          "symbol": "GXSetTevKColorSel",
+          "start": "0x802518D8",
+          "end": "0x80251934"
+        },
+        {
+          "symbol": "GXSetTevKAlphaSel",
+          "start": "0x80251934",
+          "end": "0x80251990"
+        },
+        {
+          "symbol": "GXSetTevSwapMode",
+          "start": "0x80251990",
+          "end": "0x802519D8"
+        },
+        {
+          "symbol": "GXSetTevSwapModeTable",
+          "start": "0x802519D8",
+          "end": "0x80251A58"
+        },
+        {
+          "symbol": "GXSetAlphaCompare",
+          "start": "0x80251A58",
+          "end": "0x80251A9C"
+        },
+        {
+          "symbol": "GXSetZTexture",
+          "start": "0x80251A9C",
+          "end": "0x80251B28"
+        },
+        {
+          "symbol": "GXSetTevOrder",
+          "start": "0x80251B28",
+          "end": "0x80251CC4"
+        },
+        {
+          "symbol": "GXSetNumTevStages",
+          "start": "0x80251CC4",
+          "end": "0x80251CEC"
+        }
+      ],
+      "discarded": [
+        "GXSetTevColorS10"
+      ]
     }
   ]
 }
