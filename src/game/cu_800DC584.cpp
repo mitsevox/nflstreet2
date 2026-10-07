@@ -92,7 +92,7 @@ extern "C" float fn_800DC6A8(Object_801BBD5C *pObject, Object_80039F5C *p, int i
     return fn_800DAA68(index, pA, pObject, b, fn_800DC61C(pObject, p));
 }
 
-extern "C" int fn_800DD830() {
+extern "C" int fn_800DD830(void *p) {
     return 1;
 }
 
@@ -163,7 +163,7 @@ extern "C" void fn_800DF750(Object_80137ABC *pBall, Vector_80039F5C *pPos, int *
     fn_80137EE0(pBall, &delta);
 }
 
-extern "C" void fn_800DF9FC() {
+extern "C" void fn_800DF9FC(Object_80039F5C *p, void *pRecord, unsigned int value) {
 }
 
 extern "C" int fn_800E0188(Object_80039F5C *p, float *pA, float *pB)
@@ -246,7 +246,7 @@ extern "C" int fn_800E05C0(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_800E068C() {
+extern "C" int fn_800E068C(Object_80039F5C *p) {
     return 0;
 }
 
@@ -283,7 +283,7 @@ extern "C" int fn_800E0EF0(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_800E0F40() {
+extern "C" int fn_800E0F40(Object_80039F5C *p) {
     return 0;
 }
 
