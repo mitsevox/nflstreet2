@@ -1,4 +1,3 @@
-#include <math.h>
 #include "game/fn_800F06F4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
@@ -84,7 +83,7 @@ int fn_8009A298(int handle);
 int fn_8009A2EC(int handle);
 int fn_8009A578(int handle);
 int fn_8009A5D4(int handle);
-void fn_8009A5DC(int a, int b, int *pA, int *pB);
+void fn_8009A5DC(int a, int b, void *pA, int *pB);
 int fn_8009AD38(int team, int value);
 void fn_8009BD2C(Object_80039F5C *p, int *pOut);
 void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pA, Vector_80039F5C *pB, int a);
@@ -273,7 +272,7 @@ void fn_8016FB10(Object_80039F5C *p, void *pBall, Pair_8017055C *pOut, int a)
     if (p == 0) {
         return;
     }
-    fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, (int *)&unknown, &handle);
+    fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
     if (!(p->mMotion.mPos.mZ > 0.0f)) {
         Vector_80039F5C left;
         Vector_80039F5C right;
@@ -405,7 +404,7 @@ void fn_8016FB10(Object_80039F5C *p, void *pBall, Pair_8017055C *pOut, int a)
             onSide = left.mZ;
         }
         for (i = 0; i <= 10; i++) {
-            fn_8009BF5C(p, lbl_802E99C4[i], &joint, (int)&extra);
+            fn_8009BF5C(p, lbl_802E99C4[i], &joint, &extra);
             if (joint.mZ < onSide) {
                 onSide = joint.mZ;
             }
@@ -2344,5 +2343,5 @@ void fn_8017417C(void)
 }
 }
 
-/* Joint names read in order by fn_80176630 (lis/addi at 0x801766EC). */
+/* Joint names read in order by fn_80176630 (lis r22 at 0x80176698, addi at 0x801766EC). */
 const char *lbl_802E99F0[5] = {"headend", "rwrist", "lwrist", "lball", "rball"};

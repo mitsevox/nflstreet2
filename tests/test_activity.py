@@ -219,6 +219,42 @@ class ContributorTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Merged source lacks'):
             self.credits()
 
+    def test_source_merge_rejects_a_pure_rename(self):
+        self.git('mv', 'src/test.c', 'src/merged.c')
+        self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                 'commit', '-qm', 'Rename the source')
+        self.commit = self.git('rev-parse', 'HEAD')
+        self.build['units'][0]['source'] = 'src/merged.c'
+        self.entry['source'] = 'src/merged.c'
+        self.entry['provenance'].update(original_source='src/test.c', merged_source=True)
+        with self.assertRaisesRegex(ValueError, 'Merged source lacks'):
+            self.credits()
+
+    def test_source_merge_must_descend_from_the_provenance_commit(self):
+        (self.root/'src/merged.c').write_text('int other(void) { return 2; }\n'
+                                             'int function(void) { return 1; }\n')
+        self.git('add', 'src/merged.c')
+        self.git('rm', '-q', 'src/test.c')
+        self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                 'commit', '-qm', 'Merge sources')
+        (self.root/'src/test.c').write_text('int function(void) { return 1; }')
+        self.git('add', 'src/test.c')
+        self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                 'commit', '-qm', 'Restore the original')
+        self.commit = self.git('rev-parse', 'HEAD')
+        self.build['units'][0]['source'] = 'src/merged.c'
+        self.entry['source'] = 'src/merged.c'
+        self.entry['provenance'].update(commit=self.commit, original_source='src/test.c',
+                                        merged_source=True)
+        with self.assertRaisesRegex(ValueError, 'Merged source lacks'):
+            self.credits()
+
+    def test_source_merge_root_commit_has_no_parent_to_replace(self):
+        self.assertFalse(activity.merged_source(self.root, self.commit, 'src/test.c',
+                                                'src/merged.c', self.commit))
+        self.assertFalse(activity.merged_source(self.root, self.commit, 'src/test.c',
+                                                'src/test.c', self.commit))
+
     def test_path_migration_rejects_unrelated_current_source(self):
         (self.root/'src/unrelated.c').write_text('int function(void) { return 99; }')
         self.git('add', 'src/unrelated.c')
