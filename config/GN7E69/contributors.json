@@ -7743,6 +7743,21 @@
       }
     },
     {
+      "source": "src/game/cu_8019B460.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8019B43C"
+      ],
+      "provenance": {
+        "pull_request": 493,
+        "merged_via": 493,
+        "commit": "e9bda149f081c8dc6e44bfb100cc5ccacfa0a489",
+        "introduced_blob": "64e60da5127b35e1048aa61bac54def96d775093"
+      }
+    },
+    {
       "source": "src/game/cu_80191398.cpp",
       "contributors": [
         "adampreddy"
