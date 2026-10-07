@@ -92,7 +92,7 @@ int fn_80081FD4(Object_8008044C *pObject, int a);
 int fn_80082280(Object_8008044C *pObject);
 int fn_800822D4(Object_8008044C *pObject);
 void fn_800840A4(Object_8007A334 *pObject, void *pBuffer);
-void fn_80146094(void *p);
+void fn_80146094(Object_80146094 *pObject);
 void fn_8015F6E8(const char *pName, int b, int c, int d, Ids_8015F6E8 *pIds);
 void fn_8015FFC8(int player, int key, int value);
 void fn_80160E94(int index, int slot, int id, int palette, int d);
@@ -1151,7 +1151,7 @@ extern "C" void fn_8004A040(Object_8003DEC4 *pPlayer, Init_8004A040 *pInit)
     fn_801C1F94(pPlayer, 0x19F0, 0);
     fn_80042610(pPlayer, pInit->mUnknown04, pInit->mUnknown08, pInit->mUnknown10, pInit->mUnknown14);
     pPlayer->mUnknown4956 = pInit->mUnknown18;
-    fn_80146094(pPlayer->mUnknown5188);
+    fn_80146094(&pPlayer->mUnknown5188);
     fn_801A3588(pPlayer, pInit);
 }
 

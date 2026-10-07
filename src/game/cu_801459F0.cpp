@@ -1,6 +1,7 @@
 #include <dolphin/mtx.h>
 #include "game/cu_80136B1C.h"
 #include "game/fn_801C68FC.h"
+#include "game/Object_80146094.h"
 
 /* Object returned by fn_80144CE0 and released by fn_80144E38. */
 struct Object_80144CE0 {
@@ -49,27 +50,6 @@ struct Vec_801EBC18 {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
-};
-
-struct Object_80146094 {
-    char mPad000[0x568];
-    unsigned char mUnknown568;
-    float mUnknown56C;
-    float mUnknown570;
-    float mUnknown574;
-    char mPad578[0x57C - 0x578];
-    unsigned char mUnknown57C;
-    float mUnknown580;
-    float mUnknown584;
-    float mUnknown588;
-    char mPad58C[0x590 - 0x58C];
-    float mUnknown590;
-    float mUnknown594;
-    float mUnknown598;
-    char mPad59C[0x5A0 - 0x59C];
-    int mUnknown5A0;
-    int mUnknown5A4;
-    int mUnknown5A8;
 };
 
 extern "C" {

@@ -10056,6 +10056,114 @@
       ]
     },
     {
+      "source": "src/game/cu_80146F40.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80146F40-0x80147908 (src/game/cu_80146F40.cpp) and its data, type, compiler and source-form rows. All bodies are comparisons; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80146F40",
+          "end": "0x80147908"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0490",
+          "end": "0x802A04D8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DD68C",
+          "end": "0x802DD72C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB27C",
+          "end": "0x803EB284"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80146F40",
+          "start": "0x80146F40",
+          "end": "0x80146F74"
+        },
+        {
+          "symbol": "fn_80146F74",
+          "start": "0x80146F74",
+          "end": "0x80146FCC"
+        },
+        {
+          "symbol": "fn_80146FCC",
+          "start": "0x80146FCC",
+          "end": "0x80146FD8"
+        },
+        {
+          "symbol": "fn_80146FD8",
+          "start": "0x80146FD8",
+          "end": "0x80146FDC"
+        },
+        {
+          "symbol": "fn_80146FDC",
+          "start": "0x80146FDC",
+          "end": "0x801470F0"
+        },
+        {
+          "symbol": "fn_801470F0",
+          "start": "0x801470F0",
+          "end": "0x80147598"
+        },
+        {
+          "symbol": "fn_80147598",
+          "start": "0x80147598",
+          "end": "0x801475F4"
+        },
+        {
+          "symbol": "fn_801475F4",
+          "start": "0x801475F4",
+          "end": "0x801476C8"
+        },
+        {
+          "symbol": "fn_801476C8",
+          "start": "0x801476C8",
+          "end": "0x801477F0"
+        },
+        {
+          "symbol": "fn_801477F0",
+          "start": "0x801477F0",
+          "end": "0x80147840"
+        },
+        {
+          "symbol": "fn_80147840",
+          "start": "0x80147840",
+          "end": "0x80147860"
+        },
+        {
+          "symbol": "fn_80147860",
+          "start": "0x80147860",
+          "end": "0x801478A8"
+        },
+        {
+          "symbol": "fn_801478A8",
+          "start": "0x801478A8",
+          "end": "0x801478F0"
+        },
+        {
+          "symbol": "fn_801478F0",
+          "start": "0x801478F0",
+          "end": "0x80147900"
+        },
+        {
+          "symbol": "fn_80147900",
+          "start": "0x80147900",
+          "end": "0x80147908"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8015C25C.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row 0x8015C25C-0x8015D3EC (src/game/cu_8015C25C.cpp), its type and source-form rows, the 25 exact function extents, the exact .rodata row 0x802A3EF8-0x802A3F10 and the exact .sdata row 0x803EB328-0x803EB330. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
