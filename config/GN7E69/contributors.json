@@ -6561,7 +6561,7 @@
       ],
       "provenance": {
         "pull_request": 544,
-        "merged_via": 544,
+        "merged_via": 573,
         "commit": "b5fd7e16f0ce0e3a13a2f9e138c874bfb0d5103f",
         "introduced_blob": "f5552d8d24727c28a93d5586a12244e7a8ee6a33"
       }
@@ -6727,7 +6727,7 @@
       ],
       "provenance": {
         "pull_request": 549,
-        "merged_via": 549,
+        "merged_via": 573,
         "commit": "c21b243504d5ad2fcc7db8a793d823d74c7fe5af",
         "introduced_blob": "e566b5f0cacd8568e06f9198b3a003abc357e42b"
       }
@@ -10506,7 +10506,7 @@
       ],
       "provenance": {
         "pull_request": 510,
-        "merged_via": 525,
+        "merged_via": 573,
         "commit": "74b8a51b6a95ba03d4b08507f93e440fc4ad3019",
         "introduced_blob": "2e3ed684a6b3eb28b4d8b21a5689bb12b71237f9"
       }
@@ -10850,7 +10850,7 @@
         "original_blob": "51312b5fa9ca264467ed1b8f9b86235ec4a4e598",
         "integration_adjustment": "Canonical OS/PPC/stdio and established __ar header closure; removed inherited decompilation process introduction. Complete function bodies and behavior comments unchanged. Relocate byte-identical internal VM header under include/dolphin and use the explicit canonical header include; complete C bodies unchanged.",
         "pull_request": 567,
-        "merged_via": 567
+        "merged_via": 573
       }
     },
     {
@@ -10869,7 +10869,7 @@
         "original_blob": "1cc038dec490e9ebd63d0d0cf38b52e26a517c15",
         "integration_adjustment": "Canonical OS/PPC/stdio and established __ar header closure; removed inherited decompilation process introduction. Complete function bodies and behavior comments unchanged. Relocate byte-identical internal VM header under include/dolphin and use the explicit canonical header include; complete C bodies unchanged.",
         "pull_request": 567,
-        "merged_via": 567
+        "merged_via": 573
       }
     },
     {
@@ -10890,7 +10890,7 @@
         "original_blob": "52c1c810d93c1e37a65ced32d568550ea30dd34e",
         "integration_adjustment": "Canonical includes/NULL and existing OS reset BOOL callback/reschedule declarations; removed donor-address process comments.; Keep target-accessed channel fields and opaque unaccessed regions; native channel256/sec64 extents corroborate actual original stride.; GBAInit omits absent Initialized guard and version registration; actual original DSPInit call retained.; Reset record priority127 follows original16-byte record, instead of related donor126.",
         "pull_request": 567,
-        "merged_via": 567
+        "merged_via": 573
       }
     },
     {
@@ -10912,7 +10912,7 @@
         "original_blob": "9803d9ec108c0278d1434eec00e644ea72e3f6e3",
         "integration_adjustment": "Canonical includes/NULL and existing OS reset BOOL callback/reschedule declarations; removed donor-address process comments.; Keep target-accessed channel fields and opaque unaccessed regions; native channel256/sec64 extents corroborate actual original stride.; GBAInit omits absent Initialized guard and version registration; actual original DSPInit call retained.; Reset record priority127 follows original16-byte record, instead of related donor126.",
         "pull_request": 567,
-        "merged_via": 567
+        "merged_via": 573
       }
     },
     {
@@ -10937,7 +10937,7 @@
         "original_blob": "835144e27205e760b19ff936788c460321153d02",
         "integration_adjustment": "Canonical headers and genuine release FIFO float macros. Entire inline-assembly helpers and assembly-dependent consumer APIs omitted; eight complete C logical bodies retained in normal file. No interior-body holes or version-splices; full mapped file denominator retained.",
         "pull_request": 567,
-        "merged_via": 567
+        "merged_via": 573
       }
     },
     {
@@ -10956,7 +10956,7 @@
         "original_blob": "9fed89b6d24102bd0fe636160bcdafb6270e85f8",
         "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Remove unsupported padding[12] declaration; whole initializer retained and honestly partial.",
         "pull_request": 567,
-        "merged_via": 567
+        "merged_via": 573
       }
     },
     {
@@ -10974,7 +10974,7 @@
         "original_blob": "35542bcfc72779991f353aa900bd4c329e951756",
         "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Whole canonical-layout C bodies; original context/FPU assembly stays external.",
         "pull_request": 567,
-        "merged_via": 567
+        "merged_via": 573
       }
     },
     {
@@ -10992,7 +10992,7 @@
         "original_blob": "4fd3bf22e513e6870fd262ccf6257eb8e3529864",
         "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Canonical actual s32 reset argument and32-byte alignment; original Run provider, full DVD stack objects preserved.",
         "pull_request": 567,
-        "merged_via": 567
+        "merged_via": 573
       }
     },
     {
@@ -11010,7 +11010,7 @@
         "original_blob": "2b87ffd2a286f4009c59907b5828854a674de721",
         "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Remove unsupported unused unk[3] compiler scaffold and fake hardware layouts; reuse canonical MMIO registers.",
         "pull_request": 567,
-        "merged_via": 567
+        "merged_via": 573
       }
     },
     {
@@ -11029,7 +11029,7 @@
         "original_blob": "12cedc3fabf04c7b11bcf8778b460a3cc0344527",
         "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Whole canonical-layout C bodies; original context/FPU assembly stays external.",
         "pull_request": 567,
-        "merged_via": 567
+        "merged_via": 573
       }
     },
     {
@@ -11047,7 +11047,7 @@
         "original_blob": "c035ef60e1cbce22d6bd800b9c9f515f7910cf38",
         "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Add missing prototype for genuine complete module initializer; original lowmemory globals unchanged.",
         "pull_request": 567,
-        "merged_via": 567
+        "merged_via": 573
       }
     },
     {
@@ -11070,7 +11070,7 @@
         "original_blob": "ae99ea535a89734d6d26224cbeb48a8736a0f218",
         "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. OSPriv\u2192__os.h and original external exception bridge; retain compiled genuine PeriodicAlarm unassigned.",
         "pull_request": 567,
-        "merged_via": 567
+        "merged_via": 573
       }
     },
     {
@@ -11083,7 +11083,7 @@
       ],
       "provenance": {
         "pull_request": 570,
-        "merged_via": 570,
+        "merged_via": 573,
         "commit": "8ca2eb1aed483486c478cd1d2ebf0032637e3b79",
         "introduced_blob": "64e2d92f6790fc3fe01c6ac1d2f7d00425093353"
       }
@@ -11098,7 +11098,7 @@
       ],
       "provenance": {
         "pull_request": 571,
-        "merged_via": 571,
+        "merged_via": 573,
         "commit": "db2dc7c503876d274162b028ce183a79513d47d4",
         "introduced_blob": "503d4255b0e47be2d11c341a65e5bc630efeb3c4"
       }
@@ -11131,9 +11131,12 @@
       ],
       "provenance": {
         "pull_request": 540,
-        "merged_via": 540,
-        "commit": "2e522b7ec765df9d1cb99e2fec9239df936f3d3c",
-        "introduced_blob": "a46529fd3654904589d9635abd7de2c25986bd1a"
+        "merged_via": 573,
+        "commit": "c441fd4b7a82c21eadd89ad8671d02f3b6e35af2",
+        "introduced_blob": "4169487c864e5ec781e162cc18c228bfd72ce66c",
+        "original_commit": "2e522b7ec765df9d1cb99e2fec9239df936f3d3c",
+        "original_blob": "a46529fd3654904589d9635abd7de2c25986bd1a",
+        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved."
       }
     },
     {
@@ -11166,9 +11169,12 @@
       ],
       "provenance": {
         "pull_request": 556,
-        "merged_via": 556,
-        "commit": "a10d9ae965815037bad1084e7ca2661469fc3895",
-        "introduced_blob": "a73f9e0cd1ffdfbaf2ce0e1027def659043c7cbe"
+        "merged_via": 573,
+        "commit": "c441fd4b7a82c21eadd89ad8671d02f3b6e35af2",
+        "introduced_blob": "4169487c864e5ec781e162cc18c228bfd72ce66c",
+        "original_commit": "a10d9ae965815037bad1084e7ca2661469fc3895",
+        "original_blob": "a73f9e0cd1ffdfbaf2ce0e1027def659043c7cbe",
+        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved."
       }
     },
     {
@@ -11210,9 +11216,12 @@
       ],
       "provenance": {
         "pull_request": 557,
-        "merged_via": 557,
-        "commit": "d40ff6e9c0cf611b978b9d84cc545d953845b977",
-        "introduced_blob": "e6c396e9cbd91bc07deab487974253d591d8c909"
+        "merged_via": 573,
+        "commit": "c441fd4b7a82c21eadd89ad8671d02f3b6e35af2",
+        "introduced_blob": "4169487c864e5ec781e162cc18c228bfd72ce66c",
+        "original_commit": "d40ff6e9c0cf611b978b9d84cc545d953845b977",
+        "original_blob": "e6c396e9cbd91bc07deab487974253d591d8c909",
+        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved."
       }
     },
     {
@@ -11244,9 +11253,12 @@
       ],
       "provenance": {
         "pull_request": 558,
-        "merged_via": 558,
-        "commit": "fa2066a7feab31e4fe4bc6a0c3e0d9f24c8d09ab",
-        "introduced_blob": "471e72470a3864eff0f5f3bf4605dd90da2a9306"
+        "merged_via": 573,
+        "commit": "c441fd4b7a82c21eadd89ad8671d02f3b6e35af2",
+        "introduced_blob": "4169487c864e5ec781e162cc18c228bfd72ce66c",
+        "original_commit": "fa2066a7feab31e4fe4bc6a0c3e0d9f24c8d09ab",
+        "original_blob": "471e72470a3864eff0f5f3bf4605dd90da2a9306",
+        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved."
       }
     }
   ],
