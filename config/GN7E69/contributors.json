@@ -8854,8 +8854,11 @@
       "provenance": {
         "pull_request": 467,
         "merged_via": 467,
-        "commit": "771a8506195b2ced10b28a0cedd813d38cd6c2b1",
-        "introduced_blob": "d6ee8c7d4f53d9d8c48d9b7fd300dc024a06ffee"
+        "commit": "6946bf46c0a5ddb43ac6eb2d1c03850c54a20113",
+        "introduced_blob": "fa707f98d8532398b3748c348e4245b524955a29",
+        "original_commit": "771a8506195b2ced10b28a0cedd813d38cd6c2b1",
+        "original_blob": "d6ee8c7d4f53d9d8c48d9b7fd300dc024a06ffee",
+        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses."
       }
     },
     {
@@ -8870,8 +8873,11 @@
       "provenance": {
         "pull_request": 469,
         "merged_via": 469,
-        "commit": "8801e4e04580cd0ce07d5ef1cc6f6302e97b5bed",
-        "introduced_blob": "49e49e1b68d8b6a254fa14764067f2286ad1a7ef"
+        "commit": "6946bf46c0a5ddb43ac6eb2d1c03850c54a20113",
+        "introduced_blob": "973b91a351935a9654519ed4b6f9c83440be4893",
+        "original_commit": "8801e4e04580cd0ce07d5ef1cc6f6302e97b5bed",
+        "original_blob": "49e49e1b68d8b6a254fa14764067f2286ad1a7ef",
+        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses."
       }
     },
     {
@@ -8892,8 +8898,11 @@
       "provenance": {
         "pull_request": 472,
         "merged_via": 472,
-        "commit": "e87d3bbb8167681e2c6130c54cba16ec9c47bb09",
-        "introduced_blob": "a23dbfdd8e14d42964f481dc03c626dc6782ad7b"
+        "commit": "6946bf46c0a5ddb43ac6eb2d1c03850c54a20113",
+        "introduced_blob": "baa1705b52cb365f9ff8d11ce9d338538c18ec88",
+        "original_commit": "e87d3bbb8167681e2c6130c54cba16ec9c47bb09",
+        "original_blob": "a23dbfdd8e14d42964f481dc03c626dc6782ad7b",
+        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses."
       }
     },
     {
@@ -8910,8 +8919,11 @@
       "provenance": {
         "pull_request": 480,
         "merged_via": 480,
-        "commit": "9309229de46b802347f0d845f9041a7a37d60830",
-        "introduced_blob": "135ae1212e5532a13d8066147b568349536ffeee"
+        "commit": "6946bf46c0a5ddb43ac6eb2d1c03850c54a20113",
+        "introduced_blob": "baa1705b52cb365f9ff8d11ce9d338538c18ec88",
+        "original_commit": "9309229de46b802347f0d845f9041a7a37d60830",
+        "original_blob": "135ae1212e5532a13d8066147b568349536ffeee",
+        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses."
       }
     },
     {
