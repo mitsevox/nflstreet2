@@ -8856,8 +8856,11 @@
       "provenance": {
         "pull_request": 459,
         "merged_via": 459,
-        "commit": "137e7321d10e8118c7560dce542de18629730486",
-        "introduced_blob": "b9d8eb94d8d124ebc04b928a316ae42d45c0d16e"
+        "commit": "25c6b444a1ae46f36554630d44e0008a0d6e0621",
+        "introduced_blob": "c21db09c503b57d3b26f5f94542415fa02785b17",
+        "original_commit": "137e7321d10e8118c7560dce542de18629730486",
+        "original_blob": "b9d8eb94d8d124ebc04b928a316ae42d45c0d16e",
+        "integration_adjustment": "Normalize donor blank-line trailing whitespace; source bodies, static declarations and native object are unchanged."
       }
     },
     {
