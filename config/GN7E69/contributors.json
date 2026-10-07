@@ -10602,6 +10602,78 @@
         "commit": "bcf05077005fe09d851b9d02fec33532b2e90323",
         "introduced_blob": "b0b26f6633f4db968f2d53f9936539f7e278828c"
       }
+    },
+    {
+      "source": "src/game/cu_800DAEE4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DAEE4",
+        "0x800DB074",
+        "0x800DB60C"
+      ],
+      "provenance": {
+        "pull_request": 563,
+        "merged_via": 563,
+        "commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
+        "introduced_blob": "b98c1cce7e7d54627e00da000bd0669f2045740c"
+      }
+    },
+    {
+      "source": "src/game/cu_800DC584.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DC61C",
+        "0x800DC674",
+        "0x800DC6A8",
+        "0x800DD830",
+        "0x800DDCE4",
+        "0x800DDEE4",
+        "0x800DE364",
+        "0x800DF6EC",
+        "0x800DF750",
+        "0x800DF9FC",
+        "0x800E0188",
+        "0x800E01D8",
+        "0x800E0230",
+        "0x800E0574",
+        "0x800E05C0",
+        "0x800E068C",
+        "0x800E0818",
+        "0x800E0E8C",
+        "0x800E0EF0",
+        "0x800E0F40",
+        "0x800E12D4",
+        "0x800E1350",
+        "0x800E13E4",
+        "0x800E1544",
+        "0x800E1554"
+      ],
+      "provenance": {
+        "pull_request": 563,
+        "merged_via": 563,
+        "commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
+        "introduced_blob": "19068d954928aba65a8d03e94d9f0caa205d76a6"
+      }
+    },
+    {
+      "source": "src/game/cu_800E3A34.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800E3B8C",
+        "0x800E3C30"
+      ],
+      "provenance": {
+        "pull_request": 563,
+        "merged_via": 563,
+        "commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
+        "introduced_blob": "0366bc8bdd2359557cd0bcdb31f951ae78de1ca7"
+      }
     }
   ],
   "target": "GN7E69",
