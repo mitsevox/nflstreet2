@@ -101,7 +101,11 @@ struct Object_80039F5C {
     char mUnknown9[3];
     unsigned int mFlags;
     int mUnknown16;
-    char mUnknown20[316];
+    char mUnknown20[88];
+    int mUnknown108;
+    char mUnknown112[88];
+    int mUnknown200;
+    char mUnknown204[132];
     int mUnknown336;
     char mUnknown340[20];
     unsigned char mUnknown360;
