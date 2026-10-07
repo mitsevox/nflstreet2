@@ -1096,10 +1096,6 @@
       "address": "0x803EC2C0",
       "evidence": "Complete BFBB CARDMount native retained operand resolved against original target; source name corroborated by pinned donor declaration and actual call/access context."
     },
-    "__PADFixBits": {
-      "address": "0x803ED3E8",
-      "evidence": "Original PADInit at0x80247178 loads this four-byte SDA word at0x803ED3E8; existing canonical include/dolphin/si.h declares u32 __PADFixBits. Wireless reset handling reads this state; no function/callee identity is claimed."
-    },
     "__AICallbackStackSwitch": {
       "address": "0x8024A7B0",
       "evidence": "Original AID handler directcall passes callbackcodepointerr3, original88bytes changesr1 andcallsnoargs thenrestores; sourceimplementation unresolved."
