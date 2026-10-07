@@ -2572,7 +2572,7 @@
       "name": "src/dolphin/ax/AXCL.c",
       "source": "src/dolphin/ax/AXCL.c",
       "library": "AX",
-      "evidence": "Target GetCommandListCycles8-byte getter at8704C, GetCommandListAddress87054 flips2x768-byte buffers and writes sharedCLpointer, CommandListDSP generator87090 uses16-bitcommands/cyclecounter; init87740/quit87764/modesetters through87784. AXCL source and call/global relationships corroborate file; no native whole layout success claimed.",
+      "evidence": "Seven unchanged nativeAXCL routines1848bytes fully resolve all216relocations; complete1536BSS20SBSS match nativeplacement. Originalfile edges remainprovisional.",
       "sections": [
         {
           "section": ".text",
@@ -2581,6 +2581,22 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Target GetCommandListCycles8-byte getter at8704C, GetCommandListAddress87054 flips2x768-byte buffers and writes sharedCLpointer, CommandListDSP generator87090 uses16-bitcommands/cyclecounter; init87740/quit87764/modesetters through87784. AXCL source and call/global relationships corroborate file; no native whole layout success claimed."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803BD980",
+          "end": "0x803BDF80",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "AXCL complete unchanged nativeallocation and actualtargetoperands establish extent; nointer-file alignmentpadding credited."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED550",
+          "end": "0x803ED564",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "AXCL complete unchanged nativeallocation and actualtargetoperands establish extent; nointer-file alignmentpadding credited."
         }
       ]
     },

@@ -192,17 +192,9 @@
       "address": "0x80288E2C",
       "evidence": "evidence.tsv AX external __AXVPBInit; branch instruction destination and upstream role."
     },
-    "__AXClInit": {
-      "address": "0x80287740",
-      "evidence": "evidence.tsv AX external __AXClInit; branch instruction destination and upstream role."
-    },
     "__AXVPBQuit": {
       "address": "0x8028902C",
       "evidence": "evidence.tsv AX external __AXVPBQuit; branch instruction destination and upstream role."
-    },
-    "__AXClQuit": {
-      "address": "0x80287764",
-      "evidence": "evidence.tsv AX external __AXClQuit; branch instruction destination and upstream role."
     },
     "__OSLockSramEx": {
       "address": "0x8023CAF0",
@@ -347,10 +339,6 @@
     "__DSP_rude_task_pending": {
       "address": "0x803ED4F4",
       "evidence": "evidence.tsv DSP init external records: target operands and pinned BFBB reference role."
-    },
-    "__AXClMode": {
-      "address": "0x803ED560",
-      "evidence": "AXAux target lwz r13-19776 at 0x80286E58/0x80286F2C; shared related SDK mode declaration, original storage remains linked."
     },
     "__builtin_delete": {
       "address": "0x801D3C18",
@@ -860,14 +848,6 @@
       "address": "0x80288B68",
       "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
     },
-    "__AXGetCommandListAddress": {
-      "address": "0x80287054",
-      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
-    },
-    "__AXNextFrame": {
-      "address": "0x80287090",
-      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
-    },
     "AIInitDMA": {
       "address": "0x8024A140",
       "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
@@ -935,6 +915,14 @@
     "OSGetConsoleType": {
       "address": "0x80238984",
       "evidence": "evidence.tsv external OSGetConsoleType: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
+    },
+    "__AXGetPBs": {
+      "address": "0x80288DE0",
+      "evidence": "evidence.tsv AXCL retainedcall/globaloperand and pinned donor declaration."
+    },
+    "__AXCompressorTable": {
+      "address": "0x803027C0",
+      "evidence": "evidence.tsv AXCL retainedcall/globaloperand and pinned donor declaration."
     }
   },
   "units": [
@@ -8169,6 +8157,43 @@
           "placement": ".sbss",
           "start": "0x803ED5D8",
           "end": "0x803ED5E8"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ax/AXCL.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv AXCL contiguous native216relocation proof and complete staticstorage.",
+      "link_roots": {
+        "symbols": [
+          "__AXGetCommandListCycles",
+          "__AXGetCommandListAddress",
+          "__AXNextFrame",
+          "__AXClInit",
+          "__AXClQuit",
+          "AXSetMode",
+          "AXSetCompressor"
+        ],
+        "evidence": "Target retains seven routines1848bytes; helper writerinlines and unusedAXGetMode naturally discarded; whole native1536BSS20SBSS unchanged."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8028704C",
+          "end": "0x80287784"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803BD980",
+          "end": "0x803BDF80"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED550",
+          "end": "0x803ED564"
         }
       ]
     }
