@@ -8928,6 +8928,22 @@
         "commit": "1562a06526704677b109a45004a18d8b0fb5455e",
         "introduced_blob": "973b91a351935a9654519ed4b6f9c83440be4893"
       }
+    },
+    {
+      "source": "src/game/cu_800325E8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80032E90",
+        "0x80032EBC"
+      ],
+      "provenance": {
+        "pull_request": 487,
+        "merged_via": 487,
+        "commit": "290e1daa274a53c6f6b6689658bef46c14a4a420",
+        "introduced_blob": "fa707f98d8532398b3748c348e4245b524955a29"
+      }
     }
   ],
   "target": "GN7E69",
