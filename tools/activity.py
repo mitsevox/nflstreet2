@@ -156,11 +156,12 @@ def historical_source_blob(root, revision, source, blob):
     return blob in historical_source_blobs(root, revision, source)
 
 
-def merged_source(root, revision, historical_source, source, origin):
-    # A merge into a combined source: some commit in this history that descends from
-    # the provenance commit writes the current path while removing the original path
-    # that its first parent still had. A pure rename (the parent's original content
-    # moved unchanged) must use renamed_blob instead.
+def merged_source(root, revision, historical_source, source):
+    # A merge into a combined source: some commit in this history writes the current
+    # path while removing the original path that its first parent still had. A pure
+    # rename (the parent's original content moved unchanged) must use renamed_blob.
+    # Provenance commits are contribution-branch commits that squash merges leave
+    # outside main, so ancestry from them is not required.
     if any(character in path for path in (historical_source, source)
            for character in ('\r', '\n', '\0')):
         raise ValueError('Invalid attribution source path')
@@ -180,13 +181,9 @@ def merged_source(root, revision, historical_source, source, origin):
             not SHA.fullmatch(row) and row != query + ' missing'
             for query, row in zip(queries, rows)):
         raise ValueError('Invalid Git historical source response')
-    for i in range(0, len(rows), 4):
-        if SHA.fullmatch(rows[i]) and rows[i] != rows[i + 1] and rows[i] != rows[i + 3] \
-                and not SHA.fullmatch(rows[i + 2]) and SHA.fullmatch(rows[i + 3]) \
-                and not subprocess.run(['git', 'merge-base', '--is-ancestor', origin, commits[i // 4]],
-                                       cwd=root, capture_output=True).returncode:
-            return True
-    return False
+    return any(SHA.fullmatch(rows[i]) and rows[i] != rows[i + 1] and rows[i] != rows[i + 3]
+               and not SHA.fullmatch(rows[i + 2]) and SHA.fullmatch(rows[i + 3])
+               for i in range(0, len(rows), 4))
 
 
 def contributors(root, ledger, build, revision, fetch_missing=False, exact_inventory=None):
@@ -239,7 +236,7 @@ def contributors(root, ledger, build, revision, fetch_missing=False, exact_inven
             if provenance['merged_source'] is not True or historical_source == source \
                     or 'renamed_blob' in provenance:
                 raise ValueError('Invalid merged source provenance')
-            if not merged_source(root, revision, historical_source, source, commit):
+            if not merged_source(root, revision, historical_source, source):
                 raise ValueError('Merged source lacks a commit that replaces the original path')
         elif historical_source != source:
             renamed_blob = provenance.get('renamed_blob', provenance['introduced_blob'])
