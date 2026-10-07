@@ -886,7 +886,7 @@
     },
     "EXISelect": {
       "address": "0x8025A9E4",
-      "evidence": "evidence.tsv external EXISelect: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
+      "evidence": "evidence.tsv external EXISelect: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source.; evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
     },
     "EXIImm": {
       "address": "0x80259E7C",
@@ -898,11 +898,11 @@
     },
     "EXIDeselect": {
       "address": "0x8025AB10",
-      "evidence": "evidence.tsv external EXIDeselect: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
+      "evidence": "evidence.tsv external EXIDeselect: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source.; evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
     },
     "EXIUnlock": {
       "address": "0x8025B298",
-      "evidence": "evidence.tsv external EXIUnlock: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source."
+      "evidence": "evidence.tsv external EXIUnlock: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source.; evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
     },
     "EXIDetach": {
       "address": "0x8025A928",
@@ -923,6 +923,26 @@
     "__AXCompressorTable": {
       "address": "0x803027C0",
       "evidence": "evidence.tsv AXCL retainedcall/globaloperand and pinned donor declaration."
+    },
+    "EXIImmEx": {
+      "address": "0x8025A0D8",
+      "evidence": "evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
+    },
+    "OSGetTick": {
+      "address": "0x8023E7AC",
+      "evidence": "evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
+    },
+    "__CARDMountCallback": {
+      "address": "0x802562C8",
+      "evidence": "evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
+    },
+    "__CARDReadStatus": {
+      "address": "0x80253770",
+      "evidence": "evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
+    },
+    "EXIProbe": {
+      "address": "0x8025A6E8",
+      "evidence": "evidence.tsv CARDUnlock external row; actual target relocation and accepted shared declaration."
     }
   },
   "units": [
@@ -8194,6 +8214,37 @@
           "placement": ".sbss",
           "start": "0x803ED550",
           "end": "0x803ED564"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/card/CARDUnlock.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv CARDUnlock functions, static-data and shared CARD/DSP layout rows; archive file ownership provisional.",
+      "link_roots": {
+        "symbols": [
+          "__CARDUnlock"
+        ],
+        "evidence": "Six whole target functions retained naturally from sole global root; other helpers inline and are removed by ordinary SN linker."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802588A8",
+          "end": "0x80259B08"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF080",
+          "end": "0x802FF1E0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC2C8",
+          "end": "0x803EC2CC"
         }
       ]
     }
