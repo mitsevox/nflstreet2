@@ -34,14 +34,12 @@ void fn_80191948(int value, Object_80191948 *pA, Object_80191948 *pB, Object_801
             fn_80029BBC(fn_801D6850(), text, 32);
         }
         break;
-    case 63:
-        switch (fn_801D6850()) {
-        case 1: case 2: case 3:
-            break;
-        default:
+    case 63: {
+        int key = fn_801D6850();
+        if (key < 1 || key > 3) {
             flag = lbl_803EB720;
-            break;
         }
+    }
     case 2:
         switch (fn_801D6850()) {
         case 1:
