@@ -14065,6 +14065,129 @@
           "end": "0x801765C0"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80146134.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv pool/preset target access and measured source-form rows; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80146134",
+          "end": "0x80146F40"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0450",
+          "end": "0x802A0490"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB258",
+          "end": "0x803EB27C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031B7DC",
+          "end": "0x8031BD04"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80146134",
+          "start": "0x80146134",
+          "end": "0x80146150"
+        },
+        {
+          "symbol": "fn_80146150",
+          "start": "0x80146150",
+          "end": "0x8014619C"
+        },
+        {
+          "symbol": "fn_8014619C",
+          "start": "0x8014619C",
+          "end": "0x80146374"
+        },
+        {
+          "symbol": "fn_80146374",
+          "start": "0x80146374",
+          "end": "0x801463D8"
+        },
+        {
+          "symbol": "fn_801463D8",
+          "start": "0x801463D8",
+          "end": "0x801464D0"
+        },
+        {
+          "symbol": "fn_801464D0",
+          "start": "0x801464D0",
+          "end": "0x801469A0"
+        },
+        {
+          "symbol": "fn_801469A0",
+          "start": "0x801469A0",
+          "end": "0x80146A6C"
+        },
+        {
+          "symbol": "fn_80146A6C",
+          "start": "0x80146A6C",
+          "end": "0x80146B40"
+        },
+        {
+          "symbol": "fn_80146B40",
+          "start": "0x80146B40",
+          "end": "0x80146BA8"
+        },
+        {
+          "symbol": "fn_80146BA8",
+          "start": "0x80146BA8",
+          "end": "0x80146BF8"
+        },
+        {
+          "symbol": "fn_80146BF8",
+          "start": "0x80146BF8",
+          "end": "0x80146C00"
+        },
+        {
+          "symbol": "fn_80146C00",
+          "start": "0x80146C00",
+          "end": "0x80146C4C"
+        },
+        {
+          "symbol": "fn_80146C4C",
+          "start": "0x80146C4C",
+          "end": "0x80146DC4"
+        },
+        {
+          "symbol": "fn_80146DC4",
+          "start": "0x80146DC4",
+          "end": "0x80146E64"
+        },
+        {
+          "symbol": "fn_80146E64",
+          "start": "0x80146E64",
+          "end": "0x80146E78"
+        },
+        {
+          "symbol": "fn_80146E78",
+          "start": "0x80146E78",
+          "end": "0x80146EDC"
+        },
+        {
+          "symbol": "fn_80146EDC",
+          "start": "0x80146EDC",
+          "end": "0x80146F0C"
+        },
+        {
+          "symbol": "fn_80146F0C",
+          "start": "0x80146F0C",
+          "end": "0x80146F40"
+        }
+      ]
     }
   ]
 }
