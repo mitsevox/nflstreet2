@@ -74,6 +74,11 @@ typedef struct EXIControl {
     } queue[3];
 } EXIControl;
 
+#define EXI_STATE_ATTACHED 0x08
+
+u32 EXIClearInterrupts(s32 channel, BOOL exi, BOOL tc, BOOL ext);
+void __OSEnableBarnacle(s32 channel, u32 device);
+
 EXICallback EXISetExiCallback(s32 channel, EXICallback callback);
 
 void EXIInit(void);
