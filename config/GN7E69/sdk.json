@@ -860,7 +860,7 @@
           "evidence": "Complete unchanged native DVDLow allocation and target operands establish the section extent; see evidence.tsv DVDLow data rows. Native unused break-alarm storage is preserved without claiming target behavior; no inter-file padding credited."
         },
         {
-          "section": ".sdata",
+          "section": ".data5",
           "start": "0x803EC1F0",
           "end": "0x803EC1F4",
           "start_boundary": "exact",
