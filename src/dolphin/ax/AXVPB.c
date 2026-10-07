@@ -51,7 +51,6 @@ void __AXServiceVPB(AXVPB* pvpb)
     }
     if (sync & AX_SYNC_FLAG_COPYALL)
     {
-        // copy the whole PB struct. (size: 0xF4)
         u32* src;
         u32* dst;
         src = (void*)ppbUser;
@@ -254,7 +253,6 @@ void __AXServiceVPB(AXVPB* pvpb)
 
     if (sync & AX_SYNC_FLAG_COPYAXPBMIX)
     {
-        // copy AXPBMIX.
         u16* src;
         u16* dst;
         src = (void*)&ppbUser->mix;
@@ -320,7 +318,6 @@ void __AXServiceVPB(AXVPB* pvpb)
     }
     else if (sync & AX_SYNC_FLAG_COPYITD)
     {
-        // copy ITD struct.
         u16* src;
         u16* dst;
         u32* dst_;
@@ -383,7 +380,6 @@ void __AXServiceVPB(AXVPB* pvpb)
 
     if (sync & AX_SYNC_FLAG_COPYUPDATE)
     {
-        // copy UPDATE struct.
         u16* src;
         u16* dst;
         dst = (void*)&ppbDsp->update;
@@ -422,7 +418,6 @@ void __AXServiceVPB(AXVPB* pvpb)
 
     if (sync & AX_SYNC_FLAG_COPYDPOP)
     {
-        // copy DPOP struct.
         u16* src;
         u16* dst;
         dst = (void*)&ppbDsp->dpop;
@@ -467,7 +462,6 @@ void __AXServiceVPB(AXVPB* pvpb)
 
     if (sync & AX_SYNC_FLAG_COPYFIR)
     {
-        // copy FIR struct.
         u16* src;
         u16* dst;
         dst = (void*)&ppbDsp->fir;
@@ -507,7 +501,6 @@ void __AXServiceVPB(AXVPB* pvpb)
     }
     else if (sync & AX_SYNC_FLAG_COPYADDR)
     {
-        // copy ADDR struct.
         u32* src;
         u32* dst;
         dst = (void*)&ppbDsp->addr;
@@ -531,7 +524,6 @@ void __AXServiceVPB(AXVPB* pvpb)
 
     if (sync & AX_SYNC_FLAG_COPYADPCM)
     {
-        // copy ADPCM struct.
         u32* src;
         u32* dst;
         dst = (void*)&ppbDsp->adpcm;
@@ -575,7 +567,6 @@ void __AXServiceVPB(AXVPB* pvpb)
     }
     else if (sync & AX_SYNC_FLAG_COPYSRC)
     {
-        // copy SRC struct.
         u16* src;
         u16* dst;
         dst = (void*)&ppbDsp->src;
@@ -605,7 +596,6 @@ void __AXServiceVPB(AXVPB* pvpb)
 
     if (sync & AX_SYNC_FLAG_COPYADPCMLOOP)
     {
-        // copy ADPCMLOOP struct.
         u16* src;
         u16* dst;
         dst = (void*)&ppbDsp->adpcmLoop;
@@ -628,7 +618,6 @@ void __AXServiceVPB(AXVPB* pvpb)
 
     if (sync & 0x200000)
     {
-        // copy AXPBLPF struct
         u16* src;
         u16* dst;
 
