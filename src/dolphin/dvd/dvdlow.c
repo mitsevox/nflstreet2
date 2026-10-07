@@ -325,7 +325,7 @@ BOOL DVDLowRead(void* addr, u32 length, u32 offset, DVDLowCallback callback) {
 	} else {
         ASSERTLINE(900, FALSE);
     }
-    
+
 	return TRUE;
 }
 
