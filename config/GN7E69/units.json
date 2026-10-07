@@ -1071,6 +1071,26 @@
     "__CARDVendorID": {
       "address": "0x803EC2C0",
       "evidence": "Complete BFBB CARDMount native retained operand resolved against original target; source name corroborated by pinned donor declaration and actual call/access context."
+    },
+    "__DVDFSInit": {
+      "address": "0x8023ED68",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "__DVDThreadQueue": {
+      "address": "0x803ED110",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "__fstLoad": {
+      "address": "0x80242120",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "__DVDPrintFatalMessage": {
+      "address": "0x80242018",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "DVDCompareDiskID": {
+      "address": "0x80241F20",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
     }
   },
   "units": [

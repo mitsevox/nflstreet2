@@ -10647,6 +10647,61 @@
         "commit": "df9d8be5a779874c7938a7b9a3068054f13411a3",
         "introduced_blob": "3cb3fb098f31ebfba52dfbdfc00906c8a203c707"
       }
+    },
+    {
+      "source": "src/dolphin/dvd/dvd.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023F494",
+        "0x8023F5F8",
+        "0x8023F684",
+        "0x8023F730",
+        "0x8023F764",
+        "0x8023F78C",
+        "0x8023FAD4",
+        "0x8023FB3C",
+        "0x8023FBD4",
+        "0x8023FBFC",
+        "0x8023FE34",
+        "0x8023FE68",
+        "0x8023FE9C",
+        "0x8023FF10",
+        "0x8023FF48",
+        "0x80240140",
+        "0x80240280",
+        "0x8024034C",
+        "0x8024037C",
+        "0x802403EC",
+        "0x80240414",
+        "0x802404F8",
+        "0x80240A48",
+        "0x80241080",
+        "0x8024115C",
+        "0x8024122C",
+        "0x80241300",
+        "0x802413BC",
+        "0x8024148C",
+        "0x802414D0",
+        "0x8024151C",
+        "0x802415C8",
+        "0x802415D8",
+        "0x802418A4",
+        "0x80241950",
+        "0x80241974",
+        "0x8024197C",
+        "0x80241A74"
+      ],
+      "provenance": {
+        "pull_request": 527,
+        "merged_via": 527,
+        "commit": "5c19415814ce282c0d01b93fa456f4523fd7c19f",
+        "introduced_blob": "2cdc1c316e5529133e258cae7d31b1bf9cb0a6b7",
+        "original_commit": "05efcc947b8a8cb11ab2fbb0a8ab05d6990348ed",
+        "original_blob": "11288d899e338df40f5846b759dcc1194be3980d",
+        "integration_adjustment": "Remove the unsupported unused cancellation stack local and inherited process comments; preserve function behavior and ordinary compiler settings. Cancellation frame instructions remain measured partial."
+      }
     }
   ],
   "target": "GN7E69",
