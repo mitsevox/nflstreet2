@@ -60,7 +60,9 @@ struct Block_80170374 {
     Flags_80170374 mFlags;
     char mUnknown4[24];
     float mUnknown28;
-    char mUnknown32[16];
+    char mUnknown32[8];
+    int mUnknown40;
+    char mUnknown44[4];
     int mUnknown48;
     char mUnknown52[2];
     unsigned char mUnknown54;
@@ -71,6 +73,21 @@ struct Block_80170374 {
 struct Block_801718E8 {
     char mUnknown0[52];
     unsigned char mUnknown52;
+};
+
+/* Block at +1240, reset by fn_800CE674 and fn_800CE684. Only the accessed
+   prefix is declared; the size is unknown. */
+struct Object_800CE674 {
+    short mUnknown0;
+    char mUnknown2;
+    char mUnknown3;
+};
+
+/* 124-byte entry of the array that +800 points to. */
+struct Entry_800EAC9C {
+    char mUnknown0[76];
+    void *mpUnknown76;
+    char mUnknown80[44];
 };
 
 /* Record that +784 points to. */
@@ -98,7 +115,7 @@ struct Object_80039F5C {
     };
     Block_80170E64 *mpUnknown4;
     unsigned char mUnknown8;
-    char mUnknown9[3];
+    unsigned char mUnknown9[3];
     unsigned int mFlags;
     int mUnknown16;
     char mUnknown20[316];
@@ -127,9 +144,11 @@ struct Object_80039F5C {
     char mUnknown788[4];
     void *mpUnknown792;
     Object_8016D9B8 *mpUnknown796;
-    char mUnknown800[232];
+    Entry_800EAC9C *mpUnknown800;
+    char mUnknown804[228];
     int mUnknown1032;
-    char mUnknown1036[8];
+    int mUnknown1036;
+    char mUnknown1040[4];
     int mUnknown1044;
     char mUnknown1048[112];
     Block_801718E8 mUnknown1160;
@@ -138,11 +157,14 @@ struct Object_80039F5C {
     char mUnknown1215[3];
     unsigned char mUnknown1218;
     unsigned char mUnknown1219;
-    char mUnknown1220[1680];
+    char mUnknown1220[20];
+    Object_800CE674 mUnknown1240;
+    char mUnknown1244[1656];
     float mUnknown2900;
     char mUnknown2904[4];
     unsigned short mUnknown2908;
-    char mUnknown2910[4];
+    char mUnknown2910[3];
+    unsigned char mUnknown2913;
     unsigned char mUnknown2914;
     char mUnknown2915[1];
     unsigned char mUnknown2916;

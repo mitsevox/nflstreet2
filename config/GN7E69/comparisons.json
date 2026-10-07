@@ -5923,7 +5923,7 @@
     {
       "source": "src/game/cu_800E3CC0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp, exact whole-function rows and inferred name/source-form/compiler rows for five complete constant-return bodies. Original bytes remain linked; all other bodies and static data are unmeasured.",
+      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp, exact whole-function rows and inferred name/source-form/compiler rows for the 37 complete bodies, and the local overlay type rows. Original bytes remain linked; all other bodies and static data are unmeasured.",
       "sections": [
         {
           "section": ".text",
@@ -5939,14 +5939,134 @@
           "end": "0x800E8748"
         },
         {
+          "symbol": "fn_800E9010",
+          "start": "0x800E9010",
+          "end": "0x800E9024"
+        },
+        {
+          "symbol": "fn_800E9024",
+          "start": "0x800E9024",
+          "end": "0x800E92DC"
+        },
+        {
+          "symbol": "fn_800E92DC",
+          "start": "0x800E92DC",
+          "end": "0x800E93CC"
+        },
+        {
+          "symbol": "fn_800E93CC",
+          "start": "0x800E93CC",
+          "end": "0x800E948C"
+        },
+        {
+          "symbol": "fn_800E9504",
+          "start": "0x800E9504",
+          "end": "0x800E9528"
+        },
+        {
+          "symbol": "fn_800E9528",
+          "start": "0x800E9528",
+          "end": "0x800E954C"
+        },
+        {
+          "symbol": "fn_800E96EC",
+          "start": "0x800E96EC",
+          "end": "0x800E98A4"
+        },
+        {
+          "symbol": "fn_800E98A4",
+          "start": "0x800E98A4",
+          "end": "0x800E99A8"
+        },
+        {
+          "symbol": "fn_800E9DBC",
+          "start": "0x800E9DBC",
+          "end": "0x800E9E18"
+        },
+        {
+          "symbol": "fn_800E9FC0",
+          "start": "0x800E9FC0",
+          "end": "0x800E9FD8"
+        },
+        {
           "symbol": "fn_800EA1D0",
           "start": "0x800EA1D0",
           "end": "0x800EA1D8"
         },
         {
+          "symbol": "fn_800EA1D8",
+          "start": "0x800EA1D8",
+          "end": "0x800EA284"
+        },
+        {
+          "symbol": "fn_800EAC9C",
+          "start": "0x800EAC9C",
+          "end": "0x800EAD44"
+        },
+        {
+          "symbol": "fn_800EAEA4",
+          "start": "0x800EAEA4",
+          "end": "0x800EAEC0"
+        },
+        {
+          "symbol": "fn_800EAEC0",
+          "start": "0x800EAEC0",
+          "end": "0x800EAF34"
+        },
+        {
           "symbol": "fn_800EAFFC",
           "start": "0x800EAFFC",
           "end": "0x800EB004"
+        },
+        {
+          "symbol": "fn_800EB0C4",
+          "start": "0x800EB0C4",
+          "end": "0x800EB3E8"
+        },
+        {
+          "symbol": "fn_800EB78C",
+          "start": "0x800EB78C",
+          "end": "0x800EB7F8"
+        },
+        {
+          "symbol": "fn_800EB7F8",
+          "start": "0x800EB7F8",
+          "end": "0x800EB86C"
+        },
+        {
+          "symbol": "fn_800EBCE0",
+          "start": "0x800EBCE0",
+          "end": "0x800EBD8C"
+        },
+        {
+          "symbol": "fn_800EBD8C",
+          "start": "0x800EBD8C",
+          "end": "0x800EBDCC"
+        },
+        {
+          "symbol": "fn_800EC640",
+          "start": "0x800EC640",
+          "end": "0x800EC674"
+        },
+        {
+          "symbol": "fn_800EC6DC",
+          "start": "0x800EC6DC",
+          "end": "0x800EC758"
+        },
+        {
+          "symbol": "fn_800EC758",
+          "start": "0x800EC758",
+          "end": "0x800EC76C"
+        },
+        {
+          "symbol": "fn_800EC840",
+          "start": "0x800EC840",
+          "end": "0x800EC870"
+        },
+        {
+          "symbol": "fn_800ECD14",
+          "start": "0x800ECD14",
+          "end": "0x800ECE28"
         },
         {
           "symbol": "fn_800ECE28",
@@ -5957,6 +6077,46 @@
           "symbol": "fn_800ECE30",
           "start": "0x800ECE30",
           "end": "0x800ECE38"
+        },
+        {
+          "symbol": "fn_800ECE38",
+          "start": "0x800ECE38",
+          "end": "0x800ECEBC"
+        },
+        {
+          "symbol": "fn_800ED0F4",
+          "start": "0x800ED0F4",
+          "end": "0x800ED208"
+        },
+        {
+          "symbol": "fn_800EDB48",
+          "start": "0x800EDB48",
+          "end": "0x800EDC68"
+        },
+        {
+          "symbol": "fn_800EE61C",
+          "start": "0x800EE61C",
+          "end": "0x800EE694"
+        },
+        {
+          "symbol": "fn_800EE7C8",
+          "start": "0x800EE7C8",
+          "end": "0x800EE7DC"
+        },
+        {
+          "symbol": "fn_800EE9AC",
+          "start": "0x800EE9AC",
+          "end": "0x800EEA20"
+        },
+        {
+          "symbol": "fn_800EEDC8",
+          "start": "0x800EEDC8",
+          "end": "0x800EEE3C"
+        },
+        {
+          "symbol": "fn_800EF0DC",
+          "start": "0x800EF0DC",
+          "end": "0x800EF0FC"
         }
       ]
     },
@@ -14083,7 +14243,7 @@
     {
       "source": "src/game/cu_80086C10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u2013800878D8 and existing exact function extents. Complete fourteen-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
+      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10–800878D8 and existing exact function extents. Complete fourteen-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
       "sections": [
         {
           "section": ".text",
