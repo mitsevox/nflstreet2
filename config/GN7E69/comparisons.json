@@ -11851,6 +11851,37 @@
           "end": "0x8003260C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8015A39C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained open/provisional 24-function grouping and full provisional original pool association; two complete store bodies, individual neutral name/type/field/source-form/compiler rows. Only whole 16/8-byte functions and four-byte compiled read-only float literal are measured; 22 other bodies, external byte and all other storage remain original and unmeasured. Canonical int/void C contract is preserved.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015A39C",
+          "end": "0x8015C25C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A3EF0",
+          "end": "0x802A3EF4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8015C244",
+          "start": "0x8015C244",
+          "end": "0x8015C254"
+        },
+        {
+          "symbol": "fn_8015C254",
+          "start": "0x8015C254",
+          "end": "0x8015C25C"
+        }
+      ]
     }
   ]
 }
