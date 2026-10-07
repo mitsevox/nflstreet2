@@ -10629,7 +10629,8 @@
         "commit": "82922e85957d61a1787ca4f12b7a57e128a1b476",
         "introduced_blob": "7f4279abde0f17a93b58782ac5bff59fe6f082f4",
         "original_blob": "5281160427fbb2fc2e914ba8a1c73c4c5d39667f",
-        "integration_adjustment": "Removed the donor no-effect dst expression explicitly marked as register-allocation scaffolding and inaccurate COPYALL commentary; complete coherent source and pinned-profile compiler output remain unchanged."
+        "integration_adjustment": "Removed the donor no-effect dst expression explicitly marked as register-allocation scaffolding and inaccurate COPYALL commentary; complete coherent source and pinned-profile compiler output remain unchanged.",
+        "original_commit": "274ebccaaf265cbdbc1f111d9d26272fed80ccae"
       }
     },
     {
