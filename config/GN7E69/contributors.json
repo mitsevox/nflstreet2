@@ -6667,6 +6667,31 @@
       }
     },
     {
+      "source": "src/game/cu_800E3CC0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800E579C",
+        "0x800E5B04",
+        "0x800E67AC",
+        "0x800E68A8",
+        "0x800E7330",
+        "0x800E7B90",
+        "0x800E7C84",
+        "0x800E86E4",
+        "0x800E8748",
+        "0x800E885C",
+        "0x800E8ED4"
+      ],
+      "provenance": {
+        "pull_request": 545,
+        "merged_via": 545,
+        "commit": "4502998a782597d3eac0ddae00b139d1c709f2b4",
+        "introduced_blob": "d73759d9966753bb84e6b01c43629ae1666db35b"
+      }
+    },
+    {
       "source": "src/game/cu_800EFC68.cpp",
       "contributors": [
         "adampreddy"
