@@ -8899,6 +8899,88 @@
         "commit": "7bc78fd1f6a72d3c8bd38632a2ee7e276e63682b",
         "introduced_blob": "88ca8dfb27034843ab0ebbc7e50116be83f6e7b9"
       }
+    },
+    {
+      "source": "src/dolphin/ax/AXProf.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80289408"
+      ],
+      "provenance": {
+        "pull_request": 459,
+        "merged_via": 459,
+        "commit": "a6ba81d31ab45788566e3da6384b0bbf0d23b4fd",
+        "introduced_blob": "e2d140998453986987076aea15dc92a925182387"
+      }
+    },
+    {
+      "source": "src/dolphin/ax/AXCL.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8028704C",
+        "0x80287054",
+        "0x80287090",
+        "0x80287740",
+        "0x80287764",
+        "0x80287768",
+        "0x8028777C"
+      ],
+      "provenance": {
+        "pull_request": 459,
+        "merged_via": 459,
+        "commit": "0c5535734cc95e41a01ba2abba80597822b50543",
+        "introduced_blob": "314da2bc86ac0bf72f599f2b250f8bfe344ced89"
+      }
+    },
+    {
+      "source": "src/dolphin/card/CARDUnlock.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x802588A8",
+        "0x80258A14",
+        "0x80258B58",
+        "0x80258C1C",
+        "0x80259774",
+        "0x802597E4"
+      ],
+      "provenance": {
+        "pull_request": 459,
+        "merged_via": 459,
+        "commit": "e4676f51eb85af8e77899fa84442a244a9a9ef00",
+        "introduced_blob": "eedc129df9dfccca2e07be120d226bf534d145e3"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXPixel.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80251CEC",
+        "0x80251F10",
+        "0x80252034",
+        "0x80252088",
+        "0x802520B4",
+        "0x802520E0",
+        "0x80252114",
+        "0x80252148",
+        "0x8025221C",
+        "0x80252248",
+        "0x80252284",
+        "0x802522BC"
+      ],
+      "provenance": {
+        "pull_request": 459,
+        "merged_via": 459,
+        "commit": "83ec9c3a0921fd972ac1d19f21c740e2ce2358e0",
+        "introduced_blob": "b3a183beb76492d0ad0aea7f117c37ffe11b2c1b"
+      }
     }
   ],
   "target": "GN7E69",
