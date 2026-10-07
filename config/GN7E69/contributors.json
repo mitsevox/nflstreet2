@@ -11072,6 +11072,21 @@
         "pull_request": 567,
         "merged_via": 567
       }
+    },
+    {
+      "source": "src/game/cu_8018AFF0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8018AFF0"
+      ],
+      "provenance": {
+        "pull_request": 570,
+        "merged_via": 570,
+        "commit": "8ca2eb1aed483486c478cd1d2ebf0032637e3b79",
+        "introduced_blob": "64e2d92f6790fc3fe01c6ac1d2f7d00425093353"
+      }
     }
   ],
   "target": "GN7E69",
