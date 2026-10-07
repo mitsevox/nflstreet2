@@ -1,6 +1,7 @@
 #include "game/fn_8017F584.h"
 #include "game/fn_801EF390.h"
 #include "game/Object_80233EAC.h"
+#include "game/cu_801442FC.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXStruct.h>
 
@@ -22,13 +23,6 @@ struct Desc_80233D64 {
     char mUnknownB0[0x40];
 };
 
-struct Object_80144310 {
-    char mUnknown0[0xC];
-    float mUnknownC;
-    float mUnknown10;
-    float mUnknown14;
-};
-
 struct Object_8019CE3C {
     char mUnknown0[4];
     char mUnknown4[0x10];
@@ -45,13 +39,12 @@ struct Object_8019CE3C {
     float mUnknown29C;
     float mUnknown2A0;
     char mUnknown2A4[8];
-    char mUnknown2AC[8];
+    Tracker_801442FC mUnknown2AC;
 };
 
 extern "C" {
 int fn_80027DF0(void);
 unsigned char fn_80054D24(int index);
-int fn_80144310(void *p, Object_80144310 *pObject, float *a, float *b);
 int fn_801486A0(void);
 void fn_801A5434(void *p, int a);
 void fn_801D04C4(void);
@@ -160,7 +153,7 @@ void fn_8019CFF4(Object_8019CE3C *pObject)
     }
     color.a = pObject->mUnknown28C * 128.0f;
     mask = fn_80236B98(4, x, y, z);
-    if (fn_80144310(pObject->mUnknown2AC, pObject->mpUnknown294, unknown28, unknown38)) {
+    if (fn_80144310(&pObject->mUnknown2AC, pObject->mpUnknown294, unknown28, unknown38)) {
         unknown38[0] *= x;
         unknown38[1] *= y;
         unknown38[2] *= z;
