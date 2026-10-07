@@ -5,6 +5,7 @@
 #include <dolphin/gx/GXCull.h>
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXVert.h>
+#include <dolphin/gx/GXBump.h>
 #include "game/cu_80191398.h"
 
 extern "C" {
@@ -20,8 +21,6 @@ void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 void fn_8024FFC4(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
 void fn_80250258(GXTexObj *pObj, int a, int b, float c, float d, float e, int f, int g, int h);
 void fn_802505A8(GXTexObj *pObj, int a);
-void fn_80251570(int a);
-void fn_80251594(int a);
 void fn_80251604(int a, int b);
 void fn_80251A58(int a, int b, int c, int d, int e);
 void fn_80251B28(int a, int b, int c, int d);
@@ -228,8 +227,8 @@ int fn_8019143C(int x, unsigned short y, int c, char *pText, int e)
         fn_80251B28(0, 0, 0, 4);
         fn_80251604(0, 0);
         fn_8024DF64(1);
-        fn_80251594(0);
-        fn_80251570(0);
+        GXSetTevDirect(GX_TEVSTAGE0);
+        GXSetNumIndStages(0);
         fn_8024DCE4(0, 0, 4, 60, 0, 125);
         GXSetCullMode(GX_CULL_NONE);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);

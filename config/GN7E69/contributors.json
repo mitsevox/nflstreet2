@@ -9706,6 +9706,85 @@
         "commit": "83ec9c3a0921fd972ac1d19f21c740e2ce2358e0",
         "introduced_blob": "b3a183beb76492d0ad0aea7f117c37ffe11b2c1b"
       }
+    },
+    {
+      "source": "src/dolphin/gx/GXBump.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8025115C",
+        "0x802511C8",
+        "0x80251340",
+        "0x80251484",
+        "0x80251570",
+        "0x80251594",
+        "0x802515DC",
+        "0x802515E0"
+      ],
+      "provenance": {
+        "pull_request": 463,
+        "merged_via": 463,
+        "commit": "90032b2dadc532fa23fdea0e11a7273e6fbcdc7e",
+        "introduced_blob": "432a5f04ed2c32f7ff7b1acff4b510318f849370"
+      }
+    },
+    {
+      "source": "src/dolphin/exi/EXIBios.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80259D88",
+        "0x80259E7C",
+        "0x8025A0D8",
+        "0x8025A178",
+        "0x8025A264",
+        "0x8025A4B0",
+        "0x8025A4F8",
+        "0x8025A574",
+        "0x8025A6E8",
+        "0x8025A768",
+        "0x8025A81C",
+        "0x8025A928",
+        "0x8025A9E4",
+        "0x8025AB10",
+        "0x8025AC20",
+        "0x8025ACE8",
+        "0x8025AF00",
+        "0x8025AFD0",
+        "0x8025B1A4",
+        "0x8025B298",
+        "0x8025B374",
+        "0x8025B38C",
+        "0x8025B3B4"
+      ],
+      "provenance": {
+        "pull_request": 463,
+        "merged_via": 463,
+        "commit": "f3a1d1fce4a45f30a3b3bf7134a888ddc2da9cab",
+        "introduced_blob": "89a213a1df00dd6df23fc8fa92d45891092f23ce",
+        "original_commit": "702092857f7dc1d1672e7a7a33d59e9566a0634d",
+        "original_blob": "55c411083ed085f5ecf6d4855b5ac4b62a1d8744",
+        "integration_adjustment": "Omit inherited commented-out trial declarations and matching-process comments; genuine source bodies, static declarations and string cases are unchanged."
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSResetSW.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023C3E0",
+        "0x8023C4D4",
+        "0x8023C548"
+      ],
+      "provenance": {
+        "pull_request": 463,
+        "merged_via": 463,
+        "commit": "7aa998fe525644d0c3db9bf33c72bbe1f60c1666",
+        "introduced_blob": "428e26951c058b06543563ae1f59183aba0abf35"
+      }
     }
   ],
   "target": "GN7E69",

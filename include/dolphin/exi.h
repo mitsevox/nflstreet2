@@ -74,6 +74,11 @@ typedef struct EXIControl {
     } queue[3];
 } EXIControl;
 
+#define EXI_STATE_ATTACHED 0x08
+
+u32 EXIClearInterrupts(s32 channel, BOOL exi, BOOL tc, BOOL ext);
+void __OSEnableBarnacle(s32 channel, u32 device);
+
 EXICallback EXISetExiCallback(s32 channel, EXICallback callback);
 
 void EXIInit(void);
@@ -96,7 +101,6 @@ int EXISelectSD(s32 chan, u32 dev, u32 freq);
 s32 EXIGetType(s32 chan, u32 dev, u32* type);
 char* EXIGetTypeString(u32 type);
 
-void __OSEnableBarnacle(s32 chan, u32 dev);
 u32 InitializeUART(u32 baudRate);
 u32 WriteUARTN(const void* buf, unsigned long len);
 
