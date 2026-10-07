@@ -32,7 +32,9 @@ struct Object_800B26B0 {
     float mUnknown28;
     int mUnknown32;
     float mUnknown36;
-    char mUnknown40[12];
+    float mUnknown40;
+    float mUnknown44;
+    char mUnknown48[4];
     float mUnknown52;
     char mUnknown56[4];
     float mUnknown60;
@@ -60,7 +62,9 @@ struct Block_80170374 {
     Flags_80170374 mFlags;
     char mUnknown4[24];
     float mUnknown28;
-    char mUnknown32[16];
+    char mUnknown32[8];
+    int mUnknown40;
+    int mUnknown44;
     int mUnknown48;
     char mUnknown52[2];
     unsigned char mUnknown54;
@@ -127,7 +131,8 @@ struct Object_80039F5C {
     char mUnknown788[4];
     void *mpUnknown792;
     Object_8016D9B8 *mpUnknown796;
-    char mUnknown800[232];
+    void *mpUnknown800;
+    char mUnknown804[228];
     int mUnknown1032;
     char mUnknown1036[8];
     int mUnknown1044;

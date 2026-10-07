@@ -6994,20 +6994,141 @@
     {
       "source": "src/game/cu_801260D4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained inferred twenty-nine-function grouping and exact complete helper 0x8012A384-0x8012A38C. Only the whole constant-return body is reconstructed; twenty-eight other functions and all static data remain original and unmeasured.",
+      "evidence": "evidence.tsv retained inferred twenty-nine-function grouping (provisional/open edges); individual name and source-form rows for the reconstructed bodies 0x8012623C, 0x80126DD4-0x801297F8, 0x8012A384 and 0x8012A38C, compiler row 0x8012623C-0x8012A3B0, and exact data row 0x8029F6B8-0x8029F808 for the compiled literal pools of 0x80126DD4-0x801297F8. Five bodies, all other literals and all static data remain original and unmeasured; the entire original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8012A384",
-          "end": "0x8012A38C"
+          "start": "0x801260D4",
+          "end": "0x8012A6B0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F6B8",
+          "end": "0x8029F808"
         }
       ],
       "functions": [
         {
+          "symbol": "fn_8012623C",
+          "start": "0x8012623C",
+          "end": "0x801262B8"
+        },
+        {
+          "symbol": "fn_80126DD4",
+          "start": "0x80126DD4",
+          "end": "0x80126FD8"
+        },
+        {
+          "symbol": "fn_80126FD8",
+          "start": "0x80126FD8",
+          "end": "0x80127324"
+        },
+        {
+          "symbol": "fn_80127324",
+          "start": "0x80127324",
+          "end": "0x801274D4"
+        },
+        {
+          "symbol": "fn_801274D4",
+          "start": "0x801274D4",
+          "end": "0x80127758"
+        },
+        {
+          "symbol": "fn_80127758",
+          "start": "0x80127758",
+          "end": "0x80127AD0"
+        },
+        {
+          "symbol": "fn_80127AD0",
+          "start": "0x80127AD0",
+          "end": "0x80127CD4"
+        },
+        {
+          "symbol": "fn_80127CD4",
+          "start": "0x80127CD4",
+          "end": "0x80127EFC"
+        },
+        {
+          "symbol": "fn_80127EFC",
+          "start": "0x80127EFC",
+          "end": "0x801281A8"
+        },
+        {
+          "symbol": "fn_801281A8",
+          "start": "0x801281A8",
+          "end": "0x80128590"
+        },
+        {
+          "symbol": "fn_80128590",
+          "start": "0x80128590",
+          "end": "0x801285C8"
+        },
+        {
+          "symbol": "fn_801285C8",
+          "start": "0x801285C8",
+          "end": "0x80128628"
+        },
+        {
+          "symbol": "fn_80128628",
+          "start": "0x80128628",
+          "end": "0x8012886C"
+        },
+        {
+          "symbol": "fn_8012886C",
+          "start": "0x8012886C",
+          "end": "0x80128B60"
+        },
+        {
+          "symbol": "fn_80128B60",
+          "start": "0x80128B60",
+          "end": "0x80128BE0"
+        },
+        {
+          "symbol": "fn_80128BE0",
+          "start": "0x80128BE0",
+          "end": "0x80128D50"
+        },
+        {
+          "symbol": "fn_80128D50",
+          "start": "0x80128D50",
+          "end": "0x80128EF8"
+        },
+        {
+          "symbol": "fn_80128EF8",
+          "start": "0x80128EF8",
+          "end": "0x80129098"
+        },
+        {
+          "symbol": "fn_80129098",
+          "start": "0x80129098",
+          "end": "0x80129360"
+        },
+        {
+          "symbol": "fn_80129360",
+          "start": "0x80129360",
+          "end": "0x801294A8"
+        },
+        {
+          "symbol": "fn_801294A8",
+          "start": "0x801294A8",
+          "end": "0x80129704"
+        },
+        {
+          "symbol": "fn_80129704",
+          "start": "0x80129704",
+          "end": "0x801297F8"
+        },
+        {
           "symbol": "fn_8012A384",
           "start": "0x8012A384",
           "end": "0x8012A38C"
+        },
+        {
+          "symbol": "fn_8012A38C",
+          "start": "0x8012A38C",
+          "end": "0x8012A3B0"
         }
       ]
     },
