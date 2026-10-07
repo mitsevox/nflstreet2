@@ -5987,7 +5987,7 @@
     {
       "source": "src/game/cu_800D0D4C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/open grouping row for src/game/cu_800D0D4C.cpp, 39 complete function extents and individual inferred name/source-form rows, the partial State_800D0D4C and Code_800D0F98 type rows, and target-width external access footprints. The nullable function-pointer setter follows the complete registered pointee/invoker contract; nominal source signatures remain qualified. Only these 39 whole bodies are measured; all static storage and 78 other bodies remain original and unmeasured.",
+      "evidence": "evidence.tsv retained open/open grouping row for src/game/cu_800D0D4C.cpp, 39 complete function extents and individual inferred name/source-form rows, the game_cpp compiler and declaration-shapes rows for 0x800D0D4C-0x800D3D64, the partial State_800D0D4C and Code_800D0F98 type rows, and target-width external access footprints. The nullable function-pointer setter follows the complete registered pointee/invoker contract; nominal source signatures remain qualified. Only these 39 whole bodies are measured; all static storage and 78 other bodies remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
