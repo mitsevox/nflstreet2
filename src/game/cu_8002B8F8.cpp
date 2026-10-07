@@ -1,3 +1,5 @@
+#include "game/fn_8022781C.h"
+#include "game/fn_80195EFC.h"
 /* Replay camera and replay recorder of the in-game loop (Xbox data string
    "REPLAY.C" heads this file's .data; neutral file name). The data and the
    first four functions are linked from source; the remaining functions
@@ -209,7 +211,6 @@ void fn_80190ED4(Type_80190ED4 *pStream, char *pBuffer, int mode);
 int fn_80190EF0(Type_80190ED4 *pStream);
 unsigned long long fn_80190F18(void *pStream, int bits);
 void fn_80191068(void *pStream, unsigned long long value, int bits);
-void fn_80195EFC(int a, int b, int c, int d);
 int fn_8019623C(int id);
 void fn_80199C94(char *pSrc, int index, int size);
 char *fn_80199CC4(int index, int size);
@@ -231,7 +232,6 @@ int fn_801F7ABC(void);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 void fn_802196B4(void *p, int a, int b, int c, float *pD, unsigned char e);
 void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
-float fn_8022781C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 float fn_8022785C(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
 int fn_8023790C(void);

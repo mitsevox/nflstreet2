@@ -1,3 +1,4 @@
+#include "game/fn_80195EFC.h"
 #include "engine/cu_80227F14.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_801D2B7C.h"

@@ -1,3 +1,5 @@
+#include "game/fn_8022781C.h"
+#include "game/fn_80177FE0.h"
 #include "game/cu_8002B8F8.h"
 #include "game/cu_80064864.h"
 #include "game/fn_800AD9B4.h"
@@ -37,7 +39,6 @@ unsigned char fn_8002D060(Type_803EA368 *p);
 int fn_800BA6F8(void);
 void *fn_800C47C4(void);
 int fn_80177F70(void);
-Point_8017886C fn_80177FE0(void);
 Point_8017886C fn_80177FFC(int team);
 float fn_80178298(void);
 int fn_80178320(void);
@@ -62,7 +63,6 @@ void fn_80211E08(void *p, int a);
 void fn_80211EFC(void *p);
 int fn_802120E4(void *p, unsigned int key);
 int fn_80212124(void *p, unsigned int key, int a);
-float fn_8022781C(Vector_80039F5C *a, Vector_80039F5C *b);
 void fn_80234D00(Bounds_80234D00 *pIn, Bounds_80234D00 *pOut);
 int fn_80236EC0(int a);
 void fn_8024CB90(int a, int b);

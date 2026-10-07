@@ -1,3 +1,4 @@
+#include "game/fn_80177FE0.h"
 #include "game/Object_80039F5C.h"
 #include "game/Message_800F01CC.h"
 #include "game/Team_80167A8C.h"
@@ -31,7 +32,6 @@ void fn_800D7A0C(Object_80039F5C *, int);
 unsigned char fn_80168E00(int, unsigned char, unsigned char *);
 unsigned int fn_802372EC(unsigned int, unsigned int);
 int fn_80178320(void);
-Point_80167910 fn_80177FE0(void);
 int fn_800AD9B4(void);
 int fn_801481B0(void);
 int fn_801483F8(void);
@@ -112,7 +112,7 @@ int fn_80134E24(Object_80039F5C *player) {
             (int)((float)(player->mRatings[6] + player->mRatings[2]) * 0.5f * 0.0039215689f * 29.0f);
         state->mUnknown1C = fn_802372EC(0, 31) <= state->mUnknown1B ? 29 : 0;
         int team = fn_80178320();
-        Point_80167910 point = fn_80177FE0();
+        Point_8017886C point = fn_80177FE0();
         unsigned int size = fn_80178D18((unsigned char)team);
         for (int i = 0; i < (int)size; ++i) {
             Object_80039F5C *other = fn_80039F5C((unsigned char)team, (unsigned short)i);
@@ -145,14 +145,14 @@ int fn_80135200(Object_80039F5C *player) {
     fn_800B8344();
     State_80134E24 *state = (State_80134E24 *)&player->mUnknown336;
     if (!lbl_803EB169) {
-        Point_80167910 point = fn_80177FE0();
+        Point_8017886C point = fn_80177FE0();
         if (point.mY - player->mMotion.mPos.mY > 4.5f)
             lbl_803EB169 = 1;
     }
     if (lbl_803EB169)
         fn_8013474C(player);
     fn_8010A2DC(player, 0, -1);
-    Point_80167910 point = fn_80177FE0();
+    Point_8017886C point = fn_80177FE0();
     fn_80134C20(player, state);
     if (player->mFlags & 0x4000) {
         if (fn_801783AC(0) == 1) {
@@ -182,7 +182,7 @@ int fn_80135200(Object_80039F5C *player) {
         float values[8];
         fn_8012430C(values, 4, player);
         fn_801344F8(player, values);
-        Point_80167910 next = fn_80177FE0();
+        Point_8017886C next = fn_80177FE0();
         if (player->mMotion.mPos.mY > next.mY - 1.5f)
             weights = lbl_802DB174;
         else
@@ -222,7 +222,7 @@ int fn_80135200(Object_80039F5C *player) {
         for (unsigned char i = 0; i < size; ++i) {
             Object_80039F5C *other = fn_80039F5C(fn_80178320(), i);
             if (other->mUnknown8 != 255 && other->mUnknown2914 >= 13 && other->mUnknown2914 <= 18) {
-                Point_80167910 next = fn_80177FE0();
+                Point_8017886C next = fn_80177FE0();
                 if (other->mMotion.mPos.mY < next.mY)
                     state->mUnknown1 = -1;
             }
@@ -360,7 +360,7 @@ int fn_80135200(Object_80039F5C *player) {
             --state->mUnknown1;
     }
     if (fn_801344A0()) {
-        Point_80167910 next = fn_80177FE0();
+        Point_8017886C next = fn_80177FE0();
         if (player->mMotion.mPos.mY > next.mY - 0.5f) {
             if (fn_801CFFD0(state->mUnknown8, 0x400000) <= 0xE38E2)
                 state->mUnknown3 = 0;

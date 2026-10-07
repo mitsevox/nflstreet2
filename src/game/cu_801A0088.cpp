@@ -1,3 +1,5 @@
+#include "game/fn_8022781C.h"
+#include "game/fn_80177FE0.h"
 #include "game/State_80167094.h"
 #include "game/Object_8017886C.h"
 #include "game/Object_80039F5C.h"
@@ -26,7 +28,6 @@ extern Mtx44 lbl_802F28F4;
 extern unsigned char lbl_803EB7DC[];
 int fn_800BA6F8(void);
 int fn_80027DF0(void);
-Point_8017886C fn_80177FE0(void);
 int fn_80177F70(void);
 float fn_80178298(void);
 float fn_80178A2C(void);
@@ -45,7 +46,6 @@ void fn_80211EFC(Resource_801A1240 *);
 Descriptor_801A1240 *fn_802120AC(Resource_801A1240 *, const char *);
 Palette_801A0088 *fn_80212074(Descriptor_801A1240 *, int);
 GXTexObj *fn_80212050(Descriptor_801A1240 *);
-float fn_8022781C(Vector_80039F5C *, Vector_80039F5C *);
 int fn_80228668(void);
 void fn_8024D418(void);
 void fn_8024CB90(int, int);
@@ -95,7 +95,7 @@ extern "C" int fn_801A0270(int, Point_80167094 *p, QuadPoint_801A0614 *uv, GXCol
     GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 4);
     GXPosition3f32(p[0].mX,p[0].mY,z); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[0].mX,z);
     GXPosition3f32(p[1].mX,p[1].mY,z); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[1].mX,z);
-    float length = fn_8022781C((Vector_80039F5C *)&p[0],(Vector_80039F5C *)&p[2]) * 0.09f;
+    float length = fn_8022781C(&p[0],&p[2]) * 0.09f;
     GXPosition3f32(p[2].mX,p[2].mY,z); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[2].mX,length);
     GXPosition3f32(p[3].mX,p[3].mY,z); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[3].mX,length);
     return 0;
@@ -126,7 +126,7 @@ extern "C" int fn_801A04D4(int, Point_80167094 *p, QuadPoint_801A0614 *uv, unsig
         Point_80167094 *current = p+i;
         while (n > 0) {
             unsigned int j = i & 3;
-            if (j == 2) length += fn_8022781C((Vector_80039F5C *)&p[i-2],(Vector_80039F5C *)&p[i]) * 0.09f;
+            if (j == 2) length += fn_8022781C(&p[i-2],&p[i]) * 0.09f;
             GXPosition3f32(current->mX,current->mY,0.0f); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[j].mX,length);
             ++i; ++current; --n;
         }

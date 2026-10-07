@@ -21,7 +21,7 @@ void fn_8007D654(void);
 void fn_8022F294(int);
 int fn_8022F0D4(int);
 void fn_8022F794(int, char *);
-char *fn_8022F3D4(int);
+int fn_8022F3D4(int);
 void fn_80029C2C(int, int, int);
 void fn_8002A1D4(int, int, char *);
 int fn_80190394(void);
@@ -189,8 +189,8 @@ int fn_80187038(unsigned char pad, int allowCreate)
     fn_80186A10(selected, name);
     int db = fn_8022F358(selected);
     fn_8022F478(db);
-    char *text = fn_8022F3D4(db);
-    int status = fn_801FCE10(0, "use \x8C select 'wnSU' into \x82 and 'swSU' into \x82 and 'FPRP' into \x82 and 'tpSU' into \x82 and 'trSU' into \x82 and 'TDTU' into \x82 and 'FSSU' into \x82 and 'idSU' into \x82 and 'rfSU' into \x82 and 'BGSU' into \x82 and 'TBGU' into \x82 and 'TPTU' into \x82 and 'sdSU' into \x82 and 'FNWU' into \x82 and 'WSQU' into \x82 and 'WOSU' into \x82 and 'LOSU' into \x82 and 'SOSU' into \x82 and 'AOSU' into \x82 from 'TSPU'\n", text, &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12, &v13, &v14, &v15, &v16, &v17, &v18);
+    int token = fn_8022F3D4(db);
+    int status = fn_801FCE10(0, "use \x8C select 'wnSU' into \x82 and 'swSU' into \x82 and 'FPRP' into \x82 and 'tpSU' into \x82 and 'trSU' into \x82 and 'TDTU' into \x82 and 'FSSU' into \x82 and 'idSU' into \x82 and 'rfSU' into \x82 and 'BGSU' into \x82 and 'TBGU' into \x82 and 'TPTU' into \x82 and 'sdSU' into \x82 and 'FNWU' into \x82 and 'WSQU' into \x82 and 'WOSU' into \x82 and 'LOSU' into \x82 and 'SOSU' into \x82 and 'AOSU' into \x82 from 'TSPU'\n", token, &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12, &v13, &v14, &v15, &v16, &v17, &v18);
     if (v1 < 0) v1 = 0;
     int busy = 0;
     if (fn_8017F584() == 0) {
@@ -297,11 +297,11 @@ void fn_8018787C(int index)
     fn_80186A10(index, name);
     int db = fn_8022F358(index);
     fn_8022F478(db);
-    char *text = fn_8022F3D4(db);
+    int token = fn_8022F3D4(db);
     if (fn_801FCE10(0, "use 'EVAS' select 'KPSH' into \x82 from 'RCSH' where 'KUSH' = \x88\n", &id, name) == 23) {
         id = fn_80187400(0x52435348, 0x4B505348, 0, 255);
         if (id == -1) return;
-        if (fn_801FCE10(0, "use \x8C select 'wnSU' into \x82 and 'swSU' into \x82 and 'FPRP' into \x82 and 'tpSU' into \x82 and 'trSU' into \x82 and 'TDTU' into \x82 and 'FSSU' into \x82 and 'idSU' into \x82 and 'rfSU' into \x82 and 'BGSU' into \x82 and 'TBGU' into \x82 and 'TPTU' into \x82 and 'FNWU' into \x82 from 'TSPU'\n", text, &v[0], &v[1], &v[2], &v[3], &v[4], &v[5], &v[6], &v[7], &v[8], &v[9], &v[10], &v[11], &v[12]) == 0)
+        if (fn_801FCE10(0, "use \x8C select 'wnSU' into \x82 and 'swSU' into \x82 and 'FPRP' into \x82 and 'tpSU' into \x82 and 'trSU' into \x82 and 'TDTU' into \x82 and 'FSSU' into \x82 and 'idSU' into \x82 and 'rfSU' into \x82 and 'BGSU' into \x82 and 'TBGU' into \x82 and 'TPTU' into \x82 and 'FNWU' into \x82 from 'TSPU'\n", token, &v[0], &v[1], &v[2], &v[3], &v[4], &v[5], &v[6], &v[7], &v[8], &v[9], &v[10], &v[11], &v[12]) == 0)
             fn_801FCE10(0, "use 'EVAS' insert into 'RCSH' set 'KPSH' = \x82 and 'KUSH' = \x88 and 'WGSH' = \x82 and 'LGSH' = \x82 and 'PTSH' = \x82 and 'TPSH' = \x82 and 'TRSH' = \x82 and 'TDSH' = \x82 and 'TSSH' = \x82 and 'CISH' = \x82 and 'RFSH' = \x82 and 'GTSH' = \x82 and '2TSH' = \x82 and 'TTSH' = \x82 and 'CNWH' = \x82\n", id, name, v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7], v[8], v[9], v[10], v[11], v[12]);
     }
     if (id != -1) fn_8018689C(id);

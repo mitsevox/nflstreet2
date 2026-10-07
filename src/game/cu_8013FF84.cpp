@@ -1,3 +1,4 @@
+#include "game/fn_80177FE0.h"
 #include "game/Camera_8013F738.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_801C1F94.h"
@@ -79,7 +80,6 @@ void fn_8013FA8C(int);
 int fn_801383B0(void);
 void *fn_801374BC(void);
 void fn_80137D58(void *,void *);
-Point_80167910 fn_80177FE0(void);
 int fn_801486A0(void);
 void fn_8013C478(Camera_8013F738 *,void *);
 int fn_801783AC(int);

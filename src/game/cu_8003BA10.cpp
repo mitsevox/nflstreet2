@@ -1,3 +1,4 @@
+#include "game/fn_8022781C.h"
 #include "game/Block_80307980.h"
 #include "game/Init_8004A040.h"
 #include "game/Item_800476DC.h"
@@ -57,7 +58,6 @@ void fn_80227248(void *, void *, float);
 void fn_80227CC0(void *, void *);
 void fn_802271F0(void *);
 void fn_80227C2C(void *, void *);
-float fn_8022781C(void *, void *);
 float fn_802276E8(void *, void *);
 int fn_80227040(void *, void *);
 void fn_801CFC14(int, float *, float *);

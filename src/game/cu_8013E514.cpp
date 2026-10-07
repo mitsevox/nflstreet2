@@ -1,3 +1,5 @@
+#include "game/fn_80177FE0.h"
+#include "game/fn_80195EFC.h"
 #include "game/Camera_8013F738.h"
 #include "game/Interp_8013CC14.h"
 #include "game/Object_80039F5C.h"
@@ -103,12 +105,10 @@ void fn_8013F97C(int);
 Camera_8013F738 *fn_8013FA04(int);
 void fn_8013FBB4(int, int);
 void fn_80142B00(void);
-Point_8017886C fn_80177FE0(void);
 int fn_801784C4(void);
 void fn_8017CFB0(unsigned short, unsigned short, int, int);
 void fn_8017CFB4(int);
 void fn_80187DD0(unsigned short);
-void fn_80195EFC(int, int, int, int);
 int fn_8019623C(int);
 void fn_801C3990(void *, float, float);
 int fn_801CFE40(float, float);

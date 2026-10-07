@@ -1,3 +1,5 @@
+#include "game/fn_8022781C.h"
+#include "game/fn_80177FE0.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
@@ -157,9 +159,7 @@ void fn_80173EE0(int a, short b, short c, int d, int e);
 void fn_80174074(void);
 void fn_80177C50(int a);
 int fn_80177F70(void);
-Pair_8017055C fn_80177FE0(void);
 void fn_80178264(Pair_8017055C pos);
-Pair_8017055C fn_8017827C(void);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_80178348(void);
@@ -186,7 +186,6 @@ int fn_801CFFD0(int a, int b);
 void fn_80227538(Pair_8017055C *pOut, int angle, float length);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
-float fn_8022781C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 float fn_802278D0(Vector_80039F5C *pA, Vector_80039F5C *pB);
 float fn_80237260(int stream);
 

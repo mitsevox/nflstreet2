@@ -1,3 +1,4 @@
+#include "game/fn_80177FE0.h"
 #include "game/Object_80039F5C.h"
 #include "game/Pair_8017055C.h"
 #include "game/cu_80136B1C.h"
@@ -56,8 +57,6 @@ float fn_80178A2C(void);
 float fn_80178A08(void);
 int fn_80177F70(void);
 int fn_801784E8(void);
-Pair_8017055C fn_80177FE0(void);
-Pair_8017055C fn_8017827C(void);
 void fn_80174204(Input_80174868 *, Output_80174868 *, int, float);
 void fn_800B2640(int, int);
 int fn_800B2600(void);

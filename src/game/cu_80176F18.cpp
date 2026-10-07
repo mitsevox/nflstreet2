@@ -1,3 +1,4 @@
+#include "game/fn_80177FE0.h"
 #include <math.h>
 #include <string.h>
 #include "game/Class_802A56E8.h"
@@ -208,7 +209,6 @@ int fn_80177F70(void);
 int fn_80177F7C(void);
 void fn_80177F88(int value);
 void fn_80177FD4(int value);
-Point_8017886C fn_80177FE0(void);
 Point_8017886C fn_80177FFC(int team);
 Point_8017886C fn_80178070(void);
 Point_8017886C fn_8017808C(void);
@@ -216,7 +216,6 @@ void fn_801780A8(Point_8017886C pos);
 void fn_8017813C(Point_8017886C pos);
 int fn_80178194(void);
 void fn_80178264(Point_8017886C pos);
-Point_8017886C fn_8017827C(void);
 float fn_80178298(void);
 float fn_801782A4(void);
 void fn_801782B0(void);
