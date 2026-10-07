@@ -33,7 +33,7 @@ static DVDCommandBlock DriveBlock;
 
 static OSBootInfo* BootInfo;
 static u32* BI2DebugFlag;
-static u32* BI2DebugFlagHolder;
+static u32 BI2DebugFlagHolder;
 __declspec(weak) BOOL __OSIsGcam = FALSE;
 static f64 ZeroF;
 static f32 ZeroPS[2];
@@ -168,7 +168,7 @@ void OSInit(void)
         {
             BI2DebugFlagHolder =
                 (u32*)*((u8*)DEBUGFLAG_ADDR);
-            BI2DebugFlag = (u32*)&BI2DebugFlagHolder;
+            BI2DebugFlag = &BI2DebugFlagHolder;
             __PADSpec = (u32) * ((u8*)OS_DEBUG_ADDRESS_2);
         }
 
