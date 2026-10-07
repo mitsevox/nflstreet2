@@ -9,8 +9,6 @@
    entries. */
 class Class_802938C0 : public Class_8018FD64 {
 public:
-    virtual ~Class_802938C0();
-
     void fn_80190098();
     int fn_801900D4(int id, int *pResult);
     int fn_80190120();
