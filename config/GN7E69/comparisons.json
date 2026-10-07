@@ -12246,6 +12246,42 @@
           "end": "0x80053B4C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80055584.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv record comparison target/type/query rows. Source is unlinked; table and shared flags remain original.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80055584",
+          "end": "0x80055F24"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028E008",
+          "end": "0x8028E164"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80055584",
+          "start": "0x80055584",
+          "end": "0x80055B2C"
+        },
+        {
+          "symbol": "fn_80055B2C",
+          "start": "0x80055B2C",
+          "end": "0x80055E8C"
+        },
+        {
+          "symbol": "fn_80055E8C",
+          "start": "0x80055E8C",
+          "end": "0x80055F24"
+        }
+      ]
     }
   ]
 }

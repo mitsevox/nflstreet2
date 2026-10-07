@@ -225,4 +225,3 @@ extern "C" void fn_8019E00C(State_8019D994 *state, Input_8019D994 *input, int mo
     input->vectorC[1] = frame.word2 << 8;
     input->vectorC[2] = fn_8019D800(samples[2], 0, 2, context, pair) << 8;
 }
-
