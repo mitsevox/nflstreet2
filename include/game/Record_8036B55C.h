@@ -46,7 +46,8 @@ struct Record_8036B55C {
     char mUnknown548[4];
     char mUnknown552[224];
     unsigned char mUnknown776;
-    char mUnknown777[7];
+    char mUnknown777[3];
+    int mUnknown780;
     void *mUnknown784;
     char mUnknown788[4];
     void *mUnknown792;

@@ -1,6 +1,8 @@
 #include "engine/cu_80227F14.h"
+#include "game/Object_8003DEC4.h"
 #include "game/Record_8036B55C.h"
 #include "game/Object_8008044C.h"
+#include "game/cu_8015C25C.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8021D7B8.h"
 #include <string.h>
@@ -34,9 +36,6 @@ struct Record_8037D92C {
     unsigned char mUnknown28;
     unsigned char mUnknown29;
 };
-
-
-
 
 extern "C" {
 extern float lbl_803EA2C4;
@@ -75,13 +74,6 @@ void fn_800D7A0C(Record_8036B55C *pRecord, int a);
 void fn_800EFD70(int a);
 void fn_800EFDD8(void);
 void fn_800EFFA0(int a, void *b, Record_8036B55C *pRecord, int c);
-void fn_8015CBC8(void);
-void fn_8015CC1C(void);
-int fn_8015CD9C(void);
-void fn_8015D060(int index, char *pBuffer, unsigned char a, int b);
-void fn_8015D1CC(int index, unsigned char a);
-int fn_8015D1FC(int index);
-int fn_8015D2E8(Object_8003DEC4 *pObject);
 void fn_80161168(void);
 void fn_8016D8B0(void *pObject);
 void fn_8018A8C8(int a);

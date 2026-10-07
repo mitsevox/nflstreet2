@@ -6,6 +6,7 @@
 #include "game/Object_8007A334.h"
 #include "game/Object_8008044C.h"
 #include "game/cu_80047E28.h"
+#include "game/cu_8015C25C.h"
 #include "game/cu_80181330.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C3284.h"
@@ -99,9 +100,7 @@ void fn_80087A30(int table, Object_8007A334 *pObject);
 int fn_80087A78(int table, Object_8007A334 *pObject, int value, int *pIndex);
 int fn_80087B00(int table, Object_8007A334 *pObject);
 int fn_80087B5C(int type);
-void fn_8015D180(int a, int b);
 void fn_8015D224(int index);
-void fn_8015D38C(int a);
 void fn_8015F638(int a, int b, int c, int *pResult);
 int fn_8016128C(int a);
 void fn_8016139C(int a, int *pId, int *pPalette);
