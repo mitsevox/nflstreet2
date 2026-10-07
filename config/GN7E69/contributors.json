@@ -10625,14 +10625,13 @@
       ],
       "provenance": {
         "pull_request": 542,
-        "merged_via": 542,
+        "merged_via": 560,
         "commit": "82922e85957d61a1787ca4f12b7a57e128a1b476",
         "introduced_blob": "7f4279abde0f17a93b58782ac5bff59fe6f082f4",
         "original_blob": "5281160427fbb2fc2e914ba8a1c73c4c5d39667f",
         "integration_adjustment": "Removed the donor no-effect dst expression explicitly marked as register-allocation scaffolding and inaccurate COPYALL commentary; complete coherent source and pinned-profile compiler output remain unchanged.",
         "original_commit": "274ebccaaf265cbdbc1f111d9d26272fed80ccae"
-      },
-      "merged_via": 560
+      }
     },
     {
       "source": "src/dolphin/dsp/dsp_debug.c",
@@ -10644,11 +10643,10 @@
       ],
       "provenance": {
         "pull_request": 542,
-        "merged_via": 542,
+        "merged_via": 560,
         "commit": "df9d8be5a779874c7938a7b9a3068054f13411a3",
         "introduced_blob": "3cb3fb098f31ebfba52dfbdfc00906c8a203c707"
-      },
-      "merged_via": 560
+      }
     },
     {
       "source": "src/dolphin/dvd/dvd.c",
@@ -10697,14 +10695,13 @@
       ],
       "provenance": {
         "pull_request": 527,
-        "merged_via": 527,
+        "merged_via": 560,
         "commit": "5c19415814ce282c0d01b93fa456f4523fd7c19f",
         "introduced_blob": "2cdc1c316e5529133e258cae7d31b1bf9cb0a6b7",
         "original_commit": "05efcc947b8a8cb11ab2fbb0a8ab05d6990348ed",
         "original_blob": "11288d899e338df40f5846b759dcc1194be3980d",
         "integration_adjustment": "Remove the unsupported unused cancellation stack local and inherited process comments; preserve function behavior and ordinary compiler settings. Cancellation frame instructions remain measured partial."
-      },
-      "merged_via": 560
+      }
     },
     {
       "source": "src/dolphin/pad/Pad.c",
@@ -10729,14 +10726,13 @@
       ],
       "provenance": {
         "pull_request": 529,
-        "merged_via": 529,
+        "merged_via": 560,
         "commit": "1097f87ed6ddf20b4a9937f3a270d054be75a262",
         "introduced_blob": "f0eec07fb657a4ab7264fca9a996828ab1d8e19f",
         "original_commit": "36572653d679b7adb854d105cb2cadaa5f7e582f",
         "original_blob": "cb51040943529f811f6532d20c835f782d282246",
         "integration_adjustment": "Reuse canonical os/string includes and fixed boot globals; omit redundant offsetof macro and unsupported foreign-compiler push/inline-all/pop directives under the unchanged pinned profile. Complete coherent C bodies retained; native tail-SDA packing remains measured partial."
-      },
-      "merged_via": 560
+      }
     },
     {
       "source": "src/dolphin/ai/ai.c",
@@ -10764,11 +10760,10 @@
       ],
       "provenance": {
         "pull_request": 529,
-        "merged_via": 529,
+        "merged_via": 560,
         "commit": "0c1b26d92daa749bec20fcde3f74940c517e29f3",
         "introduced_blob": "dfc630bfb306a68a9c2970b7c9c09d299f9b9bdc"
-      },
-      "merged_via": 560
+      }
     }
   ],
   "target": "GN7E69",
