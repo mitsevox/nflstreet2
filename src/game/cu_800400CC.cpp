@@ -1,6 +1,8 @@
+#include "game/fn_8022781C.h"
 #include <string.h>
 
 #include "game/bitstream.h"
+#include "game/Level_80054130.h"
 #include "game/cu_80041210.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801C1F94.h"
@@ -73,31 +75,6 @@ struct Desc_800408E4 {
     unsigned short mUnknown180;
 };
 
-/* 36-byte placement entry of the level data returned by fn_80054130. */
-struct Entry_80054130 {
-    float mUnknown0[6];
-    unsigned short mUnknown24;
-    int mUnknown28;
-    int mUnknown32;
-};
-
-struct Level_80054130 {
-    char mUnknown0[44];
-    char *mUnknown44;
-    char mUnknown48[12];
-    char *mUnknown60;
-    char mUnknown64[4];
-    char *mUnknown68;
-    char mUnknown72[16];
-    unsigned int mUnknown88;
-    Entry_80054130 *mUnknown92;
-    char mUnknown96[8];
-    unsigned int mUnknown104;
-    Entry_80054130 *mUnknown108;
-    unsigned int mUnknown112;
-    Entry_80054130 *mUnknown116;
-};
-
 struct Angles_801EBC18 {
     int mUnknown0;
     int mUnknown4;
@@ -136,7 +113,6 @@ void fn_8004F754(int model, Object_80040818 *pObject, int index);
 void fn_800504EC(void);
 void fn_80051308(void);
 void fn_80053A1C(void);
-Level_80054130 *fn_80054130(void);
 void fn_800B2A14(float *pPos, unsigned char *pAngles);
 char *fn_801C310C(char *pText, const char *pPattern);
 int fn_801C9DC8(int value);
@@ -153,7 +129,6 @@ void fn_801EC048(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, floa
 int fn_801F1520(int value);
 int fn_801F7C88(void);
 int fn_80227594(float *pA, float *pB, float tolerance);
-float fn_8022781C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
 void fn_80228D58(Object_80040818 *pObject);

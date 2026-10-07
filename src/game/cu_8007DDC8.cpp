@@ -1,18 +1,7 @@
 #include "game/Object_8007A334.h"
 #include "game/fn_801FCE10.h"
 
-struct Table_8007E020 {
-    void Set(int tag, int type = 2, Object_80023BBC *filter = 0)
-    {
-        mFilter = filter;
-        mTag = tag;
-        mUnknown4 = type;
-    }
-
-    int mTag;
-    int mUnknown4;
-    Object_80023BBC *mFilter;
-};
+#include "game/Table_8007E020.h"
 
 extern "C" {
 int fn_801F967C(int handle, int table);

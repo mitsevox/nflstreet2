@@ -4,15 +4,7 @@
 #include "game/fn_80227638.h"
 #include "game/RecordList_8002E7C0.h"
 
-/* A value easing from mStart to mTarget; mUpdate advances it. */
-struct Interp_8013CC14 {
-    float mStart;
-    float mTarget;
-    float mValue;
-    float mTime;
-    float mRate;
-    void (*mUpdate)(Interp_8013CC14 *pInterp, int steps);
-};
+#include "game/Interp_8013CC14.h"
 
 struct CameraState_8013D1C0 {
     float mUnknown00[3];

@@ -5,6 +5,7 @@
 #include "game/fn_801EEB44.h"
 #include "game/fn_80218FC4.h"
 #include <string.h>
+#include <dolphin/os/OSResetSW.h>
 
 #include "game/Record_802CC680.h"
 
@@ -60,8 +61,6 @@ void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 int fn_802399F8(void);
 int fn_80239A00(void);
 void fn_80239CEC(int a, int b);
-void (*fn_8023C4D4(void (*pCallback)(void)))(void);
-int fn_8023C548(void);
 int fn_8023CF60(void);
 void fn_8023CFD0(int a);
 int fn_8024151C(void);
@@ -174,10 +173,10 @@ static void fn_800242AC(void)
 
 static void fn_800244A0(void)
 {
-    if ((unsigned char)fn_8023C548()) {
+    if ((unsigned char)OSGetResetButtonState()) {
         lbl_803EBAE8 = 1;
     } else {
-        fn_8023C4D4(fn_800244A0);
+        OSSetResetCallback(fn_800244A0);
     }
 }
 
@@ -205,7 +204,7 @@ void fn_80024560(void)
 
 void fn_800245DC(void)
 {
-    lbl_803EBAE4 = fn_8023C4D4(fn_800244A0);
+    lbl_803EBAE4 = OSSetResetCallback(fn_800244A0);
 }
 
 void fn_80024654(void);
@@ -217,7 +216,7 @@ void fn_80024608(void)
 
 void fn_80024628(void)
 {
-    fn_8023C4D4(lbl_803EBAE4);
+    OSSetResetCallback(lbl_803EBAE4);
     lbl_803EBAE4 = 0;
 }
 
@@ -226,7 +225,7 @@ void fn_80024654(void)
     int previous = fn_801F8758(1);
 
     if (previous && !fn_80185274() && lbl_803EBAE8) {
-        if (!fn_8023C548()) {
+        if (!OSGetResetButtonState()) {
             fn_801F87FC(0);
             lbl_803EBAE8 = 0;
         }

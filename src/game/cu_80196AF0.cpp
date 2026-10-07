@@ -1,3 +1,4 @@
+#include <dolphin/gx/GXPixel.h>
 #include "game/fn_801D2B7C.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXEnum.h>
@@ -36,8 +37,6 @@ void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 void fn_80251604(int a, int b);
 void fn_80251B28(int a, int b, int c, int d);
 void fn_80251CC4(int a);
-void fn_80252034(int a, int b, int c, int d);
-void fn_802520E0(int a, int b, int c);
 void fn_802523A4(Mtx44 m, int a);
 void fn_80252448(float *p);
 void fn_802524D4(float *p);
@@ -112,16 +111,16 @@ void fn_80196C2C(unsigned int color, int mode, float alpha)
     fn_8024D418();
     fn_8024CB90(9, 1);
     fn_8024D450(0, 9, 1, 4, 4);
-    fn_802520E0(0, 7, 0);
+    GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
     GXSetCullMode(GX_CULL_NONE);
     fn_802528B0(1);
     switch (mode) {
     case 1:
-        fn_80252034(1, 2, 4, 5);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCCLR, GX_BL_SRCALPHA, GX_LO_NOOP);
         break;
     case 0:
     default:
-        fn_80252034(1, 4, 5, 5);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
         break;
     }
     {
@@ -144,8 +143,8 @@ void fn_80196C2C(unsigned int color, int mode, float alpha)
     }
     fn_801D0F80(view);
     fn_8025251C(view, 0);
-    fn_80252034(0, 0, 0, 5);
-    fn_802520E0(1, 3, 1);
+    GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_NOOP);
+    GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
     fn_802528B0(0);
 }
 
