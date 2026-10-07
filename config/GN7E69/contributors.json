@@ -10314,6 +10314,104 @@
         "commit": "0cc1c6d83d7ed812648c2fb384f231d2d327447d",
         "introduced_blob": "65de8ecb9af00d8d375adc451048c110674a9d44"
       }
+    },
+    {
+      "source": "src/game/cu_8007342C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8007342C",
+        "0x80073478",
+        "0x80073528"
+      ],
+      "provenance": {
+        "pull_request": 513,
+        "merged_via": 513,
+        "commit": "c6f0d63e57f466bdede4955484e568ef53c5c3c7",
+        "introduced_blob": "17c7d07e057fb3f271c0298260ca7e63bbd21f35"
+      }
+    },
+    {
+      "source": "src/game/cu_80080F20.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80080FD4",
+        "0x80081000",
+        "0x8008105C",
+        "0x80081088",
+        "0x800810B4",
+        "0x800810E0",
+        "0x80081108",
+        "0x80081134",
+        "0x8008115C",
+        "0x80081188",
+        "0x800811B4",
+        "0x800811E0",
+        "0x80081208",
+        "0x80081230",
+        "0x8008125C",
+        "0x80081284"
+      ],
+      "provenance": {
+        "pull_request": 515,
+        "merged_via": 515,
+        "commit": "be8b6f77865ca9d752dd385b0cefb52092a1540d",
+        "introduced_blob": "9e1658a097cf1be6232219aa98455ef3e4639900"
+      }
+    },
+    {
+      "source": "src/game/cu_8018AC38.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8018AC38",
+        "0x8018AC3C",
+        "0x8018AC40",
+        "0x8018ACB8",
+        "0x8018ACBC"
+      ],
+      "provenance": {
+        "pull_request": 517,
+        "merged_via": 517,
+        "commit": "bb9af7032b3eb97d5ff4177bb81f7c8397577cb8",
+        "introduced_blob": "e23c2dd6e4ee2e731adb218cd356b08bbfd1401b"
+      }
+    },
+    {
+      "source": "src/game/cu_8018AD78.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8018AD78"
+      ],
+      "provenance": {
+        "pull_request": 520,
+        "merged_via": 520,
+        "commit": "c69bb6d5d4c5def1cddf9024fc4845040c75f84a",
+        "introduced_blob": "734c256da51a368b03b95a334a956eac76dd299e"
+      }
+    },
+    {
+      "source": "src/game/cu_8018AFD0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8018AFD0",
+        "0x8018AFD8",
+        "0x8018AFE8"
+      ],
+      "provenance": {
+        "pull_request": 522,
+        "merged_via": 522,
+        "commit": "816aee9738afbee699a14b9a14143eeaf09de150",
+        "introduced_blob": "1b0b301b4a0b81ac9a3acc6d1ee521af04a353f6"
+      }
     }
   ],
   "target": "GN7E69",
