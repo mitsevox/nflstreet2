@@ -18,7 +18,9 @@ extern char lbl_802F24C8[];
 void fn_802353CC(void *p);
 void fn_802353D0(void *p);
 void fn_8023633C(void *p);
+int fn_800A3444(void);
 
+void fn_8019B43C(void);
 void fn_8019B460(int id);
 void fn_8019B5D4(void);
 void fn_8019B614(void);
@@ -28,6 +30,11 @@ static int lbl_803EB7B8 = -1;
 static char *lbl_803EB7BC = 0;
 
 extern "C" {
+
+void fn_8019B43C(void)
+{
+    fn_8019B460(fn_800A3444());
+}
 
 void fn_8019B460(int id)
 {
