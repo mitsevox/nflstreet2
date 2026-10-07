@@ -15953,6 +15953,937 @@
           "end": "0x8024A9EC"
         }
       ]
+    },
+    {
+      "source": "src/dolphin/os/OSTime.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023E794",
+          "end": "0x8023E818"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__OSGetSystemTime",
+          "start": "0x8023E7B4",
+          "end": "0x8023E818"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSMemory.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023BA78",
+          "end": "0x8023BD50"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FC470",
+          "end": "0x802FC480"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OnReset",
+          "start": "0x8023BA78",
+          "end": "0x8023BAB4"
+        },
+        {
+          "symbol": "MEMIntrruptHandler",
+          "start": "0x8023BAB4",
+          "end": "0x8023BB20"
+        },
+        {
+          "symbol": "__OSInitMemoryProtection",
+          "start": "0x8023BC38",
+          "end": "0x8023BD50"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSContext.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023A2D8",
+          "end": "0x8023AB48"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FBEF8",
+          "end": "0x802FC0CF"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OSGetCurrentContext",
+          "start": "0x8023A588",
+          "end": "0x8023A594"
+        },
+        {
+          "symbol": "OSClearContext",
+          "start": "0x8023A6F4",
+          "end": "0x8023A718"
+        },
+        {
+          "symbol": "OSDumpContext",
+          "start": "0x8023A7D4",
+          "end": "0x8023AA7C"
+        },
+        {
+          "symbol": "__OSContextInit",
+          "start": "0x8023AB00",
+          "end": "0x8023AB48"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSCache.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80239CAC",
+          "end": "0x8023A2D8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FBCC8",
+          "end": "0x802FBEF2"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "L2GlobalInvalidate",
+          "start": "0x80239FEC",
+          "end": "0x8023A084"
+        },
+        {
+          "symbol": "DMAErrorHandler",
+          "start": "0x8023A084",
+          "end": "0x8023A1E4"
+        },
+        {
+          "symbol": "__OSCacheInit",
+          "start": "0x8023A1E4",
+          "end": "0x8023A2D8"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSReboot.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023E920",
+          "end": "0x8023EC7C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A4520",
+          "end": "0x803A4540"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED0E0",
+          "end": "0x803ED0EC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "Callback",
+          "start": "0x8023E930",
+          "end": "0x8023E93C"
+        },
+        {
+          "symbol": "__OSReboot",
+          "start": "0x8023E93C",
+          "end": "0x8023EC7C"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSReset.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023BFBC",
+          "end": "0x8023C3E0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED0A0",
+          "end": "0x803ED0AC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OSRegisterResetFunction",
+          "start": "0x8023BFBC",
+          "end": "0x8023C040"
+        },
+        {
+          "symbol": "__OSDoHotReset",
+          "start": "0x8023C0B0",
+          "end": "0x8023C0F8"
+        },
+        {
+          "symbol": "OSResetSystem",
+          "start": "0x8023C0F8",
+          "end": "0x8023C3B0"
+        },
+        {
+          "symbol": "OSGetResetCode",
+          "start": "0x8023C3B0",
+          "end": "0x8023C3E0"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSInterrupt.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023B1F4",
+          "end": "0x8023BA60"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FC3F0",
+          "end": "0x802FC41C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED088",
+          "end": "0x803ED0A0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__OSSetInterruptHandler",
+          "start": "0x8023B240",
+          "end": "0x8023B25C"
+        },
+        {
+          "symbol": "__OSGetInterruptHandler",
+          "start": "0x8023B25C",
+          "end": "0x8023B270"
+        },
+        {
+          "symbol": "__OSInterruptInit",
+          "start": "0x8023B270",
+          "end": "0x8023B2E4"
+        },
+        {
+          "symbol": "SetInterruptMask",
+          "start": "0x8023B2E4",
+          "end": "0x8023B5BC"
+        },
+        {
+          "symbol": "__OSMaskInterrupts",
+          "start": "0x8023B5BC",
+          "end": "0x8023B644"
+        },
+        {
+          "symbol": "__OSUnmaskInterrupts",
+          "start": "0x8023B644",
+          "end": "0x8023B6CC"
+        },
+        {
+          "symbol": "__OSDispatchInterrupt",
+          "start": "0x8023B6CC",
+          "end": "0x8023BA10"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OS.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023885C",
+          "end": "0x80239348"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FB868",
+          "end": "0x802FBA5F"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A3A20",
+          "end": "0x803A3A70"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC148",
+          "end": "0x803EC158"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED038",
+          "end": "0x803ED078"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OSGetConsoleType",
+          "start": "0x80238984",
+          "end": "0x802389AC"
+        },
+        {
+          "symbol": "ClearArena",
+          "start": "0x802389AC",
+          "end": "0x80238AD4"
+        },
+        {
+          "symbol": "InquiryCallback",
+          "start": "0x80238AD4",
+          "end": "0x80238B10"
+        },
+        {
+          "symbol": "__OSSetExceptionHandler",
+          "start": "0x80239190",
+          "end": "0x802391AC"
+        },
+        {
+          "symbol": "__OSGetExceptionHandler",
+          "start": "0x802391AC",
+          "end": "0x802391C0"
+        },
+        {
+          "symbol": "__OSGetDIConfig",
+          "start": "0x80239308",
+          "end": "0x8023931C"
+        },
+        {
+          "symbol": "OSRegisterVersion",
+          "start": "0x8023931C",
+          "end": "0x80239348"
+        },
+        {
+          "symbol": "OSInit",
+          "start": "0x80238B10",
+          "end": "0x80238EE8"
+        },
+        {
+          "symbol": "OSExceptionInit",
+          "start": "0x80238EE8",
+          "end": "0x80239168"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSLink.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023BA60",
+          "end": "0x8023BA78"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__OSModuleInit",
+          "start": "0x8023BA60",
+          "end": "0x8023BA78"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSAlarm.c",
+      "profile": "dolphin_release",
+      "evidence": "coherent pinnedBFBB Csource; original80byte assemblygate remains external original provider, no reconstructedassembly. Entire mappedfile unchanged; whole Cpartial source and extraPeriodic function preserved.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80239348",
+          "end": "0x802399F8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED078",
+          "end": "0x803ED080"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OSInitAlarm",
+          "start": "0x80239348",
+          "end": "0x80239394"
+        },
+        {
+          "symbol": "OSCreateAlarm",
+          "start": "0x80239394",
+          "end": "0x802393A4"
+        },
+        {
+          "symbol": "InsertAlarm",
+          "start": "0x802393A4",
+          "end": "0x802395F4"
+        },
+        {
+          "symbol": "OSSetAlarm",
+          "start": "0x802395F4",
+          "end": "0x8023965C"
+        },
+        {
+          "symbol": "OSCancelAlarm",
+          "start": "0x8023965C",
+          "end": "0x80239778"
+        },
+        {
+          "symbol": "DecrementerExceptionCallback",
+          "start": "0x80239778",
+          "end": "0x802399A8"
+        }
+      ],
+      "discarded": [
+        "OSSetPeriodicAlarm"
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXInit.c",
+      "profile": "dolphin_release",
+      "evidence": "Pinned coherent BFBB five complete C bodies; original unsupported unused ASM helper omitted; ordinary partial comparison, no promotion",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024ACC0",
+          "end": "0x8024C038"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDE40",
+          "end": "0x802FE07C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A5900",
+          "end": "0x803A5F30"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC258",
+          "end": "0x803EC25C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED358",
+          "end": "0x803ED380"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED840",
+          "end": "0x803ED868"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__GXDefaultTexRegionCallback",
+          "start": "0x8024ACC0",
+          "end": "0x8024ADBC"
+        },
+        {
+          "symbol": "__GXDefaultTlutRegionCallback",
+          "start": "0x8024ADBC",
+          "end": "0x8024ADE0"
+        },
+        {
+          "symbol": "__GXShutdown",
+          "start": "0x8024ADE0",
+          "end": "0x8024AF70"
+        },
+        {
+          "symbol": "GXInit",
+          "start": "0x8024AF70",
+          "end": "0x8024B700"
+        },
+        {
+          "symbol": "__GXInitGX",
+          "start": "0x8024B700",
+          "end": "0x8024C038"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXTransform.c",
+      "profile": "dolphin_release",
+      "evidence": "Coherent BFBB eight complete C bodies, whole ASM-dependent APIs left original; no source cut or version-splice; normal comparison",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802523A4",
+          "end": "0x8025295C"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED9B8",
+          "end": "0x803ED9C0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GXSetCurrentMtx",
+          "start": "0x802525BC",
+          "end": "0x802525F0"
+        },
+        {
+          "symbol": "__GXSetMatrixIndex",
+          "start": "0x802528D8",
+          "end": "0x8025295C"
+        },
+        {
+          "symbol": "__GXSetViewport",
+          "start": "0x802526A4",
+          "end": "0x80252734"
+        },
+        {
+          "symbol": "GXSetViewportJitter",
+          "start": "0x80252734",
+          "end": "0x8025278C"
+        },
+        {
+          "symbol": "GXSetViewport",
+          "start": "0x8025278C",
+          "end": "0x802527D4"
+        },
+        {
+          "symbol": "GXSetScissor",
+          "start": "0x802527F8",
+          "end": "0x80252870"
+        },
+        {
+          "symbol": "GXSetScissorBoxOffset",
+          "start": "0x80252870",
+          "end": "0x802528B0"
+        },
+        {
+          "symbol": "GXSetClipMode",
+          "start": "0x802528B0",
+          "end": "0x802528D8"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/vm/VM.c",
+      "profile": "dolphin_release",
+      "evidence": "complete related MVP1a61 C source; actual original behavior/calls and static cells; unchanged profile, honest frame/compiler differences; no uninitialized storage credit.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80244F18",
+          "end": "0x80245200"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC208",
+          "end": "0x803EC20C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED230",
+          "end": "0x803ED248"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "VMInit",
+          "start": "0x80244F18",
+          "end": "0x80244FB4"
+        },
+        {
+          "symbol": "__VMGetMRAMPages",
+          "start": "0x80244FB4",
+          "end": "0x80244FBC"
+        },
+        {
+          "symbol": "__VMGetARAMSize",
+          "start": "0x80244FBC",
+          "end": "0x80244FC4"
+        },
+        {
+          "symbol": "__VMGetARAMStart",
+          "start": "0x80244FC4",
+          "end": "0x80244FCC"
+        },
+        {
+          "symbol": "__VMAllocMRAMSwapSpace",
+          "start": "0x80244FCC",
+          "end": "0x80244FFC"
+        },
+        {
+          "symbol": "__VMSwapPageIn",
+          "start": "0x80244FFC",
+          "end": "0x802451F8"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "sInitialized",
+          "start": "0x803ED244",
+          "end": "0x803ED248"
+        },
+        {
+          "symbol": "sLogStatsCallback",
+          "start": "0x803ED240",
+          "end": "0x803ED244"
+        },
+        {
+          "symbol": "sMRAMPages",
+          "start": "0x803ED23C",
+          "end": "0x803ED240"
+        },
+        {
+          "symbol": "sARAMSize",
+          "start": "0x803ED238",
+          "end": "0x803ED23C"
+        },
+        {
+          "symbol": "sMRAMSwapSpace",
+          "start": "0x803ED234",
+          "end": "0x803ED238"
+        },
+        {
+          "symbol": "sMRAMSize",
+          "start": "0x803ED230",
+          "end": "0x803ED234"
+        }
+      ],
+      "discarded": [
+        "VMSetLogStatsCallback",
+        "__VMSwapPageOut",
+        "VMStoreAllPages"
+      ]
+    },
+    {
+      "source": "src/dolphin/vm/VMPageReplacement.c",
+      "profile": "dolphin_release",
+      "evidence": "complete related MVP1a61 C source; actual original behavior/calls and static cells; unchanged profile, honest frame/compiler differences; no uninitialized storage credit.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80245200",
+          "end": "0x80245514"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC210",
+          "end": "0x803EC218"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED250",
+          "end": "0x803ED254"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__VMGetPageToReplace",
+          "start": "0x80245200",
+          "end": "0x80245244"
+        },
+        {
+          "symbol": "__VMPageReplacementLRU",
+          "start": "0x80245244",
+          "end": "0x80245414"
+        },
+        {
+          "symbol": "__VMPageReplacementRandom",
+          "start": "0x80245414",
+          "end": "0x802454A8"
+        },
+        {
+          "symbol": "__VMPageReplacementFIFO",
+          "start": "0x802454A8",
+          "end": "0x80245514"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "sCurrentPage",
+          "start": "0x803ED250",
+          "end": "0x803ED254"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/vm/VMMapping.c",
+      "profile": "dolphin_release",
+      "evidence": "complete related MVP1a61 C source; actual original behavior/calls and static cells; unchanged profile, honest frame/compiler differences; no uninitialized storage credit.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80245514",
+          "end": "0x80245820"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDC98",
+          "end": "0x802FDCFF"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED258",
+          "end": "0x803ED268"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "VMAlloc",
+          "start": "0x80245514",
+          "end": "0x80245614"
+        },
+        {
+          "symbol": "__VMTranslateVMPageToARAMPage",
+          "start": "0x80245614",
+          "end": "0x80245654"
+        },
+        {
+          "symbol": "__VMIsPageMapped",
+          "start": "0x80245654",
+          "end": "0x80245674"
+        },
+        {
+          "symbol": "__VMMappingErrorAlert",
+          "start": "0x80245674",
+          "end": "0x802456AC"
+        },
+        {
+          "symbol": "__VMSetPageInARAM",
+          "start": "0x802456AC",
+          "end": "0x802456C4"
+        },
+        {
+          "symbol": "__VMIsPageInARAM",
+          "start": "0x802456C4",
+          "end": "0x802456D8"
+        },
+        {
+          "symbol": "__VMAllocVirtualToARAMLUT",
+          "start": "0x802456D8",
+          "end": "0x80245780"
+        },
+        {
+          "symbol": "__VMAllocARAMToVirtualLUT",
+          "start": "0x80245780",
+          "end": "0x80245820"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "sARAMPageCursor",
+          "start": "0x803ED264",
+          "end": "0x803ED268"
+        },
+        {
+          "symbol": "sAllocatedARAM",
+          "start": "0x803ED260",
+          "end": "0x803ED264"
+        },
+        {
+          "symbol": "sVirtualToARAMLUT",
+          "start": "0x803ED25C",
+          "end": "0x803ED260"
+        },
+        {
+          "symbol": "sARAMToVirtualLUT",
+          "start": "0x803ED258",
+          "end": "0x803ED25C"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gba/GBA.c",
+      "profile": "dolphin_release",
+      "evidence": "complete pinnedPikmin2 related GBA C functions with actualtarget Init guard/version delta, canonicalreset callback; opaqueunaccessed fields, no uninitializedstoragecredit.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80289450",
+          "end": "0x802895E8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x803060C0",
+          "end": "0x803060D0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803D4260",
+          "end": "0x803D4760"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED5E8",
+          "end": "0x803ED5EC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "ShortCommandProc",
+          "start": "0x80289450",
+          "end": "0x802894A4"
+        },
+        {
+          "symbol": "GBAInit",
+          "start": "0x802894A4",
+          "end": "0x80289548"
+        },
+        {
+          "symbol": "GBAGetStatus",
+          "start": "0x80289548",
+          "end": "0x802895D8"
+        },
+        {
+          "symbol": "OnReset",
+          "start": "0x802895D8",
+          "end": "0x802895E8"
+        }
+      ],
+      "discarded": [
+        "GBAGetStatusAsync",
+        "GBAResetAsync",
+        "GBAReset"
+      ]
+    },
+    {
+      "source": "src/dolphin/gba/GBAXfer.c",
+      "profile": "dolphin_release",
+      "evidence": "complete pinnedPikmin2 related GBA C functions with actualtarget Init guard/version delta, canonicalreset callback; opaqueunaccessed fields, no uninitializedstoragecredit.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802895E8",
+          "end": "0x802898FC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__GBAHandler",
+          "start": "0x802895E8",
+          "end": "0x802896C4"
+        },
+        {
+          "symbol": "__GBASyncCallback",
+          "start": "0x802896C4",
+          "end": "0x802896F8"
+        },
+        {
+          "symbol": "__GBASync",
+          "start": "0x802896F8",
+          "end": "0x80289764"
+        },
+        {
+          "symbol": "TypeAndStatusCallback",
+          "start": "0x80289764",
+          "end": "0x80289888"
+        },
+        {
+          "symbol": "__GBATransfer",
+          "start": "0x80289888",
+          "end": "0x802898FC"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXFifo.c",
+      "profile": "dolphin_release",
+      "evidence": "Existing coherent source getters actualCPU/GP pointer loads and originalCleanGPFifo caller roles independently frozen; source import credit preserved",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024C038",
+          "end": "0x8024CB90"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED380",
+          "end": "0x803ED3A0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GXGetCPUFifo",
+          "start": "0x8024C8D8",
+          "end": "0x8024C8E0"
+        },
+        {
+          "symbol": "GXGetGPFifo",
+          "start": "0x8024C8E0",
+          "end": "0x8024C8E8"
+        }
+      ],
+      "discarded": [
+        "GXSetCurrentGXThread"
+      ]
     }
   ]
 }
