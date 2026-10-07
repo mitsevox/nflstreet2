@@ -10291,6 +10291,281 @@
       ]
     },
     {
+      "source": "src/game/cu_80042F54.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x80042F54-0x80044F20 (src/game/cu_80042F54.cpp), its type, field and source-form rows, the 46 exact function extents and the exact data rows 0x8028D438-0x8028D568 (.rodata), 0x802CCF30-0x802CD190 (.data) and 0x803EA494-0x803EA4A8 (.sdata); the .sbss 0x803EC790-0x803EC7B0 and .bss 0x80307778-0x803078D4 placements are also recorded as data rows. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80042F54",
+          "end": "0x80044F20"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D438",
+          "end": "0x8028D568"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802CCF30",
+          "end": "0x802CD190"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA494",
+          "end": "0x803EA4A8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC790",
+          "end": "0x803EC7B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80307778",
+          "end": "0x803078D4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80042F54",
+          "start": "0x80042F54",
+          "end": "0x80042FA8"
+        },
+        {
+          "symbol": "fn_80042FA8",
+          "start": "0x80042FA8",
+          "end": "0x80043028"
+        },
+        {
+          "symbol": "fn_80043028",
+          "start": "0x80043028",
+          "end": "0x80043130"
+        },
+        {
+          "symbol": "fn_80043130",
+          "start": "0x80043130",
+          "end": "0x80043158"
+        },
+        {
+          "symbol": "fn_80043158",
+          "start": "0x80043158",
+          "end": "0x800431DC"
+        },
+        {
+          "symbol": "fn_800431DC",
+          "start": "0x800431DC",
+          "end": "0x800433D4"
+        },
+        {
+          "symbol": "fn_800433D4",
+          "start": "0x800433D4",
+          "end": "0x80043464"
+        },
+        {
+          "symbol": "fn_80043464",
+          "start": "0x80043464",
+          "end": "0x800434B0"
+        },
+        {
+          "symbol": "fn_800434B0",
+          "start": "0x800434B0",
+          "end": "0x800434FC"
+        },
+        {
+          "symbol": "fn_800434FC",
+          "start": "0x800434FC",
+          "end": "0x800435B0"
+        },
+        {
+          "symbol": "fn_800435B0",
+          "start": "0x800435B0",
+          "end": "0x800435B4"
+        },
+        {
+          "symbol": "fn_800435B4",
+          "start": "0x800435B4",
+          "end": "0x800436D8"
+        },
+        {
+          "symbol": "fn_800436D8",
+          "start": "0x800436D8",
+          "end": "0x800436DC"
+        },
+        {
+          "symbol": "fn_800436DC",
+          "start": "0x800436DC",
+          "end": "0x800437A8"
+        },
+        {
+          "symbol": "fn_800437A8",
+          "start": "0x800437A8",
+          "end": "0x8004389C"
+        },
+        {
+          "symbol": "fn_8004389C",
+          "start": "0x8004389C",
+          "end": "0x80043954"
+        },
+        {
+          "symbol": "fn_80043954",
+          "start": "0x80043954",
+          "end": "0x80043AE4"
+        },
+        {
+          "symbol": "fn_80043AE4",
+          "start": "0x80043AE4",
+          "end": "0x80043D68"
+        },
+        {
+          "symbol": "fn_80043D68",
+          "start": "0x80043D68",
+          "end": "0x80043DD8"
+        },
+        {
+          "symbol": "fn_80043DD8",
+          "start": "0x80043DD8",
+          "end": "0x80043F50"
+        },
+        {
+          "symbol": "fn_80043F50",
+          "start": "0x80043F50",
+          "end": "0x80044114"
+        },
+        {
+          "symbol": "fn_80044114",
+          "start": "0x80044114",
+          "end": "0x800441F0"
+        },
+        {
+          "symbol": "fn_800441F0",
+          "start": "0x800441F0",
+          "end": "0x80044264"
+        },
+        {
+          "symbol": "fn_80044264",
+          "start": "0x80044264",
+          "end": "0x80044378"
+        },
+        {
+          "symbol": "fn_80044378",
+          "start": "0x80044378",
+          "end": "0x800443B8"
+        },
+        {
+          "symbol": "fn_800443B8",
+          "start": "0x800443B8",
+          "end": "0x80044460"
+        },
+        {
+          "symbol": "fn_80044460",
+          "start": "0x80044460",
+          "end": "0x80044518"
+        },
+        {
+          "symbol": "fn_80044518",
+          "start": "0x80044518",
+          "end": "0x80044528"
+        },
+        {
+          "symbol": "fn_80044528",
+          "start": "0x80044528",
+          "end": "0x80044544"
+        },
+        {
+          "symbol": "fn_80044544",
+          "start": "0x80044544",
+          "end": "0x80044564"
+        },
+        {
+          "symbol": "fn_80044564",
+          "start": "0x80044564",
+          "end": "0x80044580"
+        },
+        {
+          "symbol": "fn_80044580",
+          "start": "0x80044580",
+          "end": "0x800446E0"
+        },
+        {
+          "symbol": "fn_800446E0",
+          "start": "0x800446E0",
+          "end": "0x80044854"
+        },
+        {
+          "symbol": "fn_80044854",
+          "start": "0x80044854",
+          "end": "0x80044858"
+        },
+        {
+          "symbol": "fn_80044858",
+          "start": "0x80044858",
+          "end": "0x800449B4"
+        },
+        {
+          "symbol": "fn_800449B4",
+          "start": "0x800449B4",
+          "end": "0x800449EC"
+        },
+        {
+          "symbol": "fn_800449EC",
+          "start": "0x800449EC",
+          "end": "0x80044A38"
+        },
+        {
+          "symbol": "fn_80044A38",
+          "start": "0x80044A38",
+          "end": "0x80044A7C"
+        },
+        {
+          "symbol": "fn_80044A7C",
+          "start": "0x80044A7C",
+          "end": "0x80044AB0"
+        },
+        {
+          "symbol": "fn_80044AB0",
+          "start": "0x80044AB0",
+          "end": "0x80044B04"
+        },
+        {
+          "symbol": "fn_80044B04",
+          "start": "0x80044B04",
+          "end": "0x80044B2C"
+        },
+        {
+          "symbol": "fn_80044B2C",
+          "start": "0x80044B2C",
+          "end": "0x80044B50"
+        },
+        {
+          "symbol": "fn_80044B50",
+          "start": "0x80044B50",
+          "end": "0x80044B78"
+        },
+        {
+          "symbol": "fn_80044B78",
+          "start": "0x80044B78",
+          "end": "0x80044C00"
+        },
+        {
+          "symbol": "fn_80044C00",
+          "start": "0x80044C00",
+          "end": "0x80044C88"
+        },
+        {
+          "symbol": "fn_80044C88",
+          "start": "0x80044C88",
+          "end": "0x80044F20"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_801444D8.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801444D8-0x80145224 (src/game/cu_801444D8.cpp), its 19 exact function extents, the exact .rodata/.data/.sdata/.bss data rows and the compiler and source-form rows, which state the unresolved .rodata bytes. Draft comparisons only; the original assembly remains linked until the .rodata placement is reproduced.",
