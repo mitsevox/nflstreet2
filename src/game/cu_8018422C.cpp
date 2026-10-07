@@ -6,6 +6,7 @@
 #include "game/Callees_8002A138.h"
 #include "game/fn_8007F828.h"
 #include "game/Record_80021154.h"
+#include "game/fn_80191948.h"
 
 struct Name_801859C8 {
     char mUnknown0[8];
@@ -58,7 +59,6 @@ int fn_8002A86C(int value, int type, const char *name, unsigned int *pIndex);
 int fn_80191810(int a);
 void fn_80193DC4(int *pA, int *pB);
 int fn_801D6850(void);
-void fn_80191948(int a, int b, int c, int d);
 }
 
 static void (*lbl_803EB590)(int, int *) = 0;
@@ -181,9 +181,9 @@ int fn_801844E0(int a)
     return 1;
 }
 
-void fn_80184528(int a, int b, int c, int d)
+void fn_80184528(int value, Object_80191948 *pA, Object_80191948 *pB, Object_80191948 *pC)
 {
-    fn_80191948(a, b, c, d);
+    fn_80191948(value, pA, pB, pC);
 }
 
 void fn_80184548(void)
@@ -658,7 +658,8 @@ int fn_80185284(unsigned int id, Params_80185284 *pParams, int c, int *pResult)
         *pResult = fn_80184488(pParams->mUnknown0);
         break;
     case 339:
-        fn_80184528(pParams->mUnknown0, pParams->mUnknown4, pParams->mUnknown8, pParams->mUnknownC);
+        fn_80184528(pParams->mUnknown0, (Object_80191948 *)pParams->mUnknown4,
+                     (Object_80191948 *)pParams->mUnknown8, (Object_80191948 *)pParams->mUnknownC);
         break;
     case 341:
         *pResult = fn_80184398((int *)pParams->mUnknown0, (int *)pParams->mUnknown4, (int *)pParams->mUnknown8,

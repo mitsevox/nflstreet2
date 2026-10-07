@@ -5987,7 +5987,7 @@
     {
       "source": "src/game/cu_800D0D4C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/open grouping row for src/game/cu_800D0D4C.cpp, six exact complete function extents and individual inferred name/source-form/compiler rows, plus four target-width external scalar-access footprints. Only these six whole bodies are measured; all static storage and 111 other bodies remain original and unmeasured.",
+      "evidence": "evidence.tsv retained open/open grouping row for src/game/cu_800D0D4C.cpp, seven complete function extents and individual inferred name/source-form/compiler rows, plus five target-width external access footprints. The nullable function-pointer setter follows the complete registered pointee/invoker contract; nominal source signatures remain qualified. Only these seven whole bodies are measured; all static storage and 110 other bodies remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
@@ -6026,6 +6026,11 @@
           "symbol": "fn_800D7520",
           "start": "0x800D7520",
           "end": "0x800D7528"
+        },
+        {
+          "symbol": "fn_800D7604",
+          "start": "0x800D7604",
+          "end": "0x800D760C"
         }
       ]
     },
@@ -11814,6 +11819,187 @@
           "symbol": "fn_800400D4",
           "start": "0x800400D4",
           "end": "0x80040154"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800325E8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained provisional/provisional ten-function hull; three complete getter bodies and two complete neutral lifecycle-role constant-call stubs, with individual name/function/source-form rows. Five other bodies and all storage remain original/unmeasured. Canonical Class_801CC350 and record contracts unchanged; no root, vtable or compiler lifecycle storage emitted.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800325E8",
+          "end": "0x80032EE8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GetName__14Class_800325E8",
+          "start": "0x800325E8",
+          "end": "0x800325F4"
+        },
+        {
+          "symbol": "vfn_04__14Class_800325E8",
+          "start": "0x800325F4",
+          "end": "0x80032600"
+        },
+        {
+          "symbol": "vfn_05__14Class_800325E8",
+          "start": "0x80032600",
+          "end": "0x8003260C"
+        },
+        {
+          "symbol": "fn_80032E90",
+          "start": "0x80032E90",
+          "end": "0x80032EBC"
+        },
+        {
+          "symbol": "fn_80032EBC",
+          "start": "0x80032EBC",
+          "end": "0x80032EE8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8015A39C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained open/provisional24-function grouping and full provisional original pool association; three complete bodies with individual neutral name/type/field/source-form/compiler rows. Whole44/16/8-byte functions and four-byte compiled read-only float literal are measured;21 other bodies, all external storage and all other pool bytes remain original/unmeasured. Canonical player pointer and existing int/void contracts preserved; entire original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015A39C",
+          "end": "0x8015C25C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A3EF0",
+          "end": "0x802A3EF4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8015C218",
+          "start": "0x8015C218",
+          "end": "0x8015C244"
+        },
+        {
+          "symbol": "fn_8015C244",
+          "start": "0x8015C244",
+          "end": "0x8015C254"
+        },
+        {
+          "symbol": "fn_8015C254",
+          "start": "0x8015C254",
+          "end": "0x8015C25C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained open/provisional37-function grouping; fourteen complete380-target-byte bodies with individual neutral name/source-form rows and original external access footprints. Existing canonical callee/vector contracts preserved, including unused first argument for fn_80071BA0. No storage emitted;23 other functions/all storage original/unmeasured; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8006F810",
+          "end": "0x80071C3C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8006F810",
+          "start": "0x8006F810",
+          "end": "0x8006F820"
+        },
+        {
+          "symbol": "fn_8006F820",
+          "start": "0x8006F820",
+          "end": "0x8006F824"
+        },
+        {
+          "symbol": "fn_8006F824",
+          "start": "0x8006F824",
+          "end": "0x8006F850"
+        },
+        {
+          "symbol": "fn_800711DC",
+          "start": "0x800711DC",
+          "end": "0x800711E0"
+        },
+        {
+          "symbol": "fn_80071344",
+          "start": "0x80071344",
+          "end": "0x80071348"
+        },
+        {
+          "symbol": "fn_80071348",
+          "start": "0x80071348",
+          "end": "0x8007134C"
+        },
+        {
+          "symbol": "fn_80071790",
+          "start": "0x80071790",
+          "end": "0x80071794"
+        },
+        {
+          "symbol": "fn_80071974",
+          "start": "0x80071974",
+          "end": "0x800719A4"
+        },
+        {
+          "symbol": "fn_800719A4",
+          "start": "0x800719A4",
+          "end": "0x800719D4"
+        },
+        {
+          "symbol": "fn_800719D4",
+          "start": "0x800719D4",
+          "end": "0x80071A04"
+        },
+        {
+          "symbol": "fn_80071BA0",
+          "start": "0x80071BA0",
+          "end": "0x80071BDC"
+        },
+        {
+          "symbol": "fn_80071BDC",
+          "start": "0x80071BDC",
+          "end": "0x80071C2C"
+        },
+        {
+          "symbol": "fn_80071C2C",
+          "start": "0x80071C2C",
+          "end": "0x80071C34"
+        },
+        {
+          "symbol": "fn_80071C34",
+          "start": "0x80071C34",
+          "end": "0x80071C3C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80191948.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained two-function grouping 0x80191948-0x80193CEC and full original pool association, single complete808-byte function extent, neutral name, partial-root type/field, original-storage external access footprints, source-form and compiler rows. Larger8316-byte body and original pool storage remain unmeasured and original; entire original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80191948",
+          "end": "0x80193CEC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80191948",
+          "start": "0x80191948",
+          "end": "0x80191C70"
         }
       ]
     }

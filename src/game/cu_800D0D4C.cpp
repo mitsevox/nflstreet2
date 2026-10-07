@@ -1,4 +1,6 @@
 extern "C" {
+typedef void (*Callback_800D7604)(int, int, const char *, int, int, int, int);
+extern Callback_800D7604 lbl_803EACC0;
 extern unsigned char lbl_803EACC4;
 extern int lbl_803EACC8;
 extern int lbl_803EACD0;
@@ -21,4 +23,7 @@ extern "C" void fn_800D750C() {
 }
 extern "C" void fn_800D7520(int a) {
     lbl_803EACC4 = a;
+}
+extern "C" void fn_800D7604(Callback_800D7604 a) {
+    lbl_803EACC0 = a;
 }
