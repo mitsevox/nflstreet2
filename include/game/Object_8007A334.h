@@ -124,7 +124,7 @@ void fn_8007F064(Object_8007A334 *pObject);
 void fn_8007F094(Object_8007A334 *pObject, char *pBuffer, int size);
 int fn_8007F0C8(Object_8007A334 *pObject);
 void fn_8007F0F4(Object_8007A334 *pObject, int a, int *pResult);
-void fn_80083E40(Object_8007A334 *pObject, void *pDesc, int tag);
+void fn_80083E40(Object_8007A334 *pObject, Query_80083E40 *pQuery, int tag);
 void fn_80083F68(Object_8007A334 *pObject);
 void fn_80083F88(Object_8007A334 *pObject, char *pBuffer, int size);
 int fn_80084034(Object_8007A334 *pObject, int id, int *pResult);
