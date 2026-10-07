@@ -12124,6 +12124,37 @@
           "end": "0x8014116C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80134E24.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv source unit, overlay, storage and behavior rows for cu_80134E24; author-only scoped comparisons, original assembly retained.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80134E24",
+          "end": "0x80135CEC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FD88",
+          "end": "0x8029FDD4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80134E24",
+          "start": "0x80134E24",
+          "end": "0x80135200"
+        },
+        {
+          "symbol": "fn_80135200",
+          "start": "0x80135200",
+          "end": "0x80135CEC"
+        }
+      ]
     }
   ]
 }
