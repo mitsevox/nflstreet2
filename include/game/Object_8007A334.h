@@ -119,6 +119,7 @@ float fn_8007A9E4(Object_8007A334 *pObject, int a);
 void fn_8007AA90(Object_8007A334 *pObject, int key, int value);
 void fn_8007AA3C(Object_8007A334 *pObject, int a, int b, int c);
 void fn_8007ABA4(void *pObject, int a, int b);
+void fn_8007ADD4(void *pObject, int a, char *pText, int length);
 void fn_8007EEFC(Object_8007A334 *pObject);
 void fn_8007F064(Object_8007A334 *pObject);
 void fn_8007F094(Object_8007A334 *pObject, char *pBuffer, int size);

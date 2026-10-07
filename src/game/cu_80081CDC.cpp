@@ -87,11 +87,10 @@ struct Record_80082B18 {
 
 extern "C" {
 int fn_8007A43C(Object_8007A334 *pObject);
-void fn_8007ADD4(void *pObject, int tag, char *pBuffer, int size);
 void fn_8007BA88(Object_8007A334 *pCursor, int value);
 void fn_8007BB04(Object_8007A334 *pCursor);
 int fn_8007BBFC(Object_8007A334 *pCursor, int key, int *pResult);
-void fn_8007FC70(int a, int b, int mode, int c);
+int fn_8007FC70(int a, int b, int mode, int c);
 void fn_80080138(int a, int b, int mode);
 int fn_8008058C(int *pId, int *pPos, int *pValue, int a, int b, int c, int mode);
 void fn_80080874(int which);
@@ -186,18 +185,18 @@ unsigned int fn_80081ECC(int category, int *pValues)
     return fn_80229CFC(category, values, 0);
 }
 
-void fn_80081F50(Object_8008044C *pObject, int team, int a)
+void fn_80081F50(Object_8008044C *pObject, unsigned char side, int a)
 {
     unsigned int flags = fn_8007A98C(pObject, 0x47494C50);
 
     if (a) {
-        if (team == 0) {
+        if (side == 0) {
             flags |= 1;
         } else {
             flags |= 2;
         }
     } else {
-        if (team == 0) {
+        if (side == 0) {
             flags &= ~1;
         } else {
             flags &= ~2;
@@ -331,7 +330,7 @@ int fn_80082414(int index)
         Object_8008044C cursor;
         Desc_8008044C desc;
 
-        desc.mUnknown4 = index;
+        desc.mUnknown4 = 3;
         desc.mUnknown8 = 1;
         desc.mUnknown0 = 0;
         fn_8008044C(&cursor, &desc, 0x54415453);
@@ -483,19 +482,19 @@ void fn_800829D8(void)
     lbl_803EA7D8 = 0;
 }
 
-void fn_80082A64(int a, int b)
+int fn_80082A64(int a, int b)
 {
-    fn_8007FC70(a, fn_8022C8F0(0, 14), 0, b);
+    return fn_8007FC70(a, fn_8022C8F0(0, 14), 0, b);
 }
 
-void fn_80082AB0(int a, int b, int c)
+int fn_80082AB0(int a, int b, int c)
 {
-    fn_8007FC70(b, a, 0, c);
+    return fn_8007FC70(b, a, 0, c);
 }
 
-void fn_80082AE4(int a, int b)
+int fn_80082AE4(int a, int b)
 {
-    fn_8007FC70(b, a, 1, -1);
+    return fn_8007FC70(b, a, 1, -1);
 }
 
 void fn_80082B18(Record_80082B18 *pRecord)
@@ -574,8 +573,8 @@ void fn_80082B18(Record_80082B18 *pRecord)
     pRecord->mUnknownBC = 0;
 }
 
-/* Fetches the next first and last name from the two name cursors opened by
-   fn_800828FC, and stores the upper-case form of the last name. */
+/* Fetches a randomly chosen first and last name through the two name cursors
+   opened by fn_800828FC, and stores the upper-case form of the last name. */
 void fn_80082C64(Record_80082B18 *pRecord)
 {
     char *pLast = pRecord->mUnknown08;
@@ -598,14 +597,14 @@ void fn_80082D30(Record_80082B18 *pRecord)
 {
     QueryCursor cursor;
     QueryResult result;
-    unsigned int face = fn_802372EC(0, 12);
+    unsigned int skin = fn_802372EC(0, 12);
 
-    pRecord->mUnknown28 = face;
+    pRecord->mUnknown28 = skin;
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    fn_801FCE10(&result, "use 'TATS' declare \x8a cursor for select * from 'ECAF' where 'IKSP' = \x85\n", &cursor, face);
+    fn_801FCE10(&result, "use 'TATS' declare \x8a cursor for select * from 'ECAF' where 'IKSP' = \x85\n", &cursor, skin);
     cursor.mUnknown4 = fn_802372EC(0, result.mUnknown0);
     fn_801FCE10(0,
                 "fetch from \x8a 'CFRP' into \x82 and 'THLP' into \x82 and 'PTEP' into \x82 and 'XELP' into \x82 "

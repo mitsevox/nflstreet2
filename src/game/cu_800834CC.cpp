@@ -17,7 +17,7 @@ struct Query_8008352C {
 };
 
 extern "C" {
-void fn_8003DE74(unsigned char team, int *pList);
+void fn_8003DE74(unsigned char side, int *pList);
 void *fn_801C2030(void *dst, const void *src, unsigned int n);
 unsigned int fn_801C3180(const char *pText);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
@@ -31,9 +31,7 @@ void fn_801F9BB4(int handle, int table, int column, int *pInfo);
 void fn_80023024(int a);
 int fn_8007A43C(Object_8007A334 *pObject);
 int fn_8007A934(Object_8007A334 *pObject, int key);
-void fn_8007ADD4(Object_8007A334 *pObject, int key, char *pText, int length);
 void fn_8007CAEC(int index, int value);
-void fn_80081F50(Object_8008044C *pObject, unsigned char team, int a);
 void fn_800828FC(void);
 void fn_800829D8(void);
 int fn_80082A64(int a, int b);
@@ -267,7 +265,7 @@ void fn_80083B00(Object_8007A334 *pObject, void *pColumns, int tag)
     fn_8007A334(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
 }
 
-void fn_80083BC4(Object_8007A334 *pObject, void *pColumns, int tag, int league)
+void fn_80083BC4(Object_8007A334 *pObject, void *pColumns, int tag, int logo)
 {
     Object_80023BBC root;
     Object_80023BBC left;
@@ -277,7 +275,7 @@ void fn_80083BC4(Object_8007A334 *pObject, void *pColumns, int tag, int league)
     left.Set(6, 0x4D41455450595454LL, 3);
     left.mUnknown24.mInt = 0;
     right.Set(6, 0x4D4145544C474C54LL, 3);
-    right.mUnknown24.mInt = league;
+    right.mUnknown24.mInt = logo;
     fn_8007A334(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
 }
 
@@ -308,8 +306,6 @@ void fn_80083DE4(int id)
 {
     fn_801FCE10(0, "use 'TATS' update 'YALP' set 'ITGT' = \x85 where 'DIGT' = \x82\n", id, id);
 }
-
-void fn_80083E40(Object_8007A334 *pObject, Query_80083E40 *pQuery, int tag);
 
 void fn_80083E1C(Object_8007A334 *pObject, Query_80083E40 *pQuery)
 {
@@ -500,7 +496,7 @@ void fn_80084470(Object_8007A334 *pObject, int value)
     }
 }
 
-int fn_800844B8(const char *pName, int type, int league)
+int fn_800844B8(const char *pName, int type, int logo)
 {
     unsigned short count = 1;
     int id;
@@ -510,22 +506,22 @@ int fn_800844B8(const char *pName, int type, int league)
                 "use 'TATS' insert into 'MAET' set 'DIGT' = \x82 and 'PYTT' = \x82 and 'DIOT' = \x82 and "
                 "'DROT' = \x82 and 'LGLT' = \x82 and 'SIVT' = \x83 and 'RUMT' = \x85 and 'ANDT' = \x88 and "
                 "'LDTC' = \x82\n",
-                id, type, id, 0, league, 1, 3, pName, 1);
+                id, type, id, 0, logo, 1, 3, pName, 1);
     return id;
 }
 
-void fn_8008463C(int *pLeague, int *pFirst, int *pSecond, int *pThird);
-void fn_800846F4(int league, char *pName, int size);
+void fn_8008463C(int *pLogo, int *pFirst, int *pSecond, int *pThird);
+void fn_800846F4(int logo, char *pName, int size);
 
-int fn_8008454C(int type, int league, const char *pName)
+int fn_8008454C(int type, int logo, const char *pName)
 {
     char name[33];
     int values[4];
     int id;
 
     fn_8008463C(&values[0], &values[1], &values[2], &values[3]);
-    if (league != -1) {
-        values[0] = league;
+    if (logo != -1) {
+        values[0] = logo;
     }
     if (pName && fn_801C3180(pName)) {
         fn_801C2EF0(name, pName, 33);
@@ -542,7 +538,7 @@ int fn_8008454C(int type, int league, const char *pName)
     return id;
 }
 
-void fn_8008463C(int *pLeague, int *pFirst, int *pSecond, int *pThird)
+void fn_8008463C(int *pLogo, int *pFirst, int *pSecond, int *pThird)
 {
     QueryCursor cursor;
     QueryResult result;
@@ -554,27 +550,27 @@ void fn_8008463C(int *pLeague, int *pFirst, int *pSecond, int *pThird)
     fn_801FCE10(&result, "use 'TATS' declare \x8a cursor for select * from 'LTPS'\n", &cursor);
     cursor.mUnknown4 = fn_80237390(1, 0, result.mUnknown0 - 1);
     fn_801FCE10(0, "use 'TATS' fetch from \x8a 'LGLT' into \x85 and '1CMT' into \x85 and '2CMT' into \x85 and '3CMT' into \x85\n",
-                &cursor, pLeague, pFirst, pSecond, pThird);
+                &cursor, pLogo, pFirst, pSecond, pThird);
     if (cursor.mUnknown0) {
         fn_801FCFA0(&cursor);
     }
 }
 
-void fn_800846F4(int league, char *pName, int size)
+void fn_800846F4(int logo, char *pName, int size)
 {
     QueryCursor cursor;
     QueryResult result;
-    int locked = 0;
+    int flag = 0;
 
     if (fn_801F9A90(0, 0x43544E52)) {
-        locked = 1;
+        flag = 1;
         fn_8022EF8C(0, 0x43544E52);
     }
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    fn_801FCE10(&result, "declare \x8a cursor for select * from 'CTNR' where ('LGLT' = \x82)\n", &cursor, league);
+    fn_801FCE10(&result, "declare \x8a cursor for select * from 'CTNR' where ('LGLT' = \x82)\n", &cursor, logo);
     int count = result.mUnknown0;
     if (count > 0) {
         cursor.mUnknown4 = fn_80237390(1, 0, count - 1);
@@ -585,7 +581,7 @@ void fn_800846F4(int league, char *pName, int size)
     if (cursor.mUnknown0) {
         fn_801FCFA0(&cursor);
     }
-    if (locked) {
+    if (flag) {
         fn_8022EFBC(0, 0x43544E52);
     }
 }
@@ -653,21 +649,21 @@ void fn_80084908(int a, int b, int *pOut, unsigned int count, int *pIn, unsigned
 
 void fn_80084DAC(int team, int *pIds, unsigned int count);
 
-void fn_80084A8C(int team, int *pList, int a, int count)
+void fn_80084A8C(int team, int *pList, int side, int count)
 {
     Record_8003B6BC record;
     Object_8007A334 query;
     Object_8008044C cursor;
     int i;
 
-    fn_8003DE74(a, pList);
-    fn_8003B6BC(a, &record);
+    fn_8003DE74(side, pList);
+    fn_8003B6BC(side, &record);
     fn_80084DAC(team, record.mUnknown, count);
     fn_80083E40(&query, 0, 0x54415453);
     fn_80084034(&query, team, 0);
     int type = fn_8008400C(&query);
     fn_80083F68(&query);
-    if (a == 0) {
+    if (side == 0) {
         fn_8007CAEC(0, team);
         fn_8022A508(0, team, team, type, -1);
         fn_8022DC7C(0);
@@ -681,25 +677,25 @@ void fn_80084A8C(int team, int *pList, int a, int count)
     fn_8008044C(&cursor, 0, 0x54415453);
     for (i = 0; i < count; i++) {
         fn_800809C4(&cursor, record.mUnknown[i], 0);
-        fn_80081F50(&cursor, a, 1);
+        fn_80081F50(&cursor, side, 1);
     }
     fn_8008056C(&cursor);
 }
 
-void fn_80084C24(int team, int *pList, int a, int count)
+void fn_80084C24(int team, int *pList, int side, int count)
 {
     Record_8003B6BC record;
     Object_8007A334 query;
     Object_8008044C cursor;
     int i;
 
-    fn_8003DE74(a, pList);
-    fn_8003B6BC(a, &record);
+    fn_8003DE74(side, pList);
+    fn_8003B6BC(side, &record);
     fn_80083E40(&query, 0, 0x54415453);
     fn_80084034(&query, team, 0);
     int type = fn_8008400C(&query);
     fn_80083F68(&query);
-    if (a == 0) {
+    if (side == 0) {
         fn_8007CAEC(0, team);
         fn_8022A508(0, team, team, type, -1);
         fn_8022DC7C(0);
@@ -713,7 +709,7 @@ void fn_80084C24(int team, int *pList, int a, int count)
     fn_8008044C(&cursor, 0, 0x54415453);
     for (i = 0; i < count; i++) {
         fn_800809C4(&cursor, record.mUnknown[i], 0);
-        fn_80081F50(&cursor, a, 1);
+        fn_80081F50(&cursor, side, 1);
     }
     fn_8008056C(&cursor);
 }

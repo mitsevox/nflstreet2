@@ -70,7 +70,7 @@ void fn_8003B1F4(int group);
 void fn_8003B234(int group, int kind, Pair_8003AEA8 **pPairs);
 void fn_8003B2D0(int group, int kind, int slot);
 int fn_8003B360(int group);
-void fn_8003DE74(int team, int *pList);
+void fn_8003DE74(unsigned char side, int *pList);
 int fn_800551D8(unsigned char a);
 void fn_800551E0(unsigned char a, int b, char *pText, int length);
 void fn_80055230(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
@@ -100,9 +100,8 @@ int fn_80080D10(Object_8008044C *pObject);
 int fn_80081188(Object_8008044C *pObject);
 int fn_800812B0(Object_8008044C *pObject, int index);
 void fn_8008135C(Object_8008044C *pObject, int index, int value);
-void fn_80081F50(Object_8008044C *pObject, int team, int a);
 int fn_80082414(int index);
-int fn_8008257C(int count, int *pOut);
+int fn_8008257C(int count, unsigned int *pOut);
 int fn_800827EC(int id, int value);
 int fn_80082864(void);
 void fn_800828FC(void);
@@ -342,7 +341,7 @@ int fn_80017380(int teamId)
 int fn_80017610(int n, int teamId, float scale)
 {
     int count0 = 0;
-    int team = 0;
+    unsigned int team = 0;
     int max = 0;
     int id = 0;
     int pos = 0;
@@ -435,7 +434,7 @@ int fn_800179EC(int start, int teamId, float scale)
 {
     int n = start;
     int count0 = 0;
-    int team = 0;
+    unsigned int team = 0;
     int range = 0;
     int id = 0;
     int pos = 0;
