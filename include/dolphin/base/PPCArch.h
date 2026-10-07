@@ -35,6 +35,7 @@ extern "C" {
 
 u32 PPCMfmsr();
 void PPCMtmsr(u32 newMSR);
+void PPCSync(void);
 void PPCHalt();
 u32 PPCMffpscr();
 void PPCMtfpscr(u32 newFPSCR);

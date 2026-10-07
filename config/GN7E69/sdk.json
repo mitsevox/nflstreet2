@@ -543,51 +543,47 @@
       "name": "src/dolphin/os/OSThread.c",
       "source": "src/dolphin/os/OSThread.c",
       "library": "OS",
-      "evidence": "First4-byte switch callback atD478; thread initializationD47C, queues/scheduler/priority/run-selection/create/exit/cancel/resume/suspend/sleep/wake native anchors. Finalclear-stackE6E8 endsE794.",
+      "evidence": "Complete related SDK source with22 exact unlinked measured target functions4892code; current headers reused,17 extra emitted helpers remain genuine source without target identities. Original archive boundaries provisional; full promotion deferred for genuine outside-DOL stack linker constants.",
       "sections": [
-        {
-          "section": ".bss",
-          "start": "0x803A3B18",
-          "end": "0x803A3C18",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true,
-          "evidence": "Thread initialization forms 803A3B18 at 8023D4A8. Its queue loop starts index zero, scales by eight at 8023D54C, advances eight bytes at 8023D568, and continues through index 31 at 8023D564/8023D56C. The called initializer at 8023D5D8/8023D5DC writes both four-byte head/tail slots. Thus 32 full eight-byte records require 256 bytes."
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED0D0",
-          "end": "0x803ED0D4",
-          "evidence": "Native RunQueueBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSThreadInit at0x8023D544. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED0D4",
-          "end": "0x803ED0D8",
-          "evidence": "Native RunQueueHint storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSThreadInit at0x8023D550. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED0D8",
-          "end": "0x803ED0DC",
-          "evidence": "Native Reschedule storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSThreadInit at0x8023D5B0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
         {
           "section": ".text",
           "start": "0x8023D478",
           "end": "0x8023E794",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "First4-byte switch callback atD478; thread initializationD47C, queues/scheduler/priority/run-selection/create/exit/cancel/resume/suspend/sleep/wake native anchors. Finalclear-stackE6E8 endsE794. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+          "evidence": "Registered complete target interval contains 22 exact unlinked functions, 4892 bytes with actual operands resolved. Seventeen other emitted donor bodies remain genuine source without target identities; the full emitted native code is not claimed as this target interval. Archive edges remain provisional."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803A3B18",
+          "end": "0x803A4510",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Complete native .bss allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FC480",
+          "end": "0x802FCC8D",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Complete native .data allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED0D0",
+          "end": "0x803ED0DC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Complete native .sbss allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC168",
+          "end": "0x803EC16D",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Complete native .sdata allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional."
         }
       ]
     },
@@ -1332,7 +1328,31 @@
           "end": "0x80249C78",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "First 68-byte registration routine481A0 is ambiguous by itself; contiguous unique DMA/GetStatus/Init/Handler/Checksize6132-byte anchors support ownership. PAD ends481A0; init/calls reference callback. Retained screen AR base481E0 is invalid and must not be used."
+          "evidence": "Complete naturally retained AR allocation measured with all 64 actual code/data operands and normal original-DOL validation. File/archive ownership remains provisional; NOBITS retains allocation without a raw initialized-byte claim."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FDD58",
+          "end": "0x802FDD9C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Complete naturally retained AR allocation measured with all 64 actual code/data operands and normal original-DOL validation. File/archive ownership remains provisional; NOBITS retains allocation without a raw initialized-byte claim."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC238",
+          "end": "0x803EC23C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Complete naturally retained AR allocation measured with all 64 actual code/data operands and normal original-DOL validation. File/archive ownership remains provisional; NOBITS retains allocation without a raw initialized-byte claim."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED2B8",
+          "end": "0x803ED2D8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "Complete naturally retained AR allocation measured with all 64 actual code/data operands and normal original-DOL validation. File/archive ownership remains provisional; NOBITS retains allocation without a raw initialized-byte claim."
         }
       ]
     },

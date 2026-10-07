@@ -14365,6 +14365,174 @@
           "end": "0x8023B1F4"
         }
       ]
+    },
+    {
+      "source": "src/dolphin/os/OSThread.c",
+      "profile": "dolphin_release",
+      "evidence": "Pinned clean pinned dolsdk complete source with canonical current headers; no profile/pragmas/assembly manipulation. Target actual 22 functions and complete native storage measured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023D478",
+          "end": "0x8023E794"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A3B18",
+          "end": "0x803A4510"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FC480",
+          "end": "0x802FCC8D"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED0D0",
+          "end": "0x803ED0DC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC168",
+          "end": "0x803EC16D"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "DefaultSwitchThreadCallback",
+          "start": "0x8023D478",
+          "end": "0x8023D47C"
+        },
+        {
+          "symbol": "UnsetRun",
+          "start": "0x8023D670",
+          "end": "0x8023D6D8"
+        },
+        {
+          "symbol": "SetEffectivePriority",
+          "start": "0x8023D714",
+          "end": "0x8023D8D4"
+        },
+        {
+          "symbol": "SelectThread",
+          "start": "0x8023D924",
+          "end": "0x8023DB4C"
+        },
+        {
+          "symbol": "__OSThreadInit",
+          "start": "0x8023D47C",
+          "end": "0x8023D5D4"
+        },
+        {
+          "symbol": "OSInitThreadQueue",
+          "start": "0x8023D5D4",
+          "end": "0x8023D5E4"
+        },
+        {
+          "symbol": "OSClearStack",
+          "start": "0x8023E6E8",
+          "end": "0x8023E794"
+        },
+        {
+          "symbol": "OSGetCurrentThread",
+          "start": "0x8023D5E4",
+          "end": "0x8023D5F0"
+        },
+        {
+          "symbol": "OSDisableScheduler",
+          "start": "0x8023D5F0",
+          "end": "0x8023D630"
+        },
+        {
+          "symbol": "OSEnableScheduler",
+          "start": "0x8023D630",
+          "end": "0x8023D670"
+        },
+        {
+          "symbol": "__OSGetEffectivePriority",
+          "start": "0x8023D6D8",
+          "end": "0x8023D714"
+        },
+        {
+          "symbol": "__OSPromoteThread",
+          "start": "0x8023D8D4",
+          "end": "0x8023D924"
+        },
+        {
+          "symbol": "__OSReschedule",
+          "start": "0x8023DB4C",
+          "end": "0x8023DB7C"
+        },
+        {
+          "symbol": "OSYieldThread",
+          "start": "0x8023DB7C",
+          "end": "0x8023DBB8"
+        },
+        {
+          "symbol": "OSCreateThread",
+          "start": "0x8023DBB8",
+          "end": "0x8023DDA0"
+        },
+        {
+          "symbol": "OSExitThread",
+          "start": "0x8023DDA0",
+          "end": "0x8023DE84"
+        },
+        {
+          "symbol": "OSWakeupThread",
+          "start": "0x8023E524",
+          "end": "0x8023E628"
+        },
+        {
+          "symbol": "OSCancelThread",
+          "start": "0x8023DE84",
+          "end": "0x8023E040"
+        },
+        {
+          "symbol": "OSSleepThread",
+          "start": "0x8023E438",
+          "end": "0x8023E524"
+        },
+        {
+          "symbol": "OSResumeThread",
+          "start": "0x8023E040",
+          "end": "0x8023E2C8"
+        },
+        {
+          "symbol": "OSSuspendThread",
+          "start": "0x8023E2C8",
+          "end": "0x8023E438"
+        },
+        {
+          "symbol": "OSSetThreadPriority",
+          "start": "0x8023E628",
+          "end": "0x8023E6E8"
+        }
+      ],
+      "discarded": [
+        "__OSSwitchThread",
+        "__OSIsThreadActive",
+        "SetRun",
+        "UpdatePriority",
+        "CheckThreadQueue",
+        "IsMember",
+        "OSSetSwitchThreadCallback",
+        "OSIsThreadSuspended",
+        "OSIsThreadTerminated",
+        "OSJoinThread",
+        "OSDetachThread",
+        "OSGetThreadPriority",
+        "OSSetIdleFunction",
+        "OSGetIdleFunction",
+        "OSCheckActiveThreads",
+        "OSSetThreadSpecific",
+        "OSGetThreadSpecific"
+      ]
     }
   ]
 }

@@ -228,14 +228,6 @@
       "address": "0x80253FD4",
       "evidence": "evidence.tsv retained CARD external __CARDWritePage: target callback and scheduler calls."
     },
-    "ARStartDMA": {
-      "address": "0x80248220",
-      "evidence": "evidence.tsv ARAM queue external row: target call operand and independently inspected SDK callee role."
-    },
-    "ARRegisterDMACallback": {
-      "address": "0x802481A0",
-      "evidence": "evidence.tsv ARAM queue external row: target call operand and independently inspected SDK callee role."
-    },
     "__AXSetPBDefault": {
       "address": "0x80288DEC",
       "evidence": "Target AXFreeVoice/AXAcquireVoice direct branch destinations, SDK default parameter-block behavior at callee."
@@ -1011,6 +1003,46 @@
     "__OSLastInterruptTime": {
       "address": "0x803ED098",
       "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
+    },
+    "PPCSync": {
+      "address": "0x80238774",
+      "evidence": "Actual retained AR native relocation resolves target0x80238774; pinned related SDK declaration; original symbol name not claimed."
+    },
+    "_stack_addr": {
+      "address": "0x803FE4C0",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "_stack_end": {
+      "address": "0x803EE4C0",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "OSGetCurrentContext": {
+      "address": "0x8023A588",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "OSSaveContext": {
+      "address": "0x8023A594",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "OSEnableInterrupts": {
+      "address": "0x8023B208",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "OSInitContext": {
+      "address": "0x8023A718",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "__OSErrorTable": {
+      "address": "0x803A3A70",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "__OSFpscrEnableBits": {
+      "address": "0x803EC160",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+    },
+    "__OSUnlockAllMutex": {
+      "address": "0x8023BF2C",
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
     }
   },
   "units": [
@@ -8786,6 +8818,62 @@
           "placement": ".sbss",
           "start": "0x803ED1D0",
           "end": "0x803ED230"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ar/ar.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv AR whole-source, individual retained-function extents and complete native allocation rows; pinned donor source plus target April-2003 initializer.",
+      "link_roots": {
+        "symbols": [
+          "ARRegisterDMACallback",
+          "ARGetDMAStatus",
+          "ARStartDMA",
+          "ARInit",
+          "ARGetBaseAddress",
+          "__ARClearInterrupt",
+          "__ARGetInterruptStatus"
+        ],
+        "evidence": "Actual seven global retained roots naturally retain two genuine static handler/checksize dependencies, nine complete contiguous functions."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802481A0",
+          "end": "0x80249C78"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDD58",
+          "end": "0x802FDD9C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC238",
+          "end": "0x803EC23C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED2B8",
+          "end": "0x803ED2D8"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXDisplayList.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv complete pinned BFBB file and actual GXCallDisplayList target operands; normal fixed-profile full original-DOL validation.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80252334",
+          "end": "0x802523A4"
         }
       ]
     }
