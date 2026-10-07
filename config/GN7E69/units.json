@@ -9122,6 +9122,25 @@
           "end": "0x8018AFD0"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8018AFD0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018AFD0-0x8018AFF0 (src/game/cu_8018AFD0.cpp) and its .sdata row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018AFD0",
+          "end": "0x8018AFF0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB6B8",
+          "end": "0x803EB6C0"
+        }
+      ]
     }
   ]
 }
