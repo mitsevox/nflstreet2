@@ -3,6 +3,7 @@
 
 #include "game/Camera_8013F738.h"
 #include "game/Object_8017886C.h"
+#include "game/Object_80039F5C.h"
 
 /* 100-byte block of the player object at +0xB54, copied whole by the
    snapshot functions fn_8002B960 / fn_8002BAF4. It ends where
@@ -37,6 +38,16 @@ struct Pair_803EA368 {
     int mUnknown4;
 };
 
+/* One of the 60 28-byte event slots at +0xDFC, filled by fn_800310C0 and
+   looked up by mId (fn_8003108C); fn_800312DC sets every mId to -1. */
+struct Event_803EA368 {
+    int mId;
+    int mUnknown04;
+    Vector_80039F5C mPos;
+    int mFacing;
+    Object_80039F5C *mpObject;
+};
+
 /* The 0x14BC-byte replay object allocated by fn_8002C8C0; lbl_803EA368
    points to it. */
 struct Type_803EA368 {
@@ -58,7 +69,7 @@ struct Type_803EA368 {
     char mPadDA4[4];
     void *mUnknownDA8[20];
     char mPadDF8[4];
-    char mUnknownDFC[0x3C][0x1C];
+    Event_803EA368 mEvents[60];
     Pair_803EA368 mUnknown148C[5];
     unsigned char mUnknown14B4;
     unsigned char mUnknown14B5;
