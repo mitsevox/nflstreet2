@@ -59,6 +59,43 @@ void fn_800719D4(void)
     fn_8006CA18(lbl_803EA6D9 + 34, 100, 0);
 }
 
+int fn_80071BA0(int a, int value)
+{
+    switch (value) {
+    case 3:
+        return 105;
+    case 9:
+        return 111;
+    case 10:
+        return 108;
+    default:
+        return 105;
+    }
+}
+
+int fn_80071BDC(int value)
+{
+    int result = 42;
+    switch (value) {
+    case 0:
+    case 1:
+    case 8:
+        result = 44;
+        break;
+    case 2:
+    case 3:
+        break;
+    case 4:
+    case 6:
+        result = 43;
+        break;
+    default:
+        result = 44;
+        break;
+    }
+    return result;
+}
+
 void fn_80071C2C(int value)
 {
     lbl_803EA6CE = value;

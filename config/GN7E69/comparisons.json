@@ -11891,7 +11891,7 @@
     {
       "source": "src/game/cu_8006F810.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional37-function grouping; twelve complete240-byte bodies with individual neutral name/source-form rows and external one-byte access footprints. Canonical callee and vector declarations reused. No storage emitted;25 other functions and all storage remain original/unmeasured; entire original assembly remains linked.",
+      "evidence": "evidence.tsv retained open/provisional37-function grouping; fourteen complete380-target-byte bodies with individual neutral name/source-form rows and original external access footprints. Existing canonical callee/vector contracts preserved, including unused first argument for fn_80071BA0. No storage emitted;23 other functions/all storage original/unmeasured; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -11950,6 +11950,16 @@
           "symbol": "fn_800719D4",
           "start": "0x800719D4",
           "end": "0x80071A04"
+        },
+        {
+          "symbol": "fn_80071BA0",
+          "start": "0x80071BA0",
+          "end": "0x80071BDC"
+        },
+        {
+          "symbol": "fn_80071BDC",
+          "start": "0x80071BDC",
+          "end": "0x80071C2C"
         },
         {
           "symbol": "fn_80071C2C",
