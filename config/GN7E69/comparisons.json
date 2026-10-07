@@ -5862,20 +5862,61 @@
     {
       "source": "src/game/cu_800D949C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained inferred sixteen-function grouping and exact complete helper 0x800DAC78-0x800DAC88. Only this whole body is reconstructed; fifteen other functions and all static data remain original and unmeasured.",
+      "evidence": "evidence.tsv retained inferred sixteen-function grouping, exact whole-function rows for eight reconstructed bodies and the exact .rodata row 0x8029D87C-0x8029D8A0 (literal pools of 0x800DA8D8, 0x800DAA68 and 0x800DAC88). Only these bodies and that literal run are measured; seven other functions and all other static data remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800DAC78",
-          "end": "0x800DAC88"
+          "start": "0x800D949C",
+          "end": "0x800DAEE4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029D87C",
+          "end": "0x8029D8A0"
         }
       ],
       "functions": [
         {
+          "symbol": "fn_800D9A10",
+          "start": "0x800D9A10",
+          "end": "0x800D9B0C"
+        },
+        {
+          "symbol": "fn_800D9B0C",
+          "start": "0x800D9B0C",
+          "end": "0x800D9C40"
+        },
+        {
+          "symbol": "fn_800D9C40",
+          "start": "0x800D9C40",
+          "end": "0x800D9C80"
+        },
+        {
+          "symbol": "fn_800DA53C",
+          "start": "0x800DA53C",
+          "end": "0x800DA54C"
+        },
+        {
+          "symbol": "fn_800DA8D8",
+          "start": "0x800DA8D8",
+          "end": "0x800DAA68"
+        },
+        {
+          "symbol": "fn_800DAA68",
+          "start": "0x800DAA68",
+          "end": "0x800DAC78"
+        },
+        {
           "symbol": "fn_800DAC78",
           "start": "0x800DAC78",
           "end": "0x800DAC88"
+        },
+        {
+          "symbol": "fn_800DAC88",
+          "start": "0x800DAC88",
+          "end": "0x800DAD90"
         }
       ]
     },

@@ -6546,6 +6546,27 @@
       }
     },
     {
+      "source": "src/game/cu_800D949C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D9A10",
+        "0x800D9B0C",
+        "0x800D9C40",
+        "0x800DA53C",
+        "0x800DA8D8",
+        "0x800DAA68",
+        "0x800DAC88"
+      ],
+      "provenance": {
+        "pull_request": 544,
+        "merged_via": 544,
+        "commit": "b5fd7e16f0ce0e3a13a2f9e138c874bfb0d5103f",
+        "introduced_blob": "f5552d8d24727c28a93d5586a12244e7a8ee6a33"
+      }
+    },
+    {
       "source": "src/game/cu_80060948.cpp",
       "contributors": [
         "mitsevox"
