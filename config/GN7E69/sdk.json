@@ -1740,8 +1740,8 @@
           "end": "0x802FE07C",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": true,
-          "evidence": "Complete ordinary native initialized pool 0x802FDE40..0x802FE07C directly equals original target after ordinary relocations. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 constants, table entries and original call operands support placement; original archive edges remain provisional."
+          "object_seed": false,
+          "evidence": "Complete ordinary native initialized pool 0x802FDE40..0x802FE07C directly equals original target after ordinary relocations. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 constants, table entries and original call operands support placement; original archive edges remain provisional. The complete initialized pool contains DTK independently discovered GXTexRegionAddrTable at 0x802FDFAC..0x802FE06C; retain those original internal symbols instead of injecting an overlapping aggregate analysis symbol. Whole SDK ownership and normal pool comparison remain unchanged."
         },
         {
           "section": ".data5",
