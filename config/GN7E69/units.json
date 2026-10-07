@@ -7765,12 +7765,12 @@
     {
       "source": "src/game/cu_8019B460.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019B460-0x8019B644 (src/game/cu_8019B460.cpp) and its two .sdata rows.",
+      "evidence": "evidence.tsv unit row 0x8019B43C-0x8019B644 (src/game/cu_8019B460.cpp) and its two .sdata rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8019B460",
+          "start": "0x8019B43C",
           "end": "0x8019B644"
         },
         {
@@ -8614,6 +8614,63 @@
           "placement": ".data5",
           "start": "0x803EA628",
           "end": "0x803EA62C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800554FC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800554FC-0x80055584 (src/game/cu_800554FC.cpp) and its source-form and compiler rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800554FC",
+          "end": "0x80055584"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80087CBC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80087CBC-0x80087F10 (src/game/cu_80087CBC.cpp) and its .rodata and .data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80087CBC",
+          "end": "0x80087F10"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80294F0C",
+          "end": "0x80294F5C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6C14",
+          "end": "0x802D6C24"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801442FC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801442FC-0x801444D8 (src/game/cu_801442FC.cpp) and its .rodata row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801442FC",
+          "end": "0x801444D8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0398",
+          "end": "0x802A03A8"
         }
       ]
     }
