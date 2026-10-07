@@ -2176,8 +2176,8 @@
           "end": "0x803ED9C0",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Target GXTransform loads at 0x80252448, 0x802524E4 and 0x802526AC corroborate four local floats in the pinned native donor. The unused fifth float remains unassigned. Complete ordinary native initialized pool 0x803ED9B8..0x803ED9C0 directly equals original target after ordinary relocations. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 constants, table entries and original call operands support placement; original archive edges remain provisional. Initialized pool ownership is a comparison allocation, not a single original object-symbol claim. Preserve DTK-discovered individual original literals, tables and relocations; do not inject an overlapping aggregate analysis symbol.",
-          "object_seed": false
+          "evidence": "Target transformation routines reference the complete four-word floating constant pool at 0x803ED9B0..0x803ED9C0. Retained normal C independently measures its final two floats at 0x803ED9B8..0x803ED9C0; the other words receive no new comparison credit. Bound the complete original typed pool at its established mapped edge rather than retain the oversized automatic lbl_803ED9BC eight-byte guess. Source-file ownership remains provisional.",
+          "object_seed": true
         },
         {
           "section": ".text",
