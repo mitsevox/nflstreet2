@@ -2564,7 +2564,7 @@
       "name": "src/dolphin/ax/AXOut.c",
       "source": "src/dolphin/ax/AXOut.c",
       "library": "AX",
-      "evidence": "Eight coherent native AXOut routines end at 0x80287F4C; following twelve-byte __AXGetStudio getter belongs to pinned AXSPB source and resolves its studio base. Original file edges remain provisional.",
+      "evidence": "Eight retained native AXOut routines1992bytes and complete BSS19080/SBSS52 fully resolve and link byte-identically; original source-file edges remain provisional. Following studio getter belongs to AXSPB.",
       "sections": [
         {
           "section": ".text",
@@ -2573,6 +2573,22 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Eight coherent native AXOut routines end at 0x80287F4C; following twelve-byte __AXGetStudio getter belongs to pinned AXSPB source and resolves its studio base. Original file edges remain provisional."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803BDF80",
+          "end": "0x803C2A08",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Complete unchanged AXOut native static section and all retained relocation operands establish extent; no source padding or inter-file alignment gap credited."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED568",
+          "end": "0x803ED59C",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Complete unchanged AXOut native static section and all retained relocation operands establish extent; no source padding or inter-file alignment gap credited."
         }
       ]
     },

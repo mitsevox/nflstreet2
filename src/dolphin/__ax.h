@@ -43,6 +43,14 @@ void __AXAuxInit(void);
 void __AXAuxQuit(void);
 void __AXClInit(void);
 void __AXClQuit(void);
+void __AXSyncPBs(u32 lessDspCycles);
+u32 __AXGetCommandListAddress(void);
+void __AXNextFrame(void* sbuffer, void* buffer);
+u32 __AXGetNumVoices(void);
+AXPROFILE* __AXGetCurrentProfile(void);
+void __AXOutNewFrame(u32 lessDspCycles);
+void __AXOutAiCallback(void);
+void __AXOutInitDSP(void);
 void __AXOutInit(u32 outputBufferMode);
 void __AXOutQuit(void);
 

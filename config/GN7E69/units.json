@@ -196,10 +196,6 @@
       "address": "0x80287740",
       "evidence": "evidence.tsv AX external __AXClInit; branch instruction destination and upstream role."
     },
-    "__AXOutInit": {
-      "address": "0x80287B54",
-      "evidence": "evidence.tsv AX external __AXOutInit; branch instruction destination and upstream role."
-    },
     "__AXVPBQuit": {
       "address": "0x8028902C",
       "evidence": "evidence.tsv AX external __AXVPBQuit; branch instruction destination and upstream role."
@@ -207,10 +203,6 @@
     "__AXClQuit": {
       "address": "0x80287764",
       "evidence": "evidence.tsv AX external __AXClQuit; branch instruction destination and upstream role."
-    },
-    "__AXOutQuit": {
-      "address": "0x80287EF4",
-      "evidence": "evidence.tsv AX external __AXOutQuit; branch instruction destination and upstream role."
     },
     "__OSLockSramEx": {
       "address": "0x8023CAF0",
@@ -863,6 +855,50 @@
     "DVDGetCurrentDiskID": {
       "address": "0x80241974",
       "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration."
+    },
+    "__AXSyncPBs": {
+      "address": "0x80288B68",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "__AXGetCommandListAddress": {
+      "address": "0x80287054",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "__AXNextFrame": {
+      "address": "0x80287090",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "AIInitDMA": {
+      "address": "0x8024A140",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "__AXGetNumVoices": {
+      "address": "0x80288414",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "__AXGetCurrentProfile": {
+      "address": "0x80289408",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "AIRegisterDMACallback": {
+      "address": "0x8024A0FC",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "AIStartDMA": {
+      "address": "0x8024A1C8",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "AIStopDMA": {
+      "address": "0x8024A1E0",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "axDspSlave": {
+      "address": "0x80304200",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
+    },
+    "axDspSlaveLength": {
+      "address": "0x803EC5C0",
+      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
     }
   },
   "units": [
@@ -8010,6 +8046,41 @@
           "placement": ".sbss",
           "start": "0x803ED188",
           "end": "0x803ED1D0"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ax/AXOut.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv AXOut native retention, relocation, function and static-layout rows.",
+      "link_roots": {
+        "symbols": [
+          "__AXOutNewFrame",
+          "__AXOutAiCallback",
+          "__AXOutInitDSP",
+          "__AXOutInit",
+          "__AXOutQuit"
+        ],
+        "evidence": "Target retains contiguous eight-function 1992-byte layout; native AXSetStepMode and AXRegisterCallback are unused library entry points, discarded by ordinary SN retention."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80287784",
+          "end": "0x80287F4C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803BDF80",
+          "end": "0x803C2A08"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED568",
+          "end": "0x803ED59C"
         }
       ]
     }
