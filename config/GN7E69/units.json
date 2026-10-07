@@ -8616,6 +8616,19 @@
           "end": "0x803EA62C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800554FC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800554FC-0x80055584 (src/game/cu_800554FC.cpp) and its source-form and compiler rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800554FC",
+          "end": "0x80055584"
+        }
+      ]
     }
   ]
 }
