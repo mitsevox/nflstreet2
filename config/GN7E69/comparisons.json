@@ -13436,6 +13436,37 @@
           "end": "0x801A7C20"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800E2FE4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv player-state and bounded literal rows for cu_800E2FE4; original assembly linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E2FE4",
+          "end": "0x800E3A34"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DB28",
+          "end": "0x8029DB70"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E2FE4",
+          "start": "0x800E2FE4",
+          "end": "0x800E36DC"
+        },
+        {
+          "symbol": "fn_800E36DC",
+          "start": "0x800E36DC",
+          "end": "0x800E3A34"
+        }
+      ]
     }
   ]
 }
