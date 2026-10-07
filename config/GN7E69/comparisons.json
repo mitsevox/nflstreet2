@@ -11846,6 +11846,78 @@
           "end": "0x80190DCC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80163674.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional/open unit row src/game/cu_80163674.cpp, exact target function extents, exact readonly and small-data extents, and scoped layout/source-form/compiler rows. Original assembly remains linked; nine function comparisons only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80163674",
+          "end": "0x80163D08"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A45E0",
+          "end": "0x802A460C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB3A4",
+          "end": "0x803EB3A8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80163674",
+          "start": "0x80163674",
+          "end": "0x80163788"
+        },
+        {
+          "symbol": "fn_80163788",
+          "start": "0x80163788",
+          "end": "0x801638F0"
+        },
+        {
+          "symbol": "fn_801638F0",
+          "start": "0x801638F0",
+          "end": "0x80163954"
+        },
+        {
+          "symbol": "fn_80163954",
+          "start": "0x80163954",
+          "end": "0x80163AD8"
+        },
+        {
+          "symbol": "fn_80163AD8",
+          "start": "0x80163AD8",
+          "end": "0x80163B44"
+        },
+        {
+          "symbol": "fn_80163B44",
+          "start": "0x80163B44",
+          "end": "0x80163BCC"
+        },
+        {
+          "symbol": "fn_80163BCC",
+          "start": "0x80163BCC",
+          "end": "0x80163C30"
+        },
+        {
+          "symbol": "fn_80163C30",
+          "start": "0x80163C30",
+          "end": "0x80163CD0"
+        },
+        {
+          "symbol": "fn_80163CD0",
+          "start": "0x80163CD0",
+          "end": "0x80163D08"
+        }
+      ]
     }
   ]
 }
