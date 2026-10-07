@@ -9065,6 +9065,31 @@
           "end": "0x803ED918"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8007342C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007342C-0x8007355C (src/game/cu_8007342C.cpp) and its .rodata and .sbss rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007342C",
+          "end": "0x8007355C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80290BD4",
+          "end": "0x80290BF8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC844",
+          "end": "0x803EC848"
+        }
+      ]
     }
   ]
 }
