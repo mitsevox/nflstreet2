@@ -3,11 +3,9 @@
 static int OnReset(BOOL final);
 static void ShortCommandProc(s32 chan);
 
-char* __GBAVersion                           = "<< Dolphin SDK - GBA\trelease build: Dec  3 2003 18:41:55 (0x2301) >>";
 static OSResetFunctionInfo ResetFunctionInfo = { OnReset, 0x7E };
 static GBASecParam SecParams[4] ATTRIBUTE_ALIGN(32);
 GBAControl __GBA[4];
-static BOOL Initialized;
 BOOL __GBAReset;
 
 static void ShortCommandProc(s32 chan)
@@ -28,22 +26,18 @@ void GBAInit(void)
 	GBAControl* gba;
 	s32 chan;
 
-	if (Initialized == FALSE) {
-		Initialized = TRUE;
-		OSRegisterVersion(__GBAVersion);
-		for (chan = 0; chan < 4; ++chan) {
-			gba        = &__GBA[chan];
-			gba->delay = OSMicrosecondsToTicks(60);
-			OSInitThreadQueue(&gba->threadQueue);
-			gba->param = &SecParams[chan];
-		}
-		OSInitAlarm();
-
-		DSPInit();
-
-		__GBAReset = FALSE;
-		OSRegisterResetFunction(&ResetFunctionInfo);
+	for (chan = 0; chan < 4; ++chan) {
+		gba        = &__GBA[chan];
+		gba->delay = OSMicrosecondsToTicks(60);
+		OSInitThreadQueue(&gba->threadQueue);
+		gba->param = &SecParams[chan];
 	}
+	OSInitAlarm();
+
+	DSPInit();
+
+	__GBAReset = FALSE;
+	OSRegisterResetFunction(&ResetFunctionInfo);
 }
 
 int GBAGetStatusAsync(s32 chan, u8* statusPtr)
