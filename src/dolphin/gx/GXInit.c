@@ -27,8 +27,6 @@
 #include <dolphin/vi.h>
 
 #include "__gx.h"
-#include <dolphin/gx/GXEnum.h>
-
 #if SDK_REVISION < 2
 #define BUILD_DATE "Apr 21 2004"
 #define DBUILD_TIME "03:55:13"
@@ -91,17 +89,13 @@ static u32 GXTexRegionAddrTable[] = {
     0x80000, 0x10000, 0xA0000, 0x30000, 0x80000, 0x50000, 0xA0000, 0x70000,
 };
 
-// prototypes
+void __GXInitGX(void);
+void __GXSetTmemConfig(u32);
 static int __GXShutdown(int final);
 
 static OSResetFunctionInfo GXResetFuncInfo = { __GXShutdown, 0x7F, NULL, NULL };
 
-asm BOOL IsWriteGatherBufferEmpty(void)
-{
-sync:
-    mfspr r3, WPAR;
-    andi.r3, r3, 1
-}
+
 
 inline void EnableWriteGatherPipe(void)
 {
@@ -224,13 +218,6 @@ static int __GXShutdown(BOOL final)
     return 1;
 }
 
-#define SOME_SET_REG_MACRO(reg, size, shift, val)                                                  \
-    do                                                                                             \
-    {                                                                                              \
-        (reg) =                                                                                    \
-            (u32)__rlwimi((u32)(reg), (val), (shift), (32 - (shift) - (size)), (31 - (shift)));    \
-    } while (0);
-
 GXFifoObj* GXInit(void* base, u32 size)
 {
     u32 i;
@@ -341,11 +328,9 @@ GXFifoObj* GXInit(void* base, u32 size)
         SET_REG_FIELD(0, __GXData->vatB[i], 1, 31, 1);
         do
         {
-            s32 regAddr;
             GX_WRITE_U8(GX_LOAD_CP_REG);
             GX_WRITE_U8(i | 0x80);
             GX_WRITE_U32(__GXData->vatB[i]);
-            regAddr = i - 12;
         } while (0);
     }
     {
@@ -394,7 +379,6 @@ GXFifoObj* GXInit(void* base, u32 size)
     {
         u32 reg = 0;
 #if DEBUG
-        s32 regAddr;
 #endif
         GX_SET_CP_REG(3, reg);
 
@@ -403,7 +387,6 @@ GXFifoObj* GXInit(void* base, u32 size)
         GX_WRITE_U8(0x20);
         GX_WRITE_U32(__GXData->perfSel);
 #if DEBUG
-        regAddr = -12;
 #endif
 
         reg = 0;
@@ -450,7 +433,6 @@ void __GXInitGX(void)
         rmode = &GXMpal480IntDf;
         break;
     default:
-        //ASSERTMSGLINE(1342, 0, "GXInit: invalid TV format");
         rmode = &GXNtsc480IntDf;
         break;
     }
