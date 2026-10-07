@@ -136,17 +136,18 @@ def resolve_undefined(symbols, references, ambiguous, discarded_only=frozenset()
 
     Names in `references` resolve to their address and neutral fn_/lbl_ labels resolve by their
     address. An ambiguous accepted data name always fails closed, as does any other unknown name,
-    except one that only registered discarded functions reference (see discarded_references)."""
+    except an unambiguous one that only listed discarded functions reference (see
+    discarded_references); such a name is left out of the result."""
     defined = {s['name'] for s in symbols if s['shndx'] != sb.SHN_UNDEF}
     resolved = {}
     for symbol in symbols:
         name = symbol['name']
         if symbol['shndx'] != sb.SHN_UNDEF or not name or name in defined:
             continue
-        if name in discarded_only and name not in references and not sb.NEUTRAL.fullmatch(name):
-            continue
         if name in ambiguous:
             raise ValueError(f'Ambiguous comparison symbol {name}')
+        if name in discarded_only and name not in references and not sb.NEUTRAL.fullmatch(name):
+            continue
         neutral = sb.NEUTRAL.fullmatch(name)
         if name in references:
             resolved[name] = references[name]
@@ -248,8 +249,9 @@ def configured(root, binary):
         discarded = candidate.get('discarded', [])
         if 'discarded' in candidate and (not isinstance(discarded, list) or not discarded
                 or not all(isinstance(n, str) and n for n in discarded) or len(set(discarded)) != len(discarded)
-                or set(discarded) & {r.get('symbol') for r in candidate['functions']}):
-            raise ValueError('Comparison discarded functions need distinct unregistered symbols')
+                or set(discarded) & {r.get('symbol') for r in candidate['functions']}
+                or any(sb.NEUTRAL.fullmatch(n) for n in discarded)):
+            raise ValueError('Comparison discarded functions need distinct unregistered descriptive symbols')
         if not candidate['source'].startswith('src/'):
             raise ValueError('Comparison source belongs in its normal src/ location')
         if not isinstance(candidate['functions'], list) or not candidate['functions']:

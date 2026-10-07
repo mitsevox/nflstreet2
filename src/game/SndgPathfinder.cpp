@@ -3,6 +3,7 @@
 #include "game/SndgPathfinder.h"
 #include "game/Camera_8013F738.h"
 #include "game/Class_801B8D9C.h"
+#include "game/Object_8017886C.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_8016871C.h"
@@ -600,7 +601,7 @@ int fn_8013FD0C(int index);
 unsigned int fn_801568F0(void);
 int fn_80177F70(void);
 Vec2 fn_80177FE0(void);
-Vec2 fn_80178070(void);
+Point_8017886C fn_80178070(void);
 float fn_80178298(void);
 int fn_80178308(void);
 void GetScores(int *pHome, int *pAway);
@@ -2841,9 +2842,9 @@ extern "C" void fn_8006E08C(void)
 extern "C" void UpdateGameSituation(void)
 {
     Vec2 spot = fn_80177FE0();
-    Vec2 prevSpot = fn_80178070();
-    int home = 0;
-    int away = 0;
+    Point_8017886C prevSpot = fn_80178070();
+    int home;
+    int away;
 
     lbl_803EA69C->mUnknownF = lbl_803EA69C->mUnknownE;
     lbl_803EA69C->mUnknownE = fn_80178308();
@@ -2857,7 +2858,7 @@ extern "C" void UpdateGameSituation(void)
     } else {
         lbl_803EA69C->mUnknown8 = lbl_803EA69C->mUnknown2 - lbl_803EA69C->mUnknown0;
     }
-    lbl_803EA69C->mUnknown11 = (char)prevSpot.y;
+    lbl_803EA69C->mUnknown11 = (char)prevSpot.mY;
     lbl_803EA69C->mUnknown10 = (char)spot.y;
     lbl_803EA69C->mUnknown12 = lbl_803EA69C->mUnknown10 - lbl_803EA69C->mUnknown11;
     lbl_803EA69C->mUnknown15 = lbl_803EA69C->mUnknown14;

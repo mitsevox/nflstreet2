@@ -155,8 +155,12 @@ class ResolveUndefined(unittest.TestCase):
         resolved = function_compare.resolve_undefined(
             self.undefined('GetScores', 'gData'), {'gData': 0x80100000}, set(), {'GetScores'})
         self.assertEqual(resolved, {'gData': 0x80100000})
+        # The real caller drops ambiguous names from the references; they still fail closed.
         with self.assertRaisesRegex(ValueError, 'Ambiguous comparison symbol gData'):
-            function_compare.resolve_undefined(self.undefined('gData'), {'gData': 1}, {'gData'}, {'gData'})
+            function_compare.resolve_undefined(self.undefined('gData'), {}, {'gData'}, {'gData'})
+        # A neutral callee of a discarded body still resolves by its address.
+        self.assertEqual(function_compare.resolve_undefined(
+            self.undefined('fn_80001000'), {}, set(), {'fn_80001000'}), {'fn_80001000': 0x80001000})
 
     @staticmethod
     def relocations(*entries):
@@ -240,6 +244,14 @@ class InPlaceComparisons(ComparisonFixture):
         self.manifest['units']=[dict(self.unit,profile='different')];self.write_config()
         with self.assertRaisesRegex(ValueError,'same compiler profile'):
             function_compare.configured(self.root,self.binary)
+
+    def test_discarded_lists_need_distinct_unregistered_descriptive_names(self):
+        for bad in ([], ['fn_80000000'], ['Dropped', 'Dropped'], ['fn_80001000'], [''], 'Dropped'):
+            self.unit['discarded'] = bad; self.write_config()
+            with self.assertRaisesRegex(ValueError, 'discarded functions need'):
+                function_compare.configured(self.root, self.binary)
+        self.unit['discarded'] = ['Dropped']; self.write_config()
+        self.assertEqual(function_compare.configured(self.root, self.binary)[1][0]['discarded'], ['Dropped'])
 
     def test_evidence_and_unique_target_coverage_are_required(self):
         self.unit['functions'][0]['end']='0x80000004';self.write_config()
