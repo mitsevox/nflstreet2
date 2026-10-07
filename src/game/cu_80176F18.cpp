@@ -4,7 +4,7 @@
 #include "game/Class_80148A58.h"
 #include "game/FELoop.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_80054130.h"
+#include "game/Level_80054130.h"
 #include "game/Object_800785C0.h"
 #include "game/Object_8017886C.h"
 #include "game/Record_800B15FC.h"
@@ -413,8 +413,8 @@ extern "C" void fn_8017710C(void)
 
     if (fn_80054130()) {
         unsigned char i;
-        unsigned char total = fn_80054130()->mUnknown88;
-        Record_80054130 *pRecord = fn_80054130()->mUnknown8C;
+        unsigned char total = fn_80054130()->mUnknown136;
+        Record_80054130 *pRecord = fn_80054130()->mUnknown140;
 
         for (i = 0; i < total; i++, pRecord++) {
             Point_8017886C a;

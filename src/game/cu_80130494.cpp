@@ -1,7 +1,7 @@
 #include <math.h>
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_80054130.h"
+#include "game/Level_80054130.h"
 #include "game/Object_8017886C.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_80136B1C.h"
@@ -199,17 +199,17 @@ extern "C" int fn_80130764(Object_80039F5C *p, Block_80130494 *pBlock)
 extern "C" int fn_80130948(Object_80039F5C *p, Block_80130494 *pBlock)
 {
     int found = 0;
-    Object_80054130 *pObject = fn_80054130();
+    Level_80054130 *pLevel = fn_80054130();
     unsigned int i;
 
-    for (i = 0; i < pObject->mUnknown88; i++) {
+    for (i = 0; i < pLevel->mUnknown136; i++) {
         Vector_80039F5C a;
         Vector_80039F5C b;
         Vector_80039F5C nearest;
         float dist;
         float t;
 
-        fn_800541AC(&pObject->mUnknown8C[i], &a, &b);
+        fn_800541AC(&pLevel->mUnknown140[i], &a, &b);
         b.mZ = 0.0f;
         a.mZ = 0.0f;
         fn_80227970(&a, &b, &p->mMotion.mPos, &nearest, &dist, &t);
