@@ -12616,6 +12616,124 @@
           "end": "0x8013F460"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801A0088.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional/provisional membership, target function/data extents and instruction-supported shared state/source-form records. Seventeen unlinked native comparisons; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A0088",
+          "end": "0x801A1338"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE01C",
+          "end": "0x802AE094"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F2734",
+          "end": "0x802F2754"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8036550C",
+          "end": "0x80365574"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801A0088",
+          "start": "0x801A0088",
+          "end": "0x801A0108"
+        },
+        {
+          "symbol": "fn_801A0108",
+          "start": "0x801A0108",
+          "end": "0x801A0270"
+        },
+        {
+          "symbol": "fn_801A0270",
+          "start": "0x801A0270",
+          "end": "0x801A03E4"
+        },
+        {
+          "symbol": "fn_801A03E4",
+          "start": "0x801A03E4",
+          "end": "0x801A04D4"
+        },
+        {
+          "symbol": "fn_801A04D4",
+          "start": "0x801A04D4",
+          "end": "0x801A0614"
+        },
+        {
+          "symbol": "fn_801A0614",
+          "start": "0x801A0614",
+          "end": "0x801A0788"
+        },
+        {
+          "symbol": "fn_801A0788",
+          "start": "0x801A0788",
+          "end": "0x801A07A8"
+        },
+        {
+          "symbol": "fn_801A07A8",
+          "start": "0x801A07A8",
+          "end": "0x801A085C"
+        },
+        {
+          "symbol": "fn_801A085C",
+          "start": "0x801A085C",
+          "end": "0x801A09B0"
+        },
+        {
+          "symbol": "fn_801A09B0",
+          "start": "0x801A09B0",
+          "end": "0x801A0B1C"
+        },
+        {
+          "symbol": "fn_801A0B1C",
+          "start": "0x801A0B1C",
+          "end": "0x801A0CA0"
+        },
+        {
+          "symbol": "fn_801A0CA0",
+          "start": "0x801A0CA0",
+          "end": "0x801A0E2C"
+        },
+        {
+          "symbol": "fn_801A0E2C",
+          "start": "0x801A0E2C",
+          "end": "0x801A0FAC"
+        },
+        {
+          "symbol": "fn_801A0FAC",
+          "start": "0x801A0FAC",
+          "end": "0x801A105C"
+        },
+        {
+          "symbol": "fn_801A105C",
+          "start": "0x801A105C",
+          "end": "0x801A1240"
+        },
+        {
+          "symbol": "fn_801A1240",
+          "start": "0x801A1240",
+          "end": "0x801A12E8"
+        },
+        {
+          "symbol": "fn_801A12E8",
+          "start": "0x801A12E8",
+          "end": "0x801A1338"
+        }
+      ]
     }
   ]
 }

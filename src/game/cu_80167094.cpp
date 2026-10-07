@@ -1,3 +1,4 @@
+#include "game/State_80167094.h"
 #include "game/fn_801C1F94.h"
 #include "game/Team_80167A8C.h"
 
@@ -11,20 +12,6 @@ struct Record_80167094 {
 struct Object_80167160 {
     unsigned char mUnknown0[0x14];
     unsigned int mUnknown14;
-};
-struct State_80167094 {
-    unsigned char mUnknown0[0x940];
-    int mUnknown940[12];
-    unsigned char mUnknown970[11][0x180];
-    unsigned char mUnknown19F0[11][0x30];
-    unsigned char mUnknown1C00[0x210];
-    unsigned char mUnknown1E10[11][0x30];
-    unsigned char mUnknown2020[0x58];
-    unsigned char mUnknown2078[11];
-    unsigned char mUnknown2083;
-    float mUnknown2084[11][4];
-    unsigned int mUnknown2134[11];
-    unsigned char mUnknown2160[0x70];
 };
 
 static Record_80167094 lbl_8031D38C[9][11];
