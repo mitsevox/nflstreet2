@@ -470,44 +470,8 @@
       "name": "src/dolphin/os/OSResetSW.c",
       "source": "src/dolphin/os/OSResetSW.c",
       "library": "OS",
-      "evidence": "Unique reset-switch interrupt and callback setter anchors; state routineC548 reads switch timing/state after setter, before SRAM first callback.",
+      "evidence": "Three native donor-supported reset-switch functions reproduce the target1024-byte sequence and complete32-byte state; original archive-member ownership remains provisional.",
       "sections": [
-        {
-          "section": ".sbss",
-          "start": "0x803ED0B0",
-          "end": "0x803ED0B4",
-          "evidence": "Native ResetCallback storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSResetSWInterruptHandler at0x8023C490. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED0B4",
-          "end": "0x803ED0B8",
-          "evidence": "Native Down storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSResetSWInterruptHandler at0x8023C480. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED0B8",
-          "end": "0x803ED0BC",
-          "evidence": "Native LastState storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSResetSWInterruptHandler at0x8023C488. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED0C8",
-          "end": "0x803ED0D0",
-          "evidence": "Native HoldDown storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSResetSWInterruptHandler at0x8023C400. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
         {
           "section": ".text",
           "start": "0x8023C3E0",
@@ -515,6 +479,15 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Unique reset-switch interrupt and callback setter anchors; state routineC548 reads switch timing/state after setter, before SRAM first callback. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED0B0",
+          "end": "0x803ED0D0",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "object_seed": true,
+          "evidence": "Complete native ResetCallback/Down/LastState/HoldUp/HoldDown allocation, including native4-byte internal time alignment; every target state operand resolves to its native slot. Existing four seeds consolidated and missing HoldUp slot evidenced; no inter-file padding."
         }
       ]
     },

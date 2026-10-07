@@ -871,6 +871,10 @@
     "memmove": {
       "address": "0x801C2030",
       "evidence": "evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
+    },
+    "__OSStartTime": {
+      "address": "0x803ED070",
+      "evidence": "evidence.tsv OSResetSW external/type rows: actual retained target operands and pinned SDK declarations."
     }
   },
   "units": [
@@ -8057,6 +8061,33 @@
           "placement": ".sbss",
           "start": "0x803ED3C8",
           "end": "0x803ED3CC"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSResetSW.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv OSResetSW unit/function/data/source-form rows; dolsdk2004 2328b416 and BFBB8fb1c232 whole-body version reconciliation.",
+      "link_roots": {
+        "symbols": [
+          "__OSResetSWInterruptHandler",
+          "OSSetResetCallback",
+          "OSGetResetButtonState"
+        ],
+        "evidence": "Target contiguous interrupt handler0x8023C3E0,callback setter0x8023C4D4,button-state body0x8023C548; all46 actual retained target operands resolve full native layout. Unused switch/timer bodies remain genuine source and are naturally discarded."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023C3E0",
+          "end": "0x8023C7E0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED0B0",
+          "end": "0x803ED0D0"
         }
       ]
     }
