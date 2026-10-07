@@ -135,7 +135,9 @@ struct Object_80039F5C {
     char mUnknown1215[3];
     unsigned char mUnknown1218;
     unsigned char mUnknown1219;
-    char mUnknown1220[1688];
+    char mUnknown1220[1680];
+    float mUnknown2900;
+    char mUnknown2904[4];
     unsigned short mUnknown2908;
     char mUnknown2910[4];
     unsigned char mUnknown2914;
