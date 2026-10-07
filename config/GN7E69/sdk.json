@@ -1328,7 +1328,7 @@
           "end": "0x80249C78",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete naturally retained AR allocation measured with all 64 actual code/data operands and normal original-DOL validation. File/archive ownership remains provisional; NOBITS retains allocation without a raw initialized-byte claim."
+          "evidence": "Complete naturally retained AR allocation measured with 64 actual code operands and the initialized version-pointer relocation and normal original-DOL validation. File/archive ownership remains provisional; NOBITS retains allocation without a raw initialized-byte claim."
         },
         {
           "section": ".data4",
@@ -1336,7 +1336,7 @@
           "end": "0x802FDD9C",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete naturally retained AR allocation measured with all 64 actual code/data operands and normal original-DOL validation. File/archive ownership remains provisional; NOBITS retains allocation without a raw initialized-byte claim."
+          "evidence": "Complete naturally retained AR allocation measured with 64 actual code operands and the initialized version-pointer relocation and normal original-DOL validation. File/archive ownership remains provisional; NOBITS retains allocation without a raw initialized-byte claim."
         },
         {
           "section": ".data5",
@@ -1344,7 +1344,7 @@
           "end": "0x803EC23C",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete naturally retained AR allocation measured with all 64 actual code/data operands and normal original-DOL validation. File/archive ownership remains provisional; NOBITS retains allocation without a raw initialized-byte claim."
+          "evidence": "Complete naturally retained AR allocation measured with 64 actual code operands and the initialized version-pointer relocation and normal original-DOL validation. File/archive ownership remains provisional; NOBITS retains allocation without a raw initialized-byte claim."
         },
         {
           "section": ".sbss",
@@ -1352,7 +1352,7 @@
           "end": "0x803ED2D8",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete naturally retained AR allocation measured with all 64 actual code/data operands and normal original-DOL validation. File/archive ownership remains provisional; NOBITS retains allocation without a raw initialized-byte claim."
+          "evidence": "Complete naturally retained AR allocation measured with 64 actual code operands and the initialized version-pointer relocation and normal original-DOL validation. File/archive ownership remains provisional; NOBITS retains allocation without a raw initialized-byte claim."
         }
       ]
     },
