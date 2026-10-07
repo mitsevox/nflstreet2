@@ -2821,7 +2821,7 @@
       }
     },
     {
-      "source": "src/game/cu_8017055C.cpp",
+      "source": "src/game/cu_8016FB10.cpp",
       "contributors": [
         "mitsevox"
       ],
@@ -2854,7 +2854,9 @@
         "merged_via": 216,
         "commit": "12e0fcb93f12f54dacfee2ee3152d63da1802e9e",
         "introduced_blob": "4354442fd659245d08c307774fbc0dda43b0921f",
-        "original_blob": "4354442fd659245d08c307774fbc0dda43b0921f"
+        "original_blob": "4354442fd659245d08c307774fbc0dda43b0921f",
+        "original_source": "src/game/cu_8017055C.cpp",
+        "merged_source": true
       }
     },
     {
@@ -4098,7 +4100,7 @@
       }
     },
     {
-      "source": "src/game/cu_80173298.cpp",
+      "source": "src/game/cu_8016FB10.cpp",
       "contributors": [
         "mitsevox"
       ],
@@ -4128,7 +4130,9 @@
         "pull_request": 259,
         "merged_via": 259,
         "commit": "80030d98940c7ce8460f441e3c5e80985d3f2c98",
-        "introduced_blob": "850f9b8d529dc5705a0ba99e0f1d234c06c22058"
+        "introduced_blob": "850f9b8d529dc5705a0ba99e0f1d234c06c22058",
+        "original_source": "src/game/cu_80173298.cpp",
+        "merged_source": true
       }
     },
     {
@@ -5860,7 +5864,7 @@
       }
     },
     {
-      "source": "src/game/cu_80173C2C.cpp",
+      "source": "src/game/cu_8016FB10.cpp",
       "contributors": [
         "mitsevox"
       ],
@@ -5882,7 +5886,9 @@
         "pull_request": 278,
         "merged_via": 276,
         "commit": "35af101f989d963f27eb631377ee385d1750d085",
-        "introduced_blob": "e31716f4a4e4abdfa4979712844dc19e71929ce2"
+        "introduced_blob": "e31716f4a4e4abdfa4979712844dc19e71929ce2",
+        "original_source": "src/game/cu_80173C2C.cpp",
+        "merged_source": true
       }
     },
     {

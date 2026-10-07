@@ -115,7 +115,9 @@ struct Object_80039F5C {
     int mUnknown548;
     char mUnknown552[8];
     Block_80170374 mUnknown560;
-    char mUnknown616[160];
+    char mUnknown616[152];
+    float mUnknown768;
+    char mUnknown772[4];
     unsigned char mUnknown776;
     char mUnknown777[7];
     State_80039F5C *mpState;

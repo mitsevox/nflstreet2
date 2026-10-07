@@ -1,3 +1,4 @@
+#include <math.h>
 #include "game/fn_800F06F4.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_80178D18.h"
@@ -10,6 +11,11 @@
 #include "game/fn_80227638.h"
 #include "game/Message_800F01CC.h"
 #include "game/Record_800B15FC.h"
+#include "game/fn_801FCE10.h"
+#include "game/fn_80238174.h"
+#include "game/Object_8017886C.h"
+#include <stdio.h>
+#include <string.h>
 
 struct Pair_8017055C {
     float mX;
@@ -33,6 +39,28 @@ struct Object_80172FB0 {
     int mUnknownCC;
     char mUnknownD0[36];
     int mUnknownF4;
+};
+
+/* One logged play: its type (fn_80173EE0 counts type 8 separately), two
+ * signed halfword values and two player references from fn_80174114. */
+struct Play_80361694 {
+    int mType;
+    short mUnknown4;
+    short mUnknown6;
+    unsigned short mUnknown8;
+    unsigned short mUnknownA;
+};
+
+/* One block of the log: up to 40 plays and the block state. fn_80173D10
+ * copies a finished block into the entry after its +0x1E4 index. */
+struct Log_80361694 {
+    Play_80361694 mPlays[40];
+    int mUnknown1E0;
+    unsigned short mUnknown1E4;
+    unsigned short mCount;
+    unsigned short mUnknown1E8;
+    unsigned char mUnknown1EA;
+    unsigned char mUnknown1EB;
 };
 
 extern "C" {
@@ -179,13 +207,237 @@ void fn_80172154(Object_80039F5C *p, void *pBall);
 void fn_801726F8(Object_80039F5C *p);
 int fn_801729F8(void *pBall, Pair_8017055C *pPos);
 int fn_8017319C(Object_80039F5C *p);
+int fn_8016EB50(Object_80039F5C *p, Vector_80039F5C *pPos);
+int fn_8009A5A0(int handle);
+float fn_80178A44(void);
+int fn_801385A8(void *pBall);
+extern void *lbl_803EAB84;
+int fn_80025708(void);
+void fn_8002572C(void);
+Object_80039F5C *fn_8009BCE8(int *pRef);
+int fn_8009D558(int a);
+void fn_8009D818(int state);
+void fn_8009D888(int index, int a);
+void fn_8009D8CC(int index);
+void fn_8009D964(int index, int value);
+unsigned int fn_8009D990(int index);
+int fn_8009D9A8(int index);
+int fn_8009D9D8(int index);
+void fn_800AD910(int a, float b);
+int fn_800B232C(int a);
+int fn_800B2624(void);
+int fn_800B9A90(void *pHandle);
+void fn_800B9B9C(void *pHandle);
+int fn_800BA6F8(void);
+void fn_8016E498(void);
+int fn_8016E764(void);
+int fn_801787DC(int team);
+int fn_80178AE0(void);
+int fn_80178C24(void);
+void *fn_8023816C(void *pHandle);
+void fn_801735B4(unsigned int mask);
+unsigned int fn_801735C8(unsigned int mask);
+void fn_801735D8(unsigned int mask);
+void fn_801739D0(void);
+int fn_80173A88(void);
+unsigned char fn_80173B64(void);
+void fn_80173C68(void);
+int fn_80173CAC(void);
+int fn_80174114(int id);
+int fn_80177C38(void);
+void fn_8017C298(unsigned short a, short b);
+void fn_8017C2F0(unsigned short a);
+int fn_8022DDB4(int tag, void *data);
 }
+
+#define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
+
+float lbl_803EB430 = 0.075f;
+float lbl_803EB434 = 0.12f;
+int lbl_802E99C4[11] = {6, 2, 5, 1, 24, 18, 22, 16, 21, 15, 26};
 
 unsigned char lbl_803EB438 = 1;
 unsigned char lbl_803EB439 = 0;
 int lbl_803EB43C = 0;
 
 extern "C" {
+void fn_8016FB10(Object_80039F5C *p, void *pBall, Pair_8017055C *pOut, int a)
+{
+    Vector_80039F5C ballPos;
+    unsigned char unknown;
+    int handle;
+
+    fn_80137D58(pBall, &ballPos);
+    pOut->mX = ballPos.mX;
+    pOut->mY = ballPos.mY;
+    if (p == 0) {
+        return;
+    }
+    fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, (int *)&unknown, &handle);
+    if (!(p->mMotion.mPos.mZ > 0.0f)) {
+        Vector_80039F5C left;
+        Vector_80039F5C right;
+        Vector_80039F5C joint;
+        Vector_80039F5C extra;
+        float onSide;
+        float limit;
+        int leftDown;
+        int rightDown;
+        int handoff;
+        unsigned char i;
+
+        pOut->mX = 0.0f;
+        pOut->mY = p->mMotion.mPos.mY;
+        fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "lball"), &left, 0);
+        fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "rball"), &right, 0);
+        if (a == 0) {
+            limit = p->mUnknown768 * 0.1275f;
+        } else {
+            limit = 10.0f;
+        }
+        if (p->mpState->mId == 0x1C && fn_8009A5A0(handle) == 1) {
+            limit += 0.03f;
+        }
+        if (!(left.mZ > limit)) {
+            pOut->mX = left.mX;
+            pOut->mY = left.mY;
+            leftDown = 1;
+        } else {
+            leftDown = 0;
+        }
+        if (!(right.mZ > limit)) {
+            rightDown = 1;
+            if (fabsf(right.mX) > fabsf(pOut->mX)) {
+                pOut->mX = right.mX;
+            }
+            if (fabsf(right.mY) > fabsf(pOut->mY)) {
+                pOut->mY = right.mY;
+            }
+        } else {
+            rightDown = 0;
+        }
+        if (!leftDown && !rightDown) {
+            pOut->mX = p->mMotion.mPos.mX;
+            pOut->mY = p->mMotion.mPos.mY;
+        }
+        handoff = fn_801383A0(pBall);
+        if (handoff != 0 && handoff != 4) {
+            int leftHit;
+            int result;
+            int region;
+
+            if (!leftDown && !rightDown) {
+                pOut->mX = 0.0f;
+                pOut->mY = CLAMP(pOut->mY, -fn_80178A44(), fn_80178A44());
+            }
+            leftHit = leftDown || handoff == 2;
+            rightDown = rightDown || handoff == 3;
+            if (leftHit || rightDown) {
+                handoff = 4;
+            } else {
+                fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "lknee"), &left, 0);
+                fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "rknee"), &right, 0);
+                if (left.mZ <= 0.18f) {
+                    handoff = 4;
+                    if (fabsf(left.mX) > fabsf(pOut->mX)) {
+                        pOut->mX = left.mX;
+                    }
+                    if (fabsf(left.mY) > fabsf(pOut->mY)) {
+                        pOut->mY = left.mY;
+                    }
+                }
+                if (right.mZ <= 0.18f) {
+                    handoff = 4;
+                    if (fabsf(right.mX) > fabsf(pOut->mX)) {
+                        pOut->mX = right.mX;
+                    }
+                    if (fabsf(right.mY) > fabsf(pOut->mY)) {
+                        pOut->mY = right.mY;
+                    }
+                }
+            }
+            if (pOut->mX < 0.0f) {
+                pOut->mX -= lbl_803EB434;
+            } else {
+                pOut->mX += lbl_803EB434;
+            }
+            if (pOut->mY < 0.0f) {
+                pOut->mY -= lbl_803EB434;
+            } else {
+                pOut->mY += lbl_803EB434;
+            }
+            result = fn_80178508(pOut, (float *)&region, 0);
+            if (result == 3) {
+                result = fn_80178508(pOut, (float *)&region, 0);
+            }
+            if (result == 2 || result == 0 || result == 1) {
+                fn_80138398(pBall, handoff);
+                if (handoff == 4) {
+                    fn_80137D58(fn_801374BC(), &joint);
+                    if (joint.mY > fn_80178A2C() && p->mIdBytes[2] == fn_80178308()) {
+                        p->mFlags |= 0x800000;
+                    }
+                }
+            }
+            return;
+        }
+        if (pOut->mX < 0.0f) {
+            pOut->mX -= lbl_803EB430;
+        } else {
+            pOut->mX += lbl_803EB430;
+        }
+        if (pOut->mY < 0.0f) {
+            pOut->mY -= lbl_803EB430;
+        } else {
+            pOut->mY += lbl_803EB430;
+        }
+        if (leftDown || rightDown) {
+            return;
+        }
+        if (fabsf(pOut->mX) < fn_80178A08()) {
+            return;
+        }
+        if (fabsf(ballPos.mX) >= fn_80178A08()) {
+            return;
+        }
+        onSide = right.mZ;
+        if (onSide > left.mZ) {
+            onSide = left.mZ;
+        }
+        for (i = 0; i <= 10; i++) {
+            fn_8009BF5C(p, lbl_802E99C4[i], &joint, (int)&extra);
+            if (joint.mZ < onSide) {
+                onSide = joint.mZ;
+            }
+        }
+        if (onSide <= p->mUnknown768 * 0.165f) {
+            return;
+        }
+        if (fabsf(ballPos.mX) < fabsf(pOut->mX)) {
+            pOut->mX = ballPos.mX;
+        }
+        if (ballPos.mY > pOut->mY) {
+            pOut->mY = ballPos.mY;
+        }
+    } else if (fabsf(p->mMotion.mPos.mX) < fabsf(pOut->mX)) {
+        pOut->mX = p->mMotion.mPos.mX;
+    }
+}
+
+
+int fn_80170140(Object_80039F5C *p)
+{
+    int result = 0;
+
+    if (p == fn_80137B40()) {
+        Vector_80039F5C pos;
+
+        fn_80137D58(fn_801374BC(), &pos);
+        result = fn_8016EB50(p, &pos);
+    }
+    return result;
+}
+
 int fn_80170198(Object_80039F5C *p)
 {
     float zoneInfo;
@@ -1445,3 +1697,652 @@ void fn_80172FB0(Object_80172FB0 *pEvent)
     lbl_803EB43C = 0;
 }
 }
+
+extern "C" {
+int fn_8017319C(Object_80039F5C *p)
+{
+    int result = 0;
+    int down = 0;
+    int handoff;
+
+    if (p->mIdBytes[2] == fn_80178308() && p == fn_80137B40() && p->mMotion.mPos.mY >= fn_80178A2C()) {
+        return 0;
+    }
+    handoff = fn_801383A0(fn_801374BC());
+    if (fn_80054D24(0x18) && !fn_8017F584()) {
+        return 0;
+    }
+    if (fn_800D0B90(p)) {
+        down = 1;
+    }
+    if (down && fn_800A7EB8(p->mIdBytes[2]) != 2 && !fn_801787A0() && fn_80137B40() == p && handoff == 0) {
+        result = fn_801385A8(fn_801374BC());
+    }
+    if (result) {
+        fn_80171824(p);
+    }
+    return result;
+}
+}
+
+/* Flag word allocated through fn_80238174 under the id 'clkr' (fn_801732D0). */
+static unsigned int *lbl_803ECB2C;
+
+extern "C" {
+
+void fn_80173298(int a, int b)
+{
+    fn_801FCE10(0, "update 'FNIG' set 'OTHG' = \x82 and 'OTAG' = \x82\n", a, b);
+}
+
+void fn_801732D0(void)
+{
+    void *pHandle = fn_80238174(0, (void **)&lbl_803ECB2C, sizeof(*lbl_803ECB2C), 0, 0x636C6B72);
+
+    fn_8023816C(pHandle);
+    fn_802381E0(pHandle);
+}
+
+void fn_80173320(void)
+{
+}
+
+void fn_80173324(unsigned int a)
+{
+    int flags;
+
+    if (fn_8009D86C() != 6) {
+        flags = fn_8009D558(a);
+    } else {
+        flags = 0;
+    }
+    if (flags & 2) {
+        if (fn_8016E764()) {
+            fn_8016E498();
+        }
+    }
+    if (flags & 1) {
+        if (!fn_801735C8(0x10) && fn_80173A88() && !fn_80173B64() && fn_800AD9B4() != 3) {
+            fn_8009D8CC(1);
+            fn_8009D8CC(0);
+            fn_801735B4(1);
+            fn_80178370();
+            fn_801735B4(0x10);
+            fn_801735D8(0x100);
+            fn_800B9B9C(lbl_803EAB84);
+            if (fn_80025708()) {
+                fn_8002572C();
+            }
+        }
+    }
+}
+
+void fn_80173404(void)
+{
+    int state;
+
+    fn_8009D8CC(1);
+    fn_801787DC(0);
+    fn_801787DC(1);
+    state = fn_8009D86C();
+    switch (state) {
+    case 0:
+        state = 4;
+        fn_80173298(0, 0);
+        break;
+    case 2:
+        fn_80173298(3, 3);
+    case 1:
+    case 3:
+        state++;
+        fn_800AD910(6, 0.0f);
+        break;
+    case 4:
+        fn_8017F584();
+        if (fn_80178AE0() == 2 && !fn_80025708()) {
+            fn_801735B4(0x40);
+            state = 5;
+            fn_80173298(2, 2);
+            fn_801FCE10(0, "update 'FNIG' set 'TOFG' = \x83\n", 1);
+        } else {
+            state = 6;
+        }
+        fn_800AD910(7, 0.0f);
+        break;
+    case 5:
+        state = 6;
+        fn_800AD910(6, 0.0f);
+        break;
+    }
+    if (state != 6) {
+        fn_8009D964(1, fn_8009D9A8(1));
+    }
+    if (state == 1 || state == 3 || state == 5) {
+        fn_8017886C()->mUnknown1D = 0;
+    }
+    fn_8009D818(state);
+    fn_801735D8(4);
+    fn_801735D8(0x80);
+    if (fn_8009D990(1) <= 120 && !fn_800BA6F8()) {
+        fn_801735B4(4);
+        fn_801735B4(0x80);
+    }
+}
+
+void fn_801735B4(unsigned int mask)
+{
+    *lbl_803ECB2C |= mask;
+}
+
+unsigned int fn_801735C8(unsigned int mask)
+{
+    return *lbl_803ECB2C & mask;
+}
+
+void fn_801735D8(unsigned int mask)
+{
+    *lbl_803ECB2C &= ~mask;
+}
+
+unsigned char fn_801735EC(void)
+{
+    return fn_801735C8(0x40);
+}
+
+void fn_80173614(void)
+{
+    int allow;
+
+    fn_801735D8(0x32B);
+    if (fn_8009D9D8(0) == 1) {
+        fn_8009D8CC(0);
+    }
+    if (fn_8009D9D8(1) == 0) {
+        allow = 1;
+        if (!fn_80178C24()) {
+            allow = 0;
+        }
+        if (fn_80177F70() == 6 || fn_80177F70() == 0) {
+            allow = 0;
+        }
+        if (allow) {
+            fn_8009D888(1, 0);
+        }
+    }
+}
+
+void fn_801736AC(void)
+{
+    int allow;
+    int mode;
+
+    if (fn_8009D9D8(1) == 0 && !fn_801735C8(1) && fn_801735C8(2)) {
+        allow = 1;
+        switch (fn_8009D86C()) {
+        case 2:
+            if (fn_8009D990(1) <= 119 && !fn_801735C8(0x100)) {
+                allow = 0;
+            }
+            break;
+        case 4:
+        case 5:
+            if (fn_8009D990(1) <= 299 && !fn_801735C8(0x100)) {
+                allow = 0;
+            }
+            break;
+        }
+        mode = fn_80177F70();
+        if (mode == 0 || mode == 6) {
+            allow = 0;
+        }
+        if (!fn_80178C24()) {
+            allow = 0;
+        }
+        if (allow) {
+            fn_8009D888(1, 0);
+        }
+    }
+}
+
+void fn_80173794(void)
+{
+    unsigned int count = fn_800B15D4();
+    int found = 0;
+    int seen3 = 0;
+    int check = 0;
+    unsigned short i;
+
+    for (i = 0; i < count; i++) {
+        Record_800B15FC *pRecord = fn_800B1648(i);
+
+        switch (pRecord->mUnknown14) {
+        case 3:
+            seen3 = 1;
+            break;
+        case 11:
+        case 13:
+        case 20:
+        case 21:
+        case 30:
+            found = 1;
+            fn_801735B4(1);
+            break;
+        case 25:
+            found = 1;
+            fn_801735D8(0x100);
+            if (seen3) {
+                switch (fn_8009D86C()) {
+                case 2:
+                    if (pRecord->mUnknown18 <= 119) {
+                        fn_801735B4(1);
+                    } else {
+                        fn_801735B4(2);
+                    }
+                    break;
+                case 4:
+                case 5:
+                    if (pRecord->mUnknown18 <= 299) {
+                        fn_801735B4(1);
+                    } else {
+                        fn_801735B4(2);
+                    }
+                    break;
+                default:
+                    fn_801735B4(2);
+                    break;
+                }
+                if (fn_800B232C(0) == 2) {
+                    check = 1;
+                }
+            } else {
+                check = 1;
+            }
+            if (check) {
+                switch (fn_8009D86C()) {
+                case 2:
+                case 4:
+                case 5:
+                    if (fn_8009D9D8(1) && fn_8009D990(1) <= 44 && fn_800B2624()) {
+                        Object_80039F5C *p = fn_8009BCE8(&pRecord->mUnknown0);
+                        int score = fn_801787DC(p->mId >> 8 & 0xFF);
+
+                        if (score < fn_801787DC((p->mId >> 8 & 0xFF) ^ 1)) {
+                            fn_801735D8(1);
+                            fn_801735B4(0x100);
+                            fn_801735B4(2);
+                        }
+                    }
+                    break;
+                }
+            }
+            break;
+        case 22:
+        case 39:
+            found = 1;
+            if (seen3) {
+                if (pRecord->mUnknown0) {
+                    fn_801739D0();
+                } else {
+                    fn_801735B4(1);
+                }
+            }
+            break;
+        }
+    }
+    if (found) {
+        fn_8009D8CC(1);
+    }
+    fn_8009D8CC(0);
+}
+
+void fn_801739D0(void)
+{
+    switch (fn_8009D86C()) {
+    case 2:
+        if (fn_8009D990(1) <= 119) {
+            fn_801735B4(1);
+        } else {
+            fn_801735B4(2);
+        }
+        break;
+    case 4:
+    case 5:
+        if (fn_8009D990(1) <= 299) {
+            fn_801735B4(1);
+        } else {
+            fn_801735B4(2);
+        }
+        break;
+    default:
+        fn_801735B4(2);
+        break;
+    }
+}
+
+void fn_80173A50(void)
+{
+    fn_8009D8CC(1);
+    fn_801735B4(1);
+    fn_8009D964(0, 10);
+}
+
+int fn_80173A88(void)
+{
+    int allow = 1;
+    int mode = fn_800AD9B4();
+    int state = fn_8009D86C();
+
+    if (fn_800BA6F8() || mode == 3 || (!(unsigned char)fn_800B9A90(lbl_803EAB84) && mode != 2)) {
+        allow = 0;
+    }
+    if (fn_801486A0() == 3 && fn_8009D990(1) != 0) {
+        allow = 0;
+    }
+    if (state == 2 || state == 4 || state == 5) {
+        if (fn_800B2624() && !fn_801735C8(0x100)) {
+            fn_801735B4(0x20);
+            allow = 0;
+        } else {
+            fn_801735D8(0x20);
+        }
+    }
+    return allow;
+}
+
+unsigned char fn_80173B64(void)
+{
+    return fn_801735C8(0x20);
+}
+
+void fn_80173B8C(void)
+{
+    fn_8009D8CC(0);
+    fn_801735B4(1);
+    fn_8009D8CC(1);
+    fn_80173404();
+    fn_801735D8(0x10);
+}
+
+void fn_80173BCC(void)
+{
+    fn_801735B4(4);
+    fn_801735B4(0x80);
+}
+
+void fn_80173BF8(void)
+{
+    fn_801735B4(4);
+}
+
+void fn_80173C1C(void)
+{
+    *lbl_803ECB2C = 0;
+}
+
+/* Player-name lookup ("select 'ANLP' into ... from 'AGLP' where 'DIGP' = ...")
+ * It has no code in the GameCube target; the
+ * PS2 build keeps it at SLUS_211.18 0x31CCE0, directly before the counterpart
+ * of fn_80173C2C. Name is descriptive, not recovered. */
+void GetPlayerName(unsigned short id, char *pName)
+{
+    if (id != 0xFFFF) {
+        fn_801FCE10(0, "select 'ANLP' into \x88 from 'AGLP' where 'DIGP' = \x84\n", pName, id);
+    } else {
+        pName[0] = ' ';
+        pName[1] = 0;
+    }
+}
+
+}
+
+int lbl_803ECB30;
+Log_80361694 lbl_80361694[3];
+int lbl_80361C58[3];
+
+extern "C" {
+void fn_80173C2C(void)
+{
+    int resume = 0;
+
+    lbl_803ECB30 = 0;
+    fn_801C1F94(lbl_80361694, 0, sizeof(lbl_80361694));
+    if (resume) {
+        int found;
+
+        fn_801FCE10(0, "select 'PNIG' into \x82 from 'FNIG'\n", &found);
+        resume = found;
+    }
+    fn_80173C68();
+    if (resume) {
+        fn_801FCE10(0, "select 'MSDG' into \x89 from 'NIBG'\n", &lbl_80361694[lbl_803ECB30]);
+    }
+}
+
+void fn_80173C68(void)
+{
+    fn_801C1F94(&lbl_80361694[1], 0, sizeof(Log_80361694));
+    fn_801C1F94(&lbl_80361694[2], 0, sizeof(Log_80361694));
+}
+
+int fn_80173CAC(void)
+{
+    unsigned int count = fn_8009D86C();
+
+    count = count ? count : 1;
+    if (count > 5) {
+        count = 5;
+    }
+    return count * fn_8009D9A8(1) - fn_8009D990(1);
+}
+
+void fn_80173D10(void)
+{
+    Log_80361694 *pLog = &lbl_80361694[lbl_803ECB30];
+    int value;
+
+    if (pLog->mUnknown1E4 <= 1) {
+        lbl_80361694[pLog->mUnknown1E4 + 1] = *pLog;
+    }
+    lbl_80361694[lbl_803ECB30].mUnknown1E4 = 0xFFFF;
+    lbl_80361694[lbl_803ECB30].mCount = 0;
+    lbl_80361694[lbl_803ECB30].mUnknown1E8 = 0;
+    lbl_80361694[lbl_803ECB30].mUnknown1EA = 0;
+    lbl_80361694[lbl_803ECB30].mUnknown1EB = 0;
+    value = fn_80173CAC();
+    lbl_80361694[lbl_803ECB30].mUnknown1E0 = value;
+    lbl_80361C58[lbl_803ECB30] = value;
+    fn_8022DDB4(0x4D534447, &lbl_80361694[lbl_803ECB30]);
+}
+
+void fn_80173E24(void)
+{
+    int team = fn_80178308();
+    Log_80361694 *pLog = &lbl_80361694[lbl_803ECB30];
+
+    if (pLog->mUnknown1E4 != team && pLog->mUnknown1EB == 0) {
+        fn_80173D10();
+        lbl_80361694[lbl_803ECB30].mUnknown1E4 = team;
+        fn_8017C298(team, (short)fn_80177FE0().mY);
+    }
+    fn_8022DDB4(0x4D534447, &lbl_80361694[lbl_803ECB30]);
+}
+
+void fn_80173EE0(int type, short a, short b, int c, int d)
+{
+    Log_80361694 *pLog = &lbl_80361694[lbl_803ECB30];
+
+    if (pLog->mCount < 40) {
+        lbl_80361694[lbl_803ECB30].mPlays[pLog->mCount].mType = type;
+        lbl_80361694[lbl_803ECB30].mPlays[pLog->mCount].mUnknown4 = a;
+        lbl_80361694[lbl_803ECB30].mPlays[pLog->mCount].mUnknown6 = b;
+        lbl_80361694[lbl_803ECB30].mPlays[lbl_80361694[lbl_803ECB30].mCount].mUnknown8 = fn_80174114(c);
+        lbl_80361694[lbl_803ECB30].mPlays[lbl_80361694[lbl_803ECB30].mCount].mUnknownA = fn_80174114(d);
+        if (lbl_80361694[lbl_803ECB30].mUnknown1EA == 0 && (float)a >= 30.0f && fn_80177C38() == 0) {
+            lbl_80361694[lbl_803ECB30].mUnknown1EA = 1;
+            fn_8017C2F0(lbl_80361694[lbl_803ECB30].mUnknown1E4);
+        }
+        if (type == 8) {
+            lbl_80361694[lbl_803ECB30].mUnknown1E8++;
+        }
+        lbl_80361694[lbl_803ECB30].mCount++;
+        fn_8022DDB4(0x4D534447, &lbl_80361694[lbl_803ECB30]);
+    }
+}
+
+void fn_80174074(void)
+{
+    lbl_80361C58[lbl_803ECB30] = fn_80173CAC();
+}
+
+/* PS2 SLUS_211.18 0x31D2B8: returns one field of play [index] of the current
+ * block. No code in the GameCube target. Name is descriptive. */
+int GetPlayField(int index, int field)
+{
+    switch (field) {
+    case 0:
+        return lbl_80361694[lbl_803ECB30].mPlays[index].mType;
+    case 1:
+        return lbl_80361694[lbl_803ECB30].mPlays[index].mUnknown4;
+    case 2:
+        return lbl_80361694[lbl_803ECB30].mPlays[index].mUnknown6;
+    case 3:
+        return lbl_80361694[lbl_803ECB30].mPlays[index].mUnknown8;
+    case 4:
+        return lbl_80361694[lbl_803ECB30].mPlays[index].mUnknownA;
+    }
+    return 0;
+}
+
+/* PS2 SLUS_211.18 0x31D3D8: writes the play-by-play line for a play. No code
+ * in the GameCube target; its strings remain in this unit's .rodata. */
+void FormatPlay(int type, short yards, unsigned short player, unsigned short other, char *pOut)
+{
+    char name[16];
+    char otherName[16];
+
+    GetPlayerName(player, name);
+    switch (type) {
+    case 0:
+        if (other != 0xFFFF) {
+            GetPlayerName(other, otherName);
+            sprintf(pOut, "%d yard pass from %s to %s", yards, name, otherName);
+        } else {
+            sprintf(pOut, "Incomplete pass by %s", name);
+        }
+        break;
+    case 1:
+        sprintf(pOut, "%d yard run by %s", yards, name);
+        break;
+    case 5:
+        sprintf(pOut, "%d yard field goal by %s", yards, name);
+        break;
+    case 4:
+        sprintf(pOut, "%d yard interception return by %s", yards, name);
+        break;
+    case 3:
+        sprintf(pOut, "%d yard fumble return by %s", yards, name);
+        break;
+    case 2:
+        sprintf(pOut, "Punt by %s", name);
+        break;
+    case 6:
+        sprintf(pOut, "%d yard kick return by %s", yards, name);
+        break;
+    case 7:
+        sprintf(pOut, "%d yard punt return by %s", yards, name);
+        break;
+    case 8:
+        sprintf(pOut, "%d yard penalty", yards);
+        break;
+    case 9:
+        sprintf(pOut, "Safety");
+        break;
+    case 10:
+        sprintf(pOut, "%s missed extra point", name);
+        break;
+    case 11:
+        sprintf(pOut, "2pt conversion by %s failed", name);
+        break;
+    case 12:
+        sprintf(pOut, "%s was sacked for a %d yard loss", name, -yards);
+        break;
+    default:
+        strcpy(pOut, "");
+        break;
+    }
+}
+
+/* PS2 SLUS_211.18 0x31D5B0: writes the scoring-play suffix. No code in the
+ * GameCube target; its strings remain in this unit's .rodata. */
+void FormatPlaySuffix(int type, short yards, unsigned short player, unsigned short other, char *pOut)
+{
+    char name[16];
+    char otherName[16];
+
+    GetPlayerName(player, name);
+    switch (type) {
+    case 0:
+        if (other != 0xFFFF) {
+            GetPlayerName(other, otherName);
+            sprintf(pOut, " (%s Pass to %s)", name, otherName);
+        } else {
+            strcpy(pOut, "");
+        }
+        break;
+    case 1:
+        sprintf(pOut, " (%s Run)", name);
+        break;
+    case 5:
+        sprintf(pOut, " (%s Kick)", name);
+        break;
+    case 10:
+        sprintf(pOut, " (Extra Point failed)");
+        break;
+    case 11:
+        sprintf(pOut, " (Conversion failed)");
+        break;
+    case 8:
+        sprintf(pOut, " (%s Penalty)", name);
+        break;
+    default:
+        strcpy(pOut, "");
+        break;
+    }
+}
+
+int fn_801740A8(void)
+{
+    return lbl_80361694[lbl_803ECB30].mUnknown1EA;
+}
+
+void fn_801740C4(int value)
+{
+    Log_80361694 *pLog = &lbl_80361694[lbl_803ECB30];
+
+    if (pLog->mUnknown1EB == 0) {
+        pLog->mUnknown1EB = value;
+        fn_8022DDB4(0x4D534447, pLog);
+    }
+}
+
+int fn_80174114(int id)
+{
+    if (id != 0 && (id & 0xFF) == 1) {
+        return fn_80039F5C(id >> 8 & 0xFF, id >> 16 & 0xFF)->mUnknown2908;
+    }
+    return 0xFFFF;
+}
+
+unsigned char fn_80174160(void)
+{
+    return lbl_80361694[lbl_803ECB30].mUnknown1E4;
+}
+
+void fn_8017417C(void)
+{
+    lbl_80361694[lbl_803ECB30].mUnknown1EA = 1;
+}
+}
+
+/* Joint names read in order by fn_80176630 (lis/addi at 0x801766EC). */
+const char *lbl_802E99F0[5] = {"headend", "rwrist", "lwrist", "lball", "rball"};
