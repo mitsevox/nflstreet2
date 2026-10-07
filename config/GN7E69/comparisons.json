@@ -13622,6 +13622,78 @@
           "end": "0x800E3A34"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80141210.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv camera target layouts, membership, callback ABI and measured source-form rows; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80141210",
+          "end": "0x801422C8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0268",
+          "end": "0x802A02B0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB1F0",
+          "end": "0x803EB1F4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80141210",
+          "start": "0x80141210",
+          "end": "0x80141920"
+        },
+        {
+          "symbol": "fn_80141920",
+          "start": "0x80141920",
+          "end": "0x80141E8C"
+        },
+        {
+          "symbol": "fn_80141E8C",
+          "start": "0x80141E8C",
+          "end": "0x80141FA0"
+        },
+        {
+          "symbol": "fn_80141FA0",
+          "start": "0x80141FA0",
+          "end": "0x80142110"
+        },
+        {
+          "symbol": "fn_80142110",
+          "start": "0x80142110",
+          "end": "0x801421C4"
+        },
+        {
+          "symbol": "fn_801421C4",
+          "start": "0x801421C4",
+          "end": "0x80142224"
+        },
+        {
+          "symbol": "fn_80142224",
+          "start": "0x80142224",
+          "end": "0x80142228"
+        },
+        {
+          "symbol": "fn_80142228",
+          "start": "0x80142228",
+          "end": "0x801422C0"
+        },
+        {
+          "symbol": "fn_801422C0",
+          "start": "0x801422C0",
+          "end": "0x801422C8"
+        }
+      ]
     }
   ]
 }
