@@ -1791,15 +1791,15 @@
       "name": "src/dolphin/gx/GXBump.c",
       "source": "src/dolphin/gx/GXBump.c",
       "library": "GX",
-      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "evidence": "Pinned dolsdk2004 2328b416 native retained eight-body code1192 and complete24-byte constant allocation reproduce the target; reference file/archive attribution remains provisional.",
       "sections": [
         {
           "section": ".data6",
           "start": "0x803ED918",
-          "end": "0x803ED91C",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "evidence": "GXBump 80251224 loads a float at 803ED918. The donor four-byte local float at offset zero equals it. Remaining donor constants have no confirmed retained target references and remain unassigned.",
+          "end": "0x803ED930",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Complete native .sdata2 allocation24 bytes, including unused native constants/alignment, equals target803ED918..803ED930. Target float load80251224 and all retained operands resolve native base; no invented padding. Original archive identity remains provisional.",
           "object_seed": true
         },
         {
@@ -1808,7 +1808,7 @@
           "end": "0x80251604",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 7 uniquely located function anchors in this interval; target has a function entry at 0x8025115C, previous instruction is blr, and previous interval ends at 0x80251604 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+          "evidence": "All eight native retained bodies cover8025115C..80251604 with exact resolved target operands. Four-byte __GXUpdateBPMask corroborated by target calls8024E8B4/8024E954 and accepted GXGeometry role; code/file ownership follows related donor, original archive edges remain provisional."
         }
       ]
     },
@@ -2192,7 +2192,7 @@
       "name": "src/dolphin/exi/EXIBios.c",
       "source": "src/dolphin/exi/EXIBios.c",
       "library": "EXI",
-      "evidence": "Target interrupt-mask helperD88, CompleteTransferE7C, EXI transfer/sync/interrupt/probe/select/lock/id sequence; unique EXIClearInterruptsA4B0 native anchor. Preceding59B08..59D88 is accepted CARDRdwr, not EXI.",
+      "evidence": "BFBB8fb1c232addcacf44932c10c4cede41b43f98f40 src/dolphin/src/exi/EXIBios.c23 retained routines6620code and466native storage fully resolve; original archive attribution remains provisional.",
       "sections": [
         {
           "section": ".text",
@@ -2200,7 +2200,43 @@
           "end": "0x8025B764",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Target interrupt-mask helperD88, CompleteTransferE7C, EXI transfer/sync/interrupt/probe/select/lock/id sequence; unique EXIClearInterruptsA4B0 native anchor. Preceding59B08..59D88 is accepted CARDRdwr, not EXI. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+          "evidence": "BFBB8fb1c232addcacf44932c10c4cede41b43f98f40 src/dolphin/src/exi/EXIBios.c full retained native layout and every resolved operand match target; original archive edges remain provisional."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FF1E0",
+          "end": "0x802FF2EA",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "BFBB8fb1c232addcacf44932c10c4cede41b43f98f40 src/dolphin/src/exi/EXIBios.c full retained native layout and every resolved operand match target; original archive edges remain provisional.",
+          "object_seed": true
+        },
+        {
+          "section": ".bss",
+          "start": "0x803A6748",
+          "end": "0x803A6808",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "BFBB8fb1c232addcacf44932c10c4cede41b43f98f40 src/dolphin/src/exi/EXIBios.c full retained native layout and every resolved operand match target; original archive edges remain provisional.",
+          "object_seed": true
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC2D0",
+          "end": "0x803EC2D4",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "BFBB8fb1c232addcacf44932c10c4cede41b43f98f40 src/dolphin/src/exi/EXIBios.c full retained native layout and every resolved operand match target; original archive edges remain provisional.",
+          "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED3C8",
+          "end": "0x803ED3CC",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "BFBB8fb1c232addcacf44932c10c4cede41b43f98f40 src/dolphin/src/exi/EXIBios.c full retained native layout and every resolved operand match target; original archive edges remain provisional.",
+          "object_seed": true
         }
       ]
     },
