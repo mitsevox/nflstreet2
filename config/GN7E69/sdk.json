@@ -103,16 +103,7 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "OSInit forms 803A3A20 at 80238B30 and invalidates 32 bytes at 80238EAC..80238EB4. It passes that pointer to DVDInquiryAsync at 80238EC0..80238EC8; callee 802413DC/802413E8 sets the transfer length to 32. InquiryCallback reads the version halfword at +2. Both target sizes independently corroborate the donor DVDDriveInfo 32-byte ABI. DriveInfo: OSInit forms 0x803A3A20 at 0x80238B30, invalidates32 bytes at 0x80238EAC..0x80238EB4 and passes it to DVDInquiryAsync at 0x80238EC8; InquiryCallback reads the device halfword at+2. Native .bss offset 0, size 32, alignment 32 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
-        },
-        {
-          "section": ".data5",
-          "start": "0x803EC154",
-          "end": "0x803EC158",
-          "evidence": "Native symbol@160 complete4-byte initializedpayload byte-identical; matching targetfunction referenceOSRegisterVersion at0x80239330.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
+          "evidence": "OSInit forms 803A3A20 at 80238B30 and invalidates 32 bytes at 80238EAC..80238EB4. It passes that pointer to DVDInquiryAsync at 80238EC0..80238EC8; callee 802413DC/802413E8 sets the transfer length to 32. InquiryCallback reads the device-code halfword at +2. Both target sizes independently corroborate the donor DVDDriveInfo 32-byte ABI. DriveInfo: OSInit forms 0x803A3A20 at 0x80238B30, invalidates32 bytes at 0x80238EAC..0x80238EB4 and passes it to DVDInquiryAsync at 0x80238EC8; InquiryCallback reads the device halfword at+2. Native .bss offset 0, size 32, alignment 32 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
         },
         {
           "section": ".sbss",
@@ -251,11 +242,11 @@
         {
           "section": ".data5",
           "start": "0x803EC148",
-          "end": "0x803EC154",
+          "end": "0x803EC158",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "Three actual initialized arena/DI pointer words at 0x803EC148..0x803EC154; OSGetArenaHi/Lo and DIConfig getter use target SDA loads. Complete native .sdata initialized allocation of 16 bytes is directly compared with target0x803EC148..0x803EC158; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional."
+          "evidence": "Complete native 16-byte initialized .sdata pool: version pointer at 0x803EC148, %08x newline format plus two alignment bytes at 0x803EC14C..0x803EC154, and %s newline format at 0x803EC154..0x803EC158. Actual OSInit load at 0x80238E50 references the version pointer; OSRegisterVersion uses the final format. Complete resolved initialized pool equals target; individual symbol proof remains in evidence.tsv; original archive membership provisional."
         }
       ]
     },
@@ -758,7 +749,7 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "Header: __OSReboot reads32 bytes from DVD into0x803A4520; ApploaderHeader fields at+20/+24 drive aligned loader size and entry handling. Native .bss offset 0, size 32, alignment 32 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+          "evidence": "Header: __OSReboot reads32 bytes from DVD into0x803A4520; ApploaderHeader fields at+20/+24 supply body and reboot sizes for aligned DVD read length and offset; execution uses fixed 0x81300000. Native .bss offset 0, size 32, alignment 32 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
         },
         {
           "section": ".sbss",
@@ -1240,7 +1231,7 @@
           "end": "0x80245200",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "VMInit same-sized native156-byte fingerprint, __VMSwapPageIn508, arena-swap allocation48, getters; targetcalls connect VMBASE initialization and VM mappingallocators."
+          "evidence": "Actual target analysis function cuts and ordered calls corroborate the complete mapped code denominator. Related MVP2005 source names remain reference-derived; normal compiler comparisons include every retained target C body and preserve measured mismatches."
         },
         {
           "section": ".sbss",
@@ -1252,31 +1243,13 @@
           "evidence": "sLogStatsCallback: lwz at 0x80245180 accesses 0x803ED240; lwz at 0x802451C0 accesses 0x803ED240. Related MVP2005 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 gives the state role and declaration; target32-bit accesses establish storage width. Individually bound diagnostic mapping; no NOBITS byte credit or native-order claim."
         }
       ],
-      "evidence": "MVP2005 pinned1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 nativeproductionobject fingerprint + reconstructedsource andlinked_names.tsv provenance; originalNFLfileownershipprovisional. Names are reference-derived, nottargetdebug recovered. VMInit same-sized native156-byte fingerprint, __VMSwapPageIn508, arena-swap allocation48, getters; targetcalls connect VMBASE initialization and VM mappingallocators.",
+      "evidence": "Related MVP2005 revision 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 reconstructed C and reference names corroborate actual target function cuts, call order and accessed storage. Original target compiler and archive membership remain unresolved; normal complete-body comparisons distinguish exact functions from measured partials.",
       "name": "src/dolphin/vm/VM.c"
     },
     {
       "source": "src/dolphin/vm/VMPageReplacement.c",
       "library": "VM",
       "sections": [
-        {
-          "section": ".data5",
-          "start": "0x803EC210",
-          "end": "0x803EC214",
-          "evidence": "Native symbolsFirstPass complete4-byte initializedpayload byte-identical; matching targetfunction reference__VMPageReplacementLRU at0x80245258.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".data5",
-          "start": "0x803EC214",
-          "end": "0x803EC218",
-          "evidence": "Native symbolsPolicy complete4-byte initializedpayload byte-identical; matching targetfunction reference__VMGetPageToReplace at0x8024520C.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
         {
           "section": ".sbss",
           "start": "0x803ED250",
@@ -1292,10 +1265,19 @@
           "end": "0x80245514",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "All four retained functions native fingerprint uniquely match: dispatch68, LRU464, random148,FIFO108; complete788-byte contiguous target run."
+          "evidence": "Actual target analysis function cuts and ordered calls corroborate the complete mapped code denominator. Related MVP2005 source names remain reference-derived; normal compiler comparisons include every retained target C body and preserve measured mismatches."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC210",
+          "end": "0x803EC218",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native eight-byte initialized .sdata pool contains FirstPass at 0x803EC210 and Policy at 0x803EC214. Actual __VMPageReplacementLRU load at 0x80245258 and __VMGetPageToReplace load at 0x8024520C establish the two words. Whole resolved pool equals target; individual typed evidence retained; related MVP names do not establish original target symbols or archive edges."
         }
       ],
-      "evidence": "MVP2005 pinned1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 nativeproductionobject fingerprint + reconstructedsource andlinked_names.tsv provenance; originalNFLfileownershipprovisional. Names are reference-derived, nottargetdebug recovered. All four retained functions native fingerprint uniquely match: dispatch68, LRU464, random148,FIFO108; complete788-byte contiguous target run.",
+      "evidence": "Related MVP2005 revision 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 reconstructed C and reference names corroborate actual target function cuts, call order and accessed storage. Original target compiler and archive membership remain unresolved; normal complete-body comparisons distinguish exact functions from measured partials.",
       "name": "src/dolphin/vm/VMPageReplacement.c"
     },
     {
@@ -1353,10 +1335,10 @@
           "end": "0x80245820",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "VMAlloc256, translate64, mapped32, alert56, set24, inARAM20, virtual-LUT168,ARAM-LUT160 complete780-byte run; unique diagnostic target802FDC98."
+          "evidence": "Actual target analysis function cuts and ordered calls corroborate the complete mapped code denominator. Related MVP2005 source names remain reference-derived; normal compiler comparisons include every retained target C body and preserve measured mismatches."
         }
       ],
-      "evidence": "MVP2005 pinned1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 nativeproductionobject fingerprint + reconstructedsource andlinked_names.tsv provenance; originalNFLfileownershipprovisional. Names are reference-derived, nottargetdebug recovered. VMAlloc256, translate64, mapped32, alert56, set24, inARAM20, virtual-LUT168,ARAM-LUT160 complete780-byte run; unique diagnostic target802FDC98.",
+      "evidence": "Related MVP2005 revision 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 reconstructed C and reference names corroborate actual target function cuts, call order and accessed storage. Original target compiler and archive membership remain unresolved; normal complete-body comparisons distinguish exact functions from measured partials.",
       "name": "src/dolphin/vm/VMMapping.c"
     },
     {

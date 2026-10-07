@@ -3,7 +3,7 @@
 #include <libc/stdio.h>
 #include "__ar.h"
 
-#include "__vm.h"
+#include <dolphin/__vm.h>
 
 /* Index of a virtual page in sVirtualToARAMLUT: 8192 pages of 4 KB cover 32 MB. */
 #define VM_LUT_INDEX(addr) (((addr) >> 12) & 0x1FFF)

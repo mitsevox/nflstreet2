@@ -15957,7 +15957,7 @@
     {
       "source": "src/dolphin/os/OSTime.c",
       "profile": "dolphin_release",
-      "evidence": "PRIVATE whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
       "sections": [
         {
           "section": ".text",
@@ -15977,7 +15977,7 @@
     {
       "source": "src/dolphin/os/OSMemory.c",
       "profile": "dolphin_release",
-      "evidence": "PRIVATE whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
       "sections": [
         {
           "section": ".text",
@@ -16013,7 +16013,7 @@
     {
       "source": "src/dolphin/os/OSContext.c",
       "profile": "dolphin_release",
-      "evidence": "PRIVATE whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
       "sections": [
         {
           "section": ".text",
@@ -16054,7 +16054,7 @@
     {
       "source": "src/dolphin/os/OSCache.c",
       "profile": "dolphin_release",
-      "evidence": "PRIVATE whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
       "sections": [
         {
           "section": ".text",
@@ -16090,7 +16090,7 @@
     {
       "source": "src/dolphin/os/OSReboot.c",
       "profile": "dolphin_release",
-      "evidence": "PRIVATE whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
       "sections": [
         {
           "section": ".text",
@@ -16127,7 +16127,7 @@
     {
       "source": "src/dolphin/os/OSReset.c",
       "profile": "dolphin_release",
-      "evidence": "PRIVATE whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
       "sections": [
         {
           "section": ".text",
@@ -16168,7 +16168,7 @@
     {
       "source": "src/dolphin/os/OSInterrupt.c",
       "profile": "dolphin_release",
-      "evidence": "PRIVATE whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
       "sections": [
         {
           "section": ".text",
@@ -16230,7 +16230,7 @@
     {
       "source": "src/dolphin/os/OS.c",
       "profile": "dolphin_release",
-      "evidence": "PRIVATE whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
       "sections": [
         {
           "section": ".text",
@@ -16314,7 +16314,7 @@
     {
       "source": "src/dolphin/os/OSLink.c",
       "profile": "dolphin_release",
-      "evidence": "PRIVATE whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
       "sections": [
         {
           "section": ".text",
@@ -16334,7 +16334,7 @@
     {
       "source": "src/dolphin/os/OSAlarm.c",
       "profile": "dolphin_release",
-      "evidence": "PRIVATE coherent pinnedBFBB Csource; original80byte assemblygate remains external original provider, no reconstructedassembly. Entire mappedfile unchanged; whole Cpartial source and extraPeriodic function preserved.",
+      "evidence": "coherent pinnedBFBB Csource; original80byte assemblygate remains external original provider, no reconstructedassembly. Entire mappedfile unchanged; whole Cpartial source and extraPeriodic function preserved.",
       "sections": [
         {
           "section": ".text",
@@ -16519,7 +16519,7 @@
     {
       "source": "src/dolphin/vm/VM.c",
       "profile": "dolphin_release",
-      "evidence": "PRIVATE complete related MVP1a61 C source; actual original behavior/calls and static cells; unchanged profile, honest frame/compiler differences; no uninitialized storage credit.",
+      "evidence": "complete related MVP1a61 C source; actual original behavior/calls and static cells; unchanged profile, honest frame/compiler differences; no uninitialized storage credit.",
       "sections": [
         {
           "section": ".text",
@@ -16613,7 +16613,7 @@
     {
       "source": "src/dolphin/vm/VMPageReplacement.c",
       "profile": "dolphin_release",
-      "evidence": "PRIVATE complete related MVP1a61 C source; actual original behavior/calls and static cells; unchanged profile, honest frame/compiler differences; no uninitialized storage credit.",
+      "evidence": "complete related MVP1a61 C source; actual original behavior/calls and static cells; unchanged profile, honest frame/compiler differences; no uninitialized storage credit.",
       "sections": [
         {
           "section": ".text",
@@ -16667,7 +16667,7 @@
     {
       "source": "src/dolphin/vm/VMMapping.c",
       "profile": "dolphin_release",
-      "evidence": "PRIVATE complete related MVP1a61 C source; actual original behavior/calls and static cells; unchanged profile, honest frame/compiler differences; no uninitialized storage credit.",
+      "evidence": "complete related MVP1a61 C source; actual original behavior/calls and static cells; unchanged profile, honest frame/compiler differences; no uninitialized storage credit.",
       "sections": [
         {
           "section": ".text",
@@ -16756,7 +16756,7 @@
     {
       "source": "src/dolphin/gba/GBA.c",
       "profile": "dolphin_release",
-      "evidence": "PRIVATE complete pinnedPikmin2 related GBA C functions with actualtarget Init guard/version delta, canonicalreset callback; opaqueunaccessed fields, no uninitializedstoragecredit.",
+      "evidence": "complete pinnedPikmin2 related GBA C functions with actualtarget Init guard/version delta, canonicalreset callback; opaqueunaccessed fields, no uninitializedstoragecredit.",
       "sections": [
         {
           "section": ".text",
@@ -16814,7 +16814,7 @@
     {
       "source": "src/dolphin/gba/GBAXfer.c",
       "profile": "dolphin_release",
-      "evidence": "PRIVATE complete pinnedPikmin2 related GBA C functions with actualtarget Init guard/version delta, canonicalreset callback; opaqueunaccessed fields, no uninitializedstoragecredit.",
+      "evidence": "complete pinnedPikmin2 related GBA C functions with actualtarget Init guard/version delta, canonicalreset callback; opaqueunaccessed fields, no uninitializedstoragecredit.",
       "sections": [
         {
           "section": ".text",

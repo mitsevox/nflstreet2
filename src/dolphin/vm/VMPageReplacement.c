@@ -3,7 +3,7 @@
 #include <libc/stdio.h>
 #include "__ar.h"
 
-#include "__vm.h"
+#include <dolphin/__vm.h>
 
 static u32 sCurrentPage;
 static BOOL sFirstPass = TRUE;
