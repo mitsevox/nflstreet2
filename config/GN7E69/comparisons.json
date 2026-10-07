@@ -10056,6 +10056,244 @@
       ]
     },
     {
+      "source": "src/game/cu_80169F80.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80169F80-0x8016BAD8 for src/game/cu_80169F80.cpp, its 40 exact function extents, the exact data rows for the three initialized placements and the linker row for the three discarded functions (Xbox 0x120CD0, 0x120D60, 0x120DE0); they are compiled with the file but not measured. Draft comparisons only; the original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80169F80",
+          "end": "0x8016BAD8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A49A0",
+          "end": "0x802A4BA0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802E9970",
+          "end": "0x802E99C4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB40C",
+          "end": "0x803EB410"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80169F80",
+          "start": "0x80169F80",
+          "end": "0x80169FCC"
+        },
+        {
+          "symbol": "fn_80169FCC",
+          "start": "0x80169FCC",
+          "end": "0x8016A2D4"
+        },
+        {
+          "symbol": "fn_8016A2D4",
+          "start": "0x8016A2D4",
+          "end": "0x8016A334"
+        },
+        {
+          "symbol": "fn_8016A334",
+          "start": "0x8016A334",
+          "end": "0x8016A408"
+        },
+        {
+          "symbol": "fn_8016A408",
+          "start": "0x8016A408",
+          "end": "0x8016A4DC"
+        },
+        {
+          "symbol": "fn_8016A4DC",
+          "start": "0x8016A4DC",
+          "end": "0x8016A568"
+        },
+        {
+          "symbol": "fn_8016A568",
+          "start": "0x8016A568",
+          "end": "0x8016A5F4"
+        },
+        {
+          "symbol": "fn_8016A5F4",
+          "start": "0x8016A5F4",
+          "end": "0x8016A618"
+        },
+        {
+          "symbol": "fn_8016A618",
+          "start": "0x8016A618",
+          "end": "0x8016A770"
+        },
+        {
+          "symbol": "fn_8016A770",
+          "start": "0x8016A770",
+          "end": "0x8016A7DC"
+        },
+        {
+          "symbol": "fn_8016A7DC",
+          "start": "0x8016A7DC",
+          "end": "0x8016A9B4"
+        },
+        {
+          "symbol": "fn_8016A9B4",
+          "start": "0x8016A9B4",
+          "end": "0x8016AC24"
+        },
+        {
+          "symbol": "fn_8016AC24",
+          "start": "0x8016AC24",
+          "end": "0x8016ACD8"
+        },
+        {
+          "symbol": "fn_8016ACD8",
+          "start": "0x8016ACD8",
+          "end": "0x8016AD80"
+        },
+        {
+          "symbol": "fn_8016AD80",
+          "start": "0x8016AD80",
+          "end": "0x8016AF34"
+        },
+        {
+          "symbol": "fn_8016AF34",
+          "start": "0x8016AF34",
+          "end": "0x8016B04C"
+        },
+        {
+          "symbol": "fn_8016B04C",
+          "start": "0x8016B04C",
+          "end": "0x8016B0AC"
+        },
+        {
+          "symbol": "fn_8016B0AC",
+          "start": "0x8016B0AC",
+          "end": "0x8016B0B0"
+        },
+        {
+          "symbol": "fn_8016B0B0",
+          "start": "0x8016B0B0",
+          "end": "0x8016B144"
+        },
+        {
+          "symbol": "fn_8016B144",
+          "start": "0x8016B144",
+          "end": "0x8016B210"
+        },
+        {
+          "symbol": "fn_8016B210",
+          "start": "0x8016B210",
+          "end": "0x8016B22C"
+        },
+        {
+          "symbol": "fn_8016B22C",
+          "start": "0x8016B22C",
+          "end": "0x8016B248"
+        },
+        {
+          "symbol": "fn_8016B248",
+          "start": "0x8016B248",
+          "end": "0x8016B2B8"
+        },
+        {
+          "symbol": "fn_8016B2B8",
+          "start": "0x8016B2B8",
+          "end": "0x8016B2E8"
+        },
+        {
+          "symbol": "fn_8016B2E8",
+          "start": "0x8016B2E8",
+          "end": "0x8016B310"
+        },
+        {
+          "symbol": "fn_8016B310",
+          "start": "0x8016B310",
+          "end": "0x8016B32C"
+        },
+        {
+          "symbol": "fn_8016B32C",
+          "start": "0x8016B32C",
+          "end": "0x8016B348"
+        },
+        {
+          "symbol": "fn_8016B348",
+          "start": "0x8016B348",
+          "end": "0x8016B364"
+        },
+        {
+          "symbol": "fn_8016B364",
+          "start": "0x8016B364",
+          "end": "0x8016B438"
+        },
+        {
+          "symbol": "fn_8016B438",
+          "start": "0x8016B438",
+          "end": "0x8016B7C4"
+        },
+        {
+          "symbol": "fn_8016B7C4",
+          "start": "0x8016B7C4",
+          "end": "0x8016B82C"
+        },
+        {
+          "symbol": "fn_8016B82C",
+          "start": "0x8016B82C",
+          "end": "0x8016B8C8"
+        },
+        {
+          "symbol": "fn_8016B8C8",
+          "start": "0x8016B8C8",
+          "end": "0x8016B938"
+        },
+        {
+          "symbol": "fn_8016B938",
+          "start": "0x8016B938",
+          "end": "0x8016B974"
+        },
+        {
+          "symbol": "fn_8016B974",
+          "start": "0x8016B974",
+          "end": "0x8016B9B0"
+        },
+        {
+          "symbol": "fn_8016B9B0",
+          "start": "0x8016B9B0",
+          "end": "0x8016B9EC"
+        },
+        {
+          "symbol": "fn_8016B9EC",
+          "start": "0x8016B9EC",
+          "end": "0x8016BA28"
+        },
+        {
+          "symbol": "fn_8016BA28",
+          "start": "0x8016BA28",
+          "end": "0x8016BA80"
+        },
+        {
+          "symbol": "fn_8016BA80",
+          "start": "0x8016BA80",
+          "end": "0x8016BAAC"
+        },
+        {
+          "symbol": "fn_8016BAAC",
+          "start": "0x8016BAAC",
+          "end": "0x8016BAD8"
+        }
+      ],
+      "discarded": [
+        "GetTrackerFloat8",
+        "SumRunWeightsBit28",
+        "SumRunWeightsBit30"
+      ]
+    },
+    {
       "source": "src/game/cu_800834CC.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800834CC-0x800850E8 (src/game/cu_800834CC.cpp), its individual exact function extents and its .rodata/.data/.sdata/.sbss data rows. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
