@@ -232,7 +232,7 @@ void fn_8007CCC4(Object_8007A334 *pObject);
 int fn_800808F8(Object_8008044C *pObject);
 int fn_80080E98(Object_8008044C *pObject);
 int fn_800872E8(int a);
-void fn_8008731C(int a, int id, int *pOut1, int *pOut2, char *pBuffer, int size);
+int fn_8008731C(int a, int id, int *pOut1, int *pOut2, char *pBuffer, int size);
 int fn_8008736C(int a, int b);
 void fn_80087600(int a, int b);
 void fn_800876C0(void);

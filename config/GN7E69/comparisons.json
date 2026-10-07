@@ -11816,6 +11816,109 @@
           "end": "0x80040154"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80086C10.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u2013800878D8 and existing exact function extents. Complete fourteen-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80086C10",
+          "end": "0x800878D8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80294B38",
+          "end": "0x80294F0C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6B8C",
+          "end": "0x802D6BD8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA808",
+          "end": "0x803EA80C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80086C10",
+          "start": "0x80086C10",
+          "end": "0x80086CE8"
+        },
+        {
+          "symbol": "fn_80086CE8",
+          "start": "0x80086CE8",
+          "end": "0x80086D0C"
+        },
+        {
+          "symbol": "fn_80086D0C",
+          "start": "0x80086D0C",
+          "end": "0x80087128"
+        },
+        {
+          "symbol": "fn_80087128",
+          "start": "0x80087128",
+          "end": "0x800872E8"
+        },
+        {
+          "symbol": "fn_800872E8",
+          "start": "0x800872E8",
+          "end": "0x8008731C"
+        },
+        {
+          "symbol": "fn_8008731C",
+          "start": "0x8008731C",
+          "end": "0x8008736C"
+        },
+        {
+          "symbol": "fn_8008736C",
+          "start": "0x8008736C",
+          "end": "0x80087460"
+        },
+        {
+          "symbol": "fn_80087460",
+          "start": "0x80087460",
+          "end": "0x8008754C"
+        },
+        {
+          "symbol": "fn_8008754C",
+          "start": "0x8008754C",
+          "end": "0x80087600"
+        },
+        {
+          "symbol": "fn_80087600",
+          "start": "0x80087600",
+          "end": "0x800876C0"
+        },
+        {
+          "symbol": "fn_800876C0",
+          "start": "0x800876C0",
+          "end": "0x80087704"
+        },
+        {
+          "symbol": "fn_80087704",
+          "start": "0x80087704",
+          "end": "0x8008775C"
+        },
+        {
+          "symbol": "fn_8008775C",
+          "start": "0x8008775C",
+          "end": "0x80087880"
+        },
+        {
+          "symbol": "fn_80087880",
+          "start": "0x80087880",
+          "end": "0x800878D8"
+        }
+      ]
     }
   ]
 }
