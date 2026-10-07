@@ -13,17 +13,20 @@ struct CameraHeader_8013F628 {
     int mUnknown14;
     int mUnknown18;
     int mUnknown1C;
-    char mPad20[4];
+    float mUnknown20;
     float mUnknown24;
 };
 
 struct Camera_8013F738 {
     CameraHeader_8013F628 mHeader;
-    char mPad28[8];
+    void *mUnknown28;
+    char mPad2C[4];
     float mUnknown30;
     char mPad34[4];
     int mUnknown38;
-    char mPad3C[0x28];
+    char mPad3C[0x20];
+    float mUnknown5C;
+    float mUnknown60;
     float mUnknown64;
     float mUnknown68;
     float mUnknown6C;
@@ -60,7 +63,7 @@ struct Camera_8013F738 {
     float mUnknownE8;
     float mUnknownEC;
     float mUnknownF0;
-    char mPadF4[4];
+    float mUnknownF4;
     char mPadF8[0x30];
     /* Script records of the replay camera (type 3). */
     RecordList_8002E7C0 mUnknown128;
