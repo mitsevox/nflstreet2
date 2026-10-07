@@ -1,5 +1,7 @@
 #include <dolphin/os.h>
 
+void __OSModuleInit(void);
+
 OSModuleQueue __OSModuleInfoList : (OS_BASE_CACHED | 0x30C8);
 const void* __OSStringTable : (OS_BASE_CACHED | 0x30D0);
 
