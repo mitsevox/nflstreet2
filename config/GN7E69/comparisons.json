@@ -5922,7 +5922,7 @@
     {
       "source": "src/game/cu_800EFC68.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional grouping row for src/game/cu_800EFC68.cpp; ten exact complete function extents with individual inferred name/source-form/compiler rows. Only these bodies are measured; all other bodies and mapped static storage remain original and unmeasured.",
+      "evidence": "evidence.tsv retained open/provisional grouping row for src/game/cu_800EFC68.cpp; ten exact complete function extents with individual inferred name/source-form/compiler rows, plus 32 follow-up function extents in 0x80111E80-0x8011BAE0 (30 exact, 0x801167C4 and 0x8011893C partial) with individual inferred name rows and the aggregate src/game/cu_800EFC68.cpp 0x80111E80-0x8011BAE0 source-form (bodies, partial bodies, declarations), compiler and type rows. Only these bodies are measured; all other bodies and mapped static storage remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",

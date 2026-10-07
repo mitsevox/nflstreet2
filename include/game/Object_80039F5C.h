@@ -73,7 +73,8 @@ struct Block_801718E8 {
     unsigned char mUnknown52;
 };
 
-/* Four-byte record at +1240, reset by fn_800CE674 and fn_800CE684. */
+/* Record at +1240; only bytes +0..+3 are accessed (fn_800CE674 and
+   fn_800CE684 store -1 to them). Size not established. */
 struct Record_800CE674 {
     short mUnknown0;
     char mUnknown2;
