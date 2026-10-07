@@ -1,5 +1,5 @@
 #include "dolphin/base/PPCArch.h"
-#include "dolphin/os/OSPriv.h"
+#include "__os.h"
 #include "dolphin/os/OSReset.h"
 
 static struct OSAlarmQueue
@@ -8,7 +8,7 @@ static struct OSAlarmQueue
     OSAlarm* tail;
 } AlarmQueue;
 
-static void DecrementerExceptionHandler(__OSException exception, OSContext* context);
+extern void DecrementerExceptionHandler(__OSException exception, OSContext* context);
 static BOOL OnReset(BOOL final);
 
 inline void SetTimer(OSAlarm* alarm)
@@ -214,13 +214,4 @@ static void DecrementerExceptionCallback(register __OSException exception,
     OSLoadContext(context);
 }
 
-static asm void DecrementerExceptionHandler(register __OSException exception,
-                                            register OSContext* context)
-{
-    // clang-format off
-	nofralloc 
-	OS_EXCEPTION_SAVE_GPRS(context)
-	stwu r1, -8(r1)
-	b DecrementerExceptionCallback
-    // clang-format on
-}
+
