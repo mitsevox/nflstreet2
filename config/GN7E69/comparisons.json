@@ -15314,6 +15314,67 @@
         "GXSetDrawSync",
         "GXReadDrawSync"
       ]
+    },
+    {
+      "source": "src/dolphin/card/CARDMount.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete BFBB CARDMount file with current canonical headers; eight full target bodies and both complete initialized tables. The adjacent 56-byte probe remains unrecovered in the full mapped span; no source splice or compiler changes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80255C38",
+          "end": "0x80256730"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF040",
+          "end": "0x802FF080"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "IsCard",
+          "start": "0x80255C38",
+          "end": "0x80255D04"
+        },
+        {
+          "symbol": "CARDProbeEx",
+          "start": "0x80255D3C",
+          "end": "0x80255EB8"
+        },
+        {
+          "symbol": "DoMount",
+          "start": "0x80255EB8",
+          "end": "0x802562C8"
+        },
+        {
+          "symbol": "__CARDMountCallback",
+          "start": "0x802562C8",
+          "end": "0x80256400"
+        },
+        {
+          "symbol": "CARDMountAsync",
+          "start": "0x80256400",
+          "end": "0x802565A0"
+        },
+        {
+          "symbol": "CARDMount",
+          "start": "0x802565A0",
+          "end": "0x802565E8"
+        },
+        {
+          "symbol": "DoUnmount",
+          "start": "0x802565E8",
+          "end": "0x80256684"
+        },
+        {
+          "symbol": "CARDUnmount",
+          "start": "0x80256684",
+          "end": "0x80256730"
+        }
+      ]
     }
   ]
 }

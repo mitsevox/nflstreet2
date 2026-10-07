@@ -1962,7 +1962,7 @@
       "name": "src/dolphin/card/CARDBios.c",
       "source": "src/dolphin/card/CARDBios.c",
       "library": "CARD",
-      "evidence": "Initial empty default API callback5335C corroborated source order; numerous distinct sync/EXI/status/segment/API anchors through OnReset545F0..54640. GX ends5335C. Native retained-screen base53474 is invalid; rejected as boundary evidence.",
+      "evidence": "Complete BFBB CARDBios source with current canonical headers; all 25 retained target functions and full initialized/NOBITS allocations validated. Original archive boundary remains provisional.",
       "sections": [
         {
           "section": ".text",
@@ -1971,6 +1971,42 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Initial empty default API callback5335C corroborated source order; numerous distinct sync/EXI/status/segment/API anchors through OnReset545F0..54640. GX ends5335C. Native retained-screen base53474 is invalid; rejected as boundary evidence."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED3C0",
+          "end": "0x803ED3C2",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native allocation corroborated by original operands: 544-byte control array, 32-byte fallback disk ID, 72-byte version string plus 16-byte reset descriptor, four-byte version pointer and two-byte encoding value. No invented padding."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC2B8",
+          "end": "0x803EC2BC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native allocation corroborated by original operands: 544-byte control array, 32-byte fallback disk ID, 72-byte version string plus 16-byte reset descriptor, four-byte version pointer and two-byte encoding value. No invented padding."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803A6508",
+          "end": "0x803A6748",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native allocation corroborated by original operands: 544-byte control array, 32-byte fallback disk ID, 72-byte version string plus 16-byte reset descriptor, four-byte version pointer and two-byte encoding value. No invented padding."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FEFE8",
+          "end": "0x802FF040",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native allocation corroborated by original operands: 544-byte control array, 32-byte fallback disk ID, 72-byte version string plus 16-byte reset descriptor, four-byte version pointer and two-byte encoding value. No invented padding."
         }
       ]
     },
