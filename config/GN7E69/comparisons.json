@@ -5922,7 +5922,7 @@
     {
       "source": "src/game/cu_800EFC68.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional grouping row for src/game/cu_800EFC68.cpp; ten exact complete function extents with individual inferred name/source-form/compiler rows. Only these bodies are measured; all other bodies and mapped static storage remain original and unmeasured.",
+      "evidence": "evidence.tsv retained open/provisional grouping row for src/game/cu_800EFC68.cpp; the registered functions are exact complete function extents, each with individual inferred name/source-form/compiler rows. Only these bodies are measured; all other bodies and mapped static storage remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
@@ -5968,9 +5968,104 @@
           "end": "0x800FF868"
         },
         {
+          "symbol": "fn_8010BE54",
+          "start": "0x8010BE54",
+          "end": "0x8010BEA4"
+        },
+        {
+          "symbol": "fn_8010BEA4",
+          "start": "0x8010BEA4",
+          "end": "0x8010BED4"
+        },
+        {
+          "symbol": "fn_8010C864",
+          "start": "0x8010C864",
+          "end": "0x8010C8F8"
+        },
+        {
+          "symbol": "fn_8010CFD4",
+          "start": "0x8010CFD4",
+          "end": "0x8010D004"
+        },
+        {
+          "symbol": "fn_8010D6D4",
+          "start": "0x8010D6D4",
+          "end": "0x8010D734"
+        },
+        {
+          "symbol": "fn_8010DA38",
+          "start": "0x8010DA38",
+          "end": "0x8010DAB4"
+        },
+        {
+          "symbol": "fn_8010EF40",
+          "start": "0x8010EF40",
+          "end": "0x8010F058"
+        },
+        {
+          "symbol": "fn_8010FB10",
+          "start": "0x8010FB10",
+          "end": "0x8010FB4C"
+        },
+        {
           "symbol": "fn_8010FD8C",
           "start": "0x8010FD8C",
           "end": "0x8010FD94"
+        },
+        {
+          "symbol": "fn_801100A0",
+          "start": "0x801100A0",
+          "end": "0x801100E8"
+        },
+        {
+          "symbol": "fn_801105B0",
+          "start": "0x801105B0",
+          "end": "0x80110630"
+        },
+        {
+          "symbol": "fn_80110630",
+          "start": "0x80110630",
+          "end": "0x8011067C"
+        },
+        {
+          "symbol": "fn_80110824",
+          "start": "0x80110824",
+          "end": "0x801108D4"
+        },
+        {
+          "symbol": "fn_80110EB0",
+          "start": "0x80110EB0",
+          "end": "0x80110EE4"
+        },
+        {
+          "symbol": "fn_80110EE4",
+          "start": "0x80110EE4",
+          "end": "0x80110FE4"
+        },
+        {
+          "symbol": "fn_80110FE4",
+          "start": "0x80110FE4",
+          "end": "0x80111090"
+        },
+        {
+          "symbol": "fn_80111090",
+          "start": "0x80111090",
+          "end": "0x80111104"
+        },
+        {
+          "symbol": "fn_80111354",
+          "start": "0x80111354",
+          "end": "0x801113DC"
+        },
+        {
+          "symbol": "fn_80111580",
+          "start": "0x80111580",
+          "end": "0x801115C0"
+        },
+        {
+          "symbol": "fn_80111964",
+          "start": "0x80111964",
+          "end": "0x80111974"
         },
         {
           "symbol": "fn_80113C18",
