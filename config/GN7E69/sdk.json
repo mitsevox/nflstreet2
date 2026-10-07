@@ -763,8 +763,8 @@
           "end": "0x802FD278",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": true,
-          "evidence": "Complete native allocation and actual original operands/pointers: initialized pools 384+24 bytes; scratch BB2/disk ID/dummy/alarm 32+32+48+40 bytes. No source storage credit for unlinked NOBITS."
+          "object_seed": false,
+          "evidence": "Complete native allocation and actual original operands/pointers: initialized pools 384+24 bytes; scratch BB2/disk ID/dummy/alarm 32+32+48+40 bytes. No source storage credit for unlinked NOBITS. Ownership-only extent: preserve the genuine inferred jump-table objects within this initialized pool."
         },
         {
           "section": ".bss",
