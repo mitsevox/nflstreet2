@@ -9868,6 +9868,23 @@
         "commit": "66b94bed45f1c57a8bbe84f3ae50812e505ee419",
         "introduced_blob": "39129b397c668e0cc9ee1945d408deeb5cbd85ba"
       }
+    },
+    {
+      "source": "src/game/cu_80063A30.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80063A30",
+        "0x80063AA0",
+        "0x80063AA8"
+      ],
+      "provenance": {
+        "pull_request": 481,
+        "merged_via": 481,
+        "commit": "49c3648b69faca0aea3938a518e006d4912278d4",
+        "introduced_blob": "811ee0a277af96f379445df26487d930ba13e83f"
+      }
     }
   ],
   "target": "GN7E69",
