@@ -424,7 +424,7 @@ s32 __CARDReadSegment(s32 chan, CARDCallback callback)
     {
         if (!EXIImmEx(chan, card->cmd, card->cmdlen, 1) ||
             !EXIImmEx(chan, (u8*)card->workArea + sizeof(CARDID), card->latency,
-                      1) || // XXX use DMA if possible
+                      1) ||
             !EXIDma(chan, card->buffer, 512, card->mode, __CARDTxHandler))
         {
             card->txCallback = 0;
