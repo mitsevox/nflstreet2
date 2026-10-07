@@ -10,7 +10,7 @@
 
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
 
-/* This mode overlays the opaque block at player+0x150. */
+/* Partial overlay of the opaque player block at +336. */
 struct State_801297F8 {
     float mUnknown0;
     float mUnknown4;
@@ -738,7 +738,8 @@ extern "C" int fn_80128D50(Object_80039F5C *p, State_801297F8 *pState)
         found = 1;
     }
     if (found == 0) {
-        if (fn_8013BA58(fn_801374BC(), 0) == 4) {
+        value = fn_8013BA58(fn_801374BC(), 0);
+        if (value == 4) {
             fn_80138064(fn_801374BC(), &pos);
         }
     } else {

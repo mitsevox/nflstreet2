@@ -6994,7 +6994,7 @@
     {
       "source": "src/game/cu_801260D4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained inferred twenty-nine-function grouping (provisional/open edges); individual name and source-form rows for the reconstructed bodies 0x8012623C, 0x80126DD4-0x801297F8, 0x8012A384 and 0x8012A38C, compiler row 0x8012623C-0x8012A3B0, and exact data row 0x8029F6B8-0x8029F808 for the compiled literal pools of 0x80126DD4-0x801297F8. Five bodies, all other literals and all static data remain original and unmeasured; the entire original assembly stays linked.",
+      "evidence": "evidence.tsv retained inferred twenty-nine-function grouping (provisional/open edges); individual name and source-form rows for the reconstructed bodies 0x8012623C, 0x80126DD4-0x801297F8 (0x801274D4 and 0x80129098 measured fuzzy partials), 0x8012A384 and 0x8012A38C, compiler rows 0x8012623C-0x801262B8, 0x80126DD4-0x801297F8, 0x8012A384-0x8012A38C and 0x8012A38C-0x8012A3B0, and exact data row 0x8029F6B8-0x8029F808 for the compiled literal pools of 0x80126DD4-0x801297F8. Five bodies, all other literals and all static data remain original and unmeasured; the entire original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
