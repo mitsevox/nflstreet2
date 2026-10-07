@@ -11937,6 +11937,26 @@
           "end": "0x80071C3C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80191948.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained two-function grouping 0x80191948-0x80193CEC and full original pool association, single complete808-byte function extent, neutral name, partial-root type/field, original-storage external access footprints, source-form and compiler rows. Larger8316-byte body and original pool storage remain unmeasured and original; entire original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80191948",
+          "end": "0x80193CEC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80191948",
+          "start": "0x80191948",
+          "end": "0x80191C70"
+        }
+      ]
     }
   ]
 }
