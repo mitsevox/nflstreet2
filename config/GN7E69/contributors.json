@@ -9177,8 +9177,10 @@
       "provenance": {
         "pull_request": 464,
         "merged_via": 464,
-        "commit": "16f61b4a0b780056f79f9a3110ec9d38579c5ea3",
-        "introduced_blob": "2653f6f5b9622cfec3ef8fd78a4c6f00f71119c9"
+        "commit": "2152119fdb74c02f28474426426844a5e851c73b",
+        "introduced_blob": "8894ffc14f02a2ae09e04473145404a529810e18",
+        "original_commit": "16f61b4a0b780056f79f9a3110ec9d38579c5ea3",
+        "original_blob": "2653f6f5b9622cfec3ef8fd78a4c6f00f71119c9"
       }
     },
     {
@@ -9223,8 +9225,10 @@
       "provenance": {
         "pull_request": 464,
         "merged_via": 464,
-        "commit": "705bb0ff04dfa99c00a2d49a6d69c638301c2f5e",
-        "introduced_blob": "7f20b61e30dcdc6a6c6a7bb6401b2541f25dee6e"
+        "commit": "2152119fdb74c02f28474426426844a5e851c73b",
+        "introduced_blob": "648d9399e64ac174a91cbc7f3ee780a0494dcb5a",
+        "original_commit": "705bb0ff04dfa99c00a2d49a6d69c638301c2f5e",
+        "original_blob": "7f20b61e30dcdc6a6c6a7bb6401b2541f25dee6e"
       }
     },
     {
@@ -9260,8 +9264,10 @@
       "provenance": {
         "pull_request": 464,
         "merged_via": 464,
-        "commit": "a7a3a30001abb674ccbfc1e61f81695e6ea3c263",
-        "introduced_blob": "de39c1601c334815addb20ddc5d5c443e8c36323"
+        "commit": "2152119fdb74c02f28474426426844a5e851c73b",
+        "introduced_blob": "e78f59fa2156a475df20a927a5e8a506267bfe41",
+        "original_commit": "a7a3a30001abb674ccbfc1e61f81695e6ea3c263",
+        "original_blob": "de39c1601c334815addb20ddc5d5c443e8c36323"
       }
     },
     {
@@ -9284,8 +9290,8 @@
       "provenance": {
         "pull_request": 464,
         "merged_via": 464,
-        "commit": "62ac7bdbe2dcb647be24a46a242e68cbe53816fe",
-        "introduced_blob": "8d72b11019c183e5d530172152204ce99379152d",
+        "commit": "2152119fdb74c02f28474426426844a5e851c73b",
+        "introduced_blob": "0afa93615ed017e192db5d2825a27730fba4906f",
         "original_commit": "d4821a1d57cd08363d1afa1f7db003c327b1fc99",
         "original_blob": "839af371f889124a86493c6c8e4a7445dde830e7",
         "integration_adjustment": "Centralized established query/callback declarations and corrected the opaque query-token interface after independent accuracy findings. Original source contributor retained; target access and callback contracts support the corrections."
@@ -9309,8 +9315,10 @@
       "provenance": {
         "pull_request": 464,
         "merged_via": 464,
-        "commit": "dd1b024e7d79b05dc605ce870a09d546b9a1eddd",
-        "introduced_blob": "d5ae71d578e60bb8d33f222f92ef98f0118ed340"
+        "commit": "2152119fdb74c02f28474426426844a5e851c73b",
+        "introduced_blob": "cc072ed0d71b3a743fe0f058005141a652195925",
+        "original_commit": "dd1b024e7d79b05dc605ce870a09d546b9a1eddd",
+        "original_blob": "d5ae71d578e60bb8d33f222f92ef98f0118ed340"
       }
     },
     {
