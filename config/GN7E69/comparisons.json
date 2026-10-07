@@ -11825,7 +11825,7 @@
     {
       "source": "src/game/cu_800325E8.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained provisional/provisional ten-function hull, three complete function extents and inferred name/type/source-form/compiler rows. Only three whole getter bodies are measured; seven other bodies and all original storage remain unmeasured. Canonical Class_801CC350 and record contracts are reused without changing shared declarations.",
+      "evidence": "evidence.tsv retained provisional/provisional ten-function hull; three complete getter bodies and two complete neutral lifecycle-role constant-call stubs, with individual name/function/source-form rows. Five other bodies and all storage remain original/unmeasured. Canonical Class_801CC350 and record contracts unchanged; no root, vtable or compiler lifecycle storage emitted.",
       "sections": [
         {
           "section": ".text",
@@ -11849,6 +11849,16 @@
           "symbol": "vfn_05__14Class_800325E8",
           "start": "0x80032600",
           "end": "0x8003260C"
+        },
+        {
+          "symbol": "fn_80032E90",
+          "start": "0x80032E90",
+          "end": "0x80032EBC"
+        },
+        {
+          "symbol": "fn_80032EBC",
+          "start": "0x80032EBC",
+          "end": "0x80032EE8"
         }
       ]
     },
