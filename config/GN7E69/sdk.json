@@ -2687,65 +2687,29 @@
         {
           "section": ".data4",
           "start": "0x803026D0",
-          "end": "0x803026E4",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "evidence": "Genuine 5-entry u32 cost table within the complete 212-byte AXVPB pool. Native symbol extent and original __AXSyncPBs indexing at 0x80288C18 with offsets20/84 at0x80288C48/0x80288C5C establish these boundaries; complete initialized payload is exact. Original archive ownership remains provisional.",
-          "object_seed": true
-        },
-        {
-          "section": ".data4",
-          "start": "0x803026E4",
-          "end": "0x80302724",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "evidence": "Genuine 16-entry u32 cost table within the complete 212-byte AXVPB pool. Native symbol extent and original __AXSyncPBs indexing at 0x80288C18 with offsets20/84 at0x80288C48/0x80288C5C establish these boundaries; complete initialized payload is exact. Original archive ownership remains provisional.",
-          "object_seed": true
-        },
-        {
-          "section": ".data4",
-          "start": "0x80302724",
           "end": "0x803027A4",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Genuine 32-entry u32 cost table within the complete 212-byte AXVPB pool. Native symbol extent and original __AXSyncPBs indexing at 0x80288C18 with offsets20/84 at0x80288C48/0x80288C5C establish these boundaries; complete initialized payload is exact. Original archive ownership remains provisional.",
+          "evidence": "Complete coherent native section ownership, verified by identical source-built DOL. Genuine 5-entry u32 cost table within the complete 212-byte AXVPB pool. Native symbol extent and original __AXSyncPBs indexing at 0x80288C18 with offsets20/84 at0x80288C48/0x80288C5C establish these boundaries; complete initialized payload is exact. Original archive ownership remains provisional. Genuine 16-entry u32 cost table within the complete 212-byte AXVPB pool. Native symbol extent and original __AXSyncPBs indexing at 0x80288C18 with offsets20/84 at0x80288C48/0x80288C5C establish these boundaries; complete initialized payload is exact. Original archive ownership remains provisional. Genuine 32-entry u32 cost table within the complete 212-byte AXVPB pool. Native symbol extent and original __AXSyncPBs indexing at 0x80288C18 with offsets20/84 at0x80288C48/0x80288C5C establish these boundaries; complete initialized payload is exact. Original archive ownership remains provisional.",
           "object_seed": true
         },
         {
           "section": ".bss",
           "start": "0x803C2A60",
-          "end": "0x803C6760",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true,
-          "evidence": "__AXPB complete coherent BFBB typedarray, nativeoffset0/size15616; actual Init64iterations/cacheextent/stride and starting base803C2A60 established in ordinary exact code. Original archive allocation edges remain provisional; no padding absorbed."
-        },
-        {
-          "section": ".bss",
-          "start": "0x803C6760",
-          "end": "0x803C7760",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true,
-          "evidence": "__AXITD complete coherent BFBB typedarray, nativeoffset15616/size4096; actual Init64iterations/cacheextent/stride and starting base803C2A60 established in ordinary exact code. Original archive allocation edges remain provisional; no padding absorbed."
-        },
-        {
-          "section": ".bss",
-          "start": "0x803C7760",
-          "end": "0x803CB760",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true,
-          "evidence": "__AXUpdates typed 64-entry update array, native offset19712/size16384. Init assigns per-voice pointers with stride256; Sync flushes the complete16384-byte range. Init does not clear this array. Original archive allocation edges remain provisional; no padding absorbed."
-        },
-        {
-          "section": ".bss",
-          "start": "0x803CB760",
           "end": "0x803D4260",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "__AXVPB complete coherent BFBB typedarray, nativeoffset36096/size35584; actual Init64iterations/cacheextent/stride and starting base803C2A60 established in ordinary exact code. Original archive allocation edges remain provisional; no padding absorbed."
+          "evidence": "Complete coherent native section ownership, verified by identical source-built DOL. __AXPB complete coherent BFBB typedarray, nativeoffset0/size15616; actual Init64iterations/cacheextent/stride and starting base803C2A60 established in ordinary exact code. Original archive allocation edges remain provisional; no padding absorbed. __AXITD complete coherent BFBB typedarray, nativeoffset15616/size4096; actual Init64iterations/cacheextent/stride and starting base803C2A60 established in ordinary exact code. Original archive allocation edges remain provisional; no padding absorbed. __AXUpdates typed 64-entry update array, native offset19712/size16384. Init assigns per-voice pointers with stride256; Sync flushes the complete16384-byte range. Init does not clear this array. Original archive allocation edges remain provisional; no padding absorbed. __AXVPB complete coherent BFBB typedarray, nativeoffset36096/size35584; actual Init64iterations/cacheextent/stride and starting base803C2A60 established in ordinary exact code. Original archive allocation edges remain provisional; no padding absorbed."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED5C8",
+          "end": "0x803ED5D4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete coherent native section ownership, verified by identical source-built DOL. __AXMaxDspCycles native u32 4bytes, original SDA references verified; archiveallocationedge provisional. __AXRecDspCycles native u32 4bytes, original SDA references verified; archiveallocationedge provisional. __AXNumVoices native u32 4bytes, original SDA references verified; archiveallocationedge provisional."
         },
         {
           "section": ".data6",
@@ -2755,33 +2719,6 @@
           "end_boundary": "provisional",
           "object_seed": true,
           "evidence": "Complete native float65536.0 initialized4-byte pool, original ratio load8028932C r13 SDA803EE4A8 independently observed, exact normalinitializedbytes. Archiveedges provisional."
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED5C8",
-          "end": "0x803ED5CC",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true,
-          "evidence": "__AXMaxDspCycles native u32 4bytes, original SDA references verified; archiveallocationedge provisional."
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED5CC",
-          "end": "0x803ED5D0",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true,
-          "evidence": "__AXRecDspCycles native u32 4bytes, original SDA references verified; archiveallocationedge provisional."
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED5D0",
-          "end": "0x803ED5D4",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true,
-          "evidence": "__AXNumVoices native u32 4bytes, original SDA references verified; archiveallocationedge provisional."
         },
         {
           "section": ".text",
