@@ -1890,7 +1890,7 @@
     {
       "source": "src/game/SndgPathfinder.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80068154-0x8006F1F4 for src/game/SndgPathfinder.cpp, its 160 exact function extents, exact data rows for every initialized placement and the source-form rows that state the remaining differences. Draft comparisons only; the original assembly remains linked until the whole unit reproduces the target in the complete source build.",
+      "evidence": "evidence.tsv unit row 0x80068154-0x8006F1F4 for src/game/SndgPathfinder.cpp, its 160 exact function extents, exact data rows for every initialized placement and the source-form rows that state the remaining differences. The discarded entry UpdateGameSituation follows the linker row for this unit (Xbox 0x1AA590); it is compiled with the file but not measured. Draft comparisons only; the original assembly remains linked until the whole unit reproduces the target in the complete source build.",
       "sections": [
         {
           "section": ".text",
@@ -2742,6 +2742,9 @@
           "start": "0x8006F1C8",
           "end": "0x8006F1F4"
         }
+      ],
+      "discarded": [
+        "UpdateGameSituation"
       ]
     },
     {

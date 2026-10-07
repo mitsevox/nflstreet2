@@ -7,19 +7,13 @@
 #include "game/fn_80227638.h"
 #include "game/fn_800670B4.h"
 
-/* Read both as a word and as a halfword. */
-union Slot_80163E94 {
-    int mWord;
-    short mHalf;
-};
-
 /* Record fn_80163E94 returns; the entries are selected by the side flag. */
 struct Record_80163E94 {
     char mUnknown0[9];
     unsigned char mUnknown9[2];
     char mUnknownB[5];
     Point_8017886C mUnknown10[2];
-    Slot_80163E94 mUnknown20[2];
+    int mUnknown20[2];
 };
 
 extern "C" {
@@ -68,15 +62,15 @@ void fn_80164568(Object_80039F5C *p, Record_80163E94 *pRecord, int side)
             fn_800F03D8(0, p->mpState, &msg, p);
             fn_801C1F94(&msg, 0, 4);
             msg.mId = 6;
-            msg.mUnknown1[0] = (int)(side == 1 ? pRecord->mUnknown20[1].mHalf : pRecord->mUnknown20[0].mHalf);
+            msg.mUnknown1[0] = (side == 1 ? pRecord->mUnknown20[1] : pRecord->mUnknown20[0]) >> 16;
             msg.mUnknown1[1] = 1;
             msg.mUnknown1[2] = 20;
             fn_800F03D8(0, p->mpState, &msg, p);
-        } else if (fn_801CFFD0(side == 1 ? pRecord->mUnknown20[1].mWord : pRecord->mUnknown20[0].mWord,
+        } else if (fn_801CFFD0(side == 1 ? pRecord->mUnknown20[1] : pRecord->mUnknown20[0],
                        p->mMotion.mFacing) > 0xAAAAA) {
             fn_801C1F94(&msg, 0, 4);
             msg.mId = 6;
-            msg.mUnknown1[0] = (int)(side == 1 ? pRecord->mUnknown20[1].mHalf : pRecord->mUnknown20[0].mHalf);
+            msg.mUnknown1[0] = (side == 1 ? pRecord->mUnknown20[1] : pRecord->mUnknown20[0]) >> 16;
             msg.mUnknown1[1] = 1;
             msg.mUnknown1[2] = 20;
             fn_800F03D8(0, p->mpState, &msg, p);
@@ -129,7 +123,7 @@ void fn_801647A4(Object_800670B4 *pObject, int team, void *pArg)
         fn_801C1F94(&msg, 0, 4);
         msg.mId = 87;
         msg.mUnknown1[0] = pObject->mUnknown8.mUnknownF == 1 ? pRecord->mUnknown9[1] : pRecord->mUnknown9[0];
-        msg.mUnknown1[1] = pObject->mUnknown8.mUnknownF == 1 ? pRecord->mUnknown20[1].mHalf : pRecord->mUnknown20[0].mHalf;
+        msg.mUnknown1[1] = (pObject->mUnknown8.mUnknownF == 1 ? pRecord->mUnknown20[1] : pRecord->mUnknown20[0]) >> 16;
         fn_800F03D8(0, p->mpState, &msg, p);
     }
 }
@@ -182,21 +176,23 @@ void fn_80164A64(int team)
     for (i = 0; i < count; i++) {
         Object_80039F5C *p = fn_80039F5C(team, i);
 
-        if (p->mUnknown3048.mId != 0 && p->mUnknown3048.mId == 7) {
-            Message_800F01CC msg;
-            float value;
+        if (p->mUnknown3048.mId != 0) {
+            if (p->mUnknown3048.mId == 7) {
+                Message_800F01CC msg;
+                float value;
 
-            fn_800FF6D8(p);
-            fn_801C1F94(&msg, 0, 4);
-            msg.mId = 51;
-            value = fn_80237260(0);
-            if (fn_80177F70() == 0) {
-                value *= 2.0f;
-            } else {
-                value *= 0.4f;
+                fn_800FF6D8(p);
+                fn_801C1F94(&msg, 0, 4);
+                msg.mId = 51;
+                value = fn_80237260(0);
+                if (fn_80177F70() == 0) {
+                    value *= 2.0f;
+                } else {
+                    value *= 0.4f;
+                }
+                msg.mUnknown1[0] = (int)(value * 32.0f);
+                fn_800F00D4(0, p->mpState, &msg, p);
             }
-            msg.mUnknown1[0] = (int)(value * 32.0f);
-            fn_800F00D4(0, p->mpState, &msg, p);
         }
     }
 }

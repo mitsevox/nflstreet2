@@ -466,11 +466,22 @@ struct Struct_8030A518 {
 };
 
 struct Struct_8030A830 {
-    char mUnknown0[0xA];
+    short mUnknown0;
+    short mUnknown2;
+    short mUnknown4;
+    short mUnknown6;
+    short mUnknown8;
     short mUnknownA;
     unsigned char mUnknownC;
     unsigned char mUnknownD;
-    char mUnknownE[0x18 - 0xE];
+    unsigned char mUnknownE;
+    unsigned char mUnknownF;
+    char mUnknown10;
+    char mUnknown11;
+    char mUnknown12;
+    char mUnknown13;
+    unsigned char mUnknown14;
+    unsigned char mUnknown15;
     int mFlags;
     float mUnknown1C;
     float mUnknown20;
@@ -587,8 +598,12 @@ int fn_8013F9F8(void);
 Camera_8013F738 *fn_8013FA04(int index);
 int fn_8013FD0C(int index);
 unsigned int fn_801568F0(void);
+int fn_80177F70(void);
 Vec2 fn_80177FE0(void);
+Vec2 fn_80178070(void);
+float fn_80178298(void);
 int fn_80178308(void);
+void GetScores(int *pHome, int *pAway);
 int fn_80178348(void);
 int fn_801784C4(void);
 unsigned long long fn_80190F18(void *pStream, int bits);
@@ -1416,7 +1431,7 @@ extern "C" void fn_80069398(int index, Vector_80039F5C *pPos, void *pObject)
             int cutoff;
             if (v >= 0) {
                 if (v <= 127) {
-                    cutoff = (int)((127.0f - v) * (17500.0f / 127.0f) + 2500.0f);
+                    cutoff = (int)(((127.0f - v) * (17500.0f / 127.0f) + 2500.0f) * 0.002f * 500.0f);
                 } else {
                     cutoff = 2500;
                 }
@@ -2821,6 +2836,33 @@ extern "C" void fn_8006E08C(void)
     lbl_803EA69C->mFlags = 0;
     lbl_803EA69C->mUnknown24.mX = 0.0f;
     lbl_803EA69C->mUnknown24.mY = 0.0f;
+}
+
+extern "C" void UpdateGameSituation(void)
+{
+    Vec2 spot = fn_80177FE0();
+    Vec2 prevSpot = fn_80178070();
+    int home = 0;
+    int away = 0;
+
+    lbl_803EA69C->mUnknownF = lbl_803EA69C->mUnknownE;
+    lbl_803EA69C->mUnknownE = fn_80178308();
+    lbl_803EA69C->mUnknown4 = lbl_803EA69C->mUnknown0;
+    lbl_803EA69C->mUnknown6 = lbl_803EA69C->mUnknown2;
+    GetScores(&home, &away);
+    lbl_803EA69C->mUnknown0 = home;
+    lbl_803EA69C->mUnknown2 = away;
+    if (lbl_803EA69C->mUnknownE == 0) {
+        lbl_803EA69C->mUnknown8 = lbl_803EA69C->mUnknown0 - lbl_803EA69C->mUnknown2;
+    } else {
+        lbl_803EA69C->mUnknown8 = lbl_803EA69C->mUnknown2 - lbl_803EA69C->mUnknown0;
+    }
+    lbl_803EA69C->mUnknown11 = (char)prevSpot.y;
+    lbl_803EA69C->mUnknown10 = (char)spot.y;
+    lbl_803EA69C->mUnknown12 = lbl_803EA69C->mUnknown10 - lbl_803EA69C->mUnknown11;
+    lbl_803EA69C->mUnknown15 = lbl_803EA69C->mUnknown14;
+    lbl_803EA69C->mUnknown14 = fn_80177F70();
+    lbl_803EA69C->mUnknown13 = (char)(fn_80178298() - spot.y + 0.001f);
 }
 
 extern "C" void fn_8006E0DC(int unknown)
