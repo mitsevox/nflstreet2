@@ -841,7 +841,7 @@
       "name": "src/dolphin/dvd/dvdlow.c",
       "source": "src/dolphin/dvd/dvdlow.c",
       "library": "DVD",
-      "evidence": "Twenty retained donor function instruction layouts cover3652 bytes continuously including workarounds then final LowSetWAType43088..430CC; VI begins430CC. Masked comparison establishes ownership corroboration, not source match.",
+      "evidence": "Twenty retained native SDK functions and all relocation operands resolve continuously at 0x80242288-0x802430CC; native BSS/sdata/SBSS placement and initialized FirstRead word are verified. Original archive member boundaries remain provisional.",
       "sections": [
         {
           "section": ".text",
@@ -849,7 +849,31 @@
           "end": "0x802430CC",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Twenty retained donor function instruction layouts cover3652 bytes continuously including workarounds then final LowSetWAType43088..430CC; VI begins430CC. Masked comparison establishes ownership corroboration, not source match."
+          "evidence": "Twenty retained native SDK functions and all relocation operands resolve continuously at 0x80242288-0x802430CC; native BSS/sdata/SBSS placement and initialized FirstRead word are verified. Original archive member boundaries remain provisional."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803A5668",
+          "end": "0x803A5738",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Complete unchanged native DVDLow allocation and target operands establish the section extent; see evidence.tsv DVDLow data rows. Native unused break-alarm storage is preserved without claiming target behavior; no inter-file padding credited."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC1F0",
+          "end": "0x803EC1F4",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Complete unchanged native DVDLow allocation and target operands establish the section extent; see evidence.tsv DVDLow data rows. Native unused break-alarm storage is preserved without claiming target behavior; no inter-file padding credited."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED188",
+          "end": "0x803ED1D0",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Complete unchanged native DVDLow allocation and target operands establish the section extent; see evidence.tsv DVDLow data rows. Native unused break-alarm storage is preserved without claiming target behavior; no inter-file padding credited."
         }
       ]
     },
@@ -1868,51 +1892,33 @@
       "name": "src/dolphin/gx/GXPixel.c",
       "source": "src/dolphin/gx/GXPixel.c",
       "library": "GX",
-      "evidence": "Related SDK source order and target function/data anchors; original file ownership is provisional. See references.",
+      "evidence": "BFBB 8fb1c232 full twelve-function native unit reproduces all target code, p2f table and complete constant pool under the existing profile. Original archive-member edges remain provisional.",
       "sections": [
-        {
-          "section": ".data6",
-          "start": "0x803ED950",
-          "end": "0x803ED95C",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "evidence": "Retained GXPixel fog calculations at 0x80251D34, 0x80251D48, 0x80251D7C and 0x80251D80 reference local float/double constants corroborated by pinned native donor types and bytes. Independent target-reference review excludes alignment gaps, weak globals and unused constants.",
-          "object_seed": true
-        },
-        {
-          "section": ".data6",
-          "start": "0x803ED960",
-          "end": "0x803ED96C",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "evidence": "Retained GXPixel fog calculations at 0x80251D34, 0x80251D48, 0x80251D7C and 0x80251D80 reference local float/double constants corroborated by pinned native donor types and bytes. Independent target-reference review excludes alignment gaps, weak globals and unused constants.",
-          "object_seed": true
-        },
-        {
-          "section": ".data6",
-          "start": "0x803ED970",
-          "end": "0x803ED97C",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "evidence": "Retained GXPixel fog calculations at 0x80251D34, 0x80251D48, 0x80251D7C and 0x80251D80 reference local float/double constants corroborated by pinned native donor types and bytes. Independent target-reference review excludes alignment gaps, weak globals and unused constants.",
-          "object_seed": true
-        },
-        {
-          "section": ".data6",
-          "start": "0x803ED980",
-          "end": "0x803ED988",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "evidence": "Retained GXPixel fog calculations at 0x80251D34, 0x80251D48, 0x80251D7C and 0x80251D80 reference local float/double constants corroborated by pinned native donor types and bytes. Independent target-reference review excludes alignment gaps, weak globals and unused constants.",
-          "object_seed": true
-        },
         {
           "section": ".text",
           "start": "0x80251CEC",
           "end": "0x80252334",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 11 uniquely located function anchors in this interval; target has a function entry at 0x80251CEC, previous instruction is blr, and previous interval ends at 0x80252334 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes. Start0x80251CEC takes fog mode bits plus start/end/near/far floats, branches by projection bit, computes fog A/B/C and emits BP fog registers. Followed by uniquely fingerprinted GXSetFogRangeAdj0x80251F10. No compiler-equivalence claim for the fog body."
+          "evidence": "BFBB 8fb1c232 full twelve-function native unit reproduces all target code, p2f table and complete constant pool under the existing profile. Original archive-member edges remain provisional."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FEE80",
+          "end": "0x802FEEA0",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "object_seed": true,
+          "evidence": "Complete unchanged BFBB native table/constant allocation, target accesses and all initialized bytes establish this extent; see evidence.tsv GXPixel data rows. Native constant alignment bytes are preserved without invented source padding."
+        },
+        {
+          "section": ".data6",
+          "start": "0x803ED950",
+          "end": "0x803ED988",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "object_seed": true,
+          "evidence": "Complete unchanged BFBB native table/constant allocation, target accesses and all initialized bytes establish this extent; see evidence.tsv GXPixel data rows. Native constant alignment bytes are preserved without invented source padding."
         }
       ]
     },
@@ -2178,14 +2184,14 @@
       "name": "src/dolphin/card/CARDUnlock.c",
       "source": "src/dolphin/card/CARDUnlock.c",
       "library": "CARD",
-      "evidence": "Six distinct retained donor functions continuously cover4704bytes, followed by independently accepted Rdwr.",
+      "evidence": "Six retained SDK functions and unchanged native CardData firmware/random state resolve completely; original archive-member ownership remains provisional.",
       "sections": [
         {
           "section": ".data4",
           "start": "0x802FF080",
           "end": "0x802FF1E0",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
           "evidence": "CARDUnlock forms 802FF080 at 80259708, converts it to a physical DSP task pointer at 8025970C/80259710, and stores length 352 at 80259714/8025971C. The full donor CardData u8[352] equals the target.",
           "object_seed": true
         },
@@ -2195,7 +2201,15 @@
           "end": "0x80259B08",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Six distinct retained donor functions continuously cover4704bytes, followed by independently accepted Rdwr."
+          "evidence": "Six retained SDK functions and unchanged native CardData firmware/random state resolve completely; original archive-member ownership remains provisional."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC2C8",
+          "end": "0x803EC2CC",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Native initialized four-byte random state equals target word 1; retained target operands establish its address. See evidence.tsv next data row."
         }
       ]
     },
@@ -2238,48 +2252,21 @@
       "evidence": "Unique ProbeBarnacle396, __OSEnableBarnacle444, InitializeUART112; followingWriteUARTN atBB1C540 calls EXIBios samechannel registers; ends SI busy initializer.",
       "sections": [
         {
-          "section": ".sbss",
-          "start": "0x803ED3D0",
-          "end": "0x803ED3D4",
-          "evidence": "Native Chan storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSEnableBarnacle at0x8025BA80. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED3D4",
-          "end": "0x803ED3D8",
-          "evidence": "Native Dev storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSEnableBarnacle at0x8025BA88. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED3D8",
-          "end": "0x803ED3DC",
-          "evidence": "Native Enabled storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSEnableBarnacle at0x8025BA90. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED3DC",
-          "end": "0x803ED3E0",
-          "evidence": "Native BarnacleEnabled storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSEnableBarnacle at0x8025BA8C. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
           "section": ".text",
           "start": "0x8025B764",
           "end": "0x8025BD38",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Unique ProbeBarnacle396, __OSEnableBarnacle444, InitializeUART112; followingWriteUARTN atBB1C540 calls EXIBios samechannel registers; ends SI busy initializer. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED3D0",
+          "end": "0x803ED3E0",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "object_seed": true,
+          "evidence": "Complete unchanged native EXIUart SBSS allocation contains the four individually evidenced four-byte objects Chan, Dev, Enabled and BarnacleEnabled at offsets0,4,8,12. Target operands establish each slot; no padding is claimed. A single native section extent replaces the earlier four research seeds without changing source ownership or addresses."
         }
       ]
     },
@@ -2548,7 +2535,7 @@
       "name": "src/dolphin/ax/AXCL.c",
       "source": "src/dolphin/ax/AXCL.c",
       "library": "AX",
-      "evidence": "Target GetCommandListCycles8-byte getter at8704C, GetCommandListAddress87054 flips2x768-byte buffers and writes sharedCLpointer, CommandListDSP generator87090 uses16-bitcommands/cyclecounter; init87740/quit87764/modesetters through87784. AXCL source and call/global relationships corroborate file; no native whole layout success claimed.",
+      "evidence": "Seven unchanged nativeAXCL routines1848bytes fully resolve all216relocations; complete1536BSS20SBSS match nativeplacement. Originalfile edges remainprovisional.",
       "sections": [
         {
           "section": ".text",
@@ -2556,7 +2543,23 @@
           "end": "0x80287784",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Target GetCommandListCycles8-byte getter at8704C, GetCommandListAddress87054 flips2x768-byte buffers and writes sharedCLpointer, CommandListDSP generator87090 uses16-bitcommands/cyclecounter; init87740/quit87764/modesetters through87784. AXCL source and call/global relationships corroborate file; no native whole layout success claimed."
+          "evidence": "Seven retained AXCL native routines cover 0x8028704C-0x80287784 continuously; all operands and full native storage resolve and link byte-identically. Actual target function edges are evidenced individually; original archive-member edges remain provisional."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803BD980",
+          "end": "0x803BDF80",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "AXCL complete unchanged nativeallocation and actualtargetoperands establish extent; nointer-file alignmentpadding credited."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED550",
+          "end": "0x803ED564",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "AXCL complete unchanged nativeallocation and actualtargetoperands establish extent; nointer-file alignmentpadding credited."
         }
       ]
     },
@@ -2564,7 +2567,7 @@
       "name": "src/dolphin/ax/AXOut.c",
       "source": "src/dolphin/ax/AXOut.c",
       "library": "AX",
-      "evidence": "Eight coherent native AXOut routines end at 0x80287F4C; following twelve-byte __AXGetStudio getter belongs to pinned AXSPB source and resolves its studio base. Original file edges remain provisional.",
+      "evidence": "Eight retained native AXOut routines1992bytes and complete BSS19080/SBSS52 fully resolve and link byte-identically; original source-file edges remain provisional. Following studio getter belongs to AXSPB.",
       "sections": [
         {
           "section": ".text",
@@ -2573,6 +2576,22 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Eight coherent native AXOut routines end at 0x80287F4C; following twelve-byte __AXGetStudio getter belongs to pinned AXSPB source and resolves its studio base. Original file edges remain provisional."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803BDF80",
+          "end": "0x803C2A08",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Complete unchanged AXOut native static section and all retained relocation operands establish extent; no source padding or inter-file alignment gap credited."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED568",
+          "end": "0x803ED59C",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "Complete unchanged AXOut native static section and all retained relocation operands establish extent; no source padding or inter-file alignment gap credited."
         }
       ]
     },
@@ -2646,6 +2665,14 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Unique72-byte current profile routine; following GBA channel functions establish different library."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED5D8",
+          "end": "0x803ED5E8",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "AXProf complete16byte nativeprofile-state section; all seven targetSDAreferences agree, original file edges remainprovisional."
         }
       ]
     },

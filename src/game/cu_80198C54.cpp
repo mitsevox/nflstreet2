@@ -1,3 +1,4 @@
+#include <dolphin/gx/GXPixel.h>
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/FMCAPPORT.h"
@@ -96,8 +97,6 @@ void fn_80251604(int a, int b);
 void fn_80251A58(int a, int b, int c, int d, int e);
 void fn_80251B28(int a, int b, int c, int d);
 void fn_80251CC4(int a);
-void fn_80252034(int a, int b, int c, int d);
-void fn_802520E0(int a, int b, int c);
 void fn_802523A4(Matrix_80198C54 m, int a);
 void fn_802524D4(float *p);
 void fn_8025251C(Matrix_80198C54 m, int a);
@@ -360,10 +359,10 @@ void fn_801993B8(int textured, unsigned int color, GXTexObj *pTexture, float alp
         fn_8024CB90(13, 1);
         fn_8024D450(0, 9, 1, 4, 4);
         fn_8024D450(0, 13, 1, 4, 0);
-        fn_802520E0(0, 7, 0);
+        GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
         GXSetCullMode(GX_CULL_NONE);
         fn_802528B0(1);
-        fn_80252034(1, 4, 5, 5);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
         fn_802505A8(pTexture, 0);
     } else {
         fn_80251CC4(1);
@@ -374,10 +373,10 @@ void fn_801993B8(int textured, unsigned int color, GXTexObj *pTexture, float alp
         fn_8024D418();
         fn_8024CB90(9, 1);
         fn_8024D450(0, 9, 1, 4, 4);
-        fn_802520E0(0, 7, 0);
+        GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
         GXSetCullMode(GX_CULL_NONE);
         fn_802528B0(1);
-        fn_80252034(1, 4, 5, 5);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
     }
     fn_802524D4(lbl_80365338[0]);
     C_MTXOrtho(projection, 0.0f, 448.0f, 0.0f, 640.0f, 1.0f, 2.0f);
@@ -389,9 +388,9 @@ void fn_801993B8(int textured, unsigned int color, GXTexObj *pTexture, float alp
 
 void fn_8019969C(void)
 {
-    fn_80252034(0, 0, 0, 5);
+    GXSetBlendMode(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_NOOP);
     fn_802523A4(lbl_80365338, 0);
-    fn_802520E0(1, 3, 1);
+    GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
     fn_802528B0(0);
 }
 

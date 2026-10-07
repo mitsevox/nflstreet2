@@ -1,3 +1,4 @@
+#include <dolphin/gx/GXPixel.h>
 #include <dolphin/types.h>
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXStruct.h>
@@ -25,9 +26,6 @@ void fn_80251604(int a, int b);
 void fn_80251A58(int a, int b, int c, int d, int e);
 void fn_80251B28(int a, int b, int c, int d);
 void fn_80251CC4(int a);
-void fn_80252034(int a, int b, int c, int d);
-void fn_802520E0(int a, int b, int c);
-void fn_80252114(int a);
 void fn_8025251C(Mtx44 m, int a);
 void fn_802525BC(int a);
 }
@@ -234,9 +232,9 @@ int fn_8019143C(int x, unsigned short y, int c, char *pText, int e)
         fn_80251570(0);
         fn_8024DCE4(0, 0, 4, 60, 0, 125);
         GXSetCullMode(GX_CULL_NONE);
-        fn_80252034(1, 4, 5, 5);
-        fn_80252114(0);
-        fn_802520E0(0, 7, 0);
+        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
+        GXSetZCompLoc(GX_DISABLE);
+        GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
         fn_80251A58(4, 0, 0, 4, 0);
         fn_801D0F80(m);
         fn_8025251C(m, 0);

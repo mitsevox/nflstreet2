@@ -1,3 +1,4 @@
+#include <dolphin/gx/GXPixel.h>
 #include "game/fn_801EF390.h"
 #include "game/fn_801D2B7C.h"
 #include <dolphin/mtx.h>
@@ -61,9 +62,6 @@ void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 void fn_80251604(int a, int b);
 void fn_80251B28(int a, int b, int c, int d);
 void fn_80251CC4(int a);
-void fn_80252034(int a, int b, int c, int d);
-void fn_802520E0(int a, int b, int c);
-void fn_80252114(int a);
 void fn_8025251C(Mtx44 m, int a);
 void fn_802525BC(int a);
 void fn_801D04C4(void);
@@ -133,9 +131,9 @@ void fn_8019F6CC(int index)
     fn_80210388();
     lbl_803ECBF8 = fn_80236EC0(1);
     GXSetCullMode(GX_CULL_NONE);
-    fn_80252034(1, 4, 5, 5);
-    fn_80252114(0);
-    fn_802520E0(1, 3, 0);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
+    GXSetZCompLoc(GX_DISABLE);
+    GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
     fn_80210CC4(0.01f, 0.01f);
     fn_8024D418();
     fn_8024CB90(9, 1);
@@ -155,7 +153,7 @@ void fn_8019F6CC(int index)
 void fn_8019F82C(int index)
 {
     fn_80210CC4(0.0f, 1.0f);
-    fn_802520E0(1, 3, 1);
+    GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
     fn_80236EC0(lbl_803ECBF8);
 }
 

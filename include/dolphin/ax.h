@@ -56,6 +56,28 @@ typedef struct _AXSPB {
     /* 0x34 */ s16 dpopBSDelta;
 } AXSPB;
 
+typedef struct _AXPROFILE {
+    /* 0x00 */ u64 axFrameStart;
+    /* 0x08 */ u64 auxProcessingStart;
+    /* 0x10 */ u64 auxProcessingEnd;
+    /* 0x18 */ u64 userCallbackStart;
+    /* 0x20 */ u64 userCallbackEnd;
+    /* 0x28 */ u64 axFrameEnd;
+    /* 0x30 */ u32 axNumVoices;
+} AXPROFILE;
+
+typedef void (*AXCallback)();
+AXCallback AXRegisterCallback(AXCallback callback);
+void AXSetStepMode(u32 i);
+extern AXPROFILE __AXLocalProfile;
+extern u16 axDspSlaveLength;
+extern u16 axDspSlave[];
+
+void AXSetMode(u32 mode);
+u32 AXGetMode(void);
+void AXSetCompressor(u32 i);
+void AXInitProfile(AXPROFILE* profile, u32 maxProfiles);
+u32 AXGetProfile(void);
 void AXInit(void);
 void AXInitEx(u32 outputBufferMode);
 void AXQuit(void);

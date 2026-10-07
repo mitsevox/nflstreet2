@@ -1,3 +1,4 @@
+#include <dolphin/gx/GXPixel.h>
 #include "game/cu_8019FBEC.h"
 #include "game/fn_801EF390.h"
 #include <dolphin/mtx.h>
@@ -48,9 +49,6 @@ void fn_80251604(int a, int b);
 void fn_80251A58(int a, int b, int c, int d, int e);
 void fn_80251B28(int a, int b, int c, int d);
 void fn_80251CC4(int a);
-void fn_80252034(int a, int b, int c, int d);
-void fn_802520E0(int a, int b, int c);
-void fn_80252114(int a);
 void fn_8025251C(Mtx44 m, int a);
 }
 
@@ -106,13 +104,13 @@ void fn_8019FD80(Instance_80159F10 *pInstance)
     fn_8024FC48(1);
     fn_8024DF64(1);
     fn_8024DCE4(0, 1, 4, 60, 0, 125);
-    fn_80252034(1, 4, 5, 5);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
     fn_80251B28(0, 0, 0, 4);
     fn_80251604(0, 0);
     fn_80251CC4(1);
     fn_8025251C(fn_801D0444(), 0);
-    fn_80252114(0);
-    fn_802520E0(1, 3, 1);
+    GXSetZCompLoc(GX_DISABLE);
+    GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
     fn_80251A58(4, 32, 0, 4, 32);
     fn_80250654(&lbl_803654E8[pInstance->mUnknown1D], 0);
     fn_802505A8(&lbl_8036547C[pInstance->mUnknown1C], 0);
@@ -130,7 +128,7 @@ void fn_8019FD80(Instance_80159F10 *pInstance)
     GXColor4u8(255, 255, 255, pInstance->mUnknown20 * 255.0f);
     GXTexCoord2f32(0.0f, 0.0f);
     fn_80251A58(7, 0, 0, 7, 0);
-    fn_80252114(1);
+    GXSetZCompLoc(GX_ENABLE);
     fn_80236EC0(value);
 }
 }

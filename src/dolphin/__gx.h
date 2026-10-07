@@ -45,6 +45,7 @@ void __GXCalculateVLim(void);
 
 /* GXBump */
 void __GXUpdateBPMask(void);
+void __GXFlushTextureState(void);
 
 /* GXGeometry */
 void __GXSetDirtyState(void);
