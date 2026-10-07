@@ -10,6 +10,7 @@
 #include "game/fn_80227638.h"
 #include "game/Message_800F01CC.h"
 #include "game/Record_800B15FC.h"
+#include "game/cu_8003108C.h"
 
 struct Pair_8017055C {
     float mX;
@@ -36,13 +37,10 @@ struct Object_80172FB0 {
 };
 
 extern "C" {
-extern void *lbl_803EA368;
 extern float lbl_803ECB08;
 
 double fabs(double);
 
-void fn_80031328(void *p, int a);
-void fn_800310C0(void *p, int a, Object_80039F5C *pObject, Vector_80039F5C *pPos, int *pFacing);
 void fn_8003AB08(Object_80039F5C *p, int a);
 unsigned char fn_80054D24(int index);
 void fn_80053A70(Object_80039F5C *p);
