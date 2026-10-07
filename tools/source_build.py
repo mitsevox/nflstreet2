@@ -28,13 +28,13 @@ LINK_TIMEOUT = 600
 # Build inputs the report is bound to; tools/progress.py rejects reports from other versions.
 TRUSTED_TOOLS = ("tools/source_build.py", "tools/prodg_cc.py", "tools/sdk_cc.py", "tools/setup_compiler.py",
                  "tools/baseline.py", "tools/compiler-tools.json", "tools/baseline-tools.json",
-                 "config/GN7E69/baseline.json", "config/GN7E69/analysis.json")
+                 "tools/diagnostic_object.py", "config/GN7E69/baseline.json", "config/GN7E69/analysis.json")
 
 SHT_PROGBITS, SHT_SYMTAB, SHT_STRTAB, SHT_NOBITS = 1, 2, 3, 8
 SHF_WRITE, SHF_ALLOC, SHF_EXECINSTR = 1, 2, 4
 SHN_UNDEF, SHN_ABS, SHN_COMMON = 0, 0xFFF1, 0xFFF2
 STB_LOCAL, STB_GLOBAL = 0, 1
-STT_FUNC, STT_SECTION, STT_FILE = 2, 3, 4
+STT_OBJECT, STT_FUNC, STT_SECTION, STT_FILE = 1, 2, 3, 4
 
 
 def address(text):
@@ -199,7 +199,8 @@ def load_manifest(manifest, sections, compiler_version):
     by_name = {section["name"]: section for section in sections}
     units, ranges, sources, followed = [], [], set(), []
     for unit in manifest.get("units", []):
-        if set(unit) - {"link_roots"} != {"source", "profile", "evidence", "sections"} or not unit["evidence"].strip():
+        if set(unit) - {"link_roots", "folded"} != {"source", "profile", "evidence", "sections"} \
+                or not unit["evidence"].strip():
             raise ValueError("Each unit needs exactly source, profile, evidence and sections; "
                              "flags belong to a profile")
         source = repository_path(unit["source"])
@@ -257,6 +258,7 @@ def load_manifest(manifest, sections, compiler_version):
                 raise ValueError(f"{unit['source']} {entry['section']} must follow another configured section "
                                  f"of the same unit earlier in {entry['placement']}")
             followed.append((code["end"], entry["start"], unit["source"], entry["section"]))
+        folded = folded_symbols(unit.get("folded"), placed, unit["source"])
         root = profiles[unit["profile"]].get("source_root")
         compile_path = None
         if root:
@@ -270,7 +272,8 @@ def load_manifest(manifest, sections, compiler_version):
                       "flags": profiles[unit["profile"]]["flags"], "sections": placed,
                       "compiler": profiles[unit["profile"]].get("compiler", "prodg"),
                       "include_dirs": profiles[unit["profile"]].get("include_dirs", []),
-                      "source_root": root, "compile_path": compile_path, "link_roots": roots})
+                      "source_root": root, "compile_path": compile_path, "link_roots": roots,
+                      "folded": folded})
     ranges.sort()
     for left, right in zip(ranges, ranges[1:]):
         if right[0] < left[1]:
@@ -279,6 +282,100 @@ def load_manifest(manifest, sections, compiler_version):
         if any(gap_start < end and start < gap_end for start, end, _ in ranges):
             raise ValueError(f"{source} {name}: another configured range lies between it and the code it follows")
     return units, externals, [directory for directory in manifest.get("include_dirs", [])]
+
+
+def folded_symbols(folded, placed, source):
+    """Validate a unit's folded local duplicates; return {name: target address} or None.
+
+    `folded` is {"symbols": {name: address}, "evidence": locator}. Each name is a local symbol
+    the unit defines that the original linker folded into a byte-identical same-named local
+    of another file at that address; fold_object checks the compiled object."""
+    if folded is None:
+        return None
+    if not isinstance(folded, dict) or set(folded) != {"symbols", "evidence"} \
+            or not isinstance(folded["evidence"], str) or not folded["evidence"].strip() \
+            or not isinstance(folded["symbols"], dict) or not folded["symbols"]:
+        raise ValueError(f"{source}: folded needs a non-empty symbols map and evidence")
+    result = {}
+    for name, value in folded["symbols"].items():
+        if not name or NEUTRAL.fullmatch(name) or name in LINKER_SYMBOLS:
+            raise ValueError(f"{source}: folded symbol {name!r} must be a descriptive local name")
+        result[name] = address(value)
+        if any(entry["start"] <= result[name] < entry["end"] for entry in placed):
+            raise ValueError(f"{source}: folded symbol {name} targets the unit's own range")
+    return result
+
+
+def folded_reference(name):
+    return f"__folded_{name}"
+
+
+def fold_object(native, folded, output):
+    """Model the original linker folding a unit's local duplicates into another file's copies.
+
+    For each folded name, which must be exactly one defined local function or object, the
+    relocations that target it are redirected to a new undefined symbol `__folded_<name>`, which
+    the link resolves to the configured address; nothing else changes (ngcld rejects relocations
+    against absolute symbols). A reference into a folded extent through any other symbol
+    (a section symbol or an alias) is ambiguous and fails. The folded function's body is left
+    unreferenced for the linker's retention to drop; the folded object's bytes stay in place.
+    Writes the derived object and returns {name: (symbol, section)}."""
+    data = bytearray(native)
+    sections, symbols = read_elf(bytes(data))
+    tables = [section for section in sections if section["type"] == SHT_SYMTAB]
+    if len(tables) != 1:
+        raise ValueError("Folding requires exactly one symbol table")
+    symtab, strtab = tables[0], sections[tables[0]["link"]]
+    folds, added, names = {}, [], b""
+    for name in folded:
+        if any(symbol["name"] == folded_reference(name) for symbol in symbols):
+            raise ValueError(f"Folded reference {folded_reference(name)} is already a symbol of the unit")
+        found = [index for index, symbol in enumerate(symbols, 1) if symbol["name"] == name]
+        symbol = symbols[found[0] - 1] if len(found) == 1 else None
+        section = sections[symbol["shndx"]] if symbol and 0 < symbol["shndx"] < len(sections) else None
+        if symbol is None or symbol["bind"] != STB_LOCAL or symbol["type"] not in (STT_OBJECT, STT_FUNC) \
+                or section is None or section["type"] != SHT_PROGBITS or not section["flags"] & SHF_ALLOC \
+                or bool(section["flags"] & SHF_EXECINSTR) != (symbol["type"] == STT_FUNC) \
+                or not symbol["size"] or symbol["value"] + symbol["size"] > section["size"]:
+            raise ValueError(f"Folded symbol {name} is not one local function or object defined in the unit")
+        folds[found[0]] = (name, symbol, section, len(symbols) + 1 + len(added))
+        added.append(struct.pack(">IIIBBH", strtab["size"] + len(names), 0, 0, STB_GLOBAL << 4, 0, SHN_UNDEF))
+        names += folded_reference(name).encode("ascii") + b"\0"
+    extents = [(symbol["shndx"], symbol["value"], symbol["value"] + symbol["size"])
+               for _, symbol, _, _ in folds.values()]
+    for index, symbol in enumerate(symbols, 1):
+        if index not in folds and symbol["type"] not in (STT_SECTION, STT_FILE) \
+                and any(shndx == symbol["shndx"] and start <= symbol["value"] < end
+                        for shndx, start, end in extents):
+            raise ValueError(f"Symbol {symbol['name']} aliases a folded symbol")
+    for section in sections:
+        if section["type"] == 9 and sections[section["info"]]["flags"] & SHF_ALLOC:
+            raise ValueError("Folding requires explicit-addend relocations")
+        if section["type"] != 4:
+            continue
+        for at in range(section["offset"], section["offset"] + section["size"], 12):
+            info, addend = struct.unpack_from(">Ii", data, at + 4)
+            index = info >> 8
+            if index in folds:
+                struct.pack_into(">I", data, at + 4, folds[index][3] << 8 | info & 255)
+            elif 0 < index <= len(symbols) and symbols[index - 1]["type"] == STT_SECTION and any(
+                    shndx == symbols[index - 1]["shndx"] and start <= addend < end
+                    for shndx, start, end in extents):
+                raise ValueError("A relocation reaches a folded symbol through its section")
+    # Append the extended symbol and string tables and a new section header table.
+    shoff = struct.unpack_from(">I", data, 32)[0]
+    _, shnum = struct.unpack_from(">HH", data, 46)
+    headers = [bytearray(data[shoff + index * 40:shoff + index * 40 + 40]) for index in range(shnum)]
+    for header, content in ((symtab, data[symtab["offset"]:symtab["offset"] + symtab["size"]] + b"".join(added)),
+                            (strtab, data[strtab["offset"]:strtab["offset"] + strtab["size"]] + names)):
+        data += b"\0" * (-len(data) % 4)
+        struct.pack_into(">II", headers[header["index"]], 16, len(data), len(content))
+        data += content
+    data += b"\0" * (-len(data) % 4)
+    struct.pack_into(">I", data, 32, len(data))
+    data += b"".join(headers)
+    Path(output).write_bytes(bytes(data))
+    return {name: (symbol, section) for name, symbol, section, _ in folds.values()}
 
 
 def evidence_rows(root, kind):
@@ -437,11 +534,18 @@ def plan(sections, units, objects, externals):
             pieces[section["name"]].append({"start": cursor, "end": section["end"], "symbols": []})
     resolved = {}
     for unit in units:
+        folds = {folded_reference(name): value for name, value in (unit.get("folded") or {}).items()}
         for symbol in objects[unit["source"]][1]:
             name = symbol["name"]
-            if symbol["shndx"] != SHN_UNDEF or symbol["bind"] == STB_LOCAL or not name or name in defined:
+            if symbol["shndx"] != SHN_UNDEF or symbol["bind"] == STB_LOCAL or not name:
                 continue
-            if name in externals:
+            if name in folds:
+                value = folds[name]
+                if name in defined or name in externals or resolved.get(name, value) != value:
+                    raise ValueError(f"{unit['source']}: folded reference {name} is ambiguous")
+            elif name in defined:
+                continue
+            elif name in externals:
                 value = externals[name]
             elif NEUTRAL.fullmatch(name):
                 value = int(NEUTRAL.fullmatch(name)[1], 16)
@@ -557,7 +661,7 @@ def retained_layout(unit, compiler, wrapper):
     native = unit["object"]
     sections, symbols = read_elf(native.read_bytes())
     allocated = [section for section in sections if section["flags"] & SHF_ALLOC and section["size"]]
-    allowed = {".text", ".rodata", ".data", ".bss", ".sdata", ".sdata2", ".sbss", ".sbss2"}
+    allowed = {".text", ".rodata", ".data", ".bss", ".sdata", ".sdata2", ".sbss", ".sbss2", ".ctors", ".dtors"}
     native_sections = {section["name"]: section for section in allocated}
     native_text = native_sections.get(".text")
     if native_text is None or not native_text["flags"] & SHF_EXECINSTR \
@@ -598,11 +702,15 @@ def retained_layout(unit, compiler, wrapper):
         if original is None or symbol["size"] != original["size"] \
                 or symbol["shndx"] != text["index"]:
             raise ValueError("Retained-layout linker changed a function's identity or size")
+    # A folded function's references now resolve to the copy it folds into; its body must go.
+    folded = set(unit.get("folded") or ())
+    if folded & {symbol["name"] for symbol in retained}:
+        raise ValueError(f"{unit['source']}: the linker retained a folded function")
     discarded = unit["link_roots"].get("discarded")
     if discarded is not None:
         native_functions = {symbol["name"] for symbol in symbols if symbol["type"] == 2
                             and symbol["shndx"] == native_text["index"] and symbol["size"] > 0}
-        if native_functions - {symbol["name"] for symbol in retained} != set(discarded):
+        if native_functions - {symbol["name"] for symbol in retained} - folded != set(discarded):
             raise ValueError(f"{unit['source']}: discarded functions differ from link_roots discarded")
     mapped = [text]
     by_index = {section["index"]: section for section in allocated}
@@ -724,14 +832,24 @@ def build(original, manifest_path, report_path):
         unit["depfile"] = unit["object"].with_suffix(".d")
         compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs)
         unit["native_object_sha256"] = sha256(unit["object"])
-        objects[unit["source"]] = (retained_layout(unit, compiler, wrapper) if unit["link_roots"]
-                                   else read_elf(unit["object"].read_bytes()))
+        unit["link_object"], unit["folds"] = unit["object"], {}
+        if unit["folded"]:
+            unit["link_object"] = unit["object"].with_suffix(".folded.o")
+            unit["folds"] = fold_object(unit["object"].read_bytes(), unit["folded"], unit["link_object"])
+            if not unit["link_roots"] and any(symbol["type"] == STT_FUNC for symbol, _ in unit["folds"].values()):
+                raise ValueError(f"{unit['source']}: a folded function needs link_roots so the linker drops its body")
+        unit["link_object_sha256"] = sha256(unit["link_object"])
+        objects[unit["source"]] = (retained_layout(dict(unit, object=unit["link_object"]), compiler, wrapper)
+                                   if unit["link_roots"] else read_elf(unit["link_object"].read_bytes()))
     pieces, defined, resolved = plan(sections, units, objects, externals)
+    references = {**externals, **resolved, **{name: value for name, (value, _) in defined.items()}}
+    for unit in units:
+        check_folded_functions(unit, target, sections, binary, references, compiler, wrapper)
     for section in sections:
         for piece in pieces[section["name"]]:
             if "unit" in piece:
                 unit = next(u for u in units if u["source"] == piece["unit"])
-                piece["object"], piece["input"] = unit["object"], piece["entry"]["section"]
+                piece["object"], piece["input"] = unit["link_object"], piece["entry"]["section"]
                 continue
             piece["object"] = BUILD / "original" / f"orig_{section['name'].strip('.')}_{piece['start']:08X}.o"
             piece["input"] = section["output"]
@@ -772,7 +890,8 @@ def build(original, manifest_path, report_path):
     run("ngcld", [str(wrapper), str(compiler / "ngcld.exe"), "@" + str(response)], BUILD / "link.log")
     if not elf.is_file() or not elf.stat().st_size:
         raise RuntimeError("Linker did not produce a fresh ELF")
-    if any(sha256(unit["object"]) != unit["native_object_sha256"] for unit in units):
+    if any(sha256(unit["object"]) != unit["native_object_sha256"]
+           or sha256(unit["link_object"]) != unit["link_object_sha256"] for unit in units):
         raise RuntimeError("Final linker input no longer equals the native compiler object")
     final = {s["name"]: s["value"] for s in read_elf(elf.read_bytes())[1] if s["bind"] != STB_LOCAL}
     for name, (value, source) in defined.items():
@@ -782,6 +901,8 @@ def build(original, manifest_path, report_path):
     if not output.is_file() or not output.stat().st_size:
         raise RuntimeError("Converter did not produce a fresh DOL")
     result = output.read_bytes()
+    for unit in units:
+        check_folded_objects(unit, binary, result)
     identical = result == binary and hashlib.sha1(result).hexdigest() == target["sha1"]
     report = measure(target, sections, units, manifest_bytes, result, identical, resolved, objects)
     report_path.parent.mkdir(parents=True, exist_ok=True)
@@ -789,6 +910,52 @@ def build(original, manifest_path, report_path):
     if not identical:
         raise RuntimeError(f"Source build differs from the complete target; see {report_path}")
     return report
+
+
+def check_folded_functions(unit, target, sections, binary, references, compiler, wrapper):
+    """A folded function has no code of its own in the target. Linked alone at the address it
+    folds into, its compiled body must reproduce the target bytes there."""
+    import diagnostic_object
+    placements = {entry["section"]: entry for entry in unit["sections"]}
+    for name, (symbol, section) in unit["folds"].items():
+        if symbol["type"] != STT_FUNC:
+            continue
+        start, size = unit["folded"][name], symbol["size"]
+        directory = BUILD / "folded" / re.sub(r"[^A-Za-z0-9]+", "_", f"{unit['source']}_{name}").strip("_")
+        directory.mkdir(parents=True)
+        fragment = directory / "fragment.o"
+        label, objects, script = diagnostic_object.fragment(
+            unit["link_object"].read_bytes(), section, symbol["value"], size, start, {}, {}, placements,
+            references, fragment, sections)
+        (directory / "link.ld").write_text(
+            f"SECTIONS {{\n_SDA_BASE_ = {target['sda_base']};\n_SDA2_BASE_ = {target['sda2_base']};\n"
+            f"{section['name']} 0x{start:08X} : {{ *({section['name']}) }}\n" + "\n".join(script) + "\n}\n")
+        output = directory / "linked.elf"
+        run("Folded function link", [str(wrapper), str(compiler / "ngcld.exe"), "-T", str(directory / "link.ld"),
+            "-o", str(output), str(fragment), *map(str, objects)], directory / "link.log")
+        linked_sections, linked_symbols = read_elf(output.read_bytes())
+        found = [s for s in linked_symbols if s["name"] == label and s["type"] == STT_FUNC]
+        placed = next((s for s in linked_sections if found and s["index"] == found[0]["shndx"]), None)
+        actual = placed["data"][start - placed["addr"]:start - placed["addr"] + size] \
+            if placed and len(found) == 1 and found[0]["value"] == start else None
+        if actual is None or actual != dol_bytes(binary, start, start + size):
+            raise ValueError(f"{unit['source']}: folded function {name} differs from the target "
+                             f"bytes at 0x{start:08X}")
+
+
+def check_folded_objects(unit, binary, result):
+    """A folded object keeps its bytes in place, unreferenced; as linked they must equal the
+    target bytes of the object it folds into."""
+    placements = {entry["section"]: entry for entry in unit["sections"]}
+    for name, (symbol, section) in unit["folds"].items():
+        if symbol["type"] != STT_OBJECT:
+            continue
+        here = placements[section["name"]]["start"] + symbol["value"]
+        there = unit["folded"][name]
+        copy = dol_bytes(result, here, here + symbol["size"])
+        if copy is None or copy != dol_bytes(binary, there, there + symbol["size"]):
+            raise ValueError(f"{unit['source']}: folded object {name} at 0x{here:08X} differs from the "
+                             f"target bytes at 0x{there:08X}")
 
 
 def baseline_system():
@@ -858,6 +1025,8 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                          "compiler": {"family": family, "version": version},
                          "dependencies": unit["dependencies"],
                          "link_roots": unit.get("link_roots"),
+                         "folded": {name: f"0x{value:08X}" for name, value in unit["folded"].items()}
+                         if unit.get("folded") else None,
                          "native_object_sha256": unit.get("native_object_sha256"),
                          "status": "matched" if identical else "unverified", "sections": entries,
                          "functions": compiled_functions(unit, objects[unit["source"]])})

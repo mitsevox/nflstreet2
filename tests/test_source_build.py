@@ -267,6 +267,140 @@ class Placement(Fixture):
             sb.check_basenames([Path("a/unit (1).o")])
 
 
+def with_relocations(path, target, entries):
+    """Append one SHT_RELA section for section `target` to an object from sb.write_object;
+    entries are (offset, symbol index, type, addend)."""
+    data = bytearray(Path(path).read_bytes())
+    shoff = struct.unpack_from(">I", data, 32)[0]
+    count = struct.unpack_from(">H", data, 48)[0]
+    headers = [bytes(data[shoff + index * 40:shoff + index * 40 + 40]) for index in range(count)]
+    data = data[:shoff]
+    symtab = next(index for index, header in enumerate(headers) if struct.unpack_from(">I", header, 4)[0] == 2)
+    offset = len(data)
+    data += b"".join(struct.pack(">IIi", at, index << 8 | kind, addend) for at, index, kind, addend in entries)
+    headers.append(struct.pack(">IIIIIIIIII", 0, 4, 0, 0, offset, len(entries) * 12, symtab, target, 4, 12))
+    struct.pack_into(">I", data, 32, len(data))
+    struct.pack_into(">H", data, 48, len(headers))
+    Path(path).write_bytes(bytes(data) + b"".join(headers))
+
+
+def relocations(data):
+    sections, symbols = sb.read_elf(data)
+    return [(at, symbols[(info >> 8) - 1]["name"], info & 255, addend)
+            for section in sections if section["type"] == 4
+            for at, info, addend in struct.iter_unpack(">IIi", data[section["offset"]:
+                                                                     section["offset"] + section["size"]])]
+
+
+class FoldedDuplicates(Fixture):
+    """Local duplicates the original linker folded into another file's identical copies."""
+
+    # Object symbol indices: 0 null, 1 file, 2 and 3 the .text and .rodata section symbols.
+    SYMBOLS = [{"name": "Unit_Function", "value": 0, "size": 4, "shndx": 1, "type": sb.STT_FUNC},
+               {"name": "Destroy", "value": 4, "size": 4, "shndx": 1, "type": sb.STT_FUNC, "bind": sb.STB_LOCAL},
+               {"name": "Table", "value": 0, "size": 4, "shndx": 2, "type": sb.STT_OBJECT, "bind": sb.STB_LOCAL}]
+
+    def native(self, symbols=None, text_relocations=((0, 6, 6, 0),), rodata_relocations=((0, 5, 1, 0),)):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        path = Path(temporary.name) / "unit.o"
+        sb.write_object(path, [dict(text(8), data=bytes(range(8))), rodata(4)],
+                        self.SYMBOLS if symbols is None else symbols)
+        with_relocations(path, 1, text_relocations)
+        with_relocations(path, 2, rodata_relocations)
+        return path.read_bytes(), Path(temporary.name) / "folded.o"
+
+    def folded_manifest(self, symbols=None, evidence="linker evidence"):
+        manifest = copy.deepcopy(self.manifest)
+        manifest["units"][0]["folded"] = {"symbols": {"Destroy": "0x80003124", "Table": "0x80004010"}
+                                          if symbols is None else symbols,
+                                          "evidence": evidence}
+        return manifest
+
+    def test_manifest_folds_need_evidence_and_foreign_addresses(self):
+        units, _, _ = self.load(self.folded_manifest())
+        self.assertEqual(units[0]["folded"], {"Destroy": 0x80003124, "Table": 0x80004010})
+        self.assertIsNone(self.load()[0][0]["folded"])
+        with self.assertRaisesRegex(ValueError, "symbols map and evidence"):
+            self.load(self.folded_manifest(evidence=" "))
+        with self.assertRaisesRegex(ValueError, "symbols map and evidence"):
+            self.load(self.folded_manifest(symbols={}))
+        with self.assertRaisesRegex(ValueError, "descriptive local name"):
+            self.load(self.folded_manifest(symbols={"fn_80003124": "0x80003124"}))
+        with self.assertRaisesRegex(ValueError, "the unit's own range"):
+            self.load(self.folded_manifest(symbols={"Destroy": "0x80003114"}))
+        with self.assertRaisesRegex(ValueError, "uppercase hexadecimal"):
+            self.load(self.folded_manifest(symbols={"Destroy": "0x80003124a"}))
+
+    def test_only_relocations_to_folded_symbols_change(self):
+        native, output = self.native()
+        folds = sb.fold_object(native, {"Destroy": 0x80003124, "Table": 0x80004010}, output)
+        self.assertEqual({name: (symbol["value"], section["name"]) for name, (symbol, section) in folds.items()},
+                         {"Destroy": (4, ".text"), "Table": (0, ".rodata")})
+        derived = output.read_bytes()
+        self.assertEqual(relocations(derived), [(0, "__folded_Table", 6, 0), (0, "__folded_Destroy", 1, 0)])
+        sections, symbols = sb.read_elf(derived)
+        before_sections, before_symbols = sb.read_elf(native)
+        self.assertEqual([s.get("data") for s in sections], [s.get("data") for s in before_sections])
+        self.assertEqual(symbols[:len(before_symbols)], before_symbols)
+        self.assertEqual([(s["name"], s["bind"], s["shndx"]) for s in symbols[len(before_symbols):]],
+                         [("__folded_Destroy", sb.STB_GLOBAL, sb.SHN_UNDEF),
+                          ("__folded_Table", sb.STB_GLOBAL, sb.SHN_UNDEF)])
+
+    def test_folded_names_must_be_unique_local_definitions(self):
+        native, output = self.native()
+        for name in ("Missing", "Unit_Function"):
+            with self.assertRaisesRegex(ValueError, "not one local function or object"):
+                sb.fold_object(native, {name: 0x80003124}, output)
+        twice = self.SYMBOLS + [dict(self.SYMBOLS[1], value=0)]
+        with self.assertRaisesRegex(ValueError, "not one local function or object"):
+            sb.fold_object(self.native(twice)[0], {"Destroy": 0x80003124}, output)
+        # A function must be code and an object must be data.
+        swapped = [self.SYMBOLS[0], dict(self.SYMBOLS[1], type=sb.STT_OBJECT), self.SYMBOLS[2]]
+        with self.assertRaisesRegex(ValueError, "not one local function or object"):
+            sb.fold_object(self.native(swapped)[0], {"Destroy": 0x80003124}, output)
+        clash = self.SYMBOLS + [{"name": "__folded_Destroy", "value": 0, "shndx": 0}]
+        with self.assertRaisesRegex(ValueError, "already a symbol"):
+            sb.fold_object(self.native(clash)[0], {"Destroy": 0x80003124}, output)
+        self.assertFalse(output.exists())
+
+    def test_references_by_section_or_alias_are_ambiguous(self):
+        native, output = self.native(rodata_relocations=((0, 2, 1, 4),))
+        with self.assertRaisesRegex(ValueError, "through its section"):
+            sb.fold_object(native, {"Destroy": 0x80003124}, output)
+        # The same section relocation outside the folded extent is unaffected.
+        sb.fold_object(self.native(rodata_relocations=((0, 2, 1, 0),))[0], {"Destroy": 0x80003124}, output)
+        alias = self.SYMBOLS + [{"name": "Alias", "value": 6, "size": 0, "shndx": 1, "bind": sb.STB_LOCAL}]
+        with self.assertRaisesRegex(ValueError, "aliases a folded symbol"):
+            sb.fold_object(self.native(alias)[0], {"Destroy": 0x80003124}, output)
+
+    def test_folded_references_resolve_to_their_configured_address(self):
+        symbols = [{"name": "Unit_Function", "value": 0, "shndx": 1, "type": 2},
+                   {"name": "__folded_Table", "value": 0, "shndx": 0}]
+        objects = {"src/unit.c": compiled([text(8), rodata(4)], symbols)}
+        pieces, _, resolved = self.plan(objects, self.folded_manifest())
+        self.assertEqual(resolved, {"__folded_Table": 0x80004010})
+        self.assertEqual(pieces[".data2"][-1]["symbols"], [{"name": "__folded_Table", "value": 4}])
+        # Without the fold the name is unknown; a definition elsewhere makes it ambiguous.
+        with self.assertRaisesRegex(ValueError, "unresolved symbol __folded_Table"):
+            self.plan(objects)
+        manifest = self.folded_manifest()
+        manifest["externals"] = {"__folded_Table": {"address": "0x80004010", "evidence": "x"}}
+        with self.assertRaisesRegex(ValueError, "folded reference __folded_Table is ambiguous"):
+            self.plan(objects, manifest)
+
+    def test_folded_object_copy_must_equal_the_target_bytes(self):
+        units, _, _ = self.load(self.folded_manifest(symbols={"Table": "0x80003120"}))
+        unit = units[0]
+        unit["folds"] = {"Table": ({"type": sb.STT_OBJECT, "value": 0, "size": 4}, {"name": ".rodata"})}
+        # The copy at 0x80004008 holds 0x88-0x8B; the target holds 0x20-0x23 at 0x80003120.
+        with self.assertRaisesRegex(ValueError, "folded object Table at 0x80004008 differs"):
+            sb.check_folded_objects(unit, self.binary, self.binary)
+        binary = bytearray(self.binary)
+        binary[0x120:0x124] = bytes(range(0x88, 0x8C))
+        sb.check_folded_objects(unit, bytes(binary), bytes(binary))
+
+
 class ReadOnlyDataAfterCode(Fixture):
     """A unit's read-only data may be configured directly after its own code in a code section."""
 

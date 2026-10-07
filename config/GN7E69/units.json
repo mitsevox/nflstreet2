@@ -839,6 +839,34 @@
     "ReadBitStream__FP11BitStream_tUi": {
       "address": "0x80190F18",
       "evidence": "evidence.tsv external row 0x80190F18 (ReadBitStream__FP11BitStream_tUi), name row 0x80190F18 and type row BitStream_t."
+    },
+    "fn_8018FE58__14Class_8018FD64": {
+      "address": "0x8018FE58",
+      "evidence": "evidence.tsv external row 0x8018FE58 (fn_8018FE58__14Class_8018FD64) and type row Class_8018FD64."
+    },
+    "fn_8018FEA0__14Class_8018FD64": {
+      "address": "0x8018FEA0",
+      "evidence": "evidence.tsv external row 0x8018FEA0 (fn_8018FEA0__14Class_8018FD64) and type row Class_8018FD64."
+    },
+    "fn_8018FEE8__14Class_8018FD64": {
+      "address": "0x8018FEE8",
+      "evidence": "evidence.tsv external row 0x8018FEE8 (fn_8018FEE8__14Class_8018FD64) and type row Class_8018FD64."
+    },
+    "fn_8018FF30__14Class_8018FD64iiiPi": {
+      "address": "0x8018FF30",
+      "evidence": "evidence.tsv external row 0x8018FF30 (fn_8018FF30__14Class_8018FD64iiiPi) and type row Class_8018FD64."
+    },
+    "fn_8018FFC0__14Class_8018FD64i": {
+      "address": "0x8018FFC0",
+      "evidence": "evidence.tsv external row 0x8018FFC0 (fn_8018FFC0__14Class_8018FD64i) and type row Class_8018FD64."
+    },
+    "fn_80190050__14Class_8018FD64if": {
+      "address": "0x80190050",
+      "evidence": "evidence.tsv external row 0x80190050 (fn_80190050__14Class_8018FD64if) and type row Class_8018FD64."
+    },
+    "fn_80190074__14Class_8018FD64ii": {
+      "address": "0x80190074",
+      "evidence": "evidence.tsv external row 0x80190074 (fn_80190074__14Class_8018FD64ii) and type row Class_8018FD64."
     }
   },
   "units": [
@@ -7936,6 +7964,160 @@
           "end": "0x803EC790"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80005668.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row src/game/cu_80005668.cpp, the function rows 0x80005668-0x80008F0C, the data rows 0x80008F10-0x8000A360 (data_80008F10), 0x802F400C-0x802F4140, 0x803EB910-0x803EB93C and 0x803ED6D0-0x803ED6D8, the .ctors/.dtors words and the data rows of its .bss and .sbss objects.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80005668",
+          "end": "0x80008F0C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x80008F10",
+          "end": "0x8000A360",
+          "follows": ".text"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F400C",
+          "end": "0x802F4140"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB910",
+          "end": "0x803EB93C"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED6D0",
+          "end": "0x803ED6D8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80369D9C",
+          "end": "0x8036A1C4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECCC4",
+          "end": "0x803ECD60"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B20",
+          "end": "0x80289B24"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C48",
+          "end": "0x80289C4C"
+        }
+      ],
+      "link_roots": {
+        "symbols": [
+          "vfn_01__14Class_80009ED8iPiT2",
+          "vfn_02__14Class_80009ED8iiPPv",
+          "vfn_03__14Class_80009ED8i",
+          "vfn_06__14Class_80009ED8",
+          "vfn_02__14Class_80009E88iiPPv",
+          "vfn_01__14Class_8000A108iPiT2",
+          "vfn_02__14Class_8000A108iiPPv",
+          "vfn_03__14Class_8000A108i",
+          "vfn_04__14Class_8000A108iPi",
+          "vfn_05__14Class_8000A108iP14Entry_80182CC8",
+          "vfn_01__14Class_8000A0B8iPiT2",
+          "vfn_02__14Class_8000A0B8iiPPv",
+          "vfn_03__14Class_8000A0B8i",
+          "vfn_05__14Class_8000A0B8iP14Entry_80182CC8",
+          "vfn_02__14Class_8000A068iiPPv",
+          "vfn_06__14Class_8000A068",
+          "vfn_02__14Class_80009FC8iiPPv",
+          "vfn_02__14Class_80009F78iiPPv",
+          "vfn_01__14Class_80009F28iPiT2",
+          "vfn_02__14Class_80009F28iiPPv",
+          "vfn_01__14Class_8000A018iPiT2",
+          "vfn_02__14Class_8000A018iiPPv",
+          "vfn_03__14Class_8000A018i",
+          "vfn_01__14Class_80009D88iPiT2",
+          "vfn_02__14Class_80009D88iiPPv",
+          "vfn_03__14Class_80009D88i",
+          "vfn_05__14Class_80009D88iP14Entry_80182CC8",
+          "vfn_09__14Class_80009D28iPiG12Arg_8018399C",
+          "vfn_10__14Class_80009D28iG12Arg_8018399C",
+          "vfn_01__14Class_80009E48iPiT2",
+          "vfn_02__14Class_80009E48iiPPv",
+          "vfn_03__14Class_80009E48i",
+          "vfn_05__14Class_80009E48iP14Entry_80182CC8",
+          "vfn_01__14Class_80009E08iPiT2",
+          "vfn_02__14Class_80009E08iiPPv",
+          "vfn_03__14Class_80009E08i",
+          "vfn_05__14Class_80009E08iP14Entry_80182CC8",
+          "vfn_01__14Class_80009DC8iPiT2",
+          "vfn_02__14Class_80009DC8iiPPv",
+          "vfn_03__14Class_80009DC8i",
+          "vfn_05__14Class_80009DC8iP14Entry_80182CC8",
+          "vfn_01__14Class_80009C88iPiT2",
+          "vfn_02__14Class_80009C88iiPPv",
+          "vfn_03__14Class_80009C88i",
+          "vfn_05__14Class_80009C88iP14Entry_80182CC8",
+          "vfn_06__14Class_80009CC8iiiPiT4G12Arg_8018399CN26",
+          "vfn_07__14Class_80009CC8iiG12Arg_8018399C",
+          "vfn_08__14Class_80009CC8iii",
+          "fn_800088C8",
+          "fn_8000890C",
+          "fn_80008914",
+          "fn_8000891C",
+          "fn_80008924",
+          "fn_800089C0",
+          "fn_800089D8",
+          "fn_800089E0",
+          "vfn_07__14Class_8000A0B8",
+          "vfn_08__14Class_8000A0B8",
+          "vfn_07__14Class_8000A068",
+          "vfn_08__14Class_8000A068",
+          "vfn_07__14Class_8000A018",
+          "vfn_08__14Class_8000A018",
+          "vfn_07__14Class_80009FC8",
+          "vfn_08__14Class_80009FC8",
+          "vfn_07__14Class_80009F78",
+          "vfn_08__14Class_80009F78",
+          "vfn_07__14Class_80009F28",
+          "vfn_08__14Class_80009F28",
+          "vfn_07__14Class_80009ED8",
+          "vfn_08__14Class_80009ED8",
+          "vfn_07__14Class_80009E88",
+          "vfn_08__14Class_80009E88",
+          "vfn_04__14Class_80009E48iPi",
+          "vfn_04__14Class_80009E08iPi",
+          "vfn_04__14Class_80009DC8iPi",
+          "vfn_04__14Class_80009D88iPi",
+          "vfn_04__14Class_80009C88iPi"
+        ],
+        "discarded": [
+          "GetRange__14Class_80009F78i"
+        ],
+        "evidence": "evidence.tsv linker row cu_80005668 GetRange: the target keeps every listed function, all reached from outside the unit or from each other; the out-of-line copy of the inline accessor GetRange of Class_80009F78 has no code in the target."
+      },
+      "folded": {
+        "symbols": {
+          "_._14Class_802938C0": "0x80083454",
+          "_vt.14Class_802938C0": "0x802938C0"
+        },
+        "evidence": "evidence.tsv source-form row cu_80005668 Class_802938C0 linkage and data row 0x8000A2B8-0x8000A360: the implicit destructor and vtable of Class_802938C0 are local to both this file and src/game/cu_80081CDC.cpp; the target keeps only the latter's destructor 0x80083454, this file's references resolve to 0x80083454 and 0x802938C0, and its vtable copy stays unreferenced in place."
+      }
     }
   ]
 }
