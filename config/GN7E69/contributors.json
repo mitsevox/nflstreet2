@@ -10231,6 +10231,21 @@
         "commit": "3e1ad873db22c1dc2091ea96dfb5102e1e8348fa",
         "introduced_blob": "df91d3038c52b1e7edf817697fc8283520a7d543"
       }
+    },
+    {
+      "source": "src/dolphin/os/OSAudioSystem.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80239BD4"
+      ],
+      "provenance": {
+        "pull_request": 507,
+        "merged_via": 507,
+        "commit": "0cc1c6d83d7ed812648c2fb384f231d2d327447d",
+        "introduced_blob": "65de8ecb9af00d8d375adc451048c110674a9d44"
+      }
     }
   ],
   "target": "GN7E69",
