@@ -1745,6 +1745,22 @@
     "__DBExceptionDestination": {
       "address": "0x8023ECEC",
       "evidence": "DBInit actual codepointer stored at fixed interface+8;16byte original entry branches to Caux. Unsupported assembly source remains external/target original."
+    },
+    "__VMBASEInvalidateTLBEntry": {
+      "address": "0x80245B14",
+      "evidence": "Original target provider retained for calls from measured VMBase C. Complete target instructions at 0x80245B14 and pinned MVP 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 src/dolphin/vmbase/VMBase.c declarations support the accessed contract; no body or original handwritten assembly provenance claimed. See VMBase external evidence."
+    },
+    "__VMBASESetupExceptionHandlers": {
+      "address": "0x80245FD0",
+      "evidence": "Original target provider retained for calls from measured VMBase C. Complete target instructions at 0x80245FD0 and pinned MVP 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 src/dolphin/vmbase/VMBase.c declarations support the accessed contract; no body or original handwritten assembly provenance claimed. See VMBase external evidence."
+    },
+    "__VMBASESetupVMRegisters": {
+      "address": "0x80245F34",
+      "evidence": "Original target provider retained for calls from measured VMBase C. Complete target instructions at 0x80245F34 and pinned MVP 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 src/dolphin/vmbase/VMBase.c declarations support the accessed contract; no body or original handwritten assembly provenance claimed. See VMBase external evidence."
+    },
+    "__VMBASEInvalidateEntireTLB": {
+      "address": "0x80245EDC",
+      "evidence": "Original target provider retained for calls from measured VMBase C. Complete target instructions at 0x80245EDC and pinned MVP 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 src/dolphin/vmbase/VMBase.c declarations support the accessed contract; no body or original handwritten assembly provenance claimed. See VMBase external evidence."
     }
   },
   "units": [
