@@ -18606,16 +18606,27 @@
     {
       "source": "src/game/cu_800DC584.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row 0x800DC584-0x800E2FE4 for src/game/cu_800DC584.cpp, exact whole-function rows and inferred name/source-form rows for twenty-five complete bodies. Original bytes remain linked; fifty other bodies and all static data remain original and unmeasured.",
+      "evidence": "evidence.tsv open/open unit row 0x800DC584-0x800E2FE4 for src/game/cu_800DC584.cpp, exact whole-function rows and inferred name/source-form rows for forty complete bodies, and the exact data row 0x8029DA74-0x8029DA80 for the .rodata literals of fn_800E11C0, fn_800E1248 and fn_800E1438. Original bytes remain linked; thirty-five other bodies and all other static data remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800DC584",
           "end": "0x800E2FE4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DA74",
+          "end": "0x8029DA80"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_800DC584",
+          "start": "0x800DC584",
+          "end": "0x800DC61C"
+        },
         {
           "symbol": "fn_800DC61C",
           "start": "0x800DC61C",
@@ -18632,14 +18643,49 @@
           "end": "0x800DC6F4"
         },
         {
+          "symbol": "fn_800DD5E4",
+          "start": "0x800DD5E4",
+          "end": "0x800DD648"
+        },
+        {
+          "symbol": "fn_800DD648",
+          "start": "0x800DD648",
+          "end": "0x800DD69C"
+        },
+        {
+          "symbol": "fn_800DD780",
+          "start": "0x800DD780",
+          "end": "0x800DD830"
+        },
+        {
           "symbol": "fn_800DD830",
           "start": "0x800DD830",
           "end": "0x800DD838"
         },
         {
+          "symbol": "fn_800DD838",
+          "start": "0x800DD838",
+          "end": "0x800DD92C"
+        },
+        {
+          "symbol": "fn_800DD92C",
+          "start": "0x800DD92C",
+          "end": "0x800DD994"
+        },
+        {
           "symbol": "fn_800DDCE4",
           "start": "0x800DDCE4",
           "end": "0x800DDD24"
+        },
+        {
+          "symbol": "fn_800DDD24",
+          "start": "0x800DDD24",
+          "end": "0x800DDE6C"
+        },
+        {
+          "symbol": "fn_800DDE6C",
+          "start": "0x800DDE6C",
+          "end": "0x800DDEE4"
         },
         {
           "symbol": "fn_800DDEE4",
@@ -18652,9 +18698,24 @@
           "end": "0x800DE3B0"
         },
         {
+          "symbol": "fn_800DF134",
+          "start": "0x800DF134",
+          "end": "0x800DF1F4"
+        },
+        {
+          "symbol": "fn_800DF654",
+          "start": "0x800DF654",
+          "end": "0x800DF6EC"
+        },
+        {
           "symbol": "fn_800DF6EC",
           "start": "0x800DF6EC",
           "end": "0x800DF710"
+        },
+        {
+          "symbol": "fn_800DF710",
+          "start": "0x800DF710",
+          "end": "0x800DF750"
         },
         {
           "symbol": "fn_800DF750",
@@ -18717,6 +18778,16 @@
           "end": "0x800E0F48"
         },
         {
+          "symbol": "fn_800E11C0",
+          "start": "0x800E11C0",
+          "end": "0x800E1248"
+        },
+        {
+          "symbol": "fn_800E1248",
+          "start": "0x800E1248",
+          "end": "0x800E12D4"
+        },
+        {
           "symbol": "fn_800E12D4",
           "start": "0x800E12D4",
           "end": "0x800E1350"
@@ -18732,6 +18803,11 @@
           "end": "0x800E1438"
         },
         {
+          "symbol": "fn_800E1438",
+          "start": "0x800E1438",
+          "end": "0x800E1544"
+        },
+        {
           "symbol": "fn_800E1544",
           "start": "0x800E1544",
           "end": "0x800E1554"
@@ -18740,6 +18816,11 @@
           "symbol": "fn_800E1554",
           "start": "0x800E1554",
           "end": "0x800E1584"
+        },
+        {
+          "symbol": "fn_800E1778",
+          "start": "0x800E1778",
+          "end": "0x800E1870"
         }
       ]
     },
