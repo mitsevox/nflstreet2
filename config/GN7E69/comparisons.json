@@ -6692,12 +6692,6 @@
           "placement": ".data3",
           "start": "0x8029E410",
           "end": "0x8029E4B8"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029E880",
-          "end": "0x8029E8D0"
         }
       ],
       "functions": [
@@ -7790,26 +7784,6 @@
           "symbol": "fn_800F4E14",
           "start": "0x800F4E14",
           "end": "0x800F4E88"
-        },
-        {
-          "symbol": "fn_80104944",
-          "start": "0x80104944",
-          "end": "0x80104A08"
-        },
-        {
-          "symbol": "fn_80104A08",
-          "start": "0x80104A08",
-          "end": "0x80104B24"
-        },
-        {
-          "symbol": "fn_80104B24",
-          "start": "0x80104B24",
-          "end": "0x80104B3C"
-        },
-        {
-          "symbol": "fn_80104B3C",
-          "start": "0x80104B3C",
-          "end": "0x80104C3C"
         }
       ]
     },
@@ -24429,6 +24403,47 @@
           "symbol": "fn_8003AC10",
           "start": "0x8003AC10",
           "end": "0x8003AC84"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80104944.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. Four target whole-function extents and literal-pool slice retain their evidence; this split permits independent compilation of disjoint partial literal pools and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80104944",
+          "end": "0x80104C3C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E880",
+          "end": "0x8029E8D0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80104944",
+          "start": "0x80104944",
+          "end": "0x80104A08"
+        },
+        {
+          "symbol": "fn_80104A08",
+          "start": "0x80104A08",
+          "end": "0x80104B24"
+        },
+        {
+          "symbol": "fn_80104B24",
+          "start": "0x80104B24",
+          "end": "0x80104B3C"
+        },
+        {
+          "symbol": "fn_80104B3C",
+          "start": "0x80104B3C",
+          "end": "0x80104C3C"
         }
       ]
     }

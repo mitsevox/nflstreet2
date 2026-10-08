@@ -1,3 +1,4 @@
+#include "game/cu_80125F3C.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_80178D18.h"
 

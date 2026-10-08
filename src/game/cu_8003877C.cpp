@@ -107,7 +107,7 @@ void fn_8008E978(Object_80039F5C *p);
 void fn_8009C370(Object_80039F5C *p);
 void fn_8009CDEC(Object_80039F5C *p);
 void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
-void fn_8009D00C(Object_80039F5C *p, int *pRecord);
+void fn_8009D00C(void *p, int *pRecord);
 int fn_8011E8A4(void);
 void fn_8011E8D8(Object_80039F5C *p);
 Set_8003EE6C *fn_801442F0(void);

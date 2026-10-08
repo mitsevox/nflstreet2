@@ -1,9 +1,9 @@
+#include "game/fn_801D2B7C.h"
 #include "game/cu_800034A0.h"
 #include "game/cu_8002ACB4.h"
 
 extern "C" {
 void *fn_801D2B7C(int size, int a, int b);
-void fn_801D2BD0(void *ptr);
 int fn_8018A854(void);
 void fn_80228474(int a, int b, void *c, int d);
 void fn_8002A478(int *pType, void *pSlot);
@@ -292,7 +292,7 @@ int fn_800039E4(int a, int *b, int *c)
         if (lbl_803EB8C8 == 0 && c != 0 && *c < 0) {
             lbl_803EB8C8 = 36;
         }
-        fn_8002A5A0(&type, &slot);
+        fn_8002A478(&type, &slot);
         if (lbl_803EB8C8 == 0) {
             fn_80029990(type, slot, lbl_80367580.mChecksum);
         } else {

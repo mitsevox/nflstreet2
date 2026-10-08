@@ -3251,7 +3251,7 @@ extern "C" void fn_8009CC28(void)
 {
 }
 
-extern "C" void fn_8009D00C(int value, int *pState)
+extern "C" void fn_8009D00C(void *p, int *pState)
 {
     switch (*pState) {
     case 1:

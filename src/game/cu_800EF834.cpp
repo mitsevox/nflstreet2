@@ -1,3 +1,4 @@
+#include "game/Record_800DB60C.h"
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
@@ -9,7 +10,7 @@
 /* Partial view of the opaque player block at +336 used by the handlers
    below. */
 struct Block_800EF968 {
-    char mUnknown0[24];
+    Record_800DB60C mRecord;
     unsigned char mUnknown24;
     unsigned char mUnknown25;
     unsigned short mUnknown26;
@@ -22,8 +23,7 @@ int fn_800C4B6C(Object_80039F5C *p);
 int fn_800D0B90(Object_80039F5C *p);
 void fn_800D0BF4(Object_80039F5C *p, int a, int b);
 void fn_800D640C(Object_80039F5C *p);
-void fn_800DB520(void *pBlock, Object_80039F5C *p, int a, float value);
-void fn_800DB60C(void *pBlock, Object_80039F5C *p);
+void fn_800DB520(void *pBlock, Object_80039F5C *p, Object_80039F5C *pOther, float value);
 void fn_800DB7A4(void *pBlock, Object_80039F5C *p);
 void fn_800EF224(Object_80039F5C *p);
 void fn_800EF538(Object_80039F5C *p);
@@ -173,7 +173,7 @@ extern "C" int fn_800EFBD8(Object_80039F5C *p)
     fn_800B65A0(p->mIdBytes[2]);
     fn_800B6D34(p, &input);
     if (input.mUnknown95 & 64) {
-        fn_800DB60C(pBlock, p);
+        fn_800DB60C(&pBlock->mRecord, p);
     }
     return 0;
 }
