@@ -21554,6 +21554,129 @@
           "end": "0x8007AEE8"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_80228E44.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80228E44-0x80228F78 (src/engine/cu_80228E44.c), its function and name rows and the exact .sdata data row 0x803EBFA8-0x803EBFB8. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80228E44",
+          "end": "0x80228F78"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBFA8",
+          "end": "0x803EBFB8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80228E44",
+          "start": "0x80228E44",
+          "end": "0x80228F0C"
+        },
+        {
+          "symbol": "fn_80228F0C",
+          "start": "0x80228F0C",
+          "end": "0x80228F78"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80228F78.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80228F78-0x80229084 (src/engine/cu_80228F78.c), its function and name rows and the exact .sdata data row 0x803EBFB8-0x803EBFC4. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80228F78",
+          "end": "0x80229084"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBFB8",
+          "end": "0x803EBFC4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80228F78",
+          "start": "0x80228F78",
+          "end": "0x80228FD8"
+        },
+        {
+          "symbol": "fn_80228FD8",
+          "start": "0x80228FD8",
+          "end": "0x80229010"
+        },
+        {
+          "symbol": "fn_80229010",
+          "start": "0x80229010",
+          "end": "0x8022905C"
+        },
+        {
+          "symbol": "fn_8022905C",
+          "start": "0x8022905C",
+          "end": "0x80229084"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80229094.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80229094-0x80229270 (src/engine/cu_80229094.c), its function and name rows and the exact .sdata data row 0x803EBFC8-0x803EBFD8. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80229094",
+          "end": "0x80229270"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBFC8",
+          "end": "0x803EBFD8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80229094",
+          "start": "0x80229094",
+          "end": "0x802290E0"
+        },
+        {
+          "symbol": "fn_802290E0",
+          "start": "0x802290E0",
+          "end": "0x8022910C"
+        },
+        {
+          "symbol": "fn_8022910C",
+          "start": "0x8022910C",
+          "end": "0x80229188"
+        },
+        {
+          "symbol": "fn_80229188",
+          "start": "0x80229188",
+          "end": "0x802291A0"
+        },
+        {
+          "symbol": "fn_802291A0",
+          "start": "0x802291A0",
+          "end": "0x80229210"
+        },
+        {
+          "symbol": "fn_80229210",
+          "start": "0x80229210",
+          "end": "0x80229270"
+        }
+      ]
     }
   ]
 }
