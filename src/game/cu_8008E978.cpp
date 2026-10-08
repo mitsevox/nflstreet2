@@ -952,7 +952,7 @@ struct Block_800AD634 {
 };
 
 extern "C" {
-void fn_8004A230(int a);
+void fn_8004A230(unsigned char value);
 void fn_8003AB08(Object_80039F5C *p, int a);
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
@@ -1322,10 +1322,10 @@ extern "C" void fn_800ABA0C(void)
     for (i = 0; i <= 1; i++) {
         unsigned char team = i;
         unsigned int count = fn_80178D18(team);
-        unsigned int i;
+        unsigned int index;
 
-        for (i = 0; i < count; i++) {
-            Object_80039F5C *p = fn_80039F5C(team, i);
+        for (index = 0; index < count; index++) {
+            Object_80039F5C *p = fn_80039F5C(team, index);
 
             fn_800EFE60(0, p->mpState, p);
         }
