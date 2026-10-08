@@ -18,7 +18,7 @@ extern "C" {
 int fn_801CFFD0(int a, int b);
 int fn_801CFE40(float y, float x);
 void fn_80227690(void *pOut, void *pA, void *pB);
-void fn_801061E8(Object_80039F5C *p, int a);
+void fn_801061E8(Object_80039F5C *p, Object_80137ABC *pBall);
 int fn_80106580(Object_80039F5C *p, int a);
 void fn_800DB40C(Record_800DB60C *pRecord, Object_80039F5C *p, Object_80137ABC *pBall);
 }
@@ -41,7 +41,7 @@ extern "C" int fn_800DAEE4(Object_80039F5C *p)
     return result;
 }
 
-extern "C" void fn_800DB074(Object_80039F5C *p, int a, Record_800DB074 *pRecord)
+extern "C" void fn_800DB074(Object_80039F5C *p, Object_80137ABC *pBall, Record_800DB074 *pRecord)
 {
     Record_8011F518 *pRecord8011F518 = fn_8011F518();
     pRecord8011F518->mUnknown8 = pRecord->mUnknown16;
@@ -53,7 +53,7 @@ extern "C" void fn_800DB074(Object_80039F5C *p, int a, Record_800DB074 *pRecord)
     } else {
         pRecord8011F518->mUnknown12 = p->mMotion.mUnknown32;
     }
-    fn_801061E8(p, a);
+    fn_801061E8(p, pBall);
 }
 
 extern "C" void fn_800DB60C(Record_800DB60C *pRecord, Object_80039F5C *p)
