@@ -11744,6 +11744,234 @@
         "commit": "4b5e5f85e99b25a0c628cd797d1cc19874a33331",
         "introduced_blob": "b31c3458eb961f8ff1fa1be6b2273e6c1ac6ac05"
       }
+    },
+    {
+      "source": "src/dolphin/ai/ai.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024A67C"
+      ],
+      "provenance": {
+        "pull_request": 638,
+        "merged_via": 638,
+        "commit": "5b8af3721f43b74e6a58826812ba8831158ee821",
+        "introduced_blob": "f48c1005863095b2ac5c2ab12d47528a1515107e"
+      }
+    },
+    {
+      "source": "src/dolphin/card/CARDMount.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80255D04"
+      ],
+      "provenance": {
+        "pull_request": 638,
+        "merged_via": 638,
+        "commit": "5b8af3721f43b74e6a58826812ba8831158ee821",
+        "introduced_blob": "d19e431acde43bd355b8c5a8df354aef07f40c0b"
+      }
+    },
+    {
+      "source": "src/dolphin/card/CARDOpen.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80256F14",
+        "0x80257238"
+      ],
+      "provenance": {
+        "pull_request": 518,
+        "commit": "e41764df10133c40bb021486fe67fae9d00c7532",
+        "introduced_blob": "bd86568291ba7f3e478b30f4a247cb27a256712f",
+        "merged_via": 525
+      }
+    },
+    {
+      "source": "src/dolphin/db/db.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023EC7C",
+        "0x8023ECA4",
+        "0x8023ECFC"
+      ],
+      "provenance": {
+        "pull_request": 638,
+        "merged_via": 638,
+        "commit": "5b8af3721f43b74e6a58826812ba8831158ee821",
+        "introduced_blob": "baf338cbd0c4e3df0a13a29d3681259021382145"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXAttr.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024D92C",
+        "0x8024DC48"
+      ],
+      "provenance": {
+        "pull_request": 510,
+        "merged_via": 638,
+        "commit": "54fd0a6750e5ce371f0e41be8483bda6316867ea",
+        "introduced_blob": "3fb0070eeb507686f6da51d9b455c846c9c168c7",
+        "original_commit": "25bb1f507f6dddc498e716be764bdf93e1425c12",
+        "original_blob": "9bf05936c88407bd952b2fe5aafe62b8d8791283",
+        "integration_adjustment": "Preserve original PR510 source/contributor ownership. Replace two existing partials with complete genuine donor fixed-u8 VAT eight-iteration loop and target-required Array index-base/stride cache writes. Existing exact bodies remain unchanged; supported source/type/operand differences are reviewed in the current integration, with no flags or fabricated storage."
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXFifo.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024C8E8",
+        "0x8024C9F0"
+      ],
+      "provenance": {
+        "pull_request": 638,
+        "merged_via": 638,
+        "commit": "54fd0a6750e5ce371f0e41be8483bda6316867ea",
+        "introduced_blob": "e4d1336123d90d918f800661bf68350a3ab709ef"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXFrameBuf.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024EBC4"
+      ],
+      "provenance": {
+        "pull_request": 491,
+        "merged_via": 638,
+        "commit": "54fd0a6750e5ce371f0e41be8483bda6316867ea",
+        "introduced_blob": "ecd6e3cf6aac7af803840c3107a79ea3652c0e08",
+        "original_commit": "6d2d36c28b674a9d3c2604f6456bde44b30b9367",
+        "original_blob": "7e9067e8a7c9d14f14b8dd05d7e09dbcdf9602fc",
+        "integration_adjustment": "Preserve original PR491 source/contributor ownership. Replace existing Overscan partial with complete donor mode-bit1/XFB-margin and unconditional double VI-height-margin behavior, supported by all288 actual target bytes and unsigned field widths; canonical render-mode layout and production guard retained."
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXLight.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024FA68",
+        "0x8024FB58",
+        "0x8024FC48",
+        "0x8024FC84"
+      ],
+      "provenance": {
+        "pull_request": 638,
+        "merged_via": 638,
+        "commit": "54fd0a6750e5ce371f0e41be8483bda6316867ea",
+        "introduced_blob": "b330a4a5e80ec16e79aabe73ab99d0ca83ddb911"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXTev.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x802519D8"
+      ],
+      "provenance": {
+        "pull_request": 505,
+        "merged_via": 638,
+        "commit": "54fd0a6750e5ce371f0e41be8483bda6316867ea",
+        "introduced_blob": "7c160db72986a47c14c5bf63e30867975f7fb546",
+        "original_commit": "250035d1706aebb8faccffc4ae518d3504316e25",
+        "original_blob": "0989968911523fae1d32996d1588d4a9e3a1103e",
+        "integration_adjustment": "Preserve original PR505 source/contributor ownership. Replace existing table-swap partial with complete genuine donor body using a meaningful shared index in both cache accesses; preserve canonical types, ordinary source macros and all128 actual target bytes. No unused frame or match-only expressions."
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSRtc.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023CFD0"
+      ],
+      "provenance": {
+        "pull_request": 505,
+        "merged_via": 638,
+        "commit": "de10f0c1ea72d95e6532f5e5ebd8ca8a518067a8",
+        "introduced_blob": "66058b87c7c05f861b469522901cbfe7dae44de3",
+        "original_commit": "3e1ad873db22c1dc2091ea96dfb5102e1e8348fa",
+        "original_blob": "df91d3038c52b1e7edf817697fc8283520a7d543",
+        "integration_adjustment": "Recover the target-supported noncommitting __OSUnlockSram(FALSE) call in the unchanged-mode OSSetGbsMode branch; preserve original PR505 body attribution and all prior exact functions. CommitFALSE ignores the offset, so runtime behavior is equivalent; the complete setter remains partial due its stack frame. No padding, flags, declarations or ranges changed. Preserve original PR505 source/contributor ownership. Integrate complete target-supported Progressive setter donor form with direct canonical LockSram/UnlockSram calls and meaningful readable local names; preserve later GBS helper sanitation and unchanged GBS partial. Previous14 exact source bodies/credit remain. This new exact setter is a correction of an existing partial, not a transfer of source authorship."
+      }
+    },
+    {
+      "source": "src/dolphin/os/__ppc_eabi_init.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023E818",
+        "0x8023E900"
+      ],
+      "provenance": {
+        "pull_request": 638,
+        "merged_via": 638,
+        "commit": "de10f0c1ea72d95e6532f5e5ebd8ca8a518067a8",
+        "introduced_blob": "ec786e175cbb9fe6e09b2063aab219d50b084f34"
+      }
+    },
+    {
+      "source": "src/dolphin/pad/Pad.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80247134",
+        "0x8024779C",
+        "0x80247EDC",
+        "0x80248070",
+        "0x802480D0"
+      ],
+      "provenance": {
+        "pull_request": 529,
+        "merged_via": 560,
+        "commit": "1097f87ed6ddf20b4a9937f3a270d054be75a262",
+        "introduced_blob": "f0eec07fb657a4ab7264fca9a996828ab1d8e19f",
+        "original_commit": "36572653d679b7adb854d105cb2cadaa5f7e582f",
+        "original_blob": "cb51040943529f811f6532d20c835f782d282246",
+        "integration_adjustment": "Reuse canonical os/string includes and fixed boot globals; omit redundant offsetof macro and unsupported foreign-compiler push/inline-all/pop directives under the unchanged pinned profile. Complete coherent C bodies retained; native tail-SDA packing remains measured partial."
+      }
+    },
+    {
+      "source": "src/dolphin/vmbase/VMBase.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80245B24",
+        "0x80245B34",
+        "0x80245B44",
+        "0x80245B50",
+        "0x80245B78",
+        "0x80245EC4"
+      ],
+      "provenance": {
+        "pull_request": 638,
+        "merged_via": 638,
+        "commit": "de10f0c1ea72d95e6532f5e5ebd8ca8a518067a8",
+        "introduced_blob": "758861ce285b82496c6a121edc9a25cf585a44ae"
+      }
     }
   ],
   "target": "GN7E69",

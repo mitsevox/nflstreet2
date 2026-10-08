@@ -214,6 +214,10 @@ void AIInit(u8* stack)
     __AI_init_flag = TRUE;
 }
 
+void AIReset(void) {
+    __AI_init_flag = FALSE;
+}
+
 void __AISHandler(s16 interrupt, OSContext* context)
 {
     OSContext tmpContext;

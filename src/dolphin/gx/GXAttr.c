@@ -368,22 +368,19 @@ void GXSetVtxAttrFmtv(GXVtxFmt vtxfmt, const GXVtxAttrFmtList* list) {
     __GXData->dirtyVAT |= (u8)(1 << (u8)vtxfmt);
 }
 
-void __GXSetVAT(void) {
-    s32 i;
-    u32 dirty = __GXData->dirtyVAT;
+void __GXSetVAT(void)
+{
+    u8 i;
 
-    i = 0;
-    do {
-        if (dirty & 1) {
-            GX_WRITE_SOME_REG4(8, i | 0x70, __GXData->vatA[i], i - 12);
-            GX_WRITE_SOME_REG4(8, i | 0x80, __GXData->vatB[i], i - 12);
-            GX_WRITE_SOME_REG4(8, i | 0x90, __GXData->vatC[i], i - 12);
+    for (i = 0; i < 8; i++)
+    {
+        if (__GXData->dirtyVAT & (1 << (u8)i))
+        {
+            GX_WRITE_SOME_REG4(GX_LOAD_CP_REG, i | 0x70, __GXData->vatA[i], i - 12);
+            GX_WRITE_SOME_REG4(GX_LOAD_CP_REG, i | 0x80, __GXData->vatB[i], i - 12);
+            GX_WRITE_SOME_REG4(GX_LOAD_CP_REG, i | 0x90, __GXData->vatC[i], i - 12);
         }
-
-        dirty >>= 1;
-        i++;
-    } while (dirty != 0);
-
+    }
     __GXData->dirtyVAT = 0;
 }
 
@@ -508,21 +505,30 @@ void GXGetVtxAttrFmtv(GXVtxFmt fmt, GXVtxAttrFmtList* vat) {
 }
 
 void GXSetArray(GXAttr attr, void* base_ptr, u8 stride) {
+    s32 idx;
     GXAttr cpAttr;
     u32 phyAddr;
 
-
-    CHECK_GXBEGIN(963, "GXSetArray");
     if (attr == GX_VA_NBT) {
         attr = GX_VA_NRM;
     }
 
-    CHECK_ATTRNAME5(966, attr);
     cpAttr = attr - GX_VA_POS;
-    phyAddr = (u32)base_ptr & 0x3FFFFFFF;
+    phyAddr = (u32)base_ptr & ~0xC0000000;
 
     GX_WRITE_SOME_REG2(8, cpAttr | 0xA0, phyAddr, cpAttr - 12);
+
+    idx = cpAttr - 12;
+    if (idx >= 0 && idx < 4) {
+        __GXData->indexBase[idx] = (u32)base_ptr & ~0xC0000000;
+    }
+
     GX_WRITE_SOME_REG3(8, cpAttr | 0xB0, stride, cpAttr - 12);
+
+    idx = cpAttr - 12;
+    if (idx >= 0 && idx < 4) {
+        __GXData->indexStride[idx] = stride;
+    }
 }
 
 void GXInvalidateVtxCache(void) {
