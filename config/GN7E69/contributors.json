@@ -12623,7 +12623,7 @@
         "introduced_blob": "9074c15452e195396e3c2d66dee7d562632c1d07",
         "original_commit": "822d46e57d70743f47409a7566f938dcf9ab0325",
         "original_blob": "202f9eec5cfdfd31c62542110e0e697846e7d6af",
-        "integration_adjustment": " Combine reviewed source corrections and disjoint function additions with accepted main; preserve original contributor, original source pin and unchanged function bodies. Reuse the accepted callee signatures in the combined file; preserve the incoming raw integer storage with an explicit conversion of the returned pointer word."
+        "integration_adjustment": " Combine reviewed source corrections and disjoint function additions with accepted main; preserve original contributor, original source pin and function behavior. Reuse the accepted callee signatures in the combined file; preserve the incoming raw integer storage with an explicit conversion of the returned pointer word."
       }
     },
     {
@@ -12682,7 +12682,7 @@
         "introduced_blob": "9074c15452e195396e3c2d66dee7d562632c1d07",
         "original_commit": "bbaf7ebe6289d1cb81dbd9fc3e25ed27c5b9ee93",
         "original_blob": "7381462d28e69ed6a22b58a920d13ddd6a148bbf",
-        "integration_adjustment": " Combine reviewed source corrections and disjoint function additions with accepted main; preserve original contributor, original source pin and unchanged function bodies. Reuse the accepted callee signatures in the combined file; preserve the incoming raw integer storage with an explicit conversion of the returned pointer word."
+        "integration_adjustment": " Combine reviewed source corrections and disjoint function additions with accepted main; preserve original contributor, original source pin and function behavior. Reuse the accepted callee signatures in the combined file; preserve the incoming raw integer storage with an explicit conversion of the returned pointer word."
       }
     },
     {
