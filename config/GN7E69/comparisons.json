@@ -6450,13 +6450,19 @@
     {
       "source": "src/game/cu_800EFC68.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional grouping row for src/game/cu_800EFC68.cpp; registered complete target function extents with individual inferred name/source-form/compiler rows. Exact and partial source bodies are measured independently; all unregistered bodies and mapped static storage remain original and unmeasured.",
+      "evidence": "evidence.tsv retained open/provisional grouping row for src/game/cu_800EFC68.cpp; registered complete target function extents with individual inferred name/source-form/compiler rows. Exact and partial source bodies are measured independently; the .rodata literal-pool slice 0x8029E880-0x8029E8D0 is measured as one section; all unregistered bodies and mapped static storage remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800EFC68",
           "end": "0x80125F3C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E880",
+          "end": "0x8029E8D0"
         }
       ],
       "functions": [
@@ -7354,6 +7360,26 @@
           "symbol": "fn_800F4E14",
           "start": "0x800F4E14",
           "end": "0x800F4E88"
+        },
+        {
+          "symbol": "fn_80104944",
+          "start": "0x80104944",
+          "end": "0x80104A08"
+        },
+        {
+          "symbol": "fn_80104A08",
+          "start": "0x80104A08",
+          "end": "0x80104B24"
+        },
+        {
+          "symbol": "fn_80104B24",
+          "start": "0x80104B24",
+          "end": "0x80104B3C"
+        },
+        {
+          "symbol": "fn_80104B3C",
+          "start": "0x80104B3C",
+          "end": "0x80104C3C"
         }
       ]
     },
@@ -16021,7 +16047,7 @@
     {
       "source": "src/game/cu_80086C10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u201380087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
+      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10–80087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
       "sections": [
         {
           "section": ".text",
@@ -21373,7 +21399,7 @@
     {
       "source": "src/game/cu_8007A3C4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/type/external/source-form/compiler rows at8007A3C4\u20138007A9E4 and existing exact function extents. Thirteen complete comparison-only bodies. No initialized storage; original-file edges remain open, and neighboring setup/typed-value/update bodies are not claimed. Original bytes stay linked.",
+      "evidence": "evidence.tsv unit/type/external/source-form/compiler rows at8007A3C4–8007A9E4 and existing exact function extents. Thirteen complete comparison-only bodies. No initialized storage; original-file edges remain open, and neighboring setup/typed-value/update bodies are not claimed. Original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -21513,7 +21539,7 @@
     {
       "source": "src/game/cu_8007A9E4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/type/external/source-form/compiler records for8007A9E4\u20138007AEE8. Six full comparison-only bodies; four update bodies retain measured instruction differences. No initialized storage or complete original-file boundary claim; original bytes remain linked.",
+      "evidence": "evidence.tsv unit/type/external/source-form/compiler records for8007A9E4–8007AEE8. Six full comparison-only bodies; four update bodies retain measured instruction differences. No initialized storage or complete original-file boundary claim; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
