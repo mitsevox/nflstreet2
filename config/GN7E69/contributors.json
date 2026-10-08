@@ -11626,8 +11626,11 @@
       "provenance": {
         "pull_request": 645,
         "merged_via": 645,
-        "commit": "e6a7af4166df541ddfec63fe41da6587d9501d82",
-        "introduced_blob": "30dd22f566880ac78f7c832b735abc3baee78e39"
+        "commit": "fcfafdd782bd2bf1cb0e8a025a84c575526f66c0",
+        "introduced_blob": "3aceadaa702c10095a386d8f1acea89a55845e70",
+        "original_blob": "30dd22f566880ac78f7c832b735abc3baee78e39",
+        "integration_adjustment": "Review fix in PR 645: shared callee declarations, the +1008 word member and a literal 0 store; every credited function remains exact. Preserve the original source commit/blob and contributor credit.",
+        "original_commit": "e6a7af4166df541ddfec63fe41da6587d9501d82"
       }
     },
     {
