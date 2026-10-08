@@ -10584,6 +10584,8 @@
         "0x8024DFA0",
         "0x8024E034",
         "0x8024E090",
+        "0x8024E36C",
+        "0x8024E404",
         "0x8024E450",
         "0x8024E4D0",
         "0x8024E518",
@@ -11614,6 +11616,60 @@
         "merged_via": 579,
         "commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
         "introduced_blob": "0366bc8bdd2359557cd0bcdb31f951ae78de1ca7"
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSFont.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80285A90"
+      ],
+      "provenance": {
+        "pull_request": 581,
+        "merged_via": 581,
+        "commit": "c1faf185fcbf2a9e6c3ee7d4f1c669e1dfe6b1cb",
+        "introduced_blob": "b694f5043e12fd7d6ea773f9a49e6d4b2d77c1a8",
+        "original_commit": "3d2b9cc38b6908a39c3a1d86f560c7b83fb9eee1",
+        "original_blob": "b694f5043e12fd7d6ea773f9a49e6d4b2d77c1a8"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXFifo.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024C7D8"
+      ],
+      "provenance": {
+        "pull_request": 581,
+        "merged_via": 581,
+        "commit": "2d767d251b6571455d7b2a781763f15c15135f50",
+        "introduced_blob": "ea7b8bda0e13126a69b6140b3f37aa252a422388",
+        "original_commit": "013d5f30feffe2c2e66874ce36ba1837e02dd10b",
+        "original_blob": "29fe36686124d28db36ba03f612e7aefc6a93f6c",
+        "integration_adjustment": "Fixed comparison guard preserves accepted native output; complete original cleanup and genuine base accessor follow donor relative order before existing CPU/GP getters. Canonical declarations preserve target layout."
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXMisc.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024E1FC",
+        "0x8024E660"
+      ],
+      "provenance": {
+        "pull_request": 581,
+        "merged_via": 581,
+        "commit": "2d767d251b6571455d7b2a781763f15c15135f50",
+        "introduced_blob": "8f9ee4e1fc9ebba03aba28ebbb6a2076dc7b9e5f",
+        "original_commit": "013d5f30feffe2c2e66874ce36ba1837e02dd10b",
+        "original_blob": "1bb7829ca7c355a0383040f6e4a454df43c58071",
+        "integration_adjustment": "Complete original abort-frame and depth-query bodies retain expressions under the fixed comparison guard; canonical register macros use their existing diagnostic-line parameter. Existing draw-completion body attribution remains PR518."
       }
     }
   ],
