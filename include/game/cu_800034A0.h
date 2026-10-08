@@ -19,7 +19,7 @@ void fn_800034D0(void);
 void fn_800034FC(void);
 void fn_80003620(void);
 void fn_800037C0(int a, int *b);
-int fn_800039E4(int a, int *b);
+int fn_800039E4(int a, int *b, int *c);
 }
 
 #endif

@@ -22,15 +22,15 @@ int fn_8022F5E4(Request_8002AD64 *pRequest, StreamOps_8002ACB4 *pOps);
 int fn_8022EB5C(CardStreamTarget *pTarget, StreamOps_8002ACB4 *pOps);
 
 int fn_8022F53C(int a);
-void fn_8022F4BC(void);
-int fn_8022F384(void);
+int fn_8022F4BC(void);
+int fn_8022F384(int a);
 void fn_8002A574(int a, int b);
 void fn_801D6B24(char *p, int size);
 void fn_80029A40(int a, int b, unsigned int c, char *d);
 void fn_8022F3D4(int a);
 void fn_8007A24C(void);
 void fn_80029CE0(int a, int b);
-void fn_801D6844(void);
+int fn_801D6844(void);
 void fn_801D6DE0(int a, int b);
 void fn_8006EC24(void);
 void fn_8022EBC8(void);
@@ -42,11 +42,12 @@ int fn_800298E8(int a, int b);
 int fn_801D6620(void *p);
 int fn_801D6EA0(int a);
 void fn_801D6EFC(void);
+void fn_80029990(int type, int index, int value);
 void fn_80029E10(int a, int b);
 void fn_802284EC(int a, void *b);
+void fn_8002A804(void);
 
 extern StreamOps_8002ACB4 gCardStreamOps;
-extern char lbl_8003A804[];
 }
 
 extern "C" {
@@ -80,7 +81,7 @@ void fn_800034FC(void)
     lbl_80367580.mPosition = 0;
 
     if (fn_8018A854()) {
-        fn_80228474(fn_8018A854(), 2, lbl_8003A804, 31);
+        fn_80228474(fn_8018A854(), 2, (void *)fn_8002A804, 31);
     }
 
     lbl_803EB8D4 = 1;
@@ -125,7 +126,7 @@ void fn_80003620(void)
     lbl_80367580.mPosition = 0;
 
     if (fn_8018A854()) {
-        fn_80228474(fn_8018A854(), 2, lbl_8003A804, 31);
+        fn_80228474(fn_8018A854(), 2, (void *)fn_8002A804, 31);
     }
 
     lbl_803EB8D4 = 1;
@@ -176,8 +177,7 @@ void fn_800037C0(int a, int *b)
     switch (type) {
     case 1:
         if (a) {
-            fn_801D6844();
-            fn_801D6DE0(0, type);
+            fn_801D6DE0(fn_801D6844(), type);
             if (*b >= 0) {
                 *b = -100;
             }
@@ -200,19 +200,18 @@ void fn_800037C0(int a, int *b)
                 *b = -50;
             }
         } else if (res == 0) {
-            fn_8022F4BC();
-            slot = fn_8022F384();
+            int res_f4bc = fn_8022F4BC();
+            slot = fn_8022F384(res_f4bc);
             fn_8002A574(type, slot);
             fn_801D6B24(buf + 8, 17);
             fn_80029A40(type, slot, lbl_80367580.mChecksum, buf + 8);
-            fn_8022F3D4(0);
+            fn_8022F3D4(res_f4bc);
             fn_8007A24C();
             fn_80029CE0(type, slot);
         } else {
             fn_8022F4BC();
             fn_8022F1BC();
-            fn_801D6844();
-            fn_801D6DE0(0, type);
+            fn_801D6DE0(fn_801D6844(), type);
             if (*b >= 0) {
                 *b = -100;
             }
@@ -228,8 +227,8 @@ void fn_800037C0(int a, int *b)
                 *b = -50;
             }
         } else if (res == 0) {
-            fn_8022F4BC();
-            slot = fn_8022F384();
+            int res_f4bc = fn_8022F4BC();
+            slot = fn_8022F384(res_f4bc);
             fn_8002A574(type, slot);
             fn_801D6B24(buf + 8, 17);
             fn_80029A40(type, slot, lbl_80367580.mChecksum, buf + 8);
@@ -237,8 +236,7 @@ void fn_800037C0(int a, int *b)
         } else {
             fn_8022F4BC();
             fn_8022F1BC();
-            fn_801D6844();
-            fn_801D6DE0(0, type);
+            fn_801D6DE0(fn_801D6844(), type);
             if (*b >= 0) {
                 *b = -100;
             }
@@ -248,17 +246,21 @@ void fn_800037C0(int a, int *b)
     }
 }
 
-int fn_800039E4(int a, int *b)
+int fn_800039E4(int a, int *b, int *c)
 {
-    char val[4];
+    char val = 0;
     int state = a;
 
     switch (state) {
     case 0:
-        *b = fn_801D6620(b);
+        *b = fn_801D6620(c);
+        break;
+    case 1:
+        state = 4;
+        *b = fn_801D6620(c);
         break;
     case 4:
-        *b = fn_801D6620(b);
+        *b = fn_801D6620(c);
         if (fn_801D6EA0(0)) {
             fn_800034FC();
             state = 5;
@@ -267,23 +269,42 @@ int fn_800039E4(int a, int *b)
     case 5:
         *b = 0;
         if ((unsigned int)(lbl_803EB8C8 - 45) > 1) {
-            if (fn_801D6EA0((int)val)) {
+            if (fn_801D6EA0((int)&val)) {
                 fn_800034D0();
                 state = 6;
                 fn_801D6EFC();
             }
-            if (val[0]) {
+            if (val) {
                 fn_800034D0();
                 state = 6;
             }
         }
         break;
+    case 6: {
+        int type;
+        int slot;
+        *b = fn_801D6620(c);
+        if (*b == 0) {
+            return state;
+        }
+        if (lbl_803EB8C8 == 0 && c != 0 && *c < 0) {
+            lbl_803EB8C8 = 36;
+        }
+        fn_8002A5A0(&type, &slot);
+        if (lbl_803EB8C8 == 0) {
+            fn_80029990(type, slot, lbl_80367580.mChecksum);
+        } else {
+            fn_80029E10(type, slot);
+        }
+        state = 0;
+        break;
+    }
     case 7:
         state = 9;
-        *b = fn_801D6620(b);
+        *b = fn_801D6620(c);
         break;
     case 9:
-        *b = fn_801D6620(b);
+        *b = fn_801D6620(c);
         if (fn_801D6EA0(0)) {
             fn_80003620();
             state = 10;
@@ -292,32 +313,33 @@ int fn_800039E4(int a, int *b)
     case 10:
         *b = 0;
         if ((unsigned int)(lbl_803EB8C8 - 45) > 1) {
-            if (fn_801D6EA0((int)val)) {
+            if (fn_801D6EA0((int)&val)) {
                 fn_800034D0();
-                state = 6;
+                state = 11;
                 fn_801D6EFC();
             }
-            if (val[0]) {
+            if (val) {
                 fn_800034D0();
-                state = 6;
+                state = 11;
             }
         }
         break;
     case 11:
-        *b = fn_801D6620(b);
-        if (*b) {
-            if (lbl_803EB8C8 == 0 && b != 0 && *b < 0) {
-                lbl_803EB8C8 = 36;
-            }
-            state = 0;
-            fn_800037C0(lbl_803EB8C8, b);
+        *b = fn_801D6620(c);
+        if (*b == 0) {
+            return state;
         }
+        if (lbl_803EB8C8 == 0 && c != 0 && *c < 0) {
+            lbl_803EB8C8 = 36;
+        }
+        state = 0;
+        fn_800037C0(lbl_803EB8C8, c);
         break;
     }
 
     if (*b != 0 && lbl_803EB8D4 != 0) {
         if (fn_8018A854()) {
-            fn_802284EC(fn_8018A854(), lbl_8003A804);
+            fn_802284EC(fn_8018A854(), (void *)fn_8002A804);
         }
         lbl_803EB8D4 = 0;
     }
