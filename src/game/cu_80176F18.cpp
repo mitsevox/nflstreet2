@@ -132,7 +132,7 @@ float fn_800A32E4(void);
 int fn_800A3444(void);
 void fn_800A8954(int event, int team, Object_80039F5C *p);
 void fn_800AD910(int a, float b);
-void fn_800B1584(int a, int b);
+void fn_800B1584(int a, const float *pPos);
 void fn_800B2314(void);
 int fn_800B65A0(int team);
 int fn_800BA6F8(void);
