@@ -2,6 +2,8 @@
 #include "__dsp.h"
 #include "dolphin/hw_regs.h"
 
+
+#if defined(DECOMP_COMPARE)
 void __DSPHandler(__OSInterrupt, OSContext* context)
 {
     OSContext exceptionContext;
@@ -206,6 +208,8 @@ void __DSPHandler(__OSInterrupt, OSContext* context)
     OSClearContext(&exceptionContext);
     OSSetCurrentContext(context);
 }
+
+#endif
 
 void __DSP_exec_task(DSPTaskInfo* curr, DSPTaskInfo* next)
 {

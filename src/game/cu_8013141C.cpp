@@ -1,50 +1,19 @@
 #include <math.h>
+#include "game/Control_80132090.h"
+#include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_800670B4.h"
+#include "game/fn_80163E94.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_80178D18.h"
 
-struct Control_80132090 {
-    int mUnknown0;
-    float mValues[8];
-    float mUnknown36;
-    float mUnknown40;
-    int mUnknown44;
-    unsigned char mUnknown48;
-    signed char mUnknown49;
-    char mUnknown50[2];
-    unsigned char mUnknown52;
-    char mUnknown53[3];
-    char mUnknown56[8];
-    int mUnknown64;
-    int mUnknown68;
-    int mUnknown72;
-    int mUnknown76;
-    unsigned char mUnknown80;
-    unsigned char mUnknown81;
-    char mUnknown82[6];
-};
 
-struct Input_800B6D34 {
-    char mUnknown0[93];
-    unsigned char mUnknown93;
-    char mUnknown94[1];
-    unsigned char mUnknown95;
-    unsigned char mUnknown96;
-    char mUnknown97[7];
-};
-
-struct Record_80163E94 {
-    char mUnknown0[11];
-    unsigned char mUnknownB;
-};
 
 extern "C" {
 unsigned char *fn_8003AB38(Object_80039F5C *p);
-void fn_800B6D34(Object_80039F5C *p, Input_800B6D34 *pInput);
 void fn_800B76E8(Object_80039F5C *p);
 void fn_800B7CA4(Object_80039F5C *p);
 void fn_800B8344(Object_80039F5C *p);
@@ -58,7 +27,7 @@ int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_801067D8(Object_80039F5C *p);
 int fn_8010A2DC(Object_80039F5C *p, int a, int b);
-void fn_8011E1BC(Object_80039F5C *p, int a, int b, int c);
+void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 void fn_8011F45C(int a);
 int fn_801231E4(Object_80039F5C *p, int angle);
@@ -72,12 +41,9 @@ int fn_8012510C(float *pValues);
 void fn_8012DDCC(Object_80039F5C *p, Control_80132090 *pControl, int a);
 void fn_8012F5A0(Object_80039F5C *p, int a, void *pBlock);
 void fn_8012F89C(Object_80039F5C *p, Control_80132090 *pControl, int a);
-int fn_8012FA64(Object_80039F5C *p);
-void fn_80130338(Object_80039F5C *p, Control_80132090 *pControl);
 int fn_80132630(Object_80039F5C *p, Vector_80039F5C *pPos, int a);
 void fn_8013FA8C(int a);
 void fn_80148108(int mode);
-Record_80163E94 *fn_80163E94(Object_800670B4 *pObject, unsigned int index, void *pArg);
 Object_800670B4 *fn_80168708(int team);
 Point_8017886C fn_80177FE0(void);
 int fn_80178308(void);
