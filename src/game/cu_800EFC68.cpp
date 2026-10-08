@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "game/Command_800CEE74.h"
+#include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
@@ -2399,6 +2400,14 @@ extern "C" void fn_800FD708(State_80039F5C *pState)
     pState->mUnknown2 = ((0x800000 - (pState->mUnknown2 << 17)) & 0xFFFFFF) >> 17;
 }
 
+extern "C" int fn_800FD7D0(Object_80039F5C *p)
+{
+    Object_800670B4 *pTeam = fn_80168708(p->mIdBytes[2]);
+    Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[p->mIdBytes[1]];
+
+    return pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20;
+}
+
 extern "C" int fn_800FDA58(Object_80039F5C *p)
 {
     State_800FDA58 *pState = (State_800FDA58 *)&p->mUnknown336;
@@ -2414,6 +2423,20 @@ extern "C" int fn_800FDA58(Object_80039F5C *p)
     }
     p->mFlags &= ~0x40000;
     p->mFlags &= ~0x20000000;
+    return 0;
+}
+
+extern "C" int fn_800FDFD8(Object_80039F5C *p)
+{
+    Input_800B6D34 input;
+
+    if (p->mIdBytes[2] == fn_80178320()) {
+        fn_800B6D34(p, &input);
+        if (p->mFlags & 0x4000) {
+            p->mFlags &= ~0x10;
+            return 1;
+        }
+    }
     return 0;
 }
 

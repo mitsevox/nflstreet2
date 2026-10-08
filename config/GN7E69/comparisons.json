@@ -6701,9 +6701,19 @@
           "end": "0x800FD724"
         },
         {
+          "symbol": "fn_800FD7D0",
+          "start": "0x800FD7D0",
+          "end": "0x800FD828"
+        },
+        {
           "symbol": "fn_800FDA58",
           "start": "0x800FDA58",
           "end": "0x800FDAC8"
+        },
+        {
+          "symbol": "fn_800FDFD8",
+          "start": "0x800FDFD8",
+          "end": "0x800FE03C"
         },
         {
           "symbol": "fn_800FE41C",
