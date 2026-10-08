@@ -11717,39 +11717,6 @@
       }
     },
     {
-      "source": "src/game/cu_800DC584.cpp",
-      "contributors": [
-        "adampreddy"
-      ],
-      "functions": [
-        "0x800DC584",
-        "0x800DD5E4",
-        "0x800DD648",
-        "0x800DD780",
-        "0x800DD92C",
-        "0x800DDD24",
-        "0x800DDE6C",
-        "0x800DF134",
-        "0x800DF654",
-        "0x800DF710",
-        "0x800E0F48",
-        "0x800E1044",
-        "0x800E11C0",
-        "0x800E1248",
-        "0x800E1438",
-        "0x800E1778"
-      ],
-      "provenance": {
-        "pull_request": 645,
-        "merged_via": 645,
-        "commit": "0d7d3b3d7234c55dbdc1ad5940a26974c80cc0fa",
-        "introduced_blob": "6b844b1cdea1ea75c0b25cb6917eaefa5f7825e2",
-        "original_blob": "30dd22f566880ac78f7c832b735abc3baee78e39",
-        "integration_adjustment": "Canonical shared-layout integration retains reviewed function behavior and byte offsets, uses existing record field names and callee declarations, and preserves all accepted and incoming bodies. Original author commit/blob retained; integrated source is independently reviewed and measured.",
-        "original_commit": "e6a7af4166df541ddfec63fe41da6587d9501d82"
-      }
-    },
-    {
       "source": "src/game/cu_800E3A34.cpp",
       "contributors": [
         "adampreddy"
@@ -13538,6 +13505,39 @@
         "merged_via": 696,
         "commit": "37dc5a8132398b3dc4b61f900ccb57470a624f93",
         "introduced_blob": "08b003370daae9fbe7747f2b776ce1f9537a22ad"
+      }
+    },
+    {
+      "source": "src/game/cu_800DC584.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DC584",
+        "0x800DD5E4",
+        "0x800DD648",
+        "0x800DD780",
+        "0x800DD92C",
+        "0x800DDD24",
+        "0x800DDE6C",
+        "0x800DF134",
+        "0x800DF654",
+        "0x800DF710",
+        "0x800E0F48",
+        "0x800E1044",
+        "0x800E11C0",
+        "0x800E1248",
+        "0x800E1438",
+        "0x800E1778"
+      ],
+      "provenance": {
+        "pull_request": 645,
+        "merged_via": 645,
+        "commit": "0d7d3b3d7234c55dbdc1ad5940a26974c80cc0fa",
+        "introduced_blob": "6b844b1cdea1ea75c0b25cb6917eaefa5f7825e2",
+        "original_blob": "30dd22f566880ac78f7c832b735abc3baee78e39",
+        "integration_adjustment": "Canonical shared-layout integration retains reviewed function behavior and byte offsets, uses existing record field names and callee declarations, and preserves all accepted and incoming bodies. Original author commit/blob retained; integrated source is independently reviewed and measured.",
+        "original_commit": "e6a7af4166df541ddfec63fe41da6587d9501d82"
       }
     },
     {
