@@ -12415,6 +12415,28 @@
         "commit": "dc7730e717111f1519d05e17232b6b342b68f61e",
         "introduced_blob": "5d3ec0c503d0e24192ad60d0eaecc175773c5402"
       }
+    },
+    {
+      "source": "src/game/cu_8018AB0C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8018A978",
+        "0x8018AA44",
+        "0x8018AAE4",
+        "0x8018AB08",
+        "0x8018AB64"
+      ],
+      "provenance": {
+        "pull_request": 644,
+        "merged_via": 644,
+        "commit": "1a7870baeb127e9698c9e64fd6beff3d2bc3ac6f",
+        "introduced_blob": "e6c0c7042fb781ba104a539ae00319eaf526426e",
+        "original_blob": "fba5dee401fd43f27874690e58152de4ee514e52",
+        "integration_adjustment": "Hostile-review fixes in PR644: file mode, shared engine header declaration of 0x80228D58 and neutral local names.",
+        "original_commit": "7ae32cbfba0f9dd6e97a8f6c56b9521d1724fda1"
+      }
     }
   ],
   "target": "GN7E69",
