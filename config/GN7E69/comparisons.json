@@ -3548,6 +3548,37 @@
       ]
     },
     {
+      "source": "src/game/cu_80125F3C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv open/open unit row 0x80125F3C-0x801260D4 for src/game/cu_80125F3C.cpp, exact whole-function rows, inferred name rows and the exact .rodata data row 0x8029F660-0x8029F674. Original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80125F3C",
+          "end": "0x801260D4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F660",
+          "end": "0x8029F674"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80125F3C",
+          "start": "0x80125F3C",
+          "end": "0x80125FA0"
+        },
+        {
+          "symbol": "fn_80125FA0",
+          "start": "0x80125FA0",
+          "end": "0x801260D4"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8013CD58.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv function row 0x8013CC7C-0x8013CD58, data row 0x802A00F8-0x802A0108 and the fn_8013CC7C source-form row; the remaining placements are the accepted unit 0x8013CD58-0x8013E514 and its data rows. Draft comparison only; the original bytes of 0x8013CC7C and its pool remain linked.",
@@ -23480,16 +23511,32 @@
     {
       "source": "src/game/cu_800E3A34.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row 0x800E3A34-0x800E3CC0 for src/game/cu_800E3A34.cpp, exact whole-function rows and inferred name/source-form rows for two complete bodies. Original bytes remain linked; two other bodies and all static data remain original and unmeasured.",
+      "evidence": "evidence.tsv open/open unit row 0x800E3A34-0x800E3CC0 for src/game/cu_800E3A34.cpp, exact whole-function rows, inferred name/source-form rows for four complete bodies and the exact .rodata data row 0x8029DB70-0x8029DB78. Original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800E3A34",
           "end": "0x800E3CC0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DB70",
+          "end": "0x8029DB78"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_800E3A34",
+          "start": "0x800E3A34",
+          "end": "0x800E3AE8"
+        },
+        {
+          "symbol": "fn_800E3AE8",
+          "start": "0x800E3AE8",
+          "end": "0x800E3B8C"
+        },
         {
           "symbol": "fn_800E3B8C",
           "start": "0x800E3B8C",

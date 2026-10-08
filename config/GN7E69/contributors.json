@@ -11825,6 +11825,38 @@
       }
     },
     {
+      "source": "src/game/cu_800E3A34.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800E3A34",
+        "0x800E3AE8"
+      ],
+      "provenance": {
+        "pull_request": 695,
+        "merged_via": 695,
+        "commit": "6229bd2dffa7926bbfa99edaa40a7a7f4f0d9b6f",
+        "introduced_blob": "c38988cb66e816b969a90e70357b78ae3ef7f296"
+      }
+    },
+    {
+      "source": "src/game/cu_80125F3C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80125F3C",
+        "0x80125FA0"
+      ],
+      "provenance": {
+        "pull_request": 695,
+        "merged_via": 695,
+        "commit": "6229bd2dffa7926bbfa99edaa40a7a7f4f0d9b6f",
+        "introduced_blob": "013266f9bea8513884299317f5390002af84af9e"
+      }
+    },
+    {
       "source": "src/dolphin/os/OSFont.c",
       "contributors": [
         "mitsevox"
