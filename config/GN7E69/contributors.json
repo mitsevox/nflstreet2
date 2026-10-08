@@ -6979,6 +6979,41 @@
       }
     },
     {
+      "source": "src/game/cu_801260D4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8012623C",
+        "0x80126DD4",
+        "0x80126FD8",
+        "0x80127324",
+        "0x80127758",
+        "0x80127AD0",
+        "0x80127CD4",
+        "0x80127EFC",
+        "0x801281A8",
+        "0x80128590",
+        "0x801285C8",
+        "0x80128628",
+        "0x8012886C",
+        "0x80128B60",
+        "0x80128BE0",
+        "0x80128D50",
+        "0x80128EF8",
+        "0x80129360",
+        "0x801294A8",
+        "0x80129704",
+        "0x8012A38C"
+      ],
+      "provenance": {
+        "pull_request": 562,
+        "merged_via": 562,
+        "commit": "99be8c37a587a495e4ed189bbec87b1e43f6ea7a",
+        "introduced_blob": "43896253a88aeaf316074051e4a59d1992b7fad6"
+      }
+    },
+    {
       "source": "src/game/cu_8001E73C.cpp",
       "contributors": [
         "adampreddy"
