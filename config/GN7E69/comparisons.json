@@ -18141,6 +18141,201 @@
       "discarded": [
         "GXSetCurrentGXThread"
       ]
+    },
+    {
+      "source": "src/game/cu_800DAEE4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv open/open unit row 0x800DAEE4-0x800DBB74 for src/game/cu_800DAEE4.cpp, exact whole-function rows and inferred name/source-form rows for three complete bodies. Original bytes remain linked; ten other bodies and all static data remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DAEE4",
+          "end": "0x800DBB74"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800DAEE4",
+          "start": "0x800DAEE4",
+          "end": "0x800DAF5C"
+        },
+        {
+          "symbol": "fn_800DB074",
+          "start": "0x800DB074",
+          "end": "0x800DB100"
+        },
+        {
+          "symbol": "fn_800DB60C",
+          "start": "0x800DB60C",
+          "end": "0x800DB688"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800DC584.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv open/open unit row 0x800DC584-0x800E2FE4 for src/game/cu_800DC584.cpp, exact whole-function rows and inferred name/source-form rows for twenty-five complete bodies. Original bytes remain linked; fifty other bodies and all static data remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800DC584",
+          "end": "0x800E2FE4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800DC61C",
+          "start": "0x800DC61C",
+          "end": "0x800DC674"
+        },
+        {
+          "symbol": "fn_800DC674",
+          "start": "0x800DC674",
+          "end": "0x800DC6A8"
+        },
+        {
+          "symbol": "fn_800DC6A8",
+          "start": "0x800DC6A8",
+          "end": "0x800DC6F4"
+        },
+        {
+          "symbol": "fn_800DD830",
+          "start": "0x800DD830",
+          "end": "0x800DD838"
+        },
+        {
+          "symbol": "fn_800DDCE4",
+          "start": "0x800DDCE4",
+          "end": "0x800DDD24"
+        },
+        {
+          "symbol": "fn_800DDEE4",
+          "start": "0x800DDEE4",
+          "end": "0x800DDF34"
+        },
+        {
+          "symbol": "fn_800DE364",
+          "start": "0x800DE364",
+          "end": "0x800DE3B0"
+        },
+        {
+          "symbol": "fn_800DF6EC",
+          "start": "0x800DF6EC",
+          "end": "0x800DF710"
+        },
+        {
+          "symbol": "fn_800DF750",
+          "start": "0x800DF750",
+          "end": "0x800DF7CC"
+        },
+        {
+          "symbol": "fn_800DF9FC",
+          "start": "0x800DF9FC",
+          "end": "0x800DFA00"
+        },
+        {
+          "symbol": "fn_800E0188",
+          "start": "0x800E0188",
+          "end": "0x800E01D8"
+        },
+        {
+          "symbol": "fn_800E01D8",
+          "start": "0x800E01D8",
+          "end": "0x800E0230"
+        },
+        {
+          "symbol": "fn_800E0230",
+          "start": "0x800E0230",
+          "end": "0x800E02D0"
+        },
+        {
+          "symbol": "fn_800E0574",
+          "start": "0x800E0574",
+          "end": "0x800E05C0"
+        },
+        {
+          "symbol": "fn_800E05C0",
+          "start": "0x800E05C0",
+          "end": "0x800E068C"
+        },
+        {
+          "symbol": "fn_800E068C",
+          "start": "0x800E068C",
+          "end": "0x800E0694"
+        },
+        {
+          "symbol": "fn_800E0818",
+          "start": "0x800E0818",
+          "end": "0x800E0850"
+        },
+        {
+          "symbol": "fn_800E0E8C",
+          "start": "0x800E0E8C",
+          "end": "0x800E0EF0"
+        },
+        {
+          "symbol": "fn_800E0EF0",
+          "start": "0x800E0EF0",
+          "end": "0x800E0F40"
+        },
+        {
+          "symbol": "fn_800E0F40",
+          "start": "0x800E0F40",
+          "end": "0x800E0F48"
+        },
+        {
+          "symbol": "fn_800E12D4",
+          "start": "0x800E12D4",
+          "end": "0x800E1350"
+        },
+        {
+          "symbol": "fn_800E1350",
+          "start": "0x800E1350",
+          "end": "0x800E13E4"
+        },
+        {
+          "symbol": "fn_800E13E4",
+          "start": "0x800E13E4",
+          "end": "0x800E1438"
+        },
+        {
+          "symbol": "fn_800E1544",
+          "start": "0x800E1544",
+          "end": "0x800E1554"
+        },
+        {
+          "symbol": "fn_800E1554",
+          "start": "0x800E1554",
+          "end": "0x800E1584"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800E3A34.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv open/open unit row 0x800E3A34-0x800E3CC0 for src/game/cu_800E3A34.cpp, exact whole-function rows and inferred name/source-form rows for two complete bodies. Original bytes remain linked; two other bodies and all static data remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E3A34",
+          "end": "0x800E3CC0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E3B8C",
+          "start": "0x800E3B8C",
+          "end": "0x800E3C30"
+        },
+        {
+          "symbol": "fn_800E3C30",
+          "start": "0x800E3C30",
+          "end": "0x800E3CC0"
+        }
+      ]
     }
   ]
 }
