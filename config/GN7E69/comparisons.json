@@ -18983,6 +18983,51 @@
           "end": "0x80285AE8"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8007A9E4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit/type/external/source-form/compiler records for8007A9E4\u20138007AEE8. Six full comparison-only bodies; four update bodies retain measured instruction differences. No initialized storage or complete original-file boundary claim; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007A9E4",
+          "end": "0x8007AEE8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8007A9E4",
+          "start": "0x8007A9E4",
+          "end": "0x8007AA3C"
+        },
+        {
+          "symbol": "fn_8007AA3C",
+          "start": "0x8007AA3C",
+          "end": "0x8007AA90"
+        },
+        {
+          "symbol": "fn_8007AA90",
+          "start": "0x8007AA90",
+          "end": "0x8007ABA4"
+        },
+        {
+          "symbol": "fn_8007ABA4",
+          "start": "0x8007ABA4",
+          "end": "0x8007ACB8"
+        },
+        {
+          "symbol": "fn_8007ACB8",
+          "start": "0x8007ACB8",
+          "end": "0x8007ADD4"
+        },
+        {
+          "symbol": "fn_8007ADD4",
+          "start": "0x8007ADD4",
+          "end": "0x8007AEE8"
+        }
+      ]
     }
   ]
 }
