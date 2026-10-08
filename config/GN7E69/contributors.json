@@ -10605,9 +10605,12 @@
       ],
       "provenance": {
         "pull_request": 518,
-        "commit": "f44d5e9ea92e987aaa5a66cda3e34f1357b0406c",
-        "introduced_blob": "4f19805bc617e38287ac26c1f0580402120c369e",
-        "merged_via": 525
+        "commit": "540f696914c6831a8ced6b19115b856d1def733d",
+        "introduced_blob": "d67051eb61414ba0a9601c3008aa9552d7cca330",
+        "merged_via": 525,
+        "original_commit": "f44d5e9ea92e987aaa5a66cda3e34f1357b0406c",
+        "original_blob": "4f19805bc617e38287ac26c1f0580402120c369e",
+        "integration_adjustment": " Preserve existing BFBB bodies and original attribution; append only two unchanged target-supported TP C bodies under fixed comparison guard and supply the canonical GXTexModeSync declaration. Ordinary native output and all inherited measurements remain unchanged."
       }
     },
     {
@@ -11617,6 +11620,23 @@
         "merged_via": 579,
         "commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
         "introduced_blob": "0366bc8bdd2359557cd0bcdb31f951ae78de1ca7"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXMisc.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024E4F4",
+        "0x8024E63C"
+      ],
+      "provenance": {
+        "commit": "540f696914c6831a8ced6b19115b856d1def733d",
+        "introduced_blob": "d67051eb61414ba0a9601c3008aa9552d7cca330",
+        "original_commit": "e9c170a8f68e4a7c1f53057ae1b6522237d373a9",
+        "original_blob": "c8d43e8a3d71c04c2b74a187d9c1b7cd4bdda646",
+        "integration_adjustment": "Complete unchanged pinned TP donor forms are appended under fixed DECOMP_COMPARE using accepted canonical macros; move the genuine void GXTexModeSync(void) declaration from the source guard into canonical GXManage.h. No body expressions changed. Preserve all previous source credit; originals remain linked."
       }
     }
   ],
