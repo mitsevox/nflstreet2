@@ -968,8 +968,8 @@ int fn_800BA6F8(void);
 void *fn_800C4658(Block_800B95B4 *p);
 void fn_800C46A0(Block_800B95B4 *p);
 void fn_800DC578(void);
-int fn_800F0770(int a, State_80039F5C *pQueue, int mode, int b, void *pContext);
-void fn_800F1800(unsigned char index);
+int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
+void fn_800F1800(int index);
 void *fn_801374BC(void);
 Object_80039F5C *fn_80137B40(void);
 int fn_801486A0(void);
@@ -993,7 +993,7 @@ void fn_800B6658(Object_80039F5C *p);
 void fn_800B6714(Object_80039F5C *p, int index);
 void fn_800B6988(int index);
 int fn_800B7F34(Object_80039F5C *p);
-unsigned char fn_800B9A90(Class_80297C60 *p);
+int fn_800B9A90(Class_80297C60 *p);
 
 extern void *lbl_803EA368;
 extern unsigned char lbl_803EAB44;
@@ -1271,7 +1271,7 @@ extern "C" void fn_800B6714(Object_80039F5C *p, int index)
             fn_800B6658(pOther);
         }
         if (index != 0xFF) {
-            fn_800F1800(index);
+            fn_800F1800((unsigned char)index);
         }
         p->mUnknown8 = index;
         p->mFlags |= 0x400;
@@ -1563,7 +1563,7 @@ extern "C" void fn_800B86A4(int index)
 
 extern "C" void fn_800B8940(void)
 {
-    if (lbl_803EAB78->mUnknown158 == 1 && fn_800B9A90(lbl_803EAB84) == 1) {
+    if (lbl_803EAB78->mUnknown158 == 1 && (unsigned char)fn_800B9A90(lbl_803EAB84) == 1) {
         lbl_803EAB78->mUnknown158 = 0;
     }
 }
@@ -1599,7 +1599,7 @@ extern "C" void fn_800B9A6C(Class_80297C60 *p, void *q)
     fn_800C46A0(lbl_803EAB78);
 }
 
-extern "C" unsigned char fn_800B9A90(Class_80297C60 *p)
+extern "C" int fn_800B9A90(Class_80297C60 *p)
 {
     return lbl_803EAB78->mUnknown151;
 }
@@ -1621,12 +1621,12 @@ extern "C" void fn_800B9B64(Class_80297C60 *p, int enable, int value)
     }
 }
 
-extern "C" void fn_800B9B9C(void)
+extern "C" void fn_800B9B9C(Class_80297C60 *p)
 {
     lbl_803EAB78->mUnknown150 = 1;
 }
 
-extern "C" void fn_800B9BAC(void)
+extern "C" void fn_800B9BAC(Class_80297C60 *p)
 {
     lbl_803EAB78->mUnknown151 = 1;
 }
