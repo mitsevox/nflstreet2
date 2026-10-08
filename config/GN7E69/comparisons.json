@@ -4972,12 +4972,12 @@
     {
       "source": "src/game/cu_8018B0BC.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open unit row, exact whole-function boundaries and unlinked data slice 0x802A9A50-0x802A9DFC. The native first function/literal prefix is linked; full comparison placements retain its offsets and measure only unlinked ranges. Two wrapper bodies are exact but unlinked; no complete-file claim.",
+      "evidence": "evidence.tsv open unit row, exact whole-function boundaries and unlinked data slice 0x802A9A50-0x802A9DFC. The native first two functions and literal prefix are linked; full comparison placements retain its offsets and measure only unlinked ranges. Two wrapper bodies are exact but unlinked; no complete-file claim.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8018B0BC",
+          "start": "0x8018B014",
           "end": "0x8018B8B0"
         },
         {
@@ -5862,27 +5862,68 @@
     {
       "source": "src/game/cu_800D949C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained inferred sixteen-function grouping and exact complete helper 0x800DAC78-0x800DAC88. Only this whole body is reconstructed; fifteen other functions and all static data remain original and unmeasured.",
+      "evidence": "evidence.tsv retained inferred sixteen-function grouping, exact whole-function rows for eight reconstructed bodies and the exact .rodata row 0x8029D87C-0x8029D8A0 (literal pools of 0x800DA8D8, 0x800DAA68 and 0x800DAC88). Only these bodies and that literal run are measured; seven other functions and all other static data remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800DAC78",
-          "end": "0x800DAC88"
+          "start": "0x800D949C",
+          "end": "0x800DAEE4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029D87C",
+          "end": "0x8029D8A0"
         }
       ],
       "functions": [
         {
+          "symbol": "fn_800D9A10",
+          "start": "0x800D9A10",
+          "end": "0x800D9B0C"
+        },
+        {
+          "symbol": "fn_800D9B0C",
+          "start": "0x800D9B0C",
+          "end": "0x800D9C40"
+        },
+        {
+          "symbol": "fn_800D9C40",
+          "start": "0x800D9C40",
+          "end": "0x800D9C80"
+        },
+        {
+          "symbol": "fn_800DA53C",
+          "start": "0x800DA53C",
+          "end": "0x800DA54C"
+        },
+        {
+          "symbol": "fn_800DA8D8",
+          "start": "0x800DA8D8",
+          "end": "0x800DAA68"
+        },
+        {
+          "symbol": "fn_800DAA68",
+          "start": "0x800DAA68",
+          "end": "0x800DAC78"
+        },
+        {
           "symbol": "fn_800DAC78",
           "start": "0x800DAC78",
           "end": "0x800DAC88"
+        },
+        {
+          "symbol": "fn_800DAC88",
+          "start": "0x800DAC88",
+          "end": "0x800DAD90"
         }
       ]
     },
     {
       "source": "src/game/cu_800E3CC0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp, exact whole-function rows and inferred name/source-form/compiler rows for five complete constant-return bodies. Original bytes remain linked; all other bodies and static data are unmeasured.",
+      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp, exact whole-function rows and inferred name/source-form/compiler rows for the 37 complete bodies, and the local overlay type rows. Original bytes remain linked; all other bodies and static data are unmeasured.",
       "sections": [
         {
           "section": ".text",
@@ -5898,14 +5939,134 @@
           "end": "0x800E8748"
         },
         {
+          "symbol": "fn_800E9010",
+          "start": "0x800E9010",
+          "end": "0x800E9024"
+        },
+        {
+          "symbol": "fn_800E9024",
+          "start": "0x800E9024",
+          "end": "0x800E92DC"
+        },
+        {
+          "symbol": "fn_800E92DC",
+          "start": "0x800E92DC",
+          "end": "0x800E93CC"
+        },
+        {
+          "symbol": "fn_800E93CC",
+          "start": "0x800E93CC",
+          "end": "0x800E948C"
+        },
+        {
+          "symbol": "fn_800E9504",
+          "start": "0x800E9504",
+          "end": "0x800E9528"
+        },
+        {
+          "symbol": "fn_800E9528",
+          "start": "0x800E9528",
+          "end": "0x800E954C"
+        },
+        {
+          "symbol": "fn_800E96EC",
+          "start": "0x800E96EC",
+          "end": "0x800E98A4"
+        },
+        {
+          "symbol": "fn_800E98A4",
+          "start": "0x800E98A4",
+          "end": "0x800E99A8"
+        },
+        {
+          "symbol": "fn_800E9DBC",
+          "start": "0x800E9DBC",
+          "end": "0x800E9E18"
+        },
+        {
+          "symbol": "fn_800E9FC0",
+          "start": "0x800E9FC0",
+          "end": "0x800E9FD8"
+        },
+        {
           "symbol": "fn_800EA1D0",
           "start": "0x800EA1D0",
           "end": "0x800EA1D8"
         },
         {
+          "symbol": "fn_800EA1D8",
+          "start": "0x800EA1D8",
+          "end": "0x800EA284"
+        },
+        {
+          "symbol": "fn_800EAC9C",
+          "start": "0x800EAC9C",
+          "end": "0x800EAD44"
+        },
+        {
+          "symbol": "fn_800EAEA4",
+          "start": "0x800EAEA4",
+          "end": "0x800EAEC0"
+        },
+        {
+          "symbol": "fn_800EAEC0",
+          "start": "0x800EAEC0",
+          "end": "0x800EAF34"
+        },
+        {
           "symbol": "fn_800EAFFC",
           "start": "0x800EAFFC",
           "end": "0x800EB004"
+        },
+        {
+          "symbol": "fn_800EB0C4",
+          "start": "0x800EB0C4",
+          "end": "0x800EB3E8"
+        },
+        {
+          "symbol": "fn_800EB78C",
+          "start": "0x800EB78C",
+          "end": "0x800EB7F8"
+        },
+        {
+          "symbol": "fn_800EB7F8",
+          "start": "0x800EB7F8",
+          "end": "0x800EB86C"
+        },
+        {
+          "symbol": "fn_800EBCE0",
+          "start": "0x800EBCE0",
+          "end": "0x800EBD8C"
+        },
+        {
+          "symbol": "fn_800EBD8C",
+          "start": "0x800EBD8C",
+          "end": "0x800EBDCC"
+        },
+        {
+          "symbol": "fn_800EC640",
+          "start": "0x800EC640",
+          "end": "0x800EC674"
+        },
+        {
+          "symbol": "fn_800EC6DC",
+          "start": "0x800EC6DC",
+          "end": "0x800EC758"
+        },
+        {
+          "symbol": "fn_800EC758",
+          "start": "0x800EC758",
+          "end": "0x800EC76C"
+        },
+        {
+          "symbol": "fn_800EC840",
+          "start": "0x800EC840",
+          "end": "0x800EC870"
+        },
+        {
+          "symbol": "fn_800ECD14",
+          "start": "0x800ECD14",
+          "end": "0x800ECE28"
         },
         {
           "symbol": "fn_800ECE28",
@@ -5916,13 +6077,53 @@
           "symbol": "fn_800ECE30",
           "start": "0x800ECE30",
           "end": "0x800ECE38"
+        },
+        {
+          "symbol": "fn_800ECE38",
+          "start": "0x800ECE38",
+          "end": "0x800ECEBC"
+        },
+        {
+          "symbol": "fn_800ED0F4",
+          "start": "0x800ED0F4",
+          "end": "0x800ED208"
+        },
+        {
+          "symbol": "fn_800EDB48",
+          "start": "0x800EDB48",
+          "end": "0x800EDC68"
+        },
+        {
+          "symbol": "fn_800EE61C",
+          "start": "0x800EE61C",
+          "end": "0x800EE694"
+        },
+        {
+          "symbol": "fn_800EE7C8",
+          "start": "0x800EE7C8",
+          "end": "0x800EE7DC"
+        },
+        {
+          "symbol": "fn_800EE9AC",
+          "start": "0x800EE9AC",
+          "end": "0x800EEA20"
+        },
+        {
+          "symbol": "fn_800EEDC8",
+          "start": "0x800EEDC8",
+          "end": "0x800EEE3C"
+        },
+        {
+          "symbol": "fn_800EF0DC",
+          "start": "0x800EF0DC",
+          "end": "0x800EF0FC"
         }
       ]
     },
     {
       "source": "src/game/cu_800EFC68.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional grouping row for src/game/cu_800EFC68.cpp; ten exact complete function extents with individual inferred name/source-form/compiler rows. Only these bodies are measured; all other bodies and mapped static storage remain original and unmeasured.",
+      "evidence": "evidence.tsv retained open/provisional grouping row for src/game/cu_800EFC68.cpp; registered complete target function extents with individual inferred name/source-form/compiler rows. Exact and partial source bodies are measured independently; all unregistered bodies and mapped static storage remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
@@ -5968,9 +6169,104 @@
           "end": "0x800FF868"
         },
         {
+          "symbol": "fn_8010BE54",
+          "start": "0x8010BE54",
+          "end": "0x8010BEA4"
+        },
+        {
+          "symbol": "fn_8010BEA4",
+          "start": "0x8010BEA4",
+          "end": "0x8010BED4"
+        },
+        {
+          "symbol": "fn_8010C864",
+          "start": "0x8010C864",
+          "end": "0x8010C8F8"
+        },
+        {
+          "symbol": "fn_8010CFD4",
+          "start": "0x8010CFD4",
+          "end": "0x8010D004"
+        },
+        {
+          "symbol": "fn_8010D6D4",
+          "start": "0x8010D6D4",
+          "end": "0x8010D734"
+        },
+        {
+          "symbol": "fn_8010DA38",
+          "start": "0x8010DA38",
+          "end": "0x8010DAB4"
+        },
+        {
+          "symbol": "fn_8010EF40",
+          "start": "0x8010EF40",
+          "end": "0x8010F058"
+        },
+        {
+          "symbol": "fn_8010FB10",
+          "start": "0x8010FB10",
+          "end": "0x8010FB4C"
+        },
+        {
           "symbol": "fn_8010FD8C",
           "start": "0x8010FD8C",
           "end": "0x8010FD94"
+        },
+        {
+          "symbol": "fn_801100A0",
+          "start": "0x801100A0",
+          "end": "0x801100E8"
+        },
+        {
+          "symbol": "fn_801105B0",
+          "start": "0x801105B0",
+          "end": "0x80110630"
+        },
+        {
+          "symbol": "fn_80110630",
+          "start": "0x80110630",
+          "end": "0x8011067C"
+        },
+        {
+          "symbol": "fn_80110824",
+          "start": "0x80110824",
+          "end": "0x801108D4"
+        },
+        {
+          "symbol": "fn_80110EB0",
+          "start": "0x80110EB0",
+          "end": "0x80110EE4"
+        },
+        {
+          "symbol": "fn_80110EE4",
+          "start": "0x80110EE4",
+          "end": "0x80110FE4"
+        },
+        {
+          "symbol": "fn_80110FE4",
+          "start": "0x80110FE4",
+          "end": "0x80111090"
+        },
+        {
+          "symbol": "fn_80111090",
+          "start": "0x80111090",
+          "end": "0x80111104"
+        },
+        {
+          "symbol": "fn_80111354",
+          "start": "0x80111354",
+          "end": "0x801113DC"
+        },
+        {
+          "symbol": "fn_80111580",
+          "start": "0x80111580",
+          "end": "0x801115C0"
+        },
+        {
+          "symbol": "fn_80111964",
+          "start": "0x80111964",
+          "end": "0x80111974"
         },
         {
           "symbol": "fn_80113C18",
@@ -5981,6 +6277,396 @@
           "symbol": "fn_80125508",
           "start": "0x80125508",
           "end": "0x80125510"
+        },
+        {
+          "symbol": "fn_800F62A4",
+          "start": "0x800F62A4",
+          "end": "0x800F6370"
+        },
+        {
+          "symbol": "fn_800F6790",
+          "start": "0x800F6790",
+          "end": "0x800F67CC"
+        },
+        {
+          "symbol": "fn_800F67CC",
+          "start": "0x800F67CC",
+          "end": "0x800F67E8"
+        },
+        {
+          "symbol": "fn_800F67E8",
+          "start": "0x800F67E8",
+          "end": "0x800F6878"
+        },
+        {
+          "symbol": "fn_800F722C",
+          "start": "0x800F722C",
+          "end": "0x800F7314"
+        },
+        {
+          "symbol": "fn_800F93D0",
+          "start": "0x800F93D0",
+          "end": "0x800F9440"
+        },
+        {
+          "symbol": "fn_800F9440",
+          "start": "0x800F9440",
+          "end": "0x800F9480"
+        },
+        {
+          "symbol": "fn_800F9AF0",
+          "start": "0x800F9AF0",
+          "end": "0x800F9BD8"
+        },
+        {
+          "symbol": "fn_800F9BD8",
+          "start": "0x800F9BD8",
+          "end": "0x800F9CAC"
+        },
+        {
+          "symbol": "fn_800FA014",
+          "start": "0x800FA014",
+          "end": "0x800FA098"
+        },
+        {
+          "symbol": "fn_800FAD10",
+          "start": "0x800FAD10",
+          "end": "0x800FAD2C"
+        },
+        {
+          "symbol": "fn_800FB768",
+          "start": "0x800FB768",
+          "end": "0x800FB824"
+        },
+        {
+          "symbol": "fn_800FB824",
+          "start": "0x800FB824",
+          "end": "0x800FB844"
+        },
+        {
+          "symbol": "fn_800FB844",
+          "start": "0x800FB844",
+          "end": "0x800FB9D4"
+        },
+        {
+          "symbol": "fn_800FBAA8",
+          "start": "0x800FBAA8",
+          "end": "0x800FBB70"
+        },
+        {
+          "symbol": "fn_800FBF74",
+          "start": "0x800FBF74",
+          "end": "0x800FC014"
+        },
+        {
+          "symbol": "fn_800FC014",
+          "start": "0x800FC014",
+          "end": "0x800FC070"
+        },
+        {
+          "symbol": "fn_800FC070",
+          "start": "0x800FC070",
+          "end": "0x800FC0C4"
+        },
+        {
+          "symbol": "fn_800FC0C4",
+          "start": "0x800FC0C4",
+          "end": "0x800FC128"
+        },
+        {
+          "symbol": "fn_800FC128",
+          "start": "0x800FC128",
+          "end": "0x800FC1DC"
+        },
+        {
+          "symbol": "fn_800FC1DC",
+          "start": "0x800FC1DC",
+          "end": "0x800FC290"
+        },
+        {
+          "symbol": "fn_800FCC24",
+          "start": "0x800FCC24",
+          "end": "0x800FCE58"
+        },
+        {
+          "symbol": "fn_800FD3F0",
+          "start": "0x800FD3F0",
+          "end": "0x800FD41C"
+        },
+        {
+          "symbol": "fn_800FD650",
+          "start": "0x800FD650",
+          "end": "0x800FD68C"
+        },
+        {
+          "symbol": "fn_80111F80",
+          "start": "0x80111F80",
+          "end": "0x80111FBC"
+        },
+        {
+          "symbol": "fn_80112E10",
+          "start": "0x80112E10",
+          "end": "0x80112E8C"
+        },
+        {
+          "symbol": "fn_80112E8C",
+          "start": "0x80112E8C",
+          "end": "0x80112F8C"
+        },
+        {
+          "symbol": "fn_80113088",
+          "start": "0x80113088",
+          "end": "0x80113208"
+        },
+        {
+          "symbol": "fn_80113208",
+          "start": "0x80113208",
+          "end": "0x801133FC"
+        },
+        {
+          "symbol": "fn_801133FC",
+          "start": "0x801133FC",
+          "end": "0x80113478"
+        },
+        {
+          "symbol": "fn_80113478",
+          "start": "0x80113478",
+          "end": "0x80113498"
+        },
+        {
+          "symbol": "fn_801135E4",
+          "start": "0x801135E4",
+          "end": "0x80113604"
+        },
+        {
+          "symbol": "fn_80113604",
+          "start": "0x80113604",
+          "end": "0x80113680"
+        },
+        {
+          "symbol": "fn_80113AAC",
+          "start": "0x80113AAC",
+          "end": "0x80113B28"
+        },
+        {
+          "symbol": "fn_80113BCC",
+          "start": "0x80113BCC",
+          "end": "0x80113C18"
+        },
+        {
+          "symbol": "fn_801147D4",
+          "start": "0x801147D4",
+          "end": "0x80114838"
+        },
+        {
+          "symbol": "fn_80114D14",
+          "start": "0x80114D14",
+          "end": "0x80114D50"
+        },
+        {
+          "symbol": "fn_80114D50",
+          "start": "0x80114D50",
+          "end": "0x80114DD8"
+        },
+        {
+          "symbol": "fn_80114DD8",
+          "start": "0x80114DD8",
+          "end": "0x80114DE0"
+        },
+        {
+          "symbol": "fn_80114DE0",
+          "start": "0x80114DE0",
+          "end": "0x80114DF4"
+        },
+        {
+          "symbol": "fn_80114DF4",
+          "start": "0x80114DF4",
+          "end": "0x80114E7C"
+        },
+        {
+          "symbol": "fn_80114E7C",
+          "start": "0x80114E7C",
+          "end": "0x80114EE4"
+        },
+        {
+          "symbol": "fn_801163B4",
+          "start": "0x801163B4",
+          "end": "0x80116410"
+        },
+        {
+          "symbol": "fn_801167C4",
+          "start": "0x801167C4",
+          "end": "0x80116880"
+        },
+        {
+          "symbol": "fn_80116880",
+          "start": "0x80116880",
+          "end": "0x80116984"
+        },
+        {
+          "symbol": "fn_80116AB8",
+          "start": "0x80116AB8",
+          "end": "0x80116B98"
+        },
+        {
+          "symbol": "fn_801170A0",
+          "start": "0x801170A0",
+          "end": "0x801170E8"
+        },
+        {
+          "symbol": "fn_80118704",
+          "start": "0x80118704",
+          "end": "0x8011875C"
+        },
+        {
+          "symbol": "fn_8011875C",
+          "start": "0x8011875C",
+          "end": "0x8011876C"
+        },
+        {
+          "symbol": "fn_8011876C",
+          "start": "0x8011876C",
+          "end": "0x80118778"
+        },
+        {
+          "symbol": "fn_80118778",
+          "start": "0x80118778",
+          "end": "0x801187CC"
+        },
+        {
+          "symbol": "fn_80118894",
+          "start": "0x80118894",
+          "end": "0x8011893C"
+        },
+        {
+          "symbol": "fn_8011893C",
+          "start": "0x8011893C",
+          "end": "0x80118B4C"
+        },
+        {
+          "symbol": "fn_80119478",
+          "start": "0x80119478",
+          "end": "0x801194F0"
+        },
+        {
+          "symbol": "fn_8011AFCC",
+          "start": "0x8011AFCC",
+          "end": "0x8011B138"
+        },
+        {
+          "symbol": "fn_8011B138",
+          "start": "0x8011B138",
+          "end": "0x8011B2A4"
+        },
+        {
+          "symbol": "fn_80104C3C",
+          "start": "0x80104C3C",
+          "end": "0x80104C9C"
+        },
+        {
+          "symbol": "fn_8010531C",
+          "start": "0x8010531C",
+          "end": "0x80105384"
+        },
+        {
+          "symbol": "fn_801064A4",
+          "start": "0x801064A4",
+          "end": "0x80106580"
+        },
+        {
+          "symbol": "fn_80106580",
+          "start": "0x80106580",
+          "end": "0x80106618"
+        },
+        {
+          "symbol": "fn_80106618",
+          "start": "0x80106618",
+          "end": "0x80106678"
+        },
+        {
+          "symbol": "fn_80106794",
+          "start": "0x80106794",
+          "end": "0x801067D8"
+        },
+        {
+          "symbol": "fn_801067D8",
+          "start": "0x801067D8",
+          "end": "0x8010680C"
+        },
+        {
+          "symbol": "fn_801076F0",
+          "start": "0x801076F0",
+          "end": "0x801077D8"
+        },
+        {
+          "symbol": "fn_8010A07C",
+          "start": "0x8010A07C",
+          "end": "0x8010A0A0"
+        },
+        {
+          "symbol": "fn_8010A1C4",
+          "start": "0x8010A1C4",
+          "end": "0x8010A220"
+        },
+        {
+          "symbol": "fn_8010A220",
+          "start": "0x8010A220",
+          "end": "0x8010A254"
+        },
+        {
+          "symbol": "fn_8010A254",
+          "start": "0x8010A254",
+          "end": "0x8010A2DC"
+        },
+        {
+          "symbol": "fn_8010AEA0",
+          "start": "0x8010AEA0",
+          "end": "0x8010AEC4"
+        },
+        {
+          "symbol": "fn_8010AEC4",
+          "start": "0x8010AEC4",
+          "end": "0x8010AECC"
+        },
+        {
+          "symbol": "fn_8010B1B4",
+          "start": "0x8010B1B4",
+          "end": "0x8010B1FC"
+        },
+        {
+          "symbol": "fn_8010B1FC",
+          "start": "0x8010B1FC",
+          "end": "0x8010B224"
+        },
+        {
+          "symbol": "fn_8010B3A0",
+          "start": "0x8010B3A0",
+          "end": "0x8010B5B0"
+        },
+        {
+          "symbol": "fn_8010B5B0",
+          "start": "0x8010B5B0",
+          "end": "0x8010B738"
+        },
+        {
+          "symbol": "fn_8010B738",
+          "start": "0x8010B738",
+          "end": "0x8010B87C"
+        },
+        {
+          "symbol": "fn_8010B924",
+          "start": "0x8010B924",
+          "end": "0x8010BA00"
+        },
+        {
+          "symbol": "fn_8010BA00",
+          "start": "0x8010BA00",
+          "end": "0x8010BA90"
+        },
+        {
+          "symbol": "fn_8010BC48",
+          "start": "0x8010BC48",
+          "end": "0x8010BC90"
         }
       ]
     },
@@ -14042,7 +14728,7 @@
     {
       "source": "src/game/cu_80086C10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u2013800878D8 and existing exact function extents. Complete fourteen-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
+      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10–800878D8 and existing exact function extents. Complete fourteen-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
       "sections": [
         {
           "section": ".text",
@@ -15952,6 +16638,937 @@
           "start": "0x8024A808",
           "end": "0x8024A9EC"
         }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSTime.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023E794",
+          "end": "0x8023E818"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__OSGetSystemTime",
+          "start": "0x8023E7B4",
+          "end": "0x8023E818"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSMemory.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023BA78",
+          "end": "0x8023BD50"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FC470",
+          "end": "0x802FC480"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OnReset",
+          "start": "0x8023BA78",
+          "end": "0x8023BAB4"
+        },
+        {
+          "symbol": "MEMIntrruptHandler",
+          "start": "0x8023BAB4",
+          "end": "0x8023BB20"
+        },
+        {
+          "symbol": "__OSInitMemoryProtection",
+          "start": "0x8023BC38",
+          "end": "0x8023BD50"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSContext.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023A2D8",
+          "end": "0x8023AB48"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FBEF8",
+          "end": "0x802FC0CF"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OSGetCurrentContext",
+          "start": "0x8023A588",
+          "end": "0x8023A594"
+        },
+        {
+          "symbol": "OSClearContext",
+          "start": "0x8023A6F4",
+          "end": "0x8023A718"
+        },
+        {
+          "symbol": "OSDumpContext",
+          "start": "0x8023A7D4",
+          "end": "0x8023AA7C"
+        },
+        {
+          "symbol": "__OSContextInit",
+          "start": "0x8023AB00",
+          "end": "0x8023AB48"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSCache.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80239CAC",
+          "end": "0x8023A2D8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FBCC8",
+          "end": "0x802FBEF2"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "L2GlobalInvalidate",
+          "start": "0x80239FEC",
+          "end": "0x8023A084"
+        },
+        {
+          "symbol": "DMAErrorHandler",
+          "start": "0x8023A084",
+          "end": "0x8023A1E4"
+        },
+        {
+          "symbol": "__OSCacheInit",
+          "start": "0x8023A1E4",
+          "end": "0x8023A2D8"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSReboot.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023E920",
+          "end": "0x8023EC7C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A4520",
+          "end": "0x803A4540"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED0E0",
+          "end": "0x803ED0EC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "Callback",
+          "start": "0x8023E930",
+          "end": "0x8023E93C"
+        },
+        {
+          "symbol": "__OSReboot",
+          "start": "0x8023E93C",
+          "end": "0x8023EC7C"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSReset.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023BFBC",
+          "end": "0x8023C3E0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED0A0",
+          "end": "0x803ED0AC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OSRegisterResetFunction",
+          "start": "0x8023BFBC",
+          "end": "0x8023C040"
+        },
+        {
+          "symbol": "__OSDoHotReset",
+          "start": "0x8023C0B0",
+          "end": "0x8023C0F8"
+        },
+        {
+          "symbol": "OSResetSystem",
+          "start": "0x8023C0F8",
+          "end": "0x8023C3B0"
+        },
+        {
+          "symbol": "OSGetResetCode",
+          "start": "0x8023C3B0",
+          "end": "0x8023C3E0"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSInterrupt.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023B1F4",
+          "end": "0x8023BA60"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FC3F0",
+          "end": "0x802FC41C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED088",
+          "end": "0x803ED0A0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__OSSetInterruptHandler",
+          "start": "0x8023B240",
+          "end": "0x8023B25C"
+        },
+        {
+          "symbol": "__OSGetInterruptHandler",
+          "start": "0x8023B25C",
+          "end": "0x8023B270"
+        },
+        {
+          "symbol": "__OSInterruptInit",
+          "start": "0x8023B270",
+          "end": "0x8023B2E4"
+        },
+        {
+          "symbol": "SetInterruptMask",
+          "start": "0x8023B2E4",
+          "end": "0x8023B5BC"
+        },
+        {
+          "symbol": "__OSMaskInterrupts",
+          "start": "0x8023B5BC",
+          "end": "0x8023B644"
+        },
+        {
+          "symbol": "__OSUnmaskInterrupts",
+          "start": "0x8023B644",
+          "end": "0x8023B6CC"
+        },
+        {
+          "symbol": "__OSDispatchInterrupt",
+          "start": "0x8023B6CC",
+          "end": "0x8023BA10"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OS.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023885C",
+          "end": "0x80239348"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FB868",
+          "end": "0x802FBA5F"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A3A20",
+          "end": "0x803A3A70"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC148",
+          "end": "0x803EC158"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED038",
+          "end": "0x803ED078"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OSGetConsoleType",
+          "start": "0x80238984",
+          "end": "0x802389AC"
+        },
+        {
+          "symbol": "ClearArena",
+          "start": "0x802389AC",
+          "end": "0x80238AD4"
+        },
+        {
+          "symbol": "InquiryCallback",
+          "start": "0x80238AD4",
+          "end": "0x80238B10"
+        },
+        {
+          "symbol": "__OSSetExceptionHandler",
+          "start": "0x80239190",
+          "end": "0x802391AC"
+        },
+        {
+          "symbol": "__OSGetExceptionHandler",
+          "start": "0x802391AC",
+          "end": "0x802391C0"
+        },
+        {
+          "symbol": "__OSGetDIConfig",
+          "start": "0x80239308",
+          "end": "0x8023931C"
+        },
+        {
+          "symbol": "OSRegisterVersion",
+          "start": "0x8023931C",
+          "end": "0x80239348"
+        },
+        {
+          "symbol": "OSInit",
+          "start": "0x80238B10",
+          "end": "0x80238EE8"
+        },
+        {
+          "symbol": "OSExceptionInit",
+          "start": "0x80238EE8",
+          "end": "0x80239168"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSLink.c",
+      "profile": "dolphin_release",
+      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023BA60",
+          "end": "0x8023BA78"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__OSModuleInit",
+          "start": "0x8023BA60",
+          "end": "0x8023BA78"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSAlarm.c",
+      "profile": "dolphin_release",
+      "evidence": "coherent pinnedBFBB Csource; original80byte assemblygate remains external original provider, no reconstructedassembly. Entire mappedfile unchanged; whole Cpartial source and extraPeriodic function preserved.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80239348",
+          "end": "0x802399F8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED078",
+          "end": "0x803ED080"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OSInitAlarm",
+          "start": "0x80239348",
+          "end": "0x80239394"
+        },
+        {
+          "symbol": "OSCreateAlarm",
+          "start": "0x80239394",
+          "end": "0x802393A4"
+        },
+        {
+          "symbol": "InsertAlarm",
+          "start": "0x802393A4",
+          "end": "0x802395F4"
+        },
+        {
+          "symbol": "OSSetAlarm",
+          "start": "0x802395F4",
+          "end": "0x8023965C"
+        },
+        {
+          "symbol": "OSCancelAlarm",
+          "start": "0x8023965C",
+          "end": "0x80239778"
+        },
+        {
+          "symbol": "DecrementerExceptionCallback",
+          "start": "0x80239778",
+          "end": "0x802399A8"
+        }
+      ],
+      "discarded": [
+        "OSSetPeriodicAlarm"
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXInit.c",
+      "profile": "dolphin_release",
+      "evidence": "Pinned coherent BFBB five complete C bodies; original unsupported unused ASM helper omitted; ordinary partial comparison, no promotion",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024ACC0",
+          "end": "0x8024C038"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDE40",
+          "end": "0x802FE07C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A5900",
+          "end": "0x803A5F30"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC258",
+          "end": "0x803EC25C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED358",
+          "end": "0x803ED380"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED840",
+          "end": "0x803ED868"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__GXDefaultTexRegionCallback",
+          "start": "0x8024ACC0",
+          "end": "0x8024ADBC"
+        },
+        {
+          "symbol": "__GXDefaultTlutRegionCallback",
+          "start": "0x8024ADBC",
+          "end": "0x8024ADE0"
+        },
+        {
+          "symbol": "__GXShutdown",
+          "start": "0x8024ADE0",
+          "end": "0x8024AF70"
+        },
+        {
+          "symbol": "GXInit",
+          "start": "0x8024AF70",
+          "end": "0x8024B700"
+        },
+        {
+          "symbol": "__GXInitGX",
+          "start": "0x8024B700",
+          "end": "0x8024C038"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXTransform.c",
+      "profile": "dolphin_release",
+      "evidence": "Coherent BFBB eight complete C bodies, whole ASM-dependent APIs left original; no source cut or version-splice; normal comparison",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802523A4",
+          "end": "0x8025295C"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED9B8",
+          "end": "0x803ED9C0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GXSetCurrentMtx",
+          "start": "0x802525BC",
+          "end": "0x802525F0"
+        },
+        {
+          "symbol": "__GXSetMatrixIndex",
+          "start": "0x802528D8",
+          "end": "0x8025295C"
+        },
+        {
+          "symbol": "__GXSetViewport",
+          "start": "0x802526A4",
+          "end": "0x80252734"
+        },
+        {
+          "symbol": "GXSetViewportJitter",
+          "start": "0x80252734",
+          "end": "0x8025278C"
+        },
+        {
+          "symbol": "GXSetViewport",
+          "start": "0x8025278C",
+          "end": "0x802527D4"
+        },
+        {
+          "symbol": "GXSetScissor",
+          "start": "0x802527F8",
+          "end": "0x80252870"
+        },
+        {
+          "symbol": "GXSetScissorBoxOffset",
+          "start": "0x80252870",
+          "end": "0x802528B0"
+        },
+        {
+          "symbol": "GXSetClipMode",
+          "start": "0x802528B0",
+          "end": "0x802528D8"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/vm/VM.c",
+      "profile": "dolphin_release",
+      "evidence": "complete related MVP1a61 C source; actual original behavior/calls and static cells; unchanged profile, honest frame/compiler differences; no uninitialized storage credit.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80244F18",
+          "end": "0x80245200"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC208",
+          "end": "0x803EC20C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED230",
+          "end": "0x803ED248"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "VMInit",
+          "start": "0x80244F18",
+          "end": "0x80244FB4"
+        },
+        {
+          "symbol": "__VMGetMRAMPages",
+          "start": "0x80244FB4",
+          "end": "0x80244FBC"
+        },
+        {
+          "symbol": "__VMGetARAMSize",
+          "start": "0x80244FBC",
+          "end": "0x80244FC4"
+        },
+        {
+          "symbol": "__VMGetARAMStart",
+          "start": "0x80244FC4",
+          "end": "0x80244FCC"
+        },
+        {
+          "symbol": "__VMAllocMRAMSwapSpace",
+          "start": "0x80244FCC",
+          "end": "0x80244FFC"
+        },
+        {
+          "symbol": "__VMSwapPageIn",
+          "start": "0x80244FFC",
+          "end": "0x802451F8"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "sInitialized",
+          "start": "0x803ED244",
+          "end": "0x803ED248"
+        },
+        {
+          "symbol": "sLogStatsCallback",
+          "start": "0x803ED240",
+          "end": "0x803ED244"
+        },
+        {
+          "symbol": "sMRAMPages",
+          "start": "0x803ED23C",
+          "end": "0x803ED240"
+        },
+        {
+          "symbol": "sARAMSize",
+          "start": "0x803ED238",
+          "end": "0x803ED23C"
+        },
+        {
+          "symbol": "sMRAMSwapSpace",
+          "start": "0x803ED234",
+          "end": "0x803ED238"
+        },
+        {
+          "symbol": "sMRAMSize",
+          "start": "0x803ED230",
+          "end": "0x803ED234"
+        }
+      ],
+      "discarded": [
+        "VMSetLogStatsCallback",
+        "__VMSwapPageOut",
+        "VMStoreAllPages"
+      ]
+    },
+    {
+      "source": "src/dolphin/vm/VMPageReplacement.c",
+      "profile": "dolphin_release",
+      "evidence": "complete related MVP1a61 C source; actual original behavior/calls and static cells; unchanged profile, honest frame/compiler differences; no uninitialized storage credit.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80245200",
+          "end": "0x80245514"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC210",
+          "end": "0x803EC218"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED250",
+          "end": "0x803ED254"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__VMGetPageToReplace",
+          "start": "0x80245200",
+          "end": "0x80245244"
+        },
+        {
+          "symbol": "__VMPageReplacementLRU",
+          "start": "0x80245244",
+          "end": "0x80245414"
+        },
+        {
+          "symbol": "__VMPageReplacementRandom",
+          "start": "0x80245414",
+          "end": "0x802454A8"
+        },
+        {
+          "symbol": "__VMPageReplacementFIFO",
+          "start": "0x802454A8",
+          "end": "0x80245514"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "sCurrentPage",
+          "start": "0x803ED250",
+          "end": "0x803ED254"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/vm/VMMapping.c",
+      "profile": "dolphin_release",
+      "evidence": "complete related MVP1a61 C source; actual original behavior/calls and static cells; unchanged profile, honest frame/compiler differences; no uninitialized storage credit.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80245514",
+          "end": "0x80245820"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FDC98",
+          "end": "0x802FDCFF"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED258",
+          "end": "0x803ED268"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "VMAlloc",
+          "start": "0x80245514",
+          "end": "0x80245614"
+        },
+        {
+          "symbol": "__VMTranslateVMPageToARAMPage",
+          "start": "0x80245614",
+          "end": "0x80245654"
+        },
+        {
+          "symbol": "__VMIsPageMapped",
+          "start": "0x80245654",
+          "end": "0x80245674"
+        },
+        {
+          "symbol": "__VMMappingErrorAlert",
+          "start": "0x80245674",
+          "end": "0x802456AC"
+        },
+        {
+          "symbol": "__VMSetPageInARAM",
+          "start": "0x802456AC",
+          "end": "0x802456C4"
+        },
+        {
+          "symbol": "__VMIsPageInARAM",
+          "start": "0x802456C4",
+          "end": "0x802456D8"
+        },
+        {
+          "symbol": "__VMAllocVirtualToARAMLUT",
+          "start": "0x802456D8",
+          "end": "0x80245780"
+        },
+        {
+          "symbol": "__VMAllocARAMToVirtualLUT",
+          "start": "0x80245780",
+          "end": "0x80245820"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "sARAMPageCursor",
+          "start": "0x803ED264",
+          "end": "0x803ED268"
+        },
+        {
+          "symbol": "sAllocatedARAM",
+          "start": "0x803ED260",
+          "end": "0x803ED264"
+        },
+        {
+          "symbol": "sVirtualToARAMLUT",
+          "start": "0x803ED25C",
+          "end": "0x803ED260"
+        },
+        {
+          "symbol": "sARAMToVirtualLUT",
+          "start": "0x803ED258",
+          "end": "0x803ED25C"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gba/GBA.c",
+      "profile": "dolphin_release",
+      "evidence": "complete pinnedPikmin2 related GBA C functions with actualtarget Init guard/version delta, canonicalreset callback; opaqueunaccessed fields, no uninitializedstoragecredit.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80289450",
+          "end": "0x802895E8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x803060C0",
+          "end": "0x803060D0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803D4260",
+          "end": "0x803D4760"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED5E8",
+          "end": "0x803ED5EC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "ShortCommandProc",
+          "start": "0x80289450",
+          "end": "0x802894A4"
+        },
+        {
+          "symbol": "GBAInit",
+          "start": "0x802894A4",
+          "end": "0x80289548"
+        },
+        {
+          "symbol": "GBAGetStatus",
+          "start": "0x80289548",
+          "end": "0x802895D8"
+        },
+        {
+          "symbol": "OnReset",
+          "start": "0x802895D8",
+          "end": "0x802895E8"
+        }
+      ],
+      "discarded": [
+        "GBAGetStatusAsync",
+        "GBAResetAsync",
+        "GBAReset"
+      ]
+    },
+    {
+      "source": "src/dolphin/gba/GBAXfer.c",
+      "profile": "dolphin_release",
+      "evidence": "complete pinnedPikmin2 related GBA C functions with actualtarget Init guard/version delta, canonicalreset callback; opaqueunaccessed fields, no uninitializedstoragecredit.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802895E8",
+          "end": "0x802898FC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__GBAHandler",
+          "start": "0x802895E8",
+          "end": "0x802896C4"
+        },
+        {
+          "symbol": "__GBASyncCallback",
+          "start": "0x802896C4",
+          "end": "0x802896F8"
+        },
+        {
+          "symbol": "__GBASync",
+          "start": "0x802896F8",
+          "end": "0x80289764"
+        },
+        {
+          "symbol": "TypeAndStatusCallback",
+          "start": "0x80289764",
+          "end": "0x80289888"
+        },
+        {
+          "symbol": "__GBATransfer",
+          "start": "0x80289888",
+          "end": "0x802898FC"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXFifo.c",
+      "profile": "dolphin_release",
+      "evidence": "Existing coherent source getters actualCPU/GP pointer loads and originalCleanGPFifo caller roles independently frozen; source import credit preserved",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024C038",
+          "end": "0x8024CB90"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED380",
+          "end": "0x803ED3A0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GXGetCPUFifo",
+          "start": "0x8024C8D8",
+          "end": "0x8024C8E0"
+        },
+        {
+          "symbol": "GXGetGPFifo",
+          "start": "0x8024C8E0",
+          "end": "0x8024C8E8"
+        }
+      ],
+      "discarded": [
+        "GXSetCurrentGXThread"
       ]
     }
   ]

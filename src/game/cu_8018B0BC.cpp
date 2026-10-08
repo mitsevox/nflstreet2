@@ -1,9 +1,11 @@
+#include "game/Table_8007E020.h"
 #include "game/fn_801FCE10.h"
 
 extern "C" {
 int fn_8022F358(int index);
 int fn_8022F3D4(int handle);
-void fn_8018B014(int handle);
+int fn_801F9908(int handle, Table_8007E020 *pTables, Object_80023BBC *pFilter,
+                QueryResult *pResult, int flags);
 int fn_801F9980(int handle, int *pTable);
 int fn_801F967C(int handle, int table);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
@@ -12,6 +14,19 @@ int fn_80029D74(int type, int index);
 void fn_80029CE0(int type, int index);
 int fn_8008A900(int value, int group);
 void fn_8018B6F0(int index);
+
+void fn_8018B014(int handle)
+{
+    QueryResult result;
+    Table_8007E020 tables[2];
+
+    tables[0].Set(0x59505453);
+    tables[1].Set(-1);
+    fn_801F9908(handle, tables, 0, &result, 0);
+    tables[0].Set(0x4D455453);
+    tables[1].Set(-1);
+    fn_801F9908(handle, tables, 0, &result, 0);
+}
 
 void fn_8018B0BC(int source, int team, int index)
 {
