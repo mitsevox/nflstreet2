@@ -1,5 +1,6 @@
 #include "game/Record_8036B55C.h"
 #include "game/Object_8008044C.h"
+#include "game/Object_801BBD5C.h"
 #include "game/fn_802372EC.h"
 #include <string.h>
 
@@ -25,18 +26,6 @@ struct Table_80089904 {
 struct Header_8008977C {
     unsigned char mUnknown0[2];
     unsigned short mUnknown2;
-};
-
-struct Value_801BBD5C {
-    float mValue;
-    unsigned char mUnknown4[8];
-};
-
-struct Object_801BBD5C {
-    unsigned char mUnknown0[4];
-    unsigned int mCount;
-    unsigned char mUnknown8[20];
-    Value_801BBD5C mValues[1];
 };
 
 struct Transition_80089A84 {
