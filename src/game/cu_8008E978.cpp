@@ -1441,6 +1441,110 @@ extern "C" void fn_800A5A88(Pair_800A554C *pPairs)
 {
 }
 
+/* Object whose word +0x328 points to a record with a halfword count at +4
+   and whose word +0x32C points to that many 124-byte entries, as
+   fn_800A3B10 reads them. Only these words are declared; the type is not
+   established. */
+struct Header_800A3B10 {
+    unsigned char mUnknown0[4];
+    unsigned short mUnknown4;
+};
+
+struct Entry_800A3B10 {
+    unsigned char mUnknown0;
+    unsigned char mUnknown1;
+    unsigned char mUnknown2[122];
+};
+
+struct Object_800A3B10 {
+    unsigned char mUnknown0[0x328];
+    Header_800A3B10 *mpUnknown328;
+    Entry_800A3B10 *mpUnknown32C;
+};
+
+extern "C" {
+Pair_800A554C *fn_8011F50C(void);
+void fn_800A3530(void);
+void fn_800A37D8(void);
+void fn_800A3898(void);
+
+extern void (*lbl_8030EFB4[11])(void);
+extern int (*lbl_802D7E4C[21])(Object_80039F5C *p, Object_80039F5C *pTarget,
+                                Object_80039F5C *pOther, Pair_800A554C *pPair);
+}
+
+extern "C" int fn_800A3B10(Object_800A3B10 *p)
+{
+    int count = 0;
+    int i;
+
+    if (p->mpUnknown328 != 0) {
+        for (i = 0; i < p->mpUnknown328->mUnknown4; i++) {
+            if (p->mpUnknown32C[i].mUnknown1 == 2) {
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
+extern "C" void fn_800A3D70(void)
+{
+    void (**ppCallback)(void) = lbl_8030EFB4;
+    int i;
+
+    for (i = 0; i < 11; i++) {
+        *ppCallback++ = fn_800A3530;
+    }
+    lbl_8030EFB4[1] = fn_800A3898;
+    lbl_8030EFB4[2] = fn_800A37D8;
+    lbl_8030EFB4[3] = fn_800A3898;
+    lbl_8030EFB4[4] = fn_800A3898;
+    lbl_8030EFB4[5] = fn_800A3898;
+}
+
+extern "C" int fn_800A3E00(Object_80039F5C *p)
+{
+    int result = 0;
+
+    switch ((unsigned int)p->mpState->mId) {
+    case 2:
+    case 22:
+    case 30:
+    case 40:
+    case 62:
+    case 85:
+    case 92:
+        if (p->mUnknown1032 < 4 || p->mUnknown1032 > 6) {
+            result = 1;
+        }
+        break;
+    }
+    return result;
+}
+
+extern "C" int fn_800A554C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
+                           int index)
+{
+    int result = 1;
+    Pair_800A554C *pPairs = fn_8011F50C();
+
+    if (lbl_802D7E4C[index] != 0) {
+        result = lbl_802D7E4C[index](p, pTarget, pOther, &pPairs[index]);
+    }
+    return result;
+}
+
+extern "C" void fn_800A5D94(void)
+{
+    Pair_800A554C *pPairs = fn_8011F50C();
+    int i;
+
+    for (i = 10; i >= 0; i--) {
+        pPairs[i].mUnknown0 = 0;
+    }
+}
+
 /* Partial view of the object whose word +0x28 fn_800C6640 decodes as a
    player reference. The size is unknown. */
 struct Object_800C6640 {
@@ -3300,9 +3404,28 @@ extern "C" void fn_800A9648(void)
     fn_800927BC((unsigned char)lbl_8030F42C.mUnknown14[lbl_8030F42C.mUnknownC]);
 }
 
+extern "C" {
+void fn_8017DC08(void);
+void fn_800B63B0(void);
+void fn_800A9238(void);
+void fn_800A9178(void);
+}
+
 extern "C" int fn_800A9680(void)
 {
     return lbl_803EAA85;
+}
+
+extern "C" void fn_800A9688(void)
+{
+    fn_8017DC08();
+    if (fn_80156704()) {
+        fn_801574DC(0);
+    }
+    fn_800B63B0();
+    fn_800A9238();
+    fn_800A9178();
+    lbl_803EAA85 = 1;
 }
 
 extern "C" void fn_800A981C(void)
