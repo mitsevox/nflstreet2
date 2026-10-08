@@ -6667,6 +6667,236 @@
           "symbol": "fn_8010BC48",
           "start": "0x8010BC48",
           "end": "0x8010BC90"
+        },
+        {
+          "symbol": "fn_800EFC68",
+          "start": "0x800EFC68",
+          "end": "0x800EFCD0"
+        },
+        {
+          "symbol": "fn_800EFCD0",
+          "start": "0x800EFCD0",
+          "end": "0x800EFD70"
+        },
+        {
+          "symbol": "fn_800EFD70",
+          "start": "0x800EFD70",
+          "end": "0x800EFDD8"
+        },
+        {
+          "symbol": "fn_800EFDD8",
+          "start": "0x800EFDD8",
+          "end": "0x800EFE0C"
+        },
+        {
+          "symbol": "fn_800EFE0C",
+          "start": "0x800EFE0C",
+          "end": "0x800EFE1C"
+        },
+        {
+          "symbol": "fn_800EFE1C",
+          "start": "0x800EFE1C",
+          "end": "0x800EFE60"
+        },
+        {
+          "symbol": "fn_800EFE60",
+          "start": "0x800EFE60",
+          "end": "0x800EFEF8"
+        },
+        {
+          "symbol": "fn_800EFEF8",
+          "start": "0x800EFEF8",
+          "end": "0x800EFFA0"
+        },
+        {
+          "symbol": "fn_800EFFA0",
+          "start": "0x800EFFA0",
+          "end": "0x800F00D4"
+        },
+        {
+          "symbol": "fn_800F00D4",
+          "start": "0x800F00D4",
+          "end": "0x800F01CC"
+        },
+        {
+          "symbol": "fn_800F01CC",
+          "start": "0x800F01CC",
+          "end": "0x800F0278"
+        },
+        {
+          "symbol": "fn_800F0278",
+          "start": "0x800F0278",
+          "end": "0x800F03D8"
+        },
+        {
+          "symbol": "fn_800F03D8",
+          "start": "0x800F03D8",
+          "end": "0x800F0490"
+        },
+        {
+          "symbol": "fn_800F0490",
+          "start": "0x800F0490",
+          "end": "0x800F053C"
+        },
+        {
+          "symbol": "fn_800F053C",
+          "start": "0x800F053C",
+          "end": "0x800F05E4"
+        },
+        {
+          "symbol": "fn_800F05E4",
+          "start": "0x800F05E4",
+          "end": "0x800F067C"
+        },
+        {
+          "symbol": "fn_800F067C",
+          "start": "0x800F067C",
+          "end": "0x800F06F4"
+        },
+        {
+          "symbol": "fn_800F06F4",
+          "start": "0x800F06F4",
+          "end": "0x800F0770"
+        },
+        {
+          "symbol": "fn_800F0770",
+          "start": "0x800F0770",
+          "end": "0x800F08F8"
+        },
+        {
+          "symbol": "fn_800F0910",
+          "start": "0x800F0910",
+          "end": "0x800F0960"
+        },
+        {
+          "symbol": "fn_800F0BF8",
+          "start": "0x800F0BF8",
+          "end": "0x800F0C6C"
+        },
+        {
+          "symbol": "fn_800F0C6C",
+          "start": "0x800F0C6C",
+          "end": "0x800F0CCC"
+        },
+        {
+          "symbol": "fn_800F0CCC",
+          "start": "0x800F0CCC",
+          "end": "0x800F0E10"
+        },
+        {
+          "symbol": "fn_800F0E10",
+          "start": "0x800F0E10",
+          "end": "0x800F0E2C"
+        },
+        {
+          "symbol": "fn_800F0E2C",
+          "start": "0x800F0E2C",
+          "end": "0x800F0EC0"
+        },
+        {
+          "symbol": "fn_800F0EC0",
+          "start": "0x800F0EC0",
+          "end": "0x800F0EFC"
+        },
+        {
+          "symbol": "fn_800F0EFC",
+          "start": "0x800F0EFC",
+          "end": "0x800F0FA0"
+        },
+        {
+          "symbol": "fn_800F0FA0",
+          "start": "0x800F0FA0",
+          "end": "0x800F0FD0"
+        },
+        {
+          "symbol": "fn_800F15B0",
+          "start": "0x800F15B0",
+          "end": "0x800F1604"
+        },
+        {
+          "symbol": "fn_800F1604",
+          "start": "0x800F1604",
+          "end": "0x800F1638"
+        },
+        {
+          "symbol": "fn_800F1638",
+          "start": "0x800F1638",
+          "end": "0x800F164C"
+        },
+        {
+          "symbol": "fn_800F164C",
+          "start": "0x800F164C",
+          "end": "0x800F16F4"
+        },
+        {
+          "symbol": "fn_800F16F4",
+          "start": "0x800F16F4",
+          "end": "0x800F1700"
+        },
+        {
+          "symbol": "fn_800F1700",
+          "start": "0x800F1700",
+          "end": "0x800F177C"
+        },
+        {
+          "symbol": "fn_800F177C",
+          "start": "0x800F177C",
+          "end": "0x800F1800"
+        },
+        {
+          "symbol": "fn_800F1800",
+          "start": "0x800F1800",
+          "end": "0x800F181C"
+        },
+        {
+          "symbol": "fn_800F181C",
+          "start": "0x800F181C",
+          "end": "0x800F1858"
+        },
+        {
+          "symbol": "fn_800F1EE0",
+          "start": "0x800F1EE0",
+          "end": "0x800F1FDC"
+        },
+        {
+          "symbol": "fn_800F22D8",
+          "start": "0x800F22D8",
+          "end": "0x800F23EC"
+        },
+        {
+          "symbol": "fn_800F2828",
+          "start": "0x800F2828",
+          "end": "0x800F285C"
+        },
+        {
+          "symbol": "fn_800F285C",
+          "start": "0x800F285C",
+          "end": "0x800F2920"
+        },
+        {
+          "symbol": "fn_800F2A40",
+          "start": "0x800F2A40",
+          "end": "0x800F2AA0"
+        },
+        {
+          "symbol": "fn_800F2C1C",
+          "start": "0x800F2C1C",
+          "end": "0x800F2CB4"
+        },
+        {
+          "symbol": "fn_800F3A6C",
+          "start": "0x800F3A6C",
+          "end": "0x800F3B54"
+        },
+        {
+          "symbol": "fn_800F4A74",
+          "start": "0x800F4A74",
+          "end": "0x800F4AD4"
+        },
+        {
+          "symbol": "fn_800F4E14",
+          "start": "0x800F4E14",
+          "end": "0x800F4E88"
         }
       ]
     },
@@ -14888,7 +15118,7 @@
     {
       "source": "src/game/cu_80086C10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10–800878D8 and existing exact function extents. Complete fourteen-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
+      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u2013800878D8 and existing exact function extents. Complete fourteen-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
       "sections": [
         {
           "section": ".text",

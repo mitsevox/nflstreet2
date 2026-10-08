@@ -200,6 +200,8 @@ struct Object_80039F5C {
     /* Message queue that mpState points to; passed to fn_800F03D8 and
        fn_800F053C. Only its head is declared. */
     State_80039F5C mUnknown3048;
+    char mUnknown3055[33];
+    unsigned char mUnknown3088;
 };
 
 extern "C" {
