@@ -23,6 +23,8 @@ struct State_8012C7E0 {
     int mUnknown12;
     int mUnknown16;
     int mUnknown20;
+    char mUnknown24[20];
+    int mUnknown44;
 };
 
 extern "C" {
@@ -53,6 +55,8 @@ int fn_801BE648(void *p);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
+float fn_80227890(void *pA, void *pB);
+float fn_8022710C(void *pV);
 
 extern Table_80089904 lbl_8031AABC;
 }
@@ -271,6 +275,33 @@ extern "C" int fn_8012D1E4(Object_80039F5C *p)
     case 3:
         result = 0;
         break;
+    }
+    return result;
+}
+
+extern "C" int fn_8012E590(Object_80039F5C *p, Object_80039F5C *pOther)
+{
+    State_8012C7E0 *state = (State_8012C7E0 *)&p->mUnknown336;
+    int result = 0;
+
+    if (fn_8011E9B4(pOther)) {
+        result = 1;
+    } else {
+        Object_80039F5C *pRef = fn_8009BCE8(&pOther->mUnknown1036);
+
+        if (pRef) {
+            Point_8017886C delta;
+
+            fn_80227690(&delta, &pRef->mMotion.mPos, &p->mMotion.mPos);
+            if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), state->mUnknown44) <= 0x355554
+                && fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing) <= 0x355554) {
+                float distance = fn_8022710C(&delta);
+
+                if (distance < fn_80227890(&p->mMotion.mPos, &pOther->mMotion.mPos)) {
+                    result = 1;
+                }
+            }
+        }
     }
     return result;
 }
