@@ -16638,7 +16638,7 @@
     {
       "source": "src/dolphin/card/CARDOpen.c",
       "profile": "dolphin_card_release",
-      "evidence": "Complete coherent pinned dSDK nine-body source/current canonical headers, fixed dolphin_release profile. Eight full target bodies1492; plain-char filename instruction partials preserved, genuine unassigned CARDOpen helper retained. Original bytes remain linked until separately validated promotion.",
+      "evidence": "Existing coherent BFBB CARDOpen source retained unchanged. The complete14-file CARD library uses qualified dolphin_card_release signed-char working profile, including all12linked units and both comparison files. Both filename functions gain exact comparison results; target extsb/NUL/equality behavior and pinned default/recipes support a working reconstruction, not unique original flags. All previously exact functions preserved; linked promotion remains separate. See evidence.tsv compiler row.",
       "sections": [
         {
           "section": ".text",
@@ -16841,7 +16841,7 @@
     {
       "source": "src/dolphin/card/CARDMount.c",
       "profile": "dolphin_card_release",
-      "evidence": "Complete BFBB CARDMount file with current canonical headers; eight full target bodies and both complete initialized tables. The adjacent 56-byte probe remains unrecovered in the full mapped span; no source splice or compiler changes.",
+      "evidence": "Coherent BFBB CARDMount source plus the complete dSDK2328 CARDProbe body (revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/card/CARDMount.c). Nine registered target bodies and both initialized tables remain comparison-only. The complete14-file CARD library uses the qualified dolphin_card_release signed-char working profile; original command line is not uniquely established. See evidence.tsv compiler/source/typed-function rows. No whole linked promotion.",
       "sections": [
         {
           "section": ".text",
@@ -17228,7 +17228,7 @@
     {
       "source": "src/dolphin/pad/Pad.c",
       "profile": "dolphin_release",
-      "evidence": "Pinned BFBB8fb1c232 coherent PAD source, full nineteen target bodies and initialized pools; explicit foreign compiler directive adaptation under unchanged target profile. See evidence.tsv; native tail-SDA layout remains measured partial. Private symbol storage map resolves all thirteen genuine BSS objects independently; diagnostic sbss envelope includes neutral unowned803ED2A4 hole without source allocation, ownership or byte credit.",
+      "evidence": "Existing pinned BFBB8fb1c232 coherent nineteen-function PAD source unchanged under fixed dolphin_release. Explicit storage symbols bind all13genuine BSS objects using actual target word accesses and typed caller evidence; all19functions and initialized pools are exact comparison-only. The sbss diagnostic envelope contains unowned803ED2A4..803ED2A8 without source allocation, ownership or initialized-data credit; SDK mapping owned spans remain unchanged. No whole linked SDA-placement or unit-completion claim. See evidence.tsv storage facts.",
       "sections": [
         {
           "section": ".text",
@@ -17429,7 +17429,7 @@
     {
       "source": "src/dolphin/ai/ai.c",
       "profile": "dolphin_release",
-      "evidence": "Pinned BFBB8fb1c232 coherent AI C source; all eighteen complete C functions measured, SRC timing routine remains partial. Original flag-clear and stack-switch functions are wholly unresolved and remain mapped/unlinked. See evidence.tsv.",
+      "evidence": "Pinned BFBB8fb1c232 coherent AI C source with complete dSDK2328 AIReset body (revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/ai/ai.c). All nineteen complete C functions registered under unchanged dolphin_release; SRC timing routine remains partial and callback-stack assembly provenance unresolved. See evidence.tsv actual storage/caller facts; no whole-unit promotion.",
       "sections": [
         {
           "section": ".text",
