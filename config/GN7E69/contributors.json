@@ -11260,6 +11260,31 @@
         "original_blob": "471e72470a3864eff0f5f3bf4605dd90da2a9306",
         "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved. Reconcile duplicate char/unsigned-char table declarations to one byte-array declaration; accesses do not establish original signedness."
       }
+    },
+    {
+      "source": "src/game/cu_800E3CC0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800E579C",
+        "0x800E5B04",
+        "0x800E67AC",
+        "0x800E68A8",
+        "0x800E7330",
+        "0x800E7B90",
+        "0x800E7C84",
+        "0x800E86E4",
+        "0x800E8748",
+        "0x800E885C",
+        "0x800E8ED4"
+      ],
+      "provenance": {
+        "pull_request": 545,
+        "merged_via": 545,
+        "commit": "872295d85e19ba329d4c88763f29b8d3efcee6c4",
+        "introduced_blob": "c4163e73e8baa72d9470e1414e3f540eba2808a6"
+      }
     }
   ],
   "target": "GN7E69",

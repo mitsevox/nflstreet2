@@ -5923,7 +5923,7 @@
     {
       "source": "src/game/cu_800E3CC0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp, exact whole-function rows and inferred name/source-form/compiler rows for the 37 complete bodies, and the local overlay type rows. Original bytes remain linked; all other bodies and static data are unmeasured.",
+      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp, registered exact whole-function extents with inferred name/source-form/compiler rows for the reconstructed bodies and local overlay type rows. Exact and partial source are measured independently; original bytes remain linked and all other bodies and static data are unmeasured.",
       "sections": [
         {
           "section": ".text",
@@ -6117,6 +6117,66 @@
           "symbol": "fn_800EF0DC",
           "start": "0x800EF0DC",
           "end": "0x800EF0FC"
+        },
+        {
+          "symbol": "fn_800E579C",
+          "start": "0x800E579C",
+          "end": "0x800E586C"
+        },
+        {
+          "symbol": "fn_800E5B04",
+          "start": "0x800E5B04",
+          "end": "0x800E5C00"
+        },
+        {
+          "symbol": "fn_800E67AC",
+          "start": "0x800E67AC",
+          "end": "0x800E68A8"
+        },
+        {
+          "symbol": "fn_800E68A8",
+          "start": "0x800E68A8",
+          "end": "0x800E6984"
+        },
+        {
+          "symbol": "fn_800E7330",
+          "start": "0x800E7330",
+          "end": "0x800E73D4"
+        },
+        {
+          "symbol": "fn_800E7B90",
+          "start": "0x800E7B90",
+          "end": "0x800E7C84"
+        },
+        {
+          "symbol": "fn_800E7C84",
+          "start": "0x800E7C84",
+          "end": "0x800E7D80"
+        },
+        {
+          "symbol": "fn_800E7D80",
+          "start": "0x800E7D80",
+          "end": "0x800E7E78"
+        },
+        {
+          "symbol": "fn_800E86E4",
+          "start": "0x800E86E4",
+          "end": "0x800E8740"
+        },
+        {
+          "symbol": "fn_800E8748",
+          "start": "0x800E8748",
+          "end": "0x800E885C"
+        },
+        {
+          "symbol": "fn_800E885C",
+          "start": "0x800E885C",
+          "end": "0x800E8898"
+        },
+        {
+          "symbol": "fn_800E8ED4",
+          "start": "0x800E8ED4",
+          "end": "0x800E9010"
         }
       ]
     },
@@ -14728,7 +14788,7 @@
     {
       "source": "src/game/cu_80086C10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10–800878D8 and existing exact function extents. Complete fourteen-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
+      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u2013800878D8 and existing exact function extents. Complete fourteen-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
       "sections": [
         {
           "section": ".text",

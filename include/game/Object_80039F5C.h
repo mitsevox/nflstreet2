@@ -133,7 +133,9 @@ struct Object_80039F5C {
     int mUnknown336;
     short mUnknown340;
     unsigned char mUnknown342;
-    char mUnknown343[17];
+    char mUnknown343[11];
+    unsigned char mUnknown354;
+    char mUnknown355[5];
     unsigned char mUnknown360;
     char mUnknown361[27];
     unsigned int mUnknown388;
