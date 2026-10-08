@@ -392,3 +392,34 @@ GXFifoObj* GXGetGPFifo(void)
 {
     return (GXFifoObj*)GPFifo;
 }
+
+void* GXGetFifoBase(const GXFifoObj* obj) {
+    __GXFifoObj* realFifo = (__GXFifoObj*)obj;
+    return realFifo->base;
+}
+
+void __GXCleanGPFifo(void) {
+    GXFifoObj dummyFifo;
+    GXFifoObj* gpFifo;
+    GXFifoObj* cpuFifo;
+    void* base;
+
+    gpFifo = GXGetGPFifo();
+    if (gpFifo == (GXFifoObj*)NULL)
+        return;
+
+    cpuFifo = GXGetCPUFifo();
+    base = GXGetFifoBase(gpFifo);
+
+    dummyFifo = *gpFifo;
+    GXInitFifoPtrs(&dummyFifo, base, base);
+    GXSetGPFifo(&dummyFifo);
+    if (cpuFifo == gpFifo) {
+        GXSetCPUFifo(&dummyFifo);
+    }
+    GXInitFifoPtrs(gpFifo, base, base);
+    GXSetGPFifo(gpFifo);
+    if (cpuFifo == gpFifo) {
+        GXSetCPUFifo(cpuFifo);
+    }
+}
