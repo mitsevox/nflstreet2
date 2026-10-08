@@ -11507,8 +11507,11 @@
       "provenance": {
         "pull_request": 603,
         "merged_via": 603,
-        "commit": "6cd8ebca15530339cdc56f21f11d07ceadf7db16",
-        "introduced_blob": "1fa73733c5448ae6ae1be2aa9f20d1a90b49a17a"
+        "commit": "1990ffbd8c629318a0f37f44d687b1352ac2aa5c",
+        "introduced_blob": "6d50f40690cc842c41cabbad9035a9210090d8fd",
+        "original_commit": "6cd8ebca15530339cdc56f21f11d07ceadf7db16",
+        "original_blob": "1fa73733c5448ae6ae1be2aa9f20d1a90b49a17a",
+        "integration_adjustment": "Combined the two reviewed, disjoint appended source sections and their canonical includes in src/game/cu_8008E978.cpp; function bodies and existing baseline source are preserved unchanged. Original contributor and source revision are retained."
       }
     },
     {
@@ -12224,8 +12227,11 @@
       "provenance": {
         "pull_request": 607,
         "merged_via": 607,
-        "commit": "7cc8ebbfea56dd12c33f38efad7fb4ea163b2214",
-        "introduced_blob": "0e5834f0187d7395a12429b8b7911dce65cc8872"
+        "commit": "1990ffbd8c629318a0f37f44d687b1352ac2aa5c",
+        "introduced_blob": "6d50f40690cc842c41cabbad9035a9210090d8fd",
+        "original_commit": "7cc8ebbfea56dd12c33f38efad7fb4ea163b2214",
+        "original_blob": "0e5834f0187d7395a12429b8b7911dce65cc8872",
+        "integration_adjustment": "Combined the two reviewed, disjoint appended source sections and their canonical includes in src/game/cu_8008E978.cpp; function bodies and existing baseline source are preserved unchanged. Original contributor and source revision are retained."
       }
     },
     {
