@@ -1,12 +1,13 @@
 #include <math.h>
 #include "game/Input_800B6D34.h"
 #include "game/Object_80039F5C.h"
+#include "game/cu_80067C10.h"
+#include "game/cu_80136B1C.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_80178D18.h"
 
 extern "C" {
-void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 int fn_800ABDA4(int team);
 int fn_800B65A0(int team);
@@ -18,7 +19,6 @@ void fn_800D5F1C(Object_80039F5C *p, int a, int b);
 void fn_800D60BC(Object_80039F5C *p, int a, int b);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
 float fn_80124FE0(Object_80039F5C *p, int kind);
-Object_80039F5C *fn_80137B40(void);
 int fn_801486A0(void);
 void fn_80156C78(int a, int b);
 int fn_801783AC(int bit);

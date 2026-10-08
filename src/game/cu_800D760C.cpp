@@ -1,5 +1,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_800D81C8.h"
+#include "game/Object_801BC084.h"
+#include "game/cu_80136B1C.h"
 #include "game/bitstream.h"
 
 /* View of the player object's state block at +336 used by these functions. */
@@ -22,18 +24,10 @@ struct Block_800D7A4C {
     float mUnknown36;
 };
 
-struct Object_801BC084 {
-    char mUnknown0[3];
-    unsigned char mUnknown3;
-};
-
 extern "C" {
 unsigned char fn_800D78C4(Object_80039F5C *p, int id);
 void fn_800D7A4C(Object_80039F5C *p, Block_800D7A4C *pBlock);
 void fn_800E7E78(Object_80039F5C *p, State_800D7A4C *pState);
-Object_80039F5C *fn_80137B40(void);
-int fn_80137C48(Object_80039F5C *p);
-Object_801BC084 *fn_801BC084(int handle);
 int fn_801BE648(void *p);
 
 extern unsigned short lbl_803192BC[2][7];
@@ -88,10 +82,10 @@ extern "C" void fn_800D7708(BitStream_t *pStream0, BitStream_t *pStream1, BitStr
 
 extern "C" void fn_800D782C(Object_80039F5C *p)
 {
-    int active = fn_80137C48(p);
+    Object_80137ABC *pBall = fn_80137C48(p);
     int id = fn_801BE648(p->mpUnknown792);
 
-    if (active) {
+    if (pBall) {
         if (p->mUnknown776) {
             if (id != p->mUnknown778) {
                 unsigned char value = fn_800D78C4(p, id);
@@ -104,8 +98,8 @@ extern "C" void fn_800D782C(Object_80039F5C *p)
             p->mUnknown777 = value;
         }
     } else {
-        p->mUnknown776 = active;
-        p->mUnknown777 = active;
+        p->mUnknown776 = 0;
+        p->mUnknown777 = 0;
     }
     p->mUnknown778 = id;
 }

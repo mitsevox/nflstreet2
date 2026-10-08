@@ -246,16 +246,37 @@ extern "C" int fn_800D91E0(Object_80039F5C *p, int team, int a, unsigned char *p
     if (p->mIdBytes[3] != 1) {
         result = 2;
     } else {
-    unsigned char kind = p->mUnknown528.mUnknown15;
-    if (kind <= 1 || kind == 4 || kind == 5 || kind == 29 || kind == 20 || kind == 21) {
-        if (p->mIdBytes[2] == team) {
-            *pOut = fn_800D9078(p, a);
-            if (*pOut) {
-                *pOut = 1;
-                result = 7;
-            } else if (p->mpState->mId == 18 || fn_800DC080(p)) {
-                *pOut = 0;
-                result = 3;
+        unsigned char kind = p->mUnknown528.mUnknown15;
+        if (kind <= 1 || kind == 4 || kind == 5 || kind == 29 || kind == 20 || kind == 21) {
+            if (p->mIdBytes[2] == team) {
+                *pOut = fn_800D9078(p, a);
+                if (*pOut) {
+                    *pOut = 1;
+                    result = 7;
+                } else if (p->mpState->mId == 18 || fn_800DC080(p)) {
+                    *pOut = 0;
+                    result = 3;
+                } else {
+                    switch (p->mUnknown2921) {
+                    case 10: result = 10; break;
+                    case 8: result = 12; break;
+                    case 1: result = 18; break;
+                    case 2: result = 19; break;
+                    case 3: result = 20; break;
+                    case 9: result = 11; break;
+                    case 4: result = 14; break;
+                    case 5: result = 15; break;
+                    case 6: result = 16; break;
+                    case 7: result = 17; break;
+                    case 0:
+                    default: result = 13; break;
+                    }
+                }
+                if ((unsigned char)(p->mUnknown528.mUnknown15 - 20) <= 1 && fn_800D0B90(p) == 2 && !fn_800D0D1C(p)) {
+                    result = 1;
+                }
+            } else if (p->mUnknown1032 == 4) {
+                result = 8;
             } else {
                 switch (p->mUnknown2921) {
                 case 10: result = 10; break;
@@ -269,33 +290,12 @@ extern "C" int fn_800D91E0(Object_80039F5C *p, int team, int a, unsigned char *p
                 case 6: result = 16; break;
                 case 7: result = 17; break;
                 case 0:
-            default: result = 13; break;
+                default: result = 13; break;
                 }
             }
-            if ((unsigned char)(p->mUnknown528.mUnknown15 - 20) <= 1 && fn_800D0B90(p) == 2 && !fn_800D0D1C(p)) {
-                result = 1;
-            }
-        } else if (p->mUnknown1032 == 4) {
-            result = 8;
         } else {
-            switch (p->mUnknown2921) {
-            case 10: result = 10; break;
-            case 8: result = 12; break;
-            case 1: result = 18; break;
-            case 2: result = 19; break;
-            case 3: result = 20; break;
-            case 9: result = 11; break;
-            case 4: result = 14; break;
-            case 5: result = 15; break;
-            case 6: result = 16; break;
-            case 7: result = 17; break;
-            case 0:
-            default: result = 13; break;
-            }
+            result = 1;
         }
-    } else {
-        result = 1;
-    }
     }
     return result;
 }
