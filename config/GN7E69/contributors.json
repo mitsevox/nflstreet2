@@ -638,6 +638,60 @@
       }
     },
     {
+      "source": "src/engine/cu_80228E44.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80228E44",
+        "0x80228F0C"
+      ],
+      "provenance": {
+        "pull_request": 689,
+        "merged_via": 689,
+        "commit": "857f1fbf8d2b2ea2275a84c253f84523f557c406",
+        "introduced_blob": "7bb96ee76425c28ccb76660f73c79e3e2b3f11f2"
+      }
+    },
+    {
+      "source": "src/engine/cu_80228F78.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80228F78",
+        "0x80228FD8",
+        "0x80229010",
+        "0x8022905C"
+      ],
+      "provenance": {
+        "pull_request": 689,
+        "merged_via": 689,
+        "commit": "857f1fbf8d2b2ea2275a84c253f84523f557c406",
+        "introduced_blob": "1dbb9c68b34f2bf446886177845651e171b2eaf6"
+      }
+    },
+    {
+      "source": "src/engine/cu_80229094.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80229094",
+        "0x802290E0",
+        "0x8022910C",
+        "0x80229188",
+        "0x802291A0",
+        "0x80229210"
+      ],
+      "provenance": {
+        "pull_request": 689,
+        "merged_via": 689,
+        "commit": "857f1fbf8d2b2ea2275a84c253f84523f557c406",
+        "introduced_blob": "4d56e3ab22097c22f8e6216658f4aa689b016fa6"
+      }
+    },
+    {
       "source": "src/game/AnmsCelebration.cpp",
       "contributors": [
         "adampreddy"
