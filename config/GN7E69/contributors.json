@@ -13587,8 +13587,8 @@
       "provenance": {
         "pull_request": 565,
         "merged_via": 565,
-        "commit": "0d7d3b3d7234c55dbdc1ad5940a26974c80cc0fa",
-        "introduced_blob": "3218c638256cebfa5fb93491551bb92be261a08d",
+        "commit": "01fb6b1bcb02f571e3bc20400bde8afaf63fa080",
+        "introduced_blob": "c5bd4710e2130d96eae30de27dc679aab491c5a4",
         "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
         "original_blob": "89db43a99a0a89388f0b8bda7eca15c5890d66fe",
         "integration_adjustment": "Canonical shared-layout integration retains reviewed function behavior and byte offsets, uses existing record field names and callee declarations, and preserves all accepted and incoming bodies. Original author commit/blob retained; integrated source is independently reviewed and measured."
@@ -13752,8 +13752,8 @@
       "provenance": {
         "pull_request": 639,
         "merged_via": 639,
-        "commit": "0d7d3b3d7234c55dbdc1ad5940a26974c80cc0fa",
-        "introduced_blob": "0df18488f0661669d0fe6b7ee3bdd4b5bbe909ea",
+        "commit": "01fb6b1bcb02f571e3bc20400bde8afaf63fa080",
+        "introduced_blob": "44b508ec2f773e4c57c5e0ed4f11d29ad2e82937",
         "fragment_origin": {
           "source": "src/game/cu_800EFC68.cpp",
           "commit": "39b472a0215d492b15c9ef7771137b7fa30f1cf1",
