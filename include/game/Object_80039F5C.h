@@ -165,7 +165,8 @@ struct Object_80039F5C {
     float mUnknown768;
     char mUnknown772[4];
     unsigned char mUnknown776;
-    char mUnknown777[3];
+    char mUnknown777[1];
+    short mUnknown778;
     Record_800C4E18 *mpUnknown780;
     State_80039F5C *mpState;
     char mUnknown788[4];

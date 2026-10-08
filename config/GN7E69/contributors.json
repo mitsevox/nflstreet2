@@ -6589,6 +6589,21 @@
       }
     },
     {
+      "source": "src/game/cu_800D949C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DAD90"
+      ],
+      "provenance": {
+        "pull_request": 636,
+        "merged_via": 636,
+        "commit": "c8f3394f444e89795c4184ff7da8d659b7e14f01",
+        "introduced_blob": "1653fd47e33bb6914c93a9676ec6d3933c50f7b9"
+      }
+    },
+    {
       "source": "src/game/cu_80060948.cpp",
       "contributors": [
         "mitsevox"
@@ -11636,6 +11651,24 @@
         "merged_via": 579,
         "commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
         "introduced_blob": "b98c1cce7e7d54627e00da000bd0669f2045740c"
+      }
+    },
+    {
+      "source": "src/game/cu_800DAEE4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DB40C",
+        "0x800DB498",
+        "0x800DB520",
+        "0x800DB7A4"
+      ],
+      "provenance": {
+        "pull_request": 636,
+        "merged_via": 636,
+        "commit": "c8f3394f444e89795c4184ff7da8d659b7e14f01",
+        "introduced_blob": "27e0ea921c8677c02e82e0427d7e37f8967e7d73"
       }
     },
     {

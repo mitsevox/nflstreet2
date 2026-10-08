@@ -8,6 +8,12 @@
 struct Record_800DB60C {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
+    char mUnknown2[2];
+    float mUnknown4;
+    float mUnknown8;
+    int mUnknown12;
+    float mUnknown16;
+    float mUnknown20;
 };
 
 extern "C" {
