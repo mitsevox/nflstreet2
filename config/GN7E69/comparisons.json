@@ -6004,7 +6004,7 @@
     {
       "source": "src/game/cu_800E3CC0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp, registered exact whole-function extents with inferred name/source-form/compiler rows for the reconstructed bodies, local overlay type rows, and the exact .rodata row 0x8029DDD8-0x8029DDE4 (literal pools of 0x800EAD44, 0x800EAF34 and 0x800EB004). Exact and partial source are measured independently; original bytes remain linked and all other bodies and static data are unmeasured.",
+      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp, registered exact whole-function extents with inferred name/source-form/compiler rows for the reconstructed bodies, local overlay type rows, and the exact .rodata row 0x8029DD48-0x8029DDE4 (literal pools of the twelve functions 0x800E8BE8-0x800EB004). Exact and partial source are measured independently; original bytes remain linked and all other bodies and static data are unmeasured.",
       "sections": [
         {
           "section": ".text",
@@ -6015,7 +6015,7 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029DDD8",
+          "start": "0x8029DD48",
           "end": "0x8029DDE4"
         }
       ],
@@ -6299,6 +6299,51 @@
           "symbol": "fn_800EE694",
           "start": "0x800EE694",
           "end": "0x800EE7C8"
+        },
+        {
+          "symbol": "fn_800E8BE8",
+          "start": "0x800E8BE8",
+          "end": "0x800E8E04"
+        },
+        {
+          "symbol": "fn_800E8E04",
+          "start": "0x800E8E04",
+          "end": "0x800E8ED4"
+        },
+        {
+          "symbol": "fn_800E948C",
+          "start": "0x800E948C",
+          "end": "0x800E9504"
+        },
+        {
+          "symbol": "fn_800E99A8",
+          "start": "0x800E99A8",
+          "end": "0x800E9B84"
+        },
+        {
+          "symbol": "fn_800E9B84",
+          "start": "0x800E9B84",
+          "end": "0x800E9DBC"
+        },
+        {
+          "symbol": "fn_800E9E18",
+          "start": "0x800E9E18",
+          "end": "0x800E9FC0"
+        },
+        {
+          "symbol": "fn_800E9FD8",
+          "start": "0x800E9FD8",
+          "end": "0x800EA1D0"
+        },
+        {
+          "symbol": "fn_800EA284",
+          "start": "0x800EA284",
+          "end": "0x800EA6F0"
+        },
+        {
+          "symbol": "fn_800EA6F0",
+          "start": "0x800EA6F0",
+          "end": "0x800EAC9C"
         }
       ]
     },

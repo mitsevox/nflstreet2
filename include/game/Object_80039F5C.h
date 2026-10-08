@@ -116,6 +116,9 @@ struct Object_8016D9B8 {
     int mUnknown8;
 };
 
+/* Object that +3092 points to; its layout is declared where it is read. */
+struct Object_800EA284;
+
 struct Object_80039F5C {
     /* Read both as a word and byte by byte (+1 index, +2 team). */
     union {
@@ -155,7 +158,9 @@ struct Object_80039F5C {
     int mUnknown548;
     char mUnknown552[8];
     Block_80170374 mUnknown560;
-    char mUnknown616[152];
+    char mUnknown616[8];
+    float mUnknown624;
+    char mUnknown628[140];
     float mUnknown768;
     char mUnknown772[4];
     unsigned char mUnknown776;
@@ -167,7 +172,8 @@ struct Object_80039F5C {
     Entry_800EAC9C *mpUnknown800;
     char mUnknown804[204];
     Key_80110630 mUnknown1008;
-    char mUnknown1011[21];
+    unsigned char mUnknown1011;
+    char mUnknown1012[20];
     int mUnknown1032;
     int mUnknown1036;
     int mUnknown1040;
@@ -206,6 +212,8 @@ struct Object_80039F5C {
     State_80039F5C mUnknown3048;
     char mUnknown3055[33];
     unsigned char mUnknown3088;
+    char mUnknown3089[3];
+    Object_800EA284 *mpUnknown3092;
 };
 
 extern "C" {
