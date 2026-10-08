@@ -11353,8 +11353,11 @@
       "provenance": {
         "pull_request": 623,
         "merged_via": 623,
-        "commit": "78f3d9c2da9c413ce6ca639f86bcef3114e4b6f5",
-        "introduced_blob": "091168158a39b597725ab7eb98236435bed806fc"
+        "commit": "0280675e7ac27ddcfaa324e9cd833eec8e48dcf3",
+        "introduced_blob": "6d7cad41f94e854f34d8b8c06d0e52a75b58e5c9",
+        "original_commit": "78f3d9c2da9c413ce6ca639f86bcef3114e4b6f5",
+        "original_blob": "091168158a39b597725ab7eb98236435bed806fc",
+        "integration_adjustment": " Combine reviewed source corrections and disjoint function additions with accepted main; preserve original contributor, original source pin and unchanged function bodies."
       }
     },
     {
@@ -12616,8 +12619,11 @@
       "provenance": {
         "pull_request": 600,
         "merged_via": 600,
-        "commit": "822d46e57d70743f47409a7566f938dcf9ab0325",
-        "introduced_blob": "202f9eec5cfdfd31c62542110e0e697846e7d6af"
+        "commit": "0280675e7ac27ddcfaa324e9cd833eec8e48dcf3",
+        "introduced_blob": "5fec3b53ecef02237db75e001fa91f94abad66a4",
+        "original_commit": "822d46e57d70743f47409a7566f938dcf9ab0325",
+        "original_blob": "202f9eec5cfdfd31c62542110e0e697846e7d6af",
+        "integration_adjustment": " Combine reviewed source corrections and disjoint function additions with accepted main; preserve original contributor, original source pin and unchanged function bodies."
       }
     },
     {
@@ -12672,8 +12678,11 @@
       "provenance": {
         "pull_request": 609,
         "merged_via": 609,
-        "commit": "bbaf7ebe6289d1cb81dbd9fc3e25ed27c5b9ee93",
-        "introduced_blob": "7381462d28e69ed6a22b58a920d13ddd6a148bbf"
+        "commit": "0280675e7ac27ddcfaa324e9cd833eec8e48dcf3",
+        "introduced_blob": "5fec3b53ecef02237db75e001fa91f94abad66a4",
+        "original_commit": "bbaf7ebe6289d1cb81dbd9fc3e25ed27c5b9ee93",
+        "original_blob": "7381462d28e69ed6a22b58a920d13ddd6a148bbf",
+        "integration_adjustment": " Combine reviewed source corrections and disjoint function additions with accepted main; preserve original contributor, original source pin and unchanged function bodies."
       }
     },
     {
