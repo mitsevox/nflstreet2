@@ -1259,10 +1259,12 @@ BOOL DVDCancelAsync(DVDCommandBlock* block, DVDCBCallback callback)
 {
     BOOL enabled;
     DVDLowCallback old;
+    s32 state;
 
     enabled = OSDisableInterrupts();
+    state = block->state;
 
-    switch (block->state)
+    switch (state)
     {
     case -1:
     case 0:
