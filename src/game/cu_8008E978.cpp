@@ -1,4 +1,4 @@
-
+#include <string.h>
 
 #include "game/Class_80148A58.h"
 #include "game/FELoop.h"
@@ -20,7 +20,7 @@
 #include "game/fn_801EF390.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_80238174.h"
-#include <string.h>
+
 /* Data whose word +4 fn_80094374 returns and whose words from +8
    fn_80093BAC indexes; the bound of that array is not established. */
 struct Table_80093BAC {
