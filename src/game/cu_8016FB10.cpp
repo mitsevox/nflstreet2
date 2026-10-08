@@ -87,7 +87,7 @@ int fn_800A7EE0(int team);
 int fn_800A7F44(int team);
 int fn_800A851C(int team, Object_80039F5C *p);
 void fn_800A8954(int event, int team, Object_80039F5C *p);
-int fn_800ABDA4(int team);
+unsigned int fn_800ABDA4(int team);
 float fn_800AC44C(Object_80039F5C *p, float value);
 float fn_800AC504(int team, float value);
 float fn_800AC6BC(int team, float value);
