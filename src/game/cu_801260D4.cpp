@@ -2,6 +2,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Team_80167A8C.h"
 #include "game/cu_80136B1C.h"
+#include "game/fn_80125F3C.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
@@ -51,8 +52,6 @@ unsigned int fn_8011E188(void);
 int fn_8011F1A4(void);
 int fn_8011F32C(void);
 unsigned int fn_8011F4C8(void);
-int fn_80125F3C(short *pRatings);
-int fn_80125FA0(Object_80039F5C *p);
 int fn_801260D4(Object_80039F5C *p);
 Object_80039F5C *fn_80128B60(void);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
