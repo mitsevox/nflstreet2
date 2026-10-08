@@ -181,7 +181,7 @@ void fn_8017CFB4(int index);
 int fn_800B9B18(void *p);
 int fn_800C0458(void *p);
 int fn_8009B9F0(int index);
-void fn_8009B8C4(int index);
+int fn_8009B8C4(int index);
 int fn_800BD1BC(void *p);
 int fn_800ABCDC(void);
 void fn_801C1FBC(void *pDest, void *pSrc, unsigned int size);
