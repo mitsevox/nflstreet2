@@ -1,4 +1,5 @@
 #include "game/fn_8018AB0C.h"
+#include "game/cu_801882B4.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
 #include "game/fn_8007F828.h"
@@ -20,14 +21,6 @@ struct Record_80362FC0 {
     unsigned char mUnknown53;
     unsigned char mUnknown54;
     unsigned char mUnknown55;
-};
-
-/* Argument of fn_80188688. */
-struct Desc_80188688 {
-    int mUnknown0;
-    int mUnknown4;
-    char *mUnknown8;
-    char **mUnknown12;
 };
 
 extern "C" {
@@ -54,13 +47,6 @@ void fn_8017CED4(unsigned int a);
 void fn_8017CFAC(void);
 void fn_8017F264(void);
 void fn_8017F284(void);
-void *fn_80188688(Desc_80188688 *pDesc);
-void fn_80188728(void *p);
-void fn_80188784(void *p, int a);
-void fn_801888A4(void *p, int a);
-void fn_8018897C(void *p, int a, int b, int c);
-void fn_801889A4(void *p, int a, int b);
-int fn_801889CC(void *p, int a, int b);
 void fn_80188D2C(void);
 int fn_801890F0(int a, int b);
 void fn_80189164(int a, int b);
@@ -145,7 +131,7 @@ void fn_802363E0(Object_80228224 *pObject);
 int fn_80236EC0(int a);
 }
 
-static void *lbl_803EB640 = 0;
+static Cache_80188688 *lbl_803EB640 = 0;
 static Object_80228224 *lbl_803EB644 = 0;
 static void *lbl_803EB648 = 0;
 static int lbl_803EB64C = 0;
