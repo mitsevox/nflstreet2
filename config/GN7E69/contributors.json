@@ -10362,8 +10362,11 @@
       "provenance": {
         "pull_request": 505,
         "merged_via": 509,
-        "commit": "3e1ad873db22c1dc2091ea96dfb5102e1e8348fa",
-        "introduced_blob": "df91d3038c52b1e7edf817697fc8283520a7d543"
+        "commit": "3e2b4979302da8acbf60d1f166990e251d4ff67f",
+        "introduced_blob": "c90fe1d83356ef6e4f14f2e96ca2455ed17657a5",
+        "original_commit": "3e1ad873db22c1dc2091ea96dfb5102e1e8348fa",
+        "original_blob": "df91d3038c52b1e7edf817697fc8283520a7d543",
+        "integration_adjustment": "Recover the target-supported noncommitting __OSUnlockSram(FALSE) call in the unchanged-mode OSSetGbsMode branch; preserve original PR505 body attribution and all prior exact functions. CommitFALSE ignores the offset, so runtime behavior is equivalent; the complete setter remains partial due its stack frame. No padding, flags, declarations or ranges changed."
       }
     },
     {
