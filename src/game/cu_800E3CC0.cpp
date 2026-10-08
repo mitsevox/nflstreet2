@@ -4,7 +4,9 @@
 #include "game/Level_80054130.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
+#include "game/Object_800EA284.h"
 #include "game/Object_8017886C.h"
+#include "game/Query_800CE770.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_800DB60C.h"
 #include "game/cu_80067C10.h"
@@ -20,6 +22,7 @@
 #include "game/fn_8022781C.h"
 #include "game/fn_802372EC.h"
 #include <math.h>
+#include "game/fn_801BE60C.h"
 
 /* Player block at +336 as used by the functions of the state entry at
    0x802DB370. */
@@ -40,21 +43,6 @@ struct State_800E8BE8 {
     float mUnknown4;
     unsigned char mUnknown8;
     unsigned char mUnknown9;
-};
-
-/* Record that word +32 of the +3092 object points to. */
-struct Record_800EA284 {
-    char mUnknown0[8];
-    float mUnknown8;
-    char mUnknown12[12];
-    float mUnknown24;
-    char mUnknown28[12];
-    float mUnknown40;
-};
-
-struct Object_800EA284 {
-    char mUnknown0[32];
-    Record_800EA284 *mpUnknown32;
 };
 
 /* Player block at +336 as used by the functions of the state entry at
@@ -144,15 +132,6 @@ struct Block_800E7588 {
     unsigned char mUnknown19;
 };
 
-struct Query_800CE770 {
-    Object_80039F5C *mpUnknown0;
-    Object_80039F5C *mpUnknown4;
-    char mUnknown8[44];
-    short mUnknown52;
-    unsigned char mUnknown54;
-    char mUnknown55[9];
-};
-
 extern "C" {
 extern unsigned char lbl_803EAD9C[8];
 extern unsigned char lbl_803EADA4[8];
@@ -195,7 +174,6 @@ int fn_80178320(void);
 int fn_801787A0(void);
 int fn_801BA5A8(void *a, void *b, unsigned short c, int d);
 float fn_801BD660(void *p, int key);
-int fn_801BE648(void *p);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *e, float f);
 float fn_80178A08(void);
 float fn_80178A44(void);
@@ -212,7 +190,6 @@ void fn_8011E8D8(Object_80039F5C *p);
 Point_8017886C fn_80177FFC(int team);
 Object_80039F5C *fn_8017876C(void);
 Object_80039F5C *fn_80114E7C(Object_80039F5C *p);
-Block_801BE60C *fn_801BE60C(void *p, int key);
 float fn_80237260(int stream);
 int fn_8023790C(void);
 int fn_800C4184(Object_80039F5C *p);
@@ -243,8 +220,6 @@ int fn_800B7F34(Object_80039F5C *p);
 int fn_800B7F88(Object_80039F5C *p);
 int fn_800B83A0(Object_80039F5C *p);
 int fn_800C05F4(void);
-int fn_800CE510(Query_800CE770 *pQuery);
-void fn_800CE770(Query_800CE770 *pQuery);
 int fn_800A8444(int team);
 int fn_800D0B90(Object_80039F5C *p);
 void fn_800D0BF4(Object_80039F5C *p, int a, int b);
@@ -546,16 +521,16 @@ extern "C" int fn_800E8748(Object_80039F5C *p) {
             Input_800B6D34 input;
 
             fn_800B6D34(p, &input);
-            if (input.mUnknown97 & 0x40) {
+            if (input.mBytes92[5] & 0x40) {
                 done = 1;
                 p->mpState->mUnknown3[0] = lbl_803EAD69;
-            } else if (input.mUnknown97 & 0x80) {
+            } else if (input.mBytes92[5] & 0x80) {
                 done = 1;
                 p->mpState->mUnknown3[0] = lbl_803EAD6A;
-            } else if (input.mUnknown98 & 1) {
+            } else if (input.mBytes92[6] & 1) {
                 done = 1;
                 p->mpState->mUnknown3[0] = lbl_803EAD6B;
-            } else if (input.mUnknown98 & 2) {
+            } else if (input.mBytes92[6] & 2) {
                 done = 1;
                 p->mpState->mUnknown3[0] = lbl_803EAD6C;
             } else if (pBlock->mUnknown6 >= lbl_803EAD54) {
@@ -1211,17 +1186,17 @@ extern "C" int fn_800EA284(Object_80039F5C *p, int angle, int direction) {
     if (near) {
         Record_800EA284 *pRecord = p->mpUnknown3092->mpUnknown32;
         if (pRecord->mUnknown8 < 1.0f) {
-            if (pRecord->mUnknown40 - pRecord->mUnknown24 < 0.65f)
+            if (pRecord->mUnknown32.mZ - pRecord->mUnknown16.mZ < 0.65f)
                 blocked = 1;
         } else {
-            if (pRecord->mUnknown40 - pRecord->mUnknown24 < 0.0f)
+            if (pRecord->mUnknown32.mZ - pRecord->mUnknown16.mZ < 0.0f)
                 blocked = 1;
         }
 
         if (fn_80114E7C(p))
             blocked = 0;
         if (blocked || fn_800EAC9C(p) || (p->mFlags & 0x800) || (pOther && fn_800EAC9C(pOther))) {
-            int animation = fn_801BE648(p->mpUnknown792);
+            unsigned short animation = fn_801BE648(p->mpUnknown792);
             if (fn_800E8ED4(animation)) {
                 Block_801BE60C *pBlock = fn_801BE60C(p->mpUnknown792, animation);
                 if (pBlock->mUnknown1C)
@@ -1256,13 +1231,13 @@ extern "C" int fn_800EA284(Object_80039F5C *p, int angle, int direction) {
             otherAngle = (otherDirection + 0x800000) & 0xFFFFFF;
             Record_800EA284 *pRecord = pOther->mpUnknown3092->mpUnknown32;
             if (pRecord->mUnknown8 < 1.0f)
-                blocked = pRecord->mUnknown40 - pRecord->mUnknown24 < 0.65f;
-            else if (pRecord->mUnknown40 - pRecord->mUnknown24 < 0.0f)
+                blocked = pRecord->mUnknown32.mZ - pRecord->mUnknown16.mZ < 0.65f;
+            else if (pRecord->mUnknown32.mZ - pRecord->mUnknown16.mZ < 0.0f)
                 blocked = 1;
             if (fn_80114E7C(pOther))
                 blocked = 0;
             if (blocked || fn_800EAC9C(pOther) || (pOther->mFlags & 0x800)) {
-                int animation = fn_801BE648(pOther->mpUnknown792);
+                unsigned short animation = fn_801BE648(pOther->mpUnknown792);
                 if (fn_800E8ED4(animation)) {
                     Block_801BE60C *pBlock = fn_801BE60C(pOther->mpUnknown792, animation);
                     if (pBlock->mUnknown1C)
@@ -1630,7 +1605,7 @@ extern "C" int fn_800EC6DC(Object_80039F5C *p) {
         return 0;
     Input_800B6D34 input;
     fn_800B6D34(p, &input);
-    if (input.mUnknown92 & 1) {
+    if (input.mBytes92[0] & 1) {
         fn_800EB78C(p);
         return 0;
     }

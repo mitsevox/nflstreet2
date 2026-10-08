@@ -11,7 +11,9 @@ struct Value_801BBD5C {
 struct Object_801BBD5C {
     unsigned char mUnknown0[4];
     unsigned int mCount;
-    unsigned char mUnknown8[12];
+    unsigned char mUnknown8[4];
+    float mUnknown12;
+    float mUnknown16;
     int mUnknown20;
     unsigned char mUnknown24[4];
     Value_801BBD5C mValues[1];

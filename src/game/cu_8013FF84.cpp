@@ -7,6 +7,7 @@
 #include "game/Team_80167A8C.h"
 #include <math.h>
 #include "engine/cu_80227F14.h"
+#include "game/Lookup_8012078C.h"
 
 struct Vector_8013FF84 { float mX,mY,mZ; };
 struct Angles_8013FF84 { int mX,mY,mZ; };
@@ -45,7 +46,6 @@ struct Control_8013FF84 {
     unsigned char mUnknown1[3];
     unsigned int mUnknown4,mUnknown8,mUnknownC;
 };
-struct Lookup_8012078C { unsigned char mUnknown0[4]; unsigned char *mUnknown4; };
 extern "C" Control_8013FF84 lbl_802DBEBC;
 extern "C" Entry_8013FF84 lbl_802DBECC[];
 extern "C" Mode_8013FF84 lbl_802DC718[];
@@ -89,7 +89,6 @@ int fn_800BA6F8(void);
 int fn_800BAA24(void);
 void fn_801CF910(void *,void *,void *);
 int fn_80178320(void);
-Lookup_8012078C *fn_8012078C(void);
 void fn_8013C438(Camera_8013F738 *);
 void fn_8013C384(void *,int,int,int);
 void fn_80067D4C(int,int);
@@ -293,7 +292,7 @@ void fn_80140708(Camera_8013F738 *camera)
             fn_801CF910(&angles,&angles,&offset);
         } else if (!fn_8007F828(18) && !fn_800BA6F8() && fn_800AD9B4() == 3 && camera->mUnknownA0 == 1) {
             int side = fn_80178320();
-            Object_80039F5C *player = fn_80039F5C(side,*fn_8012078C()->mUnknown4);
+            Object_80039F5C *player = fn_80039F5C(side,*fn_8012078C()->mpUnknown4);
             if (player && velocity.mY > player->mMotion.mPos.mY) {
                 float adjustment = (velocity.mY-player->mMotion.mPos.mY)*0.5f;
                 if (adjustment >= 0.0f) {

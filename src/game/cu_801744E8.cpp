@@ -684,7 +684,7 @@ int fn_80175E3C(Object_80039F5C *a, Object_80039F5C *b, void *) {
       unsigned char pad[16];
       float value;
     };
-    float speed = ((View *)b->mUnknown488)->value;
+    float speed = ((View *)&b->mUnknown488)->value;
     if (!(speed >= lbl_803ECB08 * 0.14f) && b->mUnknown512.mUnknown0 == 0.0f)
       reject = 1;
     if (!reject) {

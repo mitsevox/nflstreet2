@@ -1,6 +1,7 @@
 #include "game/Class_8018FD64Inline.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_801C1F94.h"
+#include "game/fn_801BE60C.h"
 
 struct Object_80053674;
 
@@ -114,7 +115,6 @@ void fn_8017D7C4(const char *);
 void fn_80180BE4(int, int *, int *);
 int fn_80186F7C(unsigned char);
 int fn_80188DD0(int);
-int fn_801BE648(void *);
 int fn_801C2FE4(Node_80053674 *, const char *);
 void *fn_8021EA44(int);
 char *fn_80220BFC(int, int);

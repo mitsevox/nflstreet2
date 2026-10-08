@@ -20,6 +20,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_8017886C.h"
+#include "game/Query_800CE770.h"
 #include "game/RecordList_8002E7C0.h"
 #include "game/Record_800B15FC.h"
 #include "game/Table_80089904.h"
@@ -53,6 +54,7 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
+#include "game/fn_80094488.h"
 
 /* Data whose word +4 fn_80094374 returns and whose words from +8
    fn_80093BAC indexes; the bound of that array is not established. */
@@ -111,11 +113,6 @@ struct Record_80093FD4 {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
-};
-
-/* 12-byte records returned by fn_80094490. */
-struct Record_80094490 {
-    unsigned char mUnknown0[12];
 };
 
 /* 14-byte block cleared by fn_80094B78. */
@@ -307,7 +304,7 @@ extern Record_80093E4C lbl_802D73B8[];
 extern Record_80093E4C lbl_802D77D8[];
 extern Record_80093E4C lbl_802D7808[];
 extern int lbl_802D7974[5][5];
-extern Record_80094490 lbl_8030C0B4[];
+extern Vector_80039F5C lbl_8030C0B4[];
 extern Slot_8009418C lbl_8030C164[2];
 extern Record_80093FD4 lbl_802D78D8[];
 extern unsigned int lbl_802D79D8[];
@@ -800,12 +797,12 @@ extern "C" void fn_800943D8(void)
     }
 }
 
-extern "C" int fn_80094488(void)
+extern "C" unsigned int fn_80094488(void)
 {
     return lbl_803EA8C4;
 }
 
-extern "C" Record_80094490 *fn_80094490(int index)
+extern "C" Vector_80039F5C *fn_80094490(int index)
 {
     return &lbl_8030C0B4[index];
 }
@@ -1836,28 +1833,8 @@ struct Block_800C9D6C {
     unsigned char mUnknown105;
 };
 
-/* Stack query block that fn_800CE770 prepares and fn_800CE2B8 reads
-   (fn_800C7084). Only the members fn_800C7084 stores are declared; the
-   size is unknown. */
-struct Query_800CE770 {
-    Object_80039F5C *mpUnknown0;
-    Object_80039F5C *mpUnknown4;
-    char mUnknown8[28];
-    int mUnknown36;
-    char mUnknown40[4];
-    float mUnknown44;
-    char mUnknown48[4];
-    short mUnknown52;
-    unsigned char mUnknown54;
-    char mUnknown55[1];
-    unsigned char mUnknown56;
-    char mUnknown57[7];
-};
-
 extern "C" {
 int fn_8003DEB4(void);
-void fn_800CE770(Query_800CE770 *pQuery);
-int fn_800CE2B8(Query_800CE770 *pQuery);
 void fn_80114D50(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8022E558(void);
 int fn_8022E560(void);
@@ -2236,7 +2213,7 @@ extern "C" int fn_800C7084(Object_80039F5C *p, Object_80039F5C *pOther, int a, f
     int result = 0;
 
     fn_800CE770(&query);
-    query.mUnknown56 = 0;
+    query.mUnknown56 = result;
     query.mUnknown36 = b;
     query.mUnknown44 = value;
     query.mUnknown52 = a;

@@ -12,7 +12,6 @@
    stride used by every walk of the array. */
 struct Player_8003877C {
     Object_80039F5C mObject;
-    int mUnknown3092;
     char mUnknown3096[12];
     char mUnknown3108[496];
     char mUnknown3604[404];
@@ -59,6 +58,9 @@ int fn_800A7FD8(void);
 int fn_801486A0(void);
 int fn_80178320(void);
 int fn_801784C4(void);
+int fn_80178508(Vector_80039F5C *pPos, float *pOut, int a);
+float fn_80178A08(void);
+float fn_80178A44(void);
 void fn_8003A1EC(int a, int team, int index);
 void fn_800392DC(Object_80039F5C *p, Block_8003A1EC *pBlock, float f);
 void fn_80039364(Object_80039F5C *p, Block_8003A1EC *pBlock, float f);
@@ -175,6 +177,32 @@ extern "C" void fn_80039458(Object_80039F5C *p)
                 p->mMotion.mPos.mY = limit;
             }
         }
+    }
+}
+
+extern "C" void fn_800394F4(Object_80039F5C *p)
+{
+    int mode = fn_800AD9B4();
+
+    if (p->mUnknown9[2] != 0
+        && ((mode == 3 && fn_800A7FD8() == 0) || fn_801486A0() == 0 || fn_801486A0() == 1)
+        && fn_80178508(&p->mMotion.mPos, 0, 0) > 2) {
+        if (++p->mUnknown3090 > 299) {
+            if (p->mMotion.mPos.mX >= fn_80178A08()) {
+                p->mMotion.mPos.mX = fn_80178A08() - 1.0f;
+            }
+            if (p->mMotion.mPos.mX <= -fn_80178A08()) {
+                p->mMotion.mPos.mX = 1.0f - fn_80178A08();
+            }
+            if (p->mMotion.mPos.mY >= fn_80178A44()) {
+                p->mMotion.mPos.mY = fn_80178A44() - 1.0f;
+            }
+            if (p->mMotion.mPos.mY <= -fn_80178A44()) {
+                p->mMotion.mPos.mY = 1.0f - fn_80178A44();
+            }
+        }
+    } else {
+        p->mUnknown3090 = 0;
     }
 }
 
@@ -393,7 +421,7 @@ extern "C" void fn_8003A4DC(void)
         fn_80143DC4(p);
         fn_800CE674(&p->mUnknown1240);
         fn_800CE684(&p->mUnknown1240);
-        *(float *)p->mUnknown772 = 1.0f;
+        p->mUnknown772 = 1.0f;
         fn_800C8270(p);
         fn_800C82C0(p);
     }
