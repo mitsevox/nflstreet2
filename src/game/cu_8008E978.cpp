@@ -7037,13 +7037,6 @@ struct Set_800CCBA0 {
     Entry_800CCBA0 mEntries[1];
 };
 
-/* One of the five 24-byte items per side of Table_800CA8EC. */
-struct Item_800CAA8C {
-    int mUnknown0;
-    unsigned char mUnknown4[4];
-    int mUnknown8;
-    unsigned char mUnknown12[12];
-};
 
 typedef Block_800C9D6C Table_800CA8EC;
 
