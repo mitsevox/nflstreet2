@@ -13057,7 +13057,6 @@
       }
     },
     {
-<<<<<<< HEAD
       "source": "src/game/cu_8008E978.cpp",
       "contributors": [
         "adampreddy"
@@ -13833,31 +13832,18 @@
       }
     },
     {
-=======
->>>>>>> 4cddbd8 (Credit cu_8003877C exact functions to adampreddy)
       "source": "src/game/cu_8003877C.cpp",
       "contributors": [
         "adampreddy"
       ],
       "functions": [
-<<<<<<< HEAD
         "0x8003924C",
         "0x80039454",
         "0x80039458",
-=======
-        "0x80038E50",
-        "0x8003924C",
-        "0x800392DC",
-        "0x80039364",
-        "0x80039454",
-        "0x80039458",
-        "0x800394F4",
->>>>>>> 4cddbd8 (Credit cu_8003877C exact functions to adampreddy)
         "0x8003977C",
         "0x80039890",
         "0x8003989C",
         "0x80039A1C",
-<<<<<<< HEAD
         "0x80039C64",
         "0x80039FE8",
         "0x8003A06C",
@@ -14130,26 +14116,29 @@
           "blob": "f2fb95fa5d267d9112f60eac7c5e46020df47505"
         },
         "integration_adjustment": "The original PR639 EFC bodies are retained in a comparison-only fragment to preserve disjoint compiler literal-pool placement; canonical shared Input byte views and entry fields are used. fragment_origin preserves the original author source pin. This is not recovery of an original translation-unit boundary."
-=======
+      }
+    },
+    {
+      "source": "src/game/cu_8003877C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80038E50",
+        "0x800392DC",
+        "0x80039364",
+        "0x800394F4",
         "0x80039A38",
         "0x80039AA8",
-        "0x80039C64",
         "0x80039CB0",
         "0x80039F04",
         "0x80039F5C",
-        "0x80039FE8",
-        "0x8003A06C",
-        "0x8003A078",
         "0x8003A090",
         "0x8003A130",
-        "0x8003A3F4",
         "0x8003A450",
         "0x8003A4DC",
         "0x8003A5A8",
         "0x8003A5E8",
-        "0x8003AB08",
-        "0x8003AB28",
-        "0x8003AB38",
         "0x8003AB40",
         "0x8003AC10"
       ],
@@ -14158,7 +14147,6 @@
         "merged_via": 692,
         "commit": "d094901f80adae4f68584569e53da31f267e0688",
         "introduced_blob": "a5d46b95706e71cefef625e6b00b80538e9c5542"
->>>>>>> 4cddbd8 (Credit cu_8003877C exact functions to adampreddy)
       }
     }
   ],
