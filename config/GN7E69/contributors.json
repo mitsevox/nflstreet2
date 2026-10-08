@@ -13858,7 +13858,9 @@
         "merged_via": 697,
         "commit": "4bbed3b7e394d9e3595b653361f79158661ccf22",
         "introduced_blob": "564f90b1773da0e97dc415c45c9715053c81e034",
-        "integration_adjustment": "Original PR 692 bodies retained with canonical unused-argument contract. Register its actual emitted rodata against the full target slice without source padding; focused comparison verifies these fifteen exact whole functions, with sixteen useful partial bodies and a measured data mismatch retained without exact credit."
+        "integration_adjustment": "Original PR 692 bodies retained with canonical unused-argument contract. Register its actual emitted rodata against the full target slice without source padding; focused comparison verifies these fifteen exact whole functions, with sixteen useful partial bodies and a measured data mismatch retained without exact credit.",
+        "original_commit": "106b14b026bb4d11f60e6bca8859116aa929c5c0",
+        "original_blob": "76f3d517bfd22cdaa585f4835fa06a793648a3c1"
       }
     }
   ],
