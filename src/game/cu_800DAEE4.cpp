@@ -100,8 +100,8 @@ extern "C" void fn_800DB100(Object_80039F5C *p, Object_80137ABC *pBall, Record_8
     int angle = fn_801CFE40(delta.mY, delta.mX);
     pRequest->mUnknown10 = angle + fn_802372EC(0, 0xE38E3);
     if (pRequest->mUnknownC == 0.0f) {
-        pRequest->mUnknownC = pRequest->mUnknown10 * 2.3841858e-07f;
-        pRequest->mUnknownC = pRequest->mUnknownC * 0.5f + 0.5f;
+        float value = pRequest->mUnknown10 * 2.3841858e-07f;
+        pRequest->mUnknownC = value * 0.5f + 0.5f;
     }
     float scale = pRequest->mUnknownC * 0.5f;
     pRequest->mUnknown0 -= pRequest->mUnknown0 * scale;
