@@ -155,7 +155,7 @@ extern "C" void fn_800D7D78(Object_80039F5C *p, Block_801BE60C *pBlock)
                     rest = 0.0f;
                 }
                 pBlock->mUnknown8 = rest;
-                p->mpUnknown800[pBlock->mUnknown4Word].mUnknown2C = rest;
+                p->mpUnknown800[pBlock->mUnknown4Word].mUnknown44 = rest;
             }
         }
     }

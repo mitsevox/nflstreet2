@@ -29,8 +29,9 @@ struct State_800D8140 {
 
 /* Payload returned by fn_801BE60C. */
 struct Block_801BE60C {
-    /* fn_800D7BC4 reads and writes +0 as a word and fn_800D7D78 reads +4
-       as a word index; the other callers use the byte and float views. */
+    /* fn_800DC36C reads and writes +0 and +4 as words for its key, and
+       fn_800D7BC4/fn_800D7D78 use +0 and +4 as words; the other callers
+       use the byte and float views. */
     union {
         struct {
             unsigned char mUnknown0;

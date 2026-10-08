@@ -6,6 +6,7 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_80218FC4.h"
 
+#include "game/Class_803EC99C.h"
 #include "game/cu_8017F264.h"
 
 /* One step of the sequence that mpEntries points to; a step whose first word
@@ -47,15 +48,6 @@ struct Params_80092E54 {
 struct Pair_802DA864 {
     int mUnknown0;
     int mUnknown4;
-};
-
-class Class_803EC99C {
-public:
-    virtual void fn_800CFF4C();
-    virtual void fn_800CFFC4(float f);
-    virtual void fn_800D0394();
-    void fn_800CFEFC();
-    bool fn_800D0408();
 };
 
 extern "C" {
