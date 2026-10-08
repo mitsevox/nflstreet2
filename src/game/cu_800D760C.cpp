@@ -3,6 +3,7 @@
 #include "game/Object_801BC084.h"
 #include "game/cu_80136B1C.h"
 #include "game/bitstream.h"
+#include "game/fn_801BE60C.h"
 
 /* View of the player object's state block at +336 used by these functions. */
 struct State_800D7A4C {
@@ -28,7 +29,6 @@ extern "C" {
 unsigned char fn_800D78C4(Object_80039F5C *p, int id);
 void fn_800D7A4C(Object_80039F5C *p, Block_800D7A4C *pBlock);
 void fn_800E7E78(Object_80039F5C *p, State_800D7A4C *pState);
-int fn_801BE648(void *p);
 
 extern unsigned short lbl_803192BC[2][7];
 extern unsigned short lbl_803192D8[2][7];
