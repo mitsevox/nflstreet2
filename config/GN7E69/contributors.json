@@ -12096,6 +12096,24 @@
         "commit": "cf1d65c4c95b12323dd18d394165d4dc48172959",
         "introduced_blob": "5c7581d617b19ae0b278859661969aaec22e51fc"
       }
+    },
+    {
+      "source": "src/dolphin/dvd/dvd.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80241628"
+      ],
+      "provenance": {
+        "pull_request": 527,
+        "merged_via": 650,
+        "commit": "e94c2afa36ecc29849fd2bc2e053600d30ae0cfd",
+        "introduced_blob": "56ecbbc3d343958a24195c144e745032fac6a1a6",
+        "original_commit": "05efcc947b8a8cb11ab2fbb0a8ab05d6990348ed",
+        "original_blob": "11288d899e338df40f5846b759dcc1194be3980d",
+        "integration_adjustment": "Remove the unsupported unused cancellation stack local and inherited process comments; preserve function behavior and ordinary compiler settings. Cancellation frame instructions remain measured partial. Preserve original PR527 source contributor and DVD ownership. A genuine pinned smstrikers command-state local used by the outer switch corrects the existing cancellation partial under unchanged accepted library flags. Post-callback state checks continue to read block->state. Only this native function changes; original linked instructions remain. No unused frame or storage manipulation."
+      }
     }
   ],
   "target": "GN7E69",
