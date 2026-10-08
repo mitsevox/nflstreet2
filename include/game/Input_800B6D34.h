@@ -9,7 +9,7 @@ struct Input_800B6D34 {
     char mUnknown0[92];
     unsigned char mUnknown92;
     unsigned char mUnknown93;
-    char mUnknown94[1];
+    unsigned char mUnknown94;
     unsigned char mUnknown95;
     unsigned char mUnknown96;
     unsigned char mUnknown97;
