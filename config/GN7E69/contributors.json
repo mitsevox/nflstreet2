@@ -10225,7 +10225,9 @@
         "0x8023F15C",
         "0x8023F2E0",
         "0x8023F3A4",
-        "0x8023F464"
+        "0x8023F464",
+        "0x8023EDA0",
+        "0x8023F180"
       ],
       "provenance": {
         "pull_request": 503,
@@ -10301,7 +10303,8 @@
         "mitsevox"
       ],
       "functions": [
-        "0x80242048"
+        "0x80242048",
+        "0x80242120"
       ],
       "provenance": {
         "pull_request": 505,
@@ -11614,6 +11617,21 @@
         "merged_via": 579,
         "commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
         "introduced_blob": "0366bc8bdd2359557cd0bcdb31f951ae78de1ca7"
+      }
+    },
+    {
+      "source": "src/dolphin/dvd/dvdidutils.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80241F20"
+      ],
+      "provenance": {
+        "pull_request": 507,
+        "merged_via": 509,
+        "commit": "3517f252f67585834f34cf20e604e9e4fca5c029",
+        "introduced_blob": "708f314903cbf4ccce606fa80c80a5d0a9bdec9d"
       }
     }
   ],

@@ -69,6 +69,39 @@
         "include/libc"
       ],
       "evidence": "evidence.tsv compiler rows 0x80227F14-0x802288F8 and 0x802288F8-0x80228E44 (engine_c): ProDG 3.9.3 cc1 -O2 (default -G 8) reproduces every instruction and data byte of both units; -O1, -O3, -Os and -G0 change them. Same flags as the uistudio profile; a separate profile because uistudio's scope evidence and source root are the UI Studio library, and these units include SDK headers that need include/libc."
+    },
+    "dolphin_dvd_release": {
+      "compiler": "mwcc",
+      "flags": [
+        "-nodefaults",
+        "-proc",
+        "gekko",
+        "-fp",
+        "hard",
+        "-Cpp_exceptions",
+        "off",
+        "-enum",
+        "int",
+        "-char",
+        "signed",
+        "-warn",
+        "pragmas",
+        "-requireprotos",
+        "-pragma",
+        "cats off",
+        "-O4,p",
+        "-inline",
+        "auto",
+        "-I-",
+        "-D__GEKKO__",
+        "-DSDK_REVISION=1",
+        "-lang=c"
+      ],
+      "include_dirs": [
+        "include/libc",
+        "src/dolphin"
+      ],
+      "evidence": "DVD-library working setting supported by signed plain-character promotions in target dvdfs.c, dvdidutils.c and fstload.c, pinned GC/1.2.5n signed-char default, and the pinned OOT/SMS/MP4 complete SDK/DVD recipes with no char override. All other dolphin_release compiler flags and declarations are preserved. This is a library-scoped reconstruction setting, not a uniquely recovered original command line; see evidence.tsv compiler row."
     }
   },
   "externals": {
@@ -3857,7 +3890,7 @@
     },
     {
       "source": "src/dolphin/dvd/dvdqueue.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_dvd_release",
       "evidence": "evidence.tsv SDK DVD/matrix unit rows: reference source order, complete retained code/data and target references; file ownership provisional.",
       "link_roots": {
         "symbols": [
@@ -3898,7 +3931,7 @@
     },
     {
       "source": "src/dolphin/dvd/dvderror.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_dvd_release",
       "evidence": "evidence.tsv SDK DVD/matrix unit rows: reference source order, complete retained code/data and target references; file ownership provisional.",
       "link_roots": {
         "symbols": [
@@ -8950,7 +8983,7 @@
     },
     {
       "source": "src/dolphin/dvd/dvdlow.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_dvd_release",
       "evidence": "evidence.tsv DVDLow retained functions, native storage and related source/type rows; original file ownership remains provisional.",
       "link_roots": {
         "symbols": [

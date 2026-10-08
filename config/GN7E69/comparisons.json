@@ -15874,7 +15874,7 @@
     },
     {
       "source": "src/dolphin/dvd/dvdfs.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_dvd_release",
       "evidence": "Complete BFBB8fb1c232 source13 emitted bodies; eight original target identities by actual API/call operands, no flags or body exclusions. Five extra bodies retain source but no original target identities. Current whole original output remains linked until full promotion.",
       "sections": [
         {
@@ -16005,7 +16005,7 @@
     },
     {
       "source": "src/dolphin/dvd/fstload.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_dvd_release",
       "evidence": "Complete genuine dolsdk2328b416 source2bodies, callback216exact and loader360target/336native honestpartial; current canonicalheaders/libraryprofile unchanged. No casts/directives/exclusions.",
       "sections": [
         {
@@ -16305,7 +16305,7 @@
     },
     {
       "source": "src/dolphin/dvd/dvdidutils.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_dvd_release",
       "evidence": "Complete pinned dolsdk2004 2328b4164b1a98422a2255d83ce9a5a7548990cc source; ordinary dolphin_release profile; full target functions measured independently, original bytes linked.",
       "sections": [
         {
@@ -16762,7 +16762,7 @@
     },
     {
       "source": "src/dolphin/dvd/dvd.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_dvd_release",
       "evidence": "Complete coherent BFBB DVD core source; all 46 target functions in the full 9,980-byte range are measured. Unsupported unused stack local omitted. Native small-BSS packing remains a diagnostic placement: target trailing globals differ, so partials remain and no NOBITS source credit or whole-unit promotion is claimed.",
       "sections": [
         {
