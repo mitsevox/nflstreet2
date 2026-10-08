@@ -10215,26 +10215,6 @@
       }
     },
     {
-      "source": "src/dolphin/dvd/dvdfs.c",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x8023ED68",
-        "0x8023F094",
-        "0x8023F15C",
-        "0x8023F2E0",
-        "0x8023F3A4",
-        "0x8023F464"
-      ],
-      "provenance": {
-        "pull_request": 503,
-        "merged_via": 509,
-        "commit": "a731c25b5046c3a0ab1ca4f6839e7b50433b73dd",
-        "introduced_blob": "80bcfd552c0d64379a0f576a2428b1cf97de783b"
-      }
-    },
-    {
       "source": "src/dolphin/gx/GXPerf.c",
       "contributors": [
         "mitsevox"
@@ -10293,21 +10273,6 @@
         "merged_via": 509,
         "commit": "f24d9ef121bed8156dc106bef4c5b42c311d8aa2",
         "introduced_blob": "54910b2091b686e5ec86779e61a9963ad28818a2"
-      }
-    },
-    {
-      "source": "src/dolphin/dvd/fstload.c",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x80242048"
-      ],
-      "provenance": {
-        "pull_request": 505,
-        "merged_via": 509,
-        "commit": "464ce81eee9ba62dcc3dcb23933ee1590e683e5f",
-        "introduced_blob": "6d05231e744a1a0d7a05c4e572bd21a49e797319"
       }
     },
     {
@@ -11743,6 +11708,393 @@
         "merged_via": 608,
         "commit": "4b5e5f85e99b25a0c628cd797d1cc19874a33331",
         "introduced_blob": "b31c3458eb961f8ff1fa1be6b2273e6c1ac6ac05"
+      }
+    },
+    {
+      "source": "src/dolphin/ai/ai.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024A67C"
+      ],
+      "provenance": {
+        "pull_request": 638,
+        "merged_via": 642,
+        "commit": "5b8af3721f43b74e6a58826812ba8831158ee821",
+        "introduced_blob": "f48c1005863095b2ac5c2ab12d47528a1515107e"
+      }
+    },
+    {
+      "source": "src/dolphin/card/CARDMount.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80255D04"
+      ],
+      "provenance": {
+        "pull_request": 638,
+        "merged_via": 642,
+        "commit": "5b8af3721f43b74e6a58826812ba8831158ee821",
+        "introduced_blob": "d19e431acde43bd355b8c5a8df354aef07f40c0b"
+      }
+    },
+    {
+      "source": "src/dolphin/card/CARDOpen.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80256F14",
+        "0x80257238"
+      ],
+      "provenance": {
+        "pull_request": 518,
+        "commit": "e41764df10133c40bb021486fe67fae9d00c7532",
+        "introduced_blob": "bd86568291ba7f3e478b30f4a247cb27a256712f",
+        "merged_via": 525
+      }
+    },
+    {
+      "source": "src/dolphin/db/db.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023EC7C",
+        "0x8023ECA4",
+        "0x8023ECFC"
+      ],
+      "provenance": {
+        "pull_request": 638,
+        "merged_via": 642,
+        "commit": "5b8af3721f43b74e6a58826812ba8831158ee821",
+        "introduced_blob": "baf338cbd0c4e3df0a13a29d3681259021382145"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXAttr.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024D92C",
+        "0x8024DC48"
+      ],
+      "provenance": {
+        "pull_request": 510,
+        "merged_via": 638,
+        "commit": "54fd0a6750e5ce371f0e41be8483bda6316867ea",
+        "introduced_blob": "3fb0070eeb507686f6da51d9b455c846c9c168c7",
+        "original_commit": "25bb1f507f6dddc498e716be764bdf93e1425c12",
+        "original_blob": "9bf05936c88407bd952b2fe5aafe62b8d8791283",
+        "integration_adjustment": "Preserve original PR510 source/contributor ownership. Replace two existing partials with complete genuine donor fixed-u8 VAT eight-iteration loop and target-required Array index-base/stride cache writes. Existing exact bodies remain unchanged; supported source/type/operand differences are reviewed in the current integration, with no flags or fabricated storage."
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXFifo.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024C8E8",
+        "0x8024C9F0"
+      ],
+      "provenance": {
+        "pull_request": 638,
+        "merged_via": 642,
+        "commit": "54fd0a6750e5ce371f0e41be8483bda6316867ea",
+        "introduced_blob": "e4d1336123d90d918f800661bf68350a3ab709ef"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXFrameBuf.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024EBC4"
+      ],
+      "provenance": {
+        "pull_request": 491,
+        "merged_via": 638,
+        "commit": "54fd0a6750e5ce371f0e41be8483bda6316867ea",
+        "introduced_blob": "ecd6e3cf6aac7af803840c3107a79ea3652c0e08",
+        "original_commit": "6d2d36c28b674a9d3c2604f6456bde44b30b9367",
+        "original_blob": "7e9067e8a7c9d14f14b8dd05d7e09dbcdf9602fc",
+        "integration_adjustment": "Preserve original PR491 source/contributor ownership. Replace existing Overscan partial with complete donor mode-bit1/XFB-margin and unconditional double VI-height-margin behavior, supported by all288 actual target bytes and unsigned field widths; canonical render-mode layout and production guard retained."
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXLight.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024FA68",
+        "0x8024FB58",
+        "0x8024FC48",
+        "0x8024FC84"
+      ],
+      "provenance": {
+        "pull_request": 638,
+        "merged_via": 642,
+        "commit": "54fd0a6750e5ce371f0e41be8483bda6316867ea",
+        "introduced_blob": "b330a4a5e80ec16e79aabe73ab99d0ca83ddb911"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXTev.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x802519D8"
+      ],
+      "provenance": {
+        "pull_request": 505,
+        "merged_via": 638,
+        "commit": "54fd0a6750e5ce371f0e41be8483bda6316867ea",
+        "introduced_blob": "7c160db72986a47c14c5bf63e30867975f7fb546",
+        "original_commit": "250035d1706aebb8faccffc4ae518d3504316e25",
+        "original_blob": "0989968911523fae1d32996d1588d4a9e3a1103e",
+        "integration_adjustment": "Preserve original PR505 source/contributor ownership. Replace existing table-swap partial with complete genuine donor body using a meaningful shared index in both cache accesses; preserve canonical types, ordinary source macros and all128 actual target bytes. No unused frame or match-only expressions."
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSRtc.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023CFD0"
+      ],
+      "provenance": {
+        "pull_request": 505,
+        "merged_via": 638,
+        "commit": "de10f0c1ea72d95e6532f5e5ebd8ca8a518067a8",
+        "introduced_blob": "66058b87c7c05f861b469522901cbfe7dae44de3",
+        "original_commit": "3e1ad873db22c1dc2091ea96dfb5102e1e8348fa",
+        "original_blob": "df91d3038c52b1e7edf817697fc8283520a7d543",
+        "integration_adjustment": "Recover the target-supported noncommitting __OSUnlockSram(FALSE) call in the unchanged-mode OSSetGbsMode branch; preserve original PR505 body attribution and all prior exact functions. CommitFALSE ignores the offset, so runtime behavior is equivalent; the complete setter remains partial due its stack frame. No padding, flags, declarations or ranges changed. Preserve original PR505 source/contributor ownership. Integrate complete target-supported Progressive setter donor form with direct canonical LockSram/UnlockSram calls and meaningful readable local names; preserve later GBS helper sanitation and unchanged GBS partial. Previous14 exact source bodies/credit remain. This new exact setter is a correction of an existing partial, not a transfer of source authorship."
+      }
+    },
+    {
+      "source": "src/dolphin/os/__ppc_eabi_init.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023E818",
+        "0x8023E900"
+      ],
+      "provenance": {
+        "pull_request": 638,
+        "merged_via": 642,
+        "commit": "de10f0c1ea72d95e6532f5e5ebd8ca8a518067a8",
+        "introduced_blob": "ec786e175cbb9fe6e09b2063aab219d50b084f34"
+      }
+    },
+    {
+      "source": "src/dolphin/pad/Pad.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80247134",
+        "0x8024779C",
+        "0x80247EDC",
+        "0x80248070",
+        "0x802480D0"
+      ],
+      "provenance": {
+        "pull_request": 529,
+        "merged_via": 560,
+        "commit": "1097f87ed6ddf20b4a9937f3a270d054be75a262",
+        "introduced_blob": "f0eec07fb657a4ab7264fca9a996828ab1d8e19f",
+        "original_commit": "36572653d679b7adb854d105cb2cadaa5f7e582f",
+        "original_blob": "cb51040943529f811f6532d20c835f782d282246",
+        "integration_adjustment": "Reuse canonical os/string includes and fixed boot globals; omit redundant offsetof macro and unsupported foreign-compiler push/inline-all/pop directives under the unchanged pinned profile. Complete coherent C bodies retained; native tail-SDA packing remains measured partial."
+      }
+    },
+    {
+      "source": "src/dolphin/vmbase/VMBase.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80245B24",
+        "0x80245B34",
+        "0x80245B44",
+        "0x80245B50",
+        "0x80245B78",
+        "0x80245EC4"
+      ],
+      "provenance": {
+        "pull_request": 638,
+        "merged_via": 642,
+        "commit": "de10f0c1ea72d95e6532f5e5ebd8ca8a518067a8",
+        "introduced_blob": "758861ce285b82496c6a121edc9a25cf585a44ae"
+      }
+    },
+    {
+      "source": "src/dolphin/dvd/dvdfs.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023ED68",
+        "0x8023F094",
+        "0x8023F15C",
+        "0x8023F2E0",
+        "0x8023F3A4",
+        "0x8023F464",
+        "0x8023EDA0",
+        "0x8023F180"
+      ],
+      "provenance": {
+        "pull_request": 503,
+        "merged_via": 509,
+        "commit": "a731c25b5046c3a0ab1ca4f6839e7b50433b73dd",
+        "introduced_blob": "80bcfd552c0d64379a0f576a2428b1cf97de783b"
+      }
+    },
+    {
+      "source": "src/dolphin/dvd/fstload.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80242048",
+        "0x80242120"
+      ],
+      "provenance": {
+        "pull_request": 505,
+        "merged_via": 509,
+        "commit": "464ce81eee9ba62dcc3dcb23933ee1590e683e5f",
+        "introduced_blob": "6d05231e744a1a0d7a05c4e572bd21a49e797319"
+      }
+    },
+    {
+      "source": "src/dolphin/dvd/dvdidutils.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80241F20"
+      ],
+      "provenance": {
+        "pull_request": 507,
+        "merged_via": 509,
+        "commit": "09398b1dd6600111962bea7249cc2e88cc862dc0",
+        "introduced_blob": "708f314903cbf4ccce606fa80c80a5d0a9bdec9d"
+      }
+    },
+    {
+      "source": "src/game/cu_8018CB28.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8018DE40",
+        "0x8018DE7C",
+        "0x8018DE9C",
+        "0x8018DF20",
+        "0x8018DF78"
+      ],
+      "provenance": {
+        "pull_request": 577,
+        "merged_via": 642,
+        "commit": "3beeda7ea605975da059e4576cf20487d26c2076",
+        "introduced_blob": "3f85a77a6d2bb1c62db373089e421c675e88a0da"
+      }
+    },
+    {
+      "source": "src/game/cu_80086C10.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x800878D8",
+        "0x80087938",
+        "0x800879E8",
+        "0x80087A30",
+        "0x80087A78",
+        "0x80087B00",
+        "0x80087B5C",
+        "0x80087BA0"
+      ],
+      "provenance": {
+        "pull_request": 616,
+        "merged_via": 642,
+        "commit": "0cef329faeeb9ece7e07cbcd96af6bc2514cb10c",
+        "introduced_blob": "2c7fa45e552578a4fea2290e73d3f69f55edaceb"
+      }
+    },
+    {
+      "source": "src/game/cu_8007A3C4.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x8007A3C4",
+        "0x8007A410",
+        "0x8007A43C",
+        "0x8007A444",
+        "0x8007A4A4",
+        "0x8007A510",
+        "0x8007A588",
+        "0x8007A600",
+        "0x8007A690",
+        "0x8007A7F4",
+        "0x8007A894",
+        "0x8007A934",
+        "0x8007A98C"
+      ],
+      "provenance": {
+        "pull_request": 626,
+        "merged_via": 642,
+        "commit": "129ef78d09eaecad3790760659cfdd899faeaae6",
+        "introduced_blob": "7ca6d8a591c2a4f4b065a1d1d2b206b9aefef129"
+      }
+    },
+    {
+      "source": "src/game/cu_80168ED0.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80168ED0",
+        "0x80169058",
+        "0x8016905C",
+        "0x80169060",
+        "0x80169264",
+        "0x801692AC",
+        "0x80169308",
+        "0x801694C8"
+      ],
+      "provenance": {
+        "pull_request": 628,
+        "merged_via": 642,
+        "commit": "c417d158e9fbfa24e3f6798a772f18609c306142",
+        "introduced_blob": "84fb4b2189e45ee10a41a1fe656f0450963965e1"
+      }
+    },
+    {
+      "source": "src/game/cu_8007A9E4.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x8007A9E4",
+        "0x8007AA3C"
+      ],
+      "provenance": {
+        "pull_request": 635,
+        "merged_via": 642,
+        "commit": "cf1d65c4c95b12323dd18d394165d4dc48172959",
+        "introduced_blob": "5c7581d617b19ae0b278859661969aaec22e51fc"
       }
     }
   ],

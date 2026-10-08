@@ -129,7 +129,7 @@ void fn_8006CA18(int index, int a, unsigned char volume);
 void fn_80073094(void);
 void fn_800731D0(int a);
 int fn_8007A43C(Object_8007A334 *pObject);
-void fn_8007A4A4(Object_8007A334 *pObject);
+int fn_8007A4A4(Object_8007A334 *pObject);
 int fn_8007A588(Object_8007A334 *pObject);
 int fn_8007A934(Object_8007A334 *pObject, int key);
 int fn_8007AF84(int team);

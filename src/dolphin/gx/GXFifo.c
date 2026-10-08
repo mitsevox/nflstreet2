@@ -426,3 +426,78 @@ GXFifoObj* GXGetGPFifo(void)
 {
     return (GXFifoObj*)GPFifo;
 }
+
+#if defined(DECOMP_COMPARE)
+extern void GXFlush(void);
+extern u32 PPCMfwpar(void);
+extern volatile void *GXRedirectWriteGatherPipe(void *);
+extern void GXRestoreWriteGatherPipe(void);
+
+
+volatile void* GXRedirectWriteGatherPipe(void* ptr) {
+    u32 reg = 0;
+    BOOL enabled = OSDisableInterrupts();
+
+    CHECK_GXBEGIN(LINE(1493, 1493, 1550), "GXRedirectWriteGatherPipe");
+    ASSERTLINE(LINE(1494, 1494, 1551), OFFSET(ptr, 32) == 0);
+    ASSERTLINE(LINE(1496, 1496, 1553), !IsWGPipeRedirected);
+
+#if DEBUG
+    IsWGPipeRedirected = TRUE;
+#endif
+
+    GXFlush();
+    while (PPCMfwpar() & 1) {}
+    PPCMtwpar((u32)OSUncachedToPhysical((void*)GXFIFO_ADDR));
+    if (CPGPLinked) {
+        __GXFifoLink(0);
+        __GXWriteFifoIntEnable(0, 0);
+    }
+    CPUFifo->wrPtr = OSPhysicalToCached(GX_GET_PI_REG(5) & 0xFBFFFFFF);
+    GX_SET_PI_REG(3, 0);
+    GX_SET_PI_REG(4, 0x04000000);
+    SET_REG_FIELD(LINE(1527, 1527, 1584), reg, 21, 5, ((u32)ptr & 0x3FFFFFFF) >> 5);
+    SET_REG_FIELD(LINE(1528, 1528, 1585), reg, 1, 26, 0);
+    GX_SET_PI_REG(5, reg);
+
+    PPCSync();
+    OSRestoreInterrupts(enabled);
+    return (volatile void *)GXFIFO_ADDR;
+}
+
+
+void GXRestoreWriteGatherPipe(void) {
+    u32 reg = 0;
+    u32 i;
+    BOOL enabled;
+
+    ASSERTLINE(1552, IsWGPipeRedirected);
+
+#if DEBUG
+    IsWGPipeRedirected = FALSE;
+#endif
+
+    enabled = OSDisableInterrupts();
+    for (i = 0; i < 31; i++) {
+        GXWGFifo.u8 = 0;
+    }
+
+    PPCSync();
+    while (PPCMfwpar() & 1) {}
+    PPCMtwpar((u32)OSUncachedToPhysical((void *)GXFIFO_ADDR));
+    GX_SET_PI_REG(3, (u32)CPUFifo->base & 0x3FFFFFFF);
+    GX_SET_PI_REG(4, (u32)CPUFifo->top & 0x3FFFFFFF);
+    SET_REG_FIELD(1578, reg, 21, 5, ((u32)CPUFifo->wrPtr & 0x3FFFFFFF) >> 5);
+    SET_REG_FIELD(1579, reg, 1, 26, 0);
+    GX_SET_PI_REG(5, reg);
+    if (CPGPLinked) {
+        __GXWriteFifoIntReset(1, 1);
+        __GXWriteFifoIntEnable(1, 0);
+        __GXFifoLink(1);
+    }
+
+    PPCSync();
+    OSRestoreInterrupts(enabled);
+}
+
+#endif

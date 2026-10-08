@@ -342,23 +342,23 @@ u32 OSGetProgressiveMode(void) {
     return on;
 }
 
-void OSSetProgressiveMode(u32 on) {
-    OSSram* sram;
+void OSSetProgressiveMode(u32 mode)
+{
+    u32 mode_bits;
+    u8* sram;
+    u8 flags;
 
-    ASSERTLINE(670, on == OS_PROGRESSIVE_MODE_OFF || on == OS_PROGRESSIVE_MODE_ON);
+    mode_bits = (mode << 7) & 0x80;
+    sram = LockSram(0);
+    flags = sram[0x13];
 
-    on <<= 7;
-    on &= 0x80;
-
-    sram = __OSLockSram();
-    if (on == (sram->flags & 0x80)) {
-        __OSUnlockSram(FALSE);
-        return;
+    if (mode_bits == (flags & 0x80)) {
+        UnlockSram(0, 0);
+    } else {
+        sram[0x13] &= 0xFFFFFF7F;
+        sram[0x13] |= mode_bits;
+        UnlockSram(1, 0);
     }
-
-    sram->flags &= ~0x80;
-    sram->flags |= on;
-    __OSUnlockSram(TRUE);
 }
 
 u32 OSGetVideoMode(void) {

@@ -15233,13 +15233,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8018CB28",
-          "end": "0x8018DE40"
+          "end": "0x8018DF98"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802AA3C4",
-          "end": "0x802AAD2C"
+          "end": "0x802AAD8C"
         },
         {
           "section": ".data",
@@ -15333,6 +15333,31 @@
           "symbol": "fn_8018DD4C",
           "start": "0x8018DD4C",
           "end": "0x8018DE40"
+        },
+        {
+          "symbol": "fn_8018DE40",
+          "start": "0x8018DE40",
+          "end": "0x8018DE7C"
+        },
+        {
+          "symbol": "fn_8018DE7C",
+          "start": "0x8018DE7C",
+          "end": "0x8018DE9C"
+        },
+        {
+          "symbol": "fn_8018DE9C",
+          "start": "0x8018DE9C",
+          "end": "0x8018DF20"
+        },
+        {
+          "symbol": "fn_8018DF20",
+          "start": "0x8018DF20",
+          "end": "0x8018DF78"
+        },
+        {
+          "symbol": "fn_8018DF78",
+          "start": "0x8018DF78",
+          "end": "0x8018DF98"
         }
       ]
     },
@@ -15535,13 +15560,13 @@
     {
       "source": "src/game/cu_80086C10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u2013800878D8 and existing exact function extents. Complete fourteen-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
+      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u201380087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80086C10",
-          "end": "0x800878D8"
+          "end": "0x80087BE4"
         },
         {
           "section": ".rodata",
@@ -15632,6 +15657,46 @@
           "symbol": "fn_80087880",
           "start": "0x80087880",
           "end": "0x800878D8"
+        },
+        {
+          "symbol": "fn_800878D8",
+          "start": "0x800878D8",
+          "end": "0x80087938"
+        },
+        {
+          "symbol": "fn_80087938",
+          "start": "0x80087938",
+          "end": "0x800879E8"
+        },
+        {
+          "symbol": "fn_800879E8",
+          "start": "0x800879E8",
+          "end": "0x80087A30"
+        },
+        {
+          "symbol": "fn_80087A30",
+          "start": "0x80087A30",
+          "end": "0x80087A78"
+        },
+        {
+          "symbol": "fn_80087A78",
+          "start": "0x80087A78",
+          "end": "0x80087B00"
+        },
+        {
+          "symbol": "fn_80087B00",
+          "start": "0x80087B00",
+          "end": "0x80087B5C"
+        },
+        {
+          "symbol": "fn_80087B5C",
+          "start": "0x80087B5C",
+          "end": "0x80087BA0"
+        },
+        {
+          "symbol": "fn_80087BA0",
+          "start": "0x80087BA0",
+          "end": "0x80087BE4"
         }
       ]
     },
@@ -16029,8 +16094,8 @@
     },
     {
       "source": "src/dolphin/dvd/dvdfs.c",
-      "profile": "dolphin_release",
-      "evidence": "Complete BFBB8fb1c232 source13 emitted bodies; eight original target identities by actual API/call operands, no flags or body exclusions. Five extra bodies retain source but no original target identities. Current whole original output remains linked until full promotion.",
+      "profile": "dolphin_dvd_release",
+      "evidence": "Complete BFBB 8fb1c232 source retains all 13 emitted bodies. Eight bounded target identities derive from actual API/call operands and match with dolphin_dvd_release signed plain char. Five extra bodies retain source without original target identities. No source casts, directives or body exclusions; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
@@ -16160,8 +16225,8 @@
     },
     {
       "source": "src/dolphin/dvd/fstload.c",
-      "profile": "dolphin_release",
-      "evidence": "Complete genuine dolsdk2328b416 source2bodies, callback216exact and loader360target/336native honestpartial; current canonicalheaders/libraryprofile unchanged. No casts/directives/exclusions.",
+      "profile": "dolphin_dvd_release",
+      "evidence": "Complete dolsdk2004 2328b416 two-body source and canonical headers unchanged. Under dolphin_dvd_release signed plain char, the 216-byte callback and complete 360-byte loader match; the former unsigned loader measured 336 bytes. No casts, directives or exclusions; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
@@ -16460,8 +16525,8 @@
     },
     {
       "source": "src/dolphin/dvd/dvdidutils.c",
-      "profile": "dolphin_release",
-      "evidence": "Complete pinned dolsdk2004 2328b4164b1a98422a2255d83ce9a5a7548990cc source; ordinary dolphin_release profile; full target functions measured independently, original bytes linked.",
+      "profile": "dolphin_dvd_release",
+      "evidence": "Complete pinned dolsdk2004 2328b4164b1a98422a2255d83ce9a5a7548990cc source, with canonical headers and dolphin_dvd_release signed plain char. Complete 248-byte DVDCompareDiskID matches independently; adjacent 48-byte wrapper ownership remains unresolved. Original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
@@ -16637,8 +16702,8 @@
     },
     {
       "source": "src/dolphin/card/CARDOpen.c",
-      "profile": "dolphin_release",
-      "evidence": "Complete coherent pinned dSDK nine-body source/current canonical headers, fixed dolphin_release profile. Eight full target bodies1492; plain-char filename instruction partials preserved, genuine unassigned CARDOpen helper retained. Original bytes remain linked until separately validated promotion.",
+      "profile": "dolphin_card_release",
+      "evidence": "Existing coherent pinned dSDK2328 CARDOpen source retained unchanged. The complete14-file CARD library uses qualified dolphin_card_release signed-char working profile, including all12linked units and both comparison files. Both filename functions gain exact comparison results; target extsb/NUL/equality behavior and pinned default/recipes support a working reconstruction, not unique original flags. All previously exact functions preserved; linked promotion remains separate. See evidence.tsv compiler row.",
       "sections": [
         {
           "section": ".text",
@@ -16840,8 +16905,8 @@
     },
     {
       "source": "src/dolphin/card/CARDMount.c",
-      "profile": "dolphin_release",
-      "evidence": "Complete BFBB CARDMount file with current canonical headers; eight full target bodies and both complete initialized tables. The adjacent 56-byte probe remains unrecovered in the full mapped span; no source splice or compiler changes.",
+      "profile": "dolphin_card_release",
+      "evidence": "Coherent BFBB CARDMount source plus the complete dSDK2328 CARDProbe body (revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/card/CARDMount.c). Nine registered target bodies and both initialized tables remain comparison-only. The complete14-file CARD library uses the qualified dolphin_card_release signed-char working profile; original command line is not uniquely established. See evidence.tsv compiler/source/typed-function rows. No whole linked promotion.",
       "sections": [
         {
           "section": ".text",
@@ -16861,6 +16926,11 @@
           "symbol": "IsCard",
           "start": "0x80255C38",
           "end": "0x80255D04"
+        },
+        {
+          "symbol": "CARDProbe",
+          "start": "0x80255D04",
+          "end": "0x80255D3C"
         },
         {
           "symbol": "CARDProbeEx",
@@ -16947,8 +17017,8 @@
     },
     {
       "source": "src/dolphin/dvd/dvd.c",
-      "profile": "dolphin_release",
-      "evidence": "Complete coherent BFBB DVD core source; all 46 target functions in the full 9,980-byte range are measured. Unsupported unused stack local omitted. Native small-BSS packing remains a diagnostic placement: target trailing globals differ, so partials remain and no NOBITS source credit or whole-unit promotion is claimed.",
+      "profile": "dolphin_dvd_release",
+      "evidence": "Complete coherent BFBB DVD core source under the library-wide dolphin_dvd_release signed plain-char setting; all 46 target functions in the full 9,980-byte range are measured. Unsupported unused stack local omitted. Native small-BSS packing remains diagnostic: trailing target globals differ, partials remain, and no NOBITS source credit or whole-unit promotion is claimed.",
       "sections": [
         {
           "section": ".text",
@@ -17223,7 +17293,7 @@
     {
       "source": "src/dolphin/pad/Pad.c",
       "profile": "dolphin_release",
-      "evidence": "Pinned BFBB8fb1c232 coherent PAD source, full nineteen target bodies and initialized pools; explicit foreign compiler directive adaptation under unchanged target profile. See evidence.tsv; native tail-SDA layout remains measured partial.",
+      "evidence": "Existing pinned BFBB8fb1c232 coherent nineteen-function PAD source unchanged under fixed dolphin_release. Explicit storage symbols bind all13genuine BSS objects using actual target word accesses and typed caller evidence; all19functions and initialized pools are exact comparison-only. The sbss diagnostic envelope contains unowned803ED2A4..803ED2A8 without source allocation, ownership or initialized-data credit; SDK mapping owned spans remain unchanged. No whole linked SDA-placement or unit-completion claim. See evidence.tsv storage facts.",
       "sections": [
         {
           "section": ".text",
@@ -17253,7 +17323,7 @@
           "section": ".sbss",
           "placement": ".sbss",
           "start": "0x803ED288",
-          "end": "0x803ED2B0"
+          "end": "0x803ED2B4"
         }
       ],
       "functions": [
@@ -17352,12 +17422,79 @@
           "start": "0x80248124",
           "end": "0x802481A0"
         }
+      ],
+      "storage": [
+        {
+          "symbol": "Initialized",
+          "start": "0x803ED288",
+          "end": "0x803ED28C"
+        },
+        {
+          "symbol": "EnabledBits",
+          "start": "0x803ED28C",
+          "end": "0x803ED290"
+        },
+        {
+          "symbol": "ResettingBits",
+          "start": "0x803ED290",
+          "end": "0x803ED294"
+        },
+        {
+          "symbol": "RecalibrateBits",
+          "start": "0x803ED294",
+          "end": "0x803ED298"
+        },
+        {
+          "symbol": "WaitingBits",
+          "start": "0x803ED298",
+          "end": "0x803ED29C"
+        },
+        {
+          "symbol": "CheckingBits",
+          "start": "0x803ED29C",
+          "end": "0x803ED2A0"
+        },
+        {
+          "symbol": "PendingBits",
+          "start": "0x803ED2A0",
+          "end": "0x803ED2A4"
+        },
+        {
+          "symbol": "SamplingCallback",
+          "start": "0x803ED2A8",
+          "end": "0x803ED2AC"
+        },
+        {
+          "symbol": "recalibrated$358",
+          "start": "0x803ED2AC",
+          "end": "0x803ED2B0"
+        },
+        {
+          "symbol": "__PADSpec",
+          "start": "0x803ED2B0",
+          "end": "0x803ED2B4"
+        },
+        {
+          "symbol": "Type",
+          "start": "0x803A5880",
+          "end": "0x803A5890"
+        },
+        {
+          "symbol": "Origin",
+          "start": "0x803A5890",
+          "end": "0x803A58C0"
+        },
+        {
+          "symbol": "CmdProbeDevice",
+          "start": "0x803A58C0",
+          "end": "0x803A58D0"
+        }
       ]
     },
     {
       "source": "src/dolphin/ai/ai.c",
       "profile": "dolphin_release",
-      "evidence": "Pinned BFBB8fb1c232 coherent AI C source; all eighteen complete C functions measured, SRC timing routine remains partial. Original flag-clear and stack-switch functions are wholly unresolved and remain mapped/unlinked. See evidence.tsv.",
+      "evidence": "Pinned BFBB8fb1c232 coherent AI C source with complete dSDK2328 AIReset body (revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/ai/ai.c). All nineteen complete C functions registered under unchanged dolphin_release; SRC timing routine remains partial and callback-stack assembly provenance unresolved. See evidence.tsv actual storage/caller facts; no whole-unit promotion.",
       "sections": [
         {
           "section": ".text",
@@ -17459,6 +17596,11 @@
           "symbol": "AIInit",
           "start": "0x8024A510",
           "end": "0x8024A67C"
+        },
+        {
+          "symbol": "AIReset",
+          "start": "0x8024A67C",
+          "end": "0x8024A688"
         },
         {
           "symbol": "__AISHandler",
@@ -18394,6 +18536,11 @@
       ],
       "functions": [
         {
+          "symbol": "__GXCleanGPFifo",
+          "start": "0x8024C7D8",
+          "end": "0x8024C8D8"
+        },
+        {
           "symbol": "GXGetCPUFifo",
           "start": "0x8024C8D8",
           "end": "0x8024C8E0"
@@ -18404,9 +18551,14 @@
           "end": "0x8024C8E8"
         },
         {
-          "symbol": "__GXCleanGPFifo",
-          "start": "0x8024C7D8",
-          "end": "0x8024C8D8"
+          "symbol": "GXRedirectWriteGatherPipe",
+          "start": "0x8024C8E8",
+          "end": "0x8024C9F0"
+        },
+        {
+          "symbol": "GXRestoreWriteGatherPipe",
+          "start": "0x8024C9F0",
+          "end": "0x8024CB90"
         }
       ],
       "discarded": [
@@ -18981,6 +19133,359 @@
           "symbol": "OSGetFontEncode",
           "start": "0x80285A90",
           "end": "0x80285AE8"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/__ppc_eabi_init.c",
+      "profile": "dolphin_release",
+      "evidence": "Provisional mapped startup unit from frozen52fd scope; coherent OOT complete pure C wrappers independently resolved with actual target ctor/PPCHalt callees. Original names and exact whole-object boundaries unproven; original hardware/ctor/dtor bytes retained.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023E818",
+          "end": "0x8023E920"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__init_user",
+          "start": "0x8023E818",
+          "end": "0x8023E838"
+        },
+        {
+          "symbol": "_ExitProcess",
+          "start": "0x8023E900",
+          "end": "0x8023E920"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/vmbase/VMBase.c",
+      "profile": "dolphin_release",
+      "evidence": "Frozen scope whole VMBase mapped unit; six complete original MVP C bodies. Actual target pointer slots803ED268/26C/270/274 independently read/written by exact whole bodies and accepted VM caller anchors. Full native16-byte allocation measured; other original unit functions and storage retained, no ASM/stub source imported. Pointer declarations use target-supported native allocation order, not donor original declaration order.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80245820",
+          "end": "0x8024648C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED268",
+          "end": "0x803ED278"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__VMBASEGetVirtualAddr",
+          "start": "0x80245B24",
+          "end": "0x80245B34"
+        },
+        {
+          "symbol": "__VMBASESetVirtualAddr",
+          "start": "0x80245B34",
+          "end": "0x80245B44"
+        },
+        {
+          "symbol": "__VMBASEIsPageLocked",
+          "start": "0x80245B44",
+          "end": "0x80245B50"
+        },
+        {
+          "symbol": "__VMBASESetPageLocked",
+          "start": "0x80245B50",
+          "end": "0x80245B78"
+        },
+        {
+          "symbol": "__VMBASESetPageFaultHandler",
+          "start": "0x80245B78",
+          "end": "0x80245B80"
+        },
+        {
+          "symbol": "__VMBASEGetPTE",
+          "start": "0x80245EC4",
+          "end": "0x80245EDC"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXLight.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete related C channel bodies, canonical target layouts, fixed comparison guard; unsupported124-byte light loader omitted and remains original. No original source names or entire archive ownership claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8024F648",
+          "end": "0x8024FD3C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FEAD0",
+          "end": "0x802FEAEC"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED898",
+          "end": "0x803ED8DC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GXSetChanAmbColor",
+          "start": "0x8024FA68",
+          "end": "0x8024FB58"
+        },
+        {
+          "symbol": "GXSetChanMatColor",
+          "start": "0x8024FB58",
+          "end": "0x8024FC48"
+        },
+        {
+          "symbol": "GXSetNumChans",
+          "start": "0x8024FC48",
+          "end": "0x8024FC84"
+        },
+        {
+          "symbol": "GXSetChanCtrl",
+          "start": "0x8024FC84",
+          "end": "0x8024FD3C"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/db/db.c",
+      "profile": "dolphin_release",
+      "evidence": "Private complete target-supported C functions from coherent BFBB; unsupported assembly entry remains external at actual target address.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023EC7C",
+          "end": "0x8023ED18"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FCCF0",
+          "end": "0x802FCD08"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED0F0",
+          "end": "0x803ED0F8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "DBInit",
+          "start": "0x8023EC7C",
+          "end": "0x8023ECA4"
+        },
+        {
+          "symbol": "__DBExceptionDestinationAux",
+          "start": "0x8023ECA4",
+          "end": "0x8023ECEC"
+        },
+        {
+          "symbol": "__DBIsExceptionMarked",
+          "start": "0x8023ECFC",
+          "end": "0x8023ED18"
+        }
+      ],
+      "discarded": [
+        "DBPrintf"
+      ]
+    },
+    {
+      "source": "src/game/cu_8007A3C4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit/type/external/source-form/compiler rows at8007A3C4\u20138007A9E4 and existing exact function extents. Thirteen complete comparison-only bodies. No initialized storage; original-file edges remain open, and neighboring setup/typed-value/update bodies are not claimed. Original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007A3C4",
+          "end": "0x8007A9E4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8007A3C4",
+          "start": "0x8007A3C4",
+          "end": "0x8007A410"
+        },
+        {
+          "symbol": "fn_8007A410",
+          "start": "0x8007A410",
+          "end": "0x8007A43C"
+        },
+        {
+          "symbol": "fn_8007A43C",
+          "start": "0x8007A43C",
+          "end": "0x8007A444"
+        },
+        {
+          "symbol": "fn_8007A444",
+          "start": "0x8007A444",
+          "end": "0x8007A4A4"
+        },
+        {
+          "symbol": "fn_8007A4A4",
+          "start": "0x8007A4A4",
+          "end": "0x8007A510"
+        },
+        {
+          "symbol": "fn_8007A510",
+          "start": "0x8007A510",
+          "end": "0x8007A588"
+        },
+        {
+          "symbol": "fn_8007A588",
+          "start": "0x8007A588",
+          "end": "0x8007A600"
+        },
+        {
+          "symbol": "fn_8007A600",
+          "start": "0x8007A600",
+          "end": "0x8007A690"
+        },
+        {
+          "symbol": "fn_8007A690",
+          "start": "0x8007A690",
+          "end": "0x8007A7F4"
+        },
+        {
+          "symbol": "fn_8007A7F4",
+          "start": "0x8007A7F4",
+          "end": "0x8007A894"
+        },
+        {
+          "symbol": "fn_8007A894",
+          "start": "0x8007A894",
+          "end": "0x8007A934"
+        },
+        {
+          "symbol": "fn_8007A934",
+          "start": "0x8007A934",
+          "end": "0x8007A98C"
+        },
+        {
+          "symbol": "fn_8007A98C",
+          "start": "0x8007A98C",
+          "end": "0x8007A9E4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80168ED0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Target function extents 0x80168ED0-0x801695D4 and callback producer 0x80168324. Provisional grouping; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80168ED0",
+          "end": "0x801695D4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80168ED0",
+          "start": "0x80168ED0",
+          "end": "0x80168F58"
+        },
+        {
+          "symbol": "fn_80168F58",
+          "start": "0x80168F58",
+          "end": "0x80169058"
+        },
+        {
+          "symbol": "fn_80169058",
+          "start": "0x80169058",
+          "end": "0x8016905C"
+        },
+        {
+          "symbol": "fn_8016905C",
+          "start": "0x8016905C",
+          "end": "0x80169060"
+        },
+        {
+          "symbol": "fn_80169060",
+          "start": "0x80169060",
+          "end": "0x80169264"
+        },
+        {
+          "symbol": "fn_80169264",
+          "start": "0x80169264",
+          "end": "0x801692AC"
+        },
+        {
+          "symbol": "fn_801692AC",
+          "start": "0x801692AC",
+          "end": "0x80169308"
+        },
+        {
+          "symbol": "fn_80169308",
+          "start": "0x80169308",
+          "end": "0x801694C8"
+        },
+        {
+          "symbol": "fn_801694C8",
+          "start": "0x801694C8",
+          "end": "0x801695D4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8007A9E4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit/type/external/source-form/compiler records for8007A9E4\u20138007AEE8. Six full comparison-only bodies; four update bodies retain measured instruction differences. No initialized storage or complete original-file boundary claim; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007A9E4",
+          "end": "0x8007AEE8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8007A9E4",
+          "start": "0x8007A9E4",
+          "end": "0x8007AA3C"
+        },
+        {
+          "symbol": "fn_8007AA3C",
+          "start": "0x8007AA3C",
+          "end": "0x8007AA90"
+        },
+        {
+          "symbol": "fn_8007AA90",
+          "start": "0x8007AA90",
+          "end": "0x8007ABA4"
+        },
+        {
+          "symbol": "fn_8007ABA4",
+          "start": "0x8007ABA4",
+          "end": "0x8007ACB8"
+        },
+        {
+          "symbol": "fn_8007ACB8",
+          "start": "0x8007ACB8",
+          "end": "0x8007ADD4"
+        },
+        {
+          "symbol": "fn_8007ADD4",
+          "start": "0x8007ADD4",
+          "end": "0x8007AEE8"
         }
       ]
     }

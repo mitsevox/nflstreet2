@@ -109,7 +109,8 @@ AXCallback AXRegisterCallback(AXCallback callback);
 void AXSetStepMode(u32 i);
 extern AXPROFILE __AXLocalProfile;
 extern u16 axDspSlaveLength;
-extern u16 axDspSlave[];
+#define AX_DSP_SLAVE_LENGTH 3936
+extern u16 axDspSlave[AX_DSP_SLAVE_LENGTH];
 
 void AXSetMode(u32 mode);
 u32 AXGetMode(void);

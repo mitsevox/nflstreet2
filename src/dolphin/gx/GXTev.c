@@ -348,20 +348,20 @@ void GXSetTevSwapMode(GXTevStageID stage, GXTevSwapSel ras_sel, GXTevSwapSel tex
     __GXData->bpSentNot = 0;
 }
 
-void GXSetTevSwapModeTable(GXTevSwapSel table, GXTevColorChan red, GXTevColorChan green,
-                           GXTevColorChan blue, GXTevColorChan alpha)
-{
+void GXSetTevSwapModeTable(GXTevSwapSel table, GXTevColorChan red, GXTevColorChan green, GXTevColorChan blue, GXTevColorChan alpha) {
     u32* Kreg;
+    u32 index = table * 2;
 
     CHECK_GXBEGIN(978, "GXSetTevSwapModeTable");
+    ASSERTMSGLINE(979, table < GX_MAX_TEVSWAP, "GXSetTevSwapModeTable: Invalid Swap Selection Index");
 
-    Kreg = &__GXData->tevKsel[table * 2];
+    Kreg = &__GXData->tevKsel[index];
     SET_REG_FIELD(982, *Kreg, 2, 0, red);
     SET_REG_FIELD(983, *Kreg, 2, 2, green);
 
     GX_WRITE_RAS_REG(*Kreg);
 
-    Kreg = &__GXData->tevKsel[table * 2 + 1];
+    Kreg = &__GXData->tevKsel[index + 1];
     SET_REG_FIELD(987, *Kreg, 2, 0, blue);
     SET_REG_FIELD(988, *Kreg, 2, 2, alpha);
 
