@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "engine/vptmanager.h"
+#include "game/Camera_8013F738.h"
 #include "game/Class_80148A58.h"
 #include "game/Entry_80219044.h"
 #include "game/FELoop.h"
@@ -2731,4 +2732,588 @@ extern "C" void fn_8009D3F0(Timer_8009D338 *p, unsigned int time)
         }
     }
     p->mUnknown10 -= time;
+}
+/* 164-byte block allocated for each team by fn_800A70F4; the two block
+   pointers are the .sbss words lbl_803EC954. */
+struct Block_800A70F4 {
+    unsigned char mUnknown0[8];
+    int mUnknown8;
+    int mUnknownC;
+    unsigned char mUnknown10[8];
+    int mUnknown18;
+    unsigned char mUnknown1C[64];
+    int mUnknown5C;
+    int mUnknown60;
+    unsigned char mUnknown64;
+    unsigned char mUnknown65[3];
+    int mUnknown68;
+    int mUnknown6C;
+    unsigned char mUnknown70[4];
+    int mUnknown74[11];
+    int mUnknownA0;
+};
+
+/* .sbss words at 0x803EC94C: a player pointer followed by two bytes. */
+struct Block_803EC94C {
+    Object_80039F5C *mpUnknown0;
+    unsigned char mUnknown4;
+    unsigned char mUnknown5;
+};
+
+/* .bss block at 0x8030F42C; only the accessed prefix is declared. */
+struct Block_8030F42C {
+    int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    int mUnknownC;
+    int mUnknown10;
+    int mUnknown14[2];
+    int mUnknown1C[2];
+    char *mpUnknown24[2];
+    char *mpUnknown2C;
+};
+
+extern "C" {
+int fn_800A3E00(Object_80039F5C *p);
+void fn_800A2E80(int a, int b);
+int fn_800A3444(void);
+int fn_800B7F88(Object_80039F5C *p);
+int fn_800B78DC(Object_80039F5C *p);
+int fn_800B7F34(Object_80039F5C *p);
+int fn_800B7E60(Object_80039F5C *p);
+int fn_800B65A0(int team);
+int fn_80178308(void);
+Camera_8013F738 *fn_8013FA04(int index);
+void fn_8013C438(Camera_8013F738 *pCamera);
+void fn_8013FA8C(int a);
+void fn_8013C384(void *pCamera, int a, int b, int c);
+void fn_8013F97C(int a);
+void fn_8013C6F0(Camera_8013F738 *pCamera);
+int fn_8011F1CC(void);
+void fn_80148108(int mode);
+void fn_80162FB8(int index, int ref);
+void fn_80163020(void);
+int fn_80156704(void);
+void fn_801574DC(int value);
+void fn_800C0330(void *p);
+void fn_80047874(unsigned char enable);
+void fn_800A636C(int team, Object_80039F5C **ppOut);
+void fn_800A7A0C(int team);
+void fn_800A9330(void);
+void fn_800A9478(int a);
+
+extern Block_803EC94C lbl_803EC94C;
+extern Block_800A70F4 *lbl_803EC954[2];
+extern int lbl_803EC95C;
+extern unsigned char lbl_803EAA18;
+extern void (*lbl_803EAA24[2])(int team);
+extern int lbl_803EAA44[2];
+extern unsigned char lbl_803EAA4C;
+extern unsigned char lbl_803EAA4D;
+extern unsigned char lbl_803EAA4F;
+extern unsigned char lbl_803EAA50;
+extern unsigned char lbl_803EAA51;
+extern unsigned char lbl_803EAA84;
+extern unsigned char lbl_803EAA85;
+extern int lbl_803EAA94;
+extern unsigned char lbl_803EAA98;
+extern void *lbl_803EABA4;
+extern Object_80039F5C *lbl_8030F404[2][2];
+extern Block_8030F42C lbl_8030F42C;
+}
+
+extern "C" int fn_800A5DD0(Object_80039F5C *p)
+{
+    return p->mUnknown1156;
+}
+
+extern "C" void fn_800A5DD8(Object_80039F5C *p)
+{
+    if (fn_800A5DD0(p)) {
+        fn_800B7F88(p);
+    } else {
+        fn_800B78DC(p);
+    }
+}
+
+extern "C" void fn_800A5E20(Object_80039F5C *p)
+{
+    if (fn_800A5DD0(p)) {
+        fn_800B7F34(p);
+    } else {
+        fn_800B7E60(p);
+    }
+}
+
+extern "C" void fn_800A5E68(Object_80039F5C *p)
+{
+    if ((p->mFlags & 0x20000) && fn_800A3E00(p) == 0) {
+        p->mUnknown1156 = 0;
+        p->mFlags &= ~0x20000;
+    }
+}
+
+extern "C" int fn_800A5EB8(Object_80039F5C *a, Object_80039F5C *b)
+{
+    int result = 0;
+
+    if (a != 0 && b != 0) {
+        if (a->mpState->mId == 26 && b->mpState->mId == 27) {
+            result = 1;
+        } else if (a->mpState->mId == 25 && (b->mpState->mId == 68 || b->mpState->mId == 90)) {
+            result = 1;
+        }
+    }
+    return result;
+}
+
+extern "C" unsigned char fn_800A5F20(Object_80039F5C *p)
+{
+    short average;
+
+    fn_80137B40();
+    average = (p->mRatings[2] + p->mRatings[4]) / 2;
+    return (average + 168) * 20 / 510 + 20;
+}
+
+extern "C" int fn_800A5F80(void)
+{
+    Object_80039F5C *p = fn_80137B40();
+    Input_800B6D34 input;
+
+    if (lbl_803EC94C.mUnknown4 == 0) {
+        return 1;
+    }
+    if (p != 0) {
+        Object_80039F5C *pOther;
+
+        fn_800B6D34(p, &input);
+        if (input.mUnknown94 & 1) {
+            return 1;
+        }
+        pOther = lbl_803EC94C.mpUnknown0;
+        if ((p->mFlags & 0x10000) || (pOther->mFlags & 0x10000) || (p->mFlags & 0x800)
+            || (pOther->mFlags & 0x800) || p->mpState->mId == 15) {
+            return 1;
+        }
+        if (p->mMotion.mPos.mY >= fn_80177FE0().mY) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+extern "C" void fn_800A61A8(void);
+
+extern "C" void fn_800A6044(void)
+{
+    Object_80039F5C *p;
+    int team;
+
+    fn_800A61A8();
+    fn_8013C438(fn_8013FA04(5));
+    p = fn_80137B40();
+    team = fn_80178308();
+    if (p == 0) {
+        fn_8013FA8C(1);
+    } else if (fn_8011F1CC() && fn_800B65A0(team) != 255 && p->mpState->mId == 18) {
+        fn_80148108(0);
+        fn_8013FA8C(2);
+    }
+}
+
+extern "C" void fn_800A60D8(Object_80039F5C *a, Object_80039F5C *b)
+{
+    fn_800A61A8();
+    if (fn_800A5EB8(a, b)) {
+        lbl_803EC94C.mpUnknown0 = b;
+        lbl_803EC94C.mUnknown5 = 1;
+        lbl_803EC94C.mUnknown4 = fn_800A5F20(b);
+        fn_80162FB8(fn_800B65A0(b->mIdBytes[2]), b->mId);
+        fn_8013C384(fn_8013FA04(5), 2, b->mId, 0);
+    }
+}
+
+extern "C" int fn_800A61E0(void);
+
+extern "C" void fn_800A615C(void)
+{
+    if (fn_800A61E0()) {
+        if (fn_800A5F80()) {
+            fn_800A6044();
+        } else {
+            lbl_803EC94C.mUnknown4--;
+        }
+    }
+}
+
+extern "C" void fn_800A61A8(void)
+{
+    lbl_803EC94C.mpUnknown0 = 0;
+    lbl_803EC94C.mUnknown4 = 0;
+    lbl_803EC94C.mUnknown5 = 0;
+    fn_80163020();
+}
+
+extern "C" int fn_800A61E0(void)
+{
+    return lbl_803EC94C.mUnknown5;
+}
+
+extern "C" void fn_800A61E8(int value)
+{
+    if (fn_80156704() && (value == 0 || lbl_803EC954[0]->mUnknown68 != 2 || lbl_803EC954[1]->mUnknown68 != 2)) {
+        fn_801574DC(value);
+    }
+}
+
+extern "C" int fn_800A6590(int value)
+{
+    switch (value) {
+    case 0:
+        return 1;
+    case 1:
+        return 2;
+    case 2:
+    default:
+        return 16;
+    }
+}
+
+extern "C" void fn_800A6750(int team)
+{
+    lbl_803EC954[team]->mUnknown74[2] = 2;
+    lbl_803EC954[team]->mUnknown74[0] = 2;
+    lbl_803EC954[team]->mUnknown74[1] = 2;
+    lbl_803EC954[team]->mUnknownA0 = lbl_803EAA18;
+    lbl_803EC954[team]->mUnknown74[5] = 2;
+    lbl_8030F404[team][0] = 0;
+    lbl_8030F404[team][1] = 0;
+}
+
+extern "C" void fn_800A67B8(int team)
+{
+    int other = (team + 1) & 1;
+
+    lbl_803EC954[other]->mUnknown74[2] = 0;
+    lbl_803EC954[other]->mUnknown74[0] = 0;
+    lbl_803EC954[team]->mUnknown74[9] = 2;
+    lbl_803EC954[team]->mUnknown74[8] = 2;
+    lbl_8030F404[team][0] = 0;
+    lbl_8030F404[team][1] = 0;
+}
+
+extern "C" void fn_800A6D5C(int team)
+{
+    lbl_803EAA4C = team;
+    lbl_803EAA4D = 1;
+    lbl_803EAA4F = 0;
+    fn_800C0330(lbl_803EABA4);
+    fn_800A61E8(0);
+    fn_80047874(0);
+}
+
+extern "C" void fn_800A6DA4(void)
+{
+    lbl_803EAA50 = fn_802372EC(0, 2);
+}
+
+extern "C" void fn_800A7274(void)
+{
+    if (lbl_803EC95C != -1) {
+        fn_80093410(lbl_803EC95C);
+        lbl_803EC95C = -1;
+    }
+    lbl_803EAA4D = 0;
+    fn_800A9330();
+}
+
+extern "C" int fn_800A7E40(int team)
+{
+    return lbl_803EC954[team]->mUnknown5C;
+}
+
+extern "C" int fn_800A7E54(int team)
+{
+    return lbl_803EC954[team]->mUnknown60;
+}
+
+extern "C" void fn_800A7E68(void)
+{
+    unsigned char team;
+
+    for (team = 0; team <= 1; team++) {
+        lbl_803EC954[team]->mUnknown5C = 0;
+        lbl_803EC954[team]->mUnknown60 = 0;
+        lbl_803EC954[team]->mUnknown6C = 0;
+    }
+}
+
+extern "C" int fn_800A7EA4(int team)
+{
+    return lbl_803EC954[team]->mUnknown74[7];
+}
+
+extern "C" int fn_800A7EB8(int team)
+{
+    return lbl_803EC954[team]->mUnknown74[0];
+}
+
+extern "C" int fn_800A7ECC(int team)
+{
+    return lbl_803EC954[team]->mUnknown74[3];
+}
+
+extern "C" int fn_800A7EE0(int team)
+{
+    return lbl_803EC954[team]->mUnknown74[5];
+}
+
+extern "C" int fn_800A7EF4(int team)
+{
+    return lbl_803EC954[team]->mUnknown74[6];
+}
+
+extern "C" int fn_800A7F08(int team)
+{
+    return lbl_803EC954[team]->mUnknown74[4];
+}
+
+extern "C" int fn_800A7F1C(int team)
+{
+    return lbl_803EC954[team]->mUnknown74[1];
+}
+
+extern "C" int fn_800A7F30(int team)
+{
+    return lbl_803EC954[team]->mUnknown74[2];
+}
+
+extern "C" int fn_800A7F44(int team)
+{
+    return lbl_803EC954[team]->mUnknown74[8];
+}
+
+extern "C" int fn_800A7F58(int team)
+{
+    return lbl_803EC954[team]->mUnknown74[9];
+}
+
+extern "C" void fn_800A7F6C(void)
+{
+    unsigned char team;
+
+    for (team = 0; team <= 1; team++) {
+        if (lbl_803EC954[team]->mUnknown68 != 0) {
+            lbl_803EAA24[lbl_803EC954[team]->mUnknown8](team);
+        }
+    }
+}
+
+extern "C" int fn_800A7FD8(void)
+{
+    return lbl_803EAA4D;
+}
+
+extern "C" int fn_800A83E0(int team)
+{
+    Block_800A70F4 *pBlock = lbl_803EC954[team];
+    int result = -1;
+
+    if (pBlock->mUnknown6C == 1 || pBlock->mUnknown6C == 2) {
+        result = pBlock->mUnknownC;
+    }
+    return result;
+}
+
+extern "C" int fn_800A8408(int team)
+{
+    Block_800A70F4 *pBlock = lbl_803EC954[team];
+    int result = 3;
+
+    if (pBlock->mUnknown6C == 1 || pBlock->mUnknown6C == 2) {
+        result = pBlock->mUnknown8;
+    }
+    return result;
+}
+
+extern "C" int fn_800A8430(int team)
+{
+    return lbl_803EC954[team]->mUnknown18;
+}
+
+extern "C" int fn_800A8444(int team)
+{
+    int result = 1;
+
+    if (lbl_803EC954[team]->mUnknown68 == 0) {
+        result = 0;
+    }
+    return result;
+}
+
+extern "C" int fn_800A8468(int team)
+{
+    return lbl_803EC954[team]->mUnknown68 == 2;
+}
+
+extern "C" int fn_800A8488(int team)
+{
+    return lbl_803EC954[team]->mUnknown6C == 1 || lbl_803EC954[team]->mUnknown6C == 2;
+}
+
+extern "C" int fn_800A84AC(int team)
+{
+    return lbl_803EC954[team]->mUnknown64;
+}
+
+extern "C" int fn_800A84C0(void)
+{
+    return 1;
+}
+
+extern "C" int fn_800A84C8(void)
+{
+    int result = 0;
+    unsigned char team;
+    unsigned char i;
+
+    for (team = 0; team <= 1; team++) {
+        for (i = 0; i <= 10; i++) {
+            if (lbl_803EC954[team]->mUnknown74[i] != 1) {
+                result = 1;
+            }
+        }
+    }
+    return result;
+}
+
+extern "C" int fn_800A851C(int team, Object_80039F5C *p)
+{
+    Object_80039F5C *pair[2];
+    int result;
+
+    fn_800A636C(team, pair);
+    result = 0;
+    if (p == pair[0] || p == pair[1]) {
+        result = 1;
+    }
+    return result;
+}
+
+extern "C" void fn_800A861C(void)
+{
+    fn_800A2E80(fn_800A3444(), 60);
+}
+
+extern "C" void fn_800A8644(void)
+{
+    fn_800A2E80(fn_800A3444(), 1);
+}
+
+extern "C" void fn_800A8738(int value)
+{
+    lbl_803EAA51 = value;
+}
+
+extern "C" int fn_800A8EA4(int team)
+{
+    return lbl_803EC954[team]->mUnknown6C;
+}
+
+extern "C" void fn_800A8EB8(void)
+{
+    int i;
+
+    for (i = 0; i <= 1; i++) {
+        unsigned char team = i;
+
+        if (fn_800A8444(team)) {
+            fn_800A7A0C(team);
+        }
+    }
+}
+
+extern "C" void fn_800A8F08(void)
+{
+    unsigned char team;
+
+    for (team = 0; team <= 1; team++) {
+        if (fn_800A8444(team)) {
+            lbl_803EAA44[team] = fn_800A8EA4(team);
+        } else {
+            lbl_803EAA44[team] = 0;
+        }
+    }
+}
+
+extern "C" void fn_800A8F70(void)
+{
+    lbl_803EAA44[0] = 0;
+    lbl_803EAA44[1] = 0;
+}
+
+extern "C" int fn_800A8F84(int team)
+{
+    return lbl_803EAA44[team];
+}
+
+extern "C" int fn_800A8F94(void)
+{
+    return lbl_803EAA4C;
+}
+
+extern "C" void fn_800A8F9C(void)
+{
+}
+
+extern "C" void fn_800A92E4(void)
+{
+    char *p = (char *)fn_801D2B7C(0x33000, 0, 0);
+
+    lbl_8030F42C.mpUnknown24[0] = p;
+    lbl_8030F42C.mpUnknown24[1] = p + 0x19800;
+    lbl_8030F42C.mpUnknown2C = p;
+}
+
+extern "C" void fn_800A9330(void)
+{
+    fn_800A9478(0);
+    fn_801D2BD0(lbl_8030F42C.mpUnknown2C);
+    lbl_8030F42C.mpUnknown2C = 0;
+    lbl_8030F42C.mpUnknown24[0] = 0;
+    lbl_8030F42C.mpUnknown24[1] = 0;
+}
+
+extern "C" int fn_800A937C(void)
+{
+    return lbl_803EAA84;
+}
+
+extern "C" void fn_800A9648(void)
+{
+    fn_800927BC((unsigned char)lbl_8030F42C.mUnknown14[lbl_8030F42C.mUnknownC]);
+}
+
+extern "C" int fn_800A9680(void)
+{
+    return lbl_803EAA85;
+}
+
+extern "C" void fn_800A981C(void)
+{
+    fn_8013F97C(0);
+    fn_8013FA8C(1);
+    fn_8013C6F0(fn_8013FA04(5));
+}
+
+extern "C" char *fn_800A9F4C(int index)
+{
+    return lbl_8030F42C.mpUnknown24[index];
+}
+
+extern "C" void fn_800AA010(int value)
+{
+    lbl_803EAA98 = value;
+    lbl_803EAA94 = 0;
 }

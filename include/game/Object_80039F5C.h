@@ -185,7 +185,9 @@ struct Object_80039F5C {
     unsigned short mUnknown1134;
     unsigned char mUnknown1136;
     unsigned char mUnknown1137;
-    char mUnknown1138[22];
+    char mUnknown1138[18];
+    unsigned char mUnknown1156;
+    char mUnknown1157[3];
     Block_801718E8 mUnknown1160;
     unsigned char mUnknown1213;
     unsigned char mUnknown1214;
