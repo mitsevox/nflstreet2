@@ -2,22 +2,7 @@
 #include "game/fn_80227638.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_800D81C8.h"
-
-struct State_800D8140 {
-    Pair_802270A4 mUnknown0;
-    float mUnknown8;
-    float mUnknownC;
-    float mUnknown10;
-    unsigned char mUnknown14;
-    unsigned char mUnknown15;
-    unsigned char mUnknown16;
-    unsigned char mUnknown17;
-};
-
-struct Block_801BE60C {
-    char mUnknown0[32];
-    State_800D8140 mUnknown20;
-};
+#include "game/Block_801BE60C.h"
 
 extern "C" {
 float fn_800C4A2C(Object_800D81C8 *p);

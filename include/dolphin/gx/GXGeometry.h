@@ -23,6 +23,10 @@ void GXSetLineWidth(u8 width, GXTexOffset texOffsets);
 void GXSetPointSize(u8 pointSize, GXTexOffset texOffsets);
 void GXEnableTexOffsets(GXTexCoordID coord, u8 line_enable, u8 point_enable);
 
+static inline void GXSetTexCoordGen(GXTexCoordID d, GXTexGenType f, GXTexGenSrc s, u32 m) {
+    GXSetTexCoordGen2(d, f, s, m, GX_FALSE, GX_PTIDENTITY);
+}
+
 #ifdef __cplusplus
 }
 #endif

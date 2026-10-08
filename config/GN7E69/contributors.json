@@ -6546,6 +6546,27 @@
       }
     },
     {
+      "source": "src/game/cu_800D949C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D9A10",
+        "0x800D9B0C",
+        "0x800D9C40",
+        "0x800DA53C",
+        "0x800DA8D8",
+        "0x800DAA68",
+        "0x800DAC88"
+      ],
+      "provenance": {
+        "pull_request": 544,
+        "merged_via": 573,
+        "commit": "b5fd7e16f0ce0e3a13a2f9e138c874bfb0d5103f",
+        "introduced_blob": "f5552d8d24727c28a93d5586a12244e7a8ee6a33"
+      }
+    },
+    {
       "source": "src/game/cu_80060948.cpp",
       "contributors": [
         "mitsevox"
@@ -6664,6 +6685,51 @@
         "merged_via": 356,
         "commit": "e7e0d6d0cc6c3a158a9576a0a413e2cc8a803966",
         "introduced_blob": "c968b6a0bd0c0af0cc2edd4aa6ee7f5ce480705f"
+      }
+    },
+    {
+      "source": "src/game/cu_800E3CC0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800E9010",
+        "0x800E92DC",
+        "0x800E93CC",
+        "0x800E9504",
+        "0x800E9528",
+        "0x800E96EC",
+        "0x800E98A4",
+        "0x800E9DBC",
+        "0x800E9FC0",
+        "0x800EA1D8",
+        "0x800EAC9C",
+        "0x800EAEA4",
+        "0x800EAEC0",
+        "0x800EB0C4",
+        "0x800EB78C",
+        "0x800EB7F8",
+        "0x800EBCE0",
+        "0x800EBD8C",
+        "0x800EC640",
+        "0x800EC6DC",
+        "0x800EC758",
+        "0x800EC840",
+        "0x800ECD14",
+        "0x800ECE38",
+        "0x800ED0F4",
+        "0x800EDB48",
+        "0x800EE61C",
+        "0x800EE7C8",
+        "0x800EE9AC",
+        "0x800EEDC8",
+        "0x800EF0DC"
+      ],
+      "provenance": {
+        "pull_request": 549,
+        "merged_via": 573,
+        "commit": "c21b243504d5ad2fcc7db8a793d823d74c7fe5af",
+        "introduced_blob": "e566b5f0cacd8568e06f9198b3a003abc357e42b"
       }
     },
     {
@@ -10434,11 +10500,13 @@
         "0x8024C720",
         "0x8024C744",
         "0x8024C778",
-        "0x8024C7A8"
+        "0x8024C7A8",
+        "0x8024C8D8",
+        "0x8024C8E0"
       ],
       "provenance": {
         "pull_request": 510,
-        "merged_via": 525,
+        "merged_via": 573,
         "commit": "74b8a51b6a95ba03d4b08507f93e440fc4ad3019",
         "introduced_blob": "2e3ed684a6b3eb28b4d8b21a5689bb12b71237f9"
       }
@@ -10766,6 +10834,246 @@
       }
     },
     {
+      "source": "src/dolphin/vm/VM.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80244FB4",
+        "0x80244FBC",
+        "0x80244FC4"
+      ],
+      "provenance": {
+        "commit": "8cc209687defe2b75e7162c0ee976d3f7ee5f5bc",
+        "introduced_blob": "0fb5dc3fff743e98914dad5889f856e296ab73c3",
+        "original_commit": "c68d0e5d6b1cced6d40d5d660d7546a948140ce5",
+        "original_blob": "51312b5fa9ca264467ed1b8f9b86235ec4a4e598",
+        "integration_adjustment": "Canonical OS/PPC/stdio and established __ar header closure; removed inherited decompilation process introduction. Complete function bodies and behavior comments unchanged. Relocate byte-identical internal VM header under include/dolphin and use the explicit canonical header include; complete C bodies unchanged.",
+        "pull_request": 567,
+        "merged_via": 573
+      }
+    },
+    {
+      "source": "src/dolphin/vm/VMMapping.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x802456AC",
+        "0x802456C4"
+      ],
+      "provenance": {
+        "commit": "8cc209687defe2b75e7162c0ee976d3f7ee5f5bc",
+        "introduced_blob": "3d92cd521bef2accaba10fee482afe64433055c2",
+        "original_commit": "c68d0e5d6b1cced6d40d5d660d7546a948140ce5",
+        "original_blob": "1cc038dec490e9ebd63d0d0cf38b52e26a517c15",
+        "integration_adjustment": "Canonical OS/PPC/stdio and established __ar header closure; removed inherited decompilation process introduction. Complete function bodies and behavior comments unchanged. Relocate byte-identical internal VM header under include/dolphin and use the explicit canonical header include; complete C bodies unchanged.",
+        "pull_request": 567,
+        "merged_via": 573
+      }
+    },
+    {
+      "source": "src/dolphin/gba/GBA.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80289450",
+        "0x802894A4",
+        "0x80289548",
+        "0x802895D8"
+      ],
+      "provenance": {
+        "commit": "faf63377fbb0917e1f2e2de9d18b572d941a5dd9",
+        "introduced_blob": "bb7e885df1e0027980afe9eae003230521b50b95",
+        "original_commit": "f336c88dcaaf8d76fbf7052c5dc196b514395d05",
+        "original_blob": "52c1c810d93c1e37a65ced32d568550ea30dd34e",
+        "integration_adjustment": "Canonical includes/NULL and existing OS reset BOOL callback/reschedule declarations; removed donor-address process comments.; Keep target-accessed channel fields and opaque unaccessed regions; native channel256/sec64 extents corroborate actual original stride.; GBAInit omits absent Initialized guard and version registration; actual original DSPInit call retained.; Reset record priority127 follows original16-byte record, instead of related donor126.",
+        "pull_request": 567,
+        "merged_via": 573
+      }
+    },
+    {
+      "source": "src/dolphin/gba/GBAXfer.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x802895E8",
+        "0x802896C4",
+        "0x802896F8",
+        "0x80289764",
+        "0x80289888"
+      ],
+      "provenance": {
+        "commit": "d3a64dce78d258477d39706d64e8ecc3fb18e99b",
+        "introduced_blob": "f39357fbc5f17e8ea49c36685b605181a2840bc9",
+        "original_commit": "f336c88dcaaf8d76fbf7052c5dc196b514395d05",
+        "original_blob": "9803d9ec108c0278d1434eec00e644ea72e3f6e3",
+        "integration_adjustment": "Canonical includes/NULL and existing OS reset BOOL callback/reschedule declarations; removed donor-address process comments.; Keep target-accessed channel fields and opaque unaccessed regions; native channel256/sec64 extents corroborate actual original stride.; GBAInit omits absent Initialized guard and version registration; actual original DSPInit call retained.; Reset record priority127 follows original16-byte record, instead of related donor126.",
+        "pull_request": 567,
+        "merged_via": 573
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXTransform.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x802525BC",
+        "0x802528D8",
+        "0x802526A4",
+        "0x80252734",
+        "0x8025278C",
+        "0x802527F8",
+        "0x80252870",
+        "0x802528B0"
+      ],
+      "provenance": {
+        "commit": "a6d9b688dd61fb9d6733b394a8b2a8e63a418b89",
+        "introduced_blob": "a79eee599c69cf14cf12210c6614d4f721b21422",
+        "original_commit": "48a3a568a0c7a90d515e74a4c66668fa66735862",
+        "original_blob": "835144e27205e760b19ff936788c460321153d02",
+        "integration_adjustment": "Canonical headers and genuine release FIFO float macros. Entire inline-assembly helpers and assembly-dependent consumer APIs omitted; eight complete C logical bodies retained in normal file. No interior-body holes or version-splices; full mapped file denominator retained.",
+        "pull_request": 567,
+        "merged_via": 573
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSMemory.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023BA78",
+        "0x8023BAB4"
+      ],
+      "provenance": {
+        "commit": "05ebfb6f188babdd884763a77026f1b7de87fac4",
+        "introduced_blob": "de9e2f48914e4ce200d6e821bd1316c409874285",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "9fed89b6d24102bd0fe636160bcdafb6270e85f8",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Remove unsupported padding[12] declaration; whole initializer retained and honestly partial.",
+        "pull_request": 567,
+        "merged_via": 573
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSContext.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023A588"
+      ],
+      "provenance": {
+        "commit": "05ebfb6f188babdd884763a77026f1b7de87fac4",
+        "introduced_blob": "74afb344dd9de1bc07f04a845639edcd851c7fbc",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "35542bcfc72779991f353aa900bd4c329e951756",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Whole canonical-layout C bodies; original context/FPU assembly stays external.",
+        "pull_request": 567,
+        "merged_via": 573
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSReboot.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023E930"
+      ],
+      "provenance": {
+        "commit": "05ebfb6f188babdd884763a77026f1b7de87fac4",
+        "introduced_blob": "e04e649112208cb895e84d83b1239b32f5596497",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "4fd3bf22e513e6870fd262ccf6257eb8e3529864",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Canonical actual s32 reset argument and32-byte alignment; original Run provider, full DVD stack objects preserved.",
+        "pull_request": 567,
+        "merged_via": 573
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSReset.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023BFBC"
+      ],
+      "provenance": {
+        "commit": "05ebfb6f188babdd884763a77026f1b7de87fac4",
+        "introduced_blob": "2d7c6f1947435f6b8ee5307a0fc8b6e8c6922a40",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "2b87ffd2a286f4009c59907b5828854a674de721",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Remove unsupported unused unk[3] compiler scaffold and fake hardware layouts; reuse canonical MMIO registers.",
+        "pull_request": 567,
+        "merged_via": 573
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSInterrupt.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023B240",
+        "0x8023B25C"
+      ],
+      "provenance": {
+        "commit": "05ebfb6f188babdd884763a77026f1b7de87fac4",
+        "introduced_blob": "2b86552771d8bae52e895085f8045335823c3378",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "12cedc3fabf04c7b11bcf8778b460a3cc0344527",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Whole canonical-layout C bodies; original context/FPU assembly stays external.",
+        "pull_request": 567,
+        "merged_via": 573
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSLink.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023BA60"
+      ],
+      "provenance": {
+        "commit": "1ce575998a77b1d0a8d0f99e8fa03c0a5577c373",
+        "introduced_blob": "2d3fc5154a451ea156b16e512cafa26fc7d1f601",
+        "original_commit": "513cea7088efd02b94f589ba17ffefcfe8f3e78a",
+        "original_blob": "c035ef60e1cbce22d6bd800b9c9f515f7910cf38",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. Add missing prototype for genuine complete module initializer; original lowmemory globals unchanged.",
+        "pull_request": 567,
+        "merged_via": 573
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSAlarm.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80239348",
+        "0x80239394",
+        "0x802393A4",
+        "0x802395F4",
+        "0x8023965C",
+        "0x80239778"
+      ],
+      "provenance": {
+        "commit": "dbe9ae7d3e2795d393dbddc0c7c446394331b003",
+        "introduced_blob": "53bdc5b5de576cab0607b4c867cf008073f0c14f",
+        "original_commit": "58b140374ae59b2135fdcc295d18496e1b76a26c",
+        "original_blob": "ae99ea535a89734d6d26224cbeb48a8736a0f218",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. OSPriv\u2192__os.h and original external exception bridge; retain compiled genuine PeriodicAlarm unassigned.",
+        "pull_request": 567,
+        "merged_via": 573
+      }
+    },
+    {
       "source": "src/game/cu_8018AFF0.cpp",
       "contributors": [
         "adampreddy"
@@ -10775,7 +11083,7 @@
       ],
       "provenance": {
         "pull_request": 570,
-        "merged_via": 570,
+        "merged_via": 573,
         "commit": "8ca2eb1aed483486c478cd1d2ebf0032637e3b79",
         "introduced_blob": "64e2d92f6790fc3fe01c6ac1d2f7d00425093353"
       }
@@ -10790,9 +11098,167 @@
       ],
       "provenance": {
         "pull_request": 571,
-        "merged_via": 571,
+        "merged_via": 573,
         "commit": "db2dc7c503876d274162b028ce183a79513d47d4",
         "introduced_blob": "503d4255b0e47be2d11c341a65e5bc630efeb3c4"
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8010BE54",
+        "0x8010BEA4",
+        "0x8010C864",
+        "0x8010CFD4",
+        "0x8010D6D4",
+        "0x8010DA38",
+        "0x8010EF40",
+        "0x8010FB10",
+        "0x801100A0",
+        "0x801105B0",
+        "0x80110630",
+        "0x80110824",
+        "0x80110EB0",
+        "0x80110EE4",
+        "0x80110FE4",
+        "0x80111090",
+        "0x80111354",
+        "0x80111580",
+        "0x80111964"
+      ],
+      "provenance": {
+        "pull_request": 540,
+        "merged_via": 573,
+        "commit": "e0f8371db8dbd2bf352312949dc553dbe8c5cc43",
+        "introduced_blob": "b148e434c47fce30cecf0de141a415137a11bdbc",
+        "original_commit": "2e522b7ec765df9d1cb99e2fec9239df936f3d3c",
+        "original_blob": "a46529fd3654904589d9635abd7de2c25986bd1a",
+        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved. Reconcile duplicate char/unsigned-char table declarations to one byte-array declaration; accesses do not establish original signedness."
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800F62A4",
+        "0x800F6790",
+        "0x800F67CC",
+        "0x800F67E8",
+        "0x800F93D0",
+        "0x800F9440",
+        "0x800F9AF0",
+        "0x800FA014",
+        "0x800FAD10",
+        "0x800FB768",
+        "0x800FB824",
+        "0x800FB844",
+        "0x800FBAA8",
+        "0x800FC014",
+        "0x800FC070",
+        "0x800FC0C4",
+        "0x800FC128",
+        "0x800FC1DC",
+        "0x800FCC24",
+        "0x800FD3F0",
+        "0x800FD650"
+      ],
+      "provenance": {
+        "pull_request": 556,
+        "merged_via": 573,
+        "commit": "e0f8371db8dbd2bf352312949dc553dbe8c5cc43",
+        "introduced_blob": "b148e434c47fce30cecf0de141a415137a11bdbc",
+        "original_commit": "a10d9ae965815037bad1084e7ca2661469fc3895",
+        "original_blob": "a73f9e0cd1ffdfbaf2ce0e1027def659043c7cbe",
+        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved. Reconcile duplicate char/unsigned-char table declarations to one byte-array declaration; accesses do not establish original signedness."
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80111F80",
+        "0x80112E10",
+        "0x80112E8C",
+        "0x80113088",
+        "0x80113208",
+        "0x801133FC",
+        "0x80113478",
+        "0x801135E4",
+        "0x80113604",
+        "0x80113AAC",
+        "0x80113BCC",
+        "0x801147D4",
+        "0x80114D14",
+        "0x80114D50",
+        "0x80114DD8",
+        "0x80114DE0",
+        "0x80114DF4",
+        "0x80114E7C",
+        "0x801163B4",
+        "0x80116880",
+        "0x80116AB8",
+        "0x801170A0",
+        "0x80118704",
+        "0x8011875C",
+        "0x8011876C",
+        "0x80118778",
+        "0x80118894",
+        "0x80119478",
+        "0x8011AFCC",
+        "0x8011B138"
+      ],
+      "provenance": {
+        "pull_request": 557,
+        "merged_via": 573,
+        "commit": "e0f8371db8dbd2bf352312949dc553dbe8c5cc43",
+        "introduced_blob": "b148e434c47fce30cecf0de141a415137a11bdbc",
+        "original_commit": "d40ff6e9c0cf611b978b9d84cc545d953845b977",
+        "original_blob": "e6c396e9cbd91bc07deab487974253d591d8c909",
+        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved. Reconcile duplicate char/unsigned-char table declarations to one byte-array declaration; accesses do not establish original signedness."
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80104C3C",
+        "0x8010531C",
+        "0x801064A4",
+        "0x80106618",
+        "0x80106794",
+        "0x801067D8",
+        "0x801076F0",
+        "0x8010A07C",
+        "0x8010A1C4",
+        "0x8010A220",
+        "0x8010A254",
+        "0x8010AEA0",
+        "0x8010AEC4",
+        "0x8010B1B4",
+        "0x8010B1FC",
+        "0x8010B5B0",
+        "0x8010B738",
+        "0x8010B924",
+        "0x8010BA00",
+        "0x8010BC48"
+      ],
+      "provenance": {
+        "pull_request": 558,
+        "merged_via": 573,
+        "commit": "e0f8371db8dbd2bf352312949dc553dbe8c5cc43",
+        "introduced_blob": "b148e434c47fce30cecf0de141a415137a11bdbc",
+        "original_commit": "fa2066a7feab31e4fe4bc6a0c3e0d9f24c8d09ab",
+        "original_blob": "471e72470a3864eff0f5f3bf4605dd90da2a9306",
+        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved. Reconcile duplicate char/unsigned-char table declarations to one byte-array declaration; accesses do not establish original signedness."
       }
     },
     {

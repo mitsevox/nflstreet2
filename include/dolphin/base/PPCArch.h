@@ -7,6 +7,11 @@
 extern "C" {
 #endif
 
+u32 PPCMfhid2(void);
+void PPCMthid2(u32 val);
+void PPCMtwpar(u32 val);
+
+
 #define MSR_FP          0x00002000  // floating point available
 #define MSR_FE0         0x00000800  // floating point exception enable
 #define MSR_FE1         0x00000100  // floating point exception enable
@@ -39,6 +44,30 @@ void PPCSync(void);
 void PPCHalt();
 u32 PPCMffpscr();
 void PPCMtfpscr(u32 newFPSCR);
+
+void PPCMtmmcr0(u32 val);
+void PPCMtmmcr1(u32 val);
+void PPCMtpmc1(u32 val);
+void PPCMtpmc2(u32 val);
+void PPCMtpmc3(u32 val);
+void PPCMtpmc4(u32 val);
+void PPCDisableSpeculation(void);
+void PPCSetFpNonIEEEMode(void);
+u32 PPCMfhid0(void);
+u32 PPCMfl2cr(void);
+void PPCMtl2cr(u32 val);
+void PPCMtdec(u32 val);
+#define MSR_IR (1 << (31 - 26))
+#define MSR_DR (1 << (31 - 27))
+#define HID0_ICE (1 << (31 - 16))
+#define HID0_DCE (1 << (31 - 17))
+#define L2CR_L2E (1 << (31 - 0))
+#define L2CR_L2I (1 << (31 - 10))
+#define HID2_DCHERR (1 << (31 - 8))
+#define HID2_DNCERR (1 << (31 - 9))
+#define HID2_DCMERR (1 << (31 - 10))
+#define HID2_DQOERR (1 << (31 - 11))
+#define SRR1_DMA_BIT 0x00200000
 
 #ifdef __cplusplus
 }
