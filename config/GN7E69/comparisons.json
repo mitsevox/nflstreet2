@@ -4972,7 +4972,7 @@
     {
       "source": "src/game/cu_8018B0BC.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open unit row, exact whole-function boundaries and unlinked data slices 0x802A98A0-0x802A98B4, 0x802A9A50-0x802A9DFC and 0x802EADE4-0x802EAE74. The native first two functions and literal prefix are linked; full comparison placements retain its offsets and measure only unlinked ranges. Two wrapper bodies are exact but unlinked; no complete-file claim.",
+      "evidence": "evidence.tsv open unit row, exact whole-function boundaries and unlinked data slices 0x802A98A0-0x802A98B4, 0x802A9A50-0x802A9E74 and 0x802EADE4-0x802EAE74. The native first two functions and literal prefix are linked; full comparison placements retain its offsets and measure only unlinked ranges. Seventeen registered bodies are exact but unlinked; no complete-file claim.",
       "sections": [
         {
           "section": ".text",
@@ -4984,7 +4984,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A98A0",
-          "end": "0x802A9DFC"
+          "end": "0x802A9E74"
         },
         {
           "section": ".data",
@@ -5033,6 +5033,11 @@
           "symbol": "fn_8018BA4C",
           "start": "0x8018BA4C",
           "end": "0x8018BB24"
+        },
+        {
+          "symbol": "fn_8018BB24",
+          "start": "0x8018BB24",
+          "end": "0x8018BD9C"
         },
         {
           "symbol": "fn_8018BD9C",
