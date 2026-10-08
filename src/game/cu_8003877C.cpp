@@ -12,7 +12,6 @@
    stride used by every walk of the array. */
 struct Player_8003877C {
     Object_80039F5C mObject;
-    int mUnknown3092;
     char mUnknown3096[12];
     char mUnknown3108[496];
     char mUnknown3604[404];
