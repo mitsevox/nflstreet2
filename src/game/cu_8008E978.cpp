@@ -127,7 +127,7 @@ struct Item_80097440 {
     unsigned char mUnknown6[2];
     Vector_80039F5C mUnknown8;
     Vector_80039F5C mUnknown14;
-    unsigned char mUnknown20[4];
+    float mUnknown20;
     unsigned short mUnknown24;
     unsigned char mUnknown26[2];
     int mUnknown28;
@@ -187,6 +187,7 @@ int fn_800ABCDC(void);
 void fn_801C1FBC(void *pDest, void *pSrc, unsigned int size);
 void fn_800973AC(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void fn_800975EC(int id, int flag, int index);
+int fn_80097160(Object_80039F5C *p, float value);
 void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int flag);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 
@@ -222,6 +223,7 @@ extern void *lbl_803EABA4;
 extern void *lbl_803EAB90;
 extern Block_80099630 *lbl_803EC92C;
 extern unsigned char lbl_803EA930;
+extern float lbl_803EA934;
 }
 
 extern "C" int fn_80090244(int *p)
@@ -1026,6 +1028,11 @@ extern "C" void fn_80096E1C(void)
     }
 }
 
+extern "C" void fn_80097028(Object_80039F5C *p)
+{
+    fn_80097160(p, lbl_803EA934);
+}
+
 extern "C" int fn_8009740C(int value)
 {
     int result;
@@ -1177,6 +1184,11 @@ extern "C" int fn_8009A1A8(Object_80039F5C *p, int handle, int b, int c, int kin
         result = 1;
     }
     return result;
+}
+
+extern "C" float fn_8009A270(int handle)
+{
+    return lbl_8030C2B8[(handle >> 29) & 3].mUnknown8[handle & 0x1FFFFFFF].mpUnknown4->mUnknown20;
 }
 
 extern "C" int fn_8009A298(int handle)
