@@ -16047,7 +16047,7 @@
     {
       "source": "src/game/cu_80086C10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10–80087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
+      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u201380087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
       "sections": [
         {
           "section": ".text",
@@ -21399,7 +21399,7 @@
     {
       "source": "src/game/cu_8007A3C4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/type/external/source-form/compiler rows at8007A3C4–8007A9E4 and existing exact function extents. Thirteen complete comparison-only bodies. No initialized storage; original-file edges remain open, and neighboring setup/typed-value/update bodies are not claimed. Original bytes stay linked.",
+      "evidence": "evidence.tsv unit/type/external/source-form/compiler rows at8007A3C4\u20138007A9E4 and existing exact function extents. Thirteen complete comparison-only bodies. No initialized storage; original-file edges remain open, and neighboring setup/typed-value/update bodies are not claimed. Original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -21539,7 +21539,7 @@
     {
       "source": "src/game/cu_8007A9E4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/type/external/source-form/compiler records for8007A9E4–8007AEE8. Six full comparison-only bodies; four update bodies retain measured instruction differences. No initialized storage or complete original-file boundary claim; original bytes remain linked.",
+      "evidence": "evidence.tsv unit/type/external/source-form/compiler records for8007A9E4\u20138007AEE8. Six full comparison-only bodies; four update bodies retain measured instruction differences. No initialized storage or complete original-file boundary claim; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
