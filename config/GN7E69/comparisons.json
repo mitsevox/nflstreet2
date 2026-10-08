@@ -6617,7 +6617,7 @@
     {
       "source": "src/game/cu_800EFC68.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional grouping row for src/game/cu_800EFC68.cpp; registered complete target function extents with individual inferred name/source-form/compiler rows. Exact and partial source bodies are measured independently; the registered .rodata slice 0x8029E410-0x8029E4B8 equals its exact evidence data row; all unregistered bodies and other mapped static storage remain original and unmeasured.",
+      "evidence": "Registered whole-function extents and allocated data sections are measured independently under comparisons.json; evidence.tsv records target boundaries, grouping confidence and source-form provenance. Unregistered functions remain unmeasured; comparison-only source stays unlinked.",
       "sections": [
         {
           "section": ".text",
@@ -6630,6 +6630,12 @@
           "placement": ".data3",
           "start": "0x8029E410",
           "end": "0x8029E4B8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E880",
+          "end": "0x8029E8D0"
         }
       ],
       "functions": [
@@ -7712,6 +7718,26 @@
           "symbol": "fn_800F4E14",
           "start": "0x800F4E14",
           "end": "0x800F4E88"
+        },
+        {
+          "symbol": "fn_80104944",
+          "start": "0x80104944",
+          "end": "0x80104A08"
+        },
+        {
+          "symbol": "fn_80104A08",
+          "start": "0x80104A08",
+          "end": "0x80104B24"
+        },
+        {
+          "symbol": "fn_80104B24",
+          "start": "0x80104B24",
+          "end": "0x80104B3C"
+        },
+        {
+          "symbol": "fn_80104B3C",
+          "start": "0x80104B3C",
+          "end": "0x80104C3C"
         }
       ]
     },

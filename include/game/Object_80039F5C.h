@@ -36,7 +36,7 @@ struct Object_800B26B0 {
     float mUnknown36;
     float mUnknown40;
     float mUnknown44;
-    char mUnknown48[4];
+    float mUnknown48;
     float mUnknown52;
     int mUnknown56;
     float mUnknown60;
