@@ -15246,6 +15246,12 @@
           "placement": ".data4",
           "start": "0x802EAE74",
           "end": "0x802EAEF4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018CA80",
+          "end": "0x8018DF98"
         }
       ],
       "functions": [
@@ -15358,6 +15364,11 @@
           "symbol": "fn_8018DF78",
           "start": "0x8018DF78",
           "end": "0x8018DF98"
+        },
+        {
+          "symbol": "fn_8018CA80",
+          "start": "0x8018CA80",
+          "end": "0x8018CB28"
         }
       ]
     },
