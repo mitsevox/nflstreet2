@@ -11742,10 +11742,10 @@
       "provenance": {
         "pull_request": 645,
         "merged_via": 645,
-        "commit": "fcfafdd782bd2bf1cb0e8a025a84c575526f66c0",
-        "introduced_blob": "3aceadaa702c10095a386d8f1acea89a55845e70",
+        "commit": "0d7d3b3d7234c55dbdc1ad5940a26974c80cc0fa",
+        "introduced_blob": "6b844b1cdea1ea75c0b25cb6917eaefa5f7825e2",
         "original_blob": "30dd22f566880ac78f7c832b735abc3baee78e39",
-        "integration_adjustment": "Review fix in PR 645: shared callee declarations, the +1008 word member and a literal 0 store; every credited function remains exact. Preserve the original source commit/blob and contributor credit.",
+        "integration_adjustment": "Canonical shared-layout integration retains reviewed function behavior and byte offsets, uses existing record field names and callee declarations, and preserves all accepted and incoming bodies. Original author commit/blob retained; integrated source is independently reviewed and measured.",
         "original_commit": "e6a7af4166df541ddfec63fe41da6587d9501d82"
       }
     },
@@ -13563,8 +13563,11 @@
       "provenance": {
         "pull_request": 565,
         "merged_via": 565,
-        "commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
-        "introduced_blob": "2dfb3e203b332fa303d05733ea7fd931ea190ddf"
+        "commit": "0d7d3b3d7234c55dbdc1ad5940a26974c80cc0fa",
+        "introduced_blob": "fe268a9ce781083ebcf07de96e277f0cdf673566",
+        "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
+        "original_blob": "2dfb3e203b332fa303d05733ea7fd931ea190ddf",
+        "integration_adjustment": "Canonical shared-layout integration retains reviewed function behavior and byte offsets, uses existing record field names and callee declarations, and preserves all accepted and incoming bodies. Original author commit/blob retained; integrated source is independently reviewed and measured."
       }
     },
     {
@@ -13584,8 +13587,11 @@
       "provenance": {
         "pull_request": 565,
         "merged_via": 565,
-        "commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
-        "introduced_blob": "89db43a99a0a89388f0b8bda7eca15c5890d66fe"
+        "commit": "0d7d3b3d7234c55dbdc1ad5940a26974c80cc0fa",
+        "introduced_blob": "3218c638256cebfa5fb93491551bb92be261a08d",
+        "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
+        "original_blob": "89db43a99a0a89388f0b8bda7eca15c5890d66fe",
+        "integration_adjustment": "Canonical shared-layout integration retains reviewed function behavior and byte offsets, uses existing record field names and callee declarations, and preserves all accepted and incoming bodies. Original author commit/blob retained; integrated source is independently reviewed and measured."
       }
     },
     {
@@ -13607,8 +13613,11 @@
       "provenance": {
         "pull_request": 565,
         "merged_via": 565,
-        "commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
-        "introduced_blob": "99d14a2579e1cf45276a8a91533d460da825f29a"
+        "commit": "0d7d3b3d7234c55dbdc1ad5940a26974c80cc0fa",
+        "introduced_blob": "194c8784f4ee5a714d23e1001ec70ac07eefcf8a",
+        "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
+        "original_blob": "99d14a2579e1cf45276a8a91533d460da825f29a",
+        "integration_adjustment": "Canonical shared-layout integration retains reviewed function behavior and byte offsets, uses existing record field names and callee declarations, and preserves all accepted and incoming bodies. Original author commit/blob retained; integrated source is independently reviewed and measured."
       }
     },
     {
@@ -13702,15 +13711,15 @@
       "provenance": {
         "pull_request": 559,
         "merged_via": 559,
-        "commit": "953a96402e05a6d21bc24252215b61bf63e8bf37",
-        "introduced_blob": "b8e52f5c7bed1fcb294c5a8b62213f6392cd25d1",
+        "commit": "0d7d3b3d7234c55dbdc1ad5940a26974c80cc0fa",
+        "introduced_blob": "b8f4e0e99f7f9049c402bcb986e980a8aa2a5a0a",
         "original_blob": "0f979da160943d5ec87c31c06d35b4e8a4eae317",
-        "integration_adjustment": "Shared Object_80039F5C +1032 layout reconciled with the accepted flat members (block view added); accepted Record_8011F4E0, Record_8011F518 and callee declarations reused in integration.",
+        "integration_adjustment": "Canonical shared-layout integration retains reviewed function behavior and byte offsets, uses existing record field names and callee declarations, and preserves all accepted and incoming bodies. Original author commit/blob retained; integrated source is independently reviewed and measured.",
         "original_commit": "39035f390e8a6911806baea36eed9b8da94606d7"
       }
     },
     {
-      "source": "src/game/cu_800EFC68.cpp",
+      "source": "src/game/cu_800F0960.cpp",
       "contributors": [
         "adampreddy"
       ],
@@ -13743,8 +13752,14 @@
       "provenance": {
         "pull_request": 639,
         "merged_via": 639,
-        "commit": "39b472a0215d492b15c9ef7771137b7fa30f1cf1",
-        "introduced_blob": "f2fb95fa5d267d9112f60eac7c5e46020df47505"
+        "commit": "0d7d3b3d7234c55dbdc1ad5940a26974c80cc0fa",
+        "introduced_blob": "0df18488f0661669d0fe6b7ee3bdd4b5bbe909ea",
+        "fragment_origin": {
+          "source": "src/game/cu_800EFC68.cpp",
+          "commit": "39b472a0215d492b15c9ef7771137b7fa30f1cf1",
+          "blob": "f2fb95fa5d267d9112f60eac7c5e46020df47505"
+        },
+        "integration_adjustment": "The original PR639 EFC bodies are retained in a comparison-only fragment to preserve disjoint compiler literal-pool placement; canonical shared Input byte views and entry fields are used. fragment_origin preserves the original author source pin. This is not recovery of an original translation-unit boundary."
       }
     }
   ],
