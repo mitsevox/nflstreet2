@@ -10043,6 +10043,19 @@
           "end": "0x802A6EC8"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801882B4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801882B4-0x80188A30 (src/game/cu_801882B4.cpp) and its compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801882B4",
+          "end": "0x80188A30"
+        }
+      ]
     }
   ]
 }
