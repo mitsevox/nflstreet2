@@ -342,3 +342,17 @@ void __GXPEInit(void)
     SET_REG_FIELD(0, reg, 1, 1, 1);
     GX_SET_PE_REG(5, reg);
 }
+
+void GXAbortFrame(void) {
+    __GXAbort();
+    __GXCleanGPFifo();
+}
+
+void GXPeekZ(u16 x, u16 y, u32* z) {
+    u32 addr = (u32)OSPhysicalToUncached(0x08000000);
+
+    SET_REG_FIELD(addr, 10, 2, x);
+    SET_REG_FIELD(addr, 10, 12, y);
+    SET_REG_FIELD(addr, 2, 22, 1);
+    *z = *(u32*)addr;
+}
