@@ -1461,7 +1461,7 @@ extern "C" void fn_800A0624(Record_800A0624 *p)
 
 extern "C" void fn_800A0684(Record_800A0684 *p)
 {
-    fn_801D34D0(p, 32, 0, 4);
+    fn_801D34D0(p, sizeof(Record_800A0684), 0, 4);
     fn_8009BD2C(0, &p->mUnknown0);
     p->mUnknown8 = fn_80177FE0();
     p->mUnknown4 = fn_80177F70();
