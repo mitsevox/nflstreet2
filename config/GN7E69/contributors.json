@@ -13888,11 +13888,11 @@
       ],
       "provenance": {
         "pull_request": 645,
-        "merged_via": 645,
-        "commit": "0d7d3b3d7234c55dbdc1ad5940a26974c80cc0fa",
-        "introduced_blob": "6b844b1cdea1ea75c0b25cb6917eaefa5f7825e2",
+        "merged_via": 698,
+        "commit": "9755e173080ab286117cf3478d0afb0755f2d9fb",
+        "introduced_blob": "100b71ad6e8e79159eeff52faacdc438f5aacd3e",
         "original_blob": "30dd22f566880ac78f7c832b735abc3baee78e39",
-        "integration_adjustment": "Canonical shared-layout integration retains reviewed function behavior and byte offsets, uses existing record field names and callee declarations, and preserves all accepted and incoming bodies. Original author commit/blob retained; integrated source is independently reviewed and measured.",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR698 independent delta review and CI.",
         "original_commit": "e6a7af4166df541ddfec63fe41da6587d9501d82"
       }
     },
@@ -13918,7 +13918,7 @@
       ],
       "provenance": {
         "pull_request": 565,
-        "merged_via": 565,
+        "merged_via": 698,
         "commit": "0d7d3b3d7234c55dbdc1ad5940a26974c80cc0fa",
         "introduced_blob": "fe268a9ce781083ebcf07de96e277f0cdf673566",
         "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
@@ -13942,7 +13942,7 @@
       ],
       "provenance": {
         "pull_request": 565,
-        "merged_via": 565,
+        "merged_via": 698,
         "commit": "01fb6b1bcb02f571e3bc20400bde8afaf63fa080",
         "introduced_blob": "c5bd4710e2130d96eae30de27dc679aab491c5a4",
         "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
@@ -13968,7 +13968,7 @@
       ],
       "provenance": {
         "pull_request": 565,
-        "merged_via": 565,
+        "merged_via": 698,
         "commit": "0d7d3b3d7234c55dbdc1ad5940a26974c80cc0fa",
         "introduced_blob": "194c8784f4ee5a714d23e1001ec70ac07eefcf8a",
         "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
@@ -14066,11 +14066,11 @@
       ],
       "provenance": {
         "pull_request": 559,
-        "merged_via": 559,
-        "commit": "0d7d3b3d7234c55dbdc1ad5940a26974c80cc0fa",
-        "introduced_blob": "b8f4e0e99f7f9049c402bcb986e980a8aa2a5a0a",
+        "merged_via": 698,
+        "commit": "9755e173080ab286117cf3478d0afb0755f2d9fb",
+        "introduced_blob": "b14e88f1987366bb16f8a87340b122bad8ec6703",
         "original_blob": "0f979da160943d5ec87c31c06d35b4e8a4eae317",
-        "integration_adjustment": "Canonical shared-layout integration retains reviewed function behavior and byte offsets, uses existing record field names and callee declarations, and preserves all accepted and incoming bodies. Original author commit/blob retained; integrated source is independently reviewed and measured.",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR698 independent delta review and CI.",
         "original_commit": "39035f390e8a6911806baea36eed9b8da94606d7"
       }
     },
@@ -14107,7 +14107,7 @@
       ],
       "provenance": {
         "pull_request": 639,
-        "merged_via": 639,
+        "merged_via": 698,
         "commit": "01fb6b1bcb02f571e3bc20400bde8afaf63fa080",
         "introduced_blob": "44b508ec2f773e4c57c5e0ed4f11d29ad2e82937",
         "fragment_origin": {
