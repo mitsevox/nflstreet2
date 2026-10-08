@@ -11478,6 +11478,62 @@
       }
     },
     {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8009A63C",
+        "0x8009A68C",
+        "0x8009A6D8",
+        "0x8009A8D4",
+        "0x8009ABC0",
+        "0x8009ABC4",
+        "0x8009AD30",
+        "0x8009B1B0",
+        "0x8009B1C4",
+        "0x8009B3A4",
+        "0x8009B3E0",
+        "0x8009B420",
+        "0x8009B448",
+        "0x8009B4C8",
+        "0x8009B5E8",
+        "0x8009B628",
+        "0x8009B698",
+        "0x8009B718",
+        "0x8009B7E0",
+        "0x8009B87C",
+        "0x8009B8C4",
+        "0x8009B910",
+        "0x8009B924",
+        "0x8009B9A8",
+        "0x8009B9BC",
+        "0x8009B9F0",
+        "0x8009BA10",
+        "0x8009BA94",
+        "0x8009BA9C",
+        "0x8009BB50",
+        "0x8009BBD8",
+        "0x8009BC30",
+        "0x8009BCE8",
+        "0x8009BD2C",
+        "0x8009BD48",
+        "0x8009CC28",
+        "0x8009D00C",
+        "0x8009D338",
+        "0x8009D348",
+        "0x8009D360",
+        "0x8009D3D8",
+        "0x8009D3F0"
+      ],
+      "provenance": {
+        "pull_request": 596,
+        "merged_via": 596,
+        "commit": "d718564ef9961247dc1ea8636f2ce1625fc3c101",
+        "introduced_blob": "ced6b291f9194415bcb577ddb6eb776981267a29"
+      }
+    },
+    {
       "source": "src/game/cu_8018B0BC.cpp",
       "contributors": [
         "adampreddy"
