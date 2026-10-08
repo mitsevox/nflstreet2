@@ -1088,9 +1088,7 @@ extern "C" void fn_800D44A8(float a) {
         fn_800B1698(fn_80137AD0(fn_801374BC()), fn_8017876C());
     }
     if (fn_80177C38() == 0) {
-        int flag = a < fn_80177FE0().mY && fn_80177F70() != 6;
-
-        if (flag != 0) {
+        if (a < fn_80177FE0().mY && fn_80177F70() != 6) {
             if (fn_8017876C() != 0) {
                 fn_800D0D48(74);
                 if (fn_800D3C80() != 0) {
@@ -1119,19 +1117,15 @@ extern "C" void fn_800D45F0(Object_80039F5C *p, float a) {
     if (p != 0) {
         fn_800D3850(0);
         if (fn_80177C38() == 0) {
-            int flag = fn_801650DC(fn_8016871C(fn_80178348())) != 0 && fn_801783AC(0) == 0 &&
-                       a <= fn_80177FE0().mY && (p->mFlags & 0x10000000);
-
-            if (flag != 0) {
+            if (fn_801650DC(fn_8016871C(fn_80178348())) != 0 && fn_801783AC(0) == 0 &&
+                a <= fn_80177FE0().mY && (p->mFlags & 0x10000000)) {
                 if (fn_800D3C80() != 0) {
                     lbl_803EACD4->mUnknown1F05 = 1;
                 } else {
                     lbl_803EACD4->mUnknown1F04 = 1;
                 }
             } else {
-                int other = a < fn_80177FE0().mY && fn_80177F70() != 6;
-
-                if (other != 0) {
+                if (a < fn_80177FE0().mY && fn_80177F70() != 6) {
                     if (fn_800D3C80() != 0) {
                         lbl_803EACD4->mUnknown1F08 = 1;
                     } else {
