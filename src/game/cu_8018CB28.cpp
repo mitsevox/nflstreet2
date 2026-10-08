@@ -35,6 +35,9 @@ void fn_8015F638(int, int, int, int *);
 void fn_8016139C(int, int *, int *);
 int fn_8016128C(int);
 void fn_8018C48C(int);
+void fn_8018C344(int database, int firstTable, int secondTable,
+                 int *pFirstCopy, int *pSecondCopy);
+void fn_8018C3EC(int firstTable, int secondTable);
 int fn_80186F7C(unsigned char);
 int fn_80186B38(int);
 int fn_8018F228(int);
@@ -374,5 +377,28 @@ void fn_8018DD4C(int team, int player, int useDefault)
     fn_801FCE10(0, "use 'TATS' update \x8c set 'DIGP' = \x82 and 'DIOP' = \x82 and 'ITGT' = \x82 and 'DBTP' = \x82 and 'DFTP' = \x82 and 'CDHP' = \x82 and 'DIGT' = \x82\n", table, id, player, team, 0, 0, 0, team);
     fn_801FCE10(0, "use 'TATS' insert into 'YALP' * select * from \x8c\n", table);
     fn_801F967C(0x54415453, table);
+}
+void fn_8018DE40(int *pFirstCopy, int *pSecondCopy, int database)
+{
+    fn_8018C344(database, 0x4D545243, 0x59505243, pFirstCopy, pSecondCopy);
+}
+void fn_8018DE7C(int firstTable, int secondTable)
+{
+    fn_8018C3EC(firstTable, secondTable);
+}
+void fn_8018DE9C(int first, int second)
+{
+    int handle = fn_8022F3D4(fn_8022F4BC());
+    fn_8018CA80(handle);
+    fn_801FCE10(0, "use \x8c insert into \x8c.'MTRC' * select * from \x8c\n", 0x54415453, handle, first);
+    fn_801FCE10(0, "use \x8c insert into \x8c.'YPRC' * select * from \x8c\n", 0x54415453, handle, second);
+}
+void fn_8018DF20(Object_8007A334 *pCursor, int index)
+{
+    fn_8007A334(pCursor, 0x59505243, 0x44494750, 0, 0, fn_8022F3D4(fn_8022F358(index)));
+}
+void fn_8018DF78(Object_8007A334 *pCursor)
+{
+    fn_8007A3C4(pCursor);
 }
 }
