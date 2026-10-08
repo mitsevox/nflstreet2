@@ -11631,7 +11631,7 @@
       ],
       "provenance": {
         "pull_request": 581,
-        "merged_via": 581,
+        "merged_via": 608,
         "commit": "c1faf185fcbf2a9e6c3ee7d4f1c669e1dfe6b1cb",
         "introduced_blob": "b694f5043e12fd7d6ea773f9a49e6d4b2d77c1a8",
         "original_commit": "3d2b9cc38b6908a39c3a1d86f560c7b83fb9eee1",
@@ -11648,7 +11648,7 @@
       ],
       "provenance": {
         "pull_request": 581,
-        "merged_via": 581,
+        "merged_via": 608,
         "commit": "2d767d251b6571455d7b2a781763f15c15135f50",
         "introduced_blob": "ea7b8bda0e13126a69b6140b3f37aa252a422388",
         "original_commit": "013d5f30feffe2c2e66874ce36ba1837e02dd10b",
@@ -11667,7 +11667,7 @@
       ],
       "provenance": {
         "pull_request": 581,
-        "merged_via": 581,
+        "merged_via": 608,
         "commit": "b1efcdf41e931436f6940ac4a289e98a97e0120b",
         "introduced_blob": "cdbe04c50c71ff750433b5ae79b62e2df9449a6f",
         "original_commit": "013d5f30feffe2c2e66874ce36ba1837e02dd10b",
@@ -11691,7 +11691,7 @@
         "original_blob": "c8d43e8a3d71c04c2b74a187d9c1b7cd4bdda646",
         "integration_adjustment": "Complete unchanged pinned TP donor forms are appended under fixed DECOMP_COMPARE using accepted canonical macros; move the genuine void GXTexModeSync(void) declaration from the source guard into canonical GXManage.h. No body expressions changed. Preserve all previous source credit; originals remain linked. Combine the disjoint independently reviewed GXMisc additions from PRs 581 and 595 without changing submitted function bodies; preserve both original donor/source proofs and all existing source attribution.",
         "pull_request": 595,
-        "merged_via": 595
+        "merged_via": 608
       }
     },
     {
@@ -11706,7 +11706,7 @@
       ],
       "provenance": {
         "pull_request": 566,
-        "merged_via": 566,
+        "merged_via": 608,
         "commit": "f012deacb4afe7a35d88c4ff34075206bbfa23b2",
         "introduced_blob": "16e642fbc1eaa7dc17ffb83bfb2249ba97badab2"
       }
@@ -11740,7 +11740,7 @@
       ],
       "provenance": {
         "pull_request": 566,
-        "merged_via": 566,
+        "merged_via": 608,
         "commit": "4b5e5f85e99b25a0c628cd797d1cc19874a33331",
         "introduced_blob": "b31c3458eb961f8ff1fa1be6b2273e6c1ac6ac05"
       }
