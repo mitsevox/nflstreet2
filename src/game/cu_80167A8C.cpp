@@ -32,7 +32,7 @@ void fn_80087CFC(Object_8007A334 *pCursor);
 int fn_80087D1C(Object_8007A334 *pCursor, int key);
 unsigned char fn_80087DA4(Object_8007A334 *pCursor, int column);
 unsigned char fn_8008973C(int index);
-int fn_800B508C(unsigned char index);
+void fn_800B508C(unsigned char index);
 int fn_800B65A0(int unknown);
 int fn_800BA6F8(void);
 QueryCursor fn_800C0750(unsigned char index, unsigned short *pValues);
