@@ -21155,7 +21155,7 @@
     {
       "source": "src/dolphin/vmbase/VMBase.c",
       "profile": "dolphin_release",
-      "evidence": "Frozen scope whole VMBase mapped unit; six complete original MVP C bodies. Actual target pointer slots803ED268/26C/270/274 independently read/written by exact whole bodies and accepted VM caller anchors. Full native16-byte allocation measured; other original unit functions and storage retained, no ASM/stub source imported. Pointer declarations use target-supported native allocation order, not donor original declaration order.",
+      "evidence": "Six existing complete C helpers retain their exact comparisons; fifteen additional complete donor-guided C bodies from MVP 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 src/dolphin/vmbase/VMBase.c remain measured partials under the unchanged dolphin_release profile. Target reverse-table arena increment is0x4000. Native20-byte .sbss consists of four established pointer cells16 bytes plus the accessed32-bit initialization guard4 bytes; original declaration order is not uniquely established. NOBITS allocation gives no initialized-data or linked credit. Four original-provider helpers remain external and receive no source credit; original instructions remain linked for all comparison-only bodies.",
       "sections": [
         {
           "section": ".text",
@@ -21167,7 +21167,7 @@
           "section": ".sbss",
           "placement": ".sbss",
           "start": "0x803ED268",
-          "end": "0x803ED278"
+          "end": "0x803ED27C"
         }
       ],
       "functions": [
@@ -21200,6 +21200,81 @@
           "symbol": "__VMBASEGetPTE",
           "start": "0x80245EC4",
           "end": "0x80245EDC"
+        },
+        {
+          "symbol": "__VMBASEISIServiceException",
+          "start": "0x80246434",
+          "end": "0x8024648C"
+        },
+        {
+          "symbol": "__VMBASEDSIServiceException",
+          "start": "0x80246290",
+          "end": "0x802462F4"
+        },
+        {
+          "symbol": "__VMBASEInvalidateReversePageTable",
+          "start": "0x80245E4C",
+          "end": "0x80245EC4"
+        },
+        {
+          "symbol": "__VMBASEInvalidateLockedPageTable",
+          "start": "0x80245D74",
+          "end": "0x80245E4C"
+        },
+        {
+          "symbol": "__VMBASEInvalidatePageTable",
+          "start": "0x80245C1C",
+          "end": "0x80245D74"
+        },
+        {
+          "symbol": "__VMBASEInitReversePageTable",
+          "start": "0x80245BEC",
+          "end": "0x80245C1C"
+        },
+        {
+          "symbol": "__VMBASEInitLockedPageTable",
+          "start": "0x80245BBC",
+          "end": "0x80245BEC"
+        },
+        {
+          "symbol": "__VMBASEInitPageTable",
+          "start": "0x80245B80",
+          "end": "0x80245BBC"
+        },
+        {
+          "symbol": "VMBASESetPageReferenced",
+          "start": "0x80245A84",
+          "end": "0x80245B14"
+        },
+        {
+          "symbol": "__VMBASEIsPageChanged",
+          "start": "0x80245A5C",
+          "end": "0x80245A84"
+        },
+        {
+          "symbol": "__VMBASEIsPageReferenced",
+          "start": "0x80245A34",
+          "end": "0x80245A5C"
+        },
+        {
+          "symbol": "__VMBASEIsPageValid",
+          "start": "0x80245A0C",
+          "end": "0x80245A34"
+        },
+        {
+          "symbol": "VMBASEClearPageTableEntry",
+          "start": "0x80245980",
+          "end": "0x80245A0C"
+        },
+        {
+          "symbol": "VMBASESetPageTableEntry",
+          "start": "0x802458EC",
+          "end": "0x80245980"
+        },
+        {
+          "symbol": "VMBASEInit",
+          "start": "0x80245820",
+          "end": "0x802458EC"
         }
       ]
     },
