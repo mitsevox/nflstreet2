@@ -6531,6 +6531,28 @@
       }
     },
     {
+      "source": "src/game/cu_800DBB74.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DBB74",
+        "0x800DBC4C",
+        "0x800DC080",
+        "0x800DC21C",
+        "0x800DC36C"
+      ],
+      "provenance": {
+        "pull_request": 551,
+        "merged_via": 551,
+        "commit": "cca96fe53d46c81a79a9b8eddf80c913b80086d3",
+        "introduced_blob": "ccfc705243ac2aeafcf5b810fc92c4b89ce86851",
+        "original_blob": "1f2f9a1525675ba90198d5095c5d6af29216d7eb",
+        "integration_adjustment": "Reviewed corrections in PR551 share the fn_801BA2A8 declaration; the merge with main reconciles the accesses into the accepted Record_800D81C8 (word +0xC added), Key_80110630, mUnknown2913 and Block_801BE60C views (word members overlapping its accepted byte and float members). Function bodies and objects unchanged.",
+        "original_commit": "306d453dc1aa129686ff0543bd279b9cedd3dc2e"
+      }
+    },
+    {
       "source": "src/game/cu_800D949C.cpp",
       "contributors": [
         "adampreddy"
