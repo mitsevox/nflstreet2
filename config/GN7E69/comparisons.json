@@ -13821,13 +13821,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8018CB28",
-          "end": "0x8018DE40"
+          "end": "0x8018DF98"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802AA3C4",
-          "end": "0x802AAD2C"
+          "end": "0x802AAD8C"
         },
         {
           "section": ".data",
@@ -13921,6 +13921,31 @@
           "symbol": "fn_8018DD4C",
           "start": "0x8018DD4C",
           "end": "0x8018DE40"
+        },
+        {
+          "symbol": "fn_8018DE40",
+          "start": "0x8018DE40",
+          "end": "0x8018DE7C"
+        },
+        {
+          "symbol": "fn_8018DE7C",
+          "start": "0x8018DE7C",
+          "end": "0x8018DE9C"
+        },
+        {
+          "symbol": "fn_8018DE9C",
+          "start": "0x8018DE9C",
+          "end": "0x8018DF20"
+        },
+        {
+          "symbol": "fn_8018DF20",
+          "start": "0x8018DF20",
+          "end": "0x8018DF78"
+        },
+        {
+          "symbol": "fn_8018DF78",
+          "start": "0x8018DF78",
+          "end": "0x8018DF98"
         }
       ]
     },
