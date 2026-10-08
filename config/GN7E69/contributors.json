@@ -11448,6 +11448,73 @@
       }
     },
     {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800A2624",
+        "0x800A2760",
+        "0x800A29AC",
+        "0x800A2F3C",
+        "0x800A30B8",
+        "0x800A3120",
+        "0x800A32B4",
+        "0x800A32C0",
+        "0x800A32CC",
+        "0x800A32D8",
+        "0x800A3360",
+        "0x800A336C",
+        "0x800A3374",
+        "0x800A3380",
+        "0x800A338C",
+        "0x800A3398",
+        "0x800A33A4",
+        "0x800A33B0",
+        "0x800A33B8",
+        "0x800A33C4",
+        "0x800A33D0",
+        "0x800A33DC",
+        "0x800A33E8",
+        "0x800A33F4",
+        "0x800A3400",
+        "0x800A3410",
+        "0x800A3420",
+        "0x800A342C",
+        "0x800A3438",
+        "0x800A3444",
+        "0x800A3450",
+        "0x800A34B0",
+        "0x800A34BC",
+        "0x800A34C8",
+        "0x800A34E0",
+        "0x800A34EC",
+        "0x800A34F8",
+        "0x800A350C",
+        "0x800A3B58",
+        "0x800A3D68",
+        "0x800A3DC4",
+        "0x800A432C",
+        "0x800A4950",
+        "0x800A4E64",
+        "0x800A506C",
+        "0x800A50B8",
+        "0x800A55C0",
+        "0x800A5A60",
+        "0x800A5A68",
+        "0x800A5A88"
+      ],
+      "provenance": {
+        "pull_request": 603,
+        "merged_via": 649,
+        "commit": "1990ffbd8c629318a0f37f44d687b1352ac2aa5c",
+        "introduced_blob": "6d50f40690cc842c41cabbad9035a9210090d8fd",
+        "original_commit": "6cd8ebca15530339cdc56f21f11d07ceadf7db16",
+        "original_blob": "1fa73733c5448ae6ae1be2aa9f20d1a90b49a17a",
+        "integration_adjustment": "Combined the two reviewed, disjoint appended source sections and their canonical includes in src/game/cu_8008E978.cpp; function bodies and existing baseline source are preserved unchanged. Original contributor and source revision are retained."
+      }
+    },
+    {
       "source": "src/game/cu_8018B0BC.cpp",
       "contributors": [
         "adampreddy"
@@ -12095,6 +12162,91 @@
         "merged_via": 642,
         "commit": "cf1d65c4c95b12323dd18d394165d4dc48172959",
         "introduced_blob": "5c7581d617b19ae0b278859661969aaec22e51fc"
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800C46B0",
+        "0x800C471C",
+        "0x800C478C",
+        "0x800C47C4",
+        "0x800C48CC",
+        "0x800C48E4",
+        "0x800C48FC",
+        "0x800C4914",
+        "0x800C495C",
+        "0x800C49A4",
+        "0x800C4A70",
+        "0x800C4E18",
+        "0x800C4E30",
+        "0x800C51DC",
+        "0x800C53D8",
+        "0x800C561C",
+        "0x800C5B20",
+        "0x800C5F80",
+        "0x800C6640",
+        "0x800C6738",
+        "0x800C68B8",
+        "0x800C769C",
+        "0x800C76C0",
+        "0x800C76D8",
+        "0x800C7708",
+        "0x800C7720",
+        "0x800C8694",
+        "0x800C8704",
+        "0x800C8744",
+        "0x800C8BBC",
+        "0x800C8CE8",
+        "0x800C9070",
+        "0x800C9094",
+        "0x800C90BC",
+        "0x800C9108",
+        "0x800C91B0",
+        "0x800C91F0",
+        "0x800C92CC",
+        "0x800C94BC",
+        "0x800C9508",
+        "0x800C9554",
+        "0x800C955C",
+        "0x800C9570",
+        "0x800C9A80",
+        "0x800C9B78",
+        "0x800C9BB0",
+        "0x800C9D6C",
+        "0x800C9E40",
+        "0x800CA228",
+        "0x800CA248",
+        "0x800CA288",
+        "0x800CA3C4",
+        "0x800CA4A8"
+      ],
+      "provenance": {
+        "pull_request": 607,
+        "merged_via": 649,
+        "commit": "1990ffbd8c629318a0f37f44d687b1352ac2aa5c",
+        "introduced_blob": "6d50f40690cc842c41cabbad9035a9210090d8fd",
+        "original_commit": "7cc8ebbfea56dd12c33f38efad7fb4ea163b2214",
+        "original_blob": "0e5834f0187d7395a12429b8b7911dce65cc8872",
+        "integration_adjustment": "Combined the two reviewed, disjoint appended source sections and their canonical includes in src/game/cu_8008E978.cpp; function bodies and existing baseline source are preserved unchanged. Original contributor and source revision are retained."
+      }
+    },
+    {
+      "source": "src/game/cu_8018CB28.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8018CA80"
+      ],
+      "provenance": {
+        "pull_request": 641,
+        "merged_via": 649,
+        "commit": "bc6663d03a8a1030100322bfb55d619d42acf0e6",
+        "introduced_blob": "420ae5d5857b4391f5c72562082eb91275f4f339"
       }
     },
     {
