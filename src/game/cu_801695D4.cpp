@@ -56,6 +56,8 @@ void fn_801696C8(unsigned char *p, short *pRecord, Callback_80169DF8 callback)
     unsigned char depth = 0;
 
     do {
+        unsigned char *base;
+        int offset, i, a, b;
         unsigned char instruction = *p++;
         int count = instruction & 15;
         switch (instruction >> 4) {
@@ -68,23 +70,21 @@ void fn_801696C8(unsigned char *p, short *pRecord, Callback_80169DF8 callback)
             while (saved <= p) {
                 if (depth == 0) {
                     result = 3;
-                    break;
+                    goto next;
                 }
                 saved = stack[--depth];
             }
-            if (result != 0)
-                break;
             p = saved - 1;
             break;
         }
         case 1: {
-            unsigned char *base = p;
-            int offset = (short)(*p++ << 8);
+            base = p;
+            offset = (short)(*p++ << 8);
             offset |= *p++;
-            for (int i = count; i > 0; --i) {
-                int a = fn_801695D4(&p, pRecord);
+            for (i = count; i > 0; --i) {
+                a = fn_801695D4(&p, pRecord);
                 unsigned char comparison = *p++;
-                int b = fn_801695D4(&p, pRecord);
+                b = fn_801695D4(&p, pRecord);
                 if (!lbl_802A4BF8[comparison](a, b)) {
                     p = base + offset - 1;
                     break;
@@ -93,17 +93,15 @@ void fn_801696C8(unsigned char *p, short *pRecord, Callback_80169DF8 callback)
             break;
         }
         case 2: {
-            unsigned char *base = p;
-            int a = fn_801695D4(&p, pRecord);
+            base = p;
+            a = fn_801695D4(&p, pRecord);
             stack[depth] = base + (*p++ << 8);
             stack[depth] += *p++;
             ++depth;
             stack[depth] = base + (*p++ << 8);
             stack[depth] += *p++;
-            int i;
             for (i = 0; i < count; ++i) {
                 base = p++;
-                int b;
                 if ((*p & 0xC0) == 0x40 || (*p & 0xC0) == 0xC0) {
                     pRecord[17] = a;
                     if (callback(11, pRecord, *p))
@@ -114,7 +112,7 @@ void fn_801696C8(unsigned char *p, short *pRecord, Callback_80169DF8 callback)
                 } else {
                     b = fn_801695D4(&p, pRecord);
                 }
-                int offset = (short)(*p++ << 8);
+                offset = (short)(*p++ << 8);
                 offset |= *p++;
                 if (a == b)
                     break;
@@ -149,6 +147,8 @@ void fn_801696C8(unsigned char *p, short *pRecord, Callback_80169DF8 callback)
             pRecord[18] += *p++ << 8;
             break;
         }
+next:
+        ;
     } while (result == 0);
     pRecord[17] = result;
 }
