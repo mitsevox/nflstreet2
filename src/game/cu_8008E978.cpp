@@ -8,9 +8,9 @@
 #include "game/cu_80064864.h"
 #include "game/cu_8008E978.h"
 #include "game/cu_80136B1C.h"
-#include "game/fn_80177FE0.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800AD9B4.h"
+#include "game/fn_80177FE0.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EF390.h"
@@ -1458,9 +1458,9 @@ extern "C" int fn_800A937C(void)
     return lbl_803EAA84;
 }
 
-extern "C" int fn_800A9648(void)
+extern "C" void fn_800A9648(void)
 {
-    return fn_800927BC((unsigned char)lbl_8030F42C.mUnknown14[lbl_8030F42C.mUnknownC]);
+    fn_800927BC((unsigned char)lbl_8030F42C.mUnknown14[lbl_8030F42C.mUnknownC]);
 }
 
 extern "C" int fn_800A9680(void)
