@@ -2,6 +2,7 @@
 #include "engine/cu_80227F14.h"
 #include "game/cu_80026BB0.h"
 #include "game/Class_801CBC50.h"
+#include "game/Class_80297BF8.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_8017F584.h"
@@ -21,7 +22,7 @@ extern char lbl_803072C4[];
 extern float lbl_803EA2C4;
 extern void *lbl_803EA368;
 extern void *lbl_803EAA8C;
-extern void *lbl_803EAB90;
+extern Class_80297BF8 *lbl_803EAB90;
 extern void *lbl_803EB688;
 extern void *lbl_803EB690;
 
