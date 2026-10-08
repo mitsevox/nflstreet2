@@ -11301,7 +11301,7 @@
       ],
       "provenance": {
         "pull_request": 548,
-        "merged_via": 548,
+        "merged_via": 578,
         "commit": "ca89e6fd01ef78b313d10841c1dea8cb646ad8f1",
         "introduced_blob": "bf9aaa788f936a42e1cd46fe7a3a91ddfb71f4df"
       }
@@ -11361,9 +11361,12 @@
       ],
       "provenance": {
         "pull_request": 552,
-        "merged_via": 552,
-        "commit": "5527c74477d2783dd64a109e935d1c9009f5e2ff",
-        "introduced_blob": "8f86bdcfe92168a2e2428d676f2f57be99f663a8"
+        "merged_via": 578,
+        "commit": "5f4842715a9429381eba6aacd4c2705a6fbde01d",
+        "introduced_blob": "f85eda6a86be2e09c308738286d03450e6fd04f6",
+        "original_commit": "5527c74477d2783dd64a109e935d1c9009f5e2ff",
+        "original_blob": "8f86bdcfe92168a2e2428d676f2f57be99f663a8",
+        "integration_adjustment": "Combine reviewed disjoint function bodies with accepted source, preserving original contributor, function addresses and source blob. Retain the accepted fn_801250B8 player-pointer declaration and type only fn_800F2828 first parameter as Object_80039F5C*, supported by caller 0x8012E670 player accesses. Preserve every accepted body and all submitted executable statements."
       }
     },
     {
@@ -11386,9 +11389,12 @@
       ],
       "provenance": {
         "pull_request": 545,
-        "merged_via": 545,
-        "commit": "872295d85e19ba329d4c88763f29b8d3efcee6c4",
-        "introduced_blob": "c4163e73e8baa72d9470e1414e3f540eba2808a6"
+        "merged_via": 578,
+        "commit": "5f4842715a9429381eba6aacd4c2705a6fbde01d",
+        "introduced_blob": "9e4c97d4106e825b3c1db0fa478db25c1abf6445",
+        "original_commit": "872295d85e19ba329d4c88763f29b8d3efcee6c4",
+        "original_blob": "c4163e73e8baa72d9470e1414e3f540eba2808a6",
+        "integration_adjustment": "Combine reviewed disjoint function bodies with accepted source, preserving original contributor, function addresses and source blob. Access the existing player +1008 unsigned byte through canonical Key_80110630::mUnknown0; preserve all accepted body definitions and shared-field offsets."
       }
     }
   ],
