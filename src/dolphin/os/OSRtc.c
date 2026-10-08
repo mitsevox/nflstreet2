@@ -507,7 +507,7 @@ void OSSetGbsMode(u16 mode) {
     sram = __OSLockSramEx();
 
     if (mode == sram->gbs) {
-        __OSUnlockSramEx(FALSE);
+        __OSUnlockSram(FALSE);
         return;
     }
     sram->gbs = mode;

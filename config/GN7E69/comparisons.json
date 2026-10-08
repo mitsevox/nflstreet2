@@ -16541,7 +16541,7 @@
     {
       "source": "src/dolphin/gx/GXMisc.c",
       "profile": "dolphin_release",
-      "evidence": "Existing BFBB complete source and18 exact target bodies1576 preserved. OOT6e449e1748a02c12b4cb218453c529175b85364a CE variant corroborates same abort wait gate/counter/timer/pulse and state; complete AbortFrame/PeekZ added, unchanged existing SetDrawDone/WaitDrawDone emitted for comparison.22target bodies2208bytes measured within full2280 provisional ownership; two36byte ranges remain original. No whole-file completion or promotion.",
+      "evidence": "evidence.tsv independently reviewed BFBB, OOT GameCube and TP source forms; combined registered complete target extents retain unchanged compiler settings, original source attribution and provisional ownership. All registered exact and partial measurements remain distinct from the accepted linked output; no whole-file promotion.",
       "sections": [
         {
           "section": ".text",
@@ -16666,6 +16666,16 @@
           "symbol": "GXPeekZ",
           "start": "0x8024E660",
           "end": "0x8024E684"
+        },
+        {
+          "symbol": "GXTexModeSync",
+          "start": "0x8024E4F4",
+          "end": "0x8024E518"
+        },
+        {
+          "symbol": "GXPeekARGB",
+          "start": "0x8024E63C",
+          "end": "0x8024E660"
         }
       ],
       "discarded": [

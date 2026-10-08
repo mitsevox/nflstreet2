@@ -1916,7 +1916,7 @@
       "name": "src/dolphin/gx/GXMisc.c",
       "source": "src/dolphin/gx/GXMisc.c",
       "library": "GX",
-      "evidence": "Complete pinned BFBB source/current canonical layouts establish18 exact comparison-only target bodies1576 and native20-byte callback/draw-finish SBSS. Six other original functions in full2280 provisional file extent remain unrecovered; donor draw-sync write/read bodies are preserved unassigned. No invented GXPoke split or source splice.",
+      "evidence": "Combined independently reviewed BFBB, OOT GameCube and TP C forms register 24 complete target functions spanning 2280 code bytes in the retained provisional grouping. Original-file ownership remains unresolved; unassigned donor APIs receive no credit. Accepted ordinary output, native 20-byte callback/draw-finish SBSS allocation, compiler profile and existing source attribution are preserved. No whole-file promotion or initialized-storage credit is claimed by this code coverage.",
       "sections": [
         {
           "section": ".text",
@@ -1924,7 +1924,7 @@
           "end": "0x8024E888",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned BFBB source/current canonical layouts establish18 exact comparison-only target bodies1576 and native20-byte callback/draw-finish SBSS. Six other original functions in full2280 provisional file extent remain unrecovered; donor draw-sync write/read bodies are preserved unassigned. No invented GXPoke split or source splice."
+          "evidence": "Combined independently reviewed BFBB, OOT GameCube and TP C forms register 24 complete target functions spanning 2280 code bytes in the retained provisional grouping. Original-file ownership remains unresolved; unassigned donor APIs receive no credit. Accepted ordinary output, native 20-byte callback/draw-finish SBSS allocation, compiler profile and existing source attribution are preserved. No whole-file promotion or initialized-storage credit is claimed by this code coverage."
         },
         {
           "section": ".sbss",

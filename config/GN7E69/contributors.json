@@ -10362,8 +10362,11 @@
       "provenance": {
         "pull_request": 505,
         "merged_via": 509,
-        "commit": "3e1ad873db22c1dc2091ea96dfb5102e1e8348fa",
-        "introduced_blob": "df91d3038c52b1e7edf817697fc8283520a7d543"
+        "commit": "3e2b4979302da8acbf60d1f166990e251d4ff67f",
+        "introduced_blob": "c90fe1d83356ef6e4f14f2e96ca2455ed17657a5",
+        "original_commit": "3e1ad873db22c1dc2091ea96dfb5102e1e8348fa",
+        "original_blob": "df91d3038c52b1e7edf817697fc8283520a7d543",
+        "integration_adjustment": "Recover the target-supported noncommitting __OSUnlockSram(FALSE) call in the unchanged-mode OSSetGbsMode branch; preserve original PR505 body attribution and all prior exact functions. CommitFALSE ignores the offset, so runtime behavior is equivalent; the complete setter remains partial due its stack frame. No padding, flags, declarations or ranges changed."
       }
     },
     {
@@ -11670,6 +11673,25 @@
         "original_commit": "013d5f30feffe2c2e66874ce36ba1837e02dd10b",
         "original_blob": "1bb7829ca7c355a0383040f6e4a454df43c58071",
         "integration_adjustment": "Complete original abort-frame and depth-query bodies retain expressions under the fixed comparison guard; canonical register macros use their existing diagnostic-line parameter. Existing draw-completion body attribution remains PR518."
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXMisc.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024E4F4",
+        "0x8024E63C"
+      ],
+      "provenance": {
+        "commit": "540f696914c6831a8ced6b19115b856d1def733d",
+        "introduced_blob": "d67051eb61414ba0a9601c3008aa9552d7cca330",
+        "original_commit": "e9c170a8f68e4a7c1f53057ae1b6522237d373a9",
+        "original_blob": "c8d43e8a3d71c04c2b74a187d9c1b7cd4bdda646",
+        "integration_adjustment": "Complete unchanged pinned TP donor forms are appended under fixed DECOMP_COMPARE using accepted canonical macros; move the genuine void GXTexModeSync(void) declaration from the source guard into canonical GXManage.h. No body expressions changed. Preserve all previous source credit; originals remain linked.",
+        "pull_request": 595,
+        "merged_via": 595
       }
     }
   ],
