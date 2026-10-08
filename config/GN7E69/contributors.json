@@ -11132,11 +11132,11 @@
       "provenance": {
         "pull_request": 540,
         "merged_via": 573,
-        "commit": "c441fd4b7a82c21eadd89ad8671d02f3b6e35af2",
-        "introduced_blob": "4169487c864e5ec781e162cc18c228bfd72ce66c",
+        "commit": "e0f8371db8dbd2bf352312949dc553dbe8c5cc43",
+        "introduced_blob": "b148e434c47fce30cecf0de141a415137a11bdbc",
         "original_commit": "2e522b7ec765df9d1cb99e2fec9239df936f3d3c",
         "original_blob": "a46529fd3654904589d9635abd7de2c25986bd1a",
-        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved."
+        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved. Reconcile duplicate char/unsigned-char table declarations to one byte-array declaration; accesses do not establish original signedness."
       }
     },
     {
@@ -11170,11 +11170,11 @@
       "provenance": {
         "pull_request": 556,
         "merged_via": 573,
-        "commit": "c441fd4b7a82c21eadd89ad8671d02f3b6e35af2",
-        "introduced_blob": "4169487c864e5ec781e162cc18c228bfd72ce66c",
+        "commit": "e0f8371db8dbd2bf352312949dc553dbe8c5cc43",
+        "introduced_blob": "b148e434c47fce30cecf0de141a415137a11bdbc",
         "original_commit": "a10d9ae965815037bad1084e7ca2661469fc3895",
         "original_blob": "a73f9e0cd1ffdfbaf2ce0e1027def659043c7cbe",
-        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved."
+        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved. Reconcile duplicate char/unsigned-char table declarations to one byte-array declaration; accesses do not establish original signedness."
       }
     },
     {
@@ -11217,11 +11217,11 @@
       "provenance": {
         "pull_request": 557,
         "merged_via": 573,
-        "commit": "c441fd4b7a82c21eadd89ad8671d02f3b6e35af2",
-        "introduced_blob": "4169487c864e5ec781e162cc18c228bfd72ce66c",
+        "commit": "e0f8371db8dbd2bf352312949dc553dbe8c5cc43",
+        "introduced_blob": "b148e434c47fce30cecf0de141a415137a11bdbc",
         "original_commit": "d40ff6e9c0cf611b978b9d84cc545d953845b977",
         "original_blob": "e6c396e9cbd91bc07deab487974253d591d8c909",
-        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved."
+        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved. Reconcile duplicate char/unsigned-char table declarations to one byte-array declaration; accesses do not establish original signedness."
       }
     },
     {
@@ -11254,11 +11254,11 @@
       "provenance": {
         "pull_request": 558,
         "merged_via": 573,
-        "commit": "c441fd4b7a82c21eadd89ad8671d02f3b6e35af2",
-        "introduced_blob": "4169487c864e5ec781e162cc18c228bfd72ce66c",
+        "commit": "e0f8371db8dbd2bf352312949dc553dbe8c5cc43",
+        "introduced_blob": "b148e434c47fce30cecf0de141a415137a11bdbc",
         "original_commit": "fa2066a7feab31e4fe4bc6a0c3e0d9f24c8d09ab",
         "original_blob": "471e72470a3864eff0f5f3bf4605dd90da2a9306",
-        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved."
+        "integration_adjustment": "Combine disjoint reviewed function bodies from PRs 540, 556, 557 and 558 in the existing source; reuse Object_800CE674 from PR 549; canonicalize fn_8009F7A4 to its target-supported player-pointer output and change only fn_801163B4 discarded output local to Object_80039F5C*. Original contributors, function addresses and source blobs preserved. Reconcile duplicate char/unsigned-char table declarations to one byte-array declaration; accesses do not establish original signedness."
       }
     }
   ],
