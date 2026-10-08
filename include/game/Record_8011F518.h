@@ -4,7 +4,7 @@
 /* Record whose address fn_8011F518 returns. Only the accessed fields are
    declared; the size is not established. */
 struct Record_8011F518 {
-    char mUnknown0[4];
+    int mUnknown0;
     unsigned char mUnknown4;
     char mUnknown5[3];
     float mUnknown8;
