@@ -21558,13 +21558,19 @@
     {
       "source": "src/game/cu_8003877C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row 0x8003877C-0x8003AC84 for src/game/cu_8003877C.cpp, exact whole-function rows and inferred name/source-form/compiler rows for 31 complete bodies. Original bytes remain linked; the other 15 bodies and all static data remain original and unmeasured.",
+      "evidence": "evidence.tsv open/open unit row 0x8003877C-0x8003AC84 for src/game/cu_8003877C.cpp, exact whole-function rows and inferred name/source-form/compiler rows for 32 complete bodies, and the exact data row 0x8028CFF0-0x8028D004 for the .rodata slice. Original bytes remain linked. The .rodata entry measures only that 20-byte float pool of the registered bodies 0x80039458, 0x800394F4, 0x8003A130 and 0x8003A4DC; the other 14 bodies, their pool words before 0x8028CFF0 and at 0x8028D004, and the .sdata word 0x803EA3F8 remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8003877C",
           "end": "0x8003AC84"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028CFF0",
+          "end": "0x8028D004"
         }
       ],
       "functions": [
@@ -21597,6 +21603,11 @@
           "symbol": "fn_80039458",
           "start": "0x80039458",
           "end": "0x800394F4"
+        },
+        {
+          "symbol": "fn_800394F4",
+          "start": "0x800394F4",
+          "end": "0x8003962C"
         },
         {
           "symbol": "fn_8003977C",
