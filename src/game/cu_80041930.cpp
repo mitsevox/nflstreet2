@@ -1,4 +1,5 @@
 #include "game/Object_8003DEC4.h"
+#include "game/Object_801BC084.h"
 #include "game/Record_8036B55C.h"
 #include "game/bitstream.h"
 #include "game/cu_80136B1C.h"
@@ -51,9 +52,8 @@ void fn_8019F1F0(Object_8003DEC4 *pObject, int a, unsigned int b, int count);
 void fn_8019F404(float *p);
 void fn_8019F48C(float *p);
 void fn_8019F4AC(Object_8003DEC4 *pObject);
-int fn_801BAD70(int a, int b, int handle, int c);
+int fn_801BAD70(Object_801BC084 *pRecord, int b, int handle, int c);
 int fn_801BBE5C(int a, int b);
-int fn_801BC084(int handle);
 void fn_801CF8A8(int *pOut, int a, int b, float t);
 void fn_801D0470(int a);
 void fn_801D0494(void);

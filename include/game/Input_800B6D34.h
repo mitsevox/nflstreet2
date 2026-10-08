@@ -6,7 +6,10 @@
 /* Record that fn_800B6D34 fills for a player. Only the bytes its callers
    read are declared. */
 struct Input_800B6D34 {
-    char mUnknown0[92];
+    char mUnknown0[12];
+    float mUnknown12;
+    float mUnknown16;
+    char mUnknown20[72];
     unsigned char mUnknown92;
     unsigned char mUnknown93;
     unsigned char mUnknown94;

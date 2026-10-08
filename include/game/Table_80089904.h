@@ -1,6 +1,8 @@
 #ifndef GAME_TABLE_80089904_H
 #define GAME_TABLE_80089904_H
 
+#include "game/Object_801BBD5C.h"
+
 /* Record an entry of Table_80089904 points to. Only the accessed bytes are
    declared; the size is unknown. */
 struct Info_80089904 {

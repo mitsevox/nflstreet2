@@ -97,6 +97,18 @@ struct Object_800CE674 {
 /* 124-byte entry of the array that +800 points to. */
 typedef Record_800D81C8 Entry_800EAC9C;
 
+/* 12-byte block at +1228; fn_800D0B90 returns its first word. */
+struct Block_800D0B90 {
+    int mUnknown0;
+    unsigned char mUnknown4;
+    unsigned char mUnknown5;
+    char mUnknown6[2];
+    unsigned char mUnknown8;
+    unsigned char mUnknown9;
+    unsigned char mUnknown10;
+    unsigned char mUnknown11;
+};
+
 /* Record that +784 points to. */
 struct State_80039F5C {
     unsigned char mId;
@@ -116,7 +128,10 @@ struct Record_800C4E18 {
 
 /* Object that +796 points to. */
 struct Object_8016D9B8 {
-    char mUnknown0[8];
+    char mUnknown0[2];
+    unsigned short mUnknown2;
+    unsigned short mUnknown4;
+    char mUnknown6[2];
     int mUnknown8;
 };
 
@@ -152,7 +167,9 @@ struct Object_80039F5C {
     unsigned char mUnknown402;
     char mUnknown403[21];
     Object_800B26B0 mMotion;
-    char mUnknown488[24];
+    float mUnknown488;
+    float mUnknown492;
+    char mUnknown496[16];
     Object_8016D8B0 mUnknown512;
     Object_8016D8B0 mUnknown528;
     unsigned char mUnknown544;
@@ -165,8 +182,11 @@ struct Object_80039F5C {
     float mUnknown768;
     char mUnknown772[4];
     unsigned char mUnknown776;
-    char mUnknown777[1];
-    short mUnknown778;
+    unsigned char mUnknown777;
+    union {
+        short mUnknown778;
+        unsigned short mUnknown778Unsigned;
+    };
     Record_800C4E18 *mpUnknown780;
     State_80039F5C *mpState;
     char mUnknown788[4];
@@ -180,7 +200,9 @@ struct Object_80039F5C {
     int mUnknown1036;
     int mUnknown1040;
     int mUnknown1044;
-    char mUnknown1048[16];
+    char mUnknown1048[4];
+    int mUnknown1052;
+    char mUnknown1056[8];
     short mUnknown1064;
     char mUnknown1066[60];
     unsigned char mUnknown1126;
@@ -202,7 +224,7 @@ struct Object_80039F5C {
     unsigned char mUnknown1222;
     char mUnknown1223[1];
     int mUnknown1224;
-    char mUnknown1228[12];
+    Block_800D0B90 mUnknown1228;
     Object_800CE674 mUnknown1240;
     char mUnknown1244[1656];
     float mUnknown2900;
@@ -213,7 +235,11 @@ struct Object_80039F5C {
     unsigned char mUnknown2914;
     char mUnknown2915[1];
     unsigned char mUnknown2916;
-    char mUnknown2917[83];
+    char mUnknown2917[4];
+    unsigned char mUnknown2921;
+    char mUnknown2922[1];
+    unsigned char mUnknown2923[4];
+    char mUnknown2927[73];
     short mRatings[10];
     char mUnknown3020[20];
     int mUnknown3040;
