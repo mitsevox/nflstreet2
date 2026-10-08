@@ -34,6 +34,7 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_80227638.h"
 #include "game/fn_8016871C.h"
+#include "game/fn_801BE60C.h"
 /* Views of the block at player +336. Only the accessed fields
    are declared. */
 struct Block_800FBAA8 {
@@ -592,7 +593,6 @@ Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char 
 float fn_801250B8(Object_80039F5C *p, int a, int b);
 int fn_80178308(void);
 int fn_80178320(void);
-int fn_801BE648(void *p);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);

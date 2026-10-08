@@ -52,6 +52,7 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
+#include "game/fn_80094488.h"
 
 /* Data whose word +4 fn_80094374 returns and whose words from +8
    fn_80093BAC indexes; the bound of that array is not established. */
@@ -110,11 +111,6 @@ struct Record_80093FD4 {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
-};
-
-/* 12-byte records returned by fn_80094490. */
-struct Record_80094490 {
-    unsigned char mUnknown0[12];
 };
 
 /* 14-byte block cleared by fn_80094B78. */
@@ -288,7 +284,7 @@ extern Record_80093E4C lbl_802D73B8[];
 extern Record_80093E4C lbl_802D77D8[];
 extern Record_80093E4C lbl_802D7808[];
 extern int lbl_802D7974[5][5];
-extern Record_80094490 lbl_8030C0B4[];
+extern Vector_80039F5C lbl_8030C0B4[];
 extern Slot_8009418C lbl_8030C164[2];
 extern Record_80093FD4 lbl_802D78D8[];
 extern unsigned int lbl_802D79D8[];
@@ -756,12 +752,12 @@ extern "C" void fn_800943D8(void)
     }
 }
 
-extern "C" int fn_80094488(void)
+extern "C" unsigned int fn_80094488(void)
 {
     return lbl_803EA8C4;
 }
 
-extern "C" Record_80094490 *fn_80094490(int index)
+extern "C" Vector_80039F5C *fn_80094490(int index)
 {
     return &lbl_8030C0B4[index];
 }

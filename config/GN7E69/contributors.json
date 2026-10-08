@@ -11717,6 +11717,39 @@
       }
     },
     {
+      "source": "src/game/cu_800DC584.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DC584",
+        "0x800DD5E4",
+        "0x800DD648",
+        "0x800DD780",
+        "0x800DD92C",
+        "0x800DDD24",
+        "0x800DDE6C",
+        "0x800DF134",
+        "0x800DF654",
+        "0x800DF710",
+        "0x800E0F48",
+        "0x800E1044",
+        "0x800E11C0",
+        "0x800E1248",
+        "0x800E1438",
+        "0x800E1778"
+      ],
+      "provenance": {
+        "pull_request": 645,
+        "merged_via": 645,
+        "commit": "fcfafdd782bd2bf1cb0e8a025a84c575526f66c0",
+        "introduced_blob": "3aceadaa702c10095a386d8f1acea89a55845e70",
+        "original_blob": "30dd22f566880ac78f7c832b735abc3baee78e39",
+        "integration_adjustment": "Review fix in PR 645: shared callee declarations, the +1008 word member and a literal 0 store; every credited function remains exact. Preserve the original source commit/blob and contributor credit.",
+        "original_commit": "e6a7af4166df541ddfec63fe41da6587d9501d82"
+      }
+    },
+    {
       "source": "src/game/cu_800E3A34.cpp",
       "contributors": [
         "adampreddy"

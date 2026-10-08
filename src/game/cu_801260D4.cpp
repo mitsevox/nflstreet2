@@ -7,6 +7,7 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
 #include "game/fn_802372EC.h"
+#include "game/fn_801BE60C.h"
 
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
 
@@ -64,7 +65,6 @@ float fn_80178A08(void);
 float fn_80178A2C(void);
 float fn_80178A5C(void);
 int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
-int fn_801BE648(void *p);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);

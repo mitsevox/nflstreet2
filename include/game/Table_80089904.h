@@ -33,6 +33,9 @@ struct Table_80089904 {
     Entry_80089904 mEntries[1];
 };
 
-extern "C" void fn_801BBC3C(unsigned short a, unsigned short b, Table_80089904 *pTable);
+extern "C" {
+int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues);
+void fn_801BBC3C(unsigned short a, unsigned short b, Table_80089904 *pTable);
+}
 
 #endif

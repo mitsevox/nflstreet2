@@ -32,7 +32,13 @@ struct Block_801BE60C {
         int mUnknown4Word;
     };
     float mUnknown8;
-    char mUnknownC[20];
+    float mUnknownC;
+    float mUnknown10;
+    int mUnknown14;
+    char mUnknown18[4];
+    unsigned char mUnknown1C;
+    unsigned char mUnknown1D;
+    char mUnknown1E[2];
     State_800D8140 mUnknown20;
     char mUnknown38[4];
     unsigned char mUnknown3C;

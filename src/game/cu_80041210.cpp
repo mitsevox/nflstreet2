@@ -2,6 +2,7 @@
 #include "game/fn_80238174.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801D2B7C.h"
+#include "game/fn_801BE60C.h"
 #include <string.h>
 
 struct Pool_803EA488 {
@@ -28,7 +29,6 @@ int fn_801BC7C0(void *a, void *b, void *c);
 int fn_801BCA74(void *a, void *b, int c, void *d, int e, int f);
 int fn_801BCCAC(void *a, void *b, int c, void *d, int e, int f);
 void fn_801BE420(void *a, void *b, void *c, Object_80041904 *pObject, float d);
-int fn_801BE648(void *a);
 void fn_801EBFA0(float *pOut, int x, int y, int z);
 int fn_80238278(const void *p, int size, int seed);
 void *fn_8023816C(void *pHandle);

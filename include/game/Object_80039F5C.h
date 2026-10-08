@@ -75,7 +75,8 @@ struct Block_80170374 {
 
 /* Block at +1160. */
 struct Block_801718E8 {
-    char mUnknown0[52];
+    char mUnknown0[12];
+    char mUnknown12[40];
     unsigned char mUnknown52;
 };
 
@@ -165,6 +166,7 @@ struct Block_8011E240 {
     unsigned char mUnknown105;
     char mUnknown106[2];
 };
+struct Object_800E11C0;
 
 struct Object_80039F5C {
     /* Read both as a word and byte by byte (+1 index, +2 team). */
@@ -225,8 +227,14 @@ struct Object_80039F5C {
     Object_8016D9B8 *mpUnknown796;
     Record_800D81C8 *mpUnknown800;
     char mUnknown804[204];
-    Key_80110630 mUnknown1008;
-    char mUnknown1011[21];
+    union {
+        int mUnknown1008Word;
+        struct {
+            Key_80110630 mUnknown1008;
+            unsigned char mUnknown1011;
+        };
+    };
+    char mUnknown1012[20];
     /* The 108 bytes at +1032, read field by field and as Block_8011E240. */
     union {
         struct {
@@ -289,6 +297,8 @@ struct Object_80039F5C {
     State_80039F5C mUnknown3048;
     char mUnknown3055[33];
     unsigned char mUnknown3088;
+    char mUnknown3089[3];
+    Object_800E11C0 *mpUnknown3092;
 };
 
 extern "C" {
