@@ -16638,7 +16638,7 @@
     {
       "source": "src/dolphin/card/CARDOpen.c",
       "profile": "dolphin_card_release",
-      "evidence": "Existing coherent BFBB CARDOpen source retained unchanged. The complete14-file CARD library uses qualified dolphin_card_release signed-char working profile, including all12linked units and both comparison files. Both filename functions gain exact comparison results; target extsb/NUL/equality behavior and pinned default/recipes support a working reconstruction, not unique original flags. All previously exact functions preserved; linked promotion remains separate. See evidence.tsv compiler row.",
+      "evidence": "Existing coherent pinned dSDK2328 CARDOpen source retained unchanged. The complete14-file CARD library uses qualified dolphin_card_release signed-char working profile, including all12linked units and both comparison files. Both filename functions gain exact comparison results; target extsb/NUL/equality behavior and pinned default/recipes support a working reconstruction, not unique original flags. All previously exact functions preserved; linked promotion remains separate. See evidence.tsv compiler row.",
       "sections": [
         {
           "section": ".text",
