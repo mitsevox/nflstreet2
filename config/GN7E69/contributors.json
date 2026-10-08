@@ -11472,7 +11472,7 @@
       ],
       "provenance": {
         "pull_request": 572,
-        "merged_via": 572,
+        "merged_via": 579,
         "commit": "afacb17799df7deb89d093ad4d34e50fe5f767b0",
         "introduced_blob": "24d0c5425968c611ce093c8a1243f728c19c86c1"
       }
@@ -11501,7 +11501,7 @@
       ],
       "provenance": {
         "pull_request": 575,
-        "merged_via": 575,
+        "merged_via": 579,
         "commit": "cccfc43a9d1a0eacfc66f0f0d4776a713810649a",
         "introduced_blob": "f484d58e77a43f5a61fe99d78d5f586da4235303"
       }
@@ -11536,7 +11536,7 @@
       ],
       "provenance": {
         "pull_request": 562,
-        "merged_via": 562,
+        "merged_via": 579,
         "commit": "99be8c37a587a495e4ed189bbec87b1e43f6ea7a",
         "introduced_blob": "43896253a88aeaf316074051e4a59d1992b7fad6"
       }
@@ -11553,7 +11553,7 @@
       ],
       "provenance": {
         "pull_request": 563,
-        "merged_via": 563,
+        "merged_via": 579,
         "commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
         "introduced_blob": "b98c1cce7e7d54627e00da000bd0669f2045740c"
       }
@@ -11592,7 +11592,7 @@
       ],
       "provenance": {
         "pull_request": 563,
-        "merged_via": 563,
+        "merged_via": 579,
         "commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
         "introduced_blob": "19068d954928aba65a8d03e94d9f0caa205d76a6"
       }
@@ -11608,7 +11608,7 @@
       ],
       "provenance": {
         "pull_request": 563,
-        "merged_via": 563,
+        "merged_via": 579,
         "commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
         "introduced_blob": "0366bc8bdd2359557cd0bcdb31f951ae78de1ca7"
       }
