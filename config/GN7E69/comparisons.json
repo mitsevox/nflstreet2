@@ -18020,6 +18020,32 @@
       "discarded": [
         "GXSetCurrentGXThread"
       ]
+    },
+    {
+      "source": "src/dolphin/os/OSFont.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete OOT small OSFont donor variant, unchanged body and canonical include-only integration; 88-byte target function and 2-byte initialized halfword evidenced individually. Original source-file/archive boundaries provisional; comparison-only, original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80285A90",
+          "end": "0x80285AE8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC5A8",
+          "end": "0x803EC5AA"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OSGetFontEncode",
+          "start": "0x80285A90",
+          "end": "0x80285AE8"
+        }
+      ]
     }
   ]
 }

@@ -2665,7 +2665,7 @@
       "name": "src/dolphin/os/OSFont.c",
       "source": "src/dolphin/os/OSFont.c",
       "library": "OS",
-      "evidence": "Direct inspected target body and BFBB OSFont.c352..374; donor name/reference-derived originalfile ownership provisional; no sourcecompile/matchcredit.",
+      "evidence": "Target cached font encoding leaf and OOT6e449e1748a02c12b4cb218453c529175b85364a complete small OSFont.c; one88-byte Cbody and2-byte initializedcache comparison, actualhalfword accesses/caller; relatedfile name and originalarchiveboundaries remain provisional. Originaltargetbytes selected until promotion.",
       "sections": [
         {
           "section": ".data5",
