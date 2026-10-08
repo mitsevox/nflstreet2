@@ -14,6 +14,9 @@
 #include "game/fn_80227638.h"
 #include "game/fn_8022781C.h"
 #include "game/fn_802372EC.h"
+#include "game/fn_801BE60C.h"
+#include "game/fn_801EBC18.h"
+#include "game/fn_80094488.h"
 #include <math.h>
 
 struct Record_800DC584 {
@@ -136,8 +139,6 @@ void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key,
                  Object_80039F5C *pOther, Record_800DDCE4 *pRecord, int mask);
 int fn_800DA7AC(Object_801BBD5C *pObject, float value);
 float fn_800DAA68(int index, void *pA, Object_801BBD5C *pObject, int b, float value);
-unsigned int fn_80094488(void);
-Vector_80039F5C *fn_80094490(int index);
 void fn_8009A260(Object_80039F5C *p);
 int fn_8009B9A8(int a);
 float fn_8009BB54(int a);
@@ -161,13 +162,8 @@ int fn_801486A0(void);
 Object_800670B4 *fn_80168708(int team);
 void fn_80171DB0(Object_80039F5C *p);
 int fn_80178308(void);
-int fn_801BE068(void *a, void *b, void *c, unsigned short key, Object_80039F5C *p, float value);
-Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
-unsigned short fn_801BE648(void *p);
-void fn_801BE760(void *p, unsigned short key, int a);
 int fn_801CFE08(float value);
 int fn_801CFFD0(int a, int b);
-void fn_801EBC18(int *pAngles, float *pRot);
 void fn_802271A4(Vector_80039F5C *pOut, Vector_80039F5C *p);
 void fn_80227248(void *pOut, void *p, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -257,7 +253,7 @@ extern "C" int fn_800DD830(void *p) {
 
 extern "C" int fn_800DD838(Object_80039F5C *p)
 {
-    int result = *(int *)&p->mUnknown1008;
+    int result = p->mUnknown1008Word;
     if (result == -1) {
         result = 2;
         switch (fn_800AD9B4()) {
@@ -444,7 +440,7 @@ extern "C" int fn_800DF6EC(Object_80039F5C *p)
     return result;
 }
 
-extern "C" void fn_800DF710(Object_80039F5C *p, int joint, Vector_80039F5C *pPos, int *pAngles)
+extern "C" void fn_800DF710(Object_80039F5C *p, int joint, Vector_80039F5C *pPos, Angles_801EBC18 *pAngles)
 {
     float rot[4];
     fn_8009BFD0(p, pPos, rot);
@@ -726,7 +722,7 @@ extern "C" int fn_800E1438(Object_80039F5C *p)
         message.mId = 11;
         message.mUnknown1[0] = p->mUnknown9[0];
         fn_800F05E4(0, p->mpState, &message, p);
-        pBlock1160->mUnknown52 = result;
+        pBlock1160->mUnknown52 = 0;
         result = 1;
     }
     return result;

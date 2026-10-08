@@ -21,6 +21,7 @@
 #include "game/fn_8017F584.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
+#include "game/fn_801BE60C.h"
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
@@ -168,7 +169,6 @@ void fn_80176984(void);
 void fn_80176CC8(int type, short a, int b, int c);
 void fn_80176E34(int a, int b, int c, int d);
 int fn_8017F60C(void);
-int fn_801BE648(void *p);
 void fn_8022B2CC(int handle, int tag, int value);
 int fn_8022B414(int handle, int tag, int *pValue);
 int fn_8022B580(int handle, int tag, int value);

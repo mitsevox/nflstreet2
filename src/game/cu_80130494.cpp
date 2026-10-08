@@ -10,6 +10,7 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
+#include "game/fn_801BE60C.h"
 
 #define MIN(a, b) ((a) <= (b) ? (a) : (b))
 #define MAX(a, b) ((a) >= (b) ? (a) : (b))
@@ -49,7 +50,6 @@ int fn_80178320(void);
 int fn_801783AC(int bit);
 float fn_80178A08(void);
 float fn_80178A44(void);
-int fn_801BE648(void *p);
 int fn_801C4E98(void *p, const char *pName);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);

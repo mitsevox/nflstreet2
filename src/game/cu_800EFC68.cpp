@@ -13,6 +13,7 @@
 #include "game/fn_802270D4.h"
 #include <string.h>
 #include "game/fn_801D2B7C.h"
+#include "game/fn_801BE60C.h"
 
 /* Record whose address fn_8011F4E0 returns. Only the accessed fields are
    declared; the size is unknown. */
@@ -280,7 +281,6 @@ Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char 
 float fn_801250B8(Object_80039F5C *p, int a, int b);
 int fn_80178308(void);
 int fn_80178320(void);
-int fn_801BE648(void *p);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);

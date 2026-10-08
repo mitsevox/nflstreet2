@@ -5,6 +5,7 @@
 #include "game/cu_8015C25C.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8021D7B8.h"
+#include "game/fn_801BE60C.h"
 #include <string.h>
 
 /* Object returned by fn_801DD168. */
@@ -83,9 +84,7 @@ void fn_801BA03C(Object_801BA03C *pObject, void *a, float b, Record_8036B55C *pR
 int fn_801BC7C0(Object_801BA03C *pObject, void *a, void *b);
 int fn_801BCA74(Object_801BA03C *pObject, void *a, int b, void *c, int d, int e);
 int fn_801BCCAC(Object_801BA03C *pObject, void *a, int b, void *c, int d, int e);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, Record_8036B55C *pRecord, float e);
 void fn_801BE420(void *a, Object_801BA03C *pObject, void *b, Record_8036B55C *pRecord, float c);
-int fn_801BE648(void *a);
 void fn_801CE9E0(int a);
 float fn_801CFD28(int a);
 int fn_801CFFF0(int a, int b, float c);

@@ -3,6 +3,7 @@
 #include "game/cu_80136B1C.h"
 #include "game/fn_801C68FC.h"
 #include "game/Object_80146094.h"
+#include "game/fn_801EBC18.h"
 
 /* One 0x60-byte entry of the pool at lbl_803EB24C. */
 struct Event_801459F0 {
@@ -30,12 +31,6 @@ struct Object_803ECA10 {
     float mUnknown3A4;
 };
 
-struct Vec_801EBC18 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-};
-
 extern "C" {
 void fn_80145224(void);
 void fn_80145314(Event_801459F0 *pEvent);
@@ -59,7 +54,6 @@ void fn_801D0544(void);
 void fn_801D0BCC(int a, int b, int c);
 void fn_801D0C58(void *a);
 void fn_801D0F80(Mtx44 m);
-Vec_801EBC18 fn_801EBC18(void *pIn);
 
 extern unsigned char lbl_803EB249;
 }
@@ -266,7 +260,8 @@ void fn_80145EFC(int a, float *pPos, float *pRot, Source_80144CE0 *pSource)
     fn_801D0508();
     fn_801D0C58(pPos);
     if (pRot != 0) {
-        Vec_801EBC18 v = fn_801EBC18(pRot);
+        Angles_801EBC18 v;
+        fn_801EBC18(&v, pRot);
 
         fn_801D0BCC(v.mUnknown8, v.mUnknown4, v.mUnknown0);
     }

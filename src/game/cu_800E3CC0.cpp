@@ -13,6 +13,7 @@
 #include "game/fn_8016871C.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
+#include "game/fn_801BE60C.h"
 
 /* Player block at +336 as used by the functions of the state entry at
    0x802DB370. */
@@ -119,7 +120,6 @@ int fn_80178320(void);
 int fn_801787A0(void);
 int fn_801BA5A8(void *a, void *b, unsigned short c, int d);
 float fn_801BD660(void *p, int key);
-int fn_801BE648(void *p);
 int fn_800E92DC(Object_80039F5C *p);
 int fn_800E948C(Object_80039F5C *p);
 int fn_800EA284(Object_80039F5C *p, int angle, int direction);

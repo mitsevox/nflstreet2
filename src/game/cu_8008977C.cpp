@@ -3,6 +3,7 @@
 #include "game/Object_801BBD5C.h"
 #include "game/Table_80089904.h"
 #include "game/fn_802372EC.h"
+#include "game/fn_801BE60C.h"
 #include <string.h>
 
 struct Header_8008977C {
@@ -20,8 +21,6 @@ void fn_800225F4(int index, unsigned int value);
 unsigned char fn_800DA53C(unsigned short index);
 Object_8008044C *fn_80182DC8(void);
 Object_801BBD5C *fn_801BBD5C(unsigned short a, unsigned short b);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, Record_8036B55C *pRecord, float e);
-void fn_801BE760(void *a, unsigned short b, int c);
 void fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d,
                 unsigned short e, Record_8036B55C *pRecord, float f);
 int fn_8008A20C(unsigned int value);

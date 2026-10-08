@@ -171,8 +171,14 @@ struct Object_80039F5C {
     Object_8016D9B8 *mpUnknown796;
     Entry_800EAC9C *mpUnknown800;
     char mUnknown804[204];
-    Key_80110630 mUnknown1008;
-    unsigned char mUnknown1011;
+    /* Read as a word (lwz at 0x800DD84C) and byte by byte. */
+    union {
+        int mUnknown1008Word;
+        struct {
+            Key_80110630 mUnknown1008;
+            unsigned char mUnknown1011;
+        };
+    };
     char mUnknown1012[20];
     int mUnknown1032;
     int mUnknown1036;
