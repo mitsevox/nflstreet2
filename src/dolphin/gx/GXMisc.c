@@ -127,7 +127,10 @@ u16 GXReadDrawSync(void)
     return token;
 }
 
-inline void GXSetDrawDone(void)
+#if !defined(DECOMP_COMPARE)
+inline
+#endif
+void GXSetDrawDone(void)
 {
     u32 reg;
     BOOL enabled;
@@ -141,7 +144,10 @@ inline void GXSetDrawDone(void)
     OSRestoreInterrupts(enabled);
 }
 
-inline void GXWaitDrawDone(void)
+#if !defined(DECOMP_COMPARE)
+inline
+#endif
+void GXWaitDrawDone(void)
 {
     BOOL enabled;
 
@@ -343,6 +349,7 @@ void __GXPEInit(void)
     GX_SET_PE_REG(5, reg);
 }
 
+#if defined(DECOMP_COMPARE)
 void GXAbortFrame(void) {
     __GXAbort();
     __GXCleanGPFifo();
@@ -351,8 +358,10 @@ void GXAbortFrame(void) {
 void GXPeekZ(u16 x, u16 y, u32* z) {
     u32 addr = (u32)OSPhysicalToUncached(0x08000000);
 
-    SET_REG_FIELD(addr, 10, 2, x);
-    SET_REG_FIELD(addr, 10, 12, y);
-    SET_REG_FIELD(addr, 2, 22, 1);
+    SET_REG_FIELD(0, addr, 10, 2, x);
+    SET_REG_FIELD(0, addr, 10, 12, y);
+    SET_REG_FIELD(0, addr, 2, 22, 1);
     *z = *(u32*)addr;
 }
+
+#endif
