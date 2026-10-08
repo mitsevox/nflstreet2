@@ -10610,7 +10610,7 @@
         "merged_via": 525,
         "original_commit": "f44d5e9ea92e987aaa5a66cda3e34f1357b0406c",
         "original_blob": "4f19805bc617e38287ac26c1f0580402120c369e",
-        "integration_adjustment": " Preserve existing BFBB bodies and original attribution; append only two unchanged target-supported TP C bodies under fixed comparison guard and supply the canonical GXTexModeSync declaration. Ordinary native output and all inherited measurements remain unchanged."
+        "integration_adjustment": "Preserve existing BFBB bodies and original attribution; append only two unchanged target-supported TP C bodies under fixed comparison guard and supply the canonical GXTexModeSync declaration. Ordinary native output and all inherited measurements remain unchanged."
       }
     },
     {
@@ -11637,7 +11637,8 @@
         "original_commit": "e9c170a8f68e4a7c1f53057ae1b6522237d373a9",
         "original_blob": "c8d43e8a3d71c04c2b74a187d9c1b7cd4bdda646",
         "integration_adjustment": "Complete unchanged pinned TP donor forms are appended under fixed DECOMP_COMPARE using accepted canonical macros; move the genuine void GXTexModeSync(void) declaration from the source guard into canonical GXManage.h. No body expressions changed. Preserve all previous source credit; originals remain linked.",
-        "pull_request": 595
+        "pull_request": 595,
+        "merged_via": 595
       }
     }
   ],
