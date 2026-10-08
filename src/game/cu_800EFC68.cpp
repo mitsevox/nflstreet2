@@ -199,7 +199,6 @@ int fn_801BE648(void *p);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
-extern char lbl_802DABBC[];
 extern float lbl_803EAF58;
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_8009F7A4(Object_80039F5C *p, Object_80039F5C **ppOut);
