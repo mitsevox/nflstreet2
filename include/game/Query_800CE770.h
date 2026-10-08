@@ -3,8 +3,9 @@
 
 struct Object_80039F5C;
 
-/* 64-byte local record that fn_800CE770 clears; callers fill it and pass it
-   to fn_800CE4A8 or fn_800CE510. Only accessed members are named. */
+/* 64-byte stack block that fn_800CE770 prepares before it is passed to
+   fn_800CE2B8 or fn_800CE510. Only the members the reconstructed callers
+   access are declared; the rest stays opaque. */
 struct Query_800CE770 {
     Object_80039F5C *mpUnknown0;
     Object_80039F5C *mpUnknown4;
@@ -15,11 +16,16 @@ struct Query_800CE770 {
     char mUnknown48[4];
     short mUnknown52;
     unsigned char mUnknown54;
-    char mUnknown55[9];
+    char mUnknown55[1];
+    unsigned char mUnknown56;
+    char mUnknown57[7];
 };
 
+/* Parameter lists follow register use at the call sites only. */
 extern "C" {
 void fn_800CE770(Query_800CE770 *pQuery);
+int fn_800CE2B8(Query_800CE770 *pQuery);
+int fn_800CE510(Query_800CE770 *pQuery);
 }
 
 #endif

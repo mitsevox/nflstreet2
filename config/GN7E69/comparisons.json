@@ -8205,7 +8205,7 @@
     {
       "source": "src/game/cu_800D0D4C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/open grouping row for src/game/cu_800D0D4C.cpp, 98 complete function extents and individual inferred name/source-form/compiler rows, the game_cpp compiler and declaration-shapes rows for 0x800D0D4C-0x800D3D64 and 0x800D3D68-0x800D760C, the partial State_800D0D4C type and field rows and the Code_800D0F98 type row, and target-width external access footprints. The nullable function-pointer setter follows the complete registered pointee/invoker contract; nominal source signatures remain qualified. Only these 98 whole bodies and the measured partial bodies (including 0x800D3294) are measured; all static storage and 18 other bodies remain original and unmeasured.",
+      "evidence": "evidence.tsv retained open/open grouping row for src/game/cu_800D0D4C.cpp, 95 complete function extents, 4 measured partial bodies (0x800D3294, 0x800D3CC0, 0x800D5900, 0x800D6F3C) and individual inferred name/source-form/compiler rows, the game_cpp compiler and declaration-shapes rows for 0x800D0D4C-0x800D3D64 and 0x800D3D68-0x800D760C, the partial State_800D0D4C type and field rows and the Code_800D0F98 type row, and target-width external access footprints. The nullable function-pointer setter follows the complete registered pointee/invoker contract; nominal source signatures remain qualified. Only these 95 whole bodies and the 4 measured partial bodies are measured; all static storage and 18 other bodies remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
