@@ -1477,7 +1477,29 @@ struct Block_800C9D6C {
     unsigned char mUnknown105;
 };
 
+/* Stack query block that fn_800CE770 prepares and fn_800CE2B8 reads
+   (fn_800C7084). Only the members fn_800C7084 stores are declared; the
+   size is unknown. */
+struct Query_800CE770 {
+    Object_80039F5C *mpUnknown0;
+    Object_80039F5C *mpUnknown4;
+    char mUnknown8[28];
+    int mUnknown36;
+    char mUnknown40[4];
+    float mUnknown44;
+    char mUnknown48[4];
+    short mUnknown52;
+    unsigned char mUnknown54;
+    char mUnknown55[1];
+    unsigned char mUnknown56;
+    char mUnknown57[7];
+};
+
 extern "C" {
+int fn_8003DEB4(void);
+void fn_800CE770(Query_800CE770 *pQuery);
+int fn_800CE2B8(Query_800CE770 *pQuery);
+void fn_80114D50(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8022E558(void);
 int fn_8022E560(void);
 void fn_800B852C(void);
@@ -1849,6 +1871,27 @@ extern "C" void fn_800C68B8(Object_80039F5C *p, Object_80039F5C *pOther, int val
 {
 }
 
+extern "C" int fn_800C7084(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value, int b)
+{
+    Query_800CE770 query;
+    int result = 0;
+
+    fn_800CE770(&query);
+    query.mUnknown56 = 0;
+    query.mUnknown36 = b;
+    query.mUnknown44 = value;
+    query.mUnknown52 = a;
+    query.mUnknown54 = 255;
+    query.mpUnknown0 = p;
+    query.mpUnknown4 = pOther;
+    result = fn_800CE2B8(&query);
+    if (result != 0) {
+        p->mUnknown1219 = 1;
+        fn_80114D50(p, pOther);
+    }
+    return result;
+}
+
 extern "C" int fn_800C769C(Object_80039F5C *p, int value)
 {
     if (p->mUnknown1220 != 0 && p->mUnknown1224 == value) {
@@ -2181,6 +2224,30 @@ extern "C" void fn_800C9D6C(unsigned char a, unsigned char b)
 extern "C" void fn_800C9E40(void)
 {
     lbl_803EAC3C = 0;
+}
+
+extern "C" void fn_800CA14C(void)
+{
+    unsigned int i;
+
+    for (i = 0; i < fn_8003DEB4(); i++) {
+        fn_8003DEC4(i)->mUnknown20 &= ~0x10000;
+    }
+    if (fn_800AD9B4() == 3) {
+        unsigned char team;
+
+        for (team = 0; team < 2; team++) {
+            unsigned char j;
+
+            for (j = 0; j < lbl_803EAC3C->mCounts[team]; j++) {
+                lbl_803EAC3C->mEntries[team][j].mRef = 0;
+            }
+        }
+        lbl_803EAC3C->mUnknown104 = 0;
+        lbl_803EAC3C->mUnknown105 = 0;
+        fn_800C9BB0();
+        fn_800C9B78();
+    }
 }
 
 extern "C" void fn_800CA228(void)
