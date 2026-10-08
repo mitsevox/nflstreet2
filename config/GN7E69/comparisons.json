@@ -2,6 +2,51 @@
   "schema": 2,
   "units": [
     {
+      "source": "src/game/cu_800034A0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800034A0-0x80003C94 (src/game/cu_800034A0.cpp), individual exact function extents and its data references. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800034A0",
+          "end": "0x80003C94"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800034A0",
+          "start": "0x800034A0",
+          "end": "0x800034D0"
+        },
+        {
+          "symbol": "fn_800034D0",
+          "start": "0x800034D0",
+          "end": "0x800034FC"
+        },
+        {
+          "symbol": "fn_800034FC",
+          "start": "0x800034FC",
+          "end": "0x80003620"
+        },
+        {
+          "symbol": "fn_80003620",
+          "start": "0x80003620",
+          "end": "0x800037C0"
+        },
+        {
+          "symbol": "fn_800037C0",
+          "start": "0x800037C0",
+          "end": "0x800039E4"
+        },
+        {
+          "symbol": "fn_800039E4",
+          "start": "0x800039E4",
+          "end": "0x80003C94"
+        }
+      ]
+    },
+    {
       "source": "src/game/ModuleGroup_8003450C.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row for src/game/ModuleGroup_8003450C.cpp (candidate range cu_8003450C), individual exact function extents, exact data rows for its rodata, empty-table .sdata words and .ctors/.dtors words, the storage, declaration and static-initializer source-form rows, and name rows. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
