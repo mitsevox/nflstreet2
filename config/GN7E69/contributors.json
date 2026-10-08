@@ -11650,8 +11650,8 @@
       "provenance": {
         "pull_request": 639,
         "merged_via": 639,
-        "commit": "6ed85dd519403c152306718ff39a36fc6dd7632f",
-        "introduced_blob": "6e0957849494619e4ae0264be98c7cd243db6eb8"
+        "commit": "39b472a0215d492b15c9ef7771137b7fa30f1cf1",
+        "introduced_blob": "f2fb95fa5d267d9112f60eac7c5e46020df47505"
       }
     }
   ],
