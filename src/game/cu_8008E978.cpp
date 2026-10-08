@@ -3893,7 +3893,6 @@ struct Block_800BA3F0 {
 
 extern "C" {
 void fn_800B14E4(void);
-void fn_800B2670(int value);
 void fn_800B63B0(void);
 unsigned char fn_800B9BFC(void);
 void fn_800B9C3C(void);
@@ -4209,7 +4208,6 @@ unsigned char fn_800744A8(void);
 void fn_80092F98(int handle);
 void fn_80093348(int handle);
 void fn_800940F0(int handle);
-int fn_800A9F4C(int index);
 void fn_800CC560(int a);
 void fn_8013F3FC(void);
 int fn_801F3E28(void);
@@ -4279,7 +4277,7 @@ extern "C" void fn_800BAFE8(void)
     unsigned int i;
 
     for (i = 0; i <= 1; i++) {
-        lbl_803EC990[i] = fn_800A9F4C(i);
+        lbl_803EC990[i] = (int)fn_800A9F4C(i);
     }
     lbl_803EC98C->mUnknown29 = 2;
     lbl_803EC98C->mUnknown2C = 0x19000;
