@@ -402,62 +402,6 @@
       "address": "0x8025278C",
       "evidence": "evidence.tsv external row GXSetViewport: target REL24 branch at 0x80228C90 and SDK GXTransform.c body."
     },
-    "fn_8018FDEC__14Class_8018FD64iiPvT3i": {
-      "address": "0x8018FDEC",
-      "evidence": "evidence.tsv external row 0x8018FDEC (fn_8018FDEC__14Class_8018FD64iiPvT3i) and type row Class_8018FD64."
-    },
-    "fn_8018FF54__14Class_8018FD64iiiPi": {
-      "address": "0x8018FF54",
-      "evidence": "evidence.tsv external row 0x8018FF54 (fn_8018FF54__14Class_8018FD64iiiPi) and type row Class_8018FD64."
-    },
-    "fn_8018FE10__14Class_8018FD64": {
-      "address": "0x8018FE10",
-      "evidence": "evidence.tsv external row 0x8018FE10 (fn_8018FE10__14Class_8018FD64) and type row Class_8018FD64."
-    },
-    "_._14Class_8018FD64": {
-      "address": "0x8018FD94",
-      "evidence": "evidence.tsv external row 0x8018FD94 (_._14Class_8018FD64) and type row Class_8018FD64."
-    },
-    "fn_8018FFE4__14Class_8018FD64iii": {
-      "address": "0x8018FFE4",
-      "evidence": "evidence.tsv external row 0x8018FFE4 (fn_8018FFE4__14Class_8018FD64iii) and type row Class_8018FD64."
-    },
-    "__14Class_8018FD64": {
-      "address": "0x8018FD64",
-      "evidence": "evidence.tsv external row 0x8018FD64 (__14Class_8018FD64) and type row Class_8018FD64."
-    },
-    "_vt.14Class_8018FD64": {
-      "address": "0x802AB4F8",
-      "evidence": "evidence.tsv external row 0x802AB4F8 (_vt.14Class_8018FD64) and type row Class_8018FD64."
-    },
-    "fn_8018FE34__14Class_8018FD64": {
-      "address": "0x8018FE34",
-      "evidence": "evidence.tsv external row 0x8018FE34 (fn_8018FE34__14Class_8018FD64) and type row Class_8018FD64."
-    },
-    "fn_8018FE7C__14Class_8018FD64": {
-      "address": "0x8018FE7C",
-      "evidence": "evidence.tsv external row 0x8018FE7C (fn_8018FE7C__14Class_8018FD64) and type row Class_8018FD64."
-    },
-    "fn_8018FEC4__14Class_8018FD64": {
-      "address": "0x8018FEC4",
-      "evidence": "evidence.tsv external row 0x8018FEC4 (fn_8018FEC4__14Class_8018FD64) and type row Class_8018FD64."
-    },
-    "fn_8018FF78__14Class_8018FD64i": {
-      "address": "0x8018FF78",
-      "evidence": "evidence.tsv external row 0x8018FF78 (fn_8018FF78__14Class_8018FD64i) and type row Class_8018FD64."
-    },
-    "fn_8018FF9C__14Class_8018FD64i": {
-      "address": "0x8018FF9C",
-      "evidence": "evidence.tsv external row 0x8018FF9C (fn_8018FF9C__14Class_8018FD64i) and type row Class_8018FD64."
-    },
-    "fn_80190008__14Class_8018FD64ii": {
-      "address": "0x80190008",
-      "evidence": "evidence.tsv external row 0x80190008 (fn_80190008__14Class_8018FD64ii) and type row Class_8018FD64."
-    },
-    "fn_8019002C__14Class_8018FD64ii": {
-      "address": "0x8019002C",
-      "evidence": "evidence.tsv external row 0x8019002C (fn_8019002C__14Class_8018FD64ii) and type row Class_8018FD64."
-    },
     "vfn_05__14Class_802A6B60iP14Entry_80182CC8": {
       "address": "0x80182CC8",
       "evidence": "evidence.tsv external row 0x80182CC8 (vfn_05__14Class_802A6B60iP14Entry_80182CC8) and type row Class_802A6B60."
@@ -750,30 +694,6 @@
       "address": "0x800BCA00",
       "evidence": "evidence.tsv external row for 0x800BCA00 (vfn_10__14Class_80297BF8)."
     },
-    "fn_80190098__14Class_802938C0": {
-      "address": "0x80190098",
-      "evidence": "evidence.tsv external row 0x80190098 (fn_80190098__14Class_802938C0) and type row Class_802938C0."
-    },
-    "fn_801900D4__14Class_802938C0iPi": {
-      "address": "0x801900D4",
-      "evidence": "evidence.tsv external row 0x801900D4 (fn_801900D4__14Class_802938C0iPi) and type row Class_802938C0."
-    },
-    "fn_80190120__14Class_802938C0": {
-      "address": "0x80190120",
-      "evidence": "evidence.tsv external row 0x80190120 (fn_80190120__14Class_802938C0) and type row Class_802938C0."
-    },
-    "fn_8019015C__14Class_802938C0Pci": {
-      "address": "0x8019015C",
-      "evidence": "evidence.tsv external row 0x8019015C (fn_8019015C__14Class_802938C0Pci) and type row Class_802938C0."
-    },
-    "fn_801901A4__14Class_802938C0": {
-      "address": "0x801901A4",
-      "evidence": "evidence.tsv external row 0x801901A4 (fn_801901A4__14Class_802938C0) and type row Class_802938C0."
-    },
-    "fn_8018FF0C__14Class_8018FD64i": {
-      "address": "0x8018FF0C",
-      "evidence": "evidence.tsv external row 0x8018FF0C (fn_8018FF0C__14Class_8018FD64i) and type row Class_8018FD64."
-    },
     "vfn_01__14Class_802A6BB0iPi": {
       "address": "0x80182A80",
       "evidence": "evidence.tsv external row 0x80182A80 (vfn_01__14Class_802A6BB0iPi) and type row Class_802A6BB0."
@@ -801,34 +721,6 @@
     "ReadBitStream__FP11BitStream_tUi": {
       "address": "0x80190F18",
       "evidence": "evidence.tsv external row 0x80190F18 (ReadBitStream__FP11BitStream_tUi), name row 0x80190F18 and type row BitStream_t."
-    },
-    "fn_8018FE58__14Class_8018FD64": {
-      "address": "0x8018FE58",
-      "evidence": "evidence.tsv external row 0x8018FE58 (fn_8018FE58__14Class_8018FD64) and type row Class_8018FD64."
-    },
-    "fn_8018FEA0__14Class_8018FD64": {
-      "address": "0x8018FEA0",
-      "evidence": "evidence.tsv external row 0x8018FEA0 (fn_8018FEA0__14Class_8018FD64) and type row Class_8018FD64."
-    },
-    "fn_8018FEE8__14Class_8018FD64": {
-      "address": "0x8018FEE8",
-      "evidence": "evidence.tsv external row 0x8018FEE8 (fn_8018FEE8__14Class_8018FD64) and type row Class_8018FD64."
-    },
-    "fn_8018FF30__14Class_8018FD64iiiPi": {
-      "address": "0x8018FF30",
-      "evidence": "evidence.tsv external row 0x8018FF30 (fn_8018FF30__14Class_8018FD64iiiPi) and type row Class_8018FD64."
-    },
-    "fn_8018FFC0__14Class_8018FD64i": {
-      "address": "0x8018FFC0",
-      "evidence": "evidence.tsv external row 0x8018FFC0 (fn_8018FFC0__14Class_8018FD64i) and type row Class_8018FD64."
-    },
-    "fn_80190050__14Class_8018FD64if": {
-      "address": "0x80190050",
-      "evidence": "evidence.tsv external row 0x80190050 (fn_80190050__14Class_8018FD64if) and type row Class_8018FD64."
-    },
-    "fn_80190074__14Class_8018FD64ii": {
-      "address": "0x80190074",
-      "evidence": "evidence.tsv external row 0x80190074 (fn_80190074__14Class_8018FD64ii) and type row Class_8018FD64."
     },
     "AIStartDMA": {
       "address": "0x8024A1C8",
@@ -10022,6 +9914,89 @@
           "placement": ".text",
           "start": "0x8018AD34",
           "end": "0x8018AD78"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801864E0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801864E0-0x80186A44 (src/game/cu_801864E0.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801864E0",
+          "end": "0x80186A44"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A6C24",
+          "end": "0x802A6EC8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801882B4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801882B4-0x80188A30 (src/game/cu_801882B4.cpp) and its compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801882B4",
+          "end": "0x80188A30"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8018FD64.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018FD64-0x80190208 (src/game/cu_8018FD64.cpp) and its compiler, data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018FD64",
+          "end": "0x80190208"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AB4F8",
+          "end": "0x802AB5A0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8018F1F0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018F1F0-0x8018FD64 (src/game/cu_8018F1F0.cpp) and its compiler, data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018F1F0",
+          "end": "0x8018FD64"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AB364",
+          "end": "0x802AB4F8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80193E7C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80193E7C-0x80193FB0 (src/game/cu_80193E7C.cpp) and its compiler, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80193E7C",
+          "end": "0x80193FB0"
         }
       ]
     }
