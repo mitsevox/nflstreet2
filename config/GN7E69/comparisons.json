@@ -24259,13 +24259,19 @@
     {
       "source": "src/game/cu_8003877C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row 0x8003877C-0x8003AC84 for src/game/cu_8003877C.cpp, exact whole-function rows and inferred name/source-form/compiler rows for 31 complete bodies. Original bytes remain linked; the other 15 bodies and all static data remain original and unmeasured.",
+      "evidence": "Whole-function extents and provisional unit boundaries are recorded in evidence.tsv. The emitted .rodata is compared against the target pool 0x8028CFF0-0x8028D004, whose intervening target word is not reconstructed; retain the measured data mismatch without padding or source fabrication. Original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8003877C",
           "end": "0x8003AC84"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028CFF0",
+          "end": "0x8028D004"
         }
       ],
       "functions": [

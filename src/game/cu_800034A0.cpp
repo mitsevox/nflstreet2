@@ -172,6 +172,8 @@ void fn_800037C0(int a, int *b)
     int slot;
     int type;
 
+    buf[0] = 1;
+
     fn_8002A5A0(&type, &slot);
 
     switch (type) {
