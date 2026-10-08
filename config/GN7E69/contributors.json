@@ -6544,7 +6544,7 @@
       ],
       "provenance": {
         "pull_request": 551,
-        "merged_via": 551,
+        "merged_via": 696,
         "commit": "cca96fe53d46c81a79a9b8eddf80c913b80086d3",
         "introduced_blob": "ccfc705243ac2aeafcf5b810fc92c4b89ce86851",
         "original_blob": "1f2f9a1525675ba90198d5095c5d6af29216d7eb",
@@ -6598,7 +6598,7 @@
       ],
       "provenance": {
         "pull_request": 636,
-        "merged_via": 636,
+        "merged_via": 696,
         "commit": "c8f3394f444e89795c4184ff7da8d659b7e14f01",
         "introduced_blob": "1653fd47e33bb6914c93a9676ec6d3933c50f7b9"
       }
@@ -11666,9 +11666,12 @@
       ],
       "provenance": {
         "pull_request": 636,
-        "merged_via": 636,
-        "commit": "c8f3394f444e89795c4184ff7da8d659b7e14f01",
-        "introduced_blob": "27e0ea921c8677c02e82e0427d7e37f8967e7d73"
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "43a1bcf617c89995f6b305f61b8bb17a519e36af",
+        "original_commit": "c8f3394f444e89795c4184ff7da8d659b7e14f01",
+        "original_blob": "27e0ea921c8677c02e82e0427d7e37f8967e7d73",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
       }
     },
     {
@@ -12954,9 +12957,12 @@
       ],
       "provenance": {
         "pull_request": 605,
-        "merged_via": 605,
-        "commit": "d2460efbb069fdedeb7c928a2676529bb8345b84",
-        "introduced_blob": "2ba0d5765908ee54d68c13ba11da69508d000cee"
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "d2460efbb069fdedeb7c928a2676529bb8345b84",
+        "original_blob": "2ba0d5765908ee54d68c13ba11da69508d000cee",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
       }
     },
     {
@@ -13029,9 +13035,12 @@
       ],
       "provenance": {
         "pull_request": 606,
-        "merged_via": 606,
-        "commit": "5aa496fcf88cf75cebac07bfa19d7d063ad45cc8",
-        "introduced_blob": "7cab5fda1c9febc521db0e6903125082286e2a54"
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "5aa496fcf88cf75cebac07bfa19d7d063ad45cc8",
+        "original_blob": "7cab5fda1c9febc521db0e6903125082286e2a54",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
       }
     },
     {
@@ -13064,9 +13073,12 @@
       ],
       "provenance": {
         "pull_request": 611,
-        "merged_via": 611,
-        "commit": "80e9be799a2252a5ae0e19131815db2162d38e97",
-        "introduced_blob": "153560bff20f47443e3d7ec4aae92898318c1589"
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "80e9be799a2252a5ae0e19131815db2162d38e97",
+        "original_blob": "153560bff20f47443e3d7ec4aae92898318c1589",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
       }
     },
     {
@@ -13126,9 +13138,12 @@
       ],
       "provenance": {
         "pull_request": 612,
-        "merged_via": 612,
-        "commit": "42b114e0ca475bc90ec2c593a7224d8515bebfa9",
-        "introduced_blob": "f7a9e4bd9ad28de249b5d7f80ce9c5ecc1320f9f"
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "42b114e0ca475bc90ec2c593a7224d8515bebfa9",
+        "original_blob": "f7a9e4bd9ad28de249b5d7f80ce9c5ecc1320f9f",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
       }
     },
     {
@@ -13186,9 +13201,12 @@
       ],
       "provenance": {
         "pull_request": 620,
-        "merged_via": 620,
-        "commit": "470742a5294448cd5ec3039e2709fbad552f8521",
-        "introduced_blob": "99f813ff683b4017de646452c30c0643f4278306"
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "470742a5294448cd5ec3039e2709fbad552f8521",
+        "original_blob": "99f813ff683b4017de646452c30c0643f4278306",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
       }
     },
     {
@@ -13254,9 +13272,12 @@
       ],
       "provenance": {
         "pull_request": 621,
-        "merged_via": 621,
-        "commit": "b13992daa1d2de036441be872697bc66c502c075",
-        "introduced_blob": "1beeaddb0c2c08bc00210084dda2bb85682aa29f"
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "b13992daa1d2de036441be872697bc66c502c075",
+        "original_blob": "1beeaddb0c2c08bc00210084dda2bb85682aa29f",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
       }
     },
     {
@@ -13269,9 +13290,12 @@
       ],
       "provenance": {
         "pull_request": 621,
-        "merged_via": 621,
-        "commit": "8e532b07d81761d37a4483b837f4370b2e5936f5",
-        "introduced_blob": "80c124512bf0086fbf4ba396b3c10a2201ccbf91"
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "8e532b07d81761d37a4483b837f4370b2e5936f5",
+        "original_blob": "80c124512bf0086fbf4ba396b3c10a2201ccbf91",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
       }
     },
     {
@@ -13339,9 +13363,12 @@
       ],
       "provenance": {
         "pull_request": 622,
-        "merged_via": 622,
-        "commit": "6d4917cf157d081d999dbaffcd0c9d52402c707b",
-        "introduced_blob": "54115d175b57ad5075738d5394b3464eb54fc926"
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "6d4917cf157d081d999dbaffcd0c9d52402c707b",
+        "original_blob": "54115d175b57ad5075738d5394b3464eb54fc926",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
       }
     },
     {
@@ -13357,9 +13384,12 @@
       ],
       "provenance": {
         "pull_request": 630,
-        "merged_via": 630,
-        "commit": "7c0570462f6b657610e668a78ae93363ecd37c07",
-        "introduced_blob": "5f2d33f15fab836fbfb7f34a9403fa8ddc80b6d4"
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "4e6ae2ade79238390bc0a4cb6990b2834cd8a03a",
+        "original_commit": "7c0570462f6b657610e668a78ae93363ecd37c07",
+        "original_blob": "5f2d33f15fab836fbfb7f34a9403fa8ddc80b6d4",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
       }
     },
     {
@@ -13388,9 +13418,12 @@
       ],
       "provenance": {
         "pull_request": 632,
-        "merged_via": 632,
-        "commit": "3ab2337dd963fc26851975b7b861938a1052c3e2",
-        "introduced_blob": "9f1ba094497543ccf3a79f4ae2ec076f408de656"
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "4e6ae2ade79238390bc0a4cb6990b2834cd8a03a",
+        "original_commit": "3ab2337dd963fc26851975b7b861938a1052c3e2",
+        "original_blob": "9f1ba094497543ccf3a79f4ae2ec076f408de656",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
       }
     },
     {
@@ -13411,9 +13444,12 @@
       ],
       "provenance": {
         "pull_request": 634,
-        "merged_via": 634,
-        "commit": "f3fed80127536c1361a6734399a6d7a17b1a96a3",
-        "introduced_blob": "0d0329df8ea939def6a50036d4e31e40b0f3cab1"
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "4e6ae2ade79238390bc0a4cb6990b2834cd8a03a",
+        "original_commit": "f3fed80127536c1361a6734399a6d7a17b1a96a3",
+        "original_blob": "0d0329df8ea939def6a50036d4e31e40b0f3cab1",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
       }
     },
     {
@@ -13436,9 +13472,12 @@
       ],
       "provenance": {
         "pull_request": 678,
-        "merged_via": 678,
-        "commit": "0715353a9ad891b27f0e06356beb4b6e0b769fae",
-        "introduced_blob": "c895ed40acfe09096959acb797803d2922c00061"
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "0715353a9ad891b27f0e06356beb4b6e0b769fae",
+        "original_blob": "c895ed40acfe09096959acb797803d2922c00061",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
       }
     },
     {
@@ -13463,7 +13502,7 @@
       ],
       "provenance": {
         "pull_request": 690,
-        "merged_via": 690,
+        "merged_via": 696,
         "commit": "37dc5a8132398b3dc4b61f900ccb57470a624f93",
         "introduced_blob": "08b003370daae9fbe7747f2b776ce1f9537a22ad"
       }
