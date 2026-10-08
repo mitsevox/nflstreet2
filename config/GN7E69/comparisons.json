@@ -15560,13 +15560,13 @@
     {
       "source": "src/game/cu_80086C10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u2013800878D8 and existing exact function extents. Complete fourteen-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
+      "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u201380087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80086C10",
-          "end": "0x800878D8"
+          "end": "0x80087BE4"
         },
         {
           "section": ".rodata",
@@ -15657,6 +15657,46 @@
           "symbol": "fn_80087880",
           "start": "0x80087880",
           "end": "0x800878D8"
+        },
+        {
+          "symbol": "fn_800878D8",
+          "start": "0x800878D8",
+          "end": "0x80087938"
+        },
+        {
+          "symbol": "fn_80087938",
+          "start": "0x80087938",
+          "end": "0x800879E8"
+        },
+        {
+          "symbol": "fn_800879E8",
+          "start": "0x800879E8",
+          "end": "0x80087A30"
+        },
+        {
+          "symbol": "fn_80087A30",
+          "start": "0x80087A30",
+          "end": "0x80087A78"
+        },
+        {
+          "symbol": "fn_80087A78",
+          "start": "0x80087A78",
+          "end": "0x80087B00"
+        },
+        {
+          "symbol": "fn_80087B00",
+          "start": "0x80087B00",
+          "end": "0x80087B5C"
+        },
+        {
+          "symbol": "fn_80087B5C",
+          "start": "0x80087B5C",
+          "end": "0x80087BA0"
+        },
+        {
+          "symbol": "fn_80087BA0",
+          "start": "0x80087BA0",
+          "end": "0x80087BE4"
         }
       ]
     },

@@ -332,4 +332,108 @@ void fn_80087880(int team)
     fn_801FCE10(0, "use 'TATS' delete from 'MAET' where 'DIGT' = \x85\n", team);
 }
 
+int fn_800878D8(int index, Object_8007A334 *pCursor, int row)
+{
+    const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
+    int id = -1;
+    if (fn_8007A600(pCursor, row)) {
+        id = fn_8007A98C(pCursor, pDescriptor->mIdColumn);
+    }
+    return id;
+}
+
+int fn_80087938(int index, Object_8007A334 *pCursor, int ordinal, int *pRow)
+{
+    int result = 0;
+    int row = 0;
+    int available = 0;
+    for (; fn_8007A600(pCursor, row); row++) {
+        int id = fn_800878D8(index, pCursor, row);
+        if (!fn_8008736C(index, id)) {
+            if (available == ordinal) {
+                if (pRow) {
+                    *pRow = row;
+                }
+                result = 1;
+                break;
+            }
+            available++;
+        }
+    }
+    return result;
+}
+
+int fn_800879E8(int index, Object_8007A334 *pCursor)
+{
+    const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
+    int id = fn_8007A98C(pCursor, pDescriptor->mIdColumn);
+    return fn_80087460(index, id);
+}
+
+void fn_80087A30(int index, Object_8007A334 *pCursor)
+{
+    const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
+    int id = fn_8007A98C(pCursor, pDescriptor->mIdColumn);
+    fn_8008754C(index, id);
+}
+
+int fn_80087A78(int index, Object_8007A334 *pCursor, int id, int *pOrdinal)
+{
+    int result = 0;
+    int ordinal = 0;
+    int row;
+    for (; fn_80087938(index, pCursor, ordinal, &row); ordinal++) {
+        if (fn_800878D8(index, pCursor, row) == id) {
+            *pOrdinal = ordinal;
+            result = 1;
+            break;
+        }
+    }
+    return result;
+}
+
+int fn_80087B00(int index, Object_8007A334 *pCursor)
+{
+    int count = 0;
+    int row;
+    while (fn_80087938(index, pCursor, count, &row)) {
+        count++;
+    }
+    return count;
+}
+
+int fn_80087B5C(int type)
+{
+    int index = 31;
+    switch (type) {
+    case 0:
+        index = 20;
+        break;
+    case 1:
+        index = 21;
+        break;
+    case 2:
+        index = 19;
+        break;
+    }
+    return index;
+}
+
+int fn_80087BA0(int index)
+{
+    int type = 3;
+    switch (index) {
+    case 20:
+        type = 0;
+        break;
+    case 21:
+        type = 1;
+        break;
+    case 19:
+        type = 2;
+        break;
+    }
+    return type;
+}
+
 }
