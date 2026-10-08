@@ -91,7 +91,8 @@ struct State_800D0D4C {
     char mUnknown1F0E[2];
     unsigned char mUnknown1F10;
     unsigned char mUnknown1F11;
-    char mUnknown1F12[2];
+    char mUnknown1F12[1];
+    unsigned char mUnknown1F13;
     float mUnknown1F14;
     unsigned int mUnknown1F18;
     Object_80039F5C *mpUnknown1F1C[4];
@@ -161,7 +162,9 @@ extern void *lbl_803EB688;
 int fn_80025708(void);
 unsigned char fn_80054D24(int index);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
+void fn_800A7A0C(int team);
 int fn_800A8444(int team);
+int fn_800A8488(int team);
 int fn_800A84C8(void);
 int fn_800A8740(void);
 int fn_800A8F84(unsigned char index);
@@ -693,6 +696,33 @@ extern "C" void fn_800D3238(void) {
             fn_800D1D84(fn_80178348(), 70, 1);
         }
     }
+}
+
+extern "C" void fn_800D3294(int team, unsigned int value) {
+    int limit = 0;
+
+    fn_801788D8(&limit);
+    if (fn_800A8740() == 0) {
+        if (fn_800A8488(0)) {
+            fn_800A7A0C(0);
+        }
+        if (fn_800A8488(1)) {
+            fn_800A7A0C(1);
+        }
+    }
+    if (value == limit) {
+        value = 100;
+    } else {
+        value = value * 100 / limit;
+    }
+    if (fn_80025708() == 0 && fn_801486A0() != 5) {
+        if (fn_800A84C8() != 0 && fn_800A8444((unsigned char)team) != 0) {
+            fn_800D1D84(team, 107, value);
+        } else {
+            fn_800D1D84(team, 106, value);
+        }
+    }
+    lbl_803EACD4->mUnknown1F13 = 1;
 }
 
 extern "C" void fn_800D338C(void) {

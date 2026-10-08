@@ -638,6 +638,60 @@
       }
     },
     {
+      "source": "src/engine/cu_80228E44.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80228E44",
+        "0x80228F0C"
+      ],
+      "provenance": {
+        "pull_request": 689,
+        "merged_via": 697,
+        "commit": "857f1fbf8d2b2ea2275a84c253f84523f557c406",
+        "introduced_blob": "7bb96ee76425c28ccb76660f73c79e3e2b3f11f2"
+      }
+    },
+    {
+      "source": "src/engine/cu_80228F78.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80228F78",
+        "0x80228FD8",
+        "0x80229010",
+        "0x8022905C"
+      ],
+      "provenance": {
+        "pull_request": 689,
+        "merged_via": 697,
+        "commit": "857f1fbf8d2b2ea2275a84c253f84523f557c406",
+        "introduced_blob": "1dbb9c68b34f2bf446886177845651e171b2eaf6"
+      }
+    },
+    {
+      "source": "src/engine/cu_80229094.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80229094",
+        "0x802290E0",
+        "0x8022910C",
+        "0x80229188",
+        "0x802291A0",
+        "0x80229210"
+      ],
+      "provenance": {
+        "pull_request": 689,
+        "merged_via": 697,
+        "commit": "857f1fbf8d2b2ea2275a84c253f84523f557c406",
+        "introduced_blob": "4d56e3ab22097c22f8e6216658f4aa689b016fa6"
+      }
+    },
+    {
       "source": "src/game/AnmsCelebration.cpp",
       "contributors": [
         "adampreddy"
@@ -11426,6 +11480,50 @@
       }
     },
     {
+      "source": "src/game/cu_800E3CC0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800E4494",
+        "0x800EAD44",
+        "0x800EAF34",
+        "0x800EB004",
+        "0x800EC76C",
+        "0x800EE694"
+      ],
+      "provenance": {
+        "pull_request": 637,
+        "merged_via": 697,
+        "commit": "dee824cc28d41b2c9e5f7977832a368e2cf07865",
+        "introduced_blob": "ee6e3ea72029b99a3ea8bedb395da88c7240d675",
+        "original_commit": "9d84800bd73480946ecc57d74d934e4930162eb4",
+        "original_blob": "13e0c7985c388b271af904287f1e333052bda97a",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR697 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_800E3CC0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800E948C",
+        "0x800E99A8",
+        "0x800E9B84",
+        "0x800E9E18"
+      ],
+      "provenance": {
+        "pull_request": 637,
+        "merged_via": 697,
+        "commit": "dee824cc28d41b2c9e5f7977832a368e2cf07865",
+        "introduced_blob": "ee6e3ea72029b99a3ea8bedb395da88c7240d675",
+        "original_commit": "2d2b2d5762a2d42eb654bc85715e445a51686220",
+        "original_blob": "a1a9134510678002e75a38f23361486c04f20a4d",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR697 independent delta review and CI."
+      }
+    },
+    {
       "source": "src/game/cu_8008E978.cpp",
       "contributors": [
         "adampreddy"
@@ -11733,6 +11831,41 @@
       }
     },
     {
+      "source": "src/game/cu_800E3A34.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800E3A34",
+        "0x800E3AE8"
+      ],
+      "provenance": {
+        "pull_request": 695,
+        "merged_via": 697,
+        "commit": "6229bd2dffa7926bbfa99edaa40a7a7f4f0d9b6f",
+        "introduced_blob": "c38988cb66e816b969a90e70357b78ae3ef7f296"
+      }
+    },
+    {
+      "source": "src/game/cu_80125F3C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80125F3C",
+        "0x80125FA0"
+      ],
+      "provenance": {
+        "pull_request": 695,
+        "merged_via": 697,
+        "commit": "dee824cc28d41b2c9e5f7977832a368e2cf07865",
+        "introduced_blob": "e1475420a8b0c018a59b7425449c1c4828f44467",
+        "original_commit": "6229bd2dffa7926bbfa99edaa40a7a7f4f0d9b6f",
+        "original_blob": "013266f9bea8513884299317f5390002af84af9e",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR697 independent delta review and CI."
+      }
+    },
+    {
       "source": "src/dolphin/os/OSFont.c",
       "contributors": [
         "mitsevox"
@@ -11820,6 +11953,25 @@
         "merged_via": 608,
         "commit": "f012deacb4afe7a35d88c4ff34075206bbfa23b2",
         "introduced_blob": "16e642fbc1eaa7dc17ffb83bfb2249ba97badab2"
+      }
+    },
+    {
+      "source": "src/game/cu_800EF834.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800EF968",
+        "0x800EFBD8"
+      ],
+      "provenance": {
+        "pull_request": 681,
+        "merged_via": 697,
+        "commit": "dee824cc28d41b2c9e5f7977832a368e2cf07865",
+        "introduced_blob": "3bb00720ea40020092ec4bab84e23738afc08e53",
+        "original_commit": "54559624c46d2d4fd1ab054fb469f178f889b860",
+        "original_blob": "ee9e5871e8c87d2e2325ec78c3c6f1ef7fa26439",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR697 independent delta review and CI."
       }
     },
     {
@@ -13505,6 +13657,210 @@
         "merged_via": 696,
         "commit": "37dc5a8132398b3dc4b61f900ccb57470a624f93",
         "introduced_blob": "08b003370daae9fbe7747f2b776ce1f9537a22ad"
+      }
+    },
+    {
+      "source": "src/game/cu_800034A0.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800034A0",
+        "0x800034D0"
+      ],
+      "provenance": {
+        "pull_request": 658,
+        "merged_via": 697,
+        "commit": "dee824cc28d41b2c9e5f7977832a368e2cf07865",
+        "introduced_blob": "d907034902ee36808bbe392470dea16d870eec10",
+        "original_commit": "16db197586cc845baf76ac22de3d3d02b0a4200e",
+        "original_blob": "67efdcbe83ca6b141c2acbcfff39ca3862ed1ae8",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR697 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_80104944.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80104944",
+        "0x80104A08",
+        "0x80104B24"
+      ],
+      "provenance": {
+        "pull_request": 680,
+        "merged_via": 697,
+        "commit": "4bbed3b7e394d9e3595b653361f79158661ccf22",
+        "introduced_blob": "f25cda5a503765018434d33b62d57b39d2d6725c",
+        "fragment_origin": {
+          "source": "src/game/cu_800EFC68.cpp",
+          "commit": "62218c67ea0a49314b927ffbba7fd645a168285d",
+          "blob": "a58cd597b5838e6048a77386465f44d9e0a35c26"
+        },
+        "integration_adjustment": "Preserve original PR 680 author and exact function addresses in a new comparison source fragment with its actual introduction pin; fragment_origin retains the original authored source location/commit/blob. Independent review verifies unchanged bodies apart from canonical two-float point reuse. This is not an original file-boundary claim or a whole-path rename."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800A3B10",
+        "0x800A3E00",
+        "0x800A554C",
+        "0x800A5D94",
+        "0x800A9688"
+      ],
+      "provenance": {
+        "pull_request": 682,
+        "merged_via": 697,
+        "commit": "dee824cc28d41b2c9e5f7977832a368e2cf07865",
+        "introduced_blob": "7fae7b72d6bda4625991d110bb24a8a0cff08c45",
+        "original_commit": "7161cbabdc857c8f8d8b82edc2f7d2ac8909fea8",
+        "original_blob": "29b3052aba027bb73c804b8e76e61b4e34399967",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR697 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800FD7D0",
+        "0x800FDFD8"
+      ],
+      "provenance": {
+        "pull_request": 684,
+        "merged_via": 697,
+        "commit": "dee824cc28d41b2c9e5f7977832a368e2cf07865",
+        "introduced_blob": "38f3883b431afa664d6c5fef5877ce533376585c",
+        "original_commit": "2d7b6cc5ad5eb2df5002c2b45630c84ddc997056",
+        "original_blob": "887134723bce78d17d7da33fc1b2a1ed131cdf2b",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR697 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800C7084",
+        "0x800CA14C"
+      ],
+      "provenance": {
+        "pull_request": 685,
+        "merged_via": 697,
+        "commit": "dee824cc28d41b2c9e5f7977832a368e2cf07865",
+        "introduced_blob": "7fae7b72d6bda4625991d110bb24a8a0cff08c45",
+        "original_commit": "4089d55d22364336567a01b9661dc65162440760",
+        "original_blob": "57dc086820b20e3c7801b78ed9c31535a9eb1416",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR697 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/Common/UIStudio/UIStudio.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80217C38",
+        "0x802182E4",
+        "0x80218A34",
+        "0x80218AA8",
+        "0x80218AB0",
+        "0x80218ABC",
+        "0x80218AC4",
+        "0x80218ACC",
+        "0x80219044",
+        "0x8021956C",
+        "0x802195E4",
+        "0x80219650",
+        "0x80219854",
+        "0x8021A020",
+        "0x8021A060"
+      ],
+      "provenance": {
+        "pull_request": 688,
+        "merged_via": 697,
+        "commit": "865f6497d321694f4911200c19fa1d5206e0db33",
+        "introduced_blob": "40e1b92027414b4a07a913c370f3c5db1526aade"
+      }
+    },
+    {
+      "source": "src/game/cu_8012A6B0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8012E590"
+      ],
+      "provenance": {
+        "pull_request": 691,
+        "merged_via": 697,
+        "commit": "ae80e7c4cabf7898074c795dd45933e144c70b93",
+        "introduced_blob": "6e4cf787a2ab32a1c0728399013633c6bb049dd7"
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8009B288",
+        "0x8009BDA0",
+        "0x8009C470",
+        "0x8009C56C",
+        "0x8009C604",
+        "0x8009C684",
+        "0x8009C6F4",
+        "0x8009C814",
+        "0x8009C98C"
+      ],
+      "provenance": {
+        "pull_request": 694,
+        "merged_via": 697,
+        "commit": "dee824cc28d41b2c9e5f7977832a368e2cf07865",
+        "introduced_blob": "7fae7b72d6bda4625991d110bb24a8a0cff08c45",
+        "original_commit": "65fe16f47697d0aaf792e5b88fcf19c5d6960c4f",
+        "original_blob": "7851399ede7a5ae41c27f7fb62d32faca03af746",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR697 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_8003877C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8003924C",
+        "0x80039454",
+        "0x80039458",
+        "0x8003977C",
+        "0x80039890",
+        "0x8003989C",
+        "0x80039A1C",
+        "0x80039C64",
+        "0x80039FE8",
+        "0x8003A06C",
+        "0x8003A078",
+        "0x8003A3F4",
+        "0x8003AB08",
+        "0x8003AB28",
+        "0x8003AB38"
+      ],
+      "provenance": {
+        "pull_request": 692,
+        "merged_via": 697,
+        "commit": "4bbed3b7e394d9e3595b653361f79158661ccf22",
+        "introduced_blob": "564f90b1773da0e97dc415c45c9715053c81e034",
+        "integration_adjustment": "Original PR 692 bodies retained with canonical unused-argument contract. Register its actual emitted rodata against the full target slice without source padding; focused comparison verifies these fifteen exact whole functions, with sixteen useful partial bodies and a measured data mismatch retained without exact credit.",
+        "original_commit": "106b14b026bb4d11f60e6bca8859116aa929c5c0",
+        "original_blob": "76f3d517bfd22cdaa585f4835fa06a793648a3c1"
       }
     },
     {

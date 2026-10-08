@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "game/Command_800CEE74.h"
+#include "game/Input_800B6D34.h"
 #include "game/Lookup_8012078C.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
@@ -9,6 +10,7 @@
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F518.h"
 #include "game/State_803EB098.h"
+#include "game/Team_80167A8C.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_800670B4.h"
@@ -21,6 +23,7 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802270D4.h"
+#include "game/fn_80227638.h"
 #include "game/fn_8022781C.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_80238174.h"
@@ -583,6 +586,9 @@ int fn_80178348(void);
 int fn_80178360(void);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_8022765C(void *pOut, void *pA, void *pB);
+float fn_80237260(int stream);
+extern unsigned char lbl_803EAEE8;
+extern float lbl_803ED6CC;
 unsigned char fn_8010B87C(Object_80039F5C *p, Object_80039F5C *pOther);
 extern Queue_800EFE0C **lbl_803EAE14;
 extern int lbl_803EC9EC;
@@ -2418,6 +2424,14 @@ extern "C" void fn_800FD708(State_80039F5C *pState)
     pState->mUnknown2 = ((0x800000 - (pState->mUnknown2 << 17)) & 0xFFFFFF) >> 17;
 }
 
+extern "C" int fn_800FD7D0(Object_80039F5C *p)
+{
+    Object_800670B4 *pTeam = fn_80168708(p->mIdBytes[2]);
+    Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[p->mIdBytes[1]];
+
+    return pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20;
+}
+
 extern "C" int fn_800FDA58(Object_80039F5C *p)
 {
     State_800FDA58 *pState = (State_800FDA58 *)&p->mUnknown336;
@@ -2433,6 +2447,20 @@ extern "C" int fn_800FDA58(Object_80039F5C *p)
     }
     p->mFlags &= ~0x40000;
     p->mFlags &= ~0x20000000;
+    return 0;
+}
+
+extern "C" int fn_800FDFD8(Object_80039F5C *p)
+{
+    Input_800B6D34 input;
+
+    if (p->mIdBytes[2] == fn_80178320()) {
+        fn_800B6D34(p, &input);
+        if (p->mFlags & 0x4000) {
+            p->mFlags &= ~0x10;
+            return 1;
+        }
+    }
     return 0;
 }
 
@@ -2787,6 +2815,14 @@ extern "C" int fn_801047C8(void)
     }
     return result;
 }
+
+
+
+
+
+
+
+
 
 extern "C" void fn_80104C3C(Object_80039F5C *p, Vector_80039F5C *pOut, float scale) {
     Vector_80039F5C v;
