@@ -18983,6 +18983,86 @@
           "end": "0x80285AE8"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8007A3C4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit/type/external/source-form/compiler rows at8007A3C4\u20138007A9E4 and existing exact function extents. Thirteen complete comparison-only bodies. No initialized storage; original-file edges remain open, and neighboring setup/typed-value/update bodies are not claimed. Original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007A3C4",
+          "end": "0x8007A9E4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8007A3C4",
+          "start": "0x8007A3C4",
+          "end": "0x8007A410"
+        },
+        {
+          "symbol": "fn_8007A410",
+          "start": "0x8007A410",
+          "end": "0x8007A43C"
+        },
+        {
+          "symbol": "fn_8007A43C",
+          "start": "0x8007A43C",
+          "end": "0x8007A444"
+        },
+        {
+          "symbol": "fn_8007A444",
+          "start": "0x8007A444",
+          "end": "0x8007A4A4"
+        },
+        {
+          "symbol": "fn_8007A4A4",
+          "start": "0x8007A4A4",
+          "end": "0x8007A510"
+        },
+        {
+          "symbol": "fn_8007A510",
+          "start": "0x8007A510",
+          "end": "0x8007A588"
+        },
+        {
+          "symbol": "fn_8007A588",
+          "start": "0x8007A588",
+          "end": "0x8007A600"
+        },
+        {
+          "symbol": "fn_8007A600",
+          "start": "0x8007A600",
+          "end": "0x8007A690"
+        },
+        {
+          "symbol": "fn_8007A690",
+          "start": "0x8007A690",
+          "end": "0x8007A7F4"
+        },
+        {
+          "symbol": "fn_8007A7F4",
+          "start": "0x8007A7F4",
+          "end": "0x8007A894"
+        },
+        {
+          "symbol": "fn_8007A894",
+          "start": "0x8007A894",
+          "end": "0x8007A934"
+        },
+        {
+          "symbol": "fn_8007A934",
+          "start": "0x8007A934",
+          "end": "0x8007A98C"
+        },
+        {
+          "symbol": "fn_8007A98C",
+          "start": "0x8007A98C",
+          "end": "0x8007A9E4"
+        }
+      ]
     }
   ]
 }
