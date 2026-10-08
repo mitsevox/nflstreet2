@@ -132,7 +132,7 @@ float fn_800A32E4(void);
 int fn_800A3444(void);
 void fn_800A8954(int event, int team, Object_80039F5C *p);
 void fn_800AD910(int a, float b);
-void fn_800B1584(int a, int b);
+void fn_800B1584(int a, const float *pPos);
 void fn_800B2314(void);
 int fn_800B65A0(int team);
 int fn_800BA6F8(void);
@@ -1707,11 +1707,11 @@ extern "C" void fn_80179D98(int id, float from, float to)
 
 extern "C" void fn_80179EBC(int ref)
 {
-    int other = fn_8009BCE8(&ref)->mUnknown1032.mUnknown12;
+    int other = fn_8009BCE8(&ref)->mUnknown1044;
 
     if (other != 0) {
         Object_80039F5C *p = fn_8009BCE8(&other);
-        if (p->mUnknown1032.mUnknown12 == ref && other == p->mId) {
+        if (p->mUnknown1044 == ref && other == p->mId) {
             fn_8017937C(other, 0x61736F67, 1);
         }
     }

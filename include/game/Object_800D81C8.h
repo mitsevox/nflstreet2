@@ -12,8 +12,14 @@ struct Block_801BD6D4 {
     float mUnknown8;
 };
 
+struct Block_801BF3C8 {
+    float mUnknown0;
+};
+
 struct Record_800D81C8 {
-    char mUnknown0[76];
+    char mUnknown0[48];
+    Block_801BF3C8 mUnknown30;
+    char mUnknown34[24];
     Block_801BD6D4 mUnknown4C;
     char mUnknown58[36];
 };

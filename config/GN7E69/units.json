@@ -69,6 +69,72 @@
         "include/libc"
       ],
       "evidence": "evidence.tsv compiler rows 0x80227F14-0x802288F8 and 0x802288F8-0x80228E44 (engine_c): ProDG 3.9.3 cc1 -O2 (default -G 8) reproduces every instruction and data byte of both units; -O1, -O3, -Os and -G0 change them. Same flags as the uistudio profile; a separate profile because uistudio's scope evidence and source root are the UI Studio library, and these units include SDK headers that need include/libc."
+    },
+    "dolphin_card_release": {
+      "compiler": "mwcc",
+      "flags": [
+        "-nodefaults",
+        "-proc",
+        "gekko",
+        "-fp",
+        "hard",
+        "-Cpp_exceptions",
+        "off",
+        "-enum",
+        "int",
+        "-char",
+        "signed",
+        "-warn",
+        "pragmas",
+        "-requireprotos",
+        "-pragma",
+        "cats off",
+        "-O4,p",
+        "-inline",
+        "auto",
+        "-I-",
+        "-D__GEKKO__",
+        "-DSDK_REVISION=1",
+        "-lang=c"
+      ],
+      "include_dirs": [
+        "include/libc",
+        "src/dolphin"
+      ],
+      "evidence": "CARD whole-library working hypothesis only: target sign-extension of filename plain chars, GC/1.2.5n default signed and three pinned full CARD recipes omit char override. No nonzero-sensitive signed-char operation proven; equality/NUL tests alone do not uniquely establish original flags. Independent compiler-profile review required. All other flags/source/header types fixed; all12accepted native objects byte-identical;2partial functions440bytes exact."
+    },
+    "dolphin_dvd_release": {
+      "compiler": "mwcc",
+      "flags": [
+        "-nodefaults",
+        "-proc",
+        "gekko",
+        "-fp",
+        "hard",
+        "-Cpp_exceptions",
+        "off",
+        "-enum",
+        "int",
+        "-char",
+        "signed",
+        "-warn",
+        "pragmas",
+        "-requireprotos",
+        "-pragma",
+        "cats off",
+        "-O4,p",
+        "-inline",
+        "auto",
+        "-I-",
+        "-D__GEKKO__",
+        "-DSDK_REVISION=1",
+        "-lang=c"
+      ],
+      "include_dirs": [
+        "include/libc",
+        "src/dolphin"
+      ],
+      "evidence": "DVD-library working setting supported by signed plain-character promotions in target dvdfs.c, dvdidutils.c and fstload.c, pinned GC/1.2.5n signed-char default, and the pinned OOT/SMS/MP4 complete SDK/DVD recipes with no char override. All other dolphin_release compiler flags and declarations are preserved. This is a library-scoped reconstruction setting, not a uniquely recovered original command line; see evidence.tsv compiler row."
     }
   },
   "externals": {
@@ -156,14 +222,6 @@
       "address": "0x8023931C",
       "evidence": "evidence.tsv AX external OSRegisterVersion; branch instruction destination and upstream role."
     },
-    "__AXVPBInit": {
-      "address": "0x80288E2C",
-      "evidence": "evidence.tsv AX external __AXVPBInit; branch instruction destination and upstream role."
-    },
-    "__AXVPBQuit": {
-      "address": "0x8028902C",
-      "evidence": "evidence.tsv AX external __AXVPBQuit; branch instruction destination and upstream role."
-    },
     "__OSLockSramEx": {
       "address": "0x8023CAF0",
       "evidence": "evidence.tsv retained CARD external __OSLockSramEx: branch or address-load operands and reference signature."
@@ -187,10 +245,6 @@
     "DCInvalidateRange": {
       "address": "0x80239CC0",
       "evidence": "evidence.tsv retained CARD external DCInvalidateRange: branch or address-load operands and reference signature."
-    },
-    "__AXSetPBDefault": {
-      "address": "0x80288DEC",
-      "evidence": "Target AXFreeVoice/AXAcquireVoice direct branch destinations, SDK default parameter-block behavior at callee."
     },
     "__DSP_curr_task": {
       "address": "0x803ED508",
@@ -776,21 +830,9 @@
       "address": "0x80190074",
       "evidence": "evidence.tsv external row 0x80190074 (fn_80190074__14Class_8018FD64ii) and type row Class_8018FD64."
     },
-    "__AXGetNumVoices": {
-      "address": "0x80288414",
-      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
-    },
-    "__AXSyncPBs": {
-      "address": "0x80288B68",
-      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
-    },
     "AIStartDMA": {
       "address": "0x8024A1C8",
       "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
-    },
-    "__AXGetPBs": {
-      "address": "0x80288DE0",
-      "evidence": "evidence.tsv AXCL retainedcall/globaloperand and pinned donor declaration."
     },
     "AIRegisterDMACallback": {
       "address": "0x8024A0FC",
@@ -810,10 +852,6 @@
     },
     "AIStopDMA": {
       "address": "0x8024A1E0",
-      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
-    },
-    "axDspSlaveLength": {
-      "address": "0x803EC5C0",
       "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
     },
     "__OSGetInterruptHandler": {
@@ -836,10 +874,6 @@
       "address": "0x803ED068",
       "evidence": "evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
     },
-    "__AXCompressorTable": {
-      "address": "0x803027C0",
-      "evidence": "evidence.tsv AXCL retainedcall/globaloperand and pinned donor declaration."
-    },
     "OSGetConsoleType": {
       "address": "0x80238984",
       "evidence": "evidence.tsv external OSGetConsoleType: EXIUart target calls and inspected EXI/OS callee behavior with pinned SDK source. evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
@@ -859,10 +893,6 @@
     "OSCreateAlarm": {
       "address": "0x80239394",
       "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration."
-    },
-    "axDspSlave": {
-      "address": "0x80304200",
-      "evidence": "evidence.tsv AXOut external row: retained native relocation and target instruction destination, pinned dolsdk2004 declaration."
     },
     "OSClearContext": {
       "address": "0x8023A6F4",
@@ -1095,6 +1125,642 @@
     "__CARDVendorID": {
       "address": "0x803EC2C0",
       "evidence": "Complete BFBB CARDMount native retained operand resolved against original target; source name corroborated by pinned donor declaration and actual call/access context."
+    },
+    "__DVDFSInit": {
+      "address": "0x8023ED68",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "__DVDThreadQueue": {
+      "address": "0x803ED110",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "__fstLoad": {
+      "address": "0x80242120",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "__DVDPrintFatalMessage": {
+      "address": "0x80242018",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "DVDCompareDiskID": {
+      "address": "0x80241F20",
+      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
+    },
+    "__AICallbackStackSwitch": {
+      "address": "0x8024A7B0",
+      "evidence": "Original AID handler directcall passes callbackcodepointerr3, original88bytes changesr1 andcallsnoargs thenrestores; sourceimplementation unresolved."
+    },
+    "__OSIsGcam": {
+      "address": "0x803ED044",
+      "evidence": "Original OSReboot instruction0x8023EA38 loads signed32-bit cached mode flag from r13-21084; canonical OS.h BOOL declaration reused. Whole source streaming branch tests same flag."
+    },
+    "__ArenaLo": {
+      "address": "0x8040E4E0",
+      "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
+    },
+    "_db_stack_end": {
+      "address": "0x8040E4C0",
+      "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
+    },
+    "__ArenaHi": {
+      "address": "0x81780000",
+      "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
+    },
+    "__DVDLongFileNameFlag": {
+      "address": "0x803ED10C",
+      "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
+    },
+    "__PADSpec": {
+      "address": "0x803ED2B0",
+      "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
+    },
+    "__OSUnhandledException": {
+      "address": "0x8023AF0C",
+      "evidence": "Original complete MEMIntrruptHandler call instruction0x8023BB0C identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "RealMode": {
+      "address": "0x8023BC20",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "Config24MB": {
+      "address": "0x8023BB20",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "Config48MB": {
+      "address": "0x8023BBA0",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "__OSSetExceptionHandler": {
+      "address": "0x80239190",
+      "evidence": "Original complete OSAlarm C caller instruction80239380 directbranch identifies target; coherent pinnedBFBB supplied role/signature. No provider implementation claimed."
+    },
+    "DBPrintf": {
+      "address": "0x8023ED18",
+      "evidence": "Original complete OSExceptionInit call instruction0x80239150 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "OSSwitchFPUContext": {
+      "address": "0x8023AA7C",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "PPCMfl2cr": {
+      "address": "0x8023875C",
+      "evidence": "Original complete __OSCacheInit call instruction0x8023A288 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "PPCMtl2cr": {
+      "address": "0x80238764",
+      "evidence": "Original complete __OSCacheInit call instruction0x8023A294 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "PPCMfhid2": {
+      "address": "0x80238808",
+      "evidence": "Original complete OSInit call instruction0x80238CCC identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "PPCMthid2": {
+      "address": "0x80238810",
+      "evidence": "Original complete OSInit call instruction0x80238CD4 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "PPCMfhid0": {
+      "address": "0x8023874C",
+      "evidence": "Original complete __OSCacheInit call instruction0x8023A220 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "ICEnable": {
+      "address": "0x80239DBC",
+      "evidence": "Original complete __OSCacheInit call instruction0x8023A210 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "DCEnable": {
+      "address": "0x80239CAC",
+      "evidence": "Original complete __OSCacheInit call instruction0x8023A230 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "OSSetErrorHandler": {
+      "address": "0x8023ACF4",
+      "evidence": "Original complete __OSCacheInit call instruction0x8023A2B0 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "DVDInit": {
+      "address": "0x8023F498",
+      "evidence": "Original complete OSInit call instruction0x80238E88 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "DVDSetAutoInvalidation": {
+      "address": "0x802415C8",
+      "evidence": "Original complete __OSReboot call instruction0x8023E9A0 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "DVDResume": {
+      "address": "0x802415D8",
+      "evidence": "Original complete __OSReboot call instruction0x8023E9A4 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "__DVDPrepareResetAsync": {
+      "address": "0x80241A74",
+      "evidence": "Original complete __OSReboot call instruction0x8023E9B4 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "DVDCheckDisk": {
+      "address": "0x8024197C",
+      "evidence": "Original complete __OSReboot call instruction0x8023EC00 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "__OSDoHotReset": {
+      "address": "0x8023C0B0",
+      "evidence": "Original complete __OSReboot call instruction0x8023EC38 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "AISetStreamVolLeft": {
+      "address": "0x8024A4B8",
+      "evidence": "Original complete __OSReboot call instruction0x8023EA6C identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "AISetStreamVolRight": {
+      "address": "0x8024A4E4",
+      "evidence": "Original complete __OSReboot call instruction0x8023EA74 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "DVDCancelStreamAsync": {
+      "address": "0x80241300",
+      "evidence": "Original complete __OSReboot call instruction0x8023EA80 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "DVDGetCommandBlockStatus": {
+      "address": "0x802414D0",
+      "evidence": "Original complete __OSReboot call instruction0x8023EC40 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "AISetStreamPlayState": {
+      "address": "0x8024A1F8",
+      "evidence": "Original complete __OSReboot call instruction0x8023EB04 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "ICFlashInvalidate": {
+      "address": "0x80239DAC",
+      "evidence": "Original complete OSResetSystem call instruction0x8023C264 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "Run": {
+      "address": "0x8023E920",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "Reset": {
+      "address": "0x8023C040",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "__OSStopAudioSystem": {
+      "address": "0x80239BD4",
+      "evidence": "Original complete OSResetSystem call instruction0x8023C118 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "__PADDisableRecalibration": {
+      "address": "0x80248124",
+      "evidence": "Original complete OSResetSystem call instruction0x8023C398 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "__OSSyncSram": {
+      "address": "0x8023CED0",
+      "evidence": "Original complete OSResetSystem call instruction0x8023C240 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "LCDisable": {
+      "address": "0x80239ED4",
+      "evidence": "Original complete OSResetSystem call instruction0x8023C244 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "OSCancelThread": {
+      "address": "0x8023DE84",
+      "evidence": "Original complete OSResetSystem call instruction0x8023C320 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "__OSReboot": {
+      "address": "0x8023E93C",
+      "evidence": "Original complete OSResetSystem call instruction0x8023C2E8 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "ExternalInterruptHandler": {
+      "address": "0x8023BA10",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "OSGetResetCode": {
+      "address": "0x8023C3B0",
+      "evidence": "Original complete ClearArena call instruction0x802389BC identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "OSGetArenaLo": {
+      "address": "0x80239A00",
+      "evidence": "Original complete OSInit call instruction0x80238E38 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "PPCMtmmcr0": {
+      "address": "0x80238790",
+      "evidence": "Original complete OSInit call instruction0x80238B60 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "PPCMtmmcr1": {
+      "address": "0x80238798",
+      "evidence": "Original complete OSInit call instruction0x80238B68 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "PPCMtpmc1": {
+      "address": "0x802387A0",
+      "evidence": "Original complete OSInit call instruction0x80238B70 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "PPCMtpmc2": {
+      "address": "0x802387A8",
+      "evidence": "Original complete OSInit call instruction0x80238B78 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "PPCMtpmc3": {
+      "address": "0x802387B0",
+      "evidence": "Original complete OSInit call instruction0x80238B80 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "PPCMtpmc4": {
+      "address": "0x802387B8",
+      "evidence": "Original complete OSInit call instruction0x80238B88 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "PPCDisableSpeculation": {
+      "address": "0x8023882C",
+      "evidence": "Original complete OSInit call instruction0x80238B8C identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "PPCSetFpNonIEEEMode": {
+      "address": "0x80238854",
+      "evidence": "Original complete OSInit call instruction0x80238B90 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "OSSetArenaLo": {
+      "address": "0x80239A10",
+      "evidence": "Original complete OSInit call instruction0x80238C68 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "__OSModuleInit": {
+      "address": "0x8023BA60",
+      "evidence": "Original complete OSInit call instruction0x80238C98 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "__OSInterruptInit": {
+      "address": "0x8023B270",
+      "evidence": "Original complete OSInit call instruction0x80238C9C identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "__OSContextInit": {
+      "address": "0x8023AB00",
+      "evidence": "Original complete OSInit call instruction0x80238CB0 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "__OSCacheInit": {
+      "address": "0x8023A1E4",
+      "evidence": "Original complete OSInit call instruction0x80238CB4 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "__OSInitSram": {
+      "address": "0x8023C958",
+      "evidence": "Original complete OSInit call instruction0x80238CC0 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "__OSThreadInit": {
+      "address": "0x8023D47C",
+      "evidence": "Original complete OSInit call instruction0x80238CC4 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "__OSInitAudioSystem": {
+      "address": "0x80239A18",
+      "evidence": "Original complete OSInit call instruction0x80238CC8 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "__OSInitMemoryProtection": {
+      "address": "0x8023BC38",
+      "evidence": "Original complete OSInit call instruction0x80238CE4 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "EnableMetroTRKInterrupts": {
+      "address": "0x801AA7B8",
+      "evidence": "Original complete OSInit call instruction0x80238E70 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "DVDInquiryAsync": {
+      "address": "0x802413BC",
+      "evidence": "Original complete OSInit call instruction0x80238EC8 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "__DBIsExceptionMarked": {
+      "address": "0x8023ECFC",
+      "evidence": "Original complete OSExceptionInit call instruction0x80239000 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
+    },
+    "__OSEVStart": {
+      "address": "0x802391C0",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "__OSEVSetNumber": {
+      "address": "0x80239228",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "__OSEVEnd": {
+      "address": "0x80239258",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "__OSDBINTSTART": {
+      "address": "0x80239168",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "__OSDBINTEND": {
+      "address": "0x8023918C",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "__OSDBJUMPSTART": {
+      "address": "0x8023918C",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "__OSDBJUMPEND": {
+      "address": "0x80239190",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "__DBVECTOR": {
+      "address": "0x80239218",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "OSDefaultExceptionHandler": {
+      "address": "0x8023925C",
+      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
+    },
+    "DecrementerExceptionHandler": {
+      "address": "0x802399A8",
+      "evidence": "Original OSInitAlarm forms pointer to retained80byte exceptionbridge. Unsupported ASM remains original, no sourcecredit."
+    },
+    "__OSGetExceptionHandler": {
+      "address": "0x802391AC",
+      "evidence": "Original complete OSAlarm C caller instruction80239358 directbranch identifies target; coherent pinnedBFBB supplied role/signature. No provider implementation claimed."
+    },
+    "PPCMtdec": {
+      "address": "0x8023876C",
+      "evidence": "Original complete OSAlarm C caller instruction8023993C directbranch identifies target; coherent pinnedBFBB supplied role/signature. No provider implementation claimed."
+    },
+    "GXSetGPMetric": {
+      "address": "0x8025295C",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXClearGPMetric": {
+      "address": "0x8025334C",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetTevOp": {
+      "address": "0x80251604",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetTevKColorSel": {
+      "address": "0x802518D8",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetTevKAlphaSel": {
+      "address": "0x80251934",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetTevSwapMode": {
+      "address": "0x80251990",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetTevSwapModeTable": {
+      "address": "0x802519D8",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetAlphaCompare": {
+      "address": "0x80251A58",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetZTexture": {
+      "address": "0x80251A9C",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetTevOrder": {
+      "address": "0x80251B28",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetNumTevStages": {
+      "address": "0x80251CC4",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXClearVtxDesc": {
+      "address": "0x8024D418",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetVtxAttrFmtv": {
+      "address": "0x8024D6AC",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetArray": {
+      "address": "0x8024DC48",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXInvalidateVtxCache": {
+      "address": "0x8024DCD4",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetTexCoordGen2": {
+      "address": "0x8024DCE4",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetNumTexGens": {
+      "address": "0x8024DF64",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetMisc": {
+      "address": "0x8024DFA0",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "__GXAbort": {
+      "address": "0x8024E090",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXPokeAlphaMode": {
+      "address": "0x8024E518",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXPokeAlphaRead": {
+      "address": "0x8024E52C",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXPokeAlphaUpdate": {
+      "address": "0x8024E54C",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXPokeBlendMode": {
+      "address": "0x8024E564",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXPokeColorUpdate": {
+      "address": "0x8024E5C8",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXPokeDstAlpha": {
+      "address": "0x8024E5E0",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXPokeDither": {
+      "address": "0x8024E604",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXPokeZMode": {
+      "address": "0x8024E61C",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetDrawSyncCallback": {
+      "address": "0x8024E684",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetDrawDoneCallback": {
+      "address": "0x8024E750",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "__GXPEInit": {
+      "address": "0x8024E814",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "PPCMtwpar": {
+      "address": "0x80238824",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXLoadPosMtxImm": {
+      "address": "0x8025251C",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXLoadNrmMtxImm": {
+      "address": "0x8025256C",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetCurrentMtx": {
+      "address": "0x802525BC",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXLoadTexMtxImm": {
+      "address": "0x802525F0",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetProjectionv": {
+      "address": "0x80252448",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetClipMode": {
+      "address": "0x802528B0",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetScissor": {
+      "address": "0x802527F8",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetScissorBoxOffset": {
+      "address": "0x80252870",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetNumChans": {
+      "address": "0x8024FC48",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetChanCtrl": {
+      "address": "0x8024FC84",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetChanAmbColor": {
+      "address": "0x8024FA68",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetChanMatColor": {
+      "address": "0x8024FB58",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "__VMGetMRAMPages": {
+      "address": "0x80244FB4",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__VMGetARAMSize": {
+      "address": "0x80244FBC",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__VMGetARAMStart": {
+      "address": "0x80244FC4",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__VMGetPageToReplace": {
+      "address": "0x80245200",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__VMTranslateVMPageToARAMPage": {
+      "address": "0x80245614",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__VMIsPageMapped": {
+      "address": "0x80245654",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__VMMappingErrorAlert": {
+      "address": "0x80245674",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__VMSetPageInARAM": {
+      "address": "0x802456AC",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__VMIsPageInARAM": {
+      "address": "0x802456C4",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__VMAllocVirtualToARAMLUT": {
+      "address": "0x802456D8",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__VMAllocARAMToVirtualLUT": {
+      "address": "0x80245780",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "VMBASEInit": {
+      "address": "0x80245820",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__VMBASEGetVirtualAddr": {
+      "address": "0x80245B24",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__VMBASEIsPageChanged": {
+      "address": "0x80245A5C",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "VMBASEClearPageTableEntry": {
+      "address": "0x80245980",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "VMBASESetPageTableEntry": {
+      "address": "0x802458EC",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__VMBASEIsPageValid": {
+      "address": "0x80245A0C",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__VMBASEIsPageReferenced": {
+      "address": "0x80245A34",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__VMBASEIsPageLocked": {
+      "address": "0x80245B44",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "VMBASESetPageReferenced": {
+      "address": "0x80245A84",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
+    },
+    "__GBASyncCallback": {
+      "address": "0x802896C4",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for GBA."
+    },
+    "__GBASync": {
+      "address": "0x802896F8",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for GBA."
+    },
+    "__GBATransfer": {
+      "address": "0x80289888",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for GBA."
+    },
+    "__GBA": {
+      "address": "0x803D4360",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for GBA."
+    },
+    "__GBAReset": {
+      "address": "0x803ED5E8",
+      "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for GBA."
+    },
+    "__GXCleanGPFifo": {
+      "address": "0x8024C7D8",
+      "evidence": "GXAbortFrame originalbranch8024E354 calls full256-byte original FIFO cleanup; complete OOT related C and target arguments/globals establish void(void). Comparison-only body is not an accepted native provider."
+    },
+    "__init_cpp": {
+      "address": "0x8023E838",
+      "evidence": "Actual complete startup C call at8023E824 reaches original84-byte ctor-table loop entry8023E838, known table802CC668. Logical SDK spelling from coherent OOT6e449e; void(void) call signature. Original target debug name not claimed; original body remains linked, no fake definition."
+    },
+    "PPCMfwpar": {
+      "address": "0x80238818",
+      "evidence": "Actual original12-byte helper sync/mfspr r3,SPR921/blr and both original FIFO call destinations, exact fullnative bodies; related SDK spelling and u32(void) role, no original debug-symbol claim."
+    },
+    "GXFlush": {
+      "address": "0x8024E034",
+      "evidence": "Actual original FIFO redirect call destination and existing full exact-unlinked GXMisc GXFlush comparison establish related API/void(void) role. Original callee bytes remain linked; no new whole-unit promotion or source credit."
+    },
+    "__DBExceptionDestination": {
+      "address": "0x8023ECEC",
+      "evidence": "DBInit actual codepointer stored at fixed interface+8;16byte original entry branches to Caux. Unsupported assembly source remains external/target original."
+    },
+    "__VMBASEInvalidateTLBEntry": {
+      "address": "0x80245B14",
+      "evidence": "Original target provider retained for calls from measured VMBase C. Complete target instructions at 0x80245B14 and pinned MVP 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 src/dolphin/vmbase/VMBase.c declarations support the accessed contract; no body or original handwritten assembly provenance claimed. See VMBase external evidence."
+    },
+    "__VMBASESetupExceptionHandlers": {
+      "address": "0x80245FD0",
+      "evidence": "Original target provider retained for calls from measured VMBase C. Complete target instructions at 0x80245FD0 and pinned MVP 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 src/dolphin/vmbase/VMBase.c declarations support the accessed contract; no body or original handwritten assembly provenance claimed. See VMBase external evidence."
+    },
+    "__VMBASESetupVMRegisters": {
+      "address": "0x80245F34",
+      "evidence": "Original target provider retained for calls from measured VMBase C. Complete target instructions at 0x80245F34 and pinned MVP 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 src/dolphin/vmbase/VMBase.c declarations support the accessed contract; no body or original handwritten assembly provenance claimed. See VMBase external evidence."
+    },
+    "__VMBASEInvalidateEntireTLB": {
+      "address": "0x80245EDC",
+      "evidence": "Original target provider retained for calls from measured VMBase C. Complete target instructions at 0x80245EDC and pinned MVP 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 src/dolphin/vmbase/VMBase.c declarations support the accessed contract; no body or original handwritten assembly provenance claimed. See VMBase external evidence."
     }
   },
   "units": [
@@ -3094,7 +3760,7 @@
     },
     {
       "source": "src/dolphin/card/CARDBlock.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARD unit row CARDBlock; CREDITS.md import provenance.",
       "sections": [
         {
@@ -3107,7 +3773,7 @@
     },
     {
       "source": "src/dolphin/card/CARDCreate.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARD unit row CARDCreate; CREDITS.md import provenance.",
       "sections": [
         {
@@ -3120,7 +3786,7 @@
     },
     {
       "source": "src/dolphin/card/CARDDelete.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARD unit row CARDDelete; CREDITS.md import provenance.",
       "sections": [
         {
@@ -3133,7 +3799,7 @@
     },
     {
       "source": "src/dolphin/card/CARDDir.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARD unit row CARDDir; CREDITS.md import provenance.",
       "sections": [
         {
@@ -3146,7 +3812,7 @@
     },
     {
       "source": "src/dolphin/card/CARDStat.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARD unit row CARDStat; CREDITS.md import provenance.",
       "sections": [
         {
@@ -3159,7 +3825,7 @@
     },
     {
       "source": "src/dolphin/card/CARDWrite.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARD unit row CARDWrite; CREDITS.md import provenance.",
       "sections": [
         {
@@ -3197,7 +3863,7 @@
     },
     {
       "source": "src/dolphin/card/CARDCheck.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARDCheck.c target code and retention; CREDITS.md reference source.",
       "link_roots": {
         "symbols": [
@@ -3220,7 +3886,7 @@
     },
     {
       "source": "src/dolphin/card/CARDFormat.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARDFormat.c target code and retention; CREDITS.md reference source.",
       "link_roots": {
         "symbols": [
@@ -3240,7 +3906,7 @@
     },
     {
       "source": "src/dolphin/card/CARDRdwr.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARDRdwr.c target code and retention; CREDITS.md reference source.",
       "link_roots": {
         "symbols": [
@@ -3260,7 +3926,7 @@
     },
     {
       "source": "src/dolphin/card/CARDRead.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARDRead.c target code and retention; CREDITS.md reference source.",
       "link_roots": {
         "symbols": [
@@ -3281,7 +3947,7 @@
     },
     {
       "source": "src/dolphin/dvd/dvdqueue.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_dvd_release",
       "evidence": "evidence.tsv SDK DVD/matrix unit rows: reference source order, complete retained code/data and target references; file ownership provisional.",
       "link_roots": {
         "symbols": [
@@ -3322,7 +3988,7 @@
     },
     {
       "source": "src/dolphin/dvd/dvderror.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_dvd_release",
       "evidence": "evidence.tsv SDK DVD/matrix unit rows: reference source order, complete retained code/data and target references; file ownership provisional.",
       "link_roots": {
         "symbols": [
@@ -7098,12 +7764,12 @@
     {
       "source": "src/game/cu_8018B0BC.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded team/player copy group; exact linked first function and native literal prefix. The four later bodies remain registered for comparison; original-file edges stay open.",
+      "evidence": "evidence.tsv bounded team/player copy group; exact linked first two functions and native literal prefix. The four later bodies remain registered for comparison; original-file edges stay open.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8018B0BC",
+          "start": "0x8018B014",
           "end": "0x8018B2A8"
         },
         {
@@ -8374,7 +9040,7 @@
     },
     {
       "source": "src/dolphin/dvd/dvdlow.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_dvd_release",
       "evidence": "evidence.tsv DVDLow retained functions, native storage and related source/type rows; original file ownership remains provisional.",
       "link_roots": {
         "symbols": [
@@ -8550,7 +9216,7 @@
     },
     {
       "source": "src/dolphin/card/CARDUnlock.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARDUnlock functions, static-data and shared CARD/DSP layout rows; archive file ownership provisional.",
       "link_roots": {
         "symbols": [
@@ -9186,7 +9852,7 @@
     },
     {
       "source": "src/dolphin/card/CARDBios.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "Complete BFBB CARDBios source with current canonical headers; all 25 retained target functions and full initialized/NOBITS allocations validated. Original archive boundary remains provisional.",
       "link_roots": {
         "symbols": [
@@ -9243,6 +9909,119 @@
           "placement": ".data4",
           "start": "0x802FEFE8",
           "end": "0x802FF040"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ax/AXVPB.c",
+      "profile": "dolphin_release",
+      "evidence": "Pinned BFBB coherent AXVPB source, thirteen complete target functions and typed native allocations; normal thirteen-root SN retention and full original-output validation required. See evidence.tsv; original archive edges remain provisional.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80288414",
+          "end": "0x80289408"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x803026D0",
+          "end": "0x803027A4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803C2A60",
+          "end": "0x803D4260"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED5C8",
+          "end": "0x803ED5D4"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EE4A8",
+          "end": "0x803EE4AC"
+        }
+      ],
+      "link_roots": {
+        "symbols": [
+          "__AXGetNumVoices",
+          "__AXServiceVPB",
+          "__AXSyncPBs",
+          "__AXGetPBs",
+          "__AXSetPBDefault",
+          "__AXVPBInit",
+          "__AXVPBQuit",
+          "AXSetVoiceSrcType",
+          "AXSetVoiceState",
+          "AXSetVoiceAddr",
+          "AXSetVoiceAdpcm",
+          "AXSetVoiceSrcRatio",
+          "AXSetVoiceAdpcmLoop"
+        ],
+        "evidence": "Thirteen original complete target functions retain coherent native bodies in source order. Six donor public setters have no target identities and are naturally removed by SN library retention; no source splicing or synthetic boundary."
+      }
+    },
+    {
+      "source": "src/game/cu_8018AFF0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018AFF0-0x8018B014 (src/game/cu_8018AFF0.cpp).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018AFF0",
+          "end": "0x8018B014"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ax/AXComp.c",
+      "profile": "dolphin_release",
+      "evidence": "Genuine pinned complete donor initializer source, authenticated Git blob and native compiled data equality. Actual AXCL/AXOut target references support extent; data-only source-file attribution remains provisional. No CPUinstruction/function credit. https://github.com/doldecomp/dolsdk2004 revision 2328b4164b1a98422a2255d83ce9a5a7548990cc path src/ax/AXComp.c blob bc0eb97c877c88f4aa1b998362ef2eb661e8423e.",
+      "sections": [
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x803027C0",
+          "end": "0x80304200"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ax/DSPCode.c",
+      "profile": "dolphin_release",
+      "evidence": "Genuine pinned complete donor initializer source, authenticated Git blob and native compiled data equality. Actual AXCL/AXOut target references support extent; data-only source-file attribution remains provisional. No CPUinstruction/function credit. https://github.com/bfbbdecomp/bfbb revision 8fb1c232addcacf44932c10c4cede41b43f98f40 path src/dolphin/src/ax/DSPCode.c blob c8fbd9e78fd9955d097acb4277f25846918f785e.",
+      "sections": [
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80304200",
+          "end": "0x803060C0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC5C0",
+          "end": "0x803EC5C2"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8018AD34.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018AD34-0x8018AD78 (src/game/cu_8018AD34.cpp).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018AD34",
+          "end": "0x8018AD78"
         }
       ]
     }

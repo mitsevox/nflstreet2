@@ -1,3 +1,4 @@
+#include "game/Entry_800B206C.h"
 #include "game/fn_80177FE0.h"
 #include "game/Object_80039F5C.h"
 #include "game/Pair_8017055C.h"
@@ -17,14 +18,6 @@ struct Output_80174868 {
   signed char mUnknown14;
   unsigned char mUnknown15;
   unsigned char mUnknown16[2];
-};
-struct Event_801744E8 {
-  int mUnknown0;
-  unsigned short mUnknown4;
-  unsigned char mUnknown6, mUnknown7;
-  unsigned int mUnknown8, mUnknownC, mUnknown10;
-  int mUnknown14;
-  unsigned int mUnknown18, mUnknown1C, mUnknown20;
 };
 struct Table_801744E8 {
   unsigned short mUnknown0, mUnknown2;
@@ -74,7 +67,7 @@ int fn_8009D86C(void);
 int fn_8009D990(int);
 void fn_801735B4(unsigned int);
 void fn_801F51DC(int, void *, int, int,
-                 int (*)(Event_801744E8 *, Event_801744E8 *), int, int, int);
+                 int (*)(Entry_800B206C *, Entry_800B206C *), int, int, int);
 int fn_80175E3C(Object_80039F5C *, Object_80039F5C *, void *);
 void fn_801760B4(int, Object_80039F5C *, Object_80039F5C *);
 void fn_8017419C(float *value, Object_80039F5C *, int) {
@@ -168,9 +161,9 @@ void fn_80174204(Input_80174868 *in, Output_80174868 *out, int type,
   out->mUnknown10 = type ? 2 : type;
 }
 
-int fn_801744E8(Event_801744E8 *events, int, unsigned char *result) {
+int fn_801744E8(Entry_800B206C *events, int, unsigned char *result) {
   *result = 0;
-  int team = events[0].mUnknown6, other = events[1].mUnknown6;
+  int team = events[0].mUnknown4Bytes[2], other = events[1].mUnknown4Bytes[2];
   unsigned short a = team == fn_80178308()
                          ? lbl_802E9A04[events[0].mUnknown0].mUnknown0
                          : lbl_802E9A04[events[0].mUnknown0].mUnknown2;
@@ -184,7 +177,7 @@ int fn_801744E8(Event_801744E8 *events, int, unsigned char *result) {
     }
     if (a == 5 && b == 15) {
       *result = 1;
-      Event_801744E8 temp = events[0];
+      Entry_800B206C temp = events[0];
       events[0] = events[1];
       events[1] = temp;
       return 1;
@@ -194,15 +187,15 @@ int fn_801744E8(Event_801744E8 *events, int, unsigned char *result) {
   *result = 2;
   return 1;
 }
-int fn_80174720(Event_801744E8 *, int, unsigned char *result) {
+int fn_80174720(Entry_800B206C *, int, unsigned char *result) {
   *result = 0;
   return -1;
 }
-int fn_80174730(Event_801744E8 *, int, unsigned char *result) {
+int fn_80174730(Entry_800B206C *, int, unsigned char *result) {
   *result = 0;
   return -1;
 }
-int fn_80174740(Event_801744E8 *a, Event_801744E8 *b) {
+int fn_80174740(Entry_800B206C *a, Entry_800B206C *b) {
   return a->mUnknown14 - b->mUnknown14;
 }
 float fn_80174750(int direction, float value, float amount) {
@@ -781,7 +774,7 @@ int fn_80176378(int value) {
   }
   return 1;
 }
-int fn_801763D0(Event_801744E8 *events, int count, unsigned char *result) {
+int fn_801763D0(Entry_800B206C *events, int count, unsigned char *result) {
   *result = 0;
   switch (count) {
   case 1:

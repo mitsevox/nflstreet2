@@ -10,6 +10,9 @@
 extern "C" {
 #endif
 
+#define GX_WRITE_F32(f) GXWGFifo.f32 = (f32)(f)
+#define GX_WRITE_XF_REG_F(addr, value) do { GX_WRITE_F32(value); } while (0)
+
 #define GX_WRITE_U8(ub)     \
     GXWGFifo.u8 = (u8)(ub)
 
@@ -38,6 +41,8 @@ do { \
 
 #define CHECK_GXBEGIN(line, name) ASSERTMSGLINE(line, !__GXinBegin, "'" name "' is not allowed between GXBegin/GXEnd")
 
+void __GXSetViewport(void);
+
 /* GXAttr */
 void __GXSetMatrixIndex(GXAttr matIdxAttr);
 void __GXSetVCD(void);
@@ -50,6 +55,7 @@ void __GXFlushTextureState(void);
 
 /* GXGeometry */
 void __GXSetDirtyState(void);
+void __GXCleanGPFifo(void);
 void __GXSendFlushPrim(void);
 void __GXSetGenMode(void);
 

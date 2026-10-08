@@ -1,6 +1,8 @@
 #ifndef GAME_OBJECT_80039F5C_H
 #define GAME_OBJECT_80039F5C_H
 
+#include "game/Object_800D81C8.h"
+
 /* The player object returned by fn_80039F5C, with the blocks it contains or
    points to. */
 
@@ -32,9 +34,11 @@ struct Object_800B26B0 {
     float mUnknown28;
     int mUnknown32;
     float mUnknown36;
-    char mUnknown40[12];
+    float mUnknown40;
+    float mUnknown44;
+    char mUnknown48[4];
     float mUnknown52;
-    char mUnknown56[4];
+    int mUnknown56;
     float mUnknown60;
 };
 
@@ -60,7 +64,9 @@ struct Block_80170374 {
     Flags_80170374 mFlags;
     char mUnknown4[24];
     float mUnknown28;
-    char mUnknown32[16];
+    char mUnknown32[8];
+    int mUnknown40;
+    int mUnknown44;
     int mUnknown48;
     char mUnknown52[2];
     unsigned char mUnknown54;
@@ -73,15 +79,39 @@ struct Block_801718E8 {
     unsigned char mUnknown52;
 };
 
+/* Three bytes at +1008, compared field by field by fn_80110630. */
+struct Key_80110630 {
+    unsigned char mUnknown0;
+    unsigned char mUnknown1;
+    unsigned char mUnknown2;
+};
+
+/* Block at +1240, reset by fn_800CE674 and fn_800CE684. Only the accessed
+   prefix is declared; the size is unknown. */
+struct Object_800CE674 {
+    short mUnknown0;
+    char mUnknown2;
+    char mUnknown3;
+};
+
+/* 124-byte entry of the array that +800 points to. */
+typedef Record_800D81C8 Entry_800EAC9C;
+
 /* Record that +784 points to. */
 struct State_80039F5C {
     unsigned char mId;
     unsigned char mUnknown1;
     unsigned char mUnknown2;
-    char mUnknown3[1];
+    unsigned char mUnknown3[1];
     unsigned char mUnknown4;
     char mUnknown5[1];
     unsigned char mUnknown6;
+};
+
+/* Record that +780 points to. Only the word +8 is accessed. */
+struct Record_800C4E18 {
+    char mUnknown0[8];
+    int mUnknown8;
 };
 
 /* Object that +796 points to. */
@@ -90,35 +120,35 @@ struct Object_8016D9B8 {
     int mUnknown8;
 };
 
-/* Block at Block_8011E240 +40, passed to fn_8011DBC8. Its extent past +54
-   is not established. */
+/* Block at player +1072 (Block_8011E240 +40), passed to fn_8011DBC8. +52 is
+   a halfword counter (fn_8011E884, fn_8011E88C, fn_8011DA40). Declared up to
+   +54; the byte there is player +1126. */
 struct Block_8011DBC8 {
     char mUnknown0[52];
     short mUnknown52;
-    unsigned char mUnknown54;
-    char mUnknown55[1];
 };
 
-/* 108-byte block at +1032, cleared as a whole by fn_8011DF90. +4, +8 and
-   +12 hold references resolved through fn_8009BCE8 and written by
-   fn_8009BD2C. */
+/* View of the 108 bytes at player +1032 as one block: fn_8011DF90 clears
+   them with one 108-byte fn_801C1F94 call, and fn_8011E194, fn_8011E1A8,
+   fn_8011E1BC, fn_8011E240, fn_8011E33C and fn_8011E3A4 address them
+   through a register holding player +1032. The per-field view is the
+   mUnknown1032-mUnknown1139 members; this view declares the bytes the
+   block-relative code accesses and leaves the others opaque. +102 is the
+   signed view of player +1134 (lha at 0x8011DB2C, extsh at 0x8011DB54). */
 struct Block_8011E240 {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
     int mUnknown12;
-    int mUnknown16;
-    int mUnknown20;
-    char mUnknown24[16];
-    Block_8011DBC8 mUnknown40;
-    char mUnknown96[4];
+    char mUnknown16[78];
+    unsigned char mUnknown94;
+    char mUnknown95[5];
     unsigned char mUnknown100;
     char mUnknown101[1];
     short mUnknown102;
     unsigned char mUnknown104;
     unsigned char mUnknown105;
-    unsigned char mUnknown106;
-    unsigned char mUnknown107;
+    char mUnknown106[2];
 };
 
 struct Object_80039F5C {
@@ -129,16 +159,27 @@ struct Object_80039F5C {
     };
     Block_80170E64 *mpUnknown4;
     unsigned char mUnknown8;
-    char mUnknown9[3];
+    unsigned char mUnknown9[3];
     unsigned int mFlags;
     int mUnknown16;
-    char mUnknown20[316];
+    char mUnknown20[88];
+    int mUnknown108;
+    char mUnknown112[88];
+    int mUnknown200;
+    char mUnknown204[132];
     int mUnknown336;
-    char mUnknown340[20];
+    short mUnknown340;
+    unsigned char mUnknown342;
+    char mUnknown343[11];
+    unsigned char mUnknown354;
+    char mUnknown355[5];
     unsigned char mUnknown360;
-    char mUnknown361[31];
+    char mUnknown361[27];
+    unsigned int mUnknown388;
     unsigned char mUnknown392;
-    char mUnknown393[31];
+    char mUnknown393[9];
+    unsigned char mUnknown402;
+    char mUnknown403[21];
     Object_800B26B0 mMotion;
     char mUnknown488[24];
     Object_8016D8B0 mUnknown512;
@@ -153,34 +194,74 @@ struct Object_80039F5C {
     float mUnknown768;
     char mUnknown772[4];
     unsigned char mUnknown776;
-    char mUnknown777[7];
+    char mUnknown777[3];
+    Record_800C4E18 *mpUnknown780;
     State_80039F5C *mpState;
     char mUnknown788[4];
     void *mpUnknown792;
     Object_8016D9B8 *mpUnknown796;
-    char mUnknown800[232];
-    Block_8011E240 mUnknown1032;
-    char mUnknown1140[20];
+    Record_800D81C8 *mpUnknown800;
+    char mUnknown804[204];
+    Key_80110630 mUnknown1008;
+    char mUnknown1011[21];
+    /* The 108 bytes at +1032, read field by field and as Block_8011E240. */
+    union {
+        struct {
+            int mUnknown1032;
+            int mUnknown1036;
+            int mUnknown1040;
+            int mUnknown1044;
+            int mUnknown1048;
+            int mUnknown1052;
+            char mUnknown1056[8];
+            short mUnknown1064;
+            char mUnknown1066[6];
+            Block_8011DBC8 mUnknown1072;
+            unsigned char mUnknown1126;
+            char mUnknown1127[7];
+            unsigned short mUnknown1134;
+            unsigned char mUnknown1136;
+            unsigned char mUnknown1137;
+            unsigned char mUnknown1138;
+            unsigned char mUnknown1139;
+        };
+        Block_8011E240 mBlock1032;
+    };
+    char mUnknown1140[16];
+    unsigned char mUnknown1156;
+    char mUnknown1157[3];
     Block_801718E8 mUnknown1160;
     unsigned char mUnknown1213;
     unsigned char mUnknown1214;
     char mUnknown1215[3];
     unsigned char mUnknown1218;
     unsigned char mUnknown1219;
-    char mUnknown1220[1680];
+    unsigned char mUnknown1220;
+    unsigned char mUnknown1221;
+    unsigned char mUnknown1222;
+    char mUnknown1223[1];
+    int mUnknown1224;
+    char mUnknown1228[12];
+    Object_800CE674 mUnknown1240;
+    char mUnknown1244[1656];
     float mUnknown2900;
     char mUnknown2904[4];
     unsigned short mUnknown2908;
-    char mUnknown2910[4];
+    char mUnknown2910[3];
+    unsigned char mUnknown2913;
     unsigned char mUnknown2914;
     char mUnknown2915[1];
     unsigned char mUnknown2916;
     char mUnknown2917[83];
     short mRatings[10];
-    char mUnknown3020[28];
+    char mUnknown3020[20];
+    int mUnknown3040;
+    char mUnknown3044[4];
     /* Message queue that mpState points to; passed to fn_800F03D8 and
        fn_800F053C. Only its head is declared. */
     State_80039F5C mUnknown3048;
+    char mUnknown3055[33];
+    unsigned char mUnknown3088;
 };
 
 extern "C" {

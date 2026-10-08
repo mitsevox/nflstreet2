@@ -62,7 +62,7 @@ void fn_8008FCB4(int a);
 void fn_8008FD88(int a);
 void fn_8008FE60(void);
 void fn_8008FED4(void);
-void fn_8009BD48(Record_8036B55C *pRecord, int a, int b, unsigned char c);
+void fn_8009BD48(int *pRef, int a, int b, int c);
 void fn_8009CDEC(Record_8036B55C *pRecord);
 int fn_800ADD7C(void *pObject, unsigned int a);
 int fn_800ADEFC(void *pObject, unsigned int a);
@@ -73,7 +73,8 @@ int fn_800C47C4(void);
 void fn_800D7A0C(Record_8036B55C *pRecord, int a);
 void fn_800EFD70(int a);
 void fn_800EFDD8(void);
-void fn_800EFFA0(int a, void *b, Record_8036B55C *pRecord, int c);
+struct State_80039F5C;
+void fn_800EFFA0(int a, State_80039F5C *pQueue, Record_8036B55C *pRecord, int c);
 void fn_80161168(void);
 void fn_8016D8B0(void *pObject);
 void fn_8018A8C8(int a);
@@ -150,7 +151,7 @@ static void fn_800218EC(int index, Object_8003DEC4 *pObject)
     fn_800B267C(&pRecord->mUnknown424);
     fn_8016D8B0(pRecord->mUnknown512);
     fn_8016D8B0(pRecord->mUnknown528);
-    fn_8009BD48(pRecord, 3, 0, index);
+    fn_8009BD48((int *)pRecord, 3, 0, (unsigned char)index);
     pRecord->mUnknown8 = 0;
     pRecord->mUnknown12 = 0;
     pRecord->mUnknown9 = 0;
@@ -188,7 +189,7 @@ static void fn_80021B08(Record_8036B55C *pRecord, float step)
     Object_8003DEC4 *pObject = pRecord->mUnknown4;
     int result;
 
-    fn_800EFFA0(0, pRecord->mUnknown3048, pRecord, 0);
+    fn_800EFFA0(0, (State_80039F5C *)pRecord->mUnknown3048, pRecord, 0);
     if (pObject->mUnknown20 & 0x10) {
         fn_801BE420(pRecord->mUnknown3604, &pRecord->mUnknown3096, pRecord->mUnknown3108, pRecord, step);
         fn_801BA03C(&pRecord->mUnknown3096, pRecord->mUnknown3108, step, pRecord);

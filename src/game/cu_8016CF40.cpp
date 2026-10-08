@@ -78,7 +78,7 @@ void fn_8016CF40(Object_80039F5C *p)
     float speed;
     float limit;
 
-    if (p->mUnknown1032.mUnknown0 == 4) {
+    if (p->mUnknown1032 == 4) {
         speed = lbl_803ECB14 * p->mUnknown528.mUnknown0;
         limit = lbl_803ECB14;
     } else if (turn <= 0x2E38E2) {
@@ -105,7 +105,7 @@ void fn_8016CF40(Object_80039F5C *p)
         sign = -sign;
     }
     limit *= 5.0f;
-    if (pInput->mUnknown14 == 2 || p->mUnknown1032.mUnknown0 == 4) {
+    if (pInput->mUnknown14 == 2 || p->mUnknown1032 == 4) {
         pMotion->mUnknown36 = speed * (191.25f / 255.0f * 0.38f + 0.62f);
         pMotion->mUnknown36 = pMotion->mUnknown36 <= limit ? pMotion->mUnknown36 : limit;
         pMotion->mUnknown52 = lbl_803ECB20 * (191.25f / 510.0f + 0.5f) * sign;

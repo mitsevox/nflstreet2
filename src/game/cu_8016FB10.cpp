@@ -13,6 +13,7 @@
 #include "game/fn_80227638.h"
 #include "game/Message_800F01CC.h"
 #include "game/Record_800B15FC.h"
+#include "game/Record_8011F518.h"
 #include "game/cu_8003108C.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
@@ -107,7 +108,6 @@ int fn_800E0F40(Object_80039F5C *p);
 void fn_801039D8(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 Record_8011F4F8 *fn_8011F4F8(int index);
-Record_8011F518 *fn_8011F518(void);
 Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, float *pOut, int b);
 void *fn_801374BC(void);
 int fn_801374E0(void *pBall);
@@ -1354,7 +1354,7 @@ void fn_80172154(Object_80039F5C *p, void *pBall)
             switch (pMate->mpState->mId) {
             case 0x1F:
             case 0x21:
-                if (pMate->mUnknown1032.mUnknown0 != 4) {
+                if (pMate->mUnknown1032 != 4) {
                     fn_800F053C(0, pMate->mpState, &message, pMate);
                 }
                 break;
