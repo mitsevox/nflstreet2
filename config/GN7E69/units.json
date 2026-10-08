@@ -1671,6 +1671,10 @@
     "__GBAReset": {
       "address": "0x803ED5E8",
       "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for GBA."
+    },
+    "__GXCleanGPFifo": {
+      "address": "0x8024C7D8",
+      "evidence": "GXAbortFrame originalbranch8024E348 calls full256-byte original FIFO cleanup; complete OOT related C and target arguments/globals establish void(void). Comparison-only body is not an accepted native provider."
     }
   },
   "units": [

@@ -16541,7 +16541,7 @@
     {
       "source": "src/dolphin/gx/GXMisc.c",
       "profile": "dolphin_release",
-      "evidence": "Complete pinned BFBB twenty-body source/currentcanonical headers. Eighteen presenttarget bodies1576 independently resolved, full2280 provisional ownership retains other unrecovered original functions. No version body splicing.",
+      "evidence": "Existing BFBB complete source and18 exact target bodies1576 preserved. OOT6e449e1748a02c12b4cb218453c529175b85364a CE variant corroborates same abort wait gate/counter/timer/pulse and state; complete AbortFrame/PeekZ added, unchanged existing SetDrawDone/WaitDrawDone emitted for comparison.22target bodies2208bytes measured within full2280 provisional ownership; two36byte ranges remain original. No whole-file completion or promotion.",
       "sections": [
         {
           "section": ".text",
@@ -16646,6 +16646,26 @@
           "symbol": "__GXPEInit",
           "start": "0x8024E814",
           "end": "0x8024E888"
+        },
+        {
+          "symbol": "GXAbortFrame",
+          "start": "0x8024E1FC",
+          "end": "0x8024E36C"
+        },
+        {
+          "symbol": "GXSetDrawDone",
+          "start": "0x8024E36C",
+          "end": "0x8024E404"
+        },
+        {
+          "symbol": "GXWaitDrawDone",
+          "start": "0x8024E404",
+          "end": "0x8024E450"
+        },
+        {
+          "symbol": "GXPeekZ",
+          "start": "0x8024E660",
+          "end": "0x8024E684"
         }
       ],
       "discarded": [
@@ -18192,7 +18212,7 @@
     {
       "source": "src/dolphin/gx/GXFifo.c",
       "profile": "dolphin_release",
-      "evidence": "Existing coherent source getters actualCPU/GP pointer loads and originalCleanGPFifo caller roles independently frozen; source import credit preserved",
+      "evidence": "Accepted BFBB source and native state preserved; complete OOT6e449e1748a02c12b4cb218453c529175b85364a cleanup C body and genuine base accessor use target-supported canonical FIFO layout and original getter/copy/reset calls. Three measured comparison bodies272bytes; original unregistered save/status ranges remain. Source ordering follows donor to preserve original calls; fixed comparison guard leaves accepted native output unchanged. No whole-file completion or promotion.",
       "sections": [
         {
           "section": ".text",
@@ -18217,6 +18237,11 @@
           "symbol": "GXGetGPFifo",
           "start": "0x8024C8E0",
           "end": "0x8024C8E8"
+        },
+        {
+          "symbol": "__GXCleanGPFifo",
+          "start": "0x8024C7D8",
+          "end": "0x8024C8D8"
         }
       ],
       "discarded": [
