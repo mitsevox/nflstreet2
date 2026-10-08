@@ -12281,8 +12281,11 @@
       "provenance": {
         "pull_request": 589,
         "merged_via": 589,
-        "commit": "d3fc7ed5c2c5d5db12bd1ad735cb9afe50d96c68",
-        "introduced_blob": "61be97b0a67d80ce29e45a3d57e52bec738a9ac2"
+        "commit": "2f62fd0561feb7e701be52ecabc5bdc2bab914b4",
+        "introduced_blob": "2ef7d8834743372df49b267e95eb491809df0a1e",
+        "original_commit": "d3fc7ed5c2c5d5db12bd1ad735cb9afe50d96c68",
+        "original_blob": "61be97b0a67d80ce29e45a3d57e52bec738a9ac2",
+        "integration_adjustment": "Combined reviewed source/declaration corrections with accepted main and the disjoint function additions; original contributor, original source pin and unchanged function bodies are preserved."
       }
     },
     {
@@ -12337,8 +12340,11 @@
       "provenance": {
         "pull_request": 596,
         "merged_via": 596,
-        "commit": "d718564ef9961247dc1ea8636f2ce1625fc3c101",
-        "introduced_blob": "ced6b291f9194415bcb577ddb6eb776981267a29"
+        "commit": "2f62fd0561feb7e701be52ecabc5bdc2bab914b4",
+        "introduced_blob": "65c6180f855e02a943cc22aa97b576dada60d674",
+        "original_commit": "d718564ef9961247dc1ea8636f2ce1625fc3c101",
+        "original_blob": "ced6b291f9194415bcb577ddb6eb776981267a29",
+        "integration_adjustment": "Combined reviewed source/declaration corrections with accepted main and the disjoint function additions; original contributor, original source pin and unchanged function bodies are preserved."
       }
     },
     {
@@ -12412,8 +12418,11 @@
       "provenance": {
         "pull_request": 597,
         "merged_via": 597,
-        "commit": "dc7730e717111f1519d05e17232b6b342b68f61e",
-        "introduced_blob": "5d3ec0c503d0e24192ad60d0eaecc175773c5402"
+        "commit": "2f62fd0561feb7e701be52ecabc5bdc2bab914b4",
+        "introduced_blob": "65c6180f855e02a943cc22aa97b576dada60d674",
+        "original_commit": "dc7730e717111f1519d05e17232b6b342b68f61e",
+        "original_blob": "5d3ec0c503d0e24192ad60d0eaecc175773c5402",
+        "integration_adjustment": "Combined reviewed source/declaration corrections with accepted main and the disjoint function additions; original contributor, original source pin and unchanged function bodies are preserved."
       }
     },
     {
