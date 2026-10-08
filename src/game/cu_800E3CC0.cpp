@@ -160,6 +160,7 @@ struct Command_800CEE74 {
 extern "C" {
 extern unsigned char lbl_803EAD9C[8];
 extern unsigned char lbl_803EADA4[8];
+extern float lbl_803EADAC;
 extern float lbl_803EADB0;
 extern float lbl_803EADB4;
 extern float lbl_803EADB8;
@@ -203,7 +204,7 @@ int fn_801BE648(void *p);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *e, float f);
 float fn_80178A08(void);
 float fn_80178A44(void);
-float fn_80178A68(Vector_80039F5C *pPos);
+float fn_80178A68(Point_8017886C *pPos);
 int fn_80178348(void);
 int fn_800A2178(void);
 int fn_8009FE24(Object_80039F5C *p);
@@ -598,13 +599,9 @@ extern "C" int fn_800E8BE8(Object_80039F5C *p) {
         state->mUnknown4 = 1.0f;
     else
         state->mUnknown4 = scale * 0.1f;
-    far = 0;
-    if (p->mpState->mUnknown2 != 0 && fn_80177F70() != 0) {
-        if (fabsf(fn_80177FFC(p->mIdBytes[2]).mY - p->mMotion.mPos.mY) > limit)
-            far = 1;
-        else if (fabsf(fn_80177FFC(p->mIdBytes[2]).mX - p->mMotion.mPos.mX) > 6.0f)
-            far = 1;
-    }
+    far = !(p->mpState->mUnknown2 != 0 && fn_80177F70() != 0 &&
+            fabsf(fn_80177FFC(p->mIdBytes[2]).mY - p->mMotion.mPos.mY) <= limit &&
+            fabsf(fn_80177FFC(p->mIdBytes[2]).mX - p->mMotion.mPos.mX) <= 6.0f);
     if (far)
         state->mUnknown9 = 1;
     else
@@ -1257,7 +1254,7 @@ extern "C" int fn_800EA284(Object_80039F5C *p, int angle, int direction) {
         fn_80143EBC(p, pOther);
     }
     if (pOther && near) {
-        if (!busy && fn_8022781C(&p->mMotion.mPos, &pOther->mMotion.mPos) > lbl_803EADB4)
+        if (!busy && fn_8022781C(&p->mMotion.mPos, &pOther->mMotion.mPos) > lbl_803EADAC)
             facing = 0;
         if (facing) {
             Point_8017886C delta;
@@ -1347,7 +1344,6 @@ extern "C" void fn_800EA6F0(Object_80039F5C *p) {
         if (fn_80237260(0) < chance && !index) {
             id = 58;
             kind = 210;
-
         } else {
             id = 10;
             kind = 195;
@@ -1386,13 +1382,11 @@ extern "C" void fn_800EA6F0(Object_80039F5C *p) {
             if (fn_801CFFD0(p->mMotion.mFacing, 0x400000) <= 0xE38E2 || fn_801CFFD0(p->mMotion.mFacing, 0xC00000) <= 0xE38E2)
                 p->mUnknown1008.mUnknown0 = fn_80237260(0) >= 0.5f ? 3 : 6;
         }
-
     }
     int value;
     index = fn_800C3BEC(p, &command, &value, 0);
     if (index == -1) {
         if (p != fn_80137B40()) {
-
             if (p->mUnknown1008.mUnknown0 == 3)
                 p->mUnknown1008.mUnknown0 = 6;
             else if (p->mUnknown1008.mUnknown0 == 6)
@@ -1658,7 +1652,7 @@ extern "C" int fn_800EC758(Object_80039F5C *p) {
 }
 
 extern "C" int fn_800EC76C(Object_80039F5C *p) {
-    if (fn_80178A68(&p->mMotion.mPos) < lbl_803EADE4)
+    if (fn_80178A68((Point_8017886C *)&p->mMotion.mPos) < lbl_803EADE4)
         return 5;
     int mode = fn_800A2178();
     if (p->mIdBytes[2] == fn_80178348()) {
