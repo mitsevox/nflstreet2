@@ -55,6 +55,7 @@ void __GXFlushTextureState(void);
 
 /* GXGeometry */
 void __GXSetDirtyState(void);
+void __GXCleanGPFifo(void);
 void __GXSendFlushPrim(void);
 void __GXSetGenMode(void);
 

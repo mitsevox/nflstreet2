@@ -6002,6 +6002,161 @@
       ]
     },
     {
+      "source": "src/game/cu_800EF834.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv open/open unit row for src/game/cu_800EF834.cpp, exact whole-function rows and inferred name/source-form/compiler rows for the reconstructed bodies. Wholly unlinked comparison source: original bytes remain linked; the other four bodies and all static data are unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800EF834",
+          "end": "0x800EFC68"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800EF834",
+          "start": "0x800EF834",
+          "end": "0x800EF8E8"
+        },
+        {
+          "symbol": "fn_800EF8E8",
+          "start": "0x800EF8E8",
+          "end": "0x800EF968"
+        },
+        {
+          "symbol": "fn_800EFC34",
+          "start": "0x800EFC34",
+          "end": "0x800EFC68"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8012A6B0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv open/open unit row for src/game/cu_8012A6B0.cpp, exact whole-function rows and inferred name/source-form/compiler rows for the reconstructed bodies. Wholly unlinked comparison source: original bytes remain linked; the other bodies and all static data are unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8012A6B0",
+          "end": "0x8012FF5C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8012B268",
+          "start": "0x8012B268",
+          "end": "0x8012B2E0"
+        },
+        {
+          "symbol": "fn_8012C4B4",
+          "start": "0x8012C4B4",
+          "end": "0x8012C548"
+        },
+        {
+          "symbol": "fn_8012C548",
+          "start": "0x8012C548",
+          "end": "0x8012C5A8"
+        },
+        {
+          "symbol": "fn_8012C5A8",
+          "start": "0x8012C5A8",
+          "end": "0x8012C648"
+        },
+        {
+          "symbol": "fn_8012C7E0",
+          "start": "0x8012C7E0",
+          "end": "0x8012C874"
+        },
+        {
+          "symbol": "fn_8012CA78",
+          "start": "0x8012CA78",
+          "end": "0x8012CA80"
+        },
+        {
+          "symbol": "fn_8012CA80",
+          "start": "0x8012CA80",
+          "end": "0x8012CAA4"
+        },
+        {
+          "symbol": "fn_8012CAA4",
+          "start": "0x8012CAA4",
+          "end": "0x8012CAAC"
+        },
+        {
+          "symbol": "fn_8012CAAC",
+          "start": "0x8012CAAC",
+          "end": "0x8012CAB4"
+        },
+        {
+          "symbol": "fn_8012CAB4",
+          "start": "0x8012CAB4",
+          "end": "0x8012CB50"
+        },
+        {
+          "symbol": "fn_8012CB50",
+          "start": "0x8012CB50",
+          "end": "0x8012CB98"
+        },
+        {
+          "symbol": "fn_8012CC04",
+          "start": "0x8012CC04",
+          "end": "0x8012CC50"
+        },
+        {
+          "symbol": "fn_8012CC50",
+          "start": "0x8012CC50",
+          "end": "0x8012CCA0"
+        },
+        {
+          "symbol": "fn_8012CCA0",
+          "start": "0x8012CCA0",
+          "end": "0x8012CD4C"
+        },
+        {
+          "symbol": "fn_8012CD4C",
+          "start": "0x8012CD4C",
+          "end": "0x8012CD60"
+        },
+        {
+          "symbol": "fn_8012CE60",
+          "start": "0x8012CE60",
+          "end": "0x8012CEF4"
+        },
+        {
+          "symbol": "fn_8012D1E4",
+          "start": "0x8012D1E4",
+          "end": "0x8012D258"
+        },
+        {
+          "symbol": "fn_8012EA14",
+          "start": "0x8012EA14",
+          "end": "0x8012EAF8"
+        },
+        {
+          "symbol": "fn_8012F2E0",
+          "start": "0x8012F2E0",
+          "end": "0x8012F2E8"
+        },
+        {
+          "symbol": "fn_8012F524",
+          "start": "0x8012F524",
+          "end": "0x8012F5A0"
+        },
+        {
+          "symbol": "fn_8012FEAC",
+          "start": "0x8012FEAC",
+          "end": "0x8012FF30"
+        },
+        {
+          "symbol": "fn_8012FF30",
+          "start": "0x8012FF30",
+          "end": "0x8012FF5C"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800E3CC0.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp, registered exact whole-function extents with inferred name/source-form/compiler rows for the reconstructed bodies and local overlay type rows. Exact and partial source are measured independently; original bytes remain linked and all other bodies and static data are unmeasured.",
@@ -16581,7 +16736,7 @@
     {
       "source": "src/dolphin/gx/GXMisc.c",
       "profile": "dolphin_release",
-      "evidence": "Complete pinned BFBB twenty-body source/currentcanonical headers. Eighteen presenttarget bodies1576 independently resolved, full2280 provisional ownership retains other unrecovered original functions. No version body splicing.",
+      "evidence": "evidence.tsv independently reviewed BFBB, OOT GameCube and TP source forms; combined registered complete target extents retain unchanged compiler settings, original source attribution and provisional ownership. All registered exact and partial measurements remain distinct from the accepted linked output; no whole-file promotion.",
       "sections": [
         {
           "section": ".text",
@@ -16686,6 +16841,36 @@
           "symbol": "__GXPEInit",
           "start": "0x8024E814",
           "end": "0x8024E888"
+        },
+        {
+          "symbol": "GXAbortFrame",
+          "start": "0x8024E1FC",
+          "end": "0x8024E36C"
+        },
+        {
+          "symbol": "GXSetDrawDone",
+          "start": "0x8024E36C",
+          "end": "0x8024E404"
+        },
+        {
+          "symbol": "GXWaitDrawDone",
+          "start": "0x8024E404",
+          "end": "0x8024E450"
+        },
+        {
+          "symbol": "GXPeekZ",
+          "start": "0x8024E660",
+          "end": "0x8024E684"
+        },
+        {
+          "symbol": "GXTexModeSync",
+          "start": "0x8024E4F4",
+          "end": "0x8024E518"
+        },
+        {
+          "symbol": "GXPeekARGB",
+          "start": "0x8024E63C",
+          "end": "0x8024E660"
         }
       ],
       "discarded": [
@@ -18232,7 +18417,7 @@
     {
       "source": "src/dolphin/gx/GXFifo.c",
       "profile": "dolphin_release",
-      "evidence": "Existing coherent source getters actualCPU/GP pointer loads and originalCleanGPFifo caller roles independently frozen; source import credit preserved",
+      "evidence": "Accepted BFBB source and native state preserved; complete OOT6e449e1748a02c12b4cb218453c529175b85364a cleanup C body and genuine base accessor use target-supported canonical FIFO layout and original getter/copy/reset calls. Three measured comparison bodies272bytes; original unregistered save/status ranges remain. Source ordering follows donor to preserve original calls; fixed comparison guard leaves accepted native output unchanged. No whole-file completion or promotion.",
       "sections": [
         {
           "section": ".text",
@@ -18257,6 +18442,11 @@
           "symbol": "GXGetGPFifo",
           "start": "0x8024C8E0",
           "end": "0x8024C8E8"
+        },
+        {
+          "symbol": "__GXCleanGPFifo",
+          "start": "0x8024C7D8",
+          "end": "0x8024C8D8"
         }
       ],
       "discarded": [
@@ -18805,6 +18995,32 @@
           "symbol": "fn_800E3C30",
           "start": "0x800E3C30",
           "end": "0x800E3CC0"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSFont.c",
+      "profile": "dolphin_release",
+      "evidence": "Complete OOT small OSFont donor variant, unchanged body and canonical include-only integration; 88-byte target function and 2-byte initialized halfword evidenced individually. Original source-file/archive boundaries provisional; comparison-only, original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80285A90",
+          "end": "0x80285AE8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC5A8",
+          "end": "0x803EC5AA"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "OSGetFontEncode",
+          "start": "0x80285A90",
+          "end": "0x80285AE8"
         }
       ]
     }
