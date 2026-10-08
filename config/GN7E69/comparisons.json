@@ -6276,7 +6276,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029DF88",
-          "end": "0x8029E068"
+          "end": "0x8029E178"
         }
       ],
       "functions": [
@@ -7134,6 +7134,71 @@
           "symbol": "fn_800F3284",
           "start": "0x800F3284",
           "end": "0x800F3344"
+        },
+        {
+          "symbol": "fn_800F3344",
+          "start": "0x800F3344",
+          "end": "0x800F3838"
+        },
+        {
+          "symbol": "fn_800F3838",
+          "start": "0x800F3838",
+          "end": "0x800F39FC"
+        },
+        {
+          "symbol": "fn_800F39FC",
+          "start": "0x800F39FC",
+          "end": "0x800F3A6C"
+        },
+        {
+          "symbol": "fn_800F3B54",
+          "start": "0x800F3B54",
+          "end": "0x800F3D38"
+        },
+        {
+          "symbol": "fn_800F3D38",
+          "start": "0x800F3D38",
+          "end": "0x800F3F90"
+        },
+        {
+          "symbol": "fn_800F3F90",
+          "start": "0x800F3F90",
+          "end": "0x800F4038"
+        },
+        {
+          "symbol": "fn_800F4038",
+          "start": "0x800F4038",
+          "end": "0x800F4690"
+        },
+        {
+          "symbol": "fn_800F4690",
+          "start": "0x800F4690",
+          "end": "0x800F4838"
+        },
+        {
+          "symbol": "fn_800F4838",
+          "start": "0x800F4838",
+          "end": "0x800F4918"
+        },
+        {
+          "symbol": "fn_800F4918",
+          "start": "0x800F4918",
+          "end": "0x800F4A74"
+        },
+        {
+          "symbol": "fn_800F4AD4",
+          "start": "0x800F4AD4",
+          "end": "0x800F4E14"
+        },
+        {
+          "symbol": "fn_800F4E88",
+          "start": "0x800F4E88",
+          "end": "0x800F4F08"
+        },
+        {
+          "symbol": "fn_800F4F08",
+          "start": "0x800F4F08",
+          "end": "0x800F5208"
         }
       ]
     },
