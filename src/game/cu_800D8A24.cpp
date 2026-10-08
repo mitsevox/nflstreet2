@@ -1,39 +1,21 @@
 #include <string.h>
+#include "game/Block_801BE60C.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_800D81C8.h"
+#include "game/Object_800DA8D8.h"
+#include "game/Object_801BBD5C.h"
 #include "game/Table_80089904.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802270D4.h"
-
-struct State_800D8B84 {
-    char mUnknown0[12];
-    Object_801BBD5C *mpUnknown12;
-    Object_801BBD5C *mpUnknown16;
-    Object_801BBD5C *mpUnknown20;
-    Object_801BBD5C *mpUnknown24;
-    char mUnknown28[12];
-    unsigned char mUnknown40[2];
-    char mUnknown42[6];
-    float mUnknown48;
-    short mUnknown52;
-    unsigned char mUnknown54;
-    unsigned char mUnknown55;
-    unsigned char mUnknown56;
-    unsigned char mUnknown57;
-    char mUnknown58[2];
-    unsigned char mUnknown60;
-    unsigned char mUnknown61;
-};
 
 extern "C" {
 int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues);
 void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
 unsigned char fn_800C0464(void *p);
 void fn_800DA7AC(Object_801BBD5C *pObject, float value);
-float fn_800DAA68(int index, State_800D8B84 *pState, Object_801BBD5C *pObject, Record_800D81C8 *pRecords,
+float fn_800DAA68(int index, Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Record_800D81C8 *pEntries,
                   float value);
 int fn_800DC080(Object_80039F5C *p);
-void fn_801BBC3C(unsigned short a, unsigned short b, Table_80089904 *pTable);
 Object_801BBD5C *fn_801BBD5C(unsigned short a, unsigned short b);
 void fn_801BD758(Block_801BD6D4 *p, float value);
 int fn_801CFE40(float y, float x);
@@ -46,41 +28,41 @@ int fn_800D0B90(Object_80039F5C *p);
 int fn_800D0D1C(Object_80039F5C *p);
 }
 
-extern "C" void fn_800D8B84(Table_80089904 *pTable, State_800D8B84 *pState, Object_80039F5C *p)
+extern "C" void fn_800D8B84(Table_80089904 *pTable, Block_801BE60C *pBlock, Object_80039F5C *p)
 {
-    pState->mpUnknown24 = 0;
-    pState->mpUnknown20 = 0;
-    pState->mUnknown57 = 0;
-    pState->mUnknown56 = 0;
+    pBlock->mpUnknown18 = 0;
+    pBlock->mpUnknown14 = 0;
+    pBlock->mUnknown39 = 0;
+    pBlock->mUnknown38 = 0;
     for (unsigned int i = 0; i < pTable->mCount; i++) {
         unsigned char type = pTable->mEntries[i].mpInfo->mValue;
         unsigned short key = pTable->mEntries[i].mUnknown2 & 0x7FFF;
         unsigned short id = pTable->mEntries[i].mUnknown0;
         switch (type) {
         case 1:
-            pState->mpUnknown16 = fn_801BBD5C(key, p->mpUnknown796->mUnknown2);
-            pState->mUnknown55 = id;
+            pBlock->mpUnknown10 = fn_801BBD5C(key, p->mpUnknown796->mUnknown2);
+            pBlock->mUnknown20.mUnknown17 = id;
             break;
         case 3:
-            pState->mpUnknown20 = fn_801BBD5C(key, p->mpUnknown796->mUnknown2);
-            pState->mUnknown56 = id;
+            pBlock->mpUnknown14 = fn_801BBD5C(key, p->mpUnknown796->mUnknown2);
+            pBlock->mUnknown38 = id;
             break;
         case 2:
-            pState->mpUnknown24 = fn_801BBD5C(key, p->mpUnknown796->mUnknown2);
-            pState->mUnknown57 = id;
+            pBlock->mpUnknown18 = fn_801BBD5C(key, p->mpUnknown796->mUnknown2);
+            pBlock->mUnknown39 = id;
             break;
         }
     }
-    if (pState->mpUnknown20 == 0) {
-        pState->mpUnknown20 = pState->mpUnknown16;
-        pState->mUnknown56 = pState->mUnknown55;
+    if (pBlock->mpUnknown14 == 0) {
+        pBlock->mpUnknown14 = pBlock->mpUnknown10;
+        pBlock->mUnknown38 = pBlock->mUnknown20.mUnknown17;
     }
-    if (pState->mpUnknown24 == 0) {
-        pState->mpUnknown24 = pState->mpUnknown16;
-        pState->mUnknown57 = pState->mUnknown55;
+    if (pBlock->mpUnknown18 == 0) {
+        pBlock->mpUnknown18 = pBlock->mpUnknown10;
+        pBlock->mUnknown39 = pBlock->mUnknown20.mUnknown17;
     }
-    pState->mpUnknown12 = pState->mpUnknown16;
-    pState->mUnknown54 = pState->mUnknown55;
+    pBlock->mpUnknownC = pBlock->mpUnknown10;
+    pBlock->mUnknown20.mUnknown16 = pBlock->mUnknown20.mUnknown17;
 }
 
 extern "C" void fn_800D8CB4(Table_80089904 *pTable, Object_80039F5C *p, int index, int swap)
@@ -100,31 +82,31 @@ extern "C" void fn_800D8CB4(Table_80089904 *pTable, Object_80039F5C *p, int inde
     }
 }
 
-extern "C" void fn_800D8D34(Table_80089904 *pTable, State_800D8B84 *pState, Object_80039F5C *p, int swap)
+extern "C" void fn_800D8D34(Table_80089904 *pTable, Block_801BE60C *pBlock, Object_80039F5C *p, int swap)
 {
     unsigned char values[4];
 
     memset(values, 255, sizeof(values));
-    values[0] = pState->mUnknown61;
+    values[0] = pBlock->mUnknown3D;
     int index = fn_8009C56C(pTable, values);
     unsigned short id = pTable->mEntries[index].mUnknown2 & 0x7FFF;
     fn_800D8CB4(pTable, p, index, swap);
     fn_801BBC3C(p->mpUnknown796->mUnknown2, id, pTable);
-    fn_800D8B84(pTable, pState, p);
+    fn_800D8B84(pTable, pBlock, p);
 }
 
-extern "C" void fn_800D8DD8(Table_80089904 *pTable, State_800D8B84 *pState, Object_80039F5C *p, int swap)
+extern "C" void fn_800D8DD8(Table_80089904 *pTable, Block_801BE60C *pBlock, Object_80039F5C *p, int swap)
 {
     unsigned char values[4];
 
     memset(values, 255, sizeof(values));
-    values[0] = pState->mUnknown60;
+    values[0] = pBlock->mUnknown3C;
     int index = fn_8009C56C(pTable, values);
     fn_801BBC3C(p->mpUnknown796->mUnknown2, pTable->mEntries[index].mUnknown2 & 0x7FFF, pTable);
-    fn_800D8D34(pTable, pState, p, swap);
+    fn_800D8D34(pTable, pBlock, p, swap);
 }
 
-extern "C" int fn_800D8E68(Object_80039F5C *p, State_800D8B84 *pState, unsigned char *pKind)
+extern "C" int fn_800D8E68(Object_80039F5C *p, Block_801BE60C *pBlock, unsigned char *pKind)
 {
     unsigned char id = 0;
     int changed = 0;
@@ -132,38 +114,38 @@ extern "C" int fn_800D8E68(Object_80039F5C *p, State_800D8B84 *pState, unsigned 
     float t = p->mMotion.mUnknown28;
 
     if (t == 0.0f) {
-        pObject = pState->mpUnknown16;
-        id = pState->mUnknown55;
+        pObject = pBlock->mpUnknown10;
+        id = pBlock->mUnknown20.mUnknown17;
         *pKind = 6;
     } else if (p->mMotion.mUnknown52 < 0.0f) {
-        Object_801BBD5C *pCandidate = pState->mpUnknown20;
+        Object_801BBD5C *pCandidate = pBlock->mpUnknown14;
         if (t >= pCandidate->mUnknown12 && t <= pCandidate->mUnknown16) {
             pObject = pCandidate;
-            id = pState->mUnknown56;
+            id = pBlock->mUnknown38;
             *pKind = 6;
         }
     } else if (p->mMotion.mUnknown52 == 0.0f && p->mUnknown528.mUnknown14 == 10) {
-        Object_801BBD5C *pCandidate = pState->mpUnknown24;
+        Object_801BBD5C *pCandidate = pBlock->mpUnknown18;
         if (t >= pCandidate->mUnknown12 && t <= pCandidate->mUnknown16) {
             pObject = pCandidate;
-            id = pState->mUnknown57;
+            id = pBlock->mUnknown39;
             *pKind = 6;
         }
     } else if (p->mUnknown492 > p->mUnknown488) {
-        pObject = pState->mpUnknown16;
-        id = pState->mUnknown55;
+        pObject = pBlock->mpUnknown10;
+        id = pBlock->mUnknown20.mUnknown17;
         *pKind = 6;
     } else if (p->mMotion.mUnknown28 > p->mUnknown492) {
-        pObject = pState->mpUnknown16;
-        id = pState->mUnknown55;
+        pObject = pBlock->mpUnknown10;
+        id = pBlock->mUnknown20.mUnknown17;
         *pKind = 8;
     }
-    if (pObject && pObject != pState->mpUnknown12) {
-        if (pState->mpUnknown12 == pState->mpUnknown24) {
+    if (pObject && pObject != pBlock->mpUnknownC) {
+        if (pBlock->mpUnknownC == pBlock->mpUnknown18) {
             *pKind += *pKind;
         }
-        pState->mpUnknown12 = pObject;
-        pState->mUnknown54 = id;
+        pBlock->mpUnknownC = pObject;
+        pBlock->mUnknown20.mUnknown16 = id;
         changed = 1;
     }
     return changed;
@@ -179,14 +161,14 @@ extern "C" void fn_800D8F8C(Object_80039F5C *p, Object_801BBD5C *pObject)
     fn_800DA7AC(pObject, value);
 }
 
-extern "C" void fn_800D8FFC(State_800D8B84 *pState, Object_801BBD5C *pObject, Record_800D81C8 *pRecords,
+extern "C" void fn_800D8FFC(Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Record_800D81C8 *pRecords,
                             float value)
 {
-    pState->mUnknown48 = fn_800DAA68(pState->mUnknown52, pState, pObject, pRecords, value);
+    pBlock->mUnknown20.mUnknown10 = fn_800DAA68(pBlock->mUnknown20.mUnknown14Half, pBlock, pObject, pRecords, value);
     for (unsigned char i = 0; i <= 1; i++) {
-        unsigned char index = pState->mUnknown40[i];
+        unsigned char index = pBlock->mUnknown20.mUnknown8Bytes[i];
         if (index != 255) {
-            fn_801BD758(&pRecords[index].mUnknown4C, pState->mUnknown48);
+            fn_801BD758(&pRecords[index].mUnknown4C, pBlock->mUnknown20.mUnknown10);
         }
     }
 }

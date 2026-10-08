@@ -1,3 +1,4 @@
+#include "game/Object_800DA8D8.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_800D81C8.h"
 #include "game/Block_801BE60C.h"
@@ -8,19 +9,6 @@
 #include "game/fn_802372EC.h"
 #include "game/fn_801BE60C.h"
 #include <math.h>
-
-struct Entry_800DA8D8
-{
-    float mUnknown0;
-    float mUnknown4;
-    int mUnknown8;
-};
-
-struct Object_800DA8D8
-{
-    char mUnknown0[24];
-    Entry_800DA8D8 mUnknown24[1];
-};
 
 extern "C" {
 extern float lbl_803EA2C4;
