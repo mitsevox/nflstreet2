@@ -1,6 +1,7 @@
 #include <dolphin/gx/GXPixel.h>
 #include "engine/cu_80227F14.h"
 #include "game/Object_80039F5C.h"
+#include "game/Object_80193F84.h"
 #include "game/fn_801D2B7C.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXStruct.h>
@@ -19,23 +20,8 @@ struct Entry_801A5050 {
     unsigned char mUnknown10;
 };
 
-struct Object_80193F84 {
-    char mUnknown0[8];
-    unsigned short mUnknown8;
-    unsigned short mUnknownA;
-    char mUnknownC[4];
-    int mUnknown10;
-    void *mpUnknown14;
-    char mUnknown18[16];
-    unsigned char mUnknown28;
-    char mUnknown29[23];
-};
-
 extern "C" {
 int fn_800C47C4(void);
-void fn_80193EF0(Object_80193F84 *p, int a, int b, int c, const char *pName);
-void fn_80193F2C(Object_80193F84 *p);
-void fn_80193F84(Object_80193F84 *p);
 int fn_801CECCC(int index);
 int fn_801CECDC(int a);
 void fn_801D0470(int a);

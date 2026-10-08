@@ -21,10 +21,10 @@ public:
     virtual int fn_8018FF9C(int column) = 0;
     virtual float fn_8018FFC0(int column) = 0;
     virtual void fn_8018FFE4(int a, int b, int c) = 0;
-    virtual int fn_80190008(int column, int value) = 0;
-    virtual int fn_8019002C(int column, int value) = 0;
-    virtual int fn_80190050(int column, float value) = 0;
-    virtual int fn_80190074(int column, int value) = 0;
+    virtual void fn_80190008(int column, int value) = 0;
+    virtual void fn_8019002C(int column, int value) = 0;
+    virtual void fn_80190050(int column, float value) = 0;
+    virtual void fn_80190074(int column, char *pText, int length) = 0;
 };
 
 /* Cursor object with vtable 0x802AB4F8: the vtable pointer at +0 and an
@@ -51,10 +51,10 @@ public:
     virtual int fn_8018FF9C(int column);
     virtual float fn_8018FFC0(int column);
     virtual void fn_8018FFE4(int a, int b, int c);
-    virtual int fn_80190008(int column, int value);
-    virtual int fn_8019002C(int column, int value);
-    virtual int fn_80190050(int column, float value);
-    virtual int fn_80190074(int column, int value);
+    virtual void fn_80190008(int column, int value);
+    virtual void fn_8019002C(int column, int value);
+    virtual void fn_80190050(int column, float value);
+    virtual void fn_80190074(int column, char *pText, int length);
     virtual ~Class_8018FD64();
     virtual void fn_8018FE10();
 
