@@ -2,12 +2,16 @@
 
 #include "game/Class_80148A58.h"
 #include "game/FELoop.h"
+#include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_80064864.h"
 #include "game/cu_8008E978.h"
+#include "game/fn_8007F828.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800AD9B4.h"
+#include "game/fn_800F06F4.h"
 #include "game/fn_8016871C.h"
+#include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C68FC.h"
 #include "game/fn_801D2B7C.h"
@@ -896,6 +900,310 @@ extern "C" void fn_80097564(void)
 
     for (i = 0; i <= 2; i++) {
         fn_80097518(i);
+    }
+}
+
+/* 20-byte records of the .data table at 0x802D82E0. */
+struct Record_802D82E0 {
+    unsigned char mUnknown0;
+    unsigned char mUnknown1;
+    unsigned char mUnknown2[2];
+    unsigned int mUnknown4;
+    unsigned char mUnknown8;
+    unsigned char mUnknown9;
+    unsigned char mUnknownA[2];
+    unsigned int mUnknownC;
+    int mUnknown10;
+};
+
+/* 620-byte block allocated under the id 'hrte' (fn_800AEB1C). */
+struct Block_800AEB1C {
+    Message_800F01CC mMessages[2][7][10];
+    Object_80039F5C *mpObjects[2][7];
+    unsigned char mUnknown268[2];
+    unsigned char mUnknown26A[2];
+};
+
+extern "C" {
+void fn_800ADA1C(void);
+void fn_800AE138(int index);
+int fn_800B65A0(int team);
+int fn_800B6644(int index);
+int fn_80177C38(void);
+int fn_80178308(void);
+int fn_80178348(void);
+int fn_80178360(void);
+unsigned char fn_80194F24(void);
+void fn_80194F1C(unsigned char enabled);
+void fn_80194C5C(int a, int b, int c);
+int fn_801C6458(int a, int b);
+int fn_801E195C(int a);
+void fn_8017DDDC(int index);
+void fn_800EFE1C(int a, State_80039F5C *pQueue);
+void fn_8011E3EC(Object_80039F5C *p, int a);
+void fn_8011E240(Object_80039F5C *p);
+
+extern void (*lbl_8030F51C[6])(void);
+extern unsigned char lbl_8030F9DC[15];
+extern unsigned char lbl_8030F9EC[15];
+extern Record_802D82E0 lbl_802D82E0[15];
+extern unsigned char lbl_803EAAE8;
+extern unsigned char lbl_803EAAE9;
+extern int lbl_803EAAEC;
+extern unsigned char lbl_803EAAF0;
+extern unsigned char lbl_803EAAF1;
+extern Block_800AEB1C *lbl_803EAAF4;
+extern int lbl_803EAAF8[2];
+extern int lbl_803EC96C;
+extern int lbl_803EC970;
+}
+
+extern "C" void fn_800AE10C(void)
+{
+    int i;
+
+    for (i = 0; i < 6; i++) {
+        lbl_8030F51C[i] = fn_800ADA1C;
+    }
+}
+
+extern "C" void fn_800AE65C(void)
+{
+    unsigned char saved = fn_80194F24();
+
+    fn_80194F1C(1);
+    if (fn_8007F828(9) != 0) {
+        unsigned int i;
+
+        for (i = 0; i <= 9; i++) {
+            if (fn_801E195C(fn_801C6458(i, 0)) == 2 && fn_800B6644(i) != 255) {
+                fn_80194C5C(i, 127, 20);
+            }
+        }
+    }
+    fn_80194F1C(saved);
+}
+
+extern "C" void fn_800AE6F0(void)
+{
+    if (lbl_803EAAE8 != 0) {
+        int index;
+
+        fn_800AE138(lbl_803EAAEC);
+        index = lbl_803EAAEC;
+        lbl_803EC970 = 0;
+        lbl_8030F9DC[index] = 1;
+        if (index == 1 || index == 2) {
+            lbl_8030F9DC[1] = 1;
+            lbl_8030F9DC[2] = 1;
+        }
+    }
+}
+
+extern "C" void fn_800AE750(int index, int team)
+{
+    if (fn_800B65A0(team) != 255) {
+        lbl_8030F9DC[index] = 1;
+    }
+}
+
+extern "C" void fn_800AE798(int index, int team)
+{
+    if (fn_800B65A0(team) != 255 && lbl_8030F9DC[index] == 0) {
+        lbl_8030F9EC[index] = 0;
+    }
+}
+
+extern "C" void fn_800AE7F0(int index, int team, Object_80039F5C *p)
+{
+    if (fn_800B65A0(team) == 255 && (index == 1 || index == 2)) {
+        index = 3;
+        team = team == 0;
+    }
+    if (fn_800B65A0(team) != 255) {
+        int flag = 0;
+
+        if (lbl_802D82E0[index].mUnknown9 == 0 || p == 0 || (p->mFlags & 0x4000) != 0) {
+            flag = 1;
+        }
+        if (flag && lbl_8030F9EC[index] != 1) {
+            lbl_8030F9EC[index] = 1;
+        }
+    }
+}
+
+extern "C" void fn_800AE8B4(void)
+{
+    lbl_803EC96C = 0;
+    lbl_803EC970 = 0;
+    if (lbl_803EAAF1 != 0) {
+        int i;
+
+        for (i = 0; i < 15; i++) {
+            lbl_8030F9DC[i] = 0;
+            lbl_8030F9EC[i] = 0;
+        }
+        lbl_803EAAF1 = 1;
+    }
+}
+
+extern "C" void fn_800AE904(int index)
+{
+    if ((fn_8007F828(15) != 0 || index == 14) && lbl_8030F9DC[index] == 0) {
+        lbl_803EAAEC = index;
+        lbl_803EAAE8 = 1;
+        fn_800AE6F0();
+    }
+}
+
+extern "C" int fn_800AE968(int index)
+{
+    return lbl_8030F9DC[index];
+}
+
+extern "C" int fn_800AE978(void)
+{
+    return lbl_803EAAE8;
+}
+
+extern "C" int fn_800AE980(void)
+{
+    return lbl_803EAAE9;
+}
+
+extern "C" void fn_800AE988(void)
+{
+    lbl_803EAAE8 = 0;
+    lbl_803EAAE9 = 0;
+}
+
+extern "C" void fn_800AE9A4(void)
+{
+    int team;
+
+    if ((fn_80177C38() & 1) == 0) {
+        team = fn_80178348();
+    } else {
+        team = fn_80178360();
+    }
+    if (fn_800B65A0(team) != 255) {
+        lbl_803EAAF0 = 1;
+    }
+}
+
+extern "C" void fn_800AE9EC(void)
+{
+    lbl_803EAAF0 = 0;
+}
+
+extern "C" void fn_800AEA70(Object_80039F5C *p, Message_800F01CC *pMessages)
+{
+    int count = 0;
+
+    fn_801C1F94(&pMessages[count], 0, sizeof(Message_800F01CC));
+    pMessages[count].mId = 31;
+    pMessages[count].mUnknown1[0] = 48;
+    count++;
+    fn_801C1F94(&pMessages[count], 0, sizeof(Message_800F01CC));
+    pMessages[count].mId = 19;
+    pMessages[count].mUnknown1[0] = 40;
+    pMessages[count].mUnknown1[1] = 32;
+    pMessages[count].mUnknown1[2] = 255;
+    count++;
+    fn_801C1F94(&pMessages[count], 0, sizeof(Message_800F01CC));
+    pMessages[count].mId = 21;
+    count++;
+    fn_801C1F94(&pMessages[count], 0, sizeof(Message_800F01CC));
+    pMessages[count].mId = 0;
+}
+
+extern "C" void fn_800AEB1C(void)
+{
+    void *pHandle = fn_80238174(0, (void **)&lbl_803EAAF4, sizeof(Block_800AEB1C), 0, 0x68727465);
+    Block_800AEB1C *pBlock = (Block_800AEB1C *)fn_8023816C(pHandle);
+
+    fn_801C1F94(pBlock->mpObjects, 0, sizeof(pBlock->mpObjects));
+    fn_801C1F94(pBlock->mMessages, 0, sizeof(pBlock->mMessages));
+    pBlock->mUnknown268[0] = 0;
+    pBlock->mUnknown268[1] = 0;
+    fn_802381E0(pHandle);
+}
+
+extern "C" void fn_800AEB9C(void)
+{
+}
+
+extern "C" Message_800F01CC *fn_800AEE20(Object_80039F5C *p)
+{
+    Message_800F01CC *pFound = 0;
+    unsigned char team = p->mIdBytes[2];
+    unsigned int count = fn_80178D18(team);
+    unsigned char i;
+
+    for (i = 0; i < count; i++) {
+        Object_80039F5C *pObject = lbl_803EAAF4->mpObjects[team][i];
+
+        if (pObject != 0 && pObject == p) {
+            pFound = lbl_803EAAF4->mMessages[team][i];
+            break;
+        }
+    }
+    return pFound;
+}
+
+extern "C" void fn_800AEEDC(int team)
+{
+    fn_801C1F94(lbl_803EAAF4->mpObjects[team], 0, sizeof(lbl_803EAAF4->mpObjects[team]));
+    fn_801C1F94(lbl_803EAAF4->mMessages[team], 0, sizeof(lbl_803EAAF4->mMessages[team]));
+}
+
+extern "C" void fn_800AEF38(int team)
+{
+    if (lbl_803EAAF4->mUnknown268[team] != 0) {
+        lbl_803EAAF4->mUnknown268[team] = 0;
+    }
+    fn_8017DDDC(team);
+}
+
+extern "C" void fn_800AEF74(Object_80039F5C *p, Message_800F01CC *pMessages)
+{
+    unsigned char i;
+    int result = 0xFFFF;
+
+    for (i = 0; i <= 1 && result == 0xFFFF; i++) {
+        result = fn_800F06F4(0, p->mpState, (unsigned char)lbl_803EAAF8[i], 0xFFFF);
+    }
+    if (result != 0xFFFF) {
+        fn_8011E3EC(p, 0);
+        fn_8011E240(p);
+    }
+    fn_800EFE1C(0, p->mpState);
+    for (i = 0; pMessages[i].mId != 0; i++) {
+        if (i == 0) {
+            fn_800F053C(0, p->mpState, &pMessages[i], p);
+        } else {
+            fn_800F03D8(0, p->mpState, &pMessages[i], p);
+        }
+    }
+}
+
+extern "C" int fn_800AF078(int team)
+{
+    return lbl_803EAAF4->mUnknown268[team];
+}
+
+extern "C" void fn_800AF088(void)
+{
+    int team = fn_80178308();
+    unsigned int count = fn_80178D18(team);
+    unsigned char i;
+
+    for (i = 0; i < count; i++) {
+        if (lbl_803EAAF4->mpObjects[team][i] != 0
+            && (lbl_803EAAF4->mMessages[team][i][0].mId == 31 || lbl_803EAAF4->mMessages[team][i][1].mId == 31)) {
+            lbl_803EAAF4->mpObjects[team][i] = 0;
+            fn_801C1F94(lbl_803EAAF4->mMessages[team][i], 0, sizeof(lbl_803EAAF4->mMessages[team][i]));
+        }
     }
 }
 
