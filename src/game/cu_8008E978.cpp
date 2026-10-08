@@ -1284,7 +1284,7 @@ extern "C" void fn_800BF6CC(int index)
     fn_8003A3F4(0, index);
 }
 
-extern "C" unsigned char fn_800BF718(int index)
+extern "C" int fn_800BF718(int index)
 {
     return lbl_803EABA8->mSlots[index].mUnknown1C;
 }
@@ -1438,7 +1438,7 @@ extern "C" void fn_800C07C4(QueryCursor cursor)
     }
 }
 
-extern "C" signed char fn_800C1180(Object_80039F5C *p)
+extern "C" int fn_800C1180(Object_80039F5C *p)
 {
     State_80039F5C *pState = p->mpState;
     signed char result = 0;
@@ -1493,7 +1493,7 @@ extern "C" void fn_800C1C34(void)
     }
 }
 
-extern "C" unsigned char fn_800C1E40(void)
+extern "C" int fn_800C1E40(void)
 {
     return lbl_803EABB8;
 }
