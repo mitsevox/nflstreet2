@@ -11038,7 +11038,7 @@
         "introduced_blob": "53bdc5b5de576cab0607b4c867cf008073f0c14f",
         "original_commit": "58b140374ae59b2135fdcc295d18496e1b76a26c",
         "original_blob": "ae99ea535a89734d6d26224cbeb48a8736a0f218",
-        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. OSPriv\u2192__os.h and original external exception bridge; retain compiled genuine PeriodicAlarm unassigned.",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. OSPriv→__os.h and original external exception bridge; retain compiled genuine PeriodicAlarm unassigned.",
         "pull_request": 567,
         "merged_via": 573
       }
@@ -12844,6 +12844,35 @@
         "merged_via": 665,
         "commit": "ad39693943528199dcef4d941f8874b49b22471e",
         "introduced_blob": "594fe801ae67f189c395d7391f5afbf95072f303"
+      }
+    },
+    {
+      "source": "src/Common/UIStudio/UIStudio.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80217C38",
+        "0x802182E4",
+        "0x80218A34",
+        "0x80218AA8",
+        "0x80218AB0",
+        "0x80218ABC",
+        "0x80218AC4",
+        "0x80218ACC",
+        "0x80219044",
+        "0x8021956C",
+        "0x802195E4",
+        "0x80219650",
+        "0x80219854",
+        "0x8021A020",
+        "0x8021A060"
+      ],
+      "provenance": {
+        "pull_request": 688,
+        "merged_via": 688,
+        "commit": "865f6497d321694f4911200c19fa1d5206e0db33",
+        "introduced_blob": "40e1b92027414b4a07a913c370f3c5db1526aade"
       }
     }
   ],
