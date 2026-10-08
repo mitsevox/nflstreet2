@@ -2,6 +2,7 @@
 
 #include "game/Camera_8013F738.h"
 #include "game/Class_80148A58.h"
+#include "game/Entry_800B206C.h"
 #include "game/FELoop.h"
 #include "game/Object_80039F5C.h"
 #include "game/Record_800B15FC.h"
@@ -901,23 +902,6 @@ extern "C" void fn_80097564(void)
     }
 }
 
-/* One of the 36-byte entries at +4 and +40 of Block_800B21D0, filled by
-   fn_800B206C. */
-struct Entry_800B206C {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    float mUnknownC;
-    float mUnknown10;
-    int mUnknown14;
-    int mUnknown18;
-    int mUnknown1C;
-    unsigned char mUnknown20;
-    unsigned char mUnknown21;
-    unsigned char mUnknown22;
-    unsigned char mUnknown23[1];
-};
-
 /* The 96 bytes after the first word of Block_800B21D0, compared by
    fn_800B19E8. */
 struct State_800B19E8 {
@@ -1031,8 +1015,7 @@ extern "C" void fn_800B14E4(void)
 extern "C" void fn_800B1508(void)
 {
     if (fn_80238604(lbl_803EAB18) < 74) {
-        int handle = lbl_803EAB18;
-        Record_800B15FC *pRecord = (Record_800B15FC *)fn_80238540(handle, fn_80238604(handle));
+        Record_800B15FC *pRecord = (Record_800B15FC *)fn_80238540(lbl_803EAB18, fn_80238604(lbl_803EAB18));
 
         pRecord->mUnknown18 = fn_8009D990(1);
         fn_80238570(lbl_803EAB18, pRecord->mUnknown14 <= 61);
