@@ -12937,8 +12937,11 @@
       "provenance": {
         "pull_request": 559,
         "merged_via": 559,
-        "commit": "39035f390e8a6911806baea36eed9b8da94606d7",
-        "introduced_blob": "0f979da160943d5ec87c31c06d35b4e8a4eae317"
+        "commit": "953a96402e05a6d21bc24252215b61bf63e8bf37",
+        "introduced_blob": "b8e52f5c7bed1fcb294c5a8b62213f6392cd25d1",
+        "original_blob": "0f979da160943d5ec87c31c06d35b4e8a4eae317",
+        "integration_adjustment": "Shared Object_80039F5C +1032 layout reconciled with the accepted flat members (block view added); accepted Record_8011F4E0, Record_8011F518 and callee declarations reused in integration.",
+        "original_commit": "39035f390e8a6911806baea36eed9b8da94606d7"
       }
     }
   ],
