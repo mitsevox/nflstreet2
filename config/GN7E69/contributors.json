@@ -13644,6 +13644,35 @@
         "commit": "4089d55d22364336567a01b9661dc65162440760",
         "introduced_blob": "57dc086820b20e3c7801b78ed9c31535a9eb1416"
       }
+    },
+    {
+      "source": "src/Common/UIStudio/UIStudio.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80217C38",
+        "0x802182E4",
+        "0x80218A34",
+        "0x80218AA8",
+        "0x80218AB0",
+        "0x80218ABC",
+        "0x80218AC4",
+        "0x80218ACC",
+        "0x80219044",
+        "0x8021956C",
+        "0x802195E4",
+        "0x80219650",
+        "0x80219854",
+        "0x8021A020",
+        "0x8021A060"
+      ],
+      "provenance": {
+        "pull_request": 688,
+        "merged_via": 688,
+        "commit": "865f6497d321694f4911200c19fa1d5206e0db33",
+        "introduced_blob": "40e1b92027414b4a07a913c370f3c5db1526aade"
+      }
     }
   ],
   "target": "GN7E69",
