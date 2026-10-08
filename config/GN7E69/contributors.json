@@ -13000,6 +13000,41 @@
         "commit": "5aa496fcf88cf75cebac07bfa19d7d063ad45cc8",
         "introduced_blob": "7cab5fda1c9febc521db0e6903125082286e2a54"
       }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80091D34",
+        "0x800921B0",
+        "0x800937CC",
+        "0x800943D8",
+        "0x80095304",
+        "0x80096440",
+        "0x80097028",
+        "0x80097440",
+        "0x800975A4",
+        "0x800994E0",
+        "0x80099568",
+        "0x80099630",
+        "0x800996D4",
+        "0x800996FC",
+        "0x8009A1A8",
+        "0x8009A270",
+        "0x8009A298",
+        "0x8009A2EC",
+        "0x8009A578",
+        "0x8009A5A0",
+        "0x8009A5D4"
+      ],
+      "provenance": {
+        "pull_request": 611,
+        "merged_via": 611,
+        "commit": "80e9be799a2252a5ae0e19131815db2162d38e97",
+        "introduced_blob": "153560bff20f47443e3d7ec4aae92898318c1589"
+      }
     }
   ],
   "target": "GN7E69",

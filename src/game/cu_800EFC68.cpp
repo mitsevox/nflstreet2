@@ -390,7 +390,7 @@ int fn_8009EF6C(void *p);
 int fn_80099AD0(Object_80039F5C *p, Object_80137ABC *pBall, int a, int b, int c, int d, int e);
 int fn_80099C80(Object_80039F5C *p, Object_80137ABC *pBall, int a, int *pOut, int *pOut2);
 int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
-int fn_8009A1A8(Object_80039F5C *p, int a, int b, int c, unsigned char index);
+int fn_8009A1A8(Object_80039F5C *p, int a, int b, int c, int index);
 int fn_800C1180(Object_80039F5C *p);
 float fn_800CA9B4(int kind, Object_80039F5C *p);
 void fn_800CE674(Object_800CE674 *p);
