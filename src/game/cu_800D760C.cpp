@@ -1,3 +1,4 @@
+#include "game/Block_801BE60C.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_800D81C8.h"
 #include "game/Object_801BC084.h"
@@ -12,21 +13,9 @@ struct State_800D7A4C {
     unsigned char mUnknown11;
 };
 
-struct Block_800D7A4C {
-    int mUnknown0;
-    int mUnknown4;
-    float mUnknown8;
-    short mUnknown12;
-    signed char mUnknown14[11];
-    char mUnknown25[3];
-    int mUnknown28;
-    float mUnknown32;
-    float mUnknown36;
-};
-
 extern "C" {
 unsigned char fn_800D78C4(Object_80039F5C *p, int id);
-void fn_800D7A4C(Object_80039F5C *p, Block_800D7A4C *pBlock);
+void fn_800D7A4C(Object_80039F5C *p, Block_801BE60C *pBlock);
 void fn_800E7E78(Object_80039F5C *p, State_800D7A4C *pState);
 int fn_801BE648(void *p);
 
@@ -115,47 +104,47 @@ extern "C" void fn_800D7A18(Object_80039F5C *p)
     p->mUnknown778 = fn_801BE648(p->mpUnknown792);
 }
 
-extern "C" void fn_800D7BC4(Object_80039F5C *p, Block_800D7A4C *pBlock)
+extern "C" void fn_800D7BC4(Object_80039F5C *p, Block_801BE60C *pBlock)
 {
     State_800D7A4C *pState = (State_800D7A4C *)&p->mUnknown336;
 
     if (pState->mUnknown5 == 3 && fn_80137B40() && pState->mUnknown11) {
-        float count = pBlock->mUnknown12;
+        float count = pBlock->mUnknownC;
         unsigned char saved = p->mUnknown512.mUnknown14;
         p->mUnknown512.mUnknown14 = 6;
         fn_800E7E78(p, pState);
         fn_800D7A4C(p, pBlock);
         int n = (int)count;
-        int value = pBlock->mUnknown0 * pBlock->mUnknown12 / n;
-        pBlock->mUnknown12 = n;
-        pBlock->mUnknown0 = value;
+        int value = pBlock->mUnknown0Word * pBlock->mUnknownC / n;
+        pBlock->mUnknownC = n;
+        pBlock->mUnknown0Word = value;
         if (value < 0) {
-            if (pBlock->mUnknown12 <= 5) {
+            if (pBlock->mUnknownC <= 5) {
                 int limit = (int)(-lbl_803EAD00 * 46603.38f);
-                pBlock->mUnknown0 = value < limit ? limit : value;
+                pBlock->mUnknown0Word = value < limit ? limit : value;
             } else {
                 int limit = (int)(-lbl_803EAD04 * 46603.38f);
-                pBlock->mUnknown0 = value < limit ? limit : value;
+                pBlock->mUnknown0Word = value < limit ? limit : value;
             }
         } else {
-            if (pBlock->mUnknown12 <= 5) {
+            if (pBlock->mUnknownC <= 5) {
                 int limit = (int)(lbl_803EAD00 * 46603.38f);
-                pBlock->mUnknown0 = value < limit ? limit : value;
+                pBlock->mUnknown0Word = value < limit ? limit : value;
             } else {
                 int limit = (int)(lbl_803EAD04 * 46603.38f);
-                pBlock->mUnknown0 = value > limit ? limit : value;
+                pBlock->mUnknown0Word = value > limit ? limit : value;
             }
         }
         p->mUnknown512.mUnknown14 = saved;
     }
 }
 
-extern "C" void fn_800D7D78(Object_80039F5C *p, Block_800D7A4C *pBlock)
+extern "C" void fn_800D7D78(Object_80039F5C *p, Block_801BE60C *pBlock)
 {
     if (p->mUnknown560.mFlags.mBytes[0] != 0) {
         unsigned char k = p->mUnknown560.mUnknown54;
         if (k <= 10 && pBlock->mUnknown8 > 0.0f) {
-            signed char *pLevels = pBlock->mUnknown14;
+            signed char *pLevels = pBlock->mUnknownE;
             if (pLevels[k] < lbl_802DA87C[k]) {
                 float step = lbl_802DA87C[k] * 0.2f;
                 signed char level = (int)(pLevels[k] + step);
@@ -166,7 +155,7 @@ extern "C" void fn_800D7D78(Object_80039F5C *p, Block_800D7A4C *pBlock)
                     rest = 0.0f;
                 }
                 pBlock->mUnknown8 = rest;
-                p->mpUnknown800[pBlock->mUnknown4].mUnknown2C = rest;
+                p->mpUnknown800[pBlock->mUnknown4Word].mUnknown2C = rest;
             }
         }
     }

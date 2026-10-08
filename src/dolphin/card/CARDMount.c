@@ -55,6 +55,14 @@ static BOOL IsCard(u32 id) {
   return TRUE;
 }
 
+int CARDProbe(s32 chan) {
+    if (__gUnknown800030E3 & 0x80) {
+        return 0;
+    } else {
+        return EXIProbe(chan);
+    }
+}
+
 s32 CARDProbeEx(s32 chan, s32* memSize, s32* sectorSize) {
   u32 id;
   CARDControl* card;

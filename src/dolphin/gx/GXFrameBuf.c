@@ -76,36 +76,33 @@ GXRenderModeObj GXEurgb60Hz480IntAa = {20, 640, 242, 480, 40, 0, 640, 480, 1, 0,
 GXRenderModeObj GXRmHW = {1, 320, 240, 240, 40, 0, 640, 480, 0, 0, 0, { 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 }, { 0, 0, 21, 22, 21, 0, 0 } };
 
 #if defined(DECOMP_COMPARE)
-void GXAdjustForOverscan(const GXRenderModeObj* rmin, GXRenderModeObj* rmout, u16 hor, u16 ver) {
-    u16 hor2 = hor * 2;
-    u16 ver2 = ver * 2;
-    u32 verf;
-    u32 mode;
+// clang-format on
 
-    if (rmin != rmout) {
-        *rmout = *rmin;
-    }
+void GXAdjustForOverscan(const GXRenderModeObj *rIn, GXRenderModeObj *rOut, u16 horiz, u16 vert) {
+  u16 hor2 = horiz * 2;
+  u16 ver2 = vert * 2;
+  u32 verf;
 
-    mode = rmin->viTVmode & 3;
-    rmout->fbWidth = rmin->fbWidth - hor2;
-    verf = (ver2 * rmin->efbHeight) / (u32)rmin->xfbHeight;
-    rmout->efbHeight = rmin->efbHeight - verf;
-    if (rmin->xFBmode == VI_XFBMODE_SF && mode == 0) {
-        rmout->xfbHeight = rmin->xfbHeight - ver2 / 2;
-    } else {
-        rmout->xfbHeight = rmin->xfbHeight - ver2;
-    }
+  if (rIn != rOut) {
+    *rOut = *rIn;
+  }
 
-    rmout->viWidth = rmin->viWidth - hor2;
+  rOut->fbWidth = rIn->fbWidth - hor2;
+  verf = rIn->efbHeight;
+  rOut->efbHeight = verf - ((ver2 * verf) / rIn->xfbHeight);
 
-    if (mode == 1) {
-        rmout->viHeight = rmin->viHeight - (ver2 * 2);
-    } else {
-        rmout->viHeight = rmin->viHeight - ver2;
-    }
+  if (rIn->xFBmode == VI_XFBMODE_SF && (rIn->viTVmode & 2) != 2) {
+    rOut->xfbHeight = rIn->xfbHeight - vert;
+  } else {
+    rOut->xfbHeight = rIn->xfbHeight - ver2;
+  }
 
-    rmout->viXOrigin = rmin->viXOrigin + hor;
-    rmout->viYOrigin = rmin->viYOrigin + ver;
+  rOut->viWidth = rIn->viWidth - hor2;
+
+  rOut->viHeight = rIn->viHeight - ver2;
+
+  rOut->viXOrigin = rIn->viXOrigin + horiz;
+  rOut->viYOrigin = rIn->viYOrigin + vert;
 }
 #endif
 

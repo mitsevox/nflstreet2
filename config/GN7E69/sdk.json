@@ -26,6 +26,10 @@
     {
       "repository": "https://github.com/mitsevox/mvp2005",
       "revision": "1a61d5adf81a14bef749c0b2b7e803aabc2f98b3"
+    },
+    {
+      "repository": "https://github.com/projectPiki/pikmin2",
+      "revision": "29bc5478edffa2c963c88fdd261d876d055aa2b0"
     }
   ],
   "coverage": [
@@ -50,7 +54,7 @@
       "name": "src/dolphin/os/__ppc_eabi_init.c",
       "source": "src/dolphin/os/__ppc_eabi_init.c",
       "library": "OS",
-      "evidence": "Constructor/destructor-table iteration and user-init/abort/exit glue; targettable802DC668/670; native exit anchor and inspected callers distinguish identical generic wrapper fingerprints.",
+      "evidence": "Constructor/destructor-table iteration and user-init/abort/exit glue; target constructor/destructor tables802CC668/802CC670 (lis/addi at8023E848/84C and8023E8BC/8C0); native exit anchor and inspected callers distinguish identical generic wrapper fingerprints.",
       "sections": [
         {
           "section": ".init",
@@ -66,7 +70,7 @@
           "end": "0x8023E920",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Constructor/destructor-table iteration and user-init/abort/exit glue; targettable802DC668/670; native exit anchor and inspected callers distinguish identical generic wrapper fingerprints. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+          "evidence": "Constructor/destructor-table iteration and user-init/abort/exit glue; target constructor/destructor tables802CC668/802CC670 (lis/addi at8023E848/84C and8023E8BC/8C0); native exit anchor and inspected callers distinguish identical generic wrapper fingerprints. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
         }
       ]
     },
@@ -99,22 +103,13 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "OSInit forms 803A3A20 at 80238B30 and invalidates 32 bytes at 80238EAC..80238EB4. It passes that pointer to DVDInquiryAsync at 80238EC0..80238EC8; callee 802413DC/802413E8 sets the transfer length to 32. InquiryCallback reads the version halfword at +2. Both target sizes independently corroborate the donor DVDDriveInfo 32-byte ABI."
-        },
-        {
-          "section": ".data5",
-          "start": "0x803EC154",
-          "end": "0x803EC158",
-          "evidence": "Native symbol@160 complete4-byte initializedpayload byte-identical; matching targetfunction referenceOSRegisterVersion at0x80239330.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
+          "evidence": "OSInit forms 803A3A20 at 80238B30 and invalidates 32 bytes at 80238EAC..80238EB4. It passes that pointer to DVDInquiryAsync at 80238EC0..80238EC8; callee 802413DC/802413E8 sets the transfer length to 32. InquiryCallback reads the device-code halfword at +2. Both target sizes independently corroborate the donor DVDDriveInfo 32-byte ABI. DriveInfo: OSInit forms 0x803A3A20 at 0x80238B30, invalidates32 bytes at 0x80238EAC..0x80238EB4 and passes it to DVDInquiryAsync at 0x80238EC8; InquiryCallback reads the device halfword at+2. Native .bss offset 0, size 32, alignment 32 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
         },
         {
           "section": ".sbss",
           "start": "0x803ED038",
           "end": "0x803ED03C",
-          "evidence": "Native BootInfo storage slot4 bytes referenced consistently by matching targetfunction(s), e.g OSGetConsoleType at0x80238984. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native BootInfo storage slot4 bytes referenced consistently by matching targetfunction(s), e.g OSGetConsoleType at0x80238984. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. BootInfo: lwz at 0x80238984 accesses 0x803ED038; stw at 0x80238BA0 accesses 0x803ED038; lwz at 0x80238C0C accesses 0x803ED038; lwz at 0x80238C30 accesses 0x803ED038 Native .sbss offset 0, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -123,7 +118,7 @@
           "section": ".sbss",
           "start": "0x803ED03C",
           "end": "0x803ED040",
-          "evidence": "Native BI2DebugFlag storage slot4 bytes referenced consistently by matching targetfunction(s), e.g OSExceptionInit at0x80238FB4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native BI2DebugFlag storage slot4 bytes referenced consistently by matching targetfunction(s), e.g OSExceptionInit at0x80238FB4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. BI2DebugFlag: stw at 0x80238B9C accesses 0x803ED03C; stw at 0x80238BB8 accesses 0x803ED03C; lwz at 0x80238BC0 accesses 0x803ED03C; stw at 0x80238BFC accesses 0x803ED03C Native .sbss offset 4, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -132,7 +127,7 @@
           "section": ".sbss",
           "start": "0x803ED048",
           "end": "0x803ED050",
-          "evidence": "Native ZeroF storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSFPRInit at0x802388FC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native ZeroF storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSFPRInit at0x802388FC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. ZeroF: lfd at 0x802388FC accesses 0x803ED048 Native .sbss offset 16, size 8, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -141,7 +136,7 @@
           "section": ".sbss",
           "start": "0x803ED050",
           "end": "0x803ED058",
-          "evidence": "Native ZeroPS storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSFPRInit at0x80238878. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native ZeroPS storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSFPRInit at0x80238878. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. ZeroPS: __OSFPRInit forms 0x803ED050 at 0x80238878 and loads paired-single zeros with psq_l at 0x8023887C; eight-byte source buffer. Native .sbss offset 24, size 8, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -150,7 +145,7 @@
           "section": ".sbss",
           "start": "0x803ED05C",
           "end": "0x803ED060",
-          "evidence": "Native OSExceptionTable storage slot4 bytes referenced consistently by matching targetfunction(s), e.g OSExceptionInit at0x8023910C. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native OSExceptionTable storage slot4 bytes referenced consistently by matching targetfunction(s), e.g OSExceptionInit at0x8023910C. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. OSExceptionTable: stw at 0x8023910C accesses 0x803ED05C; lwz at 0x80239194 accesses 0x803ED05C; lwz at 0x802391B0 accesses 0x803ED05C Native .sbss offset 36, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -162,6 +157,96 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Unique __OSFPRInit, OSGetConsoleType, InquiryCallback, OSExceptionInit, OSDefaultExceptionHandler, __OSPSInit, OSRegisterVersion anchors; following alarm initializer installs exception vector8. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803A3A40",
+          "end": "0x803A3A70",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "DriveBlock: OSInit passes0x803A3A40 as the DVDCommandBlock to DVDInquiryAsync; InquiryCallback uses block word+12status. Canonical DVDCommandBlock is48 bytes. Native .bss offset 32, size 48, alignment 32 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED040",
+          "end": "0x803ED044",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "BI2DebugFlagHolder: stw at 0x80238BF8 accesses 0x803ED040 Native .sbss offset 8, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED058",
+          "end": "0x803ED05C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "AreWeInitialized: lwz at 0x80238B28 accesses 0x803ED058; stw at 0x80238B48 accesses 0x803ED058 Native .sbss offset 32, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED044",
+          "end": "0x803ED048",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__OSIsGcam: lwz at 0x80238E8C accesses 0x803ED044 Native .sbss offset 12, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED064",
+          "end": "0x803ED068",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__OSSavedRegionStart: stw at 0x802389D0 accesses 0x803ED064; stw at 0x80238A0C accesses 0x803ED064; lwz at 0x80238A40 accesses 0x803ED064; lwz at 0x80238A50 accesses 0x803ED064 Native .sbss offset 44, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED060",
+          "end": "0x803ED064",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__OSSavedRegionEnd: stw at 0x802389D4 accesses 0x803ED060; stw at 0x80238A10 accesses 0x803ED060; lwz at 0x80238AA0 accesses 0x803ED060 Native .sbss offset 40, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED070",
+          "end": "0x803ED078",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__OSStartTime: stw at 0x80238B50 accesses 0x803ED074; stw at 0x80238B54 accesses 0x803ED070 Native .sbss offset 56, size 8, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED068",
+          "end": "0x803ED06C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__OSInIPL: lwz at 0x80238CD8 accesses 0x803ED068; lwz at 0x80238E7C accesses 0x803ED068 Native .sbss offset 48, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FB868",
+          "end": "0x802FBA5F",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native .data initialized allocation of 503 bytes is directly compared with target0x802FB868..0x802FBA5F; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC148",
+          "end": "0x803EC158",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native 16-byte initialized .sdata pool: version pointer at 0x803EC148, %08x newline format plus two alignment bytes at 0x803EC14C..0x803EC154, and %s newline format at 0x803EC154..0x803EC158. Actual OSInit load at 0x80238E50 references the version pointer; OSRegisterVersion uses the final format. Complete resolved initialized pool equals target; individual symbol proof remains in evidence.tsv; original archive membership provisional. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct."
         }
       ]
     },
@@ -177,7 +262,7 @@
           "end": "0x803ED080",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "AlarmQueue two-pointer8-byte queue; InsertAlarm and alarm init masked native references consistently resolve803ED078. Both first/lastpointer words used. No neighboring allocation ownership inferred.",
+          "evidence": "AlarmQueue two-pointer8-byte queue; InsertAlarm and alarm init masked native references consistently resolve803ED078. Both first/lastpointer words used. No neighboring allocation ownership inferred. AlarmQueue: stw at 0x8023937C accesses 0x803ED078; lwz at 0x80239474 accesses 0x803ED078; stw at 0x802394C0 accesses 0x803ED078; stw at 0x80239570 accesses 0x803ED078 Native .sbss offset 0, size 8, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
           "object_seed": true
         },
         {
@@ -261,7 +346,7 @@
           "end": "0x802FBEF2",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Entire native.data554-byte diagnosticpool byte-identical; target DMAErrorHandler/L2 invalidation references resolve native pool base, including8023A048. No trailing alignment ownership inferred.",
+          "evidence": "Entire native.data554-byte diagnosticpool byte-identical; target DMAErrorHandler/L2 invalidation references resolve native pool base, including8023A048. No trailing alignment ownership inferred. Complete native .data initialized allocation of 554 bytes is directly compared with target0x802FBCC8..0x802FBEF2; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct.",
           "object_seed": true
         },
         {
@@ -286,7 +371,7 @@
           "end": "0x802FC0CF",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Entire native.data471-byte diagnosticpool byte-identical; masked-native OSDumpContext references base; __OSContextInit also references local diagnostic802FC0AC at8023AB30. No trailing padding included.",
+          "evidence": "Entire native.data471-byte diagnosticpool byte-identical; masked-native OSDumpContext references base; __OSContextInit also references local diagnostic802FC0AC at8023AB30. No trailing padding included. Complete native .data initialized allocation of 471 bytes is directly compared with target0x802FBEF8..0x802FC0CF; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct.",
           "object_seed": true
         },
         {
@@ -353,14 +438,14 @@
           "end": "0x802FC41C",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Entire44-byte InterruptPrioTable byte-identical; target dispatch reference at8023B95C plus native symbol relocations establishes exact table address/length.",
+          "evidence": "Entire44-byte InterruptPrioTable byte-identical; target dispatch reference at8023B95C plus native symbol relocations establishes exact table address/length. Complete native .data initialized allocation of 44 bytes is directly compared with target0x802FC3F0..0x802FC41C; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct.",
           "object_seed": true
         },
         {
           "section": ".sbss",
           "start": "0x803ED088",
           "end": "0x803ED08C",
-          "evidence": "Native InterruptHandlerTable storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSSetInterruptHandler at0x8023B244. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native InterruptHandlerTable storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSSetInterruptHandler at0x8023B244. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. InterruptHandlerTable: lwz at 0x8023B244 accesses 0x803ED088; lwz at 0x8023B260 accesses 0x803ED088; stw at 0x8023B288 accesses 0x803ED088; lwz at 0x8023B294 accesses 0x803ED088 Native .sbss offset 0, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -369,7 +454,7 @@
           "section": ".sbss",
           "start": "0x803ED08C",
           "end": "0x803ED090",
-          "evidence": "Native __OSLastInterruptSrr0 storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSDispatchInterrupt at0x8023B9C0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native __OSLastInterruptSrr0 storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSDispatchInterrupt at0x8023B9C0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. __OSLastInterruptSrr0: stw at 0x8023B9C0 accesses 0x803ED08C Native .sbss offset 4, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -378,7 +463,7 @@
           "section": ".sbss",
           "start": "0x803ED090",
           "end": "0x803ED092",
-          "evidence": "Native __OSLastInterrupt storage slot2 bytes referenced consistently by matching targetfunction(s), e.g __OSDispatchInterrupt at0x8023B9AC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native __OSLastInterrupt storage slot2 bytes referenced consistently by matching targetfunction(s), e.g __OSDispatchInterrupt at0x8023B9AC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. __OSLastInterrupt: sth at 0x8023B9AC accesses 0x803ED090 Native .sbss offset 8, size 2, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -387,7 +472,7 @@
           "section": ".sbss",
           "start": "0x803ED098",
           "end": "0x803ED0A0",
-          "evidence": "Native __OSLastInterruptTime storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSDispatchInterrupt at0x8023B9B4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native __OSLastInterruptTime storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSDispatchInterrupt at0x8023B9B4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. __OSLastInterruptTime: stw at 0x8023B9B4 accesses 0x803ED09C; stw at 0x8023B9B8 accesses 0x803ED098 Native .sbss offset 16, size 8, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -431,6 +516,15 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Unique reset callback, memory interrupt, Config24MB/48MB, memory-protection initializer anchors. Donor unsupported stack padding is irrelevant to mapping and grants no source-match claim. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FC470",
+          "end": "0x802FC480",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native .data initialized allocation of 16 bytes is directly compared with target0x802FC470..0x802FC480; related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 typed tables/diagnostic literals and original operands support ownership. Original object edges remain provisional. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct."
         }
       ]
     },
@@ -460,7 +554,7 @@
           "section": ".sbss",
           "start": "0x803ED0A0",
           "end": "0x803ED0A8",
-          "evidence": "Native ResetFunctionQueue storage slot8 bytes referenced consistently by matching targetfunction(s), e.g OSRegisterResetFunction at0x8023BFBC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native ResetFunctionQueue storage slot8 bytes referenced consistently by matching targetfunction(s), e.g OSRegisterResetFunction at0x8023BFBC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. ResetFunctionQueue: lwz at 0x8023BFBC accesses 0x803ED0A0; stw at 0x8023BFF8 accesses 0x803ED0A0; stw at 0x8023C030 accesses 0x803ED0A0; lwz at 0x8023C14C accesses 0x803ED0A0 Native .sbss offset 0, size 8, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -472,6 +566,15 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Reset registration, raw reset and hot-reset anchors; finalC3B0 reads reboot indicator800030E2 and reset codePI registerCC003024 matching OSGetResetCode donor behavior. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED0A8",
+          "end": "0x803ED0AC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "bootThisDol: lwz at 0x8023C12C accesses 0x803ED0A8; lwz at 0x8023C27C accesses 0x803ED0A8 Native .sbss offset 8, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
         }
       ]
     },
@@ -638,6 +741,42 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Target Run sync/isync/mtlr16, Prepared callback12, reboot832 uses physical reboot/region words, apploader and DVD path; corroborated BFBB donor OSReboot.c function order and body semantics. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803A4520",
+          "end": "0x803A4540",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Header: __OSReboot reads32 bytes from DVD into0x803A4520; ApploaderHeader fields at+20/+24 supply body and reboot sizes for aligned DVD read length and offset; execution uses fixed 0x81300000. Native .bss offset 0, size 32, alignment 32 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED0E0",
+          "end": "0x803ED0E4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "SaveStart: lwz at 0x8023E958 accesses 0x803ED0E0 Native .sbss offset 0, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED0E4",
+          "end": "0x803ED0E8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "SaveEnd: lwz at 0x8023E960 accesses 0x803ED0E4 Native .sbss offset 4, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED0E8",
+          "end": "0x803ED0EC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Prepared: stw at 0x8023E934 accesses 0x803ED0E8; stw at 0x8023E9AC accesses 0x803ED0E8; lwz at 0x8023EA2C accesses 0x803ED0E8 Native .sbss offset 8, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
         }
       ]
     },
@@ -738,7 +877,7 @@
       "name": "src/dolphin/dvd/dvd.c",
       "source": "src/dolphin/dvd/dvd.c",
       "library": "DVD",
-      "evidence": "Target DVD state-machine/cancel/read cluster; multiple nontrivial anchors; first empty optional checker inferred from adjacent source order. Published native retained-layout base is invalid because unrelated cbForCancelAllSync alias matched AX; do not use its base.",
+      "evidence": "Complete coherent BFBB 50-body source with 46 target bodies across 9,980 bytes; normal comparisons retain exact and partial results. Four extra source bodies remain unassigned. Small-global target placement differs from full native packing; original archive membership remains provisional.",
       "sections": [
         {
           "section": ".text",
@@ -747,6 +886,60 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Target DVD state-machine/cancel/read cluster; multiple nontrivial anchors; first empty optional checker inferred from adjacent source order. Published native retained-layout base is invalid because unrelated cbForCancelAllSync alias matched AX; do not use its base."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC180",
+          "end": "0x803EC198",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native allocation and actual original operands/pointers: initialized pools 384+24 bytes; scratch BB2/disk ID/dummy/alarm 32+32+48+40 bytes. No source storage credit for unlinked NOBITS."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FD0F8",
+          "end": "0x802FD278",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": false,
+          "evidence": "Complete native allocation and actual original operands/pointers: initialized pools 384+24 bytes; scratch BB2/disk ID/dummy/alarm 32+32+48+40 bytes. No source storage credit for unlinked NOBITS. Ownership-only extent: preserve the genuine inferred jump-table objects within this initialized pool."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803A5540",
+          "end": "0x803A55D8",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native allocation and actual original operands/pointers: initialized pools 384+24 bytes; scratch BB2/disk ID/dummy/alarm 32+32+48+40 bytes. No source storage credit for unlinked NOBITS."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED118",
+          "end": "0x803ED154",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Fifteen actual four-byte small globals established by retained target operands; intervening unused cells remain unassigned. Native diagnostic 76-byte packing is not an original target allocation and is not promoted."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED15C",
+          "end": "0x803ED164",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Original boot/init flag cells established by retained target operands; intervening unused cells remain unassigned. Native diagnostic 76-byte packing is not an original target allocation and is not promoted."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED16C",
+          "end": "0x803ED170",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Original LastState pointer cell established by retained target operands; intervening unused cells remain unassigned. Native diagnostic 76-byte packing is not an original target allocation and is not promoted."
         }
       ]
     },
@@ -982,7 +1175,7 @@
           "section": ".data5",
           "start": "0x803EC208",
           "end": "0x803EC20C",
-          "evidence": "Native symbolsARAMStart complete4-byte initializedpayload byte-identical; matching targetfunction referenceVMInit at0x80244F68.",
+          "evidence": "Native symbolsARAMStart complete4-byte initializedpayload byte-identical; matching targetfunction referenceVMInit at0x80244F68. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -991,7 +1184,7 @@
           "section": ".sbss",
           "start": "0x803ED230",
           "end": "0x803ED234",
-          "evidence": "Native sMRAMSize storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMInit at0x80244F74. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native sMRAMSize storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMInit at0x80244F74. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. sMRAMSize: stw at 0x80244F74 accesses 0x803ED230; lwz at 0x80244FDC accesses 0x803ED230. Related MVP2005 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 gives the state role and declaration; target32-bit accesses establish storage width. Individually bound diagnostic mapping; no NOBITS byte credit or native-order claim.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -1000,7 +1193,7 @@
           "section": ".sbss",
           "start": "0x803ED234",
           "end": "0x803ED238",
-          "evidence": "Native sMRAMSwapSpace storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VMAllocMRAMSwapSpace at0x80244FE0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native sMRAMSwapSpace storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VMAllocMRAMSwapSpace at0x80244FE0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. sMRAMSwapSpace: stw at 0x80244FE0 accesses 0x803ED234; lwz at 0x80245058 accesses 0x803ED234. Related MVP2005 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 gives the state role and declaration; target32-bit accesses establish storage width. Individually bound diagnostic mapping; no NOBITS byte credit or native-order claim.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -1009,7 +1202,7 @@
           "section": ".sbss",
           "start": "0x803ED238",
           "end": "0x803ED23C",
-          "evidence": "Native sARAMSize storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMInit at0x80244F70. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native sARAMSize storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMInit at0x80244F70. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. sARAMSize: stw at 0x80244F70 accesses 0x803ED238; lwz at 0x80244FBC accesses 0x803ED238. Related MVP2005 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 gives the state role and declaration; target32-bit accesses establish storage width. Individually bound diagnostic mapping; no NOBITS byte credit or native-order claim.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -1018,7 +1211,7 @@
           "section": ".sbss",
           "start": "0x803ED23C",
           "end": "0x803ED240",
-          "evidence": "Native sMRAMPages storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMInit at0x80244F78. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native sMRAMPages storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMInit at0x80244F78. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. sMRAMPages: stw at 0x80244F78 accesses 0x803ED23C; lwz at 0x80244FB4 accesses 0x803ED23C. Related MVP2005 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 gives the state role and declaration; target32-bit accesses establish storage width. Individually bound diagnostic mapping; no NOBITS byte credit or native-order claim.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -1027,7 +1220,7 @@
           "section": ".sbss",
           "start": "0x803ED244",
           "end": "0x803ED248",
-          "evidence": "Native sInitialized storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMInit at0x80244F40. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native sInitialized storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMInit at0x80244F40. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. sInitialized: lwz at 0x80244F40 accesses 0x803ED244; stw at 0x80244F5C accesses 0x803ED244. Related MVP2005 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 gives the state role and declaration; target32-bit accesses establish storage width. Individually bound diagnostic mapping; no NOBITS byte credit or native-order claim.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -1038,10 +1231,19 @@
           "end": "0x80245200",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "VMInit same-sized native156-byte fingerprint, __VMSwapPageIn508, arena-swap allocation48, getters; targetcalls connect VMBASE initialization and VM mappingallocators."
+          "evidence": "Actual target analysis function cuts and ordered calls corroborate the complete mapped code denominator. Related MVP2005 source names remain reference-derived; normal compiler comparisons include every retained target C body and preserve measured mismatches."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED240",
+          "end": "0x803ED244",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "sLogStatsCallback: lwz at 0x80245180 accesses 0x803ED240; lwz at 0x802451C0 accesses 0x803ED240. Related MVP2005 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 gives the state role and declaration; target32-bit accesses establish storage width. Individually bound diagnostic mapping; no NOBITS byte credit or native-order claim."
         }
       ],
-      "evidence": "MVP2005 pinned1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 nativeproductionobject fingerprint + reconstructedsource andlinked_names.tsv provenance; originalNFLfileownershipprovisional. Names are reference-derived, nottargetdebug recovered. VMInit same-sized native156-byte fingerprint, __VMSwapPageIn508, arena-swap allocation48, getters; targetcalls connect VMBASE initialization and VM mappingallocators.",
+      "evidence": "Related MVP2005 revision 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 reconstructed C and reference names corroborate actual target function cuts, call order and accessed storage. Original target compiler and archive membership remain unresolved; normal complete-body comparisons distinguish exact functions from measured partials.",
       "name": "src/dolphin/vm/VM.c"
     },
     {
@@ -1049,28 +1251,10 @@
       "library": "VM",
       "sections": [
         {
-          "section": ".data5",
-          "start": "0x803EC210",
-          "end": "0x803EC214",
-          "evidence": "Native symbolsFirstPass complete4-byte initializedpayload byte-identical; matching targetfunction reference__VMPageReplacementLRU at0x80245258.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".data5",
-          "start": "0x803EC214",
-          "end": "0x803EC218",
-          "evidence": "Native symbolsPolicy complete4-byte initializedpayload byte-identical; matching targetfunction reference__VMGetPageToReplace at0x8024520C.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
           "section": ".sbss",
           "start": "0x803ED250",
           "end": "0x803ED254",
-          "evidence": "Native sCurrentPage storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VMPageReplacementLRU at0x80245260. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native sCurrentPage storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __VMPageReplacementLRU at0x80245260. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. sCurrentPage: lwz at 0x80245260 accesses 0x803ED250; lwz at 0x80245278 accesses 0x803ED250; lwz at 0x802452BC accesses 0x803ED250; lwz at 0x802452CC accesses 0x803ED250. Related MVP2005 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 gives the state role and declaration; target32-bit accesses establish storage width. Individually bound diagnostic mapping; no NOBITS byte credit or native-order claim.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -1081,10 +1265,19 @@
           "end": "0x80245514",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "All four retained functions native fingerprint uniquely match: dispatch68, LRU464, random148,FIFO108; complete788-byte contiguous target run."
+          "evidence": "Actual target analysis function cuts and ordered calls corroborate the complete mapped code denominator. Related MVP2005 source names remain reference-derived; normal compiler comparisons include every retained target C body and preserve measured mismatches."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC210",
+          "end": "0x803EC218",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native eight-byte initialized .sdata pool contains FirstPass at 0x803EC210 and Policy at 0x803EC214. Actual __VMPageReplacementLRU load at 0x80245258 and __VMGetPageToReplace load at 0x8024520C establish the two words. Whole resolved pool equals target; individual typed evidence retained; related MVP names do not establish original target symbols or archive edges. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct."
         }
       ],
-      "evidence": "MVP2005 pinned1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 nativeproductionobject fingerprint + reconstructedsource andlinked_names.tsv provenance; originalNFLfileownershipprovisional. Names are reference-derived, nottargetdebug recovered. All four retained functions native fingerprint uniquely match: dispatch68, LRU464, random148,FIFO108; complete788-byte contiguous target run.",
+      "evidence": "Related MVP2005 revision 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 reconstructed C and reference names corroborate actual target function cuts, call order and accessed storage. Original target compiler and archive membership remain unresolved; normal complete-body comparisons distinguish exact functions from measured partials.",
       "name": "src/dolphin/vm/VMPageReplacement.c"
     },
     {
@@ -1097,14 +1290,14 @@
           "end": "0x802FDCFF",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Exact103-byte VMAlloc allocation-error diagnostic includingterminator; target80245688 materializes this address, sprintf at45694 andPPCHalt at45698. NativeMVP VMMapping.o symbol payload completely byte-identical.",
+          "evidence": "Exact103-byte VMAlloc allocation-error diagnostic includingterminator; target80245688 materializes this address, sprintf at45694 andPPCHalt at45698. NativeMVP VMMapping.o symbol payload completely byte-identical. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct.",
           "object_seed": true
         },
         {
           "section": ".sbss",
           "start": "0x803ED258",
           "end": "0x803ED25C",
-          "evidence": "Native sARAMToVirtualLUT storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMAlloc at0x80245594. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native sARAMToVirtualLUT storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMAlloc at0x80245594. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. sARAMToVirtualLUT: lwz at 0x80245594 accesses 0x803ED258; stw at 0x80245790 accesses 0x803ED258; lwz at 0x802457AC accesses 0x803ED258; lwz at 0x802457B8 accesses 0x803ED258. Related MVP2005 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 gives the state role and declaration; target32-bit accesses establish storage width. Individually bound diagnostic mapping; no NOBITS byte credit or native-order claim.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -1113,7 +1306,7 @@
           "section": ".sbss",
           "start": "0x803ED25C",
           "end": "0x803ED260",
-          "evidence": "Native sVirtualToARAMLUT storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMAlloc at0x802455D4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native sVirtualToARAMLUT storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMAlloc at0x802455D4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. sVirtualToARAMLUT: lwz at 0x802455D4 accesses 0x803ED25C; lwz at 0x80245624 accesses 0x803ED25C; lwz at 0x80245654 accesses 0x803ED25C; lwz at 0x802456AC accesses 0x803ED25C. Related MVP2005 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 gives the state role and declaration; target32-bit accesses establish storage width. Individually bound diagnostic mapping; no NOBITS byte credit or native-order claim.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -1122,7 +1315,7 @@
           "section": ".sbss",
           "start": "0x803ED260",
           "end": "0x803ED264",
-          "evidence": "Native sAllocatedARAM storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMAlloc at0x80245560. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native sAllocatedARAM storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMAlloc at0x80245560. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. sAllocatedARAM: lwz at 0x80245560 accesses 0x803ED260; lwz at 0x802455E0 accesses 0x803ED260; stw at 0x802455E8 accesses 0x803ED260. Related MVP2005 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 gives the state role and declaration; target32-bit accesses establish storage width. Individually bound diagnostic mapping; no NOBITS byte credit or native-order claim.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -1131,7 +1324,7 @@
           "section": ".sbss",
           "start": "0x803ED264",
           "end": "0x803ED268",
-          "evidence": "Native sARAMPageCursor storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMAlloc at0x80245544. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
+          "evidence": "Native sARAMPageCursor storage slot4 bytes referenced consistently by matching targetfunction(s), e.g VMAlloc at0x80245544. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. sARAMPageCursor: lwz at 0x80245544 accesses 0x803ED264; stw at 0x80245558 accesses 0x803ED264; lwz at 0x80245598 accesses 0x803ED264; stw at 0x802455A4 accesses 0x803ED264. Related MVP2005 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 gives the state role and declaration; target32-bit accesses establish storage width. Individually bound diagnostic mapping; no NOBITS byte credit or native-order claim.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -1142,10 +1335,10 @@
           "end": "0x80245820",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "VMAlloc256, translate64, mapped32, alert56, set24, inARAM20, virtual-LUT168,ARAM-LUT160 complete780-byte run; unique diagnostic target802FDC98."
+          "evidence": "Actual target analysis function cuts and ordered calls corroborate the complete mapped code denominator. Related MVP2005 source names remain reference-derived; normal compiler comparisons include every retained target C body and preserve measured mismatches."
         }
       ],
-      "evidence": "MVP2005 pinned1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 nativeproductionobject fingerprint + reconstructedsource andlinked_names.tsv provenance; originalNFLfileownershipprovisional. Names are reference-derived, nottargetdebug recovered. VMAlloc256, translate64, mapped32, alert56, set24, inARAM20, virtual-LUT168,ARAM-LUT160 complete780-byte run; unique diagnostic target802FDC98.",
+      "evidence": "Related MVP2005 revision 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 reconstructed C and reference names corroborate actual target function cuts, call order and accessed storage. Original target compiler and archive membership remain unresolved; normal complete-body comparisons distinguish exact functions from measured partials.",
       "name": "src/dolphin/vm/VMMapping.c"
     },
     {
@@ -1263,133 +1456,52 @@
       "name": "src/dolphin/pad/Pad.c",
       "source": "src/dolphin/pad/Pad.c",
       "library": "PAD",
-      "evidence": "Unique origin/type/probe/spec/sampling handlers; target last48124 toggles bootbyte30E3 bit40 matching __PADDisableRecalibration, ends481A0 before AR callback setter.",
+      "evidence": "Coherent pinned BFBB April 2003 C source: nineteen complete target functions and observed typed storage; source unit attribution remains related and archive edges provisional. Native tail-SDA packing differences remain measured partial; original bytes remain linked.",
       "sections": [
         {
-          "section": ".bss",
-          "start": "0x803A5890",
-          "end": "0x803A58C0",
+          "section": ".data5",
+          "start": "0x803EC218",
+          "end": "0x803EC238",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "PAD UpdateOrigin forms 803A5890 at 802466E4 and multiplies channel by 12 at 802466DC. PADRead independently forms this base at 80247370, processes exactly four channels at 802476C8/802476D4, and advances its Origin pointer by 12 at 802476CC. Reset handling clears a full 12-byte record at 80248004..80248018, not merely the 10-byte wire reply. Four 12-byte PADStatus records require 48 bytes."
+          "evidence": "Complete coherent BFBB native .sdata extent 32 bytes, original references/pointers and observed typed accesses establish base; exact initialized equality separately verified, NOBITS no raw-byte credit."
         },
         {
-          "section": ".data5",
-          "start": "0x803EC21C",
-          "end": "0x803EC220",
-          "evidence": "Native symbolResettingChan complete4-byte initializedpayload byte-identical; matching targetfunction referencePADOriginCallback at0x8024688C.",
+          "section": ".bss",
+          "start": "0x803A5880",
+          "end": "0x803A58D0",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": true
+          "object_seed": true,
+          "evidence": "Complete coherent BFBB native .bss extent 80 bytes, original references/pointers and observed typed accesses establish base; exact initialized equality separately verified, NOBITS no raw-byte credit."
         },
         {
-          "section": ".data5",
-          "start": "0x803EC220",
-          "end": "0x803EC224",
-          "evidence": "Native symbolXPatchBits complete4-byte initializedpayload byte-identical; matching targetfunction referenceUpdateOrigin at0x80246828.",
+          "section": ".data4",
+          "start": "0x802FDD00",
+          "end": "0x802FDD58",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".data5",
-          "start": "0x803EC224",
-          "end": "0x803EC228",
-          "evidence": "Native symbolAnalogMode complete4-byte initializedpayload byte-identical; matching targetfunction referenceUpdateOrigin at0x802466F0.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".data5",
-          "start": "0x803EC228",
-          "end": "0x803EC22C",
-          "evidence": "Native symbolSpec complete4-byte initializedpayload byte-identical; matching targetfunction referencePADTypeAndStatusCallback at0x80246BE4.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".data5",
-          "start": "0x803EC230",
-          "end": "0x803EC234",
-          "evidence": "Native symbolCmdReadOrigin complete4-byte initializedpayload byte-identical; matching targetfunction referencePADTypeAndStatusCallback at0x80246CD0.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".data5",
-          "start": "0x803EC234",
-          "end": "0x803EC238",
-          "evidence": "Native symbolCmdCalibrate complete4-byte initializedpayload byte-identical; matching targetfunction referencePADTypeAndStatusCallback at0x80246C9C.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
+          "object_seed": false,
+          "evidence": "Complete coherent BFBB native .data extent 88 bytes, original references/pointers and observed typed accesses establish base; exact initialized equality separately verified, NOBITS no raw-byte credit."
         },
         {
           "section": ".sbss",
-          "start": "0x803ED28C",
-          "end": "0x803ED290",
-          "evidence": "Native EnabledBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADOriginCallback at0x8024689C. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED290",
-          "end": "0x803ED294",
-          "evidence": "Native ResettingBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADOriginCallback at0x802468D0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED294",
-          "end": "0x803ED298",
-          "evidence": "Native RecalibrateBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADTypeAndStatusCallback at0x80246B00. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED298",
-          "end": "0x803ED29C",
-          "evidence": "Native WaitingBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADProbeCallback at0x80246A54. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED2A0",
+          "start": "0x803ED288",
           "end": "0x803ED2A4",
-          "evidence": "Native PendingBits storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADTypeAndStatusCallback at0x80246D84. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": true
+          "object_seed": true,
+          "evidence": "Observed original SDA word accesses; scalar and pointer widths from coherent source/call behavior. Unknown word at803ED2A4 remains unowned; native tail ordering differs and comparison remains partial."
         },
         {
           "section": ".sbss",
           "start": "0x803ED2A8",
-          "end": "0x803ED2AC",
-          "evidence": "Native SamplingCallback storage slot4 bytes referenced consistently by matching targetfunction(s), e.g SamplingHandler at0x80248084. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
-          "start_boundary": "provisional",
-          "end_boundary": "provisional",
-          "object_seed": true
-        },
-        {
-          "section": ".sbss",
-          "start": "0x803ED2B0",
           "end": "0x803ED2B4",
-          "evidence": "Native __PADSpec storage slot4 bytes referenced consistently by matching targetfunction(s), e.g PADSetSpec at0x802477A4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "object_seed": true
+          "object_seed": true,
+          "evidence": "Observed original SDA word accesses; scalar and pointer widths from coherent source/call behavior. Unknown word at803ED2A4 remains unowned; native tail ordering differs and comparison remains partial."
         },
         {
           "section": ".text",
@@ -1397,7 +1509,7 @@
           "end": "0x802481A0",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Unique origin/type/probe/spec/sampling handlers; target last48124 toggles bootbyte30E3 bit40 matching __PADDisableRecalibration, ends481A0 before AR callback setter. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+          "evidence": "Nineteen complete contiguous original functions, individual19native extents6864 match observedcuts; original archiveedges remain inferred."
         }
       ]
     },
@@ -1485,8 +1597,35 @@
       "name": "src/dolphin/ai/ai.c",
       "source": "src/dolphin/ai/ai.c",
       "library": "AI",
-      "evidence": "First68-byte registration callback atA0FC ambiguous by itself; subsequent unique AI DMA/stream/DSPrate/interrupt/SRC functions contiguous. Retained AI screen beginsA140 and therefore omits registration prefix; total mapped ownership includes prefix. No claim this routine is AIReset.",
+      "evidence": "Coherent pinned BFBB April 2003 C functions corroborate callback/DMA/stream/rate/SRC behavior. All eighteen C bodies measured, SRC routine partial; original twelve-byte flag-clear and eighty-eight-byte stack-switch routines remain unrecovered within unchanged complete mapped range. Stack-switch assembly provenance unresolved; no new assembly implementation or whole-unit promotion.",
       "sections": [
+        {
+          "section": ".data4",
+          "start": "0x802FDDE8",
+          "end": "0x802FDE2C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Neutral typedextent corroborated by originaloperand accesses and complete coherentBFBB native allocation. full68byteversionstring; no additional archiveextent/padding."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC248",
+          "end": "0x803EC24C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Neutral typedextent corroborated by originaloperand accesses and complete coherentBFBB native allocation. versionpointer802FDDE8; no additional archiveextent/padding."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED308",
+          "end": "0x803ED348",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Neutral typedextent corroborated by originaloperand accesses and complete coherentBFBB native allocation. six4bytecallback/stack/flags plusfive8bytetimingvalues, including original savedstackcell; no additional archiveextent/padding."
+        },
         {
           "section": ".text",
           "start": "0x8024A0FC",
@@ -1594,6 +1733,123 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Partition ownership is provisional, not an original object boundary recovery. Pinned dolsdk2004/BFBB source families provide 4 uniquely located function anchors in this interval; target has a function entry at 0x8024ACC0, previous instruction is blr, and previous interval ends at 0x8024C038 with blr at end-4. Conventional filename is reference-derived. Native retained-layout sizes are not used as target unit sizes."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FDE40",
+          "end": "0x802FE07C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": false,
+          "evidence": "Complete ordinary native initialized pool 0x802FDE40..0x802FE07C directly equals original target after ordinary relocations. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 constants, table entries and original call operands support placement; original archive edges remain provisional. The complete initialized pool contains DTK independently discovered GXTexRegionAddrTable at 0x802FDFAC..0x802FE06C; retain those original internal symbols instead of injecting an overlapping aggregate analysis symbol. Whole SDK ownership and normal pool comparison remain unchanged."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC258",
+          "end": "0x803EC25C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": false,
+          "evidence": "Complete ordinary native initialized pool 0x803EC258..0x803EC25C directly equals original target after ordinary relocations. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 constants, table entries and original call operands support placement; original archive edges remain provisional. Initialized pool ownership is a comparison allocation, not a single original object-symbol claim. Preserve DTK-discovered individual original literals, tables and relocations; do not inject an overlapping aggregate analysis symbol."
+        },
+        {
+          "section": ".data6",
+          "start": "0x803ED840",
+          "end": "0x803ED868",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": false,
+          "evidence": "Complete ordinary native initialized pool 0x803ED840..0x803ED868 directly equals original target after ordinary relocations. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 constants, table entries and original call operands support placement; original archive edges remain provisional. Initialized pool ownership is a comparison allocation, not a single original object-symbol claim. Preserve DTK-discovered individual original literals, tables and relocations; do not inject an overlapping aggregate analysis symbol."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803A5900",
+          "end": "0x803A5980",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "GXInit forms 0x803A5900 and passes it to GXInitFifoBase/Ptrs and GXSetCPUFifo/GXSetGPFifo; canonical GXFifoObj128 bytes. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40; complete native natural allocation. No zero-byte credit."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803A5980",
+          "end": "0x803A5F30",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Original constant0x803ED840 points to0x803A5980; target uses cache fields through+0x5AC dirtyState and texture/TLUT banks at+0x208/+0x288/+0x308/+0x388. Canonical GXData1456 bytes. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40; complete native natural allocation. No zero-byte credit."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED358",
+          "end": "0x803ED35C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__piReg: stw at 0x8024AFD8 accesses 0x803ED358. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration and complete native allocation establish4-byte typed cell; CP/PE/MI pointees use16-bit access, PI32-bit. Time is a 64-bit pair. Alignment hole0x803ED36C..0x803ED370 remains unclaimed. No NOBITS progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED35C",
+          "end": "0x803ED360",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__cpReg: lwz at 0x8024AF34 accesses 0x803ED35C; lwz at 0x8024AF44 accesses 0x803ED35C; stw at 0x8024AFCC accesses 0x803ED35C; lwz at 0x8024B668 accesses 0x803ED35C. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration and complete native allocation establish4-byte typed cell; CP/PE/MI pointees use16-bit access, PI32-bit. Time is a 64-bit pair. Alignment hole0x803ED36C..0x803ED370 remains unclaimed. No NOBITS progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED360",
+          "end": "0x803ED364",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__peReg: stw at 0x8024AFDC accesses 0x803ED360. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration and complete native allocation establish4-byte typed cell; CP/PE/MI pointees use16-bit access, PI32-bit. Time is a 64-bit pair. Alignment hole0x803ED36C..0x803ED370 remains unclaimed. No NOBITS progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED364",
+          "end": "0x803ED368",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__memReg: lwz at 0x8024AE04 accesses 0x803ED364; lwz at 0x8024AE5C accesses 0x803ED364; stw at 0x8024AFE0 accesses 0x803ED364. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration and complete native allocation establish4-byte typed cell; CP/PE/MI pointees use16-bit access, PI32-bit. Time is a 64-bit pair. Alignment hole0x803ED36C..0x803ED370 remains unclaimed. No NOBITS progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED368",
+          "end": "0x803ED36C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "peCount: stw at 0x8024AE38 accesses 0x803ED368; lwz at 0x8024AED0 accesses 0x803ED368; stw at 0x8024AEE8 accesses 0x803ED368. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration and complete native allocation establish4-byte typed cell; CP/PE/MI pointees use16-bit access, PI32-bit. Time is a 64-bit pair. Alignment hole0x803ED36C..0x803ED370 remains unclaimed. No NOBITS progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED370",
+          "end": "0x803ED378",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "time: stw at 0x8024AE40 accesses 0x803ED374; stw at 0x8024AE48 accesses 0x803ED370; lwz at 0x8024AE88 accesses 0x803ED374; lwz at 0x8024AE90 accesses 0x803ED370. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration and complete native allocation establish8-byte typed cell; CP/PE/MI pointees use16-bit access, PI32-bit. Time is a 64-bit pair. Alignment hole0x803ED36C..0x803ED370 remains unclaimed. No NOBITS progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED378",
+          "end": "0x803ED37C",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "calledOnce: lwz at 0x8024ADF8 accesses 0x803ED378; stw at 0x8024AE50 accesses 0x803ED378. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration and complete native allocation establish4-byte typed cell; CP/PE/MI pointees use16-bit access, PI32-bit. Time is a 64-bit pair. Alignment hole0x803ED36C..0x803ED370 remains unclaimed. No NOBITS progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED37C",
+          "end": "0x803ED380",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "resetFuncRegistered: lwz at 0x8024B008 accesses 0x803ED37C; stw at 0x8024B020 accesses 0x803ED37C. Related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration and complete native allocation establish4-byte typed cell; CP/PE/MI pointees use16-bit access, PI32-bit. Time is a 64-bit pair. Alignment hole0x803ED36C..0x803ED370 remains unclaimed. No NOBITS progress."
         }
       ]
     },
@@ -1660,7 +1916,7 @@
       "name": "src/dolphin/gx/GXMisc.c",
       "source": "src/dolphin/gx/GXMisc.c",
       "library": "GX",
-      "evidence": "Complete pinned BFBB source/current canonical layouts establish18 exact comparison-only target bodies1576 and native20-byte callback/draw-finish SBSS. Six other original functions in full2280 provisional file extent remain unrecovered; donor draw-sync write/read bodies are preserved unassigned. No invented GXPoke split or source splice.",
+      "evidence": "Combined independently reviewed BFBB, OOT GameCube and TP C forms register 24 complete target functions spanning 2280 code bytes in the retained provisional grouping. Original-file ownership remains unresolved; unassigned donor APIs receive no credit. Accepted ordinary output, native 20-byte callback/draw-finish SBSS allocation, compiler profile and existing source attribution are preserved. No whole-file promotion or initialized-storage credit is claimed by this code coverage.",
       "sections": [
         {
           "section": ".text",
@@ -1668,7 +1924,7 @@
           "end": "0x8024E888",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned BFBB source/current canonical layouts establish18 exact comparison-only target bodies1576 and native20-byte callback/draw-finish SBSS. Six other original functions in full2280 provisional file extent remain unrecovered; donor draw-sync write/read bodies are preserved unassigned. No invented GXPoke split or source splice."
+          "evidence": "Combined independently reviewed BFBB, OOT GameCube and TP C forms register 24 complete target functions spanning 2280 code bytes in the retained provisional grouping. Original-file ownership remains unresolved; unassigned donor APIs receive no credit. Accepted ordinary output, native 20-byte callback/draw-finish SBSS allocation, compiler profile and existing source attribution are preserved. No whole-file promotion or initialized-storage credit is claimed by this code coverage."
         },
         {
           "section": ".sbss",
@@ -1920,7 +2176,7 @@
           "end": "0x803ED9C0",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Target GXTransform loads at 0x80252448, 0x802524E4 and 0x802526AC corroborate four local floats in the pinned native donor. The unused fifth float remains unassigned.",
+          "evidence": "Target transformation routines reference the complete four-word floating constant pool at 0x803ED9B0..0x803ED9C0. Retained normal C independently measures its final two floats at 0x803ED9B8..0x803ED9C0; the other words receive no new comparison credit. Bound the complete original typed pool at its established mapped edge rather than retain the oversized automatic lbl_803ED9BC eight-byte guess. Source-file ownership remains provisional.",
           "object_seed": true
         },
         {
@@ -2409,7 +2665,7 @@
       "name": "src/dolphin/os/OSFont.c",
       "source": "src/dolphin/os/OSFont.c",
       "library": "OS",
-      "evidence": "Direct inspected target body and BFBB OSFont.c352..374; donor name/reference-derived originalfile ownership provisional; no sourcecompile/matchcredit.",
+      "evidence": "Target cached font encoding leaf and OOT6e449e1748a02c12b4cb218453c529175b85364a complete small OSFont.c; one88-byte Cbody and2-byte initializedcache comparison, actualhalfword accesses/caller; relatedfile name and originalarchiveboundaries remain provisional. Originaltargetbytes selected until promotion.",
       "sections": [
         {
           "section": ".data5",
@@ -2682,7 +2938,7 @@
       "name": "src/dolphin/ax/AXVPB.c",
       "source": "src/dolphin/ax/AXVPB.c",
       "library": "AX",
-      "evidence": "Initial8-byte GetPBs leaf followed by distinctive service/sync/default/init/voice setter anchors through ADPCMloop ending89408. BFBB native Init and Default additionally corroborate. Dolsdk retained base8865C invalid; not used.",
+      "evidence": "Coherent pinned BFBB AXVPB source: thirteen complete target functions, typed parameter/update/voice/ITD arrays, three cycle/count words, complete cycle tables and ratio constant. Six donor-only setter functions remain unassigned. Original source/archive attribution is reference-derived; code/file edges remain provisional.",
       "sections": [
         {
           "section": ".data4",
@@ -2690,8 +2946,35 @@
           "end": "0x803027A4",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "AXVPB 80288B84/80288B8C forms 803026D0. Source-cycle indexing at 80288C18 and offsets 20/84 at 80288C48/80288C5C select three u32 tables of 5, 16 and 32 entries. The complete 212-byte donor pool equals the target.",
+          "evidence": "Complete coherent native section ownership, verified by identical source-built DOL. Genuine 5-entry u32 cost table within the complete 212-byte AXVPB pool. Native symbol extent and original __AXSyncPBs indexing at 0x80288C18 with offsets20/84 at0x80288C48/0x80288C5C establish these boundaries; complete initialized payload is exact. Original archive ownership remains provisional. Genuine 16-entry u32 cost table within the complete 212-byte AXVPB pool. Native symbol extent and original __AXSyncPBs indexing at 0x80288C18 with offsets20/84 at0x80288C48/0x80288C5C establish these boundaries; complete initialized payload is exact. Original archive ownership remains provisional. Genuine 32-entry u32 cost table within the complete 212-byte AXVPB pool. Native symbol extent and original __AXSyncPBs indexing at 0x80288C18 with offsets20/84 at0x80288C48/0x80288C5C establish these boundaries; complete initialized payload is exact. Original archive ownership remains provisional.",
           "object_seed": true
+        },
+        {
+          "section": ".bss",
+          "start": "0x803C2A60",
+          "end": "0x803D4260",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete coherent native section ownership, verified by identical source-built DOL. __AXPB complete coherent BFBB typedarray, nativeoffset0/size15616; actual Init64iterations/cacheextent/stride and starting base803C2A60 established in ordinary exact code. Original archive allocation edges remain provisional; no padding absorbed. __AXITD complete coherent BFBB typedarray, nativeoffset15616/size4096; actual Init64iterations/cacheextent/stride and starting base803C2A60 established in ordinary exact code. Original archive allocation edges remain provisional; no padding absorbed. __AXUpdates typed 64-entry update array, native offset19712/size16384. Init assigns per-voice pointers with stride256; Sync flushes the complete16384-byte range. Init does not clear this array. Original archive allocation edges remain provisional; no padding absorbed. __AXVPB complete coherent BFBB typedarray, nativeoffset36096/size35584; actual Init64iterations/cacheextent/stride and starting base803C2A60 established in ordinary exact code. Original archive allocation edges remain provisional; no padding absorbed."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED5C8",
+          "end": "0x803ED5D4",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete coherent native section ownership, verified by identical source-built DOL. __AXMaxDspCycles native u32 4bytes, original SDA references verified; archiveallocationedge provisional. __AXRecDspCycles native u32 4bytes, original SDA references verified; archiveallocationedge provisional. __AXNumVoices native u32 4bytes, original SDA references verified; archiveallocationedge provisional."
+        },
+        {
+          "section": ".data6",
+          "start": "0x803EE4A8",
+          "end": "0x803EE4AC",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "Complete native float65536.0 initialized4-byte pool, original ratio load8028932C r13 SDA803EE4A8 independently observed, exact normalinitializedbytes. Archiveedges provisional."
         },
         {
           "section": ".text",
@@ -2699,7 +2982,7 @@
           "end": "0x80289408",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Initial8-byte GetPBs leaf followed by distinctive service/sync/default/init/voice setter anchors through ADPCMloop ending89408. BFBB native Init and Default additionally corroborate. Dolsdk retained base8865C invalid; not used."
+          "evidence": "Initial8-byte __AXGetNumVoices leaf followed by distinctive service/sync/default/init/voice setter anchors through ADPCMloop ending89408. BFBB native Init and Default additionally corroborate. Dolsdk retained base8865C invalid; not used."
         }
       ]
     },
@@ -2736,10 +3019,10 @@
         {
           "section": ".bss",
           "start": "0x803D4260",
-          "end": "0x803D4760",
+          "end": "0x803D4360",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Four param records, addresses populated by target GBAInit64-byte stride fourtimes. Extent/layout corroborated; ownership not recovered from a target map. Four GBA controls, target GBAInit256-byte stride fourtimes; FFCC GBAControl layout corroboration. Extent/layout corroborated; ownership not recovered from a target map. Neutral object seed bounds only these typed target data cells/arrays; independently checked against target access widths, initial values and donor declarations. It does not extend ownership into neighboring padding.",
+          "evidence": "SecParams[4], each 64 bytes: GBAInit uses buffer base0x803D4260 and64-byte channel increments, storing each buffer pointer at record+248. Opaque security buffers; complete native allocation 256, alignment 32. No NOBITS progress.",
           "object_seed": true
         },
         {
@@ -2748,7 +3031,7 @@
           "end": "0x803060D0",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "GBAInit passes this reset record; targetdata callback802895D8,priority127,zero next/prev. Extent/layout corroborated; ownership not recovered from a target map. Seeded 16-byte OSResetFunctionInfo: four target words at 0x803060C0 are OnReset pointer 0x802895D8, priority 127, and two zero link fields; GBAInit references this address and OSRegisterResetFunction consumes this structure. The seed bounds the typed record, not neighboring data. Neutral object seed bounds only these typed target data cells/arrays; independently checked against target access widths, initial values and donor declarations. It does not extend ownership into neighboring padding.",
+          "evidence": "GBAInit passes this reset record; targetdata callback802895D8,priority127,zero next/prev. Extent/layout corroborated; ownership not recovered from a target map. Seeded 16-byte OSResetFunctionInfo: four target words at 0x803060C0 are OnReset pointer 0x802895D8, priority 127, and two zero link fields; GBAInit references this address and OSRegisterResetFunction consumes this structure. The seed bounds the typed record, not neighboring data. Neutral object seed bounds only these typed target data cells/arrays; independently checked against target access widths, initial values and donor declarations. It does not extend ownership into neighboring padding. Seed this reviewed exact natural allocation to bound otherwise oversized automatic original-data labels at the SDK ownership edge; individual field/literal proofs and provisional archive membership remain distinct.",
           "object_seed": true
         },
         {
@@ -2767,6 +3050,15 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "FFCC donor ShortCommandProc input[0:1]==0,4 andstatusmask0x3A; GBAInit fourchannels stride0x100/paramstride0x40,delay60us,threadqueues,alarm/DSP/resetfunction; GBAGetStatus andreset callback behavior corroborate. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        },
+        {
+          "section": ".bss",
+          "start": "0x803D4360",
+          "end": "0x803D4760",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "object_seed": true,
+          "evidence": "__GBA[4], each 256 bytes: original initialization loops four channels with record stride256; writes delay words+48/+52, initializes threadqueue+36 and buffer pointer+248. Transfer callbacks access output0/input5, lengths12/16, status20, callback28 and error32. Unaccessed bytes 24..27 and60..247 opaque. Native allocation 1024, alignment 32; no NOBITS progress."
         }
       ]
     },

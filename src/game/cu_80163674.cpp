@@ -1,4 +1,5 @@
 #include "engine/cu_80227F14.h"
+#include "game/cu_801882B4.h"
 #include "game/Object_80039F5C.h"
 
 struct Desc_80163788 {
@@ -45,24 +46,10 @@ struct Object_80163788 {
     int mUnknown1E4;
 };
 
-struct Desc_80188688 {
-    int mUnknown00;
-    int mUnknown04;
-    int mUnknown08;
-    const char **mpUnknown0C;
-};
-
 extern "C" {
-void *lbl_803EB3A4 = 0;
-extern const char *lbl_802EAD10[];
+Cache_80188688 *lbl_803EB3A4 = 0;
+extern char *lbl_802EAD10[];
 int fn_80027DF0(void);
-void *fn_80188688(Desc_80188688 *);
-void fn_80188728(void *);
-void fn_80188784(void *, int);
-void fn_801888A4(void *, int);
-void fn_8018897C(void *, int, int, int);
-void fn_801889A4(void *, int, int);
-int fn_801889CC(void *, int, int);
 int fn_801C657C(void);
 void fn_801D0470(int);
 void fn_801D04C4(void);
@@ -234,10 +221,10 @@ int fn_80163C30(void *pHandle, int count)
     }
     if (!lbl_803EB3A4) {
         Desc_80188688 desc;
-        desc.mUnknown00 = 1;
-        desc.mUnknown04 = 21;
-        desc.mUnknown08 = 0;
-        desc.mpUnknown0C = lbl_802EAD10;
+        desc.mUnknown0 = 1;
+        desc.mUnknown4 = 21;
+        desc.mUnknown8 = 0;
+        desc.mUnknown12 = lbl_802EAD10;
         lbl_803EB3A4 = fn_80188688(&desc);
         result = (int)lbl_803EB3A4;
     }

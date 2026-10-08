@@ -12,7 +12,10 @@ struct Block_801BD6D4 {
     float mUnknown8;
 };
 
-/* 124-byte record; the player object at +800 points to an array of them. */
+struct Block_801BF3C8 {
+    float mUnknown0;
+};
+
 struct Record_800D81C8 {
     char mUnknown0[2];
     unsigned short mUnknown2;
@@ -22,7 +25,8 @@ struct Record_800D81C8 {
     unsigned short mUnknown8;
     char mUnknownA[34];
     float mUnknown2C;
-    char mUnknown30[28];
+    Block_801BF3C8 mUnknown30;
+    char mUnknown34[24];
     Block_801BD6D4 mUnknown4C;
     char mUnknown58[36];
 };
