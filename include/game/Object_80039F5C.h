@@ -1,6 +1,8 @@
 #ifndef GAME_OBJECT_80039F5C_H
 #define GAME_OBJECT_80039F5C_H
 
+#include "game/Object_800D81C8.h"
+
 /* The player object returned by fn_80039F5C, with the blocks it contains or
    points to. */
 
@@ -93,11 +95,7 @@ struct Object_800CE674 {
 };
 
 /* 124-byte entry of the array that +800 points to. */
-struct Entry_800EAC9C {
-    char mUnknown0[76];
-    void *mpUnknown76;
-    char mUnknown80[44];
-};
+typedef Record_800D81C8 Entry_800EAC9C;
 
 /* Record that +784 points to. */
 struct State_80039F5C {
@@ -164,7 +162,7 @@ struct Object_80039F5C {
     char mUnknown788[4];
     void *mpUnknown792;
     Object_8016D9B8 *mpUnknown796;
-    Entry_800EAC9C *mpUnknown800;
+    Record_800D81C8 *mpUnknown800;
     char mUnknown804[204];
     Key_80110630 mUnknown1008;
     char mUnknown1011[21];
