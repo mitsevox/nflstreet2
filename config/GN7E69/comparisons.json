@@ -6264,13 +6264,19 @@
     {
       "source": "src/game/cu_800EFC68.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional grouping row for src/game/cu_800EFC68.cpp; registered complete target function extents with individual inferred name/source-form/compiler rows. Exact and partial source bodies are measured independently; all unregistered bodies and mapped static storage remain original and unmeasured.",
+      "evidence": "evidence.tsv retained open/provisional grouping row for src/game/cu_800EFC68.cpp; registered complete target function extents with individual inferred name/source-form/compiler rows. Exact and partial source bodies are measured independently; the registered .rodata slice 0x8029E410-0x8029E4B8 equals its exact evidence data row; all unregistered bodies and other mapped static storage remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800EFC68",
           "end": "0x80125F3C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E410",
+          "end": "0x8029E4B8"
         }
       ],
       "functions": [
@@ -6538,6 +6544,81 @@
           "symbol": "fn_800FD650",
           "start": "0x800FD650",
           "end": "0x800FD68C"
+        },
+        {
+          "symbol": "fn_800F97A8",
+          "start": "0x800F97A8",
+          "end": "0x800F986C"
+        },
+        {
+          "symbol": "fn_800F986C",
+          "start": "0x800F986C",
+          "end": "0x800F9AF0"
+        },
+        {
+          "symbol": "fn_800FBB70",
+          "start": "0x800FBB70",
+          "end": "0x800FBF74"
+        },
+        {
+          "symbol": "fn_800FC290",
+          "start": "0x800FC290",
+          "end": "0x800FC4A8"
+        },
+        {
+          "symbol": "fn_800FC4A8",
+          "start": "0x800FC4A8",
+          "end": "0x800FC648"
+        },
+        {
+          "symbol": "fn_800FC648",
+          "start": "0x800FC648",
+          "end": "0x800FC7A0"
+        },
+        {
+          "symbol": "fn_800FC7A0",
+          "start": "0x800FC7A0",
+          "end": "0x800FCA78"
+        },
+        {
+          "symbol": "fn_800FCA78",
+          "start": "0x800FCA78",
+          "end": "0x800FCC24"
+        },
+        {
+          "symbol": "fn_800FCE58",
+          "start": "0x800FCE58",
+          "end": "0x800FCFC0"
+        },
+        {
+          "symbol": "fn_800FCFC0",
+          "start": "0x800FCFC0",
+          "end": "0x800FD178"
+        },
+        {
+          "symbol": "fn_800FD178",
+          "start": "0x800FD178",
+          "end": "0x800FD2AC"
+        },
+        {
+          "symbol": "fn_800FD2AC",
+          "start": "0x800FD2AC",
+          "end": "0x800FD3F0"
+        },
+        {
+          "symbol": "fn_800FD41C",
+          "start": "0x800FD41C",
+          "end": "0x800FD580"
+        },
+        {
+          "symbol": "fn_800FD580",
+          "start": "0x800FD580",
+          "end": "0x800FD650"
+        },
+        {
+          "symbol": "fn_800FD68C",
+          "start": "0x800FD68C",
+          "end": "0x800FD708"
         },
         {
           "symbol": "fn_80111F80",

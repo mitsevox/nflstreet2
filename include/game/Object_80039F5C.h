@@ -94,7 +94,9 @@ struct Object_800CE674 {
 
 /* 124-byte entry of the array that +800 points to. */
 struct Entry_800EAC9C {
-    char mUnknown0[76];
+    char mUnknown0[44];
+    float mUnknown44;
+    char mUnknown48[28];
     void *mpUnknown76;
     char mUnknown80[44];
 };
