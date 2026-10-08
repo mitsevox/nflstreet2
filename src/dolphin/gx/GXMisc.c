@@ -344,8 +344,6 @@ void __GXPEInit(void)
 }
 
 #if defined(DECOMP_COMPARE)
-void GXTexModeSync(void);
-
 void GXTexModeSync(void) {
     u32 reg;
 

@@ -16541,7 +16541,7 @@
     {
       "source": "src/dolphin/gx/GXMisc.c",
       "profile": "dolphin_release",
-      "evidence": "Complete pinned BFBB twenty-body source/currentcanonical headers. Eighteen presenttarget bodies1576 independently resolved, full2280 provisional ownership retains other unrecovered original functions. No version body splicing.",
+      "evidence": "Complete pinned BFBB source with two complete unchanged TP C operations corroborated by actual target constants, registers and layout; target source-form evidence records the partial variant reuse. Twenty present target bodies1648 bytes independently resolved; full2280 provisional ownership retains other original functions. Existing ordinary profile, initialized state and all inherited bodies preserved.",
       "sections": [
         {
           "section": ".text",
@@ -16583,6 +16583,11 @@
           "end": "0x8024E4F4"
         },
         {
+          "symbol": "GXTexModeSync",
+          "start": "0x8024E4F4",
+          "end": "0x8024E518"
+        },
+        {
           "symbol": "GXPokeAlphaMode",
           "start": "0x8024E518",
           "end": "0x8024E52C"
@@ -16621,6 +16626,11 @@
           "symbol": "GXPokeZMode",
           "start": "0x8024E61C",
           "end": "0x8024E63C"
+        },
+        {
+          "symbol": "GXPeekARGB",
+          "start": "0x8024E63C",
+          "end": "0x8024E660"
         },
         {
           "symbol": "GXSetDrawSyncCallback",
