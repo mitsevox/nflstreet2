@@ -12869,8 +12869,11 @@
       "provenance": {
         "pull_request": 565,
         "merged_via": 565,
-        "commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
-        "introduced_blob": "2dfb3e203b332fa303d05733ea7fd931ea190ddf"
+        "commit": "ded29d3bda92af818e027ccede0c01e5392e9747",
+        "introduced_blob": "fe268a9ce781083ebcf07de96e277f0cdf673566",
+        "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
+        "original_blob": "2dfb3e203b332fa303d05733ea7fd931ea190ddf",
+        "integration_adjustment": "Review fix takes the callee declarations of 0x80067E3C, 0x80137B40 and 0x80137C48 from the shared headers include/game/cu_80067C10.h and include/game/cu_80136B1C.h instead of local copies; integration with main uses the accepted shared Input_800B6D34 and Object_80039F5C layouts. Function bodies and the compiled object are unchanged."
       }
     },
     {
@@ -12890,8 +12893,11 @@
       "provenance": {
         "pull_request": 565,
         "merged_via": 565,
-        "commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
-        "introduced_blob": "89db43a99a0a89388f0b8bda7eca15c5890d66fe"
+        "commit": "ded29d3bda92af818e027ccede0c01e5392e9747",
+        "introduced_blob": "92fdf66596a5f47298efbbf5c11ed41e0d358f9e",
+        "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
+        "original_blob": "89db43a99a0a89388f0b8bda7eca15c5890d66fe",
+        "integration_adjustment": "Review fix takes 0x80137B40/0x80137C48 from include/game/cu_80136B1C.h and 0x801BC084 from include/game/Object_801BC084.h; integration with main replaces the local block view with accesses of the accepted Block_801BE60C payload type (word views +0/+4, halfword +0xC, signed bytes +0xE) and uses the accepted Record_800D81C8 and Object_80039F5C layouts. Statements are unchanged and the compiled object is identical."
       }
     },
     {
@@ -12913,8 +12919,11 @@
       "provenance": {
         "pull_request": 565,
         "merged_via": 565,
-        "commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
-        "introduced_blob": "99d14a2579e1cf45276a8a91533d460da825f29a"
+        "commit": "ded29d3bda92af818e027ccede0c01e5392e9747",
+        "introduced_blob": "999e9ea8bd0783787f255ecc355ff8a79caf3079",
+        "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
+        "original_blob": "99d14a2579e1cf45276a8a91533d460da825f29a",
+        "integration_adjustment": "Integration with main replaces the local block view with accesses of the accepted Block_801BE60C payload type and its state prefix, uses the accepted Table_80089904/Object_801BBD5C headers, and declares 0x800DAA68 and the r4 of 0x800D8FFC with the shared Object_800DA8D8 as src/game/cu_800D949C.cpp does. Statements are unchanged and the compiled object is identical."
       }
     }
   ],
