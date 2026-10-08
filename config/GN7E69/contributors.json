@@ -13664,7 +13664,7 @@
       }
     },
     {
-      "source": "src/game/cu_800EFC68.cpp",
+      "source": "src/game/cu_80104944.cpp",
       "contributors": [
         "adampreddy"
       ],
@@ -13676,8 +13676,14 @@
       "provenance": {
         "pull_request": 680,
         "merged_via": 680,
-        "commit": "62218c67ea0a49314b927ffbba7fd645a168285d",
-        "introduced_blob": "a58cd597b5838e6048a77386465f44d9e0a35c26"
+        "commit": "4bbed3b7e394d9e3595b653361f79158661ccf22",
+        "introduced_blob": "f25cda5a503765018434d33b62d57b39d2d6725c",
+        "fragment_origin": {
+          "source": "src/game/cu_800EFC68.cpp",
+          "commit": "62218c67ea0a49314b927ffbba7fd645a168285d",
+          "blob": "a58cd597b5838e6048a77386465f44d9e0a35c26"
+        },
+        "integration_adjustment": "Preserve original PR 680 author and exact function addresses in a new comparison source fragment with its actual introduction pin; fragment_origin retains the original authored source location/commit/blob. Independent review verifies unchanged bodies apart from canonical two-float point reuse. This is not an original file-boundary claim or a whole-path rename."
       }
     },
     {
@@ -13796,6 +13802,36 @@
         "merged_via": 694,
         "commit": "65fe16f47697d0aaf792e5b88fcf19c5d6960c4f",
         "introduced_blob": "7851399ede7a5ae41c27f7fb62d32faca03af746"
+      }
+    },
+    {
+      "source": "src/game/cu_8003877C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8003924C",
+        "0x80039454",
+        "0x80039458",
+        "0x8003977C",
+        "0x80039890",
+        "0x8003989C",
+        "0x80039A1C",
+        "0x80039C64",
+        "0x80039FE8",
+        "0x8003A06C",
+        "0x8003A078",
+        "0x8003A3F4",
+        "0x8003AB08",
+        "0x8003AB28",
+        "0x8003AB38"
+      ],
+      "provenance": {
+        "pull_request": 692,
+        "merged_via": 692,
+        "commit": "4bbed3b7e394d9e3595b653361f79158661ccf22",
+        "introduced_blob": "564f90b1773da0e97dc415c45c9715053c81e034",
+        "integration_adjustment": "Original PR 692 bodies retained with canonical unused-argument contract. Register its actual emitted rodata against the full target slice without source padding; focused comparison verifies these fifteen exact whole functions, with sixteen useful partial bodies and a measured data mismatch retained without exact credit."
       }
     }
   ],
