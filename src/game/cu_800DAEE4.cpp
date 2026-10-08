@@ -1,5 +1,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
+#include "game/Record_800DB60C.h"
 #include "game/Record_8011F518.h"
 #include "game/cu_80136B1C.h"
 
@@ -7,11 +8,6 @@ struct Record_800DB074 {
     char mUnknown0[12];
     int mUnknown12;
     float mUnknown16;
-};
-
-struct Record_800DB60C {
-    unsigned char mUnknown0;
-    unsigned char mUnknown1;
 };
 
 extern "C" {

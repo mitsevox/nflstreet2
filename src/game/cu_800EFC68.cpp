@@ -16,6 +16,7 @@
 #include "game/Input_800B6D34.h"
 #include "game/fn_80177FE0.h"
 #include "game/Record_800B15FC.h"
+#include "game/Record_800DB60C.h"
 #include "game/fn_8022781C.h"
 
 /* Record whose address fn_8011F4E0 returns. Only the accessed fields are
@@ -211,7 +212,6 @@ int fn_8011F290(void);
 int fn_800FD2AC(Object_80039F5C *p);
 int fn_80112C04(Object_80039F5C *p, Object_80137ABC *pBall, int *pAngle, float *pValue);
 void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput);
-void fn_800DB60C(void *pBlock, Object_80039F5C *p);
 int fn_800B7FE8(Object_80039F5C *p);
 int fn_8011165C(Object_80039F5C *p);
 void fn_800D4F34(int a);
@@ -2583,7 +2583,7 @@ extern "C" int fn_80111528(Object_80039F5C *p)
 
     fn_800B6D34(p, &input);
     if (input.mUnknown95 & 64) {
-        fn_800DB60C(&((State_8010CAE8 *)&p->mUnknown336)->mUnknown20, p);
+        fn_800DB60C((Record_800DB60C *)&((State_8010CAE8 *)&p->mUnknown336)->mUnknown20, p);
     } else {
         fn_800B7FE8(p);
     }
