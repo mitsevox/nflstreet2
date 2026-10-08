@@ -11593,8 +11593,11 @@
       "provenance": {
         "pull_request": 563,
         "merged_via": 579,
-        "commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
-        "introduced_blob": "19068d954928aba65a8d03e94d9f0caa205d76a6"
+        "commit": "884faf9223ff3af40f2ac59db021daf79a4938b7",
+        "introduced_blob": "3775e626df3b7e8a3b08b76efccdfff6499bcfde",
+        "original_commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
+        "original_blob": "19068d954928aba65a8d03e94d9f0caa205d76a6",
+        "integration_adjustment": "Retain the independently reviewed author revision that corrects unused parameter signatures of fn_800DD830, fn_800DF9FC, fn_800E068C and fn_800E0F40. Source is unchanged from reviewed PR head 884faf9; preserve original source commit/blob and contributor credit while binding introduction history to the source retained by the actual batch squash."
       }
     },
     {
