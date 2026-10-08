@@ -1,5 +1,6 @@
 #include "game/Camera_8013F738.h"
 #include "game/Object_80039F5C.h"
+#include "game/cu_8008E978.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_800AD9B4.h"
@@ -9,18 +10,8 @@
    and the contents of the opaque spans remain unknown. */
 struct Curve_801C5278 { unsigned char mUnknown0[4]; float mUnknown4, mUnknown8; unsigned char mUnknownC[4]; };
 struct Sample_801C009C { float mUnknown0[3]; Curve_801C5278 mUnknownC[15]; };
-struct Frame_80141210 { unsigned char mUnknown0[0x30]; float mUnknown30, mUnknown34; unsigned char mUnknown38[4]; float mUnknown3C; };
-struct Actor_801C009C { int mUnknown0,mUnknown4; unsigned int mUnknown8; unsigned char mUnknownC[12]; Frame_80141210 *mUnknown18; };
-struct Selection_80141210 { unsigned char mUnknown0; unsigned char mUnknown1[3]; union { int mWord; unsigned short mParts[2]; } mUnknown4,mUnknown8; };
-struct MotionSource_80141210 { unsigned char mUnknown0[0x1C0]; int mUnknown1C0; };
-struct Character_80093BCC { int mUnknown0,mUnknown4; unsigned char mUnknown8[12]; MotionSource_80141210 *mUnknown14; unsigned char mUnknown18[0xC8]; Selection_80141210 mUnknownE0; };
 struct Settings_800963EC { unsigned char mUnknown0[0x300]; float mUnknown300; };
 struct Entry_801411B4 { float mUnknown0; unsigned char mUnknown4[4]; unsigned char mUnknown8; };
-struct Playback_80096DA8 {
-    int mUnknown0,mUnknown4; unsigned char mUnknown8[4]; unsigned int mUnknownC;
-    int mUnknown10; union { int mWord; unsigned short mParts[2]; } mUnknown14,mUnknown18,mUnknown1C;
-    float mUnknown20,mUnknown24;
-};
 struct State_80141210 { unsigned char mUnknown0[16]; int mUnknown10,mUnknown14; };
 struct Angles_80141210 { int mX,mY,mZ; };
 struct View_802DCEB0 { Vector_80039F5C mUnknown0; Angles_80141210 mUnknownC; int mUnknown18; };
@@ -54,11 +45,7 @@ void fn_801C3990(Camera_8013F738 *,float,float);
 void fn_8013C478(Camera_8013F738 *,void *);
 void fn_8013C4BC(Camera_8013F738 *,void *,int);
 void fn_8013C6F0(Camera_8013F738 *);
-Character_80093BCC *fn_80093BCC(unsigned char);
-Actor_801C009C *fn_80093BAC(int,int);
 Settings_800963EC *fn_800963EC(Character_80093BCC *);
-Playback_80096DA8 *fn_80096DA8(int);
-Actor_801C009C *fn_80096DCC(int,int);
 int fn_801784C4(void);
 Camera_8013F738 *fn_8013FA04(int);
 void fn_801C3EA4(Camera_8013F738 *,float,float,float);

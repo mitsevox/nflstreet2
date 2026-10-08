@@ -11396,6 +11396,225 @@
         "original_blob": "c4163e73e8baa72d9470e1414e3f540eba2808a6",
         "integration_adjustment": "Combine reviewed disjoint function bodies with accepted source, preserving original contributor, function addresses and source blob. Access the existing player +1008 unsigned byte through canonical Key_80110630::mUnknown0; preserve all accepted body definitions and shared-field offsets."
       }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80090244",
+        "0x8009036C",
+        "0x80091240",
+        "0x800920B8",
+        "0x800920EC",
+        "0x80092160",
+        "0x80092168",
+        "0x800925A4",
+        "0x800925F0",
+        "0x800926A8",
+        "0x800926F4",
+        "0x8009274C",
+        "0x80092784",
+        "0x800927BC",
+        "0x80093BAC",
+        "0x80093BCC",
+        "0x80093C08",
+        "0x80093C3C",
+        "0x80093C50",
+        "0x80093C64",
+        "0x80093E38",
+        "0x80093E4C",
+        "0x80093EC0",
+        "0x80093FD4",
+        "0x80094048",
+        "0x800940D8",
+        "0x8009418C",
+        "0x800941B8",
+        "0x800941EC",
+        "0x8009422C",
+        "0x800942F0",
+        "0x80094374",
+        "0x8009439C",
+        "0x800943B0",
+        "0x800943D0",
+        "0x80094488",
+        "0x80094490",
+        "0x800944A4",
+        "0x80094564",
+        "0x80094608",
+        "0x80094B78",
+        "0x80094BBC",
+        "0x80094C00",
+        "0x80094D94",
+        "0x80094DB8",
+        "0x80094E80",
+        "0x80094EDC",
+        "0x80094FE8",
+        "0x80095028",
+        "0x80095FD8",
+        "0x8009601C",
+        "0x8009604C",
+        "0x80096060",
+        "0x8009637C",
+        "0x80096590",
+        "0x800966F8",
+        "0x80096794",
+        "0x80096A24",
+        "0x80096D14",
+        "0x80096DA8",
+        "0x80096DCC",
+        "0x80096E1C",
+        "0x8009740C",
+        "0x80097430",
+        "0x80097518",
+        "0x80097564"
+      ],
+      "provenance": {
+        "pull_request": 572,
+        "merged_via": 579,
+        "commit": "afacb17799df7deb89d093ad4d34e50fe5f767b0",
+        "introduced_blob": "24d0c5425968c611ce093c8a1243f728c19c86c1"
+      }
+    },
+    {
+      "source": "src/game/cu_8018B0BC.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8018B950",
+        "0x8018B9D4",
+        "0x8018BA2C",
+        "0x8018BA4C",
+        "0x8018BB24",
+        "0x8018BD9C",
+        "0x8018BDFC",
+        "0x8018BE68",
+        "0x8018BECC",
+        "0x8018BF10",
+        "0x8018C008",
+        "0x8018C044",
+        "0x8018C0E8",
+        "0x8018C1E0",
+        "0x8018C230"
+      ],
+      "provenance": {
+        "pull_request": 575,
+        "merged_via": 579,
+        "commit": "cccfc43a9d1a0eacfc66f0f0d4776a713810649a",
+        "introduced_blob": "f484d58e77a43f5a61fe99d78d5f586da4235303"
+      }
+    },
+    {
+      "source": "src/game/cu_801260D4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8012623C",
+        "0x80126DD4",
+        "0x80126FD8",
+        "0x80127324",
+        "0x80127758",
+        "0x80127AD0",
+        "0x80127CD4",
+        "0x80127EFC",
+        "0x801281A8",
+        "0x80128590",
+        "0x801285C8",
+        "0x80128628",
+        "0x8012886C",
+        "0x80128B60",
+        "0x80128BE0",
+        "0x80128D50",
+        "0x80128EF8",
+        "0x80129360",
+        "0x801294A8",
+        "0x80129704",
+        "0x8012A38C"
+      ],
+      "provenance": {
+        "pull_request": 562,
+        "merged_via": 579,
+        "commit": "99be8c37a587a495e4ed189bbec87b1e43f6ea7a",
+        "introduced_blob": "43896253a88aeaf316074051e4a59d1992b7fad6"
+      }
+    },
+    {
+      "source": "src/game/cu_800DAEE4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DAEE4",
+        "0x800DB074",
+        "0x800DB60C"
+      ],
+      "provenance": {
+        "pull_request": 563,
+        "merged_via": 579,
+        "commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
+        "introduced_blob": "b98c1cce7e7d54627e00da000bd0669f2045740c"
+      }
+    },
+    {
+      "source": "src/game/cu_800DC584.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DC61C",
+        "0x800DC674",
+        "0x800DC6A8",
+        "0x800DD830",
+        "0x800DDCE4",
+        "0x800DDEE4",
+        "0x800DE364",
+        "0x800DF6EC",
+        "0x800DF750",
+        "0x800DF9FC",
+        "0x800E0188",
+        "0x800E01D8",
+        "0x800E0230",
+        "0x800E0574",
+        "0x800E05C0",
+        "0x800E068C",
+        "0x800E0818",
+        "0x800E0E8C",
+        "0x800E0EF0",
+        "0x800E0F40",
+        "0x800E12D4",
+        "0x800E1350",
+        "0x800E13E4",
+        "0x800E1544",
+        "0x800E1554"
+      ],
+      "provenance": {
+        "pull_request": 563,
+        "merged_via": 579,
+        "commit": "884faf9223ff3af40f2ac59db021daf79a4938b7",
+        "introduced_blob": "3775e626df3b7e8a3b08b76efccdfff6499bcfde",
+        "original_commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
+        "original_blob": "19068d954928aba65a8d03e94d9f0caa205d76a6",
+        "integration_adjustment": "Retain the independently reviewed author revision that corrects unused parameter signatures of fn_800DD830, fn_800DF9FC, fn_800E068C and fn_800E0F40. Source is unchanged from reviewed PR head 884faf9; preserve original source commit/blob and contributor credit while binding introduction history to the source retained by the actual batch squash."
+      }
+    },
+    {
+      "source": "src/game/cu_800E3A34.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800E3B8C",
+        "0x800E3C30"
+      ],
+      "provenance": {
+        "pull_request": 563,
+        "merged_via": 579,
+        "commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
+        "introduced_blob": "0366bc8bdd2359557cd0bcdb31f951ae78de1ca7"
+      }
     }
   ],
   "target": "GN7E69",

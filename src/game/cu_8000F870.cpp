@@ -5,6 +5,7 @@
 #include "game/Object_8007A334.h"
 #include "game/Object_8008044C.h"
 #include "game/Object_800785C0.h"
+#include "game/Request_802329F0.h"
 #include "game/cu_8003AEA8.h"
 #include "game/cu_8003E214.h"
 #include "game/cu_80181330.h"
@@ -19,14 +20,6 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_802372EC.h"
-
-/* Argument block passed to fn_802329F0 with the file name template.dat. */
-struct Request_802329F0 {
-    int mMode;
-    int mSize;
-    const char *mpName;
-    int mCount;
-};
 
 /* One signed byte per side, copied as a pair. */
 struct Pair_803ECE48 {
@@ -256,7 +249,6 @@ void fn_8022DD18(int a);
 int fn_8022F358(int index);
 int fn_8022F384(int a);
 int fn_8022F4BC(void);
-void fn_802329F0(Request_802329F0 *pRequest);
 
 extern char lbl_802EBE24[];
 extern void *lbl_803EB688;
