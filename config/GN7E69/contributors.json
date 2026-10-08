@@ -11668,11 +11668,11 @@
       "provenance": {
         "pull_request": 581,
         "merged_via": 581,
-        "commit": "2d767d251b6571455d7b2a781763f15c15135f50",
-        "introduced_blob": "8f9ee4e1fc9ebba03aba28ebbb6a2076dc7b9e5f",
+        "commit": "b1efcdf41e931436f6940ac4a289e98a97e0120b",
+        "introduced_blob": "cdbe04c50c71ff750433b5ae79b62e2df9449a6f",
         "original_commit": "013d5f30feffe2c2e66874ce36ba1837e02dd10b",
         "original_blob": "1bb7829ca7c355a0383040f6e4a454df43c58071",
-        "integration_adjustment": "Complete original abort-frame and depth-query bodies retain expressions under the fixed comparison guard; canonical register macros use their existing diagnostic-line parameter. Existing draw-completion body attribution remains PR518."
+        "integration_adjustment": "Complete original abort-frame and depth-query bodies retain expressions under the fixed comparison guard; canonical register macros use their existing diagnostic-line parameter. Existing draw-completion body attribution remains PR518. Combine the disjoint independently reviewed GXMisc additions from PRs 581 and 595 without changing submitted function bodies; preserve both original donor/source proofs and all existing source attribution."
       }
     },
     {
@@ -11685,11 +11685,11 @@
         "0x8024E63C"
       ],
       "provenance": {
-        "commit": "540f696914c6831a8ced6b19115b856d1def733d",
-        "introduced_blob": "d67051eb61414ba0a9601c3008aa9552d7cca330",
+        "commit": "b1efcdf41e931436f6940ac4a289e98a97e0120b",
+        "introduced_blob": "cdbe04c50c71ff750433b5ae79b62e2df9449a6f",
         "original_commit": "e9c170a8f68e4a7c1f53057ae1b6522237d373a9",
         "original_blob": "c8d43e8a3d71c04c2b74a187d9c1b7cd4bdda646",
-        "integration_adjustment": "Complete unchanged pinned TP donor forms are appended under fixed DECOMP_COMPARE using accepted canonical macros; move the genuine void GXTexModeSync(void) declaration from the source guard into canonical GXManage.h. No body expressions changed. Preserve all previous source credit; originals remain linked.",
+        "integration_adjustment": "Complete unchanged pinned TP donor forms are appended under fixed DECOMP_COMPARE using accepted canonical macros; move the genuine void GXTexModeSync(void) declaration from the source guard into canonical GXManage.h. No body expressions changed. Preserve all previous source credit; originals remain linked. Combine the disjoint independently reviewed GXMisc additions from PRs 581 and 595 without changing submitted function bodies; preserve both original donor/source proofs and all existing source attribution.",
         "pull_request": 595,
         "merged_via": 595
       }
