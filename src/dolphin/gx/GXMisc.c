@@ -342,3 +342,25 @@ void __GXPEInit(void)
     SET_REG_FIELD(0, reg, 1, 1, 1);
     GX_SET_PE_REG(5, reg);
 }
+
+#if defined(DECOMP_COMPARE)
+void GXTexModeSync(void);
+
+void GXTexModeSync(void) {
+    u32 reg;
+
+    CHECK_GXBEGIN(625, "GXTexModeSync");
+    reg = 0x63000000;
+    GX_WRITE_RAS_REG(reg);
+    __GXData->bpSentNot = 0;
+}
+
+void GXPeekARGB(u16 x, u16 y, u32* color) {
+    u32 addr = (u32)OSPhysicalToUncached(0x08000000);
+
+    SET_REG_FIELD(792, addr, 10, 2, x);
+    SET_REG_FIELD(793, addr, 10, 12, y);
+    SET_REG_FIELD(793, addr, 2, 22, 0);
+    *color = *(u32*)addr;
+}
+#endif
