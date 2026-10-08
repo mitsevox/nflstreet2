@@ -18,6 +18,20 @@ public:
     virtual void vfn_10();
     virtual void vfn_11();
     virtual int vfn_12();
+
+    short fn_800C02C8();
+    void fn_800C02D4(short value);
+    short fn_800C02E0();
+    void fn_800C02EC(short value);
+    void fn_800C02F8(int value);
+    int fn_800C0414();
+    unsigned char fn_800C0420(int index);
+    unsigned char fn_800C043C(int index);
+    unsigned char fn_800C0458();
 };
+
+/* .sdata word whose initial value is the object at 0x803EC914, the .sbss word
+   in which 0x800CF100 stores this vtable. */
+extern Class_80297CE8 *lbl_803EABA4;
 
 #endif

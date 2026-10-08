@@ -6531,6 +6531,28 @@
       }
     },
     {
+      "source": "src/game/cu_800DBB74.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DBB74",
+        "0x800DBC4C",
+        "0x800DC080",
+        "0x800DC21C",
+        "0x800DC36C"
+      ],
+      "provenance": {
+        "pull_request": 551,
+        "merged_via": 696,
+        "commit": "cca96fe53d46c81a79a9b8eddf80c913b80086d3",
+        "introduced_blob": "ccfc705243ac2aeafcf5b810fc92c4b89ce86851",
+        "original_blob": "1f2f9a1525675ba90198d5095c5d6af29216d7eb",
+        "integration_adjustment": "Reviewed corrections in PR551 share the fn_801BA2A8 declaration; the merge with main reconciles the accesses into the accepted Record_800D81C8 (word +0xC added), Key_80110630, mUnknown2913 and Block_801BE60C views (word members overlapping its accepted byte and float members). Function bodies and objects unchanged.",
+        "original_commit": "306d453dc1aa129686ff0543bd279b9cedd3dc2e"
+      }
+    },
+    {
       "source": "src/game/cu_800D949C.cpp",
       "contributors": [
         "adampreddy"
@@ -6564,6 +6586,21 @@
         "merged_via": 573,
         "commit": "b5fd7e16f0ce0e3a13a2f9e138c874bfb0d5103f",
         "introduced_blob": "f5552d8d24727c28a93d5586a12244e7a8ee6a33"
+      }
+    },
+    {
+      "source": "src/game/cu_800D949C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DAD90"
+      ],
+      "provenance": {
+        "pull_request": 636,
+        "merged_via": 696,
+        "commit": "c8f3394f444e89795c4184ff7da8d659b7e14f01",
+        "introduced_blob": "1653fd47e33bb6914c93a9676ec6d3933c50f7b9"
       }
     },
     {
@@ -11617,6 +11654,27 @@
       }
     },
     {
+      "source": "src/game/cu_800DAEE4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DB40C",
+        "0x800DB498",
+        "0x800DB520",
+        "0x800DB7A4"
+      ],
+      "provenance": {
+        "pull_request": 636,
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "43a1bcf617c89995f6b305f61b8bb17a519e36af",
+        "original_commit": "c8f3394f444e89795c4184ff7da8d659b7e14f01",
+        "original_blob": "27e0ea921c8677c02e82e0427d7e37f8967e7d73",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
+      }
+    },
+    {
       "source": "src/game/cu_800DC584.cpp",
       "contributors": [
         "adampreddy"
@@ -12844,6 +12902,609 @@
         "merged_via": 665,
         "commit": "ad39693943528199dcef4d941f8874b49b22471e",
         "introduced_blob": "594fe801ae67f189c395d7391f5afbf95072f303"
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800AA2B4",
+        "0x800AA2F8",
+        "0x800AA6D8",
+        "0x800AA80C",
+        "0x800AA8B8",
+        "0x800AA93C",
+        "0x800AAA00",
+        "0x800AAA78",
+        "0x800AAAC4",
+        "0x800AAE20",
+        "0x800AAEE0",
+        "0x800AAF38",
+        "0x800AAFEC",
+        "0x800AB190",
+        "0x800AB29C",
+        "0x800AB2FC",
+        "0x800AB944",
+        "0x800ABCC0",
+        "0x800ABCDC",
+        "0x800ABCE8",
+        "0x800ABD1C",
+        "0x800ABD7C",
+        "0x800ABD80",
+        "0x800ABDA4",
+        "0x800ABE00",
+        "0x800AC218",
+        "0x800AC268",
+        "0x800AC2C0",
+        "0x800AC324",
+        "0x800AC3A0",
+        "0x800AC3FC",
+        "0x800ACA70",
+        "0x800ACAF8",
+        "0x800ACBFC",
+        "0x800ACF40",
+        "0x800ACFA8",
+        "0x800AD0E4",
+        "0x800AD2CC",
+        "0x800AD3A8",
+        "0x800AD4B8",
+        "0x800AD50C",
+        "0x800AD550",
+        "0x800AD5C0",
+        "0x800AD9B4"
+      ],
+      "provenance": {
+        "pull_request": 605,
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "d2460efbb069fdedeb7c928a2676529bb8345b84",
+        "original_blob": "2ba0d5765908ee54d68c13ba11da69508d000cee",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800AE10C",
+        "0x800AE65C",
+        "0x800AE6F0",
+        "0x800AE750",
+        "0x800AE798",
+        "0x800AE7F0",
+        "0x800AE8B4",
+        "0x800AE904",
+        "0x800AE968",
+        "0x800AE978",
+        "0x800AE980",
+        "0x800AE988",
+        "0x800AE9A4",
+        "0x800AE9EC",
+        "0x800AEA70",
+        "0x800AEB1C",
+        "0x800AEB9C",
+        "0x800AEE20",
+        "0x800AEEDC",
+        "0x800AEF38",
+        "0x800AEF74",
+        "0x800AF078",
+        "0x800AF088",
+        "0x800AF13C",
+        "0x800AF198",
+        "0x800AF1BC",
+        "0x800AF1FC",
+        "0x800AF264",
+        "0x800AF2AC",
+        "0x800AF71C",
+        "0x800AF790",
+        "0x800AF804",
+        "0x800AF9C0",
+        "0x800AF9E4",
+        "0x800AF9F4",
+        "0x800AFA60",
+        "0x800AFAAC",
+        "0x800AFAD4",
+        "0x800AFB70",
+        "0x800AFBD8",
+        "0x800AFC28",
+        "0x800AFC5C",
+        "0x800AFC94",
+        "0x800AFCB8",
+        "0x800AFD54",
+        "0x800AFD58",
+        "0x800AFDD4",
+        "0x800AFE20",
+        "0x800AFF20",
+        "0x800AFF88",
+        "0x800B0004",
+        "0x800B0A28",
+        "0x800B0C70",
+        "0x800B0CFC",
+        "0x800B0DA0",
+        "0x800B0E68",
+        "0x800B0EB8",
+        "0x800B0F28",
+        "0x800B0F98",
+        "0x800B146C",
+        "0x800B1478"
+      ],
+      "provenance": {
+        "pull_request": 606,
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "5aa496fcf88cf75cebac07bfa19d7d063ad45cc8",
+        "original_blob": "7cab5fda1c9febc521db0e6903125082286e2a54",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80091D34",
+        "0x800921B0",
+        "0x800937CC",
+        "0x800943D8",
+        "0x80095304",
+        "0x80096440",
+        "0x80097028",
+        "0x80097440",
+        "0x800975A4",
+        "0x800994E0",
+        "0x80099568",
+        "0x80099630",
+        "0x800996D4",
+        "0x800996FC",
+        "0x8009A1A8",
+        "0x8009A270",
+        "0x8009A298",
+        "0x8009A2EC",
+        "0x8009A578",
+        "0x8009A5A0",
+        "0x8009A5D4"
+      ],
+      "provenance": {
+        "pull_request": 611,
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "80e9be799a2252a5ae0e19131815db2162d38e97",
+        "original_blob": "153560bff20f47443e3d7ec4aae92898318c1589",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8009D474",
+        "0x8009D86C",
+        "0x8009D888",
+        "0x8009D8CC",
+        "0x8009D924",
+        "0x8009D944",
+        "0x8009D964",
+        "0x8009D984",
+        "0x8009D990",
+        "0x8009D9A8",
+        "0x8009D9C0",
+        "0x8009D9D8",
+        "0x8009D9F8",
+        "0x8009DA10",
+        "0x8009DA90",
+        "0x8009DB54",
+        "0x8009DD10",
+        "0x8009DE9C",
+        "0x8009E0EC",
+        "0x8009E138",
+        "0x8009E58C",
+        "0x8009E9A4",
+        "0x8009E9C8",
+        "0x8009F13C",
+        "0x8009F6B4",
+        "0x8009F778",
+        "0x8009F780",
+        "0x8009FE24",
+        "0x8009FF94",
+        "0x8009FFA4",
+        "0x8009FFB4",
+        "0x8009FFC4",
+        "0x800A0230",
+        "0x800A039C",
+        "0x800A061C",
+        "0x800A0624",
+        "0x800A0684",
+        "0x800A1470",
+        "0x800A1478",
+        "0x800A14A8",
+        "0x800A1A58",
+        "0x800A1A80",
+        "0x800A1C50",
+        "0x800A2160",
+        "0x800A216C",
+        "0x800A2178",
+        "0x800A2184",
+        "0x800A2190"
+      ],
+      "provenance": {
+        "pull_request": 612,
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "42b114e0ca475bc90ec2c593a7224d8515bebfa9",
+        "original_blob": "f7a9e4bd9ad28de249b5d7f80ce9c5ecc1320f9f",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800CA8EC",
+        "0x800CA8F4",
+        "0x800CAA6C",
+        "0x800CAA8C",
+        "0x800CAAC4",
+        "0x800CABF4",
+        "0x800CAC14",
+        "0x800CC244",
+        "0x800CC404",
+        "0x800CC448",
+        "0x800CC470",
+        "0x800CC560",
+        "0x800CC618",
+        "0x800CC6A8",
+        "0x800CC800",
+        "0x800CC8F0",
+        "0x800CC98C",
+        "0x800CCBA0",
+        "0x800CCC04",
+        "0x800CCEBC",
+        "0x800CD21C",
+        "0x800CE674",
+        "0x800CE684",
+        "0x800CE690",
+        "0x800CF090",
+        "0x800CF35C",
+        "0x800CF394",
+        "0x800CF3CC",
+        "0x800CF404",
+        "0x800CF43C",
+        "0x800CF474",
+        "0x800CF4AC",
+        "0x800CF4E4",
+        "0x800CF51C",
+        "0x800CF554",
+        "0x800CF58C",
+        "0x800CF5C4",
+        "0x800CF5FC",
+        "0x800CF634",
+        "0x800CF66C",
+        "0x800CF6A4",
+        "0x800CF6DC",
+        "0x800CF714",
+        "0x800CF74C",
+        "0x800CF784",
+        "0x800CF7BC"
+      ],
+      "provenance": {
+        "pull_request": 620,
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "470742a5294448cd5ec3039e2709fbad552f8521",
+        "original_blob": "99f813ff683b4017de646452c30c0643f4278306",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800B508C",
+        "0x800B50E8",
+        "0x800B51D0",
+        "0x800B5224",
+        "0x800B52D0",
+        "0x800B530C",
+        "0x800B53F4",
+        "0x800B5448",
+        "0x800B54C0",
+        "0x800B5F94",
+        "0x800B5FC0",
+        "0x800B62D8",
+        "0x800B63A4",
+        "0x800B63B0",
+        "0x800B6408",
+        "0x800B6474",
+        "0x800B64C4",
+        "0x800B6544",
+        "0x800B65A0",
+        "0x800B65C0",
+        "0x800B65D0",
+        "0x800B6644",
+        "0x800B6658",
+        "0x800B6714",
+        "0x800B67FC",
+        "0x800B6C98",
+        "0x800B7368",
+        "0x800B7370",
+        "0x800B7F34",
+        "0x800B7F88",
+        "0x800B7FE8",
+        "0x800B81A4",
+        "0x800B823C",
+        "0x800B82AC",
+        "0x800B8344",
+        "0x800B83A0",
+        "0x800B83F4",
+        "0x800B847C",
+        "0x800B852C",
+        "0x800B8538",
+        "0x800B8544",
+        "0x800B85C8",
+        "0x800B8608",
+        "0x800B8694",
+        "0x800B86A4",
+        "0x800B898C",
+        "0x800B9598",
+        "0x800B9A44",
+        "0x800B9A6C",
+        "0x800B9A90",
+        "0x800B9B18",
+        "0x800B9B64",
+        "0x800B9B9C",
+        "0x800B9BAC"
+      ],
+      "provenance": {
+        "pull_request": 621,
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "b13992daa1d2de036441be872697bc66c502c075",
+        "original_blob": "1beeaddb0c2c08bc00210084dda2bb85682aa29f",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800B8940"
+      ],
+      "provenance": {
+        "pull_request": 621,
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "8e532b07d81761d37a4483b837f4370b2e5936f5",
+        "original_blob": "80c124512bf0086fbf4ba396b3c10a2201ccbf91",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800BE7BC",
+        "0x800BE8E4",
+        "0x800BEFAC",
+        "0x800BF2EC",
+        "0x800BF364",
+        "0x800BF45C",
+        "0x800BF4B8",
+        "0x800BF574",
+        "0x800BF6CC",
+        "0x800BF718",
+        "0x800BF824",
+        "0x800BFAB4",
+        "0x800BFB44",
+        "0x800BFB68",
+        "0x800C02C8",
+        "0x800C02D4",
+        "0x800C02E0",
+        "0x800C02EC",
+        "0x800C02F8",
+        "0x800C032C",
+        "0x800C0414",
+        "0x800C0420",
+        "0x800C043C",
+        "0x800C0458",
+        "0x800C0464",
+        "0x800C05F4",
+        "0x800C0658",
+        "0x800C0660",
+        "0x800C0750",
+        "0x800C07C4",
+        "0x800C1180",
+        "0x800C13A0",
+        "0x800C1C34",
+        "0x800C1E40",
+        "0x800C1E48",
+        "0x800C1E50",
+        "0x800C2090",
+        "0x800C20D8",
+        "0x800C20DC",
+        "0x800C210C",
+        "0x800C2F94",
+        "0x800C2FB8",
+        "0x800C310C",
+        "0x800C3170",
+        "0x800C3610",
+        "0x800C3678",
+        "0x800C4184",
+        "0x800C432C",
+        "0x800C4410",
+        "0x800C442C",
+        "0x800C4438",
+        "0x800C4460",
+        "0x800C44E0",
+        "0x800C4568",
+        "0x800C4658",
+        "0x800C46A0"
+      ],
+      "provenance": {
+        "pull_request": 622,
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "6d4917cf157d081d999dbaffcd0c9d52402c707b",
+        "original_blob": "54115d175b57ad5075738d5394b3464eb54fc926",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80112F8C",
+        "0x80113510",
+        "0x80113B28",
+        "0x80114A30"
+      ],
+      "provenance": {
+        "pull_request": 630,
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "4e6ae2ade79238390bc0a4cb6990b2834cd8a03a",
+        "original_commit": "7c0570462f6b657610e668a78ae93363ecd37c07",
+        "original_blob": "5f2d33f15fab836fbfb7f34a9403fa8ddc80b6d4",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8010CAE8",
+        "0x8010CE2C",
+        "0x8010CE90",
+        "0x8010D004",
+        "0x8010D36C",
+        "0x8010D734",
+        "0x8010D80C",
+        "0x8010D82C",
+        "0x8010FB4C",
+        "0x80110078",
+        "0x801101DC",
+        "0x8011067C",
+        "0x80110C68",
+        "0x80111104",
+        "0x80111314",
+        "0x80111528",
+        "0x80111794"
+      ],
+      "provenance": {
+        "pull_request": 632,
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "4e6ae2ade79238390bc0a4cb6990b2834cd8a03a",
+        "original_commit": "3ab2337dd963fc26851975b7b861938a1052c3e2",
+        "original_blob": "9f1ba094497543ccf3a79f4ae2ec076f408de656",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800FC290",
+        "0x800FC4A8",
+        "0x800FC648",
+        "0x800FCA78",
+        "0x800FCFC0",
+        "0x800FD178",
+        "0x800FD41C",
+        "0x800FD580",
+        "0x800FD68C"
+      ],
+      "provenance": {
+        "pull_request": 634,
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "4e6ae2ade79238390bc0a4cb6990b2834cd8a03a",
+        "original_commit": "f3fed80127536c1361a6734399a6d7a17b1a96a3",
+        "original_blob": "0d0329df8ea939def6a50036d4e31e40b0f3cab1",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800B2314",
+        "0x800B2340",
+        "0x800B36F4",
+        "0x800B442C",
+        "0x800B4A18",
+        "0x800BC4E0",
+        "0x800BC5B8",
+        "0x800BCAF4",
+        "0x800BD184",
+        "0x800BD1BC",
+        "0x800BD99C"
+      ],
+      "provenance": {
+        "pull_request": 678,
+        "merged_via": 696,
+        "commit": "386153a42b4917965c8adb3d4049c940096061b2",
+        "introduced_blob": "ff2f0762be85177fa0adc31b79a0b9026bfcaa22",
+        "original_commit": "0715353a9ad891b27f0e06356beb4b6e0b769fae",
+        "original_blob": "c895ed40acfe09096959acb797803d2922c00061",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR696 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_8003F66C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8003F6B0",
+        "0x8003F6B4",
+        "0x8003F6C8",
+        "0x8003F6D8",
+        "0x8003F6E0",
+        "0x8003F6E8",
+        "0x8003F6F0",
+        "0x8003F744",
+        "0x8003F754",
+        "0x8003F91C",
+        "0x8003FB2C",
+        "0x8003FBB4",
+        "0x8003FC68"
+      ],
+      "provenance": {
+        "pull_request": 690,
+        "merged_via": 696,
+        "commit": "37dc5a8132398b3dc4b61f900ccb57470a624f93",
+        "introduced_blob": "08b003370daae9fbe7747f2b776ce1f9537a22ad"
       }
     }
   ],

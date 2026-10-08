@@ -16,11 +16,21 @@ struct State_800D8140 {
 
 /* Payload returned by fn_801BE60C. */
 struct Block_801BE60C {
-    unsigned char mUnknown0;
-    unsigned char mUnknown1;
-    unsigned char mUnknown2;
-    unsigned char mUnknown3;
-    float mUnknown4;
+    /* fn_800DC36C reads and writes +0 and +4 as words for its key; the
+       other callers use the byte and float views. */
+    union {
+        struct {
+            unsigned char mUnknown0;
+            unsigned char mUnknown1;
+            unsigned char mUnknown2;
+            unsigned char mUnknown3;
+        };
+        int mUnknown0Word;
+    };
+    union {
+        float mUnknown4;
+        int mUnknown4Word;
+    };
     float mUnknown8;
     char mUnknownC[20];
     State_800D8140 mUnknown20;

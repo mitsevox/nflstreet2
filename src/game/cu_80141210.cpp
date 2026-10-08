@@ -1,4 +1,5 @@
 #include "game/Camera_8013F738.h"
+#include "game/Class_80297B90.h"
 #include "game/Class_80297BF8.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_8008E978.h"
@@ -20,8 +21,6 @@ struct View_802DCEB0 { Vector_80039F5C mUnknown0; Angles_80141210 mUnknownC; int
 extern "C" {
 extern View_802DCEB0 lbl_802DCEB0[];
 extern View_802DCEB0 lbl_802DCF58;
-extern Class_80297BF8 *lbl_803EAB90;
-extern void *lbl_803EAA8C;
 float fn_801BFFA0(void);
 Sample_801C009C *fn_801C00F8(Actor_801C009C *);
 Sample_801C009C *fn_801C009C(Actor_801C009C *,int,unsigned short,unsigned short);
