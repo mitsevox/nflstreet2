@@ -12702,6 +12702,22 @@
         "original_blob": "11288d899e338df40f5846b759dcc1194be3980d",
         "integration_adjustment": "Remove the unsupported unused cancellation stack local and inherited process comments; preserve function behavior and ordinary compiler settings. At that prior integration, cancellation frame instructions remained a measured partial. Preserve original PR527 source contributor and DVD ownership. A genuine pinned smstrikers command-state local used by the outer switch corrects the existing cancellation partial under unchanged accepted library flags. Post-callback state checks continue to read block->state. Only this native function changes; original linked instructions remain. No unused frame or storage manipulation."
       }
+    },
+    {
+      "source": "src/game/cu_800034A0.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800034A0",
+        "0x800034D0"
+      ],
+      "provenance": {
+        "pull_request": 658,
+        "merged_via": 658,
+        "commit": "16db197586cc845baf76ac22de3d3d02b0a4200e",
+        "introduced_blob": "67efdcbe83ca6b141c2acbcfff39ca3862ed1ae8"
+      }
     }
   ],
   "target": "GN7E69",
