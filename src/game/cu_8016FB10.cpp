@@ -14,17 +14,13 @@
 #include "game/Message_800F01CC.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F518.h"
+#include "game/Record_8011F4F8.h"
 #include "game/cu_8003108C.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/Object_8017886C.h"
 #include <stdio.h>
 #include <string.h>
-
-struct Record_8011F4F8 {
-    char mUnknown0[11];
-    unsigned char mUnknownB;
-};
 
 struct Object_80172FB0 {
     char mUnknown0[12];
@@ -111,7 +107,6 @@ int fn_800E0EF0(Object_80039F5C *p);
 int fn_800E0F40(Object_80039F5C *p);
 void fn_801039D8(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
-Record_8011F4F8 *fn_8011F4F8(int index);
 Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, float *pOut, int b);
 void *fn_801374BC(void);
 int fn_801374E0(void *pBall);

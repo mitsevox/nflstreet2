@@ -2,6 +2,7 @@
 #include "game/Object_800D81C8.h"
 #include "game/Block_801BE60C.h"
 #include "game/Record_8036B55C.h"
+#include "game/Table_80089904.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802372EC.h"
@@ -203,5 +204,30 @@ void fn_800DAC88(Block_801BE60C *pBlock, void *a, Record_800D81C8 *pEntries)
             pBlock->mUnknown3 = 255;
         }
     }
+}
+
+int fn_800DAD90(Table_80089904 *pTable, int value, int a, unsigned char b)
+{
+    float best = 0.0f;
+    int result = 0xFFFF;
+
+    for (unsigned short i = 0; i < pTable->mCount; i++) {
+        Info_80089904 *pInfo = pTable->mEntries[i].mpInfo;
+        if (pInfo->mValue == a && pInfo->mUnknown6 == 1 && value >= pInfo->mUnknown16 &&
+            value <= pInfo->mUnknown20) {
+            float weight = 0.5f;
+            if (pInfo->mType == b) {
+                weight += weight;
+            }
+            if (weight > best) {
+                best = weight;
+                result = i;
+            }
+        }
+    }
+    if (result == 0xFFFF) {
+        result = 0;
+    }
+    return result;
 }
 }

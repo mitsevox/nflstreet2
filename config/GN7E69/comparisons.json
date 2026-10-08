@@ -5943,7 +5943,7 @@
     {
       "source": "src/game/cu_800D949C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained inferred sixteen-function grouping, exact whole-function rows for eight reconstructed bodies and the exact .rodata row 0x8029D87C-0x8029D8A0 (literal pools of 0x800DA8D8, 0x800DAA68 and 0x800DAC88). Only these bodies and that literal run are measured; seven other functions and all other static data remain original and unmeasured.",
+      "evidence": "evidence.tsv retained inferred sixteen-function grouping, exact whole-function rows for nine reconstructed bodies and the exact .rodata row 0x8029D87C-0x8029D8A8 (literal pools of 0x800DA8D8, 0x800DAA68, 0x800DAC88 and 0x800DAD90). Only these bodies and that literal run are measured; seven other functions and all other static data remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
@@ -5955,7 +5955,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029D87C",
-          "end": "0x8029D8A0"
+          "end": "0x8029D8A8"
         }
       ],
       "functions": [
@@ -5998,6 +5998,11 @@
           "symbol": "fn_800DAC88",
           "start": "0x800DAC88",
           "end": "0x800DAD90"
+        },
+        {
+          "symbol": "fn_800DAD90",
+          "start": "0x800DAD90",
+          "end": "0x800DAE4C"
         }
       ]
     },
@@ -18766,13 +18771,19 @@
     {
       "source": "src/game/cu_800DAEE4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row 0x800DAEE4-0x800DBB74 for src/game/cu_800DAEE4.cpp, exact whole-function rows and inferred name/source-form rows for three complete bodies. Original bytes remain linked; ten other bodies and all static data remain original and unmeasured.",
+      "evidence": "evidence.tsv open/open unit row 0x800DAEE4-0x800DBB74 for src/game/cu_800DAEE4.cpp, exact whole-function rows and inferred name/source-form rows for ten reconstructed bodies (seven exact, three partial), and the exact .rodata row 0x8029D8B8-0x8029D908 (literal pools of 0x800DB100-0x800DB7A4). Original bytes remain linked; three other bodies and all other static data remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800DAEE4",
           "end": "0x800DBB74"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029D8B8",
+          "end": "0x8029D908"
         }
       ],
       "functions": [
@@ -18787,9 +18798,44 @@
           "end": "0x800DB100"
         },
         {
+          "symbol": "fn_800DB100",
+          "start": "0x800DB100",
+          "end": "0x800DB308"
+        },
+        {
+          "symbol": "fn_800DB308",
+          "start": "0x800DB308",
+          "end": "0x800DB40C"
+        },
+        {
+          "symbol": "fn_800DB40C",
+          "start": "0x800DB40C",
+          "end": "0x800DB498"
+        },
+        {
+          "symbol": "fn_800DB498",
+          "start": "0x800DB498",
+          "end": "0x800DB520"
+        },
+        {
+          "symbol": "fn_800DB520",
+          "start": "0x800DB520",
+          "end": "0x800DB60C"
+        },
+        {
           "symbol": "fn_800DB60C",
           "start": "0x800DB60C",
           "end": "0x800DB688"
+        },
+        {
+          "symbol": "fn_800DB688",
+          "start": "0x800DB688",
+          "end": "0x800DB7A4"
+        },
+        {
+          "symbol": "fn_800DB7A4",
+          "start": "0x800DB7A4",
+          "end": "0x800DB8B4"
         }
       ]
     },
