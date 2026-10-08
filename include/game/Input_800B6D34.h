@@ -3,9 +3,9 @@
 
 #include "game/Object_80039F5C.h"
 
-/* 104-byte record that fn_800B6D34 fills for a player by copying the block
-   fn_800F177C returns; fn_800F0FD0 builds those blocks. Only accessed members
-   are named. */
+/* 104-byte record that fn_800B6D34 fills for a player through fn_800F177C,
+   which copies one of the blocks fn_800F0FD0 builds into it. Only accessed
+   members are named. */
 struct Input_800B6D34 {
     unsigned int mUnknown0;
     float mUnknown4;
