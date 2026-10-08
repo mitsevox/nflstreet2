@@ -20,6 +20,8 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/Object_8017886C.h"
+#include "game/State_803EB098.h"
+#include "game/fn_801BE60C.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -170,7 +172,6 @@ int fn_8017D064(int a);
 void fn_8017D0A4(int a, int b, const char *pText);
 void fn_8017D7C4(const char *pText);
 void fn_8017D844(const char *pText);
-int fn_801BE648(void *p);
 int fn_801C4E98(void *p, const char *pName);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);

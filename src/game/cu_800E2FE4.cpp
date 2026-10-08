@@ -3,6 +3,7 @@
 #include "game/cu_80067C10.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
+#include "game/fn_801BE60C.h"
 #include <math.h>
 
 struct State_800E2FE4 {
@@ -38,9 +39,7 @@ void fn_800C89F0(Object_80039F5C *, int, int, int, float);
 int fn_80178320(void);
 int fn_80178308(void);
 int fn_80124CE4(Object_80039F5C *, int, void *, int, int, float, float);
-int fn_801BE648(void *);
 int fn_800E1870(Object_80039F5C *);
-int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
 void fn_800E3AE8(Object_80039F5C *, int, int);
 int fn_800E3A34(Object_80039F5C *, Point_8017886C *);
 

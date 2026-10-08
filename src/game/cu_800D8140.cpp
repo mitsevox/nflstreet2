@@ -3,6 +3,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_800D81C8.h"
 #include "game/Block_801BE60C.h"
+#include "game/fn_801BE60C.h"
 
 extern "C" {
 float fn_800C4A2C(Object_800D81C8 *p);
@@ -12,8 +13,6 @@ int fn_801784C4(void);
 int fn_801787A0(void);
 float fn_801BD660(void *p, int key);
 float fn_801BD6D4(Block_801BD6D4 *p);
-Block_801BE60C *fn_801BE60C(void *p, int key);
-int fn_801BE648(void *p);
 void fn_80227248(Pair_802270A4 *p, Pair_802270A4 *pOther, float value);
 void fn_8022728C(Pair_802270A4 *p, Pair_802270A4 *pOther, float value);
 }
@@ -106,7 +105,7 @@ extern "C" void fn_800D84DC(State_800D8140 *p, Object_800D81C8 *pOther)
         Block_801BD6D4 *pBlock = &pRecord->mUnknown4C;
         if (p->mUnknown17 == 255) return;
         if ((pOther->mUnknownC & 8) && p->mUnknown16) return;
-        int id = fn_801BE648(pOther->mpUnknown318);
+        unsigned short id = fn_801BE648(pOther->mpUnknown318);
         Object_80039F5C *pThird = fn_8009BCE8(&pOther->mUnknown150);
         if (!pThird) return;
         Block_801BE60C *pResult = fn_801BE60C(pThird->mpUnknown792, id);

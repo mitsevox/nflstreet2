@@ -9,6 +9,7 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_80054138.h"
+#include "game/fn_801EBC18.h"
 
 struct Anim_8004AA34 {
     int mUnknown0;
@@ -75,12 +76,6 @@ struct Desc_800408E4 {
     unsigned short mUnknown180;
 };
 
-struct Angles_801EBC18 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-};
-
 extern "C" {
 void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
 void fn_80030304(void *pStream, float *pValues, int bits, float scale);
@@ -123,7 +118,6 @@ void fn_801DD0C8(int handle, int type, int a, int (*pCallback)(Object_80040818 *
 Object_80040818 *fn_801DD268(int handle, int type, int a, Desc_800408E4 *pDesc);
 void fn_801DD320(int handle, Object_80040818 *pObject);
 void fn_801DD3AC(int handle, Object_80040818 *pObject, int a);
-Angles_801EBC18 fn_801EBC18(float *pRot);
 void fn_801EBEF8(Quat_801EB488 *pOut, int a, int b, int c);
 void fn_801EC048(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
 int fn_801F1520(int value);
@@ -417,7 +411,8 @@ void fn_80040A70(Object_80041904 *pLinked, int index)
 
     if (pLinked->mUnknown428 != 0 && (pLinked->mUnknown428->mUnknown32 != 0 || pLinked->mUnknown428->mUnknown33 != 0)) {
         fn_800B2A14(&pLinked->mUnknown8, &pLinked->mUnknown428->mUnknown32);
-        Angles_801EBC18 angles = fn_801EBC18(&pLinked->mUnknown96);
+        Angles_801EBC18 angles;
+        fn_801EBC18(&angles, &pLinked->mUnknown96);
         angles.mUnknown8 = pLinked->mUnknown32 + 0x400000;
         fn_801EBEF8(&pObject->mRot, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
     } else {

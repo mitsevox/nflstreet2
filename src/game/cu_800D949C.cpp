@@ -6,6 +6,7 @@
 #include "game/cu_80136B1C.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802372EC.h"
+#include "game/fn_801BE60C.h"
 #include <math.h>
 
 struct Entry_800DA8D8
@@ -26,7 +27,6 @@ extern float lbl_803EA2C4;
 extern unsigned char lbl_802DA888[];
 
 int fn_80178308(void);
-int fn_801BE648(void *p);
 int fn_800D91E0(Object_80039F5C *p, int team, int flag, unsigned char *pValue);
 int fn_800D949C(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag, unsigned char value);
 void fn_800D8DD8(void *a, Block_801BE60C *pBlock, Object_80039F5C *p, int value);

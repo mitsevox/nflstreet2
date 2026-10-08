@@ -52,7 +52,8 @@ struct Record_80067338 {
         };
     };
     unsigned int mUnknown18;
-    char mUnknown1C[0x1D4];
+    unsigned char mUnknown1C;
+    char mUnknown1D[0x1D3];
     char mUnknown1F0[0x1C];
 };
 
