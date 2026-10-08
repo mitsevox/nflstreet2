@@ -42,6 +42,7 @@
 #include "game/fn_80163E94.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C68FC.h"
+#include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801EF390.h"
@@ -3819,6 +3820,11 @@ extern "C" void fn_800B2304(void)
     lbl_803EAB20->mUnknown4.mUnknown5C = 0;
 }
 
+extern "C" int fn_800B2314(void)
+{
+    return lbl_803EAB20->mUnknown4.mUnknown5C;
+}
+
 extern "C" int fn_800B2320(void)
 {
     return lbl_803EAB20->mUnknown4.mUnknown5A;
@@ -3827,6 +3833,11 @@ extern "C" int fn_800B2320(void)
 extern "C" int fn_800B232C(int index)
 {
     return lbl_803EAB20->mUnknown4.mUnknown0[index].mUnknown0;
+}
+
+extern "C" Object_80039F5C *fn_800B2340(int index)
+{
+    return fn_8009BCE8(&lbl_803EAB20->mUnknown4.mUnknown0[index].mUnknown4);
 }
 
 extern "C" void fn_800B2370(Object_80039F5C *pA, int kind, Object_80039F5C *pB, float value)
@@ -3985,6 +3996,11 @@ extern "C" void fn_800B3644(int *p)
     }
 }
 
+extern "C" void fn_800B36F4(void)
+{
+    fn_800B3644(0);
+}
+
 extern "C" void fn_800B3C54(void)
 {
     lbl_803EAB2C = 1;
@@ -4041,6 +4057,11 @@ extern "C" void fn_800B4408(void)
     fn_800B34BC();
 }
 
+extern "C" int fn_800B442C(void)
+{
+    return 25;
+}
+
 extern "C" void fn_800B4434(void)
 {
     lbl_803EAB34->mUnknown8 &= ~6;
@@ -4049,6 +4070,13 @@ extern "C" void fn_800B4434(void)
 extern "C" void fn_800B49EC(Record_800B49EC *pDst, const Record_800B49EC *pSrc)
 {
     *pDst = *pSrc;
+}
+
+extern "C" const char *lbl_802D87A4[];
+
+extern "C" void fn_800B4A18(int index, char *pDest, int size)
+{
+    fn_801C3284(pDest, lbl_802D87A4[index], size);
 }
 
 /* Block allocated by fn_800BA3F0 through fn_80238174 under the id 'prac'
@@ -4588,6 +4616,19 @@ extern "C" void fn_800BBE98(void)
     fn_800941B8();
     fn_8017CFB4(7);
     lbl_803EC98C->mUnknown0 = 2;
+}
+
+extern "C" {
+int fn_800C1E40(void);
+void fn_8021956C(void *p, int a, int b, int c);
+int fn_80169E68(int mode);
+}
+
+extern "C" void fn_800BC4E0(void)
+{
+    if (fn_800C1E40() == 0) {
+        fn_8021956C(lbl_803EB688, 3, 8, 1);
+    }
 }
 
 extern "C" void fn_800BC51C(Class_80297BF8 *pObject)
@@ -9239,5 +9280,36 @@ extern "C" Step_800C4460 *fn_800C4658(Sequence_800C4460 *p)
 extern "C" void fn_800C46A0(Sequence_800C4460 *p)
 {
     p->mUnknown100++;
+}
+
+extern "C" void fn_800BC5B8(void)
+{
+    fn_800BC51C(0);
+}
+
+extern "C" void fn_800BCAF4(float value)
+{
+    fn_800AD910(5, value);
+}
+
+extern "C" void fn_800BD184(void)
+{
+    lbl_803EAB94 = 1;
+}
+
+extern "C" int fn_800BD1BC(void)
+{
+    return lbl_803EAB95 & 1;
+}
+
+extern "C" void fn_800BD99C(int team)
+{
+    if (fn_800BA6F8() == 0 && fn_800B65A0(team) == 255) {
+        if (team == fn_80178320()) {
+            fn_80169EF4(2);
+        } else {
+            fn_80169E68(2);
+        }
+    }
 }
 
