@@ -5,7 +5,9 @@
 struct Entry_8006719C {
     char mUnknown0[0xB];
     unsigned char mUnknownB;
-    char mUnknownC[0x1C];
+    char mUnknownC[0x14];
+    int mUnknown20;
+    int mUnknown24;
 };
 
 /* Filled by fn_8006719C and fn_8006723C, which clear all 0xCA8 bytes first. */
