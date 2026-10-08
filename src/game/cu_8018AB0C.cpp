@@ -1,3 +1,4 @@
+#include "engine/cu_80227F14.h"
 #include "game/fn_8018AB0C.h"
 
 struct Block_8018A978 {
@@ -31,7 +32,7 @@ struct Object_8018A978 {
     View_8018A978 *mpUnknown52;
 };
 
-struct Fade_8021CA3C {
+struct Object_8021CA3C {
     char mUnknown0[12];
     float mUnknown12;
 };
@@ -40,16 +41,15 @@ extern "C" {
 int fn_80163C30(void *p, int value);
 void fn_80163CD0(void);
 View_8018A978 *fn_801DD168(int type, int flags, Desc_8018A978 *pDesc);
-Fade_8021CA3C *fn_8021CA3C(void);
+Object_8021CA3C *fn_8021CA3C(void);
 void fn_8018A8C8(int a);
 void fn_801CE9E0(int a);
 void fn_801CE95C(void);
 void fn_80163D64(View_8018A978 *pView, unsigned char value);
 void fn_80163D08(View_8018A978 *pView, int value);
-void fn_80228D58(View_8018A978 *pView);
 
 void fn_8018A978(Object_8018A978 *p);
-void fn_8018AA44(Object_8018A978 *p, int *pDone);
+void fn_8018AA44(Object_8018A978 *p, int *pFlag);
 void fn_8018AAE4(Object_8018A978 *p);
 void fn_8018AB08(Object_8018A978 *p, int a, int b);
 void fn_8018AB64(Object_8018A978 *p, unsigned int message, int a, int *pArgs);
@@ -69,24 +69,24 @@ void fn_8018A978(Object_8018A978 *p)
     p->mpUnknown52 = fn_801DD168(19, 0, &desc);
 }
 
-void fn_8018AA44(Object_8018A978 *p, int *pDone)
+void fn_8018AA44(Object_8018A978 *p, int *pFlag)
 {
-    Fade_8021CA3C *fade = fn_8021CA3C();
+    Object_8021CA3C *pObject = fn_8021CA3C();
 
     fn_8018A8C8(4);
     fn_801CE9E0(1);
-    if (pDone != 0 && *pDone == 0) {
+    if (pFlag != 0 && *pFlag == 0) {
         fn_801CE95C();
-        *pDone = 1;
+        *pFlag = 1;
     }
-    fn_80163D64(p->mpUnknown52, (unsigned char)(fade->mUnknown12 * 255.0f));
+    fn_80163D64(p->mpUnknown52, (unsigned char)(pObject->mUnknown12 * 255.0f));
     fn_80163D08(p->mpUnknown52, 1);
     fn_801CE9E0(0);
 }
 
 void fn_8018AAE4(Object_8018A978 *p)
 {
-    fn_80228D58(p->mpUnknown52);
+    fn_80228D58((int)p->mpUnknown52);
 }
 
 void fn_8018AB08(Object_8018A978 *p, int a, int b)
