@@ -19164,7 +19164,7 @@
     {
       "source": "src/dolphin/vmbase/VMBase.c",
       "profile": "dolphin_release",
-      "evidence": "Frozen scope whole VMBase mapped unit; six complete original MVP C bodies. Actual target pointer slots803ED268/26C/270/274 independently read/written by exact whole bodies and accepted VM caller anchors. Full native16-byte allocation measured; other original unit functions and storage retained, no ASM/stub source imported. Pointer declarations use target-supported native allocation order, not donor original declaration order.",
+      "evidence": "Six existing complete C helpers retain their exact comparisons; fifteen additional complete donor-guided C bodies from MVP 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 src/dolphin/vmbase/VMBase.c remain measured partials under the unchanged dolphin_release profile. Target reverse-table arena increment is0x4000. Native20-byte .sbss consists of four established pointer cells16 bytes plus the accessed32-bit initialization guard4 bytes; original declaration order is not uniquely established. NOBITS allocation gives no initialized-data or linked credit. Four original-provider helpers remain external and receive no source credit; original instructions remain linked for all comparison-only bodies.",
       "sections": [
         {
           "section": ".text",
