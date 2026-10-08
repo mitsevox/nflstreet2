@@ -3,6 +3,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
+#include "game/Query_800CE770.h"
 #include "game/Record_800B15FC.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_80136B1C.h"
@@ -71,15 +72,6 @@ struct Block_800E7588 {
     unsigned char mUnknown19;
 };
 
-struct Query_800CE770 {
-    Object_80039F5C *mpUnknown0;
-    Object_80039F5C *mpUnknown4;
-    char mUnknown8[44];
-    short mUnknown52;
-    unsigned char mUnknown54;
-    char mUnknown55[9];
-};
-
 extern "C" {
 extern unsigned char lbl_803EAD9C[8];
 extern unsigned char lbl_803EADA4[8];
@@ -133,8 +125,6 @@ int fn_800B7F34(Object_80039F5C *p);
 int fn_800B7F88(Object_80039F5C *p);
 int fn_800B83A0(Object_80039F5C *p);
 int fn_800C05F4(void);
-int fn_800CE510(Query_800CE770 *pQuery);
-void fn_800CE770(Query_800CE770 *pQuery);
 int fn_800A8444(int team);
 int fn_800D0B90(Object_80039F5C *p);
 void fn_800D0BF4(Object_80039F5C *p, int a, int b);

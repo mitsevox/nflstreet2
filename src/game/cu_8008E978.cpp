@@ -13,6 +13,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_8017886C.h"
+#include "game/Query_800CE770.h"
 #include "game/RecordList_8002E7C0.h"
 #include "game/Record_800B15FC.h"
 #include "game/Team_80167A8C.h"
@@ -1477,28 +1478,8 @@ struct Block_800C9D6C {
     unsigned char mUnknown105;
 };
 
-/* Stack query block that fn_800CE770 prepares and fn_800CE2B8 reads
-   (fn_800C7084). Only the members fn_800C7084 stores are declared; the
-   size is unknown. */
-struct Query_800CE770 {
-    Object_80039F5C *mpUnknown0;
-    Object_80039F5C *mpUnknown4;
-    char mUnknown8[28];
-    int mUnknown36;
-    char mUnknown40[4];
-    float mUnknown44;
-    char mUnknown48[4];
-    short mUnknown52;
-    unsigned char mUnknown54;
-    char mUnknown55[1];
-    unsigned char mUnknown56;
-    char mUnknown57[7];
-};
-
 extern "C" {
 int fn_8003DEB4(void);
-void fn_800CE770(Query_800CE770 *pQuery);
-int fn_800CE2B8(Query_800CE770 *pQuery);
 void fn_80114D50(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8022E558(void);
 int fn_8022E560(void);
@@ -1877,7 +1858,7 @@ extern "C" int fn_800C7084(Object_80039F5C *p, Object_80039F5C *pOther, int a, f
     int result = 0;
 
     fn_800CE770(&query);
-    query.mUnknown56 = 0;
+    query.mUnknown56 = result;
     query.mUnknown36 = b;
     query.mUnknown44 = value;
     query.mUnknown52 = a;
