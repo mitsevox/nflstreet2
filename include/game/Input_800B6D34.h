@@ -3,18 +3,20 @@
 
 #include "game/Object_80039F5C.h"
 
-/* Record that fn_800B6D34 fills for a player. Only the bytes its callers
-   read are declared. */
+/* 104-byte record that fn_800B6D34 fills for a player by copying the block
+   fn_800F177C returns; fn_800F0FD0 builds those blocks. Only accessed members
+   are named. */
 struct Input_800B6D34 {
-    char mUnknown0[92];
-    unsigned char mUnknown92;
-    unsigned char mUnknown93;
-    char mUnknown94[1];
-    unsigned char mUnknown95;
-    unsigned char mUnknown96;
-    unsigned char mUnknown97;
-    unsigned char mUnknown98;
-    char mUnknown99[5];
+    unsigned int mUnknown0;
+    float mUnknown4;
+    float mUnknown8;
+    float mUnknown12;
+    float mUnknown16;
+    int mUnknown20;
+    float mUnknown24[12];
+    float mUnknown72[5];
+    unsigned char mUnknown92[9];
+    char mUnknown101[3];
 };
 
 extern "C" {

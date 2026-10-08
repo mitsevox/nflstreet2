@@ -6271,6 +6271,12 @@
           "placement": ".text",
           "start": "0x800EFC68",
           "end": "0x80125F3C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DF88",
+          "end": "0x8029E068"
         }
       ],
       "functions": [
@@ -7038,6 +7044,96 @@
           "symbol": "fn_800F4E14",
           "start": "0x800F4E14",
           "end": "0x800F4E88"
+        },
+        {
+          "symbol": "fn_800F0960",
+          "start": "0x800F0960",
+          "end": "0x800F0B84"
+        },
+        {
+          "symbol": "fn_800F0B84",
+          "start": "0x800F0B84",
+          "end": "0x800F0BF8"
+        },
+        {
+          "symbol": "fn_800F0FD0",
+          "start": "0x800F0FD0",
+          "end": "0x800F15B0"
+        },
+        {
+          "symbol": "fn_800F1858",
+          "start": "0x800F1858",
+          "end": "0x800F1C68"
+        },
+        {
+          "symbol": "fn_800F1C68",
+          "start": "0x800F1C68",
+          "end": "0x800F1EE0"
+        },
+        {
+          "symbol": "fn_800F1FDC",
+          "start": "0x800F1FDC",
+          "end": "0x800F21E0"
+        },
+        {
+          "symbol": "fn_800F21E0",
+          "start": "0x800F21E0",
+          "end": "0x800F22D8"
+        },
+        {
+          "symbol": "fn_800F23EC",
+          "start": "0x800F23EC",
+          "end": "0x800F24D8"
+        },
+        {
+          "symbol": "fn_800F24D8",
+          "start": "0x800F24D8",
+          "end": "0x800F268C"
+        },
+        {
+          "symbol": "fn_800F268C",
+          "start": "0x800F268C",
+          "end": "0x800F2828"
+        },
+        {
+          "symbol": "fn_800F2920",
+          "start": "0x800F2920",
+          "end": "0x800F2A40"
+        },
+        {
+          "symbol": "fn_800F2AA0",
+          "start": "0x800F2AA0",
+          "end": "0x800F2B8C"
+        },
+        {
+          "symbol": "fn_800F2B8C",
+          "start": "0x800F2B8C",
+          "end": "0x800F2C14"
+        },
+        {
+          "symbol": "fn_800F2CB4",
+          "start": "0x800F2CB4",
+          "end": "0x800F2EC8"
+        },
+        {
+          "symbol": "fn_800F2EC8",
+          "start": "0x800F2EC8",
+          "end": "0x800F2FB8"
+        },
+        {
+          "symbol": "fn_800F2FB8",
+          "start": "0x800F2FB8",
+          "end": "0x800F30AC"
+        },
+        {
+          "symbol": "fn_800F30AC",
+          "start": "0x800F30AC",
+          "end": "0x800F3284"
+        },
+        {
+          "symbol": "fn_800F3284",
+          "start": "0x800F3284",
+          "end": "0x800F3344"
         }
       ]
     },

@@ -1,7 +1,9 @@
+#include "game/Command_800CEE74.h"
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
+#include "game/Query_800CE770.h"
 #include "game/Record_800B15FC.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_80136B1C.h"
@@ -70,19 +72,6 @@ struct Block_800E7588 {
     unsigned char mUnknown19;
 };
 
-struct Query_800CE770 {
-    Object_80039F5C *mpUnknown0;
-    Object_80039F5C *mpUnknown4;
-    char mUnknown8[44];
-    short mUnknown52;
-    unsigned char mUnknown54;
-    char mUnknown55[9];
-};
-
-struct Command_800CEE74 {
-    char mUnknown0[64];
-};
-
 extern "C" {
 extern unsigned char lbl_803EAD9C[8];
 extern unsigned char lbl_803EADA4[8];
@@ -135,12 +124,8 @@ void fn_800B76E8(Object_80039F5C *p);
 int fn_800B7F34(Object_80039F5C *p);
 int fn_800B7F88(Object_80039F5C *p);
 int fn_800B83A0(Object_80039F5C *p);
-void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int flag);
-int fn_800C3BEC(Object_80039F5C *p, Command_800CEE74 *pCommand, int *pValue, int *pB);
 int fn_800C05F4(void);
 int fn_800CE510(Query_800CE770 *pQuery);
-void fn_800CE770(Query_800CE770 *pQuery);
-void fn_800CEE74(Command_800CEE74 *pCommand, Object_80039F5C *p, Object_80039F5C *pOther, void *pData, int a, int b, int flag);
 int fn_800A8444(int team);
 int fn_800D0B90(Object_80039F5C *p);
 void fn_800D0BF4(Object_80039F5C *p, int a, int b);
@@ -403,16 +388,16 @@ extern "C" int fn_800E8748(Object_80039F5C *p) {
             Input_800B6D34 input;
 
             fn_800B6D34(p, &input);
-            if (input.mUnknown97 & 0x40) {
+            if (input.mUnknown92[5] & 0x40) {
                 done = 1;
                 p->mpState->mUnknown3[0] = lbl_803EAD69;
-            } else if (input.mUnknown97 & 0x80) {
+            } else if (input.mUnknown92[5] & 0x80) {
                 done = 1;
                 p->mpState->mUnknown3[0] = lbl_803EAD6A;
-            } else if (input.mUnknown98 & 1) {
+            } else if (input.mUnknown92[6] & 1) {
                 done = 1;
                 p->mpState->mUnknown3[0] = lbl_803EAD6B;
-            } else if (input.mUnknown98 & 2) {
+            } else if (input.mUnknown92[6] & 2) {
                 done = 1;
                 p->mpState->mUnknown3[0] = lbl_803EAD6C;
             } else if (pBlock->mUnknown6 >= lbl_803EAD54) {
@@ -717,7 +702,7 @@ extern "C" int fn_800EA1D8(Object_80039F5C *p) {
     int index = fn_800B65A0(p->mIdBytes[2]);
     Input_800B6D34 input;
     fn_800B6D34(p, &input);
-    if (input.mUnknown95 & 0x40) {
+    if (input.mUnknown92[3] & 0x40) {
         fn_800DB60C(((State_800E9E18 *)&p->mUnknown336)->mUnknown20, p);
     } else {
         int mode = fn_800AD9B4();
@@ -887,7 +872,7 @@ extern "C" int fn_800EC6DC(Object_80039F5C *p) {
         return 0;
     Input_800B6D34 input;
     fn_800B6D34(p, &input);
-    if (input.mUnknown92 & 1) {
+    if (input.mUnknown92[0] & 1) {
         fn_800EB78C(p);
         return 0;
     }
