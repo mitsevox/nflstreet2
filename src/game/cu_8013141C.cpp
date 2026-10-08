@@ -524,20 +524,20 @@ extern "C" int fn_80132440(Object_80039F5C *p)
         Input_800B6D34 input;
 
         fn_800B6D34(p, &input);
-        if ((input.mUnknown96 & 1) || (input.mUnknown96 & 0x10)) {
+        if ((input.mBytes92[4] & 1) || (input.mBytes92[4] & 0x10)) {
             flag = 1;
         }
-        if (fn_8013141C(p) && (input.mUnknown93 & 0x40)) {
+        if (fn_8013141C(p) && (input.mBytes92[1] & 0x40)) {
             result = 1;
             fn_80148108(0);
             fn_80131E80(p);
         }
         if (!result) {
-            if (input.mUnknown95 & 0x40) {
+            if (input.mBytes92[3] & 0x40) {
                 if (fn_80131B3C(p, 9, flag)) {
                     p->mFlags |= 0x4000;
                 }
-            } else if (input.mUnknown96 & 8) {
+            } else if (input.mBytes92[4] & 8) {
                 if (fn_80131B3C(p, 10, 0)) {
                     p->mFlags |= 0x4000;
                     fn_800D5998();

@@ -10,6 +10,9 @@
 #include "game/Record_8011F518.h"
 #include "game/State_803EB098.h"
 #include "game/cu_80067C10.h"
+#include "game/Input_800B6D34.h"
+#include "game/Query_800CE770.h"
+#include "game/Table_80089904.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_800AD9B4.h"
@@ -31,7 +34,6 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_80227638.h"
 #include "game/fn_8016871C.h"
-
 /* Views of the block at player +336. Only the accessed fields
    are declared. */
 struct Block_800FBAA8 {
@@ -321,17 +323,35 @@ struct Queue_800EFE0C {
     Handlers_800EFC68 *mpHandlers;
 };
 
-/* 104-byte block held at +8 of each Entry_800F0EFC. */
-struct Block_800F177C {
-    unsigned int mUnknown0;
-    char mUnknown4[100];
+/* 196-byte record returned by fn_800B8694. */
+struct Record_800B8694 {
+    float mUnknown0[8];
+    float mUnknown32;
+    float mUnknown36;
+    float mUnknown40;
+    float mUnknown44;
+    int mUnknown48;
+    float mUnknown52[22];
+    float mUnknown140;
+    float mUnknown144;
+    float mUnknown148;
+    float mUnknown152;
+    float mUnknown156;
+    float mUnknown160;
+    float mUnknown164;
+    float mUnknown168;
+    float mUnknown172;
+    float mUnknown176;
+    float mUnknown180;
+    float mUnknown184;
+    char mUnknown188[8];
 };
 
 /* 116-byte entry of the array that Record_803EAE18 points to. */
 struct Entry_800F0EFC {
     unsigned int *mpUnknown0;
-    void *mpUnknown4;
-    Block_800F177C mBlock;
+    int *mpUnknown4;
+    Input_800B6D34 mBlock;
     unsigned char mUnknown112;
     char mUnknown113[3];
 };
@@ -354,10 +374,27 @@ struct Block_800F0C6C {
 
 /* 88-byte block at +336 of the player object, cleared by fn_800F4A74. */
 struct Block_800F4A74 {
-    char mUnknown0[36];
+    char mUnknown0[20];
+    int mUnknown20;
+    int mUnknown24;
+    float mUnknown28;
+    float mUnknown32;
     int mUnknown36;
     int mUnknown40;
-    char mUnknown44[18];
+    float mUnknown44;
+    unsigned char mUnknown48;
+    unsigned char mUnknown49;
+    unsigned char mUnknown50;
+    unsigned char mUnknown51;
+    unsigned char mUnknown52;
+    unsigned char mUnknown53;
+    unsigned char mUnknown54;
+    unsigned char mUnknown55;
+    unsigned char mUnknown56;
+    unsigned char mUnknown57;
+    short mUnknown58;
+    unsigned char mUnknown60;
+    unsigned char mUnknown61;
     unsigned char mUnknown62;
     unsigned char mUnknown63;
     char mUnknown64[24];
@@ -375,11 +412,58 @@ struct Info_800F3A6C {
     float mUnknown40;
 };
 
+/* Object pointer, three positions, a pair and a float filled by fn_800F39FC
+   and passed to fn_800F2EC8, fn_800F30AC, fn_800F3284, fn_800F3838,
+   fn_800F3A6C, fn_800F3B54, fn_800F3D38, fn_800F3F90 and fn_800F4038. Only
+   the accessed prefix is declared; the size is unknown. */
 struct Points_800F3A6C {
-    char mUnknown0[4];
-    Point_8017886C mUnknown4;
-    char mUnknown12[4];
-    Point_8017886C mUnknown16;
+    Object_80137ABC *mpUnknown0;
+    Vector_80039F5C mUnknown4;
+    Vector_80039F5C mUnknown16;
+    Vector_80039F5C mUnknown28;
+    Point_8017886C mUnknown40;
+    float mUnknown48;
+};
+
+/* View of another player's +336 block read by fn_800F3344 while that player
+   is in state 28. Only the accessed prefix is declared; the size is unknown. */
+struct Block_800F3344 {
+    unsigned short mUnknown0;
+    char mUnknown2[2];
+    Vector_80039F5C mUnknown4;
+    unsigned int mUnknown16;
+};
+
+/* Block at +336 of the player object used by fn_800F23EC, fn_800F24D8 and
+   fn_800F268C. Only the accessed prefix is declared; the size is unknown. */
+struct Block_800F23EC {
+    float mUnknown0;
+    short mUnknown4;
+    unsigned char mUnknown6;
+    unsigned char mUnknown7;
+};
+
+/* Byte at +336 of the player object set by fn_800F2AA0. */
+struct Block_800F2AA0 {
+    unsigned char mUnknown0;
+};
+
+/* Four bytes matched against the Info_80089904 records by fn_800F2CB4. */
+struct Key_800F2CB4 {
+    unsigned char mUnknown0;
+    unsigned char mUnknown1;
+    unsigned char mUnknown2;
+    unsigned char mUnknown3;
+};
+
+/* Record passed by the caller at 0x800F6548/0x800F6594 to fn_800F4E88 and
+   fn_800F4F08. Only the accessed members are declared; the size is unknown. */
+struct Record_800F4E88 {
+    Point_8017886C mUnknown0;
+    float mUnknown8;
+    float mUnknown12;
+    char mUnknown16[4];
+    int mUnknown20;
 };
 
 struct Object_800F4E14 {
@@ -588,9 +672,9 @@ extern Queue_800EFE0C **lbl_803EAE14;
 extern int lbl_803EC9EC;
 extern Record_803EAE18 *lbl_803EAE18;
 extern float lbl_803EAE1C;
-extern Block_800F177C lbl_802DAAD0;
+extern Input_800B6D34 lbl_802DAAD0;
 extern unsigned int *lbl_802EE928[];
-extern void *lbl_802EE938[];
+extern int *lbl_802EE938[];
 void fn_800A5A8C(int a, Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800D6C70(Object_80039F5C *p);
 int fn_800DD648(Object_80039F5C *p);
@@ -599,7 +683,7 @@ void fn_800EFCD0(int a, State_80039F5C *pQueue, Object_80039F5C *p);
 void fn_800F0490(int a, State_80039F5C *pQueue, int id);
 void fn_800F0960(Object_80039F5C *p, Block_800F0C6C *pBlock);
 int fn_800F0B84(Object_80039F5C *p);
-void fn_800F0FD0(Block_800F177C *pBlock, int index);
+void fn_800F0FD0(Input_800B6D34 *pBlock, int index);
 int fn_800F1FDC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_800F21E0(Object_80039F5C *p, Object_80039F5C *pOther, float distance);
 int fn_800F2920(Object_80039F5C *p);
@@ -669,6 +753,57 @@ Point_8017886C fn_80177FFC(int team);
 unsigned char fn_8009F6B4(void);
 int fn_8009F778(Object_80039F5C *p);
 void *fn_800AEE20(Object_80039F5C *p);
+void fn_8009BD60(Object_80039F5C *p);
+int fn_8011F1A4(void);
+unsigned char fn_8011F4C8(void);
+int fn_800B6644(int index);
+Record_800B8694 *fn_800B8694(int index);
+int fn_801D34D0(void *pDest, int size, int value, int width);
+void fn_800A8954(int event, int team, Object_80039F5C *p);
+int fn_800B83F4(Object_80039F5C *p);
+int fn_800CA5CC(Object_80039F5C *p, int a, int b);
+int fn_800D0B90(Object_80039F5C *p);
+void fn_800D0C0C(Object_80039F5C *p, int a);
+int fn_801BA568(void *pA, void *pB, int id);
+int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
+int fn_801BA6B0(Entry_800EAC9C *pEntry);
+void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
+void fn_801BD81C(void *p, float value);
+float fn_801CFFA0(float value);
+int fn_800B83A0(Object_80039F5C *p);
+void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
+extern float lbl_803EA2C4;
+float fn_80178A08(void);
+int fn_8011E9B4(Object_80039F5C *p);
+void fn_8022732C(void *pPoint, void *pVelocity, float scale);
+int fn_800C4B6C(Object_80039F5C *p);
+void fn_800D52F8(Object_80039F5C *p);
+int fn_800CE4A8(Query_800CE770 *pQuery);
+float fn_800C49A4(Object_80039F5C *p, float value);
+void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int a);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float e);
+void fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
+Object_80039F5C *fn_8015286C(void *pSet, int index);
+int fn_8015310C(void *pSet);
+extern unsigned char lbl_803EAE20[8];
+extern const float lbl_803ED6CC;
+int fn_800AC3FC(Object_80039F5C *p, int value);
+void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
+void fn_8013AA00(Object_80137ABC *pBall, float *pOut, Point_8017886C *pPoint, float scale);
+void fn_80227538(Point_8017886C *pOut, int angle, float length);
+void fn_801528E0(void *pSet, Point_8017886C *pOut);
+int fn_800AC3A0(Object_80039F5C *p);
+void fn_802271A4(Point_8017886C *pOut, Point_8017886C *pIn);
+float fn_801CFB94(int angle);
+float fn_80178A44(void);
+float fn_8011F4D4(void);
+float fn_802276E8(Point_8017886C *pA, Point_8017886C *pB);
+int fn_8009A6EC(Object_80039F5C *p);
+int fn_800997F4(Object_80039F5C *p, Object_80137ABC *pBall, float range, void *pBlock, int a, int b, int c, int *pOutA,
+                int *pOutB);
+int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
+                float range);
+extern char lbl_8031BDD4[];
 }
 
 extern "C" void fn_800EFC68(int a, State_80039F5C *pQueue) {
@@ -961,6 +1096,10 @@ extern "C" void fn_800F0910(int a, Message_800F01CC *pMessage) {
     }
 }
 
+
+
+
+
 extern "C" void fn_800F0BF8(Object_80039F5C *p, int a, int angle) {
     if (fn_800F0B84(p) != 0) {
         Message_800F01CC message;
@@ -1063,7 +1202,7 @@ extern "C" int fn_800F0EFC(void *p, int value) {
     return 0;
 }
 
-extern "C" int fn_800F0FA0(Block_800F177C *pBlock, unsigned int *pMasks, int index) {
+extern "C" int fn_800F0FA0(Input_800B6D34 *pBlock, unsigned int *pMasks, int index) {
     int result = 0;
 
     if (pMasks != 0 && (pBlock->mUnknown0 & pMasks[index]) == pMasks[index]) {
@@ -1071,6 +1210,8 @@ extern "C" int fn_800F0FA0(Block_800F177C *pBlock, unsigned int *pMasks, int ind
     }
     return result;
 }
+
+
 
 extern "C" int fn_800F15B0(void *p, void *pBuffer) {
     Record_803EAE18 *pRecord = (Record_803EAE18 *)p;
@@ -1114,8 +1255,8 @@ extern "C" void fn_800F1700() {
     }
 }
 
-extern "C" void fn_800F177C(int index, Block_800F177C *pOut) {
-    Block_800F177C *pSource;
+extern "C" void fn_800F177C(int index, Input_800B6D34 *pOut) {
+    Input_800B6D34 *pSource;
 
     if (lbl_803EAE18->mpEntries[index].mUnknown112 == 0) {
         pSource = &lbl_803EAE18->mpEntries[index].mBlock;
@@ -1133,6 +1274,10 @@ extern "C" void fn_800F181C(int index, int which) {
     lbl_803EAE18->mpEntries[index].mpUnknown0 = lbl_802EE928[which];
     lbl_803EAE18->mpEntries[index].mpUnknown4 = lbl_802EE938[which];
 }
+
+
+
+
 
 extern "C" int fn_800F1EE0(Object_80039F5C *p) {
     int result = 0;
@@ -1169,6 +1314,10 @@ extern "C" int fn_800F1EE0(Object_80039F5C *p) {
     return result;
 }
 
+
+
+
+
 extern "C" int fn_800F22D8(Object_80039F5C *p, int a, int b, int c) {
     int result = 0;
 
@@ -1197,6 +1346,12 @@ extern "C" int fn_800F22D8(Object_80039F5C *p, int a, int b, int c) {
     }
     return result;
 }
+
+
+
+
+
+
 
 extern "C" int fn_800F2828(Object_80039F5C *a, int b) {
     return fn_801250B8(a, b, 6) < lbl_803EAE1C;
@@ -1228,6 +1383,8 @@ extern "C" int fn_800F285C(Object_80039F5C *p) {
     return 1;
 }
 
+
+
 extern "C" int fn_800F2A40(Object_80039F5C *p) {
     Object_80039F5C *pOther = fn_80137B40();
 
@@ -1239,6 +1396,10 @@ extern "C" int fn_800F2A40(Object_80039F5C *p) {
     }
     return 1;
 }
+
+
+
+
 
 extern "C" int fn_800F2C14() {
     return 0;
@@ -1261,6 +1422,22 @@ extern "C" int fn_800F2C1C(Object_80039F5C *p, int a) {
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 extern "C" void fn_800F3A6C(Object_80039F5C *pA, Object_80039F5C *pB, Info_800F3A6C *pInfo, Points_800F3A6C *pPoints) {
     Point_8017886C delta;
 
@@ -1277,6 +1454,20 @@ extern "C" void fn_800F3A6C(Object_80039F5C *pA, Object_80039F5C *pB, Info_800F3
     pInfo->mUnknown40 = fn_802270A4(&delta);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 extern "C" int fn_800F4A74(Object_80039F5C *p) {
     Block_800F4A74 *pBlock = (Block_800F4A74 *)&p->mUnknown336;
 
@@ -1287,6 +1478,8 @@ extern "C" int fn_800F4A74(Object_80039F5C *p) {
     pBlock->mUnknown40 = 0xC00000;
     return 0;
 }
+
+
 
 extern "C" int fn_800F4E14(Object_80039F5C *p, Object_800F4E14 *pInfo) {
     int result = 0;
@@ -1299,6 +1492,10 @@ extern "C" int fn_800F4E14(Object_80039F5C *p, Object_800F4E14 *pInfo) {
     }
     return result;
 }
+
+
+
+
 
 extern "C" int fn_800F62A4(Object_80039F5C *p) {
     Message_800F01CC message;

@@ -13675,6 +13675,44 @@
         "integration_adjustment": "Shared Object_80039F5C +1032 layout reconciled with the accepted flat members (block view added); accepted Record_8011F4E0, Record_8011F518 and callee declarations reused in integration.",
         "original_commit": "39035f390e8a6911806baea36eed9b8da94606d7"
       }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800F0960",
+        "0x800F0B84",
+        "0x800F1C68",
+        "0x800F1FDC",
+        "0x800F21E0",
+        "0x800F23EC",
+        "0x800F24D8",
+        "0x800F2920",
+        "0x800F2AA0",
+        "0x800F2B8C",
+        "0x800F2CB4",
+        "0x800F2EC8",
+        "0x800F2FB8",
+        "0x800F3284",
+        "0x800F3838",
+        "0x800F39FC",
+        "0x800F3B54",
+        "0x800F3D38",
+        "0x800F3F90",
+        "0x800F4690",
+        "0x800F4838",
+        "0x800F4918",
+        "0x800F4E88",
+        "0x800F4F08"
+      ],
+      "provenance": {
+        "pull_request": 639,
+        "merged_via": 639,
+        "commit": "39b472a0215d492b15c9ef7771137b7fa30f1cf1",
+        "introduced_blob": "f2fb95fa5d267d9112f60eac7c5e46020df47505"
+      }
     }
   ],
   "target": "GN7E69",

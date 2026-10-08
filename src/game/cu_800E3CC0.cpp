@@ -3,6 +3,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
+#include "game/Query_800CE770.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_800DB60C.h"
 #include "game/cu_80067C10.h"
@@ -72,15 +73,6 @@ struct Block_800E7588 {
     unsigned char mUnknown19;
 };
 
-struct Query_800CE770 {
-    Object_80039F5C *mpUnknown0;
-    Object_80039F5C *mpUnknown4;
-    char mUnknown8[44];
-    short mUnknown52;
-    unsigned char mUnknown54;
-    char mUnknown55[9];
-};
-
 extern "C" {
 extern unsigned char lbl_803EAD9C[8];
 extern unsigned char lbl_803EADA4[8];
@@ -134,7 +126,6 @@ int fn_800B7F88(Object_80039F5C *p);
 int fn_800B83A0(Object_80039F5C *p);
 int fn_800C05F4(void);
 int fn_800CE510(Query_800CE770 *pQuery);
-void fn_800CE770(Query_800CE770 *pQuery);
 int fn_800A8444(int team);
 int fn_800D0B90(Object_80039F5C *p);
 void fn_800D0BF4(Object_80039F5C *p, int a, int b);
@@ -397,16 +388,16 @@ extern "C" int fn_800E8748(Object_80039F5C *p) {
             Input_800B6D34 input;
 
             fn_800B6D34(p, &input);
-            if (input.mUnknown97 & 0x40) {
+            if (input.mBytes92[5] & 0x40) {
                 done = 1;
                 p->mpState->mUnknown3[0] = lbl_803EAD69;
-            } else if (input.mUnknown97 & 0x80) {
+            } else if (input.mBytes92[5] & 0x80) {
                 done = 1;
                 p->mpState->mUnknown3[0] = lbl_803EAD6A;
-            } else if (input.mUnknown98 & 1) {
+            } else if (input.mBytes92[6] & 1) {
                 done = 1;
                 p->mpState->mUnknown3[0] = lbl_803EAD6B;
-            } else if (input.mUnknown98 & 2) {
+            } else if (input.mBytes92[6] & 2) {
                 done = 1;
                 p->mpState->mUnknown3[0] = lbl_803EAD6C;
             } else if (pBlock->mUnknown6 >= lbl_803EAD54) {
@@ -881,7 +872,7 @@ extern "C" int fn_800EC6DC(Object_80039F5C *p) {
         return 0;
     Input_800B6D34 input;
     fn_800B6D34(p, &input);
-    if (input.mUnknown92 & 1) {
+    if (input.mBytes92[0] & 1) {
         fn_800EB78C(p);
         return 0;
     }

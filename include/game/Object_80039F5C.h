@@ -211,7 +211,7 @@ struct Object_80039F5C {
     Block_80170374 mUnknown560;
     char mUnknown616[152];
     float mUnknown768;
-    char mUnknown772[4];
+    float mUnknown772;
     unsigned char mUnknown776;
     unsigned char mUnknown777;
     union {
