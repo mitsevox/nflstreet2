@@ -103,7 +103,7 @@ void fn_8007ECBC(int, int);
 void fn_80083E1C(Object_8007A334 *, int);
 void fn_8009BD2C(Object_80039F5C *, int *);
 int fn_800B65A0(int);
-void fn_800D6D7C(Object_80039F5C *, int, int);
+void fn_800D6D7C(Object_80039F5C *, unsigned int, int);
 int fn_800A3444(void);
 int fn_801485D4(void);
 int fn_80156704(void);
