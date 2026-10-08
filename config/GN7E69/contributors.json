@@ -14144,9 +14144,12 @@
       ],
       "provenance": {
         "pull_request": 692,
-        "merged_via": 692,
-        "commit": "d094901f80adae4f68584569e53da31f267e0688",
-        "introduced_blob": "a5d46b95706e71cefef625e6b00b80538e9c5542"
+        "merged_via": 698,
+        "commit": "97e17f9304125948a82e83fa1c9b17d7fe9b9c83",
+        "introduced_blob": "0e9dc1b8d96f0257915e2fec10c3cbac23f6752f",
+        "original_commit": "d094901f80adae4f68584569e53da31f267e0688",
+        "original_blob": "a5d46b95706e71cefef625e6b00b80538e9c5542",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR698 independent delta review and CI."
       }
     }
   ],
