@@ -10024,6 +10024,25 @@
           "end": "0x8018AD78"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801864E0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801864E0-0x80186A44 (src/game/cu_801864E0.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801864E0",
+          "end": "0x80186A44"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A6C24",
+          "end": "0x802A6EC8"
+        }
+      ]
     }
   ]
 }
