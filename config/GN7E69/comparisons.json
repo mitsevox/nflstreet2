@@ -18606,7 +18606,7 @@
     {
       "source": "src/game/cu_800DC584.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row 0x800DC584-0x800E2FE4 for src/game/cu_800DC584.cpp, exact whole-function rows and inferred name/source-form rows for forty complete bodies, and the exact data row 0x8029DA74-0x8029DA80 for the .rodata literals of fn_800E11C0, fn_800E1248 and fn_800E1438. Original bytes remain linked; thirty-five other bodies and all other static data remain original and unmeasured.",
+      "evidence": "evidence.tsv open/open unit row 0x800DC584-0x800E2FE4 for src/game/cu_800DC584.cpp, exact whole-function rows and inferred name/source-form rows for forty-two complete bodies, and the exact data row 0x8029DA68-0x8029DA80 for the .rodata literals of fn_800E0F48, fn_800E1044, fn_800E11C0, fn_800E1248 and fn_800E1438. Original bytes remain linked; thirty-three other bodies and all other static data remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
@@ -18617,7 +18617,7 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029DA74",
+          "start": "0x8029DA68",
           "end": "0x8029DA80"
         }
       ],
@@ -18776,6 +18776,16 @@
           "symbol": "fn_800E0F40",
           "start": "0x800E0F40",
           "end": "0x800E0F48"
+        },
+        {
+          "symbol": "fn_800E0F48",
+          "start": "0x800E0F48",
+          "end": "0x800E1044"
+        },
+        {
+          "symbol": "fn_800E1044",
+          "start": "0x800E1044",
+          "end": "0x800E11C0"
         },
         {
           "symbol": "fn_800E11C0",

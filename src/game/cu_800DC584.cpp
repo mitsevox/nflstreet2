@@ -11,6 +11,7 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
+#include "game/fn_80227638.h"
 #include "game/fn_8022781C.h"
 #include "game/fn_802372EC.h"
 #include <math.h>
@@ -135,7 +136,11 @@ void fn_800DD994(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key,
                  Object_80039F5C *pOther, Record_800DDCE4 *pRecord, int mask);
 int fn_800DA7AC(Object_801BBD5C *pObject, float value);
 float fn_800DAA68(int index, void *pA, Object_801BBD5C *pObject, int b, float value);
+unsigned int fn_80094488(void);
+Vector_80039F5C *fn_80094490(int index);
 void fn_8009A260(Object_80039F5C *p);
+int fn_8009B9A8(int a);
+float fn_8009BB54(int a);
 void fn_8009BD60(Object_80039F5C *p);
 void fn_8009BFD0(Object_80039F5C *p, Vector_80039F5C *pPos, float *pRot);
 void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
@@ -163,6 +168,10 @@ void fn_801BE760(void *p, unsigned short key, int a);
 int fn_801CFE08(float value);
 int fn_801CFFD0(int a, int b);
 void fn_801EBC18(int *pAngles, float *pRot);
+void fn_802271A4(Vector_80039F5C *pOut, Vector_80039F5C *p);
+void fn_80227248(void *pOut, void *p, float scale);
+void fn_80227690(void *pOut, void *pA, void *pB);
+float fn_80227B04(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC);
 }
 
 extern float lbl_803ECB08;
@@ -576,6 +585,45 @@ extern "C" int fn_800E0EF0(Object_80039F5C *p)
 
 extern "C" int fn_800E0F40(Object_80039F5C *p) {
     return 0;
+}
+
+extern "C" int fn_800E0F48(Vector_80039F5C *p, Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC)
+{
+    float d0 = p->mX * (pC->mY - pB->mY) + pC->mX * (pB->mY - p->mY) + pB->mX * (p->mY - pC->mY);
+    float d1 = pB->mX * (p->mY - pA->mY) + p->mX * (pA->mY - pB->mY) + pA->mX * (pB->mY - p->mY);
+    float d2 = pA->mX * (pB->mY - pC->mY) + pB->mX * (pC->mY - pA->mY) + pC->mX * (pA->mY - pB->mY);
+    float d3 = pC->mX * (pA->mY - p->mY) + pA->mX * (p->mY - pC->mY) + p->mX * (pC->mY - pA->mY);
+    if ((d0 >= 0.0f && d1 >= 0.0f && d2 >= 0.0f && d3 >= 0.0f) ||
+        (d0 <= 0.0f && d1 <= 0.0f && d2 <= 0.0f && d3 <= 0.0f)) {
+        return 1;
+    }
+    return 0;
+}
+
+extern "C" int fn_800E1044(Object_80039F5C *p, Vector_80039F5C *pTarget)
+{
+    int result = 0;
+    if (fn_8009B9A8(0) && fn_80094488() > 1) {
+        Vector_80039F5C end;
+        Vector_80039F5C start;
+        unsigned short i;
+        fn_80227690(&end, pTarget, &p->mMotion.mPos);
+        fn_802271A4(&end, &end);
+        fn_80227248(&end, &end, p->mMotion.mUnknown28 * fn_8009BB54(0));
+        fn_80227638(&end, &end, &p->mMotion.mPos);
+        end.mZ = 0.0f;
+        start = p->mMotion.mPos;
+        start.mZ = 0.0f;
+        for (i = 0; i < fn_80094488() - 1; i++) {
+            if (fn_800E0F48(&p->mMotion.mPos, &end, fn_80094490(i), fn_80094490(i + 1)) ||
+                fn_80227B04(&start, &end, fn_80094490(i)) < 4.0f ||
+                fn_80227B04(&start, &end, fn_80094490(i + 1)) < 4.0f) {
+                result = 1;
+                break;
+            }
+        }
+    }
+    return result;
 }
 
 extern "C" int fn_800E11C0(Object_80039F5C *p)
