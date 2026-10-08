@@ -6160,6 +6160,11 @@
           "start": "0x8012D1E4",
           "end": "0x8012D258"
         },
+          "symbol": "fn_8012D1E4",
+          "start": "0x8012D1E4",
+          "end": "0x8012D258"
+        },
+        ,
         {
           "symbol": "fn_8012EA14",
           "start": "0x8012EA14",
