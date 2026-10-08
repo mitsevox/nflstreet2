@@ -4549,8 +4549,14 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8018AB0C",
-          "end": "0x8018AB64"
+          "start": "0x8018A978",
+          "end": "0x8018AC38"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A8738",
+          "end": "0x802A8750"
         },
         {
           "section": ".sdata",
@@ -4561,6 +4567,26 @@
       ],
       "functions": [
         {
+          "symbol": "fn_8018A978",
+          "start": "0x8018A978",
+          "end": "0x8018AA44"
+        },
+        {
+          "symbol": "fn_8018AA44",
+          "start": "0x8018AA44",
+          "end": "0x8018AAE4"
+        },
+        {
+          "symbol": "fn_8018AAE4",
+          "start": "0x8018AAE4",
+          "end": "0x8018AB08"
+        },
+        {
+          "symbol": "fn_8018AB08",
+          "start": "0x8018AB08",
+          "end": "0x8018AB0C"
+        },
+        {
           "symbol": "fn_8018AB0C",
           "start": "0x8018AB0C",
           "end": "0x8018AB3C"
@@ -4569,6 +4595,11 @@
           "symbol": "fn_8018AB3C",
           "start": "0x8018AB3C",
           "end": "0x8018AB64"
+        },
+        {
+          "symbol": "fn_8018AB64",
+          "start": "0x8018AB64",
+          "end": "0x8018AC38"
         }
       ]
     },
