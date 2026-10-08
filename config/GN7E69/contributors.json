@@ -11038,7 +11038,7 @@
         "introduced_blob": "53bdc5b5de576cab0607b4c867cf008073f0c14f",
         "original_commit": "58b140374ae59b2135fdcc295d18496e1b76a26c",
         "original_blob": "ae99ea535a89734d6d26224cbeb48a8736a0f218",
-        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. OSPriv→__os.h and original external exception bridge; retain compiled genuine PeriodicAlarm unassigned.",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. OSPriv\u2192__os.h and original external exception bridge; retain compiled genuine PeriodicAlarm unassigned.",
         "pull_request": 567,
         "merged_via": 573
       }
