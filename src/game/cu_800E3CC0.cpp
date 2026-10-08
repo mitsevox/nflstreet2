@@ -733,8 +733,8 @@ extern "C" int fn_800EAC9C(Object_80039F5C *p) {
     int animation = fn_801BE648(p->mpUnknown792);
     int index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0);
     if (index != 0xFFFF) {
-        float start = fn_801BD660(p->mpUnknown800[index].mpUnknown76, 0xC001);
-        result = start < fn_801BD660(p->mpUnknown800[index].mpUnknown76, 0x8000);
+        float start = fn_801BD660(p->mpUnknown800[index].mUnknown4C.mpUnknown0, 0xC001);
+        result = start < fn_801BD660(p->mpUnknown800[index].mUnknown4C.mpUnknown0, 0x8000);
     }
     return result;
 }
