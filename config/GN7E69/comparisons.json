@@ -21554,6 +21554,136 @@
           "end": "0x8007AEE8"
         }
       ]
+    },
+    {
+      "source": "src/Common/UIStudio/UIStudio.c",
+      "profile": "uistudio",
+      "evidence": "evidence.tsv provisional unit row 0x802176E8-0x8021A068 for ../../../Source/Common/UIStudio/UIStudio.c, exact whole-function rows and neutral name rows for the 23 draft bodies, and the file compiler row. The drafts use no static data; the .rodata block data_802B1D40 and all other functions remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802176E8",
+          "end": "0x8021A068"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80217C38",
+          "start": "0x80217C38",
+          "end": "0x80217D30"
+        },
+        {
+          "symbol": "fn_802182E4",
+          "start": "0x802182E4",
+          "end": "0x80218364"
+        },
+        {
+          "symbol": "fn_802188A0",
+          "start": "0x802188A0",
+          "end": "0x802188D4"
+        },
+        {
+          "symbol": "fn_80218A34",
+          "start": "0x80218A34",
+          "end": "0x80218AA8"
+        },
+        {
+          "symbol": "fn_80218AA8",
+          "start": "0x80218AA8",
+          "end": "0x80218AB0"
+        },
+        {
+          "symbol": "fn_80218AB0",
+          "start": "0x80218AB0",
+          "end": "0x80218ABC"
+        },
+        {
+          "symbol": "fn_80218ABC",
+          "start": "0x80218ABC",
+          "end": "0x80218AC4"
+        },
+        {
+          "symbol": "fn_80218AC4",
+          "start": "0x80218AC4",
+          "end": "0x80218ACC"
+        },
+        {
+          "symbol": "fn_80218ACC",
+          "start": "0x80218ACC",
+          "end": "0x80218AD4"
+        },
+        {
+          "symbol": "fn_80218AD4",
+          "start": "0x80218AD4",
+          "end": "0x80218AF0"
+        },
+        {
+          "symbol": "fn_80218CB8",
+          "start": "0x80218CB8",
+          "end": "0x80218D20"
+        },
+        {
+          "symbol": "fn_80218D20",
+          "start": "0x80218D20",
+          "end": "0x80218DDC"
+        },
+        {
+          "symbol": "fn_80218FC4",
+          "start": "0x80218FC4",
+          "end": "0x80219044"
+        },
+        {
+          "symbol": "fn_80219044",
+          "start": "0x80219044",
+          "end": "0x80219070"
+        },
+        {
+          "symbol": "fn_8021956C",
+          "start": "0x8021956C",
+          "end": "0x802195E4"
+        },
+        {
+          "symbol": "fn_802195E4",
+          "start": "0x802195E4",
+          "end": "0x80219650"
+        },
+        {
+          "symbol": "fn_80219650",
+          "start": "0x80219650",
+          "end": "0x802196B4"
+        },
+        {
+          "symbol": "fn_80219854",
+          "start": "0x80219854",
+          "end": "0x8021992C"
+        },
+        {
+          "symbol": "fn_80219A54",
+          "start": "0x80219A54",
+          "end": "0x80219AF8"
+        },
+        {
+          "symbol": "fn_80219AF8",
+          "start": "0x80219AF8",
+          "end": "0x80219BA0"
+        },
+        {
+          "symbol": "fn_80219F84",
+          "start": "0x80219F84",
+          "end": "0x8021A020"
+        },
+        {
+          "symbol": "fn_8021A020",
+          "start": "0x8021A020",
+          "end": "0x8021A060"
+        },
+        {
+          "symbol": "fn_8021A060",
+          "start": "0x8021A060",
+          "end": "0x8021A068"
+        }
+      ]
     }
   ]
 }
