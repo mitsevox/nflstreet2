@@ -14,4 +14,8 @@ public:
     virtual void vfn_06();
 };
 
+/* .sdata word whose initial value is the object at 0x803EC908, the .sbss word
+   in which 0x800CF100 stores this vtable. */
+extern Class_80297B50 *lbl_803EAB38;
+
 #endif

@@ -925,7 +925,7 @@ struct Item_800CAA8C {
     int mUnknown0;
     unsigned char mUnknown4[4];
     int mUnknown8;
-    unsigned char mUnknownC[12];
+    unsigned char mUnknown12[12];
 };
 
 /* Data that the .sdata word 0x803EAC3C points to. */
@@ -952,14 +952,14 @@ struct Delta_800CC6A8 {
 struct Group_800CC98C {
     Object_80039F5C *mpUnknown0;
     Object_80039F5C *mpUnknown4[7];
-    unsigned char mUnknown20[4];
-    int mUnknown24;
-    unsigned char mUnknown28[12];
-    unsigned short mUnknown34;
-    unsigned char mUnknown36[3];
-    unsigned char mUnknown39;
-    unsigned char mUnknown3A;
-    unsigned char mUnknown3B;
+    unsigned char mUnknown32[4];
+    int mUnknown36;
+    unsigned char mUnknown40[12];
+    unsigned short mUnknown52;
+    unsigned char mUnknown54[3];
+    unsigned char mUnknown57;
+    unsigned char mUnknown58;
+    unsigned char mUnknown59;
 };
 
 struct Node_800CCEBC {
@@ -970,14 +970,14 @@ struct Node_800CCEBC {
 
 struct Play_800CCEBC {
     unsigned char mUnknown0[16];
-    Node_800CCEBC *mpUnknown10;
-    Node_800CCEBC *mpUnknown14;
-    int mUnknown18;
-    int mUnknown1C;
-    int mUnknown20;
+    Node_800CCEBC *mpUnknown16;
+    Node_800CCEBC *mpUnknown20;
     int mUnknown24;
-    unsigned char mUnknown28;
-    unsigned char mUnknown29;
+    int mUnknown28;
+    int mUnknown32;
+    int mUnknown36;
+    unsigned char mUnknown40;
+    unsigned char mUnknown41;
 };
 
 extern "C" {
@@ -1010,12 +1010,6 @@ int fn_800CD0BC(Group_800CC98C *pGroup, Play_800CCEBC *pPlay, int a);
 extern Table_800CA8EC *lbl_803EAC3C;
 extern int lbl_803EAC48;
 extern int (*lbl_8029804C[])(Object_80039F5C *p);
-extern Class_80297AB8 *lbl_803EA9E4;
-extern Class_80297B90 *lbl_803EAA8C;
-extern Class_80297B50 *lbl_803EAB38;
-extern Class_80297C60 *lbl_803EAB84;
-extern Class_80297BF8 *lbl_803EAB90;
-extern Class_80297CE8 *lbl_803EABA4;
 }
 
 extern "C" Table_800CA8EC *fn_800CA8EC(void)
@@ -1160,11 +1154,11 @@ extern "C" int fn_800CC618(Object_80039F5C *p)
 
     switch (p->mpState->mId) {
     case 16:
-        if (fn_80114DE0(p) == 0) {
+        if (fn_80114DE0(p) != 0) {
+            result = 1;
+        } else {
             result = (p->mFlags >> 19) & 1;
-            break;
         }
-        result = 1;
         break;
     case 17:
         break;
@@ -1281,11 +1275,11 @@ extern "C" int fn_800CC8F0(Object_80039F5C *p)
         result = fn_80113BCC(p);
         break;
     case 16:
-        if (fn_80114DE0(p) == 0) {
+        if (fn_80114DE0(p) != 0) {
+            result = 1;
+        } else {
             result = (p->mFlags >> 19) & 1;
-            break;
         }
-        result = 1;
         break;
     case 32:
         if (p->mUnknown1032 == 6 && p->mUnknown344 != 0) {
@@ -1340,24 +1334,24 @@ extern "C" int fn_800CCC04(Group_800CC98C *pGroup, Play_800CCEBC *pPlay)
     int result = 0;
     int angle;
 
-    if (pGroup->mUnknown39 != 0) {
-        angle = (pPlay->mpUnknown10->mUnknown4 - pPlay->mpUnknown14->mUnknown4) & 0xFFFFFF;
+    if (pGroup->mUnknown57 != 0) {
+        angle = (pPlay->mpUnknown16->mUnknown4 - pPlay->mpUnknown20->mUnknown4) & 0xFFFFFF;
     } else {
-        angle = (pPlay->mpUnknown14->mUnknown4 - pPlay->mpUnknown10->mUnknown4) & 0xFFFFFF;
+        angle = (pPlay->mpUnknown20->mUnknown4 - pPlay->mpUnknown16->mUnknown4) & 0xFFFFFF;
     }
-    if (fn_801CFFD0(angle, (pPlay->mUnknown18 - pPlay->mUnknown1C) & 0xFFFFFF) < pGroup->mUnknown24) {
+    if (fn_801CFFD0(angle, (pPlay->mUnknown24 - pPlay->mUnknown28) & 0xFFFFFF) < pGroup->mUnknown36) {
         result = 1;
     }
     if (result == 0) {
-        if (fn_801CFFD0(angle, (pPlay->mUnknown20 - pPlay->mUnknown24) & 0xFFFFFF) < pGroup->mUnknown24) {
+        if (fn_801CFFD0(angle, (pPlay->mUnknown32 - pPlay->mUnknown36) & 0xFFFFFF) < pGroup->mUnknown36) {
             result = 1;
         }
         if (result == 0) {
-            if (fn_801CFFD0(angle, (pPlay->mUnknown18 - pPlay->mUnknown24) & 0xFFFFFF) < pGroup->mUnknown24) {
+            if (fn_801CFFD0(angle, (pPlay->mUnknown24 - pPlay->mUnknown36) & 0xFFFFFF) < pGroup->mUnknown36) {
                 result = 1;
             }
             if (result == 0) {
-                if (fn_801CFFD0(angle, (pPlay->mUnknown20 - pPlay->mUnknown1C) & 0xFFFFFF) < pGroup->mUnknown24) {
+                if (fn_801CFFD0(angle, (pPlay->mUnknown32 - pPlay->mUnknown28) & 0xFFFFFF) < pGroup->mUnknown36) {
                     result = 1;
                 }
             }
@@ -1369,15 +1363,15 @@ extern "C" int fn_800CCC04(Group_800CC98C *pGroup, Play_800CCEBC *pPlay)
 extern "C" int fn_800CCEBC(Group_800CC98C *pGroup, Play_800CCEBC *pPlay)
 {
     int result = 0;
-    int a = pPlay->mpUnknown10->mUnknown3;
-    int b = pPlay->mpUnknown14->mUnknown3;
+    int a = pPlay->mpUnknown16->mUnknown3;
+    int b = pPlay->mpUnknown20->mUnknown3;
 
-    if (pPlay->mUnknown29 == 2) {
+    if (pPlay->mUnknown41 == 2) {
         result = a == 5;
-    } else if (pGroup->mUnknown34 == 175) {
+    } else if (pGroup->mUnknown52 == 175) {
         result = 1;
     } else if (a != 5) {
-        switch (pPlay->mUnknown28) {
+        switch (pPlay->mUnknown40) {
         case 2:
             if (b == 3) {
                 result = 1;
@@ -1389,7 +1383,7 @@ extern "C" int fn_800CCEBC(Group_800CC98C *pGroup, Play_800CCEBC *pPlay)
             }
             break;
         case 0:
-            switch (pGroup->mUnknown34) {
+            switch (pGroup->mUnknown52) {
             case 93:
             case 94:
                 result = 1;
@@ -1416,7 +1410,7 @@ extern "C" int fn_800CD21C(Group_800CC98C *pGroup, Play_800CCEBC *pPlay, int a)
     if (fn_800CCEBC(pGroup, pPlay) != 0 && fn_800CCC04(pGroup, pPlay) != 0 && fn_800CCD20(pGroup, pPlay) != 0) {
         result = 1;
     }
-    if (result != 0 && pGroup->mUnknown3B != 0) {
+    if (result != 0 && pGroup->mUnknown59 != 0) {
         result = fn_800CD0BC(pGroup, pPlay, a);
     }
     return result;

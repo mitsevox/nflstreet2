@@ -7,6 +7,7 @@
 #include "game/cu_80067C10.h"
 #include "game/fn_802372EC.h"
 #include "game/Object_80039F5C.h"
+#include "game/Class_80297C60.h"
 #include "game/Pair_8017055C.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802270D4.h"
@@ -198,7 +199,6 @@ int fn_8016EB50(Object_80039F5C *p, Vector_80039F5C *pPos);
 int fn_8009A5A0(int handle);
 float fn_80178A44(void);
 int fn_801385A8(void *pBall);
-extern void *lbl_803EAB84;
 int fn_80025708(void);
 void fn_8002572C(void);
 Object_80039F5C *fn_8009BCE8(int *pRef);
