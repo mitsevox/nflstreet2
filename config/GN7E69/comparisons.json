@@ -19383,6 +19383,66 @@
           "end": "0x8007A9E4"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80168ED0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Target function extents 0x80168ED0-0x801695D4 and callback producer 0x80168324. Provisional grouping; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80168ED0",
+          "end": "0x801695D4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80168ED0",
+          "start": "0x80168ED0",
+          "end": "0x80168F58"
+        },
+        {
+          "symbol": "fn_80168F58",
+          "start": "0x80168F58",
+          "end": "0x80169058"
+        },
+        {
+          "symbol": "fn_80169058",
+          "start": "0x80169058",
+          "end": "0x8016905C"
+        },
+        {
+          "symbol": "fn_8016905C",
+          "start": "0x8016905C",
+          "end": "0x80169060"
+        },
+        {
+          "symbol": "fn_80169060",
+          "start": "0x80169060",
+          "end": "0x80169264"
+        },
+        {
+          "symbol": "fn_80169264",
+          "start": "0x80169264",
+          "end": "0x801692AC"
+        },
+        {
+          "symbol": "fn_801692AC",
+          "start": "0x801692AC",
+          "end": "0x80169308"
+        },
+        {
+          "symbol": "fn_80169308",
+          "start": "0x80169308",
+          "end": "0x801694C8"
+        },
+        {
+          "symbol": "fn_801694C8",
+          "start": "0x801694C8",
+          "end": "0x801695D4"
+        }
+      ]
     }
   ]
 }
