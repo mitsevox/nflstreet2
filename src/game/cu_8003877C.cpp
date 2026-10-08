@@ -422,7 +422,7 @@ extern "C" void fn_8003A4DC(void)
         fn_80143DC4(p);
         fn_800CE674(&p->mUnknown1240);
         fn_800CE684(&p->mUnknown1240);
-        *(float *)p->mUnknown772 = 1.0f;
+        p->mUnknown772 = 1.0f;
         fn_800C8270(p);
         fn_800C82C0(p);
     }
