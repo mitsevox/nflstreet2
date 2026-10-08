@@ -128,7 +128,7 @@ void fn_800EE964(State_800EE9AC *pState, Object_80039F5C *p, Point_8017886C *pPo
 void fn_800EEE3C(Point_8017886C *pOut, int *pFacing, Object_80039F5C *p, int value);
 int fn_800EEA20(Object_80039F5C *p);
 int fn_800B5FEC(Object_80039F5C *p);
-void fn_800B76E8(Object_80039F5C *p);
+int fn_800B76E8(Object_80039F5C *p);
 int fn_800B7F34(Object_80039F5C *p);
 int fn_800B7F88(Object_80039F5C *p);
 int fn_800B83A0(Object_80039F5C *p);
