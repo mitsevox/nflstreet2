@@ -4,6 +4,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/Record_800B15FC.h"
+#include "game/Record_800DB60C.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_800AD9B4.h"
@@ -100,7 +101,6 @@ int fn_800B78DC(Object_80039F5C *p);
 int fn_800B7FE8(Object_80039F5C *p);
 void fn_800CE674(Object_800CE674 *p);
 void fn_800CE684(Object_800CE674 *p);
-void fn_800DB60C(void *pBlock, Object_80039F5C *p);
 void fn_800EFE60(int a, void *p, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
@@ -128,7 +128,7 @@ void fn_800EE964(State_800EE9AC *pState, Object_80039F5C *p, Point_8017886C *pPo
 void fn_800EEE3C(Point_8017886C *pOut, int *pFacing, Object_80039F5C *p, int value);
 int fn_800EEA20(Object_80039F5C *p);
 int fn_800B5FEC(Object_80039F5C *p);
-void fn_800B76E8(Object_80039F5C *p);
+int fn_800B76E8(Object_80039F5C *p);
 int fn_800B7F34(Object_80039F5C *p);
 int fn_800B7F88(Object_80039F5C *p);
 int fn_800B83A0(Object_80039F5C *p);
@@ -712,7 +712,7 @@ extern "C" int fn_800EA1D8(Object_80039F5C *p) {
     Input_800B6D34 input;
     fn_800B6D34(p, &input);
     if (input.mUnknown95 & 0x40) {
-        fn_800DB60C(((State_800E9E18 *)&p->mUnknown336)->mUnknown20, p);
+        fn_800DB60C((Record_800DB60C *)((State_800E9E18 *)&p->mUnknown336)->mUnknown20, p);
     } else {
         int mode = fn_800AD9B4();
         if (p->mIdBytes[2] == fn_80178320() || mode == 3

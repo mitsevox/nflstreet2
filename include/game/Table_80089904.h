@@ -10,7 +10,8 @@ struct Info_80089904 {
     unsigned char mUnknown6;
     char mUnknown7[5];
     int mUnknown12;
-    char mUnknown16[8];
+    int mUnknown16;
+    int mUnknown20;
     float mUnknown24;
     float mUnknown28;
     float mUnknown32;

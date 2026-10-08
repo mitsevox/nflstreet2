@@ -17,7 +17,10 @@ struct Block_801BF3C8 {
 };
 
 struct Record_800D81C8 {
-    char mUnknown0[48];
+    char mUnknown0[12];
+    int mUnknownC;
+    char mUnknown10[28];
+    float mUnknown44;
     Block_801BF3C8 mUnknown30;
     char mUnknown34[24];
     Block_801BD6D4 mUnknown4C;

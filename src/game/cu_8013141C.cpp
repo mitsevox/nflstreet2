@@ -14,7 +14,7 @@
 
 extern "C" {
 unsigned char *fn_8003AB38(Object_80039F5C *p);
-void fn_800B76E8(Object_80039F5C *p);
+int fn_800B76E8(Object_80039F5C *p);
 void fn_800B7CA4(Object_80039F5C *p);
 void fn_800B8344(Object_80039F5C *p);
 void fn_800D058C(Object_80039F5C *p);

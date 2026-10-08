@@ -1,11 +1,20 @@
 #ifndef GAME_FN_800670B4_H
 #define GAME_FN_800670B4_H
 
+#include "game/Object_8017886C.h"
+
 /* One of the seven 40-byte entries at Object_8006719C +0x84. */
 struct Entry_8006719C {
-    char mUnknown0[0xB];
+    char mUnknown0[9];
+    unsigned char mUnknown9;
+    unsigned char mUnknownA;
     unsigned char mUnknownB;
-    char mUnknownC[0x1C];
+    char mUnknownC[2];
+    unsigned short mUnknownE;
+    Point_8017886C mUnknown10;
+    Point_8017886C mUnknown18;
+    int mUnknown20;
+    int mUnknown24;
 };
 
 /* Filled by fn_8006719C and fn_8006723C, which clear all 0xCA8 bytes first. */

@@ -1,6 +1,7 @@
 #ifndef GAME_STATE_803EB098_H
 #define GAME_STATE_803EB098_H
 
+#include "game/Record_8011F4F8.h"
 #include "game/Record_8011F518.h"
 
 /* Record at State_803EB098 +8, whose address fn_8011F4E0 returns. The
@@ -21,13 +22,6 @@ struct Record_8011F4E0 {
     unsigned char mUnknown32[7];
     char mUnknown39[1];
     unsigned char mUnknown40[8];
-};
-
-/* 32-byte record of the trailing State_803EB098 array (fn_8011F4F8). */
-struct Record_8011F4F8 {
-    char mUnknown0[11];
-    unsigned char mUnknownB;
-    char mUnknownC[20];
 };
 
 /* State allocated through fn_80238174 under the id 'pinf' (fn_8011F0D8):

@@ -52,7 +52,7 @@ void *fn_801C6A20(void *pool);
 void *fn_801C6B4C(void *pool, void *item);
 void fn_801C6C0C(void *pool, void *item);
 void *fn_801C6C84(void *pool, void *item);
-void fn_801C6D34(void *pool, int b, void *ctx, int d, int (*fn)(void *, void *), int f);
+int fn_801C6D34(void *pool, int b, void *ctx, int d, int (*fn)(void *, void *), int f);
 void fn_801D03D0(Mtx44 m);
 void fn_801D0508(void);
 void fn_801D0544(void);

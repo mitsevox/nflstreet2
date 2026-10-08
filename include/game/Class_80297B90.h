@@ -1,10 +1,10 @@
-#ifndef GAME_CLASS_80297BF8_H
-#define GAME_CLASS_80297BF8_H
+#ifndef GAME_CLASS_80297B90_H
+#define GAME_CLASS_80297B90_H
 
-/* Polymorphic class with vtable 0x80297BF8 in the cu_8008E978 candidate range.
+/* Polymorphic class with vtable 0x80297B90 in the cu_8008E978 candidate range.
    Only the entries that its users override or call carry signatures; the
    rest are placeholders. */
-class Class_80297BF8 {
+class Class_80297B90 {
 public:
     virtual void vfn_01();
     virtual void vfn_02();
@@ -16,11 +16,11 @@ public:
     virtual void vfn_08();
     virtual void vfn_09();
     virtual void vfn_10();
-    virtual void vfn_11(float dt);
+    virtual void vfn_11();
 };
 
-/* .sdata word whose initial value is the object at 0x803EC910, the .sbss word
+/* .sdata word whose initial value is the object at 0x803EC904, the .sbss word
    in which 0x800CF100 stores this vtable. */
-extern Class_80297BF8 *lbl_803EAB90;
+extern Class_80297B90 *lbl_803EAA8C;
 
 #endif
