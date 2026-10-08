@@ -15232,7 +15232,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8018CB28",
+          "start": "0x8018CA80",
           "end": "0x8018DF98"
         },
         {
@@ -15246,12 +15246,6 @@
           "placement": ".data4",
           "start": "0x802EAE74",
           "end": "0x802EAEF4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018CA80",
-          "end": "0x8018DF98"
         }
       ],
       "functions": [
