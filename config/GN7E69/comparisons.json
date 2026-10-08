@@ -13085,6 +13085,86 @@
       ]
     },
     {
+      "source": "src/game/cu_8003F66C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv open/open unit row for src/game/cu_8003F66C.cpp, exact whole-function rows and inferred name/source-form/compiler rows for the reconstructed bodies. Wholly unlinked comparison source: original bytes remain linked; the other bodies and all static data are unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003F66C",
+          "end": "0x8003FE90"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8003F6B0",
+          "start": "0x8003F6B0",
+          "end": "0x8003F6B4"
+        },
+        {
+          "symbol": "fn_8003F6B4",
+          "start": "0x8003F6B4",
+          "end": "0x8003F6C8"
+        },
+        {
+          "symbol": "fn_8003F6C8",
+          "start": "0x8003F6C8",
+          "end": "0x8003F6D8"
+        },
+        {
+          "symbol": "fn_8003F6D8",
+          "start": "0x8003F6D8",
+          "end": "0x8003F6E0"
+        },
+        {
+          "symbol": "fn_8003F6E0",
+          "start": "0x8003F6E0",
+          "end": "0x8003F6E8"
+        },
+        {
+          "symbol": "fn_8003F6E8",
+          "start": "0x8003F6E8",
+          "end": "0x8003F6F0"
+        },
+        {
+          "symbol": "fn_8003F6F0",
+          "start": "0x8003F6F0",
+          "end": "0x8003F744"
+        },
+        {
+          "symbol": "fn_8003F744",
+          "start": "0x8003F744",
+          "end": "0x8003F754"
+        },
+        {
+          "symbol": "fn_8003F754",
+          "start": "0x8003F754",
+          "end": "0x8003F768"
+        },
+        {
+          "symbol": "fn_8003F91C",
+          "start": "0x8003F91C",
+          "end": "0x8003F95C"
+        },
+        {
+          "symbol": "fn_8003FB2C",
+          "start": "0x8003FB2C",
+          "end": "0x8003FB54"
+        },
+        {
+          "symbol": "fn_8003FBB4",
+          "start": "0x8003FBB4",
+          "end": "0x8003FBF0"
+        },
+        {
+          "symbol": "fn_8003FC68",
+          "start": "0x8003FC68",
+          "end": "0x8003FC70"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800400CC.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80040154-0x80041210 (src/game/cu_800400CC.cpp), the cu_800400CC draft source-form row 0x800400CC-0x80040154 and the exact function rows 0x800400CC-0x80040154. Draft comparisons only; the file's .rodata, .sdata and .sbss placements are fully covered by its linked source and used only for relocation, and original bytes remain linked for the two unlinked functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",
