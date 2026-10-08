@@ -13554,11 +13554,11 @@
       "provenance": {
         "pull_request": 565,
         "merged_via": 565,
-        "commit": "ded29d3bda92af818e027ccede0c01e5392e9747",
-        "introduced_blob": "92fdf66596a5f47298efbbf5c11ed41e0d358f9e",
+        "commit": "f3061cf4178d46d3df6d90384f231dda6683b523",
+        "introduced_blob": "b540e5c38403140cc30abac9d2984bc9ded74356",
         "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
         "original_blob": "89db43a99a0a89388f0b8bda7eca15c5890d66fe",
-        "integration_adjustment": "Review fix takes 0x80137B40/0x80137C48 from include/game/cu_80136B1C.h and 0x801BC084 from include/game/Object_801BC084.h; integration with main replaces the local block view with accesses of the accepted Block_801BE60C payload type (word views +0/+4, halfword +0xC, signed bytes +0xE) and uses the accepted Record_800D81C8 and Object_80039F5C layouts. Statements are unchanged and the compiled object is identical."
+        "integration_adjustment": "Review fix takes 0x80137B40/0x80137C48 from include/game/cu_80136B1C.h and 0x801BC084 from include/game/Object_801BC084.h; integration with main replaces the local block view with accesses of the accepted Block_801BE60C payload type (word views +0/+4, halfword +0xC, signed bytes +0xE) and uses the accepted Record_800D81C8 and Object_80039F5C layouts. Statements are unchanged and the compiled object is identical. A later refresh uses the accepted name mUnknown44 for the Record_800D81C8 float +0x2C."
       }
     },
     {
