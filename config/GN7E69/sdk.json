@@ -54,7 +54,7 @@
       "name": "src/dolphin/os/__ppc_eabi_init.c",
       "source": "src/dolphin/os/__ppc_eabi_init.c",
       "library": "OS",
-      "evidence": "Constructor/destructor-table iteration and user-init/abort/exit glue; targettable802DC668/670; native exit anchor and inspected callers distinguish identical generic wrapper fingerprints.",
+      "evidence": "Constructor/destructor-table iteration and user-init/abort/exit glue; target constructor/destructor tables802CC668/802CC670 (lis/addi at8023E848/84C and8023E8BC/8C0); native exit anchor and inspected callers distinguish identical generic wrapper fingerprints.",
       "sections": [
         {
           "section": ".init",
@@ -70,7 +70,7 @@
           "end": "0x8023E920",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Constructor/destructor-table iteration and user-init/abort/exit glue; targettable802DC668/670; native exit anchor and inspected callers distinguish identical generic wrapper fingerprints. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+          "evidence": "Constructor/destructor-table iteration and user-init/abort/exit glue; target constructor/destructor tables802CC668/802CC670 (lis/addi at8023E848/84C and8023E8BC/8C0); native exit anchor and inspected callers distinguish identical generic wrapper fingerprints. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
         }
       ]
     },
