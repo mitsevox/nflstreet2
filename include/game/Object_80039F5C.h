@@ -185,7 +185,9 @@ struct Object_80039F5C {
     unsigned short mUnknown1134;
     unsigned char mUnknown1136;
     unsigned char mUnknown1137;
-    char mUnknown1138[22];
+    char mUnknown1138[18];
+    unsigned char mUnknown1156;
+    char mUnknown1157[3];
     Block_801718E8 mUnknown1160;
     unsigned char mUnknown1213;
     unsigned char mUnknown1214;
@@ -210,7 +212,9 @@ struct Object_80039F5C {
     unsigned char mUnknown2916;
     char mUnknown2917[83];
     short mRatings[10];
-    char mUnknown3020[28];
+    char mUnknown3020[20];
+    int mUnknown3040;
+    char mUnknown3044[4];
     /* Message queue that mpState points to; passed to fn_800F03D8 and
        fn_800F053C. Only its head is declared. */
     State_80039F5C mUnknown3048;

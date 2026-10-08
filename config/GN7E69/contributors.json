@@ -12248,6 +12248,219 @@
         "commit": "bc6663d03a8a1030100322bfb55d619d42acf0e6",
         "introduced_blob": "420ae5d5857b4391f5c72562082eb91275f4f339"
       }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800FD708",
+        "0x800FDA58",
+        "0x800FE41C",
+        "0x800FE430",
+        "0x800FF538",
+        "0x800FF7A8",
+        "0x800FF8DC",
+        "0x800FFDFC",
+        "0x800FFE30",
+        "0x800FFF78",
+        "0x800FFFA0",
+        "0x800FFFB0",
+        "0x801000EC",
+        "0x80100B0C",
+        "0x801018B4",
+        "0x80101B7C",
+        "0x801024FC",
+        "0x80103D6C",
+        "0x801045BC",
+        "0x80104688",
+        "0x80104720",
+        "0x801047C8"
+      ],
+      "provenance": {
+        "pull_request": 589,
+        "merged_via": 651,
+        "commit": "2f62fd0561feb7e701be52ecabc5bdc2bab914b4",
+        "introduced_blob": "2ef7d8834743372df49b267e95eb491809df0a1e",
+        "original_commit": "d3fc7ed5c2c5d5db12bd1ad735cb9afe50d96c68",
+        "original_blob": "61be97b0a67d80ce29e45a3d57e52bec738a9ac2",
+        "integration_adjustment": "Combined reviewed source/declaration corrections with accepted main and the disjoint function additions; original contributor, original source pin and unchanged function bodies are preserved."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8009A63C",
+        "0x8009A68C",
+        "0x8009A6D8",
+        "0x8009A8D4",
+        "0x8009ABC0",
+        "0x8009ABC4",
+        "0x8009AD30",
+        "0x8009B1B0",
+        "0x8009B1C4",
+        "0x8009B3A4",
+        "0x8009B3E0",
+        "0x8009B420",
+        "0x8009B448",
+        "0x8009B4C8",
+        "0x8009B5E8",
+        "0x8009B628",
+        "0x8009B698",
+        "0x8009B718",
+        "0x8009B7E0",
+        "0x8009B87C",
+        "0x8009B8C4",
+        "0x8009B910",
+        "0x8009B924",
+        "0x8009B9A8",
+        "0x8009B9BC",
+        "0x8009B9F0",
+        "0x8009BA10",
+        "0x8009BA94",
+        "0x8009BA9C",
+        "0x8009BB50",
+        "0x8009BBD8",
+        "0x8009BC30",
+        "0x8009BCE8",
+        "0x8009BD2C",
+        "0x8009BD48",
+        "0x8009CC28",
+        "0x8009D00C",
+        "0x8009D338",
+        "0x8009D348",
+        "0x8009D360",
+        "0x8009D3D8",
+        "0x8009D3F0"
+      ],
+      "provenance": {
+        "pull_request": 596,
+        "merged_via": 651,
+        "commit": "2f62fd0561feb7e701be52ecabc5bdc2bab914b4",
+        "introduced_blob": "65c6180f855e02a943cc22aa97b576dada60d674",
+        "original_commit": "d718564ef9961247dc1ea8636f2ce1625fc3c101",
+        "original_blob": "ced6b291f9194415bcb577ddb6eb776981267a29",
+        "integration_adjustment": "Combined reviewed source/declaration corrections with accepted main and the disjoint function additions; original contributor, original source pin and unchanged function bodies are preserved."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800A5DD0",
+        "0x800A5DD8",
+        "0x800A5E20",
+        "0x800A5E68",
+        "0x800A5EB8",
+        "0x800A5F80",
+        "0x800A6044",
+        "0x800A60D8",
+        "0x800A615C",
+        "0x800A61A8",
+        "0x800A61E0",
+        "0x800A61E8",
+        "0x800A6590",
+        "0x800A6750",
+        "0x800A67B8",
+        "0x800A6D5C",
+        "0x800A6DA4",
+        "0x800A7274",
+        "0x800A7E40",
+        "0x800A7E54",
+        "0x800A7E68",
+        "0x800A7EA4",
+        "0x800A7EB8",
+        "0x800A7ECC",
+        "0x800A7EE0",
+        "0x800A7EF4",
+        "0x800A7F08",
+        "0x800A7F1C",
+        "0x800A7F30",
+        "0x800A7F44",
+        "0x800A7F58",
+        "0x800A7F6C",
+        "0x800A7FD8",
+        "0x800A83E0",
+        "0x800A8408",
+        "0x800A8430",
+        "0x800A8444",
+        "0x800A8468",
+        "0x800A8488",
+        "0x800A84AC",
+        "0x800A84C0",
+        "0x800A84C8",
+        "0x800A851C",
+        "0x800A861C",
+        "0x800A8644",
+        "0x800A8738",
+        "0x800A8EA4",
+        "0x800A8EB8",
+        "0x800A8F08",
+        "0x800A8F70",
+        "0x800A8F84",
+        "0x800A8F94",
+        "0x800A8F9C",
+        "0x800A92E4",
+        "0x800A9330",
+        "0x800A937C",
+        "0x800A9648",
+        "0x800A9680",
+        "0x800A981C",
+        "0x800A9F4C",
+        "0x800AA010"
+      ],
+      "provenance": {
+        "pull_request": 597,
+        "merged_via": 651,
+        "commit": "2f62fd0561feb7e701be52ecabc5bdc2bab914b4",
+        "introduced_blob": "65c6180f855e02a943cc22aa97b576dada60d674",
+        "original_commit": "dc7730e717111f1519d05e17232b6b342b68f61e",
+        "original_blob": "5d3ec0c503d0e24192ad60d0eaecc175773c5402",
+        "integration_adjustment": "Combined reviewed source/declaration corrections with accepted main and the disjoint function additions; original contributor, original source pin and unchanged function bodies are preserved."
+      }
+    },
+    {
+      "source": "src/game/cu_8018AB0C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8018A978",
+        "0x8018AA44",
+        "0x8018AAE4",
+        "0x8018AB08",
+        "0x8018AB64"
+      ],
+      "provenance": {
+        "pull_request": 644,
+        "merged_via": 651,
+        "commit": "1a7870baeb127e9698c9e64fd6beff3d2bc3ac6f",
+        "introduced_blob": "e6c0c7042fb781ba104a539ae00319eaf526426e",
+        "original_blob": "fba5dee401fd43f27874690e58152de4ee514e52",
+        "integration_adjustment": "Hostile-review fixes in PR644: file mode, shared engine header declaration of 0x80228D58 and neutral local names.",
+        "original_commit": "7ae32cbfba0f9dd6e97a8f6c56b9521d1724fda1"
+      }
+    },
+    {
+      "source": "src/game/cu_8018AD34.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8018AD34"
+      ],
+      "provenance": {
+        "pull_request": 647,
+        "merged_via": 651,
+        "commit": "d5a2c773378be616d11ef4150379f3cea4b3315b",
+        "introduced_blob": "95f833e89d9f7cb0c52ce6db3107a66b348abf38"
+      }
     }
   ],
   "target": "GN7E69",

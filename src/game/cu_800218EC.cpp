@@ -62,7 +62,7 @@ void fn_8008FCB4(int a);
 void fn_8008FD88(int a);
 void fn_8008FE60(void);
 void fn_8008FED4(void);
-void fn_8009BD48(Record_8036B55C *pRecord, int a, int b, unsigned char c);
+void fn_8009BD48(int *pRef, int a, int b, int c);
 void fn_8009CDEC(Record_8036B55C *pRecord);
 int fn_800ADD7C(void *pObject, unsigned int a);
 int fn_800ADEFC(void *pObject, unsigned int a);
@@ -151,7 +151,7 @@ static void fn_800218EC(int index, Object_8003DEC4 *pObject)
     fn_800B267C(&pRecord->mUnknown424);
     fn_8016D8B0(pRecord->mUnknown512);
     fn_8016D8B0(pRecord->mUnknown528);
-    fn_8009BD48(pRecord, 3, 0, index);
+    fn_8009BD48((int *)pRecord, 3, 0, (unsigned char)index);
     pRecord->mUnknown8 = 0;
     pRecord->mUnknown12 = 0;
     pRecord->mUnknown9 = 0;
