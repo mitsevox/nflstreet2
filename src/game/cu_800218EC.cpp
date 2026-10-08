@@ -73,7 +73,8 @@ int fn_800C47C4(void);
 void fn_800D7A0C(Record_8036B55C *pRecord, int a);
 void fn_800EFD70(int a);
 void fn_800EFDD8(void);
-void fn_800EFFA0(int a, void *b, Record_8036B55C *pRecord, int c);
+struct State_80039F5C;
+void fn_800EFFA0(int a, State_80039F5C *pQueue, Record_8036B55C *pRecord, int c);
 void fn_80161168(void);
 void fn_8016D8B0(void *pObject);
 void fn_8018A8C8(int a);
@@ -188,7 +189,7 @@ static void fn_80021B08(Record_8036B55C *pRecord, float step)
     Object_8003DEC4 *pObject = pRecord->mUnknown4;
     int result;
 
-    fn_800EFFA0(0, pRecord->mUnknown3048, pRecord, 0);
+    fn_800EFFA0(0, (State_80039F5C *)pRecord->mUnknown3048, pRecord, 0);
     if (pObject->mUnknown20 & 0x10) {
         fn_801BE420(pRecord->mUnknown3604, &pRecord->mUnknown3096, pRecord->mUnknown3108, pRecord, step);
         fn_801BA03C(&pRecord->mUnknown3096, pRecord->mUnknown3108, step, pRecord);

@@ -133,7 +133,9 @@ struct Object_80039F5C {
     int mUnknown336;
     short mUnknown340;
     unsigned char mUnknown342;
-    char mUnknown343[17];
+    char mUnknown343[11];
+    unsigned char mUnknown354;
+    char mUnknown355[5];
     unsigned char mUnknown360;
     char mUnknown361[27];
     unsigned int mUnknown388;
@@ -200,6 +202,8 @@ struct Object_80039F5C {
     /* Message queue that mpState points to; passed to fn_800F03D8 and
        fn_800F053C. Only its head is declared. */
     State_80039F5C mUnknown3048;
+    char mUnknown3055[33];
+    unsigned char mUnknown3088;
 };
 
 extern "C" {

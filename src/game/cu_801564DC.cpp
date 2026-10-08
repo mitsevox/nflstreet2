@@ -340,7 +340,7 @@ void fn_800D4164(int a, float b, int c);
 void fn_800D6F08(void);
 void fn_800D7158(void);
 void fn_800D7520(int a);
-void fn_800EFE60(int a, void *p, Object_80039F5C *pObject);
+void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 void fn_8011DF90(void);
 void fn_80138590(Object_80137ABC *pBall);
 void fn_8013A910(Object_80137ABC *pBall, int *pAngles);
@@ -791,7 +791,7 @@ void fn_80156AB0(void)
     for (team = 0; team <= 1; team++) {
         for (i = 0; i <= 6; i++) {
             Object_80039F5C *pObject = fn_80039F5C((unsigned char)team, i);
-            fn_800EFE60(0, (char *)pObject + 0xBE8, pObject);
+            fn_800EFE60(0, &pObject->mUnknown3048, pObject);
         }
     }
     side = fn_800885A8(fn_801568F0(), fn_801568E8());

@@ -12,7 +12,9 @@ struct Input_800B6D34 {
     char mUnknown94[1];
     unsigned char mUnknown95;
     unsigned char mUnknown96;
-    char mUnknown97[7];
+    unsigned char mUnknown97;
+    unsigned char mUnknown98;
+    char mUnknown99[5];
 };
 
 extern "C" {
