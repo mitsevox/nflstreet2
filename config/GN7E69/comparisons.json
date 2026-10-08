@@ -6116,13 +6116,19 @@
     {
       "source": "src/game/cu_800EF834.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row for src/game/cu_800EF834.cpp, exact whole-function rows and inferred name/source-form/compiler rows for the reconstructed bodies. Wholly unlinked comparison source: original bytes remain linked; the other four bodies and all static data are unmeasured.",
+      "evidence": "evidence.tsv open/open unit row for src/game/cu_800EF834.cpp, whole-function rows and inferred name/source-form/compiler rows for all seven bodies (0x800EFA40 and 0x800EFB98 measured fuzzy partials), and data row 0x8029DF7C-0x8029DF88 for the compiled per-function literal pools. Wholly unlinked comparison source: original bytes remain linked; all other static data is unmeasured.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800EF834",
           "end": "0x800EFC68"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DF7C",
+          "end": "0x8029DF88"
         }
       ],
       "functions": [
@@ -6135,6 +6141,26 @@
           "symbol": "fn_800EF8E8",
           "start": "0x800EF8E8",
           "end": "0x800EF968"
+        },
+        {
+          "symbol": "fn_800EF968",
+          "start": "0x800EF968",
+          "end": "0x800EFA40"
+        },
+        {
+          "symbol": "fn_800EFA40",
+          "start": "0x800EFA40",
+          "end": "0x800EFB98"
+        },
+        {
+          "symbol": "fn_800EFB98",
+          "start": "0x800EFB98",
+          "end": "0x800EFBD8"
+        },
+        {
+          "symbol": "fn_800EFBD8",
+          "start": "0x800EFBD8",
+          "end": "0x800EFC34"
         },
         {
           "symbol": "fn_800EFC34",
