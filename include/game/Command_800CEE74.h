@@ -3,11 +3,11 @@
 
 #include "game/Object_80039F5C.h"
 
-/* 64-byte local filled by fn_800CEE74 and passed to fn_800C3BEC. Its fields
-   are not accessed by the reconstructed callers, so only the size is
-   declared. */
+/* Command filled by fn_800CEE74 and passed to fn_800C3BEC. */
 struct Command_800CEE74 {
-    char mUnknown0[64];
+    char mUnknown0[62];
+    unsigned char mUnknown62;
+    char mUnknown63[1];
 };
 
 /* Parameter lists follow register use at the call sites only. */
