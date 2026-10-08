@@ -383,16 +383,7 @@ OSThread* GXSetCurrentGXThread(void)
     return prev;
 }
 
-GXFifoObj* GXGetCPUFifo(void)
-{
-    return (GXFifoObj*)CPUFifo;
-}
-
-GXFifoObj* GXGetGPFifo(void)
-{
-    return (GXFifoObj*)GPFifo;
-}
-
+#if defined(DECOMP_COMPARE)
 void* GXGetFifoBase(const GXFifoObj* obj) {
     __GXFifoObj* realFifo = (__GXFifoObj*)obj;
     return realFifo->base;
@@ -422,4 +413,16 @@ void __GXCleanGPFifo(void) {
     if (cpuFifo == gpFifo) {
         GXSetCPUFifo(cpuFifo);
     }
+}
+
+#endif
+
+GXFifoObj* GXGetCPUFifo(void)
+{
+    return (GXFifoObj*)CPUFifo;
+}
+
+GXFifoObj* GXGetGPFifo(void)
+{
+    return (GXFifoObj*)GPFifo;
 }
