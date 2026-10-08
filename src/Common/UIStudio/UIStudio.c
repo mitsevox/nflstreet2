@@ -72,10 +72,12 @@ Uint32 fn_802188A0(Uint32 NumScreens, Uint32 NumActionFncs, Uint32 NumRateFncs, 
 void fn_80218A34(UISInfoT *pInfo)
 {
     Int32 Screen;
+    UISScreenT *pScreen;
 
     pInfo->bShuttingDown = 1;
     for (Screen = pInfo->NumScreens - 1; Screen >= 0; Screen--) {
-        fn_8021956C(pInfo, pInfo->Screens[Screen].GroupID, pInfo->Screens[Screen].ScreenID, 1);
+        pScreen = &pInfo->Screens[Screen];
+        fn_8021956C(pInfo, pScreen->GroupID, pScreen->ScreenID, 1);
     }
     pInfo->unk_00 = 0;
     pInfo->bShuttingDown = 0;
