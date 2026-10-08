@@ -46,7 +46,7 @@ int fn_8010A2DC(Object_80039F5C *p, int a, int b);
 int fn_80110C10(Object_80039F5C *p);
 int fn_80110C68(Object_80039F5C *p);
 void fn_80111354(Object_80039F5C *p);
-void fn_80112C04(Object_80039F5C *p, Object_80137ABC *pBall, int *pAngle, float *pValue);
+int fn_80112C04(Object_80039F5C *p, Object_80137ABC *pBall, int *pAngle, float *pValue);
 unsigned int fn_8011E188(void);
 int fn_8011F1A4(void);
 int fn_8011F32C(void);
