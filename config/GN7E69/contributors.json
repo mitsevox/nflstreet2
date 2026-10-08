@@ -13943,11 +13943,11 @@
       "provenance": {
         "pull_request": 565,
         "merged_via": 698,
-        "commit": "01fb6b1bcb02f571e3bc20400bde8afaf63fa080",
-        "introduced_blob": "c5bd4710e2130d96eae30de27dc679aab491c5a4",
+        "commit": "8b0b66553e17eefd2dd723eb3ce08a99e6f0b3fb",
+        "introduced_blob": "d0b8f105431a41620c978f7b753e3ce761fa416e",
         "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
         "original_blob": "89db43a99a0a89388f0b8bda7eca15c5890d66fe",
-        "integration_adjustment": "Canonical shared-layout integration retains reviewed function behavior and byte offsets, uses existing record field names and callee declarations, and preserves all accepted and incoming bodies. Original author commit/blob retained; integrated source is independently reviewed and measured."
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR698 independent delta review and CI."
       }
     },
     {
@@ -13969,11 +13969,11 @@
       "provenance": {
         "pull_request": 565,
         "merged_via": 698,
-        "commit": "0d7d3b3d7234c55dbdc1ad5940a26974c80cc0fa",
-        "introduced_blob": "194c8784f4ee5a714d23e1001ec70ac07eefcf8a",
+        "commit": "8b0b66553e17eefd2dd723eb3ce08a99e6f0b3fb",
+        "introduced_blob": "999e9ea8bd0783787f255ecc355ff8a79caf3079",
         "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
         "original_blob": "99d14a2579e1cf45276a8a91533d460da825f29a",
-        "integration_adjustment": "Canonical shared-layout integration retains reviewed function behavior and byte offsets, uses existing record field names and callee declarations, and preserves all accepted and incoming bodies. Original author commit/blob retained; integrated source is independently reviewed and measured."
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR698 independent delta review and CI."
       }
     },
     {
