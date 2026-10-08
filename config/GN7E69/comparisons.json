@@ -21554,6 +21554,176 @@
           "end": "0x8007AEE8"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8003877C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv open/open unit row 0x8003877C-0x8003AC84 for src/game/cu_8003877C.cpp, exact whole-function rows and inferred name/source-form/compiler rows for 31 complete bodies. Original bytes remain linked; the other 15 bodies and all static data remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003877C",
+          "end": "0x8003AC84"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80038E50",
+          "start": "0x80038E50",
+          "end": "0x80038E80"
+        },
+        {
+          "symbol": "fn_8003924C",
+          "start": "0x8003924C",
+          "end": "0x800392DC"
+        },
+        {
+          "symbol": "fn_800392DC",
+          "start": "0x800392DC",
+          "end": "0x80039364"
+        },
+        {
+          "symbol": "fn_80039364",
+          "start": "0x80039364",
+          "end": "0x80039454"
+        },
+        {
+          "symbol": "fn_80039454",
+          "start": "0x80039454",
+          "end": "0x80039458"
+        },
+        {
+          "symbol": "fn_80039458",
+          "start": "0x80039458",
+          "end": "0x800394F4"
+        },
+        {
+          "symbol": "fn_8003977C",
+          "start": "0x8003977C",
+          "end": "0x800397D0"
+        },
+        {
+          "symbol": "fn_80039890",
+          "start": "0x80039890",
+          "end": "0x8003989C"
+        },
+        {
+          "symbol": "fn_8003989C",
+          "start": "0x8003989C",
+          "end": "0x800398B4"
+        },
+        {
+          "symbol": "fn_80039A1C",
+          "start": "0x80039A1C",
+          "end": "0x80039A38"
+        },
+        {
+          "symbol": "fn_80039A38",
+          "start": "0x80039A38",
+          "end": "0x80039AA8"
+        },
+        {
+          "symbol": "fn_80039AA8",
+          "start": "0x80039AA8",
+          "end": "0x80039B2C"
+        },
+        {
+          "symbol": "fn_80039C64",
+          "start": "0x80039C64",
+          "end": "0x80039CB0"
+        },
+        {
+          "symbol": "fn_80039CB0",
+          "start": "0x80039CB0",
+          "end": "0x80039D08"
+        },
+        {
+          "symbol": "fn_80039F04",
+          "start": "0x80039F04",
+          "end": "0x80039F5C"
+        },
+        {
+          "symbol": "fn_80039F5C",
+          "start": "0x80039F5C",
+          "end": "0x80039F8C"
+        },
+        {
+          "symbol": "fn_80039FE8",
+          "start": "0x80039FE8",
+          "end": "0x8003A06C"
+        },
+        {
+          "symbol": "fn_8003A06C",
+          "start": "0x8003A06C",
+          "end": "0x8003A078"
+        },
+        {
+          "symbol": "fn_8003A078",
+          "start": "0x8003A078",
+          "end": "0x8003A090"
+        },
+        {
+          "symbol": "fn_8003A090",
+          "start": "0x8003A090",
+          "end": "0x8003A130"
+        },
+        {
+          "symbol": "fn_8003A130",
+          "start": "0x8003A130",
+          "end": "0x8003A1EC"
+        },
+        {
+          "symbol": "fn_8003A3F4",
+          "start": "0x8003A3F4",
+          "end": "0x8003A450"
+        },
+        {
+          "symbol": "fn_8003A450",
+          "start": "0x8003A450",
+          "end": "0x8003A4DC"
+        },
+        {
+          "symbol": "fn_8003A4DC",
+          "start": "0x8003A4DC",
+          "end": "0x8003A5A8"
+        },
+        {
+          "symbol": "fn_8003A5A8",
+          "start": "0x8003A5A8",
+          "end": "0x8003A5E8"
+        },
+        {
+          "symbol": "fn_8003A5E8",
+          "start": "0x8003A5E8",
+          "end": "0x8003A628"
+        },
+        {
+          "symbol": "fn_8003AB08",
+          "start": "0x8003AB08",
+          "end": "0x8003AB28"
+        },
+        {
+          "symbol": "fn_8003AB28",
+          "start": "0x8003AB28",
+          "end": "0x8003AB38"
+        },
+        {
+          "symbol": "fn_8003AB38",
+          "start": "0x8003AB38",
+          "end": "0x8003AB40"
+        },
+        {
+          "symbol": "fn_8003AB40",
+          "start": "0x8003AB40",
+          "end": "0x8003AC10"
+        },
+        {
+          "symbol": "fn_8003AC10",
+          "start": "0x8003AC10",
+          "end": "0x8003AC84"
+        }
+      ]
     }
   ]
 }
