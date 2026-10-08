@@ -12702,6 +12702,149 @@
         "original_blob": "11288d899e338df40f5846b759dcc1194be3980d",
         "integration_adjustment": "Remove the unsupported unused cancellation stack local and inherited process comments; preserve function behavior and ordinary compiler settings. At that prior integration, cancellation frame instructions remained a measured partial. Preserve original PR527 source contributor and DVD ownership. A genuine pinned smstrikers command-state local used by the outer switch corrects the existing cancellation partial under unchanged accepted library flags. Post-callback state checks continue to read block->state. Only this native function changes; original linked instructions remain. No unused frame or storage manipulation."
       }
+    },
+    {
+      "source": "src/game/cu_801864E0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801864E0",
+        "0x80186518",
+        "0x80186714",
+        "0x80186808",
+        "0x8018689C",
+        "0x80186994",
+        "0x801869F0",
+        "0x80186A10"
+      ],
+      "provenance": {
+        "pull_request": 654,
+        "merged_via": 665,
+        "commit": "d5f664998e7f4c72161a6f22dc52cbfb2957585e",
+        "introduced_blob": "6538d44d11ecf127308e1ab438a0ee2490ddd328"
+      }
+    },
+    {
+      "source": "src/game/cu_801882B4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801882B4",
+        "0x801882D8",
+        "0x801882FC",
+        "0x80188320",
+        "0x80188368",
+        "0x801883B0",
+        "0x801883F8",
+        "0x80188458",
+        "0x801885A4",
+        "0x80188688",
+        "0x80188728",
+        "0x80188784",
+        "0x801888A4",
+        "0x8018897C",
+        "0x801889A4",
+        "0x801889CC"
+      ],
+      "provenance": {
+        "pull_request": 656,
+        "merged_via": 665,
+        "commit": "cdc35d018e04e2ef71403edecb8b5956bb1cdb18",
+        "introduced_blob": "a378850a1171e809529426edca8202d1d32603da"
+      }
+    },
+    {
+      "source": "src/game/cu_8018FD64.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8018FD64",
+        "0x8018FD94",
+        "0x8018FDEC",
+        "0x8018FE10",
+        "0x8018FE34",
+        "0x8018FE58",
+        "0x8018FE7C",
+        "0x8018FEA0",
+        "0x8018FEC4",
+        "0x8018FEE8",
+        "0x8018FF0C",
+        "0x8018FF30",
+        "0x8018FF54",
+        "0x8018FF78",
+        "0x8018FF9C",
+        "0x8018FFC0",
+        "0x8018FFE4",
+        "0x80190008",
+        "0x8019002C",
+        "0x80190050",
+        "0x80190074",
+        "0x80190098",
+        "0x801900D4",
+        "0x80190120",
+        "0x8019015C",
+        "0x801901A4"
+      ],
+      "provenance": {
+        "pull_request": 660,
+        "merged_via": 665,
+        "commit": "6bfe415b51eb87902349d5b125e3e21359518e18",
+        "introduced_blob": "2dcf7ad98e3c0bb45604470dd9a36b973ccedb45"
+      }
+    },
+    {
+      "source": "src/game/cu_8018F1F0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8018F1F0",
+        "0x8018F228",
+        "0x8018F288",
+        "0x8018F2F4",
+        "0x8018F340",
+        "0x8018F38C",
+        "0x8018F3D8",
+        "0x8018F41C",
+        "0x8018F488",
+        "0x8018F4C4",
+        "0x8018F52C",
+        "0x8018F584",
+        "0x8018F5A4",
+        "0x8018F6C0",
+        "0x8018F9B4",
+        "0x8018FB4C",
+        "0x8018FBC8",
+        "0x8018FBE8",
+        "0x8018FC1C"
+      ],
+      "provenance": {
+        "pull_request": 662,
+        "merged_via": 665,
+        "commit": "87a177e09076795e72c88595097816ce071be3ba",
+        "introduced_blob": "10404c38c3c18904b2b32a8821d83a702635cedc"
+      }
+    },
+    {
+      "source": "src/game/cu_80193E7C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80193E7C",
+        "0x80193EF0",
+        "0x80193F2C",
+        "0x80193F84"
+      ],
+      "provenance": {
+        "pull_request": 664,
+        "merged_via": 665,
+        "commit": "ad39693943528199dcef4d941f8874b49b22471e",
+        "introduced_blob": "594fe801ae67f189c395d7391f5afbf95072f303"
+      }
     }
   ],
   "target": "GN7E69",
