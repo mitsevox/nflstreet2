@@ -11615,6 +11615,62 @@
         "commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
         "introduced_blob": "0366bc8bdd2359557cd0bcdb31f951ae78de1ca7"
       }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800B9F4C",
+        "0x800BA570",
+        "0x800BA574",
+        "0x800BA5B0",
+        "0x800BA674",
+        "0x800BA6F4",
+        "0x800BA6F8",
+        "0x800BA71C",
+        "0x800BA728",
+        "0x800BA72C",
+        "0x800BA7E8",
+        "0x800BA864",
+        "0x800BA870",
+        "0x800BA8CC",
+        "0x800BA940",
+        "0x800BA94C",
+        "0x800BA988",
+        "0x800BA9C0",
+        "0x800BAA24",
+        "0x800BAA30",
+        "0x800BAAB8",
+        "0x800BAAC4",
+        "0x800BACF4",
+        "0x800BACF8",
+        "0x800BAD9C",
+        "0x800BAE40",
+        "0x800BAE64",
+        "0x800BAE7C",
+        "0x800BAF30",
+        "0x800BAF7C",
+        "0x800BAFE8",
+        "0x800BB050",
+        "0x800BB0C4",
+        "0x800BB23C",
+        "0x800BB828",
+        "0x800BB8D4",
+        "0x800BB924",
+        "0x800BB9A0",
+        "0x800BB9A4",
+        "0x800BBB4C",
+        "0x800BBE98",
+        "0x800BC51C"
+      ],
+      "provenance": {
+        "pull_request": 609,
+        "merged_via": 609,
+        "commit": "bbaf7ebe6289d1cb81dbd9fc3e25ed27c5b9ee93",
+        "introduced_blob": "7381462d28e69ed6a22b58a920d13ddd6a148bbf"
+      }
     }
   ],
   "target": "GN7E69",
