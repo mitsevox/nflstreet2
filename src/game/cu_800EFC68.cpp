@@ -13,6 +13,8 @@
 #include "game/fn_802270D4.h"
 #include <string.h>
 #include "game/fn_801D2B7C.h"
+#include "game/Input_800B6D34.h"
+#include "game/Record_800B15FC.h"
 
 /* Record whose address fn_8011F4E0 returns. Only the accessed fields are
    declared; the size is unknown. */
@@ -71,13 +73,15 @@ struct State_80112E10 {
 };
 
 struct State_80113478 {
-    int mUnknown0;
+    unsigned int mUnknown0;
     int mUnknown4;
 };
 
 struct State_80113AAC {
     int mRef;
-    char mUnknown4[10];
+    char mUnknown4[8];
+    unsigned char mUnknown12;
+    unsigned char mUnknown13;
     unsigned char mUnknown14;
     unsigned char mUnknown15;
     char mUnknown16[5];
@@ -93,6 +97,15 @@ struct State_80114DF4 {
     int mRef;
     char mUnknown4[52];
     unsigned char mUnknown56;
+    unsigned char mUnknown57;
+    unsigned char mUnknown58;
+    char mUnknown59[8];
+    unsigned char mUnknown67;
+};
+
+struct Block_80114A30 {
+    char mUnknown0[44];
+    int mUnknown44;
 };
 
 struct Record_801170A0 {
@@ -378,6 +391,17 @@ int fn_800F21E0(Object_80039F5C *p, Object_80039F5C *pOther, float distance);
 int fn_800F2920(Object_80039F5C *p);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
 unsigned int fn_80178D18(int team);
+int fn_800B76E8(Object_80039F5C *p);
+int fn_800B7F34(Object_80039F5C *p);
+void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput);
+int fn_800EF8E8(Object_80039F5C *p, int a);
+int fn_800AD0E4(int team);
+int fn_80114D14(int a, unsigned char b, int c, unsigned char d);
+int fn_800C53D8(Object_80039F5C *p);
+void fn_800D47D4(int a, Object_80039F5C *p);
+void fn_8017D8C4(int a, int b, unsigned char c);
+void fn_80178718(Object_80039F5C *p);
+int fn_801787A0(void);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 }
@@ -2257,6 +2281,35 @@ extern "C" int fn_80112E8C(Object_80039F5C *p)
     return result;
 }
 
+extern "C" int fn_80112F8C(Object_80039F5C *p)
+{
+    State_80112E10 *state = (State_80112E10 *)&p->mUnknown336;
+    Input_800B6D34 input;
+    int flag;
+
+    fn_800B6D34(p, &input);
+    flag = 0;
+    if (state->mUnknown13 == 0) {
+        p->mUnknown512.mUnknown15 = 22;
+        if (input.mUnknown95 & 8) {
+            p->mUnknown512.mUnknown15 = 23;
+            p->mFlags |= 0x4000;
+        }
+        if ((input.mUnknown96 & 1) || (input.mUnknown96 & 0x10)) {
+            flag = 1;
+        }
+        if (((input.mUnknown92 & 1) && fn_800E815C(p, 0, flag) != 0) ||
+            ((input.mUnknown93 & 4) && fn_800EF8E8(p, flag) != 0)) {
+            p->mFlags |= 0x4000;
+            return 0;
+        }
+        fn_800B6E68(p, &input);
+    } else {
+        return fn_800B76E8(p);
+    }
+    return 0;
+}
+
 extern "C" int fn_80113088(Object_80039F5C *p)
 {
     int result = 0;
@@ -2395,6 +2448,42 @@ extern "C" int fn_80113478(Object_80039F5C *p)
     return 0;
 }
 
+extern "C" int fn_80113510(Object_80039F5C *p)
+{
+    State_80113478 *state = (State_80113478 *)&p->mUnknown336;
+    Input_800B6D34 input;
+    int result;
+    int c = 0;
+    int a;
+    int pressed;
+
+    fn_800B6D34(p, &input);
+    result = 0;
+    a = 0;
+    fn_800B6E68(p, &input);
+    if (p->mpState->mUnknown2 != 0) {
+        pressed = (input.mUnknown92 >> 1) & 1;
+    } else {
+        pressed = (input.mUnknown92 >> 3) & 1;
+    }
+    if (input.mUnknown96 & 1) {
+        c = 1;
+    }
+    if (pressed) {
+        int mode = state->mUnknown4;
+        if (state->mUnknown0 > 15) {
+            a = 1;
+        }
+        if (fn_80113208(p, a, mode, c) != 0) {
+            result = 1;
+        }
+    } else {
+        fn_80113208(p, 1, state->mUnknown4, c);
+        result = 1;
+    }
+    return result;
+}
+
 extern "C" int fn_801135E4(Object_80039F5C *p)
 {
     return fn_80113604(p);
@@ -2430,6 +2519,24 @@ extern "C" int fn_80113AAC(Object_80039F5C *p)
     return 0;
 }
 
+extern "C" int fn_80113B28(Object_80039F5C *p)
+{
+    State_80113AAC *state = (State_80113AAC *)&p->mUnknown336;
+    Input_800B6D34 input;
+
+    fn_8009BCE8(&state->mRef);
+    fn_800B6D34(p, &input);
+    if (state->mUnknown14 == 1 || state->mUnknown14 == 4 || state->mUnknown14 == 5 ||
+        fn_801BE648(p->mpUnknown792) == 234) {
+        if ((input.mUnknown95 & 0x10) && state->mUnknown14 == 1) {
+            state->mUnknown12++;
+        }
+    } else {
+        return fn_800B7F34(p);
+    }
+    return 0;
+}
+
 extern "C" int fn_80113BCC(Object_80039F5C *p)
 {
     int result = 0;
@@ -2458,7 +2565,121 @@ extern "C" int fn_801147D4(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_80114D14(int a, unsigned int b, int c, unsigned int d)
+extern "C" int fn_80114A30(Object_80039F5C *p, int a)
+{
+    State_80114DF4 *state = (State_80114DF4 *)&p->mUnknown336;
+    Object_80039F5C *pOther = fn_80039F5C((unsigned char)(1 - p->mIdBytes[2]), p->mpState->mUnknown3[0]);
+    State_80113AAC *pOtherState = (State_80113AAC *)&pOther->mUnknown336;
+    Input_800B6D34 input;
+    int flag;
+    int result;
+
+    fn_800B6D34(pOther, &input);
+    flag = (input.mUnknown96 >> 5) & 1;
+    state->mUnknown67 = a;
+    if (state->mUnknown56 != 4) {
+        unsigned short otherRating = pOther->mRatings[5];
+        unsigned short rating = p->mRatings[2];
+        int low;
+        int high;
+        int diff;
+
+        if (!(p->mFlags & 0x4000)) {
+            unsigned char value = fn_800AD0E4(p->mIdBytes[2]);
+            state->mUnknown58 += value;
+        }
+        if (!(pOther->mFlags & 0x4000)) {
+            unsigned char value = fn_800AD0E4(pOther->mIdBytes[2]);
+            pOtherState->mUnknown12 += value;
+        }
+        switch (state->mUnknown57) {
+        case 0:
+            if (!flag) {
+                low = -2;
+                high = 2;
+            } else {
+                low = -3;
+                high = 0;
+            }
+            break;
+        case 1:
+            if (!flag) {
+                low = -1;
+                high = 1;
+            } else {
+                low = -3;
+                high = -1;
+            }
+            break;
+        default:
+            if (!flag) {
+                low = 0;
+                high = 1;
+            } else {
+                low = -3;
+                high = -2;
+            }
+            break;
+        }
+        diff = fn_80114D14(state->mUnknown58, rating, pOtherState->mUnknown12, otherRating);
+        if (fn_800C53D8(p) != 0) {
+            diff = high;
+        }
+        if (diff >= high) {
+            Record_800B15FC *pRecord;
+
+            p->mUnknown1219 = 1;
+            ((Block_80114A30 *)&p->mUnknown1160)->mUnknown44++;
+            result = 2;
+            pRecord = fn_800B15FC();
+            fn_8009BD2C(p, &pRecord->mUnknown0);
+            pRecord->mUnknownC = p->mMotion.mPos.mX;
+            pRecord->mUnknown10 = p->mMotion.mPos.mY;
+            pRecord->mUnknown14 = 38;
+            pRecord->mUnknown16 = 1;
+            fn_800B1508();
+        } else if (diff <= low) {
+            if (flag || pOtherState->mUnknown13 != 0) {
+                result = 5;
+            } else {
+                result = 3;
+            }
+            p->mUnknown1219 = 0;
+            p->mFlags |= 0x10000;
+            p->mFlags &= ~0x80000;
+            fn_80178718(pOther);
+        } else {
+            result = 1;
+        }
+        if (result == 1) {
+            state->mUnknown57++;
+        }
+    } else {
+        result = 1;
+        fn_8017D8C4(p->mId, pOther->mId, 0);
+    }
+    if (fn_801787A0() != 0 || (fn_80137B40() != p && fn_80137B40() != pOther)) {
+        result = 3;
+        if (fn_802372EC(0, 100) < 50) {
+            result = 2;
+        }
+    }
+    pOtherState->mUnknown14 = result;
+    state->mUnknown56 = result;
+    if (result != 1) {
+        fn_80067DB8(102, &p->mMotion.mPos, result, 0, 0);
+        fn_8017D9B0(p->mId, pOther->mId);
+        if (result == 2) {
+            fn_800D47D4(0, p);
+        }
+        if (result == 3) {
+            fn_800D47D4(1, p);
+        }
+    }
+    return result;
+}
+
+extern "C" int fn_80114D14(int a, unsigned char b, int c, unsigned char d)
 {
     int result = a - c;
 
