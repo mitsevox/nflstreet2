@@ -332,9 +332,6 @@ extern unsigned char lbl_803EA99B;
 extern void *lbl_803EB688;
 extern Entry_8009B87C lbl_802D7BF8;
 extern Entry_80219044 lbl_8030E6D0;
-extern void *lbl_803EAB84;
-extern void *lbl_803EABA4;
-extern void *lbl_803EAB90;
 extern Block_80099630 *lbl_803EC92C;
 extern unsigned char lbl_803EA930;
 extern float lbl_803EA934;
@@ -1638,13 +1635,37 @@ struct Object_800C6640 {
     int mUnknown28;
 };
 
-/* Record whose address fn_8011F4EC returns. Only the bytes fn_800C8CE8
-   reads are declared. */
-struct Record_8011F4EC {
-    unsigned char mUnknown0[0x199];
+/* Object whose address fn_8011F4EC returns. Only the accessed bytes are
+   declared; the size is not established. */
+struct State_8011F4EC {
+    int mUnknown0;
+    int mUnknown4[2];
+    int mUnknownC;
+    unsigned char mUnknown10;
+    unsigned char mUnknown11;
+    unsigned char mUnknown12[2];
+    unsigned short mUnknown14;
+    unsigned char mUnknown16[386];
+    unsigned char mUnknown198;
     unsigned char mUnknown199[3];
     unsigned char mUnknown19C[3];
+    unsigned char mUnknown19F[3];
+    unsigned char mUnknown1A2;
+    unsigned char mUnknown1A3[5];
+    unsigned char mUnknown1A8;
+    unsigned char mUnknown1A9;
+    unsigned char mUnknown1AA[2];
+    float mUnknown1AC[3];
+    unsigned char mUnknown1B8[3];
+    unsigned char mUnknown1BB[3];
+    unsigned char mUnknown1BE[3];
+    unsigned char mUnknown1C1[3];
+    unsigned char mUnknown1C4;
+    unsigned char mUnknown1C5;
 };
+
+typedef State_8011F4EC Record_8011F4EC;
+typedef State_8011F4EC Block_8011F4EC;
 
 /* One of the five 24-byte entries per team of Block_800C9D6C. */
 struct Entry_800C9D6C {
@@ -1722,7 +1743,7 @@ int fn_800EE7C8(Object_80039F5C *p);
 unsigned int fn_8011E188(void);
 int fn_801CFFD0(int a, int b);
 int fn_801BE648(void *p);
-Record_8011F4EC *fn_8011F4EC(void);
+State_8011F4EC *fn_8011F4EC(void);
 int fn_800C8C1C(Object_80039F5C *p);
 Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
 Object_80039F5C *fn_800C8DBC(int team, Vector_80039F5C *pPos, Object_80039F5C *p, int mode);
@@ -3012,7 +3033,6 @@ extern unsigned char lbl_803EAA84;
 extern unsigned char lbl_803EAA85;
 extern int lbl_803EAA94;
 extern unsigned char lbl_803EAA98;
-extern void *lbl_803EABA4;
 extern Object_80039F5C *lbl_8030F404[2][2];
 extern Block_8030F42C lbl_8030F42C;
 }
@@ -3485,9 +3505,9 @@ extern "C" int fn_800A937C(void)
     return lbl_803EAA84;
 }
 
-extern "C" void fn_800A9648(void)
+extern "C" int fn_800A9648(void)
 {
-    fn_800927BC((unsigned char)lbl_8030F42C.mUnknown14[lbl_8030F42C.mUnknownC]);
+    return fn_800927BC((unsigned char)lbl_8030F42C.mUnknown14[lbl_8030F42C.mUnknownC]);
 }
 
 extern "C" int fn_800A9680(void)
@@ -3569,8 +3589,8 @@ int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_8009D990(int index);
 void fn_800D6F3C(Record_800B15FC *pRecord);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
-void fn_800AFDD4(void (*pCallback)(int, unsigned int));
-void fn_800AFE20(void (*pCallback)(int, unsigned int));
+void fn_800AFDD4(void (*pCallback)(int, int, float));
+void fn_800AFE20(void (*pCallback)(int, int, float));
 void fn_801789F8(void);
 unsigned char fn_801735EC(void);
 void fn_80177F88(int value);
@@ -3607,8 +3627,7 @@ extern int lbl_803EAB24;
 extern unsigned char lbl_803EAB2C;
 extern unsigned char lbl_803EAB2D;
 extern Block_800B3660 *lbl_803EAB34;
-extern int *lbl_803EAB38;
-extern int lbl_803EC908;
+extern Class_80297B50 lbl_803EC908;
 extern Block_800B21D0 lbl_8030FAFC;
 }
 
@@ -3665,7 +3684,7 @@ extern "C" Record_800B15FC *fn_800B1648(unsigned short index)
     return (Record_800B15FC *)fn_80238540(lbl_803EAB18, index);
 }
 
-extern "C" void fn_800B1758(int a, unsigned int b)
+extern "C" void fn_800B1758(int a, int b, float c)
 {
 }
 
@@ -3987,7 +4006,7 @@ extern "C" int fn_800B35E4(void)
     return result;
 }
 
-extern "C" void fn_800B3644(int *p)
+extern "C" void fn_800B3644(Class_80297B50 *p)
 {
     if (p == 0) {
         lbl_803EAB38 = &lbl_803EC908;
@@ -4433,7 +4452,6 @@ extern Block_800BC538 *lbl_803EC98C;
 extern int lbl_803EC990[2];
 extern unsigned char lbl_803EAB94;
 extern unsigned char lbl_803EAB95;
-extern Class_80297BF8 *lbl_803EAB90;
 extern unsigned char lbl_803EABA1;
 extern Class_80297BF8 lbl_803EC910;
 }
@@ -6415,37 +6433,7 @@ struct Block_8009D474 {
     int mUnknown98;
 };
 
-/* Object whose address fn_8011F4EC returns. Only the accessed bytes are
-   declared; the size is not established. */
-struct State_8011F4EC {
-    int mUnknown0;
-    int mUnknown4[2];
-    int mUnknownC;
-    unsigned char mUnknown10;
-    unsigned char mUnknown11;
-    unsigned char mUnknown12[2];
-    unsigned short mUnknown14;
-    unsigned char mUnknown16[386];
-    unsigned char mUnknown198;
-    unsigned char mUnknown199[3];
-    unsigned char mUnknown19C[3];
-    unsigned char mUnknown19F[3];
-    unsigned char mUnknown1A2;
-    unsigned char mUnknown1A3[5];
-    unsigned char mUnknown1A8;
-    unsigned char mUnknown1A9;
-    unsigned char mUnknown1AA[2];
-    float mUnknown1AC[3];
-    unsigned char mUnknown1B8[13];
-    unsigned char mUnknown1C5;
-};
 
-/* Record tested by fn_8009FE24; only its first three bytes are declared. */
-struct Record_8009FE24 {
-    unsigned char mUnknown0;
-    unsigned char mUnknown1;
-    unsigned char mUnknown2;
-};
 
 struct Block_8009FF94 {
     unsigned int mUnknown0;
@@ -6500,7 +6488,7 @@ void fn_8009E674(void);
 void fn_800A5D94(void);
 int fn_8009DBB4(State_8011F4EC *p);
 void fn_8009E58C(void);
-Record_8009FE24 *fn_800AEE20(Object_80039F5C *p);
+Message_800F01CC *fn_800AEE20(Object_80039F5C *p);
 int fn_801D34D0(void *pDest, int size, int value, int width);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_80177F70(void);
@@ -6873,18 +6861,18 @@ extern "C" int fn_8009FE24(Object_80039F5C *p)
     Object_800670B4 *pObject = fn_80168708(p->mIdBytes[2]);
 
     if (p->mIdBytes[2] == fn_80178320()) {
-        Record_8009FE24 *pRecord = fn_800AEE20(p);
+        Message_800F01CC *pRecord = fn_800AEE20(p);
 
         if (pRecord == 0) {
             if (pObject->mUnknown8.mUnknownF == 0) {
-                pRecord = (Record_8009FE24 *)fn_80164EC8(fn_8016871C(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
+                pRecord = (Message_800F01CC *)fn_80164EC8(fn_8016871C(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
             } else {
                 unsigned char index = fn_80163E94(pObject, p->mIdBytes[1], 0)->mUnknownB;
 
-                pRecord = (Record_8009FE24 *)fn_80164EC8(fn_8016871C(p->mIdBytes[2]), p->mIdBytes[2], index);
+                pRecord = (Message_800F01CC *)fn_80164EC8(fn_8016871C(p->mIdBytes[2]), p->mIdBytes[2], index);
             }
         }
-        if ((pRecord->mUnknown0 & ~0x80) == 22 && (pRecord->mUnknown2 & 8)) {
+        if ((pRecord->mId & ~0x80) == 22 && (pRecord->mUnknown1[1] & 8)) {
             result = 1;
         }
     }
@@ -7057,12 +7045,7 @@ struct Item_800CAA8C {
     unsigned char mUnknown12[12];
 };
 
-/* Data that the .sdata word 0x803EAC3C points to. */
-struct Table_800CA8EC {
-    unsigned char mUnknown0[12];
-    unsigned int mCounts[2];
-    Item_800CAA8C mItems[2][5];
-};
+typedef Block_800C9D6C Table_800CA8EC;
 
 struct Info_800CAC14 {
     unsigned char mUnknown0[4];
@@ -7177,7 +7160,7 @@ extern "C" int fn_800CAA8C(int index, unsigned int item)
     int result = 0;
 
     if (item < lbl_803EAC3C->mCounts[index]) {
-        result = lbl_803EAC3C->mItems[index][item].mUnknown0;
+        result = lbl_803EAC3C->mEntries[index][item].mRef;
     }
     return result;
 }
@@ -7187,7 +7170,7 @@ extern "C" int fn_800CAAC4(int index, unsigned int item)
     if (item >= lbl_803EAC3C->mCounts[index]) {
         return -1;
     }
-    return lbl_803EAC3C->mItems[index][item].mUnknown8;
+    return lbl_803EAC3C->mEntries[index][item].mUnknown8;
 }
 
 extern "C" int fn_800CABF4(Object_80039F5C *p, unsigned char *pOut, int which)
@@ -7731,10 +7714,27 @@ struct Pool_800B8544 {
     unsigned char mCount;
 };
 
+/* One of the eight 32-byte steps of Sequence_800C4460. */
+struct Step_800C4460 {
+    int (*mpCallback0)(void *p);
+    int (*mpCallback4)(void *p);
+    void (*mpCallback8)(void *p);
+    float mUnknownC;
+    unsigned char mUnknown10[16];
+};
+
+/* 260-byte block cleared by fn_800C4438. */
+struct Sequence_800C4460 {
+    Step_800C4460 mSteps[8];
+    unsigned char mUnknown100;
+    unsigned char mUnknown101;
+    unsigned char mUnknown102[2];
+};
+
 /* Allocated through fn_80238174 under the id 'pstp' (fn_800B95B4, 360
    bytes). Only the accessed fields are named. */
 struct Block_800B95B4 {
-    unsigned char mUnknown0[260];
+    Sequence_800C4460 mSequence;
     unsigned char mUnknown104[64];
     unsigned int mUnknown144;
     unsigned char mUnknown148;
@@ -7756,16 +7756,14 @@ extern "C" {
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_8023790C(void);
 void fn_8003AE24(Object_80039F5C *p);
-int fn_8002D060(void *p);
 int fn_8009B9A8(int a);
 int fn_800A8444(int team);
 int fn_800BA6F8(void);
-void *fn_800C4658(Block_800B95B4 *p);
-void fn_800C46A0(Block_800B95B4 *p);
+Step_800C4460 *fn_800C4658(Sequence_800C4460 *p);
+void fn_800C46A0(Sequence_800C4460 *p);
 void fn_800DC578(void);
 int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
 void fn_800F1800(int index);
-void *fn_801374BC(void);
 Object_80039F5C *fn_80137B40(void);
 int fn_801486A0(void);
 int fn_801642DC(Object_800670B4 *p, unsigned char index);
@@ -7790,12 +7788,10 @@ void fn_800B6988(int index);
 int fn_800B7F34(Object_80039F5C *p);
 int fn_800B9A90(Class_80297C60 *p);
 
-extern void *lbl_803EA368;
 extern unsigned char lbl_803EAB44;
 extern Block_800B62D8 *lbl_803EAB60;
 extern unsigned char lbl_803EAB74;
 extern Block_800B95B4 *lbl_803EAB78;
-extern Class_80297C60 *lbl_803EAB84;
 extern Class_80297C60 lbl_803EC90C;
 extern Pool_800B8544 lbl_803EC930;
 extern float lbl_803ECB08;
@@ -8386,12 +8382,12 @@ extern "C" void fn_800B9598(Class_80297C60 *p)
 
 extern "C" void *fn_800B9A44(Class_80297C60 *p)
 {
-    return fn_800C4658(lbl_803EAB78);
+    return fn_800C4658(&lbl_803EAB78->mSequence);
 }
 
 extern "C" void fn_800B9A6C(Class_80297C60 *p, void *q)
 {
-    fn_800C46A0(lbl_803EAB78);
+    fn_800C46A0(&lbl_803EAB78->mSequence);
 }
 
 extern "C" int fn_800B9A90(Class_80297C60 *p)
@@ -8399,7 +8395,7 @@ extern "C" int fn_800B9A90(Class_80297C60 *p)
     return lbl_803EAB78->mUnknown151;
 }
 
-extern "C" int fn_800B9B18(void)
+extern "C" int fn_800B9B18(void *p)
 {
     if (fn_8009B9A8(0) != 0 || lbl_803EAB78->mUnknown144 > 120) {
         return lbl_803EAB78->mUnknown14C;
@@ -8479,38 +8475,12 @@ struct Entry_800C3130 {
     short mUnknown6;
 };
 
-/* Object returned by fn_8011F4EC; only the accessed bytes are declared and
-   the size is unknown. */
-struct Block_8011F4EC {
-    unsigned char mUnknown0[0x1B8];
-    unsigned char mUnknown1B8[3];
-    unsigned char mUnknown1BB[3];
-    unsigned char mUnknown1BE[3];
-    unsigned char mUnknown1C1[3];
-    unsigned char mUnknown1C4;
-};
 
 /* 3044-byte records of the array at 0x803103F0. */
 struct Record_800C432C {
     unsigned char mUnknown0[3044];
 };
 
-/* One of the eight 32-byte steps of Sequence_800C4460. */
-struct Step_800C4460 {
-    int (*mpCallback0)(void *p);
-    int (*mpCallback4)(void *p);
-    void (*mpCallback8)(void *p);
-    float mUnknownC;
-    unsigned char mUnknown10[16];
-};
-
-/* 260-byte block cleared by fn_800C4438. */
-struct Sequence_800C4460 {
-    Step_800C4460 mSteps[8];
-    unsigned char mUnknown100;
-    unsigned char mUnknown101;
-    unsigned char mUnknown102[2];
-};
 
 extern "C" {
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
@@ -8523,9 +8493,9 @@ void fn_8013F9B8(void);
 void fn_8010A220(void);
 void fn_801789F8(void);
 void fn_800B6B98(void);
-void fn_800C1E5C(int a, unsigned int b);
-void fn_800AFDD4(void (*pCallback)(int, unsigned int));
-void fn_800AFE20(void (*pCallback)(int, unsigned int));
+void fn_800C1E5C(int a, int b, float c);
+void fn_800AFDD4(void (*pCallback)(int, int, float));
+void fn_800AFE20(void (*pCallback)(int, int, float));
 void fn_8013FA8C(int a);
 void fn_8013F97C(int a);
 unsigned char fn_801374D4(void);
@@ -8535,7 +8505,7 @@ int fn_8016E764(void);
 int fn_80178308(void);
 int fn_80178320(void);
 Object_80039F5C *fn_800B6544(int index);
-void fn_800B6868(unsigned char a, unsigned char b, unsigned char c, int d);
+void fn_800B6868(int a, int b, int c, int d);
 void fn_80148154(void);
 void fn_80148108(int mode);
 int fn_801481B0(void);
@@ -8564,7 +8534,7 @@ void fn_8017CBFC(int a);
 short fn_8017CD44(unsigned char index);
 void fn_8017CD20(void);
 QueryCursor fn_800C0698(unsigned char index, unsigned short *pValues);
-Block_8011F4EC *fn_8011F4EC(void);
+State_8011F4EC *fn_8011F4EC(void);
 int fn_801787A0(void);
 int fn_80168E00(int team, int index, unsigned char *pOut);
 int fn_801BE648(void *p);
@@ -8575,7 +8545,6 @@ void fn_801F51DC(int a, void *pBase, int count, int size,
                  int (*pCompare)(Entry_800C3130 *, Entry_800C3130 *),
                  void (*pSwap)(Entry_800C3130 *, Entry_800C3130 *), int b, int c);
 
-extern Class_80297CE8 *lbl_803EABA4;
 extern Block_800BFAD0 *lbl_803EABA8;
 extern unsigned char lbl_803EABB4;
 extern unsigned char lbl_803EABB8;
@@ -9297,7 +9266,7 @@ extern "C" void fn_800BD184(void)
     lbl_803EAB94 = 1;
 }
 
-extern "C" int fn_800BD1BC(void)
+extern "C" int fn_800BD1BC(void *p)
 {
     return lbl_803EAB95 & 1;
 }

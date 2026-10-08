@@ -4,7 +4,7 @@
 #include "game/Object_80039F5C.h"
 
 /* Record passed as the first argument of fn_800DB60C and fn_800DB40C.
-   Only bytes +0 and +1 are declared; the size is not established. */
+   The accessed prefix is declared; the original full size is not established. */
 struct Record_800DB60C {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
