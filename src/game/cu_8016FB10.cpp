@@ -20,6 +20,7 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/Object_8017886C.h"
+#include "game/State_803EB098.h"
 #include <stdio.h>
 #include <string.h>
 

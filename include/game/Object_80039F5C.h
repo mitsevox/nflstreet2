@@ -135,6 +135,37 @@ struct Object_8016D9B8 {
     int mUnknown8;
 };
 
+/* Block at player +1072 (Block_8011E240 +40), passed to fn_8011DBC8. +52 is
+   a halfword counter (fn_8011E884, fn_8011E88C, fn_8011DA40). Declared up to
+   +54; the byte there is player +1126. */
+struct Block_8011DBC8 {
+    char mUnknown0[52];
+    short mUnknown52;
+};
+
+/* View of the 108 bytes at player +1032 as one block: fn_8011DF90 clears
+   them with one 108-byte fn_801C1F94 call, and fn_8011E194, fn_8011E1A8,
+   fn_8011E1BC, fn_8011E240, fn_8011E33C and fn_8011E3A4 address them
+   through a register holding player +1032. The per-field view is the
+   mUnknown1032-mUnknown1139 members; this view declares the bytes the
+   block-relative code accesses and leaves the others opaque. +102 is the
+   signed view of player +1134 (lha at 0x8011DB2C, extsh at 0x8011DB54). */
+struct Block_8011E240 {
+    int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    int mUnknown12;
+    char mUnknown16[78];
+    unsigned char mUnknown94;
+    char mUnknown95[5];
+    unsigned char mUnknown100;
+    char mUnknown101[1];
+    short mUnknown102;
+    unsigned char mUnknown104;
+    unsigned char mUnknown105;
+    char mUnknown106[2];
+};
+
 struct Object_80039F5C {
     /* Read both as a word and byte by byte (+1 index, +2 team). */
     union {
@@ -196,21 +227,30 @@ struct Object_80039F5C {
     char mUnknown804[204];
     Key_80110630 mUnknown1008;
     char mUnknown1011[21];
-    int mUnknown1032;
-    int mUnknown1036;
-    int mUnknown1040;
-    int mUnknown1044;
-    char mUnknown1048[4];
-    int mUnknown1052;
-    char mUnknown1056[8];
-    short mUnknown1064;
-    char mUnknown1066[60];
-    unsigned char mUnknown1126;
-    char mUnknown1127[7];
-    unsigned short mUnknown1134;
-    unsigned char mUnknown1136;
-    unsigned char mUnknown1137;
-    char mUnknown1138[18];
+    /* The 108 bytes at +1032, read field by field and as Block_8011E240. */
+    union {
+        struct {
+            int mUnknown1032;
+            int mUnknown1036;
+            int mUnknown1040;
+            int mUnknown1044;
+            int mUnknown1048;
+            int mUnknown1052;
+            char mUnknown1056[8];
+            short mUnknown1064;
+            char mUnknown1066[6];
+            Block_8011DBC8 mUnknown1072;
+            unsigned char mUnknown1126;
+            char mUnknown1127[7];
+            unsigned short mUnknown1134;
+            unsigned char mUnknown1136;
+            unsigned char mUnknown1137;
+            unsigned char mUnknown1138;
+            unsigned char mUnknown1139;
+        };
+        Block_8011E240 mBlock1032;
+    };
+    char mUnknown1140[16];
     unsigned char mUnknown1156;
     char mUnknown1157[3];
     Block_801718E8 mUnknown1160;
