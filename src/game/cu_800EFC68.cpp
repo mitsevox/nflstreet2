@@ -14,6 +14,7 @@
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/Record_800B15FC.h"
+#include "game/Command_800CEE74.h"
 
 /* Record whose address fn_8011F4E0 returns. Only the accessed fields are
    declared; the size is unknown. */
@@ -324,12 +325,6 @@ struct State_80101B7C {
     int mUnknown8;
 };
 
-/* Stack block filled by fn_800CEE74 and read by fn_800C3BEC; its contents are
-   not accessed here. */
-struct Block_800CEE74 {
-    char mUnknown0[64];
-};
-
 /* View of the player +336 storage read by fn_801045BC. */
 struct State_801045BC {
     char mUnknown0[4];
@@ -453,10 +448,7 @@ Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char 
 unsigned int fn_80178D18(int team);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
-void fn_800C39E0(Object_80039F5C *p, int a, int b, int c, int d);
-int fn_800C3BEC(Object_80039F5C *p, Block_800CEE74 *pBlock, int *pA, int *pB);
 int fn_800C8BAC(Object_80039F5C *p, int a);
-void fn_800CEE74(Block_800CEE74 *pBlock, Object_80039F5C *p, int a, int b, int c, int d, int e);
 int fn_800D0B90(Object_80039F5C *p);
 void fn_800D4E68(unsigned char a);
 unsigned char *fn_8003AB38(Object_80039F5C *p);
@@ -477,7 +469,6 @@ void fn_8013FA8C(int a);
 extern float lbl_803EAED8;
 extern unsigned int lbl_803EAEDC;
 }
-
 
 extern "C" void fn_800EFC68(int a, State_80039F5C *pQueue) {
     Message_800F01CC *pEntries = (Message_800F01CC *)pQueue;
@@ -1817,21 +1808,21 @@ extern "C" int fn_80101B7C(Object_80039F5C *p)
     int flag = p->mUnknown776 == 1;
     unsigned char saved = p->mUnknown1008.mUnknown0;
     State_80101B7C *pState = (State_80101B7C *)&p->mUnknown336;
-    Block_800CEE74 block;
-    int a;
+    Command_800CEE74 command;
+    int value;
     int b;
     int index;
     int result;
 
-    fn_800CEE74(&block, p, 0, 0, 0, 235, flag);
+    fn_800CEE74(&command, p, 0, 0, 0, 235, flag);
     result = 1;
     p->mUnknown1008.mUnknown0 = pState->mUnknown8 = fn_80101C40(p);
-    index = fn_800C3BEC(p, &block, &a, &b);
+    index = fn_800C3BEC(p, &command, &value, &b);
     if (index == -1) {
         result = 0;
     }
     if (result != 0) {
-        fn_800C39E0(p, 235, index, a, flag);
+        fn_800C39E0(p, 235, index, value, flag);
     } else {
         p->mUnknown1008.mUnknown0 = saved;
     }

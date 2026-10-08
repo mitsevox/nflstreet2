@@ -1,3 +1,4 @@
+#include "game/Command_800CEE74.h"
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
@@ -79,10 +80,6 @@ struct Query_800CE770 {
     char mUnknown55[9];
 };
 
-struct Command_800CEE74 {
-    char mUnknown0[64];
-};
-
 extern "C" {
 extern unsigned char lbl_803EAD9C[8];
 extern unsigned char lbl_803EADA4[8];
@@ -135,12 +132,9 @@ void fn_800B76E8(Object_80039F5C *p);
 int fn_800B7F34(Object_80039F5C *p);
 int fn_800B7F88(Object_80039F5C *p);
 int fn_800B83A0(Object_80039F5C *p);
-void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int flag);
-int fn_800C3BEC(Object_80039F5C *p, Command_800CEE74 *pCommand, int *pValue, int *pB);
 int fn_800C05F4(void);
 int fn_800CE510(Query_800CE770 *pQuery);
 void fn_800CE770(Query_800CE770 *pQuery);
-void fn_800CEE74(Command_800CEE74 *pCommand, Object_80039F5C *p, Object_80039F5C *pOther, void *pData, int a, int b, int flag);
 int fn_800A8444(int team);
 int fn_800D0B90(Object_80039F5C *p);
 void fn_800D0BF4(Object_80039F5C *p, int a, int b);
