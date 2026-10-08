@@ -1028,10 +1028,10 @@ extern "C" void fn_8009A6D8(void)
     lbl_803EA930 = !lbl_803EA930;
 }
 
-extern "C" void fn_8009A8D4(int *p)
+extern "C" void fn_8009A8D4(void *p)
 {
     if (p != 0) {
-        p[2] = p[0] = 0x1FFFFFFF;
+        ((int *)p)[2] = ((int *)p)[0] = 0x1FFFFFFF;
     }
 }
 
@@ -1323,7 +1323,7 @@ extern "C" void fn_8009BA9C(int value)
     }
 }
 
-extern "C" void fn_8009BB50(void)
+extern "C" void fn_8009BB50(int a, int b)
 {
 }
 
