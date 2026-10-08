@@ -10365,8 +10365,11 @@
       "provenance": {
         "pull_request": 505,
         "merged_via": 509,
-        "commit": "3e1ad873db22c1dc2091ea96dfb5102e1e8348fa",
-        "introduced_blob": "df91d3038c52b1e7edf817697fc8283520a7d543"
+        "commit": "3e2b4979302da8acbf60d1f166990e251d4ff67f",
+        "introduced_blob": "c90fe1d83356ef6e4f14f2e96ca2455ed17657a5",
+        "original_commit": "3e1ad873db22c1dc2091ea96dfb5102e1e8348fa",
+        "original_blob": "df91d3038c52b1e7edf817697fc8283520a7d543",
+        "integration_adjustment": "Recover the target-supported noncommitting __OSUnlockSram(FALSE) call in the unchanged-mode OSSetGbsMode branch; preserve original PR505 body attribution and all prior exact functions. CommitFALSE ignores the offset, so runtime behavior is equivalent; the complete setter remains partial due its stack frame. No padding, flags, declarations or ranges changed."
       }
     },
     {
@@ -10587,6 +10590,8 @@
         "0x8024DFA0",
         "0x8024E034",
         "0x8024E090",
+        "0x8024E36C",
+        "0x8024E404",
         "0x8024E450",
         "0x8024E4D0",
         "0x8024E518",
@@ -11617,6 +11622,130 @@
         "merged_via": 579,
         "commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
         "introduced_blob": "0366bc8bdd2359557cd0bcdb31f951ae78de1ca7"
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSFont.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80285A90"
+      ],
+      "provenance": {
+        "pull_request": 581,
+        "merged_via": 608,
+        "commit": "c1faf185fcbf2a9e6c3ee7d4f1c669e1dfe6b1cb",
+        "introduced_blob": "b694f5043e12fd7d6ea773f9a49e6d4b2d77c1a8",
+        "original_commit": "3d2b9cc38b6908a39c3a1d86f560c7b83fb9eee1",
+        "original_blob": "b694f5043e12fd7d6ea773f9a49e6d4b2d77c1a8"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXFifo.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024C7D8"
+      ],
+      "provenance": {
+        "pull_request": 581,
+        "merged_via": 608,
+        "commit": "2d767d251b6571455d7b2a781763f15c15135f50",
+        "introduced_blob": "ea7b8bda0e13126a69b6140b3f37aa252a422388",
+        "original_commit": "013d5f30feffe2c2e66874ce36ba1837e02dd10b",
+        "original_blob": "29fe36686124d28db36ba03f612e7aefc6a93f6c",
+        "integration_adjustment": "Fixed comparison guard preserves accepted native output; complete original cleanup and genuine base accessor follow donor relative order before existing CPU/GP getters. Canonical declarations preserve target layout."
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXMisc.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024E1FC",
+        "0x8024E660"
+      ],
+      "provenance": {
+        "pull_request": 581,
+        "merged_via": 608,
+        "commit": "b1efcdf41e931436f6940ac4a289e98a97e0120b",
+        "introduced_blob": "cdbe04c50c71ff750433b5ae79b62e2df9449a6f",
+        "original_commit": "013d5f30feffe2c2e66874ce36ba1837e02dd10b",
+        "original_blob": "1bb7829ca7c355a0383040f6e4a454df43c58071",
+        "integration_adjustment": "Complete original abort-frame and depth-query bodies retain expressions under the fixed comparison guard; canonical register macros use their existing diagnostic-line parameter. Existing draw-completion body attribution remains PR518. Combine the disjoint independently reviewed GXMisc additions from PRs 581 and 595 without changing submitted function bodies; preserve both original donor/source proofs and all existing source attribution."
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXMisc.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024E4F4",
+        "0x8024E63C"
+      ],
+      "provenance": {
+        "commit": "b1efcdf41e931436f6940ac4a289e98a97e0120b",
+        "introduced_blob": "cdbe04c50c71ff750433b5ae79b62e2df9449a6f",
+        "original_commit": "e9c170a8f68e4a7c1f53057ae1b6522237d373a9",
+        "original_blob": "c8d43e8a3d71c04c2b74a187d9c1b7cd4bdda646",
+        "integration_adjustment": "Complete unchanged pinned TP donor forms are appended under fixed DECOMP_COMPARE using accepted canonical macros; move the genuine void GXTexModeSync(void) declaration from the source guard into canonical GXManage.h. No body expressions changed. Preserve all previous source credit; originals remain linked. Combine the disjoint independently reviewed GXMisc additions from PRs 581 and 595 without changing submitted function bodies; preserve both original donor/source proofs and all existing source attribution.",
+        "pull_request": 595,
+        "merged_via": 608
+      }
+    },
+    {
+      "source": "src/game/cu_800EF834.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800EF834",
+        "0x800EF8E8",
+        "0x800EFC34"
+      ],
+      "provenance": {
+        "pull_request": 566,
+        "merged_via": 608,
+        "commit": "f012deacb4afe7a35d88c4ff34075206bbfa23b2",
+        "introduced_blob": "16e642fbc1eaa7dc17ffb83bfb2249ba97badab2"
+      }
+    },
+    {
+      "source": "src/game/cu_8012A6B0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8012B268",
+        "0x8012C4B4",
+        "0x8012C548",
+        "0x8012C7E0",
+        "0x8012CA78",
+        "0x8012CA80",
+        "0x8012CAA4",
+        "0x8012CAAC",
+        "0x8012CB50",
+        "0x8012CC04",
+        "0x8012CC50",
+        "0x8012CCA0",
+        "0x8012CD4C",
+        "0x8012CE60",
+        "0x8012D1E4",
+        "0x8012EA14",
+        "0x8012F2E0",
+        "0x8012F524",
+        "0x8012FEAC",
+        "0x8012FF30"
+      ],
+      "provenance": {
+        "pull_request": 566,
+        "merged_via": 608,
+        "commit": "4b5e5f85e99b25a0c628cd797d1cc19874a33331",
+        "introduced_blob": "b31c3458eb961f8ff1fa1be6b2273e6c1ac6ac05"
       }
     },
     {

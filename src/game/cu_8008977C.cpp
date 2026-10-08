@@ -2,26 +2,8 @@
 #include "game/Object_8008044C.h"
 #include "game/Object_801BBD5C.h"
 #include "game/fn_802372EC.h"
+#include "game/Table_80089904.h"
 #include <string.h>
-
-struct Info_80089904 {
-    unsigned char mUnknown0[4];
-    unsigned char mValue;
-    unsigned char mType;
-    unsigned char mUnknown6;
-};
-
-struct Entry_80089904 {
-    unsigned short mUnknown0;
-    unsigned short mUnknown2;
-    Info_80089904 *mpInfo;
-};
-
-struct Table_80089904 {
-    unsigned short mCount;
-    unsigned char mUnknown2[2];
-    Entry_80089904 mEntries[1];
-};
 
 struct Header_8008977C {
     unsigned char mUnknown0[2];
@@ -38,7 +20,6 @@ void fn_800225F4(int index, unsigned int value);
 int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues);
 unsigned char fn_800DA53C(unsigned short index);
 Object_8008044C *fn_80182DC8(void);
-void fn_801BBC3C(unsigned short a, unsigned short b, Table_80089904 *pTable);
 Object_801BBD5C *fn_801BBD5C(unsigned short a, unsigned short b);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, Record_8036B55C *pRecord, float e);
 void fn_801BE760(void *a, unsigned short b, int c);

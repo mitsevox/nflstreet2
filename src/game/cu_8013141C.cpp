@@ -1,4 +1,5 @@
 #include <math.h>
+#include "game/Control_80132090.h"
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
@@ -9,26 +10,7 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_80178D18.h"
 
-struct Control_80132090 {
-    int mUnknown0;
-    float mValues[8];
-    float mUnknown36;
-    float mUnknown40;
-    int mUnknown44;
-    unsigned char mUnknown48;
-    signed char mUnknown49;
-    char mUnknown50[2];
-    unsigned char mUnknown52;
-    char mUnknown53[3];
-    char mUnknown56[8];
-    int mUnknown64;
-    int mUnknown68;
-    int mUnknown72;
-    int mUnknown76;
-    unsigned char mUnknown80;
-    unsigned char mUnknown81;
-    char mUnknown82[6];
-};
+
 
 extern "C" {
 unsigned char *fn_8003AB38(Object_80039F5C *p);
@@ -59,8 +41,6 @@ int fn_8012510C(float *pValues);
 void fn_8012DDCC(Object_80039F5C *p, Control_80132090 *pControl, int a);
 void fn_8012F5A0(Object_80039F5C *p, int a, void *pBlock);
 void fn_8012F89C(Object_80039F5C *p, Control_80132090 *pControl, int a);
-int fn_8012FA64(Object_80039F5C *p);
-void fn_80130338(Object_80039F5C *p, Control_80132090 *pControl);
 int fn_80132630(Object_80039F5C *p, Vector_80039F5C *pPos, int a);
 void fn_8013FA8C(int a);
 void fn_80148108(int mode);
