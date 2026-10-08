@@ -102,7 +102,6 @@ struct Record_801170A0 {
     unsigned char mUnknown1;
 };
 
-
 struct Record_80118894 {
     char mUnknown0[64];
     float mUnknown64;
@@ -122,8 +121,6 @@ struct Entry_8011AFCC {
     float mUnknown68;
     char mUnknown72[8];
 };
-
-struct Record_8011F518;
 
 /* Bytes at +336 of the player object as fn_8010BA00, fn_8010B5B0 and
    fn_8010BC48 access them. Partial layout. */
@@ -364,7 +361,6 @@ int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_80106618(Object_80039F5C *p);
 void fn_80106678(Record_8011F518 *pRecord, Object_80039F5C *p, int a, int b);
 void fn_8010CEB8(Object_80039F5C *p, int kind);
-Record_8011F518 *fn_8011F518(void);
 float fn_8012506C(Object_80039F5C *p, int kind);
 int fn_801485D4(void);
 int fn_80156704(void);
