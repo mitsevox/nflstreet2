@@ -7,6 +7,11 @@
 #include "game/Entry_800B206C.h"
 #include "game/Entry_80219044.h"
 #include "game/Class_80297AB8.h"
+#include "game/Class_80297B50.h"
+#include "game/Class_80297B90.h"
+#include "game/Class_80297C60.h"
+#include "game/Class_80297CE8.h"
+#include "game/Class_803EC99C.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
 #include "game/Input_800B6D34.h"
@@ -23,8 +28,8 @@
 #include "game/cu_8003108C.h"
 #include "game/cu_80064864.h"
 #include "game/cu_80067C10.h"
-#include "game/cu_8008E978.h"
 #include "game/cu_80136B1C.h"
+#include "game/cu_8008E978.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800AD9B4.h"
@@ -6985,4 +6990,666 @@ extern "C" void fn_800A2184(void)
 extern "C" void fn_800A2190(int bit)
 {
     lbl_803EA9EC |= 1 << bit;
+}
+
+/* Halfword-counted set whose 20-byte entries start at +8. */
+struct Entry_800CCBA0 {
+    unsigned char mUnknown0[2];
+    unsigned char mUnknown2;
+    unsigned char mUnknown3[17];
+};
+
+struct Set_800CCBA0 {
+    unsigned char mUnknown0[4];
+    unsigned short mCount;
+    unsigned char mUnknown6[2];
+    Entry_800CCBA0 mEntries[1];
+};
+
+/* One of the five 24-byte items per side of Table_800CA8EC. */
+struct Item_800CAA8C {
+    int mUnknown0;
+    unsigned char mUnknown4[4];
+    int mUnknown8;
+    unsigned char mUnknown12[12];
+};
+
+/* Data that the .sdata word 0x803EAC3C points to. */
+struct Table_800CA8EC {
+    unsigned char mUnknown0[12];
+    unsigned int mCounts[2];
+    Item_800CAA8C mItems[2][5];
+};
+
+struct Info_800CAC14 {
+    unsigned char mUnknown0[4];
+    unsigned char mUnknown4;
+    unsigned char mUnknown5;
+    unsigned char mUnknown6;
+};
+
+/* Two floats written by fn_80227690. */
+struct Delta_800CC6A8 {
+    float mX;
+    float mY;
+};
+
+/* Group of players: the first and up to seven others from +4. */
+struct Group_800CC98C {
+    Object_80039F5C *mpUnknown0;
+    Object_80039F5C *mpUnknown4[7];
+    unsigned char mUnknown32[4];
+    int mUnknown36;
+    unsigned char mUnknown40[12];
+    unsigned short mUnknown52;
+    unsigned char mUnknown54[3];
+    unsigned char mUnknown57;
+    unsigned char mUnknown58;
+    unsigned char mUnknown59;
+};
+
+struct Node_800CCEBC {
+    unsigned char mUnknown0[3];
+    unsigned char mUnknown3;
+    int mUnknown4;
+};
+
+struct Play_800CCEBC {
+    unsigned char mUnknown0[16];
+    Node_800CCEBC *mpUnknown16;
+    Node_800CCEBC *mpUnknown20;
+    int mUnknown24;
+    int mUnknown28;
+    int mUnknown32;
+    int mUnknown36;
+    unsigned char mUnknown40;
+    unsigned char mUnknown41;
+};
+
+extern "C" {
+int fn_800BA6F8(void);
+void fn_801783D0(int bit, int on);
+int fn_801783AC(int bit);
+int fn_80178320(void);
+void fn_800FF6D8(Object_80039F5C *p);
+void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
+int fn_80113BCC(Object_80039F5C *p);
+int fn_80114DE0(Object_80039F5C *p);
+Object_80039F5C *fn_80114E7C(Object_80039F5C *p);
+int fn_800EC758(Object_80039F5C *p);
+int fn_800C76C0(Object_80039F5C *p);
+int fn_8011E9B4(Object_80039F5C *p);
+int fn_801BE648(void *p);
+void fn_80227690(void *pOut, void *pA, void *pB);
+int fn_801CFE40(float y, float x);
+int fn_801CFFD0(int a, int b);
+int fn_800C91B0(Object_80039F5C *p);
+int fn_800C91F0(Object_80039F5C *p, unsigned char *pOut, int which);
+int fn_800CA5CC(Object_80039F5C *p, int a, int b);
+void fn_800CC0C0(int team);
+void fn_800CC180(int team);
+void fn_800CC2D4(void);
+void fn_800CC388(Object_80039F5C *p);
+int fn_800CCD20(Group_800CC98C *pGroup, Play_800CCEBC *pPlay);
+int fn_800CD0BC(Group_800CC98C *pGroup, Play_800CCEBC *pPlay, int a);
+
+extern Table_800CA8EC *lbl_803EAC3C;
+extern int lbl_803EAC48;
+extern int (*lbl_8029804C[])(Object_80039F5C *p);
+}
+
+extern "C" Table_800CA8EC *fn_800CA8EC(void)
+{
+    return lbl_803EAC3C;
+}
+
+extern "C" void fn_800CA8F4(Object_80039F5C *p)
+{
+    if (fn_800C91F0(p, 0, 0) != 0 && fn_800C91B0(p) != 2) {
+        if ((p->mFlags & 0x4000) == 0 && p->mUnknown512.mUnknown15 == 1 && fn_800CA5CC(p, 0, 1) == 0) {
+            p->mUnknown512.mUnknown15 = 0;
+        }
+    } else {
+        switch (p->mUnknown512.mUnknown15) {
+        case 1:
+        case 7:
+        case 9:
+        case 21:
+            p->mUnknown512.mUnknown15--;
+            break;
+        }
+    }
+}
+
+extern "C" int fn_800CAA6C(int value)
+{
+    if (value == 9 || value == 7) {
+        return 1;
+    }
+    return 0;
+}
+
+extern "C" int fn_800CAA8C(int index, unsigned int item)
+{
+    int result = 0;
+
+    if (item < lbl_803EAC3C->mCounts[index]) {
+        result = lbl_803EAC3C->mItems[index][item].mUnknown0;
+    }
+    return result;
+}
+
+extern "C" int fn_800CAAC4(int index, unsigned int item)
+{
+    if (item >= lbl_803EAC3C->mCounts[index]) {
+        return -1;
+    }
+    return lbl_803EAC3C->mItems[index][item].mUnknown8;
+}
+
+extern "C" int fn_800CABF4(Object_80039F5C *p, unsigned char *pOut, int which)
+{
+    return fn_800C91F0(p, pOut, which);
+}
+
+extern "C" int fn_800CAC14(Info_800CAC14 *p, int swap)
+{
+    int value;
+
+    if (lbl_803EAC48 == 143) {
+        value = p->mUnknown4;
+    } else {
+        value = p->mUnknown6;
+    }
+    if (swap != 0) {
+        if (value == 1) {
+            value = 2;
+        } else if (value == 2) {
+            value = 1;
+        }
+    }
+    return value;
+}
+
+extern "C" void fn_800CC244(Object_80039F5C *p)
+{
+    if (p->mpState->mId == 63) {
+        fn_800FF6D8(p);
+    } else {
+        if (fn_80137C48(p) != 0 && fn_80137B40() == p) {
+            fn_8013791C(fn_80137C48(p), 5, 0);
+        }
+        fn_800EFE60(0, p->mpState, p);
+        fn_800CC388(p);
+        fn_800FF6D8(p);
+    }
+}
+
+extern "C" void fn_800CC404(void)
+{
+    if (fn_800BA6F8() == 0) {
+        fn_800CC0C0(0);
+        fn_800CC0C0(1);
+        fn_801783D0(18, 1);
+    }
+}
+
+extern "C" void fn_800CC448(void)
+{
+    fn_801783D0(18, 0);
+}
+
+extern "C" void fn_800CC470(void)
+{
+    if (fn_801783AC(18)) {
+        fn_800CC180(0);
+        fn_800CC180(1);
+        fn_800CC448();
+    }
+}
+
+extern "C" void fn_800CC560(int mode)
+{
+    unsigned int i;
+    unsigned int count;
+
+    if (fn_800BA6F8() == 0) {
+        switch (mode) {
+        case 0:
+            break;
+        case 1:
+            fn_800CC2D4();
+            break;
+        }
+        fn_800CC448();
+        fn_800CC404();
+        count = fn_80178D70(0);
+        for (i = 0; i < count; i++) {
+            fn_800CC244(fn_80039F5C(0, i));
+        }
+        count = fn_80178D70(1);
+        for (i = 0; i < count; i++) {
+            fn_800CC244(fn_80039F5C(1, i));
+        }
+    }
+}
+
+extern "C" int fn_800CC618(Object_80039F5C *p)
+{
+    int result = 0;
+
+    switch (p->mpState->mId) {
+    case 16:
+        if (fn_80114DE0(p) != 0) {
+            result = 1;
+        } else {
+            result = (p->mFlags >> 19) & 1;
+        }
+        break;
+    case 17:
+        break;
+    case 32:
+        if (p->mUnknown1032 == 6 && p->mUnknown344 != 0) {
+            result = 1;
+        }
+        break;
+    default:
+        result = 1;
+        break;
+    }
+    return result;
+}
+
+extern "C" int fn_800CC6A8(Object_80039F5C *p)
+{
+    int result = 0;
+    int check = 0;
+
+    switch (p->mpState->mId) {
+    case 16:
+        if (fn_80114DE0(p) != 0) {
+            result = 1;
+        } else {
+            result = (p->mFlags >> 19) & 1;
+        }
+        break;
+    case 17:
+        break;
+    case 32:
+        if (p->mUnknown1032 == 6 && p->mUnknown344 != 0) {
+            result = 1;
+            check = 1;
+        }
+        break;
+    default:
+        result = 1;
+        if (fn_8011E9B4(p) != 0) {
+            check = 1;
+        }
+        break;
+    }
+    if (check && p->mIdBytes[2] == fn_80178320()) {
+        Object_80039F5C *pCarrier = fn_80137B40();
+
+        if (pCarrier != 0) {
+            Object_80039F5C *pTarget = fn_8009BCE8(&p->mUnknown1036);
+
+            if (pTarget != 0) {
+                Delta_800CC6A8 delta;
+                Delta_800CC6A8 carrierDelta;
+                int angle;
+
+                fn_80227690(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
+                angle = fn_801CFE40(delta.mY, delta.mX);
+                fn_80227690(&carrierDelta, &pCarrier->mMotion.mPos, &pTarget->mMotion.mPos);
+                if (fn_801CFFD0(angle, fn_801CFE40(carrierDelta.mY, carrierDelta.mX)) > 0x4E38E3) {
+                    result = 0;
+                }
+            }
+        }
+    }
+    return result;
+}
+
+extern "C" int fn_800CC800(Object_80039F5C *p)
+{
+    int result = 0;
+
+    switch (p->mpState->mId) {
+    case 10:
+    case 11:
+    case 12:
+    case 15:
+    case 16:
+        break;
+    case 57:
+        result = fn_800EC758(p);
+        break;
+    case 17:
+        if (fn_80114E7C(p) != 0) {
+            result = 1;
+        }
+        break;
+    case 32:
+        if (p->mUnknown1032 == 6) {
+            if (p->mUnknown344 != 0) {
+                result = 1;
+            }
+        } else if (p->mUnknown1032 == 7) {
+            result = 1;
+        }
+        break;
+    default:
+        result = 1;
+        break;
+    }
+    if (fn_801BE648(p->mpUnknown792) == 185) {
+        result = 0;
+    }
+    if (fn_800C76C0(p) != 0) {
+        result = 0;
+    }
+    return result;
+}
+
+extern "C" int fn_800CC8F0(Object_80039F5C *p)
+{
+    int result = 0;
+
+    switch (p->mpState->mId) {
+    case 17:
+        result = fn_80113BCC(p);
+        break;
+    case 16:
+        if (fn_80114DE0(p) != 0) {
+            result = 1;
+        } else {
+            result = (p->mFlags >> 19) & 1;
+        }
+        break;
+    case 32:
+        if (p->mUnknown1032 == 6 && p->mUnknown344 != 0) {
+            result = 1;
+        }
+        break;
+    default:
+        result = 1;
+        break;
+    }
+    return result;
+}
+
+extern "C" int fn_800CC98C(Group_800CC98C *pGroup, int index)
+{
+    int (*pCallback)(Object_80039F5C *p) = lbl_8029804C[index];
+    int result = 0;
+    unsigned short i;
+
+    if (pCallback(pGroup->mpUnknown0) != 0 && pCallback(pGroup->mpUnknown4[0]) != 0) {
+        result = 1;
+        for (i = 0; i <= 6; i++) {
+            if (pGroup->mpUnknown4[i] != 0 && i != 0 && lbl_8029804C[index](pGroup->mpUnknown4[i]) == 0) {
+                pGroup->mpUnknown4[i] = 0;
+            }
+        }
+    }
+    return result;
+}
+
+extern "C" unsigned short fn_800CCBA0(Set_800CCBA0 *pSet, int kind)
+{
+    unsigned short second = 0;
+    unsigned short first = 0;
+    unsigned int i;
+
+    for (i = 0; i < pSet->mCount; i++) {
+        if (pSet->mEntries[i].mUnknown2 == 0) {
+            first++;
+        } else {
+            second++;
+        }
+    }
+    if (kind == 0) {
+        return first;
+    }
+    return second;
+}
+
+extern "C" int fn_800CCC04(Group_800CC98C *pGroup, Play_800CCEBC *pPlay)
+{
+    int result = 0;
+    int angle;
+
+    if (pGroup->mUnknown57 != 0) {
+        angle = (pPlay->mpUnknown16->mUnknown4 - pPlay->mpUnknown20->mUnknown4) & 0xFFFFFF;
+    } else {
+        angle = (pPlay->mpUnknown20->mUnknown4 - pPlay->mpUnknown16->mUnknown4) & 0xFFFFFF;
+    }
+    if (fn_801CFFD0(angle, (pPlay->mUnknown24 - pPlay->mUnknown28) & 0xFFFFFF) < pGroup->mUnknown36) {
+        result = 1;
+    }
+    if (result == 0) {
+        if (fn_801CFFD0(angle, (pPlay->mUnknown32 - pPlay->mUnknown36) & 0xFFFFFF) < pGroup->mUnknown36) {
+            result = 1;
+        }
+        if (result == 0) {
+            if (fn_801CFFD0(angle, (pPlay->mUnknown24 - pPlay->mUnknown36) & 0xFFFFFF) < pGroup->mUnknown36) {
+                result = 1;
+            }
+            if (result == 0) {
+                if (fn_801CFFD0(angle, (pPlay->mUnknown32 - pPlay->mUnknown28) & 0xFFFFFF) < pGroup->mUnknown36) {
+                    result = 1;
+                }
+            }
+        }
+    }
+    return result;
+}
+
+extern "C" int fn_800CCEBC(Group_800CC98C *pGroup, Play_800CCEBC *pPlay)
+{
+    int result = 0;
+    int a = pPlay->mpUnknown16->mUnknown3;
+    int b = pPlay->mpUnknown20->mUnknown3;
+
+    if (pPlay->mUnknown41 == 2) {
+        result = a == 5;
+    } else if (pGroup->mUnknown52 == 175) {
+        result = 1;
+    } else if (a != 5) {
+        switch (pPlay->mUnknown40) {
+        case 2:
+            if (b == 3) {
+                result = 1;
+                break;
+            }
+        case 1:
+            if (b == 2) {
+                result = 1;
+            }
+            break;
+        case 0:
+            switch (pGroup->mUnknown52) {
+            case 93:
+            case 94:
+                result = 1;
+                break;
+            default:
+                if (b != 2 && b != 3) {
+                    result = 1;
+                }
+                break;
+            }
+            break;
+        default:
+            result = 0;
+            break;
+        }
+    }
+    return result;
+}
+
+extern "C" int fn_800CD21C(Group_800CC98C *pGroup, Play_800CCEBC *pPlay, int a)
+{
+    int result = 0;
+
+    if (fn_800CCEBC(pGroup, pPlay) != 0 && fn_800CCC04(pGroup, pPlay) != 0 && fn_800CCD20(pGroup, pPlay) != 0) {
+        result = 1;
+    }
+    if (result != 0 && pGroup->mUnknown59 != 0) {
+        result = fn_800CD0BC(pGroup, pPlay, a);
+    }
+    return result;
+}
+
+extern "C" void fn_800CE674(Object_800CE674 *p)
+{
+    p->mUnknown0 = -1;
+    p->mUnknown2 = -1;
+}
+
+extern "C" void fn_800CE684(Object_800CE674 *p)
+{
+    p->mUnknown3 = -1;
+}
+
+extern "C" int fn_800CE690(Object_800CE674 *p)
+{
+    switch (p->mUnknown0) {
+    case 1:
+        return 0;
+    case 2:
+        return 1;
+    case 3:
+        return 2;
+    case 4:
+        return 3;
+    case 5:
+        return 4;
+    case 6:
+        return 5;
+    case 7:
+        return 6;
+    case 8:
+        return 7;
+    case 9:
+        return 8;
+    }
+    return 0;
+}
+
+extern "C" int fn_800CF090(Object_80039F5C *p)
+{
+    int result = 0;
+
+    if ((p->mpState->mId == 36 || fn_801BE648(p->mpUnknown792) == 229 || fn_801BE648(p->mpUnknown792) == 237)
+        && p->mUnknown361[0] == 0) {
+        result = 2;
+    }
+    return result;
+}
+
+extern "C" void fn_800CF35C(float dt)
+{
+    lbl_803EABA4->vfn_04(dt);
+}
+
+extern "C" void fn_800CF394(float dt)
+{
+    lbl_803EABA4->vfn_05(dt);
+}
+
+extern "C" void fn_800CF3CC(float dt)
+{
+    lbl_803EABA4->vfn_06(dt);
+}
+
+extern "C" void fn_800CF404(float dt)
+{
+    lbl_803EAB84->vfn_03(dt);
+}
+
+extern "C" void fn_800CF43C(float dt)
+{
+    lbl_803EAB84->vfn_04(dt);
+}
+
+extern "C" void fn_800CF474(float dt)
+{
+    lbl_803EAB84->vfn_05();
+}
+
+extern "C" void fn_800CF4AC(float dt)
+{
+    lbl_803EAB90->vfn_03();
+}
+
+extern "C" void fn_800CF4E4(float dt)
+{
+    lbl_803EAB90->vfn_04(dt);
+}
+
+extern "C" void fn_800CF51C(float dt)
+{
+    lbl_803EAB90->vfn_05();
+}
+
+extern "C" void fn_800CF554(float dt)
+{
+    lbl_803EAA8C->vfn_03();
+}
+
+extern "C" void fn_800CF58C(float dt)
+{
+    lbl_803EAA8C->vfn_04(dt);
+}
+
+extern "C" void fn_800CF5C4(float dt)
+{
+    lbl_803EAA8C->vfn_05();
+}
+
+extern "C" void fn_800CF5FC(float dt)
+{
+    lbl_803EAB38->vfn_03();
+}
+
+extern "C" void fn_800CF634(float dt)
+{
+    lbl_803EAB38->vfn_04(dt);
+}
+
+extern "C" void fn_800CF66C(float dt)
+{
+    lbl_803EAB38->vfn_05();
+}
+
+extern "C" void fn_800CF6A4(float dt)
+{
+    lbl_803EA9E4->vfn_03();
+}
+
+extern "C" void fn_800CF6DC(float dt)
+{
+    lbl_803EA9E4->vfn_04(dt);
+}
+
+extern "C" void fn_800CF714(float dt)
+{
+    lbl_803EA9E4->vfn_05();
+}
+
+extern "C" void fn_800CF74C(float dt)
+{
+    lbl_803EAC9C->fn_800CFF4C();
+}
+
+extern "C" void fn_800CF784(float dt)
+{
+    lbl_803EAC9C->fn_800CFFC4(dt);
+}
+
+extern "C" void fn_800CF7BC(float dt)
+{
+    lbl_803EAC9C->fn_800D0394();
 }

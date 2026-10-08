@@ -9,6 +9,7 @@
 #include "game/fn_80218FC4.h"
 #include "game/fn_802372EC.h"
 #include "game/InGame.h"
+#include "game/Class_80297CE8.h"
 
 typedef void (*Callback_8030A4A8)(int value);
 
@@ -43,7 +44,6 @@ struct State_8030A478 {
 
 extern "C" {
 extern void *lbl_803EA368;
-extern void *lbl_803EABA4;
 extern void *lbl_803EB688;
 
 void fn_8002C9A8(void *p, int a, int b);
