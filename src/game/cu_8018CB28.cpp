@@ -3,6 +3,7 @@
 #include "game/fn_8022F478.h"
 #include "game/Object_8007A334.h"
 #include "game/Query_8008352C.h"
+#include "game/Table_8007E020.h"
 #include "game/Object_8008044C.h"
 #include "game/Block_80307980.h"
 #include "game/FMCAPPORT.h"
@@ -57,6 +58,18 @@ static int lbl_802EAEE8[3] = {
 };
 
 extern "C" {
+void fn_8018CA80(int source)
+{
+    QueryResult result;
+    Table_8007E020 tables[2];
+
+    tables[0].Set(0x59505243);
+    tables[1].Set(-1);
+    fn_801F9908(source, (char *)tables, 0, (int *)&result, 0);
+    tables[0].Set(0x4D545243);
+    tables[1].Set(-1);
+    fn_801F9908(source, (char *)tables, 0, (int *)&result, 0);
+}
 void fn_8018CB28(int source, int team, int index)
 {
     QueryResult result;

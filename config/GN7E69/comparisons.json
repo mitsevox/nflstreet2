@@ -13820,7 +13820,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8018CB28",
+          "start": "0x8018CA80",
           "end": "0x8018DF98"
         },
         {
@@ -13837,6 +13837,11 @@
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_8018CA80",
+          "start": "0x8018CA80",
+          "end": "0x8018CB28"
+        },
         {
           "symbol": "fn_8018CB28",
           "start": "0x8018CB28",
