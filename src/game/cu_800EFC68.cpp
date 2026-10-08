@@ -68,20 +68,6 @@ struct Block_800FD650 {
     unsigned int mUnknown16;
 };
 
-/* View of one Entry_8006719C of the Object_800670B4 that fn_80168708
-   returns. Partial layout. */
-struct Entry_800FCA78 {
-    char mUnknown0[9];
-    unsigned char mUnknown9;
-    unsigned char mUnknown10;
-    char mUnknown11[3];
-    unsigned short mUnknown14;
-    Point_8017886C mUnknown16;
-    Point_8017886C mUnknown24;
-    int mUnknown32;
-    int mUnknown36;
-};
-
 struct State_80111F80 {
     char mUnknown0[20];
     unsigned char mUnknown20;
@@ -1167,14 +1153,14 @@ extern "C" void fn_800F9440(Object_80039F5C *p, Object_80039F5C *pOther) {
 extern "C" Point_8017886C fn_800F97A8(Object_80039F5C *p) {
     Point_8017886C base;
     Object_800670B4 *pTeam;
-    Entry_800FCA78 *pEntry;
+    Entry_8006719C *pEntry;
     Point_8017886C point;
 
     base = fn_80177FFC(p->mIdBytes[2]);
     pTeam = fn_80168708(p->mIdBytes[2]);
-    pEntry = (Entry_800FCA78 *)&pTeam->mUnknown8.mUnknown84[p->mIdBytes[1]];
-    point.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown24 : &pEntry->mUnknown16)->mX;
-    point.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown24 : &pEntry->mUnknown16)->mY;
+    pEntry = &pTeam->mUnknown8.mUnknown84[p->mIdBytes[1]];
+    point.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
+    point.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
     fn_80227638(&point, &point, &base);
     return point;
 }
@@ -1864,14 +1850,14 @@ extern "C" int fn_800FCA78(Object_80039F5C *p) {
     Block_800FCC24 *pBlock = (Block_800FCC24 *)&p->mUnknown336;
     Point_8017886C ball;
     Object_800670B4 *pTeam;
-    Entry_800FCA78 *pEntry;
+    Entry_8006719C *pEntry;
     Point_8017886C *pOffset;
     Point_8017886C target;
 
     ball = fn_80177FE0();
     pTeam = fn_80168708(p->mIdBytes[2]);
-    pEntry = (Entry_800FCA78 *)&pTeam->mUnknown8.mUnknown84[p->mIdBytes[1]];
-    pOffset = pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown24 : &pEntry->mUnknown16;
+    pEntry = &pTeam->mUnknown8.mUnknown84[p->mIdBytes[1]];
+    pOffset = pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10;
     target.mX = pOffset->mX + ball.mX;
     target.mY = pOffset->mY + ball.mY;
     pBlock->mUnknown39 = fn_801486A0() == 2;
@@ -1882,9 +1868,9 @@ extern "C" int fn_800FCA78(Object_80039F5C *p) {
     } else {
         pBlock->mUnknown38 = 1;
     }
-    pBlock->mUnknown20 = pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown36 : pEntry->mUnknown32;
-    pBlock->mUnknown33 = pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown10 : pEntry->mUnknown9;
-    pBlock->mUnknown34 = pEntry->mUnknown14;
+    pBlock->mUnknown20 = pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20;
+    pBlock->mUnknown33 = pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknownA : pEntry->mUnknown9;
+    pBlock->mUnknown34 = pEntry->mUnknownE;
     pBlock->mUnknown28 = 0.72f;
     pBlock->mUnknown0 = 1;
     pBlock->mUnknown36 = 0;
