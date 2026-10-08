@@ -562,7 +562,6 @@ int fn_80178360(void);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_8022765C(void *pOut, void *pA, void *pB);
 float fn_80237260(int stream);
-void fn_80227538(Point_80167910 *pOut, int angle, float length);
 extern unsigned char lbl_803EAEE8;
 extern float lbl_803ED6CC;
 unsigned char fn_8010B87C(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -2802,12 +2801,12 @@ extern "C" void fn_80104944(Object_80039F5C *p, Vector_80039F5C *pOut) {
     }
 }
 
-extern "C" void fn_80104A08(Object_80039F5C *p, int angle, Point_80167910 *pPoint, float *pValue, float scale) {
+extern "C" void fn_80104A08(Object_80039F5C *p, int angle, Point_8017886C *pPoint, float *pValue, float scale) {
     if (scale == 0.0f) {
         scale = p->mUnknown560.mUnknown28 / (lbl_803ECB08 * 100621.117f);
     }
     if (scale > 0.0f) {
-        Point_80167910 offset;
+        Point_8017886C offset;
         float t;
 
         fn_80227538(&offset, angle, scale * 2.0f * fn_80237260(0));
@@ -2830,7 +2829,7 @@ extern "C" void fn_80104B3C(Object_80039F5C *p, Vector_80039F5C *pOut) {
     switch (pState->mId) {
     case 68:
     case 90:
-        fn_80227538((Point_80167910 *)pOut, (pState->mUnknown2 << 17) & 0xFFFFFF,
+        fn_80227538((Point_8017886C *)pOut, (pState->mUnknown2 << 17) & 0xFFFFFF,
                     pState->mUnknown3[0] / 255.0f * lbl_803ECB08 *
                         ((1.0f - lbl_803ED6CC) * 0.75000006f + lbl_803ED6CC));
         fn_8022765C(pOut, pOut, &p->mMotion.mUnknown40);

@@ -367,7 +367,6 @@ void fn_8013FA24(void);
 void fn_8013FA8C(int a);
 Camera_8013F738 *fn_8013FA04(int index);
 void fn_8013C6F0(Camera_8013F738 *pCamera);
-extern void *lbl_803EAB84;
 void fn_801D0508(void);
 void fn_801D0C58(void *p);
 void fn_801D0ADC(int a);
@@ -8856,7 +8855,8 @@ struct Entry_800C3130 {
 
 /* 3044-byte records of the array at 0x803103F0. */
 struct Record_800C432C {
-    unsigned char mUnknown0[3044];
+    Table_80089904 mTable;
+    unsigned char mUnknown12[3032];
 };
 
 
@@ -8918,7 +8918,6 @@ int fn_80168E00(int team, int index, unsigned char *pOut);
 int fn_801BE648(void *p);
 void fn_8009A5DC(int a, int b, void *pA, int *pB);
 int fn_8009A578(int handle);
-void fn_801BBC3C(unsigned short a, unsigned short b, Record_800C432C *pRecord);
 void fn_801F51DC(int a, void *pBase, int count, int size,
                  int (*pCompare)(Entry_800C3130 *, Entry_800C3130 *),
                  void (*pSwap)(Entry_800C3130 *, Entry_800C3130 *), int b, int c);
@@ -9541,16 +9540,16 @@ extern "C" int fn_800C4184(Object_80039F5C *p)
 
 extern "C" void fn_800C432C(void)
 {
-    fn_801BBC3C(1, 196, &lbl_803103F0[0]);
-    fn_801BBC3C(1, 197, &lbl_803103F0[1]);
-    fn_801BBC3C(1, 195, &lbl_803103F0[2]);
-    fn_801BBC3C(1, 210, &lbl_803103F0[3]);
-    fn_801BBC3C(1, 224, &lbl_803103F0[4]);
-    fn_801BBC3C(1, 228, &lbl_803103F0[5]);
-    fn_801BBC3C(1, 230, &lbl_803103F0[6]);
-    fn_801BBC3C(1, 229, &lbl_803103F0[7]);
-    fn_801BBC3C(1, 235, &lbl_803103F0[8]);
-    fn_801BBC3C(1, 237, &lbl_803103F0[9]);
+    fn_801BBC3C(1, 196, &lbl_803103F0[0].mTable);
+    fn_801BBC3C(1, 197, &lbl_803103F0[1].mTable);
+    fn_801BBC3C(1, 195, &lbl_803103F0[2].mTable);
+    fn_801BBC3C(1, 210, &lbl_803103F0[3].mTable);
+    fn_801BBC3C(1, 224, &lbl_803103F0[4].mTable);
+    fn_801BBC3C(1, 228, &lbl_803103F0[5].mTable);
+    fn_801BBC3C(1, 230, &lbl_803103F0[6].mTable);
+    fn_801BBC3C(1, 229, &lbl_803103F0[7].mTable);
+    fn_801BBC3C(1, 235, &lbl_803103F0[8].mTable);
+    fn_801BBC3C(1, 237, &lbl_803103F0[9].mTable);
 }
 
 extern "C" void fn_800C4410(int value)
