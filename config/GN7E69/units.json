@@ -69,6 +69,39 @@
         "include/libc"
       ],
       "evidence": "evidence.tsv compiler rows 0x80227F14-0x802288F8 and 0x802288F8-0x80228E44 (engine_c): ProDG 3.9.3 cc1 -O2 (default -G 8) reproduces every instruction and data byte of both units; -O1, -O3, -Os and -G0 change them. Same flags as the uistudio profile; a separate profile because uistudio's scope evidence and source root are the UI Studio library, and these units include SDK headers that need include/libc."
+    },
+    "dolphin_card_release": {
+      "compiler": "mwcc",
+      "flags": [
+        "-nodefaults",
+        "-proc",
+        "gekko",
+        "-fp",
+        "hard",
+        "-Cpp_exceptions",
+        "off",
+        "-enum",
+        "int",
+        "-char",
+        "signed",
+        "-warn",
+        "pragmas",
+        "-requireprotos",
+        "-pragma",
+        "cats off",
+        "-O4,p",
+        "-inline",
+        "auto",
+        "-I-",
+        "-D__GEKKO__",
+        "-DSDK_REVISION=1",
+        "-lang=c"
+      ],
+      "include_dirs": [
+        "include/libc",
+        "src/dolphin"
+      ],
+      "evidence": "CARD whole-library working hypothesis only: target sign-extension of filename plain chars, GC/1.2.5n default signed and three pinned full CARD recipes omit char override. No nonzero-sensitive signed-char operation proven; equality/NUL tests alone do not uniquely establish original flags. Independent compiler-profile review required. All other flags/source/header types fixed; all12accepted native objects byte-identical;2partial functions440bytes exact."
     }
   },
   "externals": {
@@ -1675,6 +1708,22 @@
     "__GXCleanGPFifo": {
       "address": "0x8024C7D8",
       "evidence": "GXAbortFrame originalbranch8024E354 calls full256-byte original FIFO cleanup; complete OOT related C and target arguments/globals establish void(void). Comparison-only body is not an accepted native provider."
+    },
+    "__init_cpp": {
+      "address": "0x8023E838",
+      "evidence": "Actual complete startup C call at8023E824 reaches original84-byte ctor-table loop entry8023E838, known table802DC668. Logical SDK spelling from coherent OOT6e449e; void(void) call signature. Original target debug name not claimed; original body remains linked, no fake definition."
+    },
+    "PPCMfwpar": {
+      "address": "0x80238818",
+      "evidence": "Actual original12-byte helper sync/mfspr r3,SPR921/blr and both original FIFO call destinations, exact fullnative bodies; related SDK spelling and u32(void) role, no original debug-symbol claim."
+    },
+    "GXFlush": {
+      "address": "0x8024E034",
+      "evidence": "Actual original FIFO redirect call destination and existing full exact-unlinked GXMisc GXFlush comparison establish related API/void(void) role. Original callee bytes remain linked; no new whole-unit promotion or source credit."
+    },
+    "__DBExceptionDestination": {
+      "address": "0x8023ECEC",
+      "evidence": "DBInit actual codepointer stored at fixed interface+8;16byte original entry branches to Caux. Unsupported assembly source remains external/target original."
     }
   },
   "units": [
@@ -3674,7 +3723,7 @@
     },
     {
       "source": "src/dolphin/card/CARDBlock.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARD unit row CARDBlock; CREDITS.md import provenance.",
       "sections": [
         {
@@ -3687,7 +3736,7 @@
     },
     {
       "source": "src/dolphin/card/CARDCreate.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARD unit row CARDCreate; CREDITS.md import provenance.",
       "sections": [
         {
@@ -3700,7 +3749,7 @@
     },
     {
       "source": "src/dolphin/card/CARDDelete.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARD unit row CARDDelete; CREDITS.md import provenance.",
       "sections": [
         {
@@ -3713,7 +3762,7 @@
     },
     {
       "source": "src/dolphin/card/CARDDir.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARD unit row CARDDir; CREDITS.md import provenance.",
       "sections": [
         {
@@ -3726,7 +3775,7 @@
     },
     {
       "source": "src/dolphin/card/CARDStat.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARD unit row CARDStat; CREDITS.md import provenance.",
       "sections": [
         {
@@ -3739,7 +3788,7 @@
     },
     {
       "source": "src/dolphin/card/CARDWrite.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARD unit row CARDWrite; CREDITS.md import provenance.",
       "sections": [
         {
@@ -3777,7 +3826,7 @@
     },
     {
       "source": "src/dolphin/card/CARDCheck.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARDCheck.c target code and retention; CREDITS.md reference source.",
       "link_roots": {
         "symbols": [
@@ -3800,7 +3849,7 @@
     },
     {
       "source": "src/dolphin/card/CARDFormat.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARDFormat.c target code and retention; CREDITS.md reference source.",
       "link_roots": {
         "symbols": [
@@ -3820,7 +3869,7 @@
     },
     {
       "source": "src/dolphin/card/CARDRdwr.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARDRdwr.c target code and retention; CREDITS.md reference source.",
       "link_roots": {
         "symbols": [
@@ -3840,7 +3889,7 @@
     },
     {
       "source": "src/dolphin/card/CARDRead.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARDRead.c target code and retention; CREDITS.md reference source.",
       "link_roots": {
         "symbols": [
@@ -9130,7 +9179,7 @@
     },
     {
       "source": "src/dolphin/card/CARDUnlock.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "evidence.tsv CARDUnlock functions, static-data and shared CARD/DSP layout rows; archive file ownership provisional.",
       "link_roots": {
         "symbols": [
@@ -9766,7 +9815,7 @@
     },
     {
       "source": "src/dolphin/card/CARDBios.c",
-      "profile": "dolphin_release",
+      "profile": "dolphin_card_release",
       "evidence": "Complete BFBB CARDBios source with current canonical headers; all 25 retained target functions and full initialized/NOBITS allocations validated. Original archive boundary remains provisional.",
       "link_roots": {
         "symbols": [
@@ -9891,6 +9940,38 @@
           "placement": ".text",
           "start": "0x8018AFF0",
           "end": "0x8018B014"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ax/AXComp.c",
+      "profile": "dolphin_release",
+      "evidence": "Genuine pinned complete donor initializer source, authenticated Git blob and native compiled data equality. Actual AXCL/AXOut target references support extent; data-only source-file attribution remains provisional. No CPUinstruction/function credit. https://github.com/doldecomp/dolsdk2004 revision 2328b4164b1a98422a2255d83ce9a5a7548990cc path src/ax/AXComp.c blob bc0eb97c877c88f4aa1b998362ef2eb661e8423e.",
+      "sections": [
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x803027C0",
+          "end": "0x80304200"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/ax/DSPCode.c",
+      "profile": "dolphin_release",
+      "evidence": "Genuine pinned complete donor initializer source, authenticated Git blob and native compiled data equality. Actual AXCL/AXOut target references support extent; data-only source-file attribution remains provisional. No CPUinstruction/function credit. https://github.com/bfbbdecomp/bfbb revision 8fb1c232addcacf44932c10c4cede41b43f98f40 path src/dolphin/src/ax/DSPCode.c blob c8fbd9e78fd9955d097acb4277f25846918f785e.",
+      "sections": [
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80304200",
+          "end": "0x803060C0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC5C0",
+          "end": "0x803EC5C2"
         }
       ]
     }
