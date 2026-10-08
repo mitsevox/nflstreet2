@@ -300,7 +300,8 @@ struct Object_80039F5C {
     State_80039F5C mUnknown3048;
     char mUnknown3055[33];
     unsigned char mUnknown3088;
-    char mUnknown3089[3];
+    char mUnknown3089[1];
+    unsigned short mUnknown3090;
     Object_800EA284 *mpUnknown3092;
 };
 

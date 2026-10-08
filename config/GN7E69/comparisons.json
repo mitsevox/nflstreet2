@@ -24739,7 +24739,7 @@
     {
       "source": "src/game/cu_8003877C.cpp",
       "profile": "game_cpp",
-      "evidence": "Whole-function extents and provisional unit boundaries are recorded in evidence.tsv. The emitted .rodata is compared against the target pool 0x8028CFF0-0x8028D004, whose intervening target word is not reconstructed; retain the measured data mismatch without padding or source fabrication. Original bytes remain linked.",
+      "evidence": "Registered whole-function extents and allocated data sections are measured independently under comparisons.json; evidence.tsv records target boundaries, grouping confidence and source-form provenance. Unregistered functions remain unmeasured; comparison-only source stays unlinked.",
       "sections": [
         {
           "section": ".text",
@@ -24784,6 +24784,11 @@
           "symbol": "fn_80039458",
           "start": "0x80039458",
           "end": "0x800394F4"
+        },
+        {
+          "symbol": "fn_800394F4",
+          "start": "0x800394F4",
+          "end": "0x8003962C"
         },
         {
           "symbol": "fn_8003977C",
