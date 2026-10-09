@@ -40,7 +40,7 @@ struct Entry_8005415C {
 struct Object_8005438C {
     Vector_80039F5C mUnknown0;
     Vector_80039F5C mUnknown12;
-    int mUnknown24;
+    char mUnknown24[4];
 };
 
 /* The level data whose address fn_80054130 returns. Only the accessed
