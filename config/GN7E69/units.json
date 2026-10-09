@@ -5738,6 +5738,19 @@
       ]
     },
     {
+      "source": "src/game/cu_80075198.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80075198-0x800756E8 (src/game/cu_80075198.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80075198",
+          "end": "0x800756E8"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800756E8.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800756E8-0x80076DB4 (src/game/cu_800756E8.cpp) and its data, compiler and source-form rows.",
