@@ -5994,6 +5994,31 @@
       ]
     },
     {
+      "source": "src/game/cu_8019E530.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019E530-0x8019F508 (src/game/cu_8019E530.cpp), its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019E530",
+          "end": "0x8019F508"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADF80",
+          "end": "0x802ADFE0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB7C8",
+          "end": "0x803EB7CC"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8019F508.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8019F508-0x8019FBEC (src/game/cu_8019F508.cpp) and its data and source-form rows.",
