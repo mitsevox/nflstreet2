@@ -14278,7 +14278,19 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80190A7C",
-          "end": "0x80190DCC"
+          "end": "0x80190ED4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80364DC0",
+          "end": "0x80364F40"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECB94",
+          "end": "0x803ECB98"
         }
       ],
       "functions": [
@@ -14296,6 +14308,16 @@
           "symbol": "AnimExtnRelocateFile__FP16AnimFileFormat_t",
           "start": "0x80190D8C",
           "end": "0x80190DCC"
+        },
+        {
+          "symbol": "fn_80190DCC",
+          "start": "0x80190DCC",
+          "end": "0x80190E08"
+        },
+        {
+          "symbol": "fn_80190E08",
+          "start": "0x80190E08",
+          "end": "0x80190ED4"
         }
       ]
     },
