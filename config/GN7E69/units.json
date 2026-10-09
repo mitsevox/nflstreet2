@@ -8464,18 +8464,18 @@
     {
       "source": "src/game/cu_801631EC.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded cu_801631EC unit, readonly pool, shared-state view, callback item layout, declarations and source-form rows. Original translation-unit extent remains provisional; the shared mutable state and preceding helper stay external.",
+      "evidence": "evidence.tsv bounded cu_801631EC unit, readonly pool, shared-state view, callback item layout, declarations and source-form rows. Original translation-unit extent remains provisional; the shared mutable state stays external; the helper 0x80163074 is part of this source.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801631EC",
+          "start": "0x80163074",
           "end": "0x80163674"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802A45B4",
+          "start": "0x802A4598",
           "end": "0x802A45D4"
         }
       ]
