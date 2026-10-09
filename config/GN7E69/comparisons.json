@@ -13615,6 +13615,37 @@
       ]
     },
     {
+      "source": "src/game/cu_800850E8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800850E8-0x80085148 (src/game/cu_800850E8.cpp), its individual exact function extents and its .rodata data row. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800850E8",
+          "end": "0x80085148"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80293D48",
+          "end": "0x80293D88"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800850E8",
+          "start": "0x800850E8",
+          "end": "0x80085118"
+        },
+        {
+          "symbol": "fn_80085118",
+          "start": "0x80085118",
+          "end": "0x80085148"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80146F40.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80146F40-0x80147908 (src/game/cu_80146F40.cpp) and its data, type, compiler and source-form rows. All bodies are comparisons; original bytes remain linked.",
@@ -25354,6 +25385,112 @@
           "symbol": "fn_800F4F08",
           "start": "0x800F4F08",
           "end": "0x800F5208"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8007AEE8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x8007AEE8-0x8007B4C8, source-form and dependency rows, and two exact bounded mutable key-list data extents. Full function comparisons include partial fn_8007B358. Original bytes remain linked; no unit promotion or recovered names are claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007AEE8",
+          "end": "0x8007B4C8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6518",
+          "end": "0x802D6558"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8007AEE8",
+          "start": "0x8007AEE8",
+          "end": "0x8007AF14"
+        },
+        {
+          "symbol": "fn_8007AF14",
+          "start": "0x8007AF14",
+          "end": "0x8007AF34"
+        },
+        {
+          "symbol": "fn_8007AF34",
+          "start": "0x8007AF34",
+          "end": "0x8007AF5C"
+        },
+        {
+          "symbol": "fn_8007AF5C",
+          "start": "0x8007AF5C",
+          "end": "0x8007AF84"
+        },
+        {
+          "symbol": "fn_8007AF84",
+          "start": "0x8007AF84",
+          "end": "0x8007AFDC"
+        },
+        {
+          "symbol": "fn_8007AFDC",
+          "start": "0x8007AFDC",
+          "end": "0x8007B090"
+        },
+        {
+          "symbol": "fn_8007B090",
+          "start": "0x8007B090",
+          "end": "0x8007B14C"
+        },
+        {
+          "symbol": "fn_8007B14C",
+          "start": "0x8007B14C",
+          "end": "0x8007B270"
+        },
+        {
+          "symbol": "fn_8007B270",
+          "start": "0x8007B270",
+          "end": "0x8007B324"
+        },
+        {
+          "symbol": "fn_8007B324",
+          "start": "0x8007B324",
+          "end": "0x8007B358"
+        },
+        {
+          "symbol": "fn_8007B358",
+          "start": "0x8007B358",
+          "end": "0x8007B3AC"
+        },
+        {
+          "symbol": "fn_8007B3AC",
+          "start": "0x8007B3AC",
+          "end": "0x8007B3CC"
+        },
+        {
+          "symbol": "fn_8007B3CC",
+          "start": "0x8007B3CC",
+          "end": "0x8007B404"
+        },
+        {
+          "symbol": "fn_8007B404",
+          "start": "0x8007B404",
+          "end": "0x8007B42C"
+        },
+        {
+          "symbol": "fn_8007B42C",
+          "start": "0x8007B42C",
+          "end": "0x8007B460"
+        },
+        {
+          "symbol": "fn_8007B460",
+          "start": "0x8007B460",
+          "end": "0x8007B494"
+        },
+        {
+          "symbol": "fn_8007B494",
+          "start": "0x8007B494",
+          "end": "0x8007B4C8"
         }
       ]
     }

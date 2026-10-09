@@ -14151,6 +14151,88 @@
         "original_blob": "a5d46b95706e71cefef625e6b00b80538e9c5542",
         "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR698 independent delta review and CI."
       }
+    },
+    {
+      "source": "src/game/cu_8007AEE8.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x8007AEE8",
+        "0x8007AF14",
+        "0x8007AF34",
+        "0x8007AF5C",
+        "0x8007AF84",
+        "0x8007AFDC",
+        "0x8007B090",
+        "0x8007B14C",
+        "0x8007B270",
+        "0x8007B324",
+        "0x8007B3AC",
+        "0x8007B3CC",
+        "0x8007B404",
+        "0x8007B42C",
+        "0x8007B460",
+        "0x8007B494"
+      ],
+      "provenance": {
+        "pull_request": 702,
+        "commit": "6bc3b57e8f1e282d60b44b64ce00742d50b7ad0b",
+        "introduced_blob": "96b02176fb49f27a22b05758d4f8e1f32a5e1b81",
+        "merged_via": 706
+      }
+    },
+    {
+      "source": "src/game/cu_80080F20.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800808F8",
+        "0x80080920",
+        "0x80080948",
+        "0x80080970",
+        "0x80080998",
+        "0x800809C4",
+        "0x800809FC",
+        "0x80080A34",
+        "0x80080A68",
+        "0x80080A9C",
+        "0x80080B08",
+        "0x80080BEC",
+        "0x80080CB0",
+        "0x80080CD8",
+        "0x80080D10",
+        "0x80080D38",
+        "0x80080E20",
+        "0x80080E48",
+        "0x80080E70",
+        "0x80080E98",
+        "0x80080ECC",
+        "0x80080EF4"
+      ],
+      "provenance": {
+        "pull_request": 703,
+        "merged_via": 706,
+        "commit": "374f918dab6bfba8dfe81f2160e807fa39c08e37",
+        "introduced_blob": "09cb07e42fec0a3f07a9f7424abfc687c2120c5e"
+      }
+    },
+    {
+      "source": "src/game/cu_800850E8.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x800850E8",
+        "0x80085118"
+      ],
+      "provenance": {
+        "pull_request": 705,
+        "merged_via": 706,
+        "commit": "f42f239a0080de8b2eb35221716dbf411886fda0",
+        "introduced_blob": "09fb11eaf55d8f49cb709fa936b73eb24e9b2961"
+      }
     }
   ],
   "target": "GN7E69",
