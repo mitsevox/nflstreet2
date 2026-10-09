@@ -67,7 +67,8 @@ struct Node_80053BCC {
 
 /* The level data whose address fn_80054130 returns: a 164-byte header of
    count and list pairs, followed by the lists and the tree in that order.
-   fn_80053C70 turns the offsets into pointers. */
+   fn_80053C70 sets each list pointer from the counts, laying the lists out
+   consecutively after the header, then relocates the tree. */
 struct Level_80054130 {
     char mUnknown0[16];
     unsigned int mUnknown16;
