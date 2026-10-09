@@ -1,3 +1,4 @@
+#include "game/fn_8009D990.h"
 struct Record_80361C64 {
     short mUnknown00;
     short mUnknown02;
@@ -20,7 +21,6 @@ struct Object_80361C64 {
 
 extern "C" {
 int fn_8009D86C(void);
-int fn_8009D990(int index);
 int fn_801740A8(void);
 void fn_801740C4(int value);
 int fn_80174114(int id);

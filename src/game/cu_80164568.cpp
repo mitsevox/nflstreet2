@@ -165,8 +165,8 @@ void fn_80164A64(int team)
     for (i = 0; i < count; i++) {
         Object_80039F5C *p = fn_80039F5C(team, i);
 
-        if (p->mUnknown3048.mId != 0) {
-            if (p->mUnknown3048.mId == 7) {
+        if (p->mQueue[0].mId != 0) {
+            if (p->mQueue[0].mId == 7) {
                 Message_800F01CC msg;
                 float value;
 

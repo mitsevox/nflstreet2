@@ -6,6 +6,8 @@
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802372EC.h"
 #include <math.h>
+#include "game/fn_8009D990.h"
+#include "game/fn_8013AD94.h"
 struct Input_80174868 {
   float mUnknown0, mUnknown4, mUnknown8, mUnknownC;
   int mUnknown10, mUnknown14, mUnknown18, mUnknown1C;
@@ -59,12 +61,10 @@ int fn_801CFE40(float, float);
 int fn_801CFFD0(int, int);
 void fn_80227690(void *, void *, void *);
 int fn_8013BA58(void *, int *);
-int fn_8013AD94(void *);
 int fn_80177C38(void);
 void fn_8017419C(float *, Object_80039F5C *, int);
 void fn_800B2370(Object_80039F5C *, int, Object_80039F5C *, float);
 int fn_8009D86C(void);
-int fn_8009D990(int);
 void fn_801735B4(unsigned int);
 void fn_801F51DC(int, void *, int, int,
                  int (*)(Entry_800B206C *, Entry_800B206C *), int, int, int);
@@ -648,7 +648,7 @@ float fn_80175BF8(Object_80039F5C *a, Object_80039F5C *b, float value) {
     adjusted = value * 1.25f;
   return adjusted;
 }
-int fn_80175C8C(void *ball, Object_80039F5C *player) {
+int fn_80175C8C(Object_80137ABC *ball, Object_80039F5C *player) {
   if (fn_800AD9B4() != 3)
     return 1;
   if (ball && fn_8013BA58(ball, 0) != 4)
@@ -898,9 +898,9 @@ void fn_80176984(void) {
   Object_80039F5C *tackler = fn_8009BCE8(&carrier->mUnknown560.mUnknown40);
   if (!fn_80175FC8(carrier, tackler))
     return;
-  Vector_80039F5C pos, velocity;
+  Vector_80039F5C pos, ballPos;
   fn_80138064(ball, &pos);
-  fn_80137D58(ball, &velocity);
+  fn_80137D58(ball, &ballPos);
   if (fn_80175DAC(carrier, tackler, pos))
     return;
   Pair_8017055C delta;
@@ -911,10 +911,10 @@ void fn_80176984(void) {
   float tacklerDistance = fn_802270A4(&delta);
   int tacklerAngle = fn_801CFE40(delta.mY, delta.mX);
   if (!(carrierDistance >= 4.0f))
-    fn_80176140(carrier, tackler, carrierDistance, &velocity,
+    fn_80176140(carrier, tackler, carrierDistance, &ballPos,
                 tacklerDistance);
   else
-    fn_80176228(carrier, tackler, carrierDistance, &velocity,
+    fn_80176228(carrier, tackler, carrierDistance, &ballPos,
                 tacklerDistance, carrierAngle, tacklerAngle);
 }
 int fn_80176B04(void) {

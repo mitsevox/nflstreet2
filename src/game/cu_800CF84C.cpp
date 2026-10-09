@@ -5,6 +5,7 @@
 #include "game/fn_80096A58.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_80218FC4.h"
+#include "game/fn_800B65A0.h"
 
 #include "game/Class_803EC99C.h"
 #include "game/cu_8017F264.h"
@@ -71,7 +72,6 @@ void fn_800AFDD4(void (*pCallback)(int, unsigned int));
 void fn_800AFE20(void (*pCallback)(int, unsigned int));
 void fn_800B14E4(void);
 void fn_800B43C8(void);
-int fn_800B65A0(int a);
 void fn_800CC560(int a);
 void fn_801383E4(int a);
 void fn_80139274(void);

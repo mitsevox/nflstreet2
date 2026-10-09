@@ -1,6 +1,7 @@
 #include "game/fn_801EEB44.h"
 #include "game/SndgCrowd.h"
 #include "game/SndgPathfinder.h"
+#include "game/fn_800B65A0.h"
 
 void *operator new(unsigned int size, int unknown);
 
@@ -11,7 +12,6 @@ extern char lbl_802EC018[];
 void *memset(void *pDest, int value, unsigned int size);
 int fn_801F3E28(void);
 int fn_800A350C(void);
-int fn_800B65A0(int unknown);
 }
 
 static ModuleDependency sDependencies[] = { lbl_8030A60C, 0 };

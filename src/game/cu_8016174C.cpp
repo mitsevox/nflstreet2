@@ -5,6 +5,7 @@
 #include "game/fn_801EF390.h"
 #include "game/fn_802270D4.h"
 #include <math.h>
+#include "game/fn_800B65A0.h"
 
 struct Object_801618D8 {
     unsigned char mUnknown0[4];
@@ -37,7 +38,6 @@ extern Object_80039F5C *lbl_803EB398;
 extern int lbl_803ECAEC;
 Object_80039F5C *fn_80137B40(void);
 Object_80039F5C *fn_800B6544(int);
-unsigned char fn_800B65A0(int);
 int fn_80188030(int);
 int fn_801C657C(void);
 void fn_801D0470(int);

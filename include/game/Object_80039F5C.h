@@ -76,9 +76,13 @@ struct Block_80170374 {
 
 /* Block at +1160. */
 struct Block_801718E8 {
-    char mUnknown0[12];
+    float mUnknown0;
+    char mUnknown4[8];
     char mUnknown12[40];
     unsigned char mUnknown52;
+    unsigned char mUnknown53;
+    unsigned char mUnknown54;
+    char mUnknown55[1];
 };
 
 /* Three bytes at +1008, compared field by field by fn_80110630. */
@@ -111,15 +115,14 @@ struct Block_800D0B90 {
     unsigned char mUnknown11;
 };
 
-/* Record that +784 points to. */
+/* One entry of the player's message queue (ten 4-byte entries laid out like
+   Message_800F01CC). mpState (+784) points to the first entry, which holds
+   the current state; bytes are named by offset. */
 struct State_80039F5C {
     unsigned char mId;
     unsigned char mUnknown1;
     unsigned char mUnknown2;
     unsigned char mUnknown3[1];
-    unsigned char mUnknown4;
-    char mUnknown5[1];
-    unsigned char mUnknown6;
 };
 
 /* Record that +780 points to. Only the word +8 is accessed. */
@@ -274,9 +277,7 @@ struct Object_80039F5C {
     unsigned char mUnknown1156;
     char mUnknown1157[3];
     Block_801718E8 mUnknown1160;
-    unsigned char mUnknown1213;
-    unsigned char mUnknown1214;
-    char mUnknown1215[3];
+    char mUnknown1216[2];
     unsigned char mUnknown1218;
     unsigned char mUnknown1219;
     unsigned char mUnknown1220;
@@ -305,11 +306,8 @@ struct Object_80039F5C {
     int mUnknown3040;
     char mUnknown3044[4];
     /* Message queue that mpState points to; passed to fn_800F03D8 and
-       fn_800F053C. Read as its head state and as ten 4-byte messages. */
-    union {
-        State_80039F5C mUnknown3048;
-        Message_800F01CC mQueue[10];
-    };
+       fn_800F053C. */
+    State_80039F5C mQueue[10];
     unsigned char mUnknown3088;
     char mUnknown3089[1];
     unsigned short mUnknown3090;

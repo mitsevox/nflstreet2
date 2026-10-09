@@ -102,8 +102,8 @@ extern "C" int fn_80130494(Object_80039F5C *p, Block_80130494 *pBlock)
             if (fn_801CFFD0(dir, angle) < (int)(lbl_803EB130 * 46603.38f)) {
                 int offset = (int)(p->mUnknown560.mFlags.mBytes[0] ? lbl_803EB138 : lbl_803EB134);
 
-                if (p->mpState->mUnknown4 == 19) {
-                    if ((p->mpState->mUnknown6 * 0x20000 - angle & 0xFFFFFF) > 0x800000) {
+                if (p->mpState[1].mId == 19) {
+                    if ((p->mpState[1].mUnknown2 * 0x20000 - angle & 0xFFFFFF) > 0x800000) {
                         found = 1;
                         angle -= (int)(offset * 46603.38f);
                     } else {
@@ -266,13 +266,13 @@ extern "C" int fn_80130BC8(Object_80039F5C *p, Block_80130494 *pBlock)
     if (ok && fn_801CFFD0(p->mUnknown512.mUnknown4, p->mMotion.mUnknown32) > 0x155555) {
         ok = 0;
     }
-    if (ok && p->mpState->mUnknown4 == 19) {
+    if (ok && p->mpState[1].mId == 19) {
         Point_8017886C delta;
 
         delta.mX = pBlock->mUnknown0 - p->mMotion.mPos.mX;
         delta.mY = pBlock->mUnknown4 - p->mMotion.mPos.mY;
         if (fn_802270A4(&delta) < 1.0f
-            && fn_801CFFD0(p->mMotion.mUnknown32, p->mpState->mUnknown6 << 17 & 0xFFFFFF) > 0x155555) {
+            && fn_801CFFD0(p->mMotion.mUnknown32, p->mpState[1].mUnknown2 << 17 & 0xFFFFFF) > 0x155555) {
             ok = 0;
         }
     }
@@ -295,7 +295,7 @@ extern "C" int fn_80130CF0(Object_80039F5C *p)
         pBlock->mUnknown0 = MAX(pBlock->mUnknown0, 3.0f - fn_80178A08());
         moved = 1;
     }
-    unsigned char *pInfo = &p->mpState->mUnknown4;
+    unsigned char *pInfo = &p->mpState[1].mId;
 
     if (pInfo[0] == 20 && (pInfo[2] == 5 || pInfo[2] == 7)) {
         margin = 4.5f;

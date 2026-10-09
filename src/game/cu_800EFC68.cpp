@@ -1,5 +1,6 @@
 #include <math.h>
 #include <string.h>
+#include "game/fn_800B65A0.h"
 
 #include "game/Command_800CEE74.h"
 #include "game/Input_800B6D34.h"
@@ -574,7 +575,6 @@ struct Plan_80121264 {
 
 extern "C" {
 void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
-int fn_800B65A0(int unknown);
 void fn_800B6714(Object_80039F5C *p, int port);
 void fn_800D0BF4(Object_80039F5C *p, int a, int b);
 void fn_800E9528(Object_80039F5C *p);
@@ -2428,7 +2428,7 @@ extern "C" int fn_800FCE58(Object_80039F5C *p, Block_800FCC24 *pBlock) {
 extern "C" int fn_800FCFC0(Object_80039F5C *p) {
     int result = 0;
 
-    if (p->mIdBytes[3] == 1 && p->mpState->mUnknown4 == 18 && fn_8011F1CC()) {
+    if (p->mIdBytes[3] == 1 && p->mpState[1].mId == 18 && fn_8011F1CC()) {
         int team = fn_80178320();
         unsigned char i = 0;
         Vector_80039F5C *pPos = &p->mMotion.mPos;
@@ -3076,10 +3076,10 @@ extern "C" int fn_80105898(Object_80039F5C *p) {
                 fn_800F053C(0, p->mpState, &message, p);
             }
         }
-    } else if (p->mpState->mUnknown4 == 31) {
+    } else if (p->mpState[1].mId == 31) {
         fn_8011E1BC(p, 0, 0, 1);
         fn_8011E3EC(p, 1);
-    } else if (p->mpState->mUnknown4 == 33) {
+    } else if (p->mpState[1].mId == 33) {
         fn_8011E1BC(p, 0, 0, 1);
         fn_8011E3EC(p, 2);
     }
@@ -5268,10 +5268,10 @@ void fn_8011E068(void)
         Object_80039F5C *p = fn_80039F5C(team, i);
 
         if (p->mpState->mId == 51) {
-            if (p->mpState->mUnknown4 == 33) {
+            if (p->mpState[1].mId == 33) {
                 fn_8011E1BC(p, 0, 0, 1);
                 fn_8011E3EC(p, 2);
-            } else if (p->mpState->mUnknown4 == 31) {
+            } else if (p->mpState[1].mId == 31) {
                 fn_8011E1BC(p, 0, 0, 1);
                 fn_8011E3EC(p, 1);
             }
@@ -5948,7 +5948,7 @@ void fn_80120CDC(Object_80039F5C *p, Object_80039F5C *pOther, Entry_80120E98 *pE
         case 3:
         default:
             pEntry->mUnknown36 |= 2;
-            if (pOther->mUnknown3048.mId == 47) {
+            if (pOther->mQueue[0].mId == 47) {
                 pEntry->mUnknown36 |= 4;
             }
             break;

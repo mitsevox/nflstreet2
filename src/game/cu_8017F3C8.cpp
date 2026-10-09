@@ -1,4 +1,5 @@
 #include "game/InGame.h"
+#include "game/fn_800B65A0.h"
 
 struct Record_800B2340 {
     unsigned char mUnknown0[2];
@@ -9,7 +10,6 @@ extern "C" {
 void fn_800655B8(void);
 void fn_800655D0(void);
 Record_800B2340 *fn_800B2340(unsigned char index);
-int fn_800B65A0(int unknown);
 void fn_8018A798(int value);
 int fn_8018A7A0(void);
 }

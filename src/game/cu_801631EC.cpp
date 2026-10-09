@@ -2,6 +2,8 @@
 #include "engine/cu_80227F14.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801EF390.h"
+#include "game/fn_800B65A0.h"
+#include "game/fn_8013AD94.h"
 
 struct Object_80163358 {
     unsigned char mUnknown00[4];
@@ -30,11 +32,9 @@ struct State_802E989C {
 
 extern "C" {
 extern State_802E989C lbl_802E989C;
-int fn_800B65A0(int side);
 int fn_800BA6F8(void);
 int fn_800BA864(void);
 int fn_800C47C4(void);
-int fn_8013AD94(Object_80137ABC *pBall);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 int fn_801486A0(void);
 int fn_801784C4(void);

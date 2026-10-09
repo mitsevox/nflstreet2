@@ -19,18 +19,10 @@
 #include "game/fn_802372EC.h"
 #include "game/cu_80164568.h"
 #include "game/fn_80163E94.h"
-
-/* Block returned by fn_801787D0, as declared in src/game/cu_80176F18.cpp. */
-struct Info_ScrmState {
-    float mUnknown00;
-    float mUnknown04;
-    float mUnknown08;
-    int mUnknown0C;
-    int mUnknown10;
-    short mUnknown14;
-    float mUnknown18;
-    int mUnknown1C;
-};
+#include "game/fn_800B65A0.h"
+#include "game/fn_8009D990.h"
+#include "game/fn_8016FB10.h"
+#include "game/Info_ScrmState.h"
 
 /* Player block at +336 as written after fn_800EEE3C: the point and facing it
    returned and two flag bytes. */
@@ -52,11 +44,6 @@ struct State_8016EC40 {
     unsigned char mUnknown19;
 };
 
-/* First word of the player block at +1160. */
-struct Block_8016F7F8 {
-    float mUnknown0;
-};
-
 extern "C" {
 extern float lbl_803ECB08;
 
@@ -70,7 +57,6 @@ void fn_8003A4DC(void);
 void fn_80044264(void);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009D888(int index, int value);
-unsigned int fn_8009D990(int index);
 int fn_8009D9D8(int index);
 void fn_8009E0EC(void);
 void fn_800A0230(void);
@@ -83,7 +69,6 @@ void fn_800AEEDC(int team);
 int fn_800B1200(void);
 void fn_800B14E4(void);
 void fn_800B2630(void);
-unsigned char fn_800B65A0(int team);
 void fn_800B6C98(void);
 void fn_800B82AC(int team);
 int fn_800BA6F8(void);
@@ -122,7 +107,6 @@ int fn_80177F70(void);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_80178508(void *pPos, float *pOut, int a);
-Info_ScrmState *fn_801787D0(void);
 int fn_801787DC(int team);
 float fn_80178A08(void);
 float fn_80178A2C(void);
@@ -144,7 +128,6 @@ void fn_80148154(void);
 void fn_801483C8(void);
 void fn_80171450(Object_80039F5C *p);
 void fn_801726F8(Object_80039F5C *p);
-int fn_801729F8(Object_80137ABC *pBall, Pair_8017055C *pPos);
 void fn_80177C50(int a);
 void fn_80178370(void);
 int fn_801783AC(int bit);
@@ -157,7 +140,6 @@ void fn_8017C8B0(unsigned short team, int value);
 void fn_8017C8DC(unsigned short team, int value);
 void fn_8017C934(unsigned short team, int value);
 void fn_8017C960(unsigned short team, int value);
-void fn_8016FB10(Object_80039F5C *p, Object_80137ABC *pBall, Pair_8017055C *pOut, int a);
 int fn_8016EB50(Object_80039F5C *p, Vector_80039F5C *pPos);
 float fn_8016FAB4(void);
 int fn_801CFFD0(int a, int b);
@@ -989,7 +971,7 @@ extern "C" void fn_8016F7F8(void)
                 } else {
                     pState->mUnknown08 = 400.0f;
                 }
-                if (((Block_8016F7F8 *)&p->mUnknown1160)->mUnknown0 != 0.0f || (p->mFlags & 0x10000)) {
+                if (p->mUnknown1160.mUnknown0 != 0.0f || (p->mFlags & 0x10000)) {
                     if (pState->mUnknown04 > pState->mUnknown00) {
                         fn_8016F99C();
                     }

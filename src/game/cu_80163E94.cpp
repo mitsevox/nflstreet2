@@ -13,8 +13,8 @@ int fn_80178320(void);
 
 int fn_801641E0(Object_800670B4 *pObject, int index, const char **ppNames);
 
-/* Returns entry index of row 0, first swapping into row 0 the entry of the
-   row that ppNames selects. */
+/* Returns a pointer to entry index of row 0, first swapping into row 0 the
+   entry of the row that ppNames selects. */
 Entry_8006719C *fn_80163E94(Object_800670B4 *pObject, unsigned int index, const char **ppNames)
 {
     if (index > 6) {

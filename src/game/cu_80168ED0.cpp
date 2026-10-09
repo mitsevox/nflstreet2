@@ -4,6 +4,7 @@
 #include "game/fn_8016871C.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802372EC.h"
+#include "game/fn_800B65A0.h"
 
 #include "game/Team_80167A8C.h"
 #include "game/fn_80163E94.h"
@@ -21,7 +22,6 @@ Object_800670B4 *fn_80168708(int team);
 void fn_800B49EC(short *ratings, void *p);
 void fn_800B4798(short *ratings, int team, unsigned char index, void *p);
 void fn_800A6F04(int team);
-int fn_800B65A0(int team);
 int fn_801788D8(int *p);
 int fn_801787DC(int team);
 int fn_80177F70(void);

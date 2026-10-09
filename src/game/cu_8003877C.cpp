@@ -129,9 +129,9 @@ extern "C" void fn_8003924C(Object_80039F5C *p)
             p->mUnknown3040 = 0;
             if (fn_8011E8A4() != 0) {
                 fn_8011E8D8(p);
-                fn_800F053C(0, &p->mUnknown3048, (Message_800F01CC *)p->mUnknown3044, p);
-                if (p->mUnknown3048.mId == (unsigned char)p->mUnknown3044[0]) {
-                    fn_8003AB08(p, p->mUnknown3048.mId);
+                fn_800F053C(0, p->mQueue, (Message_800F01CC *)p->mUnknown3044, p);
+                if (p->mQueue[0].mId == (unsigned char)p->mUnknown3044[0]) {
+                    fn_8003AB08(p, p->mQueue[0].mId);
                 }
             }
         }
@@ -344,7 +344,7 @@ extern "C" void fn_8003A090(void)
         Object_80039F5C *p = &pPlayer->mObject;
         fn_800B2BC0(&p->mMotion);
         fn_801BCEEC(p->mUnknown1244, p->mUnknown1244 + 12);
-        fn_800F0770(0, &p->mUnknown3048, 4, 1, p);
+        fn_800F0770(0, p->mQueue, 4, 1, p);
         fn_8016D9D0(&p->mUnknown528);
         fn_8016D9D0(&p->mUnknown512);
         fn_8009BEA8(p);

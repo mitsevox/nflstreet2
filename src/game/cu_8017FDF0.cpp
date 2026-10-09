@@ -11,6 +11,8 @@
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801C3284.h"
+#include "game/cu_8017F90C.h"
+#include "game/fn_800B65A0.h"
 
 /* Filled by fn_80152940 for one index; the constructor leaves mUnknown8 unset. */
 struct Info_80152940 {
@@ -44,7 +46,6 @@ int fn_80186D64(int a);
 void fn_80186F9C(int a, char *pText, int c);
 int fn_801486A0(void);
 void fn_80152940(Class_80148A58 *pObject, int index, Info_80152940 *pInfo);
-int fn_800B65A0(int a);
 int fn_80178AE0(void);
 void fn_801E1BE8(void);
 void fn_8007AEE8(Object_8007A334 *pObject);
