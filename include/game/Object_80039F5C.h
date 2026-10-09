@@ -281,12 +281,14 @@ struct Object_80039F5C {
     float mUnknown2900;
     char mUnknown2904[4];
     unsigned short mUnknown2908;
-    char mUnknown2910[3];
+    char mUnknown2910[2];
+    unsigned char mUnknown2912;
     unsigned char mUnknown2913;
     unsigned char mUnknown2914;
     char mUnknown2915[1];
     unsigned char mUnknown2916;
-    char mUnknown2917[4];
+    char mUnknown2917[3];
+    unsigned char mUnknown2920;
     unsigned char mUnknown2921;
     char mUnknown2922[1];
     unsigned char mUnknown2923[4];

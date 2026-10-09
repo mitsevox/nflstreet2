@@ -458,6 +458,18 @@
       "address": "0x80262310",
       "evidence": "evidence.tsv external row atexit: called from the function-local static guard path at 0x8000EC78 with the destructor stub 0x8000DCD8, as ProDG cc1plus registers local-static destructors; target body matches the newlib exit-procedure registration."
     },
+    "OSInit": {
+      "address": "0x80238B10",
+      "evidence": "evidence.tsv external row for 0x80238B10 (OSInit)."
+    },
+    "VMInit": {
+      "address": "0x80244F18",
+      "evidence": "evidence.tsv external row for 0x80244F18 (VMInit)."
+    },
+    "__main": {
+      "address": "0x8025E1D8",
+      "evidence": "evidence.tsv external row for 0x8025E1D8 (__main)."
+    },
     "__ashldi3": {
       "address": "0x8025E210",
       "evidence": "evidence.tsv external row for 0x8025E210 (__ashldi3)."
@@ -5775,6 +5787,19 @@
       ]
     },
     {
+      "source": "src/game/cu_80075198.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80075198-0x800756E8 (src/game/cu_80075198.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80075198",
+          "end": "0x800756E8"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800756E8.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800756E8-0x80076DB4 (src/game/cu_800756E8.cpp) and its data, compiler and source-form rows.",
@@ -7431,6 +7456,19 @@
           "placement": ".data2",
           "start": "0x80289BC0",
           "end": "0x80289BC4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80088F2C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80088F2C-0x80089330 (src/game/cu_80088F2C.cpp) and its source-form rows; .text links to 0x80088FFC, fn_80088FFC is a draft comparison.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80088F2C",
+          "end": "0x80088FFC"
         }
       ]
     },
