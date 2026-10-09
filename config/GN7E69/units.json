@@ -8209,6 +8209,19 @@
       ]
     },
     {
+      "source": "src/game/cu_80081440.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80081440-0x800817CC (src/game/cu_80081440.cpp), and its source-form rows. Linked from source: .text 0x800816C4-0x800817CC; 0x80081440-0x800816C4 and the .data table 0x802D6A28-0x802D6AD8 are a draft comparison behind DECOMP_COMPARE (config/GN7E69/comparisons.json) whose original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800816C4",
+          "end": "0x800817CC"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80138CC0.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80138CC0-0x801390D0 (src/game/cu_80138CC0.cpp), its data, type and source-form rows.",
