@@ -75,7 +75,7 @@ extern float lbl_803EB80C;
 extern void (*lbl_803EB810)(Object_8003DEC4 *pPlayer);
 extern Object_8003DEC4 *lbl_803EB814;
 extern unsigned char lbl_803EB818;
-extern Ref_803EB81C lbl_803EB81C[];
+extern Ref_803EB81C lbl_803EB81C[1];
 extern unsigned char lbl_803EB824;
 extern unsigned char lbl_803EB825;
 extern float lbl_803EA2C4;
@@ -276,7 +276,10 @@ void fn_801A15C4(Object_80228224 *pObject)
     for (i = 0; i < lbl_803ECC04; i++) {
         Object_8003DEC4 *pPlayer = fn_8003DEC4(i);
 
-        if (!(pPlayer->mUnknown20 & 8) && (pPlayer->mUnknown20 & 0x20000)) {
+        if (pPlayer->mUnknown20 & 8) {
+            continue;
+        }
+        if (pPlayer->mUnknown20 & 0x20000) {
             fn_801DD3AC(fn_80028BB4(), pPlayer, 11);
         }
     }
@@ -365,9 +368,9 @@ void fn_801A1978(Object_8003DEC4 *pPlayer, unsigned int flags)
     float depth;
     int light;
 
-    color.a = 255;
     color.g = 255;
     color.b = 255;
+    color.a = 255;
     fn_80210388();
     if (pPlayer->mUnknown20 & 8) {
         depth = 1.0f - pPlayer->mUnknown4216.mUnknown16 * lbl_803EB808;
@@ -471,9 +474,9 @@ void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int co
     int light;
     int index;
 
-    color.a = 255;
     color.g = 255;
     color.b = 255;
+    color.a = 255;
     fn_80227930(&v, lbl_802F29B0, lbl_802F29BC, fn_800D3F2C(pPlayer->mUnknown4968));
     light = fn_80236B98(1, v.x, v.y, v.z);
     fn_8024FB58(0, color);
@@ -498,7 +501,8 @@ void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int co
             fn_80234BF4(0, &pPlayer->mUnknown1164[9], 0);
             fn_80234BF4(0, &pPlayer->mUnknown1164[6], 0);
         }
-        index = (index + 1) & 1;
+        index++;
+        index &= 1;
     }
     fn_80147860(pPlayer, lbl_803EA2C4);
     fn_80210BD8(1);
@@ -794,16 +798,16 @@ void fn_801A3284(Object_8003DEC4 *pPlayer)
 
 void fn_801A32AC(int id, float sx, float sy, float tx, float ty)
 {
-    float m[3][4];
+    float m[4][4];
 
     m[0][0] = sx;
+    m[0][1] = 0.0f;
+    m[0][2] = 0.0f;
     m[0][3] = tx;
+    m[1][0] = 0.0f;
     m[1][1] = sy;
     m[1][2] = 0.0f;
     m[1][3] = ty;
-    m[0][1] = 0.0f;
-    m[0][2] = 0.0f;
-    m[1][0] = 0.0f;
     fn_802525F0(m, id, 1);
 }
 
@@ -839,8 +843,8 @@ void fn_801A34B0(int a, int b, int c, int d)
     fn_8020F28C(&lbl_80365D54);
     fn_801A14D8();
     fn_801C1F94(lbl_802F3468, 0, sizeof(lbl_802F3468));
-    lbl_802F3468[21] = 1;
     lbl_802F3468[15] = 1;
+    lbl_802F3468[21] = 1;
 }
 
 void fn_801A3514(void)
@@ -866,8 +870,8 @@ void fn_801A3588(Object_8003DEC4 *pPlayer, Creation_8003D378 *pInit)
     Model_8015E2FC *pModel;
     unsigned int i;
 
-    pPlayer->mUnknown988 = 0;
     pPlayer->mUnknown984 = 0;
+    pPlayer->mUnknown988 = 0;
     pPlayer->mUnknown4968 = pInit->mUnknown57;
     pPlayer->mUnknown4969 = pInit->mUnknown58;
     pPlayer->mUnknown1016 = pInit->mUnknown34;
@@ -1073,7 +1077,7 @@ void fn_801A3FFC(void)
 {
     unsigned int i;
     int old;
-    float m[3][4];
+    float m[4][4];
 
     fn_80210388();
     i = 0;
@@ -1134,7 +1138,7 @@ void fn_801A42D4(void)
 {
     unsigned int i;
     int old;
-    float m[3][4];
+    float m[4][4];
 
     fn_80210388();
     i = 0;
