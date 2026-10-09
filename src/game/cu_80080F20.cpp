@@ -202,7 +202,6 @@ void fn_80080EF4(Object_8008044C *pObject, int value)
     fn_8007ABA4(pObject, 0x4F504250, value);
 }
 
-
 int fn_80080F20(void *pObject)
 {
     return fn_8007A98C(pObject, 0x4E535050);
