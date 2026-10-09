@@ -13,6 +13,7 @@
 #include "game/fn_801EEB44.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_801F40F4.h"
+#include "game/fn_80054138.h"
 #include "game/fn_802270D4.h"
 
 void *operator new(unsigned int size, int unknown);

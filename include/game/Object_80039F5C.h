@@ -2,7 +2,8 @@
 #define GAME_OBJECT_80039F5C_H
 
 #include "game/Object_800D81C8.h"
-#include "game/fn_80054138.h"
+
+struct Area_80054138;
 
 /* The player object returned by fn_80039F5C, with the blocks it contains or
    points to. */
