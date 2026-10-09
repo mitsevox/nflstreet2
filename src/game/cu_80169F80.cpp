@@ -1,4 +1,5 @@
 #include <math.h>
+#include "game/Candidate_8016B364.h"
 #include "game/Class_80148A58.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_800670B4.h"
@@ -7,15 +8,6 @@
 #include "game/fn_80238174.h"
 #include "game/Object_800785C0.h"
 #include "game/Object_8017886C.h"
-
-/* One 12-byte candidate passed with its count to fn_8016B364; the
-   halfword at +4 is the weight these functions rescale or clear. */
-struct Candidate_8016B364 {
-    unsigned int mUnknown0;
-    unsigned short mUnknown4;
-    unsigned short mUnknown6;
-    unsigned char mUnknown8;
-};
 
 /* One 20-byte history entry; fn_8016B144 shifts the list down and
    starts a new entry at index 0. */

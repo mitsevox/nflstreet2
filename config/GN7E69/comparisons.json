@@ -25821,6 +25821,211 @@
           "end": "0x80079CD8"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800659AC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800659AC-0x80067C10 (src/game/cu_800659AC.cpp), its 32 exact function extents, the exact data rows .rodata 0x8028F778-0x802904C8, .data 0x802D5034-0x802D5098 and .sdata 0x803EA658-0x803EA670, the linker row for its ten discarded functions and its type and source-form rows. Draft comparison: 28 of 32 functions exact; original bytes remain linked until every function matches.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800659AC",
+          "end": "0x80067C10"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028F778",
+          "end": "0x802904C8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D5034",
+          "end": "0x802D5098"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA658",
+          "end": "0x803EA670"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800659AC",
+          "start": "0x800659AC",
+          "end": "0x80065B50"
+        },
+        {
+          "symbol": "fn_80065B50",
+          "start": "0x80065B50",
+          "end": "0x80065CAC"
+        },
+        {
+          "symbol": "fn_80065CAC",
+          "start": "0x80065CAC",
+          "end": "0x80066000"
+        },
+        {
+          "symbol": "fn_80066000",
+          "start": "0x80066000",
+          "end": "0x80066318"
+        },
+        {
+          "symbol": "fn_80066318",
+          "start": "0x80066318",
+          "end": "0x80066560"
+        },
+        {
+          "symbol": "fn_80066560",
+          "start": "0x80066560",
+          "end": "0x80066704"
+        },
+        {
+          "symbol": "fn_80066704",
+          "start": "0x80066704",
+          "end": "0x80066844"
+        },
+        {
+          "symbol": "fn_80066844",
+          "start": "0x80066844",
+          "end": "0x800668E4"
+        },
+        {
+          "symbol": "fn_800668E4",
+          "start": "0x800668E4",
+          "end": "0x80066A0C"
+        },
+        {
+          "symbol": "fn_80066A0C",
+          "start": "0x80066A0C",
+          "end": "0x80066B6C"
+        },
+        {
+          "symbol": "fn_80066B6C",
+          "start": "0x80066B6C",
+          "end": "0x80066D5C"
+        },
+        {
+          "symbol": "fn_80066D5C",
+          "start": "0x80066D5C",
+          "end": "0x80066D74"
+        },
+        {
+          "symbol": "fn_80066D74",
+          "start": "0x80066D74",
+          "end": "0x80066DC8"
+        },
+        {
+          "symbol": "fn_80066DC8",
+          "start": "0x80066DC8",
+          "end": "0x80066DE8"
+        },
+        {
+          "symbol": "fn_80066DE8",
+          "start": "0x80066DE8",
+          "end": "0x80067038"
+        },
+        {
+          "symbol": "fn_80067038",
+          "start": "0x80067038",
+          "end": "0x800670B4"
+        },
+        {
+          "symbol": "fn_800670B4",
+          "start": "0x800670B4",
+          "end": "0x80067120"
+        },
+        {
+          "symbol": "fn_80067120",
+          "start": "0x80067120",
+          "end": "0x8006719C"
+        },
+        {
+          "symbol": "fn_8006719C",
+          "start": "0x8006719C",
+          "end": "0x8006723C"
+        },
+        {
+          "symbol": "fn_8006723C",
+          "start": "0x8006723C",
+          "end": "0x800672BC"
+        },
+        {
+          "symbol": "fn_800672BC",
+          "start": "0x800672BC",
+          "end": "0x80067338"
+        },
+        {
+          "symbol": "fn_80067338",
+          "start": "0x80067338",
+          "end": "0x800673F0"
+        },
+        {
+          "symbol": "fn_800673F0",
+          "start": "0x800673F0",
+          "end": "0x80067440"
+        },
+        {
+          "symbol": "fn_80067440",
+          "start": "0x80067440",
+          "end": "0x80067490"
+        },
+        {
+          "symbol": "fn_80067490",
+          "start": "0x80067490",
+          "end": "0x800674E0"
+        },
+        {
+          "symbol": "fn_800674E0",
+          "start": "0x800674E0",
+          "end": "0x800675B4"
+        },
+        {
+          "symbol": "fn_800675B4",
+          "start": "0x800675B4",
+          "end": "0x80067624"
+        },
+        {
+          "symbol": "fn_80067624",
+          "start": "0x80067624",
+          "end": "0x80067640"
+        },
+        {
+          "symbol": "fn_80067640",
+          "start": "0x80067640",
+          "end": "0x80067690"
+        },
+        {
+          "symbol": "fn_80067690",
+          "start": "0x80067690",
+          "end": "0x80067A4C"
+        },
+        {
+          "symbol": "fn_80067A4C",
+          "start": "0x80067A4C",
+          "end": "0x80067A8C"
+        },
+        {
+          "symbol": "fn_80067A8C",
+          "start": "0x80067A8C",
+          "end": "0x80067C10"
+        }
+      ],
+      "discarded": [
+        "GetPositionString",
+        "CountRows",
+        "SelectColumnByKey",
+        "UpdateColumnByKey",
+        "SelectUABPRecord",
+        "CountUABPRows",
+        "SelectLTESAndTSBPByOrder",
+        "SelectTSBPPoints",
+        "LoadTSBPObject",
+        "SelectLTESName"
+      ]
     }
   ]
 }
