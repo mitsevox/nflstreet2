@@ -2423,6 +2423,25 @@
       ]
     },
     {
+      "source": "src/game/cu_8008DF00.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8008DF00-0x8008E978 (src/game/cu_8008DF00.cpp), its data row and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8008DF00",
+          "end": "0x8008E978"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296000",
+          "end": "0x80296038"
+        }
+      ]
+    },
+    {
       "source": "src/game/Font.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80025F94-0x8002613C (src/game/Font.cpp) and its data rows.",
