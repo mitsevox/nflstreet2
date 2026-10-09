@@ -1,9 +1,9 @@
 #include "game/Class_8018FD64Inline.h"
 
 extern "C" {
-void fn_80060458(signed char db, int index);
-void fn_8006059C(signed char db);
-void fn_80060674(signed char db);
+void fn_80060458(int index, int level);
+void fn_8006059C(int index);
+void fn_80060674(int index);
 void fn_80061D64(int index);
 void fn_80061DA0(int index);
 unsigned int fn_80078800(void);
@@ -234,7 +234,8 @@ void fn_80054964(signed char db, int id)
     case 54:
         fn_80060674(db);
         fn_80061DA0(db);
-        break;    case 17:
+        break;
+    case 17:
     case 47:
         break;
     }
