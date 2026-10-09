@@ -14610,19 +14610,19 @@
     {
       "source": "src/game/cu_80052F54.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open bounded group row, exact target function extents, readonly/small-data rows and scoped target layout/source-form records. Thirteen unlinked function comparisons; original assembly and external mutable arrays remain linked.",
+      "evidence": "evidence.tsv open/open bounded group row, exact target function extents, readonly/small-data rows and scoped target layout/source-form records. Fourteen unlinked function comparisons; original assembly and external mutable arrays remain linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80052F54",
-          "end": "0x80053B4C"
+          "end": "0x80053BC8"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8028DDFC",
-          "end": "0x8028DEA0"
+          "end": "0x8028DEA4"
         },
         {
           "section": ".sdata",
@@ -14696,6 +14696,11 @@
           "symbol": "fn_80053A70",
           "start": "0x80053A70",
           "end": "0x80053B4C"
+        },
+        {
+          "symbol": "fn_80053B4C",
+          "start": "0x80053B4C",
+          "end": "0x80053BC8"
         }
       ]
     },
