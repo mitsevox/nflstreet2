@@ -17,7 +17,7 @@ extern "C" void fn_80081C10(Object_8008044C *pObject, unsigned char *p)
         columns[i].Set(0x59414C50, lbl_803EA7D0[i], 0);
     }
     columns[2].SetEnd();
-    ((Object_8007A334 *)pObject)->Read(columns);
+    pObject->Read(columns);
     for (i = 0; i < 2; ++i) {
         p[i] = columns[i].mValue;
     }

@@ -7507,12 +7507,12 @@
     {
       "source": "src/game/cu_80088F2C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80088F2C-0x80089330 (src/game/cu_80088F2C.cpp) and its source-form rows; .text links to 0x80088FFC, fn_80088FFC is a draft comparison.",
+      "evidence": "evidence.tsv unit row 0x80088F2C-0x80089330 (src/game/cu_80088F2C.cpp) and its source-form rows; .text links 0x80088F78-0x80088FFC, fn_80088F2C (inline asm) and fn_80088FFC are comparison-only.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80088F2C",
+          "start": "0x80088F78",
           "end": "0x80088FFC"
         }
       ]

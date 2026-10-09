@@ -7,7 +7,6 @@ int fn_800C4B6C(Object_80039F5C *p);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
 int fn_800DC080(Object_80039F5C *p);
 int fn_80178320(void);
-float fn_801BE7C8(void *p, unsigned short key);
 int fn_801CFFD0(int a, int b);
 }
 
@@ -18,8 +17,9 @@ extern float lbl_803ECB10;
 
 /* fn_8008E424, fn_8008E510, fn_8008E598, fn_8008E6D8, fn_8008E6FC,
    fn_8008E858 and fn_8008E8D8 are words of the .data table 0x80297D68, which
-   fn_8008E978 indexes by the byte +14 of the record at +528. The others are
-   called from fn_8008E598. The 16-bit keys are the values fn_801BE648 returns
+   fn_8008E978 indexes by the byte +14 of the record at +512. fn_8008DFF8,
+   fn_8008E040 and fn_8008E188 are called from fn_8008E598, and fn_8008DF00
+   from fn_8008DFF8. The 16-bit keys are the values fn_801BE648 returns
    and fn_801BE068 takes. */
 
 extern "C" int fn_8008DF00(Object_80039F5C *p, int key)
@@ -28,7 +28,7 @@ extern "C" int fn_8008DF00(Object_80039F5C *p, int key)
     Object_800B26B0 *pMotion = &p->mMotion;
     int result = 0;
 
-    if (key == 74 && p->mUnknown528.mUnknown0 != 0.0f
+    if (key == 74 && pNext->mUnknown0 != 0.0f
         && fn_801CFFD0(pMotion->mFacing, pNext->mUnknown8) > 0x5FFFFF) {
         int diff = fn_801CFFD0(pMotion->mUnknown32, pNext->mUnknown4);
         unsigned char team = p->mIdBytes[2];
@@ -60,18 +60,18 @@ extern "C" int fn_8008E040(Object_80039F5C *p, int diff, unsigned short *pKey)
     Object_8016D8B0 *pNext = &p->mUnknown528;
     int result = 0;
 
-    if (diff <= 0x1C71C6 || p->mUnknown512.mUnknown0 == 0.0f) {
+    if (diff <= 0x1C71C6 || pCur->mUnknown0 == 0.0f) {
         *pKey = 74;
         pNext->mUnknown14 = 1;
         pNext->mUnknown4 = pCur->mUnknown4;
         pNext->mUnknown8 = pCur->mUnknown4;
-        p->mUnknown528.mUnknown0 = p->mUnknown512.mUnknown0;
+        pNext->mUnknown0 = pCur->mUnknown0;
     } else {
         if (diff <= 0x56C16B && pCur->mUnknown4 > 0x800000) {
             *pKey = 84;
             if (fn_801BE648(p->mpUnknown792) == 84 && fn_801BE7C8(p->mpUnknown792, 84) != 0.0f) {
                 pCur->mUnknown8 = p->mMotion.mFacing;
-                p->mUnknown512.mUnknown0 = 0.0f;
+                pCur->mUnknown0 = 0.0f;
             }
             if (fn_801CFFD0(pCur->mUnknown4, pNext->mUnknown4) > 0x400000) {
                 result = 1;
@@ -106,15 +106,15 @@ extern "C" int fn_8008E188(Object_80039F5C *p, int flag)
     }
     diff = fn_801CFFD0(pCur->mUnknown4, pCur->mUnknown8);
 
-    if (fn_80137B40() != p && diff > 0x2E38E2 && p->mUnknown512.mUnknown0 > 0.0f) {
+    if (fn_80137B40() != p && diff > 0x2E38E2 && pCur->mUnknown0 > 0.0f) {
         if (diff <= 0x56C16B) {
             if (flag || p->mUnknown492 <= lbl_803ECB0C) {
                 if (p->mIdBytes[2] == fn_80178320() || flag) {
                     key = 160;
-                    p->mUnknown528.mUnknown0 = MAX(p->mUnknown512.mUnknown0, lbl_803ECB0C * 0.18f / lbl_803ECB0C);
+                    pNext->mUnknown0 = MAX(pCur->mUnknown0, lbl_803ECB0C * 0.18f / lbl_803ECB0C);
                 } else {
                     key = 73;
-                    p->mUnknown528.mUnknown0 = MAX(p->mUnknown512.mUnknown0, lbl_803ECB0C * 0.4f / lbl_803ECB0C);
+                    pNext->mUnknown0 = MAX(pCur->mUnknown0, lbl_803ECB0C * 0.4f / lbl_803ECB0C);
                 }
                 handled = 1;
                 pNext->mUnknown14 = pCur->mUnknown14;
@@ -131,7 +131,7 @@ extern "C" int fn_8008E188(Object_80039F5C *p, int flag)
                     key = 157;
                     offset = -offset;
                 }
-                p->mUnknown528.mUnknown0 = MAX(p->mUnknown512.mUnknown0, lbl_803ECB0C * 0.18f / lbl_803ECB0C);
+                pNext->mUnknown0 = MAX(pCur->mUnknown0, lbl_803ECB0C * 0.18f / lbl_803ECB0C);
                 handled = 1;
                 pNext->mUnknown14 = pCur->mUnknown14;
                 pNext->mUnknown8 = (pCur->mUnknown8 + offset) & 0xFFFFFF;
@@ -166,7 +166,7 @@ extern "C" void fn_8008E424(Object_80039F5C *p)
     Object_8016D8B0 *pNext = &p->mUnknown528;
     unsigned short key;
 
-    p->mUnknown528.mUnknown0 = p->mUnknown512.mUnknown0;
+    pNext->mUnknown0 = pCur->mUnknown0;
     pNext->mUnknown4 = pCur->mUnknown4;
     pNext->mUnknown8 = pCur->mUnknown8;
     pNext->mUnknown14 = pCur->mUnknown14;
@@ -204,7 +204,7 @@ extern "C" void fn_8008E510(Object_80039F5C *p)
     pNext->mUnknown14 = pCur->mUnknown14;
     pNext->mUnknown4 = pCur->mUnknown4;
     pNext->mUnknown8 = pCur->mUnknown4;
-    p->mUnknown528.mUnknown0 = p->mUnknown512.mUnknown0;
+    pNext->mUnknown0 = pCur->mUnknown0;
 
     fn_801BE648(p->mpUnknown792);
     if (fn_801BE648(p->mpUnknown792) != 74) {
@@ -227,12 +227,12 @@ extern "C" void fn_8008E598(Object_80039F5C *p)
         key = 74;
         pNext->mUnknown4 = pCur->mUnknown4;
         pNext->mUnknown8 = pCur->mUnknown4;
-        p->mUnknown528.mUnknown0 = p->mUnknown512.mUnknown0;
+        pNext->mUnknown0 = pCur->mUnknown0;
     } else if (fn_800DC080(p)) {
         changed = fn_8008E040(p, diff, &key);
     } else {
         int flag = pCur->mUnknown15 == 4 || pCur->mUnknown15 == 5;
-        if (flag && p->mUnknown512.mUnknown0 == 0.0f) {
+        if (flag && pCur->mUnknown0 == 0.0f) {
             fn_8008E8D8(p);
             return;
         }
@@ -253,7 +253,7 @@ extern "C" void fn_8008E6D8(Object_80039F5C *p)
 
     pNext->mUnknown14 = pCur->mUnknown14;
     pNext->mUnknown4 = pCur->mUnknown4;
-    p->mUnknown528.mUnknown0 = p->mUnknown512.mUnknown0;
+    pNext->mUnknown0 = pCur->mUnknown0;
 }
 
 extern "C" void fn_8008E6FC(Object_80039F5C *p)
@@ -331,7 +331,7 @@ extern "C" void fn_8008E858(Object_80039F5C *p)
     pNext->mUnknown14 = pCur->mUnknown14;
     pNext->mUnknown4 = pCur->mUnknown4;
     pNext->mUnknown8 = pCur->mUnknown8;
-    p->mUnknown528.mUnknown0 = p->mUnknown512.mUnknown0;
+    pNext->mUnknown0 = pCur->mUnknown0;
 
     if (fn_801BE648(p->mpUnknown792) != 74) {
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, p, 1.0f);
@@ -343,7 +343,7 @@ extern "C" void fn_8008E8D8(Object_80039F5C *p)
     Object_8016D8B0 *pCur = &p->mUnknown512;
     Object_8016D8B0 *pNext = &p->mUnknown528;
 
-    p->mUnknown528.mUnknown0 = p->mUnknown512.mUnknown0;
+    pNext->mUnknown0 = pCur->mUnknown0;
     pNext->mUnknown4 = pCur->mUnknown4;
     pNext->mUnknown8 = pCur->mUnknown8;
     pNext->mUnknown14 = pCur->mUnknown14;
