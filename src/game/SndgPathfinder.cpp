@@ -343,12 +343,6 @@ struct Struct_802D5104 {
     void (*mStop)(int index);
 };
 
-struct Struct_8006BBC4 {
-    int mUnknown0;
-    int mUnknown4;
-    char mUnknown8[1];
-};
-
 typedef void (*Callback_8006C548)(int handle);
 typedef void (*Handler_8030A668)(int unknown);
 
