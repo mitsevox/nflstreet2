@@ -500,7 +500,7 @@ void fn_8004AD3C(int a)
 
 void fn_8004AF84(Extra_8004149C *pExtra) { pExtra->mUnknown1708 &= ~0x78; }
 
-/* Clears flag bits 0x78 of the Extra block and restarts its 0x801BE068 entry. */
+/* Clears flag bits 0x78 of the Extra block and restarts its fn_801BE068 entry. */
 static inline void Restart_801BE068(Object_80041904 *pObject, unsigned short key, float value)
 {
     fn_8004AF84(pObject->mUnknown428);
