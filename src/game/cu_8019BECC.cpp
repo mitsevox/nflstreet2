@@ -10,17 +10,17 @@
    mType. The width and brightness are interpolated along the trail. */
 struct Trail_8019CBC0 {
     unsigned int mCount;
-    int mMax;
+    int mUnknown4;
     Vector_80039F5C *mpPoints;
     int mType;
     float mRadiusX;
     float mRadiusY;
-    int mAngle;
+    int mAngleOffset;
     float mWidth;
     unsigned char mColor[3];
     float mEndWidth;
     float mEndBrightness;
-    unsigned char mStriped;
+    unsigned char mDashed;
 };
 
 /* Fan vertex of fn_8019C8C0; the 2D calls build its first two members. */
@@ -75,6 +75,21 @@ void fn_8019BF38(Trail_8019CBC0 *pTrail, unsigned int index, unsigned char *pCol
     pColor[2] = (float)pTrail->mColor[2] * brightness;
 }
 
+/* Draws one quad of the ribbon at height 0 in the given colour. */
+static inline void DrawQuad(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC,
+                            Vector_80039F5C *pD, unsigned char *pColor)
+{
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(pA->mX, pA->mY, 0.0f);
+    GXColor4u8(pColor[0], pColor[1], pColor[2], 200);
+    GXPosition3f32(pB->mX, pB->mY, 0.0f);
+    GXColor4u8(pColor[0], pColor[1], pColor[2], 200);
+    GXPosition3f32(pC->mX, pC->mY, 0.0f);
+    GXColor4u8(pColor[0], pColor[1], pColor[2], 200);
+    GXPosition3f32(pD->mX, pD->mY, 0.0f);
+    GXColor4u8(pColor[0], pColor[1], pColor[2], 200);
+}
+
 /* Draws the ribbon segment from point index - 1 to point index, joined to
    the segment drawn before it through pLeft and pRight. */
 int fn_8019C044(int unused, Trail_8019CBC0 *pTrail, unsigned int index, Vector_80039F5C *pLeft,
@@ -95,7 +110,6 @@ int fn_8019C044(int unused, Trail_8019CBC0 *pTrail, unsigned int index, Vector_8
     float width0;
     float width1;
     float x;
-    float t;
     unsigned char i;
 
     width0 = fn_8019BECC(pTrail, index - 1);
@@ -113,48 +127,26 @@ int fn_8019C044(int unused, Trail_8019CBC0 *pTrail, unsigned int index, Vector_8
     fn_8022765C(&left1, &pTrail->mpPoints[index], &side1);
     fn_802276B4(&right1, &pTrail->mpPoints[index], &side1);
     fn_8019BF38(pTrail, index - 1, color);
-    if (pTrail->mStriped) {
+    if (pTrail->mDashed) {
         for (i = 0; i < 15; i++) {
-            t = (float)(i * 2) * (1.0f / 29.0f);
-            fn_80227930(&a0, &left1, &left0, t);
-            fn_80227930(&b0, &right1, &right0, t);
-            t = (float)(i * 2 + 1) * (1.0f / 29.0f);
-            fn_80227930(&a1, &left1, &left0, t);
-            fn_80227930(&b1, &right1, &right0, t);
-            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            GXPosition3f32(a1.mX, a1.mY, 0.0f);
-            GXColor4u8(color[0], color[1], color[2], 200);
-            GXPosition3f32(a0.mX, a0.mY, 0.0f);
-            GXColor4u8(color[0], color[1], color[2], 200);
-            GXPosition3f32(b0.mX, b0.mY, 0.0f);
-            GXColor4u8(color[0], color[1], color[2], 200);
-            GXPosition3f32(b1.mX, b1.mY, 0.0f);
-            GXColor4u8(color[0], color[1], color[2], 200);
+            fn_80227930(&a0, &left1, &left0, (i * 2) / 29.0f);
+            fn_80227930(&b0, &right1, &right0, (i * 2) / 29.0f);
+            fn_80227930(&a1, &left1, &left0, (i * 2 + 1) / 29.0f);
+            fn_80227930(&b1, &right1, &right0, (i * 2 + 1) / 29.0f);
+            DrawQuad(&a1, &a0, &b0, &b1, color);
         }
     } else {
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        GXPosition3f32(left1.mX, left1.mY, 0.0f);
-        GXColor4u8(color[0], color[1], color[2], 200);
-        GXPosition3f32(left0.mX, left0.mY, 0.0f);
-        GXColor4u8(color[0], color[1], color[2], 200);
-        GXPosition3f32(right0.mX, right0.mY, 0.0f);
-        GXColor4u8(color[0], color[1], color[2], 200);
-        GXPosition3f32(right1.mX, right1.mY, 0.0f);
-        GXColor4u8(color[0], color[1], color[2], 200);
+        DrawQuad(&left1, &left0, &right0, &right1, color);
     }
     if (index < pTrail->mCount - 1) {
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        GXPosition3f32(left1.mX, left1.mY, 0.0f);
-        GXColor4u8(color[0], color[1], color[2], 200);
-        GXPosition3f32(pLeft->mX, pLeft->mY, 0.0f);
-        GXColor4u8(color[0], color[1], color[2], 200);
-        GXPosition3f32(pRight->mX, pRight->mY, 0.0f);
-        GXColor4u8(color[0], color[1], color[2], 200);
-        GXPosition3f32(right1.mX, right1.mY, 0.0f);
-        GXColor4u8(color[0], color[1], color[2], 200);
+        DrawQuad(&left1, pLeft, pRight, &right1, color);
     }
-    *pLeft = left0;
-    *pRight = right0;
+    pLeft->mX = left0.mX;
+    pLeft->mY = left0.mY;
+    pLeft->mZ = left0.mZ;
+    pRight->mX = right0.mX;
+    pRight->mY = right0.mY;
+    pRight->mZ = right0.mZ;
     return 0;
 }
 
@@ -187,15 +179,7 @@ int fn_8019C4F4(int unused, Trail_8019CBC0 *pTrail, unsigned int index)
     fn_8022765C(&left, &pTrail->mpPoints[index], &direction);
     fn_802276B4(&right, &pTrail->mpPoints[index], &direction);
     pPoints = pTrail->mpPoints;
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(left.mX, left.mY, 0.0f);
-    GXColor4u8(color[0], color[1], color[2], 200);
-    GXPosition3f32(tip.mX, tip.mY, 0.0f);
-    GXColor4u8(color[0], color[1], color[2], 200);
-    GXPosition3f32(right.mX, right.mY, 0.0f);
-    GXColor4u8(color[0], color[1], color[2], 200);
-    GXPosition3f32(pPoints[index].mX, pPoints[index].mY, 0.0f);
-    GXColor4u8(color[0], color[1], color[2], 200);
+    DrawQuad(&left, &tip, &right, &pPoints[index], color);
     return 0;
 }
 
@@ -228,15 +212,7 @@ int fn_8019C6D8(int unused, Trail_8019CBC0 *pTrail, unsigned int index)
     side.mZ = 0.0f;
     fn_8022765C(&corner3, &base, &side);
     fn_8022765C(&corner2, &pTrail->mpPoints[index], &side);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(corner0.mX, corner0.mY, 0.0f);
-    GXColor4u8(color[0], color[1], color[2], 200);
-    GXPosition3f32(corner1.mX, corner1.mY, 0.0f);
-    GXColor4u8(color[0], color[1], color[2], 200);
-    GXPosition3f32(corner3.mX, corner3.mY, 0.0f);
-    GXColor4u8(color[0], color[1], color[2], 200);
-    GXPosition3f32(corner2.mX, corner2.mY, 0.0f);
-    GXColor4u8(color[0], color[1], color[2], 200);
+    DrawQuad(&corner0, &corner1, &corner3, &corner2, color);
     return 0;
 }
 
@@ -263,7 +239,7 @@ int fn_8019C8C0(int unused, Trail_8019CBC0 *pTrail, unsigned int index)
     center.mY = pTrail->mpPoints[index].mY;
     a = pTrail->mRadiusX;
     b = pTrail->mRadiusY;
-    offset = pTrail->mAngle;
+    offset = pTrail->mAngleOffset;
     vertex.mZ = 0.0f;
     vertex.mW = 1.0f;
     steps = 28.0f;
