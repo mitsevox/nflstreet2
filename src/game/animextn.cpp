@@ -1,3 +1,4 @@
+#include <dolphin/types.h>
 #include "game/AnimFileFormat.h"
 
 extern "C" {
@@ -5,8 +6,15 @@ void *fn_801D2BB0(int a, int size, int c, int d);
 void fn_801C1D98(void *destination, char *source, int size);
 int fn_801D3148(int a, void *allocation);
 void *fn_801D310C(void *allocation, int size, int c, int d);
-
+void fn_801D2BD0(void *allocation);
+void fn_801C1E78(char *pDst, void *pSrc, int size);
+void fn_801C1FBC(void *destination, void *source, unsigned int size);
+void fn_8019ED4C(void *destination, void *source, AnimCompressTableView *table, int d);
 }
+
+/* Two 0xC0-byte staging buffers for reads from ARAM, used alternately. */
+static unsigned char AnimExtn_iCurrBuffer;
+static char AnimExtn_ARamTransferBuffer[2][0xC0] ATTRIBUTE_ALIGN(32);
 
 void _AnimExtnRelocateMotion(AnimFileFormat_t *file)
 {
@@ -76,4 +84,26 @@ void AnimExtnRelocateFile(AnimFileFormat_t *file)
     _AnimExtnRelocateCompressTable(file);
     if (file->flags & 0x200)
         _AnimExtnRelocateMotion(file);
+}
+
+extern "C" void fn_80190DCC(AnimFileFormat_t *file)
+{
+    if ((file->flags & 0x200) && file->motion[0])
+        fn_801D2BD0(file->motion[0]);
+}
+
+extern "C" void fn_80190E08(AnimFileFormat_t *file, int a, void *destination, unsigned int source, unsigned int size, int group)
+{
+    char *buffer = AnimExtn_ARamTransferBuffer[AnimExtn_iCurrBuffer];
+    AnimExtn_iCurrBuffer = AnimExtn_iCurrBuffer == 0;
+    unsigned int offset = source & 31;
+    fn_801C1E78(buffer, (void *)(source & ~31), 0xC0);
+    if (file->flags & 1) {
+        if (file->flags & 4)
+            fn_8019ED4C(destination, (void *)source, file->groupMotion[group].compress, 0);
+        else
+            fn_8019ED4C(destination, buffer + offset, file->compress, 0);
+    } else {
+        fn_801C1FBC(destination, buffer + offset, size);
+    }
 }

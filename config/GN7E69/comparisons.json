@@ -14278,7 +14278,19 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80190A7C",
-          "end": "0x80190DCC"
+          "end": "0x80190ED4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80364DC0",
+          "end": "0x80364F40"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECB94",
+          "end": "0x803ECB98"
         }
       ],
       "functions": [
@@ -14296,19 +14308,29 @@
           "symbol": "AnimExtnRelocateFile__FP16AnimFileFormat_t",
           "start": "0x80190D8C",
           "end": "0x80190DCC"
+        },
+        {
+          "symbol": "fn_80190DCC",
+          "start": "0x80190DCC",
+          "end": "0x80190E08"
+        },
+        {
+          "symbol": "fn_80190E08",
+          "start": "0x80190E08",
+          "end": "0x80190ED4"
         }
       ]
     },
     {
       "source": "src/game/cu_80163674.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional/open unit row src/game/cu_80163674.cpp, exact target function extents, exact readonly and small-data extents, and scoped layout/source-form/compiler rows. Original assembly remains linked; nine function comparisons only.",
+      "evidence": "evidence.tsv provisional/open unit row src/game/cu_80163674.cpp, exact target function extents, exact readonly and small-data extents, and scoped layout/source-form/compiler rows. Original assembly remains linked; eleven function comparisons only.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80163674",
-          "end": "0x80163D08"
+          "end": "0x80163D9C"
         },
         {
           "section": ".rodata",
@@ -14368,6 +14390,16 @@
           "symbol": "fn_80163CD0",
           "start": "0x80163CD0",
           "end": "0x80163D08"
+        },
+        {
+          "symbol": "fn_80163D08",
+          "start": "0x80163D08",
+          "end": "0x80163D64"
+        },
+        {
+          "symbol": "fn_80163D64",
+          "start": "0x80163D64",
+          "end": "0x80163D9C"
         }
       ]
     },
