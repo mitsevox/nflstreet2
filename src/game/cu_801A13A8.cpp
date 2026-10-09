@@ -12,13 +12,13 @@ struct Instance_801A13A8 {
 
 /* 64-byte block copied between the first +0x1C entries of two texture data
    images. */
-struct Colors_801A1400 {
+struct Block_801A1400 {
     unsigned int mUnknown0[16];
 };
 
 struct TextureEntry1C_801A1400 {
     int mUnknown0[2];
-    Colors_801A1400 *mpUnknown8;
+    Block_801A1400 *mpUnknown8;
 };
 
 /* Partial view of the texture data returned by 0x80161094: the entry tables
@@ -61,10 +61,10 @@ void fn_801A1400(Object_8003DEC4 *pPlayer)
 {
     unsigned char *pDest =
         ((Texture_801A1400 *)fn_80161094(pPlayer->mUnknown4971, 31))->mpUnknown18->mpUnknownC;
-    Colors_801A1400 *pColors;
+    Block_801A1400 *pBlock;
 
     fn_8019BC50(fn_801614C4(), pDest, (const unsigned char *)pPlayer->mUnknown4184);
-    pColors = ((Texture_801A1400 *)fn_80161094(pPlayer->mUnknown4971, 31))->mpUnknown1C->mpUnknown8;
-    *pColors = *((Texture_801A1400 *)fn_80161094(pPlayer->mUnknown4971, 9))->mpUnknown1C->mpUnknown8;
+    pBlock = ((Texture_801A1400 *)fn_80161094(pPlayer->mUnknown4971, 31))->mpUnknown1C->mpUnknown8;
+    *pBlock = *((Texture_801A1400 *)fn_80161094(pPlayer->mUnknown4971, 9))->mpUnknown1C->mpUnknown8;
 }
 }

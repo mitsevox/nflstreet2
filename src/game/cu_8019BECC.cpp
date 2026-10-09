@@ -182,7 +182,7 @@ int fn_8019C4F4(int unused, Trail_8019CBC0 *pTrail, unsigned int index)
     return 0;
 }
 
-/* Square end at point index. */
+/* Rectangular cap at point index: 2 * width long and 4 * width across. */
 int fn_8019C6D8(int unused, Trail_8019CBC0 *pTrail, unsigned int index)
 {
     Vector_80039F5C corner0;

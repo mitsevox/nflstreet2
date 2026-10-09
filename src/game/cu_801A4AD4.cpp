@@ -1,6 +1,7 @@
 #include "game/FMCAPPORT.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_8020E52C.h"
+#include "game/cu_801A4AD4.h"
 #include "game/fn_8021216C.h"
 
 #include <string.h>
@@ -10,14 +11,6 @@
 struct Pair_802121D0 {
     int mUnknown0;
     int mUnknown4;
-};
-
-/* Entry of the table walked by fn_801A4C1C: a texture name looked up with
-   fn_802345F8, a flag, and the descriptor passed to fn_8021216C. */
-struct Entry_802F3488 {
-    const char *mpName;
-    unsigned char mUnknown4;
-    Desc_802EE9E4 mUnknown8;
 };
 
 extern "C" {
@@ -80,8 +73,9 @@ void fn_801A4B08(Desc_802347EC *pDesc)
     fn_80234844(pDesc);
 }
 
-/* Copies the image blocks and the first +0x1C block of the texture data
-   pSrc into pDest and flushes each copy; size is not read. */
+/* Copies the image blocks and the +0x1C block selected by header halfword
+   +8 of the texture data pSrc into pDest and flushes each copy; size is
+   not read. */
 void fn_801A4B28(void *pDest, void *pSrc, unsigned int size)
 {
     Object_8020E52C *pSrcHeader = fn_8020E52C(pSrc, 0);

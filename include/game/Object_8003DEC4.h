@@ -4,6 +4,7 @@
 #include "game/FMCAPPORT.h"
 #include "game/Object_80146094.h"
 #include "game/Pair_8017055C.h"
+#include "game/cu_801442FC.h"
 
 struct Item_800476DC;
 
@@ -27,9 +28,7 @@ struct Pose_80041930 {
     float mUnknown8[3];
     float mUnknown20[3];
     int mUnknown32;
-    int mUnknown36;
-    int mUnknown40;
-    int mUnknown44;
+    int mUnknown36[3];
     short *mUnknown48;
     float (*mUnknown52)[4][4];
 };
@@ -75,19 +74,19 @@ struct Weight_80042530 {
     unsigned short mUnknown6;
 };
 
-/* 0x34-byte light record copied by fn_8020F2C4; the static at 0x80365D54
-   in src/game/cu_801A14D8.cpp has the same layout. */
-struct Light_8020F2C4 {
+/* 0x34-byte record copied by fn_8020F2C4; the static at 0x80365D54 in
+   src/game/cu_801A14D8.cpp has the same layout. */
+struct Record_8020F2C4 {
     int mUnknown0;
     char mUnknown4[24];
     int mUnknown28;
     char mUnknown32[20];
 };
 
-/* One of the two 0x44-byte light blocks at +0x400. */
-struct Light_8003DEC4 {
+/* One of the two 0x44-byte blocks at +0x400, selected by LOD. */
+struct Block_8003DEC4 {
     char mUnknown0[16];
-    Light_8020F2C4 mUnknown16;
+    Record_8020F2C4 mUnknown16;
 };
 
 struct Slot_801A3284;
@@ -199,7 +198,7 @@ struct Object_8003DEC4 {
     int mUnknown1012;
     int mUnknown1016;
     int mUnknown1020;
-    Light_8003DEC4 mUnknown1024[2];
+    Block_8003DEC4 mUnknown1024[2];
     Slot_801A3284 *mUnknown1160;
     Part_8003DEC4 mUnknown1164[12];
     char mUnknown4044[16];
@@ -212,7 +211,7 @@ struct Object_8003DEC4 {
     Projection_8003BA10 mUnknown4256;
     char mUnknown4932[24];
     int mUnknown4956;
-    char mUnknown4960[8];
+    Tracker_801442FC mUnknown4960;
     unsigned char mUnknown4968;
     unsigned char mUnknown4969;
     unsigned char mUnknown4970;

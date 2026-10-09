@@ -10,7 +10,7 @@ struct Header_80193D48 {
     unsigned short mUnknown4;
 };
 
-/* Object returned by fn_801EF390 for a save resource. */
+/* Object returned by fn_801EF390. */
 struct Resource_80193D48 {
     char mUnknown0[0x14];
     Header_80193D48 *mpUnknown14;
