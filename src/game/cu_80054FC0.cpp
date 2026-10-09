@@ -5,10 +5,6 @@ extern "C" {
 void fn_8001ED80(int value);
 int fn_8001ED88(void);
 int fn_8002B70C(void);
-void fn_8003AED8(int kind, int index, int value);
-int fn_8003B0A0(int a, int kind, int index0, int index1, int unused);
-int fn_8003B360(int group);
-int fn_8003B3AC(int group);
 void fn_80077F24(void);
 int fn_80082414(int index);
 int fn_80085428(int a, int b, float *pX, float *pY, int *pValue, char *pLabel, int labelSize);

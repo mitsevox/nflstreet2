@@ -2,6 +2,7 @@
 #include "game/cu_80181330.h"
 #include "game/Object_800785C0.h"
 #include "game/fn_801FCE10.h"
+#include "game/fn_801D2B7C.h"
 
 #include <string.h>
 
@@ -202,7 +203,6 @@ int fn_8022F358(int index);
 int fn_8022F488(int a);
 int fn_801C302C(const char *s1, const char *s2, int n);
 int fn_800BA6F8(void);
-int fn_801D2BD0(void *p);
 char *fn_801C3284(char *pDest, const char *pSource, int size);
 void fn_800588F8(int a, int b);
 int fn_80065650(void);

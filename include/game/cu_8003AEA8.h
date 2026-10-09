@@ -11,6 +11,10 @@ struct Pair_8003AEA8 {
 };
 
 extern "C" {
+void fn_8003AED8(int kind, int index, int value);
+int fn_8003B0A0(int a, int kind, int index0, int index1, int unused);
+int fn_8003B360(int group);
+int fn_8003B3AC(int group);
 void fn_8003B3F8(int group, int *list, int value);
 void fn_8003B6F0(int reset);
 void fn_8003B8BC(void);

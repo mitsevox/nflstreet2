@@ -1,4 +1,5 @@
 #include "game/Level_80054130.h"
+#include "game/fn_802270D4.h"
 
 /* Plane point with the 16-byte stride of the vector routines. */
 struct Point_80053DCC {
@@ -9,7 +10,6 @@ struct Point_80053DCC {
 };
 
 extern "C" {
-void fn_802276B4(Point_80053DCC *pOut, Point_80053DCC *pA, Point_80053DCC *pB);
 float fn_80227704(Point_80053DCC *pA, Point_80053DCC *pB);
 void fn_802277DC(Point_80053DCC *pOut, Point_80053DCC *pA, Point_80053DCC *pB);
 

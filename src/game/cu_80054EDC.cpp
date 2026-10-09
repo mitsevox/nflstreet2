@@ -1,3 +1,5 @@
+#include "game/fn_801D2B7C.h"
+
 /* 32-byte lock taken by fn_801F8014 and released by fn_801F809C. */
 struct Lock_801F8014 {
     int mUnknown0[8];
@@ -23,7 +25,6 @@ public:
 };
 
 extern "C" {
-int fn_801D2BD0(void *p);
 void fn_801F8014(Lock_801F8014 *pLock);
 void fn_801F809C(Lock_801F8014 *pLock);
 void fn_801F80D0(Lock_801F8014 *pLock);
