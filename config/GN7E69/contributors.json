@@ -14151,6 +14151,22 @@
         "original_blob": "a5d46b95706e71cefef625e6b00b80538e9c5542",
         "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR698 independent delta review and CI."
       }
+    },
+    {
+      "source": "src/game/cu_800850E8.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x800850E8",
+        "0x80085118"
+      ],
+      "provenance": {
+        "pull_request": 705,
+        "merged_via": 705,
+        "commit": "f42f239a0080de8b2eb35221716dbf411886fda0",
+        "introduced_blob": "09fb11eaf55d8f49cb709fa936b73eb24e9b2961"
+      }
     }
   ],
   "target": "GN7E69",
