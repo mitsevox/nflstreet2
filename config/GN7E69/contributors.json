@@ -14151,6 +14151,146 @@
         "original_blob": "a5d46b95706e71cefef625e6b00b80538e9c5542",
         "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR698 independent delta review and CI."
       }
+    },
+    {
+      "source": "src/game/cu_80063C7C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80063C7C",
+        "0x80063D48",
+        "0x80063D94",
+        "0x80063EC0",
+        "0x80063EE4",
+        "0x80063F04",
+        "0x80063F60",
+        "0x80063F84",
+        "0x80063FE0",
+        "0x80064004",
+        "0x80064060",
+        "0x80064084",
+        "0x800640E0",
+        "0x80064104",
+        "0x80064160",
+        "0x80064184",
+        "0x800641E0",
+        "0x80064204",
+        "0x80064250",
+        "0x80064274",
+        "0x80064294",
+        "0x800642F0",
+        "0x80064314",
+        "0x80064334",
+        "0x80064390",
+        "0x800643B4",
+        "0x80064410",
+        "0x80064434",
+        "0x80064490",
+        "0x800644B4",
+        "0x80064510",
+        "0x80064534",
+        "0x80064590",
+        "0x800645B4",
+        "0x80064610",
+        "0x80064634",
+        "0x80064690"
+      ],
+      "provenance": {
+        "pull_request": 708,
+        "merged_via": 708,
+        "commit": "0fbb36b9ee724e6bbd5a2b79a69eef21054035d1",
+        "introduced_blob": "ba2d3f24590cf588b942af53fd9e05fc3950eb4c"
+      }
+    },
+    {
+      "source": "src/game/cu_8005412C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8005412C",
+        "0x80054130",
+        "0x80054138",
+        "0x8005415C",
+        "0x800541AC",
+        "0x8005429C",
+        "0x800542DC",
+        "0x8005434C",
+        "0x8005438C",
+        "0x800543B4",
+        "0x800543D4",
+        "0x80054478",
+        "0x800544A4",
+        "0x80054568"
+      ],
+      "provenance": {
+        "pull_request": 708,
+        "merged_via": 708,
+        "commit": "fd631502beb93d2e0e5ba782bc4840a3f56f1855",
+        "introduced_blob": "8346a270025b2a29d03c806e7070168d60b9d8c2"
+      }
+    },
+    {
+      "source": "src/game/cu_800775F0.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800775F0",
+        "0x800775F8",
+        "0x80077600",
+        "0x80077654",
+        "0x800776DC",
+        "0x80077730",
+        "0x800777B8",
+        "0x80077828",
+        "0x80077854",
+        "0x80077890",
+        "0x800778CC"
+      ],
+      "provenance": {
+        "pull_request": 708,
+        "merged_via": 708,
+        "commit": "c6ed610fb74dfd1486c0e081bbc1d13ed89a2cd7",
+        "introduced_blob": "7962de7b26aeb1b29b1fa559f358cc3abf2a50e8"
+      }
+    },
+    {
+      "source": "src/game/cu_80088648.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80088648",
+        "0x8008869C",
+        "0x800886BC",
+        "0x8008872C",
+        "0x8008879C",
+        "0x8008880C",
+        "0x800888D0",
+        "0x80088950",
+        "0x8008898C",
+        "0x80088A1C",
+        "0x80088A3C",
+        "0x80088A74",
+        "0x80088AC8",
+        "0x80088C8C",
+        "0x80088CAC",
+        "0x80088CE0",
+        "0x80088D84",
+        "0x80088DB0",
+        "0x80088DF4",
+        "0x80088E2C",
+        "0x80088E7C",
+        "0x80088E84"
+      ],
+      "provenance": {
+        "pull_request": 708,
+        "merged_via": 708,
+        "commit": "175a48d166636f12042b8e6816e6117993bebb57",
+        "introduced_blob": "76a66e9f81fc04890b1721589a0285fa9573ff18"
+      }
     }
   ],
   "target": "GN7E69",
