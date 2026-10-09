@@ -956,21 +956,23 @@ void fn_8015EE74(void)
 void fn_8015EF10(void)
 {
     unsigned int i;
-    int n;
-    QueueEntry_8031C098 *pEntry;
+    int j;
+    int count;
+    QueueEntry_8031C098 *pQueue;
     unsigned int lastId;
     void *pLast;
 
     for (i = 0; i <= 3; i++) {
-        pEntry = lbl_8031C098[i];
+        pQueue = lbl_8031C098[i];
+        count = lbl_8031C0A8[i];
         pLast = 0;
-        lastId = pEntry->mId + 1;
-        for (n = lbl_8031C0A8[i]; n > 0; n--, pEntry++) {
-            if (pEntry->mId == lastId) {
-                memcpy(pEntry->mpData, pLast, fn_801D3148(1, pLast));
+        lastId = pQueue[0].mId + 1;
+        for (j = 0; j < count; j++) {
+            if (pQueue[j].mId == lastId) {
+                memcpy(pQueue[j].mpData, pLast, fn_801D3148(1, pLast));
             } else {
-                lastId = pEntry->mId;
-                pLast = pEntry->mpData;
+                lastId = pQueue[j].mId;
+                pLast = pQueue[j].mpData;
                 if (i == 0) {
                     fn_801EFF80(HairArchive(lastId), HairId(lastId), pLast);
                 } else {
