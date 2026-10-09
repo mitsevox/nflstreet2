@@ -454,6 +454,10 @@
       "address": "0x801C2FE4",
       "evidence": "evidence.tsv external row strcmp: target call sites in src/game/cu_80029500.cpp and inspected callee behavior."
     },
+    "strcat": {
+      "address": "0x801C2F2C",
+      "evidence": "evidence.tsv external row strcat: target NUL scan of r3 then byte copy of r4 with the destination preserved; conventional library interface, original symbol not recovered."
+    },
     "strcpy": {
       "address": "0x801C2EB4",
       "evidence": "evidence.tsv external row strcpy: target byte-copy loop and preserved destination; conventional library interface, original symbol not recovered."

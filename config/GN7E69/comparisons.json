@@ -14270,6 +14270,52 @@
       ]
     },
     {
+      "source": "src/game/cu_80191804.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80191804-0x80191948 (src/game/cu_80191804.cpp), its exact .rodata data row 0x802ABD6C-0x802ABD94, name rows and the source-form row recording the remaining 0x80191868 difference. Original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80191804",
+          "end": "0x80191948"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ABD6C",
+          "end": "0x802ABD94"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80191804",
+          "start": "0x80191804",
+          "end": "0x80191808"
+        },
+        {
+          "symbol": "fn_80191808",
+          "start": "0x80191808",
+          "end": "0x8019180C"
+        },
+        {
+          "symbol": "fn_8019180C",
+          "start": "0x8019180C",
+          "end": "0x80191810"
+        },
+        {
+          "symbol": "fn_80191810",
+          "start": "0x80191810",
+          "end": "0x80191868"
+        },
+        {
+          "symbol": "fn_80191868",
+          "start": "0x80191868",
+          "end": "0x80191948"
+        }
+      ]
+    },
+    {
       "source": "src/game/animextn.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv animation relocation unit and target access rows; related NASCAR normalized instruction mapping. Original assembly remains linked.",
