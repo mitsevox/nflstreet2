@@ -83,11 +83,11 @@ struct Record_80067338 {
 extern "C" {
 unsigned short fn_80067038(int tag, int kind);
 int fn_800670B4(int tag, int a, int b, Object_800670B4 *pObject);
-unsigned short fn_80067120(int tag, int handle);
-void fn_8006719C(int tag, int handle, int index, Team_80167A8C *pTeam, Object_8006719C *pObject);
-void fn_8006723C(int tag, int handle, Team_80167A8C *pTeam, Object_8006719C *pObject);
-unsigned short fn_800672BC(int tag, int handle);
-int fn_80067338(int tag, int handle, int index, Record_80067338 *pRecord);
+unsigned short fn_80067120(int tag, int key);
+void fn_8006719C(int tag, int key, int index, Team_80167A8C *pTeam, Object_8006719C *pObject);
+void fn_8006723C(int tag, int key, Team_80167A8C *pTeam, Object_8006719C *pObject);
+unsigned short fn_800672BC(int tag, int key);
+int fn_80067338(int tag, int key, int index, Record_80067338 *pRecord);
 }
 
 #endif

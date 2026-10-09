@@ -53,7 +53,7 @@ void fn_800814BC(Info_80307908 *pInfo, short *pValues)
     tables[1].Set(0x50495247, 0, &join);
     tables[2].Set(-1);
     join.Set(6, ((unsigned long long)0x50495247 << 32) | 0x594B5047, 6);
-    join.mUnknown24.mLong = ((unsigned long long)0x52414547 << 32) | 0x594B5047;
+    join.mUnknown16.mValue.mLong = ((unsigned long long)0x52414547 << 32) | 0x594B5047;
     filter.Set(11, &left, &right);
     for (i = 0; i < 14; i++) {
         if (i != 7) {

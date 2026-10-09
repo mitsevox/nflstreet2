@@ -1,5 +1,5 @@
-/* 0x80077A24-0x80079CD8. Probably the back of one source file with the range
-   0x800775F0-0x80077A24 (cu_800775F0), whose test functions fill lbl_802D6400. */
+/* 0x80077A24-0x80079CD8. lbl_802D6400 points to test functions of the range
+   0x800775F0-0x80077A24 (cu_800775F0). */
 
 #include <string.h>
 #include "game/Class_8018FD64Inline.h"
@@ -55,12 +55,12 @@ int fn_800AD9B4(void);
 void fn_800B4A18(int index, char *pDest, int size);
 int fn_800B9A90(Class_80297C60 *p);
 int fn_800D41F8(int side);
-int fn_800D7528(int side);
-int fn_800D7544(int side);
+unsigned char fn_800D7528(int side);
+unsigned char fn_800D7544(int side);
 int fn_80178308(void);
 int fn_801787DC(int team);
-signed char fn_80186B38(int a);
-void fn_8018787C(void);
+int fn_80186B38(int a);
+void fn_8018787C(int index);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 char *fn_801C2F88(char *pDest, const char *pSource, unsigned int count);
@@ -268,7 +268,7 @@ void fn_80077D0C(Object_800785C0 *pRecord, int level)
             int j;
 
             for (j = 0; j < 4; j++) {
-                fn_80077A8C(level, pRecord->mUnknown1C4[j].mType, (unsigned int *)&pRecord->mUnknown1C4[j].mValue);
+                fn_80077A8C(level, pRecord->mUnknown1C4[j].mType, &pRecord->mUnknown1C4[j].mValue);
             }
         }
         break;
@@ -514,11 +514,11 @@ void fn_800785CC(unsigned char id, int level)
 int fn_80078620(int id, int *pA, int *pB)
 {
     int result = 0;
-    int team = fn_8022F4BC();
+    int index = fn_8022F4BC();
     int handle;
 
     *pB = 3;
-    handle = fn_8022F3D4(team);
+    handle = fn_8022F3D4(index);
     *pA = 7;
     if (handle != -1) {
         Object_8007A334 *pObject = fn_80078050(handle);
@@ -528,10 +528,10 @@ int fn_80078620(int id, int *pA, int *pB)
             *pA = fn_8007A934(pObject, 0x444D4843);
             if (result == 1) {
                 Object_800785C0 record;
-                Object_8007A334 *pPlayers = fn_80077F94();
+                Object_8007A334 *pCursor = fn_80077F94();
 
-                fn_800780C0(pPlayers, id, 0);
-                fn_800780F8(pPlayers, &record, 1);
+                fn_800780C0(pCursor, id, 0);
+                fn_800780F8(pCursor, &record, 1);
                 if (record.mUnknown1F4[0].mId == 8 && !fn_8007C538(record.mUnknown1F4[0].mUnknown4)) {
                     result = 0;
                 }
@@ -628,16 +628,15 @@ int fn_80078934(void)
 
 void fn_8007897C(int value)
 {
-    int team = fn_8022F4BC();
-    int handle = fn_8022F3D4(team);
+    int index = fn_8022F4BC();
+    int handle = fn_8022F3D4(index);
 
     if (handle != -1) {
         fn_8007ABA4(fn_80077FE0(handle), 0x4D574943, value);
         if (value) {
             fn_801FCE10(0, "use \x8c update 'TSPU' set 'FNWU' = \x82\n", handle, 1);
             fn_8007F6F8(20, 1);
-            fn_80186B38(team);
-            fn_8018787C();
+            fn_8018787C(fn_80186B38(index));
         }
     }
 }
@@ -677,10 +676,10 @@ int fn_80078AE0(int id)
     return gear;
 }
 
-int fn_80078B48(int team)
+int fn_80078B48(int index)
 {
     int result = 0;
-    int handle = fn_8022F3D4(team);
+    int handle = fn_8022F3D4(index);
 
     if (handle != -1) {
         result = fn_8007A98C(fn_80077FE0(handle), 0x50444943);
@@ -711,7 +710,7 @@ void fn_80078C04(int index, int value)
     }
 }
 
-void fn_80078C50(int type, int value, char *pText, int size)
+void fn_80078C50(int type, unsigned int value, char *pText, int size)
 {
     char text[128];
     unsigned int a;
@@ -725,10 +724,10 @@ void fn_80078C50(int type, int value, char *pText, int size)
 
         fn_8022B7A4(side, tag, &a);
         if (tag == 0x73707374 && (fn_800AD9B4() == 2 || fn_800AD9B4() == 5)) {
-            int team = fn_80178308();
+            int value2 = fn_80178308();
             Object_8017886C *pPlay = fn_8017886C();
 
-            if (team == side && (a == 0 || ((pPlay->mUnknown18 & 8) && fn_800A2178() != 14))) {
+            if (value2 == side && (a == 0 || ((pPlay->mUnknown18 & 8) && fn_800A2178() != 14))) {
                 a++;
             }
         }
@@ -788,7 +787,7 @@ void fn_80078C50(int type, int value, char *pText, int size)
             break;
         case 0x31:
             fn_8022B7A4(1, 0x43637374, &a);
-            if (a >= (unsigned int)value) {
+            if (a >= value) {
                 fn_801C2D88(text, 128, "Best Completion Streak: %d", a);
             } else {
                 fn_801C2D88(text, 128, "Current Completion Streak: %d", fn_800D7528(1));
@@ -823,7 +822,7 @@ void fn_80078C50(int type, int value, char *pText, int size)
             break;
         case 0x3E:
             fn_8022B7A4(1, 0x43737374, &a);
-            if (a >= (unsigned int)value) {
+            if (a >= value) {
                 fn_801C2D88(text, 128, "Best Stylin' Completion Streak: %d", a);
             } else {
                 fn_801C2D88(text, 128, "Current Stylin' Completion Streak: %d", fn_800D7544(1));
@@ -832,7 +831,7 @@ void fn_80078C50(int type, int value, char *pText, int size)
             break;
         case 0x42:
             fn_8022B7A4(1, 0x50637374, &a);
-            if (a >= (unsigned int)value) {
+            if (a >= value) {
                 fn_801C2D88(text, 128, "Consecutive Pitches One Play Best: %d", a);
             } else {
                 fn_801C2D88(text, 128, "Consecutive Pitches Last Play: %d", a);

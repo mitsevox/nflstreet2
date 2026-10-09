@@ -42,7 +42,7 @@ void fn_8007EEFC(Object_8007A334 *pObject)
     unsigned int table = lbl_803EC868;
     unsigned long long column = 0x4B4C474C;
     arg.Set(6, ((unsigned long long)table << 32) | column, 3);
-    arg.mUnknown24.mInt = 0;
+    arg.mUnknown16.mValue.mInt = 0;
     fn_8007A334(pObject, lbl_803EC868, -1, lbl_802D6778, &arg, 0x54415453);
 }
 

@@ -4995,12 +4995,12 @@
           "end": "0x8036ADB0"
         },
         {
-          "symbol": "_.tmp_0.51",
+          "symbol": "_.tmp_0.69",
           "start": "0x803ECDE0",
           "end": "0x803ECDE4"
         },
         {
-          "symbol": "_.tmp_1.106",
+          "symbol": "_.tmp_1.124",
           "start": "0x803ECDE4",
           "end": "0x803ECDE8"
         },
@@ -5010,7 +5010,7 @@
           "end": "0x803ECDF0"
         },
         {
-          "symbol": "_.tmp_2.116",
+          "symbol": "_.tmp_2.134",
           "start": "0x803ECDF0",
           "end": "0x803ECDF4"
         },
@@ -5020,7 +5020,7 @@
           "end": "0x803ECDFC"
         },
         {
-          "symbol": "_.tmp_3.126",
+          "symbol": "_.tmp_3.144",
           "start": "0x803ECDFC",
           "end": "0x803ECE00"
         },
@@ -5030,7 +5030,7 @@
           "end": "0x803ECE08"
         },
         {
-          "symbol": "_.tmp_4.133",
+          "symbol": "_.tmp_4.151",
           "start": "0x803ECE08",
           "end": "0x803ECE0C"
         },
@@ -5040,7 +5040,7 @@
           "end": "0x803ECE14"
         },
         {
-          "symbol": "_.tmp_5.140",
+          "symbol": "_.tmp_5.158",
           "start": "0x803ECE14",
           "end": "0x803ECE18"
         },
@@ -5050,7 +5050,7 @@
           "end": "0x803ECE20"
         },
         {
-          "symbol": "_.tmp_6.147",
+          "symbol": "_.tmp_6.165",
           "start": "0x803ECE20",
           "end": "0x803ECE24"
         },
@@ -5060,7 +5060,7 @@
           "end": "0x803ECE2C"
         },
         {
-          "symbol": "_.tmp_7.154",
+          "symbol": "_.tmp_7.172",
           "start": "0x803ECE2C",
           "end": "0x803ECE30"
         },
@@ -25554,7 +25554,7 @@
     {
       "source": "src/game/cu_80077A24.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80077A24-0x80079CD8 (src/game/cu_80077A24.cpp), its 44 exact function extents, the exact .rodata, .data, .sdata, .bss, .ctors and .dtors rows, and its type, name and source-form rows. Draft comparison: 42 of 44 functions exact and all data byte-identical; 0x8007897C and 0x80078C50 remain partial. Probably one source file with cu_800775F0 (0x800775F0-0x80077A24, PR #708). Original bytes remain linked until every function matches.",
+      "evidence": "evidence.tsv unit row 0x80077A24-0x80079CD8 (src/game/cu_80077A24.cpp), its 44 exact function extents, the exact .rodata, .data, .sdata, .bss, .ctors and .dtors rows, and its type, name and source-form rows. Draft comparison: 43 of 44 functions exact and all data byte-identical; 0x80078C50 remains partial. Probably one source file with cu_800775F0 (0x800775F0-0x80077A24, PR #708). Original bytes remain linked until every function matches.",
       "sections": [
         {
           "section": ".text",
@@ -25825,7 +25825,7 @@
     {
       "source": "src/game/cu_800659AC.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800659AC-0x80067C10 (src/game/cu_800659AC.cpp), its 32 exact function extents, the exact data rows .rodata 0x8028F778-0x802904C8, .data 0x802D5034-0x802D5098 and .sdata 0x803EA658-0x803EA670, the linker row for its ten discarded functions and its type and source-form rows. Draft comparison: 28 of 32 functions exact; original bytes remain linked until every function matches.",
+      "evidence": "evidence.tsv unit row 0x800659AC-0x80067C10 (src/game/cu_800659AC.cpp), its 32 exact function extents, the exact data rows .rodata 0x8028F778-0x802904C8, .data 0x802D5034-0x802D5098 and .sdata 0x803EA658-0x803EA670, the linker row for its ten discarded functions and its type and source-form rows. Draft comparison: 27 of 32 functions exact; original bytes remain linked until every function matches.",
       "sections": [
         {
           "section": ".text",
