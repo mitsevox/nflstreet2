@@ -1137,16 +1137,15 @@ int fn_8015F5BC(const char *pName)
 void fn_8015F638(int style, int shape, int hat, int *pIds)
 {
     Object_8007A334 cursor;
-    int model;
 
     fn_8007CC50(&cursor);
     fn_8007CCE4(&cursor, style, 0);
-    model = fn_8007CD78(&cursor);
+    style = fn_8007CD78(&cursor);
     fn_8007CCC4(&cursor);
-    model = model * 28 + shape * 4;
-    pIds[0] = model + 1;
+    style = style * 28 + shape * 4;
+    pIds[0] = style + 1;
     if (hat) {
-        pIds[0] = model + 3;
+        pIds[0] = style + 3;
     }
     pIds[1] = pIds[0] + 1;
 }
