@@ -4704,6 +4704,25 @@
       ]
     },
     {
+      "source": "src/game/cu_80063C7C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80063C7C-0x80064864 (src/game/cu_80063C7C.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80063C7C",
+          "end": "0x80064864"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028F6DC",
+          "end": "0x8028F76C"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8017F584.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8017F584-0x8017F670 (src/game/cu_8017F584.cpp) and its data rows.",
