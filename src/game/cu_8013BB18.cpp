@@ -2,10 +2,9 @@
 #include "game/Camera_8013F738.h"
 #include "game/EaseVector_8013C9A4.h"
 #include "game/cu_80136B1C.h"
+#include "game/cu_8013BB18.h"
 
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
-
-typedef void (*InterpFunc_8013CC14)(Interp_8013CC14 *pInterp, int steps);
 
 /* Object a camera follows for target kinds 3 to 5 (passed as the target
    reference word). */
@@ -22,13 +21,6 @@ struct Handlers_80141054 {
     void (*mUnknown04)(Camera_8013F738 *pCamera);
 };
 
-/* Camera type record; lbl_802DBD7C lists it, and fn_8008CCFC passes that list to fn_801C34F8. */
-struct Type_802DBD24 {
-    void (*mUnknown00)(Camera_8013F738 *pCamera, Desc_8013C340 *pDesc);
-    void (*mUnknown04)(Camera_8013F738 *pCamera);
-    void (*mUnknown08)(void *p, Camera_8013F738 *pCamera);
-};
-
 struct TypeEntry_802DBD7C {
     void *mpType;
     int mSize;
@@ -38,7 +30,7 @@ struct TypeEntry_802DBD7C {
 extern "C" {
 extern char lbl_802F4884[];
 extern char lbl_802F4890[];
-extern char lbl_802CC83C[];
+extern Type_802DBD24 lbl_802CC83C;
 extern char lbl_8031BDD4[];
 
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
@@ -77,29 +69,6 @@ void fn_801D0C58(Vector_80039F5C *pPos);
 void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80227CC0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 
-unsigned char fn_8013BB18(Camera_8013F738 *pCamera);
-void fn_8013BB54(Vector_80039F5C *pVec);
-void fn_8013BB70(int *pAngles);
-void fn_8013BB84(Camera_8013F738 *pCamera);
-void fn_8013BC4C(Camera_8013F738 *pCamera, Vector_80039F5C *pTarget, Vector_80039F5C *pOut);
-void fn_8013BD98(Camera_8013F738 *pCamera, Vector_80039F5C *pOut);
-void fn_8013BDC0(int kind, int ref, Vector_80039F5C *pOut);
-void fn_8013BEE0(int kind, int ref, int *pAngles);
-void fn_8013BF40(Camera_8013F738 *pCamera, int *pAngles);
-void fn_8013C120(Camera_8013F738 *pCamera);
-void fn_8013C1C8(Camera_8013F738 *pCamera);
-void fn_8013C204(Camera_8013F738 *pCamera);
-void fn_8013C260(Camera_8013F738 *pCamera, int *pAngles);
-void fn_8013C328(Camera_8013F738 *pCamera, int kind, int ref);
-void fn_8013C384(Camera_8013F738 *pCamera, unsigned int kind, int ref, int arg);
-void fn_8013C624(Camera_8013F738 *pCamera, int id, int a, int b);
-void fn_8013C6F0(Camera_8013F738 *pCamera);
-void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg);
-void fn_8013C868(Camera_8013F738 *pCamera, Desc_8013C340 *pDesc);
-void fn_8013C90C(Camera_8013F738 *pCamera);
-void fn_8013C954(void *p, Camera_8013F738 *pCamera);
-void fn_8013CC14(Interp_8013CC14 *pInterp, float value);
-void fn_8013CC40(Interp_8013CC14 *pInterp, InterpFunc_8013CC14 update, float target, float time);
 void fn_8013CEB8(Interp_8013CC14 *pInterp, int steps);
 }
 
@@ -113,7 +82,7 @@ TypeEntry_802DBD7C lbl_802DBD7C[5] = {
     { lbl_802F4890, 0x8C, 0 },
     { lbl_802F4884, 0x94, 0 },
     { &lbl_802DBD24, 0xF58, 0 },
-    { lbl_802CC83C, 0xF60, 0 },
+    { &lbl_802CC83C, 0xF60, 0 },
     { 0, 0, 0 },
 };
 }
@@ -330,16 +299,13 @@ void fn_8013C120(Camera_8013F738 *pCamera)
 {
     switch (pCamera->mUnknown98) {
     case 0:
-    case 4: {
-        CameraType0_802F4890 *pBase = (CameraType0_802F4890 *)pCamera;
-
+    case 4:
         fn_801C3CE8(pCamera, 0);
-        pBase->mUnknown5C[0] = pBase->mUnknown5C[1] = pBase->mUnknown5C[2] = 0.1f;
-        pBase->mUnknown68[0] = pBase->mUnknown68[1] = pBase->mUnknown68[2] = 0.05f;
-        pBase->mUnknown80[0] = pBase->mUnknown80[1] = pBase->mUnknown80[2] = 0x200000;
-        pBase->mUnknown74[0] = pBase->mUnknown74[1] = pBase->mUnknown74[2] = 0x400000;
+        pCamera->mUnknown5C = pCamera->mUnknown60 = pCamera->mUnknown64 = 0.1f;
+        pCamera->mUnknown68 = pCamera->mUnknown6C = pCamera->mUnknown70 = 0.05f;
+        pCamera->mUnknown80 = pCamera->mUnknown84 = pCamera->mUnknown88 = 0x200000;
+        pCamera->mUnknown74 = pCamera->mUnknown78 = pCamera->mUnknown7C = 0x400000;
         break;
-    }
     case 1:
         fn_801C3AD8(pCamera, 0);
         break;
@@ -597,7 +563,7 @@ void fn_8013C7C4(Camera_8013F738 *pCamera)
 void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg)
 {
     if (pCamera->mUnknownDC) {
-        pCamera->mUnknownDC(pCamera, msg);
+        pCamera->mUnknownDC(pCamera, msg, arg);
     }
 }
 

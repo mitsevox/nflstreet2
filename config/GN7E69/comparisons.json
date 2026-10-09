@@ -26245,7 +26245,7 @@
     {
       "source": "src/game/cu_801394B0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x801394B0-0x8013B874 for src/game/cu_801394B0.cpp (replacing candidate cu_801394B0), its 57 exact function extents, the exact data rows 0x8029FF28-0x802A00B8 (.rodata literal pools, including four runs no surviving code loads) and 0x803EB1B0-0x803EB1C4 (.sdata floats), and the source-form rows recording the remaining differences. Wholly unlinked draft source: the source does not reproduce the four unreferenced literal runs, so the compiled .rodata is 0x38 bytes shorter than the target and literal references after 0x8029FFF8 resolve to shifted addresses; the original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801394B0-0x8013B874 for src/game/cu_801394B0.cpp (replacing candidate cu_801394B0), its 57 function extents (evidence grade exact), the exact data rows 0x8029FF28-0x802A00B8 (.rodata literal pools, including four runs no surviving code loads) and 0x803EB1B0-0x803EB1C4 (.sdata floats), and the source-form rows recording the remaining differences. Wholly unlinked draft source: the source does not reproduce the four unreferenced literal runs, so the compiled .rodata is 0x38 bytes shorter than the target and literal references after 0x8029FFF8 resolve to shifted addresses; the original assembly remains linked.",
       "sections": [
         {
           "section": ".text",

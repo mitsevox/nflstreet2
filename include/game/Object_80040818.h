@@ -23,7 +23,7 @@ struct Object_80040818 {
     Quat_801EB488 mRot;
     char mUnknown40[132];
     Anim_8004AA34 mUnknown172;
-    /* Passed to fn_801D0C58 by src/game/cu_801394B0.cpp. */
+    /* Its start is passed to fn_801D0C58 as a position vector. */
     char mUnknown180[24];
     int mUnknown204;
     char mUnknown208[12];

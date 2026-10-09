@@ -31,10 +31,13 @@ struct Camera_8013F738 {
     float mUnknown68;
     float mUnknown6C;
     float mUnknown70;
-    float mUnknown74;
-    float mUnknown78;
-    float mUnknown7C;
-    float mUnknown80;
+    /* +0x5C..+0x88 as the kind 0 and 4 cameras use them (fn_801C3CE8 and
+       fn_8013C120 store floats to +0x5C..+0x70 and words to +0x74..+0x88);
+       kind 1 lays this area out differently (CameraType1_802F4884). */
+    int mUnknown74;
+    int mUnknown78;
+    int mUnknown7C;
+    int mUnknown80;
     int mUnknown84;
     int mUnknown88;
     int mUnknown8C;
@@ -57,7 +60,9 @@ struct Camera_8013F738 {
     int mUnknownD0;
     int mUnknownD4;
     int mUnknownD8;
-    void (*mUnknownDC)(Camera_8013F738 *, int);
+    /* Mode message callback; fn_8013C824 passes the message and its
+       argument. */
+    void (*mUnknownDC)(Camera_8013F738 *pCamera, int msg, int arg);
     float mUnknownE0;
     unsigned char mUnknownE4;
     unsigned char mUnknownE5;
@@ -73,24 +78,27 @@ struct Camera_8013F738 {
     int mUnknownF5C;
 };
 
-/* The leading 0x8C bytes as fn_8013C120 sets them up for kind 0 and 4
-   (type descriptor 0x802F4890, 0x8C bytes). */
-struct CameraType0_802F4890 {
-    char mPad00[0x5C];
-    float mUnknown5C[3];
-    float mUnknown68[3];
-    int mUnknown74[3];
-    int mUnknown80[3];
-};
-
-/* The leading part as fn_8013C7C4 resets it for kind 1 (type descriptor
-   0x802F4884, 0x94 bytes). */
+/* The leading part as fn_8013C7C4 resets it and fn_801C3AD8 sets it up
+   for kind 1 (type descriptor 0x802F4884, 0x94 bytes): floats at
+   +0x64..+0x80 and words at +0x84..+0x90. */
 struct CameraType1_802F4884 {
     char mPad00[0x4C];
     Vector_80039F5C mUnknown4C;
     float mUnknown58;
     int mUnknown5C;
     int mUnknown60;
+    float mUnknown64;
+    float mUnknown68;
+    float mUnknown6C;
+    float mUnknown70;
+    float mUnknown74;
+    float mUnknown78;
+    float mUnknown7C;
+    float mUnknown80;
+    int mUnknown84;
+    int mUnknown88;
+    int mUnknown8C;
+    int mUnknown90;
 };
 
 /* Argument of fn_801C3610 when it creates a camera; fn_8013C340 clears it. */

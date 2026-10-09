@@ -763,7 +763,7 @@ extern unsigned char lbl_803EAE20[8];
 extern const float lbl_803ED6CC;
 int fn_800AC3FC(Object_80039F5C *p, int value);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
-void fn_8013AA00(Object_80137ABC *pBall, float *pOut, Point_8017886C *pPoint, float scale);
+void fn_8013AA00(Object_80137ABC *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_801528E0(void *pSet, Point_8017886C *pOut);
 int fn_800AC3A0(Object_80039F5C *p);

@@ -92,7 +92,7 @@ int fn_80178320(void);
 void fn_8013C438(Camera_8013F738 *);
 void fn_8013C384(void *,int,int,int);
 void fn_80067D4C(int,int);
-void fn_80140DBC(Camera_8013F738 *,int);
+void fn_80140DBC(Camera_8013F738 *,int,int);
 void fn_80140EA0(Camera_8013F738 *);
 
 void fn_8013FF84(Camera_8013F738 *camera, Vector_8013FF84 *point)
@@ -311,7 +311,7 @@ void fn_80140708(Camera_8013F738 *camera)
     }
 }
 unsigned char fn_80140DB4(void) { return lbl_803EB1E8; }
-void fn_80140DBC(Camera_8013F738 *camera, int message)
+void fn_80140DBC(Camera_8013F738 *camera, int message, int)
 {
     State_8013FF84 *state = (State_8013FF84 *)&camera->mPadF8;
     switch (message) {

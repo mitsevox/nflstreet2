@@ -3,6 +3,7 @@
 #include "game/Camera_8013F738.h"
 #include "game/Interp_8013CC14.h"
 #include "game/EaseVector_8013C9A4.h"
+#include "game/cu_8013BB18.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_80178D18.h"
@@ -60,7 +61,7 @@ struct ScriptCamera_8013E514 {
 struct Desc0_8013EEE4 {
     Vector_80039F5C mPosition, mEndPosition, mTarget;
     float mFov, mEndFov, mLimit, mRate, mDuration;
-    int mModeX, mModeY, mModeZ, mModeFov;
+    InterpFunc_8013CC14 mModeX, mModeY, mModeZ, mModeFov;
     unsigned short mUnknown48, mUnknown4A;
     int mUnknown4C, mUnknown50;
     unsigned int mFlags;
@@ -73,7 +74,7 @@ struct Desc1_8013F090 {
     float mTargetStartScale, mTargetEndScale;
     int mUnknown58, mRef;
     float mFov, mEndFov, mLimit, mRate, mDuration;
-    int mModePosition, mModeTarget, mModeFov;
+    InterpFunc_8013CC14 mModePosition, mModeTarget, mModeFov;
     unsigned short mUnknown80, mUnknown82;
     int mUnknown84, mUnknown88;
     unsigned int mFlags;
@@ -89,11 +90,6 @@ unsigned char lbl_803EB1E0 = 0;
 int fn_80028310(void);
 void fn_800A3B5C(void);
 int fn_800AD9B4(void);
-void fn_8013C9A4(EaseVector_8013C9A4 *, Vector_80039F5C *, Vector_80039F5C *, Vector_80039F5C *, int, float, float, float);
-void fn_8013CAA4(EaseVector_8013C9A4 *, int);
-void fn_8013CBC4(EaseVector_8013C9A4 *);
-void fn_8013CC14(Interp_8013CC14 *, float);
-void fn_8013CC40(Interp_8013CC14 *, int, float, float);
 void fn_8013F97C(int);
 Camera_8013F738 *fn_8013FA04(int);
 void fn_8013FBB4(int, int);

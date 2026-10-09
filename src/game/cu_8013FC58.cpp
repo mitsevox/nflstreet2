@@ -1,28 +1,5 @@
 #include "game/Camera_8013F738.h"
-
-/* Camera fields used by this mode; +0x74..+0x88 are read and written as
-   words here, +0xF8 begins the mode's own state. */
-struct Camera_8013FD8C {
-    char mPad00[0x5C];
-    float mUnknown5C;
-    float mUnknown60;
-    float mUnknown64;
-    float mUnknown68;
-    float mUnknown6C;
-    float mUnknown70;
-    int mUnknown74;
-    int mUnknown78;
-    int mUnknown7C;
-    int mUnknown80;
-    int mUnknown84;
-    int mUnknown88;
-    char mPad8C[0x14];
-    int mUnknownA0;
-    char mPadA4[0x38];
-    void (*mUnknownDC)(Camera_8013FD8C *pCamera, int msg);
-    char mPadE0[0x18];
-    int mUnknownF8[2];
-};
+#include "game/cu_8013BB18.h"
 
 struct Pair_8013FE30 {
     int mUnknown0;
@@ -45,18 +22,13 @@ struct Tuning_8013FF28 {
 };
 
 struct Mode_8013FD8C {
-    void (*mUnknown00)(Camera_8013FD8C *pCamera);
-    void (*mUnknown04)(Camera_8013FD8C *pCamera);
+    void (*mUnknown00)(Camera_8013F738 *pCamera, Desc_8013C340 *pDesc);
+    void (*mUnknown04)(Camera_8013F738 *pCamera);
     int mUnknown08;
 };
 
 extern "C" {
 int fn_800A34E0(void);
-void fn_8013C478(void *pCamera, void *pValue);
-void fn_8013C4BC(void *pCamera, void *pAngles, int shift);
-void fn_8013C540(void *pCamera, int value);
-void fn_8013C57C(void *pCamera, int value);
-void fn_8013C6F0(Camera_8013F738 *pCamera);
 Camera_8013F738 *fn_8013FA04(int index);
 void fn_8013FA24(void);
 void fn_8013FA8C(int a);
@@ -65,11 +37,11 @@ int fn_801784C4(void);
 int fn_801CFE40(float y, float x);
 void fn_80227490(float *pOut, float *pIn, int a0, int a1, int a2);
 
-void fn_8013FD8C(Camera_8013FD8C *pCamera);
-void fn_8013FD9C(Camera_8013FD8C *pCamera);
-void fn_8013FDA0(Camera_8013FD8C *pCamera);
-void fn_8013FDE0(Camera_8013FD8C *pCamera, int msg);
-void fn_8013FE30(Camera_8013FD8C *pCamera);
+void fn_8013FD8C(Camera_8013F738 *pCamera, Desc_8013C340 *pDesc);
+void fn_8013FD9C(Camera_8013F738 *pCamera);
+void fn_8013FDA0(Camera_8013F738 *pCamera);
+void fn_8013FDE0(Camera_8013F738 *pCamera, int msg, int arg);
+void fn_8013FE30(Camera_8013F738 *pCamera);
 }
 
 static Preset_8013FE30 lbl_802DBDE0[6] = {
@@ -143,24 +115,24 @@ int fn_8013FD0C(int index)
     return fn_801CFE40(out[1], out[0]);
 }
 
-void fn_8013FD8C(Camera_8013FD8C *pCamera)
+void fn_8013FD8C(Camera_8013F738 *pCamera, Desc_8013C340 *pDesc)
 {
     pCamera->mUnknownDC = fn_8013FDE0;
 }
 
-void fn_8013FD9C(Camera_8013FD8C *pCamera)
+void fn_8013FD9C(Camera_8013F738 *pCamera)
 {
 }
 
-void fn_8013FDA0(Camera_8013FD8C *pCamera)
+void fn_8013FDA0(Camera_8013F738 *pCamera)
 {
-    int *pState = pCamera->mUnknownF8;
+    int *pState = (int *)pCamera->mPadF8;
 
     fn_8013C540(pCamera, pState[0]);
     fn_8013C57C(pCamera, pState[1]);
 }
 
-void fn_8013FDE0(Camera_8013FD8C *pCamera, int msg)
+void fn_8013FDE0(Camera_8013F738 *pCamera, int msg, int arg)
 {
     switch (msg) {
     case 3:
@@ -176,13 +148,13 @@ void fn_8013FDE0(Camera_8013FD8C *pCamera, int msg)
     }
 }
 
-void fn_8013FE30(Camera_8013FD8C *pCamera)
+void fn_8013FE30(Camera_8013F738 *pCamera)
 {
-    int *pState = pCamera->mUnknownF8;
+    int *pState = (int *)pCamera->mPadF8;
 
     if (pCamera->mUnknownA0 <= 5) {
-        fn_8013C478(pCamera, &lbl_802DBDE0[pCamera->mUnknownA0]);
-        fn_8013C4BC(pCamera, &lbl_802DBDE0[pCamera->mUnknownA0].mUnknown4, lbl_802DBDE0[pCamera->mUnknownA0].mUnknownC);
+        fn_8013C478(pCamera, (Vector_80039F5C *)&lbl_802DBDE0[pCamera->mUnknownA0]);
+        fn_8013C4BC(pCamera, (int *)&lbl_802DBDE0[pCamera->mUnknownA0].mUnknown4, lbl_802DBDE0[pCamera->mUnknownA0].mUnknownC);
         pState[0] = lbl_802DBE40[pCamera->mUnknownA0].mUnknown0;
         pState[1] = lbl_802DBE40[pCamera->mUnknownA0].mUnknown4;
     }
@@ -193,14 +165,14 @@ void fn_8013FE30(Camera_8013FD8C *pCamera)
         angles.mUnknown0 = pSrc->mUnknown0;
         angles.mUnknown4 = pSrc->mUnknown4;
         angles.mUnknown4 = fn_801784C4() ? 0x800000 : 0;
-        fn_8013C478(pCamera, &lbl_802DBDE0[0]);
-        fn_8013C4BC(pCamera, &angles, lbl_802DBDE0[0].mUnknownC);
+        fn_8013C478(pCamera, (Vector_80039F5C *)&lbl_802DBDE0[0]);
+        fn_8013C4BC(pCamera, (int *)&angles, lbl_802DBDE0[0].mUnknownC);
         pState[0] = 0;
         pState[1] = 0;
     }
 }
 
-void fn_8013FF28(Camera_8013FD8C *pCamera, int index)
+void fn_8013FF28(Camera_8013F738 *pCamera, int index)
 {
     pCamera->mUnknown5C = pCamera->mUnknown60 = pCamera->mUnknown64 = lbl_802DBE7C[index].mUnknown0;
     pCamera->mUnknown68 = pCamera->mUnknown6C = pCamera->mUnknown70 = lbl_802DBE7C[index].mUnknown4;

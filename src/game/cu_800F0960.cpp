@@ -789,7 +789,7 @@ extern unsigned char lbl_803EAE20[8];
 extern const float lbl_803ED6CC;
 int fn_800AC3FC(Object_80039F5C *p, int value);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
-void fn_8013AA00(Object_80137ABC *pBall, float *pOut, Point_8017886C *pPoint, float scale);
+void fn_8013AA00(Object_80137ABC *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_801528E0(void *pSet, Point_8017886C *pOut);
 int fn_800AC3A0(Object_80039F5C *p);
@@ -1891,7 +1891,7 @@ extern "C" void fn_800F3838(Object_80039F5C *p, Object_80039F5C *pOther, Points_
 extern "C" void fn_800F39FC(Points_800F3A6C *pInfo, int index) {
     pInfo->mpUnknown0 = fn_80137ABC(index);
     fn_80138064(pInfo->mpUnknown0, &pInfo->mUnknown4);
-    fn_8013AA00(pInfo->mpUnknown0, &pInfo->mUnknown48, &pInfo->mUnknown40, 1.5f);
+    fn_8013AA00(pInfo->mpUnknown0, 1.5f, &pInfo->mUnknown48, (Vector_80039F5C *)&pInfo->mUnknown40);
     fn_80137EC4(pInfo->mpUnknown0, &pInfo->mUnknown28);
     fn_80137D58(pInfo->mpUnknown0, &pInfo->mUnknown16);
 }
