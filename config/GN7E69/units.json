@@ -454,6 +454,14 @@
       "address": "0x801C2FE4",
       "evidence": "evidence.tsv external row strcmp: target call sites in src/game/cu_80029500.cpp and inspected callee behavior."
     },
+    "strcat": {
+      "address": "0x801C2F2C",
+      "evidence": "evidence.tsv external row strcat: target NUL scan of r3 then byte copy of r4 with the destination preserved; conventional library interface, original symbol not recovered."
+    },
+    "strrchr": {
+      "address": "0x801C30C0",
+      "evidence": "evidence.tsv external row strrchr: target scan keeping the last position whose byte equals the second argument; conventional library interface, original symbol not recovered."
+    },
     "strcpy": {
       "address": "0x801C2EB4",
       "evidence": "evidence.tsv external row strcpy: target byte-copy loop and preserved destination; conventional library interface, original symbol not recovered."
@@ -5160,6 +5168,31 @@
       ]
     },
     {
+      "source": "src/game/cu_80180FA4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80180FA4-0x80181330 (src/game/cu_80180FA4.cpp), its .data and .bss rows and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80180FA4",
+          "end": "0x80181330"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EA934",
+          "end": "0x802EA988"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80362A14",
+          "end": "0x80362A20"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8017F264.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8017F264-0x8017F3C8 (src/game/cu_8017F264.cpp) and its data rows.",
@@ -7883,6 +7916,19 @@
       ]
     },
     {
+      "source": "src/game/cu_80163E94.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80163E94-0x80164568 (src/game/cu_80163E94.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80163E94",
+          "end": "0x80164568"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80190208.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80190208-0x80190A7C and its data, declaration and source-form rows.",
@@ -10170,6 +10216,19 @@
           "placement": ".data3",
           "start": "0x802AB364",
           "end": "0x802AB4F8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80193CEC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80193CEC-0x80193E7C (src/game/cu_80193CEC.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80193CEC",
+          "end": "0x80193E7C"
         }
       ]
     },

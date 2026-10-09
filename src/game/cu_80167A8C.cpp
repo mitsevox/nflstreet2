@@ -577,7 +577,7 @@ void GetPlayerPosition(unsigned char team, int index, float *pX, float *pY)
     Team_80167A8C *pTeam = &lbl_803ECAF4->mUnknown4[team];
 
     if (pTeam->mUnknown20.mUnknown10 == 1) {
-        index = pTeam->mUnknown20.mUnknown14.mUnknown8.mUnknown84[index].mUnknownB;
+        index = pTeam->mUnknown20.mUnknown14.mUnknown8.mUnknown84[0][index].mUnknownB;
     }
     if (pX) {
         *pX = pTeam->mUnknown693C[index].mX;

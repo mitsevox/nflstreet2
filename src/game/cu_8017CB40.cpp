@@ -58,13 +58,13 @@ void fn_8017CC34(int team, Object_800670B4 *pTeam)
         flag = 1;
     }
     for (i = 0; i <= 6; i++) {
-        unsigned short value = pTeam->mUnknown8.mUnknown84[i].mUnknown0;
+        unsigned short value = pTeam->mUnknown8.mUnknown84[0][i].mUnknown0;
         if (flag && value == 1) {
             pairs[i][0] = 25;
         } else {
             pairs[i][0] = value;
         }
-        pairs[i][1] = pTeam->mUnknown8.mUnknown84[i].mUnknown3 - 1;
+        pairs[i][1] = pTeam->mUnknown8.mUnknown84[0][i].mUnknown3 - 1;
     }
     if (team == 0) {
         handle = fn_8022E558();
