@@ -12445,19 +12445,19 @@
     {
       "source": "src/game/cu_8004A2F4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8004A2F4-0x8004BA44 (src/game/cu_8004A2F4.cpp), its compiler, type and source-form rows, the .rodata row 0x8028D7A0-0x8028D7DC and the .bss row 0x803084C4-0x8030865C. Draft comparison: 19 of 23 functions exact; fn_8004AA34, fn_8004ABF4, fn_8004AF94 and fn_8004B354 are partial; original bytes remain linked.",
+      "evidence": "evidence.tsv unit row 0x8004A2F4-0x8004C684 (src/game/cu_8004A2F4.cpp), its compiler, type and source-form rows, the .rodata row 0x8028D7A0-0x8028D920 and the .bss row 0x803084C4-0x8030865C. Draft comparison: 30 of 34 functions exact; fn_8004AA34, fn_8004ABF4, fn_8004BD20 and fn_8004C518 are partial; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8004A2F4",
-          "end": "0x8004BA44"
+          "end": "0x8004C684"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8028D7A0",
-          "end": "0x8028D7DC"
+          "end": "0x8028D920"
         },
         {
           "section": ".bss",
@@ -12581,6 +12581,61 @@
           "symbol": "fn_8004B354",
           "start": "0x8004B354",
           "end": "0x8004BA44"
+        },
+        {
+          "symbol": "fn_8004BA44",
+          "start": "0x8004BA44",
+          "end": "0x8004BD20"
+        },
+        {
+          "symbol": "fn_8004BD20",
+          "start": "0x8004BD20",
+          "end": "0x8004C204"
+        },
+        {
+          "symbol": "fn_8004C204",
+          "start": "0x8004C204",
+          "end": "0x8004C270"
+        },
+        {
+          "symbol": "fn_8004C270",
+          "start": "0x8004C270",
+          "end": "0x8004C2FC"
+        },
+        {
+          "symbol": "fn_8004C2FC",
+          "start": "0x8004C2FC",
+          "end": "0x8004C368"
+        },
+        {
+          "symbol": "fn_8004C368",
+          "start": "0x8004C368",
+          "end": "0x8004C3D4"
+        },
+        {
+          "symbol": "fn_8004C3D4",
+          "start": "0x8004C3D4",
+          "end": "0x8004C440"
+        },
+        {
+          "symbol": "fn_8004C440",
+          "start": "0x8004C440",
+          "end": "0x8004C4AC"
+        },
+        {
+          "symbol": "fn_8004C4AC",
+          "start": "0x8004C4AC",
+          "end": "0x8004C518"
+        },
+        {
+          "symbol": "fn_8004C518",
+          "start": "0x8004C518",
+          "end": "0x8004C5E0"
+        },
+        {
+          "symbol": "fn_8004C5E0",
+          "start": "0x8004C5E0",
+          "end": "0x8004C684"
         }
       ]
     },

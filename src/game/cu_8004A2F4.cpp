@@ -1,8 +1,10 @@
 #include <math.h>
 #include <string.h>
 
-#include "game/Object_8003DEC4.h"
+#include "game/Node_80041904.h"
 #include "game/Object_80039F5C.h"
+#include "game/Object_8003DEC4.h"
+#include "game/Object_80040818.h"
 #include "game/bitstream.h"
 #include "game/cu_80041210.h"
 #include "game/cu_80067C10.h"
@@ -10,7 +12,6 @@
 #include "game/cu_80136B1C.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_801BA2A8.h"
-#include "game/fn_801BE60C.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802372EC.h"
@@ -41,63 +42,6 @@ struct VariantTable_8004A6EC {
 struct NameId_8004B020 {
     char mName[64];
     int mId;
-};
-
-/* Emitter record allocated per "particle" block and linked through
-   mpNext at +128 of its node. */
-struct Emitter_8004BD20 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    float mUnknown12[3];
-    float mUnknown24[3];
-    float mUnknown36;
-    unsigned char mUnknown40;
-    char mUnknown41[3];
-    Emitter_8004BD20 *mpNext;
-};
-
-/* Element of the list at +312 of Object_80041904, linked through
-   mpNext. */
-struct Node_80041904 {
-    char mName[64];
-    int mId;
-    unsigned char mUnknown68;
-    char mUnknown69[3];
-    float mUnknown72;
-    float mUnknown76;
-    char mUnknown80[8];
-    int mUnknown88;
-    unsigned short mUnknown92;
-    char mUnknown94[2];
-    int mUnknown96;
-    int mUnknown100;
-    int mUnknown104;
-    int mUnknown108;
-    float mUnknown112;
-    int mUnknown116;
-    int mUnknown120;
-    unsigned char mUnknown124;
-    char mUnknown125[3];
-    Emitter_8004BD20 *mUnknown128;
-    Node_80041904 *mpNext;
-};
-
-struct Flags_800411C8 {
-    char mUnknown0[20];
-    short mUnknown20;
-};
-
-/* View of the 548-byte placed object of src/game/cu_800400CC.cpp. */
-struct Object_80040818 {
-    char mUnknown0[172];
-    Pose_80041930 mUnknown172;
-    void *mUnknown228;
-    char mUnknown232[16];
-    unsigned int mUnknown248;
-    char mUnknown252[220];
-    Object_80041904 *mUnknown472;
-    Flags_800411C8 *mUnknown476;
 };
 
 /* 0x24-byte name table entry of fn_8004C368, fn_8004C3D4 and fn_8004C440. */
@@ -181,7 +125,9 @@ int fn_800C47C4(void);
 void fn_80145100(int type, int index);
 char *fn_801C2EB4(char *pDst, const char *pSrc);
 int fn_801F0A8C(int set, const char *pName);
-void fn_8004CBEC(void *pData, Object_80041904 *pObject, Object_80040818 *pOwner, float t);
+void fn_8004CBEC(void *pData, float t, Object_80041904 *pObject, Object_80040818 *pOwner);
+int fn_801BE068(void *pA, void *pB, void *pC, unsigned short key, float value, void *p);
+unsigned short fn_801BE648(void *p);
 void fn_8004CE6C(Object_80040818 *pOwner);
 void fn_8004E090(Object_80040818 *pOwner, int a, int b);
 void fn_800516B4(int id, float *pA, float *pB);
@@ -535,7 +481,7 @@ static inline void Restart_801BE068(Object_80041904 *pObject, unsigned short key
 {
     fn_8004AF84(pObject->mUnknown428);
     fn_801BE068(pObject->mUnknown428->mUnknown1300, pObject->mUnknown428->mUnknown48, pObject->mUnknown428->mUnknown60,
-                key, pObject, value);
+                key, value, pObject);
 }
 
 void fn_8004AF94(Object_80041904 *pObject, unsigned char b1, unsigned char b0, unsigned char b3,
@@ -756,7 +702,7 @@ int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
                         pObject->mUnknown200.mTime = 0.0f;
                         pObject->mUnknown200.mStep = 0;
                     }
-                    fn_8004CBEC(pNode->mUnknown128, pObject, pOwner, t);
+                    fn_8004CBEC(pNode->mUnknown128, t, pObject, pOwner);
                     count = (unsigned int)pNode->mUnknown112;
                 } else {
                     Object_80137ABC *pBall = fn_801374BC();
