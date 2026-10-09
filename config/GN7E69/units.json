@@ -530,6 +530,10 @@
       "address": "0x800BE7BC",
       "evidence": "evidence.tsv external row for 0x800BE7BC (vfn_12__14Class_80297CE8)."
     },
+    "fn_800C0420__14Class_80297CE8i": {
+      "address": "0x800C0420",
+      "evidence": "evidence.tsv external row for 0x800C0420 (fn_800C0420__14Class_80297CE8i)."
+    },
     "vfn_03__14Class_80297C60f": {
       "address": "0x800B9654",
       "evidence": "evidence.tsv external row for 0x800B9654 (vfn_03__14Class_80297C60f)."
