@@ -33,7 +33,7 @@ struct State_8016DDDC {
     char mUnknown0[8];
     Point_8017886C mPoint;
     int mFacing;
-    char mUnknown20[16];
+    char mUnknown20[28];
     unsigned char mUnknown48;
     char mUnknown49[1];
     unsigned char mUnknown50;
@@ -113,7 +113,7 @@ int fn_80178308(void);
 int fn_80178320(void);
 int fn_80178508(void *pPos, float *pOut, int a);
 Info_ScrmState *fn_801787D0(void);
-int fn_801787DC(unsigned char side);
+int fn_801787DC(int team);
 float fn_80178A08(void);
 float fn_80178A2C(void);
 void fn_8017CFB4(int index);
@@ -206,18 +206,20 @@ extern "C" void fn_8016DDDC(int team)
         Point_8017886C point;
         int facing;
         State_8016DDDC *pState;
-        unsigned char id = p->mpState->mId;
 
-        if (id >= 13 && id <= 14) {
+        switch (p->mpState->mId) {
+        case 13:
+        case 14:
             fn_800EEE3C(&point, &facing, p, 1);
             pState = (State_8016DDDC *)&p->mUnknown336;
             pState->mPoint.mX = point.mX;
             pState->mPoint.mY = point.mY;
-            pState->mUnknown50 = 1;
             pState->mFacing = facing;
             pState->mUnknown48 = 0;
+            pState->mUnknown50 = 1;
             fn_800FF6D8(p);
-        } else {
+            break;
+        default:
             if (fn_80137C48(p) != 0 && fn_80137B40() == p) {
                 fn_8013791C(fn_80137C48(p), 5, 0);
             }
@@ -227,10 +229,11 @@ extern "C" void fn_8016DDDC(int team)
             pState = (State_8016DDDC *)&p->mUnknown336;
             pState->mPoint.mX = point.mX;
             pState->mPoint.mY = point.mY;
-            pState->mUnknown50 = 1;
             pState->mFacing = facing;
             pState->mUnknown48 = 0;
+            pState->mUnknown50 = 1;
             fn_800FF6D8(p);
+            break;
         }
         p->mFlags |= 0x40000;
     }
@@ -307,11 +310,11 @@ extern "C" void fn_8016E15C(void)
 
     pos = fn_80177FE0();
     if (fn_80177F70() != 0) {
+        Message_800F01CC message;
         Object_80137ABC *pBall = fn_801374BC();
         Vector_80039F5C ballPos;
         Object_80039F5C *pCarrier;
         Object_80039F5C *pPasser;
-        Message_800F01CC message;
         int offense;
         unsigned char team;
 
@@ -345,28 +348,23 @@ extern "C" void fn_8016E15C(void)
 
             for (i = 0; i < count; i++) {
                 Object_80039F5C *p = fn_80039F5C(team, i);
-                float delay;
 
-                if (p == pCarrier || p == pPasser) {
-                    continue;
+                if (p != pCarrier && p != pPasser && p->mMotion.mUnknown28 < lbl_803ECB08 * 0.1f &&
+                    (p->mIdBytes[2] == offense || fabsf(pos.mY - p->mMotion.mPos.mY) < 2.0f ||
+                     fabsf(pos.mX - p->mMotion.mPos.mX) > 6.0f)) {
+                    float delay = 0.025098039f;
+
+                    delay += fn_802372EC(0, 8) * 0.01f;
+                    if (p->mIdBytes[2] == offense) {
+                        delay += 0.075f;
+                    } else {
+                        delay += 0.025f;
+                    }
+                    fn_801C1F94(&message, 0, 4);
+                    message.mId = 51;
+                    message.mUnknown1[0] = (int)(delay * 32.0f);
+                    fn_800F00D4(0, p->mpState, &message, p);
                 }
-                if (p->mMotion.mUnknown28 >= lbl_803ECB08 * 0.1f) {
-                    continue;
-                }
-                if (p->mIdBytes[2] != offense && fabsf(pos.mY - p->mMotion.mPos.mY) >= 2.0f &&
-                    fabsf(pos.mX - p->mMotion.mPos.mX) <= 6.0f) {
-                    continue;
-                }
-                delay = 0.025098039f + fn_802372EC(0, 8) * 0.01f;
-                if (p->mIdBytes[2] == offense) {
-                    delay += 0.075f;
-                } else {
-                    delay += 0.025f;
-                }
-                fn_801C1F94(&message, 0, 4);
-                message.mId = 51;
-                message.mUnknown1[0] = (int)(delay * 32.0f);
-                fn_800F00D4(0, p->mpState, &message, p);
             }
         }
     }
@@ -379,7 +377,7 @@ extern "C" void fn_8016E498(void)
     int other = fn_80178320();
     Vector_80039F5C ballPos;
     unsigned int count;
-    Object_800670B4 *pObject;
+    int side;
 
     fn_8011F574();
     fn_800D0B08();
@@ -401,10 +399,8 @@ extern "C" void fn_8016E498(void)
     fn_800FAD2C();
     fn_8016B0B0();
     fn_800FAECC(1);
-    pObject = fn_80168708(team);
-    fn_80164C4C(pObject, fn_8016871C(team), team, 0);
-    pObject = fn_80168708(other);
-    fn_80164C4C(pObject, fn_8016871C(other), other, 0);
+    fn_80164C4C(fn_80168708(team), fn_8016871C(team), team, 0);
+    fn_80164C4C(fn_80168708(other), fn_8016871C(other), other, 0);
 
     count = fn_80178D70(team);
     for (i = 0; i < count; i++) {
@@ -442,13 +438,13 @@ extern "C" void fn_8016E498(void)
     fn_80176630();
     fn_80173E24();
 
-    team = fn_80178308();
+    side = fn_80178308();
     fn_80138590(fn_801374BC());
     fn_8010BEA4();
     fn_800DC578();
-    if (fn_800B65A0(team) != 0xFF && fn_80177F70() != 0) {
+    if (fn_800B65A0(side) != 0xFF && fn_80177F70() != 0) {
         Camera_8013F738 *pCamera = fn_8013FA04(fn_8013F9F8());
-        Record_80067338 *pRecord = fn_8016871C(team);
+        Record_80067338 *pRecord = fn_8016871C(side);
 
         if (fn_801650BC(pRecord) == 0 && pRecord->mUnknown14 != 4 && pRecord->mUnknown14 != 2) {
             fn_8013FA8C(2);
@@ -462,7 +458,7 @@ extern "C" void fn_8016E498(void)
 
 extern "C" int fn_8016E764(void)
 {
-    int allowed = 1;
+    bool allowed = true;
     int mode = fn_801486A0();
     int result;
 
@@ -471,24 +467,21 @@ extern "C" int fn_8016E764(void)
     }
     result = 0;
     if (fn_800B65A0(fn_80178308()) != 0xFF) {
-        if (fn_8017886C()->mUnknown1D == -2 || fn_8013BA58(fn_801374BC(), 0) == 6 || allowed == 0) {
+        if (fn_8017886C()->mUnknown1D == -2 || fn_8013BA58(fn_801374BC(), 0) == 6 || !allowed) {
             if (fn_8016E928() != 0) {
                 result = 1;
             }
         }
-    } else if (fn_8017886C()->mUnknown1D == -2 || fn_8013BA58(fn_801374BC(), 0) == 6 || allowed == 0) {
+    } else if (fn_8017886C()->mUnknown1D == -2 || fn_8013BA58(fn_801374BC(), 0) == 6 || !allowed) {
         Object_800785C0 *pRecord = fn_800785C0();
 
         if (fn_80025708() != 0 && pRecord->mUnknown1A4 != 0 && fn_800254E8(pRecord, 55, 0) != 0 &&
             fn_801787DC(0) < fn_801787DC(1)) {
             result = 1;
         }
-        if (result == 0) {
-            short score = fn_8009D990(0);
-
-            if (score <= lbl_803EABA4->fn_800C02E0() && fn_800B1200() != 0 && fn_8016E928() != 0) {
-                result = 1;
-            }
+        if (result == 0 && (short)fn_8009D990(0) <= lbl_803EABA4->fn_800C02E0() && fn_800B1200() != 0 &&
+            fn_8016E928() != 0) {
+            result = 1;
         }
     }
     if (lbl_803EABA4->fn_800C0414() == 1 && fn_8009D990(0) > fn_8009D990(1) &&
