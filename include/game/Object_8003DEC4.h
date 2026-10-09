@@ -75,13 +75,6 @@ struct Weight_80042530 {
     unsigned short mUnknown6;
 };
 
-/* Record whose position (+0xC) is tracked by fn_801A1650 and passed to
-   fn_80144310 with the block at +0x1360 of the player. */
-struct Source_80144310 {
-    char mUnknown0[12];
-    float mUnknown12[3];
-};
-
 /* 0x34-byte light record copied by fn_8020F2C4; the static at 0x80365D54
    in src/game/cu_801A14D8.cpp has the same layout. */
 struct Light_8020F2C4 {
@@ -193,7 +186,7 @@ struct Object_8003DEC4 {
     short mUnknown830;
     char mUnknown832[76];
     float mUnknown908[4][4];
-    Source_80144310 *mUnknown972;
+    int mUnknown972;
     unsigned int mUnknown976;
     char mUnknown980[4];
     int mUnknown984;

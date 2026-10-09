@@ -21,6 +21,13 @@ struct Slot_801A3284 {
     char mUnknown45[3];
 };
 
+/* Light source the player stands in, held as an int at +0x3CC of the
+   player (the 0x80054138 result); its position is at +0xC. */
+struct Source_80144310 {
+    char mUnknown0[12];
+    float mUnknown12[3];
+};
+
 /* Four colour bytes passed by value to fn_8024FB58. */
 struct Color_8024FB58 {
     unsigned char r;
@@ -304,7 +311,7 @@ int fn_801A1650(Object_8003DEC4 *pPlayer)
     if (pPlayer->mUnknown20 & 0x20000) {
         flash = pData->mUnknown564 == 12.0f;
     }
-    pSource = pPlayer->mUnknown972;
+    pSource = (Source_80144310 *)pPlayer->mUnknown972;
     if (pSource) {
         if (pSource->mUnknown12[0] != pData->mUnknown580 || pSource->mUnknown12[1] != pData->mUnknown584 ||
             pSource->mUnknown12[2] != pData->mUnknown588) {
@@ -313,9 +320,9 @@ int fn_801A1650(Object_8003DEC4 *pPlayer)
             pData->mUnknown590 = (pData->mUnknown580 - pData->mUnknown590) * (1.0f / 15.0f) * t + pData->mUnknown590;
             pData->mUnknown594 = (pData->mUnknown584 - pData->mUnknown594) * (1.0f / 15.0f) * t + pData->mUnknown594;
             pData->mUnknown598 = (pData->mUnknown588 - pData->mUnknown598) * (1.0f / 15.0f) * t + pData->mUnknown598;
-            pData->mUnknown580 = pPlayer->mUnknown972->mUnknown12[0];
-            pData->mUnknown584 = pPlayer->mUnknown972->mUnknown12[1];
-            pData->mUnknown588 = pPlayer->mUnknown972->mUnknown12[2];
+            pData->mUnknown580 = pSource->mUnknown12[0];
+            pData->mUnknown584 = pSource->mUnknown12[1];
+            pData->mUnknown588 = pSource->mUnknown12[2];
             pData->mUnknown5A0 = 0;
         }
         if (pData->mUnknown5A0 < 15) {
@@ -353,7 +360,7 @@ int fn_801A1650(Object_8003DEC4 *pPlayer)
         b = color.z;
     }
     light = fn_80236B98(1, r, g, b);
-    if (fn_80144310(pPlayer->mUnknown4960, pPlayer->mUnknown972, block, &scale)) {
+    if (fn_80144310(pPlayer->mUnknown4960, (Source_80144310 *)pPlayer->mUnknown972, block, &scale)) {
         scale.x *= r;
         scale.y *= g;
         scale.z *= b;

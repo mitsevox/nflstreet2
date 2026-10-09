@@ -25536,6 +25536,12 @@
           "placement": ".text",
           "start": "0x801A14D8",
           "end": "0x801A4AD4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE484",
+          "end": "0x802AE524"
         }
       ],
       "functions": [
