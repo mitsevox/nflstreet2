@@ -13589,7 +13589,7 @@
     {
       "source": "src/game/cu_80044F20.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x80044F20-0x80046004 (src/game/cu_80044F20.cpp), its compiler, type and source-form rows, the 13 exact function extents and the exact .rodata data row 0x8028D568-0x8028D588. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80044F20-0x80046004 (src/game/cu_80044F20.cpp), its compiler, type and source-form rows, the 13 target-exact function boundaries (6 bodies exact, 7 partial) and the exact .rodata data row 0x8028D568-0x8028D588. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
