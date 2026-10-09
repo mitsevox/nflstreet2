@@ -23,8 +23,8 @@ struct Object_80167A8C {
 extern "C" {
 int fn_80066D74(unsigned int id, int a, int b, int c, int d, int e);
 void fn_80066DC8(unsigned int id, int a);
-int fn_800674E0(int tag, int a, int *pResult);
-int fn_800675B4(int tag, int a, int b);
+void fn_800674E0(int tag, int a, int *pResult);
+void fn_800675B4(int tag, int a, int b);
 void fn_80067A4C(int team, int tag, int kind, int *pResult);
 int fn_80067A8C(int tag, int a, int b);
 void fn_80087CBC(Object_8007A334 *pCursor);
@@ -577,7 +577,7 @@ void GetPlayerPosition(unsigned char team, int index, float *pX, float *pY)
     Team_80167A8C *pTeam = &lbl_803ECAF4->mUnknown4[team];
 
     if (pTeam->mUnknown20.mUnknown10 == 1) {
-        index = pTeam->mUnknown20.mUnknown14.mUnknown8.mUnknown84[index].mUnknownB;
+        index = pTeam->mUnknown20.mUnknown14.mUnknown8.mUnknown84[0][index].mUnknownB;
     }
     if (pX) {
         *pX = pTeam->mUnknown693C[index].mX;
