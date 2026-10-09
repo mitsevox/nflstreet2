@@ -24825,21 +24825,56 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8003877C",
-          "end": "0x8003AC84"
+          "start": "0x8003830C",
+          "end": "0x8003AEA8"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8028CFF0",
-          "end": "0x8028D004"
+          "start": "0x8028CFA0",
+          "end": "0x8028D070"
         }
       ],
       "functions": [
         {
+          "symbol": "fn_8003830C",
+          "start": "0x8003830C",
+          "end": "0x8003845C"
+        },
+        {
+          "symbol": "fn_8003845C",
+          "start": "0x8003845C",
+          "end": "0x800384DC"
+        },
+        {
+          "symbol": "fn_800384DC",
+          "start": "0x800384DC",
+          "end": "0x800385D4"
+        },
+        {
+          "symbol": "fn_800385D4",
+          "start": "0x800385D4",
+          "end": "0x80038650"
+        },
+        {
+          "symbol": "fn_80038650",
+          "start": "0x80038650",
+          "end": "0x8003877C"
+        },
+        {
           "symbol": "fn_80038E50",
           "start": "0x80038E50",
           "end": "0x80038E80"
+        },
+        {
+          "symbol": "fn_80038E80",
+          "start": "0x80038E80",
+          "end": "0x80039044"
+        },
+        {
+          "symbol": "fn_80039044",
+          "start": "0x80039044",
+          "end": "0x8003924C"
         },
         {
           "symbol": "fn_8003924C",
@@ -24970,6 +25005,11 @@
           "symbol": "fn_8003A5E8",
           "start": "0x8003A5E8",
           "end": "0x8003A628"
+        },
+        {
+          "symbol": "fn_8003A628",
+          "start": "0x8003A628",
+          "end": "0x8003AB08"
         },
         {
           "symbol": "fn_8003AB08",

@@ -6748,9 +6748,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8003AC84.cpp",
+      "source": "src/game/cu_8003877C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8003AC84-0x8003AEA8 (src/game/cu_8003AC84.cpp) and its data and source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8003830C-0x8003AEA8 (src/game/cu_8003877C.cpp): the three functions 0x8003AC84-0x8003AEA8 and the .rodata 0x8028D02C-0x8028D06C are linked from source; the rest of the file is comparison-only.",
       "sections": [
         {
           "section": ".text",
