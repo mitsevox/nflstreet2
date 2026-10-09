@@ -4,6 +4,7 @@
    channel name "Divots", and the per-surface variant tables read from the
    "surface"/"divot" data blocks. The file ends with the colour-entry parser
    used by the dynamic palette code that follows it. */
+#include "game/DynClut_80044F20.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/bitstream.h"
@@ -75,15 +76,6 @@ struct DivotHandlers {
 struct DivotFeet {
     float mFoot0[2];
     float mFoot1[2];
-};
-
-/* Colour entry parsed by fn_80044C88. */
-struct ColorEntry {
-    int mMode;
-    unsigned char mFrom;
-    unsigned char mTo;
-    unsigned char mColor;
-    unsigned char mLevel;
 };
 
 extern "C" {

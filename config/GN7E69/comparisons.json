@@ -12696,6 +12696,92 @@
       ]
     },
     {
+      "source": "src/game/cu_80044F20.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x80044F20-0x80046004 (src/game/cu_80044F20.cpp), its compiler, type and source-form rows, the 13 exact function extents and the exact .rodata data row 0x8028D568-0x8028D588. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80044F20",
+          "end": "0x80046004"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D568",
+          "end": "0x8028D588"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80044F20",
+          "start": "0x80044F20",
+          "end": "0x80045020"
+        },
+        {
+          "symbol": "fn_80045020",
+          "start": "0x80045020",
+          "end": "0x80045084"
+        },
+        {
+          "symbol": "fn_80045084",
+          "start": "0x80045084",
+          "end": "0x800450A8"
+        },
+        {
+          "symbol": "fn_800450A8",
+          "start": "0x800450A8",
+          "end": "0x800450D8"
+        },
+        {
+          "symbol": "fn_800450D8",
+          "start": "0x800450D8",
+          "end": "0x800451D0"
+        },
+        {
+          "symbol": "fn_800451D0",
+          "start": "0x800451D0",
+          "end": "0x800452F8"
+        },
+        {
+          "symbol": "fn_800452F8",
+          "start": "0x800452F8",
+          "end": "0x80045524"
+        },
+        {
+          "symbol": "fn_80045524",
+          "start": "0x80045524",
+          "end": "0x80045714"
+        },
+        {
+          "symbol": "fn_80045714",
+          "start": "0x80045714",
+          "end": "0x80045904"
+        },
+        {
+          "symbol": "fn_80045904",
+          "start": "0x80045904",
+          "end": "0x80045B30"
+        },
+        {
+          "symbol": "fn_80045B30",
+          "start": "0x80045B30",
+          "end": "0x80045D5C"
+        },
+        {
+          "symbol": "fn_80045D5C",
+          "start": "0x80045D5C",
+          "end": "0x80045F64"
+        },
+        {
+          "symbol": "fn_80045F64",
+          "start": "0x80045F64",
+          "end": "0x80046004"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_801444D8.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801444D8-0x80145224 (src/game/cu_801444D8.cpp), its 19 exact function extents, the exact .rodata/.data/.sdata/.bss data rows and the compiler and source-form rows, which state the unresolved .rodata bytes. Draft comparisons only; the original assembly remains linked until the .rodata placement is reproduced.",
