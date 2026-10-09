@@ -4,6 +4,8 @@
 #include "game/fn_8007F828.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_8021D7B8.h"
+#include "game/fn_800B65A0.h"
+#include "game/fn_8009D990.h"
 
 /* Result list sent with message 0x80000083: a two-word header followed by
    the four results copied by fn_80025C88. */
@@ -26,9 +28,7 @@ int fn_800796B8(int side, Object_800785C0 *pRecord, int index, int *pResult);
 int fn_80079758(int side, Info_8007984C *pInfo);
 int fn_800797F4(Object_800785C0 *pRecord, int a, int b);
 int fn_8007984C(Object_800785C0 *pRecord);
-int fn_8009D990(int index);
 int fn_800A7E40(unsigned char side);
-int fn_800B65A0(int side);
 int fn_800D41F8(int side);
 unsigned char fn_80174160(void);
 int fn_80177F70(void);

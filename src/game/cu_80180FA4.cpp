@@ -2,6 +2,7 @@
 #include "game/Object_8007A334.h"
 #include "game/cu_80181330.h"
 #include "game/fn_8021D7B8.h"
+#include "game/cu_8017F90C.h"
 
 extern void *lbl_803EB688;
 

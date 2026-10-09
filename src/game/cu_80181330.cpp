@@ -6,6 +6,7 @@
 #include "game/cu_80181330.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_8021D7B8.h"
+#include "game/cu_8017F90C.h"
 
 /* One entry of the screen stack lbl_80362B14. */
 struct StackEntry_80362B14 {

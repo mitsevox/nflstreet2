@@ -2,6 +2,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801BE60C.h"
+#include "game/fn_800B65A0.h"
 
 struct Object_80053674;
 
@@ -103,7 +104,6 @@ void fn_80067E3C(int, void *, int, int, int, int);
 void fn_8007ECBC(int, int);
 void fn_80083E1C(Object_8007A334 *, int);
 void fn_8009BD2C(Object_80039F5C *, int *);
-int fn_800B65A0(int);
 void fn_800D6D7C(Object_80039F5C *, unsigned int, int);
 int fn_800A3444(void);
 int fn_801485D4(void);

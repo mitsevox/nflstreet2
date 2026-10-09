@@ -24,6 +24,8 @@
 #include "game/Class_80297C60.h"
 #include "game/Class_80297CE8.h"
 #include "game/Class_802A56E8.h"
+#include "game/fn_800B65A0.h"
+#include "game/fn_8009D990.h"
 
 /* One step of a tutorial lesson (32-byte records of the step tables). */
 struct Step_802DEC08 {
@@ -315,7 +317,6 @@ void fn_8009D8CC(int index);
 void fn_8009D944(int index);
 void fn_8009D964(int index, int value);
 void fn_8009D984(int a);
-unsigned int fn_8009D990(int index);
 void fn_8009E01C(void);
 void fn_800A039C(Class_80297AB8 *pObject);
 void fn_800A7A0C(int a);
@@ -325,7 +326,6 @@ void fn_800AD910(int a, float b);
 void fn_800AE988(void);
 void fn_800B3EFC(int team);
 void fn_800B63B0(void);
-int fn_800B65A0(int unknown);
 int fn_800B81A4(void);
 void fn_800B847C(int a, int b);
 void fn_800B9598(Class_80297C60 *pObject);
@@ -791,7 +791,7 @@ void fn_80156AB0(void)
     for (team = 0; team <= 1; team++) {
         for (i = 0; i <= 6; i++) {
             Object_80039F5C *pObject = fn_80039F5C((unsigned char)team, i);
-            fn_800EFE60(0, &pObject->mUnknown3048, pObject);
+            fn_800EFE60(0, pObject->mQueue, pObject);
         }
     }
     side = fn_800885A8(fn_801568F0(), fn_801568E8());

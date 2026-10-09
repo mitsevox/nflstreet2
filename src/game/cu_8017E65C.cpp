@@ -3,6 +3,7 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_80238174.h"
+#include "game/fn_800B65A0.h"
 
 /* 0x30-byte block allocated by fn_8017EB94 under the id 'ctos'. */
 struct State_8017EB94 {
@@ -75,7 +76,6 @@ void fn_800A3B5C(Object_80039F5C *p);
 void fn_80028918(int unknown);
 int fn_80027DF0(void);
 void fn_8009BD48(int *pRef, int a, int b, int c);
-int fn_800B65A0(int unknown);
 void fn_8013CC7C(Interp_8013CC14 *pInterp, int steps);
 void fn_8013CD58(Interp_8013CC14 *pInterp, int steps);
 void fn_8013F374(ShotEntry_8013F374 *pEntries);
@@ -257,19 +257,19 @@ void fn_8017E754(unsigned char *pUnused, Spot_8017E754 *pA, Spot_8017E754 *pB)
             message.mUnknown1[1] = (int)(pTable[i].mPos.mY + pTable[i].mPos.mY);
             message.mId = 0x3F;
             message.mUnknown1[2] = angle;
-            fn_800F053C(0, &p->mUnknown3048, &message, p);
+            fn_800F053C(0, p->mQueue, &message, p);
 
             fn_801C1F94(&message, 0, sizeof(message));
             message.mId = 6;
             message.mUnknown1[0] = angle;
-            fn_800F03D8(0, &p->mUnknown3048, &message, p);
+            fn_800F03D8(0, p->mQueue, &message, p);
 
             fn_801C1F94(&message, 0, sizeof(message));
             message.mId = 9;
             message.mUnknown1[0] = 0xCB;
             message.mUnknown1[1] = 0;
             message.mUnknown1[2] = 0xFF;
-            fn_800F03D8(0, &p->mUnknown3048, &message, p);
+            fn_800F03D8(0, p->mQueue, &message, p);
         }
     }
 }

@@ -5,6 +5,7 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
+#include "game/fn_800B65A0.h"
 
 /* This mode overlays the opaque block at player+0x150. */
 struct State_80134E24 {
@@ -35,7 +36,6 @@ int fn_80178320(void);
 int fn_800AD9B4(void);
 int fn_801481B0(void);
 int fn_801483F8(void);
-unsigned char fn_800B65A0(int);
 int fn_80137C48(Object_80039F5C *);
 void fn_80148108(int);
 void fn_8013FA8C(int);
@@ -265,8 +265,8 @@ int fn_80135200(Object_80039F5C *player) {
             }
             int found = 0;
             if ((state->mUnknown14 >= 5.0f ||
-                 (state->mUnknown28->mpState->mId != 58 && (state->mUnknown28->mpState->mUnknown4 == 21 ||
-                                                            state->mUnknown28->mpState->mUnknown4 == 51))) &&
+                 (state->mUnknown28->mpState->mId != 58 && (state->mUnknown28->mpState[1].mId == 21 ||
+                                                            state->mUnknown28->mpState[1].mId == 51))) &&
                 (state->mUnknown1D[state->mUnknown2C] == 0 ||
                  (state->mUnknown1D[state->mUnknown2C] == 1 &&
                   state->mUnknown20[state->mUnknown2C] <= lbl_803EB16A))) {
@@ -302,7 +302,7 @@ int fn_80135200(Object_80039F5C *player) {
                     score = state->mUnknown20[i];
                     if ((state->mUnknown14 >= 5.0f ||
                          (candidate->mpState->mId != 58 &&
-                          (candidate->mpState->mUnknown4 == 21 || candidate->mpState->mUnknown4 == 51))) &&
+                          (candidate->mpState[1].mId == 21 || candidate->mpState[1].mId == 51))) &&
                         (rank == 0 || (rank == 1 && score <= lbl_803EB16A))) {
                         found = 1;
                         if (!fn_801347D4(player, state, &selected, &action, indices))

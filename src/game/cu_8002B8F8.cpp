@@ -1,5 +1,6 @@
 #include "game/fn_8022781C.h"
 #include "game/fn_80195EFC.h"
+#include "game/fn_8009D990.h"
 /* Replay camera and replay recorder of the in-game loop (Xbox data string
    "REPLAY.C" heads this file's .data; neutral file name). The data and the
    first four functions are linked from source; the remaining functions
@@ -149,7 +150,6 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009D818(int state);
 int fn_8009D86C(void);
 void fn_8009D964(int index, int value);
-int fn_8009D990(int index);
 void fn_800A3120(float a);
 float fn_800A32B4(void);
 int fn_800A3444(void);

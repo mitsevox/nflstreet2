@@ -1,4 +1,6 @@
 #include <string.h>
+#include "game/fn_800B65A0.h"
+#include "game/fn_8009D990.h"
 
 #include "engine/vptmanager.h"
 #include "game/Camera_8013F738.h"
@@ -1900,7 +1902,6 @@ int fn_800C95DC(int team, int index, int *pRef);
 int fn_800BA6F8(void);
 int fn_800BAA24(void);
 int fn_80178C9C(void);
-int fn_800B65A0(int team);
 int fn_800B6644(int index);
 Object_80039F5C *fn_800B6544(int index);
 int fn_80168E00(int team, int index, unsigned char *pOut);
@@ -3340,7 +3341,6 @@ int fn_800B7F88(Object_80039F5C *p);
 int fn_800B78DC(Object_80039F5C *p);
 int fn_800B7F34(Object_80039F5C *p);
 int fn_800B7E60(Object_80039F5C *p);
-int fn_800B65A0(int team);
 int fn_80178308(void);
 Camera_8013F738 *fn_8013FA04(int index);
 void fn_8013C438(Camera_8013F738 *pCamera);
@@ -3948,7 +3948,6 @@ void *fn_80238540(int handle, int index);
 void *fn_8023850C(int handle);
 void fn_80238570(int handle, int unknown);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
-int fn_8009D990(int index);
 void fn_800D6F3C(Record_800B15FC *pRecord);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_800AFDD4(void (*pCallback)(int, int, float));
@@ -5095,7 +5094,6 @@ unsigned char fn_8005B3CC(void);
 Object_80039F5C *fn_8005A8AC(int index);
 void fn_800ABA0C(void);
 void fn_800ABAF0(void);
-int fn_800B65A0(int team);
 int fn_80178308(void);
 int fn_8017F60C(void);
 void fn_800B8608(void);
@@ -5200,10 +5198,10 @@ extern "C" void fn_800AA8B8(void)
         Object_80039F5C *p = fn_80039F5C(0, i);
 
         fn_8003AB08(p, 0);
-        fn_800EFE1C(0, &p->mUnknown3048);
+        fn_800EFE1C(0, p->mQueue);
         p = fn_80039F5C(1, i);
         fn_8003AB08(p, 0);
-        fn_800EFE1C(0, &p->mUnknown3048);
+        fn_800EFE1C(0, p->mQueue);
     }
 }
 
@@ -5823,7 +5821,6 @@ struct Block_800AEB1C {
 extern "C" {
 void fn_800ADA1C(void);
 void fn_800AE138(int index);
-int fn_800B65A0(int team);
 int fn_800B6644(int index);
 int fn_80177C38(void);
 int fn_80178308(void);
@@ -6842,7 +6839,6 @@ int fn_80178308(void);
 int fn_80178320(void);
 Object_800670B4 *fn_80168708(int team);
 int fn_80168E00(int team, int index, unsigned char *pOut);
-int fn_800B65A0(int team);
 void fn_800C1C34(void);
 void fn_800FBAA8(void);
 void fn_8009E674(void);
@@ -6972,7 +6968,7 @@ extern "C" void fn_8009D984(int value)
     lbl_803EA9A8->mEntries[1].mUnknownC = value;
 }
 
-extern "C" int fn_8009D990(int index)
+extern "C" unsigned int fn_8009D990(int index)
 {
     Entry_8009D964 *pEntry = &lbl_803EA9A8->mEntries[index];
 
@@ -8393,7 +8389,7 @@ extern "C" void fn_800B6658(Object_80039F5C *p)
         lbl_803EAB60->mpEntries[p->mUnknown8].mUnknown1 = 0xFF;
         lbl_803EAB60->mpEntries[p->mUnknown8].mUnknown4 = 0;
         lbl_803EAB60->mpEntries[p->mUnknown8].mUnknown8 = 0;
-        fn_800F0770(0, &p->mUnknown3048, 4, 0, p);
+        fn_800F0770(0, p->mQueue, 4, 0, p);
         fn_800F1800(p->mUnknown8);
     }
     p->mUnknown8 = 0xFF;
@@ -8836,7 +8832,6 @@ struct Record_800C432C {
 
 extern "C" {
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
-int fn_800B65A0(int index);
 int fn_80177F70(void);
 int fn_801F0F18(int a);
 void fn_800AD910(int a, float b);
@@ -8868,7 +8863,6 @@ int fn_8011F32C(void);
 int fn_8011F228(void);
 int fn_800B119C(void);
 int fn_800BA6F8(void);
-int fn_8009D990(int index);
 int fn_8013F9F8(void);
 Camera_8013F738 *fn_8013FA04(int index);
 void fn_8013C6F0(Camera_8013F738 *pCamera);

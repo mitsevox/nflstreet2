@@ -1,6 +1,7 @@
 #include "game/Class_80148A58.h"
 #include "game/cu_80064864.h"
 #include "game/fn_800AD9B4.h"
+#include "game/fn_800B65A0.h"
 
 /* Request latched by fn_8006587C and handed out once through the slot-0 callback fn_80065714. */
 struct Request_8030A50C {
@@ -17,7 +18,6 @@ int fn_8002D060(void *p);
 int fn_8009B9A8(int a);
 int fn_8009D86C(void);
 int fn_800A7FD8(void);
-int fn_800B65A0(int a);
 int fn_800B6644(int a);
 int fn_800BA6F8(void);
 int fn_80178308(void);
