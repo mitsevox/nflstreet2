@@ -47,7 +47,7 @@ struct Hit_8004C844 {
     char mUnknown6[2];
 };
 
-typedef void (*Callback_80041904)(Object_80041904 *pObject, int entry, int mode);
+typedef int (*Callback_80041904)(Object_80041904 *pObject, Object_80040818 *pOwner, int mode);
 
 struct Object_80041904 {
     int mUnknown0;

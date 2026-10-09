@@ -125,7 +125,6 @@ extern float lbl_803EA4F0;
 
 void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
 void fn_80030554(void *pStream, float *pValues, int bits, float scale);
-Object_80040818 *fn_80040F18(int index);
 void fn_800411C8(Object_80040818 *pObject);
 void fn_800411EC(Object_80040818 *pObject);
 int fn_8004C204(const char *pName);
@@ -169,8 +168,8 @@ float fn_80178A08(void);
 float fn_80178A44(void);
 void fn_8019EC88(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pB, Pose_80041930 *pC, float t,
                  unsigned char a);
-void fn_801A9F98(Extra_8004149C *pExtra, int entry, int a, int b);
-void fn_801AA124(int entry, void *a, int b, void *c);
+void fn_801A9F98(Extra_8004149C *pExtra, Object_80040818 *pItem, int a, int b);
+void fn_801AA124(Object_80040818 *pItem, void *a, int b, void *c);
 short *fn_801AA220(int count);
 void fn_801B9EDC(void *p, int a, int b, int c);
 void fn_801B9FEC(void *p, void *q);
@@ -342,9 +341,9 @@ void fn_8004A870(Handler_803084C4 *pHandlers, unsigned int count)
     pHandlers[101] = fn_8004A5EC;
 }
 
-void fn_8004A8C4(Extra_8004149C *pExtra, int entry, int a) { fn_801A9F98(pExtra, entry, a, 0); }
+void fn_8004A8C4(Extra_8004149C *pExtra, Object_80040818 *pItem, int a) { fn_801A9F98(pExtra, pItem, a, 0); }
 
-void fn_8004A8E8(int entry, void *a, int b, void *c) { fn_801AA124(entry, a, b, c); }
+void fn_8004A8E8(Object_80040818 *pItem, void *a, int b, void *c) { fn_801AA124(pItem, a, b, c); }
 
 void fn_8004A908(Object_80041904 *pObject, int index)
 {

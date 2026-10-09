@@ -85,7 +85,6 @@ void fn_800407F0(void);
 void fn_80040818(Object_80040818 *pObject, Desc_800408E4 *pDesc);
 void fn_80040884(Object_80040818 *pObject);
 int fn_800408A4(Object_80040818 *pObject);
-Object_80040818 *fn_80040F18(int index);
 }
 
 static Object_80040818 **lbl_803EA480 = 0;
@@ -246,7 +245,7 @@ void fn_800405F0(int handle)
             Object_80041904 *pLinked = lbl_803EA480[i]->mUnknown472;
 
             if (pLinked->mUnknown184 != 0) {
-                pLinked->mUnknown184(pLinked, (int)lbl_803EA480[i], 3);
+                pLinked->mUnknown184(pLinked, lbl_803EA480[i], 3);
             }
             fn_801DD320(handle, lbl_803EA480[i]);
             fn_80228D58(lbl_803EA480[i]);
@@ -276,7 +275,7 @@ void fn_800406C0(unsigned int flags)
                 Object_80041904 *pLinked = pObject->mUnknown472;
 
                 if (pLinked->mUnknown184 != 0) {
-                    pLinked->mUnknown184(pLinked, (int)pObject, 4);
+                    pLinked->mUnknown184(pLinked, pObject, 4);
                 }
             }
         }

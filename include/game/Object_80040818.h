@@ -53,6 +53,7 @@ struct Object_80040818 {
 };
 
 extern "C" {
+Object_80040818 *fn_80040F18(int index);
 Skeleton_80041930 *fn_800410B8(int index);
 Skeleton_80041930 *fn_800410E0(Object_80040818 *pObject);
 }

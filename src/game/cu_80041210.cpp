@@ -17,10 +17,9 @@ struct Pool_803EA488 {
 
 extern "C" {
 int fn_80040A70(Object_80041904 *pObject, int index);
-Object_80040818 *fn_80040F18(int index);
 int fn_80041094(int index);
-void fn_8004A8C4(Extra_8004149C *pExtra, int entry, int a);
-void fn_8004A8E8(int entry, void *a, int b, void *c);
+void fn_8004A8C4(Extra_8004149C *pExtra, Object_80040818 *pItem, int a);
+void fn_8004A8E8(Object_80040818 *pItem, void *a, int b, void *c);
 void fn_8004A908(Object_80041904 *pObject, int index);
 void fn_8004C684(void *pOwner, Object_80041904 *pObject);
 void fn_8004C7B8(Object_80041904 *pObject);
@@ -147,7 +146,7 @@ Object_80041904 *fn_8004149C(void *pOwner, Desc_8004149C *pDesc)
     pObject->mUnknown140 = pObject->mUnknown32;
     fn_8004C684(pOwner, pObject);
     if (pObject->mUnknown184 != 0) {
-        pObject->mUnknown184(pObject, (int)fn_80040F18(lbl_803EA488->mCount), 0);
+        pObject->mUnknown184(pObject, fn_80040F18(lbl_803EA488->mCount), 0);
     }
     lbl_803EA488->mCount++;
     return pObject;
@@ -182,11 +181,11 @@ int fn_800416CC(float dt)
             fn_801BE420(pExtra->mUnknown1300, pExtra->mUnknown48, pExtra->mUnknown60, pObject, dt);
             fn_801BA03C(pExtra->mUnknown48, pExtra->mUnknown60, pObject, dt);
             a = fn_801BC7C0(pExtra->mUnknown48, pExtra->mUnknown60, pExtra->mUnknown1300);
-            fn_8004A8C4(pExtra, (int)fn_80040F18(i), a);
+            fn_8004A8C4(pExtra, fn_80040F18(i), a);
             pExtra->mUnknown32 = fn_801BCA74(pExtra->mUnknown48, pExtra->mUnknown60, a, pExtra->mUnknown36, 0xFFFF, 1);
             pExtra->mUnknown33 = fn_801BCCAC(pExtra->mUnknown48, pExtra->mUnknown60, a, pExtra->mUnknown40,
                                              fn_801BE648(pObject->mUnknown428->mUnknown1300), 1);
-            fn_8004A8E8((int)fn_80040F18(i), pExtra->mUnknown60, pExtra->mUnknown52, pExtra->mUnknown1300);
+            fn_8004A8E8(fn_80040F18(i), pExtra->mUnknown60, pExtra->mUnknown52, pExtra->mUnknown1300);
         }
     }
     return 0;
@@ -202,9 +201,9 @@ int fn_8004183C(void)
 
         if (pObject->mUnknown184 != 0) {
             if (fn_800AD9B4() == 5) {
-                pObject->mUnknown184(pObject, (int)fn_80040F18(i), 2);
+                pObject->mUnknown184(pObject, fn_80040F18(i), 2);
             } else {
-                pObject->mUnknown184(pObject, (int)fn_80040F18(i), 1);
+                pObject->mUnknown184(pObject, fn_80040F18(i), 1);
             }
         }
     }

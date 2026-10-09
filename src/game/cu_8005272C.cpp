@@ -23,7 +23,6 @@ struct Data_800528E8 {
 
 extern "C" {
 int fn_80040F10(void);
-Object_80040818 *fn_80040F18(int index);
 void fn_8004D498(int handle);
 int fn_8004D4B0(int handle, const char *pName);
 int fn_8004D508(int handle, const char *pName);
