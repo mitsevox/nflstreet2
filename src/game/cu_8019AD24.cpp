@@ -1,10 +1,7 @@
 #include "engine/cu_80227F14.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_8021216C.h"
-
-struct Object_80235588 {
-    char mUnknown0[0xC0];
-};
+#include "game/Object_80235588.h"
 
 struct Element_8019AD5C {
     char mUnknown0[0x30];

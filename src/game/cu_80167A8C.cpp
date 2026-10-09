@@ -42,7 +42,7 @@ int fn_80164ED8(Object_800670B4 *pObject, Record_80067338 *pRecord, int index, u
 int fn_80165000(Object_800670B4 *pObject, Record_80067338 *pRecord, int index, unsigned char *pOut, unsigned char flag);
 void fn_80167794(signed char team, int a, int b);
 void fn_80167910(Point_80167910 *pPoints, int count);
-void fn_8016BAD8(int team);
+int fn_8016BAD8(int team);
 int fn_801485D4(void);
 int fn_801486A0(void);
 int fn_80177F70(void);

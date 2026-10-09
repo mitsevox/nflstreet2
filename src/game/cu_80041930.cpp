@@ -49,7 +49,7 @@ short *fn_8019ED20(int count);
 void fn_8019EDDC(Object_8003DEC4 *pObject, int a, int count);
 void fn_8019F044(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c);
 void fn_8019F1F0(Object_8003DEC4 *pObject, int a, unsigned int b, int count);
-void fn_8019F404(float *p);
+void fn_8019F404(float *pValues, Blend_80042530 *pBlend);
 void fn_8019F48C(float *p);
 void fn_8019F4AC(Object_8003DEC4 *pObject);
 int fn_801BAD70(Object_801BC084 *pRecord, int b, int handle, int c);
@@ -421,7 +421,7 @@ void fn_80042530(Object_8003DEC4 *pObject, Blend_80042530 *pBlend)
 {
     pObject->mUnknown260 = pBlend->mUnknown0;
     if (pObject->mUnknown816 && pBlend->mUnknown0) {
-        fn_8019F404(pObject->mUnknown820);
+        fn_8019F404(pObject->mUnknown820, pBlend);
         if (pObject->mUnknown20 & 0x40000) {
             pObject->mUnknown264[0].mUnknown0 = pBlend->mUnknown4[0].mUnknown4;
             pObject->mUnknown264[0].mUnknown4 = pBlend->mUnknown4[0].mUnknown32;

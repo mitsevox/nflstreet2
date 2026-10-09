@@ -6,6 +6,7 @@
 #include "game/fn_802372EC.h"
 
 #include "game/Team_80167A8C.h"
+#include "game/fn_80163E94.h"
 
 extern "C" {
 int fn_801486A0(void);
@@ -17,7 +18,6 @@ int fn_80178308(void);
 int fn_80178320(void);
 void fn_800B0DA4(void);
 Object_800670B4 *fn_80168708(int team);
-void fn_80164430(Object_800670B4 *p, unsigned char index, unsigned char *a, unsigned char *b);
 void fn_800B49EC(short *ratings, void *p);
 void fn_800B4798(short *ratings, int team, unsigned char index, void *p);
 void fn_800A6F04(int team);

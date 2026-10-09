@@ -55,6 +55,7 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/fn_80094488.h"
+#include "game/cu_80164568.h"
 
 /* Data whose word +4 fn_80094374 returns and whose words from +8
    fn_80093BAC indexes; the bound of that array is not established. */
@@ -6841,7 +6842,6 @@ int fn_80178308(void);
 int fn_80178320(void);
 Object_800670B4 *fn_80168708(int team);
 int fn_80168E00(int team, int index, unsigned char *pOut);
-void fn_801647A4(Object_800670B4 *pObject, int team, void *pArg);
 int fn_800B65A0(int team);
 void fn_800C1C34(void);
 void fn_800FBAA8(void);
@@ -6865,7 +6865,6 @@ void fn_8017D6B8(int a, int b);
 unsigned char fn_8017F384(unsigned char value);
 
 extern Block_8009D474 *lbl_803EA9A8;
-extern char lbl_803EB3B0[];
 extern int lbl_803EA9D0;
 extern int lbl_803EA9D4;
 extern int lbl_803EA9D8;
@@ -8120,8 +8119,6 @@ int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_8003
 void fn_800F1800(int index);
 Object_80039F5C *fn_80137B40(void);
 int fn_801486A0(void);
-int fn_801642DC(Object_800670B4 *p, unsigned char index);
-int fn_80164384(Object_800670B4 *p, unsigned char index);
 Object_800670B4 *fn_80168708(int team);
 int fn_8017F60C(void);
 int fn_80178308(void);

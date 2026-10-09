@@ -1,5 +1,6 @@
 #include "game/Object_8003DEC4.h"
 #include "game/Object_8020E52C.h"
+#include "game/Font_8019BE30.h"
 
 /* 0x50-byte object set up by 0x80233CF0, which stores its second argument at
    +0x18 and initializes the block at +0x1C. */
@@ -28,13 +29,9 @@ struct Texture_801A1400 {
     TextureEntry1C_801A1400 *mpUnknown1C;
 };
 
-struct Font_8019BE30;
-
 extern "C" {
 
 unsigned char *fn_80161094(int player, int slot);
-Font_8019BE30 *fn_801614C4(void);
-void fn_8019BC50(Font_8019BE30 *pFont, void *pDest, const char *pText);
 void fn_8020F824(void *, void *);
 void fn_80233CF0(void *pInstance, void *pModel, void *p);
 
@@ -66,7 +63,7 @@ void fn_801A1400(Object_8003DEC4 *pPlayer)
         ((Texture_801A1400 *)fn_80161094(pPlayer->mUnknown4971, 31))->mpUnknown18->mpUnknownC;
     Colors_801A1400 *pColors;
 
-    fn_8019BC50(fn_801614C4(), pDest, pPlayer->mUnknown4184);
+    fn_8019BC50(fn_801614C4(), pDest, (const unsigned char *)pPlayer->mUnknown4184);
     pColors = ((Texture_801A1400 *)fn_80161094(pPlayer->mUnknown4971, 31))->mpUnknown1C->mpUnknown8;
     *pColors = *((Texture_801A1400 *)fn_80161094(pPlayer->mUnknown4971, 9))->mpUnknown1C->mpUnknown8;
 }
