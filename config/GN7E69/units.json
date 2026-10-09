@@ -5117,6 +5117,31 @@
       ]
     },
     {
+      "source": "src/game/cu_80180FA4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80180FA4-0x80181330 (src/game/cu_80180FA4.cpp), its .data and .bss rows and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80180FA4",
+          "end": "0x80181330"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EA934",
+          "end": "0x802EA988"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80362A14",
+          "end": "0x80362A20"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8017F264.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8017F264-0x8017F3C8 (src/game/cu_8017F264.cpp) and its data rows.",
