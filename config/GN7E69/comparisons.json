@@ -15337,19 +15337,19 @@
     {
       "source": "src/game/cu_80055584.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv record comparison target/type/query rows. Source is unlinked; table and shared flags remain original.",
+      "evidence": "evidence.tsv record comparison target/type/query rows, the unit row 0x80055584-0x80056584 with its handler source-form row and the exact .rodata row 0x8028E008-0x8028E16C. Source is unlinked; table and shared flags remain original.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80055584",
-          "end": "0x80055F24"
+          "end": "0x80056584"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8028E008",
-          "end": "0x8028E164"
+          "end": "0x8028E16C"
         }
       ],
       "functions": [
@@ -15367,6 +15367,26 @@
           "symbol": "fn_80055E8C",
           "start": "0x80055E8C",
           "end": "0x80055F24"
+        },
+        {
+          "symbol": "fn_80055F24",
+          "start": "0x80055F24",
+          "end": "0x80055F4C"
+        },
+        {
+          "symbol": "fn_80055F4C",
+          "start": "0x80055F4C",
+          "end": "0x80056444"
+        },
+        {
+          "symbol": "fn_80056444",
+          "start": "0x80056444",
+          "end": "0x80056560"
+        },
+        {
+          "symbol": "fn_80056560",
+          "start": "0x80056560",
+          "end": "0x80056584"
         }
       ]
     },

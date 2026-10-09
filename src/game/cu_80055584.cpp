@@ -3,6 +3,8 @@
 #include "game/fn_8017F584.h"
 #include "game/fn_8022F478.h"
 #include "game/cu_80190208.h"
+#include "game/Object_8007A334.h"
+#include "game/fn_8007F828.h"
 
 extern "C" unsigned char lbl_803EA588;
 
@@ -43,6 +45,24 @@ int fn_8007D5A0(int type, int row, int column, char *text, int size);
 int fn_800A3444(void);
 int fn_801C31B0(char *first, char *second);
 int fn_801485D4(void);
+int fn_8022B7A4(int handle, int tag, void *pValue);
+int fn_80187C6C(void);
+int fn_80187C8C(void);
+int fn_801788D8(int *pValue);
+int fn_80178EE0(unsigned char side);
+unsigned int fn_801787DC(unsigned char side);
+int fn_800A7E40(unsigned char side);
+int fn_800A7E54(unsigned char side);
+int fn_80032288(int side);
+int fn_8022F384(int a);
+int fn_8022F4BC(void);
+void fn_8018F52C(Object_8007A334 *pObject, int a);
+void fn_8018F584(Object_8007A334 *pObject);
+void fn_8018F6C0(Object_8007A334 *pObject, int index, int delta);
+int fn_80178AE0(void);
+unsigned int fn_8009D990(int index);
+int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
+void fn_800652A8(void);
 }
 
 extern "C" void fn_80055584(void)
@@ -185,4 +205,164 @@ extern "C" void fn_80055E8C(int *values, int *exceeded)
         ++index;
     } while (--remaining);
     fn_8007D52C();
+}
+
+/* Whole minutes and remaining seconds of a time in seconds. */
+#define MINUTES_OF(seconds) ((seconds) / 3600 * 60 + ((seconds) / 60 - (seconds) / 3600 * 60))
+#define SECONDS_OF(seconds) ((seconds) - MINUTES_OF(seconds) * 60)
+
+/* Text buffer argument of message 0x80000001. */
+struct Text_80056444 {
+    int mUnknown0;
+    int mSize;
+    char *mpBuffer;
+};
+
+/* Arguments of fn_80056444. The handlers receive each array from the
+   element after the one its first word indexes. */
+struct Args_80056444 {
+    int *mpArray0;
+    int *mpArray1;
+    int *mpArray2;
+    int *mpMode;
+    Text_80056444 *mpText;
+};
+
+static inline int *ArgData(int *pArray)
+{
+    int index = pArray[0] + 1;
+
+    return &pArray[index];
+}
+
+extern "C" int fn_80055F24(int handle, int tag)
+{
+    int value;
+
+    fn_8022B7A4(handle, tag, &value);
+    return value;
+}
+
+extern "C" void fn_80055F4C(int *pHandles, int *pStats1, int *pStats0, int *pMode, char *pBuffer, int size)
+{
+    int *pStats[2];
+    int value;
+
+    pHandles[1] = fn_80187C6C();
+    pHandles[0] = fn_80187C8C();
+    for (unsigned char i = 1; i <= 14; i++) {
+        pStats0[i] = 9999;
+        pStats1[i] = 9999;
+    }
+    pStats[0] = pStats0;
+    pStats[1] = pStats1;
+    for (unsigned int side = 0; side <= 1; side++) {
+        int index;
+
+        if (side != 0) {
+            index = side == 1 ? 1 : -1;
+        } else {
+            index = 0;
+        }
+        switch (fn_801788D8(&value)) {
+        case 2:
+            pStats[side][0] = fn_80178EE0(side);
+            break;
+        case 1:
+            pStats[side][0] = -1;
+            break;
+        case 0:
+        default:
+            pStats[side][0] = fn_801787DC(side);
+            break;
+        }
+        int a = fn_80055F24(pHandles[index], 0x74727374);
+        int b = fn_80055F24(pHandles[index], 0x74507374);
+        int c = fn_80055F24(pHandles[index], 0x64647374);
+        pStats[side][2] = a + b + c;
+        pStats[side][3] = a;
+        pStats[side][4] = b;
+        pStats[side][5] = c;
+        pStats[side][7] = fn_80055F24(pHandles[index], 0x74737374);
+        pStats[side][10] = fn_80055F24(pHandles[index], 0x64317374);
+        pStats[side][9] = fn_80055F24(pHandles[index], 0x66667374);
+        pStats[side][8] = fn_80055F24(pHandles[index], 0x69447374);
+        pStats[side][1] = fn_800D41F8(side);
+        pStats[side][11] = fn_800A7E40(side);
+        pStats[side][12] = fn_800A7E54(side);
+        pStats[side][6] = fn_80055F24(pHandles[index], 0x6B737374);
+        pStats[side][13] = fn_80055F24(pHandles[index], 0x73687374);
+        if (fn_8017F60C()) {
+            pStats[side][14] = 0;
+        } else {
+            pStats[side][14] = fn_80032288(side);
+        }
+    }
+    if (fn_8017F584() == 8) {
+        Object_8007A334 cursor;
+        unsigned int score1;
+        unsigned int score0;
+
+        fn_8018F52C(&cursor, (signed char)fn_8022F384(fn_8022F4BC()));
+        if (fn_8007F828(14) == 1) {
+            score1 = fn_800D41F8(1);
+            score0 = fn_800D41F8(0);
+        } else {
+            score1 = fn_801787DC(1);
+            score0 = fn_801787DC(0);
+        }
+        if (score1 > score0) {
+            fn_8018F6C0(&cursor, 0, 1);
+        } else {
+            fn_8018F6C0(&cursor, 0, 0);
+        }
+        fn_8018F6C0(&cursor, 2, pStats[1][1]);
+        fn_8018F6C0(&cursor, 3, pStats[1][3]);
+        fn_8018F6C0(&cursor, 4, pStats[1][4]);
+        fn_8018F6C0(&cursor, 5, pStats[1][5]);
+        fn_8018F6C0(&cursor, 6, pStats[1][6]);
+        fn_8018F6C0(&cursor, 7, pStats[1][7]);
+        fn_8018F6C0(&cursor, 8, pStats[1][8]);
+        fn_8018F6C0(&cursor, 9, pStats[1][9]);
+        fn_8018F6C0(&cursor, 10, pStats[1][10]);
+        fn_8018F6C0(&cursor, 11, pStats[1][11]);
+        fn_8018F6C0(&cursor, 12, pStats[1][12]);
+        fn_8018F6C0(&cursor, 13, score1);
+        fn_8018F584(&cursor);
+    }
+    *pMode = fn_80178AE0();
+    if (*pMode == 2) {
+        *pMode = 0;
+    }
+    fn_801C2D88(pBuffer, size, "%d:%02d", MINUTES_OF(fn_8009D990(2)), SECONDS_OF(fn_8009D990(2)));
+}
+
+extern "C" int fn_80056444(unsigned int id, Args_80056444 *pArgs)
+{
+    switch (id) {
+    case 0x80000002:
+        fn_80055B2C((unsigned char *)pArgs->mpArray0);
+        break;
+    case 0x80000003:
+        fn_800652A8();
+        break;
+    case 0x80000004:
+        fn_80055E8C(ArgData(pArgs->mpArray0), ArgData(pArgs->mpArray1));
+        break;
+    case 0x80000001:
+        fn_80055F4C(ArgData(pArgs->mpArray0), ArgData(pArgs->mpArray1),
+                    ArgData(pArgs->mpArray2), pArgs->mpMode, pArgs->mpText->mpBuffer,
+                    pArgs->mpText->mSize);
+        break;
+    default:
+        return 0;
+    }
+    return 1;
+}
+
+extern "C" void fn_80056560(void)
+{
+    unsigned char anyExceeded;
+
+    fn_80055B2C(&anyExceeded);
 }
