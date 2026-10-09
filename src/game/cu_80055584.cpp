@@ -27,7 +27,7 @@ struct Record_80055584 {
 
 extern "C" {
 extern Record_80055584 lbl_802D4B14[];
-extern unsigned char lbl_803EC7EC[];
+extern unsigned char lbl_803EC7EC[2];
 int fn_80186F7C(unsigned char index);
 int fn_8022F358(int index);
 int fn_8022F3D4(int handle);
@@ -117,11 +117,11 @@ extern "C" void fn_80055B2C(unsigned char *anyExceeded)
     if (!fn_8017F60C() && fn_8017F584() != 11)
         update = 1;
     *anyExceeded = 0;
-    int unavailable = 0;
+    unsigned char unavailable = 0;
     if (!fn_8017F584()) {
         if (fn_80186F7C(0) != -1) {
             fn_80190280(fn_80186F7C(0));
-            unavailable = (unsigned char)(fn_80190394() == 0);
+            unavailable = fn_80190394() == 0;
             fn_80190288();
         }
         if (fn_80186F7C(1) != -1) {
@@ -191,19 +191,16 @@ extern "C" void fn_80055B2C(unsigned char *anyExceeded)
 extern "C" void fn_80055E8C(int *values, int *exceeded)
 {
     fn_8007D4E8();
-    int index = 0;
-    int remaining = 16;
-    do {
+    for (int i = 0; i < 16; i++) {
         int row;
-        if (lbl_802D4B14[index].type == 6)
+        if (lbl_802D4B14[i].type == 6)
             row = fn_800A3444();
         else
             row = 0;
-        fn_8007DB74(lbl_802D4B14[index].type, row);
-        values[index] = fn_8007DBB4(lbl_802D4B14[index].column);
-        exceeded[index] = lbl_802D4B14[index].exceeded;
-        ++index;
-    } while (--remaining);
+        fn_8007DB74(lbl_802D4B14[i].type, row);
+        values[i] = fn_8007DBB4(lbl_802D4B14[i].column);
+        exceeded[i] = lbl_802D4B14[i].exceeded;
+    }
     fn_8007D52C();
 }
 
