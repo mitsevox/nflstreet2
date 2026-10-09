@@ -3,6 +3,7 @@
 
 #include "game/bitstream.h"
 #include "game/Level_80054130.h"
+#include "game/Object_80040818.h"
 #include "game/cu_80041210.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801C1F94.h"
@@ -10,7 +11,6 @@
 #include "game/fn_801EEB44.h"
 #include "game/fn_80054138.h"
 #include "game/fn_801EBC18.h"
-#include "game/Object_80040818.h"
 
 /* Placement record that fn_800408E4 turns into an object. */
 struct Desc_800408E4 {

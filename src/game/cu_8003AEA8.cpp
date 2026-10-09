@@ -6,13 +6,6 @@
 #include "game/fn_8003B6BC.h"
 #include "game/fn_801C1F94.h"
 
-/* Passed by pointer; only the words at +4 and +8 are read. */
-struct Pair_8003AEA8 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-};
-
 extern "C" {
 int fn_800808F8(Object_8008044C *pObject);
 int fn_800809FC(Object_8008044C *pObject, int a, int *pResult);

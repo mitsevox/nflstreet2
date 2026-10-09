@@ -1,12 +1,11 @@
 #include "game/cu_80181330.h"
+#include "game/cu_8003AEA8.h"
 
 extern "C" {
 void fn_8001ED80(int value);
 int fn_8001ED88(void);
 int fn_8002B70C(void);
 void fn_8003AED8(int kind, int index, int value);
-void fn_8003AEF4(int a, int kind, int index, int d, Params_80005284 *p0, Params_80005284 *p1, Params_80005284 *p2);
-void fn_8003AF8C(int a, int kind, int index, int key, int e, Params_80005284 *pPair, int *pValues, int *pResult);
 int fn_8003B0A0(int a, int kind, int index0, int index1, int unused);
 int fn_8003B360(int group);
 int fn_8003B3AC(int group);
@@ -76,13 +75,13 @@ int fn_800550E4(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
         int list = pList[0] + 1;
 
         pList += list;
-        fn_8003AF8C(pArgs[0].i, pArgs[1].i, pArgs[2].i, pArgs[3].i, pArgs[7].i, pArgs[4].pParams, pList,
+        fn_8003AF8C(pArgs[0].i, pArgs[1].i, pArgs[2].i, pArgs[3].i, pArgs[7].i, (Pair_8003AEA8 *)pArgs[4].pParams, pList,
                     pArgs[6].pi);
         break;
     }
     case 267:
-        fn_8003AEF4(pArgs[0].i, pArgs[1].i, pArgs[2].i, pArgs[6].i, pArgs[3].pParams, pArgs[4].pParams,
-                    pArgs[5].pParams);
+        fn_8003AEF4(pArgs[0].i, pArgs[1].i, pArgs[2].i, pArgs[6].i, (Pair_8003AEA8 *)pArgs[3].pParams,
+                    (Pair_8003AEA8 *)pArgs[4].pParams, (Pair_8003AEA8 *)pArgs[5].pParams);
         break;
     case 269:
         fn_8003B0A0(pArgs[0].i, pArgs[1].i, pArgs[2].i, pArgs[3].i, pArgs[4].i);
