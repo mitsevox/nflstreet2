@@ -5,7 +5,10 @@
 
 /* One of the seven 40-byte entries at Object_8006719C +0x84. */
 struct Entry_8006719C {
-    char mUnknown0[9];
+    unsigned short mUnknown0;
+    char mUnknown2;
+    unsigned char mUnknown3;
+    char mUnknown4[5];
     unsigned char mUnknown9;
     unsigned char mUnknownA;
     unsigned char mUnknownB;
