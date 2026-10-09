@@ -35,7 +35,7 @@ void fn_80030ACC(void (*pSave)(BitStream_t *pStream),
                                BitStream_t *pStream3, float t),
                  int size, const char *pName);
 void fn_800400BC(Block_80170E64 *pBlock, Object_80041904 *pLinked);
-void fn_8004AA34(Anim_8004AA34 *pAnim, void *pStream, int count);
+void fn_8004AA34(Pose_80041930 *pPose, void *pStream, int count);
 void fn_8004ABF4(Object_80040818 *pObject, Object_80041904 *pLinked, void *pStream0, void *pStream1, void *pStream2,
                  void *pStream3, float t);
 void fn_8004AF84(Extra_8004149C *pExtra);

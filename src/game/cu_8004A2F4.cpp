@@ -1,7 +1,10 @@
 #include <math.h>
+#include <string.h>
 
-#include "game/Object_8003DEC4.h"
+#include "game/Node_80041904.h"
 #include "game/Object_80039F5C.h"
+#include "game/Object_8003DEC4.h"
+#include "game/Object_80040818.h"
 #include "game/bitstream.h"
 #include "game/cu_80041210.h"
 #include "game/cu_80067C10.h"
@@ -9,7 +12,6 @@
 #include "game/cu_80136B1C.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_801BA2A8.h"
-#include "game/fn_801BE60C.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802372EC.h"
@@ -42,46 +44,24 @@ struct NameId_8004B020 {
     int mId;
 };
 
-/* Element of the list at +312 of Object_80041904, linked through
-   mpNext. */
-struct Node_80041904 {
-    char mName[64];
+/* 0x24-byte name table entry of fn_8004C368, fn_8004C3D4 and fn_8004C440. */
+struct ShortNameId_8004C368 {
+    char mName[32];
     int mId;
-    unsigned char mUnknown68;
-    char mUnknown69[3];
-    float mUnknown72;
-    float mUnknown76;
-    char mUnknown80[12];
-    unsigned short mUnknown92;
-    char mUnknown94[2];
-    int mUnknown96;
-    int mUnknown100;
-    int mUnknown104;
-    int mUnknown108;
-    float mUnknown112;
-    int mUnknown116;
-    int mUnknown120;
-    unsigned char mUnknown124;
-    char mUnknown125[3];
-    void *mUnknown128;
-    Node_80041904 *mpNext;
 };
 
-struct Flags_800411C8 {
-    char mUnknown0[20];
-    short mUnknown20;
+/* 0x44-byte sound name table entry of fn_8004C4AC. */
+struct SoundNameId_8004C4AC {
+    char mName[64];
+    unsigned short mId;
+    char mUnknown66[2];
 };
 
-/* View of the 548-byte placed object of src/game/cu_800400CC.cpp. */
-struct Object_80040818 {
-    char mUnknown0[172];
-    Pose_80041930 mUnknown172;
-    void *mUnknown228;
-    char mUnknown232[16];
-    unsigned int mUnknown248;
-    char mUnknown252[220];
-    Object_80041904 *mUnknown472;
-    Flags_800411C8 *mUnknown476;
+/* 0x84-byte name/state table entry of fn_8004C270. */
+struct StateNameId_8004C270 {
+    char mName[64];
+    char mState[64];
+    int mId;
 };
 
 /* Record of fn_801C02CC; its halfwords +42 and +14 are passed to fn_801BBE5C. */
@@ -105,6 +85,18 @@ extern "C" {
 extern float lbl_803EA2C4;
 extern Table_803EA4D0 lbl_803EA4D0;
 extern unsigned char lbl_803EA4DC[8];
+extern Object_80041904 *lbl_803EA4E4;
+extern NameId_8004B020 lbl_802D47DC[];
+extern NameId_8004B020 lbl_802D48A8[];
+extern NameId_8004B020 lbl_802CFE34[85];
+extern ShortNameId_8004C368 lbl_802CFBCC[8];
+extern ShortNameId_8004C368 lbl_802CFD2C[3];
+extern ShortNameId_8004C368 lbl_802CFDA4[4];
+extern NameId_8004B020 lbl_802D14C8[32];
+extern StateNameId_8004C270 lbl_802D1D48[63];
+extern SoundNameId_8004C4AC lbl_802D3DC4[38];
+extern int lbl_8030865C[8];
+extern int lbl_8030867C[8];
 extern float lbl_803EA4E8;
 extern float lbl_803EA4EC;
 extern float lbl_803EA4F0;
@@ -115,7 +107,27 @@ Object_80040818 *fn_80040F18(int index);
 Skeleton_80041930 *fn_800410B8(int index);
 void fn_800411C8(Object_80040818 *pObject);
 void fn_800411EC(Object_80040818 *pObject);
-void fn_8004CBEC(void *pData, Object_80041904 *pObject, Object_80040818 *pOwner, float t);
+int fn_8004C204(const char *pName);
+int fn_8004C270(const char *pName, const char *pState);
+int fn_8004C2FC(const char *pName);
+unsigned short fn_8004C4AC(const char *pName);
+int fn_8004C5E0(int index);
+int fn_8004D508(int handle, const char *pKey);
+int fn_8004D560(int handle);
+int fn_8004D5B8(int handle, const char *pKey, char *pText, int size);
+int fn_8004D5F0(int handle, const char *pKey);
+float fn_8004D624(int handle, const char *pKey);
+unsigned char fn_8004D6F4(int handle, const char *pKey, float *pValues, int count);
+int fn_8004D728(int handle, const char *pKey, float *pValues);
+int fn_8004D84C(int handle);
+void fn_8004D860(int handle, int position);
+int fn_800C47C4(void);
+void fn_80145100(int type, int index);
+char *fn_801C2EB4(char *pDst, const char *pSrc);
+int fn_801F0A8C(int set, const char *pName);
+void fn_8004CBEC(void *pData, float t, Object_80041904 *pObject, Object_80040818 *pOwner);
+int fn_801BE068(void *pA, void *pB, void *pC, unsigned short key, float value, void *p);
+unsigned short fn_801BE648(void *p);
 void fn_8004CE6C(Object_80040818 *pOwner);
 void fn_8004E090(Object_80040818 *pOwner, int a, int b);
 void fn_800516B4(int id, float *pA, float *pB);
@@ -469,7 +481,7 @@ static inline void Restart_801BE068(Object_80041904 *pObject, unsigned short key
 {
     fn_8004AF84(pObject->mUnknown428);
     fn_801BE068(pObject->mUnknown428->mUnknown1300, pObject->mUnknown428->mUnknown48, pObject->mUnknown428->mUnknown60,
-                key, pObject, value);
+                key, value, pObject);
 }
 
 void fn_8004AF94(Object_80041904 *pObject, unsigned char b1, unsigned char b0, unsigned char b3,
@@ -690,7 +702,7 @@ int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
                         pObject->mUnknown200.mTime = 0.0f;
                         pObject->mUnknown200.mStep = 0;
                     }
-                    fn_8004CBEC(pNode->mUnknown128, pObject, pOwner, t);
+                    fn_8004CBEC(pNode->mUnknown128, t, pObject, pOwner);
                     count = (unsigned int)pNode->mUnknown112;
                 } else {
                     Object_80137ABC *pBall = fn_801374BC();
@@ -764,5 +776,301 @@ int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
         }
     }
     return 1;
+}
+
+void fn_8004BA44(int handle, Object_80041904 *pObject)
+{
+    char text[64];
+    char state[64];
+    int position = fn_8004D84C(handle);
+
+    fn_8004D508(handle, "anim");
+    if (fn_8004D5B8(handle, "emotion2State", state, 64)) {
+        pObject->mUnknown196 = fn_8004C2FC(state);
+    } else {
+        pObject->mUnknown196 = -1;
+    }
+    fn_8004D5B8(handle, "emotion2State", state, 64);
+    fn_8004D860(handle, position);
+    if (fn_8004D508(handle, "animPal")) {
+        pObject->mUnknown200.mActive = 1;
+        pObject->mUnknown200.mUnknown8 = fn_8004D624(handle, "delay");
+        pObject->mUnknown200.mUnknown4 = fn_8004D624(handle, "rate");
+    }
+    fn_8004D860(handle, position);
+    if (fn_8004D508(handle, "animUV")) {
+        pObject->mUnknown224 = 1;
+        pObject->mUnknown288 = 0;
+        pObject->mUnknown268 = fn_8004D624(handle, "delay");
+        pObject->mUnknown272 = (unsigned int)fn_8004D624(handle, "row");
+        pObject->mUnknown276 = (unsigned int)fn_8004D624(handle, "column");
+        pObject->mUnknown292 = pObject->mUnknown272 * pObject->mUnknown276;
+        fn_8004D6F4(handle, "rate", pObject->mUnknown228, pObject->mUnknown292);
+        fn_8004D5B8(handle, "travelDim", text, 64);
+        pObject->mUnknown300 = fn_8004B020(text, lbl_802D47DC);
+        fn_8004D5B8(handle, "stepType", text, 64);
+        pObject->mUnknown304 = fn_8004B020(text, lbl_802D48A8);
+        pObject->mUnknown296 = 0.0f;
+        pObject->mUnknown280 = 0;
+        pObject->mUnknown284 = 0;
+    } else {
+        pObject->mUnknown224 = 0;
+    }
+    fn_8004D860(handle, position);
+    if (fn_8004D508(handle, "sound")) {
+        unsigned short sound;
+
+        fn_8004D5B8(handle, "name", text, 64);
+        sound = fn_8004C4AC(text);
+        pObject->mUnknown308 = sound;
+        if ((unsigned short)(sound - 79) <= 8) {
+            pObject->mUnknown310 = sound - 79;
+        }
+    } else {
+        pObject->mUnknown308 = 0;
+    }
+    fn_8004D860(handle, position);
+}
+
+void fn_8004BD20(int handle, Object_80041904 *pObject)
+{
+    char text[64];
+    char state[64];
+    int position = fn_8004D84C(handle);
+    Node_80041904 *pNode = (Node_80041904 *)fn_801D2B7C(sizeof(Node_80041904), 0, 0);
+
+    fn_801C1F94(pNode, 0, sizeof(Node_80041904));
+    pNode->mpNext = pObject->mUnknown312;
+    pNode->mUnknown108 = -1;
+    pNode->mUnknown112 = 0.0f;
+    pNode->mUnknown124 = 0;
+    pNode->mUnknown128 = 0;
+    pNode->mId = -1;
+    pNode->mUnknown104 = -1;
+    pNode->mUnknown116 = 0;
+    pNode->mUnknown120 = 0;
+    strcpy(pNode->mName, "");
+    pObject->mUnknown312 = pNode;
+    if (fn_8004D5B8(handle, "name", text, 64)) {
+        fn_801C2EB4(pNode->mName, text);
+    }
+    if (fn_8004D508(handle, "anim") && fn_8004D5B8(handle, "emotion2State", text, 64)) {
+        pNode->mId = fn_8004C2FC(text);
+    }
+    fn_8004D860(handle, position);
+    if (fn_8004D508(handle, "swapPart")) {
+        pNode->mUnknown112 = fn_8004D624(handle, "force");
+        if (fn_8004D5B8(handle, "id", text, 64)) {
+            pNode->mUnknown104 = fn_8004C204(text);
+        }
+        if (fn_8004D5B8(handle, "swapState", state, 64)) {
+            pNode->mUnknown108 = fn_8004C270(text, state);
+        }
+        {
+            float rate = lbl_803EA2C4;
+
+            pNode->mUnknown116 = (unsigned int)(60.0f / rate * fn_8004D624(handle, "delay"));
+        }
+        pNode->mUnknown124 = fn_8004D5F0(handle, "bDisableCollisions");
+    }
+    fn_8004D860(handle, position);
+    if (fn_8004D508(handle, "particle")) {
+        do {
+            Emitter_8004BD20 *pEmitter = (Emitter_8004BD20 *)fn_801D2B7C(sizeof(Emitter_8004BD20), 0, 0);
+
+            fn_801C1F94(pEmitter, 0, sizeof(Emitter_8004BD20));
+            pEmitter->mpNext = pNode->mUnknown128;
+            pNode->mUnknown128 = pEmitter;
+            pEmitter->mUnknown4 = -1;
+            pEmitter->mUnknown8 = 0;
+            pEmitter->mUnknown0 = -1;
+            pEmitter->mUnknown40 = 0;
+            pEmitter->mUnknown36 = 0.0f;
+            if (fn_8004D5B8(handle, "emitPoint", text, 64) && fn_801C2FE4(text, "IMPACT") == 0) {
+                pEmitter->mUnknown40 = 1;
+            }
+            if (fn_8004D5B8(handle, "psf", text, 64)) {
+                int index = fn_801F0A8C(fn_800C47C4(), text);
+
+                if (index == -1) {
+                    pEmitter->mUnknown0 = 21;
+                } else {
+                    pEmitter->mUnknown0 = fn_8004C5E0(index);
+                    if (pEmitter->mUnknown0 != 21) {
+                        fn_80145100(pEmitter->mUnknown0, index);
+                    }
+                }
+            }
+            pEmitter->mUnknown36 = fn_8004D624(handle, "force");
+            if (!pEmitter->mUnknown40) {
+                float swap;
+
+                fn_8004D728(handle, "emitTranslate", pEmitter->mUnknown12);
+                swap = pEmitter->mUnknown12[1];
+                pEmitter->mUnknown12[1] = pEmitter->mUnknown12[2];
+                pEmitter->mUnknown12[2] = swap;
+                fn_8004D728(handle, "emitRotate", pEmitter->mUnknown24);
+                swap = pEmitter->mUnknown24[1];
+                pEmitter->mUnknown24[1] = pEmitter->mUnknown24[2];
+                pEmitter->mUnknown24[2] = swap;
+            }
+            pEmitter->mUnknown4 = fn_8004D5F0(handle, "occurances");
+        } while (fn_8004D560(handle));
+    }
+    fn_8004D860(handle, position);
+    if (fn_8004D508(handle, "animPal")) {
+        pNode->mUnknown68 = 1;
+        pNode->mUnknown88 = 4;
+        pNode->mUnknown76 = fn_8004D624(handle, "delay");
+        pNode->mUnknown72 = fn_8004D624(handle, "rate");
+        lbl_803EA4E4 = pObject;
+    } else {
+        pNode->mUnknown68 = 0;
+    }
+    fn_8004D860(handle, position);
+    if (fn_8004D508(handle, "surface")) {
+        pNode->mUnknown100 = fn_8004D5F0(handle, "surfType");
+        pNode->mUnknown96 = fn_8004D5F0(handle, "polyGroupId");
+    } else {
+        pNode->mUnknown100 = 15;
+        pNode->mUnknown96 = -1;
+    }
+    fn_8004D860(handle, position);
+    if (fn_8004D508(handle, "sound")) {
+        fn_8004D5B8(handle, "name", text, 64);
+        pNode->mUnknown92 = fn_8004C4AC(text);
+    } else {
+        pNode->mUnknown92 = 0;
+    }
+    fn_8004D860(handle, position);
+}
+
+int fn_8004C204(const char *pName)
+{
+    int i;
+
+    for (i = 0; i < sizeof(lbl_802D14C8) / sizeof(lbl_802D14C8[0]); i++) {
+        if (fn_801C2FE4(pName, lbl_802D14C8[i].mName) == 0) {
+            return lbl_802D14C8[i].mId;
+        }
+    }
+    return -1;
+}
+
+int fn_8004C270(const char *pName, const char *pState)
+{
+    int i;
+
+    for (i = 0; i < sizeof(lbl_802D1D48) / sizeof(lbl_802D1D48[0]); i++) {
+        if (fn_801C2FE4(pName, lbl_802D1D48[i].mName) == 0 &&
+            fn_801C2FE4(pState, lbl_802D1D48[i].mState) == 0) {
+            return lbl_802D1D48[i].mId;
+        }
+    }
+    return -1;
+}
+
+int fn_8004C2FC(const char *pName)
+{
+    int i;
+
+    for (i = 0; i < sizeof(lbl_802CFE34) / sizeof(lbl_802CFE34[0]); i++) {
+        if (fn_801C2FE4(pName, lbl_802CFE34[i].mName) == 0) {
+            return lbl_802CFE34[i].mId;
+        }
+    }
+    return -1;
+}
+
+int fn_8004C368(const char *pName)
+{
+    int i;
+
+    for (i = 0; i < sizeof(lbl_802CFBCC) / sizeof(lbl_802CFBCC[0]); i++) {
+        if (fn_801C2FE4(pName, lbl_802CFBCC[i].mName) == 0) {
+            return lbl_802CFBCC[i].mId;
+        }
+    }
+    return 0;
+}
+
+int fn_8004C3D4(const char *pName)
+{
+    int i;
+
+    for (i = 0; i < sizeof(lbl_802CFD2C) / sizeof(lbl_802CFD2C[0]); i++) {
+        if (fn_801C2FE4(pName, lbl_802CFD2C[i].mName) == 0) {
+            return lbl_802CFD2C[i].mId;
+        }
+    }
+    return 0;
+}
+
+int fn_8004C440(const char *pName)
+{
+    int i;
+
+    for (i = 0; i < sizeof(lbl_802CFDA4) / sizeof(lbl_802CFDA4[0]); i++) {
+        if (fn_801C2FE4(pName, lbl_802CFDA4[i].mName) == 0) {
+            return lbl_802CFDA4[i].mId;
+        }
+    }
+    return 0;
+}
+
+unsigned short fn_8004C4AC(const char *pName)
+{
+    int i;
+
+    for (i = 0; i < sizeof(lbl_802D3DC4) / sizeof(lbl_802D3DC4[0]); i++) {
+        if (fn_801C2FE4(pName, lbl_802D3DC4[i].mName) == 0) {
+            return lbl_802D3DC4[i].mId;
+        }
+    }
+    return 0;
+}
+
+void fn_8004C518(int handle, Object_80041904 *pObject)
+{
+    char text[32];
+
+    fn_8004D508(handle, "event");
+    while (fn_8004D5B8(handle, "type", text, 32)) {
+        switch (fn_8004C440(text)) {
+        case 1:
+            fn_8004BA44(handle, pObject);
+            break;
+        case 2:
+            fn_8004BD20(handle, pObject);
+            break;
+        case 3:
+            fn_8004BD20(handle, pObject);
+            break;
+        }
+        fn_8004D560(handle);
+    }
+}
+
+int fn_8004C5E0(int type)
+{
+    int i;
+    unsigned int slot = 8;
+    int result = 21;
+
+    for (i = 0; i < 8; i++) {
+        if (type == lbl_8030865C[i]) {
+            lbl_8030867C[i]++;
+            return i + 12;
+        }
+        if (lbl_8030865C[i] == -1 && slot == 8) {
+            slot = i;
+        }
+    }
+    if (result == 21 && slot < 8) {
+        lbl_8030865C[slot] = type;
+        lbl_8030867C[slot] = 1;
+        result = slot + 12;
+    }
+    return result;
 }
 }
