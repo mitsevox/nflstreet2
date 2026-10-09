@@ -3,5 +3,6 @@
 
 extern "C" void fn_80003F10(unsigned char value);
 extern "C" bool fn_80003F18(void);
+extern "C" int fn_80003F30(void);
 
 #endif

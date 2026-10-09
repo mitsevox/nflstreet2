@@ -5645,13 +5645,31 @@
     {
       "source": "src/game/cu_80003F10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80003F10-0x80003F30 (src/game/cu_80003F10.cpp) and its data/source-form rows.",
+      "evidence": "evidence.tsv unit row 0x80003F10-0x80003FF8 (src/game/cu_80003F10.cpp) and its data/source-form rows.",
+      "link_roots": {
+        "symbols": [
+          "fn_80003F10",
+          "fn_80003F18",
+          "fn_80003F30"
+        ],
+        "discarded": [
+          "FillDemoLaunchPaths__Fi"
+        ],
+        "evidence": "evidence.tsv linker row 0x80003F38-0x80003FF8: the target keeps the three listed functions, each called from outside the unit; the demo path function has no code in the target, while its five string literals remain in the in-text rodata after the code."
+      },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80003F10",
-          "end": "0x80003F30"
+          "end": "0x80003F38"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x80003F38",
+          "end": "0x80003FF8",
+          "follows": ".text"
         },
         {
           "section": ".sdata",
