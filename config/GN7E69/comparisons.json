@@ -14659,7 +14659,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8003F66C",
-          "end": "0x8003FE90"
+          "end": "0x800400CC"
         }
       ],
       "functions": [
@@ -14727,6 +14727,21 @@
           "symbol": "fn_8003FC68",
           "start": "0x8003FC68",
           "end": "0x8003FC70"
+        },
+        {
+          "symbol": "fn_8003FE90",
+          "start": "0x8003FE90",
+          "end": "0x800400BC"
+        },
+        {
+          "symbol": "fn_800400BC",
+          "start": "0x800400BC",
+          "end": "0x800400C4"
+        },
+        {
+          "symbol": "fn_800400C4",
+          "start": "0x800400C4",
+          "end": "0x800400CC"
         }
       ]
     },
@@ -17501,13 +17516,13 @@
     {
       "source": "src/game/cu_8003BA10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv projected geometry and resource group rows; original assembly linked.",
+      "evidence": "evidence.tsv unit row 0x8003BA00-0x8003E214 (src/game/cu_8003BA10.cpp), projected geometry and resource group rows; original assembly linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8003BA10",
-          "end": "0x8003E174"
+          "start": "0x8003BA00",
+          "end": "0x8003E214"
         },
         {
           "section": ".rodata",
@@ -17517,6 +17532,26 @@
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_8003BA00",
+          "start": "0x8003BA00",
+          "end": "0x8003BA04"
+        },
+        {
+          "symbol": "fn_8003BA04",
+          "start": "0x8003BA04",
+          "end": "0x8003BA08"
+        },
+        {
+          "symbol": "fn_8003BA08",
+          "start": "0x8003BA08",
+          "end": "0x8003BA0C"
+        },
+        {
+          "symbol": "fn_8003BA0C",
+          "start": "0x8003BA0C",
+          "end": "0x8003BA10"
+        },
         {
           "symbol": "fn_8003BA10",
           "start": "0x8003BA10",
@@ -17691,6 +17726,21 @@
           "symbol": "fn_8003E118",
           "start": "0x8003E118",
           "end": "0x8003E174"
+        },
+        {
+          "symbol": "fn_8003E174",
+          "start": "0x8003E174",
+          "end": "0x8003E194"
+        },
+        {
+          "symbol": "fn_8003E194",
+          "start": "0x8003E194",
+          "end": "0x8003E1F0"
+        },
+        {
+          "symbol": "fn_8003E1F0",
+          "start": "0x8003E1F0",
+          "end": "0x8003E214"
         }
       ]
     },
@@ -25490,21 +25540,56 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8003877C",
-          "end": "0x8003AC84"
+          "start": "0x8003830C",
+          "end": "0x8003AEA8"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8028CFF0",
-          "end": "0x8028D004"
+          "start": "0x8028CFA0",
+          "end": "0x8028D070"
         }
       ],
       "functions": [
         {
+          "symbol": "fn_8003830C",
+          "start": "0x8003830C",
+          "end": "0x8003845C"
+        },
+        {
+          "symbol": "fn_8003845C",
+          "start": "0x8003845C",
+          "end": "0x800384DC"
+        },
+        {
+          "symbol": "fn_800384DC",
+          "start": "0x800384DC",
+          "end": "0x800385D4"
+        },
+        {
+          "symbol": "fn_800385D4",
+          "start": "0x800385D4",
+          "end": "0x80038650"
+        },
+        {
+          "symbol": "fn_80038650",
+          "start": "0x80038650",
+          "end": "0x8003877C"
+        },
+        {
           "symbol": "fn_80038E50",
           "start": "0x80038E50",
           "end": "0x80038E80"
+        },
+        {
+          "symbol": "fn_80038E80",
+          "start": "0x80038E80",
+          "end": "0x80039044"
+        },
+        {
+          "symbol": "fn_80039044",
+          "start": "0x80039044",
+          "end": "0x8003924C"
         },
         {
           "symbol": "fn_8003924C",
@@ -25635,6 +25720,11 @@
           "symbol": "fn_8003A5E8",
           "start": "0x8003A5E8",
           "end": "0x8003A628"
+        },
+        {
+          "symbol": "fn_8003A628",
+          "start": "0x8003A628",
+          "end": "0x8003AB08"
         },
         {
           "symbol": "fn_8003AB08",

@@ -1,4 +1,4 @@
-/* Partial comparison source for the inferred grouping 0x8003F66C-0x8003FE90.
+/* Partial comparison source for the inferred grouping 0x8003F66C-0x800400CC.
    Not a recovered original file. The original assembly stays linked; only the
    bodies below are compiled and measured. */
 
@@ -38,6 +38,19 @@ void fn_801DD320(int handle, int item);
 }
 
 #include "engine/cu_80227F14.h"
+#include "game/Object_80039F5C.h"
+#include "game/Object_8003DEC4.h"
+#include "game/bitstream.h"
+
+extern "C" {
+unsigned char fn_8003F95C(BitStream_t *pStream, Vector_80039F5C *pPos, Quat_801EB488 *pRot,
+                          Vector_80039F5C *pLinkPos, Quat_801EB488 *pLinkRot, Object_80039F5C **ppObject,
+                          int *pIndex, unsigned char *pFlag);
+void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
+void fn_801EC048(Quat_801EB488 *pOut, Quat_801EB488 *pA, Quat_801EB488 *pB, float t);
+int fn_80054138(Vector_80039F5C *pPos);
+void fn_80030CA4(Object_80039F5C *pA, Object_80039F5C *pB);
+}
 
 extern "C" void fn_8003F6B0(Object_8003F66C *p)
 {
@@ -119,4 +132,72 @@ extern "C" void fn_8003FBB4(int handle, int item)
 extern "C" int fn_8003FC68(void)
 {
     return 212;
+}
+
+extern "C" void fn_8003FE90(Block_80170E64 *pBlock, BitStream_t *pStream1, BitStream_t *pStream0,
+                            BitStream_t *pStream2, BitStream_t *pStream3, float t)
+{
+    Vector_80039F5C pos0;
+    Vector_80039F5C pos1;
+    Vector_80039F5C linkPos0;
+    Vector_80039F5C linkPos1;
+    Quat_801EB488 rot0;
+    Quat_801EB488 rot1;
+    Quat_801EB488 linkRot0;
+    Quat_801EB488 linkRot1;
+    unsigned char flag = 0;
+    Object_80039F5C *pObject0;
+    int index0;
+    Object_80039F5C *pObject1;
+    int index1;
+    unsigned char changed0;
+    unsigned char changed1;
+
+    if (pStream2) {
+        fn_8003F95C(pStream2, &pos0, &rot0, &linkPos0, &linkRot0, &pObject0, &index0, &flag);
+    }
+    if (pStream3) {
+        fn_8003F95C(pStream3, &pos0, &rot0, &linkPos0, &linkRot0, &pObject0, &index0, &flag);
+    }
+    changed0 = fn_8003F95C(pStream0, &pos0, &rot0, &linkPos0, &linkRot0, &pObject0, &index0, &flag);
+    changed1 = fn_8003F95C(pStream1, &pos1, &rot1, &linkPos1, &linkRot1, &pObject1, &index1, &flag);
+    if (pObject0 != 0 && pObject1 != 0) {
+        Object_8003DEC4 *pPose = (Object_8003DEC4 *)pObject0->mpUnknown4;
+
+        if (index0 == index1) {
+            fn_80227930(&pBlock->mUnknown4, &linkPos1, &linkPos0, t);
+            fn_801EC048(&pBlock->mUnknown108, &linkRot1, &linkRot0, t);
+        } else {
+            pBlock->mUnknown4.mX = linkPos1.mX;
+            pBlock->mUnknown4.mY = linkPos1.mY;
+            pBlock->mUnknown4.mZ = linkPos1.mZ;
+            pBlock->mUnknown108.mX = linkRot1.mX;
+            pBlock->mUnknown108.mY = linkRot1.mY;
+            pBlock->mUnknown108.mZ = linkRot1.mZ;
+            pBlock->mUnknown108.mW = linkRot1.mW;
+            pPose->mUnknown44.mUnknown6 = index1;
+        }
+    } else {
+        fn_80227930(&pBlock->mUnknown4, &pos1, &pos0, t);
+        fn_801EC048(&pBlock->mUnknown108, &rot1, &rot0, t);
+    }
+    pBlock->mUnknown660 = fn_80054138(&pBlock->mUnknown4);
+    if (changed0 | changed1) {
+        fn_80030CA4(pObject0, pObject1);
+    }
+    if (flag) {
+        pBlock->mUnknown20 |= 2;
+    } else {
+        pBlock->mUnknown20 &= ~2;
+    }
+}
+
+extern "C" void fn_800400BC(Block_80170E64 *pBlock, Object_80041904 *pLinked)
+{
+    pBlock->mpUnknown676 = pLinked;
+}
+
+extern "C" Object_80041904 *fn_800400C4(Block_80170E64 *pBlock)
+{
+    return pBlock->mpUnknown676;
 }

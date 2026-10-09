@@ -12,6 +12,17 @@ struct Vector_80039F5C {
     float mZ;
 };
 
+/* Rotation built by fn_801EBEF8 from three angles and reset by fn_801EB488. */
+struct Quat_801EB488 {
+    float mX;
+    float mY;
+    float mZ;
+    float mW;
+};
+
+struct Object_80041904;
+struct Pose_80041930;
+
 /* Block at +4 of the player object; the entries of src/game/cu_80136B1C.cpp
    hold one at +0. */
 struct Block_80170E64 {
@@ -21,8 +32,12 @@ struct Block_80170E64 {
     unsigned int mUnknown20;
     char mUnknown24[76];
     void *mpUnknown100;
-    char mUnknown104[556];
+    char mUnknown104[4];
+    Quat_801EB488 mUnknown108;
+    char mUnknown124[536];
     int mUnknown660;
+    char mUnknown664[12];
+    Object_80041904 *mpUnknown676;
 };
 
 /* Motion block at +424, passed to fn_800B26B0, fn_800B26D0, fn_800B26E0,
@@ -179,12 +194,21 @@ struct Object_80039F5C {
     unsigned char mUnknown8;
     unsigned char mUnknown9[3];
     unsigned int mFlags;
+    /* Three 92-byte blocks at +16, +108 and +200 (filled from the +4
+       object's pose by fn_8003AE24); each holds that pose's address at
+       its +40. */
     int mUnknown16;
-    char mUnknown20[88];
+    char mUnknown20[36];
+    Pose_80041930 *mpUnknown56;
+    char mUnknown60[48];
     int mUnknown108;
-    char mUnknown112[88];
+    char mUnknown112[36];
+    Pose_80041930 *mpUnknown148;
+    char mUnknown152[48];
     int mUnknown200;
-    char mUnknown204[132];
+    char mUnknown204[36];
+    Pose_80041930 *mpUnknown240;
+    char mUnknown244[92];
     int mUnknown336;
     short mUnknown340;
     unsigned char mUnknown342;
@@ -203,7 +227,8 @@ struct Object_80039F5C {
     Object_800B26B0 mMotion;
     float mUnknown488;
     float mUnknown492;
-    char mUnknown496[16];
+    char mUnknown496[12];
+    float mUnknown508;
     Object_8016D8B0 mUnknown512;
     Object_8016D8B0 mUnknown528;
     unsigned char mUnknown544;
@@ -229,7 +254,10 @@ struct Object_80039F5C {
     void *mpUnknown792;
     Object_8016D9B8 *mpUnknown796;
     Record_800D81C8 *mpUnknown800;
-    char mUnknown804[204];
+    void *mpUnknown804;
+    void *mpUnknown808;
+    void *mpUnknown812;
+    char mUnknown816[192];
     union {
         int mUnknown1008Word;
         struct {

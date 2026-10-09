@@ -107,7 +107,16 @@ struct Object_8003DEC4 {
     int mUnknown972;
     char mUnknown976[12];
     Item_800476DC *mUnknown988;
-    char mUnknown992[3192];
+    /* Indexed as bytes from +992; the words at +1016 and +1020 are also
+       accessed by name. */
+    union {
+        char mUnknown992[3192];
+        struct {
+            char mUnknown992Head[24];
+            int mUnknown1016;
+            int mUnknown1020;
+        };
+    };
     char mUnknown4184[772];
     int mUnknown4956;
     char mUnknown4960[8];

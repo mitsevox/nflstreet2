@@ -118,6 +118,10 @@ int fn_8003CBFC();
 int fn_8003CC20();
 int fn_8003CC44();
 void fn_8004A140(int, int, int);
+void fn_801A4688(int);
+int fn_8015E440(int, int);
+void fn_80234A14(void *, int);
+void fn_801A3514();
 void fn_8003D0C8(int);
 void fn_80136AE4(int, int);
 void fn_8003D12C();
@@ -175,6 +179,10 @@ void fn_80030ACC(void (*)(BitStream_t *),
                  void (*)(BitStream_t *, BitStream_t *, BitStream_t *,
                           BitStream_t *, float),
                  int, const char *);
+void fn_8003BA00() {}
+void fn_8003BA04() {}
+void fn_8003BA08() {}
+void fn_8003BA0C() {}
 void fn_8003BA10(Object_8003DEC4 *object, float *color, Pair_8017055C *axis,
                  int angle) {
   Projection_8003BA10 *p = (Projection_8003BA10 *)&object->mUnknown4184[72];
@@ -942,5 +950,18 @@ Object_80039F5C *fn_8003E0C8(Block_80170E64 *object) {
 void fn_8003E118() {
   int size = fn_800429CC(0) + fn_8003DA8C();
   fn_80030ACC(fn_8003CEB0, fn_8003CF88, size * lbl_803EA434, "Players");
+}
+void fn_8003E174(int a) { fn_801A4688(a); }
+void fn_8003E194(int index, int value) {
+  Object_8003DEC4 *object = fn_8003DEC4(index);
+  if (value == 7)
+    value = 2;
+  object->mUnknown1016 = value;
+  object->mUnknown1020 = fn_8015E440(0, value);
+  fn_80234A14(&object->mUnknown992[172], 1);
+}
+void fn_8003E1F0() {
+  fn_801A3514();
+  fn_8003CA20();
 }
 }
