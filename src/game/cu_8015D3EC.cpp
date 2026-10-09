@@ -667,27 +667,41 @@ Object_8023417C *fn_8015E2FC(int type, int index, int a)
 
 Object_80233EAC *fn_8015E440(int type, int index)
 {
+    Object_80233EAC *pObject;
+
     switch (type) {
     case 0:
-        return &lbl_8031C0D8[index];
+        pObject = &lbl_8031C0D8[index];
+        break;
     case 1:
-        return &lbl_8031C128[1][0];
+        pObject = &lbl_8031C128[type][0];
+        break;
     case 2:
-        return &lbl_8031C128[2][1];
+        pObject = &lbl_8031C128[type][1];
+        break;
     case 3:
-        return &lbl_8031C204[index];
+        pObject = &lbl_8031C204[index];
+        break;
     case 4:
-        return &lbl_8031C1C8;
+        pObject = &lbl_8031C1C8;
+        break;
     case 5:
-        return &lbl_8031C1DC;
+        pObject = &lbl_8031C1DC;
+        break;
     case 7:
-        return &lbl_8031C31C[index];
+        pObject = &lbl_8031C31C[index];
+        break;
     case 8:
-        return &lbl_8031C434[index];
+        pObject = &lbl_8031C434[index];
+        break;
     case 9:
-        return &lbl_8031C54C[index];
+        pObject = &lbl_8031C54C[index];
+        break;
+    default:
+        pObject = 0;
+        break;
     }
-    return 0;
+    return pObject;
 }
 
 void fn_8015E548(void)
