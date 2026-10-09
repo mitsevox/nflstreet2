@@ -122,7 +122,7 @@ void fn_80052130(Object_80040818 *pItem, Node_80041904 *pNode)
     fn_801C32CC(name);
     if (fn_801C310C(name, "RIGHT")) {
         if (pPair->mpRight) {
-            pExtra->mUnknown1704 = pItem->mUnknown472->mUnknown427;
+            pExtra->mUnknown1704 = pItem->mUnknown472->mUnknown424;
             StartAnim(pItem->mUnknown472, pNode->mId, 1.0f);
             if (pPair->mpRight) {
                 for (Node_80041904 *pOther = pPair->mpRight->mUnknown472->mUnknown312; pOther;
@@ -134,7 +134,7 @@ void fn_80052130(Object_80040818 *pItem, Node_80041904 *pNode)
                             fn_801BE648(pPair->mpRight->mUnknown472->mUnknown428->mUnknown1300) !=
                                 pOther->mId) {
                             Object_80041904 *pObject = pPair->mpRight->mUnknown472;
-                            pObject->mUnknown428->mUnknown1704 = pObject->mUnknown427;
+                            pObject->mUnknown428->mUnknown1704 = pObject->mUnknown424;
                             StartAnim(pPair->mpRight->mUnknown472, pOther->mId, 1.0f);
                             fn_80052130(pPair->mpRight, pOther);
                         }
@@ -147,7 +147,7 @@ void fn_80052130(Object_80040818 *pItem, Node_80041904 *pNode)
             }
         }
     } else if (pPair->mpLeft) {
-        pExtra->mUnknown1704 = pItem->mUnknown472->mUnknown427;
+        pExtra->mUnknown1704 = pItem->mUnknown472->mUnknown424;
         StartAnim(pItem->mUnknown472, pNode->mId, 1.0f);
         if (pPair->mpRight) {
             pPair->mpRight->mUnknown472->mUnknown428->mUnknown1708 |= 1;
@@ -162,7 +162,7 @@ void fn_80052130(Object_80040818 *pItem, Node_80041904 *pNode)
                         fn_801BE648(pPair->mpLeft->mUnknown472->mUnknown428->mUnknown1300) !=
                             pOther->mId) {
                         Object_80041904 *pObject = pPair->mpLeft->mUnknown472;
-                        pObject->mUnknown428->mUnknown1704 = pObject->mUnknown427;
+                        pObject->mUnknown428->mUnknown1704 = pObject->mUnknown424;
                         StartAnim(pPair->mpLeft->mUnknown472, pOther->mId, 1.0f);
                         fn_80052130(pPair->mpLeft, pOther);
                     }

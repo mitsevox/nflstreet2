@@ -39,6 +39,14 @@ struct Cycle_80041904 {
     int mPhase;
 };
 
+/* Recent hit at +384 of Object_80041904 (three entries): the time from
+   0x800289A8 and the hit type, kept by fn_8004C844 to drop repeats. */
+struct Hit_8004C844 {
+    unsigned int mTime;
+    unsigned short mType;
+    char mUnknown6[2];
+};
+
 typedef void (*Callback_80041904)(Object_80041904 *pObject, int entry, int mode);
 
 struct Object_80041904 {
@@ -94,20 +102,20 @@ struct Object_80041904 {
     char mUnknown316[32];
     float mUnknown348;
     float mUnknown352;
-    char mUnknown356[4];
+    float mUnknown356;
     Vector_80039F5C mUnknown360;
     float mUnknown372;
     int mUnknown376;
     unsigned char mUnknown380;
     unsigned char mUnknown381;
     unsigned char mUnknown382;
-    char mUnknown383[25];
+    char mUnknown383;
+    Hit_8004C844 mUnknown384[3];
     float mUnknown408;
     float mUnknown412;
     char mUnknown416[4];
     void *mUnknown420;
-    char mUnknown424[3];
-    unsigned char mUnknown427;
+    unsigned int mUnknown424;
     Extra_8004149C *mUnknown428;
 };
 

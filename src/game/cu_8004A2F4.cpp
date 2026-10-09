@@ -15,6 +15,7 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_802372EC.h"
+#include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 
 /* Record whose four key bytes at +4 fn_8004A6EC and fn_8004A7A8 score. */
@@ -95,7 +96,27 @@ extern ShortNameId_8004C368 lbl_802CFDA4[4];
 extern NameId_8004B020 lbl_802D14C8[32];
 extern StateNameId_8004C270 lbl_802D1D48[63];
 extern SoundNameId_8004C4AC lbl_802D3DC4[38];
+/* Hitter passed to fn_8004C844: an id word, a sound channel byte (0xFF for
+   none) and the two floats whose product is the hit strength. */
+struct Hitter_8004C844 {
+    int mId;
+    char mUnknown4[4];
+    unsigned char mChannel;
+    char mUnknown9[443];
+    float mUnknown452;
+    char mUnknown456[52];
+    float mUnknown508;
+};
+
+typedef void (*Loader_8004C684)(int handle, Object_80041904 *pObject);
+
+extern Callback_80041904 lbl_802CFCEC[8];
+extern Loader_8004C684 lbl_802CFD0C[8];
+extern void (*lbl_802CFD98[3])(Object_80040818 *pOwner);
 extern int lbl_8030865C[8];
+extern unsigned char lbl_803EA4D8;
+extern unsigned char lbl_803EA4D9;
+extern unsigned short lbl_803EA4DA;
 extern int lbl_8030867C[8];
 extern float lbl_803EA4E8;
 extern float lbl_803EA4EC;
@@ -112,7 +133,13 @@ int fn_8004C270(const char *pName, const char *pState);
 int fn_8004C2FC(const char *pName);
 unsigned short fn_8004C4AC(const char *pName);
 int fn_8004C5E0(int index);
+void fn_8004D498(int handle);
+int fn_8004D4B0(int handle, const char *pKey);
 int fn_8004D508(int handle, const char *pKey);
+unsigned int fn_800289A8(void);
+unsigned char fn_8005164C(int type);
+int fn_80051680(int type);
+void fn_80194C5C(int a, int b, int c);
 int fn_8004D560(int handle);
 int fn_8004D5B8(int handle, const char *pKey, char *pText, int size);
 int fn_8004D5F0(int handle, const char *pKey);
@@ -640,7 +667,7 @@ int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
         }
         if (pExtra && (pExtra->mUnknown1708 & 1)) {
             if (pObject->mUnknown196 != -1) {
-                pExtra->mUnknown1704 = pObject->mUnknown427;
+                pExtra->mUnknown1704 = pObject->mUnknown424;
                 Restart_801BE068(pObject, pObject->mUnknown196, 1.0f);
             }
             pExtra->mUnknown1708 &= ~1;
@@ -670,7 +697,7 @@ int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
                 }
                 if (!pObject->mUnknown381) {
                     if (pNode->mId != -1 && fn_801BE648(pObject->mUnknown428->mUnknown1300) == pObject->mUnknown196) {
-                        pExtra->mUnknown1704 = pObject->mUnknown427;
+                        pExtra->mUnknown1704 = pObject->mUnknown424;
                         pExtra->mUnknown1705 = lbl_803EA4DC[(((fn_801CFE40(pObject->mUnknown352, pObject->mUnknown348) -
                                                                (pObject->mUnknown32 + 0x400000)) &
                                                               0xFFFFFF) +
@@ -1072,5 +1099,171 @@ int fn_8004C5E0(int type)
         result = slot + 12;
     }
     return result;
+}
+
+void fn_8004C684(int handle, Object_80041904 *pObject)
+{
+    char type[32];
+    char reset[32];
+    int hasType;
+    int hasReset;
+
+    fn_8004D498(handle);
+    fn_8004D4B0(handle, "behavior");
+    hasType = fn_8004D5B8(handle, "type", type, 32);
+    hasReset = fn_8004D5B8(handle, "reset", reset, 32);
+    pObject->mUnknown188 = 0;
+    pObject->mUnknown184 = lbl_802CFCEC[pObject->mUnknown188];
+    pObject->mUnknown196 = -1;
+    pObject->mUnknown424 = 1;
+    pObject->mUnknown312 = 0;
+    pObject->mUnknown420 = 0;
+    lbl_803EA4E4 = 0;
+    if (hasType) {
+        pObject->mUnknown188 = fn_8004C368(type);
+        pObject->mUnknown184 = lbl_802CFCEC[pObject->mUnknown188];
+        if (lbl_802CFD0C[pObject->mUnknown188]) {
+            lbl_802CFD0C[pObject->mUnknown188](handle, pObject);
+        }
+        fn_8004C518(handle, pObject);
+    }
+    pObject->mUnknown192 = 0;
+    if (hasReset) {
+        pObject->mUnknown192 = lbl_802CFD98[fn_8004C3D4(reset)];
+    }
+    pObject->mUnknown380 = 0;
+}
+
+void fn_8004C7B8(Object_80041904 *pObject)
+{
+    Node_80041904 *pNode = pObject->mUnknown312;
+
+    while (pNode) {
+        Emitter_8004BD20 *pEmitter = pNode->mUnknown128;
+        Node_80041904 *pFreeNode;
+
+        while (pEmitter) {
+            Emitter_8004BD20 *pFree = pEmitter;
+
+            pEmitter = pEmitter->mpNext;
+            fn_801D2BD0(pFree);
+        }
+        pNode->mUnknown128 = 0;
+        pFreeNode = pNode;
+        pNode = pNode->mpNext;
+        fn_801D2BD0(pFreeNode);
+    }
+    pObject->mUnknown312 = 0;
+    if (pObject->mUnknown420) {
+        fn_801D2BD0(pObject->mUnknown420);
+        pObject->mUnknown420 = 0;
+    }
+}
+
+void fn_8004C844(Object_80040818 *pItem, float *pPos, float *pDir, const char *pName, int type,
+                 Hitter_8004C844 *pHitter)
+{
+    int fire = 1;
+    unsigned int time = fn_800289A8();
+    Object_80041904 *pObject = pItem->mUnknown472;
+    unsigned char i;
+
+    for (i = 0; i < 3; i++) {
+        if (pObject->mUnknown384[i].mType == type) {
+            break;
+        }
+    }
+    if (i == 3) {
+        for (i = 0; i < 2; i++) {
+            pObject->mUnknown384[i + 1].mType = pObject->mUnknown384[i].mType;
+            pObject->mUnknown384[i + 1].mTime = pObject->mUnknown384[i].mTime;
+        }
+        pObject->mUnknown384[0].mTime = time;
+        pObject->mUnknown384[0].mType = type;
+    } else {
+        if (time - pObject->mUnknown384[i].mTime < 30) {
+            fire = 0;
+        }
+        pObject->mUnknown384[i].mTime = time;
+    }
+    if (!fire) {
+        return;
+    }
+    pObject->mUnknown380 = 1;
+    pObject->mUnknown381 = fn_8005164C(type);
+    fn_801C2EB4(pObject->mUnknown316, pName);
+    pObject->mUnknown360.mX = pPos[0];
+    pObject->mUnknown360.mY = pPos[1];
+    pObject->mUnknown360.mZ = pPos[2];
+    pObject->mUnknown348 = pDir[0];
+    pObject->mUnknown352 = pDir[1];
+    pObject->mUnknown356 = pDir[2];
+    if (pObject->mUnknown381) {
+        pObject->mUnknown372 = fn_802270D4((char *)fn_801374BC() + 0x54);
+    } else if (fn_80051680(type)) {
+        if (pHitter) {
+            pObject->mUnknown372 = pHitter->mUnknown508 * pHitter->mUnknown452;
+        }
+    } else {
+        pObject->mUnknown372 = fn_802270D4(pDir);
+    }
+    if (pHitter) {
+        float scale;
+
+        pObject->mUnknown376 = pHitter->mId;
+        scale = pObject->mUnknown372 * (1.0f / 70.0f);
+        if (pHitter->mChannel != 0xFF) {
+            int hi = lbl_803EA4D8;
+            int lo = lbl_803EA4D9;
+            float volume = (hi - lo) * scale + lo;
+
+            if (volume > hi) {
+                volume = hi;
+            }
+            fn_80194C5C(pHitter->mChannel, (unsigned char)(int)volume, lbl_803EA4DA);
+        }
+    } else {
+        pObject->mUnknown376 = 0;
+    }
+}
+
+void fn_8004CAA8(Object_80040818 *pItem, float *pPos, float *pDir, const char *pName, int type,
+                 Hitter_8004C844 *pHitter)
+{
+    Object_80041904 *pObject = pItem->mUnknown472;
+    Object_80040818 **ppLinked = pObject->mUnknown152;
+    float strength = 46603.3789f;
+    unsigned int i;
+
+    if (pHitter) {
+        strength = pHitter->mUnknown508 * pHitter->mUnknown452;
+    }
+    pObject->mUnknown372 = strength;
+    fn_8004C844(pItem, pPos, pDir, pName, type, pHitter);
+    for (i = 0; i < 8 && ppLinked[i]; i++) {
+        if (pHitter) {
+            ppLinked[i]->mUnknown472->mUnknown372 = strength;
+        }
+        fn_8004C844(ppLinked[i], pPos, pDir, pName, type, pHitter);
+    }
+}
+
+int fn_8004CB98(int type)
+{
+    return lbl_8030867C[type - 12];
+}
+
+void fn_8004CBB0(void)
+{
+    int i;
+
+    for (i = 0; i < 8; i++) {
+        lbl_8030867C[i] = 0;
+        lbl_8030865C[i] = -1;
+    }
+}
+
+void fn_8004CBE8(void)
+{
 }
 }
