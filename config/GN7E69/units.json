@@ -5553,13 +5553,13 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8016C170",
+          "start": "0x8016BD54",
           "end": "0x8016C70C"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802A4C48",
+          "start": "0x802A4C18",
           "end": "0x802A4D00"
         },
         {
@@ -10215,6 +10215,25 @@
           "placement": ".text",
           "start": "0x8017F90C",
           "end": "0x8017FA78"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8016BAD8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8016BAD8-0x8016BD54 (src/game/cu_8016BAD8.cpp) and its data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8016BAD8",
+          "end": "0x8016BD54"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4BA0",
+          "end": "0x802A4BA4"
         }
       ]
     }

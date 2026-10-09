@@ -158,7 +158,15 @@ struct Block_8011E240 {
     int mUnknown4;
     int mUnknown8;
     int mUnknown12;
-    char mUnknown16[78];
+    char mUnknown16[4];
+    int mUnknown20;
+    char mUnknown24[8];
+    unsigned short mUnknown32;
+    char mUnknown34[10];
+    float mUnknown44;
+    char mUnknown48[12];
+    int mUnknown60;
+    char mUnknown64[30];
     unsigned char mUnknown94;
     char mUnknown95[5];
     unsigned char mUnknown100;
