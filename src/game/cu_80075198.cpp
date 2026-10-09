@@ -143,7 +143,7 @@ void fn_80075550(int *pResult, int ref)
     if (pPlayer) {
         if (pPlayer->mUnknown2912 <= 3) {
             *pResult = 1;
-        } else if (pPlayer->mUnknown2920 - 2 <= 1U) {
+        } else if (pPlayer->mUnknown2920 == 2 || pPlayer->mUnknown2920 == 3) {
             *pResult = 2;
         } else {
             *pResult = 4;
@@ -159,7 +159,7 @@ void fn_800755C4(int *pResult, int ref)
     if (pPlayer) {
         if (pPlayer->mUnknown2912 <= 3) {
             *pResult = 4;
-        } else if (pPlayer->mUnknown2920 - 2 <= 1U) {
+        } else if (pPlayer->mUnknown2920 == 2 || pPlayer->mUnknown2920 == 3) {
             *pResult = 1;
         } else {
             *pResult = 2;

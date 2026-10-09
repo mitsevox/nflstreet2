@@ -19,9 +19,11 @@ struct Node_8008AF90 {
 };
 
 /* Color tree: fn_8008B09C adds the 32-bit words of an image and merges nodes
-   until at most 256 leaves remain; fn_8008B134 writes the average color of
-   each leaf in tree order and numbers the leaves, and fn_8008B1F0 writes the
-   leaf number of each image word as a byte. */
+   until at most 256 leaves remain; fn_8008B134 numbers the leaves in tree
+   order and writes for each the word fn_8008AE88 builds from its averaged
+   sums (the averages of bits 16-23 and 0-7 trade places, bits 24-31 are
+   0xFF, and the word is 0 when bits 8-15 average 0xFF), and fn_8008B1F0
+   writes the leaf number of each image word as a byte. */
 class Class_8008B284 {
 public:
     Class_8008B284();

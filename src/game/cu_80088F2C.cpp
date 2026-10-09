@@ -11,17 +11,20 @@ extern "C" {
 
 void fn_801CE1F0(int value);
 void fn_802451F8(int value);
+void fn_80088F2C(void);
 
+#if defined(DECOMP_COMPARE)
 void fn_80088F2C(void)
 {
-    asm volatile("li 3,4\n\toris 3,3,4\n\tmtspr 914,3\n\t"
-                 "li 3,5\n\toris 3,3,5\n\tmtspr 915,3\n\t"
-                 "li 3,6\n\toris 3,3,6\n\tmtspr 916,3\n\t"
-                 "li 3,7\n\toris 3,3,7\n\tmtspr 917,3\n\t"
-                 "li 3,7\n\toris 3,3,3847\n\tmtspr 918,3\n\t"
-                 "li 3,7\n\toris 3,3,7\n\tmtspr 919,3"
+    asm volatile("li 3,4\n\toris 3,3,4\n\tmtspr GQR2,3\n\t"
+                 "li 3,5\n\toris 3,3,5\n\tmtspr GQR3,3\n\t"
+                 "li 3,6\n\toris 3,3,6\n\tmtspr GQR4,3\n\t"
+                 "li 3,7\n\toris 3,3,7\n\tmtspr GQR5,3\n\t"
+                 "li 3,7\n\toris 3,3,3847\n\tmtspr GQR6,3\n\t"
+                 "li 3,7\n\toris 3,3,7\n\tmtspr GQR7,3"
                  : : : "r3");
 }
+#endif
 
 void fn_80088F78(void)
 {
@@ -46,9 +49,7 @@ int main(void)
 #if defined(DECOMP_COMPARE)
 /* Draft. Clamps a parameter s on pA0-pA1 and t on pB0-pB1 to 0..1 (s from
    the two-segment solve, then t from s, then s again from t), stores the
-   midpoint of the two points to pOut and returns their squared distance.
-   Control flow and stack layout match; register allocation and scheduling
-   of the opening products do not. */
+   midpoint of the two points to pOut and returns their squared distance. */
 extern "C" float fn_80088FFC(float *pA0, float *pA1, float *pB0, float *pB1, float *pOut)
 {
     float r[3];

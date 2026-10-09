@@ -4995,12 +4995,12 @@
           "end": "0x8036ADB0"
         },
         {
-          "symbol": "_.tmp_0.51",
+          "symbol": "_.tmp_0.54",
           "start": "0x803ECDE0",
           "end": "0x803ECDE4"
         },
         {
-          "symbol": "_.tmp_1.106",
+          "symbol": "_.tmp_1.109",
           "start": "0x803ECDE4",
           "end": "0x803ECDE8"
         },
@@ -5010,7 +5010,7 @@
           "end": "0x803ECDF0"
         },
         {
-          "symbol": "_.tmp_2.116",
+          "symbol": "_.tmp_2.119",
           "start": "0x803ECDF0",
           "end": "0x803ECDF4"
         },
@@ -5020,7 +5020,7 @@
           "end": "0x803ECDFC"
         },
         {
-          "symbol": "_.tmp_3.126",
+          "symbol": "_.tmp_3.129",
           "start": "0x803ECDFC",
           "end": "0x803ECE00"
         },
@@ -5030,7 +5030,7 @@
           "end": "0x803ECE08"
         },
         {
-          "symbol": "_.tmp_4.133",
+          "symbol": "_.tmp_4.136",
           "start": "0x803ECE08",
           "end": "0x803ECE0C"
         },
@@ -5040,7 +5040,7 @@
           "end": "0x803ECE14"
         },
         {
-          "symbol": "_.tmp_5.140",
+          "symbol": "_.tmp_5.143",
           "start": "0x803ECE14",
           "end": "0x803ECE18"
         },
@@ -5050,7 +5050,7 @@
           "end": "0x803ECE20"
         },
         {
-          "symbol": "_.tmp_6.147",
+          "symbol": "_.tmp_6.150",
           "start": "0x803ECE20",
           "end": "0x803ECE24"
         },
@@ -5060,7 +5060,7 @@
           "end": "0x803ECE2C"
         },
         {
-          "symbol": "_.tmp_7.154",
+          "symbol": "_.tmp_7.157",
           "start": "0x803ECE2C",
           "end": "0x803ECE30"
         },
@@ -25528,7 +25528,7 @@
     {
       "source": "src/game/cu_80088F2C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80088F2C-0x80089330 (src/game/cu_80088F2C.cpp), the function row 0x80088FFC-0x80089330, the exact .rodata row 0x80295214-0x80295224 and the source-form rows. Draft comparison of fn_80088FFC; 0x80088F2C-0x80088FFC is linked source.",
+      "evidence": "evidence.tsv unit row 0x80088F2C-0x80089330 (src/game/cu_80088F2C.cpp), the function rows 0x80088F2C-0x80088F78 and 0x80088FFC-0x80089330, the exact .rodata row 0x80295214-0x80295224 and the source-form rows. Comparison-only fn_80088F2C (inline asm, kept out of the linked build) and draft fn_80088FFC; 0x80088F78-0x80088FFC is linked source.",
       "sections": [
         {
           "section": ".text",
@@ -25544,6 +25544,11 @@
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_80088F2C",
+          "start": "0x80088F2C",
+          "end": "0x80088F78"
+        },
         {
           "symbol": "fn_80088FFC",
           "start": "0x80088FFC",

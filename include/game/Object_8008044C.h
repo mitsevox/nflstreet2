@@ -1,9 +1,14 @@
 #ifndef GAME_OBJECT_8008044C_H
 #define GAME_OBJECT_8008044C_H
 
+extern "C" {
+int fn_801FA228(int handle, int a, int b, void *pRecord);
+}
+
 struct Object_8008044C {
     Object_8008044C() : mUnknown0(0), mUnknown4(0), mUnknown8(-1), mUnknown12(-1), mUnknown16(-1) {}
     ~Object_8008044C() {}
+    int Read(void *pRecord) { return fn_801FA228(mUnknown0, 0, 0, pRecord); }
 
     int mUnknown0;
     int mUnknown4;
