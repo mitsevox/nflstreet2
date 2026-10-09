@@ -13974,7 +13974,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8003F66C",
-          "end": "0x8003FE90"
+          "end": "0x800400CC"
         }
       ],
       "functions": [
@@ -14042,6 +14042,21 @@
           "symbol": "fn_8003FC68",
           "start": "0x8003FC68",
           "end": "0x8003FC70"
+        },
+        {
+          "symbol": "fn_8003FE90",
+          "start": "0x8003FE90",
+          "end": "0x800400BC"
+        },
+        {
+          "symbol": "fn_800400BC",
+          "start": "0x800400BC",
+          "end": "0x800400C4"
+        },
+        {
+          "symbol": "fn_800400C4",
+          "start": "0x800400C4",
+          "end": "0x800400CC"
         }
       ]
     },

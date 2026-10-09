@@ -4,14 +4,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/cu_8003EC04.h"
 
-/* Rotation built by fn_801EBEF8 from three angles and reset by fn_801EB488. */
-struct Quat_801EB488 {
-    float mX;
-    float mY;
-    float mZ;
-    float mW;
-};
-
 /* The part of an Object_80137ABC entry that the block snapshot saves,
    restores and checksums. */
 struct State_80137ABC {
