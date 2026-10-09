@@ -57,7 +57,7 @@ union Union_80023BBC {
 };
 
 /* One operand of Object_80023BBC: the slot and its kind. Kind 6 names a
-   table and column (the table tag in the high word), 3 an integer and 11
+   table and column (the table tag in the high word), 3 or 2 an integer and 11
    another Object_80023BBC. */
 struct Operand_80023BBC {
     void Set(int kind, long long value)
