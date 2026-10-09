@@ -27,8 +27,17 @@ void fn_80227350(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 int fn_8013AD78(Object_80137ABC *pBall);
 void fn_8013AD9C(Object_80137ABC *pBall, int a);
 void fn_8013AB24(Object_80137ABC *pBall);
+void fn_800423F8(void *pObject, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
+int fn_80054138(Vector_80039F5C *pPos);
+void fn_8009BFD0(Object_80039F5C *p, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
+void fn_802272DC(Vector_80039F5C *pOut, Vector_80039F5C *pIn, float scale);
+int fn_802275D8(Vector_80039F5C *pA, Vector_80039F5C *pB, float eps);
+void fn_8013B8C0(Object_80137ABC *pBall, float dt);
+void fn_8013B900(Object_80137ABC *pBall, float dt);
 void fn_80139294(Object_80137ABC *pBall, Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80139308(Vector_80039F5C *pPos, Quat_801EB488 *pRot, int index, Vector_80039F5C *pOut);
+void fn_80139370(Object_80137ABC *pBall);
+void fn_80139400(Object_80137ABC *pBall, Vector_80039F5C *pOut, int *pIndex);
 }
 
 float lbl_803EB1B0 = 0.35f;
@@ -173,7 +182,7 @@ void fn_801398BC(Vector_80039F5C *pV, float scale)
     fn_8022765C(pV, pV, &delta);
 }
 
-void fn_80139954(Object_80137ABC *pBall)
+void fn_80139954(Object_80137ABC *pBall, float dt)
 {
     Vector_80039F5C pos;
     Quat_801EB488 rot;
@@ -418,6 +427,137 @@ void fn_8013A2F4(Object_80137ABC *pBall, int mode, float spin, float rate)
     if (pBall->mState.mState == 4) {
         fn_80067DB8(0x20, &pBall->mState.mPos, (int)pBall, 0, pBall->mState.mIndex);
     }
+}
+
+void fn_8013A3BC(Object_80137ABC *pBall)
+{
+    Block_80170E64 *pBlock = pBall->mpUnknown00;
+    int flip;
+
+    if (fn_802270D4(&pBall->mState.mUnknown54) > 0.3f && pBlock->mUnknown152 == 0) {
+        flip = fn_801784C4();
+        fn_8013A00C(&pBlock->mUnknown124, &pBall->mState.mPos, flip);
+        fn_8013A048(&pBlock->mUnknown136, &pBall->mState.mUnknown18, flip);
+        pBlock->mUnknown152 = 1;
+    }
+}
+
+void fn_8013A440(Object_80137ABC *pBall)
+{
+    Block_80170E64 *pBlock = pBall->mpUnknown00;
+    int flip = fn_801784C4();
+
+    fn_8013A00C(&pBlock->mUnknown4, &pBall->mState.mPos, flip);
+    fn_8013A048(&pBlock->mUnknown108, &pBall->mState.mUnknown18, flip);
+}
+
+void fn_8013A494(Object_80137ABC *pBall, float dt)
+{
+    Vector_80039F5C force;
+    Vector_80039F5C jitter;
+    float size;
+
+    fn_801397FC(pBall, &force);
+    size = fn_802270D4(&force);
+    if (size > 20.0f && fn_80237260(0) < 0.4f) {
+        jitter.mX = fn_80237260(0) - 0.5f;
+        jitter.mY = fn_80237260(0);
+        jitter.mZ = 0.0f;
+        if (pBall->mState.mUnknown54.mY > 0.0f) {
+            jitter.mY = -jitter.mY;
+        }
+        fn_802272DC(&jitter, &jitter, size * 0.5f);
+        fn_8022765C(&force, &force, &jitter);
+    }
+    if (pBall->mState.mStateArg == 1 && (pBall->mState.mFlags & 0x40)) {
+        fn_80139864(&force, 0.2f);
+    }
+    pBall->mState.mFlags &= ~0x40;
+    fn_801398BC(&force, 0.05f);
+    fn_80139294(pBall, &force, &pBall->mState.mUnknown94);
+    pBall->mState.mPos.mZ -= pBall->mState.mUnknown94.mZ;
+    pBall->mState.mUnknownE0 = 0.0f;
+    fn_80067DB8(0x1F, &pBall->mState.mPos, (unsigned int)(force.mZ * 65536.0f), 0, 0);
+}
+
+void fn_8013A64C(Object_80137ABC *pBall, float dt)
+{
+    fn_80139370(pBall);
+    fn_8013B8C0(pBall, dt);
+    fn_801396D0(pBall, dt);
+    fn_80139954(pBall, dt);
+}
+
+void fn_8013A6A8(Object_80137ABC *pBall, float dt)
+{
+    fn_80139370(pBall);
+    if (fn_80139630(pBall)) {
+        if (!fn_802275D8(&pBall->mState.mUnknown28, &pBall->mState.mPos, 1e-07f)) {
+            fn_8013B900(pBall, dt);
+        }
+        fn_80139370(pBall);
+        fn_8013AD9C(pBall, 0);
+    }
+}
+
+void fn_8013A72C(Object_80137ABC *pBall, float dt)
+{
+    Quat_801EB488 rot;
+    Quat_801EB488 turn;
+    Object_80039F5C *pHolder = fn_8009BCE8(&pBall->mState.mUnknownB4);
+    Block_80170E64 *pHolderBlock = pHolder->mpUnknown4;
+    Block_80170E64 *pBlock = fn_8013825C(pBall);
+
+    fn_8009BFD0(pHolder, &pBall->mState.mPos, &rot);
+    fn_801EBEF8(&turn, 0, 0, 0xFFC00000);
+    fn_801EB660(&rot, &rot, &turn);
+    fn_801EB52C(&rot, &rot);
+    fn_801EBEF8(&turn, 0xFFC00000, 0, 0);
+    fn_801EB660(&pBall->mState.mUnknown18, &rot, &turn);
+    fn_801EB52C(&pBall->mState.mUnknown18, &pBall->mState.mUnknown18);
+    fn_800423F8(pHolderBlock, &pBlock->mUnknown4, &pBlock->mUnknown108);
+    fn_802276B4(&pBall->mState.mUnknown54, &pBall->mState.mPos, &pBall->mState.mUnknown28);
+    if (dt != 0.0f) {
+        fn_80227264(&pBall->mState.mUnknown54, &pBall->mState.mUnknown54, 1.0f / dt);
+    }
+}
+
+void fn_8013A844(Object_80137ABC *pBall, float dt)
+{
+    Block_80170E64 *pBlock;
+
+    pBall->mState.mUnknown28.mX = pBall->mState.mPos.mX;
+    pBall->mState.mUnknown28.mY = pBall->mState.mPos.mY;
+    pBall->mState.mUnknown28.mZ = pBall->mState.mPos.mZ;
+    pBall->mState.mUnknown34.mX = pBall->mState.mUnknown18.mX;
+    pBall->mState.mUnknown34.mY = pBall->mState.mUnknown18.mY;
+    pBall->mState.mUnknown34.mZ = pBall->mState.mUnknown18.mZ;
+    pBall->mState.mUnknown34.mW = pBall->mState.mUnknown18.mW;
+    pBlock = pBall->mpUnknown00;
+    if (!fn_80137AD0(pBall)) {
+        fn_8013A0EC(pBall, dt);
+    } else {
+        fn_8013A72C(pBall, dt);
+    }
+    ClearVector(&pBall->mState.mUnknown7C);
+    ClearVector(&pBall->mState.mUnknown88);
+    pBlock->mUnknown660 = fn_80054138(&pBlock->mUnknown4);
+}
+
+void fn_8013A910(Object_80137ABC *pBall, int *pAngles)
+{
+    Vector_80039F5C low;
+    int index;
+
+    fn_801EBEF8(&pBall->mState.mUnknown18, pAngles[2], pAngles[1], pAngles[0]);
+    pBall->mState.mPos.mZ = 0.0f;
+    fn_80139400(pBall, &low, &index);
+    pBall->mState.mPos.mZ = -low.mZ;
+    ClearVector(&pBall->mState.mUnknown54);
+    ClearVector(&pBall->mState.mUnknown70);
+    fn_801EB488(&pBall->mState.mUnknown60);
+    pBall->mState.mUnknown28 = pBall->mState.mPos;
+    pBall->mState.mUnknown34 = pBall->mState.mUnknown18;
 }
 
 }

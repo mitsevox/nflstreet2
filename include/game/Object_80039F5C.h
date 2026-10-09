@@ -12,6 +12,14 @@ struct Vector_80039F5C {
     float mZ;
 };
 
+/* Rotation built by fn_801EBEF8 from three angles and reset by fn_801EB488. */
+struct Quat_801EB488 {
+    float mX;
+    float mY;
+    float mZ;
+    float mW;
+};
+
 /* Block at +4 of the player object; the entries of src/game/cu_80136B1C.cpp
    hold one at +0. */
 struct Block_80170E64 {
@@ -21,7 +29,12 @@ struct Block_80170E64 {
     unsigned int mUnknown20;
     char mUnknown24[76];
     void *mpUnknown100;
-    char mUnknown104[556];
+    char mUnknown104[4];
+    Quat_801EB488 mUnknown108;
+    Vector_80039F5C mUnknown124;
+    Quat_801EB488 mUnknown136;
+    unsigned char mUnknown152;
+    char mUnknown153[507];
     int mUnknown660;
 };
 
