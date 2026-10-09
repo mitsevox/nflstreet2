@@ -419,7 +419,8 @@ void fn_8015DA80(int index, int load)
     id1 = pLods[1].mId;
     switch (lbl_803EB360) {
     case 0:
-        pLods[1].mId = id1 = NO_MODEL;
+        pLods[1].mId = NO_MODEL;
+        id1 = NO_MODEL;
         count = 1;
         break;
     case 1:
@@ -446,8 +447,14 @@ void fn_8015DA80(int index, int load)
                     lbl_803EB354, lbl_8031C6A4[index], 0);
     }
 
-    lbl_802E31D0[index][0].mId = HairId(id0);
-    lbl_802E31D0[index][1].mId = HairId(id1);
+    lbl_802E31D0[index][0].mId = id0;
+    if (id0 > ROSTER_ID_BASE) {
+        lbl_802E31D0[index][0].mId = id0 - ROSTER_ID_BASE;
+    }
+    lbl_802E31D0[index][1].mId = id1;
+    if (id1 > ROSTER_ID_BASE) {
+        lbl_802E31D0[index][1].mId = id1 - ROSTER_ID_BASE;
+    }
     for (k = 0; k < count; k++) {
         fn_801A13D8(&lbl_802E31D0[index][k], lbl_803EB354);
     }
