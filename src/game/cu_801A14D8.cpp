@@ -573,9 +573,158 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pPos, float (*pMatrix)[4], Obj
             }
         }
     }
-    (void)pMatrix;
-    (void)ppModels;
-    (void)lod;
+    if (pPlayer->mUnknown1164[7].mpUnknown12) {
+        fn_802337D4(pPlayer->mUnknown1164[7].mpUnknown12, &pPlayer->mUnknown4064[3], pPose, 0xE0000000);
+        if (fn_80054D24(0x20) && !fn_8017F584()) {
+            if (pPlayer->mUnknown1164[7].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
+                for (j = 0; j < 12; j++) {
+                    if (j != 3 && j != 7 && j != 11) {
+                        pPlayer->mUnknown4064[3].mpUnknown0[0][j] *= scale;
+                    }
+                }
+            } else {
+                for (i = 1; i < pPlayer->mUnknown1164[7].mpUnknown12->mpUnknown12->mUnknown4; i++) {
+                    if (pPlayer->mUnknown1164[7].mpUnknown12->mpUnknown12->mpUnknown0[i][0] == 13) {
+                        for (j = 0; j < 12; j++) {
+                            if (j != 3 && j != 7 && j != 11) {
+                                pPlayer->mUnknown4064[3].mpUnknown0[i][j] *= scale;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (pPlayer->mUnknown1164[9].mpUnknown12) {
+        fn_802337D4(pPlayer->mUnknown1164[9].mpUnknown12, &pPlayer->mUnknown4064[4], pPose, 0xE0000000);
+        if (fn_80054D24(0x20) && !fn_8017F584()) {
+            if (pPlayer->mUnknown1164[9].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
+                for (j = 0; j < 12; j++) {
+                    if (j != 3 && j != 7 && j != 11) {
+                        pPlayer->mUnknown4064[4].mpUnknown0[0][j] *= scale;
+                    }
+                }
+            } else {
+                for (i = 1; i < pPlayer->mUnknown1164[9].mpUnknown12->mpUnknown12->mUnknown4; i++) {
+                    if (pPlayer->mUnknown1164[9].mpUnknown12->mpUnknown12->mpUnknown0[i][0] == 13) {
+                        for (j = 0; j < 12; j++) {
+                            if (j != 3 && j != 7 && j != 11) {
+                                pPlayer->mUnknown4064[4].mpUnknown0[i][j] *= scale;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    fn_801D0544();
+    if (pPlayer->mUnknown1164[6].mpUnknown12) {
+        float (*pBones)[4][4] = pPlayer->mUnknown44.mUnknown52;
+        short *pHead;
+
+        if (pTrail) {
+            pHead = pTrail->mUnknown468[index].mUnknown;
+            fn_801D04C4();
+            fn_801D0664(pTrail->mUnknown4D4[index]);
+        } else {
+            fn_801D04C4();
+            fn_801D06D4(pPlayer->mUnknown908);
+            fn_800C2150(pPlayer, &pPlayer->mUnknown280, !(pPlayer->mUnknown20 & 8));
+            fn_801D0544();
+            pHead = (short *)pPlayer->mUnknown280.mUnknown312;
+            fn_801D04C4();
+            fn_801D0664(pBones[13]);
+        }
+        pHead[0] = pPose[39];
+        pHead[1] = pPose[40];
+        pHead[2] = pPose[41];
+        fn_802337D4(pPlayer->mUnknown1164[6].mpUnknown12, &pPlayer->mUnknown4064[2], pHead, 0xE0000000);
+        fn_801D0544();
+    }
+    if (pPlayer->mUnknown1164[11].mpUnknown12) {
+        float (*pBones)[4][4] = pPlayer->mUnknown44.mUnknown52;
+        short *pHat;
+
+        fn_801D04C4();
+        fn_801D06D4(pPlayer->mUnknown908);
+        fn_800C2884(pPlayer, &pPlayer->mUnknown596, !(pPlayer->mUnknown20 & 8));
+        fn_801D0544();
+        pHat = (short *)pPlayer->mUnknown596.mUnknown216;
+        fn_801D04C4();
+        fn_801D0664(pBones[11]);
+        pHat[0] = pPose[33];
+        pHat[1] = pPose[34];
+        pHat[2] = pPose[35];
+        pHat[3] = pPose[42];
+        pHat[4] = pPose[43];
+        pHat[5] = pPose[44];
+        pHat[6] = pPose[60];
+        pHat[7] = pPose[61];
+        pHat[8] = pPose[62];
+        fn_802337D4(pPlayer->mUnknown1164[11].mpUnknown12, &pPlayer->mUnknown4064[5], pHat, 0xE0000000);
+        if (fn_80054D24(0x20) && !fn_8017F584()) {
+            if (pPlayer->mUnknown1164[6].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
+                for (j = 0; j < 12; j++) {
+                    if (j != 3 && j != 7 && j != 11) {
+                        pPlayer->mUnknown4064[2].mpUnknown0[0][j] *= scale;
+                    }
+                }
+            } else {
+                for (i = 0; i < pPlayer->mUnknown1164[6].mpUnknown12->mpUnknown12->mUnknown4; i++) {
+                    if (pPlayer->mUnknown1164[6].mpUnknown12->mpUnknown12->mpUnknown0[i][0] == 0) {
+                        for (j = 0; j < 12; j++) {
+                            if (j != 3 && j != 7 && j != 11) {
+                                pPlayer->mUnknown4064[2].mpUnknown0[i][j] *= scale;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        fn_801D0544();
+    }
+    if (lod <= 1) {
+        short *apHands[2];
+        unsigned int k;
+
+        for (k = 0; k <= 1; k++) {
+            if (pPlayer->mUnknown116[k].mUnknown0 == 1 && lod == 0) {
+                float (*pBones)[4][4] = pPlayer->mUnknown44.mUnknown52;
+                int bone = 0x11;
+
+                if (k == 0) {
+                    bone = 0x17;
+                }
+                apHands[k] = pPlayer->mUnknown116[k].mUnknown12.mUnknown48;
+                fn_801D04C4();
+                fn_801D0664(pBones[bone]);
+                apHands[k][0] = pPose[bone * 3 + 3];
+                apHands[k][1] = pPose[bone * 3 + 4];
+                apHands[k][2] = pPose[bone * 3 + 5];
+                fn_802337D4(ppModels[k], &pPlayer->mUnknown4136[k], apHands[k], 0);
+                if (fn_80054D24(0x20) && !fn_8017F584()) {
+                    if (pPlayer->mUnknown1164[11].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
+                        for (j = 0; j < 12; j++) {
+                            if (j != 3 && j != 7 && j != 11) {
+                                pPlayer->mUnknown4064[5].mpUnknown0[0][j] *= scale;
+                            }
+                        }
+                    } else {
+                        for (i = 1; i < pPlayer->mUnknown1164[11].mpUnknown12->mpUnknown12->mUnknown4; i++) {
+                            if (pPlayer->mUnknown1164[11].mpUnknown12->mpUnknown12->mpUnknown0[i][0] == 13) {
+                                for (j = 0; j < 12; j++) {
+                                    if (j != 3 && j != 7 && j != 11) {
+                                        pPlayer->mUnknown4064[5].mpUnknown0[i][j] *= scale;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                fn_801D0544();
+            }
+        }
+    }
     fn_801D0544();
 }
 
