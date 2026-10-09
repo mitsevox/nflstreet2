@@ -49,7 +49,11 @@ struct Object_80041904 {
     float mUnknown16;
     char mUnknown20[12];
     int mUnknown32;
-    char mUnknown36[60];
+    char mUnknown36[12];
+    float mUnknown48;
+    float mUnknown52;
+    float mUnknown56;
+    char mUnknown60[36];
     float mUnknown96;
     float mUnknown100;
     float mUnknown104;
@@ -73,7 +77,7 @@ struct Object_80041904 {
     Cycle_80041904 mUnknown200;
     char mUnknown224[84];
     unsigned short mUnknown308;
-    char mUnknown310[2];
+    unsigned short mUnknown310;
     Node_80041904 *mUnknown312;
     char mUnknown316[32];
     float mUnknown348;
@@ -113,7 +117,7 @@ int fn_80041664(void);
 int fn_800416CC(float dt);
 int fn_8004183C(void);
 Object_80041904 *fn_80041904(int index);
-int fn_80041928(void);
+unsigned int fn_80041928(void);
 }
 
 #endif

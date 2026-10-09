@@ -2,6 +2,9 @@
 #include "game/Object_80039F5C.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801BE60C.h"
+#include "game/Record_8011F4F8.h"
+#include "game/cu_80136B1C.h"
+#include "game/fn_80177FE0.h"
 
 struct Object_80053674;
 
@@ -12,7 +15,9 @@ struct Node_80053674 {
 };
 
 struct Container_80053258 {
-    unsigned char mUnknown00[152];
+    unsigned char mUnknown00[12];
+    float mUnknown0C;
+    unsigned char mUnknown10[136];
     Object_80053674 *mpUnknown98;
     unsigned char mUnknown9C[156];
     Node_80053674 *mpUnknown138;
@@ -96,6 +101,10 @@ unsigned char lbl_803EA544 = 0;
 int lbl_803EA548 = 0;
 
 int fn_80052D08(Args_80052F54 *);
+int fn_800AD9B4(void);
+Object_80039F5C *fn_80137B40(void);
+int fn_801486A0(void);
+int fn_80177C38(void);
 void fn_8004CBEC(void *, Container_80053258 *, Object_80053674 *, float);
 void fn_8004E090(Object_80053674 *, int, int);
 void fn_8005D2C8(int);
@@ -125,6 +134,84 @@ int fn_8022F358(int);
 int fn_8022F384(int);
 int fn_8022F3D4(int);
 int fn_8022F4BC(void);
+
+int fn_80052D08(Args_80052F54 *pArgs)
+{
+    Object_80053674 *pObject = pArgs->mpObject;
+    int found = 0;
+    int *pRef = &pArgs->mRef;
+    int state = fn_801486A0();
+    if (state == 0 || state == 2 || state == 3 || state == 1) {
+        return 0;
+    }
+    int phase = fn_800AD9B4();
+    if (phase != 3) {
+        return 0;
+    }
+    Object_80039F5C *pPlayer = fn_8009BCE8(pRef);
+    unsigned short type = fn_801BE648(pPlayer->mpUnknown792);
+    if (type == 181) {
+        if (pPlayer->mpState->mId == 17) {
+            Object_80039F5C *pCarrier = fn_80137B40();
+            if (pCarrier && pCarrier == fn_8009BCE8(&pPlayer->mUnknown336)) {
+                pArgs->mKind = 1;
+                found = 1;
+            }
+        } else {
+            Object_80039F5C *pCarrier = fn_80137B40();
+            pArgs->mRef = pPlayer->mUnknown336;
+            if (pCarrier && pCarrier == pPlayer) {
+                pArgs->mKind = 1;
+                found = 1;
+            }
+        }
+    } else if (type == 186) {
+        if (pPlayer->mpState->mId == 16) {
+            Object_80039F5C *pCarrier = fn_80137B40();
+            if (pCarrier && pCarrier == pPlayer) {
+                pArgs->mKind = 2;
+                found = 1;
+            }
+        } else {
+            Object_80039F5C *pCarrier = fn_80137B40();
+            pArgs->mRef = pPlayer->mUnknown336;
+            if (pCarrier && pCarrier == fn_8009BCE8(&pPlayer->mUnknown336)) {
+                pArgs->mKind = 2;
+                found = 1;
+            }
+        }
+    } else if (type == 235) {
+        if (fn_8011F4F8(fn_801374E0(fn_801374BC()))->mUnknown1D != 4) {
+            pArgs->mKind = phase;
+            found = 1;
+        }
+    } else if (type == 237) {
+        pArgs->mKind = 7;
+        found = 1;
+    } else if (type == 224 || type == 225) {
+        pArgs->mKind = 4;
+        found = 1;
+    } else if (type == 228 || type == 229) {
+        if (!fn_80177C38()) {
+            float edge;
+            float limit;
+            if (fn_801784C4()) {
+                edge = 1.5f - pObject->mpUnknown1D8->mUnknown0C;
+                limit = fn_80177FE0().mY;
+            } else {
+                edge = pObject->mpUnknown1D8->mUnknown0C + 1.5f;
+                limit = fn_80177FE0().mY;
+            }
+            if (edge <= limit) {
+                goto done;
+            }
+        }
+        pArgs->mKind = type == 229 ? 5 : 6;
+        found = 1;
+    }
+done:
+    return found;
+}
 
 void fn_80052F54(Args_80052F54 *pArgs)
 {
