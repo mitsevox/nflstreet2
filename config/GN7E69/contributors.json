@@ -14178,7 +14178,8 @@
       "provenance": {
         "pull_request": 702,
         "commit": "6bc3b57e8f1e282d60b44b64ce00742d50b7ad0b",
-        "introduced_blob": "96b02176fb49f27a22b05758d4f8e1f32a5e1b81"
+        "introduced_blob": "96b02176fb49f27a22b05758d4f8e1f32a5e1b81",
+        "merged_via": 702
       }
     }
   ],
