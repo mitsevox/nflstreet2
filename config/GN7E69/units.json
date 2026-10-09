@@ -8650,6 +8650,38 @@
       ]
     },
     {
+      "source": "src/game/cu_8019B644.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019B644-0x8019BECC (src/game/cu_8019B644.cpp) and its compiler, source-form and type rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019B644",
+          "end": "0x8019BECC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8019BECC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019BECC-0x8019CE3C (src/game/cu_8019BECC.cpp) and its data, compiler, source-form and type rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019BECC",
+          "end": "0x8019CE3C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADEB0",
+          "end": "0x802ADF18"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80191398.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80191398-0x80191804 (src/game/cu_80191398.cpp) and its .rodata, .data and .sdata rows.",
