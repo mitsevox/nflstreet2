@@ -426,4 +426,15 @@ void fn_80053A70(Object_80039F5C *pPlayer)
         }
     }
 }
+
+void fn_80053B4C(Object_80053674 *pObject, int index, int apply)
+{
+    Node_80053674 *pNode = pObject->mpUnknown1D8->mpUnknown138;
+    while (pNode && fn_801C2FE4(pNode, "Obj_Hotspot_Sponsor") != 0) {
+        pNode = pNode->mpNext;
+    }
+    if (apply) {
+        fn_8004CBEC(pNode->mpUnknown80, pObject->mpUnknown1D8, pObject, 1.0f);
+    }
+}
 }
