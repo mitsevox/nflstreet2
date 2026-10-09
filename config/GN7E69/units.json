@@ -6486,6 +6486,25 @@
       ]
     },
     {
+      "source": "src/game/cu_80138590.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80138590-0x80138CC0 (src/game/cu_80138590.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80138590",
+          "end": "0x80138CC0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FE98",
+          "end": "0x8029FEF8"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80167A8C.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80167910-0x80168ED0 (src/game/cu_80167A8C.cpp) and its data rows.",
