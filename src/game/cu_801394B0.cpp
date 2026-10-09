@@ -2,6 +2,7 @@
 
 #include "game/cu_80136B1C.h"
 #include "game/Object_80040818.h"
+#include "game/Object_8017886C.h"
 #include "game/Record_800B15FC.h"
 #include "game/cu_80067C10.h"
 #include "game/fn_800AD9B4.h"
@@ -66,9 +67,9 @@ void fn_801D0ADC(int a);
 void fn_801D0C58(void *a);
 void fn_801D0FB8(float *p);
 void fn_801EBA64(Quat_801EB488 *pRot);
-void fn_80227248(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
-void fn_8022732C(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
-void fn_80227690(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
+void fn_80227248(void *pOut, void *p, float scale);
+void fn_8022732C(void *pPoint, void *pVelocity, float scale);
+void fn_80227690(void *pOut, void *pA, void *pB);
 unsigned int fn_8023790C(void);
 float fn_80260B1C(float x);
 void fn_8013B9C0(Object_80137ABC *pBall, int state, int arg);
@@ -634,14 +635,15 @@ void fn_8013A9F0(Object_80137ABC *pBall)
 
 void fn_8013AA00(Object_80137ABC *pBall, float height, float *pTime, Vector_80039F5C *pLanding)
 {
-    Vector_80039F5C pos;
+    Point_8017886C pos;
     float vz = pBall->mState.mUnknown54.mZ;
-    float t = ((pBall->mState.mPos.mZ - height) * 0.005962963f + vz * vz) * 112495.65f;
+    float t = (pBall->mState.mPos.mZ - height) * 0.005962963f + vz * vz;
 
+    t *= 112495.65f;
     t = t < 0.0f ? 0.0f : t;
     t = vz * 335.40372f + fn_80260B1C(t);
     if (t > 0.0f) {
-        fn_80227248(&pos, &pBall->mState.mUnknown70, t * (t * 0.5f));
+        fn_80227248(&pos, &pBall->mState.mUnknown70, 0.5f * t * t);
         fn_8022732C(&pos, &pBall->mState.mUnknown54, t);
         fn_80227638(&pos, &pos, &pBall->mState.mPos);
         pLanding->mY = pos.mY;
@@ -752,7 +754,7 @@ int fn_8013ADA4(Object_80039F5C *p)
 
 int fn_8013AE1C(Object_80137ABC *pBall, Object_80039F5C *p, unsigned int type, int facing)
 {
-    Vector_80039F5C delta;
+    Point_8017886C delta;
     unsigned short state = fn_8013BA58(pBall, 0);
     int result = 0;
 
