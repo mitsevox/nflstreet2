@@ -50,10 +50,6 @@ void fn_801D12BC(int a);
 void fn_801D12EC(int a);
 void fn_801D131C(int a);
 int fn_8008A87C(int index);
-void fn_8008B09C(Class_8008B284 *pObject, void *pImage, int width, int height);
-void fn_8008B134(Class_8008B284 *pObject, void *pOut, void *p, int *pCount);
-int fn_8008B27C(Class_8008B284 *pObject);
-void fn_8008B1F0(Class_8008B284 *pObject, void *pImage, int width, int height, void *pOut);
 Object_8015E2FC *fn_8015E2FC(int a, int b, int c);
 void fn_80210214(Object_8023488C *pObject, int a);
 void fn_80210388(void);
@@ -535,15 +531,15 @@ void fn_80199BD4(Object_8008A9F8 *pObject)
     unsigned char (*pColors)[4];
     int count;
 
-    fn_8008B09C(pObject->mpUnknown1636, *ppImage, 128, 128);
+    pObject->mpUnknown1636->fn_8008B09C((unsigned int *)*ppImage, 128, 128);
     pColors = (unsigned char (*)[4])fn_801D2B7C(0x400, 0, 0);
     memset(pColors, 0, 0x400);
-    fn_8008B134(pObject->mpUnknown1636, pColors, 0, 0);
-    count = fn_8008B27C(pObject->mpUnknown1636);
+    pObject->mpUnknown1636->fn_8008B134((unsigned int *)pColors, 0, 0);
+    count = pObject->mpUnknown1636->fn_8008B27C();
     memset(pObject->mpUnknown8, 0, 0x400);
     fn_80199B68(pColors, (unsigned short *)pObject->mpUnknown8, count);
     fn_801D2BD0(pColors);
-    fn_8008B1F0(pObject->mpUnknown1636, *ppImage, 128, 128, pObject->mpUnknown4);
+    pObject->mpUnknown1636->fn_8008B1F0((unsigned int *)*ppImage, 128, 128, (unsigned char *)pObject->mpUnknown4);
 }
 #endif
 }
