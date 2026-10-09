@@ -12443,6 +12443,148 @@
       ]
     },
     {
+      "source": "src/game/cu_8004A2F4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8004A2F4-0x8004BA44 (src/game/cu_8004A2F4.cpp), its compiler, type and source-form rows, the .rodata row 0x8028D7A0-0x8028D7DC and the .bss row 0x803084C4-0x8030865C. Draft comparison: 19 of 23 functions exact; fn_8004AA34, fn_8004ABF4, fn_8004AF94 and fn_8004B354 are partial; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8004A2F4",
+          "end": "0x8004BA44"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D7A0",
+          "end": "0x8028D7DC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803084C4",
+          "end": "0x8030865C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8004A2F4",
+          "start": "0x8004A2F4",
+          "end": "0x8004A474"
+        },
+        {
+          "symbol": "fn_8004A474",
+          "start": "0x8004A474",
+          "end": "0x8004A4F0"
+        },
+        {
+          "symbol": "fn_8004A4F0",
+          "start": "0x8004A4F0",
+          "end": "0x8004A56C"
+        },
+        {
+          "symbol": "fn_8004A56C",
+          "start": "0x8004A56C",
+          "end": "0x8004A5AC"
+        },
+        {
+          "symbol": "fn_8004A5AC",
+          "start": "0x8004A5AC",
+          "end": "0x8004A5EC"
+        },
+        {
+          "symbol": "fn_8004A5EC",
+          "start": "0x8004A5EC",
+          "end": "0x8004A680"
+        },
+        {
+          "symbol": "fn_8004A680",
+          "start": "0x8004A680",
+          "end": "0x8004A6EC"
+        },
+        {
+          "symbol": "fn_8004A6EC",
+          "start": "0x8004A6EC",
+          "end": "0x8004A7A8"
+        },
+        {
+          "symbol": "fn_8004A7A8",
+          "start": "0x8004A7A8",
+          "end": "0x8004A870"
+        },
+        {
+          "symbol": "fn_8004A870",
+          "start": "0x8004A870",
+          "end": "0x8004A8C4"
+        },
+        {
+          "symbol": "fn_8004A8C4",
+          "start": "0x8004A8C4",
+          "end": "0x8004A8E8"
+        },
+        {
+          "symbol": "fn_8004A8E8",
+          "start": "0x8004A8E8",
+          "end": "0x8004A908"
+        },
+        {
+          "symbol": "fn_8004A908",
+          "start": "0x8004A908",
+          "end": "0x8004A9FC"
+        },
+        {
+          "symbol": "fn_8004A9FC",
+          "start": "0x8004A9FC",
+          "end": "0x8004AA34"
+        },
+        {
+          "symbol": "fn_8004AA34",
+          "start": "0x8004AA34",
+          "end": "0x8004ABF4"
+        },
+        {
+          "symbol": "fn_8004ABF4",
+          "start": "0x8004ABF4",
+          "end": "0x8004AD3C"
+        },
+        {
+          "symbol": "fn_8004AD3C",
+          "start": "0x8004AD3C",
+          "end": "0x8004AF84"
+        },
+        {
+          "symbol": "fn_8004AF84",
+          "start": "0x8004AF84",
+          "end": "0x8004AF94"
+        },
+        {
+          "symbol": "fn_8004AF94",
+          "start": "0x8004AF94",
+          "end": "0x8004B020"
+        },
+        {
+          "symbol": "fn_8004B020",
+          "start": "0x8004B020",
+          "end": "0x8004B088"
+        },
+        {
+          "symbol": "fn_8004B088",
+          "start": "0x8004B088",
+          "end": "0x8004B1A0"
+        },
+        {
+          "symbol": "fn_8004B1A0",
+          "start": "0x8004B1A0",
+          "end": "0x8004B354"
+        },
+        {
+          "symbol": "fn_8004B354",
+          "start": "0x8004B354",
+          "end": "0x8004BA44"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8003108C.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row 0x8003108C-0x800314E0 (src/game/cu_8003108C.cpp), its compiler, type and source-form rows, the ten exact function extents and the exact .data row 0x802CCA34-0x802CCB18. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
