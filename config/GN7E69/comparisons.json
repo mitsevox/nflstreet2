@@ -25540,8 +25540,14 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802AE484",
+          "start": "0x802AE098",
           "end": "0x802AE524"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F2934",
+          "end": "0x802F3488"
         }
       ],
       "functions": [

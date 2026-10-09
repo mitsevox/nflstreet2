@@ -61,6 +61,94 @@ struct Ref_803EB81C {
     void *mpUnknown4;
 };
 
+/* Model part description: the part name, its render pass, two halfwords
+   and the texture slot name. */
+struct Part_802F29E8 {
+    const char *mpName;
+    const char *mpPass;
+    short mUnknown8;
+    short mUnknownA;
+    const char *mpTexture;
+    int mUnknownC[8];
+};
+
+/* Initial part parameters set by fn_801A3588, indexed by key. */
+static int lbl_802F2934[31] = {
+    0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 255, 255, 255, 0, 255, 255, 255, 255, 255, 0, 0, 0, 0,
+};
+
+static float lbl_802F29B0[3] = {4.0f, 0.09f, 0.01f};
+static float lbl_802F29BC[3] = {0.7f, 0.02f, 0.12f};
+static float lbl_802F29C8[8] = {-0.7f, 0.0f, -0.7f, 0.0f, 0.7f, 2.0f, 0.7f, 0.0f};
+
+#define PART_ENTRY(name, pass, texture) { name, pass, 1, 0, texture }
+
+/* The 56 model parts, referenced with their count by the .sdata record
+   lbl_803EB81C. */
+Part_802F29E8 lbl_802F29E8[56] = {
+    PART_ENTRY("baseHead", "OnePass", "HEAD"),
+    PART_ENTRY("facialHair", "OnePass", "FACIALHAIR"),
+    PART_ENTRY("eyeL", "OnePassTX", "HEAD"),
+    PART_ENTRY("eyeR", "OnePassTX", "HEAD"),
+    PART_ENTRY("chain", "OnePass", "CHAIN"),
+    PART_ENTRY("medallion", "OnePass", "MEDALLION"),
+    PART_ENTRY("hairUpper", "OnePass", "HAIR"),
+    PART_ENTRY("hairUpperAlpha", "OnePass", "HAIR"),
+    PART_ENTRY("hairLower", "OnePass", "HAIR"),
+    PART_ENTRY("hairLowerAlpha", "OnePass", "HAIR"),
+    PART_ENTRY("torso", "OnePass", "TORSO"),
+    PART_ENTRY("collarHood", "OnePass", "TORSO"),
+    PART_ENTRY("shoulderPadL", "OnePass", "SHOULDERPAD"),
+    PART_ENTRY("hat", "OnePass", "HAT"),
+    PART_ENTRY("glasses", "OnePass", "GLASSES"),
+    PART_ENTRY("shoulderPadUnderL", "OnePass", "SHOULDERPAD"),
+    PART_ENTRY("shoulderPadUnderR", "OnePass", "SHOULDERPAD"),
+    PART_ENTRY("bicepL", "OnePass", "BICEP"),
+    PART_ENTRY("bicepSweatBandL", "OnePass", "BICEP"),
+    PART_ENTRY("sweatBandBicepL", "OnePass", "BICEPSWEATBAND"),
+    PART_ENTRY("elbowL", "OnePass", "ELBOW"),
+    PART_ENTRY("forearmL", "OnePass", "FOREARM"),
+    PART_ENTRY("wristL", "OnePass", "FOREARM"),
+    PART_ENTRY("wristPartL", "OnePass", "WRIST"),
+    PART_ENTRY("hand_Left", "OnePass", "LEFTHAND"),
+    PART_ENTRY("shoulderPadR", "OnePass", "SHOULDERPAD"),
+    PART_ENTRY("bicepR", "OnePass", "BICEP"),
+    PART_ENTRY("bicepSweatBandR", "OnePass", "BICEP"),
+    PART_ENTRY("sweatBandBicepR", "OnePass", "BICEPSWEATBAND"),
+    PART_ENTRY("elbowR", "OnePass", "ELBOW"),
+    PART_ENTRY("forearmR", "OnePass", "FOREARM"),
+    PART_ENTRY("wristR", "OnePass", "FOREARM"),
+    PART_ENTRY("wristPartR", "OnePass", "WRIST"),
+    PART_ENTRY("hand_Rt", "OnePass", "RIGHTHAND"),
+    PART_ENTRY("hipThigh", "OnePass", "THIGH"),
+    PART_ENTRY("kneeL", "OnePass", "KNEE"),
+    PART_ENTRY("shinUpperL", "OnePass", "UPPERSHIN"),
+    PART_ENTRY("shinLowerL", "OnePass", "LOWERSHIN"),
+    PART_ENTRY("shoeL", "OnePass", "SHOE"),
+    PART_ENTRY("kneeR", "OnePass", "KNEE"),
+    PART_ENTRY("shinUpperR", "OnePass", "UPPERSHIN"),
+    PART_ENTRY("shinLowerR", "OnePass", "LOWERSHIN"),
+    PART_ENTRY("shoeR", "OnePass", "SHOE"),
+    PART_ENTRY("dclTorsoFront", "OnePass", "DECALFRONT"),
+    PART_ENTRY("dclTorsoBack", "OnePass", "DECALBACK"),
+    PART_ENTRY("hatDcl", "OnePass", "DECALHAT"),
+    PART_ENTRY("hatLDcl", "OnePass", "HATLDCL"),
+    PART_ENTRY("tatooBicepL", "OnePass", "TATOOBICEPL"),
+    PART_ENTRY("tatooBicepR", "OnePass", "TATOOBICEPR"),
+    PART_ENTRY("tatooForearmL", "OnePass", "TATOOFOREARML"),
+    PART_ENTRY("tatooForearmR", "OnePass", "TATOOFOREARMR"),
+    PART_ENTRY("tatooElbowL", "OnePass", "TATOOELBOWL"),
+    PART_ENTRY("tatooElbowR", "OnePass", "TATOOELBOWR"),
+    PART_ENTRY("dclLogo", "OnePass", "DECALFRONT"),
+    PART_ENTRY("dclNumber", "OnePass", "DECALBACK"),
+    PART_ENTRY("dclName", "OnePass", "NAMEPLATE"),
+};
+
+/* Per-joint flags passed to fn_80233850; fn_801A34B0 sets entries 15 and
+   21. */
+static unsigned char lbl_802F3468[30] = {0};
+
 extern "C" {
 extern Light_8020F2C4 lbl_80365D54;
 extern char lbl_80365D88[16];
@@ -86,11 +174,6 @@ extern Ref_803EB81C lbl_803EB81C[1];
 extern unsigned char lbl_803EB824;
 extern unsigned char lbl_803EB825;
 extern float lbl_803EA2C4;
-extern float lbl_802F29B0[3];
-extern float lbl_802F29BC[3];
-extern float lbl_802F29C8[];
-extern int lbl_802F2934[];
-extern unsigned char lbl_802F3468[30];
 
 int fn_8002894C(void);
 int fn_80027DF0(void);
@@ -315,11 +398,12 @@ int fn_801A1650(Object_8003DEC4 *pPlayer)
     if (pSource) {
         if (pSource->mUnknown12[0] != pData->mUnknown580 || pSource->mUnknown12[1] != pData->mUnknown584 ||
             pSource->mUnknown12[2] != pData->mUnknown588) {
-            float t = pData->mUnknown5A0;
-
-            pData->mUnknown590 = (pData->mUnknown580 - pData->mUnknown590) * (1.0f / 15.0f) * t + pData->mUnknown590;
-            pData->mUnknown594 = (pData->mUnknown584 - pData->mUnknown594) * (1.0f / 15.0f) * t + pData->mUnknown594;
-            pData->mUnknown598 = (pData->mUnknown588 - pData->mUnknown598) * (1.0f / 15.0f) * t + pData->mUnknown598;
+            pData->mUnknown590 =
+                (pData->mUnknown580 - pData->mUnknown590) * (pData->mUnknown5A0 * (1.0f / 15.0f)) + pData->mUnknown590;
+            pData->mUnknown594 =
+                (pData->mUnknown584 - pData->mUnknown594) * (pData->mUnknown5A0 * (1.0f / 15.0f)) + pData->mUnknown594;
+            pData->mUnknown598 =
+                (pData->mUnknown588 - pData->mUnknown598) * (pData->mUnknown5A0 * (1.0f / 15.0f)) + pData->mUnknown598;
             pData->mUnknown580 = pSource->mUnknown12[0];
             pData->mUnknown584 = pSource->mUnknown12[1];
             pData->mUnknown588 = pSource->mUnknown12[2];
