@@ -11,7 +11,7 @@ struct Comment_80193CEC {
 extern "C" {
 int fn_80193CEC(char *pOut, int unused, Comment_80193CEC *pComment);
 void fn_80193D44(void);
-void fn_80193D48(void *pData, int index, int *pOptional, int *pOut);
+void fn_80193D48(void *pData, int index, unsigned char **pOptional, unsigned int *pOut);
 void fn_80193DC4(int *pFiles, int *pBlocks);
 }
 

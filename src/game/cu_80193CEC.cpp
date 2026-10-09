@@ -5,14 +5,6 @@
 #include "game/Object_8020E52C.h"
 #include "game/cu_80193CEC.h"
 
-/* Entry returned by fn_8020E560; entries are 16 bytes apart. */
-struct Entry_8020E560 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknownC;
-};
-
 struct Header_80193D48 {
     char mUnknown0[4];
     unsigned short mUnknown4;
@@ -26,7 +18,6 @@ struct Resource_80193D48 {
 
 extern "C" {
 
-Entry_8020E560 *fn_8020E560(void *p, int index);
 int fn_801D6AC8(int type);
 unsigned int fn_80029838(int type);
 
@@ -47,16 +38,16 @@ void fn_80193D44(void)
 {
 }
 
-void fn_80193D48(void *pData, int index, int *pOptional, int *pOut)
+void fn_80193D48(void *pData, int index, unsigned char **pOptional, unsigned int *pOut)
 {
     Resource_80193D48 *pResource = (Resource_80193D48 *)fn_801EF390(pData, index, 1);
-    Entry_8020E560 *pEntry;
+    Object_8020E560 *pEntry;
 
     fn_8020E2B0(pResource);
     pEntry = fn_8020E560(pResource, pResource->mpUnknown14->mUnknown4);
     *pOut = pEntry->mUnknown8;
     if (pOptional) {
-        *pOptional = pEntry->mUnknownC;
+        *pOptional = pEntry->mpUnknownC;
     } else {
         fn_801F010C(pData, index);
     }

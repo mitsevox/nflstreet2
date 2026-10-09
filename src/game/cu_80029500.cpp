@@ -52,7 +52,7 @@ extern char lbl_802EBE50[];
 
 void fn_801D646C(void);
 void fn_801D6938(SaveFileDesc *, int);
-void fn_801D6924(int (*)(char *, int, Comment_80193CEC *), void (*)(void), void (*)(int, int *, int *), void (*)(int));
+void fn_801D6924(int (*)(char *, int, Comment_80193CEC *), void (*)(void), void (*)(int, unsigned char **, unsigned int *), void (*)(int));
 void fn_801D5824(int, int);
 void fn_801D6904(int, int);
 void fn_801D64EC(void);
@@ -109,7 +109,7 @@ SaveFileDesc lbl_802CC7E0[4] = {
 
 extern "C" {
 
-void fn_80029500(int type, int *pOptional, int *pOut)
+void fn_80029500(int type, unsigned char **pOptional, unsigned int *pOut)
 {
     fn_80193D48(lbl_803EA320, lbl_802CC780[type].mUnknown4, pOptional, pOut);
 }
