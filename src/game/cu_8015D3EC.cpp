@@ -5,6 +5,8 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
 
+#include <string.h>
+
 /* One level of detail of a model description (0x50 bytes). A list of them
    ends with an entry whose id is 0xFFFF. Ids above ROSTER_ID_BASE name
    models of the roster archive and are stored there as id - ROSTER_ID_BASE. */
@@ -38,7 +40,6 @@ void fn_801A13B4(ModelLod_802DF190 *pLod, ModelLod_802DF190 *pSource, Skeleton_8
 void fn_801A13D8(ModelLod_802DF190 *pLod, Skeleton_80041930 *pSkeleton);
 void fn_801A4690(int a);
 void fn_801A46BC(void);
-void fn_801C1FBC(void *pDest, void *pSrc, unsigned int size);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 char *fn_801C3084(const char *pString, int c);
 int fn_801C9DC8(int value);
@@ -195,12 +196,10 @@ static int lbl_803ECA98;
 static Callback_8015F958 lbl_803ECA9C;
 static Object_8003DEC4 *lbl_803ECAA0;
 static void *lbl_803ECAA4[2];
-static void *lbl_803ECAAC[2];
+static char *lbl_803ECAAC[2];
 static void *lbl_803ECAB4[2];
-static void *lbl_803ECABC;
-static void *lbl_803ECAC0;
-static int lbl_803ECAC4;
-static int lbl_803ECAC8;
+static char *lbl_803ECABC[2];
+static int lbl_803ECAC4[2];
 static void *lbl_803ECACC;
 static void *lbl_803ECAD0;
 static void *lbl_803ECAD4;
@@ -756,24 +755,24 @@ void fn_8015E73C(int id)
     lbl_803EB338[0].mId = id;
     size0 = fn_801F0C50(lbl_803ECAD8, id);
     size1 = fn_801F0C50(lbl_803ECAD8, lbl_803EB338[1].mId);
-    if (lbl_803EB344 && lbl_803ECAC4 == 0 && lbl_803ECAC8 == 0) {
-        lbl_803ECABC = fn_801D2B7C(size0, 4, 0);
-        lbl_803ECAC0 = fn_801D2B7C(size1, 4, 0);
-        lbl_803ECAC4 = lbl_803EB338[0].mId;
-        lbl_803ECAC8 = lbl_803EB338[1].mId;
-        fn_801EFF80(lbl_803ECAD8, lbl_803ECAC4, lbl_803ECABC);
-        fn_801EFF80(lbl_803ECAD8, lbl_803ECAC8, lbl_803ECAC0);
+    if (lbl_803EB344 && lbl_803ECAC4[0] == 0 && lbl_803ECAC4[1] == 0) {
+        lbl_803ECABC[0] = (char *)fn_801D2B7C(size0, 4, 0);
+        lbl_803ECABC[1] = (char *)fn_801D2B7C(size1, 4, 0);
+        lbl_803ECAC4[0] = lbl_803EB338[0].mId;
+        lbl_803ECAC4[1] = lbl_803EB338[1].mId;
+        fn_801EFF80(lbl_803ECAD8, lbl_803ECAC4[0], lbl_803ECABC[0]);
+        fn_801EFF80(lbl_803ECAD8, lbl_803ECAC4[1], lbl_803ECABC[1]);
     }
-    lbl_803ECAAC[0] = fn_801D2B7C(size0, 4, 0);
-    lbl_803ECAAC[1] = fn_801D2B7C(size1, 4, 0);
+    lbl_803ECAAC[0] = (char *)fn_801D2B7C(size0, 4, 0);
+    lbl_803ECAAC[1] = (char *)fn_801D2B7C(size1, 4, 0);
     if (lbl_803EB344) {
-        fn_801C1FBC(lbl_803ECAAC[0], lbl_803ECABC, size0);
-        fn_801C1FBC(lbl_803ECAAC[1], lbl_803ECAC0, size1);
+        memcpy(lbl_803ECAAC[0], lbl_803ECABC[0], size0);
+        memcpy(lbl_803ECAAC[1], lbl_803ECABC[1], size1);
         fn_80233EAC(&lbl_8031C1C8, lbl_803EB338, "PLYRMODEL", 0, lbl_803ECAD8, lbl_803EB348,
-                    lbl_803ECAAC, 0);
+                    (void **)lbl_803ECAAC, 0);
     } else {
         fn_80233EAC(&lbl_8031C1C8, lbl_803EB338, "PLYRMODEL", 0, lbl_803ECAD8, lbl_803EB348,
-                    lbl_803ECAAC, 1);
+                    (void **)lbl_803ECAAC, 1);
     }
     if (lbl_803EB35D) {
         fn_801F0F18(0);
@@ -953,7 +952,7 @@ void fn_8015EF10(void)
         lastId = pEntry->mId + 1;
         for (n = lbl_8031C0A8[i]; n > 0; n--, pEntry++) {
             if (pEntry->mId == lastId) {
-                fn_801C1FBC(pEntry->mpData, pLast, fn_801D3148(1, pLast));
+                memcpy(pEntry->mpData, pLast, fn_801D3148(1, pLast));
             } else {
                 lastId = pEntry->mId;
                 pLast = pEntry->mpData;
@@ -1026,25 +1025,25 @@ void fn_8015F298(int index, int id)
 void fn_8015F35C(void)
 {
     lbl_803EB344 = 1;
-    lbl_803ECAC0 = 0;
-    lbl_803ECAC8 = 0;
-    lbl_803ECABC = 0;
-    lbl_803ECAC4 = 0;
+    lbl_803ECAC4[0] = 0;
+    lbl_803ECAC4[1] = 0;
+    lbl_803ECABC[0] = 0;
+    lbl_803ECABC[1] = 0;
 }
 
 void fn_8015F388(void)
 {
-    if (lbl_803ECABC) {
-        fn_801D2BD0(lbl_803ECABC);
-        lbl_803ECABC = 0;
+    if (lbl_803ECABC[0]) {
+        fn_801D2BD0(lbl_803ECABC[0]);
+        lbl_803ECABC[0] = 0;
     }
-    if (lbl_803ECAC0) {
-        fn_801D2BD0(lbl_803ECAC0);
-        lbl_803ECAC0 = 0;
+    if (lbl_803ECABC[1]) {
+        fn_801D2BD0(lbl_803ECABC[1]);
+        lbl_803ECABC[1] = 0;
     }
     lbl_803EB344 = 0;
-    lbl_803ECAC8 = 0;
-    lbl_803ECAC4 = 0;
+    lbl_803ECAC4[0] = 0;
+    lbl_803ECAC4[1] = 0;
 }
 
 void fn_8015F3FC(int a)
@@ -1185,8 +1184,8 @@ void fn_8015F82C(int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
         lbl_803EB338[0].mId = id;
         size0 = fn_801F0C50(lbl_803ECAD8, id);
         size1 = fn_801F0C50(lbl_803ECAD8, lbl_803EB338[1].mId);
-        lbl_803ECAAC[0] = fn_801D2B7C(size0, 2, 0);
-        lbl_803ECAAC[1] = fn_801D2B7C(size1, 2, 0);
+        lbl_803ECAAC[0] = (char *)fn_801D2B7C(size0, 2, 0);
+        lbl_803ECAAC[1] = (char *)fn_801D2B7C(size1, 2, 0);
         lbl_803EB330++;
         fn_801EFD2C(lbl_803ECAD8, lbl_803EB338[0].mId, 1, lbl_803ECAAC[0], 100, fn_8015E1F0, 0);
         lbl_803EB330++;
@@ -1312,7 +1311,7 @@ void fn_8015FE4C(void)
     if (lbl_803EB330 == 1) {
         lbl_803EB330 = 0;
         fn_80233EAC(&lbl_8031C1C8, lbl_803EB338, "PLYRMODEL", 0, lbl_803ECAD8, lbl_803EB348,
-                    lbl_803ECAAC, 0);
+                    (void **)lbl_803ECAAC, 0);
         lbl_803ECA6C(lbl_803ECA70);
     }
     if (lbl_803EB331 == 1) {
