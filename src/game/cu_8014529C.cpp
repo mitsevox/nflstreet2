@@ -40,7 +40,7 @@ extern "C" void fn_8014529C(Object_8003DEC4 *pBody, int index, Vector_80039F5C *
 
 extern "C" void fn_80145314(Event_801459F0 *pEvent)
 {
-    Object_80039F5C *pPlayer = (Object_80039F5C *)pEvent->mUnknown0C;
+    Object_80039F5C *pPlayer = pEvent->mUnknown0C;
     Object_8003DEC4 *pBody = (Object_8003DEC4 *)pPlayer->mpUnknown4;
     Vector_80039F5C pos;
     float m[4][4];
@@ -64,7 +64,9 @@ extern "C" void fn_80145314(Event_801459F0 *pEvent)
         }
         if (pEvent->mUnknown18 == 0 && pBody->mUnknown972 != 0) {
             fn_801D03D0(m);
-            m[2][3] = m[1][3] = m[0][3] = 0.0f;
+            m[0][3] = 0.0f;
+            m[1][3] = 0.0f;
+            m[2][3] = 0.0f;
             fn_801D03D0(pEvent->mUnknown20);
             pEvent->mUnknown20[0][3] = pos.mX;
             pEvent->mUnknown20[1][3] = pos.mY;
@@ -81,7 +83,7 @@ extern "C" void fn_80145314(Event_801459F0 *pEvent)
 
 extern "C" void fn_801454DC(Event_801459F0 *pEvent)
 {
-    Object_80039F5C *pPlayer = (Object_80039F5C *)pEvent->mUnknown0C;
+    Object_80039F5C *pPlayer = pEvent->mUnknown0C;
     Vector_80039F5C pos;
     Angles_801EBC18 angles;
     float m[4][4];
@@ -90,7 +92,9 @@ extern "C" void fn_801454DC(Event_801459F0 *pEvent)
     fn_8014529C((Object_8003DEC4 *)pPlayer->mpUnknown4, pEvent->mUnknown14, &pos, &angles);
     if (pEvent->mUnknown18 == 0) {
         fn_801D03D0(m);
-        m[2][3] = m[1][3] = m[0][3] = 0.0f;
+        m[0][3] = 0.0f;
+        m[1][3] = 0.0f;
+        m[2][3] = 0.0f;
         fn_801D0508();
         fn_801D0C58(&pos);
         fn_801D0BCC(angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
@@ -118,7 +122,7 @@ extern "C" void fn_801454DC(Event_801459F0 *pEvent)
 
 extern "C" void fn_801455F8(Event_801459F0 *pEvent)
 {
-    Object_8003DEC4 *pBody = (Object_8003DEC4 *)((Object_80039F5C *)pEvent->mUnknown0C)->mpUnknown4;
+    Object_8003DEC4 *pBody = (Object_8003DEC4 *)pEvent->mUnknown0C->mpUnknown4;
     Object_80146094 *pTrail = &pBody->mUnknown5188;
     Vector_80039F5C pos;
     Angles_801EBC18 angles;
@@ -131,7 +135,9 @@ extern "C" void fn_801455F8(Event_801459F0 *pEvent)
     fn_8014529C(pBody, pEvent->mUnknown14, &pos, &angles);
     if (pEvent->mUnknown18 == 0) {
         fn_801D03D0(m);
-        m[2][3] = m[1][3] = m[0][3] = 0.0f;
+        m[0][3] = 0.0f;
+        m[1][3] = 0.0f;
+        m[2][3] = 0.0f;
         fn_801D0508();
         fn_801D0C58(&pos);
         fn_801D0BCC(angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
@@ -164,7 +170,7 @@ extern "C" void fn_801455F8(Event_801459F0 *pEvent)
 
 extern "C" void fn_80145798(Event_801459F0 *pEvent)
 {
-    Object_8003DEC4 *pBody = (Object_8003DEC4 *)((Object_80039F5C *)pEvent->mUnknown0C)->mpUnknown4;
+    Object_8003DEC4 *pBody = (Object_8003DEC4 *)pEvent->mUnknown0C->mpUnknown4;
     Vector_80039F5C pos;
     float m[4][4];
     Args_80144CE0 args;
@@ -177,7 +183,9 @@ extern "C" void fn_80145798(Event_801459F0 *pEvent)
     args.mUnknown00 = 21;
     if (pBody->mUnknown972 != 0) {
         fn_801D03D0(m);
-        m[2][3] = m[1][3] = m[0][3] = 0.0f;
+        m[0][3] = 0.0f;
+        m[1][3] = 0.0f;
+        m[2][3] = 0.0f;
         fn_801D03D0(pEvent->mUnknown20);
         pEvent->mUnknown20[0][3] = pos.mX;
         pEvent->mUnknown20[1][3] = pos.mY;
@@ -198,7 +206,7 @@ extern "C" void fn_801458C8(Event_801459F0 *pEvent)
     Args_80144CE0 args;
     Vector_80039F5C pos;
     Vector_80039F5C velocity;
-    float (*pMatrix)[4][4] = (float (*)[4][4])pEvent->mUnknown08;
+    float (*pMatrix)[4][4] = pEvent->mUnknown08;
     Source_80144CE0 *pSource;
     float speed;
 
@@ -212,7 +220,9 @@ extern "C" void fn_801458C8(Event_801459F0 *pEvent)
         pSource = (Source_80144CE0 *)((Object_80137ABC *)pEvent->mUnknown10)->mpUnknown00->mUnknown660;
         if (pSource != 0) {
             fn_801D03D0(m);
-            m[2][3] = m[1][3] = m[0][3] = 0.0f;
+            m[0][3] = 0.0f;
+            m[1][3] = 0.0f;
+            m[2][3] = 0.0f;
             fn_801D03D0(pEvent->mUnknown20);
             pEvent->mUnknown20[0][3] = pos.mX;
             pEvent->mUnknown20[1][3] = pos.mY;
