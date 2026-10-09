@@ -377,7 +377,7 @@ unsigned char fn_8001DD9C(void)
         node.Set(11, &left, &right);
         left.Set(6, 0x59414C5044494754LL, 3, lbl_803ECE78);
         right.SetUnknown32(6, 0x59414C5044494F50LL, 3, 0x10006);
-        right.mUnknown24.mInt = 32756;
+        right.mUnknown16.mValue.mInt = 32756;
         fn_8007A334((Object_8007A334 *)&lbl_8036B2DC, 0x59414C50, 0x44494750, lbl_802F45AC, &node, 0x54415453);
         desc.mUnknown12 = 0;
         desc.mUnknown4 = 1;

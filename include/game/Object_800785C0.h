@@ -15,7 +15,7 @@ struct Entry_80079864 {
    and fn_80025B18 skips entries whose mUnknown8 is zero. */
 struct Entry_800257B4 {
     int mType;
-    int mValue;
+    unsigned int mValue;
     unsigned char mUnknown8;
     char mUnknown9[3];
 };

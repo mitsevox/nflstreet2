@@ -21,7 +21,7 @@ int fn_80025708(void);
 int fn_800257B4(int side, Object_800785C0 *pRecord, int index);
 unsigned char fn_800254B4(Object_800785C0 *pRecord);
 
-void fn_80078C50(int type, int value, char *pText, int size);
+void fn_80078C50(int type, unsigned int value, char *pText, int size);
 int fn_800796B8(int side, Object_800785C0 *pRecord, int index, int *pResult);
 int fn_80079758(int side, Info_8007984C *pInfo);
 int fn_800797F4(Object_800785C0 *pRecord, int type, int *pValue);

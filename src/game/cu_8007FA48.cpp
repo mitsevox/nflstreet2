@@ -167,7 +167,7 @@ extern "C" void fn_8007FFA8(Object_8008044C *p, void *arg, int selector, int val
     root.Set(11, &left, &right);
     left.Set(6, 0x59414C5044494754LL, 3, selector);
     right.SetUnknown32(6, 0x59414C5044494750LL, 3, 0x10006);
-    right.mUnknown24.mInt = value;
+    right.mUnknown16.mValue.mInt = value;
     fn_8007A334(reinterpret_cast<Object_8007A334 *>(p), 0x59414C50, 0x44494750, arg, &root, flags);
 }
 extern "C" void fn_80080084(int value, int handle, int table, ColumnValue_802D6424 *columns)

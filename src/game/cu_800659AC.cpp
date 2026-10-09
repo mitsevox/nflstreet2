@@ -3,80 +3,12 @@
 #include "game/Candidate_8016B364.h"
 #include "game/Object_8007A334.h"
 #include "game/QueryStatus.h"
+#include "game/Table_8007E020.h"
 #include "game/Team_80167A8C.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801FCE10.h"
-
-/* The 40-byte condition node passed to fn_801FA0BC and fn_801FA290: two
-   operands (an 8-byte value tagged with its kind) and a word combining the
-   operator. Kind 6 names a table and column, 3 an integer and 11 another
-   node; fn_801FA290 reads the same bytes as Object_80023BBC. */
-struct Condition_800659AC;
-
-union Value_800659AC {
-    int mInt;
-    unsigned long long mColumn;
-    Condition_800659AC *mpNode;
-};
-
-struct Operand_800659AC {
-    void Set(int kind, unsigned long long column)
-    {
-        mKind = kind;
-        mValue.mColumn = column;
-    }
-    void Set(int kind, int value)
-    {
-        mKind = kind;
-        mValue.mInt = value;
-    }
-    void Set(int kind, Condition_800659AC *pNode)
-    {
-        mKind = kind;
-        mValue.mpNode = pNode;
-    }
-
-    int mKind;
-    Value_800659AC mValue;
-};
-
-struct Condition_800659AC {
-    void Set(int kind, unsigned long long column, int valueKind, int value)
-    {
-        mLeft.Set(kind, column);
-        mRight.Set(valueKind, value);
-    }
-    void Set(int kind, unsigned long long column, int valueKind, unsigned long long value)
-    {
-        mLeft.Set(kind, column);
-        mRight.Set(valueKind, value);
-    }
-    void Set(int kind, Condition_800659AC *pLeft, Condition_800659AC *pRight)
-    {
-        mLeft.Set(kind, pLeft);
-        mRight.Set(kind, pRight);
-    }
-
-    Operand_800659AC mLeft;
-    Operand_800659AC mRight;
-    int mOperator;
-};
-
-/* One entry of the table list of fn_801FA0BC and fn_801FA290, as
-   Table_800659AC but filtered by a Condition_800659AC. */
-struct Table_800659AC {
-    void Set(int tag, int type, Condition_800659AC *pFilter)
-    {
-        mpFilter = pFilter;
-        mTag = tag;
-        mType = type;
-    }
-
-    int mTag;
-    int mType;
-    Condition_800659AC *mpFilter;
-};
+#include "game/fn_802372EC.h"
 
 extern "C" {
 extern char lbl_802EBDF8[];
@@ -88,13 +20,9 @@ void fn_801F51DC(int a, void *pBase, int count, int size,
                  void (*pSwap)(Candidate_8016B364 *, Candidate_8016B364 *), int b, int c);
 int fn_801F8D60(int tag, int a);
 int fn_801F8EEC(int tag);
-int fn_801F9D70(int handle, int table, Condition_800659AC *pFilter, unsigned short *pCount);
-int fn_801FA0BC(int handle, Table_800659AC *pTables, Condition_800659AC *pFilter, void *pSort, int *pCursor,
+int fn_801FA0BC(int handle, Table_8007E020 *pTables, Object_80023BBC *pFilter, void *pSort, int *pCursor,
                 QueryResult *pResult);
-int fn_801FA148(int cursor);
-int fn_801FA290(int handle, Table_800659AC *pTables, Condition_800659AC *pFilter, ColumnValue_802D6424 *pColumns);
 int fn_8020D2D0(int tag, char *pName, int a, int b);
-unsigned int fn_802372EC(unsigned int, unsigned int);
 }
 
 static const char *lbl_802D5034[25] = {
@@ -118,12 +46,12 @@ const char *GetPositionString(int index)
     return lbl_802D5034[index];
 }
 
-void fn_800659AC(int tag, int handle, int index, Team_80167A8C *pTeam, Object_8006719C *pObject)
+void fn_800659AC(int tag, int key, int index, Team_80167A8C *pTeam, Object_8006719C *pObject)
 {
-    Condition_800659AC filter;
-    Condition_800659AC orderFilter;
-    Condition_800659AC handleFilter;
-    Table_800659AC tables[2] = { { 0x54534250 }, { -1 } };
+    Object_80023BBC filter;
+    Object_80023BBC orderFilter;
+    Object_80023BBC keyFilter;
+    Table_8007E020 tables[2] = { { 0x54534250 }, { -1 } };
     ColumnValue_802D6424 columns[4] = {
         { 0, 0x54534250, 0x656D616E },
         { 0, 0x54534250, 0x54534250 },
@@ -131,22 +59,22 @@ void fn_800659AC(int tag, int handle, int index, Team_80167A8C *pTeam, Object_80
         { 0, -1, -1 }
     };
 
-    filter.mOperator = 0x20009;
-    filter.Set(11, &orderFilter, &handleFilter);
-    orderFilter.mOperator = 0x10003;
-    orderFilter.Set(6, ((unsigned long long)0x54534250 << 32) | 0x5F64726F, 3, index + 1);
-    handleFilter.mOperator = 0x10003;
-    handleFilter.Set(6, ((unsigned long long)0x54534250 << 32) | 0x4D464250, 3, handle);
+    filter.mUnknown32 = 0x20009;
+    filter.SetOperands(11, &orderFilter, &keyFilter);
+    orderFilter.mUnknown32 = 0x10003;
+    orderFilter.SetOperands(6, ((long long)0x54534250 << 32) | 0x5F64726F, 3, index + 1);
+    keyFilter.mUnknown32 = 0x10003;
+    keyFilter.SetOperands(6, ((long long)0x54534250 << 32) | 0x4D464250, 3, key);
     columns[0].mValue = (int)pObject->mUnknownC8C;
     fn_801FA290(tag, tables, &filter, columns);
     pObject->mUnknown0 = columns[1].mValue;
     pObject->mUnknown4 = columns[2].mValue;
 }
 
-void fn_80065B50(int tag, int handle, Object_8006719C *pObject)
+void fn_80065B50(int tag, int key, Object_8006719C *pObject)
 {
-    Condition_800659AC filter;
-    Table_800659AC tables[2] = { { 0x4C544553 }, { -1 } };
+    Object_80023BBC filter;
+    Table_8007E020 tables[2] = { { 0x4C544553 }, { -1 } };
     ColumnValue_802D6424 columns[7] = {
         { 0, 0x4C544553, 0x4D524F46 },
         { 0, 0x4C544553, 0x4E544F4D },
@@ -157,8 +85,8 @@ void fn_80065B50(int tag, int handle, Object_8006719C *pObject)
         { 0, -1, -1 }
     };
 
-    filter.mOperator = 0x10003;
-    filter.Set(6, ((unsigned long long)0x4C544553 << 32) | 0x4C544553, 3, handle);
+    filter.mUnknown32 = 0x10003;
+    filter.SetOperands(6, ((long long)0x4C544553 << 32) | 0x4C544553, 3, key);
     fn_801FA290(tag, tables, &filter, columns);
     pObject->mUnknown8 = columns[0].mValue;
     pObject->mUnknownC = columns[1].mValue;
@@ -168,10 +96,10 @@ void fn_80065B50(int tag, int handle, Object_8006719C *pObject)
     pObject->mUnknownF = 0;
 }
 
-void fn_80065CAC(int tag, int handle, Team_80167A8C *pTeam, Object_8006719C *pObject)
+void fn_80065CAC(int tag, int key, Team_80167A8C *pTeam, Object_8006719C *pObject)
 {
-    Condition_800659AC filter;
-    Table_800659AC tables[2] = { { 0x50544553 }, { -1 } };
+    Object_80023BBC filter;
+    Table_8007E020 tables[2] = { { 0x50544553 }, { -1 } };
     ColumnValue_802D6424 columns[12] = {
         { 0, 0x54534250, 0x50544553 },
         { 0, 0x54534250, 0x736F5044 },
@@ -191,8 +119,8 @@ void fn_80065CAC(int tag, int handle, Team_80167A8C *pTeam, Object_8006719C *pOb
     int opened = 0;
     int status;
 
-    filter.mOperator = 0x10003;
-    filter.Set(6, ((unsigned long long)0x50544553 << 32) | 0x4C544553, 3, handle);
+    filter.mUnknown32 = 0x10003;
+    filter.SetOperands(6, ((long long)0x50544553 << 32) | 0x4C544553, 3, key);
     status = fn_801FA0BC(tag, tables, &filter, 0, &cursor, 0);
     if (QUERY_STATUS_ACCEPTED(status) == 1) {
         opened = 1;
@@ -243,8 +171,8 @@ void fn_80065CAC(int tag, int handle, Team_80167A8C *pTeam, Object_8006719C *pOb
 
 void fn_80066000(int tag, int index, int key, Object_8006719C *pObject)
 {
-    Condition_800659AC filter;
-    Table_800659AC tables[2] = { { 0x47544553 }, { -1 } };
+    Object_80023BBC filter;
+    Table_8007E020 tables[2] = { { 0x47544553 }, { -1 } };
     ColumnValue_802D6424 columns[11] = {
         { 0, 0x47544553, 0x5F464753 },
         { 0, 0x47544553, 0x5F5F5F78 },
@@ -267,8 +195,8 @@ void fn_80066000(int tag, int index, int key, Object_8006719C *pObject)
         pObject->mUnknown84[row][index].mUnknown6 = 0x7FFF;
     }
     opened = 0;
-    filter.mOperator = 0x10003;
-    filter.Set(6, ((unsigned long long)0x47544553 << 32) | 0x50544553, 3, key);
+    filter.mUnknown32 = 0x10003;
+    filter.SetOperands(6, ((long long)0x47544553 << 32) | 0x50544553, 3, key);
     status = fn_801FA0BC(tag, tables, &filter, 0, &cursor, 0);
     if (QUERY_STATUS_ACCEPTED(status) == 1) {
         opened = 1;
@@ -300,10 +228,10 @@ void fn_80066000(int tag, int index, int key, Object_8006719C *pObject)
     }
 }
 
-void fn_80066318(int tag, int handle, Object_8006719C *pObject)
+void fn_80066318(int tag, int key, Object_8006719C *pObject)
 {
-    Condition_800659AC filter;
-    Table_800659AC tables[2] = { { 0x00464753 }, { -1 } };
+    Object_80023BBC filter;
+    Table_8007E020 tables[2] = { { 0x00464753 }, { -1 } };
     ColumnValue_802D6424 columns[4] = {
         { 0, 0x00464753, 0x656D616E },
         { 0, 0x00464753, 0x5F464753 },
@@ -315,8 +243,8 @@ void fn_80066318(int tag, int handle, Object_8006719C *pObject)
     int opened = 0;
     int status;
 
-    filter.mOperator = 0x10003;
-    filter.Set(6, ((unsigned long long)0x00464753 << 32) | 0x4C544553, 3, handle);
+    filter.mUnknown32 = 0x10003;
+    filter.SetOperands(6, ((long long)0x00464753 << 32) | 0x4C544553, 3, key);
     columns[0].mValue = (int)pObject->mUnknown1C[0].mUnknown0;
     status = fn_801FA0BC(tag, tables, &filter, 0, &cursor, 0);
     if (QUERY_STATUS_ACCEPTED(status) == 1) {
@@ -342,12 +270,12 @@ void fn_80066318(int tag, int handle, Object_8006719C *pObject)
     pObject->mUnknown18 = count;
 }
 
-void fn_80066560(int tag, int handle, int index, Record_80067338 *pRecord)
+void fn_80066560(int tag, int key, int index, Record_80067338 *pRecord)
 {
-    Condition_800659AC filter;
-    Condition_800659AC handleFilter;
-    Condition_800659AC orderFilter;
-    Table_800659AC tables[2] = { { 0x4C504250 }, { -1 } };
+    Object_80023BBC filter;
+    Object_80023BBC keyFilter;
+    Object_80023BBC orderFilter;
+    Table_8007E020 tables[2] = { { 0x4C504250 }, { -1 } };
     ColumnValue_802D6424 columns[4] = {
         { 0, 0x4C504250, 0x4C594C50 },
         { 0, 0x4C504250, 0x4C504250 },
@@ -355,22 +283,22 @@ void fn_80066560(int tag, int handle, int index, Record_80067338 *pRecord)
         { 0, -1, -1 }
     };
 
-    filter.mOperator = 0x20009;
-    filter.Set(11, &handleFilter, &orderFilter);
-    handleFilter.mOperator = 0x10003;
-    handleFilter.Set(6, ((unsigned long long)0x4C504250 << 32) | 0x54534250, 3, handle);
-    orderFilter.mOperator = 0x10003;
-    orderFilter.Set(6, ((unsigned long long)0x4C504250 << 32) | 0x5F64726F, 3, index + 1);
+    filter.mUnknown32 = 0x20009;
+    filter.SetOperands(11, &keyFilter, &orderFilter);
+    keyFilter.mUnknown32 = 0x10003;
+    keyFilter.SetOperands(6, ((long long)0x4C504250 << 32) | 0x54534250, 3, key);
+    orderFilter.mUnknown32 = 0x10003;
+    orderFilter.SetOperands(6, ((long long)0x4C504250 << 32) | 0x5F64726F, 3, index + 1);
     fn_801FA290(tag, tables, &filter, columns);
     pRecord->mUnknown0 = columns[0].mValue;
     pRecord->mUnknown4 = columns[1].mValue;
     pRecord->mUnknown8 = columns[2].mValue;
 }
 
-int fn_80066704(int tag, int handle, Record_80067338 *pRecord)
+int fn_80066704(int tag, int key, Record_80067338 *pRecord)
 {
-    Condition_800659AC filter;
-    Table_800659AC tables[2] = { { 0x4C594C50 }, { -1 } };
+    Object_80023BBC filter;
+    Table_8007E020 tables[2] = { { 0x4C594C50 }, { -1 } };
     ColumnValue_802D6424 columns[9] = {
         { 0, 0x4C594C50, 0x656D616E },
         { 0, 0x4C594C50, 0x6E746F6D },
@@ -384,8 +312,8 @@ int fn_80066704(int tag, int handle, Record_80067338 *pRecord)
     };
 
     columns[0].mValue = (int)pRecord->mUnknown1F0;
-    filter.mOperator = 0x10003;
-    filter.Set(6, ((unsigned long long)0x4C594C50 << 32) | 0x4C594C50, 3, handle);
+    filter.mUnknown32 = 0x10003;
+    filter.SetOperands(6, ((long long)0x4C594C50 << 32) | 0x4C594C50, 3, key);
     fn_801FA290(tag, tables, &filter, columns);
     pRecord->mUnknownD = columns[1].mValue;
     pRecord->mUnknownC = columns[2].mValue;
@@ -395,11 +323,11 @@ int fn_80066704(int tag, int handle, Record_80067338 *pRecord)
     return columns[7].mValue;
 }
 
-void fn_800668E4(int tag, int handle, Record_80067338 *pRecord);
-void fn_80066A0C(int tag, int handle, Record_80067338 *pRecord);
-void fn_80066B6C(int tag, int handle, Record_80067338 *pRecord);
+void fn_800668E4(int tag, int key, Record_80067338 *pRecord);
+void fn_80066A0C(int tag, int key, Record_80067338 *pRecord);
+void fn_80066B6C(int tag, int key, Record_80067338 *pRecord);
 
-void fn_80066844(int tag, int handle, unsigned int kind, Record_80067338 *pRecord)
+void fn_80066844(int tag, int key, unsigned int kind, Record_80067338 *pRecord)
 {
     fn_801C1F94(pRecord->mUnknown1C, 0, sizeof(pRecord->mUnknown1C));
     switch (kind) {
@@ -408,7 +336,7 @@ void fn_80066844(int tag, int handle, unsigned int kind, Record_80067338 *pRecor
     case 3:
     case 4:
     case 5:
-        fn_80066A0C(tag, handle, pRecord);
+        fn_80066A0C(tag, key, pRecord);
         break;
     case 11:
     case 12:
@@ -418,34 +346,33 @@ void fn_80066844(int tag, int handle, unsigned int kind, Record_80067338 *pRecor
     case 16:
     case 17:
     case 18:
-        fn_800668E4(tag, handle, pRecord);
+        fn_800668E4(tag, key, pRecord);
         break;
     case 21:
-        kind = 0;
         break;
     }
-    fn_80066B6C(tag, handle, pRecord);
+    fn_80066B6C(tag, key, pRecord);
 }
 
-void fn_800668E4(int tag, int handle, Record_80067338 *pRecord)
+void fn_800668E4(int tag, int key, Record_80067338 *pRecord)
 {
-    Condition_800659AC filter;
-    Table_800659AC tables[2] = { { 0x44524C50 }, { -1 } };
+    Object_80023BBC filter;
+    Table_8007E020 tables[2] = { { 0x44524C50 }, { -1 } };
     ColumnValue_802D6424 columns[2] = {
         { 0, 0x44524C50, 0x656C6F68 },
         { 0, -1, -1 }
     };
 
-    filter.mOperator = 0x10003;
-    filter.Set(6, ((unsigned long long)0x44524C50 << 32) | 0x4C594C50, 3, handle);
+    filter.mUnknown32 = 0x10003;
+    filter.SetOperands(6, ((long long)0x44524C50 << 32) | 0x4C594C50, 3, key);
     fn_801FA290(tag, tables, &filter, columns);
     pRecord->mUnknown1C[0][0] = columns[0].mValue;
 }
 
-void fn_80066A0C(int tag, int handle, Record_80067338 *pRecord)
+void fn_80066A0C(int tag, int key, Record_80067338 *pRecord)
 {
-    Condition_800659AC filter;
-    Table_800659AC tables[2] = { { 0x44504C50 }, { -1 } };
+    Object_80023BBC filter;
+    Table_8007E020 tables[2] = { { 0x44504C50 }, { -1 } };
     ColumnValue_802D6424 columns[7] = {
         { 0, 0x44504C50, 0x31766372 },
         { 0, 0x44504C50, 0x31726570 },
@@ -456,8 +383,8 @@ void fn_80066A0C(int tag, int handle, Record_80067338 *pRecord)
         { 0, -1, -1 }
     };
 
-    filter.mOperator = 0x10003;
-    filter.Set(6, ((unsigned long long)0x44504C50 << 32) | 0x4C594C50, 3, handle);
+    filter.mUnknown32 = 0x10003;
+    filter.SetOperands(6, ((long long)0x44504C50 << 32) | 0x4C594C50, 3, key);
     fn_801FA290(tag, tables, &filter, columns);
     pRecord->mUnknown1C[0][0] = columns[0].mValue;
     pRecord->mUnknown1C[0][1] = columns[1].mValue;
@@ -467,10 +394,10 @@ void fn_80066A0C(int tag, int handle, Record_80067338 *pRecord)
     pRecord->mUnknown1C[2][1] = columns[5].mValue;
 }
 
-void fn_80066B6C(int tag, int handle, Record_80067338 *pRecord)
+void fn_80066B6C(int tag, int key, Record_80067338 *pRecord)
 {
-    Condition_800659AC filter;
-    Table_800659AC tables[2] = { { 0x4D434C50 }, { -1 } };
+    Object_80023BBC filter;
+    Table_8007E020 tables[2] = { { 0x4D434C50 }, { -1 } };
     ColumnValue_802D6424 columns[16] = {
         { 0, 0x4D434C50, 0x31796C70 },
         { 0, 0x4D434C50, 0x32796C70 },
@@ -490,8 +417,8 @@ void fn_80066B6C(int tag, int handle, Record_80067338 *pRecord)
         { 0, -1, -1 }
     };
 
-    filter.mOperator = 0x10003;
-    filter.Set(6, ((unsigned long long)0x4D434C50 << 32) | 0x4C594C50, 3, handle);
+    filter.mUnknown32 = 0x10003;
+    filter.SetOperands(6, ((long long)0x4D434C50 << 32) | 0x4C594C50, 3, key);
     if (fn_801FA290(tag, tables, &filter, columns) == 0) {
         pRecord->mUnknown28[0][0] = columns[0].mValue;
         pRecord->mUnknown28[1][0] = columns[1].mValue;
@@ -550,7 +477,7 @@ void fn_80066DC8(unsigned int id, int a)
     fn_801F8EEC(id);
 }
 
-void fn_80066DE8(int tag, int handle, Record_80067338 *pRecord, int full)
+void fn_80066DE8(int tag, int key, Record_80067338 *pRecord, int flag)
 {
     unsigned char values[3];
     QueryCursor cursor;
@@ -568,8 +495,8 @@ void fn_80066DE8(int tag, int handle, Record_80067338 *pRecord, int full)
         cursor.mUnknown4 = 0;
         cursor.mUnknown12 = 0;
         ok = 1;
-        if (full) {
-            fn_801FCE10(0, "use \x8c select 'LTES' into \x85 from 'LYLP' where 'LYLP' = \x85\n", tag, &set, handle);
+        if (flag) {
+            fn_801FCE10(0, "use \x8c select 'LTES' into \x85 from 'LYLP' where 'LYLP' = \x85\n", tag, &set, key);
             fn_801FCE10(0, "use \x8c select 'soPE' into \x85 from 'PTES' where 'LTES' = \x85 and 'osop' = \x85\n", tag,
                         &type, set, i);
             switch (type) {
@@ -588,8 +515,8 @@ void fn_80066DE8(int tag, int handle, Record_80067338 *pRecord, int full)
             unsigned int tries;
 
             fn_801FCE10(0, "use \x8c select 'LASP' into \x85 from 'SYLP' where 'LYLP' = \x85 and 'osop' = \x85\n", tag,
-                        &list, handle, i);
-            if (full) {
+                        &list, key, i);
+            if (flag) {
                 status = fn_801FCE10(0,
                                      "use \x8c declare \x8a fastcursor for select 'edoc' into \x83 and '1lav' into \x83 "
                                      "and '2lav' into \x83 and '3lav' into \x83 from 'LASP' where 'LASP' = \x85 and "
@@ -633,14 +560,14 @@ void fn_80066DE8(int tag, int handle, Record_80067338 *pRecord, int full)
 
 unsigned short fn_80067038(int tag, int kind)
 {
-    Condition_800659AC filter;
+    Object_80023BBC filter;
     unsigned short count;
 
-    filter.mOperator = 0x10003;
-    filter.mLeft.mKind = 6;
-    filter.mLeft.mValue.mColumn = ((unsigned long long)0x4D464250 << 32) | 0x50595446;
-    filter.mRight.mKind = 3;
-    filter.mRight.mValue.mInt = kind;
+    filter.mUnknown32 = 0x10003;
+    filter.mUnknown0.mKind = 6;
+    filter.mUnknown0.mValue.mLong = ((long long)0x4D464250 << 32) | 0x50595446;
+    filter.mUnknown16.mKind = 3;
+    filter.mUnknown16.mValue.mInt = kind;
     if (fn_801F9D70(tag, 0x4D464250, &filter, &count) != 0) {
         count = 0;
     }
@@ -678,26 +605,26 @@ int fn_800670B4(int tag, int a, int b, Object_800670B4 *pObject)
                        tag, pObject, pObject->mUnknownCB0, a, b + 1);
 }
 
-unsigned short fn_80067120(int tag, int handle)
+unsigned short fn_80067120(int tag, int key)
 {
-    Condition_800659AC filter;
+    Object_80023BBC filter;
     unsigned short count;
 
-    filter.mOperator = 0x10003;
-    filter.mLeft.mKind = 6;
-    filter.mLeft.mValue.mColumn = ((unsigned long long)0x54534250 << 32) | 0x4D464250;
-    filter.mRight.mKind = 3;
-    filter.mRight.mValue.mInt = handle;
+    filter.mUnknown32 = 0x10003;
+    filter.mUnknown0.mKind = 6;
+    filter.mUnknown0.mValue.mLong = ((long long)0x54534250 << 32) | 0x4D464250;
+    filter.mUnknown16.mKind = 3;
+    filter.mUnknown16.mValue.mInt = key;
     if (fn_801F9D70(tag, 0x54534250, &filter, &count) != 0) {
         count = 0;
     }
     return count;
 }
 
-void fn_8006719C(int tag, int handle, int index, Team_80167A8C *pTeam, Object_8006719C *pObject)
+void fn_8006719C(int tag, int key, int index, Team_80167A8C *pTeam, Object_8006719C *pObject)
 {
     fn_801C1F94(pObject, 0, sizeof(*pObject));
-    fn_800659AC(tag, handle, index, pTeam, pObject);
+    fn_800659AC(tag, key, index, pTeam, pObject);
     if (pObject->mUnknown4) {
         fn_80065B50(tag, pObject->mUnknown4, pObject);
         fn_801688D4();
@@ -706,48 +633,48 @@ void fn_8006719C(int tag, int handle, int index, Team_80167A8C *pTeam, Object_80
     }
 }
 
-void fn_8006723C(int tag, int handle, Team_80167A8C *pTeam, Object_8006719C *pObject)
+void fn_8006723C(int tag, int key, Team_80167A8C *pTeam, Object_8006719C *pObject)
 {
     fn_801C1F94(pObject, 0, sizeof(*pObject));
-    pObject->mUnknown4 = handle;
-    fn_80065B50(tag, handle, pObject);
+    pObject->mUnknown4 = key;
+    fn_80065B50(tag, key, pObject);
     fn_801688D4();
-    fn_80065CAC(tag, handle, pTeam, pObject);
-    fn_80066318(tag, handle, pObject);
+    fn_80065CAC(tag, key, pTeam, pObject);
+    fn_80066318(tag, key, pObject);
 }
 
-unsigned short fn_800672BC(int tag, int handle)
+unsigned short fn_800672BC(int tag, int key)
 {
-    Condition_800659AC filter;
+    Object_80023BBC filter;
     unsigned short count;
 
-    filter.mOperator = 0x10003;
-    filter.mLeft.mKind = 6;
-    filter.mLeft.mValue.mColumn = ((unsigned long long)0x4C504250 << 32) | 0x54534250;
-    filter.mRight.mKind = 3;
-    filter.mRight.mValue.mInt = handle;
+    filter.mUnknown32 = 0x10003;
+    filter.mUnknown0.mKind = 6;
+    filter.mUnknown0.mValue.mLong = ((long long)0x4C504250 << 32) | 0x54534250;
+    filter.mUnknown16.mKind = 3;
+    filter.mUnknown16.mValue.mInt = key;
     if (fn_801F9D70(tag, 0x4C504250, &filter, &count) != 0) {
         count = 0;
     }
     return count;
 }
 
-int fn_80067338(int tag, int handle, int index, Record_80067338 *pRecord)
+int fn_80067338(int tag, int key, int index, Record_80067338 *pRecord)
 {
-    int full = 0;
+    int flag = 0;
     int result;
     unsigned int flags;
 
     fn_801C1F94(pRecord, 0, sizeof(*pRecord));
-    fn_80066560(tag, handle, index, pRecord);
+    fn_80066560(tag, key, index, pRecord);
     result = fn_80066704(tag, pRecord->mUnknown0, pRecord);
     flags = fn_801688D4();
     fn_80066844(tag, pRecord->mUnknown0, pRecord->mUnknown14, pRecord);
     if (flags & 2) {
         if (flags & 8) {
-            full = 1;
+            flag = 1;
         }
-        fn_80066DE8(tag, pRecord->mUnknown0, pRecord, full);
+        fn_80066DE8(tag, pRecord->mUnknown0, pRecord, flag);
     }
     return result;
 }
@@ -856,7 +783,7 @@ void SelectTSBPPoints(int tag, int key, Point_8017886C *pPoints)
     }
 }
 
-void LoadTSBPObject(int tag, int handle, Team_80167A8C *pTeam, Object_8006719C *pObject)
+void LoadTSBPObject(int tag, int key, Team_80167A8C *pTeam, Object_8006719C *pObject)
 {
     unsigned int flags;
     int formation;
@@ -865,7 +792,7 @@ void LoadTSBPObject(int tag, int handle, Team_80167A8C *pTeam, Object_8006719C *
     fn_801C1F94(pObject, 0, sizeof(*pObject));
     flags = fn_801688D4();
     fn_801FCE10(0, "use \x8c select 'MFBP' into \x85 and '_dro' into \x85 from 'TSBP' where 'TSBP' = \x85\n", tag,
-                &formation, &order, handle);
+                &formation, &order, key);
     fn_800659AC(tag, formation, order - 1, pTeam, pObject);
     if (pObject->mUnknown4) {
         fn_80065B50(tag, pObject->mUnknown4, pObject);
@@ -900,10 +827,10 @@ void fn_80067640(Candidate_8016B364 *pA, Candidate_8016B364 *pB)
 int fn_80067690(int team, int tag, int kind)
 {
     Candidate_8016B364 list[225];
-    Condition_800659AC kindFilter;
-    Condition_800659AC joinFilter;
-    Condition_800659AC playerFilter;
-    Table_800659AC tables[4];
+    Object_80023BBC kindFilter;
+    Object_80023BBC joinFilter;
+    Object_80023BBC lylpFilter;
+    Table_8007E020 tables[4];
     ColumnValue_802D6424 columns[5] = {
         { 0, 0x4C504250, 0x4C504250 },
         { 0, 0x4C594C50, 0x54594C50 },
@@ -916,17 +843,17 @@ int fn_80067690(int team, int tag, int kind)
     int opened = 0;
     int status;
 
-    kindFilter.mOperator = 0x10003;
-    kindFilter.Set(6, ((unsigned long long)0x49414250 << 32) | 0x52474941, 3, kind);
-    joinFilter.mOperator = 0x10003;
-    joinFilter.Set(6, ((unsigned long long)0x49414250 << 32) | 0x4C504250, 6,
-                   ((unsigned long long)0x4C504250 << 32) | 0x4C504250);
-    playerFilter.mOperator = 0x10003;
-    playerFilter.Set(6, ((unsigned long long)0x4C504250 << 32) | 0x4C594C50, 6,
-                     ((unsigned long long)0x4C594C50 << 32) | 0x4C594C50);
+    kindFilter.mUnknown32 = 0x10003;
+    kindFilter.SetOperands(6, ((long long)0x49414250 << 32) | 0x52474941, 3, kind);
+    joinFilter.mUnknown32 = 0x10003;
+    joinFilter.SetOperands(6, ((long long)0x49414250 << 32) | 0x4C504250, 6,
+                   ((long long)0x4C504250 << 32) | 0x4C504250);
+    lylpFilter.mUnknown32 = 0x10003;
+    lylpFilter.SetOperands(6, ((long long)0x4C504250 << 32) | 0x4C594C50, 6,
+                     ((long long)0x4C594C50 << 32) | 0x4C594C50);
     tables[0].Set(0x49414250, 0, &kindFilter);
     tables[1].Set(0x4C504250, 0, &joinFilter);
-    tables[2].Set(0x4C594C50, 0, &playerFilter);
+    tables[2].Set(0x4C594C50, 0, &lylpFilter);
     tables[3].Set(-1, 0, 0);
     fn_801C1F94(list, 0, sizeof(list));
     status = fn_801FA0BC(tag, tables, 0, 0, &cursor, 0);
@@ -983,21 +910,21 @@ void fn_80067A4C(int team, int tag, int kind, int *pResult)
 
 int fn_80067A8C(int tag, int a, int b)
 {
-    Condition_800659AC filter;
-    Condition_800659AC kindFilter;
-    Condition_800659AC playerFilter;
-    Table_800659AC tables[2] = { { 0x49414250 }, { -1 } };
+    Object_80023BBC filter;
+    Object_80023BBC kindFilter;
+    Object_80023BBC lpbpFilter;
+    Table_8007E020 tables[2] = { { 0x49414250 }, { -1 } };
     ColumnValue_802D6424 columns[2] = {
         { 0, 0x49414250, 0x4C504250 },
         { 0, -1, -1 }
     };
 
-    filter.mOperator = 0x20009;
-    filter.Set(11, &kindFilter, &playerFilter);
-    kindFilter.mOperator = 0x10003;
-    kindFilter.Set(6, ((unsigned long long)0x49414250 << 32) | 0x52474941, 3, a);
-    playerFilter.mOperator = 0x10003;
-    playerFilter.Set(6, ((unsigned long long)0x49414250 << 32) | 0x4C504250, 3, b);
+    filter.mUnknown32 = 0x20009;
+    filter.SetOperands(11, &kindFilter, &lpbpFilter);
+    kindFilter.mUnknown32 = 0x10003;
+    kindFilter.SetOperands(6, ((long long)0x49414250 << 32) | 0x52474941, 3, a);
+    lpbpFilter.mUnknown32 = 0x10003;
+    lpbpFilter.SetOperands(6, ((long long)0x49414250 << 32) | 0x4C504250, 3, b);
     return fn_801FA290(tag, tables, &filter, columns) != 0x17;
 }
 
