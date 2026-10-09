@@ -341,10 +341,6 @@ void fn_8015D7C0(void)
 
 void fn_8015D81C(unsigned int players)
 {
-    int sizesA[2] = { 0x3EC6, 0x3408 };
-    int sizesB[2] = { 0x3D04, 0x34E4 };
-    int sizesC[2] = { 0x2A85, 0x29A4 };
-    int sizesD[2] = { 0x4FE7, 0x64 };
     unsigned int i;
     unsigned int k;
     unsigned int count;
@@ -360,6 +356,11 @@ void fn_8015D81C(unsigned int players)
         count = 2;
         break;
     }
+
+    int sizesA[2] = { 0x3EC6, 0x3408 };
+    int sizesB[2] = { 0x3D04, 0x34E4 };
+    int sizesC[2] = { 0x2A85, 0x29A4 };
+    int sizesD[2] = { 0x4FE7, 0x64 };
 
     for (i = 0; i < players; i++) {
         for (k = 0; k < count; k++) {
