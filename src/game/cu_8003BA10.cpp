@@ -141,7 +141,7 @@ void fn_8015F1D4(int, int);
 void fn_8015F298(int, int);
 void fn_80080A9C(Object_8008044C *, char *, int);
 void fn_80048FE8(unsigned char, unsigned char, int);
-unsigned char fn_80080E48(Object_8008044C *);
+int fn_80080E48(Object_8008044C *);
 int fn_80081E3C(Object_8008044C *);
 int fn_80082280(Object_8008044C *);
 int fn_800822D4(Object_8008044C *);

@@ -1,11 +1,206 @@
 #include "game/Object_8007A334.h"
 #include "game/Object_8008044C.h"
+#include <string.h>
 
 extern "C" {
 
 extern const int lbl_80293968[];
+char *fn_801C2F88(char *pDest, const char *pSource, unsigned int count);
+char *fn_801C32CC(char *pText);
 
 static int lbl_802D69E0[4] = { 0x31544753, 0x32544753, 0x33544753, 0x34544753 };
+
+int fn_800808F8(Object_8008044C *pObject)
+{
+    return fn_8007A98C(pObject, 0x44494750);
+}
+
+int fn_80080920(Object_8008044C *pObject)
+{
+    return fn_8007A98C(pObject, 0x44494F50);
+}
+
+int fn_80080948(Object_8008044C *pObject)
+{
+    return fn_8007A98C(pObject, 0x44494754);
+}
+
+int fn_80080970(Object_8008044C *pObject)
+{
+    return fn_8007A98C(pObject, 0x49544754);
+}
+
+void fn_80080998(Object_8008044C *pObject, int value)
+{
+    fn_8007ABA4(pObject, 0x49544754, value);
+}
+
+int fn_800809C4(Object_8008044C *pObject, int a, int *pResult)
+{
+    return fn_8007A7F4((Object_8007A334 *)pObject, 0x44494750, a, 0, pResult);
+}
+
+int fn_800809FC(Object_8008044C *pObject, int a, int *pResult)
+{
+    return fn_8007A7F4((Object_8007A334 *)pObject, 0x44494F50, a, 0, pResult);
+}
+
+void fn_80080A34(Object_8008044C *pObject, char *pBuffer, int size)
+{
+    fn_8007AA3C((Object_8007A334 *)pObject, 0x414E4650, (int)pBuffer, size);
+}
+
+void fn_80080A68(Object_8008044C *pObject, char *pBuffer, int size)
+{
+    fn_8007AA3C((Object_8007A334 *)pObject, 0x414E4C50, (int)pBuffer, size);
+}
+
+/* The 0x4E4B4E50 text, or the upper-cased fn_80080A68 text when it is empty. */
+void fn_80080A9C(Object_8008044C *pObject, char *pBuffer, int size)
+{
+    fn_8007AA3C((Object_8007A334 *)pObject, 0x4E4B4E50, (int)pBuffer, size);
+    if (strlen(pBuffer) == 0) {
+        fn_80080A68(pObject, pBuffer, size);
+        fn_801C32CC(pBuffer);
+    }
+}
+
+/* The first non-space character of the fn_80080A34 text and ". ", then the
+   fn_80080A68 text, ending at size. */
+void fn_80080B08(Object_8008044C *pObject, char *pBuffer, int size)
+{
+    char first[16];
+    char last[16];
+    char *pFirst;
+    int length;
+    unsigned int lastLength;
+    unsigned int total;
+
+    fn_80080A34(pObject, first, 12);
+    pFirst = first;
+    while (*pFirst == ' ') pFirst++;
+    length = strlen(pFirst);
+    fn_80080A68(pObject, last, 15);
+    lastLength = strlen(last);
+    if (length) {
+        pBuffer[0] = *pFirst;
+        pBuffer[1] = '.';
+        pBuffer[2] = ' ';
+        length = 3;
+    }
+    if (lastLength) {
+        strcpy(pBuffer + length, last);
+    } else if (length) {
+        length--;
+    }
+    total = length + lastLength;
+    if (total > size) total = size;
+    pBuffer[total] = 0;
+}
+
+/* The fn_80080A34 text, a space, then the fn_80080A68 text, ending at size. */
+void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size)
+{
+    char first[16];
+    char last[16];
+    int length;
+    unsigned int lastLength;
+    unsigned int total;
+
+    fn_80080A34(pObject, first, 12);
+    length = strlen(first);
+    fn_80080A68(pObject, last, 15);
+    lastLength = strlen(last);
+    if (length) {
+        strcpy(pBuffer, first);
+        pBuffer[length] = ' ';
+        length++;
+    }
+    if (lastLength) {
+        strcpy(pBuffer + length, last);
+    } else if (length) {
+        length--;
+    }
+    total = length + lastLength;
+    if (total > size) total = size;
+    pBuffer[total] = 0;
+}
+
+int fn_80080CB0(Object_8008044C *pObject)
+{
+    return fn_8007A98C(pObject, 0x59545250);
+}
+
+int fn_80080CD8(Object_8008044C *pObject)
+{
+    return fn_8007A98C(pObject, 0x4C494C50) != 0;
+}
+
+int fn_80080D10(Object_8008044C *pObject)
+{
+    return fn_8007A98C(pObject, 0x50585350);
+}
+
+/* Only the A-Z bytes of the upper-cased fn_80080A68 text followed by the
+   fn_80080A34 text. Returns 0 with an empty buffer when fn_80080CB0 is
+   non-zero. */
+int fn_80080D38(Object_8008044C *pObject, char *pBuffer, int size)
+{
+    char first[16];
+    char *pDest;
+    char *pSource;
+    int result = 1;
+
+    if (fn_80080CB0(pObject) == 0) {
+        pBuffer[0] = 0;
+        fn_80080A68(pObject, pBuffer, 15);
+        fn_80080A34(pObject, first, 12);
+        fn_801C2F88(pBuffer, first, size);
+        fn_801C32CC(pBuffer);
+        pDest = pBuffer;
+        for (pSource = pBuffer; *pSource; pSource++) {
+            while ((*pSource < 'A' || *pSource > 'Z') && *pSource) pSource++;
+            *pDest++ = *pSource;
+        }
+        *pDest = 0;
+    } else {
+        pBuffer[0] = 0;
+        result = 0;
+    }
+    return result;
+}
+
+int fn_80080E20(Object_8008044C *pObject)
+{
+    return fn_8007A98C(pObject, 0x54425950);
+}
+
+int fn_80080E48(Object_8008044C *pObject)
+{
+    return fn_8007A98C(pObject, 0x58454C50);
+}
+
+int fn_80080E70(Object_8008044C *pObject)
+{
+    return fn_8007A98C(pObject, 0x54484C50);
+}
+
+int fn_80080E98(Object_8008044C *pObject)
+{
+    int value = fn_8007A98C(pObject, 0x52414850);
+    if (value == 63) value = 0;
+    return value;
+}
+
+int fn_80080ECC(Object_8008044C *pObject)
+{
+    return fn_8007A98C(pObject, 0x4F504250);
+}
+
+void fn_80080EF4(Object_8008044C *pObject, int value)
+{
+    fn_8007ABA4(pObject, 0x4F504250, value);
+}
 
 int fn_80080F20(void *pObject)
 {

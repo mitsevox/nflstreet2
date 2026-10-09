@@ -5291,12 +5291,12 @@
     {
       "source": "src/game/cu_80080F20.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80080F20-0x800812B0 (src/game/cu_80080F20.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x800808F8-0x800812B0 (src/game/cu_80080F20.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80080F20",
+          "start": "0x800808F8",
           "end": "0x800812B0"
         },
         {
