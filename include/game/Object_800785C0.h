@@ -23,7 +23,7 @@ struct Entry_800257B4 {
 /* 40-byte block at +524 of Object_800785C0; fn_8007984C tests mUnknown0. */
 struct Info_8007984C {
     int mUnknown0;
-    char mUnknown4[12];
+    unsigned int mUnknown4[3];
     char *mUnknown10[3];
     int mUnknown1C;
     unsigned short mUnknown20[3];
