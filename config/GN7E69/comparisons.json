@@ -16374,13 +16374,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8017419C",
-          "end": "0x801765C0"
+          "end": "0x80176C58"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A5348",
-          "end": "0x802A5460"
+          "end": "0x802A54C4"
         }
       ],
       "functions": [
@@ -16593,6 +16593,41 @@
           "symbol": "fn_801765A8",
           "start": "0x801765A8",
           "end": "0x801765C0"
+        },
+        {
+          "symbol": "fn_801765C0",
+          "start": "0x801765C0",
+          "end": "0x80176630"
+        },
+        {
+          "symbol": "fn_80176630",
+          "start": "0x80176630",
+          "end": "0x8017678C"
+        },
+        {
+          "symbol": "fn_8017678C",
+          "start": "0x8017678C",
+          "end": "0x80176838"
+        },
+        {
+          "symbol": "fn_80176838",
+          "start": "0x80176838",
+          "end": "0x80176984"
+        },
+        {
+          "symbol": "fn_80176984",
+          "start": "0x80176984",
+          "end": "0x80176B04"
+        },
+        {
+          "symbol": "fn_80176B04",
+          "start": "0x80176B04",
+          "end": "0x80176B8C"
+        },
+        {
+          "symbol": "fn_80176B8C",
+          "start": "0x80176B8C",
+          "end": "0x80176C58"
         }
       ]
     },
