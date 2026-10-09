@@ -12445,19 +12445,19 @@
     {
       "source": "src/game/cu_8004A2F4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8004A2F4-0x8004C684 (src/game/cu_8004A2F4.cpp), its compiler, type and source-form rows, the .rodata row 0x8028D7A0-0x8028D920 and the .bss row 0x803084C4-0x8030865C. Draft comparison: 30 of 34 functions exact; fn_8004AA34, fn_8004ABF4, fn_8004BD20 and fn_8004C518 are partial; original bytes remain linked.",
+      "evidence": "evidence.tsv unit row 0x8004A2F4-0x8004CBEC (src/game/cu_8004A2F4.cpp), its compiler, type and source-form rows, the .rodata row 0x8028D7A0-0x8028D944 and the .bss row 0x803084C4-0x8030865C. Draft comparison: 35 of 41 functions exact; fn_8004AA34, fn_8004ABF4, fn_8004BD20, fn_8004C518, fn_8004C844 and fn_8004CAA8 are partial (objdiff fuzzy 93.0%, 94.3%, 99.4%, 89.5%, 82.8%, 46.8%; .rodata slice 99.5%, 1/70 placed after the double); original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8004A2F4",
-          "end": "0x8004C684"
+          "end": "0x8004CBEC"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8028D7A0",
-          "end": "0x8028D920"
+          "end": "0x8028D944"
         },
         {
           "section": ".bss",
@@ -12636,6 +12636,41 @@
           "symbol": "fn_8004C5E0",
           "start": "0x8004C5E0",
           "end": "0x8004C684"
+        },
+        {
+          "symbol": "fn_8004C684",
+          "start": "0x8004C684",
+          "end": "0x8004C7B8"
+        },
+        {
+          "symbol": "fn_8004C7B8",
+          "start": "0x8004C7B8",
+          "end": "0x8004C844"
+        },
+        {
+          "symbol": "fn_8004C844",
+          "start": "0x8004C844",
+          "end": "0x8004CAA8"
+        },
+        {
+          "symbol": "fn_8004CAA8",
+          "start": "0x8004CAA8",
+          "end": "0x8004CB98"
+        },
+        {
+          "symbol": "fn_8004CB98",
+          "start": "0x8004CB98",
+          "end": "0x8004CBB0"
+        },
+        {
+          "symbol": "fn_8004CBB0",
+          "start": "0x8004CBB0",
+          "end": "0x8004CBE8"
+        },
+        {
+          "symbol": "fn_8004CBE8",
+          "start": "0x8004CBE8",
+          "end": "0x8004CBEC"
         }
       ]
     },
