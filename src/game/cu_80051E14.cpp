@@ -21,7 +21,7 @@ void fn_800411EC(Object_80040818 *pItem);
 void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 int fn_801784C4(void);
 int fn_801BE068(void *pA, void *pB, void *pC, unsigned short key, float value, void *p);
-int fn_801BE648(void *p);
+unsigned short fn_801BE648(void *p);
 void fn_801BE67C(void *pA, void *pB, void *pC, void *p);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int fn_801C2FE4(const char *pText0, const char *pText1);
