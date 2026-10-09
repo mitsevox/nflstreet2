@@ -5,6 +5,7 @@ struct Record_8019D8AC {
     int mUnknown0;
     Pair_8019D800 mUnknown4;
     Pair_8019D800 mUnknownC;
+    unsigned char *mpUnknown14;
 };
 extern "C" {
 void fn_8019D83C(short *pOut, short *pIn, unsigned int count);

@@ -726,6 +726,14 @@
       "address": "0x8025EA64",
       "evidence": "evidence.tsv external row for 0x8025EA64 (__floatdisf)."
     },
+    "OpenBitStream__FP11BitStream_tPv15BitStreamMode_t": {
+      "address": "0x80190ED4",
+      "evidence": "evidence.tsv external row 0x80190ED4 (OpenBitStream__FP11BitStream_tPv15BitStreamMode_t), name row 0x80190ED4 and type row BitStream_t."
+    },
+    "CloseBitStream__FP11BitStream_t": {
+      "address": "0x80190EF0",
+      "evidence": "evidence.tsv external row 0x80190EF0 (CloseBitStream__FP11BitStream_t), name row 0x80190EF0 and type row BitStream_t."
+    },
     "ReadBitStream__FP11BitStream_tUi": {
       "address": "0x80190F18",
       "evidence": "evidence.tsv external row 0x80190F18 (ReadBitStream__FP11BitStream_tUi), name row 0x80190F18 and type row BitStream_t."

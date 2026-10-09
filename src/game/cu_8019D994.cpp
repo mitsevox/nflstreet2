@@ -1,38 +1,6 @@
-#include "game/Record_8019D8AC.h"
-
-struct Frame_8019D3B8 {
-    unsigned char count;
-    unsigned char flags;
-    short word2;
-    short word4;
-    short word6;
-    short word8;
-    short vectorA[3];
-    short vector10[3];
-};
-
-struct State_8019D994 {
-    unsigned char unknown0[8];
-    float vector8[3];
-    float vector14[3];
-    int word20;
-    int vector24[3];
-    short *samples;
-};
-
-struct Input_8019D994 {
-    unsigned char unknown0[8];
-    unsigned char flags;
-    unsigned char unknown9[3];
-    int vectorC[3];
-    float planar18[2];
-    unsigned char unknown20[8];
-    void *encoded;
-};
+#include "game/Frame_8019D3B8.h"
 
 extern "C" {
-short *fn_8019D3B8(Frame_8019D3B8 *header, void *encoded);
-void fn_8019D514(short *destination, short *source, Record_8019D8AC *context, int mirrored);
 void fn_801C1FBC(void *destination, void *source, unsigned int size);
 extern float lbl_802F26FC[];
 extern int lbl_802F2708[];
