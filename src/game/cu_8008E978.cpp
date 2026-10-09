@@ -58,6 +58,7 @@
 #include "game/fn_80238174.h"
 #include "game/fn_80094488.h"
 #include "game/cu_80164568.h"
+#include "game/Entry_802F394C.h"
 
 /* Data whose word +4 fn_80094374 returns and whose words from +8
    fn_80093BAC indexes; the bound of that array is not established. */
@@ -1250,14 +1251,6 @@ struct Callbacks_8030E6DC {
     void (*mpCallback8)(float value);
 };
 
-/* Object whose pointer is the word +2240 of Block_8030E6E8; the size is not
-   established. */
-struct Record_8030EFA8 {
-    unsigned char mUnknown0[12];
-    float mUnknownC;
-    int mUnknown10;
-};
-
 /* Object at 0x8030E6E8. Only the accessed members are typed; the size is
    not established. */
 struct Block_8030E6E8 {
@@ -1292,7 +1285,7 @@ struct Block_8030E6E8 {
     unsigned char mUnknown8BC;
     unsigned char mUnknown8BD;
     unsigned char mUnknown8BE[2];
-    Record_8030EFA8 *mpUnknown8C0;
+    Entry_802F394C *mpUnknown8C0;
     int mUnknown8C4;
     void *mpUnknown8C8;
 };
@@ -1556,7 +1549,7 @@ extern "C" int fn_800A34E0(void)
     return lbl_8030E6E8.mUnknown8C4;
 }
 
-extern "C" Record_8030EFA8 *fn_800A34EC(void)
+extern "C" Entry_802F394C *fn_800A34EC(void)
 {
     return lbl_8030E6E8.mpUnknown8C0;
 }
@@ -8553,7 +8546,7 @@ extern "C" int fn_800B81A4(void)
     return 0xFF;
 }
 
-extern "C" int fn_800B823C(int team)
+extern "C" unsigned int fn_800B823C(int team)
 {
     unsigned char count = 0;
     int i;

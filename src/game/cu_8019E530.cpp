@@ -1,27 +1,9 @@
+#include "game/Frame_8019D3B8.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Record_8019D8AC.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801D2B7C.h"
 #include <string.h>
-
-/* 44-byte entry of a blend description: a weight, flags (bit 0 selects
-   0x8019D994 over 0x8019E00C), the frame-decoding context and the encoded
-   data. */
-struct BlendEntry_8019EDDC {
-    char mUnknown0[4];
-    float mUnknown4;
-    unsigned char mUnknown8;
-    char mUnknown9[27];
-    Record_8019D8AC *mpUnknown24;
-    unsigned short *mpUnknown28;
-};
-
-/* Blend description: an entry count and the entries. */
-struct Blend_8019EDDC {
-    unsigned short mUnknown0;
-    char mUnknown2[2];
-    BlendEntry_8019EDDC mUnknown4[1];
-};
 
 /* 0x7C-byte item of the array passed to fn_8019F044. */
 struct Item_8019F044 {
@@ -39,13 +21,6 @@ struct Item_8019F044 {
 };
 
 extern "C" {
-void fn_8019D2EC(Pose_80041930 *pPose, BlendEntry_8019EDDC *pEntry, int mirrored);
-int fn_8019D4EC(void *pSource);
-void fn_8019D514(short *pDestination, short *pSource, Record_8019D8AC *pContext, int mirrored);
-void fn_8019D994(Pose_80041930 *pPose, BlendEntry_8019EDDC *pEntry, int mode, float scale, Record_8019D8AC *pContext,
-                 int unused);
-void fn_8019E00C(Pose_80041930 *pPose, BlendEntry_8019EDDC *pEntry, int mode, float scale, Record_8019D8AC *pContext,
-                 int unused);
 void fn_801A679C(short *pOut, short *pA, short *pB, int weight, int count);
 void fn_801A67DC(short *pOut, short *pA, short *pB, int weight, int count, short *pOffset, short *pScale);
 void fn_801A6838(short *pOut, short *pA, int count, short *pOffset, short *pScale);
@@ -210,7 +185,7 @@ void fn_8019EC88(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pPrev, P
 {
     fn_80227930(pOut->mUnknown8, pOut->mUnknown8, pA->mUnknown8, t);
     fn_80227930(pOut->mUnknown20, pOut->mUnknown20, pA->mUnknown20, t);
-    fn_801CF810(&pOut->mUnknown36, &pOut->mUnknown36, &pA->mUnknown36, t);
+    fn_801CF810(pOut->mUnknown36, pOut->mUnknown36, pA->mUnknown36, t);
     fn_8019EA2C(pOut, pA, pPrev, pNext, t, a);
 }
 
@@ -219,7 +194,7 @@ short *fn_8019ED20(int count)
     return (short *)fn_801D2B7C(64 * 3 * sizeof(short), 0, 0);
 }
 
-void fn_8019ED4C(char *pDestination, char *pSource, Record_8019D8AC *pContext, int mirrored)
+void fn_8019ED4C(unsigned char *pDestination, unsigned char *pSource, Record_8019D8AC *pContext, int mirrored)
 {
     Pair_8019D800 *pPair;
     int size;
@@ -258,7 +233,7 @@ void fn_8019EDDC(Object_8003DEC4 *pObject, Blend_8019EDDC *pBlend, int count)
     values = pPose->mUnknown4 * 3;
     pEntry = &pBlend->mUnknown4[0];
     scale = pObject->mUnknown28;
-    pContext = pEntry->mpUnknown24;
+    pContext = pEntry->mpUnknown36;
     if (pEntry->mUnknown8 & 1) {
         fn_8019D994(pPose, pEntry, pObject->mUnknown32, scale, pContext, 0);
         pPair = &pContext->mUnknownC;
@@ -272,7 +247,7 @@ void fn_8019EDDC(Object_8003DEC4 *pObject, Blend_8019EDDC *pBlend, int count)
     for (i = 1; i < entries; i++) {
         pEntry = &pBlend->mUnknown4[i];
         weight = pBlend->mUnknown4[i].mUnknown4;
-        pContext = pEntry->mpUnknown24;
+        pContext = pEntry->mpUnknown36;
         if (pEntry->mUnknown8 & 1) {
             fn_8019D994(&pose, pEntry, pObject->mUnknown32, scale, pContext, 0);
             pPair = &pContext->mUnknownC;
@@ -282,7 +257,7 @@ void fn_8019EDDC(Object_8003DEC4 *pObject, Blend_8019EDDC *pBlend, int count)
         }
         fn_80227930(pPose->mUnknown8, pose.mUnknown8, pPose->mUnknown8, weight);
         fn_80227930(pPose->mUnknown20, pose.mUnknown20, pPose->mUnknown20, weight);
-        fn_801CF810(&pPose->mUnknown36, &pose.mUnknown36, &pPose->mUnknown36, weight);
+        fn_801CF810(pPose->mUnknown36, pose.mUnknown36, pPose->mUnknown36, weight);
         fn_801CF8A8(&pPose->mUnknown32, pose.mUnknown32, pPose->mUnknown32, weight);
         if (pContext != 0) {
             fn_801A67DC(pPose->mUnknown48, pose.mUnknown48, pPose->mUnknown48, (int)(weight * 4095.0f), values,
@@ -383,7 +358,7 @@ void fn_8019F2F4(float *pValues)
 
 void fn_8019F318(float *pValues, BlendEntry_8019EDDC *pEntry)
 {
-    unsigned short *pData = pEntry->mpUnknown28;
+    unsigned short *pData = (unsigned short *)pEntry->mpUnknown40;
     unsigned int i;
     unsigned int index;
     unsigned int level;

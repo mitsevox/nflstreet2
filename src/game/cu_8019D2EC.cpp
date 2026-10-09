@@ -1,6 +1,6 @@
 #include "game/Frame_8019D3B8.h"
 #include "game/bitstream.h"
-#include "game/fn_801C1F94.h"
+#include <string.h>
 
 /* Encoded frame blocks start with a count byte whose top two bits flag the
    optional vectors, then a flags byte and four header words. */
@@ -10,22 +10,22 @@ struct Block_8019D3B8 {
 
 extern "C" {
 
-void fn_8019D2EC(State_8019D994 *state, Input_8019D994 *input, int mirrored)
+void fn_8019D2EC(Pose_80041930 *pose, BlendEntry_8019EDDC *entry, int mirrored)
 {
-    unsigned char *encoded = (unsigned char *)input->encoded;
+    unsigned char *encoded = (unsigned char *)entry->mpUnknown40;
     unsigned int count = encoded[0];
     short *source = (short *)(encoded + 2);
     if (!mirrored) {
         for (unsigned int i = 0; i < count; i++) {
-            state->samples[i * 3] = source[i * 3];
-            state->samples[i * 3 + 1] = source[i * 3 + 1];
-            state->samples[i * 3 + 2] = source[i * 3 + 2];
+            pose->mUnknown48[i * 3] = source[i * 3];
+            pose->mUnknown48[i * 3 + 1] = source[i * 3 + 1];
+            pose->mUnknown48[i * 3 + 2] = source[i * 3 + 2];
         }
     } else {
         for (unsigned int i = 0; i < count; i++) {
-            state->samples[i * 3] = source[i * 3];
-            state->samples[i * 3 + 1] = -source[i * 3 + 1];
-            state->samples[i * 3 + 2] = -source[i * 3 + 2];
+            pose->mUnknown48[i * 3] = source[i * 3];
+            pose->mUnknown48[i * 3 + 1] = -source[i * 3 + 1];
+            pose->mUnknown48[i * 3 + 2] = -source[i * 3 + 2];
         }
     }
 }
@@ -57,7 +57,7 @@ short *fn_8019D3B8(Frame_8019D3B8 *header, void *encoded)
         header->vectorA[2] = read[2];
         read += 3;
     } else {
-        fn_801C1F94(header->vectorA, 0, 6);
+        memset(header->vectorA, 0, 6);
     }
     if (optional & 2) {
         header->vector10[0] = read[0];
@@ -65,7 +65,7 @@ short *fn_8019D3B8(Frame_8019D3B8 *header, void *encoded)
         header->vector10[2] = read[2];
         read += 3;
     } else {
-        fn_801C1F94(header->vector10, 0, 6);
+        memset(header->vector10, 0, 6);
     }
     return (short *)(bytes + ((char *)read - (char *)start));
 }

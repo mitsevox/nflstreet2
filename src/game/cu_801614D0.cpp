@@ -23,10 +23,10 @@ int fn_801614D0(void)
     return lbl_803EB380 != 0 && lbl_803EB380->mUnknown1CC != 0;
 }
 
-int fn_801614F4(Instance_801614D0 *pInstance, int unused)
+int fn_801614F4(Instance_801614D0 *pInstance, int a)
 {
     if (fn_801614D0()) {
-        fn_801A5568(pInstance, unused);
+        fn_801A5568(pInstance, a);
     }
     return 0;
 }

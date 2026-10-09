@@ -1,8 +1,13 @@
 #include "engine/cu_80227F14.h"
 #include "game/Init_8004A040.h"
+#include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
+#include "game/cu_8015C25C.h"
+#include "game/cu_801A4AD4.h"
+#include "game/fn_8017F584.h"
 
 #include <dolphin/gx/GXVert.h>
+#include <string.h>
 
 /* Per-player draw slot (0x30 bytes), one of the fourteen entries of
    lbl_80365AB4 handed out by fn_801A3284 and filled by fn_801A3C40. */
@@ -11,7 +16,7 @@ struct Slot_801A3284 {
     unsigned int mUnknown4;
     unsigned int mUnknown8;
     void *mpUnknown12;
-    Light_8003DEC4 *mpUnknown16;
+    Block_8003DEC4 *mpUnknown16;
     void *mpUnknown20;
     void *mpUnknown24;
     void *mpUnknown28;
@@ -19,13 +24,6 @@ struct Slot_801A3284 {
     void *mpUnknown36[2];
     unsigned char mUnknown44;
     char mUnknown45[3];
-};
-
-/* Light source the player stands in, held as an int at +0x3CC of the
-   player (the 0x80054138 result); its position is at +0xC. */
-struct Source_80144310 {
-    char mUnknown0[12];
-    float mUnknown12[3];
 };
 
 /* Four colour bytes passed by value to fn_8024FB58. */
@@ -48,19 +46,6 @@ struct Model_8015E2FC {
     void *mpUnknown24;
 };
 
-/* Object returned by fn_8003E0C8 for the player: +0x310 points to its
-   uniform record, whose first byte is a kind. */
-struct Owner_801A2EC8 {
-    char mUnknown0[784];
-    unsigned char *mpUnknown784;
-};
-
-/* Eight-byte light reference passed to fn_8020F78C and fn_802345BC. */
-struct Ref_803EB81C {
-    int mUnknown0;
-    void *mpUnknown4;
-};
-
 /* Model part description: the part name, its render pass, two halfwords
    and the texture slot name. */
 struct Part_802F29E8 {
@@ -70,6 +55,13 @@ struct Part_802F29E8 {
     short mUnknownA;
     const char *mpTexture;
     int mUnknownC[8];
+};
+
+/* Part table record passed to fn_8020F78C and fn_802345BC: the part count
+   and the part table. */
+struct Ref_803EB81C {
+    int mUnknown0;
+    Part_802F29E8 *mpUnknown4;
 };
 
 /* Initial part parameters set by fn_801A3588, indexed by key. */
@@ -150,7 +142,7 @@ Part_802F29E8 lbl_802F29E8[56] = {
 static unsigned char lbl_802F3468[30] = {0};
 
 extern "C" {
-extern Light_8020F2C4 lbl_80365D54;
+extern Record_8020F2C4 lbl_80365D54;
 extern char lbl_80365D88[16];
 extern char lbl_80365D98[];
 extern Slot_801A3284 lbl_80365AB4[14];
@@ -179,25 +171,20 @@ int fn_8002894C(void);
 int fn_80027DF0(void);
 void *fn_80028BB4(void);
 int fn_8003DEB4(void);
-Owner_801A2EC8 *fn_8003E0C8(Object_8003DEC4 *pPlayer);
+Object_80039F5C *fn_8003E0C8(Block_80170E64 *object);
 float fn_80042F54(float x, float hi, float vhi, float lo, float vlo);
 int fn_80049D04(int index);
 unsigned char fn_80049D1C(int index);
-int fn_8004A238(void);
-int fn_80054D24(int flag);
+unsigned char fn_8004A238(void);
+unsigned char fn_80054D24(int index);
 int fn_800A2624(void);
-void fn_800A3B58(Owner_801A2EC8 *pOwner, int a, int b);
+void fn_800A3B58(Object_80039F5C *p, int a, int b);
 int fn_800ADDD8(Element_80041BF8 *pElements, int index);
-unsigned int fn_800B823C(int index);
+unsigned int fn_800B823C(int team);
 void fn_800C2150(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, int a);
 void fn_800C2884(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, int a);
 float fn_800D3F2C(int index);
-void fn_801442FC(void *p);
-int fn_80144310(void *p, Source_80144310 *pSource, void *pOut, Vector_801A1650 *pScale);
 void fn_80147860(Object_8003DEC4 *pPlayer, float f);
-int fn_8015CD9C(void);
-unsigned char fn_8015D2E8(Object_8003DEC4 *pPlayer);
-void fn_8015D32C(Object_8003DEC4 *pPlayer, Vector_801A1650 *pPos);
 void fn_8015D3B0(Object_8003DEC4 *pPlayer);
 void *fn_8015E2FC(int a, int b, int c);
 int fn_8015E440(int a, int b);
@@ -213,12 +200,8 @@ void fn_8015FFA8(void *a, void *b);
 void *fn_80160C08(void);
 Desc_802347EC *fn_8016102C(int player);
 void fn_80161498(void);
-int fn_8017F584(void);
 void fn_8019723C(Object_80146094 *p);
 void fn_801A1400(Object_8003DEC4 *pPlayer);
-void *fn_801A4AE4(int player);
-void fn_801A4C1C(Desc_802347EC *pDescs, void *pEntries);
-void *fn_801C1F94(void *pDst, int value, int size);
 char *fn_801C2EF0(char *pDst, const char *pSrc, int n);
 void fn_801C657C(void);
 void fn_801D0470(void);
@@ -237,15 +220,15 @@ void fn_801DD3AC(void *a, Object_8003DEC4 *pPlayer, int b);
 void fn_801EF7BC(void *a, int b, int c);
 void fn_801F010C(void *a, int b);
 void *fn_801F0C50(void *a, int b);
-void fn_8020F28C(Light_8020F2C4 *p);
+void fn_8020F28C(Record_8020F2C4 *p);
 void fn_8020F2C4(void *pDst, void *pSrc);
-void fn_8020F78C(Light_8020F2C4 *p, Ref_803EB81C *pRef);
-void fn_8020F89C(Light_8020F2C4 *p);
-void fn_8020F8E0(Light_8020F2C4 *p);
-void fn_8020F92C(Light_8020F2C4 *p);
+void fn_8020F78C(Record_8020F2C4 *p, Ref_803EB81C *pRef);
+void fn_8020F89C(Record_8020F2C4 *p);
+void fn_8020F8E0(Record_8020F2C4 *p);
+void fn_8020F92C(Record_8020F2C4 *p);
 void fn_80210214(void *p, void *q);
 void fn_80210388(void);
-void fn_80210654(Light_8020F2C4 *p);
+void fn_80210654(Record_8020F2C4 *p);
 void fn_80210724(Joints_8003DEC4 *p);
 void fn_80210814(int a, int b, int c);
 void fn_80210BA4(void *p);
@@ -266,7 +249,7 @@ int fn_802149E8(float *p, int a);
 void fn_80214A7C(void *p);
 void fn_80214AC8(void);
 void fn_80214B20(void);
-void fn_80214B6C(Light_8020F2C4 *pDst, Light_8020F2C4 *pSrc);
+void fn_80214B6C(Record_8020F2C4 *pDst, Record_8020F2C4 *pSrc);
 void fn_80214CB4(void);
 void fn_80227930(Vector_801A1650 *pOut, float *pA, float *pB, float t);
 void fn_802336C4(void *p, void *q, int a);
@@ -375,9 +358,13 @@ void fn_801A15C4(Object_80228224 *pObject)
     }
 }
 
-/* Light colour of the player: the team colour faded towards the colour of
-   its current light source over fifteen frames, scaled by the flash
-   colour while one runs. Returns the light from fn_80236B98. */
+/* Returns the fn_80236B98 light for the player's colour. The colour starts
+   at white; when the +0xC colour of the record at +0x3CC changes, it fades
+   over fifteen steps from the colour reached so far to the new one. The
+   result is scaled by the +0x19B0 colour (a decaying pulse over thirty
+   frames, or constant while +0x19AC is 1), and replaced by a colour
+   between lbl_802F29B0 and lbl_802F29BC when flag 0x20000 is set and
+   +0x19A8 is 12. */
 int fn_801A1650(Object_8003DEC4 *pPlayer)
 {
     Object_80146094 *pData = &pPlayer->mUnknown5188;
@@ -385,28 +372,28 @@ int fn_801A1650(Object_8003DEC4 *pPlayer)
     float g = r;
     float b = r;
     int flash = 0;
-    Source_80144310 *pSource;
+    Object_80144310 *pSource;
     int light;
-    char block[16];
+    float block[4];
     Vector_801A1650 scale;
     Vector_801A1650 color;
 
     if (pPlayer->mUnknown20 & 0x20000) {
         flash = pData->mUnknown564 == 12.0f;
     }
-    pSource = (Source_80144310 *)pPlayer->mUnknown972;
+    pSource = (Object_80144310 *)pPlayer->mUnknown972;
     if (pSource) {
-        if (pSource->mUnknown12[0] != pData->mUnknown580 || pSource->mUnknown12[1] != pData->mUnknown584 ||
-            pSource->mUnknown12[2] != pData->mUnknown588) {
+        if (pSource->mUnknownC != pData->mUnknown580 || pSource->mUnknown10 != pData->mUnknown584 ||
+            pSource->mUnknown14 != pData->mUnknown588) {
             pData->mUnknown590 =
                 (pData->mUnknown580 - pData->mUnknown590) * (pData->mUnknown5A0 * (1.0f / 15.0f)) + pData->mUnknown590;
             pData->mUnknown594 =
                 (pData->mUnknown584 - pData->mUnknown594) * (pData->mUnknown5A0 * (1.0f / 15.0f)) + pData->mUnknown594;
             pData->mUnknown598 =
                 (pData->mUnknown588 - pData->mUnknown598) * (pData->mUnknown5A0 * (1.0f / 15.0f)) + pData->mUnknown598;
-            pData->mUnknown580 = pSource->mUnknown12[0];
-            pData->mUnknown584 = pSource->mUnknown12[1];
-            pData->mUnknown588 = pSource->mUnknown12[2];
+            pData->mUnknown580 = pSource->mUnknownC;
+            pData->mUnknown584 = pSource->mUnknown10;
+            pData->mUnknown588 = pSource->mUnknown14;
             pData->mUnknown5A0 = 0;
         }
         if (pData->mUnknown5A0 < 15) {
@@ -444,7 +431,7 @@ int fn_801A1650(Object_8003DEC4 *pPlayer)
         b = color.z;
     }
     light = fn_80236B98(1, r, g, b);
-    if (fn_80144310(pPlayer->mUnknown4960, (Source_80144310 *)pPlayer->mUnknown972, block, &scale)) {
+    if (fn_80144310(&pPlayer->mUnknown4960, (Object_80144310 *)pPlayer->mUnknown972, block, &scale.x)) {
         scale.x *= r;
         scale.y *= g;
         scale.z *= b;
@@ -865,8 +852,8 @@ void fn_801A29F8(Part_8003DEC4 *pPart, void *pContext, Object_8003DEC4 *pPlayer)
     pPlayer->mUnknown830 = 0x24;
 }
 
-/* Sets the two light blocks of the player from its team lights, with the
-   53 FMCAPPORT weights converted to 4.12 fixed point. */
+/* Fills the two +0x400 blocks of the player from the fn_8015E2FC models,
+   with the 53 FMCAPPORT weights converted to 4.12 fixed point. */
 void fn_801A2A88(Object_8003DEC4 *pPlayer, int unused)
 {
     short values[53];
@@ -874,7 +861,7 @@ void fn_801A2A88(Object_8003DEC4 *pPlayer, int unused)
     int b;
     int i;
 
-    fn_801C1F94(values, 0, sizeof(values));
+    memset(values, 0, sizeof(values));
     if (pPlayer->mUnknown992 == 0xFFFF) {
         fn_8015FFA8(fn_8015E2FC(6, 0, 0), fn_8015E2FC(5, 0, 0));
         fn_8015FFA8(fn_8015E2FC(6, 0, 1), fn_8015E2FC(5, 0, 1));
@@ -954,7 +941,7 @@ void fn_801A2EC8(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot)
     fn_80234CA4(&pPlayer->mUnknown1164[5], &pPlayer->mUnknown4064[1]);
     if ((pPlayer->mUnknown20 & 0x10) && pSlot->mUnknown8 == 0) {
         if (!(pPlayer->mUnknown20 & 8) && pPlayer->mUnknown820) {
-            if (*fn_8003E0C8(pPlayer)->mpUnknown784 == 0x32) {
+            if (fn_8003E0C8((Block_80170E64 *)pPlayer)->mpState->mId == 0x32) {
                 pPlayer->mUnknown820[pPlayer->mUnknown4972 + 2] = -1.0f;
             } else if (pPlayer->mUnknown20 & 0x40000) {
                 float f = pPlayer->mUnknown820[1];
@@ -1082,7 +1069,7 @@ void fn_801A34B0(int a, int b, int c, int d)
     lbl_803ECC04 = 0;
     fn_8020F28C(&lbl_80365D54);
     fn_801A14D8();
-    fn_801C1F94(lbl_802F3468, 0, sizeof(lbl_802F3468));
+    memset(lbl_802F3468, 0, sizeof(lbl_802F3468));
     lbl_802F3468[15] = 1;
     lbl_802F3468[21] = 1;
 }
@@ -1124,7 +1111,7 @@ void fn_801A3588(Object_8003DEC4 *pPlayer, Creation_8003D378 *pInit)
     pPlayer->mUnknown4971 = pInit->mUnknown5A;
     pPlayer->mUnknown4970 = pInit->mUnknown59;
     pPlayer->mUnknown4972 = pInit->mUnknown5B;
-    fn_801442FC(pPlayer->mUnknown4960);
+    fn_801442FC(&pPlayer->mUnknown4960);
     pPlayer->mUnknown4976 = pInit->mUnknown5C;
     fn_801C2EF0(pPlayer->mUnknown4184, pInit->mUnknown38, 31);
     pPlayer->mUnknown1020 = fn_8015E440(0, pPlayer->mUnknown1016);
@@ -1257,7 +1244,7 @@ void fn_801A3C40(Object_8003DEC4 *pPlayer)
             return;
         }
         if (lbl_803EB824 == 1) {
-            fn_800A3B58(fn_8003E0C8(pPlayer), 1, lbl_803EB825);
+            fn_800A3B58(fn_8003E0C8((Block_80170E64 *)pPlayer), 1, lbl_803EB825);
             lbl_803EB824 = 0;
         }
         fn_801A2EC8(pPlayer, pSlot);
@@ -1265,7 +1252,7 @@ void fn_801A3C40(Object_8003DEC4 *pPlayer)
             Vector_801A1650 pos;
 
             fn_8015D3B0(pPlayer);
-            fn_8015D32C(pPlayer, &pos);
+            fn_8015D32C(pPlayer, &pos.x);
             fn_801A209C(pPlayer, &pos.x, pPlayer->mUnknown908, 0, 0, pSlot->mpUnknown12, pSlot->mpUnknown36,
                         pSlot->mUnknown8);
         } else {
@@ -1497,7 +1484,7 @@ void fn_801A472C(void)
     if (!lbl_803EB814 || !lbl_803EB818) {
         return;
     }
-    fn_801C1F94(values, 0, sizeof(values));
+    memset(values, 0, sizeof(values));
     pPlayer = lbl_803EB814;
     if (pPlayer->mUnknown992 == 0xFFFF) {
         fn_8015FFA8(fn_8015E2FC(6, 0, 0), fn_8015E2FC(5, 0, 0));

@@ -4,16 +4,7 @@
 #include "game/InGame.h"
 #include "game/Object_80039F5C.h"
 #include "game/Instance_801614D0.h"
-
-/* One 20-byte entry of the .data table 0x802F394C, returned by
-   fn_801A566C and read back through 0x800A34EC. */
-struct Entry_802F394C {
-    float mUnknown0;
-    float mUnknown4;
-    int mUnknown8;
-    float mUnknownC;
-    unsigned int mUnknown10;
-};
+#include "game/Entry_802F394C.h"
 
 
 /* Item of the type-6 pool of src/game/cu_80046340.cpp. */
@@ -47,11 +38,8 @@ void fn_801A5780(void);
 void fn_801987F4(void);
 int fn_800A262C(void);
 int fn_800A26C4(void);
-float fn_800A3400(void);
-unsigned int fn_800A3410(void);
 int fn_800A34B0(void);
 int fn_800A34BC(void);
-Entry_802F394C *fn_800A34EC(void);
 int fn_801C657C(void);
 void fn_801D0470(int a);
 void fn_801D04C4(void);

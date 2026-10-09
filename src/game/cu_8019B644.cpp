@@ -287,11 +287,11 @@ void fn_8019BD88(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc)
     fn_8019BA4C(pFont, pDesc);
 }
 
-void fn_8019BE30(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc, void *pArchive, int index)
+void fn_8019BE30(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc, void *p, int index)
 {
-    fn_8020DFD8(fn_801EF390(pArchive, index, 1), &pFont->mTexture);
+    fn_8020DFD8(fn_801EF390(p, index, 1), &pFont->mTexture);
     fn_8019BD88(pFont, pDesc);
-    fn_801F010C(pArchive, index);
+    fn_801F010C(p, index);
 }
 
 void fn_8019BE94(Font_8019BE30 *pFont)

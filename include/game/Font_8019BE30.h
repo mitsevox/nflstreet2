@@ -47,7 +47,7 @@ struct Font_8019BE30 {
 
 extern "C" {
 unsigned int fn_8019BC50(Font_8019BE30 *pFont, unsigned char *pDest, const unsigned char *pString);
-void fn_8019BE30(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc, void *pArchive, int index);
+void fn_8019BE30(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc, void *p, int index);
 void fn_8019BE94(Font_8019BE30 *pFont);
 Font_8019BE30 *fn_801614C4(void);
 }

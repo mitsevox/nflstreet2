@@ -2,6 +2,7 @@
 #include "game/FMCAPPORT.h"
 #include "game/Font_8019BE30.h"
 #include "game/Object_8020E52C.h"
+#include "game/cu_801A4AD4.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_8017F584.h"
@@ -32,8 +33,6 @@ void fn_8004625C(void *p, int id, unsigned char *pColors);
 int fn_80049D04(int index);
 unsigned char fn_80054D24(int index);
 void fn_8015D254(int index);
-void fn_801A4B08(Desc_802347EC *pDesc);
-void fn_801A4B28(void *pDest, void *pSrc, unsigned int size);
 int fn_801C1870(int a, int b, unsigned int size, int count,
                 void (*pCallback)(int, void *, TextureSlot_802E6D68 *));
 void fn_801C1950(int loader, void *pArchive, int id, TextureSlot_802E6D68 *pSlot);
