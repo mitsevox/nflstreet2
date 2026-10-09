@@ -16786,13 +16786,13 @@
     {
       "source": "src/game/cu_8003BA10.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv projected geometry and resource group rows; original assembly linked.",
+      "evidence": "evidence.tsv unit row 0x8003BA00-0x8003E214 (src/game/cu_8003BA10.cpp), projected geometry and resource group rows; original assembly linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8003BA10",
-          "end": "0x8003E174"
+          "start": "0x8003BA00",
+          "end": "0x8003E214"
         },
         {
           "section": ".rodata",
@@ -16802,6 +16802,26 @@
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_8003BA00",
+          "start": "0x8003BA00",
+          "end": "0x8003BA04"
+        },
+        {
+          "symbol": "fn_8003BA04",
+          "start": "0x8003BA04",
+          "end": "0x8003BA08"
+        },
+        {
+          "symbol": "fn_8003BA08",
+          "start": "0x8003BA08",
+          "end": "0x8003BA0C"
+        },
+        {
+          "symbol": "fn_8003BA0C",
+          "start": "0x8003BA0C",
+          "end": "0x8003BA10"
+        },
         {
           "symbol": "fn_8003BA10",
           "start": "0x8003BA10",
@@ -16976,6 +16996,21 @@
           "symbol": "fn_8003E118",
           "start": "0x8003E118",
           "end": "0x8003E174"
+        },
+        {
+          "symbol": "fn_8003E174",
+          "start": "0x8003E174",
+          "end": "0x8003E194"
+        },
+        {
+          "symbol": "fn_8003E194",
+          "start": "0x8003E194",
+          "end": "0x8003E1F0"
+        },
+        {
+          "symbol": "fn_8003E1F0",
+          "start": "0x8003E1F0",
+          "end": "0x8003E214"
         }
       ]
     },
