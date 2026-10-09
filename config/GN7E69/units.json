@@ -3205,6 +3205,19 @@
       ]
     },
     {
+      "source": "src/game/cu_8006F54C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8006F54C-0x8006F810 (src/game/cu_8006F54C.cpp) and its source-form row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8006F54C",
+          "end": "0x8006F810"
+        }
+      ]
+    },
+    {
       "source": "src/game/GameVpt.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80029224-0x80029500 (src/game/GameVpt.cpp) and its data rows.",
@@ -8229,6 +8242,19 @@
           "placement": ".data4",
           "start": "0x802D6928",
           "end": "0x802D6950"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80081440.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80081440-0x800817CC (src/game/cu_80081440.cpp), and its source-form rows. Linked from source: .text 0x800816C4-0x800817CC; 0x80081440-0x800816C4 and the .data table 0x802D6A28-0x802D6AD8 are a draft comparison behind DECOMP_COMPARE (config/GN7E69/comparisons.json) whose original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800816C4",
+          "end": "0x800817CC"
         }
       ]
     },

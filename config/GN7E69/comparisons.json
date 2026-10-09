@@ -25493,6 +25493,37 @@
           "end": "0x8007B4C8"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80081440.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80081440-0x800817CC (src/game/cu_80081440.cpp), its exact function rows 0x80081440-0x800816C4, the exact .data row 0x802D6A28-0x802D6AD8 (measured slice) and the source-form rows. Draft comparison of 0x80081440 (exact) and 0x800814BC (partial) behind DECOMP_COMPARE; the original bytes of 0x80081440-0x800816C4 and of the .data table remain linked, while 0x800816C4-0x800817CC is linked from source in units.json; the full .text placement is kept for relocation.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80081440",
+          "end": "0x800817CC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6A28",
+          "end": "0x802D6AD8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80081440",
+          "start": "0x80081440",
+          "end": "0x800814BC"
+        },
+        {
+          "symbol": "fn_800814BC",
+          "start": "0x800814BC",
+          "end": "0x800816C4"
+        }
+      ]
     }
   ]
 }

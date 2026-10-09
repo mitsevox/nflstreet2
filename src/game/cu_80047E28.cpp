@@ -40,7 +40,7 @@ struct Pair_802CF382 {
 /* Element of lbl_80308368 (14 records of 0x18 bytes). */
 struct Entry_80308368 {
     int mId;
-    unsigned short mValues[10];
+    short mValues[10];
 };
 
 extern "C" {
@@ -72,7 +72,7 @@ int fn_80080E48(Object_8008044C *pObject);
 int fn_80080E70(Object_8008044C *pObject);
 int fn_80080E98(Object_8008044C *pObject);
 int fn_8008125C(Object_8008044C *pObject);
-void fn_80081440(Object_8008044C *pObject, unsigned short *pValues);
+void fn_80081440(Object_8008044C *pObject, short *pValues);
 void fn_80081C10(Object_8008044C *pObject, unsigned char *p);
 void fn_80081CDC(void);
 void fn_80081D24(void);
