@@ -2,6 +2,7 @@
 #define GAME_OBJECT_80039F5C_H
 
 #include "game/Object_800D81C8.h"
+#include "game/Message_800F01CC.h"
 
 /* The player object returned by fn_80039F5C, with the blocks it contains or
    points to. */
@@ -304,9 +305,11 @@ struct Object_80039F5C {
     int mUnknown3040;
     char mUnknown3044[4];
     /* Message queue that mpState points to; passed to fn_800F03D8 and
-       fn_800F053C. Only its head is declared. */
-    State_80039F5C mUnknown3048;
-    char mUnknown3055[33];
+       fn_800F053C. Read as its head state and as ten 4-byte messages. */
+    union {
+        State_80039F5C mUnknown3048;
+        Message_800F01CC mQueue[10];
+    };
     unsigned char mUnknown3088;
     char mUnknown3089[1];
     unsigned short mUnknown3090;

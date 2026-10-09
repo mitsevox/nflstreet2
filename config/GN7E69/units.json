@@ -1661,6 +1661,14 @@
     "__VMBASEInvalidateEntireTLB": {
       "address": "0x80245EDC",
       "evidence": "Original target provider retained for calls from measured VMBase C. Complete target instructions at 0x80245EDC and pinned MVP 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 src/dolphin/vmbase/VMBase.c declarations support the accessed contract; no body or original handwritten assembly provenance claimed. See VMBase external evidence."
+    },
+    "fn_800C02E0__14Class_80297CE8": {
+      "address": "0x800C02E0",
+      "evidence": "evidence.tsv external row for 0x800C02E0 (fn_800C02E0__14Class_80297CE8); descriptive mangled member name."
+    },
+    "fn_800C0414__14Class_80297CE8": {
+      "address": "0x800C0414",
+      "evidence": "evidence.tsv external row for 0x800C0414 (fn_800C0414__14Class_80297CE8); descriptive mangled member name."
     }
   },
   "units": [
