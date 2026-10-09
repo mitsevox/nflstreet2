@@ -490,6 +490,8 @@ int fn_8005E014(int *pTeam, int *pCopy, int *pCount)
         case 0:
             first = 1;
             break;
+        case 2:
+            break;
         }
     }
     team = fn_8018BDFC(lbl_802D4D40.mIndex, 1, ids, &count);
@@ -655,6 +657,8 @@ void fn_8005E4A8(void)
     case 3:
         fn_8005E43C();
         break;
+    case 4:
+        break;
     }
 }
 
@@ -681,6 +685,8 @@ int fn_8005E728(void)
         break;
     case 3:
         value = 122;
+        break;
+    case 4:
         break;
     }
     return value;
