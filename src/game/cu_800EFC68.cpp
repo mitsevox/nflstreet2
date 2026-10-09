@@ -7,6 +7,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
+#include "game/Plan_80121264.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
@@ -544,32 +545,6 @@ struct Block_803EB028 {
     unsigned char mUnknown89;
     unsigned char mUnknown90;
     char mUnknown91[1];
-};
-
-/* 48-byte entry of Plan_80121264; the array fills +0 to +1440. */
-struct Entry_80120E98 {
-    char mUnknown0[12];
-    float mUnknown12;
-    char mUnknown16[20];
-    int mUnknown36;
-    char mUnknown40[8];
-};
-
-/* 32-byte entry of Plan_80121264; the array fills +1444 to +2372. */
-struct Entry_801230B8 {
-    char mUnknown0[16];
-    int mUnknown16;
-    char mUnknown20[8];
-    float mUnknown28;
-};
-
-/* 2376-byte record cleared and filled by fn_80121264 (fn_801231E4 keeps one
-   on its stack). */
-struct Plan_80121264 {
-    Entry_80120E98 mUnknown0[30];
-    int mUnknown1440;
-    Entry_801230B8 mUnknown1444[29];
-    unsigned int mUnknown2372;
 };
 
 extern "C" {
