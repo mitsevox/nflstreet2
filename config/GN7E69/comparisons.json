@@ -6545,13 +6545,19 @@
     {
       "source": "src/game/cu_8012A6B0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row for src/game/cu_8012A6B0.cpp, exact whole-function rows and inferred name/source-form/compiler rows for the reconstructed bodies. Wholly unlinked comparison source: original bytes remain linked; the other bodies and all static data are unmeasured.",
+      "evidence": "evidence.tsv open/provisional unit row for src/game/cu_8012A6B0.cpp, exact whole-function rows and inferred name/source-form/compiler rows for the reconstructed bodies, and the .rodata row 0x8029FAF4-0x8029FB00 (literal pools of 0x8012FF5C and 0x80130338). Wholly unlinked comparison source: original bytes remain linked; the other bodies and all other static data are unmeasured.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8012A6B0",
-          "end": "0x8012FF5C"
+          "end": "0x80130494"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FAF4",
+          "end": "0x8029FB00"
         }
       ],
       "functions": [
@@ -6669,6 +6675,26 @@
           "symbol": "fn_8012FF30",
           "start": "0x8012FF30",
           "end": "0x8012FF5C"
+        },
+        {
+          "symbol": "fn_8012FF5C",
+          "start": "0x8012FF5C",
+          "end": "0x8013028C"
+        },
+        {
+          "symbol": "fn_8013028C",
+          "start": "0x8013028C",
+          "end": "0x80130318"
+        },
+        {
+          "symbol": "fn_80130318",
+          "start": "0x80130318",
+          "end": "0x80130338"
+        },
+        {
+          "symbol": "fn_80130338",
+          "start": "0x80130338",
+          "end": "0x80130494"
         }
       ]
     },

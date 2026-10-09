@@ -1,3 +1,4 @@
+#include <dolphin/mtx.h>
 #include "game/cu_801444D8.h"
 #include "game/bitstream.h"
 #include "game/cu_8002B8F8.h"

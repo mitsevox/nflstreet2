@@ -1,22 +1,10 @@
 #include <dolphin/mtx.h>
 #include "game/cu_801444D8.h"
+#include "game/Event_801459F0.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801C68FC.h"
 #include "game/Object_80146094.h"
 #include "game/fn_801EBC18.h"
-
-/* One 0x60-byte entry of the pool at lbl_803EB24C. */
-struct Event_801459F0 {
-    int mType;
-    unsigned char mUnknown04;
-    int mUnknown08;
-    int mUnknown0C;
-    void *mUnknown10;
-    int mUnknown14;
-    Object_80144CE0 *mUnknown18;
-    int mUnknown1C;
-    char mPad20[0x60 - 0x20];
-};
 
 /* One 0x44-byte entry of the pool at lbl_803EB254. */
 struct Entry_80145EFC {
@@ -33,11 +21,6 @@ struct Object_803ECA10 {
 
 extern "C" {
 void fn_80145224(void);
-void fn_80145314(Event_801459F0 *pEvent);
-void fn_801454DC(Event_801459F0 *pEvent);
-void fn_801455F8(Event_801459F0 *pEvent);
-void fn_80145798(Event_801459F0 *pEvent);
-void fn_801458C8(Event_801459F0 *pEvent);
 void fn_80146FCC(void);
 void fn_80146FD8(void);
 void fn_80146FDC(Object_80146094 *pObject);
