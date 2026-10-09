@@ -237,7 +237,9 @@ struct Object_80039F5C {
             unsigned char mUnknown1011;
         };
     };
-    char mUnknown1012[20];
+    char mUnknown1012[4];
+    float mUnknown1016[2];
+    float mUnknown1024[2];
     /* The 108 bytes at +1032, read field by field and as Block_8011E240. */
     union {
         struct {
