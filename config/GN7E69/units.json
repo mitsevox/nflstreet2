@@ -4526,6 +4526,19 @@
       ]
     },
     {
+      "source": "src/game/cu_8007A24C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007A24C-0x8007A3C4 (src/game/cu_8007A24C.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007A24C",
+          "end": "0x8007A3C4"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800545B4.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800545B4-0x80054628 (src/game/cu_800545B4.cpp) and its data rows.",
@@ -5095,6 +5108,19 @@
       ]
     },
     {
+      "source": "src/game/cu_80087BE4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80087BE4-0x80087C5C (src/game/cu_80087BE4.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80087BE4",
+          "end": "0x80087C5C"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80087C5C.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80087C5C-0x80087CBC (src/game/cu_80087C5C.cpp) and its data row.",
@@ -5303,6 +5329,25 @@
           "placement": ".data4",
           "start": "0x802D69E0",
           "end": "0x802D69F0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80081C10.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80081C10-0x80081CDC (src/game/cu_80081C10.cpp), its data row and its source-form row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80081C10",
+          "end": "0x80081CDC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA7D0",
+          "end": "0x803EA7D8"
         }
       ]
     },
