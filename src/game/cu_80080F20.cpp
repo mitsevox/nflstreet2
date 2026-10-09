@@ -55,7 +55,7 @@ void fn_80080A68(Object_8008044C *pObject, char *pBuffer, int size)
     fn_8007AA3C((Object_8007A334 *)pObject, 0x414E4C50, (int)pBuffer, size);
 }
 
-/* Nickname, or the upper-case last name when the nickname is empty. */
+/* The 0x4E4B4E50 text, or the upper-cased fn_80080A68 text when it is empty. */
 void fn_80080A9C(Object_8008044C *pObject, char *pBuffer, int size)
 {
     fn_8007AA3C((Object_8007A334 *)pObject, 0x4E4B4E50, (int)pBuffer, size);
@@ -65,7 +65,8 @@ void fn_80080A9C(Object_8008044C *pObject, char *pBuffer, int size)
     }
 }
 
-/* "F. Last": the first initial (leading spaces skipped), then the last name. */
+/* The first non-space character of the fn_80080A34 text and ". ", then the
+   fn_80080A68 text, ending at size. */
 void fn_80080B08(Object_8008044C *pObject, char *pBuffer, int size)
 {
     char first[16];
@@ -97,7 +98,7 @@ void fn_80080B08(Object_8008044C *pObject, char *pBuffer, int size)
     pBuffer[total] = 0;
 }
 
-/* "First Last". */
+/* The fn_80080A34 text, a space, then the fn_80080A68 text, ending at size. */
 void fn_80080BEC(Object_8008044C *pObject, char *pBuffer, int size)
 {
     char first[16];
@@ -140,8 +141,8 @@ int fn_80080D10(Object_8008044C *pObject)
     return fn_8007A98C(pObject, 0x50585350);
 }
 
-/* Upper-case letters of the last name followed by the first name, other
-   characters removed. Returns 0 with an empty buffer when fn_80080CB0 is
+/* Only the A-Z bytes of the upper-cased fn_80080A68 text followed by the
+   fn_80080A34 text. Returns 0 with an empty buffer when fn_80080CB0 is
    non-zero. */
 int fn_80080D38(Object_8008044C *pObject, char *pBuffer, int size)
 {
