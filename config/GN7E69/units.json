@@ -4705,6 +4705,31 @@
       ]
     },
     {
+      "source": "src/game/cu_801A4AD4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A4AD4-0x801A4CBC (src/game/cu_801A4AD4.cpp) and its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A4AD4",
+          "end": "0x801A4CBC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE528",
+          "end": "0x802AE658"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F3488",
+          "end": "0x802F37D0"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80063BE4.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80063BE4-0x80063C7C (src/game/cu_80063BE4.cpp) and its data rows.",

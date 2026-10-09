@@ -105,7 +105,8 @@ struct Object_8003DEC4 {
     char mUnknown832[76];
     float mUnknown908[4][4];
     int mUnknown972;
-    char mUnknown976[12];
+    unsigned int mUnknown976;
+    char mUnknown980[8];
     Item_800476DC *mUnknown988;
     char mUnknown992[3192];
     char mUnknown4184[772];
