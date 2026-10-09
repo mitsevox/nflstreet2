@@ -408,14 +408,18 @@ void fn_8015DA7C(void)
 
 void fn_8015DA80(int index, int load)
 {
+    ModelLod_802DF190 *pLods;
     unsigned int count;
     unsigned int k;
     unsigned int id0;
     unsigned int id1;
 
+    pLods = lbl_802E31D0[index];
+    id0 = pLods[0].mId;
+    id1 = pLods[1].mId;
     switch (lbl_803EB360) {
     case 0:
-        lbl_802E31D0[index][1].mId = NO_MODEL;
+        pLods[1].mId = id1 = NO_MODEL;
         count = 1;
         break;
     case 1:
@@ -425,8 +429,6 @@ void fn_8015DA80(int index, int load)
         count = 2;
         break;
     }
-    id0 = lbl_802E31D0[index][0].mId;
-    id1 = lbl_802E31D0[index][1].mId;
 
     if (load) {
         if (lbl_803EB35D) {
@@ -455,8 +457,10 @@ void fn_8015DA80(int index, int load)
 
 void fn_8015DD3C(int index, int load)
 {
+    ModelLod_802DF190 *pLods = lbl_802E3208[index];
+
     if (lbl_803EB360 == 0) {
-        lbl_802E3208[index][1].mId = NO_MODEL;
+        pLods[1].mId = NO_MODEL;
     }
 
     if (load) {
@@ -476,8 +480,10 @@ void fn_8015DD3C(int index, int load)
 
 void fn_8015DE3C(int index, int load)
 {
+    ModelLod_802DF190 *pLods = lbl_802E3240[index];
+
     if (lbl_803EB360 == 0) {
-        lbl_802E3240[index][1].mId = NO_MODEL;
+        pLods[1].mId = NO_MODEL;
     }
 
     if (load) {
@@ -497,16 +503,17 @@ void fn_8015DE3C(int index, int load)
 
 void fn_8015DF3C(int index, int load)
 {
+    ModelLod_802DF190 *pLods = lbl_802E3278[index];
     unsigned int count;
     unsigned int k;
 
     switch (lbl_803EB360) {
     case 0:
-        lbl_802E3278[index][1].mId = NO_MODEL;
+        pLods[1].mId = NO_MODEL;
         count = 1;
         break;
     case 1:
-        lbl_802E3278[index][1].mId = NO_MODEL;
+        pLods[1].mId = NO_MODEL;
         count = 2;
         break;
     default:
