@@ -86,7 +86,6 @@ void fn_80040818(Object_80040818 *pObject, Desc_800408E4 *pDesc);
 void fn_80040884(Object_80040818 *pObject);
 int fn_800408A4(Object_80040818 *pObject);
 Object_80040818 *fn_80040F18(int index);
-Track_800410E0 *fn_800410E0(Object_80040818 *pObject);
 }
 
 static Object_80040818 **lbl_803EA480 = 0;
@@ -211,10 +210,10 @@ int fn_800404C8(void)
         Object_80040818 *pObject = lbl_803EA480[i];
 
         if (pObject->mUnknown300 != 0) {
-            Track_800410E0 *pTrack = fn_800410E0(pObject);
+            Skeleton_80041930 *pSkeleton = fn_800410E0(pObject);
 
-            if (pTrack != 0) {
-                size += pTrack->mUnknown6 * 36;
+            if (pSkeleton != 0) {
+                size += pSkeleton->mUnknown6 * 36;
                 size += 64;
             }
             size += 108;
@@ -556,7 +555,7 @@ int fn_80041094(int index)
     return 0;
 }
 
-Track_800410E0 *fn_800410B8(int index)
+Skeleton_80041930 *fn_800410B8(int index)
 {
     Object_80040818 *pObject = lbl_803EA480[index];
 
@@ -566,7 +565,7 @@ Track_800410E0 *fn_800410B8(int index)
     return 0;
 }
 
-Track_800410E0 *fn_800410E0(Object_80040818 *pObject)
+Skeleton_80041930 *fn_800410E0(Object_80040818 *pObject)
 {
     if (pObject->mUnknown304 != 0) {
         return *pObject->mUnknown304;

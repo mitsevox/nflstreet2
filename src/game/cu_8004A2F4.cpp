@@ -125,7 +125,6 @@ extern float lbl_803EA4F0;
 void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
 void fn_80030554(void *pStream, float *pValues, int bits, float scale);
 Object_80040818 *fn_80040F18(int index);
-Skeleton_80041930 *fn_800410B8(int index);
 void fn_800411C8(Object_80040818 *pObject);
 void fn_800411EC(Object_80040818 *pObject);
 int fn_8004C204(const char *pName);

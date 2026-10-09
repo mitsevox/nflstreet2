@@ -19,7 +19,6 @@ extern "C" {
 int fn_80040A70(Object_80041904 *pObject, int index);
 Object_80040818 *fn_80040F18(int index);
 int fn_80041094(int index);
-int fn_800410B8(int index);
 void fn_8004A8C4(Extra_8004149C *pExtra, int entry, int a);
 void fn_8004A8E8(int entry, void *a, int b, void *c);
 void fn_8004A908(Object_80041904 *pObject, int index);

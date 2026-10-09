@@ -6,11 +6,6 @@
 #include "game/cu_80136B1C.h"
 #include "game/fn_80054138.h"
 
-struct Track_800410E0 {
-    char mUnknown0[6];
-    unsigned short mUnknown6;
-};
-
 struct Model_8004E0CC {
     char mUnknown0[40];
     unsigned char mUnknown40;
@@ -43,7 +38,7 @@ struct Object_80040818 {
     unsigned int mUnknown248;
     char mUnknown252[48];
     Model_8004E0CC *mUnknown300;
-    Track_800410E0 **mUnknown304;
+    Skeleton_80041930 **mUnknown304;
     int mUnknown308;
     char mUnknown312[16];
     int mUnknown328;
@@ -56,5 +51,10 @@ struct Object_80040818 {
     int mUnknown480;
     char mUnknown484[64];
 };
+
+extern "C" {
+Skeleton_80041930 *fn_800410B8(int index);
+Skeleton_80041930 *fn_800410E0(Object_80040818 *pObject);
+}
 
 #endif
