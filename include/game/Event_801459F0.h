@@ -3,12 +3,14 @@
 
 #include "game/cu_801444D8.h"
 
+struct Object_80039F5C;
+
 /* One 0x60-byte entry of the pool at lbl_803EB24C. */
 struct Event_801459F0 {
     int mType;
     unsigned char mUnknown04;
-    int mUnknown08;
-    int mUnknown0C;
+    float (*mUnknown08)[4][4];
+    Object_80039F5C *mUnknown0C;
     void *mUnknown10;
     int mUnknown14;
     Object_80144CE0 *mUnknown18;

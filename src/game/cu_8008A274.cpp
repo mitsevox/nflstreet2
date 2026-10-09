@@ -5,6 +5,7 @@
 #include "game/FMCAPPORT.h"
 #include "game/cu_8008A274.h"
 #include "game/Object_80233EAC.h"
+#include "game/cu_8015D3EC.h"
 #include "game/Object_8020E52C.h"
 
 struct Slot_8008A900 {
@@ -14,16 +15,6 @@ struct Slot_8008A900 {
 
 struct SlotTable_8008A900 {
     Slot_8008A900 mSlots[18];
-};
-
-struct Desc_80233EAC {
-    float mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
-    char mUnknown16[76];
-    int mUnknown92;
-    char mUnknown96[64];
 };
 
 struct Object_8008AAF8 {
@@ -37,10 +28,6 @@ extern "C" {
 Skeleton_80041930 *fn_8003E028(void);
 Skeleton_80041930 *fn_8003E030(void);
 void fn_8004625C(void *p, int id, FMCAPPORTText *pText);
-int fn_8015E2FC(int a, int b, int c);
-void fn_8015E73C(int id);
-void fn_8015E908(int a);
-void fn_8015F3FC(int a);
 void *fn_80160C08(void);
 void fn_80199BD4(Object_8008A9F8 *pObject);
 void fn_801A4690(int a);
@@ -51,11 +38,9 @@ void fn_80221BE8(void (*pCallback)(int, unsigned int, Object_8008AAF8 *));
 int fn_8022F358(int index);
 int fn_8022F3D4(int a);
 int fn_8022F4BC(void);
-void fn_802336C4(void *pObject, int a, int b);
+void fn_802336C4(void *pObject, Object_8023417C *pModel, int b);
 void fn_80233728(void *pObject);
 void fn_80233760(void *pObject, short *pValues, int count);
-void fn_80233EAC(Object_80233EAC *pObject, Desc_80233EAC *pDesc, const char *pName, int a,
-                 void *pArchive, Skeleton_80041930 *pSkeleton, void **ppData, int c);
 void fn_802347EC(void *pData, Desc_802347EC *pDesc, int a, int b);
 void fn_80234844(Desc_802347EC *pDesc);
 
@@ -69,9 +54,9 @@ static SlotTable_8008A900 *sSlots = 0;
 static Skeleton_80041930 *(*sCallbacks[2])(void) = { fn_8003E028, fn_8003E030 };
 static int sUnknown[2] = { 15, 32 };
 static const char *sFileNames[2] = { lbl_802EC038, lbl_802EC044 };
-static Desc_80233EAC sDesc0 = { 0.5f, 1000, 100000, 0xFFFF, { 0 }, 0xFFFF };
-static Desc_80233EAC sDesc1 = { 0.5f, 1000, 100000, 0xFFFF, { 0 }, 0xFFFF };
-static Desc_80233EAC *sDescs[2] = { &sDesc0, &sDesc1 };
+static ModelLod_802DF190 sDesc0[2] = { { 0.5f, 1000, 100000, 0xFFFF }, { 0.0f, 0, 0, 0xFFFF } };
+static ModelLod_802DF190 sDesc1[2] = { { 0.5f, 1000, 100000, 0xFFFF }, { 0.0f, 0, 0, 0xFFFF } };
+static ModelLod_802DF190 *sDescs[2] = { sDesc0, sDesc1 };
 static Object_80233EAC sObjects[2];
 
 extern "C" {
@@ -198,7 +183,7 @@ void fn_8008A590(Object_8008A9F8 *pObject)
                 pArchive = fn_801EEB44(sFileNames[i], 44);
             }
             pObject->mpUnknown512[i] = fn_801D2B7C(fn_801F0C50(pArchive, id), 0, 0);
-            sDescs[i]->mUnknown12 = id;
+            sDescs[i]->mId = id;
             Skeleton_80041930 *pSkeleton = fn_8008A84C(i);
             fn_80233EAC(&sObjects[i], sDescs[i], "CAPPORT", 0, pArchive, pSkeleton,
                         &pObject->mpUnknown512[i], 1);

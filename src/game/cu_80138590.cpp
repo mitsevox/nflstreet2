@@ -2,18 +2,10 @@
 #include "game/Record_800B15FC.h"
 #include "game/cu_80089330.h"
 #include "game/cu_80136B1C.h"
+#include "game/cu_80142BB4.h"
 #include "game/fn_802270D4.h"
 
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
-
-/* Record that fn_80142D98 fills: a vector the caller sets, the vector it
-   derives from it, and a float the caller sets. */
-struct Motion_80142D98 {
-    Vector_80039F5C mUnknown0;
-    Vector_80039F5C mUnknown12;
-    char mUnknown24[12];
-    float mUnknown36;
-};
 
 extern "C" {
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
@@ -21,9 +13,6 @@ void fn_800E9528(Object_80039F5C *p);
 void fn_8013A3BC(Object_80137ABC *pBall);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 int fn_8013BA88(Object_80137ABC *pBall, void *pData, int value);
-int fn_80142C5C(Vector_80039F5C *pA, Vector_80039F5C *pB, unsigned char *pHitA, unsigned char *pHitB);
-void fn_80142D98(Motion_80142D98 *pMotion, Vector_80039F5C *pDir, float value);
-void fn_80143150(Vector_80039F5C *pOut, Vector_80039F5C *pDir, float value);
 int fn_80178348(void);
 int fn_801C4E98(void *p, const char *pName);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
@@ -71,7 +60,7 @@ extern "C" void fn_80138690(Object_80137ABC *pBall, Vector_80039F5C *pCenter, Ve
     float x = pBall->mState.mUnknown54.mX;
     float y = pBall->mState.mUnknown54.mY;
     float z = pBall->mState.mUnknown54.mZ;
-    Motion_80142D98 motion;
+    Body_80142D98 motion;
     float length;
     float scale;
 
@@ -153,8 +142,8 @@ extern "C" void fn_80138880(Vector_80039F5C *pOut, Object_80039F5C *p, Vector_80
 extern "C" void fn_801389D4(Object_80137ABC *pBall, Object_80039F5C *p, Contact_80089330 *pContact, unsigned char sub,
                             Vector_80039F5C *pPos)
 {
-    Vector_80039F5C ball[2];
-    Vector_80039F5C target[2];
+    Segment_80142C5C ball;
+    Segment_80142C5C target;
     Vector_80039F5C dir;
     Vector_80039F5C span;
     unsigned char hitA;
@@ -162,19 +151,19 @@ extern "C" void fn_801389D4(Object_80137ABC *pBall, Object_80039F5C *p, Contact_
     int flag = 0;
     float value;
 
-    ball[0].mX = pBall->mState.mPos.mX;
-    ball[0].mY = pBall->mState.mPos.mY;
-    ball[0].mZ = pBall->mState.mPos.mZ;
-    ball[1].mX = pBall->mState.mUnknown28.mX;
-    ball[1].mY = pBall->mState.mUnknown28.mY;
-    ball[1].mZ = pBall->mState.mUnknown28.mZ;
-    target[0].mX = p->mpUnknown3092->mpUnknown32[sub].mUnknown0;
-    target[0].mY = p->mpUnknown3092->mpUnknown32[sub].mUnknown4;
-    target[0].mZ = p->mpUnknown3092->mpUnknown32[sub].mUnknown8;
-    target[1].mX = p->mpUnknown3092->mpUnknown36[sub].mUnknown0;
-    target[1].mY = p->mpUnknown3092->mpUnknown36[sub].mUnknown4;
-    target[1].mZ = p->mpUnknown3092->mpUnknown36[sub].mUnknown8;
-    if (fn_80142C5C(ball, target, &hitA, &hitB) && !fn_8013BA88(pBall, p, sub)) {
+    ball.mUnknown0.mX = pBall->mState.mPos.mX;
+    ball.mUnknown0.mY = pBall->mState.mPos.mY;
+    ball.mUnknown0.mZ = pBall->mState.mPos.mZ;
+    ball.mUnknown12.mX = pBall->mState.mUnknown28.mX;
+    ball.mUnknown12.mY = pBall->mState.mUnknown28.mY;
+    ball.mUnknown12.mZ = pBall->mState.mUnknown28.mZ;
+    target.mUnknown0.mX = p->mpUnknown3092->mpUnknown32[sub].mUnknown0;
+    target.mUnknown0.mY = p->mpUnknown3092->mpUnknown32[sub].mUnknown4;
+    target.mUnknown0.mZ = p->mpUnknown3092->mpUnknown32[sub].mUnknown8;
+    target.mUnknown12.mX = p->mpUnknown3092->mpUnknown36[sub].mUnknown0;
+    target.mUnknown12.mY = p->mpUnknown3092->mpUnknown36[sub].mUnknown4;
+    target.mUnknown12.mZ = p->mpUnknown3092->mpUnknown36[sub].mUnknown8;
+    if (fn_80142C5C(&ball, &target, &hitA, &hitB) && !fn_8013BA88(pBall, p, sub)) {
         fn_8009BD2C(p, &pBall->mState.mUnknownCC);
         fn_80138880(&dir, p, &pBall->mState.mUnknown28, sub);
         if (hitA) {
@@ -205,7 +194,7 @@ extern "C" void fn_801389D4(Object_80137ABC *pBall, Object_80039F5C *p, Contact_
             value = 0.08f;
             break;
         }
-        fn_802276B4(&span, &target[0], &target[1]);
+        fn_802276B4(&span, &target.mUnknown0, &target.mUnknown12);
         fn_8013A3BC(pBall);
         fn_80138690(pBall, &span, &dir, pContact, 1, value);
         if (fn_8013BA58(pBall, 0) == 4 && flag && p->mpState->mId == 28) {

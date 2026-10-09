@@ -173,16 +173,16 @@ void fn_80145D0C(void)
     lbl_803EB249 = 0;
 }
 
-void fn_80145D64(int type, int a, int b, int c)
+void fn_80145D64(int type, float (*pMatrix)[4][4], Object_80039F5C *pPlayer, int c)
 {
     Event_801459F0 *pEvent = (Event_801459F0 *)fn_801C6A20(lbl_803EB24C);
 
     if (pEvent != 0) {
         pEvent->mType = type;
         pEvent->mUnknown04 = 0;
-        pEvent->mUnknown08 = a;
+        pEvent->mUnknown08 = pMatrix;
         pEvent->mUnknown18 = 0;
-        pEvent->mUnknown0C = b;
+        pEvent->mUnknown0C = pPlayer;
         pEvent->mUnknown10 = 0;
         pEvent->mUnknown14 = c;
         pEvent->mUnknown1C = 21;
@@ -197,7 +197,7 @@ void fn_80145DE4(int type, Object_80137ABC *pBall)
     if (pEvent != 0) {
         pEvent->mType = type;
         pEvent->mUnknown04 = 0;
-        pEvent->mUnknown08 = (int)pBall->mpUnknown00 + 0x20;
+        pEvent->mUnknown08 = (float (*)[4][4])((char *)pBall->mpUnknown00 + 0x20);
         pEvent->mUnknown18 = 0;
         pEvent->mUnknown0C = 0;
         pEvent->mUnknown10 = pBall;

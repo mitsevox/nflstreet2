@@ -1,31 +1,18 @@
 #include "game/Object_8003DEC4.h"
 #include "game/Object_8007A334.h"
 #include "game/Object_80233EAC.h"
+#include "game/cu_8015D3EC.h"
 #include "game/cu_80047E28.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
 
 #include <string.h>
 
-/* One level of detail of a model description (0x50 bytes). A list of them
-   ends with an entry whose id is 0xFFFF. Ids above ROSTER_ID_BASE name
-   models of the roster archive and are stored there as id - ROSTER_ID_BASE. */
-struct ModelLod_802DF190 {
-    float mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    unsigned int mId;
-    int mUnknown10;
-    char mUnknown14[60];
-};
-
 /* Pending model load sorted by id by fn_8015E0B8. */
 struct QueueEntry_8031C098 {
     unsigned int mId;
     void *mpData;
 };
-
-typedef void (*Callback_8015F958)(Object_8003DEC4 *pPlayer);
 
 #define ROSTER_ID_BASE 50000U
 #define NO_MODEL 0xFFFF
@@ -49,10 +36,8 @@ void fn_801EFD2C(void *pArchive, int id, int a, void *pDest, int b, void (*pCall
 int fn_801EFF80(void *pArchive, int id, void *pDest);
 int fn_801F0A8C(void *pArchive, char *pName);
 int fn_801F0C50(void *pArchive, int id);
-void fn_801F0F18(int a);
+int fn_801F0F18(int a);
 int fn_801F1520(int value);
-void fn_80233EAC(Object_80233EAC *pObject, ModelLod_802DF190 *pLods, const char *pName, int a,
-                 void *pArchive, Skeleton_80041930 *pSkeleton, void **ppData, int c);
 
 extern char lbl_802EC028[];
 extern char lbl_802EC038[];
@@ -619,21 +604,21 @@ void fn_8015E230(void)
     lbl_803EB334--;
 }
 
-void fn_8015E240(int load, int aligned)
+void fn_8015E240(int load, int flag)
 {
     int size0;
     int size1;
-    int alignment;
+    int value;
 
     if (load) {
-        alignment = 0;
+        value = 0;
         size0 = fn_801F0C50(lbl_803ECACC, lbl_803EB340[0].mId);
         size1 = fn_801F0C50(lbl_803ECACC, lbl_803EB340[1].mId);
-        if (aligned) {
-            alignment = 4;
+        if (flag) {
+            value = 4;
         }
-        lbl_803ECAB4[0] = fn_801D2B7C(size0, alignment, 0);
-        lbl_803ECAB4[1] = fn_801D2B7C(size1, alignment, 0);
+        lbl_803ECAB4[0] = fn_801D2B7C(size0, value, 0);
+        lbl_803ECAB4[1] = fn_801D2B7C(size1, value, 0);
     }
     fn_80233EAC(&lbl_8031C1F0, lbl_803EB340, "PLYRMODEL", 0, lbl_803ECACC, 0, lbl_803ECAB4, 1);
 }
@@ -780,8 +765,8 @@ void fn_8015E73C(int id)
         fn_801F0F18(0);
         fn_8015FE4C();
     }
-    lbl_803EB338[1].mId = id + 1;
     lbl_803EB338[0].mId = id;
+    lbl_803EB338[1].mId = id + 1;
     size0 = fn_801F0C50(lbl_803ECAD8, id);
     size1 = fn_801F0C50(lbl_803ECAD8, lbl_803EB338[1].mId);
     if (lbl_803EB344 && lbl_803ECAC4[0] == 0 && lbl_803ECAC4[1] == 0) {
@@ -816,10 +801,10 @@ void fn_8015E908(int a)
     lbl_803ECAAC[1] = 0;
 }
 
-void fn_8015E950(int load, int aligned)
+void fn_8015E950(int load, int flag)
 {
     fn_801A4690(0);
-    fn_8015E240(load, aligned);
+    fn_8015E240(load, flag);
     fn_801A46BC();
 }
 
@@ -829,8 +814,8 @@ void fn_8015E994(void)
         fn_801D2BD0(lbl_803ECAB4[0]);
         fn_801D2BD0(lbl_803ECAB4[1]);
         lbl_803ECAB4[0] = 0;
-        lbl_802DFC30[0].mUnknown10 = 0;
         lbl_803ECAB4[1] = 0;
+        lbl_802DFC30[0].mUnknown10 = 0;
         lbl_802DFC30[1].mUnknown10 = 0;
     }
 }
@@ -1082,7 +1067,7 @@ void fn_8015F3FC(int a)
     unsigned int i;
 
     for (i = 0; i <= 1; i++) {
-        ((ModelLod_802DF190 *)lbl_8031C1C8.mUnknown0[4])[i].mUnknown10 = 0;
+        lbl_8031C1C8.mpUnknown10[i].mUnknown10 = 0;
         fn_801A13A8(&lbl_803EB338[i]);
         lbl_803EB338[i].mId = i + 9;
         fn_801A13B4(&lbl_803EB338[i], &lbl_802DFB40[i], lbl_803EB348);
@@ -1210,8 +1195,8 @@ void fn_8015F82C(int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
     lbl_803ECA70 = pPlayer;
     if (id != NO_MODEL) {
         lbl_803EB330 = 1;
-        lbl_803EB338[1].mId = id + 1;
         lbl_803EB338[0].mId = id;
+        lbl_803EB338[1].mId = id + 1;
         size0 = fn_801F0C50(lbl_803ECAD8, id);
         size1 = fn_801F0C50(lbl_803ECAD8, lbl_803EB338[1].mId);
         lbl_803ECAAC[0] = (char *)fn_801D2B7C(size0, 2, 0);
@@ -1221,7 +1206,8 @@ void fn_8015F82C(int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
         lbl_803EB330++;
         fn_801EFD2C(lbl_803ECAD8, lbl_803EB338[1].mId, 1, lbl_803ECAAC[1], 100, fn_8015E1F0, 0);
     } else {
-        lbl_803EB338[1].mId = lbl_803EB338[0].mId = id;
+        lbl_803EB338[0].mId = id;
+        lbl_803EB338[1].mId = id;
         pCallback(pPlayer);
     }
 }
