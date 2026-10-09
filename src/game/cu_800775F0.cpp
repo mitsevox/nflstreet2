@@ -103,8 +103,8 @@ void fn_80077890(Object_8007A334 *pObject, int value)
     fn_8007A334(pObject, 0x47504843, 0x44494843, 0, 0, value);
 }
 
-/* Reads the row of id from table 0x54415453 into pInfo; mUnknown0 is 0 when
-   fn_8018FF30 finds no row. */
+/* Reads a row for id (tags 0x444D4843 and 0x54415453 passed to
+   fn_8018FDEC) into pInfo; mUnknown0 is 0 when fn_8018FF30 finds no row. */
 void fn_800778CC(int id, Info_8007984C *pInfo)
 {
     Class_8018FD64 cursor;

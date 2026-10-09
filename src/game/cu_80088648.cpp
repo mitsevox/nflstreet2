@@ -1,16 +1,7 @@
 #include "game/Key_8007A334.h"
 #include "game/Object_8007A334.h"
+#include "game/Record_80088CE0.h"
 #include "game/cu_8002ACB4.h"
-
-/* Record filled by fn_80088CE0. */
-struct Record_80088CE0 {
-    signed char mIndex;
-    char mName[132];
-    int mUnknown136;
-    int mUnknown140;
-    unsigned int mUnknown144;
-    int mUnknown148;
-};
 
 /* State of the stream table lbl_802D6C24: the result word passed to the
    open operation. */

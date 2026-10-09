@@ -101,41 +101,41 @@ float fn_8005429C(Record_80054130 *pRecord)
     return result;
 }
 
-void fn_800542DC(Corners_800542DC *pCorners, float *pA, float *pB)
+void fn_800542DC(Points_800542DC *pPoints, float *pA, float *pB)
 {
     int found = 0;
     unsigned char i;
 
     for (i = 0; i <= 3; i++) {
-        if (pCorners->mPoint[i].mZ < 0.1f) {
+        if (pPoints->mPoint[i].mZ < 0.1f) {
             if (!found) {
                 found = 1;
-                pA[0] = pCorners->mPoint[i].mX;
-                pA[1] = pCorners->mPoint[i].mY;
+                pA[0] = pPoints->mPoint[i].mX;
+                pA[1] = pPoints->mPoint[i].mY;
             } else {
-                pB[0] = pCorners->mPoint[i].mX;
-                pB[1] = pCorners->mPoint[i].mY;
+                pB[0] = pPoints->mPoint[i].mX;
+                pB[1] = pPoints->mPoint[i].mY;
             }
         }
     }
 }
 
-float fn_8005434C(Corners_800542DC *pCorners)
+float fn_8005434C(Points_800542DC *pPoints)
 {
     float result = 0.0f;
     unsigned char i;
 
     for (i = 0; i <= 3; i++) {
-        if (pCorners->mPoint[i].mZ >= 0.1f) {
-            result = pCorners->mPoint[i].mZ;
+        if (pPoints->mPoint[i].mZ >= 0.1f) {
+            result = pPoints->mPoint[i].mZ;
         }
     }
     return result;
 }
 
-Entry_8005438C *fn_8005438C(int id)
+Object_8005438C *fn_8005438C(int id)
 {
-    Entry_8005438C *pEntry = 0;
+    Object_8005438C *pEntry = 0;
 
     if (id < lbl_803EA554->mUnknown152) {
         pEntry = &lbl_803EA554->mUnknown156[id];
