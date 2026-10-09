@@ -23,7 +23,7 @@ struct Entry_800257B4 {
 /* 40-byte block at +524 of Object_800785C0; fn_8007984C tests mUnknown0. */
 struct Info_8007984C {
     int mUnknown0;
-    char mUnknown4[12];
+    unsigned int mUnknown4[3];
     char *mUnknown10[3];
     int mUnknown1C;
     unsigned short mUnknown20[3];
@@ -38,22 +38,26 @@ struct Object_800785C0 {
     char mUnknownCB[203];
     unsigned short mUnknown196;
     unsigned char mUnknown198;
-    char mUnknown199[0x1A4 - 0x199];
+    char mUnknown199[3];
+    int mUnknown19C;
+    int mUnknown1A0;
     unsigned short mUnknown1A4;
-    char mUnknown1A6[2];
+    unsigned char mUnknown1A6;
+    unsigned char mUnknown1A7;
     int mUnknown1A8;
     int mUnknown1AC;
     int mUnknown1B0;
     int mUnknown1B4;
     int mUnknown1B8;
     int mUnknown1BC;
-    char mUnknown1C0[1];
+    unsigned char mUnknown1C0;
     unsigned char mUnknown1C1;
     char mUnknown1C2;
     unsigned char mUnknown1C3;
     Entry_800257B4 mUnknown1C4[4];
     Entry_80079864 mUnknown1F4[2];
-    char mUnknown204[4];
+    unsigned char mUnknown204;
+    char mUnknown205[3];
     int mUnknown208;
     Info_8007984C mUnknown20C;
 };
