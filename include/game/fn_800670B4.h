@@ -3,9 +3,15 @@
 
 #include "game/Object_8017886C.h"
 
-/* One of the seven 40-byte entries at Object_8006719C +0x84. */
+/* One 40-byte entry of the 11 x 7 table at Object_8006719C +0x84. */
 struct Entry_8006719C {
-    char mUnknown0[9];
+    unsigned char mUnknown0;
+    unsigned char mUnknown1;
+    unsigned char mUnknown2;
+    unsigned char mUnknown3;
+    char mUnknown4[2];
+    unsigned short mUnknown6;
+    unsigned char mUnknown8;
     unsigned char mUnknown9;
     unsigned char mUnknownA;
     unsigned char mUnknownB;
@@ -17,17 +23,27 @@ struct Entry_8006719C {
     int mUnknown24;
 };
 
-/* Filled by fn_8006719C and fn_8006723C, which clear all 0xCA8 bytes first. */
+/* One of the thirteen 8-byte named entries at Object_8006719C +0x1C. */
+struct Name_8006719C {
+    char mName[6];
+    unsigned short mId;
+};
+
+/* Filled by fn_8006719C and fn_8006723C, which clear all 0xCA8 bytes first.
+   Row 0 of mUnknown84 is the one read by most callers; fn_80163E94 and
+   fn_80164058 swap another row's entry into it. */
 struct Object_8006719C {
     int mUnknown0;
     int mUnknown4;
-    char mUnknown8[7];
+    char mUnknown8[6];
+    unsigned char mUnknownE;
     unsigned char mUnknownF;
     char mUnknown10[4];
     unsigned int mUnknown14;
-    char mUnknown18[0x6C];
-    Entry_8006719C mUnknown84[7];
-    char mUnknown19C[0xB0C];
+    char mUnknown18[4];
+    Name_8006719C mUnknown1C[13];
+    Entry_8006719C mUnknown84[11][7];
+    char mUnknownC8C[0x1C];
 };
 
 /* Filled by fn_800670B4, which clears all 0xCE4 bytes first. */

@@ -1610,7 +1610,7 @@ extern "C" Point_8017886C fn_800F97A8(Object_80039F5C *p) {
 
     base = fn_80177FFC(p->mIdBytes[2]);
     pTeam = fn_80168708(p->mIdBytes[2]);
-    pEntry = &pTeam->mUnknown8.mUnknown84[p->mIdBytes[1]];
+    pEntry = &pTeam->mUnknown8.mUnknown84[0][p->mIdBytes[1]];
     point.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
     point.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
     fn_80227638(&point, &point, &base);
@@ -2308,7 +2308,7 @@ extern "C" int fn_800FCA78(Object_80039F5C *p) {
 
     ball = fn_80177FE0();
     pTeam = fn_80168708(p->mIdBytes[2]);
-    pEntry = &pTeam->mUnknown8.mUnknown84[p->mIdBytes[1]];
+    pEntry = &pTeam->mUnknown8.mUnknown84[0][p->mIdBytes[1]];
     pOffset = pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10;
     target.mX = pOffset->mX + ball.mX;
     target.mY = pOffset->mY + ball.mY;
@@ -2617,7 +2617,7 @@ extern "C" void fn_800FD708(State_80039F5C *pState)
 extern "C" int fn_800FD7D0(Object_80039F5C *p)
 {
     Object_800670B4 *pTeam = fn_80168708(p->mIdBytes[2]);
-    Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[p->mIdBytes[1]];
+    Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[0][p->mIdBytes[1]];
 
     return pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20;
 }

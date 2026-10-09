@@ -7762,6 +7762,19 @@
       ]
     },
     {
+      "source": "src/game/cu_80163E94.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80163E94-0x80164568 (src/game/cu_80163E94.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80163E94",
+          "end": "0x80164568"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80190208.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80190208-0x80190A7C and its data, declaration and source-form rows.",
