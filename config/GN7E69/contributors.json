@@ -11129,7 +11129,7 @@
         "introduced_blob": "53bdc5b5de576cab0607b4c867cf008073f0c14f",
         "original_commit": "58b140374ae59b2135fdcc295d18496e1b76a26c",
         "original_blob": "ae99ea535a89734d6d26224cbeb48a8736a0f218",
-        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. OSPriv\u2192__os.h and original external exception bridge; retain compiled genuine PeriodicAlarm unassigned.",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. OSPriv→__os.h and original external exception bridge; retain compiled genuine PeriodicAlarm unassigned.",
         "pull_request": 567,
         "merged_via": 573
       }
@@ -14150,6 +14150,42 @@
         "original_commit": "d094901f80adae4f68584569e53da31f267e0688",
         "original_blob": "a5d46b95706e71cefef625e6b00b80538e9c5542",
         "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR698 independent delta review and CI."
+      }
+    },
+    {
+      "source": "src/game/cu_80080F20.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800808F8",
+        "0x80080920",
+        "0x80080948",
+        "0x80080970",
+        "0x80080998",
+        "0x800809C4",
+        "0x800809FC",
+        "0x80080A34",
+        "0x80080A68",
+        "0x80080A9C",
+        "0x80080B08",
+        "0x80080BEC",
+        "0x80080CB0",
+        "0x80080CD8",
+        "0x80080D10",
+        "0x80080D38",
+        "0x80080E20",
+        "0x80080E48",
+        "0x80080E70",
+        "0x80080E98",
+        "0x80080ECC",
+        "0x80080EF4"
+      ],
+      "provenance": {
+        "pull_request": 703,
+        "merged_via": 703,
+        "commit": "43ad7d7e461e8fb9a0f6863cc2ac7855a6ba2bd8",
+        "introduced_blob": "b9d14518c291526add91ceb7625a01ef6525c83d"
       }
     }
   ],
