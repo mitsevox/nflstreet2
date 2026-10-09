@@ -2,6 +2,7 @@
    saved state and pass a hit on to the entries of its node list whose names
    match, and a chain of "RIGHT"/"LEFT" linked objects that start their
    animations in turn. */
+#include "game/Node_80041904.h"
 #include "game/Object_80040818.h"
 
 /* The two linked objects at Object_80041904 +420 of a chained object. */
@@ -42,8 +43,8 @@ int fn_80051E14(Object_80041904 *pObject, Object_80040818 *pItem, int mode)
     Extra_8004149C *pExtra = pObject->mUnknown428;
 
     if (mode == 0) {
-        if (pObject->mUnknown196.mValue != -1) {
-            StartAnim(pObject, pObject->mUnknown196.mParts.mKey, 1.0f);
+        if (pObject->mUnknown196 != -1) {
+            StartAnim(pObject, pObject->mUnknown196, 1.0f);
         }
     } else if (mode == 2) {
         pObject->mUnknown8 = pObject->mUnknown112;
@@ -55,9 +56,9 @@ int fn_80051E14(Object_80041904 *pObject, Object_80040818 *pItem, int mode)
         pObject->mUnknown108 = pObject->mUnknown136;
         pObject->mUnknown32 = pObject->mUnknown140;
         pExtra->mUnknown56 = pObject->mUnknown140;
-        if (pObject->mUnknown196.mValue != -1 &&
-            fn_801BE648(pObject->mUnknown428->mUnknown1300) != pObject->mUnknown196.mValue) {
-            StartAnim(pObject, pObject->mUnknown196.mParts.mKey, 1.0f);
+        if (pObject->mUnknown196 != -1 &&
+            fn_801BE648(pObject->mUnknown428->mUnknown1300) != pObject->mUnknown196) {
+            StartAnim(pObject, pObject->mUnknown196, 1.0f);
         }
         fn_8004E090(pItem, 0, 0);
         pItem->mUnknown232_31 = 1;
@@ -73,16 +74,16 @@ int fn_80051E14(Object_80041904 *pObject, Object_80040818 *pItem, int mode)
             pExtra->mUnknown1708 &= ~1;
         }
         if (pObject->mUnknown380 &&
-            fn_801BE648(pObject->mUnknown428->mUnknown1300) == pObject->mUnknown196.mValue) {
+            fn_801BE648(pObject->mUnknown428->mUnknown1300) == pObject->mUnknown196) {
             if (pObject->mUnknown144 != -1) {
                 fn_800411C8(fn_8004117C(pObject->mUnknown144));
             } else {
                 fn_800411C8(pItem);
             }
             Vector_80039F5C pos;
-            pos.mX = pObject->mUnknown360;
-            pos.mY = pObject->mUnknown364;
-            pos.mZ = pObject->mUnknown368;
+            pos.mX = pObject->mUnknown360.mX;
+            pos.mY = pObject->mUnknown360.mY;
+            pos.mZ = pObject->mUnknown360.mZ;
             if (fn_801784C4()) {
                 pos.mX = -pos.mX;
                 pos.mY = -pos.mY;
@@ -92,8 +93,8 @@ int fn_80051E14(Object_80041904 *pObject, Object_80040818 *pItem, int mode)
             float value = pObject->mUnknown372;
             for (; pNode; pNode = pNode->mpNext) {
                 if (fn_801C2FE4(pNode->mName, pObject->mUnknown316) == 0) {
-                    if (pNode->mUnknown64.mValue != -1) {
-                        StartAnim(pObject, pNode->mUnknown64.mParts.mKey, 1.0f);
+                    if (pNode->mId != -1) {
+                        StartAnim(pObject, pNode->mId, 1.0f);
                     }
                     if (pNode->mUnknown104 != -1 && pNode->mUnknown108 != -1) {
                         fn_8004E090(pItem, pNode->mUnknown104, pNode->mUnknown108);
@@ -122,19 +123,19 @@ void fn_80052130(Object_80040818 *pItem, Node_80041904 *pNode)
     if (fn_801C310C(name, "RIGHT")) {
         if (pPair->mpRight) {
             pExtra->mUnknown1704 = pItem->mUnknown472->mUnknown427;
-            StartAnim(pItem->mUnknown472, pNode->mUnknown64.mParts.mKey, 1.0f);
+            StartAnim(pItem->mUnknown472, pNode->mId, 1.0f);
             if (pPair->mpRight) {
                 for (Node_80041904 *pOther = pPair->mpRight->mUnknown472->mUnknown312; pOther;
                      pOther = pOther->mpNext) {
                     fn_801C2EF0(name, pOther->mName, 64);
                     fn_801C32CC(name);
                     if (fn_801C310C(name, "LEFT")) {
-                        if (pOther->mUnknown64.mValue != -1 &&
+                        if (pOther->mId != -1 &&
                             fn_801BE648(pPair->mpRight->mUnknown472->mUnknown428->mUnknown1300) !=
-                                pOther->mUnknown64.mValue) {
+                                pOther->mId) {
                             Object_80041904 *pObject = pPair->mpRight->mUnknown472;
                             pObject->mUnknown428->mUnknown1704 = pObject->mUnknown427;
-                            StartAnim(pPair->mpRight->mUnknown472, pOther->mUnknown64.mParts.mKey, 1.0f);
+                            StartAnim(pPair->mpRight->mUnknown472, pOther->mId, 1.0f);
                             fn_80052130(pPair->mpRight, pOther);
                         }
                         break;
@@ -147,7 +148,7 @@ void fn_80052130(Object_80040818 *pItem, Node_80041904 *pNode)
         }
     } else if (pPair->mpLeft) {
         pExtra->mUnknown1704 = pItem->mUnknown472->mUnknown427;
-        StartAnim(pItem->mUnknown472, pNode->mUnknown64.mParts.mKey, 1.0f);
+        StartAnim(pItem->mUnknown472, pNode->mId, 1.0f);
         if (pPair->mpRight) {
             pPair->mpRight->mUnknown472->mUnknown428->mUnknown1708 |= 1;
         }
@@ -157,12 +158,12 @@ void fn_80052130(Object_80040818 *pItem, Node_80041904 *pNode)
                 fn_801C2EF0(name, pOther->mName, 64);
                 fn_801C32CC(name);
                 if (fn_801C310C(name, "RIGHT")) {
-                    if (pOther->mUnknown64.mValue != -1 &&
+                    if (pOther->mId != -1 &&
                         fn_801BE648(pPair->mpLeft->mUnknown472->mUnknown428->mUnknown1300) !=
-                            pOther->mUnknown64.mValue) {
+                            pOther->mId) {
                         Object_80041904 *pObject = pPair->mpLeft->mUnknown472;
                         pObject->mUnknown428->mUnknown1704 = pObject->mUnknown427;
-                        StartAnim(pPair->mpLeft->mUnknown472, pOther->mUnknown64.mParts.mKey, 1.0f);
+                        StartAnim(pPair->mpLeft->mUnknown472, pOther->mId, 1.0f);
                         fn_80052130(pPair->mpLeft, pOther);
                     }
                     break;
@@ -177,24 +178,24 @@ int fn_80052440(Object_80041904 *pObject, Object_80040818 *pItem, int mode)
     Extra_8004149C *pExtra = pObject->mUnknown428;
 
     if (mode == 0) {
-        if (pObject->mUnknown196.mValue != -1) {
+        if (pObject->mUnknown196 != -1) {
             pExtra->mUnknown1704 = 1;
-            StartAnim(pObject, pObject->mUnknown196.mParts.mKey, 1.0f);
+            StartAnim(pObject, pObject->mUnknown196, 1.0f);
         }
     } else {
         if (pExtra->mUnknown1708 & 1) {
-            if (pObject->mUnknown196.mValue != -1) {
+            if (pObject->mUnknown196 != -1) {
                 pExtra->mUnknown1704 = 1;
-                StartAnim(pObject, pObject->mUnknown196.mParts.mKey, 1.0f);
+                StartAnim(pObject, pObject->mUnknown196, 1.0f);
                 Extra_8004149C *pAnim = pObject->mUnknown428;
                 fn_801BE67C(pAnim->mUnknown1300, pAnim->mUnknown48, pAnim->mUnknown60, pObject);
             }
             pExtra->mUnknown1708 &= ~1;
         }
         if (pObject->mUnknown380) {
-            float x = pObject->mUnknown360;
-            float y = pObject->mUnknown364;
-            float z = pObject->mUnknown368;
+            float x = pObject->mUnknown360.mX;
+            float y = pObject->mUnknown360.mY;
+            float z = pObject->mUnknown360.mZ;
             pObject->mUnknown380 = 0;
             Vector_80039F5C pos;
             pos.mX = x;
@@ -208,8 +209,8 @@ int fn_80052440(Object_80041904 *pObject, Object_80040818 *pItem, int mode)
             for (Node_80041904 *pNode = pObject->mUnknown312; pNode; pNode = pNode->mpNext) {
                 if (fn_801C2FE4(pNode->mName, pObject->mUnknown316) == 0) {
                     if (pObject->mUnknown381 == 0) {
-                        if (pNode->mUnknown64.mValue != -1 &&
-                            fn_801BE648(pObject->mUnknown428->mUnknown1300) == pObject->mUnknown196.mValue) {
+                        if (pNode->mId != -1 &&
+                            fn_801BE648(pObject->mUnknown428->mUnknown1300) == pObject->mUnknown196) {
                             fn_80052130(pItem, pNode);
                         }
                         fn_8004CBEC(pNode->mUnknown128, pObject->mUnknown372, pObject, pItem);

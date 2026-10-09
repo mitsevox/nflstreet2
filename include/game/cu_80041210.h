@@ -1,6 +1,8 @@
 #ifndef GAME_CU_80041210_H
 #define GAME_CU_80041210_H
 
+#include "game/Object_80039F5C.h"
+
 struct Extra_8004149C {
     char mUnknown0[32];
     unsigned char mUnknown32;
@@ -8,43 +10,35 @@ struct Extra_8004149C {
     char mUnknown34[2];
     char mUnknown36[4];
     char mUnknown40[8];
-    char mUnknown48[4];
+    char mUnknown48[2];
+    unsigned short mUnknown50;
     unsigned short mUnknown52;
     char mUnknown54[2];
     int mUnknown56;
     char mUnknown60[1240];
     char mUnknown1300[404];
     unsigned char mUnknown1704;
-    char mUnknown1705[3];
+    unsigned char mUnknown1705;
+    unsigned char mUnknown1706;
+    unsigned char mUnknown1707;
     int mUnknown1708;
 };
 
 struct Object_80040818;
 struct Object_80041904;
-
-/* Animation word: -1 for none; its low halfword is the key passed to
-   fn_801BE068 and the word is compared with fn_801BE648's result. */
-union AnimId_80041904 {
-    int mValue;
-    struct {
-        short mUnknown0;
-        unsigned short mKey;
-    } mParts;
+struct Node_80041904;
+/* Timed cycle at +200 that fn_8004B354 advances: an active flag, two
+   durations, the current step, the elapsed time and the phase. */
+struct Cycle_80041904 {
+    unsigned char mActive;
+    char mUnknown1[3];
+    float mUnknown4;
+    float mUnknown8;
+    unsigned int mStep;
+    float mTime;
+    int mPhase;
 };
 
-/* Entry of the list at Object_80041904 +312, matched by its name. */
-struct Node_80041904 {
-    char mName[64];
-    AnimId_80041904 mUnknown64;
-    char mUnknown68[24];
-    unsigned short mUnknown92;
-    char mUnknown94[10];
-    int mUnknown104;
-    int mUnknown108;
-    char mUnknown112[16];
-    void *mUnknown128;
-    Node_80041904 *mpNext;
-};
 typedef void (*Callback_80041904)(Object_80041904 *pObject, int entry, int mode);
 
 struct Object_80041904 {
@@ -74,19 +68,27 @@ struct Object_80041904 {
     Object_80040818 *mUnknown152[8];
     Callback_80041904 mUnknown184;
     int mUnknown188;
-    char mUnknown192[4];
-    AnimId_80041904 mUnknown196;
-    char mUnknown200[112];
+    void (*mUnknown192)(Object_80040818 *pOwner);
+    int mUnknown196;
+    Cycle_80041904 mUnknown200;
+    char mUnknown224[84];
+    unsigned short mUnknown308;
+    char mUnknown310[2];
     Node_80041904 *mUnknown312;
-    char mUnknown316[44];
-    float mUnknown360;
-    float mUnknown364;
-    float mUnknown368;
+    char mUnknown316[32];
+    float mUnknown348;
+    float mUnknown352;
+    char mUnknown356[4];
+    Vector_80039F5C mUnknown360;
     float mUnknown372;
     int mUnknown376;
     unsigned char mUnknown380;
     unsigned char mUnknown381;
-    char mUnknown382[38];
+    unsigned char mUnknown382;
+    char mUnknown383[25];
+    float mUnknown408;
+    float mUnknown412;
+    char mUnknown416[4];
     void *mUnknown420;
     char mUnknown424[3];
     unsigned char mUnknown427;
