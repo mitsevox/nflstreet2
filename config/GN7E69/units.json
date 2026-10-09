@@ -274,14 +274,6 @@
       "address": "0x801D3BD0",
       "evidence": "evidence.tsv external row for 0x801D3BD0 (__nw__FUii); descriptive name."
     },
-    "__14Class_8008B284": {
-      "address": "0x8008B284",
-      "evidence": "evidence.tsv external row for 0x8008B284 (__14Class_8008B284); descriptive name."
-    },
-    "_._14Class_8008B284": {
-      "address": "0x8008B2E8",
-      "evidence": "evidence.tsv external row for 0x8008B2E8 (_._14Class_8008B284); descriptive name."
-    },
     "__pure_virtual": {
       "address": "0x8025F088",
       "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
@@ -6284,6 +6276,19 @@
           "placement": ".data5",
           "start": "0x803EA800",
           "end": "0x803EA808"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8008AC40.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8008AC40-0x8008B32C (src/game/cu_8008AC40.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8008AC40",
+          "end": "0x8008B32C"
         }
       ]
     },
