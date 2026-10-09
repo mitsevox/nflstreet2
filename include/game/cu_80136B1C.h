@@ -44,7 +44,10 @@ struct State_80137ABC {
     int mUnknownC8;
     int mUnknownCC;
     int mUnknownD0;
-    char mUnknownD4[16];
+    int mUnknownD4;
+    int mUnknownD8;
+    float mUnknownDC;
+    float mUnknownE0;
     int mUnknownE4;
     float mUnknownE8;
     float mUnknownEC;
