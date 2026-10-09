@@ -13615,6 +13615,37 @@
       ]
     },
     {
+      "source": "src/game/cu_800850E8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800850E8-0x80085148 (src/game/cu_800850E8.cpp), its individual exact function extents and its .rodata data row. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800850E8",
+          "end": "0x80085148"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80293D48",
+          "end": "0x80293D88"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800850E8",
+          "start": "0x800850E8",
+          "end": "0x80085118"
+        },
+        {
+          "symbol": "fn_80085118",
+          "start": "0x80085118",
+          "end": "0x80085148"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80146F40.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80146F40-0x80147908 (src/game/cu_80146F40.cpp) and its data, type, compiler and source-form rows. All bodies are comparisons; original bytes remain linked.",
