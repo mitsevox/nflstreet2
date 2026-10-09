@@ -4532,6 +4532,46 @@
       ]
     },
     {
+      "source": "src/game/cu_8019D2EC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019D2EC-0x8019D83C, source-form, name and Record_8019D8AC field rows. Code-only unlinked reconstruction; 0x8019D514 remains partial, original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019D2EC",
+          "end": "0x8019D83C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8019D2EC",
+          "start": "0x8019D2EC",
+          "end": "0x8019D3B8"
+        },
+        {
+          "symbol": "fn_8019D3B8",
+          "start": "0x8019D3B8",
+          "end": "0x8019D4EC"
+        },
+        {
+          "symbol": "fn_8019D4EC",
+          "start": "0x8019D4EC",
+          "end": "0x8019D514"
+        },
+        {
+          "symbol": "fn_8019D514",
+          "start": "0x8019D514",
+          "end": "0x8019D800"
+        },
+        {
+          "symbol": "fn_8019D800",
+          "start": "0x8019D800",
+          "end": "0x8019D83C"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8019D83C.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8019D83C-0x8019D994; two target function rows. Code-only unlinked reconstruction, original table storage retained.",
