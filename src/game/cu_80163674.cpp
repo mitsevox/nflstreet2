@@ -1,50 +1,6 @@
 #include "engine/cu_80227F14.h"
 #include "game/cu_801882B4.h"
-#include "game/Object_80039F5C.h"
-
-struct Desc_80163788 {
-    short mUnknown00;
-    short mUnknown02;
-    Vector_80039F5C mUnknown04;
-    Vector_80039F5C mUnknown10;
-    Vector_80039F5C mUnknown1C;
-    Vector_80039F5C mUnknown28;
-};
-
-struct State_80163AD8 {
-    unsigned char mUnknown00[88];
-    void *mpUnknown58;
-};
-
-struct Object_80163788 {
-    unsigned char mUnknown00[4];
-    float mUnknown04;
-    float mUnknown08;
-    float mUnknown0C;
-    unsigned char mUnknown10[4];
-    int mUnknown14;
-    unsigned char mUnknown18[48];
-    State_80163AD8 mUnknown48;
-    unsigned char mUnknownA4[244];
-    unsigned int mUnknown198;
-    Vector_80039F5C mUnknown19C;
-    int mUnknown1A8;
-    int mUnknown1AC;
-    int mUnknown1B0;
-    Vector_80039F5C mUnknown1B4;
-    Vector_80039F5C mUnknown1C0;
-    short mUnknown1CC;
-    short mUnknown1CE;
-    float mUnknown1D0;
-    unsigned char mUnknown1D4;
-    unsigned char mUnknown1D5[3];
-    short mUnknown1D8;
-    short mUnknown1DA;
-    short mUnknown1DC;
-    unsigned short mUnknown1DE;
-    unsigned char mUnknown1E0[4];
-    int mUnknown1E4;
-};
+#include "game/cu_80163674.h"
 
 extern "C" {
 Cache_80188688 *lbl_803EB3A4 = 0;

@@ -3,13 +3,13 @@
 #include "game/fn_802270D4.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
+#include "game/fn_800DF134.h"
 
 extern "C" {
 extern float lbl_803EA2C4;
 
 void fn_800B26D0(Object_800B26B0 *pMotion, int a, int b, float c);
 void fn_800B2D88(Object_800B26B0 *pMotion, float scale);
-void fn_800DF134(Object_80039F5C *p, Point_8017886C offset, int angle, unsigned short key);
 void fn_8016C264(Object_80039F5C *pObject);
 void fn_8016C70C(Object_80039F5C *pObject);
 float fn_801CFB18(int angle);

@@ -3,11 +3,7 @@
 #include "game/GameVpt.h"
 #include "game/InGame.h"
 #include "game/Object_80039F5C.h"
-
-/* 0xC0-byte block set up by 0x80235588 and released by 0x802355E4. */
-struct Object_80235588 {
-    char mUnknown0[0xC0];
-};
+#include "game/Instance_801614D0.h"
 
 /* One 20-byte entry of the .data table 0x802F394C, returned by
    fn_801A566C and read back through 0x800A34EC. */
@@ -19,16 +15,6 @@ struct Entry_802F394C {
     unsigned int mUnknown10;
 };
 
-/* Item of the type-13 pool of src/game/cu_801614D0.cpp. */
-struct Instance_801614D0 {
-    char mUnknown0[4];
-    Vector_80039F5C mUnknown4;
-    char mUnknown10[4];
-    int mUnknown14;
-    char mUnknown18[0x30];
-    Object_80235588 mUnknown48;
-    Object_80235588 mUnknown108;
-};
 
 /* Item of the type-6 pool of src/game/cu_80046340.cpp. */
 struct Object_80046340 {
@@ -136,7 +122,7 @@ void fn_801A553C(Instance_801614D0 *pInstance)
     fn_80236EC0(0);
 }
 
-void fn_801A5568(Instance_801614D0 *pInstance)
+void fn_801A5568(Instance_801614D0 *pInstance, int unused)
 {
     int handle = fn_801C657C();
 

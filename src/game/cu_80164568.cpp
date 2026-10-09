@@ -6,20 +6,10 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include "game/fn_800670B4.h"
-
-/* Record fn_80163E94 returns; the entries are selected by the side flag. */
-struct Record_80163E94 {
-    char mUnknown0[9];
-    unsigned char mUnknown9[2];
-    char mUnknownB[5];
-    Point_8017886C mUnknown10[2];
-    int mUnknown20[2];
-};
+#include "game/fn_80163E94.h"
+#include "game/cu_80164568.h"
 
 extern "C" {
-Record_80163E94 *fn_80163E94(Object_800670B4 *pObject, unsigned int index, void *pArg);
-void fn_80164568(Object_80039F5C *p, Record_80163E94 *pRecord, int side);
-void fn_801644A0(Object_80039F5C *p);
 void fn_801647A0(Object_800670B4 *pObject, int team);
 void fn_80164A40(void);
 Object_800670B4 *fn_80168708(int team);
@@ -39,13 +29,12 @@ int fn_80178320(void);
 int fn_801CFFD0(int a, int b);
 float fn_80237260(int stream);
 
-extern char lbl_803EB3B0[];
 }
 
 static const char *lbl_8031D360[4];
 
 extern "C" {
-void fn_80164568(Object_80039F5C *p, Record_80163E94 *pRecord, int side)
+void fn_80164568(Object_80039F5C *p, Entry_8006719C *pEntry, int side)
 {
     Message_800F01CC msg;
     Point_8017886C delta;
@@ -54,7 +43,7 @@ void fn_80164568(Object_80039F5C *p, Record_80163E94 *pRecord, int side)
         p->mFlags &= ~0x40000;
         fn_800EFEF8(0, p->mpState, p);
         delta = fn_80177FFC(p->mIdBytes[2]);
-        fn_80227638(&delta, side == 1 ? &pRecord->mUnknown10[1] : &pRecord->mUnknown10[0], &delta);
+        fn_80227638(&delta, side == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10, &delta);
         fn_80227690(&delta, &p->mMotion.mPos, &delta);
         if (fn_802270A4(&delta) > 0.5f) {
             fn_801C1F94(&msg, 0, 4);
@@ -62,15 +51,15 @@ void fn_80164568(Object_80039F5C *p, Record_80163E94 *pRecord, int side)
             fn_800F03D8(0, p->mpState, &msg, p);
             fn_801C1F94(&msg, 0, 4);
             msg.mId = 6;
-            msg.mUnknown1[0] = (side == 1 ? pRecord->mUnknown20[1] : pRecord->mUnknown20[0]) >> 16;
+            msg.mUnknown1[0] = (side == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20) >> 16;
             msg.mUnknown1[1] = 1;
             msg.mUnknown1[2] = 20;
             fn_800F03D8(0, p->mpState, &msg, p);
-        } else if (fn_801CFFD0(side == 1 ? pRecord->mUnknown20[1] : pRecord->mUnknown20[0],
+        } else if (fn_801CFFD0(side == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20,
                        p->mMotion.mFacing) > 0xAAAAA) {
             fn_801C1F94(&msg, 0, 4);
             msg.mId = 6;
-            msg.mUnknown1[0] = (side == 1 ? pRecord->mUnknown20[1] : pRecord->mUnknown20[0]) >> 16;
+            msg.mUnknown1[0] = (side == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20) >> 16;
             msg.mUnknown1[1] = 1;
             msg.mUnknown1[2] = 20;
             fn_800F03D8(0, p->mpState, &msg, p);
@@ -78,7 +67,7 @@ void fn_80164568(Object_80039F5C *p, Record_80163E94 *pRecord, int side)
         fn_801644A0(p);
         fn_801C1F94(&msg, 0, 4);
         msg.mId = 9;
-        msg.mUnknown1[0] = side == 1 ? pRecord->mUnknown9[1] : pRecord->mUnknown9[0];
+        msg.mUnknown1[0] = side == 1 ? pEntry->mUnknownA : pEntry->mUnknown9;
         msg.mUnknown1[1] = 0;
         msg.mUnknown1[2] = 146;
         fn_800F03D8(0, p->mpState, &msg, p);
@@ -92,7 +81,7 @@ void fn_801647A0(Object_800670B4 *pObject, int team)
 {
 }
 
-void fn_801647A4(Object_800670B4 *pObject, int team, void *pArg)
+void fn_801647A4(Object_800670B4 *pObject, int team, const char **ppNames)
 {
     unsigned char i;
     unsigned int count;
@@ -105,7 +94,7 @@ void fn_801647A4(Object_800670B4 *pObject, int team, void *pArg)
     fn_8003977C(team);
     count = fn_80178D70(team);
     for (i = 0; i < count; i++) {
-        Record_80163E94 *pRecord = fn_80163E94(pObject, i, pArg);
+        Entry_8006719C *pEntry = fn_80163E94(pObject, i, ppNames);
         Object_80039F5C *p = fn_80039F5C(team, i);
 
         p->mFlags = (p->mFlags & ~0x4000) | 0x10;
@@ -122,8 +111,8 @@ void fn_801647A4(Object_800670B4 *pObject, int team, void *pArg)
         fn_801644A0(p);
         fn_801C1F94(&msg, 0, 4);
         msg.mId = 87;
-        msg.mUnknown1[0] = pObject->mUnknown8.mUnknownF == 1 ? pRecord->mUnknown9[1] : pRecord->mUnknown9[0];
-        msg.mUnknown1[1] = (pObject->mUnknown8.mUnknownF == 1 ? pRecord->mUnknown20[1] : pRecord->mUnknown20[0]) >> 16;
+        msg.mUnknown1[0] = pObject->mUnknown8.mUnknownF == 1 ? pEntry->mUnknownA : pEntry->mUnknown9;
+        msg.mUnknown1[1] = (pObject->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20) >> 16;
         fn_800F03D8(0, p->mpState, &msg, p);
     }
 }
@@ -139,7 +128,7 @@ void fn_80164940(int team)
     count = fn_80178D70(team);
     for (i = 0; i < count; i++) {
         int update = 1;
-        Record_80163E94 *pRecord = fn_80163E94(pObject, i, lbl_803EB3B0);
+        Entry_8006719C *pEntry = fn_80163E94(pObject, i, lbl_803EB3B0);
         Object_80039F5C *p = fn_80039F5C(team, i);
 
         if (team != home) {
@@ -155,7 +144,7 @@ void fn_80164940(int team)
             p->mFlags &= ~0x40000;
             p->mFlags &= ~0x4000;
             p->mFlags |= 0x10;
-            fn_80164568(p, pRecord, pObject->mUnknown8.mUnknownF);
+            fn_80164568(p, pEntry, pObject->mUnknown8.mUnknownF);
         }
     }
 }

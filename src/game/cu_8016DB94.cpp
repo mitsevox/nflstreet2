@@ -17,6 +17,8 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_802372EC.h"
+#include "game/cu_80164568.h"
+#include "game/fn_80163E94.h"
 
 /* Block returned by fn_801787D0, as declared in src/game/cu_80176F18.cpp. */
 struct Info_ScrmState {
@@ -56,7 +58,6 @@ struct Block_8016F7F8 {
 };
 
 extern "C" {
-extern char lbl_803EB3B0[];
 extern float lbl_803ECB08;
 
 int fn_800254E8(Object_800785C0 *pRecord, int a, int b);
@@ -110,8 +111,6 @@ Camera_8013F738 *fn_8013FA04(int index);
 void fn_8013FA8C(int a);
 int fn_801486A0(void);
 void fn_80162780(int a, int b);
-Object_80039F5C *fn_8016444C(Object_800670B4 *pObject);
-void fn_801647A4(Object_800670B4 *pObject, int team, void *pArg);
 void fn_80164C4C(Object_800670B4 *pObject, Record_80067338 *pRecord, int team, int a);
 int fn_801650BC(Record_80067338 *pRecord);
 Object_800670B4 *fn_80168708(int team);

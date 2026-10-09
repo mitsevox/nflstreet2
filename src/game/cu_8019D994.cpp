@@ -8,7 +8,7 @@ extern int lbl_802F2708[];
 void fn_8019DF38(int *output, short *input, int index, Record_8019D8AC *context);
 }
 
-extern "C" void fn_8019D994(State_8019D994 *state, Input_8019D994 *input, int mode, Record_8019D8AC *context, float scale)
+extern "C" void fn_8019D994(State_8019D994 *state, Input_8019D994 *input, int mode, Record_8019D8AC *context, float scale, int unused)
 {
     Frame_8019D3B8 frame;
     int special = input->flags & 4;
@@ -108,7 +108,7 @@ extern "C" void fn_8019DF38(int *output, short *input, int index, Record_8019D8A
     }
 }
 
-extern "C" void fn_8019E00C(State_8019D994 *state, Input_8019D994 *input, int mode, Record_8019D8AC *context, float scale)
+extern "C" void fn_8019E00C(State_8019D994 *state, Input_8019D994 *input, int mode, Record_8019D8AC *context, float scale, int unused)
 {
     Frame_8019D3B8 frame;
     int special = input->flags & 4;

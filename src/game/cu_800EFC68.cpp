@@ -5082,7 +5082,6 @@ int fn_80165098(Record_80067338 *pRecord);
 int fn_801650BC(Record_80067338 *pRecord);
 int fn_801650DC(Record_80067338 *pRecord);
 int fn_801650FC(Record_80067338 *pRecord);
-void fn_8016444C(Object_800670B4 *p);
 void fn_800A5A88(void *p);
 void fn_801F51DC(int a, void *pBase, int count, int size, int (*pCompare)(void *, void *),
                  void (*pSwap)(void *, void *), int b, int c);
