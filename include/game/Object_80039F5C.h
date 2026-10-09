@@ -2,6 +2,7 @@
 #define GAME_OBJECT_80039F5C_H
 
 #include "game/Object_800D81C8.h"
+#include "game/fn_80054138.h"
 
 /* The player object returned by fn_80039F5C, with the blocks it contains or
    points to. */
@@ -35,7 +36,7 @@ struct Block_80170E64 {
     char mUnknown104[4];
     Quat_801EB488 mUnknown108;
     char mUnknown124[536];
-    int mUnknown660;
+    Area_80054138 *mUnknown660;
     char mUnknown664[12];
     Object_80041904 *mpUnknown676;
 };

@@ -12,6 +12,7 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_801D2B7C.h"
 #include "game/cu_80067C10.h"
+#include "game/cu_80136B1C.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
@@ -230,7 +231,6 @@ void fn_800C89BC(Object_80039F5C *p);
 void fn_800EFFA0(int a, State_80039F5C *pQueue, Object_80039F5C *p, int flag);
 void fn_800A5E68(Object_80039F5C *p);
 void fn_8003962C(Object_80039F5C *p, int flag);
-Object_80039F5C *fn_80137B40(void);
 void fn_800C7D44(void);
 void fn_8011E13C(void);
 Object_800670B4 *fn_80168708(int team);

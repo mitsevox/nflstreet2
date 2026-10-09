@@ -5,6 +5,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_80040818.h"
+#include "game/InGame.h"
 #include "game/bitstream.h"
 #include "game/cu_80041210.h"
 #include "game/cu_80067C10.h"
@@ -135,7 +136,6 @@ int fn_8004C5E0(int index);
 void fn_8004D498(int handle);
 int fn_8004D4B0(int handle, const char *pKey);
 int fn_8004D508(int handle, const char *pKey);
-unsigned int fn_800289A8(void);
 unsigned char fn_8005164C(int type);
 int fn_80051680(int type);
 void fn_80194C5C(int a, int b, int c);
@@ -183,7 +183,6 @@ int fn_801C2FE4(const char *pA, const char *pB);
 int fn_801CFE40(float y, float x);
 void fn_80227248(void *pOut, void *p, float scale);
 void fn_80227690(void *pOut, void *pA, void *pB);
-float fn_802270A4(void *pV);
 float fn_80237260(int stream);
 
 Handler_803084C4 lbl_803084C4[102];
