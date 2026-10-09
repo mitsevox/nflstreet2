@@ -458,6 +458,10 @@
       "address": "0x801C2F2C",
       "evidence": "evidence.tsv external row strcat: target NUL scan of r3 then byte copy of r4 with the destination preserved; conventional library interface, original symbol not recovered."
     },
+    "strrchr": {
+      "address": "0x801C30C0",
+      "evidence": "evidence.tsv external row strrchr: target scan keeping the last position whose byte equals the second argument; conventional library interface, original symbol not recovered."
+    },
     "strcpy": {
       "address": "0x801C2EB4",
       "evidence": "evidence.tsv external row strcpy: target byte-copy loop and preserved destination; conventional library interface, original symbol not recovered."
@@ -9988,6 +9992,19 @@
           "placement": ".data3",
           "start": "0x802AB364",
           "end": "0x802AB4F8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80193CEC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80193CEC-0x80193E7C (src/game/cu_80193CEC.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80193CEC",
+          "end": "0x80193E7C"
         }
       ]
     },
