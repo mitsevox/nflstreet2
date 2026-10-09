@@ -34,7 +34,7 @@ int fn_80238278(const void *p, int size, int seed);
 void *fn_8023816C(void *pHandle);
 
 Pool_803EA488 *lbl_803EA488 = 0;
-int lbl_803EA48C = 0;
+unsigned int lbl_803EA48C = 0;
 
 int fn_80041210(void *p, int value)
 {
@@ -221,7 +221,7 @@ Object_80041904 *fn_80041904(int index)
     return pObject;
 }
 
-int fn_80041928(void)
+unsigned int fn_80041928(void)
 {
     return lbl_803EA48C;
 }

@@ -12,7 +12,9 @@ struct Record_8011F4F8 {
     unsigned char mUnknownB;
     float mUnknownC;
     int mUnknown10;
-    char mUnknown14[12];
+    char mUnknown14[9];
+    unsigned char mUnknown1D;
+    char mUnknown1E[2];
 };
 
 extern "C" Record_8011F4F8 *fn_8011F4F8(int index);

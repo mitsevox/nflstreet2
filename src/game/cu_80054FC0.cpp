@@ -7,7 +7,7 @@ int fn_8002B70C(void);
 void fn_8003AED8(int kind, int index, int value);
 void fn_8003AEF4(int a, int kind, int index, int d, Params_80005284 *p0, Params_80005284 *p1, Params_80005284 *p2);
 void fn_8003AF8C(int a, int kind, int index, int key, int e, Params_80005284 *pPair, int *pValues, int *pResult);
-int fn_8003B0A0(int a, int kind, int index0, int index1, int e);
+int fn_8003B0A0(int a, int kind, int index0, int index1, int unused);
 int fn_8003B360(int group);
 int fn_8003B3AC(int group);
 void fn_80077F24(void);

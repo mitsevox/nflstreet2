@@ -92,7 +92,7 @@ void fn_8003AF8C(int a, int kind, int index, int key, int e, Pair_8003AEA8 *pPai
     }
 }
 
-int fn_8003B0A0(int a, int kind, int index0, int index1)
+int fn_8003B0A0(int a, int kind, int index0, int index1, int unused)
 {
     return fn_8008593C(kind == 1, a, lbl_803075A8[kind][index0], lbl_803075A8[kind][index1]);
 }

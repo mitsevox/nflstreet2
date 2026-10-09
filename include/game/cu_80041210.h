@@ -29,7 +29,11 @@ struct Object_80041904 {
     float mUnknown16;
     char mUnknown20[12];
     int mUnknown32;
-    char mUnknown36[60];
+    char mUnknown36[12];
+    float mUnknown48;
+    float mUnknown52;
+    float mUnknown56;
+    char mUnknown60[36];
     float mUnknown96;
     float mUnknown100;
     float mUnknown104;
@@ -48,7 +52,10 @@ struct Object_80041904 {
     Object_80040818 *mUnknown152[8];
     Callback_80041904 mUnknown184;
     int mUnknown188;
-    char mUnknown192[228];
+    char mUnknown192[116];
+    unsigned short mUnknown308;
+    unsigned short mUnknown310;
+    char mUnknown312[108];
     void *mUnknown420;
     char mUnknown424[4];
     Extra_8004149C *mUnknown428;
@@ -72,7 +79,7 @@ int fn_80041664(void);
 int fn_800416CC(float dt);
 int fn_8004183C(void);
 Object_80041904 *fn_80041904(int index);
-int fn_80041928(void);
+unsigned int fn_80041928(void);
 }
 
 #endif

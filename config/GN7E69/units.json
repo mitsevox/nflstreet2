@@ -4515,6 +4515,19 @@
       ]
     },
     {
+      "source": "src/game/cu_80054628.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80054628-0x80054CA8 (src/game/cu_80054628.cpp).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80054628",
+          "end": "0x80054CA8"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80054CA8.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80054CA8-0x80054D34 (src/game/cu_80054CA8.cpp) and its data rows.",
@@ -8517,19 +8530,19 @@
     {
       "source": "src/game/cu_8005272C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8005272C-0x800529CC (src/game/cu_8005272C.cpp) and its data row.",
+      "evidence": "evidence.tsv unit row 0x8005272C-0x80052D08 (src/game/cu_8005272C.cpp) and its two .rodata rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8005272C",
-          "end": "0x800529CC"
+          "end": "0x80052D08"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8028DDB0",
-          "end": "0x8028DDE0"
+          "end": "0x8028DDF8"
         }
       ]
     },
