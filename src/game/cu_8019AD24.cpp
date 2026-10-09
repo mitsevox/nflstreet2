@@ -1,5 +1,6 @@
 #include "engine/cu_80227F14.h"
 #include "game/fn_801EF390.h"
+#include "game/fn_8021216C.h"
 
 struct Object_80235588 {
     char mUnknown0[0xC0];
@@ -38,15 +39,6 @@ struct Record_802EE9D4 {
     float mUnknownC;
 };
 
-struct Desc_802EE9E4 {
-    int mUnknown0;
-    int mUnknown4;
-    float mUnknown8;
-    int mUnknownC;
-    unsigned char mUnknown10;
-    unsigned char mUnknown11;
-};
-
 extern "C" {
 void fn_80044114(void);
 void *fn_800A336C(void);
@@ -64,7 +56,6 @@ void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Object_8019AD5C *));
 int fn_801DD268(int handle, int a, int b, int *pDesc);
 void fn_801DD320(int handle, int item);
 void fn_801DD3AC(int handle, int item, int a);
-void fn_8021216C(void *p, Desc_802EE9E4 *pDesc);
 void fn_80234DFC(int a, void *pB, int c, int d, const char *pName, int e);
 void fn_80234EA0(void *p, int a);
 void fn_802353D8(void *p, int flags);

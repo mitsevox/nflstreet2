@@ -4679,6 +4679,57 @@
       ]
     },
     {
+      "source": "src/game/cu_801A13A8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A13A8-0x801A14D8 (src/game/cu_801A13A8.cpp) and its type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A13A8",
+          "end": "0x801A14D8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801A679C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A679C-0x801A6870 (src/game/cu_801A679C.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A679C",
+          "end": "0x801A6870"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801A4AD4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801A4AD4-0x801A4CBC (src/game/cu_801A4AD4.cpp) and its data, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A4AD4",
+          "end": "0x801A4CBC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE528",
+          "end": "0x802AE658"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F3488",
+          "end": "0x802F37D0"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80063BE4.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80063BE4-0x80063C7C (src/game/cu_80063BE4.cpp) and its data rows.",
@@ -7684,6 +7735,25 @@
           "placement": ".sbss",
           "start": "0x803ECBF0",
           "end": "0x803ECBF4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8019B368.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019B368-0x8019B43C (src/game/cu_8019B368.cpp) and its data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019B368",
+          "end": "0x8019B43C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADEA8",
+          "end": "0x802ADEAC"
         }
       ]
     },
