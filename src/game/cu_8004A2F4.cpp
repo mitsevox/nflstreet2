@@ -95,6 +95,11 @@ extern ShortNameId_8004C368 lbl_802CFDA4[4];
 extern NameId_8004B020 lbl_802D14C8[32];
 extern StateNameId_8004C270 lbl_802D1D48[63];
 extern SoundNameId_8004C4AC lbl_802D3DC4[38];
+typedef void (*Loader_8004C684)(int handle, Object_80041904 *pObject);
+
+extern Callback_80041904 lbl_802CFCEC[8];
+extern Loader_8004C684 lbl_802CFD0C[8];
+extern void (*lbl_802CFD98[3])(Object_80040818 *pOwner);
 extern int lbl_8030865C[8];
 extern int lbl_8030867C[8];
 extern float lbl_803EA4E8;
@@ -112,6 +117,8 @@ int fn_8004C270(const char *pName, const char *pState);
 int fn_8004C2FC(const char *pName);
 unsigned short fn_8004C4AC(const char *pName);
 int fn_8004C5E0(int index);
+void fn_8004D498(int handle);
+int fn_8004D4B0(int handle, const char *pKey);
 int fn_8004D508(int handle, const char *pKey);
 int fn_8004D560(int handle);
 int fn_8004D5B8(int handle, const char *pKey, char *pText, int size);
@@ -640,7 +647,7 @@ int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
         }
         if (pExtra && (pExtra->mUnknown1708 & 1)) {
             if (pObject->mUnknown196 != -1) {
-                pExtra->mUnknown1704 = pObject->mUnknown427;
+                pExtra->mUnknown1704 = pObject->mUnknown424;
                 Restart_801BE068(pObject, pObject->mUnknown196, 1.0f);
             }
             pExtra->mUnknown1708 &= ~1;
@@ -670,7 +677,7 @@ int fn_8004B354(Object_80041904 *pObject, Object_80040818 *pOwner, int mode)
                 }
                 if (!pObject->mUnknown381) {
                     if (pNode->mId != -1 && fn_801BE648(pObject->mUnknown428->mUnknown1300) == pObject->mUnknown196) {
-                        pExtra->mUnknown1704 = pObject->mUnknown427;
+                        pExtra->mUnknown1704 = pObject->mUnknown424;
                         pExtra->mUnknown1705 = lbl_803EA4DC[(((fn_801CFE40(pObject->mUnknown352, pObject->mUnknown348) -
                                                                (pObject->mUnknown32 + 0x400000)) &
                                                               0xFFFFFF) +
@@ -1072,5 +1079,64 @@ int fn_8004C5E0(int type)
         result = slot + 12;
     }
     return result;
+}
+
+void fn_8004C684(int handle, Object_80041904 *pObject)
+{
+    char type[32];
+    char reset[32];
+    int hasType;
+    int hasReset;
+
+    fn_8004D498(handle);
+    fn_8004D4B0(handle, "behavior");
+    hasType = fn_8004D5B8(handle, "type", type, 32);
+    hasReset = fn_8004D5B8(handle, "reset", reset, 32);
+    pObject->mUnknown188 = 0;
+    pObject->mUnknown184 = lbl_802CFCEC[pObject->mUnknown188];
+    pObject->mUnknown196 = -1;
+    pObject->mUnknown424 = 1;
+    pObject->mUnknown312 = 0;
+    pObject->mUnknown420 = 0;
+    lbl_803EA4E4 = 0;
+    if (hasType) {
+        pObject->mUnknown188 = fn_8004C368(type);
+        pObject->mUnknown184 = lbl_802CFCEC[pObject->mUnknown188];
+        if (lbl_802CFD0C[pObject->mUnknown188]) {
+            lbl_802CFD0C[pObject->mUnknown188](handle, pObject);
+        }
+        fn_8004C518(handle, pObject);
+    }
+    pObject->mUnknown192 = 0;
+    if (hasReset) {
+        pObject->mUnknown192 = lbl_802CFD98[fn_8004C3D4(reset)];
+    }
+    pObject->mUnknown380 = 0;
+}
+
+void fn_8004C7B8(Object_80041904 *pObject)
+{
+    Node_80041904 *pNode = pObject->mUnknown312;
+
+    while (pNode) {
+        Emitter_8004BD20 *pEmitter = pNode->mUnknown128;
+        Node_80041904 *pFreeNode;
+
+        while (pEmitter) {
+            Emitter_8004BD20 *pFree = pEmitter;
+
+            pEmitter = pEmitter->mpNext;
+            fn_801D2BD0(pFree);
+        }
+        pNode->mUnknown128 = 0;
+        pFreeNode = pNode;
+        pNode = pNode->mpNext;
+        fn_801D2BD0(pFreeNode);
+    }
+    pObject->mUnknown312 = 0;
+    if (pObject->mUnknown420) {
+        fn_801D2BD0(pObject->mUnknown420);
+        pObject->mUnknown420 = 0;
+    }
 }
 }

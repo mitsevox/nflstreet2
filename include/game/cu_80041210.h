@@ -106,8 +106,7 @@ struct Object_80041904 {
     float mUnknown412;
     char mUnknown416[4];
     void *mUnknown420;
-    char mUnknown424[3];
-    unsigned char mUnknown427;
+    unsigned int mUnknown424;
     Extra_8004149C *mUnknown428;
 };
 
