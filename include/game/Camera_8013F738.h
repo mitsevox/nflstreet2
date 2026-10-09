@@ -20,9 +20,9 @@ struct CameraHeader_8013F628 {
 struct Camera_8013F738 {
     CameraHeader_8013F628 mHeader;
     void *mUnknown28;
-    char mPad2C[4];
+    float mUnknown2C;
     float mUnknown30;
-    char mPad34[4];
+    float mUnknown34;
     int mUnknown38;
     char mPad3C[0x20];
     float mUnknown5C;
@@ -40,15 +40,17 @@ struct Camera_8013F738 {
     int mUnknown8C;
     int mUnknown90;
     int mUnknown94;
-    char mPad98[4];
+    /* Base camera kind: 0 and 4 use the type-0 layout below, 1 the type-1
+       layout. */
+    unsigned int mUnknown98;
     int mUnknown9C;
     int mUnknownA0;
     int mUnknownA4;
     int mUnknownA8;
-    char mPadAC[4];
+    int mUnknownAC;
     int mUnknownB0;
     int mUnknownB4;
-    char mPadB8[0xC];
+    Vector_80039F5C mUnknownB8;
     float mUnknownC4;
     float mUnknownC8;
     float mUnknownCC;
@@ -69,6 +71,34 @@ struct Camera_8013F738 {
     RecordList_8002E7C0 mUnknown128;
     char mPad6B0[0x8AC];
     int mUnknownF5C;
+};
+
+/* The leading 0x8C bytes as fn_8013C120 sets them up for kind 0 and 4
+   (type descriptor 0x802F4890, 0x8C bytes). */
+struct CameraType0_802F4890 {
+    char mPad00[0x5C];
+    float mUnknown5C[3];
+    float mUnknown68[3];
+    int mUnknown74[3];
+    int mUnknown80[3];
+};
+
+/* The leading part as fn_8013C7C4 resets it for kind 1 (type descriptor
+   0x802F4884, 0x94 bytes). */
+struct CameraType1_802F4884 {
+    char mPad00[0x4C];
+    Vector_80039F5C mUnknown4C;
+    float mUnknown58;
+    int mUnknown5C;
+    int mUnknown60;
+};
+
+/* Argument of fn_801C3610 when it creates a camera; fn_8013C340 clears it. */
+struct Desc_8013C340 {
+    int mUnknown00;
+    int mUnknown04;
+    int mUnknown08;
+    int mUnknown0C;
 };
 
 #endif

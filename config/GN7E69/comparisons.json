@@ -3579,6 +3579,218 @@
       ]
     },
     {
+      "source": "src/game/cu_8013BB18.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8013BB18-0x8013CC7C (src/game/cu_8013BB18.cpp), its function rows and the data rows 0x802A00B8-0x802A00F4 and 0x802DBD24-0x802DBDB8. Draft comparison only: the target .rodata holds a 0.5 constant (0x802A00D4) that no retained function loads, so the compiled pool is one word short and the original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8013BB18",
+          "end": "0x8013CC7C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A00B8",
+          "end": "0x802A00F4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DBD24",
+          "end": "0x802DBDB8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8013BB18",
+          "start": "0x8013BB18",
+          "end": "0x8013BB54"
+        },
+        {
+          "symbol": "fn_8013BB54",
+          "start": "0x8013BB54",
+          "end": "0x8013BB70"
+        },
+        {
+          "symbol": "fn_8013BB70",
+          "start": "0x8013BB70",
+          "end": "0x8013BB84"
+        },
+        {
+          "symbol": "fn_8013BB84",
+          "start": "0x8013BB84",
+          "end": "0x8013BC4C"
+        },
+        {
+          "symbol": "fn_8013BC4C",
+          "start": "0x8013BC4C",
+          "end": "0x8013BD98"
+        },
+        {
+          "symbol": "fn_8013BD98",
+          "start": "0x8013BD98",
+          "end": "0x8013BDC0"
+        },
+        {
+          "symbol": "fn_8013BDC0",
+          "start": "0x8013BDC0",
+          "end": "0x8013BEE0"
+        },
+        {
+          "symbol": "fn_8013BEE0",
+          "start": "0x8013BEE0",
+          "end": "0x8013BF40"
+        },
+        {
+          "symbol": "fn_8013BF40",
+          "start": "0x8013BF40",
+          "end": "0x8013C120"
+        },
+        {
+          "symbol": "fn_8013C120",
+          "start": "0x8013C120",
+          "end": "0x8013C1C8"
+        },
+        {
+          "symbol": "fn_8013C1C8",
+          "start": "0x8013C1C8",
+          "end": "0x8013C204"
+        },
+        {
+          "symbol": "fn_8013C204",
+          "start": "0x8013C204",
+          "end": "0x8013C260"
+        },
+        {
+          "symbol": "fn_8013C260",
+          "start": "0x8013C260",
+          "end": "0x8013C2B4"
+        },
+        {
+          "symbol": "fn_8013C2B4",
+          "start": "0x8013C2B4",
+          "end": "0x8013C328"
+        },
+        {
+          "symbol": "fn_8013C328",
+          "start": "0x8013C328",
+          "end": "0x8013C340"
+        },
+        {
+          "symbol": "fn_8013C340",
+          "start": "0x8013C340",
+          "end": "0x8013C384"
+        },
+        {
+          "symbol": "fn_8013C384",
+          "start": "0x8013C384",
+          "end": "0x8013C438"
+        },
+        {
+          "symbol": "fn_8013C438",
+          "start": "0x8013C438",
+          "end": "0x8013C478"
+        },
+        {
+          "symbol": "fn_8013C478",
+          "start": "0x8013C478",
+          "end": "0x8013C4BC"
+        },
+        {
+          "symbol": "fn_8013C4BC",
+          "start": "0x8013C4BC",
+          "end": "0x8013C540"
+        },
+        {
+          "symbol": "fn_8013C540",
+          "start": "0x8013C540",
+          "end": "0x8013C57C"
+        },
+        {
+          "symbol": "fn_8013C57C",
+          "start": "0x8013C57C",
+          "end": "0x8013C624"
+        },
+        {
+          "symbol": "fn_8013C624",
+          "start": "0x8013C624",
+          "end": "0x8013C678"
+        },
+        {
+          "symbol": "fn_8013C678",
+          "start": "0x8013C678",
+          "end": "0x8013C680"
+        },
+        {
+          "symbol": "fn_8013C680",
+          "start": "0x8013C680",
+          "end": "0x8013C6F0"
+        },
+        {
+          "symbol": "fn_8013C6F0",
+          "start": "0x8013C6F0",
+          "end": "0x8013C7C4"
+        },
+        {
+          "symbol": "fn_8013C7C4",
+          "start": "0x8013C7C4",
+          "end": "0x8013C824"
+        },
+        {
+          "symbol": "fn_8013C824",
+          "start": "0x8013C824",
+          "end": "0x8013C854"
+        },
+        {
+          "symbol": "fn_8013C854",
+          "start": "0x8013C854",
+          "end": "0x8013C868"
+        },
+        {
+          "symbol": "fn_8013C868",
+          "start": "0x8013C868",
+          "end": "0x8013C90C"
+        },
+        {
+          "symbol": "fn_8013C90C",
+          "start": "0x8013C90C",
+          "end": "0x8013C954"
+        },
+        {
+          "symbol": "fn_8013C954",
+          "start": "0x8013C954",
+          "end": "0x8013C9A4"
+        },
+        {
+          "symbol": "fn_8013C9A4",
+          "start": "0x8013C9A4",
+          "end": "0x8013CAA4"
+        },
+        {
+          "symbol": "fn_8013CAA4",
+          "start": "0x8013CAA4",
+          "end": "0x8013CBC4"
+        },
+        {
+          "symbol": "fn_8013CBC4",
+          "start": "0x8013CBC4",
+          "end": "0x8013CC14"
+        },
+        {
+          "symbol": "fn_8013CC14",
+          "start": "0x8013CC14",
+          "end": "0x8013CC40"
+        },
+        {
+          "symbol": "fn_8013CC40",
+          "start": "0x8013CC40",
+          "end": "0x8013CC7C"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8013CD58.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv function row 0x8013CC7C-0x8013CD58, data row 0x802A00F8-0x802A0108 and the fn_8013CC7C source-form row; the remaining placements are the accepted unit 0x8013CD58-0x8013E514 and its data rows. Draft comparison only; the original bytes of 0x8013CC7C and its pool remain linked.",

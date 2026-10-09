@@ -2,6 +2,7 @@
 #include "game/fn_80195EFC.h"
 #include "game/Camera_8013F738.h"
 #include "game/Interp_8013CC14.h"
+#include "game/EaseVector_8013C9A4.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_80178D18.h"
@@ -14,14 +15,6 @@ struct Entry_8013F374 {
 };
 
 /* The two record kinds have distinct payloads; their common stride is 0x130. */
-struct EaseVector_8013C9A4 {
-    Vector_80039F5C mBase;
-    Interp_8013CC14 mX;
-    Interp_8013CC14 mY;
-    Interp_8013CC14 mZ;
-    Vector_80039F5C mResult;
-    Interp_8013CC14 mScale;
-};
 struct Payload0_8013EEE4 {
     Interp_8013CC14 mX, mY, mZ;
     Vector_80039F5C mTarget;

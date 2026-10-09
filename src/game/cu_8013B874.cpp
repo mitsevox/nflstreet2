@@ -126,4 +126,9 @@ int fn_8013BA88(Object_80137ABC *p, void *pData, int value)
     }
     return result;
 }
+
+int fn_8013BAE0(Object_80137ABC *p, void *pData, int value)
+{
+    return p == fn_801374BC();
+}
 }

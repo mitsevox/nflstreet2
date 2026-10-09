@@ -6212,13 +6212,13 @@
     {
       "source": "src/game/cu_8013B874.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8013B874-0x8013BAE0 (src/game/cu_8013B874.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8013B874-0x8013BB18 (src/game/cu_8013B874.cpp) and its data rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8013B874",
-          "end": "0x8013BAE0"
+          "end": "0x8013BB18"
         },
         {
           "section": ".data",

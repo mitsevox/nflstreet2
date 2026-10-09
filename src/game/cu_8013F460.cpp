@@ -10,14 +10,6 @@ struct CameraSave_8013F56C {
     int mUnknown28;
 };
 
-/* Argument of fn_801C3610 when it creates a camera. */
-struct Desc_8013C340 {
-    int mUnknown00;
-    int mUnknown04;
-    int mUnknown08;
-    int mUnknown0C;
-};
-
 struct CameraSet_803ECA00 {
     int mCurrent;
     void *mpCameras[4];

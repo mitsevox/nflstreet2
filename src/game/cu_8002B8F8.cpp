@@ -69,15 +69,6 @@ struct Entry_80030D08 {
     int mUnknown08;
 };
 
-/* Argument of fn_801C3610 when it creates a camera (as in
-   src/game/cu_8013F460.cpp). */
-struct Desc_8013C340 {
-    int mUnknown00;
-    int mUnknown04;
-    int mUnknown08;
-    int mUnknown0C;
-};
-
 /* 0x14-byte focus block of the replay camera at 0x8030660C (cleared as a
    whole by fn_8002F61C); mPos is the focus point. */
 struct Type_8030660C {
