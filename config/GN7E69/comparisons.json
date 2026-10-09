@@ -5452,6 +5452,136 @@
       ]
     },
     {
+      "source": "src/game/cu_80142BB4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row for src/game/cu_80142BB4.cpp (replacing candidate cu_80142BB4), individual exact function extents, the .rodata data row, and the source-form, type, name and linker rows (the linker rows record the two functions the target discarded, BounceBody2D and CollideWithPoint, which the source keeps unregistered). All 21 functions compile to the target instructions and relocations; the compiled .rodata lacks the unexplained 0.0f at 0x802A035C, which moves the later pools down 4 bytes in the comparison link (five functions then differ only in lfs displacements), so the unit stays comparison-only and its original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80142BB4",
+          "end": "0x80143F40"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0318",
+          "end": "0x802A0398"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80142BB4",
+          "start": "0x80142BB4",
+          "end": "0x80142BE4"
+        },
+        {
+          "symbol": "fn_80142BE4",
+          "start": "0x80142BE4",
+          "end": "0x80142C5C"
+        },
+        {
+          "symbol": "fn_80142C5C",
+          "start": "0x80142C5C",
+          "end": "0x80142D98"
+        },
+        {
+          "symbol": "fn_80142D98",
+          "start": "0x80142D98",
+          "end": "0x80142EA0"
+        },
+        {
+          "symbol": "fn_80142EA0",
+          "start": "0x80142EA0",
+          "end": "0x80142FF8"
+        },
+        {
+          "symbol": "fn_80142FF8",
+          "start": "0x80142FF8",
+          "end": "0x80143150"
+        },
+        {
+          "symbol": "fn_80143150",
+          "start": "0x80143150",
+          "end": "0x80143220"
+        },
+        {
+          "symbol": "fn_80143220",
+          "start": "0x80143220",
+          "end": "0x80143360"
+        },
+        {
+          "symbol": "fn_80143360",
+          "start": "0x80143360",
+          "end": "0x80143464"
+        },
+        {
+          "symbol": "fn_80143464",
+          "start": "0x80143464",
+          "end": "0x80143540"
+        },
+        {
+          "symbol": "fn_80143540",
+          "start": "0x80143540",
+          "end": "0x8014359C"
+        },
+        {
+          "symbol": "fn_8014359C",
+          "start": "0x8014359C",
+          "end": "0x80143668"
+        },
+        {
+          "symbol": "fn_80143668",
+          "start": "0x80143668",
+          "end": "0x80143718"
+        },
+        {
+          "symbol": "fn_80143718",
+          "start": "0x80143718",
+          "end": "0x8014377C"
+        },
+        {
+          "symbol": "fn_8014377C",
+          "start": "0x8014377C",
+          "end": "0x801437FC"
+        },
+        {
+          "symbol": "fn_801437FC",
+          "start": "0x801437FC",
+          "end": "0x801438EC"
+        },
+        {
+          "symbol": "fn_801438EC",
+          "start": "0x801438EC",
+          "end": "0x80143D3C"
+        },
+        {
+          "symbol": "fn_80143D3C",
+          "start": "0x80143D3C",
+          "end": "0x80143DC4"
+        },
+        {
+          "symbol": "fn_80143DC4",
+          "start": "0x80143DC4",
+          "end": "0x80143E14"
+        },
+        {
+          "symbol": "fn_80143E14",
+          "start": "0x80143E14",
+          "end": "0x80143EBC"
+        },
+        {
+          "symbol": "fn_80143EBC",
+          "start": "0x80143EBC",
+          "end": "0x80143F40"
+        }
+      ],
+      "discarded": [
+        "BounceBody2D",
+        "CollideWithPoint"
+      ]
+    },
+    {
       "source": "src/game/cu_80144224.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80143F40-0x801442FC (src/game/cu_80144224.cpp), its function rows and its .sdata and .sbss data rows. 0x80143F8C-0x801442FC and both data words are linked; the comparison measures only the draft function 0x80143F40.",
