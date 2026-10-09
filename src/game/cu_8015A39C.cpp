@@ -1,16 +1,4 @@
-#include "game/Object_80039F5C.h"
-
-struct Object_8015C244 {
-    char mUnknown0[48];
-    float mUnknown48;
-    char mUnknown52[28];
-    unsigned char mUnknown80;
-    unsigned char mUnknown81;
-    char mUnknown82[2];
-    unsigned int mUnknown84;
-    char mUnknown88[120];
-    Object_80039F5C *mpUnknown208;
-};
+#include "game/Object_8015C244.h"
 
 extern "C" {
 extern unsigned char lbl_803ECA68;

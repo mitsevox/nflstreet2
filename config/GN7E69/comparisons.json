@@ -16765,12 +16765,12 @@
     {
       "source": "src/game/cu_80141210.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv camera target layouts, membership, callback ABI and measured source-form rows; original assembly remains linked.",
+      "evidence": "evidence.tsv camera target layouts, membership (start extended over 0x8014116C-0x80141210), callback ABI and measured source-form rows; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80141210",
+          "start": "0x8014116C",
           "end": "0x801422C8"
         },
         {
@@ -16787,6 +16787,21 @@
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_8014116C",
+          "start": "0x8014116C",
+          "end": "0x8014118C"
+        },
+        {
+          "symbol": "fn_8014118C",
+          "start": "0x8014118C",
+          "end": "0x801411B4"
+        },
+        {
+          "symbol": "fn_801411B4",
+          "start": "0x801411B4",
+          "end": "0x80141210"
+        },
         {
           "symbol": "fn_80141210",
           "start": "0x80141210",
@@ -16831,6 +16846,26 @@
           "symbol": "fn_801422C0",
           "start": "0x801422C0",
           "end": "0x801422C8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80148424.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit/source-form rows; one complete body with measured register and stack-layout differences, original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80148424",
+          "end": "0x801485B4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80148424",
+          "start": "0x80148424",
+          "end": "0x801485B4"
         }
       ]
     },
