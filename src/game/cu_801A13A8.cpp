@@ -1,3 +1,6 @@
+#include "game/Object_8003DEC4.h"
+#include "game/Object_8020E52C.h"
+
 /* 0x50-byte object set up by 0x80233CF0, which stores its second argument at
    +0x18 and initializes the block at +0x1C. */
 struct Instance_801A13A8 {
@@ -6,13 +9,8 @@ struct Instance_801A13A8 {
     char mUnknown1C[0x34];
 };
 
-/* Partial view of a texture image returned by 0x80161094: the words at +0x18
-   and +0x1C point to blocks whose +0xC and +8 words are read here. */
-struct TextureEntry18_801A1400 {
-    int mUnknown0[3];
-    void *mpUnknownC;
-};
-
+/* 64-byte block copied between the first +0x1C entries of two texture data
+   images. */
 struct Colors_801A1400 {
     unsigned int mUnknown0[16];
 };
@@ -22,17 +20,12 @@ struct TextureEntry1C_801A1400 {
     Colors_801A1400 *mpUnknown8;
 };
 
+/* Partial view of the texture data returned by 0x80161094: the entry tables
+   at +0x18 (fn_8020E560) and +0x1C (fn_8020E5F8). */
 struct Texture_801A1400 {
     char mUnknown0[0x18];
-    TextureEntry18_801A1400 *mpUnknown18;
+    Object_8020E560 *mpUnknown18;
     TextureEntry1C_801A1400 *mpUnknown1C;
-};
-
-struct Object_801A1400 {
-    char mUnknown0[0x1058];
-    char mUnknown1058[0x20];
-    char mUnknown1078[0x2F3];
-    unsigned char mUnknown136B;
 };
 
 struct Font_8019BE30;
@@ -64,16 +57,17 @@ void fn_801A13FC(void)
 {
 }
 
-/* Draws the text at +0x1058 with the 0x801614C4 font into texture slot 31 of
-   the player at +0x136B, then copies the 64-byte +0x1C block of slot 9 over
+/* Draws the string at +0x1058 of the player with the 0x801614C4 font into
+   its texture slot 31, then copies the 64-byte +0x1C block of slot 9 over
    that of slot 31. */
-void fn_801A1400(Object_801A1400 *pObject)
+void fn_801A1400(Object_8003DEC4 *pPlayer)
 {
-    void *pDest = ((Texture_801A1400 *)fn_80161094(pObject->mUnknown136B, 31))->mpUnknown18->mpUnknownC;
+    unsigned char *pDest =
+        ((Texture_801A1400 *)fn_80161094(pPlayer->mUnknown4971, 31))->mpUnknown18->mpUnknownC;
     Colors_801A1400 *pColors;
 
-    fn_8019BC50(fn_801614C4(), pDest, pObject->mUnknown1058);
-    pColors = ((Texture_801A1400 *)fn_80161094(pObject->mUnknown136B, 31))->mpUnknown1C->mpUnknown8;
-    *pColors = *((Texture_801A1400 *)fn_80161094(pObject->mUnknown136B, 9))->mpUnknown1C->mpUnknown8;
+    fn_8019BC50(fn_801614C4(), pDest, pPlayer->mUnknown4184);
+    pColors = ((Texture_801A1400 *)fn_80161094(pPlayer->mUnknown4971, 31))->mpUnknown1C->mpUnknown8;
+    *pColors = *((Texture_801A1400 *)fn_80161094(pPlayer->mUnknown4971, 9))->mpUnknown1C->mpUnknown8;
 }
 }
