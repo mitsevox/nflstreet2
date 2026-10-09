@@ -30,9 +30,14 @@ struct State_802E989C {
 
 extern "C" {
 extern State_802E989C lbl_802E989C;
+int fn_800B65A0(int side);
+int fn_800BA6F8(void);
+int fn_800BA864(void);
 int fn_800C47C4(void);
+int fn_8013AD94(Object_80137ABC *pBall);
+int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 int fn_801486A0(void);
-void fn_80163074(int index);
+int fn_801784C4(void);
 int fn_801C657C(void);
 void fn_801D0470(int a);
 void fn_801D04C4(void);
@@ -62,6 +67,46 @@ void fn_80235DB8(int a);
 void fn_80163358(Object_80163358 *pObject, int *pArgs);
 void fn_80163414(Object_80163358 *pObject);
 int fn_8016345C(Object_80163358 *pObject);
+
+// Refreshes marker entry index from ball index: its position, whether it
+// is shown, and a scale that grows with the ball's height.
+void fn_80163074(int index)
+{
+    Entry_802E98A0 *pEntry = &lbl_802E989C.mEntries[index];
+    Object_80137ABC *pBall;
+
+    pEntry->mEnabled = 0;
+    pBall = fn_80137ABC(index);
+    fn_8013BA58(pBall, 0);
+    if (fn_800BA6F8() != 0 && fn_800BA864() != 0) {
+        fn_80137D58(pBall, &pEntry->mPosition);
+        pEntry->mEnabled = 1;
+    } else if ((fn_801486A0() == 1 || fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF)
+               && fn_8013AD94(pBall) != 0 && fn_80138064(pBall, &pEntry->mPosition) != 0) {
+        pEntry->mEnabled = 1;
+    }
+    pEntry->mPosition.mZ = 0.0f;
+    if (fn_801784C4() != 0) {
+        pEntry->mPosition.mX = -pEntry->mPosition.mX;
+        pEntry->mPosition.mY = -pEntry->mPosition.mY;
+    }
+    if (pEntry->mEnabled != 0) {
+        Vector_80039F5C ball;
+        float height;
+
+        fn_80137D58(pBall, &ball);
+        height = ball.mZ;
+        if (height <= 3.0f) {
+            pEntry->mScale = 1.0f;
+        } else if (height >= 14.0f) {
+            pEntry->mScale = 5.25f;
+        } else {
+            float t = (height - 3.0f) / 11.0f;
+
+            pEntry->mScale = t * 4.25f + 1.0f;
+        }
+    }
+}
 
 void fn_801631EC(int handle)
 {
