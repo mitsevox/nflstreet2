@@ -28890,6 +28890,58 @@
           "end": "0x801A4AD4"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80198378.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit0x80198378-0x80198C54, its source-form/type/external/compiler rows and complete native data extents. Partial0x801987F4 remains fully compared; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80198378",
+          "end": "0x80198C54"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADB10",
+          "end": "0x802ADB40"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EDE10",
+          "end": "0x802EDF8C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80198378",
+          "start": "0x80198378",
+          "end": "0x8019837C"
+        },
+        {
+          "symbol": "fn_8019837C",
+          "start": "0x8019837C",
+          "end": "0x801985FC"
+        },
+        {
+          "symbol": "fn_801985FC",
+          "start": "0x801985FC",
+          "end": "0x801987F4"
+        },
+        {
+          "symbol": "fn_801987F4",
+          "start": "0x801987F4",
+          "end": "0x80198B24"
+        },
+        {
+          "symbol": "fn_80198B24",
+          "start": "0x80198B24",
+          "end": "0x80198C54"
+        }
+      ]
     }
   ]
 }
