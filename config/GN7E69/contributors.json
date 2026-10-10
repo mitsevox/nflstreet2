@@ -9108,8 +9108,8 @@
         "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses.",
         "original_source": "src/game/cu_8015A39C.cpp",
         "merged_source": true,
-        "migration_commit": "c6d391e53067b2add9e37bf049007c887e5cb630",
-        "merged_blob": "383fbeb6d873ba31428389a6e0a420c1c87bf888"
+        "migration_commit": "23598ea10c0a90567d759733d11681d493e7db63",
+        "merged_blob": "e5ca7f6b15c947f3c35a05e612b71ccd171a99d5"
       }
     },
     {
@@ -9173,8 +9173,8 @@
         "introduced_blob": "973b91a351935a9654519ed4b6f9c83440be4893",
         "original_source": "src/game/cu_8015A39C.cpp",
         "merged_source": true,
-        "migration_commit": "c6d391e53067b2add9e37bf049007c887e5cb630",
-        "merged_blob": "383fbeb6d873ba31428389a6e0a420c1c87bf888"
+        "migration_commit": "23598ea10c0a90567d759733d11681d493e7db63",
+        "merged_blob": "e5ca7f6b15c947f3c35a05e612b71ccd171a99d5"
       }
     },
     {
