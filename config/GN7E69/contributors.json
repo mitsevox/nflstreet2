@@ -9090,7 +9090,7 @@
       }
     },
     {
-      "source": "src/game/cu_8015A39C.cpp",
+      "source": "src/game/cu_8015A248.cpp",
       "contributors": [
         "adampreddy"
       ],
@@ -9105,7 +9105,11 @@
         "introduced_blob": "973b91a351935a9654519ed4b6f9c83440be4893",
         "original_commit": "8801e4e04580cd0ce07d5ef1cc6f6302e97b5bed",
         "original_blob": "49e49e1b68d8b6a254fa14764067f2286ad1a7ef",
-        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses."
+        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses.",
+        "original_source": "src/game/cu_8015A39C.cpp",
+        "merged_source": true,
+        "migration_commit": "c6d391e53067b2add9e37bf049007c887e5cb630",
+        "merged_blob": "383fbeb6d873ba31428389a6e0a420c1c87bf888"
       }
     },
     {
@@ -9155,7 +9159,7 @@
       }
     },
     {
-      "source": "src/game/cu_8015A39C.cpp",
+      "source": "src/game/cu_8015A248.cpp",
       "contributors": [
         "adampreddy"
       ],
@@ -9166,7 +9170,11 @@
         "pull_request": 483,
         "merged_via": 489,
         "commit": "1562a06526704677b109a45004a18d8b0fb5455e",
-        "introduced_blob": "973b91a351935a9654519ed4b6f9c83440be4893"
+        "introduced_blob": "973b91a351935a9654519ed4b6f9c83440be4893",
+        "original_source": "src/game/cu_8015A39C.cpp",
+        "merged_source": true,
+        "migration_commit": "c6d391e53067b2add9e37bf049007c887e5cb630",
+        "merged_blob": "383fbeb6d873ba31428389a6e0a420c1c87bf888"
       }
     },
     {
