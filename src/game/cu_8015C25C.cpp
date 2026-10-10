@@ -2,6 +2,7 @@
 #include "game/Object_8003DEC4.h"
 #include "game/cu_80047E28.h"
 #include "game/cu_8015C25C.h"
+#include "game/cu_8015D3EC.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80233CBC.h"
 
@@ -44,23 +45,15 @@ struct State_803EB32C {
     unsigned char mUnknown253;
 };
 
-typedef void (*Callback_8015C25C)(Object_8003DEC4 *pPlayer);
-
 extern "C" {
 void fn_80023024(int a);
 void fn_8003E194(int index, int value);
-void fn_8015F958(int a, Ids_8015F6E8 *pIds, Object_8003DEC4 *pPlayer, Callback_8015C25C pCallback);
-void fn_8015FB38(int a, int id, Object_8003DEC4 *pPlayer, Callback_8015C25C pCallback);
-void fn_8015FC54(int a, int id, Object_8003DEC4 *pPlayer, Callback_8015C25C pCallback);
-void fn_8015FD70(int a, int id, Object_8003DEC4 *pPlayer, Callback_8015C25C pCallback);
-int fn_8015F5BC(const char *pName);
-void fn_8015FE4C(void);
 void fn_8015FFC8(int player, int key, int value);
 void fn_8016118C(void);
 void fn_801611BC(int index, const char *pName, int a);
 void fn_8016130C(int index, int a, int b, int c, int d);
 void fn_801613F0(void);
-void fn_801A46E0(Object_8003DEC4 *pPlayer, int id, Callback_8015C25C pCallback);
+void fn_801A46E0(Object_8003DEC4 *pPlayer, int id, Callback_8015F958 pCallback);
 void fn_801A472C(void);
 void fn_801A4AD4(Object_8003DEC4 *pPlayer);
 void fn_80233C7C(void *p);

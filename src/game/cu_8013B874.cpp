@@ -7,7 +7,7 @@ struct StateFuncs_802DBC28 {
     void (*mUnknown8)(Object_80137ABC *p, float dt);
     void (*mEnter)(Object_80137ABC *p);
     void (*mExit)(Object_80137ABC *p);
-    int (*mUnknown14)(Object_80137ABC *p, void *pData, int value);
+    int (*mUnknown14)(Object_80137ABC *p, void *pData, unsigned int type);
     void (*mUnknown18)(Object_80137ABC *p, float dt);
 };
 
@@ -28,14 +28,14 @@ void fn_8013B250(Object_80137ABC *p);
 void fn_8013B2A0(Object_80137ABC *p, float dt);
 void fn_8013B330(Object_80137ABC *p, float dt);
 void fn_8013B350(Object_80137ABC *p, float dt);
-int fn_8013B3EC(Object_80137ABC *p, void *pData, int value);
-int fn_8013B52C(Object_80137ABC *p, void *pData, int value);
-int fn_8013B5EC(Object_80137ABC *p, void *pData, int value);
-int fn_8013B6A0(Object_80137ABC *p, void *pData, int value);
+int fn_8013B3EC(Object_80137ABC *p, void *pData, unsigned int type);
+int fn_8013B52C(Object_80137ABC *p, void *pData, unsigned int type);
+int fn_8013B5EC(Object_80137ABC *p, void *pData, unsigned int type);
+int fn_8013B6A0(Object_80137ABC *p, void *pData, unsigned int type);
 void fn_8013B730(Object_80137ABC *p, float dt);
 void fn_8013B734(Object_80137ABC *p, float dt);
-int fn_8013B86C(Object_80137ABC *p, void *pData, int value);
-int fn_8013BAE0(Object_80137ABC *p, void *pData, int value);
+int fn_8013B86C(Object_80137ABC *p, void *pData, unsigned int type);
+int fn_8013BAE0(Object_80137ABC *p, void *pData, unsigned int type);
 }
 
 static StateFuncs_802DBC28 lbl_802DBC28[9] = {
@@ -125,5 +125,10 @@ int fn_8013BA88(Object_80137ABC *p, void *pData, int value)
         result = lbl_802DBC28[p->mState.mState].mUnknown14(p, pData, value);
     }
     return result;
+}
+
+int fn_8013BAE0(Object_80137ABC *p, void *pData, unsigned int type)
+{
+    return p == fn_801374BC();
 }
 }

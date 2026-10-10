@@ -1,4 +1,5 @@
 #include "game/Camera_8013F738.h"
+#include "game/cu_8013BB18.h"
 #include "game/Class_80297B90.h"
 #include "game/Class_80297BF8.h"
 #include "game/Object_80039F5C.h"
@@ -14,7 +15,7 @@ struct Curve_801C5278 { unsigned char mUnknown0[4]; float mUnknown4, mUnknown8; 
 struct Sample_801C009C { float mUnknown0[3]; Curve_801C5278 mUnknownC[15]; };
 struct Settings_800963EC { unsigned char mUnknown0[0x300]; float mUnknown300; };
 struct Entry_801411B4 { float mUnknown0; unsigned char mUnknown4[4]; unsigned char mUnknown8; };
-struct State_80141210 { unsigned char mUnknown0[16]; int mUnknown10,mUnknown14; };
+struct State_80141210 { float mUnknown0,mUnknown4; int mUnknown8; unsigned char mUnknownC[4]; int mUnknown10,mUnknown14; };
 struct Angles_80141210 { int mX,mY,mZ; };
 struct View_802DCEB0 { Vector_80039F5C mUnknown0; Angles_80141210 mUnknownC; int mUnknown18; };
 
@@ -42,20 +43,40 @@ void fn_8014118C(Angles_80141210 *,State_80141210 *,Actor_801C009C *,int,int,int
 Entry_801411B4 *fn_801411B4(Camera_8013F738 *);
 int fn_80027DF0(void);
 void fn_801C3990(Camera_8013F738 *,float,float);
-void fn_8013C478(Camera_8013F738 *,void *);
-void fn_8013C4BC(Camera_8013F738 *,void *,int);
-void fn_8013C6F0(Camera_8013F738 *);
 Settings_800963EC *fn_800963EC(Character_80093BCC *);
 int fn_801784C4(void);
 Camera_8013F738 *fn_8013FA04(int);
 void fn_801C3EA4(Camera_8013F738 *,float,float,float);
 void fn_801C3ED0(Camera_8013F738 *,int,int,int);
-void fn_8013C384(void *,int,int,int);
 float fn_800BD190(void *); float fn_800AB9EC(void *);
 void fn_80142228(Camera_8013F738 *);
 }
 
 static unsigned char lbl_803EB1F0 = 0;
+
+extern "C" void fn_8014116C(float x, float y, float z, Vector_80039F5C *out, State_80141210 *state, Actor_801C009C *)
+{
+    out->mX = state->mUnknown0 + x;
+    out->mY = state->mUnknown4 + y;
+    out->mZ = z;
+}
+
+extern "C" void fn_8014118C(Angles_80141210 *out, State_80141210 *, Actor_801C009C *, int x, int y, int z)
+{
+    out->mX = (0xC00000 - x) & 0xFFFFFF;
+    out->mY = y & 0xFFFFFF;
+    out->mZ = -z & 0xFFFFFF;
+}
+
+extern "C" Entry_801411B4 *fn_801411B4(Camera_8013F738 *camera)
+{
+    State_80141210 *state=reinterpret_cast<State_80141210 *>(camera->mPadF8);
+    Entry_801411B4 *entry=0;
+    Object_80039F5C *object=fn_8009BCE8(&state->mUnknown8);
+    if (object && object->mIdBytes[3]==1 && object->mpState->mId==50)
+        entry=reinterpret_cast<Entry_801411B4 *>(&object->mUnknown336);
+    return entry;
+}
 
 extern "C" void fn_80141210(Camera_8013F738 *camera, Actor_801C009C *actor, Selection_80141210 *selection, float time)
 {
@@ -124,7 +145,7 @@ extern "C" void fn_80141210(Camera_8013F738 *camera, Actor_801C009C *actor, Sele
     fn_8014118C(&resultAngles,state,actor,angles.mX,angles.mY,angles.mZ);
     if (lbl_803EB1F0 && fn_80027DF0()==0) fn_801C3990(camera,35.28518295288086f,camera->mHeader.mUnknown24);
     else fn_801C3990(camera,36.77341842651367f,camera->mHeader.mUnknown24);
-    fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles,5); fn_8013C6F0(camera); fn_80142228(camera);
+    fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles.mX,5); fn_8013C6F0(camera); fn_80142228(camera);
 }
 
 extern "C" void fn_80141920(Camera_8013F738 *camera, Actor_801C009C *actor, int mirror, float time)
@@ -181,7 +202,7 @@ extern "C" void fn_80141920(Camera_8013F738 *camera, Actor_801C009C *actor, int 
     fn_8014118C(&resultAngles,state,actor,angles.mX,angles.mY,angles.mZ);
     if (lbl_803EB1F0 && fn_80027DF0()==0) fn_801C3990(camera,35.28518295288086f,camera->mHeader.mUnknown24);
     else fn_801C3990(camera,36.77341842651367f,camera->mHeader.mUnknown24);
-    fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles,5); fn_8013C6F0(camera); fn_80142228(camera);
+    fn_8013C478(camera,&result); fn_8013C4BC(camera,&resultAngles.mX,5); fn_8013C6F0(camera); fn_80142228(camera);
 }
 
 extern "C" void fn_80141E8C(Camera_8013F738 *camera)
@@ -216,12 +237,12 @@ extern "C" void fn_80141FA0(Camera_8013F738 *camera)
     State_80141210 *state=reinterpret_cast<State_80141210 *>(camera->mPadF8);
     if (camera->mUnknownA0<=5) {
         fn_8013C478(camera,&lbl_802DCEB0[camera->mUnknownA0].mUnknown0);
-        fn_8013C4BC(camera,&lbl_802DCEB0[camera->mUnknownA0].mUnknownC,lbl_802DCEB0[camera->mUnknownA0].mUnknown18);
+        fn_8013C4BC(camera,&lbl_802DCEB0[camera->mUnknownA0].mUnknownC.mX,lbl_802DCEB0[camera->mUnknownA0].mUnknown18);
     }
     switch(camera->mUnknownA0) {
     case 7:
         fn_8013C478(camera,&lbl_802DCF58.mUnknown0);
-        fn_8013C4BC(camera,&lbl_802DCF58.mUnknownC,lbl_802DCF58.mUnknown18);
+        fn_8013C4BC(camera,&lbl_802DCF58.mUnknownC.mX,lbl_802DCF58.mUnknown18);
         break;
     case 10: {
         Entry_801411B4 *entry=fn_801411B4(camera);
@@ -262,8 +283,8 @@ extern "C" void fn_80142110(Camera_8013F738 *camera,int event,int argument)
 }
 extern "C" void fn_801421C4(Camera_8013F738 *camera)
 {
-    camera->mUnknownDC=reinterpret_cast<void (*)(Camera_8013F738 *,int)>(fn_80142110);
-    int *angles=reinterpret_cast<int *>(&camera->mUnknown74);
+    camera->mUnknownDC=fn_80142110;
+    int *angles=&camera->mUnknown74;
     angles[3]=0xCCCCC;
     camera->mUnknown5C=0.2f; camera->mUnknown68=0.1f;
     angles[0]=0x199999;

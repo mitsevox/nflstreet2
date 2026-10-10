@@ -829,7 +829,7 @@ extern "C" int fn_800E93CC(Object_80039F5C *p) {
 
 extern "C" int fn_800E948C(Object_80039F5C *p) {
     if (p->mUnknown560.mFlags.mBytes[0]) {
-        if (p->mUnknown624 >= 0.5f)
+        if (p->mContact560.mUnknown56.mZ >= 0.5f)
             return 1;
         return 3;
     }

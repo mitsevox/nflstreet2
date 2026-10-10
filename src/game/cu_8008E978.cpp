@@ -2752,9 +2752,9 @@ extern "C" void fn_8009ABC4(void)
     fn_8009A8F0();
 }
 
-extern "C" int fn_8009AD30(int a, int b)
+extern "C" int fn_8009AD30(Object_80039F5C *p, int value)
 {
-    return b;
+    return value;
 }
 
 extern "C" void fn_8009B1B0(Block_8009B720 *p)
