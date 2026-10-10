@@ -1229,7 +1229,7 @@ void fn_8004CAA8(Object_80040818 *pItem, float *pPos, float *pDir, const char *p
 {
     Object_80041904 *pObject = pItem->mUnknown472;
     Object_80040818 **ppLinked = pObject->mUnknown152;
-    float strength = 46603.3789f;
+    float strength = 0.0f;
     unsigned int i;
 
     if (pHitter) {
