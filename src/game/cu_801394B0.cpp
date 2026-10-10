@@ -98,7 +98,7 @@ void fn_8013AB24(Object_80137ABC *pBall);
 void fn_800423F8(void *pObject, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
 int fn_80054138(Vector_80039F5C *pPos);
 void fn_8009BFD0(Object_80039F5C *p, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
-void fn_802272DC(Vector_80039F5C *pOut, Vector_80039F5C *pIn, float scale);
+void fn_802272DC(Vector_80039F5C *pOut, Vector_80039F5C *pIn, float length);
 int fn_802275D8(Vector_80039F5C *pA, Vector_80039F5C *pB, float eps);
 void fn_8013B8C0(Object_80137ABC *pBall, float dt);
 void fn_8013B900(Object_80137ABC *pBall, float dt);
@@ -685,18 +685,18 @@ void fn_8013ABE0(Object_80137ABC *pBall)
     pBall->mState.mUnknownEC = 1.35f;
 }
 
-void fn_8013AC28(Object_80137ABC *pBall, Vector_80039F5C *pTarget, int mode, float time, float spin, float rate)
+void fn_8013AC28(Object_80137ABC *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float rate)
 {
     Vector_80039F5C delta;
-    float speed;
+    float time;
 
     pBall->mState.mUnknown48.mX = pTarget->mX;
     pBall->mState.mUnknown48.mY = pTarget->mY;
     pBall->mState.mUnknown48.mZ = pTarget->mZ;
     fn_802276B4(&delta, pTarget, &pBall->mState.mPos);
-    speed = fn_802270A4(&delta) / time * lbl_803EA2C4;
-    delta.mZ += 0.0029814816f * speed * speed * 0.5f;
-    fn_80227264(&pBall->mState.mUnknown54, &delta, 1.0f / speed);
+    time = fn_802270A4(&delta) / speed * lbl_803EA2C4;
+    delta.mZ += 0.0029814816f * time * time * 0.5f;
+    fn_80227264(&pBall->mState.mUnknown54, &delta, 1.0f / time);
     fn_8013A2F4(pBall, mode, spin, rate);
 }
 
