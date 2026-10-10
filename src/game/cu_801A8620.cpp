@@ -1,3 +1,4 @@
+#include "game/cu_801A8620.h"
 #include "engine/cu_80227F14.h"
 #include "engine/vptmanager.h"
 #include "game/GameVpt.h"
@@ -30,7 +31,7 @@ struct Model_801A8620 { unsigned char mUnknown0[8]; ModelData_801A8620 *mpUnknow
 struct Asset_801A8620 { unsigned char mUnknown0[0x11]; unsigned char mUnknown11; };
 struct ModelRef_801A8620 { Geometry_801A8620 *mpUnknown0; };
 struct Context_801A8620 { unsigned int mUnknown0; ModelRef_801A8620 *mpUnknown4; };
-struct Element_801A8620 { unsigned char mUnknown0[0x28]; };
+
 struct Cache_801A8D9C {
     Asset_801A8620 *mpUnknown0; Context_801A8620 mUnknown4;
     unsigned char mUnknownC[0x2C]; char mUnknown38[0x100];
@@ -50,31 +51,6 @@ struct Instance_801A8D9C {
 };
 struct Pose_801A8B84 { unsigned char mUnknown0[8]; Vector_80039F5C mUnknown8; unsigned char mUnknown14[0x4C]; Vector_80039F5C mUnknown60; };
 struct Env_801A8D9C { void *mpUnknown0; };
-struct Object_801A8620;
-struct Child_801A9430 {
-    unsigned char mUnknown0[0x30]; Vector_80039F5C mUnknown30;
-    Vector_80039F5C mUnknown3C; unsigned char mUnknown48[8];
-    Object_801A8620 *mpUnknown50; unsigned char mUnknown54[4];
-    void *mpUnknown58; Child_801A9430 *mpUnknown5C; Vector_80039F5C mUnknown60;
-    unsigned char mUnknown6C;
-};
-struct Object_801A8620 {
-    unsigned char mUnknown0[4]; Vector_80039F5C mUnknown4;
-    unsigned char mUnknown10[4]; int (*mUnknown14)(Object_801A8620 *, int); Vector_80039F5C mUnknown18;
-    unsigned char mUnknown24[0x84]; void *mpUnknownA8; unsigned char mUnknownAC[8]; Vector_80039F5C mUnknownB4;
-    unsigned char mUnknownC0[12]; int mUnknownCC;
-    unsigned char mUnknownD0[12]; int mUnknownDC; unsigned char mUnknownE0[8];
-    union { unsigned int mWord; unsigned char mBytes[4]; } mUnknownE8;
-    unsigned char mUnknownEC[8]; int mUnknownF4; int mUnknownF8;
-    unsigned char mUnknownFC; unsigned char mUnknownFD[3]; Texture_801A8D08 *mpUnknown100;
-    Element_801A8620 mUnknown104; Instance_801A8D9C *mpUnknown12C;
-    Env_801A8D9C *mpUnknown130; unsigned char mUnknown134[4]; unsigned char mUnknown138;
-    unsigned char mUnknown139[3]; int mUnknown13C; unsigned char mUnknown140;
-    unsigned char mUnknown141[11]; void *mpUnknown14C; unsigned char mUnknown150[8];
-    char mUnknown158[128]; Pose_801A8B84 *mpUnknown1D8;
-    unsigned char mUnknown1DC[4]; Child_801A9430 *mpUnknown1E0;
-};
-
 extern "C" {
 extern void *lbl_803EA368;
 int fn_8002D060(void *);

@@ -4,6 +4,12 @@
 #include "game/Object_8003DEC4.h"
 #include "game/Record_8019D8AC.h"
 
+/* Encoded frame blocks start with a count byte whose top two bits flag the
+   optional vectors, then a flags byte and four header words. */
+struct Block_8019D3B8 {
+    unsigned int mWords[7];
+};
+
 /* Frame header decoded by fn_8019D3B8 from an encoded sample block. */
 struct Frame_8019D3B8 {
     unsigned char count;

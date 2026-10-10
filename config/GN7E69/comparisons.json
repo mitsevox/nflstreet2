@@ -28890,6 +28890,67 @@
           "end": "0x801A4AD4"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801A980C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit 0x801A980C-0x801AA24C, complete source-form/type/compiler rows, and native readonly extent 0x802AE958-0x802AE978. Partial functions 0x801A991C and 0x801A9C44 remain fully compared; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A980C",
+          "end": "0x801AA24C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE958",
+          "end": "0x802AE978"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801A980C",
+          "start": "0x801A980C",
+          "end": "0x801A983C"
+        },
+        {
+          "symbol": "fn_801A983C",
+          "start": "0x801A983C",
+          "end": "0x801A991C"
+        },
+        {
+          "symbol": "fn_801A991C",
+          "start": "0x801A991C",
+          "end": "0x801A9C08"
+        },
+        {
+          "symbol": "fn_801A9C08",
+          "start": "0x801A9C08",
+          "end": "0x801A9C44"
+        },
+        {
+          "symbol": "fn_801A9C44",
+          "start": "0x801A9C44",
+          "end": "0x801A9F98"
+        },
+        {
+          "symbol": "fn_801A9F98",
+          "start": "0x801A9F98",
+          "end": "0x801AA124"
+        },
+        {
+          "symbol": "fn_801AA124",
+          "start": "0x801AA124",
+          "end": "0x801AA220"
+        },
+        {
+          "symbol": "fn_801AA220",
+          "start": "0x801AA220",
+          "end": "0x801AA24C"
+        }
+      ]
     }
   ]
 }
