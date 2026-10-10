@@ -52,7 +52,7 @@ int fn_8016BD54(Object_80039F5C *pObject)
 
 float fn_8016BD80(Object_80039F5C *pObject)
 {
-    return fn_802275D8(&pObject->mMotion.mPos, pObject->mMotion.mUnknown12, 1e-7f) ? 0.9f : 0.7f;
+    return fn_802275D8(&pObject->mMotion.mPos, &pObject->mMotion.mUnknown12, 1e-7f) ? 0.9f : 0.7f;
 }
 
 void fn_8016BDCC(Object_80039F5C *pObject)

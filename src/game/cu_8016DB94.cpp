@@ -817,7 +817,7 @@ extern "C" void fn_8016EC40(Object_80039F5C *p)
             return;
         }
         if ((pOwner->mFlags & 0x800) &&
-            ((pOwner->mFlags & 0x10000) || p->mUnknown560.mUnknown52[1] != 0)) {
+            ((pOwner->mFlags & 0x10000) || p->mUnknown560.mUnknown53 != 0)) {
             float x;
             float line;
 

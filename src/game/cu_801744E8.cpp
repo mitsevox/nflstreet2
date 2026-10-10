@@ -853,7 +853,7 @@ void fn_8017678C(Object_80039F5C *player) {
     return;
   int team = fn_80178320();
   if (player->mIdBytes[2] == team && player->mUnknown560.mFlags.mBytes[0] &&
-      player->mUnknown560.mUnknown52[1]) {
+      player->mUnknown560.mUnknown53) {
     if (fn_800BA6F8())
       fn_80178370();
     else
