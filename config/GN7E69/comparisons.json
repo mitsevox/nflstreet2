@@ -15185,7 +15185,7 @@
     {
       "source": "src/game/cu_8006F810.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional37-function grouping; fourteen complete380-target-byte bodies with individual neutral name/source-form rows and original external access footprints. Existing canonical callee/vector contracts preserved, including unused first argument for fn_80071BA0. No storage emitted;23 other functions/all storage original/unmeasured; original assembly stays linked. Added22 complete target-body reconstructions for event-triggered sound selection, cyclic nonrepeating IDs, delayed positioned playback, event forwarding and selection-handle lifecycle; names retained neutral. Original assembly remains linked.",
+      "evidence": "evidence.tsv retained open/provisional37-function grouping. All37 complete bodies now compared:23 newly reconstructed event-driven sound dispatch/selection/playback functions and14 existing bodies. Neutral labels retained; canonical player, ball, area, event and Block_800C9D6C contracts reused. The complete emitted conversion-literal pool is measured against the honest56-byte target slice0x80290B60-0x80290B98, including intervening unresolved original constants. Code/data matching incompleteness remains explicit; no linking promotion or storage definition; original assembly/storage stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -15196,7 +15196,7 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x80290B90",
+          "start": "0x80290B60",
           "end": "0x80290B98"
         }
       ],
@@ -15215,6 +15215,11 @@
           "symbol": "fn_8006F824",
           "start": "0x8006F824",
           "end": "0x8006F850"
+        },
+        {
+          "symbol": "fn_8006F850",
+          "start": "0x8006F850",
+          "end": "0x80070C40"
         },
         {
           "symbol": "fn_80070C40",
