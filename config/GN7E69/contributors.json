@@ -14894,8 +14894,11 @@
       "provenance": {
         "pull_request": 714,
         "merged_via": 714,
-        "commit": "c3d9b73dd5f325ab6269bb14c5cb258c4daf954c",
-        "introduced_blob": "3185706bac63e58c1d10b7b6e27b14840e08a156"
+        "commit": "9a4c2edb69452e9e152d1e792b1416d6405e5d67",
+        "introduced_blob": "f081783363fa30ff614cfb0c8f23599c6d6feb4f",
+        "original_blob": "3185706bac63e58c1d10b7b6e27b14840e08a156",
+        "original_commit": "c3d9b73dd5f325ab6269bb14c5cb258c4daf954c",
+        "integration_adjustment": "Reconcile canonical shared layouts and declarations with accepted main while preserving reviewed behavior, original contributor provenance, and function credit; integration delta reviewed independently and validated by final combined CI."
       }
     },
     {
@@ -15671,8 +15674,11 @@
       "provenance": {
         "pull_request": 717,
         "merged_via": 717,
-        "commit": "c3f1c8ac140d6ac52b149794abedad37dd36dba3",
-        "introduced_blob": "d0e27c78477fb2fa593ecdf1b610a6cc9e7ae1ff"
+        "commit": "9a4c2edb69452e9e152d1e792b1416d6405e5d67",
+        "introduced_blob": "f52f5405fddbfe3c103daba5851d3d8f7bb56d54",
+        "original_blob": "d0e27c78477fb2fa593ecdf1b610a6cc9e7ae1ff",
+        "original_commit": "c3f1c8ac140d6ac52b149794abedad37dd36dba3",
+        "integration_adjustment": "Reconcile canonical shared layouts and declarations with accepted main while preserving reviewed behavior, original contributor provenance, and function credit; integration delta reviewed independently and validated by final combined CI."
       }
     },
     {
@@ -15692,8 +15698,11 @@
       "provenance": {
         "pull_request": 717,
         "merged_via": 717,
-        "commit": "c3f1c8ac140d6ac52b149794abedad37dd36dba3",
-        "introduced_blob": "afa8d183bbb73d8a041b3fc228817e42b541563d"
+        "commit": "9a4c2edb69452e9e152d1e792b1416d6405e5d67",
+        "introduced_blob": "5653b099cb9c5dcedc6cf52b1b63154561157c2a",
+        "original_blob": "afa8d183bbb73d8a041b3fc228817e42b541563d",
+        "original_commit": "c3f1c8ac140d6ac52b149794abedad37dd36dba3",
+        "integration_adjustment": "Reconcile canonical shared layouts and declarations with accepted main while preserving reviewed behavior, original contributor provenance, and function credit; integration delta reviewed independently and validated by final combined CI."
       }
     },
     {
@@ -15826,8 +15835,11 @@
       "provenance": {
         "pull_request": 717,
         "merged_via": 717,
-        "commit": "c3f1c8ac140d6ac52b149794abedad37dd36dba3",
-        "introduced_blob": "3f119159bc29ae57642c22536191b523e8b23b7b"
+        "commit": "9a4c2edb69452e9e152d1e792b1416d6405e5d67",
+        "introduced_blob": "4066a8381bd5454ca2573a861d6596bbe48b1ae0",
+        "original_blob": "3f119159bc29ae57642c22536191b523e8b23b7b",
+        "original_commit": "c3f1c8ac140d6ac52b149794abedad37dd36dba3",
+        "integration_adjustment": "Reconcile canonical shared layouts and declarations with accepted main while preserving reviewed behavior, original contributor provenance, and function credit; integration delta reviewed independently and validated by final combined CI."
       }
     },
     {
