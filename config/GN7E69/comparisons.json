@@ -15147,24 +15147,129 @@
       ]
     },
     {
-      "source": "src/game/cu_8015A39C.cpp",
+      "source": "src/game/cu_8015A248.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional24-function grouping and full provisional original pool association; three complete bodies with individual neutral name/type/field/source-form/compiler rows. Whole44/16/8-byte functions and four-byte compiled read-only float literal are measured;21 other bodies, all external storage and all other pool bytes remain original/unmeasured. Canonical player pointer and existing int/void contracts preserved; entire original assembly stays linked.",
+      "evidence": "Source consolidation retains accepted three-function prefix unchanged, with24 complete additional bodies under fixed DECOMP_COMPARE. Shared original pool context compiles184 bytes identical to target0x802A3E40-0x802A3EF8 including natural trailing alignment. Accepted prefix data remains invariant and is excluded from new comparison credit; comparison functions retain full24 target extents. Provisional original unit edges, neutral identifiers, unchanged game_cpp profile; original assembly stays linked for additional bodies.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8015A39C",
+          "start": "0x8015A248",
           "end": "0x8015C25C"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802A3EF0",
-          "end": "0x802A3EF4"
+          "start": "0x802A3E40",
+          "end": "0x802A3EF8"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_8015A39C",
+          "start": "0x8015A39C",
+          "end": "0x8015A3EC"
+        },
+        {
+          "symbol": "fn_8015A3EC",
+          "start": "0x8015A3EC",
+          "end": "0x8015A588"
+        },
+        {
+          "symbol": "fn_8015A588",
+          "start": "0x8015A588",
+          "end": "0x8015A6E0"
+        },
+        {
+          "symbol": "fn_8015A6E0",
+          "start": "0x8015A6E0",
+          "end": "0x8015A818"
+        },
+        {
+          "symbol": "fn_8015A818",
+          "start": "0x8015A818",
+          "end": "0x8015AB84"
+        },
+        {
+          "symbol": "fn_8015AB84",
+          "start": "0x8015AB84",
+          "end": "0x8015ABE4"
+        },
+        {
+          "symbol": "fn_8015ABE4",
+          "start": "0x8015ABE4",
+          "end": "0x8015AD50"
+        },
+        {
+          "symbol": "fn_8015AD50",
+          "start": "0x8015AD50",
+          "end": "0x8015AF48"
+        },
+        {
+          "symbol": "fn_8015AF48",
+          "start": "0x8015AF48",
+          "end": "0x8015B344"
+        },
+        {
+          "symbol": "fn_8015B344",
+          "start": "0x8015B344",
+          "end": "0x8015B834"
+        },
+        {
+          "symbol": "fn_8015B834",
+          "start": "0x8015B834",
+          "end": "0x8015BCAC"
+        },
+        {
+          "symbol": "fn_8015BCAC",
+          "start": "0x8015BCAC",
+          "end": "0x8015BED4"
+        },
+        {
+          "symbol": "fn_8015BED4",
+          "start": "0x8015BED4",
+          "end": "0x8015BF28"
+        },
+        {
+          "symbol": "fn_8015BF28",
+          "start": "0x8015BF28",
+          "end": "0x8015BFAC"
+        },
+        {
+          "symbol": "fn_8015BFAC",
+          "start": "0x8015BFAC",
+          "end": "0x8015BFD4"
+        },
+        {
+          "symbol": "fn_8015BFD4",
+          "start": "0x8015BFD4",
+          "end": "0x8015C024"
+        },
+        {
+          "symbol": "fn_8015C024",
+          "start": "0x8015C024",
+          "end": "0x8015C064"
+        },
+        {
+          "symbol": "fn_8015C064",
+          "start": "0x8015C064",
+          "end": "0x8015C0C0"
+        },
+        {
+          "symbol": "fn_8015C0C0",
+          "start": "0x8015C0C0",
+          "end": "0x8015C114"
+        },
+        {
+          "symbol": "fn_8015C114",
+          "start": "0x8015C114",
+          "end": "0x8015C170"
+        },
+        {
+          "symbol": "fn_8015C170",
+          "start": "0x8015C170",
+          "end": "0x8015C218"
+        },
         {
           "symbol": "fn_8015C218",
           "start": "0x8015C218",
