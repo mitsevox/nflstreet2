@@ -69,7 +69,7 @@ int fn_80081D4C(Object_8008044C *pObject, unsigned char *p)
             columns[i].Set(0x4C434750, lbl_802D6850[i], 0);
         }
         columns[18].SetEnd();
-        fn_801FA228(pObject->mUnknown0, 0, 0, columns);
+        pObject->Read(columns);
         for (i = 0; i < 18; i++) {
             p[i] = columns[i].mValue;
         }

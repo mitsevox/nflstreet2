@@ -16,4 +16,10 @@ struct Table_8007E020 {
     Object_80023BBC *mFilter;
 };
 
+extern "C" {
+int fn_801F9D70(int handle, int table, Object_80023BBC *pFilter, unsigned short *pCount);
+int fn_801FA148(int cursor);
+int fn_801FA290(int handle, Table_8007E020 *pTables, Object_80023BBC *pFilter, ColumnValue_802D6424 *pColumns);
+}
+
 #endif

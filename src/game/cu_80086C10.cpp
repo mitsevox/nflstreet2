@@ -120,7 +120,7 @@ int fn_80086D0C(int index, int id, int byRow, int *pId, int *pPrice,
     columns[column].SetEnd();
     if (byRow) {
         priceFilter.SetUnknown32(6, ((unsigned long long)pDescriptor->mTable << 32) | pDescriptor->mPriceColumn, 2, 0x10004);
-        priceFilter.mUnknown24.mInt = 0;
+        priceFilter.mUnknown16.mValue.mInt = 0;
         if (pDescriptor->mTable == 0x52414547) {
             pFilter = &both;
             both.Set(11, &priceFilter, &categoryFilter);
@@ -183,7 +183,7 @@ int fn_80087128(int index)
     int result = 0;
     Object_80023BBC *pFilter = &priceFilter;
     priceFilter.SetUnknown32(6, ((unsigned long long)pDescriptor->mTable << 32) | pDescriptor->mPriceColumn, 2, 0x10004);
-    priceFilter.mUnknown24.mInt = 0;
+    priceFilter.mUnknown16.mValue.mInt = 0;
     if (pDescriptor->mTable == 0x52414547) {
         pFilter = &both;
         both.Set(11, &priceFilter, &categoryFilter);

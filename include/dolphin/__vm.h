@@ -3,6 +3,10 @@
 
 #include <dolphin/types.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef void (*VMLogStatsCallback)(u32 virtualAddr, u32 physicalAddr, u32 pageNumber, u32 pageMissLatency, BOOL pageSwappedOut);
 
 void VMInit(u32 mramSize, u32 aramStart, u32 aramSize);
@@ -40,5 +44,9 @@ u32 __VMBASEGetPhysicalAddr(u32 virtualAddr);
 u32 __VMBASEGetVirtualAddr(u32 physPage);
 BOOL __VMBASEIsPageLocked(u32 physPage);
 void VMBASEStoreAllPages(void (*storePage)(u32 virtualAddr));
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

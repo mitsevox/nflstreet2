@@ -21,6 +21,14 @@ struct Struct_802D611C {
     unsigned int mUnknown8;
 };
 
+/* Argument of fn_8006BBC4, which compares the string at +8 with the names of
+   lbl_802D50A4; fn_8006F6A0 reads the float at +4. */
+struct Struct_8006BBC4 {
+    int mUnknown0;
+    float mUnknown4;
+    char mUnknown8[1];
+};
+
 extern "C" {
 extern Struct_802D611C lbl_802D611C[];
 

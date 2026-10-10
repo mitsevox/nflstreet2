@@ -78,7 +78,7 @@ int fn_80023BBC(int index, int a)
     Object_80023BBC arg;
 
     arg.Set(6, 0x4C43444C4C4C4344LL, 3);
-    arg.mUnknown24.mInt = 0;
+    arg.mUnknown16.mValue.mInt = 0;
     fn_8007A334(&cursor, 0x4C43444C, 0x494C4344, lbl_802F4684, &arg, handle);
     found = fn_8007A7F4(&cursor, 0x494C4344, a, 0, &value);
     fn_8007A3C4(&cursor);
@@ -96,7 +96,7 @@ int fn_80023CA4(int index, int a)
     Object_80023BBC arg;
 
     arg.Set(6, 0x4C43444C4C4C4344LL, 3);
-    arg.mUnknown24.mInt = 0;
+    arg.mUnknown16.mValue.mInt = 0;
     fn_8007A334(&cursor, 0x4C43444C, 0x494C4344, lbl_802F46A4, &arg, handle);
     if (fn_8007A600(&cursor, a)) {
         result = fn_8007A98C(&cursor, 0x494C4344);

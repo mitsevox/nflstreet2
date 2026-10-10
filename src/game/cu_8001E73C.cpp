@@ -10,7 +10,7 @@ void fn_8000FCD4(int a);
 void fn_800256F8(int value);
 void fn_80077F24(void);
 Object_8007A334 *fn_80077F94(void);
-void fn_800780C0(Object_8007A334 *pObject, unsigned char id, int a);
+void fn_800780C0(Object_8007A334 *pObject, unsigned char id, int *pResult);
 void fn_800780F8(Object_8007A334 *pObject, Object_800785C0 *pRecord, int a);
 int fn_80078620(int id, int *pA, int *pB);
 unsigned int fn_80078800(void);

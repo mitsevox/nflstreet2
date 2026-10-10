@@ -56,40 +56,79 @@ union Union_80023BBC {
     struct Object_80023BBC *mNode;
 };
 
-/* Fifth argument of fn_8007A334; it is stored at +28 of the cursor. */
+/* One operand of Object_80023BBC: the slot and its kind. Kind 6 names a
+   table and column (the table tag in the high word), 3 or 2 an integer and 11
+   another Object_80023BBC. */
+struct Operand_80023BBC {
+    void Set(int kind, long long value)
+    {
+        mKind = kind;
+        mValue.mLong = value;
+    }
+    void Set(int kind, int value)
+    {
+        mKind = kind;
+        mValue.mInt = value;
+    }
+    void Set(int kind, Object_80023BBC *pNode)
+    {
+        mKind = kind;
+        mValue.mNode = pNode;
+    }
+
+    int mKind;
+    Union_80023BBC mValue;
+};
+
+/* Fifth argument of fn_8007A334; it is stored at +28 of the cursor. Two
+   operands and the operator word. */
 struct Object_80023BBC {
     void Set(int a, long long b, int type)
     {
         mUnknown32 = 0x10003;
-        mUnknown0 = a;
-        mUnknown8 = b;
-        mUnknown16 = type;
+        mUnknown0.mKind = a;
+        mUnknown0.mValue = b;
+        mUnknown16.mKind = type;
     }
     void Set(int a, long long b, int type, int c)
     {
         Set(a, b, type);
-        mUnknown24.mInt = c;
+        mUnknown16.mValue.mInt = c;
     }
     void SetUnknown32(int a, long long b, int type, int unknown32)
     {
         mUnknown32 = unknown32;
-        mUnknown0 = a;
-        mUnknown8 = b;
-        mUnknown16 = type;
+        mUnknown0.mKind = a;
+        mUnknown0.mValue = b;
+        mUnknown16.mKind = type;
     }
     void Set(int a, Object_80023BBC *pLeft, Object_80023BBC *pRight)
     {
         mUnknown32 = 0x20009;
-        mUnknown0 = a;
-        mUnknown8.mNode = pLeft;
-        mUnknown16 = 11;
-        mUnknown24.mNode = pRight;
+        mUnknown0.mKind = a;
+        mUnknown0.mValue.mNode = pLeft;
+        mUnknown16.mKind = 11;
+        mUnknown16.mValue.mNode = pRight;
+    }
+    /* Operand setters that leave mUnknown32 to the caller. */
+    void SetOperands(int kind, long long column, int valueKind, int value)
+    {
+        mUnknown0.Set(kind, column);
+        mUnknown16.Set(valueKind, value);
+    }
+    void SetOperands(int kind, long long column, int valueKind, long long value)
+    {
+        mUnknown0.Set(kind, column);
+        mUnknown16.Set(valueKind, value);
+    }
+    void SetOperands(int kind, Object_80023BBC *pLeft, Object_80023BBC *pRight)
+    {
+        mUnknown0.Set(kind, pLeft);
+        mUnknown16.Set(kind, pRight);
     }
 
-    int mUnknown0;
-    Union_80023BBC mUnknown8;
-    int mUnknown16;
-    Union_80023BBC mUnknown24;
+    Operand_80023BBC mUnknown0;
+    Operand_80023BBC mUnknown16;
     int mUnknown32;
 };
 

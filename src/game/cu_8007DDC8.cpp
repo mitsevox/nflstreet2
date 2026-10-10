@@ -89,14 +89,14 @@ int fn_8007E020(int type, int a, int b)
         unsigned int t = table;
         unsigned long long column = 0x594B5047;
         join.Set(6, 0x52414547594B5047LL, 6);
-        join.mUnknown24.mLong = ((unsigned long long)t << 32) | column;
+        join.mUnknown16.mValue.mLong = ((unsigned long long)t << 32) | column;
         typeFilter.Set(6, 0x5241454749545247LL, 3);
-        typeFilter.mUnknown24.mInt = type;
+        typeFilter.mUnknown16.mValue.mInt = type;
         pFilter = &typeFilter;
         if (a >= 0) {
             both.Set(11, pFilter, &idFilter);
             idFilter.Set(6, 0x5241454749545347LL, 3);
-            idFilter.mUnknown24.mInt = a;
+            idFilter.mUnknown16.mValue.mInt = a;
             pFilter = &both;
         }
         if (b == 0) {
