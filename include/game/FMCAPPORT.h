@@ -1,6 +1,7 @@
 #ifndef GAME_FMCAPPORT_H
 #define GAME_FMCAPPORT_H
 
+#include "game/Class_8008B284.h"
 #include "game/Module.h"
 #include "game/Object_80228224.h"
 
@@ -58,8 +59,6 @@ struct Object_80234A30 {
     char mUnknown228[12];
 };
 
-class Class_8008B284;
-
 /* Argument of fn_8008A9F8, fn_8008AA48, fn_8008AA7C, fn_8008AA9C, fn_8008AAD0,
    fn_8008AAF0, fn_8008ABA4, fn_80199968, fn_801999B0 and fn_801999F4. */
 struct Object_8008A9F8 {
@@ -82,15 +81,6 @@ struct Object_8008A9F8 {
     Triple_80198D98 mUnknown1340[30];
     Triple_80198D98 mUnknown1520[19];
     Class_8008B284 *mpUnknown1636;
-};
-
-class Class_8008B284 {
-public:
-    Class_8008B284();
-    ~Class_8008B284();
-
-private:
-    char mUnknown0[44];
 };
 
 struct FMCAPPORTState {

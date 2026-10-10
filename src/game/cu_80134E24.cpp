@@ -80,7 +80,7 @@ int fn_80134E24(Object_80039F5C *player) {
     state->mUnknown34 = 0;
     fn_80135CEC(player);
     lbl_803EB169 = 0;
-    unsigned char variant = player->mUnknown2910[3];
+    unsigned char variant = player->mUnknown2913;
     if (player->mUnknown776 != 2 && variant == 0)
         fn_800D7A0C(player, 2);
     else if (player->mUnknown776 != 1 && variant == 1)
@@ -102,7 +102,7 @@ int fn_80134E24(Object_80039F5C *player) {
         state->mUnknown3 = 0;
         state->mUnknown6 = 0;
         state->mUnknown0 = 0;
-        state->mUnknown8 = state->mUnknown10 = player->mUnknown2910[3] == 1 ? 0x800000 : 0;
+        state->mUnknown8 = state->mUnknown10 = player->mUnknown2913 == 1 ? 0x800000 : 0;
         state->mUnknown1A = state->mUnknown18 = 0;
         for (int i = 0; i < 3; ++i)
             fn_80168E00(player->mIdBytes[2], i, &state->mUnknown2D[i]);
@@ -212,7 +212,7 @@ int fn_80135200(Object_80039F5C *player) {
                     state->mUnknown10 = angle;
                     minimum = sum;
                 } else if (sum == minimum) {
-                    int base = player->mUnknown2910[3] == 1 ? 0x800000 : 0;
+                    int base = player->mUnknown2913 == 1 ? 0x800000 : 0;
                     if (fn_801CFFD0(base, state->mUnknown10) > fn_801CFFD0(base, angle))
                         state->mUnknown10 = angle;
                 }

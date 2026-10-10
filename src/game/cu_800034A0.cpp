@@ -27,8 +27,8 @@ int fn_8022F384(int a);
 void fn_8002A574(int a, int b);
 void fn_801D6B24(char *p, int size);
 void fn_80029A40(int a, int b, unsigned int c, char *d);
-void fn_8022F3D4(int a);
-void fn_8007A24C(void);
+int fn_8022F3D4(int a);
+void fn_8007A24C(int handle);
 void fn_80029CE0(int a, int b);
 int fn_801D6844(void);
 void fn_801D6DE0(int a, int b);
@@ -207,8 +207,7 @@ void fn_800037C0(int a, int *b)
             fn_8002A574(type, slot);
             fn_801D6B24(buf + 8, 17);
             fn_80029A40(type, slot, lbl_80367580.mChecksum, buf + 8);
-            fn_8022F3D4(res_f4bc);
-            fn_8007A24C();
+            fn_8007A24C(fn_8022F3D4(res_f4bc));
             fn_80029CE0(type, slot);
         } else {
             fn_8022F4BC();

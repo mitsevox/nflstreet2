@@ -215,9 +215,9 @@ void fn_8007BF60(int id)
         keys[1].Set(-1, -1, 3);
         both.Set(11, &first, &second);
         first.Set(6, 0x5049524749544947LL, 2);
-        first.mUnknown24.mInt = id;
+        first.mUnknown16.mValue.mInt = id;
         second.Set(6, 0x504952474C504947LL, 2);
-        second.mUnknown24.mInt = count;
+        second.mUnknown16.mValue.mInt = count;
         {
             Class_8018FD64 rows;
 
@@ -232,7 +232,7 @@ void fn_8007BF60(int id)
             }
         }
         second.Set(6, 0x504952474C504947LL, 2);
-        second.mUnknown24.mInt = next;
+        second.mUnknown16.mValue.mInt = next;
         {
             Class_8018FD64 rows;
 

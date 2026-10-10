@@ -3,13 +3,26 @@
 
 #include "game/Object_8017886C.h"
 
-/* One of the seven 40-byte entries at Object_8006719C +0x84. */
+struct Team_80167A8C;
+
+/* One of the 8-byte slots at Object_8006719C +0x1C, filled by fn_80066318. */
+struct Slot_8006719C {
+    char mUnknown0[5];
+    unsigned char mUnknown5;
+    unsigned short mUnknown6;
+};
+
+/* One 40-byte entry of the 11 x 7 table at Object_8006719C +0x84. */
 struct Entry_8006719C {
-    char mUnknown0[9];
+    unsigned short mUnknown0;
+    unsigned short mUnknown2;
+    unsigned short mUnknown4;
+    unsigned short mUnknown6;
+    unsigned char mUnknown8;
     unsigned char mUnknown9;
     unsigned char mUnknownA;
     unsigned char mUnknownB;
-    char mUnknownC[2];
+    unsigned short mUnknownC;
     unsigned short mUnknownE;
     Point_8017886C mUnknown10;
     Point_8017886C mUnknown18;
@@ -21,13 +34,16 @@ struct Entry_8006719C {
 struct Object_8006719C {
     int mUnknown0;
     int mUnknown4;
-    char mUnknown8[7];
+    int mUnknown8;
+    unsigned short mUnknownC;
+    unsigned char mUnknownE;
     unsigned char mUnknownF;
-    char mUnknown10[4];
+    int mUnknown10;
     unsigned int mUnknown14;
-    char mUnknown18[0x6C];
-    Entry_8006719C mUnknown84[7];
-    char mUnknown19C[0xB0C];
+    int mUnknown18;
+    Slot_8006719C mUnknown1C[13];
+    Entry_8006719C mUnknown84[11][7];
+    char mUnknownC8C[0x1C];
 };
 
 /* Filled by fn_800670B4, which clears all 0xCE4 bytes first. */
@@ -40,9 +56,13 @@ struct Object_800670B4 {
 
 /* Filled by fn_80067338, which clears all 0x20C bytes first. */
 struct Record_80067338 {
-    char mUnknown0[4];
+    int mUnknown0;
     int mUnknown4;
-    char mUnknown8[0xC];
+    int mUnknown8;
+    unsigned char mUnknownC;
+    unsigned char mUnknownD;
+    char mUnknownE[2];
+    int mUnknown10;
     /* Read both as a word and as its last byte. */
     union {
         int mUnknown14;
@@ -52,19 +72,22 @@ struct Record_80067338 {
         };
     };
     unsigned int mUnknown18;
-    unsigned char mUnknown1C;
-    char mUnknown1D[0x1D3];
+    unsigned char mUnknown1C[3][4];
+    unsigned char mUnknown28[5][3];
+    char mUnknown37;
+    unsigned char mUnknown38[7][10][4];
+    char mUnknown150[0xA0];
     char mUnknown1F0[0x1C];
 };
 
 extern "C" {
 unsigned short fn_80067038(int tag, int kind);
 int fn_800670B4(int tag, int a, int b, Object_800670B4 *pObject);
-unsigned short fn_80067120(int tag, int handle);
-void fn_8006719C(int tag, int handle, int index, void *pOwner, Object_8006719C *pObject);
-void fn_8006723C(int tag, int handle, void *pOwner, Object_8006719C *pObject);
-unsigned short fn_800672BC(int tag, int handle);
-int fn_80067338(int tag, int handle, int index, Record_80067338 *pRecord);
+unsigned short fn_80067120(int tag, int key);
+void fn_8006719C(int tag, int key, int index, Team_80167A8C *pTeam, Object_8006719C *pObject);
+void fn_8006723C(int tag, int key, Team_80167A8C *pTeam, Object_8006719C *pObject);
+unsigned short fn_800672BC(int tag, int key);
+int fn_80067338(int tag, int key, int index, Record_80067338 *pRecord);
 }
 
 #endif

@@ -247,14 +247,14 @@ void fn_80083B00(Object_8007A334 *pObject, void *pColumns, int tag)
     Object_80023BBC right;
 
     root.mUnknown32 = 0x2000A;
-    root.mUnknown0 = 11;
-    root.mUnknown8.mNode = &left;
-    root.mUnknown16 = 11;
-    root.mUnknown24.mNode = &right;
+    root.mUnknown0.mKind = 11;
+    root.mUnknown0.mValue.mNode = &left;
+    root.mUnknown16.mKind = 11;
+    root.mUnknown16.mValue.mNode = &right;
     left.Set(6, 0x4D41455450595454LL, 3);
-    left.mUnknown24.mInt = 0;
+    left.mUnknown16.mValue.mInt = 0;
     right.Set(6, 0x4D41455450595454LL, 3);
-    right.mUnknown24.mInt = 5;
+    right.mUnknown16.mValue.mInt = 5;
     fn_8007A334(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
 }
 
@@ -266,9 +266,9 @@ void fn_80083BC4(Object_8007A334 *pObject, void *pColumns, int tag, int logo)
 
     root.Set(11, &left, &right);
     left.Set(6, 0x4D41455450595454LL, 3);
-    left.mUnknown24.mInt = 0;
+    left.mUnknown16.mValue.mInt = 0;
     right.Set(6, 0x4D4145544C474C54LL, 3);
-    right.mUnknown24.mInt = logo;
+    right.mUnknown16.mValue.mInt = logo;
     fn_8007A334(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
 }
 
@@ -283,15 +283,15 @@ void fn_80083C98(Object_8007A334 *pObject, void *pColumns, int tag, unsigned cha
     root.Set(11, &left, &right);
     left.Set(11, &leftLeft, &leftRight);
     right.SetUnknown32(6, 0x4D41455450595454LL, 3, 0x10006);
-    right.mUnknown24.mInt = 17;
+    right.mUnknown16.mValue.mInt = 17;
     if (flag) {
-        leftLeft.mUnknown24.mInt = 0;
+        leftLeft.mUnknown16.mValue.mInt = 0;
     } else {
-        leftLeft.mUnknown24.mInt = 1;
+        leftLeft.mUnknown16.mValue.mInt = 1;
     }
     leftLeft.SetUnknown32(6, 0x4D41455452554D54LL, 3, 0x10006);
     leftRight.SetUnknown32(6, 0x4D41455450595454LL, 3, 0x10006);
-    leftRight.mUnknown24.mInt = 2;
+    leftRight.mUnknown16.mValue.mInt = 2;
     fn_8007A334(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
 }
 

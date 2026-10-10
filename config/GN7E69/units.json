@@ -274,14 +274,6 @@
       "address": "0x801D3BD0",
       "evidence": "evidence.tsv external row for 0x801D3BD0 (__nw__FUii); descriptive name."
     },
-    "__14Class_8008B284": {
-      "address": "0x8008B284",
-      "evidence": "evidence.tsv external row for 0x8008B284 (__14Class_8008B284); descriptive name."
-    },
-    "_._14Class_8008B284": {
-      "address": "0x8008B2E8",
-      "evidence": "evidence.tsv external row for 0x8008B2E8 (_._14Class_8008B284); descriptive name."
-    },
     "__pure_virtual": {
       "address": "0x8025F088",
       "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
@@ -465,6 +457,18 @@
     "atexit": {
       "address": "0x80262310",
       "evidence": "evidence.tsv external row atexit: called from the function-local static guard path at 0x8000EC78 with the destructor stub 0x8000DCD8, as ProDG cc1plus registers local-static destructors; target body matches the newlib exit-procedure registration."
+    },
+    "OSInit": {
+      "address": "0x80238B10",
+      "evidence": "evidence.tsv external row for 0x80238B10 (OSInit)."
+    },
+    "VMInit": {
+      "address": "0x80244F18",
+      "evidence": "evidence.tsv external row for 0x80244F18 (VMInit)."
+    },
+    "__main": {
+      "address": "0x8025E1D8",
+      "evidence": "evidence.tsv external row for 0x8025E1D8 (__main)."
     },
     "__ashldi3": {
       "address": "0x8025E210",
@@ -10060,6 +10064,148 @@
           "placement": ".text",
           "start": "0x80193E7C",
           "end": "0x80193FB0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8008DF00.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8008DF00-0x8008E978 (src/game/cu_8008DF00.cpp), its data row and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8008DF00",
+          "end": "0x8008E978"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296000",
+          "end": "0x80296038"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8006F54C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8006F54C-0x8006F810 (src/game/cu_8006F54C.cpp) and its source-form row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8006F54C",
+          "end": "0x8006F810"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800747DC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800747DC-0x80074D70 (src/game/cu_800747DC.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800747DC",
+          "end": "0x80074D70"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8007A24C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007A24C-0x8007A3C4 (src/game/cu_8007A24C.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007A24C",
+          "end": "0x8007A3C4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80087BE4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80087BE4-0x80087C5C (src/game/cu_80087BE4.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80087BE4",
+          "end": "0x80087C5C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80081C10.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80081C10-0x80081CDC (src/game/cu_80081C10.cpp), its data row and its source-form row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80081C10",
+          "end": "0x80081CDC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA7D0",
+          "end": "0x803EA7D8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80075198.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80075198-0x800756E8 (src/game/cu_80075198.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80075198",
+          "end": "0x800756E8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8008AC40.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8008AC40-0x8008B32C (src/game/cu_8008AC40.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8008AC40",
+          "end": "0x8008B32C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80088F2C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80088F2C-0x80089330 (src/game/cu_80088F2C.cpp) and its source-form rows; .text links 0x80088F78-0x80088FFC, fn_80088F2C (inline asm) and fn_80088FFC are comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80088F78",
+          "end": "0x80088FFC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80081440.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80081440-0x800817CC (src/game/cu_80081440.cpp), and its source-form rows. Linked from source: .text 0x800816C4-0x800817CC; 0x80081440-0x800816C4 and the .data table 0x802D6A28-0x802D6AD8 are a draft comparison behind DECOMP_COMPARE (config/GN7E69/comparisons.json) whose original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800816C4",
+          "end": "0x800817CC"
         }
       ]
     }

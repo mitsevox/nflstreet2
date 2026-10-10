@@ -15,7 +15,7 @@ struct Entry_80079864 {
    and fn_80025B18 skips entries whose mUnknown8 is zero. */
 struct Entry_800257B4 {
     int mType;
-    int mValue;
+    unsigned int mValue;
     unsigned char mUnknown8;
     char mUnknown9[3];
 };
@@ -38,22 +38,26 @@ struct Object_800785C0 {
     char mUnknownCB[203];
     unsigned short mUnknown196;
     unsigned char mUnknown198;
-    char mUnknown199[0x1A4 - 0x199];
+    char mUnknown199[3];
+    int mUnknown19C;
+    int mUnknown1A0;
     unsigned short mUnknown1A4;
-    char mUnknown1A6[2];
+    unsigned char mUnknown1A6;
+    unsigned char mUnknown1A7;
     int mUnknown1A8;
     int mUnknown1AC;
     int mUnknown1B0;
     int mUnknown1B4;
     int mUnknown1B8;
     int mUnknown1BC;
-    char mUnknown1C0[1];
+    unsigned char mUnknown1C0;
     unsigned char mUnknown1C1;
     char mUnknown1C2;
     unsigned char mUnknown1C3;
     Entry_800257B4 mUnknown1C4[4];
     Entry_80079864 mUnknown1F4[2];
-    char mUnknown204[4];
+    unsigned char mUnknown204;
+    char mUnknown205[3];
     int mUnknown208;
     Info_8007984C mUnknown20C;
 };
