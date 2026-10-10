@@ -73,7 +73,7 @@ int fn_80178308(void);
 Object_800670B4 *fn_80168708(int);
 Record_8011F4E0 *fn_8011F4E0(void);
 float fn_8011F4D4(void);
-int fn_801650DC(void);
+int fn_801650DC(Record_80067338 *pRecord);
 int fn_8011E9D8(void *);
 void fn_800F0910(int, void *);
 unsigned char fn_800FC014(Object_80039F5C *, void *);
@@ -504,7 +504,7 @@ void fn_8015BCAC(Object_8015C244 *p)
     } while (more);
     fn_8015B834(p, command, hasOther);
     Record_80067338 *pRecord = fn_8016871C(pPlayer->mIdBytes[2]);
-    if (fn_801650DC()) {
+    if (fn_801650DC(pRecord)) {
         for (unsigned char i = 0; i <= 2; ++i) {
             if (pPlayer->mIdBytes[1] == pRecord->mUnknown1C[i][0]) {
                 unsigned short index = fn_800F06F4(0, p->mpUnknown76, 19, 0xffff);
