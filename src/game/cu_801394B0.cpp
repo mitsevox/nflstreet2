@@ -96,7 +96,6 @@ int fn_8013AD78(Object_80137ABC *pBall);
 void fn_8013AD9C(Object_80137ABC *pBall, int a);
 void fn_8013AB24(Object_80137ABC *pBall);
 void fn_800423F8(void *pObject, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
-int fn_80054138(Vector_80039F5C *pPos);
 void fn_8009BFD0(Object_80039F5C *p, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
 void fn_802272DC(Vector_80039F5C *pOut, Vector_80039F5C *pIn, float length);
 int fn_802275D8(Vector_80039F5C *pA, Vector_80039F5C *pB, float eps);
@@ -609,7 +608,7 @@ void fn_8013A844(Object_80137ABC *pBall, float dt)
     }
     ClearVector(&pBall->mState.mUnknown7C);
     ClearVector(&pBall->mState.mUnknown88);
-    pBlock->mUnknown660 = fn_80054138(&pBlock->mUnknown4);
+    pBlock->mUnknown660 = fn_80054138(&pBlock->mUnknown4.mX);
 }
 
 void fn_8013A910(Object_80137ABC *pBall, int *pAngles)
