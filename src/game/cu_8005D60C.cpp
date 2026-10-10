@@ -1391,20 +1391,20 @@ int fn_8005FC84(void)
     return active;
 }
 
-void fn_8005FCF8(int *pAway, int *pHome)
+void fn_8005FCF8(int *pFirst, int *pSecond)
 {
     int ids[13];
     int itgt[13];
     int count;
     int i;
-    int away;
-    int home;
+    int secondSide;
+    int firstSide;
 
     for (i = 0; i < 6; i++) {
-        ids[i] = pHome[i + 1];
+        ids[i] = pSecond[i + 1];
     }
     for (i = 0; i < 7; i++) {
-        ids[i + 6] = pAway[i];
+        ids[i + 6] = pFirst[i];
     }
     {
         Object_8008044C object;
@@ -1428,21 +1428,21 @@ void fn_8005FCF8(int *pAway, int *pHome)
     {
         Object_8007A334 cursor;
         if (fn_8007CB6C(2) == 0) {
-            away = 1;
-            home = 0;
+            secondSide = 1;
+            firstSide = 0;
         } else {
-            away = 0;
-            home = 1;
+            secondSide = 0;
+            firstSide = 1;
         }
         fn_8007A334(&cursor, lbl_803EA5D8, 0x44494750, 0, 0, 0x54415453);
         for (i = 1; i <= 6; i++) {
-            if (fn_800809C4((Object_8008044C *)&cursor, pHome[i], 0)) {
-                fn_80081F50((Object_8008044C *)&cursor, away, 1);
+            if (fn_800809C4((Object_8008044C *)&cursor, pSecond[i], 0)) {
+                fn_80081F50((Object_8008044C *)&cursor, secondSide, 1);
             }
         }
         for (i = 0; i <= 6; i++) {
-            if (fn_800809C4((Object_8008044C *)&cursor, pAway[i], 0)) {
-                fn_80081F50((Object_8008044C *)&cursor, home, 1);
+            if (fn_800809C4((Object_8008044C *)&cursor, pFirst[i], 0)) {
+                fn_80081F50((Object_8008044C *)&cursor, firstSide, 1);
             }
         }
         fn_8007A3C4(&cursor);

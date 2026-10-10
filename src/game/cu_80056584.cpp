@@ -533,7 +533,7 @@ int fn_80057044(void)
 }
 
 
-void fn_800570A4(int *pSide, int *pPads, int *pMode, int *pFresh, int *pType, int *pState, int *pFinal)
+void fn_800570A4(int *pSide, int *pTable, int *pMode, int *pFlag, int *pType, int *pState, int *pIsMode6)
 {
     if (fn_80177F7C() == 6 && (fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF)) {
         fn_80177D78();
@@ -543,7 +543,7 @@ void fn_800570A4(int *pSide, int *pPads, int *pMode, int *pFresh, int *pType, in
         lbl_803EA598 = 1;
     }
     if (lbl_803EA58C->mUnknown50 == 0) {
-        *pFresh = 0;
+        *pFlag = 0;
         lbl_803EA58C->mUnknown2C = fn_8007CB6C(1);
         lbl_803EA58C->mUnknown28 = fn_8007CB6C(0);
         lbl_803EA58C->mUnknown40[1] = 0;
@@ -551,17 +551,17 @@ void fn_800570A4(int *pSide, int *pPads, int *pMode, int *pFresh, int *pType, in
         lbl_803EA58C->mUnknown42[1] = 0;
         lbl_803EA58C->mUnknown42[0] = 0;
         fn_800B4434();
-        int pad = fn_800B65A0(1);
-        if (pad == 0xFF) {
+        int id = fn_800B65A0(1);
+        if (id == 0xFF) {
             lbl_803EA58C->mUnknown4 = -1;
         } else {
-            lbl_803EA58C->mUnknown4 = fn_80188030(pad);
+            lbl_803EA58C->mUnknown4 = fn_80188030(id);
         }
-        pad = fn_800B65A0(0);
-        if (pad == 0xFF) {
+        id = fn_800B65A0(0);
+        if (id == 0xFF) {
             lbl_803EA58C->mUnknown0 = -1;
         } else {
-            lbl_803EA58C->mUnknown0 = fn_80188030(pad);
+            lbl_803EA58C->mUnknown0 = fn_80188030(id);
         }
         lbl_803EA590->mUnknown0[0] = 0;
         lbl_803EA590->mUnknown0[1] = 0;
@@ -584,18 +584,18 @@ void fn_800570A4(int *pSide, int *pPads, int *pMode, int *pFresh, int *pType, in
             fn_80168D74(1);
         }
     } else {
-        *pFresh = 1;
+        *pFlag = 1;
         lbl_803EA58C->mUnknown50 = 0;
     }
     *pSide = fn_80178308() != 0;
     for (unsigned char i = 0; i <= 7; i++) {
-        pPads[i] = -1;
+        pTable[i] = -1;
     }
     if (lbl_803EA58C->mUnknown0 != -1) {
-        pPads[lbl_803EA58C->mUnknown0] = 0;
+        pTable[lbl_803EA58C->mUnknown0] = 0;
     }
     if (lbl_803EA58C->mUnknown4 != -1) {
-        pPads[lbl_803EA58C->mUnknown4] = 1;
+        pTable[lbl_803EA58C->mUnknown4] = 1;
     }
     fn_800B3C54();
     *pMode = fn_8009D990(3);
@@ -627,11 +627,11 @@ void fn_800570A4(int *pSide, int *pPads, int *pMode, int *pFresh, int *pType, in
         }
     }
     *pState = fn_80057044();
-    *pFinal = fn_80177F70() == 6;
+    *pIsMode6 = fn_80177F70() == 6;
 }
 
 
-void fn_8005740C(int value1, int *pPair1, int score1, int flag1, int value0, int *pPair0, int score0, int flag0)
+void fn_8005740C(int value1, int *pPair1, int word1, int test1, int value0, int *pPair0, int word0, int test0)
 {
     int count = fn_80179138();
 
@@ -697,10 +697,10 @@ void fn_8005740C(int value1, int *pPair1, int score1, int flag1, int value0, int
             fn_80085A34(fn_80168EBC(1)->mUnknown40, 1);
         } else {
             lbl_803EA58C->mUnknown50 = 1;
-            lbl_803EA58C->mUnknown8[0] = score0;
-            lbl_803EA58C->mUnknown8[1] = score1;
-            lbl_803EA58C->mUnknown44[0] = flag0 == 1;
-            lbl_803EA58C->mUnknown44[1] = flag1 == 1;
+            lbl_803EA58C->mUnknown8[0] = word0;
+            lbl_803EA58C->mUnknown8[1] = word1;
+            lbl_803EA58C->mUnknown44[0] = test0 == 1;
+            lbl_803EA58C->mUnknown44[1] = test1 == 1;
             lbl_803EA58C->mUnknown10[0] = value0;
             lbl_803EA58C->mUnknown10[1] = value1;
             lbl_803EA58C->mUnknown18[0].mUnknown0 = pPair0[0];
@@ -1557,30 +1557,30 @@ int fn_80059664(int group, unsigned int id, Arg_8018399C *pArgs, int unused, int
 }
 
 
-int fn_8005993C(int *pHome, int *pAway, char *pHomeName, int homeSize, char *pAwayName, int awaySize,
-                int *pHomeColor, int *pAwayColor)
+int fn_8005993C(int *pId1, int *pId0, char *pName1, int size1, char *pName0, int size0,
+                int *pValue1, int *pValue0)
 {
     int ok = 1;
-    char home[17];
-    char away[17];
-    int away_id = fn_800C8744(0);
-    int home_id = fn_800C8744(1);
+    char name1[17];
+    char name0[17];
+    int id0 = fn_800C8744(0);
+    int id1 = fn_800C8744(1);
 
-    fn_80187CAC(home_id, home, 16);
-    fn_80187CAC(away_id, away, 16);
-    home[16] = 0;
-    away[16] = 0;
+    fn_80187CAC(id1, name1, 16);
+    fn_80187CAC(id0, name0, 16);
+    name1[16] = 0;
+    name0[16] = 0;
     if (fn_8007F828(14) == 1) {
         ok = 0;
     }
-    int awayColor = fn_8017881C(0);
-    int homeColor = fn_8017881C(1);
-    *pHome = home_id;
-    *pAway = away_id;
-    *pHomeColor = homeColor;
-    *pAwayColor = awayColor;
-    fn_801C2EF0(pHomeName, home, homeSize);
-    fn_801C2EF0(pAwayName, away, awaySize);
+    int value0 = fn_8017881C(0);
+    int value1 = fn_8017881C(1);
+    *pId1 = id1;
+    *pId0 = id0;
+    *pValue1 = value1;
+    *pValue0 = value0;
+    fn_801C2EF0(pName1, name1, size1);
+    fn_801C2EF0(pName0, name0, size0);
     return ok;
 }
 
