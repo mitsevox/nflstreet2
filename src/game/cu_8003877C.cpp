@@ -1133,7 +1133,6 @@ extern "C" void fn_8003A628(Record_8003EC04 *pRecord)
         pOther->mUnknownC = pSub->mUnknownC;
     } else {
         int single = pRecord->mUnknown2F == 1;
-        unsigned char count = pRecord->mUnknown2F;
 
         switch (fn_801BE648(p->mpUnknown792)) {
         case 0x25:
@@ -1159,12 +1158,12 @@ extern "C" void fn_8003A628(Record_8003EC04 *pRecord)
         case 0xE1:
         case 0xE3:
         case 0xEA:
+            pRecord->mUnknown2F = 11;
             break;
         default:
-            count = (unsigned char)(p->mUnknown528.mUnknown15 - 15) <= 1 ? 11 : 9;
+            pRecord->mUnknown2F = (unsigned char)(p->mUnknown528.mUnknown15 - 15) <= 1 ? 11 : 9;
             break;
         }
-        pRecord->mUnknown2F = count;
         for (i = 0; i < pRecord->mUnknown2F; i++) {
             float (*pMatrices)[4][4] = pObject->mUnknown112;
             Sub_8003EC54 *pSub = &pRecord->mpUnknown20[i];
@@ -1202,9 +1201,9 @@ extern "C" void fn_8003A628(Record_8003EC04 *pRecord)
                 fn_802276B4(&a, &pSub->mUnknown20, &pSub->mUnknown10);
                 fn_80227264(&a, &a, 2.15f);
                 fn_8022765C(&pSub->mUnknown10, &a, &pSub->mUnknown10);
-                fn_80227930(pSub, &pSub->mUnknown10, &pSub->mUnknown20, 0.5f);
                 break;
             }
+            fn_80227930(pSub, &pSub->mUnknown10, &pSub->mUnknown20, 0.5f);
         }
     }
     fn_801D0544();
