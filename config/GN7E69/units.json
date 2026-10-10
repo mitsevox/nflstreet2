@@ -4477,6 +4477,37 @@
       ]
     },
     {
+      "source": "src/game/cu_8005412C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8005412C-0x800545B4 (src/game/cu_8005412C.cpp) and its data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8005412C",
+          "end": "0x800545B4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028DEB0",
+          "end": "0x8028DEC8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA554",
+          "end": "0x803EA55C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80309E04",
+          "end": "0x80309E34"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800545B4.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800545B4-0x80054628 (src/game/cu_800545B4.cpp) and its data rows.",
@@ -4700,6 +4731,25 @@
           "placement": ".data5",
           "start": "0x803EA630",
           "end": "0x803EA634"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80063C7C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80063C7C-0x80064864 (src/game/cu_80063C7C.cpp) and its data, compiler and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80063C7C",
+          "end": "0x80064864"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028F6DC",
+          "end": "0x8028F76C"
         }
       ]
     },
@@ -6588,6 +6638,19 @@
           "placement": ".data5",
           "start": "0x803EA788",
           "end": "0x803EA790"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800775F0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800775F0-0x80077A24 (src/game/cu_800775F0.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800775F0",
+          "end": "0x80077A24"
         }
       ]
     },

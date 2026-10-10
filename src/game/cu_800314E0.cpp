@@ -1,19 +1,10 @@
 #include "game/Object_8007A334.h"
+#include "game/Record_80088CE0.h"
 #include "game/cu_800314E0.h"
 #include "game/cu_80190208.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_8017F584.h"
 #include "game/fn_801D2B7C.h"
-
-/* Record filled by fn_80088CE0. */
-struct Record_80088CE0 {
-    signed char mIndex;
-    char mName[132];
-    int mUnknown136;
-    int mUnknown140;
-    unsigned int mUnknown144;
-    int mUnknown148;
-};
 
 extern "C" {
 int fn_800A3444(void);
@@ -32,7 +23,7 @@ int fn_80088A74(Object_8007A334 *pObject, int index);
 void fn_80088AC8(Object_8007A334 *pObject, int index, int a);
 void fn_80088B24(Object_8007A334 *pObject, int a, unsigned char b);
 void fn_80088C8C(Object_8007A334 *pObject);
-int fn_80088CAC(Object_8007A334 *pObject, int a, int key, int b);
+int fn_80088CAC(Object_8007A334 *pObject, int a, int key, int *pResult);
 void fn_80088CE0(Object_8007A334 *pObject, Record_80088CE0 *pRecord);
 unsigned char fn_80088D84(Object_8007A334 *pObject);
 int fn_801486A0(void);

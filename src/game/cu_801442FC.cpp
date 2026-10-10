@@ -1,14 +1,9 @@
 #include "engine/cu_80227F14.h"
+#include "game/Level_80054130.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_801442FC.h"
 
-struct Object_8005438C {
-    Vector_80039F5C mUnknown0;
-    Vector_80039F5C mUnknown12;
-};
-
 extern "C" {
-Object_8005438C *fn_8005438C(int id);
 void fn_801D0470(int a);
 void fn_802271F0(float *pOut, float *pIn);
 void fn_80227C2C(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
