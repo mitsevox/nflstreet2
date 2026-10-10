@@ -729,7 +729,7 @@ extern "C" void fn_800D1D84(int side, int id, int count) {
             if (lbl_803EC9D8[side] > lbl_803EC9DC[side]) lbl_803EC9DC[side] = lbl_803EC9D8[side];
             break;
         case 14: case 17: lbl_803EC9D8[side] = 0; break;
-        case 19: case 20: case 21: case 22: case 23: case 24:
+        case 18:
             lbl_803EC9AC[side]++;
             lbl_803EC9D8[side]++;
             if (lbl_803EC9D8[side] > lbl_803EC9DC[side]) lbl_803EC9DC[side] = lbl_803EC9D8[side];
@@ -751,7 +751,7 @@ extern "C" void fn_800D1D84(int side, int id, int count) {
         case 66: lbl_803EC9A4[side] += value; break;
         case 77: lbl_803EC9B8[side] = 1; lbl_803EC9C0[side] = 1; break;
         case 76: lbl_803EC9B8[side] = 1; break;
-        case 18: lbl_803EC9C8[side] = 1; break;
+        case 19: case 20: case 21: case 22: case 23: case 24: lbl_803EC9C8[side] = 1; break;
         }
         fn_800D1A90(side, id, scaled, subtract, value, text, extra, mode, name, lbl_803EACD4->mUnknown0[id].mUnknown40);
     }
