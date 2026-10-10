@@ -15173,8 +15173,11 @@
       "provenance": {
         "pull_request": 716,
         "merged_via": 719,
-        "commit": "405d4c98664ea3a351f8b3701f1a2eed3763ec62",
-        "introduced_blob": "2a273e64c48316c97a145801aae65cfd4cf33710"
+        "commit": "667fc996945ec850bd442e286ccb3f53d2e214c0",
+        "introduced_blob": "5e2c98d42b4c3da030b8c9c1d90c2c11e3b7959c",
+        "original_commit": "405d4c98664ea3a351f8b3701f1a2eed3763ec62",
+        "original_blob": "2a273e64c48316c97a145801aae65cfd4cf33710",
+        "integration_adjustment": "Adapt existing callers to canonical vector and individual byte field declarations at identical offsets; preserve original reviewed behavior and contributor credit. This bounded delta passed independent accuracy and hostile rechecks."
       }
     },
     {
@@ -15204,8 +15207,11 @@
       "provenance": {
         "pull_request": 716,
         "merged_via": 719,
-        "commit": "405d4c98664ea3a351f8b3701f1a2eed3763ec62",
-        "introduced_blob": "92d929313b136825adfc78d55cca59b514a90c00"
+        "commit": "667fc996945ec850bd442e286ccb3f53d2e214c0",
+        "introduced_blob": "ca28e6d2ef24c210cc875c319c50eb2e26d8899f",
+        "original_commit": "405d4c98664ea3a351f8b3701f1a2eed3763ec62",
+        "original_blob": "92d929313b136825adfc78d55cca59b514a90c00",
+        "integration_adjustment": "Adapt existing callers to canonical vector and individual byte field declarations at identical offsets; preserve original reviewed behavior and contributor credit. This bounded delta passed independent accuracy and hostile rechecks."
       }
     },
     {
@@ -15222,8 +15228,11 @@
       "provenance": {
         "pull_request": 716,
         "merged_via": 719,
-        "commit": "405d4c98664ea3a351f8b3701f1a2eed3763ec62",
-        "introduced_blob": "a91a3957b364071a58d0e91fc5b3d51933436b98"
+        "commit": "667fc996945ec850bd442e286ccb3f53d2e214c0",
+        "introduced_blob": "4247153d880d458d74fadeef13f94589dadfa6d5",
+        "original_commit": "405d4c98664ea3a351f8b3701f1a2eed3763ec62",
+        "original_blob": "a91a3957b364071a58d0e91fc5b3d51933436b98",
+        "integration_adjustment": "Adapt existing callers to canonical vector and individual byte field declarations at identical offsets; preserve original reviewed behavior and contributor credit. This bounded delta passed independent accuracy and hostile rechecks."
       }
     },
     {
