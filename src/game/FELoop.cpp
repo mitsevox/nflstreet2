@@ -21,7 +21,6 @@ extern float lbl_803EA2C4;
 extern void *lbl_803EB688;
 extern void *lbl_803EB690;
 
-int fn_80003F30(void);
 void fn_80010150(int a);
 int fn_80010194(void);
 void fn_80011600(int a, int b, int c);

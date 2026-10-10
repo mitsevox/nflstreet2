@@ -4,10 +4,10 @@
 /* Row of table 'VETS' filled by fn_8018EC68 (0x64 bytes). */
 struct VetsRow_8018EC68 {
     char mIuve[64];
-    short mQrxe;
-    short mPewr;
-    short mPdwr;
-    short mCswr;
+    unsigned short mQrxe;
+    unsigned short mPewr;
+    unsigned short mPdwr;
+    unsigned short mCswr;
     int mDive;
     int mItes;
     unsigned char mNets;

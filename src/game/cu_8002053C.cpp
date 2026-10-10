@@ -8,8 +8,8 @@ int fn_801869F0(void);
 int fn_80186DF0(signed char *pIndices, int length);
 int fn_80186A10(int index, char *pText);
 void fn_80186ED8(signed char index);
-void fn_80054964(int index, int value);
-void fn_80054628(int index, int value);
+void fn_80054964(signed char db, int id);
+void fn_80054628(signed char db, int id);
 
 int fn_8002053C(int control)
 {

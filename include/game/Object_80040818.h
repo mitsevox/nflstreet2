@@ -1,17 +1,21 @@
 #ifndef GAME_OBJECT_80040818_H
 #define GAME_OBJECT_80040818_H
 
-#include "game/Object_80039F5C.h"
+#include "game/Object_8003DEC4.h"
+#include "game/cu_80041210.h"
+#include "game/cu_80136B1C.h"
+#include "game/fn_80054138.h"
 
-struct Area_80054138;
-struct Flags_800411C8;
-struct Model_8004E0CC;
-struct Object_80041904;
-struct Track_800410E0;
+struct Model_8004E0CC {
+    char mUnknown0[40];
+    unsigned char mUnknown40;
+};
 
-struct Anim_8004AA34 {
-    int mUnknown0;
-    unsigned short mUnknown4;
+struct Flags_800411C8 {
+    unsigned short mUnknown0;
+    unsigned short mUnknown2;
+    char mUnknown4[16];
+    short mUnknown20;
 };
 
 /* 548-byte object of pool type 28, one per placed object. */
@@ -22,23 +26,31 @@ struct Object_80040818 {
     int (*mUnknown20)(Object_80040818 *pObject);
     Quat_801EB488 mRot;
     char mUnknown40[132];
-    Anim_8004AA34 mUnknown172;
-    /* Its start is passed to fn_801D0C58 as a position vector. */
-    char mUnknown180[24];
-    int mUnknown204;
-    char mUnknown208[12];
-    /* Three 16-bit angles. */
-    short *mpUnknown220;
-    char mUnknown224[8];
+    union {
+        Pose_80041930 mUnknown172;
+        struct {
+            char mUnknown172Head[8];
+            /* Its start is passed to fn_801D0C58 as a position vector. */
+            char mUnknown180[24];
+            int mUnknown204;
+            char mUnknown208[12];
+            /* Three 16-bit angles, also stored as the pose's bone angles. */
+            short *mpUnknown220;
+            char mUnknown224[4];
+        };
+    };
+    void *mUnknown228;
     unsigned int mUnknown232_0 : 27;
     unsigned int mUnknown232_27 : 1;
     unsigned int mUnknown232_28 : 1;
     unsigned int mUnknown232_29 : 1;
     unsigned int mUnknown232_30 : 1;
     unsigned char mUnknown232_31 : 1;
-    char mUnknown236[64];
+    char mUnknown236[12];
+    unsigned int mUnknown248;
+    char mUnknown252[48];
     Model_8004E0CC *mUnknown300;
-    Track_800410E0 **mUnknown304;
+    Skeleton_80041930 **mUnknown304;
     int mUnknown308;
     char mUnknown312[16];
     int mUnknown328;
@@ -51,5 +63,11 @@ struct Object_80040818 {
     int mUnknown480;
     char mUnknown484[64];
 };
+
+extern "C" {
+Object_80040818 *fn_80040F18(int index);
+Skeleton_80041930 *fn_800410B8(int index);
+Skeleton_80041930 *fn_800410E0(Object_80040818 *pObject);
+}
 
 #endif

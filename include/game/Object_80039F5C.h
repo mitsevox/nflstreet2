@@ -4,6 +4,8 @@
 #include "game/Object_800D81C8.h"
 #include "game/Message_800F01CC.h"
 
+struct Area_80054138;
+
 /* The player object returned by fn_80039F5C, with the blocks it contains or
    points to. */
 
@@ -21,6 +23,9 @@ struct Quat_801EB488 {
     float mW;
 };
 
+struct Object_80041904;
+struct Pose_80041930;
+
 /* Block at +4 of the player object; the entries of src/game/cu_80136B1C.cpp
    hold one at +0. */
 struct Block_80170E64 {
@@ -36,7 +41,9 @@ struct Block_80170E64 {
     Quat_801EB488 mUnknown136;
     unsigned char mUnknown152;
     char mUnknown153[507];
-    int mUnknown660;
+    Area_80054138 *mUnknown660;
+    char mUnknown664[12];
+    Object_80041904 *mpUnknown676;
 };
 
 /* Motion block at +424, passed to fn_800B26B0, fn_800B26D0, fn_800B26E0,
@@ -151,12 +158,6 @@ struct State_80039F5C {
     unsigned char mUnknown3[1];
 };
 
-/* Record that +780 points to. Only the word +8 is accessed. */
-struct Record_800C4E18 {
-    char mUnknown0[8];
-    int mUnknown8;
-};
-
 /* Object that +796 points to. */
 struct Object_8016D9B8 {
     char mUnknown0[2];
@@ -217,12 +218,21 @@ struct Object_80039F5C {
     unsigned char mUnknown8;
     unsigned char mUnknown9[3];
     unsigned int mFlags;
+    /* Three 92-byte blocks at +16, +108 and +200 (filled from the +4
+       object's pose by fn_8003AE24); each holds that pose's address at
+       its +40. */
     int mUnknown16;
-    char mUnknown20[88];
+    char mUnknown20[36];
+    Pose_80041930 *mpUnknown56;
+    char mUnknown60[48];
     int mUnknown108;
-    char mUnknown112[88];
+    char mUnknown112[36];
+    Pose_80041930 *mpUnknown148;
+    char mUnknown152[48];
     int mUnknown200;
-    char mUnknown204[132];
+    char mUnknown204[36];
+    Pose_80041930 *mpUnknown240;
+    char mUnknown244[92];
     int mUnknown336;
     short mUnknown340;
     unsigned char mUnknown342;
@@ -266,13 +276,16 @@ struct Object_80039F5C {
         short mUnknown778;
         unsigned short mUnknown778Unsigned;
     };
-    Record_800C4E18 *mpUnknown780;
+    Area_80054138 *mpUnknown780;
     State_80039F5C *mpState;
     char mUnknown788[4];
     void *mpUnknown792;
     Object_8016D9B8 *mpUnknown796;
     Record_800D81C8 *mpUnknown800;
-    char mUnknown804[204];
+    void *mpUnknown804;
+    void *mpUnknown808;
+    void *mpUnknown812;
+    char mUnknown816[192];
     union {
         int mUnknown1008Word;
         struct {

@@ -14,6 +14,7 @@
 #include "game/fn_801EEB44.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_801F40F4.h"
+#include "game/fn_80054138.h"
 #include "game/fn_802270D4.h"
 
 void *operator new(unsigned int size, int unknown);
@@ -398,13 +399,6 @@ struct Node_8006BF4C {
     void *m4;
     int m8;
     Callback_8006C548 mC;
-};
-
-/* Record whose address Block_80170E64 keeps in its word at +0x294. */
-struct Record_80170E64_294 {
-    int m0;
-    int m4;
-    int m8;
 };
 
 struct Struct_802D62B8 {
@@ -2294,7 +2288,7 @@ extern "C" void fn_8006CCD0(Record_80067CA8 *p)
                 int id = 15;
                 Object_80137ABC *pBall = fn_801374BC();
                 if (pBall != 0 && pBall->mpUnknown00 != 0 && pBall->mpUnknown00->mUnknown660 != 0) {
-                    id = ((Record_80170E64_294 *)pBall->mpUnknown00->mUnknown660)->m8;
+                    id = pBall->mpUnknown00->mUnknown660->mSurface;
                 }
                 fn_8006C854(fn_80071BA0(fn_800A3444(), id), &p->mPos);
             } else {
