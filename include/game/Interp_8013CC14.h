@@ -11,4 +11,6 @@ struct Interp_8013CC14 {
     void (*mUpdate)(Interp_8013CC14 *pInterp, int steps);
 };
 
+typedef void (*InterpFunc_8013CC14)(Interp_8013CC14 *pInterp, int steps);
+
 #endif

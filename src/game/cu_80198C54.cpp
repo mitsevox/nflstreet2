@@ -4,6 +4,7 @@
 #include "game/FMCAPPORT.h"
 #include "game/Object_8003DEC4.h"
 #include "game/cu_8008A274.h"
+#include "game/cu_8015D3EC.h"
 #include "engine/cu_80227F14.h"
 #include <dolphin/gx/GXEnum.h>
 #include <dolphin/gx/GXStruct.h>
@@ -17,11 +18,6 @@ struct Triple_802EDF8C {
     float mUnknown0;
     float mUnknown4;
     float mUnknown8;
-};
-
-struct Object_8015E2FC {
-    char mUnknown0[24];
-    int mUnknown24;
 };
 
 /* Argument of fn_802338D4: a halfword-triple table at +0x30 and an output buffer at +0x34. */
@@ -50,8 +46,11 @@ void fn_801D12BC(int a);
 void fn_801D12EC(int a);
 void fn_801D131C(int a);
 int fn_8008A87C(int index);
-Object_8015E2FC *fn_8015E2FC(int a, int b, int c);
-void fn_80210214(Object_8023488C *pObject, int a);
+void fn_8008B09C(Class_8008B284 *pObject, void *pImage, int width, int height);
+void fn_8008B134(Class_8008B284 *pObject, void *pOut, void *p, int *pCount);
+int fn_8008B27C(Class_8008B284 *pObject);
+void fn_8008B1F0(Class_8008B284 *pObject, void *pImage, int width, int height, void *pOut);
+void fn_80210214(Object_8023488C *pObject, void *p);
 void fn_80210388(void);
 void fn_80210BD8(int a);
 void fn_80210CC4(float a, float b);
@@ -63,7 +62,7 @@ void fn_80233BB8(Object_80233BB8 *pObject, int a, int b);
 void fn_80233BD8(Object_80233BB8 *pObject);
 void fn_80233BDC(Object_80233BB8 *pObject, Skeleton_80041930 *pData);
 void fn_80233CBC(void *pObject, int a, int b);
-void fn_8023465C(Object_8023488C *pObject, Object_8015E2FC *p, Desc_802347EC *pDesc);
+void fn_8023465C(Object_8023488C *pObject, Object_8023417C *pModel, Desc_802347EC *pDesc);
 void fn_8023488C(Object_8023488C *pObject, int a);
 void fn_802348AC(Object_8023488C *pObject);
 void fn_80234A30(Object_80234A30 *pObject, int a);
@@ -184,7 +183,7 @@ void fn_80198EE0(Object_8008A9F8 *pObject)
 
 void fn_80198F24(Object_8008A9F8 *pObject)
 {
-    Object_8015E2FC *pResult = fn_8015E2FC(0, 0, 0);
+    Object_8023417C *pResult = fn_8015E2FC(0, 0, 0);
     Object_8023488C *pUnknown612 = &pObject->mUnknown612;
     void *pElement = pObject->mUnknown384[0].mpUnknown24;
     Desc_802347EC *pDescs = pObject->mUnknown384;
@@ -192,7 +191,7 @@ void fn_80198F24(Object_8008A9F8 *pObject)
     fn_80211FF0();
     fn_80212018("capport", pElement);
     fn_8023488C(pUnknown612, 0x38);
-    fn_80210214(pUnknown612, pResult->mUnknown24);
+    fn_80210214(pUnknown612, pResult->mpUnknown18);
     fn_8023465C(pUnknown612, pResult, pDescs);
     fn_80211FF0();
 }

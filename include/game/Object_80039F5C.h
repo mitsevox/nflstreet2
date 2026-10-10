@@ -2,6 +2,9 @@
 #define GAME_OBJECT_80039F5C_H
 
 #include "game/Object_800D81C8.h"
+#include "game/Message_800F01CC.h"
+
+struct Area_80054138;
 
 /* The player object returned by fn_80039F5C, with the blocks it contains or
    points to. */
@@ -12,6 +15,17 @@ struct Vector_80039F5C {
     float mZ;
 };
 
+/* Rotation built by fn_801EBEF8 from three angles and reset by fn_801EB488. */
+struct Quat_801EB488 {
+    float mX;
+    float mY;
+    float mZ;
+    float mW;
+};
+
+struct Object_80041904;
+struct Pose_80041930;
+
 /* Block at +4 of the player object; the entries of src/game/cu_80136B1C.cpp
    hold one at +0. */
 struct Block_80170E64 {
@@ -21,15 +35,22 @@ struct Block_80170E64 {
     unsigned int mUnknown20;
     char mUnknown24[76];
     void *mpUnknown100;
-    char mUnknown104[556];
-    int mUnknown660;
+    char mUnknown104[4];
+    Quat_801EB488 mUnknown108;
+    Vector_80039F5C mUnknown124;
+    Quat_801EB488 mUnknown136;
+    unsigned char mUnknown152;
+    char mUnknown153[507];
+    Area_80054138 *mUnknown660;
+    char mUnknown664[12];
+    Object_80041904 *mpUnknown676;
 };
 
 /* Motion block at +424, passed to fn_800B26B0, fn_800B26D0, fn_800B26E0,
    fn_800B2A14 and fn_800B2D9C. Angles are 24-bit words. */
 struct Object_800B26B0 {
     Vector_80039F5C mPos;
-    char mUnknown12[12];
+    Vector_80039F5C mUnknown12;
     int mFacing;
     float mUnknown28;
     int mUnknown32;
@@ -59,25 +80,42 @@ union Flags_80170374 {
     unsigned char mBytes[4];
 };
 
-/* 56-byte block at +560. */
+/* 56-byte block at +560 (0x800AEB5C clears 0x38 bytes); fn_80143D3C resets
+   it and fn_80143464 accumulates into it. */
 struct Block_80170374 {
     Flags_80170374 mFlags;
-    char mUnknown4[24];
+    Vector_80039F5C mUnknown4;
+    Vector_80039F5C mUnknown16;
     float mUnknown28;
-    char mUnknown32[8];
+    float mUnknown32;
+    float mUnknown36;
     int mUnknown40;
     int mUnknown44;
     int mUnknown48;
-    char mUnknown52[2];
+    unsigned char mUnknown52;
+    unsigned char mUnknown53;
     unsigned char mUnknown54;
-    char mUnknown55[1];
+    unsigned char mUnknown55;
+};
+
+/* The 68 bytes at +560 as fn_80143668 addresses them: the block followed by
+   the contact point it copies to +56. */
+struct Contact_80143668 {
+    Block_80170374 mBlock;
+    Vector_80039F5C mUnknown56;
 };
 
 /* Block at +1160. */
 struct Block_801718E8 {
-    char mUnknown0[12];
-    char mUnknown12[40];
+    float mUnknown0;
+    char mUnknown4[8];
+    char mUnknown12[32];
+    int mUnknown44;
+    char mUnknown48[4];
     unsigned char mUnknown52;
+    unsigned char mUnknown53;
+    unsigned char mUnknown54;
+    char mUnknown55[1];
 };
 
 /* Three bytes at +1008, compared field by field by fn_80110630. */
@@ -110,21 +148,14 @@ struct Block_800D0B90 {
     unsigned char mUnknown11;
 };
 
-/* Record that +784 points to. */
+/* One entry of the player's message queue (ten 4-byte entries laid out like
+   Message_800F01CC). mpState (+784) points to the first entry, which holds
+   the current state; bytes are named by offset. */
 struct State_80039F5C {
     unsigned char mId;
     unsigned char mUnknown1;
     unsigned char mUnknown2;
     unsigned char mUnknown3[1];
-    unsigned char mUnknown4;
-    char mUnknown5[1];
-    unsigned char mUnknown6;
-};
-
-/* Record that +780 points to. Only the word +8 is accessed. */
-struct Record_800C4E18 {
-    char mUnknown0[8];
-    int mUnknown8;
 };
 
 /* Object that +796 points to. */
@@ -158,7 +189,15 @@ struct Block_8011E240 {
     int mUnknown4;
     int mUnknown8;
     int mUnknown12;
-    char mUnknown16[78];
+    char mUnknown16[4];
+    int mUnknown20;
+    char mUnknown24[8];
+    unsigned short mUnknown32;
+    char mUnknown34[10];
+    float mUnknown44;
+    char mUnknown48[12];
+    int mUnknown60;
+    char mUnknown64[30];
     unsigned char mUnknown94;
     char mUnknown95[5];
     unsigned char mUnknown100;
@@ -179,12 +218,21 @@ struct Object_80039F5C {
     unsigned char mUnknown8;
     unsigned char mUnknown9[3];
     unsigned int mFlags;
+    /* Three 92-byte blocks at +16, +108 and +200 (filled from the +4
+       object's pose by fn_8003AE24); each holds that pose's address at
+       its +40. */
     int mUnknown16;
-    char mUnknown20[88];
+    char mUnknown20[36];
+    Pose_80041930 *mpUnknown56;
+    char mUnknown60[48];
     int mUnknown108;
-    char mUnknown112[88];
+    char mUnknown112[36];
+    Pose_80041930 *mpUnknown148;
+    char mUnknown152[48];
     int mUnknown200;
-    char mUnknown204[132];
+    char mUnknown204[36];
+    Pose_80041930 *mpUnknown240;
+    char mUnknown244[92];
     int mUnknown336;
     short mUnknown340;
     unsigned char mUnknown342;
@@ -203,7 +251,8 @@ struct Object_80039F5C {
     Object_800B26B0 mMotion;
     float mUnknown488;
     float mUnknown492;
-    char mUnknown496[16];
+    char mUnknown496[12];
+    float mUnknown508;
     Object_8016D8B0 mUnknown512;
     Object_8016D8B0 mUnknown528;
     unsigned char mUnknown544;
@@ -211,10 +260,14 @@ struct Object_80039F5C {
     char mUnknown546[2];
     int mUnknown548;
     char mUnknown552[8];
-    Block_80170374 mUnknown560;
-    char mUnknown616[8];
-    float mUnknown624;
-    char mUnknown628[140];
+    /* The 68 bytes at +560, as the 56-byte block and as the block with the
+       contact point that follows it. */
+    union {
+        Block_80170374 mUnknown560;
+        Contact_80143668 mContact560;
+    };
+    int mUnknown628[2];
+    char mUnknown636[132];
     float mUnknown768;
     float mUnknown772;
     unsigned char mUnknown776;
@@ -223,13 +276,16 @@ struct Object_80039F5C {
         short mUnknown778;
         unsigned short mUnknown778Unsigned;
     };
-    Record_800C4E18 *mpUnknown780;
+    Area_80054138 *mpUnknown780;
     State_80039F5C *mpState;
     char mUnknown788[4];
     void *mpUnknown792;
     Object_8016D9B8 *mpUnknown796;
     Record_800D81C8 *mpUnknown800;
-    char mUnknown804[204];
+    void *mpUnknown804;
+    void *mpUnknown808;
+    void *mpUnknown812;
+    char mUnknown816[192];
     union {
         int mUnknown1008Word;
         struct {
@@ -237,7 +293,9 @@ struct Object_80039F5C {
             unsigned char mUnknown1011;
         };
     };
-    char mUnknown1012[20];
+    char mUnknown1012[4];
+    float mUnknown1016[2];
+    float mUnknown1024[2];
     /* The 108 bytes at +1032, read field by field and as Block_8011E240. */
     union {
         struct {
@@ -265,9 +323,7 @@ struct Object_80039F5C {
     unsigned char mUnknown1156;
     char mUnknown1157[3];
     Block_801718E8 mUnknown1160;
-    unsigned char mUnknown1213;
-    unsigned char mUnknown1214;
-    char mUnknown1215[3];
+    char mUnknown1216[2];
     unsigned char mUnknown1218;
     unsigned char mUnknown1219;
     unsigned char mUnknown1220;
@@ -298,9 +354,8 @@ struct Object_80039F5C {
     int mUnknown3040;
     char mUnknown3044[4];
     /* Message queue that mpState points to; passed to fn_800F03D8 and
-       fn_800F053C. Only its head is declared. */
-    State_80039F5C mUnknown3048;
-    char mUnknown3055[33];
+       fn_800F053C. */
+    State_80039F5C mQueue[10];
     unsigned char mUnknown3088;
     char mUnknown3089[1];
     unsigned short mUnknown3090;

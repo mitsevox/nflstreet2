@@ -114,7 +114,7 @@ int fn_8018E20C(Object_8007A334 *pCursor, int row, char *pBuffer, int size)
 
 /* Writes the 'ANLP' text of the row, preceded by the first character of its
    'ANFP' text and ". " when that text is not empty. */
-int fn_8018E284(Object_8007A334 *pCursor, int row, char *pName)
+int fn_8018E284(Object_8007A334 *pCursor, int row, char *pName, int size)
 {
     char first[12];
     char last[15];

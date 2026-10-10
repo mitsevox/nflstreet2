@@ -47,7 +47,7 @@ extern "C" void fn_8017F814(void)
 
 extern "C" unsigned char fn_8017F860(void) { return lbl_803EB508; }
 
-extern "C" int fn_8017F868(unsigned int id, Block_8017F868 *pBlock)
+extern "C" int fn_8017F868(unsigned int id, Block_8017F868 *pBlock, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:

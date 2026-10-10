@@ -3,12 +3,15 @@
 
 #include "game/fn_800670B4.h"
 
-/* Record fn_80163E94 returns. Only the byte its callers read is declared. */
-struct Record_80163E94 {
-    char mUnknown0[11];
-    unsigned char mUnknownB;
-};
+struct Object_80039F5C;
 
-extern "C" Record_80163E94 *fn_80163E94(Object_800670B4 *pObject, unsigned int index, void *pArg);
+extern "C" {
+Entry_8006719C *fn_80163E94(Object_800670B4 *pObject, unsigned int index, const char **ppNames);
+int fn_801642DC(Object_800670B4 *pObject, unsigned char index);
+int fn_80164384(Object_800670B4 *pObject, unsigned char index);
+void fn_80164430(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
+Object_80039F5C *fn_8016444C(Object_800670B4 *pObject);
+void fn_801644A0(Object_80039F5C *p);
+}
 
 #endif

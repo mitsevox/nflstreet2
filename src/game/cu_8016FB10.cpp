@@ -24,6 +24,9 @@
 #include "game/fn_801BE60C.h"
 #include <stdio.h>
 #include <string.h>
+#include "game/fn_800B65A0.h"
+#include "game/fn_8009D990.h"
+#include "game/fn_8016FB10.h"
 
 struct Object_80172FB0 {
     char mUnknown0[12];
@@ -94,7 +97,6 @@ float fn_800AC734(Object_80039F5C *p, float value);
 float fn_800AC7E0(int team, float value);
 void fn_800ACE90(Object_80039F5C *p, unsigned int *pValue);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_800B65A0(int team);
 void fn_800B6714(Object_80039F5C *p, int port);
 int fn_800D0B90(Object_80039F5C *p);
 void fn_800D44A8(float a);
@@ -146,7 +148,6 @@ int fn_801486A0(void);
 int fn_80156704(void);
 void fn_80156C78(int a, int b);
 float fn_8016FAB4(void);
-void fn_8016FB10(Object_80039F5C *p, void *pBall, Pair_8017055C *pOut, int a);
 void fn_80173D10(void);
 void fn_80173EE0(int a, short b, short c, int d, int e);
 void fn_80174074(void);
@@ -189,7 +190,6 @@ void fn_80171DB0(Object_80039F5C *p);
 void fn_80171E30(void);
 void fn_80172154(Object_80039F5C *p, void *pBall);
 void fn_801726F8(Object_80039F5C *p);
-int fn_801729F8(void *pBall, Pair_8017055C *pPos);
 int fn_8017319C(Object_80039F5C *p);
 int fn_8016EB50(Object_80039F5C *p, Vector_80039F5C *pPos);
 int fn_8009A5A0(int handle);
@@ -203,7 +203,6 @@ void fn_8009D818(int state);
 void fn_8009D888(int index, int a);
 void fn_8009D8CC(int index);
 void fn_8009D964(int index, int value);
-unsigned int fn_8009D990(int index);
 int fn_8009D9A8(int index);
 int fn_8009D9D8(int index);
 void fn_800AD910(int a, float b);
@@ -924,10 +923,10 @@ void fn_80171450(Object_80039F5C *p)
             ratingScale /= 255.0f;
             ratingScale *= 0.75f;
             chance -= ratingScale * chance;
-            if (p->mUnknown1213) {
+            if (p->mUnknown1160.mUnknown53) {
                 chance = fn_800AC504(p->mId >> 8 & 0xFF, chance);
             }
-            if (p->mUnknown1214) {
+            if (p->mUnknown1160.mUnknown54) {
                 chance *= 1.5f;
             }
             if (hit && (pHitter = fn_8009BCE8(&p->mUnknown336)) != 0) {
@@ -1359,7 +1358,7 @@ void fn_80172154(Object_80039F5C *p, void *pBall)
                 }
                 break;
             case 0x20:
-                if (pMate->mpState->mUnknown4 == 0x21 || pMate->mpState->mUnknown4 == 0x1F) {
+                if (pMate->mpState[1].mId == 0x21 || pMate->mpState[1].mId == 0x1F) {
                     break;
                 }
             case 0x1C:

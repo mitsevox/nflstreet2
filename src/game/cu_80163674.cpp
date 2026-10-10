@@ -1,50 +1,6 @@
 #include "engine/cu_80227F14.h"
 #include "game/cu_801882B4.h"
-#include "game/Object_80039F5C.h"
-
-struct Desc_80163788 {
-    short mUnknown00;
-    short mUnknown02;
-    Vector_80039F5C mUnknown04;
-    Vector_80039F5C mUnknown10;
-    Vector_80039F5C mUnknown1C;
-    Vector_80039F5C mUnknown28;
-};
-
-struct State_80163AD8 {
-    unsigned char mUnknown00[88];
-    void *mpUnknown58;
-};
-
-struct Object_80163788 {
-    unsigned char mUnknown00[4];
-    float mUnknown04;
-    float mUnknown08;
-    float mUnknown0C;
-    unsigned char mUnknown10[4];
-    int mUnknown14;
-    unsigned char mUnknown18[48];
-    State_80163AD8 mUnknown48;
-    unsigned char mUnknownA4[244];
-    unsigned int mUnknown198;
-    Vector_80039F5C mUnknown19C;
-    int mUnknown1A8;
-    int mUnknown1AC;
-    int mUnknown1B0;
-    Vector_80039F5C mUnknown1B4;
-    Vector_80039F5C mUnknown1C0;
-    short mUnknown1CC;
-    short mUnknown1CE;
-    float mUnknown1D0;
-    unsigned char mUnknown1D4;
-    unsigned char mUnknown1D5[3];
-    short mUnknown1D8;
-    short mUnknown1DA;
-    short mUnknown1DC;
-    unsigned short mUnknown1DE;
-    unsigned char mUnknown1E0[4];
-    int mUnknown1E4;
-};
+#include "game/cu_80163674.h"
 
 extern "C" {
 Cache_80188688 *lbl_803EB3A4 = 0;
@@ -61,7 +17,7 @@ void fn_801D0C58(void *);
 void fn_801D0D94(float, float, float);
 int fn_801DCF0C(int, int, int, void (*)(Object_80163788 *, Desc_80163788 *), void (*)(Object_80163788 *));
 void fn_801DCF8C(int);
-int fn_801DD0C8(void *, int, int, int (*)(Object_80163788 *));
+int fn_801DD0C8(void *, int, int, int (*)(Object_80163788 *, int));
 void fn_80234DFC(int, void *, int, int, const char *, int);
 void fn_80234EA0(void *, int);
 void fn_80234EEC(void *, int, void *, unsigned char);
@@ -77,6 +33,7 @@ void fn_80235788(void *, int, int);
 void fn_80235C24(void *, void *);
 void fn_80235C90(void *, int, float, float, float, float);
 void fn_80235D10(void *, float);
+void fn_80235D74(void *, int);
 int fn_80235D9C(int);
 void fn_80235DB8(int);
 int fn_80236B4C(int);
@@ -143,7 +100,7 @@ void fn_801638F0(Object_80163788 *pObject)
     fn_801888A4(lbl_803EB3A4, pObject->mUnknown1CC);
 }
 
-int fn_80163954(Object_80163788 *pObject)
+int fn_80163954(Object_80163788 *pObject, int value)
 {
     int context = fn_801C657C();
     fn_801D0470(fn_80228668());
@@ -237,5 +194,20 @@ void fn_80163CD0(void)
     fn_801DCF8C(19);
     fn_80188728(lbl_803EB3A4);
     lbl_803EB3A4 = 0;
+}
+
+void fn_80163D08(Object_80163788 *pObject, int value)
+{
+    if ((pObject->mUnknown198 & 1) && pObject->mUnknown14 && fn_80163BCC(pObject)) {
+        fn_80163954(pObject, value);
+    }
+}
+
+void fn_80163D64(Object_80163788 *pObject, unsigned char value)
+{
+    pObject->mUnknown1E4 = value;
+    if (pObject->mUnknown198 & 1) {
+        fn_80235D74(&pObject->mUnknown48, value >> 2);
+    }
 }
 }

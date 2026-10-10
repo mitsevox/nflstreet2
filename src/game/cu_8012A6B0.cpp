@@ -3,12 +3,14 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_800D81C8.h"
 #include "game/Object_8017886C.h"
+#include "game/Plan_80121264.h"
 #include "game/Table_80089904.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_8003108C.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_8007F828.h"
+#include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_80227638.h"
@@ -33,14 +35,35 @@ void fn_800A5A8C(int a, void *pA, void *pB);
 int fn_800A8444(int team);
 int fn_800A8740(void);
 int fn_800ABDA4(int team);
+short fn_800ACC80(Object_80039F5C *p, short value);
+int fn_800B76E8(Object_80039F5C *p);
+void fn_800B8344(Object_80039F5C *p);
+void fn_800D058C(Object_80039F5C *p);
+void fn_800D0660(Object_80039F5C *p, unsigned char *pOut);
+int fn_800D0694(Object_80039F5C *p);
+int fn_800D5A6C(int a, int b, int c);
+int fn_8009AD30(Object_80039F5C *p, int value);
 void fn_800D6CC0(Object_80039F5C *p);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800FD68C(Message_800F01CC *, void *, void *);
+int fn_8010A2DC(Object_80039F5C *p, int a, int b);
+void fn_8011168C(Object_80039F5C *p);
 int fn_80110824(Object_80039F5C *p, int a, int b, int c);
 int fn_8011E9B4(Object_80039F5C *p);
+void fn_8012311C(Object_80039F5C *p, Plan_80121264 *pPlan, int angle);
+Entry_801230B8 *fn_80123174(Plan_80121264 *pPlan);
+void fn_8012430C(float *pOut, int kind, Object_80039F5C *p);
+int fn_801243E0(float *pValues, int a);
 void fn_8012B2E0(Object_80039F5C *p, Point_8017886C *pOut);
 void fn_8012C3A4(Object_80039F5C *p);
 void fn_8012CB98(int a, int b, int angle, Point_8017886C *pOut);
+void fn_8012CEF4(Object_80039F5C *p, Control_80132090 *pControl);
+void fn_8012CFA0(Object_80039F5C *p);
+void fn_8012D258(Object_80039F5C *p);
+void fn_8012D4FC(Object_80039F5C *p, int mode);
+void fn_8012D8A8(Object_80039F5C *p, Control_80132090 *pControl, int *pMode, Entry_801230B8 *pEntry);
+int fn_8012FC08(Object_80039F5C *p, Control_80132090 *pControl);
+int fn_8012FDDC(Object_80039F5C *p, Control_80132090 *pControl);
 void fn_8013FA8C(int a);
 void fn_80148154(void);
 int fn_801481B0(void);
@@ -384,4 +407,150 @@ extern "C" int fn_8012FF30(Object_80039F5C *p)
 {
     fn_800A3B58(p, 2, 0);
     return 1;
+}
+
+extern "C" int fn_8012FF5C(Object_80039F5C *p)
+{
+    Object_800B26B0 *pMotion = &p->mMotion;
+    Control_80132090 *pControl = (Control_80132090 *)&p->mUnknown336;
+    Plan_80121264 plan;
+    Message_800F01CC message;
+    int mode = 0;
+
+    fn_800B8344(p);
+    if (p == fn_80137B40()) {
+        fn_8012CEF4(p, pControl);
+        fn_800D5A6C(0, 0, 0);
+        fn_800A3B58(p, 2, 0);
+    } else {
+        fn_801C1F94(&message, 0, 4);
+        if (fn_801486A0() == 0) {
+            message.mId = 57;
+            message.mUnknown1[0] = fn_801374D4();
+        } else {
+            message.mId = 33;
+        }
+        fn_800F053C(0, p->mpState, &message, p);
+        return 0;
+    }
+    if (fn_8010A2DC(p, 0, -1)) {
+        p->mUnknown512.mUnknown15 = pControl->mUnknown52;
+        return 0;
+    }
+    if (!(p->mFlags & 0x4000)) {
+        if (--pControl->mUnknown49 <= 0) {
+            float *pValues = pControl->mValues;
+            Entry_801230B8 *pEntry;
+
+            pControl->mUnknown49 = (255 - ((p->mRatings[0] >> 1) + (p->mRatings[2] >> 1))) >> 4;
+            pControl->mUnknown40 = 1.0f;
+            pControl->mUnknown52 = 1;
+            fn_8012430C(pValues, 1, p);
+            fn_8012CFA0(p);
+            pControl->mUnknown48 = fn_801243E0(pValues, pMotion->mFacing);
+            pControl->mUnknown44 = pControl->mUnknown48 << 21;
+            fn_8012D4FC(p, mode);
+            fn_8012311C(p, &plan, pControl->mUnknown44);
+            pEntry = fn_80123174(&plan);
+            if (pEntry) {
+                int angle = pEntry->mUnknown16;
+
+                pControl->mUnknown44 = angle;
+                pControl->mUnknown48 = ((angle + 0x100000) >> 21) & 7;
+            }
+            fn_8012D8A8(p, pControl, &mode, pEntry);
+            fn_8012DDCC(p, pControl, mode);
+            fn_8012D258(p);
+            pControl->mUnknown0 = fn_8012FA64(p);
+            fn_8012F89C(p, pControl, mode);
+            if (pControl->mUnknown56.mUnknown6) {
+                fn_800D0694(p);
+            }
+        }
+        fn_800D058C(p);
+        fn_800D0660(p, &pControl->mUnknown52);
+        p->mUnknown512.mUnknown15 = pControl->mUnknown52;
+        p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown8 = pControl->mUnknown44;
+        p->mUnknown512.mUnknown4 = pControl->mUnknown44;
+        p->mUnknown512.mUnknown0 = pControl->mUnknown40;
+        if (p->mFlags & 0x400000) {
+            p->mUnknown512.mUnknown14 = 10;
+            p->mUnknown512.mUnknown8 = pMotion->mFacing;
+            p->mUnknown512.mUnknown4 = pMotion->mFacing;
+            p->mUnknown512.mUnknown0 = 0.5f;
+        }
+        fn_8012F5A0(p, pControl, &pControl->mUnknown56);
+    } else {
+        if (fn_800D0694(p)) {
+            fn_800D058C(p);
+            fn_800D0660(p, &pControl->mUnknown52);
+            p->mUnknown512.mUnknown15 = pControl->mUnknown52;
+        }
+        if (p->mFlags & 0x400000) {
+            p->mUnknown512.mUnknown14 = 10;
+            p->mUnknown512.mUnknown8 = pMotion->mFacing;
+            p->mUnknown512.mUnknown4 = pMotion->mFacing;
+            p->mUnknown512.mUnknown0 = 0.5f;
+        }
+    }
+    if (p->mpState->mId == 1) {
+        fn_8012FDDC(p, pControl);
+        fn_8012FC08(p, pControl);
+        fn_8011168C(p);
+    }
+    return 0;
+}
+
+extern "C" int fn_8013028C(Object_80039F5C *p)
+{
+    Control_80132090 *pControl = (Control_80132090 *)&p->mUnknown336;
+
+    pControl->mUnknown44 = 0x400000;
+    pControl->mUnknown52 = 0;
+    pControl->mUnknown49 = 0;
+    pControl->mUnknown56.mUnknown0 = (signed char)(16 - (p->mRatings[2] + p->mRatings[0]) / 32);
+    pControl->mUnknown56.mUnknown0 = fn_800ACC80(p, pControl->mUnknown56.mUnknown0);
+    pControl->mUnknown56.mUnknown0 = fn_8009AD30(p, pControl->mUnknown56.mUnknown0);
+    return 0;
+}
+
+extern "C" int fn_80130318(Object_80039F5C *p)
+{
+    return fn_800B76E8(p);
+}
+
+extern "C" void fn_80130338(Object_80039F5C *p, Control_80132090 *pControl)
+{
+    pControl->mUnknown36 = fn_80177FE0().mY;
+    pControl->mUnknown44 = 0;
+    pControl->mUnknown49 = 0;
+    pControl->mUnknown56.mUnknown0 = (signed char)(16 - (p->mRatings[2] + p->mRatings[0]) / 32);
+    pControl->mUnknown56.mUnknown0 = fn_800ACC80(p, pControl->mUnknown56.mUnknown0);
+    pControl->mUnknown56.mUnknown0 = fn_8009AD30(p, pControl->mUnknown56.mUnknown0);
+    pControl->mUnknown52 = 1;
+    pControl->mUnknown40 = 1.0f;
+    pControl->mUnknown0 = 0;
+    pControl->mUnknown56.mUnknown4 = 0;
+    pControl->mUnknown56.mUnknown5 = 0;
+    if (fn_801486A0() == 0) {
+        if (!(p->mFlags & 0x400)) {
+            unsigned char roll = fn_802372EC(0, 100);
+
+            if ((fn_800ABDA4(1) == 0 && roll > 80) || (fn_800ABDA4(1) == 1 && roll > 40)
+                || (fn_800ABDA4(1) == 2 && roll != 0)) {
+                pControl->mUnknown56.mUnknown6 = 1;
+            } else {
+                pControl->mUnknown56.mUnknown6 = 0;
+            }
+        } else {
+            pControl->mUnknown56.mUnknown6 = 1;
+        }
+    } else {
+        pControl->mUnknown56.mUnknown6 = 1;
+    }
+    if (fn_800AD9B4() == 3) {
+        pControl->mUnknown0 = fn_8012FA64(p);
+    }
+    pControl->mUnknown56.mUnknown2 = 0;
 }

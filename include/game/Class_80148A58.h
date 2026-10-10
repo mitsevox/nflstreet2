@@ -23,7 +23,7 @@ public:
     virtual void vfn_15();
     virtual void vfn_16();
     virtual void vfn_17();
-    virtual void vfn_18();
+    virtual void vfn_18(int a, unsigned char index, char *pText, unsigned char length);
     virtual void vfn_19();
     virtual void vfn_20();
     virtual void vfn_21();

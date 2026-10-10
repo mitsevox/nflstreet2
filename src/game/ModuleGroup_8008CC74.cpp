@@ -4,6 +4,7 @@
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/Record_802CC680.h"
 #include "game/cu_80026BB0.h"
+#include "game/cu_8015D3EC.h"
 
 /* Argument of fn_801F8A0C and fn_801F8A54. */
 struct Desc_801F8A0C {
@@ -48,7 +49,6 @@ void fn_8008A88C(void);
 void fn_8008A8D0(void);
 void fn_8008FAA8(void);
 void fn_8015E548(void);
-void fn_8015E620(int a, int b);
 void fn_8015E65C(void);
 void fn_8015E684(void);
 void fn_8015E714(void);

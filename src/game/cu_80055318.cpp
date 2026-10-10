@@ -1,5 +1,6 @@
 #include "game/cu_800314E0.h"
 #include <stdio.h>
+#include "game/cu_8017F90C.h"
 
 struct Value_8005542C {
     int mUnknown0;

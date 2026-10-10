@@ -1,6 +1,7 @@
 #include "game/State_80167094.h"
 #include "game/fn_801C1F94.h"
 #include "game/Team_80167A8C.h"
+#include "game/fn_800B65A0.h"
 
 struct Record_80167094 {
     unsigned char mUnknown0[8];
@@ -31,7 +32,6 @@ Team_80167A8C *fn_80168EBC(int);
 void fn_8018A8C8(int);
 int fn_8017F60C(void);
 int fn_801486A0(void);
-int fn_800B65A0(int);
 int fn_800BA6F8(void);
 void fn_801A133C(float, float, void *, unsigned char);
 void fn_8018A908(void (*)(int, float, float, float, float));

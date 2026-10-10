@@ -6,6 +6,7 @@
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
+#include "game/fn_80054138.h"
 #include "game/fn_80238174.h"
 
 extern "C" {
@@ -18,7 +19,6 @@ int fn_8003FC68(void);
 void fn_8003FC70(Block_80170E64 *pBlock, int a);
 void fn_8003FE90(Block_80170E64 *pBlock, int a, int b, int c, int d, float e);
 void fn_80030ACC(void (*pCallback0)(int a), void (*pCallback4)(int a, int b, int c, int d, float e), int size, const char *pName);
-int fn_80054138(Vector_80039F5C *pPos);
 void fn_80076D7C(int id);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_800C47C4(void);
@@ -592,7 +592,7 @@ void fn_80137D74(Object_80137ABC *pBall, Vector_80039F5C *pPos)
     pBall->mState.mPos.mX = pPos->mX;
     pBall->mState.mPos.mY = pPos->mY;
     pBall->mState.mPos.mZ = pPos->mZ;
-    pBall->mpUnknown00->mUnknown660 = fn_80054138(&pBall->mpUnknown00->mUnknown4);
+    pBall->mpUnknown00->mUnknown660 = fn_80054138(&pBall->mpUnknown00->mUnknown4.mX);
 }
 
 /* The entry position, raised to the higher capsule end of its record. */

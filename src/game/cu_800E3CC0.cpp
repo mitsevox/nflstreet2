@@ -23,6 +23,7 @@
 #include "game/fn_802372EC.h"
 #include <math.h>
 #include "game/fn_801BE60C.h"
+#include "game/fn_800B65A0.h"
 
 /* Player block at +336 as used by the functions of the state entry at
    0x802DB370. */
@@ -153,7 +154,6 @@ int fn_8009A578(int handle);
 void fn_8009A8D4(void *p);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 Object_80039F5C *fn_800B6544(int index);
-int fn_800B65A0(int team);
 void fn_800B67FC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_800B78DC(Object_80039F5C *p);
 int fn_800B7FE8(Object_80039F5C *p);
@@ -829,7 +829,7 @@ extern "C" int fn_800E93CC(Object_80039F5C *p) {
 
 extern "C" int fn_800E948C(Object_80039F5C *p) {
     if (p->mUnknown560.mFlags.mBytes[0]) {
-        if (p->mUnknown624 >= 0.5f)
+        if (p->mContact560.mUnknown56.mZ >= 0.5f)
             return 1;
         return 3;
     }
@@ -1729,7 +1729,7 @@ extern "C" int fn_800ED0F4(Object_80039F5C *p, State_800EDC68 *state) {
         if (kind >= 6 && kind <= 11)
             result = 1;
         if (!result) {
-            int pending = fn_800F06F4(0, &p->mpState->mUnknown4, 26, 0xFFFF) != 0xFFFF;
+            int pending = fn_800F06F4(0, &p->mpState[1], 26, 0xFFFF) != 0xFFFF;
             if (pending)
                 result = 1;
         }

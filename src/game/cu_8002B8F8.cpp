@@ -1,5 +1,6 @@
 #include "game/fn_8022781C.h"
 #include "game/fn_80195EFC.h"
+#include "game/fn_8009D990.h"
 /* Replay camera and replay recorder of the in-game loop (Xbox data string
    "REPLAY.C" heads this file's .data; neutral file name). The data and the
    first four functions are linked from source; the remaining functions
@@ -15,6 +16,7 @@
 #include "game/Object_8017886C.h"
 #include "game/RecordList_8002E7C0.h"
 #include "game/cu_80136B1C.h"
+#include "game/cu_8013BB18.h"
 #include "game/cu_8002B8F8.h"
 #include "game/cu_8003108C.h"
 #include "game/fn_800AD9B4.h"
@@ -67,15 +69,6 @@ struct Entry_80030D08 {
     int mId;
     Cond_8002D4A0 *mpConds;
     int mUnknown08;
-};
-
-/* Argument of fn_801C3610 when it creates a camera (as in
-   src/game/cu_8013F460.cpp). */
-struct Desc_8013C340 {
-    int mUnknown00;
-    int mUnknown04;
-    int mUnknown08;
-    int mUnknown0C;
 };
 
 /* 0x14-byte focus block of the replay camera at 0x8030660C (cleared as a
@@ -149,7 +142,6 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009D818(int state);
 int fn_8009D86C(void);
 void fn_8009D964(int index, int value);
-int fn_8009D990(int index);
 void fn_800A3120(float a);
 float fn_800A32B4(void);
 int fn_800A3444(void);
@@ -158,16 +150,6 @@ void fn_800A866C(void);
 void fn_800B50E8(int a);
 int fn_800B81A4(void);
 void fn_801383E4(int on);
-void fn_8013C2B4(void *pCamera, int a, int b, int c);
-void fn_8013C340(Desc_8013C340 *pDesc);
-void fn_8013C384(void *pCamera, int a, int b, int c);
-void fn_8013C540(Camera_8013F738 *pCamera, int angle);
-void fn_8013C57C(Camera_8013F738 *pCamera, int angle);
-void fn_8013C624(void *pCamera, int a, int b, int c);
-void fn_8013C6F0(Camera_8013F738 *pCamera);
-void fn_8013C868(void);
-void fn_8013C90C(void);
-void fn_8013C954(void);
 void fn_8013E474(void);
 void fn_8013FB44(void);
 void fn_80144EDC(float a);
@@ -290,9 +272,9 @@ void fn_8002E75C(Type_803EA368 *p, Timer_8002E7C0 *pTimer);
 void fn_8002E890(RecordList_8002E7C0 *pList);
 void fn_8002E8B8(Type_803EA368 *p, RecordList_8002E7C0 *pList);
 int fn_8002E950(int mode);
-void fn_8002EA18(void);
-void fn_8002EA38(void);
-void fn_8002EA58(void);
+void fn_8002EA18(Camera_8013F738 *pCamera, Desc_8013C340 *pDesc);
+void fn_8002EA38(Camera_8013F738 *pCamera);
+void fn_8002EA58(void *p, Camera_8013F738 *pCamera);
 Camera_8013F738 *fn_8002EA78(Type_8002FDB4 *pDesc);
 void fn_8002EBBC(Object_80039F5C *p);
 void fn_8002EC28(void);
@@ -380,7 +362,7 @@ static Type_8030660C lbl_8030660C;
 static char lbl_802CC830[] = "REPLAY.C";
 
 /* The replay camera's callbacks; 0x802DBDA0 points to this table. */
-static void (*lbl_802CC83C[])(void) = { fn_8002EA18, fn_8002EA38, fn_8002EA58 };
+static Type_802DBD24 lbl_802CC83C = { fn_8002EA18, fn_8002EA38, fn_8002EA58 };
 
 static Command_8002DC00 lbl_802CC848[] = {
     { 1, 0 }, { 0x26, 0x2D }, { 0x28, 10000 }, { 5, 14 }, { 0x1A, 0 }, { 0x1B, -6 }, { 0x1C, 4 }, { -1, 0 },
@@ -1987,19 +1969,19 @@ extern "C" int fn_8002E950(int mode)
     return 0;
 }
 
-extern "C" void fn_8002EA18(void)
+extern "C" void fn_8002EA18(Camera_8013F738 *pCamera, Desc_8013C340 *pDesc)
 {
-    fn_8013C868();
+    fn_8013C868(pCamera, pDesc);
 }
 
-extern "C" void fn_8002EA38(void)
+extern "C" void fn_8002EA38(Camera_8013F738 *pCamera)
 {
-    fn_8013C90C();
+    fn_8013C90C(pCamera);
 }
 
-extern "C" void fn_8002EA58(void)
+extern "C" void fn_8002EA58(void *p, Camera_8013F738 *pCamera)
 {
-    fn_8013C954();
+    fn_8013C954(p, pCamera);
 }
 
 extern "C" Camera_8013F738 *fn_8002EA78(Type_8002FDB4 *pDesc)
@@ -2330,6 +2312,7 @@ extern "C" void fn_8002F5D4(Camera_8013F738 *pCamera, float amount)
 extern "C" Camera_8013F738 *fn_8002F61C(Type_8002FDB4 *pDesc)
 {
     Camera_8013F738 *pCamera;
+    CameraType1_802F4884 *pBase;
 
     memset(&lbl_8030660C, 0, sizeof(Type_8030660C));
     lbl_803EC620 = 0;
@@ -2343,18 +2326,19 @@ extern "C" Camera_8013F738 *fn_8002F61C(Type_8002FDB4 *pDesc)
     }
     lbl_803EC630 = pCamera->mUnknown30;
     fn_80031040(0);
-    pCamera->mUnknown90 = 0x200000;
-    pCamera->mUnknown88 = 0x400000;
-    pCamera->mUnknown64 = 0.3f;
-    pCamera->mUnknown68 = 0.3f;
-    pCamera->mUnknown6C = 0.3f;
-    pCamera->mUnknown70 = 0.2f;
-    pCamera->mUnknown74 = 0.3f;
-    pCamera->mUnknown78 = 0.3f;
-    pCamera->mUnknown8C = 0x200000;
-    pCamera->mUnknown84 = 0x400000;
-    pCamera->mUnknown7C = 0.3f;
-    pCamera->mUnknown80 = 0.2f;
+    pBase = (CameraType1_802F4884 *)pCamera;
+    pBase->mUnknown90 = 0x200000;
+    pBase->mUnknown88 = 0x400000;
+    pBase->mUnknown64 = 0.3f;
+    pBase->mUnknown68 = 0.3f;
+    pBase->mUnknown6C = 0.3f;
+    pBase->mUnknown70 = 0.2f;
+    pBase->mUnknown74 = 0.3f;
+    pBase->mUnknown78 = 0.3f;
+    pBase->mUnknown8C = 0x200000;
+    pBase->mUnknown84 = 0x400000;
+    pBase->mUnknown7C = 0.3f;
+    pBase->mUnknown80 = 0.2f;
     fn_801C39D0(pCamera, 0.1f);
     pCamera->mUnknown94 |= 4;
     lbl_803EA384 = 1;

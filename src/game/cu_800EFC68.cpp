@@ -1,5 +1,6 @@
 #include <math.h>
 #include <string.h>
+#include "game/fn_800B65A0.h"
 
 #include "game/Command_800CEE74.h"
 #include "game/Input_800B6D34.h"
@@ -7,6 +8,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
+#include "game/Plan_80121264.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F518.h"
 #include "game/Team_80167A8C.h"
@@ -103,11 +105,6 @@ struct State_80114DF4 {
     unsigned char mUnknown58;
     char mUnknown59[8];
     unsigned char mUnknown67;
-};
-
-struct Block_80114A30 {
-    char mUnknown0[44];
-    int mUnknown44;
 };
 
 struct Record_801170A0 {
@@ -546,35 +543,8 @@ struct Block_803EB028 {
     char mUnknown91[1];
 };
 
-/* 48-byte entry of Plan_80121264; the array fills +0 to +1440. */
-struct Entry_80120E98 {
-    char mUnknown0[12];
-    float mUnknown12;
-    char mUnknown16[20];
-    int mUnknown36;
-    char mUnknown40[8];
-};
-
-/* 32-byte entry of Plan_80121264; the array fills +1444 to +2372. */
-struct Entry_801230B8 {
-    char mUnknown0[16];
-    int mUnknown16;
-    char mUnknown20[8];
-    float mUnknown28;
-};
-
-/* 2376-byte record cleared and filled by fn_80121264 (fn_801231E4 keeps one
-   on its stack). */
-struct Plan_80121264 {
-    Entry_80120E98 mUnknown0[30];
-    int mUnknown1440;
-    Entry_801230B8 mUnknown1444[29];
-    unsigned int mUnknown2372;
-};
-
 extern "C" {
 void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
-int fn_800B65A0(int unknown);
 void fn_800B6714(Object_80039F5C *p, int port);
 void fn_800D0BF4(Object_80039F5C *p, int a, int b);
 void fn_800E9528(Object_80039F5C *p);
@@ -788,7 +758,7 @@ extern unsigned char lbl_803EAE20[8];
 extern const float lbl_803ED6CC;
 int fn_800AC3FC(Object_80039F5C *p, int value);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
-void fn_8013AA00(Object_80137ABC *pBall, float *pOut, Point_8017886C *pPoint, float scale);
+void fn_8013AA00(Object_80137ABC *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_801528E0(void *pSet, Point_8017886C *pOut);
 int fn_800AC3A0(Object_80039F5C *p);
@@ -2428,7 +2398,7 @@ extern "C" int fn_800FCE58(Object_80039F5C *p, Block_800FCC24 *pBlock) {
 extern "C" int fn_800FCFC0(Object_80039F5C *p) {
     int result = 0;
 
-    if (p->mIdBytes[3] == 1 && p->mpState->mUnknown4 == 18 && fn_8011F1CC()) {
+    if (p->mIdBytes[3] == 1 && p->mpState[1].mId == 18 && fn_8011F1CC()) {
         int team = fn_80178320();
         unsigned char i = 0;
         Vector_80039F5C *pPos = &p->mMotion.mPos;
@@ -3076,10 +3046,10 @@ extern "C" int fn_80105898(Object_80039F5C *p) {
                 fn_800F053C(0, p->mpState, &message, p);
             }
         }
-    } else if (p->mpState->mUnknown4 == 31) {
+    } else if (p->mpState[1].mId == 31) {
         fn_8011E1BC(p, 0, 0, 1);
         fn_8011E3EC(p, 1);
-    } else if (p->mpState->mUnknown4 == 33) {
+    } else if (p->mpState[1].mId == 33) {
         fn_8011E1BC(p, 0, 0, 1);
         fn_8011E3EC(p, 2);
     }
@@ -4635,7 +4605,7 @@ extern "C" int fn_80114A30(Object_80039F5C *p, int a)
             Record_800B15FC *pRecord;
 
             p->mUnknown1219 = 1;
-            ((Block_80114A30 *)&p->mUnknown1160)->mUnknown44++;
+            p->mUnknown1160.mUnknown44++;
             result = 2;
             pRecord = fn_800B15FC();
             fn_8009BD2C(p, &pRecord->mUnknown0);
@@ -5082,7 +5052,6 @@ int fn_80165098(Record_80067338 *pRecord);
 int fn_801650BC(Record_80067338 *pRecord);
 int fn_801650DC(Record_80067338 *pRecord);
 int fn_801650FC(Record_80067338 *pRecord);
-void fn_8016444C(Object_800670B4 *p);
 void fn_800A5A88(void *p);
 void fn_801F51DC(int a, void *pBase, int count, int size, int (*pCompare)(void *, void *),
                  void (*pSwap)(void *, void *), int b, int c);
@@ -5269,10 +5238,10 @@ void fn_8011E068(void)
         Object_80039F5C *p = fn_80039F5C(team, i);
 
         if (p->mpState->mId == 51) {
-            if (p->mpState->mUnknown4 == 33) {
+            if (p->mpState[1].mId == 33) {
                 fn_8011E1BC(p, 0, 0, 1);
                 fn_8011E3EC(p, 2);
-            } else if (p->mpState->mUnknown4 == 31) {
+            } else if (p->mpState[1].mId == 31) {
                 fn_8011E1BC(p, 0, 0, 1);
                 fn_8011E3EC(p, 1);
             }
@@ -5949,7 +5918,7 @@ void fn_80120CDC(Object_80039F5C *p, Object_80039F5C *pOther, Entry_80120E98 *pE
         case 3:
         default:
             pEntry->mUnknown36 |= 2;
-            if (pOther->mUnknown3048.mId == 47) {
+            if (pOther->mQueue[0].mId == 47) {
                 pEntry->mUnknown36 |= 4;
             }
             break;

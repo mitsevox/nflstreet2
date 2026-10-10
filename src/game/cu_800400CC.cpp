@@ -3,6 +3,7 @@
 
 #include "game/bitstream.h"
 #include "game/Level_80054130.h"
+#include "game/Object_80040818.h"
 #include "game/cu_80041210.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801C1F94.h"
@@ -10,58 +11,6 @@
 #include "game/fn_801EEB44.h"
 #include "game/fn_80054138.h"
 #include "game/fn_801EBC18.h"
-
-struct Anim_8004AA34 {
-    int mUnknown0;
-    unsigned short mUnknown4;
-};
-
-struct Track_800410E0 {
-    char mUnknown0[6];
-    unsigned short mUnknown6;
-};
-
-struct Model_8004E0CC {
-    char mUnknown0[40];
-    unsigned char mUnknown40;
-};
-
-struct Flags_800411C8 {
-    unsigned short mUnknown0;
-    unsigned short mUnknown2;
-};
-
-/* 548-byte object of pool type 28, one per placed object. */
-struct Object_80040818 {
-    int mUnknown0;
-    Vector_80039F5C mPos;
-    char mUnknown16[4];
-    int (*mUnknown20)(Object_80040818 *pObject);
-    Quat_801EB488 mRot;
-    char mUnknown40[132];
-    Anim_8004AA34 mUnknown172;
-    char mUnknown180[52];
-    unsigned int mUnknown232_0 : 27;
-    unsigned int mUnknown232_27 : 1;
-    unsigned int mUnknown232_28 : 1;
-    unsigned int mUnknown232_29 : 1;
-    unsigned int mUnknown232_30 : 1;
-    unsigned char mUnknown232_31 : 1;
-    char mUnknown236[64];
-    Model_8004E0CC *mUnknown300;
-    Track_800410E0 **mUnknown304;
-    int mUnknown308;
-    char mUnknown312[16];
-    int mUnknown328;
-    Area_80054138 *mUnknown332;
-    float mUnknown336;
-    float mUnknown340;
-    char mName[128];
-    Object_80041904 *mUnknown472;
-    Flags_800411C8 *mUnknown476;
-    int mUnknown480;
-    char mUnknown484[64];
-};
 
 /* Placement record that fn_800408E4 turns into an object. */
 struct Desc_800408E4 {
@@ -86,9 +35,9 @@ void fn_80030ACC(void (*pSave)(BitStream_t *pStream),
                                BitStream_t *pStream3, float t),
                  int size, const char *pName);
 void fn_800400BC(Block_80170E64 *pBlock, Object_80041904 *pLinked);
-void fn_8004AA34(Anim_8004AA34 *pAnim, void *pStream, int count);
-void fn_8004ABF4(Object_80040818 *pObject, Object_80041904 *pLinked, void *pStream0, void *pStream1, void *pStream2,
-                 void *pStream3, float t);
+void fn_8004AA34(Pose_80041930 *pPose, BitStream_t *pStream, unsigned int count);
+void fn_8004ABF4(Object_80040818 *pObject, Object_80041904 *pLinked, BitStream_t *pStream0, BitStream_t *pStream1,
+                 BitStream_t *pStream2, BitStream_t *pStream3, float t);
 void fn_8004AF84(Extra_8004149C *pExtra);
 void fn_8004CBE8(void);
 void fn_8004D0F4(int handle);
@@ -136,8 +85,6 @@ void fn_800407F0(void);
 void fn_80040818(Object_80040818 *pObject, Desc_800408E4 *pDesc);
 void fn_80040884(Object_80040818 *pObject);
 int fn_800408A4(Object_80040818 *pObject);
-Object_80040818 *fn_80040F18(int index);
-Track_800410E0 *fn_800410E0(Object_80040818 *pObject);
 }
 
 static Object_80040818 **lbl_803EA480 = 0;
@@ -262,10 +209,10 @@ int fn_800404C8(void)
         Object_80040818 *pObject = lbl_803EA480[i];
 
         if (pObject->mUnknown300 != 0) {
-            Track_800410E0 *pTrack = fn_800410E0(pObject);
+            Skeleton_80041930 *pSkeleton = fn_800410E0(pObject);
 
-            if (pTrack != 0) {
-                size += pTrack->mUnknown6 * 36;
+            if (pSkeleton != 0) {
+                size += pSkeleton->mUnknown6 * 36;
                 size += 64;
             }
             size += 108;
@@ -298,7 +245,7 @@ void fn_800405F0(int handle)
             Object_80041904 *pLinked = lbl_803EA480[i]->mUnknown472;
 
             if (pLinked->mUnknown184 != 0) {
-                pLinked->mUnknown184(pLinked, (int)lbl_803EA480[i], 3);
+                pLinked->mUnknown184(pLinked, lbl_803EA480[i], 3);
             }
             fn_801DD320(handle, lbl_803EA480[i]);
             fn_80228D58(lbl_803EA480[i]);
@@ -328,7 +275,7 @@ void fn_800406C0(unsigned int flags)
                 Object_80041904 *pLinked = pObject->mUnknown472;
 
                 if (pLinked->mUnknown184 != 0) {
-                    pLinked->mUnknown184(pLinked, (int)pObject, 4);
+                    pLinked->mUnknown184(pLinked, pObject, 4);
                 }
             }
         }
@@ -607,7 +554,7 @@ int fn_80041094(int index)
     return 0;
 }
 
-Track_800410E0 *fn_800410B8(int index)
+Skeleton_80041930 *fn_800410B8(int index)
 {
     Object_80040818 *pObject = lbl_803EA480[index];
 
@@ -617,7 +564,7 @@ Track_800410E0 *fn_800410B8(int index)
     return 0;
 }
 
-Track_800410E0 *fn_800410E0(Object_80040818 *pObject)
+Skeleton_80041930 *fn_800410E0(Object_80040818 *pObject)
 {
     if (pObject->mUnknown304 != 0) {
         return *pObject->mUnknown304;

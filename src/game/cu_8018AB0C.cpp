@@ -1,4 +1,5 @@
 #include "engine/cu_80227F14.h"
+#include "game/cu_80163674.h"
 #include "game/fn_8018AB0C.h"
 
 struct Block_8018A978 {
@@ -16,12 +17,6 @@ struct Desc_8018A978 {
     Block_8018A978 mUnknown40;
 };
 
-struct View_8018A978 {
-    char mUnknown0[464];
-    float mUnknown464;
-    unsigned char mUnknown468;
-};
-
 struct Object_8018A978 {
     short mUnknown0;
     short mUnknown2;
@@ -29,7 +24,7 @@ struct Object_8018A978 {
     Block_8018A978 mUnknown16;
     Block_8018A978 mUnknown28;
     Block_8018A978 mUnknown40;
-    View_8018A978 *mpUnknown52;
+    Object_80163788 *mpUnknown52;
 };
 
 struct Object_8021CA3C {
@@ -38,15 +33,11 @@ struct Object_8021CA3C {
 };
 
 extern "C" {
-int fn_80163C30(void *p, int value);
-void fn_80163CD0(void);
-View_8018A978 *fn_801DD168(int type, int flags, Desc_8018A978 *pDesc);
+Object_80163788 *fn_801DD168(int type, int flags, Desc_8018A978 *pDesc);
 Object_8021CA3C *fn_8021CA3C(void);
 void fn_8018A8C8(int a);
 void fn_801CE9E0(int a);
 void fn_801CE95C(void);
-void fn_80163D64(View_8018A978 *pView, unsigned char value);
-void fn_80163D08(View_8018A978 *pView, int value);
 
 void fn_8018A978(Object_8018A978 *p);
 void fn_8018AA44(Object_8018A978 *p, int *pFlag);
@@ -123,8 +114,8 @@ void fn_8018AB64(Object_8018A978 *p, unsigned int message, int a, int *pArgs)
             fn_8018AB08(p, pArgs[0], pArgs[1]);
             break;
         case 4:
-            p->mpUnknown52->mUnknown464 = pArgs[0] * 0.01f;
-            p->mpUnknown52->mUnknown468 = 1;
+            p->mpUnknown52->mUnknown1D0 = pArgs[0] * 0.01f;
+            p->mpUnknown52->mUnknown1D4 = 1;
             break;
         }
     }

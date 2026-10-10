@@ -38,9 +38,6 @@ Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char 
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float fn_8012506C(Object_80039F5C *p, int kind);
 int fn_8012510C(float *pValues);
-void fn_8012DDCC(Object_80039F5C *p, Control_80132090 *pControl, int a);
-void fn_8012F5A0(Object_80039F5C *p, int a, void *pBlock);
-void fn_8012F89C(Object_80039F5C *p, Control_80132090 *pControl, int a);
 int fn_80132630(Object_80039F5C *p, Vector_80039F5C *pPos, int a);
 void fn_8013FA8C(int a);
 void fn_80148108(int mode);
@@ -76,7 +73,7 @@ extern "C" int fn_8013141C(Object_80039F5C *p)
     State_80039F5C *pState = p->mpState;
     int result = 0;
 
-    if (fn_80137C48(p) != 0 && pState->mUnknown4 == 18) {
+    if (fn_80137C48(p) != 0 && pState[1].mId == 18) {
         result = fn_801783AC(0) == 0;
     }
     return result;
@@ -295,7 +292,7 @@ extern "C" void fn_80131C1C(Object_80039F5C *p, float *pValues, Control_80132090
     p->mUnknown512.mUnknown8 = pControl->mUnknown44;
     p->mUnknown512.mUnknown4 = pControl->mUnknown44;
     p->mUnknown512.mUnknown0 = pControl->mUnknown40;
-    fn_8012F5A0(p, 0, pControl->mUnknown56);
+    fn_8012F5A0(p, 0, &pControl->mUnknown56);
 }
 
 extern "C" void fn_80131D48(Object_80039F5C *p, float *pValues, Control_80132090 *pControl)

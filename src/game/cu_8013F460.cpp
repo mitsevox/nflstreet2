@@ -2,7 +2,9 @@
 #include "game/Object_80228224.h"
 #include "game/fn_800AD9B4.h"
 #include "game/Camera_8013F738.h"
+#include "game/cu_8013BB18.h"
 #include "game/fn_80238174.h"
+#include "game/fn_800B65A0.h"
 
 /* One camera in a saved state; only mHeader is restored. */
 struct CameraSave_8013F56C {
@@ -10,17 +12,9 @@ struct CameraSave_8013F56C {
     int mUnknown28;
 };
 
-/* Argument of fn_801C3610 when it creates a camera. */
-struct Desc_8013C340 {
-    int mUnknown00;
-    int mUnknown04;
-    int mUnknown08;
-    int mUnknown0C;
-};
-
 struct CameraSet_803ECA00 {
     int mCurrent;
-    void *mpCameras[4];
+    Camera_8013F738 *mpCameras[4];
     unsigned char mUnknown14;
 };
 
@@ -30,7 +24,7 @@ struct State_803ECA00 {
     CameraSet_803ECA00 mSet;
 };
 
-typedef void (*CameraFunc_8013F85C)(void *pCamera, int a, int b, int c);
+typedef void (*CameraFunc_8013F85C)(Camera_8013F738 *pCamera, int a, int b, int c);
 
 extern "C" {
 extern float lbl_803EA2C4;
@@ -39,14 +33,6 @@ int fn_8002B2D4(void *pObject, void *pItem, int (*a)(void *, void *), int (*b)(v
 int fn_8002B3DC(void *pObject, void *pItem);
 int fn_8002B494(void *pObject, void *pItem, void *pOther);
 void fn_800AD9C0(float value);
-int fn_800B65A0(int a);
-void fn_8013C2B4(void *pCamera, int a, int b, int c);
-void fn_8013C340(Desc_8013C340 *pDesc);
-void fn_8013C384(void *pCamera, int a, int b, int c);
-void fn_8013C624(void *pCamera, int a, int b, int c);
-void fn_8013C680(void *pCamera, int a, int b, int c);
-void fn_8013C824(void *pCamera, int msg, int arg);
-int fn_8013C854(int id);
 void fn_80141164(float value);
 int fn_80178308(void);
 int fn_80178320(void);
@@ -135,7 +121,7 @@ int fn_8013F628(void *p, void *pBuffer)
     pBuffer = (char *)pBuffer + sizeof(Object_80228224);
     CameraSave_8013F56C *pSaved = (CameraSave_8013F56C *)pBuffer;
     for (short i = 0; i < 4; i++, pSaved++) {
-        *(CameraHeader_8013F628 *)pState->mSet.mpCameras[i] = pSaved->mHeader;
+        pState->mSet.mpCameras[i]->mHeader = pSaved->mHeader;
     }
     return 1;
 }
@@ -162,7 +148,7 @@ void fn_8013F7C0(State_803ECA00 *pState, int index, int id)
     fn_8013C340(&desc);
     desc.mUnknown00 = fn_8013C854(id);
     desc.mUnknown04 = id;
-    pState->mSet.mpCameras[index] = fn_801C3610(2, &desc);
+    pState->mSet.mpCameras[index] = (Camera_8013F738 *)fn_801C3610(2, &desc);
 }
 
 void fn_8013F820(State_803ECA00 *pState, int index)
@@ -218,7 +204,7 @@ Camera_8013F738 *fn_8013FA04(int index)
     if (index == 5) {
         index = lbl_803ECA00->mSet.mCurrent;
     }
-    return (Camera_8013F738 *)lbl_803ECA00->mSet.mpCameras[index];
+    return lbl_803ECA00->mSet.mpCameras[index];
 }
 
 void fn_8013FA24(void)
@@ -228,7 +214,7 @@ void fn_8013FA24(void)
 
 void fn_8013FA58(int a, int b)
 {
-    fn_8013F85C(fn_8013C384, a, b, 0);
+    fn_8013F85C((CameraFunc_8013F85C)fn_8013C384, a, b, 0);
 }
 
 void fn_8013FA8C(int a)

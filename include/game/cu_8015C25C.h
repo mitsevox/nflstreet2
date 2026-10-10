@@ -12,6 +12,7 @@ void fn_8015D180(int index, unsigned char priority);
 void fn_8015D1CC(int index, unsigned char priority);
 unsigned char fn_8015D1FC(int index);
 unsigned char fn_8015D2E8(Object_8003DEC4 *pPlayer);
+void fn_8015D32C(Object_8003DEC4 *pPlayer, float *pScale);
 unsigned char fn_8015D38C(unsigned char value);
 }
 

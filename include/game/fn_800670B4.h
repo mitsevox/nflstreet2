@@ -7,15 +7,29 @@ struct Team_80167A8C;
 
 /* One of the 8-byte slots at Object_8006719C +0x1C, filled by fn_80066318. */
 struct Slot_8006719C {
-    char mUnknown0[5];
-    unsigned char mUnknown5;
-    unsigned short mUnknown6;
+    union {
+        char mName[6];
+        struct {
+            char mUnknown0[5];
+            unsigned char mUnknown5;
+        };
+    };
+    union {
+        unsigned short mUnknown6;
+        unsigned short mId;
+    };
 };
 
 /* One 40-byte entry of the 11 x 7 table at Object_8006719C +0x84. */
 struct Entry_8006719C {
     unsigned short mUnknown0;
-    unsigned short mUnknown2;
+    union {
+        unsigned short mUnknown2;
+        struct {
+            char mUnknown2Pad;
+            unsigned char mUnknown3;
+        };
+    };
     unsigned short mUnknown4;
     unsigned short mUnknown6;
     unsigned char mUnknown8;

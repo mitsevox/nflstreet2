@@ -6,6 +6,7 @@
 #include "game/cu_80136B1C.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801C1F94.h"
+#include "game/fn_800B65A0.h"
 
 /* Partial view of the opaque player block at +336 used by the handlers
    below. */
@@ -18,7 +19,6 @@ struct Block_800EF968 {
 
 extern "C" {
 void fn_800A8954(int event, int team, Object_80039F5C *p);
-int fn_800B65A0(int team);
 int fn_800C4B6C(Object_80039F5C *p);
 int fn_800D0B90(Object_80039F5C *p);
 void fn_800D0BF4(Object_80039F5C *p, int a, int b);

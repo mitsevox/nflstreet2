@@ -22,6 +22,8 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/fn_801BE60C.h"
+#include "game/fn_800B65A0.h"
+#include "game/Info_ScrmState.h"
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
@@ -38,18 +40,6 @@ public:
 struct Segment_ScrmState {
     Point_8017886C mA;
     Point_8017886C mB;
-};
-
-/* Returned by fn_801787D0; the layout is that read by fn_8016F6A4. */
-struct Info_ScrmState {
-    float mUnknown00;
-    float mUnknown04;
-    float mUnknown08;
-    int mUnknown0C;
-    int mUnknown10;
-    short mUnknown14;
-    float mUnknown18;
-    int mUnknown1C;
 };
 
 /* The 'scru' block allocated by fn_801779D8; lbl_803EB444 points to it. */
@@ -135,7 +125,6 @@ void fn_800A8954(int event, int team, Object_80039F5C *p);
 void fn_800AD910(int a, float b);
 void fn_800B1584(int a, const float *pPos);
 void fn_800B2314(void);
-int fn_800B65A0(int team);
 int fn_800BA6F8(void);
 Point_8017886C fn_800BA7A0(void);
 int fn_800BAAB8(void);
@@ -227,7 +216,6 @@ void fn_80178718(Object_80039F5C *p);
 Object_80039F5C *fn_8017876C(void);
 unsigned char fn_80178794(void);
 int fn_801787A0(void);
-Info_ScrmState *fn_801787D0(void);
 int fn_801787DC(int team);
 void fn_801787FC(int team, short value);
 int fn_8017881C(int a);

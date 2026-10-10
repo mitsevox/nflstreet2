@@ -1,4 +1,5 @@
 #include "game/cu_80041210.h"
+#include "game/Object_80040818.h"
 #include "game/fn_80238174.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801D2B7C.h"
@@ -16,11 +17,9 @@ struct Pool_803EA488 {
 
 extern "C" {
 int fn_80040A70(Object_80041904 *pObject, int index);
-int fn_80040F18(int index);
 int fn_80041094(int index);
-int fn_800410B8(int index);
-void fn_8004A8C4(Extra_8004149C *pExtra, int entry, int a);
-void fn_8004A8E8(int entry, void *a, int b, void *c);
+void fn_8004A8C4(Extra_8004149C *pExtra, Object_80040818 *pItem, int a);
+void fn_8004A8E8(Object_80040818 *pItem, void *a, int b, void *c);
 void fn_8004A908(Object_80041904 *pObject, int index);
 void fn_8004C684(void *pOwner, Object_80041904 *pObject);
 void fn_8004C7B8(Object_80041904 *pObject);
@@ -34,7 +33,7 @@ int fn_80238278(const void *p, int size, int seed);
 void *fn_8023816C(void *pHandle);
 
 Pool_803EA488 *lbl_803EA488 = 0;
-int lbl_803EA48C = 0;
+unsigned int lbl_803EA48C = 0;
 
 int fn_80041210(void *p, int value)
 {
@@ -221,7 +220,7 @@ Object_80041904 *fn_80041904(int index)
     return pObject;
 }
 
-int fn_80041928(void)
+unsigned int fn_80041928(void)
 {
     return lbl_803EA48C;
 }

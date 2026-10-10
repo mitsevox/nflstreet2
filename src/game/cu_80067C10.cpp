@@ -1,4 +1,5 @@
 #include "game/cu_80067C10.h"
+#include "game/fn_8009D990.h"
 
 /* Descriptor passed to fn_80238424, which allocates mUnknown0 records of
    mUnknown4 bytes after mUnknown8 callback slots. */
@@ -8,10 +9,9 @@ struct Desc_80238424 {
     int mUnknown8;
 };
 
-typedef int (*Fn_803EA674)(int);
+typedef unsigned int (*Fn_803EA674)(int);
 
 extern "C" {
-int fn_8009D990(int index);
 void fn_8006CE84(Record_80067CA8 *pRecord);
 void fn_800D70CC(Record_80067CA8 *pRecord);
 int fn_801D34D0(void *pDest, int size, int value, int width);
