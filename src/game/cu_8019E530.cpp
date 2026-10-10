@@ -46,7 +46,9 @@ static unsigned char lbl_803EB7C9 = 1;
 extern "C" {
 /* Replaces the three 16-bit angles of pTo with their value at t between
    pFrom (t = 0) and pTo (t = 1): linear when the two are within 0x71C,
-   otherwise a cubic using pPrev and pNext, when given, for the tangents. */
+   otherwise a cubic using pPrev and pNext, when given, for the tangents.
+   On the cubic path, a pFrom or pNext angle shifted by 2*pi to follow the
+   wrap at pi is written back. */
 void fn_8019E530(short *pPrev, short *pFrom, short *pTo, short *pNext, float t)
 {
     float tangent0[3];

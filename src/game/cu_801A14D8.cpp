@@ -709,7 +709,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], O
             fn_801D06D4(pPlayer->mUnknown908);
             fn_800C2150(pPlayer, &pPlayer->mUnknown280, !(pPlayer->mUnknown20 & 8));
             fn_801D0544();
-            pHead = (short *)pPlayer->mUnknown280.mUnknown312;
+            pHead = pPlayer->mUnknown280.mUnknown256.mUnknown48;
             fn_801D04C4();
             fn_801D0664(pBones[13]);
         }
@@ -727,7 +727,7 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], O
         fn_801D06D4(pPlayer->mUnknown908);
         fn_800C2884(pPlayer, &pPlayer->mUnknown596, !(pPlayer->mUnknown20 & 8));
         fn_801D0544();
-        pHat = (short *)pPlayer->mUnknown596.mUnknown216;
+        pHat = pPlayer->mUnknown596.mUnknown160.mUnknown48;
         fn_801D04C4();
         fn_801D0664(pBones[11]);
         pHat[0] = pPose[33];
@@ -1038,7 +1038,8 @@ void fn_801A32AC(int id, float sx, float sy, float tx, float ty)
     fn_802525F0(m, id, 1);
 }
 
-/* Texture offsets of the two eyes from the head angles of the pose. */
+/* Texture offsets of the two eyes from the X and Y angles of pose bones 28
+   and 29. */
 void fn_801A3300(Object_8003DEC4 *pPlayer, float *pA, float *pB)
 {
     if (pPlayer->mUnknown20 & 0x80) {
