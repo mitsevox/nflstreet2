@@ -9090,7 +9090,7 @@
       }
     },
     {
-      "source": "src/game/cu_8015A39C.cpp",
+      "source": "src/game/cu_8015A248.cpp",
       "contributors": [
         "adampreddy"
       ],
@@ -9105,7 +9105,11 @@
         "introduced_blob": "973b91a351935a9654519ed4b6f9c83440be4893",
         "original_commit": "8801e4e04580cd0ce07d5ef1cc6f6302e97b5bed",
         "original_blob": "49e49e1b68d8b6a254fa14764067f2286ad1a7ef",
-        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses."
+        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses.",
+        "original_source": "src/game/cu_8015A39C.cpp",
+        "merged_source": true,
+        "migration_commit": "23598ea10c0a90567d759733d11681d493e7db63",
+        "merged_blob": "e5ca7f6b15c947f3c35a05e612b71ccd171a99d5"
       }
     },
     {
@@ -9155,7 +9159,7 @@
       }
     },
     {
-      "source": "src/game/cu_8015A39C.cpp",
+      "source": "src/game/cu_8015A248.cpp",
       "contributors": [
         "adampreddy"
       ],
@@ -9166,7 +9170,11 @@
         "pull_request": 483,
         "merged_via": 489,
         "commit": "1562a06526704677b109a45004a18d8b0fb5455e",
-        "introduced_blob": "973b91a351935a9654519ed4b6f9c83440be4893"
+        "introduced_blob": "973b91a351935a9654519ed4b6f9c83440be4893",
+        "original_source": "src/game/cu_8015A39C.cpp",
+        "merged_source": true,
+        "migration_commit": "23598ea10c0a90567d759733d11681d493e7db63",
+        "merged_blob": "e5ca7f6b15c947f3c35a05e612b71ccd171a99d5"
       }
     },
     {
@@ -16061,6 +16069,88 @@
         "merged_via": 719,
         "commit": "c3f1c8ac140d6ac52b149794abedad37dd36dba3",
         "introduced_blob": "c95da0359afc9ef531afc27c5a1c270c044c8642"
+      }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80070D68",
+        "0x80070E8C",
+        "0x8007105C",
+        "0x80071540",
+        "0x80071594",
+        "0x800716E4",
+        "0x80071748",
+        "0x80071794",
+        "0x800717E0",
+        "0x8007184C",
+        "0x800718A0",
+        "0x80071914"
+      ],
+      "provenance": {
+        "pull_request": 725,
+        "merged_via": 725,
+        "commit": "23598ea10c0a90567d759733d11681d493e7db63",
+        "introduced_blob": "73a6573e7d52cdb919fdbdc744401952cc1f81cd",
+        "original_commit": "2e10963a8ea451bf29b23cbc9cd78143615a4d3e",
+        "original_blob": "73a6573e7d52cdb919fdbdc744401952cc1f81cd",
+        "integration_adjustment": "Preserve the original lane source contributor through reviewed batch integration; the final authored and introduced source blobs are identical."
+      }
+    },
+    {
+      "source": "src/game/cu_800D0D4C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800D1634",
+        "0x800D20A0",
+        "0x800D2108",
+        "0x800D2280",
+        "0x800D3F2C",
+        "0x800D4164",
+        "0x800D4D84",
+        "0x800D7550"
+      ],
+      "provenance": {
+        "pull_request": 725,
+        "merged_via": 725,
+        "commit": "23598ea10c0a90567d759733d11681d493e7db63",
+        "introduced_blob": "b7144eee495144be597210c6be4b45f6fca178fe",
+        "original_commit": "05f812159d575e967d087116306001b291688517",
+        "original_blob": "b7144eee495144be597210c6be4b45f6fca178fe",
+        "integration_adjustment": "Preserve the original lane source contributor through reviewed batch integration; the final authored and introduced source blobs are identical."
+      }
+    },
+    {
+      "source": "src/game/cu_8015A248.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8015A39C",
+        "0x8015A588",
+        "0x8015AB84",
+        "0x8015ABE4",
+        "0x8015BED4",
+        "0x8015BFAC",
+        "0x8015BFD4",
+        "0x8015C024",
+        "0x8015C064",
+        "0x8015C0C0",
+        "0x8015C114"
+      ],
+      "provenance": {
+        "pull_request": 725,
+        "merged_via": 725,
+        "commit": "23598ea10c0a90567d759733d11681d493e7db63",
+        "introduced_blob": "e5ca7f6b15c947f3c35a05e612b71ccd171a99d5",
+        "original_commit": "24060b5e94715daac73ed4ada4c86f460b43e5f0",
+        "original_blob": "e5ca7f6b15c947f3c35a05e612b71ccd171a99d5",
+        "integration_adjustment": "Preserve the original lane source contributor through reviewed batch integration; the final authored and introduced source blobs are identical."
       }
     }
   ],
