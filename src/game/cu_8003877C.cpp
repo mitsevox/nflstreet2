@@ -799,7 +799,7 @@ extern "C" void fn_80039B2C(float dt)
         } else {
             pos = p->mMotion.mPos;
         }
-        p->mpUnknown780 = (Record_800C4E18 *)fn_80054138(&pos.mX);
+        p->mpUnknown780 = fn_80054138(&pos.mX);
     }
 }
 

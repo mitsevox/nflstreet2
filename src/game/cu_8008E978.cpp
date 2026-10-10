@@ -48,6 +48,7 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801EF390.h"
+#include "game/fn_80054138.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_80218FC4.h"
@@ -2039,7 +2040,7 @@ extern "C" int fn_800C4E18(Object_80039F5C *p)
     if (p->mpUnknown780 == 0) {
         return 3;
     }
-    return p->mpUnknown780->mUnknown8;
+    return p->mpUnknown780->mSurface;
 }
 
 extern "C" int fn_800C4E30(Object_80039F5C *p, Object_80039F5C *pOther)

@@ -138,12 +138,6 @@ struct State_80039F5C {
     unsigned char mUnknown6;
 };
 
-/* Record that +780 points to. Only the word +8 is accessed. */
-struct Record_800C4E18 {
-    char mUnknown0[8];
-    int mUnknown8;
-};
-
 /* Object that +796 points to. */
 struct Object_8016D9B8 {
     char mUnknown0[2];
@@ -250,7 +244,7 @@ struct Object_80039F5C {
         short mUnknown778;
         unsigned short mUnknown778Unsigned;
     };
-    Record_800C4E18 *mpUnknown780;
+    Area_80054138 *mpUnknown780;
     State_80039F5C *mpState;
     char mUnknown788[4];
     void *mpUnknown792;
