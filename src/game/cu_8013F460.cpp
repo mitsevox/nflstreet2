@@ -4,6 +4,7 @@
 #include "game/Camera_8013F738.h"
 #include "game/cu_8013BB18.h"
 #include "game/fn_80238174.h"
+#include "game/fn_800B65A0.h"
 
 /* One camera in a saved state; only mHeader is restored. */
 struct CameraSave_8013F56C {
@@ -32,7 +33,6 @@ int fn_8002B2D4(void *pObject, void *pItem, int (*a)(void *, void *), int (*b)(v
 int fn_8002B3DC(void *pObject, void *pItem);
 int fn_8002B494(void *pObject, void *pItem, void *pOther);
 void fn_800AD9C0(float value);
-int fn_800B65A0(int a);
 void fn_80141164(float value);
 int fn_80178308(void);
 int fn_80178320(void);

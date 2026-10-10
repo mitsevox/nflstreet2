@@ -73,10 +73,10 @@ extern "C" void fn_8015C25C(Object_8003DEC4 *pPlayer)
     State_803EB32C *pState = lbl_803EB32C;
     Entry_803EB32C *pEntry = &pState->mEntries[pState->mCurrent];
 
-    fn_80234A14(&pPlayer->mUnknown992[1852], 1);
-    fn_80234A14(&pPlayer->mUnknown992[2092], 1);
-    fn_80233C7C(&pPlayer->mUnknown992[1872]);
-    fn_80233CBC(&pPlayer->mUnknown992[1872], 27, 0);
+    fn_80234A14(&pPlayer->mUnknown1164[7], 1);
+    fn_80234A14(&pPlayer->mUnknown1164[8], 1);
+    fn_80233C7C(&pPlayer->mUnknown1164[7].mUnknown20);
+    fn_80233CBC(&pPlayer->mUnknown1164[7].mUnknown20, 27, 0);
     fn_80049C50(pPlayer->mUnknown4971, pPlayer->mUnknown4970);
     pEntry->mUnknownFA &= ~0x21;
 }
@@ -86,9 +86,9 @@ extern "C" void fn_8015C2E0(Object_8003DEC4 *pPlayer)
     State_803EB32C *pState = lbl_803EB32C;
     Entry_803EB32C *pEntry = &pState->mEntries[pState->mCurrent];
 
-    fn_80234A14(&pPlayer->mUnknown992[1612], 1);
-    fn_80233C7C(&pPlayer->mUnknown992[1632]);
-    fn_80233CBC(&pPlayer->mUnknown992[1632], 0, 0);
+    fn_80234A14(&pPlayer->mUnknown1164[6], 1);
+    fn_80233C7C(&pPlayer->mUnknown1164[6].mUnknown20);
+    fn_80233CBC(&pPlayer->mUnknown1164[6].mUnknown20, 0, 0);
     pEntry->mUnknownFA &= ~0x42;
 }
 
@@ -97,9 +97,9 @@ extern "C" void fn_8015C34C(Object_8003DEC4 *pPlayer)
     State_803EB32C *pState = lbl_803EB32C;
     Entry_803EB32C *pEntry = &pState->mEntries[pState->mCurrent];
 
-    fn_80234A14(&pPlayer->mUnknown992[2332], 1);
-    fn_80233C7C(&pPlayer->mUnknown992[2352]);
-    fn_80233CBC(&pPlayer->mUnknown992[2352], 28, 0);
+    fn_80234A14(&pPlayer->mUnknown1164[9], 1);
+    fn_80233C7C(&pPlayer->mUnknown1164[9].mUnknown20);
+    fn_80233CBC(&pPlayer->mUnknown1164[9].mUnknown20, 28, 0);
     pEntry->mUnknownFA &= ~0x84;
 }
 
@@ -108,11 +108,11 @@ extern "C" void fn_8015C3B8(Object_8003DEC4 *pPlayer)
     State_803EB32C *pState = lbl_803EB32C;
     Entry_803EB32C *pEntry = &pState->mEntries[pState->mCurrent];
 
-    fn_80234A14(&pPlayer->mUnknown992[2812], 1);
-    fn_80233C7C(&pPlayer->mUnknown992[2832]);
-    fn_80233CBC(&pPlayer->mUnknown992[2832], 29, 0);
-    fn_80233C7C(&pPlayer->mUnknown992[2832]);
-    fn_80233CBC(&pPlayer->mUnknown992[2832], 30, 0);
+    fn_80234A14(&pPlayer->mUnknown1164[11], 1);
+    fn_80233C7C(&pPlayer->mUnknown1164[11].mUnknown20);
+    fn_80233CBC(&pPlayer->mUnknown1164[11].mUnknown20, 29, 0);
+    fn_80233C7C(&pPlayer->mUnknown1164[11].mUnknown20);
+    fn_80233CBC(&pPlayer->mUnknown1164[11].mUnknown20, 30, 0);
     pEntry->mUnknownFA &= ~0x210;
 }
 
@@ -121,8 +121,8 @@ extern "C" void fn_8015C43C(Object_8003DEC4 *pPlayer)
     State_803EB32C *pState = lbl_803EB32C;
     Entry_803EB32C *pEntry = &pState->mEntries[pState->mCurrent];
 
-    fn_80234A14(&pPlayer->mUnknown992[1132], 1);
-    fn_80234A14(&pPlayer->mUnknown992[1372], 1);
+    fn_80234A14(&pPlayer->mUnknown1164[4], 1);
+    fn_80234A14(&pPlayer->mUnknown1164[5], 1);
     pEntry->mUnknownFA &= ~0x108;
 }
 

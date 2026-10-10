@@ -74,9 +74,9 @@ struct Object_80146094 {
     float mUnknown594;
     float mUnknown598;
     char mPad59C[0x5A0 - 0x59C];
-    int mUnknown5A0;
+    unsigned int mUnknown5A0;
     int mUnknown5A4;
-    int mUnknown5A8;
+    unsigned int mUnknown5A8;
 };
 
 #endif

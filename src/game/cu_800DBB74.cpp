@@ -4,6 +4,7 @@
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801BA2A8.h"
 #include "game/Object_80039F5C.h"
+#include "game/fn_80163E94.h"
 
 struct Object_800DC36C {
     char mUnknown0[36];
@@ -42,7 +43,6 @@ int fn_801481B0(void);
 int fn_801483F8(void);
 int fn_801486A0(void);
 void fn_80156C78(int index, int value);
-Object_80039F5C *fn_8016444C(Object_800670B4 *p);
 Object_800670B4 *fn_80168708(int team);
 float fn_8016D9F4(Object_80039F5C *p, float a, float b);
 int fn_801783AC(int bit);

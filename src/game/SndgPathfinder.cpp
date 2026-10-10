@@ -1,4 +1,5 @@
 #include <string.h>
+#include "game/fn_8009D990.h"
 
 #include "game/SndgPathfinder.h"
 #include "game/Camera_8013F738.h"
@@ -584,7 +585,6 @@ void fn_80077488(void);
 void fn_8007753C(void);
 int fn_8007F828(int a);
 int fn_8009D86C(void);
-int fn_8009D990(int a);
 int fn_800A3444(void);
 int fn_800A8444(int a);
 int fn_800AD9B4(void);

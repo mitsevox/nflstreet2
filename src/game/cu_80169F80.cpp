@@ -8,6 +8,7 @@
 #include "game/fn_80238174.h"
 #include "game/Object_800785C0.h"
 #include "game/Object_8017886C.h"
+#include "game/fn_800B65A0.h"
 
 /* One 20-byte history entry; fn_8016B144 shifts the list down and
    starts a new entry at index 0. */
@@ -40,7 +41,6 @@ extern "C" {
 int fn_80025708(void);
 int fn_800A82FC(int team);
 int fn_800A8430(int team);
-int fn_800B65A0(int unknown);
 int fn_800BA6F8(void);
 int fn_800C8744(int team);
 int fn_8011F1CC(void);

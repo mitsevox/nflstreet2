@@ -7,6 +7,7 @@
 #include "game/fn_8007F828.h"
 #include "game/Record_80021154.h"
 #include "game/fn_80191948.h"
+#include "game/cu_8017F90C.h"
 
 struct Name_801859C8 {
     char mUnknown0[8];
@@ -78,7 +79,7 @@ static int lbl_803ECB80;
 
 extern "C" {
 
-int fn_8018422C(void)
+int fn_8018422C(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
 {
     return 0;
 }

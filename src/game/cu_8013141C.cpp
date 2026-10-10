@@ -73,7 +73,7 @@ extern "C" int fn_8013141C(Object_80039F5C *p)
     State_80039F5C *pState = p->mpState;
     int result = 0;
 
-    if (fn_80137C48(p) != 0 && pState->mUnknown4 == 18) {
+    if (fn_80137C48(p) != 0 && pState[1].mId == 18) {
         result = fn_801783AC(0) == 0;
     }
     return result;

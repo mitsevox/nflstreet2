@@ -1,4 +1,5 @@
 #include "game/PaletteColor.h"
+#include "game/cu_8017F90C.h"
 
 struct Block_8017FAE8 {
     int mUnknown0;
@@ -33,7 +34,7 @@ void fn_8017FA84(int a, int b, int *pOut0, int *pOut1, int *pOut2)
     *pOut1 = color.g;
 }
 
-int fn_8017FAE8(int id, Block_8017FAE8 *pBlock)
+int fn_8017FAE8(int id, Block_8017FAE8 *pBlock, int unused, int *pResult)
 {
     switch (id) {
     case 17:

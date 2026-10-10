@@ -12,28 +12,6 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_80227638.h"
 #include <math.h>
-struct Clip_8003BFCC {
-  float mPoints[7][3];
-  Pair_8017055C mPairs[7];
-  unsigned char mCount;
-  unsigned char mUnknown141[3];
-};
-struct Projection_8003BA10 {
-  float mColor[4];
-  float mPoints[4][3];
-  Pair_8017055C mPairs[4];
-  Clip_8003BFCC mRecords[4];
-  unsigned char mUnknown672, mUnknown673;
-};
-struct Creation_8003D378 {
-  Init_8004A040 mInit;
-  int mUnknown1C;
-  Ids_8015F6E8 mUnknown20;
-  int mUnknown28, mUnknown2C, mUnknown30, mUnknown34;
-  char mUnknown38[31];
-  unsigned char mUnknown57, mUnknown58, mUnknown59, mUnknown5A, mUnknown5B;
-  FMCAPPORTValues mUnknown5C;
-};
 struct Region_8003BDF0 {
   unsigned char mUnknown0[128];
   unsigned int mUnknown128;
@@ -177,7 +155,7 @@ void fn_80030ACC(void (*)(BitStream_t *),
                  int, const char *);
 void fn_8003BA10(Object_8003DEC4 *object, float *color, Pair_8017055C *axis,
                  int angle) {
-  Projection_8003BA10 *p = (Projection_8003BA10 *)&object->mUnknown4184[72];
+  Projection_8003BA10 *p = &object->mUnknown4256;
   p->mUnknown673 =
       fn_8004A238() && (object->mUnknown20 & 1) && !(object->mUnknown20 & 2);
   float first[4], center[4], delta[4], direction[2];
@@ -260,7 +238,7 @@ void fn_8003BDF0(Object_8003DEC4 *object, Pair_8017055C *axis, int angle) {
   fn_80042380(object, 26, first, 0);
   first[2] = (first[2] + center[2]) * 0.5f;
   float radius = fabsf(1.0f / fn_801CFD28(angle)) * first[2];
-  Projection_8003BA10 *p = (Projection_8003BA10 *)&object->mUnknown4184[72];
+  Projection_8003BA10 *p = &object->mUnknown4256;
   radius += fn_8022781C(p->mPoints[0], p->mPoints[2]);
   for (unsigned char i = 0; i < regions->mUnknown128; ++i) {
     Pair_8017055C a, b, mid;
@@ -275,7 +253,7 @@ void fn_8003BDF0(Object_8003DEC4 *object, Pair_8017055C *axis, int angle) {
 }
 void fn_8003BFCC(Object_8003DEC4 *object, float *center, Pair_8017055C *axis,
                  Pair_8017055C *a, Pair_8017055C *b, int angle, float scale) {
-  Projection_8003BA10 *p = (Projection_8003BA10 *)&object->mUnknown4184[72];
+  Projection_8003BA10 *p = &object->mUnknown4256;
   if (p->mUnknown672 > 3)
     return;
   Pair_8017055C original = {center[0], center[1]}, shifted;
@@ -744,7 +722,7 @@ int fn_8003D378(int owner, int mode) {
       }
       if (lbl_803EA410 && lbl_803EA414) {
         Projection_8003BA10 *p =
-            (Projection_8003BA10 *)&lbl_803EA430[index]->mUnknown4184[72];
+            &lbl_803EA430[index]->mUnknown4256;
         p->mUnknown672 = 0;
         p->mPairs[0].mX = 0.0f;
         p->mPairs[0].mY = 0.0f;

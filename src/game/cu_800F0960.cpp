@@ -1,5 +1,6 @@
 #include <math.h>
 #include <string.h>
+#include "game/fn_800B65A0.h"
 
 #include "game/Command_800CEE74.h"
 #include "game/Lookup_8012078C.h"
@@ -107,11 +108,6 @@ struct State_80114DF4 {
     unsigned char mUnknown58;
     char mUnknown59[8];
     unsigned char mUnknown67;
-};
-
-struct Block_80114A30 {
-    char mUnknown0[44];
-    int mUnknown44;
 };
 
 struct Record_801170A0 {
@@ -578,7 +574,6 @@ struct Plan_80121264 {
 
 extern "C" {
 void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
-int fn_800B65A0(int unknown);
 void fn_800B6714(Object_80039F5C *p, int port);
 void fn_800D0BF4(Object_80039F5C *p, int a, int b);
 void fn_800E9528(Object_80039F5C *p);

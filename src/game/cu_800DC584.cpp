@@ -1,4 +1,5 @@
 #include "game/Object_80039F5C.h"
+#include "game/fn_800DF134.h"
 #include "game/Object_800EA284.h"
 #include "game/Object_801BBD5C.h"
 #include "game/Block_801BE60C.h"
@@ -387,16 +388,15 @@ extern "C" int fn_800DE364(unsigned int id)
     return result;
 }
 
-extern "C" void fn_800DF134(Object_80039F5C *p, Pair_802270A4 *pOffset, int angle, int key)
+extern "C" void fn_800DF134(Object_80039F5C *p, Point_8017886C offset, int angle, int key)
 {
-    Pair_802270A4 offset = *pOffset;
     if (key == fn_801BE648(p->mpUnknown792)) {
         Block_801BE60C *pRecord = fn_801BE60C(p->mpUnknown792, key);
         if (pRecord) {
             if (pRecord->mUnknown1C) {
-                pRecord->mUnknown4 += offset.mUnknown0;
+                pRecord->mUnknown4 += offset.mX;
                 pRecord->mUnknown14 = (pRecord->mUnknown14 + angle) & 0xFFFFFF;
-                pRecord->mUnknown8 += offset.mUnknown4;
+                pRecord->mUnknown8 += offset.mY;
             }
             p->mpUnknown800[pRecord->mUnknown1D].mUnknownC =
                 (p->mpUnknown800[pRecord->mUnknown1D].mUnknownC + angle) & 0xFFFFFF;

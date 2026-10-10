@@ -7,6 +7,7 @@
 #include "game/fn_8007F828.h"
 #include "game/fn_80218FC4.h"
 #include "game/fn_8021D7B8.h"
+#include "game/fn_800B65A0.h"
 
 extern "C" {
 extern void *lbl_803EB688;
@@ -16,7 +17,6 @@ int fn_8002B5A8(void);
 int fn_800A8444(int team);
 int fn_800A8488(int team);
 Object_80039F5C *fn_800B6544(int index);
-int fn_800B65A0(int team);
 int fn_800B6644(int index);
 int fn_801486A0(void);
 int fn_80156704(void);

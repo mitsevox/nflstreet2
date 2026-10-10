@@ -6,11 +6,11 @@
 #include "game/fn_80177FE0.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_80178D18.h"
+#include "game/fn_800B65A0.h"
 
 extern "C" {
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 int fn_800ABDA4(int team);
-int fn_800B65A0(int team);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 void fn_800D5054(Object_80039F5C *p, int a);
 void fn_800D5494(Object_80039F5C *p, int a, int b);

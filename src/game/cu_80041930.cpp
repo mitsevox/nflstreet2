@@ -1,3 +1,4 @@
+#include "game/Frame_8019D3B8.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_801BC084.h"
 #include "game/Record_8036B55C.h"
@@ -11,25 +12,6 @@
 struct Quant_802CCDF8 {
     unsigned short mUnknown0;
     unsigned char mUnknown2;
-};
-
-/* Blend description passed to fn_80042530: an entry count and 44-byte
-   entries holding a weight, two halfwords and the fn_801BAD70 result. */
-struct BlendEntry_80042530 {
-    char mUnknown0[4];
-    float mUnknown4;
-    char mUnknown8[24];
-    unsigned short mUnknown32;
-    unsigned short mUnknown34;
-    char mUnknown36[4];
-    int mUnknown40;
-};
-
-struct Blend_80042530 {
-    unsigned short mUnknown0;
-    char mUnknown2[2];
-    BlendEntry_80042530 mUnknown4[24];
-    char mUnknown1060[4];
 };
 
 extern "C" {
@@ -49,10 +31,9 @@ short *fn_8019ED20(int count);
 void fn_8019EDDC(Object_8003DEC4 *pObject, int a, int count);
 void fn_8019F044(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c);
 void fn_8019F1F0(Object_8003DEC4 *pObject, int a, unsigned int b, int count);
-void fn_8019F404(float *p);
 void fn_8019F48C(float *p);
 void fn_8019F4AC(Object_8003DEC4 *pObject);
-int fn_801BAD70(Object_801BC084 *pRecord, int b, int handle, int c);
+void *fn_801BAD70(Object_801BC084 *pRecord, int b, int handle, int c);
 int fn_801BBE5C(int a, int b);
 void fn_801CF8A8(int *pOut, int a, int b, float t);
 void fn_801D0470(int a);
@@ -242,12 +223,12 @@ void fn_80041EB0(Object_8003DEC4 *pObject, BitStream_t *pStream)
     fn_80191068(pStream, pObject->mUnknown264[1].mUnknown6, 16);
 }
 
-void fn_80042530(Object_8003DEC4 *pObject, Blend_80042530 *pBlend);
+void fn_80042530(Object_8003DEC4 *pObject, Blend_8019EDDC *pBlend);
 void fn_800425D4(Object_8003DEC4 *pObject);
 
 void fn_80041F74(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *pStreamB, float t, int skip)
 {
-    Blend_80042530 blend;
+    Blend_8019EDDC blend;
     float from;
     float to;
     long long value;
@@ -282,13 +263,13 @@ void fn_80041F74(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *p
         value = ReadBitStream(pStreamB, 16);
         ReadBitStream(pStreamA, 32);
         weight = ReadBitStream(pStreamB, 32);
-        blend.mUnknown4[0].mUnknown40 = fn_801BAD70(fn_801BC084(handle), 0, handle, value);
+        blend.mUnknown4[0].mpUnknown40 = fn_801BAD70(fn_801BC084(handle), 0, handle, value);
         blend.mUnknown4[0].mUnknown4 = 1.0f;
         pObject->mUnknown260 = 1;
         if (blend.mUnknown0 > 1) {
             ReadBitStream(pStreamA, 16);
             value = ReadBitStream(pStreamB, 16);
-            blend.mUnknown4[1].mUnknown40 = fn_801BAD70(fn_801BC084(handle), 0, handle, value);
+            blend.mUnknown4[1].mpUnknown40 = fn_801BAD70(fn_801BC084(handle), 0, handle, value);
             blend.mUnknown4[1].mUnknown4 = weight;
         } else {
             ReadBitStream(pStreamA, 16);
@@ -391,7 +372,7 @@ void fn_800423F8(Object_8003DEC4 *pObject, float *pOut, Quat_801EB488 *pRot)
         fn_801D0CFC(pObject->mUnknown24);
         fn_801D0664(*pMatrix);
         fn_801D0C58(pObject->mUnknown44.mUnknown20);
-        fn_801D0BCC(pObject->mUnknown44.mUnknown44, pObject->mUnknown44.mUnknown40, pObject->mUnknown44.mUnknown36);
+        fn_801D0BCC(pObject->mUnknown44.mUnknown36[2], pObject->mUnknown44.mUnknown36[1], pObject->mUnknown44.mUnknown36[0]);
         fn_801D0FB8(pOut);
         fn_801D11F4(angles, 0);
         fn_801D0544();
@@ -417,11 +398,11 @@ void fn_80042508(Object_8003DEC4 *pObject, int a, unsigned int index)
     fn_8019F1F0(pObject, a, index, pObject->mUnknown100->mUnknown6);
 }
 
-void fn_80042530(Object_8003DEC4 *pObject, Blend_80042530 *pBlend)
+void fn_80042530(Object_8003DEC4 *pObject, Blend_8019EDDC *pBlend)
 {
     pObject->mUnknown260 = pBlend->mUnknown0;
     if (pObject->mUnknown816 && pBlend->mUnknown0) {
-        fn_8019F404(pObject->mUnknown820);
+        fn_8019F404(pObject->mUnknown820, pBlend);
         if (pObject->mUnknown20 & 0x40000) {
             pObject->mUnknown264[0].mUnknown0 = pBlend->mUnknown4[0].mUnknown4;
             pObject->mUnknown264[0].mUnknown4 = pBlend->mUnknown4[0].mUnknown32;

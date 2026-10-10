@@ -7,6 +7,7 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
+#include "game/fn_800B65A0.h"
 
 #include "game/Team_80167A8C.h"
 
@@ -33,7 +34,6 @@ int fn_80087D1C(Object_8007A334 *pCursor, int key);
 unsigned char fn_80087DA4(Object_8007A334 *pCursor, int column);
 unsigned char fn_8008973C(int index);
 void fn_800B508C(unsigned char index);
-int fn_800B65A0(int unknown);
 int fn_800BA6F8(void);
 QueryCursor fn_800C0750(unsigned char index, unsigned short *pValues);
 void fn_800C07C4(QueryCursor cursor);
@@ -42,7 +42,7 @@ int fn_80164ED8(Object_800670B4 *pObject, Record_80067338 *pRecord, int index, u
 int fn_80165000(Object_800670B4 *pObject, Record_80067338 *pRecord, int index, unsigned char *pOut, unsigned char flag);
 void fn_80167794(signed char team, int a, int b);
 void fn_80167910(Point_80167910 *pPoints, int count);
-void fn_8016BAD8(int team);
+int fn_8016BAD8(int team);
 int fn_801485D4(void);
 int fn_801486A0(void);
 int fn_80177F70(void);

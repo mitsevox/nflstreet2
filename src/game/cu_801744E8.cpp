@@ -6,6 +6,8 @@
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802372EC.h"
 #include <math.h>
+#include "game/fn_8009D990.h"
+#include "game/fn_8013AD94.h"
 struct Input_80174868 {
   float mUnknown0, mUnknown4, mUnknown8, mUnknownC;
   int mUnknown10, mUnknown14, mUnknown18, mUnknown1C;
@@ -59,17 +61,23 @@ int fn_801CFE40(float, float);
 int fn_801CFFD0(int, int);
 void fn_80227690(void *, void *, void *);
 int fn_8013BA58(void *, int *);
-int fn_8013AD94(void *);
 int fn_80177C38(void);
 void fn_8017419C(float *, Object_80039F5C *, int);
 void fn_800B2370(Object_80039F5C *, int, Object_80039F5C *, float);
 int fn_8009D86C(void);
-int fn_8009D990(int);
 void fn_801735B4(unsigned int);
 void fn_801F51DC(int, void *, int, int,
                  int (*)(Entry_800B206C *, Entry_800B206C *), int, int, int);
 int fn_80175E3C(Object_80039F5C *, Object_80039F5C *, void *);
 void fn_801760B4(int, Object_80039F5C *, Object_80039F5C *);
+extern const char *lbl_802E99F0[];
+unsigned int fn_80178D18(int team);
+void fn_80178370(void);
+int fn_800BA6F8(void);
+int fn_801787A0(void);
+int fn_80168E00(int team, int index, unsigned char *pOut);
+int fn_801C4E98(void *p, const char *pName);
+float fn_802270A4(void *);
 void fn_8017419C(float *value, Object_80039F5C *, int) {
   unsigned int factor = 127;
   float normalized = (float)factor * 0.003921568859368563f;
@@ -544,8 +552,8 @@ int fn_801756F0(Object_80039F5C *player) {
   }
   return 0;
 }
-void fn_801757A4(Object_80039F5C *a, int angleA, Object_80039F5C *b, int angleB,
-                 void *context, float valueA, float valueB) {
+void fn_801757A4(Object_80039F5C *a, float valueA, int angleA,
+                 Object_80039F5C *b, float valueB, int angleB, void *context) {
   int selected = 0;
   int zeroState = a->mUnknown512.mUnknown0 == 0.0f;
   int limit;
@@ -640,7 +648,7 @@ float fn_80175BF8(Object_80039F5C *a, Object_80039F5C *b, float value) {
     adjusted = value * 1.25f;
   return adjusted;
 }
-int fn_80175C8C(void *ball, Object_80039F5C *player) {
+int fn_80175C8C(Object_80137ABC *ball, Object_80039F5C *player) {
   if (fn_800AD9B4() != 3)
     return 1;
   if (ball && fn_8013BA58(ball, 0) != 4)
@@ -659,12 +667,12 @@ int fn_80175C8C(void *ball, Object_80039F5C *player) {
     return 1;
   return 0;
 }
-int fn_80175DAC(Object_80039F5C *a, Object_80039F5C *b, Pair_8017055C *point) {
+int fn_80175DAC(Object_80039F5C *a, Object_80039F5C *b, Vector_80039F5C point) {
   if (!a || !b)
     return 1;
   if (a->mIdBytes[2] == b->mIdBytes[2])
     return 1;
-  float value = fabsf(point->mX);
+  float value = fabsf(point.mX);
   return !(value < fn_80178A08() + 2.0f);
 }
 int fn_80175E3C(Object_80039F5C *a, Object_80039F5C *b, void *) {
@@ -726,8 +734,8 @@ void fn_801760B4(int type, Object_80039F5C *a, Object_80039F5C *b) {
     fn_800B2370(a, 9, b, value);
   }
 }
-void fn_80176140(Object_80039F5C *a, Object_80039F5C *b, Pair_8017055C *point,
-                 float valueB, float valueA) {
+void fn_80176140(Object_80039F5C *a, Object_80039F5C *b, float valueB,
+                 Vector_80039F5C *point, float valueA) {
   if (!(point->mY >= a->mMotion.mPos.mY)) {
     if (!(valueB >= valueA) && fn_801756F0(b)) {
       if (!fn_80175E3C(b, a, point))
@@ -738,8 +746,8 @@ void fn_80176140(Object_80039F5C *a, Object_80039F5C *b, Pair_8017055C *point,
     }
   }
 }
-void fn_80176228(Object_80039F5C *a, Object_80039F5C *b, Pair_8017055C *point,
-                 int angleA, int angleB, float valueA, float valueB) {
+void fn_80176228(Object_80039F5C *a, Object_80039F5C *b, float valueA,
+                 Vector_80039F5C *point, float valueB, int angleA, int angleB) {
   if (!(valueA >= valueB) && fn_801756F0(b)) {
     if (!fn_80175E3C(b, a, point))
       fn_801760B4(4, b, a);
@@ -750,7 +758,7 @@ void fn_80176228(Object_80039F5C *a, Object_80039F5C *b, Pair_8017055C *point,
       fn_801760B4(3, a, b);
     return;
   }
-  fn_801757A4(a, angleA, b, angleB, point, valueA, valueB);
+  fn_801757A4(a, valueA, angleA, b, valueB, angleB, point);
 }
 float fn_80176328(float value) {
   float limit = fn_80178A2C();
@@ -806,4 +814,123 @@ void fn_801764A0(int type, Input_80174868 *in, Output_80174868 *out) {
     fn_800B2640(4, 1);
 }
 unsigned int fn_801765A8(int type) { return lbl_802E9A04[type].mUnknown4; }
+void fn_8017678C(Object_80039F5C *player);
+void fn_801765C0(void) {
+  for (unsigned char team = 0; team <= 1; team++) {
+    unsigned int count = fn_80178D18(team);
+    for (unsigned short i = 0; i < count; i++)
+      fn_8017678C(fn_80039F5C(team, i));
+  }
+}
+void fn_80176630(void) {
+  Point_8017886C line;
+  line = fn_80177FE0();
+  unsigned int count = fn_80178D18(fn_80178320());
+  for (unsigned short i = 0; i < count; i++) {
+    Object_80039F5C *player = fn_80039F5C(fn_80178320(), i);
+    if (!(player->mMotion.mPos.mY >= line.mY + 3.0f)) {
+      if (!(player->mMotion.mPos.mY >= line.mY + 0.15625f)) {
+        fn_800B2370(player, 2, 0, 1.0f);
+        return;
+      }
+      for (unsigned short j = 0; j <= 4; j++) {
+        Vector_80039F5C pos, dir;
+        int joint =
+            fn_801C4E98(player->mpUnknown4->mpUnknown100, lbl_802E99F0[j]);
+        fn_8009BF5C(player, joint, &pos, &dir);
+        if (!(pos.mY >= line.mY + 0.15625f)) {
+          fn_800B2370(player, 2, 0, 1.0f);
+          return;
+        }
+      }
+    }
+  }
+}
+void fn_8017678C(Object_80039F5C *player) {
+  int mode = fn_800AD9B4();
+  int live = fn_80177F70();
+  if (mode != 2 || !live || fn_8013BA58(fn_801374BC(), 0) != 6)
+    return;
+  int team = fn_80178320();
+  if (player->mIdBytes[2] == team && player->mUnknown560.mFlags.mBytes[0] &&
+      player->mUnknown560.mUnknown52[1]) {
+    if (fn_800BA6F8())
+      fn_80178370();
+    else
+      fn_800B2370(player, 3, 0, 1.0f);
+  }
+}
+void fn_80176838(Object_80039F5C *player) {
+  if (fn_800B2618(8) <= 0.0f)
+    return;
+  Point_8017886C line;
+  line = fn_80177FE0();
+  Vector_80039F5C ball;
+  if (!fn_80138064(fn_801374BC(), &ball))
+    return;
+  if (player->mFlags & 0x8000) {
+    if (!(ball.mY >= line.mY - 4.0f))
+      fn_800B2370(player, 11, 0, 1.0f);
+    return;
+  }
+  int near = 0;
+  for (unsigned char i = 0; i <= 2; i++) {
+    Pair_8017055C delta;
+    unsigned short index = fn_80168E00(player->mIdBytes[2], i, 0);
+    fn_80227690(&delta,
+                &fn_80039F5C(player->mIdBytes[2], index)->mMotion.mPos,
+                &ball);
+    if (fn_802270A4(&delta) < 4.0f) {
+      near = 1;
+      break;
+    }
+  }
+  if (!near)
+    fn_800B2370(player, 11, 0, 1.0f);
+}
+void fn_80176984(void) {
+  Object_80137ABC *ball = fn_801374BC();
+  Object_80039F5C *carrier = 0;
+  if (ball)
+    carrier = fn_80137B88(ball);
+  if (fn_80175C8C(ball, carrier))
+    return;
+  Object_80039F5C *tackler = fn_8009BCE8(&carrier->mUnknown560.mUnknown40);
+  if (!fn_80175FC8(carrier, tackler))
+    return;
+  Vector_80039F5C pos, ballPos;
+  fn_80138064(ball, &pos);
+  fn_80137D58(ball, &ballPos);
+  if (fn_80175DAC(carrier, tackler, pos))
+    return;
+  Pair_8017055C delta;
+  fn_80227690(&delta, &pos, &carrier->mMotion.mPos);
+  float carrierDistance = fn_802270A4(&delta);
+  int carrierAngle = fn_801CFE40(delta.mY, delta.mX);
+  fn_80227690(&delta, &pos, &tackler->mMotion.mPos);
+  float tacklerDistance = fn_802270A4(&delta);
+  int tacklerAngle = fn_801CFE40(delta.mY, delta.mX);
+  if (!(carrierDistance >= 4.0f))
+    fn_80176140(carrier, tackler, carrierDistance, &ballPos,
+                tacklerDistance);
+  else
+    fn_80176228(carrier, tackler, carrierDistance, &ballPos,
+                tacklerDistance, carrierAngle, tacklerAngle);
+}
+int fn_80176B04(void) {
+  float chance = 2000.0f;
+  fn_80175A40(&chance, 2, 10000.0f);
+  if (!fn_801787A0() && (float)fn_802372EC(0, 10000) < chance)
+    return 1;
+  return 0;
+}
+void fn_80176B8C(Object_80039F5C *player) {
+  if (fn_800AD9B4() != 3 || fn_80137C48(player))
+    return;
+  float chance = 75.0f;
+  fn_80175A40(&chance, 9, 100.0f);
+  fn_8017419C(&chance, player, 9);
+  if (!((float)fn_802372EC(0, 100) >= chance))
+    fn_800B2370(player, 12, 0, 1.0f);
+}
 }
