@@ -338,7 +338,7 @@ extern "C" void fn_8016E15C(void)
         Vector_80039F5C ballPos;
         Object_80039F5C *pCarrier;
         Object_80039F5C *pPasser;
-        int offense;
+        int defense;
         unsigned char team;
 
         fn_80137D58(pBall, &ballPos);
@@ -364,7 +364,7 @@ extern "C" void fn_8016E15C(void)
         message.mUnknown1[0] = fn_8016E154(pCarrier);
         fn_800F00D4(0, pPasser->mpState, &message, pPasser);
 
-        offense = fn_80178320();
+        defense = fn_80178320();
         for (team = 0; team < 2; team++) {
             unsigned char i;
             unsigned int count = fn_80178D70(team);
@@ -373,12 +373,12 @@ extern "C" void fn_8016E15C(void)
                 Object_80039F5C *p = fn_80039F5C(team, i);
 
                 if (p != pCarrier && p != pPasser && p->mMotion.mUnknown28 < lbl_803ECB08 * 0.1f &&
-                    (p->mIdBytes[2] == offense || fabsf(pos.mY - p->mMotion.mPos.mY) < 2.0f ||
+                    (p->mIdBytes[2] == defense || fabsf(pos.mY - p->mMotion.mPos.mY) < 2.0f ||
                      fabsf(pos.mX - p->mMotion.mPos.mX) > 6.0f)) {
                     float delay = 0.025098039f;
 
                     delay += fn_802372EC(0, 8) * 0.01f;
-                    if (p->mIdBytes[2] == offense) {
+                    if (p->mIdBytes[2] == defense) {
                         delay += 0.075f;
                     } else {
                         delay += 0.025f;
