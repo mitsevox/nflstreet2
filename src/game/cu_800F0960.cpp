@@ -110,11 +110,6 @@ struct State_80114DF4 {
     unsigned char mUnknown67;
 };
 
-struct Block_80114A30 {
-    char mUnknown0[44];
-    int mUnknown44;
-};
-
 struct Record_801170A0 {
     char mUnknown0[1];
     unsigned char mUnknown1;

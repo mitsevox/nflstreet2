@@ -311,7 +311,7 @@ void fn_802525F0(float (*pMatrix)[4], int id, int type);
 int fn_801A1C10(Object_8003DEC4 *pPlayer);
 void fn_801A1D80(Object_8003DEC4 *pPlayer, int flag);
 int fn_801A201C(Object_8003DEC4 *pPlayer);
-void fn_801A209C(Object_8003DEC4 *pPlayer, float *pPos, float (*pMatrix)[4], Object_80146094 *pTrail,
+void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], Object_80146094 *pTrail,
                  int index, void *pModel, void **ppModels, unsigned int lod);
 void fn_801A32AC(int id, float sx, float sy, float tx, float ty);
 void fn_801A3300(Object_8003DEC4 *pPlayer, float *pA, float *pB);
@@ -603,7 +603,7 @@ int fn_801A201C(Object_8003DEC4 *pPlayer)
     return result;
 }
 
-void fn_801A209C(Object_8003DEC4 *pPlayer, float *pPos, float (*pMatrix)[4], Object_80146094 *pTrail,
+void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], Object_80146094 *pTrail,
                  int index, void *pModel, void **ppModels, unsigned int lod)
 {
     float scale = 1.5f;
@@ -619,8 +619,8 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pPos, float (*pMatrix)[4], Obj
     fn_801D04C4();
     fn_801D0664(pMatrix);
     fn_801D0CFC(pPlayer->mUnknown24);
-    if (pPos) {
-        fn_801D0D94(pPos[0], pPos[1], pPos[2]);
+    if (pScale) {
+        fn_801D0D94(pScale[0], pScale[1], pScale[2]);
     }
     fn_801D04C4();
     fn_80233BE0();
@@ -1249,11 +1249,11 @@ void fn_801A3C40(Object_8003DEC4 *pPlayer)
         }
         fn_801A2EC8(pPlayer, pSlot);
         if (fn_8015CD9C()) {
-            Vector_801A1650 pos;
+            Vector_801A1650 scale;
 
             fn_8015D3B0(pPlayer);
-            fn_8015D32C(pPlayer, &pos.x);
-            fn_801A209C(pPlayer, &pos.x, pPlayer->mUnknown908, 0, 0, pSlot->mpUnknown12, pSlot->mpUnknown36,
+            fn_8015D32C(pPlayer, &scale.x);
+            fn_801A209C(pPlayer, &scale.x, pPlayer->mUnknown908, 0, 0, pSlot->mpUnknown12, pSlot->mpUnknown36,
                         pSlot->mUnknown8);
         } else {
             fn_801A209C(pPlayer, 0, pPlayer->mUnknown908, 0, 0, pSlot->mpUnknown12, pSlot->mpUnknown36,

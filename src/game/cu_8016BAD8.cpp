@@ -9,8 +9,8 @@ void fn_8016B438(int team, unsigned char *pOut, unsigned int *pFlags);
 float fn_80178A5C(void);
 
 // Randomly toggles byte +0x17 of team's fn_80168708 object, with a chance
-// adjusted by the x of the fn_80177FE0 line point and by the byte and flags
-// that fn_8016B438 fills. Returns 1 when the byte was toggled.
+// adjusted by the x of the fn_80177FE0 line point and by the flags that
+// fn_8016B438 reports. Returns 1 when the byte was toggled.
 int fn_8016BAD8(int team)
 {
     int flipped = 0;

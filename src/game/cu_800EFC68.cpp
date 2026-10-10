@@ -106,11 +106,6 @@ struct State_80114DF4 {
     unsigned char mUnknown67;
 };
 
-struct Block_80114A30 {
-    char mUnknown0[44];
-    int mUnknown44;
-};
-
 struct Record_801170A0 {
     char mUnknown0[1];
     unsigned char mUnknown1;
@@ -4635,7 +4630,7 @@ extern "C" int fn_80114A30(Object_80039F5C *p, int a)
             Record_800B15FC *pRecord;
 
             p->mUnknown1219 = 1;
-            ((Block_80114A30 *)&p->mUnknown1160)->mUnknown44++;
+            p->mUnknown1160.mUnknown44++;
             result = 2;
             pRecord = fn_800B15FC();
             fn_8009BD2C(p, &pRecord->mUnknown0);

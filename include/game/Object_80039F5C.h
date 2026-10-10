@@ -78,7 +78,9 @@ struct Block_80170374 {
 struct Block_801718E8 {
     float mUnknown0;
     char mUnknown4[8];
-    char mUnknown12[40];
+    char mUnknown12[32];
+    int mUnknown44;
+    char mUnknown48[4];
     unsigned char mUnknown52;
     unsigned char mUnknown53;
     unsigned char mUnknown54;
