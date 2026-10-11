@@ -6,11 +6,28 @@
 #include "game/Record_8011F518.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_802372EC.h"
+#include "game/fn_800B65A0.h"
+#include "game/Table_80089904.h"
 
 typedef Record_800DB60C Record_800DB074;
 
 extern "C" {
 extern float lbl_803ECB08;
+extern float lbl_803EAD14;
+extern unsigned char lbl_803EAD18;
+extern unsigned char lbl_803EAD19;
+int fn_800DAE4C(Object_80039F5C *p);
+int fn_800DAD90(Table_80089904 *pTable, int value, int a, unsigned char b);
+int fn_801BA2A8(void *record, Record_800D81C8 *entries, unsigned short value, int animation, int key, Object_80039F5C *p, float weight);
+float fn_8012506C(Object_80039F5C *p, int value);
+int fn_800ACFA8(Object_80039F5C *p);
+Object_80039F5C *fn_80105384(Object_80039F5C *p, int value, Point_8017886C *pOut);
+int fn_80132630(Object_80039F5C *p, Point_8017886C *pPoint, Object_80039F5C *pOther);
+int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pOther, int value);
+int fn_80178308(void);
+unsigned int fn_800ABDA4(int team);
+unsigned char fn_8011F59C(int index);
+void fn_8011F5AC(int index);
 
 int fn_801CFFD0(int a, int b);
 int fn_801CFE40(float y, float x);
@@ -47,6 +64,24 @@ extern "C" int fn_800DAEE4(Object_80039F5C *p)
         }
     }
     return result;
+}
+
+extern "C" int fn_800DAF5C(Table_80089904 *pTable, int key, void *pContext,
+    Record_800D81C8 *pEntries, Object_80039F5C *p, int phase)
+{
+    if (phase != 0) {
+        return 0;
+    }
+    Point_8017886C direction;
+    direction.mX = (signed char)p->mUnknown1008.mUnknown1 * 0.1f;
+    direction.mY = (signed char)p->mUnknown1008.mUnknown2 * 0.1f;
+    int angle = (fn_801CFE40(direction.mY, direction.mX) - p->mMotion.mFacing) & 0xFFFFFF;
+    int foot = fn_800DAE4C(p);
+    unsigned char side = (unsigned char)fn_800DAEE4(p);
+    int index = fn_800DAD90(pTable, angle, foot, side);
+    fn_801BA2A8(pContext, pEntries, pTable->mEntries[index].mUnknown0,
+        pTable->mEntries[index].mUnknown2, key, p, 1.0f);
+    return 0;
 }
 
 extern "C" void fn_800DB074(Object_80039F5C *p, Object_80137ABC *pBall, Record_800DB074 *pRecord)
@@ -242,4 +277,104 @@ extern "C" void fn_800DB7A4(Record_800DB074 *pRecord, Object_80039F5C *p)
             }
         }
     }
+}
+
+extern "C" void fn_800DB8B4(Record_800DB60C *pRecord, Object_80039F5C *p)
+{
+    int allow = 1;
+    int failed = 0;
+    if (fn_800B65A0(p->mIdBytes[2]) != 255 || pRecord->mUnknown1 == 1) {
+        return;
+    }
+    switch (p->mpState->mId) {
+    case 10:
+    case 16:
+    case 58:
+        break;
+    default:
+        return;
+    }
+    if (!(fn_8012506C(p, 3) <= 65.0f)) {
+        allow = 0;
+    }
+    unsigned int roll = (unsigned int)fn_802372EC(0, 255);
+    if (roll > (unsigned int)fn_800ACFA8(p)) {
+        failed = 1;
+    }
+    if (failed && (unsigned int)fn_802372EC(0, 100) < (unsigned int)lbl_803EAD19) {
+        allow = allow == 0;
+    }
+    Point_8017886C point;
+    Object_80039F5C *pOther = fn_80105384(p, 0, &point);
+    if (!pOther) {
+        return;
+    }
+    int can = 0;
+    if (allow && fn_80132630(p, &point, pOther)) {
+        can = 1;
+    }
+    if (!can) {
+        return;
+    }
+    int ready = 0;
+    if (fn_801066D0(p, pOther, 9)) {
+        ready = 1;
+    }
+    if (!ready) {
+        return;
+    }
+    allow = fn_8012506C(pOther, 5) < lbl_803EAD14;
+    if (!allow) {
+        return;
+    }
+    if (fn_800ABDA4(fn_80178308()) == 0) {
+        int count = fn_8011F59C(0);
+        count += fn_8011F59C(1);
+        if (count > 0) {
+            allow = 0;
+        }
+    } else if (fn_800ABDA4(fn_80178308()) == 1) {
+        int count = fn_8011F59C(0);
+        count += fn_8011F59C(1);
+        if (count > 1) {
+            allow = 0;
+        }
+    }
+    if (!allow) {
+        return;
+    }
+    if (failed) {
+        if ((unsigned int)fn_8011F59C(1) < (unsigned int)lbl_803EAD18) {
+            fn_8011F5AC(1);
+        } else {
+            allow = 0;
+        }
+    } else {
+        fn_8011F5AC(0);
+    }
+    if (allow) {
+        fn_800DB60C(pRecord, p);
+    }
+}
+
+extern "C" int fn_800DBAF0(Object_80039F5C *p)
+{
+    Record_800DB60C *pRecord = 0;
+    switch (p->mpState->mId) {
+    case 16:
+        pRecord = (Record_800DB60C *)((char *)p + 368);
+        break;
+    case 10:
+    case 58:
+        pRecord = (Record_800DB60C *)((char *)p + 356);
+        break;
+    case 36:
+        pRecord = (Record_800DB60C *)((char *)p + 336);
+        break;
+    }
+    int result = 0;
+    if (pRecord && pRecord->mUnknown1) {
+        result = pRecord->mUnknown20 >= 0.0f;
+    }
+    return result;
 }

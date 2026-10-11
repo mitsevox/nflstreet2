@@ -45,7 +45,7 @@ void fn_801BA650(Record_800D81C8 *entry, Object_80039F5C *p, float value);
 float fn_801BD60C(void *p);
 float fn_801CFFA0(float value);
 void fn_801BD81C(void *p, float value);
-void fn_800DA6AC(Record_8036B55C *record, Record_800D81C8 *entries, Object_80039F5C *p);
+void fn_800DA6AC(Record_8036B55C *record, Record_800D81C8 *entries, int key);
 void fn_800DA814(Object_800DA8D8 *object, Block_801BE60C *block, Object_80039F5C *p, int value, int index, int key, Record_8036B55C *record, Record_800D81C8 *entries);
 void fn_800DA8D8(Object_800DA8D8 *, Block_801BE60C *, Object_80039F5C *, int, int, unsigned short, void *, Record_800D81C8 *, unsigned char);
 void fn_800DAC78(Block_801BE60C *, float, float);
@@ -411,7 +411,7 @@ int fn_800DA54C(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
     return 0;
 }
 
-void fn_800DA6AC(Record_8036B55C *record, Record_800D81C8 *entries, Object_80039F5C *)
+void fn_800DA6AC(Record_8036B55C *record, Record_800D81C8 *entries, int)
 {
     for (unsigned int i = 0; i <= 3; i++) {
         unsigned int count = fn_801BA568(record, entries, lbl_802DA8AC[i].mUnknown2);
@@ -448,7 +448,7 @@ void fn_800DA814(Object_800DA8D8 *object, Block_801BE60C *block, Object_80039F5C
                  int value, int index, int key, Record_8036B55C *record,
                  Record_800D81C8 *entries)
 {
-    fn_800DA6AC(record, entries, p);
+    fn_800DA6AC(record, entries, key);
     int first = object->mUnknown24[index].mUnknown8;
     int second = object->mUnknown24[index + 1].mUnknown8;
     block->mUnknown0 = fn_801BA2A8(record, entries, (unsigned short)value, first, key, p, 1.0f);

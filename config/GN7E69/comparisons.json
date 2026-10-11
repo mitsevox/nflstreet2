@@ -24920,7 +24920,7 @@
     {
       "source": "src/game/cu_800DAEE4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row 0x800DAEE4-0x800DBB74 for src/game/cu_800DAEE4.cpp, exact whole-function rows and inferred name/source-form rows for ten reconstructed bodies (seven exact, three partial), and the exact .rodata row 0x8029D8B8-0x8029D908 (literal pools of 0x800DB100-0x800DB7A4). Original bytes remain linked; three other bodies and all other static data remain original and unmeasured.",
+      "evidence": "Complete thirteen-body comparison context, including three released functions recovered in issue 726. Full 108-byte target literal extent including unreconstructed D908 word is registered and remains partial; original data type and grouping remain provisional. Existing function ranges retained. Original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
@@ -24931,8 +24931,8 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029D8B8",
-          "end": "0x8029D908"
+          "start": "0x8029D8A8",
+          "end": "0x8029D914"
         }
       ],
       "functions": [
@@ -24940,6 +24940,11 @@
           "symbol": "fn_800DAEE4",
           "start": "0x800DAEE4",
           "end": "0x800DAF5C"
+        },
+        {
+          "symbol": "fn_800DAF5C",
+          "start": "0x800DAF5C",
+          "end": "0x800DB074"
         },
         {
           "symbol": "fn_800DB074",
@@ -24985,6 +24990,16 @@
           "symbol": "fn_800DB7A4",
           "start": "0x800DB7A4",
           "end": "0x800DB8B4"
+        },
+        {
+          "symbol": "fn_800DB8B4",
+          "start": "0x800DB8B4",
+          "end": "0x800DBAF0"
+        },
+        {
+          "symbol": "fn_800DBAF0",
+          "start": "0x800DBAF0",
+          "end": "0x800DBB74"
         }
       ]
     },
