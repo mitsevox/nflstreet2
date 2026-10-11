@@ -4,6 +4,7 @@
 #include "game/SndgPathfinder.h"
 #include "game/Camera_8013F738.h"
 #include "game/Class_801B8D9C.h"
+#include "engine/cu_801B8C18.h"
 #include "game/Object_8017886C.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_80136B1C.h"
@@ -36,11 +37,6 @@ class Allocator {
 public:
     virtual void *Alloc(int size, const AllocParams &params);
     virtual void Free(void *p, int unknown);
-};
-
-struct Struct_803EB878 {
-    const char *mName;
-    unsigned int mHash;
 };
 
 extern "C" {

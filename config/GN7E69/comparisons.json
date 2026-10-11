@@ -28890,6 +28890,101 @@
           "end": "0x801A4AD4"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801B8C18.cpp",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv provisional unit row 0x801B8C18-0x801B91A0, shared/private type and source-form rows, and compiler row engine_cpp_nosda. All sixteen complete functions measured, including six partial bodies. External data ownership remains unclaimed; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B8C18",
+          "end": "0x801B91A0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801B8C18",
+          "start": "0x801B8C18",
+          "end": "0x801B8C60"
+        },
+        {
+          "symbol": "fn_801B8C60",
+          "start": "0x801B8C60",
+          "end": "0x801B8D4C"
+        },
+        {
+          "symbol": "fn_801B8D4C",
+          "start": "0x801B8D4C",
+          "end": "0x801B8D9C"
+        },
+        {
+          "symbol": "__14Class_801B8D9C",
+          "start": "0x801B8D9C",
+          "end": "0x801B8DA8"
+        },
+        {
+          "symbol": "fn_801B8DA8",
+          "start": "0x801B8DA8",
+          "end": "0x801B8DF0"
+        },
+        {
+          "symbol": "fn_801B8DF0",
+          "start": "0x801B8DF0",
+          "end": "0x801B8EDC"
+        },
+        {
+          "symbol": "fn_801B8EDC",
+          "start": "0x801B8EDC",
+          "end": "0x801B8F2C"
+        },
+        {
+          "symbol": "fn_801B8F2C",
+          "start": "0x801B8F2C",
+          "end": "0x801B9018"
+        },
+        {
+          "symbol": "fn_801B9018",
+          "start": "0x801B9018",
+          "end": "0x801B9068"
+        },
+        {
+          "symbol": "fn_801B9068",
+          "start": "0x801B9068",
+          "end": "0x801B90BC"
+        },
+        {
+          "symbol": "fn_801B90BC",
+          "start": "0x801B90BC",
+          "end": "0x801B90CC"
+        },
+        {
+          "symbol": "fn_801B90CC",
+          "start": "0x801B90CC",
+          "end": "0x801B90F0"
+        },
+        {
+          "symbol": "fn_801B90F0",
+          "start": "0x801B90F0",
+          "end": "0x801B9134"
+        },
+        {
+          "symbol": "fn_801B9134",
+          "start": "0x801B9134",
+          "end": "0x801B9148"
+        },
+        {
+          "symbol": "fn_801B9148",
+          "start": "0x801B9148",
+          "end": "0x801B9174"
+        },
+        {
+          "symbol": "fn_801B9174",
+          "start": "0x801B9174",
+          "end": "0x801B91A0"
+        }
+      ]
     }
   ]
 }
