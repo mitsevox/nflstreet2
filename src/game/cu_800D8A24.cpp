@@ -12,7 +12,7 @@ extern "C" {
 int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues);
 void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
 unsigned char fn_800C0464(void *p);
-void fn_800DA7AC(Object_801BBD5C *pObject, float value);
+int fn_800DA7AC(Object_801BBD5C *pObject, float value);
 float fn_800DAA68(int index, Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Record_800D81C8 *pEntries,
                   float value);
 int fn_800DC080(Object_80039F5C *p);
@@ -151,14 +151,14 @@ extern "C" int fn_800D8E68(Object_80039F5C *p, Block_801BE60C *pBlock, unsigned 
     return changed;
 }
 
-extern "C" void fn_800D8F8C(Object_80039F5C *p, Object_801BBD5C *pObject)
+extern "C" int fn_800D8F8C(Object_80039F5C *p, Object_801BBD5C *pObject)
 {
     float value = p->mMotion.mUnknown28;
 
     if (value != 0.0f && fn_801CFFD0(p->mMotion.mFacing, p->mMotion.mUnknown32) > 0x3C71C7) {
         value = -value;
     }
-    fn_800DA7AC(pObject, value);
+    return fn_800DA7AC(pObject, value);
 }
 
 extern "C" void fn_800D8FFC(Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Record_800D81C8 *pRecords,

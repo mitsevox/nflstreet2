@@ -6740,7 +6740,7 @@
     {
       "source": "src/game/cu_800D949C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained inferred sixteen-function grouping, exact whole-function rows for nine reconstructed bodies and the exact .rodata row 0x8029D87C-0x8029D8A8 (literal pools of 0x800DA8D8, 0x800DAA68, 0x800DAC88 and 0x800DAD90). Only these bodies and that literal run are measured; seven other functions and all other static data remain original and unmeasured.",
+      "evidence": "evidence.tsv provisional sixteen-function grouping and full-function rows for all sixteen bodies; complete natural literal context 0x8029D7F8-0x8029D8A8. Comparison-only source; original bytes remain linked and other static data is unmeasured.",
       "sections": [
         {
           "section": ".text",
@@ -6751,11 +6751,16 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029D87C",
+          "start": "0x8029D7F8",
           "end": "0x8029D8A8"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_800D949C",
+          "start": "0x800D949C",
+          "end": "0x800D9A10"
+        },
         {
           "symbol": "fn_800D9A10",
           "start": "0x800D9A10",
@@ -6772,9 +6777,34 @@
           "end": "0x800D9C80"
         },
         {
+          "symbol": "fn_800D9C80",
+          "start": "0x800D9C80",
+          "end": "0x800DA53C"
+        },
+        {
           "symbol": "fn_800DA53C",
           "start": "0x800DA53C",
           "end": "0x800DA54C"
+        },
+        {
+          "symbol": "fn_800DA54C",
+          "start": "0x800DA54C",
+          "end": "0x800DA6AC"
+        },
+        {
+          "symbol": "fn_800DA6AC",
+          "start": "0x800DA6AC",
+          "end": "0x800DA7AC"
+        },
+        {
+          "symbol": "fn_800DA7AC",
+          "start": "0x800DA7AC",
+          "end": "0x800DA814"
+        },
+        {
+          "symbol": "fn_800DA814",
+          "start": "0x800DA814",
+          "end": "0x800DA8D8"
         },
         {
           "symbol": "fn_800DA8D8",
@@ -6800,6 +6830,11 @@
           "symbol": "fn_800DAD90",
           "start": "0x800DAD90",
           "end": "0x800DAE4C"
+        },
+        {
+          "symbol": "fn_800DAE4C",
+          "start": "0x800DAE4C",
+          "end": "0x800DAEE4"
         }
       ]
     },
