@@ -16076,8 +16076,11 @@
       "provenance": {
         "pull_request": 731,
         "merged_via": 731,
-        "commit": "8764bc85ff797c03daf08669684fbf4f2ff166d7",
-        "introduced_blob": "fa468c389361fd9b381fd28890a0392b84c434bf"
+        "commit": "0150d7fa4f5dbd92e281a4c84b35e3ee7797615c",
+        "introduced_blob": "0571b43ea94c45151792cb7458f864512d8bb618",
+        "original_commit": "8764bc85ff797c03daf08669684fbf4f2ff166d7",
+        "original_blob": "fa468c389361fd9b381fd28890a0392b84c434bf",
+        "integration_adjustment": "Reviewed canonical SDK declaration and enum replacements preserve all nine emitted instruction comparisons; retain the original reconstruction author and source revision while binding the final source blob for squash integration."
       }
     }
   ],
