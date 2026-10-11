@@ -472,6 +472,69 @@ class InPlaceComparisons(ComparisonFixture):
         entries=function_compare.load(measured,self.binary,self.root)
         self.assertEqual([(e['kind'],e['matched']) for e in entries],[('code',8),('data',4)])
 
+    def test_data_fragment_alignment_preserves_payload_relocations_and_full_extent(self):
+        if not self.compiler_available:
+            self.skipTest('Pinned compiler and objdiff are installed by CI')
+        self.source.write_text('extern int external[4];\n'
+                               'struct Item { double values[2]; int *pointer; };\n'
+                               'static const struct Item value = {{1.0, 2.0}, &external[1]};\n'
+                               'const void *fn_80000000(void) { return &value; }\n')
+        self.manifest['externals'] = {'external': {'address': '0x80300000', 'evidence': 'fixture'}}
+        resolved = bytes.fromhex('3ff000000000000040000000000000008030000400000000')
+        for start, extra in ((0x80200000, b''), (0x80200004, bytes(4))):
+            with self.subTest(start=hex(start)):
+                code = bytes.fromhex('3c6080203863' + f'{start & 0xFFFF:04x}' + '4e800020')
+                data = resolved + extra
+                binary = bytearray(self.dol(code))
+                for offset, value in ((0x1C, len(binary)), (0x64, start), (0xAC, len(data))):
+                    struct.pack_into('>I', binary, offset, value)
+                self.binary = bytes(binary) + data; self.original.write_bytes(self.binary)
+                self.target['sections']['.data3'] = f'0x{start:08X}'
+                (self.root/'config/GN7E69/baseline.json').write_text(json.dumps(self.target))
+                self.unit['sections'] = [
+                    {'section': '.text', 'placement': '.text', 'start': '0x80000000', 'end': '0x8000000C'},
+                    {'section': '.rodata', 'placement': '.data3', 'start': f'0x{start:08X}',
+                     'end': f'0x{start + len(data):08X}'}]
+                self.unit['functions'][0]['end'] = '0x8000000C'
+                self.write_config()
+                (self.root/'config/GN7E69/evidence.tsv').write_text(
+                    'kind\tstart\tend\tstart_boundary\tend_boundary\tsubject\n'
+                    'function\t0x80000000\t0x8000000C\texact\texact\tfixture\n'
+                    f'data\t0x{start:08X}\t0x{start + len(data):08X}\texact\texact\tfixture\n')
+                receipts = function_compare.generate(self.original, self.root/'build/source/report.json', self.tool)
+                entries = function_compare.load(receipts, self.binary, self.root)
+                self.assertEqual(entries[0]['matched'], 12)
+                self.assertEqual(entries[1]['matched'], 0 if extra else 24)
+                self.assertEqual(entries[1]['end'], f'0x{start + len(data):08X}')
+                receipt = receipts[0]
+                native = self.root/receipt['object']
+                self.assertEqual(sb.sha256(native), receipt['object_sha256'])
+                native_sections, _ = sb.read_elf(native.read_bytes())
+                original = next(s for s in native_sections if s['name'] == '.rodata')
+                self.assertEqual((original['align'], original['size']), (8, 24))
+                pair = receipt['pairs'][1]
+                output = self.root/pair['path']
+                sections, symbols = sb.read_elf(output.read_bytes())
+                linked = next(s for s in sections if s['name'] == '.rodata')
+                symbol = next(s for s in symbols if s['name'] == pair['output_symbol'])
+                self.assertEqual((linked['addr'], linked['size'], symbol['value'], symbol['size']),
+                                 (start, 24, start, 24))
+                self.assertEqual(linked['data'], resolved)
+                fragment_sections, _ = sb.read_elf(output.with_suffix('.o').read_bytes())
+                fragment = next(s for s in fragment_sections if s['name'] == '.rodata')
+                self.assertEqual(fragment['data'], original['data'])
+                self.assertEqual(fragment['align'], 4 if extra else 8)
+                # Even a rehashed receipt cannot move the data symbol behind a linker prefix.
+                damaged = bytearray(output.read_bytes())
+                table = next(s for s in sections if s['type'] == sb.SHT_SYMTAB)
+                index = symbols.index(symbol) + 1
+                struct.pack_into('>I', damaged, table['offset'] + index * 16 + 4, start + 4)
+                output.write_bytes(damaged)
+                altered = copy.deepcopy(receipts)
+                altered[0]['pairs'][1]['sha256'] = sb.sha256(output)
+                with self.assertRaisesRegex(ValueError, 'complete data bytes at configured address'):
+                    function_compare.load(altered, self.binary, self.root)
+
     def partial_data_fixture(self, linked_rodata=b'linked\0\0', middle=False, tail_source=False):
         """Draft and linked functions share one compiled .rodata; only the unlinked slices are measured.
 
@@ -643,7 +706,7 @@ class InPlaceComparisons(ComparisonFixture):
             struct.pack_into('>I', data, header + 20, section['size'] + 4)
 
         for change, error in ((last_linked_byte, 'linked bytes at their native placement'),
-                              (longer, 'must compile to its full target placement')):
+                              (longer, 'complete data bytes at configured address')):
             with self.subTest(change=change.__name__):
                 try:
                     changed = self.rewrite_sliced_data(receipts, change)
