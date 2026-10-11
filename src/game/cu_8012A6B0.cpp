@@ -170,7 +170,7 @@ struct State_8012BCC8 {
 };
 
 extern "C" int fn_800F2828(Object_80039F5C *p, Object_80039F5C *pOther);
-extern "C" int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, int a);
+extern "C" int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 extern "C" int fn_80110EB0(Object_80039F5C *p, Object_80039F5C *pOther);
 
 struct State_8012A824 {
