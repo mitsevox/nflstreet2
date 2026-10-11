@@ -1398,6 +1398,14 @@
       "address": "0x80251CC4",
       "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
     },
+    "GXSetVtxDesc": {
+      "address": "0x8024CB90",
+      "evidence": "Accepted complete GXAttr function/name evidence at 0x8024CB90-0x8024CDFC and canonical GXGeometry.h declaration; target rendering callers and native relocation destinations agree. Original bytes remain linked."
+    },
+    "GXSetVtxAttrFmt": {
+      "address": "0x8024D450",
+      "evidence": "Accepted complete GXAttr function/name evidence at 0x8024D450-0x8024D6AC and canonical GXGeometry.h declaration; target rendering callers and native relocation destinations agree. Original bytes remain linked."
+    },
     "GXClearVtxDesc": {
       "address": "0x8024D418",
       "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
