@@ -191,6 +191,17 @@ jobs:
           name: GN7E69_report
           path: build/GN7E69/report.json
           if-no-files-found: error
+      - name: Prepare verified publication history
+        if: github.ref == 'refs/heads/main'
+        run: python3 tools/restore_history.py --prepare
+      - name: Preserve verified publication history
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: published-history-v1-${{ github.run_attempt }}
+          path: build/activity/archive/*.json
+          if-no-files-found: error
+          retention-days: 90
       - uses: actions/upload-pages-artifact@98ef48e41587a300b82de4cf298aa98b57b2faae
         if: github.ref == 'refs/heads/main'
         with:
