@@ -438,8 +438,12 @@ def generate(original, source_report, tool):
             data_output = pair / ('data' + name + '.elf')
             sb.run('comparison data link', [str(wrapper), str(compiler/'ngcld.exe'), '-T', str(data_script),
                 '-o', str(data_output), str(data_fragment), *map(str, references)], pair/'data-link.log')
-            data_sections, _ = sb.read_elf(data_output.read_bytes())
+            data_sections, data_symbols = sb.read_elf(data_output.read_bytes())
             linked_section = next(s for s in data_sections if s['name'] == name)
+            linked_data = [s for s in data_symbols if s['name'] == data_symbol and s['type'] == sb.STT_OBJECT]
+            if len(linked_data) != 1 or linked_data[0]['value'] != a or linked_data[0]['size'] != section['size'] \
+                    or linked_data[0]['shndx'] != linked_section['index']:
+                raise ValueError('Diagnostic link changed comparison data identity')
             if linked_section['addr'] != a or linked_section['size'] != section['size']:
                 raise ValueError('Diagnostic link changed data placement or size')
             if sliced:
@@ -499,6 +503,7 @@ def load(receipts, binary, root):
                 raise ValueError('Stale or foreign comparison output')
         if sb.dependencies(root / receipt['depfile'], root) != receipt['dependencies']:
             raise ValueError('Comparison dependencies differ from compiler receipt')
+        native_sections, _ = sb.read_elf((root / receipt['object']).read_bytes())
         expected_rows = {(r['symbol'], r['start'], r['end']) for r in unit['functions'] if not any(
             a <= sb.address(r['start']) < sb.address(r['end']) <= b for a, b in linked_bounds)}
         # Recompute the measured data slices from build/source/report.json, independently of the
@@ -538,6 +543,12 @@ def load(receipts, binary, root):
             elif entry['type'] == 'bytes' and row['symbol'] in placements and entry['kind'] == entry_kind(placements[row['symbol']]):
                 placement = placements[row['symbol']]
                 section = next(s for s in sections if s['name'] == row['symbol'])
+                native_section = next(s for s in native_sections if s['name'] == row['symbol'])
+                candidates = [s for s in symbols if s['name'] == pair['output_symbol'] and s['type'] == sb.STT_OBJECT]
+                if len(candidates) != 1 or candidates[0]['value'] != placement['start'] \
+                        or candidates[0]['size'] != native_section['size'] \
+                        or candidates[0]['shndx'] != section['index'] or section['size'] != native_section['size']:
+                    raise ValueError('Comparison output lacks complete data bytes at configured address')
                 if section['addr'] != placement['start']:
                     raise ValueError('Comparison data differs from configured address')
                 if (a, b) == (placement['start'], placement['end']):

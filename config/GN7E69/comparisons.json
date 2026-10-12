@@ -29748,6 +29748,72 @@
           "end": "0x801B91A0"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80196F48.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit80196F48-801981D8 and source-form/shared type/external/compiler rows. Nine complete functions and full212-byte readonly interval measured; all partials retained. Original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80196F48",
+          "end": "0x801981D8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADA3C",
+          "end": "0x802ADB10"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80196F48",
+          "start": "0x80196F48",
+          "end": "0x8019723C"
+        },
+        {
+          "symbol": "fn_8019723C",
+          "start": "0x8019723C",
+          "end": "0x80197680"
+        },
+        {
+          "symbol": "fn_80197680",
+          "start": "0x80197680",
+          "end": "0x80197D08"
+        },
+        {
+          "symbol": "fn_80197D08",
+          "start": "0x80197D08",
+          "end": "0x80197E64"
+        },
+        {
+          "symbol": "fn_80197E64",
+          "start": "0x80197E64",
+          "end": "0x80197E68"
+        },
+        {
+          "symbol": "fn_80197E68",
+          "start": "0x80197E68",
+          "end": "0x80197E6C"
+        },
+        {
+          "symbol": "fn_80197E6C",
+          "start": "0x80197E6C",
+          "end": "0x80197F84"
+        },
+        {
+          "symbol": "fn_80197F84",
+          "start": "0x80197F84",
+          "end": "0x80197FDC"
+        },
+        {
+          "symbol": "fn_80197FDC",
+          "start": "0x80197FDC",
+          "end": "0x801981D8"
+        }
+      ]
     }
   ]
 }
