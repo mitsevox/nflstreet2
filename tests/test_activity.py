@@ -373,6 +373,18 @@ class ContributorTests(unittest.TestCase):
 
 
 class RestoreTests(unittest.TestCase):
+    def durable_archive(self, document, manifest=None):
+        payload=json.dumps(document).encode()
+        if manifest is None:
+            manifest={'schema':1,'repository':restore_history.REPOSITORY,'revision':document['revision'],
+                      'run':10,'attempt':1,'target_sha1':document['target_sha1'],
+                      'activity_sha256':restore_history.hashlib.sha256(payload).hexdigest()}
+        output=io.BytesIO()
+        with zipfile.ZipFile(output,'w') as zipped:
+            zipped.writestr('activity.json',payload)
+            zipped.writestr('manifest.json',json.dumps(manifest))
+        return output.getvalue()
+
     def archive(self, document=None):
         tar_bytes=io.BytesIO()
         with tarfile.open(fileobj=tar_bytes,mode='w') as tar:
@@ -383,15 +395,21 @@ class RestoreTests(unittest.TestCase):
         with zipfile.ZipFile(zipped,'w') as archive:archive.writestr('artifact.tar',tar_bytes.getvalue())
         return zipped.getvalue()
 
-    def setup_api(self, seed, deployed, archived, expired=False):
+    def setup_api(self, seed, deployed, archived, expired=False, durable=None, job=None):
         responses={
             'deployments?environment=github-pages&per_page=100':[{'id':1,'sha':deployed}],
             'deployments/1/statuses':[{'state':'success','created_at':'2026-10-03T12:00:00Z',
                'log_url':'https://github.com/mitsevox/nflstreet2/actions/runs/10/job/20'}],
             'actions/runs/10':{'head_sha':deployed,'head_branch':'main','event':'push','path':'.github/workflows/baseline.yml'},
             'actions/runs/10/artifacts?per_page=100':{'artifacts':[{'id':2,'name':'github-pages','expired':expired,'created_at':'2026-10-03T11:00:00Z'}]}}
+        if durable is not None:
+            responses['actions/runs/10/artifacts?per_page=100']['artifacts'].append(
+                {'id':3,'name':'published-history-v1-1','expired':False,'created_at':'2026-10-03T11:01:00Z',
+                 'digest':'sha256:'+restore_history.hashlib.sha256(durable).hexdigest(),'workflow_run':{'id':10}})
+            responses['actions/jobs/20']=job or {'run_id':10,'head_sha':deployed,'conclusion':'success','run_attempt':1}
         def api(path):
             if path=='actions/artifacts/2/zip':return self.archive(archived)
+            if path=='actions/artifacts/3/zip':return durable
             return json.dumps(responses[path]).encode()
         return patch.object(restore_history,'api',side_effect=api)
 
@@ -418,6 +436,75 @@ class RestoreTests(unittest.TestCase):
     def test_no_successful_deployment_is_not_silent_bootstrap(self):
         with self.assertRaisesRegex(ValueError,'No successful'):
             restore_history.published_run([{'id':1}],lambda n:[{'state':'failure'}])
+
+    def test_durable_history_restores_after_pages_archive_expires(self):
+        seed=HistoryTests().document([HistoryTests().row()])
+        document=HistoryTests().document([HistoryTests().row(),HistoryTests().row('d'*40)])
+        document['revision']='d'*40
+        with self.setup_api(seed,'d'*40,None,expired=True,durable=self.durable_archive(document)):
+            result,receipt=restore_history.restore(seed)
+            self.assertEqual(result,document)
+            self.assertEqual((receipt['artifact'],receipt['kind']),(3,'durable-history'))
+
+    def test_bad_durable_proof_cannot_fall_back_to_valid_pages(self):
+        seed=HistoryTests().document([HistoryTests().row()]);seed['revision']='a'*40
+        manifest={'schema':1,'repository':restore_history.REPOSITORY,'revision':'a'*40,'run':99,
+                  'attempt':1,'target_sha1':seed['target_sha1'],'activity_sha256':'0'*64}
+        with self.setup_api(seed,'a'*40,seed,durable=self.durable_archive(seed,manifest)),self.assertRaisesRegex(ValueError,'manifest'):
+            restore_history.restore(seed)
+        with self.setup_api(seed,'a'*40,seed,durable=self.durable_archive(seed),
+                job={'run_id':10,'head_sha':'a'*40,'conclusion':'success','run_attempt':2}),self.assertRaisesRegex(ValueError,'published attempt'):
+            restore_history.restore(seed)
+
+    def test_durable_zip_digest_and_entries_are_authenticated(self):
+        document=HistoryTests().document([HistoryTests().row()]);document['revision']='a'*40
+        archive=self.durable_archive(document)
+        artifact={'digest':'sha256:'+'0'*64}
+        with self.assertRaisesRegex(ValueError,'digest'):
+            restore_history.durable_archive(archive,artifact,10,1,'a'*40,document['target_sha1'])
+        output=io.BytesIO()
+        with zipfile.ZipFile(output,'w') as zipped:zipped.writestr('../activity.json',b'{}')
+        archive=output.getvalue();artifact['digest']='sha256:'+restore_history.hashlib.sha256(archive).hexdigest()
+        with self.assertRaisesRegex(ValueError,'entries'):
+            restore_history.durable_archive(archive,artifact,10,1,'a'*40,document['target_sha1'])
+
+    def test_audited_recovery_is_exact_and_preserves_every_snapshot(self):
+        seed=HistoryTests().document([HistoryTests().row(),HistoryTests().row('d'*40)])
+        receipt={'schema':1,'deployment':1,'run':10,'revision':'d'*40,'snapshot_count':2,
+                 'history_sha256':restore_history.hashlib.sha256(restore_history.encoded(seed)).hexdigest()}
+        with self.setup_api(seed,'d'*40,None,expired=True):
+            result,proof=restore_history.restore(seed,receipt)
+            self.assertEqual(result['snapshots'],seed['snapshots']);self.assertEqual(proof['kind'],'audited-recovery')
+        for key,value in [('deployment',2),('run',11),('revision','a'*40),('history_sha256','0'*64),('snapshot_count',1)]:
+            bad=dict(receipt,**{key:value})
+            with self.setup_api(seed,'d'*40,None,expired=True),self.assertRaisesRegex(ValueError,'exact audited recovery'):
+                restore_history.restore(seed,bad)
+
+    def test_prepare_preserves_payload_and_rejects_another_revision(self):
+        document=HistoryTests().document([HistoryTests().row()]);document['revision']='a'*40
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);(root/'build/site').mkdir(parents=True);(root/'config/GN7E69').mkdir(parents=True)
+            (root/'config/GN7E69/history.json').write_text(json.dumps(document))
+            payload=json.dumps(document).encode();(root/'build/site/activity.json').write_bytes(payload)
+            restore_history.prepare_history(root,'a'*40,10,1)
+            archive=root/'build/activity/archive'
+            self.assertEqual((archive/'activity.json').read_bytes(),payload)
+            manifest=json.loads((archive/'manifest.json').read_text())
+            self.assertEqual(manifest['activity_sha256'],restore_history.hashlib.sha256(payload).hexdigest())
+            with self.assertRaisesRegex(ValueError,'differs from its published'):
+                restore_history.prepare_history(root,'d'*40,10,1)
+
+    def test_historyless_pages_cannot_bypass_exact_recovery(self):
+        seed=HistoryTests().document([HistoryTests().row(),HistoryTests().row('d'*40)])
+        receipt={'schema':1,'deployment':1,'run':10,'revision':'d'*40,'snapshot_count':2,
+                 'history_sha256':restore_history.hashlib.sha256(restore_history.encoded(seed)).hexdigest()}
+        with self.setup_api(seed,'d'*40,None):
+            result,proof=restore_history.restore(seed,receipt)
+            self.assertEqual(result['snapshots'],seed['snapshots']);self.assertEqual(proof['kind'],'audited-recovery')
+        with self.setup_api(seed,'d'*40,None),self.assertRaisesRegex(ValueError,'exact audited recovery'):
+            restore_history.restore(seed,dict(receipt,history_sha256='0'*64))
+        with self.setup_api(seed,'a'*40,None),self.assertRaisesRegex(ValueError,'exact audited recovery'):
+            restore_history.restore(seed,receipt)
 
 
 class ExactInventoryTests(unittest.TestCase):
