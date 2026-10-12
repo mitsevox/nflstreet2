@@ -6570,43 +6570,6 @@
       }
     },
     {
-      "source": "src/game/cu_800DBB74.cpp",
-      "contributors": [
-        "adampreddy"
-      ],
-      "functions": [
-        "0x800DC578"
-      ],
-      "provenance": {
-        "pull_request": 341,
-        "merged_via": 345,
-        "commit": "1bbb113de0a17b14c97454d3b8a5109d59095f31",
-        "introduced_blob": "7fb6d3ac2ada5cc8f80c7903ec805b078ec34b63"
-      }
-    },
-    {
-      "source": "src/game/cu_800DBB74.cpp",
-      "contributors": [
-        "adampreddy"
-      ],
-      "functions": [
-        "0x800DBB74",
-        "0x800DBC4C",
-        "0x800DC080",
-        "0x800DC21C",
-        "0x800DC36C"
-      ],
-      "provenance": {
-        "pull_request": 551,
-        "merged_via": 696,
-        "commit": "cca96fe53d46c81a79a9b8eddf80c913b80086d3",
-        "introduced_blob": "ccfc705243ac2aeafcf5b810fc92c4b89ce86851",
-        "original_blob": "1f2f9a1525675ba90198d5095c5d6af29216d7eb",
-        "integration_adjustment": "Reviewed corrections in PR551 share the fn_801BA2A8 declaration; the merge with main reconciles the accesses into the accepted Record_800D81C8 (word +0xC added), Key_80110630, mUnknown2913 and Block_801BE60C views (word members overlapping its accepted byte and float members). Function bodies and objects unchanged.",
-        "original_commit": "306d453dc1aa129686ff0543bd279b9cedd3dc2e"
-      }
-    },
-    {
       "source": "src/game/cu_800D949C.cpp",
       "contributors": [
         "adampreddy"
@@ -11739,48 +11702,6 @@
       }
     },
     {
-      "source": "src/game/cu_800DC584.cpp",
-      "contributors": [
-        "adampreddy"
-      ],
-      "functions": [
-        "0x800DC61C",
-        "0x800DC674",
-        "0x800DC6A8",
-        "0x800DD830",
-        "0x800DDCE4",
-        "0x800DDEE4",
-        "0x800DE364",
-        "0x800DF6EC",
-        "0x800DF750",
-        "0x800DF9FC",
-        "0x800E0188",
-        "0x800E01D8",
-        "0x800E0230",
-        "0x800E0574",
-        "0x800E05C0",
-        "0x800E068C",
-        "0x800E0818",
-        "0x800E0E8C",
-        "0x800E0EF0",
-        "0x800E0F40",
-        "0x800E12D4",
-        "0x800E1350",
-        "0x800E13E4",
-        "0x800E1544",
-        "0x800E1554"
-      ],
-      "provenance": {
-        "pull_request": 563,
-        "merged_via": 579,
-        "commit": "884faf9223ff3af40f2ac59db021daf79a4938b7",
-        "introduced_blob": "3775e626df3b7e8a3b08b76efccdfff6499bcfde",
-        "original_commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
-        "original_blob": "19068d954928aba65a8d03e94d9f0caa205d76a6",
-        "integration_adjustment": "Retain the independently reviewed author revision that corrects unused parameter signatures of fn_800DD830, fn_800DF9FC, fn_800E068C and fn_800E0F40. Source is unchanged from reviewed PR head 884faf9; preserve original source commit/blob and contributor credit while binding introduction history to the source retained by the actual batch squash."
-      }
-    },
-    {
       "source": "src/game/cu_800E3A34.cpp",
       "contributors": [
         "adampreddy"
@@ -13827,39 +13748,6 @@
         "integration_adjustment": "Original PR 692 bodies retained with canonical unused-argument contract. Register its actual emitted rodata against the full target slice without source padding; focused comparison verifies these fifteen exact whole functions, with sixteen useful partial bodies and a measured data mismatch retained without exact credit.",
         "original_commit": "106b14b026bb4d11f60e6bca8859116aa929c5c0",
         "original_blob": "76f3d517bfd22cdaa585f4835fa06a793648a3c1"
-      }
-    },
-    {
-      "source": "src/game/cu_800DC584.cpp",
-      "contributors": [
-        "adampreddy"
-      ],
-      "functions": [
-        "0x800DC584",
-        "0x800DD5E4",
-        "0x800DD648",
-        "0x800DD780",
-        "0x800DD92C",
-        "0x800DDD24",
-        "0x800DDE6C",
-        "0x800DF134",
-        "0x800DF654",
-        "0x800DF710",
-        "0x800E0F48",
-        "0x800E1044",
-        "0x800E11C0",
-        "0x800E1248",
-        "0x800E1438",
-        "0x800E1778"
-      ],
-      "provenance": {
-        "pull_request": 645,
-        "merged_via": 698,
-        "commit": "9755e173080ab286117cf3478d0afb0755f2d9fb",
-        "introduced_blob": "100b71ad6e8e79159eeff52faacdc438f5aacd3e",
-        "original_blob": "30dd22f566880ac78f7c832b735abc3baee78e39",
-        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR698 independent delta review and CI.",
-        "original_commit": "e6a7af4166df541ddfec63fe41da6587d9501d82"
       }
     },
     {
@@ -16189,6 +16077,173 @@
         "original_commit": "24060b5e94715daac73ed4ada4c86f460b43e5f0",
         "original_blob": "e5ca7f6b15c947f3c35a05e612b71ccd171a99d5",
         "integration_adjustment": "Preserve the original lane source contributor through reviewed batch integration; the final authored and introduced source blobs are identical."
+      }
+    },
+    {
+      "source": "src/game/cu_800DAEE4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DC578"
+      ],
+      "provenance": {
+        "pull_request": 341,
+        "merged_via": 727,
+        "commit": "1bbb113de0a17b14c97454d3b8a5109d59095f31",
+        "introduced_blob": "7fb6d3ac2ada5cc8f80c7903ec805b078ec34b63",
+        "original_source": "src/game/cu_800DBB74.cpp",
+        "merged_source": true,
+        "migration_commit": "75820de069a5347dd7fb2fbbbea14d92d4bceb99",
+        "merged_blob": "3aa92963b810515d969d21c8e968df90e0edec9d",
+        "integration_adjustment": "Preserve original contributor, original source commit/blob and introduction history through the structural consolidation of adjacent provisional player-state groups. The pinned migration deletes the old source path and writes this combined blob. Complete bodies remain registered, literal-reference regressions are measured honestly, and original bytes remain linked."
+      }
+    },
+    {
+      "source": "src/game/cu_800DAEE4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DBB74",
+        "0x800DBC4C",
+        "0x800DC080",
+        "0x800DC21C",
+        "0x800DC36C"
+      ],
+      "provenance": {
+        "pull_request": 551,
+        "merged_via": 727,
+        "commit": "cca96fe53d46c81a79a9b8eddf80c913b80086d3",
+        "introduced_blob": "ccfc705243ac2aeafcf5b810fc92c4b89ce86851",
+        "original_blob": "1f2f9a1525675ba90198d5095c5d6af29216d7eb",
+        "integration_adjustment": "Reviewed corrections in PR551 share the fn_801BA2A8 declaration; the merge with main reconciles the accesses into the accepted Record_800D81C8 (word +0xC added), Key_80110630, mUnknown2913 and Block_801BE60C views (word members overlapping its accepted byte and float members). Function bodies and objects unchanged. Preserve original contributor, original source commit/blob and introduction history through the structural consolidation of adjacent provisional player-state groups. The pinned migration deletes the old source path and writes this combined blob. Complete bodies remain registered, literal-reference regressions are measured honestly, and original bytes remain linked.",
+        "original_commit": "306d453dc1aa129686ff0543bd279b9cedd3dc2e",
+        "original_source": "src/game/cu_800DBB74.cpp",
+        "merged_source": true,
+        "migration_commit": "75820de069a5347dd7fb2fbbbea14d92d4bceb99",
+        "merged_blob": "3aa92963b810515d969d21c8e968df90e0edec9d"
+      }
+    },
+    {
+      "source": "src/game/cu_800DAEE4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DC61C",
+        "0x800DC674",
+        "0x800DC6A8",
+        "0x800DD830",
+        "0x800DDCE4",
+        "0x800DDEE4",
+        "0x800DE364",
+        "0x800DF6EC",
+        "0x800DF750",
+        "0x800DF9FC",
+        "0x800E0188",
+        "0x800E01D8",
+        "0x800E0230",
+        "0x800E0574",
+        "0x800E05C0",
+        "0x800E068C",
+        "0x800E0818",
+        "0x800E0E8C",
+        "0x800E0EF0",
+        "0x800E0F40",
+        "0x800E12D4",
+        "0x800E1350",
+        "0x800E13E4",
+        "0x800E1544",
+        "0x800E1554"
+      ],
+      "provenance": {
+        "pull_request": 563,
+        "merged_via": 727,
+        "commit": "884faf9223ff3af40f2ac59db021daf79a4938b7",
+        "introduced_blob": "3775e626df3b7e8a3b08b76efccdfff6499bcfde",
+        "original_commit": "997fb2e3cfccf8d890702924a9018b7bbdf2b4d2",
+        "original_blob": "19068d954928aba65a8d03e94d9f0caa205d76a6",
+        "integration_adjustment": "Retain the independently reviewed author revision that corrects unused parameter signatures of fn_800DD830, fn_800DF9FC, fn_800E068C and fn_800E0F40. Source is unchanged from reviewed PR head 884faf9; preserve original source commit/blob and contributor credit while binding introduction history to the source retained by the actual batch squash. Preserve original contributor, original source commit/blob and introduction history through the structural consolidation of adjacent provisional player-state groups. The pinned migration deletes the old source path and writes this combined blob. Complete bodies remain registered, literal-reference regressions are measured honestly, and original bytes remain linked.",
+        "original_source": "src/game/cu_800DC584.cpp",
+        "merged_source": true,
+        "migration_commit": "75820de069a5347dd7fb2fbbbea14d92d4bceb99",
+        "merged_blob": "3aa92963b810515d969d21c8e968df90e0edec9d"
+      }
+    },
+    {
+      "source": "src/game/cu_800DAEE4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DC584",
+        "0x800DD5E4",
+        "0x800DD648",
+        "0x800DD780",
+        "0x800DD92C",
+        "0x800DDD24",
+        "0x800DDE6C",
+        "0x800DF134",
+        "0x800DF654",
+        "0x800DF710",
+        "0x800E0F48",
+        "0x800E1044",
+        "0x800E11C0",
+        "0x800E1248",
+        "0x800E1438",
+        "0x800E1778"
+      ],
+      "provenance": {
+        "pull_request": 645,
+        "merged_via": 727,
+        "commit": "9755e173080ab286117cf3478d0afb0755f2d9fb",
+        "introduced_blob": "100b71ad6e8e79159eeff52faacdc438f5aacd3e",
+        "original_blob": "30dd22f566880ac78f7c832b735abc3baee78e39",
+        "integration_adjustment": "Combine reviewed disjoint function additions with accepted main and canonical shared layouts/declarations; preserve original authors, original source pins and per-function credit. Target-grounded integration changes and final measurements are covered by PR698 independent delta review and CI. Preserve original contributor, original source commit/blob and introduction history through the structural consolidation of adjacent provisional player-state groups. The pinned migration deletes the old source path and writes this combined blob. Complete bodies remain registered, literal-reference regressions are measured honestly, and original bytes remain linked.",
+        "original_commit": "e6a7af4166df541ddfec63fe41da6587d9501d82",
+        "original_source": "src/game/cu_800DC584.cpp",
+        "merged_source": true,
+        "migration_commit": "75820de069a5347dd7fb2fbbbea14d92d4bceb99",
+        "merged_blob": "3aa92963b810515d969d21c8e968df90e0edec9d"
+      }
+    },
+    {
+      "source": "src/game/cu_800D949C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800DA7AC",
+        "0x800DAE4C"
+      ],
+      "provenance": {
+        "pull_request": 727,
+        "merged_via": 727,
+        "commit": "75820de069a5347dd7fb2fbbbea14d92d4bceb99",
+        "introduced_blob": "df8c9d2031ca6966e31405529a938d91467628e3",
+        "original_commit": "c585bf03839591f3e4bf28366fb228f34b94ef20",
+        "original_blob": "c8f94063aff662c9696342764a261480999c4539",
+        "integration_adjustment": "Preserve the original lane source contributor and final author checkpoint through batch integration. Target-supported independent review corrections reconcile call contracts, flag/shift widths and unordered predicates; measured exact function identities retain original contributor credit. Source bodies remain unlinked comparisons."
+      }
+    },
+    {
+      "source": "src/game/cu_8012A6B0.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8012A6B0",
+        "0x8012FDDC"
+      ],
+      "provenance": {
+        "pull_request": 727,
+        "merged_via": 727,
+        "commit": "a696e72e292fe89f0ee0d1ca8a6a318100183c9a",
+        "introduced_blob": "2233364733f3adcb7c1c127e02a48d5fe58db88c",
+        "original_commit": "f24f291de78bfae0d31df7fab0a1224ffccf1abc",
+        "original_blob": "bd73d747ba913bd4fd3d23d16a03ffd7d234aff5",
+        "integration_adjustment": "Preserve the original lane source contributor and final author checkpoint through batch integration. Target-supported independent review corrections reconcile call contracts, flag/shift widths and unordered predicates; measured exact function identities retain original contributor credit. Source bodies remain unlinked comparisons."
       }
     }
   ],
