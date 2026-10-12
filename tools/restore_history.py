@@ -140,6 +140,11 @@ def restore(seed, recovery=None):
     artifact=max(candidates,key=lambda a:a['created_at'])
     document=read_archive(api(f"actions/artifacts/{artifact['id']}/zip"))
     if document is None:
+        if recovery is not None:
+            document=audited_recovery(seed,recovery,deployment,run_id)
+            return document,{'deployment':deployment['id'],'run':run_id,'artifact':artifact['id'],
+                             'revision':deployment['sha'],'kind':'audited-recovery',
+                             'history_sha256':recovery['history_sha256']}
         if deployment['sha'] not in {row['revision'] for row in seed['snapshots']}:
             raise ValueError('Published history is missing outside the audited bootstrap revisions')
         document=seed
@@ -163,7 +168,7 @@ def main():
         return
     seed=json.loads((ROOT/'config/GN7E69/history.json').read_text())
     recovery_path=ROOT/'config/GN7E69/history-recovery.json'
-    recovery=json.loads(recovery_path.read_text()) if recovery_path.exists() else None
+    recovery=json.loads(recovery_path.read_text())
     document,receipt=restore(seed,recovery)
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(document,indent=2)+'\n')

@@ -494,6 +494,18 @@ class RestoreTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'differs from its published'):
                 restore_history.prepare_history(root,'d'*40,10,1)
 
+    def test_historyless_pages_cannot_bypass_exact_recovery(self):
+        seed=HistoryTests().document([HistoryTests().row(),HistoryTests().row('d'*40)])
+        receipt={'schema':1,'deployment':1,'run':10,'revision':'d'*40,'snapshot_count':2,
+                 'history_sha256':restore_history.hashlib.sha256(restore_history.encoded(seed)).hexdigest()}
+        with self.setup_api(seed,'d'*40,None):
+            result,proof=restore_history.restore(seed,receipt)
+            self.assertEqual(result['snapshots'],seed['snapshots']);self.assertEqual(proof['kind'],'audited-recovery')
+        with self.setup_api(seed,'d'*40,None),self.assertRaisesRegex(ValueError,'exact audited recovery'):
+            restore_history.restore(seed,dict(receipt,history_sha256='0'*64))
+        with self.setup_api(seed,'a'*40,None),self.assertRaisesRegex(ValueError,'exact audited recovery'):
+            restore_history.restore(seed,receipt)
+
 
 class ExactInventoryTests(unittest.TestCase):
     def site(self):
