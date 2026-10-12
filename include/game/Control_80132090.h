@@ -8,7 +8,7 @@
 struct Block_8012F5A0 {
     short mUnknown0;
     unsigned char mUnknown2;
-    char mUnknown3[1];
+    unsigned char mUnknown3;
     unsigned char mUnknown4;
     unsigned char mUnknown5;
     unsigned char mUnknown6;
@@ -23,9 +23,12 @@ struct Control_80132090 {
     int mUnknown44;
     unsigned char mUnknown48;
     signed char mUnknown49;
-    char mUnknown50[2];
+    unsigned char mUnknown50;
+    char mUnknown51[1];
     unsigned char mUnknown52;
-    char mUnknown53[3];
+    char mUnknown53[1];
+    unsigned char mUnknown54;
+    unsigned char mUnknown55;
     Block_8012F5A0 mUnknown56;
     int mUnknown64;
     int mUnknown68;

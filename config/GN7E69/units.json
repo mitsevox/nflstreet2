@@ -135,6 +135,16 @@
         "src/dolphin"
       ],
       "evidence": "DVD-library working setting supported by signed plain-character promotions in target dvdfs.c, dvdidutils.c and fstload.c, pinned GC/1.2.5n signed-char default, and the pinned OOT/SMS/MP4 complete SDK/DVD recipes with no char override. All other dolphin_release compiler flags and declarations are preserved. This is a library-scoped reconstruction setting, not a uniquely recovered original command line; see evidence.tsv compiler row."
+    },
+    "engine_cpp_nosda": {
+      "flags": [
+        "-O2",
+        "-G0"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler row 0x801B8C18-0x801B91A0: bounded C++ lookup/synchronization group. ProDG 3.9.3 -O2 -G0 reproduces ten functions, including all scalar-global access helpers. Original references to 8037E820/824 and 802F4838 use absolute lis/load/store pairs rather than SDA; the globals lie outside SDA range. Default -G8 and -G4 emit incompatible SDA relocations for these scalar declarations. -O1 changes wrapper/dispatch bodies; -Os changes lookup body sizes. -O3 is indistinguishable on this candidate, and the exact original compiler version and small-data threshold below four bytes are unresolved. One profile applies to the entire source; no per-function override or changes to accepted profiles."
     }
   },
   "externals": {
@@ -1397,6 +1407,14 @@
     "GXSetNumTevStages": {
       "address": "0x80251CC4",
       "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXSetVtxDesc": {
+      "address": "0x8024CB90",
+      "evidence": "Accepted complete GXAttr function/name evidence at 0x8024CB90-0x8024CDFC and canonical GXGeometry.h declaration; target rendering callers and native relocation destinations agree. Original bytes remain linked."
+    },
+    "GXSetVtxAttrFmt": {
+      "address": "0x8024D450",
+      "evidence": "Accepted complete GXAttr function/name evidence at 0x8024D450-0x8024D6AC and canonical GXGeometry.h declaration; target rendering callers and native relocation destinations agree. Original bytes remain linked."
     },
     "GXClearVtxDesc": {
       "address": "0x8024D418",

@@ -17,7 +17,13 @@ struct Block_801BF3C8 {
 };
 
 struct Record_800D81C8 {
-    char mUnknown0[2];
+    union {
+        char mUnknown0[2];
+        struct {
+            char mUnknown0Byte;
+            unsigned char mUnknown1;
+        };
+    };
     unsigned short mUnknown2;
     char mUnknown4[2];
     unsigned char mUnknown6;
@@ -25,12 +31,17 @@ struct Record_800D81C8 {
     unsigned short mUnknown8;
     char mUnknownA[2];
     int mUnknownC;
-    char mUnknown10[28];
+    char mUnknown10[12];
+    int mUnknown1C;
+    char mUnknown20[8];
+    float mUnknown28;
     float mUnknown44;
     Block_801BF3C8 mUnknown30;
     char mUnknown34[24];
     Block_801BD6D4 mUnknown4C;
-    char mUnknown58[36];
+    char mUnknown58[18];
+    unsigned char mUnknown6A;
+    char mUnknown6B[17];
 };
 
 /* Partial view of the object that fn_8009BCE8 decodes a packed reference to. */

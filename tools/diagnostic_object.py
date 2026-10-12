@@ -1,4 +1,5 @@
 """Preserve native bytes/relocations in a private, independently positioned comparison fragment."""
+import math
 import struct
 import source_build as sb
 
@@ -73,7 +74,10 @@ def fragment(native, section, offset, size, target_start, functions, targets, pl
             if kind in (32, 106, 107, 109, 116):
                 small_references.add(alias)
             relocations.append((position-offset, kind, alias))
-    fragment_section = dict(section, size=size, data=section['data'][offset:offset+size])
+    # An isolated comparison starts at its evidenced target address, which need not be an
+    # original section boundary. Prevent the linker from inserting a prefix before its bytes.
+    fragment_section = dict(section, size=size, data=section['data'][offset:offset+size],
+                            align=math.gcd(max(section['align'], 1), target_start))
     symbols_out = [{'name': 'function' if section['flags'] & sb.SHF_EXECINSTR else 'data',
                     'value': 0, 'size': size, 'shndx': 1, 'type': 2 if section['flags'] & sb.SHF_EXECINSTR else 1}]
     symbols_out += [{'name': name, 'value': 0 if name in small_references else address,

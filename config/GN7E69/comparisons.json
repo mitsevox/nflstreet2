@@ -6681,66 +6681,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800DBB74.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv inferred unit row 0x800DBB74-0x800DC584, exact function rows 0x800DBB74-0x800DC584, exact .rodata data row 0x8029D914-0x8029D92C and exact initialized data row 0x803EAD1C-0x803EAD20. All six bodies are reconstructed as unlinked comparison source; the original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DBB74",
-          "end": "0x800DC584"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029D914",
-          "end": "0x8029D92C"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EAD1C",
-          "end": "0x803EAD20"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_800DBB74",
-          "start": "0x800DBB74",
-          "end": "0x800DBC4C"
-        },
-        {
-          "symbol": "fn_800DBC4C",
-          "start": "0x800DBC4C",
-          "end": "0x800DC080"
-        },
-        {
-          "symbol": "fn_800DC080",
-          "start": "0x800DC080",
-          "end": "0x800DC21C"
-        },
-        {
-          "symbol": "fn_800DC21C",
-          "start": "0x800DC21C",
-          "end": "0x800DC36C"
-        },
-        {
-          "symbol": "fn_800DC36C",
-          "start": "0x800DC36C",
-          "end": "0x800DC578"
-        },
-        {
-          "symbol": "fn_800DC578",
-          "start": "0x800DC578",
-          "end": "0x800DC584"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_800D949C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained inferred sixteen-function grouping, exact whole-function rows for nine reconstructed bodies and the exact .rodata row 0x8029D87C-0x8029D8A8 (literal pools of 0x800DA8D8, 0x800DAA68, 0x800DAC88 and 0x800DAD90). Only these bodies and that literal run are measured; seven other functions and all other static data remain original and unmeasured.",
+      "evidence": "evidence.tsv provisional sixteen-function grouping and full-function rows for all sixteen bodies; complete natural literal context 0x8029D7F8-0x8029D8A8. Comparison-only source; original bytes remain linked and other static data is unmeasured.",
       "sections": [
         {
           "section": ".text",
@@ -6751,11 +6694,16 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029D87C",
+          "start": "0x8029D7F8",
           "end": "0x8029D8A8"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_800D949C",
+          "start": "0x800D949C",
+          "end": "0x800D9A10"
+        },
         {
           "symbol": "fn_800D9A10",
           "start": "0x800D9A10",
@@ -6772,9 +6720,34 @@
           "end": "0x800D9C80"
         },
         {
+          "symbol": "fn_800D9C80",
+          "start": "0x800D9C80",
+          "end": "0x800DA53C"
+        },
+        {
           "symbol": "fn_800DA53C",
           "start": "0x800DA53C",
           "end": "0x800DA54C"
+        },
+        {
+          "symbol": "fn_800DA54C",
+          "start": "0x800DA54C",
+          "end": "0x800DA6AC"
+        },
+        {
+          "symbol": "fn_800DA6AC",
+          "start": "0x800DA6AC",
+          "end": "0x800DA7AC"
+        },
+        {
+          "symbol": "fn_800DA7AC",
+          "start": "0x800DA7AC",
+          "end": "0x800DA814"
+        },
+        {
+          "symbol": "fn_800DA814",
+          "start": "0x800DA814",
+          "end": "0x800DA8D8"
         },
         {
           "symbol": "fn_800DA8D8",
@@ -6800,6 +6773,11 @@
           "symbol": "fn_800DAD90",
           "start": "0x800DAD90",
           "end": "0x800DAE4C"
+        },
+        {
+          "symbol": "fn_800DAE4C",
+          "start": "0x800DAE4C",
+          "end": "0x800DAEE4"
         }
       ]
     },
@@ -6862,7 +6840,7 @@
     {
       "source": "src/game/cu_8012A6B0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/provisional unit row for src/game/cu_8012A6B0.cpp, exact whole-function rows and inferred name/source-form/compiler rows for the reconstructed bodies, and the .rodata row 0x8029FAF4-0x8029FB00 (literal pools of 0x8012FF5C and 0x80130338). Wholly unlinked comparison source: original bytes remain linked; the other bodies and all other static data are unmeasured.",
+      "evidence": "evidence.tsv provisional unit row, full 58 function extents with inferred neutral name/source-form records, approved Control byte widths, reconciled local dependency contracts and full natural .rodata 0x8029F858-0x8029FB20 (712 bytes, including seven-pointer action table). All 31 new bodies and 27 existing bodies remain unlinked comparisons; original assembly remains linked. No unsupported source-file boundary or original-name claim.",
       "sections": [
         {
           "section": ".text",
@@ -6873,15 +6851,65 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029FAF4",
-          "end": "0x8029FB00"
+          "start": "0x8029F858",
+          "end": "0x8029FB20"
         }
       ],
       "functions": [
         {
+          "symbol": "fn_8012A6B0",
+          "start": "0x8012A6B0",
+          "end": "0x8012A824"
+        },
+        {
+          "symbol": "fn_8012A824",
+          "start": "0x8012A824",
+          "end": "0x8012AACC"
+        },
+        {
+          "symbol": "fn_8012AACC",
+          "start": "0x8012AACC",
+          "end": "0x8012B268"
+        },
+        {
           "symbol": "fn_8012B268",
           "start": "0x8012B268",
           "end": "0x8012B2E0"
+        },
+        {
+          "symbol": "fn_8012B2E0",
+          "start": "0x8012B2E0",
+          "end": "0x8012B3EC"
+        },
+        {
+          "symbol": "fn_8012B3EC",
+          "start": "0x8012B3EC",
+          "end": "0x8012B654"
+        },
+        {
+          "symbol": "fn_8012B654",
+          "start": "0x8012B654",
+          "end": "0x8012BB6C"
+        },
+        {
+          "symbol": "fn_8012BB6C",
+          "start": "0x8012BB6C",
+          "end": "0x8012BCC8"
+        },
+        {
+          "symbol": "fn_8012BCC8",
+          "start": "0x8012BCC8",
+          "end": "0x8012BE28"
+        },
+        {
+          "symbol": "fn_8012BE28",
+          "start": "0x8012BE28",
+          "end": "0x8012C3A4"
+        },
+        {
+          "symbol": "fn_8012C3A4",
+          "start": "0x8012C3A4",
+          "end": "0x8012C4B4"
         },
         {
           "symbol": "fn_8012C4B4",
@@ -6899,9 +6927,19 @@
           "end": "0x8012C648"
         },
         {
+          "symbol": "fn_8012C648",
+          "start": "0x8012C648",
+          "end": "0x8012C7E0"
+        },
+        {
           "symbol": "fn_8012C7E0",
           "start": "0x8012C7E0",
           "end": "0x8012C874"
+        },
+        {
+          "symbol": "fn_8012C874",
+          "start": "0x8012C874",
+          "end": "0x8012CA78"
         },
         {
           "symbol": "fn_8012CA78",
@@ -6934,6 +6972,11 @@
           "end": "0x8012CB98"
         },
         {
+          "symbol": "fn_8012CB98",
+          "start": "0x8012CB98",
+          "end": "0x8012CC04"
+        },
+        {
           "symbol": "fn_8012CC04",
           "start": "0x8012CC04",
           "end": "0x8012CC50"
@@ -6954,9 +6997,24 @@
           "end": "0x8012CD60"
         },
         {
+          "symbol": "fn_8012CD60",
+          "start": "0x8012CD60",
+          "end": "0x8012CE60"
+        },
+        {
           "symbol": "fn_8012CE60",
           "start": "0x8012CE60",
           "end": "0x8012CEF4"
+        },
+        {
+          "symbol": "fn_8012CEF4",
+          "start": "0x8012CEF4",
+          "end": "0x8012CFA0"
+        },
+        {
+          "symbol": "fn_8012CFA0",
+          "start": "0x8012CFA0",
+          "end": "0x8012D1E4"
         },
         {
           "symbol": "fn_8012D1E4",
@@ -6964,9 +7022,34 @@
           "end": "0x8012D258"
         },
         {
+          "symbol": "fn_8012D258",
+          "start": "0x8012D258",
+          "end": "0x8012D4FC"
+        },
+        {
+          "symbol": "fn_8012D4FC",
+          "start": "0x8012D4FC",
+          "end": "0x8012D8A8"
+        },
+        {
+          "symbol": "fn_8012D8A8",
+          "start": "0x8012D8A8",
+          "end": "0x8012DDCC"
+        },
+        {
+          "symbol": "fn_8012DDCC",
+          "start": "0x8012DDCC",
+          "end": "0x8012E590"
+        },
+        {
           "symbol": "fn_8012E590",
           "start": "0x8012E590",
           "end": "0x8012E670"
+        },
+        {
+          "symbol": "fn_8012E670",
+          "start": "0x8012E670",
+          "end": "0x8012EA14"
         },
         {
           "symbol": "fn_8012EA14",
@@ -6974,14 +7057,64 @@
           "end": "0x8012EAF8"
         },
         {
+          "symbol": "fn_8012EAF8",
+          "start": "0x8012EAF8",
+          "end": "0x8012EE90"
+        },
+        {
+          "symbol": "fn_8012EE90",
+          "start": "0x8012EE90",
+          "end": "0x8012EF94"
+        },
+        {
+          "symbol": "fn_8012EF94",
+          "start": "0x8012EF94",
+          "end": "0x8012F11C"
+        },
+        {
+          "symbol": "fn_8012F11C",
+          "start": "0x8012F11C",
+          "end": "0x8012F2E0"
+        },
+        {
           "symbol": "fn_8012F2E0",
           "start": "0x8012F2E0",
           "end": "0x8012F2E8"
         },
         {
+          "symbol": "fn_8012F2E8",
+          "start": "0x8012F2E8",
+          "end": "0x8012F524"
+        },
+        {
           "symbol": "fn_8012F524",
           "start": "0x8012F524",
           "end": "0x8012F5A0"
+        },
+        {
+          "symbol": "fn_8012F5A0",
+          "start": "0x8012F5A0",
+          "end": "0x8012F89C"
+        },
+        {
+          "symbol": "fn_8012F89C",
+          "start": "0x8012F89C",
+          "end": "0x8012FA64"
+        },
+        {
+          "symbol": "fn_8012FA64",
+          "start": "0x8012FA64",
+          "end": "0x8012FC08"
+        },
+        {
+          "symbol": "fn_8012FC08",
+          "start": "0x8012FC08",
+          "end": "0x8012FDDC"
+        },
+        {
+          "symbol": "fn_8012FDDC",
+          "start": "0x8012FDDC",
+          "end": "0x8012FEAC"
         },
         {
           "symbol": "fn_8012FEAC",
@@ -8890,13 +9023,19 @@
     {
       "source": "src/game/cu_800D0D4C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/open grouping row for src/game/cu_800D0D4C.cpp, 95 complete function extents, 4 measured partial bodies (0x800D3294, 0x800D3CC0, 0x800D5900, 0x800D6F3C) and individual inferred name/source-form/compiler rows, the game_cpp compiler and declaration-shapes rows for 0x800D0D4C-0x800D3D64 and 0x800D3D68-0x800D760C, the partial State_800D0D4C type and field rows and the Code_800D0F98 type row, and target-width external access footprints. The nullable function-pointer setter follows the complete registered pointee/invoker contract; nominal source signatures remain qualified. Only these 95 whole bodies and the 4 measured partial bodies are measured; all static storage and 18 other bodies remain original and unmeasured.",
+      "evidence": "evidence.tsv open/open grouping, full function extents and existing source/type/compiler evidence, plus the 18 complete event-tracker comparison bodies added under issue #724. All 117 registered bodies are measured at full target extents. Static storage remains external and original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800D0D4C",
           "end": "0x800D760C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80298098",
+          "end": "0x80298140"
         }
       ],
       "functions": [
@@ -8931,14 +9070,54 @@
           "end": "0x800D1634"
         },
         {
+          "symbol": "fn_800D1634",
+          "start": "0x800D1634",
+          "end": "0x800D1700"
+        },
+        {
           "symbol": "fn_800D1700",
           "start": "0x800D1700",
           "end": "0x800D1788"
         },
         {
+          "symbol": "fn_800D1788",
+          "start": "0x800D1788",
+          "end": "0x800D1A90"
+        },
+        {
+          "symbol": "fn_800D1A90",
+          "start": "0x800D1A90",
+          "end": "0x800D1D84"
+        },
+        {
+          "symbol": "fn_800D1D84",
+          "start": "0x800D1D84",
+          "end": "0x800D207C"
+        },
+        {
           "symbol": "fn_800D207C",
           "start": "0x800D207C",
           "end": "0x800D20A0"
+        },
+        {
+          "symbol": "fn_800D20A0",
+          "start": "0x800D20A0",
+          "end": "0x800D2108"
+        },
+        {
+          "symbol": "fn_800D2108",
+          "start": "0x800D2108",
+          "end": "0x800D2280"
+        },
+        {
+          "symbol": "fn_800D2280",
+          "start": "0x800D2280",
+          "end": "0x800D2378"
+        },
+        {
+          "symbol": "fn_800D2378",
+          "start": "0x800D2378",
+          "end": "0x800D2C10"
         },
         {
           "symbol": "fn_800D2C10",
@@ -9121,9 +9300,19 @@
           "end": "0x800D3F2C"
         },
         {
+          "symbol": "fn_800D3F2C",
+          "start": "0x800D3F2C",
+          "end": "0x800D3FBC"
+        },
+        {
           "symbol": "fn_800D3FBC",
           "start": "0x800D3FBC",
           "end": "0x800D4164"
+        },
+        {
+          "symbol": "fn_800D4164",
+          "start": "0x800D4164",
+          "end": "0x800D41F8"
         },
         {
           "symbol": "fn_800D41F8",
@@ -9221,6 +9410,11 @@
           "end": "0x800D4D84"
         },
         {
+          "symbol": "fn_800D4D84",
+          "start": "0x800D4D84",
+          "end": "0x800D4E68"
+        },
+        {
           "symbol": "fn_800D4E68",
           "start": "0x800D4E68",
           "end": "0x800D4EC0"
@@ -9241,9 +9435,19 @@
           "end": "0x800D5054"
         },
         {
+          "symbol": "fn_800D5054",
+          "start": "0x800D5054",
+          "end": "0x800D52F8"
+        },
+        {
           "symbol": "fn_800D52F8",
           "start": "0x800D52F8",
           "end": "0x800D5494"
+        },
+        {
+          "symbol": "fn_800D5494",
+          "start": "0x800D5494",
+          "end": "0x800D5704"
         },
         {
           "symbol": "fn_800D5704",
@@ -9269,6 +9473,21 @@
           "symbol": "fn_800D5A28",
           "start": "0x800D5A28",
           "end": "0x800D5A6C"
+        },
+        {
+          "symbol": "fn_800D5A6C",
+          "start": "0x800D5A6C",
+          "end": "0x800D5F1C"
+        },
+        {
+          "symbol": "fn_800D5F1C",
+          "start": "0x800D5F1C",
+          "end": "0x800D60BC"
+        },
+        {
+          "symbol": "fn_800D60BC",
+          "start": "0x800D60BC",
+          "end": "0x800D640C"
         },
         {
           "symbol": "fn_800D640C",
@@ -9361,6 +9580,11 @@
           "end": "0x800D7158"
         },
         {
+          "symbol": "fn_800D7158",
+          "start": "0x800D7158",
+          "end": "0x800D7438"
+        },
+        {
           "symbol": "fn_800D7438",
           "start": "0x800D7438",
           "end": "0x800D750C"
@@ -9389,6 +9613,11 @@
           "symbol": "fn_800D7544",
           "start": "0x800D7544",
           "end": "0x800D7550"
+        },
+        {
+          "symbol": "fn_800D7550",
+          "start": "0x800D7550",
+          "end": "0x800D7604"
         },
         {
           "symbol": "fn_800D7604",
@@ -15147,24 +15376,129 @@
       ]
     },
     {
-      "source": "src/game/cu_8015A39C.cpp",
+      "source": "src/game/cu_8015A248.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional24-function grouping and full provisional original pool association; three complete bodies with individual neutral name/type/field/source-form/compiler rows. Whole44/16/8-byte functions and four-byte compiled read-only float literal are measured;21 other bodies, all external storage and all other pool bytes remain original/unmeasured. Canonical player pointer and existing int/void contracts preserved; entire original assembly stays linked.",
+      "evidence": "Source consolidation retains accepted three-function prefix unchanged, with24 complete additional bodies under fixed DECOMP_COMPARE. Shared original pool context compiles184 bytes identical to target0x802A3E40-0x802A3EF8 including natural trailing alignment. Accepted prefix data remains invariant and is excluded from new comparison credit; comparison functions retain full24 target extents. Provisional original unit edges, neutral identifiers, unchanged game_cpp profile; original assembly stays linked for additional bodies.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8015A39C",
+          "start": "0x8015A248",
           "end": "0x8015C25C"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802A3EF0",
-          "end": "0x802A3EF4"
+          "start": "0x802A3E40",
+          "end": "0x802A3EF8"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_8015A39C",
+          "start": "0x8015A39C",
+          "end": "0x8015A3EC"
+        },
+        {
+          "symbol": "fn_8015A3EC",
+          "start": "0x8015A3EC",
+          "end": "0x8015A588"
+        },
+        {
+          "symbol": "fn_8015A588",
+          "start": "0x8015A588",
+          "end": "0x8015A6E0"
+        },
+        {
+          "symbol": "fn_8015A6E0",
+          "start": "0x8015A6E0",
+          "end": "0x8015A818"
+        },
+        {
+          "symbol": "fn_8015A818",
+          "start": "0x8015A818",
+          "end": "0x8015AB84"
+        },
+        {
+          "symbol": "fn_8015AB84",
+          "start": "0x8015AB84",
+          "end": "0x8015ABE4"
+        },
+        {
+          "symbol": "fn_8015ABE4",
+          "start": "0x8015ABE4",
+          "end": "0x8015AD50"
+        },
+        {
+          "symbol": "fn_8015AD50",
+          "start": "0x8015AD50",
+          "end": "0x8015AF48"
+        },
+        {
+          "symbol": "fn_8015AF48",
+          "start": "0x8015AF48",
+          "end": "0x8015B344"
+        },
+        {
+          "symbol": "fn_8015B344",
+          "start": "0x8015B344",
+          "end": "0x8015B834"
+        },
+        {
+          "symbol": "fn_8015B834",
+          "start": "0x8015B834",
+          "end": "0x8015BCAC"
+        },
+        {
+          "symbol": "fn_8015BCAC",
+          "start": "0x8015BCAC",
+          "end": "0x8015BED4"
+        },
+        {
+          "symbol": "fn_8015BED4",
+          "start": "0x8015BED4",
+          "end": "0x8015BF28"
+        },
+        {
+          "symbol": "fn_8015BF28",
+          "start": "0x8015BF28",
+          "end": "0x8015BFAC"
+        },
+        {
+          "symbol": "fn_8015BFAC",
+          "start": "0x8015BFAC",
+          "end": "0x8015BFD4"
+        },
+        {
+          "symbol": "fn_8015BFD4",
+          "start": "0x8015BFD4",
+          "end": "0x8015C024"
+        },
+        {
+          "symbol": "fn_8015C024",
+          "start": "0x8015C024",
+          "end": "0x8015C064"
+        },
+        {
+          "symbol": "fn_8015C064",
+          "start": "0x8015C064",
+          "end": "0x8015C0C0"
+        },
+        {
+          "symbol": "fn_8015C0C0",
+          "start": "0x8015C0C0",
+          "end": "0x8015C114"
+        },
+        {
+          "symbol": "fn_8015C114",
+          "start": "0x8015C114",
+          "end": "0x8015C170"
+        },
+        {
+          "symbol": "fn_8015C170",
+          "start": "0x8015C170",
+          "end": "0x8015C218"
+        },
         {
           "symbol": "fn_8015C218",
           "start": "0x8015C218",
@@ -15185,13 +15519,19 @@
     {
       "source": "src/game/cu_8006F810.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional37-function grouping; fourteen complete380-target-byte bodies with individual neutral name/source-form rows and original external access footprints. Existing canonical callee/vector contracts preserved, including unused first argument for fn_80071BA0. No storage emitted;23 other functions/all storage original/unmeasured; original assembly stays linked.",
+      "evidence": "evidence.tsv retained open/provisional37-function grouping. All37 complete bodies now compared:23 newly reconstructed event-driven sound dispatch/selection/playback functions and14 existing bodies. Neutral labels retained; canonical player, ball, area, event and Block_800C9D6C contracts reused. The complete emitted conversion-literal pool is measured against the honest56-byte target slice0x80290B60-0x80290B98, including intervening unresolved original constants. Code/data matching incompleteness remains explicit; no linking promotion or storage definition; original assembly/storage stays linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8006F810",
           "end": "0x80071C3C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80290B60",
+          "end": "0x80290B98"
         }
       ],
       "functions": [
@@ -15211,9 +15551,49 @@
           "end": "0x8006F850"
         },
         {
+          "symbol": "fn_8006F850",
+          "start": "0x8006F850",
+          "end": "0x80070C40"
+        },
+        {
+          "symbol": "fn_80070C40",
+          "start": "0x80070C40",
+          "end": "0x80070D68"
+        },
+        {
+          "symbol": "fn_80070D68",
+          "start": "0x80070D68",
+          "end": "0x80070E8C"
+        },
+        {
+          "symbol": "fn_80070E8C",
+          "start": "0x80070E8C",
+          "end": "0x80070F84"
+        },
+        {
+          "symbol": "fn_80070F84",
+          "start": "0x80070F84",
+          "end": "0x8007105C"
+        },
+        {
+          "symbol": "fn_8007105C",
+          "start": "0x8007105C",
+          "end": "0x800710C8"
+        },
+        {
+          "symbol": "fn_800710C8",
+          "start": "0x800710C8",
+          "end": "0x800711DC"
+        },
+        {
           "symbol": "fn_800711DC",
           "start": "0x800711DC",
           "end": "0x800711E0"
+        },
+        {
+          "symbol": "fn_800711E0",
+          "start": "0x800711E0",
+          "end": "0x80071344"
         },
         {
           "symbol": "fn_80071344",
@@ -15226,9 +15606,69 @@
           "end": "0x8007134C"
         },
         {
+          "symbol": "fn_8007134C",
+          "start": "0x8007134C",
+          "end": "0x80071458"
+        },
+        {
+          "symbol": "fn_80071458",
+          "start": "0x80071458",
+          "end": "0x80071540"
+        },
+        {
+          "symbol": "fn_80071540",
+          "start": "0x80071540",
+          "end": "0x80071594"
+        },
+        {
+          "symbol": "fn_80071594",
+          "start": "0x80071594",
+          "end": "0x80071600"
+        },
+        {
+          "symbol": "fn_80071600",
+          "start": "0x80071600",
+          "end": "0x800716E4"
+        },
+        {
+          "symbol": "fn_800716E4",
+          "start": "0x800716E4",
+          "end": "0x80071748"
+        },
+        {
+          "symbol": "fn_80071748",
+          "start": "0x80071748",
+          "end": "0x80071790"
+        },
+        {
           "symbol": "fn_80071790",
           "start": "0x80071790",
           "end": "0x80071794"
+        },
+        {
+          "symbol": "fn_80071794",
+          "start": "0x80071794",
+          "end": "0x800717E0"
+        },
+        {
+          "symbol": "fn_800717E0",
+          "start": "0x800717E0",
+          "end": "0x8007184C"
+        },
+        {
+          "symbol": "fn_8007184C",
+          "start": "0x8007184C",
+          "end": "0x800718A0"
+        },
+        {
+          "symbol": "fn_800718A0",
+          "start": "0x800718A0",
+          "end": "0x80071914"
+        },
+        {
+          "symbol": "fn_80071914",
+          "start": "0x80071914",
+          "end": "0x80071974"
         },
         {
           "symbol": "fn_80071974",
@@ -15244,6 +15684,21 @@
           "symbol": "fn_800719D4",
           "start": "0x800719D4",
           "end": "0x80071A04"
+        },
+        {
+          "symbol": "fn_80071A04",
+          "start": "0x80071A04",
+          "end": "0x80071A6C"
+        },
+        {
+          "symbol": "fn_80071A6C",
+          "start": "0x80071A6C",
+          "end": "0x80071B08"
+        },
+        {
+          "symbol": "fn_80071B08",
+          "start": "0x80071B08",
+          "end": "0x80071BA0"
         },
         {
           "symbol": "fn_80071BA0",
@@ -24885,19 +25340,25 @@
     {
       "source": "src/game/cu_800DAEE4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row 0x800DAEE4-0x800DBB74 for src/game/cu_800DAEE4.cpp, exact whole-function rows and inferred name/source-form rows for ten reconstructed bodies (seven exact, three partial), and the exact .rodata row 0x8029D8B8-0x8029D908 (literal pools of 0x800DB100-0x800DB7A4). Original bytes remain linked; three other bodies and all other static data remain original and unmeasured.",
+      "evidence": "evidence.tsv inferred open/open combined contributor group 0x800DAEE4-0x800E2FE4: 94 complete functions across three earlier provisional groups, complete .rodata context 0x8029D8A8-0x8029DB28, and initialized word 0x803EAD1C-0x803EAD20. Contiguous code, ordered literal users and cross-group animation/player-state calls support this provisional grouping, not an original-file claim. The complete pool begins at its natural eight-byte alignment; unknown or absent native literals remain measured mismatches. Eight older exact classifications become partial through literal-reference relocation; existing source attribution is preserved. Original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800DAEE4",
-          "end": "0x800DBB74"
+          "end": "0x800E2FE4"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029D8B8",
-          "end": "0x8029D908"
+          "start": "0x8029D8A8",
+          "end": "0x8029DB28"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EAD1C",
+          "end": "0x803EAD20"
         }
       ],
       "functions": [
@@ -24905,6 +25366,11 @@
           "symbol": "fn_800DAEE4",
           "start": "0x800DAEE4",
           "end": "0x800DAF5C"
+        },
+        {
+          "symbol": "fn_800DAF5C",
+          "start": "0x800DAF5C",
+          "end": "0x800DB074"
         },
         {
           "symbol": "fn_800DB074",
@@ -24950,28 +25416,47 @@
           "symbol": "fn_800DB7A4",
           "start": "0x800DB7A4",
           "end": "0x800DB8B4"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800DC584.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row 0x800DC584-0x800E2FE4 for src/game/cu_800DC584.cpp, exact whole-function rows and inferred name/source-form rows for forty-two complete bodies, and the exact data row 0x8029DA68-0x8029DA80 for the .rodata literals of fn_800E0F48, fn_800E1044, fn_800E11C0, fn_800E1248 and fn_800E1438. Original bytes remain linked; thirty-three other bodies and all other static data remain original and unmeasured.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DC584",
-          "end": "0x800E2FE4"
         },
         {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029DA68",
-          "end": "0x8029DA80"
-        }
-      ],
-      "functions": [
+          "symbol": "fn_800DB8B4",
+          "start": "0x800DB8B4",
+          "end": "0x800DBAF0"
+        },
+        {
+          "symbol": "fn_800DBAF0",
+          "start": "0x800DBAF0",
+          "end": "0x800DBB74"
+        },
+        {
+          "symbol": "fn_800DBB74",
+          "start": "0x800DBB74",
+          "end": "0x800DBC4C"
+        },
+        {
+          "symbol": "fn_800DBC4C",
+          "start": "0x800DBC4C",
+          "end": "0x800DC080"
+        },
+        {
+          "symbol": "fn_800DC080",
+          "start": "0x800DC080",
+          "end": "0x800DC21C"
+        },
+        {
+          "symbol": "fn_800DC21C",
+          "start": "0x800DC21C",
+          "end": "0x800DC36C"
+        },
+        {
+          "symbol": "fn_800DC36C",
+          "start": "0x800DC36C",
+          "end": "0x800DC578"
+        },
+        {
+          "symbol": "fn_800DC578",
+          "start": "0x800DC578",
+          "end": "0x800DC584"
+        },
         {
           "symbol": "fn_800DC584",
           "start": "0x800DC584",
@@ -24993,6 +25478,26 @@
           "end": "0x800DC6F4"
         },
         {
+          "symbol": "fn_800DC6F4",
+          "start": "0x800DC6F4",
+          "end": "0x800DCC14"
+        },
+        {
+          "symbol": "fn_800DCC14",
+          "start": "0x800DCC14",
+          "end": "0x800DCE2C"
+        },
+        {
+          "symbol": "fn_800DCE2C",
+          "start": "0x800DCE2C",
+          "end": "0x800DD2E8"
+        },
+        {
+          "symbol": "fn_800DD2E8",
+          "start": "0x800DD2E8",
+          "end": "0x800DD5E4"
+        },
+        {
           "symbol": "fn_800DD5E4",
           "start": "0x800DD5E4",
           "end": "0x800DD648"
@@ -25001,6 +25506,11 @@
           "symbol": "fn_800DD648",
           "start": "0x800DD648",
           "end": "0x800DD69C"
+        },
+        {
+          "symbol": "fn_800DD69C",
+          "start": "0x800DD69C",
+          "end": "0x800DD780"
         },
         {
           "symbol": "fn_800DD780",
@@ -25023,6 +25533,11 @@
           "end": "0x800DD994"
         },
         {
+          "symbol": "fn_800DD994",
+          "start": "0x800DD994",
+          "end": "0x800DDCE4"
+        },
+        {
           "symbol": "fn_800DDCE4",
           "start": "0x800DDCE4",
           "end": "0x800DDD24"
@@ -25043,14 +25558,54 @@
           "end": "0x800DDF34"
         },
         {
+          "symbol": "fn_800DDF34",
+          "start": "0x800DDF34",
+          "end": "0x800DE19C"
+        },
+        {
+          "symbol": "fn_800DE19C",
+          "start": "0x800DE19C",
+          "end": "0x800DE364"
+        },
+        {
           "symbol": "fn_800DE364",
           "start": "0x800DE364",
           "end": "0x800DE3B0"
         },
         {
+          "symbol": "fn_800DE3B0",
+          "start": "0x800DE3B0",
+          "end": "0x800DE51C"
+        },
+        {
+          "symbol": "fn_800DE51C",
+          "start": "0x800DE51C",
+          "end": "0x800DE910"
+        },
+        {
+          "symbol": "fn_800DE910",
+          "start": "0x800DE910",
+          "end": "0x800DEAB0"
+        },
+        {
+          "symbol": "fn_800DEAB0",
+          "start": "0x800DEAB0",
+          "end": "0x800DEC10"
+        },
+        {
+          "symbol": "fn_800DEC10",
+          "start": "0x800DEC10",
+          "end": "0x800DF134"
+        },
+        {
           "symbol": "fn_800DF134",
           "start": "0x800DF134",
           "end": "0x800DF1F4"
+        },
+        {
+          "symbol": "fn_800DF1F4",
+          "start": "0x800DF1F4",
+          "end": "0x800DF654"
         },
         {
           "symbol": "fn_800DF654",
@@ -25073,9 +25628,34 @@
           "end": "0x800DF7CC"
         },
         {
+          "symbol": "fn_800DF7CC",
+          "start": "0x800DF7CC",
+          "end": "0x800DF9FC"
+        },
+        {
           "symbol": "fn_800DF9FC",
           "start": "0x800DF9FC",
           "end": "0x800DFA00"
+        },
+        {
+          "symbol": "fn_800DFA00",
+          "start": "0x800DFA00",
+          "end": "0x800DFCEC"
+        },
+        {
+          "symbol": "fn_800DFCEC",
+          "start": "0x800DFCEC",
+          "end": "0x800DFD90"
+        },
+        {
+          "symbol": "fn_800DFD90",
+          "start": "0x800DFD90",
+          "end": "0x800DFED0"
+        },
+        {
+          "symbol": "fn_800DFED0",
+          "start": "0x800DFED0",
+          "end": "0x800E0188"
         },
         {
           "symbol": "fn_800E0188",
@@ -25093,6 +25673,26 @@
           "end": "0x800E02D0"
         },
         {
+          "symbol": "fn_800E02D0",
+          "start": "0x800E02D0",
+          "end": "0x800E034C"
+        },
+        {
+          "symbol": "fn_800E034C",
+          "start": "0x800E034C",
+          "end": "0x800E0438"
+        },
+        {
+          "symbol": "fn_800E0438",
+          "start": "0x800E0438",
+          "end": "0x800E04C8"
+        },
+        {
+          "symbol": "fn_800E04C8",
+          "start": "0x800E04C8",
+          "end": "0x800E0574"
+        },
+        {
           "symbol": "fn_800E0574",
           "start": "0x800E0574",
           "end": "0x800E05C0"
@@ -25108,9 +25708,24 @@
           "end": "0x800E0694"
         },
         {
+          "symbol": "fn_800E0694",
+          "start": "0x800E0694",
+          "end": "0x800E0818"
+        },
+        {
           "symbol": "fn_800E0818",
           "start": "0x800E0818",
           "end": "0x800E0850"
+        },
+        {
+          "symbol": "fn_800E0850",
+          "start": "0x800E0850",
+          "end": "0x800E0AD8"
+        },
+        {
+          "symbol": "fn_800E0AD8",
+          "start": "0x800E0AD8",
+          "end": "0x800E0E8C"
         },
         {
           "symbol": "fn_800E0E8C",
@@ -25178,9 +25793,44 @@
           "end": "0x800E1584"
         },
         {
+          "symbol": "fn_800E1584",
+          "start": "0x800E1584",
+          "end": "0x800E1778"
+        },
+        {
           "symbol": "fn_800E1778",
           "start": "0x800E1778",
           "end": "0x800E1870"
+        },
+        {
+          "symbol": "fn_800E1870",
+          "start": "0x800E1870",
+          "end": "0x800E1954"
+        },
+        {
+          "symbol": "fn_800E1954",
+          "start": "0x800E1954",
+          "end": "0x800E2550"
+        },
+        {
+          "symbol": "fn_800E2550",
+          "start": "0x800E2550",
+          "end": "0x800E283C"
+        },
+        {
+          "symbol": "fn_800E283C",
+          "start": "0x800E283C",
+          "end": "0x800E2ABC"
+        },
+        {
+          "symbol": "fn_800E2ABC",
+          "start": "0x800E2ABC",
+          "end": "0x800E2F20"
+        },
+        {
+          "symbol": "fn_800E2F20",
+          "start": "0x800E2F20",
+          "end": "0x800E2FE4"
         }
       ]
     },
@@ -28888,6 +29538,280 @@
           "symbol": "fn_801A472C",
           "start": "0x801A472C",
           "end": "0x801A4AD4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801A980C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit 0x801A980C-0x801AA24C, complete source-form/type/compiler rows, and native readonly extent 0x802AE958-0x802AE978. Partial functions 0x801A991C and 0x801A9C44 remain fully compared; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A980C",
+          "end": "0x801AA24C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE958",
+          "end": "0x802AE978"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801A980C",
+          "start": "0x801A980C",
+          "end": "0x801A983C"
+        },
+        {
+          "symbol": "fn_801A983C",
+          "start": "0x801A983C",
+          "end": "0x801A991C"
+        },
+        {
+          "symbol": "fn_801A991C",
+          "start": "0x801A991C",
+          "end": "0x801A9C08"
+        },
+        {
+          "symbol": "fn_801A9C08",
+          "start": "0x801A9C08",
+          "end": "0x801A9C44"
+        },
+        {
+          "symbol": "fn_801A9C44",
+          "start": "0x801A9C44",
+          "end": "0x801A9F98"
+        },
+        {
+          "symbol": "fn_801A9F98",
+          "start": "0x801A9F98",
+          "end": "0x801AA124"
+        },
+        {
+          "symbol": "fn_801AA124",
+          "start": "0x801AA124",
+          "end": "0x801AA220"
+        },
+        {
+          "symbol": "fn_801AA220",
+          "start": "0x801AA220",
+          "end": "0x801AA24C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80198378.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit0x80198378-0x80198C54, its source-form/type/external/compiler rows and complete native data extents. Partial0x801987F4 remains fully compared; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80198378",
+          "end": "0x80198C54"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADB10",
+          "end": "0x802ADB40"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EDE10",
+          "end": "0x802EDF8C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80198378",
+          "start": "0x80198378",
+          "end": "0x8019837C"
+        },
+        {
+          "symbol": "fn_8019837C",
+          "start": "0x8019837C",
+          "end": "0x801985FC"
+        },
+        {
+          "symbol": "fn_801985FC",
+          "start": "0x801985FC",
+          "end": "0x801987F4"
+        },
+        {
+          "symbol": "fn_801987F4",
+          "start": "0x801987F4",
+          "end": "0x80198B24"
+        },
+        {
+          "symbol": "fn_80198B24",
+          "start": "0x80198B24",
+          "end": "0x80198C54"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801B8C18.cpp",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv provisional unit row 0x801B8C18-0x801B91A0, shared/private type and source-form rows, and compiler row engine_cpp_nosda. All sixteen complete functions measured, including six partial bodies. External data ownership remains unclaimed; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B8C18",
+          "end": "0x801B91A0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801B8C18",
+          "start": "0x801B8C18",
+          "end": "0x801B8C60"
+        },
+        {
+          "symbol": "fn_801B8C60",
+          "start": "0x801B8C60",
+          "end": "0x801B8D4C"
+        },
+        {
+          "symbol": "fn_801B8D4C",
+          "start": "0x801B8D4C",
+          "end": "0x801B8D9C"
+        },
+        {
+          "symbol": "__14Class_801B8D9C",
+          "start": "0x801B8D9C",
+          "end": "0x801B8DA8"
+        },
+        {
+          "symbol": "fn_801B8DA8",
+          "start": "0x801B8DA8",
+          "end": "0x801B8DF0"
+        },
+        {
+          "symbol": "fn_801B8DF0",
+          "start": "0x801B8DF0",
+          "end": "0x801B8EDC"
+        },
+        {
+          "symbol": "fn_801B8EDC",
+          "start": "0x801B8EDC",
+          "end": "0x801B8F2C"
+        },
+        {
+          "symbol": "fn_801B8F2C",
+          "start": "0x801B8F2C",
+          "end": "0x801B9018"
+        },
+        {
+          "symbol": "fn_801B9018",
+          "start": "0x801B9018",
+          "end": "0x801B9068"
+        },
+        {
+          "symbol": "fn_801B9068",
+          "start": "0x801B9068",
+          "end": "0x801B90BC"
+        },
+        {
+          "symbol": "fn_801B90BC",
+          "start": "0x801B90BC",
+          "end": "0x801B90CC"
+        },
+        {
+          "symbol": "fn_801B90CC",
+          "start": "0x801B90CC",
+          "end": "0x801B90F0"
+        },
+        {
+          "symbol": "fn_801B90F0",
+          "start": "0x801B90F0",
+          "end": "0x801B9134"
+        },
+        {
+          "symbol": "fn_801B9134",
+          "start": "0x801B9134",
+          "end": "0x801B9148"
+        },
+        {
+          "symbol": "fn_801B9148",
+          "start": "0x801B9148",
+          "end": "0x801B9174"
+        },
+        {
+          "symbol": "fn_801B9174",
+          "start": "0x801B9174",
+          "end": "0x801B91A0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80196F48.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit80196F48-801981D8 and source-form/shared type/external/compiler rows. Nine complete functions and full212-byte readonly interval measured; all partials retained. Original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80196F48",
+          "end": "0x801981D8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADA3C",
+          "end": "0x802ADB10"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80196F48",
+          "start": "0x80196F48",
+          "end": "0x8019723C"
+        },
+        {
+          "symbol": "fn_8019723C",
+          "start": "0x8019723C",
+          "end": "0x80197680"
+        },
+        {
+          "symbol": "fn_80197680",
+          "start": "0x80197680",
+          "end": "0x80197D08"
+        },
+        {
+          "symbol": "fn_80197D08",
+          "start": "0x80197D08",
+          "end": "0x80197E64"
+        },
+        {
+          "symbol": "fn_80197E64",
+          "start": "0x80197E64",
+          "end": "0x80197E68"
+        },
+        {
+          "symbol": "fn_80197E68",
+          "start": "0x80197E68",
+          "end": "0x80197E6C"
+        },
+        {
+          "symbol": "fn_80197E6C",
+          "start": "0x80197E6C",
+          "end": "0x80197F84"
+        },
+        {
+          "symbol": "fn_80197F84",
+          "start": "0x80197F84",
+          "end": "0x80197FDC"
+        },
+        {
+          "symbol": "fn_80197FDC",
+          "start": "0x80197FDC",
+          "end": "0x801981D8"
         }
       ]
     }
