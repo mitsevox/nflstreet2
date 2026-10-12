@@ -10,10 +10,12 @@ struct Object_8015C244 {
     char mUnknown0[20];
     char mUnknown20[28];
     float mUnknown48;
-    char mUnknown52[16];
+    char mUnknown52[12];
+    unsigned char mUnknown64;
+    char mUnknown65[3];
     float mUnknown68;
     float mUnknown72;
-    char mUnknown76[4];
+    unsigned char *mpUnknown76;
     unsigned char mUnknown80;
     unsigned char mUnknown81;
     char mUnknown82[2];
