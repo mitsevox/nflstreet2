@@ -2,12 +2,6 @@
 #include "game/bitstream.h"
 #include <string.h>
 
-/* Encoded frame blocks start with a count byte whose top two bits flag the
-   optional vectors, then a flags byte and four header words. */
-struct Block_8019D3B8 {
-    unsigned int mWords[7];
-};
-
 extern "C" {
 
 void fn_8019D2EC(Pose_80041930 *pose, BlendEntry_8019EDDC *entry, int mirrored)
