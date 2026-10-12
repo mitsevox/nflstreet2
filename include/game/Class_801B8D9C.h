@@ -1,13 +1,15 @@
 #ifndef GAME_CLASS_801B8D9C_H
 #define GAME_CLASS_801B8D9C_H
 
+struct Entry_801B8DF0;
+
 /* Constructed by 0x801B8D9C; src/game/cu_801AA24C.cpp defines ten objects of it. */
 class Class_801B8D9C {
 public:
     Class_801B8D9C();
 
-private:
-    char mUnknown0[8];
+    Entry_801B8DF0 *mEntry;
+    int mValue;
 };
 
 extern Class_801B8D9C lbl_803ECC54;

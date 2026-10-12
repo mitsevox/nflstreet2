@@ -16245,6 +16245,30 @@
         "original_blob": "bd73d747ba913bd4fd3d23d16a03ffd7d234aff5",
         "integration_adjustment": "Preserve the original lane source contributor and final author checkpoint through batch integration. Target-supported independent review corrections reconcile call contracts, flag/shift widths and unordered predicates; measured exact function identities retain original contributor credit. Source bodies remain unlinked comparisons."
       }
+    },
+    {
+      "source": "src/engine/cu_801B8C18.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x801B8C18",
+        "0x801B8D9C",
+        "0x801B8DA8",
+        "0x801B9068",
+        "0x801B90BC",
+        "0x801B90CC",
+        "0x801B90F0",
+        "0x801B9134",
+        "0x801B9148",
+        "0x801B9174"
+      ],
+      "provenance": {
+        "pull_request": 729,
+        "merged_via": 729,
+        "commit": "5a957c2ca6c01d373c1b9321c3316ca92bf6db1b",
+        "introduced_blob": "820d2441f4942bb65864696b262ef5c09ffee963"
+      }
     }
   ],
   "target": "GN7E69",
