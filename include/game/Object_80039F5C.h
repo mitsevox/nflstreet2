@@ -6,6 +6,15 @@
 
 struct Area_80054138;
 
+struct Block_800CC180 {
+    unsigned short mUnknown0;
+    char mUnknown2[6];
+    float mUnknown8;
+    float mUnknown12;
+    int mUnknown16;
+    char mUnknown20[4];
+};
+
 /* The player object returned by fn_80039F5C, with the blocks it contains or
    points to. */
 
@@ -233,14 +242,19 @@ struct Object_80039F5C {
     char mUnknown204[36];
     Pose_80041930 *mpUnknown240;
     char mUnknown244[92];
-    int mUnknown336;
-    short mUnknown340;
-    unsigned char mUnknown342;
-    char mUnknown343[1];
-    unsigned char mUnknown344;
-    char mUnknown345[9];
-    unsigned char mUnknown354;
-    char mUnknown355[5];
+    union {
+        struct {
+            int mUnknown336;
+            short mUnknown340;
+            unsigned char mUnknown342;
+            char mUnknown343[1];
+            unsigned char mUnknown344;
+            char mUnknown345[9];
+            unsigned char mUnknown354;
+            char mUnknown355[5];
+        };
+        Block_800CC180 mUnknown336Block;
+    };
     unsigned char mUnknown360;
     char mUnknown361[27];
     unsigned int mUnknown388;

@@ -8,17 +8,28 @@ struct Object_80039F5C;
    access are declared; the rest stays opaque. */
 struct Query_800CE770 {
     Object_80039F5C *mpUnknown0;
-    Object_80039F5C *mpUnknown4;
-    char mUnknown8[28];
+    union {
+        Object_80039F5C *mpUnknown4;
+        Object_80039F5C *mpUnknown4Entries[7];
+    };
+    int mUnknown32;
     int mUnknown36;
-    char mUnknown40[4];
+    int mUnknown40;
     float mUnknown44;
-    char mUnknown48[4];
-    short mUnknown52;
+    float mUnknown48;
+    union {
+        short mUnknown52;
+        unsigned short mUnknown52Unsigned;
+        unsigned char mBytes52[2];
+    };
     unsigned char mUnknown54;
-    char mUnknown55[1];
+    unsigned char mUnknown55;
     unsigned char mUnknown56;
-    char mUnknown57[7];
+    unsigned char mUnknown57;
+    unsigned char mUnknown58;
+    unsigned char mUnknown59;
+    unsigned char mUnknown60;
+    char mUnknown61[3];
 };
 
 /* Parameter lists follow register use at the call sites only. */
