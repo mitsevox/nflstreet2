@@ -2,22 +2,32 @@
 #define GAME_TABLE_80089904_H
 
 #include "game/Object_801BBD5C.h"
+#include "game/Object_80039F5C.h"
 
 /* Record an entry of Table_80089904 points to. Only the accessed bytes are
    declared; the size is unknown. */
 struct Info_80089904 {
     unsigned char mUnknown0[4];
-    unsigned char mValue;
-    unsigned char mType;
-    unsigned char mUnknown6;
-    unsigned char mUnknown7;
-    char mUnknown8[4];
-    int mUnknown12;
-    int mUnknown16;
-    int mUnknown20;
+    union {
+        struct {
+            unsigned char mValue;
+            unsigned char mType;
+            unsigned char mUnknown6;
+            unsigned char mUnknown7;
+        };
+        float mUnknown4Float;
+    };
+    union { char mUnknown8[4]; float mUnknown8Float; };
+    union { int mUnknown12; float mUnknown12Float; };
+    union { int mUnknown16; float mUnknown16Float; };
+    union { int mUnknown20; float mUnknown20Float; };
     float mUnknown24;
-    float mUnknown28;
-    float mUnknown32;
+    union {
+        struct { float mUnknown28; float mUnknown32; float mUnknown36; };
+        Vector_80039F5C mUnknown28Vector;
+    };
+    Vector_80039F5C mUnknown40;
+    unsigned char mUnknown52;
 };
 
 struct Entry_80089904 {

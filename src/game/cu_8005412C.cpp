@@ -1,15 +1,10 @@
+#include "game/Record_803EA558.h"
 #include "game/Level_80054130.h"
 #include "game/fn_80054138.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80218FC4.h"
 
-/* 12-byte record of the array 0x800543D4 allocates at lbl_803EA558, one per
-   record of the list at +140 of the level data. */
-struct Record_803EA558 {
-    float mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-};
+
 
 /* 12-byte text slot of lbl_80309E10, filled by 0x800544A4. */
 struct Text_80309E10 {

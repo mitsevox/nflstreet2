@@ -114,11 +114,22 @@ struct Contact_80143668 {
     Vector_80039F5C mUnknown56;
 };
 
+struct Snapshot_801718E8 {
+    int mUnknown0;
+    float mUnknown4;
+    float mUnknown8;
+    char mUnknown12[20];
+};
+
 /* Block at +1160. */
 struct Block_801718E8 {
     float mUnknown0;
     char mUnknown4[8];
-    char mUnknown12[32];
+    union {
+        char mUnknown12[32];
+        struct { int mUnknown12Word; float mUnknown16; float mUnknown20; char mUnknown24[20]; };
+        Snapshot_801718E8 mSnapshot12;
+    };
     int mUnknown44;
     char mUnknown48[4];
     unsigned char mUnknown52;
