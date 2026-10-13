@@ -16289,6 +16289,94 @@
         "original_blob": "fa468c389361fd9b381fd28890a0392b84c434bf",
         "integration_adjustment": "Reviewed canonical SDK declaration and enum replacements preserve all nine emitted instruction comparisons; retain the original reconstruction author and source revision while binding the final source blob for squash integration."
       }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800CBFA8",
+        "0x800CC2D4",
+        "0x800CD170",
+        "0x800CD8BC",
+        "0x800CDD98",
+        "0x800CDDDC",
+        "0x800CE158",
+        "0x800CE2B8",
+        "0x800CE438",
+        "0x800CE4A8"
+      ],
+      "provenance": {
+        "pull_request": 737,
+        "merged_via": 737,
+        "commit": "1d98609787d17b6ea93291fa204c02ea5668d677",
+        "introduced_blob": "903b02fe75786d48640313a33c632fe970609d71",
+        "original_commit": "3a848dec67a8296dfde01ab20c9a7c755d913f7e",
+        "original_blob": "2e0c64d5d61c89b9e9fe882c10feab363573e757",
+        "integration_adjustment": "Preserve original lane A source contribution through target-supported X coordinate scale correction in fn_800CBFA8, canonical shared Command geometry and Point contract reconciliation, and correction of H2 metadata to distinguish two-component helpers from the three-float write of 80227264. Original and introduced source blobs are pinned independently. Credit remains scoped to newly authored functions that are complete exact matches on the final integrated measurement."
+      }
+    },
+    {
+      "source": "src/game/cu_801230B8.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801230B8",
+        "0x801254C8",
+        "0x80125E20",
+        "0x80125F10"
+      ],
+      "provenance": {
+        "pull_request": 737,
+        "merged_via": 737,
+        "commit": "1d98609787d17b6ea93291fa204c02ea5668d677",
+        "introduced_blob": "4e9992c060d77173461d68e94564ee082238ce8c",
+        "original_commit": "aeb9a802d7ed930d460657219fe8a3d296369267",
+        "original_blob": "0d4d7c499901b24d8ba19ce43839a86624c67dcc",
+        "integration_adjustment": "Preserve original lane B source contribution through full three-float Vector output buffers and shared helper declarations, reconciliation of the no-op callback signature, and the target-required short-circuit that bypasses the second boundary-check chain when blockedA succeeds in fn_80125708. Original and introduced source blobs are pinned independently. Credit remains scoped to newly authored functions that are complete exact matches on the final integrated measurement."
+      }
+    },
+    {
+      "source": "src/game/cu_80134E24.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80136034",
+        "0x801360D4",
+        "0x80136A78",
+        "0x80136AA4"
+      ],
+      "provenance": {
+        "pull_request": 737,
+        "merged_via": 737,
+        "commit": "1d98609787d17b6ea93291fa204c02ea5668d677",
+        "introduced_blob": "2c2a1de113dc124cdd7fd6d95ffff733bd2c1990",
+        "original_commit": "e6b7c753a0060b01801ed06f95f59d7fb84e5a04",
+        "original_blob": "84d434de89319f685fa03e4b668f5b149a19f3a3",
+        "integration_adjustment": "Preserve original lane C source contribution through integration reconciliation of the shared queue descriptor type and integer queue-kind forwarding contract. Original and introduced source blobs are pinned independently. Credit remains scoped to newly authored functions that are complete exact matches on the final integrated measurement."
+      }
+    },
+    {
+      "source": "src/game/cu_80132630.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80133920",
+        "0x80134370"
+      ],
+      "provenance": {
+        "pull_request": 737,
+        "merged_via": 737,
+        "commit": "1d98609787d17b6ea93291fa204c02ea5668d677",
+        "introduced_blob": "0e410b1f65f905bf8afa81738d6eafdcda114977",
+        "original_commit": "e6b7c753a0060b01801ed06f95f59d7fb84e5a04",
+        "original_blob": "0e410b1f65f905bf8afa81738d6eafdcda114977",
+        "integration_adjustment": "Preserve original lane C source contribution through combined integration with canonical shared declarations. Original and introduced source blobs are pinned independently. Credit remains scoped to newly authored functions that are complete exact matches on the final integrated measurement."
+      }
     }
   ],
   "target": "GN7E69",
