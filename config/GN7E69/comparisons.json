@@ -30399,6 +30399,158 @@
           "end": "0x80134E24"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80164B78.cpp",
+      "profile": "game_cpp",
+      "evidence": "Target surveyed grouping and complete25-body/fullreadonly/storage/context evidence. Original source boundaries unknown; full missing storage measured, no padding.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80164B78",
+          "end": "0x80167094"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4624",
+          "end": "0x802A4908"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031D2B8",
+          "end": "0x8031D360"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80164B78",
+          "start": "0x80164B78",
+          "end": "0x80164C4C"
+        },
+        {
+          "symbol": "fn_80164C4C",
+          "start": "0x80164C4C",
+          "end": "0x80164CE4"
+        },
+        {
+          "symbol": "fn_80164CE4",
+          "start": "0x80164CE4",
+          "end": "0x80164E30"
+        },
+        {
+          "symbol": "fn_80164E30",
+          "start": "0x80164E30",
+          "end": "0x80164EC8"
+        },
+        {
+          "symbol": "fn_80164EC8",
+          "start": "0x80164EC8",
+          "end": "0x80164ED8"
+        },
+        {
+          "symbol": "fn_80164ED8",
+          "start": "0x80164ED8",
+          "end": "0x80165000"
+        },
+        {
+          "symbol": "fn_80165000",
+          "start": "0x80165000",
+          "end": "0x80165098"
+        },
+        {
+          "symbol": "fn_80165098",
+          "start": "0x80165098",
+          "end": "0x801650BC"
+        },
+        {
+          "symbol": "fn_801650BC",
+          "start": "0x801650BC",
+          "end": "0x801650DC"
+        },
+        {
+          "symbol": "fn_801650DC",
+          "start": "0x801650DC",
+          "end": "0x801650FC"
+        },
+        {
+          "symbol": "fn_801650FC",
+          "start": "0x801650FC",
+          "end": "0x80165110"
+        },
+        {
+          "symbol": "fn_80165110",
+          "start": "0x80165110",
+          "end": "0x801651E0"
+        },
+        {
+          "symbol": "fn_801651E0",
+          "start": "0x801651E0",
+          "end": "0x80165464"
+        },
+        {
+          "symbol": "fn_80165464",
+          "start": "0x80165464",
+          "end": "0x80165770"
+        },
+        {
+          "symbol": "fn_80165770",
+          "start": "0x80165770",
+          "end": "0x80165890"
+        },
+        {
+          "symbol": "fn_80165890",
+          "start": "0x80165890",
+          "end": "0x80165C50"
+        },
+        {
+          "symbol": "fn_80165C50",
+          "start": "0x80165C50",
+          "end": "0x80165D18"
+        },
+        {
+          "symbol": "fn_80165D18",
+          "start": "0x80165D18",
+          "end": "0x80165DF8"
+        },
+        {
+          "symbol": "fn_80165DF8",
+          "start": "0x80165DF8",
+          "end": "0x80165F78"
+        },
+        {
+          "symbol": "fn_80165F78",
+          "start": "0x80165F78",
+          "end": "0x801660A0"
+        },
+        {
+          "symbol": "fn_801660A0",
+          "start": "0x801660A0",
+          "end": "0x80166110"
+        },
+        {
+          "symbol": "fn_80166110",
+          "start": "0x80166110",
+          "end": "0x801662A8"
+        },
+        {
+          "symbol": "fn_801662A8",
+          "start": "0x801662A8",
+          "end": "0x8016631C"
+        },
+        {
+          "symbol": "fn_8016631C",
+          "start": "0x8016631C",
+          "end": "0x80166BE8"
+        },
+        {
+          "symbol": "fn_80166BE8",
+          "start": "0x80166BE8",
+          "end": "0x80167094"
+        }
+      ]
     }
   ]
 }

@@ -3,17 +3,7 @@
 #include "game/Team_80167A8C.h"
 #include "game/fn_800B65A0.h"
 
-struct Record_80167094 {
-    unsigned char mUnknown0[8];
-    float mUnknown8;
-    float mUnknownC;
-    unsigned int mUnknown10;
-    unsigned char mUnknown14[0x1B8];
-};
-struct Object_80167160 {
-    unsigned char mUnknown0[0x14];
-    unsigned int mUnknown14;
-};
+#include "game/Record_80167094.h"
 
 static Record_80167094 lbl_8031D38C[9][11];
 static unsigned char lbl_80328570[3][9];
@@ -21,13 +11,13 @@ static State_80167094 lbl_8032858C[3][9];
 extern "C" float lbl_802E992C[][2];
 
 extern "C" {
-void fn_801651E0(void *, int, signed char, int, Record_80167094 *);
-void fn_80165464(void *, int, int, Record_80167094 *);
-void fn_80165890(void *, Record_80167094 *, int, unsigned char);
+int fn_801651E0(void *, int, signed char, int, Record_80167094 *);
+int fn_80165464(void *, int, int, Record_80167094 *);
+int fn_80165890(void *, Record_80167094 *, int, unsigned char);
 void fn_80165110(Object_80167160 *, int);
 void fn_80166BE8(Object_80167160 *, State_80167094 *, Record_80167094 *, int, int, unsigned char);
 int fn_8016631C(Record_80167094 *, int, void *, void *, void *, void *, int);
-void fn_80165770(Object_80167160 *, State_80167094 *, Record_80167094 *);
+int fn_80165770(Object_80167160 *, State_80167094 *, Record_80167094 *);
 Team_80167A8C *fn_80168EBC(int);
 void fn_8018A8C8(int);
 int fn_8017F60C(void);
