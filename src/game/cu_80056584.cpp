@@ -1698,7 +1698,7 @@ void fn_800C8818(int id);
 void fn_8002B714(void);
 void fn_8007E738(int value);
 void fn_8007BF60(int value);
-int fn_8007984C(void);
+int fn_8007984C(Object_800785C0 *pRecord);
 int fn_8002B5C8(void);
 void fn_80077F24(void);
 
@@ -2149,7 +2149,7 @@ void fn_8005B838(int kind,int value)
 int fn_8005B908(Params_80005284 **pText)
 {
     int result=0;Object_800785C0 *p=fn_800785C0();
-    if(!fn_8007984C()) {
+    if(!fn_8007984C(p)) {
         for(int i=0;i<2;i++) {
             if(p->mUnknown1F4[i].mId) {
                 result+=fn_8005B730((*pText)->mpText,(*pText)->mLength,p->mUnknown1F4[i].mId,p->mUnknown1F4[i].mUnknown4);
