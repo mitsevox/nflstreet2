@@ -16377,6 +16377,88 @@
         "original_blob": "0e410b1f65f905bf8afa81738d6eafdcda114977",
         "integration_adjustment": "Preserve original lane C source contribution through combined integration with canonical shared declarations. Original and introduced source blobs are pinned independently. Credit remains scoped to newly authored functions that are complete exact matches on the final integrated measurement."
       }
+    },
+    {
+      "source": "src/game/cu_8004A2F4.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8004CE6C",
+        "0x8004CFCC",
+        "0x8004D068",
+        "0x8004D0F4",
+        "0x8004D118",
+        "0x8004D334",
+        "0x8004D498",
+        "0x8004D5B8",
+        "0x8004D5F0",
+        "0x8004D624",
+        "0x8004D6F4",
+        "0x8004D798",
+        "0x8004D818",
+        "0x8004D84C",
+        "0x8004D860",
+        "0x8004D994",
+        "0x8004DC08"
+      ],
+      "provenance": {
+        "pull_request": 737,
+        "merged_via": 737,
+        "commit": "809342964d2a946e6c3308265fe3da096b906174",
+        "introduced_blob": "f16404130262cd2a68a898ea2467d67997d48b5d",
+        "original_commit": "0fe215259cd0e4f1b86bd5f7e8c4b63a420ac4be",
+        "original_blob": "1b9ebae21daab671f6f019f9526cb6d6e25758d4",
+        "integration_adjustment": "Original author source is preserved through integration and target-supported localized contract, argument, predicate, literal or geometry corrections. Original and introduced source blobs are pinned separately; credit covers only newly authored whole exact functions measured on the integrated revision."
+      }
+    },
+    {
+      "source": "src/game/cu_80056584.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80059F54",
+        "0x8005A860",
+        "0x8005A8AC",
+        "0x8005AC18",
+        "0x8005ACC8",
+        "0x8005B3CC",
+        "0x8005B4B0",
+        "0x8005B55C",
+        "0x8005B5D8",
+        "0x8005B9FC"
+      ],
+      "provenance": {
+        "pull_request": 737,
+        "merged_via": 737,
+        "commit": "809342964d2a946e6c3308265fe3da096b906174",
+        "introduced_blob": "4fbe783d80bb14d85c26379395c38b846a9992cc",
+        "original_commit": "efbce0db811398224890a3eddbcfd95920ea5ccc",
+        "original_blob": "e8a28652c39d28d37bc0aaa43b1d5b6af4c3d7b8",
+        "integration_adjustment": "Original author source is preserved through integration and target-supported localized contract, argument, predicate, literal or geometry corrections. Original and introduced source blobs are pinned separately; credit covers only newly authored whole exact functions measured on the integrated revision."
+      }
+    },
+    {
+      "source": "src/game/cu_80164B78.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80164C4C",
+        "0x80164EC8",
+        "0x801650FC",
+        "0x801660A0"
+      ],
+      "provenance": {
+        "pull_request": 737,
+        "merged_via": 737,
+        "commit": "809342964d2a946e6c3308265fe3da096b906174",
+        "introduced_blob": "8bdd58715ed3fec9ce41a5212a88a14ee1aa78ac",
+        "original_commit": "d3db8749043cf582e876c941bb6314be3a294f53",
+        "original_blob": "79e71cc5daa255380f44e17ee2a321a2d983a6c6",
+        "integration_adjustment": "Original author source is preserved through integration and target-supported localized contract, argument, predicate, literal or geometry corrections. Original and introduced source blobs are pinned separately; credit covers only newly authored whole exact functions measured on the integrated revision."
+      }
     }
   ],
   "target": "GN7E69",
