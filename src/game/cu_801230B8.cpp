@@ -805,10 +805,12 @@ void fn_80125708(Object_80039F5C *p, State_80125594 *pState)
         || (fn_801CFFD0(velocityAngle, 0x800000) <= 0xFA4F9 && target.mY > fn_80178A44() - 4.0f)
         || (fn_801CFFD0(velocityAngle, 0xC00000) <= 0xFA4F9 && target.mX < 4.0f - fn_80178A08())
         || (fn_801CFFD0(velocityAngle, 0) <= 0xFA4F9 && !(target.mY >= 4.0f - fn_80178A44()))) blockedA = 1;
-    if ((fn_801CFFD0(velocityAngle, 0xC00000) <= 0xFA4F9 && target.mX > fn_80178A08() - 4.0f)
-        || (fn_801CFFD0(velocityAngle, 0) <= 0xFA4F9 && target.mY > fn_80178A44() - 4.0f)
-        || (fn_801CFFD0(velocityAngle, 0x400000) <= 0xFA4F9 && target.mX < 4.0f - fn_80178A08())
-        || (fn_801CFFD0(velocityAngle, 0x800000) <= 0xFA4F9 && !(target.mY >= 4.0f - fn_80178A44()))) blockedB = 1;
+    if (!blockedA) {
+        if ((fn_801CFFD0(velocityAngle, 0xC00000) <= 0xFA4F9 && target.mX > fn_80178A08() - 4.0f)
+            || (fn_801CFFD0(velocityAngle, 0) <= 0xFA4F9 && target.mY > fn_80178A44() - 4.0f)
+            || (fn_801CFFD0(velocityAngle, 0x400000) <= 0xFA4F9 && target.mX < 4.0f - fn_80178A08())
+            || (fn_801CFFD0(velocityAngle, 0x800000) <= 0xFA4F9 && !(target.mY >= 4.0f - fn_80178A44()))) blockedB = 1;
+    }
     int difference = (opposite - velocityAngle) & 0xFFFFFF;
     float offset = 0.0f;
     int side = 0;
