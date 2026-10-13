@@ -29,7 +29,7 @@ void fn_800EF224(Object_80039F5C *p);
 void fn_800EF538(Object_80039F5C *p);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-float fn_801250B8(Object_80039F5C *p, int a, int b);
+float fn_801250B8(Object_80039F5C *p, Object_80039F5C *a, int b);
 
 extern float lbl_803EAE10;
 }
@@ -178,7 +178,7 @@ extern "C" int fn_800EFBD8(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_800EFC34(Object_80039F5C *p, int a)
+extern "C" int fn_800EFC34(Object_80039F5C *p, Object_80039F5C *a)
 {
     return fn_801250B8(p, a, 6) < lbl_803EAE10;
 }
