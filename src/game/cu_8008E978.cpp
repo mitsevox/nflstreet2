@@ -7542,7 +7542,7 @@ extern "C" void fn_800CBFA8(Object_80039F5C *p, Delta_800CC6A8 *pPos, int angle)
     }
     Message_800F01CC message;
     fn_801C1F94(&message, 0, 4);
-    message.mUnknown1[0] = (int)(pPos->mX * 2.0f);
+    message.mUnknown1[0] = (int)(pPos->mX * 4.0f);
     message.mUnknown1[1] = (int)(pPos->mY * 2.0f);
     message.mId = 63;
     message.mUnknown1[2] = ((int)((float)angle * 46603.37890625f)) >> 16;
