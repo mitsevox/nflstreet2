@@ -353,7 +353,7 @@ void fn_80165F78(Point_80167094 *control, Point_80167094 *out, int samples, int 
         fn_80165DF8(&lbl_8031D308[i], &lbl_8031D308[i+1], &out[n], &out[n+1], width, &prior, 1);
         n += 2;
     }
-    fn_80165DF8(&lbl_8031D308[samples-1], &lbl_8031D308[samples], &out[n], &out[n+1], width, 0, 0);
+    fn_80165DF8(&lbl_8031D308[samples-1], &lbl_8031D308[samples], &out[n+1], &out[n], width, 0, 0);
 }
 
 void fn_801660A0(Point_80167094 *points, Point_80167094 *out, int width)

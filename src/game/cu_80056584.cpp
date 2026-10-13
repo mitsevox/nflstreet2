@@ -3,6 +3,7 @@
 #include "game/Object_8007A334.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_80181330.h"
+#include "game/cu_8017DD68.h"
 #include "game/Object_800785C0.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_801D2B7C.h"
@@ -1652,14 +1653,13 @@ int fn_800D41F8(int team);
 int fn_800A8444(int team);
 int fn_800A8740(void);
 float fn_800D3F2C(int team);
-void fn_8017DF6C(unsigned char team,unsigned char mode);
-void fn_8017E328(unsigned char team,int mode);
+void fn_8017E328(int team,int mode);
 int fn_800CAAC4(int team,unsigned char index);
 float fn_800C9CF0(int team,unsigned char index);
 int fn_80178C24(void);
 unsigned int fn_8009D9F8(int key);
 int fn_8009D9C0(int key);
-Record_80067338 *fn_8016898C(unsigned char team,unsigned char index);
+Record_80067338 *fn_8016898C(int team,int index);
 int fn_800AEBA0(void);
 int fn_80178E4C(void);
 int fn_800AF078(int team);
@@ -1762,9 +1762,9 @@ void fn_80059B64(int *pList, int *pValues, Arg_8018399C *pNames, int *pScores, i
                 if (fn_800D3F2C(i) < lbl_803ED6A4) pModes[i] = 0;
                 else pModes[i] = 1;
             } else pModes[i] = 2;
-            fn_8017DF6C(i, pModes[i]);
-            if (fn_800D3F2C(i) < lbl_803ED6A4) fn_8017E328(i, 1);
-            else fn_8017E328(i, 2);
+            fn_8017DF6C((unsigned char)i, (unsigned char)pModes[i]);
+            if (fn_800D3F2C(i) < lbl_803ED6A4) fn_8017E328((unsigned char)i, 1);
+            else fn_8017E328((unsigned char)i, 2);
         }
     }
     pLast[1] = 0; pLast[0] = 0;
@@ -1829,7 +1829,7 @@ void fn_8005A1C0(unsigned int team, int *pEnabled, Params_80005284 **pNames, int
     for (unsigned int i = 0; i < 4; i++) {
         pEnabled[i] = fn_801486A0() != 2 || i < 2;
         if (pEnabled[i] == 1) {
-            Record_80067338 *pRecord = fn_8016898C(team, i);
+            Record_80067338 *pRecord = fn_8016898C((unsigned char)team, i);
             fn_801C2EF0(pNames[i]->mpText, pRecord->mUnknown1F3, pNames[i]->mLength);
         }
     }

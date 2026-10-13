@@ -294,7 +294,7 @@ void fn_801A9368(Object_801A8620 *p,int index)
     int palette=fn_80212124(&p->mUnknown104,0xFF000000,index);
     fn_802101B0(&s->mUnknownC.mUnknown10[0x44],0);fn_8020FDAC(0xFF000000,palette);
 }
-void fn_801A93C0(Object_801A8620 *p)
+void fn_801A93C0(Object_801A8620 *p, void *)
 {
     Mesh_801A93C0 *mesh=&p->mpUnknown12C->mUnknownC.mpUnknown64->mpUnknown8->mUnknown18;
     if(mesh->mUnknown9==4)fn_801A7C20(mesh);else if(mesh->mUnknown9==3)fn_801A7F10(mesh);

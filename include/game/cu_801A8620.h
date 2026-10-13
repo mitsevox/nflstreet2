@@ -62,5 +62,7 @@ struct Object_801A8620 {
 };
 
 extern "C" void fn_801A8D08(Child_801A9430 *p, Object_801A8620 *owner);
+extern "C" void fn_801A9368(Object_801A8620 *p, int index);
+extern "C" void fn_801A93C0(Object_801A8620 *p, void *);
 
 #endif

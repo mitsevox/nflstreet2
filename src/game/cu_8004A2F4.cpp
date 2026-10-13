@@ -1291,13 +1291,6 @@ struct Instance_8004DA0C {
     Object_80235588 mRender;
 };
 
-struct PoseEffects_8004D874 {
-    char mUnknown0[212];
-    void *mpUnknown212;
-    char mUnknown216[8];
-    unsigned char mUnknown224;
-};
-
 extern "C" {
 extern Child_801A9430 **lbl_803EA4F4;
 extern Parser_8004D3A8 *lbl_803EA4F8;
@@ -1340,8 +1333,6 @@ float fn_802171DC(void *, const char *, float);
 int fn_8021743C(void *, const char *, float *, int);
 int fn_8002D060(void *);
 int fn_801C657C(void);
-void fn_801A9368(Object_801A8620 *, void *);
-void fn_801A93C0(Object_801A8620 *, void *);
 void fn_801A8548(Object_801A8620 *, int);
 int fn_80228668(void);
 void fn_80235C90(void *, int, float, float, float, float);
@@ -1583,8 +1574,8 @@ int fn_8004D874(Object_801A8620 *p, int mode)
     else flag = p->mUnknownE8.mBytes[3] & 1;
     if (flag) {
         int context = fn_801C657C();
-        PoseEffects_8004D874 *pPose = (PoseEffects_8004D874 *)p->mpUnknown1D8;
-        if (p->mFlagF0) fn_801A9368(p, pPose->mpUnknown212);
+        Object_80041904 *pPose = (Object_80041904 *)p->mpUnknown1D8;
+        if (p->mFlagF0) fn_801A9368(p, (int)pPose->mUnknown200.mStep);
         if (pPose->mUnknown224 == 1) fn_801A93C0(p, &pPose->mUnknown224);
         int index = fn_80228668();
         Object_80235588 *pRender = &pInstance->mRender;
