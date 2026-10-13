@@ -16432,11 +16432,11 @@
       "provenance": {
         "pull_request": 737,
         "merged_via": 737,
-        "commit": "809342964d2a946e6c3308265fe3da096b906174",
-        "introduced_blob": "4fbe783d80bb14d85c26379395c38b846a9992cc",
+        "commit": "a75378f82a77e90d1e3649cc5dce75a9accfaf5e",
+        "introduced_blob": "9b52d84717ac5c7e6ff9a972d3412a30c8ad2788",
         "original_commit": "efbce0db811398224890a3eddbcfd95920ea5ccc",
         "original_blob": "e8a28652c39d28d37bc0aaa43b1d5b6af4c3d7b8",
-        "integration_adjustment": "Original author source is preserved through integration and target-supported localized contract, argument, predicate, literal or geometry corrections. Original and introduced source blobs are pinned separately; credit covers only newly authored whole exact functions measured on the integrated revision."
+        "integration_adjustment": "Original author source is preserved through integration and target-supported localized contract, argument, predicate, literal or geometry corrections. Original and introduced source blobs are pinned separately; credit covers only newly authored whole exact functions measured on the integrated revision. The introduced pin includes the target-supported 8005B908 consumed-record pointer correction; the original author, original source pin and ten exact function identities remain unchanged."
       }
     },
     {
