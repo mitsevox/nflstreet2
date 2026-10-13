@@ -52,7 +52,10 @@ struct Object_80040818 {
     Model_8004E0CC *mUnknown300;
     Skeleton_80041930 **mUnknown304;
     int mUnknown308;
-    char mUnknown312[16];
+    union {
+        char mUnknown312[16];
+        struct { char mUnknown312Head[4]; int mWord316; char mUnknown320Tail[8]; };
+    };
     int mUnknown328;
     Area_80054138 *mUnknown332;
     float mUnknown336;
