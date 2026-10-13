@@ -1,3 +1,4 @@
+#include "game/Desc_800408E4.h"
 #include "game/fn_8022781C.h"
 #include <string.h>
 
@@ -11,19 +12,6 @@
 #include "game/fn_801EEB44.h"
 #include "game/fn_80054138.h"
 #include "game/fn_801EBC18.h"
-
-/* Placement record that fn_800408E4 turns into an object. */
-struct Desc_800408E4 {
-    int mUnknown0;
-    char mName[128];
-    Desc_8004149C mUnknown132;
-    void *mUnknown160;
-    void *mUnknown164;
-    int mUnknown168;
-    int mUnknown172;
-    int mUnknown176;
-    unsigned short mUnknown180;
-};
 
 extern "C" {
 void fn_800301C4(void *pStream, float *pValues, int bits, float scale);

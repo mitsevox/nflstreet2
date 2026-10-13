@@ -1,3 +1,8 @@
+#include "game/Desc_800408E4.h"
+#include "game/Record_8031B6F8.h"
+#include "game/cu_801A8620.h"
+#include "game/Object_80235588.h"
+#include "game/fn_801EBC18.h"
 #include <math.h>
 #include <string.h>
 
@@ -1262,5 +1267,434 @@ void fn_8004CBB0(void)
 
 void fn_8004CBE8(void)
 {
+}
+}
+
+struct Parser_8004D3A8 {
+    char mName[256];
+    void *mpData;
+    void *mpCursor;
+    int mId;
+};
+
+struct Cache_8004DA0C {
+    int mHandle;
+    char mName[256];
+    char mUnknown260[48];
+    int mReferences;
+    void *mpArchive;
+    int mId;
+};
+
+struct Instance_8004DA0C {
+    Cache_8004DA0C *mpCache;
+    Object_80235588 mRender;
+};
+
+struct PoseEffects_8004D874 {
+    char mUnknown0[212];
+    void *mpUnknown212;
+    char mUnknown216[8];
+    unsigned char mUnknown224;
+};
+
+extern "C" {
+extern Child_801A9430 **lbl_803EA4F4;
+extern Parser_8004D3A8 *lbl_803EA4F8;
+extern unsigned short lbl_803EC7D0;
+extern unsigned short lbl_803EC7D2;
+extern int lbl_803EC7D4;
+extern void *lbl_803EC7D8;
+extern char *lbl_803EC7DC;
+extern unsigned short lbl_803EA4FC;
+extern Cache_8004DA0C *lbl_8030869C[];
+extern void *lbl_803EA368;
+void fn_801EBEF8(Quat_801EB488 *, int, int, int);
+void fn_801EBFA0(Quat_801EB488 *, int, int, int);
+void fn_801EB660(Quat_801EB488 *, Quat_801EB488 *, void *);
+void fn_801D0508(void); void fn_801D0544(void);
+void fn_801D0860(void *); void fn_801D0C58(void *);
+void fn_801D0470(int); void fn_801D04C4(void); void fn_801D08FC(int);
+void fn_80227C2C(void *, void *);
+void fn_8022765C(void *, void *, void *);
+void fn_802276B4(void *, void *, void *);
+void fn_80227490(void *, void *, int, int, int);
+int fn_801CFFD0(int, int);
+int fn_801DCF0C(int, int, int, void *, void *);
+void fn_801DCF8C(int);
+void fn_801DD0C8(int, int, int, int (*)(Child_801A9430 *));
+Child_801A9430 *fn_801DD268(int, int, int, Desc_800408E4 *);
+void fn_801DD320(int, Child_801A9430 *);
+void fn_80228D58(Child_801A9430 *); void fn_80228DD4(void); void fn_80228E18(void);
+int fn_801F7C88(void);
+Object_80040818 *fn_8004113C(int, unsigned int);
+void fn_801A980C(Child_801A9430 *);
+void *fn_801EF7BC(void *, int, char *);
+int fn_801F0C50(void *, int);
+void *fn_80216860(void *, const char *);
+void *fn_80216BFC(void *, const char *);
+void *fn_80216E34(void *);
+int fn_80216F3C(void *, const char *, char *, int, const char *);
+int fn_80217070(void *, const char *, int);
+float fn_802171DC(void *, const char *, float);
+int fn_8021743C(void *, const char *, float *, int);
+int fn_8002D060(void *);
+int fn_801C657C(void);
+void fn_801A9368(Object_801A8620 *, void *);
+void fn_801A93C0(Object_801A8620 *, void *);
+void fn_801A8548(Object_801A8620 *, int);
+int fn_80228668(void);
+void fn_80235C90(void *, int, float, float, float, float);
+void fn_80235740(void *, int); void fn_80235764(void *, int);
+int fn_801EF390(void *, int, int);
+void fn_80235DB8(int); void fn_80234DCC(int, void *, const char *, int);
+void fn_80235588(void *, int); void fn_802355E4(void *);
+void fn_80235630(void *, int); void fn_80235C24(void *, void *);
+void fn_80235D74(void *, int); void fn_802353D8(void *, int); void fn_802353F8(void *, int);
+void fn_80234EA0(void *, int); void fn_801F010C(void *, int);
+void fn_8004E16C(void *, int, Object_80040818 *);
+void fn_801A8D9C(void *, int, Object_801A8620 *);
+void fn_801A92D0(void *, Object_801A8620 *);
+unsigned int fn_80236398(int);
+void fn_801A5050(int, Vector_80039F5C *, float, float *);
+int fn_8004D2F8(Child_801A9430 *);
+void fn_8004D068(int);
+int fn_8004D994(const char *);
+void fn_8004DA0C(void *, int, Object_80040818 *);
+
+void fn_8004CBEC(void *pData, float time, Object_80041904 *pObject, Object_80040818 *pOwner)
+{
+    Emitter_8004BD20 *p = (Emitter_8004BD20 *)pData;
+    while (p) {
+        if (!(time <= p->mUnknown36) && p->mUnknown0 != 21 &&
+            (p->mUnknown4 == 0 || p->mUnknown8 < p->mUnknown4)) {
+            p->mUnknown8++;
+            Quat_801EB488 rotation;
+            Vector_80039F5C position;
+            if (p->mUnknown40) {
+                Vector_80039F5C direction;
+                direction.mX = -pObject->mUnknown348;
+                direction.mY = -pObject->mUnknown352;
+                direction.mZ = -pObject->mUnknown356;
+                int angle = fn_801CFE40(direction.mZ, direction.mX);
+                int heading = fn_801CFE40(direction.mY, direction.mX);
+                fn_801EBFA0(&rotation, angle, heading, 0);
+                position = pObject->mUnknown360;
+            } else {
+                fn_801EBEF8(&rotation, (int)(p->mUnknown24[2] * 46603.3789f),
+                            (int)(p->mUnknown24[1] * 46603.3789f), (int)(p->mUnknown24[0] * 46603.3789f));
+                fn_801EB660(&rotation, &rotation, &pObject->mUnknown96);
+                fn_801D0508();
+                fn_801D0860(&rotation);
+                Vector_80039F5C offset;
+                fn_80227C2C(&offset, p->mUnknown12);
+                fn_801D0544();
+                position.mX = pObject->mUnknown8;
+                position.mY = pObject->mUnknown12;
+                position.mZ = pObject->mUnknown16;
+                fn_8022765C(&position, &position, &offset);
+            }
+            fn_80145EFC(p->mUnknown0, &position.mX, &rotation.mX, (Source_80144CE0 *)pOwner->mUnknown332);
+            Record_8031B6F8 record;
+            record.mId = p->mUnknown0;
+            record.mPos[0] = position.mX;
+            record.mPos[1] = position.mY;
+            record.mPos[2] = position.mZ;
+            record.mRot[0] = rotation.mX;
+            record.mRot[1] = rotation.mY;
+            record.mRot[2] = rotation.mZ;
+            record.mRot[3] = rotation.mW;
+            record.mpSource = (Source_80144CE0 *)pOwner->mUnknown332;
+            fn_8014516C(record);
+        }
+        p = p->mpNext;
+    }
+}
+
+void fn_8004CE6C(Object_80040818 *pOwner)
+{
+    Node_80041904 *p = pOwner->mUnknown472->mUnknown312;
+    while (p) {
+        if (p->mUnknown116 && p->mUnknown120 && --p->mUnknown120 == 0)
+            fn_8004E090(pOwner, p->mUnknown104, p->mUnknown108);
+        p = p->mpNext;
+    }
+}
+
+void fn_8004CEE8(Child_801A9430 *p)
+{
+    Object_80041904 *pObject = p->mpObject54;
+    Extra_8004149C *pExtra = pObject->mUnknown428;
+    if (pExtra) {
+        if (pExtra->mUnknown32) {
+            p->mAngle4C = (p->mAngle4C + pExtra->mWord36) & 0xFFFFFF;
+            Angles_801EBC18 angles;
+            fn_801EBC18(&angles, &p->mRotation3C.mX);
+            angles.mUnknown8 = p->mAngle4C + 0x400000;
+            fn_801EBEF8(&p->mRotation3C, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
+        }
+        int angle = fn_801CFFD0(p->mAngle4C, pObject->mUnknown32);
+        if (pExtra->mUnknown33) {
+            Vector_80039F5C delta;
+            fn_802276B4(&delta, &pObject->mUnknown8, pObject->mUnknown20);
+            fn_80227490(&delta, &delta, angle, 0, 0);
+            fn_8022765C(&p->mUnknown30, &p->mUnknown30, &delta);
+        }
+    }
+}
+
+void fn_8004CFCC(int handle, int count)
+{
+    fn_801DCF0C(31, 112, count, 0, 0);
+    if (handle) fn_801DD0C8(handle, 31, 0, fn_8004D2F8);
+    lbl_803EA4F4 = (Child_801A9430 **)fn_801D2B7C(count * 4, 0, 0);
+    fn_801C1F94(lbl_803EA4F4, 0, count * 4);
+    fn_801F7C88();
+    lbl_803EC7D0 = 0;
+    lbl_803EC7D2 = count;
+}
+
+void fn_8004D068(int handle)
+{
+    if (lbl_803EA4F4) {
+        for (unsigned short i = 0; i < lbl_803EC7D0; i++) {
+            fn_801DD320(handle, lbl_803EA4F4[i]);
+            fn_80228D58(lbl_803EA4F4[i]);
+        }
+        fn_80228DD4();
+        fn_801D2BD0(lbl_803EA4F4);
+        lbl_803EA4F4 = 0;
+    }
+}
+
+void fn_8004D0F4(int handle) { fn_8004CFCC(handle, 64); }
+void fn_8004D118(int handle) { fn_8004D068(handle); fn_80228E18(); fn_801DCF8C(31); }
+
+void fn_8004D144(Desc_800408E4 *pDesc, int handle, int first)
+{
+    Child_801A9430 *p = fn_801DD268(handle, 31, 0, pDesc);
+    lbl_803EA4F4[lbl_803EC7D0] = p;
+    fn_801442FC(&p->mTracker60);
+    p->mWord68 = 0;
+    p->mUnknown14.mX = pDesc->mUnknown132.mUnknown4;
+    p->mUnknown14.mY = pDesc->mUnknown132.mUnknown8;
+    p->mUnknown14.mZ = pDesc->mUnknown132.mUnknown12;
+    p->mUnknown30 = p->mUnknown14;
+    fn_801EBFA0(&p->mRotation3C, (int)(pDesc->mUnknown132.mUnknown20 * 46603.3789f),
+                (int)(pDesc->mUnknown132.mUnknown24 * 46603.3789f),
+                (int)(pDesc->mUnknown132.mUnknown16 * 46603.3789f));
+    p->mUnknown20 = p->mRotation3C;
+    p->mpOwner50 = 0;
+    p->mAngle4C = (int)((pDesc->mUnknown132.mUnknown24 - 90.0f) * 46603.3789f);
+    p->mpOwner50 = fn_8004113C(pDesc->mUnknown176, first);
+    if (!p->mpOwner50) {
+        p->mpObject54 = 0;
+    } else {
+        p->mpObject54 = p->mpOwner50->mUnknown472;
+        Child_801A9430 *pLast = (Child_801A9430 *)p->mpOwner50->mUnknown480;
+        if (!pLast) p->mpOwner50->mUnknown480 = (int)p;
+        else {
+            while (pLast->mpUnknown5C) pLast = pLast->mpUnknown5C;
+            pLast->mpUnknown5C = p;
+        }
+    }
+    p->mpUnknown58 = fn_80054138(&pDesc->mUnknown132.mUnknown4);
+    lbl_803EC7D0++;
+    p->mUnknown6C = 0;
+    fn_801A980C(p);
+}
+
+int fn_8004D2F8(Child_801A9430 *p) { if (p->mpOwner50) fn_8004CEE8(p); return 0; }
+
+int fn_8004D334(const char *pName)
+{
+    for (int i = 0; i < lbl_803EC7D4; i++)
+        if (fn_801C2FE4(pName, lbl_803EA4F8[i].mName) == 0) return i;
+    return -1;
+}
+
+int fn_8004D3A8(void *pData, char *pName)
+{
+    int id = fn_801F0A8C((int)pData, pName);
+    if (id == -1) return -1;
+    int index = fn_8004D334(pName);
+    if (index == -1) {
+        fn_801C2EB4(lbl_803EA4F8[lbl_803EC7D4].mName, pName);
+        void *p = fn_801EF7BC(pData, id, lbl_803EC7DC);
+        lbl_803EA4F8[lbl_803EC7D4].mpCursor = p;
+        lbl_803EA4F8[lbl_803EC7D4].mpData = p;
+        lbl_803EC7DC += fn_801F0C50(pData, id) + 4;
+        lbl_803EA4F8[lbl_803EC7D4].mId = id;
+        index = lbl_803EC7D4++;
+    } else lbl_803EA4F8[index].mpCursor = lbl_803EA4F8[index].mpData;
+    return index;
+}
+
+void fn_8004D498(int handle) { lbl_803EA4F8[handle].mpCursor = lbl_803EA4F8[handle].mpData; }
+int fn_8004D4B0(int handle, const char *pKey) {
+    void *p = fn_80216860(lbl_803EA4F8[handle].mpCursor, pKey);
+    lbl_803EA4F8[handle].mpCursor = p; return p != 0;
+}
+int fn_8004D508(int handle, const char *pKey) {
+    void *p = fn_80216BFC(lbl_803EA4F8[handle].mpCursor, pKey);
+    lbl_803EA4F8[handle].mpCursor = p; return p != 0;
+}
+int fn_8004D560(int handle) {
+    void *p = fn_80216E34(lbl_803EA4F8[handle].mpCursor);
+    lbl_803EA4F8[handle].mpCursor = p; return p != 0;
+}
+int fn_8004D5B8(int handle, const char *pKey, char *pText, int size) {
+    return fn_80216F3C(lbl_803EA4F8[handle].mpCursor, pKey, pText, size, "");
+}
+int fn_8004D5F0(int handle, const char *pKey) { return fn_80217070(lbl_803EA4F8[handle].mpCursor, pKey, 0); }
+float fn_8004D624(int handle, const char *pKey) { return fn_802171DC(lbl_803EA4F8[handle].mpCursor, pKey, 0.0f); }
+int fn_8004D65C(int handle, const char *pKey, float *pValues) {
+    float values[9];
+    if (!fn_8021743C(lbl_803EA4F8[handle].mpCursor, pKey, values, 9)) return 0;
+    for (int i = 0; i < 9; i++) pValues[i + i / 3] = values[i];
+    return 1;
+}
+unsigned char fn_8004D6F4(int handle, const char *pKey, float *pValues, int count) {
+    return fn_8021743C(lbl_803EA4F8[handle].mpCursor, pKey, pValues, count);
+}
+int fn_8004D728(int handle, const char *pKey, float *pValues) {
+    float values[3];
+    if (!fn_8021743C(lbl_803EA4F8[handle].mpCursor, pKey, values, 3)) return 0;
+    pValues[0] = values[0]; pValues[2] = values[2]; pValues[1] = values[1]; return 1;
+}
+void fn_8004D798(void) {
+    lbl_803EC7D4 = 0;
+    lbl_803EA4F8 = (Parser_8004D3A8 *)fn_801D2B7C(0x4B60, 4, 0);
+    fn_801C1F94(lbl_803EA4F8, 0, 0x4B60);
+    lbl_803EC7D8 = fn_801D2B7C(0x18000, 4, 0);
+    fn_801C1F94(lbl_803EC7D8, 0, 0x18000);
+    lbl_803EC7DC = (char *)lbl_803EC7D8;
+    fn_8004CBB0();
+}
+void fn_8004D818(void) { fn_801D2BD0(lbl_803EA4F8); lbl_803EA4F8 = 0; fn_801D2BD0(lbl_803EC7D8); }
+int fn_8004D84C(int handle) { return (int)lbl_803EA4F8[handle].mpCursor; }
+void fn_8004D860(int handle, int position) { lbl_803EA4F8[handle].mpCursor = (void *)position; }
+
+int fn_8004D874(Object_801A8620 *p, int mode)
+{
+    Instance_8004DA0C *pInstance = p->mpRender12C;
+    unsigned char flag;
+    if (fn_8002D060(lbl_803EA368)) flag = p->mUnknownE8.mBytes[3] & 4;
+    else flag = p->mUnknownE8.mBytes[3] & 1;
+    if (flag) {
+        int context = fn_801C657C();
+        PoseEffects_8004D874 *pPose = (PoseEffects_8004D874 *)p->mpUnknown1D8;
+        if (p->mFlagF0) fn_801A9368(p, pPose->mpUnknown212);
+        if (pPose->mUnknown224 == 1) fn_801A93C0(p, &pPose->mUnknown224);
+        int index = fn_80228668();
+        Object_80235588 *pRender = &pInstance->mRender;
+        fn_801D0470(index); fn_801D04C4();
+        fn_801D0C58(&p->mUnknown4); fn_801D0860(&p->mUnknown18); fn_801D08FC(0x400000);
+        fn_80235C90(pRender, context, 0.5f, 0.5f, 0.5f, 0.51f);
+        fn_80235740(pRender, context); fn_801D0544(); fn_80235764(pRender, context);
+    }
+    if (p->mUnknownE8.mWord & 2) fn_801A8548(p, mode);
+    return 0;
+}
+
+int fn_8004D994(const char *pName)
+{
+    for (int i = 0; i < lbl_803EA4FC; i++)
+        if (fn_801C2FE4(pName, lbl_8030869C[i]->mName) == 0) return i;
+    return -1;
+}
+
+void fn_8004DA0C(void *pData, int handle, Object_80040818 *pObject)
+{
+    Object_801A8620 *p = (Object_801A8620 *)pObject;
+    char name[256];
+    fn_8004D5B8(handle, "tideRef", name, 256);
+    int index = fn_8004D994(name);
+    p->mpRender12C = (Instance_8004DA0C *)fn_801D2B7C(196, 0, 0);
+    fn_801C1F94(p->mpRender12C, 0, 196);
+    Instance_8004DA0C *pInstance = p->mpRender12C;
+    if (index == -1) {
+        lbl_8030869C[lbl_803EA4FC] = (Cache_8004DA0C *)fn_801D2B7C(320, 0, 0);
+        fn_801C1F94(lbl_8030869C[lbl_803EA4FC], 0, 320);
+        pInstance->mpCache = lbl_8030869C[lbl_803EA4FC++];
+        pInstance->mpCache->mReferences = 1;
+        fn_801C2EB4(pInstance->mpCache->mName, name);
+        pInstance->mpCache->mpArchive = pData;
+        pInstance->mpCache->mId = fn_801F0A8C((int)pData, name);
+        pInstance->mpCache->mHandle = fn_801EF390(pData, pInstance->mpCache->mId, 1);
+        fn_80235DB8(pInstance->mpCache->mHandle);
+        fn_80234DCC(pInstance->mpCache->mHandle, pInstance->mpCache->mUnknown260, "Objects", 3);
+    } else {
+        pInstance->mpCache = lbl_8030869C[index];
+        pInstance->mpCache->mReferences++;
+    }
+    Object_80235588 *pRender = &pInstance->mRender;
+    fn_80235588(pRender, 6);
+    fn_80235630(pRender, pInstance->mpCache->mHandle);
+    fn_80235C24(pRender, pInstance->mpCache->mUnknown260);
+    fn_80235D74(pRender, 8); fn_802353D8(pRender, 3); fn_802353F8(pRender, 0);
+    p->mUnknownE8.mWord = 1;
+    if (fn_8004D5B8(handle, "tideEnvMapRef", name, 256)) p->mUnknownE8.mWord = 2;
+    p->mUnknown14 = fn_8004D874;
+}
+
+void fn_8004DC08(Object_80040818 *pObject)
+{
+    Object_801A8620 *p = (Object_801A8620 *)pObject;
+    Instance_8004DA0C *pInstance = p->mpRender12C;
+    fn_802355E4(&pInstance->mRender);
+    pInstance->mpCache->mReferences--;
+    if (pInstance->mpCache->mReferences <= 0) {
+        fn_80234EA0(pInstance->mpCache->mUnknown260, 3);
+        fn_801F010C(pInstance->mpCache->mpArchive, pInstance->mpCache->mId);
+    }
+    fn_801D2BD0(p->mpRender12C);
+    p->mpRender12C = 0;
+}
+
+void fn_8004DC88(void *pData, int handle, Object_80040818 *pObject)
+{
+    Object_801A8620 *p = (Object_801A8620 *)pObject;
+    char type[32]; char name[128];
+    p->mpUnknownA8 = pData;
+    fn_8004D498(handle);
+    if (!fn_8004D4B0(handle, "render")) return;
+    fn_8004D5B8(handle, "type", type, 32);
+    if (fn_801C2FE4(type, "NO_RENDER") == 0) {
+        p->mTypeEC = 0;
+        fn_8004E16C(pData, handle, pObject);
+        return;
+    }
+    if (fn_801C2FE4(type, "STATIC_RENDER") == 0) {
+        p->mTypeEC = 1;
+        fn_8004DA0C(pData, handle, pObject);
+    } else if (fn_801C2FE4(type, "DYNAMIC_RENDER") == 0) {
+        p->mTypeEC = 2;
+        fn_8004E16C(pData, handle, pObject);
+        fn_8004D498(handle); fn_8004D4B0(handle, "render");
+        fn_801A8D9C(pData, handle, p);
+        fn_8004D498(handle); fn_8004D4B0(handle, "render");
+    }
+    if (fn_8004D5F0(handle, "bFadeable")) p->mUnknown140 = 1;
+    else p->mUnknown140 = 0;
+    p->mScale144 = 1.0f;
+    if (fn_8004D508(handle, "shadow")) {
+        float size = fn_8004D624(handle, "fShadowSize");
+        unsigned int packed = fn_80236398(0);
+        float color[4];
+        color[0] = (packed & 0xFF) * 0.0078125f;
+        color[1] = ((packed >> 8) & 0xFF) * 0.0078125f;
+        color[2] = ((packed >> 16) & 0xFF) * 0.0078125f;
+        color[3] = (packed >> 24) * 0.0078125f;
+        if (size == 0.0f) size = 2.0f;
+        fn_801A5050(0, &p->mUnknown4, size, color);
+    }
+    fn_8004D498(handle);
+    if (fn_8004D4B0(handle, "animPal")) {
+        p->mFlagF0 = 1;
+        fn_8004D5B8(handle, "tideRef", name, 128);
+        p->mUnknownF4 = fn_801F0A8C((int)pData, name);
+        fn_801A92D0(pData, p);
+    } else { p->mFlagF0 = 0; p->mUnknownF8 = 0; }
 }
 }

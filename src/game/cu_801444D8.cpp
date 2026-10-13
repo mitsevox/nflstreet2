@@ -1,3 +1,4 @@
+#include "game/Record_8031B6F8.h"
 #include <dolphin/mtx.h>
 #include "game/cu_801444D8.h"
 #include "game/bitstream.h"
@@ -26,14 +27,6 @@ struct Config_803EB22A {
 struct Counts_801447E8 {
     signed char mUnknown0;
     signed char mUnknown1;
-};
-
-/* One 0x24-byte record of the six-entry table written to the replay stream. */
-struct Record_8031B6F8 {
-    int mId;
-    float mPos[3];
-    float mRot[4];
-    Source_80144CE0 *mpSource;
 };
 
 /* One 12-byte entry of the 20-entry table at lbl_802DD020. */
@@ -145,7 +138,6 @@ int fn_80145074(int a);
 void fn_80145100(int index, int file);
 int fn_80145118(int index);
 void fn_8014512C(void);
-void fn_8014516C(Record_8031B6F8 record);
 }
 
 static unsigned char lbl_803EB228 = 0;
