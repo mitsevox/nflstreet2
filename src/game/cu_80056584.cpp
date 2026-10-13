@@ -1681,7 +1681,7 @@ void fn_8018F4C4(void *p);
 int fn_8018F288(void *p,int id);
 int fn_8018F3D8(void *p);
 int fn_800A3444(void);
-void fn_8007B684(void);
+void fn_8007B684(int id);
 void fn_8007B8A4(char *pText,int size);
 void fn_8007B904(char *pText,int size);
 void fn_8007B6D4(void);
@@ -1691,8 +1691,8 @@ int fn_80083FBC(Object_8007A334 *pObject);
 void fn_80079248(char *pText,int size,int id);
 void fn_80078BB8(int value);
 int fn_80078B94(void);
-void fn_80078AE0(int id);
-void fn_8007E274(void);
+int fn_80078AE0(int id);
+void fn_8007E274(int key);
 void fn_8007E8A8(int a,int value);
 void fn_800C8818(int id);
 void fn_8002B714(void);
@@ -1902,7 +1902,7 @@ int fn_8005A630(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
 int fn_8005A794(int tag, int column, int id)
 {
     int value;
-    if (fn_801FCE10(0,"select \x8c int into \x82 from \x8c where 'DIGP' = \x82\n",column,&value,tag,id)) value=0;
+    if (fn_801FCE10(0,"select \x8c into \x82 from \x8c where 'DIGP' = \x82\n",column,&value,tag,id)) value=0;
     return value;
 }
 
@@ -1912,7 +1912,7 @@ void fn_8005A7EC(int team)
     do {
         swapped=0;
         for (int i=0;i<10;i++) {
-            if (lbl_80309FC4[team].mValues[i]<lbl_80309FC4[team].mValues[i+1]) {
+            if (!(lbl_80309FC4[team].mValues[i]>=lbl_80309FC4[team].mValues[i+1])) {
                 float value=lbl_80309FC4[team].mValues[i];
                 lbl_80309FC4[team].mValues[i]=lbl_80309FC4[team].mValues[i+1];
                 lbl_80309FC4[team].mValues[i+1]=value;
@@ -1954,7 +1954,7 @@ void fn_8005A8D0(int team)
             }
             Object_80039F5C *p=fn_8003AC84(row);
             if(p && p->mUnknown9[2]) sum+=1.0f;
-            if(lbl_80309FC4[team].mUnknown0<sum) {
+            if(!(sum<=lbl_80309FC4[team].mUnknown0)) {
                 lbl_80309FC4[team].mUnknown0=sum;
                 lbl_80309FC4[team].mUnknown4=row;
                 for(int i=0;i<12;i++) lbl_80309FC4[team].mStats[i]=values[i];
@@ -2086,7 +2086,7 @@ int fn_8005B2BC(unsigned int id,Arg_8018399C *pArgs,int unused,int *pResult)
 unsigned char fn_8005B3CC(void) {return lbl_803EA59F;}
 void fn_8005B3D4(char *pFirst,int firstSize,char *pLast,int lastSize,int *pValue,char *pLabel,int labelSize,int *pResult)
 {
-    fn_800A3444();fn_8007B684();fn_8007B8A4(pFirst,firstSize);fn_8007B904(pLast,lastSize);fn_8007B6D4();
+    fn_8007B684(fn_800A3444());fn_8007B8A4(pFirst,firstSize);fn_8007B904(pLast,lastSize);fn_8007B6D4();
     fn_801FCE10(0,"use 'EVAS' select 'KTFH' into \x82 from 'DFSH' where 'DIVE' = \x80\n",pValue,fn_800A3444());
     int mode=fn_8007F828(14);
     if(mode==0) {fn_801C2E18(pLabel,"Touchdowns");*pResult=fn_8007F828(1);}
@@ -2097,7 +2097,7 @@ int fn_8005B4B0(unsigned int id,Arg_8018399C *pArgs,int unused,int *pResult)
     switch(id) {
     case 0x80000001:fn_8005B3D4(pArgs[0].pParams->mpText,pArgs[0].pParams->mLength,pArgs[1].pParams->mpText,
         pArgs[1].pParams->mLength,pArgs[2].pi,pArgs[3].pParams->mpText,pArgs[3].pParams->mLength,pArgs[4].pi);break;
-    case 0x80000002:fn_800A3444();fn_8007B684();fn_8007B8A4(pArgs[0].pParams->mpText,pArgs[0].pParams->mLength);fn_8007B6D4();break;
+    case 0x80000002:fn_8007B684(fn_800A3444());fn_8007B8A4(pArgs[0].pParams->mpText,pArgs[0].pParams->mLength);fn_8007B6D4();break;
     default:return 0;
     }
     return 1;
@@ -2137,7 +2137,7 @@ void fn_8005B838(int kind,int value)
 {
     switch(kind) {
     case 1:fn_80078BB8(fn_80078B94()+value);break;
-    case 2:fn_80078AE0(value);fn_8007E274();break;
+    case 2:fn_8007E274(fn_80078AE0(value));break;
     case 3:fn_8007E8A8(0,value);break;
     case 4:fn_800C8818(0);fn_8002B714();break;
     case 5:fn_8007E738(value);break;

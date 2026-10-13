@@ -36,8 +36,8 @@ unsigned int fn_80178D18(int);
 int fn_80178D70(int);
 Object_800670B4 *fn_80168708(int);
 Record_8011F4E0 *fn_8011F4E0(void);
-int fn_800AEE20(Object_80039F5C *);
-void fn_800AEF74(Object_80039F5C *, int);
+Message_800F01CC *fn_800AEE20(Object_80039F5C *);
+void fn_800AEF74(Object_80039F5C *, Message_800F01CC *);
 void fn_800F0910(int, Message_800F01CC *);
 int fn_800AD9B4(void);
 int fn_801650DC(Record_80067338 *);
@@ -71,7 +71,7 @@ void fn_80164CE4(Record_80067338 *record, Object_80039F5C *p, int remap)
     if (fn_8011F4E0()->mUnknown6 && (unsigned int)(p->mUnknown2914 - 17) <= 1) remap = !remap;
     unsigned char index = p->mIdBytes[1];
     if (remap) index = fn_80163E94(fn_80168708(p->mIdBytes[2]), p->mIdBytes[1], 0)->mUnknownB;
-    int other = fn_800AEE20(p);
+    Message_800F01CC *other = fn_800AEE20(p);
     if (other) {fn_800AEF74(p, other); return;}
     Message_800F01CC *queue = (Message_800F01CC *)fn_80164EC8(record, p->mIdBytes[2], index);
     short count = 0;
@@ -353,7 +353,7 @@ void fn_80165F78(Point_80167094 *control, Point_80167094 *out, int samples, int 
         fn_80165DF8(&lbl_8031D308[i], &lbl_8031D308[i+1], &out[n], &out[n+1], width, &prior, 1);
         n += 2;
     }
-    fn_80165DF8(&lbl_8031D308[samples-2], &lbl_8031D308[samples-1], &out[n+1], &out[n], width, 0, 0);
+    fn_80165DF8(&lbl_8031D308[samples-1], &lbl_8031D308[samples], &out[n], &out[n+1], width, 0, 0);
 }
 
 void fn_801660A0(Point_80167094 *points, Point_80167094 *out, int width)
@@ -419,10 +419,10 @@ int fn_8016631C(Record_80167094 *record, int capacity, void *vertexBuffer, void 
             controls[0] = starts[i];
             fn_80227638(&controls[1], &step->mUnknown0, starts);
             fn_80227638(&controls[2], &step->mUnknown8, starts);
-            if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (controls[1].mX > 116.0f) controls[1].mX = 116.0f;
-            if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (controls[1].mY > 96.0f) controls[1].mY = 96.0f;
-            if (controls[2].mX < 4.0f) controls[2].mX = 4.0f; else if (controls[2].mX > 116.0f) controls[2].mX = 116.0f;
-            if (controls[2].mY < 4.0f) controls[2].mY = 4.0f; else if (controls[2].mY > 96.0f) controls[2].mY = 96.0f;
+            if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
+            if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
+            if (controls[2].mX < 4.0f) controls[2].mX = 4.0f; else if (!(controls[2].mX <= 116.0f)) controls[2].mX = 116.0f;
+            if (controls[2].mY < 4.0f) controls[2].mY = 4.0f; else if (!(controls[2].mY <= 96.0f)) controls[2].mY = 96.0f;
             ends[i+1] = controls[2];
             int samples = (int)(fn_8022781C(&controls[0], &controls[1]) * 0.175f + 2.0f);
             if (samples > 8) samples = 8;
@@ -436,8 +436,8 @@ int fn_8016631C(Record_80167094 *record, int capacity, void *vertexBuffer, void 
         } else if (step->mUnknown10 == 0) {
             controls[0] = starts[i];
             fn_80227638(&controls[1], &step->mUnknown0, starts);
-            if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (controls[1].mX > 116.0f) controls[1].mX = 116.0f;
-            if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (controls[1].mY > 96.0f) controls[1].mY = 96.0f;
+            if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
+            if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
             ends[i+1] = controls[1];
             fn_801660A0(controls, strip, width);
             count = fn_801662A8(vertices, count, capacity, strip);
@@ -447,8 +447,8 @@ int fn_8016631C(Record_80167094 *record, int capacity, void *vertexBuffer, void 
                 controls[0] = starts[i];
                 if (!j) fn_80227638(&controls[1], &step->mUnknown0, starts);
                 else fn_80227638(&controls[1], &step->mUnknown8, starts);
-                if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (controls[1].mX > 116.0f) controls[1].mX = 116.0f;
-                if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (controls[1].mY > 96.0f) controls[1].mY = 96.0f;
+                if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
+                if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
                 ends[i+1] = controls[1];
                 fn_801660A0(controls, strip, width);
                 count = fn_801662A8(vertices, count, capacity, strip);
@@ -460,8 +460,8 @@ int fn_8016631C(Record_80167094 *record, int capacity, void *vertexBuffer, void 
                 controls[1] = starts[i];
                 starts[i].mY -= 8.0f;
                 controls[0] = starts[i];
-                if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (controls[1].mX > 116.0f) controls[1].mX = 116.0f;
-                if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (controls[1].mY > 96.0f) controls[1].mY = 96.0f;
+                if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
+                if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
                 ends[i+1] = controls[1];
                 fn_801660A0(controls, strip, width);
                 count = fn_801662A8(vertices, count, capacity, strip);

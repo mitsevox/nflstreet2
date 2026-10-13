@@ -30713,7 +30713,7 @@
     {
       "source": "src/game/cu_80164B78.cpp",
       "profile": "game_cpp",
-      "evidence": "Target surveyed grouping and complete25-body/fullreadonly/storage/context evidence. Original source boundaries unknown; full missing storage measured, no padding.",
+      "evidence": "Target surveyed grouping and complete25-body/fullreadonly/storage/context evidence. Original source boundaries unknown; complete scratch target context retained without native storage definitions, unrepresented and uncredited, no padding.",
       "sections": [
         {
           "section": ".text",
