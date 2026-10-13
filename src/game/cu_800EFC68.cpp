@@ -1,3 +1,4 @@
+#include "game/Queue_800EFE0C.h"
 #include <math.h>
 #include <string.h>
 #include "game/fn_800B65A0.h"
@@ -310,12 +311,6 @@ struct Handlers_800EFC68 {
     void (*mpUnknown20)(Message_800F01CC *pMessage);
 };
 
-/* Descriptor registered per queue kind through fn_800EFE0C. */
-struct Queue_800EFE0C {
-    unsigned short mUnknown0;
-    unsigned short mCount;
-    Handlers_800EFC68 *mpHandlers;
-};
 
 /* 196-byte record returned by fn_800B8694. */
 struct Record_800B8694 {
@@ -556,7 +551,7 @@ int fn_801102A4(Object_80039F5C *p);
 void fn_8011E240(Object_80039F5C *p);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, float *pOut, int b);
-float fn_801250B8(Object_80039F5C *p, int a, int b);
+float fn_801250B8(Object_80039F5C *p, Object_80039F5C *pExclude, int kind);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801CFE40(float y, float x);
@@ -707,7 +702,7 @@ float fn_80178A44(void);
 int fn_801784E8(void);
 int fn_800DC080(Object_80039F5C *p);
 void fn_800DBC4C(Object_80039F5C *p, int angle, float value);
-int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, int a);
+int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float fn_8022710C(void *pV);
 Object_800670B4 *fn_80168708(int team);
 int fn_801248D4(Object_80039F5C *p, int a, Vector_80039F5C *pPos, Object_80039F5C **ppOut, int b, int c, float x, float y);
@@ -1322,7 +1317,7 @@ extern "C" int fn_800F22D8(Object_80039F5C *p, int a, int b, int c) {
 
 
 
-extern "C" int fn_800F2828(Object_80039F5C *a, int b) {
+extern "C" int fn_800F2828(Object_80039F5C *a, Object_80039F5C *b) {
     return fn_801250B8(a, b, 6) < lbl_803EAE1C;
 }
 
@@ -4001,7 +3996,7 @@ extern "C" int fn_80110C68(Object_80039F5C *p)
     return ((State_80113AAC *)&p->mUnknown336)->mUnknown14;
 }
 
-extern "C" int fn_80110EB0(Object_80039F5C *p, int a)
+extern "C" int fn_80110EB0(Object_80039F5C *p, Object_80039F5C *a)
 {
     return fn_801250B8(p, a, 6) < lbl_803EAF58;
 }
@@ -5984,7 +5979,7 @@ int fn_801231E4(Object_80039F5C *p, int angle)
     return angle;
 }
 
-void fn_80123E2C(void)
+void fn_80123E2C(float *, Object_80039F5C *, Object_80039F5C *)
 {
 }
 

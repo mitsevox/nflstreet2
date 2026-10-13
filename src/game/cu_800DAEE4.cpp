@@ -889,7 +889,7 @@ int fn_80027DF0(void);
 void fn_8010A2DC(Object_80039F5C *p, int a, int b);
 void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
 void fn_8013AD04(Object_80137ABC *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
-int fn_80124C28(Object_80039F5C *p, float *pOut, int angle, int facing, float a, float b);
+Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, int facing, float a, float b);
 void fn_800ACDE4(Object_80039F5C *p, float *pChance, float *pAngle);
 int fn_80178348(void);
 float fn_80237260(int a);
@@ -1059,7 +1059,6 @@ struct Character_800DF7CC {
     char mUnknown24[92]; Object_80137ABC *mpBall[1];
 };
 extern "C" {
-void fn_800CE804(Command_800CEE74 *, Table_80089904 *, unsigned short);
 Frame_800DF7CC *fn_801C029C(Actor_801C009C *, unsigned char);
 float fn_801BFFA0(Object_80039F5C *);
 int fn_801C065C(Frame_800DF7CC *, float);

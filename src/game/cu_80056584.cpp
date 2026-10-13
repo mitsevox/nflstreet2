@@ -1,5 +1,9 @@
 #include "game/Class_80148A58.h"
+#include "game/Object_8008044C.h"
+#include "game/Object_8007A334.h"
+#include "game/Object_80039F5C.h"
 #include "game/cu_80181330.h"
+#include "game/cu_8017DD68.h"
 #include "game/Object_800785C0.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_801D2B7C.h"
@@ -277,6 +281,8 @@ static unsigned short lbl_803EA59A = 15;
 static unsigned char lbl_803EA59C = 0;
 static unsigned char lbl_803EA59D = 0;
 static unsigned char lbl_803EA59E = 0;
+static unsigned char lbl_803EA59F = 0;
+static int lbl_803EA5A0[2] = {0,0};
 
 void fn_80056584(int index, char *pOut, int b, char *pText0, int size0, char *pText1, int size1,
                  char *pText2, int size2, int *pColor, int unused, char *pText, int length, int *pId)
@@ -1618,6 +1624,552 @@ void fn_80059A9C(int *pList)
             }
         }
     }
+}
+
+
+struct Stats_8005A7EC {
+    float mUnknown0;
+    int mUnknown4;
+    int mStats[12];
+    float mValues[11];
+    int mIndices[11];
+};
+struct Weight_8005A8D0 {int mTag;int mColumn;float mWeight;};
+struct Category_8005AB04 {char mName[20];unsigned char mEnabled;unsigned int mCount;int mIndices[2];};
+extern Object_8008044C lbl_80309F98;
+extern Stats_8005A7EC lbl_80309FC4[2];
+extern const Weight_8005A8D0 lbl_8028EAE8[12];
+extern const Category_8005AB04 lbl_8028EB78[11];
+extern int lbl_802D4D0C[4];
+extern const char *lbl_802D4D1C[9];
+extern const float lbl_803ED6A4,lbl_803ED6A8;
+void fn_800D4164(int side,float time,int a);
+void fn_800A7B5C(void);
+void fn_800B823C(int side);
+int fn_80187C8C(void);
+int fn_80187C6C(void);
+int fn_801787DC(int team);
+int fn_800D41F8(int team);
+int fn_800A8444(int team);
+int fn_800A8740(void);
+float fn_800D3F2C(int team);
+void fn_8017E328(int team,int mode);
+int fn_800CAAC4(int team,unsigned char index);
+float fn_800C9CF0(int team,unsigned char index);
+int fn_80178C24(void);
+unsigned int fn_8009D9F8(int key);
+int fn_8009D9C0(int key);
+Record_80067338 *fn_8016898C(int team,int index);
+int fn_800AEBA0(void);
+int fn_80178E4C(void);
+int fn_800AF078(int team);
+int fn_8002892C(void);
+Object_80039F5C *fn_8003AC84(int id);
+int fn_8008201C(Object_8008044C *pObject,int a,int b,int *pResult,int *pPosition);
+void fn_80080A34(Object_8008044C *pObject,char *pText,int size);
+void fn_8017833C(int enabled);
+void fn_80178354(int enabled);
+void fn_800C1E50(void);
+int fn_80025718(void);
+int fn_80025508(void);
+int fn_80178AE0(void);
+void *fn_8022F4BC(void);
+void *fn_80186B38(void *p);
+int fn_8006270C(void);
+void fn_8018F340(void *p,int id);
+void fn_8018F4C4(void *p);
+int fn_8018F288(void *p,int id);
+int fn_8018F3D8(void *p);
+int fn_800A3444(void);
+void fn_8007B684(int id);
+void fn_8007B8A4(char *pText,int size);
+void fn_8007B904(char *pText,int size);
+void fn_8007B6D4(void);
+void fn_80083E1C(Object_8007A334 *pObject,Query_80083E40 *pQuery);
+int fn_8008406C(Object_8007A334 *pObject,int id,int *pResult);
+int fn_80083FBC(Object_8007A334 *pObject);
+void fn_80079248(char *pText,int size,int id);
+void fn_80078BB8(int value);
+int fn_80078B94(void);
+int fn_80078AE0(int id);
+void fn_8007E274(int key);
+void fn_8007E8A8(int a,int value);
+void fn_800C8818(int id);
+void fn_8002B714(void);
+void fn_8007E738(int value);
+void fn_8007BF60(int value);
+int fn_8007984C(Object_800785C0 *pRecord);
+int fn_8002B5C8(void);
+void fn_80077F24(void);
+
+void fn_80059B64(int *pList, int *pValues, Arg_8018399C *pNames, int *pScores, int *pZero, int *pModes, int *pState, int *pFlags, int *pEnabled, int *pLast);
+void fn_80059E24(float *pValues);
+void fn_80059F54(int *pA, int *pB, int *pC, int *pD);
+void fn_80059F80(char *pText, int *pRed, int *pGreen, int *pBlue);
+void fn_8005A1C0(unsigned int team, int *pEnabled, Params_80005284 **pNames, int *pMode, Params_80005284 **ppText);
+int fn_8005A2B8(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int fn_8005A630(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult);
+int fn_8005A794(int tag, int column, int id);
+void fn_8005A7EC(int team);
+int fn_8005A860(int team);
+Object_80039F5C *fn_8005A8AC(int team);
+void fn_8005A8D0(int team);
+void fn_8005AB04(int team, Arg_8018399C *pNames, int *pValues);
+void fn_8005AC18(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize);
+void fn_8005ACF0(int team);
+void fn_8005ACC8(void);
+void fn_8005ADCC(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize,Arg_8018399C *pNames,int *pValues);
+void fn_8005AE5C(int index);
+void fn_8005AEC8(int *pEnabled,int *pCount,Params_80005284 *pFirst,Params_80005284 *pSecond,int *pAllowed);
+void fn_8005B128(int *pResult,int *pId,Params_80005284 *pText);
+int fn_8005B2BC(unsigned int id,Arg_8018399C *pArgs,int unused,int *pResult);
+void fn_8005B3D4(char *pFirst,int firstSize,char *pLast,int lastSize,int *pValue,char *pLabel,int labelSize,int *pResult);
+int fn_8005B4B0(unsigned int id,Arg_8018399C *pArgs,int unused,int *pResult);
+void fn_8005B55C(int *pResult);
+void fn_8005B610(char *pText,int size,int id);
+void fn_8005B6AC(char *pText,int size,unsigned char id,int defensive);
+int fn_8005B730(char *pText,int size,int kind,int value);
+void fn_8005B838(int kind,int value);
+int fn_8005B908(Params_80005284 **pText);
+void fn_8005B9FC(int *pResult,Params_80005284 **pNames);
+
+void fn_80059B64(int *pList, int *pValues, Arg_8018399C *pNames, int *pScores, int *pZero, int *pModes, int *pState, int *pFlags, int *pEnabled, int *pLast)
+{
+    if (fn_80025708()) {
+        if (fn_800785C0()->mUnknown1C3) { fn_800D4164(0, lbl_803ED6A4, 0); fn_800A7B5C(); }
+        if (fn_800785C0()->mUnknown1C2) { fn_800D4164(1, lbl_803ED6A4, 0); fn_800A7B5C(); }
+    }
+    fn_800B823C(0); fn_800B823C(1);
+    fn_80059A9C(pList);
+    pValues[0] = fn_80187C8C(); pValues[1] = fn_80187C6C();
+    if (fn_8007F828(14) != 1) {
+        Params_80005284 *pText = ((Params_80005284 **)pNames[0].pi)[*pNames[0].pi + 1];
+        fn_801C2D88(pText->mpText, pText->mLength + 1, "%d", fn_801787DC(0));
+        pText = ((Params_80005284 **)pNames[0].pi)[*pNames[0].pi + 2];
+        fn_801C2D88(pText->mpText, pText->mLength + 1, "%d", fn_801787DC(1));
+    } else {
+        ((Params_80005284 **)pNames[0].pi)[*pNames[0].pi + 1]->mpText[0] = 0;
+        ((Params_80005284 **)pNames[0].pi)[*pNames[0].pi + 2]->mpText[0] = 0;
+    }
+    pScores[0] = fn_800D41F8(0); pScores[1] = fn_800D41F8(1);
+    pZero[1] = 0; pZero[0] = 0; pModes[1] = 0; pModes[0] = 0;
+    *pState = fn_80177F70();
+    pFlags[0] = fn_800A8444(0); pFlags[1] = fn_800A8444(1);
+    *pEnabled = fn_800A8740() == 0;
+    if (*pEnabled == 1) {
+        for (int i = 0; i < 2; i++) {
+            if (fn_800D3F2C(i) < lbl_803ED6A8) {
+                if (fn_800D3F2C(i) < lbl_803ED6A4) pModes[i] = 0;
+                else pModes[i] = 1;
+            } else pModes[i] = 2;
+            fn_8017DF6C((unsigned char)i, (unsigned char)pModes[i]);
+            if (fn_800D3F2C(i) < lbl_803ED6A4) fn_8017E328((unsigned char)i, 1);
+            else fn_8017E328((unsigned char)i, 2);
+        }
+    }
+    pLast[1] = 0; pLast[0] = 0;
+}
+
+void fn_80059E24(float *pValues)
+{
+    for (int i = 0; i < 4; i++) pValues[i] = 1.0f;
+    float *pLow = pValues, *pHigh = pValues + 3;
+    int index1 = 0, index0 = 0;
+    for (unsigned int i = 0; i < 4; i++) {
+        int id = fn_80188044(i);
+        if (id != -1) {
+            int team = fn_800B6644(id);
+            if (team != 255) {
+                if ((unsigned int)fn_801486A0() <= 1) {
+                    for (unsigned char j = 0; j < 4; j++) {
+                        if (fn_800CAAC4(team, j) == id) {pValues[i] = fn_800C9CF0(team, j); break;}
+                    }
+                } else if (team == 1) *pLow++ = fn_800C9CF0(1, index1++);
+                else if (team == 0) *pHigh-- = fn_800C9CF0(0, index0++);
+            }
+        }
+    }
+}
+
+void fn_80059F54(int *pA, int *pB, int *pC, int *pD)
+{
+    *pA = lbl_802D4D0C[0]; *pB = lbl_802D4D0C[1]; *pC = lbl_802D4D0C[2]; *pD = lbl_802D4D0C[3];
+}
+
+void fn_80059F80(char *pText, int *pRed, int *pGreen, int *pBlue)
+{
+    int key;
+    int mode = fn_801486A0();
+    if (mode == 2 || mode == 4) key = 5;
+    else { key = 4; if (fn_80178C24()) key = 1; }
+    unsigned int time = fn_8009D990(key);
+    unsigned int elapsed = fn_8009D9F8(key);
+    int duration = fn_8009D9C0(key);
+    float fraction = (float)elapsed / (float)duration;
+    if (!(1.0f - fraction > 0.0000001f)) fraction = 1.0f;
+    unsigned int remainder = (unsigned int)(fraction * 1000.0f) % 1000;
+    unsigned short minutes = time / 60;
+    unsigned short seconds = time % 60;
+    if (minutes == 0 && seconds == 0) remainder = 0;
+    if (remainder) {
+        if (!seconds) {seconds = 59; minutes--;}
+        else seconds--;
+    }
+    fn_801C2E18(pText, "%d:%02d.%01d", minutes, seconds, remainder / 100);
+    if (pRed && pGreen && pBlue) {
+        if (minutes != 0 || (seconds > 9 && (seconds != 10 || remainder != 0))) {
+            *pRed = 255; *pGreen = 255; *pBlue = 255;
+        } else {*pRed = 200; *pGreen = 0; *pBlue = 0;}
+    }
+}
+
+void fn_8005A1C0(unsigned int team, int *pEnabled, Params_80005284 **pNames, int *pMode, Params_80005284 **ppText)
+{
+    Params_80005284 *pText = *ppText;
+    for (unsigned int i = 0; i < 4; i++) {
+        pEnabled[i] = fn_801486A0() != 2 || i < 2;
+        if (pEnabled[i] == 1) {
+            Record_80067338 *pRecord = fn_8016898C((unsigned char)team, i);
+            fn_801C2EF0(pNames[i]->mpText, pRecord->mUnknown1F3, pNames[i]->mLength);
+        }
+    }
+    if ((unsigned int)fn_80178308() == team) {
+        *pMode = fn_800AEBA0() != 0;
+        if (*pMode == 1) fn_801C2EF0(pText->mpText, "Max Protect", pText->mLength);
+    } else {
+        *pMode = fn_80178E4C();
+        fn_801C2EF0(pText->mpText, "Prediction", pText->mLength);
+    }
+}
+
+int fn_8005A2B8(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+{
+    switch (id) {
+    case 0x80000001:
+        fn_80059B64((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4), (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4), &pArgs[2],
+                   (int *)(pArgs[3].i + (*pArgs[3].pi + 1) * 4), (int *)(pArgs[4].i + (*pArgs[4].pi + 1) * 4),
+                   (int *)(pArgs[5].i + (*pArgs[5].pi + 1) * 4), pArgs[6].pi,
+                   (int *)(pArgs[7].i + (*pArgs[7].pi + 1) * 4), pArgs[8].pi,
+                   (int *)(pArgs[9].i + (*pArgs[9].pi + 1) * 4));
+        break;
+    case 0x80000002: fn_80059E24((float *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
+    case 0x80000003: fn_80059A9C((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
+    case 0x80000005: fn_80059F54(pArgs[0].pi,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
+    case 0x80000006: fn_80059F80(pArgs[0].pParams->mpText,0,0,0); break;
+    case 0x80000007:
+        if (fn_80025708()) *pResult = fn_800785C0()->mUnknown1A4;
+        else {int mode = fn_801486A0(); *pResult = mode == 2 || mode == 4 ? 1 : fn_80178C24();}
+        break;
+    case 0x80000008:
+        ((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4))[0] = fn_800AF078(0);
+        ((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4))[1] = fn_800AF078(1);
+        *pArgs[1].pi = fn_8002892C() != 0;
+        ((int *)(pArgs[2].i + (*pArgs[2].pi + 1) * 4))[0] = 0;
+        ((int *)(pArgs[2].i + (*pArgs[2].pi + 1) * 4))[1] = 0;
+        ((float *)(pArgs[3].i + (*pArgs[3].pi + 1) * 4))[0] = 1.0f;
+        ((float *)(pArgs[3].i + (*pArgs[3].pi + 1) * 4))[1] = 1.0f;
+        ((float *)(pArgs[4].i + (*pArgs[4].pi + 1) * 4))[0] = 1.0f;
+        ((float *)(pArgs[4].i + (*pArgs[4].pi + 1) * 4))[1] = 1.0f;
+        ((int *)(pArgs[5].i + (*pArgs[5].pi + 1) * 4))[0] = 0;
+        ((int *)(pArgs[5].i + (*pArgs[5].pi + 1) * 4))[1] = 0;
+        break;
+    case 0x80000009:
+        {Params_80005284 *pText = pArgs[4].pParams;
+        fn_8005A1C0(pArgs[0].i, (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4),
+                   (Params_80005284 **)(pArgs[2].i + (*pArgs[2].pi + 1) * 4), pArgs[3].pi, &pText);}
+        break;
+    default: return 0;
+    }
+    return 1;
+}
+
+int fn_8005A630(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
+{
+    switch(id) {
+    case 0x80000001: break;
+    case 0x80000002: {int mode=fn_801486A0(); *pResult=mode==2||mode==4?1:fn_80178C24();} break;
+    case 0x80000003: fn_80059A9C((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
+    case 0x80000004: fn_80059F80(pArgs[0].pParams->mpText,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
+    case 0x80000005: fn_80059E24((float *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
+    case 0x80000006: {Params_80005284 *pText=pArgs[4].pParams;
+        fn_8005A1C0(pArgs[0].i,(int *)(pArgs[1].i+(*pArgs[1].pi+1)*4),
+                   (Params_80005284 **)(pArgs[2].i+(*pArgs[2].pi+1)*4),pArgs[3].pi,&pText);} break;
+    default:return 0;
+    }
+    return 1;
+}
+
+int fn_8005A794(int tag, int column, int id)
+{
+    int value;
+    if (fn_801FCE10(0,"select \x8c into \x82 from \x8c where 'DIGP' = \x82\n",column,&value,tag,id)) value=0;
+    return value;
+}
+
+void fn_8005A7EC(int team)
+{
+    int swapped;
+    do {
+        swapped=0;
+        for (int i=0;i<10;i++) {
+            if (!(lbl_80309FC4[team].mValues[i]>=lbl_80309FC4[team].mValues[i+1])) {
+                float value=lbl_80309FC4[team].mValues[i];
+                lbl_80309FC4[team].mValues[i]=lbl_80309FC4[team].mValues[i+1];
+                lbl_80309FC4[team].mValues[i+1]=value;
+                int index=lbl_80309FC4[team].mIndices[i];
+                lbl_80309FC4[team].mIndices[i]=lbl_80309FC4[team].mIndices[i+1];
+                lbl_80309FC4[team].mIndices[i+1]=index;
+                swapped=1;
+            }
+        }
+    } while(swapped);
+}
+
+int fn_8005A860(int team)
+{
+    fn_8005ACF0(team); fn_8005A8D0(team); fn_8005ACC8();
+    return lbl_80309FC4[team].mUnknown4;
+}
+Object_80039F5C *fn_8005A8AC(int team)
+{
+    return fn_8003AC84(fn_8005A860(team));
+}
+
+void fn_8005A8D0(int team)
+{
+    int row;
+    int values[12];
+    float scores[11];
+    if (fn_8008201C(&lbl_80309F98,0,team,&row,0)) {
+        do {
+            for (int i=0;i<12;i++) values[i]=fn_8005A794(lbl_8028EAE8[i].mTag,lbl_8028EAE8[i].mColumn,row);
+            float sum=0.0f;
+            for (int i=0;i<11;i++) {
+                float value=0.0f;
+                for (unsigned int j=0;j<lbl_8028EB78[i].mCount;j++) {
+                    int index=lbl_8028EB78[i].mIndices[j];
+                    if(index!=13) value += values[index]*lbl_8028EAE8[index].mWeight;
+                }
+                scores[i]=value; sum+=value;
+            }
+            Object_80039F5C *p=fn_8003AC84(row);
+            if(p && p->mUnknown9[2]) sum+=1.0f;
+            if(!(sum<=lbl_80309FC4[team].mUnknown0)) {
+                lbl_80309FC4[team].mUnknown0=sum;
+                lbl_80309FC4[team].mUnknown4=row;
+                for(int i=0;i<12;i++) lbl_80309FC4[team].mStats[i]=values[i];
+                for(int i=0;i<11;i++) lbl_80309FC4[team].mValues[i]=scores[i];
+            }
+        } while(fn_8008201C(&lbl_80309F98,1,team,&row,0));
+    }
+}
+
+void fn_8005AB04(int team, Arg_8018399C *pNames, int *pValues)
+{
+    fn_8005A7EC(team);
+    unsigned int count=0;
+    int i=0;
+    do {
+        const Category_8005AB04 *pCategory=&lbl_8028EB78[lbl_80309FC4[team].mIndices[i++]];
+        if(pCategory->mEnabled) {
+            Params_80005284 *pText=((Params_80005284 **)pNames[0].pi)[*pNames[0].pi+count+1];
+            fn_801C2EF0(pText->mpText,pCategory->mName,pText->mLength);
+            int value=0;
+            for(unsigned int j=0;j<pCategory->mCount;j++) {
+                int index=pCategory->mIndices[j];
+                if(index!=13) value+=lbl_80309FC4[team].mStats[index];
+            }
+            pValues[count++]=value;
+        }
+    } while(count<4);
+}
+
+void fn_8005AC18(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize)
+{
+    int key;
+    fn_800809C4(&lbl_80309F98,lbl_80309FC4[team].mUnknown4,&key);
+    *pId=fn_800C8744(team);
+    char first[16],last[16];
+    fn_80080A34(&lbl_80309F98,first,12); fn_801C2EF0(pFirst,first,firstSize);
+    fn_80080A68(&lbl_80309F98,last,15); fn_801C2EF0(pLast,last,lastSize);
+}
+void fn_8005ACC8(void) {fn_8008056C(&lbl_80309F98);}
+void fn_8005ACF0(int team)
+{
+    Desc_8008044C desc;
+    desc.mUnknown4=1; desc.mUnknown8=team;
+    fn_8008044C(&lbl_80309F98,&desc,0x454D4147);
+    Stats_8005A7EC *p=&lbl_80309FC4[team];
+    p->mUnknown4=0; p->mUnknown0=-3.4028234663852886e38f;
+    for(int i=11;i>=0;i--) p->mStats[i]=0;
+    for(int i=0;i<11;i++) {p->mIndices[i]=i;p->mValues[i]=0.0f;}
+}
+void fn_8005ADCC(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize,Arg_8018399C *pNames,int *pValues)
+{
+    team=team!=0;
+    fn_8005ACF0(team); fn_8005A8D0(team);
+    fn_8005AC18(team,pId,pFirst,firstSize,pLast,lastSize); fn_8005AB04(team,pNames,pValues); fn_8005ACC8();
+}
+
+void fn_8005AE5C(int index)
+{
+    if(lbl_803EA5A0[index]!=1 && lbl_803EA5A0[index]==2) {
+        if(fn_8017F584()==8) {fn_800C1CA0();fn_8017833C(1);fn_80178354(1);}
+        else fn_800C1CA0();
+    }
+    lbl_803EA5A0[0]=0; lbl_803EA5A0[1]=0;
+}
+
+void fn_8005AEC8(int *pEnabled,int *pCount,Params_80005284 *pFirst,Params_80005284 *pSecond,int *pAllowed)
+{
+    fn_800C1E50();fn_80059020();
+    int enabled=0;
+    if(!fn_8017F60C() && (!fn_80025718() || fn_80025508())) {
+        enabled=1;
+        if(fn_8017F584()==7 || fn_8017F584()==10) {
+            if(fn_800B65A0(fn_80178AE0())!=255) enabled=0;
+        }
+    }
+    *pEnabled=enabled;
+    unsigned int score1,score0;
+    if(fn_8007F828(14)==1) {score1=fn_800D41F8(1);score0=fn_800D41F8(0);}
+    else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
+    *pAllowed=!((score1<score0 && fn_800B65A0(1)!=255)||(score0<score1 && fn_800B65A0(0)!=255));
+    if(fn_8017F584()==8) {
+        if(score1>score0) {*pCount=1;fn_801C2EF0(pFirst->mpText,"Continue",pFirst->mLength);lbl_803EA5A0[0]=3;}
+        else {*pCount=2;fn_801C2EF0(pFirst->mpText,"Rematch",pFirst->mLength);lbl_803EA5A0[0]=2;
+              fn_801C2EF0(pSecond->mpText,"Exit",pSecond->mLength);lbl_803EA5A0[1]=1;}
+        return;
+    }
+    const char *pLabel=fn_8017F584()==11?"Continue":"Exit";
+    if(*pEnabled==1) {
+        *pCount=2;fn_801C2EF0(pFirst->mpText,"Rematch",pFirst->mLength);lbl_803EA5A0[0]=2;
+        fn_801C2EF0(pSecond->mpText,pLabel,pSecond->mLength);lbl_803EA5A0[1]=1;
+    } else {
+        *pCount=1;fn_801C2EF0(pFirst->mpText,pLabel,pSecond->mLength);lbl_803EA5A0[0]=1;lbl_803EA5A0[1]=0;
+    }
+}
+
+void fn_8005B128(int *pResult,int *pId,Params_80005284 *pText)
+{
+    unsigned int score1,score0;
+    if(fn_8007F828(14)==1) {score1=fn_800D41F8(1);score0=fn_800D41F8(0);}
+    else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
+    if(fn_8017F584()==8) {
+        if(score1>score0) {
+            void *p=fn_80186B38(fn_8022F4BC());
+            fn_8018F340(p,fn_8006270C());
+            fn_8018F4C4(fn_80186B38(fn_8022F4BC()));
+            *pResult=1;
+            if(fn_8018F288(fn_80186B38(fn_8022F4BC()),34)) *pResult=3;
+            else if(!fn_8018F3D8(fn_80186B38(fn_8022F4BC()))) *pResult=2;
+        } else *pResult=0;
+        Object_8007A334 query;
+        fn_80083E40(&query,0,0x54415453);
+        if(fn_80084034(&query,*pId,0)) {char name[36];fn_80083F88(&query,name,32);fn_801C3284(pText->mpText,name,pText->mLength);}
+        else fn_801C3284(pText->mpText,"",pText->mLength);
+        fn_80083F68(&query);
+    } else *pResult=-1;
+}
+int fn_8005B2BC(unsigned int id,Arg_8018399C *pArgs,int unused,int *pResult)
+{
+    switch(id) {
+    case 0x80000001:lbl_803EA59F=1;fn_8005AEC8(pArgs[0].pi,pArgs[1].pi,pArgs[2].pParams,pArgs[3].pParams,pArgs[4].pi);break;
+    case 0x80000002:fn_8005AE5C(pArgs[0].i);lbl_803EA59F=0;break;
+    case 0x80000003:fn_8005ADCC(pArgs[0].i,pArgs[1].pi,pArgs[2].pParams->mpText,pArgs[2].pParams->mLength,
+        pArgs[3].pParams->mpText,pArgs[3].pParams->mLength,&pArgs[4],(int *)(pArgs[5].i+(*pArgs[5].pi+1)*4));break;
+    case 0x80000004:fn_8005B128(pArgs[0].pi,pArgs[1].pi,pArgs[2].pParams);break;
+    default:return 0;
+    }
+    return 1;
+}
+unsigned char fn_8005B3CC(void) {return lbl_803EA59F;}
+void fn_8005B3D4(char *pFirst,int firstSize,char *pLast,int lastSize,int *pValue,char *pLabel,int labelSize,int *pResult)
+{
+    fn_8007B684(fn_800A3444());fn_8007B8A4(pFirst,firstSize);fn_8007B904(pLast,lastSize);fn_8007B6D4();
+    fn_801FCE10(0,"use 'EVAS' select 'KTFH' into \x82 from 'DFSH' where 'DIVE' = \x80\n",pValue,fn_800A3444());
+    int mode=fn_8007F828(14);
+    if(mode==0) {fn_801C2E18(pLabel,"Touchdowns");*pResult=fn_8007F828(1);}
+    else if(mode==1) {fn_801C2E18(pLabel,"Style Points");*pResult=fn_8007F828(2);}
+}
+int fn_8005B4B0(unsigned int id,Arg_8018399C *pArgs,int unused,int *pResult)
+{
+    switch(id) {
+    case 0x80000001:fn_8005B3D4(pArgs[0].pParams->mpText,pArgs[0].pParams->mLength,pArgs[1].pParams->mpText,
+        pArgs[1].pParams->mLength,pArgs[2].pi,pArgs[3].pParams->mpText,pArgs[3].pParams->mLength,pArgs[4].pi);break;
+    case 0x80000002:fn_8007B684(fn_800A3444());fn_8007B8A4(pArgs[0].pParams->mpText,pArgs[0].pParams->mLength);fn_8007B6D4();break;
+    default:return 0;
+    }
+    return 1;
+}
+void fn_8005B55C(int *pResult)
+{
+    Object_8007A334 query;
+    fn_80083E1C(&query,0);fn_8008406C(&query,1,0);*pResult=fn_80083FBC(&query);fn_80083F68(&query);fn_800C1E50();
+}
+void fn_8005B5D8(int clear) {fn_800652A8();if(clear) fn_800C1CA0();}
+void fn_8005B610(char *pText,int size,int id)
+{
+    Object_8007A334 query;char name[24];
+    fn_8007EEFC(&query);fn_8007F0F4(&query,id+45,0);fn_8007F094(&query,name,21);fn_8007F064(&query);
+    fn_801C2D88(pText,size,lbl_802D4D1C[5],name);
+}
+void fn_8005B6AC(char *pText,int size,unsigned char id,int defensive)
+{
+    char name[68];fn_80058798(name,64,id,defensive);
+    fn_801C2D88(pText,size,defensive?lbl_802D4D1C[3]:lbl_802D4D1C[7],name);
+}
+int fn_8005B730(char *pText,int size,int kind,int value)
+{
+    int result=0;char text[260];text[0]=0;
+    switch(kind) {
+    case 1:result=value;break;
+    case 2:fn_80079248(text,255,value);break;
+    case 3:fn_8005B6AC(text,255,value,1);break;
+    case 5:fn_8005B610(text,255,value);break;
+    case 7:fn_8005B6AC(text,255,value,0);break;
+    default:fn_801C3284(text,lbl_802D4D1C[kind],255);break;
+    }
+    if(fn_801C3180(text)>0) fn_801C2EF0(pText,text,size);
+    return result;
+}
+void fn_8005B838(int kind,int value)
+{
+    switch(kind) {
+    case 1:fn_80078BB8(fn_80078B94()+value);break;
+    case 2:fn_8007E274(fn_80078AE0(value));break;
+    case 3:fn_8007E8A8(0,value);break;
+    case 4:fn_800C8818(0);fn_8002B714();break;
+    case 5:fn_8007E738(value);break;
+    case 6:break;
+    case 7:fn_8007E8A8(1,value);break;
+    case 8:fn_8007BF60(value);break;
+    }
+}
+int fn_8005B908(Params_80005284 **pText)
+{
+    int result=0;Object_800785C0 *p=fn_800785C0();
+    if(!fn_8007984C(p)) {
+        for(int i=0;i<2;i++) {
+            if(p->mUnknown1F4[i].mId) {
+                result+=fn_8005B730((*pText)->mpText,(*pText)->mLength,p->mUnknown1F4[i].mId,p->mUnknown1F4[i].mUnknown4);
+                fn_8005B838(p->mUnknown1F4[i].mId,p->mUnknown1F4[i].mUnknown4);
+                if(fn_801C3180((*pText)->mpText)) pText++;
+            }
+        }
+    } else {
+        int index=fn_8002B5C8();
+        if(index<3) {
+            result=fn_8005B730((*pText)->mpText,(*pText)->mLength,p->mUnknown20C.mUnknown1C,p->mUnknown20C.mUnknown20[index]);
+            fn_8005B838(p->mUnknown20C.mUnknown1C,p->mUnknown20C.mUnknown20[index]);
+        }
+    }
+    return result;
+}
+void fn_8005B9FC(int *pResult,Params_80005284 **pNames)
+{
+    for(int i=0;i<4;i++) fn_801C3284(pNames[i]->mpText,"",pNames[i]->mLength);
+    *pResult=fn_8005B908(pNames);fn_80077F24();
 }
 
 }

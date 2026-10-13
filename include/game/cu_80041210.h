@@ -8,7 +8,7 @@ struct Extra_8004149C {
     unsigned char mUnknown32;
     unsigned char mUnknown33;
     char mUnknown34[2];
-    char mUnknown36[4];
+    union { char mUnknown36[4]; int mWord36; };
     char mUnknown40[8];
     char mUnknown48[2];
     unsigned short mUnknown50;
