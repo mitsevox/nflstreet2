@@ -1,3 +1,4 @@
+#include "game/Command_800CEE74.h"
 #include "game/Record_803EA558.h"
 #include "game/Level_80054130.h"
 #include "game/cu_80142BB4.h"
@@ -7361,10 +7362,7 @@ extern "C" void fn_800A2190(int bit)
 }
 
 /* Two floats written by fn_80227690. */
-struct Delta_800CC6A8 {
-    float mX;
-    float mY;
-};
+typedef Point_8017886C Delta_800CC6A8;
 
 /* Halfword-counted set whose 20-byte entries start at +8. */
 struct Entry_800CCBA0 {
@@ -10012,34 +10010,7 @@ extern "C" int fn_800CCD20(Group_800CC98C *p, Play_800CCEBC *pPlay)
     return result;
 }
 
-struct Anchor_800CE804 {
-    int mAngle;
-    Delta_800CC6A8 mPoint;
-    unsigned char mUnknown12;
-    char mUnknown13[3];
-};
 
-struct Record_800CEE74 {
-    Vector_80039F5C mUnknown0;
-    Vector_80039F5C mUnknown12;
-    float mUnknown24;
-    union {
-        struct {    int mUnknown28;
-    Delta_800CC6A8 mUnknown32;
-    unsigned char mUnknown40;
-    char mUnknown41[3];
-    int mUnknown44;
-    Delta_800CC6A8 mUnknown48;
-    unsigned char mUnknown56;
-    char mUnknown57[3];
-
-        };
-        struct { Anchor_800CE804 mAnchor28; Anchor_800CE804 mAnchor44; };
-    };
-    unsigned short mUnknown60;
-    unsigned char mUnknown62;
-    unsigned char mUnknown63;
-};
 
 extern "C" {
 extern float lbl_802EA6FC[];
@@ -10067,8 +10038,9 @@ extern "C" void fn_800CEDA4(Node_800CCEBC *p, Delta_800CC6A8 *pPoint, int *pAngl
     }
 }
 
-extern "C" void fn_800CEE74(Record_800CEE74 *pOut, Object_80039F5C *pA, Object_80039F5C *pB, Delta_800CC6A8 *pPoint, int angle, int key, int mirror)
+extern "C" void fn_800CEE74(Command_800CEE74 *pOut, Object_80039F5C *pA, Object_80039F5C *pB, void *pData, int angle, int key, int mirror)
 {
+    Point_8017886C *pPoint = (Point_8017886C *)pData;
     pOut->mUnknown62 = mirror;
     pOut->mUnknown60 = key;
     pOut->mUnknown32.mX = pA->mMotion.mPos.mX;
@@ -10080,7 +10052,7 @@ extern "C" void fn_800CEE74(Record_800CEE74 *pOut, Object_80039F5C *pA, Object_8
         pOut->mUnknown48 = *pPoint;
         pOut->mUnknown56 = pB != 0 ? pB->mUnknown2920 : 1;
     }
-    pOut->mUnknown63 = 1;
+    pOut->mUnknown63Value = 1;
 }
 
 extern "C" int fn_800CE2B8(Query_800CE770 *p)
@@ -10298,9 +10270,8 @@ extern "C" {
 int fn_800C8BAC(Object_80039F5C *, int);
 Table_80089904 *fn_801BE72C(unsigned short,unsigned short);
 Object_801BBD5C *fn_801BBD5C(unsigned short,unsigned short);
-void fn_800CE804(Record_800CEE74 *, Table_80089904 *, int);
-int fn_800CEA7C(Group_800CC98C *, Record_800CEE74 *, Vector_80039F5C *, int *);
-void fn_800CEED8(int,int,Record_800CEE74 *,Object_80039F5C *,Vector_80039F5C *,int,Vector_80039F5C *,int *,unsigned char *);
+int fn_800CEA7C(Group_800CC98C *, Command_800CEE74 *, Vector_80039F5C *, int *);
+void fn_800CEED8(int,int,Command_800CEE74 *,Object_80039F5C *,Vector_80039F5C *,int,Vector_80039F5C *,int *,unsigned char *);
 }
 
 extern "C" Play_800CCEBC *fn_800CD3C0(Group_800CC98C *p, Play_800CCEBC *pOut, unsigned short *pKey)
@@ -10380,7 +10351,7 @@ extern float lbl_803EAC84;
 extern float lbl_803EAC88;
 }
 
-extern "C" void fn_800CE804(Record_800CEE74 *p, Table_80089904 *pTable, int index)
+extern "C" void fn_800CE804(Command_800CEE74 *p, Table_80089904 *pTable, int index)
 {
     Anchor_800CE804 *pAnchor = 0;
     switch (p->mUnknown60) {
@@ -10391,7 +10362,7 @@ extern "C" void fn_800CE804(Record_800CEE74 *p, Table_80089904 *pTable, int inde
                 Info_80089904 *pInfo = pTable->mEntries[i].mpInfo;
                 p->mUnknown12 = pInfo->mUnknown28Vector;
                 p->mUnknown24 = pInfo->mUnknown24;
-                p->mUnknown0 = pInfo->mUnknown40;
+                p->mVector0 = pInfo->mUnknown40;
                 pAnchor = &p->mAnchor28;
                 break;
             }
@@ -10403,7 +10374,7 @@ extern "C" void fn_800CE804(Record_800CEE74 *p, Table_80089904 *pTable, int inde
             if (pInfo->mUnknown52 == 1) {
                 p->mUnknown12 = pInfo->mUnknown28Vector;
                 p->mUnknown24 = pInfo->mUnknown24;
-                p->mUnknown0 = pInfo->mUnknown40;
+                p->mVector0 = pInfo->mUnknown40;
                 pAnchor = &p->mAnchor28;
             }
         }
@@ -10411,22 +10382,22 @@ extern "C" void fn_800CE804(Record_800CEE74 *p, Table_80089904 *pTable, int inde
     }
     if (p->mUnknown62 != 0 && pAnchor == &p->mAnchor28) {
         p->mUnknown12.mY = -p->mUnknown12.mY;
-        p->mUnknown0.mY = -p->mUnknown0.mY;
+        p->mVector0.mY = -p->mVector0.mY;
     }
     fn_80227384(&p->mUnknown12, &p->mUnknown12, pAnchor->mAngle);
     p->mUnknown12.mX += pAnchor->mPoint.mX;
     p->mUnknown12.mY += pAnchor->mPoint.mY;
-    p->mUnknown0.mZ = 0.0f;
-    fn_80227384(&p->mUnknown0, &p->mUnknown0, pAnchor->mAngle);
-    fn_802271F0(&p->mUnknown0, &p->mUnknown0);
+    p->mVector0.mZ = 0.0f;
+    fn_80227384(&p->mVector0, &p->mVector0, pAnchor->mAngle);
+    fn_802271F0(&p->mVector0, &p->mVector0);
     Vector_80039F5C delta;
-    if (pAnchor->mUnknown12 == 2) fn_80227264(&delta, &p->mUnknown0, lbl_803EAC88);
-    else fn_80227264(&delta, &p->mUnknown0, lbl_803EAC84);
+    if (pAnchor->mUnknown12 == 2) fn_80227264(&delta, &p->mVector0, lbl_803EAC88);
+    else fn_80227264(&delta, &p->mVector0, lbl_803EAC84);
     fn_8022765C(&p->mUnknown12, &p->mUnknown12, &delta);
     delta.mX = 0.0f;
 }
 
-extern "C" void fn_800CEED8(int key, int index, Record_800CEE74 *pRecord, Object_80039F5C *pPlayer,
+extern "C" void fn_800CEED8(int key, int index, Command_800CEE74 *pRecord, Object_80039F5C *pPlayer,
                             Vector_80039F5C *pPoint, int angle, Vector_80039F5C *pOut, int *pAngle, unsigned char *pValue)
 {
     Record_800C432C table;
@@ -10447,7 +10418,7 @@ extern "C" void fn_800CEED8(int key, int index, Record_800CEE74 *pRecord, Object
     Delta_800CC6A8 delta;
     fn_80227690(&delta, pPoint, &pRecord->mUnknown12);
     fn_80227638(pOut, pOut, &delta);
-    unsigned int difference = ((angle & 0xFFFFFF) - fn_801CFE40(pRecord->mUnknown0.mY, pRecord->mUnknown0.mX)) & 0xFFFFFF;
+    unsigned int difference = ((angle & 0xFFFFFF) - fn_801CFE40(pRecord->mVector0.mY, pRecord->mVector0.mX)) & 0xFFFFFF;
     *pAngle = (*pAngle + difference) & 0xFFFFFF;
     fn_80227690(pOut, pOut, pPoint);
     fn_80227384(pOut, pOut, difference);
@@ -10455,7 +10426,7 @@ extern "C" void fn_800CEED8(int key, int index, Record_800CEE74 *pRecord, Object
 }
 
 extern "C" { int fn_800E0F48(void *,void *,void *,void *); }
-extern "C" int fn_800CCF68(Group_800CC98C *p, Record_800CEE74 *pRecord, Vector_80039F5C *pPoint, int angle)
+extern "C" int fn_800CCF68(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_80039F5C *pPoint, int angle)
 {
     Record_800C432C table;
     fn_801BBC3C(1, pRecord->mUnknown60, &table.mTable);
@@ -10486,7 +10457,7 @@ extern "C" int fn_800CD0BC(Group_800CC98C *p, Play_800CCEBC *pPlay, int key)
     Delta_800CC6A8 point;
     int angle;
     fn_800CEDA4(pPlay->mpUnknown20, &point, &angle, pA, p->mUnknown57);
-    Record_800CEE74 record;
+    Command_800CEE74 record;
     fn_800CEE74(&record, pA, pB, &point, angle, key, p->mUnknown57);
     Vector_80039F5C resultPoint;
     int resultAngle;
@@ -10509,12 +10480,12 @@ extern unsigned char lbl_803EAC8C;
 extern float lbl_803EAC90;
 }
 
-extern "C" int fn_800CEA7C(Group_800CC98C *p, Record_800CEE74 *pRecord, Vector_80039F5C *pOut, int *pAngle)
+extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_80039F5C *pOut, int *pAngle)
 {
     Record_800C432C table;
     fn_801BBC3C(1, pRecord->mUnknown60, &table.mTable);
     fn_800CE804(pRecord, &table.mTable, 0);
-    int direction = fn_801CFE40(pRecord->mUnknown0.mY, pRecord->mUnknown0.mX);
+    int direction = fn_801CFE40(pRecord->mVector0.mY, pRecord->mVector0.mX);
     unsigned int count = (unsigned short)fn_80054130()->mUnknown136;
     Record_80054130 *pRow = fn_80054130()->mUnknown140;
     float height = pRecord->mUnknown12.mZ;

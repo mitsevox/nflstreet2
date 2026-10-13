@@ -1059,7 +1059,6 @@ struct Character_800DF7CC {
     char mUnknown24[92]; Object_80137ABC *mpBall[1];
 };
 extern "C" {
-void fn_800CE804(Command_800CEE74 *, Table_80089904 *, unsigned short);
 Frame_800DF7CC *fn_801C029C(Actor_801C009C *, unsigned char);
 float fn_801BFFA0(Object_80039F5C *);
 int fn_801C065C(Frame_800DF7CC *, float);
