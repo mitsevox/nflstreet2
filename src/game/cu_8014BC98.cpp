@@ -3,6 +3,7 @@
 #include "game/fn_8009D990.h"
 #include "game/fn_800F06F4.h"
 #include "game/Class_80297C60.h"
+#include "game/fn_80218FC4.h"
 #include <string.h>
 
 struct State_802A23A8 {
@@ -43,17 +44,16 @@ int fn_800A2178(void);
 int fn_800A937C(void);
 int fn_800A8444(int team);
 int fn_800A8EA4(int team);
-int fn_80218FC4(void *p, unsigned short a, unsigned short b, unsigned char count, int *pArgs);
 int fn_8014BC90(void);
 int fn_800B9A90(Class_80297C60 *p);
 
 void fn_800BC5DC(void *p);
 void fn_800BCB18(void *p, float dt);
-void fn_800B3718(void *p, float dt);
-void fn_800B9654(void *p);
+void fn_800B3718(void *p);
+void fn_800B9654(void *p, float dt);
 void fn_800B9830(void *p, float dt);
 void fn_800BFB88(void *p, float dt);
-void fn_800A042C(void *p, float dt);
+void fn_800A042C(void *p);
 void fn_800A050C(void *p, float dt);
 int fn_800B8E18(void *p, char *pText);
 void fn_800B925C(void *p, char *pText);
@@ -242,9 +242,9 @@ void fn_8014BED8(const int *pValues, int *pOrder, unsigned int count)
     }
 }
 
-void fn_8014C118(void *p, float dt)
+void fn_8014C118(void *p)
 {
-    fn_800B3718(p, dt);
+    fn_800B3718(p);
     fn_801487C0(0, 4);
     fn_801487C0(1, 4);
 }
@@ -259,9 +259,9 @@ int fn_8014C158(void)
     return 1;
 }
 
-void fn_8014C160(void *p)
+void fn_8014C160(void *p, float dt)
 {
-    fn_800B9654(p);
+    fn_800B9654(p, dt);
     fn_8009D8CC(5);
 }
 
@@ -296,9 +296,9 @@ void fn_8014C214(void *p, float dt)
     }
 }
 
-void fn_8014C278(State_802A23A8 *p, float dt)
+void fn_8014C278(State_802A23A8 *p)
 {
-    fn_800A042C(p, dt);
+    fn_800A042C(p);
     if (fn_800A937C() == 0) {
         fn_8009D888(5, 0);
     }
