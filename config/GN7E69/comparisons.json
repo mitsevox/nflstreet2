@@ -31917,7 +31917,7 @@
     {
       "source": "src/game/cu_8014BC98.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #784; thirteen complete bodies 0x8014BC98-0x8014C630 inside the retained provisional cu_801485B4 survey group, after the cu_8014B890.cpp fragment: the order-list helpers fn_8014BC98/fn_8014BED8 (called from 0x8014CB08-0x8014CCD0) and eleven bodies whose addresses are held by the .rodata dispatch tables 0x802A22D4-0x802A24B4. Native literals start at 0x802A0CE0 (5.0f loaded by fn_8014C528); readonly context 0x802A0CE0-0x802A11F4 is measured here, including the unresolved trailing context after the native 12-byte emission. Original file boundaries and nominal identity unresolved; the constructor 0x8014C630, the vtable entry 0x8014C690 and later bodies excluded; original bytes stay linked.",
+      "evidence": "Issue #784; thirteen complete bodies 0x8014BC98-0x8014C630 inside the retained provisional cu_801485B4 survey group, after the cu_8014B890.cpp fragment: the order-list helpers fn_8014BC98/fn_8014BED8 (called from 0x8014CB08-0x8014CCD0) and eleven bodies whose addresses are held by the .rodata dispatch tables 0x802A22D4-0x802A24B4. Native literals start at 0x802A0CE0 (5.0f loaded by fn_8014C528); readonly context 0x802A0CE0-0x802A0E70 is measured here, including the unresolved trailing context after the native 12-byte emission (follow-up #791 measures 0x802A0E70-0x802A11F4 with src/game/cu_8014E220.cpp). Original file boundaries and nominal identity unresolved; the constructor 0x8014C630, the vtable entry 0x8014C690 and later bodies excluded; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -31929,7 +31929,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A0CE0",
-          "end": "0x802A11F4"
+          "end": "0x802A0E70"
         }
       ],
       "functions": [
@@ -32157,6 +32157,57 @@
           "symbol": "fn_8014DD2C",
           "start": "0x8014DD2C",
           "end": "0x8014DDCC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8014E220.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #791; six complete handler bodies in 0x8014E220-0x8014E534 inside the retained provisional cu_801485B4 survey group, held by the .rodata dispatch tables 0x802A20C8 (Class_80297BF8-derived) and 0x802A2058 (Class_80297CE8-derived). 0x8014E2DC (0x8014E2DC-0x8014E31C) is not registered because its text argument is the literal 0x802A0B74 emitted by src/game/cu_8014AB64.cpp. Native literal 2.5f at 0x802A0E70 (fn_8014E244); readonly context 0x802A0E70-0x802A11F4 is measured here, including the unresolved trailing context after the native 4-byte emission. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014E220",
+          "end": "0x8014E534"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0E70",
+          "end": "0x802A11F4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8014E220",
+          "start": "0x8014E220",
+          "end": "0x8014E244"
+        },
+        {
+          "symbol": "fn_8014E244",
+          "start": "0x8014E244",
+          "end": "0x8014E290"
+        },
+        {
+          "symbol": "fn_8014E290",
+          "start": "0x8014E290",
+          "end": "0x8014E2DC"
+        },
+        {
+          "symbol": "fn_8014E31C",
+          "start": "0x8014E31C",
+          "end": "0x8014E3B4"
+        },
+        {
+          "symbol": "fn_8014E3B4",
+          "start": "0x8014E3B4",
+          "end": "0x8014E48C"
+        },
+        {
+          "symbol": "fn_8014E48C",
+          "start": "0x8014E48C",
+          "end": "0x8014E534"
         }
       ]
     },
