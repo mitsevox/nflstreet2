@@ -27476,6 +27476,175 @@
       ]
     },
     {
+      "source": "src/engine/cu_8025E148.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv provisional unit row 0x8025E148-0x8025FBD4 (src/engine/cu_8025E148.c), its compiler, source-form, function and name rows and the exact data rows 0x802B7268-0x802B72B0 (.rodata), 0x802FF4A8-0x802FF4B0 (.data) and 0x803A6A08-0x803A6A28 (.bss). Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025E148",
+          "end": "0x8025FBD4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7268",
+          "end": "0x802B72B0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF4A8",
+          "end": "0x802FF4B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6A08",
+          "end": "0x803A6A28"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8025E148",
+          "start": "0x8025E148",
+          "end": "0x8025E1D8"
+        },
+        {
+          "symbol": "__main",
+          "start": "0x8025E1D8",
+          "end": "0x8025E210"
+        },
+        {
+          "symbol": "__ashldi3",
+          "start": "0x8025E210",
+          "end": "0x8025E250"
+        },
+        {
+          "symbol": "__ashrdi3",
+          "start": "0x8025E250",
+          "end": "0x8025E290"
+        },
+        {
+          "symbol": "__fixunssfdi",
+          "start": "0x8025E850",
+          "end": "0x8025EA08"
+        },
+        {
+          "symbol": "__floatdidf",
+          "start": "0x8025EA08",
+          "end": "0x8025EA64"
+        },
+        {
+          "symbol": "__floatdisf",
+          "start": "0x8025EA64",
+          "end": "0x8025EB14"
+        },
+        {
+          "symbol": "__lshrdi3",
+          "start": "0x8025EB14",
+          "end": "0x8025EB54"
+        },
+        {
+          "symbol": "__pure_virtual",
+          "start": "0x8025F088",
+          "end": "0x8025F0A8"
+        },
+        {
+          "symbol": "__cmpdi2",
+          "start": "0x8025FABC",
+          "end": "0x8025FAF8"
+        },
+        {
+          "symbol": "fn_8025FAF8",
+          "start": "0x8025FAF8",
+          "end": "0x8025FB08"
+        },
+        {
+          "symbol": "fn_8025FB08",
+          "start": "0x8025FB08",
+          "end": "0x8025FB34"
+        },
+        {
+          "symbol": "fn_8025FB34",
+          "start": "0x8025FB34",
+          "end": "0x8025FB68"
+        },
+        {
+          "symbol": "fn_8025FB68",
+          "start": "0x8025FB68",
+          "end": "0x8025FBD4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_802622DC.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x802622DC-0x80264424 (src/engine/cu_802622DC.c), its compiler, source-form, function and name rows and the exact .rodata data row 0x802B733C-0x802B73BC. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802622DC",
+          "end": "0x80264424"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B733C",
+          "end": "0x802B73BC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "vprintf",
+          "start": "0x802622DC",
+          "end": "0x80262310"
+        },
+        {
+          "symbol": "atexit",
+          "start": "0x80262310",
+          "end": "0x802623A8"
+        },
+        {
+          "symbol": "fn_802623A8",
+          "start": "0x802623A8",
+          "end": "0x80262440"
+        },
+        {
+          "symbol": "fn_80262440",
+          "start": "0x80262440",
+          "end": "0x8026247C"
+        },
+        {
+          "symbol": "fn_8026247C",
+          "start": "0x8026247C",
+          "end": "0x802624D8"
+        },
+        {
+          "symbol": "fn_802624D8",
+          "start": "0x802624D8",
+          "end": "0x80262524"
+        },
+        {
+          "symbol": "fn_80262524",
+          "start": "0x80262524",
+          "end": "0x802625A0"
+        },
+        {
+          "symbol": "fn_80262A88",
+          "start": "0x80262A88",
+          "end": "0x80262B5C"
+        },
+        {
+          "symbol": "fn_80262B5C",
+          "start": "0x80262B5C",
+          "end": "0x80262C34"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8003877C.cpp",
       "profile": "game_cpp",
       "evidence": "Registered whole-function extents and allocated data sections are measured independently under comparisons.json; evidence.tsv records target boundaries, grouping confidence and source-form provenance. Unregistered functions remain unmeasured; comparison-only source stays unlinked.",
