@@ -1,8 +1,11 @@
+#include <stdio.h>
 #include <string.h>
 #include "game/Entry_80219044.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_801FCE10.h"
+
+struct Object_80056584;
 
 extern "C" {
 extern unsigned short lbl_802EAB80;
@@ -36,6 +39,14 @@ void fn_8006CA84(int a);
 void fn_8018A7B0(void);
 void fn_80023024(int a);
 void fn_80187E08(int show, const char *pText, int a, int b);
+extern unsigned char lbl_803EB61D;
+extern unsigned char lbl_803EB624;
+extern unsigned char lbl_803EB61B;
+
+void fn_801F87FC(int a);
+int fn_8017F60C(void);
+void fn_8002129C(char *pDest, int length);
+int fn_801C2D88(char *pDest, int length, const char *pFormat, ...);
 
 void fn_80187AD4(int id)
 {
@@ -165,6 +176,110 @@ void fn_80187E08(int show, const char *pText, int a, int b)
             }
         }
         fn_8021956C(lbl_803EB68C, 1, 3, 1);
+    }
+}
+
+int fn_80187F44(char *pText0, int length0, char *pText1, int length1,
+                char *pText2, int length2, char *pText3, int length3)
+{
+    fn_801C3284(pText0, "NGC", length0);
+    fn_801C3284(pText1, "Memory Card", length1);
+    fn_801C3284(pText2, "Memory Card", length2);
+    fn_801C3284(pText3, "Memory Card Slot", length3);
+    return 2;
+}
+
+void fn_80187FD0(void)
+{
+    lbl_803EB61D = 1;
+}
+
+void fn_80187FDC(void)
+{
+    if (lbl_803EB61D == 1) {
+        fn_801F87FC(1);
+    }
+    lbl_803EB61D = 0;
+}
+
+void fn_80188014(int value)
+{
+    lbl_803EB624 = value;
+}
+
+void fn_8018801C(int index, int value)
+{
+    lbl_802EACAC[index] = value;
+}
+
+int fn_80188030(int index)
+{
+    return lbl_802EACAC[index];
+}
+
+int fn_80188044(int value)
+{
+    for (int i = 0; i < 10; ++i) {
+        if (lbl_802EACAC[i] == value) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void fn_8018807C(unsigned char value)
+{
+    if (fn_8017F60C() == 0) {
+        lbl_803EB61B = value;
+    }
+}
+
+void fn_801880B4(char *pText, int length)
+{
+    fn_8002129C(pText, length);
+}
+
+void fn_801880D4(int value, char *pText, int length)
+{
+    char previous[32];
+    int negative = value < 0;
+    value = value < 0 ? -value : value;
+    pText[0] = 0;
+    while (value != 0) {
+        int remaining = value / 1000;
+        unsigned short group = value % 1000;
+        value = remaining;
+        if (remaining == 0) {
+            if (strlen(pText) != 0) {
+                strcpy(previous, pText);
+                sprintf(pText, "%d,%s", group, previous);
+            } else {
+                sprintf(pText, "%d", group);
+            }
+        } else if (strlen(pText) != 0) {
+            strcpy(previous, pText);
+            sprintf(pText, "%03d,%s", group, previous);
+        } else {
+            sprintf(pText, "%03d", group);
+        }
+    }
+    if (strlen(pText) == 0) {
+        sprintf(pText, "0");
+    }
+    if (negative) {
+        strcpy(previous, pText);
+        sprintf(pText, "-%s", previous);
+    }
+}
+
+void fn_80188248(Object_80056584 *pObject, char *pText, int length)
+{
+    Object_80039F5C *p = (Object_80039F5C *)pObject;
+    signed char initial = p->mUnknown2927[0];
+    if (initial == 0 || initial == ' ') {
+        fn_801C2D88(pText, length, "%s", p->mUnknown2927 + 21);
+    } else {
+        fn_801C2D88(pText, length, "%c. %s", initial, p->mUnknown2927 + 21);
     }
 }
 }
