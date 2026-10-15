@@ -114,7 +114,10 @@ struct Params_803A6C40 {
 
 struct Record_803A6DF0 {
     unsigned char mUnknown0[4];
-    short m4[15];
+    short m4[8];
+    int m14;
+    unsigned char mUnknown18[8];
+    unsigned short m20;
     unsigned char m22;
     unsigned char m23;
     unsigned short m24;
@@ -181,18 +184,26 @@ struct Transfer_803B2B90 {
 
 struct Stream_802743A0 {
     unsigned char m0[6][1600];
-    void *m2580[6];
+    unsigned char *m2580[6];
     signed char m2598;
-    unsigned char mUnknown2599[3];
+    unsigned char m2599;
+    unsigned char m259A;
+    unsigned char m259B;
     unsigned char *m259C[6];
-    unsigned char mUnknown25B4[0x30];
+    int m25B4;
+    short m25B8[6];
+    unsigned char *m25C4[6];
+    int m25DC;
+    int m25E0;
 };
 
 struct State_803A8D60 {
     Channel_803A8D60 m0[48];
     unsigned char mUnknownC00[0x810];
     Stream_802743A0 *m1410[32];
-    unsigned char mUnknown1490[0x638];
+    unsigned char mUnknown1490[0x630];
+    unsigned char *m1AC0;
+    unsigned char mUnknown1AC4[4];
     OSThread m1AC8;
     unsigned char mUnknown1DE0[0x8008];
     int m9DE8;
@@ -220,6 +231,18 @@ struct Struct_802753AC {
 
 struct Node_803B4E20 {
     Node_803B4E20 *m0;
+};
+
+struct Info_80274464 {
+    unsigned short m0;
+    unsigned char m2;
+};
+
+struct Struct_80274464 {
+    unsigned char mUnknown0[7];
+    unsigned char m7;
+    unsigned char mUnknown8[0x10];
+    void *m18[8];
 };
 
 struct Setup_80272EC4 {
@@ -273,13 +296,28 @@ struct Record_803B5010 {
     Node_80279D90 *m58;
 };
 
+struct Params_80275F80 {
+    int m0;
+    int m4;
+    int m8;
+    int mC;
+    int m10;
+    int m14;
+    int m18;
+    int m1C;
+    int m20;
+    int m24;
+    int (*m28)(Node_80279D90 *node);
+};
+
 struct Struct_803B4E34 {
     Setup_80272EC4 m0;
     unsigned short mC;
     unsigned char mE;
     unsigned char mUnknownF[5];
     int *m14;
-    unsigned char mUnknown18[0x90];
+    void (*m18[6][3])(Node_80279D90 *node, Params_80275F80 *params);
+    int m60[6][3];
     void *mA8[2];
     int *mB0[2];
     void *mB8[6];
@@ -290,6 +328,8 @@ struct Struct_803B4E34 {
     unsigned char mUnknown11C[0x18];
     Node_80279D90 m134[6];
     Record_803B5010 *m1DC;
+    void (*m1E0)(int count, int *dst, void *src, float gain);
+    void (*m1E4)(void *dst, short *src, int count);
 };
 
 extern "C" {
@@ -304,7 +344,12 @@ extern int lbl_803A8D34;
 extern State_803A8D60 lbl_803A8D60;
 extern void (*lbl_803B5028)(Setup_80272EC4 *setup);
 extern void (*lbl_803B502C)(void);
+extern void (*lbl_803B5030)(void **buffers, int count);
+extern void (*lbl_803B5034)(int index, int a, int b, int c, int d, void *p, int count, int e, int f, int g, int h,
+                            int j, int k, int slot);
+extern void (*lbl_803B5038)(int index);
 extern void (*lbl_803B503C)(int index);
+extern void (*lbl_803B5040)(int index, int value);
 extern int lbl_8030002C;
 extern int lbl_80300E98;
 extern OSMutex lbl_803B4B90;
@@ -340,6 +385,20 @@ void fn_8027A844(void);
 void fn_8027A8A4(void);
 void fn_80277240(Node_80279D90 *node);
 void fn_80275F54(void);
+unsigned char *fn_802792F0(int index, int channel, int *length, int *b);
+void fn_80274B50(int index);
+void fn_80274960(int index);
+void fn_802747D8(int index);
+void fn_8027952C(int index, int channel, int value);
+void fn_80279598(void);
+void fn_8027271C(int index);
+void fn_80274D34(int index, int value);
+void fn_80275E7C(void);
+void fn_80276194(int index);
+void fn_802763E0(void **buffers, int count);
+void fn_80277404(Node_80279D90 *node, void *data, int index);
+void fn_802774C8(void *dst, short *src, int count);
+void fn_8027A8EC(int count, int *dst, void *src, float gain);
 
 int fn_80271A04(void);
 void fn_80271D34(Voice_803A7734 *voice);
@@ -364,6 +423,8 @@ void fn_80272FB4(void);
 int fn_802733A0(void);
 int fn_80273458(void);
 int fn_80273960(int flag);
+void fn_80273040(int index, Stream_802743A0 *stream, Record_803A6DF0 *record);
+void fn_802739F8(void);
 void fn_80273D7C(u32 flags, int *a, int *b);
 int fn_80273DC0(Struct_80270E04 *p, int value, int *base);
 int fn_80274304(int index);
@@ -374,6 +435,7 @@ int fn_8027474C(int index);
 int fn_802747D0(void);
 int fn_80274CA8(int index, int value);
 void fn_80274E24(int index, int value);
+int fn_80274464(int stream, int index, int a, int b, int c, Info_80274464 *info, Struct_80274464 *p);
 int fn_80274EAC(int index);
 int fn_80274F5C(int index);
 int fn_802750B8(int index, Desc_80276798 *desc);
@@ -390,6 +452,9 @@ int fn_802753AC(Struct_802753AC *p, int mode);
 float *fn_802753F0(int index);
 void fn_80275404(void);
 void fn_802754A8(void);
+void fn_8027555C(void);
+void fn_80275F80(int index, int type, int mode, int a, int b, void *data, int c, int d, int e, int f, int g, int h,
+                 int k, int slot);
 void fn_80275948(float value);
 void *fn_80275B7C(int size);
 void fn_80275B9C(void *p);
@@ -1038,6 +1103,59 @@ int fn_802733A0(void)
     return 0;
 }
 
+void fn_80273040(int index, Stream_802743A0 *stream, Record_803A6DF0 *record)
+{
+    unsigned char *source[6];
+    int length;
+    int b;
+    int remaining = 1536;
+    int chunk;
+    int rest;
+    int i;
+
+    do {
+        if (stream->m25C4[0] == 0) {
+            for (i = 0; i < record->m23; i++) {
+                stream->m25C4[i] = fn_802792F0(index, i, &length, &b);
+            }
+            stream->m25E0 = 0;
+            stream->m25DC = length * 2;
+        }
+        chunk = remaining;
+        if (stream->m25C4[0] != 0) {
+            int available = stream->m25DC - stream->m25E0;
+
+            if (available <= 0) {
+                stream->m25C4[0] = 0;
+                continue;
+            }
+            if (remaining > available) {
+                chunk = available;
+            }
+            stream->m25B8[stream->m2599] += chunk >> 1;
+            rest = remaining - chunk;
+            for (i = 0; i < record->m23; i++) {
+                source[i] = stream->m25C4[i] + stream->m25E0;
+            }
+            stream->m25E0 += chunk;
+        } else {
+            rest = 0;
+            for (i = 0; i < record->m23; i++) {
+                source[i] = lbl_803A8D60.m1AC0;
+            }
+        }
+        for (i = 0; i < record->m23; i++) {
+            fn_8026B2E0(stream->m2580[i] + (1536 - remaining), source[i], chunk);
+        }
+        remaining = rest;
+    } while (remaining > 0);
+    for (i = 0; i < record->m23; i++) {
+        DCFlushRange(stream->m2580[i], 1536);
+        fn_80272B7C(1, (u32)stream->m2580[i], (u32)stream->m259C[i] + stream->m2599 * 1536, 1536, -1);
+    }
+}
+
+
 int fn_80273458(void)
 {
     Params_803A6C40 params = lbl_803A6C24.m1C;
@@ -1084,6 +1202,95 @@ int fn_80273960(int flag)
     OSCancelThread(&lbl_803A8D60.m1AC8);
     AXQuit();
     return 0;
+}
+
+void fn_802739F8(void)
+{
+    AXPBADPCM adpcm;
+    AXPBADPCMLOOP loop;
+    AXPBADDR addr;
+    int i;
+    int j;
+
+    for (i = 0; i < lbl_803A6C24.m1C.m22; i++) {
+        Stream_802743A0 *stream = lbl_803A8D60.m1410[i];
+        Channel_803A8D60 *channel;
+        Record_803A6DF0 *record;
+        AXVPB *vpb;
+        int position;
+        int half;
+
+        if (stream == 0 || stream->m2598 < 0) {
+            continue;
+        }
+        channel = &lbl_803A8D60.m0[stream->m2598];
+        record = &lbl_803A6C24.m1CC[stream->m2598];
+        if (!(stream->m259A & 0x80)) {
+            stream->m259A--;
+            if (stream->m259A & 0x80) {
+                addr.format = 10;
+                adpcm.gain = 2048;
+                addr.loopFlag = 1;
+                memset(&loop, 0, sizeof(loop));
+                fn_80274B50(stream->m2598);
+                for (j = 0; j < record->m23; j++) {
+                    u32 address;
+                    u32 loopAddress;
+                    u32 endAddress;
+
+                    fn_80274960(record->m4[j]);
+                    fn_802747D8(record->m4[j]);
+                    address = (u32)stream->m259C[j];
+                    loopAddress = address >> 1;
+                    endAddress = (address + 3070) >> 1;
+                    AXSetVoiceAdpcm(lbl_803A8D60.m0[record->m4[j]].m3C, &adpcm);
+                    AXSetVoiceAdpcmLoop(lbl_803A8D60.m0[record->m4[j]].m3C, &loop);
+                    addr.endAddressHi = endAddress >> 16;
+                    addr.endAddressLo = endAddress;
+                    addr.loopAddressHi = loopAddress >> 16;
+                    addr.loopAddressLo = loopAddress;
+                    addr.currentAddressHi = loopAddress >> 16;
+                    addr.currentAddressLo = loopAddress;
+                    AXSetVoiceAddr(lbl_803A8D60.m0[record->m4[j]].m3C, &addr);
+                    AXSetVoiceState(lbl_803A8D60.m0[record->m4[j]].m3C, 1);
+                    lbl_803A8D60.m0[record->m4[j]].m24 = 1;
+                }
+            }
+        }
+        vpb = channel->m3C;
+        if (vpb == 0) {
+            continue;
+        }
+        position = (vpb->pb.addr.currentAddressHi << 16) + vpb->pb.addr.currentAddressLo;
+        half = position > stream->m25B4;
+        if (half != stream->m2599) {
+            if (stream->m25B8[stream->m2599] != 0) {
+                for (j = 0; j < record->m23; j++) {
+                    fn_8027952C(i, j, stream->m25B8[stream->m2599]);
+                }
+                stream->m25B8[stream->m2599] = 0;
+            }
+            fn_80273040(i, stream, record);
+            stream->m2599 = half;
+        }
+    }
+    fn_80279598();
+    for (i = 0; i < lbl_803A6C24.m1C.m12; i++) {
+        Channel_803A8D60 *channel = &lbl_803A8D60.m0[i];
+        Record_803A6DF0 *record = &lbl_803A6C24.m1CC[i];
+        AXVPB *vpb = channel->m3C;
+
+        if (vpb != 0 && channel->m24 != 0 && vpb->pb.state == 0 && channel->m18 >= 0 && channel->m24 == 1) {
+            for (j = 0; j < lbl_803A6C24.m1CC[i].m23; j++) {
+                if (lbl_803A8D60.m0[record->m4[j]].m24 != 0) {
+                    fn_80272990(record->m4[j], 0);
+                    lbl_803A8D60.m0[record->m4[j]].m24 = 0;
+                }
+            }
+        }
+    }
+    fn_8027257C();
+    fn_80272150();
 }
 
 void fn_80273D7C(u32 flags, int *a, int *b)
@@ -1154,10 +1361,64 @@ int fn_802743A0(int index, Stream_802743A0 *stream)
     }
     for (i = 0; i < 6; i++) {
         stream->m259C[i] = stream->m259C[0] + i * 0xC00;
-        stream->m2580[i] = (void *)OSRoundUp32B(stream->m0[i]);
+        stream->m2580[i] = (unsigned char *)OSRoundUp32B(stream->m0[i]);
     }
     stream->m2598 = -1;
     lbl_803A8D60.m1410[index] = stream;
+    return 0;
+}
+
+int fn_80274464(int stream, int index, int a, int b, int c, Info_80274464 *info, Struct_80274464 *p)
+{
+    Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
+    int i;
+
+    record->m14 = 0;
+    record->m20 = info->m0;
+    lbl_803A8D60.m0[index].m1C = stream;
+    record->m23 = info->m2;
+    if (record->m24 & 4) {
+        for (i = 0; i < record->m23; i++) {
+            lbl_803B5034(record->m4[i] - lbl_803A6C24.m1C.m12, record->m22, 0, 0, 0, p->m18[i], record->m23, 0, -1,
+                         -1, 0, 0, p->m7, i);
+        }
+        fn_80274B50(record->m4[0]);
+        for (i = 0; i < record->m23; i++) {
+            fn_80274960(record->m4[i]);
+            fn_802747D8(record->m4[i]);
+        }
+        fn_80274CA8(record->m4[0], a);
+        fn_80274D34(record->m4[0], b);
+        fn_80274E24(record->m4[0], c);
+        for (i = 0; i < record->m23; i++) {
+            lbl_803B5038(record->m4[i] - lbl_803A6C24.m1C.m12);
+        }
+    } else {
+        Stream_802743A0 *block = lbl_803A8D60.m1410[stream];
+
+        for (i = 0; i < 6; i++) {
+            block->m25B8[i] = 0;
+        }
+        block->m25C4[0] = 0;
+        block->m259A = 2;
+        block->m2599 = 1;
+        block->m2598 = index;
+        block->m259B = info->m2;
+        fn_8027271C(index);
+        for (i = 0; i < info->m2; i++) {
+            u32 loopAddress = (u32)block->m259C[i] >> 1;
+            u32 endAddress = ((u32)block->m259C[i] + 3070) >> 1;
+
+            if (i == 0) {
+                block->m25B4 = (loopAddress + endAddress) >> 1;
+            }
+            memset(block->m2580[i], 0, 1536);
+            DCFlushRange(block->m2580[i], 1536);
+            fn_80272B7C(1, (u32)block->m2580[i], (u32)block->m259C[i], 1536, -1);
+            AXSetVoiceSrcType(lbl_803A8D60.m0[record->m4[i]].m3C, 1);
+            lbl_803A8D60.m0[record->m4[i]].m24 = 1;
+        }
+    }
     return 0;
 }
 
@@ -1402,6 +1663,18 @@ void fn_802754A8(void)
     }
 }
 
+void fn_8027555C(void)
+{
+    lbl_803B5028 = fn_80275BBC;
+    lbl_803B502C = fn_80275E7C;
+    lbl_803B5030 = fn_802763E0;
+    lbl_803B5034 = fn_80275F80;
+    lbl_803B5038 = fn_80276194;
+    lbl_803B503C = fn_80276278;
+    lbl_803B5040 = fn_80276A84;
+}
+
+
 void fn_80275948(float value)
 {
 }
@@ -1477,6 +1750,82 @@ void fn_80275BBC(Setup_80272EC4 *setup)
         fn_80279D90(&lbl_803B4E34.m104[i], &lbl_803B4E34.m134[i]);
         memset(lbl_803B4E34.mD0[i], 0, 640);
     }
+}
+
+void fn_80275F54(void)
+{
+    lbl_803B4E34.m1E0 = fn_8027A8EC;
+    lbl_803B4E34.m1E4 = fn_802774C8;
+    lbl_803B4E34.mC = 320;
+}
+
+void fn_80275F80(int index, int type, int mode, int a, int b, void *data, int c, int d, int e, int f, int g, int h,
+                 int k, int slot)
+{
+    Record_803B5010 *record = &lbl_803B4E34.m1DC[index];
+    Params_80275F80 params;
+    int table = 0;
+    int kind;
+
+    record->m40 = 0;
+    record->m48 = 0;
+    record->m50 = 0;
+    record->m54 = 0;
+    record->m58 = 0;
+    record->m4C = 0;
+    params.m18 = 1;
+    params.m28 = 0;
+    kind = -1;
+    if (type == 7) {
+        kind = 0;
+    } else if (type == 10) {
+        kind = 1;
+    } else if (type == 4) {
+        kind = 2;
+    } else if (type == 22) {
+        kind = 3;
+    } else if (type == 16) {
+        kind = 4;
+    } else if (type == 23) {
+        kind = 5;
+    }
+    if (mode == 1) {
+        if (f > 0) {
+            table = 1;
+        }
+    } else if (mode == 0) {
+        table = 2;
+    }
+    if (lbl_803B4E34.m18[kind][table] != 0) {
+        record->m48 = (Node_80279D90 *)fn_8026B5D4(lbl_803B4E34.m60[kind][table]);
+        params.m0 = a;
+        params.m24 = k;
+        params.m4 = b;
+        params.m8 = c;
+        params.mC = d;
+        params.m10 = e;
+        params.m14 = f;
+        params.m20 = lbl_803A6C24.m16F;
+        params.m1C = index;
+        record->m48->m4 = 0;
+        record->m48->m18 = 240;
+        record->m48->m1A = slot;
+        lbl_803B4E34.m18[kind][table](record->m48, &params);
+        record->m44 = params.m28;
+        fn_80279D90(&record->m40, record->m48);
+    }
+    if (data != 0) {
+        if (mode != 0) {
+            index = -1;
+        }
+        record->m4C = (Node_80279D90 *)fn_8026B5D4(6196);
+        record->m4C->m4 = 0;
+        record->m4C->m18 = 200;
+        record->m4C->m1A = slot;
+        fn_80277404(record->m4C, data, index);
+        fn_80279D90(&record->m40, record->m4C);
+    }
+    record->m0 = 1;
 }
 
 void fn_80276238(int index)
