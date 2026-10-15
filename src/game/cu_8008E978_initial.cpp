@@ -224,7 +224,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
         case 0xC017: {
             int index=fn_801BA5A8(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
             if(index!=0xFFFF) mode=fn_801BA6B0(&p->mpUnknown800[index]);
-            else mode=p->mUnknown776!=1;
+            else mode=p->mUnknown776==1;
             int selection=fn_801BD910();int *record;
             switch(selection) {
             case 1:record=&p->mUnknown16;break;
