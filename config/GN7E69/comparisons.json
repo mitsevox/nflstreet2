@@ -32096,6 +32096,71 @@
       ]
     },
     {
+      "source": "src/game/cu_8014DA20.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #788; ten complete bodies 0x8014DA20-0x8014DDCC inside the retained provisional cu_801485B4 survey group: the helpers fn_8014DA20 (called from 0x8014E1C0) and fn_8014DA90 (called from 0x8014F020) and eight handler bodies held by the .rodata dispatch tables 0x802A1F10 and 0x802A2130. No initialized data of its own. Excluded: 0x8014D948 (its literals 0x802A05C8 and 0x802A0DDC lie in readonly context measured by other fragments) and the code before it, and 0x8014DDCC onward. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014DA20",
+          "end": "0x8014DDCC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8014DA20",
+          "start": "0x8014DA20",
+          "end": "0x8014DA90"
+        },
+        {
+          "symbol": "fn_8014DA90",
+          "start": "0x8014DA90",
+          "end": "0x8014DB24"
+        },
+        {
+          "symbol": "fn_8014DB24",
+          "start": "0x8014DB24",
+          "end": "0x8014DBCC"
+        },
+        {
+          "symbol": "fn_8014DBCC",
+          "start": "0x8014DBCC",
+          "end": "0x8014DBF8"
+        },
+        {
+          "symbol": "fn_8014DBF8",
+          "start": "0x8014DBF8",
+          "end": "0x8014DC28"
+        },
+        {
+          "symbol": "fn_8014DC28",
+          "start": "0x8014DC28",
+          "end": "0x8014DC5C"
+        },
+        {
+          "symbol": "fn_8014DC5C",
+          "start": "0x8014DC5C",
+          "end": "0x8014DC7C"
+        },
+        {
+          "symbol": "fn_8014DC7C",
+          "start": "0x8014DC7C",
+          "end": "0x8014DD04"
+        },
+        {
+          "symbol": "fn_8014DD04",
+          "start": "0x8014DD04",
+          "end": "0x8014DD2C"
+        },
+        {
+          "symbol": "fn_8014DD2C",
+          "start": "0x8014DD2C",
+          "end": "0x8014DDCC"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
