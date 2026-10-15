@@ -199,7 +199,9 @@ struct Stream_802743A0 {
 
 struct State_803A8D60 {
     Channel_803A8D60 m0[48];
-    unsigned char mUnknownC00[0x810];
+    unsigned char mUnknownC00[0x808];
+    u32 m1408;
+    u32 m140C;
     Stream_802743A0 *m1410[32];
     unsigned char mUnknown1490[0x630];
     unsigned char *m1AC0;
@@ -231,6 +233,32 @@ struct Struct_802753AC {
 
 struct Node_803B4E20 {
     Node_803B4E20 *m0;
+};
+
+struct Loop_80273DF8 {
+    unsigned short m0;
+    unsigned short m2;
+    unsigned char m4;
+};
+
+struct Header_80273DF8 {
+    unsigned char mUnknown0[2];
+    signed char m2;
+    signed char m3;
+    unsigned char mUnknown4[0xF];
+    unsigned char m13;
+    unsigned char mUnknown14[0x42];
+    unsigned short m56;
+    u32 m58;
+    u32 m5C;
+    int m60;
+    u32 *m64;
+    int m68[6];
+    int m80[6];
+    void *m98[6];
+    unsigned char mUnknownB0[0x18];
+    unsigned char *mC8[6];
+    Loop_80273DF8 *mE0[6];
 };
 
 struct Info_80274464 {
@@ -391,7 +419,8 @@ void fn_80274960(int index);
 void fn_802747D8(int index);
 void fn_8027952C(int index, int channel, int value);
 void fn_80279598(void);
-void fn_8027271C(int index);
+int fn_8027271C(int index);
+int fn_80271BD4(int index, int slot);
 void fn_80274D34(int index, int value);
 void fn_80275E7C(void);
 void fn_80276194(int index);
@@ -426,6 +455,7 @@ int fn_80273960(int flag);
 void fn_80273040(int index, Stream_802743A0 *stream, Record_803A6DF0 *record);
 void fn_802739F8(void);
 void fn_80273D7C(u32 flags, int *a, int *b);
+int fn_80273DF8(Header_80273DF8 *header, int base, int index, int a, int b, int c);
 int fn_80273DC0(Struct_80270E04 *p, int value, int *base);
 int fn_80274304(int index);
 int fn_80274334(int index);
@@ -1310,6 +1340,130 @@ int fn_80273DC0(Struct_80270E04 *p, int value, int *base)
         *base = p->m68;
     }
     *p->m64 = value + (p->m68 - *base);
+    return 0;
+}
+
+int fn_80273DF8(Header_80273DF8 *header, int base, int index, int a, int b, int c)
+{
+    Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
+    Channel_803A8D60 *channel = &lbl_803A8D60.m0[index];
+    AXPBADDR addr;
+    AXPBADPCM adpcm;
+    AXPBADPCMLOOP loop;
+    u32 size = 0;
+    u32 offset = 0;
+    u32 loopStart;
+    u32 loopEnd;
+    int i;
+
+    record->m20 = header->m56;
+    record->m14 = header->m58;
+    record->m23 = header->m3;
+    if (record->m24 & 0x200) {
+        memset(&loop, 0, sizeof(loop));
+        if (header->m60 >= 0) {
+            addr.loopFlag = 1;
+            loopEnd = header->m60;
+            loopStart = header->m5C;
+        } else {
+            addr.loopFlag = 0;
+            if (record->m22 == 18) {
+                loopStart = lbl_803A8D60.m140C;
+            } else {
+                loopStart = lbl_803A8D60.m1408;
+            }
+            loopEnd = header->m58 - 1;
+        }
+        if (record->m22 == 18) {
+            size = (header->m58 + 13) / 14 * 14;
+            addr.format = 0;
+            adpcm.gain = 0;
+            adpcm.yn1 = 0;
+            adpcm.yn2 = 0;
+            loopEnd = loopEnd * 8 / 7;
+            loopStart = loopStart * 8 / 7;
+            size = size * 8 / 7;
+            offset = *header->m64 << 1;
+        } else if (record->m22 == 7) {
+            addr.format = 10;
+            adpcm.gain = 2048;
+            size = header->m58;
+            offset = *header->m64 >> 1;
+        }
+        channel->m18 = offset;
+        if (fn_8027271C(index) == 0) {
+            return -9;
+        }
+        for (i = 0; i < record->m23; i++) {
+            fn_80274960(record->m4[i]);
+            fn_802747D8(record->m4[i]);
+        }
+        fn_80274B50(index);
+        fn_80271BD4(record->m4[0], 0);
+        for (i = 0; i < header->m3; i++) {
+            u32 start;
+            u32 loopAddress;
+            u32 endAddress;
+
+            if (record->m22 == 18) {
+                fn_8026B2E0(&adpcm, header->mC8[i], 32);
+                adpcm.pred_scale = header->mC8[i][32];
+                if (header->m60 > 0) {
+                    loop.loop_pred_scale = header->mE0[i]->m4;
+                    loop.loop_yn1 = header->mE0[i]->m0;
+                    loop.loop_yn2 = header->mE0[i]->m2;
+                }
+            }
+            start = offset + size * i;
+            loopAddress = loopStart;
+            if (header->m60 > 0) {
+                loopAddress = start + loopStart;
+            }
+            endAddress = start + loopEnd - 2;
+            if (record->m22 == 18) {
+                start += 2;
+                if ((loopAddress & 15) == 0) {
+                    loopAddress += 2;
+                } else if ((loopAddress & 15) == 1) {
+                    loopAddress += 1;
+                }
+                if ((endAddress & 15) == 0) {
+                    endAddress += 2;
+                } else if ((endAddress & 15) == 1) {
+                    endAddress += 1;
+                }
+            }
+            AXSetVoiceSrcType(lbl_803A8D60.m0[record->m4[i]].m3C, 1);
+            AXSetVoiceAdpcm(lbl_803A8D60.m0[record->m4[i]].m3C, &adpcm);
+            AXSetVoiceAdpcmLoop(lbl_803A8D60.m0[record->m4[i]].m3C, &loop);
+            addr.currentAddressHi = start >> 16;
+            addr.loopAddressHi = loopAddress >> 16;
+            addr.endAddressHi = endAddress >> 16;
+            addr.endAddressLo = endAddress;
+            addr.currentAddressLo = start;
+            addr.loopAddressLo = loopAddress;
+            AXSetVoiceAddr(lbl_803A8D60.m0[record->m4[i]].m3C, &addr);
+            AXSetVoiceState(lbl_803A8D60.m0[record->m4[i]].m3C, 1);
+            lbl_803A8D60.m0[record->m4[i]].m24 = 1;
+        }
+    } else {
+        for (i = 0; i < record->m23; i++) {
+            fn_80275F80(record->m4[i] - lbl_803A6C24.m1C.m12, header->m13, 1, base + header->m68[i],
+                        base + header->m68[0] + header->m80[i], header->m98[i], record->m23, record->m14, header->m5C,
+                        header->m60, 0, 0, header->m2, i);
+            fn_80274960(record->m4[i]);
+        }
+        fn_80274B50(record->m4[0]);
+        for (i = 0; i < lbl_8030002C; i++) {
+            fn_80271BD4(record->m4[0], i);
+        }
+        fn_80274CA8(record->m4[0], a);
+        fn_80274D34(record->m4[0], b);
+        fn_80274E24(record->m4[0], c);
+        for (i = 0; i < record->m23; i++) {
+            fn_80276194(record->m4[i] - lbl_803A6C24.m1C.m12);
+        }
+    }
     return 0;
 }
 
