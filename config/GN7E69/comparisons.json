@@ -32001,6 +32001,101 @@
       ]
     },
     {
+      "source": "src/game/cu_8014C868.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #786; sixteen complete bodies in 0x8014C868-0x8014D024 inside the retained provisional cu_801485B4 survey group, after the cu_8014BC98.cpp fragment: four handler bodies held by the .rodata dispatch tables 0x802A2200 and 0x802A2490, eleven entries of the vtable 0x802A2C90 installed by the constructor 0x8014C630, and the stats query fn_8014CCE8 (called from 0x8005CB68). fn_8014CB30 (0x8014CB30-0x8014CCE8) is not registered: it writes the base Class_80148A58 bytes at +0x10, which the shared header keeps opaque. 0x8014C808 is excluded because it shares the literal 0x802A0B74 emitted by src/game/cu_8014AB64.cpp. No initialized data of its own. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014C868",
+          "end": "0x8014D024"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8014C868",
+          "start": "0x8014C868",
+          "end": "0x8014C8AC"
+        },
+        {
+          "symbol": "fn_8014C8AC",
+          "start": "0x8014C8AC",
+          "end": "0x8014C954"
+        },
+        {
+          "symbol": "fn_8014C954",
+          "start": "0x8014C954",
+          "end": "0x8014C980"
+        },
+        {
+          "symbol": "fn_8014C980",
+          "start": "0x8014C980",
+          "end": "0x8014C9B0"
+        },
+        {
+          "symbol": "fn_8014C9B0",
+          "start": "0x8014C9B0",
+          "end": "0x8014CA78"
+        },
+        {
+          "symbol": "fn_8014CA78",
+          "start": "0x8014CA78",
+          "end": "0x8014CA80"
+        },
+        {
+          "symbol": "fn_8014CA80",
+          "start": "0x8014CA80",
+          "end": "0x8014CA88"
+        },
+        {
+          "symbol": "fn_8014CA88",
+          "start": "0x8014CA88",
+          "end": "0x8014CA90"
+        },
+        {
+          "symbol": "fn_8014CA90",
+          "start": "0x8014CA90",
+          "end": "0x8014CA98"
+        },
+        {
+          "symbol": "fn_8014CA98",
+          "start": "0x8014CA98",
+          "end": "0x8014CAD4"
+        },
+        {
+          "symbol": "fn_8014CAD4",
+          "start": "0x8014CAD4",
+          "end": "0x8014CB30"
+        },
+        {
+          "symbol": "fn_8014CCE8",
+          "start": "0x8014CCE8",
+          "end": "0x8014CF44"
+        },
+        {
+          "symbol": "fn_8014CF44",
+          "start": "0x8014CF44",
+          "end": "0x8014CF80"
+        },
+        {
+          "symbol": "fn_8014CF80",
+          "start": "0x8014CF80",
+          "end": "0x8014CFDC"
+        },
+        {
+          "symbol": "fn_8014CFDC",
+          "start": "0x8014CFDC",
+          "end": "0x8014D014"
+        },
+        {
+          "symbol": "fn_8014D014",
+          "start": "0x8014D014",
+          "end": "0x8014D024"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
