@@ -31736,7 +31736,7 @@
     {
       "source": "src/game/cu_8014AB64.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A11F4 is measured here, including the unresolved trailing context after the native 0x54-byte emission. Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked.",
+      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A0CE0 is measured here, including the unresolved trailing context after the native 0x54-byte emission (follow-up #784 measures 0x802A0CE0-0x802A11F4 with src/game/cu_8014BC98.cpp). Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -31748,7 +31748,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A0B50",
-          "end": "0x802A11F4"
+          "end": "0x802A0CE0"
         }
       ],
       "functions": [
@@ -31911,6 +31911,92 @@
           "symbol": "fn_8014BC90",
           "start": "0x8014BC90",
           "end": "0x8014BC98"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8014BC98.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #784; thirteen complete bodies 0x8014BC98-0x8014C630 inside the retained provisional cu_801485B4 survey group, after the cu_8014B890.cpp fragment: the order-list helpers fn_8014BC98/fn_8014BED8 (called from 0x8014CB08-0x8014CCD0) and eleven bodies whose addresses are held by the .rodata dispatch tables 0x802A22D4-0x802A24B4. Native literals start at 0x802A0CE0 (5.0f loaded by fn_8014C528); readonly context 0x802A0CE0-0x802A11F4 is measured here, including the unresolved trailing context after the native 12-byte emission. Original file boundaries and nominal identity unresolved; the constructor 0x8014C630, the vtable entry 0x8014C690 and later bodies excluded; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014BC98",
+          "end": "0x8014C630"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0CE0",
+          "end": "0x802A11F4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8014BC98",
+          "start": "0x8014BC98",
+          "end": "0x8014BED8"
+        },
+        {
+          "symbol": "fn_8014BED8",
+          "start": "0x8014BED8",
+          "end": "0x8014C118"
+        },
+        {
+          "symbol": "fn_8014C118",
+          "start": "0x8014C118",
+          "end": "0x8014C150"
+        },
+        {
+          "symbol": "fn_8014C150",
+          "start": "0x8014C150",
+          "end": "0x8014C158"
+        },
+        {
+          "symbol": "fn_8014C158",
+          "start": "0x8014C158",
+          "end": "0x8014C160"
+        },
+        {
+          "symbol": "fn_8014C160",
+          "start": "0x8014C160",
+          "end": "0x8014C188"
+        },
+        {
+          "symbol": "fn_8014C188",
+          "start": "0x8014C188",
+          "end": "0x8014C214"
+        },
+        {
+          "symbol": "fn_8014C214",
+          "start": "0x8014C214",
+          "end": "0x8014C278"
+        },
+        {
+          "symbol": "fn_8014C278",
+          "start": "0x8014C278",
+          "end": "0x8014C308"
+        },
+        {
+          "symbol": "fn_8014C308",
+          "start": "0x8014C308",
+          "end": "0x8014C4C0"
+        },
+        {
+          "symbol": "fn_8014C4C0",
+          "start": "0x8014C4C0",
+          "end": "0x8014C528"
+        },
+        {
+          "symbol": "fn_8014C528",
+          "start": "0x8014C528",
+          "end": "0x8014C5AC"
+        },
+        {
+          "symbol": "fn_8014C5AC",
+          "start": "0x8014C5AC",
+          "end": "0x8014C630"
         }
       ]
     },
