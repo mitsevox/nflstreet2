@@ -1,5 +1,4 @@
 #include <math.h>
-#include <float.h>
 #include "game/Record_8011F4F8.h"
 #include "game/fn_801248D4.h"
 #include "game/Object_80039F5C.h"
@@ -448,7 +447,7 @@ void fn_8010016C(Object_80039F5C *p,Point_8017886C *point,Object_80039F5C *other
     fn_80227904(&middle,&p->mMotion.mPos,point,0.5f);
     fn_80227690(&delta,point,&other->mMotion.mPos);
     float time=fn_802270A4(&delta)/speed;
-    float best=FLT_MAX;int replace=0;
+    float best=3.4028235e38f;int replace=0;
     int team=fn_80178320();unsigned int n=fn_80178D70(team);
     for(unsigned int i=0;i<n;++i) {
         Object_80039F5C *candidate=fn_80039F5C(team,(unsigned short)i);
