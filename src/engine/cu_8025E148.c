@@ -27,7 +27,7 @@ typedef void (*func_ptr) (void);
 
 typedef struct Context_8025FB68
 {
-  void *mUnknown0;
+  char mUnknown0[4];
   void **mUnknown4;
   char mUnknown8[8];
 } Context_8025FB68;
