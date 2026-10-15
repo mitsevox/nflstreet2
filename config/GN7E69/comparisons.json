@@ -27581,7 +27581,7 @@
     {
       "source": "src/engine/cu_802622DC.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802622DC-0x80264424 (src/engine/cu_802622DC.c), its compiler, source-form, function and name rows and the exact .rodata data row 0x802B733C-0x802B73BC. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802622DC-0x80264424 (src/engine/cu_802622DC.c), its compiler, source-form, function and name rows and the exact .rodata data row 0x802B7538-0x802B7578. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -27592,8 +27592,8 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802B733C",
-          "end": "0x802B73BC"
+          "start": "0x802B7538",
+          "end": "0x802B7578"
         }
       ],
       "functions": [
@@ -27613,11 +27613,6 @@
           "end": "0x80262440"
         },
         {
-          "symbol": "fn_80262440",
-          "start": "0x80262440",
-          "end": "0x8026247C"
-        },
-        {
           "symbol": "fn_8026247C",
           "start": "0x8026247C",
           "end": "0x802624D8"
@@ -27631,6 +27626,11 @@
           "symbol": "fn_80262524",
           "start": "0x80262524",
           "end": "0x802625A0"
+        },
+        {
+          "symbol": "fn_802625A0",
+          "start": "0x802625A0",
+          "end": "0x80262A88"
         },
         {
           "symbol": "fn_80262A88",
