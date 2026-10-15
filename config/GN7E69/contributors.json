@@ -16459,6 +16459,60 @@
         "original_blob": "79e71cc5daa255380f44e17ee2a321a2d983a6c6",
         "integration_adjustment": "Original author source is preserved through integration and target-supported localized contract, argument, predicate, literal or geometry corrections. Original and introduced source blobs are pinned separately; credit covers only newly authored whole exact functions measured on the integrated revision."
       }
+    },
+    {
+      "source": "src/game/cu_8004A2F4.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8004DF68",
+        "0x8004DFDC",
+        "0x8004E018",
+        "0x8004E090",
+        "0x8004E0CC",
+        "0x8004E0F4",
+        "0x8004E2B4",
+        "0x8004E320",
+        "0x8004E358"
+      ],
+      "provenance": {
+        "pull_request": 741,
+        "merged_via": 741,
+        "commit": "7e085963b888968e5b49ad055d9c8eb725d1a0f3",
+        "introduced_blob": "24cbe79b37c0e721c1dc07324cf85e1b0c015552",
+        "original_commit": "6d3021858ad739df5513a3c275c7ccad77a999d4",
+        "original_blob": "a390ae68fa447bd1a81adf438a8eb0b20f026ae4",
+        "integration_adjustment": "Preserve original author source through integration and target-supported local corrections of defaults, pointer layouts/forwarding, unsigned-byte arguments, floating search bounds and ordered/unordered predicates. Original and introduced source blobs are pinned separately. Credit is limited to newly authored whole exact functions measured at the final integrated revision."
+      }
+    },
+    {
+      "source": "src/game/cu_80056584.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8005BACC",
+        "0x8005BB0C",
+        "0x8005BB50",
+        "0x8005BB8C",
+        "0x8005BE54",
+        "0x8005BF18",
+        "0x8005BF5C",
+        "0x8005BF98",
+        "0x8005BFD4",
+        "0x8005C1A4",
+        "0x8005D2C8"
+      ],
+      "provenance": {
+        "pull_request": 741,
+        "merged_via": 741,
+        "commit": "7e085963b888968e5b49ad055d9c8eb725d1a0f3",
+        "introduced_blob": "ad2bf1be06ac9e6b30fa9bb188d5227a05a14403",
+        "original_commit": "7f6dd34cc2b9ca7b8d40f86061d534f633e3a5fb",
+        "original_blob": "9ecbcbdab1cee203cbfea64522e4e0bc3b85148c",
+        "integration_adjustment": "Preserve original author source through integration and target-supported local corrections of defaults, pointer layouts/forwarding, unsigned-byte arguments, floating search bounds and ordered/unordered predicates. Original and introduced source blobs are pinned separately. Credit is limited to newly authored whole exact functions measured at the final integrated revision."
+      }
     }
   ],
   "target": "GN7E69",
