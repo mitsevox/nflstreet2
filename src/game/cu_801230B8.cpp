@@ -1,3 +1,4 @@
+#include "game/fn_801248D4.h"
 #include "game/Object_80039F5C.h"
 #include "game/Plan_80121264.h"
 #include "game/Class_80148A58.h"
@@ -58,11 +59,6 @@ int fn_80125C28(Object_80039F5C *p, State_80125594 *pState);
 void fn_80125594(Object_80039F5C *p, State_80125594 *pState);
 void fn_80125708(Object_80039F5C *p, State_80125594 *pState);
 
-struct Filter_801248D4 {
-    unsigned char mCount;
-    unsigned char mValues[1];
-};
-
 Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, int facing, float length, float width);
 
 int fn_80178308(void);
@@ -110,7 +106,6 @@ void fn_80125B74(Object_80039F5C *p, State_80125594 *pState);
 int fn_80125E20(Object_80039F5C *p);
 void fn_80125EC8(int a, int b);
 void fn_80125F10(void);
-int fn_801248D4(Object_80039F5C *p, Vector_80039F5C *pPos, Vector_80039F5C *pTarget, Object_80039F5C **pOut, Filter_801248D4 *pFilter, Object_80039F5C *pExclude, float margin, float width);
 int fn_80124B1C(Object_80039F5C *p, Object_80039F5C *pOther, int angle, float length, float width);
 Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, int facing, float length, float width);
 Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, int facing, float length, float width);

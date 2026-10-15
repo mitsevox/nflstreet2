@@ -12,6 +12,7 @@ struct Object_801A8620;
 struct Object_80040818;
 struct Object_80041904;
 struct Instance_8004DA0C;
+struct Cache_8004E16C;
 
 struct Element_801A8620 { unsigned char mUnknown0[0x28]; };
 
@@ -50,7 +51,7 @@ struct Object_801A8620 {
     unsigned char mUnknownFC; unsigned char mUnknownFD[3]; Texture_801A8D08 *mpUnknown100;
     Element_801A8620 mUnknown104;
     union { Instance_801A8D9C *mpUnknown12C; Instance_8004DA0C *mpRender12C; };
-    Env_801A8D9C *mpUnknown130; unsigned char mUnknown134[4]; unsigned char mUnknown138;
+    union { Env_801A8D9C *mpUnknown130; Cache_8004E16C *mpSkeleton130; }; unsigned char mUnknown134[4]; unsigned char mUnknown138;
     unsigned char mUnknown139[3]; int mUnknown13C;
     union {
         struct { unsigned char mUnknown140; unsigned char mUnknown141[11]; };

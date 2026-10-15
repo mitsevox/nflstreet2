@@ -3146,13 +3146,13 @@
     {
       "source": "src/game/cu_80056584.cpp",
       "profile": "game_cpp",
-      "evidence": "Complete78 registered bodies (46 prior and32 added), full readonly surrounding candidate context E16C-ED08 and28 bytes of initialized small data. Original file edges and ownership of unrecovered readonly items remain provisional; no promotion.",
+      "evidence": "Complete 110 registered bodies: 78 prior, 31 additional ordinary stat/scoring/unlock functions through8005D540, and one evidence-supported naturally generated empty virtual destructor at8005D580-8005D5B4. Full2972-byte readonly surrounding context E16C-ED08 and44-byte initialized small-data context remain measured, preserving old prefixes. Original file edges, nominal record identity and ownership of unrecovered readonly items remain provisional; no promotion. D540 initializer and D5B4/D5E0 stubs stay unregistered and original-linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80056584",
-          "end": "0x8005BA64"
+          "end": "0x8005D5B4"
         },
         {
           "section": ".rodata",
@@ -3164,7 +3164,7 @@
           "section": ".sdata",
           "placement": ".data5",
           "start": "0x803EA58C",
-          "end": "0x803EA5A8"
+          "end": "0x803EA5B8"
         }
       ],
       "functions": [
@@ -3557,6 +3557,166 @@
           "symbol": "fn_8005B9FC",
           "start": "0x8005B9FC",
           "end": "0x8005BA64"
+        },
+        {
+          "symbol": "fn_8005BA64",
+          "start": "0x8005BA64",
+          "end": "0x8005BA98"
+        },
+        {
+          "symbol": "fn_8005BA98",
+          "start": "0x8005BA98",
+          "end": "0x8005BACC"
+        },
+        {
+          "symbol": "fn_8005BACC",
+          "start": "0x8005BACC",
+          "end": "0x8005BB0C"
+        },
+        {
+          "symbol": "fn_8005BB0C",
+          "start": "0x8005BB0C",
+          "end": "0x8005BB50"
+        },
+        {
+          "symbol": "fn_8005BB50",
+          "start": "0x8005BB50",
+          "end": "0x8005BB8C"
+        },
+        {
+          "symbol": "fn_8005BB8C",
+          "start": "0x8005BB8C",
+          "end": "0x8005BC10"
+        },
+        {
+          "symbol": "fn_8005BC10",
+          "start": "0x8005BC10",
+          "end": "0x8005BCA8"
+        },
+        {
+          "symbol": "fn_8005BCA8",
+          "start": "0x8005BCA8",
+          "end": "0x8005BE54"
+        },
+        {
+          "symbol": "fn_8005BE54",
+          "start": "0x8005BE54",
+          "end": "0x8005BE5C"
+        },
+        {
+          "symbol": "fn_8005BE5C",
+          "start": "0x8005BE5C",
+          "end": "0x8005BF18"
+        },
+        {
+          "symbol": "fn_8005BF18",
+          "start": "0x8005BF18",
+          "end": "0x8005BF5C"
+        },
+        {
+          "symbol": "fn_8005BF5C",
+          "start": "0x8005BF5C",
+          "end": "0x8005BF98"
+        },
+        {
+          "symbol": "fn_8005BF98",
+          "start": "0x8005BF98",
+          "end": "0x8005BFD4"
+        },
+        {
+          "symbol": "fn_8005BFD4",
+          "start": "0x8005BFD4",
+          "end": "0x8005BFDC"
+        },
+        {
+          "symbol": "fn_8005BFDC",
+          "start": "0x8005BFDC",
+          "end": "0x8005C0C0"
+        },
+        {
+          "symbol": "fn_8005C0C0",
+          "start": "0x8005C0C0",
+          "end": "0x8005C144"
+        },
+        {
+          "symbol": "fn_8005C144",
+          "start": "0x8005C144",
+          "end": "0x8005C1A4"
+        },
+        {
+          "symbol": "fn_8005C1A4",
+          "start": "0x8005C1A4",
+          "end": "0x8005C1F4"
+        },
+        {
+          "symbol": "fn_8005C1F4",
+          "start": "0x8005C1F4",
+          "end": "0x8005C338"
+        },
+        {
+          "symbol": "fn_8005C338",
+          "start": "0x8005C338",
+          "end": "0x8005C4A4"
+        },
+        {
+          "symbol": "fn_8005C4A4",
+          "start": "0x8005C4A4",
+          "end": "0x8005C6EC"
+        },
+        {
+          "symbol": "fn_8005C6EC",
+          "start": "0x8005C6EC",
+          "end": "0x8005C844"
+        },
+        {
+          "symbol": "fn_8005C844",
+          "start": "0x8005C844",
+          "end": "0x8005C994"
+        },
+        {
+          "symbol": "fn_8005C994",
+          "start": "0x8005C994",
+          "end": "0x8005CAE4"
+        },
+        {
+          "symbol": "fn_8005CAE4",
+          "start": "0x8005CAE4",
+          "end": "0x8005CC50"
+        },
+        {
+          "symbol": "fn_8005CC50",
+          "start": "0x8005CC50",
+          "end": "0x8005CD8C"
+        },
+        {
+          "symbol": "fn_8005CD8C",
+          "start": "0x8005CD8C",
+          "end": "0x8005CE10"
+        },
+        {
+          "symbol": "fn_8005CE10",
+          "start": "0x8005CE10",
+          "end": "0x8005D1E4"
+        },
+        {
+          "symbol": "fn_8005D1E4",
+          "start": "0x8005D1E4",
+          "end": "0x8005D2C8"
+        },
+        {
+          "symbol": "fn_8005D2C8",
+          "start": "0x8005D2C8",
+          "end": "0x8005D2D0"
+        },
+        {
+          "symbol": "fn_8005D2D0",
+          "start": "0x8005D2D0",
+          "end": "0x8005D540"
+        },
+        {
+          "symbol": "_._15Record_8005CE10",
+          "start": "0x8005D580",
+          "end": "0x8005D5B4"
         }
       ]
     },
@@ -13117,13 +13277,13 @@
     {
       "source": "src/game/cu_8004A2F4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0\u20130x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership.",
+      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0\u20130x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8004A2F4",
-          "end": "0x8004DF68"
+          "end": "0x800504EC"
         },
         {
           "section": ".rodata",
@@ -13493,6 +13653,131 @@
           "symbol": "fn_8004DC88",
           "start": "0x8004DC88",
           "end": "0x8004DF68"
+        },
+        {
+          "symbol": "fn_8004DF68",
+          "start": "0x8004DF68",
+          "end": "0x8004DFDC"
+        },
+        {
+          "symbol": "fn_8004DFDC",
+          "start": "0x8004DFDC",
+          "end": "0x8004E018"
+        },
+        {
+          "symbol": "fn_8004E018",
+          "start": "0x8004E018",
+          "end": "0x8004E090"
+        },
+        {
+          "symbol": "fn_8004E090",
+          "start": "0x8004E090",
+          "end": "0x8004E0CC"
+        },
+        {
+          "symbol": "fn_8004E0CC",
+          "start": "0x8004E0CC",
+          "end": "0x8004E0F4"
+        },
+        {
+          "symbol": "fn_8004E0F4",
+          "start": "0x8004E0F4",
+          "end": "0x8004E16C"
+        },
+        {
+          "symbol": "fn_8004E16C",
+          "start": "0x8004E16C",
+          "end": "0x8004E2B4"
+        },
+        {
+          "symbol": "fn_8004E2B4",
+          "start": "0x8004E2B4",
+          "end": "0x8004E320"
+        },
+        {
+          "symbol": "fn_8004E320",
+          "start": "0x8004E320",
+          "end": "0x8004E358"
+        },
+        {
+          "symbol": "fn_8004E358",
+          "start": "0x8004E358",
+          "end": "0x8004E3CC"
+        },
+        {
+          "symbol": "fn_8004E3CC",
+          "start": "0x8004E3CC",
+          "end": "0x8004E468"
+        },
+        {
+          "symbol": "fn_8004E468",
+          "start": "0x8004E468",
+          "end": "0x8004E4D0"
+        },
+        {
+          "symbol": "fn_8004E4D0",
+          "start": "0x8004E4D0",
+          "end": "0x8004EA80"
+        },
+        {
+          "symbol": "fn_8004EA80",
+          "start": "0x8004EA80",
+          "end": "0x8004ED44"
+        },
+        {
+          "symbol": "fn_8004ED44",
+          "start": "0x8004ED44",
+          "end": "0x8004EE18"
+        },
+        {
+          "symbol": "fn_8004EE18",
+          "start": "0x8004EE18",
+          "end": "0x8004F20C"
+        },
+        {
+          "symbol": "fn_8004F20C",
+          "start": "0x8004F20C",
+          "end": "0x8004F2D0"
+        },
+        {
+          "symbol": "fn_8004F2D0",
+          "start": "0x8004F2D0",
+          "end": "0x8004F3A4"
+        },
+        {
+          "symbol": "fn_8004F3A4",
+          "start": "0x8004F3A4",
+          "end": "0x8004F4B4"
+        },
+        {
+          "symbol": "fn_8004F4B4",
+          "start": "0x8004F4B4",
+          "end": "0x8004F56C"
+        },
+        {
+          "symbol": "fn_8004F56C",
+          "start": "0x8004F56C",
+          "end": "0x8004F710"
+        },
+        {
+          "symbol": "fn_8004F710",
+          "start": "0x8004F710",
+          "end": "0x8004F754"
+        },
+        {
+          "symbol": "fn_8004F754",
+          "start": "0x8004F754",
+          "end": "0x8004FF8C"
+        },
+        {
+          "symbol": "fn_8004FF8C",
+          "start": "0x8004FF8C",
+          "end": "0x800502C0"
+        },
+        {
+          "symbol": "fn_800502C0",
+          "start": "0x800502C0",
+          "end": "0x800504EC"
         }
       ]
     },
@@ -30859,6 +31144,182 @@
           "symbol": "fn_80166BE8",
           "start": "0x80166BE8",
           "end": "0x80167094"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800FE444.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only31-body CPU/player geometry fragment within retained provisional cu_800EFC68 grouping. No older body moves or original file-end claim. Full580-byte surrounding readonly context retains unknown leading/internalzero ownership and all native mismatches. Original callback records stay external-owned.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FE444",
+          "end": "0x801018B4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E4FC",
+          "end": "0x8029E740"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800FE444",
+          "start": "0x800FE444",
+          "end": "0x800FE564"
+        },
+        {
+          "symbol": "fn_800FE564",
+          "start": "0x800FE564",
+          "end": "0x800FE910"
+        },
+        {
+          "symbol": "fn_800FE910",
+          "start": "0x800FE910",
+          "end": "0x800FE9B4"
+        },
+        {
+          "symbol": "fn_800FE9B4",
+          "start": "0x800FE9B4",
+          "end": "0x800FEB60"
+        },
+        {
+          "symbol": "fn_800FEB60",
+          "start": "0x800FEB60",
+          "end": "0x800FEDBC"
+        },
+        {
+          "symbol": "fn_800FEDBC",
+          "start": "0x800FEDBC",
+          "end": "0x800FEFD4"
+        },
+        {
+          "symbol": "fn_800FEFD4",
+          "start": "0x800FEFD4",
+          "end": "0x800FF094"
+        },
+        {
+          "symbol": "fn_800FF094",
+          "start": "0x800FF094",
+          "end": "0x800FF538"
+        },
+        {
+          "symbol": "fn_800FF598",
+          "start": "0x800FF598",
+          "end": "0x800FF6D8"
+        },
+        {
+          "symbol": "fn_800FF6D8",
+          "start": "0x800FF6D8",
+          "end": "0x800FF7A8"
+        },
+        {
+          "symbol": "fn_800FF7F4",
+          "start": "0x800FF7F4",
+          "end": "0x800FF860"
+        },
+        {
+          "symbol": "fn_800FF868",
+          "start": "0x800FF868",
+          "end": "0x800FF8DC"
+        },
+        {
+          "symbol": "fn_800FF8FC",
+          "start": "0x800FF8FC",
+          "end": "0x800FFA10"
+        },
+        {
+          "symbol": "fn_800FFA10",
+          "start": "0x800FFA10",
+          "end": "0x800FFB4C"
+        },
+        {
+          "symbol": "fn_800FFB4C",
+          "start": "0x800FFB4C",
+          "end": "0x800FFD2C"
+        },
+        {
+          "symbol": "fn_800FFD2C",
+          "start": "0x800FFD2C",
+          "end": "0x800FFDFC"
+        },
+        {
+          "symbol": "fn_80100024",
+          "start": "0x80100024",
+          "end": "0x801000EC"
+        },
+        {
+          "symbol": "fn_8010016C",
+          "start": "0x8010016C",
+          "end": "0x80100370"
+        },
+        {
+          "symbol": "fn_80100370",
+          "start": "0x80100370",
+          "end": "0x801007A4"
+        },
+        {
+          "symbol": "fn_801007A4",
+          "start": "0x801007A4",
+          "end": "0x80100AA0"
+        },
+        {
+          "symbol": "fn_80100AA0",
+          "start": "0x80100AA0",
+          "end": "0x80100B0C"
+        },
+        {
+          "symbol": "fn_80100B34",
+          "start": "0x80100B34",
+          "end": "0x80100BF8"
+        },
+        {
+          "symbol": "fn_80100BF8",
+          "start": "0x80100BF8",
+          "end": "0x80100EA0"
+        },
+        {
+          "symbol": "fn_80100EA0",
+          "start": "0x80100EA0",
+          "end": "0x80101064"
+        },
+        {
+          "symbol": "fn_80101064",
+          "start": "0x80101064",
+          "end": "0x80101130"
+        },
+        {
+          "symbol": "fn_80101130",
+          "start": "0x80101130",
+          "end": "0x80101408"
+        },
+        {
+          "symbol": "fn_80101408",
+          "start": "0x80101408",
+          "end": "0x801014C8"
+        },
+        {
+          "symbol": "fn_801014C8",
+          "start": "0x801014C8",
+          "end": "0x80101568"
+        },
+        {
+          "symbol": "fn_80101568",
+          "start": "0x80101568",
+          "end": "0x801016A4"
+        },
+        {
+          "symbol": "fn_801016A4",
+          "start": "0x801016A4",
+          "end": "0x8010176C"
+        },
+        {
+          "symbol": "fn_8010176C",
+          "start": "0x8010176C",
+          "end": "0x801018B4"
         }
       ]
     }
