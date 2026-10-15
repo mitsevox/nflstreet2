@@ -101,7 +101,7 @@ int fn_8014DC5C(void)
     return fn_8014EDBC();
 }
 
-void fn_8014DC7C(void *p)
+void fn_8014DC7C(void *p, int team)
 {
     fn_80177768(p, 2);
     for (unsigned char i = 0; i <= 5; i++) {
@@ -118,7 +118,7 @@ void fn_8014DD04(void)
     fn_80178CD8(0);
 }
 
-void fn_8014DD2C(void)
+void fn_8014DD2C(void *p, int team)
 {
     int pad = fn_80065650();
     unsigned short i;
