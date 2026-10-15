@@ -1,5 +1,4 @@
 #include "game/Class_80148A58.h"
-#include "game/Class_80297CE8.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_8009D990.h"
@@ -19,6 +18,7 @@ extern unsigned char lbl_803EB2B4;
 extern unsigned char lbl_803EB2B5;
 extern char *lbl_803EB2B0;
 extern void *lbl_803EB688;
+extern void *lbl_803EABA4;
 extern const int lbl_802DE3D0[];
 
 int fn_801787DC(int team);
@@ -70,6 +70,7 @@ void fn_8003A450(void);
 int fn_8005BFD4(void);
 void fn_8005BF18(void);
 void fn_80173B8C(void);
+void fn_800C02EC(void *p, short value);
 
 void fn_800BC5DC(void *p);
 void fn_800BCB18(void *p, float dt);
@@ -218,7 +219,7 @@ void fn_8014B028(void *p, float dt)
         fn_8009D944(1);
         fn_8009D944(0);
         short value = 9 - fn_802372EC(0, 5);
-        lbl_803EABA4->fn_800C02EC(value);
+        fn_800C02EC(lbl_803EABA4, value);
     }
 }
 
@@ -234,7 +235,7 @@ void fn_8014B0D0(void *p, float dt)
     fn_801487C0(fn_80178308(), 3);
     fn_801487C0(fn_80178320(), 2);
     short value = 9 - fn_802372EC(0, 5);
-    lbl_803EABA4->fn_800C02EC(value);
+    fn_800C02EC(lbl_803EABA4, value);
     Object_80137ABC *pBall = fn_801374BC();
     Vector_80039F5C pos;
     fn_80137D58(pBall, &pos);
