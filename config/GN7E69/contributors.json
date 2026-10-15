@@ -16536,6 +16536,84 @@
         "commit": "ca7b9af2e1d9a8e8f10145b2ce932b6e6dce89e6",
         "introduced_blob": "080318a8a0f826356609c30de1adeb1df2171861"
       }
+    },
+    {
+      "source": "src/game/cu_8008E978_initial.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8008E978",
+        "0x8008EB18",
+        "0x8008F940",
+        "0x8008F978",
+        "0x8008F9C0",
+        "0x8008F9F0",
+        "0x8008FCB4",
+        "0x8008FD88",
+        "0x8008FDC0",
+        "0x8008FE5C",
+        "0x8008FE60",
+        "0x8008FED4",
+        "0x8008FF28"
+      ],
+      "provenance": {
+        "pull_request": 750,
+        "merged_via": 750,
+        "commit": "d8999e016fb42b80d021fc37f7e7efaca9bc980d",
+        "introduced_blob": "a1b9fcc63b2c804c7c060480d37367cad9d1ccbb",
+        "original_commit": "dd444865bb07d30ee6441afa36d3893b223b8bef",
+        "original_blob": "3576445e26ee4d9f9c3f64e82be8eac9237990a7",
+        "integration_adjustment": "Integrated comparison metadata and canonical declarations; target-backed independent-review corrections preserve original source authorship."
+      }
+    },
+    {
+      "source": "src/game/cu_80149014.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80149014",
+        "0x80149518",
+        "0x8014993C",
+        "0x80149998",
+        "0x8014A6A0",
+        "0x8014AACC",
+        "0x8014AAD4",
+        "0x8014AADC",
+        "0x8014AAE4",
+        "0x8014AB58"
+      ],
+      "provenance": {
+        "pull_request": 750,
+        "merged_via": 750,
+        "commit": "d8999e016fb42b80d021fc37f7e7efaca9bc980d",
+        "introduced_blob": "f801a1a6a1080b3b3e54c6de45c2aab1081ed1be",
+        "original_commit": "c6c1287f5356fa119c80633a43dd6131ddfa3926",
+        "original_blob": "f801a1a6a1080b3b3e54c6de45c2aab1081ed1be",
+        "integration_adjustment": "Integrated comparison metadata and canonical declarations; target-backed independent-review corrections preserve original source authorship."
+      }
+    },
+    {
+      "source": "src/game/cu_800A0134.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800A02B4",
+        "0x800A03B8",
+        "0x800A0408",
+        "0x800A05E8"
+      ],
+      "provenance": {
+        "pull_request": 750,
+        "merged_via": 750,
+        "commit": "d8999e016fb42b80d021fc37f7e7efaca9bc980d",
+        "introduced_blob": "85bb2507c747721df5091b8c9d30c36f185bb84b",
+        "original_commit": "5067ec6c962e49725259a4d9c3670a2137fccbcb",
+        "original_blob": "4e8d425869f0249927194a1f5c2788cf5d1e0c45",
+        "integration_adjustment": "Integrated comparison metadata and canonical declarations; target-backed independent-review corrections preserve original source authorship."
+      }
     }
   ],
   "target": "GN7E69",

@@ -1,3 +1,6 @@
+#include "game/Step_800C4460.h"
+#include "game/Block_8030E6E8.h"
+#include "game/Record_800A0624.h"
 #include "game/Command_800CEE74.h"
 #include "game/Record_803EA558.h"
 #include "game/Level_80054130.h"
@@ -321,7 +324,7 @@ extern Vector_80039F5C lbl_8030C0B4[];
 extern Slot_8009418C lbl_8030C164[2];
 extern Record_80093FD4 lbl_802D78D8[];
 extern unsigned int lbl_802D79D8[];
-extern int lbl_803EC928;
+extern Object_8017886C *lbl_803EC928;
 extern Entry_80094BC4 *lbl_803EA8DC;
 extern int lbl_8030C270[14];
 extern Block_80096954 *lbl_803EA920;
@@ -858,7 +861,7 @@ extern "C" void fn_80094B78(Header_80094B78 *p)
     p->mUnknown2 = sizeof(Header_80094B78);
 }
 
-extern "C" void fn_80094BBC(int value)
+extern "C" void fn_80094BBC(Object_8017886C *value)
 {
     lbl_803EC928 = value;
 }
@@ -1250,54 +1253,6 @@ extern "C" void fn_80097564(void)
         fn_80097518(i);
     }
 }
-
-struct Object_80144CE0;
-
-/* Three code pointers at 0x8030E6DC. */
-struct Callbacks_8030E6DC {
-    void (*mpCallback0)(void);
-    void (*mpCallback4)(void);
-    void (*mpCallback8)(float value);
-};
-
-/* Object at 0x8030E6E8. Only the accessed members are typed; the size is
-   not established. */
-struct Block_8030E6E8 {
-    int mUnknown0;
-    unsigned short mUnknown4;
-    unsigned short mUnknown6;
-    unsigned short mUnknown8;
-    unsigned short mUnknownA;
-    unsigned short mUnknownC;
-    unsigned char mUnknownE[2];
-    unsigned char mUnknown10[12];
-    Vector_80039F5C mUnknown1C;
-    float mUnknown28;
-    float mUnknown2C;
-    float mUnknown30;
-    float mUnknown34;
-    unsigned char mUnknown38[8];
-    int mUnknown40;
-    unsigned char mUnknown44[4];
-    int mUnknown48;
-    float mUnknown4C;
-    float mUnknown50;
-    unsigned char mUnknown54[8];
-    int mUnknown5C;
-    float mUnknown60;
-    int mUnknown64;
-    unsigned char mUnknown68[4];
-    int mUnknown6C[20];
-    Object_80144CE0 *mpUnknownBC[30];
-    unsigned char mUnknown134[1920];
-    unsigned char mUnknown8B4[8];
-    unsigned char mUnknown8BC;
-    unsigned char mUnknown8BD;
-    unsigned char mUnknown8BE[2];
-    Entry_802F394C *mpUnknown8C0;
-    int mUnknown8C4;
-    void *mpUnknown8C8;
-};
 
 /* Stack block whose address fn_800A4E8C passes as the fourth argument of the
    callbacks of the .data table 0x802D7E20. */
@@ -6781,36 +6736,9 @@ struct Block_8009FF94 {
     unsigned int mUnknown4;
 };
 
-/* 24 bytes cleared by fn_800A0624. */
-struct Record_800A0624 {
-    unsigned char mUnknown0;
-    unsigned char mUnknown1[3];
-    int mUnknown4;
-    unsigned char mUnknown8[4];
-    int mUnknownC;
-    int mUnknown10;
-    unsigned char mUnknown14[4];
-};
 
-/* 32 bytes cleared by fn_800A0684. */
-struct Record_800A0684 {
-    int mUnknown0;
-    int mUnknown4;
-    Point_8017886C mUnknown8;
-    unsigned char mUnknown10[12];
-    unsigned char mUnknown1C;
-};
 
-struct Pair_800A14A8 {
-    int mUnknown0;
-    int mUnknown4;
-};
 
-struct Block_802D7C64 {
-    int mUnknown0;
-    unsigned char mUnknown4;
-    unsigned char mUnknown5;
-};
 
 extern "C" {
 unsigned int fn_801735C8(unsigned int mask);
@@ -6833,7 +6761,7 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_80177F70(void);
 int fn_800B2320(void);
 int fn_800A1C50(void);
-void fn_800A1C74(int a, int b);
+void fn_800A1C74(Object_8017886C *a, Object_8017886C *b);
 void fn_80194F1C(unsigned char enabled);
 int fn_800C8774(int team);
 int fn_801787DC(int team);
@@ -7287,19 +7215,20 @@ extern "C" void fn_800A0684(Record_800A0684 *p)
     p->mUnknown1C = fn_80178308();
 }
 
-extern "C" int fn_800A1470(void)
+extern "C" int fn_800A1470(void *unused)
 {
     return 1;
 }
 
-extern "C" int fn_800A1478(void)
+extern "C" int fn_800A1478(void *unused)
 {
     return fn_800A1C50() != 1;
 }
 
-extern "C" void fn_800A14A8(Pair_800A14A8 *p)
+extern "C" void fn_800A14A8(void *context)
 {
-    fn_800A1C74(p->mUnknown0, p->mUnknown4);
+    Pair_800A14A8 *p=(Pair_800A14A8 *)context;
+    fn_800A1C74(p->mpFirst, p->mpSecond);
     fn_80194F1C(0);
     fn_80067D4C(124, 0);
 }
@@ -8170,15 +8099,6 @@ struct Record_800B8544 {
 struct Pool_800B8544 {
     Record_800B8544 *mpRecords;
     unsigned char mCount;
-};
-
-/* One of the eight 32-byte steps of Sequence_800C4460. */
-struct Step_800C4460 {
-    int (*mpCallback0)(void *p);
-    int (*mpCallback4)(void *p);
-    void (*mpCallback8)(void *p);
-    float mUnknownC;
-    unsigned char mUnknown10[16];
 };
 
 /* 260-byte block cleared by fn_800C4438. */

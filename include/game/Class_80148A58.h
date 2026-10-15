@@ -4,6 +4,8 @@
 /* Object returned by fn_80148A58; its vtable pointer is at offset 0x18,
    after 24 bytes of data. Only the vtable slots called through are given
    signatures; the others are placeholders. */
+struct Object_80039F5C;
+
 class Class_80148A58 {
 public:
     virtual void vfn_01();
@@ -29,6 +31,20 @@ public:
                         char *pSecond, int secondLength);
     virtual void vfn_21();
     virtual int vfn_22(int a);
+
+    virtual void vfn_23();
+    virtual int vfn_24(int team, unsigned int tag);
+    virtual unsigned char vfn_25(int team, int index);
+    virtual int vfn_26(int team, int index, Object_80039F5C *pPlayer, int kind);
+    virtual int vfn_27(int team, int index, int value);
+    virtual unsigned char vfn_28(int index);
+    virtual const char *vfn_29(int kind);
+    virtual int vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer);
+    virtual int vfn_31(int kind, int team, int index, Object_80039F5C *pPlayer,
+                       int threshold, int mode);
+    virtual int vfn_32(int team, int kind);
+    virtual int vfn_33(int kind, int team);
+    virtual int vfn_34(int kind, int team, int threshold, int mode);
 
     int mUnknown0;
     int mUnknown4;
