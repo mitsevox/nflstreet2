@@ -31963,13 +31963,13 @@
     {
       "source": "src/engine/cu_80264424.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80264424-0x8026A664 (src/engine/cu_80264424.c), its compiler and source-form rows, and exact whole-function rows and neutral name rows for the 74 draft bodies. The drafts define no static data; references to other data use neutral labels. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80264424-0x80266A2C (src/engine/cu_80264424.c), its compiler and source-form rows, and exact whole-function rows and neutral name rows for the two draft bodies. The drafts define no static data. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80264424",
-          "end": "0x8026A664"
+          "end": "0x80266A2C"
         }
       ],
       "functions": [
@@ -31982,7 +31982,22 @@
           "symbol": "fn_8026696C",
           "start": "0x8026696C",
           "end": "0x80266A2C"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80266A2C.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80266A2C-0x8026A664 (src/engine/cu_80266A2C.c), its compiler and source-form rows, and exact whole-function rows and neutral name rows for the 72 draft bodies. engine_c is the comparison setting only; the original flags of this range are unresolved (compiler row). The drafts define no static data; references to other data use neutral labels. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80266A2C",
+          "end": "0x8026A664"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_80266A88",
           "start": "0x80266A88",
