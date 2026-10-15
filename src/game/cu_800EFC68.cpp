@@ -1,4 +1,6 @@
+#include "game/fn_801248D4.h"
 #include "game/Queue_800EFE0C.h"
+#include "game/State_800FDA58.h"
 #include <math.h>
 #include <string.h>
 #include "game/fn_800B65A0.h"
@@ -460,35 +462,6 @@ struct Object_800F4E14 {
     int mUnknown20;
 };
 
-/* View of the player +336 storage shared by fn_800FDA58 and fn_800FF538. */
-struct State_800FDA58 {
-    short mUnknown0;
-    unsigned char mUnknown2;
-    char mUnknown3[1];
-    int mUnknown4;
-    float mUnknown8;
-    float mUnknown12;
-    int mUnknown16;
-    char mUnknown20[28];
-    int mUnknown48;
-    unsigned char mUnknown52;
-    unsigned char mUnknown53;
-};
-
-/* View of the player +336 storage used by fn_800FF7A8. */
-struct State_800FF7A8 {
-    int mUnknown0;
-    unsigned char mUnknown4;
-};
-
-/* View of the player +336 storage used by fn_800FFDFC, fn_800FFF78 and
-   fn_800FFE30. */
-struct State_800FFDFC {
-    unsigned char mUnknown0;
-    char mUnknown1[3];
-    float mUnknown4;
-};
-
 /* Entry reached through List_801018B4 items and read by fn_801018B4. */
 struct Entry_801018B4 {
     char mUnknown0[4];
@@ -705,7 +678,6 @@ void fn_800DBC4C(Object_80039F5C *p, int angle, float value);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float fn_8022710C(void *pV);
 Object_800670B4 *fn_80168708(int team);
-int fn_801248D4(Object_80039F5C *p, int a, Vector_80039F5C *pPos, Object_80039F5C **ppOut, int b, int c, float x, float y);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
 int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
 void fn_800FC290(Object_80039F5C *p, Block_800FCC24 *pBlock, Point_8017886C target);
