@@ -16513,6 +16513,29 @@
         "original_blob": "9ecbcbdab1cee203cbfea64522e4e0bc3b85148c",
         "integration_adjustment": "Preserve original author source through integration and target-supported local corrections of defaults, pointer layouts/forwarding, unsigned-byte arguments, floating search bounds and ordered/unordered predicates. Original and introduced source blobs are pinned separately. Credit is limited to newly authored whole exact functions measured at the final integrated revision."
       }
+    },
+    {
+      "source": "src/game/cu_801485B4.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801485B4",
+        "0x801485C0",
+        "0x801485D4",
+        "0x801485EC",
+        "0x801485F4",
+        "0x80148644",
+        "0x80148698",
+        "0x801486A0",
+        "0x801488D4"
+      ],
+      "provenance": {
+        "pull_request": 749,
+        "merged_via": 749,
+        "commit": "ca7b9af2e1d9a8e8f10145b2ce932b6e6dce89e6",
+        "introduced_blob": "080318a8a0f826356609c30de1adeb1df2171861"
+      }
     }
   ],
   "target": "GN7E69",

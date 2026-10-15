@@ -31358,6 +31358,92 @@
           "end": "0x8016CEEC"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801485B4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #748; thirteen complete leading control/setup bodies inside retained provisional cu_801485B4 survey group. Original file boundaries and remaining source ownership unresolved. Full target function ranges and complete 32-byte literal context measured; original assembly stays linked. No promotion or header edits.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801485B4",
+          "end": "0x80148A98"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0568",
+          "end": "0x802A0588"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801485B4",
+          "start": "0x801485B4",
+          "end": "0x801485C0"
+        },
+        {
+          "symbol": "fn_801485C0",
+          "start": "0x801485C0",
+          "end": "0x801485D4"
+        },
+        {
+          "symbol": "fn_801485D4",
+          "start": "0x801485D4",
+          "end": "0x801485EC"
+        },
+        {
+          "symbol": "fn_801485EC",
+          "start": "0x801485EC",
+          "end": "0x801485F4"
+        },
+        {
+          "symbol": "fn_801485F4",
+          "start": "0x801485F4",
+          "end": "0x80148644"
+        },
+        {
+          "symbol": "fn_80148644",
+          "start": "0x80148644",
+          "end": "0x80148698"
+        },
+        {
+          "symbol": "fn_80148698",
+          "start": "0x80148698",
+          "end": "0x801486A0"
+        },
+        {
+          "symbol": "fn_801486A0",
+          "start": "0x801486A0",
+          "end": "0x801486A8"
+        },
+        {
+          "symbol": "fn_801486A8",
+          "start": "0x801486A8",
+          "end": "0x801487C0"
+        },
+        {
+          "symbol": "fn_801487C0",
+          "start": "0x801487C0",
+          "end": "0x80148814"
+        },
+        {
+          "symbol": "fn_80148814",
+          "start": "0x80148814",
+          "end": "0x801488D4"
+        },
+        {
+          "symbol": "fn_801488D4",
+          "start": "0x801488D4",
+          "end": "0x80148A58"
+        },
+        {
+          "symbol": "fn_80148A58",
+          "start": "0x80148A58",
+          "end": "0x80148A98"
+        }
+      ]
     }
   ]
 }
