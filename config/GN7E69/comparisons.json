@@ -31322,6 +31322,42 @@
           "end": "0x801018B4"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8016C70C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #740; evidence.tsv full function extents and bounded literal context 0x802A4D00-0x802A4D68. Three complete unlinked bodies; provisional source grouping; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8016C70C",
+          "end": "0x8016CEEC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4D00",
+          "end": "0x802A4D68"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8016C70C",
+          "start": "0x8016C70C",
+          "end": "0x8016CA50"
+        },
+        {
+          "symbol": "fn_8016CA50",
+          "start": "0x8016CA50",
+          "end": "0x8016CDD4"
+        },
+        {
+          "symbol": "fn_8016CDD4",
+          "start": "0x8016CDD4",
+          "end": "0x8016CEEC"
+        }
+      ]
     }
   ]
 }
