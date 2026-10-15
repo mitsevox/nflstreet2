@@ -8,8 +8,8 @@
 struct Object_80056584;
 
 extern "C" {
-extern unsigned short lbl_802EAB80;
-extern unsigned short lbl_802EABB4;
+extern unsigned short lbl_802EAB80 __attribute__((section(".data")));
+extern unsigned short lbl_802EABB4 __attribute__((section(".data")));
 extern char lbl_802EABC0[];
 extern char lbl_802EABD0[];
 extern char lbl_802EABD8[];
