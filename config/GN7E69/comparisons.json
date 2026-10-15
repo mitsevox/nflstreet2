@@ -31855,6 +31855,66 @@
       ]
     },
     {
+      "source": "src/game/cu_8014B890.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #782; nine complete bodies 0x8014B890-0x8014BC98 inside the retained provisional cu_801485B4 survey group: seven entries of the vtable 0x802A2DB8 installed by the constructor 0x8014B498, the stats query fn_8014BA20 (called from 0x8005C8AC) and fn_8014BC90 (called from 0x8014C238, 0x8014CAA8). No initialized data referenced. Excluded: the constructor/destructor 0x8014B498/0x8014B4E8 and the vtable entries fn_8014B528/fn_8014B7D4, which store state-object vtable addresses inline. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014B890",
+          "end": "0x8014BC98"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8014B890",
+          "start": "0x8014B890",
+          "end": "0x8014B898"
+        },
+        {
+          "symbol": "fn_8014B898",
+          "start": "0x8014B898",
+          "end": "0x8014B8D4"
+        },
+        {
+          "symbol": "fn_8014B8D4",
+          "start": "0x8014B8D4",
+          "end": "0x8014B930"
+        },
+        {
+          "symbol": "fn_8014B930",
+          "start": "0x8014B930",
+          "end": "0x8014BA20"
+        },
+        {
+          "symbol": "fn_8014BA20",
+          "start": "0x8014BA20",
+          "end": "0x8014BB4C"
+        },
+        {
+          "symbol": "fn_8014BB4C",
+          "start": "0x8014BB4C",
+          "end": "0x8014BC40"
+        },
+        {
+          "symbol": "fn_8014BC40",
+          "start": "0x8014BC40",
+          "end": "0x8014BC88"
+        },
+        {
+          "symbol": "fn_8014BC88",
+          "start": "0x8014BC88",
+          "end": "0x8014BC90"
+        },
+        {
+          "symbol": "fn_8014BC90",
+          "start": "0x8014BC90",
+          "end": "0x8014BC98"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
