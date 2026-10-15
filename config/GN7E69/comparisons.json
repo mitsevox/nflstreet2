@@ -31559,7 +31559,7 @@
     {
       "source": "src/game/cu_80149014.cpp",
       "profile": "game_cpp",
-      "evidence": "Complete23target functions, full surrounding0568-11F4 readonly context retained as provisional foreign pool. Source fragment/file identity unresolved. All foreign globals external and original-linked.",
+      "evidence": "Complete 23 target functions; query literal starts at target 0x802A0588. Full shared 0x802A0568-0x802A11F4 readonly context remains measured once: numeric prefix 0x802A0568-0x802A0588 by cu_801485B4.cpp and complete remaining 3180-byte suffix by this fragment. Native query bytes relocate at their evidenced address; unresolved trailing context remains visible. Original file ownership unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -31570,7 +31570,7 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802A0568",
+          "start": "0x802A0588",
           "end": "0x802A11F4"
         }
       ],
