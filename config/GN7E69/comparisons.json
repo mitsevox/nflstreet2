@@ -15795,16 +15795,27 @@
     {
       "source": "src/game/cu_8003F66C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row for src/game/cu_8003F66C.cpp, exact whole-function rows and inferred name/source-form/compiler rows for the reconstructed bodies. Wholly unlinked comparison source: original bytes remain linked; the other bodies and all static data are unmeasured.",
+      "evidence": "Issue #744; existing open/open grouping and exact function ranges retained. All 23 complete bodies measured; 16 prior definitions and original attribution preserved. Full 48-byte literal context 0x8028D358-0x8028D388 is measured, including both alignment words and all per-function pools. Original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8003F66C",
           "end": "0x800400CC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D358",
+          "end": "0x8028D388"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_8003F66C",
+          "start": "0x8003F66C",
+          "end": "0x8003F6B0"
+        },
         {
           "symbol": "fn_8003F6B0",
           "start": "0x8003F6B0",
@@ -15851,9 +15862,24 @@
           "end": "0x8003F768"
         },
         {
+          "symbol": "fn_8003F768",
+          "start": "0x8003F768",
+          "end": "0x8003F91C"
+        },
+        {
           "symbol": "fn_8003F91C",
           "start": "0x8003F91C",
           "end": "0x8003F95C"
+        },
+        {
+          "symbol": "fn_8003F95C",
+          "start": "0x8003F95C",
+          "end": "0x8003FAC4"
+        },
+        {
+          "symbol": "fn_8003FAC4",
+          "start": "0x8003FAC4",
+          "end": "0x8003FB2C"
         },
         {
           "symbol": "fn_8003FB2C",
@@ -15861,14 +15887,29 @@
           "end": "0x8003FB54"
         },
         {
+          "symbol": "fn_8003FB54",
+          "start": "0x8003FB54",
+          "end": "0x8003FBB4"
+        },
+        {
           "symbol": "fn_8003FBB4",
           "start": "0x8003FBB4",
           "end": "0x8003FBF0"
         },
         {
+          "symbol": "fn_8003FBF0",
+          "start": "0x8003FBF0",
+          "end": "0x8003FC68"
+        },
+        {
           "symbol": "fn_8003FC68",
           "start": "0x8003FC68",
           "end": "0x8003FC70"
+        },
+        {
+          "symbol": "fn_8003FC70",
+          "start": "0x8003FC70",
+          "end": "0x8003FE90"
         },
         {
           "symbol": "fn_8003FE90",
@@ -31785,6 +31826,137 @@
           "symbol": "fn_800A22E4",
           "start": "0x800A22E4",
           "end": "0x800A233C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80187AD4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #744; explicitly released former candidate plus contiguous format tail. Complete 22-function comparisons and full literal context; original file identity, discarded bodies and global storage ownership remain unresolved. Original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80187AD4",
+          "end": "0x801882B4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A7910",
+          "end": "0x802A8340"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80187AD4",
+          "start": "0x80187AD4",
+          "end": "0x80187C0C"
+        },
+        {
+          "symbol": "fn_80187C0C",
+          "start": "0x80187C0C",
+          "end": "0x80187C5C"
+        },
+        {
+          "symbol": "fn_80187C5C",
+          "start": "0x80187C5C",
+          "end": "0x80187C64"
+        },
+        {
+          "symbol": "fn_80187C64",
+          "start": "0x80187C64",
+          "end": "0x80187C6C"
+        },
+        {
+          "symbol": "fn_80187C6C",
+          "start": "0x80187C6C",
+          "end": "0x80187C8C"
+        },
+        {
+          "symbol": "fn_80187C8C",
+          "start": "0x80187C8C",
+          "end": "0x80187CAC"
+        },
+        {
+          "symbol": "fn_80187CAC",
+          "start": "0x80187CAC",
+          "end": "0x80187D10"
+        },
+        {
+          "symbol": "fn_80187D10",
+          "start": "0x80187D10",
+          "end": "0x80187DD0"
+        },
+        {
+          "symbol": "fn_80187DD0",
+          "start": "0x80187DD0",
+          "end": "0x80187DD8"
+        },
+        {
+          "symbol": "fn_80187DD8",
+          "start": "0x80187DD8",
+          "end": "0x80187E08"
+        },
+        {
+          "symbol": "fn_80187E08",
+          "start": "0x80187E08",
+          "end": "0x80187F44"
+        },
+        {
+          "symbol": "fn_80187F44",
+          "start": "0x80187F44",
+          "end": "0x80187FD0"
+        },
+        {
+          "symbol": "fn_80187FD0",
+          "start": "0x80187FD0",
+          "end": "0x80187FDC"
+        },
+        {
+          "symbol": "fn_80187FDC",
+          "start": "0x80187FDC",
+          "end": "0x80188014"
+        },
+        {
+          "symbol": "fn_80188014",
+          "start": "0x80188014",
+          "end": "0x8018801C"
+        },
+        {
+          "symbol": "fn_8018801C",
+          "start": "0x8018801C",
+          "end": "0x80188030"
+        },
+        {
+          "symbol": "fn_80188030",
+          "start": "0x80188030",
+          "end": "0x80188044"
+        },
+        {
+          "symbol": "fn_80188044",
+          "start": "0x80188044",
+          "end": "0x8018807C"
+        },
+        {
+          "symbol": "fn_8018807C",
+          "start": "0x8018807C",
+          "end": "0x801880B4"
+        },
+        {
+          "symbol": "fn_801880B4",
+          "start": "0x801880B4",
+          "end": "0x801880D4"
+        },
+        {
+          "symbol": "fn_801880D4",
+          "start": "0x801880D4",
+          "end": "0x80188248"
+        },
+        {
+          "symbol": "fn_80188248",
+          "start": "0x80188248",
+          "end": "0x801882B4"
         }
       ]
     }
