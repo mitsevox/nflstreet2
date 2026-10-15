@@ -4,6 +4,14 @@
 #include "game/cu_8003E214.h"
 #include "game/fn_8021D7B8.h"
 #include "game/cu_80064864.h"
+#include "game/fn_8007F6F8.h"
+#include "game/Class_80297AB8.h"
+#include "game/Class_80297B50.h"
+#include "game/Class_80297B90.h"
+#include "game/Class_80297BF8.h"
+#include "game/Class_80297C60.h"
+#include "game/Class_80297CE8.h"
+#include "game/Class_802A56E8.h"
 
 class Block_802A21E8 {
 public:
@@ -35,14 +43,13 @@ void fn_801735D8(unsigned int mask);
 void fn_8009D8CC(int index);
 void fn_8009D964(int index, int value);
 void fn_800AAD58(void *p, float dt);
-void fn_800BC51C(void *p);
-void fn_800B3644(void *p);
-void fn_800BFAB4(void *p);
-void fn_800A039C(void *p);
-void fn_800B9598(void *p);
-void fn_800AACB8(void *p);
-void fn_8007F6F8(int a, int b);
-void fn_80178F20(void *p);
+void fn_800BC51C(Class_80297BF8 *pObject);
+void fn_800B3644(Class_80297B50 *pObject);
+void fn_800BFAB4(Class_80297CE8 *pObject);
+void fn_800A039C(Class_80297AB8 *pObject);
+void fn_800B9598(Class_80297C60 *pObject);
+void fn_800AACB8(Class_80297B90 *pObject);
+void fn_80178F20(Class_802A56E8 *pObject);
 int fn_8014BC90(void);
 void fn_8014BC98(const int *pValues, int *pOrder, unsigned int count);
 void fn_8014BED8(const int *pValues, int *pOrder, unsigned int count);
