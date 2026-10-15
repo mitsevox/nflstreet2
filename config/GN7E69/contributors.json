@@ -16459,6 +16459,52 @@
         "original_blob": "79e71cc5daa255380f44e17ee2a321a2d983a6c6",
         "integration_adjustment": "Original author source is preserved through integration and target-supported localized contract, argument, predicate, literal or geometry corrections. Original and introduced source blobs are pinned separately; credit covers only newly authored whole exact functions measured on the integrated revision."
       }
+    },
+    {
+      "source": "src/game/cu_8003F66C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8003FAC4",
+        "0x8003FB54",
+        "0x8003FBF0"
+      ],
+      "provenance": {
+        "pull_request": 747,
+        "merged_via": 747,
+        "commit": "00683e4f802b9681e1cdd0c3541cba86e3b1f6a1",
+        "introduced_blob": "987558efbdaa0c24505fab083eb1a8313df9cd0d"
+      }
+    },
+    {
+      "source": "src/game/cu_80187AD4.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80187C0C",
+        "0x80187C5C",
+        "0x80187C64",
+        "0x80187C6C",
+        "0x80187C8C",
+        "0x80187D10",
+        "0x80187DD0",
+        "0x80187FD0",
+        "0x80187FDC",
+        "0x80188014",
+        "0x8018801C",
+        "0x80188030",
+        "0x80188044",
+        "0x8018807C",
+        "0x801880B4"
+      ],
+      "provenance": {
+        "pull_request": 747,
+        "merged_via": 747,
+        "commit": "66676efab8fa0354e0fd279b421be79cfc34fa3a",
+        "introduced_blob": "0d1cebef87f466f179f40da55c882d0a044387fc"
+      }
     }
   ],
   "target": "GN7E69",
