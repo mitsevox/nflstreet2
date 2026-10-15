@@ -175,8 +175,10 @@ struct State_8010D80C {
     Vector_80039F5C mUnknown0;
     char mUnknown12[4];
     float mUnknown16;
-    char mUnknown20[6];
+    int mUnknown20;
+    unsigned short mUnknown24;
     unsigned char mUnknown26;
+    unsigned char mUnknown27;
 };
 
 /* The word at +0 is also read back by its low byte. */
@@ -192,11 +194,15 @@ struct State_80111104 {
 /* View of the payload that fn_801BE60C returns, as fn_8011067C accesses it.
    Partial layout. */
 struct Block_8011067C {
-    char mUnknown0[12];
+    float mUnknown0;
+    float mUnknown4;
+    int mUnknown8;
     float mUnknown12;
     float mUnknown16;
-    char mUnknown20[4];
+    float mUnknown20;
     int mUnknown24;
+    int mUnknown28;
+    int mUnknown32;
 };
 
 /* View of the player object from +1032. */
@@ -246,6 +252,8 @@ struct Record_8010B738 {
     int mUnknown16;
     int mUnknown20;
     float mUnknown24;
+    float mUnknown28;
+    float mUnknown32;
 };
 
 struct Entry_8010B738 {
