@@ -8,7 +8,7 @@ Int32 fn_802178E4(void *pNodeArg, void **ppNode, Int32 Type, void *pNode);
 void fn_80217A7C(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Value, Int32 Type, void *pNode,
                  Int32 bAll);
 void fn_802180A0(UISInfoT *pInfo, UISScreenT *pScreen, void *pArg2, Int32 Arg3, Int32 Arg4,
-                 Int32 Arg5, Int32 Arg6, Uint8 *pArg7, Uint8 *pArg8);
+                 Int32 Arg5, Int32 Arg6, Int32 *pArgs, Uint8 *pArg8);
 Uint8 fn_8021861C(void *pTarget);
 Int32 fn_80218DDC(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 bArg3, Int32 Arg4,
                   Int32 *pArg5);
@@ -134,7 +134,7 @@ Int32 fn_80218CB8(UISInfoT *pInfo, void *pTarget)
 }
 
 Int32 fn_80218D20(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Arg3, Int32 Arg4,
-                  Int32 Arg5, Uint8 *pArg6)
+                  Int32 Count, Int32 *pArgs)
 {
     UISScreenT *pScreen;
     Uint8 Done;
@@ -143,11 +143,11 @@ Int32 fn_80218D20(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Arg3, 
     fn_802182E4(pInfo, pScreen);
     pScreen->pData->pControls[0].pState->bEnabled = 1;
     Done = 0;
-    if (Arg5 == 255) {
-        Arg5 = pArg6[43];
+    if (Count == 255) {
+        Count = (Uint8)pArgs[10];
     }
     pInfo->Flags |= 2;
-    fn_802180A0(pInfo, pScreen, pInfo->unk_74, 0, -1, -2, Arg5, pArg6, &Done);
+    fn_802180A0(pInfo, pScreen, &pInfo->RunState, 0, -1, -2, Count, pArgs, &Done);
     pInfo->Flags &= ~2;
     return 1;
 }
@@ -159,10 +159,10 @@ Int32 fn_80218FC4(UISInfoT *pInfo, Int16 GroupID, Int16 ScreenID, Int32 Arg3, In
     if (!(pInfo->Flags & 2)) {
         return fn_80218DDC(pInfo, GroupID, ScreenID, 0, Arg3, pArg4);
     }
-    Action.GroupID = GroupID;
-    Action.ScreenID = ScreenID;
-    Action.unk_04 = -1;
-    Action.unk_06 = -1;
+    Action.s.GroupID = GroupID;
+    Action.s.ScreenID = ScreenID;
+    Action.s.unk_04 = -1;
+    Action.s.unk_06 = -1;
     fn_8021D904(GroupID, ScreenID, pInfo, 0, &Action, Arg3, pArg4);
     return 1;
 }
@@ -177,8 +177,8 @@ void fn_8021956C(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 bProces
     UISThreadActionT Action;
     Int32 Arg;
 
-    Action.GroupID = GroupID;
-    Action.ScreenID = ScreenID;
+    Action.s.GroupID = GroupID;
+    Action.s.ScreenID = ScreenID;
     Arg = 0;
     fn_8021D904(GroupID, ScreenID, pInfo, 1, &Action, 1, &Arg);
     if (bProcess) {
@@ -190,8 +190,8 @@ void fn_802195E4(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
 {
     UISThreadActionT Action;
 
-    Action.GroupID = GroupID;
-    Action.ScreenID = ScreenID;
+    Action.s.GroupID = GroupID;
+    Action.s.ScreenID = ScreenID;
     fn_8021D904(GroupID, ScreenID, pInfo, 3, &Action, 0, 0);
     if (!(pInfo->Flags & 2)) {
         fn_8021DDF4(pInfo, 0);
@@ -215,8 +215,8 @@ void fn_80219650(UISInfoT *pInfo, Uint16 *pGroupID, Uint16 *pScreenID)
     }
 }
 
-void fn_80219854(UISInfoT *pInfo, void *pArg1, Int32 Arg2, Int32 Arg3, Int32 Arg4, Uint8 *pArg5,
-                 Int32 bAll)
+void fn_80219854(UISInfoT *pInfo, UISRunStateT *pState, Int32 Arg2, Int32 Arg3, Int32 Count,
+                 Int32 *pArgs, Int32 bAll)
 {
     Uint32 Screen;
     Uint32 End;
@@ -239,7 +239,7 @@ void fn_80219854(UISInfoT *pInfo, void *pArg1, Int32 Arg2, Int32 Arg3, Int32 Arg
             continue;
         }
         Done = 0;
-        fn_802180A0(pInfo, pScreen, pArg1, 0, Arg2, Arg3, Arg4, pArg5, &Done);
+        fn_802180A0(pInfo, pScreen, pState, 0, Arg2, Arg3, Count, pArgs, &Done);
     }
 }
 
@@ -252,7 +252,7 @@ void fn_80219A54(UISInfoT *pInfo, Int32 Arg1)
     for (Screen = 0; Screen < pInfo->NumScreens; Screen++) {
         pInfo->Flags |= 2;
         Done = 0;
-        fn_802180A0(pInfo, &pInfo->Screens[Screen], pInfo->unk_74, 0, Arg1, -10, 0, 0, &Done);
+        fn_802180A0(pInfo, &pInfo->Screens[Screen], &pInfo->RunState, 0, Arg1, -10, 0, 0, &Done);
         pInfo->Flags &= ~2;
     }
 }
