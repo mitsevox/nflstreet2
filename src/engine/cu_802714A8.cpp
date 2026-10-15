@@ -999,7 +999,7 @@ void fn_80272990(int channel, int mode)
 
 int fn_80272AA4(int key)
 {
-    int i = 0;
+    int i;
     BOOL enabled = OSDisableInterrupts();
 
     for (i = 0; i < 64; i++) {
@@ -1051,7 +1051,7 @@ int fn_80272B7C(u32 priority, u32 source, u32 dest, u32 length, int slot)
 
 void fn_80272C9C(int key)
 {
-    int i = 0;
+    int i;
     BOOL enabled = OSDisableInterrupts();
 
     for (i = 0; i < 64; i++) {
