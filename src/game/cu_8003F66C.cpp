@@ -94,7 +94,7 @@ void fn_800301C4(void *pStream, float *pValues, int bits, float scale);
 void fn_80030304(void *pStream, float *pValues, int bits, float scale);
 void fn_80030554(void *pStream, float *pValues, int bits, float scale);
 void fn_8003065C(void *pStream, float *pValues, int bits, float scale);
-void fn_800423F8(Object_8003DEC4 *p, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
+void fn_800423F8(Object_8003DEC4 *p, float *pPos, Quat_801EB488 *pRot);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_80030CB8(void);
 void fn_801D0470(int a);
@@ -245,7 +245,7 @@ extern "C" unsigned char fn_8003F95C(BitStream_t *pStream, Vector_80039F5C *pPos
         pPose->mUnknown44.mUnknown36[0] = (int)((unsigned int)ReadBitStream(pStream, 12) << 20) >> 8;
         pPose->mUnknown44.mUnknown36[1] = (int)((unsigned int)ReadBitStream(pStream, 12) << 20) >> 8;
         pPose->mUnknown44.mUnknown36[2] = (int)((unsigned int)ReadBitStream(pStream, 12) << 20) >> 8;
-        fn_800423F8(pPose, pLinkPos, pLinkRot);
+        fn_800423F8(pPose, &pLinkPos->mX, pLinkRot);
     } else {
         ReadBitStream(pStream, 39);
         ReadBitStream(pStream, 36);
