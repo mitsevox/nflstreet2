@@ -1703,6 +1703,10 @@
     "fn_800C02E0__14Class_80297CE8": {
       "address": "0x800C02E0",
       "evidence": "evidence.tsv external row for 0x800C02E0 (fn_800C02E0__14Class_80297CE8); descriptive mangled member name."
+    },
+    "AnimExtnRelocateFile__FP16AnimFileFormat_t": {
+      "address": "0x80190D8C",
+      "evidence": "Existing canonical AnimFileFormat.h declaration and animextn.cpp comparison definition; target callback addresses formed at8008FC0C/FD24, evidenced function80190D8C-80190DCC and related-name row16547. Resolver declaration only; no promotion or new source credit."
     }
   },
   "units": [

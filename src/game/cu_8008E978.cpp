@@ -324,7 +324,7 @@ extern Vector_80039F5C lbl_8030C0B4[];
 extern Slot_8009418C lbl_8030C164[2];
 extern Record_80093FD4 lbl_802D78D8[];
 extern unsigned int lbl_802D79D8[];
-extern int lbl_803EC928;
+extern Object_8017886C *lbl_803EC928;
 extern Entry_80094BC4 *lbl_803EA8DC;
 extern int lbl_8030C270[14];
 extern Block_80096954 *lbl_803EA920;
@@ -861,7 +861,7 @@ extern "C" void fn_80094B78(Header_80094B78 *p)
     p->mUnknown2 = sizeof(Header_80094B78);
 }
 
-extern "C" void fn_80094BBC(int value)
+extern "C" void fn_80094BBC(Object_8017886C *value)
 {
     lbl_803EC928 = value;
 }
@@ -6736,10 +6736,7 @@ struct Block_8009FF94 {
     unsigned int mUnknown4;
 };
 
-struct Pair_800A14A8 {
-    int mUnknown0;
-    int mUnknown4;
-};
+
 
 
 
@@ -6764,7 +6761,7 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_80177F70(void);
 int fn_800B2320(void);
 int fn_800A1C50(void);
-void fn_800A1C74(int a, int b);
+void fn_800A1C74(Object_8017886C *a, Object_8017886C *b);
 void fn_80194F1C(unsigned char enabled);
 int fn_800C8774(int team);
 int fn_801787DC(int team);
@@ -7218,19 +7215,20 @@ extern "C" void fn_800A0684(Record_800A0684 *p)
     p->mUnknown1C = fn_80178308();
 }
 
-extern "C" int fn_800A1470(void)
+extern "C" int fn_800A1470(void *unused)
 {
     return 1;
 }
 
-extern "C" int fn_800A1478(void)
+extern "C" int fn_800A1478(void *unused)
 {
     return fn_800A1C50() != 1;
 }
 
-extern "C" void fn_800A14A8(Pair_800A14A8 *p)
+extern "C" void fn_800A14A8(void *context)
 {
-    fn_800A1C74(p->mUnknown0, p->mUnknown4);
+    Pair_800A14A8 *p=(Pair_800A14A8 *)context;
+    fn_800A1C74(p->mpFirst, p->mpSecond);
     fn_80194F1C(0);
     fn_80067D4C(124, 0);
 }

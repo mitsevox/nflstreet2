@@ -327,7 +327,7 @@ extern "C" void fn_800A0EB8(Record_800A0624 *state,Object_8017886C *out)
                 if(fn_80177C38()==1 || fn_80177C38()==3)out->mUnknown18&=~4;
                 else out->mUnknown18|=4;
             } else {
-                if(!(out->mUnknown08.mY<=fn_80178A2C()) && fabsf(out->mUnknown08.mX)<fn_80178A08())out->mUnknown1D=6;
+                if(!(out->mUnknown08.mY<=fn_80178A2C()) && !(fabsf(out->mUnknown08.mX)>=fn_80178A08()))out->mUnknown1D=6;
                 out->mUnknown04=1;out->mUnknown18|=0x44;
             }
             if(fn_801486A0()==4 && fn_80177C38()!=0) {
@@ -339,7 +339,7 @@ extern "C" void fn_800A0EB8(Record_800A0624 *state,Object_8017886C *out)
             out->mUnknown04=6;out->mUnknown08.mX=0.0f;
             out->mUnknown08.mY=fn_80178A2C()-5.0f;
         }
-        if((previous!=6 && !(-fn_80178A2C()<=out->mUnknown08.mY)) || out->mUnknown18&0x100) {
+        if((previous!=6 && out->mUnknown08.mY < -fn_80178A2C()) || out->mUnknown18&0x100) {
             if(fn_801783AC(2) && !(out->mUnknown18&0x100)) {
                 out->mUnknown1D=-2;out->mUnknown04=1;
                 out->mUnknown18=(out->mUnknown18&~0x800)|0x84;
@@ -380,10 +380,10 @@ extern "C" void fn_800A1620(Object_8017886C *out)
 
 struct Pair_800A14A8;
 extern "C" {
-Object_8017886C *fn_800A16C8(int,Object_8017886C *,unsigned char *);
+Object_8017886C *fn_800A16C8(Object_8017886C *,Object_8017886C *,unsigned char *);
 void fn_800B14E4(void);
 int fn_800BA6F8(void);
-void fn_80094BBC(int);
+void fn_80094BBC(Object_8017886C *);
 void fn_80178878(const Object_8017886C *);
 void fn_800A14E4(Object_8017886C *,unsigned char);
 int fn_800C8774(int);
@@ -412,24 +412,23 @@ unsigned int fn_800B2314(void);
 void fn_8009BA9C(Object_8017886C *);
 void fn_8002C9A8(void *,int,int);
 void fn_8017D764(void);
-void fn_800A1A84(Object_8017886C *,int);
+void fn_800A1A84(Object_8017886C *,Object_8017886C *);
 void fn_8017813C(Point_8017886C);
 int fn_800B2320(void);
-void fn_800B2564(Object_8017886C *,int);
+void fn_800B2564(Object_8017886C *,Object_8017886C *);
 unsigned int fn_8009D990(int);
 void *fn_800B9A44(Class_80297C60 *);
 void fn_800B9A6C(Class_80297C60 *,void *);
-int fn_800A1470(void);
-int fn_800A1478(void);
-void fn_800A14A8(Pair_800A14A8 *);
+int fn_800A1470(void *);
+int fn_800A1478(void *);
+void fn_800A14A8(void *);
 extern Block_802D7C64 lbl_802D7C64[];
 extern void *lbl_803EA368;
 }
 
-extern "C" void fn_800A1C74(int value,int resultWord)
+extern "C" void fn_800A1C74(Object_8017886C *value,Object_8017886C *input)
 {
     unsigned char update=1;
-    Object_8017886C *input=(Object_8017886C *)resultWord;
     Object_8017886C *result=fn_800A16C8(value,input,&update);
     if(lbl_802D7C64[0].mUnknown5==1) {
         fn_800B14E4();lbl_802D7C64[0].mUnknown5=0;
@@ -484,7 +483,7 @@ extern "C" void fn_800A1C74(int value,int resultWord)
     }
 }
 
-extern "C" void fn_800A1FEC(Object_8017886C *result,int value)
+extern "C" void fn_800A1FEC(Object_8017886C *result,Object_8017886C *value)
 {
     fn_800A1A84(result,value);
     Point_8017886C pos=result->mUnknown08;
@@ -496,10 +495,10 @@ extern "C" void fn_800A1FEC(Object_8017886C *result,int value)
         fn_800B9A6C(lbl_803EAB84,step);
     }
     Step_800C4460 *step=(Step_800C4460 *)fn_800B9A44(lbl_803EAB84);
-    step->mpCallback0=(int (*)(void *))fn_800A1470;
-    step->mpCallback4=(int (*)(void *))fn_800A1478;
-    step->mpCallback8=(void (*)(void *))fn_800A14A8;
-    step->mWords10[0]=(int)result;step->mWords10[1]=value;
+    step->mpCallback0=fn_800A1470;
+    step->mpCallback4=fn_800A1478;
+    step->mpCallback8=fn_800A14A8;
+    step->mContext.mpFirst=result;step->mContext.mpSecond=value;
     fn_800B9A6C(lbl_803EAB84,step);
 }
 
