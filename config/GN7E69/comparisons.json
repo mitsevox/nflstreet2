@@ -31600,7 +31600,7 @@
     {
       "source": "src/game/cu_80149014.cpp",
       "profile": "game_cpp",
-      "evidence": "Complete 23 target functions; query literal starts at target 0x802A0588. Full shared 0x802A0568-0x802A11F4 readonly context remains measured once: numeric prefix 0x802A0568-0x802A0588 by cu_801485B4.cpp and complete remaining 3180-byte suffix by this fragment. Native query bytes relocate at their evidenced address; unresolved trailing context remains visible. Original file ownership unresolved; original bytes stay linked.",
+      "evidence": "Complete 23 target functions; query literal starts at target 0x802A0588. Full shared 0x802A0568-0x802A11F4 readonly context remains measured once: numeric prefix 0x802A0568-0x802A0588 by cu_801485B4.cpp, 0x802A0588-0x802A0B50 by this fragment and 0x802A0B50-0x802A11F4 (literal origin of fn_8014AC88) by cu_8014AB64.cpp. Native query bytes relocate at their evidenced address; unresolved trailing context remains visible. Original file ownership unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -31612,7 +31612,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A0588",
-          "end": "0x802A11F4"
+          "end": "0x802A0B50"
         }
       ],
       "functions": [
@@ -31730,6 +31730,127 @@
           "symbol": "fn_8014AB58",
           "start": "0x8014AB58",
           "end": "0x8014AB64"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8014AB64.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A11F4 is measured here, including the unresolved trailing context after the native 0x54-byte emission. Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014AB64",
+          "end": "0x8014B498"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A0B50",
+          "end": "0x802A11F4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8014AB64",
+          "start": "0x8014AB64",
+          "end": "0x8014ABE4"
+        },
+        {
+          "symbol": "fn_8014ABE4",
+          "start": "0x8014ABE4",
+          "end": "0x8014AC0C"
+        },
+        {
+          "symbol": "fn_8014AC0C",
+          "start": "0x8014AC0C",
+          "end": "0x8014AC88"
+        },
+        {
+          "symbol": "fn_8014AC88",
+          "start": "0x8014AC88",
+          "end": "0x8014AD24"
+        },
+        {
+          "symbol": "fn_8014AD24",
+          "start": "0x8014AD24",
+          "end": "0x8014AD70"
+        },
+        {
+          "symbol": "fn_8014AD70",
+          "start": "0x8014AD70",
+          "end": "0x8014ADB0"
+        },
+        {
+          "symbol": "fn_8014ADB0",
+          "start": "0x8014ADB0",
+          "end": "0x8014AE58"
+        },
+        {
+          "symbol": "fn_8014AE58",
+          "start": "0x8014AE58",
+          "end": "0x8014AE84"
+        },
+        {
+          "symbol": "fn_8014AE84",
+          "start": "0x8014AE84",
+          "end": "0x8014AEB4"
+        },
+        {
+          "symbol": "fn_8014AEB4",
+          "start": "0x8014AEB4",
+          "end": "0x8014AF24"
+        },
+        {
+          "symbol": "fn_8014AF24",
+          "start": "0x8014AF24",
+          "end": "0x8014B028"
+        },
+        {
+          "symbol": "fn_8014B028",
+          "start": "0x8014B028",
+          "end": "0x8014B0C8"
+        },
+        {
+          "symbol": "fn_8014B0C8",
+          "start": "0x8014B0C8",
+          "end": "0x8014B0D0"
+        },
+        {
+          "symbol": "fn_8014B0D0",
+          "start": "0x8014B0D0",
+          "end": "0x8014B178"
+        },
+        {
+          "symbol": "fn_8014B178",
+          "start": "0x8014B178",
+          "end": "0x8014B1C8"
+        },
+        {
+          "symbol": "fn_8014B1C8",
+          "start": "0x8014B1C8",
+          "end": "0x8014B210"
+        },
+        {
+          "symbol": "fn_8014B210",
+          "start": "0x8014B210",
+          "end": "0x8014B2CC"
+        },
+        {
+          "symbol": "fn_8014B2CC",
+          "start": "0x8014B2CC",
+          "end": "0x8014B350"
+        },
+        {
+          "symbol": "fn_8014B350",
+          "start": "0x8014B350",
+          "end": "0x8014B38C"
+        },
+        {
+          "symbol": "fn_8014B38C",
+          "start": "0x8014B38C",
+          "end": "0x8014B498"
         }
       ]
     },
