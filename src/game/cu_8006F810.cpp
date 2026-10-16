@@ -13,22 +13,6 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 
-struct Constants_8006F850 {
-    float mThreshold;
-    char mUnknown4[12];
-    float mScale;
-    char mUnknown14[12];
-    float mStrong;
-};
-
-struct Constants_8006F810 {
-    float mBounds[3];
-    float mThreshold;
-    float mScale;
-    char mUnknown14[8];
-    float mZ;
-};
-
 struct Record_80071594 {
     int mUnknown0;
     int mUnknown4;
@@ -61,7 +45,6 @@ int fn_800A9680(void);
 int fn_80073310(void);
 int fn_801650DC(Record_80067338 *pRecord);
 int fn_80178348(void);
-extern Constants_8006F850 lbl_80290B58;
 extern unsigned int lbl_80290B9C[4];
 extern float lbl_803ECB08;
 extern unsigned char lbl_803EA6EC;
@@ -107,7 +90,6 @@ void fn_80227690(void *out, void *a, void *b);
 int fn_80237470(int a, int b);
 int fn_802374C8(int handle);
 void fn_8023756C(int handle);
-extern Constants_8006F810 lbl_80290B7C;
 extern unsigned char lbl_802D63D0[];
 extern unsigned char lbl_80290BAC[][2];
 extern Vector_80039F5C lbl_8030AA7C;
@@ -502,8 +484,8 @@ void fn_8006F850(Record_80067CA8 *p)
         Object_80039F5C *a = (Object_80039F5C *)p->mUnknown10.mpObject;
         Object_80039F5C *b = (Object_80039F5C *)p->mUnknown14;
         int id;
-        if (a->mUnknown560.mUnknown28 > lbl_803ECB08 * lbl_80290B58.mThreshold ||
-            b->mUnknown560.mUnknown28 > lbl_803ECB08 * lbl_80290B58.mThreshold || fn_800A9680()) {
+        if (a->mUnknown560.mUnknown28 > lbl_803ECB08 * 3144.409912109375f ||
+            b->mUnknown560.mUnknown28 > lbl_803ECB08 * 3144.409912109375f || fn_800A9680()) {
             lbl_803EA6D0 = (lbl_803EA6D0 + 1) % 3;
             id = lbl_803EA6D0 + 15;
         } else {
@@ -513,9 +495,9 @@ void fn_8006F850(Record_80067CA8 *p)
         unsigned char volume;
         if (fn_800A9680()) volume = fn_8006CC90(id);
         else {
-            float scaled = (a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * fn_8006CC90(id) / (lbl_803ECB08 * lbl_80290B58.mScale);
+            float scaled = (a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * fn_8006CC90(id) / (lbl_803ECB08 * 100621.1171875f);
             if (!(scaled <= fn_8006CC90(id))) volume = (unsigned char)(int)(float)fn_8006CC90(id);
-            else volume = (unsigned char)(int)((a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * fn_8006CC90(id) / (lbl_803ECB08 * lbl_80290B58.mScale));
+            else volume = (unsigned char)(int)((a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * fn_8006CC90(id) / (lbl_803ECB08 * 100621.1171875f));
         }
         fn_8006C8A4(id, &a->mMotion.mPos, volume);
         break;
@@ -576,10 +558,10 @@ void fn_8006F850(Record_80067CA8 *p)
         int id;
         if (((unsigned int)state <= 1 || state == 3 || state == 5 || state == 7) &&
             ((unsigned int)previous <= 1 || previous == 3 || previous == 5 || previous == 7)) {
-            if (!(value <= lbl_803ECB08 * lbl_80290B58.mStrong)) {
+            if (!(value <= lbl_803ECB08 * 12577.6396484375f)) {
                 lbl_803EA6D2 = (lbl_803EA6D2 + 1) % 2;
                 id = lbl_803EA6D2 + 6;
-            } else if (value > lbl_803ECB08 * lbl_80290B58.mThreshold) {
+            } else if (value > lbl_803ECB08 * 3144.409912109375f) {
                 lbl_803EA6D3 = (lbl_803EA6D3 + 1) % 2;
                 id = lbl_803EA6D3 + 8;
             } else {
@@ -587,7 +569,7 @@ void fn_8006F850(Record_80067CA8 *p)
                 id = lbl_803EA6D4 + 10;
             }
         } else {
-            if (!(value <= lbl_803ECB08 * lbl_80290B58.mStrong)) {
+            if (!(value <= lbl_803ECB08 * 12577.6396484375f)) {
                 lbl_803EA6D3 = (lbl_803EA6D3 + 1) % 2;
                 id = lbl_803EA6D3 + 8;
             } else {
@@ -700,7 +682,7 @@ void fn_80070F84(void)
     unsigned int count = 0;
     for (int i = 0; i < 7; ++i) {
         Point_8017886C *point = &p->mUnknown8.mUnknown84[0][i].mUnknown10;
-        if (point->mX > lbl_80290B7C.mBounds[0] && point->mX < lbl_80290B7C.mBounds[1] && point->mY < lbl_80290B7C.mBounds[2]) ++count;
+        if (point->mX > -6.0f && point->mX < 6.0f && point->mY < 3.0f) ++count;
     }
     int id;
     if (count > 2) id = fn_802374C8(lbl_803EC828) + 40;
@@ -793,15 +775,16 @@ void fn_8007134C(void)
 
 void fn_80071458(Object_80039F5C *p, Object_80137ABC *ball)
 {
-    Vector_80039F5C pos, velocity, delta;
+    Vector_80039F5C pos, velocity;
+    Point_8017886C delta;
     fn_80137D58(ball, &pos);
     int nearby = 0;
     fn_80137EC4(ball, &velocity);
     if (p->mIdBytes[3] == 1) {
         fn_80227690(&delta, &pos, &p->mMotion);
-        nearby = fn_802270A4(&delta) < lbl_80290B7C.mThreshold;
+        nearby = fn_802270A4(&delta) < 0.3f;
     }
-    fn_80067DB8(28, &pos, (unsigned int)(fn_802270D4(&velocity) * lbl_80290B7C.mScale), nearby, ball->mState.mIndex);
+    fn_80067DB8(28, &pos, (unsigned int)(fn_802270D4(&velocity) * 65536.0f), nearby, ball->mState.mIndex);
 }
 
 void fn_80071540(int *value, Object_80137ABC *ball)
@@ -817,7 +800,7 @@ void fn_80071594(void *record)
     Vector_80039F5C pos;
     pos.mX = p->mUnknownC;
     pos.mY = p->mUnknown10;
-    pos.mZ = lbl_80290B7C.mZ;
+    pos.mZ = 0.0f;
     if (lbl_803EA6CD) fn_80067E3C((unsigned short)(p->mUnknown14 + 137), &pos, p->mUnknown0, p->mUnknown4, p->mUnknown8, 0);
 }
 

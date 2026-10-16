@@ -16155,7 +16155,7 @@
     {
       "source": "src/game/cu_8006F810.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional37-function grouping. All37 complete bodies now compared:23 newly reconstructed event-driven sound dispatch/selection/playback functions and14 existing bodies. Neutral labels retained; canonical player, ball, area, event and Block_800C9D6C contracts reused. The complete emitted conversion-literal pool is measured against the honest56-byte target slice0x80290B60-0x80290B98, including intervening unresolved original constants. Code/data matching incompleteness remains explicit; no linking promotion or storage definition; original assembly/storage stays linked.",
+      "evidence": "evidence.tsv retained open/provisional37-function grouping. All37 complete bodies compared; ordinary float literals replace external aggregate constant views and the temporary two-float difference reuses Point_8017886C. Full native rodata is measured against referenced target context0x80290B58-0x80290B9C; extra native bytes remain mismatches, without absorbing the following original table. Canonical player, ball, event and Block_800C9D6C contracts retained. Original assembly/storage stays linked; no completed-file or storage allocation claim.",
       "sections": [
         {
           "section": ".text",
@@ -16166,8 +16166,8 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x80290B60",
-          "end": "0x80290B98"
+          "start": "0x80290B58",
+          "end": "0x80290B9C"
         }
       ],
       "functions": [
