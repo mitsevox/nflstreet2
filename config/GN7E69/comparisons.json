@@ -24220,6 +24220,11 @@
           "end": "0x800BB0EC"
         },
         {
+          "symbol": "fn_800BB0EC",
+          "start": "0x800BB0EC",
+          "end": "0x800BB23C"
+        },
+        {
           "symbol": "fn_800BB23C",
           "start": "0x800BB23C",
           "end": "0x800BB24C"

@@ -4914,6 +4914,53 @@ extern "C" unsigned char fn_800BB0C4(void)
     return lbl_803EABA1;
 }
 
+/* 48-byte record returned by fn_801C029C; only the first word is read. */
+struct Entry_801C029C {
+    unsigned int mUnknown0;
+};
+
+extern "C" {
+Entry_801C029C *fn_801C029C(Actor_801C009C *pActor, unsigned short index);
+
+extern unsigned short lbl_802D9B14[];
+}
+
+extern "C" unsigned int fn_800BB0EC(void)
+{
+    unsigned int index = 9999;
+    int checkFirst = fn_801486A0() == 3;
+    unsigned int count = fn_80178D70(1);
+    unsigned int limit = count < fn_80178D70(0) ? count : fn_80178D70(0);
+
+    while (index == 9999) {
+        Actor_801C009C *pActor;
+        unsigned short i;
+        int ok;
+
+        index = fn_802372EC(0, lbl_803EC98C->mUnknown2B);
+        if (checkFirst && fn_80093BAC(index, lbl_803EC98C->mUnknown14)->mUnknown0 == 4) {
+            index = (index + 1) % lbl_803EC98C->mUnknown2B;
+        }
+        pActor = fn_80093BAC(index, lbl_803EC98C->mUnknown14);
+        ok = 1;
+        for (i = 0; i < pActor->mUnknown4; i++) {
+            if (fn_80096440(fn_801C029C(pActor, i)->mUnknown0) >= limit) {
+                ok = 0;
+                break;
+            }
+        }
+        if (ok) {
+            int mask = 1 << fn_800A3444();
+
+            if (lbl_802D9B14[index] & mask) {
+                break;
+            }
+        }
+        index = 9999;
+    }
+    return index;
+}
+
 extern "C" int fn_800BB23C(int value)
 {
     return value == 6;
