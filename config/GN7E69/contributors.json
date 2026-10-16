@@ -16660,6 +16660,20 @@
         "commit": "66676efab8fa0354e0fd279b421be79cfc34fa3a",
         "introduced_blob": "0d1cebef87f466f179f40da55c882d0a044387fc"
       }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80071600"
+      ],
+      "provenance": {
+        "pull_request": 799,
+        "commit": "5677da2b15a53220e9dbb20e8371c3cc7878e826",
+        "introduced_blob": "f7fb2714236387fa754fcb8ceb36748b36236ba0"
+      }
     }
   ],
   "target": "GN7E69",
