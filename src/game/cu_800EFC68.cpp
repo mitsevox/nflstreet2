@@ -5257,6 +5257,237 @@ extern "C" int fn_80111F80(Object_80039F5C *p)
 }
 
 extern "C" {
+Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
+int fn_8009A77C(Object_80039F5C *p);
+int fn_80111B4C(Object_80039F5C *p);
+extern unsigned char lbl_803EAF7D;
+extern float lbl_803EAF80;
+extern float lbl_803EAF84;
+extern float lbl_803EAF88;
+extern float lbl_803EAF8C;
+}
+
+extern "C" int fn_80111FBC(Object_80039F5C *p)
+{
+    State_80111F80 *state = (State_80111F80 *)&p->mUnknown336;
+    Vector_80039F5C delta;
+    Vector_80039F5C ball;
+    Vector_80039F5C from;
+    Vector_80039F5C velocity;
+    Vector_80039F5C pos;
+    Vector_80039F5C offset;
+    Message_800F01CC message;
+    Point_8017886C toBall;
+    float height;
+    int value;
+    int extra;
+    Object_80137ABC *pBall;
+    int target = 0x1FFFFFFF;
+    int flag;
+    int found;
+    int a;
+    int mode;
+    float range;
+    float t;
+    float speed;
+
+    pBall = fn_80137ABC(p->mpState->mUnknown1);
+    fn_80138064(pBall, &ball);
+    fn_80137D58(pBall, &from);
+    fn_80137EC4(pBall, &velocity);
+    fn_802276B4(&offset, &from, &p->mMotion.mPos);
+    if (!(p->mFlags & 0x4000)) {
+        if (ball.mX > fn_80178A08()) {
+            ball.mX -= 2.0f * (ball.mX - fn_80178A08());
+        } else if (ball.mX < -fn_80178A08()) {
+            ball.mX -= 2.0f * (ball.mX + fn_80178A08());
+        }
+        if (lbl_803EAF7D != 0) {
+            if (ball.mX > fn_80178A08() - 3.0f && p->mMotion.mPos.mX < ball.mX) {
+                if (ball.mX > fn_80178A08() + 0.5f) {
+                    if (fabsf(ball.mX - from.mX) < 1e-7f) {
+                        t = 0.0f;
+                    } else {
+                        t = (fn_80178A08() + 0.5f - from.mX) / (ball.mX - from.mX);
+                    }
+                    ball.mX = fn_80178A08() + 0.5f;
+                    ball.mY = (ball.mY - from.mY) * t + from.mY;
+                }
+                fn_80227690(&delta, &p->mMotion.mPos, &ball);
+                fn_80227538((Point_8017886C *)&delta, fn_801CFE40(delta.mY, delta.mX), 1.25f);
+                fn_80227638(&ball, &ball, &delta);
+            }
+            if (ball.mX < -(fn_80178A08() - 3.0f) && p->mMotion.mPos.mX > ball.mX) {
+                if (ball.mX < -(fn_80178A08() + 0.5f)) {
+                    if (ball.mX - from.mX != 0.0f) {
+                        t = (-(fn_80178A08() + 0.5f) - from.mX) / (ball.mX - from.mX);
+                    } else {
+                        t = 0.0f;
+                    }
+                    ball.mX = -(fn_80178A08() + 0.5f);
+                    ball.mY = (ball.mY - from.mY) * t + from.mY;
+                }
+                fn_80227690(&delta, &p->mMotion.mPos, &ball);
+                fn_80227538((Point_8017886C *)&delta, fn_801CFE40(delta.mY, delta.mX), 1.25f);
+                fn_80227638(&ball, &ball, &delta);
+            }
+        }
+        ball.mY = ball.mY > fn_80178A44() - 0.75f ? fn_80178A44() - 0.75f : ball.mY;
+    } else {
+        fn_80138064(fn_801374BC(), &pos);
+        fn_80227690(&toBall, &pos, &p->mMotion.mPos);
+        if (fn_801CFFD0(p->mUnknown512.mUnknown4, fn_801CFE40(toBall.mY, toBall.mX)) > 0x200000) {
+            Object_80039F5C *pOther = fn_800FB9D4(p);
+
+            if (pOther != 0) {
+                fn_801C1F94(&message, 0, 4);
+                message.mId = 24;
+                message.mUnknown1[0] = 2;
+                fn_800F053C(0, pOther->mpState, &message, pOther);
+            }
+        }
+    }
+    flag = ball.mY >= fn_80177FE0().mY + 2.0f;
+    if (fn_801CFFD0(p->mMotion.mFacing, 0xC00000) < 0x2AAAAA) {
+        flag = 0;
+    }
+    if (fn_8013BA58(pBall, 0) != 4) {
+        fn_801C1F94(&message, 0, 4);
+        if (fn_80137AD0(pBall) == p) {
+            message.mId = 1;
+            fn_800F053C(0, p->mpState, &message, p);
+        }
+        return 1;
+    }
+    if (!(p->mFlags & 0x4000)) {
+        if (flag == 1) {
+            a = 0;
+            mode = 3;
+        } else {
+            a = 0;
+            mode = 2;
+        }
+    } else {
+        a = 0;
+        mode = 1;
+    }
+    if (p->mUnknown8 == 0xFF) {
+        range = 120.0f;
+    } else {
+        range = 17.0f;
+    }
+    fn_801380AC(pBall, &height);
+    value = -1;
+    extra = 0;
+    if (fn_8009A6EC(p)) {
+        target = fn_800997F4(p, pBall, range, state, 3, 0, 0, &value, &extra);
+    }
+    if (target == 0x1FFFFFFF) {
+        target = fn_80099734(p, pBall, 0, mode, state, 1, 0, 0, fn_8009A77C(p), range);
+    }
+    if (target != 0x1FFFFFFF) {
+        int result;
+
+        if (((target >> 29) & 3) == 1) {
+            result = fn_8009A1A8(p, target, value, extra, p->mpState->mUnknown1);
+        } else {
+            result = fn_80099F04(p, target, p->mpState->mUnknown1);
+        }
+        if (result != 0) {
+            return 0;
+        }
+    } else if (height <= lbl_803EAF80) {
+        fn_80138064(pBall, &pos);
+        flag = 0;
+        if (fn_8022781C(&p->mMotion.mPos, &pos) < lbl_803EAF84) {
+            if (fn_80137B88(pBall) == p && fn_801783AC(11) == 0) {
+                if (fn_801CFFD0(fn_801CFE40(offset.mY, offset.mX), p->mMotion.mFacing) >
+                    (int)(lbl_803EAF88 * 46603.378f)) {
+                    mode = 2;
+                }
+                flag = 1;
+            } else if (fn_801783AC(11) == 1 && fn_8022781C(&p->mMotion.mPos, &pos) > lbl_803EAF8C) {
+                a = 3;
+                mode = 3;
+                flag = 1;
+            }
+            if (flag) {
+                found = 1;
+                target = fn_80099734(p, pBall, a, mode, state, 1, 0, 1, fn_8009A77C(p), range);
+                if (target == 0x1FFFFFFF) {
+                    found = 0;
+                }
+            } else {
+                found = 0;
+            }
+            if (found && fn_80099F04(p, target, p->mpState->mUnknown1) == 1) {
+                return 0;
+            }
+        }
+    }
+    if (!(p->mFlags & 0x4000)) {
+        fn_802276B4(&delta, &ball, &p->mMotion.mPos);
+        if (fn_80111B4C(p)) {
+            float ratio;
+            float distance;
+
+            speed = lbl_803ECB08 * (lbl_803ED6CC + (1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f));
+            fn_802276B4(&ball, &ball, &from);
+            if (fn_802270A4(&velocity) != 0.0f) {
+                ratio = fn_802270A4(&ball) / fn_802270A4(&velocity);
+            } else {
+                ratio = 0.0f;
+            }
+            distance = fn_802270A4(&delta);
+            if (distance > 0.5f) {
+                distance -= 0.5f;
+            }
+            if (ratio == 0.0f) {
+                distance = 0.0f;
+            } else {
+                distance /= ratio;
+            }
+            if (distance > speed) {
+                t = 1.0f;
+            } else if (speed != 0.0f) {
+                t = distance / speed;
+            } else {
+                t = 0.0f;
+            }
+            if (t < 0.4f) {
+                t = 0.4f;
+            }
+            if (t != 0.0f) {
+                int angle = fn_801CFE40(delta.mY, delta.mX);
+
+                if (fn_801CFFD0(angle, p->mMotion.mFacing) < 0xAAAAA) {
+                    p->mUnknown512.mUnknown15 = 1;
+                }
+                if (fn_801CFFD0(p->mMotion.mFacing, angle) > 0x600000) {
+                    int turn = (p->mMotion.mFacing + 0x5F49F5) & 0xFFFFFF;
+
+                    if (fn_801CFFD0(turn, angle) > 0x400000) {
+                        turn = (turn + 0x800000) & 0xFFFFFF;
+                    }
+                    angle = turn;
+                }
+                p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = angle;
+                p->mUnknown512.mUnknown14 = 1;
+                p->mUnknown512.mUnknown0 = t;
+            }
+        } else {
+            fn_80227690(&offset, &from, &p->mMotion.mPos);
+            p->mUnknown512.mUnknown14 = 1;
+            p->mUnknown512.mUnknown8 = fn_801CFE40(offset.mY, offset.mX) & 0xFFFFFF;
+            p->mUnknown512.mUnknown4 = fn_801CFE40(offset.mY, offset.mX) & 0xFFFFFF;
+            p->mUnknown512.mUnknown0 = 0.0f;
+        }
+        fn_80111E80(p);
+    }
+    return 0;
+}
+
+extern "C" {
 float fn_8016D9F4(Object_80039F5C *p, float a, float b);
 int fn_8009F0B8(Object_80039F5C *p, int angle);
 int fn_800A7F1C(unsigned char);
@@ -5864,7 +6095,7 @@ extern "C" int fn_80113BCC(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_80113C18() {
+extern "C" int fn_80113C18(Object_80039F5C *p, void *pState) {
     return 0;
 }
 
@@ -5968,6 +6199,284 @@ extern "C" int fn_80113C20(Object_80039F5C *p)
         fn_800D7A18(p);
     }
     return 0;
+}
+
+/* The bytes at player +336 as fn_80113E74 updates them; +32 is the block
+   passed to fn_800DB7A4 and fn_800DB8B4. */
+struct State_80113E74 {
+    int mRef;
+    float mUnknown4;
+    float mUnknown8;
+    float mUnknown12;
+    char mUnknown16[4];
+    unsigned int mUnknown20;
+    char mUnknown24[1];
+    unsigned char mUnknown25;
+    short mUnknown26;
+    unsigned char mUnknown28;
+    unsigned char mUnknown29;
+    unsigned char mUnknown30;
+    unsigned char mUnknown31;
+    char mUnknown32[24];
+    unsigned char mUnknown56;
+    char mUnknown57[2];
+    unsigned char mUnknown59;
+    int mUnknown60;
+    unsigned short mUnknown64;
+    char mUnknown66[2];
+    unsigned char mUnknown68;
+};
+
+/* The bytes at +336 of the player that fn_80113E74's reference names. */
+struct Other_80113E74 {
+    char mUnknown0[4];
+    unsigned int mUnknown4;
+    float mUnknown8;
+};
+
+extern "C" {
+int fn_8017319C(Object_80039F5C *p);
+void fn_800DB7A4(void *pBlock, Object_80039F5C *p);
+void fn_800DB8B4(void *pBlock, Object_80039F5C *p);
+void fn_80114F64(Object_80039F5C *p, int angle);
+void fn_800D6E98(int team);
+void fn_80171E30(void);
+void fn_801720B4(Object_80039F5C *p);
+void fn_80171824(Object_80039F5C *p);
+int fn_800A7F1C(unsigned char);
+void fn_80102D78(Object_80039F5C *p);
+void fn_801039D8(Object_80039F5C *p);
+int fn_800CE690(Object_800CE674 *p);
+float fn_800CE73C(Object_800CE674 *p);
+void fn_801410F4(int a);
+void fn_8016F6F4(Object_80039F5C *p, Object_80039F5C *pOther);
+void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pOther);
+void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void fn_800D640C(Object_80039F5C *p);
+extern unsigned char lbl_803EAF91;
+extern int lbl_803EAF94;
+}
+
+extern "C" int fn_80113E74(Object_80039F5C *p)
+{
+    int result = 0;
+    State_80113E74 *state = (State_80113E74 *)&p->mUnknown336;
+    Object_800CE674 *pAnim = &p->mUnknown1240;
+    Other_80113E74 *pOtherState = 0;
+    Object_80039F5C *pOther = fn_8009BCE8(&state->mRef);
+    Message_800F01CC message;
+    Vector_80039F5C ball;
+    Vector_80039F5C hand;
+    Point_8017886C aim;
+    Object_80137ABC *pBall;
+    int allowed;
+    float speed;
+
+    if (pOther != 0) {
+        pOtherState = (Other_80113E74 *)&pOther->mUnknown336;
+    }
+    if (state->mUnknown68 == 0) {
+        fn_8017319C(p);
+        state->mUnknown68 = 1;
+    }
+    fn_800DB7A4(state->mUnknown32, p);
+    if (state->mUnknown56 == 1) {
+        state->mUnknown60++;
+        if (!(p->mFlags & 0x4000)) {
+            state->mUnknown64++;
+            if (!(p->mFlags & 0x4000)) {
+                if (fn_801486A0() == 0) {
+                    fn_80114F64(p, (fn_801CFE40(p->mMotion.mPos.mY, p->mMotion.mPos.mX) + 0x800000) & 0xFFFFFF);
+                } else {
+                    fn_80114F64(p, 0x400000);
+                }
+            }
+        }
+    }
+    if (p == fn_80137B40() && fn_801787A0() == 0 && (p->mFlags & 1)) {
+        p->mFlags &= ~1;
+        if (fn_801787A0() == 0) {
+            if (state->mUnknown56 == 5) {
+                fn_80067E3C(61, &p->mpUnknown4->mUnknown4, p->mId, 0, 0, 0);
+                fn_800D6E98(fn_80178320());
+                fn_80171E30();
+                fn_801720B4(pOther);
+                fn_800A8954(26, p->mIdBytes[2], p);
+            } else if (fn_801BE648(p->mpUnknown792) == 234 && fn_801BE648(pOther->mpUnknown792) == 234) {
+                fn_80171E30();
+                fn_801720B4(pOther);
+                if (fn_801787A0() == 0) {
+                    fn_800D6E98(fn_80178308());
+                    fn_800A8954(26, p->mIdBytes[2], p);
+                    fn_80156C78(40, 1);
+                }
+            } else {
+                fn_80171824(p);
+            }
+        }
+    }
+    if (state->mUnknown25 != 0) {
+        if (fn_80137C48(p) == 0) {
+            p->mFlags |= 0x4000000;
+            state->mUnknown25 = 0;
+        } else {
+            if (((p->mFlags & 0x10000) && state->mUnknown56 != 4 && state->mUnknown56 != 2) ||
+                state->mUnknown56 == 3) {
+                allowed = 1;
+                if (state->mUnknown56 == 1) {
+                    allowed = p->mRatings[2] - pOther->mRatings[5] <= lbl_803EAF94;
+                }
+                if (allowed) {
+                    fn_800DB8B4(state->mUnknown32, p);
+                }
+            }
+        }
+    }
+    if (state->mUnknown30 == 1) {
+        if ((p->mFlags & 0x1000) || state->mUnknown29 != 0) {
+            pBall = fn_80137C48(p);
+            if (pBall != 0) {
+                fn_80137D58(pBall, &ball);
+                fn_8009BF5C(p, 12, &hand, 0);
+                if (fn_800A7F1C(p->mIdBytes[2]) == 2 ||
+                    (ball.mZ >= state->mUnknown8 - 0.3f && ball.mZ > hand.mZ - 0.15f)) {
+                    Record_8011F4F8 *pRecord = fn_8011F4F8(fn_801374E0(pBall));
+
+                    if (pRecord->mUnknownB == 1) {
+                        int angle;
+                        float scale;
+                        Object_80039F5C *pTarget;
+
+                        aim.mX = 0.2f;
+                        aim.mY = state->mUnknown12 - ball.mZ;
+                        if (aim.mY < 0.0f) {
+                            aim.mY = 0.0f;
+                        }
+                        angle = fn_801CFE40(aim.mY, aim.mX);
+                        pRecord->mUnknown10 = angle + fn_802372EC(0, 0xE38E3);
+                        pRecord->mUnknown8 = (pRecord->mUnknown8 - 5) / 3 + 5;
+                        pRecord->mUnknownC = state->mUnknown4 / (lbl_803ECB08 * 100621.12f);
+                        if (pRecord->mUnknownC == 0.0f) {
+                            pRecord->mUnknownC = 0.5f * (pRecord->mUnknown10 * (1.0f / 4194304.0f)) + 0.5f;
+                        }
+                        scale = pRecord->mUnknownC / 3.0f;
+                        pRecord->mUnknown0 -= pRecord->mUnknown0 * scale;
+                        pRecord->mUnknown4 -= pRecord->mUnknown4 * scale;
+                        fn_80102D78(p);
+                        pTarget = fn_8009BCE8(&state->mRef);
+                        if (pTarget != 0) {
+                            Record_800B15FC *pEvent = fn_800B15FC();
+
+                            fn_8009BD2C(pTarget, &pEvent->mUnknown0);
+                            pEvent->mUnknownC = p->mMotion.mPos.mX;
+                            pEvent->mUnknown10 = p->mMotion.mPos.mY;
+                            pEvent->mUnknown14 = 34;
+                            fn_800B1508();
+                        }
+                    }
+                } else {
+                    fn_801039D8(p);
+                }
+            }
+            p->mUnknown778 = -1;
+            p->mFlags &= ~0x1000;
+            state->mUnknown30 = 0;
+        } else if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 69) == 0 &&
+                   fn_801BA568(p->mpUnknown796, p->mpUnknown800, 178) == 0) {
+            p->mUnknown778 = -1;
+            state->mUnknown30 = 0;
+        } else {
+            pBall = fn_80137C48(p);
+            if (pBall != 0) {
+                fn_80137D58(pBall, &ball);
+                if (state->mUnknown12 < ball.mZ) {
+                    state->mUnknown12 = ball.mZ;
+                }
+            }
+        }
+    }
+    if (pAnim->mUnknown0 != -1) {
+        if (state->mUnknown26 < 0) {
+            state->mUnknown26 = fn_80113C18(p, state);
+            state->mUnknown28 = 1;
+        }
+        if (pAnim->mUnknown2 != 7) {
+            state->mUnknown20 = fn_800CE690(pAnim);
+            state->mUnknown4 = fn_800CE73C(pAnim);
+            if (state->mUnknown28 == 1) {
+                if (fn_80137B40() == p) {
+                    if (state->mUnknown4 >= lbl_803ECB08 * 80496.9f || lbl_803EAF91 != 0) {
+                        fn_801410F4(2);
+                    } else if (state->mUnknown4 >= lbl_803ECB08 * 70434.78f) {
+                        fn_801410F4(1);
+                    } else if (state->mUnknown4 >= lbl_803ECB08 * 60372.67f) {
+                        fn_801410F4(0);
+                    }
+                }
+                if (fn_80137B40() == p) {
+                    fn_8016F6F4(p, fn_8009BCE8(&state->mRef));
+                }
+                state->mUnknown28 = 0;
+            }
+        } else {
+            fn_80067E3C(45, &pOther->mMotion.mPos, pOther->mId, 0, 0, 0);
+        }
+        if (state->mUnknown26 == 0) {
+            Object_80137ABC *pHeld = fn_80137C48(p);
+
+            if (pHeld != 0 && pHeld == fn_801374BC() && fn_801BE648(p->mpUnknown792) != 234 &&
+                fn_801BE648(p->mpUnknown792) != 238) {
+                fn_801718E8(p, pOther);
+            }
+        }
+        state->mUnknown26--;
+        if (state->mUnknown26 < 0) {
+            fn_800CE674(pAnim);
+        }
+    }
+    if (state->mUnknown59 == 0 && pOtherState != 0 && state->mUnknown20 != 0xFF && pOtherState->mUnknown4 != 0xFF) {
+        speed = pOtherState->mUnknown8 < state->mUnknown4 ? state->mUnknown4 : pOtherState->mUnknown8;
+        fn_80067E3C(37, &p->mMotion.mPos, p->mId, (unsigned int)speed, state->mUnknown20, pOtherState->mUnknown4);
+        state->mUnknown59 = 1;
+        fn_800A3B58(p, 1, 1);
+        speed = pOtherState->mUnknown8 < state->mUnknown4 ? state->mUnknown4 : pOtherState->mUnknown8;
+        if (speed > lbl_803ECB08 * 100621.12f * 0.75 && fn_80137B40() == p) {
+            fn_80067D4C(100, 0);
+        }
+    }
+    if (fn_801787A0() != 0 && p->mIdBytes[3] == 1 && (p->mFlags & 0x1000)) {
+        p->mFlags &= ~0x1000;
+        pBall = fn_80137C48(p);
+        if (pBall != 0) {
+            fn_8013791C(pBall, 5, 0);
+        }
+    }
+    if (p->mUnknown9[0] != 1) {
+        p->mFlags &= ~0x82008;
+        fn_80143EBC(p, fn_8009BCE8(&state->mRef));
+        state->mUnknown31 = 1;
+        if (state->mUnknown20 <= 10) {
+            fn_801C1F94(&message, 0, 4);
+            message.mId = 11;
+            message.mUnknown1[0] = p->mUnknown9[0];
+            fn_800F05E4(0, p->mpState, &message, p);
+        } else {
+            fn_801C1F94(&message, 0, 4);
+            message.mId = 11;
+            message.mUnknown1[0] = p->mUnknown9[0];
+            fn_800F05E4(0, p->mpState, &message, p);
+        }
+    }
+    if ((p->mFlags & 4) && state->mUnknown56 != 1 && state->mUnknown56 != 4) {
+        result = 1;
+        p->mFlags &= ~0x0409280C;
+        fn_80143EBC(p, fn_8009BCE8(&state->mRef));
+        p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+        fn_800D640C(p);
+    }
+    return result;
 }
 
 extern "C" int fn_801147D4(Object_80039F5C *p)
@@ -6460,6 +6969,365 @@ extern "C" float fn_80115248(Object_80039F5C *p, Object_80039F5C *pTarget)
         score += fn_802270A4(&offset) * 4.0f;
     }
     return score;
+}
+
+/* The bytes at player +336 as fn_8011569C drives them. */
+struct State_8011569C {
+    int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    float mUnknown12;
+    unsigned char mUnknown16;
+    unsigned char mUnknown17;
+    char mUnknown18[2];
+    unsigned char mUnknown20;
+};
+
+/* 16-byte zone records at +24 of the block fn_8011F4EC returns. */
+struct Zone_8011569C {
+    float mUnknown0;
+    float mUnknown4;
+    float mLow;
+    float mHigh;
+};
+
+struct Field_8011569C {
+    char mUnknown0[24];
+    Zone_8011569C mZones[1];
+};
+
+extern "C" {
+void fn_8009E9EC(Object_80039F5C *p, int side, Point_8017886C *pOut);
+Object_80039F5C *fn_8009EC60(unsigned int index, Point_8017886C *pOut);
+int fn_8009EFDC(int side);
+void fn_8009F928(Object_80039F5C *p, Point_8017886C *pSpot, int a, unsigned char flag);
+unsigned char fn_8009FD7C(Object_80039F5C *p, Object_80039F5C *pOther);
+int fn_8009E9A4(void);
+int fn_800DC21C(Object_80039F5C *p);
+Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
+float fn_80115248(Object_80039F5C *p, Object_80039F5C *pOther, unsigned char count);
+int fn_80116410(Object_80039F5C *p, Object_80039F5C *pOther, State_8011569C *pState, Point_8017886C *pTarget);
+int fn_80116984(Object_80039F5C *p, Object_80039F5C *pOther, float *pOut);
+int fn_80168E00(int team, int index, unsigned char *pOut);
+float fn_80178A2C(void);
+void *fn_8011F4EC(void);
+int fn_80116AB8(Object_80039F5C *p);
+void fn_80116880(Object_80039F5C *p, Object_80039F5C *pOther, float *pValue, float *pOut, float range);
+int fn_801167C4(void *pTarget, Object_80039F5C *p);
+float fn_801CFB18(int angle);
+extern float lbl_803EAFBC;
+extern float lbl_803EAFCC;
+extern float lbl_803ECB04;
+}
+
+extern "C" void fn_8011569C(Object_80039F5C *p)
+{
+    float bonus;
+    Point_8017886C zone;
+    Point_8017886C target;
+    Point_8017886C ball;
+    Point_8017886C spot;
+    Vector_80039F5C ballPos;
+    float xs[4];
+    float weights[4];
+    float total = 0.0f;
+    float minX = 1000.0f;
+    float maxX = -1000.0f;
+    const float kAdvance = 4.0f;
+    const float kCruise = 0.8f;
+    const float kDepth = 10.0f;
+    const float kSlow = 0.6f;
+    const float kMargin = 2.0f;
+    unsigned char numPlayers = 0;
+    unsigned char numBelow = 0;
+    unsigned char numAbove = 0;
+    State_8011569C *pState = (State_8011569C *)&p->mUnknown336;
+    signed char side;
+    int count;
+
+    bonus = 0.0f;
+    zone.mX = 0.0f;
+    zone.mY = 0.0f;
+    target.mX = 0.0f;
+    target.mY = 0.0f;
+    ball.mX = 0.0f;
+    ball.mY = 0.0f;
+    spot.mX = 0.0f;
+    spot.mY = 0.0f;
+    ballPos.mX = 0.0f;
+    ballPos.mY = 0.0f;
+    ballPos.mZ = 0.0f;
+    target.mX = 0.0f;
+    target.mY = 0.0f;
+    side = p->mpState->mUnknown1;
+    count = fn_8009EAB0(p, side);
+    fn_8009E9EC(p, side, &zone);
+    Zone_8011569C *pZone = &((Field_8011569C *)fn_8011F4EC())->mZones[side];
+    float low = pZone->mLow;
+    float high = pZone->mHigh;
+    ball = fn_80177FE0();
+    fn_80137D58(fn_801374BC(), &ballPos);
+    if (count != 1) {
+        pState->mUnknown17 = 0;
+    }
+    fn_80116AB8(p);
+
+    if (count == 0) {
+        unsigned char i;
+        for (i = 0; i < 3; i++) {
+            int index = fn_80168E00(fn_80178308(), i, 0);
+            if (index != 0xFF) {
+                numPlayers++;
+                Object_80039F5C *pOther = fn_80039F5C(fn_80178308(), index);
+                if (pOther->mMotion.mPos.mX > high) {
+                    numAbove++;
+                } else if (pOther->mMotion.mPos.mX < low) {
+                    numBelow++;
+                }
+                if (pOther->mMotion.mPos.mX < minX) {
+                    minX = pOther->mMotion.mPos.mX;
+                }
+                if (pOther->mMotion.mPos.mX > maxX) {
+                    maxX = pOther->mMotion.mPos.mX;
+                }
+            }
+        }
+        if (numPlayers == 0) {
+            minX = -7.0f;
+            maxX = 7.0f;
+            goto pick;
+        } else if (numBelow == numPlayers) {
+            target.mX = low;
+        } else if (numAbove == numPlayers) {
+            target.mX = high;
+        } else {
+        pick:
+            float x;
+            if (fn_8009EFDC(side) != 0) {
+                if (zone.mX < fn_80177FE0().mX) {
+                    x = minX < zone.mX ? zone.mX : minX;
+                } else {
+                    x = maxX > zone.mX ? zone.mX : maxX;
+                }
+            } else {
+                x = zone.mX;
+            }
+            target.mX = x;
+        }
+        target.mY = ball.mY + kDepth;
+        pState->mUnknown12 = kSlow;
+        fn_80116410(p, 0, pState, &target);
+        if (ball.mY > fn_80178A2C() - 5.0f) {
+            Object_80039F5C *pCarrier = fn_80137B40();
+            if (pCarrier != 0 && (pCarrier->mFlags & 0x8000)
+                && ((pCarrier->mMotion.mPos.mX < ball.mX && p->mMotion.mPos.mX < ball.mX)
+                    || (pCarrier->mMotion.mPos.mX > ball.mX && p->mMotion.mPos.mX > ball.mX))) {
+                float gap = ball.mY - pCarrier->mMotion.mPos.mY;
+                int a = fn_800DC21C(pCarrier);
+                int b = fn_800DC080(pCarrier);
+                if ((a != 0 || b != 0 || fn_801783AC(0) != 0) && gap < 8.0f) {
+                    pState->mUnknown20 = 1;
+                }
+            }
+        }
+    } else {
+        if (count == 1) {
+            Object_80039F5C *pOther = fn_8009EC60(0, &spot);
+            int covered = 0;
+            int handled = 0;
+
+            if (pOther->mpState->mId != 20) {
+                pState->mUnknown17 = 0;
+            } else if (pState->mUnknown17 == 0) {
+                pState->mUnknown17 = fn_8009FD7C(p, pOther);
+            }
+            fn_8009F928(pOther, &spot, 12, pState->mUnknown17);
+            float range;
+            if (fn_801CFFD0(pOther->mMotion.mUnknown32, 0x400000) <= 0x155554
+                || fn_801CFFD0(pOther->mMotion.mUnknown32, 0xC00000) <= 0x155554) {
+                range = 1.5f;
+            } else {
+                range = 6.0f;
+            }
+            fn_80116880(p, pOther, &spot.mX, &target.mX, range);
+            Object_80039F5C *pMark = fn_800FB9D4(pOther);
+            if (pMark != 0) {
+                Point_8017886C delta;
+                fn_80227690(&delta, &pMark->mMotion.mPos, &pOther->mMotion.mPos);
+                if (fn_802270A4(&delta) < 5.0f && !(pMark->mFlags & 0x20000)) {
+                    covered = 1;
+                }
+            }
+            if (covered == 0 && fn_801167C4(pOther, p) != 0) {
+                covered = 1;
+            }
+            if (covered != 0) {
+                handled = fn_80116410(p, pOther, pState, &target);
+                if (target.mY < pOther->mMotion.mPos.mY) {
+                    handled = 0;
+                }
+            }
+            if (handled == 0) {
+                Point_8017886C delta;
+                float dy = pOther->mMotion.mPos.mY - p->mMotion.mPos.mY;
+                fn_80227690(&delta, &spot, &p->mMotion.mPos);
+                float dist = fn_802270A4(&delta);
+                float dx = fabsf(spot.mX - p->mMotion.mPos.mX);
+                dx *= fn_801CFB18(pOther->mMotion.mUnknown32);
+                if (dx < 0.0f) {
+                    dx = 0.0f;
+                }
+                dx *= 0.75f;
+                int ahead = fn_80116984(p, pOther, &bonus);
+                dx += bonus;
+                target.mY = pOther->mMotion.mUnknown44 * 60.0f * lbl_803EAFCC + spot.mY + kMargin + dx;
+                if (target.mY < p->mMotion.mPos.mY
+                    && fn_801CFFD0(pOther->mMotion.mUnknown32, 0x400000) <= 0x155554
+                    && spot.mY > p->mMotion.mPos.mY - lbl_803EAFBC) {
+                    target.mY = p->mMotion.mPos.mY + kMargin;
+                }
+                if (ahead != 0) {
+                    pState->mUnknown12 = 1.0f;
+                } else if (dy > -2.0f) {
+                    pState->mUnknown12 = p->mMotion.mPos.mY < spot.mY + 5.0f ? 1.0f : kCruise;
+                } else if (dy > -5.0f && dist > 8.0f) {
+                    pState->mUnknown12 = 1.0f;
+                } else if (dy > -7.0f) {
+                    pState->mUnknown12 = dist > 12.0f ? 1.0f : kSlow;
+                } else {
+                    int moving = 1;
+                    if ((short)fn_8011F4E0()->mUnknown2 < 0
+                        && (pOther->mMotion.mUnknown44 <= fabsf(pOther->mMotion.mUnknown40) * 2.0f / 3.0f
+                            || pOther->mMotion.mUnknown44 <= lbl_803ECB04 * 0.25f)) {
+                        moving = 0;
+                    }
+                    if (moving == 1) {
+                        target.mY = p->mMotion.mPos.mY;
+                        pState->mUnknown12 = 0.4f;
+                    } else {
+                        pState->mUnknown12 = kSlow;
+                    }
+                }
+            }
+            if (p->mMotion.mPos.mY > fn_80178A2C()) {
+                if (fabsf(target.mX - p->mMotion.mPos.mX) > 1.0f) {
+                    pState->mUnknown12 = 1.0f;
+                } else if (pState->mUnknown12 != 1.0f) {
+                    pState->mUnknown12 = kCruise;
+                }
+            } else if (pState->mUnknown12 < kCruise && fabsf(target.mX - p->mMotion.mPos.mX) > kMargin) {
+                pState->mUnknown12 = kCruise;
+            }
+        } else {
+            Object_80039F5C *pOther = 0;
+            unsigned int i;
+
+            for (i = 0; i < count; i++) {
+                Point_8017886C pos;
+                weights[i] = fn_80115248(p, fn_8009EC60(i, &pos), count);
+                xs[i] = pos.mX;
+                if (xs[i] > maxX) {
+                    maxX = xs[i];
+                }
+                if (xs[i] < minX) {
+                    minX = xs[i];
+                }
+            }
+            for (i = 0; i < count; i++) {
+                total += weights[i];
+            }
+            for (i = 0; i < count; i++) {
+                pOther = fn_8009EC60(i, &spot);
+                if (weights[i] / total < kCruise || weights[i] < 500.0f) {
+                    pOther = 0;
+                } else {
+                    break;
+                }
+            }
+            Object_80039F5C *pLeader = pOther;
+            if (pOther == 0) {
+                pOther = fn_8009EC60(0, &spot);
+            }
+            if (pLeader == 0) {
+                float mid = (maxX - minX) * 0.5f;
+                target.mX = mid;
+                for (i = 0; i < count; i++) {
+                    target.mX += (xs[i] - mid) * (weights[i] / total);
+                }
+            } else {
+                fn_80116880(p, pOther, &spot.mX, &target.mX, 1.5f);
+            }
+            float dx = fabsf(spot.mX - p->mMotion.mPos.mX);
+            dx *= fn_801CFB18(pOther->mMotion.mUnknown32);
+            if (dx < 0.0f) {
+                dx = 0.0f;
+            }
+            dx *= 0.75f;
+            int ahead = fn_80116984(p, pOther, &bonus);
+            dx += bonus;
+            target.mY = pOther->mMotion.mUnknown44 * 60.0f * lbl_803EAFCC + spot.mY + kMargin + dx;
+            int angle = fn_801CFFD0(pOther->mMotion.mUnknown32, 0x400000);
+            if (target.mY < p->mMotion.mPos.mY && angle <= 0x155554
+                && spot.mY > p->mMotion.mPos.mY - lbl_803EAFBC) {
+                target.mY = p->mMotion.mPos.mY + kMargin;
+            }
+            float dy = target.mY - p->mMotion.mPos.mY;
+            if (ahead != 0) {
+                pState->mUnknown12 = 1.0f;
+            } else if (angle <= 0x2E38E2) {
+                if (dy > kMargin) {
+                    if (p->mMotion.mPos.mY < pOther->mMotion.mPos.mY + kMargin
+                        && p->mMotion.mPos.mY < fn_80178A2C()) {
+                        pState->mUnknown12 = 1.0f;
+                    } else {
+                        pState->mUnknown12 = kCruise;
+                    }
+                } else if (dy > -2.0f) {
+                    if (pOther->mMotion.mUnknown44 > fabsf(pOther->mMotion.mUnknown40) * 2.0f / 3.0f
+                        && pOther->mMotion.mUnknown44 > lbl_803ECB04 * 0.25f) {
+                        pState->mUnknown12 = kSlow;
+                    } else {
+                        pState->mUnknown12 = 0.4f;
+                    }
+                } else {
+                    pState->mUnknown12 = 0.4f;
+                }
+            } else if (dy <= 0.0f && dy > -2.0f) {
+                pState->mUnknown12 = 1.0f;
+            } else {
+                pState->mUnknown12 = kCruise;
+            }
+            if (p->mMotion.mPos.mY > fn_80178A2C()) {
+                if (fabsf(target.mX - p->mMotion.mPos.mX) > 1.0f) {
+                    pState->mUnknown12 = 1.0f;
+                } else if (pState->mUnknown12 != 1.0f) {
+                    pState->mUnknown12 = kCruise;
+                }
+            } else if (pState->mUnknown12 < kCruise && fabsf(target.mX - p->mMotion.mPos.mX) > kMargin) {
+                pState->mUnknown12 = kCruise;
+            }
+        }
+    }
+
+    target.mX = target.mX < low + kMargin ? low + kMargin : (target.mX > high - kMargin ? high - kMargin : target.mX);
+    if (p->mMotion.mPos.mY > fn_80178A44() - 6.0f - 1.0f) {
+        pState->mUnknown12 = kCruise;
+    }
+    target.mY = target.mY > fn_80178A44() - 6.0f ? fn_80178A44() - 6.0f : target.mY;
+    switch (fn_8009E9A4()) {
+    case 1:
+        target.mY += kAdvance;
+        break;
+    case 2:
+        target.mY -= 1.0f;
+        break;
+    }
+    fn_80227690(&target, &target, &p->mMotion.mPos);
+    pState->mUnknown8 = fn_801CFE40(target.mY, target.mX);
+    if (fn_802270A4(&target) < 1.0f) {
+        pState->mUnknown4 = 0xC00000;
+        pState->mUnknown12 = 0.0f;
+    }
 }
 
 extern "C" int fn_801163B4(Object_80039F5C *p)
