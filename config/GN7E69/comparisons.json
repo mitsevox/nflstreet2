@@ -33393,6 +33393,81 @@
           "end": "0x8026A4D4"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80148AD0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #811; twelve complete unregistered base-class helpers between the excluded constructor80148A98 and callback80148D20 inside the provisional cu801485B4 survey grouping. Reuses canonical class, player and callback declarations. No literal or defined storage; original code remains linked. Original source-file identity and larger grouping ownership unresolved.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80148AD0",
+          "end": "0x80148D20"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80148AD0",
+          "start": "0x80148AD0",
+          "end": "0x80148AD8"
+        },
+        {
+          "symbol": "fn_80148AD8",
+          "start": "0x80148AD8",
+          "end": "0x80148AE0"
+        },
+        {
+          "symbol": "fn_80148AE0",
+          "start": "0x80148AE0",
+          "end": "0x80148AE8"
+        },
+        {
+          "symbol": "fn_80148AE8",
+          "start": "0x80148AE8",
+          "end": "0x80148AF0"
+        },
+        {
+          "symbol": "fn_80148AF0",
+          "start": "0x80148AF0",
+          "end": "0x80148AF8"
+        },
+        {
+          "symbol": "fn_80148AF8",
+          "start": "0x80148AF8",
+          "end": "0x80148B44"
+        },
+        {
+          "symbol": "fn_80148B44",
+          "start": "0x80148B44",
+          "end": "0x80148B70"
+        },
+        {
+          "symbol": "fn_80148B70",
+          "start": "0x80148B70",
+          "end": "0x80148B9C"
+        },
+        {
+          "symbol": "fn_80148B9C",
+          "start": "0x80148B9C",
+          "end": "0x80148BF0"
+        },
+        {
+          "symbol": "fn_80148BF0",
+          "start": "0x80148BF0",
+          "end": "0x80148C4C"
+        },
+        {
+          "symbol": "fn_80148C4C",
+          "start": "0x80148C4C",
+          "end": "0x80148CA0"
+        },
+        {
+          "symbol": "fn_80148CA0",
+          "start": "0x80148CA0",
+          "end": "0x80148D20"
+        }
+      ]
     }
   ]
 }
