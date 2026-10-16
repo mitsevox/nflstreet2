@@ -64,6 +64,7 @@
 #include "game/fn_80054138.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_802372EC.h"
+#include "game/fn_801BA2A8.h"
 #include "game/fn_80218FC4.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_801FCE10.h"
@@ -393,7 +394,8 @@ void fn_801D08FC(int a);
 void fn_801D0CFC(float a);
 void fn_801D0F80(float m[4][4]);
 void fn_801D0544(void);
-void fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, void *pRecord, unsigned short c);
+int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, void *pRecord, unsigned short c);
+signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *pValues);
 void fn_800AF87C(int a, int b, Vector_80039F5C *pVec, int c);
 void fn_800AF82C(int a, int b, int c, int d, int e);
 void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
@@ -406,10 +408,17 @@ int fn_800AF9E4(Entry_800AF82C *p, int index);
 void fn_800AF95C(Entry_800AF82C *p, int index, int a);
 void fn_800AF9C0(Entry_800AF82C *p, int index, int *pValue);
 void fn_800429C0(Object_8003DEC4 *pObject);
+int fn_801CFE40(float y, float x);
+int fn_801BC7C0(void *a, void *b, void *c);
+void fn_800424C0(Object_8003DEC4 *pObject, int a);
+void fn_800424E8(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c);
+void fn_80042928(Object_8003DEC4 *pObject);
+void fn_800C8A98(Object_80039F5C *p);
 
 extern int lbl_802D7C08[3];
 extern int lbl_802D7C14[3];
 extern Vector_80039F5C lbl_802D7C20;
+extern int lbl_803EA9A4;
 }
 
 extern "C" int fn_80090244(int *p)
@@ -3098,6 +3107,29 @@ extern "C" int fn_8009C328(Object_80039F5C *pA, Object_80039F5C *pB)
     return result | fn_8009C220(pA->mUnknown816, pB->mUnknown816);
 }
 
+extern "C" void fn_8009C370(Object_80039F5C *p)
+{
+    Object_8003DEC4 *pObject = (Object_8003DEC4 *)p->mpUnknown4;
+
+    pObject->mUnknown24 = p->mUnknown768;
+    pObject->mUnknown28 = p->mUnknown772;
+    pObject->mUnknown32 = p->mUnknown776;
+    fn_800424C0(pObject, fn_801BC7C0(p->mpUnknown796, p->mpUnknown800, p->mpUnknown792));
+    fn_800424E8(pObject, p->mpUnknown800, p->mpUnknown796->mUnknown4, p->mpUnknown792);
+    fn_800C8A98(p);
+    fn_80042928(pObject);
+}
+
+extern "C" int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, void *pRecord, unsigned short c)
+{
+    int index = fn_8009C4B0(pTable, (unsigned char *)&((Object_80039F5C *)pRecord)->mUnknown1008);
+
+    if (index >= 0) {
+        fn_801BA2A8(a, b, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, c, pRecord, 1.0f);
+    }
+    return 0;
+}
+
 extern "C" int fn_8009C470(Table_80089904 *pTable, unsigned short c, void *a, void *b, void *pRecord,
                            unsigned int count)
 {
@@ -3105,6 +3137,31 @@ extern "C" int fn_8009C470(Table_80089904 *pTable, unsigned short c, void *a, vo
         fn_8009C3F8(pTable, a, b, pRecord, c);
     }
     return 0;
+}
+
+extern "C" signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *pValues)
+{
+    int i;
+    int best = -1;
+    signed char result = -1;
+
+    for (i = 0; i < pTable->mCount; i++) {
+        Info_80089904 *pInfo = pTable->mEntries[i].mpInfo;
+        int score = fn_802372EC(0, 10);
+        const unsigned char *pBytes = &pInfo->mValue;
+        int k;
+
+        for (k = 0; k < 4; k++) {
+            if (pValues[k] == *pBytes++) {
+                score += (10 - k) * 10;
+            }
+        }
+        if (score > best) {
+            best = score;
+            result = i;
+        }
+    }
+    return result;
 }
 
 extern "C" int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues)
@@ -3171,6 +3228,20 @@ extern "C" Entry_8009C684 *fn_8009C6F4(int a, Block_8009C6F4 *pBlock,
         pBlock->mUnknown0 = fn_8009C684(pEntry, a, pCallback, b, c);
     }
     return pEntry;
+}
+
+static inline int Heading(const Point_8017886C &d)
+{
+    return fn_801CFE40(d.mY, d.mX);
+}
+
+extern "C" int fn_8009C7B4(Vector_80039F5C *pVec)
+{
+    Point_8017886C point;
+
+    point.mX = pVec->mX;
+    point.mY = pVec->mZ;
+    return abs((Heading(point) - 0x400000) << 8 >> 8) > lbl_803EA9A4;
 }
 
 extern "C" int fn_8009C814(Object_80039F5C *p, Block_8009C6F4 *pBlock)
