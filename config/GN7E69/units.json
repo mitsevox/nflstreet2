@@ -2119,6 +2119,25 @@
       ]
     },
     {
+      "source": "src/game/cu_800850E8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800850E8-0x80085148 (src/game/cu_800850E8.cpp) and the .rodata data row 0x80293D48-0x80293D88.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800850E8",
+          "end": "0x80085148"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80293D48",
+          "end": "0x80293D88"
+        }
+      ]
+    },
+    {
       "source": "src/game/FEModules.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8008B32C-0x8008B974 (src/game/FEModules.cpp) and its data rows.",
@@ -2882,6 +2901,44 @@
       ]
     },
     {
+      "source": "src/game/cu_800E3A34.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800E3A34-0x800E3CC0 (src/game/cu_800E3A34.cpp), its function rows and the .rodata data row 0x8029DB70-0x8029DB78.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E3A34",
+          "end": "0x800E3CC0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DB70",
+          "end": "0x8029DB78"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8015FFC8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8015FFC8-0x8016014C (src/game/cu_8015FFC8.cpp) and the .data data row 0x802E32B0-0x802E33A8.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015FFC8",
+          "end": "0x8016014C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802E32B0",
+          "end": "0x802E33A8"
+        }
+      ]
+    },
+    {
       "source": "src/game/GRender.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80199FA4-0x8019A110 (src/game/GRender.cpp) and its data rows.",
@@ -3640,6 +3697,19 @@
           "placement": ".data2",
           "start": "0x80289BA4",
           "end": "0x80289BA8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8019D83C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019D83C-0x8019D994 (src/game/cu_8019D83C.cpp) and its function rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019D83C",
+          "end": "0x8019D994"
         }
       ]
     },

@@ -4608,37 +4608,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8015FFC8.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit/data rows; whole code-only source plus observed 31-pair table, original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015FFC8",
-          "end": "0x8016014C"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802E32B0",
-          "end": "0x802E33A8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8015FFC8",
-          "start": "0x8015FFC8",
-          "end": "0x801600FC"
-        },
-        {
-          "symbol": "fn_801600FC",
-          "start": "0x801600FC",
-          "end": "0x8016014C"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_801695D4.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801695D4-0x80169F80; separate target function extents and data rows. Unlinked comparison reconstruction; original bytes remain linked.",
@@ -5507,31 +5476,6 @@
           "symbol": "fn_8018EB20",
           "start": "0x8018EB20",
           "end": "0x8018EC68"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8019D83C.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8019D83C-0x8019D994; two target function rows. Code-only unlinked reconstruction, original table storage retained.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8019D83C",
-          "end": "0x8019D994"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8019D83C",
-          "start": "0x8019D83C",
-          "end": "0x8019D8AC"
-        },
-        {
-          "symbol": "fn_8019D8AC",
-          "start": "0x8019D8AC",
-          "end": "0x8019D994"
         }
       ]
     },
@@ -15438,37 +15382,6 @@
           "symbol": "fn_800850B8",
           "start": "0x800850B8",
           "end": "0x800850E8"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800850E8.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800850E8-0x80085148 (src/game/cu_800850E8.cpp), its individual exact function extents and its .rodata data row. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800850E8",
-          "end": "0x80085148"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x80293D48",
-          "end": "0x80293D88"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_800850E8",
-          "start": "0x800850E8",
-          "end": "0x80085118"
-        },
-        {
-          "symbol": "fn_80085118",
-          "start": "0x80085118",
-          "end": "0x80085148"
         }
       ]
     },
@@ -26745,47 +26658,6 @@
           "symbol": "fn_800E2F20",
           "start": "0x800E2F20",
           "end": "0x800E2FE4"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800E3A34.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row 0x800E3A34-0x800E3CC0 for src/game/cu_800E3A34.cpp, exact whole-function rows, inferred name/source-form rows for four complete bodies and the exact .rodata data row 0x8029DB70-0x8029DB78. Original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800E3A34",
-          "end": "0x800E3CC0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029DB70",
-          "end": "0x8029DB78"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_800E3A34",
-          "start": "0x800E3A34",
-          "end": "0x800E3AE8"
-        },
-        {
-          "symbol": "fn_800E3AE8",
-          "start": "0x800E3AE8",
-          "end": "0x800E3B8C"
-        },
-        {
-          "symbol": "fn_800E3B8C",
-          "start": "0x800E3B8C",
-          "end": "0x800E3C30"
-        },
-        {
-          "symbol": "fn_800E3C30",
-          "start": "0x800E3C30",
-          "end": "0x800E3CC0"
         }
       ]
     },
