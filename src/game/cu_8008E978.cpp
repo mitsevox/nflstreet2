@@ -1576,6 +1576,69 @@ extern "C" int fn_800A432C(Key_80110630 *pA, Key_80110630 *pB)
     return result;
 }
 
+extern "C" int fn_801CFFD0(int a, int b);
+
+/* Candidate record selected by fn_800A4358. */
+struct Entry_800A4358 {
+    int mUnknown0;
+    Key_80110630 mUnknown4;
+    int mUnknown8;
+    int mUnknownC;
+    int mUnknown10;
+    int mUnknown14;
+    float mUnknown18;
+};
+
+/* Halfword-counted table of candidates; each slot carries two halfword
+   keys and the record. */
+struct Table_800A4358 {
+    unsigned short mCount;
+    struct {
+        unsigned short mUnknown0;
+        unsigned short mUnknown2;
+        Entry_800A4358 *mpEntry;
+    } mSlots[1];
+};
+
+extern "C" unsigned short fn_800A4358(Table_800A4358 *pTable, Object_80039F5C *p, Block_801BE60C *pBlock)
+{
+    unsigned int index = 0;
+    Entry_800A4358 *pBest = 0;
+    unsigned int i;
+    int angle = fn_801CFFD0(p->mMotion.mFacing, (p->mUnknown1008.mUnknown2 << 17) & 0xFFFFFF);
+
+    for (i = 0; i < pTable->mCount; i++) {
+        Entry_800A4358 *pEntry = pTable->mSlots[i].mpEntry;
+
+        if (fn_800A432C(&pEntry->mUnknown4, &p->mUnknown1008) && angle >= pEntry->mUnknown10
+            && angle <= pEntry->mUnknown14) {
+            if (pBest == 0 || fn_802372EC(0, 100) <= 49) {
+                pBest = pEntry;
+                index = i;
+            }
+        }
+    }
+    if (pBest != 0 && index < pTable->mCount) {
+        int target = pBest->mUnknownC & 0xFFFFFF;
+
+        if (p->mUnknown1008.mUnknown0 == 6) {
+            target = 0x1000000 - target;
+        }
+        pBlock->mUnknownCWord = fn_801CFFD0(target, angle);
+        if (p->mUnknown1008.mUnknown0 == 6) {
+            if (((target - angle) & 0xFFFFFF) > 0x800000) {
+                pBlock->mUnknownCWord = -pBlock->mUnknownCWord;
+            }
+        } else if (((target - angle) & 0xFFFFFF) <= 0x7FFFFF) {
+            pBlock->mUnknownCWord = -pBlock->mUnknownCWord;
+        }
+        pBlock->mUnknown4 = pBest->mUnknown18 / pBlock->mUnknown8;
+    } else {
+        index = 0;
+    }
+    return index;
+}
+
 extern "C" {
 void fn_80227384(void *pOut, void *pIn, int angle);
 int fn_801CFE40(float y, float x);
@@ -3517,6 +3580,42 @@ extern "C" int fn_800A6590(int value)
     }
 }
 
+extern "C" Object_80039F5C *fn_800A624C(int team)
+{
+    Object_80039F5C *p = 0;
+    unsigned int count = fn_80178D70(team);
+    unsigned char i;
+
+    if (team == fn_80178308()) {
+        Record_80067338 *pRecord = fn_8016871C(team);
+
+        for (i = 0; i < count; i++) {
+            p = fn_80039F5C(team, i);
+            if (pRecord->mUnknownC == p->mIdBytes[1]) {
+                break;
+            }
+        }
+        if (p != 0 && p->mUnknown9[2] != 1) {
+            p = 0;
+        }
+    } else if (fn_800B65A0(team) != 0xFF) {
+        int index = fn_800B65A0(team);
+
+        if (index != 0xFF) {
+            for (i = 0; i < count; i++) {
+                p = fn_80039F5C(team, i);
+                if (p->mUnknown8 == index) {
+                    break;
+                }
+            }
+        }
+    }
+    if (p == 0) {
+        p = fn_80039F5C(team, fn_802372EC(0, count));
+    }
+    return p;
+}
+
 struct Record_800B49EC;
 
 /* 236-byte request passed to fn_8009313C. */
@@ -3535,7 +3634,6 @@ extern "C" {
 void fn_800B49EC(Record_800B49EC *pDst, const Record_800B49EC *pSrc);
 void fn_800B4798(short *pRatings, int team, int index, float *pOut);
 void fn_800A6F04(int team);
-int fn_800A624C(int team);
 int fn_8009313C(Request_8009313C *pRequest);
 void fn_80146114(Object_80146094 *p);
 void fn_80147840(Object_8003DEC4 *p);
@@ -3633,8 +3731,8 @@ extern "C" void fn_800A6CB0(int team)
         request.mUnknownE4 = 1;
         request.mUnknownE8 = none;
         request.mUnknown4 = none;
-        fn_8009604C(0, fn_800A624C(fn_80178308()));
-        fn_8009604C(1, fn_800A624C(fn_80178320()));
+        fn_8009604C(0, (int)fn_800A624C(fn_80178308()));
+        fn_8009604C(1, (int)fn_800A624C(fn_80178320()));
         int handle = fn_8009313C(&request);
 
         lbl_803EC95C = handle;
