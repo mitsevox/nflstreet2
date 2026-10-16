@@ -2406,6 +2406,65 @@ void fn_800502C0(void)
     lbl_803EA524++;
 }
 
+extern void (*lbl_803EBD78)(void);
+extern int lbl_803EA538;
+int fn_801E2C3C(void *pWorld);
+Body_801E9538 *fn_801E2C64(void *pWorld, int *pIterator);
+void fn_801E7208(Collection_801E7034 *pShapes, float matrix[4][4], int r, int g, int b);
+void fn_801E7298(Collection_801E7034 *pShapes, int r, int g, int b, int a);
+
+void fn_80050960(void) {}
+void fn_80050F14(void)
+{
+    unsigned int count = 0;
+    fn_801D0470(fn_80228668());
+    fn_801D0508();
+    lbl_803EBD78 = fn_80050960;
+    int iterator = fn_801E2C3C(lbl_803EA514);
+    Body_801E9538 *pBody;
+    while ((pBody = fn_801E2C64(lbl_803EA514, &iterator)) != 0) {
+        Collection_801E7034 *pShapes = pBody->mpShapes;
+        if (!pShapes) continue;
+        if ((unsigned int)pBody->mKind <= 1) {
+            switch (count % 7) {
+            case 0:
+                if (lbl_803EA538 & 1) fn_801E7208(pShapes, pBody->mTransform, 250, 0, 0);
+                if (lbl_803EA538 & 2) fn_801E7298(pShapes, 250, 0, 0, 1);
+                break;
+            case 1:
+                if (lbl_803EA538 & 1) fn_801E7208(pShapes, pBody->mTransform, 0, 250, 0);
+                if (lbl_803EA538 & 2) fn_801E7298(pShapes, 0, 250, 0, 1);
+                break;
+            case 2:
+                if (lbl_803EA538 & 1) fn_801E7208(pShapes, pBody->mTransform, 0, 0, 250);
+                if (lbl_803EA538 & 2) fn_801E7298(pShapes, 0, 0, 250, 1);
+                break;
+            case 3:
+                if (lbl_803EA538 & 1) fn_801E7208(pShapes, pBody->mTransform, 250, 250, 250);
+                if (lbl_803EA538 & 2) fn_801E7298(pShapes, 250, 250, 250, 1);
+                break;
+            case 4:
+                if (lbl_803EA538 & 1) fn_801E7208(pShapes, pBody->mTransform, 250, 250, 0);
+                if (lbl_803EA538 & 2) fn_801E7298(pShapes, 250, 250, 0, 1);
+                break;
+            case 5:
+                if (lbl_803EA538 & 1) fn_801E7208(pShapes, pBody->mTransform, 0, 250, 250);
+                if (lbl_803EA538 & 2) fn_801E7298(pShapes, 0, 250, 250, 1);
+                break;
+            default:
+                if (lbl_803EA538 & 1) fn_801E7208(pShapes, pBody->mTransform, 250, 0, 250);
+                if (lbl_803EA538 & 2) fn_801E7298(pShapes, 250, 0, 250, 1);
+                break;
+            }
+            count++;
+        } else if (pBody->mKind == 2) {
+            fn_801E7208(pShapes, pBody->mTransform, 250, 250, 250);
+        } else {
+            fn_801E7208(pShapes, pBody->mTransform, 250, 150, 150);
+        }
+    }
+    fn_801D0544();
+}
 void fn_801E9D64(Body_801E9538 *, Vector_80039F5C *, Vector_80039F5C *);
 void fn_801E9DE0(Body_801E9538 *, Vector_80039F5C *);
 
