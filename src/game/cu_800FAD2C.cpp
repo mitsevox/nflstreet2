@@ -19,6 +19,8 @@
 struct Block_800FAD2C {
     char mUnknown0[409];
     unsigned char mUnknown409[3];
+    char mUnknown412[3];
+    unsigned char mUnknown415[3];
 };
 
 extern "C" {

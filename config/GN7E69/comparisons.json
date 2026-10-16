@@ -9400,19 +9400,19 @@
     {
       "source": "src/game/cu_800F6878.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800F6878-0x800F6E30 as their own object so their literal pool 0x8029E1F4-0x8029E22C is placed exactly; it does not claim an original file boundary.",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800F6878-0x800F722C as their own object so their literal pool 0x8029E1F4-0x8029E250 is placed exactly; it does not claim an original file boundary.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800F6878",
-          "end": "0x800F6E30"
+          "end": "0x800F722C"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029E1F4",
-          "end": "0x8029E22C"
+          "end": "0x8029E250"
         }
       ],
       "functions": [
@@ -9445,28 +9445,12 @@
           "symbol": "fn_800F6D40",
           "start": "0x800F6D40",
           "end": "0x800F6E30"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800F70D0.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800F70D0-0x800F722C as their own object so their literal pool 0x8029E244-0x8029E250 is placed exactly; it does not claim an original file boundary.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800F70D0",
-          "end": "0x800F722C"
         },
         {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029E244",
-          "end": "0x8029E250"
-        }
-      ],
-      "functions": [
+          "symbol": "fn_800F6E30",
+          "start": "0x800F6E30",
+          "end": "0x800F70D0"
+        },
         {
           "symbol": "fn_800F70D0",
           "start": "0x800F70D0",
@@ -9534,19 +9518,19 @@
     {
       "source": "src/game/cu_800F930C.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800F930C-0x800F93D0 as their own object so their literal pool 0x8029E38C-0x8029E39C is placed exactly; it does not claim an original file boundary.",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800F930C-0x800FA300 as their own object so their literal pool 0x8029E38C-0x8029E3C8 is placed exactly; it does not claim an original file boundary.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800F930C",
-          "end": "0x800F93D0"
+          "end": "0x800FA300"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029E38C",
-          "end": "0x8029E39C"
+          "end": "0x8029E3C8"
         }
       ],
       "functions": [
@@ -9554,28 +9538,12 @@
           "symbol": "fn_800F930C",
           "start": "0x800F930C",
           "end": "0x800F93D0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800F9688.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800F9688-0x800FA300 as their own object so their literal pool 0x8029E3A8-0x8029E3C8 is placed exactly; it does not claim an original file boundary.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800F9688",
-          "end": "0x800FA300"
         },
         {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029E3A8",
-          "end": "0x8029E3C8"
-        }
-      ],
-      "functions": [
+          "symbol": "fn_800F9480",
+          "start": "0x800F9480",
+          "end": "0x800F9688"
+        },
         {
           "symbol": "fn_800F9688",
           "start": "0x800F9688",

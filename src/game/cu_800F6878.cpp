@@ -154,3 +154,83 @@ extern "C" void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
         }
     }
 }
+
+extern "C" void fn_800F6E30(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Point_8017886C *pOut) {
+    if (p && pOther && pOut) {
+        Point_8017886C origin = fn_80177FE0();
+        Vector_80039F5C ball;
+        Point_8017886C delta;
+        int side;
+        int flag;
+
+        fn_80137D58(fn_801374BC(), &ball);
+        fn_80227690(&delta, pTarget, &p->mMotion.mPos);
+        side = (p->mpState->mUnknown2 ^ 1) & 1;
+        if (pTarget->mX > ball.mX ? side == 0 : side != 0) {
+            flag = 1;
+        } else {
+            flag = 0;
+        }
+        if (flag) {
+            if (p->mMotion.mPos.mX > pTarget->mX) {
+                float dx = pTarget->mX - p->mMotion.mPos.mX;
+
+                pOut->mX = fabsf(dx) > 1.0f ? dx + 1.0f : 0.0f;
+            } else if (fn_802270A4(&delta) > 2.0f) {
+                pOut->mX = pTarget->mX - p->mMotion.mPos.mX + 1.0f;
+            } else {
+                pOut->mX = pTarget->mX - p->mMotion.mPos.mX - 1.0f;
+            }
+        } else if (p->mMotion.mPos.mX < pTarget->mX) {
+            float dx = pTarget->mX - p->mMotion.mPos.mX;
+
+            pOut->mX = fabsf(dx) > 1.0f ? dx - 1.0f : 0.0f;
+        } else if (fn_802270A4(&delta) > 2.0f) {
+            pOut->mX = pTarget->mX - p->mMotion.mPos.mX - 1.0f;
+        } else {
+            pOut->mX = pTarget->mX - p->mMotion.mPos.mX + 1.0f;
+        }
+        if (pOther->mMotion.mPos.mX > fn_80178A08() - 10.0f) {
+            pOut->mX = fn_80178A08() - 1.0f - p->mMotion.mPos.mX;
+        } else if (pOther->mMotion.mPos.mX < 10.0f - fn_80178A08()) {
+            pOut->mX = 1.0f - fn_80178A08() - p->mMotion.mPos.mX;
+        }
+        if (fn_800F6878(p, pOther)) {
+            if (ball.mX > pOther->mMotion.mPos.mX) {
+                pOut->mX = 0.01f;
+            } else if (ball.mX < pOther->mMotion.mPos.mX) {
+                pOut->mX = -0.01f;
+            }
+        } else {
+            fn_800F6AD8(&pOut->mX);
+        }
+    }
+}
+
+extern "C" void fn_800F70D0(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Point_8017886C *pOut) {
+    if (p && pOther && pOut) {
+        Point_8017886C origin;
+        Point_8017886C delta;
+
+        origin = fn_80177FE0();
+        fn_80227690(&delta, pTarget, &p->mMotion.mPos);
+        if (!(p->mpState->mUnknown2 & 2)) {
+            if (pTarget->mY < origin.mY) {
+                pOut->mY = pTarget->mY - p->mMotion.mPos.mY + 2.0f;
+            } else if (p->mMotion.mPos.mY > pTarget->mY) {
+                float dy = pTarget->mY - p->mMotion.mPos.mY;
+
+                pOut->mY = fabsf(dy) > 1.0f ? dy + 1.0f : 0.0f;
+            } else {
+                pOut->mY = pTarget->mY - p->mMotion.mPos.mY - 1.0f;
+            }
+        } else if (p->mMotion.mPos.mY < pTarget->mY) {
+            float dy = pTarget->mY - p->mMotion.mPos.mY;
+
+            pOut->mY = fabsf(dy) > 1.0f ? dy - 1.0f : 0.0f;
+        } else {
+            pOut->mY = pTarget->mY - p->mMotion.mPos.mY + 1.0f;
+        }
+        fn_800F6AD8(&pOut->mX);
+    }
+}
