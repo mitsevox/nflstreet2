@@ -4414,7 +4414,7 @@ struct Block_800BA3F0 {
     unsigned char mUnknownE0;
     unsigned char mUnknownE1[3];
     int mUnknownE4[37];
-    unsigned char mUnknown178[4];
+    int mUnknown178;
     int mUnknown17C;
     unsigned char mUnknown180;
     unsigned char mUnknown181[1];
@@ -4707,14 +4707,7 @@ extern "C" void fn_800BACF8(void)
     fn_8006D884(4);
 }
 
-extern "C" void fn_800BAD9C(void)
-{
-    if (lbl_803EAB88->mUnknownE0 == 0) {
-        lbl_803EAB88->mUnknownE0 = fn_800B9F50();
-    }
-}
-
-/* Only the fields fn_800BADD4 touches are declared. */
+/* Only the fields fn_800BAD1C and fn_800BADD4 touch are declared. */
 struct Object_80162DBC {
     unsigned char mUnknown0[0x20];
     unsigned int mUnknown20;
@@ -4726,6 +4719,30 @@ extern "C" {
 Object_80162DBC *fn_80162DBC(int index);
 void fn_80162780(int a, int b);
 void fn_8003A3F4(int a, int index);
+}
+
+extern "C" int lbl_802D9A84[];
+
+extern "C" void fn_800BAD1C(void)
+{
+    int i;
+
+    for (i = 0; i <= 4; i++) {
+        Object_80162DBC *p = fn_80162DBC(i);
+
+        p->mUnknown100 = 0;
+        p->mUnknown20 &= ~2;
+    }
+    fn_80162780(0, 1);
+    lbl_803EAB88->mUnknown178 = lbl_802D9A84[lbl_803EAB88->mUnknownC0];
+    lbl_803EAB88->mUnknownE0 = 0;
+}
+
+extern "C" void fn_800BAD9C(void)
+{
+    if (lbl_803EAB88->mUnknownE0 == 0) {
+        lbl_803EAB88->mUnknownE0 = fn_800B9F50();
+    }
 }
 
 extern "C" void fn_800BADD4(void)
@@ -4770,13 +4787,14 @@ struct Block_800BC538 {
     int mUnknown8;
     int mUnknownC;
     Record_800BAE7C *mpUnknown10;
-    unsigned char mUnknown14[4];
+    int mUnknown14;
     int mUnknown18;
     int mUnknown1C;
     int mUnknown20;
     unsigned char mUnknown24[5];
     unsigned char mUnknown29;
-    unsigned char mUnknown2A[2];
+    signed char mUnknown2A;
+    unsigned char mUnknown2B;
     int mUnknown2C;
     unsigned char mUnknown30[4];
 };
@@ -4917,6 +4935,38 @@ extern "C" void fn_800BB828(void)
     lbl_803EC98C->mUnknown20 = -1;
 }
 
+/* Request block passed to fn_80092E54 (236 bytes). */
+struct Params_80092E54 {
+    int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    unsigned char mUnknownC[0xD4];
+    unsigned char mUnknownE0;
+    int mUnknownE4;
+    int mUnknownE8;
+};
+
+extern "C" {
+int fn_80092E54(Params_80092E54 *pParams, void *pBuffer, int size);
+
+extern unsigned char lbl_803EAB96;
+}
+
+extern "C" void fn_800BB840(int a, int b, int c)
+{
+    Params_80092E54 params;
+
+    fn_801C1F94(&params, 0, sizeof(params));
+    params.mUnknown0 = a;
+    params.mUnknown8 = 36;
+    params.mUnknownE0 = 1;
+    params.mUnknownE4 = 1;
+    params.mUnknownE8 = lbl_803EAB96 & 1;
+    params.mUnknown4 = lbl_803EC98C->mUnknown14;
+    lbl_803EAB96++;
+    lbl_803EC98C->mUnknown1C = fn_80092E54(&params, (void *)b, c);
+}
+
 extern "C" void fn_800BB8D4(void)
 {
     lbl_803EC98C->mUnknown18 = lbl_803EC98C->mUnknown1C;
@@ -4992,6 +5042,29 @@ int fn_80061DE8(void);
 }
 
 #include "game/fn_8017F584.h"
+#include "game/cu_8018EC68.h"
+
+extern "C" {
+VetsRow_8018EC68 *fn_8005FC7C(void);
+
+extern Record_800BAE7C lbl_802D9B30[];
+}
+
+extern "C" void fn_800BC3F0(void)
+{
+    VetsRow_8018EC68 *pRow;
+
+    lbl_803EC98C->mUnknown2A = -1;
+    lbl_803EC98C->mUnknown14 = 4;
+    lbl_803EC98C->mUnknown2B = 14;
+    lbl_803EC98C->mpUnknown10 = lbl_802D9B30;
+    pRow = fn_8005FC7C();
+    if (pRow != 0 && !(pRow->mCsis & 0x80)) {
+        lbl_803EC98C->mUnknown2A = pRow->mCsis;
+        lbl_803EC98C->mUnknown14 = 5;
+        lbl_803EC98C->mUnknown2B = 13;
+    }
+}
 
 extern "C" void fn_800BC470(void)
 {
