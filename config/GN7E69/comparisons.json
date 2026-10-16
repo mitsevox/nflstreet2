@@ -32952,6 +32952,36 @@
       ]
     },
     {
+      "source": "src/game/cu_80152FFC.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #831; three complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 5, 21 and 22 of the table 0x802A2918 (derived from Class_80148A58, include/game/Class_80148A58.h, whose base table is 0x802A2EE0; 0x80152FFC, 0x80153044 and 0x8015304C, words 0x802A2944, 0x802A29C4 and 0x802A29CC). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80152B98-0x80152FFC and 0x801530FC onward excluded; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80152FFC",
+          "end": "0x801530FC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80152FFC",
+          "start": "0x80152FFC",
+          "end": "0x80153044"
+        },
+        {
+          "symbol": "fn_80153044",
+          "start": "0x80153044",
+          "end": "0x8015304C"
+        },
+        {
+          "symbol": "fn_8015304C",
+          "start": "0x8015304C",
+          "end": "0x801530FC"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
