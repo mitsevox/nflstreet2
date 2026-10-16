@@ -141,7 +141,10 @@ struct Block_801718E8 {
         Snapshot_801718E8 mSnapshot12;
     };
     int mUnknown44;
-    char mUnknown48[4];
+    union {
+        char mUnknown48[4];
+        unsigned int mUnknown48Word;
+    };
     unsigned char mUnknown52;
     unsigned char mUnknown53;
     unsigned char mUnknown54;
@@ -286,6 +289,10 @@ struct Object_80039F5C {
             char mUnknown355[5];
         };
         Block_800CC180 mUnknown336Block;
+        struct {
+            char mUnknown336Words[8];
+            int mUnknown344Word;
+        };
     };
     unsigned char mUnknown360;
     char mUnknown361[27];
@@ -381,7 +388,10 @@ struct Object_80039F5C {
     Object_800CE674 mUnknown1240;
     char mUnknown1244[1656];
     float mUnknown2900;
-    char mUnknown2904[4];
+    union {
+        char mUnknown2904[4];
+        float mUnknown2904Float;
+    };
     unsigned short mUnknown2908;
     char mUnknown2910[2];
     unsigned char mUnknown2912;
