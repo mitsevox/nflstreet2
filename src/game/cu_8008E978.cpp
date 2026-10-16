@@ -59,6 +59,7 @@
 #include "game/fn_801C68FC.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
+#include "game/fn_801EBC18.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_80054138.h"
@@ -387,6 +388,16 @@ void fn_801D08FC(int a);
 void fn_801D0CFC(float a);
 void fn_801D0F80(float m[4][4]);
 void fn_801D0544(void);
+void fn_801D04C4(void);
+void fn_801D06D4(float m[4][4]);
+void fn_801D0664(float m[4][4]);
+void fn_801D0FB8(Vector_80039F5C *pOut);
+void fn_801D11F4(void *pOut, int a);
+void fn_801D0BCC(int a, int b, int c);
+void fn_801EBEF8(Quat_801EB488 *pOut, int a, int b, int c);
+void fn_801EB488(Quat_801EB488 *pRot);
+void fn_8009BE0C(float m[4][4], Vector_80039F5C *pPos, int angle, float scale);
+void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot, int joint);
 void fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, void *pRecord, unsigned short c);
 void fn_800AF87C(int a, int b, Vector_80039F5C *pVec, int c);
 void fn_800AF82C(int a, int b, int c, int d, int e);
@@ -3062,6 +3073,20 @@ extern "C" void fn_8009BD48(int *pRef, int a, int b, int c)
     *pRef = a | b << 8 | c << 16;
 }
 
+extern "C" void fn_8009BD60(Object_80039F5C *p)
+{
+    p->mUnknown1008.mUnknown0 = p->mUnknown1008.mUnknown1 = p->mUnknown1008.mUnknown2 = p->mUnknown1011 = 0xFF;
+    p->mUnknown1012[0] = p->mUnknown1012[1] = p->mUnknown1012[2] = p->mUnknown1012[3] = 0xFF;
+}
+
+extern "C" void fn_8009BD88(Object_80039F5C *p, float scale)
+{
+    p->mUnknown768 = scale;
+    if (p->mpUnknown4 != 0) {
+        p->mpUnknown4->mScale = scale;
+    }
+}
+
 extern "C" void fn_8009BDA0(float m[4][4], Vector_80039F5C *pPos, int angle, float scale)
 {
     fn_801D0508();
@@ -3071,6 +3096,82 @@ extern "C" void fn_8009BDA0(float m[4][4], Vector_80039F5C *pPos, int angle, flo
     fn_801D0CFC(scale);
     fn_801D0F80(m);
     fn_801D0544();
+}
+
+extern "C" void fn_8009BE0C(float m[4][4], Vector_80039F5C *pPos, int angle, float scale)
+{
+    Vector_80039F5C pos;
+
+    fn_801D0508();
+    fn_801D0CFC(1.0f / scale);
+    fn_801D08FC(-0x400000);
+    fn_801D0ADC(-(angle + 0x400000));
+    pos.mX = -pPos->mX;
+    pos.mY = -pPos->mY;
+    pos.mZ = -pPos->mZ;
+    fn_801D0C58(&pos);
+    fn_801D0F80(m);
+    fn_801D0544();
+}
+
+extern "C" void fn_8009BEA8(Object_80039F5C *p)
+{
+    fn_8009BDA0(p->mUnknown640, &p->mMotion.mPos, p->mMotion.mFacing, p->mUnknown768);
+    fn_8009BE0C(p->mUnknown704, &p->mMotion.mPos, p->mMotion.mFacing, p->mUnknown768);
+}
+
+extern "C" void fn_8009BEFC(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pAngles)
+{
+    Block_80170E64 *pBlock = p->mpUnknown4;
+
+    fn_801D04C4();
+    fn_801D06D4(pBlock->mUnknown44.mUnknown52[joint]);
+    fn_801D0FB8(pOut);
+    fn_801D11F4(pAngles, 0);
+    fn_801D0544();
+}
+
+extern "C" void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pAngles)
+{
+    Block_80170E64 *pBlock = p->mpUnknown4;
+
+    fn_801D04C4();
+    fn_801D06D4(p->mUnknown640);
+    fn_801D0664(pBlock->mUnknown44.mUnknown52[joint]);
+    fn_801D0FB8(pOut);
+    if (pAngles != 0) {
+        fn_801D11F4(pAngles, 0);
+    }
+    fn_801D0544();
+}
+
+extern "C" void fn_8009BFD0(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot)
+{
+    fn_8009BFF8(p, pOut, pRot, p->mpUnknown4->mUnknown44.mUnknown6);
+}
+
+extern "C" void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot, int joint)
+{
+    Block_80170E64 *pBlock = p->mpUnknown4;
+
+    if (joint != -1) {
+        float (*m)[4] = pBlock->mUnknown44.mUnknown52[joint];
+        Angles_801EBC18 angles;
+
+        fn_801D04C4();
+        fn_801D06D4(p->mUnknown640);
+        fn_801D0664(m);
+        fn_801D0C58(pBlock->mUnknown44.mUnknown20);
+        fn_801D0BCC(pBlock->mUnknown44.mUnknown36[2], pBlock->mUnknown44.mUnknown36[1],
+                    pBlock->mUnknown44.mUnknown36[0]);
+        fn_801D0FB8(pOut);
+        fn_801D11F4(&angles, 0);
+        fn_801D0544();
+        fn_801EBEF8(pRot, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
+    } else {
+        pOut->mX = pOut->mY = pOut->mZ = 0.0f;
+        fn_801EB488(pRot);
+    }
 }
 
 extern "C" int fn_8009C470(Table_80089904 *pTable, unsigned short c, void *a, void *b, void *pRecord,
