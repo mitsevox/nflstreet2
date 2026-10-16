@@ -23815,6 +23815,11 @@
           "end": "0x800A9854"
         },
         {
+          "symbol": "fn_800A9854",
+          "start": "0x800A9854",
+          "end": "0x800A9B54"
+        },
+        {
           "symbol": "fn_800A9F4C",
           "start": "0x800A9F4C",
           "end": "0x800A9F64"

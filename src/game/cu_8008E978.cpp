@@ -4014,7 +4014,7 @@ extern "C" int fn_800A9178(void)
 }
 
 extern "C" {
-Object_8003DEC4 *fn_8003DF3C(unsigned char side, unsigned char index);
+Object_8003DEC4 *fn_8003DF3C(int side, unsigned char index);
 Object_80039F5C *fn_8003E0C8(Block_80170E64 *object);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 }
@@ -4230,6 +4230,98 @@ extern "C" void fn_800A981C(void)
     fn_8013F97C(0);
     fn_8013FA8C(1);
     fn_8013C6F0(fn_8013FA04(5));
+}
+
+extern "C" {
+void fn_80148814(Object_80039F5C *p);
+void fn_800B6B98(void);
+void fn_800B6714(Object_80039F5C *p, int index);
+void fn_800B6988(int index);
+void fn_80162780(int a, int b);
+}
+
+extern "C" void fn_800A9854(void)
+{
+    Object_80039F5C *pCarrier;
+    Object_80039F5C *p;
+    Message_800F01CC message;
+    unsigned int i;
+    unsigned int count;
+    int team;
+    int index;
+
+    pCarrier = (Object_80039F5C *)fn_80096060(fn_80096440(lbl_802D7F14[lbl_8030F42C.mUnknown0][6]));
+    fn_80137A04(fn_801374BC(), pCarrier);
+    pCarrier->mFlags &= ~4;
+
+    team = fn_80178320();
+    count = fn_80178D18(team);
+    for (i = 0; i < count; i++) {
+        p = fn_8003E0C8((Block_80170E64 *)fn_8003DF3C(team, i));
+        if (p != pCarrier) {
+            p->mFlags &= ~4;
+            if (p->mUnknown9[2] != 0) {
+                if (p->mUnknown9[0] != 1) {
+                    fn_801C1F94(&message, 0, sizeof(message));
+                    message.mId = 11;
+                    message.mUnknown1[0] = p->mUnknown9[0];
+                    message.mUnknown1[1] = 15;
+                    fn_800F053C(0, p->mpState, &message, p);
+                    fn_801C1F94(&message, 0, sizeof(message));
+                    message.mId = 2;
+                    fn_800F01CC(0, p->mpState, &message, p);
+                } else {
+                    fn_801C1F94(&message, 0, sizeof(message));
+                    message.mId = 2;
+                    fn_800F053C(0, p->mpState, &message, p);
+                }
+            } else {
+                fn_80148814(p);
+            }
+        }
+    }
+
+    team = fn_80178308();
+    count = fn_80178D18(team);
+    for (i = 0; i < count; i++) {
+        p = fn_8003E0C8((Block_80170E64 *)fn_8003DF3C(team, i));
+        if (p != pCarrier) {
+            p->mFlags &= ~4;
+            if (p->mUnknown9[2] != 0) {
+                if (p->mUnknown9[0] != 1) {
+                    fn_801C1F94(&message, 0, sizeof(message));
+                    message.mId = 11;
+                    message.mUnknown1[0] = p->mUnknown9[0];
+                    message.mUnknown1[1] = 15;
+                    fn_800F053C(0, p->mpState, &message, p);
+                    fn_801C1F94(&message, 0, sizeof(message));
+                    message.mId = 33;
+                    fn_800F01CC(0, p->mpState, &message, p);
+                } else {
+                    fn_801C1F94(&message, 0, sizeof(message));
+                    message.mId = 33;
+                    fn_800F053C(0, p->mpState, &message, p);
+                }
+            } else {
+                fn_80148814(p);
+            }
+        }
+    }
+
+    fn_801C1F94(&message, 0, sizeof(message));
+    message.mId = 1;
+    fn_800F03D8(0, pCarrier->mpState, &message, pCarrier);
+    fn_800B6B98();
+    team = pCarrier->mIdBytes[2];
+    index = fn_800B65A0(team);
+    if (index != 0xFF && pCarrier->mUnknown8 == 0xFF) {
+        fn_800B6714(pCarrier, index);
+    }
+    index = fn_800B65A0(team == 1 ? 0 : 1);
+    if (index != 0xFF) {
+        fn_800B6988(index);
+    }
+    fn_80162780(1, 1);
 }
 
 extern "C" char *fn_800A9F4C(int index)
