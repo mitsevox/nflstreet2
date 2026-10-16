@@ -8033,6 +8033,11 @@ extern "C" int fn_800CB708(Object_80039F5C *p, int *pIndex, Point_8017886C targe
 
         if (fn_801CFFD0(facing, angle) < 621378.0f && fn_801CFFD0(direction, facing) < 621378.0f) {
             switch (p->mUnknown2914) {
+            case 4:
+                if (kind == 86) {
+                    allowed = 0;
+                }
+                break;
             case 0:
                 if (target.mY > goal.mY - 3.0f) {
                     allowed = 0;
@@ -8041,11 +8046,6 @@ extern "C" int fn_800CB708(Object_80039F5C *p, int *pIndex, Point_8017886C targe
             case 1:
             case 2:
                 if (kind == 85) {
-                    allowed = 0;
-                }
-                break;
-            case 4:
-                if (kind == 86) {
                     allowed = 0;
                 }
                 break;
