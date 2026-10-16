@@ -7314,12 +7314,7 @@ struct Set_800CCBA0 {
 
 typedef Block_800C9D6C Table_800CA8EC;
 
-struct Info_800CAC14 {
-    unsigned char mUnknown0[4];
-    unsigned char mUnknown4;
-    unsigned char mUnknown5;
-    unsigned char mUnknown6;
-};
+typedef Info_80089904 Info_800CAC14;
 
 
 
@@ -7477,7 +7472,7 @@ extern "C" int fn_800CAC14(Info_800CAC14 *p, int swap)
     int value;
 
     if (lbl_803EAC48 == 143) {
-        value = p->mUnknown4;
+        value = p->mValue;
     } else {
         value = p->mUnknown6;
     }
@@ -7599,6 +7594,217 @@ extern "C" int fn_800CADC0(Object_80039F5C *p, Info_80089904 *pInfo, int angle, 
         result = 1;
     }
     return result;
+}
+
+extern "C" int fn_800CAE28(Object_80039F5C *p, Info_80089904 *pInfo, int angle)
+{
+    int result = 0;
+    unsigned int turn = (angle - p->mMotion.mFacing) & 0xFFFFFF;
+    unsigned int infoAngle = pInfo->mUnknown56;
+    int foot;
+    int side;
+    int infoSide;
+
+    if (turn > 0x955556 && turn <= 0xEAAAAA) {
+        side = -1;
+    } else {
+        side = turn > 0x155555 && turn <= 0x6AAAAA;
+    }
+    if (infoAngle > 0x8E38E4 && infoAngle <= 0xF1C71C) {
+        infoSide = -1;
+    } else {
+        infoSide = infoAngle > 0xE38E3 && infoAngle < 0x71C71C;
+    }
+    foot = fn_800CAC54(p);
+    if (foot != 255) {
+        if (side == infoSide) {
+            if (foot == fn_800CAC14(pInfo, 0)) {
+                result = 1;
+            } else if (side == 0) {
+                result = 1;
+                lbl_803EAC4C = 1;
+            }
+        } else if (side == -infoSide) {
+            if (foot == fn_800CAC14(pInfo, 1)) {
+                lbl_803EAC4C = 1;
+                result = 1;
+            }
+        }
+    }
+    return result;
+}
+
+/* Turn in place towards a move direction; payload that fn_801BE60C returns
+   for the turn animations 143 and 144. */
+struct Turn_800CBBAC {
+    unsigned char mBeyond;
+    int mRate;
+    short mFrames;
+    short mSteps;
+    int mRecord;
+    int mUnknown10;
+    int mUnknown14;
+    int mUnknown18;
+    float mStepX;
+    float mStepY;
+    Point_8017886C mTarget;
+    float mScale;
+    Info_80089904 *mpInfo;
+    int mTotal;
+};
+
+extern "C" {
+void fn_801BA6BC(Record_800D81C8 *pRecord, int value);
+void fn_801BD81C(void *p, float value);
+float fn_801CFFA0(float value);
+
+extern float lbl_803EAC68;
+extern float lbl_803EAC6C;
+}
+
+extern "C" void fn_800CAF4C(Object_80039F5C *p, int key, Record_800D81C8 *pRecords, Turn_800CBBAC *pTurn,
+                            Info_80089904 *pInfo)
+{
+    int index;
+    int infoAngle;
+    int facing;
+    int desired;
+    int offset;
+    int turn;
+
+    pTurn->mBeyond = lbl_803EAC64;
+    pTurn->mRate = 0;
+    pTurn->mUnknown10 = 0;
+    pTurn->mUnknown14 = 0;
+    pTurn->mUnknown18 = 0;
+    index = pTurn->mRecord;
+    if (lbl_803EAC4C != 0) {
+        fn_801BA6BC(&pRecords[index], 1);
+    }
+    pRecords[index].mUnknown44 = 1.0f;
+    fn_801BD81C(&pRecords[index].mUnknown4C, fn_801CFFA0(lbl_803EAC68));
+    infoAngle = pInfo->mUnknown56;
+    facing = p->mMotion.mFacing;
+    desired = lbl_803EAC58;
+    offset = infoAngle > 0x800000 ? infoAngle - 0x1000000 : infoAngle;
+    if (lbl_803EAC4C != 0) {
+        offset = -offset;
+    }
+    turn = (((desired - facing) & 0xFFFFFF) - offset) & 0xFFFFFF;
+    if (turn > 0x800000) {
+        turn -= 0x1000000;
+    }
+    pTurn->mFrames = 10;
+    pTurn->mRate = (int)((float)turn * 0.1f);
+}
+
+extern "C" void fn_800CB080(Object_80039F5C *p, int key, Record_800D81C8 *pRecords, Turn_800CBBAC *pTurn,
+                            Info_80089904 *pInfo)
+{
+    Point_8017886C target = lbl_803EAC50;
+    int index;
+    int infoAngle;
+    int facing;
+    int desired;
+    int offset;
+    int turn;
+
+    pTurn->mBeyond = lbl_803EAC64;
+    pTurn->mRate = 0;
+    pTurn->mUnknown10 = 0;
+    pTurn->mUnknown14 = 0;
+    pTurn->mUnknown18 = 0;
+    index = pTurn->mRecord;
+    if (fn_800F06F4(0, p->mpState, 9, 0xFFFF) == 0xFFFF) {
+        fn_800F06F4(0, p->mpState, 87, 0xFFFF);
+    }
+    fn_800AD9B4();
+    pTurn->mTarget.mX = target.mX;
+    pTurn->mTarget.mY = target.mY;
+    if (lbl_803EAC4C != 0) {
+        fn_801BA6BC(&pRecords[index], 1);
+    }
+    pRecords[index].mUnknown44 = lbl_803EAC60;
+    fn_801BD81C(&pRecords[index].mUnknown4C, fn_801CFFA0(lbl_803EAC6C));
+    pTurn->mScale = lbl_803EAC6C;
+    infoAngle = pInfo->mUnknown56;
+    facing = p->mMotion.mFacing;
+    desired = lbl_803EAC58;
+    offset = infoAngle > 0x800000 ? infoAngle - 0x1000000 : infoAngle;
+    if (lbl_803EAC4C != 0) {
+        offset = -offset;
+    }
+    turn = (((desired - facing) & 0xFFFFFF) - offset) & 0xFFFFFF;
+    if (turn > 0x800000) {
+        turn -= 0x1000000;
+    }
+    pTurn->mFrames = 10;
+    pTurn->mRate = (int)((float)turn * 0.1f);
+    if (pTurn->mBeyond == 2) {
+        pTurn->mRate = 0;
+    }
+}
+
+extern "C" {
+void fn_800CB484(Point_8017886C *pOut, Point_8017886C *pFrom, Point_8017886C *pTo, int flip, int angle,
+                 float scale);
+void fn_80227638(void *pOut, void *pA, void *pB);
+}
+
+extern "C" int fn_800CB228(Object_80039F5C *p, Info_80089904 *pInfo, int angle, Point_8017886C target, float limit)
+{
+    Point_8017886C step;
+    Point_8017886C delta;
+    Point_8017886C origin = {0.0f, 0.0f};
+    Point_8017886C toTarget;
+    Point_80167910 arc;
+    Point_8017886C aim;
+    int infoAngle = pInfo->mUnknown56;
+    int facing = p->mMotion.mFacing;
+    int turn;
+    int heading;
+    int bend;
+    float stepLength;
+    float ratio;
+
+    turn = infoAngle;
+    if (infoAngle > 0x800000) {
+        turn -= 0x1000000;
+    }
+    if (lbl_803EAC4C != 0) {
+        turn = -turn;
+    }
+    turn = (((angle - facing) & 0xFFFFFF) - turn) & 0xFFFFFF;
+    if (turn > 0x800000) {
+        turn -= 0x1000000;
+    }
+    step.mX = pInfo->mUnknown20Float;
+    step.mY = pInfo->mUnknown24;
+    heading = (turn + facing) & 0xFFFFFF;
+    fn_800CB484(&delta, &origin, &step, lbl_803EAC4C, heading, 1.0f);
+    turn = fn_801CFE40(delta.mY, delta.mX);
+    fn_80227690(&toTarget, &target, &p->mMotion.mPos);
+    bend = fn_801CFFD0(fn_801CFE40(toTarget.mY, toTarget.mX), turn);
+    fn_80227538(&arc, (0x400000 - bend) & 0xFFFFFF, fn_802270A4(&toTarget) * 3.7450704e-07f * bend);
+    fn_80227638(&aim, &arc, &target);
+    fn_80227690(&arc, &aim, &p->mMotion.mPos);
+    stepLength = fn_802270A4(&delta);
+    ratio = fn_802270A4(&arc) / stepLength;
+    if (ratio > 1.2f) {
+        ratio = 1.2f;
+    } else if (ratio < 0.9f) {
+        ratio = 0.9f;
+    }
+    fn_80227538(&arc, turn, stepLength * ratio);
+    fn_80227638(&aim, &arc, &p->mMotion.mPos);
+    if (fn_8022781C(&aim, &target) >= limit) {
+        lbl_803EAC5C = 0;
+        lbl_803EAC60 = 1.0f;
+        return 0;
+    }
+    lbl_803EAC60 = ratio;
+    lbl_803EAC5C = (heading - facing) & 0xFFFFFF;
+    return 1;
 }
 
 extern "C" void fn_800CB484(Point_8017886C *pOut, Point_8017886C *pFrom, Point_8017886C *pTo, int flip, int angle,
