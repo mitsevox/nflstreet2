@@ -32819,6 +32819,47 @@
       ]
     },
     {
+      "source": "src/game/cu_80153844.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #825; four complete slot bodies inside the retained provisional cu_801485B4 survey group: slot 3 of the table 0x802A1930 (0x80153844, word 0x802A194C; table of src/game/cu_801531C4.cpp) and slots 5, 4 and 7 of the table 0x802A1BC8 (derived from the engine table 0x80297BF8, include/game/Class_80297BF8.h; 0x801538C8, 0x80153910 and 0x8015399C, words 0x802A1BF4, 0x802A1BEC and 0x802A1C04). Slot 6 (0x8015395C) is not registered: it forms 0x802A0B74 inside the readonly slice measured with src/game/cu_8014AB64.cpp. The .rodata slice 0x802A1588-0x802A158C holds the 2.5f literal of fn_801538C8. Original file boundaries and nominal identity unresolved; slot 3 of 0x802A1BC8 (0x801537A0) and 0x801539A0 onward excluded; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80153844",
+          "end": "0x801539A0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A1588",
+          "end": "0x802A158C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80153844",
+          "start": "0x80153844",
+          "end": "0x801538C8"
+        },
+        {
+          "symbol": "fn_801538C8",
+          "start": "0x801538C8",
+          "end": "0x80153910"
+        },
+        {
+          "symbol": "fn_80153910",
+          "start": "0x80153910",
+          "end": "0x8015395C"
+        },
+        {
+          "symbol": "fn_8015399C",
+          "start": "0x8015399C",
+          "end": "0x801539A0"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
