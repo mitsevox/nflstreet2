@@ -60,6 +60,7 @@
 #include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EBC18.h"
+#include "game/Block_801BE60C.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_80054138.h"
@@ -247,10 +248,25 @@ struct Block_8009B720 {
     Block_8009B5E8 mUnknown4;
 };
 
+/* 60-byte payload fn_801BE60C returns for the state fn_8009A344 runs; phase
+   0 initialises it from the template at +4 of Block_80099630. */
+struct Block_8009A344 {
+    int mUnknown0;
+    float mUnknown4;
+    float mUnknown8;
+    float mUnknownC;
+    float mUnknown10;
+    int mUnknown14;
+    float mUnknown18;
+    float mUnknown1C;
+    int mUnknown20;
+    State_800D8140 mUnknown24;
+};
+
 /* The 64-byte block fn_80099630 allocates under the id 'ctch'. */
 struct Block_80099630 {
     int mUnknown0;
-    unsigned char mUnknown4[60];
+    Block_8009A344 mUnknown4;
 };
 
 /* 24-byte entries at +44 of Block_8009C6F4. */
@@ -413,6 +429,15 @@ void fn_801EB488(Quat_801EB488 *pRot);
 void fn_8009BE0C(float m[4][4], Vector_80039F5C *pPos, int angle, float scale);
 void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot, int joint);
 float fn_80178A68(Vector_80039F5C *pPos);
+Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
+void fn_801BE760(void *p, unsigned short key, int a);
+int fn_801BA2A8(void *pRecord, Record_800D81C8 *pEntries, unsigned short value, int animation, int key,
+                Object_80039F5C *p, float weight);
+void fn_800D8140(State_800D8140 *pState, Object_80039F5C *p, int value);
+void fn_800D81C8(State_800D8140 *pState, Object_80039F5C *p);
+void fn_8022765C(void *pOut, void *pA, void *pB);
+int fn_801248D4(Object_80039F5C *p, int a, Vector_80039F5C *pPos, Object_80039F5C **ppOut, float x, float y, int b,
+                int c);
 int fn_800ACF40(Object_80039F5C *p, signed char value);
 Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, float *pOut, int b);
 int fn_80177F70(void);
@@ -7016,6 +7041,53 @@ extern "C" int fn_8009A2EC(int handle)
         fn_80097430(p->mUnknown38);
     }
     return p->mUnknown38;
+}
+
+extern "C" int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
+                           Object_80039F5C *p, unsigned int phase)
+{
+    Block_8009A344 *pBlock = (Block_8009A344 *)fn_801BE60C(p->mpUnknown792, key);
+    unsigned short animation;
+    unsigned short value;
+
+    switch (phase) {
+    case 0:
+    case 1:
+        *pBlock = lbl_803EC92C->mUnknown4;
+        animation = p->mUnknown1008.mUnknown0 | p->mUnknown1008.mUnknown1 << 8;
+        value = p->mUnknown1008.mUnknown2 | p->mUnknown1011 << 8;
+        pBlock->mUnknown20 = fn_801BA2A8(pRecord, pEntries, value, animation, key, p, 1.0f);
+        fn_801BE760(p->mpUnknown792, key, 1);
+        fn_800D8140(&pBlock->mUnknown24, p, lbl_803EC92C->mUnknown4.mUnknown20);
+        break;
+    case 2:
+        if (fn_801BE648(p->mpUnknown792) == key) {
+            pBlock->mUnknown4 += 1.0f;
+            pBlock->mUnknown10 += 1.0f;
+            if (!(pBlock->mUnknown4 > pBlock->mUnknown8)) {
+                p->mMotion.mFacing = (p->mMotion.mFacing + pBlock->mUnknown14) & 0xFFFFFF;
+                p->mpUnknown796->mUnknown8 = p->mMotion.mFacing;
+            } else {
+                pEntries[pBlock->mUnknown20].mUnknown44 = 1.0f;
+            }
+            if (!(pBlock->mUnknown10 > pBlock->mUnknownC)) {
+                Vector_80039F5C pos;
+                Vector_80039F5C delta;
+
+                delta.mX = pBlock->mUnknown18;
+                delta.mY = pBlock->mUnknown1C;
+                delta.mZ = 0.0f;
+                fn_8022765C(&pos, &p->mMotion.mPos, &delta);
+                if (fn_801248D4(p, 0, &pos, 0, 0.5f, 0.5f, 0, 0)) {
+                    p->mMotion.mPos.mX += pBlock->mUnknown18;
+                    p->mMotion.mPos.mY += pBlock->mUnknown1C;
+                }
+            }
+            fn_800D81C8(&pBlock->mUnknown24, p);
+        }
+        break;
+    }
+    return 0;
 }
 
 extern "C" int fn_8009A578(int handle)
