@@ -5302,6 +5302,83 @@ void fn_8011B6E8(Entry_8011AFCC *pEntries, Pair_8011BAE0 target)
     }
 }
 
+int fn_800ACFFC(int team, int value);
+
+void fn_8011B83C(Entry_8011AFCC *pEntries, Pair_8011BAE0 target)
+{
+    unsigned char count = 0;
+    unsigned char i = 0;
+    int team = fn_80178308();
+    unsigned int n = fn_80178D70(team);
+
+    for (; i < n; i++) {
+        Object_80039F5C *p = fn_80039F5C(team, i);
+        int mode;
+
+        switch (p->mUnknown1052) {
+        case 1:
+        case 2:
+            break;
+        default:
+            continue;
+        }
+        mode = p->mUnknown1032;
+        if (mode == 5 || mode == 6 || mode == 0) {
+            continue;
+        }
+        if (mode == 4 || mode == 7) {
+            short rating;
+            int chance;
+
+            if (!(fn_8011F1CC() && lbl_803EB028->mUnknown84 != 0)
+                && (fn_8011F1CC() || lbl_803EB028->mUnknown84 <= 60)) {
+                continue;
+            }
+            rating = p->mRatings[7];
+            if (fn_800A2178() == 7 || fn_800A2178() == 8) {
+                rating *= 3;
+            }
+            chance = fn_800ACFFC(p->mIdBytes[2], rating);
+            if (chance <= 152 && fn_802372EC(0, 100) > chance * 0.6535948f) {
+                continue;
+            }
+        }
+        {
+            Pair_8011BAE0 delta;
+
+            pEntries[count].mpUnknown60 = p;
+            pEntries[count].mUnknown0 = 0;
+            fn_80227690(&delta, &target, &p->mMotion.mPos);
+            pEntries[count].mUnknown72 = fn_802270A4(&delta);
+            pEntries[count].mUnknown64 = fn_801CFE40(delta.mUnknown4, delta.mUnknown0);
+            pEntries[count].mUnknown68 = pEntries[count].mUnknown72;
+            switch (p->mUnknown2914) {
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+                pEntries[count].mUnknown68 *= 0.5f;
+                if (p->mRatings[7] > 152) {
+                    pEntries[count].mUnknown68 *= 0.01f;
+                }
+                break;
+            }
+            if (p->mUnknown1052 == 1) {
+                pEntries[count].mUnknown76 = 0;
+            } else {
+                pEntries[count].mUnknown76 = 1;
+            }
+            count++;
+        }
+    }
+    pEntries[count].mpUnknown60 = 0;
+    pEntries[count].mUnknown0 = 0;
+    pEntries[count].mUnknown68 = 0.0f;
+    fn_8011AFCC(pEntries);
+}
+
 void fn_8011DA40(void)
 {
     int team = fn_80178308();
