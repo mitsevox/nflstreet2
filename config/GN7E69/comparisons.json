@@ -22955,6 +22955,21 @@
           "end": "0x800A517C"
         },
         {
+          "symbol": "fn_800A535C",
+          "start": "0x800A535C",
+          "end": "0x800A543C"
+        },
+        {
+          "symbol": "fn_800A543C",
+          "start": "0x800A543C",
+          "end": "0x800A54F4"
+        },
+        {
+          "symbol": "fn_800A54F4",
+          "start": "0x800A54F4",
+          "end": "0x800A554C"
+        },
+        {
           "symbol": "fn_800A554C",
           "start": "0x800A554C",
           "end": "0x800A55C0"
