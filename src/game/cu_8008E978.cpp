@@ -4456,6 +4456,56 @@ void fn_80178370(void);
 extern Block_800BA3F0 *lbl_803EAB88;
 }
 
+extern "C" {
+void fn_800EFE1C(int a, State_80039F5C *pQueue);
+float fn_80178A08(void);
+}
+
+extern "C" void fn_800B9D24(void)
+{
+    int team = fn_80178320();
+    unsigned short i;
+
+    for (i = 0; i < 7; i++) {
+        Object_80039F5C *p = fn_80039F5C(team, i);
+        Object_80137ABC *pBall = fn_80137C48(p);
+
+        if (pBall != 0) {
+            Vector_80039F5C velocity;
+
+            velocity.mX = velocity.mY = velocity.mZ = 0.0f;
+            fn_80137EE0(pBall, &velocity);
+            fn_8013791C(pBall, 5, 0);
+        }
+        p->mMotion.mPos.mX = -100.0f;
+        p->mMotion.mPos.mY = -100.0f - i * 3.0f;
+        p->mpUnknown4->mUnknown20 &= ~1;
+        fn_800EFE1C(0, p->mpState);
+        p->mUnknown512.mUnknown14 = 0;
+        p->mFlags |= 0x40000;
+    }
+}
+
+extern "C" void fn_800B9E44(void)
+{
+    int team = fn_80178320();
+    unsigned short i;
+    unsigned int count = fn_80178D18(team);
+
+    for (i = 0; i < count; i++) {
+        Object_80039F5C *p = fn_80039F5C(team, i);
+
+        p->mMotion.mPos.mX = fn_80178A08() + 2.0f;
+        p->mMotion.mPos.mY = 12.0f - i * 2.0f;
+        p->mpUnknown4->mUnknown20 |= 1;
+        p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown8 = 0x800000;
+        p->mUnknown512.mUnknown4 = 0x800000;
+        p->mUnknown512.mUnknown0 = 0.14f;
+        p->mFlags &= ~0x40000;
+    }
+}
+
 extern "C" void fn_800B9F4C(void)
 {
 }
@@ -8756,9 +8806,67 @@ extern "C" void fn_800B9598(Class_80297C60 *p)
     }
 }
 
+extern "C" void fn_800C4438(Sequence_800C4460 *p);
+
+extern "C" void fn_800B95B4(void)
+{
+    void *pHandle = fn_80238174(0, (void **)&lbl_803EAB78, sizeof(Block_800B95B4), 0, 0x70737470);
+    Block_800B95B4 *p;
+
+    fn_80238234(pHandle, 0, 0, 0, fn_800B898C);
+    p = (Block_800B95B4 *)fn_8023816C(pHandle);
+    fn_800C4438(&p->mSequence);
+    p->mUnknown15C = 30;
+    fn_802381E0(pHandle);
+}
+
+extern "C" void fn_800B9630(void)
+{
+    fn_800B9598(0);
+}
+
+extern "C" {
+void fn_8007617C(void);
+void fn_800B8028(void);
+void fn_800C4568(Sequence_800C4460 *p);
+void fn_800B876C(int a, int b, float c);
+void fn_800BAAE4(void);
+void fn_8017DBCC(void);
+void fn_80179150(void);
+}
+
+extern "C" void fn_800B9998(Class_80297C60 *p)
+{
+    fn_8007617C();
+    fn_800B14E4();
+    fn_8009BA10(0);
+    fn_800B8028();
+    fn_8009B924();
+    fn_80094DF0();
+    fn_8002C9A8(lbl_803EA368, 3, 0);
+    if (fn_8002D060(lbl_803EA368) == 0) {
+        fn_800AFE20(fn_800B876C);
+    }
+    fn_800C4568(&lbl_803EAB78->mSequence);
+    fn_800B63B0();
+    if (fn_800BA6F8()) {
+        fn_800BAAE4();
+    }
+    fn_8017CFB4(7);
+    fn_80067D4C(125, 0);
+    lbl_803EAB78->mUnknown148 = 0;
+    fn_8017DBCC();
+    fn_800A8F70();
+    fn_80179150();
+}
+
 extern "C" void *fn_800B9A44(Class_80297C60 *p)
 {
     return fn_800C4658(&lbl_803EAB78->mSequence);
+}
+
+extern "C" void fn_800B9A68(void)
+{
 }
 
 extern "C" void fn_800B9A6C(Class_80297C60 *p, void *q)
@@ -8769,6 +8877,23 @@ extern "C" void fn_800B9A6C(Class_80297C60 *p, void *q)
 extern "C" int fn_800B9A90(Class_80297C60 *p)
 {
     return lbl_803EAB78->mUnknown151;
+}
+
+extern "C" int fn_800B89C8(void *p);
+
+extern "C" void fn_800B9A9C(void)
+{
+    Step_800C4460 *pStep;
+
+    lbl_803EAB78->mUnknown151 = 1;
+    pStep = (Step_800C4460 *)fn_800B9A44(lbl_803EAB84);
+    pStep->mUnknownC = 120.0f;
+    pStep->mpCallback4 = fn_800B89C8;
+    if (fn_800BA6F8()) {
+        pStep->mUnknownC = 10.0f;
+    }
+    pStep->mpUnknown10 = pStep;
+    fn_800B9A6C(lbl_803EAB84, pStep);
 }
 
 extern "C" int fn_800B9B18(void *p)
@@ -8796,6 +8921,48 @@ extern "C" void fn_800B9B9C(Class_80297C60 *p)
 extern "C" void fn_800B9BAC(Class_80297C60 *p)
 {
     lbl_803EAB78->mUnknown151 = 1;
+}
+
+extern "C" int fn_800B9BBC(void)
+{
+    int value = 0;
+
+    fn_801FCE10(0, "select 'PYTM' into \x82 from 'NIOM'\n", &value);
+    return value;
+}
+
+extern "C" unsigned char fn_800B9BFC(void)
+{
+    unsigned char value = 0;
+
+    fn_801FCE10(0, "select 'BSPG' into \x80 from 'FNIG'\n", &value);
+    return value;
+}
+
+extern "C" void fn_800B9C3C(void)
+{
+    fn_801FCE10(0, "update 'FNIG' set 'BSPG' = \x82\n", 0);
+}
+
+extern "C" unsigned char fn_800B9C70(void)
+{
+    unsigned char value = 0;
+
+    fn_801FCE10(0, "select 'PNPG' into \x80 from 'FNIG'\n", &value);
+    return value;
+}
+
+extern "C" void fn_800B9CB0(void)
+{
+    fn_801FCE10(0, "update 'FNIG' set 'PNPG' = \x82\n", 0);
+}
+
+extern "C" int fn_800B9CE4(void)
+{
+    int value = 0;
+
+    fn_801FCE10(0, "select 'YTPG' into \x82 from 'FNIG'\n", &value);
+    return value;
 }
 
 /* One of the two 32-byte records at the start of Block_800BFAD0. */
