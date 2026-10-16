@@ -588,7 +588,7 @@ int fn_800A2178(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 void fn_800D6914(int a, Object_80039F5C *p);
 void fn_80104B3C(Object_80039F5C *p, Vector_80039F5C *pOut);
-Object_80039F5C *fn_80105384(Object_80039F5C *p, int a, int b);
+Object_80039F5C *fn_80105384(Object_80039F5C *p, int aggressive, Point_8017886C *pOut);
 int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_80106618(Object_80039F5C *p);
 void fn_80106678(Record_8011F518 *pRecord, Object_80039F5C *p, int a, int b);
@@ -3141,7 +3141,7 @@ extern "C" void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut
 extern "C" float fn_801CFB18(int angle);
 extern "C" int fn_801CFDD0(float);
 
-extern "C" void fn_80105168(int mode, Object_80137ABC *pBall, Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pTarget, float speed)
+extern "C" void fn_80105168(int mode, Object_80137ABC *pBall, Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pTarget, int unused, float speed)
 {
     Vector_80039F5C delta;
     Vector_80039F5C ball;
@@ -3188,6 +3188,77 @@ extern "C" int fn_8010531C(Object_80039F5C *p) {
         return 0;
     }
     return 1;
+}
+
+extern "C" int fn_8011F524(void);
+
+extern "C" Object_80039F5C *fn_80105384(Object_80039F5C *p, int aggressive, Point_8017886C *pOut)
+{
+    float bestScore = 0.0f;
+    unsigned int count = fn_80178D18(p->mIdBytes[2]);
+    Object_80039F5C *pBest = 0;
+    int anyDepth = 0;
+    unsigned char i;
+
+    for (i = 0; i < count; i++) {
+        Object_80039F5C *pOther;
+        float distance;
+        float score;
+        float stamina;
+        Vector_80039F5C target;
+        Point_8017886C spot;
+        Object_80137ABC *pBall;
+        int side;
+
+        if (((p->mId >> 16) & 0xFF) == i) {
+            continue;
+        }
+        pOther = fn_80039F5C((p->mId >> 8) & 0xFF, i);
+        if (!anyDepth && pOther->mMotion.mPos.mY >= p->mMotion.mPos.mY) {
+            continue;
+        }
+        if (fn_8010531C(pOther) == 0 || fn_8011E9B4(pOther) != 0) {
+            continue;
+        }
+        distance = fn_8022781C(&pOther->mMotion.mPos, &p->mMotion.mPos);
+        if (distance >= 7.0f) {
+            continue;
+        }
+        if (fn_801CFFD0(pOther->mMotion.mFacing, 0xC00000) <= 0x200000) {
+            continue;
+        }
+        if ((p->mpState[0].mId == 91 || p->mpState[1].mId == 91 || (p->mUnknown2914 == 0 && fn_8011F524() != 0)) &&
+            pOther->mpState->mId == 90) {
+            score = aggressive ? 42.0f : 14.0f;
+        } else {
+            score = 7.0f - distance;
+        }
+        stamina = fn_8012506C(p, 3);
+        if (stamina < 70.0f) {
+            score += (70.0f - stamina) * 0.16666667f;
+        }
+        pBall = fn_801374BC();
+        fn_80105168(6, pBall, p, pOther, &target, 0, fn_80104C9C(p, pOther));
+        spot.mX = target.mX;
+        spot.mY = target.mY;
+        fn_802276B4(&target, &target, &p->mMotion.mPos);
+        side = ((fn_801CFE40(target.mY, target.mX) - p->mMotion.mFacing) & 0xFFFFFF) <= 0x7FFFFF ? 1 : 2;
+        if (side != p->mUnknown776) {
+            if (aggressive) {
+                score *= 0.5f;
+            } else {
+                score = 0.0f;
+            }
+        }
+        if (score > bestScore) {
+            bestScore = score;
+            pBest = pOther;
+            if (pOut) {
+                *pOut = spot;
+            }
+        }
+    }
+    return pBest;
 }
 
 extern "C" int fn_80105898(Object_80039F5C *p) {
