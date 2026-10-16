@@ -14,7 +14,7 @@ struct Step_800C4460 {
     int (*mpCallback4)(void *p);
     void (*mpCallback8)(void *p);
     float mUnknownC;
-    union { unsigned char mUnknown10[16]; Pair_800A14A8 mContext; };
+    union { unsigned char mUnknown10[16]; Pair_800A14A8 mContext; Step_800C4460 *mpUnknown10; };
 };
 
 #endif
