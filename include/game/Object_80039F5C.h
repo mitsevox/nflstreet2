@@ -356,7 +356,9 @@ struct Object_80039F5C {
         };
         Block_8011E240 mBlock1032;
     };
-    char mUnknown1140[16];
+    int mUnknown1140;
+    char mUnknown1144[10];
+    unsigned short mUnknown1154;
     unsigned char mUnknown1156;
     char mUnknown1157[3];
     Block_801718E8 mUnknown1160;
