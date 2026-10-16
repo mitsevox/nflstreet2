@@ -151,6 +151,24 @@ struct Entry_80094BC4 {
     int mUnknown24;
 };
 
+/* Row table searched by fn_800680A8 (laid out as in cu_80067F18.cpp):
+   mUnknown8 rows of mUnknownC + mUnknown10 halfwords from +mUnknown4. */
+struct Table_800680A8 {
+    char mUnknown0[4];
+    int mUnknown4;
+    unsigned int mUnknown8;
+    int mUnknownC;
+    unsigned int mUnknown10;
+};
+
+/* The four halfwords at mUnknownC of a Table_800680A8 row that
+   fn_80094B34 tests. */
+struct Cell_80094B34 {
+    unsigned short mUnknown0[3];
+    unsigned short mUnknown6 : 3;
+    signed short mValue : 13;
+};
+
 /* Block allocated by fn_80096954 with fn_801D2B7C (112 bytes). */
 struct Block_80096954 {
     Table_80093BAC *mpUnknown0[2];
@@ -405,6 +423,18 @@ extern "C" int fn_80090244(int *p)
 extern "C" void fn_8009036C(int *p)
 {
     fn_80094454(*p);
+}
+
+extern "C" int fn_801BB878(int index, int a, int b, Actor_801C009C *pActor, int c);
+extern "C" int fn_8009439C(int index);
+
+extern "C" int fn_800904D4(Character_80093BCC *pCharacter, int a, int b)
+{
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    int handle = fn_801BB878(fn_8009439C(pCharacter->mUnknown4) + pActor->mUnknown2, a, b, pActor, 0);
+
+    pCharacter->mUnknownD8.mWord = handle | 0x80000000;
+    return handle != 0xFFFF;
 }
 
 extern "C" Actor_801C009C *fn_80091240(unsigned short index)
@@ -928,6 +958,20 @@ extern "C" int fn_80094564(unsigned int a, unsigned int b)
     return result;
 }
 
+extern "C" int fn_801BC654(void);
+extern "C" int fn_801F0E68(int a, int b);
+
+extern "C" void fn_80094598(int index)
+{
+    Character_80093BCC *pCharacter = &lbl_803EC924->mUnknown80.mCharacters[index];
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    int id = fn_8009439C(pCharacter->mUnknown4) + pActor->mUnknown2;
+    int handle = fn_801BC654();
+
+    while (fn_801F0E68(handle, id) != 0) {
+    }
+}
+
 extern "C" void fn_80094608(unsigned char value)
 {
     lbl_803EA8D4 = value;
@@ -937,7 +981,7 @@ extern "C" int fn_80178348(void);
 extern "C" int fn_800947C4(Object_8017886C *p);
 extern "C" int fn_800948E4(Object_8017886C *p);
 extern "C" int fn_80094698(int index, int operand, int value, unsigned short *pRow);
-extern "C" unsigned int fn_800680A8(void *pTable, short *pValues, unsigned short **ppOut, unsigned int max,
+extern "C" unsigned int fn_800680A8(Table_800680A8 *pTable, short *pValues, unsigned short **ppOut, unsigned int max,
                                     int (*pCallback)(int index, int operand, int value, unsigned short *pRow));
 
 extern "C" int fn_800947C4(Object_8017886C *p)
@@ -960,10 +1004,21 @@ extern "C" void fn_80094A9C(short *pValues, Object_8017886C *p)
     pValues[1] = fn_800948E4(p);
 }
 
-extern "C" unsigned int fn_80094AE0(short *pValues, Object_8017886C *p, void *pTable, unsigned short **ppOut, unsigned int max)
+extern "C" unsigned int fn_80094AE0(short *pValues, Object_8017886C *p, Table_800680A8 *pTable, unsigned short **ppOut, unsigned int max)
 {
     fn_80094A9C(pValues, p);
     return fn_800680A8(pTable, pValues, ppOut, max, fn_80094698);
+}
+
+extern "C" int fn_80094B34(Table_800680A8 *pTable, int index)
+{
+    unsigned short *pRow = (unsigned short *)((char *)pTable + pTable->mUnknown4) + index * (pTable->mUnknownC + pTable->mUnknown10);
+    int result = -1;
+
+    if (((Cell_80094B34 *)(pRow + pTable->mUnknownC))->mValue > 0) {
+        result = pRow[0];
+    }
+    return result;
 }
 
 extern "C" void fn_80094B78(Header_80094B78 *p)
@@ -1131,6 +1186,25 @@ extern "C" int fn_80095028(unsigned int id)
         return 0;
     }
     return 1;
+}
+
+extern "C" int fn_80095284(Object_80039F5C *p, Character_80093BCC *pCharacter, unsigned int count)
+{
+    int result = 0;
+    unsigned short i;
+
+    if (p->mIdBytes[3] == 1) {
+        result = p->mpState->mId == 50;
+    }
+    if (result == 0) {
+        for (i = 0; i < count; i++) {
+            if (pCharacter->mUnknown14[i] == p) {
+                result = 1;
+                break;
+            }
+        }
+    }
+    return result;
 }
 
 extern "C" void fn_80095304(int id, Object_80039F5C **ppObject, unsigned short *pFound)
