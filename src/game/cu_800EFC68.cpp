@@ -4776,8 +4776,6 @@ extern "C" void fn_80105DF0(Message_800F01CC *pMessage) {
 }
 
 extern "C" float fn_80104C9C(Object_80039F5C *p, Object_80039F5C *pTarget);
-extern "C" void fn_80105168(int kind, Object_80137ABC *pBall, Object_80039F5C *p, Object_80039F5C *pTarget,
-                            Vector_80039F5C *pOut, int a);
 extern "C" int fn_8013BA70(Object_80137ABC *pBall, int *pOut);
 
 extern "C" int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind) {
@@ -4794,8 +4792,7 @@ extern "C" int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kin
                !(kind >= 2 && kind <= 5)) {
         Object_80137ABC *pLive = fn_801374BC();
 
-        fn_80104C9C(p, pTarget);
-        fn_80105168(6, pLive, p, pTarget, &target, 0);
+        fn_80105168(6, pLive, p, pTarget, &target, 0, fn_80104C9C(p, pTarget));
         if (fn_8022781C(&target, &p->mMotion.mPos) > 9.5f ||
             (!fn_801047C8() && pTarget->mMotion.mPos.mY > p->mMotion.mPos.mY)) {
             result = 0;
@@ -4807,15 +4804,7 @@ extern "C" int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kin
     return result;
 }
 
-/* Timed hand-off record that fn_8009CD00 schedules for fn_80105630. */
-struct Timer_80105FF8 {
-    unsigned int mUnknown0;
-    unsigned char mUnknown4;
-    unsigned char mUnknown5;
-};
-
-extern "C" int fn_80105630(Object_80039F5C *p, int a, Timer_80105FF8 *pTimer);
-extern "C" Timer_80105FF8 *fn_8009CD00(Object_80039F5C *p, int (*pCallback)(Object_80039F5C *, int, Timer_80105FF8 *),
+extern "C" Reach_80105630 *fn_8009CD00(Object_80039F5C *p, void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, Reach_80105630 *),
                                        int a, unsigned int delay, int b);
 extern "C" void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b);
 extern "C" int fn_801C4E98(void *p, const char *pName);
@@ -4824,7 +4813,7 @@ extern "C" int fn_8023790C(void);
 
 extern "C" int fn_80105FF8(Object_80039F5C *p, Object_80137ABC *pBall, float time) {
     int ready = 0;
-    Timer_80105FF8 *pTimer = 0;
+    Reach_80105630 *pReach = 0;
     Record_8011F518 *pRecord = fn_8011F518();
     int joint = fn_801C4E98(fn_8009BCE8(&pRecord->mUnknown0)->mpUnknown4->mpUnknown100, "rwrist");
 
@@ -4848,15 +4837,15 @@ extern "C" int fn_80105FF8(Object_80039F5C *p, Object_80137ABC *pBall, float tim
                 fn_8009CEE4(p, pRecord->mUnknown0, joint, 6, 0);
             }
             left = side == 2;
-            pTimer = fn_8009CD00(p, fn_80105630, left, (unsigned int)time, 2);
-            if (pTimer != 0) {
-                pTimer->mUnknown4 = left;
-                pTimer->mUnknown5 = fn_801374E0(pBall);
-                pTimer->mUnknown0 = fn_8023790C() + (unsigned int)time + 2;
+            pReach = fn_8009CD00(p, fn_80105630, left, (unsigned int)time, 2);
+            if (pReach != 0) {
+                pReach->mHand = left;
+                pReach->mBall = fn_801374E0(pBall);
+                pReach->mEnd = fn_8023790C() + (unsigned int)time + 2;
             }
         }
     }
-    return pTimer != 0;
+    return pReach != 0;
 }
 
 extern "C" void fn_80099568(int kind);
@@ -4899,7 +4888,7 @@ extern "C" void fn_801061E8(Object_80039F5C *p, Object_80137ABC *pBall) {
         fn_80099568(2);
         fn_801379B4(pBall, 3, 0);
         speed = fn_80104C9C(p, pTarget);
-        fn_80105168(pRecord->mUnknown5, pBall, p, pTarget, &target, 0);
+        fn_80105168(pRecord->mUnknown5, pBall, p, pTarget, &target, 0, speed);
         if (pRecord->mUnknown4 == 9) {
             if (p->mUnknown2914 == 0) {
                 fn_80104B24(&target);
@@ -5014,8 +5003,7 @@ extern "C" int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pTarget, int kin
         Vector_80039F5C pos;
         Vector_80039F5C target;
 
-        fn_80104C9C(p, pTarget);
-        fn_80105168(6, pBall, p, pTarget, &target, 0);
+        fn_80105168(6, pBall, p, pTarget, &target, 0, fn_80104C9C(p, pTarget));
         pos.mX = p->mMotion.mPos.mX;
         pos.mY = p->mMotion.mPos.mY;
         pos.mZ = p->mMotion.mPos.mZ;
