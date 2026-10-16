@@ -3122,6 +3122,168 @@ extern "C" void fn_80105DF0(Message_800F01CC *pMessage) {
     }
 }
 
+extern "C" float fn_80104C9C(Object_80039F5C *p, Object_80039F5C *pTarget);
+extern "C" void fn_80105168(int kind, Object_80137ABC *pBall, Object_80039F5C *p, Object_80039F5C *pTarget,
+                            Vector_80039F5C *pOut, int a);
+extern "C" int fn_8013BA70(Object_80137ABC *pBall, int *pOut);
+
+extern "C" int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind) {
+    int result = 1;
+    Object_80137ABC *pBall = fn_801374BC();
+    unsigned char count = fn_80137F88(pBall);
+    int state = fn_8013BA70(pBall, 0);
+    Vector_80039F5C target;
+
+    if (count <= 21 && state == 4) {
+        result = 0;
+    } else if ((kind == 11 || kind == 9 || kind == 10 || kind == 2 || kind == 3 || kind == 4 || kind == 5) &&
+               !(kind == 10 || kind == 1 || kind == 13 || kind == 3 || kind == 5 || kind == 7) &&
+               !(kind >= 2 && kind <= 5)) {
+        Object_80137ABC *pLive = fn_801374BC();
+
+        fn_80104C9C(p, pTarget);
+        fn_80105168(6, pLive, p, pTarget, &target, 0);
+        if (fn_8022781C(&target, &p->mMotion.mPos) > 9.5f ||
+            (!fn_801047C8() && pTarget->mMotion.mPos.mY > p->mMotion.mPos.mY)) {
+            result = 0;
+        }
+    }
+    if (fn_801BE648(p->mpUnknown792) == 234 || fn_801BE648(p->mpUnknown792) == 238) {
+        result = 0;
+    }
+    return result;
+}
+
+/* Timed hand-off record that fn_8009CD00 schedules for fn_80105630. */
+struct Timer_80105FF8 {
+    unsigned int mUnknown0;
+    unsigned char mUnknown4;
+    unsigned char mUnknown5;
+};
+
+extern "C" int fn_80105630(Object_80039F5C *p, int a, Timer_80105FF8 *pTimer);
+extern "C" Timer_80105FF8 *fn_8009CD00(Object_80039F5C *p, int (*pCallback)(Object_80039F5C *, int, Timer_80105FF8 *),
+                                       int a, unsigned int delay, int b);
+extern "C" void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b);
+extern "C" int fn_801C4E98(void *p, const char *pName);
+extern "C" float fn_801BD690(Block_801BD6D4 *p, int key);
+extern "C" int fn_8023790C(void);
+
+extern "C" int fn_80105FF8(Object_80039F5C *p, Object_80137ABC *pBall, float time) {
+    int ready = 0;
+    Timer_80105FF8 *pTimer = 0;
+    Record_8011F518 *pRecord = fn_8011F518();
+    int joint = fn_801C4E98(fn_8009BCE8(&pRecord->mUnknown0)->mpUnknown4->mpUnknown100, "rwrist");
+
+    if (pRecord->mUnknown4 != 8) {
+        int animation = fn_801BE648(p->mpUnknown792);
+        unsigned char side = p->mUnknown776;
+
+        if (p->mpState->mId == 10 || p->mpState->mId == 16) {
+            int index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0);
+
+            if (index != 0xFFFF && fn_801BD690(&p->mpUnknown800[index].mUnknown4C, 0xC001) > time) {
+                ready = 1;
+            }
+        } else {
+            ready = 1;
+        }
+        if (ready) {
+            int left;
+
+            if (animation == 135 || animation == 191) {
+                fn_8009CEE4(p, pRecord->mUnknown0, joint, 6, 0);
+            }
+            left = side == 2;
+            pTimer = fn_8009CD00(p, fn_80105630, left, (unsigned int)time, 2);
+            if (pTimer != 0) {
+                pTimer->mUnknown4 = left;
+                pTimer->mUnknown5 = fn_801374E0(pBall);
+                pTimer->mUnknown0 = fn_8023790C() + (unsigned int)time + 2;
+            }
+        }
+    }
+    return pTimer != 0;
+}
+
+extern "C" void fn_80099568(int kind);
+extern "C" void fn_800D7534(int team);
+extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80137ABC *pBall,
+                            Vector_80039F5C *pPos);
+extern "C" void fn_80104944(Object_80039F5C *p, Vector_80039F5C *pOut);
+extern "C" void fn_80104A08(Object_80039F5C *p, int angle, Point_8017886C *pPoint, float *pValue, float scale);
+extern "C" void fn_80104B24(Vector_80039F5C *p);
+extern "C" float fn_801050DC(Object_80137ABC *pBall, Vector_80039F5C *pTarget, float speed);
+extern "C" void fn_8013AC28(Object_80137ABC *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin,
+                            float rate);
+extern "C" void fn_801783D0(int bit, int on);
+extern "C" void fn_8010D80C(Object_80039F5C *p, Vector_80039F5C *pOut);
+extern "C" float fn_8010D82C(Object_80039F5C *p);
+extern "C" int fn_8011F32C(void);
+
+extern "C" void fn_801061E8(Object_80039F5C *p, Object_80137ABC *pBall) {
+    Vector_80039F5C target;
+    Vector_80039F5C velocity;
+    float speed;
+    Record_8011F518 *pRecord = fn_8011F518();
+    Object_80039F5C *pTarget = fn_8009BCE8(&pRecord->mUnknown0);
+
+    if (pRecord->mUnknown4 == 8) {
+        fn_8013791C(pBall, 2, 0);
+        fn_8010D80C(pTarget, &target);
+        speed = fn_8010D82C(pTarget);
+        speed = fn_801050DC(pBall, &target, speed);
+        if (fn_8011F32C()) {
+            fn_8013AC28(pBall, &target, 2, speed, 0.0f, 1.0f);
+        } else {
+            fn_8013AC28(pBall, &target, 2, speed, 0.0f, 1.0f);
+        }
+        fn_80137BC0(pBall, pTarget);
+    } else if (!(pRecord->mUnknown4 == 10 || pRecord->mUnknown4 == 1 || pRecord->mUnknown4 == 13 ||
+                 pRecord->mUnknown4 == 3 || pRecord->mUnknown4 == 5 || pRecord->mUnknown4 == 7)) {
+        Record_800B15FC *pEvent;
+
+        fn_80099568(2);
+        fn_801379B4(pBall, 3, 0);
+        speed = fn_80104C9C(p, pTarget);
+        fn_80105168(pRecord->mUnknown5, pBall, p, pTarget, &target, 0);
+        if (pRecord->mUnknown4 == 9) {
+            if (p->mUnknown2914 == 0) {
+                fn_80104B24(&target);
+            } else {
+                fn_800A5A8C(6, p, p);
+            }
+        }
+        if (pRecord->mUnknown4 == 9 || pRecord->mUnknown4 == 11) {
+            fn_80104944(p, &target);
+            fn_80104A08(p, pRecord->mUnknown12, (Point_8017886C *)&target, &speed, pRecord->mUnknown8);
+        }
+        fn_80104814(p, pTarget, pBall, &target);
+        fn_8013AC28(pBall, &target, 3, speed, 1.0f, 4.0f);
+        fn_80137BC0(pBall, pTarget);
+        fn_80137EC4(pBall, &velocity);
+        pEvent = fn_800B15FC();
+        fn_8009BD2C(p, &pEvent->mUnknown0);
+        pEvent->mUnknownC = p->mMotion.mPos.mX;
+        pEvent->mUnknown10 = p->mMotion.mPos.mY;
+        if (velocity.mY < 0.0f) {
+            pEvent->mUnknown4 = pTarget->mId;
+            pEvent->mUnknown8 = pRecord->mUnknown4;
+            pEvent->mUnknown14 = 7;
+            fn_801783D0(1, 1);
+        } else {
+            pEvent->mUnknown14 = 5;
+            pEvent->mUnknown4 = 0;
+            pEvent->mUnknown16 = 0;
+            pEvent->mUnknown8 = (int)pTarget;
+            fn_800D7534(p->mIdBytes[2]);
+            fn_801783D0(13, 1);
+            fn_801783D0(1, 0);
+        }
+        fn_800B1508();
+    }
+}
+
 extern "C" int fn_801064A4(Object_80039F5C *p, int a) {
     int result = 0;
     Object_80039F5C *pTarget = fn_80105384(p, 1, 0);
@@ -3178,6 +3340,38 @@ extern "C" int fn_80106618(Object_80039F5C *p) {
     return 0;
 }
 
+extern "C" void fn_80106678(Record_8011F518 *pRecord, Object_80039F5C *p, int a, int b) {
+    fn_8009BD2C(p, &pRecord->mUnknown0);
+    pRecord->mUnknown4 = b;
+    pRecord->mUnknown5 = a;
+    pRecord->mUnknown8 = 0.0f;
+    pRecord->mUnknown12 = 0;
+}
+
+extern float lbl_803EAEEC;
+extern float lbl_803EAEF0;
+extern "C" void fn_80227350(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
+
+extern "C" int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pTarget, int kind) {
+    unsigned char filter[2] = {1, 0x11};
+    int result = 1;
+
+    if (kind == 9) {
+        Object_80137ABC *pBall = fn_801374BC();
+        Vector_80039F5C pos;
+        Vector_80039F5C target;
+
+        fn_80104C9C(p, pTarget);
+        fn_80105168(6, pBall, p, pTarget, &target, 0);
+        pos.mX = p->mMotion.mPos.mX;
+        pos.mY = p->mMotion.mPos.mY;
+        pos.mZ = p->mMotion.mPos.mZ;
+        fn_80227350(&pos, (Vector_80039F5C *)&p->mMotion.mUnknown40, 40.0f);
+        result = fn_801248D4(p, &pos, &target, 0, (Filter_801248D4 *)filter, pTarget, lbl_803EAEF0, lbl_803EAEEC);
+    }
+    return result;
+}
+
 extern "C" int fn_80106794(Object_80039F5C *p) {
     if (fn_80137C48(p) == fn_801374BC()) {
         fn_80137C10(0);
@@ -3187,6 +3381,69 @@ extern "C" int fn_80106794(Object_80039F5C *p) {
 
 extern "C" int fn_801067D8(Object_80039F5C *p) {
     return fn_8012506C(p, 6) < lbl_803EAEF4;
+}
+
+/* Ball snapshot filled by fn_80107680. */
+struct Points_80107680 {
+    Object_80137ABC *mpUnknown0;
+    Vector_80039F5C mUnknown4;
+    Vector_80039F5C mUnknown16;
+    Vector_80039F5C mUnknown28;
+    Point_8017886C mUnknown40;
+    float mUnknown48;
+};
+
+extern "C" void fn_801074B4(Object_80039F5C *p, Points_80107680 *pInfo) {
+    Object_800B26B0 *pMotion;
+    Point_8017886C delta;
+    int angle;
+    float distance;
+    float strength;
+    Object_80039F5C *pOther = fn_80137B88(pInfo->mpUnknown0);
+
+    if (pOther == 0) {
+        return;
+    }
+    pMotion = &p->mMotion;
+    fn_80227690(&delta, &pOther->mMotion.mPos, &pMotion->mPos);
+    angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+    distance = fn_802270A4(&delta);
+    if (fn_801CFFD0(angle, pMotion->mFacing) > 0x555554 && distance >= 3.5f) {
+        return;
+    }
+    strength = 0.0f;
+    if (pMotion->mPos.mY > pOther->mMotion.mPos.mY) {
+        if (distance < 8.0f) {
+            distance -= 1.0f;
+            if (distance < 0.0f) {
+                distance = 0.0f;
+            }
+            strength = distance / 8.0f;
+            strength = 1.0f - strength;
+        }
+        if (fn_801CFFD0(pMotion->mFacing, 0x400000) <= 0x1FFFFF && fn_8013BA58(pInfo->mpUnknown0, 0) == 4) {
+            fn_80227690(&delta, &pInfo->mUnknown16, &pMotion->mPos);
+            angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+        }
+    } else if (distance < 2.5f) {
+        distance -= 1.0f;
+        if (distance < 0.0f) {
+            distance = 0.0f;
+        }
+        strength = distance / 2.5f;
+        strength = 1.0f - strength;
+    }
+    if (strength != 0.0f) {
+        fn_800C89F0(p, angle, 2, 0, strength);
+    }
+}
+
+extern "C" void fn_80107680(Points_80107680 *pInfo, int index) {
+    pInfo->mpUnknown0 = fn_80137ABC(index);
+    fn_80138064(pInfo->mpUnknown0, &pInfo->mUnknown4);
+    fn_8013AA00(pInfo->mpUnknown0, 1.5f, &pInfo->mUnknown48, (Vector_80039F5C *)&pInfo->mUnknown40);
+    fn_80137EC4(pInfo->mpUnknown0, &pInfo->mUnknown28);
+    fn_80137D58(pInfo->mpUnknown0, &pInfo->mUnknown16);
 }
 
 extern "C" void fn_801076F0(Object_80039F5C *pA, Object_80039F5C *pB, Result_801076F0 *pOut, Input_801076F0 *pIn) {
