@@ -723,6 +723,30 @@ extern "C" int fn_80093C64(void)
     return lbl_803EC924->mUnknown80.mUnknownE4E;
 }
 
+extern "C" Frame_80141210 *fn_801C029C(Actor_801C009C *pActor, unsigned short index);
+
+extern "C" int fn_80093C70(Character_80093BCC *pCharacter, int id, Frame_80141210 **ppFrame, unsigned char *pFound)
+{
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    int result = 0;
+    int i;
+
+    *pFound = 0;
+    for (i = 0; i < pActor->mUnknown4; i++) {
+        Frame_80141210 *pFrame = fn_801C029C(pActor, i);
+
+        if (pFrame->mUnknown14 == id) {
+            result = pCharacter->mUnknown74[i];
+            *pFound = 1;
+            if (ppFrame != 0) {
+                *ppFrame = pFrame;
+            }
+            break;
+        }
+    }
+    return result;
+}
+
 extern "C" int fn_80093E38(int index)
 {
     return lbl_802D73B8[index].mUnknown0;
@@ -860,6 +884,33 @@ extern "C" void fn_800941EC(void)
 extern "C" int fn_8009422C(void)
 {
     return lbl_802D72BC[0];
+}
+
+/* 32-byte records of the .data table read by fn_80094238 ("Gamebreaker",
+   "Post Game", ...). */
+struct Script_802D7A10 {
+    char mName[20];
+    int mUnknown14;
+    int mUnknown18;
+    int mUnknown1C;
+};
+
+extern "C" Script_802D7A10 lbl_802D7A10[];
+extern "C" void fn_801C02EC(void);
+extern "C" void fn_801C06A0(void);
+
+extern "C" void fn_80094238(int index)
+{
+    void *pData;
+
+    lbl_803EC924->mEntries[index].mUnknown10 = lbl_802D7A10[index].mUnknown1C;
+    lbl_803EC924->mEntries[index].mUnknown8 = lbl_802D7A10[index].mUnknown14;
+    lbl_803EC924->mEntries[index].mUnknownC = lbl_802D7A10[index].mUnknown18;
+    pData = lbl_803EC924->mpUnknown7C;
+    lbl_803EC924->mEntries[index].mpUnknown0 = (Table_80093BAC *)fn_801EF390(pData, lbl_802D7A10[index].mUnknown14, 1);
+    fn_801C02EC();
+    lbl_803EC924->mEntries[index].mUnknown4 = fn_801EF390(pData, lbl_802D7A10[index].mUnknown18, 1);
+    fn_801C06A0();
 }
 
 extern "C" void fn_800942F0(int index)

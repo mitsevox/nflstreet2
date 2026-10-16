@@ -4,7 +4,7 @@
 /* Views of the records returned by fn_80093BAC, fn_80093BCC and
    fn_80096DA8. Their original identities and the contents of the opaque
    spans remain unknown. */
-struct Frame_80141210 { unsigned char mUnknown0[0x30]; float mUnknown30, mUnknown34; unsigned char mUnknown38[4]; float mUnknown3C; };
+struct Frame_80141210 { unsigned char mUnknown0[0x14]; int mUnknown14; unsigned char mUnknown18[0x18]; float mUnknown30, mUnknown34; unsigned char mUnknown38[4]; float mUnknown3C; };
 struct Actor_801C009C { unsigned short mUnknown0,mUnknown2,mUnknown4,mUnknown6; unsigned int mUnknown8; unsigned char mUnknownC[12]; Frame_80141210 *mUnknown18; };
 struct Selection_80141210 { unsigned char mUnknown0; unsigned char mUnknown1[3]; union { int mWord; unsigned short mParts[2]; } mUnknown4,mUnknown8; };
 struct Object_80039F5C;
@@ -14,7 +14,9 @@ struct Object_80039F5C;
 struct Character_80093BCC {
     int mUnknown0,mUnknown4;
     unsigned char mUnknown8[12];
-    Object_80039F5C *mUnknown14[49];
+    Object_80039F5C *mUnknown14[24];
+    int mUnknown74[24];
+    unsigned char mUnknownD4[4];
     union { int mWord; unsigned short mParts[2]; } mUnknownD8;
     unsigned char mUnknownDC[4];
     Selection_80141210 mUnknownE0;
