@@ -7341,6 +7341,65 @@ int fn_800C8BAC(Object_80039F5C *, int);
 float fn_80178A08(void);
 }
 
+extern "C" {
+void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, int a, int b);
+int fn_8009EFDC(int index);
+}
+
+extern "C" Object_80039F5C *fn_8009EDD4(unsigned int index, int side, Point_8017886C *pOut)
+{
+    State_8011F4EC *pState = fn_8011F4EC();
+    Object_80039F5C *p;
+    int team;
+    int n;
+
+    if (index < pState->mUnknown1A3) {
+    team = fn_80178308();
+    if (pState->mUnknown1A4 != 2) {
+        int swapped;
+
+        pState->mUnknown1A4 = 2;
+        do {
+            unsigned char i;
+
+            swapped = 0;
+            for (i = 0; i < pState->mUnknown1A3 - 1; i++) {
+                Object_80039F5C *pA = fn_80039F5C(team, pState->mUnknown1A5[i]);
+                Object_80039F5C *pB = fn_80039F5C(team, pState->mUnknown1A5[i + 1]);
+                Point_8017886C a;
+                Point_8017886C b;
+
+                fn_8009F928(pA, &a, 5, 1);
+                fn_8009F928(pB, &b, 5, 1);
+                if (a.mX > b.mX) {
+                    unsigned char temp = pState->mUnknown1A5[i];
+
+                    pState->mUnknown1A5[i] = pState->mUnknown1A5[i + 1];
+                    pState->mUnknown1A5[i + 1] = temp;
+                    swapped = 1;
+                }
+            }
+        } while (swapped == 1);
+    }
+    if (fn_8009EFDC(side) == 1) {
+        index = pState->mUnknown1A3 - index - 1;
+    }
+    p = 0;
+    for (n = index; n >= 0 && p == 0; n--) {
+        p = fn_80039F5C(team, pState->mUnknown1A5[n]);
+        if (pOut != 0) {
+            fn_8009F928(p, pOut, 5, 1);
+        }
+        if (p->mpState->mId == 31 || p->mpState->mId == 32) {
+            p = 0;
+        }
+    }
+    } else {
+        p = 0;
+    }
+    return p;
+}
+
 extern "C" int fn_8009EF6C(Object_80039F5C *p)
 {
     State_8011F4EC *pState = fn_8011F4EC();
