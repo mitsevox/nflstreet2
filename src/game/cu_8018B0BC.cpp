@@ -98,7 +98,11 @@ int fn_8018B2A8(int source, int teamTable, int playerTable, int destination,
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
+    int code = 0;
     int status = fn_801FCE10(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c order by 'DIGP'\n", source, &cursor, &player, playerTable);
+    if (status != 0 && status != 23) {
+        code = status;
+    }
     if (status != 23) {
         if (*pCount <= 0) *pCount = result.mUnknown0;
         count = *pCount;
@@ -156,7 +160,11 @@ void fn_8018B6F0(int index)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
+    int code = 0;
     int status = fn_801FCE10(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from 'YPTS' order by 'DIGP'\n", handle, &cursor, &player);
+    if (status != 0 && status != 23) {
+        code = status;
+    }
     if (status != 23) {
         unsigned int count = result.mUnknown0;
         for (unsigned int i = 0; i < count; i++) {
