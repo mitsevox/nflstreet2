@@ -128,11 +128,14 @@ struct Pair_8011BAE0 {
 };
 
 struct Entry_8011AFCC {
-    char mUnknown0[60];
-    int mUnknown60;
-    char mUnknown64[4];
+    int mUnknown0;
+    char mUnknown4[56];
+    Object_80039F5C *mpUnknown60;
+    int mUnknown64;
     float mUnknown68;
-    char mUnknown72[8];
+    float mUnknown72;
+    unsigned char mUnknown76;
+    char mUnknown77[3];
 };
 
 /* Bytes at +336 of the player object as fn_8010BA00, fn_8010B5B0 and
@@ -505,7 +508,7 @@ struct Block_803EB028 {
     int mUnknown0;
     char mUnknown4[80];
     unsigned int mUnknown84;
-    char mUnknown88[1];
+    unsigned char mUnknown88;
     unsigned char mUnknown89;
     unsigned char mUnknown90;
     char mUnknown91[1];
@@ -4773,7 +4776,7 @@ extern "C" int fn_80116984(Object_80039F5C *p, Object_80039F5C *pOther, float *p
     if (p != 0 && pOther != 0 && pOut != 0) {
         *pOut = 0.0f;
         if (pOther->mRatings[4] > p->mRatings[4]) {
-            unsigned int diff = pOther->mRatings[4] * 0.38823533f - p->mRatings[4] * 0.38823533f;
+            unsigned int diff = (unsigned int)(pOther->mRatings[4] * 0.38823533f - p->mRatings[4] * 0.38823533f);
             float value = diff;
 
             *pOut = value * lbl_803EAFC0;
@@ -5134,7 +5137,7 @@ extern "C" void fn_8011AFCC(Entry_8011AFCC *pEntries)
         Entry_8011AFCC *pEntry;
 
         swapped = 0;
-        for (pEntry = pEntries + 1; pEntry->mUnknown60 != 0; pEntry++) {
+        for (pEntry = pEntries + 1; pEntry->mpUnknown60 != 0; pEntry++) {
             if (pEntry->mUnknown68 < pPrev->mUnknown68) {
                 Entry_8011AFCC temp = *pEntry;
                 *pEntry = *pPrev;
@@ -5155,7 +5158,7 @@ extern "C" void fn_8011B138(Entry_8011AFCC *pEntries)
         Entry_8011AFCC *pEntry;
 
         swapped = 0;
-        for (pEntry = pEntries + 1; pEntry->mUnknown60 != 0; pEntry++) {
+        for (pEntry = pEntries + 1; pEntry->mpUnknown60 != 0; pEntry++) {
             if (pEntry->mUnknown68 > pPrev->mUnknown68) {
                 Entry_8011AFCC temp = *pEntry;
                 *pEntry = *pPrev;
@@ -5202,6 +5205,52 @@ Entry_801230B8 *fn_801230B8(Plan_80121264 *pPlan);
 int fn_80123254(void *pA, void *pB);
 void fn_8012430C(float *pOut, int kind, Object_80039F5C *p);
 float fn_801CFB94(int angle);
+
+void fn_8011B4F8(Entry_8011AFCC *pEntry);
+
+void fn_8011B6E8(Entry_8011AFCC *pEntries, Pair_8011BAE0 target)
+{
+    unsigned char count = 0;
+    unsigned char i = 0;
+    int team = fn_80178320();
+    unsigned int n = fn_80178D70(team);
+
+    for (; i < n; i++) {
+        Object_80039F5C *p = fn_80039F5C(team, i);
+        int skip = 0;
+
+        switch (p->mQueue[0].mId) {
+        case 16:
+        case 32:
+        case 89:
+            skip = 1;
+            break;
+        case 17:
+            if (!fn_80113BCC(p)) {
+                skip = 1;
+            }
+            break;
+        }
+        if (!skip) {
+            Pair_8011BAE0 delta;
+
+            pEntries[count].mpUnknown60 = p;
+            pEntries[count].mUnknown0 = 0;
+            fn_80227690(&delta, &target, &p->mMotion.mPos);
+            pEntries[count].mUnknown72 = fn_802270A4(&delta);
+            pEntries[count].mUnknown64 = fn_801CFE40(delta.mUnknown4, delta.mUnknown0);
+            pEntries[count].mUnknown76 = 0;
+            fn_8011B4F8(&pEntries[count]);
+            count++;
+        }
+    }
+    pEntries[count].mpUnknown60 = 0;
+    pEntries[count].mUnknown0 = 0;
+    pEntries[count].mUnknown68 = 0.0f;
+    if (lbl_803EB028->mUnknown88) {
+        fn_8011B138(pEntries);
+    }
+}
 
 void fn_8011DA40(void)
 {
