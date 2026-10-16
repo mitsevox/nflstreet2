@@ -1,6 +1,10 @@
 #include "game/Class_80297AB8.h"
 #include "game/Class_80297B50.h"
 #include "game/Object_80039F5C.h"
+#include "game/cu_80067C10.h"
+#include "game/fn_800B65A0.h"
+#include "game/fn_8009D990.h"
+#include "game/fn_802372EC.h"
 
 class Class_802A1B18 : public Class_80297B50 {
 };
@@ -20,9 +24,7 @@ extern int lbl_803EB2F4;
 
 int fn_80178308(void);
 int fn_80178320(void);
-unsigned int fn_802372EC(int a, int b);
 void fn_80168640(int team, int kind);
-int fn_800B65A0(int team);
 void fn_80168744(int team, unsigned int a, unsigned int b, unsigned int c);
 void fn_80167EA0(int team);
 Team_80168EBC *fn_80168EBC(int team);
@@ -35,13 +37,11 @@ void fn_8013FB44(void);
 void fn_8016DDDC(int team);
 void fn_801790D0(int team, float a, float b);
 int fn_801787A0(void);
-int fn_8009D990(int index);
 void fn_8017D7C4(const char *pText);
 void fn_80178370(void);
 int fn_80177C38(void);
 void fn_8009D8CC(int index);
 void fn_8009D964(int index, int value);
-void fn_80067D4C(int type, Vector_80039F5C *pPos);
 
 void fn_80153DB8(Class_802A1B18 *p)
 {
@@ -91,7 +91,7 @@ void fn_80153F54(Class_802A1AE0 *p, float dt)
             fn_8017D7C4("Time Expired");
             fn_80178370();
         } else {
-            int value;
+            unsigned int value;
 
             if (fn_80177C38() % 2 != (p->mUnknown4 & 1)) {
                 p->mUnknown4++;
@@ -102,7 +102,7 @@ void fn_80153F54(Class_802A1AE0 *p, float dt)
             value = fn_8009D990(5);
             if (value != lbl_803EB2F4) {
                 lbl_803EB2F4 = value;
-                if ((unsigned int)value <= 5) {
+                if (value <= 5) {
                     fn_80067D4C(20, 0);
                 }
             }
