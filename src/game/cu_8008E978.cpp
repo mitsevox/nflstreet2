@@ -2638,6 +2638,108 @@ extern "C" void fn_800CA4A8(void)
     }
 }
 
+extern "C" {
+int fn_80054D24(int index);
+unsigned int fn_8017F584(void);
+int fn_8013BA58(Object_80137ABC *pBall, int arg);
+int fn_800A7EA4(int team);
+int fn_800A7F1C(int team);
+unsigned int fn_800C955C(Object_80039F5C *p, int kind);
+float fn_800C9CF0(int team, int index);
+float fn_800AE998(void);
+void fn_800AE7F0(int index, int team, Object_80039F5C *p);
+void fn_80156C78(int a, int b);
+void fn_800A8954(int event, int team, Object_80039F5C *p);
+void fn_80147598(void *pObject, int bit, unsigned int slot, unsigned char flag);
+void fn_80194F2C(int channel, int onTime, int offTime, int duration, int force);
+
+extern unsigned char lbl_803EAC40;
+extern unsigned char lbl_803EAC41;
+extern float lbl_803EC918;
+}
+
+extern "C" int fn_800CA5CC(Object_80039F5C *p, int kind, int value)
+{
+    Input_800B6D34 input;
+    int found = 0;
+    int allowed;
+    int pressed;
+    int ref;
+    unsigned char team;
+    unsigned char i;
+
+    fn_800B6D34(p, &input);
+    allowed = 0;
+    pressed = 0;
+    if (p->mFlags & 0x4000) {
+        if (fn_80137B40() == p) {
+            if (input.mUnknown95 & 8) {
+                allowed = 1;
+                pressed = 1;
+            }
+            if (kind == 7) {
+                allowed = 0;
+                found = 1;
+            }
+        } else if (input.mUnknown95 & 8) {
+            allowed = 1;
+            pressed = 1;
+        }
+    } else {
+        allowed = 1;
+    }
+    fn_8009BD2C(p, &ref);
+    team = ref >> 8;
+    for (i = 0; i < lbl_803EAC3C->mCounts[team]; i++) {
+        unsigned int cost;
+
+        if (lbl_803EAC3C->mEntries[team][i].mRef != ref) {
+            continue;
+        }
+        if (fn_800A7EA4(team) == 2
+            || (p == fn_80137B88(fn_801374BC()) && fn_800A7F1C(team) == 2 && fn_8013BA58(fn_801374BC(), 0) != 0)
+            || (fn_80054D24(22) != 0 && fn_8017F584() == 0)) {
+            cost = 0;
+        } else {
+            cost = fn_800C955C(p, kind);
+        }
+        if (allowed == 0) {
+            continue;
+        }
+        if (lbl_803EAC3C->mEntries[team][i].mUnknown4 >= cost && lbl_803EAC3C->mEntries[team][i].mUnknown12 == 0) {
+            if (value != 0) {
+                lbl_803EAC3C->mEntries[team][i].mUnknown4 -= cost;
+                lbl_803EAC3C->mEntries[team][i].mUnknown10 = 1;
+                if (pressed != 0) {
+                    if (!(fn_800C9CF0(team, i) > fn_800AE998())) {
+                        fn_800AE7F0(4, team, 0);
+                    }
+                    if (fn_800D0B90(p) == 0) {
+                        fn_80156C78(0, 1);
+                    }
+                }
+                if (p->mUnknown8 != 255) {
+                    fn_800A8954(0, p->mIdBytes[2], p);
+                }
+                fn_80147598(p->mpUnknown4, 16, lbl_803EAC3C->mEntries[team][i].mUnknown8, 0);
+            }
+            found = 1;
+        } else if (value != 0 && lbl_803EAC3C->mEntries[team][i].mUnknown12 == 0) {
+            lbl_803EAC3C->mEntries[team][i].mUnknown10 = 2;
+            if ((p->mFlags & 0x4000) == 0) {
+                lbl_803EAC3C->mEntries[team][i].mUnknown12 = (int)lbl_803EC918;
+                fn_80067DB8(15, &p->mMotion.mPos, 0, 0, 0);
+            } else {
+                int duration = lbl_803EAC40 + lbl_803EAC41;
+
+                fn_80067DB8(15, &p->mMotion.mPos, 1, 0, 0);
+                fn_80194F2C(p->mUnknown8, lbl_803EAC40, lbl_803EAC41, duration, 0);
+            }
+        }
+    }
+    return found;
+}
+
 extern "C" Item_8009A63C *fn_8009A63C(int ref)
 {
     Item_8009A63C *p;
