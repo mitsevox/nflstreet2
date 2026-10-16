@@ -24270,6 +24270,11 @@
           "end": "0x800BBA2C"
         },
         {
+          "symbol": "fn_800BBA2C",
+          "start": "0x800BBA2C",
+          "end": "0x800BBB4C"
+        },
+        {
           "symbol": "fn_800BBB4C",
           "start": "0x800BBB4C",
           "end": "0x800BBB84"
