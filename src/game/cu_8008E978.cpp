@@ -8892,7 +8892,8 @@ struct Block_800BFAD0 {
     int mUnknownB4;
     int mUnknownB8;
     int mUnknownBC;
-    unsigned char mUnknownC0[5];
+    int mUnknownC0;
+    unsigned char mUnknownC4;
     unsigned char mUnknownC5;
     unsigned char mUnknownC6;
     unsigned char mUnknownC7;
@@ -9063,6 +9064,33 @@ int Class_80297CE8::vfn_12()
     return result;
 }
 
+extern "C" void fn_800BD460(unsigned char index, int a);
+extern "C" void fn_8017DA9C(int team);
+extern "C" int fn_801C6280(int a, int b, void *p);
+extern "C" char lbl_802ECF88[];
+
+extern "C" void fn_800BE808(int a, unsigned char index)
+{
+    int state = lbl_803EABA8->mSlots[index].mUnknown0;
+
+    if (state == 4) {
+        return;
+    }
+    if (state != 5) {
+        lbl_803EABA8->mSlots[index].mUnknown4 = state;
+    }
+    lbl_803EABA8->mSlots[index].mUnknown0 = 4;
+    lbl_803EABA8->mSlots[index].mUnknown8 = 30;
+    fn_801C6280(a, 3, lbl_802ECF88);
+    if (fn_800A8488(0) && !fn_800A8444(0)) {
+        fn_8017DA9C(0);
+    }
+    if (fn_800A8488(1) && !fn_800A8444(1)) {
+        fn_8017DA9C(1);
+    }
+    fn_800BD460(index, 0);
+}
+
 extern "C" void fn_800BE8E4(int team)
 {
     if (team == fn_80178308()) {
@@ -9072,6 +9100,34 @@ extern "C" void fn_800BE8E4(int team)
     if (team == fn_80178320() && fn_801481B0() == 0) {
         fn_80148108(1);
     }
+}
+
+extern "C" void fn_8017D9D8(int team);
+extern "C" void fn_800BD568(unsigned char index);
+extern "C" int fn_801C6280(int a, int b, void *p);
+extern "C" char lbl_802ECD44[];
+
+extern "C" void fn_800BEC1C(int a, unsigned char index)
+{
+    lbl_803EABA8->mSlots[index].mUnknown0 = 5;
+    lbl_803EABA8->mSlots[index].mUnknown8 = 0;
+    if (fn_80156704() == 0) {
+        if (fn_800A8488(0) && !fn_800A8444(0)) {
+            fn_8017D9D8(0);
+        }
+        if (fn_800A8488(1) && !fn_800A8444(1)) {
+            fn_8017D9D8(1);
+        }
+    } else if (lbl_803EABA4->vfn_08()) {
+        if (fn_800A8488(0) && !fn_800A8444(0)) {
+            fn_8017D9D8(0);
+        }
+        if (fn_800A8488(1) && !fn_800A8444(1)) {
+            fn_8017D9D8(1);
+        }
+    }
+    fn_801C6280(a, 3, lbl_802ECD44);
+    fn_800BD568(index);
 }
 
 extern "C" void fn_800BEFAC(int index)
@@ -9244,7 +9300,6 @@ extern "C" int fn_800BF574(int a, unsigned int kind)
     return result;
 }
 
-extern "C" void fn_800BE808(int a, unsigned char index);
 extern "C" void fn_800BE944(unsigned char index, int team, int kind, float value);
 
 extern "C" void fn_800BF658(int index)
@@ -9267,6 +9322,43 @@ extern "C" void fn_800BF6CC(int index)
 extern "C" int fn_800BF718(int index)
 {
     return lbl_803EABA8->mSlots[index].mUnknown1C;
+}
+
+extern "C" void fn_800BD774(unsigned char index);
+extern "C" void fn_800BED54(unsigned char index);
+extern "C" void fn_800BD830(void);
+extern float lbl_803EABAC[2];
+
+extern "C" void fn_800BF72C(float dt)
+{
+    unsigned int i;
+
+    for (i = 0; i <= 1; i++) {
+        switch (lbl_803EABA8->mSlots[i].mUnknown0) {
+        case 4:
+        case 5:
+            fn_800BD774(i);
+            break;
+        case 8:
+            lbl_803EABAC[i] -= dt;
+            if (lbl_803EABAC[i] > 0.0f) {
+                break;
+            }
+        case 2:
+            lbl_803EABA8->mSlots[i].mUnknown0 = 0;
+            break;
+        case 6:
+            fn_800BED54(i);
+            break;
+        case 7:
+            fn_800BEFAC((unsigned char)i);
+            break;
+        }
+    }
+    if (lbl_803EABA8->mUnknownC0 > 0) {
+        lbl_803EABA8->mUnknownC0--;
+    }
+    fn_800BD830();
 }
 
 extern "C" int fn_800BF824(void)
@@ -9375,9 +9467,6 @@ void Class_80297CE8::vfn_07()
 
 extern "C" void fn_800BEC1C(int team, unsigned char index);
 extern "C" void fn_8017E01C(int index);
-extern "C" int fn_801C6280(int a, int b, void *p);
-extern "C" char lbl_802ECD44[];
-
 extern "C" void fn_800C0330(void *p)
 {
     if (fn_800AD9B4() == 2) {
