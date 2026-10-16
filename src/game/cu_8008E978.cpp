@@ -9081,6 +9081,55 @@ extern "C" void fn_800BF07C(void)
     lbl_803EABA4->fn_800C02D4(value);
 }
 
+extern "C" void fn_800BF174(void)
+{
+    short value = 0;
+    short base = lbl_803EABA4->fn_800C02C8();
+
+    if (base != 0) {
+        value = base - 2;
+        if (fn_800BA6F8() == 0) {
+            value -= fn_802372EC(0, 8);
+        }
+        if (value <= 2) {
+            value = fn_802372EC(0, 2) + 3;
+        }
+    } else {
+        int mode = lbl_803EABA8->mUnknown40;
+
+        if (fn_8009D9D8(1) == 0) {
+            mode = 0;
+        }
+        if (fn_80177F70() == 0) {
+            value = 39;
+        } else {
+            switch (mode) {
+            case 0:
+                if (fn_800BA6F8() != 0) {
+                    value = fn_8009D990(0) - 1;
+                    value -= fn_802372EC(0, 4);
+                } else {
+                    value = fn_8009D990(0) - 6;
+                    value -= fn_802372EC(0, 8);
+                }
+                break;
+            case 2:
+                value = fn_8009D990(0);
+                break;
+            case 1:
+                value = fn_802372EC(0, 3) + 3;
+                break;
+            }
+        }
+    }
+    if (value <= 2) {
+        value = fn_802372EC(0, 3) + 3;
+    } else if (value > 39) {
+        value = 39;
+    }
+    lbl_803EABA4->fn_800C02EC(value);
+}
+
 void Class_80297CE8::vfn_09()
 {
     int count = fn_801383C8();
@@ -9304,7 +9353,7 @@ void Class_80297CE8::vfn_10()
     fn_800B6B98();
 }
 
-short Class_80297CE8::fn_800C02C8()
+int Class_80297CE8::fn_800C02C8()
 {
     return lbl_803EABA8->mUnknownA4;
 }

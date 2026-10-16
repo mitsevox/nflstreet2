@@ -25715,6 +25715,11 @@
           "end": "0x800BF174"
         },
         {
+          "symbol": "fn_800BF174",
+          "start": "0x800BF174",
+          "end": "0x800BF2EC"
+        },
+        {
           "symbol": "vfn_09__14Class_80297CE8",
           "start": "0x800BF2EC",
           "end": "0x800BF364"
