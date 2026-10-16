@@ -5695,6 +5695,39 @@ extern "C" float fn_800AC504(int team, float value)
     return value;
 }
 
+extern "C" int fn_800AC584(int team, int value)
+{
+    if (value > 0) {
+        if (fn_800B65A0(team) == 255) {
+            switch (fn_800ABDA4(team)) {
+            case 0:
+                value = (int)(value * 0.85f);
+                break;
+            case 1:
+                break;
+            case 2:
+                value = (int)(value * 1.15f);
+                break;
+            }
+        } else {
+            team = (team + 1) & 1;
+            if (fn_800B65A0(team) == 255) {
+                switch (fn_800ABDA4(team)) {
+                case 0:
+                    value = (int)(value * 1.15f);
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    value = (int)(value * 0.85f);
+                    break;
+                }
+            }
+        }
+    }
+    return value;
+}
+
 extern "C" float fn_800AC6BC(int team, float value)
 {
     if (fn_800B65A0(team) != 255 && fn_800ABDA4(team ^ 1) == 0) {
@@ -5749,6 +5782,60 @@ extern "C" float fn_800AC7E0(int team, float value)
     case 2:
         if (flag == 0) {
             value *= 0.83f;
+        }
+        break;
+    }
+    return value;
+}
+
+extern "C" int fn_800AC87C(Object_80039F5C *p, int value)
+{
+    int team = p->mIdBytes[2];
+    int flag = 0;
+
+    if (fn_800B65A0(team) != 255) {
+        team ^= 1;
+        flag = 1;
+    }
+    switch (fn_800ABDA4(team)) {
+    case 0:
+        if (flag == 0) {
+            value = (int)(value * 2.0f);
+        } else {
+            value = (int)(value * 0.75f);
+        }
+        break;
+    case 1:
+        break;
+    case 2:
+        if (flag == 0) {
+            value = (int)(value * 0.75f);
+        }
+        break;
+    }
+    return value;
+}
+
+extern "C" int fn_800AC980(Object_80039F5C *p, int value)
+{
+    int team = p->mIdBytes[2];
+    int flag = 0;
+
+    if (fn_800B65A0(team) != 255) {
+        team ^= 1;
+        flag = 1;
+    }
+    switch (fn_800ABDA4(team)) {
+    case 0:
+        break;
+    case 1:
+        if (flag == 0) {
+            value = (int)(value * 0.75f);
+        }
+        break;
+    case 2:
+        if (flag == 0) {
+            value = (int)(value * 0.5f);
         }
         break;
     }
@@ -5843,6 +5930,41 @@ extern "C" short fn_800ACC80(Object_80039F5C *p, short value)
     return result;
 }
 
+extern unsigned short lbl_803EAACC[3];
+
+extern "C" int fn_800ACD04(Object_80039F5C *p)
+{
+    int team = p->mIdBytes[2];
+    int flag = 0;
+    int degrees;
+
+    if (fn_800B65A0(team) != 255) {
+        team ^= 1;
+        flag = 1;
+    }
+    switch (fn_800ABDA4(team)) {
+    case 0:
+        if (flag != 0) {
+            degrees = lbl_803EAACC[0];
+        } else {
+            degrees = lbl_803EAACC[2];
+        }
+        break;
+    case 2:
+        if (flag != 0) {
+            degrees = lbl_803EAACC[2];
+        } else {
+            degrees = lbl_803EAACC[0];
+        }
+        break;
+    case 1:
+    default:
+        degrees = lbl_803EAACC[1];
+        break;
+    }
+    return (int)(degrees * 46603.378f);
+}
+
 extern "C" void fn_800ACDE4(Object_80039F5C *p, float *pA, float *pB)
 {
     int team = p->mIdBytes[2];
@@ -5920,6 +6042,27 @@ extern "C" int fn_800ACFA8(Object_80039F5C *p)
     return result;
 }
 
+extern "C" short fn_800ACFFC(int team, short value)
+{
+    if (value > 0) {
+        switch (fn_800ABDA4(team)) {
+        case 0:
+            if (fn_800B65A0(team) == 255) {
+                value = (short)(value * 0.5f);
+            }
+            break;
+        case 1:
+            break;
+        case 2:
+            if (fn_800B65A0(team) == 255) {
+                value = (short)(value * 1.15f);
+            }
+            break;
+        }
+    }
+    return value;
+}
+
 extern "C" int fn_800AD0E4(int team)
 {
     int result = 0;
@@ -5957,6 +6100,35 @@ extern "C" float fn_800AD168(int team, float value)
         value = 0.0f;
     }
     return value;
+}
+
+extern "C" float fn_800AD204(int team, int value)
+{
+    float result = value;
+    int flag = 0;
+
+    if (fn_800B65A0(team) != 255) {
+        flag = 1;
+        team = team == 0;
+    }
+    switch (fn_800ABDA4(team)) {
+    case 0:
+        if (flag != 0) {
+            result += 168.3f;
+        } else {
+            result += 63.75f;
+        }
+        break;
+    case 1:
+    case 2:
+    default:
+        result += 63.75f;
+        break;
+    }
+    if (result > 255.0f) {
+        result = 255.0f;
+    }
+    return result * (1.0f / 255.0f);
 }
 
 extern "C" int fn_800AD2CC(int team, int flag)
