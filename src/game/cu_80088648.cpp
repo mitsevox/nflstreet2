@@ -149,20 +149,29 @@ void fn_80088B24(Object_8007A334 *pCursor, int mode, unsigned char value)
     Object_80023BBC root;
     Object_80023BBC left;
     Object_80023BBC right;
-    int column = 0x54464653;
+    unsigned int column = 0x54464653;
 
     keys[0].Set(0x53544653, 0x49464653, 0);
     keys[1].Set(-1, -1, 3);
     if (mode == 0) {
         fn_8007A334(pCursor, 0x53544653, 0x49464653, keys, 0, 0x54415453);
-    } else if (mode == 1 || mode == 2) {
-        if (mode == 2) {
+    } else {
+        switch (mode) {
+        case 2:
             column = 0x51464653;
+            /* fall through */
+        case 1: {
+            unsigned int table = 0x53544653;
+
+            root.Set(11, &left, &right);
+            left.Set(6, ((unsigned long long)table << 32) | column, 3);
+            left.mUnknown16.mValue.mInt = value;
+            right.Set(6, 0x535446534E464653LL, 3);
+            right.mUnknown16.mValue.mInt = 1;
+            fn_8007A334(pCursor, 0x53544653, 0x49464653, keys, &root, 0x54415453);
+            break;
         }
-        root.Set(11, &left, &right);
-        left.Set(6, ((long long)0x53544653 << 32) | (unsigned int)column, 3, value);
-        right.Set(6, 0x535446534E464653LL, 3, 1);
-        fn_8007A334(pCursor, 0x53544653, 0x49464653, keys, &root, 0x54415453);
+        }
     }
 }
 
