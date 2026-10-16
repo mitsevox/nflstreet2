@@ -313,9 +313,13 @@ void fn_8018D918()
     if (!fn_8018F228(fn_80186B38(fn_8022F4BC())))
         fn_8018F41C(fn_80186B38(fn_8022F4BC()));
     QueryResult result;
-    Query_8008352C columns[2];
-    QueryCursor cursor = {0, 0, -1, 0};
+    Table_8007E020 tables[2];
+    QueryCursor cursor;
     int player, pxsp, ytrp, selected;
+    cursor.mUnknown0 = 0;
+    cursor.mUnknown4 = 0;
+    cursor.mUnknown8 = -1;
+    cursor.mUnknown12 = 0;
     fn_801FCE10(&result, "use \x8c declare \x8a cursor for select 'PXSP' and 'DIOP' and 'YTRP' from 'YPRC'\n", source, &cursor);
     for (unsigned int i = 0; i < result.mUnknown0; i++) {
         player = i; pxsp = 0; ytrp = 0;
@@ -327,27 +331,21 @@ void fn_8018D918()
     if (fn_801FCE10(&result, "use \x8c select 'PXSP' into \x85 from 'YPRC' where 'DIOP' = \x85\n", source, &selected, 0x7FF4) == 0)
         fn_801FCE10(0, "use \x8c update 'PPRC' set 'PXSP' = \x85 where 'PXSP' = \x85\n", source, 8, selected);
     fn_8018CA80(source);
-    columns[0].mUnknown0 = 0x4E494843;
-    columns[0].mUnknown4 = 2; columns[0].mUnknown8 = 0;
-    columns[1].mUnknown0 = -1;
-    columns[1].mUnknown4 = 2; columns[1].mUnknown8 = 0;
-    fn_801F9908(source, (char *)columns, 0, (int *)&result, 0);
+    tables[0].Set(0x4E494843);
+    tables[1].Set(-1);
+    fn_801F9908(source, (char *)tables, 0, (int *)&result, 0);
     fn_8022EF8C(0x54415453, 0x4E494843);
     fn_801FCE10(&result, "use 'TATS' insert into \x8c.'NIHC' * select * from 'NIHC'\n", source);
     fn_8022EFBC(0x54415453, 0x4E494843);
-    columns[0].mUnknown0 = 0x47504843;
-    columns[0].mUnknown4 = 2; columns[0].mUnknown8 = 0;
-    columns[1].mUnknown0 = -1;
-    columns[1].mUnknown4 = 2; columns[1].mUnknown8 = 0;
-    fn_801F9908(source, (char *)columns, 0, (int *)&result, 0);
+    tables[0].Set(0x47504843);
+    tables[1].Set(-1);
+    fn_801F9908(source, (char *)tables, 0, (int *)&result, 0);
     fn_8022EF8C(0x54415453, 0x47504843);
     fn_801FCE10(&result, "use 'TATS' insert into \x8c.'GPHC' * select * from 'GPHC'\n", source);
     fn_8022EFBC(0x54415453, 0x47504843);
-    columns[0].mUnknown0 = 0x47505443;
-    columns[0].mUnknown4 = 2; columns[0].mUnknown8 = 0;
-    columns[1].mUnknown0 = -1;
-    columns[1].mUnknown4 = 2; columns[1].mUnknown8 = 0;
-    fn_801F9908(source, (char *)columns, 0, (int *)&result, 0);
+    tables[0].Set(0x47505443);
+    tables[1].Set(-1);
+    fn_801F9908(source, (char *)tables, 0, (int *)&result, 0);
     for (unsigned int i = 0; i <= 31; i++)
         fn_801FCE10(0, "use \x8c insert into \x8c.'GPTC' set 'MGTC' = \x82 and '1STC' = 0 and '2STC' = 0\n", source, source, i);
     fn_801FCE10(&result, "use \x8c update 'REGL' set 'KCLG' = 1 where 'KLCG' = 1\n", source);
