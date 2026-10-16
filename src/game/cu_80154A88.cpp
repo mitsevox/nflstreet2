@@ -75,8 +75,8 @@ int fn_80154AB8(Class_802A27F0 *p, int team, int index, Object_80039F5C *pPlayer
         if (fn_801531C4(&p->mpUnknown1C->mUnknown44) != team &&
             fn_80153328(&p->mpUnknown1C->mUnknown44) > 10) {
             Class_802A1930 *pRules = &p->mpUnknown1C->mUnknown44;
-            unsigned char leader = fn_801531C4(pRules);
-            value = fn_80153394(pRules, leader);
+            unsigned char selected = fn_801531C4(pRules);
+            value = fn_80153394(pRules, selected);
             value = value - fn_80153394(&p->mpUnknown1C->mUnknown44, team) == 1;
         }
         result = value;
@@ -87,8 +87,8 @@ int fn_80154AB8(Class_802A27F0 *p, int team, int index, Object_80039F5C *pPlayer
         if (fn_801531C4(&p->mpUnknown1C->mUnknown44) == team &&
             fn_80153328(&p->mpUnknown1C->mUnknown44) > 10) {
             Class_802A1930 *pRules = &p->mpUnknown1C->mUnknown44;
-            unsigned char leader = fn_801531C4(pRules);
-            value = fn_80153394(pRules, leader);
+            unsigned char selected = fn_801531C4(pRules);
+            value = fn_80153394(pRules, selected);
             value = value - fn_80153394(&p->mpUnknown1C->mUnknown44, other) == 1;
         }
         result = value;
