@@ -833,7 +833,6 @@ void fn_80071600(void)
     lbl_803EC83C = fn_80237470(1, 10);
     lbl_803EC840 = fn_80237470(1, 13);
     lbl_803EA6C5 = 1;
-    lbl_803EA6DC = 0;
     lbl_803EA6CF = 0;
     lbl_803EA6D0 = 0;
     lbl_803EA6D1 = 0;
@@ -844,6 +843,7 @@ void fn_80071600(void)
     lbl_803EA6E5 = 0;
     lbl_803EA6C4 = 0;
     lbl_803EA6DB = 0;
+    lbl_803EA6DC = 0;
 }
 
 void fn_800716E4(void)
