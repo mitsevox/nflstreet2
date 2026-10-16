@@ -16684,6 +16684,21 @@
         "original_blob": "e0006f6e05a11f2b00cb0e5e5d00c1726533273b",
         "integration_adjustment": "Preserve all existing contributor identities, function lists and original provenance while sharing canonical state-member declarations and extending the separately measured partial group source. Existing function bytes and resolved call destinations remain unchanged; pin the current complete source blob."
       }
+    },
+    {
+      "source": "src/game/cu_800325E8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80032658"
+      ],
+      "provenance": {
+        "pull_request": 795,
+        "merged_via": 795,
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "486ebe73c37aa942e8cd5f406dedfdb14ff7ac02"
+      }
     }
   ],
   "target": "GN7E69",
