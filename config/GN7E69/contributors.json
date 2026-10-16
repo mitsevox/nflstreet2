@@ -9070,11 +9070,11 @@
       "provenance": {
         "pull_request": 472,
         "merged_via": 489,
-        "commit": "6946bf46c0a5ddb43ac6eb2d1c03850c54a20113",
-        "introduced_blob": "baa1705b52cb365f9ff8d11ce9d338538c18ec88",
+        "commit": "5677da2b15a53220e9dbb20e8371c3cc7878e826",
+        "introduced_blob": "f7fb2714236387fa754fcb8ceb36748b36236ba0",
         "original_commit": "e87d3bbb8167681e2c6130c54cba16ec9c47bb09",
         "original_blob": "a23dbfdd8e14d42964f481dc03c626dc6782ad7b",
-        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses."
+        "integration_adjustment": "Preserve original contributor identities, PRs, function lists and merged_via through the ordinary initialization source-order update; all previously credited function payloads remain unchanged. Original introduction bindings are retained."
       }
     },
     {
@@ -9091,11 +9091,11 @@
       "provenance": {
         "pull_request": 480,
         "merged_via": 489,
-        "commit": "6946bf46c0a5ddb43ac6eb2d1c03850c54a20113",
-        "introduced_blob": "baa1705b52cb365f9ff8d11ce9d338538c18ec88",
+        "commit": "5677da2b15a53220e9dbb20e8371c3cc7878e826",
+        "introduced_blob": "f7fb2714236387fa754fcb8ceb36748b36236ba0",
         "original_commit": "9309229de46b802347f0d845f9041a7a37d60830",
         "original_blob": "135ae1212e5532a13d8066147b568349536ffeee",
-        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses."
+        "integration_adjustment": "Preserve original contributor identities, PRs, function lists and merged_via through the ordinary initialization source-order update; all previously credited function payloads remain unchanged. Original introduction bindings are retained."
       }
     },
     {
@@ -16019,11 +16019,11 @@
       "provenance": {
         "pull_request": 725,
         "merged_via": 734,
-        "commit": "23598ea10c0a90567d759733d11681d493e7db63",
-        "introduced_blob": "73a6573e7d52cdb919fdbdc744401952cc1f81cd",
+        "commit": "5677da2b15a53220e9dbb20e8371c3cc7878e826",
+        "introduced_blob": "f7fb2714236387fa754fcb8ceb36748b36236ba0",
         "original_commit": "2e10963a8ea451bf29b23cbc9cd78143615a4d3e",
         "original_blob": "73a6573e7d52cdb919fdbdc744401952cc1f81cd",
-        "integration_adjustment": "Preserve the original lane source contributor through reviewed batch integration; the final authored and introduced source blobs are identical."
+        "integration_adjustment": "Preserve original contributor identities, PRs, function lists and merged_via through the ordinary initialization source-order update; all previously credited function payloads remain unchanged. Original introduction bindings are retained."
       }
     },
     {
