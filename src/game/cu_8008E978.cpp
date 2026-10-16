@@ -6838,6 +6838,17 @@ struct Block_8009FF94 {
 extern "C" {
 unsigned int fn_801735C8(unsigned int mask);
 void fn_8009D964(int index, int value);
+void fn_8017C25C(int value);
+int fn_80178C24(void);
+int fn_8009D9A8(int index);
+int fn_8009D86C(void);
+int fn_80025640(int *pResult);
+int fn_80025718(void);
+int fn_8005900C(void);
+void fn_8002B5D0(int a, int b);
+int fn_800B9A90(Class_80297C60 *p);
+void fn_80178370(void);
+int fn_801787DC(int team);
 State_8011F4EC *fn_8011F4EC(void);
 int fn_8011F1CC(void);
 int fn_80178308(void);
@@ -6921,6 +6932,102 @@ extern "C" void fn_8009D474(int a, int b)
     p->mEntries[5].mUnknown10 = b;
     p->mEntries[5].mUnknown4 = b;
     fn_802381E0(pHandle);
+}
+
+extern "C" int fn_8009D558(unsigned int time)
+{
+    int flags = 0;
+
+    if (lbl_803EA9A8->mEntries[1].mUnknown0 == 1) {
+        int old = lbl_803EA9A8->mEntries[1].mUnknown8;
+
+        fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[1], time);
+        if (lbl_803EA9A8->mEntries[1].mUnknown8 != old) {
+            fn_8017C25C(1);
+        }
+    }
+    if (fn_80178C24() != 0) {
+        if (fn_8009D338((Timer_8009D338 *)&lbl_803EA9A8->mEntries[1]) != 0) {
+            if (fn_800BA6F8() != 0) {
+                fn_8009D964(1, fn_8009D9A8(1));
+            } else {
+                flags |= 1;
+            }
+        }
+    } else if (fn_80178AE0() != 2) {
+        flags |= 1;
+    }
+    if (lbl_803EA9A8->mEntries[0].mUnknown0 == 1) {
+        fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[0], time);
+        if (fn_8009D338((Timer_8009D338 *)&lbl_803EA9A8->mEntries[0]) != 0) {
+            if (fn_800BA6F8() != 0) {
+                fn_8009D964(0, fn_8009D9A8(0));
+            } else {
+                flags |= 2;
+            }
+        }
+    }
+    if (lbl_803EA9A8->mEntries[2].mUnknown0 == 1) {
+        fn_8009D3F0((Timer_8009D338 *)&lbl_803EA9A8->mEntries[2], time);
+    }
+    if (lbl_803EA9A8->mEntries[3].mUnknown0 == 1) {
+        fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[3], time);
+    }
+    if (lbl_803EA9A8->mEntries[5].mUnknown0 == 1) {
+        fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[5], time);
+    }
+    if (fn_80025708() != 0) {
+        int mode = fn_800AD9B4();
+
+        if (lbl_803EA9A8->mEntries[4].mUnknown0 == 1) {
+            fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[4], time);
+        }
+        if (fn_8009D338((Timer_8009D338 *)&lbl_803EA9A8->mEntries[4]) != 0 && fn_800AD9B4() != 1) {
+            flags |= 1;
+            if (mode == 3) {
+                fn_80178370();
+            } else if (mode == 5) {
+                fn_800B4184(1);
+            }
+        }
+        if ((unsigned char)fn_800B9A90(lbl_803EAB84) != 0 && mode == 4 && fn_801735C8(0x10) == 0
+            && fn_80025640(0) != 0) {
+            flags |= 1;
+        }
+    } else if (fn_80025718() != 0) {
+        int done = fn_8005900C();
+        int value;
+
+        if (done != 0) {
+            int mode = fn_800AD9B4();
+
+            if (mode == 3) {
+                fn_80178370();
+            } else if (mode == 5) {
+                fn_800B4184(1);
+            }
+        }
+        value = 0;
+        if (done != 0 || fn_80025640(&value) != 0) {
+            flags |= 1;
+            fn_8002B5D0(value, 7);
+        }
+    }
+    if (fn_8009D86C() == 5 && fn_801787DC(0) != fn_801787DC(1)) {
+        flags |= 1;
+    }
+    lbl_803EA9A8->mUnknown94 = flags;
+    return flags;
+}
+
+extern "C" void fn_8009D818(int state)
+{
+    int previous = lbl_803EA9A8->mUnknown0;
+
+    lbl_803EA9A8->mUnknown0 = state;
+    lbl_803EA9A8->mUnknown98 = previous;
+    fn_801FCE10(0, "update 'FNIG' set 'RTQG' = \x85\n", state);
+    lbl_803EA9A8->mUnknown94 &= ~1;
 }
 
 extern "C" int fn_8009D86C(void)
