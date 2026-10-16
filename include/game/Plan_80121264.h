@@ -1,16 +1,17 @@
 #ifndef GAME_PLAN_80121264_H
 #define GAME_PLAN_80121264_H
 
-#include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 
 /* 48-byte entry of Plan_80121264; the array fills +0 to +1440. */
 struct Entry_80120E98 {
-    char mUnknown0[8];
-    Vector_80039F5C mUnknown8;
-    char mUnknown20[16];
+    Point_8017886C *mpUnknown0;
+    Point_8017886C *mpUnknown4;
+    Point_8017886C mUnknown8;
+    char mUnknown16[20];
     int mUnknown36;
-    char mUnknown40[8];
+    int mUnknown40;
+    int mUnknown44;
 };
 
 /* 32-byte entry of Plan_80121264; the array fills +1444 to +2372. fn_80122670
