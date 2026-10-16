@@ -178,6 +178,7 @@ struct State_8010D80C {
     float mUnknown16;
     char mUnknown20[6];
     unsigned char mUnknown26;
+    unsigned char mUnknown27;
 };
 
 /* The word at +0 is also read back by its low byte. */
@@ -4028,6 +4029,22 @@ extern "C" int fn_8010D36C(Object_80039F5C *p, Object_80137ABC *pBall, State_801
         }
     }
     return result;
+}
+
+extern "C" void fn_8010D434(Object_80039F5C *p, State_8010D80C *pState) {
+    p->mFlags &= ~4;
+    if (p->mUnknown1008.mUnknown0 == 2) {
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 176, p, 1.0f);
+    } else {
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 37, p, 1.0f);
+    }
+    if (pState->mUnknown27) {
+        Record_800D81C8 *pEntries = p->mpUnknown800;
+        Record_800D81C8 *pEntry = &pEntries[fn_801BA5A8(p->mpUnknown796, pEntries, 37, 0)];
+
+        fn_801BA6BC(pEntry, !fn_801BA6B0(pEntry));
+    }
+    pState->mUnknown26 = 1;
 }
 
 extern "C" int fn_8010D6D4(Object_80039F5C *p)
