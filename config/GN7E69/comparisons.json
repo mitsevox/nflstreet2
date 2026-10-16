@@ -31635,19 +31635,19 @@
     {
       "source": "src/game/cu_80109968.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only fragment of the retained provisional cu_800EFC68 grouping: 1 target whole-function extent and the exact literal-pool slice 0x8029EB48-0x8029EB4C they load. The split lets this partial literal pool compile independently; it does not claim an original file boundary or whole-unit promotion.",
+      "evidence": "Comparison-only fragment of the retained provisional cu_800EFC68 grouping: 6 target whole-function extents and the exact literal-pool slice 0x8029EB48-0x8029EB6C they load. The split lets this partial literal pool compile independently; it does not claim an original file boundary or whole-unit promotion.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80109968",
-          "end": "0x80109990"
+          "end": "0x80109F34"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029EB48",
-          "end": "0x8029EB4C"
+          "end": "0x8029EB6C"
         }
       ],
       "functions": [
@@ -31655,28 +31655,12 @@
           "symbol": "fn_80109968",
           "start": "0x80109968",
           "end": "0x80109990"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_80109C7C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison-only fragment of the retained provisional cu_800EFC68 grouping: 4 target whole-function extents and the exact literal-pool slice 0x8029EB5C-0x8029EB6C they load. The split lets this partial literal pool compile independently; it does not claim an original file boundary or whole-unit promotion.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80109C7C",
-          "end": "0x80109F34"
         },
         {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029EB5C",
-          "end": "0x8029EB6C"
-        }
-      ],
-      "functions": [
+          "symbol": "fn_80109A1C",
+          "start": "0x80109A1C",
+          "end": "0x80109C7C"
+        },
         {
           "symbol": "fn_80109C7C",
           "start": "0x80109C7C",
@@ -31800,19 +31784,19 @@
     {
       "source": "src/game/cu_8010C8F8.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only fragment of the retained provisional cu_800EFC68 grouping: 1 target whole-function extent and the exact literal-pool slice 0x8029EC24-0x8029EC2C they load. The split lets this partial literal pool compile independently; it does not claim an original file boundary or whole-unit promotion.",
+      "evidence": "Comparison-only fragment of the retained provisional cu_800EFC68 grouping: 2 target whole-function extents and the exact literal-pool slice 0x8029EC24-0x8029EC30 they load. The split lets this partial literal pool compile independently; it does not claim an original file boundary or whole-unit promotion.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8010C8F8",
-          "end": "0x8010C98C"
+          "end": "0x8010CAE8"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029EC24",
-          "end": "0x8029EC2C"
+          "end": "0x8029EC30"
         }
       ],
       "functions": [
@@ -31820,6 +31804,11 @@
           "symbol": "fn_8010C8F8",
           "start": "0x8010C8F8",
           "end": "0x8010C98C"
+        },
+        {
+          "symbol": "fn_8010C98C",
+          "start": "0x8010C98C",
+          "end": "0x8010CAE8"
         }
       ]
     },
