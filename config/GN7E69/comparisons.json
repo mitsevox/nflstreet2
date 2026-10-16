@@ -7678,6 +7678,11 @@
           "end": "0x800EEA20"
         },
         {
+          "symbol": "fn_800EEA20",
+          "start": "0x800EEA20",
+          "end": "0x800EEDC8"
+        },
+        {
           "symbol": "fn_800EEDC8",
           "start": "0x800EEDC8",
           "end": "0x800EEE3C"
