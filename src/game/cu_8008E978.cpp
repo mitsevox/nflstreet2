@@ -2513,6 +2513,130 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
     }
 }
 
+extern "C" {
+void fn_800C56C0(Object_80039F5C *p, int key, int chance);
+void fn_801718E8(Object_80039F5C *p, Object_80039F5C *pTackler);
+extern float lbl_803EAC20;
+extern float lbl_803EAC24;
+extern float lbl_803EAC28;
+}
+
+extern "C" void fn_800C7D44(Object_80039F5C *p)
+{
+    int kindA;
+    int kindB;
+    int kindC;
+    int result = 0;
+    int stolen = 0;
+    Object_80039F5C *pOther;
+    unsigned char key;
+    unsigned int chance;
+    unsigned char blocked;
+    unsigned int roll;
+
+    if (fn_800AD9B4() != 3 || p == 0 || p->mIdBytes[3] != 1 || p != fn_80137B40()) {
+        return;
+    }
+    pOther = fn_8009BCE8(&p->mUnknown560.mUnknown40);
+    key = p->mUnknown2914;
+    chance = fn_800C6048(p, (Object_800C6640 *)&p->mUnknown560, 0, key);
+    if (chance != 0) {
+        if (!fn_800A7F30(p->mIdBytes[2]) && pOther != 0 && fn_800A851C(pOther->mIdBytes[2], pOther)) {
+            chance = 100;
+        }
+        if (chance != 0 && p->mpState->mId == 58
+            && p->mUnknown336Block.mUnknown16 == (int)fn_8009BCE8(&p->mUnknown560.mUnknown40)) {
+            chance = 0;
+        }
+    }
+    blocked = fn_800D0B90(p);
+    if (chance == 0) {
+        return;
+    }
+    if (fn_800C769C(pOther, (int)p)) {
+        roll = pOther->mUnknown1222;
+    } else {
+        roll = fn_802372EC(0, 100);
+    }
+    if (blocked) {
+        roll = 0;
+    }
+    if (roll < chance && !fn_800C53D8(p)) {
+        fn_800C5F80(p, p->mUnknown2914, &kindA, &kindB, &kindC);
+        if (pOther != 0 && fn_800C6738(pOther, p)) {
+            if (!result && fn_800C4E30(pOther, p)) {
+                result = fn_800C6DF8(p, pOther, 234, (int)(lbl_803ED6B4 * 2.0f * lbl_803EAC20), chance,
+                                     lbl_803ED6BC * 2.0f * lbl_803EAC20);
+            }
+            if (!result) {
+                if (fn_800C4EE8(pOther, p, roll, chance)) {
+                    stolen = fn_800C7084(p, pOther, 172, 0.9f, 0x88888);
+                }
+                if (!stolen) {
+                    result = fn_800C6BD8(p, pOther, 1);
+                }
+                if (!result) {
+                    if (!stolen) {
+                        result = fn_800C6A3C(p, pOther, kindC);
+                    }
+                    if (!result && !stolen) {
+                        unsigned char scale;
+                        unsigned char count;
+
+                        if (kindA == 94) {
+                            scale = (unsigned char)lbl_803EAC24;
+                            count = (unsigned char)lbl_803EAC28;
+                        } else if (fn_8011E9B4(pOther) == 1) {
+                            scale = 1;
+                            count = 2;
+                        } else {
+                            scale = count = (unsigned char)lbl_803EAC20;
+                        }
+                        float speed = scale * 1.5f;
+                        int reach = (int)(lbl_803ED6B4 * 1.5f);
+
+                        result = fn_800C6DF8(p, pOther, kindA, reach * count, chance, lbl_803ED6BC * speed);
+                    }
+                }
+            }
+            if (result) {
+                p->mFlags &= ~0x80000;
+                fn_800C51DC(p, pOther);
+                fn_80178718(pOther);
+                fn_800C68B8(pOther, p, kindA);
+            } else if (stolen) {
+                p->mFlags &= ~0x80000;
+            }
+        }
+        if (!result && !stolen) {
+            if (fn_8011E9B4(pOther)) {
+                fn_800C56C0(p, key, chance);
+            } else {
+                fn_800C561C(p, key);
+                fn_800C51DC(p, pOther);
+                fn_801718E8(p, pOther);
+                fn_80067E3C(37, &p->mMotion.mPos, p->mId, (unsigned int)p->mUnknown560.mUnknown28,
+                            p->mUnknown560.mUnknown54, p->mUnknown560.mUnknown55);
+                fn_800A3B58(p, 1, 0);
+            }
+            if (pOther->mUnknown8 != 255 && fn_800F06F4(0, pOther->mpState, 12, 0xFFFF) != 0xFFFF) {
+                fn_80156C78(23, 1);
+            }
+        }
+    } else {
+        int bonus = 0;
+
+        if (pOther != 0) {
+            bonus = pOther->mRatings[5] - p->mRatings[2];
+            bonus = bonus / 2 + 127;
+            bonus = bonus < 0 ? 0 : (bonus > 255 ? 255 : bonus);
+        }
+        p->mUnknown1160.mUnknown48 += bonus;
+        fn_800C56C0(p, key, chance);
+    }
+    fn_800C7708(pOther);
+}
+
 extern "C" void fn_800C8270(Object_80039F5C *p)
 {
     p->mUnknown1160.mUnknown4 = p->mUnknown1160.mUnknown0 = 0.0f;
