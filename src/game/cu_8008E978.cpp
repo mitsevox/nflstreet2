@@ -8661,6 +8661,31 @@ extern "C" int fn_800B5FC0(Object_80039F5C *p, Vector_80039F5C *pVector)
     return b;
 }
 
+extern "C" int fn_800B5FEC(Object_80039F5C *p)
+{
+    unsigned char i = 1;
+    int result = 1;
+
+    if (p->mpState[0].mId != 1) {
+        for (; result != 0 && p->mpState[i].mId != 0; i++) {
+            switch (p->mpState[i].mId) {
+            case 25:
+                if (p->mpState[i].mUnknown2 != 11 && p->mpState[i].mUnknown2 != 9 && p->mpState[i].mUnknown2 != 10) {
+                    result = 0;
+                }
+                break;
+            case 26:
+            case 27:
+            case 56:
+            case 68:
+                result = 0;
+                break;
+            }
+        }
+    }
+    return result;
+}
+
 extern "C" void fn_800B62D8(int count)
 {
     void *pHandle = fn_80238174(0, (void **)&lbl_803EAB60, sizeof(Block_800B62D8), 0, 0x7063746C);

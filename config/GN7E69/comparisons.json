@@ -25525,6 +25525,11 @@
           "end": "0x800B5FEC"
         },
         {
+          "symbol": "fn_800B5FEC",
+          "start": "0x800B5FEC",
+          "end": "0x800B6098"
+        },
+        {
           "symbol": "fn_800B62D8",
           "start": "0x800B62D8",
           "end": "0x800B63A4"
