@@ -7703,6 +7703,11 @@
           "end": "0x800EF224"
         },
         {
+          "symbol": "fn_800EF224",
+          "start": "0x800EF224",
+          "end": "0x800EF538"
+        },
+        {
           "symbol": "fn_800EF538",
           "start": "0x800EF538",
           "end": "0x800EF834"

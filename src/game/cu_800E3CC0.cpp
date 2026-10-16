@@ -232,6 +232,8 @@ float fn_801CFFA0(float value);
 int fn_800A7EF4(int team);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 float fn_800CA9B4(int kind, Object_80039F5C *p);
+float fn_8005429C(Record_80054130 *pRecord);
+void fn_800EF538(Object_80039F5C *p);
 void fn_800FF598(State_800EE9AC *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value, float scale);
 int fn_800B5FEC(Object_80039F5C *p);
 int fn_800B76E8(Object_80039F5C *p);
@@ -2020,6 +2022,70 @@ extern "C" int fn_800EF1C8(Object_80039F5C *p) {
     if (fn_801BE648(p->mpUnknown792) != 74)
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, p, 1.0f);
     return 1;
+}
+
+extern "C" void fn_800EF224(Object_80039F5C *p) {
+    int flag = 0;
+    int kind;
+    if (fn_800B83A0(p)) {
+        kind = 228;
+        if (fn_800A8444(p->mIdBytes[2]))
+            p->mUnknown1008.mUnknown0 = 3;
+        else
+            p->mUnknown1008.mUnknown0 = 2;
+    } else {
+        p->mUnknown1008.mUnknown0 = 0;
+        kind = 230;
+    }
+    flag = p->mUnknown776 == 1;
+    Command_800CEE74 command;
+    int value;
+    int unused;
+    fn_800CEE74(&command, p, 0, 0, 0, kind, flag);
+    int index = fn_800C3BEC(p, &command, &value, &unused);
+    Record_80054130 *pRecord = &fn_80054130()->mUnknown140[p->mUnknown1160.mUnknown28];
+    if (kind == 228) {
+        if (index == -1 || (p->mUnknown1008.mUnknown0 == 3 && fn_8005429C(pRecord) < 5.0f)) {
+            p->mUnknown1008.mUnknown0 = 2;
+            index = fn_800C3BEC(p, &command, &value, &unused);
+        }
+        if (p->mUnknown1160.mUnknown24 < 2.0f) {
+            p->mUnknown1008.mUnknown0 = 1;
+            index = fn_800C3BEC(p, &command, &value, &unused);
+        }
+    }
+    if (index != -1) {
+        fn_800C39E0(p, kind, index, value, flag);
+        if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 228)) {
+            Record_800D81C8 *pRecords = p->mpUnknown800;
+            int entry = fn_801BA5A8(p->mpUnknown796, pRecords, 228, 0);
+            float speed;
+            if (fn_800A7EF4(p->mIdBytes[2]) == 0) {
+                speed = lbl_803EAE00;
+            } else {
+                float rating = p->mRatings[4];
+                speed = 1.0f;
+                if (rating < 200.0f)
+                    speed = rating * 0.0005f + 0.8f;
+                speed *= lbl_803EAE04;
+            }
+            if (fn_800CA5CC(p, 11, 1))
+                speed *= fn_800CA9B4(12, p);
+            Record_800D81C8 *pEntry = &pRecords[entry];
+            fn_801BD81C(&pEntry->mUnknown4C, fn_801CFFA0(speed));
+            pEntry->mUnknown44 = lbl_803EAE08;
+            fn_800D0C0C(p, 0);
+        }
+        if (kind != 230) {
+            fn_80067E3C(51, &p->mMotion.mPos, p->mId, 0, 0, 0);
+            fn_80067E3C(56, &p->mMotion.mPos, p->mId, 0, 0, 0);
+        }
+        p->mFlags |= 8;
+    } else {
+        fn_800D0BF4(p, 1, 36);
+        fn_800EF538(p);
+        fn_80067E3C(59, &p->mMotion.mPos, p->mId, 0, 0, 0);
+    }
 }
 
 extern "C" void fn_800EF538(Object_80039F5C *p) {
