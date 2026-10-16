@@ -7658,6 +7658,11 @@
           "end": "0x800EDDEC"
         },
         {
+          "symbol": "fn_800EDDEC",
+          "start": "0x800EDDEC",
+          "end": "0x800EE61C"
+        },
+        {
           "symbol": "fn_800EE61C",
           "start": "0x800EE61C",
           "end": "0x800EE694"
