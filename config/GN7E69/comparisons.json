@@ -26120,6 +26120,11 @@
           "end": "0x800BDB14"
         },
         {
+          "symbol": "fn_800BDB14",
+          "start": "0x800BDB14",
+          "end": "0x800BDFB4"
+        },
+        {
           "symbol": "fn_800C7084",
           "start": "0x800C7084",
           "end": "0x800C7118"

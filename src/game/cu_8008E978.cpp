@@ -10270,6 +10270,149 @@ extern "C" void fn_800BDA7C(void)
     }
 }
 
+extern "C" {
+void fn_8016E498(void);
+int fn_80178E10(void);
+int fn_801C6280(int a, int b, void *p);
+void fn_8017DD68(int index);
+int fn_80074638(void);
+void fn_800A7514(int team);
+void fn_800BE808(int index, int team);
+void fn_800BE944(int team, int index, unsigned int msg, float value);
+extern unsigned char lbl_802ED104[];
+}
+
+extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
+{
+    int twoPlayer = fn_801486A0() == 2;
+    Object_80039F5C *pObject = fn_800B6544(index);
+    int valid = pObject != 0 && pObject->mUnknown8 != 255;
+    int team;
+    int other;
+    int side;
+    int involved;
+
+    team = fn_80178308();
+    other = fn_80178320();
+    if (index == 255) {
+        side = other;
+        if (fn_800B65A0(team) == 255) {
+            side = team;
+        }
+        involved = 1;
+    } else {
+        involved = 0;
+        side = fn_800B6644(index);
+        if (fn_800B65A0(team) == index || fn_800B65A0(other) == index) {
+            involved = 1;
+        }
+    }
+    switch (msg) {
+    case 0x59: {
+        int ok = 0;
+
+        if (involved && side == team && lbl_803EABA8->mUnknownC5 != 0) {
+            if (fn_800C0658() != 0) {
+                ok = 1;
+            } else {
+                ok = fn_8016E764();
+            }
+        }
+        if (ok && fn_800B146C() != 0) {
+            int ref = fn_800B0F98();
+            Object_80039F5C *pCarrier = fn_8009BCE8(&ref);
+            Point_8017886C spot = fn_80177FE0();
+
+            if (!(__builtin_fabsf(pCarrier->mMotion.mPos.mX + spot.mX) >= 4.0f)) {
+                ok = 0;
+            }
+        }
+        if (ok == 1) {
+            fn_8016E498();
+        } else {
+            fn_800BD958();
+        }
+        break;
+    }
+    case 0x5A:
+        if (fn_80178E10() != 0 && fn_8002D060(lbl_803EA368) == 0 && fn_800BA6F8() == 0 &&
+            fn_800A937C() == 0 && involved && (side != other || !twoPlayer)) {
+            lbl_803EABA8->mSlots[side].mUnknown0 = 1;
+            fn_801C6280(index, 3, lbl_802ED104);
+            fn_8017DD68(side);
+        }
+        break;
+    case 0x5B:
+        if (involved && fn_800A8444(side) == 0 && fn_800A8488(side) != 0) {
+            int blocked = 0;
+
+            if (fn_80156704() != 0) {
+                blocked = fn_80074638() == 0;
+            }
+            if (!blocked) {
+                fn_800A7514(side);
+                lbl_803EABA8->mUnknownB0 = side;
+                fn_800BD35C();
+                lbl_803EABB4 = 0;
+            }
+        }
+        break;
+    case 6:
+        if (other == fn_800B6644(index) || !involved) {
+            Object_80039F5C *p = fn_800B6544(index);
+
+            fn_800B6868((unsigned char)(p->mId >> 8), (unsigned char)(p->mId >> 16), p->mUnknown8, 0);
+        }
+        break;
+    case 9:
+        if (other == fn_800B6644(index) || !involved) {
+            Object_80039F5C *p = fn_800B6544(index);
+
+            fn_800B6868((unsigned char)(p->mId >> 8), (unsigned char)(p->mId >> 16), p->mUnknown8, 1);
+        }
+        break;
+    case 0x64:
+        if (team == side && involved && lbl_803EABA8->mUnknownC5 != 0) {
+            if (fn_800B0F98() == 0) {
+                fn_800B0E68();
+            }
+            if (value < 0.0f) {
+                fn_800B0F28();
+            } else {
+                fn_800B0EB8();
+            }
+        }
+        break;
+    case 0x61:
+        if (team == side && (involved || (twoPlayer && valid)) && lbl_803EABA8->mUnknownC5 != 0) {
+            if (fn_800B0F98() == 0) {
+                fn_800B0E68();
+            }
+            fn_800B0F28();
+        }
+        break;
+    case 0x62:
+        if (team == side && (involved || (twoPlayer && valid)) && lbl_803EABA8->mUnknownC5 != 0) {
+            if (fn_800B0F98() == 0) {
+                fn_800B0E68();
+            }
+            fn_800B0EB8();
+        }
+        break;
+    case 0x60:
+    case 0x63:
+        break;
+    case 0x84:
+    case 0x85:
+        if (fn_8002D060(lbl_803EA368) == 0 && involved == 1 && !twoPlayer && value != 0.0f &&
+            lbl_803EABA8->mUnknownC0 <= 0) {
+            fn_800BE808(index, side);
+            fn_800BE944(side, index, msg, value);
+        }
+        break;
+    }
+}
+
 
 extern "C" { extern float lbl_803EAC78; }
 extern "C" void fn_800CE770(Query_800CE770 *p)
