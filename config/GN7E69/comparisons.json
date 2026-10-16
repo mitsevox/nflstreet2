@@ -8184,11 +8184,6 @@
           "end": "0x80113C20"
         },
         {
-          "symbol": "fn_8011D558",
-          "start": "0x8011D558",
-          "end": "0x8011D654"
-        },
-        {
           "symbol": "fn_8011D654",
           "start": "0x8011D654",
           "end": "0x8011D8B4"
@@ -8209,79 +8204,9 @@
           "end": "0x8011DA40"
         },
         {
-          "symbol": "fn_8011DBC8",
-          "start": "0x8011DBC8",
-          "end": "0x8011DBE0"
-        },
-        {
-          "symbol": "fn_8011DCDC",
-          "start": "0x8011DCDC",
-          "end": "0x8011DF3C"
-        },
-        {
-          "symbol": "fn_8011E3F4",
-          "start": "0x8011E3F4",
-          "end": "0x8011E484"
-        },
-        {
-          "symbol": "fn_8011E7CC",
-          "start": "0x8011E7CC",
-          "end": "0x8011E884"
-        },
-        {
-          "symbol": "fn_8011EC68",
-          "start": "0x8011EC68",
-          "end": "0x8011EE18"
-        },
-        {
-          "symbol": "fn_8011EE18",
-          "start": "0x8011EE18",
-          "end": "0x8011EFD4"
-        },
-        {
-          "symbol": "fn_8011F0D8",
-          "start": "0x8011F0D8",
-          "end": "0x8011F174"
-        },
-        {
           "symbol": "fn_8011F37C",
           "start": "0x8011F37C",
           "end": "0x8011F3A8"
-        },
-        {
-          "symbol": "fn_8011FA78",
-          "start": "0x8011FA78",
-          "end": "0x8011FAFC"
-        },
-        {
-          "symbol": "fn_8011FAFC",
-          "start": "0x8011FAFC",
-          "end": "0x8011FB80"
-        },
-        {
-          "symbol": "fn_8011FB80",
-          "start": "0x8011FB80",
-          "end": "0x8011FBA8"
-        },
-        {
-          "symbol": "fn_80120618",
-          "start": "0x80120618",
-          "end": "0x80120720"
-        },
-        {
-          "symbol": "fn_80120794",
-          "start": "0x80120794",
-          "end": "0x801208C8"
-        },
-        {
-          "symbol": "fn_801208C8",
-          "start": "0x801208C8",
-          "end": "0x80120A50"
-        },
-        {
-          "symbol": "fn_80120A50",
-          "start": "0x80120A50",
-          "end": "0x80120B4C"
         },
         {
           "symbol": "fn_80120B84",
@@ -8294,19 +8219,9 @@
           "end": "0x80121918"
         },
         {
-          "symbol": "fn_80121918",
-          "start": "0x80121918",
-          "end": "0x80121BE8"
-        },
-        {
           "symbol": "fn_80121BE8",
           "start": "0x80121BE8",
           "end": "0x80121CB0"
-        },
-        {
-          "symbol": "fn_80122670",
-          "start": "0x80122670",
-          "end": "0x801227DC"
         },
         {
           "symbol": "fn_80125508",
@@ -33516,6 +33431,217 @@
           "symbol": "fn_8026A40C",
           "start": "0x8026A40C",
           "end": "0x8026A4D4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8011D558.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. 4 target whole-function extents and literal-pool slice retain their evidence; this split permits independent compilation of disjoint partial literal pools and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8011D558",
+          "end": "0x8011E484"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F2FC",
+          "end": "0x8029F310"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8011D558",
+          "start": "0x8011D558",
+          "end": "0x8011D654"
+        },
+        {
+          "symbol": "fn_8011DBC8",
+          "start": "0x8011DBC8",
+          "end": "0x8011DBE0"
+        },
+        {
+          "symbol": "fn_8011DCDC",
+          "start": "0x8011DCDC",
+          "end": "0x8011DF3C"
+        },
+        {
+          "symbol": "fn_8011E3F4",
+          "start": "0x8011E3F4",
+          "end": "0x8011E484"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8011E7CC.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. 1 target whole-function extent and literal-pool slice retain their evidence; this split permits independent compilation of disjoint partial literal pools and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8011E7CC",
+          "end": "0x8011E884"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F324",
+          "end": "0x8029F328"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8011E7CC",
+          "start": "0x8011E7CC",
+          "end": "0x8011E884"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8011EC68.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. 6 target whole-function extents and literal-pool slice retain their evidence; this split permits independent compilation of disjoint partial literal pools and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8011EC68",
+          "end": "0x8011FBA8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F330",
+          "end": "0x8029F35C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8011EC68",
+          "start": "0x8011EC68",
+          "end": "0x8011EE18"
+        },
+        {
+          "symbol": "fn_8011EE18",
+          "start": "0x8011EE18",
+          "end": "0x8011EFD4"
+        },
+        {
+          "symbol": "fn_8011F0D8",
+          "start": "0x8011F0D8",
+          "end": "0x8011F174"
+        },
+        {
+          "symbol": "fn_8011FA78",
+          "start": "0x8011FA78",
+          "end": "0x8011FAFC"
+        },
+        {
+          "symbol": "fn_8011FAFC",
+          "start": "0x8011FAFC",
+          "end": "0x8011FB80"
+        },
+        {
+          "symbol": "fn_8011FB80",
+          "start": "0x8011FB80",
+          "end": "0x8011FBA8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80120618.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. 4 target whole-function extents and literal-pool slice retain their evidence; this split permits independent compilation of disjoint partial literal pools and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80120618",
+          "end": "0x80120B4C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F368",
+          "end": "0x8029F388"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80120618",
+          "start": "0x80120618",
+          "end": "0x80120720"
+        },
+        {
+          "symbol": "fn_80120794",
+          "start": "0x80120794",
+          "end": "0x801208C8"
+        },
+        {
+          "symbol": "fn_801208C8",
+          "start": "0x801208C8",
+          "end": "0x80120A50"
+        },
+        {
+          "symbol": "fn_80120A50",
+          "start": "0x80120A50",
+          "end": "0x80120B4C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80121918.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. 1 target whole-function extent and literal-pool slice retain their evidence; this split permits independent compilation of disjoint partial literal pools and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80121918",
+          "end": "0x80121BE8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F394",
+          "end": "0x8029F398"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80121918",
+          "start": "0x80121918",
+          "end": "0x80121BE8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80122670.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. 1 target whole-function extent and literal-pool slice retain their evidence; this split permits independent compilation of disjoint partial literal pools and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80122670",
+          "end": "0x801227DC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F3D0",
+          "end": "0x8029F3D8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80122670",
+          "start": "0x80122670",
+          "end": "0x801227DC"
         }
       ]
     }
