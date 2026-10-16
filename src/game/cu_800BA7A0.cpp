@@ -54,14 +54,6 @@ extern "C" Point_8017886C fn_800BA7A0(void)
     return lbl_803EAB88->mUnknown18;
 }
 
-extern "C" void fn_800BA7E8(float x, float y)
-{
-    if (lbl_803EAB88->mUnknown20 != 0) {
-        lbl_803EAB88->mUnknown18.mX = x;
-        lbl_803EAB88->mUnknown18.mY = y;
-    }
-}
-
 extern "C" void fn_800BA804(int value)
 {
     if (fn_800BA870() != 0) {

@@ -139,10 +139,6 @@ extern "C" void fn_800B9E44(void)
     }
 }
 
-extern "C" void fn_800B9F4C(void)
-{
-}
-
 /* Effect slot returned by fn_80162DBC (laid out as in src/game/cu_8016174C.cpp). */
 struct Object_801618D8 {
     unsigned char mUnknown0[4];
