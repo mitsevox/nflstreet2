@@ -8895,52 +8895,6 @@
       }
     },
     {
-      "source": "src/game/cu_8006F810.cpp",
-      "contributors": [
-        "adampreddy"
-      ],
-      "functions": [
-        "0x8006F810",
-        "0x8006F820",
-        "0x800711DC",
-        "0x80071344",
-        "0x80071348",
-        "0x80071790",
-        "0x80071C2C",
-        "0x80071C34"
-      ],
-      "provenance": {
-        "pull_request": 472,
-        "merged_via": 489,
-        "commit": "6946bf46c0a5ddb43ac6eb2d1c03850c54a20113",
-        "introduced_blob": "baa1705b52cb365f9ff8d11ce9d338538c18ec88",
-        "original_commit": "e87d3bbb8167681e2c6130c54cba16ec9c47bb09",
-        "original_blob": "a23dbfdd8e14d42964f481dc03c626dc6782ad7b",
-        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses."
-      }
-    },
-    {
-      "source": "src/game/cu_8006F810.cpp",
-      "contributors": [
-        "adampreddy"
-      ],
-      "functions": [
-        "0x8006F824",
-        "0x80071974",
-        "0x800719A4",
-        "0x800719D4"
-      ],
-      "provenance": {
-        "pull_request": 480,
-        "merged_via": 489,
-        "commit": "6946bf46c0a5ddb43ac6eb2d1c03850c54a20113",
-        "introduced_blob": "baa1705b52cb365f9ff8d11ce9d338538c18ec88",
-        "original_commit": "9309229de46b802347f0d845f9041a7a37d60830",
-        "original_blob": "135ae1212e5532a13d8066147b568349536ffeee",
-        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses."
-      }
-    },
-    {
       "source": "src/game/animextn.cpp",
       "contributors": [
         "mitsevox"
@@ -15824,35 +15778,6 @@
       }
     },
     {
-      "source": "src/game/cu_8006F810.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x80070D68",
-        "0x80070E8C",
-        "0x8007105C",
-        "0x80071540",
-        "0x80071594",
-        "0x800716E4",
-        "0x80071748",
-        "0x80071794",
-        "0x800717E0",
-        "0x8007184C",
-        "0x800718A0",
-        "0x80071914"
-      ],
-      "provenance": {
-        "pull_request": 725,
-        "merged_via": 734,
-        "commit": "23598ea10c0a90567d759733d11681d493e7db63",
-        "introduced_blob": "73a6573e7d52cdb919fdbdc744401952cc1f81cd",
-        "original_commit": "2e10963a8ea451bf29b23cbc9cd78143615a4d3e",
-        "original_blob": "73a6573e7d52cdb919fdbdc744401952cc1f81cd",
-        "integration_adjustment": "Preserve the original lane source contributor through reviewed batch integration; the final authored and introduced source blobs are identical."
-      }
-    },
-    {
       "source": "src/game/cu_800D0D4C.cpp",
       "contributors": [
         "mitsevox"
@@ -17032,6 +16957,132 @@
         "merged_via": 795,
         "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
         "introduced_blob": "486ebe73c37aa942e8cd5f406dedfdb14ff7ac02"
+      }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8006F810",
+        "0x8006F820",
+        "0x800711DC",
+        "0x80071344",
+        "0x80071348",
+        "0x80071790",
+        "0x80071C2C",
+        "0x80071C34"
+      ],
+      "provenance": {
+        "pull_request": 472,
+        "merged_via": 489,
+        "commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
+        "introduced_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036",
+        "original_commit": "e87d3bbb8167681e2c6130c54cba16ec9c47bb09",
+        "original_blob": "a23dbfdd8e14d42964f481dc03c626dc6782ad7b",
+        "integration_adjustment": "Preserve original contributor identities, contribution/integration PRs, function lists and original source bindings through ordinary literal reconstruction and the two-float temporary refinement; all previously credited resolved function payloads remain unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8006F824",
+        "0x80071974",
+        "0x800719A4",
+        "0x800719D4"
+      ],
+      "provenance": {
+        "pull_request": 480,
+        "merged_via": 489,
+        "commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
+        "introduced_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036",
+        "original_commit": "9309229de46b802347f0d845f9041a7a37d60830",
+        "original_blob": "135ae1212e5532a13d8066147b568349536ffeee",
+        "integration_adjustment": "Preserve original contributor identities, contribution/integration PRs, function lists and original source bindings through ordinary literal reconstruction and the two-float temporary refinement; all previously credited resolved function payloads remain unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80070D68",
+        "0x80070E8C",
+        "0x8007105C",
+        "0x80071540",
+        "0x80071594",
+        "0x800716E4",
+        "0x80071748",
+        "0x80071794",
+        "0x800717E0",
+        "0x8007184C",
+        "0x800718A0",
+        "0x80071914"
+      ],
+      "provenance": {
+        "pull_request": 725,
+        "merged_via": 734,
+        "commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
+        "introduced_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036",
+        "original_commit": "2e10963a8ea451bf29b23cbc9cd78143615a4d3e",
+        "original_blob": "73a6573e7d52cdb919fdbdc744401952cc1f81cd",
+        "integration_adjustment": "Preserve original contributor identities, contribution/integration PRs, function lists and original source bindings through ordinary literal reconstruction and the two-float temporary refinement; all previously credited resolved function payloads remain unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80071600"
+      ],
+      "provenance": {
+        "pull_request": 799,
+        "merged_via": 799,
+        "commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
+        "introduced_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036",
+        "original_commit": "5677da2b15a53220e9dbb20e8371c3cc7878e826",
+        "original_blob": "f7fb2714236387fa754fcb8ceb36748b36236ba0",
+        "integration_adjustment": "Preserve original contributor identities, contribution/integration PRs, function lists and original source bindings through ordinary literal reconstruction and the two-float temporary refinement; all previously credited resolved function payloads remain unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8007134C"
+      ],
+      "provenance": {
+        "pull_request": 801,
+        "merged_via": 801,
+        "commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
+        "introduced_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036",
+        "original_commit": "a280e50e183c93bf82c43bc1bd55ab0a18f1e0e9",
+        "original_blob": "8140d87b20e5eefc4ea1ef0900ef9f931041ba15",
+        "integration_adjustment": "Preserve original contributor identities, contribution/integration PRs, function lists and original source bindings through ordinary literal reconstruction and the two-float temporary refinement; all previously credited resolved function payloads remain unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80071458"
+      ],
+      "provenance": {
+        "pull_request": 803,
+        "merged_via": 803,
+        "commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
+        "introduced_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036"
       }
     }
   ],
