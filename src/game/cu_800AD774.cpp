@@ -5,15 +5,7 @@
 #include "game/Class_80297C60.h"
 #include "game/Class_80297CE8.h"
 #include "game/cu_80026BB0.h"
-
-/* Game-mode block allocated under the id 'gply' (see cu_8008E978.cpp). */
-struct Block_800AD634 {
-    int mUnknown0;
-    int mUnknown4;
-    unsigned char mUnknown8;
-    unsigned char mUnknown9[3];
-    float mUnknownC;
-};
+#include "game/Block_800AD634.h"
 
 /* Enter, update and exit handlers of each game mode. */
 struct Mode_80297FC8 {

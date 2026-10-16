@@ -1,14 +1,6 @@
 #include "game/cu_8002B8F8.h"
 #include "game/cu_80064864.h"
-
-/* Game-mode block allocated under the id 'gply' (see cu_8008E978.cpp). */
-struct Block_800AD634 {
-    int mUnknown0;
-    int mUnknown4;
-    unsigned char mUnknown8;
-    unsigned char mUnknown9[3];
-    float mUnknownC;
-};
+#include "game/Block_800AD634.h"
 
 extern "C" {
 int fn_8002C9A8(Type_803EA368 *p, int msg, int value);

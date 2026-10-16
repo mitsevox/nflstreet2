@@ -9,6 +9,7 @@
 #include "game/Object_8017886C.h"
 #include "game/fn_8022781C.h"
 #include "game/Block_800C9D6C.h"
+#include "game/Block_800AD634.h"
 #include <string.h>
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
@@ -1898,7 +1899,7 @@ extern "C" void fn_800C471C(int handle)
     fn_801480B0((void *)handle);
 }
 
-extern "C" void fn_800C478C(void)
+extern "C" void fn_800C478C(float dt)
 {
     fn_8019B368();
     fn_8004659C();
@@ -4971,16 +4972,6 @@ struct Block_800ABD1C {
     unsigned int mUnknown4;
 };
 
-/* 16-byte block allocated under the id 'gply' by fn_800AD634: the current
-   and previous game mode, then a flag and a value set by fn_800AD9C0. */
-struct Block_800AD634 {
-    int mUnknown0;
-    int mUnknown4;
-    unsigned char mUnknown8;
-    unsigned char mUnknown9[3];
-    float mUnknownC;
-};
-
 extern "C" {
 void fn_8004A230(unsigned char value);
 void fn_8003AB08(Object_80039F5C *p, int a);
@@ -6194,6 +6185,37 @@ extern "C" void fn_800AD3A8(float dt)
     fn_800BA574();
 }
 
+extern "C" {
+int fn_800ABC64(Class_80297B90 *p);
+void fn_800AD4B8(float dt);
+void fn_800AD50C(float dt);
+void fn_800AD550(float dt);
+void fn_800AD5C0(float dt);
+void fn_800AD600(float dt);
+void fn_80177BCC(float value);
+void fn_801765C0(void);
+}
+
+extern "C" void fn_800AD418(float dt)
+{
+    unsigned char active = 1;
+
+    if (fn_800AD9B4() == 7) {
+        active = fn_800ABC64(lbl_803EAA8C);
+    }
+    if (fn_800943D0() == 0 && active) {
+        fn_800AD4B8(dt);
+        fn_800AD5C0(dt);
+        fn_800AD50C(dt);
+        fn_800AD550(dt);
+        fn_800AD600(dt);
+        fn_800C478C(dt);
+        fn_80177BCC(dt);
+        fn_8013FA24();
+        fn_801765C0();
+    }
+}
+
 extern "C" void fn_800AD4B8(float dt)
 {
     fn_800C3170();
@@ -6234,6 +6256,14 @@ extern "C" void fn_800AD5C0(float dt)
     fn_80039CB0(dt);
     fn_80039D08(dt);
     fn_801BF8DC();
+}
+
+extern "C" void fn_80039F04(void);
+
+extern "C" void fn_800AD600(float dt)
+{
+    fn_80039F04();
+    fn_80137864(dt);
 }
 
 /* Enter, update and exit handlers of each game mode. */
