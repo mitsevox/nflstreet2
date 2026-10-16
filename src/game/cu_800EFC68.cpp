@@ -129,7 +129,7 @@ struct Pair_8011BAE0 {
 
 struct Entry_8011AFCC {
     char mUnknown0[60];
-    int mUnknown60;
+    Object_80039F5C *mpUnknown60;
     char mUnknown64[4];
     float mUnknown68;
     char mUnknown72[8];
@@ -4975,7 +4975,7 @@ extern "C" void fn_8011AFCC(Entry_8011AFCC *pEntries)
         Entry_8011AFCC *pEntry;
 
         swapped = 0;
-        for (pEntry = pEntries + 1; pEntry->mUnknown60 != 0; pEntry++) {
+        for (pEntry = pEntries + 1; pEntry->mpUnknown60 != 0; pEntry++) {
             if (pEntry->mUnknown68 < pPrev->mUnknown68) {
                 Entry_8011AFCC temp = *pEntry;
                 *pEntry = *pPrev;
@@ -4996,7 +4996,7 @@ extern "C" void fn_8011B138(Entry_8011AFCC *pEntries)
         Entry_8011AFCC *pEntry;
 
         swapped = 0;
-        for (pEntry = pEntries + 1; pEntry->mUnknown60 != 0; pEntry++) {
+        for (pEntry = pEntries + 1; pEntry->mpUnknown60 != 0; pEntry++) {
             if (pEntry->mUnknown68 > pPrev->mUnknown68) {
                 Entry_8011AFCC temp = *pEntry;
                 *pEntry = *pPrev;
@@ -5049,7 +5049,7 @@ void fn_8011B83C(Entry_8011AFCC *pEntries, Pair_8011BAE0 pair);
 void fn_8011D0BC(Entry_8011AFCC *pA, Entry_8011AFCC *pB, Pair_8011BAE0 pair);
 void fn_8011D654(Entry_8011AFCC *pEntries);
 
-int fn_8011D558(Point_8017886C *p, Point_8017886C *pA, Point_8017886C *pB, Point_8017886C *pC)
+int fn_8011D558(Vector_80039F5C *p, Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC)
 {
     float d0 = p->mX * (pC->mY - pB->mY) + pC->mX * (pB->mY - p->mY) + pB->mX * (p->mY - pC->mY);
     float d1 = pB->mX * (p->mY - pA->mY) + p->mX * (pA->mY - pB->mY) + pA->mX * (pB->mY - p->mY);
@@ -5065,9 +5065,90 @@ int fn_8011D558(Point_8017886C *p, Point_8017886C *pA, Point_8017886C *pB, Point
     return 0;
 }
 
+void fn_8011D654(Entry_8011AFCC *pEntries)
+{
+    Pair_8011BAE0 pair;
+
+    pair.mUnknown0 = -fn_80178A08();
+    pair.mUnknown4 = fn_80177FE0().mY;
+    fn_8011B83C(pEntries, pair);
+    for (; pEntries->mpUnknown60 != 0 && pEntries[1].mpUnknown60 != 0; pEntries++) {
+        Object_80039F5C *pA = pEntries->mpUnknown60;
+        Object_80039F5C *pB = pEntries[1].mpUnknown60;
+
+        if ((pA->mUnknown1052 == 1 && pB->mUnknown1052 == 1) ||
+            (pA->mUnknown1052 == 2 && pB->mUnknown1052 == 2 && lbl_803EB028->mUnknown84 < 20)) {
+            int modeA = pA->mUnknown1032;
+            int crossed = 0;
+            int modeB = pB->mUnknown1032;
+            Object_80039F5C *pOtherA;
+            Object_80039F5C *pOtherB;
+
+            if (modeA == 7) {
+                pOtherA = fn_8009BCE8(&pA->mUnknown1040);
+            } else {
+                pOtherA = fn_8009BCE8(&pA->mUnknown1036);
+            }
+            if (modeB == 7) {
+                pOtherB = fn_8009BCE8(&pB->mUnknown1040);
+            } else {
+                pOtherB = fn_8009BCE8(&pB->mUnknown1036);
+            }
+            switch (modeA) {
+            case 2:
+            case 3:
+            case 7:
+                switch (modeB) {
+                case 2:
+                case 3:
+                case 7:
+                    if (pA->mUnknown8 == 255 && pB->mUnknown8 == 255 &&
+                        fn_8011D558(&pA->mMotion.mPos, &pOtherA->mMotion.mPos, &pB->mMotion.mPos,
+                                    &pOtherB->mMotion.mPos)) {
+                        crossed = 1;
+                    }
+                    break;
+                }
+                break;
+            }
+            if (crossed) {
+                Object_80039F5C *pTargetA = fn_8009BCE8(&pA->mUnknown1036);
+                Object_80039F5C *pTargetB = fn_8009BCE8(&pB->mUnknown1036);
+
+                if (modeA == 7) {
+                    fn_8011E1BC(pA, pTargetA, pOtherB, 7);
+                } else {
+                    fn_8011E1BC(pA, pOtherB, 0, modeA);
+                }
+                if (modeB == 7) {
+                    fn_8011E1BC(pB, pTargetB, pOtherA, 7);
+                } else {
+                    fn_8011E1BC(pB, pOtherA, 0, modeB);
+                }
+                switch (modeA) {
+                case 7:
+                    fn_8011E33C(pTargetA, pA, 4);
+                case 2:
+                case 3:
+                    fn_8011E33C(pOtherB, pA, 8);
+                    break;
+                }
+                switch (modeB) {
+                case 7:
+                    fn_8011E33C(pTargetB, pB, 4);
+                case 2:
+                case 3:
+                    fn_8011E33C(pOtherA, pB, 8);
+                    break;
+                }
+            }
+        }
+    }
+}
+
 void fn_8011D8B4(Entry_8011AFCC *pEntries)
 {
-    while (pEntries->mUnknown60 != 0) {
+    while (pEntries->mpUnknown60 != 0) {
         *pEntries = pEntries[1];
         pEntries++;
     }
