@@ -2903,6 +2903,18 @@ extern "C" int fn_801045BC(Object_80039F5C *p)
     return result;
 }
 
+extern "C" float fn_800B2618(int);
+
+extern "C" int fn_80104610(Object_80039F5C *p)
+{
+    int result = 0;
+
+    if (p->mpState->mId == 15) {
+        result = (int)((float)((fn_800B2618(9) - 0.5) * -2.0) * 10.0f + 17.0f);
+    }
+    return result;
+}
+
 extern "C" int fn_80104688(Object_80039F5C *p)
 {
     int result = 4;
@@ -2951,12 +2963,100 @@ extern "C" int fn_801047C8(void)
 
 
 
+extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pOther, Object_80137ABC *pBall, Vector_80039F5C *pTarget)
+{
+    Vector_80039F5C ball;
+    int clamp;
+
+    fn_80137D58(pBall, &ball);
+    clamp = 0;
+    if (pTarget->mY > ball.mY) {
+        clamp = pOther->mMotion.mPos.mY < ball.mY;
+    }
+    if (fn_801047C8() == 0 && pTarget->mY > ball.mY) {
+        clamp = 1;
+    }
+    if (clamp) {
+        pTarget->mY = ball.mY - 0.25f;
+    }
+}
+
+extern "C" void fn_801048B4(int unused, Object_80137ABC *pBall, Vector_80039F5C *pTarget)
+{
+    Vector_80039F5C ball;
+    float over;
+
+    fn_80137D58(pBall, &ball);
+    over = fabsf(pTarget->mX) - (fn_80178A08() - 2.0f);
+    if (over > 0.0f) {
+        if (over > 2.0f) {
+            over = 2.0f;
+        }
+        if (pTarget->mX > 0.0f) {
+            pTarget->mX -= over;
+        } else {
+            pTarget->mX += over;
+        }
+    }
+}
+
 extern "C" void fn_80104C3C(Object_80039F5C *p, Vector_80039F5C *pOut, float scale) {
     Vector_80039F5C v;
 
     fn_80104B3C(p, &v);
     fn_80227264(pOut, &v, scale);
     fn_8022765C(pOut, pOut, &p->mMotion.mPos);
+}
+
+extern unsigned int lbl_803EAEE0;
+extern unsigned int lbl_803EAEE4;
+
+extern "C" float fn_80104C9C(Object_80039F5C *p, Object_80039F5C *pOther)
+{
+    unsigned int frames;
+    Vector_80039F5C *pPos;
+    Vector_80039F5C *pOtherPos;
+    float count;
+    float time;
+    float gain;
+    Vector_80039F5C ahead;
+
+    if (fn_8011F518()->mUnknown4 == 12) {
+        frames = lbl_803EAEE4;
+    } else {
+        frames = lbl_803EAEE0;
+    }
+    pPos = &p->mMotion.mPos;
+    pOtherPos = &pOther->mMotion.mPos;
+    time = fn_8022781C(pOtherPos, pPos);
+    count = frames;
+    time /= count;
+    if (time < 0.06f) {
+        time = 0.06f;
+    }
+    fn_80104C3C(pOther, &ahead, count);
+    gain = (fn_8022781C(&ahead, pPos) - fn_8022781C(pOtherPos, pPos)) / count;
+    return time < time + gain ? time + gain : time;
+}
+
+extern "C" float fn_801050DC(Object_80137ABC *pBall, Vector_80039F5C *pTarget, float speed)
+{
+    Vector_80039F5C delta;
+    float time;
+    float clamped;
+
+    fn_80137D58(pBall, &delta);
+    fn_802276B4(&delta, &delta, pTarget);
+    time = fn_802270A4(&delta) / speed;
+    if (time < 0.04074074f) {
+        clamped = 0.04074074f;
+    } else {
+        clamped = time;
+        if (clamped > 0.4074074f) {
+            clamped = 0.4074074f;
+        }
+    }
+    return clamped * lbl_803EA2C4;
 }
 
 extern "C" int fn_8010531C(Object_80039F5C *p) {
