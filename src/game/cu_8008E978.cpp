@@ -7145,6 +7145,54 @@ extern "C" int fn_8009FE24(Object_80039F5C *p)
     return result;
 }
 
+/* Eight-byte pair allocated by fn_8009FF0C. */
+struct Pair_8009FF0C {
+    int mUnknown0;
+    int mUnknown4;
+};
+
+/* Object passed to the vtable 0x80297AF0 entries; only +0x10 is typed. */
+struct Object_8009FF0C {
+    unsigned char mUnknown0[16];
+    Pair_8009FF0C *mpUnknown10;
+};
+
+void *operator new(unsigned int size, int unknown);
+
+extern "C" int lbl_803EA9DC;
+
+extern "C" void *fn_8009FEF0(void)
+{
+    return &lbl_803EA9DC;
+}
+
+extern "C" int fn_8009FEF8(void)
+{
+    return 0;
+}
+
+extern "C" const char *fn_8009FF00(void)
+{
+    return "DefPred";
+}
+
+extern "C" int fn_8009FF0C(Object_8009FF0C *p)
+{
+    Pair_8009FF0C *pPair = new (0) Pair_8009FF0C;
+
+    pPair->mUnknown0 = 0;
+    p->mpUnknown10 = pPair;
+    pPair->mUnknown4 = 0;
+    return 1;
+}
+
+extern "C" int fn_8009FF58(Object_8009FF0C *p)
+{
+    delete p->mpUnknown10;
+    p->mpUnknown10 = 0;
+    return 1;
+}
+
 extern "C" void fn_8009FF94(unsigned int value)
 {
     lbl_8030C080[0]->mUnknown0 = value;
@@ -7288,6 +7336,105 @@ extern "C" void fn_800A2184(void)
 extern "C" void fn_800A2190(int bit)
 {
     lbl_803EA9EC |= 1 << bit;
+}
+
+extern "C" void fn_800A233C(void)
+{
+    lbl_8030E6E8.mUnknown28 = 20.0f;
+    lbl_8030E6E8.mUnknown2C = 40.0f;
+    lbl_8030E6E8.mUnknown30 = 50.0f;
+    lbl_8030E6E8.mUnknown34 = 1.0f;
+    lbl_8030E6E8.mFloat38 = 20.0f;
+    lbl_8030E6E8.mUnknown8B4[1] = 1;
+    lbl_8030E6E8.mUnknown8C4 = 9;
+}
+
+extern "C" void fn_800A238C(void)
+{
+    lbl_8030E6E8.mUnknown28 = 15.0f;
+    lbl_8030E6E8.mUnknown2C = 40.0f;
+    lbl_8030E6E8.mUnknown30 = 50.3f;
+    lbl_8030E6E8.mUnknown34 = 1.0f;
+    lbl_8030E6E8.mFloat38 = 20.0f;
+    lbl_8030E6E8.mUnknown8B4[0] = 1;
+    lbl_8030E6E8.mUnknown6C[1] = 0;
+    lbl_8030E6E8.mUnknown6C[2] = 0;
+    lbl_8030E6E8.mUnknown8C4 = 7;
+}
+
+extern "C" void fn_800A23F0(void)
+{
+    lbl_8030E6E8.mUnknown28 = 15.0f;
+    lbl_8030E6E8.mUnknown2C = 30.045f;
+    lbl_8030E6E8.mUnknown30 = 40.2f;
+    lbl_8030E6E8.mUnknown34 = 1.0f;
+    lbl_8030E6E8.mFloat38 = 20.03f;
+    lbl_8030E6E8.mUnknown8B4[0] = 1;
+    lbl_8030E6E8.mUnknown8B4[4] = 1;
+    lbl_8030E6E8.mUnknown8C4 = 2;
+}
+
+extern "C" void fn_800A244C(void)
+{
+    lbl_8030E6E8.mUnknown28 = 20.0f;
+    lbl_8030E6E8.mUnknown2C = 40.0f;
+    lbl_8030E6E8.mUnknown30 = 50.0f;
+    lbl_8030E6E8.mUnknown34 = 1.0f;
+    lbl_8030E6E8.mFloat38 = 20.0f;
+    lbl_8030E6E8.mUnknown8B4[0] = 1;
+    lbl_8030E6E8.mUnknown8B4[4] = 1;
+    lbl_8030E6E8.mUnknown8C4 = 5;
+}
+
+extern "C" void fn_800A24A0(void)
+{
+    lbl_8030E6E8.mUnknown28 = 20.0f;
+    lbl_8030E6E8.mUnknown2C = 40.0f;
+    lbl_8030E6E8.mUnknown30 = 50.0f;
+    lbl_8030E6E8.mUnknown34 = 1.0f;
+    lbl_8030E6E8.mFloat38 = 20.0f;
+    lbl_8030E6E8.mUnknown8B4[0] = 1;
+    lbl_8030E6E8.mUnknown6C[1] = 0;
+    lbl_8030E6E8.mUnknown6C[2] = 1;
+    lbl_8030E6E8.mUnknown8C4 = 6;
+}
+
+extern "C" void fn_800A2500(void)
+{
+    lbl_8030E6E8.mUnknown28 = 20.0f;
+    lbl_8030E6E8.mUnknown2C = 40.0f;
+    lbl_8030E6E8.mUnknown30 = 49.7f;
+    lbl_8030E6E8.mUnknown34 = 1.0f;
+    lbl_8030E6E8.mFloat38 = 20.0f;
+    lbl_8030E6E8.mUnknown8B4[3] = 1;
+    lbl_8030E6E8.mUnknown6C[6] = 7;
+    lbl_8030E6E8.mUnknown6C[7] = 1;
+    lbl_8030E6E8.mUnknown8C4 = 10;
+}
+
+extern "C" void fn_800A2560(void)
+{
+    lbl_8030E6E8.mUnknown28 = 17.5f;
+    lbl_8030E6E8.mUnknown2C = 30.0f;
+    lbl_8030E6E8.mUnknown30 = 40.2f;
+    lbl_8030E6E8.mUnknown34 = 1.0f;
+    lbl_8030E6E8.mFloat38 = 20.0f;
+    lbl_8030E6E8.mUnknown8B4[6] = 1;
+    lbl_8030E6E8.mUnknown8B4[0] = 1;
+    lbl_8030E6E8.mUnknown8C4 = 11;
+}
+
+extern "C" void fn_800A25BC(void)
+{
+    lbl_8030E6E8.mUnknown28 = 17.5f;
+    lbl_8030E6E8.mUnknown2C = 30.0f;
+    lbl_8030E6E8.mUnknown30 = 39.5f;
+    lbl_8030E6E8.mUnknown34 = 1.0f;
+    lbl_8030E6E8.mFloat38 = 20.0f;
+    lbl_8030E6E8.mUnknown8B4[0] = 1;
+    lbl_8030E6E8.mUnknown6C[1] = 7;
+    lbl_8030E6E8.mUnknown6C[2] = 1;
+    lbl_8030E6E8.mUnknown8C4 = 8;
 }
 
 /* Two floats written by fn_80227690. */
