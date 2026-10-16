@@ -8798,6 +8798,152 @@ extern "C" int fn_800B898C(void *p, void *q)
     return result;
 }
 
+extern "C" {
+void fn_800AE9A4(void);
+void fn_800D45A0(void);
+void fn_800D4858(void);
+void fn_800D4888(int flag);
+void fn_800D490C(void);
+void fn_800D49A4(void);
+void fn_800D49FC(void);
+void fn_800D4A40(void);
+void fn_800D42D4(void);
+void fn_80173D10(void);
+int fn_8017D064(int a);
+void fn_8017D7C4(const char *pText);
+int fn_80179138(void);
+}
+
+extern "C" int fn_800B8E18(void *p, char *pText)
+{
+    char firstDown[] = "1st Down";
+    char turnover[] = "Turnover On Downs";
+    char safety[] = "Safety";
+    char onePoint[] = "1 Pt. Conversion";
+    char twoPoint[] = "2 Pt. Conversion";
+    char defensive[] = "Defensive Conversion";
+    char failed[] = "Conversion Failed";
+    char touchdown[] = "Touchdown";
+    char touchdown2[] = "Touchdown";
+    char touchback[] = "Touchback";
+    int changed = 0;
+    int pending = fn_8017D064(3);
+    int score = lbl_803EAB78->mUnknown104.mUnknown1D;
+    int state = fn_80177F70();
+
+    if (pending == 0 && fn_801735C8(0x200) == 0) {
+        if (lbl_803EAB78->mUnknown104.mUnknown04 == 1) {
+            if (state == 6) {
+                if (score == 0) {
+                    strcpy(pText, failed);
+                    changed = 1;
+                }
+            } else {
+                if (lbl_803EAB78->mUnknown104.mUnknown18 & 0x40) {
+                    if (!(lbl_803EAB78->mUnknown104.mUnknown18 & 0x40000) && (fn_80177C38() & 1) == 0
+                        && fn_801486A0() != 2) {
+                        strcpy(pText, firstDown);
+                        changed = 1;
+                    }
+                }
+                if (lbl_803EAB78->mUnknown104.mUnknown18 & 0x800) {
+                    strcpy(pText, turnover);
+                    changed = 1;
+                    fn_80173D10();
+                }
+            }
+        } else if (lbl_803EAB78->mUnknown104.mUnknown18 & 0x20000) {
+            changed = 1;
+            strcpy(pText, "Out Of Bounds");
+        } else if (lbl_803EAB78->mUnknown104.mUnknown04 == 4) {
+            changed = 1;
+            strcpy(pText, "4th Down");
+        }
+        if (lbl_803EAB78->mUnknown104.mUnknown18 & 0x100) {
+            if (state == 6 && score == 0) {
+                strcpy(pText, failed);
+                changed = 1;
+            } else {
+                strcpy(pText, touchback);
+                changed = 1;
+            }
+        }
+    }
+    if (score != 0) {
+        if (score == -2) {
+            strcpy(pText, safety);
+            changed = 1;
+        } else if (score == 6 || score == 9) {
+            fn_800D42D4();
+            if (fn_80177C38() == 1 && fn_801783AC(20)) {
+                strcpy(pText, touchdown2);
+                changed = 1;
+            } else {
+                strcpy(pText, touchdown);
+                changed = 1;
+            }
+        } else if (score == 2) {
+            if (fn_80177C38() == 1 || fn_80177C38() == 3) {
+                strcpy(pText, defensive);
+            } else if (fn_80179138() == 1) {
+                strcpy(pText, onePoint);
+            } else {
+                strcpy(pText, twoPoint);
+            }
+            changed = 1;
+        }
+    } else if (lbl_803EAB78->mUnknown104.mUnknown18 & 0x4000) {
+        changed = 1;
+        strcpy(pText, "No Good");
+    }
+    return changed;
+}
+
+extern "C" void fn_800B925C(void *p, char *pText)
+{
+    char firstDown[] = "1st Down";
+    char turnover[] = "Turnover On Downs";
+    char safety[] = "Safety";
+    char onePoint[] = "1 Pt. Conversion";
+    char twoPoint[] = "2 Pt. Conversion";
+    char defensive[] = "Defensive Conversion";
+    char failed[] = "Conversion Failed";
+    char touchdown[] = "Touchdown";
+    char touchdown2[] = "Touchdown";
+    char touchback[] = "Touchback";
+
+    if (pText != 0) {
+        fn_8017D7C4(pText);
+        if (strcmp(pText, firstDown) == 0) {
+            fn_800D490C();
+            fn_800AE9A4();
+        }
+        if (strcmp(pText, turnover) == 0) {
+            fn_800D4858();
+        }
+        if (strcmp(pText, onePoint) == 0 || strcmp(pText, twoPoint) == 0) {
+            fn_800D49A4();
+            fn_800AE9A4();
+        }
+        if (strcmp(pText, defensive) == 0) {
+            fn_800D49FC();
+            fn_800AE9A4();
+        }
+        if (strcmp(pText, failed) == 0) {
+            fn_800D4A40();
+        }
+        if (strcmp(pText, safety) == 0) {
+            fn_800D45A0();
+        }
+        if (strcmp(pText, touchback) == 0) {
+            fn_800D4888(0);
+        }
+        if (strcmp(pText, touchdown) == 0 || strcmp(pText, touchdown2) == 0) {
+            fn_800AE9A4();
+        }
+    }
+}
+
 extern "C" void fn_800B9598(Class_80297C60 *p)
 {
     if (p == 0) {
