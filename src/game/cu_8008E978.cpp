@@ -2407,6 +2407,92 @@ extern "C" int fn_800C8C1C(Object_80039F5C *p)
     return result;
 }
 
+extern "C" {
+extern float lbl_803EAC2C;
+extern float lbl_803EAC30;
+extern float lbl_803EAC34;
+extern float lbl_803EAC38;
+}
+
+extern "C" Object_80039F5C *fn_800C8DBC(int team, Vector_80039F5C *pPos, Object_80039F5C *pExclude, int mode)
+{
+    float best = 10000.0f;
+    Object_80039F5C *pBest = 0;
+    unsigned int count = fn_80178D70(team);
+    int favourHigher = 1;
+    int favourMoving = 1;
+    unsigned char i;
+
+    for (i = 0; i < count; i++) {
+        Object_80039F5C *p = fn_80039F5C(team, i);
+        int valid = 1;
+        int ref;
+        unsigned char j;
+
+        if (p == pExclude) {
+            valid = 0;
+        }
+        switch (mode) {
+        case 1:
+            if (p->mUnknown1052 == 0) {
+                valid = 0;
+            }
+            break;
+        case 2:
+            if (valid) {
+                valid = p->mpState->mId == 85;
+                if (p->mpState->mId == 2 && p->mUnknown361[17] != 0 && p->mMotion.mPos.mY > pPos->mY) {
+                    valid = 1;
+                }
+            }
+            break;
+        }
+        if (fn_801BE648(p->mpUnknown792) == 173 && count > lbl_803EAC3C->mCounts[team]) {
+            valid = 0;
+        }
+        fn_8009BD2C(p, &ref);
+        for (j = 0; j < lbl_803EAC3C->mCounts[team]; j++) {
+            if (lbl_803EAC3C->mEntries[team][j].mRef == ref) {
+                valid = 0;
+                break;
+            }
+        }
+        if (valid) {
+            float dist = fn_80227890(pPos, &p->mMotion.mPos);
+
+            if (fn_800C91F0(p, 0, 1)) {
+                dist -= lbl_803EAC30;
+                if (dist < 0.0f) {
+                    dist = 0.0f;
+                }
+            }
+            if (favourHigher && p->mMotion.mPos.mY > pPos->mY) {
+                dist -= lbl_803EAC2C;
+                if (dist < 0.0f) {
+                    dist = 0.0f;
+                }
+            }
+            if (favourMoving && (unsigned int)(p->mUnknown1032 - 4) <= 2) {
+                dist += lbl_803EAC38;
+                if (dist > 9999.0f) {
+                    dist = 9999.0f;
+                }
+            }
+            if (p->mFlags & 0x800) {
+                dist += lbl_803EAC34;
+                if (dist > 9999.0f) {
+                    dist = 9999.0f;
+                }
+            }
+            if (dist < best) {
+                pBest = p;
+                best = dist;
+            }
+        }
+    }
+    return pBest;
+}
+
 extern "C" Object_80039F5C *fn_800C8CE8(void)
 {
     Record_8011F4EC *pRecord = fn_8011F4EC();
