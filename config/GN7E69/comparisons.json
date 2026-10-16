@@ -12973,68 +12973,6 @@
       ]
     },
     {
-      "source": "src/game/cu_80164568.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80164568-0x80164B78 (src/game/cu_80164568.cpp), its function rows and data rows. Draft comparison: 5 of 7 functions exact; the draft .rodata holds the same four items in a different order (the string \"Norm\" is emitted after 0.5f), so it is measured but not exact; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80164568",
-          "end": "0x80164B78"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A4610",
-          "end": "0x802A4624"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8031D360",
-          "end": "0x8031D370"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80164568",
-          "start": "0x80164568",
-          "end": "0x801647A0"
-        },
-        {
-          "symbol": "fn_801647A0",
-          "start": "0x801647A0",
-          "end": "0x801647A4"
-        },
-        {
-          "symbol": "fn_801647A4",
-          "start": "0x801647A4",
-          "end": "0x80164940"
-        },
-        {
-          "symbol": "fn_80164940",
-          "start": "0x80164940",
-          "end": "0x80164A40"
-        },
-        {
-          "symbol": "fn_80164A40",
-          "start": "0x80164A40",
-          "end": "0x80164A64"
-        },
-        {
-          "symbol": "fn_80164A64",
-          "start": "0x80164A64",
-          "end": "0x80164B64"
-        },
-        {
-          "symbol": "fn_80164B64",
-          "start": "0x80164B64",
-          "end": "0x80164B78"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_800478DC.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800478DC-0x80047E28 (src/game/cu_800478DC.cpp), its source-form rows and the .rodata data row 0x8028D674-0x8028D73C. Draft comparison: 8 of 9 functions exact; fn_80047BD0 is partial (compare tree); original bytes remain linked.",
