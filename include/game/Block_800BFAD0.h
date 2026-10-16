@@ -21,7 +21,8 @@ struct Slot_800BFAD0 {
 struct Block_800BFAD0 {
     Slot_800BFAD0 mSlots[2];
     int mUnknown40;
-    unsigned char mUnknown44[0x54];
+    int mUnknown44;
+    unsigned char mUnknown48[0x50];
     unsigned char mUnknown98[4];
     int mUnknown9C;
     unsigned char mUnknownA0[4];

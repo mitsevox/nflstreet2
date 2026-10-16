@@ -25705,6 +25705,11 @@
           "end": "0x800BED54"
         },
         {
+          "symbol": "fn_800BED54",
+          "start": "0x800BED54",
+          "end": "0x800BEFAC"
+        },
+        {
           "symbol": "fn_800BEFAC",
           "start": "0x800BEFAC",
           "end": "0x800BF07C"
