@@ -28195,6 +28195,32 @@
       ]
     },
     {
+      "source": "src/game/cu_8011BAE0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. Its target whole-function extent and literal-pool slice retain their evidence; this split permits independent compilation of a disjoint partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8011BAE0",
+          "end": "0x8011BCDC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F210",
+          "end": "0x8029F21C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8011BAE0",
+          "start": "0x8011BAE0",
+          "end": "0x8011BCDC"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800D0474.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv inferred open/open grouping row 0x800D0474-0x800D0D4C, exact function rows of its fourteen registered bodies, and exact .rodata data row 0x80298090-0x80298098 (literals of fn_800D0474 and fn_800D0694). All original bytes and static storage remain linked; bodies are measured only.",
