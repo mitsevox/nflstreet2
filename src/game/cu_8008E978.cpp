@@ -8196,7 +8196,7 @@ extern "C" void fn_800B50E8(int team)
     }
 }
 
-extern "C" int fn_800B51D0(void)
+extern "C" int fn_800B51D0(Object_80039F5C *p)
 {
     return 1;
 }
@@ -8523,13 +8523,94 @@ extern "C" void fn_800B6C98(void)
     }
 }
 
-extern "C" int fn_800B7368(void)
+extern "C" int fn_800B7368(Object_80039F5C *p, Input_800B6D34 *pInput)
 {
     return 0;
 }
 
 extern "C" int fn_800B7370(void)
 {
+    return 0;
+}
+
+extern "C" {
+int fn_800B76E8(Object_80039F5C *p);
+int fn_800B78DC(Object_80039F5C *p);
+int fn_800CA5CC(Object_80039F5C *p, int kind, int value);
+int fn_800E815C(Object_80039F5C *p, int a, int b);
+int fn_800F2C1C(Object_80039F5C *p, int a);
+int fn_8009A6EC(Object_80039F5C *p);
+int fn_8010279C(Object_80039F5C *p);
+int fn_801133FC(Object_80039F5C *p, int a, int b);
+int fn_80125510(Object_80039F5C *p, int a);
+int fn_8013BA58(Object_80137ABC *p, int *pOut);
+int fn_801783AC(int bit);
+void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput);
+}
+
+extern "C" int fn_800B7CA4(Object_80039F5C *p)
+{
+    Object_80137ABC *pBall = fn_801374BC();
+    Input_800B6D34 input;
+
+    fn_800B6D34(p, &input);
+    if (input.mUnknown95 & 8) {
+        p->mFlags |= 0x4000;
+        if (fn_800CA5CC(p, 0, 1) != 0) {
+            p->mUnknown512.mUnknown15 = 1;
+        }
+    }
+    if ((input.mUnknown92 & 1)
+        && ((fn_8013BA58(pBall, 0) == 4 && fn_800B51D0(p) != 0 && fn_801133FC(p, 1, 1) != 0)
+            || fn_800E815C(p, 0, 0) != 0)) {
+        goto handled;
+    }
+    if (input.mUnknown92 & 4) {
+        if (fn_8013BA58(pBall, 0) != 4) {
+            if (fn_800F2C1C(p, 0) != 0) {
+                goto handled;
+            }
+        } else {
+            int mode = 1;
+
+            if ((input.mUnknown96 & 1) ? fn_8009A6EC(p) : (input.mUnknown96 & 0x10)) {
+                mode = 3;
+            }
+            if (fn_801133FC(p, mode, 0) != 0) {
+                goto handled;
+            }
+        }
+    }
+    if (input.mUnknown93 & 0x10) {
+        fn_800B6988(p->mUnknown8);
+        return 0;
+    }
+    if (fn_800B7368(p, &input) != 0 || ((input.mUnknown93 & 0x20) && fn_80125510(p, 0) != 0)) {
+    handled:
+        p->mFlags |= 0x4000;
+        return 0;
+    }
+    fn_800B6E68(p, &input);
+    return 0;
+}
+
+extern "C" int fn_800B7E60(Object_80039F5C *p)
+{
+    if ((unsigned int)(fn_800AD9B4() - 3) <= 1) {
+        if (p->mIdBytes[2] == fn_80178308()) {
+            if (fn_800B5FEC(p) != 0) {
+                if (fn_800F06F4(0, p->mpState, 18, 0xFFFF) != 0xFFFF && fn_801783AC(0) == 0) {
+                    return fn_8010279C(p);
+                }
+                if (fn_80137C48(p) != 0) {
+                    return fn_800B76E8(p);
+                }
+                return fn_800B7CA4(p);
+            }
+        } else {
+            return fn_800B78DC(p);
+        }
+    }
     return 0;
 }
 
@@ -8655,6 +8736,26 @@ extern "C" void fn_800B847C(int index, unsigned char value)
 {
     if (lbl_803EAB60 != 0) {
         lbl_803EAB60->mUnknown8[index] = value;
+    }
+}
+
+extern "C" void fn_800BD184(Class_80297BF8 *p, int value);
+
+extern "C" void fn_800B8494(int value)
+{
+    int a;
+    int b;
+    int resultA;
+    int resultB;
+
+    fn_800C8704(&a, &b);
+    fn_801FCE10(0, "select 'DIOT' into \x82 from 'MTTS' where 'DIGT' = \x82\n", &resultA, a);
+    fn_801FCE10(0, "select 'DIOT' into \x82 from 'MTTS' where 'DIGT' = \x82\n", &resultB, b);
+    if (resultA == resultB) {
+        fn_800BD184(lbl_803EAB90, value);
+        fn_8013F3FC();
+    } else {
+        fn_800BD184(lbl_803EAB90, value);
     }
 }
 
@@ -9792,7 +9893,7 @@ extern "C" void fn_800BCAF4(float value)
     fn_800AD910(5, value);
 }
 
-extern "C" void fn_800BD184(void)
+extern "C" void fn_800BD184(Class_80297BF8 *p, int value)
 {
     lbl_803EAB94 = 1;
 }
