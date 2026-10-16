@@ -5206,7 +5206,57 @@ int fn_80123254(void *pA, void *pB);
 void fn_8012430C(float *pOut, int kind, Object_80039F5C *p);
 float fn_801CFB94(int angle);
 
-void fn_8011B4F8(Entry_8011AFCC *pEntry);
+int fn_8011B2A4(Entry_8011AFCC *pEntry);
+
+void fn_8011B4F8(Entry_8011AFCC *pEntry)
+{
+    float score;
+
+    if (fn_8011B2A4(pEntry) == 1) {
+        Object_800B26B0 *pMotion = &pEntry->mpUnknown60->mMotion;
+        Object_80039F5C *p;
+        int near;
+
+        if (pEntry->mUnknown72 < 80.0f) {
+            score = 80.0f - pEntry->mUnknown72;
+        } else {
+            score = 5.0f;
+        }
+        if (pMotion->mUnknown28 > lbl_803ECB08 * 0.5f && fn_801CFFD0(pEntry->mUnknown64, pMotion->mUnknown32) > 0x4E38E3) {
+            pEntry->mUnknown76 = 1;
+            score *= 0.8f;
+        }
+        switch (pEntry->mpUnknown60->mQueue[0].mId) {
+        case 10:
+        case 11:
+            score *= 0.33333334f;
+            break;
+        }
+        if (fn_8011F1CC()) {
+            score += fabsf(pMotion->mPos.mX - fn_80177FE0().mX) * 0.25f;
+        } else {
+            int angle = fn_801CFFD0(pEntry->mUnknown64, pMotion->mFacing);
+
+            if (angle > 0x600000) {
+                score *= 0.083333336f;
+            } else if (angle > 0x400000) {
+                score *= 0.16666667f;
+            }
+        }
+        p = pEntry->mpUnknown60;
+        near = 0;
+        if (p->mUnknown8 != 0xFF) {
+            near = fabsf(p->mMotion.mPos.mY - fn_80177FE0().mY) <= 5.5f
+                && fabsf(pEntry->mpUnknown60->mMotion.mPos.mX - fn_80177FE0().mX) <= 2.0f;
+        }
+        if (near) {
+            score *= 10.0f;
+        }
+    } else {
+        score = 5.0f;
+    }
+    pEntry->mUnknown68 = score;
+}
 
 void fn_8011B6E8(Entry_8011AFCC *pEntries, Pair_8011BAE0 target)
 {
