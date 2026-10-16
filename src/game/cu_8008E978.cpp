@@ -392,6 +392,13 @@ void fn_800AF87C(int a, int b, Vector_80039F5C *pVec, int c);
 void fn_800AF82C(int a, int b, int c, int d, int e);
 void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
 int fn_8009C7B4(Vector_80039F5C *pVec);
+void fn_8009CEE4(Object_80039F5C *p, int ref, int a, int b, int c);
+int fn_8003989C(void);
+void fn_80227690(void *pOut, void *pA, void *pB);
+int fn_801CFE40(float y, float x);
+void fn_8009D1AC(Object_80039F5C *p);
+
+extern int lbl_802D7C2C[14];
 }
 
 extern "C" int fn_80090244(int *p)
@@ -3181,6 +3188,93 @@ extern "C" void fn_8009D00C(void *p, int *pState)
         *pState = 1;
         break;
     }
+}
+
+extern "C" int fn_8009D04C(Object_80039F5C *p, Object_80039F5C *pOther, int limit)
+{
+    Point_8017886C delta;
+
+    fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+    return fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing) < limit;
+}
+
+extern "C" void fn_8009D0AC(Object_80039F5C *p)
+{
+    int ref = 0;
+
+    if (fn_8003989C() != 0) {
+        int i;
+        int index;
+        int *pTable;
+        int *pRef;
+
+        fn_800BA6F8();
+        i = 0;
+        index = fn_802372EC(0, 14);
+        pTable = lbl_802D7C2C;
+        pRef = &pTable[index];
+        while (i < 14) {
+            Object_80039F5C *pOther;
+
+            ref = *pRef;
+            pOther = fn_8009BCE8(&ref);
+            if (pOther != p && fn_8009D04C(p, pOther, 0x155555) == 1) {
+                break;
+            }
+            index++;
+            pRef++;
+            if (index >= 14) {
+                pRef = pTable;
+                index = 0;
+            }
+            i++;
+        }
+        if (i < 14) {
+            fn_8009CEE4(p, ref, 13, 15, 0);
+            p->mUnknown292 = ref;
+            p->mUnknown296 = fn_802372EC(0, 120) + 30;
+        } else {
+            fn_8009D1AC(p);
+        }
+    }
+}
+
+extern "C" void fn_8009D1AC(Object_80039F5C *p)
+{
+    if (p->mUnknown292 != 0) {
+        fn_8009CE88(p, &p->mUnknown16, 15);
+        p->mUnknown292 = 0;
+    }
+}
+
+extern "C" int fn_8009D1F4(Object_80039F5C *p)
+{
+    if (p->mUnknown292 != 0) {
+        p->mUnknown296--;
+        if (fn_8009D04C(p, fn_8009BCE8(&p->mUnknown292), 0x155555) == 0 || p->mUnknown296 < 0) {
+            fn_8009D0AC(p);
+        }
+    } else {
+        fn_8009D0AC(p);
+    }
+    return p->mUnknown292 == 0;
+}
+
+extern "C" int fn_8009D284(Object_80039F5C *p, Object_80039F5C *pOther)
+{
+    if (p->mUnknown292 == 0) {
+        if (fn_8009D04C(p, pOther, 0x471C72) == 1) {
+            int ref;
+
+            fn_8009BD2C(pOther, &ref);
+            fn_8009CEE4(p, ref, 26, 15, 1);
+            p->mUnknown296 = 300;
+            p->mUnknown292 = ref;
+        }
+    } else if (fn_8009D04C(p, pOther, 0x471C72) == 0) {
+        fn_8009D1AC(p);
+    }
+    return p->mUnknown292 == 0;
 }
 
 extern "C" int fn_8009D338(Timer_8009D338 *p)

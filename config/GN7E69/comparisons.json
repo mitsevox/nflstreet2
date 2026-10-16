@@ -23420,6 +23420,31 @@
           "end": "0x8009D04C"
         },
         {
+          "symbol": "fn_8009D04C",
+          "start": "0x8009D04C",
+          "end": "0x8009D0AC"
+        },
+        {
+          "symbol": "fn_8009D0AC",
+          "start": "0x8009D0AC",
+          "end": "0x8009D1AC"
+        },
+        {
+          "symbol": "fn_8009D1AC",
+          "start": "0x8009D1AC",
+          "end": "0x8009D1F4"
+        },
+        {
+          "symbol": "fn_8009D1F4",
+          "start": "0x8009D1F4",
+          "end": "0x8009D284"
+        },
+        {
+          "symbol": "fn_8009D284",
+          "start": "0x8009D284",
+          "end": "0x8009D338"
+        },
+        {
           "symbol": "fn_8009D338",
           "start": "0x8009D338",
           "end": "0x8009D348"

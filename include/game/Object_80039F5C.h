@@ -252,7 +252,10 @@ struct Object_80039F5C {
     int mUnknown200;
     char mUnknown204[36];
     Pose_80041930 *mpUnknown240;
-    char mUnknown244[92];
+    char mUnknown244[48];
+    int mUnknown292;
+    int mUnknown296;
+    char mUnknown300[36];
     union {
         struct {
             int mUnknown336;
