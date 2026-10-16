@@ -7899,6 +7899,11 @@
           "end": "0x800F9CB4"
         },
         {
+          "symbol": "fn_800F9CB4",
+          "start": "0x800F9CB4",
+          "end": "0x800F9E3C"
+        },
+        {
           "symbol": "fn_800FD708",
           "start": "0x800FD708",
           "end": "0x800FD724"
@@ -8302,6 +8307,11 @@
           "symbol": "fn_800F8828",
           "start": "0x800F8828",
           "end": "0x800F88E4"
+        },
+        {
+          "symbol": "fn_800F88E4",
+          "start": "0x800F88E4",
+          "end": "0x800F8A88"
         },
         {
           "symbol": "fn_800F93D0",

@@ -1738,6 +1738,43 @@ struct Block_800F8A88 {
     unsigned char mUnknown26;
 };
 
+extern "C" void fn_800F88E4(Object_80039F5C *p, Object_80039F5C *pTarget) {
+    unsigned char *pMine = &p->mpState->mUnknown2;
+    unsigned char *pTheirs = 0;
+    Object_80039F5C *pFound = 0;
+    unsigned short i;
+    unsigned int n = fn_80178D18(fn_80178320());
+
+    for (i = 0; i < n; i++) {
+        Object_80039F5C *pOther = fn_80039F5C(fn_80178320(), i);
+
+        if (pOther->mpState->mId == 22 && pTarget == fn_8009BCE8(&pOther->mUnknown336) && pOther != p) {
+            pFound = pOther;
+            pTheirs = &pFound->mpState->mUnknown2;
+        }
+    }
+    if (pFound && fn_8022781C(&pFound->mMotion.mPos, &pTarget->mMotion.mPos) < 10.0f
+        && fn_8022781C(&p->mMotion.mPos, &pTarget->mMotion.mPos) < 10.0f) {
+        Vector_80039F5C ball;
+        int right;
+
+        fn_80137D58(fn_801374BC(), &ball);
+        right = pTarget->mMotion.mPos.mX > ball.mX;
+        *pTheirs &= ~1;
+        *pMine &= ~1;
+        *pTheirs &= ~2;
+        *pMine &= ~2;
+        if ((right && pFound->mMotion.mPos.mX < p->mMotion.mPos.mX)
+            || (!right && pFound->mMotion.mPos.mX > p->mMotion.mPos.mX)) {
+            *pTheirs |= 2;
+            *pMine |= 1;
+        } else {
+            *pTheirs |= 1;
+            *pMine |= 2;
+        }
+    }
+}
+
 extern float lbl_803EAE40;
 extern float lbl_803EAE44;
 extern float lbl_803EAE48;
@@ -2013,6 +2050,63 @@ extern "C" Object_80039F5C *fn_800F9BD8(int forward, Object_80039F5C *p) {
 
 extern "C" int fn_800F9CAC() {
     return 1;
+}
+
+extern "C" int fn_800F9CB4(void) {
+    Record_8011F4E0 *pRecord = fn_8011F4E0();
+    unsigned char ahead = 0;
+    unsigned char behind = 0;
+    unsigned char aheadKind3 = 0;
+    int team = fn_80178308();
+    unsigned char behindKind3 = 0;
+    Point_8017886C origin;
+    int aheadKind4 = 0;
+    int behindKind4 = 0;
+    unsigned char i;
+
+    origin = fn_80177FE0();
+    for (i = 0; i <= 2; i++) {
+        Object_80039F5C *pOther = fn_80039F5C(team, pRecord->mUnknown8[i]);
+        float x = pOther->mMotion.mPos.mX;
+        unsigned char kind = pOther->mUnknown2914;
+
+        if (fabsf(x - origin.mX) > 1.0f) {
+            if (x > origin.mX) {
+                if (kind == 4) {
+                    aheadKind4 = 1;
+                } else if (kind == 3) {
+                    aheadKind3++;
+                }
+                ahead++;
+            } else {
+                if (kind == 4) {
+                    behindKind4 = 1;
+                } else if (kind == 3) {
+                    behindKind3++;
+                }
+                behind++;
+            }
+        }
+    }
+    if (behind > ahead) {
+        return 0;
+    }
+    if (ahead > behind) {
+        return 1;
+    }
+    if (behindKind3 > aheadKind3) {
+        return 0;
+    }
+    if (aheadKind3 > behindKind3) {
+        return 1;
+    }
+    if (aheadKind4 && !behindKind4) {
+        return 1;
+    }
+    if (behindKind4 && !aheadKind4) {
+        return 0;
+    }
+    return origin.mX >= 0.0f;
 }
 
 extern "C" void fn_800FA014(Object_80039F5C *p, int *pRef) {
