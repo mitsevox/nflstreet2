@@ -33182,6 +33182,51 @@
       ]
     },
     {
+      "source": "src/game/cu_801562D0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #844; six complete slot bodies of the table 0x802A1E38 (derived from the rule-set table 0x802A56E8, include/game/Class_802A56E8.h) inside the retained provisional cu_801485B4 survey group: slots 1, 4, 7, 8, 9 and 14 (0x801562D0-0x80156314, words 0x802A1E44, 0x802A1E5C, 0x802A1E74, 0x802A1E7C, 0x802A1E84 and 0x802A1EAC). The .bss object 0x8031BDD4 is referenced as an extern. Original file boundaries and nominal identity unresolved; 0x8015629C before the range and 0x8015631C onward excluded; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801562D0",
+          "end": "0x8015631C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801562D0",
+          "start": "0x801562D0",
+          "end": "0x801562DC"
+        },
+        {
+          "symbol": "fn_801562DC",
+          "start": "0x801562DC",
+          "end": "0x801562E4"
+        },
+        {
+          "symbol": "fn_801562E4",
+          "start": "0x801562E4",
+          "end": "0x801562EC"
+        },
+        {
+          "symbol": "fn_801562EC",
+          "start": "0x801562EC",
+          "end": "0x80156308"
+        },
+        {
+          "symbol": "fn_80156308",
+          "start": "0x80156308",
+          "end": "0x80156314"
+        },
+        {
+          "symbol": "fn_80156314",
+          "start": "0x80156314",
+          "end": "0x8015631C"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
