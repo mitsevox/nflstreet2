@@ -227,6 +227,10 @@ void fn_800EC9E4(Object_80039F5C *p, int a, int b);
 int fn_800EB3E8(Object_80039F5C *p, State_800EBCE0 *pState, Object_80137ABC *pBall, int a, int b);
 void fn_800EE964(State_800EE9AC *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value);
 void fn_800EE7DC(Object_80039F5C *p, State_800EE9AC *pState);
+float fn_8011F4D4(void);
+float fn_801CFB94(int angle);
+void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
+void fn_800DBC4C(Object_80039F5C *p, int angle, float value);
 int fn_800E1044(Object_80039F5C *p, Vector_80039F5C *pTarget);
 int fn_800FF094(Object_80039F5C *p);
 int fn_800CB708(Object_80039F5C *p, int *pOut, Point_8017886C point, int angle, int a);
@@ -1775,6 +1779,130 @@ extern "C" int fn_800ED0F4(Object_80039F5C *p, State_800EDC68 *state) {
                 result = 1;
             }
         }
+    }
+    return result;
+}
+
+extern "C" int fn_800ED670(Object_80039F5C *p, Object_80039F5C *pOther, State_800EDC68 *state) {
+    int result;
+    Object_80137ABC *pBall = fn_80137C48(p);
+    if (pBall) {
+        result = 2;
+        float speed = 1.0f;
+        float x = p->mMotion.mPos.mX;
+        float otherX = pOther->mMotion.mPos.mX;
+        float otherDrift = pOther->mMotion.mUnknown40;
+        int steer = 1;
+        int id;
+        int turn;
+        Vector_80039F5C ballPos;
+        Point_8017886C delta;
+        fn_80137D58(pBall, &ballPos);
+        fn_80227690(&delta, &pOther->mMotion.mPos, &ballPos);
+        int angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+        float distance = fn_802270A4(&delta);
+        if (fn_8011F1A4() && p->mUnknown2914 == 0) {
+            id = p->mpState->mUnknown2;
+            if (id == 0 || id == 2 || id == 4 || id == 6 || id == 8 || id == 10) {
+                Point_8017886C goal;
+                goal.mX = fn_8011F4D4();
+                goal.mY = fn_80177FE0().mY;
+                fn_80227690(&goal, &goal, &p->mMotion.mPos);
+                int goalAngle = fn_801CFE40(goal.mY, goal.mX) & 0xFFFFFF;
+                if (state->mUnknown8 == 12) {
+                    steer = 0;
+                    if (state->mUnknown7 == 6) {
+                        angle -= 0x71C71;
+                        if (p->mUnknown2913 == 1)
+                            angle -= 0x71C71;
+                    } else {
+                        angle += 0x71C71;
+                        if (p->mUnknown2913 == 0)
+                            angle += 0x71C71;
+                    }
+                    angle &= 0xFFFFFF;
+                }
+                if (steer) {
+                    turn = fn_801CFFD0(angle, goalAngle);
+                    turn = (int)(turn * fn_801CFB94(turn / 2));
+                    if (turn > 0x38E38) {
+                        if (p->mMotion.mFacing - angle <= 0x38E37) {
+                            if ((otherX <= x + 0.2f && otherDrift > 0.0f)
+                                || (otherX >= x - 0.2f && otherDrift < 0.0f))
+                                turn = (int)(turn * 0.33333334f);
+                        }
+                        if (((goalAngle - p->mMotion.mFacing) & 0xFFFFFF) <= 0x7FFFFF)
+                            angle += turn;
+                        else
+                            angle -= turn;
+                    }
+                }
+            }
+        } else {
+            speed = 0.75f;
+        }
+        angle &= 0xFFFFFF;
+        float range;
+        id = p->mpState->mUnknown2;
+        if (id == 1 || id == 3 || id == 5 || state->mUnknown8 == 12 || state->mUnknown8 != 7)
+            range = 1.5f;
+        else
+            range = 1.25f;
+        if (distance < range) {
+            turn = fn_801CFFD0(pOther->mMotion.mFacing, p->mMotion.mFacing);
+            if (turn > 0x400000) {
+                float scale;
+                switch (p->mpState->mUnknown2) {
+                case 0:
+                case 2:
+                case 4:
+                case 6:
+                case 8:
+                case 10:
+                case 13:
+                    scale = 1.0f - distance * 0.6666667f;
+                    result = 3;
+                    break;
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 9:
+                case 11:
+                    scale = 1.0f - distance * 0.16666667f;
+                    result = 3;
+                    break;
+                default:
+                    scale = 0.0f;
+                    break;
+                }
+                scale *= fn_801CFB94(turn - 0x400000);
+                speed -= scale;
+            }
+            fn_80143E14(p, pOther);
+            fn_80143E14(pOther, p);
+        }
+        if (speed < 0.0f)
+            speed = 0.0f;
+        unsigned int kind = state->mUnknown8;
+        if (kind == 15 || kind == 12) {
+            if (distance > 4.0f && kind == 12) {
+                fn_800DBC4C(p, angle, speed);
+            } else {
+                speed = distance * 0.25f;
+                p->mUnknown512.mUnknown0 = speed;
+                p->mUnknown512.mUnknown8 = angle;
+                p->mUnknown512.mUnknown4 = angle;
+                p->mUnknown512.mUnknown14 = 1;
+            }
+        } else {
+            p->mUnknown512.mUnknown0 = speed;
+            p->mUnknown512.mUnknown4 = angle;
+            p->mUnknown512.mUnknown8 = angle;
+            p->mUnknown512.mUnknown14 = 4;
+        }
+    } else {
+        result = 3;
     }
     return result;
 }
