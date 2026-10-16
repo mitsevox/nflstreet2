@@ -12,7 +12,9 @@ struct Record_8011F4F8 {
     unsigned char mUnknownB;
     float mUnknownC;
     int mUnknown10;
-    char mUnknown14[9];
+    float mUnknown14;
+    float mUnknown18;
+    unsigned char mUnknown1C;
     unsigned char mUnknown1D;
     char mUnknown1E[2];
 };

@@ -3071,15 +3071,153 @@ extern "C" int fn_80101C40(Object_80039F5C *p)
     return flag ? 3 : 1;
 }
 
-/* View of the player +336 storage used by fn_801021C0. */
+/* View of the player +336 storage used by fn_80101CB4 and fn_801021C0. */
 struct State_801021C0 {
-    char mUnknown0[2];
+    unsigned char mUnknown0;
+    unsigned char mUnknown1;
     unsigned char mUnknown2;
     unsigned char mUnknown3;
     int mUnknown4;
     char mUnknown8[3];
     unsigned char mUnknown11;
 };
+
+extern float lbl_803EC9E8;
+extern float lbl_803EAEC0;
+
+extern "C" {
+void fn_80156C78(int a, int b);
+void fn_80100AA0(Object_80039F5C *p, Vector_80039F5C *pPos, float *pA, float *pB);
+}
+
+extern "C" int fn_80101CB4(Object_80039F5C *p)
+{
+    Object_80039F5C *pTarget = 0;
+    State_801021C0 *pState;
+    Record_8011F4F8 *pRecord;
+    Record_800D81C8 *pAnimations;
+    unsigned char down;
+    int kind;
+    unsigned char held;
+    int slot;
+
+    if (fn_800AD9B4() != 3 || !fn_800FFFB0(p)) {
+        return 1;
+    }
+    pState = (State_801021C0 *)&p->mUnknown336;
+    pRecord = fn_8011F4F8(pState->mUnknown3 = fn_801374E0(fn_80137C48(p)));
+    p->mFlags &= ~0x1000;
+    p->mFlags &= ~4;
+    down = p->mpState->mUnknown3[0];
+    pRecord->mUnknown8 = down;
+    if (down == 0) {
+        pState->mUnknown0 = 1;
+    } else {
+        pState->mUnknown0 = 0;
+    }
+    pState->mUnknown1 = 0;
+    pState->mUnknown2 = 0;
+    pState->mUnknown4 = 0;
+    pRecord->mUnknownB = 1;
+    pRecord->mUnknownA[0] = p->mpState->mUnknown2;
+    pRecord->mUnknown1D = p->mpState->mUnknown1;
+    pRecord->mUnknownC = 0.0f;
+    pRecord->mUnknown10 = 0;
+    if ((unsigned char)pRecord->mUnknownA[0] != 15) {
+        pTarget = fn_80039F5C(p->mIdBytes[2], (unsigned char)pRecord->mUnknownA[0]);
+        pRecord->mUnknown14 = pTarget->mMotion.mUnknown40;
+        pRecord->mUnknown18 = pTarget->mMotion.mUnknown44;
+        pRecord->mUnknown1C = pTarget->mpState->mId == 20;
+        if (pTarget->mpState->mId == 51) {
+            pTarget->mFlags |= 0x80000000;
+        }
+    } else {
+        pRecord->mUnknown14 = pRecord->mUnknown18 = 0.0f;
+        pRecord->mUnknown1C = 0;
+    }
+    kind = fn_800D0B90(p);
+    held = kind;
+    fn_8009BD60(p);
+    p->mFlags &= ~4;
+    if (p->mpState->mUnknown1 != 2 && p->mpState->mUnknown1 != 5) {
+        if (fn_801BE648(p->mpUnknown792) == 222 && fn_800D0B90(p) == 0) {
+            p->mUnknown1008.mUnknown0 = 8;
+        } else if (p->mMotion.mUnknown28 > lbl_803EC9E8) {
+            switch (fn_801BE648(p->mpUnknown792)) {
+            case 84:
+                if (fn_801CFFD0(p->mMotion.mFacing, p->mMotion.mUnknown32) <= 0x3FFFFF
+                    && p->mMotion.mUnknown32 > 0x238E39 && p->mMotion.mUnknown32 <= 0x58E38D) {
+                    p->mUnknown1008.mUnknown0 = 2;
+                } else {
+                    p->mUnknown1008.mUnknown0 = 3;
+                }
+                break;
+            case 74:
+            default:
+                if (p->mMotion.mUnknown28 > 40.0f / (210.0f / lbl_803EA2C4) * 0.25f) {
+                    if (fn_800CA5CC(p, 5, 1)) {
+                        p->mUnknown1008.mUnknown0 = 5;
+                    } else if (p->mUnknown2913 == 1 && fn_801CFFD0(p->mMotion.mUnknown32, 0) <= 0x2AAAA9) {
+                        p->mUnknown1008.mUnknown0 = 5;
+                    } else if (p->mUnknown2913 == 0 && fn_801CFFD0(p->mMotion.mUnknown32, 0x800000) <= 0x2AAAA9) {
+                        p->mUnknown1008.mUnknown0 = 5;
+                    } else {
+                        p->mUnknown1008.mUnknown0 = 2;
+                    }
+                } else {
+                    p->mUnknown1008.mUnknown0 = 2;
+                }
+                break;
+            }
+        } else {
+            p->mUnknown1008.mUnknown0 = 2;
+        }
+    } else {
+        p->mUnknown1008.mUnknown0 = 1;
+    }
+    if (held) {
+        if (kind == 4) {
+            if (fn_80101B7C(p)) {
+                slot = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 235, 0);
+                p->mFlags |= 8;
+                fn_80067E3C(50, &p->mMotion.mPos, p->mId, 0, 0, 0);
+                fn_800A2190(0);
+            } else {
+                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 178, p, 1.0f);
+                slot = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 178, 0);
+                fn_80156C78(25, 1);
+            }
+        } else {
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 178, p, 1.0f);
+            slot = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 178, 0);
+            fn_80156C78(25, 1);
+        }
+        if (slot == 0xFFFF) {
+            slot = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 69, 0);
+        }
+    } else {
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 69, p, 1.0f);
+        slot = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 69, 0);
+    }
+    pAnimations = p->mpUnknown800;
+    if (pRecord->mUnknown1D != 4 && fn_801BE648(p->mpUnknown792) != 235) {
+        fn_801BD81C(&pAnimations[slot].mUnknown4C, fn_801CFFA0(lbl_803EAEC0));
+    }
+    if ((unsigned char)pRecord->mUnknownA[0] != 15) {
+        switch (p->mpState->mUnknown1) {
+        case 0:
+        case 1:
+        case 6:
+        case 7:
+            fn_80100AA0(p, &pTarget->mMotion.mPos, &pRecord->mUnknown0, &pRecord->mUnknown4);
+            break;
+        }
+    } else {
+        pRecord->mUnknown0 = pRecord->mUnknown4 = 1.0f;
+    }
+    fn_800A3B58(p, 3, 0);
+    return 0;
+}
 
 extern "C" {
 int fn_80103CB0(Object_80039F5C *p);
