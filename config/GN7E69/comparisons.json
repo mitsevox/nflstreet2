@@ -33417,6 +33417,31 @@
       ]
     },
     {
+      "source": "src/game/cu_8015617C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #861; two complete slot bodies inside the retained provisional cu_801485B4 survey group: slot 7 of the table 0x802A20C8 (Class_80297BF8 layout, include/game/Class_80297BF8.h; 0x8015617C, word 0x802A2104) and slot 9 of the table 0x802A2058 (Class_80297CE8 layout, include/game/Class_80297CE8.h; 0x801561B4, word 0x802A20A4). The destructor 0x80156180-0x801561B4 between them is not registered. No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80156174 before the range and 0x801561B8 onward excluded; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015617C",
+          "end": "0x801561B8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8015617C",
+          "start": "0x8015617C",
+          "end": "0x80156180"
+        },
+        {
+          "symbol": "fn_801561B4",
+          "start": "0x801561B4",
+          "end": "0x801561B8"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
