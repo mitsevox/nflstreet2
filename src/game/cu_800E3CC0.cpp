@@ -187,6 +187,9 @@ void fn_800EFE60(int a, void *p, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_8010AEC4(int value);
+unsigned int fn_801BA568(void *record, Record_800D81C8 *entries, unsigned short key);
+int fn_801BA6B0(Record_800D81C8 *entry);
+void fn_801BA6BC(Record_800D81C8 *entry, int value);
 int fn_800CE590(Query_800CE770 *pQuery, Record_800CE608 *pA, Record_800CE608 *pB);
 void fn_800CE608(Object_80039F5C *p, Record_800CE608 *pRecord);
 void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -1772,6 +1775,79 @@ extern "C" unsigned char fn_800EC870(Object_80039F5C *p) {
     }
     angle = (fn_801CFE40(delta.mY, delta.mX) - p->mMotion.mFacing) & 0xFFFFFF;
     return lbl_803EADE8[((angle + 0x100000) >> 21) & 7];
+}
+
+extern "C" void fn_800EC9E4(Object_80039F5C *p, int kind, int flag) {
+    int mirror = 0;
+    int upfield = 0;
+    fn_8009BD60(p);
+    p->mUnknown512.mUnknown14 = mirror;
+    if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, fn_801BE648(p->mpUnknown792))) {
+        if (fn_801BE648(p->mpUnknown792) == 192) {
+            mirror = p->mUnknown776 == 1;
+        } else {
+            Record_800D81C8 *pEntries = p->mpUnknown800;
+            mirror = fn_801BA6B0(&pEntries[fn_801BA5A8(p->mpUnknown796, pEntries, fn_801BE648(p->mpUnknown792), 0)]);
+        }
+    }
+    if (kind == 3)
+        p->mUnknown1008.mUnknown1 = 3;
+    else
+        p->mUnknown1008.mUnknown1 = 2;
+    int animation = fn_800EC840(p, kind);
+    if (animation == 209) {
+        p->mUnknown1008.mUnknown2 = fn_800EC76C(p);
+        if (p->mUnknown1008.mUnknown2 == 5) {
+            upfield = 1;
+            if (!flag && fn_80137B40() == p)
+                flag = 1;
+        }
+    }
+    if (animation == 208 || upfield) {
+        int direction = fn_800EC870(p);
+        if (mirror) {
+            switch (direction) {
+            case 7:
+                direction = 2;
+                break;
+            case 2:
+                direction = 7;
+                break;
+            case 6:
+                direction = 3;
+                break;
+            case 5:
+                direction = 4;
+                break;
+            case 4:
+                direction = 5;
+                break;
+            case 3:
+                direction = 6;
+                break;
+            }
+        }
+        if (upfield)
+            p->mUnknown1011 = direction;
+        else
+            p->mUnknown1008.mUnknown2 = direction;
+    }
+    if (p == fn_80137B40() && flag)
+        p->mUnknown1008.mUnknown0 = 1;
+    else
+        p->mUnknown1008.mUnknown0 = 2;
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, p, 1.0f);
+    if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, animation)) {
+        Record_800D81C8 *pEntries = p->mpUnknown800;
+        int index = fn_801BA5A8(p->mpUnknown796, pEntries, animation, 0);
+        if (mirror) {
+            Record_800D81C8 *pEntry = &pEntries[index];
+            fn_801BA6BC(pEntry, fn_801BA6B0(pEntry) == 0);
+        }
+    }
+    p->mUnknown9[0] = 1;
+    if (flag)
+        p->mFlags |= 0x1000;
 }
 
 extern "C" int fn_800ECC64(Object_80039F5C *p) {

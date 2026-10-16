@@ -7633,6 +7633,11 @@
           "end": "0x800EC9E4"
         },
         {
+          "symbol": "fn_800EC9E4",
+          "start": "0x800EC9E4",
+          "end": "0x800ECC64"
+        },
+        {
           "symbol": "fn_800ECC64",
           "start": "0x800ECC64",
           "end": "0x800ECD14"
