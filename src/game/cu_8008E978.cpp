@@ -315,6 +315,8 @@ void fn_80096E74(Object_80039F5C *p, Vector_80039F5C *pVec, void *pData);
 Data_80096E74 *fn_8009CD00(Object_80039F5C *p, void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int kind,
                            unsigned int duration, int d);
 int fn_8023790C(void);
+float fn_80178A08(void);
+int fn_801CFFD0(int a, int b);
 void fn_80137EFC(Object_80137ABC *pBall, Vector_80039F5C *pOut);
 void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int flag);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
@@ -1388,6 +1390,25 @@ extern "C" int fn_8009780C(Object_80039F5C *p, Object_80137ABC *pBall)
     fn_80137EFC(pBall, &velocity);
     rate = lbl_803EA2C4;
     return __builtin_fabsf(velocity.mZ / rate + 0.0029814816f) > 1e-07f;
+}
+
+static inline int PointAngle(const Point_80167910 *pPoint)
+{
+    return fn_801CFE40(pPoint->mY, pPoint->mX);
+}
+
+extern "C" int fn_80097864(Object_80039F5C *p)
+{
+    if (__builtin_fabsf(p->mMotion.mPos.mX) > fn_80178A08() - 4.0f) {
+        Point_80167910 direction;
+
+        direction.mX = p->mMotion.mPos.mX;
+        direction.mY = 0.0f;
+        if (fn_801CFFD0(PointAngle(&direction), p->mMotion.mUnknown32) <= 0x355554) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 /* Stack block whose address fn_800A4E8C passes as the fourth argument of the
