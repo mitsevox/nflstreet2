@@ -7663,6 +7663,11 @@
           "end": "0x800ECEBC"
         },
         {
+          "symbol": "fn_800ECEBC",
+          "start": "0x800ECEBC",
+          "end": "0x800ED0F4"
+        },
+        {
           "symbol": "fn_800ED0F4",
           "start": "0x800ED0F4",
           "end": "0x800ED208"

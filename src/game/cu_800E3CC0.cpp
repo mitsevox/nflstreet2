@@ -187,6 +187,8 @@ void fn_800EFE60(int a, void *p, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_8010AEC4(int value);
+int fn_8011F4C8(void);
+float fn_8011F4D4(void);
 unsigned int fn_801BA568(void *record, Record_800D81C8 *entries, unsigned short key);
 int fn_801BA6B0(Record_800D81C8 *entry);
 void fn_801BA6BC(Record_800D81C8 *entry, int value);
@@ -1913,6 +1915,72 @@ extern "C" int fn_800ECE38(Object_80039F5C *p) {
         || (mode == 2 && index != 255 && fn_800B6544(index) != p))
         return fn_800B7FE8(p);
     return 0;
+}
+
+extern "C" float fn_800ECEBC(Object_80039F5C *p, State_800EDC68 *state) {
+    float speed = 1.0f;
+    if (fn_80137C48(p)) {
+        Object_80039F5C *pOther = fn_8009BCE8(&state->mUnknown0);
+        int right = 0;
+        int inside = 0;
+        Point_8017886C delta;
+        fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+        int angle = fn_801CFE40(delta.mY, delta.mX);
+        if (fn_8011F1A4() && p->mUnknown2914 == 0) {
+            float x = fn_8011F4D4();
+            right = x > p->mMotion.mPos.mX;
+            inside = fabsf(x - p->mMotion.mPos.mX) < fabsf(x - pOther->mMotion.mPos.mX);
+            inside |= p->mMotion.mPos.mY - pOther->mMotion.mPos.mY > 5.0f;
+            inside |= (unsigned int)fn_8011F4C8() <= 3;
+        } else {
+            if (p->mUnknown2914 == 0)
+                angle = (angle - 0x400000) & 0xFFFFFF;
+            else
+                angle = (angle - p->mMotion.mFacing) & 0xFFFFFF;
+            if (angle > 0x800000)
+                right = 1;
+            if (angle > 0x600000 && angle < 0xA00000)
+                inside = 1;
+        }
+        state->mUnknown7 = right ? 6 : 3;
+        switch (state->mUnknown6) {
+        case 0:
+            break;
+        case 1:
+            if (!right)
+                speed = 1.6f;
+            right = 1;
+            inside = 1;
+            break;
+        case 2:
+            if (right == 1)
+                speed = 1.6f;
+            right = 0;
+            inside = 1;
+            break;
+        }
+        switch (state->mUnknown8) {
+        case 2:
+        case 3:
+        case 8:
+        case 9:
+            state->mUnknown7 = 6;
+            right = 1;
+            break;
+        case 4:
+        case 5:
+        case 10:
+        case 11:
+            state->mUnknown7 = 3;
+            right = 0;
+            break;
+        }
+        if (right)
+            state->mUnknown7 = inside ? 5 : 6;
+        else
+            state->mUnknown7 = inside ? 4 : 3;
+    }
+    return speed;
 }
 
 extern "C" int fn_800ED0F4(Object_80039F5C *p, State_800EDC68 *state) {
