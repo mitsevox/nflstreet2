@@ -25995,6 +25995,21 @@
           "end": "0x800BC5DC"
         },
         {
+          "symbol": "fn_800BC83C",
+          "start": "0x800BC83C",
+          "end": "0x800BC8E0"
+        },
+        {
+          "symbol": "fn_800BC8E0",
+          "start": "0x800BC8E0",
+          "end": "0x800BCA00"
+        },
+        {
+          "symbol": "fn_800BCA00",
+          "start": "0x800BCA00",
+          "end": "0x800BCAF4"
+        },
+        {
           "symbol": "fn_800BCAF4",
           "start": "0x800BCAF4",
           "end": "0x800BCB18"

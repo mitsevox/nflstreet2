@@ -4724,7 +4724,7 @@ struct Record_800BAE7C {
    accessed here are declared. */
 struct Block_800BC538 {
     int mUnknown0;
-    unsigned char mUnknown4[4];
+    unsigned int mUnknown4;
     int mUnknown8;
     int mUnknownC;
     Record_800BAE7C *mpUnknown10;
@@ -9654,6 +9654,11 @@ int fn_8016E928(void);
 int fn_8006D884(int idx);
 void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 extern unsigned char lbl_803EABA0;
+extern unsigned char lbl_803EABA2;
+extern unsigned char lbl_803EABA3;
+void fn_800BBA2C(void);
+void fn_800BBF18(void);
+void fn_800BD1C8(Record_800BAE7C *pRecords);
 int fn_8013C678(Camera_8013F738 *pCamera);
 void fn_8013C7C4(Camera_8013F738 *pCamera);
 void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg);
@@ -9662,6 +9667,70 @@ void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg);
 extern "C" void fn_800BC5B8(void)
 {
     fn_800BC51C(0);
+}
+
+extern "C" void fn_800BC83C(void)
+{
+    lbl_803EABA2 = 0;
+    lbl_803EABA3 = 0;
+    if (fn_800655F8() == 0) {
+        fn_800655D0();
+    }
+    fn_800655B8();
+    if (lbl_803EAB94 == 0) {
+        fn_800BBF18();
+    }
+    if (lbl_803EC98C->mUnknown4 == 2.0f) {
+        fn_800BAFE8();
+        fn_800BAE7C(lbl_803EC98C->mpUnknown10, lbl_803EAB95);
+        fn_800BD1C8(lbl_803EC98C->mpUnknown10);
+    }
+}
+
+extern "C" void fn_800BC8E0(void)
+{
+    int busy = fn_800BAF30();
+
+    lbl_803EC98C->mUnknown24++;
+    if (fn_800BB050(busy) != 0) {
+        lbl_803EAB95++;
+        lbl_803EC98C->mUnknown24 = 0;
+        if (lbl_803EC98C->mpUnknown10[lbl_803EAB95].mUnknown0 == 9999) {
+            fn_800BBE98();
+        } else {
+            fn_800BBA2C();
+            fn_800BBCF0(lbl_803EC98C->mpUnknown10);
+            fn_800BB924();
+            fn_800BAE7C(lbl_803EC98C->mpUnknown10, lbl_803EAB95 + 1);
+            fn_800BD1C8(lbl_803EC98C->mpUnknown10);
+        }
+    }
+    if (lbl_803EABA2 == 0 && lbl_803EC98C->mpUnknown10[lbl_803EAB95 + 1].mUnknown0 == 9999) {
+        float time = fn_80094454(lbl_803EC98C->mUnknown18);
+
+        if (time > 0.0f && time <= 61.0f) {
+            fn_80195EFC(6, 60, 0, fn_800BB9A0);
+            lbl_803EABA2 = 1;
+        }
+    }
+}
+
+extern "C" void fn_800BCA00(Class_80297BF8 *pThis, float dt)
+{
+    int state;
+
+    if (lbl_803EABA3 == 0 && fn_800AE968(14) == 0 && fn_8002892C() == 0 &&
+        fn_8017F60C() == 0 && fn_80156704() == 0 && fn_801485D4() == 0 &&
+        (state = fn_8007F828(14)) == 1) {
+        pThis->vfn_07();
+        fn_800AE904(14);
+        lbl_803EABA3 = state;
+    } else if (fn_800AE980() == 0) {
+        fn_800AE988();
+        fn_8004A230(1);
+        pThis->vfn_11(dt);
+        fn_800941B8();
+    }
 }
 
 extern "C" void fn_800BCAF4(float value)
