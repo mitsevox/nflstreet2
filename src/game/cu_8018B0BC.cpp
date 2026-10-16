@@ -185,10 +185,6 @@ int fn_8018E874(int index, int n);
 int fn_801F9D70(int handle, int table, Object_80023BBC *pFilter, unsigned short *pCount);
 int fn_8007A934(Object_8007A334 *pObject, int key);
 void fn_8018B8B0(Object_8008044C *pObject);
-void fn_8008135C(Object_8008044C *pObject, int index, int value);
-int fn_8022F4BC(void);
-int fn_8022F384(int a);
-void fn_8018E7A0(int index, int value);
 int fn_802294F4(void);
 int fn_80229554(void);
 void fn_800828FC(void);
@@ -208,16 +204,6 @@ int fn_8016128C(int a);
 void fn_8016139C(int a, int *pId, int *pPalette);
 
 extern char lbl_802EBE24[];
-
-void fn_8018B8B0(Object_8008044C *pObject)
-{
-    for (int i = 0; i < 10; i++) fn_8008135C(pObject, lbl_802EAE30[i], 1);
-    Object_8007A334 *pCursor = (Object_8007A334 *)pObject;
-    fn_8007AA90(pCursor, 0x44494F50, -1);
-    fn_8007AA90(pCursor, 0x54474850, 0x41);
-    fn_8007AA90(pCursor, 0x54475750, 0);
-    fn_8007AA90(pCursor, 0x54425950, 2);
-}
 
 void fn_8018B950(int index)
 {
@@ -352,21 +338,6 @@ void fn_8018BF10(int index, int team)
     fn_8018B0BC(0x54415453, team, index);
 }
 
-void fn_8018BF3C(void)
-{
-    Table_8007E020 tables[2];
-    QueryResult result;
-    int pxsp;
-    int handle = fn_8022F3D4(fn_8022F4BC());
-    fn_801FCE10(0, "use \x8c select 'PXSP' into \x85 from 'YPTS'\n", handle, &pxsp);
-    fn_801FCE10(0, "use \x8c update 'PPRC' set 'PXSP' = \x85 where 'PXSP' = \x85\n", handle, 7, pxsp);
-    fn_8018B014(handle);
-    tables[0].Set(0x43455453);
-    tables[1].Set(-1);
-    fn_801F9908(handle, tables, 0, &result, 0);
-    fn_8018E7A0(fn_8022F384(fn_8022F4BC()), 1);
-}
-
 void fn_8018C008(int *pFirstCopy, int *pSecondCopy, int database)
 {
     fn_8018C344(database, 0x4D455453, 0x59505453, pFirstCopy, pSecondCopy);
@@ -377,14 +348,6 @@ void fn_8018C044(int firstTable, int secondTable)
     fn_8018C3EC(firstTable, secondTable);
 }
 
-void fn_8018C064(int firstTable, int secondTable)
-{
-    int handle = fn_8022F3D4(fn_8022F4BC());
-    fn_8018B014(handle);
-    fn_801FCE10(0, "use \x8c insert into \x8c.'METS' * select * from \x8c\n", 0x54415453, handle, firstTable);
-    fn_801FCE10(0, "use \x8c insert into \x8c.'YPTS' * select * from \x8c\n", 0x54415453, handle, secondTable);
-}
-
 int fn_8018C0E8(int index, int *pTeam)
 {
     Object_8007A334 cursor;
@@ -392,19 +355,6 @@ int fn_8018C0E8(int index, int *pTeam)
     *pTeam = fn_8007A98C(&cursor, 0x44494754);
     fn_8018BA2C(&cursor);
     return 1;
-}
-
-void fn_8018C15C(int team, int player)
-{
-    QueryResult result;
-    fn_801FCE10(&result, "use 'TATS' update 'YALP' set 'DIGT' = \x82 and 'ITGT' = \x82 and 'DIOP' = \x82 and 'DBTP' = \x82 and 'DFTP' = \x82 and 'CDHP' = \x82 where 'DIGP' = \x82\n",
-                team, team, -1, 0, 0, 0, player);
-}
-
-void fn_8018C1A8(int player, int team)
-{
-    QueryResult result;
-    fn_801FCE10(&result, "use 'TATS' delete from 'YALP' where 'DIGT' = \x82 and 'DIGP' = \x82\n", team, player);
 }
 
 int fn_8018C1E0(Object_8007A334 *pCursor)
