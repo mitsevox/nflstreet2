@@ -7528,8 +7528,8 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029DD48",
-          "end": "0x8029DDE4"
+          "start": "0x8029DD40",
+          "end": "0x8029DF7C"
         }
       ],
       "functions": [
