@@ -54,6 +54,7 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_80195EFC.h"
 #include "game/fn_800F06F4.h"
+#include "game/Lookup_8012078C.h"
 #include "game/fn_80163E94.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801C68FC.h"
@@ -6849,6 +6850,9 @@ void fn_8009E674(void);
 void fn_800A5D94(void);
 int fn_8009DBB4(State_8011F4EC *p);
 void fn_8009E58C(void);
+int fn_8011F2C4(void);
+int fn_8011F1A4(void);
+int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 void fn_8003AB08(Object_80039F5C *p, int a);
 float fn_80237260(int stream);
 void fn_800FAD2C(void);
@@ -7230,6 +7234,96 @@ extern "C" void fn_8009E138(void)
     if (p->mUnknown14 & 0x8000) {
         fn_8009E674();
     }
+}
+
+extern "C" int fn_8009E180(Object_80039F5C *p)
+{
+    int check = 0;
+    Object_80137ABC *pBall = fn_801374BC();
+    Object_80039F5C *pCarrier = fn_80137B40();
+
+    if (pCarrier != 0) {
+        if (pCarrier->mIdBytes[3] == 1) {
+            int pending;
+
+            if (fn_801783AC(0) == 1) {
+                return 6;
+            }
+            pending = fn_800F06F4(0, pCarrier->mpState, 18, 0xFFFF);
+            if (pending != 0xFFFF || fn_800F06F4(0, pCarrier->mpState, 15, 0xFFFF) != pending
+                || fn_8011F2C4() != 0) {
+                Object_80039F5C *pTarget;
+                Point_8017886C ball;
+
+                if (pCarrier->mFlags & 0x8000) {
+                    return 2;
+                }
+                pTarget = fn_8009BCE8(&p->mUnknown1036);
+                if (pTarget != 0 && (pTarget->mUnknown1052 == 2 || pTarget->mUnknown1052 == 3)) {
+                    unsigned int limit = fn_800AC268(p->mIdBytes[2]);
+                    Lookup_8012078C *pLookup = fn_8012078C();
+
+                    if (pLookup->mpUnknown4[0] != p->mIdBytes[1] && pLookup->mpUnknown4[1] != p->mIdBytes[1]) {
+                        int kind = pLookup->mpUnknown12[p->mIdBytes[1]];
+
+                        if ((kind == 2 || kind == 0) && fn_8011E188() > limit) {
+                            check = 1;
+                        }
+                    }
+                }
+                ball = fn_80177FE0();
+                if (p->mpState->mId == 30 && p->mMotion.mPos.mY < ball.mY - 1.0f) {
+                    if (fn_8011F1CC() != 0) {
+                        return 4;
+                    }
+                    if (fn_8011F1A4() != 0) {
+                        return 5;
+                    }
+                }
+            } else if (fn_801BE648(pCarrier->mpUnknown792) != 34) {
+                check = 1;
+            }
+            if (check != 0) {
+                unsigned int limit = fn_800AC218(p->mIdBytes[2]);
+                int kind = fn_8012078C()->mpUnknown12[p->mIdBytes[1]];
+                Object_80039F5C *pHolder;
+
+                if (kind == 4) {
+                    limit += 15;
+                } else if (kind == 3) {
+                    limit += 6;
+                }
+                pHolder = fn_80137AD0(pBall);
+                if (fn_8011F1A4() != 0 && (pHolder->mUnknown2914 != 0 || pHolder->mpState->mId == 91)) {
+                    limit /= 2;
+                }
+                if (fn_80137F88(pBall) > limit) {
+                    return 5;
+                }
+            }
+        }
+    } else {
+        switch (fn_8013BA58(pBall, 0)) {
+        case 4:
+            if (fn_80137B88(fn_801374BC()) != 0 || fn_801486A0() == 1) {
+                return 4;
+            }
+            break;
+        case 2:
+            break;
+        case 3:
+            if (fn_801783AC(0) == 1) {
+                return 6;
+            }
+            if (fn_8011F2C4() != 0) {
+                return 1;
+            }
+            return 3;
+        default:
+            return 6;
+        }
+    }
+    return 0;
 }
 
 extern "C" void fn_8009E458(void)
