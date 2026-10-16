@@ -3407,9 +3407,7 @@ extern "C" unsigned char *fn_8009CC2C(Object_80039F5C *p,
         fn_800AF9C0(pEntries, 0, lbl_802D7C14);
     }
     fn_800429C0((Object_8003DEC4 *)p->mpUnknown4);
-    pBlock->mUnknownE = 0;
-    pBlock->mUnknown8 = 0;
-    pBlock->mUnknownC = 0;
+    pBlock->mUnknownE = pBlock->mUnknownC = pBlock->mUnknown8 = 0;
     return pEntry->mUnknown10;
 }
 
