@@ -8229,6 +8229,16 @@
           "end": "0x8011E884"
         },
         {
+          "symbol": "fn_8011EC68",
+          "start": "0x8011EC68",
+          "end": "0x8011EE18"
+        },
+        {
+          "symbol": "fn_8011EE18",
+          "start": "0x8011EE18",
+          "end": "0x8011EFD4"
+        },
+        {
           "symbol": "fn_8011F0D8",
           "start": "0x8011F0D8",
           "end": "0x8011F174"

@@ -5676,6 +5676,102 @@ int fn_8011E9D8(State_80039F5C *pState)
     return result;
 }
 
+extern unsigned char lbl_803EB024;
+
+int fn_8011A994(Object_80039F5C *p, Object_80039F5C *pOther);
+int fn_800CE4A8(Query_800CE770 *pQuery);
+void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
+unsigned char fn_8011EE18(Object_80039F5C *p, Object_80039F5C *pCarrier);
+
+int fn_8011EC68(Object_80039F5C *p, Object_80039F5C *pOther)
+{
+    int result = 0;
+    Object_80039F5C *pCarrier;
+
+    if (fn_8011A994(p, pOther) && (pCarrier = fn_80137B40()) != 0) {
+        Point_8017886C delta;
+        int angle;
+
+        fn_80227690(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
+        angle = fn_801CFE40(delta.mY, delta.mX);
+        if (fn_801CFFD0(pOther->mUnknown512.mUnknown4, angle) >= (int)(lbl_803EB024 * (16777216.0f / 360.0f))) {
+            Point_8017886C toBall;
+            Point_8017886C ball;
+
+            ball = fn_80177FE0();
+            fn_80227690(&toBall, &ball, &pOther->mMotion.mPos);
+            angle = fn_801CFE40(toBall.mY, toBall.mX);
+            if (fn_801CFFD0(pOther->mUnknown512.mUnknown4, angle) > 0x400000 || !fn_8011F1CC() ||
+                (pCarrier->mFlags & 0x8000)) {
+                Query_800CE770 query;
+
+                fn_800CE770(&query);
+                query.mUnknown52 = 161;
+                query.mUnknown44 = 0.8f;
+                query.mUnknown36 = 0xE38E3;
+                query.mpUnknown0 = p;
+                query.mpUnknown4 = pOther;
+                query.mUnknown54 = fn_8011EE18(pOther, pCarrier);
+                if (fn_800CE4A8(&query)) {
+                    fn_8011E1BC(p, pOther, 0, 5);
+                    result = 1;
+                    fn_8011E33C(pOther, p, 5);
+                }
+            }
+        }
+    }
+    return result;
+}
+
+unsigned char fn_8011EE18(Object_80039F5C *p, Object_80039F5C *pCarrier)
+{
+    int degrees = (int)(((p->mUnknown512.mUnknown4 - p->mMotion.mFacing + 0x1000000) & 0xFFFFFF) * (360.0f / 16777216.0f));
+    int rest = degrees % 45;
+    int result;
+
+    if (rest > 22) {
+        degrees += 45 - rest;
+    } else {
+        degrees -= rest;
+    }
+    degrees = degrees < 90 ? 90 : degrees > 270 ? 270 : degrees;
+    switch (degrees / 45 - 1) {
+    case 0:
+        result = 4;
+        break;
+    case 1:
+        result = 7;
+        break;
+    case 2:
+        result = 10;
+        break;
+    case 3: {
+        Point_8017886C delta;
+        int angle;
+
+        fn_80227690(&delta, &pCarrier->mMotion.mPos, &p->mMotion.mPos);
+        angle = fn_801CFE40(delta.mY, delta.mX);
+        fn_80227384(&delta, &delta, p->mMotion.mFacing);
+        angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+        result = 17;
+        if (angle <= 0x7FFFFF) {
+            result = 18;
+        }
+        break;
+    }
+    case 4:
+        result = 16;
+        break;
+    case 5:
+        result = 14;
+        break;
+    default:
+        result = 4;
+        break;
+    }
+    return result;
+}
+
 int fn_8011EFD4(void *p, void *q)
 {
     State_803EB098 *pState = (State_803EB098 *)p;
