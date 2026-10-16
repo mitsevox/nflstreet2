@@ -458,8 +458,13 @@ struct Record_800F4E88 {
 };
 
 struct Object_800F4E14 {
-    char mUnknown0[20];
+    float mUnknown0;
+    float mUnknown4;
+    float mUnknown8;
+    float mUnknown12;
+    char mUnknown16[4];
     int mUnknown20;
+    unsigned char mUnknown24;
 };
 
 /* Entry reached through List_801018B4 items and read by fn_801018B4. */
@@ -1443,6 +1448,32 @@ extern "C" void fn_800F60BC(Object_80039F5C *p) {
     }
 }
 
+extern "C" int fn_800F6158(Object_80039F5C *p) {
+    Object_800F4E14 *pBlock = (Object_800F4E14 *)&p->mUnknown336;
+    Vector_80039F5C *pPos = &p->mMotion.mPos;
+    int result;
+
+    pBlock->mUnknown20 = (p->mpState->mUnknown2 << 17) & 0xFE0000;
+    result = fn_800F4E14(p, pBlock);
+    if (!result) {
+        Point_8017886C offset;
+        unsigned char distance = p->mpState->mUnknown1;
+
+        pBlock->mUnknown8 = (distance >> 3) + (distance & 7) * 0.14285715f;
+        pBlock->mUnknown12 = p->mpState->mUnknown3[0] * 0.003921569f;
+        fn_80227538(&offset, pBlock->mUnknown20, pBlock->mUnknown8);
+        pBlock->mUnknown0 = p->mMotion.mPos.mX + offset.mX;
+        pBlock->mUnknown4 = pPos->mY + offset.mY;
+        pBlock->mUnknown24 = result;
+        fn_8011E3EC(p, 3);
+        p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown8 = pBlock->mUnknown20;
+        p->mUnknown512.mUnknown4 = pBlock->mUnknown20;
+        p->mUnknown512.mUnknown0 = pBlock->mUnknown12;
+    }
+    return 0;
+}
+
 extern "C" int fn_800F62A4(Object_80039F5C *p) {
     Message_800F01CC message;
 
@@ -1627,6 +1658,34 @@ extern "C" void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
         } else {
             fn_800F6AD8(&pOut->mX);
         }
+    }
+}
+
+extern "C" void fn_800F70D0(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Point_8017886C *pOut) {
+    if (p && pOther && pOut) {
+        Point_8017886C origin;
+        Point_8017886C delta;
+
+        origin = fn_80177FE0();
+        fn_80227690(&delta, pTarget, &p->mMotion.mPos);
+        if (!(p->mpState->mUnknown2 & 2)) {
+            if (pTarget->mY < origin.mY) {
+                pOut->mY = pTarget->mY - p->mMotion.mPos.mY + 2.0f;
+            } else if (p->mMotion.mPos.mY > pTarget->mY) {
+                float dy = pTarget->mY - p->mMotion.mPos.mY;
+
+                pOut->mY = fabsf(dy) > 1.0f ? dy + 1.0f : 0.0f;
+            } else {
+                pOut->mY = pTarget->mY - p->mMotion.mPos.mY - 1.0f;
+            }
+        } else if (p->mMotion.mPos.mY < pTarget->mY) {
+            float dy = pTarget->mY - p->mMotion.mPos.mY;
+
+            pOut->mY = fabsf(dy) > 1.0f ? dy - 1.0f : 0.0f;
+        } else {
+            pOut->mY = pTarget->mY - p->mMotion.mPos.mY + 1.0f;
+        }
+        fn_800F6AD8(&pOut->mX);
     }
 }
 
