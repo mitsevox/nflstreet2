@@ -4772,16 +4772,16 @@ extern "C" int fn_800BAE64(void)
 /* One of the 80-byte records that the word +16 of Block_800BC538 points
    to; only the accessed fields are declared. */
 struct Slot_800BAE7C {
+    int mUnknown0;
+    unsigned char mUnknown4[3];
+    unsigned char mTeam;
     Object_80039F5C *mpObject;
-    int mUnknown4;
-    unsigned char mUnknown8[4];
 };
 
 struct Record_800BAE7C {
     int mUnknown0;
-    unsigned char mUnknown4[8];
-    Slot_800BAE7C mUnknownC[4];
-    unsigned char mUnknown3C[4];
+    Slot_800BAE7C mSlots[4];
+    unsigned char mUnknown34[12];
     int mUnknown40;
     int mUnknown44;
     unsigned char mUnknown48[4];
@@ -5169,6 +5169,56 @@ extern "C" void fn_800BBB4C(void)
     lbl_803EAB94 = 1;
 }
 
+extern "C" {
+Object_80039F5C *fn_800606CC(int type, int position);
+
+extern unsigned int lbl_803EAB98;
+extern unsigned int lbl_803EAB9C;
+}
+
+extern "C" Object_80039F5C *fn_800BBB84(int position, Record_800BAE7C *pRecords, int index, int slot)
+{
+    Object_80039F5C *p = 0;
+
+    if (lbl_803EC98C->mUnknown2A > -1) {
+        p = fn_800606CC(fn_80094564(lbl_803EC98C->mUnknown2A, index), position);
+    }
+    if (p == 0) {
+        unsigned int *pUsed = 0;
+        int pick = -1;
+        int team = pRecords[index].mSlots[slot].mTeam;
+
+        if (pRecords[index].mSlots[slot].mUnknown0 != 31) {
+            switch (team) {
+            case 0:
+                pUsed = &lbl_803EAB98;
+                break;
+            case 1:
+                pUsed = &lbl_803EAB9C;
+                break;
+            }
+            if (pUsed != 0) {
+                unsigned int count;
+
+                if (*pUsed >= (1 << fn_80178D70(team)) - 1) {
+                    *pUsed = 0;
+                }
+                count = fn_80178D70(team);
+                while (pick == -1) {
+                    pick = fn_802372EC(0, count);
+                    if (count > 1 && (*pUsed & (1 << pick)) == (1 << pick)) {
+                        pick = -1;
+                    } else {
+                        *pUsed |= 1 << pick;
+                    }
+                }
+                p = fn_80039F5C(team, pick);
+            }
+        }
+    }
+    return p;
+}
+
 extern "C" unsigned char lbl_803EABA0;
 
 extern "C" void fn_800BBCF0(Record_800BAE7C *p)
@@ -5177,9 +5227,9 @@ extern "C" void fn_800BBCF0(Record_800BAE7C *p)
     Object_80039F5C *pB = 0;
 
     if (p != 0 && lbl_803EABA0 == 0) {
-        pA = p[lbl_803EAB95].mUnknownC[0].mpObject;
-        if (p[lbl_803EAB95].mUnknownC[0].mUnknown4 != 31) {
-            pB = p[lbl_803EAB95].mUnknownC[1].mpObject;
+        pA = p[lbl_803EAB95].mSlots[0].mpObject;
+        if (p[lbl_803EAB95].mSlots[1].mUnknown0 != 31) {
+            pB = p[lbl_803EAB95].mSlots[1].mpObject;
         }
         if (pA != 0) {
             int key = p[lbl_803EAB95].mUnknown40;
@@ -5203,7 +5253,7 @@ extern "C" void fn_800BBDE0(void)
     unsigned int i;
 
     for (i = 0; i < pActor->mUnknown4; i++) {
-        Object_80039F5C *p = lbl_803EC98C->mpUnknown10[lbl_803EAB95].mUnknownC[i].mpObject;
+        Object_80039F5C *p = lbl_803EC98C->mpUnknown10[lbl_803EAB95].mSlots[i].mpObject;
 
         p->mUnknown9[2] = 1;
         p->mpUnknown4->mUnknown20 |= 1;
