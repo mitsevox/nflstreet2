@@ -127,7 +127,7 @@ struct Block_801718E8 {
     char mUnknown4[8];
     union {
         char mUnknown12[32];
-        struct { int mUnknown12Word; float mUnknown16; float mUnknown20; char mUnknown24[20]; };
+        struct { int mUnknown12Word; float mUnknown16; float mUnknown20; float mUnknown24; short mUnknown28; char mUnknown30[14]; };
         Snapshot_801718E8 mSnapshot12;
     };
     int mUnknown44;

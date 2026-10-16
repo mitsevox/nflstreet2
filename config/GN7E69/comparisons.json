@@ -7769,9 +7769,24 @@
           "end": "0x800ED670"
         },
         {
+          "symbol": "fn_800ED670",
+          "start": "0x800ED670",
+          "end": "0x800EDB48"
+        },
+        {
           "symbol": "fn_800EDB48",
           "start": "0x800EDB48",
           "end": "0x800EDC68"
+        },
+        {
+          "symbol": "fn_800EDC68",
+          "start": "0x800EDC68",
+          "end": "0x800EDDEC"
+        },
+        {
+          "symbol": "fn_800EDDEC",
+          "start": "0x800EDDEC",
+          "end": "0x800EE61C"
         },
         {
           "symbol": "fn_800EE61C",
@@ -7784,9 +7799,24 @@
           "end": "0x800EE7DC"
         },
         {
+          "symbol": "fn_800EE7DC",
+          "start": "0x800EE7DC",
+          "end": "0x800EE964"
+        },
+        {
+          "symbol": "fn_800EE964",
+          "start": "0x800EE964",
+          "end": "0x800EE9AC"
+        },
+        {
           "symbol": "fn_800EE9AC",
           "start": "0x800EE9AC",
           "end": "0x800EEA20"
+        },
+        {
+          "symbol": "fn_800EEA20",
+          "start": "0x800EEA20",
+          "end": "0x800EEDC8"
         },
         {
           "symbol": "fn_800EEDC8",
@@ -7794,9 +7824,34 @@
           "end": "0x800EEE3C"
         },
         {
+          "symbol": "fn_800EEE3C",
+          "start": "0x800EEE3C",
+          "end": "0x800EF0DC"
+        },
+        {
           "symbol": "fn_800EF0DC",
           "start": "0x800EF0DC",
           "end": "0x800EF0FC"
+        },
+        {
+          "symbol": "fn_800EF0FC",
+          "start": "0x800EF0FC",
+          "end": "0x800EF1C8"
+        },
+        {
+          "symbol": "fn_800EF1C8",
+          "start": "0x800EF1C8",
+          "end": "0x800EF224"
+        },
+        {
+          "symbol": "fn_800EF224",
+          "start": "0x800EF224",
+          "end": "0x800EF538"
+        },
+        {
+          "symbol": "fn_800EF538",
+          "start": "0x800EF538",
+          "end": "0x800EF834"
         },
         {
           "symbol": "fn_800E579C",
