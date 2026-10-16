@@ -7683,6 +7683,11 @@
           "end": "0x800EEE3C"
         },
         {
+          "symbol": "fn_800EEE3C",
+          "start": "0x800EEE3C",
+          "end": "0x800EF0DC"
+        },
+        {
           "symbol": "fn_800EF0DC",
           "start": "0x800EF0DC",
           "end": "0x800EF0FC"

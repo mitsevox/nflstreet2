@@ -20,6 +20,7 @@
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
 #include "game/fn_8022781C.h"
+#include "game/fn_80227638.h"
 #include "game/fn_802372EC.h"
 #include <math.h>
 #include "game/fn_801BE60C.h"
@@ -145,6 +146,7 @@ extern float lbl_803EADB8;
 extern float lbl_803EADBC;
 extern float lbl_803EADC0;
 extern float lbl_803EADE4;
+extern unsigned char lbl_803EADF4[8];
 extern float lbl_803ECB08;
 void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
@@ -217,6 +219,10 @@ void fn_800EE964(State_800EE9AC *pState, Object_80039F5C *p, Point_8017886C *pPo
 void fn_800EEE3C(Point_8017886C *pOut, int *pFacing, Object_80039F5C *p, int value);
 int fn_800EEA20(Object_80039F5C *p);
 int fn_800DC080(Object_80039F5C *p);
+Point_8017886C fn_8017808C(void);
+float fn_80178A2C(void);
+void fn_80227538(Point_8017886C *pOut, int angle, float length);
+void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
 void fn_800FF598(State_800EE9AC *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value, float scale);
 int fn_800B5FEC(Object_80039F5C *p);
 int fn_800B76E8(Object_80039F5C *p);
@@ -1933,6 +1939,51 @@ extern "C" int fn_800EEDC8(Object_80039F5C *p) {
     state->mUnknown50 = 0;
     state->mUnknown52 = 0;
     return 0;
+}
+
+extern "C" void fn_800EEE3C(Point_8017886C *pOut, int *pFacing, Object_80039F5C *p, int value) {
+    unsigned int count = fn_80178D70(p->mIdBytes[2]);
+    Point_8017886C origin;
+    Point_8017886C offset;
+    float base;
+    origin = fn_8017808C();
+    int id = p->mId;
+    if (((id >> 16) & 0xFF) < count) {
+        if (((id >> 8) & 0xFF) == fn_80178308()) {
+            offset.mX = 0.0f;
+            offset.mY = 0.0f;
+            if (value)
+                base = 2.5f;
+            else
+                base = 4.0f;
+            fn_80227538(pOut, 0, fn_802372EC(0, 100) * 0.003f + base);
+            fn_80227384(pOut, pOut, ((lbl_803EADF4[p->mIdBytes[1]] << 24) / count + 0x400000) & 0xFFFFFF);
+            fn_80227690(&offset, &offset, pOut);
+            *pFacing = fn_801CFE40(offset.mY, offset.mX);
+            if (origin.mY < 3.0f - fn_80178A2C())
+                pOut->mY -= 7.0f;
+            else
+                pOut->mY -= 10.0f;
+            fn_80227638(pOut, pOut, &origin);
+        } else {
+            offset.mX = 0.0f;
+            offset.mY = 0.0f;
+            if (value)
+                base = 2.5f;
+            else
+                base = 4.0f;
+            fn_80227538(pOut, 0, fn_802372EC(0, 100) * 0.003f + base);
+            fn_80227384(pOut, pOut, ((lbl_803EADF4[p->mIdBytes[1]] << 24) / count + 0x400000) & 0xFFFFFF);
+            fn_80227690(&offset, &offset, pOut);
+            *pFacing = fn_801CFE40(offset.mY, offset.mX);
+            pOut->mY += 3.0f;
+            fn_80227638(pOut, pOut, &origin);
+        }
+    } else {
+        pOut->mX = p->mMotion.mPos.mX;
+        pOut->mY = p->mMotion.mPos.mY;
+        *pFacing = p->mMotion.mFacing;
+    }
 }
 
 extern "C" int fn_800EF0DC(Object_80039F5C *p) {
