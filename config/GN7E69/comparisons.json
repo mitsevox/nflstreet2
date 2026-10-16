@@ -33382,6 +33382,41 @@
       ]
     },
     {
+      "source": "src/game/cu_80156238.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #858; four complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 6, 7, 10 and 11 of the table 0x802A1F10 (derived from the engine table 0x80297B90, include/game/Class_80297B90.h; 0x80156238, 0x8015623C, 0x80156240 and 0x80156248, words 0x802A1F44, 0x802A1F4C, 0x802A1F64 and 0x802A1F6C). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80156204 before the range and 0x80156250 onward excluded; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80156238",
+          "end": "0x80156250"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80156238",
+          "start": "0x80156238",
+          "end": "0x8015623C"
+        },
+        {
+          "symbol": "fn_8015623C",
+          "start": "0x8015623C",
+          "end": "0x80156240"
+        },
+        {
+          "symbol": "fn_80156240",
+          "start": "0x80156240",
+          "end": "0x80156248"
+        },
+        {
+          "symbol": "fn_80156248",
+          "start": "0x80156248",
+          "end": "0x80156250"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
