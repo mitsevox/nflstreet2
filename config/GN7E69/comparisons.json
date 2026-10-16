@@ -7959,9 +7959,19 @@
           "end": "0x80101C40"
         },
         {
+          "symbol": "fn_80102470",
+          "start": "0x80102470",
+          "end": "0x801024FC"
+        },
+        {
           "symbol": "fn_801024FC",
           "start": "0x801024FC",
           "end": "0x80102664"
+        },
+        {
+          "symbol": "fn_80103CB0",
+          "start": "0x80103CB0",
+          "end": "0x80103D6C"
         },
         {
           "symbol": "fn_80103D6C",

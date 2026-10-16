@@ -8,7 +8,7 @@ struct Record_8011F4F8 {
     float mUnknown0;
     float mUnknown4;
     short mUnknown8;
-    char mUnknownA[1];
+    unsigned char mUnknownA;
     unsigned char mUnknownB;
     float mUnknownC;
     int mUnknown10;

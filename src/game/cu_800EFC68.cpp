@@ -2832,6 +2832,34 @@ extern "C" int fn_80101B7C(Object_80039F5C *p)
     return result;
 }
 
+/* View of the player +336 storage read by fn_80102470. */
+struct State_80102470 {
+    char mUnknown0[2];
+    unsigned char mUnknown2;
+};
+
+extern "C" int fn_80102470(Object_80039F5C *p)
+{
+    State_80102470 *pState = (State_80102470 *)&p->mUnknown336;
+    unsigned int flags;
+
+    if (pState->mUnknown2 != 0 || fn_800FFFB0(p) == 0) {
+        flags = p->mFlags;
+        p->mFlags = flags & ~0x2000;
+        if (flags & 0x4000) {
+            int facing = p->mMotion.mFacing;
+
+            p->mUnknown512.mUnknown14 = 1;
+            p->mUnknown512.mUnknown8 = facing;
+            p->mUnknown512.mUnknown4 = facing;
+            p->mUnknown512.mUnknown0 = 0.0f;
+        }
+        p->mFlags &= ~8;
+        return 1;
+    }
+    return 0;
+}
+
 extern "C" void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d)
 {
     Message_800F01CC message;
@@ -2872,6 +2900,30 @@ extern "C" void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d)
         fn_800F01CC(0, p->mpState, &message, p);
         break;
     }
+}
+
+extern "C" void fn_80102D78(Object_80039F5C *p);
+
+extern "C" int fn_80103CB0(Object_80039F5C *p)
+{
+    Record_8011F4F8 *pRecord = fn_8011F4F8(fn_801374E0(fn_80137C48(p)));
+
+    switch (pRecord->mUnknown1D) {
+    case 4:
+        fn_800A5A8C(2, p, fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownA));
+        if (fn_801BE648(p->mpUnknown792) == 69 || fn_801BE648(p->mpUnknown792) == 178) {
+            p->mFlags |= 4;
+        }
+        break;
+    case 5:
+        fn_800A5A8C(3, p, p);
+        break;
+    case 3:
+    default:
+        fn_80102D78(p);
+        break;
+    }
+    return 1;
 }
 
 extern "C" int fn_80103D6C(Object_80039F5C *p)
