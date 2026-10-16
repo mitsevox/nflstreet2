@@ -2971,6 +2971,110 @@ extern "C" int fn_80101C40(Object_80039F5C *p)
     return flag ? 3 : 1;
 }
 
+/* View of the player +336 storage used by fn_801021C0. */
+struct State_801021C0 {
+    char mUnknown0[2];
+    unsigned char mUnknown2;
+    unsigned char mUnknown3;
+    int mUnknown4;
+    char mUnknown8[3];
+    unsigned char mUnknown11;
+};
+
+extern "C" {
+int fn_80103CB0(Object_80039F5C *p);
+void fn_800D4D84(Object_80039F5C *p);
+int fn_80104610(Object_80039F5C *p);
+void fn_80176B8C(Object_80039F5C *p);
+}
+
+extern "C" int fn_801021C0(Object_80039F5C *p)
+{
+    State_801021C0 *pState = (State_801021C0 *)&p->mUnknown336;
+
+    if (fn_800FFFB0(p)) {
+        Record_8011F4F8 *pRecord;
+        unsigned char kind;
+
+        if (fn_800AD9B4() != 3) {
+            return 1;
+        }
+        pRecord = fn_8011F4F8(pState->mUnknown3);
+        kind = pRecord->mUnknown1D;
+        if (p->mFlags & 0x1000) {
+            fn_80103CB0(p);
+            pState->mUnknown4 = 0;
+            p->mFlags &= ~0x1000;
+            pRecord->mUnknownB = 0;
+        }
+        if ((p->mFlags & 0x2000) && kind == 4) {
+            fn_800A5A8C(2, p, fn_80039F5C(p->mIdBytes[2], (unsigned char)pRecord->mUnknownA[0]));
+            fn_800D4D84(p);
+            if (p->mFlags & 0x4000) {
+                fn_80148108(0);
+            }
+        }
+        if (p->mFlags & 4) {
+            if (fn_801BE648(p->mpUnknown792) == 235) {
+                p->mFlags = (p->mFlags & ~4) | 8;
+                p->mUnknown1008.mUnknown0 = pState->mUnknown11;
+                p->mUnknown1008.mUnknown1 = 1;
+                p->mUnknown1008.mUnknown2 = 1;
+                p->mUnknown1011 = 6;
+                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 236, p, 1.0f);
+            } else {
+                if (kind == 4) {
+                    p->mFlags &= ~0x2000;
+                }
+                p->mFlags &= ~4;
+                p->mUnknown512.mUnknown14 = 1;
+                p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+                p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
+                p->mUnknown512.mUnknown0 = 0.0f;
+                return 1;
+            }
+        }
+    } else {
+        Object_80039F5C *pOther;
+
+        pState->mUnknown4++;
+        pOther = fn_8009BCE8(&p->mUnknown560.mUnknown40);
+        if (pOther && (pOther->mpState->mId == 12 || p->mUnknown560.mUnknown32 > lbl_803ECB08 * 50310.56f)) {
+            switch (p->mUnknown560.mUnknown55) {
+            case 0:
+            case 5:
+            case 7:
+                if (pState->mUnknown4 > fn_80104610(p)) {
+                    fn_80176B8C(pOther);
+                }
+                pState->mUnknown2 = 1;
+                if (fn_800E96EC(p, pOther) == 1) {
+                    Record_800B15FC *pEvent = fn_800B15FC();
+
+                    fn_8009BD2C(pOther, &pEvent->mUnknown0);
+                    pEvent->mUnknownC = p->mMotion.mPos.mX;
+                    pEvent->mUnknown10 = p->mMotion.mPos.mY;
+                    pEvent->mUnknown14 = 34;
+                    fn_800B1508();
+                } else {
+                    pState->mUnknown2 = 0;
+                }
+                break;
+            }
+        }
+        p->mFlags &= ~0x3000;
+        if (p->mFlags & 4) {
+            p->mFlags &= ~4;
+            p->mUnknown512.mUnknown14 = 1;
+            p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+            p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
+            p->mUnknown512.mUnknown0 = 0.0f;
+            return 1;
+        }
+    }
+    return 0;
+}
+
 extern "C" void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d)
 {
     Message_800F01CC message;
