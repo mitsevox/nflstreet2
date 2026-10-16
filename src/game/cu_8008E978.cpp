@@ -138,19 +138,6 @@ struct Header_80094B78 {
     unsigned char mUnknown4[10];
 };
 
-/* One of the ten 40-byte entries of the block fn_80094E80 allocates under
-   the id 'anmm'. */
-struct Entry_80094BC4 {
-    void *mpUnknown0;
-    void *mpUnknown4;
-    int mUnknown8;
-    int mUnknownC;
-    int mUnknown10;
-    Vector_80039F5C mUnknown14;
-    void (*mpCallback20)(void *p);
-    int mUnknown24;
-};
-
 /* Row table searched by fn_800680A8 (laid out as in cu_80067F18.cpp):
    mUnknown8 rows of mUnknownC + mUnknown10 halfwords from +mUnknown4. */
 struct Table_800680A8 {
@@ -444,30 +431,43 @@ extern "C" Actor_801C009C *fn_80091240(unsigned short index)
     return fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
 }
 
+extern "C" int fn_80027DF0(void);
+extern "C" void fn_80162780(int a, int b);
+extern "C" void fn_8013F97C(int a);
+extern "C" void fn_8013FB44(void);
+extern "C" void fn_8013FA58(int a, int b);
+extern "C" void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg);
+extern "C" void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 extern "C" Object_80039F5C *fn_8008FF28(Character_80093BCC *pCharacter, Actor_801C009C *pActor);
-extern "C" int fn_800E0188(Object_80039F5C *p, float *pA, float *pB);
 
-extern "C" int fn_80091C84(int index, float *pOut)
+extern "C" void fn_8009126C(int index)
 {
-    Character_80093BCC *pCharacter;
-    int result = 0;
+    Character_80093BCC *pCharacter = fn_80093BCC(index);
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    unsigned char selected;
 
-    pCharacter = fn_80093BCC(index);
-    if (pCharacter != 0) {
-        Object_80039F5C *p = fn_8008FF28(pCharacter, fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4));
-        float start;
-        float end;
-
-        if (p->mIdBytes[3] == 1 && fn_800E0188(p, &start, &end) != 0) {
-            if (pOut != 0) {
-                *pOut = end - start;
-            }
-            if (end - start > 0.0f) {
-                result = 1;
-            }
-        }
+    if (pActor->mUnknown4 > 1) {
+        pCharacter->mUnknownDC[0] = 0;
     }
-    return result;
+    selected = pCharacter->mUnknownE0.mUnknown0;
+    if (fn_80027DF0() == 0 && selected != 0) {
+        Object_80039F5C *p;
+        Camera_8013F738 *pCamera;
+        int ref;
+
+        fn_80162780(0, 0);
+        fn_8013F97C(2);
+        p = fn_8008FF28(pCharacter, pActor);
+        fn_8009BD2C(p, &ref);
+        pCamera = fn_8013FA04(2);
+        pCamera->mUnknown100 = ref;
+        pCamera->mUnknownF8 = p->mMotion.mPos.mX;
+        pCamera->mUnknownFC = p->mMotion.mPos.mY;
+        fn_8013FB44();
+        fn_8013FA8C(10);
+        fn_8013FA58(0, 0);
+        fn_8013C824(pCamera, 3, 0);
+    }
 }
 
 extern "C" int fn_80091D34(void)
@@ -557,24 +557,6 @@ extern "C" float fn_800921B0(Object_80039F5C *p, Camera_8013F738 *pCamera)
 
 extern "C" void fn_800942F0(int index);
 extern "C" void fn_8009418C(void);
-
-extern "C" void fn_801D339C(int a);
-extern "C" void fn_801D3318(int a, const char *pName);
-extern "C" void fn_801D342C(int a);
-extern "C" void fn_80094238(int index);
-
-extern "C" void fn_80092538(void)
-{
-    fn_801D339C(-1);
-    fn_801D3318(-1, "ANIMSCRIPT_PROJ");
-    fn_80094238(0);
-    fn_80094238(1);
-    fn_80094238(2);
-    fn_80094238(3);
-    fn_80094238(4);
-    fn_80094238(5);
-    fn_801D342C(-1);
-}
 
 extern "C" void fn_800925A4(void)
 {
@@ -667,6 +649,28 @@ extern "C" int fn_800927BC(int index)
         result = 1;
     }
     return result;
+}
+
+extern "C" int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
+extern "C" void fn_800F0490(int a, State_80039F5C *pQueue, int id);
+
+extern "C" void fn_80093348(int team)
+{
+    Character_80093BCC *pCharacter = fn_80093BCC(team);
+
+    if (pCharacter != 0) {
+        Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+        unsigned short i;
+
+        for (i = 0; i < pActor->mUnknown4; i++) {
+            Object_80039F5C *p = pCharacter->mUnknown14[i];
+
+            if (p != 0 && p->mIdBytes[3] == 1 && p->mpState->mId == 50 && p->mUnknown344 == team) {
+                fn_800F0770(0, p->mpState, 1, 0, p);
+                fn_800F0490(0, p->mpState, 50);
+            }
+        }
+    }
 }
 
 extern "C" void fn_800937CC(void)
@@ -965,14 +969,6 @@ extern "C" void fn_800943D8(void)
     }
 }
 
-extern "C" float fn_80094454(int index)
-{
-    float value = 0.0f;
-
-    fn_80091C84(index, &value);
-    return value;
-}
-
 extern "C" unsigned int fn_80094488(void)
 {
     return lbl_803EA8C4;
@@ -1082,21 +1078,6 @@ extern "C" void fn_80094B78(Header_80094B78 *p)
 extern "C" void fn_80094BBC(Object_8017886C *value)
 {
     lbl_803EC928 = value;
-}
-
-extern "C" void fn_80094BC4(Entry_80094BC4 *p)
-{
-    p->mpUnknown0 = 0;
-    p->mUnknown8 = -1;
-    p->mpUnknown4 = 0;
-    p->mUnknownC = 0;
-    p->mUnknown10 = 0;
-    {
-        Vector_80039F5C *pV = &p->mUnknown14;
-
-        pV->mX = pV->mY = pV->mZ = 0.0f;
-    }
-    p->mUnknown24 = 0;
 }
 
 extern "C" void fn_80094C00(Entry_80094BC4 *p, int count)
@@ -1419,31 +1400,27 @@ extern "C" Table_80093BAC *fn_800966F8(int index)
     return lbl_803EA920->mpUnknown0[index];
 }
 
+extern "C" void fn_80096850(int index, Point_8017886C *pOut, int *pFlag);
+
+extern "C" void fn_80096708(int index)
+{
+    Point_8017886C pos = {0.0f, 0.0f};
+    Camera_8013F738 *pCamera;
+
+    fn_80096DA8(index);
+    pCamera = fn_8013FA04(2);
+    pCamera->mUnknown108 = index;
+    fn_80096850(index, &pos, &pCamera->mUnknown10C);
+    pCamera->mUnknownF8 = pos.mX;
+    pCamera->mUnknownFC = pos.mY;
+    fn_80162780(0, 0);
+    fn_8013F97C(2);
+    fn_8013FA8C(11);
+}
+
 extern "C" int fn_80096794(void)
 {
     return 0;
-}
-
-extern "C" int fn_8009679C(unsigned int index)
-{
-    int result = 0;
-    Playback_80096DA8 *pPlayback = fn_80096DA8(index);
-
-    if (pPlayback->mUnknown0 != -1) {
-        float limit = pPlayback->mUnknown2C * 0.059999995f;
-        float time;
-
-        result = pPlayback->mUnknown10 == 2;
-        time = pPlayback->mUnknown20;
-        if (time < limit) {
-            time = limit;
-        }
-        pPlayback->mUnknown20 = time;
-        if (pPlayback->mUnknown24 >= time && pPlayback->mUnknown24 != 0.0f) {
-            result = 0;
-        }
-    }
-    return result;
 }
 
 extern "C" void fn_80096A24(void)

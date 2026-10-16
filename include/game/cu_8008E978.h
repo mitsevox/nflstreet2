@@ -1,13 +1,14 @@
 #ifndef GAME_CU_8008E978_H
 #define GAME_CU_8008E978_H
 
+#include "game/Object_80039F5C.h"
+
 /* Views of the records returned by fn_80093BAC, fn_80093BCC and
    fn_80096DA8. Their original identities and the contents of the opaque
    spans remain unknown. */
 struct Frame_80141210 { unsigned char mUnknown0[0x14]; int mUnknown14; unsigned char mUnknown18[0x18]; float mUnknown30, mUnknown34; unsigned char mUnknown38[4]; float mUnknown3C; };
 struct Actor_801C009C { unsigned short mUnknown0,mUnknown2,mUnknown4,mUnknown6; unsigned int mUnknown8; unsigned char mUnknownC[12]; Frame_80141210 *mUnknown18; };
 struct Selection_80141210 { unsigned char mUnknown0; unsigned char mUnknown1[3]; union { int mWord; unsigned short mParts[2]; } mUnknown4,mUnknown8; };
-struct Object_80039F5C;
 
 /* One of the four 912-byte records at +128 of the block fn_800925F0
    allocates. */
@@ -31,6 +32,19 @@ struct Playback_80096DA8 {
     int mUnknown10; union { int mWord; unsigned short mParts[2]; } mUnknown14,mUnknown18,mUnknown1C;
     float mUnknown20,mUnknown24;
     unsigned char mUnknown28[4]; unsigned int mUnknown2C;
+};
+
+/* One of the ten 40-byte entries of the block fn_80094E80 allocates under
+   the id 'anmm'. */
+struct Entry_80094BC4 {
+    void *mpUnknown0;
+    void *mpUnknown4;
+    int mUnknown8;
+    int mUnknownC;
+    int mUnknown10;
+    Vector_80039F5C mUnknown14;
+    void (*mpCallback20)(void *p);
+    int mUnknown24;
 };
 
 extern "C" {
