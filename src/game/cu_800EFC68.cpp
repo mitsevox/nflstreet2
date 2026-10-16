@@ -2981,7 +2981,7 @@ extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pOther, Object_
     }
 }
 
-extern "C" void fn_801048B4(int unused, Object_80137ABC *pBall, Vector_80039F5C *pTarget)
+extern "C" void fn_801048B4(Object_80039F5C *p, Object_80137ABC *pBall, Vector_80039F5C *pTarget)
 {
     Vector_80039F5C ball;
     float over;
@@ -3057,6 +3057,44 @@ extern "C" float fn_801050DC(Object_80137ABC *pBall, Vector_80039F5C *pTarget, f
         }
     }
     return clamped * lbl_803EA2C4;
+}
+
+extern "C" int fn_801C4E98(void *p, const char *pName);
+extern "C" void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pA);
+extern "C" float fn_801CFB18(int angle);
+extern "C" int fn_801CFDD0(float);
+
+extern "C" void fn_80105168(int mode, Object_80137ABC *pBall, Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pTarget, float speed)
+{
+    Vector_80039F5C delta;
+    Vector_80039F5C ball;
+    Vector_80039F5C hand;
+    Vector_80039F5C handDir;
+    Vector_80039F5C velocity;
+    float distance;
+    float runSpeed;
+    int angle;
+    float time;
+
+    fn_80137D58(pBall, &ball);
+    if (mode == 6) {
+        fn_8009BF5C(pOther, fn_801C4E98(pOther->mpUnknown4->mpUnknown100, "rwrist"), &hand, &handDir);
+    } else {
+        fn_8009BF5C(pOther, fn_801C4E98(pOther->mpUnknown4->mpUnknown100, "lwrist"), &hand, &handDir);
+    }
+    fn_802276B4(&delta, &ball, &hand);
+    distance = fn_802270A4(&delta);
+    fn_80104B3C(pOther, &velocity);
+    runSpeed = fn_802270D4(&velocity);
+    angle = (fn_801CFE40(velocity.mY, velocity.mX) - fn_801CFE40(delta.mY, delta.mX)) & 0xFFFFFF;
+    time = distance / (speed * fn_801CFB94(fn_801CFDD0(runSpeed * fn_801CFB18(angle) / speed)) + runSpeed * fn_801CFB94(angle));
+    if (time <= 0.0f || time > 120.0f) {
+        time = 2.0f;
+    }
+    fn_80104C3C(pOther, pTarget, time);
+    pTarget->mZ = hand.mZ;
+    fn_801048B4(p, pBall, pTarget);
+    pTarget->mY = pTarget->mY >= pOther->mMotion.mPos.mY ? pTarget->mY : pOther->mMotion.mPos.mY;
 }
 
 extern "C" int fn_8010531C(Object_80039F5C *p) {
