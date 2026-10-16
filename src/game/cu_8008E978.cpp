@@ -138,19 +138,22 @@ struct Header_80094B78 {
     unsigned char mUnknown4[10];
 };
 
-/* One of the ten 40-byte entries of the block fn_80094E80 allocates under
-   the id 'anmm'. */
-struct Entry_80094BC4 {
-    void *mpUnknown0;
-    void *mpUnknown4;
-    int mUnknown8;
+/* Row table searched by fn_800680A8 (laid out as in cu_80067F18.cpp):
+   mUnknown8 rows of mUnknownC + mUnknown10 halfwords from +mUnknown4. */
+struct Table_800680A8 {
+    char mUnknown0[4];
+    int mUnknown4;
+    unsigned int mUnknown8;
     int mUnknownC;
-    int mUnknown10;
-    float mUnknown14;
-    float mUnknown18;
-    float mUnknown1C;
-    void (*mpCallback20)(void *p);
-    int mUnknown24;
+    unsigned int mUnknown10;
+};
+
+/* The four halfwords at mUnknownC of a Table_800680A8 row that
+   fn_80094B34 tests. */
+struct Cell_80094B34 {
+    unsigned short mUnknown0[3];
+    unsigned short mUnknown6 : 3;
+    signed short mValue : 13;
 };
 
 /* Block allocated by fn_80096954 with fn_801D2B7C (112 bytes). */
@@ -409,11 +412,134 @@ extern "C" void fn_8009036C(int *p)
     fn_80094454(*p);
 }
 
+extern "C" void fn_801BB74C(unsigned short slot, int id, Actor_801C009C *pActor);
+extern "C" int fn_8009439C(int index);
+extern "C" void fn_801BC440(Actor_801C009C *pActor, Actor_801C009C *pSource);
+
+extern "C" int fn_80090390(Character_80093BCC *pCharacter, int *pSlot)
+{
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    int load = 1;
+    unsigned int i = 0;
+    int id = fn_8009439C(pCharacter->mUnknown4) + pActor->mUnknown2;
+
+    for (i = 0; i < 2; i++) {
+        if (lbl_8030C164[i].mUnknown0 == id) {
+            if (lbl_8030C164[i].mUnknown8 == pCharacter->mUnknown0) {
+                load = 0;
+                lbl_8030C164[i].mUnknown4++;
+            } else {
+                load = 0;
+                fn_801BC440(pActor, fn_80093BAC(lbl_8030C164[i].mUnknown8, lbl_8030C164[i].mUnknownC));
+                lbl_8030C164[i].mUnknown4++;
+            }
+            pCharacter->mUnknownD8.mWord = i;
+            break;
+        }
+    }
+    if (load) {
+        for (i = 0; i < 2; i++) {
+            if (lbl_8030C164[i].mUnknown4 == 0) {
+                fn_801BB74C(i, id, pActor);
+                lbl_8030C164[i].mUnknown0 = id;
+                lbl_8030C164[i].mUnknown8 = pCharacter->mUnknown0;
+                lbl_8030C164[i].mUnknown4++;
+                lbl_8030C164[i].mUnknownC = pCharacter->mUnknown4;
+                pCharacter->mUnknownD8.mWord = i;
+                break;
+            }
+        }
+    }
+    if (*pSlot != i) {
+        *pSlot = i;
+    }
+    return i < 2;
+}
+
+extern "C" int fn_801BB878(int index, int a, int b, Actor_801C009C *pActor, int c);
+
+extern "C" int fn_800904D4(Character_80093BCC *pCharacter, int a, int b)
+{
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    int handle = fn_801BB878(fn_8009439C(pCharacter->mUnknown4) + pActor->mUnknown2, a, b, pActor, 0);
+
+    pCharacter->mUnknownD8.mWord = handle | 0x80000000;
+    return handle != 0xFFFF;
+}
+
+extern "C" void fn_800EFE1C(int a, State_80039F5C *pQueue);
+
+extern "C" void fn_80091144(int index)
+{
+    Character_80093BCC *pCharacter = fn_80093BCC(index);
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    unsigned short i;
+
+    for (i = 0; i < pActor->mUnknown4; i++) {
+        Object_80039F5C *p = pCharacter->mUnknown14[i];
+
+        if (p != 0 && p->mUnknown9[2] != 0) {
+            Message_800F01CC message;
+
+            fn_801C1F94(&message, 0, sizeof(message));
+            message.mUnknown1[0] = index;
+            message.mUnknown1[1] = i;
+            if (p->mIdBytes[3] == 1 || p->mIdBytes[3] == 3) {
+                message.mId = 50;
+                fn_800F053C(0, p->mpState, &message, p);
+                if (p->mpState->mId != message.mId) {
+                    fn_800EFE1C(0, p->mpState);
+                    fn_800F053C(0, p->mpState, &message, p);
+                }
+            }
+        }
+    }
+}
+
 extern "C" Actor_801C009C *fn_80091240(unsigned short index)
 {
     Character_80093BCC *pCharacter = fn_80093BCC(index);
 
     return fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+}
+
+extern "C" int fn_80027DF0(void);
+extern "C" void fn_80162780(int a, int b);
+extern "C" void fn_8013F97C(int a);
+extern "C" void fn_8013FB44(void);
+extern "C" void fn_8013FA58(int a, int b);
+extern "C" void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg);
+extern "C" void fn_8009BD2C(Object_80039F5C *p, int *pRef);
+extern "C" Object_80039F5C *fn_8008FF28(Character_80093BCC *pCharacter, Actor_801C009C *pActor);
+
+extern "C" void fn_8009126C(int index)
+{
+    Character_80093BCC *pCharacter = fn_80093BCC(index);
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    unsigned char selected;
+
+    if (pActor->mUnknown4 > 1) {
+        pCharacter->mUnknownDC[0] = 0;
+    }
+    selected = pCharacter->mUnknownE0.mUnknown0;
+    if (fn_80027DF0() == 0 && selected != 0) {
+        Object_80039F5C *p;
+        Camera_8013F738 *pCamera;
+        int ref;
+
+        fn_80162780(0, 0);
+        fn_8013F97C(2);
+        p = fn_8008FF28(pCharacter, pActor);
+        fn_8009BD2C(p, &ref);
+        pCamera = fn_8013FA04(2);
+        pCamera->mUnknown100 = ref;
+        pCamera->mUnknownF8 = p->mMotion.mPos.mX;
+        pCamera->mUnknownFC = p->mMotion.mPos.mY;
+        fn_8013FB44();
+        fn_8013FA8C(10);
+        fn_8013FA58(0, 0);
+        fn_8013C824(pCamera, 3, 0);
+    }
 }
 
 extern "C" int fn_80091D34(void)
@@ -431,6 +557,35 @@ extern "C" int fn_80091D34(void)
         }
     }
     return result;
+}
+
+extern "C" void fn_80091DAC(int index, int force)
+{
+    Character_80093BCC *pCharacter = fn_80093BCC(index);
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+
+    if (pActor->mUnknown4 > 1 || !(pActor->mUnknown8 & 0x10) || force == 1) {
+        unsigned short i;
+
+        for (i = 0; i < pActor->mUnknown4; i++) {
+            pCharacter->mUnknown14[i]->mFlags |= 8;
+        }
+    }
+}
+
+extern "C" void fn_80091E44(int index)
+{
+    Character_80093BCC *pCharacter = fn_80093BCC(index);
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    unsigned short i;
+
+    for (i = 0; i < pActor->mUnknown4; i++) {
+        Object_80039F5C *p = pCharacter->mUnknown14[i];
+
+        if (p != 0) {
+            p->mFlags &= ~8;
+        }
+    }
 }
 
 extern "C" int fn_800920B8(void *p, void *pBuffer)
@@ -568,6 +723,28 @@ extern "C" int fn_800927BC(int index)
     return result;
 }
 
+extern "C" int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
+extern "C" void fn_800F0490(int a, State_80039F5C *pQueue, int id);
+
+extern "C" void fn_80093348(int team)
+{
+    Character_80093BCC *pCharacter = fn_80093BCC(team);
+
+    if (pCharacter != 0) {
+        Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+        unsigned short i;
+
+        for (i = 0; i < pActor->mUnknown4; i++) {
+            Object_80039F5C *p = pCharacter->mUnknown14[i];
+
+            if (p != 0 && p->mIdBytes[3] == 1 && p->mpState->mId == 50 && p->mUnknown344 == team) {
+                fn_800F0770(0, p->mpState, 1, 0, p);
+                fn_800F0490(0, p->mpState, 50);
+            }
+        }
+    }
+}
+
 extern "C" void fn_800937CC(void)
 {
     if (fn_8009B9F0(0)) {
@@ -582,7 +759,7 @@ extern "C" Actor_801C009C *fn_80093BAC(int a, int b)
     return lbl_803EC924->mEntries[b].mpUnknown0->mpUnknown8[a];
 }
 
-extern "C" Character_80093BCC *fn_80093BCC(unsigned short index)
+extern "C" Character_80093BCC *fn_80093BCC(unsigned int index)
 {
     Block_800925F0 *pBlock = lbl_803EC924;
     Character_80093BCC *pCharacter = 0;
@@ -620,6 +797,30 @@ extern "C" int fn_80093C50(int index)
 extern "C" int fn_80093C64(void)
 {
     return lbl_803EC924->mUnknown80.mUnknownE4E;
+}
+
+extern "C" Frame_80141210 *fn_801C029C(Actor_801C009C *pActor, unsigned short index);
+
+extern "C" Object_80137ABC *fn_80093C70(Character_80093BCC *pCharacter, int id, Frame_80141210 **ppFrame, unsigned char *pFound)
+{
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    Object_80137ABC *result = 0;
+    int i;
+
+    *pFound = 0;
+    for (i = 0; i < pActor->mUnknown4; i++) {
+        Frame_80141210 *pFrame = fn_801C029C(pActor, i);
+
+        if (pFrame->mUnknown14 == id) {
+            result = pCharacter->mUnknown74[i];
+            *pFound = 1;
+            if (ppFrame != 0) {
+                *ppFrame = pFrame;
+            }
+            break;
+        }
+    }
+    return result;
 }
 
 extern "C" int fn_80093E38(int index)
@@ -761,6 +962,33 @@ extern "C" int fn_8009422C(void)
     return lbl_802D72BC[0];
 }
 
+/* 32-byte records of the .data table read by fn_80094238 ("Gamebreaker",
+   "Post Game", ...). */
+struct Script_802D7A10 {
+    char mName[20];
+    int mUnknown14;
+    int mUnknown18;
+    int mUnknown1C;
+};
+
+extern "C" Script_802D7A10 lbl_802D7A10[];
+extern "C" void fn_801C02EC(void);
+extern "C" void fn_801C06A0(void);
+
+extern "C" void fn_80094238(int index)
+{
+    void *pData;
+
+    lbl_803EC924->mEntries[index].mUnknown10 = lbl_802D7A10[index].mUnknown1C;
+    lbl_803EC924->mEntries[index].mUnknown8 = lbl_802D7A10[index].mUnknown14;
+    lbl_803EC924->mEntries[index].mUnknownC = lbl_802D7A10[index].mUnknown18;
+    pData = lbl_803EC924->mpUnknown7C;
+    lbl_803EC924->mEntries[index].mpUnknown0 = (Table_80093BAC *)fn_801EF390(pData, lbl_802D7A10[index].mUnknown14, 1);
+    fn_801C02EC();
+    lbl_803EC924->mEntries[index].mUnknown4 = fn_801EF390(pData, lbl_802D7A10[index].mUnknown18, 1);
+    fn_801C06A0();
+}
+
 extern "C" void fn_800942F0(int index)
 {
     void *pData = lbl_803EC924->mpUnknown7C;
@@ -849,9 +1077,67 @@ extern "C" int fn_80094564(unsigned int a, unsigned int b)
     return result;
 }
 
+extern "C" int fn_801BC654(void);
+extern "C" int fn_801F0E68(int a, int b);
+
+extern "C" void fn_80094598(int index)
+{
+    Character_80093BCC *pCharacter = &lbl_803EC924->mUnknown80.mCharacters[index];
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    int id = fn_8009439C(pCharacter->mUnknown4) + pActor->mUnknown2;
+    int handle = fn_801BC654();
+
+    while (fn_801F0E68(handle, id) != 0) {
+    }
+}
+
 extern "C" void fn_80094608(unsigned char value)
 {
     lbl_803EA8D4 = value;
+}
+
+extern "C" int fn_80178348(void);
+extern "C" int fn_800947C4(Object_8017886C *p);
+extern "C" int fn_800948E4(Object_8017886C *p);
+extern "C" int fn_80094698(int index, int operand, int value, unsigned short *pRow);
+extern "C" unsigned int fn_800680A8(Table_800680A8 *pTable, short *pValues, unsigned short **ppOut, unsigned int max,
+                                    int (*pCallback)(int index, int operand, int value, unsigned short *pRow));
+
+extern "C" int fn_800947C4(Object_8017886C *p)
+{
+    int result = 0;
+
+    fn_8016871C(fn_80178348());
+    if (p->mUnknown18 & 0x8000) {
+        result = 1;
+    }
+    if (fn_80177F7C() == 6) {
+        result = 2;
+    }
+    return result;
+}
+
+extern "C" void fn_80094A9C(short *pValues, Object_8017886C *p)
+{
+    pValues[0] = fn_800947C4(p);
+    pValues[1] = fn_800948E4(p);
+}
+
+extern "C" unsigned int fn_80094AE0(short *pValues, Object_8017886C *p, Table_800680A8 *pTable, unsigned short **ppOut, unsigned int max)
+{
+    fn_80094A9C(pValues, p);
+    return fn_800680A8(pTable, pValues, ppOut, max, fn_80094698);
+}
+
+extern "C" int fn_80094B34(Table_800680A8 *pTable, int index)
+{
+    unsigned short *pRow = (unsigned short *)((char *)pTable + pTable->mUnknown4) + index * (pTable->mUnknownC + pTable->mUnknown10);
+    int result = -1;
+
+    if (((Cell_80094B34 *)(pRow + pTable->mUnknownC))->mValue > 0) {
+        result = pRow[0];
+    }
+    return result;
 }
 
 extern "C" void fn_80094B78(Header_80094B78 *p)
@@ -1006,6 +1292,25 @@ extern "C" int fn_80095028(unsigned int id)
     return 1;
 }
 
+extern "C" int fn_80095284(Object_80039F5C *p, Character_80093BCC *pCharacter, unsigned int count)
+{
+    int result = 0;
+    unsigned short i;
+
+    if (p->mIdBytes[3] == 1) {
+        result = p->mpState->mId == 50;
+    }
+    if (result == 0) {
+        for (i = 0; i < count; i++) {
+            if (pCharacter->mUnknown14[i] == p) {
+                result = 1;
+                break;
+            }
+        }
+    }
+    return result;
+}
+
 extern "C" void fn_80095304(int id, Object_80039F5C **ppObject, unsigned short *pFound)
 {
     int found = 0;
@@ -1054,6 +1359,22 @@ extern "C" int fn_80096060(int index)
     return lbl_8030C270[index];
 }
 
+extern "C" int fn_80096304(int index)
+{
+    Character_80093BCC *pCharacter = fn_80093BCC(index);
+    int result = 1;
+    int i;
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+
+    for (i = 0; i < pActor->mUnknown4; i++) {
+        if (fn_80095FD8(pCharacter->mUnknown14[i]) == 0) {
+            result = 0;
+            break;
+        }
+    }
+    return result;
+}
+
 extern "C" int fn_8009637C(unsigned short index)
 {
     Character_80093BCC *pCharacter = fn_80093BCC(index);
@@ -1064,6 +1385,21 @@ extern "C" int fn_8009637C(unsigned short index)
         result = fn_8009B9BC() == 0;
     }
     return result;
+}
+
+extern "C" Object_80039F5C *fn_800963EC(Character_80093BCC *pCharacter)
+{
+    return pCharacter->mUnknown14[0];
+}
+
+extern "C" Object_80039F5C *fn_800963F4(Character_80093BCC *pCharacter)
+{
+    Object_80039F5C *p = 0;
+
+    if (fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4)->mUnknown4 > 1) {
+        p = pCharacter->mUnknown14[1];
+    }
+    return p;
 }
 
 extern "C" int fn_80096440(unsigned int id)
@@ -1131,9 +1467,61 @@ extern "C" int fn_80096590(void)
     return result;
 }
 
+extern "C" int lbl_803EA924[2];
+
+extern "C" int fn_800965E8(Playback_80096DA8 *pPlayback, int *pSlot)
+{
+    int load = 1;
+    unsigned int i = 0;
+    Actor_801C009C *pActor = fn_80096DCC(pPlayback->mUnknown0, pPlayback->mUnknown4);
+    int id = pActor->mUnknown2 + lbl_803EA924[pPlayback->mUnknown4];
+
+    for (i = 0; i < 2; i++) {
+        if (lbl_8030C2A8[i].mUnknown0 == id) {
+            lbl_8030C2A8[i].mUnknown4++;
+            load = 0;
+            pPlayback->mUnknown8 = i + 5;
+            break;
+        }
+    }
+    if (load) {
+        for (i = 0; i < 2; i++) {
+            if (lbl_8030C2A8[i].mUnknown4 == 0) {
+                fn_801BB74C(i + 5, id, pActor);
+                lbl_8030C2A8[i].mUnknown0 = id;
+                lbl_8030C2A8[i].mUnknown4++;
+                pPlayback->mUnknown8 = i + 5;
+                break;
+            }
+        }
+    }
+    if (*pSlot != i) {
+        *pSlot = i;
+    }
+    return i < 2;
+}
+
 extern "C" Table_80093BAC *fn_800966F8(int index)
 {
     return lbl_803EA920->mpUnknown0[index];
+}
+
+extern "C" void fn_80096850(int index, Point_8017886C *pOut, int *pFlag);
+
+extern "C" void fn_80096708(int index)
+{
+    Point_8017886C pos = {0.0f, 0.0f};
+    Camera_8013F738 *pCamera;
+
+    fn_80096DA8(index);
+    pCamera = fn_8013FA04(2);
+    pCamera->mUnknown108 = index;
+    fn_80096850(index, &pos, &pCamera->mUnknown10C);
+    pCamera->mUnknownF8 = pos.mX;
+    pCamera->mUnknownFC = pos.mY;
+    fn_80162780(0, 0);
+    fn_8013F97C(2);
+    fn_8013FA8C(11);
 }
 
 extern "C" int fn_80096794(void)
@@ -1145,6 +1533,26 @@ extern "C" void fn_80096A24(void)
 {
     fn_801F010C(lbl_803EA920->mpUnknown8, 3);
     fn_801D2BD0(lbl_803EA920);
+}
+
+extern "C" int fn_800965E8(Playback_80096DA8 *pPlayback, int *pIndex);
+
+/* The request is the 48-byte Playback_80096DA8 record that is stored into
+   the free slot. */
+extern "C" int fn_80096A58(Params_80096A58 *pParams)
+{
+    Playback_80096DA8 *pPlayback = (Playback_80096DA8 *)pParams;
+    int index = fn_80096590();
+
+    if (index != -1) {
+        fn_80096DCC(pPlayback->mUnknown0, pPlayback->mUnknown4);
+        if (fn_800965E8(pPlayback, &index) != 0) {
+            lbl_803EA920->mUnknown10[index] = *pPlayback;
+        } else {
+            index = -1;
+        }
+    }
+    return index;
 }
 
 extern "C" void fn_80096D14(int index)

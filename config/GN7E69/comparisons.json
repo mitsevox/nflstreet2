@@ -22365,9 +22365,39 @@
           "end": "0x80090390"
         },
         {
+          "symbol": "fn_80090390",
+          "start": "0x80090390",
+          "end": "0x800904D4"
+        },
+        {
+          "symbol": "fn_800904D4",
+          "start": "0x800904D4",
+          "end": "0x80090558"
+        },
+        {
+          "symbol": "fn_80091144",
+          "start": "0x80091144",
+          "end": "0x80091240"
+        },
+        {
           "symbol": "fn_80091240",
           "start": "0x80091240",
           "end": "0x8009126C"
+        },
+        {
+          "symbol": "fn_8009126C",
+          "start": "0x8009126C",
+          "end": "0x8009134C"
+        },
+        {
+          "symbol": "fn_80091DAC",
+          "start": "0x80091DAC",
+          "end": "0x80091E44"
+        },
+        {
+          "symbol": "fn_80091E44",
+          "start": "0x80091E44",
+          "end": "0x80091EC0"
         },
         {
           "symbol": "fn_800920B8",
@@ -22425,6 +22455,11 @@
           "end": "0x80092830"
         },
         {
+          "symbol": "fn_80093348",
+          "start": "0x80093348",
+          "end": "0x80093410"
+        },
+        {
           "symbol": "fn_80093BAC",
           "start": "0x80093BAC",
           "end": "0x80093BCC"
@@ -22453,6 +22488,11 @@
           "symbol": "fn_80093C64",
           "start": "0x80093C64",
           "end": "0x80093C70"
+        },
+        {
+          "symbol": "fn_80093C70",
+          "start": "0x80093C70",
+          "end": "0x80093D20"
         },
         {
           "symbol": "fn_80093E38",
@@ -22505,6 +22545,11 @@
           "end": "0x80094238"
         },
         {
+          "symbol": "fn_80094238",
+          "start": "0x80094238",
+          "end": "0x800942F0"
+        },
+        {
           "symbol": "fn_800942F0",
           "start": "0x800942F0",
           "end": "0x80094374"
@@ -22550,9 +22595,34 @@
           "end": "0x80094598"
         },
         {
+          "symbol": "fn_80094598",
+          "start": "0x80094598",
+          "end": "0x80094608"
+        },
+        {
           "symbol": "fn_80094608",
           "start": "0x80094608",
           "end": "0x80094610"
+        },
+        {
+          "symbol": "fn_800947C4",
+          "start": "0x800947C4",
+          "end": "0x8009481C"
+        },
+        {
+          "symbol": "fn_80094A9C",
+          "start": "0x80094A9C",
+          "end": "0x80094AE0"
+        },
+        {
+          "symbol": "fn_80094AE0",
+          "start": "0x80094AE0",
+          "end": "0x80094B34"
+        },
+        {
+          "symbol": "fn_80094B34",
+          "start": "0x80094B34",
+          "end": "0x80094B78"
         },
         {
           "symbol": "fn_80094B78",
@@ -22605,6 +22675,11 @@
           "end": "0x80095078"
         },
         {
+          "symbol": "fn_80095284",
+          "start": "0x80095284",
+          "end": "0x80095304"
+        },
+        {
           "symbol": "fn_80095FD8",
           "start": "0x80095FD8",
           "end": "0x8009601C"
@@ -22625,9 +22700,24 @@
           "end": "0x80096074"
         },
         {
+          "symbol": "fn_80096304",
+          "start": "0x80096304",
+          "end": "0x8009637C"
+        },
+        {
           "symbol": "fn_8009637C",
           "start": "0x8009637C",
           "end": "0x800963EC"
+        },
+        {
+          "symbol": "fn_800963EC",
+          "start": "0x800963EC",
+          "end": "0x800963F4"
+        },
+        {
+          "symbol": "fn_800963F4",
+          "start": "0x800963F4",
+          "end": "0x80096440"
         },
         {
           "symbol": "fn_80096590",
@@ -22635,9 +22725,19 @@
           "end": "0x800965E8"
         },
         {
+          "symbol": "fn_800965E8",
+          "start": "0x800965E8",
+          "end": "0x800966F8"
+        },
+        {
           "symbol": "fn_800966F8",
           "start": "0x800966F8",
           "end": "0x80096708"
+        },
+        {
+          "symbol": "fn_80096708",
+          "start": "0x80096708",
+          "end": "0x80096794"
         },
         {
           "symbol": "fn_80096794",
@@ -22648,6 +22748,11 @@
           "symbol": "fn_80096A24",
           "start": "0x80096A24",
           "end": "0x80096A58"
+        },
+        {
+          "symbol": "fn_80096A58",
+          "start": "0x80096A58",
+          "end": "0x80096B1C"
         },
         {
           "symbol": "fn_80096D14",
@@ -27938,6 +28043,136 @@
           "symbol": "fn_8003AC10",
           "start": "0x8003AC10",
           "end": "0x8003AC84"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80091C84.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. One target whole-function extent and its literal-pool slice; this split permits independent compilation of a disjoint partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80091C84",
+          "end": "0x80091D34"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802960AC",
+          "end": "0x802960B0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80091C84",
+          "start": "0x80091C84",
+          "end": "0x80091D34"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80092538.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. One target whole-function extent and its literal-pool slice; this split permits independent compilation of a disjoint partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80092538",
+          "end": "0x800925A4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802960DC",
+          "end": "0x802960EC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80092538",
+          "start": "0x80092538",
+          "end": "0x800925A4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80094454.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. One target whole-function extent and its literal-pool slice; this split permits independent compilation of a disjoint partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80094454",
+          "end": "0x80094488"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296104",
+          "end": "0x80296108"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80094454",
+          "start": "0x80094454",
+          "end": "0x80094488"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80094BC4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. One target whole-function extent and its literal-pool slice; this split permits independent compilation of a disjoint partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80094BC4",
+          "end": "0x80094C00"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296114",
+          "end": "0x80296118"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80094BC4",
+          "start": "0x80094BC4",
+          "end": "0x80094C00"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8009679C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. One target whole-function extent and its literal-pool slice; this split permits independent compilation of a disjoint partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8009679C",
+          "end": "0x80096850"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296138",
+          "end": "0x80296148"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8009679C",
+          "start": "0x8009679C",
+          "end": "0x80096850"
         }
       ]
     },
