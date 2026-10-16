@@ -20,9 +20,7 @@ struct Entry_8015005C {
     unsigned int mUnknown4;
     unsigned short mUnknown8;
     unsigned short mUnknown10;
-    unsigned char mUnknown12;
-    unsigned char mUnknown13;
-    char mUnknown14[6];
+    char mUnknown12[8];
 };
 
 struct Table_8015005C {
@@ -50,7 +48,7 @@ void fn_801486A8(void);
 void fn_801527E0(Settings_8031BDD4 *p, int value);
 Object_80039F5C *fn_8003AC84(int id);
 void fn_800AD910(int a, float b);
-void fn_800B6474(int a, int team);
+void fn_800B6474(int index, unsigned char team);
 void fn_800B6714(Object_80039F5C *pPlayer, int a);
 void fn_800B6658(Object_80039F5C *pPlayer);
 void fn_80162780(int a, int b);
@@ -91,8 +89,8 @@ void fn_801509D4(Class_802A1D58 *p)
     for (i = 0; i <= 3; i++) {
         Object_80039F5C *pPlayer = fn_8003AC84(fn_801530FC()->mEntries[i].mUnknown0);
         if (pPlayer) {
-            unsigned char value = fn_801530FC()->mEntries[i].mUnknown12;
-            if (value != 255 && fn_801530FC()->mEntries[i].mUnknown13 == 0) {
+            unsigned char value = fn_801530FC()->mEntries[i].mUnknown12[0];
+            if (value != 255 && fn_801530FC()->mEntries[i].mUnknown12[1] == 0) {
                 fn_800B6474(value, pPlayer->mIdBytes[2]);
                 fn_800B6714(pPlayer, value);
             } else {
