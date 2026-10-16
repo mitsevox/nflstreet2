@@ -155,13 +155,13 @@ int fn_8018D018(int destination, int rumt, int index, int *pOriginalIds, int pre
 void fn_8018D07C(int index)
 {
     QueryResult result;
-    QueryCursor cursor = {0, 0, -1, 0};
     int player, ytrp, oldPxsp;
-    int code = 0;
     int source = fn_8022F3D4(fn_8022F358(index));
+    QueryCursor cursor = {0, 0, -1, 0};
     int hadState = fn_80029D74(2, index);
     cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;
+    int code = 0;
     int status = fn_801FCE10(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from 'YPRC' order by 'DIGP'\n", source, &cursor, &player);
     if (status != 0 && status != 23) {
         code = status;
