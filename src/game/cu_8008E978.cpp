@@ -5533,6 +5533,32 @@ extern "C" float fn_800AC004(int team, float value)
     return value;
 }
 
+extern "C" unsigned int fn_800AC074(int team, unsigned int value)
+{
+    int flag = 0;
+
+    if (fn_800B65A0(team) != 255) {
+        flag = 1;
+        team = team == 0;
+    }
+    switch (fn_800ABDA4(team)) {
+    case 0:
+        if (flag != 0) {
+            value = (unsigned int)(value * 2.0f);
+        } else {
+            value = (unsigned int)(value * 0.8f);
+        }
+        break;
+    case 1:
+        value = (unsigned int)(value * 1.2f);
+        break;
+    case 2:
+        value = (unsigned int)(value * 1.0f);
+        break;
+    }
+    return value;
+}
+
 extern "C" int fn_800AC218(int team)
 {
     int result;

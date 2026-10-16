@@ -24405,6 +24405,11 @@
           "end": "0x800AC074"
         },
         {
+          "symbol": "fn_800AC074",
+          "start": "0x800AC074",
+          "end": "0x800AC218"
+        },
+        {
           "symbol": "fn_800AC218",
           "start": "0x800AC218",
           "end": "0x800AC268"
