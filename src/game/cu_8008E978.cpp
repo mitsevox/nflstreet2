@@ -1738,6 +1738,9 @@ extern "C" void fn_800A5D94(void)
 struct Object_800C6640 {
     unsigned char mUnknown0[0x28];
     int mUnknown28;
+    unsigned char mUnknown2C[10];
+    unsigned char mUnknown36;
+    unsigned char mUnknown37;
 };
 
 /* Object whose address fn_8011F4EC returns. Only the accessed bytes are
@@ -2010,6 +2013,53 @@ extern "C" void fn_800C51DC(Object_80039F5C *p, Object_80039F5C *pOther)
     fn_800CA5CC(pOther, 9, 1);
 }
 
+struct Order_800C5234 {
+    int mIds[7];
+};
+
+/* Only the order list at +4 is accessed; the size is not established. */
+struct Owner_800C5234 {
+    int mUnknown0;
+    Order_800C5234 mOrder;
+};
+
+extern Order_800C5234 lbl_80317AD8;
+
+extern "C" void fn_800C5234(Owner_800C5234 *p, int id)
+{
+    unsigned char i;
+    int temp;
+
+    p->mOrder = lbl_80317AD8;
+    for (i = 0; i < 7; i++) {
+        if (id == p->mOrder.mIds[i]) {
+            temp = p->mOrder.mIds[0];
+            p->mOrder.mIds[0] = id;
+            p->mOrder.mIds[i] = temp;
+            break;
+        }
+    }
+    if (i == 7) {
+        p->mOrder.mIds[0] = id;
+    }
+}
+
+extern "C" float fn_800CA9B4(int kind, Object_80039F5C *p);
+
+extern "C" int fn_800C52C8(Object_80039F5C *p, int unused, int value, int useModifier)
+{
+    int rating;
+    float scale;
+
+    rating = p->mRatings[2] < 0 ? 0 : (p->mRatings[2] > 255 ? 255 : p->mRatings[2]);
+    scale = rating * 0.00078431377f + 0.05f;
+    scale = scale < 0.05f ? 0.05f : (scale > 0.25f ? 0.25f : scale);
+    if (useModifier) {
+        scale *= fn_800CA9B4(5, p);
+    }
+    return value * scale;
+}
+
 extern "C" int fn_800C53D8(Object_80039F5C *p)
 {
     int result = 0;
@@ -2144,6 +2194,125 @@ extern "C" int fn_800C6738(Object_80039F5C *p, Object_80039F5C *pOther)
 
 extern "C" void fn_800C68B8(Object_80039F5C *p, Object_80039F5C *pOther, int value)
 {
+}
+
+extern "C" int fn_800C68BC(Object_800C6640 *pSource, int value)
+{
+    Object_80039F5C *pOwner = fn_8009BCE8(&pSource->mUnknown28);
+
+    switch (pSource->mUnknown37) {
+    case 9:
+    case 10:
+        return value == 12;
+    case 6:
+    case 8:
+        switch (pSource->mUnknown36) {
+        case 6:
+        case 8:
+            return 1;
+        }
+        return 0;
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+        switch (pSource->mUnknown36) {
+        case 2:
+        case 4:
+        case 9:
+        case 10:
+            return 0;
+        }
+        break;
+    case 2:
+    case 4:
+        switch (pSource->mUnknown36) {
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 9:
+        case 10:
+            return 0;
+        case 6:
+        case 8:
+            if (pOwner == 0) {
+                return 1;
+            }
+            return !(pOwner->mFlags & 0x800);
+        }
+        break;
+    case 0:
+        switch (pSource->mUnknown36) {
+        case 9:
+        case 10:
+            return 0;
+        }
+        break;
+    }
+    return 1;
+}
+
+extern float lbl_803EAC10;
+extern float lbl_803EAC14;
+extern float lbl_803EAC18;
+
+extern "C" float fn_80178A08(void);
+extern "C" void fn_8006F0B8(int kind);
+
+extern "C" int fn_800C6BD8(Object_80039F5C *p, Object_80039F5C *pOther)
+{
+    Query_800CE770 query;
+    int result = 0;
+
+    if (fn_801BE648(p->mpUnknown792) != 196 && fn_80054130()->mUnknown136 != 0
+        && __builtin_fabsf(p->mMotion.mPos.mX) > fn_80178A08() - lbl_803EAC18) {
+        fn_800CE770(&query);
+        query.mpUnknown0 = p;
+        query.mpUnknown4 = pOther;
+        query.mUnknown36 = lbl_803EAC10 * 46603.378f;
+        query.mUnknown44 = lbl_803EAC14;
+        query.mUnknown52 = 181;
+        query.mUnknown59 = 1;
+        query.mUnknown60 = 1;
+        result = fn_800CE2B8(&query);
+    }
+    if (result != 0) {
+        fn_80067DB8(44, &p->mMotion.mPos, 0, 0, 0);
+        fn_8006F0B8(8);
+        p->mUnknown1219 = 0;
+    }
+    return result;
+}
+
+extern "C" void fn_800D4748(Object_80039F5C *p);
+extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p);
+
+extern "C" int fn_800C6CDC(Object_80039F5C *p, Object_80039F5C *pOther)
+{
+    Query_800CE770 query;
+    int result = 0;
+
+    if (fn_801BE648(p->mpUnknown792) != 196 && fn_80054130()->mUnknown136 != 0
+        && __builtin_fabsf(p->mMotion.mPos.mX) > fn_80178A08() - lbl_803EAC18) {
+        fn_800CE770(&query);
+        query.mpUnknown0 = p;
+        query.mpUnknown4 = pOther;
+        query.mUnknown36 = lbl_803EAC10 * 46603.378f;
+        query.mUnknown44 = lbl_803EAC14;
+        query.mUnknown52 = 186;
+        query.mUnknown59 = 1;
+        query.mUnknown60 = 1;
+        result = fn_800CE2B8(&query);
+    }
+    if (result != 0) {
+        fn_800D4748(p);
+        fn_800A8954(13, p->mIdBytes[2], p);
+        fn_80067DB8(44, &p->mMotion.mPos, 0, 0, 0);
+        fn_8006F0B8(8);
+        p->mUnknown1219 = 1;
+    }
+    return result;
 }
 
 extern "C" int fn_800C7084(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value, int b)
