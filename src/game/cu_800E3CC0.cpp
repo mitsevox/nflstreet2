@@ -195,6 +195,19 @@ extern float lbl_803EAE00;
 extern float lbl_803EAE04;
 extern float lbl_803EAE08;
 extern float lbl_803ECB08;
+extern float lbl_803EADD8;
+extern float lbl_803EADDC;
+extern float lbl_803EADE0;
+extern int lbl_802DAAB4[4];
+int fn_8009A77C(Object_80039F5C *p);
+float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
+int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
+                float range);
+int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
+Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, float *pOut, int b);
+void fn_8013AA00(Object_80137ABC *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
+int fn_801C4E98(void *p, const char *pName);
+int fn_8013BA88(Object_80137ABC *pBall, void *pData, int value);
 void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
@@ -1914,6 +1927,198 @@ extern "C" int fn_800EBD8C(Object_80039F5C *p) {
     }
     p->mFlags &= ~8;
     return 1;
+}
+
+extern "C" int fn_800EBDCC(Object_80039F5C *p) {
+    State_800EBCE0 *state = (State_800EBCE0 *)&p->mUnknown336;
+    Vector_80039F5C target;
+    Vector_80039F5C predicted;
+    Vector_80039F5C ballPos;
+    Vector_80039F5C delta;
+    Message_800F01CC message;
+    Vector_80039F5C velocity;
+    Vector_80039F5C left;
+    Vector_80039F5C right;
+    int owner;
+    float distance;
+    int found = 0;
+    int result = 0;
+    fn_8010A2DC(p, 0, -1);
+    Object_80137ABC *pBall = fn_80137ABC(state->mUnknown43);
+    int kind = fn_8013BA58(pBall, &owner);
+    fn_80137D58(pBall, &ballPos);
+    fn_80137EC4(pBall, &velocity);
+    if (ballPos.mZ > 3.15f) {
+        fn_8013AA00(pBall, 2.65f, 0, &target);
+        target.mZ = 2.65f;
+    } else {
+        fn_8013AA00(pBall, 0.0f, 0, &ballPos);
+        ballPos.mZ = 0.0f;
+        distance = fn_8022785C(&ballPos, &p->mMotion.mPos);
+        fn_800EAEC0(&target, pBall, distance * lbl_803EADD8);
+    }
+    if (state->mUnknown40 != 0xFFFF) {
+        if (fn_801BE648(p->mpUnknown792) != 48) {
+            result = 1;
+            goto done;
+        }
+        if (kind == 5) {
+            if ((state->mUnknown24 -= 1.0f) > 0.0f) {
+                fn_800EAEC0(&predicted, pBall, state->mUnknown24);
+                fn_802276B4(&delta, &predicted, &state->mUnknown12);
+                distance = fn_802270A4(&delta);
+                if (distance > 0.05f) {
+                    fn_80227350(&state->mUnknown0, &delta, 0.05f / (state->mUnknown24 * distance));
+                    fn_80227350(&state->mUnknown12, &delta, 0.05f / distance);
+                } else {
+                    fn_80227350(&state->mUnknown0, &delta, 1.0f / state->mUnknown24);
+                    state->mUnknown12.mX = predicted.mX;
+                    state->mUnknown12.mY = predicted.mY;
+                    state->mUnknown12.mZ = predicted.mZ;
+                }
+                state->mUnknown0.mZ = 0.0f;
+                fn_8022765C(&p->mMotion.mPos, &p->mMotion.mPos, &state->mUnknown0);
+            } else if (!fn_801787A0()) {
+                fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "LFOOTBALL"), &left, 0);
+                fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "RFOOTBALL"), &right, 0);
+                float reach = (p->mFlags & 0x400) ? 0.4f : 0.15f;
+                if (fn_8022785C(&target, &right) < reach || fn_8022785C(&target, &left) < reach)
+                    fn_8013BA88(pBall, p, 4);
+            }
+        }
+        switch (p->mUnknown9[0]) {
+        default:
+            state->mUnknown40 = 0xFFFF;
+            if (kind == 5 && fn_800EB3E8(p, state, pBall, 3, 0))
+                state->mUnknown40 = fn_800EAF34(p, 0, 0, 0);
+            if (state->mUnknown40 == 0xFFFF) {
+                fn_801C1F94(&message, 0, 4);
+                message.mId = 11;
+                message.mUnknown1[0] = p->mUnknown9[0];
+                fn_800F00D4(0, p->mpState, &message, p);
+            }
+            break;
+        case 1:
+            if (p->mFlags & 4) {
+                p->mFlags &= ~4;
+                state->mUnknown40 = 0xFFFF;
+                state->mUnknown28 = 0;
+            }
+            break;
+        case 8:
+            break;
+        }
+        if (fn_801787A0() && p->mIdBytes[3] == 1 && (p->mFlags & 0x1000)) {
+            p->mFlags &= ~0x1000;
+            Object_80137ABC *pHeld = fn_80137C48(p);
+            if (pHeld)
+                fn_8013791C(pHeld, 5, 0);
+        }
+        goto done;
+    }
+    if (p->mFlags & 0x800) {
+        if (p->mUnknown9[0] != 1 && p->mUnknown9[0] != 8) {
+            fn_801C1F94(&message, 0, 4);
+            message.mId = 11;
+            message.mUnknown1[0] = p->mUnknown9[0];
+            fn_800F00D4(0, p->mpState, &message, p);
+        }
+        result = 0;
+        goto done;
+    }
+    if (state->mUnknown42 == 0) {
+        if (kind == 4 || kind == 5) {
+            if (!fn_801787A0() && velocity.mZ < 0.0f) {
+                int handle = fn_80099734(p, pBall, 0, 3, state->mUnknown48, 1, 0, 0, fn_8009A77C(p), 120.0f);
+                if (handle != 0x1FFFFFFF && fn_80099F04(p, handle, fn_801374E0(pBall)) == 1) {
+                    result = 0;
+                    goto done;
+                }
+            }
+            if (--state->mUnknown28 <= 0 || (p->mFlags & 0x400)) {
+                state->mUnknown28 = (255 - p->mRatings[0]) / 12;
+                int type = 2;
+                if (fn_800EB004(pBall) != 5)
+                    type = 5;
+                int team = p->mIdBytes[2] ^ 1;
+                Object_80039F5C *pOther = fn_801244F0(p, team, 0, fn_80178D18(team), &distance, 0);
+                if (pOther) {
+                    Point_8017886C offset;
+                    fn_80227690(&offset, &ballPos, &pOther->mMotion.mPos);
+                    int angle = fn_801CFE40(offset.mY, offset.mX);
+                    if (pOther->mMotion.mUnknown28 != 0.0f && distance < lbl_803EADDC &&
+                        fn_801CFFD0(angle, pOther->mMotion.mUnknown32) < (int)(lbl_803EADE0 * 46603.37890625f) &&
+                        !(p->mFlags & 0x4000))
+                        type = 1;
+                }
+                fn_800EB86C(p, state, &target);
+                if (fn_800EB3E8(p, state, pBall, type, 0)) {
+                    state->mUnknown40 = fn_800EAF34(p, 0, 0, 0);
+                    goto check;
+                }
+            }
+            if ((fn_801486A0() || !(p->mFlags & 0x400)) && fn_800EAD44(p, pBall)) {
+                result = 0;
+                goto done;
+            }
+        check:
+            int *pAnimation = lbl_802DAAB4;
+            for (unsigned int i = 0; i <= 3; pAnimation++, i++) {
+                if (fn_801BE648(p->mpUnknown792) == *pAnimation) {
+                    found = 1;
+                    break;
+                }
+            }
+            if (state->mUnknown40 == 0xFFFF && (!(p->mFlags & 0x4000) || (((p->mFlags >> 14) & 1) && !found)) &&
+                (fn_801486A0() || p->mUnknown8 == 0xFF)) {
+                p->mUnknown512.mUnknown14 = 1;
+                p->mUnknown512.mUnknown8 = state->mUnknown36;
+                p->mUnknown512.mUnknown4 = state->mUnknown36;
+                p->mUnknown512.mUnknown0 = state->mUnknown32;
+            }
+            goto done;
+        }
+        if (pBall == fn_801374BC()) {
+            Object_80039F5C *pHolder = fn_80137AD0(pBall);
+            if (pHolder) {
+                if (pHolder != p) {
+                    if (fn_801486A0()) {
+                    if (pHolder->mIdBytes[2] == p->mIdBytes[2]) {
+                        fn_801C1F94(&message, 0, 4);
+                        message.mId = 33;
+                        fn_800F053C(0, p->mpState, &message, p);
+                    } else {
+                        fn_801C1F94(&message, 0, 4);
+                        message.mId = 2;
+                        fn_800F053C(0, p->mpState, &message, p);
+                    }
+                    } else {
+                        fn_801C1F94(&message, 0, 4);
+                        message.mId = 97;
+                        fn_800F053C(0, p->mpState, &message, p);
+                    }
+                } else {
+                    fn_801C1F94(&message, 0, 4);
+                    message.mId = 1;
+                    fn_800F053C(0, p->mpState, &message, p);
+                }
+            } else if (fn_801486A0()) {
+                fn_801C1F94(&message, 0, 4);
+                message.mId = 2;
+                fn_800F053C(0, p->mpState, &message, p);
+            } else {
+                fn_801C1F94(&message, 0, 4);
+                message.mId = 97;
+                fn_800F053C(0, p->mpState, &message, p);
+            }
+        }
+    }
+    p->mUnknown512.mUnknown14 = 1;
+    p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
+    p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+    result = 1;
+done:
+    return result;
 }
 
 extern "C" int fn_800EC640(Object_80039F5C *p) {

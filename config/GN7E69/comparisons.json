@@ -7689,6 +7689,11 @@
           "end": "0x800EBDCC"
         },
         {
+          "symbol": "fn_800EBDCC",
+          "start": "0x800EBDCC",
+          "end": "0x800EC640"
+        },
+        {
           "symbol": "fn_800EC640",
           "start": "0x800EC640",
           "end": "0x800EC674"
