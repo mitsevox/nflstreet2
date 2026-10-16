@@ -74,10 +74,8 @@ void fn_8018CB28(int source, int team, int index)
 {
     QueryResult result;
     int table = -1;
-    QueryCursor cursor;
+    QueryCursor cursor = {0, 0, -1, 0};
     int player;
-    fn_801C1F94(&cursor, 0, sizeof(cursor));
-    cursor.mUnknown8 = -1;
     int destination = fn_8022F3D4(fn_8022F358(index));
     fn_8018CA80(destination);
     fn_801F9980(destination, &table);
@@ -110,10 +108,8 @@ int fn_8018CD1C(int source, int teamTable, int playerTable, int destination,
     unsigned short count;
     int team;
     int table = -1;
-    QueryCursor cursor;
+    QueryCursor cursor = {0, 0, -1, 0};
     int player;
-    fn_801C1F94(&cursor, 0, sizeof(cursor));
-    cursor.mUnknown8 = -1;
     fn_8022C628(destination, 0x4D414554, &team, &teamCount);
     fn_801F9980(destination, &table);
     fn_801FCE10(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGT' = \x82)\n", source, destination, table, teamTable, 0);
@@ -155,11 +151,9 @@ int fn_8018D018(int destination, int rumt, int index, int *pOriginalIds, int pre
 void fn_8018D07C(int index)
 {
     QueryResult result;
-    QueryCursor cursor;
+    QueryCursor cursor = {0, 0, -1, 0};
     int player, ytrp, oldPxsp;
     int source = fn_8022F3D4(fn_8022F358(index));
-    fn_801C1F94(&cursor, 0, sizeof(cursor));
-    cursor.mUnknown8 = -1;
     int hadState = fn_80029D74(2, index);
     cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;
@@ -205,11 +199,9 @@ void fn_8018D358(int index, int team, int rumt)
 {
     Object_80023BBC arg;
     QueryResult result;
-    QueryCursor cursor;
+    QueryCursor cursor = {0, 0, -1, 0};
     int ids[16];
     unsigned short total, count;
-    fn_801C1F94(&cursor, 0, sizeof(cursor));
-    cursor.mUnknown8 = -1;
     int saved = fn_8022F4BC();
     fn_8022F478(fn_8022F358(index));
     int source = fn_8022F3D4(fn_8022F358(index));
