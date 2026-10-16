@@ -2937,12 +2937,14 @@ unsigned int fn_800ACBFC(int team);
 
 extern "C" void fn_800C9E4C(unsigned char a, unsigned char b)
 {
+    int *pRefs;
     int i;
 
     lbl_803EAC3C->mCounts[0] = a;
     lbl_803EAC3C->mCounts[1] = b;
+    pRefs = lbl_803EAC3C->mRefs;
     for (i = 0; i < 3; i++) {
-        lbl_803EAC3C->mRefs[i] = 0;
+        *pRefs++ = 0;
     }
     for (i = 0; i < 5; i++) {
         lbl_803EAC3C->mEntries[0][i].mUnknown4 = 1000000000;
