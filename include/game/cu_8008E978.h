@@ -30,7 +30,7 @@ struct Character_80093BCC {
 /* One of the two 48-byte records at +16 of the block fn_80096954
    allocates. */
 struct Playback_80096DA8 {
-    int mUnknown0,mUnknown4; unsigned char mUnknown8[4]; unsigned int mUnknownC;
+    int mUnknown0,mUnknown4,mUnknown8; unsigned int mUnknownC;
     int mUnknown10; union { int mWord; unsigned short mParts[2]; } mUnknown14,mUnknown18,mUnknown1C;
     float mUnknown20,mUnknown24;
     unsigned char mUnknown28[4]; unsigned int mUnknown2C;

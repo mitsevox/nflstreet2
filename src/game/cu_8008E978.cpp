@@ -412,7 +412,49 @@ extern "C" void fn_8009036C(int *p)
     fn_80094454(*p);
 }
 
+extern "C" void fn_801BB74C(unsigned short slot, int id, Actor_801C009C *pActor);
 extern "C" int fn_8009439C(int index);
+extern "C" void fn_801BC440(Actor_801C009C *pActor, Actor_801C009C *pSource);
+
+extern "C" int fn_80090390(Character_80093BCC *pCharacter, int *pSlot)
+{
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    int load = 1;
+    unsigned int i = 0;
+    int id = fn_8009439C(pCharacter->mUnknown4) + pActor->mUnknown2;
+
+    for (i = 0; i < 2; i++) {
+        if (lbl_8030C164[i].mUnknown0 == id) {
+            if (lbl_8030C164[i].mUnknown8 == pCharacter->mUnknown0) {
+                load = 0;
+                lbl_8030C164[i].mUnknown4++;
+            } else {
+                load = 0;
+                fn_801BC440(pActor, fn_80093BAC(lbl_8030C164[i].mUnknown8, lbl_8030C164[i].mUnknownC));
+                lbl_8030C164[i].mUnknown4++;
+            }
+            pCharacter->mUnknownD8.mWord = i;
+            break;
+        }
+    }
+    if (load) {
+        for (i = 0; i < 2; i++) {
+            if (lbl_8030C164[i].mUnknown4 == 0) {
+                fn_801BB74C(i, id, pActor);
+                lbl_8030C164[i].mUnknown0 = id;
+                lbl_8030C164[i].mUnknown8 = pCharacter->mUnknown0;
+                lbl_8030C164[i].mUnknown4++;
+                lbl_8030C164[i].mUnknownC = pCharacter->mUnknown4;
+                pCharacter->mUnknownD8.mWord = i;
+                break;
+            }
+        }
+    }
+    if (*pSlot != i) {
+        *pSlot = i;
+    }
+    return i < 2;
+}
 
 extern "C" int fn_801BB878(int index, int a, int b, Actor_801C009C *pActor, int c);
 
@@ -1423,6 +1465,40 @@ extern "C" int fn_80096590(void)
         }
     }
     return result;
+}
+
+extern "C" int lbl_803EA924[2];
+
+extern "C" int fn_800965E8(Playback_80096DA8 *pPlayback, int *pSlot)
+{
+    int load = 1;
+    unsigned int i = 0;
+    Actor_801C009C *pActor = fn_80096DCC(pPlayback->mUnknown0, pPlayback->mUnknown4);
+    int id = pActor->mUnknown2 + lbl_803EA924[pPlayback->mUnknown4];
+
+    for (i = 0; i < 2; i++) {
+        if (lbl_8030C2A8[i].mUnknown0 == id) {
+            lbl_8030C2A8[i].mUnknown4++;
+            load = 0;
+            pPlayback->mUnknown8 = i + 5;
+            break;
+        }
+    }
+    if (load) {
+        for (i = 0; i < 2; i++) {
+            if (lbl_8030C2A8[i].mUnknown4 == 0) {
+                fn_801BB74C(i + 5, id, pActor);
+                lbl_8030C2A8[i].mUnknown0 = id;
+                lbl_8030C2A8[i].mUnknown4++;
+                pPlayback->mUnknown8 = i + 5;
+                break;
+            }
+        }
+    }
+    if (*pSlot != i) {
+        *pSlot = i;
+    }
+    return i < 2;
 }
 
 extern "C" Table_80093BAC *fn_800966F8(int index)
