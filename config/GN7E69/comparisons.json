@@ -7853,6 +7853,37 @@
       ]
     },
     {
+      "source": "src/game/cu_800E73D4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800E3CC0 grouping. Two target whole-function extents and their literal-pool slice; the split permits independent compilation of a partial literal pool and does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E73D4",
+          "end": "0x800E7588"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DCE8",
+          "end": "0x8029DCF0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E73D4",
+          "start": "0x800E73D4",
+          "end": "0x800E745C"
+        },
+        {
+          "symbol": "fn_800E745C",
+          "start": "0x800E745C",
+          "end": "0x800E7588"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800EFC68.cpp",
       "profile": "game_cpp",
       "evidence": "Registered whole-function extents and allocated data sections are measured independently under comparisons.json; evidence.tsv records target boundaries, grouping confidence and source-form provenance. Unregistered functions remain unmeasured; comparison-only source stays unlinked.",
