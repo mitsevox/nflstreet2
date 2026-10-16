@@ -43,6 +43,8 @@
 #include "game/cu_8003108C.h"
 #include "game/cu_80064864.h"
 #include "game/cu_80067C10.h"
+#include "game/Block_801BE60C.h"
+#include "game/Record_8011F518.h"
 #include "game/cu_80136B1C.h"
 #include "game/cu_8008E978.h"
 #include "game/fn_8007F828.h"
@@ -2013,34 +2015,26 @@ extern "C" void fn_800C51DC(Object_80039F5C *p, Object_80039F5C *pOther)
     fn_800CA5CC(pOther, 9, 1);
 }
 
-struct Order_800C5234 {
-    int mIds[7];
-};
+/* Default target order that fn_800C5234 copies into a query before moving
+   the preferred target to the front. */
+extern Object_80039F5C *lbl_80317AD8[7];
 
-/* Only the order list at +4 is accessed; the size is not established. */
-struct Owner_800C5234 {
-    int mUnknown0;
-    Order_800C5234 mOrder;
-};
-
-extern Order_800C5234 lbl_80317AD8;
-
-extern "C" void fn_800C5234(Owner_800C5234 *p, int id)
+extern "C" void fn_800C5234(Query_800CE770 *pQuery, Object_80039F5C *pTarget)
 {
     unsigned char i;
-    int temp;
+    Object_80039F5C *pTemp;
 
-    p->mOrder = lbl_80317AD8;
+    memcpy(pQuery->mpUnknown4Entries, lbl_80317AD8, sizeof(lbl_80317AD8));
     for (i = 0; i < 7; i++) {
-        if (id == p->mOrder.mIds[i]) {
-            temp = p->mOrder.mIds[0];
-            p->mOrder.mIds[0] = id;
-            p->mOrder.mIds[i] = temp;
+        if (pTarget == pQuery->mpUnknown4Entries[i]) {
+            pTemp = pQuery->mpUnknown4Entries[0];
+            pQuery->mpUnknown4Entries[0] = pTarget;
+            pQuery->mpUnknown4Entries[i] = pTemp;
             break;
         }
     }
     if (i == 7) {
-        p->mOrder.mIds[0] = id;
+        pQuery->mpUnknown4Entries[0] = pTarget;
     }
 }
 
@@ -2104,6 +2098,157 @@ extern "C" void fn_800C5B20(Object_80039F5C *p, int value)
     if (pOther != 0 && fn_802372EC(0, 255) > pOther->mRatings[0] && fn_800C5BF0(pOther, value)) {
         fn_80111354(pOther);
     }
+}
+
+extern "C" void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pA);
+extern "C" int fn_800EC640(Object_80039F5C *p);
+extern "C" int fn_80114DE0(Object_80039F5C *p);
+extern "C" Record_8011F518 *fn_8011F518(void);
+extern "C" int fn_8011E9B4(Object_80039F5C *p);
+
+extern "C" int fn_800C5BF0(Object_80039F5C *p, int value)
+{
+    State_80039F5C *pState = p->mpState;
+    int result = 1;
+    Vector_80039F5C pos;
+    void *pKind;
+    int handle;
+
+    if (fn_8011E9B4(p) != 0) {
+        result = 0;
+    } else {
+        switch (pState->mId) {
+        case 28:
+            fn_8009A5DC(pState->mUnknown1, pState->mUnknown2, &pKind, &handle);
+            if (fn_8009A578(handle) == 5) {
+                result = 0;
+            }
+            fn_8009BF5C(p, 0, &pos, 0);
+            if (pos.mZ > 2.25f) {
+                result = 0;
+            }
+            break;
+        case 36:
+            if (fn_801BE648(p->mpUnknown792) == 228) {
+                fn_8009BF5C(p, 0, &pos, 0);
+                if (pos.mZ > 1.75f) {
+                    result = 0;
+                }
+            }
+            break;
+        case 12:
+            if (fn_801BE648(p->mpUnknown792) == 237) {
+                fn_8009BF5C(p, 0, &pos, 0);
+                if (pos.mZ > 1.75f) {
+                    result = 0;
+                }
+            } else {
+                result = 0;
+            }
+            break;
+        case 15:
+            fn_8009BF5C(p, 0, &pos, 0);
+            if (pos.mZ > 1.75f) {
+                result = 0;
+            }
+            break;
+        case 50:
+            result = 0;
+            break;
+        case 16:
+            if (fn_80114DE0(p) != 0) {
+                break;
+            }
+            /* fall through */
+        case 10:
+        case 11:
+        case 32:
+            result = (p->mFlags & 0x80000) != 0;
+            break;
+        case 57:
+            result = fn_800EC640(p);
+            break;
+        case 26:
+            if (value == 7 || value == 24) {
+                result = 0;
+            } else {
+                result = p->mUnknown344Word != 14;
+            }
+            break;
+        case 25:
+            if (value == 7 || value == 24) {
+                result = 0;
+            } else {
+                result = fn_8011F518()->mUnknown4 != 8;
+            }
+            break;
+        default:
+            result = !(p->mFlags & 0x800);
+            break;
+        }
+    }
+    return result;
+}
+
+extern "C" int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **ppBlocker);
+
+extern "C" int fn_800C5DE4(Object_80039F5C *p, Object_80039F5C *pOther)
+{
+    State_80039F5C *pState = p->mpState;
+    int result = 1;
+    Object_80039F5C *pBlocker = 0;
+
+    switch (fn_801BE648(p->mpUnknown792)) {
+    case 67:
+    case 224:
+    case 225:
+    case 227:
+        if (fn_80137B40() == 0) {
+            result = 0;
+        }
+        break;
+    }
+    switch (pState->mId) {
+    case 17:
+        if (fn_80114E7C(pOther) != p) {
+            result = 0;
+        }
+        break;
+    case 10:
+        if (fn_8009BCE8(&p->mUnknown560.mUnknown40) != pOther) {
+            result = 0;
+        }
+        break;
+    case 12:
+    case 94:
+        switch (fn_801BE648(pOther->mpUnknown792)) {
+        case 228:
+        case 229:
+        case 237:
+            result = 0;
+            break;
+        }
+        if (!fn_80124714(p, pOther, &pBlocker) && pBlocker != 0 && !(pBlocker->mFlags & 0x800)) {
+            result = 0;
+        }
+        break;
+    default:
+        if (fn_8022781C(&pOther->mMotion.mPos, &p->mMotion.mPos) > 3.0f) {
+            result = 0;
+        } else if (!fn_80124714(p, pOther, &pBlocker)) {
+            if (pBlocker != 0 && !(pBlocker->mFlags & 0x800)) {
+                result = 0;
+            }
+        } else if (p->mFlags & 0x20000) {
+            result = 0;
+        }
+        break;
+    case 51:
+    case 89:
+        result = 0;
+        break;
+    }
+    return result;
 }
 
 extern "C" void fn_800C5F80(Object_80039F5C *p, int value, int *pA, int *pB, int *pC)
@@ -2251,6 +2396,50 @@ extern "C" int fn_800C68BC(Object_800C6640 *pSource, int value)
         break;
     }
     return 1;
+}
+
+extern float lbl_803ED6B4;
+extern float lbl_803ED6BC;
+
+extern "C" Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
+extern "C" int fn_800C6A3C(Object_80039F5C *p, Object_80039F5C *pOther, int type)
+{
+    Query_800CE770 query;
+    int result = 0;
+    int kind = fn_801BE648(p->mpUnknown792);
+
+    if (kind != 196 && type != -1) {
+        fn_800CE770(&query);
+        query.mUnknown56 = result;
+        query.mpUnknown0 = p;
+        if (kind == 173) {
+            if (fn_80114E7C(p) == pOther) {
+                query.mUnknown36 = 0x18E38E;
+                query.mUnknown44 = 2.0f;
+            } else {
+                return 0;
+            }
+        } else {
+            query.mUnknown60 = 1;
+            query.mUnknown44 = lbl_803ED6BC * 4.0f;
+            query.mUnknown36 = (int)(lbl_803ED6B4 * 46603.378f) * 4.0f;
+        }
+        query.mUnknown52 = type;
+        if (type == 247) {
+            query.mUnknown54 = fn_801BE60C(p->mpUnknown792, kind)->mUnknown3C;
+        } else {
+            query.mUnknown54 = 1;
+        }
+        if (!fn_8011E9B4(pOther) && fn_801CFFD0(p->mMotion.mUnknown32, pOther->mMotion.mFacing) <= 0x2AAAA9) {
+            query.mUnknown32 = 0x800000;
+        }
+        fn_800C5234(&query, pOther);
+        result = fn_800CE2B8(&query);
+    }
+    if (result != 0) {
+        p->mUnknown1219 = 0;
+    }
+    return result;
 }
 
 extern float lbl_803EAC10;

@@ -265,6 +265,10 @@ struct Object_80039F5C {
             char mUnknown355[5];
         };
         Block_800CC180 mUnknown336Block;
+        struct {
+            char mUnknown336Words[8];
+            int mUnknown344Word;
+        };
     };
     unsigned char mUnknown360;
     char mUnknown361[27];
