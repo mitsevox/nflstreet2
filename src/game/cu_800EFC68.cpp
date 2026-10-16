@@ -200,6 +200,31 @@ struct Block_8011067C {
     int mUnknown24;
 };
 
+/* The 88-byte block at player +336 as fn_80109150 initialises it. */
+struct Block_80109150 {
+    char mUnknown0[44];
+    float mUnknown44;
+    unsigned char mUnknown48;
+    unsigned char mUnknown49;
+    unsigned char mUnknown50;
+    unsigned char mUnknown51;
+    unsigned char mUnknown52;
+    unsigned char mUnknown53;
+    unsigned char mUnknown54;
+    char mUnknown55[1];
+    unsigned char mUnknown56;
+    unsigned char mUnknown57;
+    short mUnknown58;
+    unsigned char mUnknown60;
+    unsigned char mUnknown61;
+    unsigned char mUnknown62;
+    unsigned char mUnknown63;
+    unsigned char mUnknown64;
+    unsigned char mUnknown65;
+    unsigned char mUnknown66;
+    char mUnknown67[21];
+};
+
 /* View of the block at player +336 that holds the animation entry index at
    +50. */
 struct Block_80109CA0 {
@@ -758,6 +783,11 @@ int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float e);
 int fn_801BA2A8(void *pData, void *pEntries, unsigned short value, int animation, int key, void *p, float weight);
 int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
 int fn_80109A1C(Object_80039F5C *p, int kind);
+unsigned char fn_8009F0B8(Object_80039F5C *p, int angle);
+void fn_80106A60(Object_80039F5C *p);
+unsigned int fn_800ABDA4(int team);
+int fn_8010B224(Object_80039F5C *p);
+extern float lbl_802DAB74[];
 Object_80039F5C *fn_8015286C(void *pSet, int index);
 int fn_8015310C(void *pSet);
 extern unsigned char lbl_803EAE20[8];
@@ -3266,6 +3296,35 @@ extern "C" void fn_80108074(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
     }
 }
 
+extern "C" int fn_80109150(Object_80039F5C *p) {
+    Block_80109150 *pBlock = (Block_80109150 *)&p->mUnknown336;
+
+    fn_801C1F94(pBlock, 0, 88);
+    pBlock->mUnknown51 = pBlock->mUnknown49 = p->mpState->mUnknown1;
+    pBlock->mUnknown58 = 0;
+    pBlock->mUnknown50 = 4;
+    pBlock->mUnknown44 = 0.0f;
+    pBlock->mUnknown56 = fn_802372EC(0, 100);
+    pBlock->mUnknown52 = 0;
+    pBlock->mUnknown53 = 0;
+    pBlock->mUnknown54 = 0;
+    pBlock->mUnknown48 = 0;
+    pBlock->mUnknown57 = 0;
+    pBlock->mUnknown61 = 0;
+    pBlock->mUnknown60 = 1;
+    pBlock->mUnknown63 = 0;
+    pBlock->mUnknown62 = fn_8009F0B8(p, 0x38E38E);
+    pBlock->mUnknown64 = fn_801374D4();
+    pBlock->mUnknown65 = 1;
+    pBlock->mUnknown66 = 0;
+    fn_80106A60(p);
+    fn_8009A8D4(pBlock);
+    if (fn_800B65A0(p->mIdBytes[2]) == 255 && fn_800ABDA4(p->mIdBytes[2]) == 0) {
+        pBlock->mUnknown58 = 0;
+    }
+    return 0;
+}
+
 extern "C" int fn_80109968(Object_80039F5C *p, int kind) {
     return p->mMotion.mUnknown28 <= lbl_803ECB08 * 0.07f;
 }
@@ -3692,6 +3751,37 @@ extern "C" int fn_8010BC90(Table_8010B738 *pTable, unsigned short key, void *pDa
         break;
     }
     return 0;
+}
+
+extern "C" int fn_8010BD58(Object_80039F5C *p) {
+    int result = 0;
+
+    if (fn_8010B224(p)) {
+        Vector_80039F5C delta;
+        float chance;
+        float minimum;
+        int level;
+
+        fn_80137D58(fn_801374BC(), &delta);
+        fn_80227690(&delta, &delta, &p->mMotion.mPos);
+        chance = 1.2f - fn_802270A4(&delta) * 0.15f;
+        level = fn_800A2178();
+        minimum = lbl_802DAB74[level];
+        if (fn_80156704() && !fn_801485D4()) {
+            if (fn_80156D14()) {
+                minimum = 1.0f;
+            } else {
+                minimum = 0.75f;
+            }
+        }
+        if (chance < minimum) {
+            chance = minimum;
+        }
+        if (fn_80237260(0) < chance) {
+            result = 1;
+        }
+    }
+    return result;
 }
 
 extern "C" void fn_8010BE54(Object_80039F5C *p)
