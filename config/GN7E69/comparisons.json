@@ -24265,6 +24265,16 @@
           "end": "0x800AA348"
         },
         {
+          "symbol": "fn_800AA348",
+          "start": "0x800AA348",
+          "end": "0x800AA510"
+        },
+        {
+          "symbol": "fn_800AA510",
+          "start": "0x800AA510",
+          "end": "0x800AA648"
+        },
+        {
           "symbol": "fn_800AA648",
           "start": "0x800AA648",
           "end": "0x800AA6D8"

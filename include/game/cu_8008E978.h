@@ -5,7 +5,7 @@
    fn_80096DA8. Their original identities and the contents of the opaque
    spans remain unknown. */
 struct Frame_80141210 { unsigned char mUnknown0[0x30]; float mUnknown30, mUnknown34; unsigned char mUnknown38[4]; float mUnknown3C; };
-struct Actor_801C009C { int mUnknown0,mUnknown4; unsigned int mUnknown8; unsigned char mUnknownC[12]; Frame_80141210 *mUnknown18; };
+struct Actor_801C009C { int mUnknown0; unsigned short mUnknown4,mUnknown6; unsigned int mUnknown8; unsigned char mUnknownC[12]; Frame_80141210 *mUnknown18; };
 struct Selection_80141210 { unsigned char mUnknown0; unsigned char mUnknown1[3]; union { int mWord; unsigned short mParts[2]; } mUnknown4,mUnknown8; };
 struct MotionSource_80141210 { unsigned char mUnknown0[0x1C0]; int mUnknown1C0; };
 
