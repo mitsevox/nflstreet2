@@ -33419,6 +33419,26 @@
           "end": "0x8026A4D4"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8017FB90.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8017FB90-0x8017FDF0 (cu_8017FB90) and function row 0x8017FB90. The body is a comparison; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8017FB90",
+          "end": "0x8017FDF0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8017FB90",
+          "start": "0x8017FB90",
+          "end": "0x8017FDF0"
+        }
+      ]
     }
   ]
 }
