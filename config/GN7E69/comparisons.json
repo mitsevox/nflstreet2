@@ -5940,7 +5940,7 @@
     {
       "source": "src/game/cu_8018B0BC.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open unit row, exact whole-function boundaries and unlinked data slices 0x802A98A0-0x802A98B4, 0x802A9A50-0x802A9E74 and 0x802EADE4-0x802EAE74. The native first two functions and literal prefix are linked; full comparison placements retain its offsets and measure only unlinked ranges. Seventeen registered bodies are exact but unlinked; no complete-file claim.",
+      "evidence": "evidence.tsv open unit row, exact whole-function boundaries, unlinked data slices 0x802A98A0-0x802A98B4, 0x802A9A50-0x802AA0D0 and 0x802EADE4-0x802EAE74, and the linker row 0x802A9E74-0x802A9F80 for the discarded CopyRdrcPlayersToTeam (Xbox DEFAULT.xbe 0x172FF0), which is compiled with the file but not measured. The native first two functions and literal prefix are linked; full comparison placements retain its offsets and measure only unlinked ranges. No complete-file claim.",
       "sections": [
         {
           "section": ".text",
@@ -5952,7 +5952,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A98A0",
-          "end": "0x802A9E74"
+          "end": "0x802AA0D0"
         },
         {
           "section": ".data",
@@ -6082,6 +6082,9 @@
           "start": "0x8018C230",
           "end": "0x8018C344"
         }
+      ],
+      "discarded": [
+        "CopyRdrcPlayersToTeam"
       ]
     },
     {

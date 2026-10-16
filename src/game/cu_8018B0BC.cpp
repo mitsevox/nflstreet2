@@ -6,6 +6,7 @@
 #include "game/fn_8018BE68.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801FCE10.h"
+#include "game/fn_8022F478.h"
 
 #if defined(DECOMP_COMPARE)
 int lbl_802EADE4[16] = {
@@ -318,6 +319,67 @@ void fn_8018BB24(int index, int value)
                     &values, value76);
     pPort->Start();
     fn_8008056C(&object);
+}
+
+/* Discarded by the GameCube linker; see the linker row 0x802A9E74-0x802A9F80. */
+void CopyRdrcPlayersToTeam(int index, int team, int rumt)
+{
+    Object_80023BBC arg;
+    QueryResult result;
+    QueryCursor cursor = {0, 0, -1, 0};
+    int ids[16];
+    unsigned short total, count;
+    int saved = fn_8022F4BC();
+    fn_8022F478(fn_8022F358(index));
+    fn_8022F3D4(fn_8022F358(index));
+    arg.Set(6, 0x5244524344494754LL, 2, rumt);
+    fn_801F9D70(0x54415453, 0x52445243, &arg, &total);
+    count = total;
+    fn_80229AA4(0x54415453, 0x59414C50, ids, &count);
+    int player, table;
+    cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
+    cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;
+    fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 from 'RDRC' where 'DIGT' = \x82 order by 'DIGP'\n", &cursor, &player, rumt);
+    for (unsigned int i = 0; i < count; i++) {
+        fn_801FCE10(0, "fetch from \x8a\n", &cursor);
+        fn_801F9980(0x54415453, &table);
+        fn_801FCE10(&result, "use 'TATS' select into \x8c * from 'RDRC' where ('DIGP' = \x85)\n", table, player);
+        fn_801FCE10(&result, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIGP' = \x85\n", table, team, ids[i]);
+        fn_801FCE10(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", table);
+        fn_801FCE10(0, "use 'TATS' update 'YALP' set 'PXSP' = \x85 where 'DIGP' = \x85\n", i, ids[i]);
+        Object_8008044C object;
+        Block_80307980 block;
+        FMCAPPORTValues values;
+        FMCAPPORTText text60, text20;
+        int resultIds[2], unknown52, unknown56;
+        fn_8008044C(&object, 0, 0x54415453);
+        fn_800809C4(&object, ids[i], 0);
+        int value6E = fn_80080E98(&object);
+        int value6C = fn_80080E70(&object);
+        int value72 = fn_80081E3C(&object);
+        int value73 = fn_80082280(&object);
+        int value74 = fn_800822D4(&object);
+        int value76 = fn_80080E48(&object);
+        unsigned int color18 = fn_800810E0(&object);
+        unsigned int color19 = fn_80081134(&object);
+        fn_80082138(&object, &block);
+        fn_80046804(&block, &values);
+        fn_8015F638(value6E, value6C, 0, resultIds);
+        fn_8016139C(value6E, &unknown52, &unknown56);
+        int unknown8 = fn_8016128C(value72 + 1);
+        int unknown12 = value73 * 3 + value74 + 0x33BA;
+        fn_801C1F94(&text60, 0, sizeof(text60));
+        fn_801C1F94(&text20, 0, sizeof(text20));
+        text60.mChars[18] = color18 + 0x80;
+        text20.mChars[19] = color19 + 0x80;
+        gFMCAPPORT.SetEntry(i, 0xFFFF, unknown8, unknown12, 0xA7, &text20,
+            resultIds[0], unknown52, unknown56, &text60, &values, value76);
+        fn_8008056C(&object);
+        fn_801F967C(0x54415453, table);
+    }
+    if (cursor.mUnknown0) fn_801FCFA0(&cursor);
+    gFMCAPPORT.ClearEntries();
+    fn_8022F478(saved);
 }
 
 int fn_8018BD9C(int index)
