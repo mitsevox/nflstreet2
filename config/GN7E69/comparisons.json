@@ -27770,7 +27770,7 @@
     {
       "source": "src/game/cu_800D8A24.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv inferred provisional/open grouping row 0x800D8A24-0x800D949C, exact function rows of its eleven registered bodies, and exact .rodata data row 0x8029D7E8-0x8029D7F8 (literals of fn_800D8E68, fn_800D8F8C and fn_800D9078). fn_800D8A24 and all static storage remain original and unmeasured.",
+      "evidence": "evidence.tsv inferred provisional/open grouping row 0x800D8A24-0x800D949C, exact function rows of its twelve registered bodies, and exact .rodata data row 0x8029D7E4-0x8029D7F8 (literals of fn_800D8A24, fn_800D8E68, fn_800D8F8C and fn_800D9078). All other static storage remains original and unmeasured.",
       "sections": [
         {
           "section": ".text",
@@ -27781,11 +27781,16 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029D7E8",
+          "start": "0x8029D7E4",
           "end": "0x8029D7F8"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_800D8A24",
+          "start": "0x800D8A24",
+          "end": "0x800D8B84"
+        },
         {
           "symbol": "fn_800D8B84",
           "start": "0x800D8B84",
