@@ -12,6 +12,7 @@
 #include <string.h>
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
+#include "game/bitstream.h"
 
 #include "engine/vptmanager.h"
 #include "game/Camera_8013F738.h"
@@ -3951,6 +3952,14 @@ int fn_800B232C(int index);
 unsigned int fn_801765A8(int type);
 void fn_8017F430(int value);
 void fn_8017F3C8(int a, int b, int c);
+void fn_80167720(int mode);
+void fn_800B30C8(void);
+void fn_800B44D4(BitStream_t *pStream);
+void fn_800B4628(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2, BitStream_t *pStream3, float t);
+void fn_80030ACC(void (*pSave)(BitStream_t *pStream),
+                 void (*pLoad)(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
+                               BitStream_t *pStream3, float t),
+                 int size, const char *pName);
 void fn_80067DB8(int type, Vector_80039F5C *pPos, int a, int b, int c);
 
 extern int lbl_803EAB18;
@@ -4371,6 +4380,15 @@ extern "C" void fn_800B3074(void)
 {
 }
 
+extern "C" void fn_800B3078(void)
+{
+    fn_80167720(1);
+    fn_80178320();
+    fn_80178308();
+    fn_8002C9A8(lbl_803EA368, 3, 0);
+    fn_800B30C8();
+}
+
 extern "C" int fn_800B30B8(void)
 {
     return 3;
@@ -4573,11 +4591,37 @@ extern "C" void fn_800B49EC(Record_800B49EC *pDst, const Record_800B49EC *pSrc)
     *pDst = *pSrc;
 }
 
+extern "C" void fn_800B4A4C(void)
+{
+    fn_80030ACC(fn_800B44D4, fn_800B4628, 0x8C0, "Player Abilities");
+}
+
 extern "C" const char *lbl_802D87A4[];
 
 extern "C" void fn_800B4A18(int index, char *pDest, int size)
 {
     fn_801C3284(pDest, lbl_802D87A4[index], size);
+}
+
+typedef int (*Handler_800B4D7C)(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, void *pC,
+                                unsigned int mode);
+
+extern "C" {
+int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, void *pC, unsigned int mode);
+int fn_800D9C80(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, void *pC, unsigned int mode);
+int fn_80093D20(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, void *pC, unsigned int mode);
+int fn_80089E70(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, void *pC, unsigned int mode);
+
+extern Handler_800B4D7C lbl_8030FB60[248];
+}
+
+extern "C" void fn_800B4D7C(void)
+{
+    fn_8009C604(lbl_8030FB60, 248);
+    lbl_8030FB60[82] = fn_800DDD24;
+    lbl_8030FB60[74] = fn_800D9C80;
+    lbl_8030FB60[10] = fn_80093D20;
+    lbl_8030FB60[214] = fn_80089E70;
 }
 
 /* Block allocated by fn_800BA3F0 through fn_80238174 under the id 'prac'
@@ -6826,6 +6870,18 @@ extern "C" void fn_800B0F28(void)
 extern "C" int fn_800B0F98(void)
 {
     return lbl_803EAB14->mUnknown2D0;
+}
+
+extern "C" int fn_800B119C(void)
+{
+    Record_80067338 *pRecord = fn_8016871C(fn_80178308());
+    unsigned char total = 0;
+    unsigned char i;
+
+    for (i = 0; i <= 4; i++) {
+        total += pRecord->mUnknown28[i][1];
+    }
+    return total != 0;
 }
 
 extern "C" int fn_800B146C(void)
