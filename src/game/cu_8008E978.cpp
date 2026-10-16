@@ -2504,6 +2504,71 @@ extern "C" int fn_800C6CDC(Object_80039F5C *p, Object_80039F5C *pOther)
     return result;
 }
 
+extern "C" int fn_800CD2B4(int kind, Object_80039F5C *p);
+extern "C" int fn_800C7720(Object_80039F5C *p, Object_80039F5C *pOther);
+
+extern "C" int fn_800C6DF8(Object_80039F5C *p, Object_80039F5C *pOther, int type, int angle, unsigned int chance,
+                           float distance)
+{
+    int result = 0;
+    int count = 0;
+    int otherBlocking = 0;
+    int special = 0;
+    Query_800CE770 query;
+    int kinds[5];
+    unsigned int i;
+
+    if (p->mpState->mId == 36 || fn_801BE648(p->mpUnknown792) == 229 || fn_801BE648(p->mpUnknown792) == 237) {
+        special = 1;
+    }
+    if (pOther->mpState->mId == 12 || pOther->mpState->mId == 94) {
+        otherBlocking = 1;
+    }
+    fn_800CE770(&query);
+    query.mpUnknown0 = p;
+    query.mpUnknown4 = pOther;
+    query.mUnknown52 = type;
+    if (special == 1) {
+        query.mUnknown36 = 0xE38E3;
+        query.mUnknown44 = 1.0f;
+    } else if (otherBlocking == 1 && fn_800CD2B4(1, pOther)) {
+        query.mUnknown36 = 0xAAAAA;
+        query.mUnknown44 = 0.45f;
+    } else {
+        query.mUnknown44 = distance;
+        query.mUnknown36 = angle * 46603.378f;
+    }
+    if (!fn_8011E9B4(pOther) && fn_801CFFD0(p->mMotion.mUnknown32, pOther->mMotion.mFacing) <= 0x2AAAA9) {
+        query.mUnknown32 = 0x800000;
+    }
+    if (type != 94 && type != 234 && !(otherBlocking && fn_800CD2B4(1, pOther)) && !special) {
+        if (fn_802372EC(0, 100) < chance) {
+            kinds[count] = 3;
+        } else {
+            kinds[count] = 2;
+        }
+        if (fn_800C7720(pOther, p)) {
+            kinds[count] = 3;
+        }
+    } else {
+        kinds[count] = 1;
+    }
+    count++;
+    for (i = 0; i < count; i++) {
+        query.mUnknown54 = kinds[i];
+        result = fn_800CE2B8(&query);
+        if (result != 0) {
+            break;
+        }
+    }
+    if (result != 0) {
+        p->mUnknown1219 = 0;
+        p->mUnknown1216[1] = query.mUnknown54;
+        pOther->mUnknown1216[1] = p->mUnknown1216[1];
+    }
+    return result;
+}
+
 extern "C" int fn_800C7084(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value, int b)
 {
     Query_800CE770 query;
