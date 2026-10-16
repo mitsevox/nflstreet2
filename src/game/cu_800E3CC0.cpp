@@ -73,7 +73,8 @@ struct State_800EDC68 {
 /* Player block at +336 as used by the functions of the state entries at
    0x802DB3B8 and 0x802DB3D0. */
 struct State_800EE9AC {
-    char mUnknown0[48];
+    short mUnknown0;
+    char mUnknown2[46];
     unsigned char mUnknown48;
     unsigned char mUnknown49;
     unsigned char mUnknown50;
@@ -214,6 +215,7 @@ int fn_800EB3E8(Object_80039F5C *p, State_800EBCE0 *pState, Object_80137ABC *pBa
 void fn_800EE964(State_800EE9AC *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value);
 void fn_800EEE3C(Point_8017886C *pOut, int *pFacing, Object_80039F5C *p, int value);
 int fn_800EEA20(Object_80039F5C *p);
+void fn_800FF598(State_800EE9AC *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value, float scale);
 int fn_800B5FEC(Object_80039F5C *p);
 int fn_800B76E8(Object_80039F5C *p);
 int fn_800B7F34(Object_80039F5C *p);
@@ -1832,6 +1834,11 @@ extern "C" int fn_800EE7C8(Object_80039F5C *p) {
     return ((State_800EE7C8 *)&p->mUnknown336)->mUnknown4 == 1;
 }
 
+extern "C" void fn_800EE964(State_800EE9AC *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value) {
+    fn_800FF598(pState, p, pPoint, value, 0.0f);
+    pState->mUnknown0 = fn_802372EC(0, 40) + 20;
+}
+
 extern "C" int fn_800EE9AC(Object_80039F5C *p) {
     Point_8017886C point;
     int facing;
@@ -1860,4 +1867,27 @@ extern "C" int fn_800EEDC8(Object_80039F5C *p) {
 
 extern "C" int fn_800EF0DC(Object_80039F5C *p) {
     return fn_800EEA20(p);
+}
+
+extern "C" int fn_800EF0FC(Object_80039F5C *p) {
+    if (fn_800AD9B4() != 5) {
+        if (p->mUnknown9[0] != 1) {
+            Message_800F01CC message;
+            fn_801C1F94(&message, 0, 4);
+            message.mId = 11;
+            message.mUnknown1[0] = p->mUnknown9[0];
+            fn_800F00D4(0, p->mpState, &message, p);
+            p->mUnknown512.mUnknown14 = 0;
+        } else if (fn_801BE648(p->mpUnknown792) != 74 && fn_801BE648(p->mpUnknown792) != 203) {
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, p, 1.0f);
+        }
+        return 1;
+    }
+    return 0;
+}
+
+extern "C" int fn_800EF1C8(Object_80039F5C *p) {
+    if (fn_801BE648(p->mpUnknown792) != 74)
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, p, 1.0f);
+    return 1;
 }
