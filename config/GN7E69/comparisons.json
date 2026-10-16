@@ -8069,6 +8069,26 @@
           "end": "0x8010F058"
         },
         {
+          "symbol": "fn_8010F058",
+          "start": "0x8010F058",
+          "end": "0x8010F1F4"
+        },
+        {
+          "symbol": "fn_8010F1F4",
+          "start": "0x8010F1F4",
+          "end": "0x8010F43C"
+        },
+        {
+          "symbol": "fn_8010F43C",
+          "start": "0x8010F43C",
+          "end": "0x8010F654"
+        },
+        {
+          "symbol": "fn_8010F654",
+          "start": "0x8010F654",
+          "end": "0x8010FB10"
+        },
+        {
           "symbol": "fn_8010FB10",
           "start": "0x8010FB10",
           "end": "0x8010FB4C"
@@ -8079,6 +8099,11 @@
           "end": "0x8010FC40"
         },
         {
+          "symbol": "fn_8010FC40",
+          "start": "0x8010FC40",
+          "end": "0x8010FD8C"
+        },
+        {
           "symbol": "fn_8010FD8C",
           "start": "0x8010FD8C",
           "end": "0x8010FD94"
@@ -8087,6 +8112,11 @@
           "symbol": "fn_8010FD94",
           "start": "0x8010FD94",
           "end": "0x8010FE40"
+        },
+        {
+          "symbol": "fn_8010FE40",
+          "start": "0x8010FE40",
+          "end": "0x80110078"
         },
         {
           "symbol": "fn_80110078",
