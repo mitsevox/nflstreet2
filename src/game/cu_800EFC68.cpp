@@ -2890,6 +2890,85 @@ extern "C" int fn_80103D6C(Object_80039F5C *p)
 }
 
 extern "C" float fn_8016D9F4(Object_80039F5C *p, float a, float b);
+extern "C" float fn_800C49EC(float limit);
+extern "C" float fn_800CAAFC(Object_80039F5C *p);
+extern "C" float fn_801CFB18(int angle);
+extern "C" int fn_801CFDD0(float);
+
+extern "C" void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C *pPos, Vector_80039F5C *pVelocity, int angle,
+                            Vector_80039F5C *pOut, Object_80039F5C *p, float speed, float ballSpeed)
+{
+    Vector_80039F5C ball;
+    Point_8017886C delta;
+    int behind;
+    int running;
+    float runSpeed;
+    float distance;
+    float closing;
+    float time;
+    float reach;
+    float slack;
+    float burst;
+    int turn;
+
+    pOut->mX = pOut->mY = pOut->mZ = 0.0f;
+    behind = pPos->mY < fn_80177FE0().mY + 13.0f && fn_801CFFD0(angle, 0xC00000) <= 0x271C70;
+    if (behind) {
+        pOut->mX = pPos->mX;
+        pOut->mY = pPos->mY;
+        pOut->mZ = 1.3f;
+        return;
+    }
+    running = speed > fn_8016D9F4(p, 0.14f, 1.0f) && angle <= 0x7FFFFF;
+    if (speed > fn_800C49EC(lbl_803ECB08)) {
+        speed = fn_800C49EC(lbl_803ECB08);
+    }
+    fn_80137D58(pBall, &ball);
+    runSpeed = speed;
+    fn_802276B4(&ball, &ball, pPos);
+    distance = fn_802270A4(&ball);
+    if (running) {
+        runSpeed += (fn_8016D9F4(p, 1.0f, 1.0f) - runSpeed) * fn_801CFB18(angle);
+    }
+    runSpeed /= lbl_803EA2C4;
+    if (runSpeed >= ballSpeed) {
+        pOut->mX = pPos->mX;
+        pOut->mY = pPos->mY;
+        pOut->mZ = 1.3f;
+        return;
+    }
+    turn = fn_801CFFD0(angle, fn_801CFE40(ball.mY, ball.mX));
+    if (turn > 0x400000) {
+        turn = fn_801CFFD0(0x800000, turn);
+        closing = ballSpeed * fn_801CFB94(fn_801CFDD0(runSpeed * fn_801CFB18(turn) / ballSpeed)) - runSpeed * fn_801CFB94(turn);
+    } else {
+        closing = ballSpeed * fn_801CFB94(fn_801CFDD0(runSpeed * fn_801CFB18(turn) / ballSpeed)) + runSpeed * fn_801CFB94(turn);
+    }
+    time = distance / closing / lbl_803EA2C4;
+    pOut->mX = pPos->mX;
+    pOut->mY = pPos->mY;
+    fn_8022732C(pOut, pVelocity, time);
+    pOut->mZ = 1.3f;
+    fn_80227690(&delta, pOut, &p->mMotion.mPos);
+    distance = fn_802270A4(&delta);
+    burst = fn_800CAAFC(p);
+    slack = runSpeed - fn_8016D9F4(p, 0.72f, 1.0f);
+    if (slack < 0.0f) {
+        slack = 0.0f;
+    }
+    reach = (slack * burst + fn_8016D9F4(p, 0.72f, 1.0f) * time) * 0.75f;
+    if (reach < distance) {
+        float short_ = distance - reach;
+
+        pOut->mX -= short_ * fn_801CFB94(angle);
+        pOut->mY -= short_ * fn_801CFB18(angle);
+    }
+    pOut->mX = pOut->mX < 1.0f - fn_80178A08()
+                   ? 1.0f - fn_80178A08()
+                   : (pOut->mX > fn_80178A08() - 1.0f ? fn_80178A08() - 1.0f : pOut->mX);
+}
+
+
 extern "C" int fn_8012CAA4(Object_80039F5C *p);
 extern "C" int fn_8012CAAC(Object_80039F5C *p);
 extern "C" int fn_8012CB50(Message_800F01CC *pMessage);
@@ -3249,9 +3328,6 @@ extern "C" float fn_801050DC(Object_80137ABC *pBall, Vector_80039F5C *pTarget, f
 
 extern "C" int fn_801C4E98(void *p, const char *pName);
 extern "C" void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pA);
-extern "C" float fn_801CFB18(int angle);
-extern "C" int fn_801CFDD0(float);
-
 extern "C" void fn_80105168(int mode, Object_80137ABC *pBall, Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pTarget, int unused, float speed)
 {
     Vector_80039F5C delta;
