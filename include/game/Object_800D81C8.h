@@ -37,7 +37,8 @@ struct Record_800D81C8 {
     float mUnknown28;
     float mUnknown44;
     Block_801BF3C8 mUnknown30;
-    char mUnknown34[24];
+    char mUnknown34[20];
+    float mUnknown48;
     Block_801BD6D4 mUnknown4C;
     char mUnknown58[18];
     unsigned char mUnknown6A;
