@@ -1748,6 +1748,15 @@ struct Object_800C6640 {
     int mUnknown28;
 };
 
+/* One of the 24 four-float boxes fn_8009E674 lays out at +0x18 of
+   State_8011F4EC. */
+struct Box_8009E674 {
+    float mUnknown0;
+    float mUnknown4;
+    float mUnknown8;
+    float mUnknownC;
+};
+
 /* Object whose address fn_8011F4EC returns. Only the accessed bytes are
    declared; the size is not established. */
 struct State_8011F4EC {
@@ -1758,7 +1767,8 @@ struct State_8011F4EC {
     unsigned char mUnknown11;
     unsigned char mUnknown12[2];
     unsigned short mUnknown14;
-    unsigned char mUnknown16[386];
+    unsigned char mUnknown16[2];
+    Box_8009E674 mUnknown18[24];
     unsigned char mUnknown198;
     unsigned char mUnknown199[3];
     unsigned char mUnknown19C[3];
@@ -6861,6 +6871,9 @@ void fn_8009E674(void);
 void fn_800A5D94(void);
 int fn_8009DBB4(State_8011F4EC *p);
 void fn_8009E58C(void);
+float fn_80178A08(void);
+float fn_80178A2C(void);
+float fn_80178A44(void);
 int fn_8011F2C4(void);
 int fn_8011F1A4(void);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
@@ -6892,6 +6905,12 @@ extern Class_80297AB8 *lbl_803EA9E4;
 extern Class_80297AB8 lbl_803EC900;
 extern Block_802D7C64 lbl_802D7C64[];
 extern unsigned int lbl_803EA9EC;
+extern float lbl_803EA9AC;
+extern float lbl_803EA9B0;
+extern float lbl_803EA9B4;
+extern float lbl_803EA9B8;
+extern Point_8017886C lbl_802DA728[10];
+extern Point_8017886C lbl_802DA778[10];
 }
 
 extern "C" void fn_8009D474(int a, int b)
@@ -7503,6 +7522,63 @@ extern "C" void fn_8009E58C(void)
             }
         } while (swapped == 1);
         p->mUnknown1A2 = 1;
+    }
+}
+
+extern "C" void fn_8009E674(void)
+{
+    State_8011F4EC *p = fn_8011F4EC();
+    Box_8009E674 *pBoxes;
+    Vector_80039F5C pos;
+    Point_8017886C ball;
+    float offset;
+    int i;
+
+    fn_80137D58(fn_801374BC(), &pos);
+    pBoxes = p->mUnknown18;
+    ball = fn_80177FE0();
+    p->mUnknown14 = 12;
+    if (pos.mX > fn_80178A08() * 0.5f) {
+        pos.mX = fn_80178A08() * 0.5f;
+    } else if (pos.mX < -fn_80178A08() * 0.5f) {
+        pos.mX = -fn_80178A08() * 0.5f;
+    }
+    offset = pos.mX * 0.25f;
+    for (i = 0; i < 10; i++) {
+        pBoxes[i].mUnknown0 = fn_80178A44();
+        pBoxes[i].mUnknown4 = ball.mY + lbl_803EA9AC;
+        pBoxes[i].mUnknown8 = lbl_802DA778[i].mX * fn_80178A08();
+        pBoxes[i].mUnknownC = lbl_802DA778[i].mY * fn_80178A08();
+    }
+    if (ball.mY < fn_80178A2C() - 5.0f) {
+        pBoxes[10].mUnknown0 = pBoxes[11].mUnknown0 = ball.mY + 10.5f;
+    } else {
+        pBoxes[10].mUnknown0 = pBoxes[11].mUnknown0 = fn_80178A2C() + 7.0f;
+    }
+    pBoxes[10].mUnknown4 = pBoxes[11].mUnknown4 = ball.mY - 5.5f;
+    pBoxes[10].mUnknown8 = -fn_80178A08();
+    pBoxes[10].mUnknownC = offset - 8.0f;
+    pBoxes[11].mUnknown8 = offset + 8.0f;
+    pBoxes[11].mUnknownC = fn_80178A08();
+    if (ball.mY < fn_80178A2C() - 8.0f) {
+        pBoxes[12].mUnknown0 = pBoxes[13].mUnknown0 = ball.mY + 10.0f;
+    } else {
+        pBoxes[12].mUnknown0 = pBoxes[13].mUnknown0 = fn_80178A2C() + 7.0f;
+    }
+    pBoxes[12].mUnknown4 = pBoxes[13].mUnknown4 = ball.mY - 7.0f;
+    pBoxes[12].mUnknown8 = -fn_80178A08();
+    pBoxes[12].mUnknownC = offset - 8.0f;
+    pBoxes[13].mUnknown8 = offset + 8.0f;
+    pBoxes[13].mUnknownC = fn_80178A08();
+    for (i = 14; i < 24; i++) {
+        pBoxes[i].mUnknown4 = ball.mY + lbl_803EA9B8;
+        pBoxes[i].mUnknown0 = ball.mY + lbl_803EA9B4 > fn_80178A2C() + lbl_803EA9B0
+                                  ? fn_80178A2C() + lbl_803EA9B0
+                                  : ball.mY + lbl_803EA9B4;
+        pBoxes[i].mUnknown8 = lbl_802DA728[i - 14].mX;
+        pBoxes[i].mUnknownC = lbl_802DA728[i - 14].mY;
+        pBoxes[i].mUnknown8 = pBoxes[i].mUnknown8 < -fn_80178A08() ? -fn_80178A08() : pBoxes[i].mUnknown8;
+        pBoxes[i].mUnknownC = pBoxes[i].mUnknownC > fn_80178A08() ? fn_80178A08() : pBoxes[i].mUnknownC;
     }
 }
 
