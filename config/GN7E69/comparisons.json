@@ -16022,6 +16022,76 @@
       ]
     },
     {
+      "source": "src/game/cu_80032EE8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained provisional/provisional twelve-function hull (MainFE Group); getters, slot-2/3/6 bodies, the two helpers, the implicit destructor and the two lifecycle-role call stubs; the static initializer 0x8003319C and all storage remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80032EE8",
+          "end": "0x80033490"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GetName__11MainFEGroup",
+          "start": "0x80032EE8",
+          "end": "0x80032EF4"
+        },
+        {
+          "symbol": "vfn_04__11MainFEGroup",
+          "start": "0x80032EF4",
+          "end": "0x80032F00"
+        },
+        {
+          "symbol": "vfn_05__11MainFEGroup",
+          "start": "0x80032F00",
+          "end": "0x80032F0C"
+        },
+        {
+          "symbol": "vfn_06__11MainFEGroupi",
+          "start": "0x80032F0C",
+          "end": "0x80032F98"
+        },
+        {
+          "symbol": "vfn_02__11MainFEGroup",
+          "start": "0x80032F98",
+          "end": "0x800330DC"
+        },
+        {
+          "symbol": "vfn_03__11MainFEGroupii",
+          "start": "0x800330DC",
+          "end": "0x80033124"
+        },
+        {
+          "symbol": "fn_80033124",
+          "start": "0x80033124",
+          "end": "0x80033144"
+        },
+        {
+          "symbol": "fn_80033144",
+          "start": "0x80033144",
+          "end": "0x8003319C"
+        },
+        {
+          "symbol": "_._11MainFEGroup",
+          "start": "0x80033418",
+          "end": "0x80033438"
+        },
+        {
+          "symbol": "fn_80033438",
+          "start": "0x80033438",
+          "end": "0x80033464"
+        },
+        {
+          "symbol": "fn_80033464",
+          "start": "0x80033464",
+          "end": "0x80033490"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8015A248.cpp",
       "profile": "game_cpp",
       "evidence": "Source consolidation retains accepted three-function prefix unchanged, with24 complete additional bodies under fixed DECOMP_COMPARE. Shared original pool context compiles184 bytes identical to target0x802A3E40-0x802A3EF8 including natural trailing alignment. Accepted prefix data remains invariant and is excluded from new comparison credit; comparison functions retain full24 target extents. Provisional original unit edges, neutral identifiers, unchanged game_cpp profile; original assembly stays linked for additional bodies.",

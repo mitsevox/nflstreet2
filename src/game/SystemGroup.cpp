@@ -56,4 +56,4 @@ ModuleDependency *SystemGroup::vfn_06(int id)
 }
 
 void SystemGroup::vfn_02() {}
-int SystemGroup::vfn_03() { return 1; }
+int SystemGroup::vfn_03(int, int) { return 1; }
