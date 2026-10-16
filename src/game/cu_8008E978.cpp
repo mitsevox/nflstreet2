@@ -5432,6 +5432,52 @@ extern "C" void fn_800ABE00(void)
     lbl_803EAAB8->mUnknown4 = 1;
 }
 
+/* Two 8-byte records per index: a 0..1 base and a weight on the input. */
+struct Record_802D821C {
+    float mUnknown0;
+    float mUnknown4;
+};
+
+extern Record_802D821C lbl_802D821C[10];
+extern Record_802D821C lbl_802D826C[10];
+
+extern "C" short fn_800ABE10(int team, int index, short value)
+{
+    if (fn_800B65A0(team) != 255) {
+        fn_800ABDA4(team == 0);
+    } else {
+        switch (fn_800ABDA4(team)) {
+        case 0:
+            break;
+        case 1:
+            value = (short)(lbl_802D826C[index].mUnknown0 * 255.0f
+                            + lbl_802D826C[index].mUnknown4 * value);
+            break;
+        case 2:
+            value = (short)(lbl_802D821C[index].mUnknown0 * 255.0f
+                            + lbl_802D821C[index].mUnknown4 * value);
+            break;
+        }
+    }
+    return value;
+}
+
+extern "C" float fn_800AC004(int team, float value)
+{
+    switch (fn_800ABDA4(team)) {
+    case 0:
+        value *= 0.35f;
+        break;
+    case 1:
+        value *= 1.15f;
+        break;
+    case 2:
+        value *= 1.25f;
+        break;
+    }
+    return value;
+}
+
 extern "C" int fn_800AC218(int team)
 {
     int result;
@@ -5551,6 +5597,17 @@ extern "C" int fn_800AC3FC(int a, unsigned int value)
     return level == 0;
 }
 
+extern "C" float fn_800AC6BC(int team, float value)
+{
+    if (fn_800B65A0(team) != 255 && fn_800ABDA4(team ^ 1) == 0) {
+        value += 0.15f;
+    }
+    if (value > 1.0f) {
+        value = 1.0f;
+    }
+    return value;
+}
+
 extern "C" int fn_800ACA70(int team, int value)
 {
     switch (fn_800ABDA4(team)) {
@@ -5579,6 +5636,29 @@ extern "C" void fn_800ACAF8(int team, unsigned int *pValue)
         *pValue = *pValue * 2 / 3;
         break;
     }
+}
+
+extern float lbl_803EAABC;
+
+extern "C" float fn_800ACB8C(int team)
+{
+    float result;
+
+    switch (fn_800ABDA4(team)) {
+    case 0:
+        result = lbl_803EAABC * 0.5f;
+        break;
+    case 1:
+        result = 0.25f;
+        break;
+    case 2:
+        result = 0.12f;
+        break;
+    default:
+        result = 1.0f;
+        break;
+    }
+    return result;
 }
 
 extern "C" unsigned int fn_800ACBFC(int team)
@@ -5727,6 +5807,14 @@ extern "C" void fn_800AD5C0(float dt)
     fn_80039CB0(dt);
     fn_80039D08(dt);
     fn_801BF8DC();
+}
+
+extern "C" void fn_80039F04(void);
+
+extern "C" void fn_800AD600(float dt)
+{
+    fn_80039F04();
+    fn_80137864(dt);
 }
 
 extern "C" int fn_800AD9B4(void)
