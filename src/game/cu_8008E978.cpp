@@ -6849,6 +6849,9 @@ void fn_8009E674(void);
 void fn_800A5D94(void);
 int fn_8009DBB4(State_8011F4EC *p);
 void fn_8009E58C(void);
+float fn_80237260(int stream);
+void fn_800FAD2C(void);
+void fn_800FAECC(int a);
 Message_800F01CC *fn_800AEE20(Object_80039F5C *p);
 int fn_801D34D0(void *pDest, int size, int value, int width);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
@@ -7066,6 +7069,32 @@ extern "C" void fn_8009DD10(State_8011F4EC *p)
     }
 }
 
+extern "C" int fn_8009DD88(Object_80039F5C *p, Object_80039F5C *pOther)
+{
+    int result = 0;
+
+    if (p != 0 && pOther != 0 && fn_80237260(0) < p->mRatings[8] / 255.0f
+        && fn_8009F058(p, pOther, 0x400000) != 0) {
+        Object_80039F5C *pCarrier = fn_80137B40();
+
+        if (pCarrier != 0) {
+            Point_8017886C carrierDelta;
+            Point_8017886C otherDelta;
+            float carrierDistance;
+            float otherDistance;
+
+            fn_80227690(&carrierDelta, &pCarrier->mMotion.mPos, &p->mMotion.mPos);
+            fn_80227690(&otherDelta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+            carrierDistance = fn_802270A4(&carrierDelta);
+            otherDistance = fn_802270A4(&otherDelta);
+            if (carrierDistance > 3.0f) {
+                result = carrierDistance > otherDistance;
+            }
+        }
+    }
+    return result;
+}
+
 extern "C" void fn_8009DE9C(void)
 {
     State_8011F4EC *p = fn_8011F4EC();
@@ -7079,6 +7108,65 @@ extern "C" void fn_8009DE9C(void)
     fn_8009DD10(p);
     fn_800FBAA8();
     fn_8009E674();
+}
+
+extern "C" void fn_8009DEFC(int flag)
+{
+    State_8011F4EC *p = fn_8011F4EC();
+    int team;
+    Object_800670B4 *pObject;
+    Object_800670B4 *pOther;
+
+    fn_8009DA90();
+    team = fn_80178320();
+    pObject = fn_80168708((unsigned char)team);
+    pOther = fn_80168708(fn_80178308());
+    if ((pObject->mUnknown8.mUnknown14 & 1) && (fn_8016871C((unsigned char)team)->mUnknown18 & 1)
+        && fn_800B65A0(team) == 0xFF) {
+        p->mUnknown1A8 = pObject->mUnknown8.mUnknownF == 0;
+        if (fn_8009DBB4(p) != 0) {
+            if (p->mUnknown1A8 == 0) {
+                p->mUnknown1A8 = 1;
+            }
+        } else if (p->mUnknown1A8 == 1) {
+            p->mUnknown1A8 = 0;
+        }
+        if (pOther->mUnknown8.mUnknownF != 0) {
+            fn_8009DB54(flag);
+        }
+        p->mUnknown1A9 = 1;
+    } else {
+        p->mUnknown1A9 = 0;
+        p->mUnknown1A8 = 1;
+    }
+    if (fn_800B65A0(team) == 0xFF) {
+        p->mUnknown11 = 1;
+        p->mUnknownC = 60;
+    }
+}
+
+extern "C" void fn_8009E01C(void)
+{
+    State_8011F4EC *p = fn_8011F4EC();
+    int team;
+
+    fn_800FAD2C();
+    fn_800FAECC(0);
+    team = fn_80178320();
+    if ((fn_80168708((unsigned char)team)->mUnknown8.mUnknown14 & 1) && (fn_8016871C((unsigned char)team)->mUnknown18 & 1)
+        && fn_800B65A0(team) == 0xFF) {
+        if (fn_8009DBB4(p) != 0) {
+            if (p->mUnknown1A8 == 0) {
+                p->mUnknown1A8 = 1;
+            }
+        } else if (p->mUnknown1A8 == 1) {
+            p->mUnknown1A8 = 0;
+        }
+        p->mUnknown1A9 = 1;
+    } else {
+        p->mUnknown1A9 = 0;
+        p->mUnknown1A8 = 1;
+    }
 }
 
 extern "C" void fn_8009E0EC(void)
