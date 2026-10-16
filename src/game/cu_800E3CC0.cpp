@@ -24,6 +24,11 @@
 #include <math.h>
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
+#include "game/fn_801BA2A8.h"
+#include "game/fn_80227638.h"
+#include "game/Table_80089904.h"
+
+#define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
 
 /* Player block at +336 as used by the functions of the state entry at
    0x802DB370. */
@@ -51,7 +56,8 @@ struct State_800E8BE8 {
 struct State_800EBCE0 {
     char mUnknown0[28];
     int mUnknown28;
-    char mUnknown32[8];
+    float mUnknown32;
+    int mUnknown36;
     unsigned short mUnknown40;
     unsigned char mUnknown42;
     unsigned char mUnknown43;
@@ -79,6 +85,12 @@ struct State_800EE9AC {
     unsigned char mUnknown50;
     char mUnknown51[1];
     int mUnknown52;
+};
+
+/* Player block at +336 as used by fn_800ECC64. */
+struct State_800ECC64 {
+    int mUnknown0;
+    unsigned char mUnknown4;
 };
 
 struct State_800EE7C8 {
@@ -136,6 +148,7 @@ struct Block_800E7588 {
 extern "C" {
 extern unsigned char lbl_803EAD9C[8];
 extern unsigned char lbl_803EADA4[8];
+extern unsigned char lbl_803EADE8[8];
 extern float lbl_803EADAC;
 extern float lbl_803EADB0;
 extern float lbl_803EADB4;
@@ -162,6 +175,8 @@ void fn_800CE684(Object_800CE674 *p);
 void fn_800EFE60(int a, void *p, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void fn_8010AEC4(int value);
+void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_8011E240(Object_80039F5C *p);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 int fn_8011E9D8(State_80039F5C *pState);
@@ -1561,6 +1576,36 @@ extern "C" int fn_800EB7F8(Object_80039F5C *p, State_800EBCE0 *state) {
     return result;
 }
 
+extern "C" void fn_800EB86C(Object_80039F5C *p, State_800EBCE0 *state, Vector_80039F5C *pTarget) {
+    Vector_80039F5C delta;
+    delta.mX = CLAMP(pTarget->mX, -fn_80178A08(), fn_80178A08());
+    delta.mY = CLAMP(pTarget->mY, -fn_80178A44(), fn_80178A44());
+    delta.mZ = pTarget->mZ;
+    fn_802276B4(&delta, &delta, &p->mMotion.mPos);
+    float dist = fn_802270D4(&delta);
+    state->mUnknown36 = fn_801CFE40(delta.mY, delta.mX);
+    if (fn_800EB7F8(p, state)) {
+        state->mUnknown32 = 0.72f;
+        if (dist < 3.0f) {
+            if (dist < 0.75f) {
+                state->mUnknown32 = 0.0f;
+                p->mMotion.mUnknown28 = 0.0f;
+            } else {
+                state->mUnknown32 = state->mUnknown32 * (dist / 3.0f);
+                state->mUnknown32 = state->mUnknown32 < 0.4f ? 0.4f : state->mUnknown32;
+            }
+        }
+    } else {
+        state->mUnknown32 = 0.4f;
+        if (dist < 15.0f) {
+            if (dist < 10.0f)
+                state->mUnknown36 = (state->mUnknown36 + 0x800000) & 0xFFFFFF;
+            else
+                state->mUnknown32 = 0.0f;
+        }
+    }
+}
+
 extern "C" int fn_800EBCE0(Object_80039F5C *p) {
     State_800EBCE0 *state = (State_800EBCE0 *)&p->mUnknown336;
     state->mUnknown40 = 0xFFFF;
@@ -1598,6 +1643,16 @@ extern "C" int fn_800EC640(Object_80039F5C *p) {
     if (state->mUnknown40 != 0xFFFF)
         result = state->mUnknown45 == 2;
     return result;
+}
+
+extern "C" int fn_800EC674(Table_80089904 *table, unsigned short key, void *record, void *entries,
+                            Object_80039F5C *p, int phase) {
+    if (phase == 0) {
+        State_800EBCE0 *state = (State_800EBCE0 *)&p->mUnknown336;
+        fn_801BA2A8(record, entries, table->mEntries[state->mUnknown44].mUnknown0,
+                    table->mEntries[state->mUnknown44].mUnknown2, key, p, 1.0f);
+    }
+    return 0;
 }
 
 extern "C" int fn_800EC6DC(Object_80039F5C *p) {
@@ -1674,6 +1729,51 @@ extern "C" int fn_800EC76C(Object_80039F5C *p) {
 
 extern "C" int fn_800EC840(Object_80039F5C *p, int value) {
     return fn_801787A0() == 0 ? 208 : 209;
+}
+
+extern "C" unsigned char fn_800EC870(Object_80039F5C *p) {
+    Point_8017886C delta;
+    int angle;
+    Vector_80039F5C pos;
+    if (fn_801787A0()) {
+        fn_800EEE3C(&delta, &angle, p, 0);
+        fn_80227690(&delta, &delta, &p->mMotion.mPos);
+    } else if (p->mIdBytes[2] == fn_80178320() || p->mpState[1].mId == 33 || p->mpState[1].mId == 31) {
+        Object_80039F5C *pCarrier = fn_80137B40();
+        if (!pCarrier)
+            goto ball;
+        fn_80227538(&delta, pCarrier->mMotion.mUnknown32, pCarrier->mMotion.mUnknown28 * 15.0f);
+        fn_80227638(&delta, &delta, &pCarrier->mMotion.mPos);
+        fn_80227690(&delta, &delta, &p->mMotion.mPos);
+    } else if (fn_8013BA58(fn_801374BC(), 0) == 5) {
+    ball:
+        fn_80137D58(fn_801374BC(), &pos);
+        fn_80227690(&delta, &pos, &p->mMotion.mPos);
+    } else {
+        if (!fn_801486A0())
+            angle = (fn_801CFE40(p->mMotion.mPos.mY, p->mMotion.mPos.mX) + 0x800000) & 0xFFFFFF;
+        else
+            angle = (0x400000 - p->mMotion.mFacing) & 0xFFFFFF;
+        return lbl_803EADE8[((angle + 0x100000) >> 21) & 7];
+    }
+    angle = (fn_801CFE40(delta.mY, delta.mX) - p->mMotion.mFacing) & 0xFFFFFF;
+    return lbl_803EADE8[((angle + 0x100000) >> 21) & 7];
+}
+
+extern "C" int fn_800ECC64(Object_80039F5C *p) {
+    int kind = p->mpState->mUnknown1;
+    State_800ECC64 *state = (State_800ECC64 *)&p->mUnknown336;
+    int flag = kind == 4 || kind == 5;
+    if (fn_80137B40() == p)
+        fn_8010AEC4((int)p);
+    fn_800AD9B4();
+    state->mUnknown0 = p->mpState->mUnknown2;
+    state->mUnknown4 = 1;
+    if (p->mIdBytes[3] == 1)
+        p->mFlags &= ~0x1000;
+    fn_800EC9E4(p, p->mpState->mUnknown1, flag);
+    p->mUnknown772 = 1.0f;
+    return 0;
 }
 
 extern "C" int fn_800ECD14(Object_80039F5C *p) {
