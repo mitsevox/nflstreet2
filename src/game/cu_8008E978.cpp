@@ -6849,6 +6849,7 @@ void fn_8009E674(void);
 void fn_800A5D94(void);
 int fn_8009DBB4(State_8011F4EC *p);
 void fn_8009E58C(void);
+void fn_8003AB08(Object_80039F5C *p, int a);
 float fn_80237260(int stream);
 void fn_800FAD2C(void);
 void fn_800FAECC(int a);
@@ -7055,6 +7056,46 @@ extern "C" void fn_8009DB54(int flag)
     }
 }
 
+extern "C" int fn_8009DBB4(State_8011F4EC *p)
+{
+    int result = 0;
+    int team = fn_80178308();
+    unsigned char behind = 0;
+    unsigned char ahead = 0;
+    Object_800670B4 *pTeam = fn_80168708(team);
+    unsigned char i = 0;
+    float ballX = fn_80177FE0().mX;
+    int carrierId = fn_800B0F98();
+
+    do {
+        Object_80039F5C *pObject = fn_80039F5C(team, p->mUnknown199[i]);
+        Point_8017886C pos;
+
+        if ((pObject->mFlags & 0x40000) || carrierId == pObject->mId) {
+            pos.mX = pObject->mMotion.mPos.mX;
+        } else {
+            Entry_8006719C *pEntry = fn_80163E94(pTeam, p->mUnknown199[i], 0);
+
+            pos.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
+            pos.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
+            pos.mX += ballX;
+        }
+        p->mUnknown1AC[i] = pos.mX;
+        if (!(__builtin_fabsf(pos.mX - ballX) <= 0.5f)) {
+            if (!(pos.mX < ballX)) {
+                ahead++;
+            } else {
+                behind++;
+            }
+        }
+        i++;
+    } while (i <= 2);
+    if (ahead >= behind) {
+        result = 1;
+    }
+    return result;
+}
+
 extern "C" void fn_8009DD10(State_8011F4EC *p)
 {
     unsigned int i;
@@ -7188,6 +7229,46 @@ extern "C" void fn_8009E138(void)
     p->mUnknown14--;
     if (p->mUnknown14 & 0x8000) {
         fn_8009E674();
+    }
+}
+
+extern "C" void fn_8009E458(void)
+{
+    int i = 0;
+    int team = fn_80178320();
+    Message_800F01CC message;
+    int count;
+
+    fn_801C1F94(&message, 0, sizeof(message));
+    message.mId = 2;
+    count = fn_80178D70(team);
+    for (; i < count; i++) {
+        Object_80039F5C *p = fn_80039F5C(team, (unsigned char)i);
+
+        fn_8003AB08(p, 0);
+        switch (p->mpState->mId) {
+        case 32:
+        case 94:
+            if (p->mpState[1].mId != 2) {
+                fn_800F01CC(0, p->mpState, &message, p);
+            }
+            break;
+        case 28:
+            if (p->mUnknown9[0] == 1) {
+                fn_800F01CC(0, p->mpState, &message, p);
+            } else {
+                fn_8009DA10(p);
+            }
+            break;
+        default:
+            if (p->mUnknown9[0] != 1 && p->mpState->mId != 11 && p->mpState->mId != 16
+                && p->mpState->mId != 17 && p->mpState->mId != 10 && p->mpState->mId != 12) {
+                fn_8009DA10(p);
+            } else {
+                fn_800F053C(0, p->mpState, &message, p);
+            }
+            break;
+        }
     }
 }
 

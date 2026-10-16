@@ -25005,6 +25005,11 @@
           "end": "0x8009DBB4"
         },
         {
+          "symbol": "fn_8009DBB4",
+          "start": "0x8009DBB4",
+          "end": "0x8009DD10"
+        },
+        {
           "symbol": "fn_8009DD10",
           "start": "0x8009DD10",
           "end": "0x8009DD88"
@@ -25038,6 +25043,11 @@
           "symbol": "fn_8009E138",
           "start": "0x8009E138",
           "end": "0x8009E180"
+        },
+        {
+          "symbol": "fn_8009E458",
+          "start": "0x8009E458",
+          "end": "0x8009E58C"
         },
         {
           "symbol": "fn_8009E58C",
