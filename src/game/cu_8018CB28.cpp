@@ -355,14 +355,12 @@ void fn_8018D918()
 void fn_8018DC18(int unused, int player)
 {
     QueryResult result;
-    Query_8008352C columns[2];
+    Table_8007E020 tables[2];
     Object_80023BBC arg;
     arg.Set(6, 0x59414C5044494750LL, 3, player);
-    columns[0].mUnknown0 = 0x59414C50;
-    columns[0].mUnknown4 = 2; columns[0].mUnknown8 = 0;
-    columns[1].mUnknown0 = -1;
-    columns[1].mUnknown4 = 2; columns[1].mUnknown8 = 0;
-    fn_801F9908(0x54415453, (char *)columns, &arg, (int *)&result, 0);
+    tables[0].Set(0x59414C50);
+    tables[1].Set(-1);
+    fn_801F9908(0x54415453, (char *)tables, &arg, (int *)&result, 0);
 }
 int fn_8018DCBC(int id)
 {
