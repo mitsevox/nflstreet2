@@ -2889,6 +2889,83 @@ extern "C" int fn_80103D6C(Object_80039F5C *p)
     return result;
 }
 
+extern "C" float fn_8016D9F4(Object_80039F5C *p, float a, float b);
+extern "C" int fn_8012CAA4(Object_80039F5C *p);
+extern "C" int fn_8012CAAC(Object_80039F5C *p);
+extern "C" int fn_8012CB50(Message_800F01CC *pMessage);
+extern "C" void fn_8012CB98(int a, int b, int angle, Point_8017886C *pOut);
+extern "C" int fn_8012CC04(int a);
+extern "C" int fn_8012CC50(Object_80039F5C *p);
+extern "C" void fn_8012CD4C(Object_80039F5C *p, Point_8017886C *pOut);
+
+/* The target point that the state at +336 holds. */
+struct State_80104328 {
+    Point_8017886C mTarget;
+};
+
+extern "C" void fn_80104328(Object_80039F5C *p, unsigned int count, int *pTime, Vector_80039F5C *pPos, int *pAngle)
+{
+    State_80039F5C *pQueue = p->mpState;
+    float speed = fn_8016D9F4(p, 1.0f, 1.0f);
+    State_80039F5C *pEntry;
+    Point_8017886C offset;
+    unsigned char i;
+
+    pPos->mX = pPos->mY = pPos->mZ = 0.0f;
+    pEntry = pQueue;
+    switch (pEntry->mId) {
+    case 19: {
+        State_80104328 *pState = (State_80104328 *)&p->mUnknown336;
+
+        offset.mX = pState->mTarget.mX;
+        offset.mY = pState->mTarget.mY;
+        *pTime = (int)(fn_8022781C(&offset, &p->mMotion.mPos) / speed);
+        pPos->mX = pState->mTarget.mX;
+        pPos->mY = pState->mTarget.mY;
+        *pAngle = pEntry->mUnknown2 << 17 & 0xFE0000;
+        break;
+    }
+    case 20:
+        fn_8012CD4C(p, &offset);
+        pPos->mX = offset.mX;
+        pPos->mY = offset.mY;
+        if ((unsigned int)(pEntry->mUnknown2 - 8) <= 1) {
+            *pAngle = fn_8012CAAC(p);
+        } else {
+            *pAngle = fn_8012CAA4(p);
+        }
+        *pTime = fn_8012CC50(p);
+        break;
+    default:
+        *pTime = 0;
+        break;
+    }
+    for (i = 1; i <= count; i++) {
+        pEntry = &pQueue[i];
+        if (pEntry->mId == 20) {
+            State_80039F5C *pPrev = &pQueue[i - 1];
+            int kind = pEntry->mUnknown2;
+            unsigned char type = pEntry->mUnknown1;
+
+            if (pPrev->mId == 19) {
+                fn_8012CB98(kind, type, pPrev->mUnknown2 << 17 & 0xFE0000, &offset);
+                *pTime += fn_8012CC04(type);
+                pPos->mX += offset.mX;
+                pPos->mY += offset.mY;
+                *pAngle += fn_8012CB50((Message_800F01CC *)pEntry);
+            }
+        } else if (pEntry->mId == 19) {
+            float distance = (unsigned int)pEntry->mUnknown1 * 0.125f;
+
+            *pTime += (int)(distance / speed);
+            *pAngle = pEntry->mUnknown2 << 17 & 0xFE0000;
+            fn_80227538(&offset, *pAngle, distance);
+            pPos->mX += offset.mX;
+            pPos->mY += offset.mY;
+        }
+    }
+}
+
 extern "C" int fn_801045BC(Object_80039F5C *p)
 {
     int result = 0;
