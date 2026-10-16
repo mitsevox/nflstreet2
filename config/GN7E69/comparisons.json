@@ -23245,9 +23245,29 @@
           "end": "0x8009A6EC"
         },
         {
+          "symbol": "fn_8009A6EC",
+          "start": "0x8009A6EC",
+          "end": "0x8009A77C"
+        },
+        {
+          "symbol": "fn_8009A77C",
+          "start": "0x8009A77C",
+          "end": "0x8009A8D4"
+        },
+        {
           "symbol": "fn_8009A8D4",
           "start": "0x8009A8D4",
           "end": "0x8009A8F0"
+        },
+        {
+          "symbol": "fn_8009A8F0",
+          "start": "0x8009A8F0",
+          "end": "0x8009AB34"
+        },
+        {
+          "symbol": "fn_8009AB34",
+          "start": "0x8009AB34",
+          "end": "0x8009ABC0"
         },
         {
           "symbol": "fn_8009ABC0",
@@ -23260,9 +23280,39 @@
           "end": "0x8009AC18"
         },
         {
+          "symbol": "fn_8009AC18",
+          "start": "0x8009AC18",
+          "end": "0x8009AD30"
+        },
+        {
           "symbol": "fn_8009AD30",
           "start": "0x8009AD30",
           "end": "0x8009AD38"
+        },
+        {
+          "symbol": "fn_8009AD38",
+          "start": "0x8009AD38",
+          "end": "0x8009AE1C"
+        },
+        {
+          "symbol": "fn_8009AE1C",
+          "start": "0x8009AE1C",
+          "end": "0x8009AF00"
+        },
+        {
+          "symbol": "fn_8009AF00",
+          "start": "0x8009AF00",
+          "end": "0x8009AFE8"
+        },
+        {
+          "symbol": "fn_8009AFE8",
+          "start": "0x8009AFE8",
+          "end": "0x8009B0CC"
+        },
+        {
+          "symbol": "fn_8009B0CC",
+          "start": "0x8009B0CC",
+          "end": "0x8009B1B0"
         },
         {
           "symbol": "fn_8009B1B0",
@@ -23385,6 +23435,11 @@
           "end": "0x8009BB54"
         },
         {
+          "symbol": "fn_8009BB54",
+          "start": "0x8009BB54",
+          "end": "0x8009BBD8"
+        },
+        {
           "symbol": "fn_8009BBD8",
           "start": "0x8009BBD8",
           "end": "0x8009BC30"
@@ -23393,6 +23448,11 @@
           "symbol": "fn_8009BC30",
           "start": "0x8009BC30",
           "end": "0x8009BC38"
+        },
+        {
+          "symbol": "fn_8009BC38",
+          "start": "0x8009BC38",
+          "end": "0x8009BCE8"
         },
         {
           "symbol": "fn_8009BCE8",
@@ -23408,6 +23468,16 @@
           "symbol": "fn_8009BD48",
           "start": "0x8009BD48",
           "end": "0x8009BD60"
+        },
+        {
+          "symbol": "fn_8009BD60",
+          "start": "0x8009BD60",
+          "end": "0x8009BD88"
+        },
+        {
+          "symbol": "fn_8009BD88",
+          "start": "0x8009BD88",
+          "end": "0x8009BDA0"
         },
         {
           "symbol": "fn_8009CC28",
@@ -24905,6 +24975,11 @@
           "end": "0x8009A344"
         },
         {
+          "symbol": "fn_8009A344",
+          "start": "0x8009A344",
+          "end": "0x8009A578"
+        },
+        {
           "symbol": "fn_8009A578",
           "start": "0x8009A578",
           "end": "0x8009A5A0"
@@ -26103,6 +26178,41 @@
           "symbol": "fn_8009BDA0",
           "start": "0x8009BDA0",
           "end": "0x8009BE0C"
+        },
+        {
+          "symbol": "fn_8009BE0C",
+          "start": "0x8009BE0C",
+          "end": "0x8009BEA8"
+        },
+        {
+          "symbol": "fn_8009BEA8",
+          "start": "0x8009BEA8",
+          "end": "0x8009BEFC"
+        },
+        {
+          "symbol": "fn_8009BEFC",
+          "start": "0x8009BEFC",
+          "end": "0x8009BF5C"
+        },
+        {
+          "symbol": "fn_8009BF5C",
+          "start": "0x8009BF5C",
+          "end": "0x8009BFD0"
+        },
+        {
+          "symbol": "fn_8009BFD0",
+          "start": "0x8009BFD0",
+          "end": "0x8009BFF8"
+        },
+        {
+          "symbol": "fn_8009BFF8",
+          "start": "0x8009BFF8",
+          "end": "0x8009C0B8"
+        },
+        {
+          "symbol": "fn_8009C158",
+          "start": "0x8009C158",
+          "end": "0x8009C220"
         },
         {
           "symbol": "fn_8009C470",

@@ -5,6 +5,7 @@
 #include "game/Object_80146094.h"
 #include "game/Pair_8017055C.h"
 #include "game/cu_801442FC.h"
+#include "game/Pose_80041930.h"
 
 struct Item_800476DC;
 
@@ -15,22 +16,6 @@ struct Skeleton_80041930 {
     unsigned short mUnknown6;
     char mUnknown8[1032];
     unsigned short mUnknown1040[1][3];
-};
-
-/* Pose block copied, serialized and blended by src/game/cu_80041930.cpp:
-   three shorts per bone in mUnknown48 and, for the main pose, one 64-byte
-   matrix per bone in mUnknown52. */
-struct Pose_80041930 {
-    unsigned short mUnknown0;
-    unsigned short mUnknown2;
-    unsigned short mUnknown4;
-    short mUnknown6;
-    float mUnknown8[3];
-    float mUnknown20[3];
-    int mUnknown32;
-    int mUnknown36[3];
-    short *mUnknown48;
-    float (*mUnknown52)[4][4];
 };
 
 /* Element of the two-entry array at +116, passed to fn_800ADDFC,
