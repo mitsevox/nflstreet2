@@ -164,12 +164,6 @@ public:
     virtual void vfn_04(float dt);
 };
 
-/* Counter member of Class_802A3A48, cleared on construction. */
-struct Count_802A3A48 {
-    Count_802A3A48() : m(0) {}
-    unsigned int m;
-};
-
 class Class_802A3A48 : public Class_80297C60 {
 public:
     virtual void vfn_03(float dt);
@@ -181,13 +175,14 @@ public:
     virtual int vfn_11();
     virtual int vfn_12();
     virtual void vfn_14(float dt);
+    Class_802A3A48() : mUnknown8(0) {}
     virtual ~Class_802A3A48() {}
     void fn_80158C04();
 
     unsigned char mUnknown4;
     unsigned char mUnknown5;
     signed char mUnknown6;
-    Count_802A3A48 mUnknown8;
+    unsigned int mUnknown8;
     int mUnknown12;
 };
 
@@ -1777,11 +1772,11 @@ void Class_802A3A48::fn_80158C04()
             fn_801C2D88(text, 255, "%s\n\n%s", lbl_802DF140, pName);
             fn_800544A4("Tutorial Results", text, "|^Done");
         }
-        mUnknown8.m = 0;
+        mUnknown8 = 0;
         fn_801566DC(1);
     } else {
         mUnknown12 = 1;
-        if (mUnknown8.m > 2) {
+        if (mUnknown8 > 2) {
             fn_800544A4("Tutorial Results", lbl_802DF100, "|^Retry|Quit|Skip to Next Section");
         } else {
             fn_800544A4("Tutorial Results", lbl_802DF100, "|^Retry|Quit");
@@ -2071,7 +2066,7 @@ void Class_802A3A48::vfn_04(float dt)
             if (mUnknown12 != 0) {
                 switch (fn_801801D0()) {
                 case 1:
-                    mUnknown8.m++;
+                    mUnknown8++;
                     fn_801566DC(0);
                     mUnknown12 = 0;
                     fn_80194F1C(1);
@@ -2092,7 +2087,7 @@ void Class_802A3A48::vfn_04(float dt)
                     break;
                 case 3:
                     fn_80067DB8(0x88, 0, 0, 0, 0);
-                    mUnknown8.m = 0;
+                    mUnknown8 = 0;
                     fn_801566DC(1);
                     if (!fn_801569C8(fn_801568F0())) {
                         mUnknown12 = 0;
