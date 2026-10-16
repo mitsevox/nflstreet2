@@ -25620,9 +25620,19 @@
           "end": "0x800B7378"
         },
         {
+          "symbol": "fn_800B7378",
+          "start": "0x800B7378",
+          "end": "0x800B76E8"
+        },
+        {
           "symbol": "fn_800B76E8",
           "start": "0x800B76E8",
           "end": "0x800B78DC"
+        },
+        {
+          "symbol": "fn_800B78DC",
+          "start": "0x800B78DC",
+          "end": "0x800B7CA4"
         },
         {
           "symbol": "fn_800B7CA4",
