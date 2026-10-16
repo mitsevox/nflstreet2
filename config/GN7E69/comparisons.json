@@ -32098,7 +32098,7 @@
     {
       "source": "src/game/cu_8014D210.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #807; two complete bodies 0x8014D210-0x8014D67C inside the retained provisional cu_801485B4 survey group, directly after src/game/cu_8014C868.cpp: the record-value helper fn_8014D210 (called from 0x8014D5FC, 0x8014D63C and 0x8014E934) and the event-kind credit switch fn_8014D298 (no code or data reference in the target). Neither loads a literal, so no readonly range is registered. Original file boundaries and nominal identity unresolved; 0x8014D024, 0x8014D67C and 0x8014D948 excluded; original bytes stay linked.",
+      "evidence": "Issue #807; two complete bodies 0x8014D210-0x8014D67C inside the retained provisional cu_801485B4 survey group, directly after src/game/cu_8014C868.cpp: the record-value helper fn_8014D210 (called from 0x8014D5FC, 0x8014D63C and 0x8014E934) and the event-kind credit switch fn_8014D298 (registered as the 0x800D7604 callback at 0x8014DE24 and called through 0x803EACC0 at 0x800D1B78). Neither loads a literal, so no readonly range is registered. Original file boundaries and nominal identity unresolved; 0x8014D024, 0x8014D67C and 0x8014D948 excluded; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",

@@ -1,5 +1,6 @@
 #include "game/Class_80148A58.h"
 #include "game/Object_80039F5C.h"
+#include "game/cu_80136B1C.h"
 
 struct Record_8014F104 {
     int mUnknown0;
@@ -20,9 +21,6 @@ struct Block_8014F104 {
 extern "C" {
 Block_8014F104 *fn_8014F104(Class_80148A58 *p);
 void fn_8014D024(unsigned short index);
-Object_80039F5C *fn_80137B40(void);
-Object_80039F5C *fn_80137B64(void);
-Object_80039F5C *fn_8009BCE8(int *pRef);
 void fn_8014F4D8(Class_80148A58 *p, Object_80039F5C *pPlayer, int kind, int value);
 void fn_8017E46C(Object_80039F5C *p, int team, const char *pText, int value, int d);
 
@@ -38,7 +36,7 @@ void fn_8014D210(Object_80039F5C *p, int kind, int value)
     fn_8014D024(i);
 }
 
-void fn_8014D298(int kind, int unused, const char *pText, int value, int addPoints, int d, int addText)
+void fn_8014D298(int kind, int unused, const char *pText, int value, int addValue, int d, int addText)
 {
     int credit = 0;
     Object_80039F5C *pFirst = 0;
@@ -124,20 +122,20 @@ void fn_8014D298(int kind, int unused, const char *pText, int value, int addPoin
     case 96:
     case 98:
     case 120: {
-        Object_80039F5C *pTackled = fn_80137B64();
-        if (pTackled) {
-            if (pTackled->mpState->mId == 16) {
+        Object_80039F5C *pBallPlayer = fn_80137B64();
+        if (pBallPlayer) {
+            if (pBallPlayer->mpState->mId == 16) {
                 for (unsigned short i = 0; i <= 4; i++) {
                     if (!pFirst) {
                         pFirst = fn_80039F5C(0, i);
-                        if (pTackled->mpState->mUnknown3[0] != i && pFirst->mpState->mId != 17) {
+                        if (pBallPlayer->mpState->mUnknown3[0] != i && pFirst->mpState->mId != 17) {
                             pFirst = 0;
                         } else {
                             fn_8014F4D8(fn_80148A58(), pFirst, 0, 1);
                         }
                     } else if (!pSecond) {
                         pSecond = fn_80039F5C(0, i);
-                        if (pTackled->mpState->mUnknown3[0] != i && pSecond->mpState->mId != 17) {
+                        if (pBallPlayer->mpState->mUnknown3[0] != i && pSecond->mpState->mId != 17) {
                             pSecond = 0;
                         } else {
                             fn_8014F4D8(fn_80148A58(), pSecond, 0, 1);
@@ -146,8 +144,8 @@ void fn_8014D298(int kind, int unused, const char *pText, int value, int addPoin
                         break;
                     }
                 }
-            } else if (pTackled->mUnknown560.mUnknown48) {
-                pFirst = fn_8009BCE8(&pTackled->mUnknown560.mUnknown48);
+            } else if (pBallPlayer->mUnknown560.mUnknown48) {
+                pFirst = fn_8009BCE8(&pBallPlayer->mUnknown560.mUnknown48);
                 fn_8014F4D8(fn_80148A58(), pFirst, 0, 1);
             }
         }
@@ -171,14 +169,14 @@ void fn_8014D298(int kind, int unused, const char *pText, int value, int addPoin
         if (pSecond) {
             value /= 2;
         }
-        if (addPoints) {
+        if (addValue) {
             fn_8014D210(pFirst, kind, value);
         }
         if (addText) {
             fn_8017E46C(pFirst, pFirst->mIdBytes[2], pText, value, d);
         }
         if (pSecond) {
-            if (addPoints) {
+            if (addValue) {
                 fn_8014D210(pSecond, kind, value);
             }
             if (addText) {
