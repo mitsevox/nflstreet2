@@ -199,6 +199,15 @@ struct Block_8011067C {
     int mUnknown24;
 };
 
+/* View of the block at player +336 as fn_8010AF48 resets it. */
+struct Block_8010AF48 {
+    int mUnknown0;
+    short mUnknown4;
+    unsigned char mUnknown6;
+    unsigned char mUnknown7;
+    unsigned char mUnknown8;
+};
+
 /* View of the player object from +1032. */
 struct Block_8010FB4C {
     int mUnknown0;
@@ -3227,6 +3236,14 @@ extern "C" void fn_80108074(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
     }
 }
 
+extern "C" int fn_80109968(Object_80039F5C *p) {
+    return p->mMotion.mUnknown28 <= lbl_803ECB08 * 0.07f;
+}
+
+extern "C" int fn_80109C7C(Object_80039F5C *p) {
+    return p->mMotion.mUnknown28 > lbl_803ECB08 * 0.4f;
+}
+
 extern "C" int fn_8010A07C(Object_80039F5C *p) {
     int result = 0;
 
@@ -3276,6 +3293,32 @@ extern "C" int fn_8010AEA0(Object_80039F5C *p) {
 
 extern "C" void fn_8010AEC4(int value) {
     lbl_803EAF10 = value;
+}
+
+extern "C" void fn_8010AECC(Object_80039F5C *p, unsigned char a, unsigned char b, unsigned char c) {
+    fn_8009BD60(p);
+    p->mUnknown1008.mUnknown0 = a;
+    p->mUnknown1008.mUnknown1 = b;
+    p->mUnknown1008.mUnknown2 = c;
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 83, p, 1.0f);
+    p->mUnknown512.mUnknown14 = 0;
+    p->mFlags &= ~0x40000;
+    p->mFlags &= ~4;
+}
+
+extern "C" int fn_8010AF48(Object_80039F5C *p) {
+    Block_8010AF48 *pBlock;
+
+    p->mUnknown336 = -1;
+    pBlock = (Block_8010AF48 *)&p->mUnknown336;
+    pBlock->mUnknown4 = 0;
+    pBlock->mUnknown6 = 0;
+    pBlock->mUnknown8 = 0;
+    pBlock->mUnknown7 = 0;
+    if (!(p->mFlags & 0x40000)) {
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 91, p, 1.0f);
+    }
+    return 0;
 }
 
 extern "C" int fn_8010B1B4(Object_80039F5C *p) {
@@ -3443,6 +3486,22 @@ extern "C" unsigned char fn_8010B738(Object_80039F5C *p, Table_8010B738 *pTable)
     }
     if (n != 0) {
         result = choices[fn_802372EC(0, n)];
+    }
+    return result;
+}
+
+extern "C" unsigned char fn_8010B87C(Object_80039F5C *p, Object_80039F5C *pOther) {
+    unsigned char result = 0;
+
+    if (pOther != 0 && p != 0 && pOther != p) {
+        Point_8017886C delta;
+        int angle;
+
+        fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+        angle = fn_801CFE40(delta.mY, delta.mX);
+        if (fn_802270A4(&delta) <= 5.0f) {
+            result = fn_801CFFD0(angle, p->mMotion.mFacing) <= 0xE38E2;
+        }
     }
     return result;
 }
