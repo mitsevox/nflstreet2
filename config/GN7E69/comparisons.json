@@ -8264,9 +8264,19 @@
           "end": "0x80120B4C"
         },
         {
+          "symbol": "fn_80120B84",
+          "start": "0x80120B84",
+          "end": "0x80120CDC"
+        },
+        {
           "symbol": "fn_80121BE8",
           "start": "0x80121BE8",
           "end": "0x80121CB0"
+        },
+        {
+          "symbol": "fn_80122670",
+          "start": "0x80122670",
+          "end": "0x801227DC"
         },
         {
           "symbol": "fn_80125508",

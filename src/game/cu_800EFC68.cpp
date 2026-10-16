@@ -6142,6 +6142,30 @@ void fn_80120B4C(int value, int *pList, unsigned char i, unsigned char count)
     }
 }
 
+void fn_80120B84(Plan_80121264 *pPlan)
+{
+    int swapped;
+
+    do {
+        Entry_80120E98 *pPrev = pPlan->mUnknown0;
+        Entry_80120E98 *pEntry = pPrev + 1;
+        unsigned char i;
+
+        swapped = 0;
+        for (i = 0; i < pPlan->mUnknown1440 - 1; i++) {
+            if (pEntry->mUnknown8.mX < pPrev->mUnknown8.mX) {
+                Entry_80120E98 temp = *pEntry;
+
+                *pEntry = *pPrev;
+                *pPrev = temp;
+                swapped = 1;
+            }
+            pPrev = pEntry;
+            pEntry++;
+        }
+    } while (swapped);
+}
+
 void fn_80120CDC(Object_80039F5C *p, Object_80039F5C *pOther, Entry_80120E98 *pEntry)
 {
     if (pOther->mIdBytes[2] == p->mIdBytes[2]) {
@@ -6209,6 +6233,36 @@ int fn_80121BE8(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pTarg
         return 1;
     }
     return 0;
+}
+
+void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle);
+int fn_80121918(Object_80039F5C *p, Plan_80121264 *pPlan, Entry_801230B8 *pEntry);
+
+void fn_80122670(Object_80039F5C *p, Plan_80121264 *pPlan, int angle)
+{
+    Vector_80039F5C *pPos = &p->mMotion.mPos;
+    unsigned char i;
+
+    pPlan->mUnknown2372 = 0;
+    for (i = 0; i < pPlan->mUnknown1440 - 1; i++) {
+        Entry_801230B8 *pEntry = &pPlan->mUnknown1444[pPlan->mUnknown2372];
+        Point_8017886C delta;
+
+        pEntry->mpUnknown0 = &pPlan->mUnknown0[i];
+        pEntry->mpUnknown4 = &pPlan->mUnknown0[i + 1];
+        pEntry->mUnknown8.mX = (pEntry->mpUnknown0->mUnknown8.mX + pEntry->mpUnknown4->mUnknown8.mX) * 0.5f;
+        pEntry->mUnknown8.mY = (pEntry->mpUnknown0->mUnknown8.mY + pEntry->mpUnknown4->mUnknown8.mY) * 0.5f;
+        fn_80227690(&delta, &pEntry->mUnknown8, pPos);
+        pEntry->mUnknown16 = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+        pEntry->mUnknown20 = fn_802270A4(&delta);
+        fn_80227690(&delta, &pEntry->mpUnknown0->mUnknown8, &pEntry->mpUnknown4->mUnknown8);
+        pEntry->mUnknown24 = fn_802270A4(&delta);
+        pEntry->mUnknown28 = 0.0f;
+        fn_80121CB0(p, pEntry, angle);
+        if (fn_80121918(p, pPlan, pEntry)) {
+            pPlan->mUnknown2372++;
+        }
+    }
 }
 
 void fn_80123024(Object_80039F5C *p, Plan_80121264 *pPlan, int angle)
