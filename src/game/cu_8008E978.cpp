@@ -1585,6 +1585,32 @@ extern "C" int fn_800A432C(Key_80110630 *pA, Key_80110630 *pB)
     return result;
 }
 
+extern "C" {
+void fn_80227690(void *pOut, void *pA, void *pB);
+int fn_801CFE40(float y, float x);
+int fn_800A46D8(Object_80039F5C *p, Object_80039F5C *pTarget, int flag);
+int fn_800A4790(Object_80039F5C *p, Object_80039F5C *pTarget);
+void fn_80227538(Point_80167910 *pOut, int angle, float length);
+void fn_80227638(void *, void *, void *);
+int fn_8011F1A4(void);
+int fn_8011F4C8(void);
+float fn_80237260(int stream);
+}
+
+extern "C" int fn_800A4790(Object_80039F5C *p, Object_80039F5C *pTarget)
+{
+    Point_80167910 offset;
+    int angle = (pTarget->mMotion.mFacing + 0x400000) & 0xFFFFFF;
+
+    if (pTarget->mUnknown344 == 3) {
+        angle = (angle + 0x800000) & 0xFFFFFF;
+    }
+    fn_80227538(&offset, angle, 2.5f);
+    fn_80227638(&offset, &offset, &pTarget->mMotion.mPos);
+    fn_80227690(&offset, &offset, &p->mMotion.mPos);
+    return fn_801CFE40(offset.mY, offset.mX);
+}
+
 extern "C" void fn_800A4950(Object_80039F5C *p, Object_80039F5C *pOther, int index,
                             Params_800A4E8C *pParams)
 {
@@ -1623,11 +1649,123 @@ extern "C" int fn_800A50B8(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
     return fn_802372EC(0, 256) < limit;
 }
 
+extern "C" int fn_800A5104(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
+                           Pair_800A554C *pPair)
+{
+    int result = 0;
+
+    if (fn_8009F058(p, pTarget, 0x400000) != 0 && fn_8009F058(p, pOther, 0x400000) != 0) {
+        result = fn_80237260(0) < 0.33f;
+    }
+    return result;
+}
+
 extern "C" int fn_800A55C0(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
                            Pair_800A554C *pPair)
 {
     p->mUnknown512.mUnknown14 = 0;
     return 1;
+}
+
+extern "C" int fn_800A55D0(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+{
+    Point_8017886C delta;
+    int angle;
+
+    fn_80227690(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
+    angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+    p->mUnknown512.mUnknown14 = 1;
+    p->mUnknown512.mUnknown8 = angle;
+    p->mUnknown512.mUnknown4 = angle;
+    p->mUnknown512.mUnknown0 = 1.0f;
+    return 1;
+}
+
+extern "C" int fn_800A563C(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+{
+    int angle = fn_800A46D8(p, pTarget, 0);
+
+    p->mUnknown512.mUnknown14 = 1;
+    p->mUnknown512.mUnknown8 = angle;
+    p->mUnknown512.mUnknown4 = angle;
+    p->mUnknown512.mUnknown0 = 1.0f;
+    return 1;
+}
+
+extern "C" int fn_800A5690(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+{
+    int result = 1;
+
+    if (*pState == -1) {
+        if (pTarget->mpState->mId != 34) {
+            result = 0;
+        } else {
+            *pState = fn_800A4790(p, pTarget);
+        }
+    }
+    p->mUnknown512.mUnknown14 = 1;
+    p->mUnknown512.mUnknown8 = *pState;
+    p->mUnknown512.mUnknown4 = *pState;
+    p->mUnknown512.mUnknown0 = 1.0f;
+    return result;
+}
+
+extern "C" int fn_800A5718(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+{
+    int result = 1;
+
+    if (*pState == -1) {
+        if (pTarget->mpState->mId != 35) {
+            result = 0;
+        } else {
+            *pState = fn_800A46D8(p, pTarget, 0);
+        }
+    }
+    p->mUnknown512.mUnknown14 = 1;
+    p->mUnknown512.mUnknown8 = *pState;
+    p->mUnknown512.mUnknown4 = *pState;
+    p->mUnknown512.mUnknown0 = 1.0f;
+    return result;
+}
+
+extern "C" int fn_800A57A4(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+{
+    int result = 1;
+
+    if (*pState == -1) {
+        if (pTarget->mpState->mId != 52) {
+            result = 0;
+        } else {
+            if (fn_8011F1A4() != 0 && (fn_8011F4C8() & 1)) {
+                *pState = 0;
+            } else {
+                *pState = 0x800000;
+            }
+        }
+    }
+    p->mUnknown512.mUnknown14 = 1;
+    p->mUnknown512.mUnknown8 = *pState;
+    p->mUnknown512.mUnknown4 = *pState;
+    p->mUnknown512.mUnknown0 = 1.0f;
+    return result;
+}
+
+extern "C" int fn_800A5A04(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+{
+    int result = 1;
+
+    if (*pState == -1) {
+        if (pTarget->mpState->mId != 20) {
+            result = 0;
+        } else {
+            *pState = pTarget->mMotion.mUnknown32;
+        }
+    }
+    p->mUnknown512.mUnknown14 = 1;
+    p->mUnknown512.mUnknown8 = *pState;
+    p->mUnknown512.mUnknown4 = *pState;
+    p->mUnknown512.mUnknown0 = 1.0f;
+    return result;
 }
 
 extern "C" int fn_800A5A60(void)
