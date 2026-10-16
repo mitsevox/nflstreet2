@@ -52,8 +52,6 @@
 #include "game/Record_8011F4F8.h"
 #include "game/State_800FDA58.h"
 #include "game/Object_801BC084.h"
-#include "game/Frame_8019D3B8.h"
-#include "game/cu_80026BB0.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
@@ -5748,7 +5746,6 @@ extern "C" {
 void fn_800AD31C(float dt);
 void fn_800AD418(float dt);
 void fn_800CB504(void);
-int fn_801C6280(int a, int b, void *p);
 
 extern Mode_80297FC8 lbl_80297FC8[9];
 }
@@ -5775,24 +5772,6 @@ extern "C" void fn_800AD634(float dt)
     lbl_803EAA8C->vfn_01();
     fn_800B175C();
     fn_800CB504();
-}
-
-extern "C" void fn_800AD774(void)
-{
-    if (lbl_803EAAD4 != 0) {
-        void (*pExit)(float) = lbl_80297FC8[lbl_803EAAD4->mUnknown0].mpExit;
-
-        if (pExit != 0) {
-            pExit(1.0f);
-        }
-    }
-    lbl_803EAB90->vfn_02();
-    lbl_803EABA4->vfn_03();
-    lbl_803EAB38->vfn_02();
-    lbl_803EA9E4->vfn_02();
-    lbl_803EAB84->vfn_02();
-    lbl_803EAA8C->vfn_02();
-    fn_801C6280(-1, 2, (void *)fn_80026DD4);
 }
 
 extern "C" void fn_800AD888(float dt)
@@ -5833,18 +5812,6 @@ extern "C" void fn_800AD910(int mode, float dt)
 extern "C" int fn_800AD9B4(void)
 {
     return lbl_803EAAD4->mUnknown0;
-}
-
-extern "C" void fn_800AD9C0(float value)
-{
-    Block_800AD634 *p = lbl_803EAAD4;
-
-    if (p != 0 && value > 0.0f) {
-        p->mUnknownC = value;
-        p->mUnknown8 = 1;
-        fn_800655B8();
-        fn_8002C9A8(lbl_803EA368, 4, 0);
-    }
 }
 
 /* Indexed by the current value of an element (0..10), two columns. */
@@ -6023,35 +5990,6 @@ extern "C" void fn_800ADE6C(void)
     for (i = 0; i <= 10; i++) {
         lbl_8030F958[i] = fn_801BAD70(pRecord, pClip->mUnknown2, handle, pClip->mKeys[i]);
     }
-}
-
-extern "C" {
-float fn_801CFB94(int angle);
-
-extern Blend_8019EDDC lbl_8030F534;
-}
-
-/* Blend between an element's current and next pose, eased over its
-   duration. */
-extern "C" Blend_8019EDDC *fn_800ADEFC(Element_80041BF8 *pElements, unsigned int index)
-{
-    Blend_8019EDDC *pBlend = &lbl_8030F534;
-    Element_80041BF8 *p = &pElements[index];
-    unsigned int length = p->mUnknown6 * 16;
-    float t = (float)p->mUnknown8 / (float)length;
-    float s;
-
-    t = fn_801CFB94((int)(t * 8388608.0f));
-    s = t;
-
-    pBlend->mUnknown0 = 2;
-    pBlend->mUnknown4[0].mUnknown4 = 1.0f;
-    pBlend->mUnknown4[0].mUnknown8 = index == 0;
-    pBlend->mUnknown4[1].mUnknown8 = index == 0;
-    pBlend->mUnknown4[1].mUnknown4 = 1.0f - (1.0f - s) * 0.5f;
-    pBlend->mUnknown4[0].mpUnknown40 = lbl_8030F958[(signed char)p->mUnknown5];
-    pBlend->mUnknown4[1].mpUnknown40 = lbl_8030F958[(signed char)p->mUnknown4];
-    return pBlend;
 }
 
 extern "C" {
@@ -6244,11 +6182,6 @@ extern "C" void fn_800AE988(void)
     lbl_803EAAE9 = 0;
 }
 
-extern "C" float fn_800AE998(void)
-{
-    return 0.75f;
-}
-
 extern "C" void fn_800AE9A4(void)
 {
     int team;
@@ -6266,6 +6199,26 @@ extern "C" void fn_800AE9A4(void)
 extern "C" void fn_800AE9EC(void)
 {
     lbl_803EAAF0 = 0;
+}
+
+extern "C" int fn_800AE9F8(unsigned char (*pEntries)[4])
+{
+    int result = 1;
+    unsigned char i;
+
+    for (i = 0; result && (pEntries[i][0] & 0x7F) != 0; i++) {
+        switch (pEntries[i][0] & ~0x80) {
+        case 18:
+        case 25:
+        case 26:
+        case 27:
+        case 56:
+        case 68:
+            result = 0;
+            break;
+        }
+    }
+    return result;
 }
 
 extern "C" void fn_800AEA70(Object_80039F5C *p, Message_800F01CC *pMessages)
