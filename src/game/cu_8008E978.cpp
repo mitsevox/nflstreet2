@@ -72,6 +72,7 @@
 #include "game/cu_80164568.h"
 #include "game/Entry_802F394C.h"
 #include "game/Object_800785C0.h"
+#include "game/Block_800BFAD0.h"
 
 /* Data whose word +4 fn_80094374 returns and whose words from +8
    fn_80093BAC indexes; the bound of that array is not established. */
@@ -1852,8 +1853,6 @@ void fn_800CA4A8(void);
 extern float lbl_802DA2BC[14];
 extern float lbl_802DA2F4[14];
 extern float lbl_802DA32C[14];
-extern float lbl_802DA63C[14];
-extern float lbl_802DA364[14];
 extern float lbl_802DA39C[14][2];
 extern float lbl_802DA40C[14][2];
 extern float lbl_802DA47C[14][2];
@@ -1909,21 +1908,6 @@ extern "C" void *fn_800C47C4(void)
     return gStaData.fn_80033FD4();
 }
 
-extern "C" void fn_800C47EC(Level_80054130 *pLevel)
-{
-    unsigned int counts[14];
-    unsigned int i;
-    int kind;
-
-    fn_801C1F94(counts, 0, sizeof(counts));
-    for (i = 0; i < pLevel->mUnknown24; i++) {
-        counts[pLevel->mUnknown28[i].mUnknown8]++;
-    }
-    for (kind = 0; kind < 14; kind++) {
-        lbl_802DA63C[kind] = (float)counts[kind] / (float)pLevel->mUnknown24;
-    }
-}
-
 extern "C" float fn_800C48CC(int index, float value)
 {
     return value * lbl_802DA2BC[index];
@@ -1963,29 +1947,6 @@ extern "C" float fn_800C49A4(Object_80039F5C *p, float value)
     return value;
 }
 
-extern "C" float fn_800C49EC(float value)
-{
-    float sum = 0.0f;
-    int i;
-
-    for (i = 0; i < 14; i++) {
-        sum += lbl_802DA63C[i] * lbl_802DA2F4[i];
-    }
-    return sum * value;
-}
-
-extern "C" float fn_800C4A2C(Object_80039F5C *p)
-{
-    float result = 0.0f;
-
-    if (p->mpUnknown780 != 0) {
-        int kind = fn_800C4E18(p);
-
-        result = lbl_802DA364[kind];
-    }
-    return result;
-}
-
 extern "C" float fn_800C4A70(Object_80039F5C *p, int index)
 {
     int kind = fn_800C4E18(p);
@@ -2010,25 +1971,6 @@ extern "C" float fn_800C4A70(Object_80039F5C *p, int index)
     default:
         result = lbl_802DA5CC[kind][index];
         break;
-    }
-    return result;
-}
-
-extern "C" float fn_80237260(int stream);
-extern "C" int fn_800A84C0(int team);
-
-extern "C" int fn_800C4D54(Object_80039F5C *p)
-{
-    int result = 0;
-    float chance = fn_80237260(0) * (1.0f / 255.0f);
-    float value = chance * p->mRatings[0];
-
-    if (fn_800A84C0(p->mIdBytes[2]) != 0) {
-        if (value < fn_800C4A70(p, 0)) {
-            result = 1;
-        } else if (value < fn_800C4A70(p, 1)) {
-            result = 2;
-        }
     }
     return result;
 }
@@ -8161,13 +8103,6 @@ struct Pool_800B8544 {
     unsigned char mCount;
 };
 
-/* 260-byte block cleared by fn_800C4438. */
-struct Sequence_800C4460 {
-    Step_800C4460 mSteps[8];
-    unsigned char mUnknown100;
-    unsigned char mUnknown101;
-    unsigned char mUnknown102[2];
-};
 
 /* Allocated through fn_80238174 under the id 'pstp' (fn_800B95B4, 360
    bytes). Only the accessed fields are named. */
@@ -8858,47 +8793,6 @@ extern "C" void fn_800B9BAC(Class_80297C60 *p)
     lbl_803EAB78->mUnknown151 = 1;
 }
 
-/* One of the two 32-byte records at the start of Block_800BFAD0. */
-struct Slot_800BFAD0 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    float mUnknownC;
-    float mUnknown10;
-    unsigned char mUnknown14;
-    unsigned char mUnknown15[3];
-    unsigned char mUnknown18;
-    unsigned char mUnknown19;
-    unsigned char mUnknown1A[2];
-    unsigned char mUnknown1C;
-    unsigned char mUnknown1D[3];
-};
-
-/* Allocated through fn_80238174 under the id 'prep' (0x800BFAD0). */
-struct Block_800BFAD0 {
-    Slot_800BFAD0 mSlots[2];
-    int mUnknown40;
-    unsigned char mUnknown44[0x54];
-    unsigned char mUnknown98[4];
-    int mUnknown9C;
-    unsigned char mUnknownA0[4];
-    short mUnknownA4;
-    short mUnknownA6;
-    unsigned char mUnknownA8;
-    unsigned char mUnknownA9[2];
-    unsigned char mUnknownAB;
-    unsigned int mUnknownAC;
-    int mUnknownB0;
-    int mUnknownB4;
-    int mUnknownB8;
-    int mUnknownBC;
-    int mUnknownC0;
-    unsigned char mUnknownC4;
-    unsigned char mUnknownC5;
-    unsigned char mUnknownC6;
-    unsigned char mUnknownC7;
-};
-
 /* Object whose first word fn_800C2F94 dereferences. */
 struct Item_800C2F94 {
     unsigned char mUnknown0[8];
@@ -9300,18 +9194,6 @@ extern "C" int fn_800BF574(int a, unsigned int kind)
     return result;
 }
 
-extern "C" void fn_800BE944(unsigned char index, int team, int kind, float value);
-
-extern "C" void fn_800BF658(int index)
-{
-    int team = fn_800B65A0(index);
-
-    lbl_803EABA8->mSlots[index].mUnknown1C = 1;
-    fn_800BE808(team, index);
-    fn_800BE944(index, team, 132, 1.0f);
-    fn_8003A3F4(1, index);
-}
-
 extern "C" void fn_800BF6CC(int index)
 {
     lbl_803EABA8->mSlots[index].mUnknown1C = 0;
@@ -9322,43 +9204,6 @@ extern "C" void fn_800BF6CC(int index)
 extern "C" int fn_800BF718(int index)
 {
     return lbl_803EABA8->mSlots[index].mUnknown1C;
-}
-
-extern "C" void fn_800BD774(unsigned char index);
-extern "C" void fn_800BED54(unsigned char index);
-extern "C" void fn_800BD830(void);
-extern float lbl_803EABAC[2];
-
-extern "C" void fn_800BF72C(float dt)
-{
-    unsigned int i;
-
-    for (i = 0; i <= 1; i++) {
-        switch (lbl_803EABA8->mSlots[i].mUnknown0) {
-        case 4:
-        case 5:
-            fn_800BD774(i);
-            break;
-        case 8:
-            lbl_803EABAC[i] -= dt;
-            if (lbl_803EABAC[i] > 0.0f) {
-                break;
-            }
-        case 2:
-            lbl_803EABA8->mSlots[i].mUnknown0 = 0;
-            break;
-        case 6:
-            fn_800BED54(i);
-            break;
-        case 7:
-            fn_800BEFAC((unsigned char)i);
-            break;
-        }
-    }
-    if (lbl_803EABA8->mUnknownC0 > 0) {
-        lbl_803EABA8->mUnknownC0--;
-    }
-    fn_800BD830();
 }
 
 extern "C" int fn_800BF824(void)
@@ -9410,17 +9255,6 @@ extern "C" void fn_800BFAB4(Class_80297CE8 *p)
     }
 }
 
-void Class_80297CE8::vfn_02()
-{
-    void *pHandle = fn_80238174(0, (void **)&lbl_803EABA8, sizeof(Block_800BFAD0), 0, 0x70726570);
-    Block_800BFAD0 *pBlock;
-
-    fn_80238234(pHandle, 0, 0, 0, fn_800BF45C);
-    pBlock = (Block_800BFAD0 *)fn_8023816C(pHandle);
-    pBlock->mUnknown40 = 0;
-    fn_802381E0(pHandle);
-}
-
 void Class_80297CE8::vfn_03()
 {
     fn_800BFAB4(0);
@@ -9463,36 +9297,6 @@ void Class_80297CE8::fn_800C02F8(int value)
 
 void Class_80297CE8::vfn_07()
 {
-}
-
-extern "C" void fn_800BEC1C(int team, unsigned char index);
-extern "C" void fn_8017E01C(int index);
-extern "C" void fn_800C0330(void *p)
-{
-    if (fn_800AD9B4() == 2) {
-        int i;
-
-        for (i = 0; i <= 1; i++) {
-            switch (lbl_803EABA8->mSlots[i].mUnknown0) {
-            case 0:
-                break;
-            case 4:
-                fn_800BE944(i, fn_800B65A0(i), 133, 0.0f);
-                fn_800BEC1C(fn_800B65A0(i), i);
-                fn_8003A3F4(0, i);
-                break;
-            case 1:
-                lbl_803EABA8->mSlots[i].mUnknown0 = 0;
-                fn_8017DDDC((unsigned char)i);
-                break;
-            case 3:
-                lbl_803EABA8->mSlots[i].mUnknown0 = 0;
-                fn_8017E01C((unsigned char)i);
-                break;
-            }
-        }
-        fn_801C6280(-1, 3, lbl_802ECD44);
-    }
 }
 
 int Class_80297CE8::fn_800C0414()
@@ -9554,25 +9358,6 @@ extern "C" unsigned short fn_800C0660(unsigned short *p, int value)
         } while (i <= 6 && *p != value);
     }
     return i;
-}
-
-extern "C" QueryCursor fn_800C0698(unsigned char index, unsigned short *pValues)
-{
-    int id = fn_800C8744(index);
-    QueryCursor cursor;
-    QueryResult result;
-
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    fn_801FCE10(&result,
-                "declare \x8a cursor for select * from 'AGLP' where ('DIGT' = \x85) and "
-                "(('DIGP' = \x84) or ('DIGP' = \x84) or ('DIGP' = \x84) or ('DIGP' = \x84) or "
-                "('DIGP' = \x84) or ('DIGP' = \x84) or ('DIGP' = \x84))\n",
-                &cursor, id, pValues[0], pValues[1], pValues[2], pValues[3],
-                pValues[4], pValues[5], pValues[6]);
-    return cursor;
 }
 
 extern "C" QueryCursor fn_800C0750(unsigned char index, unsigned short *pValues)
@@ -9805,20 +9590,6 @@ extern "C" void fn_800C3678(void)
     lbl_803EABD5 = 0;
 }
 
-extern "C" int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
-
-extern "C" void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int flag)
-{
-    if (flag != 0) {
-        index |= 0x8000;
-    }
-    p->mUnknown1008.mUnknown0 = index;
-    p->mUnknown1008.mUnknown1 = (unsigned int)index >> 8;
-    p->mUnknown1008.mUnknown2 = value;
-    p->mUnknown1011 = (unsigned int)value >> 8;
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, a, p, 1.0f);
-}
-
 extern "C" int fn_800C4184(Object_80039F5C *p)
 {
     if (p->mUnknown8 != 255) {
@@ -9957,26 +9728,6 @@ extern "C" void fn_800C4568(Sequence_800C4460 *p)
         }
     } else {
         p->mUnknown100 = 0;
-    }
-}
-
-extern "C" void fn_800C45C0(Sequence_800C4460 *p, float dt)
-{
-    if (p->mUnknown100 != 0) {
-        Step_800C4460 *pStep = &p->mSteps[p->mUnknown101];
-
-        if (pStep->mUnknownC <= 0.0f) {
-            fn_800C44E0(p);
-        } else {
-            pStep->mUnknownC -= dt;
-            if (pStep->mUnknownC > 0.0f) {
-                fn_800C44E0(p);
-            } else {
-                fn_800C4568(p);
-                p->mUnknown101++;
-                fn_800C4460(p);
-            }
-        }
     }
 }
 
