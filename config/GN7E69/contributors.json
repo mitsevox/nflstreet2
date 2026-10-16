@@ -16638,6 +16638,8 @@
       ],
       "functions": [
         "0x801531C4",
+        "0x801531F0",
+        "0x80153270",
         "0x801532E0",
         "0x801532E8",
         "0x80153328",
@@ -16649,8 +16651,8 @@
       "provenance": {
         "pull_request": 824,
         "merged_via": 824,
-        "commit": "b5f1372652f894eb386b60654ebac97255603f4c",
-        "introduced_blob": "dc9245e8969d3045a17fe726c6427cb134ed6411"
+        "commit": "03bb29fd0510b51b280629239a6c794094cb88c7",
+        "introduced_blob": "f6a24ee0ff3219fab83b59b9f5d0709fc8a8e9ac"
       }
     },
     {
