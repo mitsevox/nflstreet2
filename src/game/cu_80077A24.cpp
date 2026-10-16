@@ -743,6 +743,9 @@ void fn_80078C50(int type, unsigned int value, char *pText, int size)
             fn_8022B7A4(1, 0x6E737374, &a);
             fn_8022B7A4(0, 0x6E737374, &b);
             switch (fn_800AD9B4()) {
+            case 5:
+                fn_801C2D88(text, 128, pFormat, a + b + 1);
+                break;
             case 4:
                 if ((unsigned char)fn_800B9A90(lbl_803EAB84)) {
                     fn_801C2D88(text, 128, pFormat, a + b);
@@ -750,7 +753,6 @@ void fn_80078C50(int type, unsigned int value, char *pText, int size)
                 }
             case 2:
             case 3:
-            case 5:
                 fn_801C2D88(text, 128, pFormat, a + b + 1);
                 break;
             default:
@@ -798,6 +800,9 @@ void fn_80078C50(int type, unsigned int value, char *pText, int size)
             fn_8022B7A4(1, 0x6E737374, &a);
             fn_8022B7A4(0, 0x6E737374, &b);
             switch (fn_800AD9B4()) {
+            case 5:
+                fn_801C2D88(text, 128, pFormat, a + b + 1);
+                break;
             case 4:
                 if ((unsigned char)fn_800B9A90(lbl_803EAB84)) {
                     fn_801C2D88(text, 128, pFormat, a + b);
@@ -805,7 +810,6 @@ void fn_80078C50(int type, unsigned int value, char *pText, int size)
                 }
             case 2:
             case 3:
-            case 5:
                 fn_801C2D88(text, 128, pFormat, a + b + 1);
                 break;
             default:
