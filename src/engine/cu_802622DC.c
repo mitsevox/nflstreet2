@@ -1,5 +1,6 @@
 /* Partial source for the C library range 0x802622DC-0x80264424 (neutral file name). */
 
+#include "engine/fn_80266AD8.h"
 #include <stddef.h>
 #include <string.h>
 #include <stdarg.h>
@@ -35,7 +36,6 @@ extern char *lbl_803EC54C;
 
 extern int fn_80262C34 (void *data, File_80262B5C *fp, const char *fmt, va_list ap);
 extern int fn_80264680 ();
-extern int fn_80266AD8 (int a, char *buf, int count);
 extern void *fn_80262440 (size_t size);
 extern double fn_80265D2C (double x);
 extern double fn_80265EA0 (double x, double y);

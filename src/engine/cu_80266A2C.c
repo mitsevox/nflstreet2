@@ -1,5 +1,6 @@
 /* Partial source for the inferred partition 0x80266A2C-0x8026A664 (neutral file name). */
 
+#include "engine/fn_80266AD8.h"
 #include <string.h>
 
 typedef struct Entry_80266D20 {
