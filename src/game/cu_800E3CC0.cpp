@@ -71,7 +71,7 @@ struct State_800EBCE0 {
    0x802DB4F0. */
 struct State_800EDC68 {
     int mUnknown0;
-    char mUnknown4[2];
+    unsigned short mUnknown4;
     unsigned char mUnknown6;
     unsigned char mUnknown7;
     unsigned int mUnknown8;
@@ -187,6 +187,7 @@ void fn_800EFE60(int a, void *p, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_8010AEC4(int value);
+void fn_800D7A0C(Object_80039F5C *p, int a);
 int fn_8011F4C8(void);
 float fn_8011F4D4(void);
 unsigned int fn_801BA568(void *record, Record_800D81C8 *entries, unsigned short key);
@@ -2004,6 +2005,89 @@ extern "C" int fn_800ED0F4(Object_80039F5C *p, State_800EDC68 *state) {
         }
     }
     return result;
+}
+
+extern "C" void fn_800ED208(Object_80039F5C *p, State_800EDC68 *state, unsigned int mode) {
+    fn_8009BD60(p);
+    unsigned int kind = state->mUnknown8;
+    float speed = 1.0f;
+    unsigned short animation;
+    switch (kind) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 15:
+        speed = fn_800ECEBC(p, state);
+        animation = 77;
+        switch (mode) {
+        case 1:
+            p->mUnknown1008.mUnknown1 = 1;
+            break;
+        case 2:
+            p->mUnknown1008.mUnknown1 = 2;
+            break;
+        case 3:
+            if (kind == 2 || kind == 4 || kind == 0 || p->mpState[1].mId != 18)
+                p->mUnknown1008.mUnknown1 = 3;
+            else
+                p->mUnknown1008.mUnknown1 = 4;
+            break;
+        }
+        p->mUnknown1008.mUnknown0 = state->mUnknown7;
+        if (state->mUnknown4 != 1) {
+            if (state->mUnknown7 == 5)
+                p->mUnknown1008.mUnknown0 = 6;
+            else if (state->mUnknown7 == 4)
+                p->mUnknown1008.mUnknown0 = 3;
+        }
+        switch (p->mUnknown2913) {
+        case 0:
+            p->mUnknown1008.mUnknown2 = 1;
+            break;
+        case 1:
+            p->mUnknown1008.mUnknown2 = 2;
+            break;
+        }
+        break;
+    case 14:
+        animation = 34;
+        if (fn_801486A0() == 3)
+            p->mUnknown1008.mUnknown0 = 5;
+        else if (fn_801486A0() == 2)
+            p->mUnknown1008.mUnknown0 = 6;
+        else
+            p->mUnknown1008.mUnknown0 = 1;
+        break;
+    default:
+        animation = 77;
+        break;
+    }
+    if (fn_800ED0F4(p, state)) {
+        if (state->mUnknown7 == 5 || state->mUnknown7 == 6)
+            fn_800D7A0C(p, 2);
+        else
+            fn_800D7A0C(p, 1);
+    } else {
+        if (state->mUnknown7 == 5 || state->mUnknown7 == 6)
+            fn_800D7A0C(p, 1);
+        else
+            fn_800D7A0C(p, 2);
+    }
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, p, 1.0f);
+    unsigned char count = fn_801BA568(p->mpUnknown796, p->mpUnknown800, animation);
+    for (unsigned char i = 0; i < count; i++)
+        p->mpUnknown800[fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, i)].mUnknown20Word = (int)(speed * 16777216.0f);
 }
 
 extern "C" int fn_800ED484(Object_80039F5C *p, Object_80039F5C *pOther, State_800EDC68 *state) {

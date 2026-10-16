@@ -33,7 +33,10 @@ struct Record_800D81C8 {
     int mUnknownC;
     char mUnknown10[12];
     int mUnknown1C;
-    char mUnknown20[8];
+    union {
+        char mUnknown20[8];
+        int mUnknown20Word;
+    };
     float mUnknown28;
     float mUnknown44;
     Block_801BF3C8 mUnknown30;
