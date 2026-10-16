@@ -5370,7 +5370,7 @@ extern "C" int fn_80112C04(Object_80039F5C *p, Object_80137ABC *pBall, int *pAng
         }
         *pAngle = lowAngle;
     } else if (fn_802270A4(&lowLanding) < fn_802270A4(&lowReach)) {
-        if (value > 0.24f) {
+        if (value > 0.24000001f) {
             value -= 0.1f;
         } else {
             value = 0.14f;
