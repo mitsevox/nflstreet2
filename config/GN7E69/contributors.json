@@ -16537,11 +16537,12 @@
       }
     },
     {
-      "source": "src/game/cu_8014FBB4.cpp",
+      "source": "src/game/cu_8014F57C.cpp",
       "contributors": [
         "adampreddy"
       ],
       "functions": [
+        "0x8014F57C",
         "0x8014FBB4",
         "0x8014FF2C"
       ],
