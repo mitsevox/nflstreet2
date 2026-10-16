@@ -11019,6 +11019,19 @@
           "end": "0x802ABD94"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_8019D2EC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019D2EC-0x8019D83C (src/game/cu_8019D2EC.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019D2EC",
+          "end": "0x8019D83C"
+        }
+      ]
     }
   ]
 }
