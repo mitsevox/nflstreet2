@@ -32982,6 +32982,36 @@
       ]
     },
     {
+      "source": "src/game/cu_80154520.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #833; three complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 5, 9 and 10 of the table 0x802A27F0 (derived from Class_80148A58, include/game/Class_80148A58.h, whose base table is 0x802A2EE0; 0x80154520, 0x80154588 and 0x801545D4, words 0x802A281C, 0x802A283C and 0x802A2844). Slot 7 (0x80154528, word 0x802A282C) is not registered: its outer two-way dispatch is not reproduced by the source forms tried. The .rodata table 0x802A3000 and the .data table 0x802DEB08 are referenced as externs. Original file boundaries and nominal identity unresolved; 0x80154638 onward and the constructor and slots 1 and 2 before 0x80154520 excluded; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80154520",
+          "end": "0x80154638"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80154520",
+          "start": "0x80154520",
+          "end": "0x80154528"
+        },
+        {
+          "symbol": "fn_80154588",
+          "start": "0x80154588",
+          "end": "0x801545D4"
+        },
+        {
+          "symbol": "fn_801545D4",
+          "start": "0x801545D4",
+          "end": "0x80154638"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
