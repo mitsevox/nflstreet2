@@ -8013,6 +8013,116 @@ extern "C" int fn_800CBB00(Object_80039F5C *p, int index, Point_8017886C target,
     return 1;
 }
 
+struct Block_801BE60C;
+
+extern "C" {
+Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
+void fn_801BE760(void *p, unsigned short key, int a);
+int fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
+float fn_801BD660(void *p, int key);
+
+extern float lbl_803ECB08;
+extern float lbl_803EAC70;
+extern unsigned char lbl_803EAC65;
+}
+
+extern "C" int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pOwner, Record_800D81C8 *pRecords,
+                           Object_80039F5C *p, unsigned int event)
+{
+    Turn_800CBBAC *pTurn = (Turn_800CBBAC *)fn_801BE60C(p->mpUnknown792, key);
+    unsigned short index = 0;
+    unsigned short second;
+    unsigned short first;
+
+    switch (event) {
+    case 1:
+        p->mUnknown512.mUnknown14 = 1;
+        p->mFlags &= ~4;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
+        p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / lbl_803ECB08;
+        break;
+    case 0: {
+        unsigned short i;
+
+        second = p->mUnknown1008.mUnknown0;
+        second |= p->mUnknown1008.mUnknown1 << 8;
+        first = p->mUnknown1008.mUnknown2;
+        first |= p->mUnknown1011 << 8;
+        fn_801BE760(p->mpUnknown792, key, 1);
+        pTurn->mRecord = fn_801BA2A8(pOwner, pRecords, first, second, key, p, 1.0f);
+        pTurn->mScale = 1.0f;
+        for (i = 0; i < pTable->mCount; i++) {
+            if (pTable->mEntries[i].mUnknown2 == second && pTable->mEntries[i].mUnknown0 == first) {
+                index = i;
+                break;
+            }
+        }
+        switch (key) {
+        case 143:
+            fn_800CB080(p, 143, pRecords, pTurn, pTable->mEntries[index].mpInfo);
+            break;
+        case 144:
+            fn_800CAF4C(p, 144, pRecords, pTurn, pTable->mEntries[index].mpInfo);
+            break;
+        }
+        pTurn->mpInfo = pTable->mEntries[index].mpInfo;
+        break;
+    }
+    case 2:
+        if (fn_801BE648(p->mpUnknown792) == key) {
+            short frames = pTurn->mFrames;
+
+            if (frames > 0) {
+                p->mMotion.mFacing = (p->mMotion.mFacing + pTurn->mRate) & 0xFFFFFF;
+                p->mpUnknown800[pTurn->mRecord].mUnknownC =
+                    (p->mpUnknown800[pTurn->mRecord].mUnknownC + pTurn->mRate) & 0xFFFFFF;
+                pTurn->mFrames--;
+                pTurn->mTotal += pTurn->mRate;
+            } else if (frames == 0) {
+                if (key == 144) {
+                    pTurn->mUnknown10 = frames;
+                    pTurn->mStepY = pTurn->mStepX = 0.0f;
+                } else {
+                    Record_800D81C8 *pRecord = &pRecords[pTurn->mRecord];
+                    Point_8017886C origin;
+                    Point_8017886C step;
+                    Point_8017886C end;
+                    Point_8017886C delta;
+                    float remaining;
+
+                    remaining = fn_801BD660(pRecord->mUnknown4C.mpUnknown0, 0xC004) * (1.0f / pTurn->mScale)
+                                - pRecord->mUnknown4C.mUnknown8;
+                    pTurn->mUnknown10 = frames;
+                    origin.mX = pRecord->mUnknown24;
+                    origin.mY = pRecord->mUnknown28;
+                    step.mX = pTurn->mpInfo->mUnknown20Float;
+                    step.mY = pTurn->mpInfo->mUnknown24;
+                    fn_800CB484(&end, &origin, &step, fn_801BA6B0(pRecord),
+                                p->mpUnknown800[pTurn->mRecord].mUnknownC, pRecord->mUnknown44);
+                    fn_80227638(&end, &p->mMotion.mPos, &end);
+                    fn_80227690(&delta, &pTurn->mTarget, &end);
+                    pTurn->mSteps = (int)(remaining / lbl_803EAC70);
+                    pTurn->mStepX = delta.mX / pTurn->mSteps;
+                    pTurn->mStepY = delta.mY / pTurn->mSteps;
+                    if (pTurn->mBeyond != 0 || lbl_803EAC65 != 0) {
+                        pTurn->mStepY = pTurn->mStepX = 0.0f;
+                    }
+                }
+                pTurn->mFrames--;
+            } else if ((p->mFlags & 4) == 0) {
+                if (pTurn->mSteps > 0) {
+                    p->mMotion.mPos.mX += pTurn->mStepX;
+                    p->mMotion.mPos.mY += pTurn->mStepY;
+                    pTurn->mSteps--;
+                }
+                pTurn->mUnknown10++;
+            }
+        }
+        break;
+    }
+    return 0;
+}
+
 extern "C" {
 void fn_800CBFA8(Object_80039F5C *p, Delta_800CC6A8 *pPos, int angle);
 extern float lbl_802EA6D0[];
