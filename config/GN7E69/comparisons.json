@@ -3146,13 +3146,13 @@
     {
       "source": "src/game/cu_80056584.cpp",
       "profile": "game_cpp",
-      "evidence": "Complete 110 registered bodies: 78 prior, 31 additional ordinary stat/scoring/unlock functions through8005D540, and one evidence-supported naturally generated empty virtual destructor at8005D580-8005D5B4. Full2972-byte readonly surrounding context E16C-ED08 and44-byte initialized small-data context remain measured, preserving old prefixes. Original file edges, nominal record identity and ownership of unrecovered readonly items remain provisional; no promotion. D540 initializer and D5B4/D5E0 stubs stay unregistered and original-linked.",
+      "evidence": "Complete 110 registered bodies: 78 prior, 31 additional ordinary stat/scoring/unlock functions through8005D540, and one evidence-supported naturally generated empty virtual destructor at8005D580-8005D5B4. Full2972-byte readonly surrounding context E16C-ED08 and44-byte initialized small-data context remain measured, preserving old prefixes. Original file edges, nominal record identity and ownership of unrecovered readonly items remain provisional; no promotion. D540 initializer and D5B4/D5E0 stubs stay unregistered and original-linked. The static initializer 0x8005D540 constructs lbl_80309F98 (Object_8008044C) and its .ctors/.dtors stubs 0x8005D5B4/0x8005D5E0 close the range.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80056584",
-          "end": "0x8005D5B4"
+          "end": "0x8005D60C"
         },
         {
           "section": ".rodata",
@@ -3165,6 +3165,24 @@
           "placement": ".data5",
           "start": "0x803EA58C",
           "end": "0x803EA5B8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80309F98",
+          "end": "0x80309FC4"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A88",
+          "end": "0x80289A8C"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BC8",
+          "end": "0x80289BCC"
         }
       ],
       "functions": [
@@ -3714,9 +3732,24 @@
           "end": "0x8005D540"
         },
         {
+          "symbol": "__static_initialization_and_destruction_0",
+          "start": "0x8005D540",
+          "end": "0x8005D580"
+        },
+        {
           "symbol": "_._15Record_8005CE10",
           "start": "0x8005D580",
           "end": "0x8005D5B4"
+        },
+        {
+          "symbol": "_GLOBAL_.I.lbl_803EA58C",
+          "start": "0x8005D5B4",
+          "end": "0x8005D5E0"
+        },
+        {
+          "symbol": "_GLOBAL_.D.lbl_803EA58C",
+          "start": "0x8005D5E0",
+          "end": "0x8005D60C"
         }
       ]
     },
@@ -16076,6 +16109,12 @@
           "placement": ".text",
           "start": "0x80032EE8",
           "end": "0x80033490"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028ADF0",
+          "end": "0x8028AE48"
         }
       ],
       "functions": [

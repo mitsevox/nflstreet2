@@ -14,7 +14,6 @@ public:
     int fn_801CBE9C(int a);
     int fn_801CBEC8(int a);
     int fn_801CBEF4(int a, int b);
-    int fn_801CBFA0();
 
 private:
     char mUnknown0[220];

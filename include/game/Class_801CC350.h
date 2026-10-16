@@ -28,9 +28,6 @@ public:
     virtual void fn_801CC6F8();
     virtual void fn_801CC6FC();
 
-    int fn_801CC4F4();
-    int fn_801CC4FC();
-
 private:
     char mUnknown0[32];
 };

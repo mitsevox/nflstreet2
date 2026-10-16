@@ -19,6 +19,9 @@ void fn_80026BA4(void);
 void fn_80072C90(unsigned int delay, int wait);
 void fn_80072D98(unsigned int delay);
 void fn_80187C5C(unsigned char a);
+int fn_801CBFA0(Class_801CBC50 *pTable);
+int fn_801CC4F4(Class_801CC350 *pGroup);
+int fn_801CC4FC(Class_801CC350 *pGroup);
 extern const char lbl_8028ADDC[];
 extern Record_802CCBAC lbl_802CCBF4[];
 extern Record_803EA3A8 lbl_802CCC34[];
@@ -76,7 +79,7 @@ void MainFEGroup::vfn_02()
         case 10:
             if (!gFELoop.fn_80027C58()) {
                 fn_80024628();
-                if (!p->fn_801CBFA0()) {
+                if (!fn_801CBFA0(p)) {
                     p->fn_801CBEF4(2, 14);
                 }
             }
@@ -105,12 +108,12 @@ int MainFEGroup::vfn_03(int a, int b)
     return 1;
 }
 
-extern "C" int fn_80033124(Class_801CC350 *pGroup) { return pGroup->fn_801CC4F4(); }
+extern "C" int fn_80033124(Class_801CC350 *pGroup) { return fn_801CC4F4(pGroup); }
 
 extern "C" int fn_80033144(Class_801CC350 *pGroup)
 {
     int result = 0;
-    int stage = pGroup->fn_801CC4FC();
+    int stage = fn_801CC4FC(pGroup);
 
     if (fn_80033124(pGroup) && (stage == 7 || stage == 8)) {
         result = 1;
