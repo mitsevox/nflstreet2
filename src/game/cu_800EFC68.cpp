@@ -5236,10 +5236,12 @@ extern "C" void fn_80119478(void)
     }
 }
 
-/* View of the block at player +1072 used by fn_8011A7B4. */
-struct Block_8011A7B4 {
+/* View of the block at player +1072 used by fn_8011A608 and fn_8011A7B4. */
+struct Block_8011A608 {
     float mUnknown0;
-    char mUnknown4[12];
+    char mUnknown4[4];
+    float mUnknown8;
+    char mUnknown12[4];
     int mUnknown16;
     char mUnknown20[8];
     float mUnknown28;
@@ -5247,12 +5249,67 @@ struct Block_8011A7B4 {
     unsigned char mUnknown55;
 };
 
+extern "C" Block_803EB028 *lbl_803EB028;
+extern "C" float lbl_803EB080;
+extern "C" float lbl_803EB084;
+extern "C" int fn_800A851C(int team, Object_80039F5C *p);
+
+extern "C" int fn_8011A608(Object_80039F5C *p, Object_80039F5C *pOther)
+{
+    Block_8011A608 *pBlock = (Block_8011A608 *)&p->mUnknown1072;
+    Block_8011A608 *pOtherBlock = (Block_8011A608 *)&pOther->mUnknown1072;
+    int pass = 0;
+    int result = 0;
+    Query_800CE770 query;
+
+    if (fn_800A851C(fn_80178320(), pOther)) {
+        return 0;
+    }
+    if ((fn_8011F1CC() && fn_80237260(0) > lbl_803EB080) || (fn_8011F1A4() && fn_80237260(0) > lbl_803EB084)) {
+        float chance = fn_80237260(0);
+
+        if (chance < pBlock->mUnknown8) {
+            fn_800CE770(&query);
+            query.mUnknown36 = 0xE38E3;
+            query.mUnknown44 = 0.4f;
+            query.mpUnknown0 = p;
+            query.mpUnknown4 = pOther;
+            if (lbl_803EB028->mUnknown84 <= 24) {
+                query.mUnknown52 = 150;
+                result = fn_800CE4A8(&query);
+            } else {
+                query.mUnknown52 = 56;
+                result = fn_800CE4A8(&query);
+                if (result) {
+                    pass = 1;
+                }
+            }
+        } else if (chance < pOtherBlock->mUnknown8) {
+            fn_800CE770(&query);
+            query.mUnknown36 = 0xE38E3;
+            query.mUnknown44 = 0.4f;
+            query.mUnknown52 = 61;
+            query.mpUnknown0 = p;
+            query.mpUnknown4 = pOther;
+            result = fn_800CE4A8(&query);
+        }
+    }
+    if (result) {
+        fn_8011E1BC(p, pOther, 0, 5);
+        fn_8011E33C(pOther, p, 5);
+        if (pass) {
+            fn_801187CC(p, pOther);
+        }
+    }
+    return result;
+}
+
 extern "C" int lbl_802DAF8C[2][3][5];
 
 extern "C" int fn_8011A7B4(Object_80039F5C *p, Object_80039F5C *pOther)
 {
-    Block_8011A7B4 *pBlock = (Block_8011A7B4 *)&p->mUnknown1072;
-    Block_8011A7B4 *pOtherBlock = (Block_8011A7B4 *)&pOther->mUnknown1072;
+    Block_8011A608 *pBlock = (Block_8011A608 *)&p->mUnknown1072;
+    Block_8011A608 *pOtherBlock = (Block_8011A608 *)&pOther->mUnknown1072;
     int side;
     float limit;
     int dir;
