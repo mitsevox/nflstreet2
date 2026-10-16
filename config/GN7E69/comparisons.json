@@ -32699,6 +32699,61 @@
       ]
     },
     {
+      "source": "src/game/cu_80151598.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #821; eight complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 13, 5, 14, 8 and 12 of the table 0x802A1C98 (derived from the engine table 0x80297C60, include/game/Class_80297C60.h; words 0x802A1D04, 0x802A1CC4, 0x802A1D0C, 0x802A1CDC and 0x802A1CFC) at 0x80151598, 0x801515D0, 0x80151628, 0x80151680 and 0x80151684, and slots 3, 8 and 9 of the table 0x802A1C30 (derived from the engine table 0x80297B90, include/game/Class_80297B90.h; words 0x802A1C4C, 0x802A1C74 and 0x802A1C7C) at 0x801516A8, 0x80151798 and 0x801517C4. No literal is loaded; the .data table 0x802DEA78, the .sdata word 0x803EB688 and the global lbl_8031BDD4 are referenced as externs, so no other range is registered. Original file boundaries and nominal identity unresolved; 0x80150AC4-0x80151598 and 0x801517F4 onward excluded; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80151598",
+          "end": "0x801517F4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80151598",
+          "start": "0x80151598",
+          "end": "0x801515D0"
+        },
+        {
+          "symbol": "fn_801515D0",
+          "start": "0x801515D0",
+          "end": "0x80151628"
+        },
+        {
+          "symbol": "fn_80151628",
+          "start": "0x80151628",
+          "end": "0x80151680"
+        },
+        {
+          "symbol": "fn_80151680",
+          "start": "0x80151680",
+          "end": "0x80151684"
+        },
+        {
+          "symbol": "fn_80151684",
+          "start": "0x80151684",
+          "end": "0x801516A8"
+        },
+        {
+          "symbol": "fn_801516A8",
+          "start": "0x801516A8",
+          "end": "0x80151798"
+        },
+        {
+          "symbol": "fn_80151798",
+          "start": "0x80151798",
+          "end": "0x801517C4"
+        },
+        {
+          "symbol": "fn_801517C4",
+          "start": "0x801517C4",
+          "end": "0x801517F4"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
