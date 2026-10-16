@@ -9209,6 +9209,19 @@ extern "C" int fn_800BF574(int a, unsigned int kind)
     return result;
 }
 
+extern "C" void fn_800BE808(int a, unsigned char index);
+extern "C" void fn_800BE944(unsigned char index, int team, int kind, float value);
+
+extern "C" void fn_800BF658(int index)
+{
+    int team = fn_800B65A0(index);
+
+    lbl_803EABA8->mSlots[index].mUnknown1C = 1;
+    fn_800BE808(team, index);
+    fn_800BE944(index, team, 132, 1.0f);
+    fn_8003A3F4(1, index);
+}
+
 extern "C" void fn_800BF6CC(int index)
 {
     lbl_803EABA8->mSlots[index].mUnknown1C = 0;
@@ -9244,6 +9257,17 @@ extern "C" void fn_800BFAB4(Class_80297CE8 *p)
     } else {
         lbl_803EABA4 = p;
     }
+}
+
+void Class_80297CE8::vfn_02()
+{
+    void *pHandle = fn_80238174(0, (void **)&lbl_803EABA8, sizeof(Block_800BFAD0), 0, 0x70726570);
+    Block_800BFAD0 *pBlock;
+
+    fn_80238234(pHandle, 0, 0, 0, fn_800BF45C);
+    pBlock = (Block_800BFAD0 *)fn_8023816C(pHandle);
+    pBlock->mUnknown40 = 0;
+    fn_802381E0(pHandle);
 }
 
 void Class_80297CE8::vfn_03()
@@ -9349,6 +9373,25 @@ extern "C" unsigned short fn_800C0660(unsigned short *p, int value)
         } while (i <= 6 && *p != value);
     }
     return i;
+}
+
+extern "C" QueryCursor fn_800C0698(unsigned char index, unsigned short *pValues)
+{
+    int id = fn_800C8744(index);
+    QueryCursor cursor;
+    QueryResult result;
+
+    cursor.mUnknown0 = 0;
+    cursor.mUnknown4 = 0;
+    cursor.mUnknown8 = -1;
+    cursor.mUnknown12 = 0;
+    fn_801FCE10(&result,
+                "declare \x8a cursor for select * from 'AGLP' where ('DIGT' = \x85) and "
+                "(('DIGP' = \x84) or ('DIGP' = \x84) or ('DIGP' = \x84) or ('DIGP' = \x84) or "
+                "('DIGP' = \x84) or ('DIGP' = \x84) or ('DIGP' = \x84))\n",
+                &cursor, id, pValues[0], pValues[1], pValues[2], pValues[3],
+                pValues[4], pValues[5], pValues[6]);
+    return cursor;
 }
 
 extern "C" QueryCursor fn_800C0750(unsigned char index, unsigned short *pValues)
@@ -9689,6 +9732,26 @@ extern "C" void fn_800C4568(Sequence_800C4460 *p)
         }
     } else {
         p->mUnknown100 = 0;
+    }
+}
+
+extern "C" void fn_800C45C0(Sequence_800C4460 *p, float dt)
+{
+    if (p->mUnknown100 != 0) {
+        Step_800C4460 *pStep = &p->mSteps[p->mUnknown101];
+
+        if (pStep->mUnknownC <= 0.0f) {
+            fn_800C44E0(p);
+        } else {
+            pStep->mUnknownC -= dt;
+            if (pStep->mUnknownC > 0.0f) {
+                fn_800C44E0(p);
+            } else {
+                fn_800C4568(p);
+                p->mUnknown101++;
+                fn_800C4460(p);
+            }
+        }
     }
 }
 
