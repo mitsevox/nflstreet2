@@ -24275,6 +24275,11 @@
           "end": "0x800BBB84"
         },
         {
+          "symbol": "fn_800BBCF0",
+          "start": "0x800BBCF0",
+          "end": "0x800BBDE0"
+        },
+        {
           "symbol": "fn_800BBE98",
           "start": "0x800BBE98",
           "end": "0x800BBF18"

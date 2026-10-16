@@ -4773,7 +4773,15 @@ extern "C" int fn_800BAE64(void)
    to; only the accessed fields are declared. */
 struct Record_800BAE7C {
     int mUnknown0;
-    unsigned char mUnknown4[0x48];
+    unsigned char mUnknown4[8];
+    Object_80039F5C *mpUnknownC;
+    int mUnknown10;
+    unsigned char mUnknown14[4];
+    Object_80039F5C *mpUnknown18;
+    unsigned char mUnknown1C[0x24];
+    int mUnknown40;
+    int mUnknown44;
+    unsigned char mUnknown48[4];
     unsigned char mUnknown4C;
     unsigned char mUnknown4D[3];
 };
@@ -5072,6 +5080,33 @@ extern "C" void fn_800BBB4C(void)
     fn_800CC560(1);
     lbl_803EC98C->mUnknown0 = 2;
     lbl_803EAB94 = 1;
+}
+
+extern "C" unsigned char lbl_803EABA0;
+
+extern "C" void fn_800BBCF0(Record_800BAE7C *p)
+{
+    Object_80039F5C *pA = 0;
+    Object_80039F5C *pB = 0;
+
+    if (p != 0 && lbl_803EABA0 == 0) {
+        pA = p[lbl_803EAB95].mpUnknownC;
+        if (p[lbl_803EAB95].mUnknown10 != 31) {
+            pB = p[lbl_803EAB95].mpUnknown18;
+        }
+        if (pA != 0) {
+            int key = p[lbl_803EAB95].mUnknown40;
+
+            if (key != -1) {
+                if (!(lbl_803EC98C->mUnknown2A & 0x80)) {
+                    fn_80094048(key, &pA, &pB);
+                }
+                fn_80067E3C(107, &pA->mMotion.mPos, pA->mId, key, lbl_803EAB95 & 1, pB != 0 ? pB->mId : 0);
+                p[lbl_803EAB95].mUnknown44 = 1;
+            }
+        }
+    }
+    lbl_803EABA0 = 0;
 }
 
 extern "C" void fn_800BBE98(void)
