@@ -16678,6 +16678,21 @@
         "original_blob": "f7fb2714236387fa754fcb8ceb36748b36236ba0",
         "integration_adjustment": "Preserve original contributor identities, PRs, function lists, integration PRs and introduction bindings through the independent local-selection assignment-order update; all previously credited function payloads remain unchanged."
       }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8007134C"
+      ],
+      "provenance": {
+        "pull_request": 801,
+        "merged_via": 801,
+        "commit": "a280e50e183c93bf82c43bc1bd55ab0a18f1e0e9",
+        "introduced_blob": "8140d87b20e5eefc4ea1ef0900ef9f931041ba15"
+      }
     }
   ],
   "target": "GN7E69",
