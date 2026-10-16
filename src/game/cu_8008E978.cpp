@@ -1835,7 +1835,7 @@ int fn_800C8C1C(Object_80039F5C *p);
 Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
 Object_80039F5C *fn_800C8DBC(int team, Vector_80039F5C *pPos, Object_80039F5C *p, int mode);
 void fn_800C9E4C(unsigned char a, unsigned char b);
-int fn_800C95DC(int team, int index, int *pRef);
+int fn_800C95DC(int team, unsigned char index, int *pRef);
 int fn_800BA6F8(void);
 int fn_800BAA24(void);
 int fn_80178C9C(void);
@@ -2654,6 +2654,183 @@ extern "C" Object_80039F5C *fn_800C9570(int team)
         }
     }
     return 0;
+}
+
+extern "C" {
+int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+Object_80039F5C *fn_8015286C(void *pSet, int index);
+Object_80039F5C *fn_800CA248(void);
+extern char lbl_8031BDD4[];
+}
+
+extern "C" int fn_800C95DC(int team, unsigned char index, int *pRef)
+{
+    int result = 0;
+    Object_80039F5C *p = 0;
+
+    if (fn_801486A0() != 1) {
+        Object_80039F5C *pCarrier = fn_80137B40();
+        Object_80137ABC *pBall = fn_801374BC();
+        int state = fn_8013BA58(pBall, 0);
+        Object_80039F5C *pPrev;
+        Object_80039F5C *pHolder;
+        unsigned char i;
+
+        if (team == fn_80178308()) {
+            int taken;
+
+            switch (state) {
+            case 3:
+            case 4:
+                p = fn_80137B88(pBall);
+                if (p == 0) {
+                    p = fn_800C90BC(team, 0);
+                }
+                break;
+            case 1:
+                p = pCarrier;
+                if (p == 0) {
+                    p = fn_800C90BC(team, 0);
+                }
+                break;
+            default:
+                p = fn_800C90BC(team, 0);
+                break;
+            }
+            fn_8009BD2C(p, pRef);
+            pPrev = p;
+            taken = 0;
+            for (i = 0; i < lbl_803EAC3C->mCounts[team]; i++) {
+                if (i != index && lbl_803EAC3C->mEntries[team][i].mRef == *pRef) {
+                    taken = 1;
+                    break;
+                }
+            }
+            if (taken) {
+                result = 1;
+                switch (state) {
+                case 4:
+                    p = fn_800C9070(team, pPrev, pPrev, 0);
+                    break;
+                case 1:
+                case 3:
+                    p = 0;
+                    if (pCarrier != 0) {
+                        if (fn_800C8BBC(pCarrier)) {
+                            p = fn_800CA248();
+                        }
+                        if (p == 0 || p == pPrev) {
+                            if (!lbl_803EAC3C->mUnknown104) {
+                                p = fn_800C9570(team);
+                                lbl_803EAC3C->mUnknown104 = 1;
+                            } else {
+                                p = fn_800C9094(team, pPrev, pPrev);
+                            }
+                        }
+                        if (p == 0 || p == pPrev) {
+                            p = fn_800C9094(team, pPrev, pPrev);
+                        }
+                    }
+                    if (p == 0) {
+                        p = fn_800C90BC(team, pPrev);
+                    }
+                    break;
+                default:
+                    p = fn_800C90BC(team, pPrev);
+                    break;
+                }
+                fn_8009BD2C(p, pRef);
+            }
+        } else {
+            int taken;
+
+            switch (state) {
+            case 3:
+            case 4:
+                pHolder = fn_80137B88(pBall);
+                if (pHolder != 0) {
+                    p = fn_800C9070(team, pHolder, pHolder, 0);
+                } else {
+                    p = fn_800C90BC(team, 0);
+                }
+                break;
+            case 1:
+                if (pCarrier != 0) {
+                    if (fn_800C8BBC(pCarrier)) {
+                        p = fn_800C8CE8();
+                    }
+                    if (p == 0) {
+                        p = fn_800C9070(team, pCarrier, pCarrier, 0);
+                    }
+                } else {
+                    p = fn_800C90BC(team, 0);
+                }
+                break;
+            default:
+                p = fn_800C90BC(team, 0);
+                break;
+            }
+            fn_8009BD2C(p, pRef);
+            pPrev = p;
+            taken = 0;
+            for (i = 0; i < lbl_803EAC3C->mCounts[team]; i++) {
+                if (i != index && lbl_803EAC3C->mEntries[team][i].mRef == *pRef) {
+                    taken = 1;
+                    break;
+                }
+            }
+            if (taken) {
+                p = 0;
+                result = 1;
+                switch (state) {
+                case 3:
+                case 4:
+                    pHolder = fn_80137B88(pBall);
+                    if (pHolder != 0) {
+                        p = fn_800C9070(team, pHolder, pPrev, 0);
+                    } else {
+                        p = fn_800C90BC(team, pPrev);
+                    }
+                    break;
+                case 1:
+                    if (fn_800C8BBC(pCarrier)) {
+                        p = fn_800C9070(team, pCarrier, pPrev, 2);
+                    }
+                    if (p == 0) {
+                        if (pCarrier != 0) {
+                            p = fn_800C9070(team, pCarrier, pPrev, 0);
+                        } else {
+                            p = fn_800C90BC(team, pPrev);
+                        }
+                    }
+                    break;
+                default:
+                    p = fn_800C90BC(team, pPrev);
+                    break;
+                }
+                fn_8009BD2C(p, pRef);
+            }
+        }
+    } else {
+        result = 1;
+        if (team == 1) {
+            int count = 0;
+            unsigned int i;
+
+            for (i = 0; i <= 3; i++) {
+                p = fn_8015286C(lbl_8031BDD4, i);
+                if (p->mUnknown8 == 255) {
+                    if (index == count) {
+                        fn_8009BD2C(p, pRef);
+                    }
+                    count++;
+                }
+            }
+        } else {
+            fn_8009BD2C(fn_80039F5C(team, index), pRef);
+        }
+    }
+    return result;
 }
 
 extern "C" void fn_800C9A80(int team)
