@@ -2703,6 +2703,106 @@ extern "C" int fn_800FDFD8(Object_80039F5C *p)
     return 0;
 }
 
+extern float lbl_803EAE68;
+extern float lbl_803EAE6C;
+extern float lbl_803EAE70;
+
+#define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
+
+static inline void GetFormationPoint(Object_800670B4 *pTeam, int index, Point_8017886C *pOut)
+{
+    Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[0][index];
+
+    pOut->mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
+    pOut->mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
+}
+
+static inline void AddPoint(Point_8017886C *pOut, Point_8017886C *pOffset)
+{
+    pOut->mX += pOffset->mX;
+    pOut->mY += pOffset->mY;
+}
+
+extern "C" void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut)
+{
+    Point_8017886C base;
+    Object_800670B4 *pTeam;
+
+    base = fn_80177FFC(p->mIdBytes[2]);
+    pTeam = fn_80168708(p->mIdBytes[2]);
+    GetFormationPoint(pTeam, p->mIdBytes[1], pOut);
+    if (fn_8009FE24(p)) {
+        Object_80039F5C *pOther = fn_800FB844(p);
+
+        if (pOther) {
+            Object_800670B4 *pOtherTeam = fn_80168708(pOther->mIdBytes[2]);
+            Point_8017886C other;
+            unsigned char i;
+            unsigned int count;
+
+            GetFormationPoint(pOtherTeam, pOther->mIdBytes[1], &other);
+            if (fabsf(other.mX) < lbl_803EAE70) {
+                if (p->mUnknown2914 == 16) {
+                    if (pOut->mX < -lbl_803EAE70) {
+                        other.mX = other.mX > -lbl_803EAE70 ? -lbl_803EAE70 : other.mX;
+                    } else if (pOut->mX > lbl_803EAE70) {
+                        other.mX = other.mX < lbl_803EAE70 ? lbl_803EAE70 : other.mX;
+                    } else {
+                        other.mX = pOut->mX;
+                    }
+                } else if (p->mUnknown2914 != 17 && p->mUnknown2914 != 18) {
+                    if (pOut->mX < -lbl_803EAE70 * 0.5f) {
+                        other.mX = other.mX > -lbl_803EAE70 * 0.5f ? -lbl_803EAE70 * 0.5f : other.mX;
+                    } else if (pOut->mX > lbl_803EAE70 * 0.5f) {
+                        other.mX = other.mX < lbl_803EAE70 * 0.5f ? lbl_803EAE70 * 0.5f : other.mX;
+                    } else {
+                        pOut->mX = other.mX;
+                    }
+                }
+            }
+            if (p->mUnknown2914 != 17 && p->mUnknown2914 != 18) {
+                pOut->mX = other.mX;
+            } else if (pOtherTeam->mUnknown8.mUnknown4 == 11) {
+                pOut->mX = other.mX;
+            }
+            count = fn_80178D18(fn_80178320());
+            for (i = 0; i < count; i++) {
+                Entry_8006719C *pEntry;
+                Point_8017886C *pPoint;
+                int carrier;
+                int open;
+
+                if (i == p->mIdBytes[1]) {
+                    continue;
+                }
+                open = 0;
+                carrier = 0;
+                pEntry = &pTeam->mUnknown8.mUnknown84[0][i];
+                pPoint = pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10;
+                if (fn_8009FE24(fn_80039F5C(fn_80178320(), i))) {
+                    carrier = 1;
+                }
+                if (!carrier) {
+                    open = 1;
+                }
+                if (open && fn_8022781C(pPoint, pOut) < lbl_803EAE68) {
+                    if (pOut->mX >= 0.0) {
+                        pOut->mX = pOut->mX + lbl_803EAE6C;
+                    } else {
+                        pOut->mX = pOut->mX - lbl_803EAE6C;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    AddPoint(pOut, &base);
+    pOut->mX = CLAMP(pOut->mX, 1.0f - fn_80178A08(), fn_80178A08() - 1.0f);
+    pOut->mY = CLAMP(pOut->mY, 1.0f - fn_80178A44(), fn_80178A44() - 1.0f);
+}
+
+#undef CLAMP
+
 extern "C" void fn_800FE41C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pOut)
 {
     pOut->mX = p->mMotion.mPos.mX;
