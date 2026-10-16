@@ -33184,7 +33184,7 @@
     {
       "source": "src/game/cu_801562D0.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #844; six complete slot bodies of the table 0x802A1E38 (derived from the rule-set table 0x802A56E8, include/game/Class_802A56E8.h) inside the retained provisional cu_801485B4 survey group: slots 1, 4, 7, 8, 9 and 14 (0x801562D0-0x80156314, words 0x802A1E44, 0x802A1E5C, 0x802A1E74, 0x802A1E7C, 0x802A1E84 and 0x802A1EAC). The .bss object 0x8031BDD4 is referenced as an extern. Original file boundaries and nominal identity unresolved; 0x8015629C before the range and 0x8015631C onward excluded; original bytes stay linked.",
+      "evidence": "Issue #844; six complete slot bodies of the table 0x802A1E38 (derived from the rule-set table 0x802A56E8, include/game/Class_802A56E8.h) inside the retained provisional cu_801485B4 survey group: slots 1, 4, 7, 8, 9 and 14 (0x801562D0-0x8015631C, words 0x802A1E44, 0x802A1E5C, 0x802A1E74, 0x802A1E7C, 0x802A1E84 and 0x802A1EAC). The .bss object 0x8031BDD4 is referenced as an extern. Original file boundaries and nominal identity unresolved; 0x8015629C before the range and 0x8015631C onward excluded; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
