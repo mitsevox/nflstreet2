@@ -113,15 +113,24 @@ extern "C" void fn_80055584(void)
 
 extern "C" void fn_80055B2C(unsigned char *anyExceeded)
 {
+    char holder[32];
+    char names[2][32];
     int update = 0;
+    unsigned char unavailable;
+    int side;
+    int i;
+    int row;
+    int current;
+    int other;
+
     if (!fn_8017F60C() && fn_8017F584() != 11)
         update = 1;
     *anyExceeded = 0;
-    unsigned char unavailable = 0;
+    unavailable = 0;
     if (!fn_8017F584()) {
         if (fn_80186F7C(0) != -1) {
             fn_80190280(fn_80186F7C(0));
-            unavailable = fn_80190394() == 0;
+            unavailable |= fn_80190394() == 0;
             fn_80190288();
         }
         if (fn_80186F7C(1) != -1) {
@@ -134,57 +143,50 @@ extern "C" void fn_80055B2C(unsigned char *anyExceeded)
         if (update)
             fn_80186BAC();
         fn_801C1F94(lbl_803EC7EC, 0, 2);
-        if (update) {
-            if (fn_80186F7C(0) != -1 || fn_80186F7C(1) != -1) {
-                char names[2][32];
-                for (int side = 0; side <= 1; ++side) {
-                    if (fn_80186F7C((unsigned char)side) != -1)
-                        fn_80186A10(fn_80186F7C((unsigned char)side), names[side]);
-                    else
-                        names[side][0] = 0;
-                }
-                fn_80055584();
-                fn_8007D4E8();
-                for (int i = 0; i <= 20; ++i) {
-                    int row = 0;
-                    if (lbl_802D4B14[i].type == 6)
-                        row = fn_800A3444();
-                    fn_8007DB74(lbl_802D4B14[i].type, row);
-                    int current = fn_8007DBB4(lbl_802D4B14[i].column);
-                    char holder[32];
-                    fn_8007D5A0(lbl_802D4B14[i].type, row, 1, holder, 32);
-                    if (lbl_802D4B14[i].type == 6) {
-                        lbl_802D4B14[i].exceeded = lbl_802D4B14[i].value[lbl_802D4B14[i].side] > current;
-                        lbl_803EC7EC[lbl_802D4B14[i].side] |= lbl_802D4B14[i].exceeded;
-                    } else {
-                        fn_8007DB74(lbl_802D4B14[i].type, row + 1);
-                        int other = fn_8007DBB4(lbl_802D4B14[i].column);
-                        if (lbl_802D4B14[i].type == 4) {
-                            lbl_802D4B14[i].exceeded = lbl_802D4B14[i].value[lbl_802D4B14[i].side] > current;
-                        } else {
-                            int exceeded = 0;
-                            if (lbl_802D4B14[i].value[lbl_802D4B14[i].side] > current) {
-                                if (fn_801C31B0(holder, names[lbl_802D4B14[i].side]) || current != other)
-                                    exceeded = 1;
-                            }
-                            lbl_802D4B14[i].exceeded = exceeded;
-                        }
-                    }
-                    if (lbl_802D4B14[i].exceeded && i <= 15 && !fn_801485D4())
-                        *anyExceeded = 1;
-                    if (lbl_802D4B14[i].type != 6) {
-                        fn_8007DB74(lbl_802D4B14[i].type, 9);
-                        int threshold = fn_8007DBB4(lbl_802D4B14[i].column);
-                        for (int side = 0; side <= 1; ++side) {
-                            if (lbl_802D4B14[i].value[side] > threshold)
-                                lbl_803EC7EC[side] = 1;
-                        }
-                    }
-                }
-                fn_8007D52C();
+        if (update && (fn_80186F7C(0) != -1 || fn_80186F7C(1) != -1)) {
+            for (side = 0; side <= 1; ++side) {
+                if (fn_80186F7C((unsigned char)side) != -1)
+                    fn_80186A10(fn_80186F7C((unsigned char)side), names[side]);
+                else
+                    names[side][0] = 0;
             }
-            fn_80186CE8(lbl_803EC7EC);
+            fn_80055584();
+            fn_8007D4E8();
+            for (i = 0; i <= 20; ++i) {
+                row = 0;
+                if (lbl_802D4B14[i].type == 6)
+                    row = fn_800A3444();
+                fn_8007DB74(lbl_802D4B14[i].type, row);
+                current = fn_8007DBB4(lbl_802D4B14[i].column);
+                fn_8007D5A0(lbl_802D4B14[i].type, row, 1, holder, 32);
+                if (lbl_802D4B14[i].type == 6) {
+                    lbl_802D4B14[i].exceeded = lbl_802D4B14[i].value[lbl_802D4B14[i].side] > current;
+                    lbl_803EC7EC[lbl_802D4B14[i].side] |= lbl_802D4B14[i].exceeded;
+                } else {
+                    fn_8007DB74(lbl_802D4B14[i].type, row + 1);
+                    other = fn_8007DBB4(lbl_802D4B14[i].column);
+                    if (lbl_802D4B14[i].type == 4) {
+                        lbl_802D4B14[i].exceeded = lbl_802D4B14[i].value[lbl_802D4B14[i].side] > current;
+                    } else {
+                        lbl_802D4B14[i].exceeded = lbl_802D4B14[i].value[lbl_802D4B14[i].side] > current &&
+                                                   (fn_801C31B0(holder, names[lbl_802D4B14[i].side]) || current == other);
+                    }
+                }
+                if (lbl_802D4B14[i].exceeded && i <= 15 && !fn_801485D4())
+                    *anyExceeded = 1;
+                if (lbl_802D4B14[i].type != 6) {
+                    fn_8007DB74(lbl_802D4B14[i].type, 9);
+                    current = fn_8007DBB4(lbl_802D4B14[i].column);
+                    for (side = 0; side <= 1; ++side) {
+                        if (lbl_802D4B14[i].value[side] > current)
+                            lbl_803EC7EC[side] = 1;
+                    }
+                }
+            }
+            fn_8007D52C();
         }
+        if (update)
+            fn_80186CE8(lbl_803EC7EC);
     }
 }
 
