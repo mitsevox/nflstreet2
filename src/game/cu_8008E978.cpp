@@ -260,6 +260,13 @@ struct Entry_8009C684 {
     unsigned char mUnknown10[8];
 };
 
+/* The 8 bytes at +16 of Entry_8009C684 that fn_8009CD00 returns for the
+   fn_80096E74 callback. */
+struct Data_80096E74 {
+    unsigned int mUnknown0;
+    unsigned char mUnknown4;
+};
+
 /* Record passed to fn_8009C6F4, fn_8009C814 and fn_8009C88C. Only the
    accessed fields are declared; the size is unknown. */
 struct Block_8009C6F4 {
@@ -302,6 +309,12 @@ void fn_800975EC(int id, int flag, int index);
 int fn_80097160(Object_80039F5C *p, float value);
 int fn_801CFE40(float y, float x);
 void fn_80227538(Point_80167910 *pOut, int angle, float length);
+void fn_8009A5DC(int a, int b, void *pA, int *pB);
+int fn_8009A298(int handle);
+void fn_80096E74(Object_80039F5C *p, Vector_80039F5C *pVec, void *pData);
+Data_80096E74 *fn_8009CD00(Object_80039F5C *p, void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int kind,
+                           unsigned int duration, int d);
+int fn_8023790C(void);
 void fn_80137EFC(Object_80137ABC *pBall, Vector_80039F5C *pOut);
 void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int flag);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
@@ -371,6 +384,7 @@ extern Block_80099630 *lbl_803EC92C;
 extern unsigned char lbl_803EA930;
 extern float lbl_803EA934;
 extern float lbl_803EA2C4;
+extern unsigned char lbl_803EA93C;
 
 int fn_8005BE5C(int value);
 void fn_8005BF18(void);
@@ -1207,6 +1221,102 @@ extern "C" void fn_80097028(Object_80039F5C *p)
 
 /* Converts a vector between the two horizontal angle conventions (the angle
    is negated, the length and height are kept). */
+extern "C" unsigned char fn_8009704C(Object_80039F5C *p)
+{
+    int *pFirst;
+    int *pSecond = 0;
+    unsigned char kind;
+    unsigned char unknown;
+    int handle;
+    unsigned char result;
+
+    if (lbl_803EA93C != 0 && p->mpState->mId == 28) {
+        fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+        kind = fn_8009A298(handle);
+        switch (kind) {
+        case 1:
+            pFirst = &p->mUnknown200;
+            break;
+        case 2:
+            pSecond = &p->mUnknown200;
+        case 0:
+            pFirst = &p->mUnknown108;
+            break;
+        default:
+            pSecond = 0;
+            pFirst = 0;
+            break;
+        }
+        if (pFirst != 0) {
+            result = *pFirst != 0 && *pFirst != 4;
+        } else {
+            result = 0;
+        }
+        if (pSecond != 0) {
+            result |= *pSecond != 0 && *pSecond != 4;
+        } else if (kind == 2) {
+            result = 0;
+        }
+    } else {
+        result = 0;
+    }
+    return result;
+}
+
+extern "C" int fn_80097160(Object_80039F5C *p, float duration)
+{
+    int *pFirst;
+    int *pSecond = 0;
+    unsigned char firstKind;
+    unsigned char secondKind = 3;
+    Data_80096E74 *pData = 0;
+    unsigned char unknown;
+    int handle;
+    unsigned int type;
+
+    if (p->mpState->mId == 28) {
+        fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+        type = fn_8009A298(handle);
+        switch (type) {
+        case 0:
+            pFirst = &p->mUnknown108;
+            firstKind = 0;
+            break;
+        case 1:
+            pFirst = &p->mUnknown200;
+            firstKind = 1;
+            break;
+        case 2:
+            pFirst = &p->mUnknown200;
+            firstKind = 1;
+            pSecond = &p->mUnknown108;
+            secondKind = 0;
+            break;
+        default:
+            pSecond = 0;
+            pFirst = 0;
+            secondKind = 3;
+            firstKind = 3;
+            break;
+        }
+        if (pFirst != 0) {
+            pData = fn_8009CD00(p, fn_80096E74, firstKind, (unsigned int)duration, 2);
+            if (pData != 0) {
+                pData->mUnknown4 = firstKind;
+                pData->mUnknown0 = fn_8023790C() + (unsigned int)duration + 2;
+            }
+        }
+        if (pSecond != 0) {
+            pData = fn_8009CD00(p, fn_80096E74, secondKind, (unsigned int)duration, 2);
+            if (pData != 0) {
+                pData->mUnknown4 = secondKind;
+                pData->mUnknown0 = fn_8023790C() + (unsigned int)duration + 2;
+            }
+        }
+    }
+    return pData != 0;
+}
+
 extern "C" void fn_800973AC(Vector_80039F5C *pOut, Vector_80039F5C *pIn)
 {
     int angle = fn_801CFE40(pIn->mY, pIn->mX);
