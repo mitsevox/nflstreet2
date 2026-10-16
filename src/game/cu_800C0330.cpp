@@ -2,6 +2,7 @@
 #include "game/fn_800B65A0.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_801FCE10.h"
+#include "game/Object_80039F5C.h"
 
 extern "C" {
 void fn_800BE944(unsigned char index, int team, int kind, float value);
@@ -62,3 +63,31 @@ extern "C" QueryCursor fn_800C0698(unsigned char index, unsigned short *pValues)
     return cursor;
 }
 
+
+extern "C" {
+unsigned short fn_800C0660(unsigned short *p, int value);
+void fn_800B4DE4(QueryCursor cursor, int index, float *pOut);
+void fn_800B4900(QueryCursor cursor, int index, short *pRatings, char *pOut);
+void fn_800B4798(short *pRatings, int team, unsigned char index, float *pValue);
+void fn_800A6F04(int team);
+}
+
+extern "C" void fn_800C07F0(QueryCursor cursor, int team, unsigned short *pValues)
+{
+    unsigned short count = 0;
+    unsigned short value;
+
+    while (fn_801FCE10(0, "fetch from \x8a 'DIGP' into \x81\n", cursor, &value) == 0) {
+        if (count <= 6) {
+            unsigned short index = fn_800C0660(pValues, value);
+            Object_80039F5C *p = fn_80039F5C(team, index);
+
+            fn_800B4DE4(cursor, count, &p->mUnknown2900);
+            p->mUnknown508 = *(float *)p->mUnknown2904;
+            fn_800B4900(cursor, count, p->mRatings, p->mUnknown3020);
+            fn_800B4798(p->mRatings, team, index, &p->mUnknown2900);
+            count++;
+        }
+    }
+    fn_800A6F04(team);
+}
