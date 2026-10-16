@@ -18591,6 +18591,36 @@
       ]
     },
     {
+      "source": "src/game/cu_801A7C20.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv candidate unit cu_801A7C20 0x801A7C20-0x801A8620 and exact function rows. Three registered bodies are exact; fn_801A7F10 and the readonly pool 0x802AE898-0x802AE8E0 are not yet sourced, so original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801A7C20",
+          "end": "0x801A8620"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801A7C20",
+          "start": "0x801A7C20",
+          "end": "0x801A7F10"
+        },
+        {
+          "symbol": "fn_801A8548",
+          "start": "0x801A8548",
+          "end": "0x801A854C"
+        },
+        {
+          "symbol": "fn_801A854C",
+          "start": "0x801A854C",
+          "end": "0x801A8620"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_801744E8.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv expanded 0x8017419C unit, literal, accessed-record and source-form rows; original assembly linked.",
