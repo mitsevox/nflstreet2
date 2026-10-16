@@ -1,3 +1,5 @@
+#include <dolphin/gx/GXEnum.h>
+#include <dolphin/gx/GXCull.h>
 #include "engine/cu_80227F14.h"
 #include "game/cu_801882B4.h"
 #include "game/cu_80163674.h"
@@ -37,7 +39,6 @@ void fn_80235D74(void *, int);
 int fn_80235D9C(int);
 void fn_80235DB8(int);
 int fn_80236B4C(int);
-void fn_8024EB28(int);
 
 void fn_80163674(Object_80163788 *pObject, Desc_80163788 *pDesc)
 {
@@ -118,7 +119,7 @@ int fn_80163954(Object_80163788 *pObject, int value)
             }
             fn_80235788(&pObject->mUnknown48, context, fn_80236B4C(5));
         } else {
-            fn_8024EB28(1);
+            GXSetCullMode(GX_CULL_FRONT);
             fn_80235C90(&pObject->mUnknown48, context, 0.5f, 0.5f, 0.5f, 0.0f);
             fn_80235740(&pObject->mUnknown48, context);
             fn_80235764(&pObject->mUnknown48, context);
@@ -128,7 +129,7 @@ int fn_80163954(Object_80163788 *pObject, int value)
             fn_80235740(&pObject->mUnknown48, context);
             fn_80235764(&pObject->mUnknown48, context);
             fn_802353E8(&pObject->mUnknown48, 0x100);
-            fn_8024EB28(0);
+            GXSetCullMode(GX_CULL_NONE);
         }
         fn_801D0470(fn_80228668());
         fn_801D0544();

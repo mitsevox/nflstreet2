@@ -11023,6 +11023,31 @@
       ]
     },
     {
+      "source": "src/game/cu_80163674.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80163674-0x80163D9C (src/game/cu_80163674.cpp), its function rows and data rows 0x802A45E0-0x802A460C and 0x803EB3A4-0x803EB3A8.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80163674",
+          "end": "0x80163D9C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A45E0",
+          "end": "0x802A460C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB3A4",
+          "end": "0x803EB3A8"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800EF834.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800EF834-0x800EFC68 (src/game/cu_800EF834.cpp) and its data row 0x8029DF7C-0x8029DF88.",
