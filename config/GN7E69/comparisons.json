@@ -28159,6 +28159,32 @@
       ]
     },
     {
+      "source": "src/game/cu_8011B2A4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. Its target whole-function extent and literal-pool slice retain their evidence; this split permits independent compilation of a disjoint partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8011B2A4",
+          "end": "0x8011B4F8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F1AC",
+          "end": "0x8029F1C0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8011B2A4",
+          "start": "0x8011B2A4",
+          "end": "0x8011B4F8"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8011B4F8.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. Its target whole-function extents and literal-pool slice retain their evidence; this split permits independent compilation of a disjoint partial literal pool and does not claim an original file boundary or whole-unit promotion.",
