@@ -2923,7 +2923,7 @@ extern "C" int fn_80102664(Object_80039F5C *p)
     State_80102664 *pState = (State_80102664 *)&p->mUnknown336;
     Record_8011F4F8 *pRecord = fn_8011F4F8(pState->mUnknown3);
 
-    if (pState->mUnknown0 == 1 && pRecord->mUnknownA != 15) {
+    if (pState->mUnknown0 == 1 && pRecord->mUnknownAByte != 15) {
         Input_800B6D34 input;
         unsigned char i;
         unsigned int bit;
@@ -2932,7 +2932,7 @@ extern "C" int fn_80102664(Object_80039F5C *p)
         for (i = 0; i <= 2; i++) {
             int index = fn_80168E00(p->mIdBytes[2], i, 0);
 
-            if (pRecord->mUnknownA == index) {
+            if (pRecord->mUnknownAByte == index) {
                 break;
             }
         }
@@ -3213,7 +3213,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
     case 1:
     case 6:
     case 7:
-        pTarget = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownA);
+        pTarget = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte);
         if (!(p->mFlags & 0x4000)) {
             fn_80101130(pTarget, p, &pRecord->mUnknown8);
         }
@@ -3371,8 +3371,8 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
     }
     case 3:
         speed = lbl_803EA2C4 * 0.37f;
-        if (pRecord->mUnknownA != 15) {
-            Object_80039F5C *pReceiver = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownA);
+        if (pRecord->mUnknownAByte != 15) {
+            Object_80039F5C *pReceiver = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte);
 
             if (pReceiver->mMotion.mPos.mX > fn_80178A08() - 8.0f) {
                 target.mX = pReceiver->mMotion.mPos.mX + 14.0f;
@@ -3445,7 +3445,7 @@ extern "C" void fn_801039D8(Object_80039F5C *p)
     case 1:
     case 6:
     case 7:
-        pTarget = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownA);
+        pTarget = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte);
         pEvent->mUnknown8 = (int)pTarget;
         if (fn_800D0B90(p) != 0) {
             fn_80067E3C(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
@@ -3493,7 +3493,7 @@ extern "C" int fn_80103CB0(Object_80039F5C *p)
 
     switch (pRecord->mUnknown1D) {
     case 4:
-        fn_800A5A8C(2, p, fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownA));
+        fn_800A5A8C(2, p, fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte));
         if (fn_801BE648(p->mpUnknown792) == 69 || fn_801BE648(p->mpUnknown792) == 178) {
             p->mFlags |= 4;
         }
