@@ -2945,6 +2945,85 @@ extern "C" int fn_80102664(Object_80039F5C *p)
     return 0;
 }
 
+extern "C" {
+void fn_80148154(void);
+void fn_801483C8(void);
+void fn_800B260C(short value);
+void fn_800B1584(int a, const float *pPos);
+void fn_800D7534(int team);
+void fn_801783D0(int bit, int on);
+void fn_80099568(int kind);
+void fn_8013AD04(Object_80137ABC *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
+void fn_80101064(Object_80039F5C *p);
+}
+
+struct Type_803EA368;
+extern Type_803EA368 *lbl_803EA368;
+extern "C" void fn_800310C0(Type_803EA368 *p, int id, Object_80039F5C *pObject, Vector_80039F5C *pPos, int *pFacing);
+
+extern "C" void fn_801039D8(Object_80039F5C *p)
+{
+    Object_80039F5C *pTarget = 0;
+    Object_80137ABC *pBall = fn_80137C48(p);
+    Record_8011F4F8 *pRecord = fn_8011F4F8(fn_801374E0(pBall));
+    Record_800B15FC *pEvent;
+    Vector_80039F5C velocity;
+
+    fn_80148154();
+    fn_801483C8();
+    fn_800B260C(0);
+    pEvent = fn_800B15FC();
+    fn_8009BD2C(p, &pEvent->mUnknown0);
+    pEvent->mUnknownC = p->mMotion.mPos.mX;
+    pEvent->mUnknown10 = p->mMotion.mPos.mY;
+    pEvent->mUnknown4 = pRecord->mUnknown1D;
+    switch (pRecord->mUnknown1D) {
+    case 0:
+    case 1:
+    case 6:
+    case 7:
+        pTarget = fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownA);
+        pEvent->mUnknown8 = (int)pTarget;
+        if (fn_800D0B90(p) != 0) {
+            fn_80067E3C(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
+        }
+        break;
+    case 8:
+        if (fn_800D0B90(p) != 0) {
+            fn_80067E3C(40, &p->mMotion.mPos, p->mId, 0, 0, 0);
+        }
+        pEvent->mUnknown8 = (int)pTarget;
+        break;
+    default:
+        pEvent->mUnknown8 = 0;
+        break;
+    }
+    pEvent->mUnknown16 = 0;
+    pEvent->mUnknown14 = 5;
+    fn_800B1508();
+    fn_800D7534(p->mIdBytes[2]);
+    fn_800B1584(56, 0);
+    fn_801783D0(23, 1);
+    fn_800310C0(lbl_803EA368, 18, p, &p->mMotion.mPos, &p->mMotion.mFacing);
+    fn_80137EC4(pBall, &velocity);
+    velocity.mX = velocity.mX < -0.2f ? -0.2f : (velocity.mX > 0.2f ? 0.2f : velocity.mX);
+    velocity.mY = velocity.mY < -0.1f ? -0.1f : (velocity.mY > 0.15f ? 0.15f : velocity.mY);
+    velocity.mZ = velocity.mZ < -0.1f ? -0.1f : (velocity.mZ > 0.15f ? 0.15f : velocity.mZ);
+    fn_80137EE0(pBall, &velocity);
+    fn_80099568(1);
+    fn_801379B4(pBall, 4, 0);
+    fn_8013AD04(pBall, &velocity, 1, 2.0f, 1.0f);
+    fn_80137BC0(pBall, pTarget);
+    if (velocity.mY < 0.0f) {
+        fn_801783D0(1, 1);
+    } else {
+        fn_801783D0(13, 1);
+    }
+    fn_80101064(p);
+    p->mFlags &= ~0x2000;
+    pRecord->mUnknownB = 0;
+}
+
 extern "C" void fn_80102D78(Object_80039F5C *p);
 
 extern "C" int fn_80103CB0(Object_80039F5C *p)
