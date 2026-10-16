@@ -2106,6 +2106,19 @@
       ]
     },
     {
+      "source": "src/game/cu_8007A3C4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007A3C4-0x8007A9E4 (src/game/cu_8007A3C4.cpp) and its type, source-form and function rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007A3C4",
+          "end": "0x8007A9E4"
+        }
+      ]
+    },
+    {
       "source": "src/game/FEModules.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8008B32C-0x8008B974 (src/game/FEModules.cpp) and its data rows.",
