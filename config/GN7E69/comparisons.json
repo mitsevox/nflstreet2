@@ -23545,6 +23545,11 @@
           "end": "0x800A7B5C"
         },
         {
+          "symbol": "fn_800A7B5C",
+          "start": "0x800A7B5C",
+          "end": "0x800A7E40"
+        },
+        {
           "symbol": "fn_800A7E40",
           "start": "0x800A7E40",
           "end": "0x800A7E54"
@@ -23823,6 +23828,11 @@
           "symbol": "fn_800A9B54",
           "start": "0x800A9B54",
           "end": "0x800A9D84"
+        },
+        {
+          "symbol": "fn_800A9D84",
+          "start": "0x800A9D84",
+          "end": "0x800A9F4C"
         },
         {
           "symbol": "fn_800A9F4C",
