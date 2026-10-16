@@ -1169,10 +1169,10 @@
       "provenance": {
         "pull_request": 68,
         "merged_via": 89,
-        "commit": "42d5e72b863c1935eb84c187d734a9dcfc2a916e",
-        "introduced_blob": "21716194dbbdbc924064abd457816c70f6ce2bbe",
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "08da5bbdec1f42b61888138d443fa1abcf9c0449",
         "original_blob": "49c5d6f3b54634bfc641e6fb406d3cefbd6ede78",
-        "integration_adjustment": "Accepted shared UIS dependency reconciled in integration.",
+        "integration_adjustment": "Accepted shared UIS dependency reconciled in integration. Preserve all existing contributor identities, function lists and original provenance while sharing canonical state-member declarations and extending the separately measured partial group source. Existing function bytes and resolved call destinations remain unchanged; pin the current complete source blob.",
         "original_commit": "21e15473caafb12c8c8bbcb8820ad36556d1e224"
       }
     },
@@ -1235,10 +1235,10 @@
       "provenance": {
         "pull_request": 70,
         "merged_via": 89,
-        "commit": "42d5e72b863c1935eb84c187d734a9dcfc2a916e",
-        "introduced_blob": "c7c397348051c6a46f83e263e443efc953f1a393",
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "0ff0ff77cfdc45977a687fc73e5ef07255b37541",
         "original_blob": "99a7a78efdea229d22ade00e97183d77470f9971",
-        "integration_adjustment": "Accepted shared Sys declaration reconciled in integration.",
+        "integration_adjustment": "Accepted shared Sys declaration reconciled in integration. Preserve all existing contributor identities, function lists and original provenance while sharing canonical state-member declarations and extending the separately measured partial group source. Existing function bytes and resolved call destinations remain unchanged; pin the current complete source blob.",
         "original_commit": "2b413d3bf0748ecae1eba9afa0696054cfd9a68d"
       }
     },
@@ -2088,10 +2088,10 @@
       "provenance": {
         "pull_request": 76,
         "merged_via": 91,
-        "commit": "eea63283091a9ae13d70aed6f8fb100e2231a5d1",
-        "introduced_blob": "18b7a1290b03f7fcad848b4386de078312d6b403",
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "af8b0f6ba46dabe4c4396aa50d2b3a065a4452b4",
         "original_blob": "9887e4c165c65a47e6c3a17152dacdf50d44cea3",
-        "integration_adjustment": "Original PR76 is inherited by dependent PR81; neutral virtual-slot names reconciled in integration.",
+        "integration_adjustment": "Original PR76 is inherited by dependent PR81; neutral virtual-slot names reconciled in integration. Preserve all existing contributor identities, function lists and original provenance while sharing canonical state-member declarations and extending the separately measured partial group source. Existing function bytes and resolved call destinations remain unchanged; pin the current complete source blob.",
         "original_commit": "f28c52ea3ab5e2c15261be945e75d390868eca2d"
       }
     },
@@ -3276,8 +3276,11 @@
       "provenance": {
         "pull_request": 225,
         "merged_via": 225,
-        "commit": "97eabc1b60debdcaa17e7d870f90de731a807bf1",
-        "introduced_blob": "923acb594677339ee785897fae0765c8d5af3b7e"
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "8cd88ab829c1263ce8675297fa471ae5b2909d0d",
+        "original_commit": "97eabc1b60debdcaa17e7d870f90de731a807bf1",
+        "original_blob": "923acb594677339ee785897fae0765c8d5af3b7e",
+        "integration_adjustment": "Preserve all existing contributor identities, function lists and original provenance while sharing canonical state-member declarations and extending the separately measured partial group source. Existing function bytes and resolved call destinations remain unchanged; pin the current complete source blob."
       }
     },
     {
@@ -9045,11 +9048,11 @@
       "provenance": {
         "pull_request": 467,
         "merged_via": 489,
-        "commit": "6d37e00032df4d3762bf4176247451c1ec6dafd5",
-        "introduced_blob": "e0006f6e05a11f2b00cb0e5e5d00c1726533273b",
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "486ebe73c37aa942e8cd5f406dedfdb14ff7ac02",
         "original_commit": "771a8506195b2ced10b28a0cedd813d38cd6c2b1",
         "original_blob": "d6ee8c7d4f53d9d8c48d9b7fd300dc024a06ffee",
-        "integration_adjustment": "Preserve original contributor and function attribution while adding the separately measured slot-6 selector; all five previously credited bodies remain unchanged. The current complete source blob is pinned after the dependent source addition."
+        "integration_adjustment": "Preserve original contributor and function attribution while adding the separately measured slot-6 selector; all five previously credited bodies remain unchanged. The current complete source blob is pinned after the dependent source addition. Preserve all existing contributor identities, function lists and original provenance while sharing canonical state-member declarations and extending the separately measured partial group source. Existing function bytes and resolved call destinations remain unchanged; pin the current complete source blob."
       }
     },
     {
@@ -9110,11 +9113,11 @@
       "provenance": {
         "pull_request": 487,
         "merged_via": 489,
-        "commit": "6d37e00032df4d3762bf4176247451c1ec6dafd5",
-        "introduced_blob": "e0006f6e05a11f2b00cb0e5e5d00c1726533273b",
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "486ebe73c37aa942e8cd5f406dedfdb14ff7ac02",
         "original_commit": "290e1daa274a53c6f6b6689658bef46c14a4a420",
         "original_blob": "fa707f98d8532398b3748c348e4245b524955a29",
-        "integration_adjustment": "Preserve original contributor and function attribution while adding the separately measured slot-6 selector; all five previously credited bodies remain unchanged. The current complete source blob is pinned after the dependent source addition."
+        "integration_adjustment": "Preserve original contributor and function attribution while adding the separately measured slot-6 selector; all five previously credited bodies remain unchanged. The current complete source blob is pinned after the dependent source addition. Preserve all existing contributor identities, function lists and original provenance while sharing canonical state-member declarations and extending the separately measured partial group source. Existing function bytes and resolved call destinations remain unchanged; pin the current complete source blob."
       }
     },
     {
@@ -16675,8 +16678,11 @@
       "provenance": {
         "pull_request": 792,
         "merged_via": 792,
-        "commit": "6d37e00032df4d3762bf4176247451c1ec6dafd5",
-        "introduced_blob": "e0006f6e05a11f2b00cb0e5e5d00c1726533273b"
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "486ebe73c37aa942e8cd5f406dedfdb14ff7ac02",
+        "original_commit": "6d37e00032df4d3762bf4176247451c1ec6dafd5",
+        "original_blob": "e0006f6e05a11f2b00cb0e5e5d00c1726533273b",
+        "integration_adjustment": "Preserve all existing contributor identities, function lists and original provenance while sharing canonical state-member declarations and extending the separately measured partial group source. Existing function bytes and resolved call destinations remain unchanged; pin the current complete source blob."
       }
     }
   ],
