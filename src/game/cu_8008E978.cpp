@@ -7771,7 +7771,6 @@ extern "C" void fn_800CAF4C(Object_80039F5C *p, int key, Record_800D81C8 *pRecor
     int infoAngle;
     int facing;
     int desired;
-    int offset;
     int turn;
 
     pTurn->mBeyond = lbl_803EAC64;
@@ -7788,11 +7787,15 @@ extern "C" void fn_800CAF4C(Object_80039F5C *p, int key, Record_800D81C8 *pRecor
     infoAngle = pInfo->mUnknown56;
     facing = p->mMotion.mFacing;
     desired = lbl_803EAC58;
-    offset = infoAngle > 0x800000 ? infoAngle - 0x1000000 : infoAngle;
-    if (lbl_803EAC4C != 0) {
-        offset = -offset;
+    if (infoAngle > 0x800000) {
+        turn = infoAngle - 0x1000000;
+    } else {
+        turn = infoAngle;
     }
-    turn = (((desired - facing) & 0xFFFFFF) - offset) & 0xFFFFFF;
+    if (lbl_803EAC4C != 0) {
+        turn = -turn;
+    }
+    turn = (((desired - facing) & 0xFFFFFF) - turn) & 0xFFFFFF;
     if (turn > 0x800000) {
         turn -= 0x1000000;
     }
@@ -7800,15 +7803,20 @@ extern "C" void fn_800CAF4C(Object_80039F5C *p, int key, Record_800D81C8 *pRecor
     pTurn->mRate = (int)((float)turn * 0.1f);
 }
 
+static inline void CopyPoint_800CB080(Point_8017886C *pOut, const Point_8017886C *pIn)
+{
+    pOut->mX = pIn->mX;
+    pOut->mY = pIn->mY;
+}
+
 extern "C" void fn_800CB080(Object_80039F5C *p, int key, Record_800D81C8 *pRecords, Turn_800CBBAC *pTurn,
                             Info_80089904 *pInfo)
 {
-    Point_8017886C target = lbl_803EAC50;
+    Point_8017886C target;
     int index;
     int infoAngle;
     int facing;
     int desired;
-    int offset;
     int turn;
 
     pTurn->mBeyond = lbl_803EAC64;
@@ -7817,12 +7825,12 @@ extern "C" void fn_800CB080(Object_80039F5C *p, int key, Record_800D81C8 *pRecor
     pTurn->mUnknown14 = 0;
     pTurn->mUnknown18 = 0;
     index = pTurn->mRecord;
+    target = lbl_803EAC50;
     if (fn_800F06F4(0, p->mpState, 9, 0xFFFF) == 0xFFFF) {
         fn_800F06F4(0, p->mpState, 87, 0xFFFF);
     }
     fn_800AD9B4();
-    pTurn->mTarget.mX = target.mX;
-    pTurn->mTarget.mY = target.mY;
+    CopyPoint_800CB080(&pTurn->mTarget, &target);
     if (lbl_803EAC4C != 0) {
         fn_801BA6BC(&pRecords[index], 1);
     }
@@ -7832,11 +7840,15 @@ extern "C" void fn_800CB080(Object_80039F5C *p, int key, Record_800D81C8 *pRecor
     infoAngle = pInfo->mUnknown56;
     facing = p->mMotion.mFacing;
     desired = lbl_803EAC58;
-    offset = infoAngle > 0x800000 ? infoAngle - 0x1000000 : infoAngle;
-    if (lbl_803EAC4C != 0) {
-        offset = -offset;
+    if (infoAngle > 0x800000) {
+        turn = infoAngle - 0x1000000;
+    } else {
+        turn = infoAngle;
     }
-    turn = (((desired - facing) & 0xFFFFFF) - offset) & 0xFFFFFF;
+    if (lbl_803EAC4C != 0) {
+        turn = -turn;
+    }
+    turn = (((desired - facing) & 0xFFFFFF) - turn) & 0xFFFFFF;
     if (turn > 0x800000) {
         turn -= 0x1000000;
     }
@@ -7869,9 +7881,10 @@ extern "C" int fn_800CB228(Object_80039F5C *p, Info_80089904 *pInfo, int angle, 
     float stepLength;
     float ratio;
 
-    turn = infoAngle;
     if (infoAngle > 0x800000) {
-        turn -= 0x1000000;
+        turn = infoAngle - 0x1000000;
+    } else {
+        turn = infoAngle;
     }
     if (lbl_803EAC4C != 0) {
         turn = -turn;
@@ -7887,7 +7900,7 @@ extern "C" int fn_800CB228(Object_80039F5C *p, Info_80089904 *pInfo, int angle, 
     turn = fn_801CFE40(delta.mY, delta.mX);
     fn_80227690(&toTarget, &target, &p->mMotion.mPos);
     bend = fn_801CFFD0(fn_801CFE40(toTarget.mY, toTarget.mX), turn);
-    fn_80227538(&arc, (0x400000 - bend) & 0xFFFFFF, fn_802270A4(&toTarget) * 3.7450704e-07f * bend);
+    fn_80227538(&arc, (0x400000 - bend) & 0xFFFFFF, fn_802270A4(&toTarget) * (3.7450704e-07f * bend));
     fn_80227638(&aim, &arc, &target);
     fn_80227690(&arc, &aim, &p->mMotion.mPos);
     stepLength = fn_802270A4(&delta);
@@ -7899,14 +7912,14 @@ extern "C" int fn_800CB228(Object_80039F5C *p, Info_80089904 *pInfo, int angle, 
     }
     fn_80227538(&arc, turn, stepLength * ratio);
     fn_80227638(&aim, &arc, &p->mMotion.mPos);
-    if (fn_8022781C(&aim, &target) >= limit) {
-        lbl_803EAC5C = 0;
-        lbl_803EAC60 = 1.0f;
-        return 0;
+    if (fn_8022781C(&aim, &target) < limit) {
+        lbl_803EAC60 = ratio;
+        lbl_803EAC5C = (heading - facing) & 0xFFFFFF;
+        return 1;
     }
-    lbl_803EAC60 = ratio;
-    lbl_803EAC5C = (heading - facing) & 0xFFFFFF;
-    return 1;
+    lbl_803EAC5C = 0;
+    lbl_803EAC60 = 1.0f;
+    return 0;
 }
 
 extern "C" void fn_800CB484(Point_8017886C *pOut, Point_8017886C *pFrom, Point_8017886C *pTo, int flip, int angle,
