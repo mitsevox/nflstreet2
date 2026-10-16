@@ -5236,6 +5236,50 @@ extern "C" void fn_80119478(void)
     }
 }
 
+extern "C" float lbl_803EB08C;
+extern "C" float lbl_803EB090;
+extern "C" int fn_800CD2B4(int mode, Object_80039F5C *p);
+extern "C" int fn_800EC758(Object_80039F5C *p);
+
+extern "C" int fn_8011A994(Object_80039F5C *p, Object_80039F5C *pOther)
+{
+    Pair_8011BAE0 delta;
+
+    fn_80227690(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
+    if (fn_801CFFD0(fn_801CFE40(delta.mUnknown4, delta.mUnknown0), pOther->mMotion.mFacing) > (int)(lbl_803EB08C * 46603.38f)) {
+        Object_80039F5C *pBall = fn_80137B40();
+
+        if (pBall != 0 && fn_8022781C(&pOther->mMotion.mPos, &pBall->mMotion.mPos) > lbl_803EB090) {
+            return 0;
+        }
+    }
+    if (fn_801787A0()) {
+        return 0;
+    }
+    switch (pOther->mpState->mId) {
+    case 22:
+    case 92:
+        return (pOther->mFlags >> 10) & 1;
+    case 12:
+    case 94:
+        return p->mUnknown1040 == pOther->mId && fn_800CD2B4(1, pOther) == 0;
+    case 1:
+    case 5:
+    case 10:
+    case 15:
+    case 16:
+    case 17:
+    case 28:
+    case 50:
+    case 58:
+    case 91:
+        return 0;
+    case 57:
+        return fn_800EC758(pOther);
+    }
+    return 1;
+}
+
 extern "C" void fn_8011AFCC(Entry_8011AFCC *pEntries)
 {
     int swapped;
