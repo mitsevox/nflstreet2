@@ -165,6 +165,12 @@ extern int lbl_803EADC8;
 extern float lbl_803EADCC;
 extern float lbl_803EADD0;
 extern int lbl_803EADD4;
+extern float lbl_803EAD84;
+extern float lbl_803EAD88;
+extern float lbl_803EAD8C;
+extern float lbl_803EAD90;
+extern float lbl_803EAD94;
+extern float lbl_803EAD98;
 extern float lbl_803EADAC;
 extern float lbl_803EADB0;
 extern float lbl_803EADB4;
@@ -192,6 +198,9 @@ void fn_800EFE60(int a, void *p, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_8010AEC4(int value);
+void fn_800E9528(Object_80039F5C *p);
+int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
+void fn_800E9DBC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8009F0B8(Object_80039F5C *p, int angle);
 void fn_8003A130(void *pPos, float *pExtra, int team);
 void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int delay);
@@ -595,6 +604,76 @@ extern "C" int fn_800E8748(Object_80039F5C *p) {
 
 extern "C" int fn_800E885C(void) {
     return fn_802372EC(0, 100) >= lbl_803EAD80 ? 4 : 0;
+}
+
+extern "C" int fn_800E8898(Object_80039F5C *p, Object_80039F5C **ppLast) {
+    int result = 0;
+    if (p->mUnknown560.mFlags.mBytes[0]) {
+        switch (p->mUnknown560.mUnknown54) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4: {
+            Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown560.mUnknown40);
+            if (!pOther)
+                pOther = fn_8009BCE8(&p->mUnknown560.mUnknown44);
+            if (pOther && pOther != fn_80137B40() && pOther != *ppLast) {
+                *ppLast = pOther;
+                switch (pOther->mUnknown560.mUnknown54) {
+                case 0:
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                    switch (pOther->mpState->mId) {
+                    case 5:
+                    case 10:
+                    case 12:
+                    case 16:
+                    case 17:
+                    case 58:
+                        break;
+                    case 32: {
+                        Object_80039F5C *pTarget = fn_8009BCE8(&pOther->mUnknown336);
+                        if (pTarget && pTarget->mpState->mId == 32) {
+                            fn_800E9DBC(pOther, p);
+                            result = 1;
+                        }
+                        break;
+                    }
+                    default: {
+                        short skill = (short)p->mUnknown2904Float;
+                        short strength = pOther->mRatings[2] >= pOther->mRatings[0] ? pOther->mRatings[2] : pOther->mRatings[0];
+                        short otherSkill = (short)pOther->mUnknown2904Float;
+                        short defense = (short)(strength * lbl_803EAD84 + otherSkill * lbl_803EAD88);
+                        short offense = (short)(p->mRatings[5] * lbl_803EAD8C + skill * lbl_803EAD90);
+                        short attack = fn_802372EC(0, offense);
+                        short resist = fn_802372EC(0, defense);
+                        if (pOther->mMotion.mPos.mY < fn_80177FE0().mY)
+                            attack = (short)(attack * lbl_803EAD94);
+                        if (attack > resist) {
+                            if (attack * lbl_803EAD98 > resist) {
+                                fn_800E96EC(pOther, p);
+                                result = 1;
+                            } else {
+                                result = 1;
+                                fn_800E9528(pOther);
+                            }
+                        }
+                        break;
+                    }
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+        }
+    } else {
+        *ppLast = 0;
+    }
+    return result;
 }
 
 extern "C" int fn_800E8BE8(Object_80039F5C *p) {
