@@ -3,6 +3,8 @@
 
 #include "game/Object_80039F5C.h"
 
+struct Object_80137ABC;
+
 /* Views of the records returned by fn_80093BAC, fn_80093BCC and
    fn_80096DA8. Their original identities and the contents of the opaque
    spans remain unknown. */
@@ -16,7 +18,7 @@ struct Character_80093BCC {
     int mUnknown0,mUnknown4;
     unsigned char mUnknown8[12];
     Object_80039F5C *mUnknown14[24];
-    int mUnknown74[24];
+    Object_80137ABC *mUnknown74[24];
     unsigned char mUnknownD4[4];
     union { int mWord; unsigned short mParts[2]; } mUnknownD8;
     unsigned char mUnknownDC[4];

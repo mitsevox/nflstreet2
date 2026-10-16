@@ -412,8 +412,9 @@ extern "C" void fn_8009036C(int *p)
     fn_80094454(*p);
 }
 
-extern "C" int fn_801BB878(int index, int a, int b, Actor_801C009C *pActor, int c);
 extern "C" int fn_8009439C(int index);
+
+extern "C" int fn_801BB878(int index, int a, int b, Actor_801C009C *pActor, int c);
 
 extern "C" int fn_800904D4(Character_80093BCC *pCharacter, int a, int b)
 {
@@ -422,6 +423,35 @@ extern "C" int fn_800904D4(Character_80093BCC *pCharacter, int a, int b)
 
     pCharacter->mUnknownD8.mWord = handle | 0x80000000;
     return handle != 0xFFFF;
+}
+
+extern "C" void fn_800EFE1C(int a, State_80039F5C *pQueue);
+
+extern "C" void fn_80091144(int index)
+{
+    Character_80093BCC *pCharacter = fn_80093BCC(index);
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    unsigned short i;
+
+    for (i = 0; i < pActor->mUnknown4; i++) {
+        Object_80039F5C *p = pCharacter->mUnknown14[i];
+
+        if (p != 0 && p->mUnknown9[2] != 0) {
+            Message_800F01CC message;
+
+            fn_801C1F94(&message, 0, sizeof(message));
+            message.mUnknown1[0] = index;
+            message.mUnknown1[1] = i;
+            if (p->mIdBytes[3] == 1 || p->mIdBytes[3] == 3) {
+                message.mId = 50;
+                fn_800F053C(0, p->mpState, &message, p);
+                if (p->mpState->mId != message.mId) {
+                    fn_800EFE1C(0, p->mpState);
+                    fn_800F053C(0, p->mpState, &message, p);
+                }
+            }
+        }
+    }
 }
 
 extern "C" Actor_801C009C *fn_80091240(unsigned short index)
@@ -729,10 +759,10 @@ extern "C" int fn_80093C64(void)
 
 extern "C" Frame_80141210 *fn_801C029C(Actor_801C009C *pActor, unsigned short index);
 
-extern "C" int fn_80093C70(Character_80093BCC *pCharacter, int id, Frame_80141210 **ppFrame, unsigned char *pFound)
+extern "C" Object_80137ABC *fn_80093C70(Character_80093BCC *pCharacter, int id, Frame_80141210 **ppFrame, unsigned char *pFound)
 {
     Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
-    int result = 0;
+    Object_80137ABC *result = 0;
     int i;
 
     *pFound = 0;
