@@ -25765,6 +25765,11 @@
           "end": "0x800BF8A8"
         },
         {
+          "symbol": "fn_800BF8A8",
+          "start": "0x800BF8A8",
+          "end": "0x800BF9DC"
+        },
+        {
           "symbol": "fn_800BF9DC",
           "start": "0x800BF9DC",
           "end": "0x800BFAB4"
