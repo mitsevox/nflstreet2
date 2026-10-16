@@ -119,7 +119,11 @@ int fn_8018CD1C(int source, int teamTable, int playerTable, int destination,
     fn_801FCE10(&result, "use \x8c update 'MAET' set 'RUMT' = \x85 and 'OLFT' = 0 and 'SIVT' = 1 and 'DIGD' = \x82 where ('DIGT' = \x85)\n", destination, rumt, 8, team);
     cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;
+    int code = 0;
     int status = fn_801FCE10(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c order by 'DIGP'\n", source, &cursor, &player, playerTable);
+    if (status != 0 && status != 23) {
+        code = status;
+    }
     if (status != 23) {
         count = result.mUnknown0;
         fn_80229AA4(destination, 0x59414C50, ids, &count);
@@ -153,11 +157,15 @@ void fn_8018D07C(int index)
     QueryResult result;
     QueryCursor cursor = {0, 0, -1, 0};
     int player, ytrp, oldPxsp;
+    int code = 0;
     int source = fn_8022F3D4(fn_8022F358(index));
     int hadState = fn_80029D74(2, index);
     cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;
     int status = fn_801FCE10(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from 'YPRC' order by 'DIGP'\n", source, &cursor, &player);
+    if (status != 0 && status != 23) {
+        code = status;
+    }
     if (status != 23) {
         unsigned int count = result.mUnknown0;
         for (unsigned int i = 0; i < count; i++) {
