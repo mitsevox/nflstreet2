@@ -37,7 +37,20 @@
 #include "game/fn_801BE60C.h"
 #include "game/Block_801BE60C.h"
 
+/* View of the block at player +336 as fn_8010CB58 runs its states. */
+struct Block_8010CB58 {
+    char mUnknown0[12];
+    float mUnknown12;
+    int mUnknown16;
+    unsigned char mUnknown20;
+    char mUnknown21[3];
+    int mUnknown24;
+};
+
 extern "C" {
+void fn_800B8344(Object_80039F5C *p);
+int fn_800FD580(Object_80039F5C *p);
+void fn_800F053C(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_8009BD60(Object_80039F5C *p);
 int fn_8011F1A4(void);
 unsigned char fn_8011F4C8(void);
@@ -117,4 +130,84 @@ extern "C" void fn_8010C98C(Object_80039F5C *p) {
     }
     fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 78, p, 1.0f);
     p->mUnknown512.mUnknown14 = 0;
+}
+
+extern "C" int fn_8010CB58(Object_80039F5C *p) {
+    int result = 0;
+    Block_8010CB58 *pBlock = (Block_8010CB58 *)&p->mUnknown336;
+    int animation;
+
+    fn_800B8344(p);
+    animation = fn_801BE648(p->mpUnknown792);
+    switch (pBlock->mUnknown20) {
+    case 0:
+        if ((unsigned int)(animation - 30) <= 1 || animation == 202 || animation == 200) {
+            p->mUnknown512.mUnknown14 = 0;
+            pBlock->mUnknown20 = 1;
+        } else {
+            Object_80039F5C *pCarrier;
+
+            result = fn_800FD580(p);
+            pCarrier = fn_80137B40();
+            if (pCarrier != 0 && pCarrier->mpState->mId == 18 && (p->mFlags & 0x4000)) {
+                result = 1;
+            }
+            if (fn_8010C8F8(p)) {
+                fn_8010C98C(p);
+                pBlock->mUnknown20 = 1;
+            }
+        }
+        break;
+    case 1:
+        if (fn_80137B40() == p && animation == 74) {
+            pBlock->mUnknown20 = 2;
+        }
+        if (p->mFlags & 4) {
+            p->mFlags &= ~4;
+            pBlock->mUnknown24 = 20;
+            pBlock->mUnknown20 = 2;
+        } else if (!((unsigned int)(animation - 30) <= 1 || animation == 202 || animation == 200)) {
+            if (animation == 78) {
+                p->mUnknown512.mUnknown14 = 0;
+            } else {
+                p->mUnknown512.mUnknown14 = 1;
+                p->mUnknown512.mUnknown8 = pBlock->mUnknown16;
+                p->mUnknown512.mUnknown4 = pBlock->mUnknown16;
+                p->mUnknown512.mUnknown0 = pBlock->mUnknown12;
+            }
+        }
+        break;
+    case 2: {
+        int pass = fn_800F06F4(0, p->mpState, 18, 0xFFFF) != 0xFFFF;
+        int pitch = fn_800F06F4(0, p->mpState, 26, 0xFFFF) != 0xFFFF;
+        int toss = fn_800F06F4(0, p->mpState, 25, 0xFFFF) != 0xFFFF;
+
+        if (p == fn_80137B40() && !pass && !pitch && !toss) {
+            Message_800F01CC message;
+
+            fn_801C1F94(&message, 0, 4);
+            message.mId = 1;
+            fn_800F053C(0, p->mpState, &message, p);
+            p->mUnknown512.mUnknown14 = 1;
+            p->mUnknown512.mUnknown0 = 0.72f;
+            p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
+            p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
+        } else if (pass) {
+            result = 1;
+            p->mUnknown512.mUnknown14 = 1;
+            p->mUnknown512.mUnknown8 = pBlock->mUnknown16;
+            p->mUnknown512.mUnknown4 = pBlock->mUnknown16;
+            p->mUnknown512.mUnknown0 = pBlock->mUnknown12;
+        } else if (--pBlock->mUnknown24 < 0) {
+            result = 1;
+        } else {
+            p->mUnknown512.mUnknown14 = 1;
+            p->mUnknown512.mUnknown8 = pBlock->mUnknown16;
+            p->mUnknown512.mUnknown4 = pBlock->mUnknown16;
+            p->mUnknown512.mUnknown0 = pBlock->mUnknown12;
+        }
+        break;
+    }
+    }
+    return result;
 }
