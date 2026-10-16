@@ -32,6 +32,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
+#include "game/Object_800785C0.h"
 #include "game/Object_8017886C.h"
 #include "game/Query_800CE770.h"
 #include "game/RecordList_8002E7C0.h"
@@ -724,7 +725,7 @@ extern "C" int fn_80094048(int key, Object_80039F5C **ppA, Object_80039F5C **ppB
     return found;
 }
 
-extern "C" void fn_800940D8(int index, unsigned char value)
+extern "C" void fn_800940D8(unsigned short index, unsigned char value)
 {
     lbl_802D73B8[index].mUnknownC = value;
 }
@@ -4738,7 +4739,9 @@ struct Block_800BC538 {
     unsigned char mUnknown2A;
     unsigned char mUnknown2B;
     int mUnknown2C;
-    unsigned char mUnknown30[4];
+    unsigned char mUnknown30[2];
+    unsigned char mUnknown32;
+    unsigned char mUnknown33;
 };
 
 extern "C" {
@@ -4922,7 +4925,7 @@ extern "C" void fn_800BB9A4(int team, int value)
     }
 }
 
-extern "C" void fn_800BBB4C(void)
+extern "C" void fn_800BBB4C(Class_80297BF8 *pThis)
 {
     fn_800CC560(1);
     lbl_803EC98C->mUnknown0 = 2;
@@ -9659,6 +9662,20 @@ extern unsigned char lbl_803EABA3;
 void fn_800BBA2C(void);
 void fn_800BBF18(void);
 void fn_800BD1C8(Record_800BAE7C *pRecords);
+void fn_80065814(void);
+unsigned int fn_801568F0(void);
+void fn_80173404(void);
+void fn_800BC3F0(void);
+void fn_800BB24C(void);
+void fn_800BB694(int a, int b, float c);
+void fn_8003E174(int a);
+void fn_8017D5D8(void);
+void fn_800D4164(int side, float time, int a);
+void fn_800A7B5C(void);
+void fn_801790D0(int team, float a, float b);
+extern int lbl_803EAB98;
+extern int lbl_803EAB9C;
+extern unsigned short lbl_802D9B14[];
 int fn_8013C678(Camera_8013F738 *pCamera);
 void fn_8013C7C4(Camera_8013F738 *pCamera);
 void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg);
@@ -9667,6 +9684,80 @@ void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg);
 extern "C" void fn_800BC5B8(void)
 {
     fn_800BC51C(0);
+}
+
+extern "C" void fn_800BC5DC(Class_80297BF8 *pThis)
+{
+    int practice;
+    unsigned char i;
+
+    fn_80065814();
+    lbl_803EC98C->mUnknown32 = 0;
+    practice = fn_801568F0() <= 4;
+    fn_800BA674();
+    fn_80173404();
+    if (fn_800C1E40() != 0) {
+        fn_8009D964(2, 0);
+        fn_8004A230(1);
+    }
+    fn_8009D888(2, 0);
+    fn_800CC448();
+    fn_800BC3F0();
+    lbl_803EAB98 = 0;
+    lbl_803EAB9C = 0;
+    fn_800BB24C();
+    if (fn_800BA71C() == 1 || practice) {
+        lbl_803EAB94 = 1;
+    } else {
+        Block_800BC538 *pBlock = lbl_803EC98C;
+
+        pBlock->mUnknown18 = -1;
+        pBlock->mUnknown1C = -1;
+        pBlock->mUnknown20 = -1;
+        pBlock->mUnknown28 = 0;
+        lbl_803EAB95 = 0;
+        if (fn_800BA6F8() == 0) {
+            fn_8004A230(0);
+        }
+        fn_801383E4(1);
+        lbl_803EAB94 = 0;
+        fn_800BBA2C();
+    }
+    if (fn_800C1E40() != 0) {
+        fn_800BBA2C();
+        fn_800BBB4C(pThis);
+        lbl_803EAB94 = 1;
+    }
+    if (fn_80025708() != 0) {
+        fn_800BBB4C(pThis);
+    }
+    if (practice) {
+        fn_800BBB4C(pThis);
+    }
+    fn_800AFDD4(fn_800BB694);
+    fn_8003E174(0);
+    fn_800B2670(0);
+    fn_800C432C();
+    if (fn_800C1E40() == 0) {
+        fn_8017D5D8();
+    }
+    if (fn_80025708() != 0) {
+        if (fn_800785C0()->mUnknown1C3 != 0) {
+            fn_800D4164(0, 0.5f, 0);
+            fn_800A7B5C();
+        }
+        if (fn_800785C0()->mUnknown1C2 != 0) {
+            fn_800D4164(1, 0.5f, 0);
+            fn_800A7B5C();
+        }
+    }
+    fn_8017DC08();
+    pThis->vfn_06();
+    fn_801790D0(0, 0.0f, 0.0f);
+    fn_801790D0(1, 0.0f, 0.0f);
+    for (i = 0; i < lbl_803EC98C->mUnknown2B; i++) {
+        fn_800940D8(i, lbl_802D9B14[i] != 0);
+    }
 }
 
 extern "C" void fn_800BC83C(void)
@@ -9736,6 +9827,90 @@ extern "C" void fn_800BCA00(Class_80297BF8 *pThis, float dt)
 extern "C" void fn_800BCAF4(float value)
 {
     fn_800AD910(5, value);
+}
+
+extern "C" void fn_800BCF7C(void)
+{
+    Params_80096A58 crowd;
+    Params_80096A58 ambience;
+
+    fn_801C1F94(&crowd, 0, sizeof(crowd));
+    crowd.mUnknown40 = 0xFFFF;
+    crowd.mUnknown42 = 0xFFFF;
+    fn_801C1F94(&ambience, 0, sizeof(ambience));
+    ambience.mUnknown40 = 0xFFFF;
+    ambience.mUnknown42 = 0xFFFF;
+    switch (fn_800A3444()) {
+    case 0:
+        crowd.mUnknown0 = 14;
+        ambience.mUnknown0 = 12;
+        break;
+    case 2:
+        crowd.mUnknown0 = 2;
+        ambience.mUnknown0 = 0;
+        break;
+    case 3:
+        crowd.mUnknown0 = 26;
+        ambience.mUnknown0 = 24;
+        break;
+    case 1:
+        crowd.mUnknown0 = 20;
+        ambience.mUnknown0 = 18;
+        break;
+    case 4:
+        crowd.mUnknown0 = 8;
+        ambience.mUnknown0 = 6;
+        break;
+    case 5:
+        crowd.mUnknown0 = 33;
+        ambience.mUnknown0 = 31;
+        break;
+    case 6:
+        crowd.mUnknown0 = 36;
+        ambience.mUnknown0 = 34;
+        break;
+    case 7:
+        crowd.mUnknown0 = 30;
+        ambience.mUnknown0 = 28;
+        break;
+    case 8:
+        crowd.mUnknown0 = 11;
+        ambience.mUnknown0 = 9;
+        break;
+    case 10:
+        crowd.mUnknown0 = 17;
+        ambience.mUnknown0 = 15;
+        break;
+    case 9:
+        crowd.mUnknown0 = 5;
+        ambience.mUnknown0 = 3;
+        break;
+    case 11:
+        crowd.mUnknown0 = 23;
+        ambience.mUnknown0 = 21;
+        break;
+    default:
+        crowd.mUnknown0 = 5;
+        ambience.mUnknown0 = 3;
+        break;
+    }
+    crowd.mUnknown20 = 2;
+    crowd.mUnknown24 = 0;
+    crowd.mUnknown28 = fn_802372EC(1, 2);
+    crowd.mUnknown32 = 300.0f;
+    crowd.mUnknown12 |= 0x50;
+    ambience.mUnknown20 = 2;
+    ambience.mUnknown24 = 0;
+    ambience.mUnknown28 = 0;
+    ambience.mUnknown32 = 300.0f;
+    ambience.mUnknown12 |= 0x10;
+    lbl_803EC98C->mUnknown8 = fn_80096A58(&crowd);
+    fn_801F0F18(0);
+    if (lbl_803EC98C->mUnknown8 != -1) {
+        fn_80096B1C(lbl_803EC98C->mUnknown8);
+    }
+    lbl_803EC98C->mUnknownC = fn_80096A58(&ambience);
+    fn_801F0F18(0);
 }
 
 extern "C" void fn_800BD184(void)
