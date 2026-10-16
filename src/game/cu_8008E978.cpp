@@ -1117,6 +1117,33 @@ extern "C" int fn_800947C4(Object_8017886C *p)
     return result;
 }
 
+extern "C" Point_8017886C fn_80178070(void);
+extern "C" int fn_80178308(void);
+extern "C" float fn_80178A2C(void);
+
+extern "C" int fn_8009481C(Object_8017886C *p)
+{
+    Point_8017886C spot;
+    float y;
+    short yards;
+
+    spot = fn_80178070();
+    y = p->mUnknown08.mY;
+
+    if (fn_80178308() != fn_80178348()) {
+        spot.mY = -spot.mY;
+    }
+    if (p->mUnknown1D == 0) {
+        yards = (int)(y - spot.mY);
+    } else {
+        yards = (int)(fn_80178A2C() - spot.mY);
+    }
+    if (p->mUnknown1D != 0 && yards < 0) {
+        yards = 0;
+    }
+    return yards;
+}
+
 extern "C" void fn_80094A9C(short *pValues, Object_8017886C *p)
 {
     pValues[0] = fn_800947C4(p);
