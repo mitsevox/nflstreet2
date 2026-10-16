@@ -7859,6 +7859,11 @@
           "end": "0x800F8D2C"
         },
         {
+          "symbol": "fn_800F930C",
+          "start": "0x800F930C",
+          "end": "0x800F93D0"
+        },
+        {
           "symbol": "fn_800F9CAC",
           "start": "0x800F9CAC",
           "end": "0x800F9CB4"
@@ -8209,9 +8214,29 @@
           "end": "0x800F6878"
         },
         {
+          "symbol": "fn_800F6AD8",
+          "start": "0x800F6AD8",
+          "end": "0x800F6B2C"
+        },
+        {
+          "symbol": "fn_800F6C90",
+          "start": "0x800F6C90",
+          "end": "0x800F6D40"
+        },
+        {
+          "symbol": "fn_800F6D40",
+          "start": "0x800F6D40",
+          "end": "0x800F6E30"
+        },
+        {
           "symbol": "fn_800F722C",
           "start": "0x800F722C",
           "end": "0x800F7314"
+        },
+        {
+          "symbol": "fn_800F8828",
+          "start": "0x800F8828",
+          "end": "0x800F88E4"
         },
         {
           "symbol": "fn_800F93D0",
@@ -8922,6 +8947,11 @@
           "symbol": "fn_800F4E14",
           "start": "0x800F4E14",
           "end": "0x800F4E88"
+        },
+        {
+          "symbol": "fn_800F60BC",
+          "start": "0x800F60BC",
+          "end": "0x800F6158"
         },
         {
           "symbol": "fn_8011DA40",

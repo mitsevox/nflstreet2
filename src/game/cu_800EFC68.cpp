@@ -1433,6 +1433,16 @@ extern "C" int fn_800F4E14(Object_80039F5C *p, Object_800F4E14 *pInfo) {
 
 
 
+extern "C" void fn_800F60BC(Object_80039F5C *p) {
+    int facing = p->mMotion.mFacing & 0xFFFFFF;
+
+    if ((facing >= 0x755556 && facing <= 0x8AAAAA) || facing < 0xAAAAA || facing > 0xF55556) {
+        if (fn_8011F1A4() && fn_8011F4C8() > 3) {
+            fn_800C89F0(p, 0x400000, 2, 0, 1.0f);
+        }
+    }
+}
+
 extern "C" int fn_800F62A4(Object_80039F5C *p) {
     Message_800F01CC message;
 
@@ -1485,6 +1495,61 @@ extern "C" unsigned int fn_800F67E8(Object_80039F5C *pTarget) {
     return count;
 }
 
+extern "C" void fn_800F6AD8(float *p) {
+    if (p) {
+        if (fabsf(p[0]) < 0.3f) {
+            p[0] = 0.0f;
+        }
+        if (fabsf(p[1]) < 0.3f) {
+            p[1] = 0.0f;
+        }
+    }
+}
+
+extern "C" {
+int fn_8009E9A4(void);
+int fn_800F6878(Object_80039F5C *p, Object_80039F5C *pOther);
+}
+
+extern "C" void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Point_8017886C *pOut);
+
+extern "C" void fn_800F6C90(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Point_8017886C *pOut) {
+    if (p && pOther && pOut) {
+        Point_8017886C origin;
+
+        origin = fn_80177FE0();
+        if (pTarget->mY < origin.mY + 7.0f) {
+            pOut->mY = 0.0f;
+        } else {
+            fn_800F6D40(p, pOther, pTarget, pOut);
+        }
+        fn_800F6AD8(&pOut->mX);
+    }
+}
+
+extern "C" void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Point_8017886C *pOut) {
+    if (p && pOther && pOut) {
+        Point_8017886C delta;
+
+        fn_80227690(&delta, pTarget, &p->mMotion.mPos);
+        if (!(p->mpState->mUnknown2 & 2)) {
+            pOut->mY = pTarget->mY - p->mMotion.mPos.mY;
+            if (fn_8009E9A4() == 1 && pOther->mUnknown2914 == 3) {
+                pOut->mY = pOut->mY + 5.0f;
+            }
+        } else if (p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {
+            pOut->mY = pTarget->mY - p->mMotion.mPos.mY;
+        } else {
+            pOut->mY = pTarget->mY - p->mMotion.mPos.mY;
+        }
+        if (fn_800F6878(p, pOther)) {
+            pOut->mY = pOut->mY + 2.5f;
+        } else {
+            fn_800F6AD8(&pOut->mX);
+        }
+    }
+}
+
 extern "C" void fn_800F722C(Object_80039F5C *p, Object_80039F5C *pOther, float *pX, float *pOut) {
     if (p && pOther && pOut) {
         Vector_80039F5C pos;
@@ -1518,6 +1583,58 @@ extern "C" void fn_800F722C(Object_80039F5C *p, Object_80039F5C *pOther, float *
 }
 
 extern "C" int fn_800F8D24() {
+    return 0;
+}
+
+/* View of the block at player +336 used by fn_800F8828 and fn_800F8A88. */
+struct Block_800F8A88 {
+    char mUnknown0[24];
+    unsigned char mUnknown24;
+    unsigned char mUnknown25;
+    unsigned char mUnknown26;
+};
+
+extern "C" void fn_800F8828(Object_80039F5C *p, Object_80039F5C *pOther, Block_800F8A88 *pBlock) {
+    if (p && pOther) {
+        Point_8017886C origin;
+
+        origin = fn_80177FE0();
+        p->mpState->mUnknown2 |= pBlock->mUnknown25;
+        if (fabsf(p->mMotion.mPos.mY - origin.mY) <= 5.0f && fabsf(pOther->mMotion.mPos.mY - origin.mY) <= 5.0f
+            && pBlock->mUnknown25 == 2) {
+            p->mpState->mUnknown2 &= ~pBlock->mUnknown25;
+        }
+    }
+}
+
+/* View of the block at player +336 used by fn_800F930C. */
+struct Block_800F930C {
+    int mRef;
+    int mUnknown4;
+    int mUnknown8;
+    float mUnknown12;
+    unsigned int mUnknown16;
+};
+
+extern "C" int fn_800F930C(Object_80039F5C *p) {
+    Block_800F930C *pBlock = (Block_800F930C *)&p->mUnknown336;
+    Object_80039F5C *pOther = fn_8009BCE8(&pBlock->mRef);
+
+    if (pOther) {
+        Vector_80039F5C delta;
+
+        fn_802276B4(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+        if (fabsf(delta.mX) <= 4.0f && delta.mY <= -3.0f && pBlock->mUnknown16 <= 60) {
+            if (delta.mX > 0.0f) {
+                pBlock->mUnknown8 = 0x100000;
+            } else {
+                pBlock->mUnknown8 = 0x700000;
+            }
+            pBlock->mUnknown4 = 0xC00000;
+            pBlock->mUnknown12 = 0.33f;
+            return 1;
+        }
+    }
     return 0;
 }
 
