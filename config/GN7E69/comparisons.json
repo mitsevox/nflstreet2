@@ -24060,6 +24060,16 @@
           "end": "0x800B4250"
         },
         {
+          "symbol": "fn_800B4250",
+          "start": "0x800B4250",
+          "end": "0x800B4300"
+        },
+        {
+          "symbol": "fn_800B4300",
+          "start": "0x800B4300",
+          "end": "0x800B43A4"
+        },
+        {
           "symbol": "fn_800B43A4",
           "start": "0x800B43A4",
           "end": "0x800B43AC"
@@ -24828,6 +24838,11 @@
           "symbol": "fn_800B0A28",
           "start": "0x800B0A28",
           "end": "0x800B0A2C"
+        },
+        {
+          "symbol": "fn_800B0BC0",
+          "start": "0x800B0BC0",
+          "end": "0x800B0C70"
         },
         {
           "symbol": "fn_800B0C70",

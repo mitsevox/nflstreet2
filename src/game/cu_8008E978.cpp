@@ -3883,7 +3883,8 @@ struct Block_800B3660 {
     unsigned char mUnknown45[3];
 };
 
-/* Two words handed to fn_800B1A30. */
+/* The two words of the step context that fn_800B2564 fills and
+   fn_800B1A30 reads. */
 struct Args_800B1A30 {
     int mUnknown0;
     int mUnknown4;
@@ -3953,6 +3954,10 @@ unsigned int fn_801765A8(int type);
 void fn_8017F430(int value);
 void fn_8017F3C8(int a, int b, int c);
 void fn_80167720(int mode);
+int fn_80168D98(int team, int a, int b);
+int fn_800B1AAC(void *p);
+void *fn_800B9A44(Class_80297C60 *p);
+void fn_800B9A6C(Class_80297C60 *p, void *q);
 void fn_800B30C8(void);
 void fn_800B44D4(BitStream_t *pStream);
 void fn_800B4628(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2, BitStream_t *pStream3, float t);
@@ -4105,8 +4110,9 @@ extern "C" int fn_800B19E8(void *p, void *q)
     return result;
 }
 
-extern "C" int fn_800B1A30(Args_800B1A30 *pArgs)
+extern "C" int fn_800B1A30(void *p)
 {
+    Args_800B1A30 *pArgs = (Args_800B1A30 *)p;
     int result = fn_800B1C28(&lbl_803EAB20->mUnknown4, 1, pArgs->mUnknown4);
 
     if ((fn_801765A8(fn_800B232C(0)) & 4) || result != 0) {
@@ -4117,7 +4123,7 @@ extern "C" int fn_800B1A30(Args_800B1A30 *pArgs)
     return 1;
 }
 
-extern "C" void fn_800B1BF8(void)
+extern "C" void fn_800B1BF8(void *p)
 {
     lbl_803EAB20->mpUnknown0 = 0;
     fn_8017F2EC(0);
@@ -4248,6 +4254,22 @@ extern "C" void fn_800B24C8(void)
         }
     }
     lbl_803EAB20->mUnknown4.mUnknown5B = 0;
+}
+
+extern "C" void fn_800B2564(Object_8017886C *pFirst, Object_8017886C *pSecond)
+{
+    Step_800C4460 *pStep = (Step_800C4460 *)fn_800B9A44(lbl_803EAB84);
+
+    pStep->mUnknownC = 60.0f;
+    fn_800B9A6C(lbl_803EAB84, pStep);
+    pStep = (Step_800C4460 *)fn_800B9A44(lbl_803EAB84);
+    pStep->mContext.mpFirst = pFirst;
+    pStep->mContext.mpSecond = pSecond;
+    pStep->mpCallback0 = fn_800B1A30;
+    pStep->mpCallback4 = fn_800B1AAC;
+    pStep->mpCallback8 = fn_800B1BF8;
+    fn_800B9A6C(lbl_803EAB84, pStep);
+    lbl_803EAB20->mpUnknown0 = pStep;
 }
 
 extern "C" int fn_800B2600(void)
@@ -4528,6 +4550,42 @@ extern "C" void fn_800B41BC(int team)
     if (team == own) {
         lbl_803EAB34->mUnknown44 = 0;
     }
+}
+
+extern "C" void fn_800B4250(int enable, int own)
+{
+    if (own != 0) {
+        if (enable != 0) {
+            lbl_803EAB34->mUnknown28 = fn_80168D98(fn_80178308(), lbl_803EAB34->mUnknown20, 1);
+        } else {
+            lbl_803EAB34->mUnknown28 = -1;
+        }
+    } else if (enable != 0) {
+        if (lbl_803EAB34->mUnknown44 == 0) {
+            fn_800B3420();
+            lbl_803EAB34->mUnknown44 = 1;
+        }
+        lbl_803EAB34->mUnknown2C = fn_80168D98(fn_80178320(), lbl_803EAB34->mUnknown24, 1);
+    } else {
+        lbl_803EAB34->mUnknown2C = -1;
+    }
+}
+
+extern "C" void fn_800B4300(int mode)
+{
+    switch (mode) {
+    case 0:
+        lbl_803EAB34->mUnknown30 = 120;
+        break;
+    case 1:
+        lbl_803EAB34->mUnknown30 = 600;
+        break;
+    case 2:
+        lbl_803EAB34->mUnknown30 = 240;
+        break;
+    }
+    lbl_803EAB34->mUnknown30 += (4 - fn_8007F828(0)) * 60;
+    lbl_803EAB34->mUnknown30 += fn_802372EC(0, 4) * 60;
 }
 
 extern "C" int fn_800B43A4(void)
@@ -6768,6 +6826,26 @@ extern "C" void fn_800B0004(void)
 
 extern "C" void fn_800B0A28(void)
 {
+}
+
+extern "C" void fn_800B0BC0(void)
+{
+    int team = fn_80178308();
+    unsigned char count = 0;
+
+    if (lbl_803EAB14->mUnknown2E5 != 0) {
+        unsigned char i = 0;
+        unsigned int n = fn_80178D18(team);
+
+        for (; i < n; i++) {
+            if (fn_800F06F4(0, fn_80039F5C(team, i)->mpState, 61, 0xFFFF) != 0xFFFF) {
+                count++;
+            }
+        }
+    }
+    if (count == 0) {
+        lbl_803EAB14->mUnknown2E5 = count;
+    }
 }
 
 extern "C" int fn_800B0C70(void *p, void *q)
