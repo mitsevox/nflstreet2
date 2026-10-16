@@ -204,7 +204,7 @@ void fn_8018D358(int index, int team, int rumt)
     unsigned short total, count;
     int saved = fn_8022F4BC();
     fn_8022F478(fn_8022F358(index));
-    int source = fn_8022F3D4(fn_8022F358(index));
+    fn_8022F3D4(fn_8022F358(index));
     arg.Set(6, 0x5244524344494754LL, 2, rumt);
     fn_801F9D70(0x54415453, 0x52445243, &arg, &total);
     count = total;
@@ -212,7 +212,7 @@ void fn_8018D358(int index, int team, int rumt)
     int player, table;
     cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;
-    fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 from 'RDRC' where 'DIGT' = \x82 order by 'DIGP'\n", source, &cursor, &player, rumt);
+    fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 from 'RDRC' where 'DIGT' = \x82 order by 'DIGP'\n", &cursor, &player, rumt);
     for (unsigned int i = 0; i < count; i++) {
         fn_801FCE10(0, "fetch from \x8a\n", &cursor);
         fn_801F9980(0x54415453, &table);
@@ -233,8 +233,8 @@ void fn_8018D358(int index, int team, int rumt)
         int value73 = fn_80082280(&object);
         int value74 = fn_800822D4(&object);
         int value76 = fn_80080E48(&object);
-        int color18 = fn_800810E0(&object);
-        int color19 = fn_80081134(&object);
+        unsigned int color18 = fn_800810E0(&object);
+        unsigned int color19 = fn_80081134(&object);
         fn_80082138(&object, &block);
         fn_80046804(&block, &values);
         fn_8015F638(value6E, value6C, 0, resultIds);
