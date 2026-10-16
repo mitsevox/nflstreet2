@@ -17,7 +17,7 @@ void fn_8018CA14(int);
 int fn_801F9980(int, int *);
 int fn_801F967C(int, int);
 void fn_801F9718(int, int, ColumnValue_802D6424 *, int *, int);
-void fn_801F9908(int, char *, Object_80023BBC *, int *, int);
+int fn_801F9908(int handle, Table_8007E020 *pTables, Object_80023BBC *pFilter, QueryResult *pResult, int flags);
 int fn_801F9D70(int, int, Object_80023BBC *, unsigned short *);
 int fn_8022C628(int, int, int *, unsigned short *);
 int fn_80229AA4(int, int, int *, unsigned short *);
@@ -65,10 +65,10 @@ void fn_8018CA80(int source)
 
     tables[0].Set(0x59505243);
     tables[1].Set(-1);
-    fn_801F9908(source, (char *)tables, 0, (int *)&result, 0);
+    fn_801F9908(source, tables, 0, &result, 0);
     tables[0].Set(0x4D545243);
     tables[1].Set(-1);
-    fn_801F9908(source, (char *)tables, 0, (int *)&result, 0);
+    fn_801F9908(source, tables, 0, &result, 0);
 }
 void fn_8018CB28(int source, int team, int index)
 {
@@ -335,19 +335,19 @@ void fn_8018D918()
     fn_8018CA80(source);
     tables[0].Set(0x4E494843);
     tables[1].Set(-1);
-    fn_801F9908(source, (char *)tables, 0, (int *)&result, 0);
+    fn_801F9908(source, tables, 0, &result, 0);
     fn_8022EF8C(0x54415453, 0x4E494843);
     fn_801FCE10(&result, "use 'TATS' insert into \x8c.'NIHC' * select * from 'NIHC'\n", source);
     fn_8022EFBC(0x54415453, 0x4E494843);
     tables[0].Set(0x47504843);
     tables[1].Set(-1);
-    fn_801F9908(source, (char *)tables, 0, (int *)&result, 0);
+    fn_801F9908(source, tables, 0, &result, 0);
     fn_8022EF8C(0x54415453, 0x47504843);
     fn_801FCE10(&result, "use 'TATS' insert into \x8c.'GPHC' * select * from 'GPHC'\n", source);
     fn_8022EFBC(0x54415453, 0x47504843);
     tables[0].Set(0x47505443);
     tables[1].Set(-1);
-    fn_801F9908(source, (char *)tables, 0, (int *)&result, 0);
+    fn_801F9908(source, tables, 0, &result, 0);
     for (unsigned int i = 0; i <= 31; i++)
         fn_801FCE10(0, "use \x8c insert into \x8c.'GPTC' set 'MGTC' = \x82 and '1STC' = 0 and '2STC' = 0\n", source, source, i);
     fn_801FCE10(&result, "use \x8c update 'REGL' set 'KCLG' = 1 where 'KLCG' = 1\n", source);
@@ -360,7 +360,7 @@ void fn_8018DC18(int unused, int player)
     arg.Set(6, 0x59414C5044494750LL, 3, player);
     tables[0].Set(0x59414C50);
     tables[1].Set(-1);
-    fn_801F9908(0x54415453, (char *)tables, &arg, (int *)&result, 0);
+    fn_801F9908(0x54415453, tables, &arg, &result, 0);
 }
 int fn_8018DCBC(int id)
 {
