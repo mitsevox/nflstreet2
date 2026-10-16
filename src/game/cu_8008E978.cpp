@@ -9,6 +9,7 @@
 #include "game/Object_8017886C.h"
 #include "game/fn_8022781C.h"
 #include "game/Block_800C9D6C.h"
+#include "game/Block_801BE60C.h"
 #include <string.h>
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
@@ -1555,6 +1556,25 @@ extern "C" int fn_800A3DC4(int value)
     return 0;
 }
 
+extern "C" void fn_800A4294(Object_80039F5C *p, Block_801BE60C *pBlock)
+{
+    pBlock->mUnknown0Word = -1;
+    pBlock->mUnknown4 = 1.0f;
+    pBlock->mUnknown8 = 1.0f;
+    pBlock->mUnknownCWord = 0;
+    pBlock->mUnknown10Word = 0;
+}
+
+extern "C" void fn_800A42BC(Object_80039F5C *p, Block_801BE60C *pBlock)
+{
+    float scale = 0.4f;
+
+    pBlock->mUnknown8 = 1.0f;
+    if (p->mRatings[0] > 127) {
+        pBlock->mUnknown8 = (float)(short)(p->mRatings[0] - 127) / 128.0f * scale + 1.0f;
+    }
+}
+
 extern "C" int fn_800A432C(Key_80110630 *pA, Key_80110630 *pB)
 {
     int result = pA->mUnknown0 == pB->mUnknown0;
@@ -1740,6 +1760,13 @@ struct Object_800C6640 {
     int mUnknown28;
 };
 
+/* 16-byte entry at +0x18 of State_8011F4EC. */
+struct Entry_8011F4EC {
+    unsigned char mUnknown0[8];
+    float mUnknown8;
+    float mUnknownC;
+};
+
 /* Object whose address fn_8011F4EC returns. Only the accessed bytes are
    declared; the size is not established. */
 struct State_8011F4EC {
@@ -1750,13 +1777,16 @@ struct State_8011F4EC {
     unsigned char mUnknown11;
     unsigned char mUnknown12[2];
     unsigned short mUnknown14;
-    unsigned char mUnknown16[386];
+    unsigned char mUnknown16[2];
+    Entry_8011F4EC mUnknown18[24];
     unsigned char mUnknown198;
     unsigned char mUnknown199[3];
     unsigned char mUnknown19C[3];
     unsigned char mUnknown19F[3];
     unsigned char mUnknown1A2;
-    unsigned char mUnknown1A3[5];
+    unsigned char mUnknown1A3;
+    unsigned char mUnknown1A4;
+    unsigned char mUnknown1A5[3];
     unsigned char mUnknown1A8;
     unsigned char mUnknown1A9;
     unsigned char mUnknown1AA[2];
@@ -7050,6 +7080,57 @@ extern "C" int fn_8009E9A4(void)
 extern "C" int fn_8009E9C8(void)
 {
     return fn_8011F4EC()->mUnknown1A8;
+}
+
+extern "C" {
+void fn_80227690(void *pOut, void *pA, void *pB);
+int fn_801CFE40(float y, float x);
+int fn_800C8BAC(Object_80039F5C *, int);
+float fn_80178A08(void);
+}
+
+extern "C" int fn_8009EF6C(Object_80039F5C *p)
+{
+    State_8011F4EC *pState = fn_8011F4EC();
+    unsigned char id = p->mIdBytes[1];
+    unsigned char i;
+
+    for (i = 0; i < pState->mUnknown1A3; i++) {
+        if (id == pState->mUnknown1A5[i]) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+extern "C" int fn_8009EFDC(int index)
+{
+    Entry_8011F4EC *pEntry = &fn_8011F4EC()->mUnknown18[index];
+
+    if (pEntry->mUnknown8 != -fn_80178A08()) {
+        return pEntry->mUnknownC == fn_80178A08();
+    }
+    return pEntry->mUnknownC == fn_80178A08() ? 0 : -1;
+}
+
+extern "C" int fn_8009F058(Object_80039F5C *p, Object_80039F5C *pOther, int angle)
+{
+    Point_8017886C delta;
+
+    fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+    return fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing) < angle;
+}
+
+extern "C" int fn_8009F0B8(Object_80039F5C *p, int angle)
+{
+    Vector_80039F5C ball;
+    Point_8017886C delta;
+    int heading;
+
+    fn_80137D58(fn_801374BC(), &ball);
+    fn_80227690(&delta, &ball, &p->mMotion.mPos);
+    heading = fn_801CFE40(delta.mY, delta.mX);
+    return fn_801CFFD0(heading, p->mMotion.mFacing + fn_800C8BAC(p, 0)) < angle;
 }
 
 extern "C" int fn_8009F13C(Object_80039F5C *p)
