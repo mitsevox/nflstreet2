@@ -33,11 +33,8 @@ void fn_801A12E8(void);
 void fn_80167094(void *p, unsigned char *input, void *, int a, int b, signed char c, int group, int index)
 {
     fn_801651E0(p, a, c, b, lbl_8031D38C[index]);
-    unsigned char *out = lbl_8032858C[group][index].mUnknown2078;
-    input += 0x8F;
     for (int i = 0; i < 11; ++i) {
-        *out++ = *input;
-        input += 0x28;
+        lbl_8032858C[group][index].mUnknown2078[i] = input[i * 0x28 + 0x8F];
     }
 }
 
