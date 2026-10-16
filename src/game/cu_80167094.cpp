@@ -113,7 +113,7 @@ void fn_801673A0(int code, float x, float y, float, float)
     case 15:
         if (flag) { fn_801A133C(x, y, &lbl_8032858C[0][7], lbl_80328570[0][7]); break; }
     case15: fn_801A133C(x, y, &lbl_8032858C[0][3], lbl_80328570[0][3]); break;
-    default: fn_801A133C(x, y, &lbl_8032858C[0][code + 2], lbl_80328570[0][code + 2]); break;
+    default: fn_801A133C(x, y, &lbl_8032858C[2][code - 16], lbl_80328570[2][code - 16]); break;
     }
 }
 
