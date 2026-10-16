@@ -42,6 +42,9 @@
 #include "game/cu_80041210.h"
 #include "game/cu_8003108C.h"
 #include "game/cu_800314E0.h"
+#include "game/cu_8018EC68.h"
+#include "game/fn_80061AD4.h"
+#include "game/fn_8017F584.h"
 #include "game/cu_80064864.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_80136B1C.h"
@@ -5556,7 +5559,7 @@ void fn_80072F04(void);
 int fn_8006F394(int index, int unknown);
 }
 
-extern "C" void fn_800AB074(void)
+extern "C" void fn_800AB074(Class_80297B90 *p, float dt)
 {
     if (fn_80196278() == 0) {
         fn_80195EFC(5, 20, 0, 0);
@@ -5575,7 +5578,7 @@ extern "C" void fn_800AB0DC(Class_80297B90 *p)
     p->vfn_08();
 }
 
-extern "C" int fn_800AB138(Class_80297B90 *p)
+extern "C" int fn_800AB138(Class_80297B90 *p, float dt)
 {
     int result = 1;
 
@@ -5656,6 +5659,205 @@ extern "C" int fn_800AB2FC(void *p, float dt)
         result = 1;
     }
     return result;
+}
+
+extern "C" {
+void fn_8006CAEC(void);
+void fn_8004730C(unsigned char enabled);
+void fn_80072C90(unsigned int delay, int wait);
+void fn_800282DC(void);
+VetsRow_8018EC68 *fn_8005FC7C(void);
+void fn_80177E6C(int a, int flip);
+int fn_80157080(void);
+void fn_8005FC84(void);
+int fn_80061D14(void);
+void fn_801CE720(void);
+void fn_801CE774(void);
+int fn_801784C4(void);
+void fn_800ABA90(void);
+}
+
+extern "C" void fn_800AB3B0(Class_80297B90 *p, float dt)
+{
+    lbl_803EAA88->mUnknown10++;
+    switch (lbl_803EAA88->mUnknown4) {
+    case 0:
+        fn_8017DC08();
+        switch (fn_800AAE20(p, dt)) {
+        case 0:
+            lbl_803EAA88->mUnknown4 = 3;
+            break;
+        case 1:
+            lbl_803EAA88->mUnknown4 = 1;
+            break;
+        case 2:
+            lbl_803EAA88->mUnknown4 = 2;
+            break;
+        }
+        break;
+    case 1:
+        if (fn_800AAEE0(p, dt) == 1) {
+            break;
+        }
+        lbl_803EAA88->mUnknown4 = 2;
+    case 2:
+        if (fn_800AAF38(p, dt) == 2) {
+            break;
+        }
+        lbl_803EAA88->mUnknown4 = 3;
+    case 3:
+        if (fn_800AAFEC(p, dt) != 0) {
+            break;
+        }
+        lbl_803EAA88->mUnknown4 = 4;
+    case 4:
+        fn_8006CAEC();
+        if (fn_8002892C() != 0) {
+            fn_80047874(0);
+            fn_8004730C(0);
+            fn_80072C90(250, 1);
+            fn_800282DC();
+            break;
+        }
+        p->vfn_07();
+        lbl_803EAA88->mUnknown4 = 5;
+    case 5:
+        fn_800AB0DC(p);
+        if (p->vfn_10() == 0) {
+            fn_800ABA90();
+        }
+        lbl_803EAA88->mUnknown4 = 6;
+        break;
+    case 6:
+        if (fn_800AB138(p, dt) != 0) {
+            break;
+        }
+        if (fn_8017F60C() != 0) {
+            if (p->vfn_10() != 0) {
+                lbl_803EAA88->mUnknown4 = 13;
+            } else {
+                lbl_803EAA88->mUnknown4 = 11;
+            }
+            break;
+        }
+        lbl_803EAA88->mUnknown4 = 7;
+    case 7:
+        fn_800AB190(p);
+        lbl_803EAA88->mUnknown4 = 8;
+    case 8:
+        if (fn_800AB1B8(p, dt) != 0) {
+            break;
+        }
+        if (p->vfn_10() != 0) {
+            lbl_803EAA88->mUnknown4 = 13;
+            break;
+        }
+        lbl_803EAA88->mUnknown4 = 11;
+    case 11:
+        fn_800AB29C(p);
+        lbl_803EAA88->mUnknown4 = 12;
+    case 12:
+        if (fn_800AB2FC(p, dt) != 0) {
+            break;
+        }
+        if (fn_8017F584() != 8) {
+            lbl_803EAA88->mUnknown4 = 13;
+        } else {
+            lbl_803EAA88->mUnknown4 = 16;
+        }
+    case 13:
+        if (lbl_803EAA88->mUnknown4 == 13) {
+            lbl_803EAA88->mUnknown16 = -1;
+            if (fn_80178AE0() == 1) {
+                VetsRow_8018EC68 *pRow = fn_8005FC7C();
+
+                if (pRow == 0) {
+                    pRow = fn_80061AD4();
+                }
+                if (pRow != 0) {
+                    lbl_803EAA88->mUnknown16 = pRow->mCsos;
+                }
+            }
+            if (!(lbl_803EAA88->mUnknown16 & 0x80)) {
+                fn_800A9F64();
+                fn_80094608(1);
+                if (fn_801784C4() != 0) {
+                    fn_80177E6C(0, 0);
+                }
+                if (fn_800AA80C(p) != 0) {
+                    switch (fn_800AAE20(p, dt)) {
+                    case 0:
+                        lbl_803EAA88->mUnknown4 = 16;
+                        break;
+                    case 1:
+                        lbl_803EAA88->mUnknown4 = 14;
+                        lbl_803EAA88->mUnknown17[0] = 1;
+                        break;
+                    case 2:
+                        lbl_803EAA88->mUnknown4 = 15;
+                        lbl_803EAA88->mUnknown17[0] = 1;
+                        break;
+                    }
+                } else {
+                    lbl_803EAA88->mUnknown16 = -1;
+                }
+            }
+            if (lbl_803EAA88->mUnknown16 & 0x80) {
+                lbl_803EAA88->mUnknown4 = 16;
+            }
+            break;
+        }
+    case 14:
+        if (lbl_803EAA88->mUnknown4 == 14) {
+            if (fn_800AAEE0(p, dt) == 1) {
+                break;
+            }
+            lbl_803EAA88->mUnknown4 = 15;
+        }
+    case 15:
+        if (lbl_803EAA88->mUnknown4 == 15) {
+            if (fn_800AAF38(p, dt) == 2) {
+                break;
+            }
+            lbl_803EAA88->mUnknown4 = 16;
+            break;
+        }
+    case 16:
+        fn_800A9F64();
+        lbl_803EAA88->mUnknown16 = -1;
+        fn_800AA010(0);
+        fn_800AA124();
+        fn_8006CAEC();
+        if (fn_800C1E40() == 0) {
+            if (fn_8017F584() == 11 && fn_80157080() != 0) {
+                break;
+            }
+            fn_80072C90(250, 0);
+            fn_8005FC84();
+            fn_80061D14();
+            fn_80047874(0);
+            fn_8004730C(0);
+            if (fn_801486A0() != 15 && lbl_803EAA88->mUnknown17[0] == 0) {
+                fn_8004A230(0);
+            }
+            fn_800282DC();
+            break;
+        }
+        fn_8004A230(1);
+        fn_80195EFC(6, 60, 0, 0);
+        lbl_803EAA88->mUnknown4 = 17;
+    case 17:
+        fn_800AB074(p, dt);
+        break;
+    case 18:
+        if (fn_80196278() == 0) {
+            fn_801CE720();
+            fn_801CE774();
+            fn_80072C90(250, 1);
+            fn_800282DC();
+        }
+        break;
+    }
 }
 
 extern "C" void fn_800AB944(void *p)
@@ -5775,7 +5977,7 @@ extern "C" void fn_800ABAF0(void)
     fn_80092830(lbl_803EAA88->mUnknown8);
 }
 
-extern "C" int fn_800ABC64(void)
+extern "C" int fn_800ABC64(Class_80297B90 *p)
 {
     int value = lbl_803EAA88->mUnknown4;
 

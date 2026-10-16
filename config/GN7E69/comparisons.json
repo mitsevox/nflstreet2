@@ -24430,6 +24430,11 @@
           "end": "0x800AB3B0"
         },
         {
+          "symbol": "fn_800AB3B0",
+          "start": "0x800AB3B0",
+          "end": "0x800AB944"
+        },
+        {
           "symbol": "fn_800AB944",
           "start": "0x800AB944",
           "end": "0x800AB948"
