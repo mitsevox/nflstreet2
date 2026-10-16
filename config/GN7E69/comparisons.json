@@ -32580,13 +32580,13 @@
     {
       "source": "src/game/cu_8015005C.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #815; two complete helper bodies inside the retained provisional cu_801485B4 survey group: 0x8015005C moves a five-entry score table's entry up while its score (+10 plus twice +8) exceeds the entry before it, and 0x8015013C increments the +8 or +10 halfword of the entry whose word +0 matches an id, then calls 0x8015005C. No literal or data word is referenced, so no other range is registered. Original file boundaries and nominal identity unresolved; 0x8014FFC4-0x8015005C and 0x801501CC onward excluded; original bytes stay linked.",
+      "evidence": "Issue #815; six complete bodies inside the retained provisional cu_801485B4 survey group that use the same score table: the helpers 0x8015005C (move an entry up while its score, +10 plus twice +8, exceeds the entry before it) and 0x8015013C (increment the +8 or +10 halfword of the entry whose word +0 matches an id, then call 0x8015005C), and slots 2, 3, 11 and 19 (0x801501CC, 0x801501F0, 0x8015034C, 0x8015037C) of the table 0x802A1E38. The helper 0x801502B4-0x8015034C is not registered because its body does not yet match. No literal is loaded; the global lbl_8031BDD4 is referenced as an extern, so no other range is registered. Original file boundaries and nominal identity unresolved; 0x8014FFC4-0x8015005C and 0x801503BC onward excluded; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8015005C",
-          "end": "0x801501CC"
+          "end": "0x801503BC"
         }
       ],
       "functions": [
@@ -32599,6 +32599,26 @@
           "symbol": "fn_8015013C",
           "start": "0x8015013C",
           "end": "0x801501CC"
+        },
+        {
+          "symbol": "fn_801501CC",
+          "start": "0x801501CC",
+          "end": "0x801501F0"
+        },
+        {
+          "symbol": "fn_801501F0",
+          "start": "0x801501F0",
+          "end": "0x801502B4"
+        },
+        {
+          "symbol": "fn_8015034C",
+          "start": "0x8015034C",
+          "end": "0x8015037C"
+        },
+        {
+          "symbol": "fn_8015037C",
+          "start": "0x8015037C",
+          "end": "0x801503BC"
         }
       ]
     },
