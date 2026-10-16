@@ -5236,6 +5236,62 @@ extern "C" void fn_80119478(void)
     }
 }
 
+/* View of the block at player +1072 used by fn_8011A7B4. */
+struct Block_8011A7B4 {
+    float mUnknown0;
+    char mUnknown4[12];
+    int mUnknown16;
+    char mUnknown20[8];
+    float mUnknown28;
+    char mUnknown32[23];
+    unsigned char mUnknown55;
+};
+
+extern "C" int lbl_802DAF8C[2][3][5];
+
+extern "C" int fn_8011A7B4(Object_80039F5C *p, Object_80039F5C *pOther)
+{
+    Block_8011A7B4 *pBlock = (Block_8011A7B4 *)&p->mUnknown1072;
+    Block_8011A7B4 *pOtherBlock = (Block_8011A7B4 *)&pOther->mUnknown1072;
+    int side;
+    float limit;
+    int dir;
+
+    if (p->mUnknown1052 == 1) {
+        side = 1;
+        limit = 0.06f;
+    } else {
+        side = 0;
+        limit = 0.175f;
+    }
+    if (fn_801CFFD0(pOther->mMotion.mFacing, p->mMotion.mFacing) > 0x671C72) {
+        dir = 0;
+    } else if (((p->mMotion.mFacing - pOther->mMotion.mFacing) & 0xFFFFFF) > 0x800000) {
+        dir = 1;
+    } else {
+        dir = 2;
+    }
+    if (pBlock->mUnknown55) {
+        if (pBlock->mUnknown0 > limit) {
+            return lbl_802DAF8C[side][dir][1];
+        }
+    } else if (pOtherBlock->mUnknown0 > limit) {
+        if (pOtherBlock->mUnknown28 > pBlock->mUnknown28) {
+            return lbl_802DAF8C[side][dir][2];
+        }
+        if (((pOtherBlock->mUnknown16 - pOther->mMotion.mFacing) & 0xFFFFFF) > 0x800000) {
+            return lbl_802DAF8C[side][dir][4];
+        }
+        return lbl_802DAF8C[side][dir][3];
+    } else if (pOtherBlock->mUnknown28 > pBlock->mUnknown28) {
+        if (((pOtherBlock->mUnknown16 - pOther->mMotion.mFacing) & 0xFFFFFF) > 0x800000) {
+            return lbl_802DAF8C[side][dir][4];
+        }
+        return lbl_802DAF8C[side][dir][3];
+    }
+    return lbl_802DAF8C[side][dir][0];
+}
+
 extern "C" float lbl_803EB08C;
 extern "C" float lbl_803EB090;
 extern "C" int fn_800CD2B4(int mode, Object_80039F5C *p);
