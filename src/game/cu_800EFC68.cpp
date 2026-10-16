@@ -3760,8 +3760,20 @@ struct Timer_8010FD94 {
     unsigned char mUnknown8;
 };
 
+/* The bytes at player +336 as fn_801108D4 sets them up. */
+struct State_801108D4 {
+    float mUnknown0;
+    int mUnknown4;
+    short mUnknown8;
+    char mUnknown10[2];
+    unsigned char mUnknown12;
+    unsigned char mUnknown13;
+    unsigned char mUnknown14;
+};
+
 extern "C" {
 void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
+void fn_800D4FBC(Object_80039F5C *p, int flag);
 extern float lbl_803EAF9C;
 extern float lbl_803EAFA0;
 extern float lbl_803EAFA4;
@@ -4028,6 +4040,33 @@ extern "C" int fn_80110824(Object_80039F5C *p, int a, int b, int c)
     return result;
 }
 
+extern "C" int fn_801108D4(Object_80039F5C *p)
+{
+    State_801108D4 *pState = (State_801108D4 *)&p->mUnknown336;
+    unsigned char kind = p->mpState->mUnknown1;
+    Input_800B6D34 input;
+    short value;
+
+    if (kind == 0) {
+        fn_800B6D34(p, &input);
+        pState->mUnknown12 = kind;
+        pState->mUnknown4 = 8;
+        pState->mUnknown0 = 0.0f;
+        pState->mUnknown13 = input.mUnknown72[0] != 0.0f;
+    } else {
+        pState->mUnknown12 = 1;
+        pState->mUnknown4 = -1;
+    }
+    pState->mUnknown14 = 0;
+    pState->mUnknown8 = p->mRatings[2];
+    value = pState->mUnknown8 + 15;
+    p->mRatings[2] = value > 255 ? 255 : value;
+    p->mFlags &= ~4;
+    p->mUnknown512.mUnknown14 = 1;
+    p->mUnknown512.mUnknown8 = p->mUnknown512.mUnknown4;
+    return 0;
+}
+
 extern "C" int fn_80110C10(Object_80039F5C *p)
 {
     unsigned short key = fn_801BE648(p->mpUnknown792);
@@ -4159,13 +4198,39 @@ extern "C" int fn_80111104(Object_80039F5C *p)
     return 1;
 }
 
+extern "C" int fn_801111E8(Object_80039F5C *p)
+{
+    State_80111104 *pState = (State_80111104 *)&p->mUnknown336;
+
+    pState->mUnknown6 = (signed char)(pState->mUnknown6 - 1);
+    if ((short)pState->mUnknown6 < 0) {
+        p->mRatings[2] = pState->mUnknown4;
+        p->mUnknown512.mUnknown0 = 0.72f;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown15 = 0;
+        fn_800D4FBC(p, 0);
+        return 1;
+    }
+    p->mUnknown512.mUnknown15 = pState->mUnknown0Bytes[3];
+    if (!(p->mFlags & 0x4000)) {
+        p->mUnknown512.mUnknown0 = 1.0f;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown14 = 1;
+    } else if (p->mMotion.mUnknown28 / lbl_803ECB08 < 0.65f) {
+        p->mUnknown512.mUnknown0 = 0.65f;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown14 = 1;
+    }
+    return 0;
+}
+
 extern "C" int fn_801112D8(Object_80039F5C *p)
 {
-    p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
-    p->mUnknown512.mUnknown0 = 0.72f;
-    p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
-    p->mUnknown512.mUnknown14 = 1;
     p->mRatings[2] = p->mUnknown340;
+    p->mUnknown512.mUnknown0 = 0.72f;
+    p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+    p->mUnknown512.mUnknown14 = 1;
     p->mUnknown512.mUnknown15 = 0;
     return 1;
 }
@@ -4252,6 +4317,30 @@ extern "C" int fn_80111964(Object_80039F5C *p)
 {
     p->mUnknown512.mUnknown15 = 0;
     return 1;
+}
+
+extern "C" int fn_80111974(Object_80039F5C *p)
+{
+    State_80111794 *pState = (State_80111794 *)&p->mUnknown336;
+    Input_800B6D34 input;
+    int b;
+
+    fn_800B6D34(p, &input);
+    b = 0;
+    if ((input.mUnknown96 & 1) || (input.mUnknown96 & 0x10)) {
+        b = 1;
+    }
+    if ((input.mUnknown92 & 1) && fn_800E815C(p, 0, b)) {
+        return 0;
+    }
+    if (pState->mUnknown4 <= 34) {
+        fn_800B6E68(p, &input);
+    } else {
+        p->mUnknown512.mUnknown0 = 1.0f;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown14 = 1;
+    }
+    return 0;
 }
 
 extern "C" int fn_80111F80(Object_80039F5C *p)
