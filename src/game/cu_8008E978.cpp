@@ -8568,7 +8568,7 @@ extern "C" int fn_800B7368(Object_80039F5C *p, Input_800B6D34 *pInput)
     return 0;
 }
 
-extern "C" int fn_800B7370(void)
+extern "C" int fn_800B7370(Object_80039F5C *p, Input_800B6D34 *pInput)
 {
     return 0;
 }
@@ -8652,6 +8652,122 @@ extern "C" int fn_800B76E8(Object_80039F5C *p)
 
 handled:
     p->mFlags |= 0x4000;
+    return 0;
+}
+
+extern "C" {
+int fn_800B7378(Object_80039F5C *p);
+int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex);
+int fn_8011F1CC(void);
+int fn_800E1350(Object_80039F5C *p);
+
+extern const float lbl_80296FA0[];
+}
+
+extern "C" int fn_800B78DC(Object_80039F5C *p)
+{
+    unsigned char index = 0;
+    Object_80137ABC *pBall;
+    Object_80039F5C *pCarrier;
+    Input_800B6D34 input;
+    int state;
+
+    if (fn_801486A0() == 1 && fn_801520C4(p, &index) != 0) {
+        pBall = fn_80137ABC(index);
+    } else {
+        index = fn_801374D4();
+        pBall = fn_801374BC();
+    }
+    fn_800B6D34(p, &input);
+    if (fn_800B7378(p) != 0) {
+        p->mUnknown512.mUnknown15 = 4;
+    }
+    if (input.mUnknown95 & 8) {
+        p->mFlags |= 0x4000;
+        if (fn_800CA5CC(p, 0, 1) != 0) {
+            p->mUnknown512.mUnknown15 = 1;
+            fn_8016DA98(p);
+        }
+    }
+    if (input.mUnknown92 & 1) {
+        int loose = 0;
+        int dive = 0;
+
+        if ((fn_801783AC(11) != 0 || fn_801783AC(12) != 0) && fn_8013BA58(pBall, 0) == 4
+            && fn_80137AD0(pBall) == 0) {
+            loose = 1;
+        }
+        if ((input.mUnknown96 & 1) && p->mUnknown1032 != 4 && p->mUnknown1032 != 6) {
+            dive = 1;
+        }
+        if (loose || !dive) {
+            if (fn_8013BA58(pBall, 0) == 4 && fn_800B51D0(p) != 0 && fn_801133FC(p, 1, 1) != 0) {
+                goto handled;
+            }
+            if (!dive ? fn_800E815C(p, 0, 0) : fn_800E1350(p)) {
+                goto handled;
+            }
+        } else if (fn_800E1350(p) != 0) {
+            goto handled;
+        }
+    }
+    if (input.mUnknown92 & 4) {
+        int pass = 0;
+
+        state = fn_8013BA58(pBall, 0);
+        switch (state) {
+        case 1:
+            pCarrier = fn_80137AD0(pBall);
+            if (pCarrier->mpState->mId == 15) {
+                pass = fn_8022781C(&pCarrier->mMotion, &p->mMotion) > lbl_80296FA0[0];
+            }
+            break;
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            pass = state >= 3;
+            break;
+        }
+        if (pass) {
+            int mode = 1;
+
+            if ((input.mUnknown96 & 1) ? fn_8009A6EC(p) : (input.mUnknown96 & 0x10)) {
+                mode = 3;
+            }
+            if (fn_801133FC(p, mode, 0) != 0) {
+                goto handled;
+            }
+        } else {
+            if (fn_8011F1CC() != 0) {
+                pCarrier = fn_80137AD0(pBall);
+                if (pCarrier != 0 && (pCarrier->mpState->mId == 18 || pCarrier->mpState->mId == 15)) {
+                    fn_8022781C(&pCarrier->mMotion, &p->mMotion);
+                }
+            }
+            if (fn_800F2C1C(p, 0) != 0) {
+                goto handled;
+            }
+        }
+    }
+    if (fn_800B7248(&input, pBall, p, p) != 0) {
+        return 0;
+    }
+    if ((input.mUnknown93 & 0x20)
+        && (fn_8013BA58(pBall, 0) == 5 || fn_801486A0() == 0 || fn_801486A0() == 1 || fn_801486A0() == 2)
+        && fn_80125510(p, 0) != 0) {
+    handled:
+        p->mFlags |= 0x4000;
+        return 0;
+    }
+    if (input.mUnknown93 & 0x10) {
+        fn_800B6988(p->mUnknown8);
+    } else {
+        if (fn_800B7370(p, &input) != 0) {
+            return 0;
+        }
+        fn_800B6E68(p, &input);
+    }
     return 0;
 }
 
