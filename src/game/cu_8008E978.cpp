@@ -49,6 +49,8 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_80096A58.h"
 #include "game/fn_800AD9B4.h"
+#include "game/Record_8011F4F8.h"
+#include "game/State_800FDA58.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
@@ -4998,7 +5000,10 @@ struct Block_800ABD1C {
    word +0 is declared. */
 struct Block_800AD634 {
     int mUnknown0;
-    unsigned char mUnknown4[12];
+    int mUnknown4;
+    unsigned char mUnknown8;
+    unsigned char mUnknown9[3];
+    float mUnknownC;
 };
 
 extern "C" {
@@ -5734,6 +5739,156 @@ extern "C" int fn_800AD9B4(void)
     return lbl_803EAAD4->mUnknown0;
 }
 
+extern "C" void fn_800AD9C0(float value)
+{
+    Block_800AD634 *p = lbl_803EAAD4;
+
+    if (p != 0 && value > 0.0f) {
+        p->mUnknownC = value;
+        p->mUnknown8 = 1;
+        fn_800655B8();
+        fn_8002C9A8(lbl_803EA368, 4, 0);
+    }
+}
+
+/* Indexed by the current value of an element (0..10), two columns. */
+extern "C" unsigned char lbl_802D82BC[11][2];
+extern "C" unsigned char lbl_802D82D4[11];
+
+extern "C" void fn_800ADB34(Element_80041BF8 *pElements, int value, unsigned int duration, int index)
+{
+    Element_80041BF8 *p;
+
+    if (duration == 0) {
+        duration = 1;
+    }
+    if (duration > 255) {
+        duration = 255;
+    }
+    p = &pElements[index];
+    if (p->mUnknown0 == 0 && (signed char)p->mUnknown4 != value && value <= 10) {
+        p->mUnknown5 = value;
+        p->mUnknown6 = duration;
+        p->mUnknown8 = 0;
+        p->mUnknown0 = 1;
+    }
+}
+
+extern "C" void fn_800ADB90(Object_80039F5C *p, int value, unsigned int duration, int index)
+{
+    if (p != 0) {
+        fn_800ADB34(((Object_8003DEC4 *)p->mpUnknown4)->mUnknown116, value, duration, index);
+    }
+}
+
+extern "C" void fn_800ADBC0(Object_80039F5C *p, int key, unsigned int duration, int index)
+{
+    int value = lbl_802D82D4[key];
+
+    if (p != 0) {
+        fn_800ADB34(((Object_8003DEC4 *)p->mpUnknown4)->mUnknown116, value, duration, index);
+    }
+}
+
+extern "C" int fn_801BD910(void);
+extern "C" unsigned char lbl_803EAAD8[2];
+
+extern "C" void fn_800ADBFC(Object_80039F5C *p, int mirror)
+{
+    int key = fn_801BD910();
+    unsigned int index = 0;
+    int value = 0;
+    unsigned char duration;
+
+    if (p != 0) {
+        index = p->mIdBytes[3];
+    }
+    switch (index) {
+    case 1:
+    case 2:
+    case 3:
+        value = lbl_802D82D4[key];
+        break;
+    }
+    if (p != 0 && value == 9 && p->mpState->mId == 15
+        && fn_8011F4F8(((State_800FDA58 *)&p->mUnknown336)->mUnknown3Byte)->mUnknown1D == 4) {
+        value = 5;
+    }
+    key = fn_801BD910();
+    index = lbl_803EAAD8[key];
+    duration = fn_801BD910();
+    if (mirror != 0) {
+        index = index != 1;
+    }
+    if (p != 0) {
+        Block_80170E64 *pBody = p->mpUnknown4;
+
+        switch (p->mIdBytes[3]) {
+        case 1:
+        case 2:
+        case 3:
+            fn_800ADB34(((Object_8003DEC4 *)pBody)->mUnknown116, value, duration, index);
+            break;
+        }
+    }
+}
+
+extern "C" void fn_800ADD00(Object_80039F5C *p)
+{
+}
+
+extern "C" void fn_800ADD04(Object_80039F5C *p)
+{
+    int key = fn_801BD910();
+    int value = lbl_802D82D4[key];
+    unsigned char duration = fn_801BD910();
+
+    if (p != 0) {
+        Element_80041BF8 *pElements = ((Object_8003DEC4 *)p->mpUnknown4)->mUnknown116;
+
+        fn_800ADB34(pElements, value, duration, 0);
+        fn_800ADB34(pElements, value, duration, 1);
+    }
+}
+
+extern "C" int fn_800ADD7C(Element_80041BF8 *pElements, unsigned int index)
+{
+    Element_80041BF8 *p = &pElements[index];
+    int result = 0;
+
+    if (p->mUnknown6 == 0) {
+        return result;
+    }
+    if ((p->mUnknown8 >> 4) >= p->mUnknown6) {
+        p->mUnknown6 = 0;
+        p->mUnknown4 = p->mUnknown5;
+        p->mUnknown8 = 0;
+        p->mUnknown0 = 0;
+    } else {
+        result = 1;
+    }
+    p->mUnknown8 += 16;
+    return result;
+}
+
+extern "C" int fn_800ADDD8(Element_80041BF8 *pElements, unsigned int index)
+{
+    return lbl_802D82BC[pElements[index].mUnknown4][index];
+}
+
+extern "C" void fn_800ADDFC(Object_8003DEC4 *pObject, Element_80041BF8 *pElement, int a)
+{
+    fn_801C1F94(pElement, 0, sizeof(Element_80041BF8));
+    if (a != 0) {
+        pElement->mUnknown1[0] = pObject->mUnknown0[0];
+        pElement->mUnknown0 = 1;
+        pElement->mUnknown4 = 0;
+        pElement->mUnknown5 = 0;
+        pElement->mUnknown8 = 0;
+        pElement->mUnknown6 = 1;
+    }
+}
+
 /* 20-byte records of the .data table at 0x802D82E0. */
 struct Record_802D82E0 {
     unsigned char mUnknown0;
@@ -5905,6 +6060,11 @@ extern "C" void fn_800AE988(void)
 {
     lbl_803EAAE8 = 0;
     lbl_803EAAE9 = 0;
+}
+
+extern "C" float fn_800AE998(void)
+{
+    return 0.75f;
 }
 
 extern "C" void fn_800AE9A4(void)

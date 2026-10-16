@@ -24485,6 +24485,56 @@
           "end": "0x800AD9C0"
         },
         {
+          "symbol": "fn_800AD9C0",
+          "start": "0x800AD9C0",
+          "end": "0x800ADA1C"
+        },
+        {
+          "symbol": "fn_800ADB34",
+          "start": "0x800ADB34",
+          "end": "0x800ADB90"
+        },
+        {
+          "symbol": "fn_800ADB90",
+          "start": "0x800ADB90",
+          "end": "0x800ADBC0"
+        },
+        {
+          "symbol": "fn_800ADBC0",
+          "start": "0x800ADBC0",
+          "end": "0x800ADBFC"
+        },
+        {
+          "symbol": "fn_800ADBFC",
+          "start": "0x800ADBFC",
+          "end": "0x800ADD00"
+        },
+        {
+          "symbol": "fn_800ADD00",
+          "start": "0x800ADD00",
+          "end": "0x800ADD04"
+        },
+        {
+          "symbol": "fn_800ADD04",
+          "start": "0x800ADD04",
+          "end": "0x800ADD7C"
+        },
+        {
+          "symbol": "fn_800ADD7C",
+          "start": "0x800ADD7C",
+          "end": "0x800ADDD8"
+        },
+        {
+          "symbol": "fn_800ADDD8",
+          "start": "0x800ADDD8",
+          "end": "0x800ADDFC"
+        },
+        {
+          "symbol": "fn_800ADDFC",
+          "start": "0x800ADDFC",
+          "end": "0x800ADE6C"
+        },
+        {
           "symbol": "fn_800AE10C",
           "start": "0x800AE10C",
           "end": "0x800AE138"
@@ -24543,6 +24593,11 @@
           "symbol": "fn_800AE988",
           "start": "0x800AE988",
           "end": "0x800AE998"
+        },
+        {
+          "symbol": "fn_800AE998",
+          "start": "0x800AE998",
+          "end": "0x800AE9A4"
         },
         {
           "symbol": "fn_800AE9A4",
