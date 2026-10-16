@@ -46,38 +46,43 @@ void fn_80167128(void *p, void *, int a, int b, int, int index)
 void fn_80167160(void *p, Object_80167160 *object, int, int, int, int group, int index, int first, unsigned char count, void *)
 {
     State_80167094 *state = &lbl_8032858C[group][index];
-    int used = first == 0 ? 0 : state->mUnknown940[first];
     int remaining = 0x128;
-    Record_80167094 *records = lbl_8031D38C[index];
-    fn_80165890(p, records, first, count);
-    int flag = object->mUnknown14 > 36 || object->mUnknown14 <= 30;
+    int used;
+    if (first == 0)
+        used = 0;
+    else
+        used = state->mUnknown940[first];
+    fn_80165890(p, lbl_8031D38C[index], first, count);
+    int flag = 1;
+    if (object->mUnknown14 <= 36)
+        flag = object->mUnknown14 <= 30;
     state->mUnknown2083 = flag;
     if (lbl_80328570[group][index]) {
         fn_80165110(object, 1);
     }
     int i;
     for (i = first; i < count; ++i) {
-        Record_80167094 *record = &records[i];
+        Record_80167094 *record = &lbl_8031D38C[index][i];
         state->mUnknown940[i] = used;
         float x = record->mUnknown8;
         float y = record->mUnknownC;
         float dx = lbl_802E992C[record->mUnknown10][0];
         float dy = lbl_802E992C[record->mUnknown10][1];
-        state->mUnknown2084[i][3] = y + dy;
-        state->mUnknown2084[i][2] = x + dx;
         state->mUnknown2084[i][0] = x - dx;
         state->mUnknown2084[i][1] = y - dy;
+        state->mUnknown2084[i][2] = x + dx;
+        state->mUnknown2084[i][3] = y + dy;
         unsigned char value = fn_80168EBC((unsigned char)group)->mUnknown20.mUnknown10;
         fn_80166BE8(object, state, record, group, i, value);
         state->mUnknown2134[i] = record->mUnknown10;
         fn_801C1F94(state->mUnknown19F0[i], 0, 0x30);
         int size = fn_8016631C(record, remaining, state->mUnknown0 + used * 8,
             state->mUnknown970[i], state->mUnknown19F0[i], state->mUnknown1E10[i], flag);
-        remaining -= size;
         used += size;
+        remaining -= size;
     }
     state->mUnknown940[i] = used;
-    fn_80165770(object, state, records);
+    fn_80165770(object, state, lbl_8031D38C[index]);
 }
 
 void fn_801673A0(int code, float x, float y, float, float)
