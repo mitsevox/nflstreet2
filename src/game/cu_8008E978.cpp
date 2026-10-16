@@ -6851,11 +6851,19 @@ extern "C" void fn_800996FC(int value)
     }
 }
 
-extern "C" int fn_8009817C(Object_80039F5C *p, Object_800B26B0 *pMotion, int facing, int a, Object_80137ABC *pBall,
-                           int b, int mode, float range, void *pBlock, int c, int d, int e, int f, int g);
+/* Block at player +336 passed to fn_80099734, fn_800997F4 and fn_8009817C.
+   Only the accessed fields are declared. */
+struct Block_800997F4 {
+    char mUnknown0[8];
+    int mUnknown8;
+    int mUnknown12;
+};
 
-extern "C" int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, float range, void *pBlock, int b,
-                           int c, int d, unsigned char e)
+extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char a, Object_80137ABC *pBall,
+                           int b, int mode, float range, Block_800997F4 *pBlock, int c, int d, int e, int f, int g);
+
+extern "C" int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, float range,
+                           Block_800997F4 *pBlock, int b, int c, int d, unsigned char e)
 {
     int result = 0x1FFFFFFF;
     int flags = 0;
@@ -6864,7 +6872,103 @@ extern "C" int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, in
         if (e != 0) {
             flags = 2;
         }
-        result = fn_8009817C(p, &p->mMotion, p->mMotion.mFacing, 0, pBall, a, mode, range, pBlock, b, c, d, flags, 0);
+        result = fn_8009817C(p, &p->mMotion.mPos, p->mMotion.mFacing, 0, pBall, a, mode, range, pBlock, b, c, d, flags, 0);
+    }
+    return result;
+}
+
+extern "C" void fn_800CEED8(int, int, Command_800CEE74 *, Object_80039F5C *, Vector_80039F5C *, int, Vector_80039F5C *,
+                            int *, unsigned char *);
+extern "C" float fn_80178A2C(void);
+extern unsigned char lbl_803EA944;
+
+extern "C" int fn_800997F4(Object_80039F5C *p, Object_80137ABC *pBall, float range, Block_800997F4 *pBlock, int a,
+                           int b, int c, int *pOutA, int *pOutB)
+{
+    Command_800CEE74 command;
+    unsigned char order[3] = { 1, 2, 3 };
+    Vector_80039F5C end;
+    unsigned char key;
+    int extra = 0;
+    int index;
+    int angle;
+    int value = -1;
+    int result = 0x1FFFFFFF;
+    int last = 0x1FFFFFFF;
+    unsigned char i;
+    unsigned char j;
+
+    if (fn_80099510(p) != 0) {
+        *pOutA = value;
+        if (__builtin_fabsf(p->mMotion.mPos.mY) < fn_80178A2C() - 5.0f) {
+            order[0] = 2;
+            order[1] = 1;
+            order[2] = 3;
+        } else if (p->mIdBytes[2] == fn_80178320()) {
+            order[0] = 3;
+            order[1] = 2;
+            order[2] = 1;
+        }
+        if (pBlock != 0) {
+            last = pBlock->mUnknown8;
+        }
+        for (i = 0; i <= 2; i++) {
+            for (j = 0; j <= 1; j++) {
+                unsigned char flags;
+                int kind;
+
+                p->mUnknown1008.mUnknown0 = order[i];
+                if (j == 1) {
+                    fn_800CEE74(&command, p, 0, 0, 0, 0xE0, 1);
+                } else {
+                    fn_800CEE74(&command, p, 0, 0, 0, 0xE0, 0);
+                }
+                value = fn_800C3BEC(p, &command, &extra, &index);
+                if (value == -1) {
+                    continue;
+                }
+                fn_800CEED8(0xE0, index, &command, p, (Vector_80039F5C *)&p->mUnknown1160.mUnknown16,
+                            p->mUnknown1160.mUnknown12Word, &end, &angle, &key);
+                flags = 1;
+                if (command.mUnknown62 != 0) {
+                    flags = 2;
+                }
+                switch (p->mUnknown1008.mUnknown0) {
+                case 2:
+                    kind = 5;
+                    break;
+                case 3:
+                    kind = 6;
+                    break;
+                case 1:
+                    kind = 4;
+                    break;
+                default:
+                    kind = 4;
+                    break;
+                }
+                result = fn_8009817C(p, &end, angle, key + lbl_803EA944, pBall, kind, kind, range, pBlock, a, b, c, 1,
+                                     flags);
+                if (pBlock != 0) {
+                    if (pBlock->mUnknown8 == last) {
+                        value = pBlock->mUnknown12;
+                    } else {
+                        pBlock->mUnknown12 = value;
+                        last = pBlock->mUnknown8;
+                    }
+                }
+                if (result != 0x1FFFFFFF) {
+                    break;
+                }
+            }
+            if (result != 0x1FFFFFFF) {
+                break;
+            }
+        }
+        if (result != 0x1FFFFFFF) {
+            *pOutB = extra;
+            *pOutA = value;
+        }
     }
     return result;
 }
@@ -6908,12 +7012,6 @@ extern "C" void fn_80099AD0(Object_80039F5C *p, Object_80137ABC *pBall, int a, i
     }
 }
 
-extern "C" int fn_800997F4(Object_80039F5C *p, Object_80137ABC *pBall, float range, void *pBlock, int a, int b, int c,
-                           int *pOutA, int *pOutB);
-extern "C" void fn_800CEED8(int, int, Command_800CEE74 *, Object_80039F5C *, Vector_80039F5C *, int, Vector_80039F5C *,
-                            int *, unsigned char *);
-extern "C" float fn_80178A2C(void);
-extern unsigned char lbl_803EA944;
 
 extern "C" int fn_80099C80(Object_80039F5C *p, Object_80137ABC *pBall, int b, int *pOutA, int *pOutB)
 {
@@ -6921,17 +7019,15 @@ extern "C" int fn_80099C80(Object_80039F5C *p, Object_80137ABC *pBall, int b, in
     unsigned char order[3] = { 1, 2, 3 };
     Vector_80039F5C end;
     unsigned char key;
-    int extra;
+    int extra = 0;
     int index;
     int angle;
-    int value;
+    int value = -1;
     int result = 0x1FFFFFFF;
     unsigned char i;
     unsigned char j;
 
-    *pOutA = -1;
-    value = -1;
-    extra = 0;
+    *pOutA = value;
     if (__builtin_fabsf(p->mMotion.mPos.mY) < fn_80178A2C() - 5.0f) {
         order[0] = 2;
         order[1] = 1;
