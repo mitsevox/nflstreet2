@@ -781,11 +781,11 @@ void fn_8007134C(void)
     lbl_803EA6DC = (lbl_803EA6DC + 1) % 3;
     int id, other;
     if (!fn_80178308()) {
-        if (value <= 2) { other = lbl_803EA6DC + 100; id = lbl_803EA6DC + 85; }
-        else { other = lbl_803EA6DC + 94; id = lbl_803EA6DC + 82; }
+        if (value <= 2) { id = lbl_803EA6DC + 85; other = lbl_803EA6DC + 100; }
+        else { id = lbl_803EA6DC + 82; other = lbl_803EA6DC + 94; }
     } else {
-        if (value <= 2) { other = lbl_803EA6DC + 112; id = lbl_803EA6DC + 91; }
-        else { other = lbl_803EA6DC + 106; id = lbl_803EA6DC + 88; }
+        if (value <= 2) { id = lbl_803EA6DC + 91; other = lbl_803EA6DC + 112; }
+        else { id = lbl_803EA6DC + 88; other = lbl_803EA6DC + 106; }
     }
     fn_8006C548(2, id, 0);
     fn_8006C548(16, other, 0);
