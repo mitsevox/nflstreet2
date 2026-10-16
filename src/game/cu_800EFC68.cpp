@@ -3116,6 +3116,117 @@ extern "C" float fn_80104C9C(Object_80039F5C *p, Object_80039F5C *pOther)
     return time < time + gain ? time + gain : time;
 }
 
+extern "C" void fn_80104B24(Vector_80039F5C *p);
+extern "C" void fn_80105168(int mode, Object_80137ABC *pBall, Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pTarget, int unused, float speed);
+extern "C" void fn_801BE67C(void *pA, void *pB, void *pC, void *p);
+extern "C" int fn_801CFFF0(int a, int b, float factor);
+
+extern "C" void fn_80104D98(Object_80039F5C *p)
+{
+    Point_8017886C goal;
+    Record_8011F518 *pRecord;
+    Object_80039F5C *pOther;
+    unsigned short animation;
+
+    fn_8009BD60(p);
+    goal = fn_80177FE0();
+    pRecord = fn_8011F518();
+    pOther = fn_8009BCE8(&pRecord->mUnknown0);
+    if (pRecord->mUnknown4 == 8) {
+        animation = 34;
+        p->mUnknown1008.mUnknown0 = 2;
+    } else if (pRecord->mUnknown4 == 11 || pRecord->mUnknown4 == 9 || pRecord->mUnknown4 == 10 ||
+               pRecord->mUnknown4 == 2 || pRecord->mUnknown4 == 3 || pRecord->mUnknown4 == 4 ||
+               pRecord->mUnknown4 == 5) {
+        Vector_80039F5C target;
+        Point_8017886C dir;
+
+        animation = pRecord->mUnknown4 != 10 ? 135 : 177;
+        if (animation == 135 && fn_800D0B90(p) != 0) {
+            animation = 191;
+        }
+        pRecord->mUnknown5 = 6;
+        {
+            Object_80137ABC *pBall = fn_801374BC();
+
+            fn_80105168(6, pBall, p, pOther, &target, 0, fn_80104C9C(p, pOther));
+        }
+        if (p->mpState->mId == 91 && p->mMotion.mPos.mY < goal.mY) {
+            fn_80104B24(&target);
+        }
+        fn_80104814(p, pOther, fn_801374BC(), &target);
+        fn_80227690(&dir, &target, &p->mMotion.mPos);
+        p->mUnknown1008.mUnknown1 = dir.mX * 10.0f;
+        p->mUnknown1008.mUnknown2 = dir.mY * 10.0f;
+    } else {
+        Point_8017886C delta;
+        int side;
+        int angle;
+        int facing;
+        float rate;
+
+        switch (pRecord->mUnknown4) {
+        case 2:
+        case 3:
+            animation = 201;
+            break;
+        case 4:
+        case 5:
+            animation = 82;
+            break;
+        case 6:
+        case 7:
+            animation = 204;
+            break;
+        case 0:
+        default:
+            animation = 116;
+            break;
+        }
+        switch (p->mpState->mUnknown3[0]) {
+        case 2:
+            side = 0;
+            break;
+        case 1:
+            side = 1;
+            break;
+        case 0:
+        default:
+            side = fn_80104720(p, pOther);
+            break;
+        }
+        fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+        angle = fn_801CFE40(delta.mY, delta.mX);
+        if (pRecord->mUnknown4 <= 1 || pRecord->mUnknown4 == 12 || pRecord->mUnknown4 == 13 ||
+            pRecord->mUnknown4 == 6 || pRecord->mUnknown4 == 7) {
+            rate = 0.25f;
+        } else {
+            rate = 0.5f;
+        }
+        if (side) {
+            pRecord->mUnknown5 = 6;
+            facing = 0;
+        } else {
+            pRecord->mUnknown5 = 3;
+            facing = 0x800000;
+        }
+        facing = fn_801CFFF0(facing, angle, rate);
+        p->mUnknown512.mUnknown14 = 6;
+        p->mUnknown512.mUnknown8 = facing;
+        p->mUnknown512.mUnknown0 = 1.0f;
+        p->mUnknown512.mUnknown4 = facing;
+        p->mUnknown1008.mUnknown0 = pRecord->mUnknown5;
+    }
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, p, 1.0f);
+    if (pRecord->mUnknown4 == 6 || pRecord->mUnknown4 == 7) {
+        fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
+    }
+    p->mUnknown512.mUnknown14 = 0;
+    p->mUnknown778 = -1;
+    p->mFlags &= ~0x1000;
+    p->mFlags &= ~4;
+}
+
 extern "C" float fn_801050DC(Object_80137ABC *pBall, Vector_80039F5C *pTarget, float speed)
 {
     Vector_80039F5C delta;
