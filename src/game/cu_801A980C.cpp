@@ -119,8 +119,7 @@ void fn_801A9C44(Pose_80041930 *pose, BlendEntry_8019EDDC *entry, Record_8019D8A
     if (count > 64)
         count = 64;
     if (special) {
-        pose->mUnknown8[0] = 0.0f;
-        pose->mUnknown8[2] = 0.0f;
+        pose->mUnknown8[0] = pose->mUnknown8[2] = 0.0f;
         pose->mUnknown8[1] = pFrame->word6 * 0.000244140625f;
         if (pFrame->flags & 0x80) {
             int x = (unsigned short)pFrame->word4 | ((pFrame->flags & 3) << 16);
