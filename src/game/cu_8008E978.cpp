@@ -4183,7 +4183,7 @@ extern "C" void fn_800C9BB0(void)
     }
 }
 
-extern "C" float fn_800C9CF0(int team, unsigned char index)
+extern "C" float fn_800C9CF0(int team, int index)
 {
     float result;
 
@@ -4422,11 +4422,9 @@ extern "C" void fn_800CA4A8(void)
 extern "C" {
 int fn_80054D24(int index);
 unsigned int fn_8017F584(void);
-int fn_8013BA58(Object_80137ABC *pBall, int arg);
 int fn_800A7EA4(int team);
 int fn_800A7F1C(int team);
 unsigned int fn_800C955C(Object_80039F5C *p, int kind);
-float fn_800C9CF0(int team, int index);
 float fn_800AE998(void);
 void fn_800AE7F0(int index, int team, Object_80039F5C *p);
 void fn_80156C78(int a, int b);
@@ -9282,7 +9280,6 @@ extern "C" void fn_800CA8F4(Object_80039F5C *p)
 }
 
 extern "C" {
-float fn_800C9CF0(int team, int index);
 extern float lbl_802DA69C[];
 }
 
