@@ -1707,6 +1707,26 @@
     "AnimExtnRelocateFile__FP16AnimFileFormat_t": {
       "address": "0x80190D8C",
       "evidence": "Existing canonical AnimFileFormat.h declaration and animextn.cpp comparison definition; target callback addresses formed at8008FC0C/FD24, evidenced function80190D8C-80190DCC and related-name row16547. Resolver declaration only; no promotion or new source credit."
+    },
+    "fn_801CBD80__14Class_801CBC50ii": {
+      "address": "0x801CBD80",
+      "evidence": "evidence.tsv external row for 0x801CBD80 (fn_801CBD80__14Class_801CBC50ii) and canonical Class_801CBC50 type row."
+    },
+    "fn_801CBE24__14Class_801CBC50i": {
+      "address": "0x801CBE24",
+      "evidence": "evidence.tsv external row for 0x801CBE24 (fn_801CBE24__14Class_801CBC50i) and canonical Class_801CBC50 type row."
+    },
+    "fn_801CBE9C__14Class_801CBC50i": {
+      "address": "0x801CBE9C",
+      "evidence": "evidence.tsv external row for 0x801CBE9C (fn_801CBE9C__14Class_801CBC50i) and canonical Class_801CBC50 type row."
+    },
+    "fn_801CBEC8__14Class_801CBC50i": {
+      "address": "0x801CBEC8",
+      "evidence": "evidence.tsv external row for 0x801CBEC8 (fn_801CBEC8__14Class_801CBC50i) and canonical Class_801CBC50 type row."
+    },
+    "fn_801CBEF4__14Class_801CBC50ii": {
+      "address": "0x801CBEF4",
+      "evidence": "evidence.tsv external row for 0x801CBEF4 (fn_801CBEF4__14Class_801CBC50ii) and canonical Class_801CBC50 type row."
     }
   },
   "units": [
