@@ -3312,7 +3312,7 @@ extern unsigned char lbl_803EAA50;
 extern unsigned char lbl_803EAA51;
 extern unsigned char lbl_803EAA84;
 extern unsigned char lbl_803EAA85;
-extern int lbl_803EAA94;
+extern unsigned int lbl_803EAA94;
 extern unsigned char lbl_803EAA98;
 extern Object_80039F5C *lbl_8030F404[2][2];
 extern Block_8030F42C lbl_8030F42C;
@@ -3831,7 +3831,7 @@ struct Request_800A8FA0 {
     int mUnknownE8;
 };
 
-extern "C" void fn_80092E54(Request_800A8FA0 *pRequest, char *pBuffer, int size);
+extern "C" int fn_80092E54(Request_800A8FA0 *pRequest, char *pBuffer, int size);
 
 extern "C" void fn_800A8FA0(int a, int b, char *pBuffer)
 {
@@ -5251,6 +5251,58 @@ extern char *lbl_803EC964[2];
 extern Table_800AA80C lbl_802D8194;
 }
 
+extern "C" int fn_801F0F18(int a);
+
+extern "C" void fn_800A9F64(void)
+{
+    fn_801F0F18(0);
+    if (lbl_803EAA88->mUnknown8 != -1) {
+        if (lbl_803EAA88->mUnknown4 > 1) {
+            fn_800940F0(lbl_803EAA88->mUnknown8);
+        }
+        fn_80093410(lbl_803EAA88->mUnknown8);
+        lbl_803EAA88->mUnknown8 = -1;
+    }
+    if (lbl_803EAA88->mUnknownC != -1) {
+        fn_80093410(lbl_803EAA88->mUnknownC);
+        lbl_803EAA88->mUnknownC = -1;
+    }
+    fn_80067DB8(109, 0, 0, 0, 0);
+    fn_80067DB8(109, 0, 1, 0, 0);
+}
+
+extern "C" void fn_800AA020(void)
+{
+    unsigned short i;
+    unsigned int count;
+
+    count = fn_80178D18(0);
+    for (i = 0; i < count; i++) {
+        Object_80039F5C *p = fn_80039F5C(0, i);
+        Block_80170E64 *pBlock;
+
+        p->mMotion.mPos.mX = 55.0f;
+        p->mMotion.mPos.mY = -100.0f;
+        pBlock = p->mpUnknown4;
+        pBlock->mUnknown4.mY = -100.0f;
+        pBlock->mUnknown4.mX = 55.0f;
+        pBlock->mUnknown20 &= ~1;
+    }
+    count = fn_80178D18(1);
+    for (i = 0; i < count; i++) {
+        Object_80039F5C *p = fn_80039F5C(1, i);
+        Block_80170E64 *pBlock;
+
+        p->mMotion.mPos.mX = 55.0f;
+        p->mMotion.mPos.mY = -100.0f;
+        pBlock = p->mpUnknown4;
+        pBlock->mUnknown4.mY = -100.0f;
+        pBlock->mUnknown4.mX = 55.0f;
+        pBlock->mUnknown20 &= ~1;
+    }
+    fn_8004A230(1);
+}
+
 extern "C" void fn_800AA124(void)
 {
     unsigned short count = 7;
@@ -5267,6 +5319,46 @@ extern "C" void fn_800AA124(void)
         p->mUnknown20 |= 1;
     }
     fn_8004A230(1);
+}
+
+extern "C" void fn_800AA1B0(int a, int b)
+{
+    char *pBuffer;
+    int size;
+    Request_800A8FA0 request;
+
+    if (a == 9999) {
+        return;
+    }
+    pBuffer = 0;
+    size = 0;
+    if (b == 1) {
+        if (lbl_803EAA98 != 0) {
+            pBuffer = lbl_803EC960;
+            size = 0x2C000;
+        } else {
+            pBuffer = lbl_803EC964[lbl_803EAA94];
+            size = 0x16000;
+            if (++lbl_803EAA94 > 1) {
+                lbl_803EAA94 = 0;
+            }
+        }
+    }
+    fn_801C1F94(&request, 0, sizeof(request));
+    request.mUnknown0 = a;
+    request.mUnknown8 = 0x24;
+    request.mUnknownE0 = 1;
+    request.mUnknownE4 = 1;
+    request.mUnknownE8 = 0;
+    if (lbl_803EAA88->mUnknown16 >= 0) {
+        request.mUnknown4 = 5;
+    } else {
+        request.mUnknown4 = 2;
+    }
+    lbl_803EAA88->mUnknownC = fn_80092E54(&request, pBuffer, size);
+    if (lbl_803EAA88->mUnknown16 >= 0) {
+        fn_801F0F18(0);
+    }
 }
 
 extern "C" void fn_800AA2B4(void)
