@@ -6,7 +6,6 @@
 
 class Class_800325E8 : public Class_801CC350 {
 public:
-    virtual ~Class_800325E8();
     virtual void vfn_02();
     virtual int vfn_03(int a, int id);
     virtual const char *GetName();

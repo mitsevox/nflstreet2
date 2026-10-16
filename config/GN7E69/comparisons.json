@@ -15825,13 +15825,19 @@
     {
       "source": "src/game/cu_800325E8.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained provisional/provisional ten-function hull; three complete getters, the complete slot-6 selector, the complete slot-2 body and two complete neutral lifecycle-role call stubs, with individual name/function/source-form rows. Three other bodies and all storage remain original and unmeasured. Canonical Class_801CC350 and record contracts unchanged; no root, vtable or compiler lifecycle storage emitted.",
+      "evidence": "evidence.tsv retained provisional/provisional ten-function hull; three complete getters, the complete slot-6 selector, the complete slot-2 body and two complete neutral lifecycle-role call stubs, with individual name/function/source-form rows. Three other bodies and all storage remain original and unmeasured. Canonical Class_801CC350 and record contracts unchanged. The slot-3 body and the implicit destructor are complete; the vtable _vt.14Class_800325E8 is emitted with them and measured against the exact data row 0x8028AD18-0x8028AD70. No root or other storage emitted.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800325E8",
           "end": "0x80032EE8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028AD18",
+          "end": "0x8028AD70"
         }
       ],
       "functions": [
@@ -15864,6 +15870,11 @@
           "symbol": "vfn_03__14Class_800325E8ii",
           "start": "0x80032728",
           "end": "0x80032790"
+        },
+        {
+          "symbol": "_._14Class_800325E8",
+          "start": "0x80032E70",
+          "end": "0x80032E90"
         },
         {
           "symbol": "fn_80032E90",
