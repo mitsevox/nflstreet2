@@ -1704,10 +1704,6 @@
       "address": "0x800C02E0",
       "evidence": "evidence.tsv external row for 0x800C02E0 (fn_800C02E0__14Class_80297CE8); descriptive mangled member name."
     },
-    "AnimExtnRelocateFile__FP16AnimFileFormat_t": {
-      "address": "0x80190D8C",
-      "evidence": "Existing canonical AnimFileFormat.h declaration and animextn.cpp comparison definition; target callback addresses formed at8008FC0C/FD24, evidenced function80190D8C-80190DCC and related-name row16547. Resolver declaration only; no promotion or new source credit."
-    },
     "fn_801CBD80__14Class_801CBC50ii": {
       "address": "0x801CBD80",
       "evidence": "evidence.tsv external row for 0x801CBD80 (fn_801CBD80__14Class_801CBC50ii) and canonical Class_801CBC50 type row."
@@ -11055,6 +11051,31 @@
           "placement": ".data4",
           "start": "0x802EDE10",
           "end": "0x802EDF8C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/animextn.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80190A7C-0x80190ED4 (animextn.cpp), its storage and source-form rows, and the related NASCAR 2005 name rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80190A7C",
+          "end": "0x80190ED4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80364DC0",
+          "end": "0x80364F40"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECB94",
+          "end": "0x803ECB98"
         }
       ]
     }
