@@ -3934,6 +3934,11 @@ void fn_8017F430(int value);
 void fn_8017F3C8(int a, int b, int c);
 void fn_80167720(int mode);
 int fn_80168D98(int team, int a, int b);
+void fn_800B4184(int a);
+void fn_800B43AC(int value);
+void fn_800B43C8(void);
+void fn_800BA72C(void);
+void fn_801689AC(int team);
 int fn_800B1AAC(void *p);
 void fn_800B2670(unsigned char value);
 void *fn_800B9A44(Class_80297C60 *p);
@@ -4401,6 +4406,27 @@ extern "C" void fn_800B3EC0(int a, int b)
 {
     fn_80168640(a, 1);
     fn_80168640(b, 11);
+}
+
+extern "C" void fn_800B4020(void)
+{
+    fn_8009D944(1);
+    fn_8009D944(0);
+    if (fn_80025708() != 0) {
+        fn_8009D944(4);
+    }
+    if (lbl_803EAB34->mUnknown42 == 1) {
+        fn_800B4184(1);
+        fn_80067DB8(0x70, 0, fn_80178308(), 0, 0);
+    }
+    fn_800BA72C();
+    fn_801689AC(0);
+    fn_801689AC(1);
+    lbl_803EAB34->mUnknown1C = 0;
+    fn_800B43AC(0);
+    lbl_803EAB34->mUnknown42 = 0;
+    fn_8017CFB4(0);
+    fn_800B43C8();
 }
 
 extern "C" void fn_800B40D8(unsigned char value)
@@ -8468,6 +8494,7 @@ void fn_800DC578(void);
 int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
 void fn_800F1800(int index);
 Object_80039F5C *fn_80137B40(void);
+int fn_801064A4(Object_80039F5C *p, int a);
 int fn_801486A0(void);
 Object_800670B4 *fn_80168708(int team);
 int fn_8017F60C(void);
@@ -8601,6 +8628,19 @@ extern "C" int fn_800B5448(void *p, void *pBuffer)
 extern "C" int fn_800B54C0(void *p)
 {
     return lbl_803EAB60->mCount * sizeof(Entry_800B5224) + sizeof(Block_800B62D8);
+}
+
+extern "C" int fn_800B56C4(Object_80039F5C *p, Input_800B6D34 *pInput, int a)
+{
+    int result = 1;
+    Object_80039F5C *pControlled = fn_80137B40();
+
+    if (pControlled == p && fn_800F06F4(0, pControlled->mpState, 25, 0xFFFF) == 0xFFFF
+        && (pInput->mUnknown95 & 0x40) && fn_801064A4(pControlled, a) != 0) {
+        pControlled->mFlags |= 0x4000;
+        result = 0;
+    }
+    return result;
 }
 
 extern "C" int fn_800B5F94(Object_80039F5C *p, Vector_80039F5C *pVector)

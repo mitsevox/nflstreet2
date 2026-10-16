@@ -24000,6 +24000,11 @@
           "end": "0x800B3EFC"
         },
         {
+          "symbol": "fn_800B4020",
+          "start": "0x800B4020",
+          "end": "0x800B40D8"
+        },
+        {
           "symbol": "fn_800B40D8",
           "start": "0x800B40D8",
           "end": "0x800B410C"
@@ -25503,6 +25508,11 @@
           "symbol": "fn_800B54C0",
           "start": "0x800B54C0",
           "end": "0x800B54D4"
+        },
+        {
+          "symbol": "fn_800B56C4",
+          "start": "0x800B56C4",
+          "end": "0x800B5764"
         },
         {
           "symbol": "fn_800B5F94",
