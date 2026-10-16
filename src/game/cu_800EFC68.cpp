@@ -6858,11 +6858,11 @@ struct State_80115248 {
 extern "C" {
 Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
 float fn_80227890(void *pA, void *pB);
-Object_80039F5C *fn_8009EC60(int a, int b);
+Object_80039F5C *fn_8009EC60(unsigned int index, Point_8017886C *pOut);
 float fn_80178A2C(void);
 }
 
-extern "C" float fn_80115248(Object_80039F5C *p, Object_80039F5C *pTarget)
+extern "C" float fn_80115248(Object_80039F5C *p, Object_80039F5C *pTarget, unsigned char kind)
 {
     float score = 1.0f;
     float part = 0.0f;
@@ -7005,7 +7005,7 @@ unsigned char fn_8009FD7C(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8009E9A4(void);
 int fn_800DC21C(Object_80039F5C *p);
 Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
-float fn_80115248(Object_80039F5C *p, Object_80039F5C *pOther, unsigned char count);
+float fn_80115248(Object_80039F5C *p, Object_80039F5C *pTarget, unsigned char kind);
 int fn_80116410(Object_80039F5C *p, Object_80039F5C *pOther, State_8011569C *pState, Point_8017886C *pTarget);
 int fn_80116984(Object_80039F5C *p, Object_80039F5C *pOther, float *pOut);
 int fn_80168E00(int team, int index, unsigned char *pOut);
