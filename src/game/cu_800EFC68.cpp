@@ -2995,13 +2995,9 @@ extern "C" void fn_80101AE0(Object_80039F5C *p, float *pOut)
 {
     if (p && pOut) {
         short rating = p->mRatings[6];
+        short value = rating < lbl_803EAE88 ? lbl_803EAE88 : (rating > 255 ? 255 : rating);
 
-        if (rating < lbl_803EAE88) {
-            rating = lbl_803EAE88;
-        } else if (rating > 255) {
-            rating = 255;
-        }
-        *pOut = (float)(rating - lbl_803EAE88) / (float)(255 - lbl_803EAE88);
+        *pOut = (float)(value - lbl_803EAE88) / (float)(255 - lbl_803EAE88);
     }
 }
 
