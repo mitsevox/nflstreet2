@@ -124,14 +124,26 @@ struct Snapshot_801718E8 {
 /* Block at +1160. */
 struct Block_801718E8 {
     float mUnknown0;
-    char mUnknown4[8];
+    float mUnknown4;
+    int mUnknown8;
     union {
         char mUnknown12[32];
-        struct { int mUnknown12Word; float mUnknown16; float mUnknown20; char mUnknown24[20]; };
+        struct {
+            int mUnknown12Word;
+            float mUnknown16;
+            float mUnknown20;
+            float mUnknown24;
+            short mUnknown28;
+            unsigned char mUnknown30;
+            char mUnknown31[1];
+            float mUnknown32;
+            float mUnknown36;
+            int mUnknown40;
+        };
         Snapshot_801718E8 mSnapshot12;
     };
     int mUnknown44;
-    char mUnknown48[4];
+    int mUnknown48;
     unsigned char mUnknown52;
     unsigned char mUnknown53;
     unsigned char mUnknown54;

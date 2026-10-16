@@ -2215,6 +2215,53 @@ extern "C" int fn_800C7720(Object_80039F5C *pOther, Object_80039F5C *p)
     return result;
 }
 
+extern "C" void fn_800C8270(Object_80039F5C *p)
+{
+    p->mUnknown1160.mUnknown4 = p->mUnknown1160.mUnknown0 = 0.0f;
+    p->mUnknown1160.mUnknown8 = 0;
+    p->mUnknown1160.mUnknown44 = 0;
+    p->mUnknown1160.mUnknown48 = 0;
+    p->mUnknown1160.mUnknown52 = 0;
+    p->mUnknown1160.mUnknown53 = 0;
+    p->mUnknown1160.mUnknown54 = 0;
+    p->mUnknown1160.mUnknown55[0] = 0;
+    p->mUnknown1216[0] = 0;
+    p->mUnknown1218 = 0;
+    p->mUnknown1219 = 0;
+    p->mUnknown1224 = 0;
+    p->mUnknown1220 = 0;
+    p->mUnknown1221 = 0;
+    p->mUnknown1222 = 0;
+}
+
+extern "C" float fn_80178A2C(void);
+
+extern "C" void fn_800C82C0(Object_80039F5C *p)
+{
+    p->mUnknown1160.mUnknown12Word = 0x400000;
+    p->mUnknown1160.mUnknown16 = 0.0f;
+    p->mUnknown1160.mUnknown20 = fn_80178A2C();
+    p->mUnknown1160.mUnknown24 = 0.0f;
+    p->mUnknown1160.mUnknown30 = 1;
+    p->mUnknown1160.mUnknown28 = -1;
+    p->mUnknown1160.mUnknown36 = 0.0f;
+    p->mUnknown1160.mUnknown32 = 0.0f;
+    p->mUnknown1160.mUnknown40 = 0;
+}
+
+extern "C" int fn_800C8420(Object_80039F5C *p, float value)
+{
+    Block_801718E8 *pBlock = &p->mUnknown1160;
+
+    if (value > pBlock->mUnknown0) {
+        pBlock->mUnknown0 = value;
+        pBlock->mUnknown8 = 12;
+        pBlock->mUnknown4 = value * (1.0f / 12.0f);
+        return 1;
+    }
+    return 0;
+}
+
 extern "C" int fn_800C8694(Object_80039F5C *p)
 {
     switch (fn_801BE648(p->mpUnknown792)) {
