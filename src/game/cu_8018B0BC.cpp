@@ -195,7 +195,7 @@ int fn_80186F7C(unsigned char index);
 int fn_8018E874(int index, int n);
 int fn_801F9D70(int handle, int table, Object_80023BBC *pFilter, unsigned short *pCount);
 int fn_8007A934(Object_8007A334 *pObject, int key);
-void fn_8018B8B0(Object_8008044C *pObject);
+void fn_8008135C(Object_8008044C *pObject, int index, int value);
 int fn_802294F4(void);
 int fn_80229554(void);
 void fn_800828FC(void);
@@ -213,6 +213,17 @@ int fn_80081134(Object_8008044C *pObject);
 void fn_8015F638(int a, int b, int c, int *pResult);
 int fn_8016128C(int a);
 void fn_8016139C(int a, int *pId, int *pPalette);
+
+void fn_8018B8B0(Object_8008044C *pObject)
+{
+    for (int i = 0; i < 10; i++) {
+        fn_8008135C(pObject, lbl_802EAE30[i], 1);
+    }
+    fn_8007AA90((Object_8007A334 *)pObject, 0x44494F50, -1);
+    fn_8007AA90((Object_8007A334 *)pObject, 0x54474850, 'A');
+    fn_8007AA90((Object_8007A334 *)pObject, 0x54475750, 0);
+    fn_8007AA90((Object_8007A334 *)pObject, 0x54425950, 2);
+}
 
 extern char lbl_802EBE24[];
 
