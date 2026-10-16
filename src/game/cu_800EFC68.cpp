@@ -5290,6 +5290,65 @@ int fn_8011DCA8(unsigned int id)
     return 0;
 }
 
+Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
+
+void fn_8011DCDC(void)
+{
+    if (fn_8011F1CC()) {
+        Object_80039F5C *p = fn_80039FE8(fn_80178308(), 1, 0);
+        int index = 0xFFFF;
+        Object_80039F5C *pOther = fn_80039FE8(fn_80178308(), 2, 0);
+        int otherIndex = 0xFFFF;
+        int hasOther;
+
+        if (p) {
+            index = fn_800F06F4(0, p->mQueue, 31, 0xFFFF);
+        }
+        if (pOther) {
+            otherIndex = fn_800F06F4(0, pOther->mQueue, 31, 0xFFFF);
+        }
+        hasOther = otherIndex != 0xFFFF;
+        if (index != 0xFFFF ? !hasOther : hasOther) {
+            Point_8017886C ball;
+            float x;
+
+            if (otherIndex != 0xFFFF && index == 0xFFFF) {
+                p = pOther;
+            }
+            ball = fn_80177FE0();
+            if (fabsf(p->mMotion.mPos.mX - ball.mX) < 0.75f) {
+                index = fn_800F06F4(0, p->mQueue, 3, 0xFFFF);
+                if (index == 0xFFFF) {
+                    index = fn_800F06F4(0, p->mQueue, 4, 0xFFFF);
+                    if (index == 0xFFFF) {
+                        index = fn_800F06F4(0, p->mQueue, 27, 0xFFFF);
+                    }
+                }
+                if (index == 0xFFFF) {
+                    x = p->mMotion.mPos.mX;
+                } else {
+                    int angle = p->mpState[index].mUnknown2 << 17;
+
+                    if (angle > 0x400000 && angle < 0xC00000) {
+                        x = p->mMotion.mPos.mX - 2.0f;
+                    } else {
+                        x = p->mMotion.mPos.mX + 2.0f;
+                    }
+                }
+            } else {
+                x = p->mMotion.mPos.mX;
+            }
+            if (x < ball.mX) {
+                lbl_803EB028->mUnknown90 = 1;
+            } else {
+                lbl_803EB028->mUnknown90 = 2;
+            }
+        }
+    } else {
+        lbl_803EB028->mUnknown90 = 0;
+    }
+}
+
 void fn_8011DF3C(void)
 {
     void *pHandle = fn_80238174(0, (void **)&lbl_803EB028, sizeof(Block_803EB028), 0, 0x626C636B);
