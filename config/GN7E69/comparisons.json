@@ -8184,6 +8184,66 @@
           "end": "0x80113C20"
         },
         {
+          "symbol": "fn_8011D8B4",
+          "start": "0x8011D8B4",
+          "end": "0x8011D930"
+        },
+        {
+          "symbol": "fn_8011D930",
+          "start": "0x8011D930",
+          "end": "0x8011D9B8"
+        },
+        {
+          "symbol": "fn_8011D9B8",
+          "start": "0x8011D9B8",
+          "end": "0x8011DA40"
+        },
+        {
+          "symbol": "fn_8011DBC8",
+          "start": "0x8011DBC8",
+          "end": "0x8011DBE0"
+        },
+        {
+          "symbol": "fn_8011E3F4",
+          "start": "0x8011E3F4",
+          "end": "0x8011E484"
+        },
+        {
+          "symbol": "fn_8011E7CC",
+          "start": "0x8011E7CC",
+          "end": "0x8011E884"
+        },
+        {
+          "symbol": "fn_8011F0D8",
+          "start": "0x8011F0D8",
+          "end": "0x8011F174"
+        },
+        {
+          "symbol": "fn_8011F37C",
+          "start": "0x8011F37C",
+          "end": "0x8011F3A8"
+        },
+        {
+          "symbol": "fn_8011FA78",
+          "start": "0x8011FA78",
+          "end": "0x8011FAFC"
+        },
+        {
+          "symbol": "fn_8011FAFC",
+          "start": "0x8011FAFC",
+          "end": "0x8011FB80"
+        },
+        {
+          "symbol": "fn_8011FB80",
+          "start": "0x8011FB80",
+          "end": "0x8011FBA8"
+        },
+        {
+          "symbol": "fn_80121BE8",
+          "start": "0x80121BE8",
+          "end": "0x80121CB0"
+        },
+        {
           "symbol": "fn_80125508",
           "start": "0x80125508",
           "end": "0x80125510"
