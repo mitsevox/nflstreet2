@@ -7868,6 +7868,130 @@ extern "C" int fn_800CB580(Object_80039F5C *p, int *pIndex, Point_8017886C targe
     return found;
 }
 
+extern "C" Point_8017886C fn_80177FFC(int team);
+
+extern "C" int fn_800CB708(Object_80039F5C *p, int *pIndex, Point_8017886C target, int angle, int beyond)
+{
+    float offset = 0.0f;
+    int message = 0xFFFF;
+    int mode;
+    int found;
+    int facing;
+    int kind;
+    int direction;
+    int turn;
+    unsigned int i;
+    float distance;
+    Point_8017886C aim;
+    Point_8017886C delta;
+    Point_8017886C goal;
+
+    mode = fn_800AD9B4();
+    found = 0;
+    facing = p->mMotion.mFacing;
+    message = fn_800F06F4(0, p->mpState, 9, 0xFFFF);
+    if (message == 0xFFFF) {
+        message = fn_800F06F4(0, p->mpState, 87, 0xFFFF);
+    }
+    kind = 0;
+    if (message != 0xFFFF && mode == 2) {
+        kind = p->mpState[message].mUnknown1;
+    }
+    aim.mX = target.mX;
+    aim.mY = offset + target.mY;
+    fn_80227690(&delta, &aim, &p->mMotion.mPos);
+    goal = fn_80177FFC(p->mIdBytes[2]);
+    direction = fn_801CFE40(delta.mY, delta.mX);
+    distance = fn_802270A4(&delta);
+    turn = fn_801CFFD0(facing, direction);
+    if (beyond != 2 && turn > 0x18E38E) {
+        return 0;
+    }
+    if (mode == 2) {
+        int allowed = 1;
+
+        if (fn_801CFFD0(facing, angle) < 621378.0f && fn_801CFFD0(direction, facing) < 621378.0f) {
+            switch (p->mUnknown2914) {
+            case 0:
+                if (target.mY > goal.mY - 3.0f) {
+                    allowed = 0;
+                }
+                break;
+            case 1:
+            case 2:
+                if (kind == 85) {
+                    allowed = 0;
+                }
+                break;
+            case 4:
+                if (kind == 86) {
+                    allowed = 0;
+                }
+                break;
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+                allowed = 0;
+                break;
+            case 10:
+            case 11:
+            case 12:
+            case 16:
+            case 17:
+            case 18:
+            case 24:
+                allowed = 0;
+                break;
+            }
+        }
+        if (allowed == 0) {
+            return 0;
+        }
+    }
+    lbl_803EAC48 = 143;
+    lbl_803EAC44 = &lbl_80317AF4;
+    for (i = 0; i < lbl_803EAC44->mCount; i++) {
+        Info_80089904 *pInfo;
+        float length;
+
+        lbl_803EAC4C = 0;
+        pInfo = lbl_803EAC44->mEntries[i].mpInfo;
+        length = fn_802270A4(&pInfo->mUnknown20);
+        if (beyond == 2 || !(fabsf(length - distance) >= 2.0f)) {
+            int infoAngle = fn_801CFFD0(pInfo->mUnknown56, 0);
+            int limit = 0x155555;
+            int turn = fn_801CFFD0(facing, angle);
+
+            if (turn > 0x555554) {
+                limit = 0x2AAAAA;
+            }
+            if (fn_801CFFD0(infoAngle, turn) < limit && fn_800CAE28(p, pInfo, angle) != 0) {
+                float scale = 0.25f;
+
+                switch (beyond) {
+                case 0:
+                    break;
+                case 1:
+                    if (mode == 4) {
+                        scale = 1.0f;
+                    } else {
+                        scale = 0.45f;
+                    }
+                    break;
+                }
+                if (beyond == 2 || fn_800CB228(p, pInfo, angle, aim, scale) != 0) {
+                    *pIndex = i;
+                    found = 1;
+                    break;
+                }
+            }
+        }
+    }
+    return found;
+}
+
 extern "C" int fn_800CBB00(Object_80039F5C *p, int index, Point_8017886C target, int angle, int beyond)
 {
     unsigned short first;
