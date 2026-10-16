@@ -160,6 +160,11 @@ extern "C" {
 extern unsigned char lbl_803EAD9C[8];
 extern unsigned char lbl_803EADA4[8];
 extern unsigned char lbl_803EADE8[8];
+extern int lbl_803EADC4;
+extern int lbl_803EADC8;
+extern float lbl_803EADCC;
+extern float lbl_803EADD0;
+extern int lbl_803EADD4;
 extern float lbl_803EADAC;
 extern float lbl_803EADB0;
 extern float lbl_803EADB4;
@@ -187,6 +192,11 @@ void fn_800EFE60(int a, void *p, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_8010AEC4(int value);
+int fn_8009F0B8(Object_80039F5C *p, int angle);
+void fn_8003A130(void *pPos, float *pExtra, int team);
+void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int delay);
+int fn_80178360(void);
+void fn_800D4CD4(void);
 void fn_800D7A0C(Object_80039F5C *p, int a);
 int fn_8011F4C8(void);
 float fn_8011F4D4(void);
@@ -1622,6 +1632,54 @@ extern "C" void fn_800EB86C(Object_80039F5C *p, State_800EBCE0 *state, Vector_80
                 state->mUnknown36 = (state->mUnknown36 + 0x800000) & 0xFFFFFF;
             else
                 state->mUnknown32 = 0.0f;
+        }
+    }
+}
+
+extern "C" void fn_800EBA48(int id) {
+    Message_800F01CC message;
+    Vector_80039F5C pos;
+    Vector_80039F5C delta;
+    int owner;
+    Object_80039F5C *pOther;
+    if (fn_801787A0())
+        return;
+    Object_80137ABC *pBall = fn_80137ABC(id);
+    fn_8013BA58(pBall, &owner);
+    if (fn_80138064(pBall, &pos))
+        fn_8003A130(&pos, 0, fn_80178360());
+    fn_800D4CD4();
+    for (unsigned char team = 0; team <= 1; team++) {
+        int count = fn_80178D70(team);
+        for (int i = 0; i < count; i++) {
+            pOther = fn_80039F5C(team, (unsigned char)i);
+            fn_802276B4(&delta, &pos, &pOther->mMotion.mPos);
+            fn_801C1F94(&message, 0, 4);
+            message.mId = 57;
+            message.mUnknown1[0] = id;
+            int delay = fn_8009F0B8(pOther, 0x3C71C7) ? lbl_803EADC8 : lbl_803EADC4;
+            delay += (unsigned int)(fn_802270A4(&delta) * lbl_803EADCC);
+            delay += (int)((255 - pOther->mRatings[0]) * lbl_803EADD0);
+            delay += fn_802372EC(0, lbl_803EADD4);
+            if ((pOther->mFlags & 0x400) || !fn_801486A0())
+                delay = 0;
+            switch (pOther->mpState->mId) {
+            case 0:
+            case 11:
+            case 23:
+            case 24:
+            case 28:
+            case 68:
+            case 90:
+                delay = 0;
+                break;
+            }
+            if (pOther->mQueue[0].mId != message.mId && (unsigned char)pOther->mUnknown3044[0] != message.mId) {
+                if (fn_800EAEA4(pOther))
+                    fn_8003AB28(pOther, &message, delay);
+                else
+                    fn_800F01CC(0, pOther->mpState, &message, (Object_80039F5C *)&pOther);
+            }
         }
     }
 }

@@ -7593,6 +7593,11 @@
           "end": "0x800EBA48"
         },
         {
+          "symbol": "fn_800EBA48",
+          "start": "0x800EBA48",
+          "end": "0x800EBCE0"
+        },
+        {
           "symbol": "fn_800EBCE0",
           "start": "0x800EBCE0",
           "end": "0x800EBD8C"
