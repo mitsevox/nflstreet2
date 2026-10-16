@@ -4771,14 +4771,17 @@ extern "C" int fn_800BAE64(void)
 
 /* One of the 80-byte records that the word +16 of Block_800BC538 points
    to; only the accessed fields are declared. */
+struct Slot_800BAE7C {
+    Object_80039F5C *mpObject;
+    int mUnknown4;
+    unsigned char mUnknown8[4];
+};
+
 struct Record_800BAE7C {
     int mUnknown0;
     unsigned char mUnknown4[8];
-    Object_80039F5C *mpUnknownC;
-    int mUnknown10;
-    unsigned char mUnknown14[4];
-    Object_80039F5C *mpUnknown18;
-    unsigned char mUnknown1C[0x24];
+    Slot_800BAE7C mUnknownC[4];
+    unsigned char mUnknown3C[4];
     int mUnknown40;
     int mUnknown44;
     unsigned char mUnknown48[4];
@@ -5174,9 +5177,9 @@ extern "C" void fn_800BBCF0(Record_800BAE7C *p)
     Object_80039F5C *pB = 0;
 
     if (p != 0 && lbl_803EABA0 == 0) {
-        pA = p[lbl_803EAB95].mpUnknownC;
-        if (p[lbl_803EAB95].mUnknown10 != 31) {
-            pB = p[lbl_803EAB95].mpUnknown18;
+        pA = p[lbl_803EAB95].mUnknownC[0].mpObject;
+        if (p[lbl_803EAB95].mUnknownC[0].mUnknown4 != 31) {
+            pB = p[lbl_803EAB95].mUnknownC[1].mpObject;
         }
         if (pA != 0) {
             int key = p[lbl_803EAB95].mUnknown40;
@@ -5191,6 +5194,21 @@ extern "C" void fn_800BBCF0(Record_800BAE7C *p)
         }
     }
     lbl_803EABA0 = 0;
+}
+
+extern "C" void fn_800BBDE0(void)
+{
+    Character_80093BCC *pCharacter = fn_80093BCC(lbl_803EC98C->mUnknown18);
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    unsigned int i;
+
+    for (i = 0; i < pActor->mUnknown4; i++) {
+        Object_80039F5C *p = lbl_803EC98C->mpUnknown10[lbl_803EAB95].mUnknownC[i].mpObject;
+
+        p->mUnknown9[2] = 1;
+        p->mpUnknown4->mUnknown20 |= 1;
+        fn_8009604C(fn_80096440(fn_801C029C(pActor, i)->mUnknown0), (int)p);
+    }
 }
 
 extern "C" void fn_800BBE98(void)

@@ -24290,6 +24290,11 @@
           "end": "0x800BBDE0"
         },
         {
+          "symbol": "fn_800BBDE0",
+          "start": "0x800BBDE0",
+          "end": "0x800BBE98"
+        },
+        {
           "symbol": "fn_800BBE98",
           "start": "0x800BBE98",
           "end": "0x800BBF18"
