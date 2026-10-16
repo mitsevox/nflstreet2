@@ -300,6 +300,9 @@ void fn_801C1FBC(void *pDest, void *pSrc, unsigned int size);
 void fn_800973AC(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void fn_800975EC(int id, int flag, int index);
 int fn_80097160(Object_80039F5C *p, float value);
+int fn_801CFE40(float y, float x);
+void fn_80227538(Point_80167910 *pOut, int angle, float length);
+void fn_80137EFC(Object_80137ABC *pBall, Vector_80039F5C *pOut);
 void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int flag);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 
@@ -367,6 +370,7 @@ extern Entry_80219044 lbl_8030E6D0;
 extern Block_80099630 *lbl_803EC92C;
 extern unsigned char lbl_803EA930;
 extern float lbl_803EA934;
+extern float lbl_803EA2C4;
 
 int fn_8005BE5C(int value);
 void fn_8005BF18(void);
@@ -1201,6 +1205,17 @@ extern "C" void fn_80097028(Object_80039F5C *p)
     fn_80097160(p, lbl_803EA934);
 }
 
+/* Converts a vector between the two horizontal angle conventions (the angle
+   is negated, the length and height are kept). */
+extern "C" void fn_800973AC(Vector_80039F5C *pOut, Vector_80039F5C *pIn)
+{
+    int angle = fn_801CFE40(pIn->mY, pIn->mX);
+    float length = fn_802270A4(pIn);
+
+    fn_80227538((Point_80167910 *)pOut, (0x1000000 - angle) & 0xFFFFFF, length);
+    pOut->mZ = pIn->mZ;
+}
+
 extern "C" int fn_8009740C(int value)
 {
     int result;
@@ -1252,6 +1267,17 @@ extern "C" void fn_80097564(void)
     for (i = 0; i <= 2; i++) {
         fn_80097518(i);
     }
+}
+
+extern "C" int fn_8009780C(Object_80039F5C *p, Object_80137ABC *pBall)
+{
+    Vector_80039F5C velocity;
+
+    float rate;
+
+    fn_80137EFC(pBall, &velocity);
+    rate = lbl_803EA2C4;
+    return __builtin_fabsf(velocity.mZ / rate + 0.0029814816f) > 1e-07f;
 }
 
 /* Stack block whose address fn_800A4E8C passes as the fourth argument of the
@@ -6575,6 +6601,23 @@ extern "C" int fn_800994E0(void *p, int value)
     return 0;
 }
 
+extern "C" int fn_80099510(Object_80039F5C *p)
+{
+    bool even;
+
+    if (p->mUnknown8 != 0xFF) {
+        return 1;
+    }
+    even = ((p->mId >> 16 & 0xFF) + (p->mId >> 8 & 0xFF)) % 2 == 0;
+    if (lbl_803EA930 == 0) {
+        return !even;
+    }
+    if (even) {
+        return 1;
+    }
+    return 0;
+}
+
 extern "C" void fn_80099568(int kind)
 {
     switch (kind) {
@@ -6626,6 +6669,24 @@ extern "C" void fn_800996FC(int value)
     }
 }
 
+extern "C" int fn_8009817C(Object_80039F5C *p, Object_800B26B0 *pMotion, int facing, int a, Object_80137ABC *pBall,
+                           int b, int mode, float range, void *pBlock, int c, int d, int e, int f, int g);
+
+extern "C" int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, float range, void *pBlock, int b,
+                           int c, int d, unsigned char e)
+{
+    int result = 0x1FFFFFFF;
+    int flags = 0;
+
+    if (fn_80099510(p) != 0) {
+        if (e != 0) {
+            flags = 2;
+        }
+        result = fn_8009817C(p, &p->mMotion, p->mMotion.mFacing, 0, pBall, a, mode, range, pBlock, b, c, d, flags, 0);
+    }
+    return result;
+}
+
 extern "C" int fn_8009A1A8(Object_80039F5C *p, int handle, int b, int c, int kind)
 {
     Message_800F01CC message;
@@ -6649,6 +6710,11 @@ extern "C" int fn_8009A1A8(Object_80039F5C *p, int handle, int b, int c, int kin
         result = 1;
     }
     return result;
+}
+
+extern "C" void fn_8009A260(Object_80039F5C *p)
+{
+    p->mUnknown772 = 1.0f;
 }
 
 extern "C" float fn_8009A270(int handle)
