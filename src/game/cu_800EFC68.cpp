@@ -36,6 +36,7 @@
 #include "game/fn_80238174.h"
 #include "game/Record_800DB60C.h"
 #include "game/fn_801BE60C.h"
+#include "game/Block_801BE60C.h"
 /* Views of the block at player +336. Only the accessed fields
    are declared. */
 struct Block_800FBAA8 {
@@ -206,6 +207,16 @@ struct Block_8010AF48 {
     unsigned char mUnknown6;
     unsigned char mUnknown7;
     unsigned char mUnknown8;
+};
+
+/* View of the block at player +336 as the animation callbacks use it. */
+struct Block_8010BC90 {
+    unsigned char mUnknown0;
+    char mUnknown1[2];
+    unsigned char mUnknown3;
+    char mUnknown4[16];
+    int mUnknown20;
+    unsigned short mUnknown24;
 };
 
 /* View of the player object from +1032. */
@@ -727,7 +738,8 @@ int fn_800CE4A8(Query_800CE770 *pQuery);
 float fn_800C49A4(Object_80039F5C *p, float value);
 void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int a);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float e);
-void fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
+int fn_801BA2A8(void *pData, void *pEntries, unsigned short value, int animation, int key, void *p, float weight);
+int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
 Object_80039F5C *fn_8015286C(void *pSet, int index);
 int fn_8015310C(void *pSet);
 extern unsigned char lbl_803EAE20[8];
@@ -3571,6 +3583,32 @@ extern "C" int fn_8010BC48(Object_80039F5C *p) {
     return 1;
 }
 
+extern "C" int fn_8010BC90(Table_8010B738 *pTable, unsigned short key, void *pData, Record_800D81C8 *pEntries,
+                           Object_80039F5C *p, unsigned int mode) {
+    Block_801BE60C *pRecord = fn_801BE60C(p->mpUnknown792, key);
+    Block_8010BC90 *pBlock = (Block_8010BC90 *)&p->mUnknown336;
+
+    switch (mode) {
+    case 0: {
+        unsigned char index = fn_8010B738(p, pTable);
+
+        if (index != 255) {
+            pBlock->mUnknown3 = index;
+            pRecord->mUnknown0Word = fn_801BA2A8(pData, pEntries, pTable->mEntries[index].mUnknown0,
+                                                 pTable->mEntries[index].mUnknown2, key, p, 1.0f);
+            lbl_802DABBC[index] = 1;
+        } else {
+            pBlock->mUnknown0 = 1;
+        }
+        break;
+    }
+    case 1:
+    case 3:
+        break;
+    }
+    return 0;
+}
+
 extern "C" void fn_8010BE54(Object_80039F5C *p)
 {
     Message_800F01CC message;
@@ -3615,6 +3653,27 @@ extern "C" int fn_8010C864(Object_80039F5C *p)
         }
     }
     return found;
+}
+
+extern "C" int fn_8010C8F8(Object_80039F5C *p) {
+    int result = 0;
+    float range = 1.0f;
+    Object_80137ABC *pBall;
+    Vector_80039F5C pos;
+    Point_8017886C delta;
+
+    fn_80137B40();
+    pBall = fn_80137CD0(p);
+    if (pBall == 0) {
+        pBall = fn_801374BC();
+        range = 1.5f;
+    }
+    fn_80137D58(pBall, &pos);
+    fn_80227690(&delta, &pos, &p->mMotion.mPos);
+    if (fn_802270A4(&delta) < range) {
+        result = 1;
+    }
+    return result;
 }
 
 extern "C" int fn_8010CAE8(Object_80039F5C *p)
@@ -3754,6 +3813,25 @@ extern "C" void fn_8010D80C(Object_80039F5C *p, Vector_80039F5C *pOut)
 extern "C" float fn_8010D82C(Object_80039F5C *p)
 {
     return ((State_8010D80C *)&p->mUnknown336)->mUnknown16;
+}
+
+extern "C" int fn_8010D834(Table_80089904 *pTable, unsigned short key, void *pData, Record_800D81C8 *pEntries,
+                           Object_80039F5C *p, unsigned int mode) {
+    if (mode == 0) {
+        if (p->mpState->mId == 56) {
+            Block_8010BC90 *pBlock = (Block_8010BC90 *)&p->mUnknown336;
+
+            fn_801BA2A8(pData, pEntries, pBlock->mUnknown24, pBlock->mUnknown20, key, p, 1.0f);
+        } else {
+            int index = fn_8009C4B0(pTable, &p->mUnknown1008);
+
+            if (index >= 0) {
+                fn_801BA2A8(pData, pEntries, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2,
+                            key, p, 1.0f);
+            }
+        }
+    }
+    return 0;
 }
 
 extern "C" Object_80039F5C *fn_8010DA38(Object_80039F5C *p, Object_80039F5C *pExclude)
