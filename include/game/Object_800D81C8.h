@@ -39,7 +39,10 @@ struct Record_800D81C8 {
     Block_801BF3C8 mUnknown30;
     char mUnknown34[24];
     Block_801BD6D4 mUnknown4C;
-    char mUnknown58[18];
+    char mUnknown58[12];
+    unsigned short mUnknown64;
+    unsigned short mUnknown66;
+    char mUnknown68[2];
     unsigned char mUnknown6A;
     char mUnknown6B[17];
 };

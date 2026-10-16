@@ -7403,6 +7403,30 @@ extern "C" void fn_800CA8F4(Object_80039F5C *p)
     }
 }
 
+extern "C" {
+float fn_800C9CF0(int team, int index);
+extern float lbl_802DA69C[];
+}
+
+extern "C" float fn_800CA9B4(int kind, Object_80039F5C *p)
+{
+    float scale = lbl_802DA69C[kind];
+
+    switch (kind) {
+    case 6:
+        if (fn_800B65A0(p->mIdBytes[2]) == 255 && fn_800ABDA4(p->mIdBytes[2]) == 0) {
+            scale = 1.0f;
+        }
+        break;
+    case 5:
+        if (fn_800B65A0(p->mIdBytes[2]) == 255 && fn_800ABDA4(p->mIdBytes[2]) == 0) {
+            scale *= 0.33333334f;
+        }
+        break;
+    }
+    return scale;
+}
+
 extern "C" int fn_800CAA6C(int value)
 {
     if (value == 9 || value == 7) {
@@ -7429,6 +7453,20 @@ extern "C" int fn_800CAAC4(int index, unsigned int item)
     return lbl_803EAC3C->mEntries[index][item].mUnknown8;
 }
 
+extern "C" float fn_800CAAFC(Object_80039F5C *p)
+{
+    unsigned char team;
+    signed char index = fn_800C9108(p, &team);
+    float result;
+
+    if (index != -1) {
+        result = (float)(unsigned int)(fn_800C9CF0(team, index) * 1000000000.0f) / lbl_8030C084[0];
+    } else {
+        result = 1000000000.0f / lbl_8030C084[0];
+    }
+    return result;
+}
+
 extern "C" int fn_800CABF4(Object_80039F5C *p, unsigned char *pOut, int which)
 {
     return fn_800C91F0(p, pOut, which);
@@ -7451,6 +7489,73 @@ extern "C" int fn_800CAC14(Info_800CAC14 *p, int swap)
         }
     }
     return value;
+}
+
+extern "C" {
+int fn_801BA6B0(Record_800D81C8 *pRecord);
+int fn_801C4E98(void *p, const char *pName);
+void fn_8009BEFC(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, Vector_80039F5C *pScratch);
+}
+
+extern "C" int fn_800CAC54(Object_80039F5C *p)
+{
+    Record_800D81C8 *pRecord;
+    unsigned char i;
+    int foot;
+
+    for (i = 0; i < 10; i++) {
+        pRecord = &p->mpUnknown800[i];
+        if (pRecord->mUnknown8 == 74 && pRecord->mUnknown1 == 2 && pRecord->mUnknown66 <= 16) {
+            break;
+        }
+        pRecord = 0;
+    }
+    if (pRecord != 0) {
+        switch (pRecord->mUnknown64) {
+        case 4:
+        case 5:
+        case 12:
+        case 13:
+            foot = 255;
+            break;
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+            foot = 2;
+            break;
+        case 1:
+        case 2:
+        case 3:
+        case 16:
+            foot = 1;
+            break;
+        default:
+            foot = 1;
+            break;
+        }
+        if (fn_801BA6B0(pRecord) != 0 && foot != 255) {
+            if (foot == 1) {
+                foot = 2;
+            } else {
+                foot = 1;
+            }
+        }
+    } else {
+        Vector_80039F5C left;
+        Vector_80039F5C right;
+        Vector_80039F5C scratch;
+
+        foot = 2;
+        fn_8009BEFC(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "lankle"), &left, &scratch);
+        fn_8009BEFC(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "rankle"), &right, &scratch);
+        if (!(left.mY <= right.mY)) {
+            foot = 1;
+        }
+    }
+    return foot;
 }
 
 extern "C" {
