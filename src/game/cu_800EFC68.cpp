@@ -6357,7 +6357,9 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
                         pRecord->mUnknown8 = (pRecord->mUnknown8 - 5) / 3 + 5;
                         pRecord->mUnknownC = state->mUnknown4 / (lbl_803ECB08 * 100621.12f);
                         if (pRecord->mUnknownC == 0.0f) {
-                            pRecord->mUnknownC = 0.5f * (pRecord->mUnknown10 * (1.0f / 4194304.0f)) + 0.5f;
+                            float spread = pRecord->mUnknown10 / 4194304.0f;
+
+                            pRecord->mUnknownC = spread * 0.5f + 0.5f;
                         }
                         scale = pRecord->mUnknownC / 3.0f;
                         pRecord->mUnknown0 -= pRecord->mUnknown0 * scale;
