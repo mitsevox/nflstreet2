@@ -16696,6 +16696,21 @@
         "original_blob": "8140d87b20e5eefc4ea1ef0900ef9f931041ba15",
         "integration_adjustment": "Preserve original contributor identities, contribution/integration PRs, function lists and original source bindings through ordinary literal reconstruction and the two-float temporary refinement; all previously credited resolved function payloads remain unchanged."
       }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80071458"
+      ],
+      "provenance": {
+        "pull_request": 803,
+        "merged_via": 803,
+        "commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
+        "introduced_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036"
+      }
     }
   ],
   "target": "GN7E69",
