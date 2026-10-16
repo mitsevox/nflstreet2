@@ -3218,13 +3218,14 @@ extern "C" void fn_8009D0AC(Object_80039F5C *p)
         int index;
         int *pTable;
         int *pRef;
+        int count = 14;
 
         fn_800BA6F8();
         i = 0;
-        index = fn_802372EC(0, 14);
+        index = fn_802372EC(0, count);
         pTable = lbl_802D7C2C;
         pRef = &pTable[index];
-        while (i < 14) {
+        while (i < count) {
             Object_80039F5C *pOther;
 
             ref = *pRef;
@@ -3234,13 +3235,13 @@ extern "C" void fn_8009D0AC(Object_80039F5C *p)
             }
             index++;
             pRef++;
-            if (index >= 14) {
+            if (index >= count) {
                 pRef = pTable;
                 index = 0;
             }
             i++;
         }
-        if (i < 14) {
+        if (i < count) {
             fn_8009CEE4(p, ref, 13, 15, 0);
             p->mUnknown292 = ref;
             p->mUnknown296 = fn_802372EC(0, 120) + 30;
