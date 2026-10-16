@@ -104,8 +104,11 @@ int fn_8018B2A8(int source, int teamTable, int playerTable, int destination,
         code = status;
     }
     if (status != 23) {
-        if (*pCount <= 0) *pCount = result.mUnknown0;
-        count = *pCount;
+        if (*pCount <= 0) {
+            count = *pCount = result.mUnknown0;
+        } else {
+            count = *pCount;
+        }
         fn_80229AA4(destination, 0x59414C50, ids, &count);
         for (unsigned int i = 0; i < count; i++) {
             if (destination == 0x54415453) pOriginalIds[i] = ids[i];
