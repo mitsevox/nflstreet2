@@ -3775,6 +3775,9 @@ extern "C" {
 void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800D4FBC(Object_80039F5C *p, int flag);
 void fn_80156C78(int a, int b);
+void fn_80227248(void *pOut, void *pIn, float scale);
+int fn_801C4E98(void *p, const char *pName);
+void fn_80227638(void *pOut, void *pA, void *pB);
 extern float lbl_803EAF9C;
 extern float lbl_803EAFA0;
 extern float lbl_803EAFA4;
@@ -4101,6 +4104,45 @@ extern "C" int fn_801108D4(Object_80039F5C *p)
     return 0;
 }
 
+extern "C" int fn_80110B00(Object_80039F5C *p)
+{
+    int done = 0;
+    State_801108D4 *pState = (State_801108D4 *)&p->mUnknown336;
+    Input_800B6D34 input;
+
+    if (pState->mUnknown12 == 0) {
+        pState->mUnknown4 = (short)(pState->mUnknown4 - 1);
+        if (pState->mUnknown4 > 0) {
+            fn_800B6D34(p, &input);
+            if (input.mUnknown4 < 0.0f) {
+                p->mpState->mUnknown2 = 1;
+            } else if (input.mUnknown4 > 0.0f) {
+                p->mpState->mUnknown2 = 2;
+            } else if (input.mUnknown0 & 4) {
+                p->mpState->mUnknown2 = 1;
+            } else if (input.mUnknown0 & 8) {
+                p->mpState->mUnknown2 = 2;
+            }
+            if (pState->mUnknown13) {
+                if (input.mUnknown72[0] == 1.0f || input.mUnknown72[0] < pState->mUnknown0) {
+                    done = 1;
+                } else {
+                    pState->mUnknown0 = input.mUnknown72[0];
+                }
+            } else if (!(input.mUnknown93 & 2)) {
+                done = 1;
+            }
+        } else {
+            done = 1;
+        }
+        if (done == 1) {
+            p->mpState->mUnknown1 = 2;
+            pState->mUnknown12 = done;
+        }
+    }
+    return 0;
+}
+
 extern "C" int fn_80110C10(Object_80039F5C *p)
 {
     unsigned short key = fn_801BE648(p->mpUnknown792);
@@ -4421,6 +4463,28 @@ extern "C" int fn_80111974(Object_80039F5C *p)
         p->mUnknown512.mUnknown14 = 1;
     }
     return 0;
+}
+
+extern "C" void fn_80111A28(Object_80039F5C *p, int angle, float length, Vector_80039F5C *pOut)
+{
+    Vector_80039F5C right;
+    Vector_80039F5C left;
+    Vector_80039F5C other;
+    Point_8017886C direction;
+
+    if (fn_801CFFD0(angle, p->mMotion.mUnknown32)) {
+        length -= 30.0f;
+        if (length < 0.0f) {
+            length = 0.0f;
+        }
+    }
+    fn_80227538(&direction, angle, p->mMotion.mUnknown28);
+    fn_80227248(pOut, &direction, length);
+    fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "rwrist"), &right, &other);
+    fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, "lwrist"), &left, &other);
+    fn_8022765C(&right, &right, &left);
+    fn_80227264(&right, &right, 0.5f);
+    fn_80227638(pOut, pOut, &right);
 }
 
 extern "C" void fn_80111E80(Object_80039F5C *p)
