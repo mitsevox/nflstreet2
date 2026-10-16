@@ -71,6 +71,7 @@
 #include "game/fn_80094488.h"
 #include "game/cu_80164568.h"
 #include "game/Entry_802F394C.h"
+#include "game/Object_800785C0.h"
 
 /* Data whose word +4 fn_80094374 returns and whose words from +8
    fn_80093BAC indexes; the bound of that array is not established. */
@@ -1851,6 +1852,7 @@ void fn_800CA4A8(void);
 extern float lbl_802DA2BC[14];
 extern float lbl_802DA2F4[14];
 extern float lbl_802DA32C[14];
+extern float lbl_802DA63C[14];
 extern float lbl_802DA364[14];
 extern float lbl_802DA39C[14][2];
 extern float lbl_802DA40C[14][2];
@@ -1858,7 +1860,6 @@ extern float lbl_802DA47C[14][2];
 extern float lbl_802DA4EC[14][2];
 extern float lbl_802DA55C[14][2];
 extern float lbl_802DA5CC[14][2];
-extern float lbl_802DA63C[14];
 extern Block_800C9D6C *lbl_803EAC3C;
 extern unsigned int lbl_8030C084[];
 }
@@ -1906,6 +1907,21 @@ extern "C" void fn_800C478C(void)
 extern "C" void *fn_800C47C4(void)
 {
     return gStaData.fn_80033FD4();
+}
+
+extern "C" void fn_800C47EC(Level_80054130 *pLevel)
+{
+    unsigned int counts[14];
+    unsigned int i;
+    int kind;
+
+    fn_801C1F94(counts, 0, sizeof(counts));
+    for (i = 0; i < pLevel->mUnknown24; i++) {
+        counts[pLevel->mUnknown28[i].mUnknown8]++;
+    }
+    for (kind = 0; kind < 14; kind++) {
+        lbl_802DA63C[kind] = (float)counts[kind] / (float)pLevel->mUnknown24;
+    }
 }
 
 extern "C" float fn_800C48CC(int index, float value)
@@ -1994,6 +2010,25 @@ extern "C" float fn_800C4A70(Object_80039F5C *p, int index)
     default:
         result = lbl_802DA5CC[kind][index];
         break;
+    }
+    return result;
+}
+
+extern "C" float fn_80237260(int stream);
+extern "C" int fn_800A84C0(int team);
+
+extern "C" int fn_800C4D54(Object_80039F5C *p)
+{
+    int result = 0;
+    float chance = fn_80237260(0) * (1.0f / 255.0f);
+    float value = chance * p->mRatings[0];
+
+    if (fn_800A84C0(p->mIdBytes[2]) != 0) {
+        if (value < fn_800C4A70(p, 0)) {
+            result = 1;
+        } else if (value < fn_800C4A70(p, 1)) {
+            result = 2;
+        }
     }
     return result;
 }
@@ -3687,7 +3722,7 @@ extern "C" int fn_800A84AC(int team)
     return lbl_803EC954[team]->mUnknown64;
 }
 
-extern "C" int fn_800A84C0(void)
+extern "C" int fn_800A84C0(int team)
 {
     return 1;
 }
@@ -9250,6 +9285,30 @@ extern "C" int fn_800BF824(void)
     return result;
 }
 
+extern "C" void fn_800A7514(unsigned char team);
+
+extern "C" void fn_800BF9DC(void)
+{
+    if (lbl_803EABA8->mUnknownB4 > 60) {
+        unsigned int i;
+
+        for (i = 0; i <= 1; i++) {
+            if (fn_800B65A0(i) == 255 && fn_800A84AC((unsigned char)i) != 0) {
+                fn_800A7514(i);
+            }
+        }
+        lbl_803EABA8->mUnknownB4 = -1;
+    }
+    if (fn_80025708() != 0) {
+        if (fn_800785C0()->mUnknown1C3 != 0 && fn_800A8444(0) == 0) {
+            fn_800A7514(0);
+        }
+        if (fn_800785C0()->mUnknown1C2 != 0 && fn_800A8444(1) == 0) {
+            fn_800A7514(1);
+        }
+    }
+}
+
 extern "C" void fn_800BFAB4(Class_80297CE8 *p)
 {
     if (p == 0) {
@@ -9312,6 +9371,39 @@ void Class_80297CE8::fn_800C02F8(int value)
 
 void Class_80297CE8::vfn_07()
 {
+}
+
+extern "C" void fn_800BEC1C(int team, unsigned char index);
+extern "C" void fn_8017E01C(int index);
+extern "C" int fn_801C6280(int a, int b, void *p);
+extern "C" char lbl_802ECD44[];
+
+extern "C" void fn_800C0330(void *p)
+{
+    if (fn_800AD9B4() == 2) {
+        int i;
+
+        for (i = 0; i <= 1; i++) {
+            switch (lbl_803EABA8->mSlots[i].mUnknown0) {
+            case 0:
+                break;
+            case 4:
+                fn_800BE944(i, fn_800B65A0(i), 133, 0.0f);
+                fn_800BEC1C(fn_800B65A0(i), i);
+                fn_8003A3F4(0, i);
+                break;
+            case 1:
+                lbl_803EABA8->mSlots[i].mUnknown0 = 0;
+                fn_8017DDDC((unsigned char)i);
+                break;
+            case 3:
+                lbl_803EABA8->mSlots[i].mUnknown0 = 0;
+                fn_8017E01C((unsigned char)i);
+                break;
+            }
+        }
+        fn_801C6280(-1, 3, lbl_802ECD44);
+    }
 }
 
 int Class_80297CE8::fn_800C0414()
