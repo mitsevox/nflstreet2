@@ -25960,6 +25960,11 @@
           "end": "0x800C2FDC"
         },
         {
+          "symbol": "fn_800C2FDC",
+          "start": "0x800C2FDC",
+          "end": "0x800C310C"
+        },
+        {
           "symbol": "fn_800C310C",
           "start": "0x800C310C",
           "end": "0x800C3130"

@@ -9820,6 +9820,42 @@ extern "C" void fn_800C2FB8(Entry_800C3130 *pA, Entry_800C3130 *pB)
     *pB = entry;
 }
 
+extern "C" void fn_80227970(void *, void *, void *, void *, float *, float *);
+
+extern "C" int fn_800C2FDC(Block_80170E64 *p, Block_80170E64 *pOther, float range, float radiusSq,
+                           float *pBest, int maxAngle)
+{
+    Vector_80039F5C end;
+    Vector_80039F5C closest;
+    Point_8017886C delta;
+    float distance;
+    float factor;
+    float distanceSq;
+    float rangeSq;
+
+    fn_80227690(&delta, &pOther->mUnknown4, &p->mUnknown4);
+    rangeSq = range * range;
+    distanceSq = delta.mX * delta.mX + delta.mY * delta.mY;
+    if (distanceSq < radiusSq) {
+        if (distanceSq < *pBest) {
+            *pBest = distanceSq;
+            return 1;
+        }
+    } else if (distanceSq < rangeSq &&
+               fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), p->mUnknown36) < maxAngle) {
+        fn_80227538((Point_80167910 *)&end, p->mUnknown36, range);
+        end.mX += p->mUnknown4.mX;
+        end.mY += p->mUnknown4.mY;
+        end.mZ = p->mUnknown4.mZ;
+        fn_80227970(&p->mUnknown4, &end, &pOther->mUnknown4, &closest, &distance, &factor);
+        if (radiusSq > distance * distance && distanceSq < *pBest) {
+            *pBest = distanceSq;
+            return 1;
+        }
+    }
+    return 0;
+}
+
 extern "C" void fn_800C310C(void)
 {
     unsigned int i;
