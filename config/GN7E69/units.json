@@ -2939,6 +2939,31 @@
       ]
     },
     {
+      "source": "src/game/cu_8018AB0C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018A978-0x8018AC38 (src/game/cu_8018AB0C.cpp), its function rows, the .rodata constants and the .sdata data row 0x803EB6B0-0x803EB6B4.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018A978",
+          "end": "0x8018AC38"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A8738",
+          "end": "0x802A8750"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB6B0",
+          "end": "0x803EB6B4"
+        }
+      ]
+    },
+    {
       "source": "src/game/GRender.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80199FA4-0x8019A110 (src/game/GRender.cpp) and its data rows.",
