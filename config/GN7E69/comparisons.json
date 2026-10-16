@@ -32578,6 +32578,31 @@
       ]
     },
     {
+      "source": "src/game/cu_8015005C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #815; two complete helper bodies inside the retained provisional cu_801485B4 survey group: 0x8015005C moves a five-entry score table's entry up while its score (+10 plus twice +8) exceeds the entry before it, and 0x8015013C increments the +8 or +10 halfword of the entry whose word +0 matches an id, then calls 0x8015005C. No literal or data word is referenced, so no other range is registered. Original file boundaries and nominal identity unresolved; 0x8014FFC4-0x8015005C and 0x801501CC onward excluded; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015005C",
+          "end": "0x801501CC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8015005C",
+          "start": "0x8015005C",
+          "end": "0x8015013C"
+        },
+        {
+          "symbol": "fn_8015013C",
+          "start": "0x8015013C",
+          "end": "0x801501CC"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
