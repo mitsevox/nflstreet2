@@ -32623,6 +32623,36 @@
       ]
     },
     {
+      "source": "src/game/cu_80150710.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #817; three complete slot bodies of the table 0x802A1DC8 inside the retained provisional cu_801485B4 survey group: slot 4 (0x80150710, word 0x802A1DEC), slot 7 (0x80150820, word 0x802A1E04) and slot 11 (0x80150824, word 0x802A1E24). Slots 5 and 6 (0x8015076C-0x80150820) are not registered: 0x8015076C does not yet match and 0x801507E0 forms addresses inside readonly context measured with another fragment. No literal or data word is referenced, so no other range is registered. Original file boundaries and nominal identity unresolved; 0x801503BC-0x80150710 and 0x80150848 onward excluded; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80150710",
+          "end": "0x80150848"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80150710",
+          "start": "0x80150710",
+          "end": "0x8015076C"
+        },
+        {
+          "symbol": "fn_80150820",
+          "start": "0x80150820",
+          "end": "0x80150824"
+        },
+        {
+          "symbol": "fn_80150824",
+          "start": "0x80150824",
+          "end": "0x80150848"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
