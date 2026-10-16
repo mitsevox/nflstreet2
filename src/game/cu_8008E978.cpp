@@ -8905,6 +8905,67 @@ extern "C" void fn_800B86A4(int index)
     }
 }
 
+extern "C" {
+int fn_8002D228(Type_803EA368 *p);
+void fn_8002D2C8(Type_803EA368 *p, unsigned char value);
+int fn_8009B9BC(void);
+int fn_80065864(void);
+unsigned char fn_8017F2DC(unsigned char value);
+unsigned char fn_8017F324(unsigned char value);
+unsigned char fn_8017F394(void);
+unsigned char fn_8017F48C(void);
+void fn_8017F2A4(void);
+void fn_8017CFB4(int index);
+int fn_8017D064(int a);
+void fn_8009B924(void);
+void fn_80094DF0(void);
+
+extern const float lbl_80297068[];
+}
+
+extern "C" void fn_800B876C(int index, unsigned int event, float value)
+{
+    if (fn_801486A0() == 0) {
+        return;
+    }
+    switch (event) {
+    case 0:
+    case 6:
+    case 7:
+    case 8:
+    case 14:
+    case 15:
+        if (fn_8009B9A8(0) != 0 && value == lbl_80297068[0]) {
+            fn_800B86A4(index);
+        }
+        break;
+    case 9:
+        if (lbl_803EAB78->mUnknown151 != 0 && fn_8009B9BC() == 0 && fn_8002D060(lbl_803EA368) == 0
+            && fn_8002892C() == 0 && fn_80028934() == 0 && fn_8017F48C() == 0 && fn_80065864() == 0
+            && fn_800655F8() == 1 && (fn_800B6644(index) == 0 || fn_800B6644(index) == 1)) {
+            fn_8002C9A8(lbl_803EA368, 3, 0);
+            if (fn_8002D228(lbl_803EA368) != 0) {
+                fn_8009BA10(0);
+                fn_8009B924();
+                fn_80094DF0();
+                fn_8002D2C8(lbl_803EA368, 1);
+                while (fn_8017D064(7) != 0) {
+                    fn_8017CFB4(7);
+                }
+                if (fn_8017F394() != 0) {
+                    fn_8017F2A4();
+                    fn_8017F324(1);
+                    fn_8017F2DC(2);
+                }
+                fn_8002CA74(lbl_803EA368, 10, index);
+                fn_8002CA74(lbl_803EA368, 11, 0);
+                fn_8002CA74(lbl_803EA368, 7, 0);
+            }
+        }
+        break;
+    }
+}
+
 extern "C" void fn_800B8940(void)
 {
     if (lbl_803EAB78->mUnknown158 == 1 && (unsigned char)fn_800B9A90(lbl_803EAB84) == 1) {
@@ -8939,7 +9000,6 @@ void fn_8013F3FC(void);
 void fn_80162780(int a, int b);
 void fn_80173B8C(void);
 void fn_801783D0(int bit, int on);
-int fn_8002D228(Type_803EA368 *p);
 int fn_8002E950(int mode);
 
 extern unsigned char lbl_803EAB7C;
