@@ -7703,19 +7703,23 @@ extern "C" int fn_800CAE28(Object_80039F5C *p, Info_80089904 *pInfo, int angle)
     int result = 0;
     unsigned int turn = (angle - p->mMotion.mFacing) & 0xFFFFFF;
     unsigned int infoAngle = pInfo->mUnknown56;
-    int foot;
     int side;
     int infoSide;
+    int foot;
 
     if (turn > 0x955556 && turn <= 0xEAAAAA) {
         side = -1;
+    } else if (turn > 0x155555 && turn <= 0x6AAAAA) {
+        side = 1;
     } else {
-        side = turn > 0x155555 && turn <= 0x6AAAAA;
+        side = 0;
     }
     if (infoAngle > 0x8E38E4 && infoAngle <= 0xF1C71C) {
         infoSide = -1;
+    } else if (infoAngle > 0xE38E3 && infoAngle < 0x71C71C) {
+        infoSide = 1;
     } else {
-        infoSide = infoAngle > 0xE38E3 && infoAngle < 0x71C71C;
+        infoSide = 0;
     }
     foot = fn_800CAC54(p);
     if (foot != 255) {
