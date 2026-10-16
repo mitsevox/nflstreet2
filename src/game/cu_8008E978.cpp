@@ -1452,6 +1452,26 @@ extern "C" void fn_80096A24(void)
     fn_801D2BD0(lbl_803EA920);
 }
 
+extern "C" int fn_800965E8(Playback_80096DA8 *pPlayback, int *pIndex);
+
+/* The request is the 48-byte Playback_80096DA8 record that is stored into
+   the free slot. */
+extern "C" int fn_80096A58(Params_80096A58 *pParams)
+{
+    Playback_80096DA8 *pPlayback = (Playback_80096DA8 *)pParams;
+    int index = fn_80096590();
+
+    if (index != -1) {
+        fn_80096DCC(pPlayback->mUnknown0, pPlayback->mUnknown4);
+        if (fn_800965E8(pPlayback, &index) != 0) {
+            lbl_803EA920->mUnknown10[index] = *pPlayback;
+        } else {
+            index = -1;
+        }
+    }
+    return index;
+}
+
 extern "C" void fn_80096D14(int index)
 {
     Playback_80096DA8 *p = fn_80096DA8(index);
