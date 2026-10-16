@@ -41,6 +41,7 @@
 #include "game/cu_8002B8F8.h"
 #include "game/cu_80041210.h"
 #include "game/cu_8003108C.h"
+#include "game/cu_800314E0.h"
 #include "game/cu_80064864.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_80136B1C.h"
@@ -5101,6 +5102,19 @@ extern "C" void fn_800AA2F8(void)
     lbl_803EAA88->mUnknownC = -1;
 }
 
+extern "C" void fn_800AA648(Entry_800AA80C *pEntries, int index)
+{
+    if (lbl_803EAA88->mUnknown14 != 0 && lbl_803EC960 != 0) {
+        int id = pEntries[lbl_803EAA90].mUnknown0;
+
+        if (id != 9999) {
+            fn_800AA1B0(id, pEntries[lbl_803EAA90].mUnknown4);
+            fn_800AA348(lbl_803EAA88->mpUnknown0->mEntries, index);
+            fn_800AA510(lbl_803EAA88->mpUnknown0->mEntries, index);
+        }
+    }
+}
+
 extern "C" void fn_800AA6D8(Entry_800AA80C *pEntries, int index)
 {
     if (fn_800737B8() != 0) {
@@ -5484,6 +5498,40 @@ extern "C" void fn_800AB190(void *p)
     fn_80031A54();
 }
 
+extern "C" {
+extern Entry_80306620 lbl_8030F45C;
+extern Entry_80219044 lbl_8030F504;
+extern Entry_80219044 lbl_8030F510;
+extern unsigned char lbl_803EAA9A;
+}
+
+extern "C" int fn_800AB1B8(void *p, float dt)
+{
+    int result = 0;
+
+    if (lbl_803EAA9C < fn_8003203C()) {
+        int args[3];
+
+        result = 1;
+        fn_80032044(lbl_803EAA9C, &lbl_8030F45C);
+        lbl_8030F504.mpText = lbl_8030F45C.mName;
+        lbl_8030F504.mLength = fn_801C3180(lbl_8030F45C.mName);
+        lbl_8030F510.mpText = lbl_8030F45C.mText;
+        lbl_8030F510.mLength = fn_801C3180(lbl_8030F45C.mText);
+        args[0] = (int)&lbl_8030F504;
+        args[1] = (int)&lbl_8030F510;
+        args[2] = lbl_8030F45C.mUnknown164;
+        fn_80064F58(1, 20, -1, 3, args, 1);
+        lbl_803EAA9C++;
+    } else {
+        fn_800320B0();
+        lbl_803EAA9A = 0;
+        lbl_803EAA9C = 0;
+        fn_8021956C(lbl_803EB688, 1, 20, 1);
+    }
+    return result;
+}
+
 extern "C" void fn_800AB29C(void *p)
 {
     fn_80218FC4(lbl_803EB688, 3, 7, 0, 0);
@@ -5518,6 +5566,31 @@ extern "C" int fn_800AB2FC(void *p, float dt)
 
 extern "C" void fn_800AB944(void *p)
 {
+}
+
+extern "C" {
+void fn_8017D4AC(void);
+void fn_8017DB44(void);
+}
+
+extern "C" void fn_800AB948(Class_80297B90 *p)
+{
+    if (fn_800C1E40() != 0) {
+        fn_8017D4AC();
+    } else {
+        fn_8017DB44();
+    }
+    fn_800A9F64();
+    lbl_803EAA99 = 0;
+    fn_80094DF0();
+    fn_800AB944(lbl_803EAA8C);
+    fn_800AFE20((void (*)(int, int, float))fn_800AA93C);
+    fn_8013825C(fn_801374BC())->mUnknown20 |= 1;
+    fn_8013825C(fn_801374BC())->mUnknown20 &= ~2;
+    fn_8003E174(1);
+    fn_800941B8();
+    lbl_803EAA88->mUnknown4 = 19;
+    lbl_803EAA88->mpUnknown0 = 0;
 }
 
 extern "C" float fn_800AB9EC(Class_80297B90 *p)
@@ -5560,6 +5633,52 @@ extern "C" void fn_800ABA90(void)
     fn_801F0F18(0);
     fn_8009604C(0, (int)fn_8005A8AC(0));
     fn_8009604C(1, (int)fn_8005A8AC(1));
+}
+
+extern "C" {
+float fn_80178A2C(void);
+}
+
+extern "C" void fn_800ABAF0(void)
+{
+    Message_800F01CC message;
+    Object_80039F5C *pObject0;
+    Object_80039F5C *pObject1;
+    unsigned int i;
+
+    fn_801C1F94(&message, 0, sizeof(message));
+    message.mId = 9;
+    message.mUnknown1[0] = 203;
+    message.mUnknown1[1] = 0;
+    message.mUnknown1[2] = 255;
+    pObject0 = fn_8005A8AC(0);
+    pObject1 = fn_8005A8AC(1);
+    for (i = 0; i <= 1; i++) {
+        unsigned int count = fn_80178D18((unsigned char)i);
+        unsigned int index;
+
+        for (index = 0; index < count; index++) {
+            Object_80039F5C *p = fn_80039F5C((unsigned char)i, index);
+
+            fn_800EFE60(0, p->mpState, p);
+            if (p != pObject0 && p != pObject1) {
+                p->mMotion.mPos.mX = 0.0f;
+                p->mMotion.mPos.mY = fn_80178A2C();
+                p->mpUnknown4->mUnknown20 &= ~1;
+                fn_800F00D4(0, p->mpState, &message, p);
+            }
+        }
+    }
+    pObject1->mMotion.mPos.mX = 0.0f;
+    pObject0->mMotion.mPos.mX = 0.0f;
+    pObject1->mMotion.mPos.mY = 0.75f;
+    pObject0->mMotion.mPos.mY = 0.75f;
+    fn_8004A230(1);
+    fn_80092F98(lbl_803EAA88->mUnknownC);
+    lbl_803EAA88->mUnknown8 = lbl_803EAA88->mUnknownC;
+    lbl_803EAA88->mUnknownC = -1;
+    fn_80092830(lbl_803EAA88->mUnknown8);
+    fn_80092830(lbl_803EAA88->mUnknown8);
 }
 
 extern "C" int fn_800ABC64(void)
