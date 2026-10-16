@@ -30,7 +30,7 @@ struct Playback_80096DA8 {
     int mUnknown0,mUnknown4; unsigned char mUnknown8[4]; unsigned int mUnknownC;
     int mUnknown10; union { int mWord; unsigned short mParts[2]; } mUnknown14,mUnknown18,mUnknown1C;
     float mUnknown20,mUnknown24;
-    unsigned char mUnknown28[8];
+    unsigned char mUnknown28[4]; unsigned int mUnknown2C;
 };
 
 extern "C" {
