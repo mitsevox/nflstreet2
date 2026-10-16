@@ -7648,6 +7648,11 @@
           "end": "0x800EDC68"
         },
         {
+          "symbol": "fn_800EDC68",
+          "start": "0x800EDC68",
+          "end": "0x800EDDEC"
+        },
+        {
           "symbol": "fn_800EE61C",
           "start": "0x800EE61C",
           "end": "0x800EE694"
@@ -7656,6 +7661,11 @@
           "symbol": "fn_800EE7C8",
           "start": "0x800EE7C8",
           "end": "0x800EE7DC"
+        },
+        {
+          "symbol": "fn_800EE7DC",
+          "start": "0x800EE7DC",
+          "end": "0x800EE964"
         },
         {
           "symbol": "fn_800EE964",

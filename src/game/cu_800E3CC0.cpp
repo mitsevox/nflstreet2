@@ -65,7 +65,8 @@ struct State_800EBCE0 {
    0x802DB4F0. */
 struct State_800EDC68 {
     int mUnknown0;
-    char mUnknown4[3];
+    short mUnknown4;
+    unsigned char mUnknown6;
     unsigned char mUnknown7;
     unsigned int mUnknown8;
 };
@@ -215,6 +216,7 @@ int fn_800EB3E8(Object_80039F5C *p, State_800EBCE0 *pState, Object_80137ABC *pBa
 void fn_800EE964(State_800EE9AC *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value);
 void fn_800EEE3C(Point_8017886C *pOut, int *pFacing, Object_80039F5C *p, int value);
 int fn_800EEA20(Object_80039F5C *p);
+int fn_800DC080(Object_80039F5C *p);
 void fn_800FF598(State_800EE9AC *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value, float scale);
 int fn_800B5FEC(Object_80039F5C *p);
 int fn_800B76E8(Object_80039F5C *p);
@@ -1778,6 +1780,43 @@ extern "C" void fn_800EDB48(Object_80039F5C *p, Object_80039F5C *pOther, Object_
     }
 }
 
+extern "C" int fn_800EDC68(Object_80039F5C *p) {
+    State_800EDC68 *state = (State_800EDC68 *)&p->mUnknown336;
+    state->mUnknown4 = 0;
+    state->mUnknown8 = p->mpState->mUnknown2;
+    state->mUnknown6 = p->mpState->mUnknown3[0];
+    Object_80039F5C *pOther = fn_80039F5C(p->mIdBytes[2], p->mpState->mUnknown1);
+    fn_8009BD2C(pOther, &state->mUnknown0);
+    switch (state->mUnknown8) {
+    case 12:
+    case 13:
+    case 15:
+        fn_80137C10(pOther);
+        if (p->mUnknown2914 != 0)
+            state->mUnknown8 = 15;
+        if (fn_800DC080(p)) {
+            state->mUnknown8 = 12;
+            if (p->mMotion.mPos.mY < pOther->mMotion.mPos.mY
+                || fn_80177FE0().mY - p->mMotion.mPos.mY > 3.0f)
+                state->mUnknown8 = 13;
+        }
+        break;
+    case 14:
+        if (p->mpState[1].mId == 31) {
+            fn_8011E1BC(p, 0, 0, 1);
+            fn_8011E3EC(p, 1);
+        } else if (p->mpState[1].mId == 33) {
+            fn_8011E1BC(p, 0, 0, 1);
+            fn_8011E3EC(p, 2);
+        }
+        break;
+    }
+    p->mUnknown512.mUnknown14 = 0;
+    p->mFlags &= ~4;
+    p->mFlags &= ~1;
+    return 0;
+}
+
 extern "C" int fn_800EE61C(Object_80039F5C *p) {
     State_800EDC68 *state = (State_800EDC68 *)&p->mUnknown336;
     Object_80039F5C *pOther = fn_8009BCE8(&state->mUnknown0);
@@ -1832,6 +1871,37 @@ extern "C" void fn_800EE694(Object_80039F5C *p) {
 
 extern "C" int fn_800EE7C8(Object_80039F5C *p) {
     return ((State_800EE7C8 *)&p->mUnknown336)->mUnknown4 == 1;
+}
+
+extern "C" void fn_800EE7DC(Object_80039F5C *p) {
+    Message_800F01CC message;
+    fn_801C1F94(&message, 0, 4);
+    message.mId = 64;
+    message.mUnknown1[0] = 18;
+    message.mUnknown1[1] = 1;
+    fn_800F03D8(0, p->mpState, &message, p);
+    if (fn_801BE648(p->mpUnknown792) != 74 && fn_801BE648(p->mpUnknown792) != 203)
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, p, 1.0f);
+    fn_801C1F94(&message, 0, 4);
+    message.mId = 51;
+    message.mUnknown1[0] = (int)(fn_80237260(0) * 32.0f);
+    fn_800F03D8(0, p->mpState, &message, p);
+    fn_801C1F94(&message, 0, 4);
+    message.mId = 9;
+    message.mUnknown1[0] = 203;
+    message.mUnknown1[1] = 0;
+    message.mUnknown1[2] = 255;
+    fn_800F03D8(0, p->mpState, &message, p);
+    int index;
+    if (p->mIdBytes[2] == fn_80178308())
+        index = 0;
+    else
+        index = 5;
+    if (p->mIdBytes[1] == index) {
+        fn_801C1F94(&message, 0, 4);
+        message.mId = 71;
+        fn_800F03D8(0, p->mpState, &message, p);
+    }
 }
 
 extern "C" void fn_800EE964(State_800EE9AC *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value) {
