@@ -52,6 +52,8 @@
 #include "game/Record_8011F4F8.h"
 #include "game/State_800FDA58.h"
 #include "game/Object_801BC084.h"
+#include "game/Frame_8019D3B8.h"
+#include "game/cu_80026BB0.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
@@ -4997,8 +4999,8 @@ struct Block_800ABD1C {
     unsigned int mUnknown4;
 };
 
-/* 16-byte block allocated under the id 'gply' at 0x800AD664. Only the
-   word +0 is declared. */
+/* 16-byte block allocated under the id 'gply' by fn_800AD634: the current
+   and previous game mode, then a flag and a value set by fn_800AD9C0. */
 struct Block_800AD634 {
     int mUnknown0;
     int mUnknown4;
@@ -5745,8 +5747,52 @@ struct Mode_80297FC8 {
 extern "C" {
 void fn_800AD31C(float dt);
 void fn_800AD418(float dt);
+void fn_800CB504(void);
+int fn_801C6280(int a, int b, void *p);
 
 extern Mode_80297FC8 lbl_80297FC8[9];
+}
+
+extern "C" void fn_800AD634(float dt)
+{
+    void *pHandle = fn_80238174(0, (void **)&lbl_803EAAD4, sizeof(Block_800AD634), 0, 0x67706C79);
+    Block_800AD634 *pBlock = (Block_800AD634 *)fn_8023816C(pHandle);
+    void (*pEnter)(float);
+
+    pBlock->mUnknown0 = 0;
+    pBlock->mUnknown8 = 0;
+    pEnter = lbl_80297FC8[pBlock->mUnknown0].mpEnter;
+    if (pEnter != 0) {
+        pEnter(dt);
+    }
+    fn_802381E0(pHandle);
+    lbl_803EAB90->vfn_01();
+    lbl_803EABA4->vfn_02();
+    lbl_803EA9E4->vfn_01();
+    lbl_803EAB84->vfn_01();
+    lbl_803EAB38->vfn_01();
+    lbl_803EAC9C->fn_800CFEFC();
+    lbl_803EAA8C->vfn_01();
+    fn_800B175C();
+    fn_800CB504();
+}
+
+extern "C" void fn_800AD774(void)
+{
+    if (lbl_803EAAD4 != 0) {
+        void (*pExit)(float) = lbl_80297FC8[lbl_803EAAD4->mUnknown0].mpExit;
+
+        if (pExit != 0) {
+            pExit(1.0f);
+        }
+    }
+    lbl_803EAB90->vfn_02();
+    lbl_803EABA4->vfn_03();
+    lbl_803EAB38->vfn_02();
+    lbl_803EA9E4->vfn_02();
+    lbl_803EAB84->vfn_02();
+    lbl_803EAA8C->vfn_02();
+    fn_801C6280(-1, 2, (void *)fn_80026DD4);
 }
 
 extern "C" void fn_800AD888(float dt)
@@ -5976,6 +6022,52 @@ extern "C" void fn_800ADE6C(void)
     pClip = (Clip_800ADE6C *)fn_801BAB34(pRecord, key);
     for (i = 0; i <= 10; i++) {
         lbl_8030F958[i] = fn_801BAD70(pRecord, pClip->mUnknown2, handle, pClip->mKeys[i]);
+    }
+}
+
+extern "C" {
+float fn_801CFB94(int angle);
+
+extern Blend_8019EDDC lbl_8030F534;
+}
+
+/* Blend between an element's current and next pose, eased over its
+   duration. */
+extern "C" Blend_8019EDDC *fn_800ADEFC(Element_80041BF8 *pElements, unsigned int index)
+{
+    Blend_8019EDDC *pBlend = &lbl_8030F534;
+    Element_80041BF8 *p = &pElements[index];
+    unsigned int length = p->mUnknown6 * 16;
+    float t = (float)p->mUnknown8 / (float)length;
+    float s;
+
+    t = fn_801CFB94((int)(t * 8388608.0f));
+    s = t;
+
+    pBlend->mUnknown0 = 2;
+    pBlend->mUnknown4[0].mUnknown4 = 1.0f;
+    pBlend->mUnknown4[0].mUnknown8 = index == 0;
+    pBlend->mUnknown4[1].mUnknown8 = index == 0;
+    pBlend->mUnknown4[1].mUnknown4 = 1.0f - (1.0f - s) * 0.5f;
+    pBlend->mUnknown4[0].mpUnknown40 = lbl_8030F958[(signed char)p->mUnknown5];
+    pBlend->mUnknown4[1].mpUnknown40 = lbl_8030F958[(signed char)p->mUnknown4];
+    return pBlend;
+}
+
+extern "C" {
+void fn_800AE018(Object_80039F5C *p, int index, unsigned short key);
+
+extern unsigned char lbl_803EAADC[2];
+}
+
+extern "C" void fn_800AE0B8(Object_80039F5C *p)
+{
+    int key = fn_801BD910();
+    int index = lbl_803EAADC[key];
+
+    key = fn_801BD910();
+    if (p != 0) {
+        fn_800AE018(p, index, key);
     }
 }
 
