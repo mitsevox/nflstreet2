@@ -71,6 +71,7 @@
 #include "game/fn_80094488.h"
 #include "game/cu_80164568.h"
 #include "game/Entry_802F394C.h"
+#include "game/fn_8017F584.h"
 
 /* Data whose word +4 fn_80094374 returns and whose words from +8
    fn_80093BAC indexes; the bound of that array is not established. */
@@ -3696,6 +3697,23 @@ extern "C" int fn_800A851C(int team, Object_80039F5C *p)
     return result;
 }
 
+extern "C" {
+void fn_80147D4C(int index, unsigned char value);
+void fn_80147D60(int index, int value);
+void fn_80147D74(int index, unsigned int color, float value, unsigned int count);
+}
+
+extern "C" void fn_800A8570(void)
+{
+    unsigned char *pColor = (unsigned char *)fn_800A3360();
+    unsigned int color = (pColor[2] << 16) + (pColor[1] << 8) + pColor[0];
+    float alpha = (unsigned int)pColor[3] * (1.0f / 255.0f);
+
+    fn_80147D4C(0, 1);
+    fn_80147D74(0, color, alpha, 60);
+    fn_80147D60(0, 1);
+}
+
 extern "C" void fn_800A861C(void)
 {
     fn_800A2E80(fn_800A3444(), 60);
@@ -3709,6 +3727,32 @@ extern "C" void fn_800A8644(void)
 extern "C" void fn_800A8738(int value)
 {
     lbl_803EAA51 = value;
+}
+
+extern "C" unsigned int fn_801568F0(void);
+
+extern "C" int fn_800A8740(void)
+{
+    if (lbl_803EAA51 != 0) {
+        return 1;
+    }
+    if (fn_8017F584() == 11 && fn_801568F0() == 4) {
+        return 0;
+    }
+    if (fn_8017F584() == 7 || fn_8017F584() == 10) {
+        switch (fn_801486A0()) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+            return 1;
+        }
+        return 0;
+    }
+    if (fn_8007F828(19) == 0) {
+        return 1;
+    }
+    return fn_8007F828(14) == 1;
 }
 
 extern "C" int fn_800A8EA4(int team)
@@ -3760,6 +3804,60 @@ extern "C" int fn_800A8F94(void)
 
 extern "C" void fn_800A8F9C(void)
 {
+}
+
+/* 236-byte request built on the stack by fn_800A8FA0 for fn_80092E54. */
+struct Request_800A8FA0 {
+    int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    unsigned char mUnknownC[212];
+    unsigned char mUnknownE0;
+    unsigned char mUnknownE1[3];
+    int mUnknownE4;
+    int mUnknownE8;
+};
+
+extern "C" void fn_80092E54(Request_800A8FA0 *pRequest, char *pBuffer, int size);
+
+extern "C" void fn_800A8FA0(int a, int b, char *pBuffer)
+{
+    Request_800A8FA0 request;
+
+    fn_801C1F94(&request, 0, sizeof(request));
+    request.mUnknown0 = b;
+    request.mUnknown8 = 0x24;
+    request.mUnknownE0 = 1;
+    request.mUnknownE4 = 0;
+    request.mUnknownE8 = 0;
+    request.mUnknown4 = a;
+    fn_80092E54(&request, pBuffer, 0x19800);
+}
+
+extern "C" {
+Object_8003DEC4 *fn_8003DF3C(unsigned char side, unsigned char index);
+Object_80039F5C *fn_8003E0C8(Block_80170E64 *object);
+void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
+}
+
+extern "C" void fn_800A9238(void)
+{
+    unsigned char team;
+
+    for (team = 0; team <= 1; team++) {
+        unsigned int i = 0;
+        unsigned int count = fn_80178D18(team);
+
+        for (; i < count; i++) {
+            Object_80039F5C *p = fn_8003E0C8((Block_80170E64 *)fn_8003DF3C(team, i));
+            Message_800F01CC message;
+
+            fn_800EFE60(0, p->mpState, p);
+            fn_801C1F94(&message, 0, sizeof(message));
+            message.mId = 0;
+            fn_800F053C(0, p->mpState, &message, p);
+        }
+    }
 }
 
 extern "C" void fn_800A92E4(void)
