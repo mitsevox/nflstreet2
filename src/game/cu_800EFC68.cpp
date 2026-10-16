@@ -718,7 +718,7 @@ int fn_800CE4A8(Query_800CE770 *pQuery);
 float fn_800C49A4(Object_80039F5C *p, float value);
 void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int a);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float e);
-void fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
+int fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
 Object_80039F5C *fn_8015286C(void *pSet, int index);
 int fn_8015310C(void *pSet);
 extern unsigned char lbl_803EAE20[8];
@@ -3381,6 +3381,66 @@ extern "C" int fn_80106794(Object_80039F5C *p) {
 
 extern "C" int fn_801067D8(Object_80039F5C *p) {
     return fn_8012506C(p, 6) < lbl_803EAEF4;
+}
+
+/* Payload that fn_801BE60C returns for the turn handled by fn_8010680C. */
+struct Turn_8010680C {
+    int mUnknown0;
+    float mUnknown4;
+    unsigned char mUnknown8;
+};
+
+extern "C" int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
+
+extern "C" int fn_8010680C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
+                           Object_80039F5C *p, unsigned int phase) {
+    Turn_8010680C *pTurn = (Turn_8010680C *)fn_801BE60C(p->mpUnknown792, key);
+
+    switch (phase) {
+    case 0: {
+        int index = fn_8009C4B0(pTable, &p->mUnknown1008);
+        int facing;
+
+        if (index >= 0) {
+            p->mFlags &= ~4;
+            pTurn->mUnknown8 = fn_801BA2A8(pRecord, pEntries, pTable->mEntries[index].mUnknown0,
+                                           pTable->mEntries[index].mUnknown2, key, p, 1.0f);
+        }
+        facing = p->mUnknown512.mUnknown8;
+        if (fn_801CFFD0(facing, p->mMotion.mFacing) > 0xB60B) {
+            fn_801BE760(p->mpUnknown792, key, 1);
+            if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 204)) {
+                int entry;
+
+                pEntries = p->mpUnknown800;
+                entry = fn_801BA5A8(p->mpUnknown796, pEntries, 204, 0);
+
+                pTurn->mUnknown4 = pEntries[entry].mUnknown48;
+                if (pTurn->mUnknown4 != 0.0f ||
+                    (pTurn->mUnknown4 = fn_801BD690(&pEntries[entry].mUnknown4C, 0xC003)) != 0.0f) {
+                    pTurn->mUnknown4 = pTurn->mUnknown4 > 50.0f ? 50.0f : pTurn->mUnknown4;
+                    pTurn->mUnknown0 = (int)(fn_801CFFD0(facing, p->mMotion.mFacing) / pTurn->mUnknown4);
+                    if (((p->mMotion.mFacing - facing) & 0xFFFFFF) <= 0x7FFFFF) {
+                        pTurn->mUnknown0 = -pTurn->mUnknown0;
+                    }
+                    /* The shipped code discards the rate it just computed. */
+                    pTurn->mUnknown0 = 0;
+                }
+            }
+        }
+        break;
+    }
+    case 1:
+        break;
+    case 2:
+        if (pTurn->mUnknown4 > 0.0f) {
+            pTurn->mUnknown4 -= 1.0f;
+            p->mMotion.mFacing += pTurn->mUnknown0;
+            p->mpUnknown800[pTurn->mUnknown8].mUnknownC += pTurn->mUnknown0;
+        }
+        break;
+    }
+    return 0;
 }
 
 /* View of the player block at +336 that fn_80106A60 fills. Partial layout. */
