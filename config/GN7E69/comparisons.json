@@ -5511,6 +5511,26 @@
       ]
     },
     {
+      "source": "src/game/cu_8018EF6C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv candidate unit cu_8018EF6C 0x8018EF6C-0x8018F1F0 and its exact function row. fn_8018EF6C is a partial body (same size, callee-saved register assignment differs); original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018EF6C",
+          "end": "0x8018F1F0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8018EF6C",
+          "start": "0x8018EF6C",
+          "end": "0x8018F1F0"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8019D83C.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8019D83C-0x8019D994; two target function rows. Code-only unlinked reconstruction, original table storage retained.",
