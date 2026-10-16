@@ -23900,21 +23900,6 @@
           "end": "0x800B2564"
         },
         {
-          "symbol": "fn_800B2600",
-          "start": "0x800B2600",
-          "end": "0x800B260C"
-        },
-        {
-          "symbol": "fn_800B260C",
-          "start": "0x800B260C",
-          "end": "0x800B2618"
-        },
-        {
-          "symbol": "fn_800B2618",
-          "start": "0x800B2618",
-          "end": "0x800B2624"
-        },
-        {
           "symbol": "fn_800B2624",
           "start": "0x800B2624",
           "end": "0x800B2630"
@@ -23933,21 +23918,6 @@
           "symbol": "fn_800B2670",
           "start": "0x800B2670",
           "end": "0x800B267C"
-        },
-        {
-          "symbol": "fn_800B267C",
-          "start": "0x800B267C",
-          "end": "0x800B26B0"
-        },
-        {
-          "symbol": "fn_800B26B0",
-          "start": "0x800B26B0",
-          "end": "0x800B26D0"
-        },
-        {
-          "symbol": "fn_800B26D0",
-          "start": "0x800B26D0",
-          "end": "0x800B26E0"
         },
         {
           "symbol": "fn_800B2B90",
@@ -26373,6 +26343,83 @@
           "symbol": "fn_800CEED8",
           "start": "0x800CEED8",
           "end": "0x800CF090"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800B2564.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Four target whole-function extents and their literal-pool slice; this split permits independent compilation of a partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800B2564",
+          "end": "0x800B2624"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296B70",
+          "end": "0x80296B78"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800B2564",
+          "start": "0x800B2564",
+          "end": "0x800B2600"
+        },
+        {
+          "symbol": "fn_800B2600",
+          "start": "0x800B2600",
+          "end": "0x800B260C"
+        },
+        {
+          "symbol": "fn_800B260C",
+          "start": "0x800B260C",
+          "end": "0x800B2618"
+        },
+        {
+          "symbol": "fn_800B2618",
+          "start": "0x800B2618",
+          "end": "0x800B2624"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800B267C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Three target whole-function extents and their literal-pool slice; this split permits independent compilation of a partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800B267C",
+          "end": "0x800B26E0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296B7C",
+          "end": "0x80296B88"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800B267C",
+          "start": "0x800B267C",
+          "end": "0x800B26B0"
+        },
+        {
+          "symbol": "fn_800B26B0",
+          "start": "0x800B26B0",
+          "end": "0x800B26D0"
+        },
+        {
+          "symbol": "fn_800B26D0",
+          "start": "0x800B26D0",
+          "end": "0x800B26E0"
         }
       ]
     },

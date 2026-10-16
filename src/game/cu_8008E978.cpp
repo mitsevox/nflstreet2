@@ -19,6 +19,7 @@
 #include "game/Class_80148A58.h"
 #include "game/Class_80297BF8.h"
 #include "game/Entry_800B206C.h"
+#include "game/Block_800B21D0.h"
 #include "game/Entry_80219044.h"
 #include "game/Class_80297AB8.h"
 #include "game/Class_80297B50.h"
@@ -3835,28 +3836,6 @@ extern "C" void fn_800AA010(int value)
     lbl_803EAA94 = 0;
 }
 
-/* The 96 bytes after the first word of Block_800B21D0, compared by
-   fn_800B19E8. */
-struct State_800B19E8 {
-    Entry_800B206C mUnknown0[1];
-    Entry_800B206C mUnknown24[1];
-    unsigned char mUnknown48[4];
-    short mUnknown4C;
-    unsigned char mUnknown4E[12];
-    unsigned char mUnknown5A;
-    unsigned char mUnknown5B;
-    unsigned char mUnknown5C;
-    unsigned char mUnknown5D;
-    unsigned char mUnknown5E;
-    unsigned char mUnknown5F[1];
-};
-
-/* Allocated through fn_80238174 under the id 'penl' (fn_800B21D0). */
-struct Block_800B21D0 {
-    void *mpUnknown0;
-    State_800B19E8 mUnknown4;
-};
-
 /* 72-byte block allocated through fn_80238174 under the id 'pcal'. */
 struct Block_800B3660 {
     unsigned char mUnknown0[8];
@@ -3956,6 +3935,7 @@ void fn_8017F3C8(int a, int b, int c);
 void fn_80167720(int mode);
 int fn_80168D98(int team, int a, int b);
 int fn_800B1AAC(void *p);
+void fn_800B2670(unsigned char value);
 void *fn_800B9A44(Class_80297C60 *p);
 void fn_800B9A6C(Class_80297C60 *p, void *q);
 void fn_800B30C8(void);
@@ -4256,37 +4236,6 @@ extern "C" void fn_800B24C8(void)
     lbl_803EAB20->mUnknown4.mUnknown5B = 0;
 }
 
-extern "C" void fn_800B2564(Object_8017886C *pFirst, Object_8017886C *pSecond)
-{
-    Step_800C4460 *pStep = (Step_800C4460 *)fn_800B9A44(lbl_803EAB84);
-
-    pStep->mUnknownC = 60.0f;
-    fn_800B9A6C(lbl_803EAB84, pStep);
-    pStep = (Step_800C4460 *)fn_800B9A44(lbl_803EAB84);
-    pStep->mContext.mpFirst = pFirst;
-    pStep->mContext.mpSecond = pSecond;
-    pStep->mpCallback0 = fn_800B1A30;
-    pStep->mpCallback4 = fn_800B1AAC;
-    pStep->mpCallback8 = fn_800B1BF8;
-    fn_800B9A6C(lbl_803EAB84, pStep);
-    lbl_803EAB20->mpUnknown0 = pStep;
-}
-
-extern "C" int fn_800B2600(void)
-{
-    return lbl_803EAB20->mUnknown4.mUnknown4C;
-}
-
-extern "C" void fn_800B260C(short value)
-{
-    lbl_803EAB20->mUnknown4.mUnknown4C = value;
-}
-
-extern "C" float fn_800B2618(int type)
-{
-    return 0.0f;
-}
-
 extern "C" int fn_800B2624(void)
 {
     return lbl_803EAB20->mUnknown4.mUnknown5D;
@@ -4309,43 +4258,6 @@ extern "C" void fn_800B2640(int mask, int set)
 extern "C" void fn_800B2670(unsigned char value)
 {
     lbl_803EAB20->mUnknown4.mUnknown5E = value;
-}
-
-/* The motion functions also reach the word 72 bytes into the block, past
-   the end of Object_800B26B0 (the player object lays it out in mUnknown496). */
-struct MotionTail_800B26B0 {
-    Object_800B26B0 mMotion;
-    float mUnknown64;
-    float mUnknown68;
-    float mUnknown72;
-    int mUnknown76;
-};
-
-extern "C" void fn_800B267C(Object_800B26B0 *pMotion)
-{
-    pMotion->mPos.mX = 0.0f;
-    pMotion->mPos.mY = 0.0f;
-    pMotion->mPos.mZ = 0.0f;
-    pMotion->mFacing = 0;
-    pMotion->mUnknown32 = 0;
-    pMotion->mUnknown28 = 0.0f;
-    pMotion->mUnknown36 = 0.0f;
-    pMotion->mUnknown52 = 0.0f;
-    pMotion->mUnknown56 = 0;
-}
-
-extern "C" void fn_800B26B0(Object_800B26B0 *pMotion)
-{
-    pMotion->mUnknown52 = 0.0f;
-    pMotion->mUnknown60 = 0.0036f;
-    ((MotionTail_800B26B0 *)pMotion)->mUnknown72 = 0.0f;
-}
-
-extern "C" void fn_800B26D0(Object_800B26B0 *pMotion, int a, int b, float c)
-{
-    pMotion->mUnknown56 = a;
-    pMotion->mUnknown52 = c;
-    pMotion->mFacing = b;
 }
 
 extern "C" void fn_800B2B90(Object_800B26B0 *pMotion)
