@@ -2984,6 +2984,42 @@ extern "C" int fn_80103D6C(Object_80039F5C *p)
     return result;
 }
 
+extern "C" void fn_80101AE0(Object_80039F5C *p, float *pOut);
+extern "C" unsigned int fn_8011E188(void);
+extern float lbl_803EAE8C;
+extern float lbl_803EAE90;
+extern float lbl_803EAE94;
+extern float lbl_803EAE98;
+extern float lbl_803EAE9C;
+extern float lbl_803EAEB8;
+
+extern "C" float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short *pCount, float scale)
+{
+    Vector_80039F5C delta;
+    float factor = 0.0f;
+    float distance;
+    float spread;
+    float base;
+    float result;
+
+    fn_8011F4F8(fn_801374E0(fn_801374BC()));
+    fn_802276B4(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
+    distance = fn_802270A4(&delta);
+    fn_801CFE40(delta.mY, delta.mX);
+    *pCount = *pCount < 5 ? 5 : (*pCount > 20 ? 20 : *pCount);
+    spread = (*pCount - 5.0f) * scale * (1.0f / 15.0f);
+    fn_80101AE0(p, &factor);
+    base = (lbl_803EAEB8 - distance) * (lbl_803EAEB8 - distance) / (lbl_803EAEB8 * lbl_803EAEB8)
+        * (lbl_803EAE94 - lbl_803EAE98) + lbl_803EAE98;
+    result = spread * (factor * (lbl_803EAE8C - base)) + base;
+    result *= 1.1f;
+    result *= lbl_803EA2C4;
+    if ((p->mFlags & 0x4000) && fn_8011E188() < lbl_803EAE9C && result > lbl_803EAE90) {
+        result = lbl_803EAE90;
+    }
+    return result;
+}
+
 extern "C" int fn_801045BC(Object_80039F5C *p)
 {
     int result = 0;
