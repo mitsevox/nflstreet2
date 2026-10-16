@@ -26265,6 +26265,11 @@
           "end": "0x800BCB18"
         },
         {
+          "symbol": "fn_800BCC30",
+          "start": "0x800BCC30",
+          "end": "0x800BCF7C"
+        },
+        {
           "symbol": "fn_800BCF7C",
           "start": "0x800BCF7C",
           "end": "0x800BD184"
@@ -26358,6 +26363,11 @@
           "symbol": "fn_800BDA7C",
           "start": "0x800BDA7C",
           "end": "0x800BDB14"
+        },
+        {
+          "symbol": "fn_800BDB14",
+          "start": "0x800BDB14",
+          "end": "0x800BDFB4"
         },
         {
           "symbol": "fn_800C7084",
