@@ -26015,6 +26015,11 @@
           "end": "0x800BD1C8"
         },
         {
+          "symbol": "fn_800BD1C8",
+          "start": "0x800BD1C8",
+          "end": "0x800BD2F8"
+        },
+        {
           "symbol": "fn_800BD2F8",
           "start": "0x800BD2F8",
           "end": "0x800BD35C"
@@ -26043,6 +26048,16 @@
           "symbol": "fn_800BD568",
           "start": "0x800BD568",
           "end": "0x800BD608"
+        },
+        {
+          "symbol": "fn_800BD608",
+          "start": "0x800BD608",
+          "end": "0x800BD774"
+        },
+        {
+          "symbol": "fn_800BD774",
+          "start": "0x800BD774",
+          "end": "0x800BD830"
         },
         {
           "symbol": "fn_800BD830",

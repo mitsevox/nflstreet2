@@ -4706,7 +4706,14 @@ extern "C" int fn_800BAE64(void)
    to; only the accessed fields are declared. */
 struct Record_800BAE7C {
     int mUnknown0;
-    unsigned char mUnknown4[0x44];
+    unsigned char mUnknown4[8];
+    Object_80039F5C *mpUnknownC;
+    int mUnknown10;
+    unsigned char mUnknown14[4];
+    Object_80039F5C *mpUnknown18;
+    unsigned char mUnknown1C[0x24];
+    int mUnknown40;
+    int mUnknown44;
     float mUnknown48;
     unsigned char mUnknown4C;
     unsigned char mUnknown4D[3];
@@ -4725,9 +4732,11 @@ struct Block_800BC538 {
     int mUnknown18;
     int mUnknown1C;
     int mUnknown20;
-    unsigned char mUnknown24[5];
+    int mUnknown24;
+    unsigned char mUnknown28;
     unsigned char mUnknown29;
-    unsigned char mUnknown2A[2];
+    unsigned char mUnknown2A;
+    unsigned char mUnknown2B;
     int mUnknown2C;
     unsigned char mUnknown30[4];
 };
@@ -8800,16 +8809,21 @@ extern "C" void fn_800B9BAC(Class_80297C60 *p)
 }
 
 /* One of the two 32-byte records at the start of Block_800BFAD0. */
+/* Read by fn_800BD608 through a pointer to +12 of Slot_800BFAD0. */
+struct Stick_800BD608 {
+    float mX;
+    float mY;
+    unsigned char mUnknown8;
+    unsigned char mUnknown9;
+    unsigned char mUnknownA;
+    unsigned char mUnknownB;
+};
+
 struct Slot_800BFAD0 {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
-    float mUnknownC;
-    float mUnknown10;
-    unsigned char mUnknown14;
-    unsigned char mUnknown15;
-    unsigned char mUnknown16;
-    unsigned char mUnknown17;
+    Stick_800BD608 mStick;
     unsigned char mUnknown18;
     unsigned char mUnknown19;
     unsigned char mUnknown1A[2];
@@ -9637,8 +9651,12 @@ void fn_8016E008(int team);
 void fn_80164A64(int team);
 void fn_800B0FA4(void);
 int fn_8016E928(void);
+int fn_8006D884(int idx);
+void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
+extern unsigned char lbl_803EABA0;
 int fn_8013C678(Camera_8013F738 *pCamera);
 void fn_8013C7C4(Camera_8013F738 *pCamera);
+void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg);
 }
 
 extern "C" void fn_800BC5B8(void)
@@ -9669,6 +9687,32 @@ extern "C" float fn_800BD190(void)
 extern "C" int fn_800BD1BC(void *p)
 {
     return lbl_803EAB95 & 1;
+}
+
+extern "C" void fn_800BD1C8(Record_800BAE7C *pRecords)
+{
+    Object_80039F5C *pA = 0;
+    Object_80039F5C *pB = 0;
+
+    if (lbl_803EABA0 == 0 && lbl_803EAB95 + 1 <= 5 &&
+        pRecords[lbl_803EAB95 + 1].mUnknown0 != 9999 &&
+        fn_8006D884(((lbl_803EAB95 + 1) & 1) == 0 ? 4 : 5) == 0) {
+        int handle;
+
+        pA = pRecords[lbl_803EAB95 + 1].mpUnknownC;
+        if (pRecords[lbl_803EAB95 + 1].mUnknown10 != 31) {
+            pB = pRecords[lbl_803EAB95 + 1].mpUnknown18;
+        }
+        if (pA != 0 && (handle = pRecords[lbl_803EAB95 + 1].mUnknown40) != -1) {
+            if ((lbl_803EC98C->mUnknown2A & 0x80) == 0) {
+                fn_80094048(handle, &pA, &pB);
+            }
+            fn_80067E3C(0x6b, &pA->mMotion.mPos, pA->mId, handle, (lbl_803EAB95 + 1) & 1,
+                        pB != 0 ? pB->mId : 0);
+            pRecords[lbl_803EAB95 + 1].mUnknown44 = 1;
+            lbl_803EABA0 = 1;
+        }
+    }
 }
 
 extern "C" void fn_800BD2F8(int team)
@@ -9718,17 +9762,17 @@ extern "C" void fn_800BD460(int team, int force)
 {
     int other = team ^ 1;
 
-    lbl_803EABA8->mSlots[team].mUnknown16 = 1;
-    lbl_803EABA8->mSlots[team].mUnknown17 = 0;
+    lbl_803EABA8->mSlots[team].mStick.mUnknownA = 1;
+    lbl_803EABA8->mSlots[team].mStick.mUnknownB = 0;
     lbl_803EABA8->mSlots[team].mUnknown18 = 0;
     lbl_803EABA8->mSlots[team].mUnknown19 = 0;
-    if (lbl_803EABA8->mSlots[other].mUnknown15 == 1) {
+    if (lbl_803EABA8->mSlots[other].mStick.mUnknown9 == 1) {
         if (force != 0) {
-            lbl_803EABA8->mSlots[team].mUnknown15 = 1;
-            lbl_803EABA8->mSlots[other].mUnknown15 = 0;
+            lbl_803EABA8->mSlots[team].mStick.mUnknown9 = 1;
+            lbl_803EABA8->mSlots[other].mStick.mUnknown9 = 0;
         }
-    } else if (lbl_803EABA8->mSlots[team].mUnknown15 == 0) {
-        lbl_803EABA8->mSlots[team].mUnknown15 = fn_800BD3C0(team);
+    } else if (lbl_803EABA8->mSlots[team].mStick.mUnknown9 == 0) {
+        lbl_803EABA8->mSlots[team].mStick.mUnknown9 = fn_800BD3C0(team);
     }
 }
 
@@ -9744,13 +9788,13 @@ extern "C" void fn_800BD51C(void)
 
 extern "C" void fn_800BD568(int team)
 {
-    if (lbl_803EABA8->mSlots[team].mUnknown16 != 0) {
+    if (lbl_803EABA8->mSlots[team].mStick.mUnknownA != 0) {
         int other = team ^ 1;
 
-        lbl_803EABA8->mSlots[team].mUnknown15 = 0;
-        lbl_803EABA8->mSlots[team].mUnknown16 = 0;
-        if (lbl_803EABA8->mSlots[other].mUnknown16 != 0) {
-            lbl_803EABA8->mSlots[other].mUnknown15 = 1;
+        lbl_803EABA8->mSlots[team].mStick.mUnknown9 = 0;
+        lbl_803EABA8->mSlots[team].mStick.mUnknownA = 0;
+        if (lbl_803EABA8->mSlots[other].mStick.mUnknownA != 0) {
+            lbl_803EABA8->mSlots[other].mStick.mUnknown9 = 1;
             fn_80148154();
             if (other == fn_80178308()) {
                 fn_80148108(0);
@@ -9760,6 +9804,63 @@ extern "C" void fn_800BD568(int team)
         } else {
             fn_800BD51C();
         }
+    }
+}
+
+extern "C" int fn_800BD608(Stick_800BD608 *pStick, int team)
+{
+    Camera_8013F738 *pCamera = fn_8013FA04(5);
+    int result = 0;
+    float value;
+
+    if (fn_802270A4(pStick) == 0.0f) {
+        if (pStick->mUnknown9 == 1) {
+            fn_8013C824(pCamera, 10, 0);
+        }
+    } else {
+        result = 1;
+        if (pStick->mUnknown9 == 1) {
+            fn_8013C824(pCamera, 10, 0);
+            value = pStick->mX;
+            if (value != 0.0f) {
+                if (value < 0.0f) {
+                    value = -value;
+                    fn_8013C824(pCamera, 9, (int)&value);
+                } else {
+                    fn_8013C824(pCamera, 8, (int)&value);
+                }
+            }
+            value = pStick->mY;
+            if (value != 0.0f) {
+                fn_8013C824(pCamera, 7, (int)&value);
+            } else {
+                result = 0;
+            }
+        } else if (fn_8017F60C() != 0 && lbl_803EABA8->mSlots[team].mUnknown0 == 4 &&
+                   pStick->mY == 0.0f) {
+            result = 0;
+        }
+    }
+    if (pStick->mUnknown8 == 0) {
+        fn_8003A3F4(0, team);
+    } else {
+        fn_8003A3F4(1, team);
+        result = 1;
+    }
+    return result;
+}
+
+extern "C" void fn_800BD774(int team, int kind)
+{
+    fn_8013FA04(5);
+    if (kind == 5) {
+        if (lbl_803EABA8->mSlots[team].mUnknown8 < 0) {
+            lbl_803EABA8->mSlots[team].mUnknown0 = lbl_803EABA8->mSlots[team].mUnknown4;
+        }
+        lbl_803EABA8->mSlots[team].mUnknown8--;
+    } else if (lbl_803EABA8->mSlots[team].mStick.mUnknownA != 0 &&
+               fn_800BD608(&lbl_803EABA8->mSlots[team].mStick, team) == 0 && kind == 4) {
+        fn_800BEC1C(fn_800B65A0(team), team);
     }
 }
 
