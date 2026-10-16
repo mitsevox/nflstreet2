@@ -7869,19 +7869,9 @@
           "end": "0x800FD724"
         },
         {
-          "symbol": "fn_800FD724",
-          "start": "0x800FD724",
-          "end": "0x800FD7D0"
-        },
-        {
           "symbol": "fn_800FD7D0",
           "start": "0x800FD7D0",
           "end": "0x800FD828"
-        },
-        {
-          "symbol": "fn_800FD978",
-          "start": "0x800FD978",
-          "end": "0x800FDA58"
         },
         {
           "symbol": "fn_800FDA58",
@@ -7889,19 +7879,9 @@
           "end": "0x800FDAC8"
         },
         {
-          "symbol": "fn_800FDAC8",
-          "start": "0x800FDAC8",
-          "end": "0x800FDFD8"
-        },
-        {
           "symbol": "fn_800FDFD8",
           "start": "0x800FDFD8",
           "end": "0x800FE03C"
-        },
-        {
-          "symbol": "fn_800FE03C",
-          "start": "0x800FE03C",
-          "end": "0x800FE41C"
         },
         {
           "symbol": "fn_800FE41C",
@@ -7974,24 +7954,9 @@
           "end": "0x80101AE0"
         },
         {
-          "symbol": "fn_80101AE0",
-          "start": "0x80101AE0",
-          "end": "0x80101B7C"
-        },
-        {
           "symbol": "fn_80101B7C",
           "start": "0x80101B7C",
           "end": "0x80101C40"
-        },
-        {
-          "symbol": "fn_80101C40",
-          "start": "0x80101C40",
-          "end": "0x80101CB4"
-        },
-        {
-          "symbol": "fn_801021C0",
-          "start": "0x801021C0",
-          "end": "0x80102470"
         },
         {
           "symbol": "fn_801024FC",
@@ -7999,24 +7964,9 @@
           "end": "0x80102664"
         },
         {
-          "symbol": "fn_8010279C",
-          "start": "0x8010279C",
-          "end": "0x80102A78"
-        },
-        {
-          "symbol": "fn_801039D8",
-          "start": "0x801039D8",
-          "end": "0x80103CB0"
-        },
-        {
           "symbol": "fn_80103D6C",
           "start": "0x80103D6C",
           "end": "0x80103DD8"
-        },
-        {
-          "symbol": "fn_80104328",
-          "start": "0x80104328",
-          "end": "0x801045BC"
         },
         {
           "symbol": "fn_801045BC",
@@ -8307,11 +8257,6 @@
           "symbol": "fn_800FB844",
           "start": "0x800FB844",
           "end": "0x800FB9D4"
-        },
-        {
-          "symbol": "fn_800FB9D4",
-          "start": "0x800FB9D4",
-          "end": "0x800FBAA8"
         },
         {
           "symbol": "fn_800FBAA8",
