@@ -9216,17 +9216,13 @@ extern short lbl_803EAB66;
 extern short lbl_803EAB68;
 extern short lbl_803EAB6A;
 extern short lbl_803EAB6C;
-extern const float lbl_80296F90[];
-extern const float lbl_80296F94[];
-extern const float lbl_80296F98[];
-extern const float lbl_80296F9C[];
 }
 
 extern "C" int fn_800B7378(Object_80039F5C *p)
 {
     int result = 0;
-    int minAngle = (int)(lbl_803EAB64 * lbl_80296F90[0]);
-    int maxAngle = (int)(lbl_803EAB65 * lbl_80296F90[0]);
+    int minAngle = (int)(lbl_803EAB64 * 46603.379f);
+    int maxAngle = (int)(lbl_803EAB65 * 46603.379f);
     Object_80039F5C *pCarrier = fn_80137B40();
     int angleSlack;
     int rangeSlack;
@@ -9234,9 +9230,9 @@ extern "C" int fn_800B7378(Object_80039F5C *p)
     int angle;
     float distance;
 
-    if (p != 0 && pCarrier != 0 && pCarrier->mMotion.mUnknown28 / lbl_803ECB08 > lbl_80296F94[0]) {
+    if (p != 0 && pCarrier != 0 && pCarrier->mMotion.mUnknown28 / lbl_803ECB08 > 0.14f) {
         if ((unsigned int)(p->mUnknown528.mUnknown15 - 4) <= 1) {
-            angleSlack = (int)(lbl_803EAB6A * lbl_80296F90[0]);
+            angleSlack = (int)(lbl_803EAB6A * 46603.379f);
         } else {
             angleSlack = 0;
         }
@@ -9247,11 +9243,11 @@ extern "C" int fn_800B7378(Object_80039F5C *p)
             fn_80227690(&delta, &p->mMotion, &pCarrier->mMotion);
             angle = fn_801CFE40(delta.mY, delta.mX);
             if (fn_801CFFD0(pCarrier->mMotion.mFacing, 0) <= 0x3FFFFF) {
-                minAngle = (int)(minAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * lbl_80296F98[0]);
-                maxAngle = (int)(maxAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * lbl_80296F9C[0]);
+                minAngle = (int)(minAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * 699050.0f);
+                maxAngle = (int)(maxAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * 1398101.0f);
             } else {
-                minAngle = (int)(minAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * lbl_80296F9C[0]);
-                maxAngle = (int)(maxAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * lbl_80296F98[0]);
+                minAngle = (int)(minAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * 1398101.0f);
+                maxAngle = (int)(maxAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * 699050.0f);
             }
             distance = fn_8022710C(&delta);
             if (angle >= minAngle - angleSlack && angle <= maxAngle + angleSlack
@@ -9336,7 +9332,6 @@ int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex);
 int fn_8011F1CC(void);
 int fn_800E1350(Object_80039F5C *p);
 
-extern const float lbl_80296FA0[];
 }
 
 extern "C" int fn_800B78DC(Object_80039F5C *p)
@@ -9394,7 +9389,7 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
         case 1:
             pCarrier = fn_80137AD0(pBall);
             if (pCarrier->mpState->mId == 15) {
-                pass = fn_8022781C(&pCarrier->mMotion, &p->mMotion) > lbl_80296FA0[0];
+                pass = fn_8022781C(&pCarrier->mMotion, &p->mMotion) > 5.0f;
             }
             break;
         case 2:
@@ -9778,7 +9773,6 @@ int fn_8017D064(int a);
 void fn_8009B924(void);
 void fn_80094DF0(void);
 
-extern const float lbl_80297068[];
 }
 
 extern "C" void fn_800B876C(int index, unsigned int event, float value)
@@ -9793,7 +9787,7 @@ extern "C" void fn_800B876C(int index, unsigned int event, float value)
     case 8:
     case 14:
     case 15:
-        if (fn_8009B9A8(0) != 0 && value == lbl_80297068[0]) {
+        if (fn_8009B9A8(0) != 0 && value == 1.0f) {
             fn_800B86A4(index);
         }
         break;
@@ -9864,7 +9858,6 @@ extern unsigned char lbl_803EAB7C;
 extern unsigned char lbl_803EAB7D;
 extern unsigned char lbl_803EAB7E;
 extern int lbl_803EAB80;
-extern const float lbl_8029706C[];
 }
 
 /* Object handed to fn_800B89C8; only the float at +0xC of its target is used. */
@@ -9882,7 +9875,7 @@ extern "C" int fn_800B89C8(void *pData)
     }
     p = *(Target_800B89C8 **)pData;
     if (lbl_803EAB78->mUnknown150 != 0) {
-        p->mUnknownC = p->mUnknownC <= lbl_8029706C[0] ? p->mUnknownC : lbl_8029706C[0];
+        p->mUnknownC = p->mUnknownC <= 180.0f ? p->mUnknownC : 180.0f;
     }
     return 1;
 }
