@@ -8523,6 +8523,46 @@ extern "C" void fn_800B6C98(void)
     }
 }
 
+extern "C" int fn_800E6AC8(Object_80039F5C *p, int a);
+
+extern "C" int fn_800B7248(Input_800B6D34 *pInput, Object_80137ABC *pBall, Object_80039F5C *p, Object_80039F5C *pTarget)
+{
+    int result = 0;
+
+    if (p->mUnknown1032 == 4 || p->mUnknown1032 == 6) {
+        if (pInput->mUnknown96 & 4) {
+            if (fn_8009BCE8(&p->mUnknown1036) != 0) {
+                result = fn_800E6AC8(pTarget, 5);
+                if (result != 0) {
+                    p->mFlags |= 0x4000;
+                    return 1;
+                }
+            }
+        } else if (pInput->mUnknown96 & 2) {
+            if ((fn_80137B40() == 0 || fn_80137B40()->mUnknown2914 != 0) && fn_80137B40() != 0) {
+                if (fn_80137B40()->mUnknown2914 != 0 || fn_80137B40()->mpState->mId == 26) {
+                    if (fn_8009BCE8(&p->mUnknown1036) != 0) {
+                        result = fn_800E6AC8(pTarget, 4);
+                        if (result != 0) {
+                            p->mFlags |= 0x4000;
+                            return 1;
+                        }
+                    }
+                }
+            } else if (fn_8009BCE8(&p->mUnknown1036) != 0) {
+                result = fn_800E6AC8(pTarget, 8);
+                if (result != 0) {
+                    p->mFlags |= 0x4000;
+                    return 1;
+                }
+            }
+        } else {
+            return 0;
+        }
+    }
+    return result;
+}
+
 extern "C" int fn_800B7368(Object_80039F5C *p, Input_800B6D34 *pInput)
 {
     return 0;
@@ -8645,6 +8685,42 @@ extern "C" int fn_800B7FE8(Object_80039F5C *p)
         return 0;
     }
     return fn_800B7F34(p);
+}
+
+extern "C" void fn_800F181C(int index, int value);
+
+extern "C" void fn_800B8028(void)
+{
+    QueryCursor cursor = { 0, 0, -1, 0 };
+    int current;
+    int i;
+
+    for (i = 0; i < lbl_803EAB60->mCount; i++) {
+        lbl_803EAB60->mpEntries[i].mUnknown0 = 0xFF;
+        lbl_803EAB60->mpEntries[i].mUnknown1 = 0xFF;
+        lbl_803EAB60->mpEntries[i].mUnknown4 = 0;
+        lbl_803EAB60->mpEntries[i].mUnknown8 = 0;
+    }
+    lbl_803EAB60->mUnknown6[0] = 0xFF;
+    lbl_803EAB60->mUnknown6[1] = 0xFF;
+    current = fn_8022E558();
+    if (fn_801FCE10(0, "declare \x8a cursor for select * from 'OCMT'\n", &cursor) == 0) {
+        int id;
+        unsigned char slot[4];
+        int team;
+
+        while (fn_801FCE10(0, "fetch from \x8a 'UNLS' into \x82 and 'digl' into \x82\n", &cursor, &id, slot) == 0) {
+            if (fn_801FCE10(0, "select 'DIGT' into \x82 from 'MTTS' where 'UNLS' = \x82\n", &team, id) != 0) {
+                break;
+            }
+            fn_800B6474(slot[3], team != current);
+            fn_800F181C(slot[3], 0);
+        }
+    }
+    if (cursor.mUnknown0 != 0) {
+        fn_801FCFA0(&cursor);
+    }
+    fn_800B64C4();
 }
 
 extern "C" int fn_800B81A4(void)
