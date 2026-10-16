@@ -1332,6 +1332,43 @@ extern "C" void fn_800A29AC(void)
     }
 }
 
+extern "C" {
+void *fn_800C47C4(void);
+int fn_801F0A8C(void *pArchive, char *pName);
+void fn_80145100(int type, int index);
+
+extern Level_80054130 *lbl_803EA554;
+}
+
+extern "C" void fn_800A2D2C(void)
+{
+    unsigned int j;
+    unsigned char i;
+
+    for (i = 0; i < 30; i++) {
+        lbl_8030E6E8.mpUnknownBC[i] = 0;
+    }
+    for (i = 0; i < 20; i++) {
+        lbl_8030E6E8.mUnknown6C[i] = 0;
+    }
+    for (j = 0; j < 8; j++) {
+        lbl_8030E6E8.mUnknown8B4[j] = 0;
+    }
+    lbl_8030E6E8.mUnknown8B4[7] = 1;
+    for (i = 0; i < lbl_803EA554->mUnknown48; i++) {
+        unsigned char count = 0;
+        unsigned char k;
+
+        for (k = 0; k < lbl_803EA554->mUnknown96; k++) {
+            if (lbl_803EA554->mUnknown100[k].mUnknown24Bytes[1] == i) {
+                count++;
+            }
+        }
+        lbl_8030E6E8.mUnknown6C[i + 8] = count;
+        fn_80145100(i + 8, fn_801F0A8C(fn_800C47C4(), &lbl_803EA554->mUnknown52[i * 24]));
+    }
+}
+
 extern "C" void fn_800A2F3C(int value)
 {
     lbl_8030E6E8.mUnknown0 = value;
@@ -1484,6 +1521,7 @@ extern "C" int fn_800A3444(void)
 
 extern "C" void fn_800A3450(void)
 {
+    unsigned int j;
     unsigned char i;
 
     for (i = 0; i < 30; i++) {

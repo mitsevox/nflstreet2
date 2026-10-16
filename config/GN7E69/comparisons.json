@@ -22705,6 +22705,11 @@
           "end": "0x800A29D8"
         },
         {
+          "symbol": "fn_800A2D2C",
+          "start": "0x800A2D2C",
+          "end": "0x800A2E80"
+        },
+        {
           "symbol": "fn_800A2F3C",
           "start": "0x800A2F3C",
           "end": "0x800A2F48"
