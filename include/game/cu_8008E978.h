@@ -5,17 +5,16 @@
    fn_80096DA8. Their original identities and the contents of the opaque
    spans remain unknown. */
 struct Frame_80141210 { unsigned char mUnknown0[0x30]; float mUnknown30, mUnknown34; unsigned char mUnknown38[4]; float mUnknown3C; };
-struct Actor_801C009C { int mUnknown0,mUnknown4; unsigned int mUnknown8; unsigned char mUnknownC[12]; Frame_80141210 *mUnknown18; };
+struct Actor_801C009C { unsigned short mUnknown0,mUnknown2,mUnknown4,mUnknown6; unsigned int mUnknown8; unsigned char mUnknownC[12]; Frame_80141210 *mUnknown18; };
 struct Selection_80141210 { unsigned char mUnknown0; unsigned char mUnknown1[3]; union { int mWord; unsigned short mParts[2]; } mUnknown4,mUnknown8; };
-struct MotionSource_80141210 { unsigned char mUnknown0[0x1C0]; int mUnknown1C0; };
+struct Object_80039F5C;
 
 /* One of the four 912-byte records at +128 of the block fn_800925F0
    allocates. */
 struct Character_80093BCC {
     int mUnknown0,mUnknown4;
     unsigned char mUnknown8[12];
-    MotionSource_80141210 *mUnknown14;
-    unsigned char mUnknown18[0xC0];
+    Object_80039F5C *mUnknown14[49];
     union { int mWord; unsigned short mParts[2]; } mUnknownD8;
     unsigned char mUnknownDC[4];
     Selection_80141210 mUnknownE0;
@@ -34,7 +33,7 @@ struct Playback_80096DA8 {
 
 extern "C" {
 Actor_801C009C *fn_80093BAC(int,int);
-Character_80093BCC *fn_80093BCC(unsigned short);
+Character_80093BCC *fn_80093BCC(unsigned int);
 Playback_80096DA8 *fn_80096DA8(unsigned int);
 Actor_801C009C *fn_80096DCC(unsigned int,int);
 }
