@@ -54,7 +54,9 @@ struct State_800E8BE8 {
 /* Player block at +336 as used by the functions of the state entry at
    0x802DB7D8. */
 struct State_800EBCE0 {
-    char mUnknown0[28];
+    Vector_80039F5C mUnknown0;
+    Vector_80039F5C mUnknown12;
+    float mUnknown24;
     int mUnknown28;
     float mUnknown32;
     int mUnknown36;
@@ -160,6 +162,7 @@ extern "C" {
 extern unsigned char lbl_803EAD9C[8];
 extern unsigned char lbl_803EADA4[8];
 extern unsigned char lbl_803EADE8[8];
+extern Table_80089904 lbl_803192F4;
 extern int lbl_803EADC4;
 extern int lbl_803EADC8;
 extern float lbl_803EADCC;
@@ -198,6 +201,8 @@ void fn_800EFE60(int a, void *p, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_8010AEC4(int value);
+void fn_80227384(void *pOut, void *pIn, int angle);
+void fn_80227350(void *pOut, void *pV, float scale);
 void fn_800E9528(Object_80039F5C *p);
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800E9DBC(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -1668,6 +1673,84 @@ extern "C" int fn_800EB0C4(Object_80137ABC *pBall, Object_80039F5C *p) {
         break;
     }
     return 1;
+}
+
+extern "C" int fn_800EB3E8(Object_80039F5C *p, State_800EBCE0 *state, Object_80137ABC *pBall, int type, int force) {
+    Vector_80039F5C target;
+    Vector_80039F5C offset;
+    Vector_80039F5C ballPos;
+    Vector_80039F5C velocity;
+    Object_80137ABC *pCurrent = fn_80137ABC(state->mUnknown43);
+    fn_80137D58(pCurrent, &ballPos);
+    float best = 1000.0f;
+    state->mUnknown44 = -1;
+    if (!fn_801787A0() && (force || ballPos.mZ < 0.5f)) {
+        fn_80137EC4(pCurrent, &velocity);
+        if (!force && (fn_802270D4(&velocity) >= 100.0f || !fn_800EAFFC(p, pCurrent)))
+            goto done;
+        fn_801BBC3C(1, 48, &lbl_803192F4);
+        for (signed char i = 0; i < lbl_803192F4.mCount; i++) {
+            Info_80089904 *pInfo = lbl_803192F4.mEntries[i].mpInfo;
+            if (type != pInfo->mType)
+                continue;
+            state->mUnknown24 = pInfo->mUnknown32;
+            fn_800EAEC0(&target, pCurrent, pInfo->mUnknown32);
+            if (type == 5) {
+                if (fn_800EB0C4(pCurrent, p) != pInfo->mUnknown6)
+                    continue;
+                float lane = fn_80178A68((Point_8017886C *)&target);
+                float own = fn_80178A68((Point_8017886C *)&p->mMotion.mPos);
+                int level = fabsf(lane - own) < 0.5f;
+                switch (pInfo->mValue) {
+                case 0:
+                    if (!level)
+                        continue;
+                    break;
+                case 1:
+                    if (lane > own)
+                        continue;
+                    break;
+                case 2:
+                    if (lane < own)
+                        continue;
+                    break;
+                default:
+                    continue;
+                }
+            }
+            if (fn_8022781C(&target, &p->mMotion.mPos) < 0.75f || fn_8022781C(&ballPos, &p->mMotion.mPos) < 0.75f)
+                force = 1;
+            offset.mX = pInfo->mUnknown8Float;
+            offset.mY = pInfo->mUnknown12Float;
+            offset.mZ = pInfo->mUnknown16Float;
+            fn_80227384(&offset, &offset, p->mMotion.mFacing);
+            fn_8022765C(&offset, &offset, &p->mMotion.mPos);
+            fn_802276B4(&offset, &target, &offset);
+            float dist = fn_802270A4(&offset);
+            float reach = fn_802270A4(&pInfo->mUnknown8Float);
+            reach = reach <= 0.75f ? reach : 0.75f;
+            if (type != 2 && type != 5) {
+                reach += reach;
+                reach = reach <= 0.75f ? reach : 0.75f;
+            }
+            if (!force && dist >= reach)
+                continue;
+            float ratio = dist / reach;
+            if (ratio >= best)
+                continue;
+            best = ratio;
+            fn_80227264(&state->mUnknown0, &offset, 0.75f / (state->mUnknown24 * dist));
+            state->mUnknown12.mX = target.mX;
+            state->mUnknown12.mY = target.mY;
+            state->mUnknown12.mZ = target.mZ;
+            fn_80227350(&state->mUnknown12, &offset, 0.75f / dist - 1.0f);
+            state->mUnknown0.mZ = 0.0f;
+            state->mUnknown44 = i;
+            state->mUnknown45 = type;
+        }
+    }
+done:
+    return state->mUnknown44 != -1;
 }
 
 extern "C" void fn_800EB78C(Object_80039F5C *p) {
