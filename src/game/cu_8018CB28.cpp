@@ -188,10 +188,12 @@ int fn_8018D23C()
     int team;
     fn_8022C628(0x54415453, 0x4D414554, &team, &count);
     for (unsigned int i = 0; i < 13; i++) {
-        list[i].Set(0x4D414554, lbl_802EAE74[i], lbl_802EAEB4[i]);
+        list[i].Set(0x4D414554, lbl_802EAE74[i]);
+        list[i].mValue = lbl_802EAEB4[i];
     }
     for (unsigned int i = 0; i < 3; i++) {
-        list[i + 13].Set(0x4D414554, lbl_802EAE74[i + 13], lbl_802EAEE8[i]);
+        list[i + 13].mValue = lbl_802EAEE8[i];
+        list[i + 13].Set(0x4D414554, lbl_802EAE74[i + 13]);
     }
     list[0].mValue = team;
     list[16].SetEnd();
