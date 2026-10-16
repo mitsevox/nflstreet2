@@ -9,6 +9,7 @@
 #include "game/Object_8017886C.h"
 #include "game/fn_8022781C.h"
 #include "game/Block_800C9D6C.h"
+#include "game/Block_800AD634.h"
 #include <string.h>
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
@@ -4994,15 +4995,6 @@ struct Block_800ABD1C {
     unsigned int mUnknown4;
 };
 
-/* 16-byte block allocated under the id 'gply' at 0x800AD664. */
-struct Block_800AD634 {
-    int mUnknown0;
-    unsigned char mUnknown4[4];
-    unsigned char mUnknown8;
-    unsigned char mUnknown9[3];
-    float mUnknownC;
-};
-
 extern "C" {
 void fn_8004A230(unsigned char value);
 void fn_8003AB08(Object_80039F5C *p, int a);
@@ -5434,131 +5426,6 @@ extern "C" void fn_800ABE00(void)
     lbl_803EAAB8->mUnknown4 = 1;
 }
 
-/* Two 8-byte records per index: a 0..1 base and a weight on the input. */
-struct Record_802D821C {
-    float mUnknown0;
-    float mUnknown4;
-};
-
-extern Record_802D821C lbl_802D821C[10];
-extern Record_802D821C lbl_802D826C[10];
-
-extern "C" short fn_800ABE10(int team, int index, short value)
-{
-    if (fn_800B65A0(team) != 255) {
-        fn_800ABDA4(team == 0);
-    } else {
-        switch (fn_800ABDA4(team)) {
-        case 0:
-            break;
-        case 1:
-            value = (short)(lbl_802D826C[index].mUnknown0 * 255.0f
-                            + lbl_802D826C[index].mUnknown4 * value);
-            break;
-        case 2:
-            value = (short)(lbl_802D821C[index].mUnknown0 * 255.0f
-                            + lbl_802D821C[index].mUnknown4 * value);
-            break;
-        }
-    }
-    return value;
-}
-
-/* Block whose four floats at +0x18 fn_800ABF00 scales by the skill level. */
-struct Block_800ABF00 {
-    unsigned char mUnknown0[0x18];
-    float mUnknown18;
-    float mUnknown1C;
-    float mUnknown20;
-    float mUnknown24;
-};
-
-extern float lbl_803EAAA8;
-extern float lbl_803EAAAC;
-extern float lbl_803EAAB0;
-extern float lbl_803EAAB4;
-
-extern "C" void fn_800ABF00(int team, Block_800ABF00 *p)
-{
-    float d0;
-    float d1;
-    float d2;
-    float d3;
-
-    switch (fn_800ABDA4(team)) {
-    case 0:
-        d0 = p->mUnknown18 * lbl_803EAAA8;
-        d1 = p->mUnknown1C * lbl_803EAAAC;
-        d2 = p->mUnknown20 * lbl_803EAAB0;
-        d3 = p->mUnknown24 * lbl_803EAAB4;
-        break;
-    case 1:
-        d0 = p->mUnknown18 * 0.05f;
-        d1 = p->mUnknown1C * 0.05f;
-        d2 = p->mUnknown20 * 0.05f;
-        d3 = p->mUnknown24 * 0.05f;
-        break;
-    case 2:
-        d0 = p->mUnknown18 * 0.15f;
-        d1 = p->mUnknown1C * 0.15f;
-        d2 = p->mUnknown20 * 0.15f;
-        d3 = p->mUnknown24 * 0.15f;
-        break;
-    default:
-        d0 = 0.0f;
-        d1 = 0.0f;
-        d2 = 0.0f;
-        d3 = 0.0f;
-        break;
-    }
-    p->mUnknown18 += d0;
-    p->mUnknown1C += d1;
-    p->mUnknown20 += d2;
-    p->mUnknown24 += d3;
-}
-
-extern "C" float fn_800AC004(int team, float value)
-{
-    switch (fn_800ABDA4(team)) {
-    case 0:
-        value *= 0.35f;
-        break;
-    case 1:
-        value *= 1.15f;
-        break;
-    case 2:
-        value *= 1.25f;
-        break;
-    }
-    return value;
-}
-
-extern "C" unsigned int fn_800AC074(int team, unsigned int value)
-{
-    int flag = 0;
-
-    if (fn_800B65A0(team) != 255) {
-        flag = 1;
-        team = team == 0;
-    }
-    switch (fn_800ABDA4(team)) {
-    case 0:
-        if (flag != 0) {
-            value = (unsigned int)(value * 2.0f);
-        } else {
-            value = (unsigned int)(value * 0.8f);
-        }
-        break;
-    case 1:
-        value = (unsigned int)(value * 1.2f);
-        break;
-    case 2:
-        value = (unsigned int)(value * 1.0f);
-        break;
-    }
-    return value;
-}
-
 extern "C" int fn_800AC218(int team)
 {
     int result;
@@ -5678,196 +5545,6 @@ extern "C" int fn_800AC3FC(int a, unsigned int value)
     return level == 0;
 }
 
-extern "C" float fn_800AC44C(Object_80039F5C *p, float value)
-{
-    int team = p->mIdBytes[2];
-
-    if (value > 0.0f) {
-        switch (fn_800ABDA4(team)) {
-        case 0:
-            if (fn_800B65A0(team) == 255) {
-                value *= 0.15f;
-            }
-            break;
-        case 1:
-            break;
-        case 2:
-            if (fn_800B65A0(team) == 255) {
-                if (fn_801BE648(p->mpUnknown792) == 225) {
-                    value *= 1.15f;
-                } else {
-                    value *= 1.15f;
-                }
-            }
-            break;
-        }
-    }
-    return value;
-}
-
-extern "C" float fn_800AC504(int team, float value)
-{
-    if (value > 0.0f) {
-        switch (fn_800ABDA4(team ^ 1)) {
-        case 0:
-        case 1:
-            value *= 0.5f;
-            break;
-        case 2:
-            fn_800B65A0(team);
-            break;
-        }
-    }
-    return value;
-}
-
-extern "C" int fn_800AC584(int team, int value)
-{
-    if (value > 0) {
-        if (fn_800B65A0(team) == 255) {
-            switch (fn_800ABDA4(team)) {
-            case 0:
-                value = (int)(value * 0.85f);
-                break;
-            case 1:
-                break;
-            case 2:
-                value = (int)(value * 1.15f);
-                break;
-            }
-        } else {
-            team = (team + 1) & 1;
-            if (fn_800B65A0(team) == 255) {
-                switch (fn_800ABDA4(team)) {
-                case 0:
-                    value = (int)(value * 1.15f);
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    value = (int)(value * 0.85f);
-                    break;
-                }
-            }
-        }
-    }
-    return value;
-}
-
-extern "C" float fn_800AC6BC(int team, float value)
-{
-    if (fn_800B65A0(team) != 255 && fn_800ABDA4(team ^ 1) == 0) {
-        value += 0.15f;
-    }
-    if (value > 1.0f) {
-        value = 1.0f;
-    }
-    return value;
-}
-
-extern "C" float fn_800AC734(Object_80039F5C *p, float value)
-{
-    if (p->mUnknown8 != 255) {
-        if (fn_800ABDA4(fn_80178308()) == 0) {
-            value += 0.15f;
-        }
-    } else {
-        switch (fn_800ABDA4(fn_80178308())) {
-        case 0:
-            value += -0.6f;
-            break;
-        case 1:
-            value += -0.3f;
-            break;
-        case 2:
-            break;
-        }
-    }
-    if (value < 0.0f) {
-        return 0.0f;
-    }
-    return value > 1.0f ? 1.0f : value;
-}
-
-extern "C" float fn_800AC7E0(int team, float value)
-{
-    int flag = 0;
-
-    if (fn_800B65A0(team) != 255) {
-        team ^= 1;
-        flag = 1;
-    }
-    switch (fn_800ABDA4(team)) {
-    case 0:
-        if (flag != 0) {
-            value *= 0.75f;
-        }
-        break;
-    case 1:
-        break;
-    case 2:
-        if (flag == 0) {
-            value *= 0.83f;
-        }
-        break;
-    }
-    return value;
-}
-
-extern "C" int fn_800AC87C(Object_80039F5C *p, int value)
-{
-    int team = p->mIdBytes[2];
-    int flag = 0;
-
-    if (fn_800B65A0(team) != 255) {
-        team ^= 1;
-        flag = 1;
-    }
-    switch (fn_800ABDA4(team)) {
-    case 0:
-        if (flag == 0) {
-            value = (int)(value * 2.0f);
-        } else {
-            value = (int)(value * 0.75f);
-        }
-        break;
-    case 1:
-        break;
-    case 2:
-        if (flag == 0) {
-            value = (int)(value * 0.75f);
-        }
-        break;
-    }
-    return value;
-}
-
-extern "C" int fn_800AC980(Object_80039F5C *p, int value)
-{
-    int team = p->mIdBytes[2];
-    int flag = 0;
-
-    if (fn_800B65A0(team) != 255) {
-        team ^= 1;
-        flag = 1;
-    }
-    switch (fn_800ABDA4(team)) {
-    case 0:
-        break;
-    case 1:
-        if (flag == 0) {
-            value = (int)(value * 0.75f);
-        }
-        break;
-    case 2:
-        if (flag == 0) {
-            value = (int)(value * 0.5f);
-        }
-        break;
-    }
-    return value;
-}
-
 extern "C" int fn_800ACA70(int team, int value)
 {
     switch (fn_800ABDA4(team)) {
@@ -5898,29 +5575,6 @@ extern "C" void fn_800ACAF8(int team, unsigned int *pValue)
     }
 }
 
-extern float lbl_803EAABC;
-
-extern "C" float fn_800ACB8C(int team)
-{
-    float result;
-
-    switch (fn_800ABDA4(team)) {
-    case 0:
-        result = lbl_803EAABC * 0.5f;
-        break;
-    case 1:
-        result = 0.25f;
-        break;
-    case 2:
-        result = 0.12f;
-        break;
-    default:
-        result = 1.0f;
-        break;
-    }
-    return result;
-}
-
 extern "C" unsigned int fn_800ACBFC(int team)
 {
     unsigned int result = 1000000000;
@@ -5940,99 +5594,6 @@ extern "C" unsigned int fn_800ACBFC(int team)
         }
     }
     return result;
-}
-
-extern float lbl_803EAAC8;
-
-extern "C" short fn_800ACC80(Object_80039F5C *p, short value)
-{
-    short result;
-
-    if (fn_800ABDA4(p->mIdBytes[2]) == 0) {
-        result = (short)(value * lbl_803EAAC8);
-    } else {
-        result = value;
-    }
-    return result;
-}
-
-extern unsigned short lbl_803EAACC[3];
-
-extern "C" int fn_800ACD04(Object_80039F5C *p)
-{
-    int team = p->mIdBytes[2];
-    int flag = 0;
-    int degrees;
-
-    if (fn_800B65A0(team) != 255) {
-        team ^= 1;
-        flag = 1;
-    }
-    switch (fn_800ABDA4(team)) {
-    case 0:
-        if (flag != 0) {
-            degrees = lbl_803EAACC[0];
-        } else {
-            degrees = lbl_803EAACC[2];
-        }
-        break;
-    case 2:
-        if (flag != 0) {
-            degrees = lbl_803EAACC[2];
-        } else {
-            degrees = lbl_803EAACC[0];
-        }
-        break;
-    case 1:
-    default:
-        degrees = lbl_803EAACC[1];
-        break;
-    }
-    return (int)(degrees * 46603.378f);
-}
-
-extern "C" void fn_800ACDE4(Object_80039F5C *p, float *pA, float *pB)
-{
-    int team = p->mIdBytes[2];
-    int flag = 0;
-
-    if (fn_800B65A0(team) != 255) {
-        team ^= 1;
-        flag = 1;
-    }
-    if (flag == 0) {
-        switch (fn_800ABDA4(team)) {
-        case 0:
-            *pA *= 0.5f;
-            *pB *= 2.0f;
-            break;
-        case 1:
-            break;
-        case 2:
-            *pB *= 0.5f;
-            break;
-        }
-    }
-}
-
-extern "C" void fn_800ACE90(Object_80039F5C *p, int *pValue)
-{
-    int team = p->mIdBytes[2];
-    int flag = 0;
-
-    if (fn_800B65A0(team) != 255) {
-        flag = 1;
-    }
-    if (flag == 0) {
-        switch (fn_800ABDA4(team)) {
-        case 0:
-        case 1:
-            break;
-        case 2:
-            *pValue = (int)(*pValue * 0.5f);
-            break;
-        }
-    }
 }
 
 extern "C" int fn_800ACF40(Object_80039F5C *p, signed char value)
@@ -6068,27 +5629,6 @@ extern "C" int fn_800ACFA8(Object_80039F5C *p)
     return result;
 }
 
-extern "C" short fn_800ACFFC(int team, short value)
-{
-    if (value > 0) {
-        switch (fn_800ABDA4(team)) {
-        case 0:
-            if (fn_800B65A0(team) == 255) {
-                value = (short)(value * 0.5f);
-            }
-            break;
-        case 1:
-            break;
-        case 2:
-            if (fn_800B65A0(team) == 255) {
-                value = (short)(value * 1.15f);
-            }
-            break;
-        }
-    }
-    return value;
-}
-
 extern "C" int fn_800AD0E4(int team)
 {
     int result = 0;
@@ -6107,56 +5647,6 @@ extern "C" int fn_800AD0E4(int team)
     return result;
 }
 
-extern "C" float fn_80237260(int stream);
-
-extern "C" float fn_800AD168(int team, float value)
-{
-    switch (fn_800ABDA4(team)) {
-    case 0:
-        value -= fn_80237260(0) * 3.0f;
-        break;
-    case 1:
-        value -= fn_80237260(0) * 2.0f;
-        break;
-    case 2:
-        value -= fn_80237260(0) * 0.0f;
-        break;
-    }
-    if (value < 0.0f) {
-        value = 0.0f;
-    }
-    return value;
-}
-
-extern "C" float fn_800AD204(int team, int value)
-{
-    float result = value;
-    int flag = 0;
-
-    if (fn_800B65A0(team) != 255) {
-        flag = 1;
-        team = team == 0;
-    }
-    switch (fn_800ABDA4(team)) {
-    case 0:
-        if (flag != 0) {
-            result += 168.3f;
-        } else {
-            result += 63.75f;
-        }
-        break;
-    case 1:
-    case 2:
-    default:
-        result += 63.75f;
-        break;
-    }
-    if (result > 255.0f) {
-        result = 255.0f;
-    }
-    return result * (1.0f / 255.0f);
-}
-
 extern "C" int fn_800AD2CC(int team, int flag)
 {
     int result;
@@ -6171,22 +5661,6 @@ extern "C" int fn_800AD2CC(int team, int flag)
         result = 0x200000;
     }
     return result;
-}
-
-extern "C" void fn_800AD31C(float dt)
-{
-    Block_800AD634 *p = lbl_803EAAD4;
-
-    if (p != 0) {
-        if (p->mUnknownC <= 0.0f) {
-            fn_8002C9A8(lbl_803EA368, 5, 0);
-            p->mUnknown8 = 0;
-            fn_800655D0();
-        } else {
-            p->mUnknownC -= dt;
-        }
-        p->mUnknownC = p->mUnknownC < 0.0f ? 0.0f : p->mUnknownC;
-    }
 }
 
 extern "C" void fn_800AD3A8(float dt)

@@ -24390,26 +24390,6 @@
           "end": "0x800ABE10"
         },
         {
-          "symbol": "fn_800ABE10",
-          "start": "0x800ABE10",
-          "end": "0x800ABF00"
-        },
-        {
-          "symbol": "fn_800ABF00",
-          "start": "0x800ABF00",
-          "end": "0x800AC004"
-        },
-        {
-          "symbol": "fn_800AC004",
-          "start": "0x800AC004",
-          "end": "0x800AC074"
-        },
-        {
-          "symbol": "fn_800AC074",
-          "start": "0x800AC074",
-          "end": "0x800AC218"
-        },
-        {
           "symbol": "fn_800AC218",
           "start": "0x800AC218",
           "end": "0x800AC268"
@@ -24440,46 +24420,6 @@
           "end": "0x800AC44C"
         },
         {
-          "symbol": "fn_800AC44C",
-          "start": "0x800AC44C",
-          "end": "0x800AC504"
-        },
-        {
-          "symbol": "fn_800AC504",
-          "start": "0x800AC504",
-          "end": "0x800AC584"
-        },
-        {
-          "symbol": "fn_800AC584",
-          "start": "0x800AC584",
-          "end": "0x800AC6BC"
-        },
-        {
-          "symbol": "fn_800AC6BC",
-          "start": "0x800AC6BC",
-          "end": "0x800AC734"
-        },
-        {
-          "symbol": "fn_800AC734",
-          "start": "0x800AC734",
-          "end": "0x800AC7E0"
-        },
-        {
-          "symbol": "fn_800AC7E0",
-          "start": "0x800AC7E0",
-          "end": "0x800AC87C"
-        },
-        {
-          "symbol": "fn_800AC87C",
-          "start": "0x800AC87C",
-          "end": "0x800AC980"
-        },
-        {
-          "symbol": "fn_800AC980",
-          "start": "0x800AC980",
-          "end": "0x800ACA70"
-        },
-        {
           "symbol": "fn_800ACA70",
           "start": "0x800ACA70",
           "end": "0x800ACAF8"
@@ -24490,34 +24430,9 @@
           "end": "0x800ACB8C"
         },
         {
-          "symbol": "fn_800ACB8C",
-          "start": "0x800ACB8C",
-          "end": "0x800ACBFC"
-        },
-        {
           "symbol": "fn_800ACBFC",
           "start": "0x800ACBFC",
           "end": "0x800ACC80"
-        },
-        {
-          "symbol": "fn_800ACC80",
-          "start": "0x800ACC80",
-          "end": "0x800ACD04"
-        },
-        {
-          "symbol": "fn_800ACD04",
-          "start": "0x800ACD04",
-          "end": "0x800ACDE4"
-        },
-        {
-          "symbol": "fn_800ACDE4",
-          "start": "0x800ACDE4",
-          "end": "0x800ACE90"
-        },
-        {
-          "symbol": "fn_800ACE90",
-          "start": "0x800ACE90",
-          "end": "0x800ACF40"
         },
         {
           "symbol": "fn_800ACF40",
@@ -24530,34 +24445,14 @@
           "end": "0x800ACFFC"
         },
         {
-          "symbol": "fn_800ACFFC",
-          "start": "0x800ACFFC",
-          "end": "0x800AD0E4"
-        },
-        {
           "symbol": "fn_800AD0E4",
           "start": "0x800AD0E4",
           "end": "0x800AD168"
         },
         {
-          "symbol": "fn_800AD168",
-          "start": "0x800AD168",
-          "end": "0x800AD204"
-        },
-        {
-          "symbol": "fn_800AD204",
-          "start": "0x800AD204",
-          "end": "0x800AD2CC"
-        },
-        {
           "symbol": "fn_800AD2CC",
           "start": "0x800AD2CC",
           "end": "0x800AD31C"
-        },
-        {
-          "symbol": "fn_800AD31C",
-          "start": "0x800AD31C",
-          "end": "0x800AD3A8"
         },
         {
           "symbol": "fn_800AD3A8",
@@ -32558,6 +32453,148 @@
           "symbol": "fn_800A22E4",
           "start": "0x800A22E4",
           "end": "0x800A233C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800ABF00.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Eleven target whole-function extents in 0x800ABF00-0x800ACA70 and their contiguous literal-pool slice 0x80296900-0x802969A0; the integer-only neighbours inside the span stay in cu_8008E978.cpp. This split permits independent compilation of the partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800ABF00",
+          "end": "0x800ACA70"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296900",
+          "end": "0x802969A0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800ABF00",
+          "start": "0x800ABF00",
+          "end": "0x800AC004"
+        },
+        {
+          "symbol": "fn_800AC004",
+          "start": "0x800AC004",
+          "end": "0x800AC074"
+        },
+        {
+          "symbol": "fn_800AC074",
+          "start": "0x800AC074",
+          "end": "0x800AC218"
+        },
+        {
+          "symbol": "fn_800AC44C",
+          "start": "0x800AC44C",
+          "end": "0x800AC504"
+        },
+        {
+          "symbol": "fn_800AC504",
+          "start": "0x800AC504",
+          "end": "0x800AC584"
+        },
+        {
+          "symbol": "fn_800AC584",
+          "start": "0x800AC584",
+          "end": "0x800AC6BC"
+        },
+        {
+          "symbol": "fn_800AC6BC",
+          "start": "0x800AC6BC",
+          "end": "0x800AC734"
+        },
+        {
+          "symbol": "fn_800AC734",
+          "start": "0x800AC734",
+          "end": "0x800AC7E0"
+        },
+        {
+          "symbol": "fn_800AC7E0",
+          "start": "0x800AC7E0",
+          "end": "0x800AC87C"
+        },
+        {
+          "symbol": "fn_800AC87C",
+          "start": "0x800AC87C",
+          "end": "0x800AC980"
+        },
+        {
+          "symbol": "fn_800AC980",
+          "start": "0x800AC980",
+          "end": "0x800ACA70"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800ACB8C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Nine target whole-function extents in 0x800ACB8C-0x800AD3A8 and their contiguous literal-pool slice 0x802969B0-0x80296A1C; the integer-only neighbours inside the span stay in cu_8008E978.cpp, and the sixteen unreferenced readonly bytes 0x802969A0-0x802969B0 before the slice remain unowned. This split permits independent compilation of the partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800ACB8C",
+          "end": "0x800AD3A8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802969B0",
+          "end": "0x80296A1C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800ACB8C",
+          "start": "0x800ACB8C",
+          "end": "0x800ACBFC"
+        },
+        {
+          "symbol": "fn_800ACC80",
+          "start": "0x800ACC80",
+          "end": "0x800ACD04"
+        },
+        {
+          "symbol": "fn_800ACD04",
+          "start": "0x800ACD04",
+          "end": "0x800ACDE4"
+        },
+        {
+          "symbol": "fn_800ACDE4",
+          "start": "0x800ACDE4",
+          "end": "0x800ACE90"
+        },
+        {
+          "symbol": "fn_800ACE90",
+          "start": "0x800ACE90",
+          "end": "0x800ACF40"
+        },
+        {
+          "symbol": "fn_800ACFFC",
+          "start": "0x800ACFFC",
+          "end": "0x800AD0E4"
+        },
+        {
+          "symbol": "fn_800AD168",
+          "start": "0x800AD168",
+          "end": "0x800AD204"
+        },
+        {
+          "symbol": "fn_800AD204",
+          "start": "0x800AD204",
+          "end": "0x800AD2CC"
+        },
+        {
+          "symbol": "fn_800AD31C",
+          "start": "0x800AD31C",
+          "end": "0x800AD3A8"
         }
       ]
     },
