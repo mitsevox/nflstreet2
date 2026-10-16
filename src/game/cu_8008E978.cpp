@@ -2332,7 +2332,7 @@ extern "C" int fn_800C76C0(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" void fn_800C76D8(Object_80039F5C *p, int value, unsigned char a, unsigned char b)
+extern "C" void fn_800C76D8(Object_80039F5C *p, int value, int a, int b)
 {
     if (p->mUnknown1220 != 0 && p->mUnknown1224 == value) {
         return;
@@ -2362,6 +2362,155 @@ extern "C" int fn_800C7720(Object_80039F5C *pOther, Object_80039F5C *p)
         }
     }
     return result;
+}
+
+extern "C" {
+int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_80039F5C *pOther, int value);
+int fn_800C4EE8(Object_80039F5C *p, Object_80039F5C *pOther, int roll, int chance);
+int fn_800C6CDC(Object_80039F5C *p, Object_80039F5C *pOther, int value);
+int fn_800C6BD8(Object_80039F5C *p, Object_80039F5C *pOther, int value);
+int fn_800C6A3C(Object_80039F5C *p, Object_80039F5C *pOther, int value);
+int fn_800C6DF8(Object_80039F5C *p, Object_80039F5C *pOther, int kind, int a, int chance, float value);
+void fn_80156C78(int id, int value);
+int fn_800CD35C(int mode, Object_80039F5C *p);
+extern float lbl_803ED6B4;
+extern float lbl_803ED6BC;
+}
+
+extern "C" void fn_800C7794(Object_80039F5C *p)
+{
+    int kindA;
+    int kindB;
+    int kindC;
+    unsigned int chance;
+    int result = 0;
+    Object_80039F5C *pOther = fn_800C75C0(p);
+    unsigned char key;
+    unsigned char blocked;
+    unsigned int roll;
+    int tackle;
+
+    if (!fn_800C6738(p, pOther)) {
+        return;
+    }
+    key = pOther->mUnknown2914;
+    chance = fn_800C6048(pOther, 0, p, key);
+    if (chance != 0 && !fn_800A7F30(pOther->mIdBytes[2]) && fn_800A851C(p->mIdBytes[2], p)) {
+        chance = 100;
+    }
+    blocked = fn_800D0B90(pOther);
+    if (fn_800C769C(p, (int)pOther)) {
+        roll = p->mUnknown1222;
+    } else {
+        roll = fn_802372EC(0, 100);
+    }
+    if (blocked) {
+        roll = 0;
+    }
+    fn_800C5F80(pOther, key, &kindA, &kindB, &kindC);
+    if (roll >= chance && !fn_800C7720(p, pOther)) {
+        unsigned int chance2 = fn_800C6640(pOther, 0, p, key, chance);
+
+        if (chance2 != 0) {
+            if (fn_800C4EE8(p, pOther, fn_802372EC(0, 100), chance2)) {
+                result = fn_800C7084(pOther, p, 172, 0.9f, 0x88888);
+                if (result) {
+                    pOther->mFlags &= ~0x80000;
+                }
+            }
+            if (!result) {
+                result = fn_800C6CDC(pOther, p, 0);
+                if (!result) {
+                    result = fn_800C7118(pOther, p, kindB, 0.45f, 0x66666, chance);
+                    if (!result && kindB == 93 && (p->mpState->mId == 12 || p->mpState->mId == 94)
+                        && fn_800CD2B4(1, p)) {
+                        fn_800C5F80(pOther, 31, &kindA, &kindB, &kindC);
+                        result = fn_800C7118(pOther, p, kindB, 0.45f, 0x66666, chance);
+                        fn_800C5F80(pOther, key, &kindA, &kindB, &kindC);
+                    }
+                }
+            }
+            if (result) {
+                int bonus;
+
+                pOther->mFlags &= ~0x80000;
+                pOther->mUnknown1160.mUnknown44++;
+                bonus = p->mRatings[5] - pOther->mRatings[2];
+                bonus = bonus / 2 + 127;
+                if (bonus >= 0) {
+                    if (bonus > 255) {
+                        bonus = 255;
+                    }
+                } else {
+                    bonus = 0;
+                }
+                pOther->mUnknown1160.mUnknown48 += bonus;
+                if (!fn_800C53D8(pOther)) {
+                    Record_800B15FC *pRecord;
+
+                    fn_800C51DC(pOther, p);
+                    fn_800C68B8(p, pOther, kindB);
+                    pRecord = fn_800B15FC();
+                    fn_8009BD2C(pOther, &pRecord->mUnknown0);
+                    pRecord->mUnknownC = pOther->mMotion.mPos.mX;
+                    pRecord->mUnknown10 = pOther->mMotion.mPos.mY;
+                    pRecord->mUnknown14 = 38;
+                    pRecord->mUnknown16 = 1;
+                    fn_800B1508();
+                }
+                fn_800C7708(p);
+            } else {
+                fn_800C76D8(p, (int)pOther, chance, roll);
+            }
+        }
+        tackle = 0;
+    } else {
+        tackle = 1;
+    }
+    if (tackle) {
+        if (fn_800C4EE8(p, pOther, roll, chance)) {
+            result = fn_800C7084(pOther, p, 172, 0.9f, 0x88888);
+            if (result) {
+                pOther->mFlags &= ~0x80000;
+            }
+        }
+        if (!result && !fn_800C53D8(pOther)) {
+            if (!result) {
+                if (fn_800C4E30(p, pOther)) {
+                    result = fn_800C6DF8(pOther, p, 234, (int)(lbl_803ED6B4 * 2.0f), chance, lbl_803ED6BC * 2.0f);
+                } else {
+                    result = fn_800C6BD8(pOther, p, 0);
+                    if (!result) {
+                        result = fn_800C6A3C(pOther, p, kindC);
+                    }
+                    if (!result) {
+                        int reach = (int)(lbl_803ED6B4 * 1.5f);
+                        float speed = lbl_803ED6BC * 1.5f;
+
+                        result = fn_800C6DF8(pOther, p, kindA, reach, chance, speed);
+                        if (!result && kindA == 94 && (p->mpState->mId == 12 || p->mpState->mId == 94)
+                            && fn_800CD2B4(1, p)) {
+                            fn_800C5F80(pOther, 31, &kindA, &kindB, &kindC);
+                            result = fn_800C6DF8(pOther, p, kindA, reach, chance, speed);
+                            fn_800C5F80(pOther, key, &kindA, &kindB, &kindC);
+                        }
+                    }
+                }
+            }
+            if (result) {
+                fn_800C51DC(pOther, p);
+                pOther->mFlags &= ~0x80000;
+                fn_80178718(p);
+                fn_800C68B8(p, pOther, kindA);
+                fn_800C7708(p);
+            } else {
+                fn_800C76D8(p, (int)pOther, chance, roll);
+            }
+        }
+    }
+    if (result && p->mUnknown8 != 255 && fn_800CD35C(1, p)) {
+        fn_80156C78(23, 1);
+    }
 }
 
 extern "C" void fn_800C8270(Object_80039F5C *p)
