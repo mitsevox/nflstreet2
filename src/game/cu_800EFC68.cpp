@@ -468,22 +468,27 @@ struct Entry_801018B4 {
     unsigned char mUnknown4;
     unsigned char mUnknown5;
     unsigned char mUnknown6;
-    char mUnknown7[1];
+    unsigned char mUnknown7;
     int mUnknown8;
     int mUnknown12;
     unsigned short mUnknown16;
+    char mUnknown18[2];
+    float mUnknown20;
+    float mUnknown24;
 };
 
-/* 8-byte item of List_801018B4; only the leading pointer is read. */
+/* 8-byte item of List_801018B4: two halfwords for fn_801BA2A8 and the
+   entry pointer. */
 struct Item_801018B4 {
+    unsigned short mUnknown0;
+    unsigned short mUnknown2;
     Entry_801018B4 *mpEntry;
-    char mUnknown4[4];
 };
 
-/* Halfword count followed by items from +8. */
+/* Halfword count followed by items from +4. */
 struct List_801018B4 {
     unsigned short mCount;
-    char mUnknown2[6];
+    char mUnknown2[2];
     Item_801018B4 mItems[1];
 };
 
@@ -718,7 +723,7 @@ int fn_800CE4A8(Query_800CE770 *pQuery);
 float fn_800C49A4(Object_80039F5C *p, float value);
 void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int a);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float e);
-void fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
+int fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
 Object_80039F5C *fn_8015286C(void *pSet, int index);
 int fn_8015310C(void *pSet);
 extern unsigned char lbl_803EAE20[8];
@@ -3030,6 +3035,104 @@ extern "C" int fn_8010279C(Object_80039F5C *p)
         }
     }
     fn_800B6E68(p, &input);
+    return 0;
+}
+
+/* View of the fn_801BE60C payload that fn_80102A78 fills and steps. */
+struct State_80102A78 {
+    int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    int mUnknown12;
+    int mUnknown16;
+    float mUnknown20;
+    float mUnknown24;
+    float mUnknown28;
+    float mUnknown32;
+    unsigned char mUnknown36;
+};
+
+extern "C" {
+void fn_800D4EC0(int value);
+int fn_80100024(Object_80039F5C *p, int angle, int mode);
+void fn_801016A4(Object_80039F5C *p, unsigned char *pKind, Point_8017886C *pPoint, unsigned int *pAngle);
+void fn_8010176C(Object_80039F5C *p, int mode, Point_8017886C *pPoint);
+float fn_801BD6D4(Block_801BD6D4 *p);
+}
+extern float lbl_803EAEC4;
+
+extern "C" int fn_80102A78(List_801018B4 *pList, unsigned short animation, void *pData, Record_800D81C8 *pEntries,
+                           Object_80039F5C *p, unsigned int mode)
+{
+    int delta = 0;
+    unsigned int angle = 0;
+    int failed = 0;
+    State_80102A78 *pState = (State_80102A78 *)fn_801BE60C(p->mpUnknown792, animation);
+
+    switch (mode) {
+    case 0: {
+        Record_8011F4F8 *pRecord = fn_8011F4F8(((State_80102664 *)&p->mUnknown336)->mUnknown3);
+        unsigned char kind = pRecord->mUnknown1D;
+        Point_8017886C point;
+        int index;
+        Entry_801018B4 *pEntry;
+
+        fn_801016A4(p, &kind, &point, &angle);
+        fn_8010176C(p, kind, &point);
+        index = fn_801018B4(p, pList, 0, angle, &delta);
+        if (index == -1) {
+            index = 0;
+        }
+        pEntry = pList->mItems[index].mpEntry;
+        if (animation == 178 && fn_80100024(p, angle, pEntry->mUnknown7) == 0) {
+            failed = 1;
+        }
+        if (failed) {
+            fn_800D0BF4(p, 0, 0);
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 69, p, 1.0f);
+        } else if (index != -1) {
+            fn_800D4EC0(pEntry->mUnknown7);
+            pState->mUnknown20 = pEntry->mUnknown20;
+            pState->mUnknown24 = pEntry->mUnknown24;
+            pState->mUnknown28 = pState->mUnknown24 - pState->mUnknown20;
+            pState->mUnknown32 = 0.0f;
+            pState->mUnknown8 = pEntry->mUnknown12;
+            pState->mUnknown16 = p->mMotion.mFacing;
+            pState->mUnknown12 = failed;
+            pState->mUnknown36 = pRecord->mUnknown1D;
+            if (pState->mUnknown28 != 0.0f) {
+                delta = (angle - pState->mUnknown8) & 0xFFFFFF;
+                if (delta > ((0x1000000 - delta) & 0xFFFFFF)) {
+                    delta = -((0x1000000 - delta) & 0xFFFFFF);
+                }
+                pState->mUnknown4 = (int)(delta / pState->mUnknown28);
+                fn_801BE760(p->mpUnknown792, animation, 1);
+            } else {
+                pState->mUnknown4 = failed;
+            }
+            pState->mUnknown0 = fn_801BA2A8(pData, pEntries, pList->mItems[index].mUnknown0,
+                                            pList->mItems[index].mUnknown2, animation, p, 1.0f);
+            fn_801BD81C(&pEntries[pState->mUnknown0].mUnknown4C, fn_801CFFA0(lbl_803EAEC4));
+        }
+        break;
+    }
+    case 1:
+        break;
+    case 2:
+        if (fn_801BE648(p->mpUnknown792) == animation) {
+            float time = fn_801BD6D4(&p->mpUnknown800[pState->mUnknown0].mUnknown4C);
+            float previous = pState->mUnknown32;
+
+            pState->mUnknown32 = time;
+            if (time > pState->mUnknown20 && previous < pState->mUnknown24) {
+                int step = pState->mUnknown4;
+
+                p->mMotion.mFacing = (p->mMotion.mFacing + step) & 0xFFFFFF;
+                p->mpUnknown800[pState->mUnknown0].mUnknownC = (p->mpUnknown800[pState->mUnknown0].mUnknownC + step) & 0xFFFFFF;
+            }
+        }
+        break;
+    }
     return 0;
 }
 
