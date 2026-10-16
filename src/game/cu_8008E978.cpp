@@ -6828,6 +6828,33 @@ extern "C" void fn_800B0004(void)
     }
 }
 
+extern "C" void fn_800B02CC(void)
+{
+    int team = fn_80178308();
+    int count = fn_80178D18(team);
+    unsigned int index;
+
+    for (index = 0; index <= 4; index++) {
+        short i;
+
+        for (i = 0; i < count; i++) {
+            int ref;
+            unsigned int group;
+
+            fn_8009BD2C(fn_80039F5C(team, i), &ref);
+            for (group = 0; group <= 1; group++) {
+                if (fn_800AFF20(group, index, ref) != 0 && fn_800AFE8C(group, index, ref) != 0) {
+                    lbl_803EAB14->mUnknown2D4 = index;
+                    lbl_803EAB14->mUnknown2D0 = ref;
+                    lbl_803EAB14->mUnknown2D8 = group;
+                    return;
+                }
+            }
+        }
+    }
+    lbl_803EAB14->mUnknown2E4 = 0;
+}
+
 extern "C" void fn_800B0A28(void)
 {
 }

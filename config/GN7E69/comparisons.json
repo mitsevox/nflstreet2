@@ -24815,6 +24815,11 @@
           "end": "0x800B0090"
         },
         {
+          "symbol": "fn_800B02CC",
+          "start": "0x800B02CC",
+          "end": "0x800B03A4"
+        },
+        {
           "symbol": "fn_800B0A28",
           "start": "0x800B0A28",
           "end": "0x800B0A2C"
