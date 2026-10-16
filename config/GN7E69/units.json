@@ -11048,6 +11048,19 @@
       ]
     },
     {
+      "source": "src/game/cu_80168ED0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Target function extents 0x80168ED0-0x801695D4 (evidence.tsv function rows) and callback producer 0x80168324. Provisional grouping.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80168ED0",
+          "end": "0x801695D4"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800EF834.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800EF834-0x800EFC68 (src/game/cu_800EF834.cpp) and its data row 0x8029DF7C-0x8029DF88.",
