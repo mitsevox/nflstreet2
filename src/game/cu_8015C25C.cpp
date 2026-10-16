@@ -291,11 +291,15 @@ extern "C" void fn_8015C9E0(int index, unsigned int priority, unsigned char queu
     }
 
     n = lbl_803EB32C->mQueueCount;
-    while (n != 0 && lbl_803EB32C->mEntries[lbl_803EB32C->mQueue[n - 1]].mUnknownF6 < priority) {
-        lbl_803EB32C->mQueue[n] = lbl_803EB32C->mQueue[n - 1];
+    for (;;) {
+        State_803EB32C *s = lbl_803EB32C;
+        if (n == 0 || s->mEntries[s->mQueue[n - 1]].mUnknownF6 >= priority) {
+            s->mQueue[n] = index;
+            break;
+        }
+        s->mQueue[n] = s->mQueue[n - 1];
         n--;
     }
-    lbl_803EB32C->mQueue[n] = index;
     lbl_803EB32C->mQueueCount++;
     if (lbl_803EB32C->mUnknown24F[index] == 0) {
         lbl_803EB32C->mUnknown244[index] = 0.0f;
