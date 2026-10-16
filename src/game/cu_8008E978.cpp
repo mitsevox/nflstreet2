@@ -6865,6 +6865,45 @@ extern "C" int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, in
     return result;
 }
 
+extern "C" int fn_80098EAC(Object_80039F5C *p, Object_800B26B0 *pMotion, int facing, int a, Object_80137ABC *pBall,
+                           int b, int mode, int c, int d, unsigned char flags, int e);
+extern "C" int fn_80138064(Object_80137ABC *pBall, Vector_80039F5C *pOut);
+
+extern "C" void fn_80099AD0(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, int b, int d, unsigned char e)
+{
+    unsigned char flags = 0;
+    int facing;
+    int angle;
+    Vector_80039F5C delta;
+
+    if (e != 0) {
+        flags = 2;
+    }
+    if (fn_80098EAC(p, &p->mMotion, p->mMotion.mFacing, 0, pBall, a, mode, b, d, flags, 0) != 0x1FFFFFFF) {
+        return;
+    }
+    facing = p->mMotion.mFacing;
+    fn_80138064(pBall, &delta);
+    fn_80227690(&delta, &delta, &p->mMotion.mPos);
+    angle = fn_801CFE40(delta.mY, delta.mX);
+    if (fn_801CFFD0(p->mMotion.mFacing, angle) <= 0xAAAA9) {
+        p->mMotion.mFacing = angle & 0xFFFFFF;
+    } else {
+        angle = (angle - p->mMotion.mFacing) & 0xFFFFFF;
+        if (angle <= 0x7FFFFF) {
+            p->mMotion.mFacing = (p->mMotion.mFacing + 0xAAAAA) & 0xFFFFFF;
+        } else {
+            p->mMotion.mFacing = (p->mMotion.mFacing - 0xAAAAA) & 0xFFFFFF;
+        }
+    }
+    p->mpUnknown796->mUnknown8 = p->mMotion.mFacing;
+    if (fn_80098EAC(p, &p->mMotion, p->mMotion.mFacing, 0, pBall, a, mode, b, d, flags, 0) == 0x1FFFFFFF) {
+        p->mMotion.mFacing = facing;
+        p->mpUnknown796->mUnknown8 = facing;
+        fn_80099734(p, pBall, a, mode, 120.0f, 0, b, 0, d, e);
+    }
+}
+
 extern "C" int fn_8009A1A8(Object_80039F5C *p, int handle, int b, int c, int kind)
 {
     Message_800F01CC message;
