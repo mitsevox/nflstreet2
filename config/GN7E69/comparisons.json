@@ -7964,19 +7964,14 @@
           "end": "0x80102664"
         },
         {
-          "symbol": "fn_80102664",
-          "start": "0x80102664",
-          "end": "0x8010279C"
-        },
-        {
           "symbol": "fn_80103D6C",
           "start": "0x80103D6C",
           "end": "0x80103DD8"
         },
         {
-          "symbol": "fn_80103DD8",
-          "start": "0x80103DD8",
-          "end": "0x80103F80"
+          "symbol": "fn_80104328",
+          "start": "0x80104328",
+          "end": "0x801045BC"
         },
         {
           "symbol": "fn_801045BC",
