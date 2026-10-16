@@ -32756,7 +32756,7 @@
     {
       "source": "src/game/cu_801531C4.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #823; eight complete slot bodies of the table 0x802A1930 (derived from the rule-set table 0x802A56E8, include/game/Class_802A56E8.h) inside the retained provisional cu_801485B4 survey group: slot 2 (0x801531C4, word 0x802A1944), slots 6 and 7 (0x801532E0 and 0x801532E8, words 0x802A1964 and 0x802A196C), slot 16 (0x80153328, word 0x802A19B4), slots 17 and 18 (0x80153354 and 0x80153394, words 0x802A19BC and 0x802A19C4), the extra slot 22 (0x801533D4, word 0x802A19E4) and slot 14 (0x80153414, word 0x802A19A4). Slots 4 and 5 (0x801531F0-0x801532E0) are not registered because their bodies do not yet match. No literal or data word is referenced, so no other range is registered. Original file boundaries and nominal identity unresolved; slot 1 (0x80153174) and 0x801534D4 onward excluded; original bytes stay linked.",
+      "evidence": "Issue #823; ten complete slot bodies of the table 0x802A1930 (derived from the rule-set table 0x802A56E8, include/game/Class_802A56E8.h) inside the retained provisional cu_801485B4 survey group: slot 2 (0x801531C4, word 0x802A1944), slots 4 and 5 (0x801531F0 and 0x80153270, words 0x802A1954 and 0x802A195C), slots 6 and 7 (0x801532E0 and 0x801532E8, words 0x802A1964 and 0x802A196C), slot 16 (0x80153328, word 0x802A19B4), slots 17 and 18 (0x80153354 and 0x80153394, words 0x802A19BC and 0x802A19C4), the extra slot 22 (0x801533D4, word 0x802A19E4) and slot 14 (0x80153414, word 0x802A19A4). No literal or data word is referenced, so no other range is registered. Original file boundaries and nominal identity unresolved; slot 1 (0x80153174) and 0x801534D4 onward excluded; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -32770,6 +32770,16 @@
           "symbol": "fn_801531C4",
           "start": "0x801531C4",
           "end": "0x801531F0"
+        },
+        {
+          "symbol": "fn_801531F0",
+          "start": "0x801531F0",
+          "end": "0x80153270"
+        },
+        {
+          "symbol": "fn_80153270",
+          "start": "0x80153270",
+          "end": "0x801532E0"
         },
         {
           "symbol": "fn_801532E0",

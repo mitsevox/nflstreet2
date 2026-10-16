@@ -27,6 +27,31 @@ unsigned char fn_801531C4(Class_802A1930 *p)
     return fn_80155128(fn_80148A58())->mpUnknown52->mUnknown32;
 }
 
+int fn_801531F0(Class_802A1930 *p, int team)
+{
+    Score_801531C4 *pScore = fn_80155128(fn_80148A58())->mpUnknown52;
+    int other = !team;
+    unsigned int score = pScore->mUnknown24[team];
+    unsigned int otherScore = pScore->mUnknown24[other];
+
+    if (pScore->mUnknown20[team] < pScore->mUnknown16) {
+        score++;
+    }
+    otherScore += pScore->mUnknown16 - pScore->mUnknown20[other];
+    return score > otherScore;
+}
+
+int fn_80153270(Class_802A1930 *p, int team)
+{
+    Score_801531C4 *pScore = fn_80155128(fn_80148A58())->mpUnknown52;
+    int other = !team;
+    unsigned int score = pScore->mUnknown24[team];
+    unsigned int otherScore = pScore->mUnknown24[other];
+
+    score += pScore->mUnknown16 - pScore->mUnknown20[team];
+    return score <= otherScore;
+}
+
 int fn_801532E0(Class_802A1930 *p)
 {
     return 2;
