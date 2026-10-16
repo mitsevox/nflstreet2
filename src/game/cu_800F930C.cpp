@@ -22,7 +22,7 @@ struct Block_800F8A88 {
     int mUnknown4;
     int mUnknown8;
     float mUnknown12;
-    int mUnknown16;
+    unsigned int mUnknown16;
     unsigned char mUnknown20;
     unsigned char mUnknown21;
     unsigned char mUnknown22;

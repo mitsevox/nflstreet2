@@ -22,7 +22,7 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_80178A08(void);
 float fn_80178A44(void);
 int fn_8009E9A4(void);
-void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Point_8017886C *pOut);
+void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut);
 extern float lbl_803ECB08;
 extern float lbl_803EAE30;
 extern float lbl_803EAE34;
@@ -96,7 +96,7 @@ extern "C" void fn_800F6AD8(float *p) {
     }
 }
 
-extern "C" void fn_800F6B2C(Object_80039F5C *p, Point_8017886C *pDelta) {
+extern "C" void fn_800F6B2C(Object_80039F5C *p, Vector_80039F5C *pDelta) {
     if (p && pDelta) {
         Vector_80039F5C *pPos = &p->mMotion.mPos;
         Point_8017886C origin;
@@ -118,7 +118,7 @@ extern "C" void fn_800F6B2C(Object_80039F5C *p, Point_8017886C *pDelta) {
     }
 }
 
-extern "C" void fn_800F6C90(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Point_8017886C *pOut) {
+extern "C" void fn_800F6C90(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
         Point_8017886C origin;
 
@@ -132,7 +132,7 @@ extern "C" void fn_800F6C90(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
     }
 }
 
-extern "C" void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Point_8017886C *pOut) {
+extern "C" void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
         Point_8017886C delta;
 
@@ -155,7 +155,7 @@ extern "C" void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
     }
 }
 
-extern "C" void fn_800F6E30(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Point_8017886C *pOut) {
+extern "C" void fn_800F6E30(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
         Point_8017886C origin = fn_80177FE0();
         Vector_80039F5C ball;
@@ -207,7 +207,7 @@ extern "C" void fn_800F6E30(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
     }
 }
 
-extern "C" void fn_800F70D0(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Point_8017886C *pOut) {
+extern "C" void fn_800F70D0(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
         Point_8017886C origin;
         Point_8017886C delta;
