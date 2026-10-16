@@ -2902,6 +2902,49 @@ extern "C" void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d)
     }
 }
 
+/* View of the player +336 storage used by fn_80102664. */
+struct State_80102664 {
+    unsigned char mUnknown0;
+    char mUnknown1[2];
+    unsigned char mUnknown3;
+};
+
+extern "C" int fn_80168E00(int team, int index, unsigned char *pOut);
+extern "C" void fn_80156C78(int a, int b);
+extern unsigned int lbl_802DAB54[];
+
+extern "C" int fn_80102664(Object_80039F5C *p)
+{
+    State_80102664 *pState = (State_80102664 *)&p->mUnknown336;
+    Record_8011F4F8 *pRecord = fn_8011F4F8(pState->mUnknown3);
+
+    if (pState->mUnknown0 == 1 && pRecord->mUnknownA != 15) {
+        Input_800B6D34 input;
+        unsigned char i;
+        unsigned int bit;
+
+        fn_800B6D34(p, &input);
+        for (i = 0; i <= 2; i++) {
+            int index = fn_80168E00(p->mIdBytes[2], i, 0);
+
+            if (pRecord->mUnknownA == index) {
+                break;
+            }
+        }
+        pRecord->mUnknown8++;
+        bit = lbl_802DAB54[i];
+        if (((&input.mUnknown92)[bit >> 3] & (1 << (bit & 7))) != (1 << (bit & 7))) {
+            pState->mUnknown0 = 0;
+            if (fn_800FFFB0(p) != 0 && (pRecord->mUnknown1D != 4 && pRecord->mUnknown1D != 5)) {
+                fn_80156C78(29, 1);
+            }
+        }
+    } else if (pRecord->mUnknown1D != 4 && pRecord->mUnknown1D != 5 && fn_800FFFB0(p) == 0) {
+        fn_800B7F34(p);
+    }
+    return 0;
+}
+
 extern "C" void fn_80102D78(Object_80039F5C *p);
 
 extern "C" int fn_80103CB0(Object_80039F5C *p)
