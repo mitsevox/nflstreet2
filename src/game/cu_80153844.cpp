@@ -34,13 +34,9 @@ void fn_80141164(float value);
 void fn_80153844(Class_802A1930 *p, int team)
 {
     Rules_801531C4 *pRules = fn_80155128(fn_80148A58());
-    Score_801531C4 *pScore = pRules->mpUnknown52;
     int other = !team;
-    unsigned short count = pScore->mUnknown16;
 
-    pScore->mUnknown20[other] = count;
-    pScore->mUnknown20[team] = count;
-    pScore->mUnknown24[team] = count;
+    pRules->mpUnknown52->mUnknown24[team] = pRules->mpUnknown52->mUnknown20[team] = pRules->mpUnknown52->mUnknown20[other] = pRules->mpUnknown52->mUnknown16;
     if (pRules->mpUnknown52->mUnknown24[other] >= pRules->mpUnknown52->mUnknown24[team]) {
         pRules->mpUnknown52->mUnknown24[other] = pRules->mpUnknown52->mUnknown24[team] - 1;
     }
