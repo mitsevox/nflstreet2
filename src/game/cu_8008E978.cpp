@@ -7454,6 +7454,131 @@ extern "C" int fn_800CAC14(Info_800CAC14 *p, int swap)
 }
 
 extern "C" {
+float fn_802270A4(void *p);
+int fn_80177F70(void);
+void fn_80227384(void *pOut, void *pIn, int angle);
+void fn_80227248(void *pOut, void *pIn, float scale);
+int fn_801BE068(void *pA, void *pB, void *pC, unsigned short key, void *p, float value);
+
+extern Table_80089904 *lbl_803EAC44;
+extern unsigned char lbl_803EAC4C;
+extern Point_8017886C lbl_803EAC50;
+extern int lbl_803EAC58;
+extern int lbl_803EAC5C;
+extern float lbl_803EAC60;
+extern unsigned char lbl_803EAC64;
+extern Table_80089904 lbl_80317AF4;
+extern Table_80089904 lbl_803186D8;
+}
+
+extern "C" int fn_800CADC0(Object_80039F5C *p, Info_80089904 *pInfo, int angle, int check)
+{
+    int result = 0;
+
+    if (check == 0 || pInfo->mType != 1) {
+        int side = 1;
+        int infoAngle = pInfo->mUnknown56;
+        int infoSide;
+
+        if (((angle - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000) {
+            side = -1;
+        }
+        infoSide = 1;
+        if (infoAngle > 0x800000) {
+            infoSide = -1;
+        }
+
+        if (side != infoSide) {
+            lbl_803EAC4C = 1;
+        }
+        result = 1;
+    }
+    return result;
+}
+
+extern "C" void fn_800CB484(Point_8017886C *pOut, Point_8017886C *pFrom, Point_8017886C *pTo, int flip, int angle,
+                            float scale)
+{
+    if (flip != 0) {
+        pTo->mY = -pTo->mY;
+    }
+    fn_80227690(pOut, pTo, pFrom);
+    fn_80227384(pOut, pOut, angle);
+    fn_80227248(pOut, pOut, scale);
+}
+
+extern "C" void fn_800CB504(void)
+{
+    fn_801BBC3C(1, 143, &lbl_80317AF4);
+    fn_801BBC3C(1, 144, &lbl_803186D8);
+    lbl_803EAC44 = 0;
+    lbl_803EAC48 = 0;
+    lbl_803EAC4C = 0;
+    lbl_803EAC50.mY = 0.0f;
+    lbl_803EAC50.mX = 0.0f;
+    lbl_803EAC58 = 0;
+    lbl_803EAC5C = 0;
+    lbl_803EAC60 = 1.0f;
+    lbl_803EAC64 = 0;
+}
+
+extern "C" int fn_800CB580(Object_80039F5C *p, int *pIndex, Point_8017886C target, int angle, int check)
+{
+    Point_8017886C delta;
+    int found = 0;
+    int facing;
+    unsigned int i;
+    float distance;
+
+    if (p->mUnknown2914 == 19 || p->mUnknown2914 == 23) {
+        if (fn_80177F70() == 0) {
+            return 0;
+        }
+    }
+    facing = p->mMotion.mFacing;
+    fn_80227690(&delta, &target, &p->mMotion.mPos);
+    distance = fn_802270A4(&delta);
+    fn_801CFFD0(facing, angle);
+    lbl_803EAC48 = 144;
+    lbl_803EAC44 = &lbl_803186D8;
+    for (i = 0; i < lbl_803EAC44->mCount; i++) {
+        Info_80089904 *pInfo;
+
+        lbl_803EAC4C = 0;
+        pInfo = lbl_803EAC44->mEntries[i].mpInfo;
+        if (!(distance - fn_802270A4(&pInfo->mUnknown20) <= 0.5f)
+            && fn_801CFFD0(fn_801CFFD0(pInfo->mUnknown56, 0), fn_801CFFD0(facing, angle)) < 0x238E39
+            && fn_800CADC0(p, pInfo, angle, check) != 0) {
+            *pIndex = i;
+            found = 1;
+            break;
+        }
+    }
+    return found;
+}
+
+extern "C" int fn_800CBB00(Object_80039F5C *p, int index, Point_8017886C target, int angle, int beyond)
+{
+    unsigned short first;
+    unsigned short second;
+
+    p->mUnknown512.mUnknown14 = 0;
+    second = lbl_803EAC44->mEntries[index].mUnknown2;
+    first = lbl_803EAC44->mEntries[index].mUnknown0;
+    p->mUnknown9[0] = 1;
+    p->mUnknown1008.mUnknown0 = second;
+    p->mUnknown1008.mUnknown1 = second >> 8;
+    p->mUnknown1008.mUnknown2 = first;
+    p->mUnknown1011 = first >> 8;
+    p->mFlags &= ~4;
+    lbl_803EAC64 = beyond;
+    lbl_803EAC50 = target;
+    lbl_803EAC58 = angle;
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, lbl_803EAC48, p, 1.0f);
+    return 1;
+}
+
+extern "C" {
 void fn_800CBFA8(Object_80039F5C *p, Delta_800CC6A8 *pPos, int angle);
 extern float lbl_802EA6D0[];
 }
