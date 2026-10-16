@@ -3239,13 +3239,14 @@ struct Block_800A70F4 {
     unsigned char mUnknown0[8];
     int mUnknown8;
     int mUnknownC;
-    int mUnknown10;
+    unsigned int mUnknown10;
     unsigned char mUnknown14[4];
     int mUnknown18;
     unsigned char mUnknown1C[8];
     short mUnknown24[10];
     short mUnknown38[10];
-    unsigned char mUnknown4C[12];
+    unsigned char mUnknown4C[8];
+    unsigned int mUnknown54;
     float mUnknown58;
     int mUnknown5C;
     int mUnknown60;
@@ -4060,6 +4061,92 @@ extern "C" void fn_800A87E8(void)
             fn_800A8570();
         }
         fn_80047874(1);
+    }
+}
+
+/* 12-byte per-event records of the table at 0x80297E84. */
+struct Entry_80297E84 {
+    unsigned int mUnknown0;
+    unsigned int mUnknown4;
+    unsigned char mUnknown8;
+    unsigned char mUnknown9;
+};
+
+extern "C" {
+int fn_80178348(void);
+int fn_800A8EA4(int team);
+int fn_800A9680(void);
+void fn_801477F0(Block_80170E64 *p);
+void fn_80071C34(int a);
+void fn_800D4164(int team, int a, float value);
+
+extern Entry_80297E84 lbl_80297E84[];
+}
+
+extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
+{
+    int other = team == 0;
+    int isUser = team == fn_80178348();
+    Object_80039F5C *pair[2];
+    unsigned int amount;
+
+    if (fn_800A8444(team)) {
+        if (p != 0 && lbl_80297E84[event].mUnknown9 != 0) {
+            fn_800A636C(team, pair);
+            if (fn_800A9680() == 0 && (p == pair[0] || p == pair[1])) {
+                fn_801477F0(p->mpUnknown4);
+                fn_80067D4C(14, &p->mMotion.mPos);
+            }
+        }
+        if (isUser) {
+            amount = lbl_80297E84[event].mUnknown0 * 2.0f;
+        } else {
+            amount = lbl_80297E84[event].mUnknown4 * 2.0f;
+        }
+        if (fn_800A8EA4(team) == 2) {
+            amount = amount * 0.5f;
+        }
+        if (amount > lbl_803EC954[team]->mUnknown54) {
+            amount = lbl_803EC954[team]->mUnknown54;
+        }
+        lbl_803EC954[team]->mUnknown54 -= amount;
+        fn_800D4164(team, 0,
+                    0.5f * ((float)lbl_803EC954[team]->mUnknown54 / (float)lbl_803EC954[team]->mUnknown10));
+        if (lbl_803EC954[team]->mUnknown54 == 0) {
+            if (event == 9 || event == 14 || event == 16) {
+                fn_80071C34(1);
+            }
+            fn_800A7A0C(team);
+        }
+    }
+    if (lbl_80297E84[event].mUnknown8 != 0 && fn_800A8444(other)) {
+        if (lbl_80297E84[event].mUnknown9 != 0) {
+            fn_800A636C(other, pair);
+            if (fn_800A9680() == 0 && (p == pair[0] || p == pair[1])) {
+                fn_801477F0(p->mpUnknown4);
+                fn_80067D4C(14, &p->mMotion.mPos);
+            }
+        }
+        if (!isUser) {
+            amount = lbl_80297E84[event].mUnknown0 * 2.0f;
+        } else {
+            amount = lbl_80297E84[event].mUnknown4 * 2.0f;
+        }
+        if (fn_800A8EA4(other) == 2) {
+            amount = amount * 0.5f;
+        }
+        if (amount > lbl_803EC954[other]->mUnknown54) {
+            amount = lbl_803EC954[other]->mUnknown54;
+        }
+        lbl_803EC954[other]->mUnknown54 -= amount;
+        fn_800D4164(other, 0,
+                    0.5f * ((float)lbl_803EC954[other]->mUnknown54 / (float)lbl_803EC954[other]->mUnknown10));
+        if (lbl_803EC954[other]->mUnknown54 == 0) {
+            if (event == 9 || event == 14 || event == 16) {
+                fn_80071C34(1);
+            }
+            fn_800A7A0C(other);
+        }
     }
 }
 
