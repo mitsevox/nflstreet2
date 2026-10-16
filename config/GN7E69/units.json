@@ -11032,6 +11032,31 @@
           "end": "0x8019D83C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80198378.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80198378-0x80198C54 (src/game/cu_80198378.cpp) and its data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80198378",
+          "end": "0x80198C54"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADB10",
+          "end": "0x802ADB40"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EDE10",
+          "end": "0x802EDF8C"
+        }
+      ]
     }
   ]
 }
