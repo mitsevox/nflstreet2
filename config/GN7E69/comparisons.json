@@ -25105,6 +25105,11 @@
           "end": "0x8009F7A4"
         },
         {
+          "symbol": "fn_8009F7A4",
+          "start": "0x8009F7A4",
+          "end": "0x8009F928"
+        },
+        {
           "symbol": "fn_8009FD7C",
           "start": "0x8009FD7C",
           "end": "0x8009FE24"

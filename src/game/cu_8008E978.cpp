@@ -7497,6 +7497,52 @@ extern "C" int fn_8009F780(void)
     return fn_8011F4EC()->mUnknown10;
 }
 
+extern "C" {
+unsigned char fn_800FC0C4(Object_80039F5C *p);
+int fn_8009DD88(Object_80039F5C *p, Object_80039F5C *pOther);
+int fn_8003A06C(void);
+int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+}
+
+extern "C" int fn_8009F7A4(Object_80039F5C *p, Object_80039F5C **ppOut)
+{
+    unsigned int i;
+    Object_80039F5C *pOther;
+    int index;
+    int id;
+
+    if (p != 0 && fn_800F06F4(0, p->mpState, 22, 0xFFFF) != 0xFFFF && !fn_801783AC(0)
+        && fn_8013BA58(fn_801374BC(), 0) == 1) {
+        for (i = 0; i < fn_8003A06C(); i++) {
+            pOther = fn_80039F5C(fn_80178308(), i);
+            if (pOther == 0) {
+                continue;
+            }
+            if (pOther->mUnknown2914 != 1 && pOther->mUnknown2914 != 2 && pOther->mUnknown2914 != 4) {
+                continue;
+            }
+            id = pOther->mpState->mId;
+            if (id == 31 || id == 33 || id == 11 || id == 32) {
+                continue;
+            }
+            if (fn_800F06F4(0, pOther->mpState, 21, 0xFFFF) == 0xFFFF) {
+                continue;
+            }
+            if (fn_800FB9D4(pOther)) {
+                continue;
+            }
+            index = fn_800F06F4(0, p->mpState, 22, 0xFFFF);
+            if (fn_800FC0C4(pOther) == p->mpState[index].mUnknown1 && fn_8009DD88(p, pOther)) {
+                if (ppOut) {
+                    *ppOut = pOther;
+                }
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
 extern "C" int fn_8009FD7C(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     int result = 0;
