@@ -2040,7 +2040,7 @@ extern "C" void fn_800C5234(Query_800CE770 *pQuery, Object_80039F5C *pTarget)
 
 extern "C" float fn_800CA9B4(int kind, Object_80039F5C *p);
 
-extern "C" int fn_800C52C8(Object_80039F5C *p, int unused, int value, int useModifier)
+extern "C" int fn_800C52C8(Object_80039F5C *p, Object_80039F5C *pOther, int value, int useModifier)
 {
     int rating;
     float scale;
@@ -2052,6 +2052,77 @@ extern "C" int fn_800C52C8(Object_80039F5C *p, int unused, int value, int useMod
         scale *= fn_800CA9B4(5, p);
     }
     return value * scale;
+}
+
+extern "C" int fn_800ACA70(int team, int value);
+extern "C" int fn_801CFE40(float y, float x);
+extern "C" void fn_80227690(void *pOut, void *pA, void *pB);
+
+extern "C" int fn_800C5418(Object_80039F5C *p, Object_80039F5C *pOther, int value)
+{
+    Block_8011E240 *pBlock;
+    Point_8017886C delta;
+    int angle;
+    int reduction;
+
+    switch (pOther->mpState->mId) {
+    case 28:
+        if (fn_801BE648(p->mpUnknown792) == 225) {
+            value = value * 0.5f;
+        }
+        break;
+    case 12:
+        value += value >> 5;
+        break;
+    case 10:
+        value >>= 1;
+        break;
+    }
+    if (pOther->mMotion.mPos.mZ > 0.0f) {
+        value -= value >> 2;
+    }
+    pBlock = &pOther->mBlock1032;
+    if (pBlock->mUnknown0 == 4) {
+        value -= value >> 2;
+        fn_8009BCE8(&pBlock->mUnknown4);
+        if (pBlock->mUnknown95[1] == 0 || pBlock->mUnknown95[0] == 0) {
+            value >>= 1;
+        }
+    }
+    if (fn_800E1554(pOther)) {
+        value = 100;
+    }
+    reduction = 0;
+    if (value > 0) {
+        fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+        angle = fn_801CFE40(delta.mY, delta.mX);
+        switch (p->mUnknown528.mUnknown15) {
+        case 6:
+        case 7:
+            if (((angle - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000) {
+                reduction = fn_800C52C8(p, pOther, value, 0);
+            }
+            break;
+        case 8:
+        case 9:
+            if (((angle - p->mMotion.mFacing) & 0xFFFFFF) < 0x800000) {
+                reduction = fn_800C52C8(p, pOther, value, 0);
+            }
+            break;
+        default:
+            switch (p->mpState->mId) {
+            case 35:
+                reduction = value >> 2;
+                break;
+            case 34:
+                reduction = value >> 3;
+                break;
+            }
+            break;
+        }
+        reduction = fn_800ACA70(p->mIdBytes[2], reduction);
+    }
+    return value - reduction;
 }
 
 extern "C" int fn_800C53D8(Object_80039F5C *p)
