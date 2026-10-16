@@ -8589,6 +8589,64 @@ void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput);
 }
 
 extern "C" {
+int fn_801CFE40(float y, float x);
+float fn_801CFB94(int angle);
+float fn_8022710C(void *pV);
+
+extern unsigned char lbl_803EAB64;
+extern unsigned char lbl_803EAB65;
+extern short lbl_803EAB66;
+extern short lbl_803EAB68;
+extern short lbl_803EAB6A;
+extern short lbl_803EAB6C;
+extern const float lbl_80296F90[];
+extern const float lbl_80296F94[];
+extern const float lbl_80296F98[];
+extern const float lbl_80296F9C[];
+}
+
+extern "C" int fn_800B7378(Object_80039F5C *p)
+{
+    int result = 0;
+    int minAngle = (int)(lbl_803EAB64 * lbl_80296F90[0]);
+    int maxAngle = (int)(lbl_803EAB65 * lbl_80296F90[0]);
+    Object_80039F5C *pCarrier = fn_80137B40();
+    int angleSlack;
+    int rangeSlack;
+    Vector_80039F5C delta;
+    int angle;
+    float distance;
+
+    if (p != 0 && pCarrier != 0 && pCarrier->mMotion.mUnknown28 / lbl_803ECB08 > lbl_80296F94[0]) {
+        if ((unsigned int)(p->mUnknown528.mUnknown15 - 4) <= 1) {
+            angleSlack = (int)(lbl_803EAB6A * lbl_80296F90[0]);
+        } else {
+            angleSlack = 0;
+        }
+        rangeSlack = (unsigned int)(p->mUnknown528.mUnknown15 - 4) <= 1 ? lbl_803EAB6C : 0;
+        if (pCarrier != 0 && fn_801BE648(pCarrier->mpUnknown792) != 0x54
+            && fn_801BE648(pCarrier->mpUnknown792) != 0x45 && fn_801BE648(pCarrier->mpUnknown792) != 0xB2
+            && fn_801BE648(pCarrier->mpUnknown792) != 0x4D && (unsigned int)pCarrier->mMotion.mFacing <= 0x800000) {
+            fn_80227690(&delta, &p->mMotion, &pCarrier->mMotion);
+            angle = fn_801CFE40(delta.mY, delta.mX);
+            if (fn_801CFFD0(pCarrier->mMotion.mFacing, 0) <= 0x3FFFFF) {
+                minAngle = (int)(minAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * lbl_80296F98[0]);
+                maxAngle = (int)(maxAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * lbl_80296F9C[0]);
+            } else {
+                minAngle = (int)(minAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * lbl_80296F9C[0]);
+                maxAngle = (int)(maxAngle - fn_801CFB94(pCarrier->mMotion.mFacing) * lbl_80296F98[0]);
+            }
+            distance = fn_8022710C(&delta);
+            if (angle >= minAngle - angleSlack && angle <= maxAngle + angleSlack
+                && distance >= lbl_803EAB66 - rangeSlack && distance <= lbl_803EAB68 + rangeSlack) {
+                result = 1;
+            }
+        }
+    }
+    return result;
+}
+
+extern "C" {
 int fn_800B54D4(Object_80039F5C *p, int mode);
 int fn_800B56C4(Object_80039F5C *p, Input_800B6D34 *pInput, int mode);
 int fn_800B6098(Object_80039F5C *p, Input_800B6D34 *pInput, int mode);
