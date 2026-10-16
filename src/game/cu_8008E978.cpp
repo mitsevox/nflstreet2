@@ -4438,6 +4438,7 @@ void fn_800B9E44(void);
 int fn_800B9F50(void);
 Point_8017886C fn_800BA7A0(void);
 void fn_800BA804(int value);
+int fn_800BA870(void);
 void fn_800BA8CC(int value);
 int fn_800BA94C(void);
 void fn_800BA9C0(int value);
@@ -4553,11 +4554,32 @@ extern "C" void fn_800BA72C(void)
     lbl_803EAB88->mUnknown184 = 0;
 }
 
+extern "C" Point_8017886C fn_800BA7A0(void)
+{
+    if (lbl_803EAB88->mUnknown20 == 0) {
+        lbl_803EAB88->mUnknown18.mX = 0.0f;
+        lbl_803EAB88->mUnknown18.mY = -20.0f;
+    }
+    return lbl_803EAB88->mUnknown18;
+}
+
 extern "C" void fn_800BA7E8(float x, float y)
 {
     if (lbl_803EAB88->mUnknown20 != 0) {
         lbl_803EAB88->mUnknown18.mX = x;
         lbl_803EAB88->mUnknown18.mY = y;
+    }
+}
+
+extern "C" void fn_800BA804(int value)
+{
+    if (fn_800BA870() != 0) {
+        lbl_803EAB88->mUnknown183 = value;
+        if (value != 0) {
+            fn_800AD910(8, 0.0f);
+        }
+    } else {
+        lbl_803EAB88->mUnknown183 = 0;
     }
 }
 
@@ -4690,6 +4712,34 @@ extern "C" void fn_800BAD9C(void)
     if (lbl_803EAB88->mUnknownE0 == 0) {
         lbl_803EAB88->mUnknownE0 = fn_800B9F50();
     }
+}
+
+/* Only the fields fn_800BADD4 touches are declared. */
+struct Object_80162DBC {
+    unsigned char mUnknown0[0x20];
+    unsigned int mUnknown20;
+    unsigned char mUnknown24[0xDC];
+    void *mUnknown100;
+};
+
+extern "C" {
+Object_80162DBC *fn_80162DBC(int index);
+void fn_80162780(int a, int b);
+void fn_8003A3F4(int a, int index);
+}
+
+extern "C" void fn_800BADD4(void)
+{
+    int i;
+
+    for (i = 0; i <= 4; i++) {
+        Object_80162DBC *p = fn_80162DBC(i);
+
+        p->mUnknown100 = 0;
+        p->mUnknown20 &= ~2;
+    }
+    fn_80162780(0, 0);
+    fn_8003A3F4(0, fn_80178308());
 }
 
 extern "C" void fn_800BAE40(void)
@@ -4938,6 +4988,23 @@ extern "C" {
 int fn_800C1E40(void);
 void fn_8021956C(void *p, int a, int b, int c);
 int fn_80169E68(int mode);
+int fn_80061DE8(void);
+}
+
+#include "game/fn_8017F584.h"
+
+extern "C" void fn_800BC470(void)
+{
+    if (fn_800C1E40() == 0) {
+        int show = 1;
+
+        if (fn_8017F584() == 10) {
+            show = (unsigned int)fn_80061DE8() <= 4;
+        }
+        if (show) {
+            fn_80218FC4(lbl_803EB688, 3, 8, 0, 0);
+        }
+    }
 }
 
 extern "C" void fn_800BC4E0(void)
