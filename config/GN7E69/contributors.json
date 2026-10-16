@@ -1133,50 +1133,6 @@
       }
     },
     {
-      "source": "src/game/InGame.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x80027FE0",
-        "0x80028140",
-        "0x80028238",
-        "0x8002823C",
-        "0x80028240",
-        "0x80028244",
-        "0x800282B8",
-        "0x800282BC",
-        "0x800282C8",
-        "0x800282D0",
-        "0x800282DC",
-        "0x80028310",
-        "0x80028320",
-        "0x8002854C",
-        "0x80028748",
-        "0x8002885C",
-        "0x800288B0",
-        "0x80028918",
-        "0x80028920",
-        "0x8002892C",
-        "0x80028934",
-        "0x8002894C",
-        "0x800289A8",
-        "0x800289B0",
-        "0x80028A5C",
-        "0x80028A8C",
-        "0x80028AB8"
-      ],
-      "provenance": {
-        "pull_request": 68,
-        "merged_via": 89,
-        "commit": "42d5e72b863c1935eb84c187d734a9dcfc2a916e",
-        "introduced_blob": "21716194dbbdbc924064abd457816c70f6ce2bbe",
-        "original_blob": "49c5d6f3b54634bfc641e6fb406d3cefbd6ede78",
-        "integration_adjustment": "Accepted shared UIS dependency reconciled in integration.",
-        "original_commit": "21e15473caafb12c8c8bbcb8820ad36556d1e224"
-      }
-    },
-    {
       "source": "src/game/LoadingFE.cpp",
       "contributors": [
         "adampreddy"
@@ -1220,26 +1176,6 @@
         "merged_via": 50,
         "commit": "3a658d132a1e13be808f5a9470bf511e7b5d56e5",
         "introduced_blob": "c3902118750a46f35c37f2b6d22fb6eceaba9546"
-      }
-    },
-    {
-      "source": "src/game/MainLoop.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x80026AD0",
-        "0x80026AF8",
-        "0x80026BA4"
-      ],
-      "provenance": {
-        "pull_request": 70,
-        "merged_via": 89,
-        "commit": "42d5e72b863c1935eb84c187d734a9dcfc2a916e",
-        "introduced_blob": "c7c397348051c6a46f83e263e443efc953f1a393",
-        "original_blob": "99a7a78efdea229d22ade00e97183d77470f9971",
-        "integration_adjustment": "Accepted shared Sys declaration reconciled in integration.",
-        "original_commit": "2b413d3bf0748ecae1eba9afa0696054cfd9a68d"
       }
     },
     {
@@ -2069,30 +2005,6 @@
         "commit": "f9aaf8ec9a6d46aa0c7789eb3ee9f796ae07c7e7",
         "introduced_blob": "ff4859ce770b99ef6b51a25a5245599fca305ef8",
         "original_blob": "ff4859ce770b99ef6b51a25a5245599fca305ef8"
-      }
-    },
-    {
-      "source": "src/game/cu_80032340.cpp",
-      "contributors": [
-        "adampreddy"
-      ],
-      "functions": [
-        "0x80032340",
-        "0x80032348",
-        "0x800323AC",
-        "0x800323B0",
-        "0x80032428",
-        "0x80032458",
-        "0x80032484"
-      ],
-      "provenance": {
-        "pull_request": 76,
-        "merged_via": 91,
-        "commit": "eea63283091a9ae13d70aed6f8fb100e2231a5d1",
-        "introduced_blob": "18b7a1290b03f7fcad848b4386de078312d6b403",
-        "original_blob": "9887e4c165c65a47e6c3a17152dacdf50d44cea3",
-        "integration_adjustment": "Original PR76 is inherited by dependent PR81; neutral virtual-slot names reconciled in integration.",
-        "original_commit": "f28c52ea3ab5e2c15261be945e75d390868eca2d"
       }
     },
     {
@@ -3228,56 +3140,6 @@
         "merged_via": 224,
         "commit": "9d5b149ef0747fce6d9a145feab364306cf94dc5",
         "introduced_blob": "1fef045941f9f6e7f08e9cdf6e1911e2ab4f2344"
-      }
-    },
-    {
-      "source": "src/game/FELoop.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x800273AC",
-        "0x8002742C",
-        "0x80027494",
-        "0x800274F4",
-        "0x80027554",
-        "0x800275C4",
-        "0x80027624",
-        "0x80027684",
-        "0x800276E4",
-        "0x80027744",
-        "0x800277A8",
-        "0x800278B8",
-        "0x80027950",
-        "0x800279AC",
-        "0x80027A20",
-        "0x80027AD8",
-        "0x80027B5C",
-        "0x80027B64",
-        "0x80027B6C",
-        "0x80027B78",
-        "0x80027C58",
-        "0x80027D88",
-        "0x80027DF0",
-        "0x80027E18",
-        "0x80027E34",
-        "0x80027E3C",
-        "0x80027E88",
-        "0x80027E90",
-        "0x80027E98",
-        "0x80027EA0",
-        "0x80027EAC",
-        "0x80027EB4",
-        "0x80027EE0",
-        "0x80027F58",
-        "0x80027F88",
-        "0x80027FB4"
-      ],
-      "provenance": {
-        "pull_request": 225,
-        "merged_via": 225,
-        "commit": "97eabc1b60debdcaa17e7d870f90de731a807bf1",
-        "introduced_blob": "923acb594677339ee785897fae0765c8d5af3b7e"
       }
     },
     {
@@ -9030,88 +8892,6 @@
         "merged_via": 489,
         "commit": "7872d50470ab3dfb0ea5084ebdad5afe31ba4b23",
         "introduced_blob": "645a6f90e41a1aefbd2f1eaed3f23518f5a3b3bb"
-      }
-    },
-    {
-      "source": "src/game/cu_800325E8.cpp",
-      "contributors": [
-        "adampreddy"
-      ],
-      "functions": [
-        "0x800325E8",
-        "0x800325F4",
-        "0x80032600"
-      ],
-      "provenance": {
-        "pull_request": 467,
-        "merged_via": 489,
-        "commit": "6946bf46c0a5ddb43ac6eb2d1c03850c54a20113",
-        "introduced_blob": "fa707f98d8532398b3748c348e4245b524955a29",
-        "original_commit": "771a8506195b2ced10b28a0cedd813d38cd6c2b1",
-        "original_blob": "d6ee8c7d4f53d9d8c48d9b7fd300dc024a06ffee",
-        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses."
-      }
-    },
-    {
-      "source": "src/game/cu_8006F810.cpp",
-      "contributors": [
-        "adampreddy"
-      ],
-      "functions": [
-        "0x8006F810",
-        "0x8006F820",
-        "0x800711DC",
-        "0x80071344",
-        "0x80071348",
-        "0x80071790",
-        "0x80071C2C",
-        "0x80071C34"
-      ],
-      "provenance": {
-        "pull_request": 472,
-        "merged_via": 489,
-        "commit": "6946bf46c0a5ddb43ac6eb2d1c03850c54a20113",
-        "introduced_blob": "baa1705b52cb365f9ff8d11ce9d338538c18ec88",
-        "original_commit": "e87d3bbb8167681e2c6130c54cba16ec9c47bb09",
-        "original_blob": "a23dbfdd8e14d42964f481dc03c626dc6782ad7b",
-        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses."
-      }
-    },
-    {
-      "source": "src/game/cu_8006F810.cpp",
-      "contributors": [
-        "adampreddy"
-      ],
-      "functions": [
-        "0x8006F824",
-        "0x80071974",
-        "0x800719A4",
-        "0x800719D4"
-      ],
-      "provenance": {
-        "pull_request": 480,
-        "merged_via": 489,
-        "commit": "6946bf46c0a5ddb43ac6eb2d1c03850c54a20113",
-        "introduced_blob": "baa1705b52cb365f9ff8d11ce9d338538c18ec88",
-        "original_commit": "9309229de46b802347f0d845f9041a7a37d60830",
-        "original_blob": "135ae1212e5532a13d8066147b568349536ffeee",
-        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses."
-      }
-    },
-    {
-      "source": "src/game/cu_800325E8.cpp",
-      "contributors": [
-        "adampreddy"
-      ],
-      "functions": [
-        "0x80032E90",
-        "0x80032EBC"
-      ],
-      "provenance": {
-        "pull_request": 487,
-        "merged_via": 489,
-        "commit": "290e1daa274a53c6f6b6689658bef46c14a4a420",
-        "introduced_blob": "fa707f98d8532398b3748c348e4245b524955a29"
       }
     },
     {
@@ -15998,35 +15778,6 @@
       }
     },
     {
-      "source": "src/game/cu_8006F810.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x80070D68",
-        "0x80070E8C",
-        "0x8007105C",
-        "0x80071540",
-        "0x80071594",
-        "0x800716E4",
-        "0x80071748",
-        "0x80071794",
-        "0x800717E0",
-        "0x8007184C",
-        "0x800718A0",
-        "0x80071914"
-      ],
-      "provenance": {
-        "pull_request": 725,
-        "merged_via": 734,
-        "commit": "23598ea10c0a90567d759733d11681d493e7db63",
-        "introduced_blob": "73a6573e7d52cdb919fdbdc744401952cc1f81cd",
-        "original_commit": "2e10963a8ea451bf29b23cbc9cd78143615a4d3e",
-        "original_blob": "73a6573e7d52cdb919fdbdc744401952cc1f81cd",
-        "integration_adjustment": "Preserve the original lane source contributor through reviewed batch integration; the final authored and introduced source blobs are identical."
-      }
-    },
-    {
       "source": "src/game/cu_800D0D4C.cpp",
       "contributors": [
         "mitsevox"
@@ -16595,6 +16346,143 @@
       }
     },
     {
+      "source": "src/game/cu_8014AB64.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8014AB64",
+        "0x8014ABE4",
+        "0x8014AC0C",
+        "0x8014AC88",
+        "0x8014AD24",
+        "0x8014AD70",
+        "0x8014ADB0",
+        "0x8014AE58",
+        "0x8014AE84",
+        "0x8014AEB4",
+        "0x8014AF24",
+        "0x8014B028",
+        "0x8014B0C8",
+        "0x8014B0D0",
+        "0x8014B178",
+        "0x8014B1C8",
+        "0x8014B210",
+        "0x8014B2CC",
+        "0x8014B350",
+        "0x8014B38C"
+      ],
+      "provenance": {
+        "pull_request": 781,
+        "merged_via": 804,
+        "commit": "8cebd04e883dac87627fa268e9853822c8ebd592",
+        "introduced_blob": "985884935ba941e1415e95d458dac4315a287cae"
+      }
+    },
+    {
+      "source": "src/game/cu_8014B890.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8014B890",
+        "0x8014B898",
+        "0x8014B8D4",
+        "0x8014B930",
+        "0x8014BA20",
+        "0x8014BB4C",
+        "0x8014BC40",
+        "0x8014BC88",
+        "0x8014BC90"
+      ],
+      "provenance": {
+        "pull_request": 783,
+        "merged_via": 804,
+        "commit": "bf32bf4da7280f552c3d6542b538aa9866571257",
+        "introduced_blob": "78bd352b4b170a7a877c7addc9cb4020e3001d84"
+      }
+    },
+    {
+      "source": "src/game/cu_8014C868.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8014C868",
+        "0x8014C8AC",
+        "0x8014C954",
+        "0x8014C980",
+        "0x8014C9B0",
+        "0x8014CA78",
+        "0x8014CA80",
+        "0x8014CA88",
+        "0x8014CA90",
+        "0x8014CA98",
+        "0x8014CAD4",
+        "0x8014CF44",
+        "0x8014CF80",
+        "0x8014CFDC",
+        "0x8014D014"
+      ],
+      "provenance": {
+        "pull_request": 787,
+        "merged_via": 804,
+        "commit": "058f156fac3ae9d027156f763ce794639bdf81a2",
+        "introduced_blob": "4b78872f618a00e6bbd70beafeb33b0bde4952b2"
+      }
+    },
+    {
+      "source": "src/game/cu_8014DA20.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8014DA20",
+        "0x8014DA90",
+        "0x8014DB24",
+        "0x8014DBCC",
+        "0x8014DBF8",
+        "0x8014DC28",
+        "0x8014DC5C",
+        "0x8014DC7C",
+        "0x8014DD04",
+        "0x8014DD2C"
+      ],
+      "provenance": {
+        "pull_request": 789,
+        "merged_via": 804,
+        "commit": "a49254411cb933639fb46fe34d44db3241cc7411",
+        "introduced_blob": "53da14c844141899140027926fc5c7c075e9eeb1"
+      }
+    },
+    {
+      "source": "src/game/cu_8014BC98.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8014BC98",
+        "0x8014BED8",
+        "0x8014C118",
+        "0x8014C150",
+        "0x8014C158",
+        "0x8014C160",
+        "0x8014C188",
+        "0x8014C214",
+        "0x8014C278",
+        "0x8014C308",
+        "0x8014C4C0",
+        "0x8014C528",
+        "0x8014C5AC"
+      ],
+      "provenance": {
+        "pull_request": 785,
+        "merged_via": 804,
+        "commit": "65deb4cb0e8538034c4ccd00d2d4b8db10119c2a",
+        "introduced_blob": "1c93ddce30ad21a082aefc53488c302751f298a6"
+      }
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "contributors": [
         "mitsevox"
@@ -16659,6 +16547,548 @@
         "merged_via": 751,
         "commit": "66676efab8fa0354e0fd279b421be79cfc34fa3a",
         "introduced_blob": "0d1cebef87f466f179f40da55c882d0a044387fc"
+      }
+    },
+    {
+      "source": "src/engine/cu_8025E148.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8025E148",
+        "0x8025E1D8",
+        "0x8025E210",
+        "0x8025E250",
+        "0x8025E850",
+        "0x8025EA08",
+        "0x8025EA64",
+        "0x8025EB14",
+        "0x8025F088",
+        "0x8025FABC",
+        "0x8025FAF8",
+        "0x8025FB08",
+        "0x8025FB34",
+        "0x8025FB68"
+      ],
+      "provenance": {
+        "pull_request": 771,
+        "merged_via": 804,
+        "commit": "05b492a01ced4212c7c369871df61402454fe419",
+        "introduced_blob": "87c7bab4b86f5abcbf0bfbfaa730ca0e3b4a848d"
+      }
+    },
+    {
+      "source": "src/engine/cu_802622DC.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x802622DC",
+        "0x80262310",
+        "0x802623A8",
+        "0x8026247C",
+        "0x802624D8",
+        "0x80262524",
+        "0x80262A88",
+        "0x80262B5C"
+      ],
+      "provenance": {
+        "pull_request": 771,
+        "merged_via": 804,
+        "commit": "6a18ef72080c634d6c0b22ce5e591eef7c5edd5b",
+        "introduced_blob": "0c482d778f5bcbd12c98352b42ad50ed7884b2f7",
+        "original_commit": "1641eb6e7e428eae9d6702c4c3838d1689c9867e",
+        "original_blob": "fcedd3c72badbe942600c8828efcb1d1e5aed81d",
+        "integration_adjustment": "Preserve original reconstruction authorship while sharing the target-supported int(int,void*,int) buffer-forwarding declaration. No function body or pointer ABI changes."
+      }
+    },
+    {
+      "source": "src/engine/cu_802714A8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80271624",
+        "0x80271640",
+        "0x80271698",
+        "0x80271710",
+        "0x80271918",
+        "0x8027199C",
+        "0x80271A04",
+        "0x80271A0C",
+        "0x80271AB8",
+        "0x80271AD0",
+        "0x80271B74",
+        "0x80271D34",
+        "0x80271E50",
+        "0x80271F18",
+        "0x8027210C",
+        "0x80272128",
+        "0x80272618",
+        "0x80273458",
+        "0x80273960",
+        "0x80273D7C",
+        "0x80273DC0",
+        "0x80274304",
+        "0x80274398",
+        "0x802747D0",
+        "0x80274EAC",
+        "0x80275150",
+        "0x802751E0",
+        "0x80275234",
+        "0x80275330",
+        "0x80275358",
+        "0x8027535C",
+        "0x80275384",
+        "0x802753AC",
+        "0x802753F0",
+        "0x8027555C",
+        "0x80275948",
+        "0x80275B7C",
+        "0x80275B9C",
+        "0x80275F54",
+        "0x80276238",
+        "0x80276378",
+        "0x802763AC",
+        "0x80276798",
+        "0x80276820",
+        "0x80276868",
+        "0x80276A84",
+        "0x80276B40"
+      ],
+      "provenance": {
+        "pull_request": 778,
+        "merged_via": 804,
+        "commit": "ca1a271b46abf68ba0d549afc765fa24421fbf2a",
+        "introduced_blob": "b7ab391a19d4591a130d67ea31ebc00e33ed5b51"
+      }
+    },
+    {
+      "source": "src/engine/cu_80264424.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8026696C"
+      ],
+      "provenance": {
+        "pull_request": 779,
+        "merged_via": 804,
+        "commit": "d0b0e46b89513bfe6234a6414edf4a11217fdc97",
+        "introduced_blob": "dd76cc5430a4c9e530bcf21bdcfb41de11facb1e"
+      }
+    },
+    {
+      "source": "src/engine/cu_80266A2C.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80266A88",
+        "0x80266AD8",
+        "0x80266B14",
+        "0x80266CB8",
+        "0x80266D0C",
+        "0x80266D20",
+        "0x80266E88",
+        "0x80266E9C",
+        "0x80266EA4",
+        "0x80266EAC",
+        "0x8026739C",
+        "0x80267404",
+        "0x80267480",
+        "0x802674DC",
+        "0x8026769C",
+        "0x80267D84",
+        "0x80267DB4",
+        "0x80267E48",
+        "0x80267EA8",
+        "0x80268058",
+        "0x80268068",
+        "0x80268078",
+        "0x80268088",
+        "0x802680A8",
+        "0x802680D0",
+        "0x80268130",
+        "0x80268270",
+        "0x80268354",
+        "0x8026839C",
+        "0x80268480",
+        "0x802684B0",
+        "0x802684D4",
+        "0x802684FC",
+        "0x80268504",
+        "0x8026852C",
+        "0x8026855C",
+        "0x8026858C",
+        "0x802685B4",
+        "0x802685B8",
+        "0x80268668",
+        "0x8026868C",
+        "0x802686CC",
+        "0x80268FA0",
+        "0x80268FC4",
+        "0x80268FE8",
+        "0x80268FFC",
+        "0x80269008",
+        "0x80269990",
+        "0x802699C8",
+        "0x802699F4",
+        "0x80269A3C",
+        "0x80269B58",
+        "0x80269B9C",
+        "0x80269BE4",
+        "0x80269C2C",
+        "0x80269C6C",
+        "0x8026A288"
+      ],
+      "provenance": {
+        "pull_request": 779,
+        "merged_via": 804,
+        "commit": "6a18ef72080c634d6c0b22ce5e591eef7c5edd5b",
+        "introduced_blob": "74ab608486c895658f3c63834d0950af54e4862a",
+        "original_commit": "d0b0e46b89513bfe6234a6414edf4a11217fdc97",
+        "original_blob": "658b142e02daa9a5b59a573b586b21eca9b95f9f",
+        "integration_adjustment": "Preserve original reconstruction authorship while sharing the target-supported int(int,void*,int) buffer-forwarding declaration. No function body or pointer ABI changes."
+      }
+    },
+    {
+      "source": "src/game/InGame.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80027FE0",
+        "0x80028140",
+        "0x80028238",
+        "0x8002823C",
+        "0x80028240",
+        "0x80028244",
+        "0x800282B8",
+        "0x800282BC",
+        "0x800282C8",
+        "0x800282D0",
+        "0x800282DC",
+        "0x80028310",
+        "0x80028320",
+        "0x8002854C",
+        "0x80028748",
+        "0x8002885C",
+        "0x800288B0",
+        "0x80028918",
+        "0x80028920",
+        "0x8002892C",
+        "0x80028934",
+        "0x8002894C",
+        "0x800289A8",
+        "0x800289B0",
+        "0x80028A5C",
+        "0x80028A8C",
+        "0x80028AB8"
+      ],
+      "provenance": {
+        "pull_request": 68,
+        "merged_via": 89,
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "08da5bbdec1f42b61888138d443fa1abcf9c0449",
+        "original_blob": "49c5d6f3b54634bfc641e6fb406d3cefbd6ede78",
+        "integration_adjustment": "Accepted shared UIS dependency reconciled in integration. Preserve all existing contributor identities, function lists and original provenance while sharing canonical state-member declarations and extending the separately measured partial group source. Existing function bytes and resolved call destinations remain unchanged; pin the current complete source blob.",
+        "original_commit": "21e15473caafb12c8c8bbcb8820ad36556d1e224"
+      }
+    },
+    {
+      "source": "src/game/MainLoop.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80026AD0",
+        "0x80026AF8",
+        "0x80026BA4"
+      ],
+      "provenance": {
+        "pull_request": 70,
+        "merged_via": 89,
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "0ff0ff77cfdc45977a687fc73e5ef07255b37541",
+        "original_blob": "99a7a78efdea229d22ade00e97183d77470f9971",
+        "integration_adjustment": "Accepted shared Sys declaration reconciled in integration. Preserve all existing contributor identities, function lists and original provenance while sharing canonical state-member declarations and extending the separately measured partial group source. Existing function bytes and resolved call destinations remain unchanged; pin the current complete source blob.",
+        "original_commit": "2b413d3bf0748ecae1eba9afa0696054cfd9a68d"
+      }
+    },
+    {
+      "source": "src/game/cu_80032340.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80032340",
+        "0x80032348",
+        "0x800323AC",
+        "0x800323B0",
+        "0x80032428",
+        "0x80032458",
+        "0x80032484"
+      ],
+      "provenance": {
+        "pull_request": 76,
+        "merged_via": 91,
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "af8b0f6ba46dabe4c4396aa50d2b3a065a4452b4",
+        "original_blob": "9887e4c165c65a47e6c3a17152dacdf50d44cea3",
+        "integration_adjustment": "Original PR76 is inherited by dependent PR81; neutral virtual-slot names reconciled in integration. Preserve all existing contributor identities, function lists and original provenance while sharing canonical state-member declarations and extending the separately measured partial group source. Existing function bytes and resolved call destinations remain unchanged; pin the current complete source blob.",
+        "original_commit": "f28c52ea3ab5e2c15261be945e75d390868eca2d"
+      }
+    },
+    {
+      "source": "src/game/FELoop.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800273AC",
+        "0x8002742C",
+        "0x80027494",
+        "0x800274F4",
+        "0x80027554",
+        "0x800275C4",
+        "0x80027624",
+        "0x80027684",
+        "0x800276E4",
+        "0x80027744",
+        "0x800277A8",
+        "0x800278B8",
+        "0x80027950",
+        "0x800279AC",
+        "0x80027A20",
+        "0x80027AD8",
+        "0x80027B5C",
+        "0x80027B64",
+        "0x80027B6C",
+        "0x80027B78",
+        "0x80027C58",
+        "0x80027D88",
+        "0x80027DF0",
+        "0x80027E18",
+        "0x80027E34",
+        "0x80027E3C",
+        "0x80027E88",
+        "0x80027E90",
+        "0x80027E98",
+        "0x80027EA0",
+        "0x80027EAC",
+        "0x80027EB4",
+        "0x80027EE0",
+        "0x80027F58",
+        "0x80027F88",
+        "0x80027FB4"
+      ],
+      "provenance": {
+        "pull_request": 225,
+        "merged_via": 225,
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "8cd88ab829c1263ce8675297fa471ae5b2909d0d",
+        "original_commit": "97eabc1b60debdcaa17e7d870f90de731a807bf1",
+        "original_blob": "923acb594677339ee785897fae0765c8d5af3b7e",
+        "integration_adjustment": "Preserve all existing contributor identities, function lists and original provenance while sharing canonical state-member declarations and extending the separately measured partial group source. Existing function bytes and resolved call destinations remain unchanged; pin the current complete source blob."
+      }
+    },
+    {
+      "source": "src/game/cu_800325E8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800325E8",
+        "0x800325F4",
+        "0x80032600"
+      ],
+      "provenance": {
+        "pull_request": 467,
+        "merged_via": 489,
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "486ebe73c37aa942e8cd5f406dedfdb14ff7ac02",
+        "original_commit": "771a8506195b2ced10b28a0cedd813d38cd6c2b1",
+        "original_blob": "d6ee8c7d4f53d9d8c48d9b7fd300dc024a06ffee",
+        "integration_adjustment": "Preserve original contributor and function attribution while adding the separately measured slot-6 selector; all five previously credited bodies remain unchanged. The current complete source blob is pinned after the dependent source addition. Preserve all existing contributor identities, function lists and original provenance while sharing canonical state-member declarations and extending the separately measured partial group source. Existing function bytes and resolved call destinations remain unchanged; pin the current complete source blob."
+      }
+    },
+    {
+      "source": "src/game/cu_800325E8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80032E90",
+        "0x80032EBC"
+      ],
+      "provenance": {
+        "pull_request": 487,
+        "merged_via": 489,
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "486ebe73c37aa942e8cd5f406dedfdb14ff7ac02",
+        "original_commit": "290e1daa274a53c6f6b6689658bef46c14a4a420",
+        "original_blob": "fa707f98d8532398b3748c348e4245b524955a29",
+        "integration_adjustment": "Preserve original contributor and function attribution while adding the separately measured slot-6 selector; all five previously credited bodies remain unchanged. The current complete source blob is pinned after the dependent source addition. Preserve all existing contributor identities, function lists and original provenance while sharing canonical state-member declarations and extending the separately measured partial group source. Existing function bytes and resolved call destinations remain unchanged; pin the current complete source blob."
+      }
+    },
+    {
+      "source": "src/game/cu_800325E8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8003260C"
+      ],
+      "provenance": {
+        "pull_request": 792,
+        "merged_via": 804,
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "486ebe73c37aa942e8cd5f406dedfdb14ff7ac02",
+        "original_commit": "6d37e00032df4d3762bf4176247451c1ec6dafd5",
+        "original_blob": "e0006f6e05a11f2b00cb0e5e5d00c1726533273b",
+        "integration_adjustment": "Preserve all existing contributor identities, function lists and original provenance while sharing canonical state-member declarations and extending the separately measured partial group source. Existing function bytes and resolved call destinations remain unchanged; pin the current complete source blob."
+      }
+    },
+    {
+      "source": "src/game/cu_800325E8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80032658"
+      ],
+      "provenance": {
+        "pull_request": 795,
+        "merged_via": 804,
+        "commit": "a0702f95b8598478df1c42582b638a1d973314ec",
+        "introduced_blob": "486ebe73c37aa942e8cd5f406dedfdb14ff7ac02"
+      }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8006F810",
+        "0x8006F820",
+        "0x800711DC",
+        "0x80071344",
+        "0x80071348",
+        "0x80071790",
+        "0x80071C2C",
+        "0x80071C34"
+      ],
+      "provenance": {
+        "pull_request": 472,
+        "merged_via": 489,
+        "commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
+        "introduced_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036",
+        "original_commit": "e87d3bbb8167681e2c6130c54cba16ec9c47bb09",
+        "original_blob": "a23dbfdd8e14d42964f481dc03c626dc6782ad7b",
+        "integration_adjustment": "Preserve original contributor identities, contribution/integration PRs, function lists and original source bindings through ordinary literal reconstruction and the two-float temporary refinement; all previously credited resolved function payloads remain unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8006F824",
+        "0x80071974",
+        "0x800719A4",
+        "0x800719D4"
+      ],
+      "provenance": {
+        "pull_request": 480,
+        "merged_via": 489,
+        "commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
+        "introduced_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036",
+        "original_commit": "9309229de46b802347f0d845f9041a7a37d60830",
+        "original_blob": "135ae1212e5532a13d8066147b568349536ffeee",
+        "integration_adjustment": "Preserve original contributor identities, contribution/integration PRs, function lists and original source bindings through ordinary literal reconstruction and the two-float temporary refinement; all previously credited resolved function payloads remain unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80070D68",
+        "0x80070E8C",
+        "0x8007105C",
+        "0x80071540",
+        "0x80071594",
+        "0x800716E4",
+        "0x80071748",
+        "0x80071794",
+        "0x800717E0",
+        "0x8007184C",
+        "0x800718A0",
+        "0x80071914"
+      ],
+      "provenance": {
+        "pull_request": 725,
+        "merged_via": 734,
+        "commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
+        "introduced_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036",
+        "original_commit": "2e10963a8ea451bf29b23cbc9cd78143615a4d3e",
+        "original_blob": "73a6573e7d52cdb919fdbdc744401952cc1f81cd",
+        "integration_adjustment": "Preserve original contributor identities, contribution/integration PRs, function lists and original source bindings through ordinary literal reconstruction and the two-float temporary refinement; all previously credited resolved function payloads remain unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80071600"
+      ],
+      "provenance": {
+        "pull_request": 799,
+        "merged_via": 804,
+        "commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
+        "introduced_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036",
+        "original_commit": "5677da2b15a53220e9dbb20e8371c3cc7878e826",
+        "original_blob": "f7fb2714236387fa754fcb8ceb36748b36236ba0",
+        "integration_adjustment": "Preserve original contributor identities, contribution/integration PRs, function lists and original source bindings through ordinary literal reconstruction and the two-float temporary refinement; all previously credited resolved function payloads remain unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8007134C"
+      ],
+      "provenance": {
+        "pull_request": 801,
+        "merged_via": 804,
+        "commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
+        "introduced_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036",
+        "original_commit": "a280e50e183c93bf82c43bc1bd55ab0a18f1e0e9",
+        "original_blob": "8140d87b20e5eefc4ea1ef0900ef9f931041ba15",
+        "integration_adjustment": "Preserve original contributor identities, contribution/integration PRs, function lists and original source bindings through ordinary literal reconstruction and the two-float temporary refinement; all previously credited resolved function payloads remain unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_8006F810.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80071458"
+      ],
+      "provenance": {
+        "pull_request": 803,
+        "merged_via": 804,
+        "commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
+        "introduced_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036"
       }
     }
   ],
