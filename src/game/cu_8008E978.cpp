@@ -4739,7 +4739,8 @@ struct Block_800BC538 {
     unsigned char mUnknown2A;
     unsigned char mUnknown2B;
     int mUnknown2C;
-    unsigned char mUnknown30[2];
+    unsigned char mUnknown30;
+    unsigned char mUnknown31;
     unsigned char mUnknown32;
     unsigned char mUnknown33;
 };
@@ -9676,6 +9677,13 @@ void fn_801790D0(int team, float a, float b);
 extern int lbl_803EAB98;
 extern int lbl_803EAB9C;
 extern unsigned short lbl_802D9B14[];
+float fn_80178A2C(void);
+void fn_801782B0(void);
+void fn_80178CD8(int a);
+void fn_8017D764(void);
+void fn_800BAAE4(void);
+int fn_80076F40(int index);
+void fn_8017DBCC(void);
 int fn_8013C678(Camera_8013F738 *pCamera);
 void fn_8013C7C4(Camera_8013F738 *pCamera);
 void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg);
@@ -9827,6 +9835,80 @@ extern "C" void fn_800BCA00(Class_80297BF8 *pThis, float dt)
 extern "C" void fn_800BCAF4(float value)
 {
     fn_800AD910(5, value);
+}
+
+extern "C" void fn_800BCC30(Class_80297BF8 *pThis)
+{
+    if (fn_800AE968(14) != 0 || fn_8002892C() != 0 || fn_8017F60C() != 0 ||
+        fn_80156704() != 0 || fn_801485D4() != 0 || fn_8007F828(14) != 1) {
+        pThis->vfn_07();
+    }
+    lbl_803EC98C->mUnknown32 = 0;
+    fn_8004A230(1);
+    fn_8013F9B8();
+    fn_800CC560(0);
+    fn_8010A220();
+    if (fn_80025708() != 0) {
+        Point_8017886C pos = {0.0f, 0.0f};
+        int spot = (signed char)fn_800785C0()->mUnknown1C0;
+
+        if (spot != -1) {
+            if (spot < 50) {
+                pos.mY = -(fn_80178A2C() * ((50 - spot) / 50.0f));
+            } else {
+                pos.mY = fn_80178A2C() * ((spot - 50) / 50.0f);
+            }
+        } else {
+            pos.mY = 7.0f - fn_80178A2C();
+        }
+        fn_801780A8(pos);
+        fn_801782B0();
+        if (fn_800785C0()->mUnknown1A4 != 0) {
+            fn_8009D964(4, fn_800785C0()->mUnknown1A4);
+            fn_8009D8CC(4);
+        }
+    } else {
+        fn_80178CD8(1);
+        fn_8017886C()->mUnknown04 = 1;
+        Point_8017886C spot = fn_80177FE0();
+        fn_8017886C()->mUnknown08.mX = spot.mX;
+        fn_8017886C()->mUnknown08.mY = spot.mY;
+    }
+    fn_800941B8();
+    fn_8017D764();
+    if (fn_800BA6F8() != 0) {
+        fn_800BAAE4();
+    } else {
+        fn_80139274();
+    }
+    fn_800AFE20(fn_800BB694);
+    fn_80067D4C(0x6e, 0);
+    if (fn_80076F40(0) != 0) {
+        fn_80067DB8(0x6d, 0, 0, 0, 0);
+    }
+    if (fn_80076F40(1) != 0) {
+        fn_80067DB8(0x6d, 0, 1, 0, 0);
+    }
+    lbl_803EABA0 = 0;
+    fn_801789F8();
+    if (fn_800BA6F8() == 0) {
+        fn_800BB9A4(1, 1);
+    }
+    lbl_803EC98C->mUnknown30 = 0;
+    lbl_803EC98C->mUnknown24 = 0;
+    lbl_803EC98C->mUnknown31 = 0;
+    lbl_803EC98C->mUnknown28 = 0;
+    lbl_803EAB95 = 0;
+    fn_801383E4(1);
+    fn_800BB5DC();
+    fn_8003E174(1);
+    if (lbl_803EC98C->mUnknown8 != -1) {
+        fn_80096D14(lbl_803EC98C->mUnknown8);
+    }
+    fn_8017DBCC();
+    if (fn_800C1E40() == 0 && fn_80025708() == 0 && fn_8019623C(0x23000) != 0) {
+        fn_80195EFC(5, 100, 0, 0);
+    }
 }
 
 extern "C" void fn_800BCF7C(void)

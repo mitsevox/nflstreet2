@@ -26020,6 +26020,11 @@
           "end": "0x800BCB18"
         },
         {
+          "symbol": "fn_800BCC30",
+          "start": "0x800BCC30",
+          "end": "0x800BCF7C"
+        },
+        {
           "symbol": "fn_800BCF7C",
           "start": "0x800BCF7C",
           "end": "0x800BD184"
