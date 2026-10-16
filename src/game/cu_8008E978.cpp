@@ -8588,6 +8588,73 @@ int fn_801783AC(int bit);
 void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput);
 }
 
+extern "C" {
+int fn_800B54D4(Object_80039F5C *p, int mode);
+int fn_800B56C4(Object_80039F5C *p, Input_800B6D34 *pInput, int mode);
+int fn_800B6098(Object_80039F5C *p, Input_800B6D34 *pInput, int mode);
+int fn_800D0B90(Object_80039F5C *p);
+int fn_800E8098(Object_80039F5C *p, int a);
+int fn_80111090(Object_80039F5C *p, int a);
+void fn_8016DA98(Object_80039F5C *p);
+}
+
+extern "C" int fn_800B76E8(Object_80039F5C *p)
+{
+    Input_800B6D34 input;
+    int mode = 0;
+
+    fn_800B6D34(p, &input);
+    if (fn_80137B40() == p) {
+        if ((input.mUnknown96 & 1) || (input.mUnknown96 & 0x10)) {
+            mode = 4;
+        }
+        if (fn_800D0B90(p) == 0 && (input.mUnknown95 & 8)) {
+            p->mFlags |= 0x4000;
+            if (fn_800CA5CC(p, 0, 1) != 0) {
+                if ((unsigned int)(p->mUnknown528.mUnknown15 - 10) <= 1) {
+                    p->mUnknown512.mUnknown15 = 11;
+                } else {
+                    p->mUnknown512.mUnknown15 = 1;
+                }
+                fn_8016DA98(p);
+            }
+        }
+    } else if (input.mUnknown95 & 8) {
+        p->mFlags |= 0x4000;
+        if (fn_800CA5CC(p, 0, 1) != 0) {
+            p->mUnknown512.mUnknown15 = 1;
+            fn_8016DA98(p);
+        }
+    }
+    if (fn_80137B40() == p) {
+        if (fn_800B56C4(p, &input, mode) == 0) {
+            return 0;
+        }
+        if ((input.mUnknown92 & 1) && fn_800B54D4(p, mode) != 0) {
+            goto handled;
+        }
+        if (fn_800B6098(p, &input, mode) != 0) {
+            return 0;
+        }
+        if ((input.mUnknown95 & 0x10) && fn_80111090(p, 0) != 0) {
+            goto handled;
+        }
+    } else {
+        if ((input.mUnknown92 & 1) && fn_800E815C(p, 0, 0) != 0) {
+            goto handled;
+        }
+        if ((input.mUnknown92 & 4) && (fn_800E8098(p, 3) != 0 || fn_800F2C1C(p, 0) != 0)) {
+            goto handled;
+        }
+    }
+    fn_800B6E68(p, &input);
+    return 0;
+
+handled:
+    p->mFlags |= 0x4000;
+    return 0;
+}
+
 extern "C" int fn_800B7CA4(Object_80039F5C *p)
 {
     Object_80137ABC *pBall = fn_801374BC();
