@@ -8163,7 +8163,8 @@ struct Sequence_800C4460 {
    bytes). Only the accessed fields are named. */
 struct Block_800B95B4 {
     Sequence_800C4460 mSequence;
-    unsigned char mUnknown104[64];
+    Object_8017886C mUnknown104;
+    Object_8017886C mUnknown124;
     unsigned int mUnknown144;
     unsigned char mUnknown148;
     unsigned char mUnknown149[3];
@@ -8825,14 +8826,86 @@ extern "C" void fn_800B9630(void)
     fn_800B9598(0);
 }
 
+/* Argument of fn_802345C4. */
+struct Desc_802345C4 {
+    int mUnknown0;
+    int mUnknown4;
+};
+
 extern "C" {
+int fn_8002D0AC(Type_803EA368 *p);
+void fn_80076160(void);
 void fn_8007617C(void);
+void fn_800A1FEC(Object_8017886C *result, Object_8017886C *value);
 void fn_800B8028(void);
-void fn_800C4568(Sequence_800C4460 *p);
 void fn_800B876C(int a, int b, float c);
 void fn_800BAAE4(void);
-void fn_8017DBCC(void);
+void fn_800C4460(Sequence_800C4460 *p);
+void fn_800C4568(Sequence_800C4460 *p);
+void fn_800C9FC0(void);
+unsigned char fn_801478F0(unsigned char a);
+void fn_80148154(void);
+void fn_801483C8(void);
 void fn_80179150(void);
+void fn_8017DBCC(void);
+void fn_802345C4(Desc_802345C4 *pDesc, int count);
+
+extern unsigned char lbl_803EAB7C;
+extern unsigned char lbl_803EAB7D;
+extern unsigned char lbl_803EAB7E;
+extern int lbl_803EAB80;
+}
+
+extern "C" void fn_800B9654(Class_80297C60 *p, float dt)
+{
+    Vector_80039F5C pos;
+
+    pos.mX = pos.mY = pos.mZ = 0.0f;
+    fn_80076160();
+    fn_800C9FC0();
+    fn_800AE9EC();
+    fn_801478F0(0);
+    fn_801783D0(21, 0);
+    fn_800C4438(&lbl_803EAB78->mSequence);
+    if (fn_801486A0()) {
+        p->vfn_08();
+    }
+    fn_800B24C8();
+    if (fn_800BA6F8()) {
+        fn_800BAAC4();
+    }
+    fn_800A1FEC(&lbl_803EAB78->mUnknown104, &lbl_803EAB78->mUnknown124);
+    lbl_803EAB78->mUnknown151 = 0;
+    p->vfn_06();
+    fn_800C4460(&lbl_803EAB78->mSequence);
+    if (fn_8002D060(lbl_803EA368) == 0) {
+        fn_800AFDD4(fn_800B876C);
+    }
+    fn_80067D4C(123, 0);
+    fn_80148154();
+    fn_801483C8();
+    if (fn_8002D0AC(lbl_803EA368)) {
+        fn_800310C0(lbl_803EA368, 37, 0, &pos, 0);
+    }
+    lbl_803EAB78->mUnknown148 = 0;
+    lbl_803EAB78->mUnknown14C = 0;
+    lbl_803EAB78->mUnknown144 = 0;
+    lbl_803EAB78->mUnknown150 = 0;
+    lbl_803EAB78->mUnknown158 = 0;
+    lbl_803EAB78->mUnknown159[0] = 0;
+    lbl_803EAB78->mUnknown154 = 0;
+    lbl_803EAB78->mUnknown160 = 1;
+    lbl_803EAB78->mUnknown164 = 2;
+    p->vfn_07();
+    Desc_802345C4 desc = { 3, 14 };
+    fn_802345C4(&desc, 2);
+    fn_801789F8();
+    lbl_803EAB80 = -1;
+    lbl_803EAB7C = 0;
+    lbl_803EAB7D = 0;
+    lbl_803EAB7E = 0;
+    fn_8009FF94(0);
+    fn_8009FFB4(0);
 }
 
 extern "C" void fn_800B9998(Class_80297C60 *p)
