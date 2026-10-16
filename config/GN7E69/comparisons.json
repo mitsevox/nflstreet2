@@ -7879,6 +7879,63 @@
       ]
     },
     {
+      "source": "src/game/cu_800E8098.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800E3CC0 grouping: target whole-function extents and their literal-pool slice; the split permits independent compilation of a partial literal pool and does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E8098",
+          "end": "0x800E815C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DD18",
+          "end": "0x8029DD1C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E8098",
+          "start": "0x800E8098",
+          "end": "0x800E815C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800E8420.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800E3CC0 grouping: target whole-function extents and their literal-pool slice; the split permits independent compilation of a partial literal pool and does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E8420",
+          "end": "0x800E86E4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DD38",
+          "end": "0x8029DD40"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E8420",
+          "start": "0x800E8420",
+          "end": "0x800E8554"
+        },
+        {
+          "symbol": "fn_800E8554",
+          "start": "0x800E8554",
+          "end": "0x800E86E4"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800EFC68.cpp",
       "profile": "game_cpp",
       "evidence": "Registered whole-function extents and allocated data sections are measured independently under comparisons.json; evidence.tsv records target boundaries, grouping confidence and source-form provenance. Unregistered functions remain unmeasured; comparison-only source stays unlinked.",
