@@ -24560,6 +24560,16 @@
           "end": "0x800AE138"
         },
         {
+          "symbol": "fn_800AE138",
+          "start": "0x800AE138",
+          "end": "0x800AE380"
+        },
+        {
+          "symbol": "fn_800AE380",
+          "start": "0x800AE380",
+          "end": "0x800AE65C"
+        },
+        {
           "symbol": "fn_800AE65C",
           "start": "0x800AE65C",
           "end": "0x800AE6F0"

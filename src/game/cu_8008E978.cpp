@@ -52,6 +52,7 @@
 #include "game/Record_8011F4F8.h"
 #include "game/State_800FDA58.h"
 #include "game/Object_801BC084.h"
+#include "game/Object_800785C0.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
@@ -6032,7 +6033,7 @@ struct Block_800AEB1C {
 
 extern "C" {
 void fn_800ADA1C(void);
-void fn_800AE138(int index);
+void fn_800AE138(unsigned int index);
 int fn_800B6644(int index);
 int fn_80177C38(void);
 int fn_80178308(void);
@@ -6069,6 +6070,147 @@ extern "C" void fn_800AE10C(void)
 
     for (i = 0; i < 6; i++) {
         lbl_8030F51C[i] = fn_800ADA1C;
+    }
+}
+
+extern "C" void fn_800AE138(unsigned int index)
+{
+    int side = -1;
+
+    if (fn_8002892C() != 0 || fn_8017F60C() != 0) {
+        return;
+    }
+    switch (lbl_802D82E0[index].mUnknown10) {
+    case 0:
+        break;
+    case 1:
+        side = fn_800B65A0(fn_80178308());
+        break;
+    case 2:
+        side = fn_800B65A0(fn_80178320());
+        break;
+    }
+    lbl_803EAAE9 = 1;
+    switch (index) {
+    case 0:
+        fn_80064EFC(7, 14, side);
+        break;
+    case 1:
+        fn_80064EFC(7, 11, side);
+        break;
+    case 2:
+        fn_80064EFC(7, 10, side);
+        break;
+    case 3:
+        fn_80064EFC(7, 13, side);
+        break;
+    case 4:
+        fn_80064EFC(7, 0, side);
+        break;
+    case 5:
+        fn_80064EFC(7, 1, side);
+        break;
+    case 8:
+        fn_80064EFC(7, 2, side);
+        break;
+    case 6:
+        fn_80064EFC(7, 4, side);
+        break;
+    case 7:
+        fn_80064EFC(7, 5, side);
+        break;
+    case 9:
+        fn_80064EFC(7, 6, side);
+        break;
+    case 10:
+        fn_80064EFC(7, 7, side);
+        break;
+    case 11:
+        fn_80064EFC(7, 8, side);
+        break;
+    case 12:
+        fn_80064EFC(7, 9, side);
+        break;
+    case 13:
+        fn_80064EFC(7, 12, side);
+        break;
+    case 14:
+        fn_80064EFC(7, 15, side);
+        break;
+    default:
+        lbl_803EAAE9 = 0;
+        break;
+    }
+}
+
+extern "C" void fn_800AE380(void)
+{
+    unsigned int i = 0;
+    int found = 0;
+
+    if (fn_8007F828(15) != 0) {
+        int home = 1;
+        int away;
+
+        lbl_803EC96C++;
+        if (fn_800B65A0(fn_80178308()) == 255) {
+            home = 0;
+        }
+        away = 1;
+        if (fn_800B65A0(fn_80178320()) == 255) {
+            away = 0;
+        }
+        if ((home && fn_80178308() == fn_80178348()) || (away && fn_80178320() == fn_80178360())) {
+            lbl_803EC970++;
+        } else {
+            lbl_803EC970 = 0;
+        }
+        for (i = 0; i < 15; i++) {
+            if (lbl_802D82E0[i].mUnknown0 == 0 || lbl_8030F9DC[i] != 0) {
+                continue;
+            }
+            if ((lbl_802D82E0[i].mUnknown10 == 0 && (home || away)) || (lbl_802D82E0[i].mUnknown10 == 1 && home)
+                || (lbl_802D82E0[i].mUnknown10 == 2 && away)) {
+                if (lbl_802D82E0[i].mUnknown4 != 0 && lbl_803EC96C >= lbl_802D82E0[i].mUnknown4 && lbl_8030F9EC[i] == 0) {
+                    found = 1;
+                }
+                if (lbl_802D82E0[i].mUnknown8 != 0 && lbl_8030F9EC[i] != 0) {
+                    found = 1;
+                }
+                if (lbl_802D82E0[i].mUnknownC != 0 && lbl_8030F9EC[i] == 0 && lbl_803EC970 >= lbl_802D82E0[i].mUnknownC) {
+                    found = 1;
+                }
+                if (lbl_803EAAF0 != 0 && lbl_802D82E0[i].mUnknown1 != 0) {
+                    found = 0;
+                }
+            }
+            if (found) {
+                break;
+            }
+        }
+    }
+    lbl_803EAAE8 = found;
+    lbl_803EAAEC = i;
+    if (fn_80178AE0() != 2) {
+        lbl_803EAAE8 = 0;
+    }
+    if (fn_80025708() != 0
+        && (fn_80059004() != 0
+            || (fn_80025708() != 0 && fn_800785C0()->mUnknown1A4 != 0 && fn_8009D990(4) == 0))) {
+        lbl_803EAAE8 = 0;
+    }
+    if (fn_8002892C() != 0 || fn_8017F60C() != 0) {
+        lbl_803EAAE8 = 0;
+    }
+    if (lbl_803EAAEC == 3) {
+        if (fn_800B65A0(0) == 255 && fn_800A8488(0) == 0) {
+            lbl_803EAAE8 = 0;
+            lbl_8030F9EC[3] = 0;
+        }
+        if (fn_800B65A0(1) == 255 && fn_800A8488(1) == 0) {
+            lbl_803EAAE8 = 0;
+            lbl_8030F9EC[3] = 0;
+        }
     }
 }
 
