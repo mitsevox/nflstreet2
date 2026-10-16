@@ -24395,11 +24395,6 @@
           "end": "0x800AB074"
         },
         {
-          "symbol": "fn_800AB074",
-          "start": "0x800AB074",
-          "end": "0x800AB0DC"
-        },
-        {
           "symbol": "fn_800AB0DC",
           "start": "0x800AB0DC",
           "end": "0x800AB138"
@@ -24445,11 +24440,6 @@
           "end": "0x800AB9EC"
         },
         {
-          "symbol": "fn_800AB9EC",
-          "start": "0x800AB9EC",
-          "end": "0x800ABA0C"
-        },
-        {
           "symbol": "fn_800ABA0C",
           "start": "0x800ABA0C",
           "end": "0x800ABA90"
@@ -24458,11 +24448,6 @@
           "symbol": "fn_800ABA90",
           "start": "0x800ABA90",
           "end": "0x800ABAF0"
-        },
-        {
-          "symbol": "fn_800ABAF0",
-          "start": "0x800ABAF0",
-          "end": "0x800ABC64"
         },
         {
           "symbol": "fn_800ABC64",
@@ -26368,6 +26353,84 @@
           "symbol": "fn_800CEED8",
           "start": "0x800CEED8",
           "end": "0x800CF090"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800AB074.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the provisional cu_8008E978 grouping for a literal-using body; its literal-pool slice is compared independently and does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800AB074",
+          "end": "0x800AB0DC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802968E4",
+          "end": "0x802968E8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800AB074",
+          "start": "0x800AB074",
+          "end": "0x800AB0DC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800AB9EC.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the provisional cu_8008E978 grouping for a literal-using body; its literal-pool slice is compared independently and does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800AB9EC",
+          "end": "0x800ABA0C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802968E8",
+          "end": "0x802968EC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800AB9EC",
+          "start": "0x800AB9EC",
+          "end": "0x800ABA0C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800ABAF0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the provisional cu_8008E978 grouping for a literal-using body; its literal-pool slice is compared independently and does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800ABAF0",
+          "end": "0x800ABC64"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802968EC",
+          "end": "0x802968F4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800ABAF0",
+          "start": "0x800ABAF0",
+          "end": "0x800ABC64"
         }
       ]
     },

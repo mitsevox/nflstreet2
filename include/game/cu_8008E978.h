@@ -32,6 +32,38 @@ struct Playback_80096DA8 {
     unsigned char mUnknown28[8];
 };
 
+/* 8-byte records from +12 of Table_800AA80C. */
+struct Entry_800AA80C {
+    int mUnknown0;
+    unsigned char mUnknown4;
+    unsigned char mUnknown5[3];
+};
+
+typedef void (*Callback_800AAE20)(Entry_800AA80C *pEntries, int index);
+
+/* The .data table whose address fn_800AA80C stores at +0 of
+   Block_800AACD4: three callbacks, then the records. */
+struct Table_800AA80C {
+    Callback_800AAE20 mpCallback0;
+    Callback_800AAE20 mpCallback4;
+    Callback_800AAE20 mpCallback8;
+    Entry_800AA80C mEntries[15];
+    float mUnknown84;
+};
+
+/* 24-byte block allocated under the id 'gend' at 0x800AACFC. */
+struct Block_800AACD4 {
+    Table_800AA80C *mpUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    int mUnknownC;
+    unsigned int mUnknown10;
+    unsigned char mUnknown14;
+    unsigned char mUnknown15;
+    signed char mUnknown16;
+    unsigned char mUnknown17[1];
+};
+
 extern "C" {
 Actor_801C009C *fn_80093BAC(int,int);
 Character_80093BCC *fn_80093BCC(unsigned short);

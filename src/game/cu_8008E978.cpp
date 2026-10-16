@@ -4961,38 +4961,6 @@ extern "C" void fn_800BC51C(Class_80297BF8 *pObject)
 }
 
 
-/* 8-byte records from +12 of Table_800AA80C. */
-struct Entry_800AA80C {
-    int mUnknown0;
-    unsigned char mUnknown4;
-    unsigned char mUnknown5[3];
-};
-
-typedef void (*Callback_800AAE20)(Entry_800AA80C *pEntries, int index);
-
-/* The .data table whose address fn_800AA80C stores at +0 of
-   Block_800AACD4: three callbacks, then the records. */
-struct Table_800AA80C {
-    Callback_800AAE20 mpCallback0;
-    Callback_800AAE20 mpCallback4;
-    Callback_800AAE20 mpCallback8;
-    Entry_800AA80C mEntries[15];
-    float mUnknown84;
-};
-
-/* 24-byte block allocated under the id 'gend' at 0x800AACFC. */
-struct Block_800AACD4 {
-    Table_800AA80C *mpUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknownC;
-    unsigned int mUnknown10;
-    unsigned char mUnknown14;
-    unsigned char mUnknown15;
-    signed char mUnknown16;
-    unsigned char mUnknown17[1];
-};
-
 /* 8-byte block allocated under the id 'gskl' by fn_800ABD1C. */
 struct Block_800ABD1C {
     unsigned int mUnknown0;
@@ -5554,21 +5522,7 @@ extern "C" int fn_800AAFEC(void *p, float dt)
 
 extern "C" {
 int fn_80196278(void);
-void fn_8006BCC8(int type);
-void fn_80072F04(void);
-int fn_8006F394(int index, int unknown);
-}
-
-extern "C" void fn_800AB074(Class_80297B90 *p, float dt)
-{
-    if (fn_80196278() == 0) {
-        fn_80195EFC(5, 20, 0, 0);
-        fn_800AD910(1, 0.0f);
-        fn_800655E8();
-        fn_8006BCC8(3);
-        fn_80072F04();
-        fn_8006F394(3, 0);
-    }
+void fn_800AB074(Class_80297B90 *p, float dt);
 }
 
 extern "C" void fn_800AB0DC(Class_80297B90 *p)
@@ -5889,17 +5843,6 @@ extern "C" void fn_800AB948(Class_80297B90 *p)
     lbl_803EAA88->mpUnknown0 = 0;
 }
 
-extern "C" float fn_800AB9EC(Class_80297B90 *p)
-{
-    float result = 0.1f;
-    Table_800AA80C *pTable = lbl_803EAA88->mpUnknown0;
-
-    if (pTable != 0) {
-        result = pTable->mUnknown84;
-    }
-    return result;
-}
-
 extern "C" void fn_800ABA0C(void)
 {
     unsigned int i;
@@ -5929,52 +5872,6 @@ extern "C" void fn_800ABA90(void)
     fn_801F0F18(0);
     fn_8009604C(0, (int)fn_8005A8AC(0));
     fn_8009604C(1, (int)fn_8005A8AC(1));
-}
-
-extern "C" {
-float fn_80178A2C(void);
-}
-
-extern "C" void fn_800ABAF0(void)
-{
-    Message_800F01CC message;
-    Object_80039F5C *pObject0;
-    Object_80039F5C *pObject1;
-    unsigned int i;
-
-    fn_801C1F94(&message, 0, sizeof(message));
-    message.mId = 9;
-    message.mUnknown1[0] = 203;
-    message.mUnknown1[1] = 0;
-    message.mUnknown1[2] = 255;
-    pObject0 = fn_8005A8AC(0);
-    pObject1 = fn_8005A8AC(1);
-    for (i = 0; i <= 1; i++) {
-        unsigned int count = fn_80178D18((unsigned char)i);
-        unsigned int index;
-
-        for (index = 0; index < count; index++) {
-            Object_80039F5C *p = fn_80039F5C((unsigned char)i, index);
-
-            fn_800EFE60(0, p->mpState, p);
-            if (p != pObject0 && p != pObject1) {
-                p->mMotion.mPos.mX = 0.0f;
-                p->mMotion.mPos.mY = fn_80178A2C();
-                p->mpUnknown4->mUnknown20 &= ~1;
-                fn_800F00D4(0, p->mpState, &message, p);
-            }
-        }
-    }
-    pObject1->mMotion.mPos.mX = 0.0f;
-    pObject0->mMotion.mPos.mX = 0.0f;
-    pObject1->mMotion.mPos.mY = 0.75f;
-    pObject0->mMotion.mPos.mY = 0.75f;
-    fn_8004A230(1);
-    fn_80092F98(lbl_803EAA88->mUnknownC);
-    lbl_803EAA88->mUnknown8 = lbl_803EAA88->mUnknownC;
-    lbl_803EAA88->mUnknownC = -1;
-    fn_80092830(lbl_803EAA88->mUnknown8);
-    fn_80092830(lbl_803EAA88->mUnknown8);
 }
 
 extern "C" int fn_800ABC64(Class_80297B90 *p)
