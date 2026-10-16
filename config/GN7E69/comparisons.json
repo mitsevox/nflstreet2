@@ -33057,6 +33057,56 @@
       ]
     },
     {
+      "source": "src/game/cu_80155F48.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #839; seven complete default slot bodies of the base table 0x802A2EE0 (Class_80148A58, include/game/Class_80148A58.h) inside the retained provisional cu_801485B4 survey group: slots 7, 9, 12, 14, 20, 21 and 22 (0x80155F48-0x80155F90, words 0x802A2F1C, 0x802A2F2C, 0x802A2F44, 0x802A2F54, 0x802A2F84, 0x802A2F8C and 0x802A2F94), which derived tables also hold. One call target is external; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80155E28 before the range and 0x80155F98 onward excluded; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80155F48",
+          "end": "0x80155F98"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80155F48",
+          "start": "0x80155F48",
+          "end": "0x80155F4C"
+        },
+        {
+          "symbol": "fn_80155F4C",
+          "start": "0x80155F4C",
+          "end": "0x80155F54"
+        },
+        {
+          "symbol": "fn_80155F54",
+          "start": "0x80155F54",
+          "end": "0x80155F74"
+        },
+        {
+          "symbol": "fn_80155F74",
+          "start": "0x80155F74",
+          "end": "0x80155F78"
+        },
+        {
+          "symbol": "fn_80155F78",
+          "start": "0x80155F78",
+          "end": "0x80155F88"
+        },
+        {
+          "symbol": "fn_80155F88",
+          "start": "0x80155F88",
+          "end": "0x80155F90"
+        },
+        {
+          "symbol": "fn_80155F90",
+          "start": "0x80155F90",
+          "end": "0x80155F98"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
