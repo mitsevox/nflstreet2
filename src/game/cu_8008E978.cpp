@@ -66,6 +66,7 @@
 #include "game/fn_802372EC.h"
 #include "game/fn_80218FC4.h"
 #include "game/fn_802270D4.h"
+#include "game/fn_801F40F4.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/fn_80094488.h"
@@ -4396,6 +4397,13 @@ extern "C" void fn_800B4A18(int index, char *pDest, int size)
     fn_801C3284(pDest, lbl_802D87A4[index], size);
 }
 
+/* Four-byte entry of the stream read by fn_800B9F50. */
+struct Event_800B9F50 {
+    unsigned char mType;
+    unsigned char mIndex;
+    unsigned short mTime;
+};
+
 /* Block allocated by fn_800BA3F0 through fn_80238174 under the id 'prac'
    (392 bytes); only the accessed fields are declared. */
 struct Block_800BA3F0 {
@@ -4414,7 +4422,7 @@ struct Block_800BA3F0 {
     unsigned char mUnknownE0;
     unsigned char mUnknownE1[3];
     int mUnknownE4[37];
-    unsigned char mUnknown178[4];
+    Event_800B9F50 *mpUnknown178;
     int mUnknown17C;
     unsigned char mUnknown180;
     unsigned char mUnknown181[1];
@@ -4508,6 +4516,185 @@ extern "C" void fn_800B9E44(void)
 
 extern "C" void fn_800B9F4C(void)
 {
+}
+
+/* Effect slot returned by fn_80162DBC (laid out as in src/game/cu_8016174C.cpp). */
+struct Object_801618D8 {
+    unsigned char mUnknown0[4];
+    Vector_80039F5C mUnknown4;
+    unsigned char mUnknown10[4];
+    int mUnknown14;
+    float mUnknown18, mUnknown1C;
+    unsigned int mUnknown20;
+    void *mUnknown24;
+    int mUnknown28, mUnknown2C, mUnknown30, mUnknown34;
+    float mUnknown38;
+    unsigned char mUnknown3C[192];
+    int mUnknownFC;
+    Object_80039F5C *mUnknown100;
+    int mUnknown104;
+};
+
+/* Position that fn_801F4934 writes for a playing stream. */
+struct Position_801F4934 {
+    int mUnknown0;
+    int mUnknown4;
+    char mUnknown8[8];
+};
+
+extern "C" {
+void fn_8003A1EC(int on, int team, int index);
+void fn_8003A394(int a, int team, int index);
+void fn_8003A3F4(int a, int team);
+int fn_8006D65C(int idx);
+Object_801618D8 *fn_80162DBC(int index);
+void fn_80162DD0(Object_801618D8 *item, Vector_80039F5C *point);
+void fn_801F4934(int a, Position_801F4934 *pPosition);
+}
+
+extern "C" int fn_800B9F50(void)
+{
+    Status_801F4834 status;
+    Position_801F4934 position;
+    int done = 0;
+
+    fn_801F4834(fn_8006D65C(4), &status);
+    if (status.mUnknown0 == 0) {
+        position.mUnknown4 = 0xFFFF;
+    } else {
+        fn_801F4934(status.mUnknown4, &position);
+    }
+    while (!done && position.mUnknown4 >= lbl_803EAB88->mpUnknown178->mTime) {
+        Event_800B9F50 *pEvent = lbl_803EAB88->mpUnknown178++;
+        int team = (pEvent->mType & 0x80) ? fn_80178308() : fn_80178320();
+        int mode = 1;
+        Object_80039F5C *p;
+        Object_801618D8 *pItem;
+        int i;
+        int j;
+
+        switch (pEvent->mType & 0x7F) {
+        case 0:
+            mode = 0;
+            if (pEvent->mType & 0x80) {
+                mode = 8;
+            }
+        case 1:
+            p = fn_80039F5C((unsigned char)team, pEvent->mIndex);
+            if (p != 0) {
+                for (i = 0; i <= 4; i++) {
+                    pItem = fn_80162DBC(i);
+                    if (pItem->mUnknown100 == 0) {
+                        pItem->mUnknown20 |= 6;
+                        pItem->mUnknown100 = p;
+                        pItem->mUnknown18 = 5.0f;
+                        pItem->mUnknown30 = mode;
+                        fn_80162DD0(pItem, &p->mMotion.mPos);
+                        break;
+                    }
+                }
+            }
+            break;
+        case 3:
+            team = fn_80178320();
+            mode = 0;
+            for (j = 0; j <= 10; j++) {
+                p = fn_80039F5C((unsigned char)team, j);
+                if (p != 0 && (unsigned int)(p->mUnknown2914 - 10) <= 2) {
+                    for (i = 0; i <= 4; i++) {
+                        pItem = fn_80162DBC(i);
+                        if (pItem->mUnknown100 == 0) {
+                            pItem->mUnknown20 |= 6;
+                            pItem->mUnknown100 = p;
+                            pItem->mUnknown18 = 5.0f;
+                            pItem->mUnknown30 = mode;
+                            fn_80162DD0(pItem, &p->mMotion.mPos);
+                            break;
+                        }
+                    }
+                }
+            }
+            break;
+        case 5:
+            team = fn_80178320();
+            mode = 0;
+            for (j = 0; j <= 10; j++) {
+                p = fn_80039F5C((unsigned char)team, j);
+                if (p != 0 && (unsigned int)(p->mUnknown2914 - 13) <= 2) {
+                    for (i = 0; i <= 4; i++) {
+                        pItem = fn_80162DBC(i);
+                        if (pItem->mUnknown100 == 0) {
+                            pItem->mUnknown20 |= 6;
+                            pItem->mUnknown100 = p;
+                            pItem->mUnknown18 = 5.0f;
+                            pItem->mUnknown30 = mode;
+                            fn_80162DD0(pItem, &p->mMotion.mPos);
+                            break;
+                        }
+                    }
+                }
+            }
+            break;
+        case 2:
+            p = fn_80039F5C((unsigned char)team, pEvent->mIndex);
+            if (p != 0) {
+                for (i = 0; i <= 4; i++) {
+                    pItem = fn_80162DBC(i);
+                    if (pItem->mUnknown100 == p) {
+                        pItem->mUnknown30 = 8;
+                        pItem->mUnknown100 = 0;
+                        pItem->mUnknown20 &= ~2;
+                    }
+                }
+            }
+            break;
+        case 4:
+            team = fn_80178320();
+            for (j = 0; j <= 10; j++) {
+                p = fn_80039F5C((unsigned char)team, j);
+                if (p != 0 && (unsigned int)(p->mUnknown2914 - 10) <= 2) {
+                    for (i = 0; i <= 4; i++) {
+                        pItem = fn_80162DBC(i);
+                        if (pItem->mUnknown100 == p) {
+                            pItem->mUnknown30 = 8;
+                            pItem->mUnknown100 = 0;
+                            pItem->mUnknown20 &= ~2;
+                        }
+                    }
+                }
+            }
+            break;
+        case 6:
+            team = fn_80178320();
+            for (j = 0; j <= 10; j++) {
+                p = fn_80039F5C((unsigned char)team, j);
+                if (p != 0 && (unsigned int)(p->mUnknown2914 - 13) <= 2) {
+                    for (i = 0; i <= 4; i++) {
+                        pItem = fn_80162DBC(i);
+                        if (pItem->mUnknown100 == p) {
+                            pItem->mUnknown30 = 8;
+                            pItem->mUnknown100 = 0;
+                            pItem->mUnknown20 &= ~2;
+                        }
+                    }
+                }
+            }
+            break;
+        case 7:
+            fn_8003A394(1, team, pEvent->mIndex);
+            break;
+        case 8:
+            fn_8003A1EC(0, team, pEvent->mIndex);
+            break;
+        case 9:
+            fn_8003A3F4(pEvent->mIndex, team);
+            break;
+        case 10:
+            done = 1;
+            break;
+        }
+    }
+    return done;
 }
 
 extern "C" void fn_800BA570(void)

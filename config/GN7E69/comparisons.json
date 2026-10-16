@@ -24050,6 +24050,11 @@
           "end": "0x800B9F50"
         },
         {
+          "symbol": "fn_800B9F50",
+          "start": "0x800B9F50",
+          "end": "0x800BA3F0"
+        },
+        {
           "symbol": "fn_800BA570",
           "start": "0x800BA570",
           "end": "0x800BA574"
