@@ -1738,9 +1738,13 @@ extern "C" void fn_800A5D94(void)
 /* Partial view of the object whose word +0x28 fn_800C6640 decodes as a
    player reference. The size is unknown. */
 struct Object_800C6640 {
-    unsigned char mUnknown0[0x28];
+    unsigned char mUnknown0;
+    unsigned char mUnknown1[0x1F];
+    float mUnknown20;
+    unsigned char mUnknown24[4];
     int mUnknown28;
-    unsigned char mUnknown2C[10];
+    unsigned char mUnknown2C[9];
+    unsigned char mUnknown35;
     unsigned char mUnknown36;
     unsigned char mUnknown37;
 };
@@ -2445,6 +2449,120 @@ extern "C" void fn_800C5F80(Object_80039F5C *p, int value, int *pA, int *pB, int
             *pC = 164;
         }
     }
+}
+
+extern "C" int fn_801787A0(void);
+extern "C" int fn_800C769C(Object_80039F5C *p, int value);
+extern "C" int fn_800C68BC(Object_800C6640 *pSource, int value);
+extern "C" int fn_800C8420(Object_80039F5C *p, float value);
+extern "C" void fn_8016F6F4(Object_80039F5C *p, int *pValue);
+extern "C" int fn_800AC584(int team, int value);
+extern "C" int fn_8009B0CC(int team, int value);
+extern "C" float fn_8016B938(void);
+extern "C" float fn_8016B974(void);
+extern "C" int fn_80177C38(void);
+
+extern float lbl_803ECB08;
+extern unsigned int lbl_803EABF8;
+
+extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_80039F5C *pOther, int value)
+{
+    Object_80039F5C *pTarget;
+    float *pStats;
+    float *pTargetStats;
+    int diff;
+    int ratingScore;
+    int speedScore;
+    float speedDiff;
+    int total;
+    int chance;
+    float bonus;
+    float carrierRating;
+    float scale;
+    Object_80039F5C *pCarrier;
+    unsigned char shift;
+
+    if (fn_801787A0() == 0) {
+        if (pSource != 0 && pOther == 0) {
+            pTarget = fn_8009BCE8(&pSource->mUnknown28);
+        } else {
+            pTarget = pOther;
+        }
+        if ((fn_801486A0() || (pTarget != 0 && fn_800F06F4(0, pTarget->mpState, 51, 0xFFFF) == 0xFFFF))
+            && pTarget != 0 && fn_800C5BF0(p, value) && fn_800C5DE4(pTarget, p)) {
+            if (fn_800C769C(pTarget, (int)p)) {
+                return pTarget->mUnknown1221;
+            }
+            pStats = &p->mUnknown2900;
+            pTargetStats = &pTarget->mUnknown2900;
+            diff = pTarget->mRatings[5] - p->mRatings[2];
+            if (diff > 0) {
+                ratingScore = diff * 30 / 255.0f + 70.0f;
+            } else {
+                ratingScore = diff * 70 / 255.0f + 70.0f;
+            }
+            ratingScore *= 0.5f;
+            speedDiff = pTargetStats[1] * pTarget->mMotion.mUnknown28 - pStats[1] * p->mMotion.mUnknown28;
+            if (speedDiff > 0.0f) {
+                speedScore = speedDiff * 30.0f / (lbl_803ECB08 * 415.0f) + 70.0f;
+            } else {
+                speedScore = speedDiff * 70.0f / (lbl_803ECB08 * 415.0f) + 70.0f;
+            }
+            speedScore *= 0.5f;
+            total = ratingScore + speedScore;
+            chance = total < 0 ? 0 : (total > 100 ? 100 : total);
+            if (pSource == 0 || pSource->mUnknown0 == 0
+                || (fn_8016F6F4(p, &pTarget->mId), !fn_800C68BC(pSource, pTarget->mpState->mId))
+                || fn_800C8420(pTarget, pSource->mUnknown20)) {
+                if (chance != 0) {
+                    chance = fn_800AC584(pTarget->mIdBytes[2], chance);
+                    chance = fn_800C5418(p, pTarget, chance);
+                    if (fn_800B65A0(p->mIdBytes[2]) != 255 && fn_800B65A0(pTarget->mIdBytes[2]) == 255) {
+                        bonus = fn_8016B938() * 0.25f;
+                        chance += (int)(chance * bonus);
+                        if (!fn_80177C38() && fn_8011F1CC() && (p->mFlags & 0x8000)) {
+                            bonus = fn_8016B974() * 0.25f;
+                            chance += (int)(chance * bonus);
+                        }
+                    }
+                    if (pSource != 0) {
+                        chance += (pSource->mUnknown35 - 1) * 5;
+                    }
+                    pCarrier = fn_80114E7C(p);
+                    if (pCarrier != 0) {
+                        carrierRating = pCarrier->mRatings[5] / 255.0f;
+                        chance += (int)(carrierRating * 40.0f);
+                    }
+                    chance = fn_8009B0CC(p->mIdBytes[2], chance);
+                    if (p->mpState->mId == 28 && (fn_801783AC(11) == 1 || fn_801783AC(12) == 1)) {
+                        chance += chance / 2;
+                    }
+                }
+                scale = 0.0f;
+                if (fn_800CA5CC(pTarget, 9, 0)) {
+                    scale = fn_800CA9B4(7, pTarget) - 1.0f;
+                }
+                if (fn_800CA5CC(p, 10, 0)) {
+                    scale -= fn_800CA9B4(8, p) - 1.0f;
+                }
+                chance = chance + chance * scale;
+                if (!fn_800C53D8(p)) {
+                    shift = p->mUnknown1160.mUnknown48Word / lbl_803EABF8;
+                    if (shift != 0) {
+                        chance = chance < 0 ? 0 : (chance > 95 ? 95 : chance);
+                        chance += (100 - chance) >> shift;
+                    }
+                }
+            } else {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+    } else {
+        return 0;
+    }
+    return chance < 20 ? 20 : (chance > 95 ? 95 : chance);
 }
 
 extern "C" int fn_800C6640(Object_80039F5C *p, Object_800C6640 *pSource, Object_80039F5C *pOther, int value,

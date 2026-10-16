@@ -131,7 +131,10 @@ struct Block_801718E8 {
         Snapshot_801718E8 mSnapshot12;
     };
     int mUnknown44;
-    char mUnknown48[4];
+    union {
+        char mUnknown48[4];
+        unsigned int mUnknown48Word;
+    };
     unsigned char mUnknown52;
     unsigned char mUnknown53;
     unsigned char mUnknown54;
