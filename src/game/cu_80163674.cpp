@@ -180,8 +180,8 @@ int fn_80163C30(void *pHandle, int count)
         Desc_80188688 desc;
         desc.mUnknown0 = 1;
         desc.mUnknown4 = 21;
-        desc.mUnknown8 = 0;
         desc.mUnknown12 = lbl_802EAD10;
+        desc.mUnknown8 = 0;
         lbl_803EB3A4 = fn_80188688(&desc);
         result = (int)lbl_803EB3A4;
     }
