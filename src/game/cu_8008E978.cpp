@@ -9417,6 +9417,68 @@ extern "C" int fn_800C0464(void)
     return result;
 }
 
+extern "C" void fn_8009FFD4(void);
+extern "C" void fn_800A02FC(void);
+extern "C" void fn_8017DD68(int index);
+extern "C" void fn_8017E01C(int index);
+extern "C" char lbl_802ED104[];
+
+extern "C" void fn_800C0488(int a, unsigned int kind)
+{
+    int handled = 0;
+    int team = fn_800B6644(a);
+
+    if (fn_800B65A0(team) == a) {
+        switch (kind) {
+        case 107:
+        case 108:
+            fn_8009FFB4(0);
+            handled = 1;
+            break;
+        case 109:
+            fn_8009FFB4(1);
+            handled = 1;
+            break;
+        case 110:
+            fn_8009FFB4(2);
+            handled = 1;
+            break;
+        case 111:
+        case 112:
+            fn_8009FFB4(3);
+            handled = 1;
+            break;
+        case 91:
+            if (fn_800A8488(team)) {
+                handled = 1;
+                fn_800A7514(team);
+                lbl_803EABA8->mUnknownB0 = team;
+                fn_800BD35C();
+            }
+            break;
+        default:
+            handled = 0;
+            break;
+        }
+    }
+    if (handled) {
+        fn_8009FFD4();
+        fn_800A02FC();
+        fn_80067D4C(24, 0);
+        fn_8017E01C(team);
+        if (kind == 108) {
+            lbl_803EABA8->mSlots[team].mUnknown0 = 1;
+            fn_801C6280(a, 3, lbl_802ED104);
+            fn_8017DD68(team);
+        } else {
+            lbl_803EABA8->mSlots[team].mUnknown0 = 2;
+            fn_801C6280(a, 3, lbl_802ECD44);
+            lbl_803EABA8->mUnknownAC = fn_800289A8();
+            lbl_803EABA8->mUnknownAB = 1;
+        }
+    }
+}
+
 extern "C" int fn_800C05F4(void)
 {
     if (lbl_803EABA8->mUnknownAB != 0) {
