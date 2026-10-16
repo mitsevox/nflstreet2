@@ -250,7 +250,12 @@ struct Block_8009B720 {
 /* The 64-byte block fn_80099630 allocates under the id 'ctch'. */
 struct Block_80099630 {
     int mUnknown0;
-    unsigned char mUnknown4[60];
+    unsigned char mUnknown4[12];
+    float mUnknown16;
+    unsigned char mUnknown20[8];
+    float mUnknown28;
+    float mUnknown32;
+    unsigned char mUnknown36[28];
 };
 
 /* 24-byte entries at +44 of Block_8009C6F4. */
@@ -317,6 +322,10 @@ Data_80096E74 *fn_8009CD00(Object_80039F5C *p, void (*pCallback)(Object_80039F5C
 int fn_8023790C(void);
 float fn_80178A08(void);
 int fn_801CFFD0(int a, int b);
+void fn_80137EC4(Object_80137ABC *pBall, Vector_80039F5C *pOut);
+void fn_80227384(void *, void *, int);
+void fn_80227638(void *, void *, void *);
+void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_80137EFC(Object_80137ABC *pBall, Vector_80039F5C *pOut);
 void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int flag);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
@@ -1409,6 +1418,44 @@ extern "C" int fn_80097864(Object_80039F5C *p)
         }
     }
     return 0;
+}
+
+extern "C" void fn_800978F8(Object_80039F5C *p, Item_80097440 *pItem, Point_80167910 *pTarget, Vector_80039F5C *pPos,
+                            float time, int *pTurn, Object_80137ABC *pBall)
+{
+    Vector_80039F5C ballPos;
+    Point_80167910 target;
+    Point_80167910 offset;
+    Point_80167910 start;
+    Point_80167910 velocity;
+    Point_80167910 delta;
+    int angle;
+    int facing;
+
+    if (p == 0 || pItem == 0 || pTurn == 0 || pBall == 0) {
+        return;
+    }
+    fn_80137EC4(pBall, &ballPos);
+    angle = (fn_801CFE40(ballPos.mY, ballPos.mX) + 0x800000) & 0xFFFFFF;
+    target.mX = pTarget->mX;
+    target.mY = pTarget->mY;
+    fn_80227384(&offset, pPos, angle);
+    fn_80227638(&start, &p->mMotion.mPos, &offset);
+    fn_80227690(&velocity, &target, &start);
+    lbl_803EC92C->mUnknown16 = time;
+    lbl_803EC92C->mUnknown28 = velocity.mX / time;
+    lbl_803EC92C->mUnknown32 = velocity.mY / time;
+    fn_80227690(&delta, pPos, &pItem->mUnknown14);
+    facing = p->mMotion.mFacing & 0xFFFFFF;
+    *pTurn = fn_801CFFD0(angle, facing);
+    if (((angle - facing) & 0xFFFFFF) > 0x800000) {
+        *pTurn = -*pTurn;
+    }
+    if (fn_802270A4(&velocity) > 2.0f) {
+        fn_80227538(&velocity, fn_801CFE40(velocity.mY, velocity.mX), 2.0f);
+        lbl_803EC92C->mUnknown28 = velocity.mX / time;
+        lbl_803EC92C->mUnknown32 = velocity.mY / time;
+    }
 }
 
 /* Stack block whose address fn_800A4E8C passes as the fourth argument of the
