@@ -16361,13 +16361,19 @@
     {
       "source": "src/game/cu_80191948.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained two-function grouping 0x80191948-0x80193CEC and full original pool association, single complete808-byte function extent, neutral name, partial-root type/field, original-storage external access footprints, source-form and compiler rows. Larger8316-byte body and original pool storage remain unmeasured and original; entire original assembly remains linked.",
+      "evidence": "evidence.tsv retained open/open two-function grouping and complete original pool association; both complete function extents, neutral labels, partial root type/field and source-form/compiler rows. Whole 8316-byte formatter and full emitted readonly section are measured without trimming; context 0x802ABDC4-0x802AD7E5 ends at final referenced terminator, leaving three extra native zero bytes as a size mismatch. All original assembly remains linked; no complete file/pool allocation or new exact credit is asserted.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80191948",
           "end": "0x80193CEC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ABDC4",
+          "end": "0x802AD7E5"
         }
       ],
       "functions": [
@@ -16375,6 +16381,11 @@
           "symbol": "fn_80191948",
           "start": "0x80191948",
           "end": "0x80191C70"
+        },
+        {
+          "symbol": "fn_80191C70",
+          "start": "0x80191C70",
+          "end": "0x80193CEC"
         }
       ]
     },
