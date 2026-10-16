@@ -51,6 +51,7 @@
 #include "game/fn_800AD9B4.h"
 #include "game/Record_8011F4F8.h"
 #include "game/State_800FDA58.h"
+#include "game/Object_801BC084.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
@@ -5734,6 +5735,55 @@ extern "C" void fn_800AD5C0(float dt)
     fn_801BF8DC();
 }
 
+/* Enter, update and exit handlers of each game mode. */
+struct Mode_80297FC8 {
+    void (*mpEnter)(float dt);
+    void (*mpUpdate)(float dt);
+    void (*mpExit)(float dt);
+};
+
+extern "C" {
+void fn_800AD31C(float dt);
+void fn_800AD418(float dt);
+
+extern Mode_80297FC8 lbl_80297FC8[9];
+}
+
+extern "C" void fn_800AD888(float dt)
+{
+    if (lbl_803EAAD4->mUnknown8 != 0) {
+        fn_8013FA24();
+        fn_800AD31C(dt);
+    } else {
+        void (*pUpdate)(float);
+
+        fn_800AD3A8(dt);
+        pUpdate = lbl_80297FC8[lbl_803EAAD4->mUnknown0].mpUpdate;
+        if (pUpdate != 0) {
+            pUpdate(dt);
+        }
+        fn_800AD418(dt);
+    }
+}
+
+extern "C" void fn_800AD910(int mode, float dt)
+{
+    if (!lbl_803EAC9C->fn_800D0408()) {
+        void (*pExit)(float) = lbl_80297FC8[lbl_803EAAD4->mUnknown0].mpExit;
+        void (*pEnter)(float);
+
+        if (pExit != 0) {
+            pExit(dt);
+        }
+        lbl_803EAAD4->mUnknown4 = lbl_803EAAD4->mUnknown0;
+        lbl_803EAAD4->mUnknown0 = mode;
+        pEnter = lbl_80297FC8[mode].mpEnter;
+        if (pEnter != 0) {
+            pEnter(dt);
+        }
+    }
+}
+
 extern "C" int fn_800AD9B4(void)
 {
     return lbl_803EAAD4->mUnknown0;
@@ -5886,6 +5936,46 @@ extern "C" void fn_800ADDFC(Object_8003DEC4 *pObject, Element_80041BF8 *pElement
         pElement->mUnknown5 = 0;
         pElement->mUnknown8 = 0;
         pElement->mUnknown6 = 1;
+    }
+}
+
+/* Clip returned by fn_801BAB34: the bank at +2 and eleven keys from +4. */
+struct Clip_800ADE6C {
+    unsigned char mUnknown0[2];
+    unsigned char mUnknown2;
+    unsigned char mUnknown3;
+    unsigned short mKeys[11];
+};
+
+/* Table filled by fn_801BBC3C with the room the largest listing needs. */
+struct Listing_800ADE6C {
+    Table_80089904 mTable;
+    unsigned char mUnknown12[3032];
+};
+
+extern "C" {
+void *fn_801BAB34(void *p, int key);
+void *fn_801BAD70(Object_801BC084 *pRecord, int b, int handle, int c);
+
+extern void *lbl_8030F958[11];
+}
+
+extern "C" void fn_800ADE6C(void)
+{
+    Listing_800ADE6C listing;
+    unsigned int i;
+    int handle;
+    int key;
+    Object_801BC084 *pRecord;
+    Clip_800ADE6C *pClip;
+
+    fn_801BBC3C(4, 1, &listing.mTable);
+    handle = listing.mTable.mEntries[0].mUnknown0;
+    key = listing.mTable.mEntries[0].mUnknown2;
+    pRecord = fn_801BC084(handle);
+    pClip = (Clip_800ADE6C *)fn_801BAB34(pRecord, key);
+    for (i = 0; i <= 10; i++) {
+        lbl_8030F958[i] = fn_801BAD70(pRecord, pClip->mUnknown2, handle, pClip->mKeys[i]);
     }
 }
 
