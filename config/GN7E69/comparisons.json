@@ -5513,13 +5513,19 @@
     {
       "source": "src/game/cu_8018EF6C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv candidate unit cu_8018EF6C 0x8018EF6C-0x8018F1F0 and its exact function row. fn_8018EF6C is a partial body (same size, callee-saved register assignment differs); original bytes remain linked.",
+      "evidence": "evidence.tsv candidate unit cu_8018EF6C 0x8018EF6C-0x8018F1F0 and its exact function row. fn_8018EF6C is a partial body (same size, callee-saved register assignment differs); its query strings 0x802AB254-0x802AB364 are byte-identical. Original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8018EF6C",
           "end": "0x8018F1F0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AB254",
+          "end": "0x802AB364"
         }
       ],
       "functions": [
