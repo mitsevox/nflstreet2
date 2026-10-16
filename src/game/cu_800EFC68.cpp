@@ -3235,8 +3235,8 @@ extern "C" void fn_80104D98(Object_80039F5C *p)
         }
         fn_80104814(p, pOther, fn_801374BC(), &target);
         fn_80227690(&dir, &target, &p->mMotion.mPos);
-        p->mUnknown1008.mUnknown1 = dir.mX * 10.0f;
-        p->mUnknown1008.mUnknown2 = dir.mY * 10.0f;
+        p->mUnknown1008.mUnknown1 = (int)(dir.mX * 10.0f);
+        p->mUnknown1008.mUnknown2 = (int)(dir.mY * 10.0f);
     } else {
         Point_8017886C delta;
         int side;
