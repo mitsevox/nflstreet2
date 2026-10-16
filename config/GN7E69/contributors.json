@@ -16595,8 +16595,11 @@
       "provenance": {
         "pull_request": 771,
         "merged_via": 771,
-        "commit": "1641eb6e7e428eae9d6702c4c3838d1689c9867e",
-        "introduced_blob": "fcedd3c72badbe942600c8828efcb1d1e5aed81d"
+        "commit": "6a18ef72080c634d6c0b22ce5e591eef7c5edd5b",
+        "introduced_blob": "0c482d778f5bcbd12c98352b42ad50ed7884b2f7",
+        "original_commit": "1641eb6e7e428eae9d6702c4c3838d1689c9867e",
+        "original_blob": "fcedd3c72badbe942600c8828efcb1d1e5aed81d",
+        "integration_adjustment": "Preserve original reconstruction authorship while sharing the target-supported int(int,void*,int) buffer-forwarding declaration. No function body or pointer ABI changes."
       }
     },
     {
@@ -16742,8 +16745,11 @@
       "provenance": {
         "pull_request": 779,
         "merged_via": 779,
-        "commit": "d0b0e46b89513bfe6234a6414edf4a11217fdc97",
-        "introduced_blob": "658b142e02daa9a5b59a573b586b21eca9b95f9f"
+        "commit": "6a18ef72080c634d6c0b22ce5e591eef7c5edd5b",
+        "introduced_blob": "74ab608486c895658f3c63834d0950af54e4862a",
+        "original_commit": "d0b0e46b89513bfe6234a6414edf4a11217fdc97",
+        "original_blob": "658b142e02daa9a5b59a573b586b21eca9b95f9f",
+        "integration_adjustment": "Preserve original reconstruction authorship while sharing the target-supported int(int,void*,int) buffer-forwarding declaration. No function body or pointer ABI changes."
       }
     },
     {
