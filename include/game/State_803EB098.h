@@ -8,7 +8,7 @@
    48-byte span is the one fn_8011EFD4 compares as a unit (li r5,48 at
    0x8011F008); inside it only the accessed fields are declared. */
 struct Record_8011F4E0 {
-    unsigned short mUnknown0;
+    short mUnknown0;
     unsigned short mUnknown2;
     unsigned char mUnknown4;
     unsigned char mUnknown5;
