@@ -216,7 +216,7 @@ struct Entry_8009B87C {
     int (*mpCallback0)(int value, int *pData);
     int (*mpCallback4)(int *pData);
     void (*mpCallback8)(int *pData);
-    int mUnknownC;
+    float (*mpCallbackC)(int *pData);
 };
 
 /* The 300 bytes at +4 of Block_8009B720 that fn_8009B698 copies and
@@ -271,6 +271,9 @@ struct Block_8009C6F4 {
     int mUnknown28;
     Entry_8009C684 mEntries[2];
 };
+
+/* 64-byte entries; three of them sit at player +816. */
+struct Entry_800AF82C;
 
 extern "C" {
 int fn_80238278(const void *p, int size, int seed);
@@ -398,6 +401,11 @@ void fn_801EBEF8(Quat_801EB488 *pOut, int a, int b, int c);
 void fn_801EB488(Quat_801EB488 *pRot);
 void fn_8009BE0C(float m[4][4], Vector_80039F5C *pPos, int angle, float scale);
 void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot, int joint);
+float fn_80178A68(Vector_80039F5C *pPos);
+void fn_800B267C(Object_800B26B0 *pMotion);
+void fn_800C89BC(Object_80039F5C *p);
+void fn_800AF804(Entry_800AF82C *p);
+void fn_8009CF30(void *pDst, Pose_80041930 *pPose);
 void fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, void *pRecord, unsigned short c);
 void fn_800AF87C(int a, int b, Vector_80039F5C *pVec, int c);
 void fn_800AF82C(int a, int b, int c, int d, int e);
@@ -2681,11 +2689,40 @@ extern "C" void fn_8009A6D8(void)
     lbl_803EA930 = !lbl_803EA930;
 }
 
+extern "C" int fn_8009A6EC(Object_80039F5C *p)
+{
+    float distance;
+    int result = fn_80178A68(&p->mMotion.mPos) <= 5.0f;
+
+    fn_801380AC(fn_801374BC(), &distance);
+    if (distance < 40.0f) {
+        result = 0;
+    }
+    if (p->mUnknown8 == 0xFF && p->mRatings[0] <= 59) {
+        result = 0;
+    }
+    return result;
+}
+
 extern "C" void fn_8009A8D4(void *p)
 {
     if (p != 0) {
         ((int *)p)[2] = ((int *)p)[0] = 0x1FFFFFFF;
     }
+}
+
+extern "C" void fn_8009AB34(void)
+{
+    void *pHandle = fn_80238174(0, (void **)&lbl_803EA948, sizeof(Block_8009AB34), 0, 0x63747570);
+    Block_8009AB34 *p = (Block_8009AB34 *)fn_8023816C(pHandle);
+
+    p->mUnknown4 = p->mUnknown0 = 0.0f;
+    if (fn_800BA6F8() == 0 && fn_8007F828(8) != 0) {
+        p->mUnknown8 = 1;
+    } else {
+        p->mUnknown8 = 0;
+    }
+    fn_802381E0(pHandle);
 }
 
 extern "C" void fn_8009ABC0(void)
@@ -3029,6 +3066,17 @@ extern "C" void fn_8009BB50(int a, int b)
 {
 }
 
+extern "C" float fn_8009BB54(int index)
+{
+    float result = 900 - fn_8009B910(index);
+    Block_8009B720 *pBlock = lbl_803EA984[index];
+
+    if (pBlock->mUnknown4.mEntries[index].mpCallbackC != 0) {
+        result = pBlock->mUnknown4.mEntries[index].mpCallbackC(pBlock->mUnknown4.mUnknown28);
+    }
+    return result;
+}
+
 extern "C" void fn_8009BBD8(int value)
 {
     if (fn_8009B448(value, 1)) {
@@ -3044,6 +3092,26 @@ extern "C" void fn_8009BBD8(int value)
 extern "C" void fn_8009BC30(int value)
 {
     lbl_803EA990 = value;
+}
+
+extern "C" void fn_8009BC38(Object_80039F5C *p, Block_80170E64 *pBlock)
+{
+    fn_801C1F94(p, 0, 0x408);
+    fn_800B267C(&p->mMotion);
+    p->mUnknown768 = 1.0f;
+    p->mpUnknown4 = pBlock;
+    p->mUnknown292 = 0;
+    p->mUnknown776 = 0;
+    p->mUnknown777 = 0;
+    p->mUnknown772 = 1.0f;
+    p->mUnknown9[2] = 1;
+    p->mUnknown778 = -1;
+    fn_800C89BC(p);
+    fn_800AF804((Entry_800AF82C *)p->mUnknown816);
+    fn_8009CF30(&p->mUnknown16, &pBlock->mUnknown44);
+    fn_8009CF30(&p->mUnknown108, &pBlock->mUnknown44);
+    fn_8009CF30(&p->mUnknown200, &pBlock->mUnknown44);
+    p->mpUnknown780 = 0;
 }
 
 extern "C" Object_80039F5C *fn_8009BCE8(int *pRef)
