@@ -7973,11 +7973,13 @@ extern "C" int fn_800CB580(Object_80039F5C *p, int *pIndex, Point_8017886C targe
     lbl_803EAC44 = &lbl_803186D8;
     for (i = 0; i < lbl_803EAC44->mCount; i++) {
         Info_80089904 *pInfo;
+        int limit;
 
         lbl_803EAC4C = 0;
         pInfo = lbl_803EAC44->mEntries[i].mpInfo;
+        limit = 0x238E39;
         if (!(distance - fn_802270A4(&pInfo->mUnknown20) <= 0.5f)
-            && fn_801CFFD0(fn_801CFFD0(pInfo->mUnknown56, 0), fn_801CFFD0(facing, angle)) < 0x238E39
+            && fn_801CFFD0(fn_801CFFD0(pInfo->mUnknown56, 0), fn_801CFFD0(facing, angle)) < limit
             && fn_800CADC0(p, pInfo, angle, check) != 0) {
             *pIndex = i;
             found = 1;
