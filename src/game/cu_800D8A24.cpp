@@ -175,9 +175,10 @@ extern "C" void fn_800D8FFC(Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Re
 
 extern "C" int fn_800D9078(Object_80039F5C *p, int a)
 {
+    Block_8011E240 *pBlock = &p->mBlock1032;
     int result = 0;
 
-    if (p->mUnknown1052 != 0) {
+    if (pBlock->mUnknown20 != 0) {
         switch (p->mUnknown1032) {
         case 4:
         case 7:
@@ -186,8 +187,8 @@ extern "C" int fn_800D9078(Object_80039F5C *p, int a)
         case 1:
         case 2:
         case 3:
-            if (a == 0 && p->mUnknown1052 != 1) {
-                Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown1036);
+            if (a == 0 && pBlock->mUnknown20 != 1) {
+                Object_80039F5C *pOther = fn_8009BCE8(&pBlock->mUnknown4);
                 if (pOther) {
                     Pair_802270A4 delta;
                     fn_80227690(&delta, &pOther->mMotion, &p->mMotion);
@@ -200,7 +201,7 @@ extern "C" int fn_800D9078(Object_80039F5C *p, int a)
             break;
         }
     }
-    if (p->mUnknown1052 == 3 && !result && p->mMotion.mUnknown28 < 1e-7f) {
+    if (pBlock->mUnknown20 == 3 && !result && p->mMotion.mUnknown28 < 1e-7f) {
         result = 1;
     }
     return result;
