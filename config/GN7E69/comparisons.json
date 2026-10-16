@@ -5531,6 +5531,26 @@
       ]
     },
     {
+      "source": "src/game/cu_8019A9A0.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv candidate unit cu_8019A9A0 0x8019A9A0-0x8019AD24 and its exact function row. The only function is exact; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019A9A0",
+          "end": "0x8019AD24"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8019A9A0",
+          "start": "0x8019A9A0",
+          "end": "0x8019AD24"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8019D83C.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8019D83C-0x8019D994; two target function rows. Code-only unlinked reconstruction, original table storage retained.",
