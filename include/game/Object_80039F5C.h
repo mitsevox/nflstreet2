@@ -292,7 +292,9 @@ struct Object_80039F5C {
         Contact_80143668 mContact560;
     };
     int mUnknown628[2];
-    char mUnknown636[132];
+    char mUnknown636[4];
+    float mUnknown640[4][4];
+    float mUnknown704[4][4];
     float mUnknown768;
     float mUnknown772;
     unsigned char mUnknown776;

@@ -253,6 +253,8 @@ struct Block_80099630 {
     unsigned char mUnknown4[60];
 };
 
+struct Entry_800AF82C;
+
 /* 24-byte entries at +44 of Block_8009C6F4. */
 struct Entry_8009C684 {
     void (*mpCallback0)(Object_80039F5C *p, Vector_80039F5C *pVec, void *pData);
@@ -266,7 +268,11 @@ struct Block_8009C6F4 {
     int mUnknown0;
     unsigned short mUnknown4;
     unsigned short mUnknown6;
-    unsigned char mUnknown8[32];
+    int mUnknown8;
+    unsigned short mUnknownC;
+    unsigned short mUnknownE;
+    Vector_80039F5C mUnknown10;
+    int mUnknown1C[3];
     int mUnknown28;
     Entry_8009C684 mEntries[2];
 };
@@ -392,6 +398,18 @@ void fn_800AF87C(int a, int b, Vector_80039F5C *pVec, int c);
 void fn_800AF82C(int a, int b, int c, int d, int e);
 void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
 int fn_8009C7B4(Vector_80039F5C *pVec);
+int fn_8009C220(void *pA, void *pB);
+void fn_801D04C4(void);
+void fn_801D06D4(float m[4][4]);
+void fn_80227CC0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
+int fn_800AF9E4(Entry_800AF82C *p, int index);
+void fn_800AF95C(Entry_800AF82C *p, int index, int a);
+void fn_800AF9C0(Entry_800AF82C *p, int index, int *pValue);
+void fn_800429C0(Object_8003DEC4 *pObject);
+
+extern int lbl_802D7C08[3];
+extern int lbl_802D7C14[3];
+extern Vector_80039F5C lbl_802D7C20;
 }
 
 extern "C" int fn_80090244(int *p)
@@ -3073,6 +3091,13 @@ extern "C" void fn_8009BDA0(float m[4][4], Vector_80039F5C *pPos, int angle, flo
     fn_801D0544();
 }
 
+extern "C" int fn_8009C328(Object_80039F5C *pA, Object_80039F5C *pB)
+{
+    int result = fn_80238258(pA, pB, 0x310);
+
+    return result | fn_8009C220(pA->mUnknown816, pB->mUnknown816);
+}
+
 extern "C" int fn_8009C470(Table_80089904 *pTable, unsigned short c, void *a, void *b, void *pRecord,
                            unsigned int count)
 {
@@ -3158,13 +3183,115 @@ extern "C" int fn_8009C814(Object_80039F5C *p, Block_8009C6F4 *pBlock)
     return pBlock->mUnknown0 > 1;
 }
 
+extern "C" int fn_8009C88C(Object_80039F5C *p, Block_8009C6F4 *pBlock)
+{
+    unsigned short index = pBlock->mUnknown4;
+
+    switch (pBlock->mUnknown0) {
+    case 1:
+        break;
+    case 4:
+        if (fn_800AF9E4((Entry_800AF82C *)p->mUnknown816, pBlock->mUnknown6) == 0) {
+            pBlock->mUnknown0 = 0;
+        }
+        break;
+    case 3:
+        if (fn_800AF9E4((Entry_800AF82C *)p->mUnknown816, pBlock->mUnknown6) == 0) {
+            pBlock->mUnknown0 = 1;
+        }
+        break;
+    case 2: {
+        Entry_8009C684 *pEntry = &pBlock->mEntries[index];
+
+        pEntry->mpCallback0(p, &pEntry->mUnknown4, pEntry->mUnknown10);
+        fn_801D04C4();
+        fn_801D06D4(p->mUnknown704);
+        fn_80227CC0(&pEntry->mUnknown4, &pEntry->mUnknown4);
+        fn_801D0544();
+        if (fn_8009C7B4(&pEntry->mUnknown4) == 1) {
+            fn_8009CE88(p, &pBlock->mUnknown0, 6);
+        }
+        break;
+    }
+    }
+    return pBlock->mUnknown0 > 1;
+}
+
 extern "C" void fn_8009C98C(void *p, Vector_80039F5C *pOut, int *pRef)
 {
     fn_8009BF5C(fn_8009BCE8(pRef), pRef[1], pOut, 0);
 }
 
+extern "C" void fn_8009CBD8(Object_80039F5C *p, Vector_80039F5C *pOut)
+{
+    Object_8003DEC4 *pObject = (Object_8003DEC4 *)p->mpUnknown4;
+
+    fn_801D04C4();
+    fn_801D06D4(pObject->mUnknown44.mUnknown52[13]);
+    fn_80227CC0(pOut, &lbl_802D7C20);
+    fn_801D0544();
+}
+
 extern "C" void fn_8009CC28(void)
 {
+}
+
+extern "C" unsigned char *fn_8009CC2C(Object_80039F5C *p,
+                                      void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int a,
+                                      int b)
+{
+    Entry_800AF82C *pEntries = (Entry_800AF82C *)p->mUnknown816;
+    Block_8009C6F4 *pBlock = (Block_8009C6F4 *)&p->mUnknown16;
+    Vector_80039F5C pos;
+    Entry_8009C684 *pEntry;
+
+    if (pBlock->mUnknown0 == 3) {
+        pBlock->mUnknown0 = 2;
+    }
+    fn_8009CBD8(p, &pos);
+    pEntry = fn_8009C6F4((int)pEntries, pBlock, pCallback, &pos, a, 0, b);
+    if (p->mIdBytes[3] == 1) {
+        fn_800AF9C0(pEntries, 0, lbl_802D7C08);
+    } else {
+        fn_800AF9C0(pEntries, 0, lbl_802D7C14);
+    }
+    fn_800429C0((Object_8003DEC4 *)p->mpUnknown4);
+    pBlock->mUnknownE = 0;
+    pBlock->mUnknown8 = 0;
+    pBlock->mUnknownC = 0;
+    return pEntry->mUnknown10;
+}
+
+extern "C" void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a)
+{
+    Block_8009C6F4 *pBlock = (Block_8009C6F4 *)pRecord;
+
+    if (pBlock->mUnknown0 == 2) {
+        pBlock->mUnknown4 = pBlock->mUnknown4 == 0;
+        pBlock->mEntries[pBlock->mUnknown4].mpCallback0 = 0;
+        pBlock->mUnknown0 = 3;
+        fn_800AF95C((Entry_800AF82C *)p->mUnknown816, pBlock->mUnknown6, a);
+    }
+}
+
+extern "C" void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b)
+{
+    int *pData = (int *)fn_8009CC2C(p, (void (*)(Object_80039F5C *, Vector_80039F5C *, void *))fn_8009C98C, a, b);
+
+    pData[0] = ref;
+    pData[1] = joint;
+}
+
+extern "C" void fn_8009CF30(Block_8009C6F4 *pBlock, int pose)
+{
+    int *pInts = pBlock->mUnknown1C;
+    Vector_80039F5C *pVec = &pBlock->mUnknown10;
+
+    pBlock->mUnknown6 = pBlock->mUnknown4 = 0;
+    pBlock->mUnknown0 = 1;
+    pBlock->mUnknown28 = pose;
+    pInts[0] = pInts[1] = pInts[2] = 0;
+    pVec->mX = pVec->mY = pVec->mZ = 0.0f;
 }
 
 extern "C" void fn_8009D00C(void *p, int *pState)
