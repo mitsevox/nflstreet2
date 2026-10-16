@@ -53,13 +53,14 @@ void fn_801A991C(short *destination, short *source, Record_8019D8AC *context, in
     OpenBitStream(&stream, source, kBitStreamRead);
     unsigned char *channels = context->mpUnknown14;
     int i = 0;
+    unsigned int bits0, bits1, bits2, bits3, bits4;
     for (; i < context->mUnknown0 - 5; i += 5) {
         unsigned char *channel = &channels[i * 2];
-        unsigned int bits0 = channel[1];
-        unsigned int bits1 = channel[3];
-        unsigned int bits2 = channel[5];
-        unsigned int bits3 = channel[7];
-        unsigned int bits4 = channel[9];
+        bits0 = channel[1];
+        bits1 = channel[3];
+        bits2 = channel[5];
+        bits3 = channel[7];
+        bits4 = channel[9];
         unsigned long long value = ReadBitStream(&stream, bits0 + bits1 + bits2 + bits3 + bits4);
         if (mirrored) {
             destination[channel[8]] = value << (16 - bits4);
@@ -84,11 +85,13 @@ void fn_801A991C(short *destination, short *source, Record_8019D8AC *context, in
         }
     }
     for (; i < context->mUnknown0; i++) {
-        unsigned int bits = channels[i * 2 + 1];
-        if (mirrored)
-            destination[channels[i * 2]] = ReadBitStream(&stream, bits) << (16 - bits);
-        else
-            destination[i] = ReadBitStream(&stream, bits) << (16 - bits);
+        if (mirrored) {
+            bits0 = channels[i * 2 + 1];
+            destination[channels[i * 2]] = ReadBitStream(&stream, bits0) << (16 - bits0);
+        } else {
+            bits0 = channels[i * 2 + 1];
+            destination[i] = ReadBitStream(&stream, bits0) << (16 - bits0);
+        }
     }
     CloseBitStream(&stream);
 }
