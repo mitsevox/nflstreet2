@@ -33012,6 +33012,26 @@
       ]
     },
     {
+      "source": "src/game/cu_80154638.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #835; the complete slot-11 body of the table 0x802A27F0 (derived from Class_80148A58, include/game/Class_80148A58.h, whose base table is 0x802A2EE0; 0x80154638, word 0x802A284C) inside the retained provisional cu_801485B4 survey group. The .data tables 0x802DEB08 and 0x802DEB40 are referenced as externs. Original file boundaries and nominal identity unresolved; 0x801548EC onward excluded; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80154638",
+          "end": "0x801548EC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80154638",
+          "start": "0x80154638",
+          "end": "0x801548EC"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
