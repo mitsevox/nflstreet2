@@ -9698,6 +9698,50 @@ extern "C" int fn_800C210C(int *p, int offset, int *pValue)
     return changed;
 }
 
+extern "C" void fn_800C2788(Object_8003DEC4 *pObject, Block_800C2788 *pBlock, int a)
+{
+    int i;
+
+    if (a == 0) {
+        return;
+    }
+    pBlock->mUnknown0[0] = 1;
+    for (i = 0; i < 9; i++) {
+        pBlock->mUnknown40[i][0] = (short)pBlock->mUnknown312->mUnknown1040[i * 2 + 2][0] << 8;
+        pBlock->mUnknown40[i][1] = (short)pBlock->mUnknown312->mUnknown1040[i * 2 + 2][1] << 8;
+        pBlock->mUnknown40[i][2] = (short)pBlock->mUnknown312->mUnknown1040[i * 2 + 2][2] << 8;
+        pBlock->mUnknown148[i][0] = 0;
+        pBlock->mUnknown148[i][1] = 0;
+        pBlock->mUnknown148[i][2] = 0;
+    }
+    for (i = 0; i < 19; i++) {
+        pBlock->mUnknown256.mUnknown48[i * 3 + 0] = pBlock->mUnknown312->mUnknown1040[i][0];
+        pBlock->mUnknown256.mUnknown48[i * 3 + 1] = pBlock->mUnknown312->mUnknown1040[i][1];
+        pBlock->mUnknown256.mUnknown48[i * 3 + 2] = pBlock->mUnknown312->mUnknown1040[i][2];
+    }
+}
+
+extern "C" void fn_800C2EC0(Object_8003DEC4 *pObject, Block_800C2EC0 *pBlock, int a)
+{
+    int i;
+
+    if (a == 0) {
+        return;
+    }
+    pBlock->mUnknown0[0] = 1;
+    for (i = 0; i < 5; i++) {
+        pBlock->mUnknown40[i][0] = (short)pBlock->mUnknown216->mUnknown1040[i][0] << 8;
+        pBlock->mUnknown40[i][1] = (short)pBlock->mUnknown216->mUnknown1040[i][1] << 8;
+        pBlock->mUnknown40[i][2] = (short)pBlock->mUnknown216->mUnknown1040[i][2] << 8;
+        pBlock->mUnknown100[i][0] = 0;
+        pBlock->mUnknown100[i][1] = 0;
+        pBlock->mUnknown100[i][2] = 0;
+        pBlock->mUnknown160.mUnknown48[i * 3 + 0] = pBlock->mUnknown216->mUnknown1040[i][0];
+        pBlock->mUnknown160.mUnknown48[i * 3 + 1] = pBlock->mUnknown216->mUnknown1040[i][1];
+        pBlock->mUnknown160.mUnknown48[i * 3 + 2] = pBlock->mUnknown216->mUnknown1040[i][2];
+    }
+}
+
 extern "C" int fn_800C2F94(Entry_800C3130 *pA, Entry_800C3130 *pB)
 {
     if (pA->mpUnknown0->mUnknown8 > pB->mpUnknown0->mUnknown8) {

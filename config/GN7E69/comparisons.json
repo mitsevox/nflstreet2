@@ -25960,6 +25960,16 @@
           "end": "0x800C2150"
         },
         {
+          "symbol": "fn_800C2788",
+          "start": "0x800C2788",
+          "end": "0x800C2884"
+        },
+        {
+          "symbol": "fn_800C2EC0",
+          "start": "0x800C2EC0",
+          "end": "0x800C2F94"
+        },
+        {
           "symbol": "fn_800C2F94",
           "start": "0x800C2F94",
           "end": "0x800C2FB8"
