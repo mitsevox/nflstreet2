@@ -63,7 +63,6 @@ int fn_801C60BC(int a);
 int fn_801C6280(int a, int b, void *pValue);
 void fn_801C3A3C(float a);
 void fn_801CAF24(void);
-int fn_801CBEF4(void *p, int a, int b);
 void fn_801CE82C(void);
 void fn_801CE910(void);
 int fn_801CEB4C(void);
@@ -317,7 +316,7 @@ void fn_80027A20()
         fn_8007CA28();
         fn_8021956C(lbl_803EB690, 1, 5, 1);
         fn_800731D0(1);
-        fn_801CBEF4(&lbl_803067B0, 2, 12);
+        lbl_803067B0.fn_801CBEF4(2, 12);
     }
 }
 
