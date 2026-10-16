@@ -4260,14 +4260,6 @@ extern "C" void fn_800B2670(unsigned char value)
     lbl_803EAB20->mUnknown4.mUnknown5E = value;
 }
 
-extern "C" void fn_800B2B90(Object_800B26B0 *pMotion)
-{
-    if (pMotion->mPos.mZ <= 0.0f && pMotion->mUnknown48 < 0.0f) {
-        pMotion->mUnknown48 = 0.0f;
-        pMotion->mPos.mZ = 0.0f;
-    }
-}
-
 extern "C" void fn_800B2BC0(Object_800B26B0 *pMotion)
 {
     pMotion->mPos.mX = -pMotion->mPos.mX;
@@ -4280,11 +4272,6 @@ extern "C" void fn_800B2BC0(Object_800B26B0 *pMotion)
     pMotion->mUnknown32 = (pMotion->mUnknown32 + 0x800000) & 0xFFFFFF;
     ((MotionTail_800B26B0 *)pMotion)->mUnknown76 = (pMotion->mUnknown32 + 0x800000) & 0xFFFFFF;
     pMotion->mUnknown56 = (pMotion->mUnknown56 + 0x800000) & 0xFFFFFF;
-}
-
-extern "C" void fn_800B2D88(Object_800B26B0 *pMotion, float speed)
-{
-    ((MotionTail_800B26B0 *)pMotion)->mUnknown72 = speed * 0.0029814816f;
 }
 
 extern "C" void fn_800B2D9C(Object_800B26B0 *pMotion)

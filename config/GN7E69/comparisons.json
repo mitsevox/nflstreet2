@@ -23920,19 +23920,9 @@
           "end": "0x800B267C"
         },
         {
-          "symbol": "fn_800B2B90",
-          "start": "0x800B2B90",
-          "end": "0x800B2BC0"
-        },
-        {
           "symbol": "fn_800B2BC0",
           "start": "0x800B2BC0",
           "end": "0x800B2C48"
-        },
-        {
-          "symbol": "fn_800B2D88",
-          "start": "0x800B2D88",
-          "end": "0x800B2D9C"
         },
         {
           "symbol": "fn_800B2D9C",
@@ -26343,6 +26333,58 @@
           "symbol": "fn_800CEED8",
           "start": "0x800CEED8",
           "end": "0x800CF090"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800B2D88.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. 1 target whole-function extent(s) and their literal-pool slice; this split permits independent compilation of a partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800B2D88",
+          "end": "0x800B2D9C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296BA4",
+          "end": "0x80296BA8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800B2D88",
+          "start": "0x800B2D88",
+          "end": "0x800B2D9C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800B2B90.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. 1 target whole-function extent(s) and their literal-pool slice; this split permits independent compilation of a partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800B2B90",
+          "end": "0x800B2BC0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296B9C",
+          "end": "0x80296BA0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800B2B90",
+          "start": "0x800B2B90",
+          "end": "0x800B2BC0"
         }
       ]
     },
