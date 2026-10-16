@@ -429,6 +429,10 @@ void fn_801EB488(Quat_801EB488 *pRot);
 void fn_8009BE0C(float m[4][4], Vector_80039F5C *pPos, int angle, float scale);
 void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot, int joint);
 float fn_80178A68(Vector_80039F5C *pPos);
+int fn_801787DC(int team);
+int fn_800D41F8(int team);
+float fn_80260E24(float a);
+float fn_80260FE8(float a);
 Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
 void fn_801BE760(void *p, unsigned short key, int a);
 int fn_801BA2A8(void *pRecord, Record_800D81C8 *pEntries, unsigned short value, int animation, int key,
@@ -2779,6 +2783,63 @@ extern "C" void fn_8009A8D4(void *p)
 {
     if (p != 0) {
         ((int *)p)[2] = ((int *)p)[0] = 0x1FFFFFFF;
+    }
+}
+
+extern "C" void fn_8009A8F0(void)
+{
+    float handicap = 0.0f;
+    unsigned int high = 0;
+    unsigned int low = 0;
+    unsigned int score0;
+    unsigned int score1;
+    float scale;
+
+    lbl_803EA948->mUnknown0[1] = lbl_803EA948->mUnknown0[0] = handicap;
+    if (lbl_803EA948->mUnknown8 == 0) {
+        return;
+    }
+    switch (fn_8007F828(14)) {
+    case 0:
+        score0 = fn_801787DC(0);
+        score1 = fn_801787DC(1);
+        scale = 8.0f;
+        break;
+    case 1:
+        score0 = fn_800D41F8(0);
+        score1 = fn_800D41F8(1);
+        scale = 100000.0f;
+        break;
+    default:
+        return;
+    }
+    if (score0 > score1) {
+        high = score0;
+        low = score1;
+    } else if (score1 > score0) {
+        high = score1;
+        low = score0;
+    }
+    if (high != low) {
+        float ratio = (high - low) / scale;
+        unsigned int steps;
+
+        if ((high == score0 && fn_800B65A0(1) != 0xFF) || (high == score1 && fn_800B65A0(0) != 0xFF)) {
+            ratio = fn_80260E24(ratio);
+        } else {
+            ratio = fn_80260FE8(ratio);
+        }
+        steps = ratio > 4.0f ? 4.0f : ratio;
+        if (steps > 1) {
+            handicap = (steps - 1) * 0.33333334f;
+        }
+        if (high == score0) {
+            if (fn_800B65A0(1) != 0xFF && fn_800B65A0(0) == 0xFF) {
+                lbl_803EA948->mUnknown0[1] = handicap;
+            }
+        } else if (fn_800B65A0(0) != 0xFF && fn_800B65A0(1) == 0xFF) {
+            lbl_803EA948->mUnknown0[0] = handicap;
+        }
     }
 }
 

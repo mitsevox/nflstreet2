@@ -23260,6 +23260,11 @@
           "end": "0x8009A8F0"
         },
         {
+          "symbol": "fn_8009A8F0",
+          "start": "0x8009A8F0",
+          "end": "0x8009AB34"
+        },
+        {
           "symbol": "fn_8009AB34",
           "start": "0x8009AB34",
           "end": "0x8009ABC0"
