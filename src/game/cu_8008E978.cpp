@@ -4324,6 +4324,86 @@ extern "C" void fn_800A9854(void)
     fn_80162780(1, 1);
 }
 
+extern "C" {
+void fn_800A8954(int event, int team, Object_80039F5C *p);
+void fn_801783D0(int bit, int on);
+void fn_80177C50(int a);
+void fn_800D67B8(int a, Object_80039F5C *p);
+}
+
+extern "C" void fn_800A9B54(int event, Object_80039F5C *p)
+{
+    Record_800B15FC *pRecord;
+
+    if (event == 17 || event == 18) {
+        return;
+    }
+    fn_800A8954(event, p->mIdBytes[2], p);
+    pRecord = fn_800B15FC();
+    fn_8009BD2C(p, &pRecord->mUnknown0);
+    pRecord->mUnknownC = p->mMotion.mPos.mX;
+    pRecord->mUnknown10 = p->mMotion.mPos.mY;
+    switch (event) {
+    case 5:
+        fn_801783D0(13, 1);
+        fn_801783D0(1, 0);
+        pRecord->mUnknown14 = event;
+        pRecord->mUnknown16 = 0x99;
+        pRecord->mUnknown4 = 0;
+        pRecord->mUnknown8 = 0;
+        fn_800B1508();
+        break;
+    case 23:
+        fn_801783D0(1, 1);
+        pRecord->mUnknown14 = 8;
+        fn_800B1508();
+        fn_80067E3C(30, &p->mMotion.mPos, p->mId, 1, 1, 0);
+        break;
+    case 25:
+        pRecord->mUnknown14 = 4;
+        fn_800B1508();
+        break;
+    case 6:
+        pRecord->mUnknown14 = event;
+        pRecord->mUnknown4 = 2;
+        fn_800B1508();
+        break;
+    case 9:
+        fn_801783D0(19, 1);
+        fn_801783D0(4, 0);
+        fn_80177C50(0);
+        pRecord = fn_800B15FC();
+        fn_8009BD2C(p, &pRecord->mUnknown0);
+        pRecord->mUnknownC = p->mMotion.mPos.mX;
+        pRecord->mUnknown10 = p->mMotion.mPos.mY;
+        pRecord->mUnknown14 = 20;
+        fn_800B1508();
+        fn_800D67B8(0, p);
+        break;
+    case 12:
+        pRecord->mUnknown14 = 28;
+        pRecord->mUnknown16 = 0;
+        pRecord->mUnknown8 = 0;
+        fn_800B1508();
+        break;
+    case 14:
+        fn_801783D0(20, 1);
+        pRecord->mUnknown14 = 18;
+        fn_800B1508();
+        break;
+    case 15:
+        fn_801783D0(4, 0);
+        fn_80177C50(0);
+        pRecord = fn_800B15FC();
+        fn_8009BD2C(p, &pRecord->mUnknown0);
+        pRecord->mUnknownC = p->mMotion.mPos.mX;
+        pRecord->mUnknown10 = p->mMotion.mPos.mY;
+        pRecord->mUnknown14 = 19;
+        fn_800B1508();
+        break;
+    }
+}
+
 extern "C" char *fn_800A9F4C(int index)
 {
     return lbl_8030F42C.mpUnknown24[index];
