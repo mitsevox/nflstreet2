@@ -7663,6 +7663,11 @@
           "end": "0x800ED208"
         },
         {
+          "symbol": "fn_800ED484",
+          "start": "0x800ED484",
+          "end": "0x800ED670"
+        },
+        {
           "symbol": "fn_800EDB48",
           "start": "0x800EDB48",
           "end": "0x800EDC68"

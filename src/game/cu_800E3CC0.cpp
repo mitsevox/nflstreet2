@@ -71,7 +71,8 @@ struct State_800EBCE0 {
    0x802DB4F0. */
 struct State_800EDC68 {
     int mUnknown0;
-    char mUnknown4[3];
+    char mUnknown4[2];
+    unsigned char mUnknown6;
     unsigned char mUnknown7;
     unsigned int mUnknown8;
 };
@@ -136,6 +137,16 @@ struct State_800E954C {
     unsigned char mUnknown31;
 };
 
+/* 16-byte record fn_800CE590 fills and fn_800CE608 applies. */
+struct Record_800CE608 {
+    int mUnknown0;
+    float mUnknown4;
+    unsigned short mUnknown8;
+    union { unsigned short mUnknown10; unsigned char mBytes10[2]; };
+    union { unsigned short mUnknown12; unsigned char mBytes12[2]; };
+    unsigned short mUnknown14;
+};
+
 struct Block_800E7588 {
     char mUnknown0[4];
     unsigned char mUnknown4;
@@ -176,6 +187,9 @@ void fn_800EFE60(int a, void *p, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_8010AEC4(int value);
+int fn_800CE590(Query_800CE770 *pQuery, Record_800CE608 *pA, Record_800CE608 *pB);
+void fn_800CE608(Object_80039F5C *p, Record_800CE608 *pRecord);
+void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_8011E240(Object_80039F5C *p);
 void fn_8011E3EC(Object_80039F5C *p, int a);
@@ -1761,14 +1775,17 @@ extern "C" unsigned char fn_800EC870(Object_80039F5C *p) {
 }
 
 extern "C" int fn_800ECC64(Object_80039F5C *p) {
-    int kind = p->mpState->mUnknown1;
     State_800ECC64 *state = (State_800ECC64 *)&p->mUnknown336;
-    int flag = kind == 4 || kind == 5;
+    int flag = p->mpState->mUnknown1 == 4 || p->mpState->mUnknown1 == 5;
     if (fn_80137B40() == p)
         fn_8010AEC4((int)p);
-    fn_800AD9B4();
-    state->mUnknown0 = p->mpState->mUnknown2;
-    state->mUnknown4 = 1;
+    if (fn_800AD9B4() == 4) {
+        state->mUnknown0 = p->mpState->mUnknown2;
+        state->mUnknown4 = 1;
+    } else {
+        state->mUnknown0 = p->mpState->mUnknown2;
+        state->mUnknown4 = 1;
+    }
     if (p->mIdBytes[3] == 1)
         p->mFlags &= ~0x1000;
     fn_800EC9E4(p, p->mpState->mUnknown1, flag);
@@ -1843,6 +1860,74 @@ extern "C" int fn_800ED0F4(Object_80039F5C *p, State_800EDC68 *state) {
         }
     }
     return result;
+}
+
+extern "C" int fn_800ED484(Object_80039F5C *p, Object_80039F5C *pOther, State_800EDC68 *state) {
+    int angle = 0x155555;
+    if (fn_80137C48(p) && pOther->mpState->mId == 27) {
+        int id;
+        float speed;
+        if (state->mUnknown8 == 15) {
+            Point_8017886C delta;
+            fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+            int heading = (fn_801CFE40(delta.mY, delta.mX) - p->mMotion.mFacing) & 0xFFFFFF;
+            speed = 0.9f;
+            if (heading > 0x800000) {
+                state->mUnknown6 = 6;
+                id = 30;
+            } else {
+                state->mUnknown6 = 3;
+                id = 31;
+            }
+        } else if (state->mUnknown8 == 6 || state->mUnknown8 == 8 || state->mUnknown8 == 10) {
+            id = 202;
+            speed = 1.5f;
+            angle = 0x200000;
+        } else if (state->mUnknown8 == 7 || state->mUnknown8 == 9 || state->mUnknown8 == 11) {
+            id = 200;
+            speed = 1.5f;
+            angle = 0x200000;
+        } else {
+            switch (state->mUnknown7) {
+            case 3:
+            case 4:
+                id = 30;
+                break;
+            case 5:
+            case 6:
+                id = 31;
+                break;
+            default:
+                id = 30;
+                break;
+            }
+            if (state->mUnknown8 == 12 || !p->mUnknown560.mFlags.mBytes[0])
+                speed = 0.85f;
+            else
+                speed = 0.85f;
+        }
+        Query_800CE770 query;
+        Record_800CE608 a;
+        Record_800CE608 b;
+        fn_800CE770(&query);
+        query.mUnknown52 = id;
+        query.mUnknown36 = angle;
+        query.mUnknown44 = speed;
+        query.mpUnknown0 = p;
+        query.mpUnknown4 = pOther;
+        if (fn_800CE590(&query, &a, &b)) {
+            fn_80143E14(p, pOther);
+            fn_80143E14(pOther, p);
+            fn_800CE608(p, &a);
+            fn_800CE608(pOther, &b);
+            p->mUnknown512.mUnknown14 = 0;
+            pOther->mUnknown512.mUnknown14 = 0;
+            p->mFlags &= ~4;
+            p->mFlags &= ~1;
+            return 1;
+        }
+    }
+    return 0;
 }
 
 extern "C" void fn_800EDB48(Object_80039F5C *p, Object_80039F5C *pOther, Object_80137ABC *pBall, State_800EDC68 *state) {
