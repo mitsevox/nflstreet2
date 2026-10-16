@@ -2151,6 +2151,114 @@ extern "C" void fn_800C561C(Object_80039F5C *p, int value)
     }
 }
 
+extern "C" int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
+extern "C" int fn_800CAA6C(int value);
+extern "C" void fn_800D4748(Object_80039F5C *p);
+extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p);
+extern "C" void fn_800C5B20(Object_80039F5C *p, int value);
+
+extern float lbl_803EAC0C;
+
+extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
+{
+    Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown560.mUnknown40);
+    int fumbled = 0;
+    int mode = 12;
+    int fromBehind = 0;
+    int stripped = 0;
+    int canStrip;
+    int canKnock;
+    Point_8017886C delta;
+    int angle;
+    int stripChance;
+    int knockChance;
+    int roll;
+    Record_800B15FC *pRecord;
+    int ok;
+
+    if (pOther != 0 && fn_800C5BF0(pOther, value)) {
+        fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+        canStrip = 0;
+        canKnock = 0;
+        angle = fn_801CFE40(delta.mY, delta.mX);
+        switch (p->mUnknown528.mUnknown15) {
+        case 6:
+            if (((angle - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000) {
+                fromBehind = 1;
+                canStrip = 1;
+                canKnock = 1;
+            }
+            break;
+        case 8:
+            if (((angle - p->mMotion.mFacing) & 0xFFFFFF) < 0x800000) {
+                fromBehind = 1;
+                canStrip = 1;
+                canKnock = 1;
+            }
+            break;
+        }
+        if (fn_800CAA6C(p->mUnknown528.mUnknown15)) {
+            mode = 2;
+        }
+        if (canStrip || canKnock) {
+            stripChance = p->mRatings[2] / 4 + p->mUnknown2904Float * 0.25f;
+            stripChance -= (int)(pOther->mRatings[5] / 4 + pOther->mUnknown2904Float * 0.25f);
+            stripChance += fn_802372EC(0, 100 - chance);
+            if (stripChance > 50) {
+                stripChance = 50;
+            }
+            if (mode == 2 && fromBehind) {
+                stripChance = stripChance * fn_800CA9B4(5, p);
+            }
+            if (fn_800CA5CC(pOther, 9, 0)) {
+                stripChance = stripChance * fn_800CA9B4(7, pOther);
+            }
+            if (fn_800C53D8(p)) {
+                stripChance = lbl_803EAC0C * 100.0f;
+            }
+            knockChance = stripChance * 2 / 3;
+            roll = fn_802372EC(0, 100);
+            if (stripChance > 0 && stripChance > roll && canStrip && fn_800E96EC(pOther, p)) {
+                fn_800C51DC(p, pOther);
+                fumbled = 1;
+                stripped = 1;
+                if (fn_800C53D8(p) == 0) {
+                    pRecord = fn_800B15FC();
+                    fn_8009BD2C(p, &pRecord->mUnknown0);
+                    pRecord->mUnknownC = p->mMotion.mPos.mX;
+                    pRecord->mUnknown10 = p->mMotion.mPos.mY;
+                    pRecord->mUnknown14 = 38;
+                    pRecord->mUnknown16 = 0;
+                    fn_800B1508();
+                }
+                p->mUnknown1160.mUnknown44++;
+                fn_800D4748(p);
+                fn_800A8954(13, p->mIdBytes[2], p);
+            }
+            if (knockChance > 0 && knockChance > roll && canKnock && !stripped && fn_800C5BF0(pOther, value)) {
+                if (!fumbled) {
+                    fn_800C51DC(p, pOther);
+                    fumbled = 1;
+                }
+                fn_80111354(pOther);
+            }
+        }
+    }
+    if (!stripped) {
+        ok = 1;
+        if (!fn_801486A0() && (pOther == 0 || fn_800F06F4(0, pOther->mpState, 51, 0xFFFF) != 0xFFFF)) {
+            ok = 0;
+        }
+        if (ok) {
+            fn_800C5B20(p, value);
+            if (!fumbled) {
+                fn_800C51DC(p, pOther);
+            }
+        }
+    }
+    fn_800C8688(p, pOther, 0, 0);
+}
+
 extern "C" void fn_800C5B20(Object_80039F5C *p, int value)
 {
     Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown560.mUnknown40);
@@ -2544,9 +2652,6 @@ extern "C" int fn_800C6BD8(Object_80039F5C *p, Object_80039F5C *pOther)
     }
     return result;
 }
-
-extern "C" void fn_800D4748(Object_80039F5C *p);
-extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p);
 
 extern "C" int fn_800C6CDC(Object_80039F5C *p, Object_80039F5C *pOther)
 {
