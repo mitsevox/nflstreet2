@@ -6101,6 +6101,11 @@
           "end": "0x8018B8B0"
         },
         {
+          "symbol": "fn_8018B8B0",
+          "start": "0x8018B8B0",
+          "end": "0x8018B950"
+        },
+        {
           "symbol": "fn_8018B950",
           "start": "0x8018B950",
           "end": "0x8018B9D4"
@@ -6151,6 +6156,11 @@
           "end": "0x8018BF3C"
         },
         {
+          "symbol": "fn_8018BF3C",
+          "start": "0x8018BF3C",
+          "end": "0x8018C008"
+        },
+        {
           "symbol": "fn_8018C008",
           "start": "0x8018C008",
           "end": "0x8018C044"
@@ -6161,9 +6171,24 @@
           "end": "0x8018C064"
         },
         {
+          "symbol": "fn_8018C064",
+          "start": "0x8018C064",
+          "end": "0x8018C0E8"
+        },
+        {
           "symbol": "fn_8018C0E8",
           "start": "0x8018C0E8",
           "end": "0x8018C15C"
+        },
+        {
+          "symbol": "fn_8018C15C",
+          "start": "0x8018C15C",
+          "end": "0x8018C1A8"
+        },
+        {
+          "symbol": "fn_8018C1A8",
+          "start": "0x8018C1A8",
+          "end": "0x8018C1E0"
         },
         {
           "symbol": "fn_8018C1E0",
