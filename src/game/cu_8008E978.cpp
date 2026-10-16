@@ -2244,6 +2244,139 @@ extern "C" int fn_800C8744(int team)
     return fn_8022E560();
 }
 
+extern "C" int fn_800C8774(int team)
+{
+    int value = 0;
+    int field = team == 0 ? 0x43534847 /* 'CSHG' */ : 0x43534147 /* 'CSAG' */;
+
+    fn_801FCE10(0, "select \x8c into \x82 from 'FNIG'\n", field, &value);
+    return value;
+}
+
+extern "C" void fn_800C87CC(int team, int value)
+{
+    int field = team == 0 ? 0x43534847 /* 'CSHG' */ : 0x43534147 /* 'CSAG' */;
+
+    fn_801FCE10(0, "update 'FNIG' set \x8c = \x82\n", field, value);
+}
+
+extern "C" int fn_800C8818(int team)
+{
+    int id = fn_800C8744(team);
+    int result = 0;
+
+    fn_801FCE10(0, "select 'DIOT' into \x82 from 'MAET' where 'DIGT' = \x82\n", &result, id);
+    return result;
+}
+
+/* Rows of three 16-bit joint angles. */
+struct Rig_800C8860 {
+    char mUnknown0[56];
+    unsigned short mJoints[4][3];
+};
+
+extern "C" {
+extern int lbl_802DA674[4];
+extern int lbl_802DA684[3];
+extern int lbl_802DA690[3];
+int fn_801C370C(int *pValue, int *pVel, int target, int a, int b);
+float fn_80227890(void *, void *);
+}
+
+static inline int FixedMul(int a, int b)
+{
+    return (int)(((long long)a * b) >> 24);
+}
+
+extern "C" void fn_800C8860(Model_800C8860 *pModel, int angle, int which)
+{
+    angle = angle << 8 >> 8;
+    switch (which) {
+    case 0:
+        pModel->mpRig->mJoints[0][0] += FixedMul(lbl_802DA674[0], angle) >> 8;
+        pModel->mpRig->mJoints[1][0] += FixedMul(lbl_802DA674[1], angle) >> 8;
+        pModel->mpRig->mJoints[2][0] += FixedMul(lbl_802DA674[2], angle) >> 8;
+        break;
+    case 1:
+        pModel->mpRig->mJoints[3][0] += FixedMul(lbl_802DA674[3], angle) >> 8;
+        break;
+    }
+}
+
+extern "C" void fn_800C89BC(Object_80039F5C *p);
+
+extern "C" void fn_800C8954(Object_80039F5C *p)
+{
+    switch (fn_801BE648(p->mpUnknown792)) {
+    case 73:
+    case 74:
+    case 157:
+    case 159:
+    case 160:
+        break;
+    default:
+        fn_800C89BC(p);
+        break;
+    }
+}
+
+extern "C" void fn_800C89BC(Object_80039F5C *p)
+{
+    unsigned int i;
+
+    for (i = 0; i <= 1; i++) {
+        p->mTurn.mTarget[i] = 0;
+        p->mTurn.mRate[i] = 1;
+    }
+    p->mTurn.mSettled = 0;
+}
+
+extern "C" void fn_800C89F0(Object_80039F5C *p, int angle, int rate, int which, float scale)
+{
+    int delta = (angle - p->mMotion.mFacing) << 8 >> 8;
+
+    delta = delta < -0x155555 ? -0x155555 : (delta > 0x155555 ? 0x155555 : delta);
+    p->mTurn.mTarget[which] = FixedMul(delta, (int)(scale * 16777216.0f));
+    p->mTurn.mRate[which] = rate;
+}
+
+extern "C" void fn_800C8A98(Object_80039F5C *p)
+{
+    Turn_800C8AF0 *pTurn = &p->mTurn;
+    unsigned int i;
+
+    if (pTurn != 0) {
+        Block_80170E64 *pBlock = p->mpUnknown4;
+
+        for (i = 0; i <= 1; i++) {
+            fn_800C8860(&pBlock->mUnknown44, pTurn->mAngle[i], i);
+        }
+    }
+}
+
+extern "C" void fn_800C8AF0(Object_80039F5C *p)
+{
+    Turn_800C8AF0 *pTurn = &p->mTurn;
+    unsigned int i;
+
+    fn_800C8954(p);
+    if (!pTurn->mSettled) {
+        for (i = 0; i <= 1; i++) {
+            if (pTurn->mAngle[i] != pTurn->mTarget[i]) {
+                fn_801C370C(&pTurn->mAngle[i], &pTurn->mSpeed[i], pTurn->mTarget[i],
+                            lbl_802DA684[pTurn->mRate[i]], lbl_802DA690[pTurn->mRate[i]]);
+            }
+        }
+        pTurn->mSettled = 1;
+    }
+    fn_800C8A98(p);
+}
+
+extern "C" int fn_800C8BAC(Object_80039F5C *p, int which)
+{
+    return p->mTurn.mAngle[which];
+}
+
 extern "C" int fn_800C8BBC(Object_80039F5C *p)
 {
     int result = 0;
@@ -2251,6 +2384,25 @@ extern "C" int fn_800C8BBC(Object_80039F5C *p)
     fn_80177FE0();
     if (fn_8011F1CC() && p != 0) {
         result = fn_801783AC(0) == 0;
+    }
+    return result;
+}
+
+extern "C" int fn_800C8C1C(Object_80039F5C *p)
+{
+    int result = 0;
+    unsigned char team = p->mIdBytes[2];
+    unsigned char i;
+
+    for (i = 0; i < lbl_803EAC3C->mCounts[team]; i++) {
+        if (lbl_803EAC3C->mEntries[team][i].mUnknown8 != -1) {
+            Object_80039F5C *pOther = fn_8009BCE8(&lbl_803EAC3C->mEntries[team][i].mRef);
+
+            if (fn_80227890(&p->mMotion.mPos, &pOther->mMotion.mPos) < 16.0f) {
+                result = 1;
+                break;
+            }
+        }
     }
     return result;
 }

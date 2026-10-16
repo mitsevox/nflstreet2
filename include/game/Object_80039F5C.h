@@ -37,12 +37,22 @@ struct Pose_80041930;
 
 /* Block at +4 of the player object; the entries of src/game/cu_80136B1C.cpp
    hold one at +0. */
+struct Rig_800C8860;
+
+/* Block at +44 of Block_80170E64; fn_800C8860 turns the joints at +48. */
+struct Model_800C8860 {
+    char mUnknown0[48];
+    Rig_800C8860 *mpRig;
+    char mUnknown52[4];
+};
+
 struct Block_80170E64 {
     char mUnknown0[4];
     Vector_80039F5C mUnknown4;
     char mUnknown16[4];
     unsigned int mUnknown20;
-    char mUnknown24[76];
+    char mUnknown24[20];
+    Model_800C8860 mUnknown44;
     void *mpUnknown100;
     char mUnknown104[4];
     Quat_801EB488 mUnknown108;
@@ -228,6 +238,16 @@ struct Block_8011E240 {
     char mUnknown106[2];
 };
 
+/* Head/body turn at +300, eased towards mTarget by fn_800C8AF0 (24-bit
+   angles); mRate indexes the easing tables. */
+struct Turn_800C8AF0 {
+    int mAngle[2];
+    int mSpeed[2];
+    int mTarget[2];
+    int mRate[2];
+    unsigned char mSettled;
+};
+
 struct Object_80039F5C {
     /* Read both as a word and byte by byte (+1 index, +2 team). */
     union {
@@ -252,7 +272,8 @@ struct Object_80039F5C {
     int mUnknown200;
     char mUnknown204[36];
     Pose_80041930 *mpUnknown240;
-    char mUnknown244[92];
+    char mUnknown244[56];
+    Turn_800C8AF0 mTurn;
     union {
         struct {
             int mUnknown336;
