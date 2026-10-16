@@ -9545,6 +9545,53 @@ extern "C" int fn_800C1180(Object_80039F5C *p)
     return result;
 }
 
+extern "C" int fn_800C0910(Object_80039F5C *p, int kind, unsigned char *pLevel);
+
+extern "C" void fn_800C11B8(void)
+{
+    State_8011F4EC *pState = fn_8011F4EC();
+
+    if (fn_801787A0() == 0) {
+        Object_80039F5C *pCarrier = fn_80137B40();
+        unsigned char start = pState->mUnknown1C4;
+        unsigned char i = start;
+        unsigned char found;
+        unsigned char level;
+
+        pState->mUnknown1C1[i] = fn_80168E00(fn_80178308(), i, &found);
+        while (pState->mUnknown1C1[i] == 255 || found == 0) {
+            i = (i + 1) % 3;
+            if (i == start) {
+                return;
+            }
+            pState->mUnknown1C1[i] = fn_80168E00(fn_80178308(), i, &found);
+        }
+        if (pCarrier != 0 && (pCarrier->mpState->mId == 18 || pCarrier->mpState->mId == 15)) {
+            Object_80039F5C *p = fn_80039F5C(fn_80178308(), pState->mUnknown1C1[i]);
+            int value;
+
+            pState->mUnknown1B8[i] = fn_800C0910(p, 5, &level);
+            pState->mUnknown1BB[i] = level;
+            pState->mUnknown1BE[i] = 5;
+            value = fn_800C0910(p, 12, &level);
+            if (value < pState->mUnknown1B8[i] ||
+                (value == pState->mUnknown1B8[i] && level <= pState->mUnknown1BB[i])) {
+                pState->mUnknown1B8[i] = value;
+                pState->mUnknown1BB[i] = level;
+                pState->mUnknown1BE[i] = 12;
+            }
+            value = fn_800C0910(p, 20, &level);
+            if (value < pState->mUnknown1B8[i] ||
+                (value == pState->mUnknown1B8[i] && level <= pState->mUnknown1BB[i])) {
+                pState->mUnknown1B8[i] = value;
+                pState->mUnknown1BB[i] = level;
+                pState->mUnknown1BE[i] = 20;
+            }
+        }
+        pState->mUnknown1C4 = (i + 1) % 3;
+    }
+}
+
 extern "C" unsigned char fn_800C13A0(State_80039F5C *pState, unsigned char *pA, unsigned char *pB)
 {
     unsigned char result = 2;

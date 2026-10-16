@@ -25885,6 +25885,11 @@
           "end": "0x800C11B8"
         },
         {
+          "symbol": "fn_800C11B8",
+          "start": "0x800C11B8",
+          "end": "0x800C13A0"
+        },
+        {
           "symbol": "fn_800C13A0",
           "start": "0x800C13A0",
           "end": "0x800C146C"
