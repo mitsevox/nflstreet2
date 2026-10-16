@@ -1,16 +1,6 @@
-class Class_802A1DC8 {
-public:
-    virtual void vfn_01();
-    virtual void vfn_02();
-    virtual void vfn_03();
-    virtual void vfn_04(float value);
-    virtual void vfn_05();
-    virtual void vfn_06();
-    virtual void vfn_07();
-    virtual void vfn_08();
-    virtual void vfn_09();
-    virtual void vfn_10();
-    virtual void vfn_11(float value);
+#include "game/Class_80297BF8.h"
+
+class Class_802A1DC8 : public Class_80297BF8 {
 };
 
 extern "C" {
