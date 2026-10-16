@@ -3261,6 +3261,58 @@ extern "C" Object_80039F5C *fn_80105384(Object_80039F5C *p, int aggressive, Poin
     return pBest;
 }
 
+/* Data block of the reach that fn_80105630 updates each frame. */
+struct Reach_80105630 {
+    unsigned int mEnd;
+    unsigned char mHand;
+    unsigned char mBall;
+};
+
+extern "C" int fn_8023790C(void);
+extern "C" void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
+
+extern "C" void fn_80105630(Object_80039F5C *p, Vector_80039F5C *pTarget, Reach_80105630 *pReach)
+{
+    int done = 0;
+    Record_8011F518 *pRecord = fn_8011F518();
+    Object_80039F5C *pOther = fn_8009BCE8(&pRecord->mUnknown0);
+
+    if (pOther != 0) {
+        Object_80137ABC *pBall = fn_80137ABC(pReach->mBall);
+        char name[10];
+        Vector_80039F5C shoulder;
+        Vector_80039F5C dir;
+        unsigned int now;
+        float t;
+        int turn;
+
+        if (pReach->mHand == 1) {
+            strcpy(name, "rshoulder");
+        } else {
+            strcpy(name, "lshoulder");
+        }
+        fn_8009BF5C(p, fn_801C4E98(p->mpUnknown4->mpUnknown100, name), &shoulder, &dir);
+        now = fn_8023790C() + 2;
+        t = (pReach->mEnd - now) * 0.083333336f;
+        t = t < 0.0f ? 0.0f : (t > 1.0f ? 1.0f : t);
+        fn_80105168(pRecord->mUnknown5, pBall, p, pOther, pTarget, 0, fn_80104C9C(p, pOther));
+        fn_802276B4(pTarget, pTarget, &shoulder);
+        turn = ((fn_801CFE40(pTarget->mY, pTarget->mX) - p->mMotion.mFacing) << 8) >> 8;
+        fn_80227538((Point_8017886C *)pTarget, ((int)(turn * (1.0f - t)) + p->mMotion.mFacing) & 0xFFFFFF, 1.5f);
+        pTarget->mZ = 0.4f;
+        fn_8022765C(pTarget, pTarget, &shoulder);
+    } else {
+        done = 1;
+    }
+    if (pReach->mEnd <= fn_8023790C()) {
+        done = 1;
+    }
+    if (done) {
+        fn_8009CE88(p, pReach->mHand == 1 ? &p->mUnknown200 : &p->mUnknown108, 12);
+        fn_8009CE88(p, &p->mUnknown16, 12);
+    }
+}
+
 extern "C" int fn_80105898(Object_80039F5C *p) {
     Message_800F01CC message;
     Vector_80039F5C ball;

@@ -6,7 +6,8 @@
 struct Record_8011F518 {
     int mUnknown0;
     unsigned char mUnknown4;
-    char mUnknown5[3];
+    unsigned char mUnknown5;
+    char mUnknown6[2];
     float mUnknown8;
     int mUnknown12;
 };
