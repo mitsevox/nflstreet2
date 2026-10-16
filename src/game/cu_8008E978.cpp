@@ -1333,6 +1333,63 @@ extern "C" void fn_800A29AC(void)
 }
 
 extern "C" {
+void fn_800A21BC(void);
+void fn_800A2228(void);
+void fn_800A227C(void);
+void fn_800A22E4(void);
+void fn_800A233C(void);
+void fn_800A238C(void);
+void fn_800A23F0(void);
+void fn_800A244C(void);
+void fn_800A24A0(void);
+void fn_800A2500(void);
+void fn_800A2560(void);
+void fn_800A25BC(void);
+}
+
+extern "C" void fn_800A29D8(int mode)
+{
+    switch (mode) {
+    case 0:
+        lbl_8030E6DC.mpCallback0 = fn_800A2228;
+        break;
+    case 1:
+        lbl_8030E6DC.mpCallback0 = fn_800A22E4;
+        break;
+    case 3:
+        lbl_8030E6DC.mpCallback0 = fn_800A227C;
+        break;
+    case 2:
+        lbl_8030E6DC.mpCallback0 = fn_800A23F0;
+        break;
+    case 4:
+        lbl_8030E6DC.mpCallback0 = fn_800A21BC;
+        break;
+    case 5:
+        lbl_8030E6DC.mpCallback0 = fn_800A244C;
+        break;
+    case 9:
+        lbl_8030E6DC.mpCallback0 = fn_800A233C;
+        break;
+    case 6:
+        lbl_8030E6DC.mpCallback0 = fn_800A24A0;
+        break;
+    case 7:
+        lbl_8030E6DC.mpCallback0 = fn_800A238C;
+        break;
+    case 8:
+        lbl_8030E6DC.mpCallback0 = fn_800A25BC;
+        break;
+    case 10:
+        lbl_8030E6DC.mpCallback0 = fn_800A2500;
+        break;
+    case 11:
+        lbl_8030E6DC.mpCallback0 = fn_800A2560;
+        break;
+    }
+}
+
+extern "C" {
 void *fn_800C47C4(void);
 int fn_801F0A8C(void *pArchive, char *pName);
 void fn_80145100(int type, int index);
