@@ -33,6 +33,11 @@ float fn_80237260(int stream);
 
 static const char *lbl_8031D360[4];
 
+static inline const char *DefaultName(void)
+{
+    return "Norm";
+}
+
 extern "C" {
 void fn_80164568(Object_80039F5C *p, Entry_8006719C *pEntry, int side)
 {
@@ -151,10 +156,10 @@ void fn_80164940(int team)
 
 void fn_80164A40(void)
 {
-    lbl_8031D360[0] = "Norm";
-    lbl_8031D360[1] = "Norm";
-    lbl_8031D360[2] = "Norm";
-    lbl_8031D360[3] = "Norm";
+    lbl_8031D360[0] = DefaultName();
+    lbl_8031D360[1] = DefaultName();
+    lbl_8031D360[2] = DefaultName();
+    lbl_8031D360[3] = DefaultName();
 }
 
 void fn_80164A64(int team)
