@@ -77,12 +77,11 @@ void fn_8014F3DC(int value)
 
 void fn_8014F3E4(Class_802A2B68 *p, int index, Info_8014F3E4 *pInfo)
 {
-    Record_8014F104 *pRecords = p->mpUnknown1C->mpUnknown34;
-    Record_8014F104 *pRecord = &pRecords[index];
+    Record_8014F104 *pRecord = &p->mpUnknown1C->mpUnknown34[index];
     pInfo->mUnknown4 = pRecord->mUnknown4;
     pInfo->mUnknown8 = pRecord->mUnknown12[8];
     pInfo->mUnknown12 = pRecord->mUnknown12[0];
-    pInfo->mpUnknown0 = fn_8003AC84(pRecords[index].mUnknown0);
+    pInfo->mpUnknown0 = fn_8003AC84(pRecord->mUnknown0);
     pInfo->mUnknown16 = pRecord->mUnknown8;
 }
 
@@ -102,7 +101,7 @@ unsigned int fn_8014F474(Class_80148A58 *p, Object_80039F5C *pPlayer)
     return i;
 }
 
-void fn_8014F4D8(Class_80148A58 *p, Object_80039F5C *pPlayer, int kind, unsigned int value)
+void fn_8014F4D8(Class_80148A58 *p, Object_80039F5C *pPlayer, int kind, int value)
 {
     unsigned int index = fn_8014F474(fn_80148A58(), pPlayer);
     if (kind == 8 && value > fn_8014F104(fn_80148A58())->mpUnknown34[index].mUnknown48) {
