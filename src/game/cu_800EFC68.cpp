@@ -538,6 +538,7 @@ int fn_800F5AD4(Object_80039F5C *p);
 void fn_800F6AD8(float *p);
 Point_8017886C fn_800F97A8(Object_80039F5C *p);
 void fn_800FBB70(void);
+int fn_800F9CB4(void);
 unsigned char fn_800FC014(Object_80039F5C *p, Object_80039F5C *pOther);
 unsigned char fn_800FC0C4(Object_80039F5C *p);
 int fn_800FC4A8(Object_80039F5C *p, Block_800FCC24 *pBlock, int a);
@@ -1691,7 +1692,14 @@ extern "C" Object_80039F5C *fn_800F9BD8(int forward, Object_80039F5C *p) {
     return pResult;
 }
 
-extern "C" int fn_800F9CAC() {
+/* One player's entry in fn_800FAECC's ordering table. */
+struct Entry_800FAECC {
+    Object_80039F5C *mpObject;
+    float mX;
+    unsigned char mKind;
+};
+
+extern "C" int fn_800F9CAC(Entry_800FAECC *pEntries, unsigned char index, unsigned char count, Object_80039F5C *p) {
     return 1;
 }
 
@@ -1714,6 +1722,125 @@ extern "C" void fn_800FAD10(unsigned char *p) {
         value = 6 - value;
     }
     p[1] = value;
+}
+
+extern "C" void fn_800FAECC(void) {
+    unsigned char used[7];
+    unsigned char counts[3] = { 0 };
+    Entry_800FAECC entries[7];
+    Record_8011F4E0 *pRecord;
+    unsigned char all = 1;
+    int useDepth = 0;
+    int forward;
+    int team;
+    Record_80067338 *pPlay;
+    Object_800670B4 *pTeam;
+    unsigned int n;
+    unsigned char count;
+    unsigned char i;
+    unsigned char j;
+    unsigned int k;
+
+    pRecord = fn_8011F4E0();
+    forward = fn_800F9CB4();
+    pRecord->mUnknown4 = all;
+    if (pRecord->mUnknown5 == 0) {
+        fn_800FBB70();
+    }
+    for (i = 0; i < 7; i++) {
+        pRecord->mUnknown32[i] = 0xFF;
+        used[i] = 0;
+    }
+    pRecord->mUnknown6 = 0;
+    team = fn_80178320();
+    pPlay = fn_8016871C(team);
+    pTeam = fn_80168708(team);
+    fn_8009F6B4();
+    for (i = 0; i < 8; i++) {
+        pRecord->mUnknown40[i] = 0xFF;
+    }
+    if (pTeam->mUnknown8.mUnknownF == 1 && (pTeam->mUnknown8.mUnknown14 & 1) && (pPlay->mUnknown18 & 1)) {
+        useDepth = 1;
+    }
+    count = 0;
+    n = fn_80178D18(team);
+    for (i = 0; i < n; i++) {
+        Object_80039F5C *p = fn_80039F5C(team, i);
+        unsigned char slot;
+        void *pTable;
+        int index;
+
+        if (!useDepth) {
+            slot = p->mIdBytes[1];
+        } else {
+            slot = fn_80163E94(pTeam, p->mIdBytes[1], 0)->mUnknownB;
+        }
+        pTable = fn_800AEE20(fn_80039F5C(team, slot));
+        if (!pTable) {
+            pTable = fn_80164EC8(pPlay, team, slot);
+        }
+        index = fn_800F06F4(0, pTable, 22, 0);
+        if (index != 0xFFFF) {
+            unsigned char position = ((unsigned char *)pTable)[index * 4 + 1];
+
+            if (position == 0) {
+                pRecord->mUnknown32[p->mIdBytes[1]] = position;
+            } else {
+                counts[position - 1]++;
+            }
+            entries[count].mpObject = p;
+            entries[count].mKind = fn_800F986C(p);
+            entries[count].mX = fn_800F97A8(p).mX;
+            count++;
+        } else {
+            pRecord->mUnknown16[p->mIdBytes[1]] = 0xFF;
+        }
+    }
+    for (i = 0; i < count; i++) {
+        for (j = i + 1; j < count; j++) {
+            if (entries[j].mX > entries[i].mX) {
+                Entry_800FAECC entry = entries[j];
+
+                entries[j] = entries[i];
+                entries[i] = entry;
+            }
+        }
+    }
+    for (k = 0; k < 3; k++) {
+        Object_80039F5C *p = fn_800F93D0(fn_80039F5C(fn_80178308(), pRecord->mUnknown8[k]));
+
+        if (p) {
+            pRecord->mUnknown32[p->mIdBytes[1]] = k + 1;
+            used[p->mIdBytes[1]] = 1;
+        }
+    }
+    for (i = 0; i < count;) {
+        unsigned char index;
+
+        if (forward) {
+            index = i++;
+        } else {
+            index = count - ++i;
+        }
+
+        if (used[entries[index].mpObject->mIdBytes[1]] == 0 && (entries[index].mKind > 1 || all)) {
+            Object_80039F5C *pCandidate = 0;
+            unsigned char done = 0;
+            unsigned char tries = 0;
+
+            while (!done && tries < 3) {
+                pCandidate = fn_800F9BD8(forward, pCandidate);
+                tries++;
+                if (!pCandidate) {
+                    done = 1;
+                } else if (fn_800F9CAC(entries, index, count, pCandidate)) {
+                    done = 1;
+                    pRecord->mUnknown32[entries[index].mpObject->mIdBytes[1]] = fn_800FC0C4(pCandidate);
+                    used[entries[index].mpObject->mIdBytes[1]] = 1;
+                }
+            }
+        }
+    }
 }
 
 extern "C" void fn_800FB768(void) {
