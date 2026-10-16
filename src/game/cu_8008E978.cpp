@@ -1556,15 +1556,6 @@ extern "C" int fn_800A3DC4(int value)
     return 0;
 }
 
-extern "C" void fn_800A4294(Object_80039F5C *p, Block_801BE60C *pBlock)
-{
-    pBlock->mUnknown0Word = -1;
-    pBlock->mUnknown4 = 1.0f;
-    pBlock->mUnknown8 = 1.0f;
-    pBlock->mUnknownCWord = 0;
-    pBlock->mUnknown10Word = 0;
-}
-
 extern "C" void fn_800A42BC(Object_80039F5C *p, Block_801BE60C *pBlock)
 {
     float scale = 0.4f;
@@ -1586,33 +1577,24 @@ extern "C" int fn_800A432C(Key_80110630 *pA, Key_80110630 *pB)
 }
 
 extern "C" {
-void fn_80227690(void *pOut, void *pA, void *pB);
+void fn_80227384(void *pOut, void *pIn, int angle);
 int fn_801CFE40(float y, float x);
-int fn_800A46D8(Object_80039F5C *p, Object_80039F5C *pTarget, int flag);
-int fn_800A4790(Object_80039F5C *p, Object_80039F5C *pTarget);
-void fn_80227538(Point_80167910 *pOut, int angle, float length);
-void fn_80227638(void *, void *, void *);
-int fn_8011F1A4(void);
-int fn_8011F4C8(void);
-float fn_80237260(int stream);
-int fn_800A7ECC(int team);
-int fn_800A54F4(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
-float fn_80227890(void *, void *);
+int fn_80120794(Object_800B26B0 *pA, Object_800B26B0 *pB, float *pVelocity, float speedA, float speedB,
+                int angle, float distance);
 }
-extern unsigned int lbl_803EAA14;
 
-extern "C" int fn_800A4790(Object_80039F5C *p, Object_80039F5C *pTarget)
+extern "C" int fn_800A46D8(Object_80039F5C *p, Object_80039F5C *pTarget, int reverse)
 {
-    Point_80167910 offset;
-    int angle = (pTarget->mMotion.mFacing + 0x400000) & 0xFFFFFF;
+    float velocity[3];
 
-    if (pTarget->mUnknown344 == 3) {
-        angle = (angle + 0x800000) & 0xFFFFFF;
+    velocity[0] = pTarget->mMotion.mUnknown40;
+    velocity[1] = pTarget->mMotion.mUnknown44;
+    velocity[2] = pTarget->mMotion.mUnknown48;
+    if (reverse) {
+        fn_80227384(velocity, velocity, 0x800000);
     }
-    fn_80227538(&offset, angle, 2.5f);
-    fn_80227638(&offset, &offset, &pTarget->mMotion.mPos);
-    fn_80227690(&offset, &offset, &p->mMotion.mPos);
-    return fn_801CFE40(offset.mY, offset.mX);
+    return fn_80120794(&p->mMotion, &pTarget->mMotion, velocity, p->mMotion.mUnknown28, pTarget->mMotion.mUnknown28,
+                       fn_801CFE40(velocity[1], velocity[0]), fn_8022781C(&p->mMotion, &pTarget->mMotion));
 }
 
 extern "C" void fn_800A4950(Object_80039F5C *p, Object_80039F5C *pOther, int index,
@@ -1653,170 +1635,11 @@ extern "C" int fn_800A50B8(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
     return fn_802372EC(0, 256) < limit;
 }
 
-extern "C" int fn_800A5104(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
-                           Pair_800A554C *pPair)
-{
-    int result = 0;
-
-    if (fn_8009F058(p, pTarget, 0x400000) != 0 && fn_8009F058(p, pOther, 0x400000) != 0) {
-        result = fn_80237260(0) < 0.33f;
-    }
-    return result;
-}
-
-extern "C" int fn_800A535C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
-                           Pair_800A554C *pPair)
-{
-    int result = 0;
-
-    if (fn_800A7ECC(p->mIdBytes[2]) == 0) {
-        result = fn_800A54F4(p, pTarget, pOther, pPair);
-    } else if (fn_8009F058(p, pTarget, 0x400000) != 0 && fn_8009F058(pTarget, p, 0x400000) != 0
-               && fn_8022781C(&p->mMotion.mPos, &pTarget->mMotion.mPos) < 7.0f) {
-        int limit = 256 / (pPair->mUnknown0 + 1);
-
-        if (fn_802372EC(0, 256) < limit) {
-            result = 1;
-        }
-    }
-    return result;
-}
-
-/* Maps value in [0, range] linearly onto [from, to]. */
-static inline int Interpolate(int value, int range, int from, int to)
-{
-    return from + value * (to - from) / range;
-}
-
-extern "C" int fn_800A543C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
-                           Pair_800A554C *pPair)
-{
-    int result = 0;
-
-    if (fn_800A7ECC(p->mIdBytes[2]) == 0) {
-        result = fn_800A54F4(p, pTarget, pOther, pPair);
-    } else if (p->mpState->mId == 22 && p->mUnknown336 == pTarget->mId) {
-        unsigned char chance = Interpolate(p->mRatings[8], 10, 90, 10);
-
-        if (fn_802372EC(0, 100) < chance) {
-            result = 1;
-        }
-    }
-    return result;
-}
-
-extern "C" int fn_800A54F4(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
-                           Pair_800A554C *pPair)
-{
-    return fn_80227890(&p->mMotion.mPos, &pTarget->mMotion.mPos) < (float)lbl_803EAA14;
-}
-
 extern "C" int fn_800A55C0(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
                            Pair_800A554C *pPair)
 {
     p->mUnknown512.mUnknown14 = 0;
     return 1;
-}
-
-extern "C" int fn_800A55D0(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
-{
-    Point_8017886C delta;
-    int angle;
-
-    fn_80227690(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
-    angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
-    p->mUnknown512.mUnknown14 = 1;
-    p->mUnknown512.mUnknown8 = angle;
-    p->mUnknown512.mUnknown4 = angle;
-    p->mUnknown512.mUnknown0 = 1.0f;
-    return 1;
-}
-
-extern "C" int fn_800A563C(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
-{
-    int angle = fn_800A46D8(p, pTarget, 0);
-
-    p->mUnknown512.mUnknown14 = 1;
-    p->mUnknown512.mUnknown8 = angle;
-    p->mUnknown512.mUnknown4 = angle;
-    p->mUnknown512.mUnknown0 = 1.0f;
-    return 1;
-}
-
-extern "C" int fn_800A5690(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
-{
-    int result = 1;
-
-    if (*pState == -1) {
-        if (pTarget->mpState->mId != 34) {
-            result = 0;
-        } else {
-            *pState = fn_800A4790(p, pTarget);
-        }
-    }
-    p->mUnknown512.mUnknown14 = 1;
-    p->mUnknown512.mUnknown8 = *pState;
-    p->mUnknown512.mUnknown4 = *pState;
-    p->mUnknown512.mUnknown0 = 1.0f;
-    return result;
-}
-
-extern "C" int fn_800A5718(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
-{
-    int result = 1;
-
-    if (*pState == -1) {
-        if (pTarget->mpState->mId != 35) {
-            result = 0;
-        } else {
-            *pState = fn_800A46D8(p, pTarget, 0);
-        }
-    }
-    p->mUnknown512.mUnknown14 = 1;
-    p->mUnknown512.mUnknown8 = *pState;
-    p->mUnknown512.mUnknown4 = *pState;
-    p->mUnknown512.mUnknown0 = 1.0f;
-    return result;
-}
-
-extern "C" int fn_800A57A4(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
-{
-    int result = 1;
-
-    if (*pState == -1) {
-        if (pTarget->mpState->mId != 52) {
-            result = 0;
-        } else {
-            if (fn_8011F1A4() != 0 && (fn_8011F4C8() & 1)) {
-                *pState = 0;
-            } else {
-                *pState = 0x800000;
-            }
-        }
-    }
-    p->mUnknown512.mUnknown14 = 1;
-    p->mUnknown512.mUnknown8 = *pState;
-    p->mUnknown512.mUnknown4 = *pState;
-    p->mUnknown512.mUnknown0 = 1.0f;
-    return result;
-}
-
-extern "C" int fn_800A5A04(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
-{
-    int result = 1;
-
-    if (*pState == -1) {
-        if (pTarget->mpState->mId != 20) {
-            result = 0;
-        } else {
-            *pState = pTarget->mMotion.mUnknown32;
-        }
-    }
-    p->mUnknown512.mUnknown14 = 1;
-    p->mUnknown512.mUnknown8 = *pState;
-    p->mUnknown512.mUnknown4 = *pState;
-    p->mUnknown512.mUnknown0 = 1.0f;
-    return result;
 }
 
 extern "C" int fn_800A5A60(void)
@@ -3694,6 +3517,48 @@ extern "C" int fn_800A6590(int value)
     }
 }
 
+struct Record_800B49EC;
+
+/* 236-byte request passed to fn_8009313C. */
+struct Request_8009313C {
+    int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    unsigned char mUnknownC[212];
+    unsigned char mUnknownE0;
+    unsigned char mUnknownE1[3];
+    int mUnknownE4;
+    int mUnknownE8;
+};
+
+extern "C" {
+void fn_800B49EC(Record_800B49EC *pDst, const Record_800B49EC *pSrc);
+void fn_800B4798(short *pRatings, int team, int index, float *pOut);
+void fn_800A6F04(int team);
+int fn_800A624C(int team);
+int fn_8009313C(Request_8009313C *pRequest);
+void fn_80146114(Object_80146094 *p);
+void fn_80147840(Object_8003DEC4 *p);
+}
+
+extern "C" void fn_800A65BC(void)
+{
+    unsigned char team;
+
+    for (team = 0; team <= 1; team++) {
+        unsigned int count = fn_80178D18(team);
+        unsigned char i;
+
+        for (i = 0; i < count; i++) {
+            Object_80039F5C *p = fn_80039F5C(team, i);
+
+            fn_800B49EC((Record_800B49EC *)p->mRatings, (Record_800B49EC *)p->mUnknown3020);
+            fn_800B4798(p->mRatings, team, i, &p->mUnknown2900);
+        }
+        fn_800A6F04(team);
+    }
+}
+
 extern "C" void fn_800A6750(int team)
 {
     lbl_803EC954[team]->mUnknown74[2] = 2;
@@ -3715,6 +3580,68 @@ extern "C" void fn_800A67B8(int team)
     lbl_803EC954[team]->mUnknown74[8] = 2;
     lbl_8030F404[team][0] = 0;
     lbl_8030F404[team][1] = 0;
+}
+
+extern "C" void fn_800A6B6C(int team)
+{
+    unsigned int count;
+    unsigned char i;
+
+    lbl_803EC954[team]->mUnknown74[2] = 1;
+    lbl_803EC954[team]->mUnknown74[0] = 1;
+    lbl_803EC954[team]->mUnknown74[1] = 1;
+    lbl_803EC954[team]->mUnknownA0 = 0;
+    lbl_803EC954[team]->mUnknown74[5] = 1;
+    count = fn_80178D18(team);
+    for (i = 0; i < count; i++) {
+        Object_8003DEC4 *pObject = (Object_8003DEC4 *)fn_80039F5C(team, i)->mpUnknown4;
+
+        fn_80146114(&pObject->mUnknown5188);
+        fn_80147840(pObject);
+    }
+}
+
+extern "C" void fn_800A6C10(int team)
+{
+    int other = (team + 1) & 1;
+    unsigned int count;
+    unsigned char i;
+
+    lbl_803EC954[other]->mUnknown74[2] = 1;
+    lbl_803EC954[other]->mUnknown74[0] = 1;
+    lbl_803EC954[team]->mUnknown74[9] = 1;
+    lbl_803EC954[team]->mUnknown74[8] = 1;
+    count = fn_80178D18(team);
+    for (i = 0; i < count; i++) {
+        Object_8003DEC4 *pObject = (Object_8003DEC4 *)fn_80039F5C(team, i)->mpUnknown4;
+
+        fn_80146114(&pObject->mUnknown5188);
+        fn_80147840(pObject);
+    }
+}
+
+extern "C" void fn_800A6CB0(int team)
+{
+    Request_8009313C request;
+    int none = 0;
+
+    if (lbl_803EC95C == -1) {
+        fn_801C1F94(&request, 0, sizeof(request));
+        request.mUnknown0 = team;
+        request.mUnknown8 = 100;
+        request.mUnknownE0 = 1;
+        request.mUnknownE4 = 1;
+        request.mUnknownE8 = none;
+        request.mUnknown4 = none;
+        fn_8009604C(0, fn_800A624C(fn_80178308()));
+        fn_8009604C(1, fn_800A624C(fn_80178320()));
+        int handle = fn_8009313C(&request);
+
+        lbl_803EC95C = handle;
+        if (handle != -1) {
+            fn_80093BCC(handle);
+        }
+    }
 }
 
 extern "C" void fn_800A6D5C(int team)
@@ -7441,11 +7368,6 @@ extern "C" int fn_8009FEF8(void)
     return 0;
 }
 
-extern "C" const char *fn_8009FF00(void)
-{
-    return "DefPred";
-}
-
 extern "C" int fn_8009FF0C(Object_8009FF0C *p)
 {
     Pair_8009FF0C *pPair = new (0) Pair_8009FF0C;
@@ -7606,105 +7528,6 @@ extern "C" void fn_800A2184(void)
 extern "C" void fn_800A2190(int bit)
 {
     lbl_803EA9EC |= 1 << bit;
-}
-
-extern "C" void fn_800A233C(void)
-{
-    lbl_8030E6E8.mUnknown28 = 20.0f;
-    lbl_8030E6E8.mUnknown2C = 40.0f;
-    lbl_8030E6E8.mUnknown30 = 50.0f;
-    lbl_8030E6E8.mUnknown34 = 1.0f;
-    lbl_8030E6E8.mFloat38 = 20.0f;
-    lbl_8030E6E8.mUnknown8B4[1] = 1;
-    lbl_8030E6E8.mUnknown8C4 = 9;
-}
-
-extern "C" void fn_800A238C(void)
-{
-    lbl_8030E6E8.mUnknown28 = 15.0f;
-    lbl_8030E6E8.mUnknown2C = 40.0f;
-    lbl_8030E6E8.mUnknown30 = 50.3f;
-    lbl_8030E6E8.mUnknown34 = 1.0f;
-    lbl_8030E6E8.mFloat38 = 20.0f;
-    lbl_8030E6E8.mUnknown8B4[0] = 1;
-    lbl_8030E6E8.mUnknown6C[1] = 0;
-    lbl_8030E6E8.mUnknown6C[2] = 0;
-    lbl_8030E6E8.mUnknown8C4 = 7;
-}
-
-extern "C" void fn_800A23F0(void)
-{
-    lbl_8030E6E8.mUnknown28 = 15.0f;
-    lbl_8030E6E8.mUnknown2C = 30.045f;
-    lbl_8030E6E8.mUnknown30 = 40.2f;
-    lbl_8030E6E8.mUnknown34 = 1.0f;
-    lbl_8030E6E8.mFloat38 = 20.03f;
-    lbl_8030E6E8.mUnknown8B4[0] = 1;
-    lbl_8030E6E8.mUnknown8B4[4] = 1;
-    lbl_8030E6E8.mUnknown8C4 = 2;
-}
-
-extern "C" void fn_800A244C(void)
-{
-    lbl_8030E6E8.mUnknown28 = 20.0f;
-    lbl_8030E6E8.mUnknown2C = 40.0f;
-    lbl_8030E6E8.mUnknown30 = 50.0f;
-    lbl_8030E6E8.mUnknown34 = 1.0f;
-    lbl_8030E6E8.mFloat38 = 20.0f;
-    lbl_8030E6E8.mUnknown8B4[0] = 1;
-    lbl_8030E6E8.mUnknown8B4[4] = 1;
-    lbl_8030E6E8.mUnknown8C4 = 5;
-}
-
-extern "C" void fn_800A24A0(void)
-{
-    lbl_8030E6E8.mUnknown28 = 20.0f;
-    lbl_8030E6E8.mUnknown2C = 40.0f;
-    lbl_8030E6E8.mUnknown30 = 50.0f;
-    lbl_8030E6E8.mUnknown34 = 1.0f;
-    lbl_8030E6E8.mFloat38 = 20.0f;
-    lbl_8030E6E8.mUnknown8B4[0] = 1;
-    lbl_8030E6E8.mUnknown6C[1] = 0;
-    lbl_8030E6E8.mUnknown6C[2] = 1;
-    lbl_8030E6E8.mUnknown8C4 = 6;
-}
-
-extern "C" void fn_800A2500(void)
-{
-    lbl_8030E6E8.mUnknown28 = 20.0f;
-    lbl_8030E6E8.mUnknown2C = 40.0f;
-    lbl_8030E6E8.mUnknown30 = 49.7f;
-    lbl_8030E6E8.mUnknown34 = 1.0f;
-    lbl_8030E6E8.mFloat38 = 20.0f;
-    lbl_8030E6E8.mUnknown8B4[3] = 1;
-    lbl_8030E6E8.mUnknown6C[6] = 7;
-    lbl_8030E6E8.mUnknown6C[7] = 1;
-    lbl_8030E6E8.mUnknown8C4 = 10;
-}
-
-extern "C" void fn_800A2560(void)
-{
-    lbl_8030E6E8.mUnknown28 = 17.5f;
-    lbl_8030E6E8.mUnknown2C = 30.0f;
-    lbl_8030E6E8.mUnknown30 = 40.2f;
-    lbl_8030E6E8.mUnknown34 = 1.0f;
-    lbl_8030E6E8.mFloat38 = 20.0f;
-    lbl_8030E6E8.mUnknown8B4[6] = 1;
-    lbl_8030E6E8.mUnknown8B4[0] = 1;
-    lbl_8030E6E8.mUnknown8C4 = 11;
-}
-
-extern "C" void fn_800A25BC(void)
-{
-    lbl_8030E6E8.mUnknown28 = 17.5f;
-    lbl_8030E6E8.mUnknown2C = 30.0f;
-    lbl_8030E6E8.mUnknown30 = 39.5f;
-    lbl_8030E6E8.mUnknown34 = 1.0f;
-    lbl_8030E6E8.mFloat38 = 20.0f;
-    lbl_8030E6E8.mUnknown8B4[0] = 1;
-    lbl_8030E6E8.mUnknown6C[1] = 7;
-    lbl_8030E6E8.mUnknown6C[2] = 1;
-    lbl_8030E6E8.mUnknown8C4 = 8;
 }
 
 /* Two floats written by fn_80227690. */
