@@ -1,4 +1,6 @@
 #include "game/Class_80148A58.h"
+#include "game/cu_8003E214.h"
+#include "game/fn_80178D18.h"
 
 class Class_802A27F0 : public Class_80148A58 {
 public:
@@ -9,9 +11,6 @@ public:
 extern "C" {
 extern int lbl_802DEB08[];
 extern int lbl_802DEB40[];
-
-void fn_8003E8FC(int value, int *list, int *ids);
-int fn_80178D70(int team);
 
 void fn_80154638(Class_802A27F0 *p, int value, int *pList, int *pIds, unsigned int count)
 {
