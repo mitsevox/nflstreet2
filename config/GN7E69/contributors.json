@@ -17644,13 +17644,14 @@
         "adampreddy"
       ],
       "functions": [
-        "0x8014B498"
+        "0x8014B498",
+        "0x8014B4E8"
       ],
       "provenance": {
         "pull_request": 928,
         "merged_via": 928,
-        "commit": "86ad5a7b5307d638d3afa53777450b9b29d6379a",
-        "introduced_blob": "d03e84b7e8049d56f037fa4333d4e4b2e051e4d6"
+        "commit": "fc0f693235231a1d932692135dbf82e76999ef7b",
+        "introduced_blob": "df4daa8dddd62e04dc4c8979f5671f5535215a9a"
       }
     },
     {
