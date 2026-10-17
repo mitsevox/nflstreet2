@@ -3658,41 +3658,6 @@ extern "C" unsigned char *fn_8009CC2C(Object_80039F5C *p,
     return pEntry->mUnknown10;
 }
 
-extern "C" unsigned char *fn_8009CD00(Object_80039F5C *p,
-                                      void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *),
-                                      int right, int a, int b)
-{
-    Entry_800AF82C *pEntries;
-    Block_8009C6F4 *pBlock;
-    const char *pJoint;
-    int id;
-    Vector_80039F5C pos;
-    int angles[3];
-    Entry_8009C684 *pEntry;
-
-    fn_801C1F94(&pos, 0, sizeof(pos));
-    pEntries = (Entry_800AF82C *)p->mUnknown816;
-    if (right == 0) {
-        pBlock = (Block_8009C6F4 *)&p->mUnknown108;
-        pJoint = "lwrist";
-        id = 1;
-    } else {
-        pBlock = (Block_8009C6F4 *)&p->mUnknown200;
-        pJoint = "rwrist";
-        id = 2;
-    }
-    fn_8009BF5C(p, fn_801C4E98(((Object_8003DEC4 *)p->mpUnknown4)->mUnknown100, pJoint), &pos, angles);
-    fn_801D04C4();
-    fn_801D06D4(p->mUnknown704);
-    fn_80227CC0(&pos, &pos);
-    fn_801D0544();
-    pEntry = fn_8009C6F4((int)pEntries, pBlock, pCallback, &pos, a, id, b);
-    if (pEntry != 0) {
-        return pEntry->mUnknown10;
-    }
-    return 0;
-}
-
 extern "C" void fn_8009CDEC(Object_80039F5C *p)
 {
     Block_8009C6F4 *pBlock = (Block_8009C6F4 *)&p->mUnknown16;
@@ -7365,78 +7330,6 @@ extern "C" void fn_801BA6BC(Record_800D81C8 *entry, int value);
 extern "C" void fn_801BD81C(void *p, float value);
 extern "C" void fn_800F05E4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
 
-extern "C" int fn_80099F04(Object_80039F5C *p, int handle, int kind)
-{
-    Message_800F01CC message;
-    unsigned char high;
-    unsigned char low;
-    int result;
-
-    if (!(p->mFlags & 0x800)) {
-        float blend;
-        short value;
-        Record_800D81C8 *pRecords;
-        float duration;
-        int index;
-        unsigned short key;
-        unsigned short group;
-        unsigned short entry;
-
-        p->mUnknown512.mUnknown14 = 0;
-        lbl_803EC92C->mUnknown4.mUnknown0 = p->mpUnknown796->mUnknown8;
-        lbl_803EC92C->mUnknown4.mUnknown14 = 0;
-        lbl_803EC92C->mUnknown4.mUnknown10 = 0.0f;
-        lbl_803EC92C->mUnknown4.mUnknown4 = 0.0f;
-        lbl_803EC92C->mUnknown4.mUnknown8 = 0.0f;
-        lbl_803EC92C->mUnknown4.mUnknownC = 0.0f;
-        duration = fn_80097A88(p, handle, fn_80137ABC(kind), &blend, &value);
-        index = (handle >> 29) & 3;
-        key = lbl_8030C2B8[index].mUnknown8[handle & 0x1FFFFFFF].mUnknown0;
-        group = lbl_8030C2B8[index].mUnknown8[handle & 0x1FFFFFFF].mUnknown2;
-        p->mFlags &= ~4;
-        p->mUnknown1011 = key >> 8;
-        p->mUnknown1008.mUnknown1 = group >> 8;
-        p->mUnknown1008.mUnknown0 = group;
-        p->mUnknown1008.mUnknown2 = key;
-        if (lbl_8030C2B8[index].mUnknown8[handle & 0x1FFFFFFF].mpUnknown4->mUnknown14.mZ > 1.159353f) {
-            unsigned char type = lbl_8030C2B8[index].mUnknown8[handle & 0x1FFFFFFF].mpUnknown4->mUnknown4;
-
-            if (type == 3 || type == 4 || type == 7) {
-                float scale = p->mRatings[1] * (1.0f / 255.0f);
-
-                if (scale > 1.0f) {
-                    scale = 1.0f;
-                }
-                p->mUnknown772 = scale * 1.1f;
-            }
-        }
-        p->mUnknown9[0] = 1;
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, lbl_8030C2B8[index].mUnknown0, p, 1.0f);
-        pRecords = p->mpUnknown800;
-        entry = fn_801BA5A8(p->mpUnknown796, pRecords, lbl_8030C2B8[index].mUnknown0, 0);
-        if (handle < 0) {
-            fn_801BA6BC(&pRecords[entry], fn_801BA6B0(&pRecords[entry]) == 0);
-        }
-        pRecords[entry].mUnknown44 = duration;
-        fn_801BD81C(&pRecords[entry].mUnknown4C, blend);
-        p->mpUnknown800[entry].mUnknownC = lbl_803EC92C->mUnknown4.mUnknown0;
-        fn_801C1F94(&message, 0, sizeof(Message_800F01CC));
-        message.mId = 28;
-        fn_800975A4(kind, handle, &high, &low);
-        message.mUnknown1[0] = high;
-        message.mUnknown1[1] = low;
-        message.mUnknown1[2] = value;
-        if (p->mpState->mId == 28) {
-            fn_800F05E4(0, p->mpState, &message, p);
-        } else {
-            fn_800F00D4(0, p->mpState, &message, p);
-        }
-        result = 1;
-    } else {
-        result = 0;
-    }
-    return result;
-}
 
 extern "C" int fn_8009A1A8(Object_80039F5C *p, int handle, int b, int c, int kind)
 {
@@ -7886,45 +7779,6 @@ extern "C" void fn_8009DB54(int flag)
     }
 }
 
-extern "C" int fn_8009DBB4(State_8011F4EC *p)
-{
-    int result = 0;
-    int team = fn_80178308();
-    unsigned char behind = 0;
-    unsigned char ahead = 0;
-    Object_800670B4 *pTeam = fn_80168708(team);
-    unsigned char i = 0;
-    float ballX = fn_80177FE0().mX;
-    int carrierId = fn_800B0F98();
-
-    do {
-        Object_80039F5C *pObject = fn_80039F5C(team, p->mUnknown199[i]);
-        Point_8017886C pos;
-
-        if ((pObject->mFlags & 0x40000) || carrierId == pObject->mId) {
-            pos.mX = pObject->mMotion.mPos.mX;
-        } else {
-            Entry_8006719C *pEntry = fn_80163E94(pTeam, p->mUnknown199[i], 0);
-
-            pos.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
-            pos.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
-            pos.mX += ballX;
-        }
-        p->mUnknown1AC[i] = pos.mX;
-        if (!(__builtin_fabsf(pos.mX - ballX) <= 0.5f)) {
-            if (!(pos.mX < ballX)) {
-                ahead++;
-            } else {
-                behind++;
-            }
-        }
-        i++;
-    } while (i <= 2);
-    if (ahead >= behind) {
-        result = 1;
-    }
-    return result;
-}
 
 extern "C" void fn_8009DD10(State_8011F4EC *p)
 {
