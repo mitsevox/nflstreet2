@@ -1331,8 +1331,8 @@ extern "C" void fn_80097028(Object_80039F5C *p)
     fn_80097160(p, lbl_803EA934);
 }
 
-/* Converts a vector between the two horizontal angle conventions (the angle
-   is negated, the length and height are kept). */
+/* Returns whether the slots the current state-28 handle selects (+0x6C/+0xC8)
+   are active (status not 0 or 4). */
 extern "C" unsigned char fn_8009704C(Object_80039F5C *p)
 {
     int *pFirst;
@@ -1375,7 +1375,8 @@ extern "C" unsigned char fn_8009704C(Object_80039F5C *p)
     return result;
 }
 
-
+/* Converts a vector between the two horizontal angle conventions (the angle
+   is negated, the length and height are kept). */
 extern "C" void fn_800973AC(Vector_80039F5C *pOut, Vector_80039F5C *pIn)
 {
     int angle = fn_801CFE40(pIn->mY, pIn->mX);
