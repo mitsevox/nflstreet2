@@ -320,9 +320,9 @@ int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, Object_80039F5C *pReco
 signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *pValues);
 void fn_800AF87C(Entry_800AF82C *pEntries, int b, Vector_80039F5C *pVec, int c);
 void fn_800AF82C(Entry_800AF82C *pEntries, int b, Pose_80041930 *pPose, int d, int e);
-void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
+void fn_8009CE88(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a);
 int fn_8009C7B4(Vector_80039F5C *pVec);
-void fn_8009CEE4(Object_80039F5C *p, int ref, int a, int b, int c);
+void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b);
 int fn_8003989C(void);
 void fn_8009D1AC(Object_80039F5C *p);
 
@@ -3272,7 +3272,7 @@ extern "C" unsigned char fn_8009C814(Object_80039F5C *p, Block_8009C6F4 *pBlock)
     Entry_8009C684 *pEntry = &pBlock->mEntries[pBlock->mUnknown4];
 
     if (pBlock->mUnknown0 == 2 && fn_8009C7B4(&pEntry->mUnknown4) == 1) {
-        fn_8009CE88(p, &pBlock->mUnknown0, 6);
+        fn_8009CE88(p, pBlock, 6);
     }
     return pBlock->mUnknown0 > 1;
 }
@@ -3303,7 +3303,7 @@ extern "C" unsigned char fn_8009C88C(Object_80039F5C *p, Block_8009C6F4 *pBlock)
         fn_80227CC0(&pEntry->mUnknown4, &pEntry->mUnknown4);
         fn_801D0544();
         if (fn_8009C7B4(&pEntry->mUnknown4) == 1) {
-            fn_8009CE88(p, &pBlock->mUnknown0, 6);
+            fn_8009CE88(p, pBlock, 6);
         }
         break;
     }
@@ -3442,10 +3442,8 @@ extern "C" void fn_8009CDEC(Object_80039F5C *p)
     fn_8009CB0C(p);
 }
 
-extern "C" void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a)
+extern "C" void fn_8009CE88(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a)
 {
-    Block_8009C6F4 *pBlock = (Block_8009C6F4 *)pRecord;
-
     if (pBlock->mUnknown0 == 2) {
         pBlock->mUnknown4 = pBlock->mUnknown4 == 0;
         pBlock->mEntries[pBlock->mUnknown4].mpCallback0 = 0;
@@ -3553,7 +3551,7 @@ extern "C" void fn_8009D0AC(Object_80039F5C *p)
 extern "C" void fn_8009D1AC(Object_80039F5C *p)
 {
     if (p->mUnknown292 != 0) {
-        fn_8009CE88(p, &p->mUnknown16, 15);
+        fn_8009CE88(p, (Block_8009C6F4 *)&p->mUnknown16, 15);
         p->mUnknown292 = 0;
     }
 }
