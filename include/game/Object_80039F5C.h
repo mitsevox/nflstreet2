@@ -35,8 +35,6 @@ struct Quat_801EB488 {
 struct Object_80041904;
 struct Pose_80041930;
 
-/* Block at +4 of the player object; the entries of src/game/cu_80136B1C.cpp
-   hold one at +0. */
 struct Rig_800C8860;
 
 /* Block at +44 of Block_80170E64; fn_800C8860 turns the joints at +48. */
@@ -46,6 +44,8 @@ struct Model_800C8860 {
     char mUnknown52[4];
 };
 
+/* Block at +4 of the player object; the entries of src/game/cu_80136B1C.cpp
+   hold one at +0. */
 struct Block_80170E64 {
     char mUnknown0[4];
     Vector_80039F5C mUnknown4;
@@ -298,9 +298,13 @@ struct Object_80039F5C {
             char mUnknown355[5];
         };
         Block_800CC180 mUnknown336Block;
+        /* Per-state scratch: state 26 reads +344 as a word (fn_800C5BF0);
+           state 58 keeps a player reference at +352 (fn_800C7D44). */
         struct {
             char mUnknown336Words[8];
             int mUnknown344Word;
+            char mUnknown348[4];
+            Object_80039F5C *mpUnknown352;
         };
     };
     unsigned char mUnknown360;
@@ -394,15 +398,12 @@ struct Object_80039F5C {
     unsigned char mUnknown1221;
     unsigned char mUnknown1222;
     char mUnknown1223[1];
-    int mUnknown1224;
+    Object_80039F5C *mpUnknown1224;
     Block_800D0B90 mUnknown1228;
     Object_800CE674 mUnknown1240;
     char mUnknown1244[1656];
     float mUnknown2900;
-    union {
-        char mUnknown2904[4];
-        float mUnknown2904Float;
-    };
+    float mUnknown2904;
     unsigned short mUnknown2908;
     char mUnknown2910[2];
     unsigned char mUnknown2912;

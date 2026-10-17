@@ -1662,7 +1662,7 @@ int fn_800A8740(void);
 float fn_800D3F2C(int team);
 void fn_8017E328(int team,int mode);
 int fn_800CAAC4(int team,unsigned char index);
-float fn_800C9CF0(int team,unsigned char index);
+float fn_800C9CF0(int team, int index);
 int fn_80178C24(void);
 unsigned int fn_8009D9F8(int key);
 int fn_8009D9C0(int key);

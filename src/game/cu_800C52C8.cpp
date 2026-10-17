@@ -100,13 +100,13 @@ int fn_800C6738(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800C68B8(Object_80039F5C *p, Object_80039F5C *pOther, int value);
 int fn_800C68BC(Object_800C6640 *pSource, int value);
 int fn_800C7084(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value, int b);
-int fn_800C769C(Object_80039F5C *p, int value);
-void fn_800C76D8(Object_80039F5C *p, int value, int a, int b);
+int fn_800C769C(Object_80039F5C *p, Object_80039F5C *pOther);
+void fn_800C76D8(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 void fn_800C7708(Object_80039F5C *p);
 int fn_800C7720(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_800C8420(Object_80039F5C *p, float value);
 void fn_800C8688(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
-int fn_800CA5CC(Object_80039F5C *p, int kind, int value);
+int fn_800CA5CC(Object_80039F5C *p, int kind, int apply);
 float fn_800CA9B4(int kind, Object_80039F5C *p);
 int fn_800CAA6C(int value);
 int fn_800CD2B4(int kind, Object_80039F5C *p);
@@ -251,7 +251,7 @@ extern "C" int fn_800C5418(Object_80039F5C *p, Object_80039F5C *pOther, int valu
 extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
 {
     Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown560.mUnknown40);
-    int fumbled = 0;
+    int contactApplied = 0;
     int mode = 12;
     int fromBehind = 0;
     int stripped = 0;
@@ -290,8 +290,8 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
             mode = 2;
         }
         if (canStrip || canKnock) {
-            stripChance = p->mRatings[2] / 4 + p->mUnknown2904Float * 0.25f;
-            stripChance -= (int)(pOther->mRatings[5] / 4 + pOther->mUnknown2904Float * 0.25f);
+            stripChance = p->mRatings[2] / 4 + p->mUnknown2904 * 0.25f;
+            stripChance -= (int)(pOther->mRatings[5] / 4 + pOther->mUnknown2904 * 0.25f);
             stripChance += fn_802372EC(0, 100 - chance);
             if (stripChance > 50) {
                 stripChance = 50;
@@ -309,7 +309,7 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
             roll = fn_802372EC(0, 100);
             if (stripChance > 0 && stripChance > roll && canStrip && fn_800E96EC(pOther, p)) {
                 fn_800C51DC(p, pOther);
-                fumbled = 1;
+                contactApplied = 1;
                 stripped = 1;
                 if (fn_800C53D8(p) == 0) {
                     pRecord = fn_800B15FC();
@@ -325,9 +325,9 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
                 fn_800A8954(13, p->mIdBytes[2], p);
             }
             if (knockChance > 0 && knockChance > roll && canKnock && !stripped && fn_800C5BF0(pOther, value)) {
-                if (!fumbled) {
+                if (!contactApplied) {
                     fn_800C51DC(p, pOther);
-                    fumbled = 1;
+                    contactApplied = 1;
                 }
                 fn_80111354(pOther);
             }
@@ -340,7 +340,7 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
         }
         if (ok) {
             fn_800C5B20(p, value);
-            if (!fumbled) {
+            if (!contactApplied) {
                 fn_800C51DC(p, pOther);
             }
         }
@@ -503,20 +503,20 @@ extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_
     int total;
     int chance;
     float bonus;
-    float carrierRating;
+    float partnerRating;
     float scale;
-    Object_80039F5C *pCarrier;
+    Object_80039F5C *pPartner;
     unsigned char shift;
 
     if (fn_801787A0() == 0) {
         if (pSource != 0 && pOther == 0) {
-            pTarget = fn_8009BCE8(&pSource->mUnknown28);
+            pTarget = fn_8009BCE8(&pSource->mUnknown40);
         } else {
             pTarget = pOther;
         }
         if ((fn_801486A0() || (pTarget != 0 && fn_800F06F4(0, pTarget->mpState, 51, 0xFFFF) == 0xFFFF))
             && pTarget != 0 && fn_800C5BF0(p, value) && fn_800C5DE4(pTarget, p)) {
-            if (fn_800C769C(pTarget, (int)p)) {
+            if (fn_800C769C(pTarget, p)) {
                 return pTarget->mUnknown1221;
             }
             pStats = &p->mUnknown2900;
@@ -539,7 +539,7 @@ extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_
             chance = total < 0 ? 0 : (total > 100 ? 100 : total);
             if (pSource == 0 || pSource->mUnknown0 == 0
                 || (fn_8016F6F4(p, &pTarget->mId), !fn_800C68BC(pSource, pTarget->mpState->mId))
-                || fn_800C8420(pTarget, pSource->mUnknown20)) {
+                || fn_800C8420(pTarget, pSource->mUnknown32)) {
                 if (chance != 0) {
                     chance = fn_800AC584(pTarget->mIdBytes[2], chance);
                     chance = fn_800C5418(p, pTarget, chance);
@@ -552,12 +552,12 @@ extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_
                         }
                     }
                     if (pSource != 0) {
-                        chance += (pSource->mUnknown35 - 1) * 5;
+                        chance += (pSource->mUnknown53 - 1) * 5;
                     }
-                    pCarrier = fn_80114E7C(p);
-                    if (pCarrier != 0) {
-                        carrierRating = pCarrier->mRatings[5] / 255.0f;
-                        chance += (int)(carrierRating * 40.0f);
+                    pPartner = fn_80114E7C(p);
+                    if (pPartner != 0) {
+                        partnerRating = pPartner->mRatings[5] / 255.0f;
+                        chance += (int)(partnerRating * 40.0f);
                     }
                     chance = fn_8009B0CC(p->mIdBytes[2], chance);
                     if (p->mpState->mId == 28 && (fn_801783AC(11) == 1 || fn_801783AC(12) == 1)) {
@@ -599,7 +599,7 @@ extern "C" int fn_800C6A3C(Object_80039F5C *p, Object_80039F5C *pOther, int type
 
     if (kind != 196 && type != -1) {
         fn_800CE770(&query);
-        query.mUnknown56 = result;
+        query.mUnknown56 = 0;
         query.mpUnknown0 = p;
         if (kind == 173) {
             if (fn_80114E7C(p) == pOther) {
@@ -637,7 +637,7 @@ extern "C" int fn_800C6BD8(Object_80039F5C *p, Object_80039F5C *pOther, int)
     int result = 0;
 
     if (fn_801BE648(p->mpUnknown792) != 196 && fn_80054130()->mUnknown136 != 0
-        && __builtin_fabsf(p->mMotion.mPos.mX) > fn_80178A08() - lbl_803EAC18) {
+        && fabsf(p->mMotion.mPos.mX) > fn_80178A08() - lbl_803EAC18) {
         fn_800CE770(&query);
         query.mpUnknown0 = p;
         query.mpUnknown4 = pOther;
@@ -662,7 +662,7 @@ extern "C" int fn_800C6CDC(Object_80039F5C *p, Object_80039F5C *pOther, int)
     int result = 0;
 
     if (fn_801BE648(p->mpUnknown792) != 196 && fn_80054130()->mUnknown136 != 0
-        && __builtin_fabsf(p->mMotion.mPos.mX) > fn_80178A08() - lbl_803EAC18) {
+        && fabsf(p->mMotion.mPos.mX) > fn_80178A08() - lbl_803EAC18) {
         fn_800CE770(&query);
         query.mpUnknown0 = p;
         query.mpUnknown4 = pOther;
@@ -893,7 +893,7 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
         chance = 100;
     }
     blocked = fn_800D0B90(pOther);
-    if (fn_800C769C(p, (int)pOther)) {
+    if (fn_800C769C(p, pOther)) {
         roll = p->mUnknown1222;
     } else {
         roll = fn_802372EC(0, 100);
@@ -954,7 +954,7 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
                 }
                 fn_800C7708(p);
             } else {
-                fn_800C76D8(p, (int)pOther, chance, roll);
+                fn_800C76D8(p, pOther, chance, roll);
             }
         }
         tackle = 0;
@@ -998,7 +998,7 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
                 fn_800C68B8(p, pOther, kindA);
                 fn_800C7708(p);
             } else {
-                fn_800C76D8(p, (int)pOther, chance, roll);
+                fn_800C76D8(p, pOther, chance, roll);
             }
         }
     }
@@ -1031,7 +1031,7 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
             chance = 100;
         }
         if (chance != 0 && p->mpState->mId == 58
-            && p->mUnknown336Block.mUnknown16 == (int)fn_8009BCE8(&p->mUnknown560.mUnknown40)) {
+            && p->mpUnknown352 == fn_8009BCE8(&p->mUnknown560.mUnknown40)) {
             chance = 0;
         }
     }
@@ -1039,7 +1039,7 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
     if (chance == 0) {
         return;
     }
-    if (fn_800C769C(pOther, (int)p)) {
+    if (fn_800C769C(pOther, p)) {
         roll = pOther->mUnknown1222;
     } else {
         roll = fn_802372EC(0, 100);
@@ -1136,7 +1136,7 @@ extern "C" void fn_800C8270(Object_80039F5C *p)
     p->mUnknown1216[0] = 0;
     p->mUnknown1218 = 0;
     p->mUnknown1219 = 0;
-    p->mUnknown1224 = 0;
+    p->mpUnknown1224 = 0;
     p->mUnknown1220 = 0;
     p->mUnknown1221 = 0;
     p->mUnknown1222 = 0;

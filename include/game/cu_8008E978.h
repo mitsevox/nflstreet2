@@ -39,18 +39,18 @@ Playback_80096DA8 *fn_80096DA8(unsigned int);
 Actor_801C009C *fn_80096DCC(unsigned int,int);
 }
 
-/* Partial view of the object whose word +0x28 fn_800C6640 decodes as a
+/* Partial view of the object whose word +40 fn_800C6640 decodes as a
    player reference. The size is unknown. */
 struct Object_800C6640 {
     unsigned char mUnknown0;
-    unsigned char mUnknown1[0x1F];
-    float mUnknown20;
-    unsigned char mUnknown24[4];
-    int mUnknown28;
-    unsigned char mUnknown2C[9];
-    unsigned char mUnknown35;
-    unsigned char mUnknown36;
-    unsigned char mUnknown37;
+    unsigned char mUnknown1[31];
+    float mUnknown32;
+    unsigned char mUnknown36[4];
+    int mUnknown40;
+    unsigned char mUnknown44[9];
+    unsigned char mUnknown53;
+    unsigned char mUnknown54;
+    unsigned char mUnknown55;
 };
 
 /* 8.24 fixed-point multiply used by the head/body turn easing. */

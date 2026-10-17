@@ -148,12 +148,6 @@ struct Turn_800CBBAC {
     int mTotal;
 };
 
-static inline void CopyPoint_800CB080(Point_8017886C *pOut, const Point_8017886C *pIn)
-{
-    pOut->mX = pIn->mX;
-    pOut->mY = pIn->mY;
-}
-
 extern "C" int fn_800C8774(int team)
 {
     int value = 0;
@@ -213,7 +207,7 @@ extern "C" Object_80039F5C *fn_800C8DBC(int team, Vector_80039F5C *pPos, Object_
     Object_80039F5C *pBest = 0;
     unsigned int count = fn_80178D70(team);
     int favourHigher = 1;
-    int favourMoving = 1;
+    int penaliseState1032 = 1;
     unsigned char i;
 
     for (i = 0; i < count; i++) {
@@ -265,7 +259,7 @@ extern "C" Object_80039F5C *fn_800C8DBC(int team, Vector_80039F5C *pPos, Object_
                     dist = 0.0f;
                 }
             }
-            if (favourMoving && (unsigned int)(p->mUnknown1032 - 4) <= 2) {
+            if (penaliseState1032 && (unsigned int)(p->mUnknown1032 - 4) <= 2) {
                 dist += lbl_803EAC38;
                 if (dist > 9999.0f) {
                     dist = 9999.0f;
@@ -299,13 +293,13 @@ extern "C" float fn_800C9CF0(int team, int index)
     return result;
 }
 
-extern "C" void fn_800C9E4C(unsigned char a, unsigned char b)
+extern "C" void fn_800C9E4C(unsigned char count0, unsigned char count1)
 {
     int *pRefs;
     int i;
 
-    lbl_803EAC3C->mCounts[0] = a;
-    lbl_803EAC3C->mCounts[1] = b;
+    lbl_803EAC3C->mCounts[0] = count0;
+    lbl_803EAC3C->mCounts[1] = count1;
     pRefs = lbl_803EAC3C->mRefs;
     for (i = 0; i < 3; i++) {
         *pRefs++ = 0;
@@ -508,7 +502,8 @@ extern "C" void fn_800CB080(Object_80039F5C *p, int key, Record_800D81C8 *pRecor
         fn_800F06F4(0, p->mpState, 87, 0xFFFF);
     }
     fn_800AD9B4();
-    CopyPoint_800CB080(&pTurn->mTarget, &target);
+    pTurn->mTarget.mX = target.mX;
+    pTurn->mTarget.mY = target.mY;
     if (lbl_803EAC4C != 0) {
         fn_801BA6BC(&pRecords[index], 1);
     }
@@ -649,7 +644,7 @@ extern "C" int fn_800CB580(Object_80039F5C *p, int *pIndex, Point_8017886C targe
 extern "C" int fn_800CB708(Object_80039F5C *p, int *pIndex, Point_8017886C target, int angle, int beyond)
 {
     float offset = 0.0f;
-    int message = 0xFFFF;
+    int message;
     int mode;
     int found;
     int facing;
