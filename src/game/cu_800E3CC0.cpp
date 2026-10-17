@@ -2683,7 +2683,9 @@ extern "C" int fn_800ED670(Object_80039F5C *p, Object_80039F5C *pOther, State_80
         angle &= 0xFFFFFF;
         float range;
         id = p->mpState->mUnknown2;
-        if (id != 1 && id != 3 && id != 5 && state->mUnknown8 != 12 && state->mUnknown8 == 7)
+        if (id == 1 || id == 3 || id == 5 || state->mUnknown8 == 12)
+            range = 1.5f;
+        else if (state->mUnknown8 == 7)
             range = 1.25f;
         else
             range = 1.5f;
@@ -3375,10 +3377,10 @@ extern "C" void fn_800EF224(Object_80039F5C *p) {
             if (fn_800A7EF4(p->mIdBytes[2]) == 0) {
                 speed = lbl_803EAE00;
             } else {
-                float rating = p->mRatings[4];
                 speed = 1.0f;
+                float rating = p->mRatings[4];
                 if (rating < 200.0f)
-                    speed = rating * 0.0005f + 0.8f;
+                    speed = rating * 0.0004999998f + 0.8f;
                 speed *= lbl_803EAE04;
             }
             if (fn_800CA5CC(p, 11, 1))
@@ -3463,7 +3465,7 @@ extern "C" void fn_800EF538(Object_80039F5C *p) {
             float rating = p->mRatings[4];
             speed = 1.0f;
             if (rating < 200.0f)
-                speed = rating * 0.0005f + 0.8f;
+                speed = rating * 0.0004999998f + 0.8f;
             speed *= lbl_803EAE04;
         }
         if (fn_800CA5CC(p, 11, 1))
