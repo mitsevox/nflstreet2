@@ -12463,13 +12463,10 @@
         "0x800B232C",
         "0x800B2370",
         "0x800B24C8",
-        "0x800B2600",
-        "0x800B260C",
         "0x800B2624",
         "0x800B2630",
         "0x800B2640",
         "0x800B2670",
-        "0x800B26D0",
         "0x800B2D9C",
         "0x800B2DF4",
         "0x800B3074",
@@ -18021,6 +18018,49 @@
         "merged_via": 902,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "52265f002a604107104633be49974a0b0f0566be"
+      }
+    },
+    {
+      "source": "src/game/cu_800B2564.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800B2600",
+        "0x800B260C"
+      ],
+      "provenance": {
+        "pull_request": 600,
+        "merged_via": 652,
+        "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
+        "introduced_blob": "bc2db4258b74d90cd345c93c521ca13e472adec5",
+        "fragment_origin": {
+          "source": "src/game/cu_8008E978.cpp",
+          "commit": "4d1cfdb96e2ec0f40dc189442c7f117cea5d57c7",
+          "blob": "9074c15452e195396e3c2d66dee7d562632c1d07"
+        },
+        "integration_adjustment": "Preserve original PR 600 author and exact function addresses in a new comparison source fragment with its actual introduction pin; fragment_origin retains the original authored source location/commit/blob. The bodies moved unchanged so the fragment's literal-pool slice compiles exactly. This is not an original file-boundary claim or a whole-path rename."
+      }
+    },
+    {
+      "source": "src/game/cu_800B267C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800B26D0"
+      ],
+      "provenance": {
+        "pull_request": 600,
+        "merged_via": 652,
+        "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
+        "introduced_blob": "08f0e2dfeedf007bc49b8aedd5c2ee926b456908",
+        "fragment_origin": {
+          "source": "src/game/cu_8008E978.cpp",
+          "commit": "4d1cfdb96e2ec0f40dc189442c7f117cea5d57c7",
+          "blob": "9074c15452e195396e3c2d66dee7d562632c1d07"
+        },
+        "integration_adjustment": "Preserve original PR 600 author and exact function addresses in a new comparison source fragment with its actual introduction pin; fragment_origin retains the original authored source location/commit/blob. The bodies moved unchanged so the fragment's literal-pool slice compiles exactly. This is not an original file-boundary claim or a whole-path rename."
       }
     }
   ],
