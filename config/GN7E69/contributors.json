@@ -18062,6 +18062,36 @@
         },
         "integration_adjustment": "Preserve original PR 600 author and exact function addresses in a new comparison source fragment with its actual introduction pin; fragment_origin retains the original authored source location/commit/blob. The bodies moved unchanged so the fragment's literal-pool slice compiles exactly. This is not an original file-boundary claim or a whole-path rename."
       }
+    },
+    {
+      "source": "src/game/cu_800A42BC.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800A42BC"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 902,
+        "commit": "a0d86dfe6503e1dd916ca9ed9ffb013c582f3f30",
+        "introduced_blob": "05e8423528b2e052c73742ca9316b6c8a8f2a5e5"
+      }
+    },
+    {
+      "source": "src/game/cu_800B4A4C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800B4A4C"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 902,
+        "commit": "a0d86dfe6503e1dd916ca9ed9ffb013c582f3f30",
+        "introduced_blob": "394165271397591b3684cba245054a30e0568cec"
+      }
     }
   ],
   "target": "GN7E69",
