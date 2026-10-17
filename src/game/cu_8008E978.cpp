@@ -4028,21 +4028,21 @@ extern unsigned int lbl_802D809C[14];
 extern unsigned int lbl_802D80D4[14];
 }
 
-extern "C" void fn_800A9018(unsigned int mode)
+extern "C" void fn_800A9018(unsigned int step)
 {
     unsigned int i;
 
     fn_8009601C();
     for (i = 0; i <= 1; i++) {
         unsigned char team = i;
-        int isUser = i == fn_80178308();
+        int isOffense = i == fn_80178308();
         unsigned int j = 0;
         unsigned int count = fn_80178D18(team);
 
         fn_80085744(fn_80168EBC(team)->mUnknown20.mUnknown14.mUnknown8.mUnknown4, i);
         for (; j < count; j++) {
             Object_80039F5C *p = fn_80039F5C(team, j);
-            int slot = fn_8008576C(p->mUnknown2908, isUser);
+            int slot = fn_8008576C(p->mUnknown2908, isOffense);
 
             if (fn_801485D4() != 0 && fn_801486A0() == 4) {
                 unsigned int id;
@@ -4050,7 +4050,7 @@ extern "C" void fn_800A9018(unsigned int mode)
                 if (lbl_8030F42C.mUnknown0 == 7) {
                     id = lbl_802D8064[slot];
                 } else if (lbl_8030F42C.mUnknown0 == 4) {
-                    if (mode > 1) {
+                    if (step > 1) {
                         id = lbl_802D80D4[slot];
                     } else {
                         id = lbl_802D809C[slot];
@@ -4067,7 +4067,7 @@ extern "C" void fn_800A9018(unsigned int mode)
 }
 
 extern "C" {
-void fn_800A9018(unsigned int mode);
+void fn_800A9018(unsigned int step);
 int fn_800A9648(void);
 void fn_80092F98(int handle);
 void fn_80094598(int index);
@@ -5798,7 +5798,7 @@ extern char lbl_8031BDD4[];
 
 extern "C" void fn_800AA348(Entry_800AA80C *pEntries, int index)
 {
-    int team = fn_80178AE0();
+    int winner = fn_80178AE0();
 
     if (!(lbl_803EAA88->mUnknown16 & 0x80)) {
         Actor_801C009C *pActor = fn_80093BAC(pEntries[index].mUnknown0, 5);
@@ -5831,23 +5831,23 @@ extern "C" void fn_800AA348(Entry_800AA80C *pEntries, int index)
             }
             fn_8009604C(0, value);
         } else {
-            if (team == 2) {
+            if (winner == 2) {
                 if (fn_801787DC(0) > fn_801787DC(1)) {
-                    team = 0;
+                    winner = 0;
                 } else {
-                    team = fn_801787DC(1) > fn_801787DC(0);
+                    winner = fn_801787DC(1) > fn_801787DC(0);
                 }
             }
-            int other = !team;
+            int loser = !winner;
 
             if (pEntries != 0) {
-                unsigned char home = team;
-                unsigned char away = other;
+                unsigned char winnerSide = winner;
+                unsigned char loserSide = loser;
                 unsigned int i;
 
                 for (i = 0; i <= 6; i++) {
-                    fn_8009604C(i, (int)fn_80039F5C(home, i));
-                    fn_8009604C(i + 7, (int)fn_80039F5C(away, i));
+                    fn_8009604C(i, (int)fn_80039F5C(winnerSide, i));
+                    fn_8009604C(i + 7, (int)fn_80039F5C(loserSide, i));
                 }
             }
         }
@@ -6980,19 +6980,10 @@ extern "C" void fn_800AD600(float dt)
     fn_80137864(dt);
 }
 
-/* Enter, update and exit handlers of each game mode. */
-struct Mode_80297FC8 {
-    void (*mpEnter)(float dt);
-    void (*mpUpdate)(float dt);
-    void (*mpExit)(float dt);
-};
-
 extern "C" {
 void fn_800AD31C(float dt);
 void fn_800AD418(float dt);
 void fn_800CB504(void);
-
-extern Mode_80297FC8 lbl_80297FC8[9];
 }
 
 extern "C" void fn_800AD634(float dt)
@@ -7061,7 +7052,8 @@ extern "C" int fn_800AD9B4(void)
 
 /* Indexed by the current value of an element (0..10), two columns. */
 extern "C" unsigned char lbl_802D82BC[11][2];
-extern "C" unsigned char lbl_802D82D4[11];
+/* Element value for each key; entry 0 is 0xFF, which fn_800ADB34 rejects. */
+extern "C" unsigned char lbl_802D82D4[12];
 
 extern "C" void fn_800ADB34(Element_80041BF8 *pElements, int value, unsigned int duration, int index)
 {
@@ -7099,7 +7091,7 @@ extern "C" void fn_800ADBC0(Object_80039F5C *p, int key, unsigned int duration, 
 }
 
 extern "C" int fn_801BD910(void);
-extern "C" unsigned char lbl_803EAAD8[2];
+extern "C" unsigned char lbl_803EAAD8[4];
 
 extern "C" void fn_800ADBFC(Object_80039F5C *p, int mirror)
 {
@@ -7240,7 +7232,7 @@ extern "C" void fn_800ADE6C(void)
 extern "C" {
 void fn_800AE018(Object_80039F5C *p, int index, unsigned short key);
 
-extern unsigned char lbl_803EAADC[2];
+extern unsigned char lbl_803EAADC[4];
 }
 
 extern "C" void fn_800AE0B8(Object_80039F5C *p)
@@ -7393,18 +7385,19 @@ extern "C" void fn_800AE380(void)
     int found = 0;
 
     if (fn_8007F828(15) != 0) {
-        int home = 1;
-        int away;
+        /* Whether the fn_80178308 / fn_80178320 team has a human controller. */
+        int humanA = 1;
+        int humanB;
 
         lbl_803EC96C++;
         if (fn_800B65A0(fn_80178308()) == 255) {
-            home = 0;
+            humanA = 0;
         }
-        away = 1;
+        humanB = 1;
         if (fn_800B65A0(fn_80178320()) == 255) {
-            away = 0;
+            humanB = 0;
         }
-        if ((home && fn_80178308() == fn_80178348()) || (away && fn_80178320() == fn_80178360())) {
+        if ((humanA && fn_80178308() == fn_80178348()) || (humanB && fn_80178320() == fn_80178360())) {
             lbl_803EC970++;
         } else {
             lbl_803EC970 = 0;
@@ -7413,8 +7406,8 @@ extern "C" void fn_800AE380(void)
             if (lbl_802D82E0[i].mUnknown0 == 0 || lbl_8030F9DC[i] != 0) {
                 continue;
             }
-            if ((lbl_802D82E0[i].mUnknown10 == 0 && (home || away)) || (lbl_802D82E0[i].mUnknown10 == 1 && home)
-                || (lbl_802D82E0[i].mUnknown10 == 2 && away)) {
+            if ((lbl_802D82E0[i].mUnknown10 == 0 && (humanA || humanB)) || (lbl_802D82E0[i].mUnknown10 == 1 && humanA)
+                || (lbl_802D82E0[i].mUnknown10 == 2 && humanB)) {
                 if (lbl_802D82E0[i].mUnknown4 != 0 && lbl_803EC96C >= lbl_802D82E0[i].mUnknown4 && lbl_8030F9EC[i] == 0) {
                     found = 1;
                 }

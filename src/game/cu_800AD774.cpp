@@ -7,18 +7,10 @@
 #include "game/cu_80026BB0.h"
 #include "game/Block_800AD634.h"
 
-/* Enter, update and exit handlers of each game mode. */
-struct Mode_80297FC8 {
-    void (*mpEnter)(float dt);
-    void (*mpUpdate)(float dt);
-    void (*mpExit)(float dt);
-};
-
 extern "C" {
 int fn_801C6280(int a, int b, void *p);
 
 extern Block_800AD634 *lbl_803EAAD4;
-extern Mode_80297FC8 lbl_80297FC8[9];
 }
 
 extern "C" void fn_800AD774(void)

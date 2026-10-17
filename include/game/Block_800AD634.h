@@ -11,4 +11,13 @@ struct Block_800AD634 {
     float mUnknownC;
 };
 
+/* Enter, update and exit handlers of each game mode, indexed by mode. */
+struct Mode_80297FC8 {
+    void (*mpEnter)(float dt);
+    void (*mpUpdate)(float dt);
+    void (*mpExit)(float dt);
+};
+
+extern "C" Mode_80297FC8 lbl_80297FC8[12];
+
 #endif

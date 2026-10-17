@@ -153,7 +153,7 @@ extern unsigned char lbl_803EAA85;
 extern Block_8030F42C lbl_8030F42C;
 }
 
-extern "C" void fn_800A9478(int keepCamera)
+extern "C" void fn_800A9478(int skipPlayerReset)
 {
     if (lbl_803EAA84 != 0) {
         int lost = 0;
@@ -180,7 +180,7 @@ extern "C" void fn_800A9478(int keepCamera)
         lbl_803EAA84 = 0;
         lbl_803EAA85 = 0;
         fn_800A981C();
-        if (keepCamera == 0) {
+        if (skipPlayerReset == 0) {
             fn_800A9854();
         }
         for (step = 0; step <= 19; step++) {
