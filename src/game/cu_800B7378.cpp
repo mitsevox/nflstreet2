@@ -33,13 +33,6 @@ struct Block_800B62D8 {
     unsigned char mUnknown12[10];
 };
 
-struct Sequence_800C4460 {
-    Step_800C4460 mSteps[8];
-    unsigned char mUnknown100;
-    unsigned char mUnknown101;
-    unsigned char mUnknown102[2];
-};
-
 struct Block_800B95B4 {
     Sequence_800C4460 mSequence;
     Object_8017886C mUnknown104;

@@ -882,7 +882,7 @@ extern "C" int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pTarget, int kin
         pos.mY = p->mMotion.mPos.mY;
         pos.mZ = p->mMotion.mPos.mZ;
         fn_80227350(&pos, (Vector_80039F5C *)&p->mMotion.mUnknown40, 40.0f);
-        result = fn_801248D4(p, &pos, &target, 0, (Filter_801248D4 *)filter, pTarget, lbl_803EAEF0, lbl_803EAEEC);
+        result = fn_801248D4(p, &pos, &target, 0, lbl_803EAEF0, lbl_803EAEEC, (Filter_801248D4 *)filter, pTarget);
     }
     return result;
 }

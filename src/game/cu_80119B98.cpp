@@ -43,7 +43,7 @@ extern "C" void fn_80119B98(void)
 
             fn_800CA5CC(pB, 8, 0);
             if (fn_8011A994(p, pB) && fn_80227890(&p->mMotion.mPos, &pB->mMotion.mPos) < 25.0f
-                && fn_801248D4(p, 0, &pB->mMotion.mPos, 0, 0, pA, 0.0f, 0.5f)) {
+                && fn_801248D4(p, 0, &pB->mMotion.mPos, 0, 0.0f, 0.5f, 0, pA)) {
                 Query_800CE770 query;
                 int done = 0;
 
