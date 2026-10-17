@@ -6351,16 +6351,16 @@ struct Item_800AF13C {
 
 /* 6-byte records of the array that Mesh_800AF2AC +48 points to. */
 struct Vertex_800AF2AC {
-    short mUnknown0;
-    short mUnknown2;
-    short mUnknown4;
+    unsigned short mUnknown0;
+    unsigned short mUnknown2;
+    unsigned short mUnknown4;
 };
 
 /* 8-byte source records read by fn_800AF2AC; +6 indexes the destination. */
 struct Source_800AF2AC {
-    short mUnknown0;
-    short mUnknown2;
-    short mUnknown4;
+    unsigned short mUnknown0;
+    unsigned short mUnknown2;
+    unsigned short mUnknown4;
     unsigned short mUnknown6;
 };
 
@@ -6484,7 +6484,6 @@ void fn_800B0090(void);
 void fn_800B03A4(int value);
 int fn_800B0A2C(Object_80039F5C *p, int value);
 void fn_800B0730(Object_80039F5C *p, int value);
-void fn_801CF810(void *pOut, void *pA, void *pB, float t);
 void fn_800B0BC0(void);
 int fn_800B0558(Object_80039F5C *p, Point_80167910 *pPoint);
 void fn_800B0DA4(void);
@@ -6563,30 +6562,6 @@ extern "C" void fn_800AF2AC(Count_800AF2AC *pCount, Mesh_800AF2AC *pMesh, Source
         pMesh->mpUnknown30[index].mUnknown0 = pSource->mUnknown0;
         pMesh->mpUnknown30[index].mUnknown2 = pSource->mUnknown2;
         pMesh->mpUnknown30[index].mUnknown4 = pSource->mUnknown4;
-        pSource++;
-    }
-}
-
-extern "C" void fn_800AF304(Count_800AF2AC *pCount, Mesh_800AF2AC *pMesh, Source_800AF2AC *pSource, float t)
-{
-    unsigned int count = pCount->mUnknown8;
-    unsigned int i;
-
-    for (i = 0; i < count; i++) {
-        int index = pSource->mUnknown6;
-        unsigned int from[3];
-        unsigned int to[3];
-
-        from[0] = pMesh->mpUnknown30[index].mUnknown0 << 8;
-        from[1] = pMesh->mpUnknown30[index].mUnknown2 << 8;
-        from[2] = pMesh->mpUnknown30[index].mUnknown4 << 8;
-        to[0] = pSource->mUnknown0 << 8;
-        to[1] = pSource->mUnknown2 << 8;
-        to[2] = pSource->mUnknown4 << 8;
-        fn_801CF810(to, to, from, t);
-        pMesh->mpUnknown30[index].mUnknown0 = to[0] >> 8;
-        pMesh->mpUnknown30[index].mUnknown2 = to[1] >> 8;
-        pMesh->mpUnknown30[index].mUnknown4 = to[2] >> 8;
         pSource++;
     }
 }
