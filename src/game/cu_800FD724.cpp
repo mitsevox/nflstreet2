@@ -47,7 +47,6 @@ struct Block_800FD650 {
 extern "C" {
 int fn_801CFE40(float y, float x);
 void fn_80227690(void *pOut, void *pA, void *pB);
-void fn_800FD724(Object_80039F5C *p);
 }
 
 extern "C" void fn_800FD724(Object_80039F5C *p)

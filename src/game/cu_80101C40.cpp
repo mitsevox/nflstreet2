@@ -38,7 +38,6 @@
 #include "game/fn_801BE60C.h"
 
 extern "C" {
-int fn_80101C40(Object_80039F5C *p);
 }
 
 extern "C" int fn_80101C40(Object_80039F5C *p)

@@ -38,7 +38,6 @@
 #include "game/fn_801BE60C.h"
 
 extern "C" {
-void fn_800FD978(Object_80039F5C *p);
 Point_8017886C fn_80177FFC(int team);
 }
 
@@ -53,7 +52,6 @@ void fn_80051B88(Object_800B26B0 *pMotion, float value);
 }
 
 extern "C" int fn_800FD7D0(Object_80039F5C *p);
-extern "C" void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut);
 
 extern "C" void fn_800FD978(Object_80039F5C *p)
 {

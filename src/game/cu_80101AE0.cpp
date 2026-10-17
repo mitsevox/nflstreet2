@@ -39,7 +39,6 @@
 
 extern unsigned char lbl_803EAE88;
 
-extern "C" void fn_80101AE0(Object_80039F5C *p, float *pOut);
 
 extern "C" void fn_80101AE0(Object_80039F5C *p, float *pOut)
 {

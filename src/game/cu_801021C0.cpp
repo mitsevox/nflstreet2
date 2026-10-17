@@ -43,8 +43,6 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 extern float lbl_803ECB08;
 void fn_800A5A8C(int a, Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80148108(int mode);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float e);
 }
 
 struct State_801021C0 {
@@ -68,9 +66,6 @@ struct State_80102470 {
 };
 
 extern "C" int fn_800FFFB0(Object_80039F5C *p);
-extern "C" int fn_80103CB0(Object_80039F5C *p);
-extern "C" int fn_80104610(Object_80039F5C *p);
-Record_8011F4F8 *fn_8011F4F8(int index);
 
 extern "C" int fn_801021C0(Object_80039F5C *p)
 {

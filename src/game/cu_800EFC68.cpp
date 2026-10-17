@@ -5,7 +5,6 @@
 #include <string.h>
 #include "game/fn_800B65A0.h"
 
-#include "game/Class_80297CE8.h"
 #include "game/Command_800CEE74.h"
 #include "game/Input_800B6D34.h"
 #include "game/Lookup_8012078C.h"
@@ -387,8 +386,7 @@ struct Block_800F4A74 {
     unsigned char mUnknown61;
     unsigned char mUnknown62;
     unsigned char mUnknown63;
-    unsigned char mUnknown64;
-    char mUnknown65[23];
+    char mUnknown64[24];
 };
 
 struct Info_800F3A6C {
@@ -468,13 +466,10 @@ struct Entry_801018B4 {
     unsigned char mUnknown4;
     unsigned char mUnknown5;
     unsigned char mUnknown6;
-    unsigned char mUnknown7;
+    char mUnknown7[1];
     int mUnknown8;
     int mUnknown12;
     unsigned short mUnknown16;
-    char mUnknown18[2];
-    float mUnknown20;
-    float mUnknown24;
 };
 
 /* 8-byte item of List_801018B4: two halfwords for fn_801BA2A8 and the
@@ -593,7 +588,6 @@ int fn_800A2178(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 void fn_800D6914(int a, Object_80039F5C *p);
 void fn_80104B3C(Object_80039F5C *p, Vector_80039F5C *pOut);
-Object_80039F5C *fn_80105384(Object_80039F5C *p, int aggressive, Point_8017886C *pOut);
 int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_80106618(Object_80039F5C *p);
 void fn_80106678(Record_8011F518 *pRecord, Object_80039F5C *p, int a, int b);
@@ -723,7 +717,6 @@ int fn_800CE4A8(Query_800CE770 *pQuery);
 float fn_800C49A4(Object_80039F5C *p, float value);
 void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int a);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float e);
-int fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
 Object_80039F5C *fn_8015286C(void *pSet, int index);
 int fn_8015310C(void *pSet);
 extern unsigned char lbl_803EAE20[8];
@@ -1745,8 +1738,6 @@ extern "C" Object_80039F5C *fn_800FB844(Object_80039F5C *p) {
     return pResult;
 }
 
-extern "C" Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
-
 extern "C" void fn_800FBAA8(void) {
     Record_8011F4E0 *pRecord = fn_8011F4E0();
     unsigned char i;
@@ -2496,8 +2487,6 @@ extern "C" void fn_800FD708(State_80039F5C *pState)
     pState->mUnknown2 = ((0x800000 - (pState->mUnknown2 << 17)) & 0xFFFFFF) >> 17;
 }
 
-extern "C" void fn_800FD724(Object_80039F5C *p);
-
 extern "C" int fn_800FD7D0(Object_80039F5C *p)
 {
     Object_800670B4 *pTeam = fn_80168708(p->mIdBytes[2]);
@@ -2505,19 +2494,6 @@ extern "C" int fn_800FD7D0(Object_80039F5C *p)
 
     return pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20;
 }
-
-extern float lbl_803EAE64;
-
-extern "C" {
-void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut);
-void fn_800FF598(State_800FDA58 *pState, Object_80039F5C *p, Point_8017886C *pPoint, int angle, float value);
-unsigned char fn_800C0658(void);
-void fn_800FF6D8(Object_80039F5C *p);
-void fn_800449B4(Object_80039F5C *p);
-void fn_80051B88(Object_800B26B0 *pMotion, float value);
-}
-
-extern "C" void fn_800FD978(Object_80039F5C *p);
 
 extern "C" int fn_800FDA58(Object_80039F5C *p)
 {
@@ -2537,25 +2513,6 @@ extern "C" int fn_800FDA58(Object_80039F5C *p)
     return 0;
 }
 
-/* View of the player +336 storage used by fn_800FDAC8. */
-struct State_800FDAC8 {
-    short mUnknown0;
-    char mUnknown2[6];
-    Point_8017886C mUnknown8;
-    char mUnknown16[32];
-    int mUnknown48;
-    unsigned char mUnknown52;
-    unsigned char mUnknown53;
-};
-
-extern "C" {
-int fn_800CB708(Object_80039F5C *p, int *pOut, Point_8017886C target, int angle, int flag);
-int fn_800CB580(Object_80039F5C *p, int *pOut, Point_8017886C target, int angle, int flag);
-void fn_800CBB00(Object_80039F5C *p, int value, Point_8017886C target, int angle, int flag);
-int fn_800FF094(Object_80039F5C *p);
-int fn_80177F70(void);
-}
-
 extern "C" int fn_800FDFD8(Object_80039F5C *p)
 {
     Input_800B6D34 input;
@@ -2569,30 +2526,6 @@ extern "C" int fn_800FDFD8(Object_80039F5C *p)
     }
     return 0;
 }
-
-extern float lbl_803EAE68;
-extern float lbl_803EAE6C;
-extern float lbl_803EAE70;
-
-#define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
-
-static inline void GetFormationPoint(Object_800670B4 *pTeam, int index, Point_8017886C *pOut)
-{
-    Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[0][index];
-
-    pOut->mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
-    pOut->mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
-}
-
-static inline void AddPoint(Point_8017886C *pOut, Point_8017886C *pOffset)
-{
-    pOut->mX += pOffset->mX;
-    pOut->mY += pOffset->mY;
-}
-
-extern "C" void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut);
-
-#undef CLAMP
 
 extern "C" void fn_800FE41C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pOut)
 {
@@ -2809,10 +2742,6 @@ extern "C" int fn_801018B4(Object_80039F5C *p, List_801018B4 *pList, int a, int 
     return bestIndex;
 }
 
-extern unsigned char lbl_803EAE88;
-
-extern "C" void fn_80101AE0(Object_80039F5C *p, float *pOut);
-
 extern "C" int fn_80101B7C(Object_80039F5C *p)
 {
     int flag = p->mUnknown776 == 1;
@@ -2838,31 +2767,6 @@ extern "C" int fn_80101B7C(Object_80039F5C *p)
     }
     return result;
 }
-
-extern "C" int fn_80101C40(Object_80039F5C *p);
-
-/* View of the player +336 storage used by fn_801021C0. */
-struct State_801021C0 {
-    char mUnknown0[2];
-    unsigned char mUnknown2;
-    unsigned char mUnknown3;
-    int mUnknown4;
-    char mUnknown8[3];
-    unsigned char mUnknown11;
-};
-
-extern "C" {
-int fn_80103CB0(Object_80039F5C *p);
-void fn_800D4D84(Object_80039F5C *p);
-int fn_80104610(Object_80039F5C *p);
-void fn_80176B8C(Object_80039F5C *p);
-}
-
-/* View of the player +336 storage read by fn_80102470. */
-struct State_80102470 {
-    char mUnknown0[2];
-    unsigned char mUnknown2;
-};
 
 extern "C" void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d)
 {
@@ -3037,107 +2941,6 @@ extern "C" int fn_8010279C(Object_80039F5C *p)
     return 0;
 }
 
-/* View of the fn_801BE60C payload that fn_80102A78 fills and steps. */
-struct State_80102A78 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
-    int mUnknown16;
-    float mUnknown20;
-    float mUnknown24;
-    float mUnknown28;
-    float mUnknown32;
-    unsigned char mUnknown36;
-};
-
-extern "C" {
-void fn_800D4EC0(int value);
-int fn_80100024(Object_80039F5C *p, int angle, int mode);
-void fn_801016A4(Object_80039F5C *p, unsigned char *pKind, Point_8017886C *pPoint, unsigned int *pAngle);
-void fn_8010176C(Object_80039F5C *p, int mode, Point_8017886C *pPoint);
-float fn_801BD6D4(Block_801BD6D4 *p);
-}
-extern float lbl_803EAEC4;
-
-extern "C" {
-void fn_800B260C(short value);
-void fn_800B1584(int a, const float *pPos);
-void fn_800D7534(int team);
-void fn_801783D0(int bit, int on);
-void fn_80099568(int kind);
-void fn_8013AD04(Object_80137ABC *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
-void fn_80101064(Object_80039F5C *p);
-}
-
-struct Type_803EA368;
-extern Type_803EA368 *lbl_803EA368;
-extern "C" void fn_800310C0(Type_803EA368 *p, int id, Object_80039F5C *pObject, Vector_80039F5C *pPos, int *pFacing);
-
-extern "C" {
-Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, int a, int team);
-void fn_80076D5C(int id);
-int fn_800A7F1C(int team);
-void fn_8010016C(Object_80039F5C *pTarget, Vector_80039F5C *pPos, Object_80039F5C *p, float speed);
-void fn_80100370(Object_80137ABC *pBall, Object_80039F5C *pTarget, Vector_80039F5C *pOut, float speed);
-void fn_80100BF8(Object_80039F5C *p, Vector_80039F5C *pPos, int *pOut, float speed, float a, float b);
-void fn_80101130(Object_80039F5C *pTarget, Object_80039F5C *p, short *pCount);
-void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_80039F5C offset, int angle, Vector_80039F5C *pOut,
-                 Object_80039F5C *pTarget, float length, float speed);
-void fn_8013AC28(Object_80137ABC *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float side);
-void fn_80152068(int index, Vector_80039F5C *pOut);
-int fn_80156C8C(unsigned long long mask);
-float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short *pCount, float scale);
-float fn_8016D9F4(Object_80039F5C *p, float a, float b);
-void fn_80176838(Object_80039F5C *p);
-float fn_80178A2C(void);
-void fn_80227248(void *pOut, void *p, float scale);
-}
-extern float lbl_803EAEC8;
-extern float lbl_803EAECC;
-extern float lbl_803EAED0;
-extern float lbl_803EAED4;
-
-static inline float AddRatingNoise_80102D78(float base, float random, int rating)
-{
-    return rating <= 255 ? random * (255 - rating) * (1.0f / 255.0f) + base : base;
-}
-
-extern "C" int fn_80103CB0(Object_80039F5C *p);
-
-extern "C" void fn_80101AE0(Object_80039F5C *p, float *pOut);
-extern "C" unsigned int fn_8011E188(void);
-extern float lbl_803EAE8C;
-extern float lbl_803EAE90;
-extern float lbl_803EAE94;
-extern float lbl_803EAE98;
-extern float lbl_803EAE9C;
-extern float lbl_803EAEB8;
-
-extern "C" float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short *pCount, float scale);
-
-extern "C" float fn_8016D9F4(Object_80039F5C *p, float a, float b);
-extern "C" float fn_800C49EC(float limit);
-extern "C" float fn_800CAAFC(Object_80039F5C *p);
-extern "C" float fn_801CFB18(int angle);
-extern "C" int fn_801CFDD0(float);
-
-extern "C" void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, int angle,
-                            Vector_80039F5C *pOut, Object_80039F5C *p, float speed, float ballSpeed);
-
-extern "C" int fn_8012CAA4(Object_80039F5C *p);
-extern "C" int fn_8012CAAC(Object_80039F5C *p);
-extern "C" int fn_8012CB50(Message_800F01CC *pMessage);
-extern "C" void fn_8012CB98(int a, int b, int angle, Point_8017886C *pOut);
-extern "C" int fn_8012CC04(int a);
-extern "C" int fn_8012CC50(Object_80039F5C *p);
-extern "C" void fn_8012CD4C(Object_80039F5C *p, Point_8017886C *pOut);
-
-/* The target point that the state at +336 holds. */
-struct State_80104328 {
-    Point_8017886C mTarget;
-};
-
 extern "C" int fn_801045BC(Object_80039F5C *p)
 {
     int result = 0;
@@ -3151,10 +2954,6 @@ extern "C" int fn_801045BC(Object_80039F5C *p)
     }
     return result;
 }
-
-extern "C" float fn_800B2618(int);
-
-extern "C" int fn_80104610(Object_80039F5C *p);
 
 extern "C" int fn_80104688(Object_80039F5C *p)
 {
@@ -3196,8 +2995,6 @@ extern "C" int fn_801047C8(void)
     return result;
 }
 
-extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pOther, Object_80137ABC *pBall, Vector_80039F5C *pTarget);
-
 extern "C" void fn_80104C3C(Object_80039F5C *p, Vector_80039F5C *pOut, float scale) {
     Vector_80039F5C v;
 
@@ -3205,86 +3002,6 @@ extern "C" void fn_80104C3C(Object_80039F5C *p, Vector_80039F5C *pOut, float sca
     fn_80227264(pOut, &v, scale);
     fn_8022765C(pOut, pOut, &p->mMotion.mPos);
 }
-
-extern unsigned int lbl_803EAEE0;
-extern unsigned int lbl_803EAEE4;
-
-extern "C" float fn_80104C9C(Object_80039F5C *p, Object_80039F5C *pOther);
-
-extern "C" void fn_80104B24(Vector_80039F5C *p);
-extern "C" void fn_80105168(int mode, Object_80137ABC *pBall, Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pTarget, int unused, float speed);
-extern "C" void fn_801BE67C(void *pA, void *pB, void *pC, void *p);
-extern "C" int fn_801CFFF0(int a, int b, float factor);
-
-extern "C" void fn_80104D98(Object_80039F5C *p);
-
-extern "C" float fn_801050DC(Object_80137ABC *pBall, Vector_80039F5C *pTarget, float speed);
-
-extern "C" int fn_801C4E98(void *p, const char *pName);
-extern "C" void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pA);
-extern "C" void fn_80105168(int mode, Object_80137ABC *pBall, Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pTarget, int unused, float speed);
-
-extern "C" int fn_8011F524(void);
-
-extern "C" Object_80039F5C *fn_80105384(Object_80039F5C *p, int aggressive, Point_8017886C *pOut);
-
-/* Data block of the reach that fn_80105630 updates each frame. */
-struct Reach_80105630 {
-    unsigned int mEnd;
-    unsigned char mHand;
-    unsigned char mBall;
-};
-
-extern "C" int fn_8023790C(void);
-extern "C" void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
-
-extern "C" float fn_80104C9C(Object_80039F5C *p, Object_80039F5C *pTarget);
-extern "C" int fn_8013BA70(Object_80137ABC *pBall, int *pOut);
-
-extern "C" int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
-
-extern "C" Reach_80105630 *fn_8009CD00(Object_80039F5C *p, void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, Reach_80105630 *),
-                                       int a, unsigned int delay, int b);
-extern "C" void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b);
-extern "C" int fn_801C4E98(void *p, const char *pName);
-extern "C" float fn_801BD690(Block_801BD6D4 *p, int key);
-extern "C" int fn_8023790C(void);
-
-extern "C" void fn_80099568(int kind);
-extern "C" void fn_800D7534(int team);
-extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80137ABC *pBall,
-                            Vector_80039F5C *pPos);
-extern "C" void fn_80104944(Object_80039F5C *p, Vector_80039F5C *pOut);
-extern "C" void fn_80104A08(Object_80039F5C *p, int angle, Point_8017886C *pPoint, float *pValue, float scale);
-extern "C" void fn_80104B24(Vector_80039F5C *p);
-extern "C" float fn_801050DC(Object_80137ABC *pBall, Vector_80039F5C *pTarget, float speed);
-extern "C" void fn_8013AC28(Object_80137ABC *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin,
-                            float rate);
-extern "C" void fn_801783D0(int bit, int on);
-extern "C" void fn_8010D80C(Object_80039F5C *p, Vector_80039F5C *pOut);
-extern "C" float fn_8010D82C(Object_80039F5C *p);
-extern "C" int fn_8011F32C(void);
-
-extern "C" void fn_801061E8(Object_80039F5C *p, Object_80137ABC *pBall);
-
-extern "C" int fn_80106618(Object_80039F5C *p);
-
-extern "C" void fn_80106678(Record_8011F518 *pRecord, Object_80039F5C *p, int a, int b);
-
-extern float lbl_803EAEEC;
-extern float lbl_803EAEF0;
-extern "C" void fn_80227350(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
-
-/* Payload that fn_801BE60C returns for the turn handled by fn_8010680C. */
-struct Turn_8010680C {
-    int mUnknown0;
-    float mUnknown4;
-    unsigned char mUnknown8;
-};
-
-extern "C" int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
-
-extern "C" Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
 
 extern "C" void fn_801076F0(Object_80039F5C *pA, Object_80039F5C *pB, Result_801076F0 *pOut, Input_801076F0 *pIn) {
     Point_8017886C delta;

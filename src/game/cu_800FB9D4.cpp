@@ -40,10 +40,8 @@
 extern "C" {
 int fn_80178320(void);
 void fn_80227690(void *pOut, void *pA, void *pB);
-unsigned int fn_80178D18(int team);
 }
 
-extern "C" Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
 
 extern "C" Object_80039F5C *fn_800FB9D4(Object_80039F5C *p)
 {

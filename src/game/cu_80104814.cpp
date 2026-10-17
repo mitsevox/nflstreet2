@@ -39,11 +39,8 @@
 
 extern "C" {
 float fn_80178A08(void);
-float fn_80178A08(void);
 }
 
-extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80137ABC *pBall,
-                            Vector_80039F5C *pPos);
 
 extern "C" int fn_801047C8(void);
 

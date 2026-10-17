@@ -100,7 +100,6 @@ int fn_801486A0(void);
 extern float lbl_803ECB08;
 void fn_800D6914(int a, Object_80039F5C *p);
 void fn_80104B3C(Object_80039F5C *p, Vector_80039F5C *pOut);
-Object_80039F5C *fn_80105384(Object_80039F5C *p, int aggressive, Point_8017886C *pOut);
 int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_80106618(Object_80039F5C *p);
 void fn_80106678(Record_8011F518 *pRecord, Object_80039F5C *p, int a, int b);
@@ -109,36 +108,23 @@ float fn_8012506C(Object_80039F5C *p, int kind);
 void fn_8022765C(void *pOut, void *pA, void *pB);
 extern const float lbl_803ED6CC;
 void fn_800A5A8C(int a, Object_80039F5C *p, Object_80039F5C *pOther);
-unsigned int fn_80178D18(int team);
 int fn_801787A0(void);
-int fn_800D0B90(Object_80039F5C *p);
 int fn_8011F1A4(void);
 void fn_8013FA8C(int a);
 void fn_800A2190(int bit);
 void fn_800A60D8(Object_80039F5C *p, Object_80039F5C *pOther);
-void fn_80104D98(Object_80039F5C *p);
 void fn_801061E8(Object_80039F5C *p, Object_80137ABC *pBall);
 void fn_8011F5AC(int index);
 void fn_80148108(int mode);
 int fn_801481B0(void);
 Object_800670B4 *fn_80168708(int team);
-int fn_801787A0(void);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
-Object_800670B4 *fn_80168708(int team);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
 int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
 void fn_8009BD60(Object_80039F5C *p);
-int fn_8011F1A4(void);
-int fn_800D0B90(Object_80039F5C *p);
 int fn_801BA568(void *pA, void *pB, int id);
-int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
-void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 extern float lbl_803EA2C4;
 int fn_8011E9B4(Object_80039F5C *p);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float e);
 int fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
-extern const float lbl_803ED6CC;
-void fn_80227538(Point_8017886C *pOut, int angle, float length);
 float fn_801CFB94(int angle);
 void fn_800D7534(int team);
 void fn_801783D0(int bit, int on);
@@ -164,7 +150,6 @@ extern "C" int fn_801CFFF0(int a, int b, float factor);
 
 extern "C" int fn_801C4E98(void *p, const char *pName);
 
-extern "C" void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pA);
 
 extern "C" int fn_8011F524(void);
 
@@ -178,7 +163,6 @@ extern "C" int fn_8023790C(void);
 
 extern "C" void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
 
-extern "C" float fn_80104C9C(Object_80039F5C *p, Object_80039F5C *pTarget);
 
 extern "C" int fn_8013BA70(Object_80137ABC *pBall, int *pOut);
 
@@ -187,31 +171,22 @@ extern "C" Reach_80105630 *fn_8009CD00(Object_80039F5C *p, void (*pCallback)(Obj
 
 extern "C" void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b);
 
-extern "C" int fn_801C4E98(void *p, const char *pName);
 
 extern "C" float fn_801BD690(Block_801BD6D4 *p, int key);
 
-extern "C" int fn_8023790C(void);
 
-extern "C" void fn_80099568(int kind);
 
-extern "C" void fn_800D7534(int team);
 
-extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80137ABC *pBall,
-                            Vector_80039F5C *pPos);
+extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pOther, Object_80137ABC *pBall,
+                            Vector_80039F5C *pTarget);
 
 extern "C" void fn_80104944(Object_80039F5C *p, Vector_80039F5C *pOut);
 
 extern "C" void fn_80104A08(Object_80039F5C *p, int angle, Point_8017886C *pPoint, float *pValue, float scale);
 
-extern "C" void fn_80104B24(Vector_80039F5C *p);
 
-extern "C" float fn_801050DC(Object_80137ABC *pBall, Vector_80039F5C *pTarget, float speed);
 
-extern "C" void fn_8013AC28(Object_80137ABC *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin,
-                            float rate);
 
-extern "C" void fn_801783D0(int bit, int on);
 
 extern "C" void fn_8010D80C(Object_80039F5C *p, Vector_80039F5C *pOut);
 
@@ -235,29 +210,12 @@ extern "C" int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
 
 extern "C" Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
 extern "C" {
-float fn_801CFB94(int angle);
-void fn_8011E3EC(Object_80039F5C *p, int a);
-int fn_8011F1A4(void);
 }
 
-extern "C" void fn_800F00D4(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p);
-extern "C" void fn_800F053C(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p);
-extern "C" Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
 extern "C" int fn_80104720(Object_80039F5C *p, Object_80039F5C *pOther);
 extern "C" int fn_801047C8(void);
-extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pOther, Object_80137ABC *pBall, Vector_80039F5C *pTarget);
 extern "C" void fn_801048B4(Object_80039F5C *p, Object_80137ABC *pBall, Vector_80039F5C *pTarget);
 extern "C" void fn_80104C3C(Object_80039F5C *p, Vector_80039F5C *pOut, float scale);
-extern "C" void fn_8010D80C(Object_80039F5C *p, Vector_80039F5C *pOut);
-extern "C" float fn_8010D82C(Object_80039F5C *p);
-void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value);
-void fn_8011E3EC(Object_80039F5C *p, int a);
-int fn_8011E9B4(Object_80039F5C *p);
-int fn_8011F1A4(void);
-int fn_8011F32C(void);
-Record_8011F518 *fn_8011F518(void);
-int fn_8011F524(void);
-void fn_8011F5AC(int index);
 
 extern "C" float fn_80104C9C(Object_80039F5C *p, Object_80039F5C *pOther)
 {

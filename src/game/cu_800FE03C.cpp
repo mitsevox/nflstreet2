@@ -40,15 +40,10 @@
 extern "C" {
 int fn_80178320(void);
 int fn_8009FE24(Object_80039F5C *p);
-unsigned int fn_80178D18(int team);
 Object_800670B4 *fn_80168708(int team);
 float fn_80178A08(void);
 float fn_80178A44(void);
-Object_800670B4 *fn_80168708(int team);
 Point_8017886C fn_80177FFC(int team);
-float fn_80178A08(void);
-float fn_80178A44(void);
-void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut);
 }
 
 extern float lbl_803EAE68;

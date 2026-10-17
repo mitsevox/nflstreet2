@@ -79,25 +79,16 @@ int fn_801486A0(void);
 extern float lbl_803ECB08;
 float fn_80237260(int stream);
 void fn_800A5A8C(int a, Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_800D0B90(Object_80039F5C *p);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 float fn_80178A08(void);
 float fn_80178A44(void);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
 void fn_800A8954(int event, int team, Object_80039F5C *p);
-int fn_800D0B90(Object_80039F5C *p);
 void fn_801BD81C(void *p, float value);
 float fn_801CFFA0(float value);
-void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 extern float lbl_803EA2C4;
-float fn_80178A08(void);
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float e);
 int fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
-void fn_80227538(Point_8017886C *pOut, int angle, float length);
 float fn_801CFB94(int angle);
-float fn_80178A44(void);
-int fn_80103CB0(Object_80039F5C *p);
 }
 
 struct State_80102664 {
@@ -156,8 +147,8 @@ void fn_8010016C(Object_80039F5C *pTarget, Vector_80039F5C *pPos, Object_80039F5
 void fn_80100370(Object_80137ABC *pBall, Object_80039F5C *pTarget, Vector_80039F5C *pOut, float speed);
 void fn_80100BF8(Object_80039F5C *p, Vector_80039F5C *pPos, int *pOut, float speed, float a, float b);
 void fn_80101130(Object_80039F5C *pTarget, Object_80039F5C *p, short *pCount);
-void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_80039F5C offset, int angle, Vector_80039F5C *pOut,
-                 Object_80039F5C *pTarget, float length, float speed);
+void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, int angle, Vector_80039F5C *pOut,
+                 Object_80039F5C *p, float speed, float ballSpeed);
 void fn_8013AC28(Object_80137ABC *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float side);
 void fn_80152068(int index, Vector_80039F5C *pOut);
 int fn_80156C8C(unsigned long long mask);
@@ -197,7 +188,6 @@ extern float lbl_803EAE9C;
 
 extern float lbl_803EAEB8;
 
-extern "C" float fn_8016D9F4(Object_80039F5C *p, float a, float b);
 
 extern "C" float fn_800C49EC(float limit);
 
@@ -225,22 +215,13 @@ struct State_80104328 {
     Point_8017886C mTarget;
 };
 
-extern "C" void fn_80099568(int kind);
 
-extern "C" void fn_800D7534(int team);
 
-extern "C" void fn_8013AC28(Object_80137ABC *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin,
-                            float rate);
 
-extern "C" void fn_801783D0(int bit, int on);
 extern "C" {
-float fn_801CFB94(int angle);
 }
 
 extern "C" int fn_801018B4(Object_80039F5C *p, List_801018B4 *pList, int a, int b, int *pOut);
-extern "C" void fn_80101AE0(Object_80039F5C *p, float *pOut);
-unsigned int fn_8011E188(void);
-Record_8011F4F8 *fn_8011F4F8(int index);
 
 extern "C" int fn_80102A78(List_801018B4 *pList, unsigned short animation, void *pData, Record_800D81C8 *pEntries,
                            Object_80039F5C *p, unsigned int mode)

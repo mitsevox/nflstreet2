@@ -9615,7 +9615,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029E870",
-          "end": "0x8029E880"
+          "end": "0x8029E87C"
         }
       ],
       "functions": [
@@ -9813,7 +9813,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029EA00",
-          "end": "0x8029EA24"
+          "end": "0x8029EA28"
         }
       ],
       "functions": [

@@ -38,7 +38,6 @@
 #include "game/fn_801BE60C.h"
 
 extern "C" {
-int fn_80104610(Object_80039F5C *p);
 }
 
 extern "C" float fn_800B2618(int);

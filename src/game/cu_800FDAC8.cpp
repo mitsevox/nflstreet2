@@ -65,8 +65,6 @@ int fn_800FF094(Object_80039F5C *p);
 int fn_80177F70(void);
 }
 
-extern "C" int fn_800F06F4(int a, void *pRecord, int id, int value);
-extern "C" void fn_800FD978(Object_80039F5C *p);
 
 extern "C" int fn_800FDAC8(Object_80039F5C *p)
 {
