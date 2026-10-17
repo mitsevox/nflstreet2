@@ -33894,6 +33894,31 @@
       ]
     },
     {
+      "source": "src/game/cu_80152940.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #903; two complete functions inside the retained provisional cu_801485B4 survey group: 0x80152940 (called from 0x800565F4, 0x80152570, 0x80152A34, 0x80152AA4, 0x80152BF0, 0x80152FA8 and 0x80180008) fills a 24-byte record from entry r4 of the table reached through member +28 of the Class_802A2918 object of src/game/cu_80152FFC.cpp, and 0x801529C0 (called from 0x8015176C and 0x801526A0) calls it for the first of entries 0-3 whose byte +12 is not 255. Calls 0x801530FC (src/game/cu_801530FC.cpp) and 0x8003AC84 (src/game/cu_8003877C.cpp) as externs; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x801528E0 before and 0x80152A54 onward are not claimed; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80152940",
+          "end": "0x80152A54"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80152940",
+          "start": "0x80152940",
+          "end": "0x801529C0"
+        },
+        {
+          "symbol": "fn_801529C0",
+          "start": "0x801529C0",
+          "end": "0x80152A54"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
