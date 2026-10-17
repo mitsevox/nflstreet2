@@ -33668,6 +33668,32 @@
       ]
     },
     {
+      "source": "src/game/cu_801559B8.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #878; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 8 of the table 0x802A2A40 (Class_80148A58-derived, include/game/Class_80148A58.h; 0x801559B8-0x80155A7C, word 0x802A2A84). Calls 0x80177F70, 0x80178308, 0x80178320 and 0x801787DC (registered by src/game/cu_80176F18.cpp) and 0x80237260 as externs. The .rodata slice 0x802A17A0-0x802A17A8 holds its 0.5f and 0.7f literals. Original file boundaries and nominal identity unresolved; 0x801558FC before the range is excluded and 0x80155A7C starts src/game/cu_80155A7C.cpp; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801559B8",
+          "end": "0x80155A7C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A17A0",
+          "end": "0x802A17A8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801559B8",
+          "start": "0x801559B8",
+          "end": "0x80155A7C"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
