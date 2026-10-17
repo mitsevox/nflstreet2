@@ -34988,6 +34988,106 @@
       ]
     },
     {
+      "source": "src/game/cu_8014B498.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #927; the complete constructor 0x8014B498-0x8014B4E8 of the Class_80148A58-derived class of the table 0x802A2DB8 inside the retained provisional cu_801485B4 survey group. It calls the base constructor 0x80148A98 (__14Class_80148A58, src/game/cu_80148A98.cpp), stores the table at +24 (resolved through the _vt.14Class_802A2DB8 external) and initializes members, including the .data record array 0x802DE130 (an extern). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014B498",
+          "end": "0x8014B4E8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__14Class_802A2DB8",
+          "start": "0x8014B498",
+          "end": "0x8014B4E8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8014C630.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #927; the complete constructor 0x8014C630-0x8014C690 of the Class_80148A58-derived class of the table 0x802A2C90 inside the retained provisional cu_801485B4 survey group. It calls the base constructor 0x80148A98 (__14Class_80148A58, src/game/cu_80148A98.cpp), stores the table at +24 (resolved through the _vt.14Class_802A2C90 external) and initializes members, including the .data record array 0x802DE41C (an extern). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014C630",
+          "end": "0x8014C690"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__14Class_802A2C90",
+          "start": "0x8014C630",
+          "end": "0x8014C690"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8014EDC4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #927; the complete constructor 0x8014EDC4-0x8014EE1C of the Class_80148A58-derived class of the table 0x802A2B68 inside the retained provisional cu_801485B4 survey group. It calls the base constructor 0x80148A98 (__14Class_80148A58, src/game/cu_80148A98.cpp), stores the table at +24 (resolved through the _vt.14Class_802A2B68 external) and initializes members, including the .data record array 0x802DE99C (an extern). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014EDC4",
+          "end": "0x8014EE1C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__14Class_802A2B68",
+          "start": "0x8014EDC4",
+          "end": "0x8014EE1C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801517F4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #927; the complete constructor 0x801517F4-0x80151858 of the Class_80148A58-derived class of the table 0x802A2918 inside the retained provisional cu_801485B4 survey group. It calls the base constructor 0x80148A98 (__14Class_80148A58, src/game/cu_80148A98.cpp), stores the table at +24 (resolved through the _vt.14Class_802A2918 external) and initializes members, including the .data record array 0x802DEA18 (an extern). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801517F4",
+          "end": "0x80151858"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__14Class_802A2918",
+          "start": "0x801517F4",
+          "end": "0x80151858"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80154214.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #927; the complete constructor 0x80154214-0x8015426C of the Class_80148A58-derived class of the table 0x802A27F0 inside the retained provisional cu_801485B4 survey group. It calls the base constructor 0x80148A98 (__14Class_80148A58, src/game/cu_80148A98.cpp), stores the table at +24 (resolved through the _vt.14Class_802A27F0 external) and initializes members, including the .data record array 0x802DEAA8 (an extern). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80154214",
+          "end": "0x8015426C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__14Class_802A27F0",
+          "start": "0x80154214",
+          "end": "0x8015426C"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
