@@ -33539,7 +33539,7 @@
     {
       "source": "src/game/cu_80155128.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #871; two complete non-virtual functions inside the retained provisional cu_801485B4 survey group (0x80155128-0x801551F0). Both are reached only by direct calls (0x80155128 from 13 sites 0x801531D4-0x801545A8, 0x80155130 from 0x8005C1CC, 0x80154984, 0x801549EC, 0x80154A3C); no data word holds either address. They read member +28 of the object returned by fn_80148A58, named through the file-local Class_802A27F0 layout of src/game/cu_80154A88.cpp. Calls fn_800B65A0 and fn_80039F5C through their headers and 0x8007AFDC as an extern; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80155004-0x80155128 before the range and 0x801551F0 onward excluded; original bytes stay linked.",
+      "evidence": "Issue #871; two complete non-virtual functions inside the retained provisional cu_801485B4 survey group (0x80155128-0x801551F0). Both are reached only by direct calls (0x80155128 from 13 sites 0x801531D4-0x801545A8, 0x80155130 from 0x8005C1CC and from 0x80154984, 0x801549EC, 0x80154A3C inside slot 35 of the table 0x802A27F0); no data word holds either address. They read member +28 of the object returned by fn_80148A58 or passed by that slot, named through the file-local Class_802A27F0 layout of src/game/cu_80154A88.cpp. Calls fn_800B65A0 and fn_80039F5C through their headers and 0x8007AFDC as an extern; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80155004-0x80155128 before the range and 0x801551F0 onward excluded; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
