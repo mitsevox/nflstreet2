@@ -13884,7 +13884,7 @@ extern "C" void fn_800BD568(int index);
 extern "C" int fn_801C6280(int a, int b, void *p);
 extern "C" char lbl_802ECD44[];
 
-extern "C" void fn_800BEC1C(int a, unsigned char index)
+extern "C" void fn_800BEC1C(int a, int index)
 {
     lbl_803EABA8->mSlots[index].mUnknown0 = 5;
     lbl_803EABA8->mSlots[index].mUnknown8 = 0;
@@ -14941,7 +14941,6 @@ extern "C" void fn_800C46A0(Sequence_800C4460 *p)
 }
 
 extern "C" {
-void fn_800BEC1C(int a, unsigned char team);
 int fn_800BF56C(void);
 void fn_8016E008(int team);
 void fn_80164A64(int team);

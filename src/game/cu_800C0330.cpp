@@ -5,7 +5,6 @@
 
 extern "C" {
 void fn_800BE944(unsigned char index, int team, int kind, float value);
-void fn_800BEC1C(int team, unsigned char index);
 void fn_8003A3F4(int a, int index);
 void fn_8017DDDC(int index);
 void fn_8017E01C(int index);

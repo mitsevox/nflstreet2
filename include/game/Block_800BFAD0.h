@@ -60,5 +60,6 @@ struct Block_800BFAD0 {
 
 /* .sdata word that holds the allocated block. */
 extern "C" Block_800BFAD0 *lbl_803EABA8;
+extern "C" void fn_800BEC1C(int a, int index);
 
 #endif
