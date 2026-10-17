@@ -33985,6 +33985,26 @@
       ]
     },
     {
+      "source": "src/game/cu_8015289C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #912; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 23 of the table 0x802A2918 of src/game/cu_80152FFC.cpp (0x8015289C-0x801528E0, word 0x802A29D4), replacing the base entry 0x80148C4C of the table 0x802A2EE0 of Class_80148A58. Calls nothing; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; src/game/cu_801527E0.cpp ends at 0x8015289C and 0x801528E0 onward is src/game/cu_801528E0.cpp; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015289C",
+          "end": "0x801528E0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8015289C",
+          "start": "0x8015289C",
+          "end": "0x801528E0"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
