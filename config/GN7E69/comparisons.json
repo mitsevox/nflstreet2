@@ -7517,7 +7517,7 @@
     {
       "source": "src/game/cu_800E3CC0.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp, registered exact whole-function extents with inferred name/source-form/compiler rows for the reconstructed bodies, local overlay type rows, and the exact .rodata row 0x8029DD48-0x8029DDE4 (literal pools of the twelve functions 0x800E8BE8-0x800EB004). Exact and partial source are measured independently; original bytes remain linked and all other bodies and static data are unmeasured.",
+      "evidence": "evidence.tsv open/open unit row for src/game/cu_800E3CC0.cpp, registered exact whole-function extents with inferred name/source-form/compiler rows for the reconstructed bodies (the partials 0x800E8898, 0x800EB3E8, 0x800EBDCC and 0x800EC870 are graded measured partial in their source-form rows), local overlay type rows, and the .rodata placement 0x8029DD40-0x8029DF7C, whose data row grades only its edges: its contents are measured fuzzy (566/572; the 0x800EB3E8 pool order at 0x8029DDE4-0x8029DDF8 and a 4-byte alignment tail differ), not exact. The unreferenced literals 0x8029DED0-0x8029DEE3 come only from the discarded Stripped_8029DED0, recovered from the Xbox prototype NFLBig.xbe at VA 0xAA0E0 (linker row 0x8029DED0-0x8029DEE4); it has no GC extent and is compiled but not registered or measured. Exact and partial source are measured independently; original bytes remain linked and all other bodies and static data are unmeasured.",
       "sections": [
         {
           "section": ".text",
@@ -7973,6 +7973,9 @@
           "start": "0x800EA6F0",
           "end": "0x800EAC9C"
         }
+      ],
+      "discarded": [
+        "Stripped_8029DED0"
       ]
     },
     {
