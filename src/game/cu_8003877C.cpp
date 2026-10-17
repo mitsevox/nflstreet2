@@ -195,7 +195,6 @@ void fn_801437FC(Object_80039F5C *pA, Object_80039F5C *pB);
 void fn_801438EC(Object_80039F5C *pA, Record_8003EC04 *pRecordA, Object_80039F5C *pB, Record_8003EC04 *pRecordB,
                  ContactList_8030BD74 *pContacts);
 void fn_80194C5C(int channel, int level, int duration);
-Object_8003DEC4 *fn_8003DF3C(int side, int index);
 int fn_8003DEBC(void);
 void fn_8009BC38(Object_80039F5C *p, Object_8003DEC4 *pObject);
 void fn_8009BD48(int *pRef, int a, int b, int c);
