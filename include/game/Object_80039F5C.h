@@ -202,11 +202,15 @@ struct Object_8016D9B8 {
 /* Object that +3092 points to; its layout is declared where it is read. */
 struct Object_800EA284;
 /* Block at player +1072 (Block_8011E240 +40), passed to fn_8011DBC8. +52 is
-   a halfword counter (fn_8011E884, fn_8011E88C, fn_8011DA40). Declared up to
-   +54; the byte there is player +1126. */
+   a halfword counter (fn_8011E884, fn_8011E88C, fn_8011DA40); +40, +44 and +48
+   are reset to 1.0f by fn_8011DBC8. The byte at +54 is player +1126. */
 struct Block_8011DBC8 {
-    char mUnknown0[52];
+    char mUnknown0[40];
+    float mUnknown40;
+    float mUnknown44;
+    float mUnknown48;
     short mUnknown52;
+    unsigned char mUnknown54;
 };
 
 /* View of the 108 bytes at player +1032 as one block: fn_8011DF90 clears
@@ -346,8 +350,7 @@ struct Object_80039F5C {
             short mUnknown1064;
             char mUnknown1066[6];
             Block_8011DBC8 mUnknown1072;
-            unsigned char mUnknown1126;
-            char mUnknown1127[7];
+            char mUnknown1128[6];
             unsigned short mUnknown1134;
             unsigned char mUnknown1136;
             unsigned char mUnknown1137;

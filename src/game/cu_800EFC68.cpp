@@ -5,6 +5,7 @@
 #include <string.h>
 #include "game/fn_800B65A0.h"
 
+#include "game/Block_803EB028.h"
 #include "game/Command_800CEE74.h"
 #include "game/Input_800B6D34.h"
 #include "game/Lookup_8012078C.h"
@@ -129,7 +130,7 @@ struct Pair_8011BAE0 {
 
 struct Entry_8011AFCC {
     char mUnknown0[60];
-    int mUnknown60;
+    Object_80039F5C *mpUnknown60;
     char mUnknown64[4];
     float mUnknown68;
     char mUnknown72[8];
@@ -497,18 +498,6 @@ struct State_80101B7C {
 struct State_801045BC {
     char mUnknown0[4];
     int mUnknown4;
-};
-
-/* 92-byte state allocated through fn_80238174 under the id 'blck'
-   (fn_8011DF3C). */
-struct Block_803EB028 {
-    int mUnknown0;
-    char mUnknown4[80];
-    unsigned int mUnknown84;
-    char mUnknown88[1];
-    unsigned char mUnknown89;
-    unsigned char mUnknown90;
-    char mUnknown91[1];
 };
 
 extern "C" {
@@ -4929,7 +4918,7 @@ extern "C" void fn_8011893C(void)
             p->mUnknown1137 = 0;
             switch (mode) {
             case 4:
-                p->mUnknown1126 = 1;
+                p->mUnknown1072.mUnknown54 = 1;
                 if (fn_8011DC68(fn_801BE648(p->mpUnknown792)) != 0) {
                     p->mUnknown1064 = fn_801BE648(p->mpUnknown792);
                 } else {
@@ -4975,7 +4964,7 @@ extern "C" void fn_8011AFCC(Entry_8011AFCC *pEntries)
         Entry_8011AFCC *pEntry;
 
         swapped = 0;
-        for (pEntry = pEntries + 1; pEntry->mUnknown60 != 0; pEntry++) {
+        for (pEntry = pEntries + 1; pEntry->mpUnknown60 != 0; pEntry++) {
             if (pEntry->mUnknown68 < pPrev->mUnknown68) {
                 Entry_8011AFCC temp = *pEntry;
                 *pEntry = *pPrev;
@@ -4996,7 +4985,7 @@ extern "C" void fn_8011B138(Entry_8011AFCC *pEntries)
         Entry_8011AFCC *pEntry;
 
         swapped = 0;
-        for (pEntry = pEntries + 1; pEntry->mUnknown60 != 0; pEntry++) {
+        for (pEntry = pEntries + 1; pEntry->mpUnknown60 != 0; pEntry++) {
             if (pEntry->mUnknown68 > pPrev->mUnknown68) {
                 Entry_8011AFCC temp = *pEntry;
                 *pEntry = *pPrev;
@@ -5043,6 +5032,122 @@ Entry_801230B8 *fn_801230B8(Plan_80121264 *pPlan);
 int fn_80123254(void *pA, void *pB);
 void fn_8012430C(float *pOut, int kind, Object_80039F5C *p);
 float fn_801CFB94(int angle);
+
+void fn_8011B6E8(Entry_8011AFCC *pEntries, Pair_8011BAE0 pair);
+void fn_8011B83C(Entry_8011AFCC *pEntries, Pair_8011BAE0 pair);
+void fn_8011D0BC(Entry_8011AFCC *pA, Entry_8011AFCC *pB, Pair_8011BAE0 pair);
+void fn_8011D654(Entry_8011AFCC *pEntries);
+
+int fn_8011D558(Vector_80039F5C *p, Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC);
+
+void fn_8011D654(Entry_8011AFCC *pEntries)
+{
+    Pair_8011BAE0 pair;
+
+    pair.mUnknown0 = -fn_80178A08();
+    pair.mUnknown4 = fn_80177FE0().mY;
+    fn_8011B83C(pEntries, pair);
+    for (; pEntries->mpUnknown60 != 0 && pEntries[1].mpUnknown60 != 0; pEntries++) {
+        Object_80039F5C *pA = pEntries->mpUnknown60;
+        Object_80039F5C *pB = pEntries[1].mpUnknown60;
+
+        if ((pA->mUnknown1052 == 1 && pB->mUnknown1052 == 1) ||
+            (pA->mUnknown1052 == 2 && pB->mUnknown1052 == 2 && lbl_803EB028->mUnknown84 < 20)) {
+            int modeA = pA->mUnknown1032;
+            int crossed = 0;
+            int modeB = pB->mUnknown1032;
+            Object_80039F5C *pOtherA;
+            Object_80039F5C *pOtherB;
+
+            if (modeA == 7) {
+                pOtherA = fn_8009BCE8(&pA->mUnknown1040);
+            } else {
+                pOtherA = fn_8009BCE8(&pA->mUnknown1036);
+            }
+            if (modeB == 7) {
+                pOtherB = fn_8009BCE8(&pB->mUnknown1040);
+            } else {
+                pOtherB = fn_8009BCE8(&pB->mUnknown1036);
+            }
+            switch (modeA) {
+            case 2:
+            case 3:
+            case 7:
+                switch (modeB) {
+                case 2:
+                case 3:
+                case 7:
+                    if (pA->mUnknown8 == 255 && pB->mUnknown8 == 255 &&
+                        fn_8011D558(&pA->mMotion.mPos, &pOtherA->mMotion.mPos, &pB->mMotion.mPos,
+                                    &pOtherB->mMotion.mPos)) {
+                        crossed = 1;
+                    }
+                    break;
+                }
+                break;
+            }
+            if (crossed) {
+                Object_80039F5C *pTargetA = fn_8009BCE8(&pA->mUnknown1036);
+                Object_80039F5C *pTargetB = fn_8009BCE8(&pB->mUnknown1036);
+
+                if (modeA == 7) {
+                    fn_8011E1BC(pA, pTargetA, pOtherB, 7);
+                } else {
+                    fn_8011E1BC(pA, pOtherB, 0, modeA);
+                }
+                if (modeB == 7) {
+                    fn_8011E1BC(pB, pTargetB, pOtherA, 7);
+                } else {
+                    fn_8011E1BC(pB, pOtherA, 0, modeB);
+                }
+                switch (modeA) {
+                case 7:
+                    fn_8011E33C(pTargetA, pA, 4);
+                case 2:
+                case 3:
+                    fn_8011E33C(pOtherB, pA, 8);
+                    break;
+                }
+                switch (modeB) {
+                case 7:
+                    fn_8011E33C(pTargetB, pB, 4);
+                case 2:
+                case 3:
+                    fn_8011E33C(pOtherA, pB, 8);
+                    break;
+                }
+            }
+        }
+    }
+}
+
+void fn_8011D8B4(Entry_8011AFCC *pEntries)
+{
+    while (pEntries->mpUnknown60 != 0) {
+        *pEntries = pEntries[1];
+        pEntries++;
+    }
+}
+
+void fn_8011D930(Entry_8011AFCC *pA, Entry_8011AFCC *pB, Pair_8011BAE0 pairB, Pair_8011BAE0 pairA)
+{
+    fn_801D34D0(pA, 8 * sizeof(Entry_8011AFCC), 0, 4);
+    fn_801D34D0(pB, 8 * sizeof(Entry_8011AFCC), 0, 4);
+    fn_8011B83C(pA, pairA);
+    fn_8011B6E8(pB, pairB);
+}
+
+void fn_8011D9B8(void)
+{
+    Entry_8011AFCC listB[8];
+    Entry_8011AFCC listA[8];
+    Pair_8011BAE0 pair;
+
+    fn_8011BAE0(&pair);
+    fn_8011D930(listA, listB, pair, pair);
+    fn_8011D0BC(listA, listB, pair);
+    fn_8011D654(listA);
+}
 
 void fn_8011DA40(void)
 {
@@ -5518,6 +5623,11 @@ int fn_8011F354(void)
     return fn_801650FC(fn_8016871C(fn_80178348()));
 }
 
+int fn_8011F37C(void)
+{
+    return (fn_8016871C(fn_80178308())->mUnknown18 >> 16) & 1;
+}
+
 void fn_8011F3A8(void)
 {
     if (fn_8011F1A4()) {
@@ -5870,6 +5980,30 @@ void fn_80120B4C(int value, int *pList, unsigned char i, unsigned char count)
     }
 }
 
+void fn_80120B84(Plan_80121264 *pPlan)
+{
+    int swapped;
+
+    do {
+        Entry_80120E98 *pPrev = pPlan->mUnknown0;
+        Entry_80120E98 *pEntry = pPrev + 1;
+        unsigned char i;
+
+        swapped = 0;
+        for (i = 0; i < pPlan->mUnknown1440 - 1; i++) {
+            if (pEntry->mUnknown8.mX < pPrev->mUnknown8.mX) {
+                Entry_80120E98 temp = *pEntry;
+
+                *pEntry = *pPrev;
+                *pPrev = temp;
+                swapped = 1;
+            }
+            pPrev = pEntry;
+            pEntry++;
+        }
+    } while (swapped);
+}
+
 void fn_80120CDC(Object_80039F5C *p, Object_80039F5C *pOther, Entry_80120E98 *pEntry)
 {
     if (pOther->mIdBytes[2] == p->mIdBytes[2]) {
@@ -5919,6 +6053,29 @@ void fn_80120E98(Plan_80121264 *pPlan, int index)
         memcpy(&pPlan->mUnknown0[index], &pPlan->mUnknown0[index + 1], (last - index) * sizeof(Entry_80120E98));
     }
     pPlan->mUnknown1440--;
+}
+
+int fn_801218EC(Point_8017886C *pPos, Entry_80120E98 *pA, Entry_80120E98 *pB)
+{
+    return pPos->mX < pB->mUnknown8.mX && pPos->mX > pA->mUnknown8.mX;
+}
+
+int fn_80121BE8(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pTarget, int angle, int heading,
+                float distB, float distA)
+{
+    if (pTarget) {
+        Point_8017886C delta;
+
+        fn_80227690(&delta, pTarget, pA);
+        heading = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+        distA = fn_802270A4(&delta);
+        fn_80227690(&delta, pTarget, pB);
+        distB = fn_802270A4(&delta);
+    }
+    if (fn_801CFFD0(heading, angle) > 0x6E38E3 && distA < distB) {
+        return 1;
+    }
+    return 0;
 }
 
 void fn_80123024(Object_80039F5C *p, Plan_80121264 *pPlan, int angle)

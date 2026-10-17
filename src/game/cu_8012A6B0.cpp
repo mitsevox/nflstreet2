@@ -1383,7 +1383,7 @@ extern "C" void fn_8012D8A8(Object_80039F5C *p, Control_80132090 *control, int *
     int firstAngle = 0, secondAngle = 0;
     float limit;
     if (entry) {
-        float value = *(float *)&entry->mUnknown20[0];
+        float value = entry->mUnknown20;
         if (value < 0.35f) {
             limit = 0.35f;
         } else {

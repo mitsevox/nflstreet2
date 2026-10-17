@@ -1968,7 +1968,7 @@ extern "C" void fn_800DE51C(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id)
             if (p->mUnknown1036) pOther = fn_80039F5C((p->mUnknown1036 >> 8) & 255, p->mpState->mUnknown3[0]);
             else if (fn_801486A0() == 0 || fn_801486A0() == 1) pOther = fn_80039F5C(p->mIdBytes[2], p->mpState->mUnknown3[0]);
             else pOther = fn_80039F5C(p->mIdBytes[2] ^ 1, p->mpState->mUnknown3[0]);
-            if (pOther->mUnknown1127[5] & 2) pBlock->mUnknown1F = 1;
+            if (pOther->mUnknown1128[4] & 2) pBlock->mUnknown1F = 1;
             break;
         case 27: case 52: pOther = fn_80137B40(); break;
         default:
@@ -1976,10 +1976,10 @@ extern "C" void fn_800DE51C(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id)
                 int state = p->mUnknown1032;
                 if (state == 4 || state == 5 || state == 2 || state == 8) {
                     pOther = fn_8009BCE8(&p->mUnknown1036);
-                    if (pOther->mUnknown1127[5] & 2) pBlock->mUnknown1F = 1;
+                    if (pOther->mUnknown1128[4] & 2) pBlock->mUnknown1F = 1;
                 } else if (state == 7) {
                     pOther = p;
-                    if (pOther->mUnknown1127[5] & 2) pBlock->mUnknown1F = 1;
+                    if (pOther->mUnknown1128[4] & 2) pBlock->mUnknown1F = 1;
                 }
             }
         }
@@ -1990,7 +1990,7 @@ extern "C" void fn_800DE51C(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id)
         if (p->mpState->mId == 16) {
             if (((unsigned char *)&p->mUnknown1160)[56]) pBlock->mUnknown1F = ((unsigned char *)&p->mUnknown1160)[55];
             else if (p->mUnknown776 == 1) pBlock->mUnknown1F = 1;
-        } else if (p->mpState->mId == 32 && (p->mUnknown1127[5] & 2)) pBlock->mUnknown1F = 1;
+        } else if (p->mpState->mId == 32 && (p->mUnknown1128[4] & 2)) pBlock->mUnknown1F = 1;
         Pair_802270A4 point;
         int angle;
         pBlock->mUnknown1C = 0;
