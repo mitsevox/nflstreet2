@@ -1,6 +1,7 @@
 #include "game/Class_80148A58.h"
 #include "game/Class_80297B90.h"
 #include "game/fn_8021D7B8.h"
+#include "game/cu_80064864.h"
 
 class Class_802A1860 : public Class_80297B90 {
 };
@@ -8,7 +9,6 @@ class Class_802A1860 : public Class_80297B90 {
 extern "C" {
 extern void *lbl_803EB688;
 void fn_800AAD58(void *p, float dt);
-void fn_80064EFC(int a, int b, int c);
 void fn_8021956C(void *p, int a, int b, int c);
 int fn_80178348(void);
 void fn_80155A7C(Class_80148A58 *p, unsigned char team, int kind, int value);
