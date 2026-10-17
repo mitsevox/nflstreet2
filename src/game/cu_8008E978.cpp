@@ -2092,16 +2092,6 @@ extern "C" int fn_800A3DC4(int value)
     return 0;
 }
 
-extern "C" void fn_800A42BC(Object_80039F5C *p, Block_801BE60C *pBlock)
-{
-    float scale = 0.4f;
-
-    pBlock->mUnknown8 = 1.0f;
-    if (p->mRatings[0] > 127) {
-        pBlock->mUnknown8 = (float)(short)(p->mRatings[0] - 127) / 128.0f * scale + 1.0f;
-    }
-}
-
 extern "C" int fn_800A432C(Key_80110630 *pA, Key_80110630 *pB)
 {
     int result = pA->mUnknown0 == pB->mUnknown0;
@@ -5429,11 +5419,6 @@ extern "C" void fn_800B49EC(Record_800B49EC *pDst, const Record_800B49EC *pSrc)
     *pDst = *pSrc;
 }
 
-extern "C" void fn_800B4A4C(void)
-{
-    fn_80030ACC(fn_800B44D4, fn_800B4628, 0x8C0, "Player Abilities");
-}
-
 extern "C" const char *lbl_802D87A4[];
 
 extern "C" void fn_800B4A18(int index, char *pDest, int size)
@@ -7156,26 +7141,6 @@ struct Table_800AF71C {
     void *mpUnknown4[5];
 };
 
-/* 24-byte items of the array at lbl_803EC97C. */
-struct Item_800AF82C {
-    unsigned char mUnknown0[24];
-};
-
-/* 64-byte entries; fn_800AF804 clears three of them. */
-struct Entry_800AF82C {
-    int mUnknown0;
-    Item_800AF82C *mpUnknown4;
-    void *mpUnknown8;
-    float mUnknownC;
-    float mUnknown10;
-    int mUnknown14;
-    unsigned char mUnknown18[24];
-    int mUnknown30[3];
-    unsigned char mUnknown3C;
-    unsigned char mUnknown3D;
-    unsigned char mUnknown3E[2];
-};
-
 /* 8-byte block allocated under the id 'jmsg' (fn_800AFCB8). */
 struct Block_800AFCB8 {
     int mUnknown0;
@@ -7379,17 +7344,6 @@ extern "C" void fn_800AF82C(Entry_800AF82C *p, int index, int value, int b, int 
         pEntry->mpUnknown8 = lbl_803EC978->mpUnknown4[index];
     }
     pEntry->mUnknown3D = c;
-}
-
-extern "C" void fn_800AF95C(Entry_800AF82C *p, int index, unsigned int count)
-{
-    Entry_800AF82C *pEntry = p + index;
-
-    if (pEntry->mUnknown14 != 0) {
-        pEntry->mUnknown14 = 0;
-        pEntry->mUnknown3C = 1;
-        pEntry->mUnknownC = pEntry->mUnknown10 = 1.0f / count;
-    }
 }
 
 extern "C" void fn_800AF9C0(Entry_800AF82C *p, int index, int *pValue)

@@ -49,6 +49,26 @@ struct Entry_80094BC4 {
     int mUnknown24;
 };
 
+/* 24-byte items of the array at lbl_803EC97C. */
+struct Item_800AF82C {
+    unsigned char mUnknown0[24];
+};
+
+/* 64-byte entries; fn_800AF804 clears three of them. */
+struct Entry_800AF82C {
+    int mUnknown0;
+    Item_800AF82C *mpUnknown4;
+    void *mpUnknown8;
+    float mUnknownC;
+    float mUnknown10;
+    int mUnknown14;
+    unsigned char mUnknown18[24];
+    int mUnknown30[3];
+    unsigned char mUnknown3C;
+    unsigned char mUnknown3D;
+    unsigned char mUnknown3E[2];
+};
+
 extern "C" {
 Actor_801C009C *fn_80093BAC(int,int);
 Character_80093BCC *fn_80093BCC(unsigned int);
