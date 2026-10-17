@@ -31,8 +31,8 @@ struct FixedMesh_801A7F10 {
     unsigned short mCount;
 };
 
-/* Texture-scroll settings: frame lengths in seconds, then the number of
-   scroll steps across the texture along each axis. */
+/* Texture-scroll settings: frame lengths in seconds, then per-axis scroll
+   values whose meaning depends on the scroll type. */
 struct Scroll_801A7C20 {
     int mUnknown0;
     float mDurations[11];

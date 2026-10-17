@@ -9693,16 +9693,8 @@ extern "C" int fn_800CD170(Delta_800CC6A8 *pA, Delta_800CC6A8 *pB, Delta_800CC6A
 
 extern "C" { unsigned char fn_80114DD8(Object_80039F5C *p); void fn_800CD978(Group_800CC98C *,Play_800CCEBC *,int); void fn_800CDB5C(Group_800CC98C *,Play_800CCEBC *,int); }
 extern "C" int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
-struct Record_800CE608;
+#include "game/Record_800CE608.h"
 extern "C" void fn_800CE608(Object_80039F5C *,Record_800CE608 *);
-struct Record_800CE608 {
-    int mUnknown0;
-    float mUnknown4;
-    unsigned short mUnknown8;
-    union { unsigned short mUnknown10; unsigned char mBytes10[2]; };
-    union { unsigned short mUnknown12; unsigned char mBytes12[2]; };
-    unsigned short mUnknown14;
-};
 
 extern "C" {
 Play_800CCEBC *fn_800CD8BC(Group_800CC98C *p, Play_800CCEBC *pOut, unsigned short *pIndex);

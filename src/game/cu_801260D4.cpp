@@ -70,7 +70,7 @@ int fn_801260D4(Object_80039F5C *p);
 void fn_801262B8(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance, int forced);
 void fn_801269B8(Object_80039F5C *p, State_801297F8 *pState, float distance);
 Object_80039F5C *fn_80128B60(void);
-int fn_8012A3B0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance, int *pChance);
+int fn_8012A3B0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance, int *pOut);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 int fn_801486A0(void);
 float fn_8016B938(void);
@@ -1097,7 +1097,7 @@ extern "C" int fn_801297F8(Object_80039F5C *p)
             result = fn_8009F7A4(p, 0) == 1;
         }
         if (--pState->mUnknown12 <= 0) {
-            float maxSpeed;
+            float speed;
             int ok;
             float dirLength;
             int dirAngle;
@@ -1116,9 +1116,9 @@ extern "C" int fn_801297F8(Object_80039F5C *p)
                     pState->mUnknown12 -= (signed char)MIN(pState->mUnknown12, pState->mUnknown12 * fn_8016B974());
                 }
             }
-            maxSpeed = pMotion->mUnknown28;
-            if (maxSpeed < lbl_803ECB08 * 0.4f) {
-                maxSpeed = lbl_803ECB08 * 0.4f;
+            speed = pMotion->mUnknown28;
+            if (speed < lbl_803ECB08 * 0.4f) {
+                speed = lbl_803ECB08 * 0.4f;
             }
             fn_80129360(pMotion, pos, velocity, &dir);
             ok = 1;
@@ -1129,12 +1129,12 @@ extern "C" int fn_801297F8(Object_80039F5C *p)
                     if (dirLength < fn_8016D9F4(pOther, 0.4f, 1.0f)) {
                         ok = distance <= 3.0f;
                     }
-                } else if ((unsigned int)(pOther->mpState->mId - 26) <= 1) {
+                } else if (pOther->mpState->mId == 26 || pOther->mpState->mId == 27) {
                     ok = 0;
                 }
             }
             if (ok) {
-                facing = fn_80120794(pMotion, &pos, &dir, maxSpeed, dirLength, dirAngle, distance);
+                facing = fn_80120794(pMotion, &pos, &dir, speed, dirLength, dirAngle, distance);
             } else {
                 Point_80167910 delta;
 
@@ -1221,19 +1221,19 @@ extern "C" int fn_8012A38C(Object_80039F5C *p, int message)
 }
 
 extern "C" int fn_8012A3B0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance,
-                           int *pChance)
+                           int *pOut)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
     int result = 0;
 
-    *pChance = lbl_803EB0C8;
+    *pOut = lbl_803EB0C8;
     if (pOther == 0) {
         result = 0;
     } else if (fn_80124714(p, pOther, 0) != 0) {
         if (pOther->mIdBytes[2] != p->mIdBytes[2] && (pOther->mFlags & 0x10000) != 0
             && distance < lbl_803EB0B0 * 0.5f && fn_801486A0() != 0) {
             result = 1;
-            *pChance = fn_8012623C(pOther);
+            *pOut = fn_8012623C(pOther);
         } else if (pOther == 0 || pOther->mIdBytes[2] == p->mIdBytes[2]) {
             result = 0;
         } else {
@@ -1254,9 +1254,9 @@ extern "C" int fn_8012A3B0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_8
                     result = 1;
                 }
                 if (pMotion->mPos.mY < pos.mY) {
-                    *pChance = lbl_803EB0CC;
+                    *pOut = lbl_803EB0CC;
                     if (fabsf(pMotion->mPos.mX - pos.mX) < fabsf(pMotion->mPos.mY - pos.mY) * 0.5f) {
-                        *pChance = lbl_803EB0D0;
+                        *pOut = lbl_803EB0D0;
                         if (pMotion->mPos.mY > fn_80178A2C() - 5.0f) {
                             odds = lbl_803EB0C0;
                         } else {

@@ -8,7 +8,7 @@ unsigned char fn_8018631C(void);
 
 extern "C" int lbl_803EB52C;
 
-// Message handler offered to fn_8017F90C: returns nonzero for the ids it handles.
+// Message handler called in turn by fn_8017F90C: returns nonzero for the ids it handles.
 extern "C" int fn_8017FB90(unsigned int id, Arg_8018399C *pArgs, int unused, int *pResult)
 {
     switch (id) {

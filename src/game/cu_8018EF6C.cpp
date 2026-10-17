@@ -8,14 +8,15 @@ int fn_8022F3D4(int a);
 int fn_8022F4BC(void);
 int fn_80237390(int stream, int low, int high);
 
-/* Rebuilds 'LTSS' from 'CTNR' in a shuffled order, with the rows of the
-   team's own league moved to the end. */
-void fn_8018EF6C(int team)
+/* Rebuilds 'LTSS' from 'CTNR' in a shuffled row order; the entry whose
+   'CTNR' row index equals the 'LGLT' value selected from 'METS' for the
+   argument is moved to the end. */
+void fn_8018EF6C(int key)
 {
     QueryCursor cursor;
     char name[40];
     int count = 0;
-    int league = 9;
+    int value = 9;
     int lglt;
 
     fn_8022EF8C(0, 0x43544E52);
@@ -31,10 +32,10 @@ void fn_8018EF6C(int team)
     }
 
     int handle = fn_8022F3D4(fn_8022F4BC());
-    fn_801FCE10(0, "use \x8c select 'LGLT' into \x82 from 'METS' where 'DIGT' = \x82\n", handle, &league, team);
+    fn_801FCE10(0, "use \x8c select 'LGLT' into \x82 from 'METS' where 'DIGT' = \x82\n", handle, &value, key);
     int last = count - 1;
     for (int i = 0; i < count && last >= 0; i++) {
-        if (pOrder[i] == league) {
+        if (pOrder[i] == value) {
             int temp = pOrder[last];
             pOrder[last] = pOrder[i];
             pOrder[i] = temp;

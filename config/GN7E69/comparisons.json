@@ -15775,32 +15775,6 @@
       ]
     },
     {
-      "source": "src/game/cu_80147908.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80147908-0x80147AE4 (cu_80147908), function row 0x80147908 and data row 0x802A0528-0x802A0540 (comparison literal placement). The body is a comparison; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80147908",
-          "end": "0x80147AE4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A0528",
-          "end": "0x802A0540"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80147908",
-          "start": "0x80147908",
-          "end": "0x80147AE4"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_8015C25C.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row 0x8015C25C-0x8015D3EC (src/game/cu_8015C25C.cpp), its type and source-form rows, the 25 exact function extents, the exact .rodata row 0x802A3EF8-0x802A3F10 and the exact .sdata row 0x803EB328-0x803EB330. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",

@@ -26,8 +26,8 @@
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_801BA2A8.h"
-#include "game/fn_80227638.h"
 #include "game/Table_80089904.h"
+#include "game/Record_800CE608.h"
 
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
 
@@ -147,16 +147,6 @@ struct State_800E954C {
     unsigned char mUnknown31;
 };
 
-/* 16-byte record fn_800CE590 fills and fn_800CE608 applies. */
-struct Record_800CE608 {
-    int mUnknown0;
-    float mUnknown4;
-    unsigned short mUnknown8;
-    union { unsigned short mUnknown10; unsigned char mBytes10[2]; };
-    union { unsigned short mUnknown12; unsigned char mBytes12[2]; };
-    unsigned short mUnknown14;
-};
-
 struct Block_800E7588 {
     char mUnknown0[4];
     unsigned char mUnknown4;
@@ -226,7 +216,7 @@ void fn_800CE684(Object_800CE674 *p);
 void fn_800EFE60(int a, void *p, Object_80039F5C *pObject);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-void fn_8010AEC4(int value);
+void fn_8010AEC4(Object_80039F5C *p);
 void fn_80227384(void *pOut, void *pIn, int angle);
 void fn_80227350(void *pOut, void *pV, float scale);
 void fn_800E9528(Object_80039F5C *p);
@@ -234,7 +224,7 @@ int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800E9DBC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8009F0B8(Object_80039F5C *p, int angle);
 void fn_8003A130(void *pPos, float *pExtra, int team);
-void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int delay);
+void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 int fn_80178360(void);
 void fn_800D4CD4(void);
 void fn_800D7A0C(Object_80039F5C *p, int a);
@@ -298,9 +288,7 @@ void fn_800EC9E4(Object_80039F5C *p, int a, int b);
 int fn_800EB3E8(Object_80039F5C *p, State_800EBCE0 *pState, Object_80137ABC *pBall, int a, int b);
 void fn_800EE964(State_800EE9AC *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value);
 void fn_800EE7DC(Object_80039F5C *p, State_800EE9AC *pState);
-float fn_8011F4D4(void);
 float fn_801CFB94(int angle);
-void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800DBC4C(Object_80039F5C *p, int angle, float value);
 int fn_801481B0(void);
 int fn_8011F2C4(void);
@@ -316,7 +304,6 @@ int fn_800EEA20(Object_80039F5C *p);
 int fn_800DC080(Object_80039F5C *p);
 Point_8017886C fn_8017808C(void);
 float fn_80178A2C(void);
-void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_801BD81C(void *p, float value);
 float fn_801CFFA0(float value);
 int fn_800A7EF4(int team);
@@ -700,17 +687,17 @@ extern "C" int fn_800E8898(Object_80039F5C *p, Object_80039F5C **ppLast) {
                         break;
                     }
                     default: {
-                        short skill = (short)p->mUnknown2904Float;
-                        short strength = pOther->mRatings[2] >= pOther->mRatings[0] ? pOther->mRatings[2] : pOther->mRatings[0];
-                        short otherSkill = (short)pOther->mUnknown2904Float;
-                        short defense = (short)(strength * lbl_803EAD84 + otherSkill * lbl_803EAD88);
-                        short offense = (short)(p->mRatings[5] * lbl_803EAD8C + skill * lbl_803EAD90);
-                        short attack = fn_802372EC(0, offense);
-                        short resist = fn_802372EC(0, defense);
+                        short rollBase = (short)p->mUnknown2904Float;
+                        short ratingMax = pOther->mRatings[2] >= pOther->mRatings[0] ? pOther->mRatings[2] : pOther->mRatings[0];
+                        short otherRollBase = (short)pOther->mUnknown2904Float;
+                        short otherLimit = (short)(ratingMax * lbl_803EAD84 + otherRollBase * lbl_803EAD88);
+                        short limit = (short)(p->mRatings[5] * lbl_803EAD8C + rollBase * lbl_803EAD90);
+                        short roll = fn_802372EC(0, limit);
+                        short otherRoll = fn_802372EC(0, otherLimit);
                         if (pOther->mMotion.mPos.mY < fn_80177FE0().mY)
-                            attack = (short)(attack * lbl_803EAD94);
-                        if (attack > resist) {
-                            if (attack * lbl_803EAD98 > resist) {
+                            roll = (short)(roll * lbl_803EAD94);
+                        if (roll > otherRoll) {
+                            if (roll * lbl_803EAD98 > otherRoll) {
                                 fn_800E96EC(pOther, p);
                                 result = 1;
                             } else {
@@ -1871,12 +1858,12 @@ extern "C" void fn_800EBA48(int id) {
             fn_801C1F94(&message, 0, 4);
             message.mId = 57;
             message.mUnknown1[0] = id;
-            int delay = fn_8009F0B8(pOther, 0x3C71C7) ? lbl_803EADC8 : lbl_803EADC4;
-            delay += (unsigned int)(fn_802270A4(&delta) * lbl_803EADCC);
-            delay += (int)((255 - pOther->mRatings[0]) * lbl_803EADD0);
-            delay += fn_802372EC(0, lbl_803EADD4);
+            int value = fn_8009F0B8(pOther, 0x3C71C7) ? lbl_803EADC8 : lbl_803EADC4;
+            value += (unsigned int)(fn_802270A4(&delta) * lbl_803EADCC);
+            value += (int)((255 - pOther->mRatings[0]) * lbl_803EADD0);
+            value += fn_802372EC(0, lbl_803EADD4);
             if ((pOther->mFlags & 0x400) || !fn_801486A0())
-                delay = 0;
+                value = 0;
             switch (pOther->mpState->mId) {
             case 0:
             case 11:
@@ -1885,12 +1872,12 @@ extern "C" void fn_800EBA48(int id) {
             case 28:
             case 68:
             case 90:
-                delay = 0;
+                value = 0;
                 break;
             }
             if (pOther->mQueue[0].mId != message.mId && (unsigned char)pOther->mUnknown3044[0] != message.mId) {
                 if (fn_800EAEA4(pOther))
-                    fn_8003AB28(pOther, &message, delay);
+                    fn_8003AB28(pOther, &message, value);
                 else
                     fn_800F01CC(0, pOther->mpState, &message, (Object_80039F5C *)&pOther);
             }
@@ -2246,7 +2233,7 @@ extern "C" unsigned char fn_800EC870(Object_80039F5C *p) {
 
 extern "C" void fn_800EC9E4(Object_80039F5C *p, int kind, int flag) {
     int mirror = 0;
-    int upfield = 0;
+    int alternate = 0;
     fn_8009BD60(p);
     p->mUnknown512.mUnknown14 = mirror;
     if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, fn_801BE648(p->mpUnknown792))) {
@@ -2265,12 +2252,12 @@ extern "C" void fn_800EC9E4(Object_80039F5C *p, int kind, int flag) {
     if (animation == 209) {
         p->mUnknown1008.mUnknown2 = fn_800EC76C(p);
         if (p->mUnknown1008.mUnknown2 == 5) {
-            upfield = 1;
+            alternate = 1;
             if (!flag && fn_80137B40() == p)
                 flag = 1;
         }
     }
-    if (animation == 208 || upfield) {
+    if (animation == 208 || alternate) {
         int direction = fn_800EC870(p);
         if (mirror) {
             switch (direction) {
@@ -2294,7 +2281,7 @@ extern "C" void fn_800EC9E4(Object_80039F5C *p, int kind, int flag) {
                 break;
             }
         }
-        if (upfield)
+        if (alternate)
             p->mUnknown1011 = direction;
         else
             p->mUnknown1008.mUnknown2 = direction;
@@ -2321,7 +2308,7 @@ extern "C" int fn_800ECC64(Object_80039F5C *p) {
     State_800ECC64 *state = (State_800ECC64 *)&p->mUnknown336;
     int flag = p->mpState->mUnknown1 == 4 || p->mpState->mUnknown1 == 5;
     if (fn_80137B40() == p)
-        fn_8010AEC4((int)p);
+        fn_8010AEC4(p);
     if (fn_800AD9B4() == 4) {
         state->mUnknown0 = p->mpState->mUnknown2;
         state->mUnknown4 = 1;
@@ -2386,42 +2373,42 @@ extern "C" float fn_800ECEBC(Object_80039F5C *p, State_800EDC68 *state) {
     float speed = 1.0f;
     if (fn_80137C48(p)) {
         Object_80039F5C *pOther = fn_8009BCE8(&state->mUnknown0);
-        int right = 0;
-        int inside = 0;
+        int sideFlag = 0;
+        int wideFlag = 0;
         Point_8017886C delta;
         fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
         int angle = fn_801CFE40(delta.mY, delta.mX);
         if (fn_8011F1A4() && p->mUnknown2914 == 0) {
             float x = fn_8011F4D4();
-            right = x > p->mMotion.mPos.mX;
-            inside = fabsf(x - p->mMotion.mPos.mX) < fabsf(x - pOther->mMotion.mPos.mX);
-            inside |= p->mMotion.mPos.mY - pOther->mMotion.mPos.mY > 5.0f;
-            inside |= (unsigned int)fn_8011F4C8() <= 3;
+            sideFlag = x > p->mMotion.mPos.mX;
+            wideFlag = fabsf(x - p->mMotion.mPos.mX) < fabsf(x - pOther->mMotion.mPos.mX);
+            wideFlag |= p->mMotion.mPos.mY - pOther->mMotion.mPos.mY > 5.0f;
+            wideFlag |= (unsigned int)fn_8011F4C8() <= 3;
         } else {
             if (p->mUnknown2914 == 0)
                 angle = (angle - 0x400000) & 0xFFFFFF;
             else
                 angle = (angle - p->mMotion.mFacing) & 0xFFFFFF;
             if (angle > 0x800000)
-                right = 1;
+                sideFlag = 1;
             if (angle > 0x600000 && angle < 0xA00000)
-                inside = 1;
+                wideFlag = 1;
         }
-        state->mUnknown7 = right ? 6 : 3;
+        state->mUnknown7 = sideFlag ? 6 : 3;
         switch (state->mUnknown6) {
         case 0:
             break;
         case 1:
-            if (!right)
+            if (!sideFlag)
                 speed = 1.6f;
-            right = 1;
-            inside = 1;
+            sideFlag = 1;
+            wideFlag = 1;
             break;
         case 2:
-            if (right == 1)
+            if (sideFlag == 1)
                 speed = 1.6f;
-            right = 0;
-            inside = 1;
+            sideFlag = 0;
+            wideFlag = 1;
             break;
         }
         switch (state->mUnknown8) {
@@ -2430,20 +2417,20 @@ extern "C" float fn_800ECEBC(Object_80039F5C *p, State_800EDC68 *state) {
         case 8:
         case 9:
             state->mUnknown7 = 6;
-            right = 1;
+            sideFlag = 1;
             break;
         case 4:
         case 5:
         case 10:
         case 11:
             state->mUnknown7 = 3;
-            right = 0;
+            sideFlag = 0;
             break;
         }
-        if (right)
-            state->mUnknown7 = inside ? 5 : 6;
+        if (sideFlag)
+            state->mUnknown7 = wideFlag ? 5 : 6;
         else
-            state->mUnknown7 = inside ? 4 : 3;
+            state->mUnknown7 = wideFlag ? 4 : 3;
     }
     return speed;
 }
@@ -2630,8 +2617,8 @@ extern "C" int fn_800ED670(Object_80039F5C *p, Object_80039F5C *pOther, State_80
         float speed = 1.0f;
         float x = p->mMotion.mPos.mX;
         float otherX = pOther->mMotion.mPos.mX;
-        float otherDrift = pOther->mMotion.mUnknown40;
-        int steer = 1;
+        float otherVelX = pOther->mMotion.mUnknown40;
+        int adjust = 1;
         int id;
         int turn;
         Vector_80039F5C ballPos;
@@ -2643,13 +2630,13 @@ extern "C" int fn_800ED670(Object_80039F5C *p, Object_80039F5C *pOther, State_80
         if (fn_8011F1A4() && p->mUnknown2914 == 0) {
             id = p->mpState->mUnknown2;
             if (id == 0 || id == 2 || id == 4 || id == 6 || id == 8 || id == 10) {
-                Point_8017886C goal;
-                goal.mX = fn_8011F4D4();
-                goal.mY = fn_80177FE0().mY;
-                fn_80227690(&goal, &goal, &p->mMotion.mPos);
-                int goalAngle = fn_801CFE40(goal.mY, goal.mX) & 0xFFFFFF;
+                Point_8017886C point;
+                point.mX = fn_8011F4D4();
+                point.mY = fn_80177FE0().mY;
+                fn_80227690(&point, &point, &p->mMotion.mPos);
+                int pointAngle = fn_801CFE40(point.mY, point.mX) & 0xFFFFFF;
                 if (state->mUnknown8 == 12) {
-                    steer = 0;
+                    adjust = 0;
                     if (state->mUnknown7 == 6) {
                         angle -= 0x71C71;
                         if (p->mUnknown2913 == 1)
@@ -2661,16 +2648,16 @@ extern "C" int fn_800ED670(Object_80039F5C *p, Object_80039F5C *pOther, State_80
                     }
                     angle &= 0xFFFFFF;
                 }
-                if (steer) {
-                    turn = fn_801CFFD0(angle, goalAngle);
+                if (adjust) {
+                    turn = fn_801CFFD0(angle, pointAngle);
                     turn = (int)(turn * fn_801CFB94(turn / 2));
                     if (turn > 0x38E38) {
                         if (p->mMotion.mFacing - angle <= 0x38E37) {
-                            if ((otherX <= x + 0.2f && otherDrift > 0.0f)
-                                || (otherX >= x - 0.2f && otherDrift < 0.0f))
+                            if ((otherX <= x + 0.2f && otherVelX > 0.0f)
+                                || (otherX >= x - 0.2f && otherVelX < 0.0f))
                                 turn = (int)(turn * 0.33333334f);
                         }
-                        if (((goalAngle - p->mMotion.mFacing) & 0xFFFFFF) <= 0x7FFFFF)
+                        if (((pointAngle - p->mMotion.mFacing) & 0xFFFFFF) <= 0x7FFFFF)
                             angle += turn;
                         else
                             angle -= turn;
@@ -2748,8 +2735,7 @@ extern "C" int fn_800ED670(Object_80039F5C *p, Object_80039F5C *pOther, State_80
     return result;
 }
 
-/* Dead-stripped in the GC build (only its literals remain at 0x8029DED0); body from NFL Street prototype Xbox (NFLBig.xbe) 0xAA0E0. */
-extern "C" void UnusedSteer_8029DED0(Object_80039F5C *p, Object_80039F5C *pOther, State_800EDC68 *state) {
+extern "C" void Stripped_8029DED0(Object_80039F5C *p, Object_80039F5C *pOther, State_800EDC68 *state) {
     if (p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {
         Point_8017886C delta;
         fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
@@ -3194,14 +3180,14 @@ extern "C" int fn_800EEA20(Object_80039F5C *p) {
         }
         if (stopped) {
             if (fn_800CB580(p, &value, state->mUnknown8, facing, 0)) {
-                    fn_800CBB00(p, value, state->mUnknown8, facing, 1);
+                fn_800CBB00(p, value, state->mUnknown8, facing, 1);
                 state->mUnknown48 = state->mUnknown49 = 1;
                 break;
             }
         }
         if (distance < 6.0f && p->mMotion.mUnknown28 > 0.006f) {
             if (fn_800CB708(p, &value, state->mUnknown8, state->mUnknown16, 1)) {
-                    fn_800CBB00(p, value, state->mUnknown8, state->mUnknown16, 1);
+                fn_800CBB00(p, value, state->mUnknown8, state->mUnknown16, 1);
                 state->mUnknown48 = 2;
                 state->mUnknown50 = 1;
                 break;
@@ -3211,10 +3197,10 @@ extern "C" int fn_800EEA20(Object_80039F5C *p) {
         if (ready == 1 || (!checked && fn_800FF094(p) == 1)) {
             int done = 1;
             if (state->mUnknown50 == 0) {
-                    if (fn_800CB708(p, &value, state->mUnknown8, state->mUnknown16, 2)) {
-                            fn_800CBB00(p, value, state->mUnknown8, state->mUnknown16, 1);
+                if (fn_800CB708(p, &value, state->mUnknown8, state->mUnknown16, 2)) {
+                    fn_800CBB00(p, value, state->mUnknown8, state->mUnknown16, 1);
                     state->mUnknown48 = 2;
-                    state->mUnknown50 = done;
+                    state->mUnknown50 = 1;
                     done = 0;
                 }
             }
@@ -3403,11 +3389,11 @@ extern "C" void fn_800EF224(Object_80039F5C *p) {
 }
 
 extern "C" void fn_800EF538(Object_80039F5C *p) {
-    int kicking = fn_800D0B90(p);
+    int mode = fn_800D0B90(p);
     fn_8009BD60(p);
     if (fn_80137B40() == p) {
         int kind = 1;
-        if (!kicking)
+        if (!mode)
             kind = 12;
         p->mUnknown1008.mUnknown0 = kind;
         if (p->mUnknown776 == 1)
@@ -3418,7 +3404,7 @@ extern "C" void fn_800EF538(Object_80039F5C *p) {
         p->mUnknown1008.mUnknown1 = 0;
         p->mUnknown1008.mUnknown0 = 1;
     }
-    if (kicking) {
+    if (mode) {
         unsigned int roll = fn_802372EC(0, 100);
         if (roll <= 32)
             p->mUnknown1008.mUnknown2 = 1;
@@ -3454,7 +3440,7 @@ extern "C" void fn_800EF538(Object_80039F5C *p) {
     if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 24) || fn_801BA568(p->mpUnknown796, p->mpUnknown800, 180)) {
         Record_800D81C8 *pRecords = p->mpUnknown800;
         int index;
-        if (kicking)
+        if (mode)
             index = fn_801BA5A8(p->mpUnknown796, pRecords, 180, 0);
         else
             index = fn_801BA5A8(p->mpUnknown796, pRecords, 24, 0);
