@@ -1,0 +1,188 @@
+#include "game/Class_80148A58.h"
+#include "game/Object_80039F5C.h"
+#include "game/cu_80136B1C.h"
+
+struct Record_8014F104 {
+    int mUnknown0;
+    unsigned int mUnknown4;
+    unsigned char mUnknown8;
+    char mUnknown9[3];
+    char mUnknown12[40];
+    char mUnknown52[4];
+};
+
+struct Block_8014F104 {
+    char mUnknown0[0x20];
+    Object_80039F5C *mpUnknown20;
+    char mUnknown24[16];
+    Record_8014F104 *mpUnknown34;
+};
+
+extern "C" {
+Block_8014F104 *fn_8014F104(Class_80148A58 *p);
+void fn_8014D024(unsigned short index);
+void fn_8014F4D8(Class_80148A58 *p, Object_80039F5C *pPlayer, int kind, int value);
+void fn_8017E46C(Object_80039F5C *p, int team, const char *pText, int value, int d);
+
+void fn_8014D210(Object_80039F5C *p, int kind, int value)
+{
+    unsigned short i;
+    for (i = 0; i <= 5; i++) {
+        if (fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown0 == p->mUnknown2908) {
+            fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown4 += value;
+            break;
+        }
+    }
+    fn_8014D024(i);
+}
+
+void fn_8014D298(int kind, int unused, const char *pText, int value, int addValue, int d, int addText)
+{
+    int credit = 0;
+    Object_80039F5C *pFirst = 0;
+    Object_80039F5C *pSecond = 0;
+    int statA = 11;
+    int statB = 11;
+    switch (kind) {
+    case 29:
+        statA = 3;
+        credit = 1;
+        break;
+    case 27:
+    case 28:
+    case 32:
+    case 33:
+    case 36:
+    case 37:
+    case 38:
+    case 39:
+    case 40:
+    case 41:
+    case 44:
+    case 45:
+    case 48:
+    case 49:
+    case 55:
+    case 56:
+    case 58:
+    case 59:
+    case 61:
+    case 62:
+    case 64:
+    case 65:
+    case 66:
+    case 108:
+        credit = 1;
+        break;
+    case 30:
+    case 31:
+        statA = 2;
+        credit = 1;
+        break;
+    case 34:
+    case 35:
+    case 46:
+    case 47:
+    case 50:
+    case 51:
+    case 109:
+    case 111:
+        statA = 5;
+        credit = 1;
+        break;
+    case 42:
+    case 43:
+    case 110:
+        statA = 5;
+        statB = 6;
+        credit = 1;
+        break;
+    case 57:
+    case 60:
+    case 112:
+        statA = 4;
+        credit = 1;
+        break;
+    case 63:
+    case 113:
+        statA = 4;
+        statB = 6;
+        credit = 1;
+        break;
+    case 86:
+    case 87:
+    case 88:
+    case 89:
+        statA = 1;
+        credit = 1;
+        break;
+    case 78:
+    case 84:
+    case 85:
+    case 96:
+    case 98:
+    case 120: {
+        Object_80039F5C *pBallPlayer = fn_80137B64();
+        if (pBallPlayer) {
+            if (pBallPlayer->mpState->mId == 16) {
+                for (unsigned short i = 0; i <= 4; i++) {
+                    if (!pFirst) {
+                        pFirst = fn_80039F5C(0, i);
+                        if (pBallPlayer->mpState->mUnknown3[0] != i && pFirst->mpState->mId != 17) {
+                            pFirst = 0;
+                        } else {
+                            fn_8014F4D8(fn_80148A58(), pFirst, 0, 1);
+                        }
+                    } else if (!pSecond) {
+                        pSecond = fn_80039F5C(0, i);
+                        if (pBallPlayer->mpState->mUnknown3[0] != i && pSecond->mpState->mId != 17) {
+                            pSecond = 0;
+                        } else {
+                            fn_8014F4D8(fn_80148A58(), pSecond, 0, 1);
+                        }
+                    } else {
+                        break;
+                    }
+                }
+            } else if (pBallPlayer->mUnknown560.mUnknown48) {
+                pFirst = fn_8009BCE8(&pBallPlayer->mUnknown560.mUnknown48);
+                fn_8014F4D8(fn_80148A58(), pFirst, 0, 1);
+            }
+        }
+        fn_8014F104(fn_80148A58())->mpUnknown20 = pFirst;
+        break;
+    }
+    }
+    if (credit == 1) {
+        pFirst = fn_80137B40();
+        if (!pFirst) {
+            pFirst = fn_80137B64();
+        }
+        if (statA != 11) {
+            fn_8014F4D8(fn_80148A58(), pFirst, statA, 1);
+        }
+        if (statB != 11) {
+            fn_8014F4D8(fn_80148A58(), pFirst, statB, 1);
+        }
+    }
+    if (pFirst) {
+        if (pSecond) {
+            value /= 2;
+        }
+        if (addValue) {
+            fn_8014D210(pFirst, kind, value);
+        }
+        if (addText) {
+            fn_8017E46C(pFirst, pFirst->mIdBytes[2], pText, value, d);
+        }
+        if (pSecond) {
+            if (addValue) {
+                fn_8014D210(pSecond, kind, value);
+            }
+            if (addText) {
+                fn_8017E46C(pSecond, pSecond->mIdBytes[2], pText, value, d);
+            }
+        }
+    }
+}
+}
