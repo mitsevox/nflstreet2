@@ -103,7 +103,7 @@ int fn_800C7084(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value,
 int fn_800C769C(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800C76D8(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 void fn_800C7708(Object_80039F5C *p);
-int fn_800C7720(Object_80039F5C *p, Object_80039F5C *pOther);
+int fn_800C7720(Object_80039F5C *pOther, Object_80039F5C *p);
 int fn_800C8420(Object_80039F5C *p, float value);
 void fn_800C8688(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 int fn_800CA5CC(Object_80039F5C *p, int kind, int apply);

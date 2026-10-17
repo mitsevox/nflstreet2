@@ -2027,10 +2027,6 @@ extern "C" void fn_800C5234(Query_800CE770 *pQuery, Object_80039F5C *pTarget)
     }
 }
 
-extern "C" int fn_800ACA70(int team, int value);
-extern "C" int fn_801CFE40(float y, float x);
-extern "C" void fn_80227690(void *pOut, void *pA, void *pB);
-
 extern "C" int fn_800C53D8(Object_80039F5C *p)
 {
     int result = 0;
@@ -2057,7 +2053,6 @@ extern "C" void fn_800C561C(Object_80039F5C *p, int value)
     }
 }
 
-extern "C" int fn_800CAA6C(int value);
 extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p);
 
 extern "C" void fn_800C5B20(Object_80039F5C *p, int value)
@@ -2081,8 +2076,6 @@ extern "C" void fn_800C5B20(Object_80039F5C *p, int value)
 }
 
 extern "C" void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pA);
-extern "C" int fn_80114DE0(Object_80039F5C *p);
-extern "C" int fn_8011E9B4(Object_80039F5C *p);
 
 extern "C" void fn_800C5F80(Object_80039F5C *p, int value, int *pA, int *pB, int *pC)
 {
@@ -2100,13 +2093,6 @@ extern "C" void fn_800C5F80(Object_80039F5C *p, int value, int *pA, int *pB, int
         }
     }
 }
-
-extern "C" int fn_801787A0(void);
-extern "C" int fn_800C769C(Object_80039F5C *p, Object_80039F5C *pOther);
-extern "C" int fn_800C68BC(Object_800C6640 *pSource, int value);
-extern "C" int fn_80177C38(void);
-
-extern float lbl_803ECB08;
 
 extern "C" int fn_800C6640(Object_80039F5C *p, Object_800C6640 *pSource, Object_80039F5C *pOther, int value,
                            int chance)
@@ -2238,9 +2224,6 @@ extern "C" int fn_800C68BC(Object_800C6640 *pSource, int value)
     return 1;
 }
 
-extern "C" int fn_800CD2B4(int kind, Object_80039F5C *p);
-extern "C" int fn_800C7720(Object_80039F5C *pOther, Object_80039F5C *p);
-
 extern "C" int fn_800C7084(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value, int b)
 {
     Query_800CE770 query;
@@ -2261,13 +2244,6 @@ extern "C" int fn_800C7084(Object_80039F5C *p, Object_80039F5C *pOther, int a, f
     }
     return result;
 }
-
-extern "C" {
-int fn_800A8444(int team);
-int fn_800CF090(Object_80039F5C *p);
-}
-
-extern "C" float fn_80227890(void *, void *);
 
 extern "C" int fn_800C769C(Object_80039F5C *p, Object_80039F5C *pOther)
 {
@@ -2319,10 +2295,7 @@ extern "C" int fn_800C7720(Object_80039F5C *pOther, Object_80039F5C *p)
 
 extern "C" {
 void fn_80156C78(int id, int value);
-int fn_800CD35C(int mode, Object_80039F5C *p);
 }
-
-extern "C" int fn_800CE438(Query_800CE770 *pQuery);
 
 extern "C" int fn_800C8694(Object_80039F5C *p)
 {
@@ -2882,7 +2855,6 @@ extern "C" void fn_800C9E40(void)
 
 extern "C" {
 int fn_800A7EA4(int team);
-unsigned int fn_800ACBFC(int team);
 }
 
 extern "C" void fn_800CA14C(void)
@@ -7834,7 +7806,6 @@ int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 int fn_800C91B0(Object_80039F5C *p);
 int fn_800C91F0(Object_80039F5C *p, unsigned char *pOut, int which);
-int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 void fn_800CC0C0(int team);
 void fn_800CC180(int team);
 void fn_800CC2D4(void);
