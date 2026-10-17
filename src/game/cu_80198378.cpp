@@ -1,5 +1,6 @@
 #include "engine/cu_80227F14.h"
 #include <dolphin/gx/GXGeometry.h>
+#include <dolphin/gx/GXPixel.h>
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXTexture.h>
 #include <dolphin/gx/GXVert.h>
@@ -32,8 +33,6 @@ void fn_80210388(void);
 void fn_8024D418(void);
 void fn_8024CB90(int a, int b);
 void fn_8024D450(int a, int b, int c, int d, int e);
-void fn_802520E0(int a, int b, int c);
-void fn_80252114(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 void fn_8024FC48(int a);
 void fn_8024DF64(int a);
@@ -177,7 +176,7 @@ void fn_801985FC(void)
     fn_8024D450(0, 9, 1, 4, 0);
     fn_8024D450(0, 11, 1, 5, 0);
     fn_8024D450(0, 13, 1, 4, 0);
-    fn_802520E0(1, 3, 0);
+    GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
     fn_8024FC84(4, 0, 1, 1, 0, 0, 2);
     fn_8024FC48(1);
     fn_8024DF64(1);
@@ -208,7 +207,6 @@ void fn_801985FC(void)
 void fn_801987F4(void)
 {
     GXColor color = {128, 128, 128, 128};
-    unsigned int baseAlpha = color.a;
     fn_80210388();
     fn_8024D418();
     fn_8024CB90(9, 1);
@@ -226,8 +224,8 @@ void fn_801987F4(void)
     fn_80210BD8(6);
     fn_80251CC4(1);
     fn_80251A58(7, 0, 0, 7, 0);
-    fn_802520E0(1, 3, 0);
-    fn_80252114(0);
+    GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
+    GXSetZCompLoc(GX_FALSE);
     fn_80210CC4(0.0f, 0.9999f);
     fn_801D0470(fn_80228668());
     fn_801D0508();
@@ -239,24 +237,20 @@ void fn_801987F4(void)
     GXLoadTexObj(&lbl_8036526C, GX_TEXMAP0);
     GXBegin(GX_TRIANGLES, GX_VTXFMT0, lbl_803ECA18 * 15);
     for (unsigned int i = 0; i < lbl_803ECA18; i++) {
-        unsigned int j = 0;
-        float (*pVertex)[3] = lbl_802EDE60;
-        do {
+        for (unsigned int j = 0; j < 15; j++) {
             float vertex[3];
-            vertex[0] = lbl_803EB284[i].mUnknownC * (*pVertex)[0];
-            vertex[1] = lbl_803EB284[i].mUnknownC * (*pVertex)[1];
-            if (pVertex > &lbl_802EDE60[5])
-                vertex[2] = lbl_803EB284[i].mUnknownC * (*pVertex)[2];
+            vertex[0] = lbl_803EB284[i].mUnknownC * lbl_802EDE60[j][0];
+            vertex[1] = lbl_803EB284[i].mUnknownC * lbl_802EDE60[j][1];
+            if (j > 5)
+                vertex[2] = lbl_803EB284[i].mUnknownC * lbl_802EDE60[j][2];
             else
-                vertex[2] = (*pVertex)[2];
+                vertex[2] = lbl_802EDE60[j][2];
             fn_8022765C(vertex, vertex, lbl_803EB284[i].mPosition);
-            unsigned char alpha = (unsigned char)(baseAlpha * lbl_803EB284[i].mUnknown10);
+            unsigned char alpha = (unsigned char)((unsigned int)color.a * lbl_803EB284[i].mUnknown10);
             GXPosition3f32(vertex[0], vertex[1], vertex[2]);
             GXColor4u8(color.r, color.g, color.b, alpha);
             GXTexCoord2f32(lbl_802EDF14[j][0], lbl_802EDF14[j][1]);
-            pVertex++;
-            j++;
-        } while (pVertex <= &lbl_802EDE60[14]);
+        }
     }
     fn_80210BD8(1);
 }

@@ -135,10 +135,10 @@ extern "C" int fn_800EFA40(Object_80039F5C *p)
     }
     if (p->mFlags & 4) {
         p->mFlags &= ~4;
-        p->mUnknown512.mUnknown0 = 0.72f;
         p->mUnknown512.mUnknown14 = 1;
-        p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown0 = 0.72f;
         return 1;
     }
     if (p->mUnknown9[0] != 1) {
@@ -156,12 +156,12 @@ extern "C" int fn_800EFA40(Object_80039F5C *p)
 
 extern "C" int fn_800EFB98(Object_80039F5C *p)
 {
-    p->mFlags &= ~8;
     p->mUnknown512.mUnknown14 = 1;
+    p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
     p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
     p->mUnknown512.mUnknown0 = 0.72f;
     p->mUnknown512.mUnknown15 = 0;
-    p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+    p->mFlags &= ~8;
     return 1;
 }
 
