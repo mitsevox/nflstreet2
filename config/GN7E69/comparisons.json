@@ -34968,6 +34968,41 @@
       ]
     },
     {
+      "source": "src/game/cu_80155F98.cpp",
+      "profile": "game_cpp",
+      "evidence": "Four complete slot-35 destructor bodies inside the retained provisional cu_801485B4 survey group: the destructors of the Class_80148A58-derived tables 0x802A2C90, 0x802A2B68, 0x802A2A40 and 0x802A2918 (0x80155F98-0x80156068; words 0x802A2DAC, 0x802A2C84, 0x802A2B5C and 0x802A2A34). Each stores its own table at +24 and calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; the table addresses resolve through the _vt externals. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80155F98",
+          "end": "0x80156068"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "_._14Class_802A2C90",
+          "start": "0x80155F98",
+          "end": "0x80155FCC"
+        },
+        {
+          "symbol": "_._14Class_802A2B68",
+          "start": "0x80155FCC",
+          "end": "0x80156000"
+        },
+        {
+          "symbol": "_._14Class_802A2A40",
+          "start": "0x80156000",
+          "end": "0x80156034"
+        },
+        {
+          "symbol": "_._14Class_802A2918",
+          "start": "0x80156034",
+          "end": "0x80156068"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
