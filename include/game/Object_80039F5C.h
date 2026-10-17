@@ -72,6 +72,16 @@ struct Object_800B26B0 {
     float mUnknown60;
 };
 
+/* The motion functions also reach the word 72 bytes into the block, past
+   the end of Object_800B26B0 (the player object lays it out in mUnknown496). */
+struct MotionTail_800B26B0 {
+    Object_800B26B0 mMotion;
+    float mUnknown64;
+    float mUnknown68;
+    float mUnknown72;
+    int mUnknown76;
+};
+
 /* 16-byte record cleared by fn_8016D8B0; the player object holds two of them
    at +512 and +528. */
 struct Object_8016D8B0 {
