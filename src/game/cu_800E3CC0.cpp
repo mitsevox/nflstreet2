@@ -2683,10 +2683,10 @@ extern "C" int fn_800ED670(Object_80039F5C *p, Object_80039F5C *pOther, State_80
         angle &= 0xFFFFFF;
         float range;
         id = p->mpState->mUnknown2;
-        if (id == 1 || id == 3 || id == 5 || state->mUnknown8 == 12 || state->mUnknown8 != 7)
-            range = 1.5f;
-        else
+        if (id != 1 && id != 3 && id != 5 && state->mUnknown8 != 12 && state->mUnknown8 == 7)
             range = 1.25f;
+        else
+            range = 1.5f;
         if (distance < range) {
             turn = fn_801CFFD0(pOther->mMotion.mFacing, p->mMotion.mFacing);
             if (turn > 0x400000) {
