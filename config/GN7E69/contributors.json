@@ -17639,6 +17639,81 @@
       }
     },
     {
+      "source": "src/game/cu_8014B498.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8014B498"
+      ],
+      "provenance": {
+        "pull_request": 928,
+        "merged_via": 928,
+        "commit": "86ad5a7b5307d638d3afa53777450b9b29d6379a",
+        "introduced_blob": "d03e84b7e8049d56f037fa4333d4e4b2e051e4d6"
+      }
+    },
+    {
+      "source": "src/game/cu_8014C630.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8014C630"
+      ],
+      "provenance": {
+        "pull_request": 928,
+        "merged_via": 928,
+        "commit": "86ad5a7b5307d638d3afa53777450b9b29d6379a",
+        "introduced_blob": "53224f84cb90548210352e0d0640d7f3b2cdc3c7"
+      }
+    },
+    {
+      "source": "src/game/cu_8014EDC4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8014EDC4"
+      ],
+      "provenance": {
+        "pull_request": 928,
+        "merged_via": 928,
+        "commit": "86ad5a7b5307d638d3afa53777450b9b29d6379a",
+        "introduced_blob": "b263b28786ddb78a5532a90be0a5007d6f9f92ad"
+      }
+    },
+    {
+      "source": "src/game/cu_801517F4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801517F4"
+      ],
+      "provenance": {
+        "pull_request": 928,
+        "merged_via": 928,
+        "commit": "86ad5a7b5307d638d3afa53777450b9b29d6379a",
+        "introduced_blob": "ce69d64f40f21e143cc100d8c5e7b35bb421962e"
+      }
+    },
+    {
+      "source": "src/game/cu_80154214.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80154214"
+      ],
+      "provenance": {
+        "pull_request": 928,
+        "merged_via": 928,
+        "commit": "86ad5a7b5307d638d3afa53777450b9b29d6379a",
+        "introduced_blob": "2ab88d7fb0f6df7868890619f2c022b2e813e5c9"
+      }
+    },
+    {
       "source": "src/game/cu_8014BC98.cpp",
       "contributors": [
         "adampreddy"
