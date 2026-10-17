@@ -1727,6 +1727,30 @@
     "__14Block_80156400": {
       "address": "0x80156400",
       "evidence": "evidence.tsv external row for 0x80156400 (__14Block_80156400); descriptive name."
+    },
+    "_vt.14Class_802A2C90": {
+      "address": "0x802A2C90",
+      "evidence": "evidence.tsv external row for 0x802A2C90 (_vt.14Class_802A2C90)."
+    },
+    "_vt.14Class_802A2B68": {
+      "address": "0x802A2B68",
+      "evidence": "evidence.tsv external row for 0x802A2B68 (_vt.14Class_802A2B68)."
+    },
+    "_vt.14Class_802A2A40": {
+      "address": "0x802A2A40",
+      "evidence": "evidence.tsv external row for 0x802A2A40 (_vt.14Class_802A2A40)."
+    },
+    "_vt.14Class_802A2918": {
+      "address": "0x802A2918",
+      "evidence": "evidence.tsv external row for 0x802A2918 (_vt.14Class_802A2918)."
+    },
+    "_vt.14Class_802A1E38": {
+      "address": "0x802A1E38",
+      "evidence": "evidence.tsv external row for 0x802A1E38 (_vt.14Class_802A1E38)."
+    },
+    "_vt.14Class_802A1DC8": {
+      "address": "0x802A1DC8",
+      "evidence": "evidence.tsv external row for 0x802A1DC8 (_vt.14Class_802A1DC8)."
     }
   },
   "units": [
