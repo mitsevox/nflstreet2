@@ -780,9 +780,8 @@ extern "C" int fn_80093C64(void)
     return lbl_803EC924->mUnknown80.mUnknownE4E;
 }
 
-extern "C" Frame_80141210 *fn_801C029C(Actor_801C009C *pActor, unsigned short index);
 
-extern "C" Object_80137ABC *fn_80093C70(Character_80093BCC *pCharacter, int id, Frame_80141210 **ppFrame, unsigned char *pFound)
+extern "C" Object_80137ABC *fn_80093C70(Character_80093BCC *pCharacter, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound)
 {
     Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
     Object_80137ABC *result = 0;
@@ -790,9 +789,9 @@ extern "C" Object_80137ABC *fn_80093C70(Character_80093BCC *pCharacter, int id, 
 
     *pFound = 0;
     for (i = 0; i < pActor->mUnknown4; i++) {
-        Frame_80141210 *pFrame = fn_801C029C(pActor, i);
+        Frame_800DF7CC *pFrame = fn_801C029C(pActor, i);
 
-        if (pFrame->mUnknown14 == id) {
+        if (pFrame->mUnknown20 == id) {
             result = pCharacter->mUnknown74[i];
             *pFound = 1;
             if (ppFrame != 0) {
@@ -2383,13 +2382,6 @@ extern "C" void fn_800A5D94(void)
     }
 }
 
-/* Partial view of the object whose word +0x28 fn_800C6640 decodes as a
-   player reference. The size is unknown. */
-struct Object_800C6640 {
-    unsigned char mUnknown0[0x28];
-    int mUnknown28;
-};
-
 typedef State_8011F4EC Record_8011F4EC;
 typedef State_8011F4EC Block_8011F4EC;
 
@@ -3620,7 +3612,7 @@ extern "C" void fn_800CA4A8(void)
 }
 
 extern "C" {
-int fn_80054D24(int index);
+unsigned char fn_80054D24(int index);
 unsigned int fn_8017F584(void);
 int fn_800A7F1C(int team);
 float fn_800AE998(void);
@@ -5304,29 +5296,29 @@ extern "C" int fn_800A7FE0(void)
         fn_8003E174(0);
         pCharacter = fn_80093BCC(lbl_803EC95C);
         if (lbl_803EAA50 <= 1) {
-            pCharacter->mUnknown14 = (MotionSource_80141210 *)fn_800A624C(fn_80178308());
-            pCharacter->mUnknown18 = (MotionSource_80141210 *)fn_800A624C(fn_80178320());
+            pCharacter->mUnknown14[0] = fn_800A624C(fn_80178308());
+            pCharacter->mUnknown14[1] = fn_800A624C(fn_80178320());
         } else if (fn_800B65A0(lbl_803EAA4C) != 0xFF) {
-            pCharacter->mUnknown14 = (MotionSource_80141210 *)fn_800B6544(fn_800B65A0(lbl_803EAA4C));
-            pCharacter->mUnknown18 = (MotionSource_80141210 *)fn_800B6544(fn_800B65D0(lbl_803EAA4C));
+            pCharacter->mUnknown14[0] = fn_800B6544(fn_800B65A0(lbl_803EAA4C));
+            pCharacter->mUnknown14[1] = fn_800B6544(fn_800B65D0(lbl_803EAA4C));
         } else {
             unsigned int count = fn_80178D18(lbl_803EAA4C);
 
-            pCharacter->mUnknown14 =
-                (MotionSource_80141210 *)fn_80039F5C(lbl_803EAA4C, fn_802372EC(0, count));
+            pCharacter->mUnknown14[0] =
+                fn_80039F5C(lbl_803EAA4C, fn_802372EC(0, count));
             do {
-                pCharacter->mUnknown18 =
-                    (MotionSource_80141210 *)fn_80039F5C(lbl_803EAA4C, fn_802372EC(0, count));
-            } while (pCharacter->mUnknown14 == pCharacter->mUnknown18);
+                pCharacter->mUnknown14[1] =
+                    fn_80039F5C(lbl_803EAA4C, fn_802372EC(0, count));
+            } while (pCharacter->mUnknown14[0] == pCharacter->mUnknown14[1]);
         }
         pCharacter->mUnknownE0.mUnknown8.mWord = lbl_803EAA4C == fn_80178308() ? 0 : 1;
         if (pCharacter->mUnknownE0.mUnknown8.mWord == 0) {
-            ((Object_80039F5C *)pCharacter->mUnknown14)->mpUnknown4->mUnknown20 |= 0x400;
-            p = (Object_80039F5C *)pCharacter->mUnknown14;
+            (pCharacter->mUnknown14[0])->mpUnknown4->mUnknown20 |= 0x400;
+            p = pCharacter->mUnknown14[0];
             fn_80067E3C(128, &p->mMotion.mPos, p->mId, lbl_802D7EFC[lbl_803EAA50][1], 0, 0);
         } else {
-            ((Object_80039F5C *)pCharacter->mUnknown18)->mpUnknown4->mUnknown20 |= 0x400;
-            p = (Object_80039F5C *)pCharacter->mUnknown18;
+            (pCharacter->mUnknown14[1])->mpUnknown4->mUnknown20 |= 0x400;
+            p = pCharacter->mUnknown14[1];
             fn_80067E3C(128, &p->mMotion.mPos, p->mId, lbl_802D7EFC[lbl_803EAA50][2], 0, 0);
         }
         lbl_803EAA4E = fn_801478F0(0);
@@ -5336,9 +5328,9 @@ extern "C" int fn_800A7FE0(void)
             Object_80039F5C *pActive;
 
             if (pCharacter->mUnknownE0.mUnknown8.mWord == 0) {
-                pActive = (Object_80039F5C *)pCharacter->mUnknown14;
+                pActive = pCharacter->mUnknown14[0];
             } else {
-                pActive = (Object_80039F5C *)pCharacter->mUnknown18;
+                pActive = pCharacter->mUnknown14[1];
             }
             pActive->mpUnknown4->mUnknown20 &= ~0x400;
             fn_800A87E8();
@@ -5485,8 +5477,8 @@ extern "C" void fn_800A87E8(void)
     if (fn_800A7FD8() != 0) {
         Character_80093BCC *pCharacter = fn_80093BCC(lbl_803EC95C);
 
-        fn_80147840((Object_8003DEC4 *)((Object_80039F5C *)pCharacter->mUnknown14)->mpUnknown4);
-        fn_80147840((Object_8003DEC4 *)((Object_80039F5C *)pCharacter->mUnknown18)->mpUnknown4);
+        fn_80147840((Object_8003DEC4 *)(pCharacter->mUnknown14[0])->mpUnknown4);
+        fn_80147840((Object_8003DEC4 *)(pCharacter->mUnknown14[1])->mpUnknown4);
         fn_80093410(lbl_803EC95C);
         if (fn_800737B8() != 0) {
             fn_80067E3C(130, 0, 0, 0, 0, 0);
@@ -6872,14 +6864,14 @@ extern "C" void fn_800B4A18(int index, char *pDest, int size)
     fn_801C3284(pDest, lbl_802D87A4[index], size);
 }
 
-typedef int (*Handler_800B4D7C)(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, void *pC,
+typedef int (*Handler_800B4D7C)(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC,
                                 unsigned int mode);
 
 extern "C" {
-int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, void *pC, unsigned int mode);
-int fn_800D9C80(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, void *pC, unsigned int mode);
-int fn_80093D20(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, void *pC, unsigned int mode);
-int fn_80089E70(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, void *pC, unsigned int mode);
+int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800D9C80(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_80093D20(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_80089E70(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
 
 extern Handler_800B4D7C lbl_8030FB60[248];
 }
@@ -7431,13 +7423,7 @@ extern "C" unsigned char fn_800BB0C4(void)
     return lbl_803EABA1;
 }
 
-/* 48-byte record returned by fn_801C029C; only the first word is read. */
-struct Entry_801C029C {
-    unsigned int mUnknown0;
-};
-
 extern "C" {
-Entry_801C029C *fn_801C029C(Actor_801C009C *pActor, unsigned short index);
 
 extern unsigned short lbl_802D9B14[];
 }
@@ -7515,17 +7501,6 @@ extern "C" void fn_800BB828(void)
     lbl_803EC98C->mUnknown1C = -1;
     lbl_803EC98C->mUnknown20 = -1;
 }
-
-/* Request block passed to fn_80092E54 (236 bytes). */
-struct Params_80092E54 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    unsigned char mUnknownC[0xD4];
-    unsigned char mUnknownE0;
-    int mUnknownE4;
-    int mUnknownE8;
-};
 
 extern "C" {
 int fn_80092E54(Params_80092E54 *pParams, void *pBuffer, int size);
@@ -8112,7 +8087,7 @@ extern "C" void fn_800AA8B8(void)
 }
 
 /* Event callback registered through fn_800AFDD4; the float is not read. */
-extern "C" void fn_800AA93C(int a, int value, float unused)
+extern "C" void fn_800AA93C(int a, unsigned int value, float unused)
 {
     if (lbl_803EAA88->mUnknown15 == 0) {
         switch ((unsigned int)value) {
@@ -13866,7 +13841,7 @@ int Class_80297CE8::vfn_12()
     return result;
 }
 
-extern "C" void fn_800BD460(unsigned char index, int a);
+extern "C" void fn_800BD460(int index, int a);
 extern "C" void fn_8017DA9C(int team);
 extern "C" int fn_801C6280(int a, int b, void *p);
 extern "C" char lbl_802ECF88[];
@@ -13905,7 +13880,7 @@ extern "C" void fn_800BE8E4(int team)
 }
 
 extern "C" void fn_8017D9D8(int team);
-extern "C" void fn_800BD568(unsigned char index);
+extern "C" void fn_800BD568(int index);
 extern "C" int fn_801C6280(int a, int b, void *p);
 extern "C" char lbl_802ECD44[];
 
@@ -14966,7 +14941,7 @@ extern "C" void fn_800C46A0(Sequence_800C4460 *p)
 }
 
 extern "C" {
-void fn_800BEC1C(int a, int team);
+void fn_800BEC1C(int a, unsigned char team);
 int fn_800BF56C(void);
 void fn_8016E008(int team);
 void fn_80164A64(int team);
