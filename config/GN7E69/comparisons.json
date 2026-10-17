@@ -34968,6 +34968,26 @@
       ]
     },
     {
+      "source": "src/game/cu_80148A98.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #925; the complete base constructor 0x80148A98-0x80148AD0 of Class_80148A58 (include/game/Class_80148A58.h, base table 0x802A2EE0) inside the retained provisional cu_801485B4 survey group, excluded by the claims #748 and #811 on either side. It stores the table at +24 (resolved through the _vt.14Class_80148A58 external) and initializes the data members at +0 to +20. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80148A98",
+          "end": "0x80148AD0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__14Class_80148A58",
+          "start": "0x80148A98",
+          "end": "0x80148AD0"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
