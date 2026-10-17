@@ -34729,7 +34729,7 @@
     {
       "source": "src/game/cu_80153700.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #894; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 11 of the table 0x802A1930 of src/game/cu_801531C4.cpp (derived from the rule-set table 0x802A56E8, include/game/Class_802A56E8.h; 0x80153700-0x801537A0, word 0x802A198C). Calls the base slot 0x80177768 through its declaration Class_802A56E8::vfn_11, fn_80148A58 and fn_801C1F94 through their headers, 0x80155128 (src/game/cu_80155128.cpp) and 0x800D7520 (src/game/cu_800D0D4C.cpp) as externs; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; slot 10 (0x801534D4) before the range and 0x801537A0 onward are not claimed; original bytes stay linked.",
+      "evidence": "Issue #894; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 11 of the table 0x802A1930 of src/game/cu_801531C4.cpp (derived from the rule-set table 0x802A56E8, include/game/Class_802A56E8.h; 0x80153700-0x801537A0, word 0x802A198C). Calls the base slot 0x80177768 through its declaration Class_802A56E8::vfn_11, fn_80148A58 and fn_801C1F94 through their headers, 0x80155128 (src/game/cu_80155128.cpp) and 0x800D7520 (src/game/cu_800D0D4C.cpp) as externs; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; slot 10 (0x801534D4) before the range is src/game/cu_801534D4.cpp and 0x801537A0 is src/game/cu_801537A0.cpp; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -34944,6 +34944,26 @@
           "symbol": "fn_801537A0",
           "start": "0x801537A0",
           "end": "0x80153844"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801534D4.cpp",
+      "profile": "game_cpp",
+      "evidence": "One complete slot body inside the retained provisional cu_801485B4 survey group: slot 10 of the table 0x802A1930 of src/game/cu_801531C4.cpp (derived from the rule-set table 0x802A56E8, include/game/Class_802A56E8.h; 0x801534D4-0x80153700, word 0x802A1984). Calls the base slot 0x8017767C through its declaration Class_802A56E8::vfn_10, fn_80148A58 and fn_8017886C through their headers, slot 35 of the fn_80148A58 object, 0x80155128 (src/game/cu_80155128.cpp), 0x800948E4, 0x8008593C (src/game/cu_800857D0.cpp), 0x80178D70 (include/game/fn_80178D18.h) and 0x80177E6C, 0x80178308, 0x80178320, 0x8017833C, 0x80178348, 0x80178360 and 0x80178CD8 (src/game/cu_80176F18.cpp) as externs; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801534D4",
+          "end": "0x80153700"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801534D4",
+          "start": "0x801534D4",
+          "end": "0x80153700"
         }
       ]
     },
