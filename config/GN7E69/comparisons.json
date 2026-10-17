@@ -9214,7 +9214,7 @@
     {
       "source": "src/game/cu_801077D8.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x801077D8-0x801079BC with their own literal-pool slice 0x8029EA00-0x8029EA24. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x801077D8-0x801079BC with their own literal-pool slice 0x8029EA00-0x8029EA24. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion. The native .rodata emits 40 bytes including four trailing zero alignment bytes; the target literal extent is 36 bytes because the following function loads its own zero at 0x8029EA24. Preserve the native padding mismatch rather than assigning the following pool to this fragment.",
       "sections": [
         {
           "section": ".text",
@@ -9226,7 +9226,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029EA00",
-          "end": "0x8029EA28"
+          "end": "0x8029EA24"
         }
       ],
       "functions": [
