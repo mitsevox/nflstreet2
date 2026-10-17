@@ -33724,7 +33724,7 @@
     {
       "source": "src/game/cu_80153844.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #825; four complete slot bodies inside the retained provisional cu_801485B4 survey group: slot 3 of the table 0x802A1930 (0x80153844, word 0x802A194C; table of src/game/cu_801531C4.cpp) and slots 5, 4 and 7 of the table 0x802A1BC8 (derived from the engine table 0x80297BF8, include/game/Class_80297BF8.h; 0x801538C8, 0x80153910 and 0x8015399C, words 0x802A1BF4, 0x802A1BEC and 0x802A1C04). Slot 6 (0x8015395C) is not registered: it forms 0x802A0B74 inside the readonly slice measured with src/game/cu_8014AB64.cpp. The .rodata slice 0x802A1588-0x802A158C holds the 2.5f literal of fn_801538C8. Original file boundaries and nominal identity unresolved; slot 3 of 0x802A1BC8 (0x801537A0) and 0x801539A0 onward excluded; original bytes stay linked.",
+      "evidence": "Issue #825; four complete slot bodies inside the retained provisional cu_801485B4 survey group: slot 3 of the table 0x802A1930 (0x80153844, word 0x802A194C; table of src/game/cu_801531C4.cpp) and slots 5, 4 and 7 of the table 0x802A1BC8 (derived from the engine table 0x80297BF8, include/game/Class_80297BF8.h; 0x801538C8, 0x80153910 and 0x8015399C, words 0x802A1BF4, 0x802A1BEC and 0x802A1C04). Slot 6 (0x8015395C) is not registered: it forms 0x802A0B74 inside the readonly slice measured with src/game/cu_8014AB64.cpp. The .rodata slice 0x802A1588-0x802A158C holds the 2.5f literal of fn_801538C8. Original file boundaries and nominal identity unresolved; slot 3 of 0x802A1BC8 (0x801537A0) is src/game/cu_801537A0.cpp and 0x801539A0 onward excluded; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -34970,7 +34970,7 @@
     {
       "source": "src/game/cu_80155F98.cpp",
       "profile": "game_cpp",
-      "evidence": "Four complete slot-35 destructor bodies inside the retained provisional cu_801485B4 survey group: the destructors of the Class_80148A58-derived tables 0x802A2C90, 0x802A2B68, 0x802A2A40 and 0x802A2918 (0x80155F98-0x80156068; words 0x802A2DAC, 0x802A2C84, 0x802A2B5C and 0x802A2A34). Each stores its own table at +24 and calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; the table addresses resolve through the _vt externals. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "Four complete slot-35 destructor bodies inside the retained provisional cu_801485B4 survey group: the destructors of the Class_80148A58-derived tables 0x802A2C90, 0x802A2B68, 0x802A2A40 and 0x802A2918 (0x80155F98-0x80156068; words 0x802A2DAC, 0x802A2C84, 0x802A2B5C and 0x802A2A34). Each stores its own table at +24 and calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; the table addresses resolve through the _vt externals. The original destructors were inline (the static destroy path 0x80155E28 only stores the tables); the out-of-line definitions are a stand-in for the emitted copies, pending the owner's decision. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
