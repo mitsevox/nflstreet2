@@ -1,9 +1,4 @@
-
-/* 12-byte block allocated by fn_8009AB34 under the id 'ctup'. */
-struct Block_8009AB34 {
-    float mUnknown0[2];
-    unsigned char mUnknown8;
-};
+#include "game/Item_80097440.h"
 
 extern "C" {
 extern Block_8009AB34 *lbl_803EA948;

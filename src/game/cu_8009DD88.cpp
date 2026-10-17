@@ -3,45 +3,7 @@
 #include "game/fn_800F06F4.h"
 #include "game/Lookup_8012078C.h"
 #include "game/fn_802270D4.h"
-
-/* One of the 24 four-float boxes fn_8009E674 lays out at +0x18 of
-   State_8011F4EC. */
-struct Box_8009E674 {
-    float mUnknown0;
-    float mUnknown4;
-    float mUnknown8;
-    float mUnknownC;
-};
-
-/* Object whose address fn_8011F4EC returns. Only the accessed bytes are
-   declared; the size is not established. */
-struct State_8011F4EC {
-    int mUnknown0;
-    int mUnknown4[2];
-    int mUnknownC;
-    unsigned char mUnknown10;
-    unsigned char mUnknown11;
-    unsigned char mUnknown12[2];
-    unsigned short mUnknown14;
-    unsigned char mUnknown16[2];
-    Box_8009E674 mUnknown18[24];
-    unsigned char mUnknown198;
-    unsigned char mUnknown199[3];
-    unsigned char mUnknown19C[3];
-    unsigned char mUnknown19F[3];
-    unsigned char mUnknown1A2;
-    unsigned char mUnknown1A3[5];
-    unsigned char mUnknown1A8;
-    unsigned char mUnknown1A9;
-    unsigned char mUnknown1AA[2];
-    float mUnknown1AC[3];
-    unsigned char mUnknown1B8[3];
-    unsigned char mUnknown1BB[3];
-    unsigned char mUnknown1BE[3];
-    unsigned char mUnknown1C1[3];
-    unsigned char mUnknown1C4;
-    unsigned char mUnknown1C5;
-};
+#include "game/Item_80097440.h"
 
 extern "C" float fn_80178A2C(void);
 

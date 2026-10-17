@@ -7,33 +7,7 @@
 #include "game/fn_801BA2A8.h"
 #include "game/fn_80238174.h"
 #include "game/fn_801248D4.h"
-
-/* 12-byte block allocated by fn_8009AB34 under the id 'ctup'. */
-struct Block_8009AB34 {
-    float mUnknown0[2];
-    unsigned char mUnknown8;
-};
-
-/* 60-byte payload fn_801BE60C returns for the state fn_8009A344 runs; phase
-   0 initialises it from the template at +4 of Block_80099630. */
-struct Block_8009A344 {
-    int mUnknown0;
-    float mUnknown4;
-    float mUnknown8;
-    float mUnknownC;
-    float mUnknown10;
-    int mUnknown14;
-    float mUnknown18;
-    float mUnknown1C;
-    int mUnknown20;
-    State_800D8140 mUnknown24;
-};
-
-/* The 64-byte block fn_80099630 allocates under the id 'ctch'. */
-struct Block_80099630 {
-    int mUnknown0;
-    Block_8009A344 mUnknown4;
-};
+#include "game/Item_80097440.h"
 
 extern "C" {
 void *fn_8023816C(void *pHandle);

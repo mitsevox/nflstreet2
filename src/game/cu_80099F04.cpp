@@ -1,62 +1,7 @@
 #include "game/cu_80136B1C.h"
 #include "game/fn_801C1F94.h"
 #include "game/Block_801BE60C.h"
-
-/* 60-byte records that fn_80097440 copies into the buffer at +3048 of
-   Record_80097518. */
-struct Item_80097440 {
-    unsigned char mUnknown0[4];
-    unsigned char mUnknown4;
-    unsigned char mUnknown5;
-    unsigned char mUnknown6[2];
-    Vector_80039F5C mUnknown8;
-    Vector_80039F5C mUnknown14;
-    float mUnknown20;
-    unsigned short mUnknown24;
-    unsigned char mUnknown26[2];
-    int mUnknown28;
-    unsigned char mUnknown2C[12];
-    int mUnknown38;
-};
-
-/* 8-byte entries from +8 of Record_80097518. */
-struct Slot_80097440 {
-    unsigned short mUnknown0;
-    unsigned short mUnknown2;
-    Item_80097440 *mpUnknown4;
-};
-
-/* 3080-byte records of the .bss array at 0x8030C2B8. */
-struct Record_80097518 {
-    int mUnknown0;
-    unsigned short mUnknown4;
-    unsigned char mUnknown6[2];
-    Slot_80097440 mUnknown8[380];
-    Item_80097440 *mpUnknownBE8;
-    unsigned short mUnknownBEC[7];
-    unsigned short mUnknownBFA[7];
-};
-
-/* 60-byte payload fn_801BE60C returns for the state fn_8009A344 runs; phase
-   0 initialises it from the template at +4 of Block_80099630. */
-struct Block_8009A344 {
-    int mUnknown0;
-    float mUnknown4;
-    float mUnknown8;
-    float mUnknownC;
-    float mUnknown10;
-    int mUnknown14;
-    float mUnknown18;
-    float mUnknown1C;
-    int mUnknown20;
-    State_800D8140 mUnknown24;
-};
-
-/* The 64-byte block fn_80099630 allocates under the id 'ctch'. */
-struct Block_80099630 {
-    int mUnknown0;
-    Block_8009A344 mUnknown4;
-};
+#include "game/Item_80097440.h"
 
 extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Object_80137ABC *pBall, float *pOut, short *pValue);
 extern "C" int fn_801BE068(void *, void *, void *, unsigned short, void *, float);

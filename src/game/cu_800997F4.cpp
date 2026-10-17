@@ -1,13 +1,6 @@
 #include "game/Command_800CEE74.h"
 #include "game/cu_80136B1C.h"
-
-/* Block at player +336 passed to fn_80099734, fn_800997F4 and fn_8009817C.
-   Only the accessed fields are declared. */
-struct Block_800997F4 {
-    char mUnknown0[8];
-    int mUnknown8;
-    int mUnknown12;
-};
+#include "game/Item_80097440.h"
 
 extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char a, Object_80137ABC *pBall,
                            int b, int mode, float range, Block_800997F4 *pBlock, int c, int d, int e, int f, int g);

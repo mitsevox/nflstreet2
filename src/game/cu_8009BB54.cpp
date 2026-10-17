@@ -2,65 +2,7 @@
 #include "game/fn_801C1F94.h"
 #include "game/fn_801EBC18.h"
 #include "game/fn_801BA2A8.h"
-
-struct Entry_800AF82C;
-
-/* 16-byte callback records copied into Block_8009B5E8 by fn_8009B87C. */
-struct Entry_8009B87C {
-    int (*mpCallback0)(int value, int *pData);
-    int (*mpCallback4)(int *pData);
-    void (*mpCallback8)(int *pData);
-    float (*mpCallbackC)(int *pData);
-};
-
-/* The 300 bytes at +4 of Block_8009B720 that fn_8009B698 copies and
-   fn_8009B5E8 checks. */
-struct Block_8009B5E8 {
-    int mUnknown0;
-    Entry_8009B87C mEntries[2];
-    unsigned int mUnknown24;
-    int mUnknown28[63];
-    unsigned char mUnknown124[3];
-    unsigned char mUnknown127;
-    int mUnknown128;
-};
-
-/* 304-byte blocks allocated by fn_8009B720 under the id 'celb'. */
-struct Block_8009B720 {
-    void *mpUnknown0;
-    Block_8009B5E8 mUnknown4;
-};
-
-/* 24-byte entries at +44 of Block_8009C6F4. */
-struct Entry_8009C684 {
-    void (*mpCallback0)(Object_80039F5C *p, Vector_80039F5C *pVec, void *pData);
-    Vector_80039F5C mUnknown4;
-    unsigned char mUnknown10[8];
-};
-
-/* Record passed to fn_8009C6F4, fn_8009C814 and fn_8009C88C. Only the
-   accessed fields are declared; the size is unknown. */
-struct Block_8009C6F4 {
-    int mUnknown0;
-    unsigned short mUnknown4;
-    unsigned short mUnknown6;
-    int mUnknown8;
-    short mUnknownC;
-    short mUnknownE;
-    Vector_80039F5C mUnknown10;
-    int mUnknown1C[3];
-    Pose_80041930 *mpPose;
-    Entry_8009C684 mEntries[2];
-};
-
-/* 64-byte entries; fn_800AF804 clears three of them. */
-struct Entry_800AF82C {
-    void *mpUnknown0;
-    unsigned char mUnknown4[44];
-    int mUnknown30[3];
-    unsigned char mUnknown3C;
-    unsigned char mUnknown3D[3];
-};
+#include "game/Item_80097440.h"
 
 extern "C" {
 unsigned int fn_8009B910(int index);
