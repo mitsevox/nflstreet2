@@ -193,11 +193,15 @@ struct State_80111104 {
 /* View of the payload that fn_801BE60C returns, as fn_8011067C accesses it.
    Partial layout. */
 struct Block_8011067C {
-    char mUnknown0[12];
+    float mUnknown0;
+    float mUnknown4;
+    int mUnknown8;
     float mUnknown12;
     float mUnknown16;
-    char mUnknown20[4];
+    float mUnknown20;
     int mUnknown24;
+    int mUnknown28;
+    int mUnknown32;
 };
 
 /* View of the player object from +1032. */
@@ -3952,6 +3956,16 @@ extern "C" int fn_80110824(Object_80039F5C *p, int a, int b, int c)
     return result;
 }
 
+extern "C" int fn_80110C10(Object_80039F5C *p)
+{
+    unsigned short key = fn_801BE648(p->mpUnknown792);
+
+    if (key == 154 || key == 188) {
+        return ((Block_8011067C *)fn_801BE60C(p->mpUnknown792, key))->mUnknown32;
+    }
+    return p->mMotion.mFacing;
+}
+
 extern "C" int fn_80110C68(Object_80039F5C *p)
 {
     return ((State_80113AAC *)&p->mUnknown336)->mUnknown14;
@@ -4479,7 +4493,7 @@ extern "C" int fn_80113BCC(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_80113C18() {
+extern "C" int fn_80113C18(Object_80039F5C *p, void *pState) {
     return 0;
 }
 

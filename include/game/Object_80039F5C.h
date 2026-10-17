@@ -375,7 +375,10 @@ struct Object_80039F5C {
     Object_800CE674 mUnknown1240;
     char mUnknown1244[1656];
     float mUnknown2900;
-    char mUnknown2904[4];
+    union {
+        char mUnknown2904[4];
+        float mUnknown2904Float;
+    };
     unsigned short mUnknown2908;
     char mUnknown2910[2];
     unsigned char mUnknown2912;

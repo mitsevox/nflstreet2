@@ -19392,6 +19392,82 @@
         "commit": "f3ac0a3ae83618595e6a1e9c12ae6deda3d46e2b",
         "introduced_blob": "20a8530415639cf9d7001b0d267c4b62237912f5"
       }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80110C10"
+      ],
+      "provenance": {
+        "pull_request": 856,
+        "merged_via": 856,
+        "commit": "9f7355dafa23712ac318b11ce43c508fa39b2ec5",
+        "introduced_blob": "b3c6ca70841ed813ccc274d100e3958a729b7245"
+      }
+    },
+    {
+      "source": "src/game/cu_8010F058.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8010F058",
+        "0x8010F1F4"
+      ],
+      "provenance": {
+        "pull_request": 856,
+        "merged_via": 856,
+        "commit": "9f7355dafa23712ac318b11ce43c508fa39b2ec5",
+        "introduced_blob": "2bee2c113f2ceeca91416342e10594da6f9e9ed6"
+      }
+    },
+    {
+      "source": "src/game/cu_8010F43C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8010FC40",
+        "0x8010FD94",
+        "0x8010FE40",
+        "0x801102A4",
+        "0x801104BC",
+        "0x801108D4",
+        "0x80110C70",
+        "0x801113DC",
+        "0x8011165C",
+        "0x8011168C"
+      ],
+      "provenance": {
+        "pull_request": 856,
+        "merged_via": 856,
+        "commit": "9f7355dafa23712ac318b11ce43c508fa39b2ec5",
+        "introduced_blob": "efbc68ca3c9b0e51cd3097f3d93ccccbe5daa17c"
+      }
+    },
+    {
+      "source": "src/game/cu_80111B4C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80111B4C",
+        "0x80111E80",
+        "0x80112928",
+        "0x80112C04",
+        "0x80113498",
+        "0x80113680",
+        "0x8011380C"
+      ],
+      "provenance": {
+        "pull_request": 856,
+        "merged_via": 856,
+        "commit": "9f7355dafa23712ac318b11ce43c508fa39b2ec5",
+        "introduced_blob": "bed9d675b214052308b1d4cfffd4e06af8e4641b"
+      }
     }
   ],
   "target": "GN7E69",
