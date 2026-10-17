@@ -2128,7 +2128,7 @@ extern "C" int fn_800FC648(Object_80039F5C *p, Block_800FCC24 *pBlock) {
     point.mY = pBlock->mUnknown4[pBlock->mUnknown32].mY;
     point.mZ = 0.0f;
     result = 0;
-    if (!fn_801248D4(p, 0, &point, &pOther, 0, 0, 0.0f, 0.5f)) {
+    if (!fn_801248D4(p, 0, &point, &pOther, 0.0f, 0.5f, 0, 0)) {
         Point_8017886C delta;
 
         fn_80227690(&delta, &pOther->mMotion.mPos, pMotion);

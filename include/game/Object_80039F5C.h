@@ -3,6 +3,7 @@
 
 #include "game/Object_800D81C8.h"
 #include "game/Message_800F01CC.h"
+#include "game/Pose_80041930.h"
 
 struct Area_80054138;
 
@@ -33,7 +34,6 @@ struct Quat_801EB488 {
 };
 
 struct Object_80041904;
-struct Pose_80041930;
 
 /* Block at +4 of the player object; the entries of src/game/cu_80136B1C.cpp
    hold one at +0. */
@@ -42,9 +42,17 @@ struct Block_80170E64 {
     Vector_80039F5C mUnknown4;
     char mUnknown16[4];
     unsigned int mUnknown20;
-    char mUnknown24[12];
-    int mUnknown36;
-    char mUnknown40[60];
+    /* +24 is the scale fn_8009BD88 sets alongside player +768. */
+    union {
+        char mUnknown24[20];
+        struct {
+            float mScale;
+            char mUnknown28[8];
+            int mUnknown36;
+            char mUnknown40[4];
+        };
+    };
+    Pose_80041930 mUnknown44;
     void *mpUnknown100;
     char mUnknown104[4];
     Quat_801EB488 mUnknown108;
@@ -268,7 +276,10 @@ struct Object_80039F5C {
     int mUnknown200;
     char mUnknown204[36];
     Pose_80041930 *mpUnknown240;
-    char mUnknown244[92];
+    char mUnknown244[48];
+    int mUnknown292;
+    int mUnknown296;
+    char mUnknown300[36];
     union {
         struct {
             int mUnknown336;
@@ -308,7 +319,9 @@ struct Object_80039F5C {
         Contact_80143668 mContact560;
     };
     int mUnknown628[2];
-    char mUnknown636[132];
+    char mUnknown636[4];
+    float mUnknown640[4][4];
+    float mUnknown704[4][4];
     float mUnknown768;
     float mUnknown772;
     unsigned char mUnknown776;
@@ -334,7 +347,7 @@ struct Object_80039F5C {
             unsigned char mUnknown1011;
         };
     };
-    char mUnknown1012[4];
+    unsigned char mUnknown1012[4];
     float mUnknown1016[2];
     float mUnknown1024[2];
     /* The 108 bytes at +1032, read field by field and as Block_8011E240. */

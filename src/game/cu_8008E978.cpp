@@ -76,6 +76,9 @@
 #include "game/fn_801C68FC.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
+#include "game/fn_801EBC18.h"
+#include "game/Block_801BE60C.h"
+#include "game/Item_80097440.h"
 #include "game/fn_801EEB44.h"
 #include "game/fn_801EF390.h"
 #include "game/fn_80054138.h"
@@ -190,68 +193,7 @@ struct Slot_80096D14 {
     int mUnknown4;
 };
 
-/* 60-byte records that fn_80097440 copies into the buffer at +3048 of
-   Record_80097518. */
-struct Item_80097440 {
-    unsigned char mUnknown0[4];
-    unsigned char mUnknown4;
-    unsigned char mUnknown5;
-    unsigned char mUnknown6[2];
-    Vector_80039F5C mUnknown8;
-    Vector_80039F5C mUnknown14;
-    float mUnknown20;
-    unsigned short mUnknown24;
-    unsigned char mUnknown26[2];
-    int mUnknown28;
-    unsigned char mUnknown2C[12];
-    int mUnknown38;
-};
-
 typedef Item_80097440 Item_8009A63C;
-
-/* 8-byte entries from +8 of Record_80097518. */
-struct Slot_80097440 {
-    int mUnknown0;
-    Item_80097440 *mpUnknown4;
-};
-
-/* 3080-byte records of the .bss array at 0x8030C2B8. */
-struct Record_80097518 {
-    int mUnknown0;
-    unsigned short mUnknown4;
-    unsigned char mUnknown6[2];
-    Slot_80097440 mUnknown8[380];
-    Item_80097440 *mpUnknownBE8;
-    unsigned short mUnknownBEC[7];
-    unsigned short mUnknownBFA[7];
-};
-
-/* 12-byte block allocated by fn_8009AB34 under the id 'ctup'. */
-struct Block_8009AB34 {
-    float mUnknown0;
-    float mUnknown4;
-    unsigned char mUnknown8;
-};
-
-/* 16-byte callback records copied into Block_8009B5E8 by fn_8009B87C. */
-struct Entry_8009B87C {
-    int (*mpCallback0)(int value, int *pData);
-    int (*mpCallback4)(int *pData);
-    void (*mpCallback8)(int *pData);
-    int mUnknownC;
-};
-
-/* The 300 bytes at +4 of Block_8009B720 that fn_8009B698 copies and
-   fn_8009B5E8 checks. */
-struct Block_8009B5E8 {
-    int mUnknown0;
-    Entry_8009B87C mEntries[2];
-    unsigned int mUnknown24;
-    int mUnknown28[63];
-    unsigned char mUnknown124[3];
-    unsigned char mUnknown127;
-    int mUnknown128;
-};
 
 /* Record passed to fn_8009D338-fn_8009D3F0. Only the accessed words are
    declared; the size is unknown. */
@@ -262,38 +204,6 @@ struct Timer_8009D338 {
     unsigned char mUnknownC[4];
     unsigned int mUnknown10;
     int mUnknown14;
-};
-
-/* 304-byte blocks allocated by fn_8009B720 under the id 'celb'. */
-struct Block_8009B720 {
-    void *mpUnknown0;
-    Block_8009B5E8 mUnknown4;
-};
-
-/* The 64-byte block fn_80099630 allocates under the id 'ctch'. */
-struct Block_80099630 {
-    int mUnknown0;
-    unsigned char mUnknown4[60];
-};
-
-/* 24-byte entries at +44 of Block_8009C6F4. */
-struct Entry_8009C684 {
-    void (*mpCallback0)(Object_80039F5C *p, Vector_80039F5C *pVec, void *pData);
-    Vector_80039F5C mUnknown4;
-    unsigned char mUnknown10[8];
-};
-
-/* Record passed to fn_8009C6F4, fn_8009C814 and fn_8009C88C. Only the
-   accessed fields are declared; the size is unknown. */
-struct Entry_800AF82C;
-
-struct Block_8009C6F4 {
-    int mUnknown0;
-    unsigned short mUnknown4;
-    unsigned short mUnknown6;
-    unsigned char mUnknown8[32];
-    int mUnknown28;
-    Entry_8009C684 mEntries[2];
 };
 
 extern "C" {
@@ -325,6 +235,11 @@ void fn_801C1FBC(void *pDest, void *pSrc, unsigned int size);
 void fn_800973AC(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void fn_800975EC(int id, int flag, int index);
 int fn_80097160(Object_80039F5C *p, float value);
+int fn_801CFE40(float y, float x);
+void fn_80227538(Point_80167910 *pOut, int angle, float length);
+void fn_8009A5DC(int a, int b, void *pA, int *pB);
+int fn_8009A298(int handle);
+void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int flag);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 
@@ -392,6 +307,7 @@ extern Entry_80219044 lbl_8030E6D0;
 extern Block_80099630 *lbl_803EC92C;
 extern unsigned char lbl_803EA930;
 extern float lbl_803EA934;
+extern unsigned char lbl_803EA93C;
 
 int fn_8005BE5C(int value);
 void fn_8005BF18(void);
@@ -412,11 +328,52 @@ void fn_801D08FC(int a);
 void fn_801D0CFC(float a);
 void fn_801D0F80(float m[4][4]);
 void fn_801D0544(void);
-void fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, void *pRecord, unsigned short c);
-void fn_800AF87C(Entry_800AF82C *p, int index, Vector_80039F5C *pVec, int c);
-void fn_800AF82C(Entry_800AF82C *p, int index, int value, int b, int c);
-void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
+void fn_801D04C4(void);
+void fn_801D06D4(float m[4][4]);
+void fn_801D0664(float m[4][4]);
+void fn_801D0FB8(Vector_80039F5C *pOut);
+void fn_801D11F4(void *pOut, int a);
+void fn_8009BE0C(float m[4][4], Vector_80039F5C *pPos, int angle, float scale);
+void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot, int joint);
+int fn_800ACF40(Object_80039F5C *p, signed char value);
+void fn_800AF804(Entry_800AF82C *p);
+void fn_8009C370(Object_80039F5C *p);
+void fn_80042270(Object_80039F5C *p);
+int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, Object_80039F5C *pRecord, unsigned short c);
+signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *pValues);
+void fn_800AF87C(Entry_800AF82C *pEntries, int b, Vector_80039F5C *pVec, int c);
+void fn_800AF82C(Entry_800AF82C *pEntries, int b, Pose_80041930 *pPose, int d, int e);
+void fn_8009CE88(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a);
 int fn_8009C7B4(Vector_80039F5C *pVec);
+void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b);
+int fn_8003989C(void);
+void fn_8009D1AC(Object_80039F5C *p);
+
+extern int lbl_802D7C2C[14];
+int fn_8009C220(void *pA, void *pB);
+void fn_80227CC0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
+int fn_800AF9E4(Entry_800AF82C *p, int index);
+void fn_800AF95C(Entry_800AF82C *p, int index, int a);
+void fn_800AF9C0(Entry_800AF82C *p, int index, int *pValue);
+void fn_800429C0(Object_8003DEC4 *pObject);
+int fn_801BC7C0(void *a, void *b, void *c);
+void fn_800424C0(Object_8003DEC4 *pObject, int a);
+void fn_800424E8(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c);
+void fn_80042928(Object_8003DEC4 *pObject);
+void fn_800C8A98(Object_80039F5C *p);
+void fn_800C8AF0(Object_80039F5C *p);
+void fn_800AF9F4(Entry_800AF82C *p);
+void fn_8009CB0C(Object_80039F5C *p);
+void fn_801D0E44(float a);
+void fn_801D0E94(void);
+void fn_80227C2C(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
+
+extern int lbl_802D7C08[3];
+extern int lbl_802D7C14[3];
+extern Vector_80039F5C lbl_802D7C20;
+extern int lbl_803EA9A4;
+extern int lbl_803EA99C;
+extern int lbl_803EA9A0;
 }
 
 extern "C" int fn_80090244(int *p)
@@ -1658,6 +1615,61 @@ extern "C" void fn_80097028(Object_80039F5C *p)
     fn_80097160(p, lbl_803EA934);
 }
 
+/* Returns whether the slots the current state-28 handle selects (+0x6C/+0xC8)
+   are active (status not 0 or 4). */
+extern "C" unsigned char fn_8009704C(Object_80039F5C *p)
+{
+    int *pFirst;
+    int *pSecond = 0;
+    unsigned char kind;
+    unsigned char unknown;
+    int handle;
+    unsigned char result;
+
+    if (lbl_803EA93C != 0 && p->mpState->mId == 28) {
+        fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+        kind = fn_8009A298(handle);
+        switch (kind) {
+        case 1:
+            pFirst = &p->mUnknown200;
+            break;
+        case 2:
+            pSecond = &p->mUnknown200;
+        case 0:
+            pFirst = &p->mUnknown108;
+            break;
+        default:
+            pSecond = 0;
+            pFirst = 0;
+            break;
+        }
+        if (pFirst != 0) {
+            result = *pFirst != 0 && *pFirst != 4;
+        } else {
+            result = 0;
+        }
+        if (pSecond != 0) {
+            result |= *pSecond != 0 && *pSecond != 4;
+        } else if (kind == 2) {
+            result = 0;
+        }
+    } else {
+        result = 0;
+    }
+    return result;
+}
+
+/* Converts a vector between the two horizontal angle conventions (the angle
+   is negated, the length and height are kept). */
+extern "C" void fn_800973AC(Vector_80039F5C *pOut, Vector_80039F5C *pIn)
+{
+    int angle = fn_801CFE40(pIn->mY, pIn->mX);
+    float length = fn_802270A4(pIn);
+
+    fn_80227538((Point_80167910 *)pOut, (0x1000000 - angle) & 0xFFFFFF, length);
+    pOut->mZ = pIn->mZ;
+}
+
 extern "C" int fn_8009740C(int value)
 {
     int result;
@@ -2374,45 +2386,6 @@ extern "C" void fn_800A5D94(void)
 struct Object_800C6640 {
     unsigned char mUnknown0[0x28];
     int mUnknown28;
-};
-
-/* 16-byte entry at +0x18 of State_8011F4EC. */
-struct Entry_8011F4EC {
-    unsigned char mUnknown0[8];
-    float mUnknown8;
-    float mUnknownC;
-};
-
-/* Object whose address fn_8011F4EC returns. Only the accessed bytes are
-   declared; the size is not established. */
-struct State_8011F4EC {
-    int mUnknown0;
-    int mUnknown4[2];
-    int mUnknownC;
-    unsigned char mUnknown10;
-    unsigned char mUnknown11;
-    unsigned char mUnknown12[2];
-    unsigned short mUnknown14;
-    unsigned char mUnknown16[2];
-    Entry_8011F4EC mUnknown18[24];
-    unsigned char mUnknown198;
-    unsigned char mUnknown199[3];
-    unsigned char mUnknown19C[3];
-    unsigned char mUnknown19F[3];
-    unsigned char mUnknown1A2;
-    unsigned char mUnknown1A3;
-    unsigned char mUnknown1A4;
-    unsigned char mUnknown1A5[3];
-    unsigned char mUnknown1A8;
-    unsigned char mUnknown1A9;
-    unsigned char mUnknown1AA[2];
-    float mUnknown1AC[3];
-    unsigned char mUnknown1B8[3];
-    unsigned char mUnknown1BB[3];
-    unsigned char mUnknown1BE[3];
-    unsigned char mUnknown1C1[3];
-    unsigned char mUnknown1C4;
-    unsigned char mUnknown1C5;
 };
 
 typedef State_8011F4EC Record_8011F4EC;
@@ -3708,6 +3681,20 @@ extern "C" void fn_8009BD48(int *pRef, int a, int b, int c)
     *pRef = a | b << 8 | c << 16;
 }
 
+extern "C" void fn_8009BD60(Object_80039F5C *p)
+{
+    p->mUnknown1008.mUnknown0 = p->mUnknown1008.mUnknown1 = p->mUnknown1008.mUnknown2 = p->mUnknown1011 = 0xFF;
+    p->mUnknown1012[0] = p->mUnknown1012[1] = p->mUnknown1012[2] = p->mUnknown1012[3] = 0xFF;
+}
+
+extern "C" void fn_8009BD88(Object_80039F5C *p, float scale)
+{
+    p->mUnknown768 = scale;
+    if (p->mpUnknown4 != 0) {
+        p->mpUnknown4->mScale = scale;
+    }
+}
+
 extern "C" void fn_8009BDA0(float m[4][4], Vector_80039F5C *pPos, int angle, float scale)
 {
     fn_801D0508();
@@ -3719,13 +3706,119 @@ extern "C" void fn_8009BDA0(float m[4][4], Vector_80039F5C *pPos, int angle, flo
     fn_801D0544();
 }
 
-extern "C" int fn_8009C470(Table_80089904 *pTable, unsigned short c, void *a, void *b, void *pRecord,
+extern "C" void fn_8009BEA8(Object_80039F5C *p)
+{
+    fn_8009BDA0(p->mUnknown640, &p->mMotion.mPos, p->mMotion.mFacing, p->mUnknown768);
+    fn_8009BE0C(p->mUnknown704, &p->mMotion.mPos, p->mMotion.mFacing, p->mUnknown768);
+}
+
+extern "C" void fn_8009BEFC(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pAngles)
+{
+    Block_80170E64 *pBlock = p->mpUnknown4;
+
+    fn_801D04C4();
+    fn_801D06D4(pBlock->mUnknown44.mUnknown52[joint]);
+    fn_801D0FB8(pOut);
+    fn_801D11F4(pAngles, 0);
+    fn_801D0544();
+}
+
+extern "C" void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pAngles)
+{
+    Block_80170E64 *pBlock = p->mpUnknown4;
+
+    fn_801D04C4();
+    fn_801D06D4(p->mUnknown640);
+    fn_801D0664(pBlock->mUnknown44.mUnknown52[joint]);
+    fn_801D0FB8(pOut);
+    if (pAngles != 0) {
+        fn_801D11F4(pAngles, 0);
+    }
+    fn_801D0544();
+}
+
+extern "C" void fn_8009BFD0(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot)
+{
+    fn_8009BFF8(p, pOut, pRot, p->mpUnknown4->mUnknown44.mUnknown6);
+}
+
+extern "C" void fn_8009C158(Object_80039F5C *p, int reset)
+{
+    Block_80170E64 *pBlock;
+
+    if (reset) {
+        fn_801C1F94(&p->mUnknown16, 0, 92);
+        fn_801C1F94(&p->mUnknown108, 0, 92);
+        fn_801C1F94(&p->mUnknown200, 0, 92);
+        fn_801C1F94(p->mUnknown816, 0, sizeof(p->mUnknown816));
+        fn_800AF804((Entry_800AF82C *)p->mUnknown816);
+        pBlock = p->mpUnknown4;
+        if (pBlock != 0) {
+            fn_8009C370(p);
+            fn_80042270(p);
+            p->mpUnknown240 = p->mpUnknown148 = p->mpUnknown56 = &pBlock->mUnknown44;
+        }
+    } else {
+        pBlock = p->mpUnknown4;
+        if (pBlock != 0) {
+            fn_8009C370(p);
+            fn_80042270(p);
+        }
+    }
+}
+
+extern "C" int fn_8009C328(Object_80039F5C *pA, Object_80039F5C *pB)
+{
+    int result = fn_80238258(pA, pB, 0x310);
+
+    return result | fn_8009C220(pA->mUnknown816, pB->mUnknown816);
+}
+
+extern "C" void fn_8009C370(Object_80039F5C *p)
+{
+    Object_8003DEC4 *pObject = (Object_8003DEC4 *)p->mpUnknown4;
+
+    pObject->mUnknown24 = p->mUnknown768;
+    pObject->mUnknown28 = p->mUnknown772;
+    pObject->mUnknown32 = p->mUnknown776;
+    fn_800424C0(pObject, fn_801BC7C0(p->mpUnknown796, p->mpUnknown800, p->mpUnknown792));
+    fn_800424E8(pObject, p->mpUnknown800, p->mpUnknown796->mUnknown4, p->mpUnknown792);
+    fn_800C8A98(p);
+    fn_80042928(pObject);
+}
+
+extern "C" int fn_8009C470(Table_80089904 *pTable, unsigned short c, void *a, void *b, Object_80039F5C *pRecord,
                            unsigned int count)
 {
     if (count <= 1) {
         fn_8009C3F8(pTable, a, b, pRecord, c);
     }
     return 0;
+}
+
+extern "C" signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *pValues)
+{
+    int i;
+    int best = -1;
+    signed char result = -1;
+
+    for (i = 0; i < pTable->mCount; i++) {
+        Info_80089904 *pInfo = pTable->mEntries[i].mpInfo;
+        int score = fn_802372EC(0, 10);
+        const unsigned char *pBytes = &pInfo->mValue;
+        int k;
+
+        for (k = 0; k < 4; k++) {
+            if (pValues[k] == *pBytes++) {
+                score += (10 - k) * 10;
+            }
+        }
+        if (score > best) {
+            best = score;
+            result = i;
+        }
+    }
+    return result;
 }
 
 extern "C" int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues)
@@ -3752,8 +3845,8 @@ extern "C" int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues)
     return result;
 }
 
-extern "C" void fn_8009C604(int (**pCallbacks)(Table_80089904 *, unsigned short, void *, void *, void *,
-                                               unsigned int),
+extern "C" void fn_8009C604(int (**pCallbacks)(Table_80089904 *, unsigned short, void *, void *,
+                                               Object_80039F5C *, unsigned int),
                             unsigned int count)
 {
     unsigned int i;
@@ -3763,7 +3856,7 @@ extern "C" void fn_8009C604(int (**pCallbacks)(Table_80089904 *, unsigned short,
     }
 }
 
-extern "C" int fn_8009C684(Entry_8009C684 *pEntry, Entry_800AF82C *a,
+extern "C" int fn_8009C684(Entry_8009C684 *pEntry, Entry_800AF82C *pEntries,
                            void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int b, int c)
 {
     fn_801C1F94(pEntry->mUnknown10, 0, 8);
@@ -3771,35 +3864,78 @@ extern "C" int fn_8009C684(Entry_8009C684 *pEntry, Entry_800AF82C *a,
     if (c == 0) {
         c = 6;
     }
-    fn_800AF87C(a, b, &pEntry->mUnknown4, c);
+    fn_800AF87C(pEntries, b, &pEntry->mUnknown4, c);
     return 2;
 }
 
-extern "C" Entry_8009C684 *fn_8009C6F4(Entry_800AF82C *a, Block_8009C6F4 *pBlock,
+extern "C" Entry_8009C684 *fn_8009C6F4(Entry_800AF82C *pEntries, Block_8009C6F4 *pBlock,
                                        void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *),
                                        Vector_80039F5C *pVec, int c, int b, int d)
 {
     Entry_8009C684 *pEntry = 0;
 
     if (pBlock->mUnknown0 != 0 && pBlock->mUnknown0 != 4) {
-        fn_800AF82C(a, b, pBlock->mUnknown28, 0, d);
+        fn_800AF82C(pEntries, b, pBlock->mpPose, 0, d);
         pBlock->mUnknown6 = b;
         pBlock->mUnknown4 = pBlock->mUnknown4 == 0;
         pEntry = &pBlock->mEntries[pBlock->mUnknown4];
         pEntry->mUnknown4.mX = pVec->mX;
         pEntry->mUnknown4.mY = pVec->mY;
         pEntry->mUnknown4.mZ = pVec->mZ;
-        pBlock->mUnknown0 = fn_8009C684(pEntry, a, pCallback, b, c);
+        pBlock->mUnknown0 = fn_8009C684(pEntry, pEntries, pCallback, b, c);
     }
     return pEntry;
 }
 
-extern "C" int fn_8009C814(Object_80039F5C *p, Block_8009C6F4 *pBlock)
+extern "C" int fn_8009C7B4(Vector_80039F5C *pVec)
+{
+    Point_8017886C point;
+
+    point.mX = pVec->mX;
+    point.mY = pVec->mZ;
+    return abs((point.Heading() - 0x400000) << 8 >> 8) > lbl_803EA9A4;
+}
+
+extern "C" unsigned char fn_8009C814(Object_80039F5C *p, Block_8009C6F4 *pBlock)
 {
     Entry_8009C684 *pEntry = &pBlock->mEntries[pBlock->mUnknown4];
 
     if (pBlock->mUnknown0 == 2 && fn_8009C7B4(&pEntry->mUnknown4) == 1) {
-        fn_8009CE88(p, &pBlock->mUnknown0, 6);
+        fn_8009CE88(p, pBlock, 6);
+    }
+    return pBlock->mUnknown0 > 1;
+}
+
+extern "C" unsigned char fn_8009C88C(Object_80039F5C *p, Block_8009C6F4 *pBlock)
+{
+    unsigned short index = pBlock->mUnknown4;
+
+    switch (pBlock->mUnknown0) {
+    case 1:
+        break;
+    case 4:
+        if (fn_800AF9E4((Entry_800AF82C *)p->mUnknown816, pBlock->mUnknown6) == 0) {
+            pBlock->mUnknown0 = 0;
+        }
+        break;
+    case 3:
+        if (fn_800AF9E4((Entry_800AF82C *)p->mUnknown816, pBlock->mUnknown6) == 0) {
+            pBlock->mUnknown0 = 1;
+        }
+        break;
+    case 2: {
+        Entry_8009C684 *pEntry = &pBlock->mEntries[index];
+
+        pEntry->mpCallback0(p, &pEntry->mUnknown4, pEntry->mUnknown10);
+        fn_801D04C4();
+        fn_801D06D4(p->mUnknown704);
+        fn_80227CC0(&pEntry->mUnknown4, &pEntry->mUnknown4);
+        fn_801D0544();
+        if (fn_8009C7B4(&pEntry->mUnknown4) == 1) {
+            fn_8009CE88(p, pBlock, 6);
+        }
+        break;
+    }
     }
     return pBlock->mUnknown0 > 1;
 }
@@ -3809,8 +3945,170 @@ extern "C" void fn_8009C98C(void *p, Vector_80039F5C *pOut, int *pRef)
     fn_8009BF5C(fn_8009BCE8(pRef), pRef[1], pOut, 0);
 }
 
-extern "C" void fn_8009CC28(void)
+extern "C" void fn_8009C9D0(Object_80039F5C *p, Vector_80039F5C *pTarget, int bone)
 {
+    Object_8003DEC4 *pObject = (Object_8003DEC4 *)p->mpUnknown4;
+    Block_8009C6F4 *pBlock = (Block_8009C6F4 *)&p->mUnknown16;
+    float m[4][4];
+    Vector_80039F5C pos;
+    Vector_80039F5C dir;
+    short rot;
+    int angle;
+
+    fn_801D04C4();
+    fn_801D0C58(&pObject->mUnknown100->mUnknown8[8 + bone * 16]);
+    fn_801D0E44(pObject->mUnknown24);
+    fn_801D0F80(m);
+    fn_801D0FB8(&pos);
+    fn_802276B4(&dir, pTarget, &pos);
+    fn_801D0E94();
+    fn_80227C2C(&dir, &dir);
+    fn_801D0544();
+    angle = -fn_801CFE40(dir.mZ, dir.mX) + 0x400000;
+    if (angle > lbl_803EA9A0) {
+        angle = lbl_803EA9A0;
+    } else if (angle < lbl_803EA99C) {
+        angle = lbl_803EA99C;
+    }
+    rot = angle >> 8;
+    if (pBlock->mUnknown8 != 6) {
+        short prev;
+
+        if (bone == 29) {
+            prev = pBlock->mUnknownC;
+        } else {
+            prev = pBlock->mUnknownE;
+        }
+        rot = (rot * (int)pBlock->mUnknown8 + prev * (6 - (int)pBlock->mUnknown8)) / 6;
+    }
+    pObject->mUnknown44.mUnknown48[bone * 3 + 1] = rot;
+    pObject->mUnknown44.mUnknown48[bone * 3] = 0;
+    pObject->mUnknown44.mUnknown48[bone * 3 + 2] = 0;
+}
+
+extern "C" void fn_8009CB0C(Object_80039F5C *p)
+{
+    Object_8003DEC4 *pObject = (Object_8003DEC4 *)p->mpUnknown4;
+
+    if (!(pObject->mUnknown20 & 0x80)) {
+        Block_8009C6F4 *pBlock = (Block_8009C6F4 *)&p->mUnknown16;
+
+        if (pBlock->mUnknown0 == 2) {
+            Vector_80039F5C *pTarget = &pBlock->mEntries[pBlock->mUnknown4].mUnknown4;
+
+            fn_801D04C4();
+            fn_801D06D4(pObject->mUnknown44.mUnknown52[13]);
+            if (pBlock->mUnknown8 < 6) {
+                pBlock->mUnknown8++;
+            }
+            fn_8009C9D0(p, pTarget, 29);
+            fn_8009C9D0(p, pTarget, 28);
+            fn_801D0544();
+        } else {
+            short *pRot29 = &pObject->mUnknown44.mUnknown48[29 * 3];
+            short *pRot28;
+
+            pRot29[0] = pRot29[1] = pRot29[2] = 0;
+            pRot28 = &pObject->mUnknown44.mUnknown48[28 * 3];
+            pRot28[0] = pRot28[1] = pRot28[2] = 0;
+        }
+    }
+}
+
+extern "C" void fn_8009CBD8(Object_80039F5C *p, Vector_80039F5C *pOut)
+{
+    Object_8003DEC4 *pObject = (Object_8003DEC4 *)p->mpUnknown4;
+
+    fn_801D04C4();
+    fn_801D06D4(pObject->mUnknown44.mUnknown52[13]);
+    fn_80227CC0(pOut, &lbl_802D7C20);
+    fn_801D0544();
+}
+
+extern "C" void fn_8009CC28(Object_80039F5C *p)
+{
+}
+
+extern "C" unsigned char *fn_8009CC2C(Object_80039F5C *p,
+                                      void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int a,
+                                      int b)
+{
+    Entry_800AF82C *pEntries = (Entry_800AF82C *)p->mUnknown816;
+    Block_8009C6F4 *pBlock = (Block_8009C6F4 *)&p->mUnknown16;
+    Vector_80039F5C pos;
+    Entry_8009C684 *pEntry;
+
+    if (pBlock->mUnknown0 == 3) {
+        pBlock->mUnknown0 = 2;
+    }
+    fn_8009CBD8(p, &pos);
+    pEntry = fn_8009C6F4(pEntries, pBlock, pCallback, &pos, a, 0, b);
+    if (p->mIdBytes[3] == 1) {
+        fn_800AF9C0(pEntries, 0, lbl_802D7C08);
+    } else {
+        fn_800AF9C0(pEntries, 0, lbl_802D7C14);
+    }
+    fn_800429C0((Object_8003DEC4 *)p->mpUnknown4);
+    pBlock->mUnknownE = pBlock->mUnknownC = pBlock->mUnknown8 = 0;
+    return pEntry->mUnknown10;
+}
+
+extern "C" void fn_8009CDEC(Object_80039F5C *p)
+{
+    Block_8009C6F4 *pBlock = (Block_8009C6F4 *)&p->mUnknown16;
+    unsigned char active = fn_8009C88C(p, pBlock);
+
+    if (active) {
+        active = fn_8009C814(p, pBlock);
+    }
+    active |= fn_8009C88C(p, (Block_8009C6F4 *)&p->mUnknown108);
+    active |= fn_8009C88C(p, (Block_8009C6F4 *)&p->mUnknown200);
+    fn_800C8AF0(p);
+    if (active) {
+        fn_800AF9F4((Entry_800AF82C *)p->mUnknown816);
+    }
+    fn_8009CC28(p);
+    fn_8009CB0C(p);
+}
+
+extern "C" void fn_8009CE88(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a)
+{
+    if (pBlock->mUnknown0 == 2) {
+        pBlock->mUnknown4 = pBlock->mUnknown4 == 0;
+        pBlock->mEntries[pBlock->mUnknown4].mpCallback0 = 0;
+        pBlock->mUnknown0 = 3;
+        fn_800AF95C((Entry_800AF82C *)p->mUnknown816, pBlock->mUnknown6, a);
+    }
+}
+
+extern "C" void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b)
+{
+    int *pData = (int *)fn_8009CC2C(p, (void (*)(Object_80039F5C *, Vector_80039F5C *, void *))fn_8009C98C, a, b);
+
+    pData[0] = ref;
+    pData[1] = joint;
+}
+
+extern "C" void fn_8009CF78(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a)
+{
+    switch (pBlock->mUnknown0) {
+    case 0:
+        break;
+    case 2:
+        pBlock->mUnknown4 = pBlock->mUnknown4 == 0;
+        pBlock->mEntries[pBlock->mUnknown4].mpCallback0 = 0;
+        pBlock->mUnknown0 = 4;
+        fn_800AF95C((Entry_800AF82C *)p->mUnknown816, pBlock->mUnknown6, a);
+        break;
+    case 3:
+        pBlock->mUnknown0 = 4;
+        break;
+    case 1:
+        pBlock->mUnknown0 = 0;
+        break;
+    case 4:
+        break;
+    }
 }
 
 extern "C" void fn_8009D00C(void *p, int *pState)
@@ -3827,6 +4125,94 @@ extern "C" void fn_8009D00C(void *p, int *pState)
         *pState = 1;
         break;
     }
+}
+
+extern "C" int fn_8009D04C(Object_80039F5C *p, Object_80039F5C *pOther, int limit)
+{
+    Point_8017886C delta;
+
+    fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+    return fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing) < limit;
+}
+
+extern "C" void fn_8009D0AC(Object_80039F5C *p)
+{
+    int ref = 0;
+
+    if (fn_8003989C() != 0) {
+        int i;
+        int index;
+        int *pTable;
+        int *pRef;
+        int count = 14;
+
+        fn_800BA6F8();
+        i = 0;
+        index = fn_802372EC(0, count);
+        pTable = lbl_802D7C2C;
+        pRef = &pTable[index];
+        while (i < count) {
+            Object_80039F5C *pOther;
+
+            ref = *pRef;
+            pOther = fn_8009BCE8(&ref);
+            if (pOther != p && fn_8009D04C(p, pOther, 0x155555) == 1) {
+                break;
+            }
+            index++;
+            pRef++;
+            if (index >= count) {
+                pRef = pTable;
+                index = 0;
+            }
+            i++;
+        }
+        if (i < count) {
+            fn_8009CEE4(p, ref, 13, 15, 0);
+            p->mUnknown292 = ref;
+            p->mUnknown296 = fn_802372EC(0, 120) + 30;
+        } else {
+            fn_8009D1AC(p);
+        }
+    }
+}
+
+extern "C" void fn_8009D1AC(Object_80039F5C *p)
+{
+    if (p->mUnknown292 != 0) {
+        fn_8009CE88(p, (Block_8009C6F4 *)&p->mUnknown16, 15);
+        p->mUnknown292 = 0;
+    }
+}
+
+extern "C" int fn_8009D1F4(Object_80039F5C *p)
+{
+    if (p->mUnknown292 != 0) {
+        p->mUnknown296--;
+        if (fn_8009D04C(p, fn_8009BCE8(&p->mUnknown292), 0x155555) == 0 || p->mUnknown296 < 0) {
+            fn_8009D0AC(p);
+        }
+    } else {
+        fn_8009D0AC(p);
+    }
+    return p->mUnknown292 == 0;
+}
+
+extern "C" int fn_8009D284(Object_80039F5C *p, Object_80039F5C *pOther)
+{
+    if (p->mUnknown292 == 0) {
+        if (fn_8009D04C(p, pOther, 0x471C72) == 1) {
+            int ref;
+
+            fn_8009BD2C(pOther, &ref);
+            fn_8009CEE4(p, ref, 26, 15, 1);
+            p->mUnknown296 = 300;
+            p->mUnknown292 = ref;
+        }
+    } else if (fn_8009D04C(p, pOther, 0x471C72) == 0) {
+        fn_8009D1AC(p);
+    }
+    return p->mUnknown292 == 0;
 }
 
 extern "C" int fn_8009D338(Timer_8009D338 *p)
@@ -9252,12 +9638,12 @@ extern "C" void fn_800AF804(Entry_800AF82C *p)
     fn_801C1F94(p, 0, 3 * sizeof(Entry_800AF82C));
 }
 
-extern "C" void fn_800AF82C(Entry_800AF82C *p, int index, int value, int b, int c)
+extern "C" void fn_800AF82C(Entry_800AF82C *p, int index, Pose_80041930 *pPose, int b, int c)
 {
     Entry_800AF82C *pEntry = p + index;
 
     if (pEntry->mUnknown3C == 0) {
-        pEntry->mUnknown0 = value;
+        pEntry->mpUnknown0 = pPose;
         pEntry->mUnknown14 = 0;
         pEntry->mpUnknown4 = &lbl_803EC97C[b * lbl_803EC980];
         pEntry->mpUnknown8 = lbl_803EC978->mpUnknown4[index];
@@ -9681,6 +10067,23 @@ extern "C" int fn_800994E0(void *p, int value)
     return 0;
 }
 
+extern "C" int fn_80099510(Object_80039F5C *p)
+{
+    bool even;
+
+    if (p->mUnknown8 != 0xFF) {
+        return 1;
+    }
+    even = ((p->mId >> 16 & 0xFF) + (p->mId >> 8 & 0xFF)) % 2 == 0;
+    if (lbl_803EA930 == 0) {
+        return !even;
+    }
+    if (even) {
+        return 1;
+    }
+    return 0;
+}
+
 extern "C" void fn_80099568(int kind)
 {
     switch (kind) {
@@ -9731,6 +10134,26 @@ extern "C" void fn_800996FC(int value)
         fn_80099568(1);
     }
 }
+
+extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char a, Object_80137ABC *pBall,
+                           int b, int mode, float range, Block_800997F4 *pBlock, int c, int d, int e, int f, int g);
+
+extern "C" int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, float range,
+                           Block_800997F4 *pBlock, int b, int c, int d, unsigned char e)
+{
+    int result = 0x1FFFFFFF;
+    int flags = 0;
+
+    if (fn_80099510(p) != 0) {
+        if (e != 0) {
+            flags = 2;
+        }
+        result = fn_8009817C(p, &p->mMotion.mPos, p->mMotion.mFacing, 0, pBall, a, mode, range, pBlock, b, c, d, flags, 0);
+    }
+    return result;
+}
+
+extern "C" void fn_800F05E4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
 
 extern "C" int fn_8009A1A8(Object_80039F5C *p, int handle, int b, int c, int kind)
 {
@@ -9818,23 +10241,6 @@ extern "C" void fn_8009A5DC(int high, int low, void *pKind, int *pHandle)
     *pHandle |= ((value >> 11) & 3) << 29;
 }
 
-struct Entry_8009D964 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknownC;
-    int mUnknown10;
-    int mUnknown14;
-};
-
-/* Allocated through fn_80238174 under the id 'clck' (fn_8009D474). */
-struct Block_8009D474 {
-    int mUnknown0;
-    Entry_8009D964 mEntries[6];
-    int mUnknown94;
-    int mUnknown98;
-};
-
 
 
 struct Block_8009FF94 {
@@ -9849,6 +10255,15 @@ struct Block_8009FF94 {
 extern "C" {
 unsigned int fn_801735C8(unsigned int mask);
 void fn_8009D964(int index, int value);
+void fn_8017C25C(int value);
+int fn_80178C24(void);
+int fn_8009D9A8(int index);
+int fn_8009D86C(void);
+int fn_80025640(int *pResult);
+int fn_80025718(void);
+int fn_8005900C(void);
+void fn_8002B5D0(int a, int b);
+int fn_800B9A90(Class_80297C60 *p);
 State_8011F4EC *fn_8011F4EC(void);
 int fn_8011F1CC(void);
 int fn_80178308(void);
@@ -9861,6 +10276,8 @@ void fn_8009E674(void);
 void fn_800A5D94(void);
 int fn_8009DBB4(State_8011F4EC *p);
 void fn_8009E58C(void);
+void fn_800FAD2C(void);
+void fn_800FAECC(int a);
 Message_800F01CC *fn_800AEE20(Object_80039F5C *p);
 int fn_801D34D0(void *pDest, int size, int value, int width);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
@@ -9925,6 +10342,92 @@ extern "C" void fn_8009D474(int a, int b)
     p->mEntries[5].mUnknown10 = b;
     p->mEntries[5].mUnknown4 = b;
     fn_802381E0(pHandle);
+}
+
+extern "C" int fn_8009D558(unsigned int time)
+{
+    int flags = 0;
+
+    if (lbl_803EA9A8->mEntries[1].mUnknown0 == 1) {
+        int old = lbl_803EA9A8->mEntries[1].mUnknown8;
+
+        fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[1], time);
+        if (lbl_803EA9A8->mEntries[1].mUnknown8 != old) {
+            fn_8017C25C(1);
+        }
+    }
+    if (fn_80178C24() != 0) {
+        if (fn_8009D338((Timer_8009D338 *)&lbl_803EA9A8->mEntries[1]) != 0) {
+            if (fn_800BA6F8() != 0) {
+                fn_8009D964(1, fn_8009D9A8(1));
+            } else {
+                flags |= 1;
+            }
+        }
+    } else if (fn_80178AE0() != 2) {
+        flags |= 1;
+    }
+    if (lbl_803EA9A8->mEntries[0].mUnknown0 == 1) {
+        fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[0], time);
+        if (fn_8009D338((Timer_8009D338 *)&lbl_803EA9A8->mEntries[0]) != 0) {
+            if (fn_800BA6F8() != 0) {
+                fn_8009D964(0, fn_8009D9A8(0));
+            } else {
+                flags |= 2;
+            }
+        }
+    }
+    if (lbl_803EA9A8->mEntries[2].mUnknown0 == 1) {
+        fn_8009D3F0((Timer_8009D338 *)&lbl_803EA9A8->mEntries[2], time);
+    }
+    if (lbl_803EA9A8->mEntries[3].mUnknown0 == 1) {
+        fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[3], time);
+    }
+    if (lbl_803EA9A8->mEntries[5].mUnknown0 == 1) {
+        fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[5], time);
+    }
+    if (fn_80025708() != 0) {
+        int mode = fn_800AD9B4();
+
+        if (lbl_803EA9A8->mEntries[4].mUnknown0 == 1) {
+            fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[4], time);
+        }
+        if (fn_8009D338((Timer_8009D338 *)&lbl_803EA9A8->mEntries[4]) != 0 && fn_800AD9B4() != 1) {
+            flags |= 1;
+            if (mode == 3) {
+                fn_80178370();
+            } else if (mode == 5) {
+                fn_800B4184(1);
+            }
+        }
+        if ((unsigned char)fn_800B9A90(lbl_803EAB84) != 0 && mode == 4 && fn_801735C8(0x10) == 0
+            && fn_80025640(0) != 0) {
+            flags |= 1;
+        }
+    } else if (fn_80025718() != 0) {
+        int done = fn_8005900C();
+        int value;
+
+        if (done != 0) {
+            int mode = fn_800AD9B4();
+
+            if (mode == 3) {
+                fn_80178370();
+            } else if (mode == 5) {
+                fn_800B4184(1);
+            }
+        }
+        value = 0;
+        if (done != 0 || fn_80025640(&value) != 0) {
+            flags |= 1;
+            fn_8002B5D0(value, 7);
+        }
+    }
+    if (fn_8009D86C() == 5 && fn_801787DC(0) != fn_801787DC(1)) {
+        flags |= 1;
+    }
+    lbl_803EA9A8->mUnknown94 = flags;
+    return flags;
 }
 
 extern "C" int fn_8009D86C(void)
@@ -10093,6 +10596,65 @@ extern "C" void fn_8009DE9C(void)
     fn_8009E674();
 }
 
+extern "C" void fn_8009DEFC(int flag)
+{
+    State_8011F4EC *p = fn_8011F4EC();
+    int team;
+    Object_800670B4 *pObject;
+    Object_800670B4 *pOther;
+
+    fn_8009DA90();
+    team = fn_80178320();
+    pObject = fn_80168708((unsigned char)team);
+    pOther = fn_80168708(fn_80178308());
+    if ((pObject->mUnknown8.mUnknown14 & 1) && (fn_8016871C((unsigned char)team)->mUnknown18 & 1)
+        && fn_800B65A0(team) == 0xFF) {
+        p->mUnknown1A8 = pObject->mUnknown8.mUnknownF == 0;
+        if (fn_8009DBB4(p) != 0) {
+            if (p->mUnknown1A8 == 0) {
+                p->mUnknown1A8 = 1;
+            }
+        } else if (p->mUnknown1A8 == 1) {
+            p->mUnknown1A8 = 0;
+        }
+        if (pOther->mUnknown8.mUnknownF != 0) {
+            fn_8009DB54(flag);
+        }
+        p->mUnknown1A9 = 1;
+    } else {
+        p->mUnknown1A9 = 0;
+        p->mUnknown1A8 = 1;
+    }
+    if (fn_800B65A0(team) == 0xFF) {
+        p->mUnknown11 = 1;
+        p->mUnknownC = 60;
+    }
+}
+
+extern "C" void fn_8009E01C(void)
+{
+    State_8011F4EC *p = fn_8011F4EC();
+    int team;
+
+    fn_800FAD2C();
+    fn_800FAECC(0);
+    team = fn_80178320();
+    if ((fn_80168708((unsigned char)team)->mUnknown8.mUnknown14 & 1) && (fn_8016871C((unsigned char)team)->mUnknown18 & 1)
+        && fn_800B65A0(team) == 0xFF) {
+        if (fn_8009DBB4(p) != 0) {
+            if (p->mUnknown1A8 == 0) {
+                p->mUnknown1A8 = 1;
+            }
+        } else if (p->mUnknown1A8 == 1) {
+            p->mUnknown1A8 = 0;
+        }
+        p->mUnknown1A9 = 1;
+    } else {
+        p->mUnknown1A9 = 0;
+        p->mUnknown1A8 = 1;
+    }
+}
+
 extern "C" void fn_8009E0EC(void)
 {
     State_8011F4EC *p = fn_8011F4EC();
@@ -10112,6 +10674,46 @@ extern "C" void fn_8009E138(void)
     p->mUnknown14--;
     if (p->mUnknown14 & 0x8000) {
         fn_8009E674();
+    }
+}
+
+extern "C" void fn_8009E458(void)
+{
+    int i = 0;
+    int team = fn_80178320();
+    Message_800F01CC message;
+    int count;
+
+    fn_801C1F94(&message, 0, sizeof(message));
+    message.mId = 2;
+    count = fn_80178D70(team);
+    for (; i < count; i++) {
+        Object_80039F5C *p = fn_80039F5C(team, (unsigned char)i);
+
+        fn_8003AB08(p, 0);
+        switch (p->mpState->mId) {
+        case 32:
+        case 94:
+            if (p->mpState[1].mId != 2) {
+                fn_800F01CC(0, p->mpState, &message, p);
+            }
+            break;
+        case 28:
+            if (p->mUnknown9[0] == 1) {
+                fn_800F01CC(0, p->mpState, &message, p);
+            } else {
+                fn_8009DA10(p);
+            }
+            break;
+        default:
+            if (p->mUnknown9[0] != 1 && p->mpState->mId != 11 && p->mpState->mId != 16
+                && p->mpState->mId != 17 && p->mpState->mId != 10 && p->mpState->mId != 12) {
+                fn_8009DA10(p);
+            } else {
+                fn_800F053C(0, p->mpState, &message, p);
+            }
+            break;
+        }
     }
 }
 
