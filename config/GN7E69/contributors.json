@@ -13367,9 +13367,12 @@
       ],
       "provenance": {
         "pull_request": 887,
-        "merged_via": 887,
-        "commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
-        "introduced_blob": "da0ae2b7c89cc2a1b1a0c5269ce6f72fe1ab8bcb"
+        "merged_via": 918,
+        "commit": "7c4b6e1c1333fe27bfbc2fc7a78f1dee1f9382f8",
+        "introduced_blob": "d741950a7b0a7fc360635f374df98d5e14c9b401",
+        "original_commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
+        "original_blob": "da0ae2b7c89cc2a1b1a0c5269ce6f72fe1ab8bcb",
+        "integration_adjustment": "Integrate the 19 independently reviewed PRs in existing source files; preserve every original contributor and function address, combine disjoint reviewed bodies, and reconcile shared declarations without relaxing comparisons. The original source commit/blob is retained for attribution."
       }
     },
     {
@@ -13382,7 +13385,7 @@
       ],
       "provenance": {
         "pull_request": 887,
-        "merged_via": 887,
+        "merged_via": 918,
         "commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
         "introduced_blob": "9c36cb4fbb5343d8fd2d27bf21ee74af45f5ae54"
       }
@@ -13397,7 +13400,7 @@
       ],
       "provenance": {
         "pull_request": 887,
-        "merged_via": 887,
+        "merged_via": 918,
         "commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
         "introduced_blob": "e9a46f113358ec4cbbed5c433d760f9a31eab634"
       }
@@ -13412,7 +13415,7 @@
       ],
       "provenance": {
         "pull_request": 887,
-        "merged_via": 887,
+        "merged_via": 918,
         "commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
         "introduced_blob": "1e7837f69f04f8be67c61e50b8174e15ba116612"
       }
@@ -13427,7 +13430,7 @@
       ],
       "provenance": {
         "pull_request": 887,
-        "merged_via": 887,
+        "merged_via": 918,
         "commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
         "introduced_blob": "097694a88337cc621470cb5e35e8820c51a90168"
       }
@@ -13442,7 +13445,7 @@
       ],
       "provenance": {
         "pull_request": 887,
-        "merged_via": 887,
+        "merged_via": 918,
         "commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
         "introduced_blob": "0f114fd623176d4c4ace2f864bb4128611bc653c"
       }
@@ -13458,7 +13461,7 @@
       ],
       "provenance": {
         "pull_request": 887,
-        "merged_via": 887,
+        "merged_via": 918,
         "commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
         "introduced_blob": "bc1c950afa21f9b4fcf5b9f08589bac83681ccb2"
       }
@@ -13474,7 +13477,7 @@
       ],
       "provenance": {
         "pull_request": 887,
-        "merged_via": 887,
+        "merged_via": 918,
         "commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
         "introduced_blob": "4117c09a57c2fd7f6e6fb5005957e6a518d62490"
       }
@@ -13489,7 +13492,7 @@
       ],
       "provenance": {
         "pull_request": 887,
-        "merged_via": 887,
+        "merged_via": 918,
         "commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
         "introduced_blob": "b9290e7fc42dc679c4f37e001145f025174a8125"
       }
@@ -13505,7 +13508,7 @@
       ],
       "provenance": {
         "pull_request": 887,
-        "merged_via": 887,
+        "merged_via": 918,
         "commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
         "introduced_blob": "8f0dac0236de5d5cc87789456166927279ca59ef"
       }
@@ -13528,7 +13531,7 @@
       ],
       "provenance": {
         "pull_request": 887,
-        "merged_via": 887,
+        "merged_via": 918,
         "commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
         "introduced_blob": "0d26081f4968dfb55bcfd4996ff3f423e3d4f200"
       }
@@ -13544,7 +13547,7 @@
       ],
       "provenance": {
         "pull_request": 887,
-        "merged_via": 887,
+        "merged_via": 918,
         "commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
         "introduced_blob": "7c56d89200b8758d2a15001d9f397ba249f4863d"
       }
@@ -13559,7 +13562,7 @@
       ],
       "provenance": {
         "pull_request": 887,
-        "merged_via": 887,
+        "merged_via": 918,
         "commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
         "introduced_blob": "98858794fccecfdc872bdd9eb680b2dbb638c085"
       }
@@ -17471,7 +17474,7 @@
       ],
       "provenance": {
         "pull_request": 897,
-        "merged_via": 897,
+        "merged_via": 918,
         "commit": "fe612a434ae4a0dd162b15a776a277f1315c25bf",
         "introduced_blob": "cdb2a41d780989d7da0d824fd3c98ce9199dee1c"
       }
@@ -17487,7 +17490,7 @@
       ],
       "provenance": {
         "pull_request": 901,
-        "merged_via": 901,
+        "merged_via": 918,
         "commit": "21cb768296e1da0bf33a3847567153f9f11ad81b",
         "introduced_blob": "695e3cd85dcd354baf00944d34fa94ca9365b3c6"
       }
@@ -17503,7 +17506,7 @@
       ],
       "provenance": {
         "pull_request": 904,
-        "merged_via": 904,
+        "merged_via": 918,
         "commit": "be0c14ec47cd39471cc957780602296bfbbc1220",
         "introduced_blob": "62d91c0a65407510d50d7e2989407cf57e907d40"
       }
@@ -17518,7 +17521,7 @@
       ],
       "provenance": {
         "pull_request": 907,
-        "merged_via": 907,
+        "merged_via": 918,
         "commit": "918a360342706f45a19d2b85a8c712b2a3c57fb1",
         "introduced_blob": "21a7f25d8b667c1d36a8464b366da6eb237866e9"
       }
@@ -17533,7 +17536,7 @@
       ],
       "provenance": {
         "pull_request": 909,
-        "merged_via": 909,
+        "merged_via": 918,
         "commit": "56b8fb9dcfc84695cf9ba533c9f1d20bd5b54b84",
         "introduced_blob": "05e70fe57c527bb9d600a6073368ca5ffa735fa4"
       }
@@ -17548,7 +17551,7 @@
       ],
       "provenance": {
         "pull_request": 911,
-        "merged_via": 911,
+        "merged_via": 918,
         "commit": "e40451572f02082797ff842eac4710094295717f",
         "introduced_blob": "cefb0181044b9464698a04a6f950e473ae027e22"
       }
@@ -17563,7 +17566,7 @@
       ],
       "provenance": {
         "pull_request": 913,
-        "merged_via": 913,
+        "merged_via": 918,
         "commit": "a1834441fe28075faf5533df209cd561804158a1",
         "introduced_blob": "53a5a75ce8f2173add9bac98bfa425a79b6e6c6a"
       }
@@ -17578,7 +17581,7 @@
       ],
       "provenance": {
         "pull_request": 915,
-        "merged_via": 915,
+        "merged_via": 918,
         "commit": "59239b8a119ff0c596a5ac378c8422168026a7c4",
         "introduced_blob": "e746c635c64fb7d14763f3ca0f35d5c064e83e7b"
       }
@@ -18239,7 +18242,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "734059f203ac33ecec5d8e66e85478d3ea072e49"
       }
@@ -18260,7 +18263,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "96e2c108f5831ad0d918fc389ced1270901c9426"
       }
@@ -18277,9 +18280,12 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
-        "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
-        "introduced_blob": "fd055e6a54ef8076e4d8c5542bde2b7c3990c7bd"
+        "merged_via": 918,
+        "commit": "7c4b6e1c1333fe27bfbc2fc7a78f1dee1f9382f8",
+        "introduced_blob": "f97dc0f03b104790edb267262f0bab02e2055124",
+        "original_commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
+        "original_blob": "fd055e6a54ef8076e4d8c5542bde2b7c3990c7bd",
+        "integration_adjustment": "Integrate the 19 independently reviewed PRs in existing source files; preserve every original contributor and function address, combine disjoint reviewed bodies, and reconcile shared declarations without relaxing comparisons. The original source commit/blob is retained for attribution."
       }
     },
     {
@@ -18365,9 +18371,12 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
-        "commit": "358b89fb6ea5623609a79bd0e2eec7cd3e1a450e",
-        "introduced_blob": "fd61617d65f120110d03476a670d4861a54ef024"
+        "merged_via": 918,
+        "commit": "7c4b6e1c1333fe27bfbc2fc7a78f1dee1f9382f8",
+        "introduced_blob": "d4240da60d4355d8ea43cee6f82d234fbc4c72f8",
+        "original_commit": "358b89fb6ea5623609a79bd0e2eec7cd3e1a450e",
+        "original_blob": "fd61617d65f120110d03476a670d4861a54ef024",
+        "integration_adjustment": "Integrate the 19 independently reviewed PRs in existing source files; preserve every original contributor and function address, combine disjoint reviewed bodies, and reconcile shared declarations without relaxing comparisons. The original source commit/blob is retained for attribution."
       }
     },
     {
@@ -18380,7 +18389,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "f73137501aa332a308481764e46aaff3ee6b48b0"
       }
@@ -18395,7 +18404,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "3502c51bd4d6e8e859664b2ad7845732a13bf162"
       }
@@ -18410,7 +18419,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "3120ef18cea4f2491a0ab0f32f1cd7b835b28f1e"
       }
@@ -18425,7 +18434,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "102fc2bdaba1c8d69f8f1e1753cbbad9df49f31c"
       }
@@ -18440,7 +18449,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "bb515ce426d25f6f0b9cd0a41e10b568f808f7da"
       }
@@ -18455,7 +18464,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "f57eb2533aae27a350d237de41a551caa4cb0cae"
       }
@@ -18479,7 +18488,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "0ae30e2d963e3dd588161853fc73e3e8469e6361"
       }
@@ -18494,7 +18503,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "5b255aa6c0a26c43c141fa797a57cc9f2568e82b"
       }
@@ -18509,7 +18518,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "25d78b0643025729b8a209619b55c0c5fc2eba02"
       }
@@ -18524,7 +18533,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "54716cf1867892af735cf95d5ec65e6da564ca1f"
       }
@@ -18539,7 +18548,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "86a185ef9a973224799ce866cc8143d14e30a54c"
       }
@@ -18555,7 +18564,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "41e3f7554352f6d186d84e6b124971448755b2d3"
       }
@@ -18575,7 +18584,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "2f67c0dd3afb8c3f94702d1e6f801cbee27afac9"
       }
@@ -18590,7 +18599,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "1e217a6f0f8687df12c042039f36a8d37516ec98"
       }
@@ -18606,7 +18615,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "bc2db4258b74d90cd345c93c521ca13e472adec5"
       }
@@ -18622,7 +18631,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "08f0e2dfeedf007bc49b8aedd5c2ee926b456908"
       }
@@ -18637,7 +18646,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "a8e9784a274378b9dd2d0da56be2d6ef6455ddef"
       }
@@ -18652,7 +18661,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "83428f584678fbb18b63dc4742523d9239abdc73"
       }
@@ -18667,7 +18676,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "199bbedce9be09de17fc9098e6c62adf9d507844"
       }
@@ -18683,7 +18692,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "4099e7cc17e09e8a043d9e77c987a77b0ea2d9cf"
       }
@@ -18698,7 +18707,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "ddcbff8eb300ca678049ba71776211ef39fb467d"
       }
@@ -18713,7 +18722,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "51fd5e47a112237b56f21f616d02a0929e7929fb"
       }
@@ -18730,7 +18739,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "1877cc003bc675af4ba840020e41a6634ec8f389"
       }
@@ -18745,7 +18754,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "d0ec240e319806ceeca1528950ed80a5b5e67df7"
       }
@@ -18760,7 +18769,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "b2cceaa77338a5a3f423551aaf28bcdf754199d1"
       }
@@ -18776,7 +18785,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "2bb93291f09085a3ba83db21bbb71c300f772699"
       }
@@ -18791,7 +18800,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "865e0fcb90d5722b498c5055008d099af04c058d"
       }
@@ -18807,7 +18816,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "80607a394921cef560a426374154c351b0495561"
       }
@@ -18822,7 +18831,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "4c58b1f54dfb71d69f7c77642f837519368e7805"
       }
@@ -18838,7 +18847,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "f7e85216405780f8062365dcf61db6cde987e321"
       }
@@ -18857,7 +18866,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "229c5698a7fc1993cf28bb557759358516c100cf"
       }
@@ -18875,7 +18884,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "358b89fb6ea5623609a79bd0e2eec7cd3e1a450e",
         "introduced_blob": "214f5b6e73b5f8af6a21908c5416bba632f87368"
       }
@@ -18893,7 +18902,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "735a8c070022b0956d269c11dcc87baf993715e7"
       }
@@ -18908,7 +18917,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "58650dea31b0e928ee601725959ae6de8897c1d4"
       }
@@ -18923,7 +18932,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "e46aa1b33609f0305a2afa700f14c101d126a224"
       }
@@ -18941,7 +18950,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "cf43c970c5e4fff9d2ebd02aa3c9d5d038c39088"
       }
@@ -18956,7 +18965,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "bf8afe36a1ca6dd657eebf374569371e4495c6de"
       }
@@ -18972,7 +18981,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "783c2a2b5ce8644067948813ce6db223a0ffa516"
       }
@@ -18990,7 +18999,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "5f1e3de8887d7676bfae2d1bb2b3fc32c82abec2"
       }
@@ -19006,7 +19015,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "358b89fb6ea5623609a79bd0e2eec7cd3e1a450e",
         "introduced_blob": "783d7e317ac625f5eb0960832c86848ff006853b"
       }
@@ -19021,7 +19030,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "4ad22bad59042e59d02a2d7553f2515817061112"
       }
@@ -19036,7 +19045,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "7ad0c4cf45f79d286c4527c112fd58dd281c0900"
       }
@@ -19051,7 +19060,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "fd52d5427d18fd003617629d4729f52895ec841a"
       }
@@ -19066,7 +19075,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "ee6e52bcc2a094c6a03ee380a74e5fd371b4ae40"
       }
@@ -19081,7 +19090,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "65b6ae52fd956680d0ddc97f9a245ef1f06b2651"
       }
@@ -19097,7 +19106,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "6ce4d4988b80230596addc1fd901fa25f9a1584c"
       }
@@ -19112,7 +19121,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "e3e82b8234d9416dfaa909a8fece2d841ec44ce1"
       }
@@ -19129,7 +19138,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "358b89fb6ea5623609a79bd0e2eec7cd3e1a450e",
         "introduced_blob": "400c142e83d46b4ad3ea41d2d276101a20517fab"
       }
@@ -19146,7 +19155,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "introduced_blob": "52265f002a604107104633be49974a0b0f0566be"
       }
@@ -19204,7 +19213,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "a0d86dfe6503e1dd916ca9ed9ffb013c582f3f30",
         "introduced_blob": "05e8423528b2e052c73742ca9316b6c8a8f2a5e5"
       }
@@ -19219,7 +19228,7 @@
       ],
       "provenance": {
         "pull_request": 902,
-        "merged_via": 902,
+        "merged_via": 918,
         "commit": "a0d86dfe6503e1dd916ca9ed9ffb013c582f3f30",
         "introduced_blob": "394165271397591b3684cba245054a30e0568cec"
       }
@@ -19235,7 +19244,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "fa32b0f0c9885588514db2dac2be843a6f3f815e"
       }
@@ -19251,7 +19260,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "391b1de4a5e1b15fb265fdee3e039e1841a7120b"
       }
@@ -19266,7 +19275,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "6067db0a639fe409cbc310911eca84d3018ced35"
       }
@@ -19281,7 +19290,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "60384df87639476e5155fd84bcff360aae92b4da"
       }
@@ -19296,7 +19305,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "2e95999c7c012449153cedd5993370d1fd950466"
       }
@@ -19311,7 +19320,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "be8882c3a10ce79692fd0da53e227721ae9bf6fc"
       }
@@ -19327,7 +19336,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "b355196da99f180c41b9f12cffc853aca651fb8f"
       }
@@ -19343,7 +19352,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "18f86c84124e2c8a8a8f1391bed2d41a395d465e"
       }
@@ -19358,7 +19367,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "34dc324f7fcc527c61e4f037011de8e427bfcf4b"
       }
@@ -19374,7 +19383,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "fd2c34c8ea33a7714037868c73ab0f6708590aa5"
       }
@@ -19391,7 +19400,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "39f196d57ba271c8fd32b349e20a5c0210519d31"
       }
@@ -19406,7 +19415,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "f19472930c7310c6ae5f8262b3d4ebeff6f5e15c"
       }
@@ -19427,7 +19436,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "c10ae6360ede35082d72bf63b0a97d490a1d0aa7"
       }
@@ -19447,7 +19456,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "77396ddbb607368b48239810428309c4796b8174"
       }
@@ -19462,7 +19471,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "cae49929e5247cc8ec1aeb3d5f7171ea07e10933"
       }
@@ -19477,7 +19486,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "0d70796b34df423a1aca0837826a1d12c73cdc07"
       }
@@ -19492,7 +19501,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "5b8e22e5252874a7832cbb34504d07af4ae70583"
       }
@@ -19507,7 +19516,7 @@
       ],
       "provenance": {
         "pull_request": 855,
-        "merged_via": 855,
+        "merged_via": 918,
         "commit": "1bee1e6121ce53518e4eaaa9ec865276c9612221",
         "introduced_blob": "278551e1e3ebc533504baa295e7aabeba34effb2"
       }
@@ -19531,7 +19540,7 @@
       ],
       "provenance": {
         "pull_request": 812,
-        "merged_via": 812,
+        "merged_via": 918,
         "commit": "f0e5cf5225f1ba865002e1480e0e644e5062bb18",
         "introduced_blob": "cb45afe6b68026a237c9eacc392ca969670b1632"
       }
@@ -19580,9 +19589,12 @@
       ],
       "provenance": {
         "pull_request": 853,
-        "merged_via": 853,
-        "commit": "39da91b7cdf62cf795d7b3ab163f96d5ab48a4e8",
-        "introduced_blob": "3039f627c1900db473fdd35758c3d2464e1c6f7f"
+        "merged_via": 918,
+        "commit": "7c4b6e1c1333fe27bfbc2fc7a78f1dee1f9382f8",
+        "introduced_blob": "d4240da60d4355d8ea43cee6f82d234fbc4c72f8",
+        "original_commit": "39da91b7cdf62cf795d7b3ab163f96d5ab48a4e8",
+        "original_blob": "3039f627c1900db473fdd35758c3d2464e1c6f7f",
+        "integration_adjustment": "Integrate the 19 independently reviewed PRs in existing source files; preserve every original contributor and function address, combine disjoint reviewed bodies, and reconcile shared declarations without relaxing comparisons. The original source commit/blob is retained for attribution."
       }
     },
     {
@@ -19601,7 +19613,7 @@
       ],
       "provenance": {
         "pull_request": 853,
-        "merged_via": 853,
+        "merged_via": 918,
         "commit": "13ec0cbdd7ac36baf6c40949e6213785c1169f12",
         "introduced_blob": "37577b285fd461660f3d10abe02e26eac2a4a9a8"
       }
@@ -19624,7 +19636,7 @@
       ],
       "provenance": {
         "pull_request": 853,
-        "merged_via": 853,
+        "merged_via": 918,
         "commit": "13ec0cbdd7ac36baf6c40949e6213785c1169f12",
         "introduced_blob": "e4ab8155f29e54f3561929e2a6dc1a448adce69a"
       }
@@ -19640,7 +19652,7 @@
       ],
       "provenance": {
         "pull_request": 853,
-        "merged_via": 853,
+        "merged_via": 918,
         "commit": "13ec0cbdd7ac36baf6c40949e6213785c1169f12",
         "introduced_blob": "ad753cd09a1aabfbb1b379473f6a3ac8e8617823"
       }
@@ -19656,7 +19668,7 @@
       ],
       "provenance": {
         "pull_request": 853,
-        "merged_via": 853,
+        "merged_via": 918,
         "commit": "13ec0cbdd7ac36baf6c40949e6213785c1169f12",
         "introduced_blob": "d3d058ccb8e80b515dc622286bcb44d89b2da09e"
       }
@@ -19674,7 +19686,7 @@
       ],
       "provenance": {
         "pull_request": 853,
-        "merged_via": 853,
+        "merged_via": 918,
         "commit": "13ec0cbdd7ac36baf6c40949e6213785c1169f12",
         "introduced_blob": "ecb69c74706b0925c7a6d2dc34d9e51259b65446"
       }
@@ -19696,9 +19708,12 @@
       ],
       "provenance": {
         "pull_request": 854,
-        "merged_via": 854,
-        "commit": "f3ac0a3ae83618595e6a1e9c12ae6deda3d46e2b",
-        "introduced_blob": "487f3f034d02f6f68c2d85e2fea83aff8421233b"
+        "merged_via": 918,
+        "commit": "7c4b6e1c1333fe27bfbc2fc7a78f1dee1f9382f8",
+        "introduced_blob": "d741950a7b0a7fc360635f374df98d5e14c9b401",
+        "original_commit": "f3ac0a3ae83618595e6a1e9c12ae6deda3d46e2b",
+        "original_blob": "487f3f034d02f6f68c2d85e2fea83aff8421233b",
+        "integration_adjustment": "Integrate the 19 independently reviewed PRs in existing source files; preserve every original contributor and function address, combine disjoint reviewed bodies, and reconcile shared declarations without relaxing comparisons. The original source commit/blob is retained for attribution."
       }
     },
     {
@@ -19713,7 +19728,7 @@
       ],
       "provenance": {
         "pull_request": 854,
-        "merged_via": 854,
+        "merged_via": 918,
         "commit": "f3ac0a3ae83618595e6a1e9c12ae6deda3d46e2b",
         "introduced_blob": "73cec50c241e9f79ea98a4f8475dc8ec136f1ecb"
       }
@@ -19728,7 +19743,7 @@
       ],
       "provenance": {
         "pull_request": 854,
-        "merged_via": 854,
+        "merged_via": 918,
         "commit": "f3ac0a3ae83618595e6a1e9c12ae6deda3d46e2b",
         "introduced_blob": "b6c4532037fbb5b4662cafad7e782b5a0a035dfe"
       }
@@ -19748,7 +19763,7 @@
       ],
       "provenance": {
         "pull_request": 854,
-        "merged_via": 854,
+        "merged_via": 918,
         "commit": "f3ac0a3ae83618595e6a1e9c12ae6deda3d46e2b",
         "introduced_blob": "a5cf3545d8ccaac8befa2cec18a30771f56df872"
       }
@@ -19764,7 +19779,7 @@
       ],
       "provenance": {
         "pull_request": 854,
-        "merged_via": 854,
+        "merged_via": 918,
         "commit": "f3ac0a3ae83618595e6a1e9c12ae6deda3d46e2b",
         "introduced_blob": "bcc66f4323496975b08664961601231923b3fbd8"
       }
@@ -19779,7 +19794,7 @@
       ],
       "provenance": {
         "pull_request": 854,
-        "merged_via": 854,
+        "merged_via": 918,
         "commit": "f3ac0a3ae83618595e6a1e9c12ae6deda3d46e2b",
         "introduced_blob": "20a8530415639cf9d7001b0d267c4b62237912f5"
       }
@@ -19794,9 +19809,12 @@
       ],
       "provenance": {
         "pull_request": 856,
-        "merged_via": 856,
-        "commit": "9f7355dafa23712ac318b11ce43c508fa39b2ec5",
-        "introduced_blob": "b3c6ca70841ed813ccc274d100e3958a729b7245"
+        "merged_via": 918,
+        "commit": "7c4b6e1c1333fe27bfbc2fc7a78f1dee1f9382f8",
+        "introduced_blob": "d741950a7b0a7fc360635f374df98d5e14c9b401",
+        "original_commit": "9f7355dafa23712ac318b11ce43c508fa39b2ec5",
+        "original_blob": "b3c6ca70841ed813ccc274d100e3958a729b7245",
+        "integration_adjustment": "Integrate the 19 independently reviewed PRs in existing source files; preserve every original contributor and function address, combine disjoint reviewed bodies, and reconcile shared declarations without relaxing comparisons. The original source commit/blob is retained for attribution."
       }
     },
     {
@@ -19810,7 +19828,7 @@
       ],
       "provenance": {
         "pull_request": 856,
-        "merged_via": 856,
+        "merged_via": 918,
         "commit": "9f7355dafa23712ac318b11ce43c508fa39b2ec5",
         "introduced_blob": "2bee2c113f2ceeca91416342e10594da6f9e9ed6"
       }
@@ -19834,7 +19852,7 @@
       ],
       "provenance": {
         "pull_request": 856,
-        "merged_via": 856,
+        "merged_via": 918,
         "commit": "9f7355dafa23712ac318b11ce43c508fa39b2ec5",
         "introduced_blob": "efbc68ca3c9b0e51cd3097f3d93ccccbe5daa17c"
       }
@@ -19855,7 +19873,7 @@
       ],
       "provenance": {
         "pull_request": 856,
-        "merged_via": 856,
+        "merged_via": 918,
         "commit": "9f7355dafa23712ac318b11ce43c508fa39b2ec5",
         "introduced_blob": "bed9d675b214052308b1d4cfffd4e06af8e4641b"
       }
@@ -19916,9 +19934,12 @@
       ],
       "provenance": {
         "pull_request": 880,
-        "merged_via": 880,
-        "commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
-        "introduced_blob": "c5a04c0d9d3f88fb0054ac07d0777f70184a34a8"
+        "merged_via": 918,
+        "commit": "7c4b6e1c1333fe27bfbc2fc7a78f1dee1f9382f8",
+        "introduced_blob": "d4240da60d4355d8ea43cee6f82d234fbc4c72f8",
+        "original_commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
+        "original_blob": "c5a04c0d9d3f88fb0054ac07d0777f70184a34a8",
+        "integration_adjustment": "Integrate the 19 independently reviewed PRs in existing source files; preserve every original contributor and function address, combine disjoint reviewed bodies, and reconcile shared declarations without relaxing comparisons. The original source commit/blob is retained for attribution."
       }
     },
     {
@@ -19932,7 +19953,7 @@
       ],
       "provenance": {
         "pull_request": 880,
-        "merged_via": 880,
+        "merged_via": 918,
         "commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
         "introduced_blob": "1c8d5b634e3595f764def5621ee1a6a9cc7c23d5"
       }
@@ -19949,7 +19970,7 @@
       ],
       "provenance": {
         "pull_request": 880,
-        "merged_via": 880,
+        "merged_via": 918,
         "commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
         "introduced_blob": "6a76d6e2d6627f7874e29e6a8c41e65a4b7b8865"
       }
@@ -19964,7 +19985,7 @@
       ],
       "provenance": {
         "pull_request": 880,
-        "merged_via": 880,
+        "merged_via": 918,
         "commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
         "introduced_blob": "bb4060c48a6a5b4cd2181029cbb0875ec952536e"
       }
@@ -19979,7 +20000,7 @@
       ],
       "provenance": {
         "pull_request": 880,
-        "merged_via": 880,
+        "merged_via": 918,
         "commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
         "introduced_blob": "b7608386d620d84dce2c51cedf84a7733c23d5ad"
       }
@@ -19994,7 +20015,7 @@
       ],
       "provenance": {
         "pull_request": 880,
-        "merged_via": 880,
+        "merged_via": 918,
         "commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
         "introduced_blob": "10a5a0f8c89189d429364b617a4759a3fb20877b"
       }
@@ -20009,7 +20030,7 @@
       ],
       "provenance": {
         "pull_request": 880,
-        "merged_via": 880,
+        "merged_via": 918,
         "commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
         "introduced_blob": "a9c3a95aaba0e8b63de19e98f7b183c7a1681d98"
       }
@@ -20034,7 +20055,7 @@
       ],
       "provenance": {
         "pull_request": 880,
-        "merged_via": 880,
+        "merged_via": 918,
         "commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
         "introduced_blob": "8bdfb7fc7fa3635b9bf4c8c9c76aa1016d3abb87"
       }
@@ -20055,7 +20076,7 @@
       ],
       "provenance": {
         "pull_request": 880,
-        "merged_via": 880,
+        "merged_via": 918,
         "commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
         "introduced_blob": "e0344fcd98b11e44ab14628a0e003c6aadb3fca5"
       }
@@ -20070,7 +20091,7 @@
       ],
       "provenance": {
         "pull_request": 880,
-        "merged_via": 880,
+        "merged_via": 918,
         "commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
         "introduced_blob": "1f7e464e85a7bcfe499f4a4d2e6b0dd97d3204df"
       }
@@ -20085,7 +20106,7 @@
       ],
       "provenance": {
         "pull_request": 880,
-        "merged_via": 880,
+        "merged_via": 918,
         "commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
         "introduced_blob": "e29817cb946741f9d5bfc2b650462167b68789d1"
       }
@@ -20100,7 +20121,7 @@
       ],
       "provenance": {
         "pull_request": 880,
-        "merged_via": 880,
+        "merged_via": 918,
         "commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
         "introduced_blob": "c012f27594341ffa7bcc70554cf792f524cffb30"
       }
@@ -20143,9 +20164,12 @@
       ],
       "provenance": {
         "pull_request": 886,
-        "merged_via": 886,
-        "commit": "43bd1f53116b8ff3406d17c7f1efe069cdcf4822",
-        "introduced_blob": "d206a8cc8c5f81bf987efe8076a7eb334db3dc16"
+        "merged_via": 918,
+        "commit": "7c4b6e1c1333fe27bfbc2fc7a78f1dee1f9382f8",
+        "introduced_blob": "d4240da60d4355d8ea43cee6f82d234fbc4c72f8",
+        "original_commit": "43bd1f53116b8ff3406d17c7f1efe069cdcf4822",
+        "original_blob": "d206a8cc8c5f81bf987efe8076a7eb334db3dc16",
+        "integration_adjustment": "Integrate the 19 independently reviewed PRs in existing source files; preserve every original contributor and function address, combine disjoint reviewed bodies, and reconcile shared declarations without relaxing comparisons. The original source commit/blob is retained for attribution."
       }
     },
     {
@@ -20161,7 +20185,7 @@
       ],
       "provenance": {
         "pull_request": 886,
-        "merged_via": 886,
+        "merged_via": 918,
         "commit": "43bd1f53116b8ff3406d17c7f1efe069cdcf4822",
         "introduced_blob": "50d19a89901166403ac0645f97067bd177ce5dfb"
       }
@@ -20177,7 +20201,7 @@
       ],
       "provenance": {
         "pull_request": 886,
-        "merged_via": 886,
+        "merged_via": 918,
         "commit": "43bd1f53116b8ff3406d17c7f1efe069cdcf4822",
         "introduced_blob": "0b098f86db64612c23ecc4dbdad942c76632ed77"
       }
@@ -20192,7 +20216,7 @@
       ],
       "provenance": {
         "pull_request": 886,
-        "merged_via": 886,
+        "merged_via": 918,
         "commit": "43bd1f53116b8ff3406d17c7f1efe069cdcf4822",
         "introduced_blob": "cf0a2378c4294f130b3c9eb7d5653c22c7baa7fe"
       }
@@ -20210,7 +20234,7 @@
       ],
       "provenance": {
         "pull_request": 886,
-        "merged_via": 886,
+        "merged_via": 918,
         "commit": "43bd1f53116b8ff3406d17c7f1efe069cdcf4822",
         "introduced_blob": "2cc395c091da4aed2442761de8f814bf68a65e0b"
       }
@@ -20229,7 +20253,7 @@
       ],
       "provenance": {
         "pull_request": 886,
-        "merged_via": 886,
+        "merged_via": 918,
         "commit": "43bd1f53116b8ff3406d17c7f1efe069cdcf4822",
         "introduced_blob": "6956866b1b05c427f00b8277abb9eb2d80dce946"
       }
@@ -20248,7 +20272,7 @@
       ],
       "provenance": {
         "pull_request": 886,
-        "merged_via": 886,
+        "merged_via": 918,
         "commit": "43bd1f53116b8ff3406d17c7f1efe069cdcf4822",
         "introduced_blob": "d31f3a2082f0b30959dc75e616b7cf6ad60cb7bb"
       }
@@ -20264,7 +20288,7 @@
       ],
       "provenance": {
         "pull_request": 886,
-        "merged_via": 886,
+        "merged_via": 918,
         "commit": "43bd1f53116b8ff3406d17c7f1efe069cdcf4822",
         "introduced_blob": "5f072cabd58ebaf23d39f268ac0d1bdd50e74723"
       }
@@ -20281,7 +20305,7 @@
       ],
       "provenance": {
         "pull_request": 886,
-        "merged_via": 886,
+        "merged_via": 918,
         "commit": "43bd1f53116b8ff3406d17c7f1efe069cdcf4822",
         "introduced_blob": "bcc033a9ac2395b7cc3551194aa5516dea821c57"
       }
@@ -20307,9 +20331,12 @@
       ],
       "provenance": {
         "pull_request": 899,
-        "merged_via": 899,
-        "commit": "251cc816c4f6f45b8a19b7a5f80e2eeb638f7b1c",
-        "introduced_blob": "3a57ffbebba2c14ef904a62f5b557fef2db51684"
+        "merged_via": 918,
+        "commit": "7c4b6e1c1333fe27bfbc2fc7a78f1dee1f9382f8",
+        "introduced_blob": "d4240da60d4355d8ea43cee6f82d234fbc4c72f8",
+        "original_commit": "251cc816c4f6f45b8a19b7a5f80e2eeb638f7b1c",
+        "original_blob": "3a57ffbebba2c14ef904a62f5b557fef2db51684",
+        "integration_adjustment": "Integrate the 19 independently reviewed PRs in existing source files; preserve every original contributor and function address, combine disjoint reviewed bodies, and reconcile shared declarations without relaxing comparisons. The original source commit/blob is retained for attribution."
       }
     },
     {
@@ -20336,9 +20363,12 @@
       ],
       "provenance": {
         "pull_request": 899,
-        "merged_via": 899,
-        "commit": "ea739b1f66e07c932344eebcad1e2c3fb3bab1ab",
-        "introduced_blob": "2ef902f0794bdf8d84a1bb761383d3b29dcf08fd"
+        "merged_via": 918,
+        "commit": "7c4b6e1c1333fe27bfbc2fc7a78f1dee1f9382f8",
+        "introduced_blob": "d8875a95b6c4b78ecd8ea64b6645cde24794123b",
+        "original_commit": "ea739b1f66e07c932344eebcad1e2c3fb3bab1ab",
+        "original_blob": "2ef902f0794bdf8d84a1bb761383d3b29dcf08fd",
+        "integration_adjustment": "Integrate the 19 independently reviewed PRs in existing source files; preserve every original contributor and function address, combine disjoint reviewed bodies, and reconcile shared declarations without relaxing comparisons. The original source commit/blob is retained for attribution."
       }
     },
     {
@@ -20367,7 +20397,7 @@
       ],
       "provenance": {
         "pull_request": 899,
-        "merged_via": 899,
+        "merged_via": 918,
         "commit": "dddefe756698325377296f0e168f4862b112dc2a",
         "introduced_blob": "3e3ea0e2c286e8a2440bb73466e712ab9bc3db98"
       }
@@ -20400,7 +20430,7 @@
       ],
       "provenance": {
         "pull_request": 905,
-        "merged_via": 905,
+        "merged_via": 918,
         "commit": "d26274ca59ea5bcb3d3cf910e0f423c5453171f2",
         "introduced_blob": "63da161706e1d2c788fd4648aa61f45ae6cdd9ab"
       }
@@ -20415,7 +20445,7 @@
       ],
       "provenance": {
         "pull_request": 905,
-        "merged_via": 905,
+        "merged_via": 918,
         "commit": "d26274ca59ea5bcb3d3cf910e0f423c5453171f2",
         "introduced_blob": "fe2e034517fb8a0625257657a47c60f3414c8f94"
       }
@@ -20430,7 +20460,7 @@
       ],
       "provenance": {
         "pull_request": 905,
-        "merged_via": 905,
+        "merged_via": 918,
         "commit": "d26274ca59ea5bcb3d3cf910e0f423c5453171f2",
         "introduced_blob": "09066990b45d81fd5d4130332f2085c1d960d24b"
       }
@@ -20445,7 +20475,7 @@
       ],
       "provenance": {
         "pull_request": 905,
-        "merged_via": 905,
+        "merged_via": 918,
         "commit": "83e2a404d6663204ae2e17e5cd2e1d8a98452e2d",
         "introduced_blob": "2292714c0a8802200dbd70523ca0385274056523"
       }
@@ -20462,7 +20492,7 @@
       ],
       "provenance": {
         "pull_request": 905,
-        "merged_via": 905,
+        "merged_via": 918,
         "commit": "d26274ca59ea5bcb3d3cf910e0f423c5453171f2",
         "introduced_blob": "4429f0b6ef622a083f6dbb99fdec8cb6a592581d"
       }
