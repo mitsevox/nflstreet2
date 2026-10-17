@@ -67,6 +67,11 @@ struct State_80102470 {
     unsigned char mUnknown2;
 };
 
+extern "C" int fn_800FFFB0(Object_80039F5C *p);
+extern "C" int fn_80103CB0(Object_80039F5C *p);
+extern "C" int fn_80104610(Object_80039F5C *p);
+Record_8011F4F8 *fn_8011F4F8(int index);
+
 extern "C" int fn_801021C0(Object_80039F5C *p)
 {
     State_801021C0 *pState = (State_801021C0 *)&p->mUnknown336;

@@ -1745,6 +1745,8 @@ extern "C" Object_80039F5C *fn_800FB844(Object_80039F5C *p) {
     return pResult;
 }
 
+extern "C" Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
+
 extern "C" void fn_800FBAA8(void) {
     Record_8011F4E0 *pRecord = fn_8011F4E0();
     unsigned char i;
@@ -2494,6 +2496,8 @@ extern "C" void fn_800FD708(State_80039F5C *pState)
     pState->mUnknown2 = ((0x800000 - (pState->mUnknown2 << 17)) & 0xFFFFFF) >> 17;
 }
 
+extern "C" void fn_800FD724(Object_80039F5C *p);
+
 extern "C" int fn_800FD7D0(Object_80039F5C *p)
 {
     Object_800670B4 *pTeam = fn_80168708(p->mIdBytes[2]);
@@ -2512,6 +2516,8 @@ void fn_800FF6D8(Object_80039F5C *p);
 void fn_800449B4(Object_80039F5C *p);
 void fn_80051B88(Object_800B26B0 *pMotion, float value);
 }
+
+extern "C" void fn_800FD978(Object_80039F5C *p);
 
 extern "C" int fn_800FDA58(Object_80039F5C *p)
 {
@@ -2583,6 +2589,8 @@ static inline void AddPoint(Point_8017886C *pOut, Point_8017886C *pOffset)
     pOut->mX += pOffset->mX;
     pOut->mY += pOffset->mY;
 }
+
+extern "C" void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut);
 
 #undef CLAMP
 
@@ -2803,6 +2811,8 @@ extern "C" int fn_801018B4(Object_80039F5C *p, List_801018B4 *pList, int a, int 
 
 extern unsigned char lbl_803EAE88;
 
+extern "C" void fn_80101AE0(Object_80039F5C *p, float *pOut);
+
 extern "C" int fn_80101B7C(Object_80039F5C *p)
 {
     int flag = p->mUnknown776 == 1;
@@ -2828,6 +2838,8 @@ extern "C" int fn_80101B7C(Object_80039F5C *p)
     }
     return result;
 }
+
+extern "C" int fn_80101C40(Object_80039F5C *p);
 
 /* View of the player +336 storage used by fn_801021C0. */
 struct State_801021C0 {
@@ -3091,42 +3103,7 @@ static inline float AddRatingNoise_80102D78(float base, float random, int rating
     return rating <= 255 ? random * (255 - rating) * (1.0f / 255.0f) + base : base;
 }
 
-extern "C" int fn_80103CB0(Object_80039F5C *p)
-{
-    Record_8011F4F8 *pRecord = fn_8011F4F8(fn_801374E0(fn_80137C48(p)));
-
-    switch (pRecord->mUnknown1D) {
-    case 4:
-        fn_800A5A8C(2, p, fn_80039F5C(p->mIdBytes[2], pRecord->mUnknownAByte));
-        if (fn_801BE648(p->mpUnknown792) == 69 || fn_801BE648(p->mpUnknown792) == 178) {
-            p->mFlags |= 4;
-        }
-        break;
-    case 5:
-        fn_800A5A8C(3, p, p);
-        break;
-    case 3:
-    default:
-        fn_80102D78(p);
-        break;
-    }
-    return 1;
-}
-
-extern "C" int fn_80103D6C(Object_80039F5C *p)
-{
-    int result = 0;
-    Object_80039F5C *pOther = fn_80137B40();
-
-    if (pOther != 0) {
-        State_80039F5C *pState = pOther->mpState;
-
-        if (pState->mId == 15 && pState->mUnknown1 != 4) {
-            result = pState->mUnknown2 == p->mIdBytes[1];
-        }
-    }
-    return result;
-}
+extern "C" int fn_80103CB0(Object_80039F5C *p);
 
 extern "C" void fn_80101AE0(Object_80039F5C *p, float *pOut);
 extern "C" unsigned int fn_8011E188(void);
@@ -3137,11 +3114,16 @@ extern float lbl_803EAE98;
 extern float lbl_803EAE9C;
 extern float lbl_803EAEB8;
 
+extern "C" float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short *pCount, float scale);
+
 extern "C" float fn_8016D9F4(Object_80039F5C *p, float a, float b);
 extern "C" float fn_800C49EC(float limit);
 extern "C" float fn_800CAAFC(Object_80039F5C *p);
 extern "C" float fn_801CFB18(int angle);
 extern "C" int fn_801CFDD0(float);
+
+extern "C" void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, int angle,
+                            Vector_80039F5C *pOut, Object_80039F5C *p, float speed, float ballSpeed);
 
 extern "C" int fn_8012CAA4(Object_80039F5C *p);
 extern "C" int fn_8012CAAC(Object_80039F5C *p);
@@ -3171,6 +3153,8 @@ extern "C" int fn_801045BC(Object_80039F5C *p)
 }
 
 extern "C" float fn_800B2618(int);
+
+extern "C" int fn_80104610(Object_80039F5C *p);
 
 extern "C" int fn_80104688(Object_80039F5C *p)
 {
@@ -3212,6 +3196,8 @@ extern "C" int fn_801047C8(void)
     return result;
 }
 
+extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pOther, Object_80137ABC *pBall, Vector_80039F5C *pTarget);
+
 extern "C" void fn_80104C3C(Object_80039F5C *p, Vector_80039F5C *pOut, float scale) {
     Vector_80039F5C v;
 
@@ -3223,15 +3209,24 @@ extern "C" void fn_80104C3C(Object_80039F5C *p, Vector_80039F5C *pOut, float sca
 extern unsigned int lbl_803EAEE0;
 extern unsigned int lbl_803EAEE4;
 
+extern "C" float fn_80104C9C(Object_80039F5C *p, Object_80039F5C *pOther);
+
 extern "C" void fn_80104B24(Vector_80039F5C *p);
 extern "C" void fn_80105168(int mode, Object_80137ABC *pBall, Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pTarget, int unused, float speed);
 extern "C" void fn_801BE67C(void *pA, void *pB, void *pC, void *p);
 extern "C" int fn_801CFFF0(int a, int b, float factor);
 
+extern "C" void fn_80104D98(Object_80039F5C *p);
+
+extern "C" float fn_801050DC(Object_80137ABC *pBall, Vector_80039F5C *pTarget, float speed);
+
 extern "C" int fn_801C4E98(void *p, const char *pName);
 extern "C" void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pA);
+extern "C" void fn_80105168(int mode, Object_80137ABC *pBall, Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pTarget, int unused, float speed);
 
 extern "C" int fn_8011F524(void);
+
+extern "C" Object_80039F5C *fn_80105384(Object_80039F5C *p, int aggressive, Point_8017886C *pOut);
 
 /* Data block of the reach that fn_80105630 updates each frame. */
 struct Reach_80105630 {
@@ -3245,6 +3240,8 @@ extern "C" void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
 
 extern "C" float fn_80104C9C(Object_80039F5C *p, Object_80039F5C *pTarget);
 extern "C" int fn_8013BA70(Object_80137ABC *pBall, int *pOut);
+
+extern "C" int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 
 extern "C" Reach_80105630 *fn_8009CD00(Object_80039F5C *p, void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, Reach_80105630 *),
                                        int a, unsigned int delay, int b);
@@ -3268,76 +3265,15 @@ extern "C" void fn_8010D80C(Object_80039F5C *p, Vector_80039F5C *pOut);
 extern "C" float fn_8010D82C(Object_80039F5C *p);
 extern "C" int fn_8011F32C(void);
 
-extern "C" int fn_801064A4(Object_80039F5C *p, int a) {
-    int result = 0;
-    Object_80039F5C *pTarget = fn_80105384(p, 1, 0);
+extern "C" void fn_801061E8(Object_80039F5C *p, Object_80137ABC *pBall);
 
-    if (pTarget == 0) {
-        if (fn_801486A0() == 0) {
-            fn_8013791C(fn_801374BC(), 3, 1);
-        }
-    } else if (fn_80105E90(p, pTarget, 11)) {
-        Message_800F01CC message;
+extern "C" int fn_80106618(Object_80039F5C *p);
 
-        result = 1;
-        fn_801C1F94(&message, 0, 4);
-        message.mId = 25;
-        fn_800D0BF4(p, a, 25);
-        message.mUnknown1[0] = pTarget->mIdBytes[1];
-        message.mUnknown1[1] = 11;
-        fn_800F00D4(0, p->mpState, &message, p);
-        fn_8010CEB8(pTarget, 11);
-    }
-    return result;
-}
-
-extern "C" int fn_80106580(Object_80039F5C *p, int a) {
-    int result = 0;
-    Object_80039F5C *pTarget = fn_80105384(p, a, 0);
-
-    if (pTarget != 0 && fn_80105E90(p, pTarget, 11) && fn_80106618(p)) {
-        result = 1;
-        fn_80106678(fn_8011F518(), pTarget, 6, 11);
-        fn_8010CEB8(pTarget, 11);
-        fn_800D6914(0, p);
-    }
-    return result;
-}
-
-extern "C" int fn_80106618(Object_80039F5C *p) {
-    int *pValue;
-
-    switch (p->mUnknown776) {
-    case 1:
-        pValue = &p->mUnknown108;
-        break;
-    case 2:
-        pValue = &p->mUnknown200;
-        break;
-    default:
-        pValue = 0;
-        break;
-    }
-    if (pValue != 0) {
-        return *pValue != 0 && *pValue != 4;
-    }
-    return 0;
-}
+extern "C" void fn_80106678(Record_8011F518 *pRecord, Object_80039F5C *p, int a, int b);
 
 extern float lbl_803EAEEC;
 extern float lbl_803EAEF0;
 extern "C" void fn_80227350(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
-
-extern "C" int fn_80106794(Object_80039F5C *p) {
-    if (fn_80137C48(p) == fn_801374BC()) {
-        fn_80137C10(0);
-    }
-    return 1;
-}
-
-extern "C" int fn_801067D8(Object_80039F5C *p) {
-    return fn_8012506C(p, 6) < lbl_803EAEF4;
-}
 
 /* Payload that fn_801BE60C returns for the turn handled by fn_8010680C. */
 struct Turn_8010680C {

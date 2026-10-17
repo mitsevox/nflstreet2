@@ -72,6 +72,8 @@ static inline void AddPoint(Point_8017886C *pOut, Point_8017886C *pOffset)
     pOut->mY += pOffset->mY;
 }
 
+extern "C" Object_80039F5C *fn_800FB844(Object_80039F5C *p);
+
 extern "C" void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut)
 {
     Point_8017886C base;

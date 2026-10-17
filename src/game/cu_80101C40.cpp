@@ -45,8 +45,8 @@ extern "C" int fn_80101C40(Object_80039F5C *p)
 {
     int flag = p->mUnknown776 == 1;
 
-    if ((p->mMotion.mPos.mX >= 210.0f && p->mMotion.mFacing <= 0x800000)
-        || (p->mMotion.mPos.mX < 210.0f && p->mMotion.mFacing > 0x800000)) {
+    if ((p->mMotion.mPos.mX >= 0.0f && p->mMotion.mFacing <= 0x800000)
+        || (p->mMotion.mPos.mX < 0.0f && p->mMotion.mFacing > 0x800000)) {
         return flag ? 1 : 3;
     }
     return flag ? 3 : 1;

@@ -7869,19 +7869,9 @@
           "end": "0x800FD724"
         },
         {
-          "symbol": "fn_800FD724",
-          "start": "0x800FD724",
-          "end": "0x800FD7D0"
-        },
-        {
           "symbol": "fn_800FD7D0",
           "start": "0x800FD7D0",
           "end": "0x800FD828"
-        },
-        {
-          "symbol": "fn_800FD978",
-          "start": "0x800FD978",
-          "end": "0x800FDA58"
         },
         {
           "symbol": "fn_800FDA58",
@@ -7889,19 +7879,9 @@
           "end": "0x800FDAC8"
         },
         {
-          "symbol": "fn_800FDAC8",
-          "start": "0x800FDAC8",
-          "end": "0x800FDFD8"
-        },
-        {
           "symbol": "fn_800FDFD8",
           "start": "0x800FDFD8",
           "end": "0x800FE03C"
-        },
-        {
-          "symbol": "fn_800FE03C",
-          "start": "0x800FE03C",
-          "end": "0x800FE41C"
         },
         {
           "symbol": "fn_800FE41C",
@@ -7974,29 +7954,9 @@
           "end": "0x80101AE0"
         },
         {
-          "symbol": "fn_80101AE0",
-          "start": "0x80101AE0",
-          "end": "0x80101B7C"
-        },
-        {
           "symbol": "fn_80101B7C",
           "start": "0x80101B7C",
           "end": "0x80101C40"
-        },
-        {
-          "symbol": "fn_80101C40",
-          "start": "0x80101C40",
-          "end": "0x80101CB4"
-        },
-        {
-          "symbol": "fn_801021C0",
-          "start": "0x801021C0",
-          "end": "0x80102470"
-        },
-        {
-          "symbol": "fn_80102470",
-          "start": "0x80102470",
-          "end": "0x801024FC"
         },
         {
           "symbol": "fn_801024FC",
@@ -8014,54 +7974,9 @@
           "end": "0x80102A78"
         },
         {
-          "symbol": "fn_80102A78",
-          "start": "0x80102A78",
-          "end": "0x80102D78"
-        },
-        {
-          "symbol": "fn_80102D78",
-          "start": "0x80102D78",
-          "end": "0x801039D8"
-        },
-        {
-          "symbol": "fn_801039D8",
-          "start": "0x801039D8",
-          "end": "0x80103CB0"
-        },
-        {
-          "symbol": "fn_80103CB0",
-          "start": "0x80103CB0",
-          "end": "0x80103D6C"
-        },
-        {
-          "symbol": "fn_80103D6C",
-          "start": "0x80103D6C",
-          "end": "0x80103DD8"
-        },
-        {
-          "symbol": "fn_80103DD8",
-          "start": "0x80103DD8",
-          "end": "0x80103F80"
-        },
-        {
-          "symbol": "fn_80103F80",
-          "start": "0x80103F80",
-          "end": "0x80104328"
-        },
-        {
-          "symbol": "fn_80104328",
-          "start": "0x80104328",
-          "end": "0x801045BC"
-        },
-        {
           "symbol": "fn_801045BC",
           "start": "0x801045BC",
           "end": "0x80104610"
-        },
-        {
-          "symbol": "fn_80104610",
-          "start": "0x80104610",
-          "end": "0x80104688"
         },
         {
           "symbol": "fn_80104688",
@@ -8077,16 +7992,6 @@
           "symbol": "fn_801047C8",
           "start": "0x801047C8",
           "end": "0x80104814"
-        },
-        {
-          "symbol": "fn_80104814",
-          "start": "0x80104814",
-          "end": "0x801048B4"
-        },
-        {
-          "symbol": "fn_801048B4",
-          "start": "0x801048B4",
-          "end": "0x80104944"
         },
         {
           "symbol": "fn_8010BE54",
@@ -8357,11 +8262,6 @@
           "symbol": "fn_800FB844",
           "start": "0x800FB844",
           "end": "0x800FB9D4"
-        },
-        {
-          "symbol": "fn_800FB9D4",
-          "start": "0x800FB9D4",
-          "end": "0x800FBAA8"
         },
         {
           "symbol": "fn_800FBAA8",
@@ -8674,139 +8574,9 @@
           "end": "0x80104C9C"
         },
         {
-          "symbol": "fn_80104C9C",
-          "start": "0x80104C9C",
-          "end": "0x80104D98"
-        },
-        {
-          "symbol": "fn_80104D98",
-          "start": "0x80104D98",
-          "end": "0x801050DC"
-        },
-        {
-          "symbol": "fn_801050DC",
-          "start": "0x801050DC",
-          "end": "0x80105168"
-        },
-        {
-          "symbol": "fn_80105168",
-          "start": "0x80105168",
-          "end": "0x8010531C"
-        },
-        {
-          "symbol": "fn_8010531C",
-          "start": "0x8010531C",
-          "end": "0x80105384"
-        },
-        {
-          "symbol": "fn_80105384",
-          "start": "0x80105384",
-          "end": "0x80105630"
-        },
-        {
-          "symbol": "fn_80105630",
-          "start": "0x80105630",
-          "end": "0x80105898"
-        },
-        {
-          "symbol": "fn_80105898",
-          "start": "0x80105898",
-          "end": "0x80105AF4"
-        },
-        {
-          "symbol": "fn_80105AF4",
-          "start": "0x80105AF4",
-          "end": "0x80105DF0"
-        },
-        {
-          "symbol": "fn_80105DF0",
-          "start": "0x80105DF0",
-          "end": "0x80105E90"
-        },
-        {
-          "symbol": "fn_80105E90",
-          "start": "0x80105E90",
-          "end": "0x80105FF8"
-        },
-        {
-          "symbol": "fn_80105FF8",
-          "start": "0x80105FF8",
-          "end": "0x801061E8"
-        },
-        {
-          "symbol": "fn_801061E8",
-          "start": "0x801061E8",
-          "end": "0x801064A4"
-        },
-        {
-          "symbol": "fn_801064A4",
-          "start": "0x801064A4",
-          "end": "0x80106580"
-        },
-        {
-          "symbol": "fn_80106580",
-          "start": "0x80106580",
-          "end": "0x80106618"
-        },
-        {
-          "symbol": "fn_80106618",
-          "start": "0x80106618",
-          "end": "0x80106678"
-        },
-        {
-          "symbol": "fn_80106678",
-          "start": "0x80106678",
-          "end": "0x801066D0"
-        },
-        {
-          "symbol": "fn_801066D0",
-          "start": "0x801066D0",
-          "end": "0x80106794"
-        },
-        {
-          "symbol": "fn_80106794",
-          "start": "0x80106794",
-          "end": "0x801067D8"
-        },
-        {
-          "symbol": "fn_801067D8",
-          "start": "0x801067D8",
-          "end": "0x8010680C"
-        },
-        {
-          "symbol": "fn_8010680C",
-          "start": "0x8010680C",
-          "end": "0x80106A60"
-        },
-        {
-          "symbol": "fn_80106A60",
-          "start": "0x80106A60",
-          "end": "0x80106C24"
-        },
-        {
-          "symbol": "fn_80106C24",
-          "start": "0x80106C24",
-          "end": "0x801074B4"
-        },
-        {
-          "symbol": "fn_801074B4",
-          "start": "0x801074B4",
-          "end": "0x80107680"
-        },
-        {
-          "symbol": "fn_80107680",
-          "start": "0x80107680",
-          "end": "0x801076F0"
-        },
-        {
           "symbol": "fn_801076F0",
           "start": "0x801076F0",
           "end": "0x801077D8"
-        },
-        {
-          "symbol": "fn_801077D8",
-          "start": "0x801077D8",
-          "end": "0x801079BC"
         },
         {
           "symbol": "fn_80108074",
@@ -9527,6 +9297,530 @@
           "symbol": "fn_80125DF0",
           "start": "0x80125DF0",
           "end": "0x80125E20"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800FB9D4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x800FB9D4-0x800FBAA8 with their own literal-pool slice 0x8029E40C-0x8029E410. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FB9D4",
+          "end": "0x800FBAA8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E40C",
+          "end": "0x8029E410"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800FB9D4",
+          "start": "0x800FB9D4",
+          "end": "0x800FBAA8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800FD724.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x800FD724-0x800FD7D0 with their own literal-pool slice 0x8029E4B8-0x8029E4BC. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FD724",
+          "end": "0x800FD7D0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E4B8",
+          "end": "0x8029E4BC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800FD724",
+          "start": "0x800FD724",
+          "end": "0x800FD7D0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800FD978.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x800FD978-0x800FDA58 with their own literal-pool slice 0x8029E4C8-0x8029E4D4. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FD978",
+          "end": "0x800FDA58"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E4C8",
+          "end": "0x8029E4D4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800FD978",
+          "start": "0x800FD978",
+          "end": "0x800FDA58"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800FDAC8.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x800FDAC8-0x800FDFD8 with their own literal-pool slice 0x8029E4D4-0x8029E4E8. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FDAC8",
+          "end": "0x800FDFD8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E4D4",
+          "end": "0x8029E4E8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800FDAC8",
+          "start": "0x800FDAC8",
+          "end": "0x800FDFD8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800FE03C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x800FE03C-0x800FE41C with their own literal-pool slice 0x8029E4E8-0x8029E4FC. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800FE03C",
+          "end": "0x800FE41C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E4E8",
+          "end": "0x8029E4FC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800FE03C",
+          "start": "0x800FE03C",
+          "end": "0x800FE41C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80101AE0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x80101AE0-0x80101B7C with their own literal-pool slice 0x8029E740-0x8029E748. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80101AE0",
+          "end": "0x80101B7C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E740",
+          "end": "0x8029E748"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80101AE0",
+          "start": "0x80101AE0",
+          "end": "0x80101B7C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80101C40.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x80101C40-0x80101CB4 with their own literal-pool slice 0x8029E748-0x8029E74C. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80101C40",
+          "end": "0x80101CB4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E748",
+          "end": "0x8029E74C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80101C40",
+          "start": "0x80101C40",
+          "end": "0x80101CB4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801021C0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 2 complete contiguous target bodies 0x801021C0-0x801024FC with their own literal-pool slice 0x8029E760-0x8029E770. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801021C0",
+          "end": "0x801024FC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E760",
+          "end": "0x8029E770"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801021C0",
+          "start": "0x801021C0",
+          "end": "0x80102470"
+        },
+        {
+          "symbol": "fn_80102470",
+          "start": "0x80102470",
+          "end": "0x801024FC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80102A78.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 8 complete contiguous target bodies 0x80102A78-0x801045BC with their own literal-pool slice 0x8029E770-0x8029E858. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80102A78",
+          "end": "0x801045BC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E770",
+          "end": "0x8029E858"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80102A78",
+          "start": "0x80102A78",
+          "end": "0x80102D78"
+        },
+        {
+          "symbol": "fn_80102D78",
+          "start": "0x80102D78",
+          "end": "0x801039D8"
+        },
+        {
+          "symbol": "fn_801039D8",
+          "start": "0x801039D8",
+          "end": "0x80103CB0"
+        },
+        {
+          "symbol": "fn_80103CB0",
+          "start": "0x80103CB0",
+          "end": "0x80103D6C"
+        },
+        {
+          "symbol": "fn_80103D6C",
+          "start": "0x80103D6C",
+          "end": "0x80103DD8"
+        },
+        {
+          "symbol": "fn_80103DD8",
+          "start": "0x80103DD8",
+          "end": "0x80103F80"
+        },
+        {
+          "symbol": "fn_80103F80",
+          "start": "0x80103F80",
+          "end": "0x80104328"
+        },
+        {
+          "symbol": "fn_80104328",
+          "start": "0x80104328",
+          "end": "0x801045BC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80104610.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x80104610-0x80104688 with their own literal-pool slice 0x8029E858-0x8029E870. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80104610",
+          "end": "0x80104688"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E858",
+          "end": "0x8029E870"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80104610",
+          "start": "0x80104610",
+          "end": "0x80104688"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80104814.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 2 complete contiguous target bodies 0x80104814-0x80104944 with their own literal-pool slice 0x8029E870-0x8029E880. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80104814",
+          "end": "0x80104944"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E870",
+          "end": "0x8029E880"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80104814",
+          "start": "0x80104814",
+          "end": "0x801048B4"
+        },
+        {
+          "symbol": "fn_801048B4",
+          "start": "0x801048B4",
+          "end": "0x80104944"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80104C9C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 23 complete contiguous target bodies 0x80104C9C-0x801074B4 with their own literal-pool slice 0x8029E8D0-0x8029E9E0. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80104C9C",
+          "end": "0x801074B4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E8D0",
+          "end": "0x8029E9E0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80104C9C",
+          "start": "0x80104C9C",
+          "end": "0x80104D98"
+        },
+        {
+          "symbol": "fn_80104D98",
+          "start": "0x80104D98",
+          "end": "0x801050DC"
+        },
+        {
+          "symbol": "fn_801050DC",
+          "start": "0x801050DC",
+          "end": "0x80105168"
+        },
+        {
+          "symbol": "fn_80105168",
+          "start": "0x80105168",
+          "end": "0x8010531C"
+        },
+        {
+          "symbol": "fn_8010531C",
+          "start": "0x8010531C",
+          "end": "0x80105384"
+        },
+        {
+          "symbol": "fn_80105384",
+          "start": "0x80105384",
+          "end": "0x80105630"
+        },
+        {
+          "symbol": "fn_80105630",
+          "start": "0x80105630",
+          "end": "0x80105898"
+        },
+        {
+          "symbol": "fn_80105898",
+          "start": "0x80105898",
+          "end": "0x80105AF4"
+        },
+        {
+          "symbol": "fn_80105AF4",
+          "start": "0x80105AF4",
+          "end": "0x80105DF0"
+        },
+        {
+          "symbol": "fn_80105DF0",
+          "start": "0x80105DF0",
+          "end": "0x80105E90"
+        },
+        {
+          "symbol": "fn_80105E90",
+          "start": "0x80105E90",
+          "end": "0x80105FF8"
+        },
+        {
+          "symbol": "fn_80105FF8",
+          "start": "0x80105FF8",
+          "end": "0x801061E8"
+        },
+        {
+          "symbol": "fn_801061E8",
+          "start": "0x801061E8",
+          "end": "0x801064A4"
+        },
+        {
+          "symbol": "fn_801064A4",
+          "start": "0x801064A4",
+          "end": "0x80106580"
+        },
+        {
+          "symbol": "fn_80106580",
+          "start": "0x80106580",
+          "end": "0x80106618"
+        },
+        {
+          "symbol": "fn_80106618",
+          "start": "0x80106618",
+          "end": "0x80106678"
+        },
+        {
+          "symbol": "fn_80106678",
+          "start": "0x80106678",
+          "end": "0x801066D0"
+        },
+        {
+          "symbol": "fn_801066D0",
+          "start": "0x801066D0",
+          "end": "0x80106794"
+        },
+        {
+          "symbol": "fn_80106794",
+          "start": "0x80106794",
+          "end": "0x801067D8"
+        },
+        {
+          "symbol": "fn_801067D8",
+          "start": "0x801067D8",
+          "end": "0x8010680C"
+        },
+        {
+          "symbol": "fn_8010680C",
+          "start": "0x8010680C",
+          "end": "0x80106A60"
+        },
+        {
+          "symbol": "fn_80106A60",
+          "start": "0x80106A60",
+          "end": "0x80106C24"
+        },
+        {
+          "symbol": "fn_80106C24",
+          "start": "0x80106C24",
+          "end": "0x801074B4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801074B4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 2 complete contiguous target bodies 0x801074B4-0x801076F0 with their own literal-pool slice 0x8029E9E0-0x8029EA00. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801074B4",
+          "end": "0x801076F0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E9E0",
+          "end": "0x8029EA00"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801074B4",
+          "start": "0x801074B4",
+          "end": "0x80107680"
+        },
+        {
+          "symbol": "fn_80107680",
+          "start": "0x80107680",
+          "end": "0x801076F0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801077D8.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x801077D8-0x801079BC with their own literal-pool slice 0x8029EA00-0x8029EA24. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801077D8",
+          "end": "0x801079BC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029EA00",
+          "end": "0x8029EA24"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801077D8",
+          "start": "0x801077D8",
+          "end": "0x801079BC"
         }
       ]
     },

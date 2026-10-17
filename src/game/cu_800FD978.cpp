@@ -52,6 +52,9 @@ void fn_800449B4(Object_80039F5C *p);
 void fn_80051B88(Object_800B26B0 *pMotion, float value);
 }
 
+extern "C" int fn_800FD7D0(Object_80039F5C *p);
+extern "C" void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut);
+
 extern "C" void fn_800FD978(Object_80039F5C *p)
 {
     State_800FDA58 *pState = (State_800FDA58 *)&p->mUnknown336;
@@ -67,12 +70,12 @@ extern "C" void fn_800FD978(Object_80039F5C *p)
     if (fn_800AD9B4() == 2 && state == 0 && p->mMotion.mPos.mY < point.mY - 2.0f) {
         value = lbl_803EAE64;
     } else {
-        value = 1.25f;
+        value = 0.0f;
     }
     fn_800FF598(pState, p, &point, angle, value);
     if (fn_800C0658() == 0) {
         fn_800FF6D8(p);
     }
     fn_800449B4(p);
-    fn_80051B88(&p->mMotion, 0.0f);
+    fn_80051B88(&p->mMotion, 1.25f);
 }
