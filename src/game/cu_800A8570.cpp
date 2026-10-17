@@ -5,6 +5,8 @@
 #include "game/cu_8002B8F8.h"
 #include "game/cu_80067C10.h"
 #include "game/cu_80136B1C.h"
+#include "game/Object_8003DEC4.h"
+#include "game/fn_800D4164.h"
 
 extern "C" {
 void *fn_800A3360(void);
@@ -54,9 +56,7 @@ int fn_800A8EA4(int team);
 int fn_800A9680(void);
 void fn_800A636C(int team, Object_80039F5C **ppOut);
 void fn_800A7A0C(int team);
-void fn_801477F0(Block_80170E64 *p);
 void fn_80071C34(int a);
-void fn_800D4164(int team, int a, float value);
 
 extern Entry_80297E84 lbl_80297E84[];
 }
@@ -72,7 +72,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
         if (p != 0 && lbl_80297E84[event].mUnknown9 != 0) {
             fn_800A636C(team, pair);
             if (fn_800A9680() == 0 && (p == pair[0] || p == pair[1])) {
-                fn_801477F0(p->mpUnknown4);
+                fn_801477F0((Object_8003DEC4 *)p->mpUnknown4);
                 fn_80067D4C(14, &p->mMotion.mPos);
             }
         }
@@ -88,8 +88,8 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
             amount = lbl_803EC954[team]->mUnknown54;
         }
         lbl_803EC954[team]->mUnknown54 -= amount;
-        fn_800D4164(team, 0,
-                    0.5f * ((float)lbl_803EC954[team]->mUnknown54 / (float)lbl_803EC954[team]->mUnknown10));
+        fn_800D4164(team, 0.5f * ((float)lbl_803EC954[team]->mUnknown54 / (float)lbl_803EC954[team]->mUnknown10),
+                    0);
         if (lbl_803EC954[team]->mUnknown54 == 0) {
             if (event == 9 || event == 14 || event == 16) {
                 fn_80071C34(1);
@@ -101,7 +101,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
         if (lbl_80297E84[event].mUnknown9 != 0) {
             fn_800A636C(other, pair);
             if (fn_800A9680() == 0 && (p == pair[0] || p == pair[1])) {
-                fn_801477F0(p->mpUnknown4);
+                fn_801477F0((Object_8003DEC4 *)p->mpUnknown4);
                 fn_80067D4C(14, &p->mMotion.mPos);
             }
         }
@@ -117,8 +117,8 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
             amount = lbl_803EC954[other]->mUnknown54;
         }
         lbl_803EC954[other]->mUnknown54 -= amount;
-        fn_800D4164(other, 0,
-                    0.5f * ((float)lbl_803EC954[other]->mUnknown54 / (float)lbl_803EC954[other]->mUnknown10));
+        fn_800D4164(other, 0.5f * ((float)lbl_803EC954[other]->mUnknown54 / (float)lbl_803EC954[other]->mUnknown10),
+                    0);
         if (lbl_803EC954[other]->mUnknown54 == 0) {
             if (event == 9 || event == 14 || event == 16) {
                 fn_80071C34(1);

@@ -1047,11 +1047,7 @@ int fn_800E3A34(Object_80039F5C *p, Point_8017886C *pPoint);
 
 #include "game/Command_800CEE74.h"
 struct Entry_800DE51C { unsigned short mUnknown0; unsigned char mUnknown2; char mUnknown3[17]; };
-struct Frame_800DF7CC {
-    char mUnknown0[14]; unsigned short mUnknown14;
-    char mUnknown16[3]; unsigned char mUnknown19;
-    unsigned int mUnknown20; char mUnknown24[18]; unsigned short mUnknown42;
-};
+#include "game/Frame_800DF7CC.h"
 struct Attachment_800DF7CC { Vector_80039F5C mPos; Angles_801EBC18 mAngles; int mFrame; };
 struct Character_800DF7CC {
     int mUnknown0, mUnknown4; unsigned int mFlags;
@@ -1059,7 +1055,6 @@ struct Character_800DF7CC {
     char mUnknown24[92]; Object_80137ABC *mpBall[1];
 };
 extern "C" {
-Frame_800DF7CC *fn_801C029C(Actor_801C009C *, unsigned char);
 float fn_801BFFA0(Object_80039F5C *);
 int fn_801C065C(Frame_800DF7CC *, float);
 Attachment_800DF7CC *fn_80093C08(unsigned short);

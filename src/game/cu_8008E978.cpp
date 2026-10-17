@@ -12,6 +12,9 @@
 #include "game/Block_800AD634.h"
 #include "game/Block_800A70F4.h"
 #include "game/Block_8030F42C.h"
+#include "game/Params_80092E54.h"
+#include "game/Frame_800DF7CC.h"
+#include "game/fn_8005FC84.h"
 #include <string.h>
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
@@ -82,9 +85,7 @@
 #include "game/fn_80094488.h"
 #include "game/cu_80164568.h"
 #include "game/Entry_802F394C.h"
-#include "game/fn_8017F584.h"
 #include "game/Object_8007A334.h"
-#include "game/Object_800785C0.h"
 
 /* Data whose word +4 fn_80094374 returns and whose words from +8
    fn_80093BAC indexes; the bound of that array is not established. */
@@ -3544,23 +3545,10 @@ extern "C" void fn_800A7A0C(int team)
     fn_800A861C();
 }
 
-struct Record_8007C84C;
 
 extern "C" {
-int fn_8007C7E8(Object_8007A334 *pCursor, int key, int *pResult);
-void fn_8007C84C(Object_8007A334 *pCursor, Record_8007C84C *pOut);
-void fn_800A6658(int team);
 void fn_800A6CB0(int id);
-void fn_800A6DA4(void);
-int fn_800A6590(int value);
-int fn_800A8408(int team);
-void fn_800AE7F0(int index, int team, Object_80039F5C *p);
-void fn_8017DE54(int a, float t, int b, int direct);
-int fn_80025708(void);
-float fn_800D3F2C(int team);
-int fn_80177F70(void);
 
-extern int lbl_803EC95C;
 extern int lbl_802D7EFC[][3];
 }
 
@@ -3672,10 +3660,6 @@ extern "C" short fn_800A8224(int team, int unused, int index, short value)
 }
 
 extern "C" {
-int fn_80178BA4(int team);
-int fn_80178BE4(int team);
-float fn_800D3F2C(int team);
-int fn_80177F70(void);
 int fn_800A8444(int team);
 }
 
@@ -3834,12 +3818,6 @@ extern "C" int fn_800A851C(int team, Object_80039F5C *p)
     return result;
 }
 
-extern "C" {
-void fn_80147D4C(int index, unsigned char value);
-void fn_80147D60(int index, int value);
-void fn_80147D74(int index, unsigned int color, float value, unsigned int count);
-}
-
 extern "C" void fn_800A861C(void)
 {
     fn_800A2E80(fn_800A3444(), 60);
@@ -3885,8 +3863,6 @@ extern "C" {
 void fn_80147840(Object_8003DEC4 *pObject);
 void fn_800A8570(void);
 int fn_800737B8(void);
-void fn_8005BF18(void);
-int fn_8005BFD4(void);
 }
 
 extern "C" void fn_800A87E8(void)
@@ -3928,13 +3904,7 @@ extern "C" void fn_800A87E8(void)
 }
 
 extern "C" {
-int fn_80178348(void);
 int fn_800A8EA4(int team);
-int fn_800A9680(void);
-void fn_801477F0(Block_80170E64 *p);
-void fn_80071C34(int a);
-void fn_800D4164(int team, int a, float value);
-
 }
 
 extern "C" int fn_800A8EA4(int team)
@@ -3988,23 +3958,9 @@ extern "C" void fn_800A8F9C(void)
 {
 }
 
-/* 236-byte request built on the stack by fn_800A8FA0 for fn_80092E54. */
-struct Request_800A8FA0 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    unsigned char mUnknownC[212];
-    unsigned char mUnknownE0;
-    unsigned char mUnknownE1[3];
-    int mUnknownE4;
-    int mUnknownE8;
-};
-
-extern "C" int fn_80092E54(Request_800A8FA0 *pRequest, char *pBuffer, int size);
-
 extern "C" int fn_800A8FA0(int a, int b, char *pBuffer, int size)
 {
-    Request_800A8FA0 request;
+    Params_80092E54 request;
 
     fn_801C1F94(&request, 0, sizeof(request));
     request.mUnknown0 = b;
@@ -4067,7 +4023,6 @@ extern "C" void fn_800A9018(unsigned int step)
 }
 
 extern "C" {
-void fn_800A9018(unsigned int step);
 int fn_800A9648(void);
 void fn_80092F98(int handle);
 void fn_80094598(int index);
@@ -4091,7 +4046,6 @@ extern "C" int fn_800A9178(void)
 }
 
 extern "C" {
-Object_8003DEC4 *fn_8003DF3C(int side, unsigned char index);
 Object_80039F5C *fn_8003E0C8(Block_80170E64 *object);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
 }
@@ -4172,21 +4126,6 @@ extern "C" void fn_800A9384(int mode)
     }
 }
 
-extern "C" {
-int fn_80178508(Point_8017886C *pPos, float *pOut, int skipFlags);
-void fn_800398B4(void);
-void fn_80039CB0(float dt);
-void fn_80039D08(float dt);
-void fn_80039B2C(float dt);
-void fn_80039A38(float dt);
-void fn_8013FB44(void);
-void fn_8017DBCC(void);
-void fn_800A981C(void);
-void fn_800A9854(void);
-
-extern float lbl_803EA2C4;
-}
-
 extern "C" int fn_800A9648(void)
 {
     return fn_800927BC((unsigned char)lbl_8030F42C.mUnknown14[lbl_8030F42C.mUnknownC]);
@@ -4196,7 +4135,6 @@ extern "C" {
 void fn_8017DC08(void);
 void fn_800B63B0(void);
 void fn_800A9238(void);
-int fn_800A9178(void);
 }
 
 extern "C" int fn_800A9680(void)
@@ -5733,7 +5671,7 @@ extern "C" void fn_800AA1B0(int a, int b)
 {
     char *pBuffer;
     int size;
-    Request_800A8FA0 request;
+    Params_80092E54 request;
 
     if (a == 9999) {
         return;
@@ -5787,7 +5725,6 @@ extern "C" void fn_800AA2F8(void)
 
 extern "C" {
 void fn_800AA020(void);
-unsigned int *fn_801C029C(Actor_801C009C *pActor, unsigned short index);
 Object_80039F5C *fn_800606CC(int type, int position);
 int fn_8014F448(Class_80148A58 *p);
 int fn_8015264C(void *p);
@@ -5806,7 +5743,7 @@ extern "C" void fn_800AA348(Entry_800AA80C *pEntries, int index)
 
         fn_800AA020();
         for (i = 0; i < pActor->mUnknown4; i++) {
-            int slot = fn_80096440(*fn_801C029C(pActor, i));
+            int slot = fn_80096440(fn_801C029C(pActor, i)->mUnknown0);
             Object_80039F5C *p = fn_800606CC(pEntries[index].mUnknown0, slot);
 
             if (p != 0) {
@@ -5868,9 +5805,9 @@ extern "C" void fn_800AA510(Entry_800AA80C *pEntries, int index)
         pActor = fn_80093BAC(pEntries[index].mUnknown0, 2);
         key = fn_80093E4C(2, (unsigned short)pEntries[index].mUnknown0);
     }
-    pObject = (Object_80039F5C *)fn_80096060(fn_80096440(*fn_801C029C(pActor, 0)));
+    pObject = (Object_80039F5C *)fn_80096060(fn_80096440(fn_801C029C(pActor, 0)->mUnknown0));
     if (pActor->mUnknown4 > 1) {
-        pOther = (Object_80039F5C *)fn_80096060(fn_80096440(*fn_801C029C(pActor, 1)));
+        pOther = (Object_80039F5C *)fn_80096060(fn_80096440(fn_801C029C(pActor, 1)->mUnknown0));
     }
     if (!(lbl_803EAA88->mUnknown16 & 0x80)) {
         fn_80094048(key, &pObject, &pOther);
@@ -5962,10 +5899,11 @@ extern "C" void fn_800AA8B8(void)
     }
 }
 
-extern "C" void fn_800AA93C(int a, unsigned int value)
+/* Event callback registered through fn_800AFDD4; the float is not read. */
+extern "C" void fn_800AA93C(int a, int value, float unused)
 {
     if (lbl_803EAA88->mUnknown15 == 0) {
-        switch (value) {
+        switch ((unsigned int)value) {
         case 0:
         case 6:
         case 7:
@@ -6056,8 +5994,6 @@ extern "C" void fn_800AAAFC(void)
 extern "C" {
 void fn_800731D0(int a);
 int fn_8006C854(int index, Vector_80039F5C *pPos);
-void fn_8003E174(int a);
-void fn_800AA720(Class_80297B90 *p);
 void fn_800C1E50(void);
 
 extern Class_80297B90 lbl_803EC904;
@@ -6130,13 +6066,13 @@ extern "C" void fn_800AAD58(Class_80297B90 *p)
     fn_800C1E50();
     lbl_803EAA99 = 0;
     lbl_803EAA88->mUnknown10 = 0;
-    fn_800AFDD4((void (*)(int, int, float))fn_800AA93C);
+    fn_800AFDD4(fn_800AA93C);
     fn_80067D4C(131, 0);
     fn_8002C9A8(lbl_803EA368, 3, 0);
     lbl_803EAA88->mUnknown4 = 19;
     lbl_803EAA88->mUnknown15 = fn_8002892C();
     lbl_803EAA88->mUnknown16 = lbl_803EAA88->mUnknownC = lbl_803EAA88->mUnknown8 = -1;
-    lbl_803EAA88->mUnknown17[0] = 0;
+    lbl_803EAA88->mUnknown17 = 0;
     fn_800AA720(p);
     fn_8003E174(0);
     fn_800AAAFC();
@@ -6335,7 +6271,6 @@ void fn_800282DC(void);
 VetsRow_8018EC68 *fn_8005FC7C(void);
 void fn_80177E6C(int a, int flip);
 int fn_80157080(void);
-void fn_8005FC84(void);
 int fn_80061D14(void);
 void fn_801CE720(void);
 void fn_801CE774(void);
@@ -6457,11 +6392,11 @@ extern "C" void fn_800AB3B0(Class_80297B90 *p, float dt)
                         break;
                     case 1:
                         lbl_803EAA88->mUnknown4 = 14;
-                        lbl_803EAA88->mUnknown17[0] = 1;
+                        lbl_803EAA88->mUnknown17 = 1;
                         break;
                     case 2:
                         lbl_803EAA88->mUnknown4 = 15;
-                        lbl_803EAA88->mUnknown17[0] = 1;
+                        lbl_803EAA88->mUnknown17 = 1;
                         break;
                     }
                 } else {
@@ -6503,7 +6438,7 @@ extern "C" void fn_800AB3B0(Class_80297B90 *p, float dt)
             fn_80061D14();
             fn_80047874(0);
             fn_8004730C(0);
-            if (fn_801486A0() != 15 && lbl_803EAA88->mUnknown17[0] == 0) {
+            if (fn_801486A0() != 15 && lbl_803EAA88->mUnknown17 == 0) {
                 fn_8004A230(0);
             }
             fn_800282DC();
@@ -6546,7 +6481,7 @@ extern "C" void fn_800AB948(Class_80297B90 *p)
     lbl_803EAA99 = 0;
     fn_80094DF0();
     fn_800AB944(lbl_803EAA8C);
-    fn_800AFE20((void (*)(int, int, float))fn_800AA93C);
+    fn_800AFE20(fn_800AA93C);
     fn_8013825C(fn_801374BC())->mUnknown20 |= 1;
     fn_8013825C(fn_801374BC())->mUnknown20 &= ~2;
     fn_8003E174(1);
@@ -6571,10 +6506,6 @@ extern "C" void fn_800ABA0C(void)
         }
     }
     fn_8004A230(0);
-}
-
-extern "C" {
-int fn_801F0F18(int a);
 }
 
 extern "C" void fn_800ABA90(void)
@@ -6900,7 +6831,6 @@ extern "C" void fn_800AD3A8(float dt)
 }
 
 extern "C" {
-int fn_800ABC64(Class_80297B90 *p);
 void fn_800AD4B8(float dt);
 void fn_800AD50C(float dt);
 void fn_800AD550(float dt);
@@ -6982,7 +6912,6 @@ extern "C" void fn_800AD600(float dt)
 
 extern "C" {
 void fn_800AD31C(float dt);
-void fn_800AD418(float dt);
 void fn_800CB504(void);
 }
 

@@ -62,7 +62,7 @@ struct Block_800AACD4 {
     unsigned char mUnknown14;
     unsigned char mUnknown15;
     signed char mUnknown16;
-    unsigned char mUnknown17[1];
+    unsigned char mUnknown17;
 };
 
 extern "C" {

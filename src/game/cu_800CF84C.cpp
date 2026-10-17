@@ -9,6 +9,7 @@
 
 #include "game/Class_803EC99C.h"
 #include "game/cu_8017F264.h"
+#include "game/Params_80092E54.h"
 
 /* One step of the sequence that mpEntries points to; a step whose first word
    is 0x42 ends it. */
@@ -36,16 +37,6 @@ struct State_803EAC98 {
     unsigned char mUnknown36;
 };
 
-struct Params_80092E54 {
-    int mUnknown0;
-    char mUnknown4[4];
-    int mUnknown8;
-    char mUnknown12[212];
-    unsigned char mUnknown224;
-    int mUnknown228;
-    int mUnknown232;
-};
-
 struct Pair_802DA864 {
     int mUnknown0;
     int mUnknown4;
@@ -60,7 +51,6 @@ void fn_800655B8(void);
 int fn_8006560C(void);
 int fn_80092784(unsigned char index);
 int fn_80092830(int handle);
-int fn_80092E54(Params_80092E54 *pParams, void *pBuffer, int size);
 void fn_80092F98(int handle);
 void fn_80093348(int handle);
 void fn_80093410(int handle);
@@ -175,9 +165,9 @@ void fn_800CFA00(int a, void *pBuffer, int size)
     params.mUnknown0 = a;
     params.mUnknown8 = 36;
     index = fn_802372EC(0, 3);
-    params.mUnknown224 = 1;
-    params.mUnknown228 = lbl_802DA864[index].mUnknown0;
-    params.mUnknown232 = lbl_802DA864[index].mUnknown4;
+    params.mUnknownE0 = 1;
+    params.mUnknownE4 = lbl_802DA864[index].mUnknown0;
+    params.mUnknownE8 = lbl_802DA864[index].mUnknown4;
     lbl_803EAC98->mUnknown24 = fn_80092E54(&params, pBuffer, size);
 }
 

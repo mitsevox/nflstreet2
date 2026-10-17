@@ -1,4 +1,5 @@
 #include "game/Class_80148A58.h"
+#include "game/fn_800D4164.h"
 #include "game/Object_8008044C.h"
 #include "game/Object_8007A334.h"
 #include "game/Object_80039F5C.h"
@@ -1650,7 +1651,6 @@ extern const Category_8005AB04 lbl_8028EB78[11];
 extern int lbl_802D4D0C[4];
 extern const char *lbl_802D4D1C[9];
 extern const float lbl_803ED6A4,lbl_803ED6A8;
-void fn_800D4164(int side,float time,int a);
 void fn_800A7B5C(void);
 void fn_800B823C(int side);
 int fn_80187C8C(void);

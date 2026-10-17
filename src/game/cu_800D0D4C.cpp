@@ -1,6 +1,7 @@
 #include <string.h>
 #include <math.h>
 #include "game/cu_8017DD68.h"
+#include "game/fn_800D4164.h"
 #include "game/Object_8007A334.h"
 #include "game/Entry_80219044.h"
 #include "game/Object_80039F5C.h"
