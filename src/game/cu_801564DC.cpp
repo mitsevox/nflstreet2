@@ -1,5 +1,4 @@
 #include "game/fn_8021D7B8.h"
-#include "game/fn_800D4164.h"
 #include "game/fn_801FCE10.h"
 #include "game/Object_80039F5C.h"
 #include "game/cu_8003AEA8.h"
@@ -337,6 +336,7 @@ void fn_800BFAB4(Class_80297CE8 *pObject);
 void fn_800C1CA0(void);
 void fn_800C1E50(void);
 void fn_800C87CC(int a, int b);
+void fn_800D4164(int a, float b, int c);
 void fn_800D6F08(void);
 void fn_800D7158(void);
 void fn_800D7520(int a);
