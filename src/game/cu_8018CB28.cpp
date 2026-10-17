@@ -17,7 +17,7 @@ void fn_8018CA14(int);
 int fn_801F9980(int, int *);
 int fn_801F967C(int, int);
 void fn_801F9718(int, int, ColumnValue_802D6424 *, int *, int);
-void fn_801F9908(int, char *, Object_80023BBC *, int *, int);
+int fn_801F9908(int handle, Table_8007E020 *pTables, Object_80023BBC *pFilter, QueryResult *pResult, int flags);
 int fn_801F9D70(int, int, Object_80023BBC *, unsigned short *);
 int fn_8022C628(int, int, int *, unsigned short *);
 int fn_80229AA4(int, int, int *, unsigned short *);
@@ -65,19 +65,17 @@ void fn_8018CA80(int source)
 
     tables[0].Set(0x59505243);
     tables[1].Set(-1);
-    fn_801F9908(source, (char *)tables, 0, (int *)&result, 0);
+    fn_801F9908(source, tables, 0, &result, 0);
     tables[0].Set(0x4D545243);
     tables[1].Set(-1);
-    fn_801F9908(source, (char *)tables, 0, (int *)&result, 0);
+    fn_801F9908(source, tables, 0, &result, 0);
 }
 void fn_8018CB28(int source, int team, int index)
 {
     QueryResult result;
     int table = -1;
-    QueryCursor cursor;
+    QueryCursor cursor = {0, 0, -1, 0};
     int player;
-    fn_801C1F94(&cursor, 0, sizeof(cursor));
-    cursor.mUnknown8 = -1;
     int destination = fn_8022F3D4(fn_8022F358(index));
     fn_8018CA80(destination);
     fn_801F9980(destination, &table);
@@ -110,10 +108,8 @@ int fn_8018CD1C(int source, int teamTable, int playerTable, int destination,
     unsigned short count;
     int team;
     int table = -1;
-    QueryCursor cursor;
+    QueryCursor cursor = {0, 0, -1, 0};
     int player;
-    fn_801C1F94(&cursor, 0, sizeof(cursor));
-    cursor.mUnknown8 = -1;
     fn_8022C628(destination, 0x4D414554, &team, &teamCount);
     fn_801F9980(destination, &table);
     fn_801FCE10(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGT' = \x82)\n", source, destination, table, teamTable, 0);
@@ -123,7 +119,11 @@ int fn_8018CD1C(int source, int teamTable, int playerTable, int destination,
     fn_801FCE10(&result, "use \x8c update 'MAET' set 'RUMT' = \x85 and 'OLFT' = 0 and 'SIVT' = 1 and 'DIGD' = \x82 where ('DIGT' = \x85)\n", destination, rumt, 8, team);
     cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;
+    int code = 0;
     int status = fn_801FCE10(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c order by 'DIGP'\n", source, &cursor, &player, playerTable);
+    if (status != 0 && status != 23) {
+        code = status;
+    }
     if (status != 23) {
         count = result.mUnknown0;
         fn_80229AA4(destination, 0x59414C50, ids, &count);
@@ -155,15 +155,17 @@ int fn_8018D018(int destination, int rumt, int index, int *pOriginalIds, int pre
 void fn_8018D07C(int index)
 {
     QueryResult result;
-    QueryCursor cursor;
     int player, ytrp, oldPxsp;
     int source = fn_8022F3D4(fn_8022F358(index));
-    fn_801C1F94(&cursor, 0, sizeof(cursor));
-    cursor.mUnknown8 = -1;
+    QueryCursor cursor = {0, 0, -1, 0};
     int hadState = fn_80029D74(2, index);
     cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;
+    int code = 0;
     int status = fn_801FCE10(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from 'YPRC' order by 'DIGP'\n", source, &cursor, &player);
+    if (status != 0 && status != 23) {
+        code = status;
+    }
     if (status != 23) {
         unsigned int count = result.mUnknown0;
         for (unsigned int i = 0; i < count; i++) {
@@ -188,10 +190,12 @@ int fn_8018D23C()
     int team;
     fn_8022C628(0x54415453, 0x4D414554, &team, &count);
     for (unsigned int i = 0; i < 13; i++) {
-        list[i].Set(0x4D414554, lbl_802EAE74[i], lbl_802EAEB4[i]);
+        list[i].Set(0x4D414554, lbl_802EAE74[i]);
+        list[i].mValue = lbl_802EAEB4[i];
     }
     for (unsigned int i = 0; i < 3; i++) {
-        list[i + 13].Set(0x4D414554, lbl_802EAE74[i + 13], lbl_802EAEE8[i]);
+        list[i + 13].mValue = lbl_802EAEE8[i];
+        list[i + 13].Set(0x4D414554, lbl_802EAE74[i + 13]);
     }
     list[0].mValue = team;
     list[16].SetEnd();
@@ -203,14 +207,12 @@ void fn_8018D358(int index, int team, int rumt)
 {
     Object_80023BBC arg;
     QueryResult result;
-    QueryCursor cursor;
+    QueryCursor cursor = {0, 0, -1, 0};
     int ids[16];
     unsigned short total, count;
-    fn_801C1F94(&cursor, 0, sizeof(cursor));
-    cursor.mUnknown8 = -1;
     int saved = fn_8022F4BC();
     fn_8022F478(fn_8022F358(index));
-    int source = fn_8022F3D4(fn_8022F358(index));
+    fn_8022F3D4(fn_8022F358(index));
     arg.Set(6, 0x5244524344494754LL, 2, rumt);
     fn_801F9D70(0x54415453, 0x52445243, &arg, &total);
     count = total;
@@ -218,7 +220,7 @@ void fn_8018D358(int index, int team, int rumt)
     int player, table;
     cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;
-    fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 from 'RDRC' where 'DIGT' = \x82 order by 'DIGP'\n", source, &cursor, &player, rumt);
+    fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 from 'RDRC' where 'DIGT' = \x82 order by 'DIGP'\n", &cursor, &player, rumt);
     for (unsigned int i = 0; i < count; i++) {
         fn_801FCE10(0, "fetch from \x8a\n", &cursor);
         fn_801F9980(0x54415453, &table);
@@ -239,8 +241,8 @@ void fn_8018D358(int index, int team, int rumt)
         int value73 = fn_80082280(&object);
         int value74 = fn_800822D4(&object);
         int value76 = fn_80080E48(&object);
-        int color18 = fn_800810E0(&object);
-        int color19 = fn_80081134(&object);
+        unsigned int color18 = fn_800810E0(&object);
+        unsigned int color19 = fn_80081134(&object);
         fn_80082138(&object, &block);
         fn_80046804(&block, &values);
         fn_8015F638(value6E, value6C, 0, resultIds);
@@ -257,7 +259,7 @@ void fn_8018D358(int index, int team, int rumt)
         fn_801F967C(0x54415453, table);
     }
     if (cursor.mUnknown0) fn_801FCFA0(&cursor);
-    gFMCAPPORT.ClearEntries();
+    gFMCAPPORT.Start();
     fn_8022F478(saved);
 }
 
@@ -313,41 +315,39 @@ void fn_8018D918()
     if (!fn_8018F228(fn_80186B38(fn_8022F4BC())))
         fn_8018F41C(fn_80186B38(fn_8022F4BC()));
     QueryResult result;
-    Query_8008352C columns[2];
-    QueryCursor cursor = {0, 0, -1, 0};
-    int player, pxsp, ytrp, selected;
+    Table_8007E020 tables[2];
+    QueryCursor cursor;
+    int pxsp, diop, ytrp, selected;
+    cursor.mUnknown0 = 0;
+    cursor.mUnknown4 = 0;
+    cursor.mUnknown8 = -1;
+    cursor.mUnknown12 = 0;
     fn_801FCE10(&result, "use \x8c declare \x8a cursor for select 'PXSP' and 'DIOP' and 'YTRP' from 'YPRC'\n", source, &cursor);
     for (unsigned int i = 0; i < result.mUnknown0; i++) {
-        player = i; pxsp = 0; ytrp = 0;
-        fn_801FCE10(0, "fetch from \x8a 'PXSP' into \x85 and 'DIOP' into \x85 and 'YTRP' into \x85\n", &cursor, &player, &pxsp, &ytrp);
-        if (pxsp != 0x7FF4 && ytrp == 1)
-            fn_801FCE10(0, "use \x8c update 'PPRC' set 'PXSP' = \x85 where 'PXSP' = \x85\n", source, i, player);
+        pxsp = i; diop = 0; ytrp = 0;
+        fn_801FCE10(0, "fetch from \x8a 'PXSP' into \x85 and 'DIOP' into \x85 and 'YTRP' into \x85\n", &cursor, &pxsp, &diop, &ytrp);
+        if (diop != 0x7FF4 && ytrp == 1)
+            fn_801FCE10(0, "use \x8c update 'PPRC' set 'PXSP' = \x85 where 'PXSP' = \x85\n", source, i, pxsp);
     }
     if (cursor.mUnknown0) fn_801FCFA0(&cursor);
     if (fn_801FCE10(&result, "use \x8c select 'PXSP' into \x85 from 'YPRC' where 'DIOP' = \x85\n", source, &selected, 0x7FF4) == 0)
         fn_801FCE10(0, "use \x8c update 'PPRC' set 'PXSP' = \x85 where 'PXSP' = \x85\n", source, 8, selected);
     fn_8018CA80(source);
-    columns[0].mUnknown0 = 0x4E494843;
-    columns[0].mUnknown4 = 2; columns[0].mUnknown8 = 0;
-    columns[1].mUnknown0 = -1;
-    columns[1].mUnknown4 = 2; columns[1].mUnknown8 = 0;
-    fn_801F9908(source, (char *)columns, 0, (int *)&result, 0);
+    tables[0].Set(0x4E494843);
+    tables[1].Set(-1);
+    fn_801F9908(source, tables, 0, &result, 0);
     fn_8022EF8C(0x54415453, 0x4E494843);
     fn_801FCE10(&result, "use 'TATS' insert into \x8c.'NIHC' * select * from 'NIHC'\n", source);
     fn_8022EFBC(0x54415453, 0x4E494843);
-    columns[0].mUnknown0 = 0x47504843;
-    columns[0].mUnknown4 = 2; columns[0].mUnknown8 = 0;
-    columns[1].mUnknown0 = -1;
-    columns[1].mUnknown4 = 2; columns[1].mUnknown8 = 0;
-    fn_801F9908(source, (char *)columns, 0, (int *)&result, 0);
+    tables[0].Set(0x47504843);
+    tables[1].Set(-1);
+    fn_801F9908(source, tables, 0, &result, 0);
     fn_8022EF8C(0x54415453, 0x47504843);
     fn_801FCE10(&result, "use 'TATS' insert into \x8c.'GPHC' * select * from 'GPHC'\n", source);
     fn_8022EFBC(0x54415453, 0x47504843);
-    columns[0].mUnknown0 = 0x47505443;
-    columns[0].mUnknown4 = 2; columns[0].mUnknown8 = 0;
-    columns[1].mUnknown0 = -1;
-    columns[1].mUnknown4 = 2; columns[1].mUnknown8 = 0;
-    fn_801F9908(source, (char *)columns, 0, (int *)&result, 0);
+    tables[0].Set(0x47505443);
+    tables[1].Set(-1);
+    fn_801F9908(source, tables, 0, &result, 0);
     for (unsigned int i = 0; i <= 31; i++)
         fn_801FCE10(0, "use \x8c insert into \x8c.'GPTC' set 'MGTC' = \x82 and '1STC' = 0 and '2STC' = 0\n", source, source, i);
     fn_801FCE10(&result, "use \x8c update 'REGL' set 'KCLG' = 1 where 'KLCG' = 1\n", source);
@@ -355,14 +355,12 @@ void fn_8018D918()
 void fn_8018DC18(int unused, int player)
 {
     QueryResult result;
-    Query_8008352C columns[2];
+    Table_8007E020 tables[2];
     Object_80023BBC arg;
     arg.Set(6, 0x59414C5044494750LL, 3, player);
-    columns[0].mUnknown0 = 0x59414C50;
-    columns[0].mUnknown4 = 2; columns[0].mUnknown8 = 0;
-    columns[1].mUnknown0 = -1;
-    columns[1].mUnknown4 = 2; columns[1].mUnknown8 = 0;
-    fn_801F9908(0x54415453, (char *)columns, &arg, (int *)&result, 0);
+    tables[0].Set(0x59414C50);
+    tables[1].Set(-1);
+    fn_801F9908(0x54415453, tables, &arg, &result, 0);
 }
 int fn_8018DCBC(int id)
 {

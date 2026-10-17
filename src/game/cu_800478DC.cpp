@@ -122,6 +122,9 @@ void fn_80047BD0(int *pIds, int part, Record_803078E8 *pRecord)
         pIds[30] = pRecord->mInfo.mUnknown04 * 3 + 15843;
         pIds[29] = pRecord->mInfo.mUnknown05 * 3 + 16110;
         break;
+    case 16: /* HAND parts (lbl_802CF020) take no extra ids */
+    case 17:
+        break;
     }
 }
 

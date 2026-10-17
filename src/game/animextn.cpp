@@ -18,47 +18,50 @@ static char AnimExtn_ARamTransferBuffer[2][0xC0] ATTRIBUTE_ALIGN(32);
 
 void _AnimExtnRelocateMotion(AnimFileFormat_t *file)
 {
+    unsigned int i;
+    unsigned int j;
     int size = fn_801D3148(1, file);
-    char *start = (char *)file;
+    unsigned int start = (unsigned int)file;
     if (file->flags & 4) {
-        for (unsigned int i = 0; i < file->groups->count; ++i) {
-            start = file->groupMotion[i].motion[0];
-            for (unsigned int j = 0; j < file->groupMotion[i].count; ++j) {
-                if ((unsigned int)file->groupMotion[i].motion[j] < (unsigned int)start)
-                    file->groupMotion[i].motion[j] = start;
+        for (i = 0; i < file->groups->count; ++i) {
+            start = (unsigned int)file->groupMotion[i].motion[0];
+            for (j = 0; j < file->groupMotion[i].count; ++j) {
+                if ((unsigned int)file->groupMotion[i].motion[j] < start)
+                    file->groupMotion[i].motion[j] = (char *)start;
             }
         }
     } else {
-        start = file->motion[0];
-        for (unsigned int i = 0; i < file->motionCount; ++i) {
-            if ((unsigned int)file->motion[i] < (unsigned int)start)
-                file->motion[i] = start;
+        start = (unsigned int)file->motion[0];
+        for (j = 0; j < file->motionCount; ++j) {
+            if ((unsigned int)file->motion[j] < start)
+                file->motion[j] = (char *)start;
         }
     }
-    int headerSize = start - (char *)file;
+    int headerSize = start - (unsigned int)file;
     int motionSize = size - headerSize;
-    char *copy = (char *)fn_801D2BB0(16, motionSize, 0, 0);
-    fn_801C1D98(copy, start, (motionSize + 31) & ~31);
+    unsigned int copy = (unsigned int)fn_801D2BB0(16, motionSize, 0, 0);
+    fn_801C1D98((void *)copy, (char *)start, (motionSize + 31) & ~31);
     fn_801D310C(file, headerSize, 0, 0);
     if (file->flags & 4) {
-        for (unsigned int i = 0; i < file->groups->count; ++i) {
-            for (unsigned int j = 0; j < file->groupMotion[i].count; ++j)
-                file->groupMotion[i].motion[j] = file->groupMotion[i].motion[j] - start + copy;
+        for (i = 0; i < file->groups->count; ++i) {
+            for (j = 0; j < file->groupMotion[i].count; ++j)
+                file->groupMotion[i].motion[j] = (char *)((unsigned int)file->groupMotion[i].motion[j] - start + copy);
         }
     } else {
-        for (unsigned int i = 0; i < file->motionCount; ++i)
-            file->motion[i] = file->motion[i] - start + copy;
+        for (j = 0; j < file->motionCount; ++j)
+            file->motion[j] = (char *)((unsigned int)file->motion[j] - start + copy);
     }
 }
 
 void _AnimExtnRelocateCompressTable(AnimFileFormat_t *file)
 {
+    Record_8019D8AC *table;
     if (file->flags & 1) {
         if (file->flags & 4) {
             file->compress = 0;
             for (int i = 0; i < (int)file->groups->count; ++i) {
                 if (file->groupMotion[i].compress) {
-                    Record_8019D8AC *table = (Record_8019D8AC *)((char *)file + (unsigned int)file->groupMotion[i].compress);
+                    table = (Record_8019D8AC *)((char *)file + (unsigned int)file->groupMotion[i].compress);
                     file->groupMotion[i].compress = table;
                     table->mUnknown4.mUnknown0 = (short *)((char *)file + (unsigned int)table->mUnknown4.mUnknown0);
                     table->mUnknown4.mUnknown4 = (short *)((char *)file + (unsigned int)table->mUnknown4.mUnknown4);
@@ -68,7 +71,7 @@ void _AnimExtnRelocateCompressTable(AnimFileFormat_t *file)
                 }
             }
         } else {
-            Record_8019D8AC *table = (Record_8019D8AC *)((char *)file + (unsigned int)file->compress);
+            table = (Record_8019D8AC *)((char *)file + (unsigned int)file->compress);
             file->compress = table;
             table->mUnknown4.mUnknown0 = (short *)((char *)file + (unsigned int)table->mUnknown4.mUnknown0);
             table->mUnknown4.mUnknown4 = (short *)((char *)file + (unsigned int)table->mUnknown4.mUnknown4);

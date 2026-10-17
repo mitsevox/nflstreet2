@@ -5,11 +5,19 @@
 #include "game/Object_800DA8D8.h"
 #include "game/Object_801BBD5C.h"
 #include "game/Table_80089904.h"
+#include "game/cu_80136B1C.h"
+#include "game/fn_801BA2A8.h"
+#include "game/fn_801BE60C.h"
 #include "game/fn_800AD9B4.h"
 #include "game/fn_802270D4.h"
 
 extern "C" {
 int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues);
+int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
+int fn_801BA6B0(Record_800D81C8 *pEntry);
+void fn_801BA6BC(Record_800D81C8 *pEntry, int value);
+void fn_800D8140(State_800D8140 *p, Object_800D81C8 *pOther, int entry);
+void fn_800D81C8(State_800D8140 *p, Object_800D81C8 *pOther);
 void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
 unsigned char fn_800C0464(void *p);
 int fn_800DA7AC(Object_801BBD5C *pObject, float value);
@@ -26,6 +34,45 @@ extern void *lbl_803EABA4;
 
 int fn_800D0B90(Object_80039F5C *p);
 int fn_800D0D1C(Object_80039F5C *p);
+}
+
+/* Payload that fn_801BE60C returns for this handler's key: the entry index
+   chosen by fn_801BA2A8 and the state fn_800D8140 and fn_800D81C8 update. */
+struct Payload_800D8A24 {
+    int mEntry;
+    State_800D8140 mState;
+};
+
+extern "C" int fn_800D8A24(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
+                           Object_80039F5C *p, unsigned int phase)
+{
+    Payload_800D8A24 *pPayload = (Payload_800D8A24 *)fn_801BE60C(p->mpUnknown792, key);
+
+    switch (phase) {
+    case 0: {
+        fn_801BE760(p->mpUnknown792, key, 1);
+        unsigned char side = p == fn_80137B40() ? 1 : 2;
+        int i = fn_8009C56C(pTable, &side);
+        fn_801BBC3C(p->mpUnknown796->mUnknown2, pTable->mEntries[i].mUnknown2 & 0x7FFF, pTable);
+        int index = fn_8009C4B0(pTable, &p->mUnknown1008);
+        if (index >= 0) {
+            pPayload->mEntry = fn_801BA2A8(pRecord, pEntries, pTable->mEntries[index].mUnknown0,
+                                           pTable->mEntries[index].mUnknown2, key, p, 1.0f);
+            if (fn_80137C48(p) && p->mUnknown776 == 1) {
+                Record_800D81C8 *pEntry = &pEntries[pPayload->mEntry];
+                fn_801BA6BC(pEntry, fn_801BA6B0(pEntry) == 0);
+            }
+            fn_800D8140(&pPayload->mState, (Object_800D81C8 *)p, pPayload->mEntry);
+        }
+        break;
+    }
+    case 1:
+        break;
+    case 2:
+        fn_800D81C8(&pPayload->mState, (Object_800D81C8 *)p);
+        break;
+    }
+    return 0;
 }
 
 extern "C" void fn_800D8B84(Table_80089904 *pTable, Block_801BE60C *pBlock, Object_80039F5C *p)
@@ -175,9 +222,10 @@ extern "C" void fn_800D8FFC(Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Re
 
 extern "C" int fn_800D9078(Object_80039F5C *p, int a)
 {
+    Block_8011E240 *pBlock = &p->mBlock1032;
     int result = 0;
 
-    if (p->mUnknown1052 != 0) {
+    if (pBlock->mUnknown20 != 0) {
         switch (p->mUnknown1032) {
         case 4:
         case 7:
@@ -186,21 +234,25 @@ extern "C" int fn_800D9078(Object_80039F5C *p, int a)
         case 1:
         case 2:
         case 3:
-            if (a == 0 && p->mUnknown1052 != 1) {
-                Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown1036);
-                if (pOther) {
-                    Pair_802270A4 delta;
-                    fn_80227690(&delta, &pOther->mMotion, &p->mMotion);
-                    if (fn_801CFFD0(fn_801CFE40(delta.mUnknown4, delta.mUnknown0), p->mMotion.mFacing) <= 0x1FFFFF
-                        && fn_802270A4(&delta) < 4.5f) {
-                        result = 1;
+            if (a == 0) {
+                if (pBlock->mUnknown20 == 1) {
+                    result = 1;
+                } else {
+                    Object_80039F5C *pOther = fn_8009BCE8(&pBlock->mUnknown4);
+                    if (pOther) {
+                        Pair_802270A4 delta;
+                        fn_80227690(&delta, &pOther->mMotion, &p->mMotion);
+                        if (fn_801CFFD0(fn_801CFE40(delta.mUnknown4, delta.mUnknown0), p->mMotion.mFacing) <= 0x1FFFFF
+                            && fn_802270A4(&delta) < 4.5f) {
+                            result = 1;
+                        }
                     }
                 }
             }
             break;
         }
     }
-    if (p->mUnknown1052 == 3 && !result && p->mMotion.mUnknown28 < 1e-7f) {
+    if (pBlock->mUnknown20 == 3 && !result && p->mMotion.mUnknown28 < 1e-7f) {
         result = 1;
     }
     return result;

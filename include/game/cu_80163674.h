@@ -42,7 +42,7 @@ struct Object_80163788 {
     short mUnknown1D8;
     short mUnknown1DA;
     short mUnknown1DC;
-    unsigned short mUnknown1DE;
+    short mUnknown1DE;
     unsigned char mUnknown1E0[4];
     int mUnknown1E4;
 };

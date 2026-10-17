@@ -81,7 +81,7 @@ void fn_8013764C(int a);
 void fn_801376B8(float step);
 void fn_80137758(float step);
 void fn_801377C4(float step);
-void fn_80137864(void);
+void fn_80137864(float step);
 void fn_801378C0(void);
 void fn_8013791C(Object_80137ABC *pBall, int a, int b);
 void fn_801379B4(Object_80137ABC *pBall, int a, int b);

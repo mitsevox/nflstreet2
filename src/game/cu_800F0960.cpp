@@ -1,4 +1,5 @@
 #include <math.h>
+#include "game/fn_801248D4.h"
 #include <string.h>
 #include "game/fn_800B65A0.h"
 
@@ -299,7 +300,7 @@ struct State_80105898 {
 
 
 extern float lbl_803EAEF4;
-extern int lbl_803EAF10;
+extern Object_80039F5C *lbl_803EAF10;
 extern unsigned char lbl_802DAB60[];
 extern unsigned char lbl_802DABBC[];
 
@@ -736,7 +737,6 @@ void fn_800DBC4C(Object_80039F5C *p, int angle, float value);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float fn_8022710C(void *pV);
 Object_800670B4 *fn_80168708(int team);
-int fn_801248D4(Object_80039F5C *p, int a, Vector_80039F5C *pPos, Object_80039F5C **ppOut, int b, int c, float x, float y);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
 int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
 void fn_800FC290(Object_80039F5C *p, Block_800FCC24 *pBlock, Point_8017886C target);
