@@ -15,7 +15,8 @@ struct Character_80093BCC {
     int mUnknown0,mUnknown4;
     unsigned char mUnknown8[12];
     MotionSource_80141210 *mUnknown14;
-    unsigned char mUnknown18[0xC0];
+    MotionSource_80141210 *mUnknown18;
+    unsigned char mUnknown1C[0xBC];
     union { int mWord; unsigned short mParts[2]; } mUnknownD8;
     unsigned char mUnknownDC[4];
     Selection_80141210 mUnknownE0;
@@ -66,7 +67,7 @@ struct Block_800AACD4 {
 
 extern "C" {
 Actor_801C009C *fn_80093BAC(int,int);
-Character_80093BCC *fn_80093BCC(unsigned short);
+Character_80093BCC *fn_80093BCC(unsigned int index);
 Playback_80096DA8 *fn_80096DA8(unsigned int);
 Actor_801C009C *fn_80096DCC(unsigned int,int);
 }
