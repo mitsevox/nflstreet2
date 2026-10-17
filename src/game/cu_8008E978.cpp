@@ -3253,18 +3253,13 @@ extern "C" Entry_8009C684 *fn_8009C6F4(Entry_800AF82C *pEntries, Block_8009C6F4 
     return pEntry;
 }
 
-static inline int Heading(const Point_8017886C &d)
-{
-    return fn_801CFE40(d.mY, d.mX);
-}
-
 extern "C" int fn_8009C7B4(Vector_80039F5C *pVec)
 {
     Point_8017886C point;
 
     point.mX = pVec->mX;
     point.mY = pVec->mZ;
-    return abs((Heading(point) - 0x400000) << 8 >> 8) > lbl_803EA9A4;
+    return abs((point.Heading() - 0x400000) << 8 >> 8) > lbl_803EA9A4;
 }
 
 extern "C" unsigned char fn_8009C814(Object_80039F5C *p, Block_8009C6F4 *pBlock)

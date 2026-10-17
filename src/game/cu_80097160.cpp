@@ -32,11 +32,6 @@ extern Block_80099630 *lbl_803EC92C;
 extern float lbl_803EA2C4;
 }
 
-static inline int PointAngle(const Point_80167910 *pPoint)
-{
-    return fn_801CFE40(pPoint->mY, pPoint->mX);
-}
-
 extern "C" int fn_80097160(Object_80039F5C *p, float duration)
 {
     int *pFirst;
@@ -105,11 +100,11 @@ extern "C" int fn_8009780C(Object_80039F5C *p, Object_80137ABC *pBall)
 extern "C" int fn_80097864(Object_80039F5C *p)
 {
     if (__builtin_fabsf(p->mMotion.mPos.mX) > fn_80178A08() - 4.0f) {
-        Point_80167910 direction;
+        Point_8017886C direction;
 
         direction.mX = p->mMotion.mPos.mX;
         direction.mY = 0.0f;
-        if (fn_801CFFD0(PointAngle(&direction), p->mMotion.mUnknown32) <= 0x355554) {
+        if (fn_801CFFD0(direction.Heading(), p->mMotion.mUnknown32) <= 0x355554) {
             return 1;
         }
     }
