@@ -2746,6 +2746,48 @@ extern "C" int fn_800ED670(Object_80039F5C *p, Object_80039F5C *pOther, State_80
     return result;
 }
 
+/* Dead-stripped in the GC build (only its literals remain at 0x8029DED0); body from NFL Street prototype Xbox (NFLBig.xbe) 0xAA0E0. */
+extern "C" void UnusedSteer_8029DED0(Object_80039F5C *p, Object_80039F5C *pOther, State_800EDC68 *state) {
+    if (p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {
+        Point_8017886C delta;
+        fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
+        fn_801CFE40(delta.mY, delta.mX);
+        float distance = fn_802270A4(&delta);
+        if (distance < 2.0f) {
+            float speed = distance * 0.5f;
+            int turn = (int)((1.0f - speed) * 0x355555);
+            if (state->mUnknown6 == 6)
+                turn = -turn;
+            unsigned int kind = state->mUnknown8;
+            if (kind == 15 || kind == 12) {
+                if (distance > 4.0f && kind == 12) {
+                    fn_800DBC4C(p, (p->mMotion.mFacing + turn) & 0xFFFFFF, speed);
+                } else {
+                    int angle = (p->mMotion.mFacing + turn) & 0xFFFFFF;
+                    p->mUnknown512.mUnknown0 = speed;
+                    p->mUnknown512.mUnknown14 = 1;
+                    p->mUnknown512.mUnknown4 = angle;
+                    p->mUnknown512.mUnknown8 = angle;
+                }
+            } else {
+                int angle = (p->mMotion.mFacing + turn) & 0xFFFFFF;
+                p->mUnknown512.mUnknown0 = speed;
+                p->mUnknown512.mUnknown14 = 4;
+                p->mUnknown512.mUnknown4 = angle;
+                p->mUnknown512.mUnknown8 = angle;
+            }
+        }
+    } else {
+        unsigned int kind = state->mUnknown8;
+        if (kind == 3 || kind == 5 || kind == 1) {
+            p->mUnknown512.mUnknown0 = 1.0f;
+            p->mUnknown512.mUnknown14 = 4;
+            p->mUnknown512.mUnknown4 = 0xC00000;
+            p->mUnknown512.mUnknown8 = 0xC00000;
+        }
+    }
+}
+
 extern "C" void fn_800EDB48(Object_80039F5C *p, Object_80039F5C *pOther, Object_80137ABC *pBall, State_800EDC68 *state) {
     if (pBall) {
         int mode = fn_800AD9B4();
