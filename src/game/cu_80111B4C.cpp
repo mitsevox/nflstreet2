@@ -23,16 +23,6 @@ struct State_80111F80 {
     unsigned char mUnknown20;
 };
 
-struct State_80114DF4 {
-    int mRef;
-    char mUnknown4[52];
-    unsigned char mUnknown56;
-    unsigned char mUnknown57;
-    unsigned char mUnknown58;
-    char mUnknown59[8];
-    unsigned char mUnknown67;
-};
-
 struct State_8010CAE8 {
     char mUnknown0[12];
     float mUnknown12;
@@ -68,8 +58,7 @@ struct State_80113680 {
     unsigned char mUnknown21;
 };
 
-/* Bytes at player +336 as fn_80113C20 sets them up (the state that
-   State_80114DF4 also views). */
+/* Bytes at player +336 as fn_80113C20 sets them up. */
 struct State_80113C20 {
     int mRef;
     float mUnknown4;
@@ -697,8 +686,8 @@ extern "C" int fn_80112928(Object_80039F5C *p)
 
 extern "C" int fn_80112C04(Object_80039F5C *p, Object_80137ABC *pBall, int *pAngle, float *pValue)
 {
-    Vector_80039F5C ballPos;
     Vector_80039F5C velocity;
+    Vector_80039F5C playerVelocity;
     float lowTime;
     Point_8017886C lowLanding;
     float highTime;
@@ -710,10 +699,10 @@ extern "C" int fn_80112C04(Object_80039F5C *p, Object_80137ABC *pBall, int *pAng
     int highAngle;
     float value;
 
-    fn_80137EC4(pBall, &ballPos);
-    velocity.mX = p->mMotion.mUnknown40;
-    velocity.mY = p->mMotion.mUnknown44;
-    velocity.mZ = p->mMotion.mUnknown48;
+    fn_80137EC4(pBall, &velocity);
+    playerVelocity.mX = p->mMotion.mUnknown40;
+    playerVelocity.mY = p->mMotion.mUnknown44;
+    playerVelocity.mZ = p->mMotion.mUnknown48;
     fn_8013AA00(pBall, 0.8f, &lowTime, (Vector_80039F5C *)&lowLanding);
     fn_8013AA00(pBall, 2.1f, &highTime, (Vector_80039F5C *)&highLanding);
     fn_80227690(&lowLanding, &lowLanding, &p->mMotion.mPos);
@@ -1488,13 +1477,12 @@ extern "C" void fn_8011569C(Object_80039F5C *p)
         if (numPlayers == 0) {
             minX = -7.0f;
             maxX = 7.0f;
-            goto pick;
-        } else if (numBelow == numPlayers) {
+        }
+        if (numPlayers != 0 && numBelow == numPlayers) {
             target.mX = low;
-        } else if (numAbove == numPlayers) {
+        } else if (numPlayers != 0 && numAbove == numPlayers) {
             target.mX = high;
         } else {
-        pick:
             float x;
             if (fn_8009EFDC(side) != 0) {
                 if (zone.mX < fn_80177FE0().mX) {
@@ -1642,10 +1630,10 @@ extern "C" void fn_8011569C(Object_80039F5C *p)
                 pOther = fn_8009EC60(0, &spot);
             }
             if (pLeader == 0) {
-                float mid = (maxX - minX) * 0.5f;
-                target.mX = mid;
+                float halfSpread = (maxX - minX) * 0.5f;
+                target.mX = halfSpread;
                 for (i = 0; i < count; i++) {
-                    target.mX += (xs[i] - mid) * (weights[i] / total);
+                    target.mX += (xs[i] - halfSpread) * (weights[i] / total);
                 }
             } else {
                 fn_80116880(p, pOther, &spot.mX, &target.mX, 1.5f);

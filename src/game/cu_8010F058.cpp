@@ -3,13 +3,6 @@
 #include "game/Object_80039F5C.h"
 #include "game/fn_802270D4.h"
 
-/* View of the player object from +1032. */
-struct Block_8010FB4C {
-    int mUnknown0;
-    char mUnknown4[101];
-    unsigned char mUnknown105;
-};
-
 extern "C" {
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value);
@@ -32,8 +25,7 @@ extern "C" void fn_8010F058(Object_80039F5C *p, Object_80039F5C *pOther)
     int a;
     Object_800B26B0 *pMotion;
 
-    if (((Block_8010FB4C *)&p->mUnknown1032)->mUnknown0 == 4 || ((Block_8010FB4C *)&p->mUnknown1032)->mUnknown0 == 7 ||
-        pOther == 0) {
+    if (p->mUnknown1032 == 4 || p->mUnknown1032 == 7 || pOther == 0) {
         return;
     }
     pMotion = &p->mMotion;
