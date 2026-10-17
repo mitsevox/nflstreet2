@@ -5096,8 +5096,6 @@ extern "C" void fn_800BB9A4(int team, int value)
     }
 }
 
-extern "C" void fn_800BBA2C(void);
-
 extern "C" void fn_800BBB4C(Class_80297BF8 *pThis)
 {
     fn_800CC560(1);
@@ -8913,8 +8911,6 @@ float fn_8022710C(void *pV);
 
 }
 
-extern "C" int fn_800B7378(Object_80039F5C *p);
-
 extern "C" {
 int fn_800B54D4(Object_80039F5C *p, int mode);
 int fn_800B56C4(Object_80039F5C *p, Input_800B6D34 *pInput, int mode);
@@ -8983,7 +8979,6 @@ handled:
 }
 
 extern "C" {
-int fn_800B7378(Object_80039F5C *p);
 int fn_8011F1CC(void);
 
 }
@@ -10398,7 +10393,6 @@ int fn_8006D884(int idx);
 void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 extern unsigned char lbl_803EABA0;
 extern unsigned char lbl_803EABA3;
-void fn_800BBA2C(void);
 void fn_800BD1C8(Record_800BAE7C *pRecords);
 void fn_800BC3F0(void);
 extern unsigned short lbl_802D9B14[];
