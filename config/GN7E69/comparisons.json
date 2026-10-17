@@ -33959,6 +33959,32 @@
       ]
     },
     {
+      "source": "src/game/cu_801528E0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #910; one complete function inside the retained provisional cu_801485B4 survey group: 0x801528E0, called only from 0x800F486C (fn_800F4838 of src/game/cu_800F0960.cpp, with r3 = 0x8031BDD4 from lis -32718 / addi -16940 at 0x800F4858/0x800F4864 and r4 = the output point), stores 0.0f and fn_80177FE0().mY + 20.0f + 10.0f to the point. Calls 0x80177FE0 (include/game/fn_80177FE0.h) as an extern. The .rodata slice 0x802A14EC-0x802A14F8 holds its 0.0f, 20.0f and 10.0f literals. Original file boundaries and nominal identity unresolved; 0x8015289C before is not claimed and 0x80152940 onward is src/game/cu_80152940.cpp; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801528E0",
+          "end": "0x80152940"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A14EC",
+          "end": "0x802A14F8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801528E0",
+          "start": "0x801528E0",
+          "end": "0x80152940"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
