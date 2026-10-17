@@ -1,6 +1,6 @@
 #include "game/Class_80148A58.h"
 
-struct Block_802A21E8;
+class Block_802A21E8;
 
 extern Record_80148C4C lbl_802DE41C[];
 
