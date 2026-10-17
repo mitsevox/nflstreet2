@@ -35,6 +35,15 @@ struct Quat_801EB488 {
 
 struct Object_80041904;
 
+struct Rig_800C8860;
+
+/* Block at +44 of Block_80170E64; fn_800C8860 turns the joints at +48. */
+struct Model_800C8860 {
+    char mUnknown0[48];
+    Rig_800C8860 *mpRig;
+    char mUnknown52[4];
+};
+
 /* Block at +4 of the player object; the entries of src/game/cu_80136B1C.cpp
    hold one at +0. */
 struct Block_80170E64 {
@@ -52,7 +61,10 @@ struct Block_80170E64 {
             char mUnknown40[4];
         };
     };
-    Pose_80041930 mUnknown44;
+    union {
+        Pose_80041930 mUnknown44;
+        Model_800C8860 mModel44;
+    };
     void *mpUnknown100;
     char mUnknown104[4];
     Quat_801EB488 mUnknown108;
@@ -144,14 +156,26 @@ struct Snapshot_801718E8 {
 /* Block at +1160. */
 struct Block_801718E8 {
     float mUnknown0;
-    char mUnknown4[8];
+    float mUnknown4;
+    int mUnknown8;
     union {
         char mUnknown12[32];
-        struct { int mUnknown12Word; float mUnknown16; float mUnknown20; char mUnknown24[20]; };
+        struct {
+            int mUnknown12Word;
+            float mUnknown16;
+            float mUnknown20;
+            float mUnknown24;
+            short mUnknown28;
+            unsigned char mUnknown30;
+            char mUnknown31[1];
+            float mUnknown32;
+            float mUnknown36;
+            int mUnknown40;
+        };
         Snapshot_801718E8 mSnapshot12;
     };
     int mUnknown44;
-    char mUnknown48[4];
+    int mUnknown48;
     unsigned char mUnknown52;
     unsigned char mUnknown53;
     unsigned char mUnknown54;
@@ -252,6 +276,16 @@ struct Block_8011E240 {
     char mUnknown106[2];
 };
 
+/* Head/body turn at +300, eased towards mTarget by fn_800C8AF0 (24-bit
+   angles); mRate indexes the easing tables. */
+struct Turn_800C8AF0 {
+    int mAngle[2];
+    int mSpeed[2];
+    int mTarget[2];
+    int mRate[2];
+    unsigned char mSettled;
+};
+
 struct Object_80039F5C {
     /* Read both as a word and byte by byte (+1 index, +2 team). */
     union {
@@ -279,7 +313,10 @@ struct Object_80039F5C {
     char mUnknown244[48];
     int mUnknown292;
     int mUnknown296;
-    char mUnknown300[36];
+    union {
+        char mUnknown300[36];
+        Turn_800C8AF0 mTurn;
+    };
     union {
         struct {
             int mUnknown336;
@@ -292,6 +329,14 @@ struct Object_80039F5C {
             char mUnknown355[5];
         };
         Block_800CC180 mUnknown336Block;
+        /* Per-state scratch: state 26 reads +344 as a word (fn_800C5BF0);
+           state 58 keeps a player reference at +352 (fn_800C7D44). */
+        struct {
+            char mUnknown336Words[8];
+            int mUnknown344Word;
+            char mUnknown348[4];
+            Object_80039F5C *mpUnknown352;
+        };
     };
     unsigned char mUnknown360;
     char mUnknown361[27];
@@ -372,7 +417,9 @@ struct Object_80039F5C {
         };
         Block_8011E240 mBlock1032;
     };
-    char mUnknown1140[16];
+    int mUnknown1140;
+    char mUnknown1144[10];
+    unsigned short mUnknown1154;
     unsigned char mUnknown1156;
     char mUnknown1157[3];
     Block_801718E8 mUnknown1160;
@@ -383,7 +430,7 @@ struct Object_80039F5C {
     unsigned char mUnknown1221;
     unsigned char mUnknown1222;
     char mUnknown1223[1];
-    int mUnknown1224;
+    Object_80039F5C *mpUnknown1224;
     Block_800D0B90 mUnknown1228;
     Object_800CE674 mUnknown1240;
     char mUnknown1244[1656];

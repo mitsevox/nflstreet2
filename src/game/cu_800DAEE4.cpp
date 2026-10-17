@@ -1084,7 +1084,7 @@ void fn_800D8140(State_800D8140 *, Object_80039F5C *, unsigned char);
 void fn_800D81C8(State_800D8140 *, Object_80039F5C *);
 void fn_800D84DC(State_800D8140 *, Object_80039F5C *);
 float fn_80114EE4(Object_80039F5C *, Object_80039F5C *);
-void fn_800C854C(Object_80039F5C *, unsigned short, unsigned char);
+int fn_800C854C(Object_80039F5C *, unsigned short, unsigned char);
 void fn_800DEC10(Object_80039F5C *, Block_800DE3B0 *);
 }
 
