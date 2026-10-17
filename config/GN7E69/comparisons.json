@@ -34025,6 +34025,26 @@
       ]
     },
     {
+      "source": "src/game/cu_801537A0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #916; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 3 of the table 0x802A1BC8 of src/game/cu_80153844.cpp (0x801537A0-0x80153844, word 0x802A1BE4), replacing the base entry 0x800BC5DC of the table 0x80297BF8 (include/game/Class_80297BF8.h). Calls the base entry 0x800BC5DC (vfn_03__14Class_80297BF8), entries 14 and 35 of the fn_80148A58 object and the registered functions 0x80178D70, 0x8017E094, 0x8017DC08, 0x800A8738 and 0x80157514. No literal or data word is referenced. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801537A0",
+          "end": "0x80153844"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801537A0",
+          "start": "0x801537A0",
+          "end": "0x80153844"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
