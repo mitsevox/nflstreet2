@@ -17090,6 +17090,92 @@
         "commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
         "introduced_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036"
       }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800C5234",
+        "0x800C8860",
+        "0x800C8954",
+        "0x800C89BC",
+        "0x800C8A98",
+        "0x800C8AF0",
+        "0x800C8BAC",
+        "0x800C95DC",
+        "0x800CA5CC",
+        "0x800CADC0",
+        "0x800CAE28",
+        "0x800CB484"
+      ],
+      "provenance": {
+        "pull_request": 899,
+        "merged_via": 899,
+        "commit": "c5f5ba7f0fb3b4722de646eb234973516f1e4c31",
+        "introduced_blob": "018ebc74d9153c39cd33eeab3438f48b32447a3f"
+      }
+    },
+    {
+      "source": "src/game/cu_800C52C8.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800C52C8",
+        "0x800C5418",
+        "0x800C56C0",
+        "0x800C6048",
+        "0x800C6A3C",
+        "0x800C6BD8",
+        "0x800C6CDC",
+        "0x800C73E0",
+        "0x800C75C0",
+        "0x800C7794",
+        "0x800C7D44",
+        "0x800C8270",
+        "0x800C82C0",
+        "0x800C8420",
+        "0x800C845C"
+      ],
+      "provenance": {
+        "pull_request": 899,
+        "merged_via": 899,
+        "commit": "c5f5ba7f0fb3b4722de646eb234973516f1e4c31",
+        "introduced_blob": "9bb5c5e8553f974c105e389f05cf57b650ce7c15"
+      }
+    },
+    {
+      "source": "src/game/cu_800C8774.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800C8774",
+        "0x800C87CC",
+        "0x800C8818",
+        "0x800C89F0",
+        "0x800C8C1C",
+        "0x800C8DBC",
+        "0x800C9CF0",
+        "0x800C9E4C",
+        "0x800CAAFC",
+        "0x800CAC54",
+        "0x800CAF4C",
+        "0x800CB080",
+        "0x800CB228",
+        "0x800CB504",
+        "0x800CB580",
+        "0x800CBB00",
+        "0x800CBBAC"
+      ],
+      "provenance": {
+        "pull_request": 899,
+        "merged_via": 899,
+        "commit": "c5f5ba7f0fb3b4722de646eb234973516f1e4c31",
+        "introduced_blob": "27df7dbba23767d13a7f1c629c342d4c5057d1cb"
+      }
     }
   ],
   "target": "GN7E69",
