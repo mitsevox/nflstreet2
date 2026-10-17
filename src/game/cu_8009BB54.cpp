@@ -28,7 +28,6 @@ void fn_800B267C(Object_800B26B0 *pMotion);
 void fn_800C89BC(Object_80039F5C *p);
 void fn_800AF804(Entry_800AF82C *p);
 void fn_8009CF30(Block_8009C6F4 *pBlock, Pose_80041930 *pPose);
-int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, void *pRecord, unsigned short c);
 signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *pValues);
 }
 
@@ -103,9 +102,9 @@ extern "C" void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801E
     }
 }
 
-extern "C" int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, void *pRecord, unsigned short c)
+extern "C" int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, Object_80039F5C *pRecord, unsigned short c)
 {
-    int index = fn_8009C4B0(pTable, (unsigned char *)&((Object_80039F5C *)pRecord)->mUnknown1008);
+    int index = fn_8009C4B0(pTable, (unsigned char *)&pRecord->mUnknown1008);
 
     if (index >= 0) {
         fn_801BA2A8(a, b, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, c, pRecord, 1.0f);

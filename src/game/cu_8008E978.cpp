@@ -316,10 +316,10 @@ int fn_800ACF40(Object_80039F5C *p, signed char value);
 void fn_800AF804(Entry_800AF82C *p);
 void fn_8009C370(Object_80039F5C *p);
 void fn_80042270(Object_80039F5C *p);
-int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, void *pRecord, unsigned short c);
+int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, Object_80039F5C *pRecord, unsigned short c);
 signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *pValues);
-void fn_800AF87C(int a, int b, Vector_80039F5C *pVec, int c);
-void fn_800AF82C(int a, int b, Pose_80041930 *pPose, int d, int e);
+void fn_800AF87C(Entry_800AF82C *pEntries, int b, Vector_80039F5C *pVec, int c);
+void fn_800AF82C(Entry_800AF82C *pEntries, int b, Pose_80041930 *pPose, int d, int e);
 void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
 int fn_8009C7B4(Vector_80039F5C *pVec);
 void fn_8009CEE4(Object_80039F5C *p, int ref, int a, int b, int c);
@@ -3153,7 +3153,7 @@ extern "C" void fn_8009C370(Object_80039F5C *p)
     fn_80042928(pObject);
 }
 
-extern "C" int fn_8009C470(Table_80089904 *pTable, unsigned short c, void *a, void *b, void *pRecord,
+extern "C" int fn_8009C470(Table_80089904 *pTable, unsigned short c, void *a, void *b, Object_80039F5C *pRecord,
                            unsigned int count)
 {
     if (count <= 1) {
@@ -3211,8 +3211,8 @@ extern "C" int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues)
     return result;
 }
 
-extern "C" void fn_8009C604(int (**pCallbacks)(Table_80089904 *, unsigned short, void *, void *, void *,
-                                               unsigned int),
+extern "C" void fn_8009C604(int (**pCallbacks)(Table_80089904 *, unsigned short, void *, void *,
+                                               Object_80039F5C *, unsigned int),
                             unsigned int count)
 {
     unsigned int i;
@@ -3222,7 +3222,7 @@ extern "C" void fn_8009C604(int (**pCallbacks)(Table_80089904 *, unsigned short,
     }
 }
 
-extern "C" int fn_8009C684(Entry_8009C684 *pEntry, int a,
+extern "C" int fn_8009C684(Entry_8009C684 *pEntry, Entry_800AF82C *pEntries,
                            void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int b, int c)
 {
     fn_801C1F94(pEntry->mUnknown10, 0, 8);
@@ -3230,25 +3230,25 @@ extern "C" int fn_8009C684(Entry_8009C684 *pEntry, int a,
     if (c == 0) {
         c = 6;
     }
-    fn_800AF87C(a, b, &pEntry->mUnknown4, c);
+    fn_800AF87C(pEntries, b, &pEntry->mUnknown4, c);
     return 2;
 }
 
-extern "C" Entry_8009C684 *fn_8009C6F4(int a, Block_8009C6F4 *pBlock,
+extern "C" Entry_8009C684 *fn_8009C6F4(Entry_800AF82C *pEntries, Block_8009C6F4 *pBlock,
                                        void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *),
                                        Vector_80039F5C *pVec, int c, int b, int d)
 {
     Entry_8009C684 *pEntry = 0;
 
     if (pBlock->mUnknown0 != 0 && pBlock->mUnknown0 != 4) {
-        fn_800AF82C(a, b, pBlock->mpPose, 0, d);
+        fn_800AF82C(pEntries, b, pBlock->mpPose, 0, d);
         pBlock->mUnknown6 = b;
         pBlock->mUnknown4 = pBlock->mUnknown4 == 0;
         pEntry = &pBlock->mEntries[pBlock->mUnknown4];
         pEntry->mUnknown4.mX = pVec->mX;
         pEntry->mUnknown4.mY = pVec->mY;
         pEntry->mUnknown4.mZ = pVec->mZ;
-        pBlock->mUnknown0 = fn_8009C684(pEntry, a, pCallback, b, c);
+        pBlock->mUnknown0 = fn_8009C684(pEntry, pEntries, pCallback, b, c);
     }
     return pEntry;
 }
@@ -3413,7 +3413,7 @@ extern "C" unsigned char *fn_8009CC2C(Object_80039F5C *p,
         pBlock->mUnknown0 = 2;
     }
     fn_8009CBD8(p, &pos);
-    pEntry = fn_8009C6F4((int)pEntries, pBlock, pCallback, &pos, a, 0, b);
+    pEntry = fn_8009C6F4(pEntries, pBlock, pCallback, &pos, a, 0, b);
     if (p->mIdBytes[3] == 1) {
         fn_800AF9C0(pEntries, 0, lbl_802D7C08);
     } else {
