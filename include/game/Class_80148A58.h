@@ -60,6 +60,8 @@ public:
     virtual int vfn_33(int kind, int team);
     virtual int vfn_34(int kind, int team, int threshold, int mode);
 
+    Class_80148A58();
+
     int mUnknown0;
     int mUnknown4;
     union {
