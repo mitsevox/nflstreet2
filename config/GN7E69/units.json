@@ -11000,7 +11000,7 @@
     {
       "source": "src/game/cu_80164568.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80164568-0x80164B78 (src/game/cu_80164568.cpp), its function rows and data row 0x802A4610-0x802A4624.",
+      "evidence": "evidence.tsv unit row 0x80164568-0x80164B78 (src/game/cu_80164568.cpp), its function rows and data rows 0x802A4610-0x802A4624 and 0x803EB3B0-0x803EB3B8.",
       "sections": [
         {
           "section": ".text",
@@ -11013,6 +11013,12 @@
           "placement": ".data3",
           "start": "0x802A4610",
           "end": "0x802A4624"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB3B0",
+          "end": "0x803EB3B8"
         },
         {
           "section": ".bss",
