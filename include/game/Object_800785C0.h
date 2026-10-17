@@ -50,7 +50,7 @@ struct Object_800785C0 {
     int mUnknown1B4;
     int mUnknown1B8;
     int mUnknown1BC;
-    unsigned char mUnknown1C0;
+    signed char mUnknown1C0;
     unsigned char mUnknown1C1;
     char mUnknown1C2;
     unsigned char mUnknown1C3;

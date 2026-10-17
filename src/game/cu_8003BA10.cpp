@@ -886,7 +886,7 @@ Object_8003DEC4 *fn_8003DEE4(int value) {
     }
   return result;
 }
-Object_8003DEC4 *fn_8003DF3C(int side, int index) {
+Object_8003DEC4 *fn_8003DF3C(int side, unsigned char index) {
   return lbl_803EA430 ? fn_8003DEC4(side * 7 + index) : 0;
 }
 Object_8003DEC4 *fn_8003DF7C(Pair_8017055C *point, float *distance) {

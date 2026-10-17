@@ -71,7 +71,19 @@ struct Camera_8013F738 {
     float mUnknownEC;
     float mUnknownF0;
     float mUnknownF4;
-    char mPadF8[0x30];
+    /* Mode state; the replay-target mode (10/11) reads it through the
+       named fields. */
+    union {
+        char mPadF8[0x30];
+        struct {
+            float mUnknownF8;
+            float mUnknownFC;
+            int mUnknown100;
+            unsigned char mUnknown104[4];
+            int mUnknown108;
+            int mUnknown10C;
+        };
+    };
     /* Script records of the replay camera (type 3). */
     RecordList_8002E7C0 mUnknown128;
     char mPad6B0[0x8AC];

@@ -9,7 +9,13 @@
 #include "game/fn_8022781C.h"
 #include "game/fn_802372EC.h"
 #include "game/fn_801BE60C.h"
+#include "game/Lookup_8012078C.h"
+#include "game/Message_800F01CC.h"
+#include "game/fn_801C1F94.h"
+#include "game/fn_800B65A0.h"
 
+#define MIN(a, b) ((a) > (b) ? (b) : (a))
+#define MAX(a, b) ((a) < (b) ? (b) : (a))
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
 
 /* Partial overlay of the opaque player block at +336. */
@@ -18,9 +24,9 @@ struct State_801297F8 {
     float mUnknown4;
     int mUnknown8;
     signed char mUnknown12;
-    unsigned char mUnknown13;
-    unsigned char mUnknown14;
-    unsigned char mUnknown15;
+    signed char mUnknown13;
+    signed char mUnknown14;
+    signed char mUnknown15;
     unsigned char mUnknown16;
     char mUnknown17[3];
     char mUnknown20[20];
@@ -29,20 +35,23 @@ struct State_801297F8 {
     unsigned char mUnknown42;
 };
 
-/* Object whose +12 word table is indexed by the player's +1 byte. */
-struct Context_8012886C {
-    unsigned char *mpUnknown0;
-    unsigned char *mpUnknown4;
-    char mUnknown8[4];
-    int *mpUnknown12;
-    short mUnknown16;
-};
-
 extern "C" {
+int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, void *pBlock, int b, int c, int d,
+                int e, float range);
+int fn_80099F04(Object_80039F5C *p, int handle, unsigned char index);
+int fn_8009A77C(Object_80039F5C *p);
 void fn_8009A8D4(void *p);
+int fn_8009AF00(int team, int value);
+int fn_8009F0B8(Object_80039F5C *p, int angle);
+int fn_8009F7A4(Object_80039F5C *p, Object_80039F5C **ppOut);
+int fn_8009FB60(Object_80039F5C *p);
+int fn_800A5C04(Object_80039F5C *p, int a, int b);
+int fn_800A5DD0(Object_80039F5C *p);
+int fn_800AC980(Object_80039F5C *p, int value);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
 int fn_800D0B90(Object_80039F5C *p);
 int fn_800DC080(Object_80039F5C *p);
+int fn_800E1584(Object_80039F5C *p);
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8010A2DC(Object_80039F5C *p, int a, int b);
 int fn_80110C10(Object_80039F5C *p);
@@ -51,13 +60,25 @@ void fn_80111354(Object_80039F5C *p);
 int fn_80112C04(Object_80039F5C *p, Object_80137ABC *pBall, int *pAngle, float *pValue);
 unsigned int fn_8011E188(void);
 int fn_8011F1A4(void);
+int fn_8011F1CC(void);
 int fn_8011F32C(void);
 unsigned int fn_8011F4C8(void);
+int fn_80120794(Object_800B26B0 *pMotion, Vector_80039F5C *pTarget, Vector_80039F5C *pDir, float speed, float length,
+                int angle, float distance);
+int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 int fn_801260D4(Object_80039F5C *p);
+void fn_801262B8(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance, int forced);
+void fn_801269B8(Object_80039F5C *p, State_801297F8 *pState, float distance);
 Object_80039F5C *fn_80128B60(void);
+int fn_8012A3B0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance, int *pOut);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 int fn_801486A0(void);
+float fn_8016B938(void);
+float fn_8016B974(void);
 float fn_8016D9F4(Object_80039F5C *p, float a, float b);
+int fn_8016DAA4(Object_80039F5C *p);
+int fn_80177C38(void);
+int fn_80178308(void);
 int fn_801783AC(int bit);
 int fn_801787A0(void);
 float fn_80178A08(void);
@@ -73,6 +94,15 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 }
 
 extern "C" unsigned int lbl_802DB04C[4];
+extern "C" float lbl_803EB0B0;
+extern "C" float lbl_803EB0B4;
+extern "C" float lbl_803EB0B8;
+extern "C" unsigned int lbl_803EB0BC;
+extern "C" unsigned int lbl_803EB0C0;
+extern "C" unsigned int lbl_803EB0C4;
+extern "C" int lbl_803EB0C8;
+extern "C" int lbl_803EB0CC;
+extern "C" int lbl_803EB0D0;
 extern "C" unsigned int lbl_803EB0D4;
 extern "C" unsigned char lbl_803EB0D8;
 extern "C" float lbl_803EB0E0;
@@ -148,7 +178,7 @@ extern "C" void fn_80126DD4(Object_80039F5C *p, State_801297F8 *pState, float di
     }
 }
 
-extern "C" int fn_80126FD8(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState, Context_8012886C *pContext,
+extern "C" int fn_80126FD8(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState, Lookup_8012078C *pContext,
                            int angle, Vector_80039F5C pos, float distance, int angle2)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
@@ -244,7 +274,7 @@ extern "C" void fn_80127324(Object_80039F5C *p, int *pAngle, Vector_80039F5C pos
     }
 }
 
-extern "C" int fn_801274D4(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState, Context_8012886C *pContext,
+extern "C" int fn_801274D4(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState, Lookup_8012078C *pContext,
                            int angle, Vector_80039F5C pos, float distance, int angle2)
 {
     int mode = fn_801486A0();
@@ -290,7 +320,7 @@ extern "C" int fn_801274D4(Object_80039F5C *p, Object_80039F5C *pOther, State_80
     return angle;
 }
 
-extern "C" int fn_80127758(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState, Context_8012886C *pContext,
+extern "C" int fn_80127758(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState, Lookup_8012078C *pContext,
                            int angle, Vector_80039F5C pos, float distance, int angle2)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
@@ -363,7 +393,7 @@ extern "C" int fn_80127758(Object_80039F5C *p, Object_80039F5C *pOther, State_80
     return angle;
 }
 
-extern "C" int fn_80127AD0(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState, Context_8012886C *pContext,
+extern "C" int fn_80127AD0(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState, Lookup_8012078C *pContext,
                            int angle, Vector_80039F5C pos, float distance, int angle2)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
@@ -404,7 +434,7 @@ extern "C" int fn_80127AD0(Object_80039F5C *p, Object_80039F5C *pOther, State_80
     return angle;
 }
 
-extern "C" int fn_80127CD4(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState, Context_8012886C *pContext,
+extern "C" int fn_80127CD4(Object_80039F5C *p, Object_80039F5C *pOther, State_801297F8 *pState, Lookup_8012078C *pContext,
                            int angle, Vector_80039F5C pos, float distance, int angle2)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
@@ -445,7 +475,7 @@ extern "C" int fn_80127CD4(Object_80039F5C *p, Object_80039F5C *pOther, State_80
     return angle;
 }
 
-extern "C" void fn_80127EFC(Object_80039F5C *p, State_801297F8 *pState, Object_80039F5C *pOther, Context_8012886C *pContext,
+extern "C" void fn_80127EFC(Object_80039F5C *p, State_801297F8 *pState, Object_80039F5C *pOther, Lookup_8012078C *pContext,
                             int *pAngle, Vector_80039F5C pos, float distance, int angle2)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
@@ -607,7 +637,7 @@ extern "C" void fn_80128628(Object_80039F5C *p, State_801297F8 *pState, Object_8
     }
 }
 
-extern "C" void fn_8012886C(Object_80039F5C *p, State_801297F8 *pState, Context_8012886C *pContext, int angle,
+extern "C" void fn_8012886C(Object_80039F5C *p, State_801297F8 *pState, Lookup_8012078C *pContext, int angle,
                             Vector_80039F5C pos, float distance, int angle2)
 {
     Object_80039F5C *pOther = fn_80128B60();
@@ -722,7 +752,7 @@ extern "C" void fn_80128BE0(Object_80039F5C *p, Object_80039F5C *pOther)
     }
 }
 
-extern "C" int fn_80128D50(Object_80039F5C *p, State_801297F8 *pState)
+extern "C" int fn_80128D50(Object_80039F5C *p, State_801297F8 *pState, Vector_80039F5C target)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
     Object_80039F5C *pCarrier = fn_80137B40();
@@ -817,30 +847,30 @@ extern "C" void fn_80128EF8(Object_80039F5C *p, Object_80039F5C *pOther, float d
     }
 }
 
-extern "C" int fn_80129098(Object_800B26B0 *pMotion, int angle, Vector_80039F5C *pTarget, Vector_80039F5C *pOffset)
+extern "C" int fn_80129098(Object_800B26B0 *pMotion, int angle, Vector_80039F5C target, Vector_80039F5C offset)
 {
     Point_80167910 dir;
 
     fn_80227538(&dir, angle, pMotion->mUnknown28);
-    if (pMotion->mPos.mY > pTarget->mY) {
-        if (fabsf(pTarget->mX) < fn_80178A08()) {
-            float dy = pMotion->mPos.mY - pTarget->mY;
+    if (pMotion->mPos.mY > target.mY) {
+        if (fabsf(target.mX) < fn_80178A08()) {
+            float dy = pMotion->mPos.mY - target.mY;
             if (dir.mY < 0.0f) {
                 dir.mY = -dir.mY;
-                dir.mX = dir.mX * (dy / fabsf(dir.mY + pOffset->mY)) + pMotion->mPos.mX;
+                dir.mX = dir.mX * (dy / fabsf(dir.mY + offset.mY)) + pMotion->mPos.mX;
                 if (fabsf(dir.mX) > fn_80178A08() - lbl_803EB100) {
                     dir.mX = CLAMP(dir.mX, lbl_803EB100 - fn_80178A08(), fn_80178A08() - lbl_803EB100);
-                    dir.mY = pTarget->mY;
+                    dir.mY = target.mY;
                     fn_80227690(&dir, &dir, pMotion);
                     angle = fn_801CFE40(dir.mY, dir.mX) & 0xFFFFFF;
                 }
             }
-            if (pTarget->mY < fn_80178A2C() && fn_80137B40() != 0) {
+            if (target.mY < fn_80178A2C() && fn_80137B40() != 0) {
                 fn_80227538(&dir, angle, pMotion->mUnknown28);
                 if (dir.mX != 0.0f) {
-                    dir.mY = dir.mY * fabsf((pMotion->mPos.mX - pTarget->mX) / dir.mX) + pMotion->mPos.mY;
+                    dir.mY = dir.mY * fabsf((pMotion->mPos.mX - target.mX) / dir.mX) + pMotion->mPos.mY;
                     if (dir.mY > fn_80178A2C()) {
-                        dir.mX = pTarget->mX;
+                        dir.mX = target.mX;
                         dir.mY = fn_80178A2C();
                         fn_80227690(&dir, &dir, pMotion);
                         angle = fn_801CFE40(dir.mY, dir.mX) & 0xFFFFFF;
@@ -848,11 +878,11 @@ extern "C" int fn_80129098(Object_800B26B0 *pMotion, int angle, Vector_80039F5C 
                 }
             }
         }
-    } else if (pTarget->mY < fn_80178A2C() && fn_80137B40() != 0 && pMotion->mPos.mY < fn_80178A2C()
+    } else if (target.mY < fn_80178A2C() && fn_80137B40() != 0 && pMotion->mPos.mY < fn_80178A2C()
                && dir.mX != 0.0f && dir.mY > 0.0f) {
-        dir.mY = dir.mY * fabsf((pMotion->mPos.mX - pTarget->mX) / dir.mX) + pMotion->mPos.mY;
+        dir.mY = dir.mY * fabsf((pMotion->mPos.mX - target.mX) / dir.mX) + pMotion->mPos.mY;
         if (dir.mY > fn_80178A2C()) {
-            dir.mX = pTarget->mX;
+            dir.mX = target.mX;
             dir.mY = fn_80178A2C();
             fn_80227690(&dir, &dir, pMotion);
             angle = fn_801CFE40(dir.mY, dir.mX) & 0xFFFFFF;
@@ -964,6 +994,218 @@ extern "C" int fn_80129704(Object_80039F5C *p)
     return 0;
 }
 
+extern "C" int fn_801297F8(Object_80039F5C *p)
+{
+    Object_800B26B0 *pMotion;
+    State_801297F8 *pState;
+    Object_80039F5C *pOther;
+    Object_80137ABC *pBall;
+    Lookup_8012078C *pLookup;
+    Message_800F01CC message;
+    Vector_80039F5C pos;
+    Vector_80039F5C velocity;
+    Vector_80039F5C dir;
+    int angle;
+    float speed;
+    float distance;
+    int result = 0;
+
+    pMotion = &p->mMotion;
+    pState = (State_801297F8 *)&p->mUnknown336;
+    if (fn_801486A0() == 0) {
+        fn_801C1F94(&message, 0, sizeof(message));
+        message.mId = 97;
+        fn_800F053C(0, p->mpState, &message, p);
+        return 0;
+    }
+    if (fn_8009FB60(p) != 0) {
+        return 1;
+    }
+    fn_8010A2DC(p, 0, -1);
+    pOther = fn_80128B60();
+    pBall = fn_801374BC();
+    if (pOther != 0) {
+        Object_800B26B0 *pOtherMotion = &pOther->mMotion;
+
+        pos.mX = pOtherMotion->mPos.mX;
+        pos.mY = pOtherMotion->mPos.mY;
+        velocity.mX = pOtherMotion->mUnknown40;
+        velocity.mY = pOtherMotion->mUnknown44;
+        velocity.mZ = pOtherMotion->mUnknown48;
+        speed = pOtherMotion->mUnknown28;
+        angle = pOtherMotion->mUnknown32;
+        distance = fn_8022781C(pMotion, &pos);
+        fn_801294A8(p, pOther, (Point_80167910 *)&velocity, &angle, &speed, &pos, distance);
+    } else {
+        if (fn_80138064(pBall, &pos) != 0) {
+            Vector_80039F5C ballPos;
+            int high = 0;
+
+            velocity.mX = velocity.mY = velocity.mZ = 0.0f;
+            fn_80137D58(pBall, &ballPos);
+            if (fn_8013BA58(pBall, 0) == 4 && ballPos.mY < fn_80177FE0().mY) {
+                high = pos.mY > fn_80177FE0().mY;
+            }
+            if (high) {
+                pOther = fn_80137B64();
+                if (pOther != 0) {
+                    pos.mX = pOther->mMotion.mPos.mX;
+                    pos.mY = pOther->mMotion.mPos.mY;
+                    velocity.mX = pOther->mMotion.mUnknown40;
+                    velocity.mY = pOther->mMotion.mUnknown44;
+                    velocity.mZ = pOther->mMotion.mUnknown48;
+                    pOther = 0;
+                } else {
+                    int intercept = 0;
+                    Object_80039F5C *pReceiver = fn_80137B88(pBall);
+
+                    if (pReceiver != 0) {
+                        float selfDistance = fn_8022781C(&pos, &p->mMotion.mPos);
+                        float receiverDistance = fn_8022781C(&pos, &pReceiver->mMotion.mPos);
+
+                        if (selfDistance < 10.0f && receiverDistance > 8.0f && fn_8009F0B8(p, 0x2AAAAA) != 0) {
+                            intercept = fn_802372EC(0, 255) < (unsigned int)p->mRatings[8];
+                        }
+                        if (intercept) {
+                            fn_801C1F94(&message, 0, sizeof(message));
+                            message.mId = 57;
+                            message.mUnknown1[0] = fn_801374E0(pBall);
+                            fn_800F053C(0, p->mpState, &message, p);
+                            return 1;
+                        }
+                    }
+                }
+            }
+        } else {
+            fn_80137D58(pBall, &pos);
+            fn_80137EC4(pBall, &velocity);
+        }
+        speed = fn_802270D4(&velocity);
+        angle = fn_801CFE40(velocity.mY, velocity.mX);
+        distance = fn_8022781C(pMotion, &pos);
+    }
+    pLookup = fn_8012078C();
+    if ((p->mFlags & 0x4000) == 0 && (fn_801486A0() != 0 || p->mUnknown8 == 0xFF)) {
+        if (fn_800A5DD0(p) == 0 && pOther != 0 && p->mIdBytes[2] == fn_80178308()) {
+            fn_801C1F94(&message, 0, sizeof(message));
+            message.mId = 33;
+            fn_800F053C(0, p->mpState, &message, p);
+            return 0;
+        }
+        if (--pState->mUnknown15 <= 0) {
+            pState->mUnknown15 = (int)(p->mRatings[5] / 255.0f * 15.0f + 3.0f);
+            result = fn_8009F7A4(p, 0) == 1;
+        }
+        if (--pState->mUnknown12 <= 0) {
+            float speed;
+            int ok;
+            float dirLength;
+            int dirAngle;
+            int facing;
+
+            pState->mUnknown12 = (255 - p->mRatings[5]) >> 4;
+            pState->mUnknown12 = fn_800AC980(p, pState->mUnknown12);
+            pState->mUnknown12 = fn_8009AF00(p->mIdBytes[2], pState->mUnknown12);
+            if (fn_801486A0() == 2 && fn_80178D70(p->mIdBytes[2]) == 1) {
+                pState->mUnknown12 = (int)(pState->mUnknown12 * 0.1f);
+            }
+            if (pOther != 0 && fn_800B65A0(p->mIdBytes[2]) != 0xFF && fn_800B65A0(pOther->mIdBytes[2]) == 0xFF
+                && fn_80177C38() == 0) {
+                pState->mUnknown12 -= (signed char)MIN(pState->mUnknown12, pState->mUnknown12 * fn_8016B938());
+                if (fn_8011F1CC() != 0 && (pOther->mFlags & 0x8000) != 0) {
+                    pState->mUnknown12 -= (signed char)MIN(pState->mUnknown12, pState->mUnknown12 * fn_8016B974());
+                }
+            }
+            speed = pMotion->mUnknown28;
+            if (speed < lbl_803ECB08 * 0.4f) {
+                speed = lbl_803ECB08 * 0.4f;
+            }
+            fn_80129360(pMotion, pos, velocity, &dir);
+            ok = 1;
+            dirLength = fn_802270A4(&dir);
+            dirAngle = fn_801CFE40(dir.mY, dir.mX);
+            if (pOther != 0) {
+                if (fn_801486A0() == 2) {
+                    if (dirLength < fn_8016D9F4(pOther, 0.4f, 1.0f)) {
+                        ok = distance <= 3.0f;
+                    }
+                } else if (pOther->mpState->mId == 26 || pOther->mpState->mId == 27) {
+                    ok = 0;
+                }
+            }
+            if (ok) {
+                facing = fn_80120794(pMotion, &pos, &dir, speed, dirLength, dirAngle, distance);
+            } else {
+                Point_80167910 delta;
+
+                fn_80227690(&delta, pMotion, &pOther->mMotion.mPos);
+                facing = (fn_801CFE40(delta.mY, delta.mX) - 0x800000) & 0xFFFFFF;
+            }
+            fn_8012886C(p, pState, pLookup, facing, pos, distance, angle & 0xFFFFFF);
+            fn_801269B8(p, pState, distance);
+            pState->mUnknown8 = fn_80129098(pMotion, pState->mUnknown8, pos, dir);
+            if (pState->mUnknown41 == 1 && fn_8013BA58(pBall, 0) == 3) {
+                int handle = fn_80099734(p, pBall, 0, 2, pState->mUnknown20, 1, 0, 0, fn_8009A77C(p), 120.0f);
+
+                if (handle != 0x1FFFFFFF && fn_80099F04(p, handle, fn_801374E0(pBall)) == 1) {
+                    return 0;
+                }
+            }
+            if (fn_800E1584(p) != 0) {
+                return 0;
+            }
+        }
+        pState->mUnknown0 = MAX(pState->mUnknown0, 0.0f);
+        pState->mUnknown4 = MAX(pState->mUnknown4, 0.0f);
+        fn_801285C8(p, pOther, pState);
+    }
+    if (fn_800A5C04(p, pState->mUnknown8, pState->mUnknown8) != 0) {
+        result = 0;
+    } else {
+        if ((p->mFlags & 0x4000) == 0 && (fn_801486A0() != 0 || p->mUnknown8 == 0xFF)) {
+            if (fn_80128D50(p, pState, pos) != 0) {
+                p->mUnknown512.mUnknown15 = pState->mUnknown16;
+                if (pState->mUnknown4 > 0.0f) {
+                    if (fn_8016DAA4(p) != 0) {
+                        p->mUnknown512.mUnknown14 = 10;
+                        p->mUnknown512.mUnknown8 = pState->mUnknown8;
+                        p->mUnknown512.mUnknown4 = pState->mUnknown8;
+                        p->mUnknown512.mUnknown0 = pState->mUnknown4;
+                    } else {
+                        p->mUnknown512.mUnknown14 = 1;
+                        p->mUnknown512.mUnknown8 = pState->mUnknown8;
+                        p->mUnknown512.mUnknown4 = pState->mUnknown8;
+                        p->mUnknown512.mUnknown0 = 0.0f;
+                    }
+                } else {
+                    p->mUnknown512.mUnknown14 = 1;
+                    p->mUnknown512.mUnknown8 = pState->mUnknown8;
+                    p->mUnknown512.mUnknown4 = pState->mUnknown8;
+                    p->mUnknown512.mUnknown0 = pState->mUnknown0;
+                }
+            } else {
+                fn_80126DD4(p, pState, distance, pOther);
+                p->mUnknown512.mUnknown15 = pState->mUnknown16;
+                p->mUnknown512.mUnknown14 = 1;
+                p->mUnknown512.mUnknown8 = pState->mUnknown8;
+                p->mUnknown512.mUnknown4 = pState->mUnknown8;
+                p->mUnknown512.mUnknown0 = pState->mUnknown0;
+            }
+            fn_801262B8(p, pOther, pos, distance, pLookup->mpUnknown12[p->mIdBytes[1]]);
+        } else if (p->mUnknown512.mUnknown15 != 1 && p->mUnknown512.mUnknown15 != 4
+                   && p->mUnknown512.mUnknown15 != 5) {
+            pState->mUnknown16 = 0;
+            fn_80126DD4(p, pState, distance, pOther);
+            p->mUnknown512.mUnknown15 = pState->mUnknown16;
+        }
+        if (p->mpState->mId == 2) {
+            fn_80128EF8(p, pOther, distance);
+            fn_80128BE0(p, pOther);
+        }
+    }
+    return result;
+}
+
 extern "C" int fn_8012A384(void)
 {
     return 1;
@@ -976,4 +1218,63 @@ extern "C" int fn_8012A38C(Object_80039F5C *p, int message)
         pState->mUnknown8 = (pState->mUnknown8 + 0x800000) & 0xFFFFFF;
     }
     return 0;
+}
+
+extern "C" int fn_8012A3B0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance,
+                           int *pOut)
+{
+    Object_800B26B0 *pMotion = &p->mMotion;
+    int result = 0;
+
+    *pOut = lbl_803EB0C8;
+    if (pOther == 0) {
+        result = 0;
+    } else if (fn_80124714(p, pOther, 0) != 0) {
+        if (pOther->mIdBytes[2] != p->mIdBytes[2] && (pOther->mFlags & 0x10000) != 0
+            && distance < lbl_803EB0B0 * 0.5f && fn_801486A0() != 0) {
+            result = 1;
+            *pOut = fn_8012623C(pOther);
+        } else if (pOther == 0 || pOther->mIdBytes[2] == p->mIdBytes[2]) {
+            result = 0;
+        } else {
+            float range = lbl_803EB0B0;
+
+            if (fn_801CFFD0(pOther->mMotion.mFacing, pMotion->mFacing) <= 0x1FFFFF) {
+                range = lbl_803EB0B8;
+            }
+            if (distance < range) {
+                unsigned int odds = lbl_803EB0BC;
+                int boosted = 0;
+
+                if (fn_8011F1CC() != 0 && (pOther->mUnknown2914 == 0 || pOther->mpState->mId == 18)) {
+                    odds += (unsigned int)(odds * fn_8016B974());
+                    boosted = 1;
+                }
+                if (fn_802372EC(0, 100) < odds) {
+                    result = 1;
+                }
+                if (pMotion->mPos.mY < pos.mY) {
+                    *pOut = lbl_803EB0CC;
+                    if (fabsf(pMotion->mPos.mX - pos.mX) < fabsf(pMotion->mPos.mY - pos.mY) * 0.5f) {
+                        *pOut = lbl_803EB0D0;
+                        if (pMotion->mPos.mY > fn_80178A2C() - 5.0f) {
+                            odds = lbl_803EB0C0;
+                        } else {
+                            odds = lbl_803EB0C4;
+                        }
+                        if (boosted) {
+                            odds += (unsigned int)(odds * fn_8016B974());
+                        }
+                        if (fn_802372EC(0, 100) < odds) {
+                            result = 1;
+                        }
+                    }
+                }
+                if ((pOther->mFlags & 0x800) != 0 && distance < lbl_803EB0B4) {
+                    result = 0;
+                }
+            }
+        }
+    }
+    return result;
 }
