@@ -33034,7 +33034,7 @@
     {
       "source": "src/game/cu_80154A88.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #837; two complete slot bodies of the table 0x802A27F0 (derived from Class_80148A58, include/game/Class_80148A58.h, whose base table is 0x802A2EE0) inside the retained provisional cu_801485B4 survey group: slot 14 (0x80154A88, word 0x802A2864) and slot 26 (0x80154AB8, word 0x802A28C4). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; slot 35 (0x801548EC) before the range and 0x80154F70 onward excluded; original bytes stay linked.",
+      "evidence": "Issue #837; two complete slot bodies of the table 0x802A27F0 (derived from Class_80148A58, include/game/Class_80148A58.h, whose base table is 0x802A2EE0) inside the retained provisional cu_801485B4 survey group: slot 14 (0x80154A88, word 0x802A2864) and slot 26 (0x80154AB8, word 0x802A28C4). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; slot 35 (0x801548EC) before the range and 0x80154F70 onward (from src/game/cu_80154F70.cpp) excluded; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -33795,6 +33795,31 @@
           "symbol": "fn_8015539C",
           "start": "0x8015539C",
           "end": "0x80155588"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80154F70.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue 890; two complete functions inside the retained provisional cu_801485B4 survey group: slot 30 of the table 0x802A27F0 of src/game/cu_80154520.cpp (Class_80148A58-derived, include/game/Class_80148A58.h; 0x80154F70-0x80154FC0, word 0x802A28E4) and 0x80154FC0 (called from 0x80154DEC in src/game/cu_80154A88.cpp). Calls the base slot 0x801499A8 through the symbol fn_801499A8 of src/game/cu_80149014.cpp, fn_80039F5C through include/game/Object_80039F5C.h and 0x8022B7A4 as an extern; reads the .sbss pair 0x803ECA24 as the extern lbl_803ECA24 (not claimed). No literal or data word is owned. Original file boundaries and nominal identity unresolved; 0x80154F70 follows src/game/cu_80154A88.cpp and 0x80155004 onward is not claimed; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80154F70",
+          "end": "0x80155004"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80154F70",
+          "start": "0x80154F70",
+          "end": "0x80154FC0"
+        },
+        {
+          "symbol": "fn_80154FC0",
+          "start": "0x80154FC0",
+          "end": "0x80155004"
         }
       ]
     },
