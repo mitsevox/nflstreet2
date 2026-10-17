@@ -33719,6 +33719,41 @@
       ]
     },
     {
+      "source": "src/game/cu_801530FC.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #883; four complete functions inside the retained provisional cu_801485B4 survey group: 0x801530FC (returns word +36 of the object held at +28 of the .bss object 0x8031BDD4), 0x8015310C and 0x80153168 (flag bytes from +44 of that object, passed in r3 by their callers), and slot 1 of the table 0x802A1930 of src/game/cu_801531C4.cpp (0x80153174, word 0x802A193C). Calls fn_801383C8 through include/game/cu_80136B1C.h and 0x801787DC (registered by src/game/cu_80176F18.cpp); reads lbl_8031BDD4 as an extern (not claimed). No literal or data word is owned. Original file boundaries and nominal identity unresolved; 0x80152FFC-0x801530FC is src/game/cu_80152FFC.cpp and 0x801531C4 starts src/game/cu_801531C4.cpp; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801530FC",
+          "end": "0x801531C4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801530FC",
+          "start": "0x801530FC",
+          "end": "0x8015310C"
+        },
+        {
+          "symbol": "fn_8015310C",
+          "start": "0x8015310C",
+          "end": "0x80153168"
+        },
+        {
+          "symbol": "fn_80153168",
+          "start": "0x80153168",
+          "end": "0x80153174"
+        },
+        {
+          "symbol": "fn_80153174",
+          "start": "0x80153174",
+          "end": "0x801531C4"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
