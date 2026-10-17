@@ -1701,7 +1701,7 @@ int fn_80078B94(void);
 int fn_80078AE0(int id);
 void fn_8007E274(int key);
 void fn_8007E8A8(int a,int value);
-void fn_800C8818(int id);
+int fn_800C8818(int team);
 void fn_8002B714(void);
 void fn_8007E738(int value);
 void fn_8007BF60(int value);
