@@ -246,7 +246,7 @@ extern "C" void fn_800BCC30(Class_80297BF8 *pThis)
     fn_8010A220();
     if (fn_80025708() != 0) {
         Point_8017886C pos = {0.0f, 0.0f};
-        int spot = (signed char)fn_800785C0()->mUnknown1C0;
+        int spot = fn_800785C0()->mUnknown1C0;
 
         if (spot != -1) {
             if (spot < 50) {

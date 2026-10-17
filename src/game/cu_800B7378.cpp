@@ -65,11 +65,6 @@ struct Desc_802345C4 {
     int mUnknown4;
 };
 
-struct Target_800B89C8 {
-    unsigned char mUnknown0[12];
-    float mUnknownC;
-};
-
 extern "C" {
 int fn_8002C9A8(Type_803EA368 *p, int msg, int value);
 int fn_8002CA74(Type_803EA368 *p, int msg, int value);
@@ -340,15 +335,15 @@ extern "C" void fn_800B8028(void)
     current = fn_8022E558();
     if (fn_801FCE10(0, "declare \x8a cursor for select * from 'OCMT'\n", &cursor) == 0) {
         int id;
-        unsigned char slot[4];
+        int slot;
         int team;
 
-        while (fn_801FCE10(0, "fetch from \x8a 'UNLS' into \x82 and 'digl' into \x82\n", &cursor, &id, slot) == 0) {
+        while (fn_801FCE10(0, "fetch from \x8a 'UNLS' into \x82 and 'digl' into \x82\n", &cursor, &id, &slot) == 0) {
             if (fn_801FCE10(0, "select 'DIGT' into \x82 from 'MTTS' where 'UNLS' = \x82\n", &team, id) != 0) {
                 break;
             }
-            fn_800B6474(slot[3], team != current);
-            fn_800F181C(slot[3], 0);
+            fn_800B6474((unsigned char)slot, team != current);
+            fn_800F181C((unsigned char)slot, 0);
         }
     }
     if (cursor.mUnknown0 != 0) {
@@ -420,14 +415,14 @@ extern "C" void fn_800B876C(int index, unsigned int event, float value)
 
 extern "C" int fn_800B89C8(void *pData)
 {
-    Target_800B89C8 *p;
+    Step_800C4460 *pStep;
 
     if (fn_800B9B18(lbl_803EAB84) != 0) {
         return 0;
     }
-    p = *(Target_800B89C8 **)pData;
+    pStep = *(Step_800C4460 **)pData;
     if (lbl_803EAB78->mUnknown150 != 0) {
-        p->mUnknownC = p->mUnknownC <= 180.0f ? p->mUnknownC : 180.0f;
+        pStep->mUnknownC = pStep->mUnknownC <= 180.0f ? pStep->mUnknownC : 180.0f;
     }
     return 1;
 }

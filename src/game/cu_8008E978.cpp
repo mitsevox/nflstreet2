@@ -32,7 +32,6 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
-#include "game/Object_800785C0.h"
 #include "game/Object_8017886C.h"
 #include "game/Query_800CE770.h"
 #include "game/RecordList_8002E7C0.h"
@@ -67,7 +66,6 @@
 #include "game/fn_802372EC.h"
 #include "game/fn_80218FC4.h"
 #include "game/fn_802270D4.h"
-#include "game/fn_801F40F4.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/fn_80094488.h"
@@ -4468,7 +4466,6 @@ extern Block_800BA3F0 *lbl_803EAB88;
 
 extern "C" {
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
-float fn_80178A08(void);
 }
 
 extern "C" void fn_800B9D24(void);
@@ -4496,21 +4493,9 @@ struct Object_801618D8 {
     int mUnknown104;
 };
 
-/* Position that fn_801F4934 writes for a playing stream. */
-struct Position_801F4934 {
-    int mUnknown0;
-    int mUnknown4;
-    char mUnknown8[8];
-};
-
 extern "C" {
-void fn_8003A1EC(int on, int team, int index);
-void fn_8003A394(int a, int team, int index);
 void fn_8003A3F4(int a, int team);
-int fn_8006D65C(int idx);
 Object_801618D8 *fn_80162DBC(int index);
-void fn_80162DD0(Object_801618D8 *item, Vector_80039F5C *point);
-void fn_801F4934(int a, Position_801F4934 *pPosition);
 }
 
 extern "C" int fn_800B9F50(void);
@@ -4744,10 +4729,9 @@ extern "C" void fn_800BACF8(void)
     fn_8006D884(4);
 }
 
-/* Only the fields fn_800BAD1C and fn_800BADD4 touch are declared. */
 extern "C" {
 void fn_80162780(int a, int b);
-void fn_8003A3F4(int a, int index);
+void fn_8003A3F4(int a, int team);
 }
 
 extern "C" Event_800B9F50 *lbl_802D9A84[];
@@ -5003,16 +4987,11 @@ extern "C" int fn_800BB23C(int value)
 }
 
 extern "C" {
-void fn_8009BD60(Object_80039F5C *p);
 int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
-void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
-void fn_800A3B5C(Object_80039F5C *p);
 int fn_801F0F18(int a);
 }
 
 #include "engine/cu_80227F14.h"
-
-extern "C" void fn_800BB458(void);
 
 extern "C" void fn_800BB504(void);
 
@@ -5116,8 +5095,6 @@ extern "C" void fn_800BB9A4(int team, int value)
         }
     }
 }
-
-extern "C" void fn_801475F4(void);
 
 extern "C" void fn_800BBA2C(void);
 
@@ -8932,15 +8909,8 @@ void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput);
 
 extern "C" {
 int fn_801CFE40(float y, float x);
-float fn_801CFB94(int angle);
 float fn_8022710C(void *pV);
 
-extern unsigned char lbl_803EAB64;
-extern unsigned char lbl_803EAB65;
-extern short lbl_803EAB66;
-extern short lbl_803EAB68;
-extern short lbl_803EAB6A;
-extern short lbl_803EAB6C;
 }
 
 extern "C" int fn_800B7378(Object_80039F5C *p);
@@ -9014,9 +8984,7 @@ handled:
 
 extern "C" {
 int fn_800B7378(Object_80039F5C *p);
-int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex);
 int fn_8011F1CC(void);
-int fn_800E1350(Object_80039F5C *p);
 
 }
 
@@ -9121,8 +9089,6 @@ extern "C" int fn_800B7FE8(Object_80039F5C *p)
     return fn_800B7F34(p);
 }
 
-extern "C" void fn_800F181C(int index, int value);
-
 extern "C" void fn_800B8028(void);
 
 extern "C" int fn_800B81A4(void)
@@ -9219,8 +9185,6 @@ extern "C" void fn_800B847C(int index, unsigned char value)
 
 extern "C" void fn_800BD184(Class_80297BF8 *p, int value);
 
-extern "C" void fn_800B8494(int value);
-
 extern "C" void fn_800B852C(void)
 {
     lbl_803EAB74 = 1;
@@ -9293,14 +9257,7 @@ extern "C" void fn_800B86A4(int index)
 
 extern "C" {
 int fn_8002D228(Type_803EA368 *p);
-void fn_8002D2C8(Type_803EA368 *p, unsigned char value);
 int fn_8009B9BC(void);
-int fn_80065864(void);
-unsigned char fn_8017F2DC(unsigned char value);
-unsigned char fn_8017F324(unsigned char value);
-unsigned char fn_8017F394(void);
-unsigned char fn_8017F48C(void);
-void fn_8017F2A4(void);
 void fn_8017CFB4(int index);
 int fn_8017D064(int a);
 void fn_8009B924(void);
@@ -9351,14 +9308,6 @@ extern unsigned char lbl_803EAB7D;
 extern unsigned char lbl_803EAB7E;
 extern int lbl_803EAB80;
 }
-
-/* Object handed to fn_800B89C8; only the float at +0xC of its target is used. */
-struct Target_800B89C8 {
-    unsigned char mUnknown0[12];
-    float mUnknownC;
-};
-
-extern "C" int fn_800B89C8(void *pData);
 
 extern "C" void fn_800B8A40(Class_80297C60 *p)
 {
@@ -9474,23 +9423,8 @@ extern "C" int fn_800B8DF4(Class_80297C60 *p)
 
 extern "C" {
 void fn_800AE9A4(void);
-void fn_800D45A0(void);
-void fn_800D4858(void);
-void fn_800D4888(int flag);
-void fn_800D490C(void);
-void fn_800D49A4(void);
-void fn_800D49FC(void);
-void fn_800D4A40(void);
-void fn_800D42D4(void);
-void fn_80173D10(void);
 int fn_8017D064(int a);
-void fn_8017D7C4(const char *pText);
-int fn_80179138(void);
 }
-
-extern "C" int fn_800B8E18(void *p, char *pText);
-
-extern "C" void fn_800B925C(void *p, char *pText);
 
 extern "C" void fn_800B9598(Class_80297C60 *p)
 {
@@ -9520,36 +9454,21 @@ extern "C" void fn_800B9630(void)
     fn_800B9598(0);
 }
 
-/* Argument of fn_802345C4. */
-struct Desc_802345C4 {
-    int mUnknown0;
-    int mUnknown4;
-};
-
 extern "C" {
-int fn_8002D0AC(Type_803EA368 *p);
-void fn_80076160(void);
 void fn_8007617C(void);
-void fn_800A1FEC(Object_8017886C *result, Object_8017886C *value);
 void fn_800B8028(void);
 void fn_800BAAE4(void);
 void fn_800C4460(Sequence_800C4460 *p);
 void fn_800C4568(Sequence_800C4460 *p);
-void fn_800C9FC0(void);
-unsigned char fn_801478F0(unsigned char a);
 void fn_80148154(void);
-void fn_801483C8(void);
 void fn_80179150(void);
 void fn_8017DBCC(void);
-void fn_802345C4(Desc_802345C4 *pDesc, int count);
 
 extern unsigned char lbl_803EAB7C;
 extern unsigned char lbl_803EAB7D;
 extern unsigned char lbl_803EAB7E;
 extern int lbl_803EAB80;
 }
-
-extern "C" void fn_800B9654(Class_80297C60 *p, float dt);
 
 extern "C" void fn_800B9998(Class_80297C60 *p)
 {
@@ -9595,8 +9514,6 @@ extern "C" int fn_800B9A90(Class_80297C60 *p)
     return lbl_803EAB78->mUnknown151;
 }
 
-extern "C" void fn_800B9A9C(void);
-
 extern "C" int fn_800B9B18(void *p)
 {
     if (fn_8009B9A8(0) != 0 || lbl_803EAB78->mUnknown144 > 120) {
@@ -9624,8 +9541,6 @@ extern "C" void fn_800B9BAC(Class_80297C60 *p)
     lbl_803EAB78->mUnknown151 = 1;
 }
 
-extern "C" int fn_800B9BBC(void);
-
 extern "C" unsigned char fn_800B9BFC(void);
 
 extern "C" void fn_800B9C3C(void);
@@ -9636,7 +9551,6 @@ extern "C" void fn_800B9CB0(void);
 
 extern "C" int fn_800B9CE4(void);
 
-/* One of the two 32-byte records at the start of Block_800BFAD0. */
 /* Read by fn_800BD608 through a pointer to +12 of Slot_800BFAD0. */
 struct Stick_800BD608 {
     float mX;
@@ -9647,6 +9561,7 @@ struct Stick_800BD608 {
     unsigned char mUnknownB;
 };
 
+/* One of the two 32-byte records at the start of Block_800BFAD0. */
 struct Slot_800BFAD0 {
     int mUnknown0;
     int mUnknown4;
@@ -10482,45 +10397,21 @@ int fn_8016E928(void);
 int fn_8006D884(int idx);
 void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 extern unsigned char lbl_803EABA0;
-extern unsigned char lbl_803EABA2;
 extern unsigned char lbl_803EABA3;
 void fn_800BBA2C(void);
-void fn_800BBF18(void);
 void fn_800BD1C8(Record_800BAE7C *pRecords);
-void fn_80065814(void);
-unsigned int fn_801568F0(void);
-void fn_80173404(void);
 void fn_800BC3F0(void);
-void fn_800BB24C(void);
-void fn_800BB694(int a, unsigned int b, float c);
-void fn_8003E174(int a);
-void fn_8017D5D8(void);
-void fn_800D4164(int side, float time, int a);
-void fn_800A7B5C(void);
-void fn_801790D0(int team, float a, float b);
 extern unsigned short lbl_802D9B14[];
-float fn_80178A2C(void);
-void fn_801782B0(void);
-void fn_80178CD8(int a);
-void fn_8017D764(void);
 void fn_800BAAE4(void);
-int fn_80076F40(int index);
 void fn_8017DBCC(void);
 int fn_8013C678(Camera_8013F738 *pCamera);
 void fn_8013C7C4(Camera_8013F738 *pCamera);
-void fn_8013C824(Camera_8013F738 *pCamera, int msg, int arg);
 }
 
 extern "C" void fn_800BC5B8(void)
 {
     fn_800BC51C(0);
 }
-
-extern "C" void fn_800BC5DC(Class_80297BF8 *pThis);
-
-extern "C" void fn_800BC83C(void);
-
-extern "C" void fn_800BC8E0(void);
 
 extern "C" void fn_800BCA00(Class_80297BF8 *pThis, float dt)
 {
@@ -10545,16 +10436,10 @@ extern "C" void fn_800BCAF4(float value)
     fn_800AD910(5, value);
 }
 
-extern "C" void fn_800BCC30(Class_80297BF8 *pThis);
-
-extern "C" void fn_800BCF7C(void);
-
 extern "C" void fn_800BD184(Class_80297BF8 *p, int value)
 {
     lbl_803EAB94 = 1;
 }
-
-extern "C" float fn_800BD190(void);
 
 extern "C" int fn_800BD1BC(void *p)
 {
@@ -10775,19 +10660,6 @@ extern "C" void fn_800BDA7C(void)
     }
 }
 
-extern "C" {
-void fn_8016E498(void);
-int fn_80178E10(void);
-int fn_801C6280(int a, int b, void *p);
-void fn_8017DD68(int index);
-int fn_80074638(void);
-void fn_800A7514(int team);
-void fn_800BE808(int index, int team);
-void fn_800BE944(int team, int index, unsigned int msg, float value);
-extern unsigned char lbl_802ED104[];
-}
-
-extern "C" void fn_800BDB14(int index, unsigned int msg, float value);
 
 
 extern "C" { extern float lbl_803EAC78; }
