@@ -471,8 +471,6 @@ void fn_801BE760(void *p, unsigned short key, int a);
 void fn_800D8140(State_800D8140 *pState, Object_80039F5C *p, int value);
 void fn_800D81C8(State_800D8140 *pState, Object_80039F5C *p);
 void fn_8022765C(void *pOut, void *pA, void *pB);
-int fn_801248D4(Object_80039F5C *p, int a, Vector_80039F5C *pPos, Object_80039F5C **ppOut, float x, float y, int b,
-                int c);
 int fn_800ACF40(Object_80039F5C *p, signed char value);
 Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, float *pOut, int b);
 int fn_80177F70(void);

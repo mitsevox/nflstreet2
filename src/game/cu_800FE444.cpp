@@ -434,7 +434,7 @@ int fn_80100024(Object_80039F5C *p,int angle,int mode)
         Vector_80039F5C point;point.mZ=0.0f;
         fn_80227538((Point_8017886C *)&point,angle,lbl_803EAEA4);
         fn_80227638(&point,&point,&p->mMotion.mPos);
-        if(!fn_801248D4(p,&p->mMotion.mPos,&point,0,(Filter_801248D4 *)filter,0,0.0f,1.0f))return 0;
+        if(!fn_801248D4(p,&p->mMotion.mPos,&point,0,0.0f,1.0f,(Filter_801248D4 *)filter,0))return 0;
     }
     return 1;
 }
