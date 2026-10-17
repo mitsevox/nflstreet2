@@ -224,7 +224,7 @@ void fn_8018B8B0(Object_8008044C *pObject)
         fn_8008135C(pObject, lbl_802EAE30[i], 1);
     }
     fn_8007AA90((Object_8007A334 *)pObject, 0x44494F50, -1);
-    fn_8007AA90((Object_8007A334 *)pObject, 0x54474850, 'A');
+    fn_8007AA90((Object_8007A334 *)pObject, 0x54474850, 0x41);
     fn_8007AA90((Object_8007A334 *)pObject, 0x54475750, 0);
     fn_8007AA90((Object_8007A334 *)pObject, 0x54425950, 2);
 }
@@ -321,7 +321,6 @@ void fn_8018BB24(int index, int value)
     fn_8008056C(&object);
 }
 
-/* Discarded by the GameCube linker; see the linker row 0x802A9E74-0x802A9F80. */
 void CopyRdrcPlayersToTeam(int index, int team, int rumt)
 {
     Object_80023BBC arg;
@@ -378,7 +377,7 @@ void CopyRdrcPlayersToTeam(int index, int team, int rumt)
         fn_801F967C(0x54415453, table);
     }
     if (cursor.mUnknown0) fn_801FCFA0(&cursor);
-    gFMCAPPORT.ClearEntries();
+    gFMCAPPORT.Start();
     fn_8022F478(saved);
 }
 

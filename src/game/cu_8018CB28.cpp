@@ -259,7 +259,7 @@ void fn_8018D358(int index, int team, int rumt)
         fn_801F967C(0x54415453, table);
     }
     if (cursor.mUnknown0) fn_801FCFA0(&cursor);
-    gFMCAPPORT.ClearEntries();
+    gFMCAPPORT.Start();
     fn_8022F478(saved);
 }
 
@@ -317,17 +317,17 @@ void fn_8018D918()
     QueryResult result;
     Table_8007E020 tables[2];
     QueryCursor cursor;
-    int player, pxsp, ytrp, selected;
+    int pxsp, diop, ytrp, selected;
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
     fn_801FCE10(&result, "use \x8c declare \x8a cursor for select 'PXSP' and 'DIOP' and 'YTRP' from 'YPRC'\n", source, &cursor);
     for (unsigned int i = 0; i < result.mUnknown0; i++) {
-        player = i; pxsp = 0; ytrp = 0;
-        fn_801FCE10(0, "fetch from \x8a 'PXSP' into \x85 and 'DIOP' into \x85 and 'YTRP' into \x85\n", &cursor, &player, &pxsp, &ytrp);
-        if (pxsp != 0x7FF4 && ytrp == 1)
-            fn_801FCE10(0, "use \x8c update 'PPRC' set 'PXSP' = \x85 where 'PXSP' = \x85\n", source, i, player);
+        pxsp = i; diop = 0; ytrp = 0;
+        fn_801FCE10(0, "fetch from \x8a 'PXSP' into \x85 and 'DIOP' into \x85 and 'YTRP' into \x85\n", &cursor, &pxsp, &diop, &ytrp);
+        if (diop != 0x7FF4 && ytrp == 1)
+            fn_801FCE10(0, "use \x8c update 'PPRC' set 'PXSP' = \x85 where 'PXSP' = \x85\n", source, i, pxsp);
     }
     if (cursor.mUnknown0) fn_801FCFA0(&cursor);
     if (fn_801FCE10(&result, "use \x8c select 'PXSP' into \x85 from 'YPRC' where 'DIOP' = \x85\n", source, &selected, 0x7FF4) == 0)
