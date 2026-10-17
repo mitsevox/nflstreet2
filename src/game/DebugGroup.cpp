@@ -18,4 +18,4 @@ ModuleDependency *DebugGroup::vfn_06(int id)
 }
 
 void DebugGroup::vfn_02() {}
-int DebugGroup::vfn_03(int, int) { return 1; }
+int DebugGroup::vfn_03(int a, int id) { return 1; }
