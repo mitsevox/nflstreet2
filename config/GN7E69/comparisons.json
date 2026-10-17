@@ -34990,13 +34990,13 @@
     {
       "source": "src/game/cu_8014B498.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #927; the complete constructor 0x8014B498-0x8014B4E8 of the Class_80148A58-derived class of the table 0x802A2DB8 inside the retained provisional cu_801485B4 survey group. It calls the base constructor 0x80148A98 (__14Class_80148A58, src/game/cu_80148A98.cpp), stores the table at +24 (resolved through the _vt.14Class_802A2DB8 external) and initializes members, including the .data record array 0x802DE130 (an extern). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "Issue #927; the complete constructor 0x8014B498-0x8014B4E8 and destructor 0x8014B4E8-0x8014B528 (slot 35, called directly by the static destroy path) of the Class_80148A58-derived class of the table 0x802A2DB8 inside the retained provisional cu_801485B4 survey group. It calls the base constructor 0x80148A98 (__14Class_80148A58, src/game/cu_80148A98.cpp), stores the table at +24 (resolved through the _vt.14Class_802A2DB8 external) and initializes members, including the .data record array 0x802DE130 (an extern). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8014B498",
-          "end": "0x8014B4E8"
+          "end": "0x8014B528"
         }
       ],
       "functions": [
@@ -35004,6 +35004,11 @@
           "symbol": "__14Class_802A2DB8",
           "start": "0x8014B498",
           "end": "0x8014B4E8"
+        },
+        {
+          "symbol": "_._14Class_802A2DB8",
+          "start": "0x8014B4E8",
+          "end": "0x8014B528"
         }
       ]
     },
