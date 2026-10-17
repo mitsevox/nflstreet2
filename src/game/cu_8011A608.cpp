@@ -154,9 +154,9 @@ extern "C" int fn_8011A994(Object_80039F5C *p, Object_80039F5C *pOther)
 
     fn_80227690(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
     if (fn_801CFFD0(fn_801CFE40(delta.mUnknown4, delta.mUnknown0), pOther->mMotion.mFacing) > (int)(lbl_803EB08C * 46603.38f)) {
-        Object_80039F5C *pBall = fn_80137B40();
+        Object_80039F5C *pCarrier = fn_80137B40();
 
-        if (pBall != 0 && fn_8022781C(&pOther->mMotion.mPos, &pBall->mMotion.mPos) > lbl_803EB090) {
+        if (pCarrier != 0 && fn_8022781C(&pOther->mMotion.mPos, &pCarrier->mMotion.mPos) > lbl_803EB090) {
             return 0;
         }
     }

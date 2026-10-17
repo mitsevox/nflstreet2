@@ -178,11 +178,11 @@ extern "C" int fn_8010CB58(Object_80039F5C *p) {
         }
         break;
     case 2: {
-        int pass = fn_800F06F4(0, p->mpState, 18, 0xFFFF) != 0xFFFF;
-        int pitch = fn_800F06F4(0, p->mpState, 26, 0xFFFF) != 0xFFFF;
-        int toss = fn_800F06F4(0, p->mpState, 25, 0xFFFF) != 0xFFFF;
+        int has18 = fn_800F06F4(0, p->mpState, 18, 0xFFFF) != 0xFFFF;
+        int has26 = fn_800F06F4(0, p->mpState, 26, 0xFFFF) != 0xFFFF;
+        int has25 = fn_800F06F4(0, p->mpState, 25, 0xFFFF) != 0xFFFF;
 
-        if (p == fn_80137B40() && !pass && !pitch && !toss) {
+        if (p == fn_80137B40() && !has18 && !has26 && !has25) {
             Message_800F01CC message;
 
             fn_801C1F94(&message, 0, 4);
@@ -192,7 +192,7 @@ extern "C" int fn_8010CB58(Object_80039F5C *p) {
             p->mUnknown512.mUnknown0 = 0.72f;
             p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
             p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
-        } else if (pass) {
+        } else if (has18) {
             result = 1;
             p->mUnknown512.mUnknown14 = 1;
             p->mUnknown512.mUnknown8 = pBlock->mUnknown16;

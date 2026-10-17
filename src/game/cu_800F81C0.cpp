@@ -15,8 +15,8 @@
 #include "game/fn_8022781C.h"
 #include "game/fn_802372EC.h"
 
-/* View of the block at player +336 used by fn_800F846C, fn_800F8828,
-   fn_800F8A88 and fn_800FA0DC. */
+/* View of the block at player +336 used by fn_800F81C0, fn_800F846C,
+   fn_800F8588, fn_800F8828, fn_800F8A88 and fn_800FA0DC. */
 struct Block_800F8A88 {
     int mRef;
     int mUnknown4;
@@ -96,7 +96,7 @@ extern "C" void fn_800F81C0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             } else {
                 pBlock->mUnknown24 = 0;
             }
-        } else if (p->mMotion.mPos.mY < origin.mY + 6.0f) {
+        } else if (pOther->mMotion.mPos.mY < origin.mY + 6.0f) {
             pBlock->mUnknown8 = direction;
             pBlock->mUnknown4 = fn_801CFE40(toSpot.mY, toSpot.mX);
             pBlock->mUnknown24 = 0;
@@ -245,7 +245,7 @@ extern "C" void fn_800F8A88(Object_80039F5C *p, Object_80039F5C *pOther) {
         pBlock->mUnknown12 = 0.0f;
     } else {
         Vector_80039F5C out;
-        int facing;
+        int unknown32;
 
         fn_800F8828(p, pOther, pBlock);
         fn_800F88E4(p, pOther);
@@ -272,11 +272,11 @@ extern "C" void fn_800F8A88(Object_80039F5C *p, Object_80039F5C *pOther) {
             fn_800F846C(p, pOther, &out);
             break;
         }
-        facing = p->mMotion.mUnknown32;
+        unknown32 = p->mMotion.mUnknown32;
         if (fn_801CFFD0(pBlock->mUnknown8, p->mMotion.mFacing) > 0x600000
             && pOther->mMotion.mUnknown28 >= lbl_803ECB08 * 0.14f && pBlock->mUnknown12 >= lbl_803ECB08 * 0.14f
             && fn_802270A4(&delta) < 5.0f) {
-            int angle = ((pBlock->mUnknown8 + facing) / 2) & 0xFFFFFF;
+            int angle = ((pBlock->mUnknown8 + unknown32) / 2) & 0xFFFFFF;
 
             if (fn_801CFFD0(angle, pBlock->mUnknown8) > 0x400000) {
                 angle = (angle + 0x800000) & 0xFFFFFF;
