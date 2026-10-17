@@ -33588,6 +33588,51 @@
       ]
     },
     {
+      "source": "src/game/cu_80155A7C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #874; six complete non-virtual functions inside the retained provisional cu_801485B4 survey group (0x80155A7C-0x80155E28). All are reached only by direct calls (0x80155A7C from 0x8015572C, 0x80155BF4 from 0x80155754, 0x80155C44 from 0x8005CE80, 0x80155CF0 from 0x8005CDDC, 0x80155D38 from 0x8005D25C and 0x80155C64, 0x80155D7C from 0x801555AC and 0x80155614); no data word holds any of them. All but 0x80155CF0 use the 192-byte block at +28 of the object, named through the file-local Class_802A2A40 (the table 0x802A2A40 whose slot 1, 0x8015583C, allocates that block). Calls fn_800C8744 and 0x801787DC (registered by src/game/cu_80176F18.cpp) as externs; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x801559B8 before the range and 0x80155E28 onward excluded; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80155A7C",
+          "end": "0x80155E28"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80155A7C",
+          "start": "0x80155A7C",
+          "end": "0x80155BF4"
+        },
+        {
+          "symbol": "fn_80155BF4",
+          "start": "0x80155BF4",
+          "end": "0x80155C44"
+        },
+        {
+          "symbol": "fn_80155C44",
+          "start": "0x80155C44",
+          "end": "0x80155CF0"
+        },
+        {
+          "symbol": "fn_80155CF0",
+          "start": "0x80155CF0",
+          "end": "0x80155D38"
+        },
+        {
+          "symbol": "fn_80155D38",
+          "start": "0x80155D38",
+          "end": "0x80155D7C"
+        },
+        {
+          "symbol": "fn_80155D7C",
+          "start": "0x80155D7C",
+          "end": "0x80155E28"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
