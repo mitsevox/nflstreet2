@@ -2299,7 +2299,7 @@ extern "C" void fn_800EC9E4(Object_80039F5C *p, int kind, int flag) {
         else
             p->mUnknown1008.mUnknown2 = direction;
     }
-    if (p == fn_80137B40() && flag)
+    if (p == fn_80137B40() && !flag)
         p->mUnknown1008.mUnknown0 = 1;
     else
         p->mUnknown1008.mUnknown0 = 2;
