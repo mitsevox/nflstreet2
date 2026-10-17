@@ -88,10 +88,6 @@ void fn_800AF804(Entry_800AF82C *p);
 void fn_8009CF30(Block_8009C6F4 *pBlock, Pose_80041930 *pPose);
 int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, void *pRecord, unsigned short c);
 signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *pValues);
-unsigned int fn_8009B910(int index);
-signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *pValues);
-void fn_8009CF30(Block_8009C6F4 *pBlock, Pose_80041930 *pPose);
-void fn_800AF804(Entry_800AF82C *p);
 }
 
 extern "C" float fn_8009BB54(int index)

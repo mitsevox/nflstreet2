@@ -2,6 +2,7 @@
 #include "game/fn_80177FE0.h"
 #include "game/fn_800F06F4.h"
 #include "game/Lookup_8012078C.h"
+#include "game/fn_802270D4.h"
 
 /* One of the 24 four-float boxes fn_8009E674 lays out at +0x18 of
    State_8011F4EC. */
@@ -70,7 +71,6 @@ extern float lbl_803EA9B8;
 extern Point_8017886C lbl_802DA728[10];
 extern Point_8017886C lbl_802DA778[10];
 Object_80039F5C *fn_80137B40(void);
- float fn_802270A4(void *);
 }
 
 extern "C" int fn_8009DD88(Object_80039F5C *p, Object_80039F5C *pOther)

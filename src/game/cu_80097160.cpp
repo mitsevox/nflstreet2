@@ -1,6 +1,7 @@
 #include "game/Team_80167A8C.h"
 #include "game/cu_80136B1C.h"
 #include "game/Block_801BE60C.h"
+#include "game/fn_802270D4.h"
 
 /* 60-byte records that fn_80097440 copies into the buffer at +3048 of
    Record_80097518. */
@@ -66,10 +67,6 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 void fn_80137EFC(Object_80137ABC *pBall, Vector_80039F5C *pOut);
 extern Block_80099630 *lbl_803EC92C;
 extern float lbl_803EA2C4;
-unsigned char *fn_8009CD00(Object_80039F5C *p, void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int right, int a, int b);
-int fn_8009A298(int handle);
-void fn_8009A5DC(int high, int low, void *pKind, int *pHandle);
- float fn_802270A4(void *);
 }
 
 static inline int PointAngle(const Point_80167910 *pPoint)
