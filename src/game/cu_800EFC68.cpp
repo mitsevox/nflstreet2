@@ -303,7 +303,7 @@ struct State_80105898 {
 };
 
 extern float lbl_803EAEF4;
-extern int lbl_803EAF10;
+extern Object_80039F5C *lbl_803EAF10;
 extern unsigned char lbl_802DAB60[];
 extern unsigned char lbl_802DABBC[];
 
@@ -3081,8 +3081,8 @@ extern "C" int fn_8010AEA0(Object_80039F5C *p) {
     return 1;
 }
 
-extern "C" void fn_8010AEC4(int value) {
-    lbl_803EAF10 = value;
+extern "C" void fn_8010AEC4(Object_80039F5C *p) {
+    lbl_803EAF10 = p;
 }
 
 extern "C" int fn_8010B1B4(Object_80039F5C *p) {

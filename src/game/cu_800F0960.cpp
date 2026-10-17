@@ -299,7 +299,7 @@ struct State_80105898 {
 
 
 extern float lbl_803EAEF4;
-extern int lbl_803EAF10;
+extern Object_80039F5C *lbl_803EAF10;
 extern unsigned char lbl_802DAB60[];
 extern unsigned char lbl_802DABBC[];
 
