@@ -1727,6 +1727,10 @@
     "__14Block_80156400": {
       "address": "0x80156400",
       "evidence": "evidence.tsv external row for 0x80156400 (__14Block_80156400); descriptive name."
+    },
+    "_vt.14Class_80148A58": {
+      "address": "0x802A2EE0",
+      "evidence": "evidence.tsv external row for 0x802A2EE0 (_vt.14Class_80148A58)."
     }
   },
   "units": [
