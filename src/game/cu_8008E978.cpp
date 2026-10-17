@@ -1828,8 +1828,7 @@ State_8011F4EC *fn_8011F4EC(void);
 int fn_800C8C1C(Object_80039F5C *p);
 Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
 Object_80039F5C *fn_800C8DBC(int team, Vector_80039F5C *pPos, Object_80039F5C *p, int mode);
-void fn_800C9E4C(unsigned char a, unsigned char b);
-int fn_800C95DC(int team, unsigned char index, int *pRef);
+void fn_800C9E4C(unsigned char count0, unsigned char count1);
 int fn_800BA6F8(void);
 int fn_800BAA24(void);
 int fn_80178C9C(void);
@@ -2998,7 +2997,6 @@ extern "C" {
 int fn_80054D24(int index);
 unsigned int fn_8017F584(void);
 int fn_800A7F1C(int team);
-unsigned int fn_800C955C(Object_80039F5C *p, int kind);
 float fn_800AE998(void);
 void fn_800AE7F0(int index, int team, Object_80039F5C *p);
 void fn_80147598(void *pObject, int bit, unsigned int slot, unsigned char flag);
@@ -7895,7 +7893,6 @@ extern "C" {
 float fn_802270A4(void *p);
 void fn_80227384(void *pOut, void *pIn, int angle);
 void fn_80227248(void *pOut, void *pIn, float scale);
-int fn_801BE068(void *pA, void *pB, void *pC, unsigned short key, void *p, float value);
 
 extern unsigned char lbl_803EAC4C;
 }
@@ -10709,7 +10706,6 @@ struct Candidate_800CD3C0 {
 };
 
 extern "C" {
-int fn_800C8BAC(Object_80039F5C *, int);
 Table_80089904 *fn_801BE72C(unsigned short,unsigned short);
 Object_801BBD5C *fn_801BBD5C(unsigned short,unsigned short);
 int fn_800CEA7C(Group_800CC98C *, Command_800CEE74 *, Vector_80039F5C *, int *);
