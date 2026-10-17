@@ -113,7 +113,7 @@ struct Block_8009C6F4 {
     int mUnknown0;
     unsigned short mUnknown4;
     unsigned short mUnknown6;
-    int mUnknown8;
+    unsigned int mUnknown8;
     short mUnknownC;
     short mUnknownE;
     Vector_80039F5C mUnknown10;

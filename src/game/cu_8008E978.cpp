@@ -3350,7 +3350,7 @@ extern "C" void fn_8009C9D0(Object_80039F5C *p, Vector_80039F5C *pTarget, int bo
         } else {
             prev = pBlock->mUnknownE;
         }
-        rot = (rot * pBlock->mUnknown8 + prev * (6 - pBlock->mUnknown8)) / 6;
+        rot = (rot * (int)pBlock->mUnknown8 + prev * (6 - (int)pBlock->mUnknown8)) / 6;
     }
     pObject->mUnknown44.mUnknown48[bone * 3 + 1] = rot;
     pObject->mUnknown44.mUnknown48[bone * 3] = 0;
@@ -3369,7 +3369,7 @@ extern "C" void fn_8009CB0C(Object_80039F5C *p)
 
             fn_801D04C4();
             fn_801D06D4(pObject->mUnknown44.mUnknown52[13]);
-            if (pBlock->mUnknown8 < 6u) {
+            if (pBlock->mUnknown8 < 6) {
                 pBlock->mUnknown8++;
             }
             fn_8009C9D0(p, pTarget, 29);
