@@ -33939,6 +33939,26 @@
       ]
     },
     {
+      "source": "src/game/cu_801526EC.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #908; one complete function inside the retained provisional cu_801485B4 survey group: 0x801526EC, called only from 0x80150368 (fn_8015034C of src/game/cu_8015005C.cpp, with r3 = 0x8031BDD4 from lis -32718 / addi -16940 at 0x80150360/0x80150364), resets the table reached through member +28 and its word +36 of the Class_802A2918 object of src/game/cu_80152FFC.cpp and calls 0x80039F5C (src/game/cu_8003877C.cpp) for team 1, indices 0-3. No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x801526EC follows fn_8015267C of src/game/cu_8015264C.cpp and 0x801527B8 onward is src/game/cu_801527B8.cpp; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801526EC",
+          "end": "0x801527B8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801526EC",
+          "start": "0x801526EC",
+          "end": "0x801527B8"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
