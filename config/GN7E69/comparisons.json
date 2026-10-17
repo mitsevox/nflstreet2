@@ -33754,6 +33754,31 @@
       ]
     },
     {
+      "source": "src/game/cu_8015264C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #885; two complete functions inside the retained provisional cu_801485B4 survey group: 0x8015264C (returns 0x8003AC84 of the id word of entry 0 of the table reached through word +28 of the .bss object 0x8031BDD4) and slot 13 of the table 0x802A2918 of src/game/cu_80152FFC.cpp (0x8015267C, word 0x802A2984). Calls fn_8017F584 through include/game/fn_8017F584.h, and 0x8003AC84 and 0x801529C0 as externs; reads lbl_8031BDD4 as an extern (not claimed). No literal or data word is owned. Original file boundaries and nominal identity unresolved; 0x8015247C-0x8015264C before and 0x801526EC onward are not claimed; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015264C",
+          "end": "0x801526EC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8015264C",
+          "start": "0x8015264C",
+          "end": "0x8015267C"
+        },
+        {
+          "symbol": "fn_8015267C",
+          "start": "0x8015267C",
+          "end": "0x801526EC"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
