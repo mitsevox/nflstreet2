@@ -23725,6 +23725,11 @@
           "end": "0x800A8954"
         },
         {
+          "symbol": "fn_800A8954",
+          "start": "0x800A8954",
+          "end": "0x800A8EA4"
+        },
+        {
           "symbol": "fn_800A8EA4",
           "start": "0x800A8EA4",
           "end": "0x800A8EB8"
