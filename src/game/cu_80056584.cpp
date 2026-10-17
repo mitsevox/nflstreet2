@@ -1643,7 +1643,7 @@ struct Stats_8005A7EC {
 };
 struct Weight_8005A8D0 {int mTag;int mColumn;float mWeight;};
 struct Category_8005AB04 {char mName[20];unsigned char mEnabled;unsigned int mCount;int mIndices[2];};
-extern Object_8008044C lbl_80309F98;
+Object_8008044C lbl_80309F98;
 extern Stats_8005A7EC lbl_80309FC4[2];
 extern const Weight_8005A8D0 lbl_8028EAE8[12];
 extern const Category_8005AB04 lbl_8028EB78[11];

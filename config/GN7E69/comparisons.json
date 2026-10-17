@@ -3146,13 +3146,13 @@
     {
       "source": "src/game/cu_80056584.cpp",
       "profile": "game_cpp",
-      "evidence": "Complete 110 registered bodies: 78 prior, 31 additional ordinary stat/scoring/unlock functions through8005D540, and one evidence-supported naturally generated empty virtual destructor at8005D580-8005D5B4. Full2972-byte readonly surrounding context E16C-ED08 and44-byte initialized small-data context remain measured, preserving old prefixes. Original file edges, nominal record identity and ownership of unrecovered readonly items remain provisional; no promotion. D540 initializer and D5B4/D5E0 stubs stay unregistered and original-linked.",
+      "evidence": "Complete 110 registered bodies: 78 prior, 31 additional ordinary stat/scoring/unlock functions through8005D540, and one evidence-supported naturally generated empty virtual destructor at8005D580-8005D5B4. Full2972-byte readonly surrounding context E16C-ED08 and44-byte initialized small-data context remain measured, preserving old prefixes. Original file edges, nominal record identity and ownership of unrecovered readonly items remain provisional; no promotion. D540 initializer and D5B4/D5E0 stubs stay unregistered and original-linked. The static initializer 0x8005D540 constructs lbl_80309F98 (Object_8008044C) and its .ctors/.dtors stubs 0x8005D5B4/0x8005D5E0 close the range.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80056584",
-          "end": "0x8005D5B4"
+          "end": "0x8005D60C"
         },
         {
           "section": ".rodata",
@@ -3165,6 +3165,24 @@
           "placement": ".data5",
           "start": "0x803EA58C",
           "end": "0x803EA5B8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80309F98",
+          "end": "0x80309FC4"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A88",
+          "end": "0x80289A8C"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BC8",
+          "end": "0x80289BCC"
         }
       ],
       "functions": [
@@ -3714,9 +3732,24 @@
           "end": "0x8005D540"
         },
         {
+          "symbol": "__static_initialization_and_destruction_0",
+          "start": "0x8005D540",
+          "end": "0x8005D580"
+        },
+        {
           "symbol": "_._15Record_8005CE10",
           "start": "0x8005D580",
           "end": "0x8005D5B4"
+        },
+        {
+          "symbol": "_GLOBAL_.I.lbl_803EA58C",
+          "start": "0x8005D5B4",
+          "end": "0x8005D5E0"
+        },
+        {
+          "symbol": "_GLOBAL_.D.lbl_803EA58C",
+          "start": "0x8005D5E0",
+          "end": "0x8005D60C"
         }
       ]
     },
@@ -7811,6 +7844,120 @@
           "symbol": "fn_800EA6F0",
           "start": "0x800EA6F0",
           "end": "0x800EAC9C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800E4120.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800E3CC0 grouping: target whole-function extents and their literal-pool slice; the split permits independent compilation of a partial literal pool and does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E4120",
+          "end": "0x800E4264"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DBA4",
+          "end": "0x8029DBB0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E4120",
+          "start": "0x800E4120",
+          "end": "0x800E4264"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800E73D4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800E3CC0 grouping. Two target whole-function extents and their literal-pool slice; the split permits independent compilation of a partial literal pool and does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E73D4",
+          "end": "0x800E7588"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DCE8",
+          "end": "0x8029DCF0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E73D4",
+          "start": "0x800E73D4",
+          "end": "0x800E745C"
+        },
+        {
+          "symbol": "fn_800E745C",
+          "start": "0x800E745C",
+          "end": "0x800E7588"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800E8098.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800E3CC0 grouping: target whole-function extents and their literal-pool slice; the split permits independent compilation of a partial literal pool and does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E8098",
+          "end": "0x800E815C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DD18",
+          "end": "0x8029DD1C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E8098",
+          "start": "0x800E8098",
+          "end": "0x800E815C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800E8420.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800E3CC0 grouping: target whole-function extents and their literal-pool slice; the split permits independent compilation of a partial literal pool and does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E8420",
+          "end": "0x800E86E4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DD38",
+          "end": "0x8029DD40"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E8420",
+          "start": "0x800E8420",
+          "end": "0x800E8554"
+        },
+        {
+          "symbol": "fn_800E8554",
+          "start": "0x800E8554",
+          "end": "0x800E86E4"
         }
       ]
     },
@@ -13523,13 +13670,13 @@
     {
       "source": "src/game/cu_8004A2F4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0\u20130x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items.",
+      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0\u20130x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of candidate cu_8004BA44): nine complete ordinary bodies; the other bodies remain original.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8004A2F4",
-          "end": "0x800504EC"
+          "end": "0x80051E14"
         },
         {
           "section": ".rodata",
@@ -14024,6 +14171,51 @@
           "symbol": "fn_800502C0",
           "start": "0x800502C0",
           "end": "0x800504EC"
+        },
+        {
+          "symbol": "fn_8005164C",
+          "start": "0x8005164C",
+          "end": "0x80051680"
+        },
+        {
+          "symbol": "fn_80051680",
+          "start": "0x80051680",
+          "end": "0x800516B4"
+        },
+        {
+          "symbol": "fn_800516B4",
+          "start": "0x800516B4",
+          "end": "0x800516E4"
+        },
+        {
+          "symbol": "fn_800516E4",
+          "start": "0x800516E4",
+          "end": "0x80051724"
+        },
+        {
+          "symbol": "fn_80051724",
+          "start": "0x80051724",
+          "end": "0x80051810"
+        },
+        {
+          "symbol": "fn_80051810",
+          "start": "0x80051810",
+          "end": "0x80051880"
+        },
+        {
+          "symbol": "fn_80051880",
+          "start": "0x80051880",
+          "end": "0x800518E0"
+        },
+        {
+          "symbol": "fn_80051B3C",
+          "start": "0x80051B3C",
+          "end": "0x80051B88"
+        },
+        {
+          "symbol": "fn_80051DB4",
+          "start": "0x80051DB4",
+          "end": "0x80051DBC"
         }
       ]
     },
@@ -16264,6 +16456,82 @@
           "symbol": "fn_80032EBC",
           "start": "0x80032EBC",
           "end": "0x80032EE8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80032EE8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv retained provisional/provisional twelve-function hull (MainFE Group); getters, slot-2/3/6 bodies, the two helpers, the implicit destructor and the two lifecycle-role call stubs; the static initializer 0x8003319C and all storage remain original and unmeasured.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80032EE8",
+          "end": "0x80033490"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028ADF0",
+          "end": "0x8028AE48"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GetName__11MainFEGroup",
+          "start": "0x80032EE8",
+          "end": "0x80032EF4"
+        },
+        {
+          "symbol": "vfn_04__11MainFEGroup",
+          "start": "0x80032EF4",
+          "end": "0x80032F00"
+        },
+        {
+          "symbol": "vfn_05__11MainFEGroup",
+          "start": "0x80032F00",
+          "end": "0x80032F0C"
+        },
+        {
+          "symbol": "vfn_06__11MainFEGroupi",
+          "start": "0x80032F0C",
+          "end": "0x80032F98"
+        },
+        {
+          "symbol": "vfn_02__11MainFEGroup",
+          "start": "0x80032F98",
+          "end": "0x800330DC"
+        },
+        {
+          "symbol": "vfn_03__11MainFEGroupii",
+          "start": "0x800330DC",
+          "end": "0x80033124"
+        },
+        {
+          "symbol": "fn_80033124",
+          "start": "0x80033124",
+          "end": "0x80033144"
+        },
+        {
+          "symbol": "fn_80033144",
+          "start": "0x80033144",
+          "end": "0x8003319C"
+        },
+        {
+          "symbol": "_._11MainFEGroup",
+          "start": "0x80033418",
+          "end": "0x80033438"
+        },
+        {
+          "symbol": "fn_80033438",
+          "start": "0x80033438",
+          "end": "0x80033464"
+        },
+        {
+          "symbol": "fn_80033464",
+          "start": "0x80033464",
+          "end": "0x80033490"
         }
       ]
     },

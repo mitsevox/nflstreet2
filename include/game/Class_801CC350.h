@@ -20,7 +20,7 @@ public:
     Class_801CC350();
     virtual ~Class_801CC350();
     virtual void vfn_02() = 0;
-    virtual int vfn_03() = 0;
+    virtual int vfn_03(int a, int b) = 0;
     virtual Record_802CCBAC *vfn_04() = 0;
     virtual Record_803EA3A8 *vfn_05() = 0;
     virtual ModuleDependency *vfn_06(int id) = 0;
@@ -35,7 +35,7 @@ private:
 class DebugGroup : public Class_801CC350 {
 public:
     virtual void vfn_02();
-    virtual int vfn_03();
+    virtual int vfn_03(int a, int b);
     virtual Record_802CCBAC *vfn_04();
     virtual Record_803EA3A8 *vfn_05();
     virtual ModuleDependency *vfn_06(int id);
@@ -45,7 +45,7 @@ public:
 class SystemGroup : public Class_801CC350 {
 public:
     virtual void vfn_02();
-    virtual int vfn_03();
+    virtual int vfn_03(int a, int b);
     virtual Record_802CCBAC *vfn_04();
     virtual Record_803EA3A8 *vfn_05();
     virtual ModuleDependency *vfn_06(int id);
