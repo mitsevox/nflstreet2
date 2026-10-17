@@ -20,7 +20,8 @@ class Class_802A1860 : public Class_80297B90 {
 
 class Record_8005CE10 {
 public:
-    virtual ~Record_8005CE10();
+    Record_8005CE10() : mOrdinal(0), mEvent(11), mPlayer(32767), mConversion(11), mOther(32767), mFlag(0) {}
+    virtual ~Record_8005CE10() {}
     unsigned int mOrdinal;
     int mEvent;
     int mPlayer;
