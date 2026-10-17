@@ -23307,9 +23307,19 @@
           "end": "0x800BAD1C"
         },
         {
+          "symbol": "fn_800BAD1C",
+          "start": "0x800BAD1C",
+          "end": "0x800BAD9C"
+        },
+        {
           "symbol": "fn_800BAD9C",
           "start": "0x800BAD9C",
           "end": "0x800BADD4"
+        },
+        {
+          "symbol": "fn_800BADD4",
+          "start": "0x800BADD4",
+          "end": "0x800BAE40"
         },
         {
           "symbol": "fn_800BAE40",
@@ -23352,6 +23362,11 @@
           "end": "0x800BB0EC"
         },
         {
+          "symbol": "fn_800BB0EC",
+          "start": "0x800BB0EC",
+          "end": "0x800BB23C"
+        },
+        {
           "symbol": "fn_800BB23C",
           "start": "0x800BB23C",
           "end": "0x800BB24C"
@@ -23365,6 +23380,11 @@
           "symbol": "fn_800BB828",
           "start": "0x800BB828",
           "end": "0x800BB840"
+        },
+        {
+          "symbol": "fn_800BB840",
+          "start": "0x800BB840",
+          "end": "0x800BB8D4"
         },
         {
           "symbol": "fn_800BB8D4",
@@ -23392,9 +23412,34 @@
           "end": "0x800BBB84"
         },
         {
+          "symbol": "fn_800BBB84",
+          "start": "0x800BBB84",
+          "end": "0x800BBCF0"
+        },
+        {
+          "symbol": "fn_800BBCF0",
+          "start": "0x800BBCF0",
+          "end": "0x800BBDE0"
+        },
+        {
+          "symbol": "fn_800BBDE0",
+          "start": "0x800BBDE0",
+          "end": "0x800BBE98"
+        },
+        {
           "symbol": "fn_800BBE98",
           "start": "0x800BBE98",
           "end": "0x800BBF18"
+        },
+        {
+          "symbol": "fn_800BC3F0",
+          "start": "0x800BC3F0",
+          "end": "0x800BC470"
+        },
+        {
+          "symbol": "fn_800BC470",
+          "start": "0x800BC470",
+          "end": "0x800BC4E0"
         },
         {
           "symbol": "fn_800BC51C",
@@ -24772,6 +24817,11 @@
           "end": "0x800B6D34"
         },
         {
+          "symbol": "fn_800B7248",
+          "start": "0x800B7248",
+          "end": "0x800B7368"
+        },
+        {
           "symbol": "fn_800B7368",
           "start": "0x800B7368",
           "end": "0x800B7370"
@@ -24780,6 +24830,21 @@
           "symbol": "fn_800B7370",
           "start": "0x800B7370",
           "end": "0x800B7378"
+        },
+        {
+          "symbol": "fn_800B76E8",
+          "start": "0x800B76E8",
+          "end": "0x800B78DC"
+        },
+        {
+          "symbol": "fn_800B7CA4",
+          "start": "0x800B7CA4",
+          "end": "0x800B7E60"
+        },
+        {
+          "symbol": "fn_800B7E60",
+          "start": "0x800B7E60",
+          "end": "0x800B7F34"
         },
         {
           "symbol": "fn_800B7F34",
@@ -24877,14 +24942,74 @@
           "end": "0x800B89C8"
         },
         {
+          "symbol": "fn_800B8A40",
+          "start": "0x800B8A40",
+          "end": "0x800B8A6C"
+        },
+        {
+          "symbol": "fn_800B8A6C",
+          "start": "0x800B8A6C",
+          "end": "0x800B8B54"
+        },
+        {
+          "symbol": "fn_800B8B54",
+          "start": "0x800B8B54",
+          "end": "0x800B8C8C"
+        },
+        {
+          "symbol": "fn_800B8C8C",
+          "start": "0x800B8C8C",
+          "end": "0x800B8C9C"
+        },
+        {
+          "symbol": "fn_800B8C9C",
+          "start": "0x800B8C9C",
+          "end": "0x800B8D28"
+        },
+        {
+          "symbol": "fn_800B8D28",
+          "start": "0x800B8D28",
+          "end": "0x800B8DB4"
+        },
+        {
+          "symbol": "fn_800B8DB4",
+          "start": "0x800B8DB4",
+          "end": "0x800B8DF4"
+        },
+        {
+          "symbol": "fn_800B8DF4",
+          "start": "0x800B8DF4",
+          "end": "0x800B8E18"
+        },
+        {
           "symbol": "fn_800B9598",
           "start": "0x800B9598",
           "end": "0x800B95B4"
         },
         {
+          "symbol": "fn_800B95B4",
+          "start": "0x800B95B4",
+          "end": "0x800B9630"
+        },
+        {
+          "symbol": "fn_800B9630",
+          "start": "0x800B9630",
+          "end": "0x800B9654"
+        },
+        {
+          "symbol": "fn_800B9998",
+          "start": "0x800B9998",
+          "end": "0x800B9A44"
+        },
+        {
           "symbol": "fn_800B9A44",
           "start": "0x800B9A44",
           "end": "0x800B9A68"
+        },
+        {
+          "symbol": "fn_800B9A68",
+          "start": "0x800B9A68",
+          "end": "0x800B9A6C"
         },
         {
           "symbol": "fn_800B9A6C",
@@ -25332,6 +25457,11 @@
           "end": "0x800BC5DC"
         },
         {
+          "symbol": "fn_800BCA00",
+          "start": "0x800BCA00",
+          "end": "0x800BCAF4"
+        },
+        {
           "symbol": "fn_800BCAF4",
           "start": "0x800BCAF4",
           "end": "0x800BCB18"
@@ -25347,9 +25477,74 @@
           "end": "0x800BD1C8"
         },
         {
+          "symbol": "fn_800BD1C8",
+          "start": "0x800BD1C8",
+          "end": "0x800BD2F8"
+        },
+        {
+          "symbol": "fn_800BD2F8",
+          "start": "0x800BD2F8",
+          "end": "0x800BD35C"
+        },
+        {
+          "symbol": "fn_800BD35C",
+          "start": "0x800BD35C",
+          "end": "0x800BD3C0"
+        },
+        {
+          "symbol": "fn_800BD3C0",
+          "start": "0x800BD3C0",
+          "end": "0x800BD460"
+        },
+        {
+          "symbol": "fn_800BD460",
+          "start": "0x800BD460",
+          "end": "0x800BD51C"
+        },
+        {
+          "symbol": "fn_800BD51C",
+          "start": "0x800BD51C",
+          "end": "0x800BD568"
+        },
+        {
+          "symbol": "fn_800BD568",
+          "start": "0x800BD568",
+          "end": "0x800BD608"
+        },
+        {
+          "symbol": "fn_800BD774",
+          "start": "0x800BD774",
+          "end": "0x800BD830"
+        },
+        {
+          "symbol": "fn_800BD830",
+          "start": "0x800BD830",
+          "end": "0x800BD8F4"
+        },
+        {
+          "symbol": "fn_800BD8F4",
+          "start": "0x800BD8F4",
+          "end": "0x800BD958"
+        },
+        {
+          "symbol": "fn_800BD958",
+          "start": "0x800BD958",
+          "end": "0x800BD99C"
+        },
+        {
           "symbol": "fn_800BD99C",
           "start": "0x800BD99C",
           "end": "0x800BDA00"
+        },
+        {
+          "symbol": "fn_800BDA00",
+          "start": "0x800BDA00",
+          "end": "0x800BDA7C"
+        },
+        {
+          "symbol": "fn_800BDA7C",
+          "start": "0x800BDA7C",
+          "end": "0x800BDB14"
         },
         {
           "symbol": "fn_800C7084",
@@ -25585,6 +25780,313 @@
           "symbol": "fn_800CEED8",
           "start": "0x800CEED8",
           "end": "0x800CF090"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800B7378.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping. 10 whole-function extents from evidence.tsv and the exact .rodata slice their literals occupy; split so the fragment literal pool compiles in target order. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800B7378",
+          "end": "0x800B9B18"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296F88",
+          "end": "0x8029713C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800B7378",
+          "start": "0x800B7378",
+          "end": "0x800B76E8"
+        },
+        {
+          "symbol": "fn_800B78DC",
+          "start": "0x800B78DC",
+          "end": "0x800B7CA4"
+        },
+        {
+          "symbol": "fn_800B8028",
+          "start": "0x800B8028",
+          "end": "0x800B81A4"
+        },
+        {
+          "symbol": "fn_800B8494",
+          "start": "0x800B8494",
+          "end": "0x800B852C"
+        },
+        {
+          "symbol": "fn_800B876C",
+          "start": "0x800B876C",
+          "end": "0x800B8940"
+        },
+        {
+          "symbol": "fn_800B89C8",
+          "start": "0x800B89C8",
+          "end": "0x800B8A40"
+        },
+        {
+          "symbol": "fn_800B8E18",
+          "start": "0x800B8E18",
+          "end": "0x800B925C"
+        },
+        {
+          "symbol": "fn_800B925C",
+          "start": "0x800B925C",
+          "end": "0x800B9540"
+        },
+        {
+          "symbol": "fn_800B9654",
+          "start": "0x800B9654",
+          "end": "0x800B9830"
+        },
+        {
+          "symbol": "fn_800B9A9C",
+          "start": "0x800B9A9C",
+          "end": "0x800B9B18"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800B9BBC.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping. 9 whole-function extents from evidence.tsv and the exact .rodata slice their literals occupy; split so the fragment literal pool compiles in target order. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800B9BBC",
+          "end": "0x800BA3F0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80297218",
+          "end": "0x80297314"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800B9BBC",
+          "start": "0x800B9BBC",
+          "end": "0x800B9BFC"
+        },
+        {
+          "symbol": "fn_800B9BFC",
+          "start": "0x800B9BFC",
+          "end": "0x800B9C3C"
+        },
+        {
+          "symbol": "fn_800B9C3C",
+          "start": "0x800B9C3C",
+          "end": "0x800B9C70"
+        },
+        {
+          "symbol": "fn_800B9C70",
+          "start": "0x800B9C70",
+          "end": "0x800B9CB0"
+        },
+        {
+          "symbol": "fn_800B9CB0",
+          "start": "0x800B9CB0",
+          "end": "0x800B9CE4"
+        },
+        {
+          "symbol": "fn_800B9CE4",
+          "start": "0x800B9CE4",
+          "end": "0x800B9D24"
+        },
+        {
+          "symbol": "fn_800B9D24",
+          "start": "0x800B9D24",
+          "end": "0x800B9E44"
+        },
+        {
+          "symbol": "fn_800B9E44",
+          "start": "0x800B9E44",
+          "end": "0x800B9F4C"
+        },
+        {
+          "symbol": "fn_800B9F50",
+          "start": "0x800B9F50",
+          "end": "0x800BA3F0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800BA7A0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping. 2 whole-function extents from evidence.tsv and the exact .rodata slice their literals occupy; split so the fragment literal pool compiles in target order. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800BA7A0",
+          "end": "0x800BA864"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80297320",
+          "end": "0x8029732C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800BA7A0",
+          "start": "0x800BA7A0",
+          "end": "0x800BA7E8"
+        },
+        {
+          "symbol": "fn_800BA804",
+          "start": "0x800BA804",
+          "end": "0x800BA864"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800BB458.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping. 2 whole-function extents from evidence.tsv and the exact .rodata slice their literals occupy; split so the fragment literal pool compiles in target order. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800BB458",
+          "end": "0x800BB5DC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029733C",
+          "end": "0x80297350"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800BB458",
+          "start": "0x800BB458",
+          "end": "0x800BB504"
+        },
+        {
+          "symbol": "fn_800BB504",
+          "start": "0x800BB504",
+          "end": "0x800BB5DC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800BBA2C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping. 1 whole-function extents from evidence.tsv and the exact .rodata slice their literals occupy; split so the fragment literal pool compiles in target order. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800BBA2C",
+          "end": "0x800BBB4C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80297354",
+          "end": "0x8029735C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800BBA2C",
+          "start": "0x800BBA2C",
+          "end": "0x800BBB4C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800BC5DC.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping. 1 whole-function extents from evidence.tsv and the exact .rodata slice their literals occupy; split so the fragment literal pool compiles in target order. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800BC5DC",
+          "end": "0x800BC83C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029735C",
+          "end": "0x80297364"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800BC5DC",
+          "start": "0x800BC5DC",
+          "end": "0x800BC83C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800BC83C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping. 7 whole-function extents from evidence.tsv and the exact .rodata slice their literals occupy; split so the fragment literal pool compiles in target order. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800BC83C",
+          "end": "0x800BDFB4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80297368",
+          "end": "0x802973A0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800BC83C",
+          "start": "0x800BC83C",
+          "end": "0x800BC8E0"
+        },
+        {
+          "symbol": "fn_800BC8E0",
+          "start": "0x800BC8E0",
+          "end": "0x800BCA00"
+        },
+        {
+          "symbol": "fn_800BCC30",
+          "start": "0x800BCC30",
+          "end": "0x800BCF7C"
+        },
+        {
+          "symbol": "fn_800BCF7C",
+          "start": "0x800BCF7C",
+          "end": "0x800BD184"
+        },
+        {
+          "symbol": "fn_800BD190",
+          "start": "0x800BD190",
+          "end": "0x800BD1BC"
+        },
+        {
+          "symbol": "fn_800BD608",
+          "start": "0x800BD608",
+          "end": "0x800BD774"
+        },
+        {
+          "symbol": "fn_800BDB14",
+          "start": "0x800BDB14",
+          "end": "0x800BDFB4"
         }
       ]
     },
