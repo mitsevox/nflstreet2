@@ -22815,6 +22815,16 @@
           "end": "0x800A29D8"
         },
         {
+          "symbol": "fn_800A29D8",
+          "start": "0x800A29D8",
+          "end": "0x800A2B40"
+        },
+        {
+          "symbol": "fn_800A2D2C",
+          "start": "0x800A2D2C",
+          "end": "0x800A2E80"
+        },
+        {
           "symbol": "fn_800A2F3C",
           "start": "0x800A2F3C",
           "end": "0x800A2F48"
@@ -23020,9 +23030,24 @@
           "end": "0x800A3E84"
         },
         {
+          "symbol": "fn_800A42BC",
+          "start": "0x800A42BC",
+          "end": "0x800A432C"
+        },
+        {
           "symbol": "fn_800A432C",
           "start": "0x800A432C",
           "end": "0x800A4358"
+        },
+        {
+          "symbol": "fn_800A4358",
+          "start": "0x800A4358",
+          "end": "0x800A44C0"
+        },
+        {
+          "symbol": "fn_800A46D8",
+          "start": "0x800A46D8",
+          "end": "0x800A4790"
         },
         {
           "symbol": "fn_800A4950",
@@ -23620,9 +23645,19 @@
           "end": "0x800A624C"
         },
         {
+          "symbol": "fn_800A624C",
+          "start": "0x800A624C",
+          "end": "0x800A636C"
+        },
+        {
           "symbol": "fn_800A6590",
           "start": "0x800A6590",
           "end": "0x800A65BC"
+        },
+        {
+          "symbol": "fn_800A65BC",
+          "start": "0x800A65BC",
+          "end": "0x800A6658"
         },
         {
           "symbol": "fn_800A6750",
@@ -23633,6 +23668,21 @@
           "symbol": "fn_800A67B8",
           "start": "0x800A67B8",
           "end": "0x800A680C"
+        },
+        {
+          "symbol": "fn_800A6B6C",
+          "start": "0x800A6B6C",
+          "end": "0x800A6C10"
+        },
+        {
+          "symbol": "fn_800A6C10",
+          "start": "0x800A6C10",
+          "end": "0x800A6CB0"
+        },
+        {
+          "symbol": "fn_800A6CB0",
+          "start": "0x800A6CB0",
+          "end": "0x800A6D5C"
         },
         {
           "symbol": "fn_800A6D5C",
@@ -25125,6 +25175,31 @@
           "end": "0x8009E9EC"
         },
         {
+          "symbol": "fn_8009EDD4",
+          "start": "0x8009EDD4",
+          "end": "0x8009EF6C"
+        },
+        {
+          "symbol": "fn_8009EF6C",
+          "start": "0x8009EF6C",
+          "end": "0x8009EFDC"
+        },
+        {
+          "symbol": "fn_8009EFDC",
+          "start": "0x8009EFDC",
+          "end": "0x8009F058"
+        },
+        {
+          "symbol": "fn_8009F058",
+          "start": "0x8009F058",
+          "end": "0x8009F0B8"
+        },
+        {
+          "symbol": "fn_8009F0B8",
+          "start": "0x8009F0B8",
+          "end": "0x8009F13C"
+        },
+        {
           "symbol": "fn_8009F13C",
           "start": "0x8009F13C",
           "end": "0x8009F168"
@@ -25145,6 +25220,11 @@
           "end": "0x8009F7A4"
         },
         {
+          "symbol": "fn_8009F7A4",
+          "start": "0x8009F7A4",
+          "end": "0x8009F928"
+        },
+        {
           "symbol": "fn_8009FD7C",
           "start": "0x8009FD7C",
           "end": "0x8009FE24"
@@ -25153,6 +25233,26 @@
           "symbol": "fn_8009FE24",
           "start": "0x8009FE24",
           "end": "0x8009FEF0"
+        },
+        {
+          "symbol": "fn_8009FEF0",
+          "start": "0x8009FEF0",
+          "end": "0x8009FEF8"
+        },
+        {
+          "symbol": "fn_8009FEF8",
+          "start": "0x8009FEF8",
+          "end": "0x8009FF00"
+        },
+        {
+          "symbol": "fn_8009FF0C",
+          "start": "0x8009FF0C",
+          "end": "0x8009FF58"
+        },
+        {
+          "symbol": "fn_8009FF58",
+          "start": "0x8009FF58",
+          "end": "0x8009FF94"
         },
         {
           "symbol": "fn_8009FF94",
@@ -32851,6 +32951,315 @@
           "symbol": "fn_8014DD2C",
           "start": "0x8014DD2C",
           "end": "0x8014DDCC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8009FF00.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: complete bodies whose float, double or string literals form the exact readonly slice measured here. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8009FF00",
+          "end": "0x8009FF0C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802964E8",
+          "end": "0x802964F0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8009FF00",
+          "start": "0x8009FF00",
+          "end": "0x8009FF0C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800A233C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: complete bodies whose float, double or string literals form the exact readonly slice measured here. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800A233C",
+          "end": "0x800A2760"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296630",
+          "end": "0x802966C8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800A233C",
+          "start": "0x800A233C",
+          "end": "0x800A238C"
+        },
+        {
+          "symbol": "fn_800A238C",
+          "start": "0x800A238C",
+          "end": "0x800A23F0"
+        },
+        {
+          "symbol": "fn_800A23F0",
+          "start": "0x800A23F0",
+          "end": "0x800A244C"
+        },
+        {
+          "symbol": "fn_800A244C",
+          "start": "0x800A244C",
+          "end": "0x800A24A0"
+        },
+        {
+          "symbol": "fn_800A24A0",
+          "start": "0x800A24A0",
+          "end": "0x800A2500"
+        },
+        {
+          "symbol": "fn_800A2500",
+          "start": "0x800A2500",
+          "end": "0x800A2560"
+        },
+        {
+          "symbol": "fn_800A2560",
+          "start": "0x800A2560",
+          "end": "0x800A25BC"
+        },
+        {
+          "symbol": "fn_800A25BC",
+          "start": "0x800A25BC",
+          "end": "0x800A2624"
+        },
+        {
+          "symbol": "fn_800A262C",
+          "start": "0x800A262C",
+          "end": "0x800A26C4"
+        },
+        {
+          "symbol": "fn_800A26C4",
+          "start": "0x800A26C4",
+          "end": "0x800A2760"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800A32E4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: complete bodies whose float, double or string literals form the exact readonly slice measured here. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800A32E4",
+          "end": "0x800A3360"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029670C",
+          "end": "0x80296710"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800A32E4",
+          "start": "0x800A32E4",
+          "end": "0x800A3360"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800A4294.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: complete bodies whose float, double or string literals form the exact readonly slice measured here. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800A4294",
+          "end": "0x800A42BC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029678C",
+          "end": "0x80296790"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800A4294",
+          "start": "0x800A4294",
+          "end": "0x800A42BC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800A4790.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: complete bodies whose float, double or string literals form the exact readonly slice measured here. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800A4790",
+          "end": "0x800A481C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802967B0",
+          "end": "0x802967B4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800A4790",
+          "start": "0x800A4790",
+          "end": "0x800A481C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800A5104.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: complete bodies whose float, double or string literals form the exact readonly slice measured here. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800A5104",
+          "end": "0x800A517C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802967E8",
+          "end": "0x802967EC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800A5104",
+          "start": "0x800A5104",
+          "end": "0x800A517C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800A535C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: complete bodies whose float, double or string literals form the exact readonly slice measured here. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800A535C",
+          "end": "0x800A54F4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296804",
+          "end": "0x80296808"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800A535C",
+          "start": "0x800A535C",
+          "end": "0x800A543C"
+        },
+        {
+          "symbol": "fn_800A543C",
+          "start": "0x800A543C",
+          "end": "0x800A54F4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800A54F4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: complete bodies whose float, double or string literals form the exact readonly slice measured here. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800A54F4",
+          "end": "0x800A5844"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296808",
+          "end": "0x80296824"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800A54F4",
+          "start": "0x800A54F4",
+          "end": "0x800A554C"
+        },
+        {
+          "symbol": "fn_800A55D0",
+          "start": "0x800A55D0",
+          "end": "0x800A563C"
+        },
+        {
+          "symbol": "fn_800A563C",
+          "start": "0x800A563C",
+          "end": "0x800A5690"
+        },
+        {
+          "symbol": "fn_800A5690",
+          "start": "0x800A5690",
+          "end": "0x800A5718"
+        },
+        {
+          "symbol": "fn_800A5718",
+          "start": "0x800A5718",
+          "end": "0x800A57A4"
+        },
+        {
+          "symbol": "fn_800A57A4",
+          "start": "0x800A57A4",
+          "end": "0x800A5844"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800A5A04.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: complete bodies whose float, double or string literals form the exact readonly slice measured here. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800A5A04",
+          "end": "0x800A5A60"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296834",
+          "end": "0x80296838"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800A5A04",
+          "start": "0x800A5A04",
+          "end": "0x800A5A60"
         }
       ]
     },
