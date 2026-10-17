@@ -42,7 +42,9 @@ struct Block_80170E64 {
     Vector_80039F5C mUnknown4;
     char mUnknown16[4];
     unsigned int mUnknown20;
-    char mUnknown24[76];
+    char mUnknown24[12];
+    int mUnknown36;
+    char mUnknown40[60];
     void *mpUnknown100;
     char mUnknown104[4];
     Quat_801EB488 mUnknown108;

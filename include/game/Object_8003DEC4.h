@@ -52,7 +52,9 @@ struct Element_80041BF8 {
 struct Block_800C2788 {
     char mUnknown0[1];
     unsigned char mUnknown1;
-    char mUnknown2[254];
+    char mUnknown2[38];
+    int mUnknown40[9][3];
+    int mUnknown148[9][3];
     Pose_80041930 mUnknown256;
     Skeleton_80041930 *mUnknown312;
 };
@@ -61,7 +63,9 @@ struct Block_800C2788 {
 struct Block_800C2EC0 {
     char mUnknown0[1];
     unsigned char mUnknown1;
-    char mUnknown2[158];
+    char mUnknown2[38];
+    int mUnknown40[5][3];
+    int mUnknown100[5][3];
     Pose_80041930 mUnknown160;
     Skeleton_80041930 *mUnknown216;
 };

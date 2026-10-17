@@ -19,7 +19,7 @@ public:
     virtual void vfn_11();
     virtual int vfn_12();
 
-    short fn_800C02C8();
+    int fn_800C02C8();
     void fn_800C02D4(short value);
     short fn_800C02E0();
     void fn_800C02EC(short value);
