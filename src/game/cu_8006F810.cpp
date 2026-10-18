@@ -683,7 +683,7 @@ void fn_80070F84(void)
     for (int i = 0; i < 7; ++i) {
         float x = p->mUnknown8.mUnknown84[0][i].mUnknown10.mX;
         float y = p->mUnknown8.mUnknown84[0][i].mUnknown10.mY;
-        if (x > -6.0f && x < 6.0f && y < 3.0f) ++count;
+        if (!(x <= -6.0f) && !(x >= 6.0f) && !(y >= 3.0f)) ++count;
     }
     int id;
     if (count > 2) id = fn_802374C8(lbl_803EC828) + 40;
