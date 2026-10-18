@@ -62,7 +62,7 @@ struct Score_801531C4 {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
-    int mUnknown12;
+    unsigned int mUnknown12;
     unsigned int mUnknown16;
     unsigned short mUnknown20[2];
     unsigned short mUnknown24[2];
