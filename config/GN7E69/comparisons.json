@@ -39382,6 +39382,52 @@
           "end": "0x801A8620"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_80147908.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit mapping, complete function extent and scoped source-form/compiler/data rows. Complete native comparison only; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80147908",
+          "end": "0x80147AE4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A052C",
+          "end": "0x802A0540"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80147908",
+          "start": "0x80147908",
+          "end": "0x80147AE4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C1D84.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit mapping, complete function extent and scoped source-form/compiler/data rows. Complete native comparison only; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C2030",
+          "end": "0x801C20A0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801C2030",
+          "start": "0x801C2030",
+          "end": "0x801C20A0"
+        }
+      ]
     }
   ]
 }
