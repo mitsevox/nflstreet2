@@ -18437,11 +18437,11 @@
       "provenance": {
         "pull_request": 472,
         "merged_via": 489,
-        "commit": "14f6bda29d78d4389c0825e22d03eae28a978624",
-        "introduced_blob": "7279d66f804a351aaef8ebf54139a91c09552947",
+        "commit": "47bbce66c3714f7e1a3867b3a637e9d5f651e171",
+        "introduced_blob": "3e402d7797677daa01c3ae908889e5b4822bccc4",
         "original_commit": "e87d3bbb8167681e2c6130c54cba16ec9c47bb09",
         "original_blob": "a23dbfdd8e14d42964f481dc03c626dc6782ad7b",
-        "integration_adjustment": "Preserve original source contributors, PRs and source bindings through the read-only external-table declaration refinement. All earlier credited complete function payloads and allocated data remain byte-identical; only fn_80071A04 and fn_80071A6C change instruction scheduling and become exact. Their bodies originate in contribution 725; the declaration refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve original source contributors, PRs and source bindings through the read-only external-table declaration and eager coordinate-load refinements. All earlier credited complete function payloads and allocated data remain byte-identical. fn_80071A04/fn_80071A6C become exact through the declaration refinement; fn_80070F84 becomes exact through two used coordinate locals and explicit unordered-compatible exclusions. These three bodies originate in contribution 725; the refinements do not transfer original source credit."
       }
     },
     {
@@ -18458,11 +18458,11 @@
       "provenance": {
         "pull_request": 480,
         "merged_via": 489,
-        "commit": "14f6bda29d78d4389c0825e22d03eae28a978624",
-        "introduced_blob": "7279d66f804a351aaef8ebf54139a91c09552947",
+        "commit": "47bbce66c3714f7e1a3867b3a637e9d5f651e171",
+        "introduced_blob": "3e402d7797677daa01c3ae908889e5b4822bccc4",
         "original_commit": "9309229de46b802347f0d845f9041a7a37d60830",
         "original_blob": "135ae1212e5532a13d8066147b568349536ffeee",
-        "integration_adjustment": "Preserve original source contributors, PRs and source bindings through the read-only external-table declaration refinement. All earlier credited complete function payloads and allocated data remain byte-identical; only fn_80071A04 and fn_80071A6C change instruction scheduling and become exact. Their bodies originate in contribution 725; the declaration refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve original source contributors, PRs and source bindings through the read-only external-table declaration and eager coordinate-load refinements. All earlier credited complete function payloads and allocated data remain byte-identical. fn_80071A04/fn_80071A6C become exact through the declaration refinement; fn_80070F84 becomes exact through two used coordinate locals and explicit unordered-compatible exclusions. These three bodies originate in contribution 725; the refinements do not transfer original source credit."
       }
     },
     {
@@ -18473,6 +18473,7 @@
       "functions": [
         "0x80070D68",
         "0x80070E8C",
+        "0x80070F84",
         "0x8007105C",
         "0x80071540",
         "0x80071594",
@@ -18489,11 +18490,11 @@
       "provenance": {
         "pull_request": 725,
         "merged_via": 734,
-        "commit": "14f6bda29d78d4389c0825e22d03eae28a978624",
-        "introduced_blob": "7279d66f804a351aaef8ebf54139a91c09552947",
+        "commit": "47bbce66c3714f7e1a3867b3a637e9d5f651e171",
+        "introduced_blob": "3e402d7797677daa01c3ae908889e5b4822bccc4",
         "original_commit": "2e10963a8ea451bf29b23cbc9cd78143615a4d3e",
         "original_blob": "73a6573e7d52cdb919fdbdc744401952cc1f81cd",
-        "integration_adjustment": "Preserve original source contributors, PRs and source bindings through the read-only external-table declaration refinement. All earlier credited complete function payloads and allocated data remain byte-identical; only fn_80071A04 and fn_80071A6C change instruction scheduling and become exact. Their bodies originate in contribution 725; the declaration refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve original source contributors, PRs and source bindings through the read-only external-table declaration and eager coordinate-load refinements. All earlier credited complete function payloads and allocated data remain byte-identical. fn_80071A04/fn_80071A6C become exact through the declaration refinement; fn_80070F84 becomes exact through two used coordinate locals and explicit unordered-compatible exclusions. These three bodies originate in contribution 725; the refinements do not transfer original source credit."
       }
     },
     {
@@ -18507,11 +18508,11 @@
       "provenance": {
         "pull_request": 799,
         "merged_via": 804,
-        "commit": "14f6bda29d78d4389c0825e22d03eae28a978624",
-        "introduced_blob": "7279d66f804a351aaef8ebf54139a91c09552947",
+        "commit": "47bbce66c3714f7e1a3867b3a637e9d5f651e171",
+        "introduced_blob": "3e402d7797677daa01c3ae908889e5b4822bccc4",
         "original_commit": "5677da2b15a53220e9dbb20e8371c3cc7878e826",
         "original_blob": "f7fb2714236387fa754fcb8ceb36748b36236ba0",
-        "integration_adjustment": "Preserve original source contributors, PRs and source bindings through the read-only external-table declaration refinement. All earlier credited complete function payloads and allocated data remain byte-identical; only fn_80071A04 and fn_80071A6C change instruction scheduling and become exact. Their bodies originate in contribution 725; the declaration refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve original source contributors, PRs and source bindings through the read-only external-table declaration and eager coordinate-load refinements. All earlier credited complete function payloads and allocated data remain byte-identical. fn_80071A04/fn_80071A6C become exact through the declaration refinement; fn_80070F84 becomes exact through two used coordinate locals and explicit unordered-compatible exclusions. These three bodies originate in contribution 725; the refinements do not transfer original source credit."
       }
     },
     {
@@ -18525,11 +18526,11 @@
       "provenance": {
         "pull_request": 801,
         "merged_via": 804,
-        "commit": "14f6bda29d78d4389c0825e22d03eae28a978624",
-        "introduced_blob": "7279d66f804a351aaef8ebf54139a91c09552947",
+        "commit": "47bbce66c3714f7e1a3867b3a637e9d5f651e171",
+        "introduced_blob": "3e402d7797677daa01c3ae908889e5b4822bccc4",
         "original_commit": "a280e50e183c93bf82c43bc1bd55ab0a18f1e0e9",
         "original_blob": "8140d87b20e5eefc4ea1ef0900ef9f931041ba15",
-        "integration_adjustment": "Preserve original source contributors, PRs and source bindings through the read-only external-table declaration refinement. All earlier credited complete function payloads and allocated data remain byte-identical; only fn_80071A04 and fn_80071A6C change instruction scheduling and become exact. Their bodies originate in contribution 725; the declaration refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve original source contributors, PRs and source bindings through the read-only external-table declaration and eager coordinate-load refinements. All earlier credited complete function payloads and allocated data remain byte-identical. fn_80071A04/fn_80071A6C become exact through the declaration refinement; fn_80070F84 becomes exact through two used coordinate locals and explicit unordered-compatible exclusions. These three bodies originate in contribution 725; the refinements do not transfer original source credit."
       }
     },
     {
@@ -18543,11 +18544,11 @@
       "provenance": {
         "pull_request": 803,
         "merged_via": 804,
-        "commit": "14f6bda29d78d4389c0825e22d03eae28a978624",
-        "introduced_blob": "7279d66f804a351aaef8ebf54139a91c09552947",
+        "commit": "47bbce66c3714f7e1a3867b3a637e9d5f651e171",
+        "introduced_blob": "3e402d7797677daa01c3ae908889e5b4822bccc4",
         "original_commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
         "original_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036",
-        "integration_adjustment": "Preserve original source contributors, PRs and source bindings through the read-only external-table declaration refinement. All earlier credited complete function payloads and allocated data remain byte-identical; only fn_80071A04 and fn_80071A6C change instruction scheduling and become exact. Their bodies originate in contribution 725; the declaration refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve original source contributors, PRs and source bindings through the read-only external-table declaration and eager coordinate-load refinements. All earlier credited complete function payloads and allocated data remain byte-identical. fn_80071A04/fn_80071A6C become exact through the declaration refinement; fn_80070F84 becomes exact through two used coordinate locals and explicit unordered-compatible exclusions. These three bodies originate in contribution 725; the refinements do not transfer original source credit."
       }
     },
     {
