@@ -35193,6 +35193,32 @@
       ]
     },
     {
+      "source": "src/game/cu_8015426C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #939; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 1 of the table 0x802A27F0 (0x8015426C-0x80154468, word 0x802A27FC), which allocates the 56-byte block held at +28 of the object and its 36-byte score block, initializes both and sets up the seven state objects. The .rodata slice 0x802A15F8-0x802A15FC holds its 18.0f literal. Calls 0x80149014, __nw__FUii, 0x80238174, 0x8023816C, 0x801D2B7C, memset, 0x802381E0, 0x800BC51C, 0x800BFAB4, 0x800B3644, 0x800A039C, 0x800B9598, 0x800AACB8, 0x80178F20, 0x80178A2C, 0x80178E88, 0x8007F828 and 0x8007F6F8; the seven state tables are referenced through new _vt.* externals. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015426C",
+          "end": "0x80154468"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A15F8",
+          "end": "0x802A15FC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8015426C",
+          "start": "0x8015426C",
+          "end": "0x80154468"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
