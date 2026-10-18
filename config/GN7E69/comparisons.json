@@ -35325,6 +35325,32 @@
       ]
     },
     {
+      "source": "src/game/cu_80151BCC.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #969; one complete function inside the retained provisional cu_801485B4 survey group: 0x80151BCC-0x80151CCC, called only from 0x80150DA4 with the .bss object 0x8031BDD4, which lowers the Y position of the team-0 players to the point Y returned by 0x80177FFC(0) and raises the Y position of each table entry's player to 5.0 above the point Y returned by 0x80177FFC(1). Owns the .rodata literal 0x802A13A8-0x802A13AC. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80151BCC",
+          "end": "0x80151CCC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A13A8",
+          "end": "0x802A13AC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80151BCC",
+          "start": "0x80151BCC",
+          "end": "0x80151CCC"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
