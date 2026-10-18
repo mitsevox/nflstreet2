@@ -1783,6 +1783,38 @@
     "_vt.14Class_802A2560": {
       "address": "0x802A2560",
       "evidence": "evidence.tsv external row for 0x802A2560 (_vt.14Class_802A2560)."
+    },
+    "_vt.14Block_802A21E8": {
+      "address": "0x802A21E8",
+      "evidence": "evidence.tsv external row for 0x802A21E8 (_vt.14Block_802A21E8)."
+    },
+    "_vt.14Class_802A2490": {
+      "address": "0x802A2490",
+      "evidence": "evidence.tsv external row for 0x802A2490 (_vt.14Class_802A2490)."
+    },
+    "_vt.14Class_802A2450": {
+      "address": "0x802A2450",
+      "evidence": "evidence.tsv external row for 0x802A2450 (_vt.14Class_802A2450)."
+    },
+    "_vt.14Class_802A23E0": {
+      "address": "0x802A23E0",
+      "evidence": "evidence.tsv external row for 0x802A23E0 (_vt.14Class_802A23E0)."
+    },
+    "_vt.14Class_802A23A8": {
+      "address": "0x802A23A8",
+      "evidence": "evidence.tsv external row for 0x802A23A8 (_vt.14Class_802A23A8)."
+    },
+    "_vt.14Class_802A2320": {
+      "address": "0x802A2320",
+      "evidence": "evidence.tsv external row for 0x802A2320 (_vt.14Class_802A2320)."
+    },
+    "_vt.14Class_802A2268": {
+      "address": "0x802A2268",
+      "evidence": "evidence.tsv external row for 0x802A2268 (_vt.14Class_802A2268)."
+    },
+    "_vt.14Class_802A2200": {
+      "address": "0x802A2200",
+      "evidence": "evidence.tsv external row for 0x802A2200 (_vt.14Class_802A2200)."
     }
   },
   "units": [
