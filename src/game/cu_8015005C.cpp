@@ -32,7 +32,7 @@ extern Settings_8031BDD4 lbl_8031BDD4;
 
 Table_8015005C *fn_801530FC(void);
 void fn_8009D964(int index, int value);
-void fn_80151CCC(Settings_8031BDD4 *p, unsigned int index, int value);
+void fn_80151CCC(Settings_8031BDD4 *p, unsigned int index, unsigned char value);
 void fn_801526EC(Settings_8031BDD4 *p);
 void fn_80177768(void *p, int team);
 void fn_801777FC(void *p);

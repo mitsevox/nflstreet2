@@ -136,35 +136,36 @@ void fn_80151D9C(Class_802A2918 *p)
     if (!over) {
         return;
     }
-    if (p->mUnknown40 != 0) {
-        fn_801C2EF0(text, "Starting next round.\n", sizeof(text));
-        for (i = 3; i != 0; i--) {
-            if (p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown12[1] == 0) {
-                pPlayer = fn_8003AC84(p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown0);
-                fn_801C2D88(line, sizeof(line), "Eliminated %s %s.\n", pPlayer->mUnknown2927,
-                            pPlayer->mUnknown2927 + 21);
-                fn_801C2F88(text, line, sizeof(text) - fn_801C3180(text));
-                pEntries = p->mpUnknown1C->mpUnknown36->mEntries;
-                if (pEntries[i].mUnknown10 + pEntries[i].mUnknown8 * 2 !=
-                    pEntries[i - 1].mUnknown10 + pEntries[i - 1].mUnknown8 * 2) {
-                    break;
-                }
+    if (p->mUnknown40 == 0) {
+        p->mpUnknown1C->mpUnknown36->mUnknown126 = sudden;
+        fn_801502B4(&p->mpUnknown1C->mUnknown32);
+        return;
+    }
+    fn_801C2EF0(text, "Starting next round.\n", sizeof(text));
+    for (i = 3; i != 0; i--) {
+        if (p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown12[1] == 0) {
+            pPlayer = fn_8003AC84(p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown0);
+            fn_801C2D88(line, sizeof(line), "Eliminated %s %s.\n", pPlayer->mUnknown2927,
+                        pPlayer->mUnknown2927 + 21);
+            fn_801C2F88(text, line, sizeof(text) - fn_801C3180(text));
+            pEntries = p->mpUnknown1C->mpUnknown36->mEntries;
+            if (pEntries[i].mUnknown10 + pEntries[i].mUnknown8 * 2 !=
+                pEntries[i - 1].mUnknown10 + pEntries[i - 1].mUnknown8 * 2) {
+                break;
             }
-        }
-        last = i == 1;
-        for (; i <= 3; i++) {
-            if (p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown12[1] == 0) {
-                fn_80151CCC(p, i, !last);
-            }
-        }
-        if (!last) {
-            goto next;
         }
     }
-    p->mpUnknown1C->mpUnknown36->mUnknown126 = sudden;
-    fn_801502B4(&p->mpUnknown1C->mUnknown32);
-    return;
-next:
+    last = i == 1;
+    for (; i <= 3; i++) {
+        if (p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown12[1] == 0) {
+            fn_80151CCC(p, i, !last);
+        }
+    }
+    if (last) {
+        p->mpUnknown1C->mpUnknown36->mUnknown126 = sudden;
+        fn_801502B4(&p->mpUnknown1C->mUnknown32);
+        return;
+    }
     fn_8017D844(text);
     for (i = 0; i < 4; i++) {
         pRows = p->mpUnknown1C->mpUnknown36->mEntries;
