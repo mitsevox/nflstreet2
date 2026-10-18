@@ -681,8 +681,9 @@ void fn_80070F84(void)
     Object_800670B4 *p = fn_80168708(fn_80178320());
     unsigned int count = 0;
     for (int i = 0; i < 7; ++i) {
-        Point_8017886C *point = &p->mUnknown8.mUnknown84[0][i].mUnknown10;
-        if (point->mX > -6.0f && point->mX < 6.0f && point->mY < 3.0f) ++count;
+        float x = p->mUnknown8.mUnknown84[0][i].mUnknown10.mX;
+        float y = p->mUnknown8.mUnknown84[0][i].mUnknown10.mY;
+        if (x > -6.0f && x < 6.0f && y < 3.0f) ++count;
     }
     int id;
     if (count > 2) id = fn_802374C8(lbl_803EC828) + 40;
