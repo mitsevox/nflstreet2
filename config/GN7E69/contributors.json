@@ -18121,11 +18121,11 @@
       "provenance": {
         "pull_request": 472,
         "merged_via": 489,
-        "commit": "2cbccaf8ada73666ebf90dcc7c0c346b64c33e7c",
-        "introduced_blob": "b279974bb112a0283a6c5afce0eeca228b758894",
+        "commit": "5d2b8155e4dbeade1f134f05c0dae64cd1952fb7",
+        "introduced_blob": "d94033c0463d41cd8676b6e9c9246ca7c1c4affd",
         "original_commit": "e87d3bbb8167681e2c6130c54cba16ec9c47bb09",
         "original_blob": "a23dbfdd8e14d42964f481dc03c626dc6782ad7b",
-        "integration_adjustment": "Preserve original contributors, PRs and source bindings through the readonly external-table, eager coordinate-load and explicit initial-sample retry-loop refinements. Earlier credited complete function payloads and allocated readonly data remain unchanged. fn_80071A04/fn_80071A6C, fn_80070F84 and fn_800711E0 become exact through these refinements; all four bodies originate in contribution 725. Refinements do not transfer original source credit."
+        "integration_adjustment": "Preserve original contributors, PRs and source bindings through the readonly-table, eager-load, initial-sample retry-loop and parity conditional-call refinements. Earlier credited function payloads and allocated readonly data remain unchanged. Five newly exact pre-existing bodies (fn_80071A04, fn_80071A6C, fn_80070F84, fn_800711E0 and fn_80070C40) originate in contribution 725; these refinements do not transfer original source credit."
       }
     },
     {
@@ -18142,11 +18142,11 @@
       "provenance": {
         "pull_request": 480,
         "merged_via": 489,
-        "commit": "2cbccaf8ada73666ebf90dcc7c0c346b64c33e7c",
-        "introduced_blob": "b279974bb112a0283a6c5afce0eeca228b758894",
+        "commit": "5d2b8155e4dbeade1f134f05c0dae64cd1952fb7",
+        "introduced_blob": "d94033c0463d41cd8676b6e9c9246ca7c1c4affd",
         "original_commit": "9309229de46b802347f0d845f9041a7a37d60830",
         "original_blob": "135ae1212e5532a13d8066147b568349536ffeee",
-        "integration_adjustment": "Preserve original contributors, PRs and source bindings through the readonly external-table, eager coordinate-load and explicit initial-sample retry-loop refinements. Earlier credited complete function payloads and allocated readonly data remain unchanged. fn_80071A04/fn_80071A6C, fn_80070F84 and fn_800711E0 become exact through these refinements; all four bodies originate in contribution 725. Refinements do not transfer original source credit."
+        "integration_adjustment": "Preserve original contributors, PRs and source bindings through the readonly-table, eager-load, initial-sample retry-loop and parity conditional-call refinements. Earlier credited function payloads and allocated readonly data remain unchanged. Five newly exact pre-existing bodies (fn_80071A04, fn_80071A6C, fn_80070F84, fn_800711E0 and fn_80070C40) originate in contribution 725; these refinements do not transfer original source credit."
       }
     },
     {
@@ -18155,6 +18155,7 @@
         "mitsevox"
       ],
       "functions": [
+        "0x80070C40",
         "0x80070D68",
         "0x80070E8C",
         "0x80070F84",
@@ -18175,11 +18176,11 @@
       "provenance": {
         "pull_request": 725,
         "merged_via": 734,
-        "commit": "2cbccaf8ada73666ebf90dcc7c0c346b64c33e7c",
-        "introduced_blob": "b279974bb112a0283a6c5afce0eeca228b758894",
+        "commit": "5d2b8155e4dbeade1f134f05c0dae64cd1952fb7",
+        "introduced_blob": "d94033c0463d41cd8676b6e9c9246ca7c1c4affd",
         "original_commit": "2e10963a8ea451bf29b23cbc9cd78143615a4d3e",
         "original_blob": "73a6573e7d52cdb919fdbdc744401952cc1f81cd",
-        "integration_adjustment": "Preserve original contributors, PRs and source bindings through the readonly external-table, eager coordinate-load and explicit initial-sample retry-loop refinements. Earlier credited complete function payloads and allocated readonly data remain unchanged. fn_80071A04/fn_80071A6C, fn_80070F84 and fn_800711E0 become exact through these refinements; all four bodies originate in contribution 725. Refinements do not transfer original source credit."
+        "integration_adjustment": "Preserve original contributors, PRs and source bindings through the readonly-table, eager-load, initial-sample retry-loop and parity conditional-call refinements. Earlier credited function payloads and allocated readonly data remain unchanged. Five newly exact pre-existing bodies (fn_80071A04, fn_80071A6C, fn_80070F84, fn_800711E0 and fn_80070C40) originate in contribution 725; these refinements do not transfer original source credit."
       }
     },
     {
@@ -18193,11 +18194,11 @@
       "provenance": {
         "pull_request": 799,
         "merged_via": 804,
-        "commit": "2cbccaf8ada73666ebf90dcc7c0c346b64c33e7c",
-        "introduced_blob": "b279974bb112a0283a6c5afce0eeca228b758894",
+        "commit": "5d2b8155e4dbeade1f134f05c0dae64cd1952fb7",
+        "introduced_blob": "d94033c0463d41cd8676b6e9c9246ca7c1c4affd",
         "original_commit": "5677da2b15a53220e9dbb20e8371c3cc7878e826",
         "original_blob": "f7fb2714236387fa754fcb8ceb36748b36236ba0",
-        "integration_adjustment": "Preserve original contributors, PRs and source bindings through the readonly external-table, eager coordinate-load and explicit initial-sample retry-loop refinements. Earlier credited complete function payloads and allocated readonly data remain unchanged. fn_80071A04/fn_80071A6C, fn_80070F84 and fn_800711E0 become exact through these refinements; all four bodies originate in contribution 725. Refinements do not transfer original source credit."
+        "integration_adjustment": "Preserve original contributors, PRs and source bindings through the readonly-table, eager-load, initial-sample retry-loop and parity conditional-call refinements. Earlier credited function payloads and allocated readonly data remain unchanged. Five newly exact pre-existing bodies (fn_80071A04, fn_80071A6C, fn_80070F84, fn_800711E0 and fn_80070C40) originate in contribution 725; these refinements do not transfer original source credit."
       }
     },
     {
@@ -18211,11 +18212,11 @@
       "provenance": {
         "pull_request": 801,
         "merged_via": 804,
-        "commit": "2cbccaf8ada73666ebf90dcc7c0c346b64c33e7c",
-        "introduced_blob": "b279974bb112a0283a6c5afce0eeca228b758894",
+        "commit": "5d2b8155e4dbeade1f134f05c0dae64cd1952fb7",
+        "introduced_blob": "d94033c0463d41cd8676b6e9c9246ca7c1c4affd",
         "original_commit": "a280e50e183c93bf82c43bc1bd55ab0a18f1e0e9",
         "original_blob": "8140d87b20e5eefc4ea1ef0900ef9f931041ba15",
-        "integration_adjustment": "Preserve original contributors, PRs and source bindings through the readonly external-table, eager coordinate-load and explicit initial-sample retry-loop refinements. Earlier credited complete function payloads and allocated readonly data remain unchanged. fn_80071A04/fn_80071A6C, fn_80070F84 and fn_800711E0 become exact through these refinements; all four bodies originate in contribution 725. Refinements do not transfer original source credit."
+        "integration_adjustment": "Preserve original contributors, PRs and source bindings through the readonly-table, eager-load, initial-sample retry-loop and parity conditional-call refinements. Earlier credited function payloads and allocated readonly data remain unchanged. Five newly exact pre-existing bodies (fn_80071A04, fn_80071A6C, fn_80070F84, fn_800711E0 and fn_80070C40) originate in contribution 725; these refinements do not transfer original source credit."
       }
     },
     {
@@ -18229,11 +18230,11 @@
       "provenance": {
         "pull_request": 803,
         "merged_via": 804,
-        "commit": "2cbccaf8ada73666ebf90dcc7c0c346b64c33e7c",
-        "introduced_blob": "b279974bb112a0283a6c5afce0eeca228b758894",
+        "commit": "5d2b8155e4dbeade1f134f05c0dae64cd1952fb7",
+        "introduced_blob": "d94033c0463d41cd8676b6e9c9246ca7c1c4affd",
         "original_commit": "52b848734d2ed9b7d3afed6719b16ce68ea5ac22",
         "original_blob": "fee6084bb56c55d03bf5f0aefd14e29f8efc3036",
-        "integration_adjustment": "Preserve original contributors, PRs and source bindings through the readonly external-table, eager coordinate-load and explicit initial-sample retry-loop refinements. Earlier credited complete function payloads and allocated readonly data remain unchanged. fn_80071A04/fn_80071A6C, fn_80070F84 and fn_800711E0 become exact through these refinements; all four bodies originate in contribution 725. Refinements do not transfer original source credit."
+        "integration_adjustment": "Preserve original contributors, PRs and source bindings through the readonly-table, eager-load, initial-sample retry-loop and parity conditional-call refinements. Earlier credited function payloads and allocated readonly data remain unchanged. Five newly exact pre-existing bodies (fn_80071A04, fn_80071A6C, fn_80070F84, fn_800711E0 and fn_80070C40) originate in contribution 725; these refinements do not transfer original source credit."
       }
     },
     {
