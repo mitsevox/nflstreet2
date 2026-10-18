@@ -55,7 +55,7 @@ public:
 
 class Class_802A19F0 : public Class_80297B90 {
 public:
-    virtual void vfn_03();
+    virtual void vfn_06();
 };
 
 struct Score_801531C4 {
