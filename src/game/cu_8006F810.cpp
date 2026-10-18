@@ -91,7 +91,7 @@ int fn_80237470(int a, int b);
 int fn_802374C8(int handle);
 void fn_8023756C(int handle);
 extern unsigned char lbl_802D63D0[];
-extern unsigned char lbl_80290BAC[][2];
+extern const unsigned char lbl_80290BAC[][2];
 extern Vector_80039F5C lbl_8030AA7C;
 extern int lbl_803EA6C0;
 extern unsigned char lbl_803EA6C4;
