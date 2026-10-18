@@ -35259,6 +35259,26 @@
       ]
     },
     {
+      "source": "src/game/cu_8014EFC0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #963; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 2 of the table 0x802A2B68 (0x8014EFC0-0x8014F104, word 0x802A2B7C), which releases the record array and the 124-byte block that the pointer at +28 of the object points to, both through their virtual destructors. Calls 0x800A8738, 0x8007F6F8 (include/game/fn_8007F6F8.h), 0x8005FC7C, 0x8014FF34, 0x8006088C, 0x80149014, 0x8014DA90, 0x800D7604, 0x80178F20, 0x800BC51C, 0x800BFAB4, 0x800A039C, 0x800B9598, 0x800AACB8 and the new __builtin_vec_delete external (0x801D3C40). No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014EFC0",
+          "end": "0x8014F104"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8014EFC0",
+          "start": "0x8014EFC0",
+          "end": "0x8014F104"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
