@@ -20510,6 +20510,21 @@
         "commit": "d26274ca59ea5bcb3d3cf910e0f423c5453171f2",
         "introduced_blob": "4429f0b6ef622a083f6dbb99fdec8cb6a592581d"
       }
+    },
+    {
+      "source": "src/game/cu_80003FF8.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x800042D8",
+        "0x80004440"
+      ],
+      "provenance": {
+        "pull_request": 942,
+        "commit": "fb19f89121981f8d204d706fc50e56f25755c4d2",
+        "introduced_blob": "268d7ba909babf9a33b3a4c622f3d2107dd59d78"
+      }
     }
   ],
   "target": "GN7E69",
