@@ -20,7 +20,7 @@ public:
 
 class Class_802A20C8 : public Class_80297BF8 {
 public:
-    virtual void vfn_03();
+    virtual void vfn_07();
 };
 
 class Class_802A2058 : public Class_80297CE8 {
@@ -46,7 +46,7 @@ public:
 
 class Class_802A1F10 : public Class_80297B90 {
 public:
-    virtual void vfn_03();
+    virtual void vfn_06();
 };
 
 class Record_8014F104 {
@@ -60,7 +60,8 @@ public:
     int mUnknown0;
     unsigned int mUnknown4;
     unsigned char mUnknown8;
-    unsigned int mUnknown12[10];
+    char mUnknown9[3];
+    char mUnknown12[40];
 };
 
 class Block_8014F104 {
