@@ -35279,6 +35279,26 @@
       ]
     },
     {
+      "source": "src/game/cu_80151CCC.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #965; one complete function inside the retained provisional cu_801485B4 survey group: 0x80151CCC-0x80151D9C, called from 0x8015028C (fn_801501F0 of src/game/cu_8015005C.cpp) and 0x80151F6C, which marks one entry of the table-0x802A2918 object's 128-byte table, decrements its two counts and updates the players. Calls 0x8003AC84, 0x800B6658, 0x80039F5C (include/game/Object_80039F5C.h), 0x801488D4, 0x80148814 and 0x8017E094. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80151CCC",
+          "end": "0x80151D9C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80151CCC",
+          "start": "0x80151CCC",
+          "end": "0x80151D9C"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
