@@ -725,8 +725,12 @@ void fn_800711E0(void)
         case 0: {
             fn_8006F54C();
             unsigned char id;
-            do { lbl_803EA6C4 = fn_802374C8(lbl_803EC820); id = lbl_803EA6C4; }
-            while (fn_8006C674(3, id));
+            lbl_803EA6C4 = fn_802374C8(lbl_803EC820);
+            id = lbl_803EA6C4;
+            while (fn_8006C674(3, id)) {
+                lbl_803EA6C4 = fn_802374C8(lbl_803EC820);
+                id = lbl_803EA6C4;
+            }
             if (fn_801486A0()) {
                 while (!fn_8006C7F4(3)) {
                     if (fn_801CB120()) fn_801CAF24();
@@ -734,8 +738,12 @@ void fn_800711E0(void)
                 }
             }
             fn_8006C548(3, id, 0);
-            do { lbl_803EA6C5 = fn_802374C8(lbl_803EC820); id = lbl_803EA6C5; }
-            while (fn_8006C674(4, id));
+            lbl_803EA6C5 = fn_802374C8(lbl_803EC820);
+            id = lbl_803EA6C5;
+            while (fn_8006C674(4, id)) {
+                lbl_803EA6C5 = fn_802374C8(lbl_803EC820);
+                id = lbl_803EA6C5;
+            }
             if (fn_801486A0()) {
                 while (!fn_8006C7F4(4)) {
                     if (fn_801CB120()) fn_801CAF24();
