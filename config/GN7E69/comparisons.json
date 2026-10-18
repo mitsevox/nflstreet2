@@ -35299,6 +35299,32 @@
       ]
     },
     {
+      "source": "src/game/cu_80151D9C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #967; one complete function inside the retained provisional cu_801485B4 survey group: 0x80151D9C-0x80152068, called only from 0x80150DB4 with the .bss object 0x8031BDD4, which ends a round of the table-0x802A2918 object: it announces sudden death, or eliminates the trailing entries through 0x80151CCC (src/game/cu_80151CCC.cpp) and either finishes through 0x801502B4 or starts the next round and resets the per-round scores. Owns the .rodata strings 0x802A13AC-0x802A13E8 it forms. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80151D9C",
+          "end": "0x80152068"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A13AC",
+          "end": "0x802A13E8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80151D9C",
+          "start": "0x80151D9C",
+          "end": "0x80152068"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
