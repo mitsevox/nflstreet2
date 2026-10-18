@@ -35153,6 +35153,26 @@
       ]
     },
     {
+      "source": "src/game/cu_8014EE1C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #935; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 1 of the table 0x802A2B68 (0x8014EE1C-0x8014EFC0, word 0x802A2B74), which allocates the 124-byte block held at +28 of the object, its six-element record array at block +0x34, and sets up its six state objects. Calls __nw__FUii, __vn__FUii, memset, 0x80178F20, 0x800BC51C, 0x800BFAB4, 0x800A039C, 0x800B9598, 0x800AACB8, 0x8007F828 and 0x8007F6F8; writes the .sdata word 0x803EB2E0; the block, record and six state tables are referenced through new _vt.* externals. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014EE1C",
+          "end": "0x8014EFC0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8014EE1C",
+          "start": "0x8014EE1C",
+          "end": "0x8014EFC0"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
