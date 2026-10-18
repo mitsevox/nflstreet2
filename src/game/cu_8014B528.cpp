@@ -19,7 +19,7 @@ public:
 
 class Class_802A2748 : public Class_80297B50 {
 public:
-    virtual void vfn_06();
+    virtual void vfn_04(float dt);
 };
 
 class Class_802A26D8 : public Class_80297CE8 {
