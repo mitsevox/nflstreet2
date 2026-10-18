@@ -39,7 +39,7 @@ void fn_801488D4(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80148814(Object_80039F5C *p);
 void fn_8017E094(int a);
 
-void fn_80151CCC(Class_802A2918 *p, unsigned int index, int value)
+void fn_80151CCC(Class_802A2918 *p, unsigned int index, unsigned char value)
 {
     Object_80039F5C *pPlayer;
     Object_80039F5C *pOther;
