@@ -44,7 +44,7 @@ public:
 
 class Class_802A2200 : public Class_80297B90 {
 public:
-    virtual void vfn_03();
+    virtual void vfn_06();
 };
 
 class Block_802A21E8 {
