@@ -276,30 +276,29 @@ void fn_8015AD50(Object_8015C244 *p, Vector_80039F5C *pPoint)
     Object_80039F5C *pOther = fn_80039F5C(fn_80178308(), 0);
     Point_8017886C origin = fn_80177FE0();
     float across = pOther->mMotion.mPos.mX - pPlayer->mMotion.mPos.mX;
-    float dx = pPlayer->mMotion.mPos.mX - origin.mX;
     float otherDx = pOther->mMotion.mPos.mX - origin.mX;
+    float dx = pPlayer->mMotion.mPos.mX - origin.mX;
+    Point_8017886C target, delta;
+    float length;
+    int angle;
     if (__builtin_fabsf(across) < 1.5f && __builtin_fabsf(otherDx) < 4.0f) {
-        Point_8017886C target;
         target.mY = pOther->mMotion.mPos.mY;
         target.mX = 1.5f - __builtin_fabsf(across);
         if (dx < 0.0f) target.mX = -target.mX;
         target.mX += pOther->mMotion.mPos.mX;
         if (fn_801784C4()) { target.mX = -target.mX; target.mY = -target.mY; }
-        Point_8017886C delta;
         fn_80227690(&delta, &target, pPoint);
-        float length = fn_802270A4(&delta);
-        int angle = fn_801CFE40(delta.mY, delta.mX);
+        length = fn_802270A4(&delta);
+        angle = fn_801CFE40(delta.mY, delta.mX);
         if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
         fn_8015A588(p, 0, pPoint, &length, &angle);
     }
-    Point_8017886C target;
     target.mX = pOther->mMotion.mPos.mX;
     target.mY = pOther->mMotion.mPos.mY;
     if (fn_801784C4()) { target.mX = -target.mX; target.mY = -target.mY; }
-    Point_8017886C delta;
     fn_80227690(&delta, &target, pPoint);
-    float length = fn_802270A4(&delta);
-    int angle = fn_801CFE40(delta.mY, delta.mX);
+    length = fn_802270A4(&delta);
+    angle = fn_801CFE40(delta.mY, delta.mX);
     if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
     fn_8015A588(p, 0, pPoint, &length, &angle);
 }
