@@ -1907,10 +1907,6 @@
     "__builtin_vec_delete": {
       "address": "0x801D3C40",
       "evidence": "evidence.tsv external row for 0x801D3C40 (__builtin_vec_delete); descriptive name."
-    },
-    "_vt.14Class_802A2A40": {
-      "address": "0x802A2A40",
-      "evidence": "evidence.tsv external row for 0x802A2A40 (_vt.14Class_802A2A40)."
     }
   },
   "units": [
