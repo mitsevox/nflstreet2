@@ -914,7 +914,7 @@ int fn_80071B08(int unused, int value)
     int result = 36;
     int choice = fn_802372EC(1, 2);
     switch (value) {
-    case 2: case 4: if (!choice) result = 38; break;
+    case 2: case 4: result = choice ? 36 : 38; break;
     case 1: case 10: result = 40; break;
     case 9: break;
     default: result = 38; break;
