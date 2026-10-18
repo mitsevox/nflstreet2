@@ -12,6 +12,8 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
+#include "game/fn_8017F584.h"
+#include "game/fn_802372EC.h"
 
 struct Record_80071594 {
     int mUnknown0;
@@ -65,14 +67,12 @@ int fn_80071B08(int unused, int value);
 
 
 int fn_80177F70(void);
-int fn_8017F584(void);
 int fn_801486A0(void);
 int fn_80178308(void);
 int fn_80178320(void);
 Object_800670B4 *fn_80168708(int side);
 int fn_8006CC54(int id);
 void fn_8006C9D4(int id);
-int fn_802372EC(int a, int b);
 int fn_8006C548(unsigned int channel, int id, void (*callback)(int handle));
 int fn_8006C674(int channel, int id);
 int fn_8006C7F4(unsigned int channel);
