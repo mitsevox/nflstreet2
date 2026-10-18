@@ -35173,6 +35173,26 @@
       ]
     },
     {
+      "source": "src/game/cu_80151858.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #937; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 1 of the table 0x802A2918 (0x80151858-0x80151A28, word 0x802A2924), which allocates the 40-byte block held at +28 of the object and its 128-byte table, initializes the table and sets up the six state objects. Calls 0x80149014, __nw__FUii, 0x80238174, 0x8023816C, 0x801D2B7C, memset, 0x8007F828, 0x8007F6F8, 0x802381E0, 0x80178F20, 0x800BC51C, 0x800BFAB4, 0x800A039C, 0x800B9598, 0x800AACB8 and 0x8016306C; the six state tables are referenced through new _vt.* externals. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80151858",
+          "end": "0x80151A28"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80151858",
+          "start": "0x80151858",
+          "end": "0x80151A28"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
