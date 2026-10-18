@@ -20850,6 +20850,21 @@
         "introduced_blob": "268d7ba909babf9a33b3a4c622f3d2107dd59d78",
         "merged_via": 977
       }
+    },
+    {
+      "source": "src/engine/cu_801C1D84.c",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x801C2030"
+      ],
+      "provenance": {
+        "pull_request": 979,
+        "merged_via": 979,
+        "commit": "95c7439e84ad43ed97ed2ad31afff627d89d9536",
+        "introduced_blob": "77d2a4121430919c7bb3018f18fd826fff58c367"
+      }
     }
   ],
   "target": "GN7E69",

@@ -39386,7 +39386,7 @@
     {
       "source": "src/game/cu_80147908.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit mapping, complete function extent and scoped source-form/compiler/data rows. Complete native comparison only; original bytes remain linked.",
+      "evidence": "evidence.tsv provisional unit row src/game/cu_80147908.cpp, complete function extent, scoped source-form/type/data rows, and existing compiler row 0x800034A0-0x801AA640 (game_cpp). Complete native comparison only; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
