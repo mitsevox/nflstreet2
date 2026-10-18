@@ -17835,6 +17835,21 @@
       }
     },
     {
+      "source": "src/game/cu_80151CCC.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80151CCC"
+      ],
+      "provenance": {
+        "pull_request": 966,
+        "merged_via": 966,
+        "commit": "f443e714c716435e1e4e4b0e108bc1efbcdbe4b7",
+        "introduced_blob": "3619d21d82450fa78dbbf9fd9ce5deb450236104"
+      }
+    },
+    {
       "source": "src/game/cu_8014B7D4.cpp",
       "contributors": [
         "adampreddy"
