@@ -617,7 +617,8 @@ void fn_80070C40(Record_80067CA8 *p)
         if (side != fn_80178308()) break;
         if (fn_8006CC54(66) || fn_8006CC54(67)) break;
         lbl_803EA6DB = (lbl_803EA6DB + 1) % 2;
-        fn_8006C854(lbl_803EA6DB ? 67 : 66, 0);
+        if (lbl_803EA6DB == 0) fn_8006C854(66, 0);
+        else fn_8006C854(67, 0);
         break;
     }
     case 140:
