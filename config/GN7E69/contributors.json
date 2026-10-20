@@ -11058,7 +11058,7 @@
         "introduced_blob": "53bdc5b5de576cab0607b4c867cf008073f0c14f",
         "original_commit": "58b140374ae59b2135fdcc295d18496e1b76a26c",
         "original_blob": "ae99ea535a89734d6d26224cbeb48a8736a0f218",
-        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. OSPriv\u2192__os.h and original external exception bridge; retain compiled genuine PeriodicAlarm unassigned.",
+        "integration_adjustment": "Reuse canonical SDK types/hardware/providers; retain complete pure C target bodies and original unimported whole assembly providers. OSPriv→__os.h and original external exception bridge; retain compiled genuine PeriodicAlarm unassigned.",
         "pull_request": 567,
         "merged_via": 573
       }
@@ -16788,8 +16788,11 @@
       "provenance": {
         "pull_request": 775,
         "merged_via": 775,
-        "commit": "b6c89f8dc0e79b43e249aa22e6c26f68ce2d601e",
-        "introduced_blob": "182af85ca2924d68b2d5f52971492d24254dec94"
+        "commit": "c3de6f65b9b7312c5789e49f5ddb857b37f4a31d",
+        "introduced_blob": "05675a3bc6fcbdcebb6fadefa077a3689aa41814",
+        "original_blob": "182af85ca2924d68b2d5f52971492d24254dec94",
+        "integration_adjustment": "Hostile-review fixes in PR775: canonical Object_80233EAC.h and Object_8020E52C.h layouts and declarations, caller-supported unused parameters and one declaration form per address; function bodies, the 117 exact addresses and the original contributor are unchanged.",
+        "original_commit": "b6c89f8dc0e79b43e249aa22e6c26f68ce2d601e"
       }
     }
   ],
