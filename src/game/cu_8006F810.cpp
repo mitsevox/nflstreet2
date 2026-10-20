@@ -12,22 +12,8 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
-
-struct Constants_8006F850 {
-    float mThreshold;
-    char mUnknown4[12];
-    float mScale;
-    char mUnknown14[12];
-    float mStrong;
-};
-
-struct Constants_8006F810 {
-    float mBounds[3];
-    float mThreshold;
-    float mScale;
-    char mUnknown14[8];
-    float mZ;
-};
+#include "game/fn_8017F584.h"
+#include "game/fn_802372EC.h"
 
 struct Record_80071594 {
     int mUnknown0;
@@ -61,7 +47,6 @@ int fn_800A9680(void);
 int fn_80073310(void);
 int fn_801650DC(Record_80067338 *pRecord);
 int fn_80178348(void);
-extern Constants_8006F850 lbl_80290B58;
 extern unsigned int lbl_80290B9C[4];
 extern float lbl_803ECB08;
 extern unsigned char lbl_803EA6EC;
@@ -82,14 +67,12 @@ int fn_80071B08(int unused, int value);
 
 
 int fn_80177F70(void);
-int fn_8017F584(void);
 int fn_801486A0(void);
 int fn_80178308(void);
 int fn_80178320(void);
 Object_800670B4 *fn_80168708(int side);
 int fn_8006CC54(int id);
 void fn_8006C9D4(int id);
-int fn_802372EC(int a, int b);
 int fn_8006C548(unsigned int channel, int id, void (*callback)(int handle));
 int fn_8006C674(int channel, int id);
 int fn_8006C7F4(unsigned int channel);
@@ -107,9 +90,8 @@ void fn_80227690(void *out, void *a, void *b);
 int fn_80237470(int a, int b);
 int fn_802374C8(int handle);
 void fn_8023756C(int handle);
-extern Constants_8006F810 lbl_80290B7C;
 extern unsigned char lbl_802D63D0[];
-extern unsigned char lbl_80290BAC[][2];
+extern const unsigned char lbl_80290BAC[][2];
 extern Vector_80039F5C lbl_8030AA7C;
 extern int lbl_803EA6C0;
 extern unsigned char lbl_803EA6C4;
@@ -502,8 +484,8 @@ void fn_8006F850(Record_80067CA8 *p)
         Object_80039F5C *a = (Object_80039F5C *)p->mUnknown10.mpObject;
         Object_80039F5C *b = (Object_80039F5C *)p->mUnknown14;
         int id;
-        if (a->mUnknown560.mUnknown28 > lbl_803ECB08 * lbl_80290B58.mThreshold ||
-            b->mUnknown560.mUnknown28 > lbl_803ECB08 * lbl_80290B58.mThreshold || fn_800A9680()) {
+        if (a->mUnknown560.mUnknown28 > lbl_803ECB08 * 3144.409912109375f ||
+            b->mUnknown560.mUnknown28 > lbl_803ECB08 * 3144.409912109375f || fn_800A9680()) {
             lbl_803EA6D0 = (lbl_803EA6D0 + 1) % 3;
             id = lbl_803EA6D0 + 15;
         } else {
@@ -513,9 +495,9 @@ void fn_8006F850(Record_80067CA8 *p)
         unsigned char volume;
         if (fn_800A9680()) volume = fn_8006CC90(id);
         else {
-            float scaled = (a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * fn_8006CC90(id) / (lbl_803ECB08 * lbl_80290B58.mScale);
+            float scaled = (a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * fn_8006CC90(id) / (lbl_803ECB08 * 100621.1171875f);
             if (!(scaled <= fn_8006CC90(id))) volume = (unsigned char)(int)(float)fn_8006CC90(id);
-            else volume = (unsigned char)(int)((a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * fn_8006CC90(id) / (lbl_803ECB08 * lbl_80290B58.mScale));
+            else volume = (unsigned char)(int)((a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * fn_8006CC90(id) / (lbl_803ECB08 * 100621.1171875f));
         }
         fn_8006C8A4(id, &a->mMotion.mPos, volume);
         break;
@@ -576,10 +558,10 @@ void fn_8006F850(Record_80067CA8 *p)
         int id;
         if (((unsigned int)state <= 1 || state == 3 || state == 5 || state == 7) &&
             ((unsigned int)previous <= 1 || previous == 3 || previous == 5 || previous == 7)) {
-            if (!(value <= lbl_803ECB08 * lbl_80290B58.mStrong)) {
+            if (!(value <= lbl_803ECB08 * 12577.6396484375f)) {
                 lbl_803EA6D2 = (lbl_803EA6D2 + 1) % 2;
                 id = lbl_803EA6D2 + 6;
-            } else if (value > lbl_803ECB08 * lbl_80290B58.mThreshold) {
+            } else if (value > lbl_803ECB08 * 3144.409912109375f) {
                 lbl_803EA6D3 = (lbl_803EA6D3 + 1) % 2;
                 id = lbl_803EA6D3 + 8;
             } else {
@@ -587,7 +569,7 @@ void fn_8006F850(Record_80067CA8 *p)
                 id = lbl_803EA6D4 + 10;
             }
         } else {
-            if (!(value <= lbl_803ECB08 * lbl_80290B58.mStrong)) {
+            if (!(value <= lbl_803ECB08 * 12577.6396484375f)) {
                 lbl_803EA6D3 = (lbl_803EA6D3 + 1) % 2;
                 id = lbl_803EA6D3 + 8;
             } else {
@@ -635,7 +617,8 @@ void fn_80070C40(Record_80067CA8 *p)
         if (side != fn_80178308()) break;
         if (fn_8006CC54(66) || fn_8006CC54(67)) break;
         lbl_803EA6DB = (lbl_803EA6DB + 1) % 2;
-        fn_8006C854(lbl_803EA6DB ? 67 : 66, 0);
+        if (lbl_803EA6DB == 0) fn_8006C854(66, 0);
+        else fn_8006C854(67, 0);
         break;
     }
     case 140:
@@ -699,8 +682,9 @@ void fn_80070F84(void)
     Object_800670B4 *p = fn_80168708(fn_80178320());
     unsigned int count = 0;
     for (int i = 0; i < 7; ++i) {
-        Point_8017886C *point = &p->mUnknown8.mUnknown84[0][i].mUnknown10;
-        if (point->mX > lbl_80290B7C.mBounds[0] && point->mX < lbl_80290B7C.mBounds[1] && point->mY < lbl_80290B7C.mBounds[2]) ++count;
+        float x = p->mUnknown8.mUnknown84[0][i].mUnknown10.mX;
+        float y = p->mUnknown8.mUnknown84[0][i].mUnknown10.mY;
+        if (!(x <= -6.0f) && !(x >= 6.0f) && !(y >= 3.0f)) ++count;
     }
     int id;
     if (count > 2) id = fn_802374C8(lbl_803EC828) + 40;
@@ -742,8 +726,12 @@ void fn_800711E0(void)
         case 0: {
             fn_8006F54C();
             unsigned char id;
-            do { lbl_803EA6C4 = fn_802374C8(lbl_803EC820); id = lbl_803EA6C4; }
-            while (fn_8006C674(3, id));
+            lbl_803EA6C4 = fn_802374C8(lbl_803EC820);
+            id = lbl_803EA6C4;
+            while (fn_8006C674(3, id)) {
+                lbl_803EA6C4 = fn_802374C8(lbl_803EC820);
+                id = lbl_803EA6C4;
+            }
             if (fn_801486A0()) {
                 while (!fn_8006C7F4(3)) {
                     if (fn_801CB120()) fn_801CAF24();
@@ -751,8 +739,12 @@ void fn_800711E0(void)
                 }
             }
             fn_8006C548(3, id, 0);
-            do { lbl_803EA6C5 = fn_802374C8(lbl_803EC820); id = lbl_803EA6C5; }
-            while (fn_8006C674(4, id));
+            lbl_803EA6C5 = fn_802374C8(lbl_803EC820);
+            id = lbl_803EA6C5;
+            while (fn_8006C674(4, id)) {
+                lbl_803EA6C5 = fn_802374C8(lbl_803EC820);
+                id = lbl_803EA6C5;
+            }
             if (fn_801486A0()) {
                 while (!fn_8006C7F4(4)) {
                     if (fn_801CB120()) fn_801CAF24();
@@ -781,11 +773,11 @@ void fn_8007134C(void)
     lbl_803EA6DC = (lbl_803EA6DC + 1) % 3;
     int id, other;
     if (!fn_80178308()) {
-        if (value <= 2) { other = lbl_803EA6DC + 100; id = lbl_803EA6DC + 85; }
-        else { other = lbl_803EA6DC + 94; id = lbl_803EA6DC + 82; }
+        if (value <= 2) { id = lbl_803EA6DC + 85; other = lbl_803EA6DC + 100; }
+        else { id = lbl_803EA6DC + 82; other = lbl_803EA6DC + 94; }
     } else {
-        if (value <= 2) { other = lbl_803EA6DC + 112; id = lbl_803EA6DC + 91; }
-        else { other = lbl_803EA6DC + 106; id = lbl_803EA6DC + 88; }
+        if (value <= 2) { id = lbl_803EA6DC + 91; other = lbl_803EA6DC + 112; }
+        else { id = lbl_803EA6DC + 88; other = lbl_803EA6DC + 106; }
     }
     fn_8006C548(2, id, 0);
     fn_8006C548(16, other, 0);
@@ -793,15 +785,16 @@ void fn_8007134C(void)
 
 void fn_80071458(Object_80039F5C *p, Object_80137ABC *ball)
 {
-    Vector_80039F5C pos, velocity, delta;
+    Vector_80039F5C pos, velocity;
+    Point_8017886C delta;
     fn_80137D58(ball, &pos);
     int nearby = 0;
     fn_80137EC4(ball, &velocity);
     if (p->mIdBytes[3] == 1) {
         fn_80227690(&delta, &pos, &p->mMotion);
-        nearby = fn_802270A4(&delta) < lbl_80290B7C.mThreshold;
+        nearby = fn_802270A4(&delta) < 0.3f;
     }
-    fn_80067DB8(28, &pos, (unsigned int)(fn_802270D4(&velocity) * lbl_80290B7C.mScale), nearby, ball->mState.mIndex);
+    fn_80067DB8(28, &pos, (unsigned int)(fn_802270D4(&velocity) * 65536.0f), nearby, ball->mState.mIndex);
 }
 
 void fn_80071540(int *value, Object_80137ABC *ball)
@@ -817,7 +810,7 @@ void fn_80071594(void *record)
     Vector_80039F5C pos;
     pos.mX = p->mUnknownC;
     pos.mY = p->mUnknown10;
-    pos.mZ = lbl_80290B7C.mZ;
+    pos.mZ = 0.0f;
     if (lbl_803EA6CD) fn_80067E3C((unsigned short)(p->mUnknown14 + 137), &pos, p->mUnknown0, p->mUnknown4, p->mUnknown8, 0);
 }
 
@@ -833,7 +826,6 @@ void fn_80071600(void)
     lbl_803EC83C = fn_80237470(1, 10);
     lbl_803EC840 = fn_80237470(1, 13);
     lbl_803EA6C5 = 1;
-    lbl_803EA6DC = 0;
     lbl_803EA6CF = 0;
     lbl_803EA6D0 = 0;
     lbl_803EA6D1 = 0;
@@ -844,6 +836,7 @@ void fn_80071600(void)
     lbl_803EA6E5 = 0;
     lbl_803EA6C4 = 0;
     lbl_803EA6DB = 0;
+    lbl_803EA6DC = 0;
 }
 
 void fn_800716E4(void)
@@ -921,7 +914,7 @@ int fn_80071B08(int unused, int value)
     int result = 36;
     int choice = fn_802372EC(1, 2);
     switch (value) {
-    case 2: case 4: if (!choice) result = 38; break;
+    case 2: case 4: result = choice ? 36 : 38; break;
     case 1: case 10: result = 40; break;
     case 9: break;
     default: result = 38; break;

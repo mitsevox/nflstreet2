@@ -29,9 +29,9 @@ Point_8017886C fn_80177FFC(int);
 void fn_80227690(void *, void *, void *);
 int fn_801CFE40(float, float);
 int fn_801CFFD0(int, int);
-int fn_800CB708(Object_80039F5C *, int *, Point_8017886C *, int, int);
-int fn_800CB580(Object_80039F5C *, int *, Point_8017886C *, int, int);
-void fn_800CBB00(Object_80039F5C *, int, Point_8017886C *, int, int);
+int fn_800CB708(Object_80039F5C *, int *, Point_8017886C, int, int);
+int fn_800CB580(Object_80039F5C *, int *, Point_8017886C, int, int);
+int fn_800CBB00(Object_80039F5C *, int, Point_8017886C, int, int);
 void fn_800E3C30(Object_80039F5C *);
 int fn_800E2F20(Object_80039F5C *, Point_8017886C *, float);
 void fn_800E4120(Object_80039F5C *, State_800E2FE4 *, int, float);
@@ -54,9 +54,9 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
     if (!state->mUnknown24) {
       int value;
       Point_8017886C point = *target;
-      if (fn_800CB708(player, &value, &point, angle, beyond)) {
+      if (fn_800CB708(player, &value, point, angle, beyond)) {
         point = *target;
-        fn_800CBB00(player, value, &point, angle, beyond);
+        fn_800CBB00(player, value, point, angle, beyond);
         state->mUnknown4C = 1;
         return;
       }
@@ -89,10 +89,10 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
           int option = (player->mFlags & 0x40000) != 0;
           Point_8017886C point = *target;
           selected =
-              fn_800CB580(player, &value, &point, direction, option) != 0;
+              fn_800CB580(player, &value, point, direction, option) != 0;
           if (!selected && option) {
             point = *target;
-            selected = fn_800CB580(player, &value, &point, direction, 0) != 0;
+            selected = fn_800CB580(player, &value, point, direction, 0) != 0;
           }
         }
         if (!selected) {
@@ -108,17 +108,17 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
           if (!state->mUnknown24) {
             Point_8017886C point = *target;
             selected =
-                fn_800CB580(player, &value, &point, direction, option) != 0;
+                fn_800CB580(player, &value, point, direction, option) != 0;
             if (!selected && option) {
               point = *target;
-              selected = fn_800CB580(player, &value, &point, direction, 0) != 0;
+              selected = fn_800CB580(player, &value, point, direction, 0) != 0;
             }
           }
         }
       }
       if (selected) {
         Point_8017886C point = *target;
-        fn_800CBB00(player, value, &point, direction, 0);
+        fn_800CBB00(player, value, point, direction, 0);
         state->mUnknown4D = 1;
         return;
       }

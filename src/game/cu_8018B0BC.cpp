@@ -6,6 +6,7 @@
 #include "game/fn_8018BE68.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_801FCE10.h"
+#include "game/fn_8022F478.h"
 
 #if defined(DECOMP_COMPARE)
 int lbl_802EADE4[16] = {
@@ -98,10 +99,17 @@ int fn_8018B2A8(int source, int teamTable, int playerTable, int destination,
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
+    int code = 0;
     int status = fn_801FCE10(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c order by 'DIGP'\n", source, &cursor, &player, playerTable);
+    if (status != 0 && status != 23) {
+        code = status;
+    }
     if (status != 23) {
-        if (*pCount <= 0) *pCount = result.mUnknown0;
-        count = *pCount;
+        if (*pCount <= 0) {
+            count = *pCount = result.mUnknown0;
+        } else {
+            count = *pCount;
+        }
         fn_80229AA4(destination, 0x59414C50, ids, &count);
         for (unsigned int i = 0; i < count; i++) {
             if (destination == 0x54415453) pOriginalIds[i] = ids[i];
@@ -156,7 +164,11 @@ void fn_8018B6F0(int index)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
+    int code = 0;
     int status = fn_801FCE10(&result, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from 'YPTS' order by 'DIGP'\n", handle, &cursor, &player);
+    if (status != 0 && status != 23) {
+        code = status;
+    }
     if (status != 23) {
         unsigned int count = result.mUnknown0;
         for (unsigned int i = 0; i < count; i++) {
@@ -184,7 +196,10 @@ int fn_80186F7C(unsigned char index);
 int fn_8018E874(int index, int n);
 int fn_801F9D70(int handle, int table, Object_80023BBC *pFilter, unsigned short *pCount);
 int fn_8007A934(Object_8007A334 *pObject, int key);
-void fn_8018B8B0(Object_8008044C *pObject);
+void fn_8008135C(Object_8008044C *pObject, int index, int value);
+int fn_8022F4BC(void);
+int fn_8022F384(int a);
+void fn_8018E7A0(int index, int value);
 int fn_802294F4(void);
 int fn_80229554(void);
 void fn_800828FC(void);
@@ -202,6 +217,17 @@ int fn_80081134(Object_8008044C *pObject);
 void fn_8015F638(int a, int b, int c, int *pResult);
 int fn_8016128C(int a);
 void fn_8016139C(int a, int *pId, int *pPalette);
+
+void fn_8018B8B0(Object_8008044C *pObject)
+{
+    for (int i = 0; i < 10; i++) {
+        fn_8008135C(pObject, lbl_802EAE30[i], 1);
+    }
+    fn_8007AA90((Object_8007A334 *)pObject, 0x44494F50, -1);
+    fn_8007AA90((Object_8007A334 *)pObject, 0x54474850, 0x41);
+    fn_8007AA90((Object_8007A334 *)pObject, 0x54475750, 0);
+    fn_8007AA90((Object_8007A334 *)pObject, 0x54425950, 2);
+}
 
 extern char lbl_802EBE24[];
 
@@ -295,6 +321,66 @@ void fn_8018BB24(int index, int value)
     fn_8008056C(&object);
 }
 
+void CopyRdrcPlayersToTeam(int index, int team, int rumt)
+{
+    Object_80023BBC arg;
+    QueryResult result;
+    QueryCursor cursor = {0, 0, -1, 0};
+    int ids[16];
+    unsigned short total, count;
+    int saved = fn_8022F4BC();
+    fn_8022F478(fn_8022F358(index));
+    fn_8022F3D4(fn_8022F358(index));
+    arg.Set(6, 0x5244524344494754LL, 2, rumt);
+    fn_801F9D70(0x54415453, 0x52445243, &arg, &total);
+    count = total;
+    fn_80229AA4(0x54415453, 0x59414C50, ids, &count);
+    int player, table;
+    cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
+    cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;
+    fn_801FCE10(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 from 'RDRC' where 'DIGT' = \x82 order by 'DIGP'\n", &cursor, &player, rumt);
+    for (unsigned int i = 0; i < count; i++) {
+        fn_801FCE10(0, "fetch from \x8a\n", &cursor);
+        fn_801F9980(0x54415453, &table);
+        fn_801FCE10(&result, "use 'TATS' select into \x8c * from 'RDRC' where ('DIGP' = \x85)\n", table, player);
+        fn_801FCE10(&result, "use 'TATS' update \x8c set 'DIGT' = \x82 and 'DIGP' = \x85\n", table, team, ids[i]);
+        fn_801FCE10(&result, "use 'TATS' insert into 'YALP' * select * from \x8c\n", table);
+        fn_801FCE10(0, "use 'TATS' update 'YALP' set 'PXSP' = \x85 where 'DIGP' = \x85\n", i, ids[i]);
+        Object_8008044C object;
+        Block_80307980 block;
+        FMCAPPORTValues values;
+        FMCAPPORTText text60, text20;
+        int resultIds[2], unknown52, unknown56;
+        fn_8008044C(&object, 0, 0x54415453);
+        fn_800809C4(&object, ids[i], 0);
+        int value6E = fn_80080E98(&object);
+        int value6C = fn_80080E70(&object);
+        int value72 = fn_80081E3C(&object);
+        int value73 = fn_80082280(&object);
+        int value74 = fn_800822D4(&object);
+        int value76 = fn_80080E48(&object);
+        unsigned int color18 = fn_800810E0(&object);
+        unsigned int color19 = fn_80081134(&object);
+        fn_80082138(&object, &block);
+        fn_80046804(&block, &values);
+        fn_8015F638(value6E, value6C, 0, resultIds);
+        fn_8016139C(value6E, &unknown52, &unknown56);
+        int unknown8 = fn_8016128C(value72 + 1);
+        int unknown12 = value73 * 3 + value74 + 0x33BA;
+        fn_801C1F94(&text60, 0, sizeof(text60));
+        fn_801C1F94(&text20, 0, sizeof(text20));
+        text60.mChars[18] = color18 + 0x80;
+        text20.mChars[19] = color19 + 0x80;
+        gFMCAPPORT.SetEntry(i, 0xFFFF, unknown8, unknown12, 0xA7, &text20,
+            resultIds[0], unknown52, unknown56, &text60, &values, value76);
+        fn_8008056C(&object);
+        fn_801F967C(0x54415453, table);
+    }
+    if (cursor.mUnknown0) fn_801FCFA0(&cursor);
+    gFMCAPPORT.Start();
+    fn_8022F478(saved);
+}
+
 int fn_8018BD9C(int index)
 {
     unsigned short count = 0;
@@ -338,6 +424,21 @@ void fn_8018BF10(int index, int team)
     fn_8018B0BC(0x54415453, team, index);
 }
 
+void fn_8018BF3C(void)
+{
+    Table_8007E020 tables[2];
+    QueryResult result;
+    int pxsp;
+    int handle = fn_8022F3D4(fn_8022F4BC());
+    fn_801FCE10(0, "use \x8c select 'PXSP' into \x85 from 'YPTS'\n", handle, &pxsp);
+    fn_801FCE10(0, "use \x8c update 'PPRC' set 'PXSP' = \x85 where 'PXSP' = \x85\n", handle, 7, pxsp);
+    fn_8018B014(handle);
+    tables[0].Set(0x43455453);
+    tables[1].Set(-1);
+    fn_801F9908(handle, tables, 0, &result, 0);
+    fn_8018E7A0(fn_8022F384(fn_8022F4BC()), 1);
+}
+
 void fn_8018C008(int *pFirstCopy, int *pSecondCopy, int database)
 {
     fn_8018C344(database, 0x4D455453, 0x59505453, pFirstCopy, pSecondCopy);
@@ -348,6 +449,14 @@ void fn_8018C044(int firstTable, int secondTable)
     fn_8018C3EC(firstTable, secondTable);
 }
 
+void fn_8018C064(int firstTable, int secondTable)
+{
+    int handle = fn_8022F3D4(fn_8022F4BC());
+    fn_8018B014(handle);
+    fn_801FCE10(0, "use \x8c insert into \x8c.'METS' * select * from \x8c\n", 0x54415453, handle, firstTable);
+    fn_801FCE10(0, "use \x8c insert into \x8c.'YPTS' * select * from \x8c\n", 0x54415453, handle, secondTable);
+}
+
 int fn_8018C0E8(int index, int *pTeam)
 {
     Object_8007A334 cursor;
@@ -355,6 +464,19 @@ int fn_8018C0E8(int index, int *pTeam)
     *pTeam = fn_8007A98C(&cursor, 0x44494754);
     fn_8018BA2C(&cursor);
     return 1;
+}
+
+void fn_8018C15C(int team, int player)
+{
+    QueryResult result;
+    fn_801FCE10(&result, "use 'TATS' update 'YALP' set 'DIGT' = \x82 and 'ITGT' = \x82 and 'DIOP' = \x82 and 'DBTP' = \x82 and 'DFTP' = \x82 and 'CDHP' = \x82 where 'DIGP' = \x82\n",
+                team, team, -1, 0, 0, 0, player);
+}
+
+void fn_8018C1A8(int player, int team)
+{
+    QueryResult result;
+    fn_801FCE10(&result, "use 'TATS' delete from 'YALP' where 'DIGT' = \x82 and 'DIGP' = \x82\n", team, player);
 }
 
 int fn_8018C1E0(Object_8007A334 *pCursor)

@@ -48,16 +48,20 @@ void fn_80191868(int value, char *pOut, int size, int unused, const char *pText)
         strcpy(pOut, " ");
         return;
     }
-    blocks = (value & 0x1FFF) ? 1 : 0;
+    blocks = 1;
+    if ((value & 0x1FFF) == 0) {
+        blocks = 0;
+    }
     blocks += value >> 13;
     if (pText) {
         fn_8017F49C(blocks, pOut, size);
         if (blocks == 1) {
             strcat(pOut, " block ");
+            strcat(pOut, pText);
         } else {
             strcat(pOut, " blocks ");
+            strcat(pOut, pText);
         }
-        strcat(pOut, pText);
     } else {
         fn_8017F49C(blocks, pOut, size);
         if (blocks == 1) {
