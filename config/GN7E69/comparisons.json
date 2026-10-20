@@ -31963,7 +31963,7 @@
     {
       "source": "src/engine/cu_8027EFAC.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8027EFAC-0x802805C4 (src/engine/cu_8027EFAC.c), its function and name rows and the exact data rows 0x802C2838-0x802C2848 (.rodata), 0x803EC570-0x803EC578 (.sdata) and 0x803ED410-0x803ED414 (.sbss). Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x8027EFAC-0x802805C4 (src/engine/cu_8027EFAC.c), its function and name rows, the exact data rows 0x802C2838-0x802C2848 (.rodata) and 0x803EC570-0x803EC578 (.sdata), and the .sbss data row 0x803ED410-0x803ED414, a zero-size placement (4-byte extent, no bytes) that matching does not measure. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
