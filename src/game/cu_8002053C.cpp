@@ -11,14 +11,13 @@ void fn_80186ED8(signed char index);
 void fn_80054964(signed char db, int id);
 void fn_80054628(signed char db, int id);
 
-int fn_8002053C(int control)
+void fn_8002053C(int control)
 {
-    int result = fn_801869F0();
-    int count = result;
+    int count = fn_801869F0();
     if (lbl_803EBAA0 == -1 && count > 0) {
         signed char indices[2];
         unsigned char auxiliary[2];
-        result = fn_80186DF0(indices, 2);
+        fn_80186DF0(indices, 2);
         for (int i = 0; i < 2; ++i) {
             if (indices[i] != -1) {
                 auxiliary[i] = 1;
@@ -39,7 +38,6 @@ int fn_8002053C(int control)
             break;
         }
     }
-    return result;
 }
 
 int fn_80020620(int control, char *pText, int c, int *pValue, int *pFlag)

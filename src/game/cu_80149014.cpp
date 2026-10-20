@@ -50,7 +50,7 @@ void fn_80149040(Object_80039F5C *p)
     QueryCursor cursor = {0,0,-1,0};
     fn_801FCE10(0,"declare \x8A cursor for select * from 'AGLP' where ('DIGP' = \x84)\n",&cursor,p->mUnknown2908);
     fn_800B4DE4(cursor,0,&p->mUnknown2900);
-    p->mUnknown508 = *(float *)p->mUnknown2904;
+    p->mUnknown508 = p->mUnknown2904Float;
     fn_800B4900(cursor,0,p->mRatings,p->mUnknown3020);
     fn_800B4798(p->mRatings,p->mIdBytes[2],p->mIdBytes[1],&p->mUnknown2900);
     if(cursor.mUnknown0)fn_801FCFA0(&cursor);

@@ -1732,9 +1732,12 @@ struct Body_801E9538 {
     float mUnknown76;
     char mUnknown80[20];
     Vector_80039F5C mUnknown100;
-    char mUnknown112[24];
+    char mUnknown112[12];
+    Vector_80039F5C mUnknown124;
     float mTransform[4][4];
-    char mUnknown200[112];
+    char mUnknown200[64];
+    Vector_80039F5C mUnknown264;
+    char mUnknown276[36];
     int mKind;
     Collection_801E7034 *mpShapes;
     char mUnknown320[4];
@@ -2402,5 +2405,82 @@ void fn_800502C0(void)
     lbl_803EA530 = 0;
     lbl_803EA524++;
 }
+
+void fn_801E9D64(Body_801E9538 *, Vector_80039F5C *, Vector_80039F5C *);
+void fn_801E9DE0(Body_801E9538 *, Vector_80039F5C *);
+
+unsigned char fn_8005164C(int type)
+{
+    unsigned char result = 0;
+    if ((unsigned int)type < (unsigned int)lbl_803EA524) {
+        result = lbl_80308F64[type].mKind == 6;
+    }
+    return result;
+}
+int fn_80051680(int type)
+{
+    int result = 0;
+    if ((unsigned int)type < (unsigned int)lbl_803EA524) {
+        result = lbl_80308F64[type].mKind == 1;
+    }
+    return result;
+}
+void fn_800516B4(int id, float *pA, float *pB)
+{
+    fn_801E9AF0(lbl_80308D0C[id], (Vector_80039F5C *)pA, (Quat_801EB488 *)pB);
+}
+void fn_800516E4(int id)
+{
+    Body_801E9538 *pBody = lbl_80308D0C[id];
+    if (pBody->mKind) fn_801E9F0C(pBody, 3);
+}
+void fn_80051724(Object_80040818 *pOwner, float *p)
+{
+    Flags_800411C8 *pFlags = pOwner->mUnknown476;
+    if (pFlags) {
+        Body_801E9538 *pBody = lbl_80308D0C[pFlags->mUnknown20];
+        Vector_80039F5C *pPos = &pBody->mUnknown100;
+        if (pPos->mZ < 1.0f && p[2] < 0.0f) {
+            Vector_80039F5C velocity;
+            Vector_80039F5C impulse;
+            Vector_80039F5C push = {0.0f};
+            push.mZ = -p[2];
+            impulse = push;
+            fn_801E9D64(pBody, &impulse, pPos);
+            fn_80227264(&velocity, p, 0.1f);
+            fn_801E9DE0(pBody, &velocity);
+        }
+    }
+}
+void fn_80051810(Object_80040818 *pOwner, float value)
+{
+    Flags_800411C8 *pFlags = pOwner->mUnknown476;
+    if (pFlags) {
+        Body_801E9538 *pBody = lbl_80308D0C[pFlags->mUnknown20];
+        Vector_80039F5C impulse;
+        fn_80227264(&impulse, &pBody->mUnknown264, -value);
+        impulse.mZ = 0.0f;
+        fn_801E9D64(pBody, &impulse, &pBody->mUnknown100);
+    }
+}
+void fn_80051880(Object_80040818 *pOwner, float value)
+{
+    Flags_800411C8 *pFlags = pOwner->mUnknown476;
+    if (pFlags) {
+        Body_801E9538 *pBody = lbl_80308D0C[pFlags->mUnknown20];
+        Vector_80039F5C velocity;
+        fn_80227264(&velocity, &pBody->mUnknown124, -value);
+        fn_801E9DE0(pBody, &velocity);
+    }
+}
+void fn_80051B3C(Object_80040818 *pOwner, float *pPos)
+{
+    Flags_800411C8 *pFlags = pOwner->mUnknown476;
+    if (pFlags) {
+        Body_801E9538 *pBody = lbl_80308D0C[pFlags->mUnknown20];
+        if (pBody->mKind) fn_801E99DC(pBody, (Vector_80039F5C *)pPos);
+    }
+}
+int fn_80051DB4(void) { return 1; }
 
 }

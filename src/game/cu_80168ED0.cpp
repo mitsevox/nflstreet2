@@ -58,18 +58,17 @@ void fn_80168F58(int team, int value)
         if (team == fn_80178308())
             fn_800B0DA4();
         for (int t = 0; t < 2; ++t) {
-            unsigned char side = t;
-            Object_800670B4 *pBook = fn_80168708(side);
-            int count = fn_80178D18(side);
+            Object_800670B4 *pBook = fn_80168708((unsigned char)t);
+            int count = fn_80178D18((unsigned char)t);
             for (int i = 0; i < count; ++i) {
-                Object_80039F5C *p = fn_80039F5C(side, i);
+                Object_80039F5C *p = fn_80039F5C((unsigned char)t, i);
                 unsigned char a, b;
                 fn_80164430(pBook, i, &a, &b);
                 p->mUnknown2914 = a;
                 fn_800B49EC(p->mRatings, p->mUnknown3020);
-                fn_800B4798(p->mRatings, side, i, &p->mUnknown2900);
+                fn_800B4798(p->mRatings, (unsigned char)t, i, &p->mUnknown2900);
             }
-            fn_800A6F04(side);
+            fn_800A6F04((unsigned char)t);
         }
     }
 }

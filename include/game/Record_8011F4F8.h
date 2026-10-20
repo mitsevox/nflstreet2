@@ -8,11 +8,17 @@ struct Record_8011F4F8 {
     float mUnknown0;
     float mUnknown4;
     short mUnknown8;
-    char mUnknownA[1];
+    /* Read as a plain char array and as an unsigned byte. */
+    union {
+        char mUnknownA[1];
+        unsigned char mUnknownAByte;
+    };
     unsigned char mUnknownB;
     float mUnknownC;
     int mUnknown10;
-    char mUnknown14[9];
+    float mUnknown14;
+    float mUnknown18;
+    char mUnknown1C[1];
     unsigned char mUnknown1D;
     char mUnknown1E[2];
 };
