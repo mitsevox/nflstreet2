@@ -35005,7 +35005,7 @@
     {
       "source": "src/game/cu_80156068.cpp",
       "profile": "game_cpp",
-      "evidence": "One complete destructor body inside the retained provisional cu_801485B4 survey group (0x80156068-0x8015609C): the destructor of the Class_80297CE8-derived table 0x802A26D8 (slot 1, word 0x802A26E4). Each body is an empty out-of-line destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "One complete destructor body inside the retained provisional cu_801485B4 survey group (0x80156068-0x8015609C): the destructor of the Class_80297CE8-derived table 0x802A26D8 (slot 1, word 0x802A26E4). The body is an empty destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. The original destructor was inline (the teardown 0x8014B7D4 stores 0x80297CE8 at +8 at 0x8014B86C and calls 0x801D3C18 at 0x8014B870 without calling it); the out-of-line definition is a stand-in for the emitted copy, pending the owner's decision. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -35025,7 +35025,7 @@
     {
       "source": "src/game/cu_801560BC.cpp",
       "profile": "game_cpp",
-      "evidence": "One complete destructor body inside the retained provisional cu_801485B4 survey group (0x801560BC-0x801560F0): the destructor of the Class_80297CE8-derived table 0x802A23E0 (slot 1, word 0x802A23EC). Each body is an empty out-of-line destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "One complete destructor body inside the retained provisional cu_801485B4 survey group (0x801560BC-0x801560F0): the destructor of the Class_80297CE8-derived table 0x802A23E0 (slot 1, word 0x802A23EC). The body is an empty destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. The original destructor was inline (the Block_802A21E8 destructor 0x80156108 stores 0x80297CE8 at +8 at 0x8015612C without calling it); the out-of-line definition is a stand-in for the emitted copy, pending the owner's decision. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -35045,7 +35045,7 @@
     {
       "source": "src/game/cu_8015629C.cpp",
       "profile": "game_cpp",
-      "evidence": "One complete destructor body inside the retained provisional cu_801485B4 survey group (0x8015629C-0x801562D0): the destructor of the Class_802A56E8-derived table 0x802A1E38 (slot 22, word 0x802A1EEC). Each body is an empty out-of-line destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "One complete destructor body inside the retained provisional cu_801485B4 survey group (0x8015629C-0x801562D0): the destructor of the Class_802A56E8-derived table 0x802A1E38 (slot 22, word 0x802A1EEC). The body is an empty destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. The original destructor was inline (the teardown 0x80151A28 stores 0x802A1E38 at +32 at 0x80151AF0 and calls 0x801D3C18 at 0x80151B00 without calling it); the out-of-line definition is a stand-in for the emitted copy, pending the owner's decision. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -35065,7 +35065,7 @@
     {
       "source": "src/game/cu_8015631C.cpp",
       "profile": "game_cpp",
-      "evidence": "Two complete destructor bodies inside the retained provisional cu_801485B4 survey group (0x8015631C-0x80156384): the destructor of the Class_80297BF8-derived table 0x802A1DC8 (slot 12, word 0x802A1E2C); the destructor of the Class_80297CE8-derived table 0x802A1D58 (slot 1, word 0x802A1D64). Each body is an empty out-of-line destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "Two complete destructor bodies inside the retained provisional cu_801485B4 survey group (0x8015631C-0x80156384): the destructor of the Class_80297BF8-derived table 0x802A1DC8 (slot 12, word 0x802A1E2C); the destructor of the Class_80297CE8-derived table 0x802A1D58 (slot 1, word 0x802A1D64). Each body is an empty destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. The original destructors were inline (the teardown 0x80151A28 stores 0x80297CE8 at +8 at 0x80151AF8 and 0x802A1DC8 at +0 at 0x80151AFC and calls 0x801D3C18 at 0x80151B00 without calling either); the out-of-line definitions are a stand-in for the emitted copies, pending the owner's decision. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
