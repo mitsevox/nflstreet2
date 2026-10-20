@@ -16025,11 +16025,11 @@
       "provenance": {
         "pull_request": 469,
         "merged_via": 489,
-        "commit": "7d2e624f27f439c148f6b0ccdc20ee6aef72c05a",
-        "introduced_blob": "902838c4af15ef2015b96263d52490ec7276c8f7",
+        "commit": "6946bf46c0a5ddb43ac6eb2d1c03850c54a20113",
+        "introduced_blob": "973b91a351935a9654519ed4b6f9c83440be4893",
         "original_commit": "8801e4e04580cd0ce07d5ef1cc6f6302e97b5bed",
         "original_blob": "49e49e1b68d8b6a254fa14764067f2286ad1a7ef",
-        "integration_adjustment": "Preserve original contributors, PR identities, source pins and earlier function inventories through the fn_8015AD50 shared-local lifetime refinement. The newly exact pre-existing body originates in contribution 725; this refinement does not transfer original source credit. Earlier complete native functions and readonly data remain unchanged.",
+        "integration_adjustment": "Preserve original contributor attribution through reviewed dependent source additions in this batch; credit remains scoped to the recorded function addresses.",
         "original_source": "src/game/cu_8015A39C.cpp",
         "merged_source": true,
         "migration_commit": "23598ea10c0a90567d759733d11681d493e7db63",
@@ -16047,15 +16047,12 @@
       "provenance": {
         "pull_request": 483,
         "merged_via": 489,
-        "commit": "7d2e624f27f439c148f6b0ccdc20ee6aef72c05a",
-        "introduced_blob": "902838c4af15ef2015b96263d52490ec7276c8f7",
+        "commit": "1562a06526704677b109a45004a18d8b0fb5455e",
+        "introduced_blob": "973b91a351935a9654519ed4b6f9c83440be4893",
         "original_source": "src/game/cu_8015A39C.cpp",
         "merged_source": true,
         "migration_commit": "23598ea10c0a90567d759733d11681d493e7db63",
-        "merged_blob": "e5ca7f6b15c947f3c35a05e612b71ccd171a99d5",
-        "original_commit": "1562a06526704677b109a45004a18d8b0fb5455e",
-        "original_blob": "973b91a351935a9654519ed4b6f9c83440be4893",
-        "integration_adjustment": "Preserve original contributors, PR identities, source pins and earlier function inventories through the fn_8015AD50 shared-local lifetime refinement. The newly exact pre-existing body originates in contribution 725; this refinement does not transfer original source credit. Earlier complete native functions and readonly data remain unchanged."
+        "merged_blob": "e5ca7f6b15c947f3c35a05e612b71ccd171a99d5"
       }
     },
     {
