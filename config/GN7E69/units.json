@@ -1727,6 +1727,186 @@
     "__14Block_80156400": {
       "address": "0x80156400",
       "evidence": "evidence.tsv external row for 0x80156400 (__14Block_80156400); descriptive name."
+    },
+    "__14Class_80148A58": {
+      "address": "0x80148A98",
+      "evidence": "evidence.tsv external row for 0x80148A98 (__14Class_80148A58)."
+    },
+    "_vt.14Class_80148A58": {
+      "address": "0x802A2EE0",
+      "evidence": "evidence.tsv external row for 0x802A2EE0 (_vt.14Class_80148A58)."
+    },
+    "_vt.14Class_802A2DB8": {
+      "address": "0x802A2DB8",
+      "evidence": "evidence.tsv external row for 0x802A2DB8 (_vt.14Class_802A2DB8)."
+    },
+    "_vt.14Class_802A2C90": {
+      "address": "0x802A2C90",
+      "evidence": "evidence.tsv external row for 0x802A2C90 (_vt.14Class_802A2C90)."
+    },
+    "_vt.14Class_802A2B68": {
+      "address": "0x802A2B68",
+      "evidence": "evidence.tsv external row for 0x802A2B68 (_vt.14Class_802A2B68)."
+    },
+    "_vt.14Class_802A2918": {
+      "address": "0x802A2918",
+      "evidence": "evidence.tsv external row for 0x802A2918 (_vt.14Class_802A2918)."
+    },
+    "_vt.14Class_802A27F0": {
+      "address": "0x802A27F0",
+      "evidence": "evidence.tsv external row for 0x802A27F0 (_vt.14Class_802A27F0)."
+    },
+    "_vt.14Class_802A2788": {
+      "address": "0x802A2788",
+      "evidence": "evidence.tsv external row for 0x802A2788 (_vt.14Class_802A2788)."
+    },
+    "_vt.14Class_802A2748": {
+      "address": "0x802A2748",
+      "evidence": "evidence.tsv external row for 0x802A2748 (_vt.14Class_802A2748)."
+    },
+    "_vt.14Class_802A26D8": {
+      "address": "0x802A26D8",
+      "evidence": "evidence.tsv external row for 0x802A26D8 (_vt.14Class_802A26D8)."
+    },
+    "_vt.14Class_802A26A0": {
+      "address": "0x802A26A0",
+      "evidence": "evidence.tsv external row for 0x802A26A0 (_vt.14Class_802A26A0)."
+    },
+    "_vt.14Class_802A2618": {
+      "address": "0x802A2618",
+      "evidence": "evidence.tsv external row for 0x802A2618 (_vt.14Class_802A2618)."
+    },
+    "_vt.14Class_802A24F8": {
+      "address": "0x802A24F8",
+      "evidence": "evidence.tsv external row for 0x802A24F8 (_vt.14Class_802A24F8)."
+    },
+    "_vt.14Class_802A2560": {
+      "address": "0x802A2560",
+      "evidence": "evidence.tsv external row for 0x802A2560 (_vt.14Class_802A2560)."
+    },
+    "_vt.14Block_802A21E8": {
+      "address": "0x802A21E8",
+      "evidence": "evidence.tsv external row for 0x802A21E8 (_vt.14Block_802A21E8)."
+    },
+    "_vt.14Class_802A2490": {
+      "address": "0x802A2490",
+      "evidence": "evidence.tsv external row for 0x802A2490 (_vt.14Class_802A2490)."
+    },
+    "_vt.14Class_802A2450": {
+      "address": "0x802A2450",
+      "evidence": "evidence.tsv external row for 0x802A2450 (_vt.14Class_802A2450)."
+    },
+    "_vt.14Class_802A23E0": {
+      "address": "0x802A23E0",
+      "evidence": "evidence.tsv external row for 0x802A23E0 (_vt.14Class_802A23E0)."
+    },
+    "_vt.14Class_802A23A8": {
+      "address": "0x802A23A8",
+      "evidence": "evidence.tsv external row for 0x802A23A8 (_vt.14Class_802A23A8)."
+    },
+    "_vt.14Class_802A2320": {
+      "address": "0x802A2320",
+      "evidence": "evidence.tsv external row for 0x802A2320 (_vt.14Class_802A2320)."
+    },
+    "_vt.14Class_802A2268": {
+      "address": "0x802A2268",
+      "evidence": "evidence.tsv external row for 0x802A2268 (_vt.14Class_802A2268)."
+    },
+    "_vt.14Class_802A2200": {
+      "address": "0x802A2200",
+      "evidence": "evidence.tsv external row for 0x802A2200 (_vt.14Class_802A2200)."
+    },
+    "_vt.14Block_8014F104": {
+      "address": "0x802A1EF8",
+      "evidence": "evidence.tsv external row for 0x802A1EF8 (_vt.14Block_8014F104)."
+    },
+    "_vt.14Class_802A2130": {
+      "address": "0x802A2130",
+      "evidence": "evidence.tsv external row for 0x802A2130 (_vt.14Class_802A2130)."
+    },
+    "_vt.14Class_802A20C8": {
+      "address": "0x802A20C8",
+      "evidence": "evidence.tsv external row for 0x802A20C8 (_vt.14Class_802A20C8)."
+    },
+    "_vt.14Class_802A2058": {
+      "address": "0x802A2058",
+      "evidence": "evidence.tsv external row for 0x802A2058 (_vt.14Class_802A2058)."
+    },
+    "_vt.14Class_802A2020": {
+      "address": "0x802A2020",
+      "evidence": "evidence.tsv external row for 0x802A2020 (_vt.14Class_802A2020)."
+    },
+    "_vt.14Class_802A1F90": {
+      "address": "0x802A1F90",
+      "evidence": "evidence.tsv external row for 0x802A1F90 (_vt.14Class_802A1F90)."
+    },
+    "_vt.14Class_802A1F10": {
+      "address": "0x802A1F10",
+      "evidence": "evidence.tsv external row for 0x802A1F10 (_vt.14Class_802A1F10)."
+    },
+    "_vt.15Record_8014F104": {
+      "address": "0x802A1F78",
+      "evidence": "evidence.tsv external row for 0x802A1F78 (_vt.15Record_8014F104)."
+    },
+    "__vn__FUii": {
+      "address": "0x801D3BF4",
+      "evidence": "evidence.tsv external row for 0x801D3BF4 (__vn__FUii); descriptive name."
+    },
+    "_vt.14Class_802A1DC8": {
+      "address": "0x802A1DC8",
+      "evidence": "evidence.tsv external row for 0x802A1DC8 (_vt.14Class_802A1DC8)."
+    },
+    "_vt.14Class_802A1D58": {
+      "address": "0x802A1D58",
+      "evidence": "evidence.tsv external row for 0x802A1D58 (_vt.14Class_802A1D58)."
+    },
+    "_vt.14Class_802A1D20": {
+      "address": "0x802A1D20",
+      "evidence": "evidence.tsv external row for 0x802A1D20 (_vt.14Class_802A1D20)."
+    },
+    "_vt.14Class_802A1C98": {
+      "address": "0x802A1C98",
+      "evidence": "evidence.tsv external row for 0x802A1C98 (_vt.14Class_802A1C98)."
+    },
+    "_vt.14Class_802A1C30": {
+      "address": "0x802A1C30",
+      "evidence": "evidence.tsv external row for 0x802A1C30 (_vt.14Class_802A1C30)."
+    },
+    "_vt.14Class_802A1E38": {
+      "address": "0x802A1E38",
+      "evidence": "evidence.tsv external row for 0x802A1E38 (_vt.14Class_802A1E38)."
+    },
+    "_vt.14Class_802A1BC8": {
+      "address": "0x802A1BC8",
+      "evidence": "evidence.tsv external row for 0x802A1BC8 (_vt.14Class_802A1BC8)."
+    },
+    "_vt.14Class_802A1B58": {
+      "address": "0x802A1B58",
+      "evidence": "evidence.tsv external row for 0x802A1B58 (_vt.14Class_802A1B58)."
+    },
+    "_vt.14Class_802A1B18": {
+      "address": "0x802A1B18",
+      "evidence": "evidence.tsv external row for 0x802A1B18 (_vt.14Class_802A1B18)."
+    },
+    "_vt.14Class_802A1AE0": {
+      "address": "0x802A1AE0",
+      "evidence": "evidence.tsv external row for 0x802A1AE0 (_vt.14Class_802A1AE0)."
+    },
+    "_vt.14Class_802A1A58": {
+      "address": "0x802A1A58",
+      "evidence": "evidence.tsv external row for 0x802A1A58 (_vt.14Class_802A1A58)."
+    },
+    "_vt.14Class_802A1930": {
+      "address": "0x802A1930",
+      "evidence": "evidence.tsv external row for 0x802A1930 (_vt.14Class_802A1930)."
+    },
+    "_vt.14Class_802A19F0": {
+      "address": "0x802A19F0",
+      "evidence": "evidence.tsv external row for 0x802A19F0 (_vt.14Class_802A19F0)."
+    },
+    "__builtin_vec_delete": {
+      "address": "0x801D3C40",
+      "evidence": "evidence.tsv external row for 0x801D3C40 (__builtin_vec_delete); descriptive name."
     }
   },
   "units": [
