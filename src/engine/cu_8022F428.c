@@ -8,6 +8,8 @@
 #include "game/fn_8022F478.h"
 #include "game/fn_80233CBC.h"
 #include "game/fn_801FCE10.h"
+#include "game/Object_8020E52C.h"
+#include "game/Object_80233EAC.h"
 #include "game/QueryStatus.h"
 
 typedef struct Entry_802FB300 {
@@ -65,32 +67,6 @@ typedef struct Box_80234070 {
     float mUnknown20;
 } Box_80234070;
 
-typedef struct Record_80233D64 {
-    int mUnknown0;
-    char mUnknown4[20];
-    void *mpUnknown24;
-    int mUnknown28;
-    char mUnknown32[20];
-} Record_80233D64;
-
-typedef struct Lod_80233D64 {
-    float mUnknown0;
-    char mUnknown4[8];
-    unsigned int mUnknown12;
-    Record_80233D64 *mpUnknown16;
-    char mUnknown20[4];
-    void *mpUnknown24;
-    Record_80233D64 mUnknown28;
-} Lod_80233D64;
-
-typedef struct Object_80233D64 {
-    const char *mpUnknown0;
-    int mUnknown4;
-    void *mpUnknown8;
-    int mUnknown12;
-    Lod_80233D64 *mpUnknown16;
-} Object_80233D64;
-
 typedef struct Desc_802345F8 {
     const char *mpUnknown0;
     char mUnknown4[16];
@@ -141,9 +117,9 @@ typedef struct Part_80234A30 {
     Values_80233C7C mUnknown20;
     int mUnknown92;
     short mUnknown96[64];
-    int mUnknown224;
-    int mUnknown228;
-    int mUnknown232[2];
+    void *mpUnknown224;
+    void *mpUnknown228;
+    void *mpUnknown232[2];
 } Part_80234A30;
 
 typedef struct Object_80234B20 {
@@ -166,26 +142,6 @@ typedef struct Holder_80234EEC {
     char mUnknown0[88];
     Sprite_80234DFC *mpUnknown88;
 } Holder_80234EEC;
-
-typedef struct Entry_8020E52C {
-    unsigned short mUnknown0;
-    unsigned short mUnknown2;
-    unsigned short mUnknown4;
-    char mUnknown6[2];
-    unsigned short mUnknown8;
-} Entry_8020E52C;
-
-typedef struct Image_8020E560 {
-    char mUnknown0[8];
-    unsigned int mUnknown8;
-    unsigned char *mpUnknownC;
-} Image_8020E560;
-
-typedef struct Image_8020E5F8 {
-    char mUnknown0[4];
-    unsigned int mUnknown4;
-    unsigned char *mpUnknown8;
-} Image_8020E5F8;
 
 typedef struct Table_803E96E8 {
     char mUnknown0[12];
@@ -328,13 +284,9 @@ extern int fn_801F9D0C(int handle, int table, int a);
 extern int fn_801FA68C(void *pCallback, int tag);
 extern int fn_801FA740(int tag);
 extern int fn_8020D2D0(int tag, char *pName, int a, int b);
-extern void fn_8020E2B0(void *p);
-extern Entry_8020E52C *fn_8020E52C(void *p, unsigned short index);
-extern Image_8020E560 *fn_8020E560(void *p, unsigned short index);
-extern Image_8020E5F8 *fn_8020E5F8(void *p, unsigned short index);
 extern void fn_8020E9D0(void *pDst, void *pSrc, unsigned int size);
 extern void fn_8020EBB0(void *p);
-extern void *fn_8020EC50(int a, unsigned int tag, Header_80234DFC **ppHeader);
+extern void *fn_8020EC50(void *p, unsigned int tag, void *pOut);
 extern void fn_8020F28C(void *p);
 extern void fn_8020F2C4(void *pDst, void *pSrc);
 extern void fn_8020F4D0(void *p, void *pData);
@@ -350,12 +302,12 @@ extern void fn_80210054(void *p, int a);
 extern void fn_80210114(void *p);
 extern void fn_802101B0(void *p, int a);
 extern void fn_80210654(void *p);
-extern void fn_80210724(int a);
-extern void fn_80210BA4(int a);
+extern void fn_80210724(void *p);
+extern void fn_80210BA4(void *p);
 extern void fn_802112DC(short *pValues, int count);
 extern void fn_80211424(short *pValues, int count);
 extern int fn_80211984(const char *pName);
-extern void fn_80211E08(void *p, void *pData);
+extern void fn_80211E08(void *p, int a);
 extern void fn_80211EFC(void *p);
 extern void *fn_80212050(void *p);
 extern void *fn_80212074(void *p, int a);
@@ -438,7 +390,7 @@ int fn_80233BE4(short *pOut, Model_80233BE4 *pModel, Values_80233C7C *pValues);
 void fn_80233C7C(Values_80233C7C *pValues);
 float fn_80234070(Box_80234070 *pBox);
 void fn_80234094(Box_80234070 *pBox);
-int fn_80234098(Object_80233D64 *pObject, float value);
+int fn_80234098(Object_80233EAC *pObject, float value);
 Desc_802345F8 *fn_802345F8(Desc_802345F8 *pDescs, const char *pName);
 void fn_8023472C(void *p, int a, int b, Desc_802345F8 *pA, Desc_802345F8 *pB, int c);
 void fn_80234A14(Part_80234A30 *pPart, int mask);
@@ -1275,118 +1227,118 @@ void fn_80233CBC(void *p, int index, int value)
     }
 }
 
-void fn_80233CF0(Lod_80233D64 *pLod, void *pData, void *p)
+void fn_80233CF0(ModelLod_802DF190 *pLod, void *pData, void *p)
 {
-    Record_80233D64 *pRecord = &pLod->mUnknown28;
+    Object_8023417C *pRecord = &pLod->mUnknown1C;
 
-    pLod->mpUnknown24 = pData;
+    pLod->mpUnknown18 = pData;
     fn_8020F28C(pRecord);
-    pLod->mpUnknown16 = pRecord;
-    fn_8020EBB0(pLod->mpUnknown24);
-    fn_8020F4D0(pRecord, pLod->mpUnknown24);
+    pLod->mpUnknown10 = pRecord;
+    fn_8020EBB0(pLod->mpUnknown18);
+    fn_8020F4D0(pRecord, pLod->mpUnknown18);
     fn_8020F78C(pRecord, lbl_803EC0F4);
     if (p != 0) {
         fn_8020F824(pRecord, p);
     }
 }
 
-void fn_80233D64(Object_80233D64 *pObject, Lod_80233D64 *pLods, const char *pName, int a, void *pData,
+void fn_80233D64(Object_80233EAC *pObject, ModelLod_802DF190 *pLods, const char *pName, int a, void *pData,
                  void *p)
 {
     int fresh = 1;
 
-    pObject->mUnknown12 = 0;
+    pObject->mUnknownC = 0;
     pObject->mpUnknown0 = pName;
     pObject->mUnknown4 = a;
-    pObject->mpUnknown16 = pLods;
+    pObject->mpUnknown10 = pLods;
     pObject->mpUnknown8 = pData;
-    for (; pLods->mUnknown12 != 0xFFFF; pLods++) {
-        if (pLods->mUnknown12 != 0) {
-            if (fn_801F0DB8(pData, pLods->mUnknown12) != 0) {
+    for (; pLods->mId != 0xFFFF; pLods++) {
+        if (pLods->mId != 0) {
+            if (fn_801F0DB8(pData, pLods->mId) != 0) {
                 fresh = 0;
             }
-            pLods->mpUnknown24 = (void *)fn_801EF390(pData, pLods->mUnknown12, 1);
-            fn_8020F28C(&pLods->mUnknown28);
-            pLods->mpUnknown16 = &pLods->mUnknown28;
-            if (pLods->mpUnknown24 != 0) {
-                fn_8020EBB0(pLods->mpUnknown24);
-                fn_8020F4D0(&pLods->mUnknown28, pLods->mpUnknown24);
+            pLods->mpUnknown18 = (void *)fn_801EF390(pData, pLods->mId, 1);
+            fn_8020F28C(&pLods->mUnknown1C);
+            pLods->mpUnknown10 = &pLods->mUnknown1C;
+            if (pLods->mpUnknown18 != 0) {
+                fn_8020EBB0(pLods->mpUnknown18);
+                fn_8020F4D0(&pLods->mUnknown1C, pLods->mpUnknown18);
                 if (lbl_803EC0F4 != 0) {
                     if (fresh) {
-                        fn_8020F78C(&pLods->mUnknown28, lbl_803EC0F4);
+                        fn_8020F78C(&pLods->mUnknown1C, lbl_803EC0F4);
                     } else {
-                        pLods->mUnknown28.mpUnknown24 = lbl_803EC0F4;
+                        pLods->mUnknown1C.mpUnknown18 = lbl_803EC0F4;
                     }
                 }
                 if (p != 0) {
-                    fn_8020F824(&pLods->mUnknown28, p);
+                    fn_8020F824(&pLods->mUnknown1C, p);
                 }
             }
         } else {
-            fn_8020F28C(&pLods->mUnknown28);
-            pLods->mpUnknown16 = 0;
+            fn_8020F28C(&pLods->mUnknown1C);
+            pLods->mpUnknown10 = 0;
         }
-        pObject->mUnknown12++;
+        pObject->mUnknownC++;
     }
 }
 
-void fn_80233EAC(Object_80233D64 *pObject, Lod_80233D64 *pLods, const char *pName, int a, void *pArchive,
-                 void *pSkeleton, void **ppData, int load)
+void fn_80233EAC(Object_80233EAC *pObject, ModelLod_802DF190 *pLods, const char *pName, int a, void *pArchive,
+                 Skeleton_80041930 *pSkeleton, void **ppData, int load)
 {
     int n = 0;
 
-    pObject->mUnknown12 = 0;
+    pObject->mUnknownC = 0;
     pObject->mpUnknown0 = pName;
     pObject->mUnknown4 = a;
-    pObject->mpUnknown16 = pLods;
+    pObject->mpUnknown10 = pLods;
     pObject->mpUnknown8 = pArchive;
-    for (; pLods->mUnknown12 != 0xFFFF; pLods++) {
-        if (pLods->mUnknown12 != 0) {
+    for (; pLods->mId != 0xFFFF; pLods++) {
+        if (pLods->mId != 0) {
             if (load != 0) {
-                fn_801EFF80(pArchive, pLods->mUnknown12, ppData[n]);
+                fn_801EFF80(pArchive, pLods->mId, ppData[n]);
             }
-            pLods->mpUnknown24 = ppData[n];
-            fn_8020F28C(&pLods->mUnknown28);
-            pLods->mpUnknown16 = &pLods->mUnknown28;
-            if (pLods->mpUnknown24 != 0) {
-                fn_8020EBB0(pLods->mpUnknown24);
-                fn_8020F4D0(&pLods->mUnknown28, pLods->mpUnknown24);
+            pLods->mpUnknown18 = ppData[n];
+            fn_8020F28C(&pLods->mUnknown1C);
+            pLods->mpUnknown10 = &pLods->mUnknown1C;
+            if (pLods->mpUnknown18 != 0) {
+                fn_8020EBB0(pLods->mpUnknown18);
+                fn_8020F4D0(&pLods->mUnknown1C, pLods->mpUnknown18);
                 if (lbl_803EC0F4 != 0) {
-                    fn_8020F78C(&pLods->mUnknown28, lbl_803EC0F4);
+                    fn_8020F78C(&pLods->mUnknown1C, lbl_803EC0F4);
                 }
                 if (pSkeleton != 0) {
-                    fn_8020F824(&pLods->mUnknown28, pSkeleton);
+                    fn_8020F824(&pLods->mUnknown1C, pSkeleton);
                 }
             }
             n++;
         } else {
-            pLods->mpUnknown16 = 0;
+            pLods->mpUnknown10 = 0;
         }
-        pObject->mUnknown12++;
+        pObject->mUnknownC++;
     }
 }
 
-void fn_80233FCC(Object_80233D64 *pObject)
+void fn_80233FCC(Object_80233EAC *pObject)
 {
-    unsigned int count = pObject->mUnknown12;
-    Lod_80233D64 *pLods = pObject->mpUnknown16;
+    unsigned int count = pObject->mUnknownC;
+    ModelLod_802DF190 *pLods = pObject->mpUnknown10;
     unsigned int i;
 
     for (i = 0; i < count; i++) {
-        Lod_80233D64 *pLod = &pLods[i];
+        ModelLod_802DF190 *pLod = &pLods[i];
 
-        if (pLod->mUnknown12 != 0) {
-            fn_801F010C(pObject->mpUnknown8, pLod->mUnknown12);
-            pLod->mpUnknown24 = 0;
-            pLod->mpUnknown16 = 0;
-            if (pLod->mUnknown28.mUnknown28 != 0) {
-                fn_8020F92C(&pLods[i].mUnknown28);
+        if (pLod->mId != 0) {
+            fn_801F010C(pObject->mpUnknown8, pLod->mId);
+            pLod->mpUnknown18 = 0;
+            pLod->mpUnknown10 = 0;
+            if (pLod->mUnknown1C.mUnknown1C != 0) {
+                fn_8020F92C(&pLods[i].mUnknown1C);
             }
-            fn_8020F28C(&pLod->mUnknown28);
+            fn_8020F28C(&pLod->mUnknown1C);
         }
     }
-    pObject->mpUnknown16 = 0;
-    pObject->mUnknown12 = 0;
+    pObject->mpUnknown10 = 0;
+    pObject->mUnknownC = 0;
 }
 
 float fn_80234070(Box_80234070 *pBox)
@@ -1398,34 +1350,34 @@ void fn_80234094(Box_80234070 *pBox)
 {
 }
 
-int fn_80234098(Object_80233D64 *pObject, float value)
+int fn_80234098(Object_80233EAC *pObject, float value)
 {
-    int count = pObject->mUnknown12;
-    Lod_80233D64 *pLods = pObject->mpUnknown16;
+    int count = pObject->mUnknownC;
+    ModelLod_802DF190 *pLods = pObject->mpUnknown10;
     int i;
 
     for (i = 0; i < count; i++) {
-        if (pLods[i].mpUnknown16 != 0 && value > pLods[i].mUnknown0) {
+        if (pLods[i].mpUnknown10 != 0 && value > pLods[i].mUnknown0) {
             break;
         }
     }
-    while (i > 0 && pLods[i].mUnknown12 == 0xFFFF) {
+    while (i > 0 && pLods[i].mId == 0xFFFF) {
         i--;
     }
     return i;
 }
 
-int fn_80234144(Object_80233D64 *pObject, Box_80234070 *pBox)
+int fn_80234144(Object_80233EAC *pObject, void *pBox)
 {
     return fn_80234098(pObject, fn_80234070(pBox));
 }
 
-Record_80233D64 *fn_8023417C(Object_80233D64 *pObject, int index)
+Object_8023417C *fn_8023417C(Object_80233EAC *pObject, int index)
 {
-    Record_80233D64 *pRecord = 0;
+    Object_8023417C *pRecord = 0;
 
-    if (index >= 0 && index < pObject->mUnknown12) {
-        pRecord = &pObject->mpUnknown16[index].mUnknown28;
+    if (index >= 0 && index < pObject->mUnknownC) {
+        pRecord = &pObject->mpUnknown10[index].mUnknown1C;
     }
     return pRecord;
 }
@@ -1529,11 +1481,11 @@ void fn_8023472C(void *p, int a, int b, Desc_802345F8 *pA, Desc_802345F8 *pB, in
     }
 }
 
-void fn_802347EC(void *pData, Desc_802345F8 *pDesc)
+void fn_802347EC(void *pData, Desc_802345F8 *pDesc, int a, int b)
 {
     pDesc->mpUnknown28 = pData;
     pDesc->mpUnknown24 = fn_801D2B7C(40, 0, 0);
-    fn_80211E08(pDesc->mpUnknown24, pDesc->mpUnknown28);
+    fn_80211E08(pDesc->mpUnknown24, (int)pDesc->mpUnknown28);
     pDesc->mpUnknown20 = pDesc->mpUnknown24->mpUnknown36;
 }
 
@@ -1556,7 +1508,7 @@ void fn_802348AC(void *p)
     fn_80210114(p);
 }
 
-void fn_802348CC(void)
+void fn_802348CC(int a)
 {
     lbl_803ED020 = fn_80211984(lbl_802B7154);
     lbl_803ED024 = fn_80211984(lbl_802B715C);
@@ -1586,15 +1538,15 @@ void fn_80234A14(Part_80234A30 *pPart, int mask)
     pPart->mUnknown8 |= mask;
 }
 
-void fn_80234A30(Part_80234A30 *pPart)
+void fn_80234A30(Part_80234A30 *pPart, int a)
 {
     pPart->mUnknown0 = 1;
     pPart->mpUnknown12 = 0;
     pPart->mUnknown16 = 0;
-    pPart->mUnknown232[0] = 0;
-    pPart->mUnknown232[1] = 0;
-    pPart->mUnknown224 = 0;
-    pPart->mUnknown228 = 0;
+    pPart->mpUnknown232[0] = 0;
+    pPart->mpUnknown232[1] = 0;
+    pPart->mpUnknown224 = 0;
+    pPart->mpUnknown228 = 0;
     fn_80233C7C(&pPart->mUnknown20);
     fn_80234A14(pPart, 0x411);
 }
@@ -1659,8 +1611,8 @@ void fn_80234BF4(int a, Part_80234A30 *pPart, int mode)
 {
     fn_80234B88(pPart);
     fn_80210654(pPart->mpUnknown12);
-    fn_80210BA4(pPart->mUnknown232[0]);
-    fn_80210724(pPart->mUnknown224);
+    fn_80210BA4(pPart->mpUnknown232[0]);
+    fn_80210724(pPart->mpUnknown224);
     switch (mode) {
     case 0:
         fn_802112DC(pPart->mUnknown96, pPart->mUnknown92);
@@ -1675,22 +1627,22 @@ void fn_80234BF4(int a, Part_80234A30 *pPart, int mode)
     }
 }
 
-void fn_80234CA4(Part_80234A30 *pPart, int value)
+void fn_80234CA4(Part_80234A30 *pPart, void *p)
 {
-    pPart->mUnknown224 = value;
+    pPart->mpUnknown224 = p;
 }
 
-void fn_80234CAC(Part_80234A30 *pPart, int value)
+void fn_80234CAC(Part_80234A30 *pPart, void *p)
 {
-    if (value != pPart->mUnknown228) {
+    if (p != pPart->mpUnknown228) {
         fn_80234A14(pPart, 1);
-        pPart->mUnknown228 = value;
+        pPart->mpUnknown228 = p;
     }
 }
 
-void fn_80234CF0(Part_80234A30 *pPart, int index, int value)
+void fn_80234CF0(Part_80234A30 *pPart, int index, void *p)
 {
-    pPart->mUnknown232[index] = value;
+    pPart->mpUnknown232[index] = p;
 }
 
 void fn_80234D00(void *pIn, void *pOut)
@@ -1733,7 +1685,7 @@ void fn_80234DCC(int a, Sprite_80234DFC *pSprite, const char *pName, int b)
 void fn_80234DFC(int a, Sprite_80234DFC *pSprite, int c, int d, const char *pName, int e)
 {
     Header_80234DFC *pHeader;
-    void *pText = fn_8020EC50(a, 0x54657874, &pHeader);
+    void *pText = fn_8020EC50((void *)a, 0x54657874, &pHeader);
 
     if (pText != 0) {
         if (e == 0) {
@@ -1742,9 +1694,9 @@ void fn_80234DFC(int a, Sprite_80234DFC *pSprite, int c, int d, const char *pNam
         } else {
             pSprite->mpUnknown40 = pText;
         }
-        fn_80211E08(pSprite, pSprite->mpUnknown40);
+        fn_80211E08(pSprite, (int)pSprite->mpUnknown40);
     }
-    pSprite->mpUnknown44 = fn_8020EC50(a, 0x4D61746C, 0);
+    pSprite->mpUnknown44 = fn_8020EC50((void *)a, 0x4D61746C, 0);
 }
 
 void fn_80234EA0(Sprite_80234DFC *pSprite, int keep)
@@ -1760,10 +1712,10 @@ void fn_80234EA0(Sprite_80234DFC *pSprite, int keep)
 void fn_80234EEC(Holder_80234EEC *pHolder, int index, void *pData, unsigned char sourceIndex)
 {
     Sprite_80234DFC *pSprite = pHolder->mpUnknown88;
-    Entry_8020E52C *pDst;
-    Entry_8020E52C *pSrc;
-    Image_8020E560 *pDstImage;
-    Image_8020E560 *pSrcImage;
+    Object_8020E52C *pDst;
+    Object_8020E52C *pSrc;
+    Object_8020E560 *pDstImage;
+    Object_8020E560 *pSrcImage;
 
     fn_8020E2B0(pData);
     pDst = fn_8020E52C(pSprite->mpUnknown40, index);
@@ -1775,10 +1727,10 @@ void fn_80234EEC(Holder_80234EEC *pHolder, int index, void *pData, unsigned char
 
 void fn_80234F74(Sprite_80234DFC *pSprite, int index, void *pData, unsigned char sourceIndex, int offset)
 {
-    Entry_8020E52C *pDst;
-    Entry_8020E52C *pSrc;
-    Image_8020E5F8 *pDstImage;
-    Image_8020E5F8 *pSrcImage;
+    Object_8020E52C *pDst;
+    Object_8020E52C *pSrc;
+    Object_8020E5F8 *pDstImage;
+    Object_8020E5F8 *pSrcImage;
 
     fn_8020E2B0(pData);
     pDst = fn_8020E52C(pSprite->mpUnknown40, index);
