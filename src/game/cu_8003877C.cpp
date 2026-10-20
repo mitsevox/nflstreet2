@@ -195,7 +195,6 @@ void fn_801437FC(Object_80039F5C *pA, Object_80039F5C *pB);
 void fn_801438EC(Object_80039F5C *pA, Record_8003EC04 *pRecordA, Object_80039F5C *pB, Record_8003EC04 *pRecordB,
                  ContactList_8030BD74 *pContacts);
 void fn_80194C5C(int channel, int level, int duration);
-Object_8003DEC4 *fn_8003DF3C(int side, int index);
 int fn_8003DEBC(void);
 void fn_8009BC38(Object_80039F5C *p, Object_8003DEC4 *pObject);
 void fn_8009BD48(int *pRef, int a, int b, int c);
@@ -231,7 +230,7 @@ void fn_800C89BC(Object_80039F5C *p);
 void fn_800EFFA0(int a, State_80039F5C *pQueue, Object_80039F5C *p, int flag);
 void fn_800A5E68(Object_80039F5C *p);
 void fn_8003962C(Object_80039F5C *p, int flag);
-void fn_800C7D44(void);
+void fn_800C7D44(Object_80039F5C *p);
 void fn_8011E13C(void);
 Object_800670B4 *fn_80168708(int team);
 void *fn_800AEE20(Object_80039F5C *p);
@@ -726,8 +725,7 @@ extern "C" void fn_800398B4(void)
         fn_8003924C(p);
         fn_8003962C(p, active);
     }
-    fn_80137B40();
-    fn_800C7D44();
+    fn_800C7D44(fn_80137B40());
     fn_8011E13C();
 }
 

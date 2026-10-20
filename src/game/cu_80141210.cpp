@@ -249,7 +249,7 @@ extern "C" void fn_80141FA0(Camera_8013F738 *camera)
         if (entry) {
             Character_80093BCC *character=fn_80093BCC(entry->mUnknown8);
             Actor_801C009C *actor=fn_80093BAC(character->mUnknown0,character->mUnknown4);
-            state->mUnknown14=character->mUnknown14->mUnknown1C0;
+            state->mUnknown14=character->mUnknown14[0]->mMotion.mFacing;
             fn_80141210(camera,actor,&character->mUnknownE0,entry->mUnknown0);
         }
         break;

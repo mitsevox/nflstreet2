@@ -6,11 +6,25 @@
    signatures; the others are placeholders. */
 struct Object_80039F5C;
 
+struct Record_80148C4C {
+    char mUnknown0[44];
+    unsigned char mUnknown2C;
+    char mUnknown2D[3];
+};
+
+struct State_80148A58 {
+    unsigned int mCount;
+    int mCachedValue;
+    Record_80148C4C *mpRecords;
+    unsigned char mUnknownC;
+    char mUnknownD[3];
+};
+
 class Class_80148A58 {
 public:
     virtual void vfn_01();
     virtual void vfn_02();
-    virtual void vfn_03();
+    virtual int vfn_03();
     virtual unsigned int vfn_04(int team);
     virtual int vfn_05(int team);
     virtual unsigned int vfn_06();
@@ -23,8 +37,8 @@ public:
     virtual int vfn_13();
     virtual void vfn_14();
     virtual void vfn_15();
-    virtual void vfn_16();
-    virtual void vfn_17();
+    virtual void vfn_16(const int *pKinds);
+    virtual void vfn_17(const int *pKinds);
     virtual void vfn_18(int a, unsigned char index, char *pText, unsigned char length);
     virtual void vfn_19(int team, int column, char *pText, int length);
     virtual void vfn_20(int team, int index, int kind, char *pFirst, int firstLength,
@@ -32,7 +46,7 @@ public:
     virtual void vfn_21();
     virtual int vfn_22(int a);
 
-    virtual void vfn_23();
+    virtual int vfn_23();
     virtual int vfn_24(int team, unsigned int tag);
     virtual unsigned char vfn_25(int team, int index);
     virtual int vfn_26(int team, int index, Object_80039F5C *pPlayer, int kind);
@@ -46,9 +60,14 @@ public:
     virtual int vfn_33(int kind, int team);
     virtual int vfn_34(int kind, int team, int threshold, int mode);
 
+    Class_80148A58();
+
     int mUnknown0;
     int mUnknown4;
-    char mUnknown8[16];
+    union {
+        char mUnknown8[16];
+        State_80148A58 mState;
+    };
 };
 
 extern "C" Class_80148A58 *fn_80148A58(void);

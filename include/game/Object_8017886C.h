@@ -1,10 +1,15 @@
 #ifndef GAME_OBJECT_8017886C_H
 #define GAME_OBJECT_8017886C_H
 
+extern "C" int fn_801CFE40(float y, float x);
+
 /* Position on the field: mX across, mY along it. */
 struct Point_8017886C {
     float mX;
     float mY;
+
+    /* Angle of the point seen from the origin. */
+    int Heading() const { return fn_801CFE40(mY, mX); }
 };
 
 /* The object whose address fn_8017886C returns; fn_8017C1F0 receives one

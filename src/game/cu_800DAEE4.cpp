@@ -1047,11 +1047,7 @@ int fn_800E3A34(Object_80039F5C *p, Point_8017886C *pPoint);
 
 #include "game/Command_800CEE74.h"
 struct Entry_800DE51C { unsigned short mUnknown0; unsigned char mUnknown2; char mUnknown3[17]; };
-struct Frame_800DF7CC {
-    char mUnknown0[14]; unsigned short mUnknown14;
-    char mUnknown16[3]; unsigned char mUnknown19;
-    unsigned int mUnknown20; char mUnknown24[18]; unsigned short mUnknown42;
-};
+#include "game/Frame_800DF7CC.h"
 struct Attachment_800DF7CC { Vector_80039F5C mPos; Angles_801EBC18 mAngles; int mFrame; };
 struct Character_800DF7CC {
     int mUnknown0, mUnknown4; unsigned int mFlags;
@@ -1059,7 +1055,6 @@ struct Character_800DF7CC {
     char mUnknown24[92]; Object_80137ABC *mpBall[1];
 };
 extern "C" {
-Frame_800DF7CC *fn_801C029C(Actor_801C009C *, unsigned char);
 float fn_801BFFA0(Object_80039F5C *);
 int fn_801C065C(Frame_800DF7CC *, float);
 Attachment_800DF7CC *fn_80093C08(unsigned short);
@@ -1089,7 +1084,7 @@ void fn_800D8140(State_800D8140 *, Object_80039F5C *, unsigned char);
 void fn_800D81C8(State_800D8140 *, Object_80039F5C *);
 void fn_800D84DC(State_800D8140 *, Object_80039F5C *);
 float fn_80114EE4(Object_80039F5C *, Object_80039F5C *);
-void fn_800C854C(Object_80039F5C *, unsigned short, unsigned char);
+int fn_800C854C(Object_80039F5C *, unsigned short, unsigned char);
 void fn_800DEC10(Object_80039F5C *, Block_800DE3B0 *);
 }
 
@@ -1968,7 +1963,7 @@ extern "C" void fn_800DE51C(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id)
             if (p->mUnknown1036) pOther = fn_80039F5C((p->mUnknown1036 >> 8) & 255, p->mpState->mUnknown3[0]);
             else if (fn_801486A0() == 0 || fn_801486A0() == 1) pOther = fn_80039F5C(p->mIdBytes[2], p->mpState->mUnknown3[0]);
             else pOther = fn_80039F5C(p->mIdBytes[2] ^ 1, p->mpState->mUnknown3[0]);
-            if (pOther->mUnknown1127[5] & 2) pBlock->mUnknown1F = 1;
+            if (pOther->mUnknown1128[4] & 2) pBlock->mUnknown1F = 1;
             break;
         case 27: case 52: pOther = fn_80137B40(); break;
         default:
@@ -1976,10 +1971,10 @@ extern "C" void fn_800DE51C(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id)
                 int state = p->mUnknown1032;
                 if (state == 4 || state == 5 || state == 2 || state == 8) {
                     pOther = fn_8009BCE8(&p->mUnknown1036);
-                    if (pOther->mUnknown1127[5] & 2) pBlock->mUnknown1F = 1;
+                    if (pOther->mUnknown1128[4] & 2) pBlock->mUnknown1F = 1;
                 } else if (state == 7) {
                     pOther = p;
-                    if (pOther->mUnknown1127[5] & 2) pBlock->mUnknown1F = 1;
+                    if (pOther->mUnknown1128[4] & 2) pBlock->mUnknown1F = 1;
                 }
             }
         }
@@ -1990,7 +1985,7 @@ extern "C" void fn_800DE51C(Object_80039F5C *p, Block_800DE3B0 *pBlock, int id)
         if (p->mpState->mId == 16) {
             if (((unsigned char *)&p->mUnknown1160)[56]) pBlock->mUnknown1F = ((unsigned char *)&p->mUnknown1160)[55];
             else if (p->mUnknown776 == 1) pBlock->mUnknown1F = 1;
-        } else if (p->mpState->mId == 32 && (p->mUnknown1127[5] & 2)) pBlock->mUnknown1F = 1;
+        } else if (p->mpState->mId == 32 && (p->mUnknown1128[4] & 2)) pBlock->mUnknown1F = 1;
         Pair_802270A4 point;
         int angle;
         pBlock->mUnknown1C = 0;

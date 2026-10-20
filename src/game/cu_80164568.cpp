@@ -33,6 +33,8 @@ float fn_80237260(int stream);
 
 static const char *lbl_8031D360[4];
 
+extern "C" const char *lbl_803EB3B0[] = { "Norm", 0 };
+
 extern "C" {
 void fn_80164568(Object_80039F5C *p, Entry_8006719C *pEntry, int side)
 {

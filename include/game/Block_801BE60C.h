@@ -55,6 +55,10 @@ struct Block_801BE60C {
             Object_801BBD5C *mpUnknown18;
         };
         struct {
+            int mUnknownCWord;
+            int mUnknown10Word;
+        };
+        struct {
             short mUnknownCHalf;
             signed char mUnknownE[11];
         };

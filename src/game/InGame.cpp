@@ -102,7 +102,6 @@ int fn_801C60BC(int a);
 int fn_801C6280(int a, int b, void *pValue);
 int fn_801C6458(int a, int b);
 void fn_801CAF24(void);
-int fn_801CBE9C(void *p, int a);
 void fn_801CE82C(void);
 void fn_801CE910(void);
 void fn_801D6F58(void);
@@ -476,8 +475,8 @@ int fn_8002894C()
     int result = 0;
     Class_803067B0 *p = &lbl_803067B0;
 
-    if (fn_801CBE9C(p, 1)) {
-        result = !fn_801CBE9C(p, 3);
+    if (p->fn_801CBE9C(1)) {
+        result = !p->fn_801CBE9C(3);
     }
     return result;
 }

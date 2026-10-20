@@ -131,7 +131,7 @@ int fn_800BAAB8(void);
 int fn_800C8704(int *pA, int *pB);
 int fn_800C8744(int team);
 void fn_800C87CC(int team, int value);
-void fn_800C9FC0(int a);
+void fn_800C9FC0(void);
 int fn_800D0B90(Object_80039F5C *p);
 int fn_800D41F8(int team);
 void fn_800D421C(int team, int value);
@@ -708,7 +708,7 @@ extern "C" void fn_80177B54(void)
 
 extern "C" void fn_80177B7C(int a)
 {
-    fn_800C9FC0(a);
+    fn_800C9FC0();
     lbl_803EB444->mUnknown3D8->vfn_11(a);
 }
 

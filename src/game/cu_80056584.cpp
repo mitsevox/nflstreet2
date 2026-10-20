@@ -1,4 +1,5 @@
 #include "game/Class_80148A58.h"
+#include "game/fn_800D4164.h"
 #include "game/Object_8008044C.h"
 #include "game/Object_8007A334.h"
 #include "game/Object_80039F5C.h"
@@ -1643,14 +1644,13 @@ struct Stats_8005A7EC {
 };
 struct Weight_8005A8D0 {int mTag;int mColumn;float mWeight;};
 struct Category_8005AB04 {char mName[20];unsigned char mEnabled;unsigned int mCount;int mIndices[2];};
-extern Object_8008044C lbl_80309F98;
+Object_8008044C lbl_80309F98;
 extern Stats_8005A7EC lbl_80309FC4[2];
 extern const Weight_8005A8D0 lbl_8028EAE8[12];
 extern const Category_8005AB04 lbl_8028EB78[11];
 extern int lbl_802D4D0C[4];
 extern const char *lbl_802D4D1C[9];
 extern const float lbl_803ED6A4,lbl_803ED6A8;
-void fn_800D4164(int side,float time,int a);
 void fn_800A7B5C(void);
 void fn_800B823C(int side);
 int fn_80187C8C(void);
@@ -1662,7 +1662,7 @@ int fn_800A8740(void);
 float fn_800D3F2C(int team);
 void fn_8017E328(int team,int mode);
 int fn_800CAAC4(int team,unsigned char index);
-float fn_800C9CF0(int team,unsigned char index);
+float fn_800C9CF0(int team, int index);
 int fn_80178C24(void);
 unsigned int fn_8009D9F8(int key);
 int fn_8009D9C0(int key);
@@ -1701,7 +1701,7 @@ int fn_80078B94(void);
 int fn_80078AE0(int id);
 void fn_8007E274(int key);
 void fn_8007E8A8(int a,int value);
-void fn_800C8818(int id);
+int fn_800C8818(int team);
 void fn_8002B714(void);
 void fn_8007E738(int value);
 void fn_8007BF60(int value);
