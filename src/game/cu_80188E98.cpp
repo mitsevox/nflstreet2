@@ -112,7 +112,7 @@ void fn_802196B4(void *p, int a, int b, int c, float *pD, unsigned char e);
 void fn_80219A54(void *p, int a);
 int fn_80219AF8(void *p, int a, int b, int c);
 int fn_8021A020(void *p);
-int fn_8021D828(void *p, int a, int b);
+int fn_8021D828(void *p, unsigned short a, unsigned short b);
 void fn_8021D880(void (*pCallback)());
 void fn_8021DF9C(void *p);
 void *fn_8021EA44(int index);
