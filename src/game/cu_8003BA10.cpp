@@ -34,7 +34,7 @@ void fn_80227690(void *, void *, void *);
 void fn_80227264(void *, void *, float);
 void fn_80227248(void *, void *, float);
 void fn_80227CC0(void *, void *);
-void fn_802271F0(void *);
+void fn_802271F0(void *, void *);
 void fn_80227C2C(void *, void *);
 float fn_802276E8(void *, void *);
 int fn_80227040(void *, void *);
@@ -195,7 +195,7 @@ void fn_8003BA10(Object_8003DEC4 *object, float *color, Pair_8017055C *axis,
     } else {
       delta[0] += axis->mX * (0.2f - length);
       delta[1] += axis->mY * (0.2f - length);
-      fn_802271F0(delta);
+      fn_802271F0(delta, delta);
       forward.mX = delta[0] * width;
       forward.mY = delta[1] * width;
       backward.mX = -delta[0] * width;
