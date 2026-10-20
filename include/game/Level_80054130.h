@@ -6,7 +6,10 @@
 /* 36-byte placement entry of the level data returned by fn_80054130. */
 struct Entry_80054130 {
     float mUnknown0[6];
-    unsigned short mUnknown24;
+    union {
+        unsigned short mUnknown24;
+        unsigned char mUnknown24Bytes[2];
+    };
     int mUnknown28;
     int mUnknown32;
 };

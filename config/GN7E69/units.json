@@ -1704,9 +1704,209 @@
       "address": "0x800C02E0",
       "evidence": "evidence.tsv external row for 0x800C02E0 (fn_800C02E0__14Class_80297CE8); descriptive mangled member name."
     },
-    "AnimExtnRelocateFile__FP16AnimFileFormat_t": {
-      "address": "0x80190D8C",
-      "evidence": "Existing canonical AnimFileFormat.h declaration and animextn.cpp comparison definition; target callback addresses formed at8008FC0C/FD24, evidenced function80190D8C-80190DCC and related-name row16547. Resolver declaration only; no promotion or new source credit."
+    "fn_801CBD80__14Class_801CBC50ii": {
+      "address": "0x801CBD80",
+      "evidence": "evidence.tsv external row for 0x801CBD80 (fn_801CBD80__14Class_801CBC50ii) and canonical Class_801CBC50 type row."
+    },
+    "fn_801CBE24__14Class_801CBC50i": {
+      "address": "0x801CBE24",
+      "evidence": "evidence.tsv external row for 0x801CBE24 (fn_801CBE24__14Class_801CBC50i) and canonical Class_801CBC50 type row."
+    },
+    "fn_801CBE9C__14Class_801CBC50i": {
+      "address": "0x801CBE9C",
+      "evidence": "evidence.tsv external row for 0x801CBE9C (fn_801CBE9C__14Class_801CBC50i) and canonical Class_801CBC50 type row."
+    },
+    "fn_801CBEC8__14Class_801CBC50i": {
+      "address": "0x801CBEC8",
+      "evidence": "evidence.tsv external row for 0x801CBEC8 (fn_801CBEC8__14Class_801CBC50i) and canonical Class_801CBC50 type row."
+    },
+    "fn_801CBEF4__14Class_801CBC50ii": {
+      "address": "0x801CBEF4",
+      "evidence": "evidence.tsv external row for 0x801CBEF4 (fn_801CBEF4__14Class_801CBC50ii) and canonical Class_801CBC50 type row."
+    },
+    "__14Block_80156400": {
+      "address": "0x80156400",
+      "evidence": "evidence.tsv external row for 0x80156400 (__14Block_80156400); descriptive name."
+    },
+    "__14Class_80148A58": {
+      "address": "0x80148A98",
+      "evidence": "evidence.tsv external row for 0x80148A98 (__14Class_80148A58)."
+    },
+    "_vt.14Class_80148A58": {
+      "address": "0x802A2EE0",
+      "evidence": "evidence.tsv external row for 0x802A2EE0 (_vt.14Class_80148A58)."
+    },
+    "_vt.14Class_802A2DB8": {
+      "address": "0x802A2DB8",
+      "evidence": "evidence.tsv external row for 0x802A2DB8 (_vt.14Class_802A2DB8)."
+    },
+    "_vt.14Class_802A2C90": {
+      "address": "0x802A2C90",
+      "evidence": "evidence.tsv external row for 0x802A2C90 (_vt.14Class_802A2C90)."
+    },
+    "_vt.14Class_802A2B68": {
+      "address": "0x802A2B68",
+      "evidence": "evidence.tsv external row for 0x802A2B68 (_vt.14Class_802A2B68)."
+    },
+    "_vt.14Class_802A2918": {
+      "address": "0x802A2918",
+      "evidence": "evidence.tsv external row for 0x802A2918 (_vt.14Class_802A2918)."
+    },
+    "_vt.14Class_802A27F0": {
+      "address": "0x802A27F0",
+      "evidence": "evidence.tsv external row for 0x802A27F0 (_vt.14Class_802A27F0)."
+    },
+    "_vt.14Class_802A2788": {
+      "address": "0x802A2788",
+      "evidence": "evidence.tsv external row for 0x802A2788 (_vt.14Class_802A2788)."
+    },
+    "_vt.14Class_802A2748": {
+      "address": "0x802A2748",
+      "evidence": "evidence.tsv external row for 0x802A2748 (_vt.14Class_802A2748)."
+    },
+    "_vt.14Class_802A26D8": {
+      "address": "0x802A26D8",
+      "evidence": "evidence.tsv external row for 0x802A26D8 (_vt.14Class_802A26D8)."
+    },
+    "_vt.14Class_802A26A0": {
+      "address": "0x802A26A0",
+      "evidence": "evidence.tsv external row for 0x802A26A0 (_vt.14Class_802A26A0)."
+    },
+    "_vt.14Class_802A2618": {
+      "address": "0x802A2618",
+      "evidence": "evidence.tsv external row for 0x802A2618 (_vt.14Class_802A2618)."
+    },
+    "_vt.14Class_802A24F8": {
+      "address": "0x802A24F8",
+      "evidence": "evidence.tsv external row for 0x802A24F8 (_vt.14Class_802A24F8)."
+    },
+    "_vt.14Class_802A2560": {
+      "address": "0x802A2560",
+      "evidence": "evidence.tsv external row for 0x802A2560 (_vt.14Class_802A2560)."
+    },
+    "_vt.14Block_802A21E8": {
+      "address": "0x802A21E8",
+      "evidence": "evidence.tsv external row for 0x802A21E8 (_vt.14Block_802A21E8)."
+    },
+    "_vt.14Class_802A2490": {
+      "address": "0x802A2490",
+      "evidence": "evidence.tsv external row for 0x802A2490 (_vt.14Class_802A2490)."
+    },
+    "_vt.14Class_802A2450": {
+      "address": "0x802A2450",
+      "evidence": "evidence.tsv external row for 0x802A2450 (_vt.14Class_802A2450)."
+    },
+    "_vt.14Class_802A23E0": {
+      "address": "0x802A23E0",
+      "evidence": "evidence.tsv external row for 0x802A23E0 (_vt.14Class_802A23E0)."
+    },
+    "_vt.14Class_802A23A8": {
+      "address": "0x802A23A8",
+      "evidence": "evidence.tsv external row for 0x802A23A8 (_vt.14Class_802A23A8)."
+    },
+    "_vt.14Class_802A2320": {
+      "address": "0x802A2320",
+      "evidence": "evidence.tsv external row for 0x802A2320 (_vt.14Class_802A2320)."
+    },
+    "_vt.14Class_802A2268": {
+      "address": "0x802A2268",
+      "evidence": "evidence.tsv external row for 0x802A2268 (_vt.14Class_802A2268)."
+    },
+    "_vt.14Class_802A2200": {
+      "address": "0x802A2200",
+      "evidence": "evidence.tsv external row for 0x802A2200 (_vt.14Class_802A2200)."
+    },
+    "_vt.14Block_8014F104": {
+      "address": "0x802A1EF8",
+      "evidence": "evidence.tsv external row for 0x802A1EF8 (_vt.14Block_8014F104)."
+    },
+    "_vt.14Class_802A2130": {
+      "address": "0x802A2130",
+      "evidence": "evidence.tsv external row for 0x802A2130 (_vt.14Class_802A2130)."
+    },
+    "_vt.14Class_802A20C8": {
+      "address": "0x802A20C8",
+      "evidence": "evidence.tsv external row for 0x802A20C8 (_vt.14Class_802A20C8)."
+    },
+    "_vt.14Class_802A2058": {
+      "address": "0x802A2058",
+      "evidence": "evidence.tsv external row for 0x802A2058 (_vt.14Class_802A2058)."
+    },
+    "_vt.14Class_802A2020": {
+      "address": "0x802A2020",
+      "evidence": "evidence.tsv external row for 0x802A2020 (_vt.14Class_802A2020)."
+    },
+    "_vt.14Class_802A1F90": {
+      "address": "0x802A1F90",
+      "evidence": "evidence.tsv external row for 0x802A1F90 (_vt.14Class_802A1F90)."
+    },
+    "_vt.14Class_802A1F10": {
+      "address": "0x802A1F10",
+      "evidence": "evidence.tsv external row for 0x802A1F10 (_vt.14Class_802A1F10)."
+    },
+    "_vt.15Record_8014F104": {
+      "address": "0x802A1F78",
+      "evidence": "evidence.tsv external row for 0x802A1F78 (_vt.15Record_8014F104)."
+    },
+    "__vn__FUii": {
+      "address": "0x801D3BF4",
+      "evidence": "evidence.tsv external row for 0x801D3BF4 (__vn__FUii); descriptive name."
+    },
+    "_vt.14Class_802A1DC8": {
+      "address": "0x802A1DC8",
+      "evidence": "evidence.tsv external row for 0x802A1DC8 (_vt.14Class_802A1DC8)."
+    },
+    "_vt.14Class_802A1D58": {
+      "address": "0x802A1D58",
+      "evidence": "evidence.tsv external row for 0x802A1D58 (_vt.14Class_802A1D58)."
+    },
+    "_vt.14Class_802A1D20": {
+      "address": "0x802A1D20",
+      "evidence": "evidence.tsv external row for 0x802A1D20 (_vt.14Class_802A1D20)."
+    },
+    "_vt.14Class_802A1C98": {
+      "address": "0x802A1C98",
+      "evidence": "evidence.tsv external row for 0x802A1C98 (_vt.14Class_802A1C98)."
+    },
+    "_vt.14Class_802A1C30": {
+      "address": "0x802A1C30",
+      "evidence": "evidence.tsv external row for 0x802A1C30 (_vt.14Class_802A1C30)."
+    },
+    "_vt.14Class_802A1E38": {
+      "address": "0x802A1E38",
+      "evidence": "evidence.tsv external row for 0x802A1E38 (_vt.14Class_802A1E38)."
+    },
+    "_vt.14Class_802A1BC8": {
+      "address": "0x802A1BC8",
+      "evidence": "evidence.tsv external row for 0x802A1BC8 (_vt.14Class_802A1BC8)."
+    },
+    "_vt.14Class_802A1B58": {
+      "address": "0x802A1B58",
+      "evidence": "evidence.tsv external row for 0x802A1B58 (_vt.14Class_802A1B58)."
+    },
+    "_vt.14Class_802A1B18": {
+      "address": "0x802A1B18",
+      "evidence": "evidence.tsv external row for 0x802A1B18 (_vt.14Class_802A1B18)."
+    },
+    "_vt.14Class_802A1AE0": {
+      "address": "0x802A1AE0",
+      "evidence": "evidence.tsv external row for 0x802A1AE0 (_vt.14Class_802A1AE0)."
+    },
+    "_vt.14Class_802A1A58": {
+      "address": "0x802A1A58",
+      "evidence": "evidence.tsv external row for 0x802A1A58 (_vt.14Class_802A1A58)."
+    },
+    "_vt.14Class_802A1930": {
+      "address": "0x802A1930",
+      "evidence": "evidence.tsv external row for 0x802A1930 (_vt.14Class_802A1930)."
+    },
+    "_vt.14Class_802A19F0": {
+      "address": "0x802A19F0",
+      "evidence": "evidence.tsv external row for 0x802A19F0 (_vt.14Class_802A19F0)."
+    },
+    "__builtin_vec_delete": {
+      "address": "0x801D3C40",
+      "evidence": "evidence.tsv external row for 0x801D3C40 (__builtin_vec_delete); descriptive name."
     }
   },
   "units": [
@@ -2082,6 +2282,38 @@
           "placement": ".data2",
           "start": "0x80289BB0",
           "end": "0x80289BB4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8007A3C4.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8007A3C4-0x8007A9E4 (src/game/cu_8007A3C4.cpp) and its type, source-form and function rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007A3C4",
+          "end": "0x8007A9E4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800850E8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800850E8-0x80085148 (src/game/cu_800850E8.cpp) and the .rodata data row 0x80293D48-0x80293D88.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800850E8",
+          "end": "0x80085148"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80293D48",
+          "end": "0x80293D88"
         }
       ]
     },
@@ -2849,6 +3081,69 @@
       ]
     },
     {
+      "source": "src/game/cu_800E3A34.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800E3A34-0x800E3CC0 (src/game/cu_800E3A34.cpp), its function rows and the .rodata data row 0x8029DB70-0x8029DB78.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E3A34",
+          "end": "0x800E3CC0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DB70",
+          "end": "0x8029DB78"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8015FFC8.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8015FFC8-0x8016014C (src/game/cu_8015FFC8.cpp) and the .data data row 0x802E32B0-0x802E33A8.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015FFC8",
+          "end": "0x8016014C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802E32B0",
+          "end": "0x802E33A8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8018AB0C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018A978-0x8018AC38 (src/game/cu_8018AB0C.cpp), its function rows, the .rodata constants and the .sdata data row 0x803EB6B0-0x803EB6B4.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018A978",
+          "end": "0x8018AC38"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A8738",
+          "end": "0x802A8750"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB6B0",
+          "end": "0x803EB6B4"
+        }
+      ]
+    },
+    {
       "source": "src/game/GRender.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80199FA4-0x8019A110 (src/game/GRender.cpp) and its data rows.",
@@ -3607,6 +3902,19 @@
           "placement": ".data2",
           "start": "0x80289BA4",
           "end": "0x80289BA8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8019D83C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019D83C-0x8019D994 (src/game/cu_8019D83C.cpp) and its function rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019D83C",
+          "end": "0x8019D994"
         }
       ]
     },
@@ -6837,6 +7145,55 @@
           "placement": ".text",
           "start": "0x800775F0",
           "end": "0x80077A24"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80077A24.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80077A24-0x80079CD8 (src/game/cu_80077A24.cpp), its 44 exact function extents, the exact .rodata, .data, .sdata, .bss, .ctors and .dtors rows, and its type, name and source-form rows. Probably one source file with src/game/cu_800775F0.cpp (0x800775F0-0x80077A24).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80077A24",
+          "end": "0x80079CD8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80290C48",
+          "end": "0x80291AC8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6400",
+          "end": "0x802D6424"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA790",
+          "end": "0x803EA798"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030ADE0",
+          "end": "0x8030B098"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A9C",
+          "end": "0x80289AA0"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BDC",
+          "end": "0x80289BE0"
         }
       ]
     },
@@ -10821,6 +11178,400 @@
           "placement": ".data3",
           "start": "0x802A4BA0",
           "end": "0x802A4BA4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80164568.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80164568-0x80164B78 (src/game/cu_80164568.cpp), its function rows and data rows 0x802A4610-0x802A4624 and 0x803EB3B0-0x803EB3B8.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80164568",
+          "end": "0x80164B78"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4610",
+          "end": "0x802A4624"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB3B0",
+          "end": "0x803EB3B8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031D360",
+          "end": "0x8031D370"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80163674.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80163674-0x80163D9C (src/game/cu_80163674.cpp), its function rows and data rows 0x802A45E0-0x802A460C and 0x803EB3A4-0x803EB3A8.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80163674",
+          "end": "0x80163D9C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A45E0",
+          "end": "0x802A460C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB3A4",
+          "end": "0x803EB3A8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80168ED0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Target function extents 0x80168ED0-0x801695D4 (evidence.tsv function rows) and callback producer 0x80168324. Provisional grouping.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80168ED0",
+          "end": "0x801695D4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801564DC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row for src/game/cu_801564DC.cpp (replacing candidate range cu_801566EC and the unassigned span before it), individual exact function extents, exact data rows for its .rodata vtables and constants, .data step tables and strings, .sdata, .bss and .sbss storage and .ctors/.dtors words, the type, source-form and name rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801564DC",
+          "end": "0x80159F10"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A3078",
+          "end": "0x802A3E20"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DEBD0",
+          "end": "0x802DF180"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB300",
+          "end": "0x803EB328"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031BEE4",
+          "end": "0x8031C02C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA2C",
+          "end": "0x803ECA5C"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AE4",
+          "end": "0x80289AE8"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C1C",
+          "end": "0x80289C20"
+        }
+      ],
+      "link_roots": {
+        "symbols": [
+          "fn_801564DC",
+          "fn_8015651C",
+          "fn_801566DC",
+          "fn_801566E4",
+          "fn_801566EC",
+          "fn_801566F8",
+          "fn_80156704",
+          "fn_80156724",
+          "fn_8015672C",
+          "fn_80156734",
+          "fn_8015673C",
+          "fn_80156854",
+          "fn_801568E8",
+          "fn_801568F0",
+          "fn_801568F8",
+          "fn_80156900",
+          "fn_80156928",
+          "fn_80156960",
+          "fn_801569B4",
+          "fn_801569BC",
+          "fn_801569C8",
+          "fn_80156AB0",
+          "fn_80156C48",
+          "fn_80156C78",
+          "fn_80156C8C",
+          "fn_80156D14",
+          "fn_80156D1C",
+          "fn_80156D24",
+          "fn_80156DC4",
+          "fn_80156E74",
+          "fn_80156E9C",
+          "fn_80156F30",
+          "fn_80157000",
+          "vfn_03__15Lesson_802A3DC8",
+          "vfn_04__15Lesson_802A3DC8",
+          "vfn_05__15Lesson_802A3DC8",
+          "vfn_06__15Lesson_802A3DC8",
+          "fn_80157080",
+          "fn_80157448",
+          "fn_801574DC",
+          "fn_80157514",
+          "fn_80157550",
+          "vfn_01__15Lesson_802A3BE8",
+          "vfn_02__15Lesson_802A3BE8",
+          "vfn_07__15Lesson_802A3BE8",
+          "vfn_08__15Lesson_802A3BE8",
+          "vfn_09__15Lesson_802A3BE8",
+          "vfn_01__15Lesson_802A3D08",
+          "vfn_02__15Lesson_802A3D08",
+          "vfn_07__15Lesson_802A3D08",
+          "vfn_08__15Lesson_802A3D08",
+          "vfn_09__15Lesson_802A3D08",
+          "vfn_04__14Class_802A3858f",
+          "vfn_05__14Class_802A3858f",
+          "vfn_04__14Class_802A3958f",
+          "vfn_03__14Class_802A38C8f",
+          "vfn_01__15Lesson_802A3CA8",
+          "vfn_02__15Lesson_802A3CA8",
+          "vfn_07__15Lesson_802A3CA8",
+          "vfn_08__15Lesson_802A3CA8",
+          "vfn_09__15Lesson_802A3CA8",
+          "vfn_01__15Lesson_802A3D68",
+          "vfn_02__15Lesson_802A3D68",
+          "vfn_07__15Lesson_802A3D68",
+          "vfn_08__15Lesson_802A3D68",
+          "vfn_09__15Lesson_802A3D68",
+          "vfn_04__14Class_802A3820f",
+          "vfn_01__15Lesson_802A3C48",
+          "vfn_02__15Lesson_802A3C48",
+          "vfn_07__15Lesson_802A3C48",
+          "vfn_08__15Lesson_802A3C48",
+          "vfn_09__15Lesson_802A3C48",
+          "fn_8015844C",
+          "fn_80158A4C",
+          "fn_80158AA8",
+          "fn_80158BB4",
+          "fn_80158C04__14Class_802A3A48",
+          "vfn_03__14Class_802A3B80",
+          "vfn_04__14Class_802A3B80f",
+          "vfn_11__14Class_802A3B80f",
+          "vfn_06__14Class_802A3B80",
+          "vfn_07__14Class_802A3B80",
+          "vfn_04__14Class_802A3B10f",
+          "vfn_06__14Class_802A3B10f",
+          "vfn_05__14Class_802A3B10f",
+          "vfn_12__14Class_802A3B10",
+          "vfn_03__14Class_802A3AD8",
+          "vfn_04__14Class_802A3AD8f",
+          "vfn_03__14Class_802A3A48f",
+          "vfn_04__14Class_802A3A48f",
+          "vfn_06__14Class_802A3A48",
+          "vfn_05__14Class_802A3A48",
+          "vfn_07__14Class_802A3A48",
+          "vfn_10__14Class_802A3A48",
+          "vfn_11__14Class_802A3A48",
+          "vfn_12__14Class_802A3A48",
+          "vfn_14__14Class_802A3A48f",
+          "vfn_11__14Class_802A3990i",
+          "vfn_12__14Class_802A3990",
+          "vfn_10__14Class_802A3990",
+          "vfn_02__14Class_802A3990",
+          "vfn_08__14Class_802A3990",
+          "vfn_08__14Class_802A3B10",
+          "vfn_14__14Class_802A3990"
+        ],
+        "discarded": [
+          "__14Class_802A3A48"
+        ],
+        "evidence": "evidence.tsv linker row cu_801564DC Class_802A3A48 constructor: the target keeps every listed function, all reached from outside the unit, from its vtables or from each other; the out-of-line copy of the inline constructor of Class_802A3A48 has no code in the target."
+      }
+    },
+    {
+      "source": "src/game/cu_80167094.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional source unit and membership row, exact individual function extents, direct reset storage extents and inferred types.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80167094",
+          "end": "0x80167910"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031D38C",
+          "end": "0x8036167C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800EF834.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800EF834-0x800EFC68 (src/game/cu_800EF834.cpp) and its data row 0x8029DF7C-0x8029DF88.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800EF834",
+          "end": "0x800EFC68"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DF7C",
+          "end": "0x8029DF88"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80191804.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80191804-0x80191948 (src/game/cu_80191804.cpp) and its data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80191804",
+          "end": "0x80191948"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ABD6C",
+          "end": "0x802ABD94"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8019D2EC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8019D2EC-0x8019D83C (src/game/cu_8019D2EC.cpp) and its source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019D2EC",
+          "end": "0x8019D83C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80198378.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80198378-0x80198C54 (src/game/cu_80198378.cpp) and its data and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80198378",
+          "end": "0x80198C54"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802ADB10",
+          "end": "0x802ADB40"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EDE10",
+          "end": "0x802EDF8C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/animextn.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80190A7C-0x80190ED4 (animextn.cpp), its storage and source-form rows, and the related NASCAR 2005 name rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80190A7C",
+          "end": "0x80190ED4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80364DC0",
+          "end": "0x80364F40"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECB94",
+          "end": "0x803ECB98"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80088648.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80088648-0x80088E8C (src/game/cu_80088648.cpp), its data row 0x802D6C24-0x802D6C40 and its type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80088648",
+          "end": "0x80088E8C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6C24",
+          "end": "0x802D6C40"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800478DC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800478DC-0x80047E28 (src/game/cu_800478DC.cpp) and its data row 0x8028D674-0x8028D73C.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800478DC",
+          "end": "0x80047E28"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028D674",
+          "end": "0x8028D73C"
         }
       ]
     }

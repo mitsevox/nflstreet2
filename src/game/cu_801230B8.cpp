@@ -509,7 +509,7 @@ int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **p
     return result;
 }
 
-int fn_801248D4(Object_80039F5C *p, Vector_80039F5C *pPos, Vector_80039F5C *pTarget, Object_80039F5C **pOut, Filter_801248D4 *pFilter, Object_80039F5C *pExclude, float margin, float width)
+int fn_801248D4(Object_80039F5C *p, Vector_80039F5C *pPos, Vector_80039F5C *pTarget, Object_80039F5C **pOut, float margin, float width, Filter_801248D4 *pFilter, Object_80039F5C *pExclude)
 {
     int result = 1;
     if (!pPos) pPos = &p->mMotion.mPos;
