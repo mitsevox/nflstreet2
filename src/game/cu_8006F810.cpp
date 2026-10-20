@@ -12,6 +12,8 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_802270D4.h"
+#include "game/fn_8017F584.h"
+#include "game/fn_802372EC.h"
 
 struct Record_80071594 {
     int mUnknown0;
@@ -65,14 +67,12 @@ int fn_80071B08(int unused, int value);
 
 
 int fn_80177F70(void);
-int fn_8017F584(void);
 int fn_801486A0(void);
 int fn_80178308(void);
 int fn_80178320(void);
 Object_800670B4 *fn_80168708(int side);
 int fn_8006CC54(int id);
 void fn_8006C9D4(int id);
-int fn_802372EC(int a, int b);
 int fn_8006C548(unsigned int channel, int id, void (*callback)(int handle));
 int fn_8006C674(int channel, int id);
 int fn_8006C7F4(unsigned int channel);
@@ -91,7 +91,7 @@ int fn_80237470(int a, int b);
 int fn_802374C8(int handle);
 void fn_8023756C(int handle);
 extern unsigned char lbl_802D63D0[];
-extern unsigned char lbl_80290BAC[][2];
+extern const unsigned char lbl_80290BAC[][2];
 extern Vector_80039F5C lbl_8030AA7C;
 extern int lbl_803EA6C0;
 extern unsigned char lbl_803EA6C4;
@@ -617,7 +617,8 @@ void fn_80070C40(Record_80067CA8 *p)
         if (side != fn_80178308()) break;
         if (fn_8006CC54(66) || fn_8006CC54(67)) break;
         lbl_803EA6DB = (lbl_803EA6DB + 1) % 2;
-        fn_8006C854(lbl_803EA6DB ? 67 : 66, 0);
+        if (lbl_803EA6DB == 0) fn_8006C854(66, 0);
+        else fn_8006C854(67, 0);
         break;
     }
     case 140:
@@ -681,8 +682,9 @@ void fn_80070F84(void)
     Object_800670B4 *p = fn_80168708(fn_80178320());
     unsigned int count = 0;
     for (int i = 0; i < 7; ++i) {
-        Point_8017886C *point = &p->mUnknown8.mUnknown84[0][i].mUnknown10;
-        if (point->mX > -6.0f && point->mX < 6.0f && point->mY < 3.0f) ++count;
+        float x = p->mUnknown8.mUnknown84[0][i].mUnknown10.mX;
+        float y = p->mUnknown8.mUnknown84[0][i].mUnknown10.mY;
+        if (!(x <= -6.0f) && !(x >= 6.0f) && !(y >= 3.0f)) ++count;
     }
     int id;
     if (count > 2) id = fn_802374C8(lbl_803EC828) + 40;
@@ -724,8 +726,12 @@ void fn_800711E0(void)
         case 0: {
             fn_8006F54C();
             unsigned char id;
-            do { lbl_803EA6C4 = fn_802374C8(lbl_803EC820); id = lbl_803EA6C4; }
-            while (fn_8006C674(3, id));
+            lbl_803EA6C4 = fn_802374C8(lbl_803EC820);
+            id = lbl_803EA6C4;
+            while (fn_8006C674(3, id)) {
+                lbl_803EA6C4 = fn_802374C8(lbl_803EC820);
+                id = lbl_803EA6C4;
+            }
             if (fn_801486A0()) {
                 while (!fn_8006C7F4(3)) {
                     if (fn_801CB120()) fn_801CAF24();
@@ -733,8 +739,12 @@ void fn_800711E0(void)
                 }
             }
             fn_8006C548(3, id, 0);
-            do { lbl_803EA6C5 = fn_802374C8(lbl_803EC820); id = lbl_803EA6C5; }
-            while (fn_8006C674(4, id));
+            lbl_803EA6C5 = fn_802374C8(lbl_803EC820);
+            id = lbl_803EA6C5;
+            while (fn_8006C674(4, id)) {
+                lbl_803EA6C5 = fn_802374C8(lbl_803EC820);
+                id = lbl_803EA6C5;
+            }
             if (fn_801486A0()) {
                 while (!fn_8006C7F4(4)) {
                     if (fn_801CB120()) fn_801CAF24();
@@ -904,7 +914,7 @@ int fn_80071B08(int unused, int value)
     int result = 36;
     int choice = fn_802372EC(1, 2);
     switch (value) {
-    case 2: case 4: if (!choice) result = 38; break;
+    case 2: case 4: result = choice ? 36 : 38; break;
     case 1: case 10: result = 40; break;
     case 9: break;
     default: result = 38; break;

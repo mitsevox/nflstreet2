@@ -6283,22 +6283,60 @@
     {
       "source": "src/game/cu_80003FF8.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv existing six-function grouping, complete accessor extent and observed byte. Only the accessor is reconstructed; five other bodies and all literals remain original-linked. Native rounding is measured without ownership of adjacent zeros.",
+      "evidence": "evidence.tsv provisional six-function grouping 0x80003FF8-0x80004AF0, full function extents, source-form and shared-declaration rows, complete literal/ID table and observed small-data extents. All bodies reconstructed in place; original bytes remain linked. Native small-data rounding is measured without ownership of following zeros.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8000485C",
+          "start": "0x80003FF8",
           "end": "0x80004864"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x80004868",
+          "end": "0x80004AF0",
+          "follows": ".text"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F3E60",
+          "end": "0x802F3E7C"
         },
         {
           "section": ".sdata",
           "placement": ".data5",
-          "start": "0x803EB8FC",
+          "start": "0x803EB8F0",
           "end": "0x803EB8FD"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_80003FF8",
+          "start": "0x80003FF8",
+          "end": "0x800042D8"
+        },
+        {
+          "symbol": "fn_800042D8",
+          "start": "0x800042D8",
+          "end": "0x80004440"
+        },
+        {
+          "symbol": "fn_80004440",
+          "start": "0x80004440",
+          "end": "0x80004504"
+        },
+        {
+          "symbol": "fn_80004504",
+          "start": "0x80004504",
+          "end": "0x8000473C"
+        },
+        {
+          "symbol": "fn_8000473C",
+          "start": "0x8000473C",
+          "end": "0x8000485C"
+        },
         {
           "symbol": "fn_8000485C",
           "start": "0x8000485C",

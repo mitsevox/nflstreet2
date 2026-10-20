@@ -86,7 +86,7 @@ void fn_800A039C(Class_80297AB8 *pObject);
 void fn_800B9598(Class_80297C60 *pObject);
 void fn_800AACB8(Class_80297B90 *pObject);
 void fn_80178F20(Class_802A56E8 *pObject);
-void fn_800A8738(unsigned char value);
+void fn_800A8738(int value);
 int fn_8005FC7C(void);
 void fn_8006088C(int value);
 int fn_8014FF34(Class_802A2B68 *p);
