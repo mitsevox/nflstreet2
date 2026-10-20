@@ -1,13 +1,11 @@
 #include "game/fn_80178D18.h"
 #include "game/Object_80039F5C.h"
+#include "engine/cu_801AE3E4.h"
 
 extern "C" {
-extern void (*lbl_803EBB10)(int, int, ...);
-
 void fn_80075550(int *pResult, int value);
 int fn_80178308(void);
 int fn_80178320(void);
-int fn_801AE5D4(int a, int b, int c);
 float fn_8022785C(Vector_80039F5C *pPosition, Vector_80039F5C *pOther);
 }
 

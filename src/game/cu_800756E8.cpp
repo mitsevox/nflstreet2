@@ -1,10 +1,9 @@
 #include "game/fn_80178D18.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
+#include "engine/cu_801AE3E4.h"
 
 extern "C" {
-extern void (*lbl_803EBB10)(int, int, ...);
-
 int fn_8006F0D8(void);
 void fn_80074398(int handle);
 int fn_80074490(int side);
@@ -22,7 +21,6 @@ int fn_80178348(void);
 int fn_80178360(void);
 int fn_801783AC(int bit);
 int fn_80179138(void);
-int fn_801AE5D4(int a, int b, int c);
 int fn_801F7ABC(void);
 float fn_80237260(int stream);
 

@@ -1,8 +1,7 @@
 #include "game/Object_8017886C.h"
+#include "engine/cu_801AE3E4.h"
 
 extern "C" {
-extern void (*lbl_803EBB10)(int, int, ...);
-
 int fn_8006F0D8(void);
 int fn_800745BC(int side);
 void fn_80075198(int *pResult);
@@ -14,7 +13,6 @@ int fn_80177F7C(void);
 int fn_80178194(void);
 int fn_80178308(void);
 int fn_80178360(void);
-int fn_801AE5D4(int a, int b, int c);
 int fn_801F7ABC(void);
 float fn_80237260(int stream);
 void fn_8007732C(int side);

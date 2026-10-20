@@ -1,11 +1,10 @@
-extern "C" {
-extern void (*lbl_803EBB10)(int, int, ...);
+#include "engine/cu_801AE3E4.h"
 
+extern "C" {
 int fn_800745BC(int side);
 void fn_80075550(int *pResult, int value);
 int fn_80178308(void);
 int fn_80178320(void);
-int fn_801AE5D4(int a, int b, int c);
 }
 
 extern "C" void fn_800747DC(int value)

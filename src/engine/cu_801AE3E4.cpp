@@ -1,5 +1,7 @@
 #include <stdarg.h>
 
+#include "engine/cu_801AE3E4.h"
+
 struct Key_801AE658 {
     unsigned short mId;
     unsigned char mUnknown2;
@@ -82,7 +84,6 @@ extern int lbl_8037E274[8];
 extern char lbl_802F4794[];
 extern Class_803EBAF8 *lbl_803EBAF8;
 extern int lbl_803EBAFC;
-extern int (*lbl_803EBB10)(int, int, ...);
 extern int lbl_803EBB18;
 extern int lbl_803EBB1C;
 extern int lbl_803ECEA0;
@@ -106,7 +107,6 @@ void fn_801B2468(void);
 void *fn_801AF4A8(int size);
 void fn_801AF500(void *p);
 void fn_801AF128(unsigned int voice);
-void fn_801AF2CC(unsigned int channel);
 int fn_801AF3D8(unsigned int channel);
 void fn_801AF544(void);
 void fn_801AF60C(void);
@@ -399,7 +399,7 @@ int fn_801AEAEC(int *event)
                         if (now == lbl_803ECEAC) {
                             lbl_803ECEB0++;
                         } else {
-                            lbl_803ECEB0 = result;
+                            lbl_803ECEB0 = 0;
                         }
                         lbl_8037E0F4.mVoices[voice].mItem = item;
                         lbl_8037E0F4.mVoices[voice].mChannel = channel;
