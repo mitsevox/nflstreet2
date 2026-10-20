@@ -5,6 +5,7 @@
 #include "game/Object_80146094.h"
 #include "game/Pair_8017055C.h"
 #include "game/cu_801442FC.h"
+#include "game/Pose_80041930.h"
 
 struct Item_800476DC;
 
@@ -15,22 +16,6 @@ struct Skeleton_80041930 {
     unsigned short mUnknown6;
     char mUnknown8[1032];
     unsigned short mUnknown1040[1][3];
-};
-
-/* Pose block copied, serialized and blended by src/game/cu_80041930.cpp:
-   three shorts per bone in mUnknown48 and, for the main pose, one 64-byte
-   matrix per bone in mUnknown52. */
-struct Pose_80041930 {
-    unsigned short mUnknown0;
-    unsigned short mUnknown2;
-    unsigned short mUnknown4;
-    short mUnknown6;
-    float mUnknown8[3];
-    float mUnknown20[3];
-    int mUnknown32;
-    int mUnknown36[3];
-    short *mUnknown48;
-    float (*mUnknown52)[4][4];
 };
 
 /* Element of the two-entry array at +116, passed to fn_800ADDFC,
@@ -52,7 +37,9 @@ struct Element_80041BF8 {
 struct Block_800C2788 {
     char mUnknown0[1];
     unsigned char mUnknown1;
-    char mUnknown2[254];
+    char mUnknown2[38];
+    int mUnknown40[9][3];
+    int mUnknown148[9][3];
     Pose_80041930 mUnknown256;
     Skeleton_80041930 *mUnknown312;
 };
@@ -61,7 +48,9 @@ struct Block_800C2788 {
 struct Block_800C2EC0 {
     char mUnknown0[1];
     unsigned char mUnknown1;
-    char mUnknown2[158];
+    char mUnknown2[38];
+    int mUnknown40[5][3];
+    int mUnknown100[5][3];
     Pose_80041930 mUnknown160;
     Skeleton_80041930 *mUnknown216;
 };
@@ -229,6 +218,10 @@ struct Object_8003DEC4 {
 
 extern "C" {
 Object_8003DEC4 *fn_8003DEC4(int index);
+/* The callers zero-extend the index to 8 bits (clrlwi r4,r31,24 at
+   0x800A926C). */
+Object_8003DEC4 *fn_8003DF3C(int side, unsigned char index);
+void fn_801477F0(Object_8003DEC4 *pObject);
 /* Callback registered by fn_8004A140 through fn_801DD0C8; its second
    argument is not read. */
 int fn_8004A1A8(Object_8003DEC4 *pObject, int unused);

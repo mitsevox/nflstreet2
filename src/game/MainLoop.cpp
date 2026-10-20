@@ -5,7 +5,6 @@ extern "C" {
 
 void fn_80023048(void);
 void fn_801CBCD0(void *pObject);
-int fn_801CBD80(void *pObject, int a, int b);
 void fn_801CBFA8(void *pObject);
 void fn_801CC054(void *pObject, int a);
 int fn_801CC7FC(void *pObject);
@@ -33,8 +32,8 @@ void fn_80026AF8(void)
     Class_803067B0 *pObject = &lbl_803067B0;
     fn_801CBCD0(pObject);
     fn_801CC054(pObject, 0);
-    fn_801CBD80(pObject, 0, -1);
-    fn_801CBD80(pObject, 2, 7);
+    pObject->fn_801CBD80(0, -1);
+    pObject->fn_801CBD80(2, 7);
 
     while (!sDone) {
         fn_80026AD0();

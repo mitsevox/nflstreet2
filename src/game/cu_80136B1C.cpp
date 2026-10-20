@@ -424,7 +424,7 @@ void fn_801377C4(float step)
     }
 }
 
-void fn_80137864(void)
+void fn_80137864(float step)
 {
     unsigned int i;
 
