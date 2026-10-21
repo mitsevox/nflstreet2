@@ -442,15 +442,15 @@ unsigned char fn_801243E0(float *pValues, int angle)
             best = i;
             minimum = value;
         } else if (value == minimum) {
-            float side = pValues[(i + 7) % 8] + pValues[(i + 1) % 8];
-            float bestSide = pValues[(best + 7) % 8] + pValues[(best + 1) % 8];
+            float side = pValues[(i - 1) & 7] + pValues[(i + 1) & 7];
+            float bestSide = pValues[(best - 1) & 7] + pValues[(best + 1) & 7];
             if (!(side >= bestSide)) {
-                best = i;
                 minimum = value;
+                best = i;
             } else if (side == bestSide && angle != -1
                 && fn_801CFFD0(angle, i << 21) < fn_801CFFD0(angle, best << 21)) {
-                best = i;
                 minimum = pValues[i];
+                best = i;
             }
         }
     }
@@ -498,8 +498,8 @@ Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char 
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut)
 {
     Point_8017886C delta;
-    Point_8017886C *pPos = (Point_8017886C *)&p->mMotion.mPos;
-    fn_80227690(&delta, (Point_8017886C *)&pOther->mMotion.mPos, pPos);
+    Object_800B26B0 *pMotion = &p->mMotion;
+    fn_80227690(&delta, (Point_8017886C *)&pOther->mMotion.mPos, (Point_8017886C *)&pMotion->mPos);
     int angle = fn_801CFE40(delta.mY, delta.mX);
     float length = fn_802270A4(&delta);
     float minimum = 1000.0f;
@@ -511,13 +511,13 @@ int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **p
             Object_80039F5C *pCandidate = fn_80039F5C(team, i);
             if (pCandidate == p || pCandidate == pOther) continue;
             Point_8017886C *pCandidatePos = (Point_8017886C *)&pCandidate->mMotion.mPos;
-            fn_80227690(&delta, pCandidatePos, pPos);
+            fn_80227690(&delta, pCandidatePos, (Point_8017886C *)&pMotion->mPos);
             if (fn_801CFFD0(angle, fn_801CFE40(delta.mY, delta.mX)) <= 0x355554) {
                 float distance = fn_802270A4(&delta);
                 if (!(distance >= length) && !(distance >= minimum)) {
                     Vector_80039F5C nearest;
                     float offset, unused;
-                    fn_80227970(&p->mMotion.mPos, &pOther->mMotion.mPos, &pCandidate->mMotion.mPos, &nearest, &offset, &unused);
+                    fn_80227970(&pMotion->mPos, &pOther->mMotion.mPos, &pCandidate->mMotion.mPos, &nearest, &offset, &unused);
                     if (!(offset >= 0.5f)) {
                         minimum = distance;
                         result = 0;
@@ -614,22 +614,24 @@ Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angl
     float limit = width + width;
     Object_80039F5C *pBest = 0;
     unsigned int count = fn_80178D70(team);
-    Point_8017886C *pPos = (Point_8017886C *)&p->mMotion.mPos;
+    Vector_80039F5C *pPos = &p->mMotion.mPos;
     for (unsigned char i = 0; i < count; i++) {
         Object_80039F5C *pOther = fn_80039F5C(team, i);
         if (pOther == p) continue;
         Point_8017886C *pOtherPos = (Point_8017886C *)&pOther->mMotion.mPos;
         Point_8017886C delta;
-        fn_80227690(&delta, pOtherPos, pPos);
+        fn_80227690(&delta, pOtherPos, (Point_8017886C *)pPos);
         if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), facing) < angle) {
             float distance = fn_802270A4(&delta);
             if (!(distance >= length)) {
                 Vector_80039F5C target;
                 fn_80227538((Point_8017886C *)&target, facing, length);
-                target.mX += pPos->mX; target.mY += pPos->mY; target.mZ = p->mMotion.mPos.mZ;
+                target.mX += pPos->mX;
+                target.mY += pPos->mY;
+                target.mZ = pPos->mZ;
                 Vector_80039F5C nearest;
                 float offset, unused;
-                fn_80227970(&p->mMotion.mPos, &target, &pOther->mMotion.mPos, &nearest, &offset, &unused);
+                fn_80227970(pPos, &target, &pOther->mMotion.mPos, &nearest, &offset, &unused);
                 if (!(limit <= offset) && !(distance >= *pOut)) { *pOut = distance; pBest = pOther; }
             }
         }
@@ -643,22 +645,24 @@ Object_80039F5C *fn_80124E5C(Object_80039F5C *p, int team, float *pOut, int angl
     float limit = width + width;
     Object_80039F5C *pBest = 0;
     unsigned int count = fn_80178D70(team);
-    Point_8017886C *pPos = (Point_8017886C *)&p->mMotion.mPos;
+    Vector_80039F5C *pPos = &p->mMotion.mPos;
     for (unsigned char i = 0; i < count; i++) {
         Object_80039F5C *pOther = fn_80039F5C(team, i);
         if (pOther == p || pOther->mUnknown1032 == 4) continue;
         Point_8017886C *pOtherPos = (Point_8017886C *)&pOther->mMotion.mPos;
         Point_8017886C delta;
-        fn_80227690(&delta, pOtherPos, pPos);
+        fn_80227690(&delta, pOtherPos, (Point_8017886C *)pPos);
         if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), facing) < angle) {
             float distance = fn_802270A4(&delta);
             if (!(distance >= length)) {
                 Vector_80039F5C target;
                 fn_80227538((Point_8017886C *)&target, facing, length);
-                target.mX += pPos->mX; target.mY += pPos->mY; target.mZ = p->mMotion.mPos.mZ;
+                target.mX += pPos->mX;
+                target.mY += pPos->mY;
+                target.mZ = pPos->mZ;
                 Vector_80039F5C nearest;
                 float offset, unused;
-                fn_80227970(&p->mMotion.mPos, &target, &pOther->mMotion.mPos, &nearest, &offset, &unused);
+                fn_80227970(pPos, &target, &pOther->mMotion.mPos, &nearest, &offset, &unused);
                 if (!(limit <= offset) && !(distance >= *pOut)) { *pOut = distance; pBest = pOther; }
             }
         }
@@ -686,30 +690,37 @@ float fn_801250B8(Object_80039F5C *p, Object_80039F5C *a, int kind)
 
 int fn_8012510C(float *pValues)
 {
-    unsigned char best = fn_801243E0(pValues, -1);
-    float lower = pValues[(best + 1) % 8];
+    unsigned int best = fn_801243E0(pValues, -1);
+    float next = pValues[(best + 1) % 8];
+    float previous = pValues[(best - 1) % 8];
+    float scale = pValues[best];
+    float lower = next;
     int offset = 0x100000;
-    if (!(lower < pValues[(best + 7) % 8])) {
-        lower = pValues[(best + 7) % 8];
+    if (!(next < previous)) {
+        lower = previous;
         offset = -0x100000;
     }
-    float scale = pValues[best];
     if (!(scale <= 0.0f)) scale /= lower;
     else if (!(scale >= 0.0f) && !(lower >= 0.0f)) scale = lower / scale;
     else scale = 0.0f;
     return ((best << 21) + (int)(offset * scale)) & 0xFFFFFF;
 }
 
-int fn_80125214(Object_80039F5C *p, Object_80039F5C *pOther)
+int fn_80125214(Object_80039F5C *p, Object_80039F5C *pTarget)
 {
     int result = 0;
+    Object_80039F5C *pOther;
     float distance;
-    if (!pOther) {
+    if (!pTarget) {
         int team;
         if (fn_801486A0() == 0 || fn_801486A0() == 1) team = p->mIdBytes[2];
-        else team = p->mIdBytes[2] ^ 1;
+        else {
+            team = p->mIdBytes[2];
+            team ^= 1;
+        }
         pOther = fn_801245DC(p, team, 0, fn_80178D18(team), 0x400000, &distance, 1);
     } else {
+        pOther = pTarget;
         Point_8017886C delta;
         fn_80227690(&delta, (Point_8017886C *)&p->mMotion.mPos, (Point_8017886C *)&pOther->mMotion.mPos);
         distance = fn_802270A4(&delta);
@@ -876,14 +887,15 @@ void fn_80125B74(Object_80039F5C *p, State_80125594 *pState)
 
 int fn_80125C28(Object_80039F5C *p, State_80125594 *)
 {
+    Object_800B26B0 *pMotion = &p->mMotion;
     Vector_80039F5C target;
     fn_80137D58(fn_801374BC(), &target);
     Point_8017886C delta;
-    fn_80227690(&delta, (Point_8017886C *)&target, (Point_8017886C *)&p->mMotion.mPos);
+    fn_80227690(&delta, (Point_8017886C *)&target, (Point_8017886C *)&pMotion->mPos);
     int angle = fn_801CFE40(delta.mY, delta.mX);
-    unsigned int value = 0;
     int result = 0;
-    if (fn_801CFFD0(angle, p->mMotion.mFacing) <= 0x18E38D) {
+    unsigned int value = 0;
+    if (fn_801CFFD0(angle, pMotion->mFacing) <= 0x18E38D) {
         Object_80039F5C *pOther = fn_80137B40();
         float distance = fn_802270A4(&delta);
         result = fn_8012A3B0(p, pOther, target, &value, distance);
