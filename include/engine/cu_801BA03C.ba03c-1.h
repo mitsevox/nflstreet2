@@ -7,7 +7,7 @@ typedef struct Anim_801BAB34 {
 } Anim_801BAB34;
 
 typedef struct Anims_801BAB34 {
-    unsigned int mCount;
+    int mCount;
     Anim_801BAB34 *mAnims[1];
 } Anims_801BAB34;
 
@@ -42,12 +42,12 @@ typedef struct State_801BAB48 {
 } State_801BAB48;
 
 typedef struct States_801BAB48 {
-    unsigned int mCount;
+    int mCount;
     State_801BAB48 mStates[1];
 } States_801BAB48;
 
 typedef struct Group_801BACD0 {
-    unsigned int mCount;
+    int mCount;
     void **mpMotion;
     void *mpCompress;
 } Group_801BACD0;
@@ -62,7 +62,7 @@ typedef struct Object_801BC084 {
     Anims_801BAB34 *mpAnims;
     void **mpMotion;
     void *mpCompress;
-    unsigned int *mpGroups;
+    int *mpGroups;
     Group_801BACD0 *mpGroupMotion;
 } Object_801BC084;
 

@@ -172,22 +172,23 @@ void fn_801BA850(Object_801BC084 *pFile)
 {
     int i;
     int j;
+    int k;
 
     if (!(pFile->mFlags & 0x1000)) {
         pFile->mpStates = (States_801BAB48 *)((char *)pFile->mpStates + (int)pFile);
         pFile->mpAnims = (Anims_801BAB34 *)((char *)pFile->mpAnims + (int)pFile);
         pFile->mpMotion = (void **)((char *)pFile->mpMotion + (int)pFile);
         if (pFile->mFlags & 8) {
-            pFile->mpGroups = (unsigned int *)((char *)pFile->mpGroups + (int)pFile);
+            pFile->mpGroups = (int *)((char *)pFile->mpGroups + (int)pFile);
             pFile->mpGroupMotion = (Group_801BACD0 *)((char *)pFile->mpGroupMotion + (int)pFile);
             if (pFile->mFlags & 4) {
-                for (i = 0; i < *pFile->mpGroups; i++) {
-                    if (pFile->mpGroupMotion[i].mpMotion) {
-                        pFile->mpGroupMotion[i].mpMotion =
-                            (void **)((char *)pFile->mpGroupMotion[i].mpMotion + (int)pFile);
-                        for (j = 0; j < pFile->mpGroupMotion[i].mCount; j++)
-                            pFile->mpGroupMotion[i].mpMotion[j] =
-                                (char *)pFile->mpGroupMotion[i].mpMotion[j] + (int)pFile;
+                for (k = 0; k < *pFile->mpGroups; k++) {
+                    if (pFile->mpGroupMotion[k].mpMotion) {
+                        pFile->mpGroupMotion[k].mpMotion =
+                            (void **)((char *)pFile->mpGroupMotion[k].mpMotion + (int)pFile);
+                        for (i = 0; i < pFile->mpGroupMotion[k].mCount; i++)
+                            pFile->mpGroupMotion[k].mpMotion[i] =
+                                (char *)pFile->mpGroupMotion[k].mpMotion[i] + (int)pFile;
                     }
                 }
             }
@@ -200,13 +201,13 @@ void fn_801BA850(Object_801BC084 *pFile)
         }
         for (i = 0; i < pFile->mpStates->mCount; i++) {
             State_801BAB48 *pState = &pFile->mpStates->mStates[i];
-            unsigned short id;
+            unsigned short count;
 
             pState->mpAnims = (StateAnims_801BAB88 *)((char *)pState->mpAnims + (int)pFile);
             if (!(pFile->mFlags & 8)) {
-                id = pState->mId;
-                pState->mId = pState->mpAnims->mUnknown2;
-                pState->mpAnims->mUnknown2 = id;
+                count = pState->mpAnims->mCount;
+                pState->mpAnims->mCount = pState->mpAnims->mUnknown2;
+                pState->mpAnims->mUnknown2 = count;
             }
             for (j = 0; j < pState->mpAnims->mCount; j++) {
                 if (pState->mpAnims->mEntries[j].mpAnim)
