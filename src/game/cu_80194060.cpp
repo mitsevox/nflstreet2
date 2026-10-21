@@ -141,14 +141,14 @@ void fn_80194108(int index, Texture_80194108 *out, int region)
 void fn_80194248(Texture_80194108 *) {}
 void fn_8019424C(Quad_8019424C *quad, float x, float y)
 {
-    quad->mUnknown24[3][0] = x;
-    quad->mUnknown24[3][1] = y;
-    quad->mUnknown24[2][0] = 0.0f;
     quad->mUnknown24[0][0] = 0.0f;
     quad->mUnknown24[0][1] = 0.0f;
     quad->mUnknown24[1][0] = x;
     quad->mUnknown24[1][1] = 0.0f;
+    quad->mUnknown24[2][0] = 0.0f;
     quad->mUnknown24[2][1] = y;
+    quad->mUnknown24[3][0] = x;
+    quad->mUnknown24[3][1] = y;
 }
 void fn_80194278(Quad_8019424C *quad, Texture_80194108 *texture) { quad->mUnknown0 = texture; }
 void fn_80194280(Quad_8019424C *quad, int, unsigned int x, unsigned int y, unsigned int width, unsigned int height)
