@@ -641,7 +641,7 @@ float fn_80175B88(float value) {
   }
   return value;
 }
-float fn_80175BF8(Object_80039F5C *a, Object_80039F5C *b, float value) {
+float fn_80175BF8(float value, Object_80039F5C *a, Object_80039F5C *b) {
   float adjusted = value;
   if (fn_801CFFD0(a->mMotion.mUnknown32, b->mMotion.mUnknown32) <= 0x200000)
     adjusted *= 0.8f;
@@ -718,7 +718,7 @@ int fn_80175FC8(Object_80039F5C *a, Object_80039F5C *b) {
   Block_80175FC8 *block = (Block_80175FC8 *)&a->mUnknown560;
   if (!block || !block->mUnknown0 || !block->mUnknown35)
     return 0;
-  float value = fn_80175B88(fn_80175BF8(a, b, fn_80175B18(block->mUnknown36)));
+  float value = fn_80175B88(fn_80175BF8(fn_80175B18(block->mUnknown36), a, b));
   if (value < 0.00001f)
     value = 0.00001f;
   else if (!(value <= 1.0f))
