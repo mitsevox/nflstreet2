@@ -1257,9 +1257,9 @@ extern "C" int fn_800C854C(Object_80039F5C *p, unsigned short key, unsigned char
             query.mpUnknown0 = p;
             query.mpUnknown4 = pOther;
             query.mUnknown36 = 0x800000;
-            query.mUnknown32 = 0x800000;
             query.mUnknown44 = 20.0f;
             query.mUnknown52 = kind;
+            query.mUnknown32 = 0x800000;
             query.mUnknown54 = a;
             query.mUnknown56 = 0;
             query.mUnknown58 = 0;
