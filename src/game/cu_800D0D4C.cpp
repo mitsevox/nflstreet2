@@ -639,20 +639,21 @@ extern "C" void fn_800D1700(int i) {
 }
 
 extern "C" void fn_800D1788(int side, int id, int count, int *pScaled, int *pSubtract, int *pValue, int *pText, int *pExtra, int *pMode, int *pName) {
-    Record_8018FC1C *record = &lbl_803EACD4->mUnknown0[id];
     int subtract, value, mode, name;
-    unsigned int threshold = 0;
-    if (record->mUnknown20 == -1) {
-        subtract = record->mUnknown12;
-        value = record->mUnknown4;
-        mode = record->mUnknown44;
-        name = fn_800D0F98((Code_800D0F98)record->mUnknown48);
+    if (lbl_803EACD4->mUnknown0[id].mUnknown20 == -1) {
+        subtract = lbl_803EACD4->mUnknown0[id].mUnknown12;
+        value = lbl_803EACD4->mUnknown0[id].mUnknown4;
+        mode = lbl_803EACD4->mUnknown0[id].mUnknown44;
+        name = fn_800D0F98((Code_800D0F98)lbl_803EACD4->mUnknown0[id].mUnknown48);
     } else {
-        const Table_800D1788 *table = &lbl_80298140[record->mUnknown20];
-        Step_800D1788 *steps = table->mpUnknown4;
-        subtract = value = mode = name = 0;
+        Step_800D1788 *steps = lbl_80298140[lbl_803EACD4->mUnknown0[id].mUnknown20].mpUnknown4;
+        subtract = 0;
+        value = 0;
+        mode = 0;
+        name = 0;
         unsigned int i = 0;
         int found = 0, ended = 0;
+        unsigned int threshold = 0;
         for (; i <= 9; i++) {
             int stepValue = steps[i].mUnknown8;
             if (stepValue == 0) { ended = 1; break; }
@@ -664,11 +665,14 @@ extern "C" void fn_800D1788(int side, int id, int count, int *pScaled, int *pSub
             found = 1;
         }
         if (i > 9) ended = 1;
-        if (found && !ended && steps[i-1].mUnknown14) {
-            Step_800D1788 *previous = &steps[i-1];
-            unsigned int percent = (((unsigned int)count - previous->mUnknown10) / previous->mUnknown18) *
-                ((previous->mUnknown18 * 100) / (steps[i].mUnknown10 - previous->mUnknown10));
-            if (percent >= 1 && percent <= 99) value += (percent * (steps[i].mUnknown8 - previous->mUnknown8)) / 100;
+        if (found && !ended) {
+            Step_800D1788 *next = &steps[i];
+            Step_800D1788 *previous = next - 1;
+            if (previous->mUnknown14) {
+                unsigned int percent = (((unsigned int)count - previous->mUnknown10) / previous->mUnknown18) *
+                    ((previous->mUnknown18 * 100) / (next->mUnknown10 - previous->mUnknown10));
+                if (percent >= 1 && percent <= 99) value += (percent * (next->mUnknown8 - previous->mUnknown8)) / 100;
+            }
         }
         Increment_800D1788 *increment = lbl_80298140[lbl_803EACD4->mUnknown0[id].mUnknown20].mpUnknown0;
         if (increment && ended && increment->mUnknown0) {
@@ -830,7 +834,7 @@ extern "C" void fn_800D2378(int id, int team, int count) {
         lbl_803EC9AC[0] = 0; lbl_803EC9AC[1] = 0;
         lbl_803EC9D8[0] = 0; lbl_803EC9D8[1] = 0;
         lbl_803EC9DC[0] = 0; lbl_803EC9DC[1] = 0;
-        lbl_803EACD4->mUnknown1F80[1] = 0; lbl_803EACD4->mUnknown1F80[0] = 0;
+        lbl_803EACD4->mUnknown1F80[0] = 0; lbl_803EACD4->mUnknown1F80[1] = 0;
         lbl_803EC9B8[0] = 0; lbl_803EC9B8[1] = 0;
         lbl_803EC9C0[0] = 0; lbl_803EC9C0[1] = 0;
         lbl_803EC9C8[0] = 0; lbl_803EC9C8[1] = 0;
@@ -838,15 +842,13 @@ extern "C" void fn_800D2378(int id, int team, int count) {
         lbl_803EC9CC[0] = 0; lbl_803EC9CC[1] = 0;
         fn_800D20A0(0, 0); fn_800D20A0(1, 0);
         signed char y = (signed char)(int)fn_80178A2C();
-        Point_8017886C point = fn_80177FE0();
-        lbl_803EACD4->mUnknown1F70 = y - (signed char)(int)point.mY;
+        lbl_803EACD4->mUnknown1F70 = y - (signed char)(int)fn_80177FE0().mY;
         fn_800D2E50();
-        lbl_803EACD4->mUnknown2064[0] = 0;
         lbl_803EACD4->mpUnknown2060 = 0;
         lbl_803EACD4->mUnknown1F18 = 0;
         lbl_803EACD4->mUnknown1F54 = 0;
         lbl_803EACD4->mUnknown1F58 = 0;
-        lbl_803EACD4->mUnknown2064[1] = 0;
+        lbl_803EACD4->mUnknown2064[0] = lbl_803EACD4->mUnknown2064[1] = 0;
         lbl_803EACD4->mUnknown2050[0] = fn_800D41F8(0);
         lbl_803EACD4->mUnknown2050[1] = fn_800D41F8(1);
         for (int i = 6; i < 69; i++) lbl_803EACD4->mUnknown1ECF[i] = 0;
@@ -855,19 +857,21 @@ extern "C" void fn_800D2378(int id, int team, int count) {
     if (id != 129 || lbl_803EACD4->mUnknown1F12) return;
     lbl_803EACD4->mUnknown1F12 = 1;
     if (lbl_803EACD4->mUnknown1EF6) {
-        lbl_803EACD4->mUnknown1F0B = 1;
         lbl_803EACD4->mUnknown1F74 = lbl_803EACD4->mUnknown1F70;
-    } else if (fn_80177F7C() != 6 && fn_80178348() == fn_80178308()) {
+        lbl_803EACD4->mUnknown1F0B = 1;
+    } else if (fn_80177F7C() != 6) {
+        if (fn_80178348() == fn_80178308()) {
         float first = fn_80178A2C();
         float second = fn_80178A2C();
-        signed char firstY = (signed char)(int)first;
-        Point_8017886C end = fn_80178070();
-        int difference = firstY - (signed char)(int)end.mY;
-        signed char secondY = (signed char)(int)second;
-        Point_8017886C start = fn_80177FE0();
-        lbl_803EACD4->mUnknown1F74 = difference - (secondY - (signed char)(int)start.mY);
+        lbl_803EACD4->mUnknown1F74 = ((signed char)(int)first - (signed char)(int)fn_80178070().mY) -
+                                     ((signed char)(int)second - (signed char)(int)fn_80177FE0().mY);
         lbl_803EACD4->mUnknown1F0B = 1;
-    } else lbl_803EACD4->mUnknown1F0B = 0;
+        } else {
+            lbl_803EACD4->mUnknown1F0B = 0;
+        }
+    } else {
+        lbl_803EACD4->mUnknown1F0B = 0;
+    }
     fn_800D2C9C(0);
     fn_800D391C(67);
     fn_800D3C00(0);
@@ -887,6 +891,8 @@ extern "C" void fn_800D2378(int id, int team, int count) {
         case 1:
             if (lbl_803EACD8 == 1) fn_800D3294(1, limit - fn_800D41F8(0));
             else if (lbl_803EACD8 == 0) fn_800D3294(0, limit - fn_800D41F8(1));
+            break;
+        case 2:
             break;
         }
     }
@@ -2065,8 +2071,7 @@ extern "C" int fn_800D5A6C(int active, int a, int b) {
                 if (fn_80178348() == fn_80137B40()->mIdBytes[2]) {
                     fn_80137D58(fn_801374BC(), &position);
                     if (lbl_803EACD4->mUnknown0[64].mUnknown36 == 0) {
-                        Point_8017886C point = fn_80177FE0();
-                        if (!(position.mY >= point.mY)) { active = 0; fn_800D59C8(fn_80137B40()->mIdBytes[2]); }
+                        if (!(position.mY >= fn_80177FE0().mY)) { active = 0; fn_800D59C8(fn_80137B40()->mIdBytes[2]); }
                     }
                 } else {
                     fn_80137D58(fn_801374BC(), &position);
@@ -2085,8 +2090,8 @@ extern "C" int fn_800D5A6C(int active, int a, int b) {
             lbl_803EACD4->mpUnknown1F40 = fn_80137B40();
             lbl_803EACD4->mUnknown1F2C = 0;
             fn_800D2280();
-            lbl_803EACD4->mUnknown1F50 = b;
             lbl_803EACD4->mUnknown1F4C = a;
+            lbl_803EACD4->mUnknown1F50 = b;
             fn_800D0D48(26);
             if (lbl_803EACD4->mUnknown206C == 0) {
                 lbl_803EACD4->mpUnknown2068 = lbl_803EACD4->mpUnknown1F40;
@@ -2097,8 +2102,8 @@ extern "C" int fn_800D5A6C(int active, int a, int b) {
             if (lbl_803EACD4->mpUnknown1F40 != fn_80137B40()) fn_800D0D48(54);
             if (lbl_803EACD4->mpUnknown1F40 == fn_80137B40()) {
                 fn_800D2280();
-                lbl_803EACD4->mUnknown1F50 = b;
                 lbl_803EACD4->mUnknown1F4C = a;
+                lbl_803EACD4->mUnknown1F50 = b;
                 int scaled, value;
                 fn_800D1788(fn_80137B40()->mIdBytes[2], 64, lbl_803EACD4->mUnknown1F2C, &scaled, 0, &value, 0, 0, 0, 0);
                 if (value != lbl_803EACD4->mUnknown1F34) {
@@ -2128,16 +2133,16 @@ extern "C" int fn_800D5A6C(int active, int a, int b) {
             if (fn_801787A0()) fn_800D0D48(59);
             if (value) {
                 if (lbl_803EACD4->mUnknown1F12 || lbl_803EACD4->mpUnknown1F40 == fn_80137B40()) {
-                    lbl_803EACD4->mUnknown1EDC = 1;
                     lbl_803EACD4->mUnknown1F3C = lbl_803EACD4->mpUnknown1F40->mIdBytes[2];
                     lbl_803EACD4->mUnknown1F48 = lbl_803EACD4->mUnknown1F2C;
+                    lbl_803EACD4->mUnknown1EDC = 1;
                     if (fn_801787A0() == 0) fn_800D2DF0();
                     result = 1;
                 } else if (value && lbl_803EACD4->mpUnknown1F40 != fn_80137B40()) {
                     if (lbl_803EACD4->mUnknown1EEE == 0) {
-                        lbl_803EACD4->mUnknown1EEE = 1;
                         lbl_803EACD4->mUnknown1F54 = lbl_803EACD4->mUnknown1F34;
                         lbl_803EACD4->mUnknown1F58 = lbl_803EACD4->mUnknown1F38;
+                        lbl_803EACD4->mUnknown1EEE = 1;
                     }
                     fn_800D59C8(lbl_803EACD4->mpUnknown1F40->mIdBytes[2]);
                 }
