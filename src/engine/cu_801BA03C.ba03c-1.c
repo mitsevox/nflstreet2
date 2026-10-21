@@ -117,11 +117,11 @@ int fn_801BA154(Object_801BA03C *pList, Record_800D81C8 *pChannels, int slot, in
             pChannels[index].mUnknownA = stateRef;
         pChannels[index].mUnknownC = pList->mUnknown8;
         pChannels[index].mUnknown1C = 0;
-        pChannels[index].mUnknown2C = 1.0f;
         pChannels[index].mUnknown20 = 0x1000000;
         pChannels[index].mUnknown24 = 0.0f;
         pChannels[index].mUnknown28 = 0.0f;
         pChannels[index].mUnknown48 = 0.0f;
+        pChannels[index].mUnknown2C = 1.0f;
         if (fn_801BA720(&pChannels[index], fn_801BAB34(fn_801BC084(slot), anim), pUser) == 0)
             pChannels[index].mStatus = 2;
     }
