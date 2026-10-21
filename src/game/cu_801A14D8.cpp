@@ -188,7 +188,7 @@ void fn_80147860(Object_8003DEC4 *pPlayer, float f);
 void fn_8015D3B0(Object_8003DEC4 *pPlayer);
 void *fn_8015E2FC(int a, int b, int c);
 int fn_8015E440(int a, int b);
-void fn_8015E73C(void);
+void fn_8015E73C(int id);
 void fn_8015E908(int a);
 void fn_8015E9F4(int a, int *p);
 void fn_8015EB4C(int a, int b);
@@ -876,7 +876,7 @@ void fn_801A2A88(Object_8003DEC4 *pPlayer, int unused)
             values[6] = 0x1000;
         }
     } else {
-        fn_8015E73C();
+        fn_8015E73C(pPlayer->mUnknown992);
         fn_8015FFA8(fn_8015E2FC(4, 0, 0), fn_8015E2FC(5, 0, 0));
         fn_8015FFA8(fn_8015E2FC(4, 0, 1), fn_8015E2FC(5, 0, 1));
         values[1] = 0x1000;
