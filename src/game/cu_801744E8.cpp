@@ -334,13 +334,14 @@ void fn_80174C24(Input_80174868 *in, Output_80174868 *out) {
 }
 void fn_80174C64(Input_80174868 *in, Output_80174868 *out) {
   out->mUnknown0 = fn_80174750(out->mUnknown8, 15.0f, in->mUnknown21);
-  if (in->mUnknown14 == 6 && in->mUnknown24 > 0) {
-    out->mUnknown10 = 3;
-    out->mUnknownC = 15.0f;
-    out->mUnknown14 = in->mUnknown24;
-    return;
-  }
-  if (in->mUnknown14 != 6 && in->mUnknown24 > 0) {
+  if (in->mUnknown14 == 6) {
+    if (in->mUnknown24 > 0) {
+      out->mUnknown10 = 3;
+      out->mUnknownC = 15.0f;
+      out->mUnknown14 = in->mUnknown24;
+      return;
+    }
+  } else if (in->mUnknown24 > 0) {
     out->mUnknown14 = in->mUnknown24;
     out->mUnknown10 = 2;
   }
