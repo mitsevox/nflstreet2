@@ -64,8 +64,8 @@ struct Block_801BE60C {
             unsigned char mUnknown19;
         };
     };
-    /* 0x800D7E9C reads +0x1C as a word, +0x20/+0x24 as floats and passes
-       +0x28 to fn_800D8140; the other callers use the first view. */
+    /* 0x800D7E9C writes +0x1C as a word and +0x20/+0x24 as floats and
+       passes +0x28 to fn_800D8140; 0x800D7A4C reads +0x1C..+0x24. */
     union {
         struct {
             unsigned char mUnknown1C;
