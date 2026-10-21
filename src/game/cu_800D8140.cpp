@@ -20,7 +20,7 @@ void fn_8022728C(Pair_802270A4 *p, Pair_802270A4 *pOther, float value);
 static float lbl_803EC9E0;
 static float lbl_803EC9E4;
 
-extern "C" void fn_800D8140(State_800D8140 *p, Object_800D81C8 *pOther, unsigned char value)
+extern "C" void fn_800D8140(State_800D8140 *p, Object_800D81C8 *pOther, int value)
 {
     p->mUnknown14 = 0;
     p->mUnknown16 = 0;
