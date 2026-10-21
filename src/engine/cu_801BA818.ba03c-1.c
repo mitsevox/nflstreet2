@@ -465,13 +465,13 @@ int fn_801BB2D8(Config_801BB2D8 *pConfig)
 {
     int i;
 
+    lbl_803EBB88 = pConfig->mpArchive;
+    lbl_803ED600 = pConfig->mUnknown4;
+    lbl_803ED604 = pConfig->mUnknown10;
     lbl_803ED5F0 = pConfig->mUnknown8;
     lbl_803ED5F4 = pConfig->mUnknownA;
     lbl_803ED608 = pConfig->mUnknownC;
     lbl_803ED5F8 = lbl_803ED5F0 + lbl_803ED5F4 + lbl_803ED608;
-    lbl_803EBB88 = pConfig->mpArchive;
-    lbl_803ED604 = pConfig->mUnknown10;
-    lbl_803ED600 = pConfig->mUnknown4;
     lbl_803ED5FC = fn_801D2BB0(lbl_803ED600, lbl_803ED5F8 * sizeof(Buffer_801BB2D8), 0, 0);
     lbl_803ED60C = fn_801D2BB0(lbl_803ED600, lbl_803ED5F8 * sizeof(Request_801BAE08), 0, 0);
     if (lbl_803ED5FC) {
@@ -484,15 +484,15 @@ int fn_801BB2D8(Config_801BB2D8 *pConfig)
                 else
                     lbl_803ED5FC[i].mpData = fn_801D2BB0(lbl_803ED600, lbl_803ED5FC[i].mSize, 0, 0);
             } else {
-                lbl_803ED5FC[i].mFlags = 0;
                 lbl_803ED5FC[i].mSize = 0;
                 lbl_803ED5FC[i].mpData = 0;
+                lbl_803ED5FC[i].mFlags = 0;
             }
             lbl_803ED5FC[i].mUnknown13 = 0;
             lbl_803ED5FC[i].mStatus = 0;
             lbl_803ED5FC[i].mId = 0;
-            lbl_803ED5FC[i].mObjectType = -1;
             lbl_803ED5FC[i].mParent = -1;
+            lbl_803ED5FC[i].mObjectType = -1;
         }
         return 0;
     }
@@ -554,8 +554,8 @@ int fn_801BB65C(int id, int frameCache)
         if (lbl_803ED5FC[i].mStatus == 0) {
             lbl_803ED5FC[i].mStatus = 2;
             lbl_803ED5FC[i].mId = id;
-            lbl_803ED5FC[i].mUnknown1C = 1;
             lbl_803ED5FC[i].mFrameCache = frameCache;
+            lbl_803ED5FC[i].mUnknown1C = 1;
             lbl_803ED60C[i].mSlot = i;
             lbl_803ED60C[i].mUnknown4 = 0;
             lbl_803ED5FC[i].mpData =
@@ -572,30 +572,32 @@ int fn_801BB65C(int id, int frameCache)
 int fn_801BB74C(unsigned short slot, int id, int bigFile)
 {
     unsigned short index = slot + lbl_803ED5F0;
+    int result = 0;
 
-    if (lbl_803ED5FC[index].mId == id && lbl_803ED5FC[index].mStatus != 0)
-        return 0;
-    switch (lbl_803ED5FC[index].mStatus) {
-    case 2:
-        while (fn_801BC044(slot) != 1) {
-            if (lbl_803EBB94)
-                fn_801F0F18(0);
-            else
-                fn_801F81AC();
-            if (fn_801CB120())
-                fn_801CAF24();
+    if (lbl_803ED5FC[index].mId != id || lbl_803ED5FC[index].mStatus == 0) {
+        switch (lbl_803ED5FC[index].mStatus) {
+        case 2:
+            while (fn_801BC044(slot) != 1) {
+                if (lbl_803EBB94)
+                    fn_801F0F18(0);
+                else
+                    fn_801F81AC();
+                if (fn_801CB120())
+                    fn_801CAF24();
+            }
+        case 1:
+            fn_801BAEAC(index);
         }
-    case 1:
-        fn_801BAEAC(index);
+        lbl_803ED5FC[index].mStatus = 2;
+        lbl_803ED5FC[index].mUnknown1C = 1;
+        lbl_803ED5FC[index].mId = id;
+        lbl_803ED60C[index].mSlot = index;
+        lbl_803ED60C[index].mUnknown4 = bigFile;
+        fn_801EFD2C(lbl_803EBB88, id, lbl_803ED600, lbl_803ED5FC[index].mpData, lbl_803ED604, fn_801BAE08,
+                    &lbl_803ED60C[index]);
+        result = fn_801F7C88();
     }
-    lbl_803ED5FC[index].mStatus = 2;
-    lbl_803ED5FC[index].mUnknown1C = 1;
-    lbl_803ED5FC[index].mId = id;
-    lbl_803ED60C[index].mSlot = index;
-    lbl_803ED60C[index].mUnknown4 = bigFile;
-    fn_801EFD2C(lbl_803EBB88, id, lbl_803ED600, lbl_803ED5FC[index].mpData, lbl_803ED604, fn_801BAE08,
-                &lbl_803ED60C[index]);
-    return fn_801F7C88();
+    return result;
 }
 
 unsigned short fn_801BB878(int id, Object_801BC084 *pData, int size, int bigFile, int flag)
