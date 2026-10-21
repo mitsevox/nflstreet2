@@ -424,8 +424,8 @@ extern "C" int fn_80090390(Character_80093BCC *pCharacter, int *pSlot)
                 fn_801BB74C(i, id, pActor);
                 lbl_8030C164[i].mUnknown0 = id;
                 lbl_8030C164[i].mUnknown8 = pCharacter->mUnknown0;
-                lbl_8030C164[i].mUnknown4++;
                 lbl_8030C164[i].mUnknownC = pCharacter->mUnknown4;
+                lbl_8030C164[i].mUnknown4++;
                 pCharacter->mUnknownD8.mWord = i;
                 break;
             }
@@ -1138,9 +1138,10 @@ extern "C" unsigned int fn_80094AE0(short *pValues, Object_8017886C *p, Table_80
 
 extern "C" int fn_80094B34(Table_800680A8 *pTable, int index)
 {
-    unsigned short *pRow = (unsigned short *)((char *)pTable + pTable->mUnknown4) + index * (pTable->mUnknownC + pTable->mUnknown10);
+    unsigned short *pRow = (unsigned short *)((char *)pTable + pTable->mUnknown4);
     int result = -1;
 
+    pRow += index * (pTable->mUnknownC + pTable->mUnknown10);
     if (((Cell_80094B34 *)(pRow + pTable->mUnknownC))->mValue > 0) {
         result = pRow[0];
     }
@@ -2333,10 +2334,10 @@ extern "C" void fn_800A3D70(void)
     for (i = 0; i < 11; i++) {
         *ppCallback++ = fn_800A3530;
     }
-    lbl_8030EFB4[1] = fn_800A3898;
     lbl_8030EFB4[2] = fn_800A37D8;
     lbl_8030EFB4[3] = fn_800A3898;
     lbl_8030EFB4[4] = fn_800A3898;
+    lbl_8030EFB4[1] = fn_800A3898;
     lbl_8030EFB4[5] = fn_800A3898;
 }
 
@@ -7840,15 +7841,14 @@ extern "C" void fn_800AA124(void)
 {
     unsigned short count = 7;
     unsigned short i;
+    Block_80170E64 *p;
 
     for (i = 0; i < count; i++) {
-        Block_80170E64 *p = fn_80039F5C(0, i)->mpUnknown4;
-
+        p = fn_80039F5C(0, i)->mpUnknown4;
         p->mUnknown20 |= 1;
     }
     for (i = 0; i < count; i++) {
-        Block_80170E64 *p = fn_80039F5C(1, i)->mpUnknown4;
-
+        p = fn_80039F5C(1, i)->mpUnknown4;
         p->mUnknown20 |= 1;
     }
     fn_8004A230(1);
@@ -8682,12 +8682,11 @@ extern "C" void fn_800ABA0C(void)
     unsigned int i;
 
     for (i = 0; i <= 1; i++) {
-        unsigned char team = i;
-        unsigned int count = fn_80178D18(team);
+        unsigned int count = fn_80178D18((unsigned char)i);
         unsigned int index;
 
         for (index = 0; index < count; index++) {
-            Object_80039F5C *p = fn_80039F5C(team, index);
+            Object_80039F5C *p = fn_80039F5C((unsigned char)i, index);
 
             fn_800EFE60(0, p->mpState, p);
         }
@@ -9175,12 +9174,8 @@ extern "C" void fn_800ADB34(Element_80041BF8 *pElements, int value, unsigned int
 {
     Element_80041BF8 *p;
 
-    if (duration == 0) {
-        duration = 1;
-    }
-    if (duration > 255) {
-        duration = 255;
-    }
+    duration = duration == 0 ? 1 : duration;
+    duration = duration > 255 ? 255 : duration;
     p = &pElements[index];
     if (p->mUnknown0 == 0 && (signed char)p->mUnknown4 != value && value <= 10) {
         p->mUnknown5 = value;
@@ -9297,11 +9292,11 @@ extern "C" void fn_800ADDFC(Object_8003DEC4 *pObject, Element_80041BF8 *pElement
     fn_801C1F94(pElement, 0, sizeof(Element_80041BF8));
     if (a != 0) {
         pElement->mUnknown1[0] = pObject->mUnknown0[0];
-        pElement->mUnknown0 = 1;
         pElement->mUnknown4 = 0;
-        pElement->mUnknown5 = 0;
         pElement->mUnknown8 = 0;
+        pElement->mUnknown5 = 0;
         pElement->mUnknown6 = 1;
+        pElement->mUnknown0 = 1;
     }
 }
 
@@ -11220,12 +11215,13 @@ extern "C" Object_80039F5C *fn_8009EDD4(unsigned int index, int side, Point_8017
 
             swapped = 0;
             for (i = 0; i < pState->mUnknown1A3 - 1; i++) {
-                Object_80039F5C *pA = fn_80039F5C(team, pState->mUnknown1A5[i]);
-                Object_80039F5C *pB = fn_80039F5C(team, pState->mUnknown1A5[i + 1]);
+                Object_80039F5C *pB;
                 Point_8017886C a;
                 Point_8017886C b;
 
-                fn_8009F928(pA, &a, 5, 1);
+                p = fn_80039F5C(team, pState->mUnknown1A5[i]);
+                pB = fn_80039F5C(team, pState->mUnknown1A5[i + 1]);
+                fn_8009F928(p, &a, 5, 1);
                 fn_8009F928(pB, &b, 5, 1);
                 if (a.mX > b.mX) {
                     unsigned char temp = pState->mUnknown1A5[i];
@@ -13086,27 +13082,27 @@ extern "C" int fn_800B76E8(Object_80039F5C *p)
             return 0;
         }
         if ((input.mUnknown92 & 1) && fn_800B54D4(p, mode) != 0) {
-            goto handled;
+            p->mFlags |= 0x4000;
+            return 0;
         }
         if (fn_800B6098(p, &input, mode) != 0) {
             return 0;
         }
         if ((input.mUnknown95 & 0x10) && fn_80111090(p, 0) != 0) {
-            goto handled;
+            p->mFlags |= 0x4000;
+            return 0;
         }
     } else {
         if ((input.mUnknown92 & 1) && fn_800E815C(p, 0, 0) != 0) {
-            goto handled;
+            p->mFlags |= 0x4000;
+            return 0;
         }
         if ((input.mUnknown92 & 4) && (fn_800E8098(p, 3) != 0 || fn_800F2C1C(p, 0) != 0)) {
-            goto handled;
+            p->mFlags |= 0x4000;
+            return 0;
         }
     }
     fn_800B6E68(p, &input);
-    return 0;
-
-handled:
-    p->mFlags |= 0x4000;
     return 0;
 }
 
