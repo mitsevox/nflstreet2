@@ -20850,6 +20850,29 @@
         "introduced_blob": "268d7ba909babf9a33b3a4c622f3d2107dd59d78",
         "merged_via": 977
       }
+    },
+    {
+      "source": "src/game/cu_800D0D4C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D1A90",
+        "0x800D1D84",
+        "0x800D2378",
+        "0x800D3294",
+        "0x800D5494",
+        "0x800D5A6C",
+        "0x800D5F1C",
+        "0x800D6F3C",
+        "0x800D7158"
+      ],
+      "provenance": {
+        "pull_request": 987,
+        "merged_via": 987,
+        "commit": "12cdc6e253bb9974a49409eafb49e2a5b5e6e917",
+        "introduced_blob": "5d3396256ee08785c1e9377d489dbeabe03bc380"
+      }
     }
   ],
   "target": "GN7E69",
