@@ -855,7 +855,7 @@ extern "C" int fn_80129098(Object_800B26B0 *pMotion, int angle, Vector_80039F5C 
             float dy = pMotion->mPos.mY - target.mY;
             if (dir.mY < 0.0f) {
                 dir.mY = -dir.mY;
-                dir.mX = (dy / fabsf(offset.mY + dir.mY)) * dir.mX + pMotion->mPos.mX;
+                dir.mX = dir.mX * (dy / fabsf(dir.mY + offset.mY)) + pMotion->mPos.mX;
                 if (fabsf(dir.mX) > fn_80178A08() - lbl_803EB100) {
                     dir.mX = CLAMP(dir.mX, lbl_803EB100 - fn_80178A08(), fn_80178A08() - lbl_803EB100);
                     dir.mY = target.mY;
