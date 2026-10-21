@@ -1479,9 +1479,6 @@ void fn_801A472C(void)
 {
     Object_8003DEC4 *pPlayer;
     short values[53];
-    int a;
-    int b;
-    int i;
 
     if (!lbl_803EB814 || !lbl_803EB818) {
         return;
@@ -1489,6 +1486,10 @@ void fn_801A472C(void)
     memset(values, 0, sizeof(values));
     pPlayer = lbl_803EB814;
     if (pPlayer->mUnknown992 == 0xFFFF) {
+        int a;
+        int b;
+        int i;
+
         fn_8015FFA8(fn_8015E2FC(6, 0, 0), fn_8015E2FC(5, 0, 0));
         fn_8015FFA8(fn_8015E2FC(6, 0, 1), fn_8015E2FC(5, 0, 1));
         for (i = 0; i < 53; i++) {
@@ -1519,8 +1520,8 @@ void fn_801A472C(void)
     } else {
         fn_8015FFA8(fn_8015E2FC(4, 0, 0), fn_8015E2FC(5, 0, 0));
         fn_8015FFA8(fn_8015E2FC(4, 0, 1), fn_8015E2FC(5, 0, 1));
-        a = pPlayer->mUnknown1024[0].mUnknown16.mUnknown28;
-        b = pPlayer->mUnknown1024[1].mUnknown16.mUnknown28;
+        int a = pPlayer->mUnknown1024[0].mUnknown16.mUnknown28;
+        int b = pPlayer->mUnknown1024[1].mUnknown16.mUnknown28;
         fn_8020F2C4(&pPlayer->mUnknown1024[0].mUnknown16, fn_8015E2FC(4, pPlayer->mUnknown4970, 0));
         fn_8020F2C4(&pPlayer->mUnknown1024[1].mUnknown16, fn_8015E2FC(4, pPlayer->mUnknown4970, 1));
         pPlayer->mUnknown1024[0].mUnknown16.mUnknown28 = a;
@@ -1544,8 +1545,8 @@ void fn_801A472C(void)
         fn_801A46BC();
     }
     lbl_803EB810(pPlayer);
-    lbl_803EB818 = 0;
     lbl_803EB810 = 0;
     lbl_803EB814 = 0;
+    lbl_803EB818 = 0;
 }
 }
