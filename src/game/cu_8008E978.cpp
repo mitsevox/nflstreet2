@@ -1058,7 +1058,6 @@ extern "C" int fn_80094564(unsigned int a, unsigned int b)
 }
 
 extern "C" int fn_801BC654(void);
-extern "C" int fn_801F0E68(int a, int b);
 
 extern "C" void fn_80094598(int index)
 {
@@ -1067,7 +1066,7 @@ extern "C" void fn_80094598(int index)
     int id = fn_8009439C(pCharacter->mUnknown4) + pActor->mUnknown2;
     int handle = fn_801BC654();
 
-    while (fn_801F0E68(handle, id) != 0) {
+    while (fn_801F0E68((void *)handle, id) != 0) {
     }
 }
 

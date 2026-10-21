@@ -1,31 +1,190 @@
-#include "game/Class_801CC350.h"
+#include "game/Class_800325E8.h"
+#include "game/ModuleGroup_8003450C.h"
+#include "game/ModuleGroup_80033A5C.h"
+#include "game/GameState.h"
+#include "game/SndgCrowd.h"
 #include "game/Class_801CBC50.h"
 #include "game/InGame.h"
 #include "game/FELoop.h"
 #include "game/fn_80072AA8.h"
 
-class Class_800325E8 : public Class_801CC350 {
-public:
-    virtual void vfn_02();
-    virtual int vfn_03(int a, int id);
-    virtual const char *GetName();
-    virtual Record_802CCBAC *vfn_04();
-    virtual Record_803EA3A8 *vfn_05();
-    virtual ModuleDependency *vfn_06(int id);
-};
 
 extern "C" {
 void fn_80025F20(int a);
 void fn_80072D98(unsigned int delay);
 void fn_80073094(void);
-void fn_80032790(int, int);
 extern const char lbl_8028AD04[];
+extern char lbl_8030C070[];
 extern Record_802CCBAC lbl_802CCBBC[];
 extern Record_803EA3A8 lbl_802CCBDC[];
-extern ModuleDependency lbl_803068D8[];
-extern ModuleDependency lbl_80306A08[];
-extern ModuleDependency lbl_803EC680[2];
 }
+
+extern LoadingFEToInGame gLoadingFEToInGame;
+extern Timg gTimg;
+
+Class_800325E8 lbl_803068B4;
+
+static ModuleDependency lbl_803068D8[] = {
+    &gMemAudit,
+    &gLoadingFEToInGame,
+    &gQkl,
+    &gGRender,
+    &gGameState,
+    &gGRand,
+    &gCelebration,
+    &gScrmRule,
+    &gTimg,
+    &gAudmon,
+    &gAnimintf,
+    &gAnimScriptMan,
+    &gArrow,
+    &gAss,
+    &gAssJoy,
+    &gBall,
+    &gBanner,
+    &gBigObj,
+    &gBlock,
+    &gCamGame,
+    &gCamScript,
+    &gCatch,
+    &gCatchUp,
+    &gCld,
+    &gClock,
+    &gCoinToss,
+    &gEffects,
+    &gEnv,
+    &gGameBrk,
+    &gGameIntf,
+    &gGamePlay,
+    &gGameSkill,
+    &gHotRt,
+    &gID3Read,
+    &gIGNetEvent,
+    &gIGOnline,
+    &gJoyMsg,
+    &gLight,
+    &gMiM,
+    &gMonitor,
+    &gParticles,
+    &gPenalty,
+    &gPlayArtMem,
+    &gPlayInfo,
+    &gPlayTrack,
+    &gPlayBook,
+    &gPlyr,
+    &gPlyrCtrl,
+    &gPlyrMsg,
+    &gPractice,
+    &gPursuit,
+    &gRenderBin,
+    &gScreenTint,
+    &gShadows,
+    &gSideAvoid,
+    &gSimpShadow,
+    &gSndgIG,
+    &gSndgCrowd,
+    &gSndgReplay,
+    &gStatcoll,
+    &gStatics,
+    &gSub,
+    &gTrk,
+    &gTurbo,
+    &gColorStyle,
+    &gVptMgr,
+    &gMiniGame,
+    &gTutorialGame,
+    &gGameStateActivate,
+    &gPause,
+    &gReplay,
+    &gReplayFrame,
+    &gRumble,
+    lbl_8030C070,
+    &gUIS,
+    0,
+};
+
+static ModuleDependency lbl_80306A08[] = {
+    &gMemAudit,
+    &gGRender,
+    &gGameState,
+    &gGRand,
+    &gCelebration,
+    &gScrmRule,
+    &gTimg,
+    &gAudmon,
+    &gAnimintf,
+    &gAnimScriptMan,
+    &gArrow,
+    &gAss,
+    &gAssJoy,
+    &gBall,
+    &gBanner,
+    &gBigObj,
+    &gBlock,
+    &gCamGame,
+    &gCamScript,
+    &gCatch,
+    &gCatchUp,
+    &gCld,
+    &gClock,
+    &gCoinToss,
+    &gEffects,
+    &gEnv,
+    &gGameBrk,
+    &gGameIntf,
+    &gGamePlay,
+    &gGameSkill,
+    &gHotRt,
+    &gID3Read,
+    &gIGNetEvent,
+    &gIGOnline,
+    &gJoyMsg,
+    &gLight,
+    &gMiM,
+    &gMonitor,
+    &gParticles,
+    &gPenalty,
+    &gPlayArtMem,
+    &gPlayInfo,
+    &gPlayTrack,
+    &gPlayBook,
+    &gPlyr,
+    &gPlyrCtrl,
+    &gPlyrMsg,
+    &gPractice,
+    &gPursuit,
+    &gRenderBin,
+    &gScreenTint,
+    &gShadows,
+    &gSideAvoid,
+    &gSimpShadow,
+    &gSndgIG,
+    &gSndgCrowd,
+    &gSndgReplay,
+    &gStatcoll,
+    &gStatics,
+    &gSub,
+    &gTrk,
+    &gTurbo,
+    &gColorStyle,
+    &gVptMgr,
+    &gMiniGame,
+    &gTutorialGame,
+    &gGameStateActivate,
+    &gPause,
+    &gReplay,
+    &gReplayFrame,
+    &gRumble,
+    lbl_8030C070,
+    &gUIS,
+    &gInGame,
+    0,
+};
+
+static ModuleDependency lbl_803EC680[] = {
+    &gMemAudit,
+    0,
+};
 
 const char *Class_800325E8::GetName() { return lbl_8028AD04; }
 Record_802CCBAC *Class_800325E8::vfn_04() { return lbl_802CCBBC; }
@@ -87,6 +246,3 @@ int Class_800325E8::vfn_03(int a, int id)
     }
     return 1;
 }
-
-extern "C" void fn_80032E90() { fn_80032790(1, 65535); }
-extern "C" void fn_80032EBC() { fn_80032790(0, 65535); }

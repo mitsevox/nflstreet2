@@ -41,7 +41,7 @@ struct Object_801A8620 {
     unsigned char mUnknown10[4]; int (*mUnknown14)(Object_801A8620 *, int); Vector_80039F5C mUnknown18;
     unsigned char mUnknown24[0x84]; void *mpUnknownA8; unsigned char mUnknownAC[8]; Vector_80039F5C mUnknownB4;
     unsigned char mUnknownC0[12]; int mUnknownCC;
-    unsigned char mUnknownD0[12]; int mUnknownDC; unsigned char mUnknownE0[8];
+    unsigned char mUnknownD0[12]; void *mpUnknownDC; unsigned char mUnknownE0[8];
     union { unsigned int mWord; unsigned char mBytes[4]; } mUnknownE8;
     union {
         unsigned char mUnknownEC[8];

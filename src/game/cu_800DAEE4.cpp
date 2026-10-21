@@ -122,10 +122,8 @@ extern "C" void fn_800DB100(Object_80039F5C *p, Object_80137ABC *pBall, Record_8
     Point_8017886C delta;
     delta.mX = 0.2f;
     delta.mY = pRecord->mUnknown8 - ball.mZ;
-    if (delta.mY < 0.0f) {
-        delta.mY = 0.0f;
-    }
-    int angle = fn_801CFE40(delta.mY, delta.mX);
+    delta.mY = delta.mY < 0.0f ? 0.0f : delta.mY;
+    int angle = delta.Heading();
     pRequest->mUnknown10 = angle + fn_802372EC(0, 0xE38E3);
     if (pRequest->mUnknownC == 0.0f) {
         float value = pRequest->mUnknown10 * 2.3841858e-07f;
@@ -155,9 +153,9 @@ extern "C" void fn_800DB308(Object_80039F5C *p, float *pOut)
     if (kind == 135 || kind == 191) {
         if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, kind)) {
             Record_800D81C8 *pRecords = p->mpUnknown800;
-            Record_800D81C8 *pRecord = &pRecords[fn_801BA5A8(p->mpUnknown796, pRecords, kind, 0)];
-            value = fn_801BD640(pRecord->mUnknown4C.mpUnknown0, 0xC003);
-            value -= fn_801BD6D4(&pRecord->mUnknown4C);
+            unsigned short index = fn_801BA5A8(p->mpUnknown796, pRecords, kind, 0);
+            value = fn_801BD640(pRecords[index].mUnknown4C.mpUnknown0, 0xC003);
+            value -= fn_801BD6D4(&pRecords[index].mUnknown4C);
             value = value < 0.0f ? 0.0f : (value > 12.0f ? 12.0f : value);
         }
     } else if (kind == 69 || kind == 178) {

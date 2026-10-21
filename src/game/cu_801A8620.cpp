@@ -64,7 +64,7 @@ void fn_801D0C58(void *); void fn_801D0860(void *); void fn_801D08FC(int);
 void fn_801D09EC(int); void fn_801D0F80(Mtx44);
 void fn_8020FA38(int, void *); void fn_8020FA8C(int);
 void fn_8020EBB0(void *); void fn_8020F4D0(void *, void *);
-void *fn_8020EC50(void *, unsigned int, int);
+void *fn_8020EC50(void *, unsigned int, void *);
 void fn_8020F78C(void *, void *); void fn_8020F824(void *, void *);
 void fn_8020F8E0(void *); void fn_8020F92C(void *);
 void fn_802100C0(void *, void *); void fn_80210114(void *);
@@ -77,11 +77,11 @@ void fn_80211E08(Element_801A8620 *, int); void fn_80211EFC(Element_801A8620 *);
 void fn_80211FF0(void); void fn_80212018(const char *, Element_801A8620 *);
 int fn_80212124(Element_801A8620 *, unsigned int, int);
 void fn_80233BB8(void *, int, int); void fn_80233BDC(void *, void *); void fn_80233BD8(void *);
-void fn_80233CBC(void *, int, int); void fn_802337D4(void *, void *, int, int);
+void fn_80233CBC(void *, int, int); void fn_802337D4(void *, void *, void *, unsigned int);
 void fn_80234A30(Packet_801A8620 *, int); void fn_80234A90(Packet_801A8620 *);
 void fn_80234A94(Packet_801A8620 *, Context_801A8620 *);
-void fn_80234AFC(void *); void fn_80234B1C(void *); void fn_80234B20(void *, void *, int);
-void fn_80234B80(void *); void fn_80234DC4(void *, int); void fn_80234DC8(void *, unsigned int);
+void fn_80234AFC(void *); void fn_80234B1C(void *); void fn_80234B20(void *, Mtx44, Mtx44);
+int fn_80234B80(void *); void fn_80234DC4(void *, int); void fn_80234DC8(void *, unsigned int);
 void fn_80234B88(Packet_801A8620 *); void fn_80234BF4(void *, Packet_801A8620 *, int);
 void fn_80234CA4(Packet_801A8620 *, void *); void fn_80234CF0(Packet_801A8620 *, int, Context_801A8620 *);
 void fn_80234DC0(Packet_801A8620 *, int); unsigned int fn_80234D4C(float *, void *, void *, void *);
@@ -148,7 +148,7 @@ int fn_801A8620(Object_801A8620 *p, int arg)
                         if(!model->mUnknown1C) fn_8020F8E0(model);
                         fn_80210654(reinterpret_cast<Object_8023417C *>(model));
                         fn_80210724(s->mUnknownC.mpUnknownE0); fn_801D04C4(); fn_801D0558();
-                        fn_802337D4(model,s->mUnknownFC,p->mUnknownDC,0);
+                        fn_802337D4(model,s->mUnknownFC,p->mpUnknownDC,0);
                         fn_801D0544(); fn_8021126C();
                     }
                     fn_802525BC(0);fn_8025251C(m2,0);fn_8025256C(m2,0);
@@ -161,7 +161,7 @@ int fn_801A8620(Object_801A8620 *p, int arg)
                         r->mpUnknown0->mpUnknown10->mpUnknown4-=p->mUnknownFC*40;
                     } else fn_802112DC(s->mUnknownC.mUnknown60,s->mUnknownC.mUnknown5C);
                 } else {
-                    p->mUnknown138=1;fn_802337D4(model,s->mUnknownFC,p->mUnknownDC,0);
+                    p->mUnknown138=1;fn_802337D4(model,s->mUnknownFC,p->mpUnknownDC,0);
                     fn_80234BF4(work,&s->mUnknownC,0);
                 }
             } else fn_80234BF4(work,&s->mUnknownC,0);
@@ -324,7 +324,7 @@ int fn_801A9430(Child_801A9430 *p,int arg)
                     p->mpUnknown50->mUnknown138=1;
                     if(!model->mUnknown1C)fn_8020F8E0(model);
                     fn_80210654(reinterpret_cast<Object_8023417C *>(model));fn_80210724(s->mUnknownC.mpUnknownE0);
-                    fn_801D04C4();fn_801D0558();fn_802337D4(model,s->mUnknownFC,p->mpUnknown50->mUnknownDC,0);
+                    fn_801D04C4();fn_801D0558();fn_802337D4(model,s->mUnknownFC,p->mpUnknown50->mpUnknownDC,0);
                     fn_801D0544();fn_8021126C();fn_8024DF64(1);fn_80251CC4(1);fn_80251B28(0,0,0,4);
                 }
                 fn_802525BC(0);fn_8025251C(m2,0);fn_8025256C(m2,0);
@@ -339,7 +339,7 @@ int fn_801A9430(Child_801A9430 *p,int arg)
             } else {
                 if(!p->mpUnknown50->mUnknown138) {
                     fn_801D06D4(m2);p->mpUnknown50->mUnknown138=1;
-                    fn_802337D4(model,s->mUnknownFC,p->mpUnknown50->mUnknownDC,0);
+                    fn_802337D4(model,s->mUnknownFC,p->mpUnknown50->mpUnknownDC,0);
                 }
                 fn_80234BF4(work,&s->mUnknownC,0);
             }

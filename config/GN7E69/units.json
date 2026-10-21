@@ -1907,6 +1907,238 @@
     "__builtin_vec_delete": {
       "address": "0x801D3C40",
       "evidence": "evidence.tsv external row for 0x801D3C40 (__builtin_vec_delete); descriptive name."
+    },
+    "gAnimintf": {
+      "address": "0x80306DEC",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gAnimintf. InGame dependency pointer written at 0x80032890."
+    },
+    "gAnimScriptMan": {
+      "address": "0x80306DFC",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gAnimScriptMan. InGame dependency pointer written at 0x800328A0."
+    },
+    "gArrow": {
+      "address": "0x80306E1C",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gArrow. InGame dependency pointer written at 0x800328B0."
+    },
+    "gAss": {
+      "address": "0x80306E3C",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gAss. InGame dependency pointer written at 0x800328C0."
+    },
+    "gAssJoy": {
+      "address": "0x80306E58",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gAssJoy. InGame dependency pointer written at 0x800328D0."
+    },
+    "gBall": {
+      "address": "0x80306E94",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gBall. InGame dependency pointer written at 0x800328E0."
+    },
+    "gBanner": {
+      "address": "0x80306EA4",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gBanner. InGame dependency pointer written at 0x800328F0."
+    },
+    "gBigObj": {
+      "address": "0x80306EC8",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gBigObj. InGame dependency pointer written at 0x80032900."
+    },
+    "gBlock": {
+      "address": "0x80306ED8",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gBlock. InGame dependency pointer written at 0x80032910."
+    },
+    "gCamGame": {
+      "address": "0x80306EF8",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gCamGame. InGame dependency pointer written at 0x80032920."
+    },
+    "gCamScript": {
+      "address": "0x80306F08",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gCamScript. InGame dependency pointer written at 0x80032930."
+    },
+    "gCatch": {
+      "address": "0x80306F24",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gCatch. InGame dependency pointer written at 0x80032940."
+    },
+    "gCatchUp": {
+      "address": "0x80306F34",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gCatchUp. InGame dependency pointer written at 0x80032950."
+    },
+    "gCld": {
+      "address": "0x80306F44",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gCld. InGame dependency pointer written at 0x80032960."
+    },
+    "gClock": {
+      "address": "0x80306F68",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gClock. InGame dependency pointer written at 0x80032970."
+    },
+    "gCoinToss": {
+      "address": "0x80306F78",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gCoinToss. InGame dependency pointer written at 0x80032980."
+    },
+    "gEffects": {
+      "address": "0x80306F88",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gEffects. InGame dependency pointer written at 0x80032990."
+    },
+    "gEnv": {
+      "address": "0x80306FB4",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gEnv. InGame dependency pointer written at 0x800329A0."
+    },
+    "gGameBrk": {
+      "address": "0x80306FD0",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gGameBrk. InGame dependency pointer written at 0x800329B0."
+    },
+    "gGameIntf": {
+      "address": "0x80306FE0",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gGameIntf. InGame dependency pointer written at 0x800329C0."
+    },
+    "gGamePlay": {
+      "address": "0x80307050",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gGamePlay. InGame dependency pointer written at 0x800329D0."
+    },
+    "gGameSkill": {
+      "address": "0x8030706C",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gGameSkill. InGame dependency pointer written at 0x800329E0."
+    },
+    "gHotRt": {
+      "address": "0x8030707C",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gHotRt. InGame dependency pointer written at 0x800329F0."
+    },
+    "gID3Read": {
+      "address": "0x8030708C",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gID3Read. InGame dependency pointer written at 0x80032A00."
+    },
+    "gIGNetEvent": {
+      "address": "0x803070AC",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gIGNetEvent. InGame dependency pointer written at 0x80032A10."
+    },
+    "gIGOnline": {
+      "address": "0x803070BC",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gIGOnline. InGame dependency pointer written at 0x80032A20."
+    },
+    "gJoyMsg": {
+      "address": "0x803070CC",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gJoyMsg. InGame dependency pointer written at 0x80032A30."
+    },
+    "gLight": {
+      "address": "0x803070EC",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gLight. InGame dependency pointer written at 0x80032A40."
+    },
+    "gMiM": {
+      "address": "0x803070FC",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gMiM. InGame dependency pointer written at 0x80032A50."
+    },
+    "gMonitor": {
+      "address": "0x8030710C",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gMonitor. InGame dependency pointer written at 0x80032A60."
+    },
+    "gParticles": {
+      "address": "0x80307138",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gParticles. InGame dependency pointer written at 0x80032A70."
+    },
+    "gPause": {
+      "address": "0x8030716C",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPause. InGame dependency pointer written at 0x80032B9C."
+    },
+    "gPenalty": {
+      "address": "0x8030717C",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPenalty. InGame dependency pointer written at 0x80032A80."
+    },
+    "gPlayArtMem": {
+      "address": "0x8030719C",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPlayArtMem. InGame dependency pointer written at 0x80032A90."
+    },
+    "gPlayInfo": {
+      "address": "0x803071B8",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPlayInfo. InGame dependency pointer written at 0x80032AA0."
+    },
+    "gPlayTrack": {
+      "address": "0x803071C8",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPlayTrack. InGame dependency pointer written at 0x80032AB0."
+    },
+    "gPlyr": {
+      "address": "0x80307240",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPlyr. InGame dependency pointer written at 0x80032AD0."
+    },
+    "gPlyrCtrl": {
+      "address": "0x80307250",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPlyrCtrl. InGame dependency pointer written at 0x80032AE0."
+    },
+    "gPlyrMsg": {
+      "address": "0x80307260",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPlyrMsg. InGame dependency pointer written at 0x80032AF0."
+    },
+    "gPractice": {
+      "address": "0x8030727C",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPractice. InGame dependency pointer written at 0x80032B00."
+    },
+    "gPursuit": {
+      "address": "0x8030728C",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPursuit. InGame dependency pointer written at 0x80032B10."
+    },
+    "gRenderBin": {
+      "address": "0x803072A8",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gRenderBin. InGame dependency pointer written at 0x80032B20."
+    },
+    "gReplay": {
+      "address": "0x803072C4",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gReplay. InGame dependency pointer written at 0x80032BAC."
+    },
+    "gReplayFrame": {
+      "address": "0x803072D4",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gReplayFrame. InGame dependency pointer written at 0x80032BBC."
+    },
+    "gScreenTint": {
+      "address": "0x803072F8",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gScreenTint. InGame dependency pointer written at 0x80032B28."
+    },
+    "gShadows": {
+      "address": "0x80307318",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gShadows. InGame dependency pointer written at 0x80032B2C."
+    },
+    "gSideAvoid": {
+      "address": "0x80307328",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gSideAvoid. InGame dependency pointer written at 0x80032B30."
+    },
+    "gSimpShadow": {
+      "address": "0x80307348",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gSimpShadow. InGame dependency pointer written at 0x80032B34."
+    },
+    "gSndgIG": {
+      "address": "0x80307374",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gSndgIG. InGame dependency pointer written at 0x80032B38."
+    },
+    "gSndgReplay": {
+      "address": "0x80307384",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gSndgReplay. InGame dependency pointer written at 0x80032B40."
+    },
+    "gStatcoll": {
+      "address": "0x80307394",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gStatcoll. InGame dependency pointer written at 0x80032B44."
+    },
+    "gStatics": {
+      "address": "0x803073D0",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gStatics. InGame dependency pointer written at 0x80032B48."
+    },
+    "gSub": {
+      "address": "0x803073E0",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gSub. InGame dependency pointer written at 0x80032B4C."
+    },
+    "gTrk": {
+      "address": "0x80307400",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gTrk. InGame dependency pointer written at 0x80032B50."
+    },
+    "gColorStyle": {
+      "address": "0x80307420",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gColorStyle. InGame dependency pointer written at 0x80032B58."
+    },
+    "gVptMgr": {
+      "address": "0x80307430",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gVptMgr. InGame dependency pointer written at 0x80032B5C."
+    },
+    "gMiniGame": {
+      "address": "0x80307450",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gMiniGame. InGame dependency pointer written at 0x80032B60."
+    },
+    "gTutorialGame": {
+      "address": "0x80307470",
+      "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gTutorialGame. InGame dependency pointer written at 0x80032B7C."
     }
   },
   "units": [

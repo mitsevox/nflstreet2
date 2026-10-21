@@ -1,8 +1,7 @@
-extern "C" {
-extern void (*lbl_803EBB10)(int, int, ...);
+#include "engine/cu_801AE3E4.h"
 
+extern "C" {
 int fn_800737C8(unsigned int a, int b);
-int fn_801AE5D4(int a, int b, int c);
 }
 
 static int lbl_803EA73C = -1;
