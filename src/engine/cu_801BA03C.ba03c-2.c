@@ -42,7 +42,9 @@ typedef struct Pair_801BCCAC {
 typedef struct Record_801BCA74 {
     char mUnknown0[1];
     unsigned char mUnknown1;
-    char mUnknown2[6];
+    unsigned short mUnknown2;
+    unsigned short mUnknown4;
+    char mUnknown6[2];
     unsigned short mUnknown8;
     char mUnknownA[2];
     int mUnknownC;
@@ -160,7 +162,9 @@ typedef struct GroupRef_801BEFA4 {
 
 typedef struct Transitions_801BEFA4 {
     unsigned short mUnknown0;
-    char mUnknown2[10];
+    char mUnknown2[2];
+    unsigned short mUnknown4;
+    char mUnknown6[6];
     GroupRef_801BEFA4 mUnknownC[1];
 } Transitions_801BEFA4;
 
@@ -172,6 +176,7 @@ typedef struct Transition_801BEFA4 {
     unsigned short mUnknownC;
     unsigned short mUnknownE;
 } Transition_801BEFA4;
+
 
 typedef void (*Update_801BF2B0)(Fade_801BF3C8 *p, float step);
 
@@ -269,6 +274,12 @@ void fn_801BF3C8(Fade_801BF3C8 *p, int type, float a, void *pSource, float b);
 void fn_801BF46C(Fade_801BF3C8 *p, float step);
 void fn_801BF4A8(Fade_801BF3C8 *p, int frames, float from, float to);
 void fn_801BBDCC(unsigned short type, unsigned short key, Transitions_801BEFA4 *pTable);
+void fn_801BF530(Fade_801BF3C8 *p, unsigned char frames, unsigned char hold, float from, float to);
+int fn_801BA154(Object_801BA03C *pObject, Record_801BCA74 *pRecords, int file, int anim, float weight, int state,
+                void *pOwner, unsigned short ref);
+void fn_801BA60C(Object_801BA03C *pObject, Record_801BCA74 *pRecords, unsigned short key, float delay);
+int fn_801BBE5C(unsigned short type, unsigned short file);
+unsigned short fn_801BBF44(unsigned short type);
 void fn_80227248(Pair_801BCCAC *pOut, Pair_801BCCAC *pIn, float scale);
 void fn_80227384(Pair_801BCCAC *pOut, Pair_801BCCAC *pIn, int angle);
 void fn_80227638(Pair_801BCCAC *pOut, Pair_801BCCAC *pA, Pair_801BCCAC *pB);
@@ -886,6 +897,9 @@ unsigned short fn_801BE648(Collection_801BE594 *p);
 int fn_801BE82C(unsigned short type, unsigned short key);
 void fn_801BE99C(Collection_801BE594 *p, Object_801BA03C *pObject, Record_801BCA74 *pRecords, unsigned short key,
                  unsigned short previous, int state, void *pOwner);
+Transition_801BEFA4 *fn_801BEFA4(Transitions_801BEFA4 *pTable, Object_801BA03C *pObject, Record_801BCA74 *pRecords,
+                                 unsigned short fromType, unsigned short fromFrame, unsigned short fromKey,
+                                 unsigned short toType, unsigned short toKey, unsigned short toFrame);
 
 int fn_801BE068(Collection_801BE594 *p, Object_801BA03C *pObject, Record_801BCA74 *pRecords, unsigned short key,
                 void *pOwner, float frames)
@@ -947,18 +961,6 @@ int fn_801BE068(Collection_801BE594 *p, Object_801BA03C *pObject, Record_801BCA7
     fn_801BDA30(pObject->mUnknown2, key, pOwner, 0, pObject, pRecords);
     fn_801BE99C(p, pObject, pRecords, key, previous, 2, pOwner);
     return 0;
-}
-
-void fn_801BE3C0(Collection_801BE594 *p, unsigned short key, int type, float a, void *pSource, float b)
-{
-    int i;
-
-    for (i = 0; i <= 3; i++) {
-        if (p->mUnknown4[i].mUnknown0 == key && p->mUnknown4[i].mUnknown2 == 3) {
-            fn_801BF3C8(&p->mUnknown4[i].mUnknown4C, type, a, pSource, b);
-            return;
-        }
-    }
 }
 
 void fn_801BE420(Collection_801BE594 *p, Object_801BA03C *pObject, Record_801BCA74 *pRecords, void *pOwner, float step)
@@ -1131,6 +1133,106 @@ void fn_801BE910(Collection_801BE594 *p, unsigned short key, int frames)
         if (p->mUnknown4[i].mUnknown0 == key
             || ((p->mUnknown4[i].mUnknown0 & 0x8000) && p->mUnknown4[i].mUnknown0 != 0xFFFF)) {
             fn_801BF4A8(&p->mUnknown4[i].mUnknown4C, frames, -1.0f, 0.0f);
+        }
+    }
+}
+
+void fn_801BE99C(Collection_801BE594 *p, Object_801BA03C *pObject, Record_801BCA74 *pRecords, unsigned short key,
+                 unsigned short previous, int state, void *pOwner)
+{
+    Transitions_801BEFA4 *pTable = &lbl_803D4F50;
+    int fallback = 1;
+    int i;
+
+    for (i = 0; i < 4; i++) {
+        if (p->mUnknown4[i].mUnknown0 == 0xFFFF) {
+            p->mUnknown4[i].mUnknown6 = fn_801BBF44(pObject->mUnknown2);
+            continue;
+        }
+        if (p->mUnknown4[i].mUnknown2 != state) {
+            continue;
+        }
+        p->mUnknown4[i].mUnknown2 = 1;
+        if (pTable->mUnknown4 != previous) {
+            fn_801BE82C(pObject->mUnknown2, previous);
+        }
+        if (pTable->mUnknown0 != 0) {
+            unsigned short slotKey = p->mUnknown4[i].mUnknown0;
+            unsigned int from = fn_801BE860(p, pObject, pRecords, slotKey);
+            unsigned int to = fn_801BE860(p, pObject, pRecords, key);
+
+            if (from != 0xFFFF && to != 0xFFFF) {
+                Transition_801BEFA4 *pTransition;
+
+                pTransition = fn_801BEFA4(pTable, pObject, pRecords, pRecords[from].mUnknown2, pRecords[from].mUnknown4,
+                                          pRecords[from].mUnknown4C.mUnknown18, key, pRecords[to].mUnknown2,
+                                          pRecords[to].mUnknown4);
+                if (pTransition == 0) {
+                    pTransition = fn_801BEFA4(pTable, pObject, pRecords, pRecords[from].mUnknown2,
+                                              pRecords[from].mUnknown4, pRecords[from].mUnknown4C.mUnknown18, key,
+                                              0xFFFF, 0);
+                }
+                if (pTransition == 0) {
+                    pTransition = fn_801BEFA4(pTable, pObject, pRecords, 0xFFFF, 0, 0, key, pRecords[to].mUnknown2,
+                                              pRecords[to].mUnknown4);
+                }
+                if (pTransition == 0) {
+                    pTransition = fn_801BEFA4(pTable, pObject, pRecords, 0xFFFF, 0, 0, key, 0xFFFF, 0);
+                }
+                if (pTransition != 0) {
+                    switch (pTransition->mUnknown4) {
+                    case 0:
+                        fn_801BF3C8(&p->mUnknown4[i].mUnknown4C, 0, 0.0f, 0, 0.0f);
+                        fallback = 0;
+                        break;
+                    case 1: {
+                        float frames = pTransition->mUnknown6 * pRecords[from].mUnknown4C.mUnknown4 *
+                                           (1.0f - pTransition->mUnknown8) +
+                                       pTransition->mUnknown6 * pRecords[to].mUnknown4C.mUnknown4 * pTransition->mUnknown8;
+
+                        fn_801BE910(p, slotKey, (unsigned int)frames);
+                        fn_801BF4A8(&p->mUnknown4[i + 2].mUnknown4C, (unsigned int)frames, 0.0f,
+                                    p->mUnknown4[i + 2].mUnknown4C.mUnknown4);
+                        fallback = 0;
+                        break;
+                    }
+                    case 2:
+                        fn_801BF3C8(&p->mUnknown4[i].mUnknown4C, 0, 0.0f, 0, 0.0f);
+                        fallback = 0;
+                        break;
+                    case 3: {
+                        int file;
+                        int index;
+
+                        p->mUnknown4[i].mUnknown6 = fn_801BBF44(pObject->mUnknown2);
+                        file = fn_801BBE5C(pObject->mUnknown2, pTransition->mUnknownC);
+                        if (file != 0xFFFFFF &&
+                            (index = fn_801BA154(pObject, pRecords, (unsigned short)file, pTransition->mUnknownE, 1.0f,
+                                                 0xFFFF, pOwner, p->mUnknown4[i].mUnknown6)) != -1) {
+                            float duration = fn_801BD60C(pRecords[index].mUnknown4C.mpUnknown0);
+                            unsigned int fade = duration * (1.0f - pTransition->mUnknown8) * 0.5f;
+                            unsigned int hold = (unsigned int)duration - fade * 2;
+                            float delay;
+
+                            fn_801BF4A8(&p->mUnknown4[i].mUnknown4C, fade, -1.0f, 0.0f);
+                            fn_801BF530(&p->mUnknown4[i + 1].mUnknown4C, fade, hold, -1.0f, 1.0f);
+                            fn_801BF4A8(&p->mUnknown4[i + 2].mUnknown4C, fade, 0.0f,
+                                        p->mUnknown4[i + 2].mUnknown4C.mUnknown4);
+                            delay = (float)hold + (float)fade;
+                            fn_801BE798(p, key, delay);
+                            fn_801BA60C(pObject, pRecords, key, delay);
+                            fallback = 0;
+                        } else {
+                            fallback = 1;
+                        }
+                        break;
+                    }
+                    }
+                }
+            }
+        }
+        if (fallback == 1) {
+            fn_801BF4A8(&p->mUnknown4[i].mUnknown4C, 10, -1.0f, 0.0f);
         }
     }
 }

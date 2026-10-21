@@ -39382,6 +39382,282 @@
           "end": "0x801A8620"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801BA03C.ba03c-2.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv compiler row engine_c 0x801BCA74-0x801BF3C8, fifty-two function rows with exact target edges and data row 0x802AEDC0-0x802AEEC8 for the literal pool. Second slice of the provisional survey partition cu_801BA03C; the 0x801BCA74 and 0x801BF3C8 edges are function boundaries, not an original file boundary. 51 of the 52 functions have bodies and are measured, including partials; fn_801BE3C0 is not reconstructed. External data ownership remains unclaimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BCA74",
+          "end": "0x801BF3C8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEDC0",
+          "end": "0x802AEEC8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BCA74",
+          "start": "0x801BCA74",
+          "end": "0x801BCCAC"
+        },
+        {
+          "symbol": "fn_801BCCAC",
+          "start": "0x801BCCAC",
+          "end": "0x801BCEEC"
+        },
+        {
+          "symbol": "fn_801BCEEC",
+          "start": "0x801BCEEC",
+          "end": "0x801BCF40"
+        },
+        {
+          "symbol": "fn_801BCF40",
+          "start": "0x801BCF40",
+          "end": "0x801BCF98"
+        },
+        {
+          "symbol": "fn_801BCF98",
+          "start": "0x801BCF98",
+          "end": "0x801BD26C"
+        },
+        {
+          "symbol": "fn_801BD26C",
+          "start": "0x801BD26C",
+          "end": "0x801BD3BC"
+        },
+        {
+          "symbol": "fn_801BD3BC",
+          "start": "0x801BD3BC",
+          "end": "0x801BD4C0"
+        },
+        {
+          "symbol": "fn_801BD4C0",
+          "start": "0x801BD4C0",
+          "end": "0x801BD4E4"
+        },
+        {
+          "symbol": "fn_801BD4E4",
+          "start": "0x801BD4E4",
+          "end": "0x801BD60C"
+        },
+        {
+          "symbol": "fn_801BD60C",
+          "start": "0x801BD60C",
+          "end": "0x801BD640"
+        },
+        {
+          "symbol": "fn_801BD640",
+          "start": "0x801BD640",
+          "end": "0x801BD660"
+        },
+        {
+          "symbol": "fn_801BD660",
+          "start": "0x801BD660",
+          "end": "0x801BD690"
+        },
+        {
+          "symbol": "fn_801BD690",
+          "start": "0x801BD690",
+          "end": "0x801BD6D4"
+        },
+        {
+          "symbol": "fn_801BD6D4",
+          "start": "0x801BD6D4",
+          "end": "0x801BD6DC"
+        },
+        {
+          "symbol": "fn_801BD6DC",
+          "start": "0x801BD6DC",
+          "end": "0x801BD710"
+        },
+        {
+          "symbol": "fn_801BD710",
+          "start": "0x801BD710",
+          "end": "0x801BD758"
+        },
+        {
+          "symbol": "fn_801BD758",
+          "start": "0x801BD758",
+          "end": "0x801BD81C"
+        },
+        {
+          "symbol": "fn_801BD81C",
+          "start": "0x801BD81C",
+          "end": "0x801BD910"
+        },
+        {
+          "symbol": "fn_801BD910",
+          "start": "0x801BD910",
+          "end": "0x801BD934"
+        },
+        {
+          "symbol": "fn_801BD934",
+          "start": "0x801BD934",
+          "end": "0x801BDA30"
+        },
+        {
+          "symbol": "fn_801BDA30",
+          "start": "0x801BDA30",
+          "end": "0x801BDAC0"
+        },
+        {
+          "symbol": "fn_801BDAC0",
+          "start": "0x801BDAC0",
+          "end": "0x801BDBD4"
+        },
+        {
+          "symbol": "fn_801BDBD4",
+          "start": "0x801BDBD4",
+          "end": "0x801BDC3C"
+        },
+        {
+          "symbol": "fn_801BDC3C",
+          "start": "0x801BDC3C",
+          "end": "0x801BDF38"
+        },
+        {
+          "symbol": "fn_801BDF38",
+          "start": "0x801BDF38",
+          "end": "0x801BDF90"
+        },
+        {
+          "symbol": "fn_801BDF90",
+          "start": "0x801BDF90",
+          "end": "0x801BDFF8"
+        },
+        {
+          "symbol": "fn_801BDFF8",
+          "start": "0x801BDFF8",
+          "end": "0x801BE030"
+        },
+        {
+          "symbol": "fn_801BE030",
+          "start": "0x801BE030",
+          "end": "0x801BE040"
+        },
+        {
+          "symbol": "fn_801BE040",
+          "start": "0x801BE040",
+          "end": "0x801BE068"
+        },
+        {
+          "symbol": "fn_801BE068",
+          "start": "0x801BE068",
+          "end": "0x801BE3C0"
+        },
+        {
+          "symbol": "fn_801BE420",
+          "start": "0x801BE420",
+          "end": "0x801BE594"
+        },
+        {
+          "symbol": "fn_801BE594",
+          "start": "0x801BE594",
+          "end": "0x801BE5D0"
+        },
+        {
+          "symbol": "fn_801BE5D0",
+          "start": "0x801BE5D0",
+          "end": "0x801BE60C"
+        },
+        {
+          "symbol": "fn_801BE60C",
+          "start": "0x801BE60C",
+          "end": "0x801BE648"
+        },
+        {
+          "symbol": "fn_801BE648",
+          "start": "0x801BE648",
+          "end": "0x801BE67C"
+        },
+        {
+          "symbol": "fn_801BE67C",
+          "start": "0x801BE67C",
+          "end": "0x801BE72C"
+        },
+        {
+          "symbol": "fn_801BE72C",
+          "start": "0x801BE72C",
+          "end": "0x801BE760"
+        },
+        {
+          "symbol": "fn_801BE760",
+          "start": "0x801BE760",
+          "end": "0x801BE798"
+        },
+        {
+          "symbol": "fn_801BE798",
+          "start": "0x801BE798",
+          "end": "0x801BE7C8"
+        },
+        {
+          "symbol": "fn_801BE7C8",
+          "start": "0x801BE7C8",
+          "end": "0x801BE82C"
+        },
+        {
+          "symbol": "fn_801BE82C",
+          "start": "0x801BE82C",
+          "end": "0x801BE860"
+        },
+        {
+          "symbol": "fn_801BE860",
+          "start": "0x801BE860",
+          "end": "0x801BE910"
+        },
+        {
+          "symbol": "fn_801BE910",
+          "start": "0x801BE910",
+          "end": "0x801BE99C"
+        },
+        {
+          "symbol": "fn_801BE99C",
+          "start": "0x801BE99C",
+          "end": "0x801BEFA4"
+        },
+        {
+          "symbol": "fn_801BEFA4",
+          "start": "0x801BEFA4",
+          "end": "0x801BF090"
+        },
+        {
+          "symbol": "fn_801BF090",
+          "start": "0x801BF090",
+          "end": "0x801BF094"
+        },
+        {
+          "symbol": "fn_801BF094",
+          "start": "0x801BF094",
+          "end": "0x801BF11C"
+        },
+        {
+          "symbol": "fn_801BF11C",
+          "start": "0x801BF11C",
+          "end": "0x801BF140"
+        },
+        {
+          "symbol": "fn_801BF140",
+          "start": "0x801BF140",
+          "end": "0x801BF2B0"
+        },
+        {
+          "symbol": "fn_801BF2B0",
+          "start": "0x801BF2B0",
+          "end": "0x801BF384"
+        },
+        {
+          "symbol": "fn_801BF384",
+          "start": "0x801BF384",
+          "end": "0x801BF3C8"
+        }
+      ]
     }
   ]
 }

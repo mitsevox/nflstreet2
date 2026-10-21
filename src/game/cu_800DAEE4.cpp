@@ -434,7 +434,7 @@ void fn_801BD81C(void *p, float value);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float value);
 
 
-void fn_801BE760(void *p, unsigned short key, int flag);
+void fn_801BE760(void *p, unsigned short key, unsigned short flags);
 float fn_801CFFA0(float value);
 int fn_801CFFD0(int a, int b);
 }
