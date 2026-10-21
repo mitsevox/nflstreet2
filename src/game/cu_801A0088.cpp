@@ -51,7 +51,7 @@ void fn_8024D418(void);
 void fn_8024CB90(int, int);
 void fn_8024FC48(int);
 void fn_8024FC84(int, int, int, int, int, int, int);
-void fn_8024FA68(int, GXColor *);
+void fn_8024FA68(int, GXColor);
 void fn_80251CC4(int);
 void fn_80251604(int, int);
 void fn_8024DF64(int);
@@ -229,9 +229,9 @@ extern "C" int fn_801A0CA0(int a,State_80167094 *s,int)
 }
 extern "C" void fn_801A0E2C(void)
 {
-    GXColor c={255,255,255,255},copy;
+    GXColor c={255,255,255,255};
     fn_80210388();fn_8024D418();fn_8024CB90(9,1);fn_8024CB90(11,1);fn_8024CB90(13,1);fn_8024FC48(1);
-    fn_8024FC84(0,1,0,1,0,0,2);fn_8024FC84(2,0,0,1,0,0,2);copy=c;fn_8024FA68(0,&copy);
+    fn_8024FC84(0,1,0,1,0,0,2);fn_8024FC84(2,0,0,1,0,0,2);fn_8024FA68(0,c);
     fn_80251CC4(1);fn_80251604(0,0);fn_8024DF64(1);fn_8024DCE4(0,0,4,60,0,125);fn_8024EB28(0);
     fn_8024D450(0,9,1,4,0);fn_8024D450(0,11,1,5,0);fn_8024D450(0,13,1,4,0);fn_80252114(1);fn_802520E0(0,7,0);fn_80251A58(4,0,0,4,0);fn_801A0088(0);
 }
@@ -243,12 +243,12 @@ extern "C" void fn_801A0FAC(int a,State_80167094 *s,unsigned char mirror)
 }
 extern "C" void fn_801A105C(float x,float y,void *input,unsigned char mirror)
 {
-    State_80167094 *s=(State_80167094 *)input;GXColor c={255,255,255,255},copy;float pos[3]={x,y,0.0f};Mtx44 m;
+    State_80167094 *s=(State_80167094 *)input;GXColor c={255,255,255,255};float pos[3]={x,y,0.0f};Mtx44 m;
     fn_801A0E2C();Point_8017886C point=fn_80177FE0();
     if(fn_80177F70()!=0&&fn_80177F70()!=6){float v=fn_80178298();if(v<fn_80178A2C()&&!fn_800BA6F8()&&!fn_80027DF0())fn_80178298();}
-    copy=c;fn_8024FA68(4,&copy);fn_801D0470(fn_80228668());fn_801D04C4();fn_801D0D94(1.0f,1.0f,0.0f);fn_801D0C58(pos);fn_801D0F80(m);fn_8025251C(m,0);
+    fn_8024FA68(4,c);fn_801D0470(fn_80228668());fn_801D04C4();fn_801D0D94(1.0f,1.0f,0.0f);fn_801D0C58(pos);fn_801D0F80(m);fn_8025251C(m,0);
     fn_80251604(0,3);fn_80252034(0,0,0,5);int a=fn_801A07A8(0,&point);fn_80251604(0,0);fn_80252034(1,4,5,5);
-    fn_801D0F80(m);fn_8025251C(m,0);copy=c;fn_8024FA68(4,&copy);fn_801A0FAC(a,s,mirror);fn_80252034(0,0,0,5);fn_801D0544();fn_801D0F80(m);fn_8025251C(m,0);
+    fn_801D0F80(m);fn_8025251C(m,0);fn_8024FA68(4,c);fn_801A0FAC(a,s,mirror);fn_80252034(0,0,0,5);fn_801D0544();fn_801D0F80(m);fn_8025251C(m,0);
 }
 extern "C" void fn_801A1240(int resource)
 {
