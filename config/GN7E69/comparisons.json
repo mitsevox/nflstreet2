@@ -31428,13 +31428,25 @@
     {
       "source": "src/engine/cu_801B8C18.cpp",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv provisional unit row 0x801B8C18-0x801B91A0, shared/private type and source-form rows, and compiler row engine_cpp_nosda. All sixteen complete functions measured, including six partial bodies. External data ownership remains unclaimed; original bytes stay linked.",
+      "evidence": "evidence.tsv unit rows 0x801B8C18-0x801B91A0 and 0x801B91A0-0x801B9D00 (one translation unit, src/engine/cu_801B8C18.cpp), function rows, data rows for the .ctors word 0x80289B44 and the registry object 0x8037E820, compiler and type rows. Shared types live in include/engine/cu_801B8C18.h. Comparison only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B8C18",
-          "end": "0x801B91A0"
+          "end": "0x801B9D00"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037E820",
+          "end": "0x8037E824"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B44",
+          "end": "0x80289B48"
         }
       ],
       "functions": [
@@ -31517,34 +31529,7 @@
           "symbol": "fn_801B9174",
           "start": "0x801B9174",
           "end": "0x801B91A0"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801B91A0.cpp",
-      "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801B91A0-0x801B9D00 (src/engine/cu_801B91A0.cpp), function rows, data rows for the .ctors word 0x80289B44 and the registry object 0x8037E820, compiler and type rows. Tail of the translation unit of src/engine/cu_801B8C18.cpp (its global constructor ends the range); shared types live in include/engine/cu_801B8C18.h. Comparison only; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B91A0",
-          "end": "0x801B9D00"
         },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8037E820",
-          "end": "0x8037E824"
-        },
-        {
-          "section": ".ctors",
-          "placement": ".data2",
-          "start": "0x80289B44",
-          "end": "0x80289B48"
-        }
-      ],
-      "functions": [
         {
           "symbol": "fn_801B91A0",
           "start": "0x801B91A0",
@@ -31671,7 +31656,7 @@
           "end": "0x801B9CD4"
         },
         {
-          "symbol": "_GLOBAL_.I.fn_801B91A0",
+          "symbol": "_GLOBAL_.I.fn_801B8C18",
           "start": "0x801B9CD4",
           "end": "0x801B9D00"
         }
