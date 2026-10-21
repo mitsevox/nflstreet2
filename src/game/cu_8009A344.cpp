@@ -104,7 +104,6 @@ extern "C" int fn_8009A77C(Object_80039F5C *p)
     int team = p->mIdBytes[2] ^ 1;
     int base = fn_800ACF40(p, 70);
     signed char bonus;
-    signed char adjust;
     short chance;
     short rating;
 
@@ -120,8 +119,7 @@ extern "C" int fn_8009A77C(Object_80039F5C *p)
     } else {
         rating = p->mRatings[8];
     }
-    adjust = (signed char)((rating - 128) * 0.25f);
-    chance += adjust;
+    chance = chance + (signed char)((rating - 128) * 0.25f);
     if (chance > (signed char)fn_802372EC(0, 100)) {
         result = 1;
     }
