@@ -21268,6 +21268,38 @@
         "introduced_blob": "12f86e7935d1ce7ba73a75a0f836ff2a66a1c29e",
         "merged_via": 985
       }
+    },
+    {
+      "source": "src/game/cu_800DAEE4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800DB308"
+      ],
+      "provenance": {
+        "pull_request": 986,
+        "merged_via": 986,
+        "commit": "4b4cd41783b788199ba025fa20a3300e003f6109",
+        "introduced_blob": "2e8c0ca839b4be806e0c6b79250807098441bfdb"
+      }
+    },
+    {
+      "source": "src/game/cu_800F0960.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800F0FD0",
+        "0x800F268C",
+        "0x800F4038"
+      ],
+      "provenance": {
+        "pull_request": 986,
+        "merged_via": 986,
+        "commit": "4b4cd41783b788199ba025fa20a3300e003f6109",
+        "introduced_blob": "bc9e5fe435911ba1b87651ede52e8a337fb63eb9"
+      }
     }
   ],
   "target": "GN7E69",
