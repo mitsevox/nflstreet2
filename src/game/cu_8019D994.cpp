@@ -124,40 +124,39 @@ extern "C" void fn_8019E00C(Pose_80041930 *pose, BlendEntry_8019EDDC *entry, int
     unsigned int count = frame.count;
     if (count > 64)
         count = 64;
-    Frame_8019D3B8 *pFrame = &frame;
     if (special) {
         pose->mUnknown8[0] = 0.0f;
         pose->mUnknown8[2] = 0.0f;
-        pose->mUnknown8[1] = pFrame->word6 * 0.000244140625f;
-        if (pFrame->flags & 0x80) {
-            int x = (unsigned short)pFrame->word4 | ((pFrame->flags & 3) << 16);
-            int z = (unsigned short)pFrame->word8 | ((pFrame->flags & 0x18) << 13);
-            if ((pFrame->flags & 4) && x)
+        pose->mUnknown8[1] = frame.word6 * 0.000244140625f;
+        if (frame.flags & 0x80) {
+            int x = (unsigned short)frame.word4 | ((frame.flags & 3) << 16);
+            int z = (unsigned short)frame.word8 | ((frame.flags & 0x18) << 13);
+            if ((frame.flags & 4) && x)
                 x |= 0xFFFC0000;
-            if ((pFrame->flags & 0x20) && z)
+            if ((frame.flags & 0x20) && z)
                 z |= 0xFFFC0000;
             entry->mUnknown24[0] = z * 0.000244140625f;
             entry->mUnknown24[1] = x * 0.000244140625f;
         } else {
-            entry->mUnknown24[0] = pFrame->word8 * 0.000244140625f;
-            entry->mUnknown24[1] = pFrame->word4 * 0.000244140625f;
+            entry->mUnknown24[0] = frame.word8 * 0.000244140625f;
+            entry->mUnknown24[1] = frame.word4 * 0.000244140625f;
         }
     } else {
-        if (pFrame->flags & 0x80) {
-            int x = (unsigned short)pFrame->word4 | ((pFrame->flags & 3) << 16);
-            int z = (unsigned short)pFrame->word8 | ((pFrame->flags & 0x18) << 13);
-            if ((pFrame->flags & 4) && x)
+        if (frame.flags & 0x80) {
+            int x = (unsigned short)frame.word4 | ((frame.flags & 3) << 16);
+            int z = (unsigned short)frame.word8 | ((frame.flags & 0x18) << 13);
+            if ((frame.flags & 4) && x)
                 x |= 0xFFFC0000;
-            if ((pFrame->flags & 0x20) && z)
+            if ((frame.flags & 0x20) && z)
                 z |= 0xFFFC0000;
             pose->mUnknown8[0] = x * 0.000244140625f;
             pose->mUnknown8[2] = z * 0.000244140625f;
         } else {
-            pose->mUnknown8[0] = pFrame->word4 * 0.000244140625f;
-            pose->mUnknown8[2] = pFrame->word8 * 0.000244140625f;
+            pose->mUnknown8[0] = frame.word4 * 0.000244140625f;
+            pose->mUnknown8[2] = frame.word8 * 0.000244140625f;
         }
-        pose->mUnknown8[1] = pFrame->word6 * 0.000244140625f;
-        pose->mUnknown32 = pFrame->word2 << 8;
+        pose->mUnknown8[1] = frame.word6 * 0.000244140625f;
+        pose->mUnknown32 = frame.word2 << 8;
     }
     float height = pose->mUnknown8[1];
     if (scale != 1.0f && height > 1.1593530178070068f)
@@ -170,14 +169,14 @@ extern "C" void fn_8019E00C(Pose_80041930 *pose, BlendEntry_8019EDDC *entry, int
             mode = 2;
     }
     if (mode == 1) {
-        pose->mUnknown20[0] = pFrame->vectorA[0] * 0.0009765625f;
-        pose->mUnknown20[1] = pFrame->vectorA[1] * 0.0009765625f;
-        pose->mUnknown20[2] = pFrame->vectorA[2] * 0.0009765625f;
+        pose->mUnknown20[0] = frame.vectorA[0] * 0.0009765625f;
+        pose->mUnknown20[1] = frame.vectorA[1] * 0.0009765625f;
+        pose->mUnknown20[2] = frame.vectorA[2] * 0.0009765625f;
         fn_8019DF38(pose->mUnknown36, samples, 25, context);
     } else if (mode == 2) {
-        pose->mUnknown20[0] = pFrame->vector10[0] * 0.0009765625f;
-        pose->mUnknown20[1] = pFrame->vector10[1] * 0.0009765625f;
-        pose->mUnknown20[2] = pFrame->vector10[2] * 0.0009765625f;
+        pose->mUnknown20[0] = frame.vector10[0] * 0.0009765625f;
+        pose->mUnknown20[1] = frame.vector10[1] * 0.0009765625f;
+        pose->mUnknown20[2] = frame.vector10[2] * 0.0009765625f;
         fn_8019DF38(pose->mUnknown36, samples, 19, context);
     } else {
         pose->mUnknown20[0] = lbl_802F26FC[0];
@@ -191,6 +190,6 @@ extern "C" void fn_8019E00C(Pose_80041930 *pose, BlendEntry_8019EDDC *entry, int
         memcpy(pose->mUnknown48, samples, count * 6);
     Pair_8019D800 *pair = &context->mUnknown4;
     entry->mUnknown12[0] = fn_8019D800(samples[0], 0, 0, context, pair) << 8;
-    entry->mUnknown12[1] = pFrame->word2 << 8;
+    entry->mUnknown12[1] = frame.word2 << 8;
     entry->mUnknown12[2] = fn_8019D800(samples[2], 0, 2, context, pair) << 8;
 }

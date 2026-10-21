@@ -406,7 +406,7 @@ void fn_80175038(Input_80174868 *in, Output_80174868 *out) {
       out->mUnknown14 = 0;
     } else {
       out->mUnknown8 = in->mUnknown0;
-      out->mUnknown0 = fn_80174750(in->mUnknown0, 10.0f, in->mUnknown21);
+      out->mUnknown0 = fn_80174750(out->mUnknown8, 10.0f, in->mUnknown21);
       out->mUnknown14 = 0;
       out->mUnknown10 = 1;
     }
@@ -443,7 +443,7 @@ void fn_80175200(Input_80174868 *in, Output_80174868 *out) {
   if (!(in->mUnknown0 <= in->mUnknown8 + 10.0f))
     out->mUnknown0 = in->mUnknown8;
   else
-    out->mUnknown0 = fn_80174750(in->mUnknown0, 10.0f, in->mUnknown21);
+    out->mUnknown0 = fn_80174750(out->mUnknown8, 10.0f, in->mUnknown21);
   if (in->mUnknown14 != 6) {
     if (!(in->mUnknown8 >= -fn_80178A2C())) {
       out->mUnknown14 = -2;
@@ -472,7 +472,7 @@ void fn_801752C0(Input_80174868 *in, Output_80174868 *out) {
 }
 void fn_801753A4(Input_80174868 *in, Output_80174868 *out) {
   out->mUnknown8 = in->mUnknown0;
-  out->mUnknown0 = fn_80174750(out->mUnknown8, 5.0f, in->mUnknown21);
+  out->mUnknown0 = fn_80174750(in->mUnknown0, 5.0f, in->mUnknown21);
   if (in->mUnknown14 != 6)
     out->mUnknown10 = out->mUnknown0 < in->mUnknownC ? 1 : 2;
   else if (in->mUnknown24 > 0) {
@@ -492,7 +492,7 @@ void fn_80175464(Input_80174868 *in, Output_80174868 *out) {
     out->mUnknown14 = in->mUnknown24;
   } else {
     out->mUnknown8 = in->mUnknown0;
-    out->mUnknown0 = fn_80174750(in->mUnknown0, 15.0f, in->mUnknown21);
+    out->mUnknown0 = fn_80174750(out->mUnknown8, 15.0f, in->mUnknown21);
     out->mUnknown10 = in->mUnknown14 == 6 ? 1 : 2;
     out->mUnknown14 = 0;
   }
