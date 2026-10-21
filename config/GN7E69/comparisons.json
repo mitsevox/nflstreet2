@@ -36271,6 +36271,31 @@
       ]
     },
     {
+      "source": "src/game/cu_80148D20.cpp",
+      "profile": "game_cpp",
+      "evidence": "Claim #974; two complete functions inside the retained provisional cu_801485B4 survey group: 0x80148D20-0x80149014, the update and select callbacks whose addresses fn_80148AF8 passes to 0x8003EBC4 and 0x8003EBE4 in place of the defaults fn_8003E4E0 and fn_8003E5E0. No literal or data word is referenced. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80148D20",
+          "end": "0x80149014"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80148D20",
+          "start": "0x80148D20",
+          "end": "0x80148DFC"
+        },
+        {
+          "symbol": "fn_80148DFC",
+          "start": "0x80148DFC",
+          "end": "0x80149014"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
