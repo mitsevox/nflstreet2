@@ -457,10 +457,10 @@ void fn_801752C0(Input_80174868 *in, Output_80174868 *out) {
     out->mUnknown14 = in->mUnknown24;
     return;
   }
-  out->mUnknown8 =
-      (!(in->mUnknown4 <= in->mUnknown0) && fn_80178308() == fn_80178348())
-          ? in->mUnknown4
-          : in->mUnknown0;
+  if (!(in->mUnknown4 <= in->mUnknown0) && fn_80178308() == fn_80178348())
+    out->mUnknown8 = in->mUnknown4;
+  else
+    out->mUnknown8 = in->mUnknown0;
   out->mUnknown0 = fn_80174750(out->mUnknown8, 15.0f, in->mUnknown21);
   out->mUnknown10 = 2;
   out->mUnknown14 = 0;
