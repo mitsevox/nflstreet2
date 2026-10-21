@@ -5646,11 +5646,12 @@ int fn_8011F904(void *p, void *pBuffer)
 int fn_8011F99C(void *p, void *pBuffer)
 {
     Lookup_8012078C *pLookup = (Lookup_8012078C *)p;
+    void *pData;
 
     *pLookup = *(Lookup_8012078C *)pBuffer;
-    pBuffer = (char *)pBuffer + sizeof(Lookup_8012078C);
-    memcpy(pLookup->mpUnknown0, pBuffer, pLookup->mUnknown16);
-    pBuffer = (char *)pBuffer + pLookup->mUnknown16;
+    pData = (char *)pBuffer + sizeof(Lookup_8012078C);
+    memcpy(pLookup->mpUnknown0, pData, pLookup->mUnknown16);
+    pBuffer = (char *)pData + pLookup->mUnknown16;
     memcpy(pLookup->mpUnknown4, pBuffer, pLookup->mUnknown16);
     pBuffer = (char *)pBuffer + pLookup->mUnknown16;
     memcpy(pLookup->mpUnknown8, pBuffer, pLookup->mUnknown16 * sizeof(Entry_8011FBE0));
