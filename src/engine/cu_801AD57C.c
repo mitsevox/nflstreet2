@@ -386,7 +386,6 @@ u32 fn_801ADF44(int offset)
     return 0;
 }
 
-void fn_801AE018(int unused, OSContext *context, u32 dsisr, u32 dar);
 
 asm(".globl fn_801ADF64\n"
     ".type fn_801ADF64,@function\n"
