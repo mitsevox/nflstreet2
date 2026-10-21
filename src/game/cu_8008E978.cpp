@@ -9320,7 +9320,7 @@ struct Listing_800ADE6C {
 
 extern "C" {
 void *fn_801BAB34(void *p, int key);
-void *fn_801BAD70(Object_801BC084 *pRecord, int b, int handle, int c);
+void *fn_801BAD70(Object_801BC084 *pRecord, int b, int handle, unsigned int c);
 
 extern void *lbl_8030F958[11];
 }

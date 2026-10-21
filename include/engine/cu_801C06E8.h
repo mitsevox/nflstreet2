@@ -54,8 +54,14 @@ typedef struct TextureDesc_801C0928 {
     int mData;
 } TextureDesc_801C0928;
 
+/* Configuration passed to fn_801C06E8, which reads only the capacity +0. The
+   game's instance at 0x803EB22A (src/game/cu_801444D8.cpp) is 6 bytes,
+   initialized {8, 0, 0, 0}, and the byte +4 is stored before the call. */
 typedef struct TextureConfig_801C06E8 {
     unsigned short mCapacity;
+    unsigned short mUnknown2;
+    unsigned char mUnknown4;
+    unsigned char mUnknown5;
 } TextureConfig_801C06E8;
 
 typedef struct TextureFile_801C0BA8 {

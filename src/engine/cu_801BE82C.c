@@ -2,8 +2,8 @@
 
 void fn_801BE910(Collection_801BE594 *p, unsigned short key, int frames);
 Transition_801BEFA4 *fn_801BEFA4(List_801BAC1C *pTable, Object_801BA03C *pObject, Record_800D81C8 *pRecords,
-                                 unsigned short fromType, unsigned short fromFrame, unsigned short fromKey,
-                                 unsigned short toType, unsigned short toKey, unsigned short toFrame);
+                                 unsigned short fromAnim, unsigned short fromFileNum, unsigned short fromReadPos,
+                                 unsigned short state, unsigned short toAnim, unsigned short toFileNum);
 
 int fn_801BE82C(unsigned short type, unsigned short key)
 {
@@ -142,18 +142,18 @@ void fn_801BE99C(Collection_801BE594 *p, Object_801BA03C *pObject, Record_800D81
 }
 
 Transition_801BEFA4 *fn_801BEFA4(List_801BAC1C *pTable, Object_801BA03C *pObject, Record_800D81C8 *pRecords,
-                                 unsigned short fromType, unsigned short fromFrame, unsigned short fromKey,
-                                 unsigned short toType, unsigned short toKey, unsigned short toFrame)
+                                 unsigned short fromAnim, unsigned short fromFileNum, unsigned short fromReadPos,
+                                 unsigned short state, unsigned short toAnim, unsigned short toFileNum)
 {
     Transition_801BEFA4 *pResult = 0;
     unsigned short key;
     int i;
 
-    if (toKey != 0xFFFF) {
-        key = toFrame | 0x8000;
+    if (toAnim != 0xFFFF) {
+        key = toFileNum | 0x8000;
     } else {
         key = 0xFFFF;
-        toKey = toType;
+        toAnim = state;
     }
     for (i = 0; i < pTable->mCount; i++) {
         StateTrans_801BAC1C *pGroup = pTable->mEntries[i].mpUnknown4;
@@ -161,9 +161,9 @@ Transition_801BEFA4 *fn_801BEFA4(List_801BAC1C *pTable, Object_801BA03C *pObject
 
         for (j = 0; j < pGroup->mCount; j++) {
             if ((pGroup->mEntries[j].mUnknown0 == key || (key == 0xFFFF && !(pGroup->mEntries[j].mUnknown0 & 0x8000))) &&
-                pGroup->mEntries[j].mUnknown2 == toKey && pGroup->mEntries[j].mUnknown4 == fromType &&
-                (fromType == 0xFFFF ||
-                 (fromKey >= pGroup->mEntries[j].mUnknown6 && fromKey <= pGroup->mEntries[j].mUnknown8))) {
+                pGroup->mEntries[j].mUnknown2 == toAnim && pGroup->mEntries[j].mUnknown4 == fromAnim &&
+                (fromAnim == 0xFFFF ||
+                 (fromReadPos >= pGroup->mEntries[j].mUnknown6 && fromReadPos <= pGroup->mEntries[j].mUnknown8))) {
                 pResult = pGroup->mEntries[j].mpUnknownC;
             }
         }

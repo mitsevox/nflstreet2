@@ -2,7 +2,7 @@
 #include "engine/cu_801BA818.h"
 #include "engine/fn_801F7BD4.h"
 
-typedef int (*Callback_803EBB7C)(void *pUser, int op, unsigned int flags);
+typedef int (*Callback_803EBB7C)(void *pUser, int op, unsigned int state);
 
 extern unsigned char lbl_803EBB78;
 extern Callback_803EBB7C lbl_803EBB7C;
@@ -23,9 +23,9 @@ int fn_801B9D50(int op)
     return lbl_803EBB80(0, op, 0);
 }
 
-void fn_801B9D84(unsigned int flags)
+void fn_801B9D84(unsigned int state)
 {
-    lbl_8037E84C[++lbl_803ECEB5] = flags;
+    lbl_8037E84C[++lbl_803ECEB5] = state;
 }
 
 void fn_801B9DA8(void *pUser)

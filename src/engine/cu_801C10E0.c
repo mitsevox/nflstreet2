@@ -1,9 +1,6 @@
 #include "game/fn_801D2B7C.h"
 #include "engine/fn_801EFD2C.h"
-
-typedef struct Lock_801F8014 {
-    int mUnknown0[8];
-} Lock_801F8014;
+#include "engine/fn_801F8014.h"
 
 typedef struct Request_801C10E0 {
     void *mArchive;
@@ -35,10 +32,6 @@ extern Loader_801C1260 *lbl_803EBBC4;
 extern unsigned char lbl_803EBBC8;
 extern volatile int lbl_803EBBCC;
 
-extern void fn_801F7FA8(Lock_801F8014 *lock);
-extern void fn_801F8014(Lock_801F8014 *lock);
-extern void fn_801F809C(Lock_801F8014 *lock);
-extern void fn_801F80D0(Lock_801F8014 *lock);
 
 void fn_801C1448(int a, int b, int c, int d, Loader_801C1260 *loader);
 void fn_801C1564(Loader_801C1260 *loader);

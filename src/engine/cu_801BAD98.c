@@ -5,24 +5,6 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801EF390.h"
 
-typedef struct Def_801BB2D8 {
-    int mSize;
-    unsigned short mFlags;
-    unsigned char mUnknown6[2];
-    AnimFileFormat_t *mpData;
-} Def_801BB2D8;
-
-typedef struct Config_801BB2D8 {
-    void *mpArchive;
-    int mUnknown4;
-    unsigned short mUnknown8;
-    unsigned short mUnknownA;
-    unsigned short mUnknownC;
-    unsigned char mUnknownE[2];
-    int mUnknown10;
-    Def_801BB2D8 *mpBuffers;
-} Config_801BB2D8;
-
 /* 32-byte slot record of the table at lbl_803ED5FC. */
 typedef struct Buffer_801BB2D8 {
     int mId;
@@ -121,7 +103,7 @@ int fn_801F0F18(int a);
 void fn_801F81AC(void);
 int fn_801F0C50(void *pArchive, int id);
 int fn_801EFF80(void *pArchive, int id, void *pDest);
-AnimFileFormat_t *fn_801EF548(void *pArchive, int id, int heap, int priority,
+AnimFileFormat_t *fn_801EF548(void *pArchive, int id, int heap, int arg,
                               void (*pCallback)(int, int, int, int, Request_801BAE08 *), Request_801BAE08 *pRequest);
 int fn_801CB120(void);
 void fn_801CAF24(void);
@@ -670,7 +652,7 @@ void fn_801BC0E8(int slot, Info_801BC0E8 *pInfo)
     unsigned short k;
     unsigned int n;
     unsigned short m;
-    int standalone;
+    int setTypeBit;
 
     if (fn_801B9EF8() == 1) {
         pBase = (char *)lbl_803ED5FC[slot].mpData;
@@ -714,7 +696,7 @@ void fn_801BC0E8(int slot, Info_801BC0E8 *pInfo)
     for (n = 0; n < pBig->mCount; n++) {
         for (m = 0; m <= 1; m++) {
             pPart = &pBig->mEntries[n].mParts[m];
-            standalone = 1;
+            setTypeBit = 1;
             if (pPart->mSize) {
                 pPart->mpFile = (AnimFileFormat_t *)(pBase + (int)pPart->mpFile);
                 switch (m) {
@@ -723,7 +705,7 @@ void fn_801BC0E8(int slot, Info_801BC0E8 *pInfo)
                         pPart->mpFile->flags |= 0x800;
                     break;
                 case 1:
-                    standalone = 0;
+                    setTypeBit = 0;
                     if (pPart->mTag == 0x4246464D)
                         pPart->mpFile->flags |= 0x400;
                     break;
@@ -741,7 +723,7 @@ void fn_801BC0E8(int slot, Info_801BC0E8 *pInfo)
                 pBuffer->mPart = n;
                 pBuffer->mParent = slot;
                 pBuffer->mObjectType = fn_801BAB24(pFile);
-                if (standalone)
+                if (setTypeBit)
                     pBuffer->mObjectType |= 0x4000;
                 pBuffer->mStatus = 1;
                 pPart->mpFile->flags |= 0x100;

@@ -57,8 +57,8 @@ extern u8 lbl_802CC651;
 extern int lbl_802C2A5C;
 
 extern int fn_801ACB9C(void);
-extern void fn_801ACC24(Reply_802CC5C0 *reply, int size);
-extern void fn_801ACDE0(Reply_802CC5C0 *reply, int size);
+extern int fn_801ACC24(void *buf, int size);
+extern int fn_801ACDE0(void *buf, int size);
 extern void fn_801AD11C(void);
 extern void fn_801AD16C(u8 *buf, u32 size);
 extern void fn_801AD1DC(u8 *buf, u32 size);
@@ -257,9 +257,9 @@ int fn_801ADB40(void)
     return lbl_802CC5B8;
 }
 
-void fn_801ADB94(u32 event)
+void fn_801ADB94(u32 state)
 {
-    switch (event) {
+    switch (state) {
     case 1:
         fn_801AD66C();
         break;

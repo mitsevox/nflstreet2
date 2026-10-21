@@ -31,6 +31,25 @@ typedef struct Pair_801BF7BC {
     short mUnknown2;
 } Pair_801BF7BC;
 
+/* Buffer definition (stride 0xC) and init configuration read by fn_801BB2D8. */
+typedef struct Def_801BB2D8 {
+    int mSize;
+    unsigned short mFlags;
+    unsigned char mUnknown6[2];
+    AnimFileFormat_t *mpData;
+} Def_801BB2D8;
+
+typedef struct Config_801BB2D8 {
+    void *mpArchive;
+    int mUnknown4;
+    unsigned short mUnknown8;
+    unsigned short mUnknownA;
+    unsigned short mUnknownC;
+    unsigned char mUnknownE[2];
+    int mUnknown10;
+    Def_801BB2D8 *mpBuffers;
+} Config_801BB2D8;
+
 struct Cache_801BFCC4;
 struct Info_801BC0E8;
 
@@ -49,6 +68,7 @@ void *fn_801BAC9C(AnimFileFormat_t *pFile, int stateRef);
 unsigned int fn_801BACB0(AnimFileFormat_t *pFile);
 unsigned short fn_801BACBC(AnimFileFormat_t *pFile, int stateRef);
 void *fn_801BAD70(AnimFileFormat_t *pFile, int a, int b, unsigned int index);
+int fn_801BB2D8(Config_801BB2D8 *pConfig);
 void fn_801BBB54(int objectType);
 void fn_801BBC3C(int objectType, int state, List_801BAB88 *pList);
 void fn_801BBDCC(int objectType, int state, List_801BAC1C *pList);

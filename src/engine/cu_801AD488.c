@@ -1,14 +1,8 @@
-typedef struct Struct_801AD488 {
-    char gpr;
-    char fpr;
-    char reserved[2];
-    char *input_arg_area;
-    char *reg_save_area;
-} Struct_801AD488;
+#include <stdarg.h>
 
-void *fn_801AD488(Struct_801AD488 *list, unsigned char type);
+void *fn_801AD488(va_list list, unsigned char type);
 
-void *fn_801AD488(Struct_801AD488 *list, unsigned char type)
+void *fn_801AD488(va_list list, unsigned char type)
 {
     char *addr;
     char *reg = &list->gpr;

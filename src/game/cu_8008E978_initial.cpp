@@ -6,6 +6,7 @@
 #include "game/fn_801EEB44.h"
 #include "game/fn_801D2B7C.h"
 #include "game/AnimFileFormat.h"
+#include "engine/cu_801BA818.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_80040818.h"
 #include "game/cu_80041210.h"
@@ -13,16 +14,6 @@
 #include "game/cu_80067C10.h"
 #include "game/cu_8003108C.h"
 
-struct Config_801BB2D8 {
-    void *mpArchive;
-    int mUnknown4;
-    unsigned short mUnknown8;
-    unsigned short mUnknown10;
-    unsigned short mUnknown12;
-    char mUnknown14[2];
-    int mUnknown16;
-    void *mpUnknown20;
-};
 struct Entry_802D71D8 {
     int mId;
     union {
@@ -74,7 +65,6 @@ void fn_801CC8AC(void *, int);
 void fn_801B9EEC(int (*)(void *,int,unsigned int), int (*)(void *,int,unsigned int));
 void fn_801BA848(void (*)(AnimFileFormat_t *));
 void fn_801BAEA4(void (*)(AnimFileFormat_t *));
-int fn_801BB2D8(Config_801BB2D8 *pConfig);
 void fn_801F0F18(int);
 void *fn_801BB570(int, int, int, int);
 void fn_801BB480(void);

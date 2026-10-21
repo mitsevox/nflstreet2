@@ -8,7 +8,7 @@ extern "C" {
 #endif
 int fn_801B9D00(int op);
 int fn_801B9D50(int op);
-void fn_801B9D84(unsigned int flags);
+void fn_801B9D84(unsigned int state);
 void fn_801B9DA8(void *pUser);
 void fn_801B9DCC(void);
 void fn_801B9DDC(void);

@@ -1,17 +1,7 @@
 #ifndef ENGINE_CU_801BFFA8_H
 #define ENGINE_CU_801BFFA8_H
 
-typedef struct Curve_801C02EC {
-    unsigned char mUnknown0[4];
-    float mUnknown4;
-    float mUnknown8;
-    void *mpKeys;
-} Curve_801C02EC;
-
-typedef struct Sample_801C009C {
-    float mUnknown0[3];
-    Curve_801C02EC mCurves[15];
-} Sample_801C009C;
+#include "engine/Sample_801C009C.h"
 
 typedef struct Group_801C001C {
     unsigned short mId;
