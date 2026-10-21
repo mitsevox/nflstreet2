@@ -20850,6 +20850,69 @@
         "introduced_blob": "268d7ba909babf9a33b3a4c622f3d2107dd59d78",
         "merged_via": 977
       }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800F986C",
+        "0x800FBF74"
+      ],
+      "provenance": {
+        "pull_request": 994,
+        "merged_via": 994,
+        "commit": "d39361568f1b949b388db0dde5459d2faeae018d",
+        "introduced_blob": "86c70ce5d0ed9f20e62a1526a4018f8efee441b6"
+      }
+    },
+    {
+      "source": "src/game/cu_800F81C0.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800F81C0"
+      ],
+      "provenance": {
+        "pull_request": 994,
+        "merged_via": 994,
+        "commit": "d39361568f1b949b388db0dde5459d2faeae018d",
+        "introduced_blob": "b56c86515b947ed05b454883fe1d85b7ce6b09e7"
+      }
+    },
+    {
+      "source": "src/game/cu_800F930C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800F9480",
+        "0x800FA0DC"
+      ],
+      "provenance": {
+        "pull_request": 994,
+        "merged_via": 994,
+        "commit": "d39361568f1b949b388db0dde5459d2faeae018d",
+        "introduced_blob": "174a9a83be17ab226587477fce013de5bf5dae64"
+      }
+    },
+    {
+      "source": "src/game/cu_80104C9C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80105168",
+        "0x801061E8"
+      ],
+      "provenance": {
+        "pull_request": 994,
+        "merged_via": 994,
+        "commit": "d39361568f1b949b388db0dde5459d2faeae018d",
+        "introduced_blob": "cc52b6cf9cdcb09b0cf6e0a2f5eb962f354d50db"
+      }
     }
   ],
   "target": "GN7E69",
