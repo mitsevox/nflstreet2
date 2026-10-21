@@ -757,10 +757,8 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, Object_801BA03C *pObject, Rec
         }
         if (!freed) {
             for (i = 0; i < 4; i++) {
-                Slot_801BE594 *pSlot = &p->mUnknown4[i];
-
-                if (pSlot->mUnknown2 == 1 && !(pSlot->mUnknown4C.mUnknown0 > 1e-07f) && (pSlot->mUnknown0 & 0x8000) &&
-                    pSlot->mUnknown0 != 0xFFFF && fn_801BA568(pObject, pRecords, pSlot->mUnknown0) == 0) {
+                if (p->mUnknown4[i].mUnknown2 == 1 && !(p->mUnknown4[i].mUnknown4C.mUnknown0 > 1e-07f) && (p->mUnknown4[i].mUnknown0 & 0x8000) &&
+                    p->mUnknown4[i].mUnknown0 != 0xFFFF && fn_801BA568(pObject, pRecords, p->mUnknown4[i].mUnknown0) == 0) {
                     fn_801BDBD4(p, pObject, pRecords, i, pOwner);
                     freed = 1;
                     fn_801BDAC0(p);
@@ -770,10 +768,8 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, Object_801BA03C *pObject, Rec
         }
         if (!freed) {
             for (i = 0; i < 4; i++) {
-                Slot_801BE594 *pSlot = &p->mUnknown4[i];
-
-                if (pSlot->mUnknown2 == 1 && pSlot->mUnknown0 != 0xFFFF &&
-                    fn_801BA568(pObject, pRecords, pSlot->mUnknown0) == 0) {
+                if (p->mUnknown4[i].mUnknown2 == 1 && p->mUnknown4[i].mUnknown0 != 0xFFFF &&
+                    fn_801BA568(pObject, pRecords, p->mUnknown4[i].mUnknown0) == 0) {
                     fn_801BDBD4(p, pObject, pRecords, i, pOwner);
                     freed = 1;
                     fn_801BDAC0(p);
@@ -787,7 +783,7 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, Object_801BA03C *pObject, Rec
 
             for (i = 0; i < 4; i++) {
                 if (p->mUnknown4[i].mUnknown2 == 1 && p->mUnknown4[i].mUnknown0 != 0xFFFF &&
-                    p->mUnknown4[i].mUnknown4C.mUnknown0 < lowest) {
+                    !(p->mUnknown4[i].mUnknown4C.mUnknown0 >= lowest)) {
                     lowest = p->mUnknown4[i].mUnknown4C.mUnknown0;
                     index = i;
                 }
@@ -938,13 +934,13 @@ int fn_801BE068(Collection_801BE594 *p, Object_801BA03C *pObject, Record_801BCA7
     return 0;
 }
 
-void fn_801BE3C0(Collection_801BE594 *p, unsigned short key, int a, int b)
+void fn_801BE3C0(Collection_801BE594 *p, unsigned short key, int a, int b, float from, float to)
 {
-    Slot_801BE594 *pSlot;
+    int i;
 
-    for (pSlot = p->mUnknown4; pSlot <= &p->mUnknown4[3]; pSlot++) {
-        if (pSlot->mUnknown0 == key && pSlot->mUnknown2 == 3) {
-            fn_801BF3C8(&pSlot->mUnknown4C, a, b, 0.0f, 0.0f);
+    for (i = 0; i <= 3; i++) {
+        if (p->mUnknown4[i].mUnknown0 == key && p->mUnknown4[i].mUnknown2 == 3) {
+            fn_801BF3C8(&p->mUnknown4[i].mUnknown4C, a, b, from, to);
             return;
         }
     }
@@ -955,22 +951,20 @@ void fn_801BE420(Collection_801BE594 *p, Object_801BA03C *pObject, Record_801BCA
     int i;
 
     for (i = 0; i <= 3; i++) {
-        Slot_801BE594 *pSlot = &p->mUnknown4[i];
-
-        if (pSlot->mUnknown2 == 0) {
+        if (p->mUnknown4[i].mUnknown2 == 0) {
             break;
         }
-        pSlot->mUnknown8 -= step;
-        if (pSlot->mUnknown8 < 0.0f) {
-            pSlot->mUnknown8 = 0.0f;
-            fn_801BF46C(&pSlot->mUnknown4C, step);
-            if (pSlot->mUnknown4C.mUnknown0 > 1e-07f) {
-                if (pSlot->mUnknown4 & 1) {
-                    fn_801BDA30(pObject->mUnknown2, pSlot->mUnknown0, pOwner, 2, pObject, pRecords);
+        p->mUnknown4[i].mUnknown8 -= step;
+        if (!(p->mUnknown4[i].mUnknown8 >= 0.0f)) {
+            p->mUnknown4[i].mUnknown8 = 0.0f;
+            fn_801BF46C(&p->mUnknown4[i].mUnknown4C, step);
+            if (!(p->mUnknown4[i].mUnknown4C.mUnknown0 <= 1e-07f)) {
+                if (p->mUnknown4[i].mUnknown4 & 1) {
+                    fn_801BDA30(pObject->mUnknown2, p->mUnknown4[i].mUnknown0, pOwner, 2, pObject, pRecords);
                 }
-                if (fn_801BA568(pObject, pRecords, pSlot->mUnknown0) == 0) {
-                    if (pSlot->mUnknown2 == 3) {
-                        fn_801BDA30(pObject->mUnknown2, pSlot->mUnknown0, pOwner, 1, pObject, pRecords);
+                if (fn_801BA568(pObject, pRecords, p->mUnknown4[i].mUnknown0) == 0) {
+                    if (p->mUnknown4[i].mUnknown2 == 3) {
+                        fn_801BDA30(pObject->mUnknown2, p->mUnknown4[i].mUnknown0, pOwner, 1, pObject, pRecords);
                     } else {
                         fn_801BDBD4(p, pObject, pRecords, i, pOwner);
                     }
@@ -1106,7 +1100,7 @@ unsigned int fn_801BE860(Collection_801BE594 *p, Object_801BA03C *pObject, Recor
     for (i = 0; i < count; i++) {
         unsigned int index = fn_801BA5A8(pObject, pRecords, key, i);
 
-        if (highest < pRecords[index].mUnknown30) {
+        if (!(highest >= pRecords[index].mUnknown30)) {
             highest = pRecords[index].mUnknown30;
             best = index;
         }
@@ -1119,9 +1113,8 @@ void fn_801BE910(Collection_801BE594 *p, unsigned short key, int frames)
     int i;
 
     for (i = 0; i < 4; i++) {
-        unsigned short old = p->mUnknown4[i].mUnknown0;
-
-        if (old == key || ((old & 0x8000) && old != 0xFFFF)) {
+        if (p->mUnknown4[i].mUnknown0 == key
+            || ((p->mUnknown4[i].mUnknown0 & 0x8000) && p->mUnknown4[i].mUnknown0 != 0xFFFF)) {
             fn_801BF4A8(&p->mUnknown4[i].mUnknown4C, frames, -1.0f, 0.0f);
         }
     }
@@ -1143,14 +1136,14 @@ Transition_801BEFA4 *fn_801BEFA4(Transitions_801BEFA4 *pTable, Object_801BA03C *
     }
     for (i = 0; i < pTable->mUnknown0; i++) {
         Group_801BEFA4 *pGroup = pTable->mUnknownC[i].mpUnknown0;
-        Rule_801BEFA4 *pRule = pGroup->mUnknown4;
         int j;
 
-        for (j = 0; j < pGroup->mUnknown0; j++, pRule++) {
-            if ((pRule->mUnknown0 == key || (key == 0xFFFF && !(pRule->mUnknown0 & 0x8000))) &&
-                pRule->mUnknown2 == toKey && pRule->mUnknown4 == fromType &&
-                (fromType == 0xFFFF || (fromKey >= pRule->mUnknown6 && fromKey <= pRule->mUnknown8))) {
-                pResult = pRule->mpUnknownC;
+        for (j = 0; j < pGroup->mUnknown0; j++) {
+            if ((pGroup->mUnknown4[j].mUnknown0 == key || (key == 0xFFFF && !(pGroup->mUnknown4[j].mUnknown0 & 0x8000))) &&
+                pGroup->mUnknown4[j].mUnknown2 == toKey && pGroup->mUnknown4[j].mUnknown4 == fromType &&
+                (fromType == 0xFFFF ||
+                 (fromKey >= pGroup->mUnknown4[j].mUnknown6 && fromKey <= pGroup->mUnknown4[j].mUnknown8))) {
+                pResult = pGroup->mUnknown4[j].mpUnknownC;
             }
         }
     }
@@ -1168,11 +1161,11 @@ void fn_801BF094(Fade_801BF3C8 *p, float step)
 
     if (value != target) {
         p->mUnknown0 = (target - p->mUnknownC) / (float)p->mUnknown10.mUnknown0 * step + value;
-        if (p->mUnknownC < target) {
-            if (p->mUnknown0 > target) {
+        if (!(p->mUnknownC >= target)) {
+            if (!(p->mUnknown0 <= target)) {
                 p->mUnknown0 = target;
             }
-        } else if (p->mUnknown0 < target) {
+        } else if (!(p->mUnknown0 >= target)) {
             p->mUnknown0 = target;
         }
     }
