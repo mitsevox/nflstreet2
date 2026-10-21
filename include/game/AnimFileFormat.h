@@ -3,17 +3,17 @@
 
 #include "game/Record_8019D8AC.h"
 
-struct AnimMotionGroupView {
+typedef struct AnimMotionGroupView {
     unsigned int count;
     char **motion;
     Record_8019D8AC *compress;
-};
+} AnimMotionGroupView;
 
-struct AnimGroupHeaderView {
+typedef struct AnimGroupHeaderView {
     unsigned int count;
-};
+} AnimGroupHeaderView;
 
-struct AnimFileFormat_t {
+typedef struct AnimFileFormat_t {
     unsigned char unknown0[4];
     unsigned short motionCount;
     unsigned short flags;
@@ -22,8 +22,10 @@ struct AnimFileFormat_t {
     Record_8019D8AC *compress;
     AnimGroupHeaderView *groups;
     AnimMotionGroupView *groupMotion;
-};
+} AnimFileFormat_t;
 
+#ifdef __cplusplus
 void AnimExtnRelocateFile(AnimFileFormat_t *file);
+#endif
 
 #endif
