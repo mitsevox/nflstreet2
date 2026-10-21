@@ -83,7 +83,7 @@ void fn_8017419C(float *value, Object_80039F5C *, int) {
   float normalized = (float)factor * 0.003921568859368563f;
   *value *= (float)(1.2000000476837158 - (double)normalized * 0.4);
 }
-float fn_80174750(int, float, float);
+float fn_80174750(float, float, int);
 void fn_80174204(Input_80174868 *in, Output_80174868 *out, int type,
                  float value) {
   if (!in || !out)
@@ -100,7 +100,7 @@ void fn_80174204(Input_80174868 *in, Output_80174868 *out, int type,
     out->mUnknown14 = 0;
     out->mUnknown15 ^= 1;
     out->mUnknown8 = in->mUnknown8;
-    out->mUnknown0 = -fn_80174750(0, in->mUnknown8, value);
+    out->mUnknown0 = -fn_80174750(in->mUnknown8, value, 0);
     return;
   }
   if (team != fn_80178308() && !in->mUnknown21 &&
@@ -114,7 +114,7 @@ void fn_80174204(Input_80174868 *in, Output_80174868 *out, int type,
       out->mUnknown14 = in->mUnknown24;
       if (in->mUnknown24 == 6 || in->mUnknown24 == 9) {
         out->mUnknown8 = fn_80178A2C() - 5.0f;
-        out->mUnknown0 = fn_80174750(0, out->mUnknown8, value);
+        out->mUnknown0 = fn_80174750(out->mUnknown8, value, 0);
       }
     }
     return;
@@ -206,7 +206,7 @@ int fn_80174730(Entry_800B206C *, int, unsigned char *result) {
 int fn_80174740(Entry_800B206C *a, Entry_800B206C *b) {
   return a->mUnknown14 - b->mUnknown14;
 }
-float fn_80174750(int direction, float value, float amount) {
+float fn_80174750(float value, float amount, int direction) {
   if (!(value >= -fn_80178A2C()))
     value = -fn_80178A2C();
   else if (!(value <= fn_80178A2C()))
@@ -225,9 +225,9 @@ float fn_80174750(int direction, float value, float amount) {
   }
   if (!(out >= -fn_80178A2C()))
     return -fn_80178A2C();
-  if (!(out <= fn_80178A2C()))
-    return fn_80178A2C();
-  return out;
+  if (out <= fn_80178A2C())
+    return out;
+  return fn_80178A2C();
 }
 void fn_80174868(Input_80174868 *in, Output_80174868 *out) {
   unsigned char side = fn_80178348();
@@ -329,10 +329,10 @@ void fn_80174868(Input_80174868 *in, Output_80174868 *out) {
     out->mUnknown10 = 2;
 }
 void fn_80174C24(Input_80174868 *in, Output_80174868 *out) {
-  out->mUnknown0 = fn_80174750(in->mUnknown21, out->mUnknown8, 15.0f);
+  out->mUnknown0 = fn_80174750(out->mUnknown8, 15.0f, in->mUnknown21);
 }
 void fn_80174C64(Input_80174868 *in, Output_80174868 *out) {
-  out->mUnknown0 = fn_80174750(in->mUnknown21, out->mUnknown8, 15.0f);
+  out->mUnknown0 = fn_80174750(out->mUnknown8, 15.0f, in->mUnknown21);
   if (in->mUnknown14 == 6 && in->mUnknown24 > 0) {
     out->mUnknown10 = 3;
     out->mUnknownC = 15.0f;
@@ -350,29 +350,29 @@ void fn_80174D10(Input_80174868 *in, Output_80174868 *out) {
   out->mUnknown10 = 1;
   out->mUnknown14 = 0;
   out->mUnknown8 = in->mUnknown0;
-  out->mUnknown0 = fn_80174750(in->mUnknown21, in->mUnknown0, 5.0f);
+  out->mUnknown0 = fn_80174750(out->mUnknown8, 5.0f, in->mUnknown21);
 }
 void fn_80174D64(Input_80174868 *in, Output_80174868 *out) {
   out->mUnknown10 = 1;
   out->mUnknown8 = in->mUnknown0;
-  out->mUnknown0 = fn_80174750(in->mUnknown21, in->mUnknown0, 5.0f);
+  out->mUnknown0 = fn_80174750(out->mUnknown8, 5.0f, in->mUnknown21);
   out->mUnknown14 = 0;
 }
 void fn_80174DB8(Input_80174868 *in, Output_80174868 *out) {
   if (!(in->mUnknown4 <= out->mUnknown8) && in->mUnknown20 == fn_80178320())
     out->mUnknown8 = in->mUnknown4;
-  out->mUnknown0 = fn_80174750(in->mUnknown21, out->mUnknown8, 5.0f);
+  out->mUnknown0 = fn_80174750(out->mUnknown8, 5.0f, in->mUnknown21);
   fn_80174204(in, out, 0, 5.0f);
 }
 void fn_80174E3C(Input_80174868 *in, Output_80174868 *out) {
-  out->mUnknown0 = fn_80174750(in->mUnknown21, out->mUnknown8, 15.0f);
+  out->mUnknown0 = fn_80174750(out->mUnknown8, 15.0f, in->mUnknown21);
   fn_80174204(in, out, 1, 15.0f);
 }
 void fn_80174E94(Input_80174868 *in, Output_80174868 *out) {
   out->mUnknown8 = in->mUnknown8;
   if (!(out->mUnknown8 >= -fn_80178A2C()))
     out->mUnknown8 = -30.0f;
-  out->mUnknown0 = fn_80174750(in->mUnknown21, out->mUnknown8, 15.0f);
+  out->mUnknown0 = fn_80174750(out->mUnknown8, 15.0f, in->mUnknown21);
   out->mUnknown10 = 2;
   out->mUnknown14 = 0;
   if (out->mUnknown15 == in->mUnknown20)
@@ -385,7 +385,7 @@ void fn_80174F4C(Input_80174868 *in, Output_80174868 *out) {
   out->mUnknown8 = in->mUnknown8;
   if (!(out->mUnknown8 >= -fn_80178A2C()))
     out->mUnknown8 = -30.0f;
-  out->mUnknown0 = fn_80174750(in->mUnknown21, out->mUnknown8, 15.0f);
+  out->mUnknown0 = fn_80174750(out->mUnknown8, 15.0f, in->mUnknown21);
   out->mUnknown10 = 2;
   out->mUnknown14 = 0;
   if (out->mUnknown15 == in->mUnknown20)
@@ -393,7 +393,7 @@ void fn_80174F4C(Input_80174868 *in, Output_80174868 *out) {
 }
 void fn_80174FE4(Input_80174868 *in, Output_80174868 *out) {
   out->mUnknown8 = in->mUnknown0;
-  out->mUnknown0 = fn_80174750(in->mUnknown21, in->mUnknown0, 5.0f);
+  out->mUnknown0 = fn_80174750(out->mUnknown8, 5.0f, in->mUnknown21);
   out->mUnknown14 = 0;
   out->mUnknown10 = 1;
 }
@@ -404,7 +404,7 @@ void fn_80175038(Input_80174868 *in, Output_80174868 *out) {
       out->mUnknown14 = 0;
     } else {
       out->mUnknown8 = in->mUnknown0;
-      out->mUnknown0 = fn_80174750(in->mUnknown21, in->mUnknown0, 10.0f);
+      out->mUnknown0 = fn_80174750(in->mUnknown0, 10.0f, in->mUnknown21);
       out->mUnknown14 = 0;
       out->mUnknown10 = 1;
     }
@@ -433,7 +433,7 @@ void fn_80175038(Input_80174868 *in, Output_80174868 *out) {
     out->mUnknown0 = fn_80178A2C() - 1.0f;
 }
 void fn_801751C0(Input_80174868 *in, Output_80174868 *out) {
-  out->mUnknown0 = fn_80174750(in->mUnknown21, out->mUnknown8, 10.0f);
+  out->mUnknown0 = fn_80174750(out->mUnknown8, 10.0f, in->mUnknown21);
 }
 void fn_80175200(Input_80174868 *in, Output_80174868 *out) {
   out->mUnknown10 = in->mUnknown14 == 6 ? 3 : 0;
@@ -441,7 +441,7 @@ void fn_80175200(Input_80174868 *in, Output_80174868 *out) {
   if (!(in->mUnknown0 <= in->mUnknown8 + 10.0f))
     out->mUnknown0 = in->mUnknown8;
   else
-    out->mUnknown0 = fn_80174750(in->mUnknown21, in->mUnknown0, 10.0f);
+    out->mUnknown0 = fn_80174750(in->mUnknown0, 10.0f, in->mUnknown21);
   if (in->mUnknown14 != 6) {
     if (!(in->mUnknown8 >= -fn_80178A2C())) {
       out->mUnknown14 = -2;
@@ -461,7 +461,7 @@ void fn_801752C0(Input_80174868 *in, Output_80174868 *out) {
       (!(in->mUnknown4 <= in->mUnknown0) && fn_80178308() == fn_80178348())
           ? in->mUnknown4
           : in->mUnknown0;
-  out->mUnknown0 = fn_80174750(in->mUnknown21, out->mUnknown8, 15.0f);
+  out->mUnknown0 = fn_80174750(out->mUnknown8, 15.0f, in->mUnknown21);
   out->mUnknown10 = 2;
   out->mUnknown14 = 0;
   if (in->mUnknown14 == 6)
@@ -470,7 +470,7 @@ void fn_801752C0(Input_80174868 *in, Output_80174868 *out) {
 }
 void fn_801753A4(Input_80174868 *in, Output_80174868 *out) {
   out->mUnknown8 = in->mUnknown0;
-  out->mUnknown0 = fn_80174750(in->mUnknown21, in->mUnknown0, 5.0f);
+  out->mUnknown0 = fn_80174750(out->mUnknown8, 5.0f, in->mUnknown21);
   if (in->mUnknown14 != 6)
     out->mUnknown10 = out->mUnknown0 < in->mUnknownC ? 1 : 2;
   else if (in->mUnknown24 > 0) {
@@ -490,7 +490,7 @@ void fn_80175464(Input_80174868 *in, Output_80174868 *out) {
     out->mUnknown14 = in->mUnknown24;
   } else {
     out->mUnknown8 = in->mUnknown0;
-    out->mUnknown0 = fn_80174750(in->mUnknown21, in->mUnknown0, 15.0f);
+    out->mUnknown0 = fn_80174750(in->mUnknown0, 15.0f, in->mUnknown21);
     out->mUnknown10 = in->mUnknown14 == 6 ? 1 : 2;
     out->mUnknown14 = 0;
   }
