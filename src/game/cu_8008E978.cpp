@@ -4340,13 +4340,10 @@ extern "C" Entry_8009C684 *fn_8009C6F4(Entry_800AF82C *pEntries, Block_8009C6F4 
 extern "C" int fn_8009C7B4(Vector_80039F5C *pVec)
 {
     Point_8017886C point;
-    int angle;
 
     point.mX = pVec->mX;
     point.mY = pVec->mZ;
-    angle = (point.Heading() - 0x400000) << 8 >> 8;
-    angle = abs(angle);
-    return angle > lbl_803EA9A4;
+    return abs((point.Heading() - 0x400000) << 8 >> 8) > lbl_803EA9A4;
 }
 
 extern "C" unsigned char fn_8009C814(Object_80039F5C *p, Block_8009C6F4 *pBlock)
@@ -4423,8 +4420,7 @@ extern "C" void fn_8009C9D0(Object_80039F5C *p, Vector_80039F5C *pTarget, int bo
     } else if (angle < lbl_803EA99C) {
         angle = lbl_803EA99C;
     }
-    angle >>= 8;
-    rot = angle;
+    rot = angle >> 8;
     if (pBlock->mUnknown8 != 6) {
         short prev;
 
@@ -7485,18 +7481,15 @@ extern "C" void fn_800BB5DC(void)
 {
     unsigned int count;
     unsigned short i;
-    Block_80170E64 *p;
 
     if (!fn_800BA6F8()) {
         count = fn_80178D18(0);
         for (i = 0; i < count; i++) {
-            p = fn_80039F5C(0, i)->mpUnknown4;
-            p->mUnknown20 |= 1;
+            fn_80039F5C(0, i)->mpUnknown4->mUnknown20 |= 1;
         }
         count = fn_80178D18(1);
         for (i = 0; i < count; i++) {
-            p = fn_80039F5C(1, i)->mpUnknown4;
-            p->mUnknown20 |= 1;
+            fn_80039F5C(1, i)->mpUnknown4->mUnknown20 |= 1;
         }
     }
 }
