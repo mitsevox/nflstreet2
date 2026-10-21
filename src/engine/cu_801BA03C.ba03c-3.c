@@ -1,3 +1,4 @@
+#include <dolphin/gx/GXTexture.h>
 #include "game/AnimFileFormat.h"
 #include "game/fn_801D2B7C.h"
 
@@ -140,6 +141,75 @@ typedef struct Table_801C06A0 {
     char *mEntries[1];
 } Table_801C06A0;
 
+typedef struct Image_8020DFD8 {
+    unsigned short mWidth;
+    unsigned short mHeight;
+    unsigned char mUnknown4[4];
+    unsigned int mFormat;
+    void *mpPixels;
+    unsigned int mPaletteFormat;
+    void *mpPalette;
+    unsigned char mUnknown18[8];
+} Image_8020DFD8;
+
+typedef struct TextureFrame_801C0E04 {
+    float mU0;
+    float mV0;
+    float mU1;
+    float mV1;
+} TextureFrame_801C0E04;
+
+typedef struct TextureGX_801C0E04 {
+    unsigned char mUnknown0[4];
+    GXTexObj mTexObj;
+    GXTlutObj mTlutObj;
+    TextureFrame_801C0E04 *mFrames;
+} TextureGX_801C0E04;
+
+typedef struct Texture_801C0928 {
+    char mName[32];
+    int mIndex;
+    unsigned char mUnknown24[4];
+    Image_8020DFD8 mImage;
+    unsigned char mAnimated;
+    unsigned char mLoaded;
+    unsigned short mFrameCount;
+    unsigned short mRows;
+    unsigned short mColumns;
+    float mCoords[8];
+    float mCellWidth;
+    float mCellHeight;
+    TextureGX_801C0E04 mGX;
+} Texture_801C0928;
+
+typedef struct TextureDesc_801C0928 {
+    char mName[32];
+    unsigned char mAnimated;
+    unsigned char mRelocated;
+    unsigned short mFrameCount;
+    unsigned short mRows;
+    unsigned short mColumns;
+    int mData;
+} TextureDesc_801C0928;
+
+typedef struct TextureConfig_801C06E8 {
+    unsigned short mCapacity;
+} TextureConfig_801C06E8;
+
+typedef struct TextureFile_801C0BA8 {
+    void *mData;
+    int mIndex;
+} TextureFile_801C0BA8;
+
+typedef struct TextureManager_802F4870 {
+    unsigned char mInitialized;
+    unsigned short mCount;
+    unsigned short mCapacity;
+    Texture_801C0928 **mTextures;
+    Texture_801C0928 *mPool;
+    unsigned char mUnknown10[16];
+} TextureManager_802F4870;
+
 typedef void (*Callback_801BFCB0)(AnimFileFormat_t *file, int a, unsigned char *destination,
                                   unsigned int source, unsigned int size, int group);
 
@@ -166,12 +236,30 @@ extern unsigned int fn_801BBE5C(unsigned short a, unsigned short b);
 extern void *fn_801BAB34(void *p, int key);
 extern float fn_801BD60C(void *p);
 extern int fn_801B9EF8(void);
+extern TextureManager_802F4870 lbl_802F4870;
+extern int fn_801D34D0(void *dest, int size, int value, int width);
+extern char *strcpy();
+extern int strcmp();
+extern void fn_8020DFD8(int data, Image_8020DFD8 *image);
+extern int fn_8020E258(Image_8020DFD8 *image);
+extern int fn_801EF390(void *data, int index, int a);
+extern int fn_801F010C(void *data, int index);
 
 #define RELOCATE(p, base) ((p) = (void *)((char *)(base) + (int)(p)))
 
 void fn_801BF748(unsigned int index);
 void fn_801BF7BC(unsigned int index);
 Frame_801C029C *fn_801C029C(Bank_801C009C *bank, unsigned short index);
+void fn_801C09F8(Texture_801C0928 *texture);
+Texture_801C0928 *fn_801C0C14(TextureDesc_801C0928 *desc, int *pData, int load);
+void fn_801C0E04(Texture_801C0928 *texture);
+void fn_801C0F64(int data, Image_8020DFD8 *image);
+void fn_801C0F84(Image_8020DFD8 *image);
+void fn_801C0FA4(Texture_801C0928 *texture);
+void fn_801C1054(Texture_801C0928 *texture);
+void fn_801C10A4(Texture_801C0928 *texture);
+void fn_801C10D8(void *p);
+void fn_801C10DC(void *p);
 
 void fn_801BF3C8(Block_801BF3C8 *p, int type, float a, void *source, float b)
 {
@@ -676,8 +764,8 @@ void fn_801C02EC(File_801C02EC *file)
         bank->mGroups = fn_801C01DC(file, (int)bank->mGroups);
         bank->mItems = fn_801C01DC(file, (int)bank->mItems);
         if (bank->mFrameCount == 0xFFFF) {
-            bank->mFrameCount = 0;
             bank->mFirstFrame = 0;
+            bank->mFrameCount = 0;
         }
         for (j = 0; j < bank->mGroupCount; j++) {
             Group_801BFFD8 *group = &bank->mGroups[j];
@@ -692,22 +780,22 @@ void fn_801C02EC(File_801C02EC *file)
 
                 child->mSamples = fn_801C01DC(file, (int)child->mSamples);
                 for (n = 0; n < child->mCount; n++) {
-                    Curve_801C02EC *curves = child->mSamples[n].mCurves;
-                    RELOCATE(curves[0].mpKeys, file);
-                    RELOCATE(curves[1].mpKeys, file);
-                    RELOCATE(curves[2].mpKeys, file);
-                    RELOCATE(curves[3].mpKeys, file);
-                    RELOCATE(curves[4].mpKeys, file);
-                    RELOCATE(curves[5].mpKeys, file);
-                    RELOCATE(curves[6].mpKeys, file);
-                    RELOCATE(curves[7].mpKeys, file);
-                    RELOCATE(curves[8].mpKeys, file);
-                    RELOCATE(curves[9].mpKeys, file);
-                    RELOCATE(curves[10].mpKeys, file);
-                    RELOCATE(curves[11].mpKeys, file);
-                    RELOCATE(curves[12].mpKeys, file);
-                    RELOCATE(curves[13].mpKeys, file);
-                    RELOCATE(curves[14].mpKeys, file);
+                    Sample_801C009C *sample = &child->mSamples[n];
+                    RELOCATE(sample->mCurves[0].mpKeys, file);
+                    RELOCATE(sample->mCurves[1].mpKeys, file);
+                    RELOCATE(sample->mCurves[2].mpKeys, file);
+                    RELOCATE(sample->mCurves[3].mpKeys, file);
+                    RELOCATE(sample->mCurves[4].mpKeys, file);
+                    RELOCATE(sample->mCurves[5].mpKeys, file);
+                    RELOCATE(sample->mCurves[6].mpKeys, file);
+                    RELOCATE(sample->mCurves[7].mpKeys, file);
+                    RELOCATE(sample->mCurves[8].mpKeys, file);
+                    RELOCATE(sample->mCurves[9].mpKeys, file);
+                    RELOCATE(sample->mCurves[10].mpKeys, file);
+                    RELOCATE(sample->mCurves[11].mpKeys, file);
+                    RELOCATE(sample->mCurves[12].mpKeys, file);
+                    RELOCATE(sample->mCurves[13].mpKeys, file);
+                    RELOCATE(sample->mCurves[14].mpKeys, file);
                 }
             }
         }
@@ -749,4 +837,265 @@ void fn_801C06A0(Table_801C06A0 *table)
         return;
     for (i = 0; i < table->mHeader.mParts.mCount; i++)
         table->mEntries[i] = (char *)table + (int)table->mEntries[i];
+}
+
+void fn_801C06E8(TextureConfig_801C06E8 *config)
+{
+    Texture_801C0928 *pool;
+    unsigned short i;
+
+    lbl_802F4870.mCount = 0;
+    lbl_802F4870.mCapacity = config->mCapacity;
+    fn_801C10D8(lbl_802F4870.mUnknown10);
+    lbl_802F4870.mTextures = fn_801D2B7C(lbl_802F4870.mCapacity * sizeof(Texture_801C0928 *), 0, 0);
+    fn_801D34D0(lbl_802F4870.mTextures, lbl_802F4870.mCapacity * sizeof(Texture_801C0928 *), 0, 1);
+    lbl_802F4870.mPool = fn_801D2B7C(lbl_802F4870.mCapacity * sizeof(Texture_801C0928), 0, 0);
+    fn_801D34D0(lbl_802F4870.mPool, lbl_802F4870.mCapacity * sizeof(Texture_801C0928), 0, 1);
+    pool = lbl_802F4870.mPool;
+    for (i = 0; i < lbl_802F4870.mCapacity; i++)
+        lbl_802F4870.mTextures[i] = &pool[i];
+    lbl_802F4870.mInitialized = 1;
+}
+
+void fn_801C07DC(void)
+{
+    unsigned short i;
+
+    for (i = 0; i < lbl_802F4870.mCount; i++) {
+        Texture_801C0928 *texture = lbl_802F4870.mTextures[i];
+        fn_801C0F84(&texture->mImage);
+        if (texture->mLoaded)
+            fn_801C09F8(texture);
+    }
+    fn_801D2BD0(lbl_802F4870.mTextures);
+    lbl_802F4870.mTextures = 0;
+    fn_801D2BD0(lbl_802F4870.mPool);
+    lbl_802F4870.mPool = 0;
+    fn_801C10DC(lbl_802F4870.mUnknown10);
+    fn_801C10DC(lbl_802F4870.mUnknown10);
+    lbl_802F4870.mCount = 0;
+    lbl_802F4870.mCapacity = 0;
+    lbl_802F4870.mInitialized = 0;
+}
+
+void fn_801C089C(Texture_801C0928 *texture)
+{
+    unsigned int columns = texture->mColumns;
+    unsigned int rows = texture->mRows;
+    float width = 1.0f / columns;
+    float height = 1.0f / rows;
+
+    texture->mCoords[0] = 0.0f;
+    texture->mCoords[1] = 0.0f;
+    texture->mCoords[2] = width;
+    texture->mCoords[3] = 0.0f;
+    texture->mCoords[4] = width;
+    texture->mCoords[5] = height;
+    texture->mCoords[6] = 0.0f;
+    texture->mCoords[7] = height;
+    texture->mCellWidth = width;
+    texture->mCellHeight = height;
+}
+
+void fn_801C0928(Texture_801C0928 *texture, TextureDesc_801C0928 *desc)
+{
+    fn_801D34D0(texture, sizeof(Texture_801C0928), 0, 1);
+    strcpy(texture->mName, desc->mName);
+    texture->mAnimated = desc->mAnimated;
+    texture->mFrameCount = desc->mFrameCount;
+    texture->mRows = desc->mRows;
+    texture->mColumns = desc->mColumns;
+    if (!desc->mRelocated) {
+        desc->mRelocated = 1;
+        desc->mData = (int)desc + desc->mData;
+    }
+    fn_801C089C(texture);
+}
+
+void fn_801C09B8(Texture_801C0928 *texture)
+{
+    if (!texture->mLoaded) {
+        fn_801C0FA4(texture);
+        texture->mLoaded = 1;
+    }
+}
+
+void fn_801C09F8(Texture_801C0928 *texture)
+{
+    if (texture->mLoaded == 1) {
+        fn_801C10A4(texture);
+        texture->mLoaded = 0;
+    }
+}
+
+void fn_801C0A38(Texture_801C0928 *texture, unsigned int time, unsigned int frame,
+                 unsigned int rate, float *coords)
+{
+    unsigned int count = texture->mFrameCount;
+
+    if (count > 1) {
+        unsigned int row;
+        unsigned int column;
+
+        if (texture->mAnimated && rate != 0)
+            frame += (time / rate) % count;
+        row = frame / texture->mColumns;
+        column = frame % texture->mColumns;
+        if (row >= texture->mRows)
+            row %= texture->mRows;
+        coords[0] = texture->mCellWidth * column;
+        coords[1] = texture->mCellHeight * row;
+        coords[2] = texture->mCellWidth * (column + 1);
+        coords[3] = texture->mCellHeight * row;
+        coords[4] = texture->mCellWidth * (column + 1);
+        coords[5] = texture->mCellHeight * (row + 1);
+        coords[6] = texture->mCellWidth * column;
+        coords[7] = texture->mCellHeight * (row + 1);
+    } else {
+        coords[6] = 0.0f;
+        coords[7] = 1.0f;
+        coords[0] = 0.0f;
+        coords[1] = 0.0f;
+        coords[2] = 1.0f;
+        coords[3] = 0.0f;
+        coords[4] = 1.0f;
+        coords[5] = 1.0f;
+    }
+}
+
+Texture_801C0928 *fn_801C0BA8(TextureFile_801C0BA8 *file, int load)
+{
+    int data;
+    Texture_801C0928 *texture;
+
+    texture = fn_801C0C14((TextureDesc_801C0928 *)fn_801EF390(file->mData, file->mIndex, 1), &data, load);
+    texture->mIndex = file->mIndex;
+    if (load)
+        fn_801F010C(file->mData, file->mIndex);
+    return texture;
+}
+
+Texture_801C0928 *fn_801C0C14(TextureDesc_801C0928 *desc, int *pData, int load)
+{
+    TextureManager_802F4870 *manager = &lbl_802F4870;
+    Texture_801C0928 *texture = manager->mTextures[manager->mCount];
+
+    fn_801C0928(texture, desc);
+    if (load && !texture->mLoaded)
+        fn_801C1054(texture);
+    *pData = desc->mData;
+    fn_801C0F64(*pData, &texture->mImage);
+    fn_801C09B8(texture);
+    if (load)
+        fn_801C0F84(&texture->mImage);
+    lbl_802F4870.mCount++;
+    return texture;
+}
+
+void fn_801C0CCC(Texture_801C0928 *texture)
+{
+    int last = lbl_802F4870.mCount - 1;
+    int i;
+
+    for (i = 0; i < lbl_802F4870.mCount; i++) {
+        if (lbl_802F4870.mTextures[i] == texture) {
+            if (i < last) {
+                lbl_802F4870.mTextures[i] = lbl_802F4870.mTextures[last];
+                lbl_802F4870.mTextures[last] = texture;
+            }
+            break;
+        }
+    }
+    fn_801C0F84(&texture->mImage);
+    if (texture->mLoaded)
+        fn_801C09F8(texture);
+    lbl_802F4870.mCount--;
+}
+
+Texture_801C0928 *fn_801C0D8C(const char *name)
+{
+    Texture_801C0928 *texture = 0;
+    unsigned short i;
+
+    for (i = 0; i < lbl_802F4870.mCount; i++) {
+        if (strcmp(lbl_802F4870.mTextures[i]->mName, name) == 0) {
+            texture = lbl_802F4870.mTextures[i];
+            break;
+        }
+    }
+    return texture;
+}
+
+void fn_801C0E04(Texture_801C0928 *texture)
+{
+    TextureGX_801C0E04 *gx = &texture->mGX;
+    unsigned short i;
+
+    if (!texture->mAnimated) {
+        gx->mFrames = 0;
+        return;
+    }
+    if (gx->mFrames == 0)
+        gx->mFrames = fn_801D2B7C(texture->mFrameCount * sizeof(TextureFrame_801C0E04), 0, 0);
+    for (i = 0; i < texture->mFrameCount; i++) {
+        unsigned short row = i / texture->mColumns;
+        unsigned short column = i % texture->mColumns;
+
+        gx->mFrames[i].mU0 = texture->mCellWidth * (unsigned int)column;
+        gx->mFrames[i].mV0 = texture->mCellHeight * (unsigned int)row;
+        gx->mFrames[i].mU1 = texture->mCellWidth * (unsigned int)(column + 1);
+        gx->mFrames[i].mV1 = texture->mCellHeight * (unsigned int)(row + 1);
+    }
+}
+
+void fn_801C0F64(int data, Image_8020DFD8 *image)
+{
+    fn_8020DFD8(data, image);
+}
+
+void fn_801C0F84(Image_8020DFD8 *image)
+{
+    fn_8020E258(image);
+}
+
+void fn_801C0FA4(Texture_801C0928 *texture)
+{
+    if (texture->mImage.mpPalette != 0) {
+        unsigned short entries = 256;
+
+        if (texture->mImage.mFormat == GX_TF_C4)
+            entries = 16;
+        GXInitTlutObj(&texture->mGX.mTlutObj, texture->mImage.mpPalette,
+                      texture->mImage.mPaletteFormat, entries);
+        GXInitTexObjCI(&texture->mGX.mTexObj, texture->mImage.mpPixels, texture->mImage.mWidth,
+                       texture->mImage.mHeight, texture->mImage.mFormat, GX_CLAMP, GX_CLAMP, 0, 0);
+    } else {
+        GXInitTexObj(&texture->mGX.mTexObj, texture->mImage.mpPixels, texture->mImage.mWidth,
+                     texture->mImage.mHeight, texture->mImage.mFormat, GX_CLAMP, GX_CLAMP, 0);
+    }
+    fn_801C0E04(texture);
+}
+
+void fn_801C1054(Texture_801C0928 *texture)
+{
+    if (texture->mAnimated) {
+        TextureGX_801C0E04 *gx = &texture->mGX;
+        gx->mFrames = fn_801D2B7C(texture->mFrameCount * sizeof(TextureFrame_801C0E04), 0, 0);
+    }
+}
+
+void fn_801C10A4(Texture_801C0928 *texture)
+{
+    TextureGX_801C0E04 *gx = &texture->mGX;
+
+    if (texture->mAnimated)
+        fn_801D2BD0(gx->mFrames);
+}
+
+void fn_801C10D8(void *p)
+{
+}
+
+void fn_801C10DC(void *p)
+{
 }
