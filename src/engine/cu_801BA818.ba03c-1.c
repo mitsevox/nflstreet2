@@ -328,13 +328,16 @@ void *fn_801BAD70(Object_801BC084 *pFile, int a, int b, unsigned int index)
 
 unsigned short fn_801BAD98(void)
 {
+    unsigned short slot = 0xFFFF;
     unsigned int i;
 
     for (i = lbl_803ED5F0 + lbl_803ED5F4; i < lbl_803ED5F8; i++) {
-        if (lbl_803ED5FC[i].mStatus == 0)
-            return i;
+        if (lbl_803ED5FC[i].mStatus == 0) {
+            slot = i;
+            break;
+        }
     }
-    return 0xFFFF;
+    return slot;
 }
 
 void fn_801BAE08(int a, int b, int c, int d, Request_801BAE08 *pRequest)
