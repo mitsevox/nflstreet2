@@ -1,4 +1,5 @@
 #include "engine/cu_80227F14.h"
+#include "game/fn_80147908.h"
 
 struct Object_80147AE4 {
     char mUnknown0[0x14];
@@ -15,8 +16,6 @@ struct Object_80147AE4 {
 };
 
 extern "C" {
-void fn_80147908(unsigned int a, unsigned int b, unsigned int *pColor, float *pValue, float t, float x,
-                 float y);
 void fn_80196EF8(int a, unsigned int color, float value);
 void fn_80196F20(int a, unsigned int color, float value);
 int fn_801CECCC(int index);

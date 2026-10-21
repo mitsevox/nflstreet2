@@ -21232,6 +21232,21 @@
         "integration_adjustment": "Hostile-review fixes in PR775: canonical Object_80233EAC.h and Object_8020E52C.h layouts and declarations, caller-supported unused parameters and one declaration form per address; function bodies, the 117 exact addresses and the original contributor are unchanged.",
         "original_commit": "b6c89f8dc0e79b43e249aa22e6c26f68ce2d601e"
       }
+    },
+    {
+      "source": "src/engine/cu_801C1D84.c",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x801C2030"
+      ],
+      "provenance": {
+        "pull_request": 979,
+        "merged_via": 979,
+        "commit": "95c7439e84ad43ed97ed2ad31afff627d89d9536",
+        "introduced_blob": "77d2a4121430919c7bb3018f18fd826fff58c367"
+      }
     }
   ],
   "target": "GN7E69",
