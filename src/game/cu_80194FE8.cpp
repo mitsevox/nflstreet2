@@ -71,10 +71,13 @@ int fn_80194FE8(void) {
     fn_801CEA44(1);
     return 1;
 }
-void fn_80195068(State_80194FE8 *state, int mode) {
+void fn_80195068(State_80194FE8 *state, unsigned int mode) {
     float adjust = 0.0f, amount = 1.0f - state->mUnknown18;
     int left = -320, lower = -224, upper = 224;
     switch (mode) {
+    case 1:
+    case 7:
+        break;
     case 2:
         left = (int)((float)left + amount * (float)left);
         lower = (int)((float)lower + amount * (float)lower);
