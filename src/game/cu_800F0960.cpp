@@ -1627,17 +1627,18 @@ extern "C" void fn_800F30AC(Object_80039F5C *p, Object_80039F5C *pOther, Points_
     Vector_80039F5C target = pInfo->mUnknown16;
     Vector_80039F5C origin = pInfo->mUnknown4;
     Vector_80039F5C delta;
+    Vector_80039F5C *pDelta = &delta;
     int heading;
     int angle;
     int turn;
     int result;
 
-    fn_80227690(&delta, &origin, &target);
-    heading = fn_801CFE40(delta.mY, delta.mX);
+    fn_80227690(pDelta, &origin, &target);
+    heading = fn_801CFE40(pDelta->mY, pDelta->mX);
     if (pOther != 0) {
-        fn_80227690(&delta, &origin, &pOther->mMotion.mPos);
-        if (fn_802270A4(&delta) > 2.0f) {
-            angle = fn_801CFE40(delta.mY, delta.mX);
+        fn_80227690(pDelta, &origin, &pOther->mMotion.mPos);
+        if (fn_802270A4(pDelta) > 2.0f) {
+            angle = fn_801CFE40(pDelta->mY, pDelta->mX);
             turn = fn_801CFFD0(heading, angle);
             if (turn <= 0x1FFFFF) {
                 result = 0;
@@ -1655,9 +1656,9 @@ extern "C" void fn_800F30AC(Object_80039F5C *p, Object_80039F5C *pOther, Points_
         result = 1;
     }
     pBlock->mUnknown24 = result;
-    fn_80227690(&delta, &origin, &p->mMotion.mPos);
-    if (fn_802270A4(&delta) > 2.0f) {
-        angle = fn_801CFE40(delta.mY, delta.mX);
+    fn_80227690(pDelta, &origin, &p->mMotion.mPos);
+    if (fn_802270A4(pDelta) > 2.0f) {
+        angle = fn_801CFE40(pDelta->mY, pDelta->mX);
         turn = fn_801CFFD0(heading, angle);
         if (turn <= 0x1FFFFF) {
             result = 0;
