@@ -147,6 +147,7 @@ Cache_801BF870 *fn_801BF870(int objectType, int state);
 void fn_801BF7BC(int objectType);
 void *fn_801BFD8C(Object_801BC084 *pFile, int a, int b, int index, void *pMotion, int group);
 
+unsigned short fn_801BAB24(Object_801BC084 *pFile);
 unsigned short fn_801BAD98(void);
 int fn_801BAEAC(int slot);
 int fn_801BB164(int id, Object_801BC084 *pData, int frameCache, int bigFile);
