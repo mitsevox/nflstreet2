@@ -20870,48 +20870,57 @@
     {
       "source": "src/game/cu_800F81C0.cpp",
       "contributors": [
-        "adampreddy"
+        "mitsevox"
       ],
       "functions": [
         "0x800F81C0"
       ],
       "provenance": {
-        "pull_request": 994,
-        "merged_via": 994,
+        "pull_request": 902,
+        "merged_via": 918,
         "commit": "d39361568f1b949b388db0dde5459d2faeae018d",
-        "introduced_blob": "b56c86515b947ed05b454883fe1d85b7ce6b09e7"
+        "introduced_blob": "b56c86515b947ed05b454883fe1d85b7ce6b09e7",
+        "original_commit": "358b89fb6ea5623609a79bd0e2eec7cd3e1a450e",
+        "original_blob": "214f5b6e73b5f8af6a21908c5416bba632f87368",
+        "integration_adjustment": "Newly exact pre-existing body (fn_800F81C0) originates in contribution 902; the PR 994 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
       }
     },
     {
       "source": "src/game/cu_800F930C.cpp",
       "contributors": [
-        "adampreddy"
+        "mitsevox"
       ],
       "functions": [
         "0x800F9480",
         "0x800FA0DC"
       ],
       "provenance": {
-        "pull_request": 994,
-        "merged_via": 994,
+        "pull_request": 902,
+        "merged_via": 918,
         "commit": "d39361568f1b949b388db0dde5459d2faeae018d",
-        "introduced_blob": "174a9a83be17ab226587477fce013de5bf5dae64"
+        "introduced_blob": "174a9a83be17ab226587477fce013de5bf5dae64",
+        "original_commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
+        "original_blob": "735a8c070022b0956d269c11dcc87baf993715e7",
+        "integration_adjustment": "Newly exact pre-existing bodies (fn_800F9480, fn_800FA0DC) originate in contribution 902; the PR 994 source-form refinement that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution."
       }
     },
     {
       "source": "src/game/cu_80104C9C.cpp",
       "contributors": [
-        "adampreddy"
+        "mitsevox"
       ],
       "functions": [
         "0x80105168",
         "0x801061E8"
       ],
       "provenance": {
-        "pull_request": 994,
-        "merged_via": 994,
+        "pull_request": 887,
+        "merged_via": 918,
         "commit": "d39361568f1b949b388db0dde5459d2faeae018d",
-        "introduced_blob": "cc52b6cf9cdcb09b0cf6e0a2f5eb962f354d50db"
+        "introduced_blob": "cc52b6cf9cdcb09b0cf6e0a2f5eb962f354d50db",
+        "original_commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
+        "original_blob": "0d26081f4968dfb55bcfd4996ff3f423e3d4f200",
+        "integration_adjustment": "Newly exact pre-existing bodies (fn_80105168, fn_801061E8) originate in contribution 887; the PR 994 source-form refinement that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution."
       }
     }
   ],
