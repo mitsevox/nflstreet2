@@ -762,7 +762,7 @@ float fn_801C01E4(Bank_801C009C *bank)
         AnimFileFormat_t *file = fn_801BC084(fn_801BBE5C(frame->mUnknown2A | 0x4000, frame->mUnknownE));
         if (file != 0) {
             float length = fn_801BD60C(fn_801BAB34(file, 0)) / fn_801BFFA0();
-            if (length <= result)
+            if (!(length <= result))
                 result = length;
         }
     }
@@ -856,21 +856,6 @@ void fn_801C02EC(File_801C02EC *file)
         for (k = 0; k < bank->mItemCount; k++)
             bank->mItems[k].mUnknown10 = fn_801C01DC(file, (int)bank->mItems[k].mUnknown10);
     }
-}
-
-int fn_801C065C(Frame_801C029C *frame, float time)
-{
-    unsigned int i;
-    int value = 0;
-
-    i = 0;
-    while (i < frame->mKeyCount) {
-        if (time < frame->mKeys[i].mTime)
-            break;
-        value = frame->mKeys[i].mValue;
-        i++;
-    }
-    return value;
 }
 
 void fn_801C06A0(Table_801C06A0 *table)
@@ -1438,25 +1423,6 @@ void fn_801C1C1C(int id)
         loader->mSlotStates[i] &= ~4;
     fn_801F809C(&lbl_803D4F98);
     fn_801C1564(loader);
-}
-
-void fn_801C1C98(int id)
-{
-    Loader_801C1260 *loader = &lbl_803EBBC4[id];
-
-    for (;;) {
-        while ((loader->mState & 2) || (loader->mState & 4))
-            ;
-        fn_801F8014(&lbl_803D4F98);
-        if (loader->mRequests[0].mState == 0)
-            break;
-        if (loader->mRequests[0].mState == 1 && fn_801C1218(loader) >= loader->mBufferCount)
-            fn_801C1A60(id);
-        fn_801F809C(&lbl_803D4F98);
-    }
-    loader->mState &= ~1;
-    fn_801C1654(loader);
-    fn_801F809C(&lbl_803D4F98);
 }
 
 u32 fn_801C1D54(void)
