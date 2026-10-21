@@ -28602,6 +28602,222 @@
       ]
     },
     {
+      "source": "src/engine/cu_80226F9C.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80226F9C-0x80227F14 (src/engine/cu_80226F9C.c), its function and name rows and the exact .sdata data row 0x803EBF88-0x803EBF8C. Draft comparisons only; original assembly remains linked. The four functions that load .rodata constants have no draft body and no .rodata is registered.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80226F9C",
+          "end": "0x80227F14"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF88",
+          "end": "0x803EBF8C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80226F9C",
+          "start": "0x80226F9C",
+          "end": "0x80226FF0"
+        },
+        {
+          "symbol": "fn_80226FF0",
+          "start": "0x80226FF0",
+          "end": "0x80227040"
+        },
+        {
+          "symbol": "fn_80227040",
+          "start": "0x80227040",
+          "end": "0x802270A4"
+        },
+        {
+          "symbol": "fn_802270A4",
+          "start": "0x802270A4",
+          "end": "0x802270D4"
+        },
+        {
+          "symbol": "fn_802270D4",
+          "start": "0x802270D4",
+          "end": "0x8022710C"
+        },
+        {
+          "symbol": "fn_8022710C",
+          "start": "0x8022710C",
+          "end": "0x80227120"
+        },
+        {
+          "symbol": "fn_80227120",
+          "start": "0x80227120",
+          "end": "0x8022713C"
+        },
+        {
+          "symbol": "fn_8022713C",
+          "start": "0x8022713C",
+          "end": "0x8022716C"
+        },
+        {
+          "symbol": "fn_8022716C",
+          "start": "0x8022716C",
+          "end": "0x802271A4"
+        },
+        {
+          "symbol": "fn_802271A4",
+          "start": "0x802271A4",
+          "end": "0x802271F0"
+        },
+        {
+          "symbol": "fn_802271F0",
+          "start": "0x802271F0",
+          "end": "0x80227248"
+        },
+        {
+          "symbol": "fn_80227248",
+          "start": "0x80227248",
+          "end": "0x80227264"
+        },
+        {
+          "symbol": "fn_80227264",
+          "start": "0x80227264",
+          "end": "0x8022728C"
+        },
+        {
+          "symbol": "fn_8022728C",
+          "start": "0x8022728C",
+          "end": "0x802272DC"
+        },
+        {
+          "symbol": "fn_802272DC",
+          "start": "0x802272DC",
+          "end": "0x8022732C"
+        },
+        {
+          "symbol": "fn_8022732C",
+          "start": "0x8022732C",
+          "end": "0x80227350"
+        },
+        {
+          "symbol": "fn_80227350",
+          "start": "0x80227350",
+          "end": "0x80227384"
+        },
+        {
+          "symbol": "fn_80227384",
+          "start": "0x80227384",
+          "end": "0x802273E8"
+        },
+        {
+          "symbol": "fn_802273E8",
+          "start": "0x802273E8",
+          "end": "0x80227490"
+        },
+        {
+          "symbol": "fn_80227490",
+          "start": "0x80227490",
+          "end": "0x80227538"
+        },
+        {
+          "symbol": "fn_80227538",
+          "start": "0x80227538",
+          "end": "0x80227594"
+        },
+        {
+          "symbol": "fn_80227594",
+          "start": "0x80227594",
+          "end": "0x802275D8"
+        },
+        {
+          "symbol": "fn_802275D8",
+          "start": "0x802275D8",
+          "end": "0x80227638"
+        },
+        {
+          "symbol": "fn_80227638",
+          "start": "0x80227638",
+          "end": "0x8022765C"
+        },
+        {
+          "symbol": "fn_8022765C",
+          "start": "0x8022765C",
+          "end": "0x80227690"
+        },
+        {
+          "symbol": "fn_80227690",
+          "start": "0x80227690",
+          "end": "0x802276B4"
+        },
+        {
+          "symbol": "fn_802276B4",
+          "start": "0x802276B4",
+          "end": "0x802276E8"
+        },
+        {
+          "symbol": "fn_802276E8",
+          "start": "0x802276E8",
+          "end": "0x80227704"
+        },
+        {
+          "symbol": "fn_80227704",
+          "start": "0x80227704",
+          "end": "0x8022772C"
+        },
+        {
+          "symbol": "fn_802277DC",
+          "start": "0x802277DC",
+          "end": "0x8022781C"
+        },
+        {
+          "symbol": "fn_8022781C",
+          "start": "0x8022781C",
+          "end": "0x8022785C"
+        },
+        {
+          "symbol": "fn_8022785C",
+          "start": "0x8022785C",
+          "end": "0x80227890"
+        },
+        {
+          "symbol": "fn_80227890",
+          "start": "0x80227890",
+          "end": "0x802278D0"
+        },
+        {
+          "symbol": "fn_802278D0",
+          "start": "0x802278D0",
+          "end": "0x80227904"
+        },
+        {
+          "symbol": "fn_80227904",
+          "start": "0x80227904",
+          "end": "0x80227930"
+        },
+        {
+          "symbol": "fn_80227930",
+          "start": "0x80227930",
+          "end": "0x80227970"
+        },
+        {
+          "symbol": "fn_80227C2C",
+          "start": "0x80227C2C",
+          "end": "0x80227CC0"
+        },
+        {
+          "symbol": "fn_80227CC0",
+          "start": "0x80227CC0",
+          "end": "0x80227D6C"
+        },
+        {
+          "symbol": "fn_80227E40",
+          "start": "0x80227E40",
+          "end": "0x80227F14"
+        }
+      ]
+    },
+    {
       "source": "src/engine/cu_80228E44.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80228E44-0x80228F78 (src/engine/cu_80228E44.c), its function and name rows and the exact .sdata data row 0x803EBFA8-0x803EBFB8. Draft comparisons only; original assembly remains linked.",
