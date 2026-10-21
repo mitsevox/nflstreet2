@@ -214,8 +214,8 @@ void fn_8015A0D0(int value);
 void fn_8015C254(int a);
 int fn_80092830(int handle);
 float fn_80094454(int handle);
-int fn_801BC044(int index);
-int fn_801BC060(int index);
+unsigned char fn_801BC044(unsigned short index);
+unsigned char fn_801BC060(unsigned short index);
 int fn_80094374(int index);
 Object_80039F5C *fn_8003AD2C(int id);
 int fn_801485D4(void);
@@ -273,7 +273,7 @@ extern Block_80096954 *lbl_803EA920;
 extern Slot_80096D14 lbl_8030C2A8[2];
 extern Record_80097518 lbl_8030C2B8[];
 
-int fn_801BE648(void *p);
+unsigned short fn_801BE648(void *p);
 int fn_800BA6F8(void);
 void fn_8009A8F0(void);
 int fn_800AE978(void);
@@ -393,7 +393,7 @@ extern "C" void fn_8009036C(int *p)
     fn_80094454(*p);
 }
 
-extern "C" void fn_801BB74C(unsigned short slot, int id, Actor_801C009C *pActor);
+extern "C" int fn_801BB74C(unsigned short slot, int id, Actor_801C009C *pActor);
 extern "C" int fn_8009439C(int index);
 extern "C" void fn_801BC440(Actor_801C009C *pActor, Actor_801C009C *pSource);
 
@@ -437,7 +437,7 @@ extern "C" int fn_80090390(Character_80093BCC *pCharacter, int *pSlot)
     return i < 2;
 }
 
-extern "C" int fn_801BB878(int index, int a, int b, Actor_801C009C *pActor, int c);
+extern "C" unsigned short fn_801BB878(int index, int a, int b, Actor_801C009C *pActor, int c);
 
 extern "C" int fn_800904D4(Character_80093BCC *pCharacter, int a, int b)
 {
@@ -2441,7 +2441,7 @@ int fn_8009A578(int handle);
 int fn_800EE7C8(Object_80039F5C *p);
 unsigned int fn_8011E188(void);
 int fn_801CFFD0(int a, int b);
-int fn_801BE648(void *p);
+unsigned short fn_801BE648(void *p);
 State_8011F4EC *fn_8011F4EC(void);
 int fn_800C8C1C(Object_80039F5C *p);
 Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
@@ -11690,7 +11690,7 @@ Object_80039F5C *fn_80114E7C(Object_80039F5C *p);
 int fn_800EC758(Object_80039F5C *p);
 int fn_800C76C0(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
-int fn_801BE648(void *p);
+unsigned short fn_801BE648(void *p);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
@@ -13750,7 +13750,7 @@ QueryCursor fn_800C0698(unsigned char index, unsigned short *pValues);
 State_8011F4EC *fn_8011F4EC(void);
 int fn_801787A0(void);
 int fn_80168E00(int team, int index, unsigned char *pOut);
-int fn_801BE648(void *p);
+unsigned short fn_801BE648(void *p);
 void fn_8009A5DC(int a, int b, void *pA, int *pB);
 int fn_8009A578(int handle);
 void fn_801F51DC(int a, void *pBase, int count, int size,

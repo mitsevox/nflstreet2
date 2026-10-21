@@ -1,3 +1,4 @@
+#include "engine/cu_801B9F00.h"
 #include "game/cu_80125F3C.h"
 #include <math.h>
 #include "game/Object_80039F5C.h"
@@ -84,7 +85,6 @@ int fn_801787A0(void);
 float fn_80178A08(void);
 float fn_80178A2C(void);
 float fn_80178A5C(void);
-int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);

@@ -1,3 +1,4 @@
+#include "engine/cu_801B9F00.h"
 #include "game/Command_800CEE74.h"
 #include "game/Block_801BE60C.h"
 #include "game/Input_800B6D34.h"
@@ -230,7 +231,6 @@ void fn_800D4CD4(void);
 void fn_800D7A0C(Object_80039F5C *p, int a);
 int fn_8011F4C8(void);
 float fn_8011F4D4(void);
-unsigned int fn_801BA568(void *record, Record_800D81C8 *entries, unsigned short key);
 int fn_801BA6B0(Record_800D81C8 *entry);
 void fn_801BA6BC(Record_800D81C8 *entry, int value);
 int fn_800CE590(Query_800CE770 *pQuery, Record_800CE608 *pA, Record_800CE608 *pB);
@@ -247,7 +247,6 @@ void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801787A0(void);
-int fn_801BA5A8(void *a, void *b, unsigned short c, int d);
 float fn_801BD660(void *p, int key);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *e, float f);
 float fn_80178A08(void);
@@ -2538,7 +2537,7 @@ extern "C" void fn_800ED208(Object_80039F5C *p, State_800EDC68 *state, unsigned 
     fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, p, 1.0f);
     unsigned char count = fn_801BA568(p->mpUnknown796, p->mpUnknown800, animation);
     for (unsigned char i = 0; i < count; i++)
-        p->mpUnknown800[fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, i)].mUnknown20Word = (int)(speed * 16777216.0f);
+        p->mpUnknown800[fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, i)].mUnknown20 = (int)(speed * 16777216.0f);
 }
 
 extern "C" int fn_800ED484(Object_80039F5C *p, Object_80039F5C *pOther, State_800EDC68 *state) {
@@ -3373,7 +3372,7 @@ extern "C" void fn_800EF224(Object_80039F5C *p) {
                 speed *= fn_800CA9B4(12, p);
             Record_800D81C8 *pEntry = &pRecords[entry];
             fn_801BD81C(&pEntry->mUnknown4C, fn_801CFFA0(speed));
-            pEntry->mUnknown44 = lbl_803EAE08;
+            pEntry->mUnknown2C = lbl_803EAE08;
             fn_800D0C0C(p, 0);
         }
         if (kind != 230) {
@@ -3458,6 +3457,6 @@ extern "C" void fn_800EF538(Object_80039F5C *p) {
             speed *= fn_800CA9B4(12, p);
         Record_800D81C8 *pRecord = &pRecords[index];
         fn_801BD81C(&pRecord->mUnknown4C, fn_801CFFA0(speed));
-        pRecord->mUnknown44 = lbl_803EAE08;
+        pRecord->mUnknown2C = lbl_803EAE08;
     }
 }

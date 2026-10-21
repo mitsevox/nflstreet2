@@ -10,7 +10,7 @@ extern "C" float fn_80178A2C(void);
 extern "C" {
 float fn_80178A08(void);
 void fn_80227690(void *pOut, void *pA, void *pB);
-int fn_801BE648(void *p);
+unsigned short fn_801BE648(void *p);
 int fn_801486A0(void);
 int fn_8009F058(Object_80039F5C *p, Object_80039F5C *pOther, int angle);
 int fn_801783AC(int bit);

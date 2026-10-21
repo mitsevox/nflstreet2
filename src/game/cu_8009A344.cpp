@@ -11,7 +11,7 @@
 
 extern "C" {
 void *fn_8023816C(void *pHandle);
-int fn_801BE648(void *p);
+unsigned short fn_801BE648(void *p);
 int fn_800BA6F8(void);
 void fn_8009A8F0(void);
 extern Block_8009AB34 *lbl_803EA948;
@@ -60,7 +60,7 @@ extern "C" int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRe
                 p->mMotion.mFacing = (p->mMotion.mFacing + pBlock->mUnknown14) & 0xFFFFFF;
                 p->mpUnknown796->mUnknown8 = p->mMotion.mFacing;
             } else {
-                pEntries[pBlock->mUnknown20].mUnknown44 = 1.0f;
+                pEntries[pBlock->mUnknown20].mUnknown2C = 1.0f;
             }
             if (!(pBlock->mUnknown10 > pBlock->mUnknownC)) {
                 Vector_80039F5C pos;

@@ -24,7 +24,7 @@ extern View_802DCEB0 lbl_802DCEB0[];
 extern View_802DCEB0 lbl_802DCF58;
 float fn_801BFFA0(void);
 Sample_801C009C *fn_801C00F8(Actor_801C009C *);
-Sample_801C009C *fn_801C009C(Actor_801C009C *,int,unsigned short,unsigned short);
+Sample_801C009C *fn_801C009C(Actor_801C009C *bank, unsigned short id, unsigned short subId, unsigned short index);
 float fn_801C5278(float,Curve_801C5278 *,int);
 void fn_801D04C4(void); void fn_801D0558(void); void fn_801D0544(void); void fn_801D0508(void);
 void fn_801D0F80(float (*)[4]); void fn_801D06D4(float (*)[4]); void fn_801D0ADC(int);

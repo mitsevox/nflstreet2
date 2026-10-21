@@ -1,6 +1,7 @@
 #ifndef GAME_RECORD_8036B55C_H
 #define GAME_RECORD_8036B55C_H
 
+#include "engine/Record_800D81C8.h"
 #include "game/Object_8003DEC4.h"
 
 /* Argument of fn_800B267C, fn_800B26E0 and fn_800B2A14. */
@@ -15,14 +16,6 @@ struct Object_800B267C {
     float mUnknown28;
     char mUnknown32[4];
     float mUnknown36;
-};
-
-/* First argument of fn_801BA03C, fn_801BC7C0, fn_801BCA74 and fn_801BCCAC. */
-struct Object_801BA03C {
-    unsigned short mUnknown0;
-    unsigned short mUnknown2;
-    unsigned short mUnknown4;
-    char mUnknown6[6];
 };
 
 /* Element of lbl_8036B55C. */
