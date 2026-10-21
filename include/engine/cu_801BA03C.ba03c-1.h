@@ -134,14 +134,9 @@ typedef struct Object_801BA03C {
     int mUnknown8;
 } Object_801BA03C;
 
-void fn_801BA360(Record_800D81C8 *pChannel, int a, int b, float x, float y);
-void fn_801BA384(Object_801BA03C *pList, Record_800D81C8 *pChannels, int index);
 int fn_801BA650(Record_800D81C8 *pChannel, float time, void *pUser);
-int fn_801BA720(Record_800D81C8 *pChannel, Anim_801BAB34 *pAnim, void *pUser);
 unsigned short fn_801BAB2C(Object_801BC084 *pFile);
 Anim_801BAB34 *fn_801BAB34(Object_801BC084 *pFile, int anim);
-int fn_801BAB48(Object_801BC084 *pFile, int state);
-void *fn_801BACD0(Object_801BC084 *pFile, int a, int b, unsigned int index, int group);
 Object_801BC084 *fn_801BC084(unsigned int slot);
 
 #endif

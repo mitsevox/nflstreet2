@@ -9,6 +9,7 @@ int fn_801BD4E4(Block_801BD6D4 *pSeq, float time);
 unsigned short fn_801BD6DC(void *pSeq);
 void fn_801BD710(Block_801BD6D4 *pSeq, float rate);
 float fn_80260260(float x, float y);
+int fn_801BA720(Record_800D81C8 *pChannel, Anim_801BAB34 *pAnim, void *pUser);
 
 void fn_801BA418(Object_801BA03C *pList, Record_800D81C8 *pChannels, int index, int slot, int anim, int state,
                  void *pUser)

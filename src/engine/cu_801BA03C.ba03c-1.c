@@ -1,6 +1,5 @@
 #include "engine/cu_801BA03C.ba03c-1.h"
 
-int fn_801B9F00(Object_801BA03C *pList, Record_800D81C8 *pChannels);
 void fn_801BF46C(Block_801BF3C8 *pWeight, float time);
 
 void fn_801BA03C(Object_801BA03C *pList, Record_800D81C8 *pChannels, float time, void *pUser)
