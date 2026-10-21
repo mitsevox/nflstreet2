@@ -1,4 +1,5 @@
 #include "engine/cu_801B9F00.h"
+#include "game/fn_801BA2A8.h"
 #include "game/fn_801248D4.h"
 #include "game/State_800FDA58.h"
 #include "game/Input_800B6D34.h"
@@ -158,7 +159,6 @@ Object_80039F5C *fn_8017876C(void);
 int fn_801787A0(void);
 float fn_80178A08(void);
 int fn_80178C9C(void);
-int fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
 int fn_801BA6B0(Entry_800EAC9C *pEntry);
 void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
 float fn_801BD690(Block_801BD6D4 *p, int key);

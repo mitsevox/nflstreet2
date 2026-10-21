@@ -1,4 +1,5 @@
 #include "engine/cu_801B9F00.h"
+#include "game/fn_801BA2A8.h"
 #include "game/fn_801248D4.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
@@ -123,7 +124,6 @@ void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_8009BD60(Object_80039F5C *p);
 extern float lbl_803EA2C4;
 int fn_8011E9B4(Object_80039F5C *p);
-int fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
 float fn_801CFB94(int angle);
 void fn_800D7534(int team);
 void fn_801783D0(int bit, int on);

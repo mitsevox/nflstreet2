@@ -1,4 +1,5 @@
 #include "game/Step_800C4460.h"
+#include "game/fn_801BA2A8.h"
 #include "game/Block_8030E6E8.h"
 #include "game/Record_800A0624.h"
 #include "game/Command_800CEE74.h"
@@ -87,7 +88,6 @@ int fn_800CAE28(Object_80039F5C *p, Info_80089904 *pInfo, int angle);
 void fn_800CB484(Point_8017886C *pOut, Point_8017886C *pFrom, Point_8017886C *pTo, int flip, int angle, float scale);
 int fn_80177F70(void);
 Point_8017886C fn_80177FFC(int team);
-int fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
 int fn_801BA6B0(Record_800D81C8 *pRecord);
 void fn_801BA6BC(Record_800D81C8 *pRecord, int value);
 float fn_801BD660(void *p, int key);
