@@ -21355,30 +21355,9 @@
         "merged_via": 918,
         "commit": "aedc50e7c4dafcb7cdf7805f539363aa7ce06c52",
         "introduced_blob": "1ce412db542af5144eb406d9202646a78b47348e",
-        "original_commit": "84f5f05f96a2ca3351703bc2ad478c33aa9e13af",
+        "original_commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
         "original_blob": "46cb37e165c686cecd1430755d5045713fea92c1",
         "integration_adjustment": "Newly exact pre-existing body (fn_80119B98) originates in contribution 902; the PR 1005 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
-      }
-    },
-    {
-      "source": "src/game/cu_801230B8.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x80123594",
-        "0x8012368C",
-        "0x801237F4",
-        "0x80123E30"
-      ],
-      "provenance": {
-        "pull_request": 737,
-        "merged_via": 737,
-        "commit": "aedc50e7c4dafcb7cdf7805f539363aa7ce06c52",
-        "introduced_blob": "a9224c9aa8861e0d1a6b168000d859a6b72772fe",
-        "original_commit": "aeb9a802d7ed930d460657219fe8a3d296369267",
-        "original_blob": "0d4d7c499901b24d8ba19ce43839a86624c67dcc",
-        "integration_adjustment": "Newly exact pre-existing bodies (fn_80123594, fn_8012368C, fn_801237F4, fn_80123E30) originate in contribution 737; the PR 1005 source-form refinement that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution."
       }
     }
   ],
