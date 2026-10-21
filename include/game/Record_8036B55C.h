@@ -19,7 +19,8 @@ struct Object_800B267C {
 
 /* First argument of fn_801BA03C, fn_801BC7C0, fn_801BCA74 and fn_801BCCAC. */
 struct Object_801BA03C {
-    char mUnknown0[4];
+    unsigned short mUnknown0;
+    unsigned short mUnknown2;
     unsigned short mUnknown4;
     char mUnknown6[6];
 };
