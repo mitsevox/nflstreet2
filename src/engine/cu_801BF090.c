@@ -22,11 +22,11 @@ void fn_801BF094(Block_801BF3C8 *p, float step)
 
     if (value != target) {
         p->mUnknown0 = (target - pData->mUnknown0) / (float)pData->mUnknown4 * step + value;
-        if (!(pData->mUnknown0 >= target)) {
-            if (!(p->mUnknown0 <= target)) {
+        if (pData->mUnknown0 < target) {
+            if (p->mUnknown0 > target) {
                 p->mUnknown0 = target;
             }
-        } else if (!(p->mUnknown0 >= target)) {
+        } else if (p->mUnknown0 < target) {
             p->mUnknown0 = target;
         }
     }
@@ -35,7 +35,7 @@ void fn_801BF094(Block_801BF3C8 *p, float step)
 void fn_801BF11C(Block_801BF3C8 *p, float step)
 {
     p->mUnknownC.mType2.mUnknown0 -= step;
-    if (!(p->mUnknownC.mType2.mUnknown0 > 0.0f)) {
+    if (p->mUnknownC.mType2.mUnknown0 <= 0.0f) {
         p->mUnknown0 = 0.0f;
     }
 }
@@ -53,7 +53,7 @@ void fn_801BF140(Block_801BF3C8 *p, float step)
         case 0:
             advance = 1;
             pData->mUnknown4 -= dt;
-            if (!(pData->mUnknown4 >= 0.0f)) {
+            if (pData->mUnknown4 < 0.0f) {
                 step = -pData->mUnknown4;
                 pData->mUnknown9 = 1;
                 dt -= step;
@@ -62,7 +62,7 @@ void fn_801BF140(Block_801BF3C8 *p, float step)
             break;
         case 1:
             pData->mUnknown4 -= dt;
-            if (!(pData->mUnknown4 >= 0.0f)) {
+            if (pData->mUnknown4 < 0.0f) {
                 step = -pData->mUnknown4;
                 pData->mUnknown9 = 2;
                 dt -= step;
@@ -89,11 +89,11 @@ void fn_801BF140(Block_801BF3C8 *p, float step)
             if (frames != 0.0f) {
                 p->mUnknown0 = (to - from) / frames * dt + p->mUnknown0;
             }
-            if (!(from >= to)) {
-                if (!(p->mUnknown0 < to)) {
+            if (from < to) {
+                if (p->mUnknown0 >= to) {
                     p->mUnknown0 = to;
                 }
-            } else if (!(p->mUnknown0 > to)) {
+            } else if (p->mUnknown0 <= to) {
                 p->mUnknown0 = to;
             }
         }

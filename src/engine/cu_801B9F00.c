@@ -17,7 +17,7 @@ int fn_801B9F00(Object_801BA03C *pList, Record_800D81C8 *pChannels)
     best = 1.0f;
     selected = -1;
     for (i = 0; i < count; i++) {
-        if ((pChannels[i].mUnknown8 & 0x8000) && !(pChannels[i].mUnknown30.mUnknown0 > best)) {
+        if ((pChannels[i].mUnknown8 & 0x8000) && pChannels[i].mUnknown30.mUnknown0 <= best) {
             best = pChannels[i].mUnknown30.mUnknown0;
             selected = i;
         }
@@ -52,11 +52,11 @@ void fn_801BA03C(Object_801BA03C *pList, Record_800D81C8 *pChannels, float time,
             pChannels[i].mUnknown1 = 0;
         if (pChannels[i].mUnknown1 != 0) {
             pChannels[i].mUnknown48 -= time;
-            if (!(pChannels[i].mUnknown48 >= 0.0f)) {
+            if (pChannels[i].mUnknown48 < 0.0f) {
                 pChannels[i].mUnknown48 = 0.0f;
                 active = pChannels[i].mUnknown30.mUnknown8;
                 fn_801BF46C(&pChannels[i].mUnknown30, time);
-                if (!(pChannels[i].mUnknown30.mUnknown0 >= 1e-7f) && active != 0)
+                if (pChannels[i].mUnknown30.mUnknown0 < 1e-7f && active != 0)
                     pChannels[i].mUnknown1 = 1;
                 if (pChannels[i].mUnknown1 != 0 && fn_801BA650(&pChannels[i], time, pUser) == 1)
                     pChannels[i].mUnknown1 = 1;

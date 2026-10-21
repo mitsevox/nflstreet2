@@ -41014,8 +41014,8 @@
     },
     {
       "source": "src/engine/cu_801B9D00.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801B9D00-0x801B9F00 (src/engine/cu_801B9D00.c, anim.c in the NASCAR 2005 symbol table), function rows, compiler row engine_c 0x801B9D00-0x801C1D84 and source-form row for the animation library file map. Small-data globals stay external. Comparison only; original bytes stay linked.",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801B9D00-0x801B9F00 (src/engine/cu_801B9D00.c, anim.c in the NASCAR 2005 symbol table), function rows, compiler row engine_c_fastmath 0x801B9D00-0x801C1D84 and source-form row for the animation library file map. Small-data globals stay external. Comparison only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -41084,7 +41084,7 @@
     },
     {
       "source": "src/engine/cu_801B9F00.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801B9F00-0x801BA2A8 (src/engine/cu_801B9F00.c, head of animchan.c), function rows, data row 0x802AED98-0x802AEDA4, compiler row engine_c and source-form row for the split at 0x801BA154 (not reconstructed; it owns .rodata 0x802AEDA4-0x802AEDB0, so this file and cu_801BA2A8.c cannot be one comparison unit). Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -41120,7 +41120,7 @@
     },
     {
       "source": "src/engine/cu_801BA2A8.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BA2A8-0x801BA818 (src/engine/cu_801BA2A8.c, tail of animchan.c), function rows, data row 0x802AEDB0-0x802AEDB8, compiler row engine_c and source-form row for the split at 0x801BA154. Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -41211,7 +41211,7 @@
     },
     {
       "source": "src/engine/cu_801BA818.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BA818-0x801BAD98 (src/engine/cu_801BA818.c, animemot.c in the NASCAR 2005 symbol table), function rows and compiler row engine_c. Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -41296,7 +41296,7 @@
     },
     {
       "source": "src/engine/cu_801BAD98.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BAD98-0x801BC65C (src/engine/cu_801BAD98.c, animfile.c), function rows, compiler row engine_c, external row for the animfile state. Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -41486,7 +41486,7 @@
     },
     {
       "source": "src/engine/cu_801BC65C.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BC65C-0x801BC7C0 (src/engine/cu_801BC65C.c, head of animmot.c), function rows, compiler row engine_c and source-form row for the split at 0x801BC7C0 (not reconstructed; it owns .rodata 0x802AEDB8-0x802AEDC0). Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -41516,7 +41516,7 @@
     },
     {
       "source": "src/engine/cu_801BCA74.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/cu_801BCA74.c, tail of animmot.c), function rows, data row 0x802AEDC0-0x802AEDC8, compiler row engine_c and source-form row for the split at 0x801BC7C0. Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -41552,7 +41552,7 @@
     },
     {
       "source": "src/engine/cu_801BCF40.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BCF40-0x801BDA30 (src/engine/cu_801BCF40.c, animseq.c), function rows, data row 0x802AEDC8-0x802AEE38 and compiler row engine_c. Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -41658,7 +41658,7 @@
     },
     {
       "source": "src/engine/cu_801BDA30.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/cu_801BDA30.c, animst.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c; fn_801BE3C0 is not reconstructed (it loads no literal). Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -41779,7 +41779,7 @@
     },
     {
       "source": "src/engine/cu_801BE82C.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BE82C-0x801BF090 (src/engine/cu_801BE82C.c, animtran.c), function rows, data row 0x802AEE68-0x802AEEA8 and compiler row engine_c. Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -41825,7 +41825,7 @@
     },
     {
       "source": "src/engine/cu_801BF090.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BF090-0x801BF5E8 (src/engine/cu_801BF090.c, animwgt.c), function rows, data row 0x802AEEA8-0x802AEEE0 and compiler row engine_c. Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -41901,7 +41901,7 @@
     },
     {
       "source": "src/engine/cu_801BF5E8.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BF5E8-0x801BF94C (src/engine/cu_801BF5E8.c, animcache.c), function rows and compiler row engine_c. Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -41951,7 +41951,7 @@
     },
     {
       "source": "src/engine/cu_801BF94C.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BF94C-0x801BFEF8 (src/engine/cu_801BF94C.c, animframecache.c), function rows and compiler row engine_c. Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -42026,7 +42026,7 @@
     },
     {
       "source": "src/engine/cu_801BFEF8.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BFEF8-0x801BFFA8 (src/engine/cu_801BFEF8.c, AnimSequencer.c), function rows and compiler row engine_c. Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -42056,7 +42056,7 @@
     },
     {
       "source": "src/engine/cu_801BFFA8.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BFFA8-0x801C01DC (src/engine/cu_801BFFA8.c, AnimSeqCamera.c), function rows and compiler row engine_c. Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -42111,7 +42111,7 @@
     },
     {
       "source": "src/engine/cu_801C01DC.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801C01DC-0x801C06E8 (src/engine/cu_801C01DC.c, animseqncr.c), function rows, data row 0x802AEEE0-0x802AEEE8 and compiler row engine_c; fn_801C065C is not reconstructed (it loads no literal). Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -42172,7 +42172,7 @@
     },
     {
       "source": "src/engine/cu_801C06E8.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801C06E8-0x801C0E04 (src/engine/cu_801C06E8.c, animTexLib.c), function rows, data row 0x802AEEE8-0x802AEF08 and compiler row engine_c. Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -42248,7 +42248,7 @@
     },
     {
       "source": "src/engine/cu_801C0E04.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801C0E04-0x801C10E0 (src/engine/cu_801C0E04.c, llanimtexlib.c), function rows, data row 0x802AEF08-0x802AEF10 and compiler row engine_c. Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -42309,7 +42309,7 @@
     },
     {
       "source": "src/engine/cu_801C10E0.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801C10E0-0x801C1D54 (src/engine/cu_801C10E0.c, asynchronous loader with no NASCAR 2005 counterpart), function rows, compiler row engine_c and source-form rows for the volatile loader state; fn_801C1C98 is not reconstructed. Comparison only; original bytes stay linked.",
       "sections": [
         {
@@ -42399,7 +42399,7 @@
     },
     {
       "source": "src/engine/cu_801C1D54.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801C1D54-0x801C1D84 (src/engine/cu_801C1D54.c, start of auxram.c), function row and compiler row engine_c; the end edge 0x801C1D84 is provisional. Comparison only; original bytes stay linked.",
       "sections": [
         {

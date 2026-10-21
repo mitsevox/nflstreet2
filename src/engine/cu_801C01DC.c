@@ -19,7 +19,7 @@ float fn_801C01E4(Bank_801C009C *bank)
         AnimFileFormat_t *file = fn_801BC084(fn_801BBE5C(frame->mUnknown2A | 0x4000, frame->mUnknownE));
         if (file != 0) {
             float length = fn_801BD60C(fn_801BAB34(file, 0)) / fn_801BFFA0();
-            if (!(length <= result))
+            if (length > result)
                 result = length;
         }
     }

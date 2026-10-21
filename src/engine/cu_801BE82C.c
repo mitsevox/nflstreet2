@@ -21,7 +21,7 @@ unsigned int fn_801BE860(Collection_801BE594 *p, Object_801BA03C *pObject, Recor
     for (i = 0; i < count; i++) {
         unsigned int index = fn_801BA5A8(pObject, pRecords, key, i);
 
-        if (!(highest >= pRecords[index].mUnknown30.mUnknown0)) {
+        if (highest < pRecords[index].mUnknown30.mUnknown0) {
             highest = pRecords[index].mUnknown30.mUnknown0;
             best = index;
         }

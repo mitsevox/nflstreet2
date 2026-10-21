@@ -78,7 +78,7 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, Object_801BA03C *pObject, Rec
         }
         if (!freed) {
             for (i = 0; i < 4; i++) {
-                if (p->mUnknown4[i].mUnknown2 == 1 && !(p->mUnknown4[i].mUnknown4C.mUnknown0 > 1e-07f) && (p->mUnknown4[i].mUnknown0 & 0x8000) &&
+                if (p->mUnknown4[i].mUnknown2 == 1 && p->mUnknown4[i].mUnknown4C.mUnknown0 <= 1e-07f && (p->mUnknown4[i].mUnknown0 & 0x8000) &&
                     p->mUnknown4[i].mUnknown0 != 0xFFFF && fn_801BA568(pObject, pRecords, p->mUnknown4[i].mUnknown0) == 0) {
                     fn_801BDBD4(p, pObject, pRecords, i, pOwner);
                     freed = 1;
@@ -104,7 +104,7 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, Object_801BA03C *pObject, Rec
 
             for (i = 0; i < 4; i++) {
                 if (p->mUnknown4[i].mUnknown2 == 1 && p->mUnknown4[i].mUnknown0 != 0xFFFF &&
-                    !(p->mUnknown4[i].mUnknown4C.mUnknown0 >= lowest)) {
+                    p->mUnknown4[i].mUnknown4C.mUnknown0 < lowest) {
                     lowest = p->mUnknown4[i].mUnknown4C.mUnknown0;
                     index = i;
                 }
@@ -260,10 +260,10 @@ void fn_801BE420(Collection_801BE594 *p, Object_801BA03C *pObject, Record_800D81
             break;
         }
         p->mUnknown4[i].mUnknown8 -= step;
-        if (!(p->mUnknown4[i].mUnknown8 >= 0.0f)) {
+        if (p->mUnknown4[i].mUnknown8 < 0.0f) {
             p->mUnknown4[i].mUnknown8 = 0.0f;
             fn_801BF46C(&p->mUnknown4[i].mUnknown4C, step);
-            if (!(p->mUnknown4[i].mUnknown4C.mUnknown0 <= 1e-07f)) {
+            if (p->mUnknown4[i].mUnknown4C.mUnknown0 > 1e-07f) {
                 if (p->mUnknown4[i].mUnknown4 & 1) {
                     fn_801BDA30(pObject->mUnknown2, p->mUnknown4[i].mUnknown0, pOwner, 2, pObject, pRecords);
                 }

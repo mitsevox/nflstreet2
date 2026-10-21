@@ -170,7 +170,7 @@ int fn_801BD3BC(Block_801BD6D4 *p, Anim_801BAB34 *pScript, int flag)
     p->mpUnknown0 = pScript;
     rate = (float)pScript->mUnknown0 * 0.0625f;
     p->mUnknown4 = rate;
-    if (!(rate > 0.0f)) {
+    if (rate <= 0.0f) {
         p->mUnknown4 = 1.0f;
     }
     p->mUnknownC = p->mUnknown4;
@@ -201,8 +201,8 @@ int fn_801BD4E4(Block_801BD6D4 *p, float step)
     int result = 0;
 
     p->mUnknownC = remaining - step;
-    if (!(p->mUnknownC >= 0.0f)) {
-        while (!(p->mUnknownC >= 0.0f) && !result) {
+    if (p->mUnknownC < 0.0f) {
+        while (p->mUnknownC < 0.0f && !result) {
             p->mUnknown10 = p->mUnknown12;
             p->mUnknown12 = fn_801BCF98(p, remaining, 0);
             if (p->mUnknown12 == 0xFFFF) {
