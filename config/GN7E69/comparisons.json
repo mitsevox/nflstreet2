@@ -39382,6 +39382,461 @@
           "end": "0x801A8620"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801AA640.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x801AA640-0x801AC6B0 (src/engine/cu_801AA640.c), layout rows 0x801AA634-0x801AA640 and 0x801AC6A8-0x801AC6B0, assembly and compiler rows 0x801AA640-0x801AC6B0, and the function rows for each registered extent. Hand-written libsn runtime as top-level asm; the .text placement includes the section end padding 0x801AC6A8-0x801AC6B0. Comparison-only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AA640",
+          "end": "0x801AC6B0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801AA640",
+          "start": "0x801AA640",
+          "end": "0x801AA6B8"
+        },
+        {
+          "symbol": "fn_801AA6B8",
+          "start": "0x801AA6B8",
+          "end": "0x801AA6C8"
+        },
+        {
+          "symbol": "fn_801AA6C8",
+          "start": "0x801AA6C8",
+          "end": "0x801AA7B8"
+        },
+        {
+          "symbol": "EnableMetroTRKInterrupts",
+          "start": "0x801AA7B8",
+          "end": "0x801AA81C"
+        },
+        {
+          "symbol": "fn_801AA81C",
+          "start": "0x801AA81C",
+          "end": "0x801AAA6C"
+        },
+        {
+          "symbol": "fn_801AAA6C",
+          "start": "0x801AAA6C",
+          "end": "0x801AAA80"
+        },
+        {
+          "symbol": "fn_801AAA80",
+          "start": "0x801AAA80",
+          "end": "0x801AAB6C"
+        },
+        {
+          "symbol": "fn_801AAB6C",
+          "start": "0x801AAB6C",
+          "end": "0x801AAB94"
+        },
+        {
+          "symbol": "fn_801AAB94",
+          "start": "0x801AAB94",
+          "end": "0x801AAB98"
+        },
+        {
+          "symbol": "fn_801AAB98",
+          "start": "0x801AAB98",
+          "end": "0x801AABD8"
+        },
+        {
+          "symbol": "fn_801AABD8",
+          "start": "0x801AABD8",
+          "end": "0x801AAC18"
+        },
+        {
+          "symbol": "fn_801AAC18",
+          "start": "0x801AAC18",
+          "end": "0x801AAC68"
+        },
+        {
+          "symbol": "fn_801AAC68",
+          "start": "0x801AAC68",
+          "end": "0x801AAD04"
+        },
+        {
+          "symbol": "fn_801AAD04",
+          "start": "0x801AAD04",
+          "end": "0x801AADF4"
+        },
+        {
+          "symbol": "fn_801AADF4",
+          "start": "0x801AADF4",
+          "end": "0x801AAE3C"
+        },
+        {
+          "symbol": "fn_801AAE3C",
+          "start": "0x801AAE3C",
+          "end": "0x801AAEDC"
+        },
+        {
+          "symbol": "fn_801AAEDC",
+          "start": "0x801AAEDC",
+          "end": "0x801AB004"
+        },
+        {
+          "symbol": "fn_801AB004",
+          "start": "0x801AB004",
+          "end": "0x801AB020"
+        },
+        {
+          "symbol": "fn_801AB020",
+          "start": "0x801AB020",
+          "end": "0x801AB034"
+        },
+        {
+          "symbol": "fn_801AB034",
+          "start": "0x801AB034",
+          "end": "0x801AB05C"
+        },
+        {
+          "symbol": "fn_801AB05C",
+          "start": "0x801AB05C",
+          "end": "0x801AB074"
+        },
+        {
+          "symbol": "fn_801AB074",
+          "start": "0x801AB074",
+          "end": "0x801AB088"
+        },
+        {
+          "symbol": "fn_801AB088",
+          "start": "0x801AB088",
+          "end": "0x801AB14C"
+        },
+        {
+          "symbol": "fn_801AB14C",
+          "start": "0x801AB14C",
+          "end": "0x801AB1A4"
+        },
+        {
+          "symbol": "fn_801AB1A4",
+          "start": "0x801AB1A4",
+          "end": "0x801AB1D4"
+        },
+        {
+          "symbol": "fn_801AB1D4",
+          "start": "0x801AB1D4",
+          "end": "0x801AB2AC"
+        },
+        {
+          "symbol": "fn_801AB2AC",
+          "start": "0x801AB2AC",
+          "end": "0x801AB35C"
+        },
+        {
+          "symbol": "fn_801AB35C",
+          "start": "0x801AB35C",
+          "end": "0x801AB388"
+        },
+        {
+          "symbol": "fn_801AB388",
+          "start": "0x801AB388",
+          "end": "0x801AB3EC"
+        },
+        {
+          "symbol": "fn_801AB3EC",
+          "start": "0x801AB3EC",
+          "end": "0x801AB430"
+        },
+        {
+          "symbol": "fn_801AB430",
+          "start": "0x801AB430",
+          "end": "0x801AB5F0"
+        },
+        {
+          "symbol": "fn_801AB5F0",
+          "start": "0x801AB5F0",
+          "end": "0x801AB7B0"
+        },
+        {
+          "symbol": "fn_801AB7B0",
+          "start": "0x801AB7B0",
+          "end": "0x801AB9C4"
+        },
+        {
+          "symbol": "fn_801AB9C4",
+          "start": "0x801AB9C4",
+          "end": "0x801ABA18"
+        },
+        {
+          "symbol": "fn_801ABA18",
+          "start": "0x801ABA18",
+          "end": "0x801ABAC8"
+        },
+        {
+          "symbol": "fn_801ABAC8",
+          "start": "0x801ABAC8",
+          "end": "0x801ABB9C"
+        },
+        {
+          "symbol": "fn_801ABB9C",
+          "start": "0x801ABB9C",
+          "end": "0x801ABD9C"
+        },
+        {
+          "symbol": "fn_801ABD9C",
+          "start": "0x801ABD9C",
+          "end": "0x801ABF30"
+        },
+        {
+          "symbol": "fn_801ABF30",
+          "start": "0x801ABF30",
+          "end": "0x801ABF48"
+        },
+        {
+          "symbol": "fn_801ABF48",
+          "start": "0x801ABF48",
+          "end": "0x801ABF64"
+        },
+        {
+          "symbol": "fn_801ABF64",
+          "start": "0x801ABF64",
+          "end": "0x801ABFBC"
+        },
+        {
+          "symbol": "fn_801ABFBC",
+          "start": "0x801ABFBC",
+          "end": "0x801AC074"
+        },
+        {
+          "symbol": "fn_801AC074",
+          "start": "0x801AC074",
+          "end": "0x801AC084"
+        },
+        {
+          "symbol": "fn_801AC084",
+          "start": "0x801AC084",
+          "end": "0x801AC1AC"
+        },
+        {
+          "symbol": "fn_801AC1AC",
+          "start": "0x801AC1AC",
+          "end": "0x801AC2D8"
+        },
+        {
+          "symbol": "fn_801AC2D8",
+          "start": "0x801AC2D8",
+          "end": "0x801AC310"
+        },
+        {
+          "symbol": "fn_801AC310",
+          "start": "0x801AC310",
+          "end": "0x801AC6A8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801AC6B0.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x801AC6B0-0x801AD424 (src/engine/cu_801AC6B0.c), layout row 0x801AC6A8-0x801AC6B0, assembly and compiler rows 0x801AC6B0-0x801AD424, and the function rows for each registered extent (the twelve file-server entries use the existing provisional 4-byte rows). Hand-written libsn runtime as top-level asm. Comparison-only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AC6B0",
+          "end": "0x801AD424"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801AC6B0",
+          "start": "0x801AC6B0",
+          "end": "0x801AC8B0"
+        },
+        {
+          "symbol": "fn_801AC8B0",
+          "start": "0x801AC8B0",
+          "end": "0x801AC974"
+        },
+        {
+          "symbol": "fn_801AC974",
+          "start": "0x801AC974",
+          "end": "0x801AC9A0"
+        },
+        {
+          "symbol": "fn_801AC9A0",
+          "start": "0x801AC9A0",
+          "end": "0x801AC9A4"
+        },
+        {
+          "symbol": "fn_801AC9A8",
+          "start": "0x801AC9A8",
+          "end": "0x801AC9AC"
+        },
+        {
+          "symbol": "fn_801AC9B0",
+          "start": "0x801AC9B0",
+          "end": "0x801AC9B4"
+        },
+        {
+          "symbol": "fn_801AC9B8",
+          "start": "0x801AC9B8",
+          "end": "0x801AC9BC"
+        },
+        {
+          "symbol": "fn_801AC9C0",
+          "start": "0x801AC9C0",
+          "end": "0x801AC9C4"
+        },
+        {
+          "symbol": "fn_801AC9C8",
+          "start": "0x801AC9C8",
+          "end": "0x801AC9CC"
+        },
+        {
+          "symbol": "fn_801AC9D0",
+          "start": "0x801AC9D0",
+          "end": "0x801AC9D4"
+        },
+        {
+          "symbol": "fn_801AC9D8",
+          "start": "0x801AC9D8",
+          "end": "0x801AC9DC"
+        },
+        {
+          "symbol": "fn_801AC9E0",
+          "start": "0x801AC9E0",
+          "end": "0x801AC9E4"
+        },
+        {
+          "symbol": "fn_801AC9E8",
+          "start": "0x801AC9E8",
+          "end": "0x801AC9EC"
+        },
+        {
+          "symbol": "fn_801AC9F0",
+          "start": "0x801AC9F0",
+          "end": "0x801AC9F4"
+        },
+        {
+          "symbol": "fn_801AC9F8",
+          "start": "0x801AC9F8",
+          "end": "0x801AC9FC"
+        },
+        {
+          "symbol": "fn_801ACA00",
+          "start": "0x801ACA00",
+          "end": "0x801ACB54"
+        },
+        {
+          "symbol": "fn_801ACB54",
+          "start": "0x801ACB54",
+          "end": "0x801ACB9C"
+        },
+        {
+          "symbol": "fn_801ACB9C",
+          "start": "0x801ACB9C",
+          "end": "0x801ACC24"
+        },
+        {
+          "symbol": "fn_801ACC24",
+          "start": "0x801ACC24",
+          "end": "0x801ACDE0"
+        },
+        {
+          "symbol": "fn_801ACDE0",
+          "start": "0x801ACDE0",
+          "end": "0x801ACF78"
+        },
+        {
+          "symbol": "fn_801ACF78",
+          "start": "0x801ACF78",
+          "end": "0x801ACF7C"
+        },
+        {
+          "symbol": "fn_801ACF7C",
+          "start": "0x801ACF7C",
+          "end": "0x801ACF80"
+        },
+        {
+          "symbol": "fn_801ACF80",
+          "start": "0x801ACF80",
+          "end": "0x801ACFD4"
+        },
+        {
+          "symbol": "fn_801ACFD4",
+          "start": "0x801ACFD4",
+          "end": "0x801ACFEC"
+        },
+        {
+          "symbol": "fn_801ACFEC",
+          "start": "0x801ACFEC",
+          "end": "0x801AD000"
+        },
+        {
+          "symbol": "fn_801AD000",
+          "start": "0x801AD000",
+          "end": "0x801AD028"
+        },
+        {
+          "symbol": "fn_801AD028",
+          "start": "0x801AD028",
+          "end": "0x801AD03C"
+        },
+        {
+          "symbol": "fn_801AD03C",
+          "start": "0x801AD03C",
+          "end": "0x801AD07C"
+        },
+        {
+          "symbol": "fn_801AD07C",
+          "start": "0x801AD07C",
+          "end": "0x801AD0B0"
+        },
+        {
+          "symbol": "fn_801AD0B0",
+          "start": "0x801AD0B0",
+          "end": "0x801AD0EC"
+        },
+        {
+          "symbol": "fn_801AD0EC",
+          "start": "0x801AD0EC",
+          "end": "0x801AD11C"
+        },
+        {
+          "symbol": "fn_801AD11C",
+          "start": "0x801AD11C",
+          "end": "0x801AD16C"
+        },
+        {
+          "symbol": "fn_801AD16C",
+          "start": "0x801AD16C",
+          "end": "0x801AD1DC"
+        },
+        {
+          "symbol": "fn_801AD1DC",
+          "start": "0x801AD1DC",
+          "end": "0x801AD244"
+        },
+        {
+          "symbol": "fn_801AD244",
+          "start": "0x801AD244",
+          "end": "0x801AD2A8"
+        },
+        {
+          "symbol": "fn_801AD2A8",
+          "start": "0x801AD2A8",
+          "end": "0x801AD318"
+        },
+        {
+          "symbol": "fn_801AD318",
+          "start": "0x801AD318",
+          "end": "0x801AD380"
+        },
+        {
+          "symbol": "fn_801AD380",
+          "start": "0x801AD380",
+          "end": "0x801AD424"
+        }
+      ]
     }
   ]
 }
