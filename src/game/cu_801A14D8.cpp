@@ -1209,7 +1209,9 @@ void fn_801A3C40(Object_8003DEC4 *pPlayer)
     fn_80228668();
     fn_801D0470();
     lod = pPlayer->mUnknown4216.mUnknown0;
-    if ((pPlayer->mUnknown20 & 8) || (pPlayer->mUnknown20 & 0x400)) {
+    if (pPlayer->mUnknown20 & 8) {
+        lod = 0;
+    } else if (pPlayer->mUnknown20 & 0x400) {
         lod = 0;
     }
     if (!(pPlayer->mUnknown20 & 8) && fn_800A2624()) {
