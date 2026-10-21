@@ -1014,7 +1014,7 @@ extern "C" void fn_800F0FD0(Input_800B6D34 *pBlock, int index) {
         pBlock->mUnknown0 |= 0x20000000;
     }
     if (pBlock->mUnknown12 != 0.0f || pBlock->mUnknown16 != 0.0f) {
-        Point_8017886C pair;
+        Vector_80039F5C pair;
         float length;
         int angle;
 
@@ -1035,7 +1035,7 @@ extern "C" void fn_800F0FD0(Input_800B6D34 *pBlock, int index) {
     }
     for (i = 0; i < 68; i++) {
         if (fn_800F0FA0(pBlock, lbl_803EAE18->mpEntries[index].mpUnknown0, i) != 0) {
-            pBlock->mBytes92[i / 8] |= 1 << (i % 8);
+            *(pBlock->mBytes92 + i / 8) |= 1 << (i % 8);
         }
     }
 }
@@ -1434,7 +1434,7 @@ extern "C" int fn_800F268C(Object_80039F5C *p) {
             if (time < 0.5f) {
                 p->mpState->mUnknown1 = 4;
                 pBlock->mUnknown6 = 1;
-            } else if ((input.mBytes92[bit / 8] & (1 << bit)) != (1 << bit)) {
+            } else if ((*(input.mBytes92 + bit / 8) & (1 << bit)) != (1 << bit)) {
                 if (time >= 0.5f) {
                     p->mpState->mUnknown1 = 3;
                 }
@@ -1643,10 +1643,10 @@ extern "C" void fn_800F30AC(Object_80039F5C *p, Object_80039F5C *pOther, Points_
                 result = 0;
             } else if (turn > 0x600000) {
                 result = 1;
-            } else if (((heading - angle) & 0xFFFFFF) <= 0x7FFFFF) {
-                result = 2;
-            } else {
+            } else if (((heading - angle) & 0xFFFFFF) > 0x7FFFFF) {
                 result = 3;
+            } else {
+                result = 2;
             }
         } else {
             result = 4;
@@ -1663,10 +1663,10 @@ extern "C" void fn_800F30AC(Object_80039F5C *p, Object_80039F5C *pOther, Points_
             result = 0;
         } else if (turn > 0x600000) {
             result = 1;
-        } else if (((heading - angle) & 0xFFFFFF) <= 0x7FFFFF) {
-            result = 2;
-        } else {
+        } else if (((heading - angle) & 0xFFFFFF) > 0x7FFFFF) {
             result = 3;
+        } else {
+            result = 2;
         }
     } else {
         result = 4;
@@ -2063,7 +2063,7 @@ extern "C" void fn_800F4038(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
     }
     pBlock->mUnknown36 = fn_801CFE40(toAim.mY, toAim.mX) & 0xFFFFFF;
     if (pOther != 0) {
-        if (otherTime < ballTime - 2.5f || (otherTime < 12.0f && ballTime < 12.0f)
+        if (time < ballTime - 2.5f || (time < 12.0f && ballTime < 12.0f)
             || p->mMotion.mPos.mY > pOther->mMotion.mPos.mY + 1.5f) {
             if (fn_802270A4(&toAim) < 7.0f) {
                 cut = 1;
