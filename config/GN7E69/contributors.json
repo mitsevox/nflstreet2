@@ -20878,14 +20878,13 @@
         "adampreddy"
       ],
       "functions": [
-        "0x8009A77C",
         "0x8009A8F0"
       ],
       "provenance": {
         "pull_request": 992,
         "merged_via": 992,
-        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
-        "introduced_blob": "f55361444ebd50ed6648e5d1a6436f51b3a8f93a"
+        "commit": "74680c62f247d88b1184902d07891ff6b9f9f348",
+        "introduced_blob": "d590196ea58bccfc9bde16c1022eb2a7359f151a"
       }
     },
     {
