@@ -160,8 +160,8 @@ struct Field_8011569C {
 };
 
 extern "C" {
-int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
-                float range);
+int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, float range, void *pBlock, int b, int c,
+                int d, int e);
 int fn_800997F4(Object_80039F5C *p, Object_80137ABC *pBall, float range, void *pBlock, int a, int b, int c, int *pOutA,
                 int *pOutB);
 int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
@@ -171,7 +171,7 @@ int fn_8009A77C(Object_80039F5C *p);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_8009E9A4(void);
 void fn_8009E9EC(Object_80039F5C *p, int side, Point_8017886C *pOut);
-int fn_8009EAB0(Object_80039F5C *p, unsigned char a);
+int fn_8009EAB0(Object_80039F5C *p, int a);
 Object_80039F5C *fn_8009EC60(unsigned int index, Point_8017886C *pOut);
 int fn_8009EF6C(void *p);
 int fn_8009EFDC(int side);
@@ -510,7 +510,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
         target = fn_800997F4(p, pBall, range, state, 3, 0, 0, &value, &extra);
     }
     if (target == 0x1FFFFFFF) {
-        target = fn_80099734(p, pBall, 0, mode, state, 1, 0, 0, fn_8009A77C(p), range);
+        target = fn_80099734(p, pBall, 0, mode, range, state, 1, 0, 0, fn_8009A77C(p));
     }
     if (target != 0x1FFFFFFF) {
         int result;
@@ -540,7 +540,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
             }
             if (flag) {
                 found = 1;
-                target = fn_80099734(p, pBall, a, mode, state, 1, 0, 1, fn_8009A77C(p), range);
+                target = fn_80099734(p, pBall, a, mode, range, state, 1, 0, 1, fn_8009A77C(p));
                 if (target == 0x1FFFFFFF) {
                     found = 0;
                 }
@@ -1233,7 +1233,8 @@ extern "C" void fn_80114F64(Object_80039F5C *p, int angle)
     int otherIndex;
 
     float clamped = diff < -lbl_803EAFB0 ? -lbl_803EAFB0 : (diff > lbl_803EAFB0 ? lbl_803EAFB0 : diff);
-    scale *= (clamped + lbl_803EAFB0) / (lbl_803EAFB0 + lbl_803EAFB0);
+    diff = (clamped + lbl_803EAFB0) / (lbl_803EAFB0 + lbl_803EAFB0);
+    scale *= diff;
     if (scale < lbl_803EAFAC) {
         scale = lbl_803EAFAC;
     }
@@ -1380,7 +1381,8 @@ extern "C" float fn_80115248(Object_80039F5C *p, Object_80039F5C *pTarget, unsig
     if (fn_8009EC60(0, 0) == pTarget) {
         float dy = pTarget->mMotion.mPos.mY - fn_8009EC60(1, 0)->mMotion.mPos.mY;
 
-        part = dy < 4.0f ? 4.0f : (dy > part ? part : dy);
+        dy = dy < 4.0f ? 4.0f : (dy > part ? part : dy);
+        part = dy;
     }
     score += part;
     part = 0.0f;
