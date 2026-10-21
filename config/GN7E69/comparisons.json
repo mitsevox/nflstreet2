@@ -30189,7 +30189,7 @@
     {
       "source": "src/game/cu_800D760C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, exact function rows of its seven registered bodies, and exact .rodata data row 0x8029D790-0x8029D7B0 (literals of fn_800D7BC4 and fn_800D7D78). Four other bodies and all static storage remain original and unmeasured.",
+      "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, exact function rows of its eight registered bodies, and exact .rodata data row 0x8029D790-0x8029D7B8 (literals of fn_800D7BC4, fn_800D7D78 and fn_800D7E9C). Three other bodies and all static storage remain original and unmeasured.",
       "sections": [
         {
           "section": ".text",
@@ -30201,7 +30201,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029D790",
-          "end": "0x8029D7B0"
+          "end": "0x8029D7B8"
         }
       ],
       "functions": [
@@ -30239,6 +30239,11 @@
           "symbol": "fn_800D7D78",
           "start": "0x800D7D78",
           "end": "0x800D7E9C"
+        },
+        {
+          "symbol": "fn_800D7E9C",
+          "start": "0x800D7E9C",
+          "end": "0x800D8140"
         }
       ]
     },

@@ -5,12 +5,16 @@
 #include "game/cu_80136B1C.h"
 #include "game/bitstream.h"
 #include "game/fn_801BE60C.h"
+#include "game/fn_801BA2A8.h"
+#include "game/Table_80089904.h"
 
 /* View of the player object's state block at +336 used by these functions. */
 struct State_800D7A4C {
     char mUnknown0[5];
     unsigned char mUnknown5;
-    char mUnknown6[5];
+    char mUnknown6[3];
+    unsigned char mUnknown9;
+    char mUnknownA[1];
     unsigned char mUnknown11;
 };
 
@@ -18,12 +22,22 @@ extern "C" {
 unsigned char fn_800D78C4(Object_80039F5C *p, int id);
 void fn_800D7A4C(Object_80039F5C *p, Block_801BE60C *pBlock);
 void fn_800E7E78(Object_80039F5C *p, State_800D7A4C *pState);
+int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
+int fn_800CA5CC(Object_80039F5C *p, int kind, int apply);
+float fn_800CA9B4(int kind, Object_80039F5C *p);
+void fn_800D8140(State_800D8140 *p, Object_800D81C8 *pOther, int entry);
+void fn_800D81C8(State_800D8140 *p, Object_800D81C8 *pOther);
+void fn_800AE7F0(int index, int team, Object_80039F5C *p);
+int fn_80178320(void);
 
 extern unsigned short lbl_803192BC[2][7];
 extern unsigned short lbl_803192D8[2][7];
 extern signed char lbl_802DA87C[];
 extern float lbl_803EAD00;
 extern float lbl_803EAD04;
+extern float lbl_803EAD08;
+extern float lbl_803EAD0C;
+extern float lbl_803EAD10;
 }
 
 extern "C" void fn_800D760C(BitStream_t *pStream)
@@ -159,4 +173,76 @@ extern "C" void fn_800D7D78(Object_80039F5C *p, Block_801BE60C *pBlock)
             }
         }
     }
+}
+
+extern "C" int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
+                           Object_80039F5C *p, unsigned int phase)
+{
+    Block_801BE60C *pBlock = fn_801BE60C(p->mpUnknown792, key);
+    State_800D7A4C *pState = (State_800D7A4C *)&p->mUnknown336;
+
+    switch (phase) {
+    case 0: {
+        fn_801BE760(p->mpUnknown792, key, 1);
+        int index = fn_8009C4B0(pTable, &p->mUnknown1008);
+        float scale;
+        pBlock->mUnknown4Word = fn_801BA2A8(pRecord, pEntries, pTable->mEntries[index].mUnknown0,
+                                       pTable->mEntries[index].mUnknown2, key, p, 1.0f);
+        pBlock->mUnknown24Float = 0.0f;
+        if (pState->mUnknown5 == 3) {
+            Info_80089904 *pInfo = pTable->mEntries[index].mpInfo;
+            pBlock->mUnknown1CWord = pInfo->mUnknown12;
+            pBlock->mUnknown24Float = pInfo->mUnknown24;
+            pBlock->mUnknown20Float = pInfo->mUnknown24;
+            if (pState->mUnknown9 == 1) {
+                scale = lbl_803EAD0C;
+            } else {
+                scale = lbl_803EAD10;
+            }
+        } else {
+            scale = lbl_803EAD08;
+        }
+        if (fn_800CA5CC(p, 3, 1)) {
+            scale *= fn_800CA9B4(pState->mUnknown5 == 3 ? 11 : 10, p);
+        }
+        pBlock->mUnknown8 = scale;
+        for (int i = 0; i != 11; i++) {
+            pBlock->mUnknownE[i] = 0;
+        }
+        p->mpUnknown800[pBlock->mUnknown4Word].mUnknown44 = scale;
+        fn_800D8140(&pBlock->mUnknown28, (Object_800D81C8 *)p, pBlock->mUnknown4Word);
+        fn_800D7A4C(p, pBlock);
+        if (pState->mUnknown5 == 3) {
+            fn_800AE7F0(6, fn_80178320(), p);
+            if (pState->mUnknown5 == 3 && pBlock->mUnknownCHalf != 0) {
+                pBlock->mUnknownCHalf += 6;
+            }
+        }
+        pBlock->mUnknown19 = 0;
+        break;
+    }
+    case 1:
+        break;
+    case 2:
+        if (fn_801BE648(p->mpUnknown792) == key) {
+            fn_800D7D78(p, pBlock);
+            if (pBlock->mUnknown0Word != 0) {
+                if (--pBlock->mUnknownCHalf > 0) {
+                    fn_800D7BC4(p, pBlock);
+                    p->mMotion.mFacing = (p->mMotion.mFacing + pBlock->mUnknown0Word) & 0xFFFFFF;
+                    p->mpUnknown800[pBlock->mUnknown4Word].mUnknownC =
+                        (p->mpUnknown800[pBlock->mUnknown4Word].mUnknownC + pBlock->mUnknown0Word) & 0xFFFFFF;
+                } else {
+                    pBlock->mUnknownCHalf = 0;
+                    pBlock->mUnknown0Word = 0;
+                }
+            }
+            fn_800D81C8(&pBlock->mUnknown28, (Object_800D81C8 *)p);
+            if (p->mFlags & 1) {
+                p->mFlags &= ~1;
+            }
+        }
+        break;
+    }
+    return 0;
 }
