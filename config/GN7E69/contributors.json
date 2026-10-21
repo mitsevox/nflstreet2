@@ -20955,6 +20955,61 @@
         "original_blob": "3f333bcd4356b016d36bfc21cbd8c0dcc06445fa",
         "integration_adjustment": "Reviewed correction preserves the original PR763 source contribution: fn_801AEAEC resets lbl_803ECEB0 with the literal 0 instead of the always-zero result local, and the declarations shared with the calling game units move to include/engine/cu_801AE3E4.h. The compiled native object is byte-identical before and after; original and introduced source blobs are pinned independently and credit remains the 37 measured exact functions."
       }
+    },
+    {
+      "source": "src/engine/cu_8027EFAC.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8027F000",
+        "0x8027F030",
+        "0x8027F0DC",
+        "0x8027F21C",
+        "0x8027F2C0",
+        "0x8027F2D8",
+        "0x8027F2EC",
+        "0x8027F3A4",
+        "0x8027F45C",
+        "0x8027F61C",
+        "0x8027F6A8",
+        "0x8027F77C",
+        "0x8027F7B0",
+        "0x8027F880",
+        "0x8027F910",
+        "0x8027F9AC",
+        "0x8027FA04",
+        "0x8027FAB8",
+        "0x8027FB2C",
+        "0x8027FB3C",
+        "0x8027FB7C",
+        "0x8027FC08",
+        "0x8027FD14",
+        "0x8027FD64",
+        "0x8027FF54",
+        "0x8028002C",
+        "0x80280080",
+        "0x802801A0",
+        "0x80280268",
+        "0x802802A0",
+        "0x802802A8",
+        "0x802803F8",
+        "0x802803FC",
+        "0x80280404",
+        "0x80280500",
+        "0x80280504",
+        "0x8028050C",
+        "0x80280560",
+        "0x80280564",
+        "0x8028056C",
+        "0x802805C0"
+      ],
+      "provenance": {
+        "pull_request": 766,
+        "merged_via": 766,
+        "commit": "25f0208dd90d708b9473ddb3473004ba6f99b8b8",
+        "introduced_blob": "72e6f40339857dcf911aaee35a4e3fe33bf59e2b"
+      }
     }
   ],
   "target": "GN7E69",
