@@ -40307,6 +40307,428 @@
           "end": "0x801BA03C"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801BA03C.ba03c-1.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801BA03C-0x801C1D84 (survey partition, first third reconstructed by lane ba03c-1), function, compiler engine_c, source-form and type rows in 0x801BA03C-0x801BCA74 and the exact .rodata data row 0x802AED9C-0x802AEDA4. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BA03C",
+          "end": "0x801BA154"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AED9C",
+          "end": "0x802AEDA4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BA03C",
+          "start": "0x801BA03C",
+          "end": "0x801BA154"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BA2A8.ba03c-1.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801BA03C-0x801C1D84 (survey partition, first third reconstructed by lane ba03c-1), function, compiler engine_c, source-form and type rows in 0x801BA03C-0x801BCA74. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BA2A8",
+          "end": "0x801BA418"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BA2A8",
+          "start": "0x801BA2A8",
+          "end": "0x801BA2D0"
+        },
+        {
+          "symbol": "fn_801BA2D0",
+          "start": "0x801BA2D0",
+          "end": "0x801BA360"
+        },
+        {
+          "symbol": "fn_801BA360",
+          "start": "0x801BA360",
+          "end": "0x801BA384"
+        },
+        {
+          "symbol": "fn_801BA384",
+          "start": "0x801BA384",
+          "end": "0x801BA398"
+        },
+        {
+          "symbol": "fn_801BA398",
+          "start": "0x801BA398",
+          "end": "0x801BA418"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BA418.ba03c-1.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801BA03C-0x801C1D84 (survey partition, first third reconstructed by lane ba03c-1), function, compiler engine_c, source-form and type rows in 0x801BA03C-0x801BCA74 and the exact .rodata data row 0x802AEDB0-0x802AEDB8. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BA418",
+          "end": "0x801BA818"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEDB0",
+          "end": "0x802AEDB8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BA418",
+          "start": "0x801BA418",
+          "end": "0x801BA568"
+        },
+        {
+          "symbol": "fn_801BA568",
+          "start": "0x801BA568",
+          "end": "0x801BA5A8"
+        },
+        {
+          "symbol": "fn_801BA5A8",
+          "start": "0x801BA5A8",
+          "end": "0x801BA60C"
+        },
+        {
+          "symbol": "fn_801BA60C",
+          "start": "0x801BA60C",
+          "end": "0x801BA650"
+        },
+        {
+          "symbol": "fn_801BA650",
+          "start": "0x801BA650",
+          "end": "0x801BA6B0"
+        },
+        {
+          "symbol": "fn_801BA6B0",
+          "start": "0x801BA6B0",
+          "end": "0x801BA6BC"
+        },
+        {
+          "symbol": "fn_801BA6BC",
+          "start": "0x801BA6BC",
+          "end": "0x801BA720"
+        },
+        {
+          "symbol": "fn_801BA720",
+          "start": "0x801BA720",
+          "end": "0x801BA784"
+        },
+        {
+          "symbol": "fn_801BA784",
+          "start": "0x801BA784",
+          "end": "0x801BA818"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BA818.ba03c-1.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801BA03C-0x801C1D84 (survey partition, first third reconstructed by lane ba03c-1), function, compiler engine_c, source-form and type rows in 0x801BA03C-0x801BCA74. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BA818",
+          "end": "0x801BC65C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BA818",
+          "start": "0x801BA818",
+          "end": "0x801BA848"
+        },
+        {
+          "symbol": "fn_801BA848",
+          "start": "0x801BA848",
+          "end": "0x801BA850"
+        },
+        {
+          "symbol": "fn_801BA850",
+          "start": "0x801BA850",
+          "end": "0x801BAB24"
+        },
+        {
+          "symbol": "fn_801BAB24",
+          "start": "0x801BAB24",
+          "end": "0x801BAB2C"
+        },
+        {
+          "symbol": "fn_801BAB2C",
+          "start": "0x801BAB2C",
+          "end": "0x801BAB34"
+        },
+        {
+          "symbol": "fn_801BAB34",
+          "start": "0x801BAB34",
+          "end": "0x801BAB48"
+        },
+        {
+          "symbol": "fn_801BAB48",
+          "start": "0x801BAB48",
+          "end": "0x801BAB88"
+        },
+        {
+          "symbol": "fn_801BAB88",
+          "start": "0x801BAB88",
+          "end": "0x801BAC1C"
+        },
+        {
+          "symbol": "fn_801BAC1C",
+          "start": "0x801BAC1C",
+          "end": "0x801BAC9C"
+        },
+        {
+          "symbol": "fn_801BAC9C",
+          "start": "0x801BAC9C",
+          "end": "0x801BACB0"
+        },
+        {
+          "symbol": "fn_801BACB0",
+          "start": "0x801BACB0",
+          "end": "0x801BACBC"
+        },
+        {
+          "symbol": "fn_801BACBC",
+          "start": "0x801BACBC",
+          "end": "0x801BACD0"
+        },
+        {
+          "symbol": "fn_801BACD0",
+          "start": "0x801BACD0",
+          "end": "0x801BAD70"
+        },
+        {
+          "symbol": "fn_801BAD70",
+          "start": "0x801BAD70",
+          "end": "0x801BAD98"
+        },
+        {
+          "symbol": "fn_801BAD98",
+          "start": "0x801BAD98",
+          "end": "0x801BAE08"
+        },
+        {
+          "symbol": "fn_801BAE08",
+          "start": "0x801BAE08",
+          "end": "0x801BAEA4"
+        },
+        {
+          "symbol": "fn_801BAEA4",
+          "start": "0x801BAEA4",
+          "end": "0x801BAEAC"
+        },
+        {
+          "symbol": "fn_801BAEAC",
+          "start": "0x801BAEAC",
+          "end": "0x801BB164"
+        },
+        {
+          "symbol": "fn_801BB164",
+          "start": "0x801BB164",
+          "end": "0x801BB2D8"
+        },
+        {
+          "symbol": "fn_801BB2D8",
+          "start": "0x801BB2D8",
+          "end": "0x801BB480"
+        },
+        {
+          "symbol": "fn_801BB480",
+          "start": "0x801BB480",
+          "end": "0x801BB544"
+        },
+        {
+          "symbol": "fn_801BB544",
+          "start": "0x801BB544",
+          "end": "0x801BB570"
+        },
+        {
+          "symbol": "fn_801BB570",
+          "start": "0x801BB570",
+          "end": "0x801BB608"
+        },
+        {
+          "symbol": "fn_801BB608",
+          "start": "0x801BB608",
+          "end": "0x801BB638"
+        },
+        {
+          "symbol": "fn_801BB638",
+          "start": "0x801BB638",
+          "end": "0x801BB65C"
+        },
+        {
+          "symbol": "fn_801BB65C",
+          "start": "0x801BB65C",
+          "end": "0x801BB74C"
+        },
+        {
+          "symbol": "fn_801BB74C",
+          "start": "0x801BB74C",
+          "end": "0x801BB878"
+        },
+        {
+          "symbol": "fn_801BB878",
+          "start": "0x801BB878",
+          "end": "0x801BB948"
+        },
+        {
+          "symbol": "fn_801BB948",
+          "start": "0x801BB948",
+          "end": "0x801BB994"
+        },
+        {
+          "symbol": "fn_801BB994",
+          "start": "0x801BB994",
+          "end": "0x801BBA18"
+        },
+        {
+          "symbol": "fn_801BBA18",
+          "start": "0x801BBA18",
+          "end": "0x801BBB54"
+        },
+        {
+          "symbol": "fn_801BBB54",
+          "start": "0x801BBB54",
+          "end": "0x801BBC3C"
+        },
+        {
+          "symbol": "fn_801BBC3C",
+          "start": "0x801BBC3C",
+          "end": "0x801BBCC8"
+        },
+        {
+          "symbol": "fn_801BBCC8",
+          "start": "0x801BBCC8",
+          "end": "0x801BBD5C"
+        },
+        {
+          "symbol": "fn_801BBD5C",
+          "start": "0x801BBD5C",
+          "end": "0x801BBDCC"
+        },
+        {
+          "symbol": "fn_801BBDCC",
+          "start": "0x801BBDCC",
+          "end": "0x801BBE5C"
+        },
+        {
+          "symbol": "fn_801BBE5C",
+          "start": "0x801BBE5C",
+          "end": "0x801BBEC0"
+        },
+        {
+          "symbol": "fn_801BBEC0",
+          "start": "0x801BBEC0",
+          "end": "0x801BBF44"
+        },
+        {
+          "symbol": "fn_801BBF44",
+          "start": "0x801BBF44",
+          "end": "0x801BBFE4"
+        },
+        {
+          "symbol": "fn_801BBFE4",
+          "start": "0x801BBFE4",
+          "end": "0x801BC044"
+        },
+        {
+          "symbol": "fn_801BC044",
+          "start": "0x801BC044",
+          "end": "0x801BC060"
+        },
+        {
+          "symbol": "fn_801BC060",
+          "start": "0x801BC060",
+          "end": "0x801BC084"
+        },
+        {
+          "symbol": "fn_801BC084",
+          "start": "0x801BC084",
+          "end": "0x801BC0C0"
+        },
+        {
+          "symbol": "fn_801BC0C0",
+          "start": "0x801BC0C0",
+          "end": "0x801BC0E8"
+        },
+        {
+          "symbol": "fn_801BC0E8",
+          "start": "0x801BC0E8",
+          "end": "0x801BC440"
+        },
+        {
+          "symbol": "fn_801BC440",
+          "start": "0x801BC440",
+          "end": "0x801BC57C"
+        },
+        {
+          "symbol": "fn_801BC57C",
+          "start": "0x801BC57C",
+          "end": "0x801BC64C"
+        },
+        {
+          "symbol": "fn_801BC64C",
+          "start": "0x801BC64C",
+          "end": "0x801BC654"
+        },
+        {
+          "symbol": "fn_801BC654",
+          "start": "0x801BC654",
+          "end": "0x801BC65C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BC65C.ba03c-1.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801BA03C-0x801C1D84 (survey partition, first third reconstructed by lane ba03c-1), function, compiler engine_c, source-form and type rows in 0x801BA03C-0x801BCA74. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BC65C",
+          "end": "0x801BC7C0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BC65C",
+          "start": "0x801BC65C",
+          "end": "0x801BC67C"
+        },
+        {
+          "symbol": "fn_801BC67C",
+          "start": "0x801BC67C",
+          "end": "0x801BC780"
+        },
+        {
+          "symbol": "fn_801BC780",
+          "start": "0x801BC780",
+          "end": "0x801BC7C0"
+        }
+      ]
     }
   ]
 }
