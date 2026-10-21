@@ -486,7 +486,7 @@ extern "C" int fn_8016E764(void)
     int result;
 
     if (mode <= 3) {
-        allowed = mode == 2;
+        allowed = mode < 2;
     }
     result = 0;
     if (fn_800B65A0(fn_80178308()) != 0xFF) {
