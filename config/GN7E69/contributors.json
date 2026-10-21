@@ -20889,21 +20889,6 @@
       }
     },
     {
-      "source": "src/game/cu_800C0330.cpp",
-      "contributors": [
-        "adampreddy"
-      ],
-      "functions": [
-        "0x800C0330"
-      ],
-      "provenance": {
-        "pull_request": 995,
-        "merged_via": 995,
-        "commit": "01401366ea7aba9a3404776d25844ccece14cae9",
-        "introduced_blob": "db9898dc959e95b9cfe77991ac27c268d438dafa"
-      }
-    },
-    {
       "source": "src/game/cu_800C52C8.cpp",
       "contributors": [
         "adampreddy"
