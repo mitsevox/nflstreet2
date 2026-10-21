@@ -1552,11 +1552,10 @@ extern "C" int fn_800F986C(Object_80039F5C *p) {
     case 15:
         if (kind == 2 || kind == 3) {
             result = 12;
+        } else if (pos.mX > base.mX) {
+            result = 14;
         } else {
             result = 10;
-            if (pos.mX > base.mX) {
-                result = 14;
-            }
         }
         break;
     case 2:
@@ -1596,7 +1595,7 @@ extern "C" Object_80039F5C *fn_800F9AF0(unsigned char slot) {
 extern "C" Object_80039F5C *fn_800F9BD8(int forward, Object_80039F5C *p) {
     Record_8011F4E0 *pRecord = fn_8011F4E0();
     Object_80039F5C *pResult = 0;
-    unsigned char id = 0;
+    int id = 0;
     int found = 0;
     unsigned char i;
 
@@ -1606,14 +1605,20 @@ extern "C" Object_80039F5C *fn_800F9BD8(int forward, Object_80039F5C *p) {
         id = p->mIdBytes[1];
     }
     for (i = 0; i < 3; i++) {
-        unsigned char slot = !forward ? 2 - i : i;
+        unsigned char slot;
+
+        if (forward) {
+            slot = i;
+        } else {
+            slot = 2 - i;
+        }
         if (found) {
             Object_80039F5C *pSlot = fn_800F9AF0(slot);
             if (pSlot) {
                 pResult = pSlot;
                 break;
             }
-        } else if (fn_80039F5C(fn_80178308(), pRecord->mUnknown8[slot])->mIdBytes[1] == id) {
+        } else if (fn_80039F5C(fn_80178308(), pRecord->mUnknown8[slot])->mIdBytes[1] == (unsigned char)id) {
             found = 1;
         }
     }
@@ -1903,8 +1908,8 @@ extern "C" Object_80039F5C *fn_800FBF74(Object_80039F5C *pTarget, Object_80039F5
 
     for (i = 0; i < n; i++) {
         Object_80039F5C *p = fn_80039F5C(fn_80178320(), i);
-        unsigned short slot = fn_800FC014(p, pOther) - 1;
-        if (slot <= 4 && fn_80039F5C(fn_80178308(), pRecord->mUnknown8[slot]) == pTarget) {
+        unsigned short kind = fn_800FC014(p, pOther);
+        if (kind >= 1 && kind <= 5 && fn_80039F5C(fn_80178308(), pRecord->mUnknown8[kind - 1]) == pTarget) {
             pResult = p;
             break;
         }
