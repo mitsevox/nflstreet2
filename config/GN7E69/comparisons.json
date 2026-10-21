@@ -14724,19 +14724,19 @@
     {
       "source": "src/game/cu_80169F80.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80169F80-0x8016BAD8 for src/game/cu_80169F80.cpp, its 40 exact function extents, the exact data rows for the three initialized placements and the linker row for the three discarded functions (Xbox 0x120CD0, 0x120D60, 0x120DE0); they are compiled with the file but not measured. Draft comparisons only; the original assembly remains linked.",
+      "evidence": "evidence.tsv unit row 0x80169F80-0x8016BAD8 for src/game/cu_80169F80.cpp, its 29 exact function extents 0x80169F80-0x8016B438 and the exact data rows for the three initialized placements; the bodies from 0x8016B438 and the three discarded functions are compared in the fragment src/game/cu_8016B438.cpp. Draft comparisons only; the original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80169F80",
-          "end": "0x8016BAD8"
+          "end": "0x8016B438"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A49A0",
-          "end": "0x802A4BA0"
+          "end": "0x802A4B10"
         },
         {
           "section": ".data",
@@ -14896,7 +14896,28 @@
           "symbol": "fn_8016B364",
           "start": "0x8016B364",
           "end": "0x8016B438"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8016B438.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the provisional unit cu_80169F80 (evidence.tsv unit row 0x80169F80-0x8016BAD8): its 11 exact function extents 0x8016B438-0x8016BAD8, the exact .rodata row 0x802A4B58-0x802A4BA0 and the linker row for the three discarded functions (Xbox 0x120CD0, 0x120D60, 0x120DE0), compiled with the fragment but not measured. The split lets this pool be placed after the unreferenced query strings 0x802A4B10-0x802A4B58 that no body forms; it is not a recovered original file boundary. Draft comparisons only; the original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8016B438",
+          "end": "0x8016BAD8"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4B58",
+          "end": "0x802A4BA0"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8016B438",
           "start": "0x8016B438",
