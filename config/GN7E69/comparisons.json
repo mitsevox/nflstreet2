@@ -15805,7 +15805,7 @@
     {
       "source": "src/game/cu_800325E8.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained provisional/provisional ten-function hull; three complete getters, the complete slot-6 selector, the complete slot-2 body and two complete neutral lifecycle-role call stubs, with individual name/function/source-form rows. Three other bodies and all storage remain original and unmeasured. Canonical Class_801CC350 and record contracts unchanged. The slot-3 body and the implicit destructor are complete; the vtable _vt.14Class_800325E8 is emitted with them and measured against the exact data row 0x8028AD18-0x8028AD70. No root or other storage emitted.",
+      "evidence": "evidence.tsv retained provisional ten-function hull, full scoped source-form/type/data/name records and existing game_cpp compiler evidence. All ten complete bodies are registered, including native generated initialization/destruction functions and full storage sections. Original bytes remain linked; the initializer is a measured partial and original file ownership remains provisional.",
       "sections": [
         {
           "section": ".text",
@@ -15818,6 +15818,30 @@
           "placement": ".data3",
           "start": "0x8028AD18",
           "end": "0x8028AD70"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803068B4",
+          "end": "0x80306B34"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC680",
+          "end": "0x803EC688"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A5C",
+          "end": "0x80289A60"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289B9C",
+          "end": "0x80289BA0"
         }
       ],
       "functions": [
@@ -15852,17 +15876,22 @@
           "end": "0x80032790"
         },
         {
+          "symbol": "__static_initialization_and_destruction_0",
+          "start": "0x80032790",
+          "end": "0x80032E70"
+        },
+        {
           "symbol": "_._14Class_800325E8",
           "start": "0x80032E70",
           "end": "0x80032E90"
         },
         {
-          "symbol": "fn_80032E90",
+          "symbol": "_GLOBAL_.I.GetName__14Class_800325E8",
           "start": "0x80032E90",
           "end": "0x80032EBC"
         },
         {
-          "symbol": "fn_80032EBC",
+          "symbol": "_GLOBAL_.D.GetName__14Class_800325E8",
           "start": "0x80032EBC",
           "end": "0x80032EE8"
         }
