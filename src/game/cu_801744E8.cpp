@@ -170,6 +170,7 @@ void fn_80174204(Input_80174868 *in, Output_80174868 *out, int type,
 }
 
 int fn_801744E8(Entry_800B206C *events, int, unsigned char *result) {
+  int handled = 0;
   *result = 0;
   int team = events[0].mUnknown4Bytes[2], other = events[1].mUnknown4Bytes[2];
   unsigned short a = team == fn_80178308()
@@ -180,20 +181,20 @@ int fn_801744E8(Entry_800B206C *events, int, unsigned char *result) {
                          : lbl_802E9A04[events[1].mUnknown0].mUnknown2;
   if (team == other) {
     if (a == 15 && b == 5) {
+      handled = 1;
       *result = 1;
-      return 1;
-    }
-    if (a == 5 && b == 15) {
+    } else if (a == 5 && b == 15) {
+      handled = 1;
       *result = 1;
       Entry_800B206C temp = events[0];
       events[0] = events[1];
       events[1] = temp;
-      return 1;
     }
-    return 0;
+  } else {
+    *result = 2;
+    handled = 1;
   }
-  *result = 2;
-  return 1;
+  return handled;
 }
 int fn_80174720(Entry_800B206C *, int, unsigned char *result) {
   *result = 0;
