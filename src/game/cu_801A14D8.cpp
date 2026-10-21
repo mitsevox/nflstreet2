@@ -776,9 +776,10 @@ void fn_801A209C(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatrix)[4], O
                 apHands[k] = pPlayer->mUnknown116[k].mUnknown12.mUnknown48;
                 fn_801D04C4();
                 fn_801D0664(pBones[bone]);
-                apHands[k][0] = pPose[bone * 3 + 3];
-                apHands[k][1] = pPose[bone * 3 + 4];
-                apHands[k][2] = pPose[bone * 3 + 5];
+                short *pJoint = pPose + bone * 3 + 3;
+                apHands[k][0] = pJoint[0];
+                apHands[k][1] = pJoint[1];
+                apHands[k][2] = pJoint[2];
                 fn_802337D4(ppModels[k], &pPlayer->mUnknown4136[k], apHands[k], 0);
                 if (fn_80054D24(0x20) && !fn_8017F584()) {
                     if (pPlayer->mUnknown1164[11].mpUnknown12->mpUnknown12->mUnknown4 == 1) {
