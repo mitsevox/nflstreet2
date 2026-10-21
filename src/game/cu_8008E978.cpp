@@ -11871,7 +11871,7 @@ extern "C" void fn_800CB484(Point_8017886C *pOut, Point_8017886C *pFrom, Point_8
 
 extern "C" {
 void fn_800CBFA8(Object_80039F5C *p, Vector_80039F5C *pPos, int angle);
-extern float lbl_802EA6D0[];
+extern float lbl_802DA6D0[];
 }
 
 extern "C" int fn_801784C4(void);
@@ -11905,7 +11905,7 @@ extern "C" void fn_800CC0C0(int team)
         Object_80039F5C *p = fn_80039F5C((unsigned char)team, i);
         Vector_80039F5C pos;
         pos.mX = x;
-        pos.mY = lbl_802EA6D0[i];
+        pos.mY = lbl_802DA6D0[i];
         fn_800CBFA8(p, &pos, angle);
     }
 }
@@ -11958,7 +11958,7 @@ extern "C" void fn_800CC388(Object_80039F5C *p)
     }
     Vector_80039F5C pos;
     pos.mX = x;
-    pos.mY = lbl_802EA6D0[p->mIdBytes[1]];
+    pos.mY = lbl_802DA6D0[p->mIdBytes[1]];
     fn_800CBFA8(p, &pos, angle);
 }
 
@@ -15479,14 +15479,14 @@ extern "C" int fn_800CCD20(Group_800CC98C *p, Play_800CCEBC *pPlay)
 }
 
 extern "C" {
-extern float lbl_802EA6FC[];
+extern float lbl_802DA6FC[];
 extern float lbl_803ECB08;
 void fn_800CE218(Group_800CC98C *p);
 }
 
 extern "C" float fn_800CE73C(Object_800CE674 *p)
 {
-    return lbl_802EA6FC[(signed char)p->mUnknown2 - 1] * (lbl_803ECB08 * 100621.1171875f);
+    return lbl_802DA6FC[(signed char)p->mUnknown2 - 1] * (lbl_803ECB08 * 100621.1171875f);
 }
 
 extern "C" void fn_800CEDA4(Node_800CCEBC *p, Delta_800CC6A8 *pPoint, int *pAngle, Object_80039F5C *pPlayer, int mirror)
