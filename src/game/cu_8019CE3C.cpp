@@ -66,8 +66,8 @@ void fn_80211EFC(Element_8019CE3C *pElement);
 void fn_80211FF0(void);
 void fn_80212018(const char *pName, Element_8019CE3C *pElement);
 void fn_80233D64(Object_80233EAC *pObject, Desc_80233D64 *pDesc, const char *pName, int a,
-                 void *pData, int b);
-int fn_80234D4C(float *pBox, void *m, void *p, void *q);
+                 void *pData, void *p);
+unsigned int fn_80234D4C(float *pBox, void *m, void *p, void *q);
 void *fn_80236384(int a);
 int fn_80236B98(int a, float x, float y, float z);
 void fn_80236C10(int a, float *p, float *q);

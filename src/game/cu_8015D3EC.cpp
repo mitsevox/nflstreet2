@@ -815,8 +815,8 @@ void fn_8015E994(void)
         fn_801D2BD0(lbl_803ECAB4[1]);
         lbl_803ECAB4[0] = 0;
         lbl_803ECAB4[1] = 0;
-        lbl_802DFC30[0].mUnknown10 = 0;
-        lbl_802DFC30[1].mUnknown10 = 0;
+        lbl_802DFC30[0].mpUnknown10 = 0;
+        lbl_802DFC30[1].mpUnknown10 = 0;
     }
 }
 
@@ -832,8 +832,8 @@ void fn_8015E9F4(int index, Ids_8015F6E8 *pIds)
         fn_8015DA80(index, 0);
     } else if (pIds->mUnknown0 != NO_MODEL) {
         pLods = lbl_802E31D0[index];
-        if (pIds->mUnknown0 != pLods[0].mId || !pLods[0].mUnknown10 ||
-            pIds->mUnknown4 != pLods[1].mId || !pLods[1].mUnknown10) {
+        if (pIds->mUnknown0 != pLods[0].mId || !pLods[0].mpUnknown10 ||
+            pIds->mUnknown4 != pLods[1].mId || !pLods[1].mpUnknown10) {
             lbl_802E31D0[index][0].mId = pIds->mUnknown0;
             lbl_802E31D0[index][1].mId = pIds->mUnknown4;
             fn_8015DA80(index, 1);
@@ -848,7 +848,7 @@ void fn_8015EB00(int index)
 
     for (k = 0; k <= 1; k++) {
         lbl_802E31D0[index][k].mId = NO_MODEL;
-        lbl_802E31D0[index][k].mUnknown10 = 0;
+        lbl_802E31D0[index][k].mpUnknown10 = 0;
     }
 }
 
@@ -864,7 +864,7 @@ void fn_8015EB4C(int index, int id)
         fn_8015DD3C(index, 0);
     } else if (id != NO_MODEL) {
         pLods = lbl_802E3208[index];
-        if (pLods[0].mId != id || !pLods[0].mUnknown10) {
+        if (pLods[0].mId != id || !pLods[0].mpUnknown10) {
             pLods[0].mId = id;
             lbl_802E3208[index][1].mId = id + 1;
             fn_8015DD3C(index, 1);
@@ -879,7 +879,7 @@ void fn_8015EC28(int index)
 
     for (k = 0; k <= 1; k++) {
         lbl_802E3208[index][k].mId = NO_MODEL;
-        lbl_802E3208[index][k].mUnknown10 = 0;
+        lbl_802E3208[index][k].mpUnknown10 = 0;
     }
 }
 
@@ -895,7 +895,7 @@ void fn_8015EC74(int index, int id)
         fn_8015DE3C(index, 0);
     } else if (id != NO_MODEL) {
         pLods = lbl_802E3240[index];
-        if (pLods[0].mId != id || !pLods[0].mUnknown10) {
+        if (pLods[0].mId != id || !pLods[0].mpUnknown10) {
             pLods[0].mId = id;
             lbl_802E3240[index][1].mId = id + 1;
             fn_8015DE3C(index, 1);
@@ -910,7 +910,7 @@ void fn_8015ED50(int index)
 
     for (k = 0; k <= 1; k++) {
         lbl_802E3240[index][k].mId = NO_MODEL;
-        lbl_802E3240[index][k].mUnknown10 = 0;
+        lbl_802E3240[index][k].mpUnknown10 = 0;
     }
 }
 
@@ -926,7 +926,7 @@ void fn_8015ED9C(int index, int id)
         fn_8015DF3C(index, 0);
     } else if (id != NO_MODEL) {
         pLods = lbl_802E3278[index];
-        if (pLods[0].mId != id || !pLods[0].mUnknown10) {
+        if (pLods[0].mId != id || !pLods[0].mpUnknown10) {
             pLods[0].mId = id;
             lbl_802E3278[index][1].mId = NO_MODEL;
             fn_8015DF3C(index, 1);
@@ -992,8 +992,8 @@ void fn_8015F068(int index, Ids_8015F6E8 *pIds)
 
     if (pIds->mUnknown0 != NO_MODEL) {
         pLods = lbl_802E31D0[index];
-        if (pIds->mUnknown0 != pLods[0].mId || !pLods[0].mUnknown10 ||
-            pIds->mUnknown4 != pLods[1].mId || !pLods[1].mUnknown10) {
+        if (pIds->mUnknown0 != pLods[0].mId || !pLods[0].mpUnknown10 ||
+            pIds->mUnknown4 != pLods[1].mId || !pLods[1].mpUnknown10) {
             lbl_802E31D0[index][0].mId = pIds->mUnknown0;
             lbl_802E31D0[index][1].mId = pIds->mUnknown4;
             fn_8015E0B8(0, index, lbl_802E31D0[index], lbl_8031C6A4[index]);
@@ -1007,8 +1007,8 @@ void fn_8015F124(int index, int id)
 
     if (id != NO_MODEL) {
         pLods = lbl_802E3208[index];
-        if (pLods[0].mId != id || !pLods[0].mUnknown10 || pLods[1].mId != id ||
-            !pLods[1].mUnknown10) {
+        if (pLods[0].mId != id || !pLods[0].mpUnknown10 || pLods[1].mId != id ||
+            !pLods[1].mpUnknown10) {
             lbl_802E3208[index][0].mId = id;
             lbl_802E3208[index][1].mId = id + 1;
             fn_8015E0B8(1, index, lbl_802E3208[index], lbl_8031C714[index]);
@@ -1018,8 +1018,8 @@ void fn_8015F124(int index, int id)
 
 void fn_8015F1D4(int index, int id)
 {
-    if ((id == NO_MODEL || (lbl_802E3240[index][0].mId == id && lbl_802E3240[index][0].mUnknown10)) &&
-        lbl_802E3240[index][1].mId == id && lbl_802E3240[index][1].mUnknown10) {
+    if ((id == NO_MODEL || (lbl_802E3240[index][0].mId == id && lbl_802E3240[index][0].mpUnknown10)) &&
+        lbl_802E3240[index][1].mId == id && lbl_802E3240[index][1].mpUnknown10) {
         return;
     }
     lbl_802E3240[index][0].mId = id;
@@ -1029,8 +1029,8 @@ void fn_8015F1D4(int index, int id)
 
 void fn_8015F298(int index, int id)
 {
-    if ((id == NO_MODEL || (lbl_802E3278[index][0].mId == id && lbl_802E3278[index][0].mUnknown10)) &&
-        lbl_802E3278[index][1].mId == id && lbl_802E3278[index][1].mUnknown10) {
+    if ((id == NO_MODEL || (lbl_802E3278[index][0].mId == id && lbl_802E3278[index][0].mpUnknown10)) &&
+        lbl_802E3278[index][1].mId == id && lbl_802E3278[index][1].mpUnknown10) {
         return;
     }
     lbl_802E3278[index][0].mId = id;
@@ -1067,7 +1067,7 @@ void fn_8015F3FC(int a)
     unsigned int i;
 
     for (i = 0; i <= 1; i++) {
-        lbl_8031C1C8.mpUnknown10[i].mUnknown10 = 0;
+        lbl_8031C1C8.mpUnknown10[i].mpUnknown10 = 0;
         fn_801A13A8(&lbl_803EB338[i]);
         lbl_803EB338[i].mId = i + 9;
         fn_801A13B4(&lbl_803EB338[i], &lbl_802DFB40[i], lbl_803EB348);
@@ -1222,8 +1222,8 @@ void fn_8015F958(int index, Ids_8015F6E8 *pIds, Object_8003DEC4 *pPlayer, Callba
     lbl_803ECA74 = index;
     if (pIds->mUnknown0 != NO_MODEL) {
         pLods = lbl_802E31D0[index];
-        if (pIds->mUnknown0 != pLods[0].mId || !pLods[0].mUnknown10 ||
-            pIds->mUnknown4 != pLods[1].mId || !pLods[1].mUnknown10) {
+        if (pIds->mUnknown0 != pLods[0].mId || !pLods[0].mpUnknown10 ||
+            pIds->mUnknown4 != pLods[1].mId || !pLods[1].mpUnknown10) {
             lbl_802E31D0[index][0].mId = pIds->mUnknown0;
             lbl_802E31D0[index][1].mId = pIds->mUnknown4;
             lbl_803EB331++;
@@ -1251,7 +1251,7 @@ void fn_8015FB38(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 
     lbl_803ECA80 = index;
     if (id != NO_MODEL) {
         pLods = lbl_802E3208[index];
-        if (pLods[0].mId != id || !pLods[0].mUnknown10) {
+        if (pLods[0].mId != id || !pLods[0].mpUnknown10) {
             pLods[0].mId = id;
             lbl_802E3208[index][1].mId = id + 1;
             lbl_803EB332++;
@@ -1279,7 +1279,7 @@ void fn_8015FC54(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 
     lbl_803ECA8C = index;
     if (id != NO_MODEL) {
         pLods = lbl_802E3240[index];
-        if (pLods[0].mId != id || !pLods[0].mUnknown10) {
+        if (pLods[0].mId != id || !pLods[0].mpUnknown10) {
             pLods[0].mId = id;
             lbl_802E3240[index][1].mId = id + 1;
             lbl_803EB333++;
@@ -1307,7 +1307,7 @@ void fn_8015FD70(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 
     lbl_803ECA98 = index;
     if (id != NO_MODEL) {
         pLods = lbl_802E3278[index];
-        if (pLods[0].mId != id || !pLods[0].mUnknown10) {
+        if (pLods[0].mId != id || !pLods[0].mpUnknown10) {
             pLods[0].mId = id;
             lbl_802E3278[index][1].mId = id + 1;
             lbl_803EB334++;

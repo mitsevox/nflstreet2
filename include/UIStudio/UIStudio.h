@@ -6,7 +6,32 @@
 /* Type and field names follow the related Madden NFL 2003 UI Studio build.
    Regions this game's code has not yet been shown to use are left as padding. */
 
-typedef struct UISControlInfo_t UISControlInfoT;
+/* Control information block; only the fields selected by
+   UISGetActionPtrValue are established. */
+typedef struct UISControlInfo_t {
+    Uint8 unk_00[0x08];
+    Float32 f08; /* 0x08 */
+    Float32 f0C; /* 0x0C */
+    Float32 f10; /* 0x10 */
+    Float32 f14; /* 0x14 */
+    Float32 f18; /* 0x18 */
+    Float32 f1C; /* 0x1C */
+    Float32 f20; /* 0x20 */
+    Float32 f24; /* 0x24 */
+    Float32 f28; /* 0x28 */
+    Float32 f2C; /* 0x2C */
+    Float32 f30; /* 0x30 */
+    Float32 f34; /* 0x34 */
+    Uint8 unk_38[0x04];
+    Float32 f3C; /* 0x3C */
+    Float32 f40; /* 0x40 */
+    Float32 f44; /* 0x44 */
+    Float32 f48; /* 0x48 */
+    Float32 f4C; /* 0x4C */
+    Float32 f50; /* 0x50 */
+    Float32 f54; /* 0x54 */
+    Float32 f58; /* 0x58 */
+} UISControlInfoT;
 
 /* Per-control state block; only the enable word is established. */
 typedef struct UISControlState_t {
@@ -28,12 +53,21 @@ typedef struct UISNode_t {
     UISNodeEntryT *pEntries;  /* 0x08 */
 } UISNodeT;
 
+/* 8-byte item of a control's item list: ID 0xFFFF marks a link to the
+   control whose index is Value; bits 0xC000 of Flags select the item kind. */
+typedef struct UISControlItem_t {
+    Uint16 Flags; /* 0x00 */
+    Uint16 ID;    /* 0x02 */
+    Int32 Value;  /* 0x04 */
+} UISControlItemT;
+
 /* 20-byte control record of a screen. */
 typedef struct UISControl_t {
     UISControlStateT *pState; /* 0x00 */
     Uint32 NumNodes;          /* 0x04 */
     UISNodeT **ppNodes;       /* 0x08 */
-    Uint8 unk_0C[0x08];
+    Uint32 NumItems;          /* 0x0C */
+    UISControlItemT *pItems;  /* 0x10 */
 } UISControlT;
 
 /* 8-byte entry of a screen's object table; pOffset (when set) holds the
@@ -45,7 +79,7 @@ typedef struct UISObjectRef_t {
 } UISObjectRefT;
 
 typedef struct UISScreenData_t {
-    Uint8 unk_00[0x04];
+    Uint32 NumControls;      /* 0x00 */
     UISControlT *pControls;  /* 0x04 */
     Uint8 unk_08[0x10];
     Uint32 NumObjects;       /* 0x18 */
@@ -54,7 +88,7 @@ typedef struct UISScreenData_t {
 
 /* 20-byte loaded-screen record. */
 typedef struct UISScreen_t {
-    Uint8 unk_00[0x04];
+    Int32 unk_00;               /* 0x00 */
     Uint16 GroupID;             /* 0x04 */
     Uint16 ScreenID;            /* 0x06 */
     Uint8 unk_08[0x04];
@@ -62,13 +96,23 @@ typedef struct UISScreen_t {
     UISScreenDataT *pData;      /* 0x10 */
 } UISScreenT;
 
-/* 16-byte record passed by address to 0x8021D904. */
-typedef struct UISThreadAction_t {
-    Int16 GroupID;  /* 0x00 */
-    Int16 ScreenID; /* 0x02 */
-    Int16 unk_04;   /* 0x04 */
-    Int16 unk_06;   /* 0x06 */
-    Uint8 unk_08[0x08];
+/* 16-byte record passed by address to 0x8021D904 and copied into the
+   thread-action stack; how it is read depends on the action type. */
+typedef union UISThreadAction_t {
+    struct {
+        Int16 GroupID;  /* 0x00 */
+        Int16 ScreenID; /* 0x02 */
+        Int16 unk_04;   /* 0x04 */
+        Int16 unk_06;   /* 0x06 */
+        Int32 unk_08;   /* 0x08 */
+        Uint16 unk_0C;  /* 0x0C */
+        Uint16 unk_0E;  /* 0x0E */
+    } s;
+    struct {
+        Int16 unk_00;   /* 0x00 */
+        Int16 bDone;    /* 0x02: set to 1 once the action has run */
+    } c;
+    Int32 Words[4];
 } UISThreadActionT;
 
 typedef struct UISCursor_t {
@@ -99,6 +143,28 @@ typedef struct UISRateFnc_t {
     UISAnimateDataT AnimationData;  /* 0x20 */
 } UISRateFncT;
 
+/* 40-byte record holding a screen pointer at 0x18. */
+typedef struct UISScreenRef_t {
+    Uint8 unk_00[0x18];
+    UISScreenT *pScreen; /* 0x18 */
+    Uint8 unk_1C[0x0C];
+} UISScreenRefT;
+
+/* Word stack used when calling into screen code; pTop is stored to and then
+   advanced. Only the accessed prefix is declared. */
+typedef struct UISRunState_t {
+    Uint8 unk_00[0x0C];
+    Int32 *pTop;  /* 0x0C */
+    Int32 unk_10; /* 0x10 */
+} UISRunStateT;
+
+/* Thread actions are pushed downwards from pTop; pStart is the first
+   (highest) record. */
+typedef struct UISActionStack_t {
+    Int32 *pStart; /* 0x00 */
+    Int32 *pTop;   /* 0x04 */
+} UISActionStackT;
+
 typedef struct UISInfo_t {
     Int32 unk_00;                   /* 0x00 */
     Uint32 Flags;                   /* 0x04 */
@@ -122,8 +188,13 @@ typedef struct UISInfo_t {
     Uint8 unk_5C[0x04];
     Int32 NumRateFncs;              /* 0x60 */
     UISRateFncT *RateFncs;          /* 0x64 */
-    Uint8 unk_68[0x0C];
-    Uint8 unk_74[0x54];             /* 0x74: passed by address to 0x802180A0 */
+    Uint8 unk_68[0x04];
+    Uint32 NumScreenRefs;           /* 0x6C */
+    UISScreenRefT *ScreenRefs;      /* 0x70 */
+    UISRunStateT RunState;          /* 0x74: passed by address to 0x802180A0 */
+    Uint8 unk_88[0x34];
+    UISActionStackT ActionStack;    /* 0xBC */
+    Uint8 unk_C4[0x04];
     Int32 bShuttingDown;            /* 0xC8 */
 } UISInfoT;
 
@@ -149,8 +220,18 @@ void UISLoadRateFnc(UISInfoT *pInfo, UISScreenT *pScreen, UISControlInfoT *pCont
 void UISUnloadRateFnc(UISInfoT *pInfo, UISControlInfoT *pControlInfo, Uint32 RateFncID);
 void UISRemoveUnNessaryRateFncs(UISInfoT *pInfo);
 
+/* UIStudio.c functions called from other files; names not yet established. */
+void fn_80218AF0(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint16 Arg3, Uint16 Arg4,
+                 Uint8 Count, Int32 *pArgs);
+Int32 fn_802191F0(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Arg3);
+void fn_80219854(UISInfoT *pInfo, UISRunStateT *pState, Int32 Arg2, Int32 Arg3, Int32 Count,
+                 Int32 *pArgs, Int32 bAll);
+void fn_80219BA0(UISInfoT *pInfo, Int32 bArg1, Int16 Arg2, Int32 Arg3, Int32 Arg4, Uint16 Arg5,
+                 Uint16 Arg6);
+void fn_80219E18(UISInfoT *pInfo, Int32 bArg1, Uint16 GroupID, Uint16 ScreenID);
+
 /* UI Studio functions outside UIStudio.c whose names are not yet established. */
-Int32 fn_8021C5EC(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID);
+Uint32 fn_8021C5EC(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID);
 void fn_8021D904(Int16 GroupID, Int16 ScreenID, UISInfoT *pInfo, Int32 Type,
                  UISThreadActionT *pAction, Int32 Arg5, Int32 *pArg6);
 void fn_8021DDF4(UISInfoT *pInfo, Int32 Arg1);

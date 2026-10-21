@@ -8,6 +8,7 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_802372EC.h"
 #include "game/Object_80039F5C.h"
+#include "engine/cu_801AE3E4.h"
 
 /* Block passed to fn_801F5B30; its first word holds fn_80073CB0. */
 struct Params_802D63DC {
@@ -77,7 +78,6 @@ int fn_80076D84(void);
 int fn_80076D94(void);
 int fn_80076DA4(void);
 int fn_80076F40(int index);
-void fn_801AF364(int a);
 void *fn_801EECD0(void *pData, int a, int b, int c);
 void fn_801F4638(int handle);
 void fn_801F46F8(int handle, int a);

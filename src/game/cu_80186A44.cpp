@@ -20,7 +20,7 @@ void fn_80186714(int, int, int);
 void fn_8007D654(void);
 void fn_8022F294(int);
 int fn_8022F0D4(int);
-void fn_8022F794(int, char *);
+int fn_8022F794(int, char *);
 int fn_8022F3D4(int);
 void fn_80029C2C(int, int, int);
 void fn_8002A1D4(int, int, char *);
