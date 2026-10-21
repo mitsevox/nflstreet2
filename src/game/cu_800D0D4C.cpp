@@ -74,69 +74,74 @@ struct State_800D0D4C {
     char mUnknown1CD8[251];
     char mUnknown1DD3[251];
     unsigned char mUnknown1ECE;
-    char mUnknown1ECF[6];
-    unsigned char mUnknown1ED5;
-    unsigned char mUnknown1ED6;
-    unsigned char mUnknown1ED7;
-    unsigned char mUnknown1ED8;
-    unsigned char mUnknown1ED9;
-    unsigned char mUnknown1EDA;
-    unsigned char mUnknown1EDB;
-    unsigned char mUnknown1EDC;
-    unsigned char mUnknown1EDD;
-    unsigned char mUnknown1EDE;
-    unsigned char mUnknown1EDF;
-    unsigned char mUnknown1EE0;
-    unsigned char mUnknown1EE1;
-    unsigned char mUnknown1EE2;
-    unsigned char mUnknown1EE3;
-    unsigned char mUnknown1EE4;
-    unsigned char mUnknown1EE5;
-    unsigned char mUnknown1EE6;
-    unsigned char mUnknown1EE7;
-    unsigned char mUnknown1EE8;
-    unsigned char mUnknown1EE9;
-    unsigned char mUnknown1EEA;
-    unsigned char mUnknown1EEB;
-    unsigned char mUnknown1EEC;
-    unsigned char mUnknown1EED;
-    unsigned char mUnknown1EEE;
-    unsigned char mUnknown1EEF;
-    unsigned char mUnknown1EF0;
-    unsigned char mUnknown1EF1;
-    unsigned char mUnknown1EF2;
-    unsigned char mUnknown1EF3;
-    unsigned char mUnknown1EF4;
-    unsigned char mUnknown1EF5;
-    unsigned char mUnknown1EF6;
-    unsigned char mUnknown1EF7;
-    unsigned char mUnknown1EF8;
-    unsigned char mUnknown1EF9;
-    unsigned char mUnknown1EFA;
-    unsigned char mUnknown1EFB;
-    unsigned char mUnknown1EFC;
-    unsigned char mUnknown1EFD;
-    unsigned char mUnknown1EFE;
-    unsigned char mUnknown1EFF;
-    unsigned char mUnknown1F00;
-    unsigned char mUnknown1F01;
-    unsigned char mUnknown1F02;
-    unsigned char mUnknown1F03;
-    unsigned char mUnknown1F04;
-    unsigned char mUnknown1F05;
-    unsigned char mUnknown1F06;
-    unsigned char mUnknown1F07;
-    unsigned char mUnknown1F08;
-    unsigned char mUnknown1F09;
-    unsigned char mUnknown1F0A;
-    unsigned char mUnknown1F0B;
-    char mUnknown1F0C[1];
-    unsigned char mUnknown1F0D;
-    char mUnknown1F0E[2];
-    unsigned char mUnknown1F10;
-    unsigned char mUnknown1F11;
-    unsigned char mUnknown1F12;
-    unsigned char mUnknown1F13;
+    union {
+        unsigned char mUnknown1ECF[69];
+        struct {
+            char mUnknown1ECFPrefix[6];
+            unsigned char mUnknown1ED5;
+            unsigned char mUnknown1ED6;
+            unsigned char mUnknown1ED7;
+            unsigned char mUnknown1ED8;
+            unsigned char mUnknown1ED9;
+            unsigned char mUnknown1EDA;
+            unsigned char mUnknown1EDB;
+            unsigned char mUnknown1EDC;
+            unsigned char mUnknown1EDD;
+            unsigned char mUnknown1EDE;
+            unsigned char mUnknown1EDF;
+            unsigned char mUnknown1EE0;
+            unsigned char mUnknown1EE1;
+            unsigned char mUnknown1EE2;
+            unsigned char mUnknown1EE3;
+            unsigned char mUnknown1EE4;
+            unsigned char mUnknown1EE5;
+            unsigned char mUnknown1EE6;
+            unsigned char mUnknown1EE7;
+            unsigned char mUnknown1EE8;
+            unsigned char mUnknown1EE9;
+            unsigned char mUnknown1EEA;
+            unsigned char mUnknown1EEB;
+            unsigned char mUnknown1EEC;
+            unsigned char mUnknown1EED;
+            unsigned char mUnknown1EEE;
+            unsigned char mUnknown1EEF;
+            unsigned char mUnknown1EF0;
+            unsigned char mUnknown1EF1;
+            unsigned char mUnknown1EF2;
+            unsigned char mUnknown1EF3;
+            unsigned char mUnknown1EF4;
+            unsigned char mUnknown1EF5;
+            unsigned char mUnknown1EF6;
+            unsigned char mUnknown1EF7;
+            unsigned char mUnknown1EF8;
+            unsigned char mUnknown1EF9;
+            unsigned char mUnknown1EFA;
+            unsigned char mUnknown1EFB;
+            unsigned char mUnknown1EFC;
+            unsigned char mUnknown1EFD;
+            unsigned char mUnknown1EFE;
+            unsigned char mUnknown1EFF;
+            unsigned char mUnknown1F00;
+            unsigned char mUnknown1F01;
+            unsigned char mUnknown1F02;
+            unsigned char mUnknown1F03;
+            unsigned char mUnknown1F04;
+            unsigned char mUnknown1F05;
+            unsigned char mUnknown1F06;
+            unsigned char mUnknown1F07;
+            unsigned char mUnknown1F08;
+            unsigned char mUnknown1F09;
+            unsigned char mUnknown1F0A;
+            unsigned char mUnknown1F0B;
+            char mUnknown1F0C[1];
+            unsigned char mUnknown1F0D;
+            char mUnknown1F0E[2];
+            unsigned char mUnknown1F10;
+            unsigned char mUnknown1F11;
+            unsigned char mUnknown1F12;
+            unsigned char mUnknown1F13;
+        };
+    };
     float mUnknown1F14;
     unsigned int mUnknown1F18;
     Object_80039F5C *mpUnknown1F1C[4];
@@ -178,7 +183,8 @@ struct State_800D0D4C {
     int mUnknown2038[2];
     int mUnknown2040[2];
     int mUnknown2048[2];
-    int mUnknown2050[4];
+    int mUnknown2050[2];
+    int mUnknown2058[2];
     Object_80039F5C *mpUnknown2060;
     unsigned char mUnknown2064[2];
     char mUnknown2066[2];
@@ -288,7 +294,7 @@ int fn_800D0B90(Object_80039F5C *p);
 void fn_800D0D48(int a);
 void fn_800D1A90(int, int, int, int, int, int, int, int, int, int);
 unsigned short fn_800D3EB0(int, int);
-void fn_800D3EDC(int, int, unsigned short);
+void fn_800D3EDC(int, int, int);
 int fn_800D3F08(int);
 void fn_800D3FBC(int, int, int);
 int fn_800D41F8(int);
@@ -684,13 +690,12 @@ extern "C" void fn_800D1788(int side, int id, int count, int *pScaled, int *pSub
 
 extern "C" void fn_800D1A90(int side, int id, int scaled, int subtract, int value, int text, int extra, int mode, int name, int arg) {
     if (lbl_803EACC4) {
-        Record_8018FC1C *record = &lbl_803EACD4->mUnknown0[id];
-        if (record->mUnknown0) {
-            if (value != 0 || record->mUnknown2) {
+        if (lbl_803EACD4->mUnknown0[id].mUnknown0) {
+            if (value != 0 || lbl_803EACD4->mUnknown0[id].mUnknown2) {
                 fn_800D3EDC(side, id, fn_800D3EB0(side, id) + 1);
                 char message[80];
                 strcpy(message, lbl_802981A8[name]);
-                if (lbl_803EACC0) lbl_803EACC0(id, side, message, value, record->mUnknown1, arg, lbl_803EACD4->mUnknown1F0C[0] == 0);
+                if (lbl_803EACC0) lbl_803EACC0(id, side, message, value, lbl_803EACD4->mUnknown0[id].mUnknown1, arg, lbl_803EACD4->mUnknown1F0C[0] == 0);
                 if (lbl_803EACD4->mUnknown0[id].mUnknown1) {
                     if (fn_800A8488(side == 0) == 0 && subtract != 0) {
                         fn_800D3FBC(side == 0, fn_800D3F08(side == 0) - subtract, 0);
@@ -724,6 +729,7 @@ extern "C" void fn_800D1D84(int side, int id, int count) {
         int scaled, subtract, value, text, extra, mode, name;
         fn_800D1788(side, id, count, &scaled, &subtract, &value, &text, &extra, &mode, &name);
         switch (id) {
+        case 67: case 68: fn_8017C8DC(side, 1); lbl_803EC9A4[side] += value; break;
         case 15:
             lbl_803EC9AC[side]++;
             lbl_803EC9D8[side]++;
@@ -748,7 +754,6 @@ extern "C" void fn_800D1D84(int side, int id, int count) {
             fn_8017C724(side, 1); lbl_803EC9A4[side] += value; break;
         case 63: fn_8017C7A8(side, 1); lbl_803EC9A4[side] += value; break;
         case 60: fn_8017C750(side, 1, 0); lbl_803EC9A4[side] += value; break;
-        case 67: case 68: fn_8017C8DC(side, 1);
         case 66: lbl_803EC9A4[side] += value; break;
         case 77: lbl_803EC9B8[side] = 1; lbl_803EC9C0[side] = 1; break;
         case 76: lbl_803EC9B8[side] = 1; break;
@@ -844,7 +849,7 @@ extern "C" void fn_800D2378(int id, int team, int count) {
         lbl_803EACD4->mUnknown2064[1] = 0;
         lbl_803EACD4->mUnknown2050[0] = fn_800D41F8(0);
         lbl_803EACD4->mUnknown2050[1] = fn_800D41F8(1);
-        for (int i = 6; i < 69; i++) ((unsigned char *)lbl_803EACD4)[0x1ECF + i] = 0;
+        for (int i = 6; i < 69; i++) lbl_803EACD4->mUnknown1ECF[i] = 0;
         return;
     }
     if (id != 129 || lbl_803EACD4->mUnknown1F12) return;
@@ -895,12 +900,12 @@ extern "C" void fn_800D2378(int id, int team, int count) {
     fn_800D1634(0, lbl_803EACD4->mUnknown1A70, 0, 0); fn_800D1634(1, lbl_803EACD4->mUnknown1A74, 0, 0);
     if (fn_80178348() != fn_80178308() || fn_80177C38() != 0) lbl_803EACD4->mUnknown1ECE = 1;
     else lbl_803EACD4->mUnknown1ECE = 0;
-    lbl_803EACD4->mUnknown2050[2] = fn_800D41F8(0) - lbl_803EACD4->mUnknown2050[0];
-    lbl_803EACD4->mUnknown2050[3] = fn_800D41F8(1) - lbl_803EACD4->mUnknown2050[1];
-    if (lbl_803EACD4->mUnknown2050[2 + fn_80178320()] > lbl_803EACD4->mUnknown2050[2 + fn_80178308()]) {
-        if (lbl_803EACD4->mUnknown2050[2 + fn_80178320()] > 0) fn_8017E3CC(fn_80178320());
-    } else if (lbl_803EACD4->mUnknown2050[2 + fn_80178308()] > 0) fn_8017E3CC(fn_80178308());
-    fn_8017C5A0(0, lbl_803EACD4->mUnknown2050[2]); fn_8017C5A0(1, lbl_803EACD4->mUnknown2050[3]);
+    lbl_803EACD4->mUnknown2058[0] = fn_800D41F8(0) - lbl_803EACD4->mUnknown2050[0];
+    lbl_803EACD4->mUnknown2058[1] = fn_800D41F8(1) - lbl_803EACD4->mUnknown2050[1];
+    if (lbl_803EACD4->mUnknown2058[fn_80178320()] > lbl_803EACD4->mUnknown2058[fn_80178308()]) {
+        if (lbl_803EACD4->mUnknown2058[fn_80178320()] > 0) fn_8017E3CC(fn_80178320());
+    } else if (lbl_803EACD4->mUnknown2058[fn_80178308()] > 0) fn_8017E3CC(fn_80178308());
+    fn_8017C5A0(0, lbl_803EACD4->mUnknown2058[0]); fn_8017C5A0(1, lbl_803EACD4->mUnknown2058[1]);
     fn_8017C5CC(0, lbl_803EC9A4[0]); fn_8017C5CC(1, lbl_803EC9A4[1]);
     fn_8017C5F8(0, lbl_803EC9AC[0]); fn_8017C5F8(1, lbl_803EC9AC[1]);
     if (lbl_803EC9B8[0]) fn_8017C800(0, ++lbl_803EC9B4[0]); else if (fn_80178360() == 0) lbl_803EC9B4[0] = 0;
@@ -1097,16 +1102,17 @@ extern "C" void fn_800D3294(int team, unsigned int value) {
             fn_800A7A0C(1);
         }
     }
+    unsigned int percent;
     if (value == limit) {
-        value = 100;
+        percent = 100;
     } else {
-        value = value * 100 / limit;
+        percent = value * 100 / limit;
     }
     if (fn_80025708() == 0 && fn_801486A0() != 5) {
         if (fn_800A84C8() != 0 && fn_800A8444((unsigned char)team) != 0) {
-            fn_800D1D84(team, 107, value);
+            fn_800D1D84(team, 107, percent);
         } else {
-            fn_800D1D84(team, 106, value);
+            fn_800D1D84(team, 106, percent);
         }
     }
     lbl_803EACD4->mUnknown1F13 = 1;
@@ -1406,7 +1412,7 @@ extern "C" unsigned short fn_800D3EB0(int side, int index) {
     return (side == 0 ? lbl_803EACD4->mUnknown1A80 : lbl_803EACD4->mUnknown1B7E)[index];
 }
 
-extern "C" void fn_800D3EDC(int side, int index, unsigned short value) {
+extern "C" void fn_800D3EDC(int side, int index, int value) {
     (side == 0 ? lbl_803EACD4->mUnknown1A80 : lbl_803EACD4->mUnknown1B7E)[index] = value;
 }
 
@@ -1824,8 +1830,16 @@ extern "C" void fn_800D5054(Object_80039F5C *p, int kind) {
         fn_800D391C(14);
         fn_800AE7F0(7, fn_80178308(), p);
         int id = 34;
-        if (kind == 1) id = 38;
-        else if (kind == 4) id = 42;
+        switch (kind) {
+        case 0:
+            break;
+        case 1:
+            id = 38;
+            break;
+        case 4:
+            id = 42;
+            break;
+        }
         if (lbl_803EACD4->mUnknown0[id].mUnknown24 != 0.0f && lbl_803EACD4->mUnknown0[id].mUnknown28 != 0) {
             int team = p->mIdBytes[2] ^ 1;
             float distance;
@@ -1838,8 +1852,8 @@ extern "C" void fn_800D5054(Object_80039F5C *p, int kind) {
         }
         Vector_80039F5C position;
         fn_80137D58(fn_801374BC(), &position);
-        Point_8017886C point = fn_80177FE0();
-        if (!(position.mY >= point.mY - 4.0f) && (kind == 4 || kind == 1)) accept = 0;
+        float limit = fn_80177FE0().mY - 4.0f;
+        if (!(position.mY >= limit) && (kind == 4 || kind == 1)) accept = 0;
         if (accept) {
             lbl_803EACD4->mUnknown1EDD = 1;
             lbl_803EACD4->mUnknown1EE0 = kind == 1;
@@ -1915,7 +1929,14 @@ extern "C" void fn_800D5494(Object_80039F5C *p, int kind, unsigned char flag) {
         fn_800D391C(15);
         fn_800AE7F0(7, fn_80178308(), p);
         int id = 46;
-        if (kind == 1 || kind == 4) id = 50;
+        switch (kind) {
+        case 0:
+            break;
+        case 1:
+        case 4:
+            id = 50;
+            break;
+        }
         lbl_803EACD4->mUnknown1F5E = flag;
         if (lbl_803EACD4->mUnknown0[id].mUnknown24 != 0.0f && lbl_803EACD4->mUnknown0[id].mUnknown28 != 0) {
             int team = p->mIdBytes[2] ^ 1;
@@ -1924,12 +1945,12 @@ extern "C" void fn_800D5494(Object_80039F5C *p, int kind, unsigned char flag) {
         } else accept = 1;
         if (accept == 0) {
             if (fn_800D0B90(p) == 0) fn_80156C78(7, 1);
-            if (kind != 0) { lbl_803EACD4->mUnknown1EF5 = 1; accept = 1; }
+            if (kind != 0) { lbl_803EACD4->mUnknown1EF5 = accept = 1; }
         }
         Vector_80039F5C position;
         fn_80137D58(fn_801374BC(), &position);
-        Point_8017886C point = fn_80177FE0();
-        if (!(position.mY >= point.mY - 4.0f) && (kind == 4 || kind == 1)) accept = 0;
+        float limit = fn_80177FE0().mY - 4.0f;
+        if (!(position.mY >= limit) && (kind == 4 || kind == 1)) accept = 0;
         if (accept) {
             lbl_803EACD4->mUnknown1EDE = 1;
             lbl_803EACD4->mUnknown1EE0 = kind != 0;
@@ -2154,8 +2175,8 @@ extern "C" void fn_800D5F1C(Object_80039F5C *p, int kind, unsigned char flag) {
         fn_8009BD2C(p, &record->mUnknown0);
         record->mUnknownC = p->mMotion.mPos.mX;
         record->mUnknown10 = p->mMotion.mPos.mY;
-        record->mUnknown4 = kind;
         record->mUnknown14 = 59;
+        record->mUnknown4 = kind;
         fn_800B1508();
     }
 }
@@ -2166,8 +2187,16 @@ extern "C" void fn_800D60BC(Object_80039F5C *p, int kind, unsigned char flag) {
         fn_800D0D48(23);
         fn_800D391C(16);
         int id = 57;
-        if (kind == 1) id = 60;
-        else if (kind == 4) id = 63;
+        switch (kind) {
+        case 0:
+            break;
+        case 1:
+            id = 60;
+            break;
+        case 4:
+            id = 63;
+            break;
+        }
         lbl_803EACD4->mUnknown1F5D[0] = flag;
         fn_800AE7F0(12, p->mIdBytes[2], p);
         if (lbl_803EACD4->mUnknown0[id].mUnknown24 != 0.0f && lbl_803EACD4->mUnknown0[id].mUnknown28 != 0) {
@@ -2182,12 +2211,12 @@ extern "C" void fn_800D60BC(Object_80039F5C *p, int kind, unsigned char flag) {
     }
     if (accept == 0) {
         if (fn_800D0B90(p) == 0) fn_80156C78(9, 1);
-        if (kind != 0) { lbl_803EACD4->mUnknown1EF5 = 1; accept = 1; }
+        if (kind != 0) { lbl_803EACD4->mUnknown1EF5 = accept = 1; }
     }
     Vector_80039F5C position;
     fn_80137D58(fn_801374BC(), &position);
-    Point_8017886C point = fn_80177FE0();
-    if (!(position.mY >= point.mY - 4.0f) && (kind == 4 || kind == 1)) accept = 0;
+    float limit = fn_80177FE0().mY - 4.0f;
+    if (!(position.mY >= limit) && (kind == 4 || kind == 1)) accept = 0;
     if (accept) {
         lbl_803EACD4->mUnknown1EDF = 1;
         lbl_803EACD4->mUnknown1EE0 = kind == 1;
@@ -2499,9 +2528,13 @@ extern "C" void fn_800D6F08(void) {
 
 extern "C" void fn_800D6F3C(Record_800B15FC *pRecord) {
     switch (pRecord->mUnknown14) {
+    case 0: case 1: case 2:
+        break;
     case 3:
         fn_800D0D48(88);
         fn_800D2378(128, 0, 1);
+        break;
+    case 4:
         break;
     case 5:
         fn_800D0D48(89);
@@ -2512,22 +2545,36 @@ extern "C" void fn_800D6F3C(Record_800B15FC *pRecord) {
             fn_800D371C();
         }
         break;
+    case 6:
+        break;
     case 7:
         fn_800D0D48(90);
         fn_800D378C();
+        break;
+    case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15:
+    case 16: case 17:
         break;
     case 18:
         fn_800D0D48(92);
         fn_800D3648();
         break;
+    case 19: case 20: case 21: case 22: case 23:
+        break;
     case 24:
         fn_800D0D48(94);
         fn_800D3C00(0);
+        break;
+    case 25: case 26: case 27: case 28: case 29: case 30: case 31: case 32:
+    case 33: case 34: case 35: case 36: case 37: case 38: case 39: case 40:
+    case 41: case 42: case 43: case 44: case 45: case 46: case 47: case 48:
+    case 49: case 50: case 51: case 52: case 53: case 54: case 55:
         break;
     case 56:
         fn_800D0D48(93);
         fn_800D3C00(0);
         fn_800D2378(79, fn_80178320(), 1);
+        break;
+    case 57: case 58: case 59:
         break;
     case 60:
         fn_800D0D48(95);
@@ -2538,6 +2585,8 @@ extern "C" void fn_800D6F3C(Record_800B15FC *pRecord) {
             fn_800D0D48(73);
             lbl_803EACD4->mUnknown1F04 = 1;
         }
+        break;
+    case 61: case 62:
         break;
     }
 }
@@ -2565,8 +2614,8 @@ extern "C" void fn_800D70CC(Record_80067CA8 *pRecord) {
 }
 
 extern "C" void fn_800D7158(void) {
-    int mode = fn_801486A0();
     int changed = 0;
+    int mode = fn_801486A0();
     if (mode == 0) {
         if (lbl_803EACC8 != 1) { lbl_803EACC8 = 1; changed = 1; }
     } else if (lbl_803EACC8 != 0) { lbl_803EACC8 = 0; changed = 1; }
@@ -2587,22 +2636,44 @@ extern "C" void fn_800D7158(void) {
     lbl_803EACD4->mUnknown2064[1] = 0;
     lbl_803EACD4->mUnknown1ECE = 1;
     lbl_803EACD4->mUnknown1F14 = 0.0f;
-    lbl_803EACD4->mUnknown2050[3] = 0;
     lbl_803EACD4->mUnknown2050[0] = 0;
-    lbl_803EACD4->mUnknown2050[2] = 0;
+    lbl_803EACD4->mUnknown2058[0] = 0;
     lbl_803EACD4->mUnknown2050[1] = 0;
-    lbl_803EC9A4[0] = lbl_803EC9A4[1] = 0;
-    lbl_803EC9AC[0] = lbl_803EC9AC[1] = 0;
-    lbl_803EC9B4[0] = lbl_803EC9B8[0] = lbl_803EC9BC[0] = lbl_803EC9C0[0] = lbl_803EC9C4[0] = lbl_803EC9C8[0] = 0;
-    lbl_803EC9B4[1] = lbl_803EC9B8[1] = lbl_803EC9BC[1] = lbl_803EC9C0[1] = lbl_803EC9C4[1] = lbl_803EC9C8[1] = 0;
-    lbl_803EC9CC[0] = lbl_803EC9CC[1] = 0;
-    lbl_803EC9D0[0] = lbl_803EC9D0[1] = 0;
-    lbl_803EC9D4[0] = lbl_803EC9D4[1] = 0;
-    lbl_803EC9DC[1] = lbl_803EC9D4[1] = lbl_803EC9D8[0] = lbl_803EC9D8[1] = lbl_803EC9DC[0] = 0;
-    for (int i = 6; i < 69; i++) ((unsigned char *)lbl_803EACD4)[0x1ECF + i] = 0;
+    lbl_803EACD4->mUnknown2058[1] = 0;
+    lbl_803EC9A4[0] = 0;
+    lbl_803EC9A4[1] = 0;
+    lbl_803EC9AC[0] = 0;
+    lbl_803EC9AC[1] = 0;
+    lbl_803EC9B4[0] = 0;
+    lbl_803EC9B4[1] = 0;
+    lbl_803EC9B8[0] = 0;
+    lbl_803EC9B8[1] = 0;
+    lbl_803EC9BC[0] = 0;
+    lbl_803EC9BC[1] = 0;
+    lbl_803EC9C0[0] = 0;
+    lbl_803EC9C0[1] = 0;
+    lbl_803EC9C4[0] = 0;
+    lbl_803EC9C4[1] = 0;
+    lbl_803EC9C8[0] = 0;
+    lbl_803EC9C8[1] = 0;
+    lbl_803EC9CC[0] = 0;
+    lbl_803EC9CC[1] = 0;
+    lbl_803EC9D0[0] = 0;
+    lbl_803EC9D0[1] = 0;
+    lbl_803EC9D4[0] = 0;
+    lbl_803EC9D4[1] = 0;
+    lbl_803EC9D8[0] = 0;
+    lbl_803EC9D8[1] = 0;
+    lbl_803EC9DC[0] = 0;
+    lbl_803EC9DC[1] = 0;
+    for (int i = 6; i < 69; i++) lbl_803EACD4->mUnknown1ECF[i] = 0;
     lbl_803EACD8 = 2;
     lbl_803EACC4 = 1;
-    lbl_803EACC5 = (unsigned int)(mode - 2) > 1;
+    if (mode == 2 || mode == 3) {
+        lbl_803EACC5 = 0;
+    } else {
+        lbl_803EACC5 = 1;
+    }
 }
 
 extern "C" void fn_800D7438(void) {

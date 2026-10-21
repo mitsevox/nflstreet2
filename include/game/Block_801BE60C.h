@@ -61,17 +61,30 @@ struct Block_801BE60C {
         struct {
             short mUnknownCHalf;
             signed char mUnknownE[11];
+            unsigned char mUnknown19;
         };
     };
-    unsigned char mUnknown1C;
-    unsigned char mUnknown1D;
-    char mUnknown1E[2];
-    State_800D8140 mUnknown20;
-    unsigned char mUnknown38;
-    unsigned char mUnknown39;
-    char mUnknown3A[2];
-    unsigned char mUnknown3C;
-    unsigned char mUnknown3D;
+    /* 0x800D7E9C reads +0x1C as a word, +0x20/+0x24 as floats and passes
+       +0x28 to fn_800D8140; the other callers use the first view. */
+    union {
+        struct {
+            unsigned char mUnknown1C;
+            unsigned char mUnknown1D;
+            char mUnknown1E[2];
+            State_800D8140 mUnknown20;
+            unsigned char mUnknown38;
+            unsigned char mUnknown39;
+            char mUnknown3A[2];
+            unsigned char mUnknown3C;
+            unsigned char mUnknown3D;
+        };
+        struct {
+            int mUnknown1CWord;
+            float mUnknown20Float;
+            float mUnknown24Float;
+            State_800D8140 mUnknown28;
+        };
+    };
 };
 
 #endif
