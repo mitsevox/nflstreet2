@@ -24,7 +24,7 @@ int fn_800D41F8(int team);
 float fn_80260E24(float a);
 float fn_80260FE8(float a);
 Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
-void fn_801BE760(void *p, unsigned short key, int a);
+void fn_801BE760(void *p, unsigned short key, unsigned short flags);
 void fn_800D8140(State_800D8140 *pState, Object_80039F5C *p, int value);
 void fn_800D81C8(State_800D8140 *pState, Object_80039F5C *p);
 void fn_8022765C(void *pOut, void *pA, void *pB);

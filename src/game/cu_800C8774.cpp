@@ -95,7 +95,7 @@ void fn_801BD81C(void *p, float value);
 int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
 Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
 int fn_801BE648(void *p);
-void fn_801BE760(void *p, unsigned short key, int a);
+void fn_801BE760(void *p, unsigned short key, unsigned short flags);
 int fn_801C4E98(void *p, const char *pName);
 int fn_801CFE40(float y, float x);
 float fn_801CFFA0(float value);
