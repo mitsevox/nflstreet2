@@ -392,10 +392,11 @@ void fn_80196130(void) {
     lbl_803ECBB8 = 0;
 }
 void fn_80196174(Object_80228224 *object) {
+    lbl_802EDCD0.mUnknown4 = 0;
+    lbl_802EDCD0.mUnknown8 = 0;
     lbl_802EDCD0.mUnknownC = object;
     lbl_802EDCD0.mUnknown0 = 0;
     lbl_803ECBB8 = 0;
-    lbl_802EDCD0.mUnknown4 = lbl_802EDCD0.mUnknown8 = 0;
     if (!lbl_803EB738) {
         lbl_803EB738 = fn_801D2BB0(1, 0x23000, 0, 0);
         GXInitTexObj(&lbl_80365168, lbl_803EB738, 320, 224, 4, 0, 0, 0);
