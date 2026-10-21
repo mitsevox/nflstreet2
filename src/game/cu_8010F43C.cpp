@@ -814,7 +814,6 @@ extern "C" int fn_801115C0(Object_80039F5C *p)
     int result = 0;
     float limit;
     float x;
-    float distance;
 
     if (p->mpState->mId == 59) {
         limit = 0.5f;
@@ -822,8 +821,11 @@ extern "C" int fn_801115C0(Object_80039F5C *p)
         limit = 0.4f;
     }
     x = fabsf(p->mMotion.mPos.mX);
-    distance = x > fn_80178A08() ? x - fn_80178A08() : fn_80178A08() - x;
-    if (distance < limit) {
+    if (x > fn_80178A08()) {
+        if (x - fn_80178A08() < limit) {
+            result = 1;
+        }
+    } else if (fn_80178A08() - x < limit) {
         result = 1;
     }
     return result;

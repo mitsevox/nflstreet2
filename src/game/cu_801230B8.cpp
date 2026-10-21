@@ -211,7 +211,8 @@ void fn_80123594(float *pValues, Object_80039F5C *p, Object_80039F5C *)
                 Point_8017886C delta;
                 fn_80227690(&delta, pOtherPos, &pos);
                 unsigned int direction = (fn_801CFE40(delta.mY, delta.mX) + 0x100000) >> 21 & 7;
-                pValues[direction] += 15.0f - distance;
+                float *pSlot = &pValues[direction];
+                *pSlot += 15.0f - distance;
             }
         }
     }
@@ -243,7 +244,8 @@ void fn_8012368C(float *pValues, Object_80039F5C *p, Object_80039F5C *)
                 Point_8017886C delta;
                 fn_80227690(&delta, pOtherPos, &pos);
                 unsigned int direction = (fn_801CFE40(delta.mY, delta.mX) + 0x100000) >> 21 & 7;
-                pValues[direction] += 15.0f - distance;
+                float *pSlot = &pValues[direction];
+                *pSlot += 15.0f - distance;
             }
         }
     }
@@ -307,7 +309,8 @@ void fn_801237F4(float *pValues, Object_80039F5C *p, Object_80039F5C *)
     }
     if (fn_801486A0()) fn_8012327C(pValues, p);
     else if (fn_800F06F4(0, fn_80039F5C(fn_80178320(), 0)->mpState, 51, 65535) != 65535) {
-        pValues[(p->mMotion.mFacing + 0x100000) >> 21 & 7] = 0.0f;
+        float *pSlot = &pValues[(p->mMotion.mFacing + 0x100000) >> 21 & 7];
+        *pSlot = 0.0f;
     }
 }
 
@@ -361,9 +364,12 @@ void fn_80123E30(float *pValues, Object_80039F5C *p, Object_80039F5C *)
             fn_80227690(&delta, pOtherPos, &pos);
             unsigned int direction = (fn_801CFE40(delta.mY, delta.mX) + 0x100000) >> 21 & 7;
             float value = 8.0f - distance;
-            pValues[direction] += value;
-            pValues[(direction + 1) % 8] += value * 0.5f;
-            pValues[(direction - 1) % 8] += value * 0.5f;
+            float *pSlot = &pValues[direction];
+            *pSlot += value;
+            pSlot = &pValues[(direction + 1) % 8];
+            *pSlot += value * 0.5f;
+            pSlot = &pValues[(direction - 1) % 8];
+            *pSlot += value * 0.5f;
         }
     }
 }
@@ -437,19 +443,24 @@ unsigned char fn_801243E0(float *pValues, int angle)
     float minimum = 32767.0f;
     unsigned char best = 0;
     for (unsigned char i = 0; i < 8; i++) {
-        float value = pValues[i];
+        float *pValue = &pValues[i];
+        float value = *pValue;
         if (!(value >= minimum)) {
             best = i;
             minimum = value;
         } else if (value == minimum) {
-            float side = pValues[(i - 1) & 7] + pValues[(i + 1) & 7];
-            float bestSide = pValues[(best - 1) & 7] + pValues[(best + 1) & 7];
+            float *pPrev = &pValues[(i - 1) & 7];
+            float *pNext = &pValues[(i + 1) & 7];
+            float side = *pPrev + *pNext;
+            float *pBestPrev = &pValues[(best - 1) & 7];
+            float *pBestNext = &pValues[(best + 1) & 7];
+            float bestSide = *pBestPrev + *pBestNext;
             if (!(side >= bestSide)) {
                 minimum = value;
                 best = i;
             } else if (side == bestSide && angle != -1
                 && fn_801CFFD0(angle, i << 21) < fn_801CFFD0(angle, best << 21)) {
-                minimum = pValues[i];
+                minimum = *pValue;
                 best = i;
             }
         }
