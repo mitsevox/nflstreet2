@@ -228,8 +228,9 @@ asm(
 "    .size fn_801AC974,.-fn_801AC974\n"
 );
 
-/* File-server entry points. In debug mode fn_801AC8B0 replaces the first word
-   of each with a host request code (0x10-0x1B) that the debugger services. */
+/* File-server entry points. fn_801AC8B0, called from fn_801AA81C, overwrites
+   the first word of each with a host request code (0x10-0x1B); the branch it
+   replaces reports that the file server is unavailable. */
 asm(
 "    .globl fn_801AC9A0\n"
 "    .type fn_801AC9A0,@function\n"
