@@ -79,7 +79,7 @@ void fn_80227538(void *, int, float);
 void fn_8022765C(void *, void *, void *);
 void fn_801D0664(void *);
 void fn_80214184(int);
-unsigned int fn_8021445C(void *, int, int);
+unsigned int fn_8021445C(void *, void *, int);
 void fn_801A6924(unsigned int);
 void fn_801A6870(unsigned int);
 int fn_800A33B8(void);

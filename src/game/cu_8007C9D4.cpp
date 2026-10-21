@@ -2,8 +2,8 @@
 #include "game/cu_8007C9D4.h"
 
 extern "C" {
-void fn_8022DBF4(int value);
-void fn_8022DC38(int value);
+int fn_8022DBF4(int value);
+int fn_8022DC38(int value);
 int fn_8022E558(void);
 int fn_8022E560(void);
 }
