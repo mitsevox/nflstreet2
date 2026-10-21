@@ -87,7 +87,7 @@ void fn_8018A8C0(unsigned char value);
 int fn_80065650(void);
 int fn_8022F384(int a);
 void *fn_8021EA44(int index);
-int fn_8021E984(void *p, int a);
+void *fn_8021E984(void *p, int a);
 void fn_8000FCD4(int a);
 int fn_8000FCCC(void);
 unsigned char fn_80187C64(void);
@@ -489,7 +489,7 @@ int fn_801801F8(unsigned int id, Arg_801801F8 *pArgs, int unused, Arg_801801F8 *
         int high = pArgs[1].i >> 16;
         int low = pArgs[1].i & 0xFFFF;
 
-        pResult->i = fn_801F0DB8((void *)fn_8021E984(pObject, high), low);
+        pResult->i = fn_801F0DB8(fn_8021E984(pObject, high), low);
 
         break;
     }
