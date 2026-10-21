@@ -20857,14 +20857,34 @@
         "adampreddy"
       ],
       "functions": [
-        "0x800F986C",
+        "0x800F986C"
+      ],
+      "provenance": {
+        "pull_request": 634,
+        "merged_via": 696,
+        "commit": "d39361568f1b949b388db0dde5459d2faeae018d",
+        "introduced_blob": "86c70ce5d0ed9f20e62a1526a4018f8efee441b6",
+        "original_commit": "f3fed80127536c1361a6734399a6d7a17b1a96a3",
+        "original_blob": "0d0329df8ea939def6a50036d4e31e40b0f3cab1",
+        "integration_adjustment": "Newly exact pre-existing body (fn_800F986C) originates in contribution 634; the PR 994 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
         "0x800FBF74"
       ],
       "provenance": {
-        "pull_request": 994,
-        "merged_via": 994,
+        "pull_request": 556,
+        "merged_via": 573,
         "commit": "d39361568f1b949b388db0dde5459d2faeae018d",
-        "introduced_blob": "86c70ce5d0ed9f20e62a1526a4018f8efee441b6"
+        "introduced_blob": "86c70ce5d0ed9f20e62a1526a4018f8efee441b6",
+        "original_commit": "a10d9ae965815037bad1084e7ca2661469fc3895",
+        "original_blob": "a73f9e0cd1ffdfbaf2ce0e1027def659043c7cbe",
+        "integration_adjustment": "Newly exact pre-existing body (fn_800FBF74) originates in contribution 556; the PR 994 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
       }
     },
     {
