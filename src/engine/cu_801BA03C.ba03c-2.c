@@ -85,20 +85,34 @@ typedef struct Payload_801BE60C {
     char mUnknown0[64];
 } Payload_801BE60C;
 
-typedef union Value_801BF094 {
-    unsigned int mUnknown0;
-    float mUnknown0Float;
-} Value_801BF094;
+typedef struct Data1_801BF4A8 {
+    float mUnknown0;
+    unsigned int mUnknown4;
+} Data1_801BF4A8;
+
+typedef struct Data2_801BF11C {
+    float mUnknown0;
+} Data2_801BF11C;
+
+typedef struct Data3_801BF530 {
+    float mUnknown0;
+    float mUnknown4;
+    unsigned char mUnknown8;
+    signed char mUnknown9;
+    unsigned short mUnknownA;
+} Data3_801BF530;
+
+typedef union Data_801BF3C8 {
+    Data1_801BF4A8 mType1;
+    Data2_801BF11C mType2;
+    Data3_801BF530 mType3;
+} Data_801BF3C8;
 
 typedef struct Fade_801BF3C8 {
     float mUnknown0;
     float mUnknown4;
-    char mUnknown8[4];
-    float mUnknownC;
-    Value_801BF094 mUnknown10;
-    unsigned char mUnknown14;
-    signed char mUnknown15;
-    unsigned short mUnknown16;
+    int mType;
+    Data_801BF3C8 mUnknownC;
 } Fade_801BF3C8;
 
 typedef struct Slot_801BE594 {
@@ -251,7 +265,7 @@ int fn_801D2BD0(void *p);
 int fn_801F7C88(void);
 unsigned int fn_801BA568(Object_801BA03C *pObject, Record_801BCA74 *pRecords, unsigned short key);
 unsigned int fn_801BA5A8(Object_801BA03C *pObject, Record_801BCA74 *pRecords, unsigned short key, unsigned short index);
-void fn_801BF3C8(Fade_801BF3C8 *p, int a, int b, float from, float to);
+void fn_801BF3C8(Fade_801BF3C8 *p, int type, float a, void *pSource, float b);
 void fn_801BF46C(Fade_801BF3C8 *p, float step);
 void fn_801BF4A8(Fade_801BF3C8 *p, int frames, float from, float to);
 void fn_801BBDCC(unsigned short type, unsigned short key, Transitions_801BEFA4 *pTable);
@@ -887,11 +901,12 @@ int fn_801BE068(Collection_801BE594 *p, Object_801BA03C *pObject, Record_801BCA7
             fn_801BDA30(pObject->mUnknown2, previous, pOwner, 4, pObject, pRecords);
             if (p->mUnknown4[i].mUnknown8 != 0.0f && i > 0) {
                 fn_801BDBD4(p, pObject, pRecords, i, pOwner);
-                if (p->mUnknown4[i - 1].mUnknown0 == 0xFFFF) {
-                    p->mUnknown4[i - 1].mUnknown0 = fn_801BDF38(p);
-                    fn_801BF4A8(&p->mUnknown4[i - 1].mUnknown4C, 10, -1.0f, 0.0f);
+                i--;
+                if (p->mUnknown4[i].mUnknown0 == 0xFFFF) {
+                    p->mUnknown4[i].mUnknown0 = fn_801BDF38(p);
+                    fn_801BF4A8(&p->mUnknown4[i].mUnknown4C, 10, -1.0f, 0.0f);
                     while (fn_801BA568(pObject, pRecords, 0xFFFF)) {
-                        pRecords[fn_801BA5A8(pObject, pRecords, 0xFFFF, 0)].mUnknown8 = p->mUnknown4[i - 1].mUnknown0;
+                        pRecords[fn_801BA5A8(pObject, pRecords, 0xFFFF, 0)].mUnknown8 = p->mUnknown4[i].mUnknown0;
                     }
                 }
             }
@@ -918,10 +933,10 @@ int fn_801BE068(Collection_801BE594 *p, Object_801BA03C *pObject, Record_801BCA7
     if (add == 1) {
         slot = fn_801BDC3C(p, pObject, pRecords, pOwner, 0xFFFF);
         memset(&p->mUnknown4[slot], 0, sizeof(Slot_801BE594));
-        p->mUnknown4[slot].mUnknown2 = add;
         p->mUnknown4[slot].mUnknown0 = 0xFFFF;
+        p->mUnknown4[slot].mUnknown2 = add;
         p->mUnknown4[slot].mUnknown8 = 0.0f;
-        fn_801BF3C8(&p->mUnknown4[slot].mUnknown4C, 0, 0, 0.0f, 0.0f);
+        fn_801BF3C8(&p->mUnknown4[slot].mUnknown4C, 0, 0.0f, 0, 0.0f);
     }
     slot = fn_801BDC3C(p, pObject, pRecords, pOwner, key);
     memset(&p->mUnknown4[slot], 0, sizeof(Slot_801BE594));
@@ -934,13 +949,13 @@ int fn_801BE068(Collection_801BE594 *p, Object_801BA03C *pObject, Record_801BCA7
     return 0;
 }
 
-void fn_801BE3C0(Collection_801BE594 *p, unsigned short key, int a, int b, float from, float to)
+void fn_801BE3C0(Collection_801BE594 *p, unsigned short key, int type, float a, void *pSource, float b)
 {
     int i;
 
     for (i = 0; i <= 3; i++) {
         if (p->mUnknown4[i].mUnknown0 == key && p->mUnknown4[i].mUnknown2 == 3) {
-            fn_801BF3C8(&p->mUnknown4[i].mUnknown4C, a, b, from, to);
+            fn_801BF3C8(&p->mUnknown4[i].mUnknown4C, type, a, pSource, b);
             return;
         }
     }
@@ -1038,7 +1053,7 @@ void fn_801BE67C(Collection_801BE594 *p, Object_801BA03C *pObject, Record_801BCA
     fn_801BDAC0(p);
     if (p->mUnknown4[0].mUnknown2 == 3) {
         p->mUnknown4[0].mUnknown8 = 0.0f;
-        fn_801BF3C8(&p->mUnknown4[0].mUnknown4C, 0, 0, 1.0f, 1.0f);
+        fn_801BF3C8(&p->mUnknown4[0].mUnknown4C, 0, 1.0f, 0, 1.0f);
     }
 }
 
@@ -1156,12 +1171,13 @@ void fn_801BF090(Fade_801BF3C8 *p, float step)
 
 void fn_801BF094(Fade_801BF3C8 *p, float step)
 {
+    Data1_801BF4A8 *pData = &p->mUnknownC.mType1;
     float value = p->mUnknown0;
     float target = p->mUnknown4;
 
     if (value != target) {
-        p->mUnknown0 = (target - p->mUnknownC) / (float)p->mUnknown10.mUnknown0 * step + value;
-        if (!(p->mUnknownC >= target)) {
+        p->mUnknown0 = (target - pData->mUnknown0) / (float)pData->mUnknown4 * step + value;
+        if (!(pData->mUnknown0 >= target)) {
             if (!(p->mUnknown0 <= target)) {
                 p->mUnknown0 = target;
             }
@@ -1173,10 +1189,70 @@ void fn_801BF094(Fade_801BF3C8 *p, float step)
 
 void fn_801BF11C(Fade_801BF3C8 *p, float step)
 {
-    p->mUnknownC -= step;
-    if (!(p->mUnknownC > 0.0f)) {
+    p->mUnknownC.mType2.mUnknown0 -= step;
+    if (!(p->mUnknownC.mType2.mUnknown0 > 0.0f)) {
         p->mUnknown0 = 0.0f;
     }
+}
+
+void fn_801BF140(Fade_801BF3C8 *p, float step)
+{
+    Data3_801BF530 *pData = &p->mUnknownC.mType3;
+
+    do {
+        int advance = 0;
+        float dt = step;
+
+        step = 0.0f;
+        switch (pData->mUnknown9) {
+        case 0:
+            advance = 1;
+            pData->mUnknown4 -= dt;
+            if (!(pData->mUnknown4 >= 0.0f)) {
+                step = -pData->mUnknown4;
+                pData->mUnknown9 = 1;
+                dt -= step;
+                pData->mUnknown4 = pData->mUnknownA;
+            }
+            break;
+        case 1:
+            pData->mUnknown4 -= dt;
+            if (!(pData->mUnknown4 >= 0.0f)) {
+                step = -pData->mUnknown4;
+                pData->mUnknown9 = 2;
+                dt -= step;
+                pData->mUnknown4 = pData->mUnknown8;
+            }
+            break;
+        case 2:
+            advance = 1;
+            break;
+        }
+        if (advance == 1) {
+            float from;
+            float to;
+            float frames;
+
+            if (pData->mUnknown9 != 2) {
+                from = pData->mUnknown0;
+                to = p->mUnknown4;
+            } else {
+                from = p->mUnknown4;
+                to = pData->mUnknown0;
+            }
+            frames = (int)pData->mUnknown8;
+            if (frames != 0.0f) {
+                p->mUnknown0 = (to - from) / frames * dt + p->mUnknown0;
+            }
+            if (!(from >= to)) {
+                if (!(p->mUnknown0 < to)) {
+                    p->mUnknown0 = to;
+                }
+            } else if (!(p->mUnknown0 > to)) {
+                p->mUnknown0 = to;
+            }
+        }
+    } while (step > 0.0f);
 }
 
 void fn_801BF2B0(int count)
