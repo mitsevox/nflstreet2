@@ -151,7 +151,7 @@ unsigned short fn_801BAD98(void);
 int fn_801BAEAC(int slot);
 int fn_801BB164(int id, Object_801BC084 *pData, int frameCache, int bigFile);
 int fn_801BB544(int id, int frameCache, int bigFile);
-unsigned int fn_801BBA18(int state, int objectType, Query_801BBA18 *pOut, unsigned int max);
+unsigned int fn_801BBA18(int state, unsigned short objectType, Query_801BBA18 *pOut, unsigned int max);
 unsigned char fn_801BBFE4(int id);
 unsigned char fn_801BC044(unsigned short slot);
 unsigned char fn_801BC060(unsigned short slot);
@@ -344,7 +344,7 @@ void fn_801BAE08(int a, int b, int c, int d, Request_801BAE08 *pRequest)
         lbl_803EBB8C(slot, pRequest->mUnknown4);
     } else {
         fn_801BA850(lbl_803ED5FC[slot].mpData);
-        lbl_803ED5FC[slot].mParent = 0xFFFF;
+        lbl_803ED5FC[slot].mParent = -1;
         lbl_803ED5FC[slot].mObjectType = fn_801BAB24(fn_801BC084(slot));
     }
     lbl_803ED5FC[slot].mStatus = 1;
@@ -406,7 +406,7 @@ int fn_801BAEAC(int slot)
                     lbl_803ED5FC[i].mSize = 0;
                     lbl_803ED5FC[i].mpData = 0;
                     lbl_803ED5FC[i].mStatus = 0;
-                    lbl_803ED5FC[i].mParent = 0xFFFF;
+                    lbl_803ED5FC[i].mParent = -1;
                     fn_801BF7BC(lbl_803ED5FC[i].mObjectType & ~0x4000);
                 }
             }
@@ -414,8 +414,8 @@ int fn_801BAEAC(int slot)
         fn_801BF7BC(lbl_803ED5FC[slot].mObjectType);
         lbl_803ED5FC[slot].mUnknown13 = 0;
         lbl_803ED5FC[slot].mStatus = 0;
-        lbl_803ED5FC[slot].mObjectType = 0xFFFF;
-        lbl_803ED5FC[slot].mParent = 0xFFFF;
+        lbl_803ED5FC[slot].mObjectType = -1;
+        lbl_803ED5FC[slot].mParent = -1;
     }
     return result;
 }
@@ -447,7 +447,7 @@ int fn_801BB164(int id, Object_801BC084 *pData, int frameCache, int bigFile)
                 }
                 fn_801BA850(lbl_803ED5FC[i].mpData);
             }
-            lbl_803ED5FC[i].mParent = 0xFFFF;
+            lbl_803ED5FC[i].mParent = -1;
             lbl_803ED5FC[i].mObjectType = fn_801BAB24(fn_801BC084((unsigned short)i));
             break;
         }
@@ -470,28 +470,29 @@ int fn_801BB2D8(Config_801BB2D8 *pConfig)
     lbl_803ED600 = pConfig->mUnknown4;
     lbl_803ED5FC = fn_801D2BB0(lbl_803ED600, lbl_803ED5F8 * sizeof(Buffer_801BB2D8), 0, 0);
     lbl_803ED60C = fn_801D2BB0(lbl_803ED600, lbl_803ED5F8 * sizeof(Request_801BAE08), 0, 0);
-    if (lbl_803ED5FC == 0)
-        return fn_801F7C88();
-    for (i = 0; i < lbl_803ED5F8; i++) {
-        if (i >= lbl_803ED5F0 && i < lbl_803ED5F0 + lbl_803ED5F4) {
-            lbl_803ED5FC[i].mSize = pConfig->mpBuffers[i - lbl_803ED5F0].mSize;
-            lbl_803ED5FC[i].mFlags = pConfig->mpBuffers[i - lbl_803ED5F0].mFlags;
-            if (pConfig->mpBuffers[i - lbl_803ED5F0].mFlags & 0x8000)
-                lbl_803ED5FC[i].mpData = pConfig->mpBuffers[i - lbl_803ED5F0].mpData;
-            else
-                lbl_803ED5FC[i].mpData = fn_801D2BB0(lbl_803ED600, lbl_803ED5FC[i].mSize, 0, 0);
-        } else {
-            lbl_803ED5FC[i].mFlags = 0;
-            lbl_803ED5FC[i].mSize = 0;
-            lbl_803ED5FC[i].mpData = 0;
+    if (lbl_803ED5FC) {
+        for (i = 0; i < lbl_803ED5F8; i++) {
+            if (i >= lbl_803ED5F0 && i < lbl_803ED5F0 + lbl_803ED5F4) {
+                lbl_803ED5FC[i].mSize = pConfig->mpBuffers[i - lbl_803ED5F0].mSize;
+                lbl_803ED5FC[i].mFlags = pConfig->mpBuffers[i - lbl_803ED5F0].mFlags;
+                if (pConfig->mpBuffers[i - lbl_803ED5F0].mFlags & 0x8000)
+                    lbl_803ED5FC[i].mpData = pConfig->mpBuffers[i - lbl_803ED5F0].mpData;
+                else
+                    lbl_803ED5FC[i].mpData = fn_801D2BB0(lbl_803ED600, lbl_803ED5FC[i].mSize, 0, 0);
+            } else {
+                lbl_803ED5FC[i].mFlags = 0;
+                lbl_803ED5FC[i].mSize = 0;
+                lbl_803ED5FC[i].mpData = 0;
+            }
+            lbl_803ED5FC[i].mUnknown13 = 0;
+            lbl_803ED5FC[i].mStatus = 0;
+            lbl_803ED5FC[i].mId = 0;
+            lbl_803ED5FC[i].mObjectType = -1;
+            lbl_803ED5FC[i].mParent = -1;
         }
-        lbl_803ED5FC[i].mUnknown13 = 0;
-        lbl_803ED5FC[i].mStatus = 0;
-        lbl_803ED5FC[i].mId = 0;
-        lbl_803ED5FC[i].mObjectType = 0xFFFF;
-        lbl_803ED5FC[i].mParent = 0xFFFF;
+        return 0;
     }
-    return 0;
+    return fn_801F7C88();
 }
 
 void fn_801BB480(void)
@@ -613,9 +614,9 @@ unsigned short fn_801BB878(int id, Object_801BC084 *pData, int size, int bigFile
 
 int fn_801BB948(unsigned int slot)
 {
-    if (slot < lbl_803ED608)
-        return fn_801BAEAC(slot + lbl_803ED5F0 + lbl_803ED5F4);
-    return 0x140004;
+    if (slot >= lbl_803ED608)
+        return 0x140004;
+    return fn_801BAEAC(slot + lbl_803ED5F0 + lbl_803ED5F4);
 }
 
 int fn_801BB994(int id)
@@ -634,7 +635,7 @@ int fn_801BB994(int id)
     return result;
 }
 
-unsigned int fn_801BBA18(int state, int objectType, Query_801BBA18 *pOut, unsigned int max)
+unsigned int fn_801BBA18(int state, unsigned short objectType, Query_801BBA18 *pOut, unsigned int max)
 {
     unsigned int count = 0;
     Cache_801BF870 *pCache = fn_801BF870(objectType, state);
@@ -661,8 +662,8 @@ unsigned int fn_801BBA18(int state, int objectType, Query_801BBA18 *pOut, unsign
                 pCache->mUnknown0 = pOut[0].mSlot;
                 pCache->mUnknown2 = pOut[0].mStateRef;
             } else {
-                pCache->mUnknown2 = -1;
                 pCache->mUnknown0 = -1;
+                pCache->mUnknown2 = -1;
             }
         }
     }
@@ -684,8 +685,8 @@ void fn_801BBB54(int objectType)
                 pCache = fn_801BF870(objectType, fn_801BACBC(fn_801BC084(i), j));
                 if (pCache) {
                     if (pCache->mUnknown0 == -1) {
-                        pCache->mUnknown2 = j;
                         pCache->mUnknown0 = i;
+                        pCache->mUnknown2 = j;
                     } else {
                         pCache->mUnknown2 = -1;
                         pCache->mUnknown0 = -2;
@@ -696,7 +697,7 @@ void fn_801BBB54(int objectType)
     }
 }
 
-void fn_801BBC3C(unsigned short objectType, int state, List_801BAB88 *pList)
+void fn_801BBC3C(int objectType, int state, List_801BAB88 *pList)
 {
     Query_801BBA18 query[32];
     unsigned int count;
@@ -715,11 +716,13 @@ int fn_801BBCC8(int state, unsigned short slot)
     unsigned int count;
     unsigned int i;
     Object_801BC084 *pFile = fn_801BC084(slot);
+    unsigned short objectType;
 
     if (pFile == 0)
         return -1;
+    objectType = pFile->mObjectType;
     if (!(state & 0x8000)) {
-        count = fn_801BBA18(state, pFile->mObjectType, query, 32);
+        count = fn_801BBA18(state, objectType, query, 32);
         for (i = 0; i < count; i++) {
             if (query[i].mSlot == slot)
                 return i;
@@ -728,7 +731,7 @@ int fn_801BBCC8(int state, unsigned short slot)
     return -1;
 }
 
-void *fn_801BBD5C(int state, int objectType)
+void *fn_801BBD5C(unsigned short state, unsigned short objectType)
 {
     Query_801BBA18 query[32];
     unsigned int count;
@@ -741,7 +744,7 @@ void *fn_801BBD5C(int state, int objectType)
     return pResult;
 }
 
-void fn_801BBDCC(unsigned short objectType, int state, List_801BAC1C *pList)
+void fn_801BBDCC(int objectType, int state, List_801BAC1C *pList)
 {
     Query_801BBA18 query[32];
     unsigned int count;
@@ -769,8 +772,8 @@ int fn_801BBE5C(int objectType, int fileNum)
 
 int fn_801BBEC0(int slot, int mask)
 {
-    int part = lbl_803ED5FC[slot].mPart;
     unsigned short parent = lbl_803ED5FC[slot].mParent;
+    int part = lbl_803ED5FC[slot].mPart;
     int i;
 
     for (i = 0; i < lbl_803ED5F8; i++) {
@@ -832,7 +835,180 @@ Object_801BC084 *fn_801BC084(unsigned int slot)
 
 int fn_801BC0C0(unsigned int slot)
 {
-    if (slot >= lbl_803ED5F8)
-        return 0;
-    return lbl_803ED5FC[slot].mFrameCache;
+    if (slot < lbl_803ED5F8)
+        return lbl_803ED5FC[slot].mFrameCache;
+    return 0;
+}
+
+void fn_801BC0E8(int slot, Info_801BC0E8 *pInfo)
+{
+    char *pBase = 0;
+    Big_801BC0E8 *pBig = 0;
+    Record_801BC0E8 *pRecord;
+    Group_801BC0E8 *pGroup;
+    Set_801BC0E8 *pSet;
+    Part_801BC0E8 *pPart;
+    Object_801BC084 *pFile;
+    Buffer_801BB2D8 *pBuffer;
+    unsigned short i;
+    unsigned short j;
+    unsigned short k;
+    unsigned int n;
+    unsigned short m;
+    int standalone;
+
+    if (fn_801B9EF8() == 1) {
+        pBase = (char *)lbl_803ED5FC[slot].mpData;
+        pBig = (Big_801BC0E8 *)(pBase + *(int *)pBase + 4);
+    } else if (fn_801B9EF8() == 2) {
+        pBig = (Big_801BC0E8 *)lbl_803ED5FC[slot].mpData;
+    }
+    pRecord = (Record_801BC0E8 *)(pBase + 4);
+    pBase = (char *)lbl_803ED5FC[slot].mpData;
+    if (fn_801B9EF8() == 1) {
+        for (i = 0; i < pInfo->mCount; i++) {
+            pSet = &pInfo->mpSets[i];
+            for (j = 0; j < pSet->mCount; j++) {
+                pGroup = &pSet->mpGroups[j];
+                pGroup->mpRecords = pRecord;
+                for (k = 0; k < pGroup->mCount; k++) {
+                    Record_801BC0E8 *pEntry = &pGroup->mpRecords[k];
+
+                    pRecord++;
+                    pEntry->mBlocks[0].mpUnknownC = pBase + (int)pEntry->mBlocks[0].mpUnknownC;
+                    pEntry->mBlocks[1].mpUnknownC = pBase + (int)pEntry->mBlocks[1].mpUnknownC;
+                    pEntry->mBlocks[2].mpUnknownC = pBase + (int)pEntry->mBlocks[2].mpUnknownC;
+                    pEntry->mBlocks[3].mpUnknownC = pBase + (int)pEntry->mBlocks[3].mpUnknownC;
+                    pEntry->mBlocks[4].mpUnknownC = pBase + (int)pEntry->mBlocks[4].mpUnknownC;
+                    pEntry->mBlocks[5].mpUnknownC = pBase + (int)pEntry->mBlocks[5].mpUnknownC;
+                    pEntry->mBlocks[6].mpUnknownC = pBase + (int)pEntry->mBlocks[6].mpUnknownC;
+                    pEntry->mBlocks[7].mpUnknownC = pBase + (int)pEntry->mBlocks[7].mpUnknownC;
+                    pEntry->mBlocks[8].mpUnknownC = pBase + (int)pEntry->mBlocks[8].mpUnknownC;
+                    pEntry->mBlocks[9].mpUnknownC = pBase + (int)pEntry->mBlocks[9].mpUnknownC;
+                    pEntry->mBlocks[10].mpUnknownC = pBase + (int)pEntry->mBlocks[10].mpUnknownC;
+                    pEntry->mBlocks[11].mpUnknownC = pBase + (int)pEntry->mBlocks[11].mpUnknownC;
+                    pEntry->mBlocks[12].mpUnknownC = pBase + (int)pEntry->mBlocks[12].mpUnknownC;
+                    pEntry->mBlocks[13].mpUnknownC = pBase + (int)pEntry->mBlocks[13].mpUnknownC;
+                    pEntry->mBlocks[14].mpUnknownC = pBase + (int)pEntry->mBlocks[14].mpUnknownC;
+                }
+            }
+        }
+    }
+    lbl_803ED5FC[slot].mParent = -1;
+    lbl_803ED5FC[slot].mObjectType = 0x8000;
+    for (n = 0; n < pBig->mCount; n++) {
+        for (m = 0; m <= 1; m++) {
+            pPart = &pBig->mEntries[n].mParts[m];
+            standalone = 1;
+            if (pPart->mSize) {
+                pPart->mpFile = (Object_801BC084 *)(pBase + (int)pPart->mpFile);
+                switch (m) {
+                case 0:
+                    if (pPart->mTag == 0x4246434D)
+                        pPart->mpFile->mFlags |= 0x800;
+                    break;
+                case 1:
+                    standalone = 0;
+                    if (pPart->mTag == 0x4246464D)
+                        pPart->mpFile->mFlags |= 0x400;
+                    break;
+                }
+                pFile = pPart->mpFile;
+                pFile->mObjectType = pPart->mObjectType;
+                if (lbl_803ED5FC[slot].mUnknown1C)
+                    pFile->mFlags &= ~0x2000;
+                else
+                    pFile->mFlags |= 0x2000;
+                fn_801BA850(pFile);
+                pBuffer = &lbl_803ED5FC[fn_801BAD98()];
+                pBuffer->mpData = pFile;
+                pBuffer->mSize = pPart->mSize;
+                pBuffer->mPart = n;
+                pBuffer->mParent = slot;
+                pBuffer->mObjectType = fn_801BAB24(pFile);
+                if (standalone)
+                    pBuffer->mObjectType |= 0x4000;
+                pBuffer->mStatus = 1;
+                pPart->mpFile->mFlags |= 0x100;
+            }
+        }
+    }
+}
+
+void fn_801BC440(Info_801BC0E8 *pDest, Info_801BC0E8 *pSource)
+{
+    unsigned short i;
+    unsigned short j;
+    unsigned short k;
+    Set_801BC0E8 *pSourceSet;
+    Set_801BC0E8 *pDestSet;
+    Group_801BC0E8 *pSourceGroup;
+    Group_801BC0E8 *pDestGroup;
+    Record_801BC0E8 *pSourceRecord;
+    Record_801BC0E8 *pDestRecord;
+
+    for (i = 0; i < pSource->mCount; i++) {
+        pSourceSet = &pSource->mpSets[i];
+        pDestSet = &pDest->mpSets[i];
+        for (j = 0; j < pSourceSet->mCount; j++) {
+            pSourceGroup = &pSourceSet->mpGroups[j];
+            pDestGroup = &pDestSet->mpGroups[j];
+            pDestGroup->mpRecords = pSourceGroup->mpRecords;
+            for (k = 0; k < pSourceGroup->mCount; k++) {
+                pSourceRecord = &pSourceGroup->mpRecords[k];
+                pDestRecord = &pDestGroup->mpRecords[k];
+                pDestRecord->mBlocks[0].mpUnknownC = pSourceRecord->mBlocks[0].mpUnknownC;
+                pDestRecord->mBlocks[1].mpUnknownC = pSourceRecord->mBlocks[1].mpUnknownC;
+                pDestRecord->mBlocks[2].mpUnknownC = pSourceRecord->mBlocks[2].mpUnknownC;
+                pDestRecord->mBlocks[3].mpUnknownC = pSourceRecord->mBlocks[3].mpUnknownC;
+                pDestRecord->mBlocks[4].mpUnknownC = pSourceRecord->mBlocks[4].mpUnknownC;
+                pDestRecord->mBlocks[5].mpUnknownC = pSourceRecord->mBlocks[5].mpUnknownC;
+                pDestRecord->mBlocks[6].mpUnknownC = pSourceRecord->mBlocks[6].mpUnknownC;
+                pDestRecord->mBlocks[7].mpUnknownC = pSourceRecord->mBlocks[7].mpUnknownC;
+                pDestRecord->mBlocks[8].mpUnknownC = pSourceRecord->mBlocks[8].mpUnknownC;
+                pDestRecord->mBlocks[9].mpUnknownC = pSourceRecord->mBlocks[9].mpUnknownC;
+                pDestRecord->mBlocks[10].mpUnknownC = pSourceRecord->mBlocks[10].mpUnknownC;
+                pDestRecord->mBlocks[11].mpUnknownC = pSourceRecord->mBlocks[11].mpUnknownC;
+                pDestRecord->mBlocks[12].mpUnknownC = pSourceRecord->mBlocks[12].mpUnknownC;
+                pDestRecord->mBlocks[13].mpUnknownC = pSourceRecord->mBlocks[13].mpUnknownC;
+                pDestRecord->mBlocks[14].mpUnknownC = pSourceRecord->mBlocks[14].mpUnknownC;
+            }
+        }
+    }
+}
+
+void fn_801BC57C(int slot)
+{
+    Big_801BC57C *pBig = (Big_801BC57C *)lbl_803ED5FC[slot].mpData;
+    Entry_801BC57C *pEntry = &pBig->mFirst;
+    Object_801BC084 *pFile;
+    Buffer_801BB2D8 *pBuffer;
+    unsigned int i;
+
+    lbl_803ED5FC[slot].mParent = -1;
+    lbl_803ED5FC[slot].mObjectType = 0x8000;
+    for (i = 0; i < pBig->mCount; i++) {
+        pFile = &pEntry->mFile;
+        pFile->mObjectType = pEntry->mObjectType;
+        fn_801BA850(pFile);
+        pBuffer = &lbl_803ED5FC[fn_801BAD98()];
+        pBuffer->mpData = pFile;
+        pBuffer->mSize = pEntry->mSize;
+        pBuffer->mPart = i;
+        pBuffer->mParent = slot;
+        pBuffer->mObjectType = fn_801BAB24(pFile) | 0x4000;
+        pBuffer->mStatus = 1;
+        pEntry = (Entry_801BC57C *)((char *)pFile + pEntry->mSize);
+        pEntry->mFile.mFlags |= 0x100;
+    }
+}
+
+void fn_801BC64C(void (*pFunc)(int, int))
+{
+    lbl_803EBB8C = pFunc;
+}
+
+void *fn_801BC654(void)
+{
+    return lbl_803EBB88;
 }
