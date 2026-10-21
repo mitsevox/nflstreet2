@@ -8858,7 +8858,7 @@
     {
       "source": "src/game/cu_800FE03C.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x800FE03C-0x800FE41C with their own literal-pool slice 0x8029E4E8-0x8029E4FC. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x800FE03C-0x800FE41C with their own literal-pool slice 0x8029E4E8-0x8029E500, including the trailing zero pad word at 0x8029E4FC that the fragment's .rodata emits. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
       "sections": [
         {
           "section": ".text",
@@ -8870,7 +8870,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029E4E8",
-          "end": "0x8029E4FC"
+          "end": "0x8029E500"
         }
       ],
       "functions": [
@@ -32069,7 +32069,7 @@
     {
       "source": "src/game/cu_800FE444.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only31-body CPU/player geometry fragment within retained provisional cu_800EFC68 grouping. No older body moves or original file-end claim. Full580-byte surrounding readonly context retains unknown leading/internalzero ownership and all native mismatches. Original callback records stay external-owned.",
+      "evidence": "Comparison-only31-body CPU/player geometry fragment within retained provisional cu_800EFC68 grouping. No older body moves or original file-end claim. Full576-byte surrounding readonly context 0x8029E500-0x8029E740 retains unknown internalzero ownership and all native mismatches. Original callback records stay external-owned.",
       "sections": [
         {
           "section": ".text",
@@ -32080,7 +32080,7 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029E4FC",
+          "start": "0x8029E500",
           "end": "0x8029E740"
         }
       ],
