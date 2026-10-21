@@ -14863,8 +14863,11 @@
       "provenance": {
         "pull_request": 714,
         "merged_via": 719,
-        "commit": "886bade47a0ef580a13f812a0a6acf922a89cd0d",
-        "introduced_blob": "c8fcecf0a547b1acb1464232d491d37e4da9cce4"
+        "commit": "7d2e624f27f439c148f6b0ccdc20ee6aef72c05a",
+        "introduced_blob": "902838c4af15ef2015b96263d52490ec7276c8f7",
+        "original_commit": "886bade47a0ef580a13f812a0a6acf922a89cd0d",
+        "original_blob": "c8fcecf0a547b1acb1464232d491d37e4da9cce4",
+        "integration_adjustment": "Preserve original contributors, PR identities, source pins and earlier function inventories through the fn_8015AD50 shared-local lifetime refinement. The newly exact pre-existing body originates in contribution 725; this refinement does not transfer original source credit. Earlier complete native functions and readonly data remain unchanged."
       }
     },
     {
@@ -16087,6 +16090,7 @@
         "0x8015A588",
         "0x8015AB84",
         "0x8015ABE4",
+        "0x8015AD50",
         "0x8015BED4",
         "0x8015BFAC",
         "0x8015BFD4",
@@ -16098,11 +16102,11 @@
       "provenance": {
         "pull_request": 725,
         "merged_via": 734,
-        "commit": "23598ea10c0a90567d759733d11681d493e7db63",
-        "introduced_blob": "e5ca7f6b15c947f3c35a05e612b71ccd171a99d5",
+        "commit": "7d2e624f27f439c148f6b0ccdc20ee6aef72c05a",
+        "introduced_blob": "902838c4af15ef2015b96263d52490ec7276c8f7",
         "original_commit": "24060b5e94715daac73ed4ada4c86f460b43e5f0",
         "original_blob": "e5ca7f6b15c947f3c35a05e612b71ccd171a99d5",
-        "integration_adjustment": "Preserve the original lane source contributor through reviewed batch integration; the final authored and introduced source blobs are identical."
+        "integration_adjustment": "Preserve original contributors, PR identities, source pins and earlier function inventories through the fn_8015AD50 shared-local lifetime refinement. The newly exact pre-existing body originates in contribution 725; this refinement does not transfer original source credit. Earlier complete native functions and readonly data remain unchanged."
       }
     },
     {
