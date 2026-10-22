@@ -41146,6 +41146,1335 @@
           "end": "0x801C20A0"
         }
       ]
+    },
+    {
+      "source": "src/engine/psysEmitter.c",
+      "profile": "engine_c",
+      "evidence": "E3 lane draft of psysEmitter.c over 0x801DFE0C-0x801E01FC (NASCAR 2005 symbol-table size/order match; see the psysEmitter.c name rows); evidence.tsv function rows and the compiler row for this range, plus exact data rows 0x802B1118-0x802B1138. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801DFE0C",
+          "end": "0x801E01FC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1118",
+          "end": "0x802B1138"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801DFE0C",
+          "start": "0x801DFE0C",
+          "end": "0x801DFF10"
+        },
+        {
+          "symbol": "fn_801DFF10",
+          "start": "0x801DFF10",
+          "end": "0x801DFFA8"
+        },
+        {
+          "symbol": "fn_801DFFA8",
+          "start": "0x801DFFA8",
+          "end": "0x801E0034"
+        },
+        {
+          "symbol": "fn_801E0034",
+          "start": "0x801E0034",
+          "end": "0x801E01FC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/psysCollision.c",
+      "profile": "engine_c",
+      "evidence": "E3 lane draft of psysCollision.c over 0x801E01FC-0x801E052C (NASCAR 2005 symbol-table size/order match; see the psysCollision.c name rows); evidence.tsv function rows and the compiler row for this range, plus exact data rows 0x802B1138-0x802B1140. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E01FC",
+          "end": "0x801E052C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1138",
+          "end": "0x802B1140"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801E01FC",
+          "start": "0x801E01FC",
+          "end": "0x801E02A4"
+        },
+        {
+          "symbol": "fn_801E02A4",
+          "start": "0x801E02A4",
+          "end": "0x801E0384"
+        },
+        {
+          "symbol": "fn_801E0384",
+          "start": "0x801E0384",
+          "end": "0x801E03F4"
+        },
+        {
+          "symbol": "fn_801E03F4",
+          "start": "0x801E03F4",
+          "end": "0x801E043C"
+        },
+        {
+          "symbol": "fn_801E043C",
+          "start": "0x801E043C",
+          "end": "0x801E0520"
+        },
+        {
+          "symbol": "fn_801E0520",
+          "start": "0x801E0520",
+          "end": "0x801E052C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/periph.c",
+      "profile": "engine_c",
+      "evidence": "E3 lane draft of periph.c over 0x801E11D0-0x801E1A20 (NASCAR 2005 symbol-table size/order match; see the periph.c name rows); evidence.tsv function rows and the compiler row for this range. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E11D0",
+          "end": "0x801E1A20"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801E11D0",
+          "start": "0x801E11D0",
+          "end": "0x801E11E8"
+        },
+        {
+          "symbol": "fn_801E11E8",
+          "start": "0x801E11E8",
+          "end": "0x801E12CC"
+        },
+        {
+          "symbol": "fn_801E12CC",
+          "start": "0x801E12CC",
+          "end": "0x801E12F8"
+        },
+        {
+          "symbol": "fn_801E12F8",
+          "start": "0x801E12F8",
+          "end": "0x801E1444"
+        },
+        {
+          "symbol": "fn_801E1444",
+          "start": "0x801E1444",
+          "end": "0x801E1478"
+        },
+        {
+          "symbol": "fn_801E1478",
+          "start": "0x801E1478",
+          "end": "0x801E153C"
+        },
+        {
+          "symbol": "fn_801E153C",
+          "start": "0x801E153C",
+          "end": "0x801E15B8"
+        },
+        {
+          "symbol": "fn_801E15B8",
+          "start": "0x801E15B8",
+          "end": "0x801E15D0"
+        },
+        {
+          "symbol": "fn_801E15D0",
+          "start": "0x801E15D0",
+          "end": "0x801E1688"
+        },
+        {
+          "symbol": "fn_801E1688",
+          "start": "0x801E1688",
+          "end": "0x801E173C"
+        },
+        {
+          "symbol": "fn_801E173C",
+          "start": "0x801E173C",
+          "end": "0x801E17D0"
+        },
+        {
+          "symbol": "fn_801E17D0",
+          "start": "0x801E17D0",
+          "end": "0x801E1884"
+        },
+        {
+          "symbol": "fn_801E1884",
+          "start": "0x801E1884",
+          "end": "0x801E1940"
+        },
+        {
+          "symbol": "fn_801E1940",
+          "start": "0x801E1940",
+          "end": "0x801E194C"
+        },
+        {
+          "symbol": "fn_801E194C",
+          "start": "0x801E194C",
+          "end": "0x801E1954"
+        },
+        {
+          "symbol": "fn_801E1954",
+          "start": "0x801E1954",
+          "end": "0x801E195C"
+        },
+        {
+          "symbol": "fn_801E195C",
+          "start": "0x801E195C",
+          "end": "0x801E19B4"
+        },
+        {
+          "symbol": "fn_801E19B4",
+          "start": "0x801E19B4",
+          "end": "0x801E1A20"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/llperiph.c",
+      "profile": "engine_c",
+      "evidence": "E3 lane draft of llperiph.c over 0x801E1A20-0x801E1D44 (NASCAR 2005 symbol-table size/order match; see the llperiph.c name rows); evidence.tsv function rows and the compiler row for this range. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E1A20",
+          "end": "0x801E1D44"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801E1A20",
+          "start": "0x801E1A20",
+          "end": "0x801E1A80"
+        },
+        {
+          "symbol": "fn_801E1A80",
+          "start": "0x801E1A80",
+          "end": "0x801E1AB4"
+        },
+        {
+          "symbol": "fn_801E1AB4",
+          "start": "0x801E1AB4",
+          "end": "0x801E1B08"
+        },
+        {
+          "symbol": "fn_801E1B08",
+          "start": "0x801E1B08",
+          "end": "0x801E1B94"
+        },
+        {
+          "symbol": "fn_801E1B94",
+          "start": "0x801E1B94",
+          "end": "0x801E1BE8"
+        },
+        {
+          "symbol": "fn_801E1BE8",
+          "start": "0x801E1BE8",
+          "end": "0x801E1C38"
+        },
+        {
+          "symbol": "fn_801E1C38",
+          "start": "0x801E1C38",
+          "end": "0x801E1CE0"
+        },
+        {
+          "symbol": "fn_801E1CE0",
+          "start": "0x801E1CE0",
+          "end": "0x801E1D04"
+        },
+        {
+          "symbol": "fn_801E1D04",
+          "start": "0x801E1D04",
+          "end": "0x801E1D3C"
+        },
+        {
+          "symbol": "fn_801E1D3C",
+          "start": "0x801E1D3C",
+          "end": "0x801E1D44"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/PJoyDrvr.c",
+      "profile": "engine_c",
+      "evidence": "E3 lane draft of PJoyDrvr.c over 0x801E1D44-0x801E274C (NASCAR 2005 symbol-table size/order match; see the PJoyDrvr.c name rows); evidence.tsv function rows and the compiler row for this range. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E1D44",
+          "end": "0x801E274C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801E1D44",
+          "start": "0x801E1D44",
+          "end": "0x801E1E34"
+        },
+        {
+          "symbol": "fn_801E1E34",
+          "start": "0x801E1E34",
+          "end": "0x801E1E50"
+        },
+        {
+          "symbol": "fn_801E25DC",
+          "start": "0x801E25DC",
+          "end": "0x801E2658"
+        },
+        {
+          "symbol": "fn_801E2658",
+          "start": "0x801E2658",
+          "end": "0x801E26FC"
+        },
+        {
+          "symbol": "fn_801E26FC",
+          "start": "0x801E26FC",
+          "end": "0x801E274C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/colorRamp.c",
+      "profile": "engine_c",
+      "evidence": "E3 lane draft of colorRamp.c over 0x801E052C-0x801E0A1C (NASCAR 2005 symbol-table size/order match; see the colorRamp.c name rows); evidence.tsv function rows and the compiler row for this range, plus exact data rows 0x802B1140-0x802B1148. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E052C",
+          "end": "0x801E0A1C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1140",
+          "end": "0x802B1148"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801E052C",
+          "start": "0x801E052C",
+          "end": "0x801E05B0"
+        },
+        {
+          "symbol": "fn_801E05B0",
+          "start": "0x801E05B0",
+          "end": "0x801E05F8"
+        },
+        {
+          "symbol": "fn_801E05F8",
+          "start": "0x801E05F8",
+          "end": "0x801E06B0"
+        },
+        {
+          "symbol": "fn_801E06B0",
+          "start": "0x801E06B0",
+          "end": "0x801E06DC"
+        },
+        {
+          "symbol": "fn_801E06DC",
+          "start": "0x801E06DC",
+          "end": "0x801E071C"
+        },
+        {
+          "symbol": "fn_801E071C",
+          "start": "0x801E071C",
+          "end": "0x801E079C"
+        },
+        {
+          "symbol": "fn_801E079C",
+          "start": "0x801E079C",
+          "end": "0x801E0844"
+        },
+        {
+          "symbol": "fn_801E0984",
+          "start": "0x801E0984",
+          "end": "0x801E098C"
+        },
+        {
+          "symbol": "fn_801E098C",
+          "start": "0x801E098C",
+          "end": "0x801E0A1C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/llquat.c",
+      "profile": "engine_c",
+      "evidence": "E3 lane draft of llquat.c over 0x801EB814-0x801EC1B4 (NASCAR 2005 symbol-table size/order match; see the llquat.c name rows); evidence.tsv function rows and the compiler row for this range, plus exact data rows 0x802B1754-0x802B179C. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801EB814",
+          "end": "0x801EC1B4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1754",
+          "end": "0x802B179C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801EB814",
+          "start": "0x801EB814",
+          "end": "0x801EB8B4"
+        },
+        {
+          "symbol": "fn_801EB8B4",
+          "start": "0x801EB8B4",
+          "end": "0x801EBA64"
+        },
+        {
+          "symbol": "fn_801EBA64",
+          "start": "0x801EBA64",
+          "end": "0x801EBAA0"
+        },
+        {
+          "symbol": "fn_801EBAA0",
+          "start": "0x801EBAA0",
+          "end": "0x801EBBA4"
+        },
+        {
+          "symbol": "fn_801EBBA4",
+          "start": "0x801EBBA4",
+          "end": "0x801EBC18"
+        },
+        {
+          "symbol": "fn_801EBC18",
+          "start": "0x801EBC18",
+          "end": "0x801EBD8C"
+        },
+        {
+          "symbol": "fn_801EBD8C",
+          "start": "0x801EBD8C",
+          "end": "0x801EBEF8"
+        },
+        {
+          "symbol": "fn_801EBEF8",
+          "start": "0x801EBEF8",
+          "end": "0x801EBFA0"
+        },
+        {
+          "symbol": "fn_801EBFA0",
+          "start": "0x801EBFA0",
+          "end": "0x801EC048"
+        },
+        {
+          "symbol": "fn_801EC048",
+          "start": "0x801EC048",
+          "end": "0x801EC1B4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/remap.c",
+      "profile": "engine_c",
+      "evidence": "E3 lane draft of remap.c over 0x801EC1B4-0x801EC650 (NASCAR 2005 symbol-table size/order match; see the remap.c name rows); evidence.tsv function rows and the compiler row for this range, plus exact data rows 0x802B17A0-0x802B17C0. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801EC1B4",
+          "end": "0x801EC650"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B17A0",
+          "end": "0x802B17C0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801EC1B4",
+          "start": "0x801EC1B4",
+          "end": "0x801EC298"
+        },
+        {
+          "symbol": "fn_801EC298",
+          "start": "0x801EC298",
+          "end": "0x801EC314"
+        },
+        {
+          "symbol": "fn_801EC314",
+          "start": "0x801EC314",
+          "end": "0x801EC3B8"
+        },
+        {
+          "symbol": "fn_801EC3B8",
+          "start": "0x801EC3B8",
+          "end": "0x801EC418"
+        },
+        {
+          "symbol": "fn_801EC418",
+          "start": "0x801EC418",
+          "end": "0x801EC650"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801EB488.c",
+      "profile": "engine_c",
+      "evidence": "E3 lane draft of a quaternion helper group over 0x801EB488-0x801EB814 (no NASCAR match; neutral file name); evidence.tsv function rows and the cu_801EB488 compiler row, plus exact data row 0x802B1748-0x802B1754. The 0x801EB488 file start is an observable anchor (preceding code is C++ with its own .rodata record ending at 0x802B1748). Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801EB488",
+          "end": "0x801EB814"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1748",
+          "end": "0x802B1754"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801EB488",
+          "start": "0x801EB488",
+          "end": "0x801EB4AC"
+        },
+        {
+          "symbol": "fn_801EB4AC",
+          "start": "0x801EB4AC",
+          "end": "0x801EB4EC"
+        },
+        {
+          "symbol": "fn_801EB4EC",
+          "start": "0x801EB4EC",
+          "end": "0x801EB52C"
+        },
+        {
+          "symbol": "fn_801EB52C",
+          "start": "0x801EB52C",
+          "end": "0x801EB56C"
+        },
+        {
+          "symbol": "fn_801EB56C",
+          "start": "0x801EB56C",
+          "end": "0x801EB5A0"
+        },
+        {
+          "symbol": "fn_801EB5A0",
+          "start": "0x801EB5A0",
+          "end": "0x801EB61C"
+        },
+        {
+          "symbol": "fn_801EB61C",
+          "start": "0x801EB61C",
+          "end": "0x801EB660"
+        },
+        {
+          "symbol": "fn_801EB660",
+          "start": "0x801EB660",
+          "end": "0x801EB700"
+        },
+        {
+          "symbol": "fn_801EB700",
+          "start": "0x801EB700",
+          "end": "0x801EB780"
+        },
+        {
+          "symbol": "fn_801EB780",
+          "start": "0x801EB780",
+          "end": "0x801EB7B4"
+        },
+        {
+          "symbol": "fn_801EB7B4",
+          "start": "0x801EB7B4",
+          "end": "0x801EB814"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801E0A1C.cpp",
+      "profile": "game_cpp",
+      "evidence": "E3 lane draft of the C++ sound-stream module over 0x801E0A1C-0x801E11D0 (no NASCAR match; the game calls its entry points from src/game/SndgPathfinder.cpp and src/game/cu_80071C3C.cpp); evidence.tsv function rows and the compiler row for this range, plus the exact data row 0x802B1150-0x802B11C0 (vtables). Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E0A1C",
+          "end": "0x801E11D0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1150",
+          "end": "0x802B11C0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801E0A1C",
+          "start": "0x801E0A1C",
+          "end": "0x801E0A3C"
+        },
+        {
+          "symbol": "fn_801E0A3C",
+          "start": "0x801E0A3C",
+          "end": "0x801E0A5C"
+        },
+        {
+          "symbol": "fn_801E0A5C",
+          "start": "0x801E0A5C",
+          "end": "0x801E0AE4"
+        },
+        {
+          "symbol": "fn_801E0AE4",
+          "start": "0x801E0AE4",
+          "end": "0x801E0AEC"
+        },
+        {
+          "symbol": "fn_801E0AEC",
+          "start": "0x801E0AEC",
+          "end": "0x801E0BE4"
+        },
+        {
+          "symbol": "fn_801E0BE4",
+          "start": "0x801E0BE4",
+          "end": "0x801E0CA8"
+        },
+        {
+          "symbol": "fn_801E0CA8",
+          "start": "0x801E0CA8",
+          "end": "0x801E0D68"
+        },
+        {
+          "symbol": "fn_801E0D68",
+          "start": "0x801E0D68",
+          "end": "0x801E0DF0"
+        },
+        {
+          "symbol": "fn_801E0DF0",
+          "start": "0x801E0DF0",
+          "end": "0x801E0EF8"
+        },
+        {
+          "symbol": "fn_801E0EF8",
+          "start": "0x801E0EF8",
+          "end": "0x801E0F7C"
+        },
+        {
+          "symbol": "fn_801E0F7C",
+          "start": "0x801E0F7C",
+          "end": "0x801E0F9C"
+        },
+        {
+          "symbol": "fn_801E0F9C",
+          "start": "0x801E0F9C",
+          "end": "0x801E0FBC"
+        },
+        {
+          "symbol": "fn_801E0FBC",
+          "start": "0x801E0FBC",
+          "end": "0x801E0FE0"
+        },
+        {
+          "symbol": "fn_801E0FE0",
+          "start": "0x801E0FE0",
+          "end": "0x801E1004"
+        },
+        {
+          "symbol": "fn_801E1004",
+          "start": "0x801E1004",
+          "end": "0x801E1028"
+        },
+        {
+          "symbol": "fn_801E1028",
+          "start": "0x801E1028",
+          "end": "0x801E1048"
+        },
+        {
+          "symbol": "fn_801E1048",
+          "start": "0x801E1048",
+          "end": "0x801E1084"
+        },
+        {
+          "symbol": "fn_801E1084",
+          "start": "0x801E1084",
+          "end": "0x801E10BC"
+        },
+        {
+          "symbol": "_._14Class_801E10BC",
+          "start": "0x801E10BC",
+          "end": "0x801E10F0"
+        },
+        {
+          "symbol": "vfn_01__14Class_801E10BCUi",
+          "start": "0x801E10F0",
+          "end": "0x801E1168"
+        },
+        {
+          "symbol": "vfn_02__14Class_801E10BCPv",
+          "start": "0x801E1168",
+          "end": "0x801E118C"
+        },
+        {
+          "symbol": "vfn_03__14Class_801E10BC",
+          "start": "0x801E118C",
+          "end": "0x801E1194"
+        },
+        {
+          "symbol": "vfn_04__14Class_801E10BC",
+          "start": "0x801E1194",
+          "end": "0x801E119C"
+        },
+        {
+          "symbol": "_._14Class_801E119C",
+          "start": "0x801E119C",
+          "end": "0x801E11D0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/particleLib.c",
+      "profile": "engine_c",
+      "evidence": "E3 lane draft of particleLib.c over 0x801DE1E0-0x801DFE0C (NASCAR 2005 symbol-table size/order match; see the particleLib.c name rows); evidence.tsv function rows and the compiler row for this range, plus exact data rows 0x802B10A8-0x802B10E8. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801DE1E0",
+          "end": "0x801DFE0C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B10A8",
+          "end": "0x802B10E8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801DE1E0",
+          "start": "0x801DE1E0",
+          "end": "0x801DE410"
+        },
+        {
+          "symbol": "fn_801DE410",
+          "start": "0x801DE410",
+          "end": "0x801DE4F8"
+        },
+        {
+          "symbol": "fn_801DE4F8",
+          "start": "0x801DE4F8",
+          "end": "0x801DE540"
+        },
+        {
+          "symbol": "fn_801DE540",
+          "start": "0x801DE540",
+          "end": "0x801DE564"
+        },
+        {
+          "symbol": "fn_801DE564",
+          "start": "0x801DE564",
+          "end": "0x801DE794"
+        },
+        {
+          "symbol": "fn_801DE794",
+          "start": "0x801DE794",
+          "end": "0x801DE7F4"
+        },
+        {
+          "symbol": "fn_801DE7F4",
+          "start": "0x801DE7F4",
+          "end": "0x801DE918"
+        },
+        {
+          "symbol": "fn_801DE918",
+          "start": "0x801DE918",
+          "end": "0x801DE968"
+        },
+        {
+          "symbol": "fn_801DE968",
+          "start": "0x801DE968",
+          "end": "0x801DE9A0"
+        },
+        {
+          "symbol": "fn_801DE9A0",
+          "start": "0x801DE9A0",
+          "end": "0x801DEA50"
+        },
+        {
+          "symbol": "fn_801DEA50",
+          "start": "0x801DEA50",
+          "end": "0x801DEA90"
+        },
+        {
+          "symbol": "fn_801DEA90",
+          "start": "0x801DEA90",
+          "end": "0x801DECFC"
+        },
+        {
+          "symbol": "fn_801DECFC",
+          "start": "0x801DECFC",
+          "end": "0x801DEEF8"
+        },
+        {
+          "symbol": "fn_801DEEF8",
+          "start": "0x801DEEF8",
+          "end": "0x801DEF18"
+        },
+        {
+          "symbol": "fn_801DEF18",
+          "start": "0x801DEF18",
+          "end": "0x801DF064"
+        },
+        {
+          "symbol": "fn_801DF184",
+          "start": "0x801DF184",
+          "end": "0x801DF1A0"
+        },
+        {
+          "symbol": "fn_801DF1A0",
+          "start": "0x801DF1A0",
+          "end": "0x801DF1E4"
+        },
+        {
+          "symbol": "fn_801DF1E4",
+          "start": "0x801DF1E4",
+          "end": "0x801DF228"
+        },
+        {
+          "symbol": "fn_801DF228",
+          "start": "0x801DF228",
+          "end": "0x801DF26C"
+        },
+        {
+          "symbol": "fn_801DF26C",
+          "start": "0x801DF26C",
+          "end": "0x801DF2AC"
+        },
+        {
+          "symbol": "fn_801DF2AC",
+          "start": "0x801DF2AC",
+          "end": "0x801DF338"
+        },
+        {
+          "symbol": "fn_801DF338",
+          "start": "0x801DF338",
+          "end": "0x801DF3E4"
+        },
+        {
+          "symbol": "fn_801DF428",
+          "start": "0x801DF428",
+          "end": "0x801DF578"
+        },
+        {
+          "symbol": "fn_801DF578",
+          "start": "0x801DF578",
+          "end": "0x801DF620"
+        },
+        {
+          "symbol": "fn_801DFD34",
+          "start": "0x801DFD34",
+          "end": "0x801DFD40"
+        },
+        {
+          "symbol": "fn_801DFD40",
+          "start": "0x801DFD40",
+          "end": "0x801DFD4C"
+        },
+        {
+          "symbol": "fn_801DFD4C",
+          "start": "0x801DFD4C",
+          "end": "0x801DFDB8"
+        },
+        {
+          "symbol": "fn_801DFDB8",
+          "start": "0x801DFDB8",
+          "end": "0x801DFDE0"
+        },
+        {
+          "symbol": "fn_801DFDE0",
+          "start": "0x801DFDE0",
+          "end": "0x801DFE0C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801E274C.cpp",
+      "profile": "game_cpp",
+      "evidence": "E3 lane draft of the C++ container classes over 0x801E274C-0x801E2CB4 (no NASCAR match); evidence.tsv function rows and the compiler row for this range, plus the exact data row 0x802B1200-0x802B1290 (vtables). Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E274C",
+          "end": "0x801E2CB4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1200",
+          "end": "0x802B1290"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__14Class_801E274C",
+          "start": "0x801E274C",
+          "end": "0x801E2768"
+        },
+        {
+          "symbol": "_._14Class_801E274C",
+          "start": "0x801E2768",
+          "end": "0x801E279C"
+        },
+        {
+          "symbol": "fn_801E279C__14Class_801E274CP14Owner_801E90A8",
+          "start": "0x801E279C",
+          "end": "0x801E27A4"
+        },
+        {
+          "symbol": "__14Class_801E27A4i",
+          "start": "0x801E27A4",
+          "end": "0x801E2818"
+        },
+        {
+          "symbol": "_._14Class_801E27A4",
+          "start": "0x801E2818",
+          "end": "0x801E2870"
+        },
+        {
+          "symbol": "fn_801E2870__14Class_801E27A4P14Class_801E299C",
+          "start": "0x801E2870",
+          "end": "0x801E2878"
+        },
+        {
+          "symbol": "fn_801E2878__14Class_801E27A4P14Class_801E2878",
+          "start": "0x801E2878",
+          "end": "0x801E28FC"
+        },
+        {
+          "symbol": "fn_801E28FC__14Class_801E27A4P14Class_801E2878",
+          "start": "0x801E28FC",
+          "end": "0x801E299C"
+        },
+        {
+          "symbol": "vfn_05__14Class_801E27A4ii",
+          "start": "0x801E299C",
+          "end": "0x801E2A28"
+        },
+        {
+          "symbol": "vfn_06__14Class_801E27A4",
+          "start": "0x801E2A28",
+          "end": "0x801E2A60"
+        },
+        {
+          "symbol": "vfn_01__14Class_801E27A4PPv",
+          "start": "0x801E2A60",
+          "end": "0x801E2AF4"
+        },
+        {
+          "symbol": "vfn_02__14Class_801E27A4PPv",
+          "start": "0x801E2AF4",
+          "end": "0x801E2B88"
+        },
+        {
+          "symbol": "vfn_03__14Class_801E27A4iPPv",
+          "start": "0x801E2B88",
+          "end": "0x801E2C3C"
+        },
+        {
+          "symbol": "fn_801E2C3C__14Class_801E27A4",
+          "start": "0x801E2C3C",
+          "end": "0x801E2C64"
+        },
+        {
+          "symbol": "fn_801E2C64__14Class_801E27A4PP13Node_801E2878",
+          "start": "0x801E2C64",
+          "end": "0x801E2CB4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801E8478.cpp",
+      "profile": "game_cpp",
+      "evidence": "E3 lane draft of the C++ joint class over 0x801E8478-0x801E8798 (no NASCAR match); evidence.tsv function rows and the compiler row for this range, plus the exact data row 0x802B1548-0x802B1570 (literal pool and vtable). Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E8478",
+          "end": "0x801E8798"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1548",
+          "end": "0x802B1570"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__14Class_801E8478P13Body_801E850CT1P12Vec_801E850CT3",
+          "start": "0x801E8478",
+          "end": "0x801E84CC"
+        },
+        {
+          "symbol": "_._14Class_801E8478",
+          "start": "0x801E84CC",
+          "end": "0x801E850C"
+        },
+        {
+          "symbol": "vfn_01__14Class_801E8478",
+          "start": "0x801E850C",
+          "end": "0x801E8798"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801EADD8.cpp",
+      "profile": "game_cpp",
+      "evidence": "E3 lane draft of the C++ box class over 0x801EADD8-0x801EB488 (no NASCAR match); evidence.tsv function rows and the compiler row for this range, plus the exact data row 0x802B1720-0x802B1748 (literal pools and vtable). Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801EADD8",
+          "end": "0x801EB488"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1720",
+          "end": "0x802B1748"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__14Class_801EADD8",
+          "start": "0x801EADD8",
+          "end": "0x801EAE10"
+        },
+        {
+          "symbol": "_._14Class_801EADD8",
+          "start": "0x801EAE10",
+          "end": "0x801EAE44"
+        },
+        {
+          "symbol": "fn_801EAE44__14Class_801EADD8P12Vec_801EADD8T1",
+          "start": "0x801EAE44",
+          "end": "0x801EAE7C"
+        },
+        {
+          "symbol": "fn_801EAE7C__14Class_801EADD8P12Vec_801EADD8",
+          "start": "0x801EAE7C",
+          "end": "0x801EAEB4"
+        },
+        {
+          "symbol": "fn_801EAEB4__14Class_801EADD8P12Vec_801EADD8",
+          "start": "0x801EAEB4",
+          "end": "0x801EAF60"
+        },
+        {
+          "symbol": "fn_801EAF60__14Class_801EADD8PA3_fP14Class_801EADD8",
+          "start": "0x801EAF60",
+          "end": "0x801EB134"
+        },
+        {
+          "symbol": "fn_801EB134__14Class_801EADD8iii",
+          "start": "0x801EB134",
+          "end": "0x801EB488"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801E8798.cpp",
+      "profile": "game_cpp",
+      "evidence": "E3 lane draft of cu_801E8798.cpp over 0x801E8798-0x801E8C78 (neutral name: no NASCAR/Madden name evidence for this unit); evidence.tsv function rows and the game_cpp compiler row for this range, plus the exact data row 0x802B1570-0x802B15F8. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E8798",
+          "end": "0x801E8C78"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1570",
+          "end": "0x802B15F8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__14Class_801E8798ffP14Class_801E88BC",
+          "start": "0x801E8798",
+          "end": "0x801E87B8"
+        },
+        {
+          "symbol": "vfn_01__14Class_801E8798P13Body_801E8798",
+          "start": "0x801E87B8",
+          "end": "0x801E87D8"
+        },
+        {
+          "symbol": "vfn_02__14Class_801E8798P13Body_801E8798",
+          "start": "0x801E87D8",
+          "end": "0x801E87E4"
+        },
+        {
+          "symbol": "vfn_03__14Class_801E8798P13Body_801E8798f",
+          "start": "0x801E87E4",
+          "end": "0x801E896C"
+        },
+        {
+          "symbol": "fn_801E896C__14Class_801E8798P13Body_801E8798",
+          "start": "0x801E896C",
+          "end": "0x801E89D8"
+        },
+        {
+          "symbol": "__14Class_801E89D8P14Class_801E8B10i",
+          "start": "0x801E89D8",
+          "end": "0x801E8A68"
+        },
+        {
+          "symbol": "_._14Class_801E89D8",
+          "start": "0x801E8A68",
+          "end": "0x801E8B10"
+        },
+        {
+          "symbol": "vfn_02__14Class_801E89D8iPv",
+          "start": "0x801E8B10",
+          "end": "0x801E8C00"
+        },
+        {
+          "symbol": "vfn_03__14Class_801E89D8",
+          "start": "0x801E8C00",
+          "end": "0x801E8C3C"
+        },
+        {
+          "symbol": "_._14Class_801E8C3C",
+          "start": "0x801E8C3C",
+          "end": "0x801E8C78"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801E8E04.cpp",
+      "profile": "game_cpp",
+      "evidence": "E3 lane draft of cu_801E8E04.cpp over 0x801E8E04-0x801E92D0 (neutral name: no NASCAR/Madden name evidence for this unit); evidence.tsv function rows and the game_cpp compiler row for this range, plus the exact data row 0x802B1660-0x802B1678. The next function 0x801E92D0 is not drafted (it stores the vtable 0x8028DD58 of a class defined in game code). Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E8E04",
+          "end": "0x801E92D0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1660",
+          "end": "0x802B1678"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__14Class_801E8E04iiP14Class_801E90F0P14Class_801E9114",
+          "start": "0x801E8E04",
+          "end": "0x801E8EA4"
+        },
+        {
+          "symbol": "_._14Class_801E8E04",
+          "start": "0x801E8EA4",
+          "end": "0x801E8F1C"
+        },
+        {
+          "symbol": "fn_801E8F1C__14Class_801E8E04P14Group_801E8E04",
+          "start": "0x801E8F1C",
+          "end": "0x801E8FD4"
+        },
+        {
+          "symbol": "fn_801E8FD4__14Class_801E8E04P14Group_801E8E04",
+          "start": "0x801E8FD4",
+          "end": "0x801E90A8"
+        },
+        {
+          "symbol": "fn_801E90A8__14Class_801E8E04P14Group_801E8E04P15Member_801E8E04",
+          "start": "0x801E90A8",
+          "end": "0x801E90CC"
+        },
+        {
+          "symbol": "fn_801E90CC__14Class_801E8E04P14Group_801E8E04P15Member_801E8E04",
+          "start": "0x801E90CC",
+          "end": "0x801E90F0"
+        },
+        {
+          "symbol": "fn_801E90F0__14Class_801E8E04P15Member_801E8E04",
+          "start": "0x801E90F0",
+          "end": "0x801E9168"
+        },
+        {
+          "symbol": "fn_801E9168__14Class_801E8E04P15Member_801E8E04",
+          "start": "0x801E9168",
+          "end": "0x801E91E0"
+        },
+        {
+          "symbol": "fn_801E91E0__14Class_801E8E04Pv",
+          "start": "0x801E91E0",
+          "end": "0x801E9248"
+        },
+        {
+          "symbol": "fn_801E9248__14Class_801E8E04Pv",
+          "start": "0x801E9248",
+          "end": "0x801E92D0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801E9F70.cpp",
+      "profile": "game_cpp",
+      "evidence": "E3 lane draft of cu_801E9F70.cpp over 0x801E9F70-0x801EADD8 (neutral name: no NASCAR/Madden name evidence for this unit); evidence.tsv function rows and the game_cpp compiler row for this range, plus the exact data row 0x802B1708-0x802B1720. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E9F70",
+          "end": "0x801EADD8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1708",
+          "end": "0x802B1720"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__14Class_801E9F70UiUi",
+          "start": "0x801E9F70",
+          "end": "0x801EA100"
+        },
+        {
+          "symbol": "_._14Class_801E9F70",
+          "start": "0x801EA100",
+          "end": "0x801EA1D8"
+        },
+        {
+          "symbol": "fn_801EA1D8__14Class_801E9F70P12Box_801E9F70Uii",
+          "start": "0x801EA1D8",
+          "end": "0x801EA284"
+        },
+        {
+          "symbol": "fn_801EA284__14Class_801E9F70P12Box_801E9F70",
+          "start": "0x801EA284",
+          "end": "0x801EA428"
+        },
+        {
+          "symbol": "fn_801EA428__14Class_801E9F70",
+          "start": "0x801EA428",
+          "end": "0x801EA470"
+        },
+        {
+          "symbol": "fn_801EA470__14Class_801E9F70Us",
+          "start": "0x801EA470",
+          "end": "0x801EA480"
+        },
+        {
+          "symbol": "fn_801EA480__14Class_801E9F70i",
+          "start": "0x801EA480",
+          "end": "0x801EA5C0"
+        },
+        {
+          "symbol": "fn_801EA5C0__14Class_801E9F70UsUsi",
+          "start": "0x801EA5C0",
+          "end": "0x801EA668"
+        },
+        {
+          "symbol": "fn_801EA668__14Class_801E9F70UsUs",
+          "start": "0x801EA668",
+          "end": "0x801EA6C0"
+        },
+        {
+          "symbol": "fn_801EA6C0__14Class_801E9F70iUsPUc",
+          "start": "0x801EA6C0",
+          "end": "0x801EA708"
+        },
+        {
+          "symbol": "fn_801EA708__14Class_801E9F70UsUsUs",
+          "start": "0x801EA708",
+          "end": "0x801EA818"
+        },
+        {
+          "symbol": "fn_801EA818__14Class_801E9F70UsUsP16Overlap_801E9F70",
+          "start": "0x801EA818",
+          "end": "0x801EA8A0"
+        },
+        {
+          "symbol": "fn_801EA8A0__14Class_801E9F70Us",
+          "start": "0x801EA8A0",
+          "end": "0x801EA908"
+        },
+        {
+          "symbol": "fn_801EA908__14Class_801E9F70iUs",
+          "start": "0x801EA908",
+          "end": "0x801EAA5C"
+        },
+        {
+          "symbol": "fn_801EAA5C__14Class_801E9F70iUs",
+          "start": "0x801EAA5C",
+          "end": "0x801EAB60"
+        },
+        {
+          "symbol": "fn_801EAB60__14Class_801E9F70iUs",
+          "start": "0x801EAB60",
+          "end": "0x801EAC98"
+        },
+        {
+          "symbol": "fn_801EAC98__14Class_801E9F70",
+          "start": "0x801EAC98",
+          "end": "0x801EACF0"
+        },
+        {
+          "symbol": "fn_801EACF0__14Class_801E9F70P13Pair_801E9F70",
+          "start": "0x801EACF0",
+          "end": "0x801EAD00"
+        },
+        {
+          "symbol": "fn_801EAD00__14Class_801E9F70",
+          "start": "0x801EAD00",
+          "end": "0x801EAD50"
+        },
+        {
+          "symbol": "fn_801EAD50__14Class_801E9F70Us",
+          "start": "0x801EAD50",
+          "end": "0x801EAD6C"
+        },
+        {
+          "symbol": "fn_801EAD6C__14Class_801E9F70",
+          "start": "0x801EAD6C",
+          "end": "0x801EADBC"
+        },
+        {
+          "symbol": "fn_801EADBC__14Class_801E9F70Us",
+          "start": "0x801EADBC",
+          "end": "0x801EADD8"
+        }
+      ]
     }
   ]
 }
