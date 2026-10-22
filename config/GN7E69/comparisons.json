@@ -34689,7 +34689,7 @@
     {
       "source": "src/game/cu_80150710.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #817; three complete slot bodies of the table 0x802A1DC8 (derived from the engine table 0x80297BF8, include/game/Class_80297BF8.h) inside the retained provisional cu_801485B4 survey group: slot 4 (0x80150710, word 0x802A1DEC), slot 7 (0x80150820, word 0x802A1E04) and slot 11 (0x80150824, word 0x802A1E24). Slots 5 and 6 (0x8015076C-0x80150820) are not registered: 0x8015076C does not yet match, and 0x801507E0 forms 0x802A0B74 inside readonly context measured with src/game/cu_8014AB64.cpp and 0x802A130C, which no fragment registers, and reads the .sdata word 0x803EB2E4. No literal or data word is referenced, so no other range is registered. Original file boundaries and nominal identity unresolved; 0x801503BC-0x80150710 and 0x80150848 onward excluded; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion.",
+      "evidence": "Issues #817 and #1021; complete handler 0x80150710-0x8015076C and slot 5 body 0x8015076C-0x801507E0 in retained provisional cu_801485B4 grouping. Slot 6 at 0x801507E0-0x80150820 is measured in cu_8014AB64.cpp to reuse its established shared literal pool naturally. Original source boundaries and identity unresolved; partial comparisons retain original linked bytes.",
       "sections": [
         {
           "section": ".text",
