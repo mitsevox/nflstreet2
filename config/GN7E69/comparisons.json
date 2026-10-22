@@ -21073,6 +21073,11 @@
           "symbol": "__AI_SRC_INIT",
           "start": "0x8024A808",
           "end": "0x8024A9EC"
+        },
+        {
+          "symbol": "__AICallbackStackSwitch",
+          "start": "0x8024A7B0",
+          "end": "0x8024A808"
         }
       ]
     },
@@ -21093,6 +21098,16 @@
           "symbol": "__OSGetSystemTime",
           "start": "0x8023E7B4",
           "end": "0x8023E818"
+        },
+        {
+          "symbol": "OSGetTime",
+          "start": "0x8023E794",
+          "end": "0x8023E7AC"
+        },
+        {
+          "symbol": "OSGetTick",
+          "start": "0x8023E7AC",
+          "end": "0x8023E7B4"
         }
       ]
     },
@@ -21129,6 +21144,21 @@
           "symbol": "__OSInitMemoryProtection",
           "start": "0x8023BC38",
           "end": "0x8023BD50"
+        },
+        {
+          "symbol": "Config24MB",
+          "start": "0x8023BB20",
+          "end": "0x8023BBA0"
+        },
+        {
+          "symbol": "Config48MB",
+          "start": "0x8023BBA0",
+          "end": "0x8023BC20"
+        },
+        {
+          "symbol": "RealMode",
+          "start": "0x8023BC20",
+          "end": "0x8023BC38"
         }
       ]
     },
@@ -21170,6 +21200,46 @@
           "symbol": "__OSContextInit",
           "start": "0x8023AB00",
           "end": "0x8023AB48"
+        },
+        {
+          "symbol": "__OSLoadFPUContext",
+          "start": "0x8023A2D8",
+          "end": "0x8023A3FC"
+        },
+        {
+          "symbol": "__OSSaveFPUContext",
+          "start": "0x8023A3FC",
+          "end": "0x8023A524"
+        },
+        {
+          "symbol": "OSSaveFPUContext",
+          "start": "0x8023A524",
+          "end": "0x8023A52C"
+        },
+        {
+          "symbol": "OSSetCurrentContext",
+          "start": "0x8023A52C",
+          "end": "0x8023A588"
+        },
+        {
+          "symbol": "OSSaveContext",
+          "start": "0x8023A594",
+          "end": "0x8023A614"
+        },
+        {
+          "symbol": "OSGetStackPointer",
+          "start": "0x8023A6EC",
+          "end": "0x8023A6F4"
+        },
+        {
+          "symbol": "OSInitContext",
+          "start": "0x8023A718",
+          "end": "0x8023A7D4"
+        },
+        {
+          "symbol": "OSSwitchFPUContext",
+          "start": "0x8023AA7C",
+          "end": "0x8023AB00"
         }
       ]
     },
@@ -21206,6 +21276,81 @@
           "symbol": "__OSCacheInit",
           "start": "0x8023A1E4",
           "end": "0x8023A2D8"
+        },
+        {
+          "symbol": "DCEnable",
+          "start": "0x80239CAC",
+          "end": "0x80239CC0"
+        },
+        {
+          "symbol": "DCInvalidateRange",
+          "start": "0x80239CC0",
+          "end": "0x80239CEC"
+        },
+        {
+          "symbol": "DCFlushRange",
+          "start": "0x80239CEC",
+          "end": "0x80239D1C"
+        },
+        {
+          "symbol": "DCStoreRange",
+          "start": "0x80239D1C",
+          "end": "0x80239D4C"
+        },
+        {
+          "symbol": "DCFlushRangeNoSync",
+          "start": "0x80239D4C",
+          "end": "0x80239D78"
+        },
+        {
+          "symbol": "ICInvalidateRange",
+          "start": "0x80239D78",
+          "end": "0x80239DAC"
+        },
+        {
+          "symbol": "ICFlashInvalidate",
+          "start": "0x80239DAC",
+          "end": "0x80239DBC"
+        },
+        {
+          "symbol": "ICEnable",
+          "start": "0x80239DBC",
+          "end": "0x80239DD0"
+        },
+        {
+          "symbol": "__LCEnable",
+          "start": "0x80239DD0",
+          "end": "0x80239E9C"
+        },
+        {
+          "symbol": "LCEnable",
+          "start": "0x80239E9C",
+          "end": "0x80239ED4"
+        },
+        {
+          "symbol": "LCDisable",
+          "start": "0x80239ED4",
+          "end": "0x80239EFC"
+        },
+        {
+          "symbol": "LCStoreBlocks",
+          "start": "0x80239EFC",
+          "end": "0x80239F20"
+        },
+        {
+          "symbol": "LCStoreData",
+          "start": "0x80239F20",
+          "end": "0x80239FCC"
+        },
+        {
+          "symbol": "LCQueueLength",
+          "start": "0x80239FCC",
+          "end": "0x80239FD8"
+        },
+        {
+          "symbol": "LCQueueWait",
+          "start": "0x80239FD8",
+          "end": "0x80239FEC"
         }
       ]
     },
@@ -21243,6 +21388,11 @@
           "symbol": "__OSReboot",
           "start": "0x8023E93C",
           "end": "0x8023EC7C"
+        },
+        {
+          "symbol": "Run",
+          "start": "0x8023E920",
+          "end": "0x8023E930"
         }
       ]
     },
@@ -21284,6 +21434,11 @@
           "symbol": "OSGetResetCode",
           "start": "0x8023C3B0",
           "end": "0x8023C3E0"
+        },
+        {
+          "symbol": "Reset",
+          "start": "0x8023C040",
+          "end": "0x8023C0B0"
         }
       ]
     },
@@ -21346,6 +21501,156 @@
           "symbol": "__OSDispatchInterrupt",
           "start": "0x8023B6CC",
           "end": "0x8023BA10"
+        },
+        {
+          "symbol": "OSDisableInterrupts",
+          "start": "0x8023B1F4",
+          "end": "0x8023B208"
+        },
+        {
+          "symbol": "OSEnableInterrupts",
+          "start": "0x8023B208",
+          "end": "0x8023B21C"
+        },
+        {
+          "symbol": "OSRestoreInterrupts",
+          "start": "0x8023B21C",
+          "end": "0x8023B240"
+        },
+        {
+          "symbol": "ExternalInterruptHandler",
+          "start": "0x8023BA10",
+          "end": "0x8023BA60"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/base/PPCArch.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv function and assembly rows 0x8023873C-0x8023885C (src/dolphin/base/PPCArch.c); sdk.json mapping. Comparison-only source; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023873C",
+          "end": "0x8023885C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "PPCMfmsr",
+          "start": "0x8023873C",
+          "end": "0x80238744"
+        },
+        {
+          "symbol": "PPCMtmsr",
+          "start": "0x80238744",
+          "end": "0x8023874C"
+        },
+        {
+          "symbol": "PPCMfhid0",
+          "start": "0x8023874C",
+          "end": "0x80238754"
+        },
+        {
+          "symbol": "PPCMthid0",
+          "start": "0x80238754",
+          "end": "0x8023875C"
+        },
+        {
+          "symbol": "PPCMfl2cr",
+          "start": "0x8023875C",
+          "end": "0x80238764"
+        },
+        {
+          "symbol": "PPCMtl2cr",
+          "start": "0x80238764",
+          "end": "0x8023876C"
+        },
+        {
+          "symbol": "PPCMtdec",
+          "start": "0x8023876C",
+          "end": "0x80238774"
+        },
+        {
+          "symbol": "PPCSync",
+          "start": "0x80238774",
+          "end": "0x8023877C"
+        },
+        {
+          "symbol": "PPCHalt",
+          "start": "0x8023877C",
+          "end": "0x80238790"
+        },
+        {
+          "symbol": "PPCMtmmcr0",
+          "start": "0x80238790",
+          "end": "0x80238798"
+        },
+        {
+          "symbol": "PPCMtmmcr1",
+          "start": "0x80238798",
+          "end": "0x802387A0"
+        },
+        {
+          "symbol": "PPCMtpmc1",
+          "start": "0x802387A0",
+          "end": "0x802387A8"
+        },
+        {
+          "symbol": "PPCMtpmc2",
+          "start": "0x802387A8",
+          "end": "0x802387B0"
+        },
+        {
+          "symbol": "PPCMtpmc3",
+          "start": "0x802387B0",
+          "end": "0x802387B8"
+        },
+        {
+          "symbol": "PPCMtpmc4",
+          "start": "0x802387B8",
+          "end": "0x802387C0"
+        },
+        {
+          "symbol": "PPCMffpscr",
+          "start": "0x802387C0",
+          "end": "0x802387E0"
+        },
+        {
+          "symbol": "PPCMtfpscr",
+          "start": "0x802387E0",
+          "end": "0x80238808"
+        },
+        {
+          "symbol": "PPCMfhid2",
+          "start": "0x80238808",
+          "end": "0x80238810"
+        },
+        {
+          "symbol": "PPCMthid2",
+          "start": "0x80238810",
+          "end": "0x80238818"
+        },
+        {
+          "symbol": "PPCMfwpar",
+          "start": "0x80238818",
+          "end": "0x80238824"
+        },
+        {
+          "symbol": "PPCMtwpar",
+          "start": "0x80238824",
+          "end": "0x8023882C"
+        },
+        {
+          "symbol": "PPCDisableSpeculation",
+          "start": "0x8023882C",
+          "end": "0x80238854"
+        },
+        {
+          "symbol": "PPCSetFpNonIEEEMode",
+          "start": "0x80238854",
+          "end": "0x8023885C"
         }
       ]
     },
@@ -21430,6 +21735,36 @@
           "symbol": "OSExceptionInit",
           "start": "0x80238EE8",
           "end": "0x80239168"
+        },
+        {
+          "symbol": "__OSFPRInit",
+          "start": "0x8023885C",
+          "end": "0x80238984"
+        },
+        {
+          "symbol": "__OSDBIntegrator",
+          "start": "0x80239168",
+          "end": "0x8023918C"
+        },
+        {
+          "symbol": "__OSDBJump",
+          "start": "0x8023918C",
+          "end": "0x80239190"
+        },
+        {
+          "symbol": "OSExceptionVector",
+          "start": "0x802391C0",
+          "end": "0x8023925C"
+        },
+        {
+          "symbol": "OSDefaultExceptionHandler",
+          "start": "0x8023925C",
+          "end": "0x802392B4"
+        },
+        {
+          "symbol": "__OSPSInit",
+          "start": "0x802392B4",
+          "end": "0x80239308"
         }
       ]
     },
@@ -21501,6 +21836,11 @@
           "symbol": "DecrementerExceptionCallback",
           "start": "0x80239778",
           "end": "0x802399A8"
+        },
+        {
+          "symbol": "DecrementerExceptionHandler",
+          "start": "0x802399A8",
+          "end": "0x802399F8"
         }
       ],
       "discarded": [
@@ -28470,6 +28810,11 @@
           "symbol": "__DBIsExceptionMarked",
           "start": "0x8023ECFC",
           "end": "0x8023ED18"
+        },
+        {
+          "symbol": "__DBExceptionDestination",
+          "start": "0x8023ECEC",
+          "end": "0x8023ECFC"
         }
       ],
       "discarded": [

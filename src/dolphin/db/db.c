@@ -27,6 +27,15 @@ void __DBExceptionDestinationAux(void)
     PPCHalt();
 }
 
+asm void __DBExceptionDestination(void)
+{
+    nofralloc
+    mfmsr r3
+    ori r3, r3, 0x30
+    mtmsr r3
+    b __DBExceptionDestinationAux
+}
+
 BOOL __DBIsExceptionMarked(__OSException exception)
 {
     u32 mask = 1 << exception;

@@ -43,6 +43,15 @@ inline void ReadApploader(OSTime time1) {
 
 
 
+asm void Run(register void* entry)
+{
+    nofralloc
+    sync
+    isync
+    mtlr entry
+    blr
+}
+
 static void Callback() { Prepared = TRUE; }
 
 inline BOOL IsStreamEnabled(void) {
