@@ -11,10 +11,10 @@ typedef struct Collision_801DF578 {
 /* Pool of particle systems created from one template (0x6E4 bytes). */
 typedef struct Pool_801DE1E0 {
     unsigned short mUnknown000;
-    PartObj_801DE1E0 *mpUnknown004[32];
-    unsigned short mUnknown084;
-    unsigned short mUnknown086;
-    Template_801DE1E0 mUnknown088;
+    PartObj_801DE1E0 *mpObjs[32];
+    unsigned short mFree;
+    unsigned short mUsed;
+    Template_801DE1E0 mTemplate;
 } Pool_801DE1E0;
 
 /* Descriptor passed to ParticleLibInit (lbl_802DCFF8 in the game). */
@@ -58,16 +58,21 @@ typedef struct State_801DE1E0 {
     unsigned short mUnknown62;
     unsigned char mUnknown64;
     int mUnknown68;
-    int mUnknown6C;
-    int mUnknown70;
+    int mHeap;
+    int mPoolCount;
     float mUnknown74;
     Vec3_801DE1E0 mUnknown78;
     int mUnknown84;
-    void *mpUnknown88;
+    void *mpRandom;
     Custom_801DE1E0 mUnknown8C;
-    Pool_801DE1E0 *mpUnknown9C;
-    unsigned char *mpUnknownA0;
 } State_801DE1E0;
+
+/* Template pool table at lbl_8039ADAC. */
+typedef struct PoolTable_801DD498 {
+    Pool_801DE1E0 *mpPools;
+    unsigned char *mpUsed;
+    int mUnknown8;
+} PoolTable_801DD498;
 
 /* Object-type record registered through fn_801D2130 ("PSYSLIB"). */
 typedef struct ObjType_801DE1E0 {
@@ -78,14 +83,16 @@ typedef struct ObjType_801DE1E0 {
 } ObjType_801DE1E0;
 
 extern State_801DE1E0 lbl_8039AD10;
+extern PoolTable_801DD498 lbl_8039ADAC;
 extern ObjType_801DE1E0 lbl_802F94AC;
 extern Vec3_801DE1E0 lbl_802F94C4;
 extern unsigned char lbl_803EBD58;
 extern float lbl_803ECF4C;
 
+void *fn_801C0D8C(char *pName);
 void *fn_801CF5BC(int a, int b);
 int fn_801CF67C(void *p);
-int fn_801CF69C(void *p);
+float fn_801CF69C(void *p);
 int fn_801CF6D4(void *p, int range);
 int fn_801CF7AC(void);
 void fn_801D04C4(void);
@@ -100,41 +107,262 @@ void fn_801D0F80(float (*m)[4]);
 void fn_801D2130(ObjType_801DE1E0 *pType);
 void fn_801D2570(int a);
 int fn_801D2730(void);
+unsigned int fn_801D27F4(int heap);
 void *fn_801D2B7C(int size, int a, int b);
+void *fn_801D2BB0(int heap, int size, int a, int b);
 int fn_801D2BD0(void *p);
-void fn_801D34D0(void *p, int size, int a, int b);
+int fn_801D34D0(void *p, int size, int value, int width);
 void fn_801DCF0C(unsigned char heap, int size, int count, void (*pAdd)(), void (*pDel)());
 void fn_801DCF8C(unsigned char heap);
 void *fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);
 void fn_801DD0C8(void *pList, unsigned char heap, int slot, void *pFunc);
 void fn_801DD0E8(void *pList);
 PartObj_801DE1E0 *fn_801DD168(unsigned char heap, int a, Template_801DE1E0 *pTemplate);
-void fn_801DDCC4(PartObj_801DE1E0 *pObj);
-Ramp_801E052C *fn_801E098C(Ramp_801E052C *pSrc, Ramp_801E052C *pDst);
 void fn_801DD200(void *pList, void *pObj);
-void fn_801DD498(void);
-void fn_801DD534(void);
-void *fn_801DD57C(unsigned short handle);
-void *fn_801C0D8C(char *pName);
+void fn_801DF3E4(unsigned char *pSrc, unsigned char *pDst, unsigned int size, int noSwap);
 void fn_801DFE0C(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
 void fn_801E0384(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
+void fn_801E03F4(PartObj_801DE1E0 *pObj);
+void fn_801E043C(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle);
+Ramp_801E052C *fn_801E098C(Ramp_801E052C *pSrc, Ramp_801E052C *pDst);
+float fn_802270D4(float *pVec);
 void fn_80227264(Vec3_801DE1E0 *pDst, Vec3_801DE1E0 *pSrc, float scale);
 void fn_80227C2C(Vec3_801DE1E0 *pSrc, Vec3_801DE1E0 *pDst);
-void fn_801DF3E4(unsigned char *pSrc, unsigned char *pDst, unsigned int size, int noSwap);
 
-int fn_801DEA90(PartObj_801DE1E0 *pObj, int steps);
-float fn_802270D4(float *pVec);
-void fn_801DDD00(PartObj_801DE1E0 *pObj, float dt);
-void fn_801DD6B8(PartObj_801DE1E0 *pObj);
-void fn_801DE010(PartObj_801DE1E0 *pObj);
-void fn_801DDE08(PartObj_801DE1E0 *pObj, float dt);
 void fn_801DD730(PartObj_801DE1E0 *pObj, unsigned short count, int step, int steps, float dt);
+void fn_801DDFB0(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, float dt);
+void fn_801DE04C(PartObj_801DE1E0 *pObj);
+void fn_801DE114(PartObj_801DE1E0 *pObj);
+void fn_801DE564(PartObj_801DE1E0 *pDst, Template_801DE1E0 *pSrc);
+void fn_801DE794(PartObj_801DE1E0 *pObj);
+void fn_801DE968(PartObj_801DE1E0 *pObj, void *pTex);
+void fn_801DE9A0(PartObj_801DE1E0 *pObj, Vec3_801DE1E0 *pPos, Vec3_801DE1E0 *pRot);
+int fn_801DEA90(PartObj_801DE1E0 *pObj, int steps);
 void fn_801DE7F4(PartObj_801DE1E0 *pObj, Template_801DE1E0 *pTemplate);
 void fn_801DEA50(PartObj_801DE1E0 *pObj);
-void fn_801DE9A0(PartObj_801DE1E0 *pObj, Vec3_801DE1E0 *pPos, Vec3_801DE1E0 *pRot);
+void fn_801DEF18(PartObj_801DE1E0 *pObj);
 void fn_801DFD4C(void);
-PartObj_801DE1E0 *fn_801DE918(Template_801DE1E0 *pTemplate);
-void fn_801DE968(PartObj_801DE1E0 *pObj, void *pTex);
+
+void fn_801DD498(void)
+{
+    fn_801D34D0(&lbl_8039ADAC, sizeof(lbl_8039ADAC), 0, 1);
+    lbl_8039ADAC.mpUsed = fn_801D2B7C(lbl_8039AD10.mPoolCount, 0, 0);
+    fn_801D34D0(lbl_8039ADAC.mpUsed, lbl_8039AD10.mPoolCount, 0, 1);
+    lbl_8039ADAC.mpPools = fn_801D2B7C(lbl_8039AD10.mPoolCount * sizeof(Pool_801DE1E0), 0, 0);
+    fn_801D34D0(lbl_8039ADAC.mpPools, lbl_8039AD10.mPoolCount * sizeof(Pool_801DE1E0), 0, 1);
+}
+
+void fn_801DD534(void)
+{
+    fn_801D2BD0(lbl_8039ADAC.mpUsed);
+    lbl_8039ADAC.mpUsed = 0;
+    fn_801D2BD0(lbl_8039ADAC.mpPools);
+    lbl_8039ADAC.mpPools = 0;
+}
+
+PartObj_801DE1E0 *fn_801DD57C(unsigned short handle)
+{
+    Pool_801DE1E0 *pPool = &lbl_8039ADAC.mpPools[handle];
+    PartObj_801DE1E0 *pObj;
+    unsigned int size;
+    unsigned short i;
+
+    if (pPool->mFree == 0) {
+        goto fail;
+    }
+    pObj = pPool->mpObjs[pPool->mUsed];
+    if (lbl_8039AD10.mUnknown64 != 0) {
+        size = 0;
+        if (pObj->mMax != 0) {
+            size = pObj->mMax * sizeof(Particle_801DE1E0);
+            size = (size + 15) & ~15;
+        }
+        if (fn_801D27F4(lbl_8039AD10.mHeap) < size) {
+            goto fail;
+        }
+        pObj->mpParticles = fn_801D2BB0(lbl_8039AD10.mHeap, size, 0, 0);
+        if (pObj->mpParticles == 0) {
+            goto fail;
+        }
+        for (i = 0; i < pObj->mMax; i++) {
+            pObj->mppParticles[i] = &pObj->mpParticles[i];
+            pObj->mppParticles[i]->mActive = 0;
+        }
+    }
+    fn_801DE564(pObj, &pPool->mTemplate);
+    fn_801DE794(pObj);
+    pObj->mUnknown2B4 = 1;
+    pPool->mUsed++;
+    pPool->mFree--;
+    return pObj;
+fail:
+    return 0;
+}
+
+void fn_801DD6B8(PartObj_801DE1E0 *pObj)
+{
+    int i;
+    int last = pObj->mCount - 1;
+
+    for (i = last; i >= 0; i--) {
+        Particle_801DE1E0 *pParticle = pObj->mppParticles[i];
+
+        if (pParticle->mAge < pParticle->mLife) {
+            continue;
+        }
+        pParticle->mActive = 0;
+        if (i != last) {
+            Particle_801DE1E0 *pLast = pObj->mppParticles[last];
+            pObj->mppParticles[last] = pParticle;
+            pObj->mppParticles[i] = pLast;
+        }
+        pObj->mCount--;
+        last = pObj->mCount - 1;
+    }
+}
+
+void fn_801DDCC4(PartObj_801DE1E0 *pObj)
+{
+    unsigned int i;
+
+    for (i = 0; i < pObj->mCount; i++) {
+        pObj->mppParticles[i]->mActive = 0;
+    }
+}
+
+void fn_801DDD00(PartObj_801DE1E0 *pObj, float dt)
+{
+    if (pObj->mUnknown0C8 != 0.0f) {
+        float value = pObj->mUnknown0C8 * dt + pObj->mUnknown0B0;
+
+        if (!(value >= pObj->mUnknown0CC)) {
+            value = pObj->mUnknown0CC;
+        } else if (!(value <= pObj->mUnknown0D0)) {
+            value = pObj->mUnknown0D0;
+        }
+        pObj->mUnknown0B0 = value;
+    }
+    switch (pObj->mUnknown050) {
+    case 0:
+        break;
+    case 1:
+        if (!(pObj->mUnknown3B0 <= pObj->mUnknown054 * lbl_8039AD10.mUnknown10)) {
+            pObj->mUnknown0B0 = 0.0f;
+            if (pObj->mCount == 0) {
+                pObj->mUnknown2B4 = 0;
+                if (pObj->mUnknown2B5 == 1) {
+                    fn_801DEF18(pObj);
+                }
+            }
+        }
+        break;
+    case 2:
+        if (!(pObj->mUnknown0B0 > pObj->mUnknown054) && pObj->mCount == 0) {
+            pObj->mUnknown2B4 = 0;
+            if (pObj->mUnknown2B5 == 1) {
+                fn_801DEF18(pObj);
+            }
+        }
+        break;
+    }
+}
+
+void fn_801DDE08(PartObj_801DE1E0 *pObj, float dt)
+{
+    unsigned short i;
+
+    fn_801E03F4(pObj);
+    for (i = 0; i < pObj->mCount; i++) {
+        Particle_801DE1E0 *pParticle = pObj->mppParticles[i];
+
+        if (pObj->mCollisionType != 0 || pObj->mColExtCount != 0) {
+            fn_801E043C(pObj, pParticle);
+        }
+        pParticle->mPrevPos = pParticle->mPos;
+        fn_801DDFB0(pObj, pParticle, dt);
+        pParticle->mForce.x = pParticle->mForce.y = pParticle->mForce.z = 0.0f;
+        if (pObj->mUnknown041 != 0) {
+            pParticle->mUnknown4C = (pParticle->mAge * pObj->mUnknown0E4 + 1.0f) * pParticle->mUnknown30;
+        }
+        pParticle->mAgeRatio = pParticle->mAge / pParticle->mLife;
+        pParticle->mAge += dt;
+        pParticle->mUnknown50 += dt * pParticle->mUnknown34;
+        pParticle->mUnknown40 = pParticle->mAge * lbl_8039AD10.mUnknown14;
+    }
+}
+
+void fn_801DDFB0(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, float dt)
+{
+    float scale = pObj->mUnknown2B0 * dt;
+
+    pParticle->mVel.x += pParticle->mForce.x * scale;
+    pParticle->mVel.y += pParticle->mForce.y * scale;
+    pParticle->mVel.z += pParticle->mForce.z * scale;
+    pParticle->mPos.x = pParticle->mVel.x * dt + pParticle->mPrevPos.x;
+    pParticle->mPos.y = pParticle->mVel.y * dt + pParticle->mPrevPos.y;
+    pParticle->mPos.z = pParticle->mVel.z * dt + pParticle->mPrevPos.z;
+}
+
+void fn_801DE010(PartObj_801DE1E0 *pObj)
+{
+    switch (pObj->mForceType) {
+    case 1:
+        fn_801DE04C(pObj);
+        break;
+    case 0:
+        fn_801DE114(pObj);
+        break;
+    }
+}
+
+void fn_801DE04C(PartObj_801DE1E0 *pObj)
+{
+    Vec3_801DE1E0 force;
+    unsigned int i;
+
+    float x;
+    float y;
+    float z;
+
+    fn_80227264(&force, &lbl_8039AD10.mUnknown78, -(pObj->mUnknown090 * pObj->mUnknown094));
+    x = force.x;
+    y = force.y;
+    z = force.z;
+    for (i = 0; i < pObj->mCount; i++) {
+        Particle_801DE1E0 *pParticle = pObj->mppParticles[i];
+
+        pParticle->mForce.x = pParticle->mVel.x * -0.45f + (pParticle->mForce.x + x);
+        pParticle->mForce.y = pParticle->mVel.y * -0.45f + (pParticle->mForce.y + y);
+        pParticle->mForce.z = pParticle->mVel.z * -0.45f + (pParticle->mForce.z + z);
+    }
+}
+
+void fn_801DE114(PartObj_801DE1E0 *pObj)
+{
+    Vec3_801DE1E0 force;
+    unsigned short i;
+
+    float x;
+    float y;
+    float z;
+
+    fn_80227264(&force, &lbl_8039AD10.mUnknown78, pObj->mUnknown098 * pObj->mUnknown090);
+    x = force.x;
+    y = force.y;
+    z = force.z;
+    for (i = 0; i < pObj->mCount; i++) {
+        Particle_801DE1E0 *pParticle = pObj->mppParticles[i];
+
+        pParticle->mForce.x += x;
+        pParticle->mForce.y += y;
+        pParticle->mForce.z += z;
+    }
+}
+
+float fn_801DE1B8(void)
+{
+    return fn_801CF69C(lbl_8039AD10.mpRandom);
+}
 
 void fn_801DE1E0(Desc_801DE1E0 *pDesc)
 {
@@ -149,8 +377,8 @@ void fn_801DE1E0(Desc_801DE1E0 *pDesc)
     lbl_8039AD10.mUnknown14 = pDesc->mUnknown08;
     lbl_8039AD10.mUnknown10 = 1.0f / (unsigned int)lbl_8039AD10.mUnknown14;
     lbl_8039AD10.mUnknown84 = fn_801CF7AC();
-    lbl_8039AD10.mpUnknown88 = fn_801CF5BC(0, lbl_8039AD10.mUnknown84);
-    lbl_8039AD10.mUnknown70 = pDesc->mUnknown18;
+    lbl_8039AD10.mpRandom = fn_801CF5BC(0, lbl_8039AD10.mUnknown84);
+    lbl_8039AD10.mPoolCount = pDesc->mUnknown18;
     fn_801DCF0C(lbl_8039AD10.mUnknown00, sizeof(PartObj_801DE1E0), pDesc->mUnknown04,
                 (void (*)())fn_801DE7F4, (void (*)())fn_801DEA50);
     lbl_8039AD10.mpUnknown04 = fn_801DCFF0(1, lbl_8039AD10.mUnknown60, 0, 0, 0, 2, 1, -1);
@@ -158,14 +386,14 @@ void fn_801DE1E0(Desc_801DE1E0 *pDesc)
     fn_801DD0C8(lbl_8039AD10.mpUnknown04, lbl_8039AD10.mUnknown00, 1, lbl_8039AD10.mpUnknown0C);
     lbl_8039AD10.mUnknown64 = pDesc->mUnknown10;
     if (lbl_8039AD10.mUnknown64) {
-        lbl_8039AD10.mUnknown6C = fn_801D2730();
-        lbl_802F94AC.mUnknown08 = lbl_8039AD10.mUnknown6C;
+        lbl_8039AD10.mHeap = fn_801D2730();
+        lbl_802F94AC.mUnknown08 = lbl_8039AD10.mHeap;
         lbl_8039AD10.mUnknown68 = (pDesc->mUnknown14 + 15) & ~15;
         lbl_802F94AC.mUnknown10 = lbl_8039AD10.mUnknown68;
         fn_801D2130(&lbl_802F94AC);
     } else {
         lbl_8039AD10.mUnknown68 = 0;
-        lbl_8039AD10.mUnknown6C = 0;
+        lbl_8039AD10.mHeap = 0;
     }
     fn_801DD498();
     lbl_8039AD10.mUnknown74 = pDesc->mUnknown0C;
@@ -200,9 +428,9 @@ void fn_801DE410(void)
     fn_801DFD4C();
     fn_801DD0E8(pState->mpUnknown04);
     fn_801DCF8C(pState->mUnknown00);
-    fn_801CF67C(pState->mpUnknown88);
+    fn_801CF67C(pState->mpRandom);
     if (pState->mUnknown64) {
-        fn_801D2570(pState->mUnknown6C);
+        fn_801D2570(pState->mHeap);
     }
     pState->mUnknown64 = 0;
     pState->mUnknown00 = 0;
@@ -211,14 +439,14 @@ void fn_801DE410(void)
     pState->mUnknown78.x = lbl_802F94C4.x;
     pState->mUnknown78.y = lbl_802F94C4.y;
     pState->mUnknown78.z = lbl_802F94C4.z;
-    pState->mUnknown6C = 0;
+    pState->mHeap = 0;
     pState->mUnknown68 = 0;
     pState->mpUnknown04 = 0;
     pState->mpUnknown08 = 0;
     pState->mpUnknown0C = 0;
     pState->mUnknown60 = 0;
     pState->mUnknown62 = 0;
-    pState->mpUnknown88 = 0;
+    pState->mpRandom = 0;
     pState->mUnknown84 = 0;
     pState->mUnknown18 = 0;
     fn_801D04C4();
@@ -249,7 +477,7 @@ void fn_801DE564(PartObj_801DE1E0 *pDst, Template_801DE1E0 *pSrc)
     pDst->mUnknown04C = pSrc->mObj.mUnknown04C;
     pDst->mUnknown050 = pSrc->mObj.mUnknown050;
     pDst->mUnknown054 = pSrc->mObj.mUnknown054;
-    pDst->mUnknown058 = pSrc->mObj.mUnknown058;
+    pDst->mForceType = pSrc->mObj.mForceType;
     pDst->mUnknown05C = pSrc->mObj.mUnknown05C;
     pDst->mUnknown060 = pSrc->mObj.mUnknown060;
     pDst->mUnknown03C = pSrc->mObj.mUnknown03C;
@@ -311,7 +539,7 @@ void fn_801DE794(PartObj_801DE1E0 *pObj)
 {
     pObj->mUnknown35B = 0;
     pObj->mUnknown3D0 = 0.0f;
-    pObj->mUnknown3B8 = 0;
+    pObj->mCount = 0;
     pObj->mUnknown3AC = 0.0f;
     pObj->mUnknown3B0 = 0.0f;
     pObj->mUnknown2B6 = 0;
@@ -333,16 +561,16 @@ void fn_801DE7F4(PartObj_801DE1E0 *pObj, Template_801DE1E0 *pTemplate)
     void *pTex;
 
     if (pTemplate->mObj.mUnknown03F) {
-        pObj->mUnknown3BC = pTemplate->mObj.mUnknown0B4;
+        pObj->mMax = pTemplate->mObj.mUnknown0B4;
     } else {
-        pObj->mUnknown3BC = lbl_8039AD10.mUnknown62;
+        pObj->mMax = lbl_8039AD10.mUnknown62;
     }
-    pObj->mppUnknown3C0 = fn_801D2B7C(pObj->mUnknown3BC * sizeof(Particle_801DE1E0 *), 0, 0);
-    fn_801D34D0(pObj->mppUnknown3C0, pObj->mUnknown3BC * sizeof(Particle_801DE1E0 *), 0, 1);
-    pObj->mpUnknown3C4 = fn_801D2B7C(pObj->mUnknown3BC * sizeof(Particle_801DE1E0), 0, 0);
-    fn_801D34D0(pObj->mpUnknown3C4, pObj->mUnknown3BC * sizeof(Particle_801DE1E0), 0, 1);
-    for (i = 0; i < pObj->mUnknown3BC; i++) {
-        pObj->mppUnknown3C0[i] = &pObj->mpUnknown3C4[i];
+    pObj->mppParticles = fn_801D2B7C(pObj->mMax * sizeof(Particle_801DE1E0 *), 0, 0);
+    fn_801D34D0(pObj->mppParticles, pObj->mMax * sizeof(Particle_801DE1E0 *), 0, 1);
+    pObj->mpParticles = fn_801D2B7C(pObj->mMax * sizeof(Particle_801DE1E0), 0, 0);
+    fn_801D34D0(pObj->mpParticles, pObj->mMax * sizeof(Particle_801DE1E0), 0, 1);
+    for (i = 0; i < pObj->mMax; i++) {
+        pObj->mppParticles[i] = &pObj->mpParticles[i];
     }
     fn_801DE564(pObj, pTemplate);
     fn_801DE794(pObj);
@@ -387,9 +615,9 @@ void fn_801DE9A0(PartObj_801DE1E0 *pObj, Vec3_801DE1E0 *pPos, Vec3_801DE1E0 *pRo
 
 void fn_801DEA50(PartObj_801DE1E0 *pObj)
 {
-    fn_801D2BD0(pObj->mppUnknown3C0);
-    if (pObj->mpUnknown3C4) {
-        fn_801D2BD0(pObj->mpUnknown3C4);
+    fn_801D2BD0(pObj->mppParticles);
+    if (pObj->mpParticles) {
+        fn_801D2BD0(pObj->mpParticles);
     }
 }
 
@@ -432,7 +660,7 @@ int fn_801DEA90(PartObj_801DE1E0 *pObj, int steps)
         if (!pObj->mUnknown2B4) {
             break;
         }
-        if (pObj->mUnknown3B8) {
+        if (pObj->mCount) {
             if (pfnPre) {
                 pfnPre(pObj);
             } else {
@@ -445,7 +673,7 @@ int fn_801DEA90(PartObj_801DE1E0 *pObj, int steps)
         } else {
             fn_801DDE08(pObj, dt);
         }
-        if (!(pObj->mUnknown0B0 <= 0.0f) && pObj->mUnknown3B8 < pObj->mUnknown3BC) {
+        if (!(pObj->mUnknown0B0 <= 0.0f) && pObj->mCount < pObj->mMax) {
             if (pfnEmit) {
                 pfnEmit(pObj, dt);
             } else {
@@ -467,7 +695,7 @@ int fn_801DEA90(PartObj_801DE1E0 *pObj, int steps)
     return 0;
 }
 
-void *fn_801DEEF8(unsigned short handle)
+PartObj_801DE1E0 *fn_801DEEF8(unsigned short handle)
 {
     return fn_801DD57C(handle);
 }
@@ -480,8 +708,8 @@ unsigned short fn_801DECFC(unsigned short count, Template_801DE1E0 *pTemplate)
     PartObj_801DE1E0 *pObj;
 
     index = 0;
-    for (i = 0; i < lbl_8039AD10.mUnknown70; i++) {
-        if (lbl_8039AD10.mpUnknownA0[i] == 0) {
+    for (i = 0; i < lbl_8039AD10.mPoolCount; i++) {
+        if (lbl_8039ADAC.mpUsed[i] == 0) {
             index = i;
             break;
         }
@@ -489,57 +717,57 @@ unsigned short fn_801DECFC(unsigned short count, Template_801DE1E0 *pTemplate)
     for (i = 0; i < count; i++) {
         pObj = fn_801DE918(pTemplate);
         if (lbl_8039AD10.mUnknown64) {
-            fn_801D2BD0(pObj->mpUnknown3C4);
-            for (j = 0; j < pObj->mUnknown3BC; j++) {
-                pObj->mppUnknown3C0[j] = 0;
+            fn_801D2BD0(pObj->mpParticles);
+            for (j = 0; j < pObj->mMax; j++) {
+                pObj->mppParticles[j] = 0;
             }
-            pObj->mpUnknown3C4 = 0;
+            pObj->mpParticles = 0;
         }
         pObj->mUnknown2B4 = 0;
         pObj->mUnknown2B5 = 1;
         pObj->mUnknown358 = index;
-        lbl_8039AD10.mpUnknown9C[index].mpUnknown004[i] = pObj;
+        lbl_8039ADAC.mpPools[index].mpObjs[i] = pObj;
     }
-    lbl_8039AD10.mpUnknown9C[index].mUnknown000 = count;
-    lbl_8039AD10.mpUnknown9C[index].mUnknown084 = count;
-    lbl_8039AD10.mpUnknown9C[index].mUnknown086 = 0;
-    lbl_8039AD10.mpUnknownA0[index] = 1;
-    lbl_8039AD10.mpUnknown9C[index].mUnknown088 = *pTemplate;
-    fn_801E098C(&pTemplate->mRamp, &lbl_8039AD10.mpUnknown9C[index].mUnknown088.mRamp);
+    lbl_8039ADAC.mpPools[index].mUnknown000 = count;
+    lbl_8039ADAC.mpPools[index].mFree = count;
+    lbl_8039ADAC.mpPools[index].mUsed = 0;
+    lbl_8039ADAC.mpUsed[index] = 1;
+    lbl_8039ADAC.mpPools[index].mTemplate = *pTemplate;
+    fn_801E098C(&pTemplate->mRamp, &lbl_8039ADAC.mpPools[index].mTemplate.mRamp);
     return index;
 }
 
 void fn_801DEF18(PartObj_801DE1E0 *pObj)
 {
     unsigned short index = pObj->mUnknown358;
-    Pool_801DE1E0 *pPool = &lbl_8039AD10.mpUnknown9C[index];
+    Pool_801DE1E0 *pPool = &lbl_8039ADAC.mpPools[index];
     unsigned short i;
     unsigned short last;
     unsigned short j;
     PartObj_801DE1E0 *pSwap;
 
-    last = pPool->mUnknown086 - 1;
-    for (i = 0; i < pPool->mUnknown086; i++) {
-        if (pPool->mpUnknown004[i] == pObj) {
+    last = pPool->mUsed - 1;
+    for (i = 0; i < pPool->mUsed; i++) {
+        if (pPool->mpObjs[i] == pObj) {
             break;
         }
     }
     pObj->mUnknown2B4 = 0;
     fn_801DDCC4(pObj);
     if (lbl_8039AD10.mUnknown64) {
-        fn_801D2BD0(pObj->mpUnknown3C4);
-        pObj->mpUnknown3C4 = 0;
-        for (j = 0; j < pObj->mUnknown3BC; j++) {
-            pObj->mppUnknown3C0[j] = 0;
+        fn_801D2BD0(pObj->mpParticles);
+        pObj->mpParticles = 0;
+        for (j = 0; j < pObj->mMax; j++) {
+            pObj->mppParticles[j] = 0;
         }
     }
     if (i != last) {
-        pSwap = pPool->mpUnknown004[last];
-        pPool->mpUnknown004[last] = pObj;
-        pPool->mpUnknown004[i] = pSwap;
+        pSwap = pPool->mpObjs[last];
+        pPool->mpObjs[last] = pObj;
+        pPool->mpObjs[i] = pSwap;
     }
-    lbl_8039AD10.mpUnknown9C[index].mUnknown086--;
-    lbl_8039AD10.mpUnknown9C[index].mUnknown084++;
+    lbl_8039ADAC.mpPools[index].mUsed--;
+    lbl_8039ADAC.mpPools[index].mFree++;
 }
 
 float fn_801DF184(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle)
@@ -671,12 +899,12 @@ void fn_801DFD4C(void)
     }
 }
 
-static int fn_801DFDB8(void)
+static float fn_801DFDB8(void)
 {
-    return fn_801CF69C(lbl_8039AD10.mpUnknown88);
+    return fn_801CF69C(lbl_8039AD10.mpRandom);
 }
 
 static int fn_801DFDE0(int range)
 {
-    return fn_801CF6D4(lbl_8039AD10.mpUnknown88, range);
+    return fn_801CF6D4(lbl_8039AD10.mpRandom, range);
 }

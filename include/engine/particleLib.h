@@ -94,17 +94,21 @@ typedef struct ColExt_801E043C {
 
 /* Particle record (0x54 bytes). */
 typedef struct Particle_801DE1E0 {
-    char mPad00[0xC];
+    Vec3_801DE1E0 mPrevPos;
     Vec3_801DE1E0 mPos;
     Vec3_801DE1E0 mVel;
-    char mPad24[0x30 - 0x24];
+    Vec3_801DE1E0 mForce;
     float mUnknown30;
-    char mPad34[0x39 - 0x34];
+    float mUnknown34;
+    unsigned char mActive;
     unsigned char mUnknown39;
-    char mPad3A[0x48 - 0x3A];
-    float mUnknown48;
+    char mPad3A[0x3C - 0x3A];
+    float mLife;
+    unsigned int mUnknown40;
+    float mAge;
+    float mAgeRatio;
     float mUnknown4C;
-    char mPad50[4];
+    float mUnknown50;
 } Particle_801DE1E0;
 
 /* Particle system object (0x3D4 bytes). A template in a loaded parameter
@@ -127,9 +131,9 @@ typedef struct PartObj_801DE1E0 {
     unsigned short mUnknown048;
     char mPad04A[2];
     int mUnknown04C;
-    int mUnknown050;
+    unsigned int mUnknown050;
     float mUnknown054;
-    int mUnknown058;
+    int mForceType;
     int mUnknown05C;
     int mUnknown060;
     Vec3_801DE1E0 mUnknown064;
@@ -190,10 +194,10 @@ typedef struct PartObj_801DE1E0 {
     float mUnknown3AC;
     float mUnknown3B0;
     int mUnknown3B4;
-    unsigned int mUnknown3B8;
-    unsigned int mUnknown3BC;
-    Particle_801DE1E0 **mppUnknown3C0;
-    Particle_801DE1E0 *mpUnknown3C4;
+    unsigned int mCount;
+    unsigned int mMax;
+    Particle_801DE1E0 **mppParticles;
+    Particle_801DE1E0 *mpParticles;
     float mUnknown3C8;
     float mUnknown3CC;
     float mUnknown3D0;
