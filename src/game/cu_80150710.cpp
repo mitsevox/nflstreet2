@@ -29,9 +29,6 @@ extern "C" {
 void fn_800BCC30(Class_80297BF8 *p);
 void fn_80149040(Object_80039F5C *p);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pPlayer);
-int fn_800C1E40(void);
-void fn_800544A4(const char *pTitle, const char *pText, const char *pButtons);
-extern const char *lbl_803EB2E4;
 
 void fn_8015076C(Class_802A1DC8 *p)
 {
@@ -45,10 +42,4 @@ void fn_8015076C(Class_802A1DC8 *p)
     }
 }
 
-void fn_801507E0(Class_802A1DC8 *p)
-{
-    if (fn_800C1E40() == 0) {
-        fn_800544A4("Jump Ball Battle", lbl_803EB2E4, "|^Done");
-    }
-}
 }
