@@ -26457,8 +26457,11 @@
       "provenance": {
         "pull_request": 1024,
         "merged_via": 1024,
-        "commit": "8fc286a43553549d8a778b19f13984a3ead45feb",
-        "introduced_blob": "2a54412d0637fc5af2b6222e9cc4307e78175eac"
+        "commit": "17c7fcd990d44d35dd4aae9ecbf6c4ddf9e91611",
+        "introduced_blob": "ffbd1b4e98e08b50740865bcd94c470a3a1fce0f",
+        "original_commit": "8fc286a43553549d8a778b19f13984a3ead45feb",
+        "original_blob": "2a54412d0637fc5af2b6222e9cc4307e78175eac",
+        "integration_adjustment": "Preserve the original MID source contributor for the unchanged exact bodies at 8009C0B8,800A02FC,800A042C. Integration corrects only the separate partial 8009F168: twelve-byte vector delta and position inputs, then velocity-heading minus delta-heading. The final introduced source blob survives squash integration; original source remains independently pinned."
       }
     }
   ],
