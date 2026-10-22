@@ -26443,6 +26443,86 @@
         "commit": "ecb52e48f2b93b4aa537302be4f5ee756fd4b0c8",
         "introduced_blob": "9b184b0c3842835284395a6a4aaf37da9dba8638"
       }
+    },
+    {
+      "source": "src/Common/UIStudio/UIStudio.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80218CB8",
+        "0x80218FC4",
+        "0x80219A54",
+        "0x80219F84"
+      ],
+      "provenance": {
+        "pull_request": 688,
+        "merged_via": 697,
+        "commit": "fe3327f1439d7a7cfff8251966dd1d44e097dd6e",
+        "introduced_blob": "db11dc4b7044693c0f4d5aaaa0f8d3d9201149c2",
+        "original_commit": "865f6497d321694f4911200c19fa1d5206e0db33",
+        "original_blob": "40e1b92027414b4a07a913c370f3c5db1526aade",
+        "integration_adjustment": "Newly exact pre-existing bodies (fn_80218CB8, fn_80218FC4, fn_80219A54, fn_80219F84) originate in contribution 688; the PR 1029 source-form refinement that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
+    },
+    {
+      "source": "src/engine/cu_80226F9C.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80227594",
+        "0x802275D8"
+      ],
+      "provenance": {
+        "pull_request": 759,
+        "merged_via": 996,
+        "commit": "fe3327f1439d7a7cfff8251966dd1d44e097dd6e",
+        "introduced_blob": "cfbb5ad9f7ab3e52a59d40f0297db1008ee225f4",
+        "original_commit": "a5448653a2cef4dfca9de94bbf678feaae657b22",
+        "original_blob": "cfbb5ad9f7ab3e52a59d40f0297db1008ee225f4",
+        "integration_adjustment": "Newly exact pre-existing bodies (fn_80227594, fn_802275D8) originate in contribution 759; the PR 1029 comparison-profile change (engine_c_fastmath) that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
+    },
+    {
+      "source": "src/engine/cu_8022F428.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8022F53C",
+        "0x80234098"
+      ],
+      "provenance": {
+        "pull_request": 775,
+        "merged_via": 996,
+        "commit": "fe3327f1439d7a7cfff8251966dd1d44e097dd6e",
+        "introduced_blob": "061ba38500e814f13a626b7de1f865172188c067",
+        "original_commit": "b6c89f8dc0e79b43e249aa22e6c26f68ce2d601e",
+        "original_blob": "182af85ca2924d68b2d5f52971492d24254dec94",
+        "integration_adjustment": "Newly exact pre-existing bodies (fn_8022F53C, fn_80234098) originate in contribution 775; the PR 1029 source-form refinement and comparison-profile change (engine_c_fastmath) that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
+    },
+    {
+      "source": "src/engine/cu_802714A8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80272990",
+        "0x80272B7C",
+        "0x80275404",
+        "0x802754A8"
+      ],
+      "provenance": {
+        "pull_request": 778,
+        "merged_via": 804,
+        "commit": "fe3327f1439d7a7cfff8251966dd1d44e097dd6e",
+        "introduced_blob": "d4563a4f3e8db1769b4ab602fb32a6436f6d1d2e",
+        "original_commit": "ca1a271b46abf68ba0d549afc765fa24421fbf2a",
+        "original_blob": "b7ab391a19d4591a130d67ea31ebc00e33ed5b51",
+        "integration_adjustment": "Newly exact pre-existing bodies (fn_80272990, fn_80272B7C, fn_80275404, fn_802754A8) originate in contribution 778; the PR 1029 source-form refinement that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
     }
   ],
   "target": "GN7E69",
