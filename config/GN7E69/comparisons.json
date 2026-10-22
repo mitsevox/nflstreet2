@@ -28582,6 +28582,153 @@
       ]
     },
     {
+      "source": "src/dolphin/amcstubs/AmcExi2Stubs.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv provisional unit row 0x8025D6A0-0x8025D6C8 (src/dolphin/amcstubs/AmcExi2Stubs.c), its compiler, source-form, type, function and name rows; CREDITS.md for the source. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025D6A0",
+          "end": "0x8025D6C8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "EXI2_Init",
+          "start": "0x8025D6A0",
+          "end": "0x8025D6A4"
+        },
+        {
+          "symbol": "EXI2_EnableInterrupts",
+          "start": "0x8025D6A4",
+          "end": "0x8025D6A8"
+        },
+        {
+          "symbol": "EXI2_Poll",
+          "start": "0x8025D6A8",
+          "end": "0x8025D6B0"
+        },
+        {
+          "symbol": "EXI2_ReadN",
+          "start": "0x8025D6B0",
+          "end": "0x8025D6B8"
+        },
+        {
+          "symbol": "EXI2_WriteN",
+          "start": "0x8025D6B8",
+          "end": "0x8025D6C0"
+        },
+        {
+          "symbol": "EXI2_Reserve",
+          "start": "0x8025D6C0",
+          "end": "0x8025D6C4"
+        },
+        {
+          "symbol": "EXI2_Unreserve",
+          "start": "0x8025D6C4",
+          "end": "0x8025D6C8"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/cu_8025D6C8.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv provisional unit row 0x8025D6C8-0x8025E148 (src/dolphin/cu_8025D6C8.c), its compiler, source-form, type, function and name rows and the exact data rows 0x803EC320-0x803EC321 (.sdata) and 0x803ED3F8-0x803ED40D (.sbss). Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025D6C8",
+          "end": "0x8025E148"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC320",
+          "end": "0x803EC321"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED3F8",
+          "end": "0x803ED40D"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8025D6C8",
+          "start": "0x8025D6C8",
+          "end": "0x8025D6CC"
+        },
+        {
+          "symbol": "fn_8025D6CC",
+          "start": "0x8025D6CC",
+          "end": "0x8025D6D0"
+        },
+        {
+          "symbol": "fn_8025D6D0",
+          "start": "0x8025D6D0",
+          "end": "0x8025D930"
+        },
+        {
+          "symbol": "fn_8025D930",
+          "start": "0x8025D930",
+          "end": "0x8025D9BC"
+        },
+        {
+          "symbol": "fn_8025D9BC",
+          "start": "0x8025D9BC",
+          "end": "0x8025DA58"
+        },
+        {
+          "symbol": "fn_8025DA58",
+          "start": "0x8025DA58",
+          "end": "0x8025DAAC"
+        },
+        {
+          "symbol": "fn_8025DAAC",
+          "start": "0x8025DAAC",
+          "end": "0x8025DB24"
+        },
+        {
+          "symbol": "fn_8025DB24",
+          "start": "0x8025DB24",
+          "end": "0x8025DB64"
+        },
+        {
+          "symbol": "fn_8025DB64",
+          "start": "0x8025DB64",
+          "end": "0x8025DBA0"
+        },
+        {
+          "symbol": "fn_8025DBA0",
+          "start": "0x8025DBA0",
+          "end": "0x8025DC4C"
+        },
+        {
+          "symbol": "fn_8025DC4C",
+          "start": "0x8025DC4C",
+          "end": "0x8025DD28"
+        },
+        {
+          "symbol": "fn_8025DD28",
+          "start": "0x8025DD28",
+          "end": "0x8025DE04"
+        },
+        {
+          "symbol": "fn_8025DE04",
+          "start": "0x8025DE04",
+          "end": "0x8025DEB0"
+        },
+        {
+          "symbol": "fn_8025DEB0",
+          "start": "0x8025DEB0",
+          "end": "0x8025E148"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8007A9E4.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit/type/external/source-form/compiler records for8007A9E4\u20138007AEE8. Six full comparison-only bodies; four update bodies retain measured instruction differences. No initialized storage or complete original-file boundary claim; original bytes remain linked.",
@@ -29835,6 +29982,68 @@
           "symbol": "fn_8025FB68",
           "start": "0x8025FB68",
           "end": "0x8025FBD4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_8025FBD4.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8025FBD4-0x80260B1C (src/engine/cu_8025FBD4.c), its compiler, source-form, type, function and name rows and the exact .sdata2 data row 0x803EDDC8-0x803EDDD8. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025FBD4",
+          "end": "0x80260B1C"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDDC8",
+          "end": "0x803EDDD8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8025FBD4",
+          "start": "0x8025FBD4",
+          "end": "0x8025FDE8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80260B1C.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80260B1C-0x802622DC (src/engine/cu_80260B1C.c), its compiler, source-form, type, function and name rows and the exact .sdata2 data row 0x803EDEDC-0x803EDEE4. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260B1C",
+          "end": "0x802622DC"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDEDC",
+          "end": "0x803EDEE4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80260B1C",
+          "start": "0x80260B1C",
+          "end": "0x80260C14"
+        },
+        {
+          "symbol": "fn_80260FC4",
+          "start": "0x80260FC4",
+          "end": "0x80260FE8"
+        },
+        {
+          "symbol": "fn_80261A24",
+          "start": "0x80261A24",
+          "end": "0x80261A58"
         }
       ]
     },
