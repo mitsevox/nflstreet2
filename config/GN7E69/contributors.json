@@ -21180,10 +21180,10 @@
       "provenance": {
         "pull_request": 775,
         "merged_via": 996,
-        "commit": "c3de6f65b9b7312c5789e49f5ddb857b37f4a31d",
-        "introduced_blob": "05675a3bc6fcbdcebb6fadefa077a3689aa41814",
+        "commit": "7f2f84f54c580c60170a320369aed82a19f731b6",
+        "introduced_blob": "58c403f204bf22e131776eb9bfa52a2a42f3fdfe",
         "original_blob": "182af85ca2924d68b2d5f52971492d24254dec94",
-        "integration_adjustment": "Hostile-review fixes in PR775: canonical Object_80233EAC.h and Object_8020E52C.h layouts and declarations, caller-supported unused parameters and one declaration form per address; function bodies, the 117 exact addresses and the original contributor are unchanged.",
+        "integration_adjustment": "Hostile-review fixes in PR775: canonical Object_80233EAC.h and Object_8020E52C.h layouts and declarations, caller-supported unused parameters and one declaration form per address; function bodies, the 117 exact addresses and the original contributor are unchanged. PR 1037 moves the shared Funcs_802FB3BC layout into include/engine/Funcs_802FB3BC.h and aligns the prototypes of 0x80229718, 0x80229744 and 0x8022D1B8 with a byte-identical object; this declaration change does not transfer original source credit.",
         "original_commit": "b6c89f8dc0e79b43e249aa22e6c26f68ce2d601e"
       }
     },
@@ -26639,8 +26639,382 @@
       "provenance": {
         "pull_request": 1027,
         "merged_via": 1033,
-        "commit": "413b50fd0a03844525b8bd16cce4544a5dc3bbcc",
-        "introduced_blob": "e821c54e71af3d6de886676c6ed131594b8c410d"
+        "commit": "f05c3e7d61a07c8502614ca6a871bc1473d357e0",
+        "introduced_blob": "2d07227f6292e9bf8e5d92f912cf18814f18af51",
+        "original_commit": "413b50fd0a03844525b8bd16cce4544a5dc3bbcc",
+        "original_blob": "e821c54e71af3d6de886676c6ed131594b8c410d",
+        "integration_adjustment": "PR 1041 moves the declarations of 0x8027CF9C-0x8027D2E0 and Format_8027D284 into include/engine/cu_8027CF9C.h and the copy-callback word 0x80301000 into include/engine/cu_802714A8.h, and types the decoder handle members Codec_8027CF9C * and the data member and casts unsigned char *; the object and every function body are unchanged, and this declaration change does not transfer original source credit."
+      }
+    },
+    {
+      "source": "src/engine/cu_8027CF9C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8027CF9C",
+        "0x8027CFCC",
+        "0x8027D284",
+        "0x8027D2C4",
+        "0x8027D2E0"
+      ],
+      "provenance": {
+        "pull_request": 1041,
+        "merged_via": 1041,
+        "commit": "f05c3e7d61a07c8502614ca6a871bc1473d357e0",
+        "introduced_blob": "6aac4e15fcec2e48f61073db0c18e4562905df4b"
+      }
+    },
+    {
+      "source": "src/engine/cu_8027D3AC.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8027D5CC",
+        "0x8027D5EC",
+        "0x8027D960",
+        "0x8027D968",
+        "0x8027D970",
+        "0x8027D9EC",
+        "0x8027D9F4",
+        "0x8027D9FC",
+        "0x8027DAA4",
+        "0x8027DAC4",
+        "0x8027E0AC",
+        "0x8027E4D8",
+        "0x8027E4F8",
+        "0x8027EAB4",
+        "0x8027ED4C",
+        "0x8027ED58",
+        "0x8027ED5C",
+        "0x8027ED64",
+        "0x8027EF50",
+        "0x8027EF58",
+        "0x8027EF94",
+        "0x8027EF9C",
+        "0x8027EFA4"
+      ],
+      "provenance": {
+        "pull_request": 1041,
+        "merged_via": 1041,
+        "commit": "cea8fc7ba225d11e3cdeacb0f13000477a155094",
+        "introduced_blob": "813548bafcfcd9f7d2a056ba6b213d93667cfb32"
+      }
+    },
+    {
+      "source": "src/engine/cu_802805C4.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x802806F8",
+        "0x80280780",
+        "0x802807F4",
+        "0x80280B94",
+        "0x80280E70",
+        "0x80280F38",
+        "0x8028156C",
+        "0x80281938",
+        "0x80281C68",
+        "0x80281C6C",
+        "0x802821E4"
+      ],
+      "provenance": {
+        "pull_request": 1041,
+        "merged_via": 1041,
+        "commit": "f05c3e7d61a07c8502614ca6a871bc1473d357e0",
+        "introduced_blob": "31545eff7d53bff274db88b0085ec2d3a552c816"
+      }
+    },
+    {
+      "source": "src/engine/cu_80221198.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80221294",
+        "0x802212C8",
+        "0x80221314",
+        "0x80221374",
+        "0x802213F8",
+        "0x80221528",
+        "0x80221570",
+        "0x80221590",
+        "0x802215B0",
+        "0x802215EC",
+        "0x80221738",
+        "0x802218D4",
+        "0x80221924",
+        "0x80221BAC",
+        "0x80221BD8",
+        "0x80221BE0",
+        "0x80221BE8",
+        "0x80221D5C",
+        "0x80222764",
+        "0x80222E0C",
+        "0x80223874",
+        "0x802239D0",
+        "0x80223A40",
+        "0x80223AA0",
+        "0x80223AD0",
+        "0x80223C4C",
+        "0x80223CB8",
+        "0x8022479C",
+        "0x8022480C",
+        "0x802254F8",
+        "0x802258F8",
+        "0x80225928",
+        "0x80225AAC",
+        "0x80225AE4",
+        "0x80225B50",
+        "0x80225D8C",
+        "0x80225D90",
+        "0x80225E10",
+        "0x80225E64",
+        "0x80225F10",
+        "0x80225F88",
+        "0x8022601C",
+        "0x802260B0",
+        "0x802260C0",
+        "0x802260D0",
+        "0x802260F8",
+        "0x8022615C",
+        "0x8022618C",
+        "0x802261D4",
+        "0x8022623C",
+        "0x802262C4",
+        "0x80226320",
+        "0x80226384",
+        "0x8022638C",
+        "0x802263D4",
+        "0x802263DC",
+        "0x80226448",
+        "0x80226498",
+        "0x802264A4",
+        "0x802264E8",
+        "0x80226570",
+        "0x8022666C",
+        "0x802267D0",
+        "0x802267D4",
+        "0x802268D4",
+        "0x802269C8",
+        "0x80226A68",
+        "0x80226C40",
+        "0x80226D20",
+        "0x80226E00",
+        "0x80226F34"
+      ],
+      "provenance": {
+        "pull_request": 1030,
+        "merged_via": 1030,
+        "commit": "2f9c351e74cf28c046b83b1d53c7e2a6bc6dcbdc",
+        "introduced_blob": "8a38399cc85c27ae260bcacd60ea75721cb0eaf7"
+      }
+    },
+    {
+      "source": "src/engine/cu_80229270.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x802293A8",
+        "0x802293B0",
+        "0x802293B4",
+        "0x802293FC",
+        "0x8022942C",
+        "0x80229434",
+        "0x80229438",
+        "0x80229470",
+        "0x80229494",
+        "0x802294D8",
+        "0x802294F4",
+        "0x802294FC",
+        "0x80229554",
+        "0x802295C0",
+        "0x802295F8",
+        "0x80229644",
+        "0x80229674",
+        "0x802296B4",
+        "0x80229718",
+        "0x80229744",
+        "0x80229760",
+        "0x80229788",
+        "0x802297B0",
+        "0x80229E78",
+        "0x80229E80",
+        "0x8022A508",
+        "0x8022A558",
+        "0x8022A59C",
+        "0x8022AC80",
+        "0x8022BF60",
+        "0x8022BF68",
+        "0x8022C02C",
+        "0x8022C3C8",
+        "0x8022C894",
+        "0x8022C8C4",
+        "0x8022C8F0",
+        "0x8022C930",
+        "0x8022C938",
+        "0x8022C988",
+        "0x8022C9A8",
+        "0x8022C9B4",
+        "0x8022CADC",
+        "0x8022CC6C",
+        "0x8022CC98",
+        "0x8022CCC4",
+        "0x8022CD0C",
+        "0x8022CD30",
+        "0x8022CD3C",
+        "0x8022CD40",
+        "0x8022CDA0",
+        "0x8022CDF8",
+        "0x8022D14C",
+        "0x8022D154",
+        "0x8022D1B8",
+        "0x8022D23C",
+        "0x8022D250",
+        "0x8022D25C",
+        "0x8022D3AC",
+        "0x8022D3D4",
+        "0x8022D6E8",
+        "0x8022D6F0",
+        "0x8022D6FC",
+        "0x8022D864",
+        "0x8022D86C",
+        "0x8022DB08",
+        "0x8022DBF4",
+        "0x8022DC38",
+        "0x8022DC7C",
+        "0x8022DCB0",
+        "0x8022DCE4",
+        "0x8022DD18",
+        "0x8022DD4C",
+        "0x8022DD80",
+        "0x8022DDB4"
+      ],
+      "provenance": {
+        "pull_request": 1037,
+        "merged_via": 1037,
+        "commit": "3be159d44d22942eb6b009864aec96ee3951cfa8",
+        "introduced_blob": "80b8e37fe9cac66620f83af52639483110508f91"
+      }
+    },
+    {
+      "source": "src/dolphin/amcstubs/AmcExi2Stubs.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8025D6A0",
+        "0x8025D6A4",
+        "0x8025D6A8",
+        "0x8025D6B0",
+        "0x8025D6B8",
+        "0x8025D6C0",
+        "0x8025D6C4"
+      ],
+      "provenance": {
+        "pull_request": 1040,
+        "merged_via": 1040,
+        "commit": "21c78ed0aada3d5385ffc9009db9e41e6e7a31fa",
+        "introduced_blob": "002bc3d4d97adf99cfb6b416e764fc019c6b3478"
+      }
+    },
+    {
+      "source": "src/dolphin/cu_8025D6C8.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8025D6C8",
+        "0x8025D6CC",
+        "0x8025D930",
+        "0x8025D9BC",
+        "0x8025DA58",
+        "0x8025DAAC",
+        "0x8025DB24",
+        "0x8025DB64",
+        "0x8025DBA0",
+        "0x8025DC4C",
+        "0x8025DD28",
+        "0x8025DE04",
+        "0x8025DEB0"
+      ],
+      "provenance": {
+        "pull_request": 1040,
+        "merged_via": 1040,
+        "commit": "21c78ed0aada3d5385ffc9009db9e41e6e7a31fa",
+        "introduced_blob": "ee413d64ba9e858db51f9605b077de6e62727400"
+      }
+    },
+    {
+      "source": "src/engine/cu_8025FBD4.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8025FBD4"
+      ],
+      "provenance": {
+        "pull_request": 1040,
+        "merged_via": 1040,
+        "commit": "21c78ed0aada3d5385ffc9009db9e41e6e7a31fa",
+        "introduced_blob": "541d9ee5c4dfd19f29096a813218f36b34b27208"
+      }
+    },
+    {
+      "source": "src/engine/cu_80260B1C.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80260B1C",
+        "0x80260FC4",
+        "0x80261A24"
+      ],
+      "provenance": {
+        "pull_request": 1040,
+        "merged_via": 1040,
+        "commit": "21c78ed0aada3d5385ffc9009db9e41e6e7a31fa",
+        "introduced_blob": "926077abbfca8979d4eb46ced3c6ef0f211e5cd9"
+      }
+    },
+    {
+      "source": "src/engine/cu_802832CC.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80284700",
+        "0x8028490C",
+        "0x80284968",
+        "0x80284AEC",
+        "0x80284D1C",
+        "0x80284DD0",
+        "0x80284F78",
+        "0x802851E8",
+        "0x80285304",
+        "0x80285394",
+        "0x80285458",
+        "0x802854D8",
+        "0x8028555C",
+        "0x802856D8",
+        "0x8028572C",
+        "0x802857D8",
+        "0x80285808",
+        "0x80285878",
+        "0x802858BC",
+        "0x80285940",
+        "0x802859B4",
+        "0x80285A1C",
+        "0x80285A8C"
+      ],
+      "provenance": {
+        "pull_request": 1040,
+        "merged_via": 1040,
+        "commit": "e9634d5867e7f39bf86165486bf2853b6587e512",
+        "introduced_blob": "ffe1a742805fe96bbaf31b71801ea9463f158ca1"
       }
     },
     {
