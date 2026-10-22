@@ -610,7 +610,7 @@ Record_8011F4E0 *fn_8011F4E0(void);
 void fn_8016DF34(Object_80039F5C *p);
 int fn_801783AC(int bit);
 void fn_8009A8D4(void *p);
-int fn_8009EAB0(Object_80039F5C *p, unsigned char a);
+int fn_8009EAB0(Object_80039F5C *p, int a);
 int fn_8009EF6C(void *p);
 int fn_80099AD0(Object_80039F5C *p, Object_80137ABC *pBall, int a, int b, int c, int d, int e);
 int fn_80099C80(Object_80039F5C *p, Object_80137ABC *pBall, int a, int *pOut, int *pOut2);

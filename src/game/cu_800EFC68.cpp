@@ -541,7 +541,7 @@ Record_8011F4E0 *fn_8011F4E0(void);
 void fn_8016DF34(Object_80039F5C *p);
 int fn_801783AC(int bit);
 void fn_8009A8D4(void *p);
-int fn_8009EAB0(Object_80039F5C *p, unsigned char a);
+int fn_8009EAB0(Object_80039F5C *p, int a);
 int fn_8009EF6C(void *p);
 int fn_80099AD0(Object_80039F5C *p, Object_80137ABC *pBall, int a, int b, int c, int d, int e);
 int fn_80099C80(Object_80039F5C *p, Object_80137ABC *pBall, int a, int *pOut, int *pOut2);
@@ -4542,7 +4542,7 @@ extern "C" int fn_801167C4(void *pTarget, Object_80039F5C *p)
             if (pOther != p) {
                 unsigned char id = pOther->mpState->mId;
                 if (id == 40 || id == 92) {
-                    fn_8009EAB0(pOther, fn_800C1180(pOther));
+                    fn_8009EAB0(pOther, (unsigned char)fn_800C1180(pOther));
                     if (fn_8009EF6C(pTarget) != 0) {
                         found = 1;
                     }
@@ -5646,11 +5646,12 @@ int fn_8011F904(void *p, void *pBuffer)
 int fn_8011F99C(void *p, void *pBuffer)
 {
     Lookup_8012078C *pLookup = (Lookup_8012078C *)p;
+    void *pData;
 
     *pLookup = *(Lookup_8012078C *)pBuffer;
-    pBuffer = (char *)pBuffer + sizeof(Lookup_8012078C);
-    memcpy(pLookup->mpUnknown0, pBuffer, pLookup->mUnknown16);
-    pBuffer = (char *)pBuffer + pLookup->mUnknown16;
+    pData = (char *)pBuffer + sizeof(Lookup_8012078C);
+    memcpy(pLookup->mpUnknown0, pData, pLookup->mUnknown16);
+    pBuffer = (char *)pData + pLookup->mUnknown16;
     memcpy(pLookup->mpUnknown4, pBuffer, pLookup->mUnknown16);
     pBuffer = (char *)pBuffer + pLookup->mUnknown16;
     memcpy(pLookup->mpUnknown8, pBuffer, pLookup->mUnknown16 * sizeof(Entry_8011FBE0));

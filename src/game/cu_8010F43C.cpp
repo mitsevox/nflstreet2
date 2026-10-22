@@ -568,8 +568,13 @@ extern "C" void fn_801104E4(Object_80039F5C *p, Block_8011067C *pBlock)
     pBlock->mUnknown16 = 1.0f;
     pBlock->mUnknown20 = 1.0f;
     if (p->mRatings[0] > 127) {
+        float bonus;
+        float step;
+
         rating = p->mRatings[0] - 127;
-        pBlock->mUnknown16 = 1.0f + rating * (scale / 128.0f);
+        bonus = rating;
+        step = scale / 128.0f;
+        pBlock->mUnknown16 = 1.0f + bonus * step;
     }
 }
 
@@ -623,11 +628,11 @@ extern "C" int fn_801109A4(Object_80039F5C *p)
         }
         if (p->mFlags & 4) {
             p->mRatings[2] = pState->mUnknown8;
-            p->mUnknown512.mUnknown15 = 0;
-            p->mUnknown512.mUnknown0 = 0.72f;
-            p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
-            p->mUnknown512.mUnknown14 = 1;
             p->mFlags &= ~4;
+            p->mUnknown512.mUnknown14 = 1;
+            p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+            p->mUnknown512.mUnknown0 = 0.72f;
+            p->mUnknown512.mUnknown15 = 0;
             result = 1;
         } else if (p->mFlags & 1) {
             p->mFlags &= ~1;
@@ -747,22 +752,22 @@ extern "C" int fn_801111E8(Object_80039F5C *p)
     pState->mUnknown6 = (signed char)(pState->mUnknown6 - 1);
     if ((short)pState->mUnknown6 < 0) {
         p->mRatings[2] = pState->mUnknown4;
-        p->mUnknown512.mUnknown0 = 0.72f;
-        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown0 = 0.72f;
         p->mUnknown512.mUnknown15 = 0;
         fn_800D4FBC(p, 0);
         return 1;
     }
     p->mUnknown512.mUnknown15 = pState->mUnknown0Bytes[3];
     if (!(p->mFlags & 0x4000)) {
+        p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = 1.0f;
-        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
-        p->mUnknown512.mUnknown14 = 1;
     } else if (p->mMotion.mUnknown28 / lbl_803ECB08 < 0.65f) {
-        p->mUnknown512.mUnknown0 = 0.65f;
-        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown0 = 0.65f;
     }
     return 0;
 }
@@ -770,9 +775,9 @@ extern "C" int fn_801111E8(Object_80039F5C *p)
 extern "C" int fn_801112D8(Object_80039F5C *p)
 {
     p->mRatings[2] = p->mUnknown340;
-    p->mUnknown512.mUnknown0 = 0.72f;
-    p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
     p->mUnknown512.mUnknown14 = 1;
+    p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+    p->mUnknown512.mUnknown0 = 0.72f;
     p->mUnknown512.mUnknown15 = 0;
     return 1;
 }
@@ -875,9 +880,9 @@ extern "C" int fn_801117F8(Object_80039F5C *p)
 
     if (--pState->mUnknown4 < 0 || !fn_801115C0(p)) {
         p->mUnknown512.mUnknown14 = 1;
-        p->mUnknown512.mUnknown15 = 0;
-        p->mUnknown512.mUnknown0 = 0.72f;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown0 = 0.72f;
+        p->mUnknown512.mUnknown15 = 0;
         return 1;
     }
     p->mUnknown512.mUnknown15 = pState->mUnknown0Bytes[3];
@@ -890,9 +895,9 @@ extern "C" int fn_801117F8(Object_80039F5C *p)
                 angle += (int)(p->mRatings[0] * 913.78827f);
             }
         }
-        p->mUnknown512.mUnknown0 = 1.0f;
-        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = angle & 0xFFFFFF;
         p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = angle & 0xFFFFFF;
+        p->mUnknown512.mUnknown0 = 1.0f;
     }
     return 0;
 }
@@ -901,10 +906,9 @@ extern "C" int fn_80111974(Object_80039F5C *p)
 {
     State_80111794 *pState = (State_80111794 *)&p->mUnknown336;
     Input_800B6D34 input;
-    int b;
+    int b = 0;
 
     fn_800B6D34(p, &input);
-    b = 0;
     if ((input.mUnknown96 & 1) || (input.mUnknown96 & 0x10)) {
         b = 1;
     }
@@ -914,9 +918,9 @@ extern "C" int fn_80111974(Object_80039F5C *p)
     if (pState->mUnknown4 <= 34) {
         fn_800B6E68(p, &input);
     } else {
-        p->mUnknown512.mUnknown0 = 1.0f;
-        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown0 = 1.0f;
     }
     return 0;
 }
