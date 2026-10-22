@@ -488,6 +488,10 @@
       "address": "0x8025E250",
       "evidence": "evidence.tsv external row for 0x8025E250 (__ashrdi3)."
     },
+    "__divdi3": {
+      "address": "0x8025E290",
+      "evidence": "evidence.tsv external row for 0x8025E290 (__divdi3)."
+    },
     "__lshrdi3": {
       "address": "0x8025EB14",
       "evidence": "evidence.tsv external row for 0x8025EB14 (__lshrdi3)."

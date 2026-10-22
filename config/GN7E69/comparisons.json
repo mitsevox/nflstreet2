@@ -42013,13 +42013,19 @@
     {
       "source": "src/engine/cu_801D86B4.cpp",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D86B4-0x801D94A0 (src/engine/cu_801D86B4.cpp) and its function rows. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file moviercmp.cpp (C++ linkage for the RCMP allocator and streamer callbacks, C linkage for MovieRcmpInitVideo ... MovieRcmpInstallMADCOWCodec). MovieRcmpResetTime 0x801D8CD8, MovieRcmpGetTime 0x801D8DE8 and MovieRcmpIsDecodeTime 0x801D900C have no draft here: their 64-bit divisions call the libgcc helper at 0x8025E290, which has no units.json external, so a comparison link of them cannot resolve. Without them the 0x28-byte pool 0x802AFF40-0x802AFF68 is not placed; the allocator name string 0x802AFF40, the allocator table 0x80399100 and codec hooks 0x803EBD44/0x803EBD48 stay extern (lbl_).",
+      "evidence": "evidence.tsv compiler row 0x801D86B4-0x801D94A0 (src/engine/cu_801D86B4.cpp), its function rows and the exact .rodata data row 0x802AFF40-0x802AFF68. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file moviercmp.cpp (C++ linkage for the RCMP allocator and streamer callbacks, C linkage for MovieRcmpInitVideo ... MovieRcmpInstallMADCOWCodec). MovieRcmpResetTime 0x801D8CD8, MovieRcmpGetTime 0x801D8DE8 and MovieRcmpIsDecodeTime 0x801D900C divide 64-bit tick counts through the libgcc helper __divdi3 (units.json external 0x8025E290). The allocator table 0x80399100 and codec hooks 0x803EBD44/0x803EBD48 stay extern (lbl_).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801D86B4",
           "end": "0x801D94A0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AFF40",
+          "end": "0x802AFF68"
         }
       ],
       "functions": [
@@ -42072,6 +42078,21 @@
           "symbol": "fn_801D8C84",
           "start": "0x801D8C84",
           "end": "0x801D8CD8"
+        },
+        {
+          "symbol": "fn_801D8CD8",
+          "start": "0x801D8CD8",
+          "end": "0x801D8DE8"
+        },
+        {
+          "symbol": "fn_801D8DE8",
+          "start": "0x801D8DE8",
+          "end": "0x801D900C"
+        },
+        {
+          "symbol": "fn_801D900C",
+          "start": "0x801D900C",
+          "end": "0x801D9224"
         },
         {
           "symbol": "fn_801D9224",

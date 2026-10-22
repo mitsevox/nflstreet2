@@ -1,3 +1,4 @@
+#include <dolphin/os.h>
 #include "engine/cu_801D86B4.h"
 
 extern "C" {
@@ -33,16 +34,18 @@ void fn_801D9538(Shape_801D94A0 *pShape, int type);
 
 
 extern Alloc_801D86B4 lbl_80399100;
-extern const char lbl_802AFF40[];
 extern Codec_801D9634 *(*lbl_803EBD44)(void);
 extern Codec_801D9634 *(*lbl_803EBD48)(void);
 
-/* MovieRcmpResetTime and MovieRcmpIsDecodeTime: not drafted here, their 64-bit divisions call
-   the libgcc helper at 0x8025E290, which the comparison link cannot resolve yet. */
-extern "C" {
-void fn_801D8CD8(Audio_801D86B4 *pAudio);
-int fn_801D900C(Info_801D86B4 *pInfo);
-}
+extern "C" void fn_801D8CD8(Audio_801D86B4 *pAudio);
+
+/* Low memory globals: the bus clock is at 0x800000F8. */
+typedef struct LowMem_801D86B4 {
+    char mPad[0xF8];
+    unsigned int mBusClock;
+} LowMem_801D86B4;
+
+#define TIMER_CLOCK_801D86B4 (((LowMem_801D86B4 *)0x80000000)->mBusClock / 4)
 
 static inline unsigned int fn_801D86B4_le32(unsigned char *p)
 {
@@ -115,7 +118,7 @@ void fn_801D8778(Decoder_801D86B4 *pDecoder, Info_801D86B4 **ppStreamer, Chunk_8
             }
             pInfo->mCodec = codec;
             if (codec != 0) {
-                pChunk = fn_801D9958((Chunk_801D86B4 *)lbl_80399100.mAlloc(lbl_802AFF40, sizeof(Chunk_801D86B4), 0, 0, lbl_80399100.mFlags));
+                pChunk = fn_801D9958((Chunk_801D86B4 *)lbl_80399100.mAlloc("", sizeof(Chunk_801D86B4), 0, 0, lbl_80399100.mFlags));
                 *ppChunk = pChunk;
                 pChunk->mpHeader = pHeader;
                 if (codec == 2) {
@@ -182,7 +185,7 @@ void fn_801D8A2C(Info_801D86B4 *pInfo, void *pStream)
     fn_801D8CD8(pAudio);
     pVideo->mpInfo = pInfo;
     fn_801D9990(&iData, &pVideo->mpInfo, (GetChunkFunc_801D9634)fn_801D8778, (ReleaseChunkFunc_801D9634)fn_801D89D4, 2);
-    pVideo->mpDecoder = fn_801D9654(lbl_80399100.mAlloc(lbl_802AFF40, 0x1C, 0, 0, lbl_80399100.mFlags), &iData);
+    pVideo->mpDecoder = fn_801D9654(lbl_80399100.mAlloc("", 0x1C, 0, 0, lbl_80399100.mFlags), &iData);
 }
 
 void fn_801D8B54(Info_801D86B4 *pInfo)
@@ -232,6 +235,102 @@ void fn_801D8C84(Info_801D86B4 *pInfo)
         fn_801D2BD0(pAudio->mpBuffer);
         pAudio->mpBuffer = 0;
     }
+}
+
+void fn_801D8CD8(Audio_801D86B4 *pAudio)
+{
+    pAudio->mSync = pAudio->mHandle >= 0;
+    switch (fn_801CE1E8()) {
+    case 1:
+        pAudio->mStartTime = OSGetTime() * 60 / (TIMER_CLOCK_801D86B4) * 1000 / 50;
+        break;
+    case 0:
+    default:
+        pAudio->mStartTime = OSGetTime() * 60 / (TIMER_CLOCK_801D86B4) * 1000 / 60;
+        break;
+    }
+    pAudio->mDrift = pAudio->mLastTime = 0;
+}
+
+int fn_801D8DE8(Info_801D86B4 *pInfo)
+{
+    Audio_801D86B4 *pAudio = pInfo->mpAudio;
+    int now;
+    int time;
+    int status[4];
+
+    switch (fn_801CE1E8()) {
+    case 1:
+        now = OSGetTime() * 60 / (TIMER_CLOCK_801D86B4) * 1000 / 50;
+        break;
+    case 0:
+    default:
+        now = OSGetTime() * 60 / (TIMER_CLOCK_801D86B4) * 1000 / 60;
+        break;
+    }
+    time = now - pAudio->mStartTime;
+
+    if (pAudio->mSync != 0) {
+        int played;
+
+        fn_8026D0AC();
+        fn_8026EF88(pAudio->mHandle, status);
+        fn_8026D0EC();
+        played = status[1] - fn_8026CAA8();
+        if (played > pAudio->mLastTime) {
+            int delta = played - time;
+
+            pAudio->mLastTime = played;
+            pAudio->mDrift = pAudio->mDrift - pAudio->mDrift / 8 + delta;
+            if ((pAudio->mDrift < 0 ? -pAudio->mDrift : pAudio->mDrift) > 0x108) {
+                pAudio->mStartTime -= pAudio->mDrift / 8;
+                pAudio->mDrift = 0;
+                time = now - pAudio->mStartTime;
+            }
+        }
+    }
+    switch (fn_801CE1E8()) {
+    case 1:
+        return (int)((time + 40) * (1.0f / 40.0f));
+    case 0:
+    default:
+        return (int)((time + 33) * (1.0f / 33.3667f));
+    }
+}
+
+int fn_801D900C(Info_801D86B4 *pInfo)
+{
+    unsigned int goal = fn_801D8DE8(pInfo);
+
+    if (pInfo->mpAudio->mSync != 0) {
+        if (goal > pInfo->mpVideo->mCurFrame + 2) {
+            switch (fn_801CE1E8()) {
+            case 1:
+                pInfo->mpAudio->mStartTime = OSGetTime() * 60 / (TIMER_CLOCK_801D86B4) * 1000 / 50 - pInfo->mpAudio->mLastTime;
+                break;
+            case 0:
+            default:
+                pInfo->mpAudio->mStartTime = OSGetTime() * 60 / (TIMER_CLOCK_801D86B4) * 1000 / 60 - pInfo->mpAudio->mLastTime;
+                break;
+            }
+            goal = fn_801D8DE8(pInfo);
+        }
+    } else {
+        if (goal > pInfo->mpVideo->mCurFrame + 2) {
+            switch (fn_801CE1E8()) {
+            case 1:
+                pInfo->mpAudio->mStartTime += (int)((goal - (pInfo->mpVideo->mCurFrame + 2)) * 40.0f);
+                break;
+            case 0:
+            default:
+                pInfo->mpAudio->mStartTime += (int)((goal - (pInfo->mpVideo->mCurFrame + 2)) * 33.3667f);
+                break;
+            }
+            goal = fn_801D8DE8(pInfo);
+        }
+    }
+    pInfo->mpVideo->mGoalFrame = goal;
+    return goal >= pInfo->mpVideo->mCurFrame + 1;
 }
 
 unsigned int fn_801D9224(Info_801D86B4 *pInfo)
