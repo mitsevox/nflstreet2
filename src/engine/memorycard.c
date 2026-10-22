@@ -1,3 +1,4 @@
+#include "game/fn_801D2B7C.h"
 #include "engine/memorycard.h"
 
 typedef void (*CARDCallback)(int chan, int result);
@@ -135,8 +136,6 @@ extern const char lbl_802AFE6C[];
 extern int sprintf(char *pBuffer, const char *pFormat, ...);
 extern int memcmp(const void *pA, const void *pB, unsigned int count);
 extern void *memcpy();
-extern void *fn_801D2B7C(int size, int heap, int flags);
-extern int fn_801D2BD0(void *pAddr);
 extern int CARDCreateAsync(int chan, const char *fileName, unsigned int size, CARDFileInfo *fileInfo,
                            CARDCallback callback);
 extern int CARDFastDelete(int chan, int fileNo);

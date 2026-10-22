@@ -1,4 +1,5 @@
 #include "engine/cu_801D86B4.h"
+#include "engine/llmemory.h"
 
 /* Intrusive doubly linked list node; a list head is a node that points at itself when empty. */
 struct Node_801D9A88 {
@@ -74,7 +75,6 @@ public:
 };
 
 extern "C" {
-int fn_801D34D0(void *pDest, int size, int value, int width);
 MadCodec_801D9A88 *fn_801D9BC8(void *pMem);
 /* maddec.cpp (C++ linkage there); referenced by neutral label for the comparison link. */
 void fn_801DABE0(const unsigned short *pData, int frame, int quant);
@@ -113,7 +113,7 @@ extern "C" MadFrame_801D9A88 *fn_801D9AA8(MadFrame_801D9A88 *pFrame, unsigned in
     pFrame->mUnknown0 = 1;
     pFrame->mpShape = (Shape_801D94A0 *)lbl_80399100.mAlloc(lbl_802AFFAC, width * 3 * height / 2 + 0x10, 0, 0x10,
                                                            lbl_80399100.mFlags);
-    fn_801D34D0(pFrame->mpShape, 0x10, 0, 4);
+    fn_801D34D0((char *)pFrame->mpShape, 0x10, 0, 4);
     pFrame->mpShape->mUnknown0[0] = 0x6C;
     pFrame->mpShape->mWidth = width;
     pFrame->mpShape->mHeight = height;

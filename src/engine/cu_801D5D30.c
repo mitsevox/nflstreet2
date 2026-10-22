@@ -1,3 +1,4 @@
+#include "game/fn_801D2B7C.h"
 #include "engine/memorycard.h"
 
 typedef struct MCSType {
@@ -86,8 +87,6 @@ extern int strncmp(const char *pA, const char *pB, unsigned int count);
 extern int memcmp(const void *pA, const void *pB, unsigned int count);
 extern int sprintf(char *pBuffer, const char *pFormat, ...);
 extern char *fn_801C3284(char *pDst, const char *pSrc, int count);
-extern void *fn_801D2B7C(int size, int heap, int flags);
-extern int fn_801D2BD0(void *pAddr);
 extern void fn_801F8758(int value);
 
 void fn_801D5D30(int state);

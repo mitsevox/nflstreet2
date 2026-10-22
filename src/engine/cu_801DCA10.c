@@ -1,8 +1,8 @@
 #include "game/fn_801C68FC.h"
+#include "game/fn_801D2B7C.h"
+#include "engine/Memory.h"
 #include "engine/cu_801DCA10.h"
 
-extern void *fn_801D2BB0(int a, int size, int ident, int flags);
-extern int fn_801D2BD0(void *pAddr);
 extern void *fn_801C6A20(void *pool);
 extern void *fn_801C6B4C(void *pool, void *item);
 extern void fn_801C6C0C(void *pool, void *item);

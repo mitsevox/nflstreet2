@@ -62,6 +62,7 @@ typedef struct MemHeap_801D134C {
     void (*mCopy)(void *pDst, int dstExtern, void *pSrc, int srcExtern, int size);
 } MemHeap_801D134C;
 
+void *fn_801D2BB0(int a, int size, int ident, int flags);
 int fn_801D26C4(int ident, int flags, const char *pMessage);
 void *fn_801D2478(int ident, int parentIdent, char *pStart, unsigned int size, int dataSize,
                   MemHeapFuncs_801D134C *pFuncs);

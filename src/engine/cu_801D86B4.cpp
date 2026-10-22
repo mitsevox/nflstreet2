@@ -1,10 +1,9 @@
 #include <dolphin/os.h>
+#include "game/fn_801D2B7C.h"
 #include "engine/cu_801D86B4.h"
+#include "engine/llmemory.h"
 
 extern "C" {
-void *fn_801D2B7C(int size, int heap, int flags);
-int fn_801D2BD0(void *pAddr);
-int fn_801D34D0(void *pDest, int size, int value, int width);
 int fn_801CE1E8(void);
 void fn_801CAF24(void);
 void fn_801F4B20(void);
@@ -174,11 +173,11 @@ void fn_801D8A2C(Info_801D86B4 *pInfo, void *pStream)
     pAudio = (Audio_801D86B4 *)fn_801D2B7C(sizeof(Audio_801D86B4), 0, 0);
     pInfo->mpVideo = pVideo;
     pInfo->mpAudio = pAudio;
-    fn_801D34D0(pVideo, sizeof(Video_801D86B4), 0, 4);
+    fn_801D34D0((char *)pVideo, sizeof(Video_801D86B4), 0, 4);
     pVideo->mpStream = pStream;
     pVideo->mCurFrame = 0;
     pVideo->mGoalFrame = 0;
-    fn_801D34D0(pAudio, sizeof(Audio_801D86B4), 0, 4);
+    fn_801D34D0((char *)pAudio, sizeof(Audio_801D86B4), 0, 4);
     pAudio->mSync = 0;
     pAudio->mActive = 0;
     pAudio->mHandle = -1;

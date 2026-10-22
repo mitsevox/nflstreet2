@@ -1,3 +1,5 @@
+#include "engine/llmemory.h"
+
 extern void *memset(void *pDst, int value, unsigned int size);
 extern void *memcpy();
 
