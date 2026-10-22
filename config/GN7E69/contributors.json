@@ -26639,8 +26639,11 @@
       "provenance": {
         "pull_request": 1027,
         "merged_via": 1033,
-        "commit": "413b50fd0a03844525b8bd16cce4544a5dc3bbcc",
-        "introduced_blob": "e821c54e71af3d6de886676c6ed131594b8c410d"
+        "commit": "f05c3e7d61a07c8502614ca6a871bc1473d357e0",
+        "introduced_blob": "2d07227f6292e9bf8e5d92f912cf18814f18af51",
+        "original_commit": "413b50fd0a03844525b8bd16cce4544a5dc3bbcc",
+        "original_blob": "e821c54e71af3d6de886676c6ed131594b8c410d",
+        "integration_adjustment": "PR 1041 moves the declarations of 0x8027CF9C-0x8027D2E0 and Format_8027D284 into include/engine/cu_8027CF9C.h and the copy-callback word 0x80301000 into include/engine/cu_802714A8.h, and types the decoder handle members Codec_8027CF9C * and the data member and casts unsigned char *; the object and every function body are unchanged, and this declaration change does not transfer original source credit."
       }
     },
     {
@@ -26695,8 +26698,8 @@
       "provenance": {
         "pull_request": 1041,
         "merged_via": 1041,
-        "commit": "f05c3e7d61a07c8502614ca6a871bc1473d357e0",
-        "introduced_blob": "04ebf4d0be39d481f5e2921df9a541ec2925cd10"
+        "commit": "cea8fc7ba225d11e3cdeacb0f13000477a155094",
+        "introduced_blob": "813548bafcfcd9f7d2a056ba6b213d93667cfb32"
       }
     },
     {
