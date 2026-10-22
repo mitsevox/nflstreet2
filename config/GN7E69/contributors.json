@@ -26642,6 +26642,87 @@
         "commit": "413b50fd0a03844525b8bd16cce4544a5dc3bbcc",
         "introduced_blob": "e821c54e71af3d6de886676c6ed131594b8c410d"
       }
+    },
+    {
+      "source": "src/engine/cu_8027CF9C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8027CF9C",
+        "0x8027CFCC",
+        "0x8027D284",
+        "0x8027D2C4",
+        "0x8027D2E0"
+      ],
+      "provenance": {
+        "pull_request": 1041,
+        "merged_via": 1041,
+        "commit": "f05c3e7d61a07c8502614ca6a871bc1473d357e0",
+        "introduced_blob": "6aac4e15fcec2e48f61073db0c18e4562905df4b"
+      }
+    },
+    {
+      "source": "src/engine/cu_8027D3AC.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8027D5CC",
+        "0x8027D5EC",
+        "0x8027D960",
+        "0x8027D968",
+        "0x8027D970",
+        "0x8027D9EC",
+        "0x8027D9F4",
+        "0x8027D9FC",
+        "0x8027DAA4",
+        "0x8027DAC4",
+        "0x8027E0AC",
+        "0x8027E4D8",
+        "0x8027E4F8",
+        "0x8027EAB4",
+        "0x8027ED4C",
+        "0x8027ED58",
+        "0x8027ED5C",
+        "0x8027ED64",
+        "0x8027EF50",
+        "0x8027EF58",
+        "0x8027EF94",
+        "0x8027EF9C",
+        "0x8027EFA4"
+      ],
+      "provenance": {
+        "pull_request": 1041,
+        "merged_via": 1041,
+        "commit": "f05c3e7d61a07c8502614ca6a871bc1473d357e0",
+        "introduced_blob": "04ebf4d0be39d481f5e2921df9a541ec2925cd10"
+      }
+    },
+    {
+      "source": "src/engine/cu_802805C4.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x802806F8",
+        "0x80280780",
+        "0x802807F4",
+        "0x80280B94",
+        "0x80280E70",
+        "0x80280F38",
+        "0x8028156C",
+        "0x80281938",
+        "0x80281C68",
+        "0x80281C6C",
+        "0x802821E4"
+      ],
+      "provenance": {
+        "pull_request": 1041,
+        "merged_via": 1041,
+        "commit": "f05c3e7d61a07c8502614ca6a871bc1473d357e0",
+        "introduced_blob": "31545eff7d53bff274db88b0085ec2d3a552c816"
+      }
     }
   ],
   "target": "GN7E69",
