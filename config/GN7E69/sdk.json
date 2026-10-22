@@ -1027,7 +1027,7 @@
       "name": "src/dolphin/dvd/fstload.c",
       "source": "src/dolphin/dvd/fstload.c",
       "library": "DVD",
-      "evidence": "Full2body faithful donor; actualwhole576target mapped, callbackexact/loaderpartial and123initialized exact, originalarchive edgesprovisional.",
+      "evidence": "Full2body faithful donor; actualwhole576target mapped, callback and loader exact (linked in the source build) and123initialized exact, originalarchive edgesprovisional.",
       "sections": [
         {
           "section": ".text",
@@ -2359,7 +2359,7 @@
       "name": "src/dolphin/card/CARDOpen.c",
       "source": "src/dolphin/card/CARDOpen.c",
       "library": "CARD",
-      "evidence": "Complete pinned dolsdk2004 source and actual original caller/operand evidence establish eight target bodies1492 at80256F14..802574E8. File edges remain provisional. Six exact comparison-only bodies1052 and two measured plain-char partials; genuine additional donor CARDOpen body is preserved unassigned.",
+      "evidence": "Complete pinned dolsdk2004 source and actual original caller/operand evidence establish eight target bodies1492 at80256F14..802574E8. File edges remain provisional. All eight bodies are exact and linked in the source build; genuine additional donor CARDOpen body is preserved unassigned.",
       "sections": [
         {
           "section": ".text",
@@ -2367,7 +2367,7 @@
           "end": "0x802574E8",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned dolsdk2004 source and actual original caller/operand evidence establish eight target bodies1492 at80256F14..802574E8. File edges remain provisional. Six exact comparison-only bodies1052 and two measured plain-char partials; genuine additional donor CARDOpen body is preserved unassigned."
+          "evidence": "Complete pinned dolsdk2004 source and actual original caller/operand evidence establish eight target bodies1492 at80256F14..802574E8. File edges remain provisional. All eight bodies are exact and linked in the source build; genuine additional donor CARDOpen body is preserved unassigned."
         }
       ]
     },
@@ -2665,7 +2665,7 @@
       "name": "src/dolphin/os/OSFont.c",
       "source": "src/dolphin/os/OSFont.c",
       "library": "OS",
-      "evidence": "Target cached font encoding leaf and OOT6e449e1748a02c12b4cb218453c529175b85364a complete small OSFont.c; one88-byte Cbody and2-byte initializedcache comparison, actualhalfword accesses/caller; relatedfile name and originalarchiveboundaries remain provisional. Originaltargetbytes selected until promotion.",
+      "evidence": "Target cached font encoding leaf and OOT6e449e1748a02c12b4cb218453c529175b85364a complete small OSFont.c; one88-byte Cbody and2-byte initializedcache comparison, actualhalfword accesses/caller; relatedfile name and originalarchiveboundaries remain provisional. Linked in the source build.",
       "sections": [
         {
           "section": ".data5",
