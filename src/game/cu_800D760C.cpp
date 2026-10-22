@@ -233,8 +233,8 @@ extern "C" int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRe
                     p->mpUnknown800[pBlock->mUnknown4Word].mUnknownC =
                         (p->mpUnknown800[pBlock->mUnknown4Word].mUnknownC + pBlock->mUnknown0Word) & 0xFFFFFF;
                 } else {
-                    pBlock->mUnknownCHalf = 0;
                     pBlock->mUnknown0Word = 0;
+                    pBlock->mUnknownCHalf = 0;
                 }
             }
             fn_800D81C8(&pBlock->mUnknown28, (Object_800D81C8 *)p);

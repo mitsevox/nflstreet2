@@ -281,14 +281,10 @@ extern "C" int fn_801274D4(Object_80039F5C *p, Object_80039F5C *pOther, State_80
     Object_800B26B0 *pMotion = &p->mMotion;
 
     if (pOther != 0) {
-        int turn = 0;
         Point_80167910 delta;
 
         if ((distance > 3.0f && pMotion->mPos.mY < fn_80177FE0().mY && fn_800DC080(pOther) != 0 && mode != 2)
             || (mode == 2 && distance < 8.0f)) {
-            turn = 1;
-        }
-        if (turn != 0) {
             int target;
             int diff;
 
@@ -302,9 +298,11 @@ extern "C" int fn_801274D4(Object_80039F5C *p, Object_80039F5C *pOther, State_80
             }
             pState->mUnknown16 = 1;
         } else {
-            if (pos.mY < fn_80177FE0().mY + 3.0f && pContext->mpUnknown4[0] != p->mIdBytes[1]
-                && pContext->mpUnknown4[pContext->mUnknown16 - 1] != p->mIdBytes[1]) {
-                fn_80127324(p, &angle, pos, angle2);
+            if (pos.mY < fn_80177FE0().mY + 3.0f) {
+                if (pContext->mpUnknown4[0] != p->mIdBytes[1]
+                    && pContext->mpUnknown4[pContext->mUnknown16 - 1] != p->mIdBytes[1]) {
+                    fn_80127324(p, &angle, pos, angle2);
+                }
             }
             if (pMotion->mPos.mY < pos.mY || distance > 5.5f || pOther->mUnknown528.mUnknown15 == 1
                 || pOther->mUnknown528.mUnknown15 == 5 || fn_801CFFD0(angle, pMotion->mFacing) <= 0x11C71B) {

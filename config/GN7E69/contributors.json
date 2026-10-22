@@ -22643,6 +22643,60 @@
         "original_blob": "46cb37e165c686cecd1430755d5045713fea92c1",
         "integration_adjustment": "Newly exact pre-existing body (fn_80119B98) originates in contribution 902; the PR 1005 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
       }
+    },
+    {
+      "source": "src/game/cu_800D0474.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D0694"
+      ],
+      "provenance": {
+        "pull_request": 565,
+        "merged_via": 698,
+        "commit": "aa78344f7d7174919ffa6a768c7e043a58d45653",
+        "introduced_blob": "f3b649ab2e9f7a398822799edf71caa5946889da",
+        "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
+        "original_blob": "2dfb3e203b332fa303d05733ea7fd931ea190ddf",
+        "integration_adjustment": "Newly exact pre-existing body (fn_800D0694) originates in contribution 565; the PR 1006 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
+    },
+    {
+      "source": "src/game/cu_800D8A24.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D9188"
+      ],
+      "provenance": {
+        "pull_request": 565,
+        "merged_via": 698,
+        "commit": "aa78344f7d7174919ffa6a768c7e043a58d45653",
+        "introduced_blob": "cba0e04be90c474c2bad4b7abb9bd1e532ad7e34",
+        "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
+        "original_blob": "99d14a2579e1cf45276a8a91533d460da825f29a",
+        "integration_adjustment": "Newly exact pre-existing body (fn_800D9188) originates in contribution 565; the PR 1006 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
+    },
+    {
+      "source": "src/game/cu_801260D4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801274D4"
+      ],
+      "provenance": {
+        "pull_request": 562,
+        "merged_via": 579,
+        "commit": "b787157fd6efb9f48604f0c7438b86e08455c367",
+        "introduced_blob": "c71518e5fe269fd47b2ee19650c210ff68bfdb06",
+        "original_commit": "99be8c37a587a495e4ed189bbec87b1e43f6ea7a",
+        "original_blob": "43896253a88aeaf316074051e4a59d1992b7fad6",
+        "integration_adjustment": "Newly exact pre-existing body (fn_801274D4) originates in contribution 562; the PR 1006 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
     }
   ],
   "target": "GN7E69",

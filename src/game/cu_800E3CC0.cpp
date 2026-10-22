@@ -584,7 +584,7 @@ extern "C" int fn_800E7D80(Object_80039F5C *p) {
                 ok = !fn_801783AC(11);
             }
             if (ok && p->mIdBytes[3] == 1 && p->mUnknown2914 <= 18 && p->mUnknown2914 >= 10) {
-                Vector_80039F5C delta;
+                Point_8017886C delta;
 
                 fn_80227690(&delta, &p->mMotion, &pos);
                 fn_802270A4(&delta);
@@ -687,10 +687,11 @@ extern "C" int fn_800E8898(Object_80039F5C *p, Object_80039F5C **ppLast) {
                     }
                     default: {
                         short rollBase = (short)p->mUnknown2904Float;
+                        short rating = p->mRatings[5];
                         short ratingMax = pOther->mRatings[2] >= pOther->mRatings[0] ? pOther->mRatings[2] : pOther->mRatings[0];
                         short otherRollBase = (short)pOther->mUnknown2904Float;
                         short otherLimit = (short)(ratingMax * lbl_803EAD84 + otherRollBase * lbl_803EAD88);
-                        short limit = (short)(p->mRatings[5] * lbl_803EAD8C + rollBase * lbl_803EAD90);
+                        short limit = (short)(rating * lbl_803EAD8C + rollBase * lbl_803EAD90);
                         short roll = fn_802372EC(0, limit);
                         short otherRoll = fn_802372EC(0, otherLimit);
                         if (pOther->mMotion.mPos.mY < fn_80177FE0().mY)
@@ -749,7 +750,10 @@ extern "C" int fn_800E8BE8(Object_80039F5C *p) {
         p->mUnknown512.mUnknown0 = 0.0f;
         state->mUnknown8 = 0;
     } else {
-        p->mUnknown512.mUnknown14 = state->mUnknown9 ? 6 : 7;
+        if (state->mUnknown9)
+            p->mUnknown512.mUnknown14 = 6;
+        else
+            p->mUnknown512.mUnknown14 = 7;
         p->mUnknown512.mUnknown4 = state->mUnknown0;
         p->mUnknown512.mUnknown8 = state->mUnknown0;
         p->mUnknown512.mUnknown0 = state->mUnknown4;
@@ -1324,8 +1328,8 @@ extern "C" int fn_800EA284(Object_80039F5C *p, int angle, int direction) {
     int result = 0;
     int other = 0;
     int otherAngle;
-    int facing = fn_801CFFD0(p->mMotion.mUnknown32, direction) <= 0x31C71C;
-    int near = facing;
+    int near = fn_801CFFD0(p->mMotion.mUnknown32, direction) <= 0x31C71C;
+    int facing = near;
     int busy;
     switch (p->mpState->mId) {
     case 16:
@@ -1362,14 +1366,7 @@ extern "C" int fn_800EA284(Object_80039F5C *p, int angle, int direction) {
 
         if (fn_80114E7C(p))
             blocked = 0;
-        if (blocked || fn_800EAC9C(p) || (p->mFlags & 0x800) || (pOther && fn_800EAC9C(pOther))) {
-            unsigned short animation = fn_801BE648(p->mpUnknown792);
-            if (fn_800E8ED4(animation)) {
-                Block_801BE60C *pBlock = fn_801BE60C(p->mpUnknown792, animation);
-                if (pBlock->mUnknown1C)
-                    pBlock->mUnknown1C = 0;
-            }
-        } else {
+        if (!blocked && !fn_800EAC9C(p) && !(p->mFlags & 0x800) && !(pOther && fn_800EAC9C(pOther))) {
             switch (p->mpState->mId) {
             case 16:
                 result = 1;
@@ -1383,6 +1380,13 @@ extern "C" int fn_800EA284(Object_80039F5C *p, int angle, int direction) {
             if (pOther && p == fn_80137B40() && !(p->mFlags & 0x10000)) {
                 fn_80178718(pOther);
                 p->mFlags = (p->mFlags | 0x10000) & ~0x80000;
+            }
+        } else {
+            unsigned short animation = fn_801BE648(p->mpUnknown792);
+            if (fn_800E8ED4(animation)) {
+                Block_801BE60C *pBlock = fn_801BE60C(p->mpUnknown792, animation);
+                if (pBlock->mUnknown1C)
+                    pBlock->mUnknown1C = 0;
             }
         }
         fn_80143EBC(p, pOther);
@@ -1403,19 +1407,19 @@ extern "C" int fn_800EA284(Object_80039F5C *p, int angle, int direction) {
                 blocked = 1;
             if (fn_80114E7C(pOther))
                 blocked = 0;
-            if (blocked || fn_800EAC9C(pOther) || (pOther->mFlags & 0x800)) {
-                unsigned short animation = fn_801BE648(pOther->mpUnknown792);
-                if (fn_800E8ED4(animation)) {
-                    Block_801BE60C *pBlock = fn_801BE60C(pOther->mpUnknown792, animation);
-                    if (pBlock->mUnknown1C)
-                        pBlock->mUnknown1C = 0;
-                }
-            } else {
+            if (!blocked && !fn_800EAC9C(pOther) && !(pOther->mFlags & 0x800)) {
                 result = 1;
                 fn_800E954C(pOther, 10, &otherAngle, 1, &otherDirection);
                 if (pOther == fn_80137B40() && !(pOther->mFlags & 0x10000)) {
                     fn_80178718(p);
                     pOther->mFlags = (pOther->mFlags | 0x10000) & ~0x80000;
+                }
+            } else {
+                unsigned short animation = fn_801BE648(pOther->mpUnknown792);
+                if (fn_800E8ED4(animation)) {
+                    Block_801BE60C *pBlock = fn_801BE60C(pOther->mpUnknown792, animation);
+                    if (pBlock->mUnknown1C)
+                        pBlock->mUnknown1C = 0;
                 }
             }
             fn_80143EBC(pOther, p);
