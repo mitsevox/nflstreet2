@@ -47,15 +47,13 @@ extern "C" int fn_8011B2A4(Entry_8011AFCC *pEntry)
     pMotion = &pEntry->mpUnknown60->mMotion;
     origin = fn_80177FE0();
     if (fn_8011F1CC() && !fn_801783AC(0) && !fn_801783AC(13)) {
-        Object_80039F5C *p;
         State_80039F5C *pState;
         unsigned int id;
 
         if (pEntry->mUnknown76 == 1) {
             return 0;
         }
-        p = pEntry->mpUnknown60;
-        pState = p->mpState;
+        pState = pEntry->mpUnknown60->mpState;
         id = pState->mId;
         if (id == 51) {
             id = pState[1].mId;
@@ -64,7 +62,7 @@ extern "C" int fn_8011B2A4(Entry_8011AFCC *pEntry)
         case 22:
         case 40:
         case 92:
-            if (p->mUnknown8 != 0xFF && (p->mFlags & 0x4000)) {
+            if (pEntry->mpUnknown60->mUnknown8 != 0xFF && (pEntry->mpUnknown60->mFlags & 0x4000)) {
                 if (lbl_803EB028->mUnknown84 < 20) {
                     if (pMotion->mPos.mY <= origin.mY + 2.5f) {
                         break;
@@ -73,7 +71,7 @@ extern "C" int fn_8011B2A4(Entry_8011AFCC *pEntry)
                     if (pMotion->mPos.mY <= origin.mY) {
                         break;
                     }
-                    if (fn_801CFFD0(p->mMotion.mUnknown32, 0xC00000) <= 0x200000
+                    if (fn_801CFFD0(pEntry->mpUnknown60->mMotion.mUnknown32, 0xC00000) <= 0x200000
                         && pEntry->mpUnknown60->mMotion.mUnknown28 >= lbl_803ECB08 * 0.4f) {
                         break;
                     }

@@ -70,6 +70,16 @@
       ],
       "evidence": "evidence.tsv compiler rows 0x80227F14-0x802288F8 and 0x802288F8-0x80228E44 (engine_c): ProDG 3.9.3 cc1 -O2 (default -G 8) reproduces every instruction and data byte of both units; -O1, -O3, -Os and -G0 change them. Same flags as the uistudio profile; a separate profile because uistudio's scope evidence and source root are the UI Studio library, and these units include SDK headers that need include/libc."
     },
+    "engine_c_fastmath": {
+      "flags": [
+        "-O2",
+        "-ffast-math"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "evidence": "evidence.tsv compiler row 0x801B9D00-0x801C1D84 (engine_c_fastmath): ProDG 3.9.3 cc1 -O2 -ffast-math with default -G8 is the owner-approved working profile for the twenty animation-library C units; r13 small-data accesses rule out -G0. Complete code and allocated data remain measured, including partial results. Historical negated-comparison source under -O2 and the revised plain-comparison source under -O2 -ffast-math produce equivalent measured output; this does not claim that removing the flag from the final plain-comparison source preserves its bytes. The target does not uniquely distinguish these source/flag combinations or prove the original EA command line. The library-wide hypothesis is inferred and owner-approved, not a per-function override."
+    },
     "dolphin_card_release": {
       "compiler": "mwcc",
       "flags": [

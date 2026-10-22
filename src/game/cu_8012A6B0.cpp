@@ -1,3 +1,4 @@
+#include "engine/cu_801B9F00.h"
 #include "game/Control_80132090.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
@@ -76,8 +77,6 @@ int fn_801481B0(void);
 void fn_801483C8(void);
 int fn_801486A0(void);
 int fn_80178320(void);
-int fn_801BA568(Object_8016D9B8 *p, Record_800D81C8 *pRecords, int key);
-int fn_801BA5A8(Object_8016D9B8 *p, Record_800D81C8 *pRecords, int key, int index);
 float fn_801BD660(void *p, int key);
 float fn_801BD690(Block_801BD6D4 *p, int key);
 int fn_801CFE40(float y, float x);

@@ -1,0 +1,48 @@
+unsigned long __cvt_fp2unsigned(double d)
+{
+    if (d >= 2147483648.0)
+        return (long)(d - 2147483648.0) ^ 0x80000000;
+    return (long)d;
+}
+
+asm(".globl __shr2u\n"
+    ".type __shr2u,@function\n"
+    "__shr2u:\n"
+    "\tb __lshrdi3\n"
+    ".size __shr2u,.-__shr2u\n"
+    "\n"
+    ".globl __div2i\n"
+    ".type __div2i,@function\n"
+    "__div2i:\n"
+    "\tb fn_8025E290\n"
+    ".size __div2i,.-__div2i\n"
+    "\n"
+    ".globl __shl2i\n"
+    ".type __shl2i,@function\n"
+    "__shl2i:\n"
+    "\tb __ashldi3\n"
+    ".size __shl2i,.-__shl2i\n"
+    "\n"
+    ".globl fn_801AD478\n"
+    ".type fn_801AD478,@function\n"
+    "fn_801AD478:\n"
+    "\tb fn_8025EB54\n"
+    ".size fn_801AD478,.-fn_801AD478\n"
+    "\n"
+    ".globl __shr2i\n"
+    ".type __shr2i,@function\n"
+    "__shr2i:\n"
+    "\tb __ashrdi3\n"
+    ".size __shr2i,.-__shr2i\n"
+    "\n"
+    ".globl fn_801AD480\n"
+    ".type fn_801AD480,@function\n"
+    "fn_801AD480:\n"
+    "\tb fn_8025F0A8\n"
+    ".size fn_801AD480,.-fn_801AD480\n"
+    "\n"
+    ".globl fn_801AD484\n"
+    ".type fn_801AD484,@function\n"
+    "fn_801AD484:\n"
+    "\tb fn_8025F58C\n"
+    ".size fn_801AD484,.-fn_801AD484\n");

@@ -25,28 +25,8 @@ struct Vec2 {
     float y;
 };
 
-struct AllocParams {
-    AllocParams() : mUnknown0(0), mUnknown4(0), mUnknown8(0) {}
-
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-};
-
-class Allocator {
-public:
-    virtual void *Alloc(int size, const AllocParams &params);
-    virtual void Free(void *p, int unknown);
-};
-
 extern "C" {
-int fn_801B90CC(Allocator **out);
-int fn_801B9148(void);
-int fn_801B9174(void);
-int fn_801B95AC(Class_801B8D9C *list, void *params, int *handle);
 int fn_801B8DA8(Class_801B8D9C *list, Struct_803EB878 *desc);
-void fn_801B983C(int handle, void *params);
-void fn_801B96E4(int handle);
 
 extern Struct_803EB878 lbl_803EB878;
 extern Struct_803EB878 lbl_803EB888;
@@ -59,7 +39,7 @@ extern Struct_803EB878 lbl_803EB8B8;
 extern Struct_803EB878 lbl_803EB8C0;
 }
 
-static inline int AddSound(Class_801B8D9C *list, Struct_803EB878 *desc, void *params, int *handle)
+static inline int AddSound(Class_801B8D9C *list, Struct_803EB878 *desc, void *params, Object_801B9068 **handle)
 {
     int err = fn_801B95AC(list, params, handle);
     if (err < 0) {
@@ -89,7 +69,7 @@ struct SoundObject {
         fn_801B9174();
     }
 
-    int mHandle;
+    Object_801B9068 *mHandle;
 };
 
 // The fields after mHandle form the parameter block that is registered with

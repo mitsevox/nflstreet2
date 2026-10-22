@@ -136,7 +136,7 @@ void fn_8016D8F0(Object_80039F5C *p, float f);
 void fn_8016F780(void);
 int fn_801BCA74(void *a, void *b, int c, void *d, int e, int f);
 int fn_801BCCAC(void *a, void *b, int c, void *d, int e, int f);
-int fn_801BE648(void *p);
+unsigned short fn_801BE648(void *p);
 
 void fn_80042508(void *pBlock, int a, unsigned int index);
 void fn_80042530(void *pBlock, int a);
@@ -467,7 +467,7 @@ extern "C" void fn_80038E80(Object_80039F5C *p, Player_8003877C *pPlayer, unsign
     p->mUnknown9[2] = index < (unsigned int)fn_80178D70(team);
     p->mpState = &pPlayer->mObject.mQueue[0];
     p->mpUnknown792 = pPlayer->mObject.mUnknown1244 + 1252;
-    p->mpUnknown796 = (Object_8016D9B8 *)pPlayer->mObject.mUnknown1244;
+    p->mpUnknown796 = (Object_801BA03C *)pPlayer->mObject.mUnknown1244;
     p->mpUnknown800 = (Record_800D81C8 *)(pPlayer->mObject.mUnknown1244 + 12);
     p->mpUnknown804 = pPlayer->mUnknown3604;
     p->mpUnknown808 = pPlayer->mUnknown3096;

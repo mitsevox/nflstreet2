@@ -113,10 +113,10 @@ extern "C" Object_80039F5C *fn_800F9480(Object_80039F5C *p) {
                     if (pMate->mpState[slot].mId == 22) {
                         ref = pMate->mUnknown336;
                     } else {
-                        int index = pOther->mpState[slot].mUnknown1;
+                        State_80039F5C *pState = &pOther->mpState[slot];
 
-                        if (index >= 1 && index <= 5) {
-                            fn_80039F5C(p->mIdBytes[2] ^ 1, pRecord->mUnknown8[index - 1]);
+                        if (pState->mUnknown1 >= 1 && pState->mUnknown1 <= 5) {
+                            fn_80039F5C(p->mIdBytes[2] ^ 1, pRecord->mUnknown8[pState->mUnknown1 - 1]);
                             fn_8009BD2C(pOther, &ref);
                         } else {
                             valid = 0;
@@ -322,8 +322,8 @@ extern "C" int fn_800FA0DC(Object_80039F5C *p) {
     pBlock->mUnknown25 = p->mpState->mUnknown2 & 2;
     pBlock->mUnknown20 = 0;
     pBlock->mUnknown4 = p->mMotion.mFacing;
-    pBlock->mUnknown12 = 0.0f;
     pBlock->mUnknown8 = p->mMotion.mFacing;
+    pBlock->mUnknown12 = 0.0f;
     pBlock->mUnknown26 = 7;
     pBlock->mUnknown27 = fn_802372EC(0, 20) + 20;
     pBlock->mUnknown21 = 0;
@@ -332,10 +332,10 @@ extern "C" int fn_800FA0DC(Object_80039F5C *p) {
         pBlock->mUnknown16 = 1;
     }
     if (p->mFlags & 0x4000) {
-        p->mUnknown512.mUnknown0 = 0.0f;
         p->mUnknown512.mUnknown14 = 1;
-        p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown0 = 0.0f;
     }
     return 0;
 }

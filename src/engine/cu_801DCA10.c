@@ -1,7 +1,7 @@
 #include "game/fn_801C68FC.h"
 #include "game/fn_801D2B7C.h"
-#include "engine/Memory.h"
 #include "engine/cu_801DCA10.h"
+#include "engine/fn_801F7BD4.h"
 
 extern void *fn_801C6A20(void *pool);
 extern void *fn_801C6B4C(void *pool, void *item);
@@ -15,8 +15,6 @@ extern int fn_801C75B8(void *pPool);
 extern void *fn_801C75F0(void *pPool);
 extern void fn_801C7650(void *pPool, void *pElement);
 extern void *memset(void *pDst, int value, unsigned int size);
-extern int fn_801F7C88(void);
-extern void fn_801F7BD4(int err);
 
 extern unsigned char lbl_803EBD50;
 extern int lbl_803ED640;

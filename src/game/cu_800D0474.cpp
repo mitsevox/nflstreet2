@@ -123,7 +123,7 @@ extern "C" int fn_800D0694(Object_80039F5C *p)
         int c = p->mUnknown528.mUnknown15;
         int special = 0;
         if (c <= 21) {
-            special = c >= 20;
+            if (c >= 20) special = 1;
         }
         if (p->mFlags & 0x4000) {
             Input_800B6D34 input;
@@ -159,8 +159,8 @@ extern "C" int fn_800D0694(Object_80039F5C *p)
             } else {
                 pBlock->mUnknown0 = 0;
                 pBlock->mUnknown9 = 255;
-                pBlock->mUnknown11 = 0;
                 pBlock->mUnknown8 = 0;
+                pBlock->mUnknown11 = 0;
             }
         } else {
             float distance;

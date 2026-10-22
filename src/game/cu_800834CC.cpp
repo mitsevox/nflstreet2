@@ -6,6 +6,7 @@
 #include "game/cu_8003E214.h"
 #include "game/fn_8003B6BC.h"
 #include "game/fn_801D2B7C.h"
+#include "game/fn_801F9908.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_802372EC.h"
 
@@ -16,7 +17,6 @@ unsigned int fn_801C3180(const char *pText);
 char *fn_801C2EF0(char *pDest, const char *pSource, int count);
 int fn_801F967C(int handle, int table);
 void fn_801F9718(int handle, int table, ColumnValue_802D6424 *pList, int *pResult, int flags);
-void fn_801F9908(int handle, char *pName, Object_80023BBC *pArg, int *pResult, int flags);
 int fn_801F9980(int handle, int *pTable);
 int fn_801F9A90(int a, int tag);
 int fn_801D34D0(void *pDest, int size, int value, int width);
@@ -183,7 +183,7 @@ void fn_80083854(Object_8007A334 *pObject)
 {
     int info[4];
     Object_80023BBC arg;
-    int result[4];
+    QueryResult result;
     ColumnValue_802D6424 list[2];
 
     fn_801F9BB4(pObject->mUnknown4, pObject->mUnknown8, pObject->mUnknown12, info);
@@ -196,7 +196,7 @@ void fn_80083854(Object_8007A334 *pObject)
     unsigned int table = pObject->mUnknown8;
     unsigned int column = pObject->mUnknown12;
     arg.Set(6, ((unsigned long long)table << 32) | column, info[0], value);
-    fn_801F9908(pObject->mUnknown4, pObject->mUnknown20, &arg, result, 0);
+    fn_801F9908(pObject->mUnknown4, (Table_8007E020 *)pObject->mUnknown20, &arg, &result, 0);
 }
 
 void fn_80083934(Object_8007A334 *pObject, int a, int b, int c)

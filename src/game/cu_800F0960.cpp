@@ -1,3 +1,5 @@
+#include "engine/cu_801B9F00.h"
+#include "game/fn_801BA2A8.h"
 #include <math.h>
 #include "game/fn_801248D4.h"
 #include <string.h>
@@ -610,7 +612,7 @@ Record_8011F4E0 *fn_8011F4E0(void);
 void fn_8016DF34(Object_80039F5C *p);
 int fn_801783AC(int bit);
 void fn_8009A8D4(void *p);
-int fn_8009EAB0(Object_80039F5C *p, unsigned char a);
+int fn_8009EAB0(Object_80039F5C *p, int a);
 int fn_8009EF6C(void *p);
 int fn_80099AD0(Object_80039F5C *p, Object_80137ABC *pBall, int a, int b, int c, int d, int e);
 int fn_80099C80(Object_80039F5C *p, Object_80137ABC *pBall, int a, int *pOut, int *pOut2);
@@ -738,7 +740,6 @@ int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **p
 float fn_8022710C(void *pV);
 Object_800670B4 *fn_80168708(int team);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
-int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
 void fn_800FC290(Object_80039F5C *p, Block_800FCC24 *pBlock, Point_8017886C target);
 int fn_800FC648(Object_80039F5C *p, Block_800FCC24 *pBlock);
 int fn_800FCE58(Object_80039F5C *p, Block_800FCC24 *pBlock);
@@ -759,8 +760,6 @@ int fn_800B83F4(Object_80039F5C *p);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 int fn_800D0B90(Object_80039F5C *p);
 void fn_800D0C0C(Object_80039F5C *p, int a);
-int fn_801BA568(void *pA, void *pB, int id);
-int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
 int fn_801BA6B0(Entry_800EAC9C *pEntry);
 void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
 void fn_801BD81C(void *p, float value);
@@ -777,7 +776,6 @@ int fn_800CE4A8(Query_800CE770 *pQuery);
 float fn_800C49A4(Object_80039F5C *p, float value);
 void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int a);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float e);
-void fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
 Object_80039F5C *fn_8015286C(void *pSet, int index);
 int fn_8015310C(void *pSet);
 extern unsigned char lbl_803EAE20[8];
@@ -1137,7 +1135,7 @@ extern "C" void fn_800F1858(Object_80039F5C *p) {
 
             speed += excess / 170.0f * b;
         }
-        pEntry->mUnknown44 = speed;
+        pEntry->mUnknown2C = speed;
     } else if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 240) != 0) {
         Entry_800EAC9C *pEntries = p->mpUnknown800;
 
@@ -1197,7 +1195,7 @@ extern "C" void fn_800F1C68(Object_80039F5C *p) {
 
                 speed += excess / 170.0f * b;
             }
-            pEntry->mUnknown44 = speed;
+            pEntry->mUnknown2C = speed;
             fn_800D0C0C(p, 0);
         }
         fn_80067E3C(48, &p->mMotion.mPos, p->mId, 0, 0, 0);
@@ -1627,17 +1625,18 @@ extern "C" void fn_800F30AC(Object_80039F5C *p, Object_80039F5C *pOther, Points_
     Vector_80039F5C target = pInfo->mUnknown16;
     Vector_80039F5C origin = pInfo->mUnknown4;
     Vector_80039F5C delta;
+    Vector_80039F5C *pDelta = &delta;
     int heading;
     int angle;
     int turn;
     int result;
 
-    fn_80227690(&delta, &origin, &target);
-    heading = fn_801CFE40(delta.mY, delta.mX);
+    fn_80227690(pDelta, &origin, &target);
+    heading = fn_801CFE40(pDelta->mY, pDelta->mX);
     if (pOther != 0) {
-        fn_80227690(&delta, &origin, &pOther->mMotion.mPos);
-        if (fn_802270A4(&delta) > 2.0f) {
-            angle = fn_801CFE40(delta.mY, delta.mX);
+        fn_80227690(pDelta, &origin, &pOther->mMotion.mPos);
+        if (fn_802270A4(pDelta) > 2.0f) {
+            angle = fn_801CFE40(pDelta->mY, pDelta->mX);
             turn = fn_801CFFD0(heading, angle);
             if (turn <= 0x1FFFFF) {
                 result = 0;
@@ -1655,9 +1654,9 @@ extern "C" void fn_800F30AC(Object_80039F5C *p, Object_80039F5C *pOther, Points_
         result = 1;
     }
     pBlock->mUnknown24 = result;
-    fn_80227690(&delta, &origin, &p->mMotion.mPos);
-    if (fn_802270A4(&delta) > 2.0f) {
-        angle = fn_801CFE40(delta.mY, delta.mX);
+    fn_80227690(pDelta, &origin, &p->mMotion.mPos);
+    if (fn_802270A4(pDelta) > 2.0f) {
+        angle = fn_801CFE40(pDelta->mY, pDelta->mX);
         turn = fn_801CFFD0(heading, angle);
         if (turn <= 0x1FFFFF) {
             result = 0;

@@ -1,3 +1,4 @@
+#include "engine/cu_801B9F00.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_800D81C8.h"
 #include "game/Object_8017886C.h"
@@ -14,8 +15,6 @@ extern "C" {
 void fn_8009BD60(Object_80039F5C *p);
 Point_8017886C fn_80177FFC(int team);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *e, float f);
-unsigned short fn_801BA568(Object_8016D9B8 *p, Record_800D81C8 *records, int key);
-int fn_801BA5A8(void *a, void *b, unsigned short c, int d);
 }
 
 extern "C" void fn_800E4120(Object_80039F5C *p, State_800E4120 *pState, int heading, float speed)
@@ -40,7 +39,7 @@ extern "C" void fn_800E4120(Object_80039F5C *p, State_800E4120 *pState, int head
         if (rate > 1.4f) {
             rate = 1.4f;
         }
-        p->mpUnknown800[index].mUnknown44 = rate;
+        p->mpUnknown800[index].mUnknown2C = rate;
         p->mUnknown512.mUnknown14 = 0;
         pState->mUnknown3 = 1;
         pState->mUnknown24 = 0;

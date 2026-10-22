@@ -1,9 +1,5 @@
 #include "game/fn_801D2B7C.h"
-
-/* 32-byte lock taken by fn_801F8014 and released by fn_801F809C. */
-struct Lock_801F8014 {
-    int mUnknown0[8];
-};
+#include "engine/fn_801F8014.h"
 
 /* Buffer owned by Class_80054EDC; fn_80054F50 releases it. */
 struct Buffer_80054EDC {
@@ -23,12 +19,6 @@ public:
     Buffer_80054EDC mBuffer;
     Lock_801F8014 mLock;
 };
-
-extern "C" {
-void fn_801F8014(Lock_801F8014 *pLock);
-void fn_801F809C(Lock_801F8014 *pLock);
-void fn_801F80D0(Lock_801F8014 *pLock);
-}
 
 Class_80054EDC::~Class_80054EDC()
 {

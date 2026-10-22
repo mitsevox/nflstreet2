@@ -1,6 +1,7 @@
 #include "game/fn_801D2B7C.h"
 #include "engine/Memory.h"
 #include "engine/llmemory.h"
+#include "engine/fn_801F8014.h"
 
 typedef struct MemRange_801D134C {
     char *mpStart;
@@ -33,8 +34,6 @@ typedef struct MemInitParams {
     MemHeapParams *mpHeap;
 } MemInitParams;
 
-typedef struct MemLock_803E92AC MemLock_803E92AC;
-
 extern int lbl_803EBCC4;
 extern void (*lbl_803EBCD4)(void);
 extern unsigned short lbl_803EBCD8;
@@ -50,7 +49,7 @@ extern MemRange_801D134C lbl_80384BC0[16];
 extern void (*lbl_803EBCEC)(void);
 extern int (*lbl_803EBCF0)(int a, void *pAddr);
 extern int (*lbl_803EBCF4)(int ident, int flags, const char *pMessage, int d);
-extern MemLock_803E92AC lbl_803E92AC;
+extern Lock_801F8014 lbl_803E92AC;
 extern const char lbl_802AF9BC[];
 extern const char lbl_802AF628[];
 
@@ -63,12 +62,8 @@ extern void *fn_801D28A8(int a, int size, int ident, int flags);
 extern void *fn_801D2E5C(int a, void *pAddr, int size, int ident, int flags);
 extern char *fn_801C3284(char *pDst, const char *pSrc);
 extern int fn_801F7ABC(void);
-extern void fn_801F7FA8(MemLock_803E92AC *pLock);
-extern void fn_801F80D0(MemLock_803E92AC *pLock);
 extern int fn_801D2130(MemHeapParams *pParams);
 extern int fn_801D2570(int ident);
-extern void fn_801F8014(MemLock_803E92AC *pLock);
-extern void fn_801F809C(MemLock_803E92AC *pLock);
 
 static MemHeap_801D134C *fn_801D134C(int id)
 {
