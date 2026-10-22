@@ -21294,11 +21294,11 @@
       "provenance": {
         "pull_request": 856,
         "merged_via": 918,
-        "commit": "8b42f836ec7fa2d012593cd6504107d2351b0e2c",
-        "introduced_blob": "e1f09708b3cbb280714e7a10714ef580504f0085",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "3545a826d27cc12a7609a05ff5b6e80aabb2798e",
         "original_commit": "9f7355dafa23712ac318b11ce43c508fa39b2ec5",
         "original_blob": "efbc68ca3c9b0e51cd3097f3d93ccccbe5daa17c",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 991 refines them in place to exact matches, and that refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 991 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -21313,11 +21313,11 @@
       "provenance": {
         "pull_request": 856,
         "merged_via": 918,
-        "commit": "d0a4dcd32e5f3fbd76a15f7c2eafa8c313ad5624",
-        "introduced_blob": "6a16951e4bbfa42286dded06428d7f6aff9e6b26",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "6184b69a419c772a5053083864bf2b41e0600b71",
         "original_commit": "9f7355dafa23712ac318b11ce43c508fa39b2ec5",
         "original_blob": "bed9d675b214052308b1d4cfffd4e06af8e4641b",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 991 refines them in place to exact matches, and that refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 991 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -21367,11 +21367,11 @@
       "provenance": {
         "pull_request": 559,
         "merged_via": 698,
-        "commit": "dc175cb7b68ce2689175d3f5814c1e01bd99074a",
-        "introduced_blob": "903a24f91955cc38708e8004554597fba39784c2",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "c09246c0fa144bf07a0c4bd1c56aa3bee5f8e03f",
         "original_commit": "39035f390e8a6911806baea36eed9b8da94606d7",
         "original_blob": "0f979da160943d5ec87c31c06d35b4e8a4eae317",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 991 refines them in place to exact matches, and that refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 991 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -21385,11 +21385,11 @@
       "provenance": {
         "pull_request": 682,
         "merged_via": 697,
-        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
-        "introduced_blob": "30aa3e57cc204d83799251d2d77e7347dc264b7f",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
         "original_commit": "7161cbabdc857c8f8d8b82edc2f7d2ac8909fea8",
         "original_blob": "29b3052aba027bb73c804b8e76e61b4e34399967",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -21404,11 +21404,11 @@
       "provenance": {
         "pull_request": 605,
         "merged_via": 696,
-        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
-        "introduced_blob": "30aa3e57cc204d83799251d2d77e7347dc264b7f",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
         "original_commit": "d2460efbb069fdedeb7c928a2676529bb8345b84",
         "original_blob": "2ba0d5765908ee54d68c13ba11da69508d000cee",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -21422,11 +21422,11 @@
       "provenance": {
         "pull_request": 902,
         "merged_via": 918,
-        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
-        "introduced_blob": "30aa3e57cc204d83799251d2d77e7347dc264b7f",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
         "original_commit": "358b89fb6ea5623609a79bd0e2eec7cd3e1a450e",
         "original_blob": "fd61617d65f120110d03476a670d4861a54ef024",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -21441,11 +21441,11 @@
       "provenance": {
         "pull_request": 880,
         "merged_via": 918,
-        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
-        "introduced_blob": "30aa3e57cc204d83799251d2d77e7347dc264b7f",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
         "original_commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
         "original_blob": "c5a04c0d9d3f88fb0054ac07d0777f70184a34a8",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -21459,11 +21459,11 @@
       "provenance": {
         "pull_request": 853,
         "merged_via": 918,
-        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
-        "introduced_blob": "30aa3e57cc204d83799251d2d77e7347dc264b7f",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
         "original_commit": "39da91b7cdf62cf795d7b3ab163f96d5ab48a4e8",
         "original_blob": "3039f627c1900db473fdd35758c3d2464e1c6f7f",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -21477,11 +21477,11 @@
       "provenance": {
         "pull_request": 886,
         "merged_via": 918,
-        "commit": "74680c62f247d88b1184902d07891ff6b9f9f348",
-        "introduced_blob": "d590196ea58bccfc9bde16c1022eb2a7359f151a",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "07478ba0823b9c0fcf8fe12f24c78ece072a5ac4",
         "original_commit": "43bd1f53116b8ff3406d17c7f1efe069cdcf4822",
         "original_blob": "2cc395c091da4aed2442761de8f814bf68a65e0b",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -21549,11 +21549,11 @@
       "provenance": {
         "pull_request": 634,
         "merged_via": 696,
-        "commit": "d39361568f1b949b388db0dde5459d2faeae018d",
-        "introduced_blob": "86c70ce5d0ed9f20e62a1526a4018f8efee441b6",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "c09246c0fa144bf07a0c4bd1c56aa3bee5f8e03f",
         "original_commit": "f3fed80127536c1361a6734399a6d7a17b1a96a3",
         "original_blob": "0d0329df8ea939def6a50036d4e31e40b0f3cab1",
-        "integration_adjustment": "Newly exact pre-existing body (fn_800F986C) originates in contribution 634; the PR 994 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+        "integration_adjustment": "Newly exact pre-existing body (fn_800F986C) originates in contribution 634; the PR 994 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -21567,11 +21567,11 @@
       "provenance": {
         "pull_request": 556,
         "merged_via": 573,
-        "commit": "d39361568f1b949b388db0dde5459d2faeae018d",
-        "introduced_blob": "86c70ce5d0ed9f20e62a1526a4018f8efee441b6",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "c09246c0fa144bf07a0c4bd1c56aa3bee5f8e03f",
         "original_commit": "a10d9ae965815037bad1084e7ca2661469fc3895",
         "original_blob": "a73f9e0cd1ffdfbaf2ce0e1027def659043c7cbe",
-        "integration_adjustment": "Newly exact pre-existing body (fn_800FBF74) originates in contribution 556; the PR 994 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+        "integration_adjustment": "Newly exact pre-existing body (fn_800FBF74) originates in contribution 556; the PR 994 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -21623,11 +21623,11 @@
       "provenance": {
         "pull_request": 887,
         "merged_via": 918,
-        "commit": "d39361568f1b949b388db0dde5459d2faeae018d",
-        "introduced_blob": "cc52b6cf9cdcb09b0cf6e0a2f5eb962f354d50db",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "c29e1a4825536a736eaccf0818f84a4a3c0332a4",
         "original_commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
         "original_blob": "0d26081f4968dfb55bcfd4996ff3f423e3d4f200",
-        "integration_adjustment": "Newly exact pre-existing bodies (fn_80105168, fn_801061E8) originate in contribution 887; the PR 994 source-form refinement that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+        "integration_adjustment": "Newly exact pre-existing bodies (fn_80105168, fn_801061E8) originate in contribution 887; the PR 994 source-form refinement that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -21646,11 +21646,11 @@
       "provenance": {
         "pull_request": 737,
         "merged_via": 737,
-        "commit": "01401366ea7aba9a3404776d25844ccece14cae9",
-        "introduced_blob": "43e0b647d89138d6eb8725329644390adf92dfff",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
         "original_commit": "3a848dec67a8296dfde01ab20c9a7c755d913f7e",
         "original_blob": "2e0c64d5d61c89b9e9fe882c10feab363573e757",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 995 refines them in place to exact matches, and that refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 995 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -21664,11 +21664,11 @@
       "provenance": {
         "pull_request": 853,
         "merged_via": 918,
-        "commit": "01401366ea7aba9a3404776d25844ccece14cae9",
-        "introduced_blob": "43e0b647d89138d6eb8725329644390adf92dfff",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
         "original_commit": "39da91b7cdf62cf795d7b3ab163f96d5ab48a4e8",
         "original_blob": "3039f627c1900db473fdd35758c3d2464e1c6f7f",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 995 refines them in place to exact matches, and that refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 995 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -21682,11 +21682,11 @@
       "provenance": {
         "pull_request": 902,
         "merged_via": 918,
-        "commit": "01401366ea7aba9a3404776d25844ccece14cae9",
-        "introduced_blob": "43e0b647d89138d6eb8725329644390adf92dfff",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
         "original_commit": "358b89fb6ea5623609a79bd0e2eec7cd3e1a450e",
         "original_blob": "fd61617d65f120110d03476a670d4861a54ef024",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 995 refines them in place to exact matches, and that refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 995 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -21718,11 +21718,11 @@
       "provenance": {
         "pull_request": 899,
         "merged_via": 918,
-        "commit": "01401366ea7aba9a3404776d25844ccece14cae9",
-        "introduced_blob": "a4f72797ea1c00eaa175bb6c9438d5bdee0bbb6f",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "1868a34c836c00095f17d2230361a4d5b9f5ce18",
         "original_commit": "ea739b1f66e07c932344eebcad1e2c3fb3bab1ab",
         "original_blob": "2ef902f0794bdf8d84a1bb761383d3b29dcf08fd",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 995 refines them in place to exact matches, and that refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 995 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -22601,11 +22601,11 @@
       "provenance": {
         "pull_request": 880,
         "merged_via": 918,
-        "commit": "41a1fe72a3b530f7da10f7a7cd475336a02dcc37",
-        "introduced_blob": "925df7b9e8974a4e985df186b5bfd8a89b59cc2b",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
         "original_commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
         "original_blob": "c5a04c0d9d3f88fb0054ac07d0777f70184a34a8",
-        "integration_adjustment": "Preserve the original contributor and PR of this pre-existing comparison body; PR 1004 refines it in place to an exact match, and that refinement does not transfer original source credit."
+        "integration_adjustment": "Preserve the original contributor and PR of this pre-existing comparison body; PR 1004 refines it in place to an exact match, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -22619,11 +22619,11 @@
       "provenance": {
         "pull_request": 856,
         "merged_via": 918,
-        "commit": "aedc50e7c4dafcb7cdf7805f539363aa7ce06c52",
-        "introduced_blob": "81b22e25ff3f5ad5cf48210698253b75276fe66e",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "3545a826d27cc12a7609a05ff5b6e80aabb2798e",
         "original_commit": "9f7355dafa23712ac318b11ce43c508fa39b2ec5",
         "original_blob": "efbc68ca3c9b0e51cd3097f3d93ccccbe5daa17c",
-        "integration_adjustment": "Newly exact pre-existing body (fn_801115C0) originates in contribution 856; the PR 1005 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+        "integration_adjustment": "Newly exact pre-existing body (fn_801115C0) originates in contribution 856; the PR 1005 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {
@@ -22691,11 +22691,11 @@
       "provenance": {
         "pull_request": 562,
         "merged_via": 579,
-        "commit": "b787157fd6efb9f48604f0c7438b86e08455c367",
-        "introduced_blob": "c71518e5fe269fd47b2ee19650c210ff68bfdb06",
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "9046df2eaf99aea57d49258b1ea8d0be4941209c",
         "original_commit": "99be8c37a587a495e4ed189bbec87b1e43f6ea7a",
         "original_blob": "43896253a88aeaf316074051e4a59d1992b7fad6",
-        "integration_adjustment": "Newly exact pre-existing body (fn_801274D4) originates in contribution 562; the PR 1006 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+        "integration_adjustment": "Newly exact pre-existing body (fn_801274D4) originates in contribution 562; the PR 1006 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     }
   ],
