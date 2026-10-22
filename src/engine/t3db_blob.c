@@ -1,7 +1,7 @@
 #include <string.h>
 #include "engine/t3db_table.h"
 
-void fn_8020CD2C(HuffNode_8020CD2C *pTree, unsigned char *pBits, int count, unsigned char *pOut)
+static void fn_8020CD2C(HuffNode_8020CD2C *pTree, unsigned char *pBits, int count, unsigned char *pOut)
 {
     int i = 0;
     unsigned char bit = 8;

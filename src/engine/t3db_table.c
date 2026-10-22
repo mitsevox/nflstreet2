@@ -5,32 +5,7 @@
 int fn_8020C6C8(TDbTable_801FAA00 *pTable);
 int fn_8020C5C8(TDbTable_801FAA00 *pTable, int count);
 
-static inline void fn_8020B878_ReadField(TDbTable_801FAA00 *pTable, TDbColumn_801FAA00 *pField, unsigned char *pRecord, TDbLitRef_80205754 *pValue)
-{
-    int type = pField->mType;
-
-    if ((unsigned int)(type - 13) <= 2) {
-        fn_8020CD9C(pTable, pField, pRecord, (char *)pValue->mUnknown0);
-    } else if ((unsigned int)type <= 1) {
-        fn_8020CF34(pRecord, pField->mBitOffset, pField->mBitCount, (unsigned char *)pValue->mUnknown0, (unsigned int)pField->mBitCount >> 3);
-    } else {
-        fn_80201D94((unsigned int *)pRecord, pField->mBitOffset, pField->mBitCount, &pValue->mUnknown0, type == 2);
-    }
-}
-
-static inline void fn_8020B564_InitField(TDbColumn_801FAA00 *pDst, TDbColumn_801FAA00 *pSrc)
-{
-    unsigned int id = pSrc->mUnknown8;
-    unsigned int type = pSrc->mType;
-    int bits = pSrc->mBitCount;
-
-    pDst->mUnknown8 = id;
-    pDst->mType = type;
-    pDst->mBitCount = bits;
-    pDst->mBitOffset = -1;
-}
-
-void fn_8020B564(TDbTable_801FAA00 *pTable, TDbColumn_801FAA00 *pFields)
+static void fn_8020B564(TDbTable_801FAA00 *pTable, TDbColumn_801FAA00 *pFields)
 {
     unsigned int i;
     unsigned int numFields = pTable->mColumnCount;
@@ -52,7 +27,15 @@ void fn_8020B564(TDbTable_801FAA00 *pTable, TDbColumn_801FAA00 *pFields)
             } while (--j >= 0);
         }
         pTable->mColumns[j + 1] = pFields[i];
-        fn_8020B564_InitField(&pTable->mColumns[j + 1], &pFields[i]);
+        {
+            TDbColumn_801FAA00 *pDst = &pTable->mColumns[j + 1];
+            TDbColumn_801FAA00 *pSrc = &pFields[i];
+
+            pDst->mUnknown8 = pSrc->mUnknown8;
+            pDst->mType = pSrc->mType;
+            pDst->mBitCount = pSrc->mBitCount;
+            pDst->mBitOffset = -1;
+        }
         if (pFields[i].mBitCount == 32) {
             halfOffset += 32;
             byteOffset += 32;
@@ -81,20 +64,19 @@ void fn_8020B564(TDbTable_801FAA00 *pTable, TDbColumn_801FAA00 *pFields)
     }
 }
 
-
 void fn_8020B710(TDbTable_801FAA00 *pTable, int record)
 {
     int bDecoded = 0;
     unsigned int k;
 
     for (k = 0; k <= 3; k++) {
-        if (pTable->mUnknown30[k] != 0) {
+        if (pTable->mCallbacks[k] != 0) {
             if (!bDecoded) {
                 TDbLitRef_80205754 *pValue = pTable->mUnknown10;
                 unsigned char i = 0;
 
                 do {
-                    fn_8020B878_ReadField(pTable, &pTable->mColumns[i], pTable->mRows + pTable->mRowSize * record, pValue);
+                    TDbReadColumn_8020A3A0(pTable, &pTable->mColumns[i], pTable->mRows + pTable->mRowSize * record, pValue);
                     if (pTable->mColumns[i].mType == 0) {
                         ((unsigned char *)(char *)pValue->mUnknown0)[(unsigned int)pTable->mColumns[i].mBitCount >> 3] = 0;
                     }
@@ -105,7 +87,7 @@ void fn_8020B710(TDbTable_801FAA00 *pTable, int record)
                 pValue->mId = -1;
                 bDecoded = 1;
             }
-            TDB_TABLE_CALLBACK(pTable, k)((int)pTable->mDb->mUnknown8, pTable->mUnknown1C, 0, 0, pTable->mUnknown10);
+            pTable->mCallbacks[k]((int)pTable->mDb->mUnknown8, pTable->mUnknown1C, 0, 0, pTable->mUnknown10);
         }
     }
 }
@@ -116,7 +98,7 @@ void fn_8020B878(TDbTable_801FAA00 *pTable, int record, TDbLitRef_80205754 *pVal
     unsigned char i = 0;
 
     do {
-        fn_8020B878_ReadField(pTable, &pTable->mColumns[i], pRecord, pValue);
+        TDbReadColumn_8020A3A0(pTable, &pTable->mColumns[i], pRecord, pValue);
         if (pTable->mColumns[i].mType == 0) {
             ((unsigned char *)(char *)pValue->mUnknown0)[(unsigned int)pTable->mColumns[i].mBitCount >> 3] = 0;
         }
@@ -263,7 +245,7 @@ int fn_8020BA7C(TDbDatabase_801FAA00 *pOwner, int tableId, TDbColumn_801FAA00 *p
             }
             pTable->mNext = 0;
             for (n = 0; n <= 3; n++) {
-                pTable->mUnknown30[n] = 0;
+                pTable->mCallbacks[n] = 0;
             }
         }
     }
@@ -287,10 +269,10 @@ int fn_8020BD90(TDbTable_801FAA00 *pTable)
                 continue;
             }
         } else {
-            if (TDB_QUERY_DB(pQuery) != pTable->mDb) {
+            if (pQuery->mDb != pTable->mDb) {
                 continue;
             }
-            if ((pQuery->mState == 0 ? TDB_QUERY_TABLE(pQuery) : pQuery->mSource.mIndex->mTable) != pTable) {
+            if ((pQuery->mState == 0 ? pQuery->mSource.mTable : pQuery->mSource.mIndex->mTable) != pTable) {
                 continue;
             }
         }
@@ -331,22 +313,6 @@ int fn_8020BD90(TDbTable_801FAA00 *pTable)
     return 0;
 }
 
-static inline void fn_8020BFA4_WriteField(TDbColumn_801FAA00 *pField, unsigned char *pRecord, TDbLitRef_80205754 *pValue)
-{
-    int type = pField->mType;
-
-    if ((unsigned int)(type - 13) <= 2) {
-        return;
-    }
-    if (type == 0) {
-        fn_8020CEC4(pRecord, pField->mBitOffset, pField->mBitCount, (unsigned char *)pValue->mUnknown0, strlen((char *)pValue->mUnknown0));
-    } else if (type == 1) {
-        fn_8020CEC4(pRecord, pField->mBitOffset, pField->mBitCount, (unsigned char *)pValue->mUnknown0, (unsigned int)pField->mBitCount >> 3);
-    } else {
-        fn_80201E10((unsigned int *)pRecord, pField->mBitOffset, pField->mBitCount, &pValue->mUnknown0);
-    }
-}
-
 int fn_8020BFA4(TDbTable_801FAA00 *pTable, TDbLitRef_80205754 *pValues, TDbResult_8020AD1C *pResult)
 {
     int err = 0;
@@ -383,10 +349,10 @@ int fn_8020BFA4(TDbTable_801FAA00 *pTable, TDbLitRef_80205754 *pValues, TDbResul
         pRecord = pTable->mRows + pTable->mRowSize * record;
         memset(pRecord, 0, pTable->mRowSize);
         for (pValue = pValues; pValue->mId != -1; pValue++) {
-            fn_8020BFA4_WriteField(&pTable->mColumns[TDB_LITREF_INDEX(pValue)], pRecord, pValue);
+            TDbWriteColumn_8020BFA4(&pTable->mColumns[pValue->mColumn], pRecord, pValue);
         }
         for (pIndex = pTable->mIndexes; pIndex != 0; pIndex = pIndex->mNext) {
-            err = TDB_INDEX_INSERT(pIndex, record);
+            err = fn_8020299C(pIndex, record);
             if (err != 0) {
                 for (pIndex = pTable->mIndexes; pIndex != 0; pIndex = pIndex->mNext) {
                     fn_80202D34(pIndex, record);
@@ -421,13 +387,13 @@ int fn_8020BFA4(TDbTable_801FAA00 *pTable, TDbLitRef_80205754 *pValues, TDbResul
             int k;
 
             for (k = 0; k <= 3; k++) {
-                if (pTable->mUnknown30[k] != 0) {
+                if (pTable->mCallbacks[k] != 0) {
                     if (!bDecoded) {
                         unsigned char i = 0;
 
                         pValue = pTable->mUnknown10;
                         do {
-                            fn_8020B878_ReadField(pTable, &pTable->mColumns[i], pRecord, pValue);
+                            TDbReadColumn_8020A3A0(pTable, &pTable->mColumns[i], pRecord, pValue);
                             pValue->mId = pTable->mColumns[i].mUnknown8;
                             pValue++;
                             i++;
@@ -435,7 +401,7 @@ int fn_8020BFA4(TDbTable_801FAA00 *pTable, TDbLitRef_80205754 *pValues, TDbResul
                         pValue->mId = -1;
                         bDecoded = 1;
                     }
-                    TDB_TABLE_CALLBACK(pTable, k)((int)pTable->mDb->mUnknown8, pTable->mUnknown1C, 0, 0, pTable->mUnknown10);
+                    pTable->mCallbacks[k]((int)pTable->mDb->mUnknown8, pTable->mUnknown1C, 0, 0, pTable->mUnknown10);
                 }
             }
         }
@@ -457,7 +423,7 @@ void fn_8020C3E4(TDbTable_801FAA00 *pTable, int record)
     unsigned char i;
 
     for (k = 0; k <= 3; k++) {
-        if (pTable->mUnknown30[k] != 0) {
+        if (pTable->mCallbacks[k] != 0) {
             break;
         }
     }
@@ -467,7 +433,7 @@ void fn_8020C3E4(TDbTable_801FAA00 *pTable, int record)
         TDbLitRef_80205754 *pValue = pTable->mUnknownC;
 
         do {
-            fn_8020B878_ReadField(pTable, &pTable->mColumns[i], pRecord, pValue);
+            TDbReadColumn_8020A3A0(pTable, &pTable->mColumns[i], pRecord, pValue);
             pValue->mId = pTable->mColumns[i].mUnknown8;
             pValue++;
             i++;
@@ -485,8 +451,8 @@ void fn_8020C3E4(TDbTable_801FAA00 *pTable, int record)
     pTable->mFlags |= 4;
     pTable->mUnknown46++;
     for (k = 0; k <= 3; k++) {
-        if (pTable->mUnknown30[k] != 0) {
-            TDB_TABLE_CALLBACK(pTable, k)((int)pTable->mDb->mUnknown8, pTable->mUnknown1C, 1, pTable->mUnknownC, 0);
+        if (pTable->mCallbacks[k] != 0) {
+            pTable->mCallbacks[k]((int)pTable->mDb->mUnknown8, pTable->mUnknown1C, 1, pTable->mUnknownC, 0);
         }
     }
     if ((pTable->mFlags & 8) && pTable->mRowCount == pTable->mUnknown46) {
@@ -541,45 +507,6 @@ int fn_8020C6C8(TDbTable_801FAA00 *pTable)
     pTable->mRowCount = 0;
     pTable->mUnknown48 = 0xFFFF;
     return 0;
-}
-
-static inline void fn_8020C764_ReadField(TDbTable_801FAA00 *pTable, TDbColumn_801FAA00 *pField, unsigned char *pRecord, void **ppData)
-{
-    int type = pField->mType;
-
-    if ((unsigned int)(type - 13) <= 2) {
-        fn_8020CD9C(pTable, pField, pRecord, *ppData);
-    } else if ((unsigned int)type <= 1) {
-        fn_8020CF34(pRecord, pField->mBitOffset, pField->mBitCount, *ppData, (unsigned int)pField->mBitCount >> 3);
-    } else {
-        fn_80201D94((unsigned int *)pRecord, pField->mBitOffset, pField->mBitCount, (unsigned int *)ppData, type == 2);
-    }
-}
-
-static inline void fn_8020C764_WriteField(TDbColumn_801FAA00 *pField, unsigned char *pRecord, void **ppData)
-{
-    int type = pField->mType;
-
-    if ((unsigned int)(type - 13) <= 2) {
-        return;
-    }
-    if (type == 0) {
-        fn_8020CEC4(pRecord, pField->mBitOffset, pField->mBitCount, *ppData, strlen(*ppData));
-    } else if (type == 1) {
-        fn_8020CEC4(pRecord, pField->mBitOffset, pField->mBitCount, *ppData, (unsigned int)pField->mBitCount >> 3);
-    } else {
-        fn_80201E10((unsigned int *)pRecord, pField->mBitOffset, pField->mBitCount, (unsigned int *)ppData);
-    }
-}
-
-static inline int fn_8020C764_IsDeleted(TDbTable_801FAA00 *pTable, unsigned int record)
-{
-    unsigned char *pRecord = pTable->mRows + pTable->mRowSize * record;
-
-    if (!((pRecord[pTable->mDeletedBit >> 3] >> (7 - (pTable->mDeletedBit & 7))) & 1)) {
-        return 0;
-    }
-    return 1;
 }
 
 int fn_8020C764(TDbTable_801FAA00 *pSrc, TDbTable_801FAA00 *pDst, TDbResult_8020AD1C *pResult)
@@ -644,7 +571,7 @@ int fn_8020C764(TDbTable_801FAA00 *pSrc, TDbTable_801FAA00 *pDst, TDbResult_8020
     for (rec = 0; rec < pSrc->mRowCount; rec++) {
         int bReused;
 
-        if (fn_8020C764_IsDeleted(pSrc, rec)) {
+        if (TDbRowBit_801FAAF8(pSrc, rec)) {
             continue;
         }
         if (pDst->mCapacity == 0 && (pDst->mFlags & 8)) {
@@ -670,14 +597,14 @@ int fn_8020C764(TDbTable_801FAA00 *pSrc, TDbTable_801FAA00 *pDst, TDbResult_8020
                 continue;
             }
             pData = pBuf;
-            fn_8020C764_ReadField(pSrc, &pSrc->mColumns[map[i]], pSrc->mRows + pSrc->mRowSize * rec, &pData);
-            fn_8020C764_WriteField(&pDst->mColumns[i], pDst->mRows + pDst->mRowSize * record, &pData);
+            TDbReadColumn_8020A3A0(pSrc, &pSrc->mColumns[map[i]], pSrc->mRows + pSrc->mRowSize * rec, (TDbLitRef_80205754 *)&pData);
+            TDbWriteColumn_8020BFA4(&pDst->mColumns[i], pDst->mRows + pDst->mRowSize * record, (TDbLitRef_80205754 *)&pData);
         }
         {
             TDbIndex_801FAA00 *pIndex;
 
             for (pIndex = pDst->mIndexes; pIndex != 0; pIndex = pIndex->mNext) {
-                err = TDB_INDEX_INSERT(pIndex, record);
+                err = fn_8020299C(pIndex, record);
                 if (err != 0) {
                     for (pIndex = pDst->mIndexes; pIndex != 0; pIndex = pIndex->mNext) {
                         fn_80202D34(pIndex, record);

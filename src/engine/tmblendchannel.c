@@ -4,7 +4,7 @@ extern BlendSource_80214E80 lbl_8039B720;
 extern BlendChannel_80214D40 lbl_8039B730[];
 extern unsigned char lbl_8039B7E0[];
 
-void *fn_80214D40(SwapAttr_8020ED10 *pAttr, int index)
+static void *fn_80214D40(SwapAttr_8020ED10 *pAttr, int index)
 {
     void **ppInputs = lbl_8039B720.mppInputs;
 
@@ -14,7 +14,7 @@ void *fn_80214D40(SwapAttr_8020ED10 *pAttr, int index)
     return pAttr->mpData;
 }
 
-unsigned char *fn_80214D6C(int id, unsigned char *pData, int capacity)
+static unsigned char *fn_80214D6C(int id, unsigned char *pData, int capacity)
 {
     BlendChannel_80214D40 *pChannel = fn_80214DB8(id);
 

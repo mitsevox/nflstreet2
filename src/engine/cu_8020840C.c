@@ -5,19 +5,6 @@
 extern TDbMemPool_80202B60 lbl_803E9670;
 extern TDbHandler_8020A660 lbl_803E95DC[15];
 
-static inline void fn_8020A3A0_ReadField(TDbTable_801FAA00 *pTable, TDbColumn_801FAA00 *pColumn, unsigned char *pRow, TDbLitRef_80205754 *pLit)
-{
-    int type = pColumn->mType;
-
-    if ((unsigned int)(type - 13) <= 2) {
-        fn_8020CD9C(pTable, pColumn, pRow, (unsigned char *)pLit->mUnknown0);
-    } else if ((unsigned int)type <= 1) {
-        fn_8020CF34(pRow, pColumn->mBitOffset, pColumn->mBitCount, (unsigned char *)pLit->mUnknown0, pColumn->mBitCount >> 3);
-    } else {
-        fn_80201D94((unsigned int *)pRow, pColumn->mBitOffset, pColumn->mBitCount, &pLit->mUnknown0, type == 2);
-    }
-}
-
 int fn_802087D4(TDbQuery_802032D8 *pQuery)
 {
     if (lbl_803EBE90 == pQuery) {
@@ -45,9 +32,9 @@ int fn_802087D4(TDbQuery_802032D8 *pQuery)
 
 int fn_802088A8(TDbQuery_802032D8 *pQuery, unsigned short *pCount)
 {
-    switch ((unsigned int)pQuery->mState) {
+    switch (pQuery->mState) {
     case 0:
-        *pCount = TDB_QUERY_TABLE(pQuery)->mRowCount - TDB_QUERY_TABLE(pQuery)->mUnknown46;
+        *pCount = pQuery->mSource.mTable->mRowCount - pQuery->mSource.mTable->mUnknown46;
         break;
     case 1:
     case 2:
@@ -80,8 +67,8 @@ int fn_80209E40(TDbStmt_80205754 *pStmt, TDbLitRef_80205754 *pLit)
                 return 7;
             }
         }
-        TDB_LITREF_INDEX(pLit) = fn_8020B97C(pStmt->mTables[j], pLit->mId);
-        if (TDB_LITREF_INDEX(pLit) == 0xFF) {
+        pLit->mColumn = fn_8020B97C(pStmt->mTables[j], pLit->mId);
+        if (pLit->mColumn == 0xFF) {
             return 9;
         }
     }
@@ -107,9 +94,9 @@ void fn_8020A3A0(TDbStmt_80205754 *pStmt, TDbLitRef_80205754 *pLit)
         if (row != 0xFFFF) {
             TDbTable_801FAA00 *pTable = pStmt->mTables[j];
 
-            fn_8020A3A0_ReadField(pTable, &pTable->mColumns[TDB_LITREF_INDEX(pLit)], pTable->mRows + row * pTable->mRowSize, pLit);
-            if (pStmt->mTables[j]->mColumns[TDB_LITREF_INDEX(pLit)].mType == 0) {
-                ((unsigned char *)pLit->mUnknown0)[pStmt->mTables[j]->mColumns[TDB_LITREF_INDEX(pLit)].mBitCount >> 3] = 0;
+            TDbReadColumn_8020A3A0(pTable, &pTable->mColumns[pLit->mColumn], pTable->mRows + row * pTable->mRowSize, pLit);
+            if (pStmt->mTables[j]->mColumns[pLit->mColumn].mType == 0) {
+                ((unsigned char *)pLit->mUnknown0)[pStmt->mTables[j]->mColumns[pLit->mColumn].mBitCount >> 3] = 0;
             }
         } else {
             pLit->mUnknown0 = 0;
@@ -122,9 +109,9 @@ void fn_8020A540(void)
     TDbQuery_802032D8 *pQuery;
 
     for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
-        switch ((unsigned int)pQuery->mState) {
+        switch (pQuery->mState) {
         case 0:
-            TDB_QUERY_TABLE(pQuery)->mFlags &= ~4;
+            pQuery->mSource.mTable->mFlags &= ~4;
             break;
         case 1:
         case 2:
@@ -142,21 +129,21 @@ void fn_8020A5A8(void)
     TDbQuery_802032D8 *pQuery;
 
     for (pQuery = lbl_803EBE90; pQuery != 0; pQuery = pQuery->mNext) {
-        if (TDB_QUERY_CALLBACK(pQuery) == 0) {
+        if (pQuery->mCallback == 0) {
             continue;
         }
-        switch ((unsigned int)pQuery->mState) {
+        switch (pQuery->mState) {
         case 0:
-            if (TDB_QUERY_TABLE(pQuery)->mFlags & 4) {
-                TDB_QUERY_TABLE(pQuery)->mFlags &= ~4;
-                TDB_QUERY_CALLBACK(pQuery)(TDB_QUERY_CALLBACK_ARG(pQuery));
+            if (pQuery->mSource.mTable->mFlags & 4) {
+                pQuery->mSource.mTable->mFlags &= ~4;
+                pQuery->mCallback(pQuery->mCallbackArg);
             }
             break;
         case 1:
         case 2:
             if (pQuery->mSource.mIndex->mDirty) {
                 pQuery->mSource.mIndex->mDirty = 0;
-                TDB_QUERY_CALLBACK(pQuery)(TDB_QUERY_CALLBACK_ARG(pQuery));
+                pQuery->mCallback(pQuery->mCallbackArg);
             }
             break;
         case 3:
@@ -203,7 +190,7 @@ int fn_8020A660(int unused, TDbStmt_80205754 *pStmt, int key, TDbLitRef_80205754
             if (bEmit) {
                 bSaved = 1;
                 for (i = 0; pLits[i].mId != -1; i++) {
-                    saved[i] = TDB_LITREF_INDEX(&pLits[i]);
+                    saved[i] = pLits[i].mColumn;
                 }
             }
         }
@@ -217,7 +204,7 @@ int fn_8020A660(int unused, TDbStmt_80205754 *pStmt, int key, TDbLitRef_80205754
                     pFn(pLits, user, &bEmit);
                     if (bSaved) {
                         for (i = 0; pLits[i].mId != -1; i++) {
-                            TDB_LITREF_INDEX(&pLits[i]) = saved[i];
+                            pLits[i].mColumn = saved[i];
                         }
                     }
                     if (bEmit) {

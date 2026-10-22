@@ -1,13 +1,9 @@
 #include <dolphin/os/OSCache.h>
+#include <dolphin/mtx.h>
 #include "engine/tmlib.h"
 #include "game/fn_801D2B7C.h"
 
-extern u32 fn_80239FCC(void);
-extern void fn_80239FD8(u32 len);
-extern u32 fn_80239F20(void *pDest, void *pSrc, u32 size);
-extern void fn_801D0F80(f32 mtx[3][4]);
 extern void fn_801CFC58(int angle, void *pTable, float *pSin, float *pCos);
-extern void fn_8024AA18(f32 a[3][4], f32 b[3][4], f32 ab[3][4]);
 
 extern unsigned char lbl_803E9288[];
 
@@ -67,8 +63,8 @@ void fn_8021353C(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_80213
 
     if (pMatrices == 0) {
         pMatrices = pObj->mpMatrices;
-    } else if (fn_80239FCC() != 0) {
-        fn_80239FD8(0);
+    } else if (LCQueueLength() != 0) {
+        LCQueueWait(0);
     }
     fn_801D0F80(pMatrices[0]);
     for (i = 1; i < pBones->mNumBones; i++) {
@@ -105,10 +101,10 @@ void fn_8021353C(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_80213
         mtx[0][3] = pPos[0];
         mtx[1][3] = pPos[1];
         mtx[2][3] = pPos[2];
-        fn_8024AA18(*pParent, mtx, pMatrices[i]);
+        PSMTXConcat(*pParent, mtx, pMatrices[i]);
     }
     if (pObj->mpCacheMatrices != 0) {
-        fn_80239F20(pObj->mpMatrices, pObj->mpCacheMatrices, pBones->mNumBones * sizeof(Mtx34_80213444));
+        LCStoreData(pObj->mpMatrices, pObj->mpCacheMatrices, pBones->mNumBones * sizeof(Mtx34_80213444));
     } else {
         DCStoreRange(pMatrices, pBones->mNumBones * sizeof(Mtx34_80213444));
     }

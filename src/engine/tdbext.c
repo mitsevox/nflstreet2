@@ -1,14 +1,7 @@
 #include "engine/t3db_table.h"
 #include "game/fn_801D2B7C.h"
-
-typedef struct TdbExtParams_8020D0CC {
-    int mUnknown00;
-    int mUnknown04;
-    int mHandle;
-    int mUnknown0C;
-    int mUnknown10;
-    int mUnknown14;
-} TdbExtParams_8020D0CC;
+#include "game/fn_801EEB44.h"
+#include "game/Record_802CC680.h"
 
 typedef struct TdbExtFile_8020D2D0 {
     void *mpStream;
@@ -16,25 +9,23 @@ typedef struct TdbExtFile_8020D2D0 {
 } TdbExtFile_8020D2D0;
 
 extern unsigned char fn_801D2700(int handle);
-extern void fn_801D2130(TdbExtParams_8020D0CC *pParams);
-extern void fn_801D2570(int handle);
-extern void *fn_801D310C(void *p, unsigned int size, int flags, int d);
+extern int fn_801D2130(Record_802CC680 *pParams);
+extern int fn_801D2570(int handle);
+extern void *fn_801D310C(void *p, int size, int flags, int d);
 extern int fn_801F0F9C(void *pPath);
-extern void *fn_801EEB44(void *pPath, int mode);
 extern int fn_801F9134(void *pDb, TdbExtFile_8020D2D0 *pFile, int flags, char *pOps);
-extern int fn_801EEFAC(void *pStream);
 
-extern TdbExtParams_8020D0CC lbl_8039B498;
+extern Record_802CC680 lbl_8039B498;
 extern void *lbl_803EBEA8;
 extern unsigned char lbl_803EBEAC;
 extern unsigned char lbl_803EBEAD;
 extern int lbl_803EBEB0;
 extern char lbl_802F9BAC[];
 
-void fn_8020D0CC(TdbExtParams_8020D0CC *pParams)
+void fn_8020D0CC(Record_802CC680 *pParams)
 {
     lbl_8039B498 = *pParams;
-    lbl_803EBEAD = fn_801D2700(pParams->mHandle);
+    lbl_803EBEAD = fn_801D2700(pParams->mUnknown8);
     if (lbl_803EBEAD == 0) {
         fn_801D2130(&lbl_8039B498);
     }
@@ -45,14 +36,14 @@ void fn_8020D0CC(TdbExtParams_8020D0CC *pParams)
 void fn_8020D158(void)
 {
     if (lbl_803EBEAD == 0) {
-        fn_801D2570(lbl_8039B498.mHandle);
+        fn_801D2570(lbl_8039B498.mUnknown8);
     }
     lbl_803EBEAC = 0;
 }
 
 int fn_8020D194(int a, int b, int *pHandle)
 {
-    *pHandle = lbl_8039B498.mHandle;
+    *pHandle = lbl_8039B498.mUnknown8;
     return 0;
 }
 

@@ -1,9 +1,6 @@
+#include <dolphin/os/OSCache.h>
 #include "game/fn_801D2B7C.h"
 #include "engine/tmlib.h"
-
-extern int lbl_803EBEBC;
-extern void fn_801D34D0(void *p, unsigned int size, int c, int d);
-extern void fn_80239CEC(void *p, unsigned int size);
 
 void fn_8020E7EC(Texture_8020DB34 *pTex)
 {
@@ -68,6 +65,6 @@ void fn_8020E9D0(void *pDst, void *pSrc, unsigned int size)
 {
     if (size != 0) {
         memcpy(pDst, pSrc, size);
-        fn_80239CEC(pDst, size);
+        DCFlushRange(pDst, size);
     }
 }

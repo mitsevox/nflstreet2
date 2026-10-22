@@ -1,6 +1,6 @@
 #include "engine/tmlib.h"
 
-void fn_80214F58(int *pAccum, short *pSrc, unsigned int count, int weight, int frac)
+static void fn_80214F58(int *pAccum, short *pSrc, unsigned int count, int weight, int frac)
 {
     weight <<= 15 - frac;
     for (; count != 0; count--) {
@@ -16,7 +16,7 @@ void fn_80214F58(int *pAccum, short *pSrc, unsigned int count, int weight, int f
     }
 }
 
-void fn_80214FB8(int *pAccum, short *pSrc, unsigned int count, int weight, int frac)
+static void fn_80214FB8(int *pAccum, short *pSrc, unsigned int count, int weight, int frac)
 {
     weight <<= 15 - frac;
     for (; count != 0; count--) {
@@ -32,7 +32,7 @@ void fn_80214FB8(int *pAccum, short *pSrc, unsigned int count, int weight, int f
     }
 }
 
-void fn_80215020(int *pAccum, short *pSrc, unsigned int count)
+static void fn_80215020(int *pAccum, short *pSrc, unsigned int count)
 {
     for (; count != 0; count--) {
         int *pDst = &pAccum[pSrc[4] * 3];
@@ -51,7 +51,7 @@ void fn_80215020(int *pAccum, short *pSrc, unsigned int count)
     }
 }
 
-void fn_802150AC(int *pDst, short *pSrc, unsigned int count, int frac)
+static void fn_802150AC(int *pDst, short *pSrc, unsigned int count, int frac)
 {
     int shift = 27 - frac;
 
@@ -68,7 +68,7 @@ void fn_802150AC(int *pDst, short *pSrc, unsigned int count, int frac)
     }
 }
 
-void fn_802150F0(int *pDst, float *pSrc, unsigned int count, int frac)
+static void fn_802150F0(int *pDst, float *pSrc, unsigned int count, int frac)
 {
     int shift = 27 - frac;
 
@@ -85,7 +85,7 @@ void fn_802150F0(int *pDst, float *pSrc, unsigned int count, int frac)
     }
 }
 
-void fn_80215190(float *pDst, int *pSrc, unsigned int count, int frac)
+static void fn_80215190(float *pDst, int *pSrc, unsigned int count, int frac)
 {
     int shift = 27 - frac;
 
@@ -102,7 +102,7 @@ void fn_80215190(float *pDst, int *pSrc, unsigned int count, int frac)
     }
 }
 
-void fn_80215258(short *pDst, int *pSrc, unsigned int count, int frac)
+static void fn_80215258(short *pDst, int *pSrc, unsigned int count, int frac)
 {
     int shift = 27 - frac;
 
@@ -134,7 +134,7 @@ void fn_80215258(short *pDst, int *pSrc, unsigned int count, int frac)
     }
 }
 
-void fn_802152F0(int *pAccum, signed char *pSrc, unsigned int count, int weight, int frac)
+static void fn_802152F0(int *pAccum, signed char *pSrc, unsigned int count, int weight, int frac)
 {
     weight <<= 15 - frac;
     for (; count != 0; count--) {
@@ -150,7 +150,7 @@ void fn_802152F0(int *pAccum, signed char *pSrc, unsigned int count, int weight,
     }
 }
 
-void fn_8021535C(int *pAccum, signed char *pSrc, unsigned int count, int weight, int frac)
+static void fn_8021535C(int *pAccum, signed char *pSrc, unsigned int count, int weight, int frac)
 {
     weight <<= 15 - frac;
     for (; count != 0; count--) {
@@ -166,7 +166,7 @@ void fn_8021535C(int *pAccum, signed char *pSrc, unsigned int count, int weight,
     }
 }
 
-void fn_802153D0(int *pAccum, signed char *pSrc, unsigned int count)
+static void fn_802153D0(int *pAccum, signed char *pSrc, unsigned int count)
 {
     for (; count != 0; count--) {
         int *pDst = &pAccum[*(short *)&pSrc[4] * 3];
@@ -185,7 +185,7 @@ void fn_802153D0(int *pAccum, signed char *pSrc, unsigned int count)
     }
 }
 
-void fn_8021546C(int *pDst, signed char *pSrc, unsigned int count, int frac)
+static void fn_8021546C(int *pDst, signed char *pSrc, unsigned int count, int frac)
 {
     int shift = 27 - frac;
 
@@ -202,7 +202,7 @@ void fn_8021546C(int *pDst, signed char *pSrc, unsigned int count, int frac)
     }
 }
 
-void fn_802154BC(signed char *pDst, int *pSrc, unsigned int count, int frac)
+static void fn_802154BC(signed char *pDst, int *pSrc, unsigned int count, int frac)
 {
     int shift = 27 - frac;
 

@@ -5,23 +5,10 @@
 #include <dolphin/gx/GXTev.h>
 #include <dolphin/gx/GXTexture.h>
 #include <dolphin/gx/GXTransform.h>
+#include <dolphin/gx/GXGet.h>
 #include "engine/tmlib.h"
 #include "game/fn_801D2B7C.h"
 
-extern void fn_8024EB28(GXCullMode mode);
-extern void fn_8025221C(GXBool dither);
-extern void fn_802520E0(GXBool compareEnable, GXCompare func, GXBool updateEnable);
-extern void fn_80252114(GXBool beforeTex);
-extern void fn_80252034(GXBlendMode type, GXBlendFactor srcFactor, GXBlendFactor dstFactor, GXLogicOp op);
-extern void fn_802527D4(RenderViewport_80210298 *pViewport);
-extern void fn_80250654(GXTlutObj *pTlut, u32 tlutName);
-extern void fn_802503D8(GXTexObj *pObj, u32 tlutName);
-extern void fn_802505A8(GXTexObj *pObj, GXTexMapID id);
-extern GXTexFmt fn_8025040C(const GXTexObj *pObj);
-extern void fn_802517E8(GXTevRegID id, GXColor color);
-extern void fn_80251864(GXTevKColorID id, GXColor color);
-
-extern RenderState_80210298 lbl_803E96E8;
 extern Texture_80212234 lbl_8039B4B0;
 extern GXTlutObj lbl_8039B4E0;
 extern GXTlutObj lbl_8039B508;
@@ -31,7 +18,6 @@ extern Texture_80212234 *lbl_803EBEF4;
 extern void *lbl_803EBEF8;
 extern void *lbl_803EBEFC;
 extern unsigned char lbl_803EBF00;
-
 
 void fn_80210298(void)
 {
@@ -89,10 +75,10 @@ void fn_802103DC(void)
 
     fn_80210388();
     fn_80210BD8(1);
-    fn_8024EB28(GX_CULL_NONE);
-    fn_8025221C(GX_FALSE);
-    fn_802520E0(GX_TRUE, GX_LEQUAL, GX_TRUE);
-    fn_80252114(GX_TRUE);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetDither(GX_FALSE);
+    GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
+    GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT0, GX_DF_NONE, GX_AF_NONE);
@@ -123,7 +109,7 @@ void fn_80210608(void)
 {
     RenderState_80210298 *pState = &lbl_803E96E8;
 
-    fn_802527D4(&pState->mViewport);
+    GXGetViewportv(&pState->mViewport.mLeft);
 }
 
 void fn_80210634(void)
@@ -199,32 +185,32 @@ void fn_80210814(GXTexMapID id, Texture_80212234 *pTexture, Clut_80212534 *pClut
     if (pTexture != 0) {
         if (pClut != 0) {
             if (pClut->mType == 0) {
-                fn_80250654(&pClut->u.maTlut[0], id);
-                fn_802503D8(&pTexture->mObj, id);
+                GXLoadTlut(&pClut->u.maTlut[0], id);
+                GXInitTexObjTlut(&pTexture->mObj, id);
             } else if (pClut->mType == 1) {
                 GXTexMapID indirectId = id + 4;
 
-                if (fn_8025040C(&pTexture->mObj) == GX_TF_C4) {
-                    fn_80250654(&lbl_8039B4E0, id);
-                    fn_802503D8(&pTexture->mObj, id);
+                if (GXGetTexObjFmt(&pTexture->mObj) == GX_TF_C4) {
+                    GXLoadTlut(&lbl_8039B4E0, id);
+                    GXInitTexObjTlut(&pTexture->mObj, id);
                 } else {
-                    fn_80250654(&lbl_8039B508, id);
-                    fn_802503D8(&pTexture->mObj, id);
+                    GXLoadTlut(&lbl_8039B508, id);
+                    GXInitTexObjTlut(&pTexture->mObj, id);
                 }
-                fn_802505A8(&pClut->u.mObj, indirectId);
+                GXLoadTexObj(&pClut->u.mObj, indirectId);
             } else {
                 u32 secondId = id + 8;
 
-                fn_80250654(&pClut->u.maTlut[0], id);
-                fn_80250654(&pClut->u.maTlut[1], secondId);
-                fn_802503D8(&pTexture->mObj, id);
+                GXLoadTlut(&pClut->u.maTlut[0], id);
+                GXLoadTlut(&pClut->u.maTlut[1], secondId);
+                GXInitTexObjTlut(&pTexture->mObj, id);
             }
         }
-        fn_802505A8(&pTexture->mObj, id);
+        GXLoadTexObj(&pTexture->mObj, id);
         if (pClut != 0 && pClut->mType == 2) {
-            fn_802503D8(&pTexture->mObj, id + 8);
-            fn_802505A8(&pTexture->mObj, id + 4);
-            fn_802503D8(&pTexture->mObj, id);
+            GXInitTexObjTlut(&pTexture->mObj, id + 8);
+            GXLoadTexObj(&pTexture->mObj, id + 4);
+            GXInitTexObjTlut(&pTexture->mObj, id);
         }
     } else if (lbl_803EBEF4 != 0) {
         fn_80210814(id, lbl_803EBEF4, 0);
@@ -255,10 +241,10 @@ void fn_80210970(Material_8020FAAC *pMaterial)
 
                 switch (pParm->mType) {
                 case 2:
-                    fn_802517E8(pParm->mIndex + 1, *(GXColor *)pValue);
+                    GXSetTevColor(pParm->mIndex + 1, *(GXColor *)pValue);
                     break;
                 case 3:
-                    fn_80251864(pParm->mIndex, *(GXColor *)pValue);
+                    GXSetTevKColor(pParm->mIndex, *(GXColor *)pValue);
                     break;
                 case 4:
                     GXSetChanMatColor(pParm->mIndex, *(GXColor *)pValue);
@@ -321,22 +307,22 @@ void fn_80210BD8(unsigned int mode)
     if (mode != pState->mBlendMode) {
         switch (mode) {
         case 1:
-            fn_80252034(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
+            GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
             break;
         case 2:
-            fn_80252034(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
+            GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
             break;
         case 3:
-            fn_80252034(GX_BM_BLEND, GX_BL_ZERO, GX_BL_SRCCLR, GX_LO_NOOP);
+            GXSetBlendMode(GX_BM_BLEND, GX_BL_ZERO, GX_BL_SRCCLR, GX_LO_NOOP);
             break;
         case 4:
-            fn_80252034(GX_BM_BLEND, GX_BL_ZERO, GX_BL_SRCALPHA, GX_LO_NOOP);
+            GXSetBlendMode(GX_BM_BLEND, GX_BL_ZERO, GX_BL_SRCALPHA, GX_LO_NOOP);
             break;
         case 5:
-            fn_80252034(GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_LO_NOOP);
+            GXSetBlendMode(GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_LO_NOOP);
             break;
         case 6:
-            fn_80252034(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_ONE, GX_LO_NOOP);
+            GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_ONE, GX_LO_NOOP);
             break;
         }
         pState->mBlendMode = mode;
@@ -357,5 +343,5 @@ void fn_80210CC4(float nearZ, float farZ)
 
 void fn_80210D10(GXBool compareEnable, GXCompare func, GXBool updateEnable)
 {
-    fn_802520E0(compareEnable, func, updateEnable);
+    GXSetZMode(compareEnable, func, updateEnable);
 }

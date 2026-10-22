@@ -6,21 +6,9 @@
 typedef struct Pool_801C750C Pool_801C750C;
 
 #include "game/Object_8020E52C.h"
+#include "engine/texture.h"
+#include "game/fn_8021216C.h"
 
-typedef struct Texture_8020DB34 {
-    unsigned short mWidth;
-    unsigned short mHeight;
-    unsigned char mWrapS;
-    unsigned char mWrapT;
-    unsigned char mMinFilter;
-    unsigned char mMagFilter;
-    unsigned int mFormat;
-    void *mpImage;
-    int mUnknown10;
-    void *mpPalette;
-    int mUnknown18;
-    unsigned char mbDirty;
-} Texture_8020DB34;
 
 typedef struct TexInfo_8020E2B0 {
     int mUnknown00;
@@ -49,6 +37,11 @@ typedef struct TexHeader_8020E2B0 {
 unsigned short fn_8020E51C(TexHeader_8020E2B0 *pTex);
 unsigned short fn_8020E524(TexHeader_8020E2B0 *pTex);
 const char *fn_8020E53C(TexHeader_8020E2B0 *pTex, unsigned short index);
+
+extern int lbl_803EBEBC;
+
+void fn_801D0F80(f32 mtx[3][4]);
+void fn_801D34D0(void *p, unsigned int size, int c, int d);
 
 Pool_801C750C *fn_801C750C(int a, int count, int size, void *pMemory);
 int fn_801C75B8(Pool_801C750C *pPool);
@@ -116,20 +109,6 @@ typedef struct Clut_80212534 {
     unsigned int mSize;
 } Clut_80212534;
 
-typedef struct TexFilterDesc_80212310 {
-    int mMinFilter;
-    int mMagFilter;
-    float mLodBias;
-    int mMaxAniso;
-    unsigned char mbBiasClamp;
-    unsigned char mbEdgeLod;
-} TexFilterDesc_80212310;
-
-typedef struct TexWrapDesc_80212374 {
-    int mWrapS;
-    int mWrapT;
-} TexWrapDesc_80212374;
-
 typedef struct TexNode_802119C4 {
     const char *mpName;
     struct TexLib_802119C4 *mpLib;
@@ -139,7 +118,7 @@ typedef struct TexNode_802119C4 {
     short mUnknownE;
 } TexNode_802119C4;
 
-typedef struct TexLib_802119C4 {
+struct TexLib_802119C4 {
     Registry_8021283C mRegistry;
     int mNumTextures;
     Texture_80212234 *mpTextures;
@@ -147,7 +126,7 @@ typedef struct TexLib_802119C4 {
     Clut_80212534 *mpCluts;
     int mNumTexNodes;
     TexNode_802119C4 *mpTexNodes;
-} TexLib_802119C4;
+};
 
 typedef void (*ChunkRelocFunc_8020EA18)(void *pData, void *pOldBase, void *pNewBase);
 
@@ -328,7 +307,7 @@ void *fn_8020EB94(void *p, void *pOldBase, void *pNewBase);
 void fn_8020EBB0(ModelRes_8020EA18 *pRes);
 void *fn_8020EC50(ModelRes_8020EA18 *pRes, int tag, Chunk_8020EA18 **ppChunk);
 
-/* tmswappart.c */
+/* cu_8020ED10.c */
 void fn_8020EFC8(int size);
 void fn_8020F00C(void);
 void fn_8020F08C(SwapPart_8020ED10 *pPart, void *pOldBase, void *pNewBase);
@@ -369,12 +348,10 @@ Clut_80212534 *fn_80212074(TexNode_802119C4 *pNode, int index);
 TexNode_802119C4 *fn_802120AC(TexLib_802119C4 *pLib, const char *pName);
 Texture_80212234 *fn_802120E4(TexLib_802119C4 *pLib, const char *pName);
 Clut_80212534 *fn_80212124(TexLib_802119C4 *pLib, const char *pName, int index);
-void fn_8021216C(TexLib_802119C4 *pLib, TexFilterDesc_80212310 *pDesc);
-void fn_802121D0(TexLib_802119C4 *pLib, TexWrapDesc_80212374 *pDesc);
 
 /* tmtexture.c */
 void fn_80212234(Texture_80212234 *pTexture, int minFilter, int magFilter, float lodBias, unsigned char bBiasClamp, unsigned char bEdgeLod, int maxAniso);
-void fn_80212310(Texture_80212234 *pTexture, TexFilterDesc_80212310 *pDesc);
+void fn_80212310(Texture_80212234 *pTexture, Desc_802EE9E4 *pDesc);
 void fn_8021234C(Texture_80212234 *pTexture, int wrapS, int wrapT);
 void fn_80212374(Texture_80212234 *pTexture, TexWrapDesc_80212374 *pDesc);
 void fn_8021239C(Texture_80212234 *pTexture, void *pData, int width, int height, int format, int numMips, void *pBuffer, Clut_80212534 *pClut);
@@ -461,8 +438,6 @@ void fn_8020FE3C(Shader_80211638 *pShader);
 void fn_8020FE78(MaterialDef_80213228 *pDef);
 
 /* tmmateriallist.c */
-Material_8020FAAC *fn_8020FF34(Material_8020FAAC *pMaterial);
-void fn_8020FF90(Material_8020FAAC *pMaterial);
 void fn_8020FFE4(int maxMaterials);
 void fn_80210020(void);
 void fn_80210054(MaterialList_8020FF34 *pList, unsigned int numMaterials);
@@ -530,6 +505,8 @@ typedef struct RenderState_80210298 {
     unsigned int mLod;
 } RenderState_80210298;
 
+extern RenderState_80210298 lbl_803E96E8;
+
 /* tmrender.c */
 void fn_80210298(void);
 void fn_802102E8(void);
@@ -569,9 +546,7 @@ typedef struct RenderHook_80211138 {
 } RenderHook_80211138;
 
 /* tmrendergeom.c */
-void fn_80210D30(SwapNode_8020ED10 *pNode, ChannelList_8021592C *pList);
 void fn_80210DCC(RenderState_80210298 *pState, SwapNode_8020ED10 *pNode);
-void fn_80211138(RenderState_80210298 *pState, SwapNode_8020ED10 *pNode);
 void fn_8021126C(void);
 void fn_802112DC(unsigned short *pIndices, unsigned int count);
 void fn_80211350(void);
@@ -591,7 +566,7 @@ void fn_8021592C(ChannelList_8021592C *pList, SwapNode_8020ED10 *pNode, SwapAttr
 void fn_80215A14(ChannelList_8021592C *pList);
 void fn_80215B00(ChannelList_8021592C *pList);
 
-/* tmgeometry.c */
+/* cu_802160A0.c */
 void fn_802160A0(Swap_802160A0 *pSwap, void *pOldBase, void *pNewBase);
 SwapSlot_802160A0 *fn_8021616C(Swap_802160A0 *pSwap, int slot);
 SwapState_802160A0 *fn_80216190(Swap_802160A0 *pSwap, int slot, int state);
@@ -653,8 +628,6 @@ typedef struct BlendSource_80214E80 {
     void **mppInputs;
 } BlendSource_80214E80;
 
-void *fn_80214D40(SwapAttr_8020ED10 *pAttr, int index);
-unsigned char *fn_80214D6C(int id, unsigned char *pData, int capacity);
 BlendChannel_80214D40 *fn_80214DB8(int id);
 int fn_80214DCC(int id, int index);
 unsigned char *fn_80214E3C(int id, unsigned char *pData, int size);
@@ -682,10 +655,6 @@ typedef struct BlendState_80214718 {
     short maWeights[128];
 } BlendState_80214718;
 
-unsigned int fn_80214718(SwapNode_8020ED10 *pNode, int baseIndex, short *pWeights, unsigned int numWeights, BlendItem_80214718 *pItems, unsigned int maxItems);
-unsigned int fn_80214814(BlendItem_80214718 *pItems, unsigned int numItems, unsigned int maxItems);
-void fn_80214890(void);
-unsigned int fn_802148BC(Buffer_80214554 *pBuffer, BlendItem_80214718 *pItems, unsigned int numItems);
 void fn_802149D4(short *pWeights, unsigned int numWeights);
 int fn_802149E8(float *pWeights, unsigned int numWeights);
 void fn_80214A7C(Buffer_80214554 *pBuffer);
@@ -698,18 +667,6 @@ int fn_80214C10(int nodeIndex);
 int fn_80214CB4(void);
 
 /* tmblendop.c */
-void fn_80214F58(int *pAccum, short *pSrc, unsigned int count, int weight, int frac);
-void fn_80214FB8(int *pAccum, short *pSrc, unsigned int count, int weight, int frac);
-void fn_80215020(int *pAccum, short *pSrc, unsigned int count);
-void fn_802150AC(int *pDst, short *pSrc, unsigned int count, int frac);
-void fn_802150F0(int *pDst, float *pSrc, unsigned int count, int frac);
-void fn_80215190(float *pDst, int *pSrc, unsigned int count, int frac);
-void fn_80215258(short *pDst, int *pSrc, unsigned int count, int frac);
-void fn_802152F0(int *pAccum, signed char *pSrc, unsigned int count, int weight, int frac);
-void fn_8021535C(int *pAccum, signed char *pSrc, unsigned int count, int weight, int frac);
-void fn_802153D0(int *pAccum, signed char *pSrc, unsigned int count);
-void fn_8021546C(int *pDst, signed char *pSrc, unsigned int count, int frac);
-void fn_802154BC(signed char *pDst, int *pSrc, unsigned int count, int frac);
 unsigned int fn_80215554(int dstId, int srcId, int weight);
 void fn_80215694(int dstId, int srcId);
 void fn_8021574C(int dstId, int srcId);
@@ -722,7 +679,7 @@ typedef struct ExtentsDef_80215804 {
 
 void fn_80215804(ExtentsDef_80215804 *pDef, void *pOldBase, void *pNewBase);
 
-/* tmtexxform.c */
+/* TMTexXForm.c */
 typedef struct TexXFormEntry_80215838 {
     const char *mpName;
     unsigned char maUnknown4[0x14];
@@ -752,7 +709,7 @@ typedef struct DebugInfo_80215B7C {
 
 void fn_80215B7C(DebugInfo_80215B7C *pInfo, void *pOldBase, void *pNewBase);
 
-/* tminstance.c */
+/* TmInstance.c */
 typedef struct InstanceTarget_80215C14 {
     int mUnknown0;
     void *mpData;
@@ -782,7 +739,7 @@ typedef struct RenderInst_80215CB0 {
 void fn_80215C14(Instance_80215C14 *pInst, void *pOldBase, void *pNewBase);
 void fn_80215CB0(RenderInst_80215CB0 *pInst, void *pOldBase, void *pNewBase);
 
-/* tmmorphanim.c */
+/* TMMorphAnim.c */
 typedef struct MorphTarget_80215DA4 {
     int mNumData;
     void *mapData[1];

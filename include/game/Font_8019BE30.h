@@ -1,6 +1,8 @@
 #ifndef GAME_FONT_8019BE30_H
 #define GAME_FONT_8019BE30_H
 
+#include "engine/texture.h"
+
 /* Descriptor of a bitmap font: the characters of the font texture in order,
    the glyph row height (+0xC), the advance of characters without a glyph
    (+0x10) and the gap after each glyph (+0x14). */
@@ -21,25 +23,13 @@ struct Glyph_8019BE30 {
     unsigned char *mpPixels;
 };
 
-/* Texture block filled by fn_8020DFD8; only the members read by the font
-   code are declared. */
-struct Texture_8020DFD8 {
-    unsigned short mWidth;
-    unsigned short mHeight;
-    char mUnknown4[8];
-    unsigned char *mpPixels;
-    char mUnknown10[4];
-    unsigned short *mpPalette;
-    char mUnknown18[8];
-};
-
 struct Font_8019BE30 {
     unsigned int mCount;
     Glyph_8019BE30 *mpGlyphs;
     unsigned int mSpaceWidth;
     unsigned int mSpacing;
     unsigned char mBorder;
-    Texture_8020DFD8 mTexture;
+    Texture_8020DB34 mTexture;
     char mUnknown34[0x28];
     unsigned char mMapCount;
     unsigned char mMap[256];

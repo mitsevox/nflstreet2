@@ -3,7 +3,7 @@
 
 extern BlendState_80214718 lbl_8039B600;
 
-unsigned int fn_80214718(SwapNode_8020ED10 *pNode, int baseIndex, short *pWeights, unsigned int numWeights, BlendItem_80214718 *pItems, unsigned int maxItems)
+static unsigned int fn_80214718(SwapNode_8020ED10 *pNode, int baseIndex, short *pWeights, unsigned int numWeights, BlendItem_80214718 *pItems, unsigned int maxItems)
 {
     unsigned int numItems;
     int i;
@@ -37,7 +37,7 @@ unsigned int fn_80214718(SwapNode_8020ED10 *pNode, int baseIndex, short *pWeight
     return numItems;
 }
 
-unsigned int fn_80214814(BlendItem_80214718 *pItems, unsigned int numItems, unsigned int maxItems)
+static unsigned int fn_80214814(BlendItem_80214718 *pItems, unsigned int numItems, unsigned int maxItems)
 {
     while (numItems > maxItems) {
         unsigned int i;
@@ -56,13 +56,13 @@ unsigned int fn_80214814(BlendItem_80214718 *pItems, unsigned int numItems, unsi
     return numItems;
 }
 
-void fn_80214890(void)
+static void fn_80214890(void)
 {
     fn_80214C04(0);
     fn_80214B44(0);
 }
 
-unsigned int fn_802148BC(Buffer_80214554 *pBuffer, BlendItem_80214718 *pItems, unsigned int numItems)
+static unsigned int fn_802148BC(Buffer_80214554 *pBuffer, BlendItem_80214718 *pItems, unsigned int numItems)
 {
     unsigned int numAttrs = pItems[0].mNumAttrs;
     unsigned int i;

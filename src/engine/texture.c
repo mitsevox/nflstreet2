@@ -1,5 +1,7 @@
+#include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "engine/fn_801F7BD4.h"
+#include "engine/cu_8027EFAC.h"
 #include "engine/tmlib.h"
 
 typedef struct TexChunk_8020DB34 {
@@ -44,29 +46,13 @@ typedef struct TexMipHeader_8020E2B0 {
 
 typedef struct TexHandler_8020DFBC {
     int mId;
-    int (*mpLoad)(void *pDesc, void *pArg);
+    int (*mpLoad)(void *pSrc, Texture_8020DB34 *pTex);
     int (*mpInit)(Texture_8020DB34 *pTex, void *pSrc, int flags);
 } TexHandler_8020DFBC;
 
-typedef struct TexDecodeBuf_8020E6A0 {
-    void *mpData;
-    int mSize;
-    int mUnknown08;
-    unsigned short mWidth;
-    unsigned short mHeight;
-    int mUnknown10;
-    short mUnknown14;
-    unsigned short mBits;
-    int mUnknown18;
-    int mUnknown1C;
-} TexDecodeBuf_8020E6A0;
-
-extern void fn_8027F3A4(int type, TexDecodeBuf_8020E6A0 *pSrc, TexDecodeBuf_8020E6A0 *pDst);
 extern TexChunk_8020DB34 *fn_801CEEF4(void *pStream, int id, int endId, int flags);
-extern int fn_801C1FEC(const void *pA, const void *pB, int size);
 extern char lbl_802B1BC4[];
 extern char lbl_802B1BCC[];
-extern void fn_801D34D0(void *p, unsigned int size, int c, int d);
 
 extern unsigned char lbl_802F7A00[];
 extern unsigned int lbl_802F7A10[];
@@ -74,7 +60,6 @@ extern unsigned char lbl_803EBC80[4];
 extern TexHandler_8020DFBC lbl_802F9BF0;
 extern TexHandler_8020DFBC lbl_802F9BFC;
 extern unsigned char lbl_803EBEB8;
-extern int lbl_803EBEBC;
 extern int lbl_803EBEC0;
 extern TexHandler_8020DFBC **lbl_803EBEC4;
 extern int lbl_803EBEC8;
@@ -87,7 +72,7 @@ int fn_8020E064(Texture_8020DB34 *pTex, unsigned short width, unsigned short hei
 int fn_8020E1B8(void *pSrc, Texture_8020DB34 *pTex, int flags);
 void fn_8020DFBC(TexHandler_8020DFBC *pHandler);
 
-int fn_8020DB34(Texture_8020DB34 *pTex, TexDesc_8020DB34 *pDesc, int flags)
+static int fn_8020DB34(Texture_8020DB34 *pTex, TexDesc_8020DB34 *pDesc, int flags)
 {
     TexChunk_8020DB34 *pChunk;
     int err;
@@ -110,7 +95,7 @@ int fn_8020DB34(Texture_8020DB34 *pTex, TexDesc_8020DB34 *pDesc, int flags)
     return err;
 }
 
-int fn_8020DC10(Texture_8020DB34 *pTex, TexHeader_8020E2B0 *pFile, unsigned int index)
+static int fn_8020DC10(Texture_8020DB34 *pTex, TexHeader_8020E2B0 *pFile, unsigned int index)
 {
     int err = 0;
 
@@ -145,7 +130,7 @@ int fn_8020DC10(Texture_8020DB34 *pTex, TexHeader_8020E2B0 *pFile, unsigned int 
     return err;
 }
 
-int fn_8020DD24(TexDesc_8020DB34 *pDesc, Texture_8020DB34 *pTex)
+static int fn_8020DD24(TexDesc_8020DB34 *pDesc, Texture_8020DB34 *pTex)
 {
     int result = fn_8020E064(pTex, pDesc->mWidth, pDesc->mHeight, pDesc->mFormat, pDesc->mTlutFormat);
 
@@ -160,7 +145,7 @@ int fn_8020DD24(TexDesc_8020DB34 *pDesc, Texture_8020DB34 *pTex)
     return result;
 }
 
-int fn_8020DDA8(TexHeader_8020E2B0 *pFile, Texture_8020DB34 *pTex)
+static int fn_8020DDA8(TexHeader_8020E2B0 *pFile, Texture_8020DB34 *pTex)
 {
     Object_8020E52C *pEntry;
     Object_8020E560 *pImage;
@@ -248,7 +233,7 @@ void fn_8020DFBC(TexHandler_8020DFBC *pHandler)
     lbl_803EBEC0++;
 }
 
-int fn_8020DFD8(TexDesc_8020DB34 *pDesc, void *pArg)
+int fn_8020DFD8(void *pSrc, Texture_8020DB34 *pTex)
 {
     int result = 0;
     unsigned int i;
@@ -256,8 +241,8 @@ int fn_8020DFD8(TexDesc_8020DB34 *pDesc, void *pArg)
     for (i = 0; i < lbl_803EBEC0; i++) {
         TexHandler_8020DFBC *pHandler = lbl_803EBEC4[i];
 
-        if (pDesc->mUnknown00 == pHandler->mId) {
-            result = pHandler->mpLoad(pDesc, pArg);
+        if (*(int *)pSrc == pHandler->mId) {
+            result = pHandler->mpLoad(pSrc, pTex);
         }
     }
     return result;
@@ -288,7 +273,7 @@ int fn_8020E064(Texture_8020DB34 *pTex, unsigned short width, unsigned short hei
         pTex->mpImage = fn_801D2BB0(lbl_803EBEBC, size, 0, 0);
         if (pTex->mpImage != 0) {
             fn_801D34D0(pTex->mpImage, size, 0, 1);
-            pTex->mUnknown10 = tlutFormat;
+            pTex->mTlutFormat = tlutFormat;
         } else {
             fn_801D2BD0(pTex->mpPalette);
             pTex->mpPalette = 0;
@@ -342,7 +327,7 @@ void fn_8020E2B0(void *p)
     if (pFile->mFlags & 1) {
         return;
     }
-    if (fn_801C1FEC(pFile, lbl_802B1BC4, 4) == 0) {
+    if (memcmp(pFile, lbl_802B1BC4, 4) == 0) {
         if (pFile->mVersion != 2) {
             pFile->mpMaterials = 0;
             pFile->mpTextures = 0;
@@ -370,7 +355,7 @@ void fn_8020E2B0(void *p)
 
             pPalette->mpUnknown8 = pPalette->mpUnknown8 + (int)pFile;
         }
-    } else if (fn_801C1FEC(pFile, lbl_802B1BCC, 4) == 0) {
+    } else if (memcmp(pFile, lbl_802B1BCC, 4) == 0) {
         pFile->mpMaterials = (Object_8020E52C *)((int)pFile->mpMaterials + (int)pFile);
         pFile->mpTextures = (Object_8020E560 *)((int)pFile->mpTextures + (int)pFile);
         pFile->mpPalettes = (Object_8020E5F8 *)((int)pFile->mpPalettes + (int)pFile);
@@ -435,7 +420,7 @@ Object_8020E560 *fn_8020E560(void *p, unsigned short index)
     TexHeader_8020E2B0 *pFile = p;
     Object_8020E560 *pImage;
 
-    if (pFile->mVersion <= 1 && fn_801C1FEC(pFile, lbl_802B1BCC, 4) != 0) {
+    if (pFile->mVersion <= 1 && memcmp(pFile, lbl_802B1BCC, 4) != 0) {
         unsigned int i;
 
         pImage = pFile->mpTextures;
@@ -461,7 +446,7 @@ Object_8020E5F8 *fn_8020E5F8(void *p, unsigned short index)
     TexHeader_8020E2B0 *pFile = p;
     Object_8020E5F8 *pPalette = 0;
 
-    if (pFile->mVersion <= 1 && fn_801C1FEC(pFile, lbl_802B1BCC, 4) != 0) {
+    if (pFile->mVersion <= 1 && memcmp(pFile, lbl_802B1BCC, 4) != 0) {
         unsigned int i;
         unsigned char *pNext = (unsigned char *)pFile->mpPalettes;
 
@@ -499,8 +484,8 @@ void *fn_8020E6A0(Object_8020E560 *pImage, void *pDst)
     if (pImage->mType == 0) {
         memcpy(pDst, pImage->mpUnknownC, size);
     } else {
-        TexDecodeBuf_8020E6A0 src;
-        TexDecodeBuf_8020E6A0 dst;
+        Buffer_8027F9AC src;
+        Buffer_8027F9AC dst;
 
         src.mpData = pImage->mpUnknownC;
         src.mSize = pImage->mUnknown8;

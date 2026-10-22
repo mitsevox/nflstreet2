@@ -34,10 +34,10 @@ extern unsigned int fn_801F0C50(void *pArchive, int id);
 extern int fn_801EF92C(void *pArchive, int id, void *pData);
 extern int fn_801F1B44(int a, int b, void *pData, unsigned int size, int e);
 
-void fn_8020D858(ResFile_8020D534 *pFile);
-void fn_8020D8B4(ResFile_8020D534 *pFile);
+static void fn_8020D858(ResFile_8020D534 *pFile);
+static void fn_8020D8B4(ResFile_8020D534 *pFile);
 
-int fn_8020D534(ResFile_8020D534 *pFile, unsigned int expectedSize, ResDesc_8020D534 *pDesc, int bAnySize)
+static int fn_8020D534(ResFile_8020D534 *pFile, unsigned int expectedSize, ResDesc_8020D534 *pDesc, int bAnySize)
 {
     unsigned int size;
 
@@ -56,7 +56,7 @@ int fn_8020D534(ResFile_8020D534 *pFile, unsigned int expectedSize, ResDesc_8020
     return 0;
 }
 
-int fn_8020D5D8(ResFile_8020D534 *pFile)
+static int fn_8020D5D8(ResFile_8020D534 *pFile)
 {
     int err = 0;
 
@@ -76,7 +76,7 @@ int fn_8020D5D8(ResFile_8020D534 *pFile)
     return err;
 }
 
-int fn_8020D674(ResFile_8020D534 *pFile, void *pSrc, unsigned int size, unsigned int *pWritten)
+static int fn_8020D674(ResFile_8020D534 *pFile, void *pSrc, unsigned int size, unsigned int *pWritten)
 {
     if (pWritten != 0) {
         *pWritten = 0;
@@ -103,7 +103,7 @@ int fn_8020D674(ResFile_8020D534 *pFile, void *pSrc, unsigned int size, unsigned
     return 0;
 }
 
-int fn_8020D750(ResFile_8020D534 *pFile, void *pDst, unsigned int size, unsigned int *pRead)
+static int fn_8020D750(ResFile_8020D534 *pFile, void *pDst, unsigned int size, unsigned int *pRead)
 {
     if (pRead != 0) {
         *pRead = 0;
@@ -130,7 +130,7 @@ int fn_8020D750(ResFile_8020D534 *pFile, void *pDst, unsigned int size, unsigned
     return 0;
 }
 
-int fn_8020D82C(ResFile_8020D534 *pFile, int offset)
+static int fn_8020D82C(ResFile_8020D534 *pFile, int offset)
 {
     if (pFile == 0) {
         return 3;
@@ -139,12 +139,12 @@ int fn_8020D82C(ResFile_8020D534 *pFile, int offset)
     return 0;
 }
 
-int fn_8020D850(void)
+static int fn_8020D850(void)
 {
     return 0;
 }
 
-void fn_8020D858(ResFile_8020D534 *pFile)
+static void fn_8020D858(ResFile_8020D534 *pFile)
 {
     if (pFile != 0) {
         pFile->mpReadData = (unsigned char *)fn_801EF390(pFile->mDesc.mpArchive, pFile->mDesc.mId, 1);
@@ -153,7 +153,7 @@ void fn_8020D858(ResFile_8020D534 *pFile)
     }
 }
 
-void fn_8020D8B4(ResFile_8020D534 *pFile)
+static void fn_8020D8B4(ResFile_8020D534 *pFile)
 {
     if (pFile != 0) {
         pFile->mpWriteBuf = fn_801D2BB0(1, pFile->mSize, 0, 0);
@@ -167,7 +167,7 @@ void fn_8020D8B4(ResFile_8020D534 *pFile)
     }
 }
 
-int fn_8020D924(ResMemFile_8020D924 *pFile, unsigned int size, ResMemDesc_8020D924 *pDesc, void *pExtra)
+static int fn_8020D924(ResMemFile_8020D924 *pFile, unsigned int size, ResMemDesc_8020D924 *pDesc, void *pExtra)
 {
     int err = 0;
 
@@ -189,7 +189,7 @@ int fn_8020D924(ResMemFile_8020D924 *pFile, unsigned int size, ResMemDesc_8020D9
     return err;
 }
 
-int fn_8020D9D8(ResMemFile_8020D924 *pFile)
+static int fn_8020D9D8(ResMemFile_8020D924 *pFile)
 {
     int err = 0;
 
@@ -205,7 +205,7 @@ int fn_8020D9D8(ResMemFile_8020D924 *pFile)
     return err;
 }
 
-int fn_8020DA70(ResMemFile_8020D924 *pFile, void *pSrc, unsigned int size, unsigned int *pWritten)
+static int fn_8020DA70(ResMemFile_8020D924 *pFile, void *pSrc, unsigned int size, unsigned int *pWritten)
 {
     if (pWritten != 0) {
         *pWritten = 0;
@@ -227,7 +227,7 @@ int fn_8020DA70(ResMemFile_8020D924 *pFile, void *pSrc, unsigned int size, unsig
     return 0;
 }
 
-int fn_8020DB2C(void)
+static int fn_8020DB2C(void)
 {
     return 0x24;
 }

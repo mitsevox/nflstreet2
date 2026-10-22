@@ -1,7 +1,6 @@
 #include "engine/tmlib.h"
 #include "game/fn_801D2B7C.h"
 
-
 extern unsigned char *lbl_803EBED0;
 extern unsigned char *lbl_803EBED4;
 extern unsigned char *lbl_803EBED8;

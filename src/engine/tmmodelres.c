@@ -1,7 +1,6 @@
 #include "engine/tmlib.h"
 #include "game/fn_801D2B7C.h"
 
-
 extern int lbl_803ECFC4;
 extern ChunkDef_8020EA18 *lbl_803ECFC8;
 extern unsigned int lbl_803ECFCC;

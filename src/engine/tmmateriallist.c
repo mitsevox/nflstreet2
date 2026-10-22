@@ -2,7 +2,7 @@
 
 extern Pool_801C750C *lbl_803EBEE8;
 
-Material_8020FAAC *fn_8020FF34(Material_8020FAAC *pMaterial)
+static Material_8020FAAC *fn_8020FF34(Material_8020FAAC *pMaterial)
 {
     if (pMaterial == 0) {
         pMaterial = fn_801C75F0(lbl_803EBEE8);
@@ -15,7 +15,7 @@ Material_8020FAAC *fn_8020FF34(Material_8020FAAC *pMaterial)
     return pMaterial;
 }
 
-void fn_8020FF90(Material_8020FAAC *pMaterial)
+static void fn_8020FF90(Material_8020FAAC *pMaterial)
 {
     if (pMaterial != 0) {
         if (--pMaterial->mRefCount <= 0) {

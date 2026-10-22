@@ -1,16 +1,10 @@
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXTexture.h>
 #include <dolphin/gx/GXTransform.h>
+#include <dolphin/gx/GXDispList.h>
 #include "engine/tmlib.h"
 
-extern void fn_80252334(void *pList, u32 size);
-extern void fn_80250654(GXTlutObj *pTlut, u32 tlutName);
-extern void fn_802503D8(GXTexObj *pObj, u32 tlutName);
-extern void fn_802505A8(GXTexObj *pObj, GXTexMapID id);
-
-extern RenderState_80210298 lbl_803E96E8;
-
-void fn_80210D30(SwapNode_8020ED10 *pNode, ChannelList_8021592C *pList)
+static void fn_80210D30(SwapNode_8020ED10 *pNode, ChannelList_8021592C *pList)
 {
     RenderState_80210298 *pState = &lbl_803E96E8;
 
@@ -25,13 +19,13 @@ void fn_80210D30(SwapNode_8020ED10 *pNode, ChannelList_8021592C *pList)
     } else {
         fn_80215B00(pList);
     }
-    fn_80252334(pNode->mpData, pNode->mDisplayListSize << 5);
+    GXCallDisplayList(pNode->mpData, pNode->mDisplayListSize << 5);
     if (pNode->mFlags & 1) {
         GXSetCurrentMtx(GX_PNMTX0);
     }
 }
 
-void fn_80211138(RenderState_80210298 *pState, SwapNode_8020ED10 *pNode)
+static void fn_80211138(RenderState_80210298 *pState, SwapNode_8020ED10 *pNode)
 {
     ChannelList_8021592C list;
     SwapNode_8020ED10 *pLod;
@@ -139,10 +133,10 @@ void fn_80211424(unsigned short *pIndices, unsigned int count)
             Texture_80212234 *pTexture = pParm->mpTexture;
 
             if (pClut != 0) {
-                fn_80250654(&pClut->u.maTlut[0], 0);
-                fn_802503D8(&pTexture->mObj, 0);
+                GXLoadTlut(&pClut->u.maTlut[0], 0);
+                GXInitTexObjTlut(&pTexture->mObj, 0);
             }
-            fn_802505A8(&pTexture->mObj, GX_TEXMAP0);
+            GXLoadTexObj(&pTexture->mObj, GX_TEXMAP0);
             if (pNode->mFlags & 8) {
                 int j;
 
@@ -179,7 +173,7 @@ void fn_80211424(unsigned short *pIndices, unsigned int count)
                     pAttr++;
                 }
             }
-            fn_80252334(pNode->mpData, pNode->mDisplayListSize << 5);
+            GXCallDisplayList(pNode->mpData, pNode->mDisplayListSize << 5);
         }
         GXSetCurrentMtx(GX_PNMTX0);
         pState->mpMaterial = 0;

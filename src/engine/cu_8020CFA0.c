@@ -1,7 +1,6 @@
 #include "engine/fn_801F7BD4.h"
+#include "game/fn_801C68FC.h"
 
-extern void *fn_801C68FC(int a, int b, int count, int size, int (*compare)(const void *, const void *), int c);
-extern void fn_801C69E4(void *pPool);
 extern int fn_801F7ABC(void);
 
 extern unsigned char lbl_803EBE9C;
@@ -12,9 +11,9 @@ extern int lbl_803ECFB8;
 
 void fn_8020D0A8(void);
 
-int fn_8020CFA0(const void *pA, const void *pB)
+int fn_8020CFA0(void *pA, void *pB)
 {
-    return ((const unsigned short *)pA)[1] - ((const unsigned short *)pB)[1];
+    return ((unsigned short *)pA)[1] - ((unsigned short *)pB)[1];
 }
 
 int fn_8020CFB0(int count)

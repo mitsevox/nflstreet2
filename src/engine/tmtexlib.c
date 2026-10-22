@@ -241,7 +241,7 @@ Clut_80212534 *fn_80212124(TexLib_802119C4 *pLib, const char *pName, int index)
     return pClut;
 }
 
-void fn_8021216C(TexLib_802119C4 *pLib, TexFilterDesc_80212310 *pDesc)
+void fn_8021216C(TexLib_802119C4 *pLib, Desc_802EE9E4 *pDesc)
 {
     int i;
 

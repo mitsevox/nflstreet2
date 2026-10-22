@@ -4,8 +4,6 @@
 #include "game/fn_801EF390.h"
 
 extern "C" {
-void fn_8020DFD8(int data, void *pTexture);
-int fn_8020E258(void *pTexture);
 
 void fn_8019B644(Font_8019BE30 *pFont)
 {
@@ -166,7 +164,7 @@ unsigned int fn_8019B9D8(Font_8019BE30 *pFont, const unsigned char *pString)
 void fn_8019BA4C(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc)
 {
     unsigned char opaque[256];
-    unsigned char *pPixels = pFont->mTexture.mpPixels;
+    unsigned char *pPixels = pFont->mTexture.mpImage;
     unsigned int i;
     unsigned int x;
     unsigned int y;
@@ -289,7 +287,7 @@ void fn_8019BD88(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc)
 
 void fn_8019BE30(Font_8019BE30 *pFont, FontDesc_8019BE30 *pDesc, void *p, int index)
 {
-    fn_8020DFD8(fn_801EF390(p, index, 1), &pFont->mTexture);
+    fn_8020DFD8((void *)fn_801EF390(p, index, 1), &pFont->mTexture);
     fn_8019BD88(pFont, pDesc);
     fn_801F010C(p, index);
 }

@@ -4,7 +4,7 @@ typedef struct MemFile_8020D388 {
     unsigned int mSize;
 } MemFile_8020D388;
 
-int fn_8020D388(MemFile_8020D388 *pFile, void *pName, MemFile_8020D388 *pSrc)
+static int fn_8020D388(MemFile_8020D388 *pFile, void *pName, MemFile_8020D388 *pSrc)
 {
     int err = 0;
 
@@ -18,7 +18,7 @@ int fn_8020D388(MemFile_8020D388 *pFile, void *pName, MemFile_8020D388 *pSrc)
     return err;
 }
 
-int fn_8020D3C0(MemFile_8020D388 *pFile)
+static int fn_8020D3C0(MemFile_8020D388 *pFile)
 {
     int err = 0;
 
@@ -30,7 +30,7 @@ int fn_8020D3C0(MemFile_8020D388 *pFile)
     return err;
 }
 
-int fn_8020D3F4(MemFile_8020D388 *pFile, void *pSrc, unsigned int size, unsigned int *pWritten)
+static int fn_8020D3F4(MemFile_8020D388 *pFile, void *pSrc, unsigned int size, unsigned int *pWritten)
 {
     if (pFile->mpData != 0) {
         if (pFile->mSize >= pFile->mPos + size) {
@@ -43,7 +43,7 @@ int fn_8020D3F4(MemFile_8020D388 *pFile, void *pSrc, unsigned int size, unsigned
     return 3;
 }
 
-int fn_8020D470(MemFile_8020D388 *pFile, void *pDst, unsigned int size, unsigned int *pRead)
+static int fn_8020D470(MemFile_8020D388 *pFile, void *pDst, unsigned int size, unsigned int *pRead)
 {
     if (pFile->mpData != 0) {
         if (pFile->mSize >= pFile->mPos + size) {
@@ -56,7 +56,7 @@ int fn_8020D470(MemFile_8020D388 *pFile, void *pDst, unsigned int size, unsigned
     return 3;
 }
 
-int fn_8020D4F0(MemFile_8020D388 *pFile, int offset)
+static int fn_8020D4F0(MemFile_8020D388 *pFile, int offset)
 {
     int pos;
 
@@ -71,7 +71,7 @@ int fn_8020D4F0(MemFile_8020D388 *pFile, int offset)
     return 0;
 }
 
-int fn_8020D52C(void)
+static int fn_8020D52C(void)
 {
     return 0;
 }

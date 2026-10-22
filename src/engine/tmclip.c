@@ -5,7 +5,6 @@ extern void fn_801D04C4(void);
 extern void fn_801D0544(void);
 extern void fn_801D0664(void *pMtx);
 extern void fn_801D06D4(void *pMtx);
-extern void fn_801D0F80(f32 mtx[3][4]);
 extern void fn_801D1288(int mode, void *pMtx);
 extern unsigned int fn_80213F18(void *pPoints, int numPoints, f32 (*pMtx)[4], Extent_802144AC *pExtent, void *pArg);
 extern unsigned int fn_80213DB0(void *pPoints, int numPoints, f32 (*pMtx)[4], void *pArg);
@@ -39,7 +38,7 @@ static inline void fn_80213BCC_Row(Extent_802144AC *pBox, f32 (*pMtx)[4], f32 (*
     pOut[7][r] = x1 + t;
 }
 
-void fn_80213BCC(Extent_802144AC *pBox, f32 (*pMtx)[4], f32 (*pOut)[3])
+static void fn_80213BCC(Extent_802144AC *pBox, f32 (*pMtx)[4], f32 (*pOut)[3])
 {
     fn_80213BCC_Row(pBox, pMtx, pOut, 0);
     fn_80213BCC_Row(pBox, pMtx, pOut, 1);

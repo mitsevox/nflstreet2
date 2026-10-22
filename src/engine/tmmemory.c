@@ -1,7 +1,6 @@
 #include "engine/tmlib.h"
 #include "game/fn_801D2B7C.h"
 
-
 void *fn_802127D0(int count, int size)
 {
     if (count > 0 && size > 0) {
