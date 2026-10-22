@@ -16145,3 +16145,94 @@ void Class_80297AB8::vfn_03()
     fn_80076DAC(0);
     fn_800A2184();
 }
+
+extern "C" {
+void fn_800497F4(int unused, int id, unsigned short *pValues);
+short fn_80157448(int team, int unused, short value);
+int fn_80148698(int team, int index, int value);
+short fn_800ABE10(int team, int index, short value);
+short fn_8009AC18(int team, int index, short value);
+float fn_800A0134(int team, int unused, int index);
+}
+
+extern "C" void fn_800B44D4(BitStream_t *pStream)
+{
+    for (unsigned char team = 0; team <= 1; team++) {
+        for (unsigned char index = 0; index <= 6; index++) {
+            short *pRatings = fn_80039F5C(team, index)->mRatings;
+            fn_80191068(pStream, pRatings[0], 16);
+            fn_80191068(pStream, pRatings[1], 16);
+            fn_80191068(pStream, pRatings[2], 16);
+            fn_80191068(pStream, pRatings[3], 16);
+            fn_80191068(pStream, pRatings[4], 16);
+            fn_80191068(pStream, pRatings[5], 16);
+            fn_80191068(pStream, pRatings[6], 16);
+            fn_80191068(pStream, pRatings[7], 16);
+            fn_80191068(pStream, pRatings[8], 16);
+            fn_80191068(pStream, pRatings[9], 16);
+        }
+    }
+}
+
+extern "C" void fn_800B4628(BitStream_t *pStream0, BitStream_t *pStream1,
+                            BitStream_t *pStream2, BitStream_t *pStream3, float t)
+{
+    for (unsigned char team = 0; team <= 1; team++) {
+        for (unsigned char index = 0; index <= 6; index++) {
+            short *pRatings = fn_80039F5C(team, index)->mRatings;
+            pRatings[0] = ReadBitStream(pStream1, 16);
+            pRatings[1] = ReadBitStream(pStream1, 16);
+            pRatings[2] = ReadBitStream(pStream1, 16);
+            pRatings[3] = ReadBitStream(pStream1, 16);
+            pRatings[4] = ReadBitStream(pStream1, 16);
+            pRatings[5] = ReadBitStream(pStream1, 16);
+            pRatings[6] = ReadBitStream(pStream1, 16);
+            pRatings[7] = ReadBitStream(pStream1, 16);
+            pRatings[8] = ReadBitStream(pStream1, 16);
+            pRatings[9] = ReadBitStream(pStream1, 16);
+            for (unsigned char i = 0; i <= 9; i++) {
+                if (pStream2) ReadBitStream(pStream2, 16);
+                if (pStream3) ReadBitStream(pStream3, 16);
+                if (pStream0) ReadBitStream(pStream0, 16);
+            }
+        }
+    }
+}
+
+extern "C" void fn_800B4798(short *pRatings, int team, int index, float *pOut)
+{
+    unsigned short id = *(unsigned short *)((char *)pOut + 8);
+    unsigned short bonuses[10];
+    fn_800497F4(team, id, bonuses);
+    for (unsigned int i = 0; i <= 9; i++) {
+        short value = pRatings[i] + bonuses[i];
+        if (value > 0) {
+            if (value > 255) value = 255;
+        } else value = 1;
+        value = fn_80157448(team, i, value);
+        value = fn_80148698(team, i, value);
+        value = fn_800ABE10(team, i, value);
+        value = fn_8009AC18(team, i, value);
+        value = fn_800A8224(team, index, i, value);
+        pRatings[i] = (short)(value * 1.0f * fn_800A0134(team, (unsigned char)id, i));
+    }
+}
+
+extern "C" void fn_800B4900(QueryCursor cursor, int index, short *pRatings, void *pOut)
+{
+    int values[10];
+    cursor.mUnknown4 = index;
+    fn_801FCE10(0,
+        "fetch from \x8a 'IGAP' into \x82 and 'MUJP' into \x82 and 'KTBP' into \x82 and "
+        "'HTCP' into \x82 and 'DPSP' into \x82 and 'KATP' into \x82 and 'SSPP' into \x82 and "
+        "'KLBP' into \x82 and 'VOCP' into \x82 and 'TFDP' into \x82\n",
+        &cursor, &values[0], &values[1], &values[2], &values[3], &values[4],
+        &values[5], &values[6], &values[7], &values[8], &values[9]);
+    if (fn_8017F584() == 0) fn_800B4448((Settings_800B4448 *)values);
+    short *pOtherRatings = (short *)pOut;
+    for (unsigned short i = 0; i <= 9; i++) {
+        short value = ((short)values[i] * 255) / 99;
+        pRatings[i] = value;
+        pOtherRatings[i] = value;
+    }
+}
