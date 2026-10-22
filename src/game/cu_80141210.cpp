@@ -8,11 +8,10 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_800AD9B4.h"
 #include "engine/cu_80227F14.h"
+#include "engine/Sample_801C009C.h"
 
 /* Views established by this caller's accesses. Their original identities
    and the contents of the opaque spans remain unknown. */
-struct Curve_801C5278 { unsigned char mUnknown0[4]; float mUnknown4, mUnknown8; unsigned char mUnknownC[4]; };
-struct Sample_801C009C { float mUnknown0[3]; Curve_801C5278 mUnknownC[15]; };
 struct Settings_800963EC { unsigned char mUnknown0[0x300]; float mUnknown300; };
 struct Entry_801411B4 { float mUnknown0; unsigned char mUnknown4[4]; unsigned char mUnknown8; };
 struct State_80141210 { float mUnknown0,mUnknown4; int mUnknown8; unsigned char mUnknownC[4]; int mUnknown10,mUnknown14; };
@@ -24,8 +23,8 @@ extern View_802DCEB0 lbl_802DCEB0[];
 extern View_802DCEB0 lbl_802DCF58;
 float fn_801BFFA0(void);
 Sample_801C009C *fn_801C00F8(Actor_801C009C *);
-Sample_801C009C *fn_801C009C(Actor_801C009C *,int,unsigned short,unsigned short);
-float fn_801C5278(float,Curve_801C5278 *,int);
+Sample_801C009C *fn_801C009C(Actor_801C009C *bank, unsigned short id, unsigned short subId, unsigned short index);
+float fn_801C5278(float,Curve_801C02EC *,int);
 void fn_801D04C4(void); void fn_801D0558(void); void fn_801D0544(void); void fn_801D0508(void);
 void fn_801D0F80(float (*)[4]); void fn_801D06D4(float (*)[4]); void fn_801D0ADC(int);
 void fn_801EBBA4(float *,Vector_80039F5C *,int);
@@ -91,32 +90,32 @@ extern "C" void fn_80141210(Camera_8013F738 *camera, Actor_801C009C *actor, Sele
     if (!sample) return;
     Vector_80039F5C base, offset, position, look, up, direction, projection;
     base.mX = sample->mUnknown0[0]; base.mY = -sample->mUnknown0[2]; base.mZ = sample->mUnknown0[1];
-    offset.mX = fn_801C5278(t,&sample->mUnknownC[9],0);
-    offset.mY = -fn_801C5278(t,&sample->mUnknownC[10],0);
-    offset.mZ = fn_801C5278(t,&sample->mUnknownC[11],0);
+    offset.mX = fn_801C5278(t,&sample->mCurves[9],0);
+    offset.mY = -fn_801C5278(t,&sample->mCurves[10],0);
+    offset.mZ = fn_801C5278(t,&sample->mCurves[11],0);
     offset.mX *= camera->mUnknownF4; offset.mY *= camera->mUnknownF4; offset.mZ *= camera->mUnknownF4;
     Angles_80141210 rotation;
-    rotation.mX = (int)(fn_801C5278(t,&sample->mUnknownC[12],0)*46603.37890625f);
-    rotation.mY = (int)(-fn_801C5278(t,&sample->mUnknownC[14],0)*46603.37890625f);
-    rotation.mZ = (int)(fn_801C5278(t,&sample->mUnknownC[13],0)*46603.37890625f);
+    rotation.mX = (int)(fn_801C5278(t,&sample->mCurves[12],0)*46603.37890625f);
+    rotation.mY = (int)(-fn_801C5278(t,&sample->mCurves[14],0)*46603.37890625f);
+    rotation.mZ = (int)(fn_801C5278(t,&sample->mCurves[13],0)*46603.37890625f);
     float qx[4],qy[4],qz[4],q[4]; Vector_80039F5C axis;
     fn_801C1F94(q,0,16); q[3] = 1.0f;
     axis.mX=1.0f; axis.mY=0.0f; axis.mZ=0.0f; fn_801EBBA4(qx,&axis,rotation.mX);
     axis.mX=0.0f; axis.mY=1.0f; axis.mZ=0.0f; fn_801EBBA4(qy,&axis,rotation.mY);
     axis.mX=0.0f; axis.mY=0.0f; axis.mZ=1.0f; fn_801EBBA4(qz,&axis,rotation.mZ);
     fn_801EB660(q,qy,qz); fn_801EB660(q,q,qx); fn_801EB814(matrix,q);
-    position.mX=fn_801C5278(t,&sample->mUnknownC[0],0);
-    position.mY=-fn_801C5278(t,&sample->mUnknownC[2],0);
-    position.mZ=fn_801C5278(t,&sample->mUnknownC[1],0);
+    position.mX=fn_801C5278(t,&sample->mCurves[0],0);
+    position.mY=-fn_801C5278(t,&sample->mCurves[2],0);
+    position.mZ=fn_801C5278(t,&sample->mCurves[1],0);
     position.mX*=camera->mUnknownF4; position.mY*=camera->mUnknownF4; position.mZ*=camera->mUnknownF4;
-    up.mX=fn_801C5278(t,&sample->mUnknownC[6],0);
-    up.mY=-fn_801C5278(t,&sample->mUnknownC[8],0);
-    up.mZ=fn_801C5278(t,&sample->mUnknownC[7],0);
+    up.mX=fn_801C5278(t,&sample->mCurves[6],0);
+    up.mY=-fn_801C5278(t,&sample->mCurves[8],0);
+    up.mZ=fn_801C5278(t,&sample->mCurves[7],0);
     up.mX*=camera->mUnknownF4; up.mY*=camera->mUnknownF4; up.mZ*=camera->mUnknownF4;
     fn_802276B4(&up,&up,&position);
-    look.mX=fn_801C5278(t,&sample->mUnknownC[3],0);
-    look.mY=-fn_801C5278(t,&sample->mUnknownC[5],0);
-    look.mZ=fn_801C5278(t,&sample->mUnknownC[4],0);
+    look.mX=fn_801C5278(t,&sample->mCurves[3],0);
+    look.mY=-fn_801C5278(t,&sample->mCurves[5],0);
+    look.mZ=fn_801C5278(t,&sample->mCurves[4],0);
     look.mX*=camera->mUnknownF4; look.mY*=camera->mUnknownF4; look.mZ*=camera->mUnknownF4;
     fn_802276B4(&direction,&position,&look); fn_802276B4(&look,&look,&position);
     if (fn_80227120(&look)<0.0001f) { look.mX=0.0f; look.mY=1.0f; look.mZ=0.0f; }
@@ -155,16 +154,16 @@ extern "C" void fn_80141920(Camera_8013F738 *camera, Actor_801C009C *actor, int 
     float t=time/fn_801BFFA0();
     Sample_801C009C *sample=fn_801C009C(actor,playback->mUnknown14.mParts[1],playback->mUnknown18.mParts[1],playback->mUnknown1C.mParts[1]);
     if (!sample) return;
-    playback->mUnknown20=(sample->mUnknownC[0].mUnknown8-sample->mUnknownC[0].mUnknown4)*fn_801BFFA0();
+    playback->mUnknown20=(sample->mCurves[0].mUnknown8-sample->mCurves[0].mUnknown4)*fn_801BFFA0();
     Vector_80039F5C base,offset,position,up,look,projection;
     base.mX=sample->mUnknown0[0]; base.mY=-sample->mUnknown0[2]; base.mZ=sample->mUnknown0[1];
-    offset.mX=fn_801C5278(t,&sample->mUnknownC[11],0);
-    offset.mY=-fn_801C5278(t,&sample->mUnknownC[9],0);
-    offset.mZ=fn_801C5278(t,&sample->mUnknownC[10],0);
+    offset.mX=fn_801C5278(t,&sample->mCurves[11],0);
+    offset.mY=-fn_801C5278(t,&sample->mCurves[9],0);
+    offset.mZ=fn_801C5278(t,&sample->mCurves[10],0);
     Angles_80141210 rotation;
-    rotation.mX=(int)(fn_801C5278(t,&sample->mUnknownC[12],0)*46603.37890625f);
-    rotation.mY=(int)(-fn_801C5278(t,&sample->mUnknownC[14],0)*46603.37890625f);
-    rotation.mZ=(int)(fn_801C5278(t,&sample->mUnknownC[13],0)*46603.37890625f);
+    rotation.mX=(int)(fn_801C5278(t,&sample->mCurves[12],0)*46603.37890625f);
+    rotation.mY=(int)(-fn_801C5278(t,&sample->mCurves[14],0)*46603.37890625f);
+    rotation.mZ=(int)(fn_801C5278(t,&sample->mCurves[13],0)*46603.37890625f);
     float q[4],qx[4],qy[4],qz[4],matrix[4][4]; Vector_80039F5C axis;
     fn_801C1F94(q,0,16); q[3]=1.0f;
     axis.mX=1.0f; axis.mY=0.0f; axis.mZ=0.0f; fn_801EBBA4(qx,&axis,rotation.mX);
@@ -172,16 +171,16 @@ extern "C" void fn_80141920(Camera_8013F738 *camera, Actor_801C009C *actor, int 
     axis.mX=0.0f; axis.mY=0.0f; axis.mZ=1.0f; fn_801EBBA4(qz,&axis,rotation.mZ);
     fn_801EB660(q,qy,qz); fn_801EB660(q,q,qx); fn_801EB814(matrix,q);
     fn_801D04C4(); fn_801D06D4(matrix); if (mirror) fn_801D0ADC(0x800000); fn_801D0F80(matrix); fn_801D0544();
-    position.mX=fn_801C5278(t,&sample->mUnknownC[0],0);
-    position.mY=-fn_801C5278(t,&sample->mUnknownC[2],0);
-    position.mZ=fn_801C5278(t,&sample->mUnknownC[1],0);
-    up.mX=fn_801C5278(t,&sample->mUnknownC[6],0);
-    up.mY=-fn_801C5278(t,&sample->mUnknownC[8],0);
-    up.mZ=fn_801C5278(t,&sample->mUnknownC[7],0);
+    position.mX=fn_801C5278(t,&sample->mCurves[0],0);
+    position.mY=-fn_801C5278(t,&sample->mCurves[2],0);
+    position.mZ=fn_801C5278(t,&sample->mCurves[1],0);
+    up.mX=fn_801C5278(t,&sample->mCurves[6],0);
+    up.mY=-fn_801C5278(t,&sample->mCurves[8],0);
+    up.mZ=fn_801C5278(t,&sample->mCurves[7],0);
     fn_802276B4(&up,&up,&position);
-    look.mX=fn_801C5278(t,&sample->mUnknownC[3],0);
-    look.mY=-fn_801C5278(t,&sample->mUnknownC[5],0);
-    look.mZ=fn_801C5278(t,&sample->mUnknownC[4],0);
+    look.mX=fn_801C5278(t,&sample->mCurves[3],0);
+    look.mY=-fn_801C5278(t,&sample->mCurves[5],0);
+    look.mZ=fn_801C5278(t,&sample->mCurves[4],0);
     fn_802276B4(&look,&look,&position);
     if (fn_80227120(&look)<0.0001f) { look.mX=0.0f; look.mY=1.0f; look.mZ=0.0f; }
     if (fn_80227120(&up)<0.0001f) { up.mX=0.0f; up.mY=0.0f; up.mZ=1.0f; }

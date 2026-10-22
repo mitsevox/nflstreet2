@@ -19,7 +19,7 @@ void fn_801BA6BC(Record_800D81C8 *pEntry, int value);
 void fn_800D8140(State_800D8140 *p, Object_800D81C8 *pOther, int entry);
 void fn_800D81C8(State_800D8140 *p, Object_800D81C8 *pOther);
 void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
-unsigned char fn_800C0464(void *p);
+int fn_800C0464(void *p);
 int fn_800DA7AC(Object_801BBD5C *pObject, float value);
 float fn_800DAA68(int index, Block_801BE60C *pBlock, Object_800DA8D8 *pObject, Record_800D81C8 *pEntries,
                   float value);
@@ -262,7 +262,7 @@ extern "C" int fn_800D9188(void)
 {
     int mode = fn_800AD9B4();
 
-    if (mode == 3 || (mode == 2 && fn_800C0464(lbl_803EABA4))) {
+    if (mode == 3 || (mode == 2 && (unsigned char)fn_800C0464(lbl_803EABA4))) {
         return 1;
     }
     return 0;

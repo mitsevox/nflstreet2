@@ -71,10 +71,13 @@ int fn_80194FE8(void) {
     fn_801CEA44(1);
     return 1;
 }
-void fn_80195068(State_80194FE8 *state, int mode) {
+void fn_80195068(State_80194FE8 *state, unsigned int mode) {
     float adjust = 0.0f, amount = 1.0f - state->mUnknown18;
     int left = -320, lower = -224, upper = 224;
     switch (mode) {
+    case 1:
+    case 7:
+        break;
     case 2:
         left = (int)((float)left + amount * (float)left);
         lower = (int)((float)lower + amount * (float)lower);
@@ -271,21 +274,17 @@ int fn_80195A58(State_80194FE8 *state, int event, unsigned int color) {
     return 1;
 }
 void fn_80195B28(int textured, unsigned int value, float alpha) {
+    Mtx44 view, projection;
     GXColor color = {0, 0, 0, 255};
     if (textured) {
-        color.r = color.g = color.b = 255;
+        color.b = color.g = color.r = 255;
     } else {
-        unsigned int red = (value & 255) * 2, green = ((value >> 8) & 255) * 2,
-                     blue = ((value >> 16) & 255) * 2;
-        if (red > 255)
-            red = 255;
-        if (green > 255)
-            green = 255;
-        if (blue > 255)
-            blue = 255;
-        color.r = red;
-        color.g = green;
-        color.b = blue;
+        unsigned int red = (value & 255) * 2;
+        unsigned int green = ((value >> 8) & 255) * 2;
+        unsigned int blue = ((value >> 16) & 255) * 2;
+        color.r = red > 255 ? 255 : red;
+        color.g = green > 255 ? 255 : green;
+        color.b = blue > 255 ? 255 : blue;
     }
     color.a = (int)(alpha * 255.0f);
     fn_8024FC48(1);
@@ -322,7 +321,6 @@ void fn_80195B28(int textured, unsigned int value, float alpha) {
         fn_80252034(1, 4, 5, 5);
     }
     fn_802524D4(lbl_80365128[0]);
-    Mtx44 projection, view;
     fn_8024AC28(projection, 0.0f, 448.0f, 0.0f, 640.0f, 1.0f, 2.0f);
     fn_802523A4(projection, 1);
     fn_801D03D0(view);
@@ -392,10 +390,11 @@ void fn_80196130(void) {
     lbl_803ECBB8 = 0;
 }
 void fn_80196174(Object_80228224 *object) {
+    lbl_802EDCD0.mUnknown4 = 0;
+    lbl_802EDCD0.mUnknown8 = 0;
     lbl_802EDCD0.mUnknownC = object;
     lbl_802EDCD0.mUnknown0 = 0;
     lbl_803ECBB8 = 0;
-    lbl_802EDCD0.mUnknown4 = lbl_802EDCD0.mUnknown8 = 0;
     if (!lbl_803EB738) {
         lbl_803EB738 = fn_801D2BB0(1, 0x23000, 0, 0);
         GXInitTexObj(&lbl_80365168, lbl_803EB738, 320, 224, 4, 0, 0, 0);

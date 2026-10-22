@@ -286,7 +286,7 @@ void fn_8017C9B8(unsigned short team, int value);
 void fn_8017C9E4(unsigned short team, int value);
 void fn_8017CA10(unsigned short team, int value);
 void fn_8017CA68(unsigned short team, int value);
-int fn_801BE648(void *p);
+unsigned short fn_801BE648(void *p);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
 int fn_80238278(const void *p, int size, int seed);
 

@@ -8797,52 +8797,6 @@
       }
     },
     {
-      "source": "src/game/cu_80169F80.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x80169F80",
-        "0x8016A2D4",
-        "0x8016A334",
-        "0x8016A408",
-        "0x8016A4DC",
-        "0x8016A568",
-        "0x8016A5F4",
-        "0x8016A618",
-        "0x8016A770",
-        "0x8016A7DC",
-        "0x8016A9B4",
-        "0x8016AC24",
-        "0x8016ACD8",
-        "0x8016AF34",
-        "0x8016B04C",
-        "0x8016B0AC",
-        "0x8016B0B0",
-        "0x8016B144",
-        "0x8016B210",
-        "0x8016B22C",
-        "0x8016B248",
-        "0x8016B2B8",
-        "0x8016B2E8",
-        "0x8016B310",
-        "0x8016B32C",
-        "0x8016B348",
-        "0x8016B364",
-        "0x8016B7C4",
-        "0x8016B82C",
-        "0x8016BA28",
-        "0x8016BA80",
-        "0x8016BAAC"
-      ],
-      "provenance": {
-        "pull_request": 450,
-        "merged_via": 451,
-        "commit": "aa86edce3869d51dc54292d2a5898e3ed00b8212",
-        "introduced_blob": "6871724f3b1e736ba37bbef5979a495e00efda58"
-      }
-    },
-    {
       "source": "src/game/cu_80198C54.cpp",
       "contributors": [
         "mitsevox"
@@ -21322,6 +21276,1426 @@
         "merged_via": 996,
         "commit": "12cdc6e253bb9974a49409eafb49e2a5b5e6e917",
         "introduced_blob": "5d3396256ee08785c1e9377d489dbeabe03bc380"
+      }
+    },
+    {
+      "source": "src/game/cu_8010F43C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801104E4",
+        "0x801109A4",
+        "0x801111E8",
+        "0x801112D8",
+        "0x801117F8",
+        "0x80111974"
+      ],
+      "provenance": {
+        "pull_request": 856,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "3545a826d27cc12a7609a05ff5b6e80aabb2798e",
+        "original_commit": "9f7355dafa23712ac318b11ce43c508fa39b2ec5",
+        "original_blob": "efbc68ca3c9b0e51cd3097f3d93ccccbe5daa17c",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 991 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_80111B4C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80114F64",
+        "0x80115248"
+      ],
+      "provenance": {
+        "pull_request": 856,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "6184b69a419c772a5053083864bf2b41e0600b71",
+        "original_commit": "9f7355dafa23712ac318b11ce43c508fa39b2ec5",
+        "original_blob": "bed9d675b214052308b1d4cfffd4e06af8e4641b",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 991 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8011B2A4.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8011B2A4"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 1008,
+        "commit": "8b42f836ec7fa2d012593cd6504107d2351b0e2c",
+        "introduced_blob": "32d4a74765eebeec8f85f8be8713dccde9b6c53b",
+        "original_commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
+        "original_blob": "fc60205d020a45cb6cd84a7741e3d0c6e318bc26",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 991 refines them in place to exact matches, and that refinement does not transfer original source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8010C8F8.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8010CB58"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 1008,
+        "commit": "dc175cb7b68ce2689175d3f5814c1e01bd99074a",
+        "introduced_blob": "dfd42552b53965bc0aeb7267e87faff6efeb9075",
+        "original_commit": "358b89fb6ea5623609a79bd0e2eec7cd3e1a450e",
+        "original_blob": "783d7e317ac625f5eb0960832c86848ff006853b",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 991 refines them in place to exact matches, and that refinement does not transfer original source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8011F99C"
+      ],
+      "provenance": {
+        "pull_request": 559,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "c09246c0fa144bf07a0c4bd1c56aa3bee5f8e03f",
+        "original_commit": "39035f390e8a6911806baea36eed9b8da94606d7",
+        "original_blob": "0f979da160943d5ec87c31c06d35b4e8a4eae317",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 991 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800A3D70"
+      ],
+      "provenance": {
+        "pull_request": 682,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
+        "original_commit": "7161cbabdc857c8f8d8b82edc2f7d2ac8909fea8",
+        "original_blob": "29b3052aba027bb73c804b8e76e61b4e34399967",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800AA124",
+        "0x800ABA0C"
+      ],
+      "provenance": {
+        "pull_request": 605,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
+        "original_commit": "d2460efbb069fdedeb7c928a2676529bb8345b84",
+        "original_blob": "2ba0d5765908ee54d68c13ba11da69508d000cee",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8009EDD4"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
+        "original_commit": "358b89fb6ea5623609a79bd0e2eec7cd3e1a450e",
+        "original_blob": "fd61617d65f120110d03476a670d4861a54ef024",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800ADB34",
+        "0x800ADDFC"
+      ],
+      "provenance": {
+        "pull_request": 880,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
+        "original_commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
+        "original_blob": "c5a04c0d9d3f88fb0054ac07d0777f70184a34a8",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800B76E8"
+      ],
+      "provenance": {
+        "pull_request": 853,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
+        "original_commit": "39da91b7cdf62cf795d7b3ab163f96d5ab48a4e8",
+        "original_blob": "3039f627c1900db473fdd35758c3d2464e1c6f7f",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8009A344.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8009A8F0"
+      ],
+      "provenance": {
+        "pull_request": 886,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "07478ba0823b9c0fcf8fe12f24c78ece072a5ac4",
+        "original_commit": "43bd1f53116b8ff3406d17c7f1efe069cdcf4822",
+        "original_blob": "2cc395c091da4aed2442761de8f814bf68a65e0b",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_800ACB8C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800AD204"
+      ],
+      "provenance": {
+        "pull_request": 880,
+        "merged_via": 1008,
+        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
+        "introduced_blob": "0faefbaed9df3ab08c13e7398f89534ad7975fa4",
+        "original_commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
+        "original_blob": "e0344fcd98b11e44ab14628a0e003c6aadb3fca5",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_800AF95C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800AF95C"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 1008,
+        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
+        "introduced_blob": "a30627385f036cef11adbff0b04007acd218744c",
+        "original_commit": "358b89fb6ea5623609a79bd0e2eec7cd3e1a450e",
+        "original_blob": "fbdd6c8f2383e7e29fa51d6d5ace1dfd20339840",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_800BBA2C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800BBA2C"
+      ],
+      "provenance": {
+        "pull_request": 853,
+        "merged_via": 1008,
+        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
+        "introduced_blob": "357f9aa110394a90cf9c6f827e7e54735af41abd",
+        "original_commit": "39da91b7cdf62cf795d7b3ab163f96d5ab48a4e8",
+        "original_blob": "d6645652905b92244ad21c77995b8c1facbbe1de",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800F986C"
+      ],
+      "provenance": {
+        "pull_request": 634,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "c09246c0fa144bf07a0c4bd1c56aa3bee5f8e03f",
+        "original_commit": "f3fed80127536c1361a6734399a6d7a17b1a96a3",
+        "original_blob": "0d0329df8ea939def6a50036d4e31e40b0f3cab1",
+        "integration_adjustment": "Newly exact pre-existing body (fn_800F986C) originates in contribution 634; the PR 994 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800FBF74"
+      ],
+      "provenance": {
+        "pull_request": 556,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "c09246c0fa144bf07a0c4bd1c56aa3bee5f8e03f",
+        "original_commit": "a10d9ae965815037bad1084e7ca2661469fc3895",
+        "original_blob": "a73f9e0cd1ffdfbaf2ce0e1027def659043c7cbe",
+        "integration_adjustment": "Newly exact pre-existing body (fn_800FBF74) originates in contribution 556; the PR 994 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_800F81C0.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800F81C0"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 1008,
+        "commit": "d39361568f1b949b388db0dde5459d2faeae018d",
+        "introduced_blob": "b56c86515b947ed05b454883fe1d85b7ce6b09e7",
+        "original_commit": "358b89fb6ea5623609a79bd0e2eec7cd3e1a450e",
+        "original_blob": "214f5b6e73b5f8af6a21908c5416bba632f87368",
+        "integration_adjustment": "Newly exact pre-existing body (fn_800F81C0) originates in contribution 902; the PR 994 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
+    },
+    {
+      "source": "src/game/cu_800F930C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800F9480",
+        "0x800FA0DC"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 1008,
+        "commit": "d39361568f1b949b388db0dde5459d2faeae018d",
+        "introduced_blob": "174a9a83be17ab226587477fce013de5bf5dae64",
+        "original_commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
+        "original_blob": "735a8c070022b0956d269c11dcc87baf993715e7",
+        "integration_adjustment": "Newly exact pre-existing bodies (fn_800F9480, fn_800FA0DC) originate in contribution 902; the PR 994 source-form refinement that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
+    },
+    {
+      "source": "src/game/cu_80104C9C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80105168",
+        "0x801061E8"
+      ],
+      "provenance": {
+        "pull_request": 887,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "c29e1a4825536a736eaccf0818f84a4a3c0332a4",
+        "original_commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
+        "original_blob": "0d26081f4968dfb55bcfd4996ff3f423e3d4f200",
+        "integration_adjustment": "Newly exact pre-existing bodies (fn_80105168, fn_801061E8) originate in contribution 887; the PR 994 source-form refinement that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800CD0BC",
+        "0x800CD978",
+        "0x800CDB5C",
+        "0x800CE590",
+        "0x800CEDA4",
+        "0x800CEE74"
+      ],
+      "provenance": {
+        "pull_request": 737,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
+        "original_commit": "3a848dec67a8296dfde01ab20c9a7c755d913f7e",
+        "original_blob": "2e0c64d5d61c89b9e9fe882c10feab363573e757",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 995 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800BDA00"
+      ],
+      "provenance": {
+        "pull_request": 853,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
+        "original_commit": "39da91b7cdf62cf795d7b3ab163f96d5ab48a4e8",
+        "original_blob": "3039f627c1900db473fdd35758c3d2464e1c6f7f",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 995 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800C2EC0"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
+        "original_commit": "358b89fb6ea5623609a79bd0e2eec7cd3e1a450e",
+        "original_blob": "fd61617d65f120110d03476a670d4861a54ef024",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 995 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_800BC83C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800BCC30"
+      ],
+      "provenance": {
+        "pull_request": 853,
+        "merged_via": 1008,
+        "commit": "01401366ea7aba9a3404776d25844ccece14cae9",
+        "introduced_blob": "1a94be22c849054606d76aa3567e0a2629e2da97",
+        "original_commit": "13ec0cbdd7ac36baf6c40949e6213785c1169f12",
+        "original_blob": "ecb69c74706b0925c7a6d2dc34d9e51259b65446",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 995 refines them in place to exact matches, and that refinement does not transfer original source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_800C52C8.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800C854C"
+      ],
+      "provenance": {
+        "pull_request": 899,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "1868a34c836c00095f17d2230361a4d5b9f5ce18",
+        "original_commit": "ea739b1f66e07c932344eebcad1e2c3fb3bab1ab",
+        "original_blob": "2ef902f0794bdf8d84a1bb761383d3b29dcf08fd",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 995 refines them in place to exact matches, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_80169F80.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80169F80",
+        "0x8016A2D4",
+        "0x8016A334",
+        "0x8016A408",
+        "0x8016A4DC",
+        "0x8016A568",
+        "0x8016A5F4",
+        "0x8016A618",
+        "0x8016A770",
+        "0x8016A7DC",
+        "0x8016A9B4",
+        "0x8016AC24",
+        "0x8016ACD8",
+        "0x8016AF34",
+        "0x8016B04C",
+        "0x8016B0AC",
+        "0x8016B0B0",
+        "0x8016B144",
+        "0x8016B210",
+        "0x8016B22C",
+        "0x8016B248",
+        "0x8016B2B8",
+        "0x8016B2E8",
+        "0x8016B310",
+        "0x8016B32C",
+        "0x8016B348",
+        "0x8016B364"
+      ],
+      "provenance": {
+        "pull_request": 450,
+        "merged_via": 1008,
+        "commit": "aa86edce3869d51dc54292d2a5898e3ed00b8212",
+        "introduced_blob": "6871724f3b1e736ba37bbef5979a495e00efda58"
+      }
+    },
+    {
+      "source": "src/game/cu_8016B438.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8016B7C4",
+        "0x8016B82C",
+        "0x8016BA28",
+        "0x8016BA80",
+        "0x8016BAAC"
+      ],
+      "provenance": {
+        "pull_request": 450,
+        "merged_via": 1008,
+        "commit": "f51963a9334386dde74d0fba6dae7e85a917c3f5",
+        "introduced_blob": "923590bfd36505da6223f2633c1e37ec19f894b6",
+        "fragment_origin": {
+          "source": "src/game/cu_80169F80.cpp",
+          "commit": "aa86edce3869d51dc54292d2a5898e3ed00b8212",
+          "blob": "6871724f3b1e736ba37bbef5979a495e00efda58"
+        },
+        "integration_adjustment": "Move the unchanged PR 450 bodies into a literal-pool comparison fragment with their contiguous run (PR 999); preserve the original author, contribution PR and per-function credit. fragment_origin keeps the original source location, commit and blob. This is not an original file-boundary claim."
+      }
+    },
+    {
+      "source": "src/game/cu_8016174C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80161A34",
+        "0x80161B38",
+        "0x80161EDC",
+        "0x801624D0"
+      ],
+      "provenance": {
+        "pull_request": 999,
+        "merged_via": 1008,
+        "commit": "f51963a9334386dde74d0fba6dae7e85a917c3f5",
+        "introduced_blob": "0b1694c4545ed52096b0d5c146ea6a3ddda24273"
+      }
+    },
+    {
+      "source": "src/game/cu_8016B438.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8016B438",
+        "0x8016B8C8",
+        "0x8016B938",
+        "0x8016B974",
+        "0x8016B9B0",
+        "0x8016B9EC"
+      ],
+      "provenance": {
+        "pull_request": 999,
+        "merged_via": 1008,
+        "commit": "f51963a9334386dde74d0fba6dae7e85a917c3f5",
+        "introduced_blob": "923590bfd36505da6223f2633c1e37ec19f894b6"
+      }
+    },
+    {
+      "source": "src/game/cu_801744E8.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801744E8",
+        "0x80174750",
+        "0x80174C24",
+        "0x80174C64",
+        "0x80174D10",
+        "0x80174D64",
+        "0x80174E94",
+        "0x80174F4C",
+        "0x801751C0",
+        "0x801752C0",
+        "0x80175BF8"
+      ],
+      "provenance": {
+        "pull_request": 999,
+        "merged_via": 1008,
+        "commit": "f51963a9334386dde74d0fba6dae7e85a917c3f5",
+        "introduced_blob": "9ee01540d2666fedb3475880908291f89eb609fe"
+      }
+    },
+    {
+      "source": "src/game/cu_80194060.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8019424C",
+        "0x80194508"
+      ],
+      "provenance": {
+        "pull_request": 999,
+        "merged_via": 1008,
+        "commit": "f51963a9334386dde74d0fba6dae7e85a917c3f5",
+        "introduced_blob": "86806126c78064b10138156e64b79de0049e2ad9"
+      }
+    },
+    {
+      "source": "src/game/cu_80194FE8.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80195B28",
+        "0x80196174"
+      ],
+      "provenance": {
+        "pull_request": 999,
+        "merged_via": 1008,
+        "commit": "f51963a9334386dde74d0fba6dae7e85a917c3f5",
+        "introduced_blob": "08cd056a3a1759017332faadaab63b567236a349"
+      }
+    },
+    {
+      "source": "src/game/cu_801A0088.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801A0E2C"
+      ],
+      "provenance": {
+        "pull_request": 999,
+        "merged_via": 1008,
+        "commit": "f51963a9334386dde74d0fba6dae7e85a917c3f5",
+        "introduced_blob": "089b4766bedb85d64fa8e65bf168c21b0e9db3f1"
+      }
+    },
+    {
+      "source": "src/game/cu_801A14D8.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801A2A88",
+        "0x801A3C40"
+      ],
+      "provenance": {
+        "pull_request": 999,
+        "merged_via": 1008,
+        "commit": "f51963a9334386dde74d0fba6dae7e85a917c3f5",
+        "introduced_blob": "f87adbd56bd96c873b6410c0db4427ed25adb592"
+      }
+    },
+    {
+      "source": "src/engine/cu_801AA640.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801AA640",
+        "0x801AA6B8",
+        "0x801AA6C8",
+        "0x801AA7B8",
+        "0x801AAA80",
+        "0x801AAB6C",
+        "0x801AAB94",
+        "0x801AAB98",
+        "0x801AABD8",
+        "0x801AAC18",
+        "0x801AAC68",
+        "0x801AAD04",
+        "0x801AADF4",
+        "0x801AAE3C",
+        "0x801AAEDC",
+        "0x801AB004",
+        "0x801AB020",
+        "0x801AB034",
+        "0x801AB05C",
+        "0x801AB074",
+        "0x801AB088",
+        "0x801AB14C",
+        "0x801AB1A4",
+        "0x801AB1D4",
+        "0x801AB2AC",
+        "0x801AB35C",
+        "0x801AB388",
+        "0x801AB3EC",
+        "0x801AB430",
+        "0x801AB5F0",
+        "0x801AB7B0",
+        "0x801AB9C4",
+        "0x801ABA18",
+        "0x801ABAC8",
+        "0x801ABB9C",
+        "0x801ABF48",
+        "0x801ABF64",
+        "0x801AC084",
+        "0x801AC1AC",
+        "0x801AC2D8",
+        "0x801AC310"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "7e6343d3941ebfd1e5ecf968f5ae51715ff4b2ec",
+        "introduced_blob": "b72721cd0189eef87b4f50e8ec29443c054cc4ae"
+      }
+    },
+    {
+      "source": "src/engine/cu_801AC6B0.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801AC6B0",
+        "0x801AC974",
+        "0x801ACA00",
+        "0x801ACB54",
+        "0x801ACB9C",
+        "0x801ACC24",
+        "0x801ACDE0",
+        "0x801ACF78",
+        "0x801ACF7C",
+        "0x801ACF80",
+        "0x801ACFD4",
+        "0x801ACFEC",
+        "0x801AD000",
+        "0x801AD028",
+        "0x801AD03C",
+        "0x801AD07C",
+        "0x801AD0B0",
+        "0x801AD0EC",
+        "0x801AD11C",
+        "0x801AD16C",
+        "0x801AD1DC",
+        "0x801AD380"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "913f234e529a26fe9879ee5e340727fb9bb3de06",
+        "introduced_blob": "db828d797d710efaf4014dd35f483ff433a6476c"
+      }
+    },
+    {
+      "source": "src/engine/cu_801AD424.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801AD46C",
+        "0x801AD470",
+        "0x801AD474",
+        "0x801AD478",
+        "0x801AD47C",
+        "0x801AD480",
+        "0x801AD484"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "9f1136fb75dffb4d1bb01c1fb0595d05df9916a6",
+        "introduced_blob": "e811a2e74ac6f29a60258c553a5c5b3bb9fe43cd"
+      }
+    },
+    {
+      "source": "src/engine/cu_801AD488.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801AD488"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "7e6343d3941ebfd1e5ecf968f5ae51715ff4b2ec",
+        "introduced_blob": "a37fa30f03de247bb5a80edd8ba46b24cc12fd96"
+      }
+    },
+    {
+      "source": "src/engine/cu_801AD57C.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801AD57C",
+        "0x801AD610",
+        "0x801AD66C",
+        "0x801AD6F8",
+        "0x801AD79C",
+        "0x801AD83C",
+        "0x801AD9C0",
+        "0x801ADA68",
+        "0x801ADB40",
+        "0x801ADB94",
+        "0x801ADC08",
+        "0x801ADD44",
+        "0x801ADDB4",
+        "0x801ADDD4",
+        "0x801ADDF8",
+        "0x801ADE80",
+        "0x801ADEC4",
+        "0x801ADF44",
+        "0x801ADF64",
+        "0x801AE004",
+        "0x801AE28C",
+        "0x801AE2AC",
+        "0x801AE328"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "7e6343d3941ebfd1e5ecf968f5ae51715ff4b2ec",
+        "introduced_blob": "e8887c553987b78b0d84a5ed3bd771d6ec52d561"
+      }
+    },
+    {
+      "source": "src/engine/cu_801B8C18.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801B9410",
+        "0x801B9484",
+        "0x801B94CC",
+        "0x801B9530",
+        "0x801B95AC",
+        "0x801B95FC",
+        "0x801B96E4",
+        "0x801B9724",
+        "0x801B97B8",
+        "0x801B97C8",
+        "0x801B97E0",
+        "0x801B983C",
+        "0x801B9884",
+        "0x801B98A8",
+        "0x801B990C",
+        "0x801B9988",
+        "0x801B99C4",
+        "0x801B9A5C",
+        "0x801B9A98",
+        "0x801B9B30",
+        "0x801B9BB8",
+        "0x801B9C30",
+        "0x801B9CAC",
+        "0x801B9CD4"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "92ec72363d3f3a16cce595df62e1f806a7632a7a",
+        "introduced_blob": "7c17ca56959552aacf3a2926a7c3993a0cdbf296"
+      }
+    },
+    {
+      "source": "src/engine/cu_801B9D00.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801B9D00",
+        "0x801B9D50",
+        "0x801B9D84",
+        "0x801B9DA8",
+        "0x801B9DCC",
+        "0x801B9DDC",
+        "0x801B9E88",
+        "0x801B9EDC",
+        "0x801B9EEC",
+        "0x801B9EF8"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "7e6343d3941ebfd1e5ecf968f5ae51715ff4b2ec",
+        "introduced_blob": "f26d782d4b6e43947557a5845e34675bc08b2f9c"
+      }
+    },
+    {
+      "source": "src/engine/cu_801B9F00.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801B9FEC",
+        "0x801BA03C"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "c289f5ebd944c7aefdfcb9e6b3776392d50e2721",
+        "introduced_blob": "2826fcaeffb0fa41aa78170dbb6a0e28b3809e14"
+      }
+    },
+    {
+      "source": "src/engine/cu_801BA2A8.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801BA2A8",
+        "0x801BA2D0",
+        "0x801BA360",
+        "0x801BA384",
+        "0x801BA398",
+        "0x801BA418",
+        "0x801BA568",
+        "0x801BA5A8",
+        "0x801BA60C",
+        "0x801BA650",
+        "0x801BA6B0",
+        "0x801BA6BC",
+        "0x801BA720",
+        "0x801BA784"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "a7dde67244652b4779f602ade45acbf6d514c611",
+        "introduced_blob": "72ff632b66e5bdf76b8b1618d4c48eb90428eb85"
+      }
+    },
+    {
+      "source": "src/engine/cu_801BA818.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801BA818",
+        "0x801BA848",
+        "0x801BA850",
+        "0x801BAB24",
+        "0x801BAB2C",
+        "0x801BAB34",
+        "0x801BAB88",
+        "0x801BAC1C",
+        "0x801BAC9C",
+        "0x801BACB0",
+        "0x801BACBC",
+        "0x801BACD0",
+        "0x801BAD70"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "a7dde67244652b4779f602ade45acbf6d514c611",
+        "introduced_blob": "e232ba28a2b5b7b33ac220c246ba407c2ff64f08"
+      }
+    },
+    {
+      "source": "src/engine/cu_801BAD98.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801BAD98",
+        "0x801BAE08",
+        "0x801BAEA4",
+        "0x801BAEAC",
+        "0x801BB2D8",
+        "0x801BB480",
+        "0x801BB544",
+        "0x801BB570",
+        "0x801BB608",
+        "0x801BB638",
+        "0x801BB948",
+        "0x801BB994",
+        "0x801BBA18",
+        "0x801BBB54",
+        "0x801BBC3C",
+        "0x801BBCC8",
+        "0x801BBD5C",
+        "0x801BBDCC",
+        "0x801BBE5C",
+        "0x801BBEC0",
+        "0x801BBF44",
+        "0x801BBFE4",
+        "0x801BC044",
+        "0x801BC060",
+        "0x801BC084",
+        "0x801BC0C0",
+        "0x801BC440",
+        "0x801BC57C",
+        "0x801BC64C",
+        "0x801BC654"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "7e6343d3941ebfd1e5ecf968f5ae51715ff4b2ec",
+        "introduced_blob": "3df41f9c3662827c18399a2c563ca4efd57bfac7"
+      }
+    },
+    {
+      "source": "src/engine/cu_801BC65C.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801BC65C",
+        "0x801BC67C",
+        "0x801BC780"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "a7dde67244652b4779f602ade45acbf6d514c611",
+        "introduced_blob": "7f847973ddc0b9cd60e38a2eeb81b9ee6a977e57"
+      }
+    },
+    {
+      "source": "src/engine/cu_801BCA74.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801BCEEC"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "a7dde67244652b4779f602ade45acbf6d514c611",
+        "introduced_blob": "a8622abf66b116d9c6e68c438865e82a8de8b386"
+      }
+    },
+    {
+      "source": "src/engine/cu_801BCF40.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801BCF40",
+        "0x801BCF98",
+        "0x801BD26C",
+        "0x801BD4C0",
+        "0x801BD4E4",
+        "0x801BD60C",
+        "0x801BD640",
+        "0x801BD660",
+        "0x801BD690",
+        "0x801BD6D4",
+        "0x801BD6DC",
+        "0x801BD710",
+        "0x801BD758",
+        "0x801BD81C",
+        "0x801BD910",
+        "0x801BD934"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "c289f5ebd944c7aefdfcb9e6b3776392d50e2721",
+        "introduced_blob": "281154074d02f79ed7e3040ad5e77765a0ec5f24"
+      }
+    },
+    {
+      "source": "src/engine/cu_801BDA30.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801BDA30",
+        "0x801BDBD4",
+        "0x801BDC3C",
+        "0x801BDF38",
+        "0x801BDF90",
+        "0x801BDFF8",
+        "0x801BE030",
+        "0x801BE040",
+        "0x801BE594",
+        "0x801BE5D0",
+        "0x801BE60C",
+        "0x801BE648",
+        "0x801BE67C",
+        "0x801BE72C",
+        "0x801BE760",
+        "0x801BE798",
+        "0x801BE7C8"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "c289f5ebd944c7aefdfcb9e6b3776392d50e2721",
+        "introduced_blob": "9f9827c99cfa3703f356f286472d7d8effaf2e1b"
+      }
+    },
+    {
+      "source": "src/engine/cu_801BE82C.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801BE82C",
+        "0x801BE860",
+        "0x801BE910"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "c289f5ebd944c7aefdfcb9e6b3776392d50e2721",
+        "introduced_blob": "17603910adde25757aa5285110c5c1ef8bdca32f"
+      }
+    },
+    {
+      "source": "src/engine/cu_801BF090.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801BF090",
+        "0x801BF094",
+        "0x801BF11C",
+        "0x801BF140",
+        "0x801BF2B0",
+        "0x801BF384",
+        "0x801BF3C8",
+        "0x801BF434",
+        "0x801BF46C",
+        "0x801BF4A8"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "c289f5ebd944c7aefdfcb9e6b3776392d50e2721",
+        "introduced_blob": "aa4df79336cb44126ab5e51954b6febcd21f3777"
+      }
+    },
+    {
+      "source": "src/engine/cu_801BF5E8.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801BF5E8",
+        "0x801BF648",
+        "0x801BF6AC",
+        "0x801BF748",
+        "0x801BF7BC",
+        "0x801BF870",
+        "0x801BF8DC"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "a7dde67244652b4779f602ade45acbf6d514c611",
+        "introduced_blob": "039c7681d2fdeae42a9b2b903c3c3ecb6c72efd7"
+      }
+    },
+    {
+      "source": "src/engine/cu_801BF94C.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801BF94C",
+        "0x801BF9A0",
+        "0x801BFA50",
+        "0x801BFAEC",
+        "0x801BFB20",
+        "0x801BFC34",
+        "0x801BFCB0",
+        "0x801BFCB8",
+        "0x801BFCC4",
+        "0x801BFD48",
+        "0x801BFD8C",
+        "0x801BFE4C"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "a7dde67244652b4779f602ade45acbf6d514c611",
+        "introduced_blob": "77782a7e2179a5eaaea08d0a1dfbe5390120c8cf"
+      }
+    },
+    {
+      "source": "src/engine/cu_801BFEF8.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801BFEF8",
+        "0x801BFF50",
+        "0x801BFFA0"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "a7dde67244652b4779f602ade45acbf6d514c611",
+        "introduced_blob": "9064f5b4a8b8749d114384aeb63f35551b89ab74"
+      }
+    },
+    {
+      "source": "src/engine/cu_801BFFA8.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801BFFA8",
+        "0x801BFFC4",
+        "0x801BFFD8",
+        "0x801C001C",
+        "0x801C009C",
+        "0x801C00F8",
+        "0x801C01B8",
+        "0x801C01C4"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "a7dde67244652b4779f602ade45acbf6d514c611",
+        "introduced_blob": "27ed09c481265c584c2d99c35c03b25f343aac43"
+      }
+    },
+    {
+      "source": "src/engine/cu_801C01DC.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801C01DC",
+        "0x801C01E4",
+        "0x801C029C",
+        "0x801C02C4",
+        "0x801C02CC",
+        "0x801C02DC",
+        "0x801C02EC",
+        "0x801C06A0"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "c289f5ebd944c7aefdfcb9e6b3776392d50e2721",
+        "introduced_blob": "9bef5bfaa210829348f3b97ea184459fc9de1676"
+      }
+    },
+    {
+      "source": "src/engine/cu_801C06E8.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801C07DC",
+        "0x801C089C",
+        "0x801C0928",
+        "0x801C09B8",
+        "0x801C09F8",
+        "0x801C0A38",
+        "0x801C0BA8",
+        "0x801C0C14",
+        "0x801C0CCC",
+        "0x801C0D8C"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "a7dde67244652b4779f602ade45acbf6d514c611",
+        "introduced_blob": "3b5c3e3e948b84a074fcad5d1a08564a847800d1"
+      }
+    },
+    {
+      "source": "src/engine/cu_801C0E04.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801C0E04",
+        "0x801C0F64",
+        "0x801C0F84",
+        "0x801C0FA4",
+        "0x801C1054",
+        "0x801C10A4",
+        "0x801C10D8",
+        "0x801C10DC"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "a7dde67244652b4779f602ade45acbf6d514c611",
+        "introduced_blob": "4461f507ec59fe214fb433f3713dab40a8e07ac8"
+      }
+    },
+    {
+      "source": "src/engine/cu_801C10E0.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801C10E0",
+        "0x801C1198",
+        "0x801C1218",
+        "0x801C1260",
+        "0x801C1448",
+        "0x801C1564",
+        "0x801C1654",
+        "0x801C1710",
+        "0x801C17BC",
+        "0x801C1870",
+        "0x801C1950",
+        "0x801C1A60",
+        "0x801C1B1C",
+        "0x801C1B90",
+        "0x801C1C1C"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "7e6343d3941ebfd1e5ecf968f5ae51715ff4b2ec",
+        "introduced_blob": "f22f731c973d4dd63080602c3330b43c3c06c611"
+      }
+    },
+    {
+      "source": "src/engine/cu_801C1D54.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801C1D54"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "a7dde67244652b4779f602ade45acbf6d514c611",
+        "introduced_blob": "d99ea3194f2e2f2c79efc5377f225729af9b7e06"
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800AB3B0"
+      ],
+      "provenance": {
+        "pull_request": 880,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "8a5cb785e690d477e12a6dcf23167145a95499e9",
+        "original_commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
+        "original_blob": "c5a04c0d9d3f88fb0054ac07d0777f70184a34a8",
+        "integration_adjustment": "Preserve the original contributor and PR of this pre-existing comparison body; PR 1004 refines it in place to an exact match, and that refinement does not transfer original source credit. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8010F43C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801115C0"
+      ],
+      "provenance": {
+        "pull_request": 856,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "3545a826d27cc12a7609a05ff5b6e80aabb2798e",
+        "original_commit": "9f7355dafa23712ac318b11ce43c508fa39b2ec5",
+        "original_blob": "efbc68ca3c9b0e51cd3097f3d93ccccbe5daa17c",
+        "integration_adjustment": "Newly exact pre-existing body (fn_801115C0) originates in contribution 856; the PR 1005 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_80119B98.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80119B98"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 1008,
+        "commit": "aedc50e7c4dafcb7cdf7805f539363aa7ce06c52",
+        "introduced_blob": "1ce412db542af5144eb406d9202646a78b47348e",
+        "original_commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
+        "original_blob": "46cb37e165c686cecd1430755d5045713fea92c1",
+        "integration_adjustment": "Newly exact pre-existing body (fn_80119B98) originates in contribution 902; the PR 1005 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
+    },
+    {
+      "source": "src/game/cu_800D0474.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D0694"
+      ],
+      "provenance": {
+        "pull_request": 565,
+        "merged_via": 1008,
+        "commit": "aa78344f7d7174919ffa6a768c7e043a58d45653",
+        "introduced_blob": "f3b649ab2e9f7a398822799edf71caa5946889da",
+        "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
+        "original_blob": "2dfb3e203b332fa303d05733ea7fd931ea190ddf",
+        "integration_adjustment": "Newly exact pre-existing body (fn_800D0694) originates in contribution 565; the PR 1006 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
+    },
+    {
+      "source": "src/game/cu_800D8A24.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D9188"
+      ],
+      "provenance": {
+        "pull_request": 565,
+        "merged_via": 1008,
+        "commit": "aa78344f7d7174919ffa6a768c7e043a58d45653",
+        "introduced_blob": "cba0e04be90c474c2bad4b7abb9bd1e532ad7e34",
+        "original_commit": "fb98d33881bbb7b309351b9ccc2d45f2c1f55411",
+        "original_blob": "99d14a2579e1cf45276a8a91533d460da825f29a",
+        "integration_adjustment": "Newly exact pre-existing body (fn_800D9188) originates in contribution 565; the PR 1006 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
+    },
+    {
+      "source": "src/game/cu_801260D4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801274D4"
+      ],
+      "provenance": {
+        "pull_request": 562,
+        "merged_via": 1008,
+        "commit": "cdc761f91d247ee79c68c72b7b1f8a8096680916",
+        "introduced_blob": "9046df2eaf99aea57d49258b1ea8d0be4941209c",
+        "original_commit": "99be8c37a587a495e4ed189bbec87b1e43f6ea7a",
+        "original_blob": "43896253a88aeaf316074051e4a59d1992b7fad6",
+        "integration_adjustment": "Newly exact pre-existing body (fn_801274D4) originates in contribution 562; the PR 1006 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution. Combine independently reviewed near-match bodies with the reviewed canonical library declarations in the same source file; retain the original contributor, original PR and original source commit/blob. The integrated source is re-pinned for squash-history verification without changing comparison extents or source credit."
       }
     },
     {

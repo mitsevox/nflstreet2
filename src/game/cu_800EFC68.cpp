@@ -1,3 +1,4 @@
+#include "engine/cu_801B9F00.h"
 #include "game/fn_801248D4.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
@@ -541,7 +542,7 @@ Record_8011F4E0 *fn_8011F4E0(void);
 void fn_8016DF34(Object_80039F5C *p);
 int fn_801783AC(int bit);
 void fn_8009A8D4(void *p);
-int fn_8009EAB0(Object_80039F5C *p, unsigned char a);
+int fn_8009EAB0(Object_80039F5C *p, int a);
 int fn_8009EF6C(void *p);
 int fn_80099AD0(Object_80039F5C *p, Object_80137ABC *pBall, int a, int b, int c, int d, int e);
 int fn_80099C80(Object_80039F5C *p, Object_80137ABC *pBall, int a, int *pOut, int *pOut2);
@@ -671,7 +672,6 @@ int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **p
 float fn_8022710C(void *pV);
 Object_800670B4 *fn_80168708(int team);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
-int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
 void fn_800FC290(Object_80039F5C *p, Block_800FCC24 *pBlock, Point_8017886C target);
 int fn_800FC648(Object_80039F5C *p, Block_800FCC24 *pBlock);
 int fn_800FCE58(Object_80039F5C *p, Block_800FCC24 *pBlock);
@@ -692,8 +692,6 @@ int fn_800B83F4(Object_80039F5C *p);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 int fn_800D0B90(Object_80039F5C *p);
 void fn_800D0C0C(Object_80039F5C *p, int a);
-int fn_801BA568(void *pA, void *pB, int id);
-int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
 int fn_801BA6B0(Entry_800EAC9C *pEntry);
 void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
 void fn_801BD81C(void *p, float value);
@@ -1552,11 +1550,10 @@ extern "C" int fn_800F986C(Object_80039F5C *p) {
     case 15:
         if (kind == 2 || kind == 3) {
             result = 12;
+        } else if (pos.mX > base.mX) {
+            result = 14;
         } else {
             result = 10;
-            if (pos.mX > base.mX) {
-                result = 14;
-            }
         }
         break;
     case 2:
@@ -1596,7 +1593,7 @@ extern "C" Object_80039F5C *fn_800F9AF0(unsigned char slot) {
 extern "C" Object_80039F5C *fn_800F9BD8(int forward, Object_80039F5C *p) {
     Record_8011F4E0 *pRecord = fn_8011F4E0();
     Object_80039F5C *pResult = 0;
-    unsigned char id = 0;
+    int id = 0;
     int found = 0;
     unsigned char i;
 
@@ -1606,14 +1603,20 @@ extern "C" Object_80039F5C *fn_800F9BD8(int forward, Object_80039F5C *p) {
         id = p->mIdBytes[1];
     }
     for (i = 0; i < 3; i++) {
-        unsigned char slot = !forward ? 2 - i : i;
+        unsigned char slot;
+
+        if (forward) {
+            slot = i;
+        } else {
+            slot = 2 - i;
+        }
         if (found) {
             Object_80039F5C *pSlot = fn_800F9AF0(slot);
             if (pSlot) {
                 pResult = pSlot;
                 break;
             }
-        } else if (fn_80039F5C(fn_80178308(), pRecord->mUnknown8[slot])->mIdBytes[1] == id) {
+        } else if (fn_80039F5C(fn_80178308(), pRecord->mUnknown8[slot])->mIdBytes[1] == (unsigned char)id) {
             found = 1;
         }
     }
@@ -1903,8 +1906,8 @@ extern "C" Object_80039F5C *fn_800FBF74(Object_80039F5C *pTarget, Object_80039F5
 
     for (i = 0; i < n; i++) {
         Object_80039F5C *p = fn_80039F5C(fn_80178320(), i);
-        unsigned short slot = fn_800FC014(p, pOther) - 1;
-        if (slot <= 4 && fn_80039F5C(fn_80178308(), pRecord->mUnknown8[slot]) == pTarget) {
+        unsigned short kind = fn_800FC014(p, pOther);
+        if (kind >= 1 && kind <= 5 && fn_80039F5C(fn_80178308(), pRecord->mUnknown8[kind - 1]) == pTarget) {
             pResult = p;
             break;
         }
@@ -2048,7 +2051,7 @@ extern "C" int fn_800FC4A8(Object_80039F5C *p, Block_800FCC24 *pBlock, int mode)
 
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, p, 1.0f);
         index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0);
-        p->mpUnknown800[index].mUnknown44 = speed;
+        p->mpUnknown800[index].mUnknown2C = speed;
         return 1;
     }
     return 0;
@@ -4542,7 +4545,7 @@ extern "C" int fn_801167C4(void *pTarget, Object_80039F5C *p)
             if (pOther != p) {
                 unsigned char id = pOther->mpState->mId;
                 if (id == 40 || id == 92) {
-                    fn_8009EAB0(pOther, fn_800C1180(pOther));
+                    fn_8009EAB0(pOther, (unsigned char)fn_800C1180(pOther));
                     if (fn_8009EF6C(pTarget) != 0) {
                         found = 1;
                     }
@@ -5646,11 +5649,12 @@ int fn_8011F904(void *p, void *pBuffer)
 int fn_8011F99C(void *p, void *pBuffer)
 {
     Lookup_8012078C *pLookup = (Lookup_8012078C *)p;
+    void *pData;
 
     *pLookup = *(Lookup_8012078C *)pBuffer;
-    pBuffer = (char *)pBuffer + sizeof(Lookup_8012078C);
-    memcpy(pLookup->mpUnknown0, pBuffer, pLookup->mUnknown16);
-    pBuffer = (char *)pBuffer + pLookup->mUnknown16;
+    pData = (char *)pBuffer + sizeof(Lookup_8012078C);
+    memcpy(pLookup->mpUnknown0, pData, pLookup->mUnknown16);
+    pBuffer = (char *)pData + pLookup->mUnknown16;
     memcpy(pLookup->mpUnknown4, pBuffer, pLookup->mUnknown16);
     pBuffer = (char *)pBuffer + pLookup->mUnknown16;
     memcpy(pLookup->mpUnknown8, pBuffer, pLookup->mUnknown16 * sizeof(Entry_8011FBE0));

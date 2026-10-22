@@ -141,14 +141,14 @@ void fn_80194108(int index, Texture_80194108 *out, int region)
 void fn_80194248(Texture_80194108 *) {}
 void fn_8019424C(Quad_8019424C *quad, float x, float y)
 {
-    quad->mUnknown24[3][0] = x;
-    quad->mUnknown24[3][1] = y;
-    quad->mUnknown24[2][0] = 0.0f;
     quad->mUnknown24[0][0] = 0.0f;
     quad->mUnknown24[0][1] = 0.0f;
     quad->mUnknown24[1][0] = x;
     quad->mUnknown24[1][1] = 0.0f;
+    quad->mUnknown24[2][0] = 0.0f;
     quad->mUnknown24[2][1] = y;
+    quad->mUnknown24[3][0] = x;
+    quad->mUnknown24[3][1] = y;
 }
 void fn_80194278(Quad_8019424C *quad, Texture_80194108 *texture) { quad->mUnknown0 = texture; }
 void fn_80194280(Quad_8019424C *quad, int, unsigned int x, unsigned int y, unsigned int width, unsigned int height)
@@ -194,6 +194,8 @@ void fn_801943D4(void)
 }
 void fn_80194508(int alpha)
 {
+    Mtx44 view;
+    Mtx44 projection;
     GXColor color = {255,255,255,(unsigned char)(alpha * 2 - 1)};
     fn_8024FC48(1);
     fn_8024FB58(4, color);
@@ -213,10 +215,8 @@ void fn_80194508(int alpha)
     fn_802528B0(1);
     fn_80252034(1,4,5,5);
     fn_802524D4(lbl_80365058[0]);
-    Mtx44 projection;
     fn_8024AC28(projection, 0.0f, 480.0f, 0.0f, 640.0f, 1.0f, 2.0f);
     fn_802523A4(projection,1);
-    Mtx44 view;
     fn_801D03D0(view);
     fn_8025251C(view,0);
     fn_802525BC(0);

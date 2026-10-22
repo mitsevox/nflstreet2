@@ -32,7 +32,7 @@ void fn_8019F044(Object_8003DEC4 *pObject, void *a, unsigned short b, void *c);
 void fn_8019F1F0(Object_8003DEC4 *pObject, int a, unsigned int b, int count);
 void fn_8019F48C(float *p);
 void fn_8019F4AC(Object_8003DEC4 *pObject);
-void *fn_801BAD70(Object_801BC084 *pRecord, int b, int handle, int c);
+void *fn_801BAD70(Object_801BC084 *pRecord, int b, int handle, unsigned int c);
 int fn_801BBE5C(int a, int b);
 void fn_801CF8A8(int *pOut, int a, int b, float t);
 void fn_801D0470(int a);

@@ -1,4 +1,5 @@
 #include "game/fn_801FCE10.h"
+#include "game/fn_801F9908.h"
 #include "game/fn_801C1F94.h"
 #include "game/fn_8022F478.h"
 #include "game/Object_8007A334.h"
@@ -17,7 +18,6 @@ void fn_8018CA14(int);
 int fn_801F9980(int, int *);
 int fn_801F967C(int, int);
 void fn_801F9718(int, int, ColumnValue_802D6424 *, int *, int);
-int fn_801F9908(int handle, Table_8007E020 *pTables, Object_80023BBC *pFilter, QueryResult *pResult, int flags);
 int fn_801F9D70(int, int, Object_80023BBC *, unsigned short *);
 int fn_8022C628(int, int, int *, unsigned short *);
 int fn_80229AA4(int, int, int *, unsigned short *);

@@ -187,6 +187,8 @@ extern "C" float fn_800AD204(int team, int value)
         break;
     case 1:
     case 2:
+        result += 63.75f;
+        break;
     default:
         result += 63.75f;
         break;

@@ -10,7 +10,7 @@ extern "C" {
 void fn_801A679C(short *pOut, short *pA, short *pB, int weight, int count);
 void fn_801A67DC(short *pOut, short *pA, short *pB, int weight, int count, short *pOffset, short *pScale);
 void fn_801A6838(short *pOut, short *pA, int count, short *pOffset, short *pScale);
-float fn_801BE5D0(void *p, int index);
+float fn_801BE5D0(void *p, unsigned short index);
 void fn_801CF810(int *pOut, int *pA, int *pB, float t);
 void fn_801CF8A8(int *pOut, int a, int b, float t);
 void fn_80227930(float *pOut, float *pA, float *pB, float t);
