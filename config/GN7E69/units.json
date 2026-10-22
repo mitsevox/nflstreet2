@@ -1282,6 +1282,10 @@
       "address": "0x80239ED4",
       "evidence": "Original complete OSResetSystem call instruction0x8023C244 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
+    "LCEnable": {
+      "address": "0x80239E9C",
+      "evidence": "evidence.tsv external row LCEnable: SDK OSCache body inside the provisional sdk.json OSCache.c range; REL24 call from 0x80236F18."
+    },
     "OSCancelThread": {
       "address": "0x8023DE84",
       "evidence": "Original complete OSResetSystem call instruction0x8023C320 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."

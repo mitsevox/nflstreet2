@@ -5,6 +5,7 @@
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
 #include <string.h>
+#include "engine/Render_802353F8.h"
 #include "game/fn_8022F478.h"
 #include "game/fn_80233CBC.h"
 #include "game/fn_801FCE10.h"
@@ -167,22 +168,6 @@ typedef struct Owner_80235328 {
     char mUnknown0[8];
     Source_80235328 *mpUnknown8;
 } Owner_80235328;
-
-typedef struct Flags_802353D8 {
-    int mUnknown0;
-} Flags_802353D8;
-
-typedef struct Render_802353F8 {
-    int mUnknown0;
-    int mUnknown4;
-    char mUnknown8[76];
-    int mUnknown84;
-    int mUnknown88;
-    char mUnknown92[8];
-    char mUnknown100[52];
-    char mUnknown152[32];
-    int mUnknown184;
-} Render_802353F8;
 
 typedef struct Cache_8022F8A8 {
     unsigned short mUnknown0;
@@ -1768,16 +1753,16 @@ void fn_802353D0(void *p)
 {
 }
 
-void fn_802353D4(void)
+void fn_802353D4(Render_802353F8 *p, int flags)
 {
 }
 
-void fn_802353D8(Flags_802353D8 *p, int flags)
+void fn_802353D8(Render_802353F8 *p, int flags)
 {
     p->mUnknown0 |= flags;
 }
 
-void fn_802353E8(Flags_802353D8 *p, int flags)
+void fn_802353E8(Render_802353F8 *p, int flags)
 {
     p->mUnknown0 &= ~flags;
 }
@@ -1843,8 +1828,8 @@ void fn_80235588(Render_802353F8 *p, int a)
 {
     p->mUnknown0 = 0x4000;
     p->mUnknown4 = -1;
-    p->mUnknown88 = 0;
-    p->mUnknown84 = 0;
+    p->mpUnknown88 = 0;
+    p->mpUnknown84 = 0;
     p->mUnknown184 = 0;
     fn_8020F28C(p->mUnknown100);
     fn_80210054(p->mUnknown92, 0);
