@@ -16114,7 +16114,7 @@ void fn_800750F0(int value);
 void fn_80075188(int value);
 void fn_80076DAC(int value);
 extern void *lbl_803EA9E8;
-extern char lbl_802FC880[];
+extern char lbl_802EC880[];
 }
 
 void Class_80297AB8::vfn_03()
@@ -16126,11 +16126,9 @@ void Class_80297AB8::vfn_03()
     fn_800B8608();
     fn_80194F1C(1);
     fn_800CC448();
-    int selection;
-    memcpy(&selection, fn_8016871C(fn_80178308())->mUnknown1C[1], sizeof(selection));
-    fn_800996FC(selection);
+    fn_800996FC(fn_8016871C(fn_80178308())->mUnknown14);
     fn_800271D4(lbl_803EA9E8);
-    fn_801C6280(-1, 3, lbl_802FC880);
+    fn_801C6280(-1, 3, lbl_802EC880);
     fn_8006F0C8(127);
     fn_80074DF8(0);
     fn_80074E90(0);
