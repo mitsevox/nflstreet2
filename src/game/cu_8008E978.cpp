@@ -16236,3 +16236,130 @@ extern "C" void fn_800B4900(QueryCursor cursor, int index, short *pRatings, void
         pOtherRatings[i] = value;
     }
 }
+
+#include "game/Item_800476DC.h"
+
+struct Record_800B4DE4 {
+    float mUnknown0;
+    float mUnknown4;
+    unsigned short mUnknown8;
+    char mUnknown10[2];
+    unsigned char mUnknown12;
+    unsigned char mUnknown13;
+    char mUnknown14[2];
+    unsigned char mUnknown16;
+    unsigned char mUnknown17;
+    unsigned char mUnknown18;
+    unsigned char mUnknown19;
+    unsigned char mUnknown20;
+    unsigned char mUnknown21;
+    unsigned char mUnknown22;
+    unsigned char mUnknown23;
+    unsigned char mUnknown24;
+    unsigned char mUnknown25;
+    unsigned char mUnknown26;
+    char mUnknown27[21];
+    char mUnknown48[21];
+    char mUnknown69[1];
+};
+
+extern "C" {
+char *fn_801C2EB4(char *pDest, const char *pSource);
+char *fn_801C32CC(char *pString);
+extern float lbl_802E821C[][2];
+extern float lbl_802E826C[][2];
+float fn_80237260(int stream);
+void fn_800476CC(Item_800476DC *p, const char *name);
+void fn_8013AA00(Object_80137ABC *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
+}
+
+extern "C" short fn_800ABE10(int team, int index, short value)
+{
+    if (fn_800B65A0(team) != 255) {
+        fn_800ABDA4(team == 0);
+    } else {
+        switch (fn_800ABDA4(team)) {
+        case 1:
+            value = (short)(lbl_802E826C[index][0] * 255.0f + lbl_802E826C[index][1] * value);
+            break;
+        case 2:
+            value = (short)(lbl_802E821C[index][0] * 255.0f + lbl_802E821C[index][1] * value);
+            break;
+        }
+    }
+    return value;
+}
+
+extern "C" void fn_800B4DE4(QueryCursor cursor, int index, void *pData)
+{
+    Record_800B4DE4 *pOut = (Record_800B4DE4 *)pData;
+    int values[16];
+    cursor.mUnknown4 = index;
+    fn_801FCE10(0,
+        "fetch from \x8a 'ANFP' into \x88 and 'ANLP' into \x88 and 'NKNP' into \x88 and "
+        "'TGWP' into \x82 and 'TGHP' into \x82 and 'IKSP' into \x82 and 'NAHP' into \x82 and "
+        "'SOPP' into \x82 and 'DIGP' into \x82 and 'LCUP' into \x82 and 'LECP' into \x82 and "
+        "'1TGS' into \x82 and '2TGS' into \x82 and '3TGS' into \x82 and '4TGS' into \x82 and "
+        "'NSPP' into \x82 and 'TBYP' into \x82 and 'XELP' into \x82 and 'TLFP' into \x82\n",
+        &cursor, pOut->mUnknown27, pOut->mUnknown48, pOut->mUnknown69,
+        &values[0], &values[1], &values[2], &values[3], &values[4], &values[5],
+        &values[6], &values[7], &values[8], &values[9], &values[10], &values[11],
+        &values[12], &values[13], &values[14], &values[15]);
+    fn_801C2EB4(pOut->mUnknown69, pOut->mUnknown48);
+    pOut->mUnknown20 = values[13];
+    if (fn_8017F584() == 0) {
+        if (fn_80054D24(30) || fn_80054D24(34)) {
+            pOut->mUnknown0 = (float)values[1] * 0.33;
+        } else if (fn_80054D24(31)) {
+            pOut->mUnknown0 = (float)values[1] * 1.5;
+        } else if (fn_80054D24(44)) {
+            pOut->mUnknown0 = (float)values[1] * (fn_80237260(0) + 0.5f);
+        } else {
+            pOut->mUnknown0 = (float)values[1];
+        }
+    } else {
+        pOut->mUnknown0 = (float)values[1];
+    }
+    pOut->mUnknown4 = (float)values[0] + 160.0f;
+    pOut->mUnknown12 = values[2];
+    pOut->mUnknown13 = values[3];
+    pOut->mUnknown16 = values[4];
+    pOut->mUnknown8 = values[5];
+    pOut->mUnknown22 = values[14];
+    pOut->mUnknown17 = values[6];
+    pOut->mUnknown18 = values[7];
+    pOut->mUnknown19 = values[12];
+    pOut->mUnknown23 = values[8];
+    pOut->mUnknown24 = values[9];
+    pOut->mUnknown25 = values[10];
+    pOut->mUnknown26 = values[11];
+    pOut->mUnknown21 = values[15];
+}
+
+extern "C" void fn_800B5150(Object_80039F5C *p)
+{
+    if (p) {
+        Object_8003DEC4 *model = (Object_8003DEC4 *)p->mpUnknown4;
+        char name[21];
+        fn_801C2EB4(name, p->mUnknown2927 + 21);
+        fn_801C32CC(name);
+        fn_800476CC(model->mUnknown988, p->mUnknown2927 + 42);
+        float scale = p->mUnknown2900 * 0.013888889f;
+        if (scale == 0.0f) scale = 1.0f;
+        fn_8009BD88(p, scale);
+    }
+}
+
+extern "C" void fn_800B5764(Vector_80039F5C *pOut)
+{
+    pOut->mX = 0.0f;
+    pOut->mY = 0.0f;
+    Object_80039F5C *pOwner = fn_80137BEC();
+    float height;
+    if (pOwner) {
+        height = (pOwner->mUnknown2900 * 0.027777778f + 1.159353f) * 0.5f;
+    } else {
+        height = 1.65f;
+    }
+    fn_8013AA00(fn_801374BC(), height, 0, pOut);
+}
