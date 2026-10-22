@@ -48,7 +48,7 @@ static int fn_801C8F14(FileAsync_801C8F14 *pA, FileAsync_801C8F14 *pB)
     return diff;
 }
 
-static void fn_801C8F2C(int count, int error, volatile FileWaitResult_801C8F14 *pResult)
+static void fn_801C8F2C(int count, int error, FileWaitResult_801C8F14 *pResult)
 {
     pResult->mCount += count;
     pResult->mDone = 1;
@@ -366,21 +366,21 @@ int fn_801C9910(const char *pName, int device)
 int fn_801C9960(int handle, char *pBuffer, int size, void (*callback)(int, int, int))
 {
     FileReq_801C8F14 req;
-    volatile FileWaitResult_801C8F14 result;
+    FileWaitResult_801C8F14 result;
     int error = 0;
     int count;
 
-    req.mpBuffer = pBuffer;
-    req.mPriority = 100;
     result.mCount = 0;
-    req.mBlockSize = 0x8000;
     result.mDone = 0;
-    req.mSize = size;
-    req.mCyclic = 0;
-    req.mpDoneFn = (FileDoneFn_801C8F14)fn_801C8F2C;
     req.mHandle = handle;
-    req.mpArg = (void *)&result;
+    req.mpBuffer = pBuffer;
+    req.mSize = size;
+    req.mBlockSize = 0x8000;
+    req.mPriority = 100;
     req.mpBlockFn = 0;
+    req.mpDoneFn = (FileDoneFn_801C8F14)fn_801C8F2C;
+    req.mpArg = &result;
+    req.mCyclic = 0;
     fn_801C9174(&req, 1);
     fn_801CA834(handle);
     count = result.mCount;
@@ -400,21 +400,21 @@ int fn_801C9960(int handle, char *pBuffer, int size, void (*callback)(int, int, 
 int fn_801C9A3C(int handle, char *pBuffer, int size, void (*callback)(int, int, int))
 {
     FileReq_801C8F14 req;
-    volatile FileWaitResult_801C8F14 result;
+    FileWaitResult_801C8F14 result;
     int error = 0;
     int count;
 
-    req.mpBuffer = pBuffer;
-    req.mPriority = 100;
     result.mCount = 0;
-    req.mBlockSize = 0x8000;
     result.mDone = 0;
-    req.mSize = size;
-    req.mCyclic = 0;
-    req.mpDoneFn = (FileDoneFn_801C8F14)fn_801C8F2C;
     req.mHandle = handle;
-    req.mpArg = (void *)&result;
+    req.mpBuffer = pBuffer;
+    req.mSize = size;
+    req.mBlockSize = 0x8000;
+    req.mPriority = 100;
     req.mpBlockFn = 0;
+    req.mpDoneFn = (FileDoneFn_801C8F14)fn_801C8F2C;
+    req.mpArg = &result;
+    req.mCyclic = 0;
     fn_801C9174(&req, 2);
     fn_801CA834(handle);
     count = result.mCount;

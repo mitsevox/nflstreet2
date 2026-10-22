@@ -148,21 +148,21 @@ void fn_801D0710(float *pAxis, int angle)
     float t = 1.0f - c;
     float *pCurrent;
 
-    m[3] = 0.0f;
     m[0] = t * x * x + c;
-    m[4] = t * x * y + s * z;
-    m[8] = t * x * z - s * y;
-    m[7] = 0.0f;
-    m[5] = t * y * y + c;
-    m[9] = t * y * z + s * x;
-    m[11] = 0.0f;
     m[1] = t * x * y - s * z;
-    m[10] = t * z * z + c;
     m[2] = t * x * z + s * y;
-    m[14] = 0.0f;
-    m[13] = 0.0f;
+    m[3] = 0.0f;
+    m[4] = t * x * y + s * z;
+    m[5] = t * y * y + c;
     m[6] = t * y * z - s * x;
+    m[7] = 0.0f;
+    m[8] = t * x * z - s * y;
+    m[9] = t * y * z + s * x;
+    m[10] = t * z * z + c;
+    m[11] = 0.0f;
     m[12] = 0.0f;
+    m[13] = 0.0f;
+    m[14] = 0.0f;
     m[15] = 1.0f;
     pCurrent = fn_801D0444();
     fn_801D058C(m, pCurrent, m);
@@ -337,18 +337,17 @@ void fn_801D0E44(float scale)
 void fn_801D0E94(void)
 {
     float *p = fn_801D0444();
-    float t1 = p[1];
-    float t2;
-    float t6;
+    float t;
 
+    t = p[1];
     p[1] = p[4];
-    t2 = p[2];
+    p[4] = t;
+    t = p[2];
     p[2] = p[8];
-    t6 = p[6];
+    p[8] = t;
+    t = p[6];
     p[6] = p[9];
-    p[4] = t1;
-    p[8] = t2;
-    p[9] = t6;
+    p[9] = t;
 }
 
 void fn_801D0EE4(void)

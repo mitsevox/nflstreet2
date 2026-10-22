@@ -8,15 +8,15 @@ typedef struct Chunk_801CEE54 {
 
 void fn_801CEE54(RenderBin_801CEC90 *pBin)
 {
+    pBin->mActive = 1;
     pBin->mUnk28 = 0;
     pBin->mUnk30 = 0;
     pBin->mpNext = 0;
-    pBin->mpMark = 0;
     pBin->mUnk38 = 0;
-    pBin->mUnk44 = 0;
     pBin->mUnk3C = 0;
+    pBin->mpMark = 0;
+    pBin->mUnk44 = 0;
     pBin->mUnk48 = 0;
-    pBin->mActive = 1;
 }
 
 void fn_801CEE84(RenderBin_801CEC90 *pBins, unsigned int numBins)
