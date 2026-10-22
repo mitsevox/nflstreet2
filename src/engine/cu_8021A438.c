@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "UIStudio/UIStudio.h"
+#include "engine/cu_8021A438.h"
 
 /* Partial source for the engine range 0x8021A438-0x80221198 (neutral file
    name). Functions without a body here keep their original bytes. */
@@ -15,35 +16,6 @@ Int32 *fn_8021D888(UISInfoT *pInfo, Int32 *p, UISThreadActionT *pAction, Int16 G
 void fn_8021D404(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Delta);
 void fn_8021D718(UISInfoT *pInfo, Int32 Value, Int32 Count, Int32 *pArgs);
 
-/* 8-byte item of an Entry_8021E688 item array. */
-typedef struct Item_8021E688 {
-    Int16 unk_00;     /* 0x00 */
-    Uint8 unk_02;     /* 0x02 */
-    Uint8 unk_03[1];
-    Int32 unk_04;     /* 0x04 */
-} Item_8021E688;
-
-/* 36-byte entry of the array at Object_8021E688 +0x0C. */
-typedef struct Entry_8021E688 {
-    Uint8 unk_00[0x08];
-    Int32 unk_08;  /* 0x08 */
-    Int32 unk_0C;  /* 0x0C */
-    Uint32 Flags;  /* 0x10 */
-    void *pData;   /* 0x14 */
-    Int32 unk_18;  /* 0x18 */
-    Uint16 bItems; /* 0x1C: set once pItems is allocated */
-    Int16 NumItems;            /* 0x1E */
-    Item_8021E688 *pItems;     /* 0x20 */
-} Entry_8021E688;
-
-/* Only the accessed members are declared; the size is not established. */
-typedef struct Object_8021E688 {
-    Uint8 unk_00[0x04];
-    Uint16 NumA;               /* 0x04: number of entries at pA */
-    Uint8 unk_06[0x06];
-    Entry_8021E688 *pA;        /* 0x0C */
-} Object_8021E688;
-
 typedef void Callback_803EBF40(Int32, Int32);
 typedef void Callback_803EBF44(Int32);
 
@@ -54,14 +26,6 @@ extern Callback_803EBF44 *lbl_803EBF44;
 int fn_801F0DB8(void *pData, int index);
 int fn_801F0E68(void *pData, int index);
 void fn_80220BE0(void);
-void fn_80221314(Object_8021E688 *pObject, Int16 a, Int16 b);
-void fn_80225F10(Object_8021E688 *pObject, Int16 a, Int16 b);
-void fn_802262C4(Object_8021E688 *pObject, Int32 a, Int32 b);
-void fn_80225D90(Object_8021E688 *pObject, Int16 a);
-void fn_802260F8(Object_8021E688 *pObject, Int32 a);
-void fn_80225E10(Object_8021E688 *pObject, Int16 a);
-void fn_8022615C(Object_8021E688 *pObject, Int32 a);
-void fn_8022618C(Object_8021E688 *pObject, Int32 a, Int32 b);
 void fn_8021E160(Object_8021E688 *pObject, Int32 Index, Entry_8021E688 *pEntry);
 void fn_8021EE54(void *pData, Int32 a, Int32 b, Int32 c, void *pArg);
 
