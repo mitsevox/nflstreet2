@@ -67,7 +67,6 @@ void fn_801D04C4(void);
 void fn_801D0C58(void *);
 void fn_801D0ADC(int);
 void fn_80227CC0(void *, void *);
-void fn_8024DC48(int, void *, int);
 void fn_80252034(int, int, int, int);
 float *fn_801D0444(void);
 void fn_8025251C(float *, int);
@@ -91,7 +90,6 @@ void fn_801D1288(int, void *);
 void fn_80214140(int);
 void fn_801D131C(int);
 void fn_801D0F80(void *);
-void fn_8024DCD4(void);
 void fn_8024FC48(int);
 void fn_8024FC84(int, int, int, int, int, int, int);
 
@@ -164,9 +162,9 @@ void fn_801A6CF8(int mode) {
   if (lbl_803ECC50 == mode)
     return;
   if (mode == 0) {
-    fn_8024DC48(9, lbl_803667E0, 16);
-    fn_8024DC48(11, &lbl_803667E0[0].mUnknownC, 16);
-    fn_8024DC48(13, lbl_80366780, 8);
+    GXSetArray(GX_VA_POS, lbl_803667E0, 16);
+    GXSetArray(GX_VA_CLR0, &lbl_803667E0[0].mUnknownC, 16);
+    GXSetArray(GX_VA_TEX0, lbl_80366780, 8);
     if (lbl_803ECC34 == 2) {
       fn_80252034(0, 4, 5, 5);
       GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
@@ -178,9 +176,9 @@ void fn_801A6CF8(int mode) {
     }
     GXSetNumTevStages(1);
   } else if (mode == 1) {
-    fn_8024DC48(9, lbl_80366DE0, 16);
-    fn_8024DC48(11, &lbl_80366DE0[0].mUnknownC, 16);
-    fn_8024DC48(13, lbl_80366780, 8);
+    GXSetArray(GX_VA_POS, lbl_80366DE0, 16);
+    GXSetArray(GX_VA_CLR0, &lbl_80366DE0[0].mUnknownC, 16);
+    GXSetArray(GX_VA_TEX0, lbl_80366780, 8);
     fn_80252034(1, 4, 5, 5);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
@@ -456,7 +454,7 @@ void fn_801A7880(void) {
   fn_801D0ADC(lbl_803EB850);
   fn_801D0F80(lbl_803667A0);
   fn_801D0544();
-  fn_8024DCD4();
+  GXInvalidateVtxCache();
   GXClearVtxDesc();
   GXSetVtxDesc(GX_VA_PNMTXIDX, GX_DIRECT);
   GXSetVtxDesc(GX_VA_POS, GX_INDEX8);

@@ -8,6 +8,7 @@
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXVert.h>
 #include <dolphin/gx/GXTev.h>
+#include <dolphin/gx/GXManage.h>
 
 struct State_80194FE8 {
     int mUnknown0;
@@ -28,7 +29,6 @@ extern GXTexObj lbl_80365168;
 extern unsigned int lbl_803ECBB0;
 extern float lbl_803ECBB4;
 extern int lbl_803ECBB8;
-void fn_8024E4D0(void);
 void fn_801CEA44(int);
 int fn_801CEC74(void);
 void fn_8024FC48(int);
@@ -60,7 +60,7 @@ int fn_80194FE8(void) {
     GXSetTexCopyDst(320, 224, GX_TF_RGB565, GX_TRUE);
     GXSetCopyFilter(0, 0, 0, 0);
     GXCopyTex(lbl_803EB738, 0);
-    fn_8024E4D0();
+    GXPixModeSync();
     fn_801CEA44(1);
     return 1;
 }

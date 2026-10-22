@@ -237,13 +237,16 @@ class Placement(Fixture):
             self.plan(self.objects(symbols=[{"name": "fn_80003114", "value": 0, "shndx": 0}]))
         with self.assertRaisesRegex(ValueError, "outside the executable"):
             self.plan(self.objects(symbols=[{"name": "lbl_80004800", "value": 0, "shndx": 0}]))
-        # Only a configured external past the whole image may be linker-defined (absolute).
+        # Only a configured external before or past the whole image may be linker-defined (absolute).
         manifest = copy.deepcopy(self.manifest)
         manifest["externals"] = {"_stack_addr": {"address": "0x80006000", "evidence": "x"},
+                                 "_low": {"address": "0x80000010", "evidence": "x"},
                                  "Gap": {"address": "0x80004800", "evidence": "x"}}
         _, _, resolved = self.plan(self.objects(symbols=[{"name": "_stack_addr", "value": 0, "shndx": 0}]),
                                    manifest)
         self.assertEqual(resolved["_stack_addr"], 0x80006000)
+        _, _, resolved = self.plan(self.objects(symbols=[{"name": "_low", "value": 0, "shndx": 0}]), manifest)
+        self.assertEqual(resolved["_low"], 0x80000010)
         self.assertIn("_stack_addr = 0x80006000;",
                       sb.link_script(TARGET, self.sections, {s["name"]: [] for s in self.sections},
                                      {"_stack_addr": 0x80006000}))

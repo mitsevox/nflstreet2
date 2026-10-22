@@ -47,6 +47,16 @@ class ExportSemantics(unittest.TestCase):
         self.assertEqual(units['src/done.c']['measures']['complete_units'], 1)
 
 
+class PublicDefinitions(unittest.TestCase):
+    def test_global_and_weak_definitions_resolve_other_files(self):
+        symbols = [{"name": "Global", "bind": sb.STB_GLOBAL, "shndx": 1},
+                   {"name": "OSReport", "bind": sb.STB_WEAK, "shndx": 1},
+                   {"name": "Local", "bind": sb.STB_LOCAL, "shndx": 1},
+                   {"name": "Undefined", "bind": sb.STB_GLOBAL, "shndx": sb.SHN_UNDEF},
+                   {"name": "WeakUndefined", "bind": sb.STB_WEAK, "shndx": sb.SHN_UNDEF}]
+        self.assertEqual(function_compare.public_definitions(symbols), {"Global", "OSReport"})
+
+
 class AcceptedDataSymbols(unittest.TestCase):
     """Public data of linked source resolves at its verified placement, and fails closed otherwise."""
     SECTIONS = [{'name': ''}, {'name': '.text', 'flags': sb.SHF_EXECINSTR | sb.SHF_ALLOC},

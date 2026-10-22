@@ -844,11 +844,11 @@
     },
     "_stack_addr": {
       "address": "0x803FE4C0",
-      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; outside the image, so the linked source build defines it as an absolute link-script symbol; no object storage claimed."
     },
     "_stack_end": {
       "address": "0x803EE4C0",
-      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; outside the image, so the linked source build defines it as an absolute link-script symbol; no object storage claimed."
     },
     "OSGetCurrentContext": {
       "address": "0x8023A588",
@@ -4091,7 +4091,7 @@
           "OSSetErrorHandler",
           "__OSUnhandledException"
         ],
-        "evidence": "The target keeps this file's 4 exact function(s) at the placed range; the global ones are the roots and the file-local ones stay through their callers. The file's other function(s) (OSVReport) have no code anywhere in the target's .init/.text (byte search with call and address fields masked), so the linker drops them as the original link did."
+        "evidence": "The target keeps this file's 4 exact function(s) at the placed range; the global ones are the roots and the file-local ones stay through their callers. The file's other function(s) (OSVReport) have no code anywhere in the target's .init/.text (byte search with call and address fields masked; the 4 masked matches do not call vprintf, so none is OSVReport), so the linker drops them as the original link did."
       },
       "sections": [
         {
@@ -10912,7 +10912,7 @@
           "GXRedirectWriteGatherPipe",
           "GXRestoreWriteGatherPipe"
         ],
-        "evidence": "Only real target global functions; sixstatic routines naturally reachable through existingsourcecallgraph/addressrefs; extra3body92sourcepreserved"
+        "evidence": "Only real target global functions; six static routines are reached through the source call graph. The file's other functions (GXSetCurrentGXThread, 76 bytes; GXGetFifoBase, 8 bytes) have no code in GXFifo's target range: GXSetCurrentGXThread has no masked-byte match in .init/.text, and the 10 matches of the generic 8-byte GXGetFifoBase getter are all game code. The linker drops them."
       },
       "sections": [
         {

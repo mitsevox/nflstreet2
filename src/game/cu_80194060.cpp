@@ -67,7 +67,6 @@ void fn_801CE774(void);
 extern "C" void GXInitTexPreLoadRegion(GXTexRegion *,int,int,int,int);
 int fn_801CF6D4(void *,int);
 extern "C" void GXInvalidateTexAll(void);
-void fn_8024E4F4(void);
 void fn_801CEA7C(int);
 int fn_801CEA08(void);
 int fn_801CEA14(void);
@@ -79,7 +78,6 @@ extern "C" RegionCallback_80194054 GXSetTexRegionCallback(RegionCallback_8019405
 int fn_801CE930(void);
 int fn_801CE944(int);
 void GXCopyDisp(int,int);
-void fn_8024E4D0(void);
 
 void fn_80194508(int);
 void fn_8019471C(void);
@@ -110,7 +108,7 @@ void fn_80194060(void)
         fn_80194508(128);
         fn_8019471C();
         GXCopyDisp(fn_801CE944((unsigned char)fn_801CE930()), 1);
-        fn_8024E4D0();
+        GXPixModeSync();
         GXFlush();
     }
 }
@@ -249,7 +247,7 @@ void fn_80194858(int mode)
 {
     lbl_803EB728 = fn_801EEB44(lbl_802EBE14,44);
     GXInvalidateTexAll();
-    fn_8024E4F4();
+    GXTexModeSync();
     fn_801CEA7C(0);
     lbl_803EB72C[1] = 0;
     switch (mode) {
@@ -311,7 +309,7 @@ void fn_80194AEC(int a)
     fn_80194508(128);
     fn_8019471C();
     GXCopyDisp(fn_801CE944((unsigned char)fn_801CE930()),a);
-    fn_8024E4D0();
+    GXPixModeSync();
     GXFlush();
     fn_801946C4();
     fn_801CEA7C(1);

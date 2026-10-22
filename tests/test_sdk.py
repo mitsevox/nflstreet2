@@ -174,6 +174,20 @@ class LinkerRetention(unittest.TestCase):
             self.assertNotIn("Missing", [s["name"] for s in symbols])
             self.assertEqual(unit["native_object_sha256"], source_build.sha256(unit["object"]))
 
+    def test_weak_functions_can_be_roots(self):
+        # OSError.c's OSReport and OSPanic are __declspec(weak) in the SDK.
+        with tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
+            root = Path(temporary)
+            unit = self.fixture(root)
+            source = root / "retention.c"
+            source.write_text(source.read_text().replace("int Keep(void);", "__declspec(weak) int Keep(void);"))
+            sdk_cc.compile(self.sdk, self.wrapper, source, unit["object"],
+                           unit["object"].with_suffix(".d"), FLAGS, [], ROOT)
+            native = source_build.read_elf(unit["object"].read_bytes())[1]
+            self.assertEqual(next(s for s in native if s["name"] == "Keep")["bind"], source_build.STB_WEAK)
+            sections, symbols = source_build.retained_layout(unit, self.compiler, self.wrapper)
+            self.assertEqual([s["name"] for s in symbols if s["type"] == 2], ["Keep"])
+
     def test_absent_roots_are_rejected(self):
         with tempfile.TemporaryDirectory(dir=ROOT / "build") as temporary:
             root = Path(temporary)

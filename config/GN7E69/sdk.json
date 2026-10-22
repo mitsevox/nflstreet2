@@ -1917,7 +1917,7 @@
       "name": "src/dolphin/gx/GXMisc.c",
       "source": "src/dolphin/gx/GXMisc.c",
       "library": "GX",
-      "evidence": "Combined independently reviewed BFBB, OOT GameCube and TP C forms give 24 complete target functions spanning 2280 code bytes. The source is the whole SDK GXMisc.c in target order: those 24 functions plus GXSetDrawSync and GXReadDrawSync, which have no code in the target and are dropped by the linker. Linked in the source build; original archive edges remain provisional.",
+      "evidence": "Combined independently reviewed BFBB, OOT GameCube and TP C forms give 24 complete target functions spanning 2280 code bytes. The source is GXMisc.c in target order: those 24 functions plus GXSetDrawSync and GXReadDrawSync, which have no code in the target and are dropped by the linker. Linked in the source build; original archive edges remain provisional.",
       "sections": [
         {
           "section": ".text",
@@ -1925,7 +1925,7 @@
           "end": "0x8024E888",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Combined independently reviewed BFBB, OOT GameCube and TP C forms give 24 complete target functions spanning 2280 code bytes. The source is the whole SDK GXMisc.c in target order: those 24 functions plus GXSetDrawSync and GXReadDrawSync, which have no code in the target and are dropped by the linker. Linked in the source build; original archive edges remain provisional."
+          "evidence": "Combined independently reviewed BFBB, OOT GameCube and TP C forms give 24 complete target functions spanning 2280 code bytes. The source is GXMisc.c in target order: those 24 functions plus GXSetDrawSync and GXReadDrawSync, which have no code in the target and are dropped by the linker. Linked in the source build; original archive edges remain provisional."
         },
         {
           "section": ".sbss",
