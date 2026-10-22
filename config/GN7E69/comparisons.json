@@ -29096,6 +29096,426 @@
       ]
     },
     {
+      "source": "src/engine/cu_80229270.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80229270-0x8022F428 (src/engine/cu_80229270.c), its function and name rows and the cu_80229270 compiler and source-form rows. The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80229270",
+          "end": "0x8022F428"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80229270",
+          "start": "0x80229270",
+          "end": "0x802293A8"
+        },
+        {
+          "symbol": "fn_802293A8",
+          "start": "0x802293A8",
+          "end": "0x802293B0"
+        },
+        {
+          "symbol": "fn_802293B0",
+          "start": "0x802293B0",
+          "end": "0x802293B4"
+        },
+        {
+          "symbol": "fn_802293B4",
+          "start": "0x802293B4",
+          "end": "0x802293FC"
+        },
+        {
+          "symbol": "fn_802293FC",
+          "start": "0x802293FC",
+          "end": "0x8022942C"
+        },
+        {
+          "symbol": "fn_8022942C",
+          "start": "0x8022942C",
+          "end": "0x80229434"
+        },
+        {
+          "symbol": "fn_80229434",
+          "start": "0x80229434",
+          "end": "0x80229438"
+        },
+        {
+          "symbol": "fn_80229438",
+          "start": "0x80229438",
+          "end": "0x80229470"
+        },
+        {
+          "symbol": "fn_80229470",
+          "start": "0x80229470",
+          "end": "0x80229494"
+        },
+        {
+          "symbol": "fn_80229494",
+          "start": "0x80229494",
+          "end": "0x802294D8"
+        },
+        {
+          "symbol": "fn_802294D8",
+          "start": "0x802294D8",
+          "end": "0x802294F4"
+        },
+        {
+          "symbol": "fn_802294F4",
+          "start": "0x802294F4",
+          "end": "0x802294FC"
+        },
+        {
+          "symbol": "fn_802294FC",
+          "start": "0x802294FC",
+          "end": "0x80229554"
+        },
+        {
+          "symbol": "fn_80229554",
+          "start": "0x80229554",
+          "end": "0x802295C0"
+        },
+        {
+          "symbol": "fn_802295C0",
+          "start": "0x802295C0",
+          "end": "0x802295F8"
+        },
+        {
+          "symbol": "fn_802295F8",
+          "start": "0x802295F8",
+          "end": "0x80229644"
+        },
+        {
+          "symbol": "fn_80229644",
+          "start": "0x80229644",
+          "end": "0x80229674"
+        },
+        {
+          "symbol": "fn_80229674",
+          "start": "0x80229674",
+          "end": "0x802296B4"
+        },
+        {
+          "symbol": "fn_802296B4",
+          "start": "0x802296B4",
+          "end": "0x80229718"
+        },
+        {
+          "symbol": "fn_80229718",
+          "start": "0x80229718",
+          "end": "0x80229744"
+        },
+        {
+          "symbol": "fn_80229744",
+          "start": "0x80229744",
+          "end": "0x80229760"
+        },
+        {
+          "symbol": "fn_80229760",
+          "start": "0x80229760",
+          "end": "0x80229788"
+        },
+        {
+          "symbol": "fn_80229788",
+          "start": "0x80229788",
+          "end": "0x802297B0"
+        },
+        {
+          "symbol": "fn_802297B0",
+          "start": "0x802297B0",
+          "end": "0x802297D8"
+        },
+        {
+          "symbol": "fn_80229E78",
+          "start": "0x80229E78",
+          "end": "0x80229E80"
+        },
+        {
+          "symbol": "fn_80229E80",
+          "start": "0x80229E80",
+          "end": "0x80229E88"
+        },
+        {
+          "symbol": "fn_8022A428",
+          "start": "0x8022A428",
+          "end": "0x8022A490"
+        },
+        {
+          "symbol": "fn_8022A490",
+          "start": "0x8022A490",
+          "end": "0x8022A508"
+        },
+        {
+          "symbol": "fn_8022A508",
+          "start": "0x8022A508",
+          "end": "0x8022A558"
+        },
+        {
+          "symbol": "fn_8022A558",
+          "start": "0x8022A558",
+          "end": "0x8022A59C"
+        },
+        {
+          "symbol": "fn_8022A59C",
+          "start": "0x8022A59C",
+          "end": "0x8022A624"
+        },
+        {
+          "symbol": "fn_8022AB6C",
+          "start": "0x8022AB6C",
+          "end": "0x8022AC80"
+        },
+        {
+          "symbol": "fn_8022AC80",
+          "start": "0x8022AC80",
+          "end": "0x8022ACEC"
+        },
+        {
+          "symbol": "fn_8022BF60",
+          "start": "0x8022BF60",
+          "end": "0x8022BF68"
+        },
+        {
+          "symbol": "fn_8022BF68",
+          "start": "0x8022BF68",
+          "end": "0x8022C02C"
+        },
+        {
+          "symbol": "fn_8022C02C",
+          "start": "0x8022C02C",
+          "end": "0x8022C098"
+        },
+        {
+          "symbol": "fn_8022C098",
+          "start": "0x8022C098",
+          "end": "0x8022C0E0"
+        },
+        {
+          "symbol": "fn_8022C3C8",
+          "start": "0x8022C3C8",
+          "end": "0x8022C410"
+        },
+        {
+          "symbol": "fn_8022C81C",
+          "start": "0x8022C81C",
+          "end": "0x8022C858"
+        },
+        {
+          "symbol": "fn_8022C858",
+          "start": "0x8022C858",
+          "end": "0x8022C894"
+        },
+        {
+          "symbol": "fn_8022C894",
+          "start": "0x8022C894",
+          "end": "0x8022C8C4"
+        },
+        {
+          "symbol": "fn_8022C8C4",
+          "start": "0x8022C8C4",
+          "end": "0x8022C8F0"
+        },
+        {
+          "symbol": "fn_8022C8F0",
+          "start": "0x8022C8F0",
+          "end": "0x8022C930"
+        },
+        {
+          "symbol": "fn_8022C930",
+          "start": "0x8022C930",
+          "end": "0x8022C938"
+        },
+        {
+          "symbol": "fn_8022C938",
+          "start": "0x8022C938",
+          "end": "0x8022C988"
+        },
+        {
+          "symbol": "fn_8022C988",
+          "start": "0x8022C988",
+          "end": "0x8022C9A8"
+        },
+        {
+          "symbol": "fn_8022C9A8",
+          "start": "0x8022C9A8",
+          "end": "0x8022C9B4"
+        },
+        {
+          "symbol": "fn_8022C9B4",
+          "start": "0x8022C9B4",
+          "end": "0x8022C9B8"
+        },
+        {
+          "symbol": "fn_8022CADC",
+          "start": "0x8022CADC",
+          "end": "0x8022CAEC"
+        },
+        {
+          "symbol": "fn_8022CC6C",
+          "start": "0x8022CC6C",
+          "end": "0x8022CC98"
+        },
+        {
+          "symbol": "fn_8022CC98",
+          "start": "0x8022CC98",
+          "end": "0x8022CCC4"
+        },
+        {
+          "symbol": "fn_8022CCC4",
+          "start": "0x8022CCC4",
+          "end": "0x8022CD0C"
+        },
+        {
+          "symbol": "fn_8022CD0C",
+          "start": "0x8022CD0C",
+          "end": "0x8022CD30"
+        },
+        {
+          "symbol": "fn_8022CD30",
+          "start": "0x8022CD30",
+          "end": "0x8022CD3C"
+        },
+        {
+          "symbol": "fn_8022CD3C",
+          "start": "0x8022CD3C",
+          "end": "0x8022CD40"
+        },
+        {
+          "symbol": "fn_8022CD40",
+          "start": "0x8022CD40",
+          "end": "0x8022CDA0"
+        },
+        {
+          "symbol": "fn_8022CDA0",
+          "start": "0x8022CDA0",
+          "end": "0x8022CDF8"
+        },
+        {
+          "symbol": "fn_8022CDF8",
+          "start": "0x8022CDF8",
+          "end": "0x8022CED8"
+        },
+        {
+          "symbol": "fn_8022D14C",
+          "start": "0x8022D14C",
+          "end": "0x8022D154"
+        },
+        {
+          "symbol": "fn_8022D154",
+          "start": "0x8022D154",
+          "end": "0x8022D1B8"
+        },
+        {
+          "symbol": "fn_8022D1B8",
+          "start": "0x8022D1B8",
+          "end": "0x8022D23C"
+        },
+        {
+          "symbol": "fn_8022D23C",
+          "start": "0x8022D23C",
+          "end": "0x8022D250"
+        },
+        {
+          "symbol": "fn_8022D250",
+          "start": "0x8022D250",
+          "end": "0x8022D25C"
+        },
+        {
+          "symbol": "fn_8022D25C",
+          "start": "0x8022D25C",
+          "end": "0x8022D268"
+        },
+        {
+          "symbol": "fn_8022D3AC",
+          "start": "0x8022D3AC",
+          "end": "0x8022D3D4"
+        },
+        {
+          "symbol": "fn_8022D3D4",
+          "start": "0x8022D3D4",
+          "end": "0x8022D418"
+        },
+        {
+          "symbol": "fn_8022D6E8",
+          "start": "0x8022D6E8",
+          "end": "0x8022D6F0"
+        },
+        {
+          "symbol": "fn_8022D6F0",
+          "start": "0x8022D6F0",
+          "end": "0x8022D6FC"
+        },
+        {
+          "symbol": "fn_8022D6FC",
+          "start": "0x8022D6FC",
+          "end": "0x8022D710"
+        },
+        {
+          "symbol": "fn_8022D864",
+          "start": "0x8022D864",
+          "end": "0x8022D86C"
+        },
+        {
+          "symbol": "fn_8022D86C",
+          "start": "0x8022D86C",
+          "end": "0x8022D874"
+        },
+        {
+          "symbol": "fn_8022DB08",
+          "start": "0x8022DB08",
+          "end": "0x8022DB20"
+        },
+        {
+          "symbol": "fn_8022DBF4",
+          "start": "0x8022DBF4",
+          "end": "0x8022DC38"
+        },
+        {
+          "symbol": "fn_8022DC38",
+          "start": "0x8022DC38",
+          "end": "0x8022DC7C"
+        },
+        {
+          "symbol": "fn_8022DC7C",
+          "start": "0x8022DC7C",
+          "end": "0x8022DCB0"
+        },
+        {
+          "symbol": "fn_8022DCB0",
+          "start": "0x8022DCB0",
+          "end": "0x8022DCE4"
+        },
+        {
+          "symbol": "fn_8022DCE4",
+          "start": "0x8022DCE4",
+          "end": "0x8022DD18"
+        },
+        {
+          "symbol": "fn_8022DD18",
+          "start": "0x8022DD18",
+          "end": "0x8022DD4C"
+        },
+        {
+          "symbol": "fn_8022DD4C",
+          "start": "0x8022DD4C",
+          "end": "0x8022DD80"
+        },
+        {
+          "symbol": "fn_8022DD80",
+          "start": "0x8022DD80",
+          "end": "0x8022DDB4"
+        },
+        {
+          "symbol": "fn_8022DDB4",
+          "start": "0x8022DDB4",
+          "end": "0x8022DDBC"
+        }
+      ]
+    },
+    {
       "source": "src/engine/cu_8022F428.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x8022F428-0x802355E4 (src/engine/cu_8022F428.c), its function and name rows and the cu_8022F428 source-form and compiler rows. The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
