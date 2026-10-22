@@ -1,4 +1,5 @@
 #include "game/fn_801248D4.h"
+#include "game/fn_801BA2A8.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
 #include <math.h>
@@ -49,7 +50,6 @@ struct Block_8010BC90 {
 
 extern "C" {
 int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
-int fn_801BA2A8(void *pData, void *pEntries, unsigned short value, int animation, int key, void *p, float weight);
 }
 
 extern "C" int fn_8010D834(Table_80089904 *pTable, unsigned short key, void *pData, Record_800D81C8 *pEntries,

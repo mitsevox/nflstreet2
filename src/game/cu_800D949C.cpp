@@ -1,3 +1,5 @@
+#include "engine/cu_801B9F00.h"
+#include "game/fn_801BA2A8.h"
 #include "game/Object_800DA8D8.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_800D81C8.h"
@@ -36,13 +38,8 @@ void fn_800D8FFC(Block_801BE60C *block, Object_800DA8D8 *object, Record_800D81C8
 int fn_800D78C4(Object_80039F5C *p, int key);
 void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
 int fn_8009C4B0(Table_80089904 *table, Key_80110630 *key);
-unsigned int fn_801BA568(void *record, Record_800D81C8 *entries, unsigned short key);
-unsigned int fn_801BA5A8(void *record, Record_800D81C8 *entries, unsigned short key, unsigned short index);
-int fn_801BA2A8(void *record, Record_800D81C8 *entries, unsigned short value, int animation, int key, Object_80039F5C *p, float weight);
 int fn_801BA6B0(Record_800D81C8 *entry);
 void fn_801BA6BC(Record_800D81C8 *entry, int value);
-void fn_801BA650(Record_800D81C8 *entry, Object_80039F5C *p, float value);
-float fn_801BD60C(void *p);
 float fn_801CFFA0(float value);
 void fn_801BD81C(void *p, float value);
 void fn_800DA6AC(Record_8036B55C *record, Record_800D81C8 *entries, int key);
@@ -62,12 +59,9 @@ int fn_800D91E0(Object_80039F5C *p, int team, int flag, unsigned char *pValue);
 int fn_800D949C(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag, unsigned char value);
 void fn_800D8DD8(void *a, Block_801BE60C *pBlock, Object_80039F5C *p, int value);
 int fn_801BA2D0(void *a, Record_800D81C8 *pEntries, Record_800D81C8 *pEntry);
-void fn_801BA384(void *a, Record_800D81C8 *pEntries, int index);
 void fn_801BA418(void *a, Record_800D81C8 *pEntries, int index, unsigned short b,
                  int c, unsigned short d, Object_80039F5C *pRecord);
 void fn_801BD758(Block_801BD6D4 *p, float value);
-void fn_801BF3C8(Block_801BF3C8 *p, int a, int b, float x, float y);
-void fn_801BF4A8(Block_801BF3C8 *p, int a, float x, float y);
 
 int fn_800D949C(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag, unsigned char value)
 {
@@ -265,13 +259,13 @@ int fn_800D9C80(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
                 entry = &entries[block->mUnknown0];
                 scale = entry->mUnknown4C.mUnknown4 / ((float)((unsigned char *)entry->mUnknown4C.mpUnknown0)[0] * 0.0625f);
                 scale *= 0.6f;
-                fn_801BA650(&entries[block->mUnknown0], p, duration * scale);
+                fn_801BA650(&entries[block->mUnknown0], duration * scale, p);
                 entry = &entries[block->mUnknown1];
                 duration = fn_801BD60C(entry->mUnknown4C.mpUnknown0);
                 entry = &entries[block->mUnknown1];
                 scale = entry->mUnknown4C.mUnknown4 / ((float)((unsigned char *)entry->mUnknown4C.mpUnknown0)[0] * 0.0625f);
                 scale *= 0.6f;
-                fn_801BA650(&entries[block->mUnknown1], p, duration * scale);
+                fn_801BA650(&entries[block->mUnknown1], duration * scale, p);
             }
         } else if (!(right.mZ >= left.mZ)) {
             Record_800D81C8 *entry = &entries[block->mUnknown0];
@@ -280,13 +274,13 @@ int fn_800D9C80(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
             entry = &entries[block->mUnknown0];
             scale = entry->mUnknown4C.mUnknown4 / ((float)((unsigned char *)entry->mUnknown4C.mpUnknown0)[0] * 0.0625f);
             scale *= 0.6f;
-            fn_801BA650(&entries[block->mUnknown0], p, duration * scale);
+            fn_801BA650(&entries[block->mUnknown0], duration * scale, p);
             entry = &entries[block->mUnknown1];
             duration = fn_801BD60C(entry->mUnknown4C.mpUnknown0);
             entry = &entries[block->mUnknown1];
             scale = entry->mUnknown4C.mUnknown4 / ((float)((unsigned char *)entry->mUnknown4C.mpUnknown0)[0] * 0.0625f);
             scale *= 0.6f;
-            fn_801BA650(&entries[block->mUnknown1], p, duration * scale);
+            fn_801BA650(&entries[block->mUnknown1], duration * scale, p);
         }
         block->mUnknown20.mUnknownC = p->mMotion.mUnknown28;
         break;
@@ -312,13 +306,13 @@ int fn_800D9C80(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
                         entry = &entries[block->mUnknown0];
                         scale = entry->mUnknown4C.mUnknown4 / ((float)((unsigned char *)entry->mUnknown4C.mpUnknown0)[0] * 0.0625f);
                         scale *= 0.5f;
-                        fn_801BA650(&entries[block->mUnknown0], p, duration * scale);
+                        fn_801BA650(&entries[block->mUnknown0], duration * scale, p);
                         entry = &entries[block->mUnknown1];
                         duration = fn_801BD60C(entry->mUnknown4C.mpUnknown0);
                         entry = &entries[block->mUnknown1];
                         scale = entry->mUnknown4C.mUnknown4 / ((float)((unsigned char *)entry->mUnknown4C.mpUnknown0)[0] * 0.0625f);
                         scale *= 0.5f;
-                        fn_801BA650(&entries[block->mUnknown1], p, duration * scale);
+                        fn_801BA650(&entries[block->mUnknown1], duration * scale, p);
                         fn_801BA6BC(&entries[block->mUnknown0], 0);
                         fn_801BA6BC(&entries[block->mUnknown1], 0);
                     }
@@ -329,13 +323,13 @@ int fn_800D9C80(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
                     entry = &entries[block->mUnknown0];
                     scale = entry->mUnknown4C.mUnknown4 / ((float)((unsigned char *)entry->mUnknown4C.mpUnknown0)[0] * 0.0625f);
                     scale *= 0.5f;
-                    fn_801BA650(&entries[block->mUnknown0], p, duration * scale);
+                    fn_801BA650(&entries[block->mUnknown0], duration * scale, p);
                     entry = &entries[block->mUnknown1];
                     duration = fn_801BD60C(entry->mUnknown4C.mpUnknown0);
                     entry = &entries[block->mUnknown1];
                     scale = entry->mUnknown4C.mUnknown4 / ((float)((unsigned char *)entry->mUnknown4C.mpUnknown0)[0] * 0.0625f);
                     scale *= 0.5f;
-                    fn_801BA650(&entries[block->mUnknown1], p, duration * scale);
+                    fn_801BA650(&entries[block->mUnknown1], duration * scale, p);
                     fn_801BA6BC(&entries[block->mUnknown0], 1);
                     fn_801BA6BC(&entries[block->mUnknown1], 1);
                 }
@@ -414,19 +408,19 @@ int fn_800DA54C(Table_80089904 *table, unsigned short key, Record_8036B55C *reco
 void fn_800DA6AC(Record_8036B55C *record, Record_800D81C8 *entries, int)
 {
     for (unsigned int i = 0; i <= 3; i++) {
-        unsigned int count = fn_801BA568(record, entries, lbl_802DA8AC[i].mUnknown2);
+        unsigned int count = fn_801BA568((Object_801BA03C *)record, entries, lbl_802DA8AC[i].mUnknown2);
         while (count > 2) {
             unsigned int selected = 0xFFFF;
             float best = 1.0f;
             for (unsigned int j = 0; j < count; j++) {
-                unsigned int index = fn_801BA5A8(record, entries, lbl_802DA8AC[i].mUnknown2, (unsigned short)j);
+                unsigned int index = fn_801BA5A8((Object_801BA03C *)record, entries, lbl_802DA8AC[i].mUnknown2, (unsigned short)j);
                 float weight = entries[index].mUnknown30.mUnknown0;
                 if (!(best <= weight)) {
                     best = weight;
                     selected = index;
                 }
             }
-            fn_801BA384(record, entries, selected);
+            fn_801BA384((Object_801BA03C *)record, entries, selected);
             count--;
         }
     }
@@ -470,10 +464,10 @@ void fn_800DA8D8(Object_800DA8D8 *pObject, Block_801BE60C *pBlock, Object_80039F
     pBlock->mUnknown1 = second;
 
     fn_801BA418(a, pEntries, pBlock->mUnknown0, b, pObject->mUnknown24[index].mUnknown8, d, pRecord);
-    fn_801BF3C8(&pEntries[pBlock->mUnknown0].mUnknown30, 0, 0, 0.0f, 0.0f);
+    fn_801BF3C8(&pEntries[pBlock->mUnknown0].mUnknown30, 0, 0.0f, 0, 0.0f);
     fn_801BF4A8(&pEntries[pBlock->mUnknown0].mUnknown30, flag, -1.0f, 1.0f);
     fn_801BA418(a, pEntries, pBlock->mUnknown1, b, pObject->mUnknown24[index + 1].mUnknown8, d, pRecord);
-    fn_801BF3C8(&pEntries[pBlock->mUnknown1].mUnknown30, 0, 0, 0.0f, 0.0f);
+    fn_801BF3C8(&pEntries[pBlock->mUnknown1].mUnknown30, 0, 0.0f, 0, 0.0f);
     fn_801BF4A8(&pEntries[pBlock->mUnknown1].mUnknown30, flag, -1.0f, 1.0f);
 }
 
@@ -509,8 +503,8 @@ float fn_800DAA68(int index, Block_801BE60C *pBlock, Object_800DA8D8 *pObject, R
             second = b + (a - first);
         }
     }
-    fn_801BF3C8(&pEntries[pBlock->mUnknown0].mUnknown30, 0, 0, first, first);
-    fn_801BF3C8(&pEntries[pBlock->mUnknown1].mUnknown30, 0, 0, second, second);
+    fn_801BF3C8(&pEntries[pBlock->mUnknown0].mUnknown30, 0, first, 0, first);
+    fn_801BF3C8(&pEntries[pBlock->mUnknown1].mUnknown30, 0, second, 0, second);
     return result;
 }
 
@@ -525,19 +519,19 @@ void fn_800DAC88(Block_801BE60C *pBlock, void *a, Record_800D81C8 *pEntries)
 
     if (pBlock->mUnknown2 != 255) {
         if (weight != 0.0f) {
-            fn_801BF3C8(&pEntries[pBlock->mUnknown2].mUnknown30, 0, 0, weight * pBlock->mUnknown8,
+            fn_801BF3C8(&pEntries[pBlock->mUnknown2].mUnknown30, 0, weight * pBlock->mUnknown8, 0,
                         weight * pBlock->mUnknown8);
         } else {
-            fn_801BA384(a, pEntries, pBlock->mUnknown2);
+            fn_801BA384((Object_801BA03C *)a, pEntries, pBlock->mUnknown2);
             pBlock->mUnknown2 = 255;
         }
     }
     if (pBlock->mUnknown3 != 255) {
         if (weight != 0.0f) {
-            fn_801BF3C8(&pEntries[pBlock->mUnknown3].mUnknown30, 0, 0, weight * (1.0f - pBlock->mUnknown8),
+            fn_801BF3C8(&pEntries[pBlock->mUnknown3].mUnknown30, 0, weight * (1.0f - pBlock->mUnknown8), 0,
                         weight * (1.0f - pBlock->mUnknown8));
         } else {
-            fn_801BA384(a, pEntries, pBlock->mUnknown3);
+            fn_801BA384((Object_801BA03C *)a, pEntries, pBlock->mUnknown3);
             pBlock->mUnknown3 = 255;
         }
     }

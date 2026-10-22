@@ -132,10 +132,10 @@ extern "C" int fn_800FDAC8(Object_80039F5C *p)
 
             fn_80227690(&delta, &target, &p->mMotion.mPos);
             angle = fn_801CFE40(delta.mY, delta.mX);
-            if (pBase->mY > p->mMotion.mPos.mY && pBase->mY - p->mMotion.mPos.mY < 1.5f
-                && fabsf(p->mMotion.mPos.mX - pBase->mX) < 7.0f
-                && ((p->mMotion.mPos.mX > pBase->mX && target.mX < p->mMotion.mPos.mX)
-                    || (p->mMotion.mPos.mX < pBase->mX && target.mX > p->mMotion.mPos.mX))) {
+            if (p->mMotion.mPos.mY < pBase->mY && pBase->mY - p->mMotion.mPos.mY < 1.5f
+                && fabsf(p->mMotion.mPos.mX - base.mX) < 7.0f
+                && ((p->mMotion.mPos.mX > base.mX && target.mX < p->mMotion.mPos.mX)
+                    || (p->mMotion.mPos.mX < base.mX && target.mX > p->mMotion.mPos.mX))) {
                 run = 0;
             }
             if (run && fn_800CB580(p, &result, target, angle, 0)) {

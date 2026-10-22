@@ -290,8 +290,8 @@ extern "C" void fn_800BCC30(Class_80297BF8 *pThis)
     if (fn_800BA6F8() == 0) {
         fn_800BB9A4(1, 1);
     }
-    lbl_803EC98C->mUnknown30 = 0;
     lbl_803EC98C->mUnknown24 = 0;
+    lbl_803EC98C->mUnknown30 = 0;
     lbl_803EC98C->mUnknown31 = 0;
     lbl_803EC98C->mUnknown28 = 0;
     lbl_803EAB95 = 0;
@@ -376,12 +376,12 @@ extern "C" void fn_800BCF7C(void)
     crowd.mUnknown24 = 0;
     crowd.mUnknown28 = fn_802372EC(1, 2);
     crowd.mUnknown32 = 300.0f;
-    crowd.mUnknown12 |= 0x50;
     ambience.mUnknown20 = 2;
     ambience.mUnknown24 = 0;
-    ambience.mUnknown28 = 0;
-    ambience.mUnknown32 = 300.0f;
+    crowd.mUnknown12 |= 0x50;
     ambience.mUnknown12 |= 0x10;
+    ambience.mUnknown32 = 300.0f;
+    ambience.mUnknown28 = 0;
     lbl_803EC98C->mUnknown8 = fn_80096A58(&crowd);
     fn_801F0F18(0);
     if (lbl_803EC98C->mUnknown8 != -1) {

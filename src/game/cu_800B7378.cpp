@@ -139,7 +139,7 @@ unsigned char fn_8017F2DC(unsigned char value);
 unsigned char fn_8017F324(unsigned char value);
 unsigned char fn_8017F394(void);
 unsigned char fn_8017F48C(void);
-int fn_801BE648(void *p);
+unsigned short fn_801BE648(void *p);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
