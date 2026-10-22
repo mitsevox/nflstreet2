@@ -3,6 +3,8 @@
 #include <dolphin/os.h>
 #include <string.h>
 
+#include "engine/cu_802714A8.h"
+
 class Class_80271640 {
 public:
     unsigned int m0;
@@ -86,76 +88,6 @@ struct Voice_803A7734 {
     unsigned short m52;
     unsigned short m54;
     unsigned short m56;
-};
-
-struct Params_803A6C40 {
-    unsigned char mUnknown0[0xA];
-    unsigned short mA;
-    unsigned char mUnknownC[2];
-    unsigned char mE;
-    unsigned char mUnknownF[3];
-    unsigned char m12;
-    unsigned char mUnknown13[0xE];
-    unsigned char m21;
-    unsigned char m22;
-    unsigned char m23;
-    unsigned char mUnknown24;
-    unsigned char m25;
-    unsigned char mUnknown26[2];
-    unsigned char m28;
-    unsigned char mUnknown29;
-    unsigned short m2A;
-    unsigned short m2C;
-    unsigned char mUnknown2E[0xA];
-    unsigned int m38;
-    unsigned int m3C;
-    unsigned char mUnknown40[0x5C];
-};
-
-struct Record_803A6DF0 {
-    unsigned char mUnknown0[4];
-    short m4[8];
-    int m14;
-    unsigned char mUnknown18[8];
-    unsigned short m20;
-    unsigned char m22;
-    unsigned char m23;
-    unsigned short m24;
-    unsigned char mUnknown26[2];
-    short m28;
-    unsigned char mUnknown2A[0x43];
-    unsigned char m6D;
-    unsigned char mUnknown6E[0x22];
-};
-
-struct Struct_803A6C24 {
-    unsigned short m0;
-    unsigned short m2;
-    unsigned char m4;
-    unsigned char m5;
-    unsigned char m6;
-    unsigned char mUnknown7[3];
-    unsigned char mA;
-    unsigned char mUnknownB;
-    unsigned char mC;
-    unsigned char mUnknownD;
-    unsigned short mE;
-    unsigned short m10;
-    unsigned char mUnknown12[0xA];
-    Params_803A6C40 m1C;
-    void *(*mB8)(int size);
-    void (*mBC)(void *p);
-    unsigned char mUnknownC0[0xC];
-    Params_803A6C40 mCC;
-    unsigned char m168;
-    unsigned char m169;
-    unsigned char mUnknown16A[2];
-    short m16C;
-    unsigned char mUnknown16E;
-    unsigned char m16F;
-    unsigned int m170;
-    unsigned char mUnknown174[0x58];
-    Record_803A6DF0 *m1CC;
 };
 
 struct Channel_803A8D60 {
@@ -273,100 +205,15 @@ struct Struct_80274464 {
     void *m18[8];
 };
 
-struct Setup_80272EC4 {
-    int m0;
-    void (*m4)(int);
-    unsigned char m8;
-    unsigned char m9;
-    unsigned char mA;
-};
-
-struct Node_80279D90 {
-    int m0;
-    void (*m4)(Node_80279D90 *node);
-    Node_80279D90 *m8;
-    unsigned char mUnknownC[0xC];
-    unsigned short m18;
-    unsigned char m1A;
-    unsigned char mUnknown1B;
-};
-
-struct Desc_80276798 {
-    int m0;
-    int m4;
-    unsigned char mUnknown8[2];
-    unsigned short mA;
-    void (*mC)(Node_80279D90 *node, int a, int slot);
-    int m10;
-    void (*m14)(Node_80279D90 *node);
-};
-
 struct Params_80279D0C {
     int m0;
     int m4;
 };
 
-struct Record_803B5010 {
-    unsigned char m0;
-    unsigned char m1;
-    unsigned char mUnknown2[2];
-    float m4[6];
-    float m1C[6];
-    float *m34;
-    float *m38;
-    float m3C;
-    Node_80279D90 *m40;
-    int (*m44)(Node_80279D90 *node);
-    Node_80279D90 *m48;
-    Node_80279D90 *m4C;
-    Node_80279D90 *m50;
-    Node_80279D90 *m54;
-    Node_80279D90 *m58;
-};
-
-struct Params_80275F80 {
-    int m0;
-    int m4;
-    int m8;
-    int mC;
-    int m10;
-    int m14;
-    int m18;
-    int m1C;
-    int m20;
-    int m24;
-    int (*m28)(Node_80279D90 *node);
-};
-
-struct Struct_803B4E34 {
-    Setup_80272EC4 m0;
-    unsigned short mC;
-    unsigned char mE;
-    unsigned char mUnknownF[5];
-    int *m14;
-    void (*m18[6][3])(Node_80279D90 *node, Params_80275F80 *params);
-    int m60[6][3];
-    void *mA8[2];
-    int *mB0[2];
-    void *mB8[6];
-    int *mD0[6];
-    float mE8[6];
-    float *m100;
-    Node_80279D90 *m104[6];
-    unsigned char mUnknown11C[0x18];
-    Node_80279D90 m134[6];
-    Record_803B5010 *m1DC;
-    void (*m1E0)(int count, int *dst, void *src, float gain);
-    void (*m1E4)(void *dst, short *src, int count);
-};
-
 extern "C" {
 extern int lbl_80300044;
-extern void *(*lbl_803B53E4)(int size);
-extern void (*lbl_803B53E8)(void *p);
 extern const unsigned short lbl_802B7A98[];
 extern const short lbl_802B7AF0[2][3][16];
-extern Struct_803A6C24 lbl_803A6C24;
 extern Voice_803A7734 lbl_803A7734[64];
 extern int lbl_803A8D34;
 extern State_803A8D60 lbl_803A8D60;
@@ -383,7 +230,6 @@ extern int lbl_80300E98;
 extern OSMutex lbl_803B4B90;
 extern Node_803B4E20 **lbl_803B4E20;
 extern float **lbl_803B4E24;
-extern Struct_803B4E34 lbl_803B4E34;
 
 void fn_8026A0E8(int value);
 void *fn_8026B5D4(int size);
@@ -391,43 +237,23 @@ void fn_8026B7D8(void *p);
 void fn_8026D0AC(void);
 void fn_8026D0EC(void);
 void fn_8027555C(void);
-void fn_802798C0(void);
 int fn_80276820(int index);
 void fn_80276868(int index, int value);
 void *fn_80279960(int size);
 void fn_80279B24(void *p);
-void fn_8027986C(u32 start, u32 length);
-void fn_8026B2E0(void *dst, void *src, int size);
-void fn_802797F4(void *(*alloc)(int size));
-void fn_80279800(void (*release)(void *p));
-void fn_8027980C(void (*copy)(void *dst, void *src, int size));
-void fn_80279C20(Node_80279D90 *node);
-void fn_80279CB8(Node_80279D90 *node);
 void fn_80279D0C(Node_80279D90 *node, Params_80279D0C *params);
-void fn_80279D90(Node_80279D90 **list, Node_80279D90 *node);
 void fn_80279DF8(Node_80279D90 **list, Node_80279D90 *node);
-void fn_8027A4C0(Node_80279D90 *node, int value);
 void fn_8027A7A0(Node_80279D90 *node, int a, int b);
-void fn_8027A7FC(void);
-void fn_8027A844(void);
-void fn_8027A8A4(void);
 void fn_80277240(Node_80279D90 *node);
 void fn_80275F54(void);
-unsigned char *fn_802792F0(int index, int channel, int *length, int *b);
-void fn_80274B50(int index);
-void fn_80274960(int index);
 void fn_802747D8(int index);
-void fn_8027952C(int index, int channel, int value);
 void fn_80279598(void);
 int fn_8027271C(int index);
 int fn_80271BD4(int index, int slot);
-void fn_80274D34(int index, int value);
 void fn_80275E7C(void);
 void fn_80276194(int index);
 void fn_802763E0(void **buffers, int count);
 void fn_80277404(Node_80279D90 *node, void *data, int index);
-void fn_802774C8(void *dst, short *src, int count);
-void fn_8027A8EC(int count, int *dst, void *src, float gain);
 
 int fn_80271A04(void);
 void fn_80271D34(Voice_803A7734 *voice);
@@ -457,18 +283,12 @@ void fn_802739F8(void);
 void fn_80273D7C(u32 flags, int *a, int *b);
 int fn_80273DF8(Header_80273DF8 *header, int base, int index, int a, int b, int c);
 int fn_80273DC0(Struct_80270E04 *p, int value, int *base);
-int fn_80274304(int index);
-int fn_80274334(int index);
-int fn_80274398(void);
 int fn_802743A0(int index, Stream_802743A0 *stream);
-int fn_8027474C(int index);
 int fn_802747D0(void);
 int fn_80274CA8(int index, int value);
-void fn_80274E24(int index, int value);
 int fn_80274464(int stream, int index, int a, int b, int c, Info_80274464 *info, Struct_80274464 *p);
 int fn_80274EAC(int index);
 int fn_80274F5C(int index);
-int fn_802750B8(int index, Desc_80276798 *desc);
 void *fn_80275150(int unused, int size);
 int fn_80275194(int unused, void *p);
 int fn_802751E0(u32 start, u32 end);
@@ -1185,7 +1005,6 @@ void fn_80273040(int index, Stream_802743A0 *stream, Record_803A6DF0 *record)
     }
 }
 
-
 int fn_80273458(void)
 {
     Params_803A6C40 params = lbl_803A6C24.m1C;
@@ -1827,7 +1646,6 @@ void fn_8027555C(void)
     lbl_803B503C = fn_80276278;
     lbl_803B5040 = fn_80276A84;
 }
-
 
 void fn_80275948(float value)
 {
