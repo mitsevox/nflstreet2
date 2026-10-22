@@ -23908,6 +23908,533 @@
         "commit": "b1f33854cceb3fc530ac47a2ee94483c2f18c2f5",
         "introduced_blob": "2b4740bcaef930db70667471374dfe92d87b8114"
       }
+    },
+    {
+      "source": "src/engine/Resource.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801EC650",
+        "0x801EC6C4",
+        "0x801EC718",
+        "0x801EC760",
+        "0x801EC894",
+        "0x801EC8AC",
+        "0x801EC8D4",
+        "0x801EC914",
+        "0x801ECBE4",
+        "0x801EDD68",
+        "0x801EDDB0",
+        "0x801EE700",
+        "0x801EE91C",
+        "0x801EE970",
+        "0x801EEA60",
+        "0x801EEB44",
+        "0x801EEFAC",
+        "0x801EF390",
+        "0x801EF548",
+        "0x801EF7BC",
+        "0x801EF92C",
+        "0x801EFAD8",
+        "0x801EFD2C",
+        "0x801EFF80",
+        "0x801F010C",
+        "0x801F08FC",
+        "0x801F0A8C",
+        "0x801F0C50",
+        "0x801F0D34",
+        "0x801F0DB8",
+        "0x801F0E68",
+        "0x801F0F18",
+        "0x801F0F9C",
+        "0x801F10B0",
+        "0x801F11AC",
+        "0x801F1230",
+        "0x801F12B4",
+        "0x801F1488",
+        "0x801F149C",
+        "0x801F1520",
+        "0x801F1530"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "fabc880e206b73bddbff3aaab72afba93d194dce"
+      }
+    },
+    {
+      "source": "src/engine/terfhash.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F1538",
+        "0x801F155C",
+        "0x801F15B0"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "de2fe9a7bc2c2dfafc14c3e33f6c584f35efb19f"
+      }
+    },
+    {
+      "source": "src/engine/reswrite.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F17E0",
+        "0x801F1B44",
+        "0x801F1C48",
+        "0x801F1CD4",
+        "0x801F1CF8",
+        "0x801F21B4",
+        "0x801F21E4",
+        "0x801F2244",
+        "0x801F2294"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "17a9544f523b77efe6d3c358d92b6beca7cc4aa8"
+      }
+    },
+    {
+      "source": "src/engine/ResTracker.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F2310",
+        "0x801F2328",
+        "0x801F23B8",
+        "0x801F2694",
+        "0x801F2790",
+        "0x801F2798",
+        "0x801F282C",
+        "0x801F283C"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "7442af94409bc14ba1f26f2df299b5acb6385db5"
+      }
+    },
+    {
+      "source": "src/engine/resquickload.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F2934",
+        "0x801F2954",
+        "0x801F29F0",
+        "0x801F2B94",
+        "0x801F2BAC",
+        "0x801F2BF0",
+        "0x801F2C54",
+        "0x801F2D60"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "6092413a41be93b01b302c028f02e4e54ad96434"
+      }
+    },
+    {
+      "source": "src/engine/rescache.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F2E54",
+        "0x801F2ED8",
+        "0x801F30CC",
+        "0x801F3104"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "c921800c584087b2507de8a9439cbed788e63877"
+      }
+    },
+    {
+      "source": "src/engine/resloosefile.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F3308",
+        "0x801F33B8",
+        "0x801F33F0",
+        "0x801F346C"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "b6b343f9afbde8ffd6bd2c0a68ad9fd1a06f5259"
+      }
+    },
+    {
+      "source": "src/engine/hash.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F34C0"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "f5f8681bea15ce145dffd8cbdde73c104003b7e8"
+      }
+    },
+    {
+      "source": "src/engine/sound.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F3524",
+        "0x801F3544",
+        "0x801F35A8",
+        "0x801F35B4",
+        "0x801F3728",
+        "0x801F3904",
+        "0x801F3908",
+        "0x801F3B4C",
+        "0x801F3E28",
+        "0x801F3E34",
+        "0x801F3E40",
+        "0x801F3ED8",
+        "0x801F3F74",
+        "0x801F4024",
+        "0x801F4050",
+        "0x801F40F4",
+        "0x801F4130",
+        "0x801F41A0",
+        "0x801F421C",
+        "0x801F4294",
+        "0x801F4314",
+        "0x801F438C",
+        "0x801F4448",
+        "0x801F44A4",
+        "0x801F44B0",
+        "0x801F4580",
+        "0x801F45D4",
+        "0x801F4638",
+        "0x801F4678",
+        "0x801F46F8",
+        "0x801F4834",
+        "0x801F48B8",
+        "0x801F4934",
+        "0x801F49B8",
+        "0x801F4A38",
+        "0x801F4AB0",
+        "0x801F4AEC",
+        "0x801F4AF8",
+        "0x801F4B20",
+        "0x801F4B88",
+        "0x801F4C5C",
+        "0x801F4CE0",
+        "0x801F4D00",
+        "0x801F4D6C",
+        "0x801F4DAC",
+        "0x801F4DD8",
+        "0x801F4F28",
+        "0x801F4F98"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "da4dac7f7ca822384b373764482b750f5bb84532"
+      }
+    },
+    {
+      "source": "src/engine/llsound.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F5034",
+        "0x801F50C8",
+        "0x801F50F8"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "0017abcf79bb31450c1691dd0dbe260ffaea007d"
+      }
+    },
+    {
+      "source": "src/engine/sort.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F5100",
+        "0x801F512C",
+        "0x801F518C",
+        "0x801F51DC",
+        "0x801F522C"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "c86b148271fe490d350d0f5154e1e3db0dd98283"
+      }
+    },
+    {
+      "source": "src/engine/bubble.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F524C",
+        "0x801F53A0",
+        "0x801F542C"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "8ea90ea3b2c7dcd8aa7277b9552fe9ed5818187c"
+      }
+    },
+    {
+      "source": "src/engine/quick.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F5458",
+        "0x801F5614",
+        "0x801F56A8",
+        "0x801F5734"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "41aca33d6e3301655c919c239da3be962ff66a2a"
+      }
+    },
+    {
+      "source": "src/engine/Speech.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F5760",
+        "0x801F57AC",
+        "0x801F57CC",
+        "0x801F5828",
+        "0x801F5C34",
+        "0x801F5C6C",
+        "0x801F5C94",
+        "0x801F5CCC",
+        "0x801F5CEC",
+        "0x801F5D0C"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "f975696c85d0184732f128a59b09c9300d68c415"
+      }
+    },
+    {
+      "source": "src/engine/stream.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F5D84",
+        "0x801F5DA4",
+        "0x801F5DE4",
+        "0x801F5E24",
+        "0x801F5EA4",
+        "0x801F5F28",
+        "0x801F5FA4",
+        "0x801F5FF4",
+        "0x801F6074",
+        "0x801F63EC",
+        "0x801F6410",
+        "0x801F685C",
+        "0x801F6AC8",
+        "0x801F6B84",
+        "0x801F6C04",
+        "0x801F6C78",
+        "0x801F6CE8",
+        "0x801F6D54",
+        "0x801F6E9C",
+        "0x801F6FA0",
+        "0x801F73D4",
+        "0x801F74D4",
+        "0x801F75C4",
+        "0x801F7604",
+        "0x801F7644",
+        "0x801F76A0",
+        "0x801F76E8",
+        "0x801F7710"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "3cc75f32e50e743d69f54e6aad1906ebf0385d68"
+      }
+    },
+    {
+      "source": "src/engine/mutex.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F7738",
+        "0x801F773C",
+        "0x801F7764",
+        "0x801F778C",
+        "0x801F77B4"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "20ecafb49c2178438fb61021250473b9972f2d8c"
+      }
+    },
+    {
+      "source": "src/engine/system.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F77DC",
+        "0x801F77EC",
+        "0x801F79C0",
+        "0x801F7ABC",
+        "0x801F7AD4",
+        "0x801F7AE8",
+        "0x801F7B04",
+        "0x801F7B14",
+        "0x801F7B1C",
+        "0x801F7B9C",
+        "0x801F7BD4",
+        "0x801F7C88"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "a77d5e49d3a39ec1823d4c3067e6627a906849a3"
+      }
+    },
+    {
+      "source": "src/engine/llsystem.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F7DF4",
+        "0x801F7E18",
+        "0x801F7E90",
+        "0x801F7ED0",
+        "0x801F7F60",
+        "0x801F7FA8",
+        "0x801F8014",
+        "0x801F809C",
+        "0x801F80D0",
+        "0x801F80E8",
+        "0x801F8128",
+        "0x801F8150",
+        "0x801F8174",
+        "0x801F81AC",
+        "0x801F81D4",
+        "0x801F81F4",
+        "0x801F8574",
+        "0x801F8758",
+        "0x801F8768",
+        "0x801F87FC",
+        "0x801F8838",
+        "0x801F8868"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "c5ee21959ddb05d1bfe2329ca070fb4027dfce08"
+      }
+    },
+    {
+      "source": "src/engine/t3db.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801F8878",
+        "0x801F88F0",
+        "0x801F89B8",
+        "0x801F8A0C",
+        "0x801F8C64",
+        "0x801F8CE8",
+        "0x801F8D60",
+        "0x801F8EEC",
+        "0x801F9014",
+        "0x801F9064",
+        "0x801F9134",
+        "0x801F91AC",
+        "0x801F93AC",
+        "0x801F9574",
+        "0x801F95C8",
+        "0x801F9608",
+        "0x801F967C",
+        "0x801F9718",
+        "0x801F97D0",
+        "0x801F9858",
+        "0x801F9908",
+        "0x801F9980",
+        "0x801F9A90",
+        "0x801F9AB8",
+        "0x801F9BB4",
+        "0x801F9C68",
+        "0x801F9CC0",
+        "0x801F9D0C",
+        "0x801F9FA4",
+        "0x801FA038",
+        "0x801FA0BC",
+        "0x801FA148",
+        "0x801FA1C0",
+        "0x801FA228",
+        "0x801FA290",
+        "0x801FA3A0",
+        "0x801FA428",
+        "0x801FA4B0",
+        "0x801FA5EC",
+        "0x801FA68C",
+        "0x801FA740",
+        "0x801FA7B0",
+        "0x801FA844"
+      ],
+      "provenance": {
+        "pull_request": 1012,
+        "merged_via": 1012,
+        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "introduced_blob": "f36d8cfc4b2bb7a26d5e52afa44442b50beebec1"
+      }
     }
   ],
   "target": "GN7E69",
