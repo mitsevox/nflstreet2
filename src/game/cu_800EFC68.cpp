@@ -1,3 +1,4 @@
+#include "engine/cu_801B9F00.h"
 #include "game/fn_801248D4.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
@@ -671,7 +672,6 @@ int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **p
 float fn_8022710C(void *pV);
 Object_800670B4 *fn_80168708(int team);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
-int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
 void fn_800FC290(Object_80039F5C *p, Block_800FCC24 *pBlock, Point_8017886C target);
 int fn_800FC648(Object_80039F5C *p, Block_800FCC24 *pBlock);
 int fn_800FCE58(Object_80039F5C *p, Block_800FCC24 *pBlock);
@@ -692,8 +692,6 @@ int fn_800B83F4(Object_80039F5C *p);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 int fn_800D0B90(Object_80039F5C *p);
 void fn_800D0C0C(Object_80039F5C *p, int a);
-int fn_801BA568(void *pA, void *pB, int id);
-int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
 int fn_801BA6B0(Entry_800EAC9C *pEntry);
 void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
 void fn_801BD81C(void *p, float value);
@@ -2053,7 +2051,7 @@ extern "C" int fn_800FC4A8(Object_80039F5C *p, Block_800FCC24 *pBlock, int mode)
 
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, p, 1.0f);
         index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0);
-        p->mpUnknown800[index].mUnknown44 = speed;
+        p->mpUnknown800[index].mUnknown2C = speed;
         return 1;
     }
     return 0;

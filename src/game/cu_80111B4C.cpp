@@ -1,3 +1,4 @@
+#include "engine/cu_801B9F00.h"
 #include "game/fn_801248D4.h"
 #include "game/State_800FDA58.h"
 #include "game/fn_800B65A0.h"
@@ -244,8 +245,6 @@ float fn_80178A08(void);
 float fn_80178A2C(void);
 float fn_80178A44(void);
 void fn_80194C5C(int a, int b, int c);
-int fn_801BA568(void *pA, void *pB, int id);
-int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
 float fn_801CFB18(int angle);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);

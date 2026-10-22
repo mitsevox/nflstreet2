@@ -169,7 +169,7 @@ extern "C" void fn_800D7D78(Object_80039F5C *p, Block_801BE60C *pBlock)
                     rest = 0.0f;
                 }
                 pBlock->mUnknown8 = rest;
-                p->mpUnknown800[pBlock->mUnknown4Word].mUnknown44 = rest;
+                p->mpUnknown800[pBlock->mUnknown4Word].mUnknown2C = rest;
             }
         }
     }
@@ -209,7 +209,7 @@ extern "C" int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRe
         for (int i = 0; i != 11; i++) {
             pBlock->mUnknownE[i] = 0;
         }
-        p->mpUnknown800[pBlock->mUnknown4Word].mUnknown44 = scale;
+        p->mpUnknown800[pBlock->mUnknown4Word].mUnknown2C = scale;
         fn_800D8140(&pBlock->mUnknown28, (Object_800D81C8 *)p, pBlock->mUnknown4Word);
         fn_800D7A4C(p, pBlock);
         if (pState->mUnknown5 == 3) {

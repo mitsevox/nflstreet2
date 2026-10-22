@@ -1,3 +1,5 @@
+#include "engine/cu_801B9F00.h"
+#include "game/fn_801BA2A8.h"
 #include "game/Object_800D81C8.h"
 #include "game/fn_801BE60C.h"
 #include "game/Object_80039F5C.h"
@@ -20,7 +22,6 @@ extern unsigned char lbl_803EAD18;
 extern unsigned char lbl_803EAD19;
 int fn_800DAE4C(Object_80039F5C *p);
 int fn_800DAD90(Table_80089904 *pTable, int value, int a, unsigned char b);
-int fn_801BA2A8(void *p, void *records, unsigned short value, int animation, int key, void *player, float weight);
 float fn_8012506C(Object_80039F5C *p, int value);
 int fn_800ACFA8(Object_80039F5C *p);
 Object_80039F5C *fn_80105384(Object_80039F5C *p, int value, Point_8017886C *pOut);
@@ -41,8 +42,6 @@ int fn_80105FF8(Object_80039F5C *p, Object_80137ABC *pBall, float value);
 int fn_80103CB0(Object_80039F5C *p);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 
-unsigned short fn_801BA568(Object_8016D9B8 *p, Record_800D81C8 *records, int key);
-unsigned short fn_801BA5A8(Object_8016D9B8 *p, Record_800D81C8 *records, int key, int index);
 float fn_801BD640(void *p, int flags);
 float fn_801BD6D4(Block_801BD6D4 *p);
 int fn_801787A0(void);
@@ -149,7 +148,7 @@ extern "C" void fn_800DB100(Object_80039F5C *p, Object_80137ABC *pBall, Record_8
 extern "C" void fn_800DB308(Object_80039F5C *p, float *pOut)
 {
     float value = 12.0f;
-    int kind = fn_801BE648(p->mpUnknown792);
+    unsigned short kind = fn_801BE648(p->mpUnknown792);
 
     if (kind == 135 || kind == 191) {
         if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, kind)) {
@@ -432,7 +431,7 @@ void fn_801BD81C(void *p, float value);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float value);
 
 
-void fn_801BE760(void *p, unsigned short key, int flag);
+void fn_801BE760(void *p, unsigned short key, unsigned short flags);
 float fn_801CFFA0(float value);
 int fn_801CFFD0(int a, int b);
 }
@@ -893,7 +892,6 @@ int fn_80178348(void);
 float fn_80237260(int a);
 int fn_800DFA00(Object_80039F5C *p, float *pValue);
 int fn_800B9A90(Class_80297C60 *p);
-int fn_801BA2A8(void *p, void *records, unsigned short value, int animation, int key, void *player, float weight);
 }
 
 struct Record_800DE19C { int mUnknown0, mUnknown4; };
@@ -953,10 +951,7 @@ struct Record_800DCC14 {
 extern "C" {
 Object_801BBD5C *fn_801BBD5C(unsigned short key, unsigned short id);
 int fn_801BA2D0(void *pA, Record_800D81C8 *pEntries, Record_800D81C8 *pEntry);
-void fn_801BA384(void *pA, Record_800D81C8 *pEntries, int index);
 void fn_801BA418(void *pA, Record_800D81C8 *pEntries, int index, unsigned short a, int b, unsigned short key, Object_80039F5C *p);
-void fn_801BF3C8(Block_801BF3C8 *p, int a, int b, float x, float y);
-void fn_801BF4A8(Block_801BF3C8 *p, int a, float x, float y);
 void fn_800DA814(Object_800DA8D8 *pObject, Block_801BE60C *pBlock, Object_80039F5C *p, int a, int index, int key, Record_8036B55C *pA, Record_800D81C8 *pEntries);
 void fn_800DA8D8(Object_800DA8D8 *pObject, Block_801BE60C *pBlock, Object_80039F5C *p, int a, int index, unsigned short key, void *pA, Record_800D81C8 *pEntries, unsigned char flag);
 void fn_800DAC78(Block_801BE60C *p, float a, float b);
@@ -993,9 +988,6 @@ void fn_800A2190(int a);
 void fn_8009A5DC(int a, int b, void *pKind, int *pHandle);
 float fn_8009A270(int handle);
 int fn_8009A578(int handle);
-unsigned short fn_801BA568(Object_8016D9B8 *p, Record_800D81C8 *records, int key);
-unsigned short fn_801BA5A8(Object_8016D9B8 *p, Record_800D81C8 *records, int key, int index);
-float fn_801BD60C(void *p);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 void fn_800D0BF4(Object_80039F5C *p, int a, int b);
 void fn_800B8344(Object_80039F5C *p);
@@ -1058,16 +1050,15 @@ int fn_801C065C(Frame_800DF7CC *, float);
 Attachment_800DF7CC *fn_80093C08(unsigned short);
 int fn_800943B0(unsigned short);
 void fn_8009134C(unsigned short);
-unsigned int fn_801BBE5C(unsigned short, unsigned short);
+int fn_801BBE5C(int objectType, int fileNum);
 void *fn_801BC084(unsigned int);
-void *fn_801BAB34(void *, int);
+Anim_801BAB34 *fn_801BAB34(void *, int);
 int fn_801BD934(float *, void *, unsigned short);
-float fn_801BD60C(void *);
 int fn_801BA6B0(Record_800D81C8 *);
 void fn_801BA6BC(Record_800D81C8 *, int);
 void fn_800D7A0C(Object_80039F5C *, int);
 unsigned int fn_801BBEC0(unsigned int, int);
-unsigned int fn_801BBCC8(int, unsigned int);
+int fn_801BBCC8(int state, unsigned int slot);
 }
 extern "C" int fn_8013BA58(Object_80137ABC *, int);
 extern "C" void fn_800ADBC0(Object_80039F5C *, int, int, int);
@@ -1249,23 +1240,23 @@ extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA,
         int direction = fn_800DC584(p, (Record_800DC584 *)pRecord);
         if (direction != pRecord->mUnknown8) {
             if (pRecord->mUnknown4 != -1 && p->mpUnknown800[pRecord->mUnknown4].mUnknown8 == key) {
-                fn_801BA384(pA, pEntries, pRecord->mUnknown4);
+                fn_801BA384((Object_801BA03C *)pA, pEntries, pRecord->mUnknown4);
             }
             int next = fn_801BA2D0(pA, pEntries, &pEntries[pRecord->mUnknown0]);
             pRecord->mUnknown4 = pRecord->mUnknown0;
             fn_801BF4A8(&pEntries[pRecord->mUnknown0].mUnknown30, 12, -1.0f, 0.0f);
             pRecord->mUnknown0 = next;
-            unsigned char value = pEntries[next].mUnknown6A;
+            unsigned char value = pEntries[next].mUnknown4C.mUnknown1E;
             pRecord->mUnknown8 = direction;
             p->mUnknown1008.mUnknown0 = direction;
             p->mUnknown1008.mUnknown1 = pRecord->mUnknown9;
             p->mUnknown1008.mUnknown2 = pRecord->mUnknown10;
             int index = fn_8009C56C(pTable, (unsigned char *)&p->mUnknown1008);
             fn_801BA418(pA, pEntries, pRecord->mUnknown0, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, key, p);
-            fn_801BF3C8(&pEntries[pRecord->mUnknown0].mUnknown30, 0, 0, 0.0f, 0.0f);
+            fn_801BF3C8(&pEntries[pRecord->mUnknown0].mUnknown30, 0, 0.0f, 0, 0.0f);
             fn_801BF4A8(&pEntries[pRecord->mUnknown0].mUnknown30, 12, -1.0f, 1.0f);
-            pEntries[pRecord->mUnknown0].mUnknown28 = -pEntries[pRecord->mUnknown0].mUnknown28;
-            pEntries[pRecord->mUnknown0].mUnknown6A = value;
+            pEntries[pRecord->mUnknown0].mUnknown24.mUnknown4 = -pEntries[pRecord->mUnknown0].mUnknown24.mUnknown4;
+            pEntries[pRecord->mUnknown0].mUnknown4C.mUnknown1E = value;
             float speed = p->mUnknown528.mUnknown0;
             speed -= speed * 0.2f;
             p->mUnknown528.mUnknown0 = speed;
@@ -1281,7 +1272,7 @@ extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA,
         if (category != pRecord->mUnknown9) {
             if (pRecord->mUnknown4 == -1 || !p->mpUnknown800[pRecord->mUnknown4].mUnknown1) {
                 if (pRecord->mUnknown4 != -1 && p->mpUnknown800[pRecord->mUnknown4].mUnknown8 == key) {
-                    fn_801BA384(pA, pEntries, pRecord->mUnknown4);
+                    fn_801BA384((Object_801BA03C *)pA, pEntries, pRecord->mUnknown4);
                 }
                 int next = fn_801BA2D0(pA, pEntries, &pEntries[pRecord->mUnknown0]);
                 pRecord->mUnknown4 = pRecord->mUnknown0;
@@ -1293,7 +1284,7 @@ extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA,
                 p->mUnknown1008.mUnknown2 = pRecord->mUnknown10;
                 int index = fn_8009C56C(pTable, (unsigned char *)&p->mUnknown1008);
                 fn_801BA418(pA, pEntries, pRecord->mUnknown0, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, key, p);
-                fn_801BF3C8(&pEntries[pRecord->mUnknown0].mUnknown30, 0, 0, 0.0f, 0.0f);
+                fn_801BF3C8(&pEntries[pRecord->mUnknown0].mUnknown30, 0, 0.0f, 0, 0.0f);
                 fn_801BF4A8(&pEntries[pRecord->mUnknown0].mUnknown30, 16, -1.0f, 1.0f);
             }
         }
@@ -1309,7 +1300,7 @@ extern "C" int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA,
             }
         }
         fn_801BD81C(&pEntries[pRecord->mUnknown0].mUnknown4C, fn_801CFFA0(rate));
-        p->mpUnknown800[pRecord->mUnknown0].mUnknown44 = 1.5f;
+        p->mpUnknown800[pRecord->mUnknown0].mUnknown2C = 1.5f;
         break;
     }
     }
@@ -2328,7 +2319,7 @@ extern "C" int fn_800DFA00(Object_80039F5C *p, float *pValue)
         fn_800D7A0C(p, p->mUnknown776 == 2 ? 1 : 2);
     }
     if ((pView->mFlags & 16) && fn_801BA568(p->mpUnknown796, p->mpUnknown800, 10)) {
-        p->mpUnknown800[fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 10, 0)].mUnknown44 = 1.0f / p->mUnknown768;
+        p->mpUnknown800[fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 10, 0)].mUnknown2C = 1.0f / p->mUnknown768;
     }
     if (handle != 0xFFFFFF) {
         unsigned int other = fn_801BBEC0(handle, 1024);

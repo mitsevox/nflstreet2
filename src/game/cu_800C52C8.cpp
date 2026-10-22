@@ -145,7 +145,7 @@ int fn_801787A0(void);
 float fn_80178A08(void);
 float fn_80178A2C(void);
 Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
-int fn_801BE648(void *p);
+unsigned short fn_801BE648(void *p);
 void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
