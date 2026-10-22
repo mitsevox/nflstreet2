@@ -41520,8 +41520,8 @@
     },
     {
       "source": "src/engine/t3db_index.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80201EC8-0x80203444 (src/engine/t3db_index.c): the whole original t3db_index.c (NASCAR 2005 symbol table), 17 functions. Comparison only; original assembly stays linked. Needs -O2 -ffast-math for 0x80202708 (see compiler row); registered with engine_c until a C fast-math profile exists.",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x80201EC8-0x80203444 (src/engine/t3db_index.c): the whole original t3db_index.c (NASCAR 2005 symbol table), 17 functions. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -41660,8 +41660,8 @@
     },
     {
       "source": "src/engine/t3db_expr.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80203754-0x80204EF8 (src/engine/t3db_expr.c): first run of the original t3db_expr.c (NASCAR 2005 symbol table), its .rodata 0x802B1AF8-0x802B1B90 and .data operator grid 0x802F9948-0x802F9B78. Comparison only; original assembly stays linked. Needs -O2 -ffast-math (see compiler row); registered with engine_c until a C fast-math profile exists.",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x80203754-0x80204EF8 (src/engine/t3db_expr.c): first run of the original t3db_expr.c (NASCAR 2005 symbol table), its .rodata 0x802B1AF8-0x802B1B90 and .data operator grid 0x802F9948-0x802F9B78. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -42062,7 +42062,7 @@
     },
     {
       "source": "src/engine/cu_802055CC.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x802055CC-0x80205754 (src/engine/cu_802055CC.c): last two functions of the original t3db_expr.c (NASCAR 2005 symbol table), split from src/engine/t3db_expr.c because 0x80204EF8 has no source yet. Comparison only; original assembly stays linked.",
       "sections": [
         {
