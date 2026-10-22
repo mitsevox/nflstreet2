@@ -26443,6 +26443,36 @@
         "commit": "ecb52e48f2b93b4aa537302be4f5ee756fd4b0c8",
         "introduced_blob": "9b184b0c3842835284395a6a4aaf37da9dba8638"
       }
+    },
+    {
+      "source": "src/game/cu_80153844.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8015395C"
+      ],
+      "provenance": {
+        "pull_request": 1023,
+        "merged_via": 1023,
+        "commit": "8b60e3336d788b99986bdb3d01683e8b03142616",
+        "introduced_blob": "059760fc740826d4e9b0f93a058fd4a002d6fbf5"
+      }
+    },
+    {
+      "source": "src/game/cu_80155640.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8015568C"
+      ],
+      "provenance": {
+        "pull_request": 1023,
+        "merged_via": 1023,
+        "commit": "8b60e3336d788b99986bdb3d01683e8b03142616",
+        "introduced_blob": "b7d346fe3b561cdbd590b7c9c474411217aacdf3"
+      }
     }
   ],
   "target": "GN7E69",
