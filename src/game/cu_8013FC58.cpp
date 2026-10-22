@@ -110,7 +110,7 @@ int fn_8013FD0C(int index)
     dir[0] = dir[1] = dir[2] = out[0] = out[1] = out[2] = 0.0f;
     pCamera = fn_8013FA04(index);
     dir[2] = -1.0f;
-    fn_80227490(out, dir, pCamera->mHeader.mUnknown1C, pCamera->mHeader.mUnknown18, pCamera->mHeader.mUnknown14);
+    fn_80227490(out, dir, pCamera->mHeader.mUnknown14[2], pCamera->mHeader.mUnknown14[1], pCamera->mHeader.mUnknown14[0]);
     out[1] = -out[1];
     return fn_801CFE40(out[1], out[0]);
 }

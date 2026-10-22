@@ -1,21 +1,8 @@
 #ifndef GAME_CAMERA_8013F738_H
 #define GAME_CAMERA_8013F738_H
 
+#include "game/CameraHeader_8013F628.h"
 #include "game/RecordList_8002E7C0.h"
-
-/* Leading block of a camera that a saved state restores. */
-struct CameraHeader_8013F628 {
-    unsigned char mUnknown00;
-    unsigned char mType;
-    char mPad02[2];
-    float mUnknown04[3];
-    char mPad10[4];
-    int mUnknown14;
-    int mUnknown18;
-    int mUnknown1C;
-    float mUnknown20;
-    float mUnknown24;
-};
 
 struct Camera_8013F738 {
     CameraHeader_8013F628 mHeader;

@@ -66,8 +66,8 @@ extern "C" int fn_80159F74(Instance_80159F10 *pInstance)
             pos = *pPos;
             pos.mZ += scale * 0.5;
             fn_801D0C58(&pos);
-            fn_801D0ADC(-pCamera->mHeader.mUnknown1C);
-            fn_801D08FC(0xC00000 - pCamera->mHeader.mUnknown14);
+            fn_801D0ADC(-pCamera->mHeader.mUnknown14[2]);
+            fn_801D08FC(0xC00000 - pCamera->mHeader.mUnknown14[0]);
             pInstance->mUnknown20 = fn_801481B0() ? 1.0f : 0.4f;
             fn_801D0CFC(scale);
             fn_8019FD80(pInstance);
