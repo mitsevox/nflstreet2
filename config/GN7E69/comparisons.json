@@ -41148,18 +41148,68 @@
       ]
     },
     {
-      "source": "src/engine/cu_801D1E30.c",
+      "source": "src/engine/Memory.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D1E30-0x801D34C4 (src/engine/cu_801D1E30.c) and its function rows. Draft comparisons only; original assembly remains linked. MemInitHeap 0x801D2130 and three other large bodies have no draft yet.",
+      "evidence": "evidence.tsv unit, source-form, compiler and type rows 0x801D134C-0x801D34C4 (src/engine/Memory.c) and its function rows. Draft comparisons only; original assembly remains linked. The heap list and default heap 0x803EBCC8/0x803EBCCC, the 16-entry address table 0x80384BC0 and its count 0x803EBCD0, the other state words 0x803EBCC4-0x803EBCF4, the lock 0x803E92AC and the strings 0x802AF628/0x802AF9BC stay external; no .rodata or .data is emitted. MemInitHeap 0x801D2130 and three other large bodies have no draft yet.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801D1E30",
+          "start": "0x801D134C",
           "end": "0x801D34C4"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_801D134C",
+          "start": "0x801D134C",
+          "end": "0x801D13A4"
+        },
+        {
+          "symbol": "fn_801D13A4",
+          "start": "0x801D13A4",
+          "end": "0x801D1474"
+        },
+        {
+          "symbol": "fn_801D1474",
+          "start": "0x801D1474",
+          "end": "0x801D1588"
+        },
+        {
+          "symbol": "fn_801D1588",
+          "start": "0x801D1588",
+          "end": "0x801D1620"
+        },
+        {
+          "symbol": "fn_801D1620",
+          "start": "0x801D1620",
+          "end": "0x801D177C"
+        },
+        {
+          "symbol": "fn_801D177C",
+          "start": "0x801D177C",
+          "end": "0x801D18A0"
+        },
+        {
+          "symbol": "fn_801D18A0",
+          "start": "0x801D18A0",
+          "end": "0x801D1ACC"
+        },
+        {
+          "symbol": "fn_801D1ACC",
+          "start": "0x801D1ACC",
+          "end": "0x801D1B64"
+        },
+        {
+          "symbol": "fn_801D1B64",
+          "start": "0x801D1B64",
+          "end": "0x801D1C14"
+        },
+        {
+          "symbol": "fn_801D1C14",
+          "start": "0x801D1C14",
+          "end": "0x801D1E30"
+        },
         {
           "symbol": "fn_801D1E30",
           "start": "0x801D1E30",

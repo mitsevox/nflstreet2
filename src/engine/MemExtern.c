@@ -1,4 +1,4 @@
-#include "engine/cu_801D1E30.h"
+#include "engine/Memory.h"
 
 typedef struct ExternHeap {
     int mIdent;
@@ -20,10 +20,6 @@ typedef struct ExternHeap {
 #define BLOCK_FREE 0x80000000
 #define BLOCK_SIZE(block) ((block) & 0x7FFFFFFF)
 #define BLOCK_END 0xFFFFFFFF
-
-extern int fn_801D26C4(int ident, int flags, const char *pMessage);
-extern void *fn_801D2478(int ident, int parentIdent, char *pStart, unsigned int size, int dataSize,
-                         MemHeapFuncs_801D1E30 *pFuncs);
 
 static void fn_801D36E8(void *pHeapData)
 {
@@ -209,7 +205,7 @@ static int fn_801D3AC4(void *pHeapData, void *pAddr)
     return BLOCK_SIZE(*pBlock);
 }
 
-static MemHeapFuncs_801D1E30 lbl_802F7B40 = {
+static MemHeapFuncs_801D134C lbl_802F7B40 = {
     fn_801D36E8, fn_801D36EC, fn_801D36F4, fn_801D3768, fn_801D37AC,
     fn_801D3820, fn_801D399C, fn_801D3ABC, fn_801D3AC4,
 };
