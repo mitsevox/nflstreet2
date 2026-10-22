@@ -848,7 +848,7 @@
     },
     "_stack_end": {
       "address": "0x803EE4C0",
-      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; outside the image, so the linked source build defines it as an absolute link-script symbol; no object storage claimed."
+      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; exactly the end of .sdata2, so the linked source build resolves it as the end of the last original piece there; no object storage claimed."
     },
     "OSGetCurrentContext": {
       "address": "0x8023A588",
@@ -10912,7 +10912,7 @@
           "GXRedirectWriteGatherPipe",
           "GXRestoreWriteGatherPipe"
         ],
-        "evidence": "Only real target global functions; six static routines are reached through the source call graph. The file's other functions (GXSetCurrentGXThread, 76 bytes; GXGetFifoBase, 8 bytes) have no code in GXFifo's target range: GXSetCurrentGXThread has no masked-byte match in .init/.text, and the 10 matches of the generic 8-byte GXGetFifoBase getter are all game code. The linker drops them."
+        "evidence": "Only real target global functions; six static routines are reached through the source call graph. The file's other functions (GXSetCurrentGXThread, 76 bytes; GXGetFifoBase, 8 bytes) have no code in GXFifo's target range: GXSetCurrentGXThread has no masked-byte match in .init/.text, and none of the 10 matches of the generic 8-byte GXGetFifoBase getter lies in GXFifo's range (they are in game, engine and AX code, several inside larger functions). The linker drops them."
       },
       "sections": [
         {

@@ -566,7 +566,7 @@ def plan(sections, units, objects, externals):
                 break
         if owner is None:
             if name in externals and outside_image(sections, value):
-                # Configured linker-defined addresses past the loaded image (e.g. the SDK's
+                # Configured linker-defined addresses before or past the loaded image (e.g. the SDK's
                 # _stack_addr) are given to the linker as absolute symbols; see link_script.
                 continue
             raise ValueError(f"External {name} at 0x{value:08X} is outside the executable sections")
