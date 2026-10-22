@@ -1,8 +1,6 @@
 #include <string.h>
 #include "engine/t3db.h"
 
-
-
 int fn_80205880(TDbTable_801FAA00 *pTable, unsigned int column, TDbQIdx_80205880 *pQIdx);
 int fn_80205A10(TDbQIdx_80205880 *pQIdx, TDbIdxNode_80201EC8 **ppCur);
 
@@ -21,7 +19,7 @@ int fn_80205754(TDbStmt_80205754 *pStmt, TDbLitRef_80205754 *pLits, unsigned int
                 if (pStmt->mTableCount == 1 || pLits[lit].mTableId == pStmt->mTables[i]->mUnknown1C ||
                     (pLits[lit].mTableId == 0 && i == 0)) {
                     if (pMask[lit >> 5] & (1 << (lit & 31))) {
-                        if (fn_80205880(pStmt->mTables[i], pLits[lit].mColumn, pQuery->mSource.mQIdx)) {
+                        if (fn_80205880(pStmt->mTables[i], (unsigned char)pLits[lit].mColumn, pQuery->mSource.mQIdx)) {
                             fn_80205A10(pQuery->mSource.mQIdx, &pQuery->mCur);
                         }
                     }

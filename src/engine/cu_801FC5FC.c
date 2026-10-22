@@ -10,13 +10,10 @@ typedef struct TDbIOFileHdr_801FC5FC {
     unsigned int mBase;
 } TDbIOFileHdr_801FC5FC;
 
-
-
 int fn_801FC5FC(TDbDatabase_801FAA00 *pDb, void *pName, TDbIODevice_801FC5FC *pDevice)
 {
     TDbIOFileHdr_801FC5FC hdr;
     TDbIOStream_801FA8C8 stream;
-    TDbMemEvent_801FC5FC event;
     TDbTable_801FAA00 *pTable;
     unsigned int *pOffsets;
     unsigned int count;
@@ -25,7 +22,7 @@ int fn_801FC5FC(TDbDatabase_801FAA00 *pDb, void *pName, TDbIODevice_801FC5FC *pD
     unsigned int base;
     int err;
 
-    TDbMemNotifyTo_801FC5FC(&event, 1, (int)pDb->mUnknown8, -1);
+    TDbMemNotify_801FC9D4(1, (int)pDb->mUnknown8, -1);
     memset(&hdr, 0, sizeof(hdr));
     count = 0;
     for (pTable = pDb->mTables; pTable != 0; pTable = pTable->mNext) {
@@ -106,7 +103,7 @@ int fn_801FC5FC(TDbDatabase_801FAA00 *pDb, void *pName, TDbIODevice_801FC5FC *pD
     } else if (pOffsets) {
         fn_8020D2AC(lbl_803EBE8C, pOffsets, count * 8);
     }
-    TDbMemNotifyEnd_801FC5FC(&event, 4);
+    TDbMemNotify_801FC9D4(4, -1, -1);
     return err;
 }
 

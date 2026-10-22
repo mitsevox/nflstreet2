@@ -3,8 +3,8 @@
 
 unsigned int lbl_802F9548[256] = { 0 };
 
-extern void fn_8020C5C8(TDbTable_801FAA00 *pTable, unsigned short count);
-int fn_801FAEDC(TDbTable_801FAA00 *pTable, TDbIOStream_801FA8C8 *pStream, int mode);
+extern int fn_8020C5C8(TDbTable_801FAA00 *pTable, int count);
+int fn_801FAEDC(TDbTable_801FAA00 *pTable, TDbIOStream_801FA8C8 *pStream, int skip);
 int fn_801FB5C0(TDbTable_801FAA00 *pTable, TDbIOStream_801FA8C8 *pStream, int mode);
 
 static inline unsigned short TDbTableFree_801FAAF8(TDbTable_801FAA00 *pTable)

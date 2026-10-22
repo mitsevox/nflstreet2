@@ -2,11 +2,11 @@
 #include "engine/t3db.h"
 
 enum {
-    TDB_SEEK_FIRST_ABOVE = 0x10001,
-    TDB_SEEK_LAST_BELOW = 0x10002,
-    TDB_SEEK_EQUAL = 0x10003,
-    TDB_SEEK_FIRST_BELOW = 0x10004,
-    TDB_SEEK_LAST_ABOVE = 0x10005
+    TDB_OP_LT = 0x10001,
+    TDB_OP_LE = 0x10002,
+    TDB_OP_EQ = 0x10003,
+    TDB_OP_GT = 0x10004,
+    TDB_OP_GE = 0x10005
 };
 
 
@@ -50,14 +50,14 @@ TDbIdxNode_80201EC8 *fn_80201F9C(TDbIdxTree_80201EC8 *pTree, unsigned int *pKey,
     if (pTree->mRoot == 0) {
         return 0;
     }
-    if ((pTree->mParts[0].mDescending && mode == TDB_SEEK_FIRST_ABOVE) ||
-        (!pTree->mParts[0].mDescending && mode == TDB_SEEK_FIRST_BELOW)) {
+    if ((pTree->mParts[0].mAscending && mode == TDB_OP_LT) ||
+        (!pTree->mParts[0].mAscending && mode == TDB_OP_GT)) {
         pNode = fn_80202200(pTree, 0);
         if (fn_80202708(pTree, pKey, pNode->mKey, 1) != 1) {
             pNode = 0;
         }
-    } else if ((pTree->mParts[0].mDescending && mode == TDB_SEEK_LAST_BELOW) ||
-               (!pTree->mParts[0].mDescending && mode == TDB_SEEK_LAST_ABOVE)) {
+    } else if ((pTree->mParts[0].mAscending && mode == TDB_OP_LE) ||
+               (!pTree->mParts[0].mAscending && mode == TDB_OP_GE)) {
         pNode = fn_80202200(pTree, 0);
         if (fn_80202708(pTree, pKey, pNode->mKey, 1) == -1) {
             pNode = 0;
@@ -72,15 +72,15 @@ TDbIdxNode_80201EC8 *fn_80201F9C(TDbIdxTree_80201EC8 *pTree, unsigned int *pKey,
             dir = (unsigned int)cmp >> 31;
         }
         switch (mode) {
-        case TDB_SEEK_LAST_BELOW:
-        case TDB_SEEK_LAST_ABOVE:
+        case TDB_OP_LE:
+        case TDB_OP_GE:
             if (cmp != 0) {
                 while (pNode != 0 && fn_80202708(pTree, pKey, pNode->mKey, 1) > 0) {
                     pNode = fn_80202200(pTree, pNode);
                 }
                 break;
             }
-        case TDB_SEEK_EQUAL:
+        case TDB_OP_EQ:
             if (cmp != 0) {
                 pNode = 0;
                 break;
@@ -91,8 +91,8 @@ TDbIdxNode_80201EC8 *fn_80201F9C(TDbIdxTree_80201EC8 *pTree, unsigned int *pKey,
                 pNext = fn_80202298(pTree, pNode);
             }
             break;
-        case TDB_SEEK_FIRST_ABOVE:
-        case TDB_SEEK_FIRST_BELOW:
+        case TDB_OP_LT:
+        case TDB_OP_GT:
             while (pNode != 0 && fn_80202708(pTree, pKey, pNode->mKey, 1) >= 0) {
                 pNode = fn_80202200(pTree, pNode);
             }
@@ -333,7 +333,7 @@ int fn_80202708(TDbIdxTree_80201EC8 *pTree, unsigned int *pKeyA, unsigned int *p
     for (i = 0; i < count; i++) {
         TDbColumn_801FAA00 *pColumn;
 
-        sign = pParts[i].mDescending ? 1 : -1;
+        sign = pParts[i].mAscending ? 1 : -1;
         if (pParts[i].mColumn != TDB_COLUMN_ROW) {
             pColumn = &pParts[i].mTable->mColumns[pParts[i].mColumn];
             switch (pColumn->mType) {
@@ -391,8 +391,9 @@ void fn_802028C0(TDbIdxTree_80201EC8 *pTree, int row, TDbIdxNode_80201EC8 *pNode
     }
 }
 
-int fn_8020299C(TDbIndex_801FAA00 *pIndex, unsigned short row)
+int fn_8020299C(TDbIndex_801FAA00 *pIndex, unsigned int rowArg)
 {
+    unsigned short row = rowArg;
     TDbValue_801FDF28 result;
     TDbIdxNode_80201EC8 *pNode;
     int err;
@@ -427,7 +428,7 @@ TDbIdxNode_80201EC8 *fn_80202A84(TDbIndex_801FAA00 *pIndex, int row)
 
     if (fn_8020360C(&pIndex->mPool, &pKey) == 0) {
         fn_802028C0(&pIndex->mTree, row, pKey);
-        pNode = fn_80201F9C(&pIndex->mTree, pKey->mKey, TDB_SEEK_EQUAL);
+        pNode = fn_80201F9C(&pIndex->mTree, pKey->mKey, TDB_OP_EQ);
         while (pNode != 0 && row != pNode->mRow) {
             pNode = fn_80202200(&pIndex->mTree, pNode);
             if (pNode != 0 && fn_80202708(&pIndex->mTree, pNode->mKey, pKey->mKey, 1) != 0) {
@@ -503,14 +504,14 @@ int fn_80202D34(TDbIndex_801FAA00 *pIndex, int row)
     err = fn_8020360C(&pIndex->mPool, &pKey);
     if (err == 0) {
         fn_802028C0(&pIndex->mTree, row, pKey);
-        pNode = fn_80201F9C(&pIndex->mTree, pKey->mKey, TDB_SEEK_EQUAL);
+        pNode = fn_80201F9C(&pIndex->mTree, pKey->mKey, TDB_OP_EQ);
         while (pNode != 0) {
             if (row == pNode->mRow) {
                 fn_802025C4(&pIndex->mTree, pNode);
                 fn_80203744(&pIndex->mPool, pNode);
                 pIndex->mDirty = 1;
                 pIndex->mCount--;
-                pNode = fn_80201F9C(&pIndex->mTree, pKey->mKey, TDB_SEEK_EQUAL);
+                pNode = fn_80201F9C(&pIndex->mTree, pKey->mKey, TDB_OP_EQ);
             } else {
                 pNode = fn_80202200(&pIndex->mTree, pNode);
                 if (pNode != 0 && fn_80202708(&pIndex->mTree, pNode->mKey, pKey->mKey, 1) != 0) {
@@ -543,16 +544,7 @@ int fn_80202E60(TDbTable_801FAA00 *pTable, void *pUserData, TDbIdxColumnDef_801F
             fn_8020D1B0(pTable->mDb->mHeap, sizeof(TDbIndex_801FAA00) + (i - 1) * sizeof(TDbIdxPart_80202708), &pIndex);
         pIndex->mFlags = 0;
     }
-    {
-        TDbMemEvent_801FC5FC event;
-
-        if (lbl_803EBE80) {
-            event.mType = 4;
-            event.mUnknown4 = -1;
-            event.mUnknown8 = -1;
-            lbl_803EBE80(&event);
-        }
-    }
+    TDbMemNotify_801FC9D4(4, -1, -1);
     if (err == 0) {
         if (pFilter != 0) {
             err = fn_80204EF8(pFilter, &pIndex->mFilter, &pTable, 1, 0);
@@ -577,7 +569,7 @@ int fn_80202E60(TDbTable_801FAA00 *pTable, void *pUserData, TDbIdxColumnDef_801F
                     if (pTable->mColumns[pDefs[i].mColumn].mType <= TDB_TYPE_BINARY) {
                         pIndex->mFlags |= 1;
                     }
-                    pIndex->mTree.mParts[i].mDescending = pDefs[i].mAscending == 0;
+                    pIndex->mTree.mParts[i].mAscending = pDefs[i].mDescending == 0;
                     pIndex->mTree.mParts[i].mTable = pTable;
                 }
                 if (err == 0) {

@@ -73,7 +73,7 @@ int fn_801FBC2C(TDbIndex_801FAA00 *pIndex, TDbIOStream_801FA8C8 *pStream)
     if (err == 0) {
         for (i = 0; i < count; i++) {
             part.mColumn = pIndex->mTree.mParts[i].mColumn;
-            part.mDescending = pIndex->mTree.mParts[i].mDescending;
+            part.mAscending = pIndex->mTree.mParts[i].mAscending;
             err = fn_801FA8C8(pStream, &part, sizeof(part));
             if (err != 0) {
                 break;

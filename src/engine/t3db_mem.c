@@ -76,16 +76,7 @@ int fn_8020360C(TDbMemPool_80202B60 *pPool, void *ppItem)
         pPool->mBlocks = pBlock;
         pPool->mRemaining = pPool->mGrowCount;
         pPool->mNext = (unsigned char *)(pBlock + 1);
-        {
-            TDbMemEvent_801FC5FC event;
-
-            if (lbl_803EBE80) {
-                event.mType = 4;
-                event.mUnknown4 = -1;
-                event.mUnknown8 = -1;
-                lbl_803EBE80(&event);
-            }
-        }
+        TDbMemNotify_801FC9D4(4, -1, -1);
     }
     *(void **)ppItem = pPool->mNext;
     pPool->mNext += pPool->mItemSize;

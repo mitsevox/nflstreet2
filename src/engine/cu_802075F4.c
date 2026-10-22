@@ -1,10 +1,5 @@
 #include "engine/t3db.h"
 
-typedef struct TDbDeleteResult_80208204 {
-    unsigned short mCount;
-    int mErr;
-} TDbDeleteResult_80208204;
-
 extern int fn_801F88F0(void *pDb, int id, int *pOut, TDbTable_801FAA00 **ppTable);
 extern int fn_80205DB8(TDbStmt_80205754 *pStmt, TDbExpr_801FAA00 *pWhere, int a, int b);
 extern unsigned char fn_80207448(TDbExpr_801FAA00 *pExpr, unsigned int table, unsigned int *pOtherTable,
@@ -382,7 +377,7 @@ int fn_80208094(TDbStmt_80205754 *pStmt)
     return 0;
 }
 
-int fn_80208204(void *pUnused, TDbStmt_80205754 *pStmt, TDbDeleteResult_80208204 *pResult)
+int fn_80208204(void *pUnused, TDbStmt_80205754 *pStmt, TDbResult_8020AD1C *pResult)
 {
     int err = 0;
     TDbValue_801FDF28 value;

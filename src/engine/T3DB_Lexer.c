@@ -22,7 +22,7 @@ void fn_802009B0(TDbLexer_801FCE10 *pLexer, unsigned int start)
             p = fn_80201030(pLexer, p);
         } else if (*p < 0) {
             TDB_LEX_TOKEN((unsigned char)*p - 0x80, 1, 1);
-        } else if ((unsigned char)(*p - '0') <= 9 || (*p == '-' && (unsigned char)p[1] - '0' <= 9U)) {
+        } else if ((unsigned char)(*p - '0') <= 9 || (*p == '-' && (unsigned char)(p[1] - '0') <= 9)) {
             p = fn_80200DD4(pLexer, p);
         } else if (*p == '\'') {
             /* four-character constant between quotes */

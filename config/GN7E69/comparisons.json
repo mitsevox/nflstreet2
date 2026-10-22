@@ -43289,7 +43289,7 @@
     },
     {
       "source": "src/engine/t3db_io.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801FA870-0x801FB0F8 (src/engine/t3db_io.c): first run of the original t3db_io.c (NASCAR 2005 symbol table), _TDbIOInitCRCTable .. _TDbIOReadTableRow, and its .data CRC table 0x802F9548-0x802F9948. Stops before 0x801FB0F8 (_TDbIOReadTableNew, no source yet). Comparison only; original assembly stays linked.",
       "sections": [
         {
@@ -43340,7 +43340,7 @@
     },
     {
       "source": "src/engine/cu_801FB9D0.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801FB9D0-0x801FBFEC (src/engine/cu_801FB9D0.c): second run of the original t3db_io.c (NASCAR 2005 symbol table), _TDbIOReadExprNode .. _TDbIOWriteTable, split because 0x801FB0F8 and 0x801FB5C0 before it and 0x801FBFEC after it have no source yet. Comparison only; original assembly stays linked.",
       "sections": [
         {
@@ -43375,7 +43375,7 @@
     },
     {
       "source": "src/engine/cu_801FC5FC.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801FC5FC-0x801FC9D4 (src/engine/cu_801FC5FC.c): last run of the original t3db_io.c (NASCAR 2005 symbol table), _TDbIOSaveDatabase and _TDbIOCRC32, ending where T3DB_Compiler.c begins; split because 0x801FBFEC (_TDbIOLoadDatabase) has no source yet. Comparison only; original assembly stays linked.",
       "sections": [
         {
@@ -43400,7 +43400,7 @@
     },
     {
       "source": "src/engine/T3DB_Compiler.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801FC9D4-0x802009B0 (src/engine/T3DB_Compiler.c): the original T3DB_Compiler.c (NASCAR 2005 symbol table), TDbSQLInit .. _T3DBExec_Aggregate, ending where T3DB_Lexer_GetTokens (0x802009B0) begins. Comparison only; original assembly stays linked.",
       "sections": [
         {
@@ -43595,7 +43595,7 @@
     },
     {
       "source": "src/engine/T3DB_Lexer.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x802009B0-0x80200DD4 (src/engine/T3DB_Lexer.c): first function of the original T3DB_Lexer.c (NASCAR 2005 symbol table), T3DB_Lexer_GetTokens. Stops before 0x80200DD4 (T3DB_Lexer_Number, no source yet). Comparison only; original assembly stays linked.",
       "sections": [
         {
@@ -43615,7 +43615,7 @@
     },
     {
       "source": "src/engine/cu_80201C70.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x80201C70-0x80201D94 (src/engine/cu_80201C70.c): last function of the original T3DB_Lexer.c (NASCAR 2005 symbol table), T3DB_Lexer_StringLiteral, split from src/engine/T3DB_Lexer.c because 0x80200DD4 and 0x80201030 have no source yet. Comparison only; original assembly stays linked.",
       "sections": [
         {
@@ -43635,7 +43635,7 @@
     },
     {
       "source": "src/engine/t3db_bitdata.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x80201D94-0x80201EC8 (src/engine/t3db_bitdata.c): the whole original t3db_bitdata.c (NASCAR 2005 symbol table), 2 functions. Comparison only; original assembly stays linked.",
       "sections": [
         {
@@ -43760,7 +43760,7 @@
     },
     {
       "source": "src/engine/t3db_mem.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x80203444-0x80203754 (src/engine/t3db_mem.c): the whole original t3db_mem.c (NASCAR 2005 symbol table), 5 functions. Comparison only; original assembly stays linked.",
       "sections": [
         {
@@ -44227,7 +44227,7 @@
     },
     {
       "source": "src/engine/t3db_query.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x80205754-0x80205DB8 (src/engine/t3db_query.c): first six functions of the original t3db_query.c (NASCAR 2005 symbol table); 0x80205DB8 has no source yet. Comparison only; original assembly stays linked.",
       "sections": [
         {
@@ -44272,7 +44272,7 @@
     },
     {
       "source": "src/engine/cu_8020651C.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x8020651C-0x80207448 (src/engine/cu_8020651C.c): ten functions of the original t3db_query.c (NASCAR 2005 symbol table) between _TDbQryPrepComplexFilter 0x80205DB8 and _TDbQryFindJoinColumn 0x80207448, which have no source yet, plus the file's 32-byte .rodata 0x802B1B90-0x802B1BB0 (default column definitions copied by 0x80206EB8). 0x802067D4 is a same-size partial. Comparison only; original assembly stays linked.",
       "sections": [
         {
@@ -44343,7 +44343,7 @@
     },
     {
       "source": "src/engine/cu_802075F4.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x802075F4-0x8020840C (src/engine/cu_802075F4.c): the last seven E5 functions of the original t3db_query.c (NASCAR 2005 symbol table), after _TDbQryFindJoinColumn 0x80207448, which has no source yet; the file continues into the E6 range. Comparison only; original assembly stays linked.",
       "sections": [
         {

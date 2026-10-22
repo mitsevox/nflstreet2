@@ -100,7 +100,7 @@ unsigned int fn_802067D4(TDbIndex_801FAA00 *pIndex, TDbExpr_801FAA00 *pExpr, TDb
         if (pCols != 0) {
             for (i = 0; pCols[i].mId != -1 && i < pIndex->mTree.mPartCount; i++) {
                 if (pIndex->mTree.mParts[i].mColumn != pCols[i].mColumn ||
-                    (pIndex->mTree.mParts[i].mDescending == 0) != pCols[i].mAscending) {
+                    (pIndex->mTree.mParts[i].mAscending == 0) != pCols[i].mDescending) {
                     break;
                 }
             }
@@ -132,10 +132,9 @@ int fn_802069BC(TDbTable_801FAA00 *pTable, TDbIdxColumnDef_801FFFC4 *pCols, TDbE
     unsigned char count;
     int err;
     TDbIndex_801FAA00 *pIndex;
-    TDbMemEvent_801FC5FC event;
 
     memset(&rowDef, 0, sizeof(rowDef));
-    TDbMemNotifyTo_801FC5FC(&event, 3, (int)pTable->mDb->mUnknown8, pTable->mUnknown1C);
+    TDbMemNotify_801FC9D4(3, (int)pTable->mDb->mUnknown8, pTable->mUnknown1C);
     if (pCols == 0 || pCols[0].mId == -1) {
         rowDef.mColumn = TDB_COLUMN_ROW;
         pCols = &rowDef;
@@ -172,7 +171,7 @@ int fn_802069BC(TDbTable_801FAA00 *pTable, TDbIdxColumnDef_801FFFC4 *pCols, TDbE
                 if (pCols[count].mColumn != TDB_COLUMN_ROW && pTable->mColumns[pCols[count].mColumn].mType <= 1) {
                     pIndex->mFlags |= 1;
                 }
-                pIndex->mTree.mParts[count].mDescending = pCols[count].mAscending == 0;
+                pIndex->mTree.mParts[count].mAscending = pCols[count].mDescending == 0;
                 pIndex->mTree.mParts[count].mTable = pTable;
             }
             if (pTable->mIndexes == 0) {
@@ -191,7 +190,7 @@ int fn_802069BC(TDbTable_801FAA00 *pTable, TDbIdxColumnDef_801FFFC4 *pCols, TDbE
             fn_8020D2AC(pTable->mDb->mHeap, pIndex, count * sizeof(TDbIdxPart_80202708) + 0x3C);
         }
     }
-    TDbMemNotifyEnd_801FC5FC(&event, 4);
+    TDbMemNotify_801FC9D4(4, -1, -1);
     return err;
 }
 
@@ -293,7 +292,7 @@ int fn_80206EB8(TDbStmt_80205754 *pStmt, TDbIdxColumnDef_801FFFC4 *pCols, TDbQId
                         if (pCols[count].mTableId == pStmt->mTables[t]->mUnknown1C || pCols[count].mTableId == 0) {
                             (*ppQIdx)->mTree.mParts[count].mTable = pStmt->mTables[t];
                             (*ppQIdx)->mTree.mParts[count].mUnknown4 = t;
-                            (*ppQIdx)->mTree.mParts[count].mDescending = pCols[count].mAscending == 0;
+                            (*ppQIdx)->mTree.mParts[count].mAscending = pCols[count].mDescending == 0;
                             (*ppQIdx)->mTree.mParts[count].mColumn =
                                 pCols[count].mId != TDB_COLUMN_ROW ? fn_8020B97C(pStmt->mTables[t], pCols[count].mId)
                                                                    : TDB_COLUMN_ROW;

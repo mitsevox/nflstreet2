@@ -11,7 +11,7 @@ struct QueryResult {
 
 struct QueryCursor {
     int mUnknown0;
-    short mUnknown4;
+    unsigned short mUnknown4;
     int mUnknown8;
     void *mUnknown12;
 };
