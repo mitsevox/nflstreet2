@@ -44,7 +44,7 @@ void fn_801C67AC(int type, void (*init)(List_801C68FC *), int (*del)(List_801C68
                  Node_801C6A20 *(*add)(List_801C68FC *, Node_801C6A20 *, int),
                  Node_801C6A20 *(*get)(List_801C68FC *, Node_801C6A20 *, int),
                  void (*remove)(List_801C68FC *, Node_801C6A20 *),
-                 int (*traverse)(List_801C68FC *, Node_801C6A20 *, void *, int, ListVisitFn_801C6D34, int),
+                 int (*traverse)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListVisitFn_801C6D34, int),
                  int (*search)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC),
                  void (*optimize)(List_801C68FC *), int headerSize, int nodeSize)
 {
@@ -187,7 +187,7 @@ void *fn_801C6C84(List_801C68FC *pList, void *item)
 }
 
 /* pStart is a get selector (0-4: first, last, ...) or an item, as for the type's get function. */
-int fn_801C6D34(List_801C68FC *pList, void *pStart, void *pCtx, int arg, ListVisitFn_801C6D34 fn, int direction)
+int fn_801C6D34(List_801C68FC *pList, void *pStart, void *pCtx, void *pArg, ListVisitFn_801C6D34 fn, int direction)
 {
     Node_801C6A20 *pNode;
 
@@ -195,7 +195,7 @@ int fn_801C6D34(List_801C68FC *pList, void *pStart, void *pCtx, int arg, ListVis
     if (pNode == 0) {
         return 1;
     }
-    return lbl_803D4FB8[pList->mType].mTraverse(pList, pNode, pCtx, arg, fn, direction);
+    return lbl_803D4FB8[pList->mType].mTraverse(pList, pNode, pCtx, pArg, fn, direction);
 }
 
 int fn_801C6DCC(List_801C68FC *pList, void *pStart, void *pKey, void *pResult, ListSearchFn_801C6DCC fn)

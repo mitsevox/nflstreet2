@@ -42,7 +42,7 @@ static int fn_80227F14(void *a, void *b)
     return *(int *)a - *(int *)b;
 }
 
-static int fn_80227F24(void *pItem, void *pContext)
+static int fn_80227F24(void *pItem, void *pContext, void *pArg)
 {
     Entry_80228474 *pEntry = pItem;
     Match_80228474 *pMatch = pContext;
@@ -56,7 +56,7 @@ static int fn_80227F24(void *pItem, void *pContext)
     return 1;
 }
 
-static int fn_80227F84(void *pItem, void *pContext)
+static int fn_80227F84(void *pItem, void *pContext, void *pArg)
 {
     Entry_80228474 *pEntry = pItem;
     Match_80228474 *pMatch = pContext;
@@ -81,7 +81,7 @@ static int fn_80228018(void *a, void *b)
     return *(int *)a - *(int *)b;
 }
 
-static int fn_80228028(void *pItem, void *pContext)
+static int fn_80228028(void *pItem, void *pContext, void *pArg)
 {
     Object_80228224 *pObject = pItem;
 

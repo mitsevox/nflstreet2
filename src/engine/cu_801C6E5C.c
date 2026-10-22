@@ -3,7 +3,6 @@
 #include "game/fn_801C1F94.h"
 
 
-typedef int (*TraverseFn_801C7188)(void *, int, int);
 typedef int (*SearchFn_801C7234)(void *, void *, void *);
 
 #define LINK_NODE_SIZE (lbl_803D4FB8[0].mNodeSize)
@@ -143,8 +142,8 @@ static void fn_801C7128(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode)
     pList->mBase.mCount--;
 }
 
-static int fn_801C7188(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode, int a, int b,
-                       TraverseFn_801C7188 callback, int direction)
+static int fn_801C7188(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode, void *pCtx, void *pArg,
+                       ListVisitFn_801C6D34 callback, int direction)
 {
     LinkNode_801C6E5C *pNext;
     int result = 1;
@@ -155,7 +154,7 @@ static int fn_801C7188(LinkList_801C6E5C *pList, LinkNode_801C6E5C *pNode, int a
         } else {
             pNext = pNode->mpNext;
         }
-        result = callback(pNode ? (char *)pNode + lbl_803D4FB8[0].mNodeSize : 0, a, b);
+        result = callback(pNode ? (char *)pNode + lbl_803D4FB8[0].mNodeSize : 0, pCtx, pArg);
         pNode = pNext;
     }
     return result == 0 ? 4 : 0;
@@ -187,7 +186,7 @@ void fn_801C72D0(void)
                 (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C6F88,
                 (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C70A8,
                 (void (*)(List_801C68FC *, Node_801C6A20 *))fn_801C7128,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, int, ListVisitFn_801C6D34, int))fn_801C7188,
+                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListVisitFn_801C6D34, int))fn_801C7188,
                 (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC))fn_801C7234,
                 (void (*)(List_801C68FC *))fn_801C72C8, sizeof(LinkList_801C6E5C), sizeof(LinkNode_801C6E5C));
 }

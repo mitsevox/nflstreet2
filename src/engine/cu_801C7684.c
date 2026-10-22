@@ -273,7 +273,7 @@ void fn_801C7EE4(void)
                 (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C7A98,
                 (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C7C44,
                 (void (*)(List_801C68FC *, Node_801C6A20 *))fn_801C7D1C,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, int, ListVisitFn_801C6D34, int))fn_801C7E00,
+                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListVisitFn_801C6D34, int))fn_801C7E00,
                 (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC))fn_801C7E30,
                 (void (*)(List_801C68FC *))fn_801C7EDC, sizeof(SplayTree_801C7684), sizeof(SplayNode_801C7684));
 }

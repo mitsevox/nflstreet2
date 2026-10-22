@@ -532,7 +532,7 @@ void fn_801C8E88(void)
                 (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C8834,
                 (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C89D4,
                 (void (*)(List_801C68FC *, Node_801C6A20 *))fn_801C8AB4,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, int, ListVisitFn_801C6D34, int))fn_801C8C44,
+                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListVisitFn_801C6D34, int))fn_801C8C44,
                 (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC))fn_801C8C84,
                 (void (*)(List_801C68FC *))fn_801C8D38, sizeof(BinTree_801C7F70), sizeof(BinNode_801C7F70));
 }
