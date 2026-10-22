@@ -25,6 +25,12 @@ struct Block_8014F104 {
 };
 
 extern "C" {
+extern char *lbl_803EB2D4;
+extern const char lbl_802A0B74[];
+
+int fn_800C1E40(void);
+void fn_800544A4(const char *pTitle, const char *pText, const char *pButtons);
+
 Block_8014F104 *fn_8014F104(Class_80148A58 *p);
 Object_80039F5C *fn_8003AC84(int id);
 void fn_800AD910(int a, float b);
@@ -131,6 +137,13 @@ void fn_8014E48C(State_802A2058 *p, float dt)
             fn_800655D0();
         }
         fn_800AD910(3, dt);
+    }
+}
+
+void fn_8014E2DC(void *p)
+{
+    if (fn_800C1E40() == 0) {
+        fn_800544A4("Crush the Carrier", lbl_803EB2D4, lbl_802A0B74);
     }
 }
 }

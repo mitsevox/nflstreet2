@@ -1,4 +1,5 @@
 #include "game/Class_80148A58.h"
+#include "game/fn_8007F828.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8008044C.h"
 #include "game/cu_8003E214.h"
@@ -34,6 +35,14 @@ struct Stats_8005CAE4 {
 };
 
 extern "C" {
+extern char *lbl_803EB2B8;
+extern const char lbl_802A0CEC[];
+extern const char lbl_802A0B74[];
+
+int fn_800C1E40(void);
+int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
+void fn_800544A4(const char *pTitle, const char *pText, const char *pButtons);
+
 extern unsigned char lbl_803EB2D1;
 extern void *lbl_803EB688;
 extern const int lbl_802DE95C[];
@@ -227,6 +236,17 @@ void fn_8014D014(Class_802A2C90 *p, int a, int b)
 {
     if (a == 0) {
         p->mUnknown20 = b;
+    }
+}
+
+void fn_8014C808(void *p)
+{
+    char text[300];
+
+    if (fn_800C1E40() == 0) {
+        int value = fn_8007F828(1);
+        fn_801C2D88(text, sizeof(text), lbl_803EB2B8, value);
+        fn_800544A4(lbl_802A0CEC, text, lbl_802A0B74);
     }
 }
 }
