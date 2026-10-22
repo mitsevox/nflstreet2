@@ -26443,6 +26443,400 @@
         "commit": "ecb52e48f2b93b4aa537302be4f5ee756fd4b0c8",
         "introduced_blob": "9b184b0c3842835284395a6a4aaf37da9dba8638"
       }
+    },
+    {
+      "source": "src/dolphin/base/PPCArch.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8023873C",
+        "0x80238744",
+        "0x8023874C",
+        "0x80238754",
+        "0x8023875C",
+        "0x80238764",
+        "0x8023876C",
+        "0x80238774",
+        "0x8023877C",
+        "0x80238790",
+        "0x80238798",
+        "0x802387A0",
+        "0x802387A8",
+        "0x802387B0",
+        "0x802387B8",
+        "0x802387C0",
+        "0x802387E0",
+        "0x80238808",
+        "0x80238810",
+        "0x80238818",
+        "0x80238824",
+        "0x8023882C",
+        "0x80238854"
+      ],
+      "provenance": {
+        "pull_request": 1028,
+        "merged_via": 1028,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "137290a2be1f37eecf38a330e5ab42f06574ee20"
+      }
+    },
+    {
+      "source": "src/dolphin/os/OS.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8023885C",
+        "0x80239168",
+        "0x8023918C",
+        "0x802391C0",
+        "0x8023925C",
+        "0x802392B4"
+      ],
+      "provenance": {
+        "pull_request": 1028,
+        "merged_via": 1028,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "82c59bf4b586cc0883c706706ed839e7767997ec"
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSAlarm.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x802399A8"
+      ],
+      "provenance": {
+        "pull_request": 1028,
+        "merged_via": 1028,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "a8948088610e06f88c590c5b5efb37d316e44e25"
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSCache.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80239CAC",
+        "0x80239CC0",
+        "0x80239CEC",
+        "0x80239D1C",
+        "0x80239D4C",
+        "0x80239D78",
+        "0x80239DAC",
+        "0x80239DBC",
+        "0x80239DD0",
+        "0x80239E9C",
+        "0x80239ED4",
+        "0x80239EFC",
+        "0x80239F20",
+        "0x80239FCC",
+        "0x80239FD8"
+      ],
+      "provenance": {
+        "pull_request": 1028,
+        "merged_via": 1028,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "91b5315684fc316e69785e0743933398b8686bae"
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSContext.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8023A2D8",
+        "0x8023A3FC",
+        "0x8023A524",
+        "0x8023A52C",
+        "0x8023A594",
+        "0x8023A6EC",
+        "0x8023A718",
+        "0x8023AA7C"
+      ],
+      "provenance": {
+        "pull_request": 1028,
+        "merged_via": 1028,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "b552a65a935c3ae51808cbb52ff7ac125cff8169"
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSInterrupt.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8023B1F4",
+        "0x8023B208",
+        "0x8023B21C",
+        "0x8023BA10"
+      ],
+      "provenance": {
+        "pull_request": 1028,
+        "merged_via": 1028,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "86028e119e7771fa3642685d63f940614969a668"
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSMemory.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8023BB20",
+        "0x8023BBA0",
+        "0x8023BC20"
+      ],
+      "provenance": {
+        "pull_request": 1028,
+        "merged_via": 1028,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "ecd73e954f53d7df435ca193f7a6f09327aec94b"
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSReset.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8023C040"
+      ],
+      "provenance": {
+        "pull_request": 1028,
+        "merged_via": 1028,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "6a21cef940474b3c8867b0417feab154c0c45a36"
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSTime.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8023E794",
+        "0x8023E7AC"
+      ],
+      "provenance": {
+        "pull_request": 1028,
+        "merged_via": 1028,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "3923ce5b119fb0a3b82bef6bd211c0c193977930"
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSReboot.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8023E920"
+      ],
+      "provenance": {
+        "pull_request": 1028,
+        "merged_via": 1028,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "f926754bbaf09f5e1f87b560ff3f57059b736a1d"
+      }
+    },
+    {
+      "source": "src/dolphin/db/db.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8023ECEC"
+      ],
+      "provenance": {
+        "pull_request": 1028,
+        "merged_via": 1028,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "68be87a2d9662def62f26d1851d76c9ec0ba4ccb"
+      }
+    },
+    {
+      "source": "src/dolphin/ai/ai.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8024A7B0"
+      ],
+      "provenance": {
+        "pull_request": 1028,
+        "merged_via": 1028,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "f9f67d8319929db9869622c608abd1754e1db489"
+      }
+    },
+    {
+      "source": "src/dolphin/os/OS.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80238984",
+        "0x802389AC",
+        "0x80238AD4",
+        "0x80238EE8",
+        "0x80239190",
+        "0x802391AC",
+        "0x80239308",
+        "0x8023931C"
+      ],
+      "provenance": {
+        "pull_request": 567,
+        "merged_via": 573,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "82c59bf4b586cc0883c706706ed839e7767997ec",
+        "original_commit": "513cea7088efd02b94f589ba17ffefcfe8f3e78a",
+        "original_blob": "626561042165ed874aef87dc61ddcd7fd301c2c2",
+        "integration_adjustment": "Newly exact pre-existing bodies (OSGetConsoleType, ClearArena, InquiryCallback, OSExceptionInit, __OSSetExceptionHandler, __OSGetExceptionHandler, __OSGetDIConfig, OSRegisterVersion) originate in contribution 567; the PR 1028 change that makes them exact restores the file's original hand-written assembly routines ahead of them and leaves these C bodies unchanged, so it does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1028 file for squash-history verification."
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSCache.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80239FEC",
+        "0x8023A084",
+        "0x8023A1E4"
+      ],
+      "provenance": {
+        "pull_request": 567,
+        "merged_via": 573,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "91b5315684fc316e69785e0743933398b8686bae",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "c38d0a40212549198b1b70fc47dadecc8afd5995",
+        "integration_adjustment": "Newly exact pre-existing bodies (L2GlobalInvalidate, DMAErrorHandler, __OSCacheInit) originate in contribution 567; the PR 1028 change that makes them exact restores the file's original hand-written assembly routines ahead of them and leaves these C bodies unchanged, so it does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1028 file for squash-history verification."
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSContext.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023A6F4",
+        "0x8023A7D4",
+        "0x8023AB00"
+      ],
+      "provenance": {
+        "pull_request": 567,
+        "merged_via": 573,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "b552a65a935c3ae51808cbb52ff7ac125cff8169",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "35542bcfc72779991f353aa900bd4c329e951756",
+        "integration_adjustment": "Newly exact pre-existing bodies (OSClearContext, OSDumpContext, __OSContextInit) originate in contribution 567; the PR 1028 change that makes them exact restores the file's original hand-written assembly routines ahead of them and leaves these C bodies unchanged, so it does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1028 file for squash-history verification."
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSInterrupt.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023B270",
+        "0x8023B2E4",
+        "0x8023B5BC",
+        "0x8023B644",
+        "0x8023B6CC"
+      ],
+      "provenance": {
+        "pull_request": 567,
+        "merged_via": 573,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "86028e119e7771fa3642685d63f940614969a668",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "12cedc3fabf04c7b11bcf8778b460a3cc0344527",
+        "integration_adjustment": "Newly exact pre-existing bodies (__OSInterruptInit, SetInterruptMask, __OSMaskInterrupts, __OSUnmaskInterrupts, __OSDispatchInterrupt) originate in contribution 567; the PR 1028 change that makes them exact restores the file's original hand-written assembly routines ahead of them and leaves these C bodies unchanged, so it does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1028 file for squash-history verification."
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSReset.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023C0B0",
+        "0x8023C3B0"
+      ],
+      "provenance": {
+        "pull_request": 567,
+        "merged_via": 573,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "6a21cef940474b3c8867b0417feab154c0c45a36",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "2b87ffd2a286f4009c59907b5828854a674de721",
+        "integration_adjustment": "Newly exact pre-existing bodies (__OSDoHotReset, OSGetResetCode) originate in contribution 567; the PR 1028 change that makes them exact restores the file's original hand-written assembly routines ahead of them and leaves these C bodies unchanged, so it does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1028 file for squash-history verification."
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSTime.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023E7B4"
+      ],
+      "provenance": {
+        "pull_request": 567,
+        "merged_via": 573,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "3923ce5b119fb0a3b82bef6bd211c0c193977930",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "33e58ad7154b4cef3468df36984d8c882481d2d0",
+        "integration_adjustment": "Newly exact pre-existing bodies (__OSGetSystemTime) originate in contribution 567; the PR 1028 change that makes them exact restores the file's original hand-written assembly routines ahead of them and leaves these C bodies unchanged, so it does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1028 file for squash-history verification."
+      }
+    },
+    {
+      "source": "src/dolphin/os/OSReboot.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8023E93C"
+      ],
+      "provenance": {
+        "pull_request": 567,
+        "merged_via": 573,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "f926754bbaf09f5e1f87b560ff3f57059b736a1d",
+        "original_commit": "707406fc623b51dba590685d4df496c032516062",
+        "original_blob": "4fd3bf22e513e6870fd262ccf6257eb8e3529864",
+        "integration_adjustment": "Newly exact pre-existing bodies (__OSReboot) originate in contribution 567; the PR 1028 change that makes them exact restores the file's original hand-written assembly routines ahead of them and leaves these C bodies unchanged, so it does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1028 file for squash-history verification."
+      }
+    },
+    {
+      "source": "src/dolphin/ai/ai.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8024A808"
+      ],
+      "provenance": {
+        "pull_request": 529,
+        "merged_via": 560,
+        "commit": "2866fe357ab904f8a3201938e81fb0c971bb2efd",
+        "introduced_blob": "f9f67d8319929db9869622c608abd1754e1db489",
+        "original_commit": "0c1b26d92daa749bec20fcde3f74940c517e29f3",
+        "original_blob": "dfc630bfb306a68a9c2970b7c9c09d299f9b9bdc",
+        "integration_adjustment": "Newly exact pre-existing bodies (__AI_SRC_INIT) originate in contribution 529; the PR 1028 change that makes them exact restores the file's original hand-written assembly routines ahead of them and leaves these C bodies unchanged, so it does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1028 file for squash-history verification."
+      }
     }
   ],
   "target": "GN7E69",
