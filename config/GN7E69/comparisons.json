@@ -30048,6 +30048,181 @@
       ]
     },
     {
+      "source": "src/engine/cu_802832CC.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x802832CC-0x80285A90 (src/engine/cu_802832CC.c), its compiler, source-form, type, function and name rows. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802832CC",
+          "end": "0x80285A90"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_802832CC",
+          "start": "0x802832CC",
+          "end": "0x80283660"
+        },
+        {
+          "symbol": "fn_80283660",
+          "start": "0x80283660",
+          "end": "0x80283E48"
+        },
+        {
+          "symbol": "fn_80283E48",
+          "start": "0x80283E48",
+          "end": "0x80284030"
+        },
+        {
+          "symbol": "fn_80284030",
+          "start": "0x80284030",
+          "end": "0x8028410C"
+        },
+        {
+          "symbol": "fn_8028410C",
+          "start": "0x8028410C",
+          "end": "0x80284700"
+        },
+        {
+          "symbol": "fn_80284700",
+          "start": "0x80284700",
+          "end": "0x8028490C"
+        },
+        {
+          "symbol": "fn_8028490C",
+          "start": "0x8028490C",
+          "end": "0x80284968"
+        },
+        {
+          "symbol": "fn_80284968",
+          "start": "0x80284968",
+          "end": "0x80284AEC"
+        },
+        {
+          "symbol": "fn_80284AEC",
+          "start": "0x80284AEC",
+          "end": "0x80284D1C"
+        },
+        {
+          "symbol": "fn_80284D1C",
+          "start": "0x80284D1C",
+          "end": "0x80284DD0"
+        },
+        {
+          "symbol": "fn_80284DD0",
+          "start": "0x80284DD0",
+          "end": "0x80284E70"
+        },
+        {
+          "symbol": "fn_80284E70",
+          "start": "0x80284E70",
+          "end": "0x80284F78"
+        },
+        {
+          "symbol": "fn_80284F78",
+          "start": "0x80284F78",
+          "end": "0x80284FB8"
+        },
+        {
+          "symbol": "fn_80284FB8",
+          "start": "0x80284FB8",
+          "end": "0x802851E8"
+        },
+        {
+          "symbol": "fn_802851E8",
+          "start": "0x802851E8",
+          "end": "0x80285304"
+        },
+        {
+          "symbol": "fn_80285304",
+          "start": "0x80285304",
+          "end": "0x80285394"
+        },
+        {
+          "symbol": "fn_80285394",
+          "start": "0x80285394",
+          "end": "0x80285458"
+        },
+        {
+          "symbol": "fn_80285458",
+          "start": "0x80285458",
+          "end": "0x802854D8"
+        },
+        {
+          "symbol": "fn_802854D8",
+          "start": "0x802854D8",
+          "end": "0x8028555C"
+        },
+        {
+          "symbol": "fn_8028555C",
+          "start": "0x8028555C",
+          "end": "0x802855EC"
+        },
+        {
+          "symbol": "fn_802855EC",
+          "start": "0x802855EC",
+          "end": "0x802856D8"
+        },
+        {
+          "symbol": "fn_802856D8",
+          "start": "0x802856D8",
+          "end": "0x8028572C"
+        },
+        {
+          "symbol": "fn_8028572C",
+          "start": "0x8028572C",
+          "end": "0x802857D8"
+        },
+        {
+          "symbol": "fn_802857D8",
+          "start": "0x802857D8",
+          "end": "0x80285808"
+        },
+        {
+          "symbol": "fn_80285808",
+          "start": "0x80285808",
+          "end": "0x80285878"
+        },
+        {
+          "symbol": "fn_80285878",
+          "start": "0x80285878",
+          "end": "0x802858BC"
+        },
+        {
+          "symbol": "fn_802858BC",
+          "start": "0x802858BC",
+          "end": "0x80285940"
+        },
+        {
+          "symbol": "fn_80285940",
+          "start": "0x80285940",
+          "end": "0x802859B4"
+        },
+        {
+          "symbol": "fn_802859B4",
+          "start": "0x802859B4",
+          "end": "0x80285A1C"
+        },
+        {
+          "symbol": "fn_80285A1C",
+          "start": "0x80285A1C",
+          "end": "0x80285A24"
+        },
+        {
+          "symbol": "fn_80285A24",
+          "start": "0x80285A24",
+          "end": "0x80285A8C"
+        },
+        {
+          "symbol": "fn_80285A8C",
+          "start": "0x80285A8C",
+          "end": "0x80285A90"
+        }
+      ]
+    },
+    {
       "source": "src/engine/cu_802622DC.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x802622DC-0x80264424 (src/engine/cu_802622DC.c), its compiler, source-form, function and name rows and the exact .rodata data row 0x802B7538-0x802B7578. Draft comparisons only; original assembly remains linked.",
