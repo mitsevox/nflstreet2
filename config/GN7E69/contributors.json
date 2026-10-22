@@ -26457,11 +26457,11 @@
       "provenance": {
         "pull_request": 1024,
         "merged_via": 1024,
-        "commit": "79035c833664ab96ae30313a6259b83a95911fb6",
-        "introduced_blob": "63f9262680bfe9635f40e137311f3ba9e7c6f1b3",
+        "commit": "cd0a52e382f40075d9d5f2a24d84d6d1fc5adb5a",
+        "introduced_blob": "23ea6d4e7e569c6b01e9e6c6bc16f21fb4b61471",
         "original_commit": "8fc286a43553549d8a778b19f13984a3ead45feb",
         "original_blob": "2a54412d0637fc5af2b6222e9cc4307e78175eac",
-        "integration_adjustment": "Preserve original MID attribution for unchanged exact bodies 8009C0B8,800A02FC,800A042C. Integration corrects only separate partial 8009F168 and appends four ratings bodies; all 1005 prior resolved function bytes remain unchanged after the append. The final integrated source blob survives squash history; original source remains independently pinned."
+        "integration_adjustment": "Preserve original source attribution for these unchanged exact bodies. Integration fixes only separate partial 8009F168, then appends eight ordinary ratings/description/label/trajectory bodies. All 1009 previously registered function scores and resolved bytes remain unchanged after the last append. The final source blob survives squash history; original source remains independently pinned."
       }
     },
     {
@@ -26476,8 +26476,11 @@
       "provenance": {
         "pull_request": 1024,
         "merged_via": 1024,
-        "commit": "7d191e57c8f064c2ff23b5c853fc3f1543c42e29",
-        "introduced_blob": "63f9262680bfe9635f40e137311f3ba9e7c6f1b3"
+        "commit": "cd0a52e382f40075d9d5f2a24d84d6d1fc5adb5a",
+        "introduced_blob": "23ea6d4e7e569c6b01e9e6c6bc16f21fb4b61471",
+        "original_commit": "7d191e57c8f064c2ff23b5c853fc3f1543c42e29",
+        "original_blob": "63f9262680bfe9635f40e137311f3ba9e7c6f1b3",
+        "integration_adjustment": "Preserve original source attribution for these unchanged exact bodies. Integration fixes only separate partial 8009F168, then appends eight ordinary ratings/description/label/trajectory bodies. All 1009 previously registered function scores and resolved bytes remain unchanged after the last append. The final source blob survives squash history; original source remains independently pinned."
       }
     },
     {

@@ -22060,7 +22060,7 @@
     {
       "source": "src/game/cu_8008E978.cpp",
       "profile": "game_cpp",
-      "evidence": "Registered whole-function extents and allocated data sections are measured independently under comparisons.json; evidence.tsv records target boundaries, grouping confidence and source-form provenance. Unregistered functions remain unmeasured; comparison-only source stays unlinked.",
+      "evidence": "Registered whole-function extents and allocated data sections are measured independently under comparisons.json; evidence.tsv records target boundaries, grouping confidence and source-form provenance. Unregistered functions remain unmeasured; comparison-only source stays unlinked. Four additional untouched ratings/description/label/trajectory bodies from issue #1021 retain all earlier registrations and the complete 808-byte data context; source-form rows document access views and natural pool differences.",
       "sections": [
         {
           "section": ".text",
@@ -27120,6 +27120,26 @@
           "symbol": "fn_800B4900",
           "start": "0x800B4900",
           "end": "0x800B49EC"
+        },
+        {
+          "symbol": "fn_800ABE10",
+          "start": "0x800ABE10",
+          "end": "0x800ABF00"
+        },
+        {
+          "symbol": "fn_800B4DE4",
+          "start": "0x800B4DE4",
+          "end": "0x800B508C"
+        },
+        {
+          "symbol": "fn_800B5150",
+          "start": "0x800B5150",
+          "end": "0x800B51D0"
+        },
+        {
+          "symbol": "fn_800B5764",
+          "start": "0x800B5764",
+          "end": "0x800B57F4"
         }
       ]
     },
