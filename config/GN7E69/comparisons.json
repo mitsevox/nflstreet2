@@ -38487,6 +38487,192 @@
       ]
     },
     {
+      "source": "src/engine/cu_8027CF9C.cpp",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv provisional unit row 0x8027CF9C-0x8027D3AC (src/engine/cu_8027CF9C.cpp), its compiler row, function and name rows, and the exact data row 0x802C2368-0x802C2380 (.rodata). Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027CF9C",
+          "end": "0x8027D3AC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C2368",
+          "end": "0x802C2380"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8027CF9C",
+          "start": "0x8027CF9C",
+          "end": "0x8027CFCC"
+        },
+        {
+          "symbol": "fn_8027CFCC",
+          "start": "0x8027CFCC",
+          "end": "0x8027D05C"
+        },
+        {
+          "symbol": "fn_8027D05C",
+          "start": "0x8027D05C",
+          "end": "0x8027D284"
+        },
+        {
+          "symbol": "fn_8027D284",
+          "start": "0x8027D284",
+          "end": "0x8027D2C4"
+        },
+        {
+          "symbol": "fn_8027D2C4",
+          "start": "0x8027D2C4",
+          "end": "0x8027D2E0"
+        },
+        {
+          "symbol": "fn_8027D2E0",
+          "start": "0x8027D2E0",
+          "end": "0x8027D2E8"
+        },
+        {
+          "symbol": "fn_8027D2E8",
+          "start": "0x8027D2E8",
+          "end": "0x8027D3AC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_8027D3AC.cpp",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8027D3AC-0x8027EFAC (src/engine/cu_8027D3AC.cpp), its compiler row, function and name rows. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027D3AC",
+          "end": "0x8027EFAC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8027D5CC",
+          "start": "0x8027D5CC",
+          "end": "0x8027D5EC"
+        },
+        {
+          "symbol": "fn_8027D5EC",
+          "start": "0x8027D5EC",
+          "end": "0x8027D60C"
+        },
+        {
+          "symbol": "fn_8027D960",
+          "start": "0x8027D960",
+          "end": "0x8027D968"
+        },
+        {
+          "symbol": "fn_8027D968",
+          "start": "0x8027D968",
+          "end": "0x8027D970"
+        },
+        {
+          "symbol": "fn_8027D970",
+          "start": "0x8027D970",
+          "end": "0x8027D978"
+        },
+        {
+          "symbol": "fn_8027D9EC",
+          "start": "0x8027D9EC",
+          "end": "0x8027D9F4"
+        },
+        {
+          "symbol": "fn_8027D9F4",
+          "start": "0x8027D9F4",
+          "end": "0x8027D9FC"
+        },
+        {
+          "symbol": "fn_8027D9FC",
+          "start": "0x8027D9FC",
+          "end": "0x8027DA24"
+        },
+        {
+          "symbol": "fn_8027DAA4",
+          "start": "0x8027DAA4",
+          "end": "0x8027DAC4"
+        },
+        {
+          "symbol": "fn_8027DAC4",
+          "start": "0x8027DAC4",
+          "end": "0x8027DAE4"
+        },
+        {
+          "symbol": "fn_8027E0AC",
+          "start": "0x8027E0AC",
+          "end": "0x8027E0C4"
+        },
+        {
+          "symbol": "fn_8027E4D8",
+          "start": "0x8027E4D8",
+          "end": "0x8027E4F8"
+        },
+        {
+          "symbol": "fn_8027E4F8",
+          "start": "0x8027E4F8",
+          "end": "0x8027E518"
+        },
+        {
+          "symbol": "fn_8027EAB4",
+          "start": "0x8027EAB4",
+          "end": "0x8027EAC0"
+        },
+        {
+          "symbol": "fn_8027ED4C",
+          "start": "0x8027ED4C",
+          "end": "0x8027ED58"
+        },
+        {
+          "symbol": "fn_8027ED58",
+          "start": "0x8027ED58",
+          "end": "0x8027ED5C"
+        },
+        {
+          "symbol": "fn_8027ED5C",
+          "start": "0x8027ED5C",
+          "end": "0x8027ED64"
+        },
+        {
+          "symbol": "fn_8027ED64",
+          "start": "0x8027ED64",
+          "end": "0x8027ED6C"
+        },
+        {
+          "symbol": "fn_8027EF50",
+          "start": "0x8027EF50",
+          "end": "0x8027EF58"
+        },
+        {
+          "symbol": "fn_8027EF58",
+          "start": "0x8027EF58",
+          "end": "0x8027EF60"
+        },
+        {
+          "symbol": "fn_8027EF94",
+          "start": "0x8027EF94",
+          "end": "0x8027EF9C"
+        },
+        {
+          "symbol": "fn_8027EF9C",
+          "start": "0x8027EF9C",
+          "end": "0x8027EFA4"
+        },
+        {
+          "symbol": "fn_8027EFA4",
+          "start": "0x8027EFA4",
+          "end": "0x8027EFAC"
+        }
+      ]
+    },
+    {
       "source": "src/engine/cu_80264424.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80264424-0x80266A2C (src/engine/cu_80264424.c), its compiler and source-form rows, and exact whole-function rows and neutral name rows for the two draft bodies. The drafts define no static data. Draft comparisons only; original assembly remains linked.",
@@ -44012,6 +44198,123 @@
           "symbol": "fn_802805C0",
           "start": "0x802805C0",
           "end": "0x802805C4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_802805C4.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x802805C4-0x802821E8 (src/engine/cu_802805C4.c), its compiler row, function and name rows, and the exact data rows 0x803EC578-0x803EC584 (.sdata) and 0x803ED414-0x803ED420 (.sbss; no bytes, not measured). Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802805C4",
+          "end": "0x802821E8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC578",
+          "end": "0x803EC584"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED414",
+          "end": "0x803ED420"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_802805C4",
+          "start": "0x802805C4",
+          "end": "0x80280660"
+        },
+        {
+          "symbol": "fn_80280660",
+          "start": "0x80280660",
+          "end": "0x802806F8"
+        },
+        {
+          "symbol": "fn_802806F8",
+          "start": "0x802806F8",
+          "end": "0x80280780"
+        },
+        {
+          "symbol": "fn_80280780",
+          "start": "0x80280780",
+          "end": "0x802807F4"
+        },
+        {
+          "symbol": "fn_802807F4",
+          "start": "0x802807F4",
+          "end": "0x80280864"
+        },
+        {
+          "symbol": "fn_80280864",
+          "start": "0x80280864",
+          "end": "0x80280B94"
+        },
+        {
+          "symbol": "fn_80280B94",
+          "start": "0x80280B94",
+          "end": "0x80280E70"
+        },
+        {
+          "symbol": "fn_80280E70",
+          "start": "0x80280E70",
+          "end": "0x80280F38"
+        },
+        {
+          "symbol": "fn_80280F38",
+          "start": "0x80280F38",
+          "end": "0x80280FC4"
+        },
+        {
+          "symbol": "fn_80280FC4",
+          "start": "0x80280FC4",
+          "end": "0x80281090"
+        },
+        {
+          "symbol": "fn_80281090",
+          "start": "0x80281090",
+          "end": "0x8028113C"
+        },
+        {
+          "symbol": "fn_8028113C",
+          "start": "0x8028113C",
+          "end": "0x8028156C"
+        },
+        {
+          "symbol": "fn_8028156C",
+          "start": "0x8028156C",
+          "end": "0x80281590"
+        },
+        {
+          "symbol": "fn_80281590",
+          "start": "0x80281590",
+          "end": "0x80281938"
+        },
+        {
+          "symbol": "fn_80281938",
+          "start": "0x80281938",
+          "end": "0x80281940"
+        },
+        {
+          "symbol": "fn_80281C68",
+          "start": "0x80281C68",
+          "end": "0x80281C6C"
+        },
+        {
+          "symbol": "fn_80281C6C",
+          "start": "0x80281C6C",
+          "end": "0x80281C74"
+        },
+        {
+          "symbol": "fn_802821E4",
+          "start": "0x802821E4",
+          "end": "0x802821E8"
         }
       ]
     },
