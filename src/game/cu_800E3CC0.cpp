@@ -1,3 +1,4 @@
+#include "game/State_800E4494.h"
 #include "engine/cu_801B9F00.h"
 #include "game/Command_800CEE74.h"
 #include "game/Block_801BE60C.h"
@@ -110,32 +111,7 @@ struct State_800EE7C8 {
     unsigned short mUnknown4;
 };
 
-struct State_800E4494 {
-    unsigned char mUnknown0;
-    unsigned char mUnknown1;
-    unsigned char mUnknown2;
-    unsigned char mUnknown3;
-    char mUnknown4[28];
-    unsigned char mUnknown32;
-    unsigned char mUnknown33;
-    char mUnknown34[2];
-    int mUnknown36;
-    char mUnknown40[9];
-    unsigned char mUnknown49;
-    unsigned char mUnknown50;
-    unsigned char mUnknown51;
-    char mUnknown52[2];
-    unsigned char mUnknown54;
-    unsigned char mUnknown55;
-    int mUnknown56;
-    char mUnknown60[8];
-    float mUnknown68;
-    float mUnknown72;
-    unsigned char mUnknown76;
-    unsigned char mUnknown77;
-    unsigned char mUnknown78;
-    char mUnknown79[1];
-};
+
 
 /* Bytes of the player block at +336 that fn_800E954C sets under states 32,
    17 and 16. */

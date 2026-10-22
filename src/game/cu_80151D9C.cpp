@@ -185,3 +185,21 @@ void fn_80151D9C(Class_802A2918 *p)
     pState->mUnknown8 = 0;
 }
 }
+
+extern "C" Table_8015005C *fn_801530FC(void);
+
+extern "C" void fn_801502B4(void *p)
+{
+    for (unsigned int i = 0; i <= 3; i++) {
+        Entry_8015005C *pEntry = &fn_801530FC()->mEntries[i];
+        unsigned int score = pEntry->mUnknown10 + pEntry->mUnknown8 * 2;
+        if (score > pEntry->mUnknown4) {
+            pEntry->mUnknown4 = score;
+        }
+        pEntry->mUnknown14 += pEntry->mUnknown8;
+        pEntry->mUnknown16 += pEntry->mUnknown10;
+        pEntry->mUnknown10 = 0;
+        pEntry->mUnknown8 = 0;
+    }
+    fn_801530FC()->mUnknown125 = 1;
+}

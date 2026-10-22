@@ -320,3 +320,13 @@ void fn_8014B38C(void *p, float dt)
     }
 }
 }
+
+class Class_802A1DC8;
+extern "C" const char *lbl_803EB2E4;
+extern "C"
+void fn_801507E0(Class_802A1DC8 *p)
+{
+    if (fn_800C1E40() == 0) {
+        fn_800544A4("Jump Ball Battle", lbl_803EB2E4, "|^Done");
+    }
+}

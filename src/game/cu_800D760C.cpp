@@ -1,3 +1,4 @@
+#include "game/State_800D7A4C.h"
 #include "game/Block_801BE60C.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_800D81C8.h"
@@ -8,15 +9,6 @@
 #include "game/fn_801BA2A8.h"
 #include "game/Table_80089904.h"
 
-/* View of the player object's state block at +336 used by these functions. */
-struct State_800D7A4C {
-    char mUnknown0[5];
-    unsigned char mUnknown5;
-    char mUnknown6[3];
-    unsigned char mUnknown9;
-    char mUnknownA[1];
-    unsigned char mUnknown11;
-};
 
 extern "C" {
 unsigned char fn_800D78C4(Object_80039F5C *p, int id);
