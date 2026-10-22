@@ -13094,7 +13094,7 @@
     {
       "source": "src/game/cu_8004A2F4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0\u20130x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of candidate cu_8004BA44): nine complete ordinary bodies; the other bodies remain original.",
+      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0\u20130x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of candidate cu_8004BA44): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns.",
       "sections": [
         {
           "section": ".text",
@@ -13597,6 +13597,31 @@
           "end": "0x800504EC"
         },
         {
+          "symbol": "fn_800508A0",
+          "start": "0x800508A0",
+          "end": "0x80050960"
+        },
+        {
+          "symbol": "fn_80050964",
+          "start": "0x80050964",
+          "end": "0x80050CCC"
+        },
+        {
+          "symbol": "fn_80050CCC",
+          "start": "0x80050CCC",
+          "end": "0x80050DA0"
+        },
+        {
+          "symbol": "fn_80050DA0",
+          "start": "0x80050DA0",
+          "end": "0x80050F14"
+        },
+        {
+          "symbol": "fn_80050F14",
+          "start": "0x80050F14",
+          "end": "0x8005122C"
+        },
+        {
           "symbol": "fn_8005164C",
           "start": "0x8005164C",
           "end": "0x80051680"
@@ -13632,9 +13657,19 @@
           "end": "0x800518E0"
         },
         {
+          "symbol": "fn_800518E0",
+          "start": "0x800518E0",
+          "end": "0x80051B3C"
+        },
+        {
           "symbol": "fn_80051B3C",
           "start": "0x80051B3C",
           "end": "0x80051B88"
+        },
+        {
+          "symbol": "fn_80051B88",
+          "start": "0x80051B88",
+          "end": "0x80051D0C"
         },
         {
           "symbol": "fn_80051DB4",
@@ -22025,7 +22060,7 @@
     {
       "source": "src/game/cu_8008E978.cpp",
       "profile": "game_cpp",
-      "evidence": "Registered whole-function extents and allocated data sections are measured independently under comparisons.json; evidence.tsv records target boundaries, grouping confidence and source-form provenance. Unregistered functions remain unmeasured; comparison-only source stays unlinked.",
+      "evidence": "Registered whole-function extents and allocated data sections are measured independently under comparisons.json; evidence.tsv records target boundaries, grouping confidence and source-form provenance. Unregistered functions remain unmeasured; comparison-only source stays unlinked. Four additional untouched ratings/description/label/trajectory bodies from issue #1021 retain all earlier registrations and the complete 808-byte data context; source-form rows document access views and natural pool differences.",
       "sections": [
         {
           "section": ".text",
@@ -27035,6 +27070,76 @@
           "symbol": "fn_800CB484",
           "start": "0x800CB484",
           "end": "0x800CB504"
+        },
+        {
+          "symbol": "fn_8009C0B8",
+          "start": "0x8009C0B8",
+          "end": "0x8009C158"
+        },
+        {
+          "symbol": "fn_8009C220",
+          "start": "0x8009C220",
+          "end": "0x8009C328"
+        },
+        {
+          "symbol": "fn_8009C630",
+          "start": "0x8009C630",
+          "end": "0x8009C684"
+        },
+        {
+          "symbol": "fn_8009F168",
+          "start": "0x8009F168",
+          "end": "0x8009F258"
+        },
+        {
+          "symbol": "fn_800A02FC",
+          "start": "0x800A02FC",
+          "end": "0x800A039C"
+        },
+        {
+          "symbol": "vfn_03__14Class_80297AB8",
+          "start": "0x800A042C",
+          "end": "0x800A050C"
+        },
+        {
+          "symbol": "fn_800B44D4",
+          "start": "0x800B44D4",
+          "end": "0x800B4628"
+        },
+        {
+          "symbol": "fn_800B4628",
+          "start": "0x800B4628",
+          "end": "0x800B4798"
+        },
+        {
+          "symbol": "fn_800B4798",
+          "start": "0x800B4798",
+          "end": "0x800B4900"
+        },
+        {
+          "symbol": "fn_800B4900",
+          "start": "0x800B4900",
+          "end": "0x800B49EC"
+        },
+        {
+          "symbol": "fn_800ABE10",
+          "start": "0x800ABE10",
+          "end": "0x800ABF00"
+        },
+        {
+          "symbol": "fn_800B4DE4",
+          "start": "0x800B4DE4",
+          "end": "0x800B508C"
+        },
+        {
+          "symbol": "fn_800B5150",
+          "start": "0x800B5150",
+          "end": "0x800B51D0"
+        },
+        {
+          "symbol": "fn_800B5764",
+          "start": "0x800B5764",
+          "end": "0x800B57F4"
         }
       ]
     },
@@ -33920,13 +34025,13 @@
     {
       "source": "src/game/cu_8014AB64.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A0CE0 is measured here, including the unresolved trailing context after the native 0x54-byte emission (follow-up #784 measures 0x802A0CE0-0x802A11F4 with src/game/cu_8014BC98.cpp). Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked.",
+      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A0CE0 is measured here, including the unresolved trailing context after the native 0x54-byte emission (follow-up #784 measures 0x802A0CE0-0x802A11F4 with src/game/cu_8014BC98.cpp). Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion. The widened provisional comparison hull includes only explicit whole functions; shared target literal |^Done at802A0B74 gives the source-grouping reason. Existing readonly target context802A0B50\u2013802A0CE0 remains unchanged. Complete natural native pool grows84 to104 bytes and is compared without clipping against400 target bytes. Done pools correctly at native+0x24; new Jump Ball Battle native+0x54 resolves802A0BA4, differing from actual802A130C. No data exactness, original-unit or adjacent-storage ownership claim.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8014AB64",
-          "end": "0x8014B498"
+          "end": "0x80150820"
         },
         {
           "section": ".rodata",
@@ -34035,6 +34140,11 @@
           "symbol": "fn_8014B38C",
           "start": "0x8014B38C",
           "end": "0x8014B498"
+        },
+        {
+          "symbol": "fn_801507E0",
+          "start": "0x801507E0",
+          "end": "0x80150820"
         }
       ]
     },
@@ -34619,7 +34729,7 @@
     {
       "source": "src/game/cu_80150710.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #817; three complete slot bodies of the table 0x802A1DC8 (derived from the engine table 0x80297BF8, include/game/Class_80297BF8.h) inside the retained provisional cu_801485B4 survey group: slot 4 (0x80150710, word 0x802A1DEC), slot 7 (0x80150820, word 0x802A1E04) and slot 11 (0x80150824, word 0x802A1E24). Slots 5 and 6 (0x8015076C-0x80150820) are not registered: 0x8015076C does not yet match, and 0x801507E0 forms 0x802A0B74 inside readonly context measured with src/game/cu_8014AB64.cpp and 0x802A130C, which no fragment registers, and reads the .sdata word 0x803EB2E4. No literal or data word is referenced, so no other range is registered. Original file boundaries and nominal identity unresolved; 0x801503BC-0x80150710 and 0x80150848 onward excluded; original bytes stay linked.",
+      "evidence": "Issues #817 and #1021; complete handler 0x80150710-0x8015076C and slot 5 body 0x8015076C-0x801507E0 in retained provisional cu_801485B4 grouping. Slot 6 at 0x801507E0-0x80150820 is measured in cu_8014AB64.cpp to reuse its established shared literal pool naturally. Original source boundaries and identity unresolved; partial comparisons retain original linked bytes.",
       "sections": [
         {
           "section": ".text",
@@ -34633,6 +34743,11 @@
           "symbol": "fn_80150710",
           "start": "0x80150710",
           "end": "0x8015076C"
+        },
+        {
+          "symbol": "fn_8015076C",
+          "start": "0x8015076C",
+          "end": "0x801507E0"
         },
         {
           "symbol": "fn_80150820",
@@ -36408,12 +36523,12 @@
     {
       "source": "src/game/cu_80151D9C.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #967; one complete function inside the retained provisional cu_801485B4 survey group: 0x80151D9C-0x80152068, called only from 0x80150DB4 with the .bss object 0x8031BDD4, which ends a round of the table-0x802A2918 object: it announces sudden death, or eliminates the trailing entries through 0x80151CCC (src/game/cu_80151CCC.cpp) and either finishes through 0x801502B4 or starts the next round and resets the per-round scores. Owns the .rodata strings 0x802A13AC-0x802A13E8 it forms. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "Issue #967; one complete function inside the retained provisional cu_801485B4 survey group: 0x80151D9C-0x80152068, called only from 0x80150DB4 with the .bss object 0x8031BDD4, which ends a round of the table-0x802A2918 object: it announces sudden death, or eliminates the trailing entries through 0x80151CCC (src/game/cu_80151CCC.cpp) and either finishes through 0x801502B4 or starts the next round and resets the per-round scores. Owns the .rodata strings 0x802A13AC-0x802A13E8 it forms. Original file boundaries and nominal identity unresolved; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion. The comparison code-placement hull expands only to locate the new body in the same retained survey grouping; only explicit whole-function ranges are measured.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80151D9C",
+          "start": "0x801502B4",
           "end": "0x80152068"
         },
         {
@@ -36424,6 +36539,11 @@
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_801502B4",
+          "start": "0x801502B4",
+          "end": "0x8015034C"
+        },
         {
           "symbol": "fn_80151D9C",
           "start": "0x80151D9C",
@@ -52078,6 +52198,269 @@
           "symbol": "fn_8021743C",
           "start": "0x8021743C",
           "end": "0x802176E8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8014FDD0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #1021; two complete whole-function bodies in retained provisional cu_801485B4 grouping. Natural partial comparisons; no original translation-unit claim, no linked promotion. Source shares identical established Record_8014F104/Block_8014F104/Class_802A2B68 header views with unchanged F104/F57C consumers.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014FDD0",
+          "end": "0x8014FFC4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8014FDD0",
+          "start": "0x8014FDD0",
+          "end": "0x8014FF2C"
+        },
+        {
+          "symbol": "fn_8014FF34",
+          "start": "0x8014FF34",
+          "end": "0x8014FFC4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8014FFC4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #1021; complete coordinate helper at existing whole-function extent. Original source grouping unresolved; natural constants 6,20,40 map to target readonly 802A12BC\u2013802A12C8. Partial comparison only; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014FFC4",
+          "end": "0x8015005C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A12BC",
+          "end": "0x802A12C8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8014FFC4",
+          "start": "0x8014FFC4",
+          "end": "0x8015005C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80116C34.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #1021, round2 HIGH, owner scope comment6345941218. Three whole previously unregistered bodies in retained provisional cu_800EFC68 grouping. Source grouping/literal slice reflects comparison storage only, not original compilation boundaries. Complete natural code and readonly emissions compared without clipping; original bytes remain linked. State fields are access-compatible local views, original names unknown.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80116C34",
+          "end": "0x80117794"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F04C",
+          "end": "0x8029F0A8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80116C34",
+          "start": "0x80116C34",
+          "end": "0x801170A0"
+        },
+        {
+          "symbol": "fn_801170E8",
+          "start": "0x801170E8",
+          "end": "0x80117494"
+        },
+        {
+          "symbol": "fn_80117494",
+          "start": "0x80117494",
+          "end": "0x80117794"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800E3CC0_initial.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue1021 bounded early fragment; actual original two-float distance threshold literal atDB84, full native4byte pool; no original source-file identity claim.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E3CC0",
+          "end": "0x800E3DCC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DB84",
+          "end": "0x8029DB88"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E3CC0",
+          "start": "0x800E3CC0",
+          "end": "0x800E3DCC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800E55B8.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue1021 bounded fragment; full natural48byte native pool measured against earlier unclaimed contextDC34\u2013DCD8; natural mismatches retained. Original source boundaries unresolved; no linked promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E55B8",
+          "end": "0x800E705C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DC34",
+          "end": "0x8029DCD8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E55B8",
+          "start": "0x800E55B8",
+          "end": "0x800E579C"
+        },
+        {
+          "symbol": "fn_800E6984",
+          "start": "0x800E6984",
+          "end": "0x800E6AC8"
+        },
+        {
+          "symbol": "fn_800E6F48",
+          "start": "0x800E6F48",
+          "end": "0x800E705C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800E705C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #1021 authorized MID round3. Normal comparison fragment for one complete untouched body and bounded original literal island; not original translation-unit boundaries. Full native emission retained, no exactness claim; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E705C",
+          "end": "0x800E7330"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DCD8",
+          "end": "0x8029DCE8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E705C",
+          "start": "0x800E705C",
+          "end": "0x800E7330"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800E7E78.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #1021 authorized MID round3. Normal comparison fragment for one complete untouched body and bounded original literal island; not original translation-unit boundaries. Full native emission retained, no exactness claim; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E7E78",
+          "end": "0x800E8098"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DD04",
+          "end": "0x8029DD18"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E7E78",
+          "start": "0x800E7E78",
+          "end": "0x800E8098"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800E815C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #1021 authorized MID round3. Normal comparison fragment for one complete untouched body and bounded original literal island; not original translation-unit boundaries. Full native emission retained, no exactness claim; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E815C",
+          "end": "0x800E8420"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DD1C",
+          "end": "0x8029DD38"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E815C",
+          "start": "0x800E815C",
+          "end": "0x800E8420"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8011FE0C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue1021 round3 HIGH; three whole previously missing bodies, provisional grouping, complete natural output and real12-byte pool; no original file boundary claim.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8011FE0C",
+          "end": "0x80120E98"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F35C",
+          "end": "0x8029F368"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8011FE0C",
+          "start": "0x8011FE0C",
+          "end": "0x80120384"
+        },
+        {
+          "symbol": "fn_80120384",
+          "start": "0x80120384",
+          "end": "0x8012055C"
+        },
+        {
+          "symbol": "fn_80120D98",
+          "start": "0x80120D98",
+          "end": "0x80120E98"
         }
       ]
     }

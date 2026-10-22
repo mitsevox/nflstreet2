@@ -16000,3 +16000,366 @@ extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
     }
     return result;
 }
+
+struct PoseCompare_8009C220 {
+    char mUnknown0[20];
+    Vector_80039F5C *mpUnknown20;
+    char mUnknown24[40];
+};
+
+struct Animation_8009C630 {
+    char mUnknown0[4];
+    unsigned short mUnknown4;
+    char mUnknown6[74];
+    float mUnknown80;
+    char mUnknown84[16];
+};
+
+extern "C" {
+float fn_801CFB18(int angle);
+float fn_801CFB94(int angle);
+int fn_801CFDD0(float value);
+void fn_800A6F04(int team);
+}
+
+extern "C" void fn_8009C0B8(Object_80039F5C *p, const Object_80039F5C *pOther)
+{
+    p->mId = pOther->mId;
+    memcpy(&p->mUnknown8, &pOther->mUnknown8, 8);
+    memcpy((char *)p + 292, (const char *)pOther + 292, 524);
+    p->mUnknown1008Word = pOther->mUnknown1008Word;
+    memcpy(p->mUnknown1012, pOther->mUnknown1012, 4);
+}
+
+extern "C" int fn_8009C220(void *pA, void *pB)
+{
+    PoseCompare_8009C220 *p = (PoseCompare_8009C220 *)pA;
+    PoseCompare_8009C220 *pOther = (PoseCompare_8009C220 *)pB;
+    int result = 0;
+    for (int i = 0; i < 3; i++) {
+        result |= fn_80238258(&p[i], &pOther[i], 20);
+        if (p[i].mpUnknown20 && pOther[i].mpUnknown20) {
+            result |= p[i].mpUnknown20->mX != pOther[i].mpUnknown20->mX;
+            result |= p[i].mpUnknown20->mY != pOther[i].mpUnknown20->mY;
+            result |= p[i].mpUnknown20->mZ != pOther[i].mpUnknown20->mZ;
+        } else {
+            result |= p[i].mpUnknown20 != pOther[i].mpUnknown20;
+        }
+    }
+    return result;
+}
+
+extern "C" float fn_8009C630(Object_80039F5C *p, int id)
+{
+    float result = 0.0f;
+    for (unsigned int i = 0; i <= 3; i++) {
+        Animation_8009C630 *pAnimation = &((Animation_8009C630 *)p->mpUnknown792)[i];
+        if (pAnimation->mUnknown4 == id) {
+            result = pAnimation->mUnknown80;
+            break;
+        }
+    }
+    return result;
+}
+
+extern "C" float fn_8009F168(Vector_80039F5C *p, Pair_802270A4 *pVelocity,
+                              Vector_80039F5C *pOther, float speed)
+{
+    Vector_80039F5C delta;
+    fn_802276B4(&delta, pOther, p);
+    float distance = fn_802270A4(&delta);
+    float velocity = fn_802270A4(pVelocity);
+    int angle = fn_801CFE40(pVelocity->mUnknown4, pVelocity->mUnknown0);
+    angle = angle - fn_801CFE40(delta.mY, delta.mX);
+    float sine = fn_801CFB18(angle);
+    int correction = fn_801CFDD0(velocity * sine / speed);
+    float closing = speed * fn_801CFB94(correction) + velocity * fn_801CFB94(angle);
+    float time = distance / closing;
+    if (time <= 0.0f || !(time <= 5.0f)) {
+        time = distance / speed;
+    }
+    return time;
+}
+
+extern "C" void fn_800A02FC(void)
+{
+    for (int team = 0; team <= 1; team++) {
+        int count = fn_80178D18((unsigned char)team);
+        for (int i = 0; i < count; i++) {
+            Object_80039F5C *p = fn_80039F5C((unsigned char)team, (unsigned short)i);
+            fn_800B49EC((Record_800B49EC *)p->mRatings,
+                         (const Record_800B49EC *)p->mUnknown3020);
+            fn_800B4798(p->mRatings, (unsigned char)team, (unsigned char)i, &p->mUnknown2900);
+        }
+        fn_800A6F04((unsigned char)team);
+    }
+}
+
+extern "C" {
+void fn_80173D10(void);
+void fn_800271D4(void *p);
+int fn_801C6280(int a, int b, void *p);
+void fn_8006F0C8(int value);
+void fn_80074DF8(int value);
+void fn_80074E90(int value);
+void fn_80074F28(int value);
+void fn_80076D4C(int value);
+void fn_80076D5C(int value);
+void fn_80076D6C(int value);
+void fn_80076D7C(int value);
+void fn_80076D8C(int value);
+void fn_80076D9C(int value);
+void fn_80075058(int value);
+void fn_800750F0(int value);
+void fn_80075188(int value);
+void fn_80076DAC(int value);
+extern void *lbl_803EA9E8;
+extern char lbl_802EC880[];
+}
+
+void Class_80297AB8::vfn_03()
+{
+    if (!fn_80177F70()) {
+        fn_80173D10();
+    }
+    fn_800B6408();
+    fn_800B8608();
+    fn_80194F1C(1);
+    fn_800CC448();
+    fn_800996FC(fn_8016871C(fn_80178308())->mUnknown14);
+    fn_800271D4(lbl_803EA9E8);
+    fn_801C6280(-1, 3, lbl_802EC880);
+    fn_8006F0C8(127);
+    fn_80074DF8(0);
+    fn_80074E90(0);
+    fn_80074F28(0);
+    fn_80076D4C(0);
+    fn_80076D5C(0);
+    fn_80076D6C(0);
+    fn_80076D7C(0);
+    fn_80076D8C(0);
+    fn_80076D9C(0);
+    fn_80075058(0);
+    fn_800750F0(0);
+    fn_80075188(0);
+    fn_80076DAC(0);
+    fn_800A2184();
+}
+
+extern "C" {
+void fn_800497F4(int unused, int id, unsigned short *pValues);
+short fn_80157448(int team, int unused, short value);
+int fn_80148698(int team, int index, int value);
+short fn_800ABE10(int team, int index, short value);
+short fn_8009AC18(int team, int index, short value);
+float fn_800A0134(int team, int unused, int index);
+}
+
+extern "C" void fn_800B44D4(BitStream_t *pStream)
+{
+    for (unsigned char team = 0; team <= 1; team++) {
+        for (unsigned char index = 0; index <= 6; index++) {
+            short *pRatings = fn_80039F5C(team, index)->mRatings;
+            fn_80191068(pStream, pRatings[0], 16);
+            fn_80191068(pStream, pRatings[1], 16);
+            fn_80191068(pStream, pRatings[2], 16);
+            fn_80191068(pStream, pRatings[3], 16);
+            fn_80191068(pStream, pRatings[4], 16);
+            fn_80191068(pStream, pRatings[5], 16);
+            fn_80191068(pStream, pRatings[6], 16);
+            fn_80191068(pStream, pRatings[7], 16);
+            fn_80191068(pStream, pRatings[8], 16);
+            fn_80191068(pStream, pRatings[9], 16);
+        }
+    }
+}
+
+extern "C" void fn_800B4628(BitStream_t *pStream0, BitStream_t *pStream1,
+                            BitStream_t *pStream2, BitStream_t *pStream3, float t)
+{
+    for (unsigned char team = 0; team <= 1; team++) {
+        for (unsigned char index = 0; index <= 6; index++) {
+            short *pRatings = fn_80039F5C(team, index)->mRatings;
+            pRatings[0] = ReadBitStream(pStream1, 16);
+            pRatings[1] = ReadBitStream(pStream1, 16);
+            pRatings[2] = ReadBitStream(pStream1, 16);
+            pRatings[3] = ReadBitStream(pStream1, 16);
+            pRatings[4] = ReadBitStream(pStream1, 16);
+            pRatings[5] = ReadBitStream(pStream1, 16);
+            pRatings[6] = ReadBitStream(pStream1, 16);
+            pRatings[7] = ReadBitStream(pStream1, 16);
+            pRatings[8] = ReadBitStream(pStream1, 16);
+            pRatings[9] = ReadBitStream(pStream1, 16);
+            for (unsigned char i = 0; i <= 9; i++) {
+                if (pStream2) ReadBitStream(pStream2, 16);
+                if (pStream3) ReadBitStream(pStream3, 16);
+                if (pStream0) ReadBitStream(pStream0, 16);
+            }
+        }
+    }
+}
+
+extern "C" void fn_800B4798(short *pRatings, int team, int index, float *pOut)
+{
+    unsigned short id = *(unsigned short *)((char *)pOut + 8);
+    unsigned short bonuses[10];
+    fn_800497F4(team, id, bonuses);
+    for (unsigned int i = 0; i <= 9; i++) {
+        short value = pRatings[i] + bonuses[i];
+        if (value > 0) {
+            if (value > 255) value = 255;
+        } else value = 1;
+        value = fn_80157448(team, i, value);
+        value = fn_80148698(team, i, value);
+        value = fn_800ABE10(team, i, value);
+        value = fn_8009AC18(team, i, value);
+        value = fn_800A8224(team, index, i, value);
+        pRatings[i] = (short)(value * 1.0f * fn_800A0134(team, (unsigned char)id, i));
+    }
+}
+
+extern "C" void fn_800B4900(QueryCursor cursor, int index, short *pRatings, void *pOut)
+{
+    int values[10];
+    cursor.mUnknown4 = index;
+    fn_801FCE10(0,
+        "fetch from \x8a 'IGAP' into \x82 and 'MUJP' into \x82 and 'KTBP' into \x82 and "
+        "'HTCP' into \x82 and 'DPSP' into \x82 and 'KATP' into \x82 and 'SSPP' into \x82 and "
+        "'KLBP' into \x82 and 'VOCP' into \x82 and 'TFDP' into \x82\n",
+        &cursor, &values[0], &values[1], &values[2], &values[3], &values[4],
+        &values[5], &values[6], &values[7], &values[8], &values[9]);
+    if (fn_8017F584() == 0) fn_800B4448((Settings_800B4448 *)values);
+    short *pOtherRatings = (short *)pOut;
+    for (unsigned short i = 0; i <= 9; i++) {
+        short value = ((short)values[i] * 255) / 99;
+        pRatings[i] = value;
+        pOtherRatings[i] = value;
+    }
+}
+
+#include "game/Item_800476DC.h"
+
+struct Record_800B4DE4 {
+    float mUnknown0;
+    float mUnknown4;
+    unsigned short mUnknown8;
+    char mUnknown10[2];
+    unsigned char mUnknown12;
+    unsigned char mUnknown13;
+    char mUnknown14[2];
+    unsigned char mUnknown16;
+    unsigned char mUnknown17;
+    unsigned char mUnknown18;
+    unsigned char mUnknown19;
+    unsigned char mUnknown20;
+    unsigned char mUnknown21;
+    unsigned char mUnknown22;
+    unsigned char mUnknown23;
+    unsigned char mUnknown24;
+    unsigned char mUnknown25;
+    unsigned char mUnknown26;
+    char mUnknown27[21];
+    char mUnknown48[21];
+    char mUnknown69[1];
+};
+
+extern "C" {
+char *fn_801C2EB4(char *pDest, const char *pSource);
+char *fn_801C32CC(char *pString);
+extern float lbl_802D821C[][2];
+extern float lbl_802D826C[][2];
+float fn_80237260(int stream);
+void fn_800476CC(Item_800476DC *p, const char *name);
+void fn_8013AA00(Object_80137ABC *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
+}
+
+extern "C" short fn_800ABE10(int team, int index, short value)
+{
+    if (fn_800B65A0(team) != 255) {
+        fn_800ABDA4(team == 0);
+    } else {
+        switch (fn_800ABDA4(team)) {
+        case 1:
+            value = (short)(lbl_802D826C[index][0] * 255.0f + lbl_802D826C[index][1] * value);
+            break;
+        case 2:
+            value = (short)(lbl_802D821C[index][0] * 255.0f + lbl_802D821C[index][1] * value);
+            break;
+        }
+    }
+    return value;
+}
+
+extern "C" void fn_800B4DE4(QueryCursor cursor, int index, void *pData)
+{
+    Record_800B4DE4 *pOut = (Record_800B4DE4 *)pData;
+    int values[16];
+    cursor.mUnknown4 = index;
+    fn_801FCE10(0,
+        "fetch from \x8a 'ANFP' into \x88 and 'ANLP' into \x88 and 'NKNP' into \x88 and "
+        "'TGWP' into \x82 and 'TGHP' into \x82 and 'IKSP' into \x82 and 'NAHP' into \x82 and "
+        "'SOPP' into \x82 and 'DIGP' into \x82 and 'LCUP' into \x82 and 'LECP' into \x82 and "
+        "'1TGS' into \x82 and '2TGS' into \x82 and '3TGS' into \x82 and '4TGS' into \x82 and "
+        "'NSPP' into \x82 and 'TBYP' into \x82 and 'XELP' into \x82 and 'TLFP' into \x82\n",
+        &cursor, pOut->mUnknown27, pOut->mUnknown48, pOut->mUnknown69,
+        &values[0], &values[1], &values[2], &values[3], &values[4], &values[5],
+        &values[6], &values[7], &values[8], &values[9], &values[10], &values[11],
+        &values[12], &values[13], &values[14], &values[15]);
+    fn_801C2EB4(pOut->mUnknown69, pOut->mUnknown48);
+    pOut->mUnknown20 = values[13];
+    if (fn_8017F584() == 0) {
+        if (fn_80054D24(30) || fn_80054D24(34)) {
+            pOut->mUnknown0 = (float)values[1] * 0.33;
+        } else if (fn_80054D24(31)) {
+            pOut->mUnknown0 = (float)values[1] * 1.5;
+        } else if (fn_80054D24(44)) {
+            pOut->mUnknown0 = (float)values[1] * (fn_80237260(0) + 0.5f);
+        } else {
+            pOut->mUnknown0 = (float)values[1];
+        }
+    } else {
+        pOut->mUnknown0 = (float)values[1];
+    }
+    pOut->mUnknown4 = (float)values[0] + 160.0f;
+    pOut->mUnknown12 = values[2];
+    pOut->mUnknown13 = values[3];
+    pOut->mUnknown16 = values[4];
+    pOut->mUnknown8 = values[5];
+    pOut->mUnknown22 = values[14];
+    pOut->mUnknown17 = values[6];
+    pOut->mUnknown18 = values[7];
+    pOut->mUnknown19 = values[12];
+    pOut->mUnknown23 = values[8];
+    pOut->mUnknown24 = values[9];
+    pOut->mUnknown25 = values[10];
+    pOut->mUnknown26 = values[11];
+    pOut->mUnknown21 = values[15];
+}
+
+extern "C" void fn_800B5150(Object_80039F5C *p)
+{
+    if (p) {
+        Object_8003DEC4 *model = (Object_8003DEC4 *)p->mpUnknown4;
+        char name[21];
+        fn_801C2EB4(name, p->mUnknown2927 + 21);
+        fn_801C32CC(name);
+        fn_800476CC(model->mUnknown988, p->mUnknown2927 + 42);
+        float scale = p->mUnknown2900 * 0.013888889f;
+        if (scale == 0.0f) scale = 1.0f;
+        fn_8009BD88(p, scale);
+    }
+}
+
+extern "C" void fn_800B5764(Vector_80039F5C *pOut)
+{
+    pOut->mX = 0.0f;
+    pOut->mY = 0.0f;
+    Object_80039F5C *pOwner = fn_80137BEC();
+    float height;
+    if (pOwner) {
+        height = (pOwner->mUnknown2900 * 0.027777778f + 1.159353f) * 0.5f;
+    } else {
+        height = 1.65f;
+    }
+    fn_8013AA00(fn_801374BC(), height, 0, pOut);
+}
