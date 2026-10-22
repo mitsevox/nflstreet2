@@ -189,22 +189,24 @@ extern "C" int fn_8010CB58(Object_80039F5C *p) {
             message.mId = 1;
             fn_800F053C(0, p->mpState, &message, p);
             p->mUnknown512.mUnknown14 = 1;
-            p->mUnknown512.mUnknown0 = 0.72f;
-            p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
             p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
-        } else if (has18) {
-            result = 1;
-            p->mUnknown512.mUnknown14 = 1;
-            p->mUnknown512.mUnknown8 = pBlock->mUnknown16;
-            p->mUnknown512.mUnknown4 = pBlock->mUnknown16;
-            p->mUnknown512.mUnknown0 = pBlock->mUnknown12;
-        } else if (--pBlock->mUnknown24 < 0) {
-            result = 1;
+            p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
+            p->mUnknown512.mUnknown0 = 0.72f;
+        } else if (!has18) {
+            if (--pBlock->mUnknown24 < 0) {
+                result = 1;
+            } else {
+                p->mUnknown512.mUnknown14 = 1;
+                p->mUnknown512.mUnknown8 = pBlock->mUnknown16;
+                p->mUnknown512.mUnknown4 = pBlock->mUnknown16;
+                p->mUnknown512.mUnknown0 = pBlock->mUnknown12;
+            }
         } else {
             p->mUnknown512.mUnknown14 = 1;
             p->mUnknown512.mUnknown8 = pBlock->mUnknown16;
             p->mUnknown512.mUnknown4 = pBlock->mUnknown16;
             p->mUnknown512.mUnknown0 = pBlock->mUnknown12;
+            result = 1;
         }
         break;
     }

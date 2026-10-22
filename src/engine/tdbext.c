@@ -1,4 +1,5 @@
 #include "engine/tmlib.h"
+#include "game/fn_801D2B7C.h"
 
 typedef struct TdbExtParams_8020D0CC {
     int mUnknown00;
@@ -17,9 +18,7 @@ typedef struct TdbExtFile_8020D2D0 {
 extern unsigned char fn_801D2700(int handle);
 extern void fn_801D2130(TdbExtParams_8020D0CC *pParams);
 extern void fn_801D2570(int handle);
-extern void *fn_801D2BB0(int heap, unsigned int size, int flags, int d);
 extern void *fn_801D310C(void *p, unsigned int size, int flags, int d);
-extern int fn_801D2BD0(void *p);
 extern int fn_801F0F9C(void *pPath);
 extern void *fn_801EEB44(void *pPath, int mode);
 extern int fn_801F9134(void *pDb, TdbExtFile_8020D2D0 *pFile, int flags, char *pOps);

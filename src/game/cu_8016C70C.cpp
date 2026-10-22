@@ -1,3 +1,4 @@
+#include "engine/cu_801B9F00.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_801BE60C.h"
@@ -6,7 +7,6 @@
 extern "C" {
 void fn_800B26D0(Object_800B26B0 *pMotion, int a, int b, float c);
 int fn_801CFFD0(int a, int b);
-int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
 int fn_8013BA58(Object_80137ABC *p, int *pArg);
 
 void fn_8016C70C(Object_80039F5C *p)
@@ -94,7 +94,7 @@ void fn_8016CA50(Object_80039F5C *p)
         }
         pMotion->mFacing = (pMotion->mFacing + limit) & 0xFFFFFF;
         if (p->mUnknown545 != 0) {
-            Object_8016D9B8 *pHeader = p->mpUnknown796;
+            Object_801BA03C *pHeader = p->mpUnknown796;
             Record_800D81C8 *pEntries = p->mpUnknown800;
             int index = fn_801BA5A8(pHeader, pEntries, fn_801BE648(p->mpUnknown792), 0);
             if (index != 0xFFFF) {

@@ -11,7 +11,7 @@ extern "C" {
 int fn_801BE068(void *pA, void *pB, void *pC, unsigned short key, void *p, float value);
 Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
 unsigned short fn_801BE648(void *p);
-void fn_801BE760(void *p, unsigned short key, int a);
+void fn_801BE760(void *p, unsigned short key, unsigned short flags);
 float fn_801BE7C8(void *p, unsigned short key);
 }
 

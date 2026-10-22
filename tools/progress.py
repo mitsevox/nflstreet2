@@ -134,9 +134,10 @@ def data_in_code(source_report):
             for unit in units for section in unit["sections"] if section.get("follows")]
 
 
-def function_inventory(target, ranges, analysis_dir, compiled=(), data_spans=()):
+def function_inventory(target, ranges, analysis_dir, compiled=(), data_spans=(), comparison_functions=()):
     """Count candidates from a bound analysis and curated names, never address labels.
 
+    Validated comparison functions with exact curated bounds may supplement missing starts.
     Data placed after code (`data_spans`) must not overlap a candidate."""
     if analysis_dir is None:
         if any(not function["neutral"] for function in compiled):
@@ -169,13 +170,15 @@ def function_inventory(target, ranges, analysis_dir, compiled=(), data_spans=())
     if evidence_path.exists():
         with evidence_path.open() as file:
             records = list(csv.DictReader(file, delimiter="\t"))
+    eligible = set(candidates) | {int(entry["start"], 16) for entry in comparison_functions
+                                  if entry.get("type") == "function" and entry.get("kind") == "code"}
     names, extents = {}, {}
     neutral = re.compile(r"(?:fn|lbl|data)_[0-9A-Fa-f]{8}$")
     for row in records:
         if row["kind"] not in ("name", "function") or row["start"] == "-":
             continue
         start = int(row["start"], 16)
-        if start not in candidates:
+        if start not in eligible:
             continue
         if not neutral.fullmatch(row["subject"]):
             if start in names and names[start] != row["subject"]:
@@ -186,10 +189,25 @@ def function_inventory(target, ranges, analysis_dir, compiled=(), data_spans=())
             if end <= start or (start in extents and extents[start] != end):
                 raise ValueError("Invalid or conflicting function extent")
             extents[start] = end
+    # Reviewed complete boundaries can identify entries that provisional CFA misses.
+    # Registration or an address label alone supplies neither an extent nor match credit.
+    for entry in comparison_functions:
+        if entry.get("type") != "function" or entry.get("kind") != "code":
+            continue
+        start, end = int(entry["start"], 16), int(entry["end"], 16)
+        if start in candidates:
+            continue
+        if end <= start or start % 4 or end % 4 or extents.get(start) != end:
+            raise ValueError("Supplemental function lacks complete exact boundary evidence")
+        if any(start < other + size and other < end for other, size in candidates.items()):
+            raise ValueError("Supplemental function overlaps an inventory candidate")
+        source_build.check_data_in_code(data_spans, [(start, end, f"candidate fn_{start:08X}")])
+        candidates[start] = end - start
+    names = {start: name for start, name in names.items() if start in candidates}
     ordered = sorted(extents.items())
     if any(right[0] < left[1] for left, right in zip(ordered, ordered[1:])):
         raise ValueError("Exact function extents overlap")
-    exact = {start: end for start, end in extents.items() if any(
+    exact = {start: end for start, end in extents.items() if start in candidates and any(
         kind == "code" and left <= start < end <= right for kind, left, right in ranges)}
     ordered_candidates = sorted(candidates.items())
     if any(right[0] < left[0] + left[1] for left, right in zip(ordered_candidates, ordered_candidates[1:])):
@@ -466,8 +484,12 @@ def report(binary, revision, source_report=None, analysis_dir=None, comparison_r
     data_spans = data_in_code(source_report)
     source_build.check_data_in_code(data_spans, source_build.function_extents(ROOT),
                                     source_build.data_extents(ROOT))
+    measurement = None
+    if comparison_report is not None:
+        import matching
+        measurement = matching.load(comparison_report, target, binary)
     functions, function_items = function_inventory(target, ranges, analysis_dir, source_functions(source_report),
-                                                   data_spans)
+                                                   data_spans, measurement["entries"] if measurement else ())
     source_map(sections, source_report, function_items)
     mapped_functions = sum(1 for section in sections if section["kind"] == "code"
                            for child in section["children"] if "address" in child)
@@ -490,9 +512,8 @@ def report(binary, revision, source_report=None, analysis_dir=None, comparison_r
     comparison_config = ROOT / "config/GN7E69/comparisons.json"
     if comparison_config.exists() and json.loads(comparison_config.read_text())["units"] and comparison_report is None:
         raise ValueError("Draft source requires a current comparison report")
-    if comparison_report is not None:
-        import matching
-        matching.apply(data, matching.load(comparison_report, target, binary))
+    if measurement is not None:
+        matching.apply(data, measurement)
     data["file_counts"] = file_inventory(data["files"])
     return data
 

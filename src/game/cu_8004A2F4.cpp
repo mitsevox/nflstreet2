@@ -1,3 +1,4 @@
+#include "engine/cu_801B9F00.h"
 #include "game/Object_8008044C.h"
 #include "game/fn_80233CBC.h"
 #include "game/Desc_800408E4.h"
@@ -178,7 +179,6 @@ void fn_8019EC88(Pose_80041930 *pOut, Pose_80041930 *pA, Pose_80041930 *pB, Pose
 void fn_801A9F98(Extra_8004149C *pExtra, Object_80040818 *pItem, int a, int b);
 void fn_801AA124(Object_80040818 *pItem, void *a, int b, void *c);
 short *fn_801AA220(int count);
-void fn_801B9EDC(void *p, int a, int b, int c);
 void fn_801B9FEC(void *p, void *q);
 int fn_801BB638(int id, int a);
 int fn_801BBE5C(int a, int b);
@@ -371,7 +371,7 @@ void fn_8004A908(Object_80041904 *pObject, int index)
             pPlaced->mUnknown172.mUnknown52 = (float (*)[4][4])pPlaced->mUnknown228;
             fn_8004A680(&pPlaced->mUnknown172, pSkeleton);
         }
-        fn_801B9EDC(pObject->mUnknown428->mUnknown48, 0, 10, 10);
+        fn_801B9EDC((Object_801BA03C *)pObject->mUnknown428->mUnknown48, 0, 10, 10);
         fn_801B9FEC(pObject->mUnknown428->mUnknown48, pObject->mUnknown428->mUnknown60);
         fn_801BE040(pObject->mUnknown428->mUnknown1300);
         pObject->mUnknown428->mUnknown1708 = 0;

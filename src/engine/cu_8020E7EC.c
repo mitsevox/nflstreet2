@@ -1,3 +1,5 @@
+#include "game/fn_801D2B7C.h"
+
 typedef struct LLTexture_8020E7EC {
     unsigned short mWidth;
     unsigned short mHeight;
@@ -10,8 +12,6 @@ typedef struct LLTexture_8020E7EC {
 } LLTexture_8020E7EC;
 
 extern int lbl_803EBEBC;
-extern void *fn_801D2BB0(int heap, unsigned int size, int flags, int d);
-extern int fn_801D2BD0(void *p);
 extern void fn_801D34D0(void *p, unsigned int size, int c, int d);
 extern void fn_80239CEC(void *p, unsigned int size);
 

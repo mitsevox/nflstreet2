@@ -1,3 +1,4 @@
+#include "engine/cu_801B9F00.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_801C1F94.h"
 #include "game/Block_801BE60C.h"
@@ -5,7 +6,6 @@
 
 extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Object_80137ABC *pBall, float *pOut, short *pValue);
 extern "C" int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
-extern "C" unsigned short fn_801BA5A8(Object_8016D9B8 *p, Record_800D81C8 *records, unsigned short key, unsigned short index);
 extern "C" int fn_801BA6B0(Record_800D81C8 *entry);
 extern "C" void fn_801BA6BC(Record_800D81C8 *entry, int value);
 extern "C" void fn_801BD81C(void *p, float value);
@@ -70,7 +70,7 @@ extern "C" int fn_80099F04(Object_80039F5C *p, int handle, int kind)
         if (handle < 0) {
             fn_801BA6BC(&pRecords[entry], fn_801BA6B0(&pRecords[entry]) == 0);
         }
-        pRecords[entry].mUnknown44 = duration;
+        pRecords[entry].mUnknown2C = duration;
         fn_801BD81C(&pRecords[entry].mUnknown4C, blend);
         p->mpUnknown800[entry].mUnknownC = lbl_803EC92C->mUnknown4.mUnknown0;
         fn_801C1F94(&message, 0, sizeof(Message_800F01CC));

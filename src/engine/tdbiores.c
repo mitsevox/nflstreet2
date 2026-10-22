@@ -1,5 +1,9 @@
+#include "game/fn_801D2B7C.h"
+#include "engine/fn_801F7BD4.h"
+#include "game/fn_801EF390.h"
+
 typedef struct ResDesc_8020D534 {
-    int mGroup;
+    void *mpArchive;
     int mId;
 } ResDesc_8020D534;
 
@@ -26,13 +30,8 @@ typedef struct ResMemFile_8020D924 {
     int mState;
 } ResMemFile_8020D924;
 
-extern unsigned int fn_801F0C50(int group, int id);
-extern int fn_801F7C88(void);
-extern void fn_801F010C(int group, int id);
-extern int fn_801EF92C(int group, int id, void *pData);
-extern int fn_801D2BD0(void *p);
-extern unsigned char *fn_801EF390(int group, int id, int flags);
-extern void *fn_801D2BB0(int heap, unsigned int size, int flags, int d);
+extern unsigned int fn_801F0C50(void *pArchive, int id);
+extern int fn_801EF92C(void *pArchive, int id, void *pData);
 extern int fn_801F1B44(int a, int b, void *pData, unsigned int size, int e);
 
 void fn_8020D858(ResFile_8020D534 *pFile);
@@ -45,7 +44,7 @@ int fn_8020D534(ResFile_8020D534 *pFile, unsigned int expectedSize, ResDesc_8020
     if (pFile == 0 || pDesc == 0) {
         return 3;
     }
-    size = fn_801F0C50(pDesc->mGroup, pDesc->mId);
+    size = fn_801F0C50(pDesc->mpArchive, pDesc->mId);
     if (fn_801F7C88() != 0 || (bAnySize == 0 && size != expectedSize)) {
         return 0x24;
     }
@@ -65,9 +64,9 @@ int fn_8020D5D8(ResFile_8020D534 *pFile)
         return 3;
     }
     if (pFile->mState == 1) {
-        fn_801F010C(pFile->mDesc.mGroup, pFile->mDesc.mId);
+        fn_801F010C(pFile->mDesc.mpArchive, pFile->mDesc.mId);
     } else if (pFile->mState == 2 && pFile->mpWriteBuf != 0) {
-        if (fn_801EF92C(pFile->mDesc.mGroup, pFile->mDesc.mId, pFile->mpWriteBuf) != 0) {
+        if (fn_801EF92C(pFile->mDesc.mpArchive, pFile->mDesc.mId, pFile->mpWriteBuf) != 0) {
             err = 0x24;
         }
         fn_801D2BD0(pFile->mpWriteBuf);
@@ -148,7 +147,7 @@ int fn_8020D850(void)
 void fn_8020D858(ResFile_8020D534 *pFile)
 {
     if (pFile != 0) {
-        pFile->mpReadData = fn_801EF390(pFile->mDesc.mGroup, pFile->mDesc.mId, 1);
+        pFile->mpReadData = (unsigned char *)fn_801EF390(pFile->mDesc.mpArchive, pFile->mDesc.mId, 1);
         pFile->mPos = 0;
         pFile->mState = pFile->mpReadData != 0 ? 1 : 3;
     }

@@ -1,3 +1,4 @@
+#include "engine/cu_801B9F00.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/fn_80177FE0.h"
 #include "game/Object_80039F5C.h"
@@ -116,10 +117,8 @@ void fn_8011E3EC(Object_80039F5C *, int);
 void fn_8011E240(Object_80039F5C *);
 void fn_80168E54(int, unsigned char, unsigned char);
 void fn_8009BD2C(Object_80039F5C *, int *);
-unsigned short fn_801BA5A8(Object_8016D9B8 *, Record_800D81C8 *, int, int);
 int fn_801BD934(float *, void *, unsigned short);
-float fn_801BD660(void *, unsigned short);
-float fn_801BD60C(void *);
+float fn_801BD660(void *pScript, int key);
 float fn_801BD6D4(Block_801BD6D4 *);
 int fn_800E6AC8(Object_80039F5C *, int);
 int fn_8011EC68(Object_80039F5C *, Object_80039F5C *);

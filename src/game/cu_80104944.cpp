@@ -22,7 +22,7 @@ extern "C" void fn_80104944(Object_80039F5C *p, Vector_80039F5C *pOut) {
     }
 }
 
-extern "C" void fn_80104A08(Object_80039F5C *p, int angle, Point_8017886C *pPoint, float *pValue, float scale) {
+extern "C" void fn_80104A08(Object_80039F5C *p, float scale, int angle, Point_8017886C *pPoint, float *pValue) {
     if (scale == 0.0f) {
         scale = p->mUnknown560.mUnknown28 / (lbl_803ECB08 * 100621.117f);
     }

@@ -1,3 +1,5 @@
+#include "engine/cu_801B9F00.h"
+#include "game/fn_801BA2A8.h"
 #include "game/fn_801248D4.h"
 #include "game/State_800FDA58.h"
 #include "game/Input_800B6D34.h"
@@ -104,14 +106,6 @@ struct State_8010F43C {
     unsigned char mUnknown22;
 };
 
-/* A 124-byte entry of the array at player +800, as fn_8010FE40 reads it. */
-struct Entry_8010FE40 {
-    char mUnknown0[72];
-    float mUnknown72;
-    Block_801BD6D4 mUnknown76;
-    char mUnknown88[36];
-};
-
 /* View of player +336 while fn_801113DC's state runs. */
 struct State_801113DC {
     int mUnknown0;
@@ -165,9 +159,6 @@ Object_80039F5C *fn_8017876C(void);
 int fn_801787A0(void);
 float fn_80178A08(void);
 int fn_80178C9C(void);
-int fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
-int fn_801BA568(void *pA, void *pB, int id);
-int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
 int fn_801BA6B0(Entry_800EAC9C *pEntry);
 void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
 float fn_801BD690(Block_801BD6D4 *p, int key);
@@ -410,7 +401,7 @@ extern "C" int fn_8010FE40(Object_80039F5C *p)
     unsigned short key;
     Timer_8010FD94 *pTimer = (Timer_8010FD94 *)&p->mUnknown336;
     int target;
-    Entry_8010FE40 *pEntries;
+    Record_800D81C8 *pEntries;
     int index;
 
     if ((p->mFlags & 0x4000) && pTimer->mUnknown8 != 0) {
@@ -434,11 +425,11 @@ extern "C" int fn_8010FE40(Object_80039F5C *p)
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, p, 1.0f);
             target = p->mpState->mUnknown2 << 16;
             if (fn_801CFFD0(target, p->mMotion.mFacing) > 0xB60B && fn_801BA568(p->mpUnknown796, p->mpUnknown800, key)) {
-                pEntries = (Entry_8010FE40 *)p->mpUnknown800;
+                pEntries = p->mpUnknown800;
                 index = fn_801BA5A8(p->mpUnknown796, pEntries, key, 0);
-                pTimer->mUnknown4 = pEntries[index].mUnknown72;
+                pTimer->mUnknown4 = pEntries[index].mUnknown48;
                 if (pTimer->mUnknown4 == 0.0f) {
-                    pTimer->mUnknown4 = fn_801BD690(&pEntries[index].mUnknown76, 0xC004);
+                    pTimer->mUnknown4 = fn_801BD690(&pEntries[index].mUnknown4C, 0xC004);
                 }
                 if (pTimer->mUnknown4 != 0.0f) {
                     pTimer->mUnknown4 = pTimer->mUnknown4 > 75.0f ? 75.0f : pTimer->mUnknown4;
@@ -568,8 +559,13 @@ extern "C" void fn_801104E4(Object_80039F5C *p, Block_8011067C *pBlock)
     pBlock->mUnknown16 = 1.0f;
     pBlock->mUnknown20 = 1.0f;
     if (p->mRatings[0] > 127) {
+        float bonus;
+        float step;
+
         rating = p->mRatings[0] - 127;
-        pBlock->mUnknown16 = 1.0f + rating * (scale / 128.0f);
+        bonus = rating;
+        step = scale / 128.0f;
+        pBlock->mUnknown16 = 1.0f + bonus * step;
     }
 }
 
@@ -623,11 +619,11 @@ extern "C" int fn_801109A4(Object_80039F5C *p)
         }
         if (p->mFlags & 4) {
             p->mRatings[2] = pState->mUnknown8;
-            p->mUnknown512.mUnknown15 = 0;
-            p->mUnknown512.mUnknown0 = 0.72f;
-            p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
-            p->mUnknown512.mUnknown14 = 1;
             p->mFlags &= ~4;
+            p->mUnknown512.mUnknown14 = 1;
+            p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+            p->mUnknown512.mUnknown0 = 0.72f;
+            p->mUnknown512.mUnknown15 = 0;
             result = 1;
         } else if (p->mFlags & 1) {
             p->mFlags &= ~1;
@@ -720,7 +716,7 @@ extern "C" int fn_80110C70(Table_8010B738 *pTable, unsigned short key, void *pA,
             pBlock->mUnknown32 = (p->mMotion.mFacing + angle) & 0xFFFFFF;
         }
         fn_801BD81C(&pEntries[pBlock->mUnknown8].mUnknown4C, fn_801CFFA0(pBlock->mUnknown16));
-        pEntries[pBlock->mUnknown8].mUnknown44 = pBlock->mUnknown20;
+        pEntries[pBlock->mUnknown8].mUnknown2C = pBlock->mUnknown20;
         pBlock->mUnknown28 = (int)(pBlock->mUnknown24 / pBlock->mUnknown12);
         pRecord = pTable->mEntries[index].mpRecord;
         pBlock->mUnknown0 = pRecord->mUnknown28;
@@ -747,22 +743,22 @@ extern "C" int fn_801111E8(Object_80039F5C *p)
     pState->mUnknown6 = (signed char)(pState->mUnknown6 - 1);
     if ((short)pState->mUnknown6 < 0) {
         p->mRatings[2] = pState->mUnknown4;
-        p->mUnknown512.mUnknown0 = 0.72f;
-        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown0 = 0.72f;
         p->mUnknown512.mUnknown15 = 0;
         fn_800D4FBC(p, 0);
         return 1;
     }
     p->mUnknown512.mUnknown15 = pState->mUnknown0Bytes[3];
     if (!(p->mFlags & 0x4000)) {
+        p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = 1.0f;
-        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
-        p->mUnknown512.mUnknown14 = 1;
     } else if (p->mMotion.mUnknown28 / lbl_803ECB08 < 0.65f) {
-        p->mUnknown512.mUnknown0 = 0.65f;
-        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown0 = 0.65f;
     }
     return 0;
 }
@@ -770,9 +766,9 @@ extern "C" int fn_801111E8(Object_80039F5C *p)
 extern "C" int fn_801112D8(Object_80039F5C *p)
 {
     p->mRatings[2] = p->mUnknown340;
-    p->mUnknown512.mUnknown0 = 0.72f;
-    p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
     p->mUnknown512.mUnknown14 = 1;
+    p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+    p->mUnknown512.mUnknown0 = 0.72f;
     p->mUnknown512.mUnknown15 = 0;
     return 1;
 }
@@ -814,7 +810,6 @@ extern "C" int fn_801115C0(Object_80039F5C *p)
     int result = 0;
     float limit;
     float x;
-    float distance;
 
     if (p->mpState->mId == 59) {
         limit = 0.5f;
@@ -822,8 +817,11 @@ extern "C" int fn_801115C0(Object_80039F5C *p)
         limit = 0.4f;
     }
     x = fabsf(p->mMotion.mPos.mX);
-    distance = x > fn_80178A08() ? x - fn_80178A08() : fn_80178A08() - x;
-    if (distance < limit) {
+    if (x > fn_80178A08()) {
+        if (x - fn_80178A08() < limit) {
+            result = 1;
+        }
+    } else if (fn_80178A08() - x < limit) {
         result = 1;
     }
     return result;
@@ -875,9 +873,9 @@ extern "C" int fn_801117F8(Object_80039F5C *p)
 
     if (--pState->mUnknown4 < 0 || !fn_801115C0(p)) {
         p->mUnknown512.mUnknown14 = 1;
-        p->mUnknown512.mUnknown15 = 0;
-        p->mUnknown512.mUnknown0 = 0.72f;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown0 = 0.72f;
+        p->mUnknown512.mUnknown15 = 0;
         return 1;
     }
     p->mUnknown512.mUnknown15 = pState->mUnknown0Bytes[3];
@@ -890,9 +888,9 @@ extern "C" int fn_801117F8(Object_80039F5C *p)
                 angle += (int)(p->mRatings[0] * 913.78827f);
             }
         }
-        p->mUnknown512.mUnknown0 = 1.0f;
-        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = angle & 0xFFFFFF;
         p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = angle & 0xFFFFFF;
+        p->mUnknown512.mUnknown0 = 1.0f;
     }
     return 0;
 }
@@ -901,10 +899,9 @@ extern "C" int fn_80111974(Object_80039F5C *p)
 {
     State_80111794 *pState = (State_80111794 *)&p->mUnknown336;
     Input_800B6D34 input;
-    int b;
+    int b = 0;
 
     fn_800B6D34(p, &input);
-    b = 0;
     if ((input.mUnknown96 & 1) || (input.mUnknown96 & 0x10)) {
         b = 1;
     }
@@ -914,9 +911,9 @@ extern "C" int fn_80111974(Object_80039F5C *p)
     if (pState->mUnknown4 <= 34) {
         fn_800B6E68(p, &input);
     } else {
-        p->mUnknown512.mUnknown0 = 1.0f;
-        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown0 = 1.0f;
     }
     return 0;
 }

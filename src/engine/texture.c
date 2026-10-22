@@ -1,3 +1,6 @@
+#include "game/fn_801D2B7C.h"
+#include "engine/fn_801F7BD4.h"
+
 typedef struct Texture_8020DB34 {
     unsigned short mWidth;
     unsigned short mHeight;
@@ -130,10 +133,6 @@ typedef struct TexDecodeBuf_8020E6A0 {
 
 extern void fn_8027F3A4(int type, TexDecodeBuf_8020E6A0 *pSrc, TexDecodeBuf_8020E6A0 *pDst);
 extern TexChunk_8020DB34 *fn_801CEEF4(void *pStream, int id, int endId, int flags);
-extern void *fn_801D2BB0(int heap, unsigned int size, int flags, int d);
-extern int fn_801D2BD0(void *p);
-extern void fn_801F7BD4(int err);
-extern int fn_801F7C88(void);
 extern int fn_801C1FEC(const void *pA, const void *pB, int size);
 extern char lbl_802B1BC4[];
 extern char lbl_802B1BCC[];

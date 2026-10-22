@@ -6,6 +6,7 @@
 #include "game/fn_801EEB44.h"
 #include "game/fn_801D2B7C.h"
 #include "game/AnimFileFormat.h"
+#include "engine/cu_801BA818.h"
 #include "game/Object_8003DEC4.h"
 #include "game/Object_80040818.h"
 #include "game/cu_80041210.h"
@@ -13,16 +14,6 @@
 #include "game/cu_80067C10.h"
 #include "game/cu_8003108C.h"
 
-struct Config_801BB2D8 {
-    void *mpArchive;
-    int mUnknown4;
-    unsigned short mUnknown8;
-    unsigned short mUnknown10;
-    unsigned short mUnknown12;
-    char mUnknown14[2];
-    int mUnknown16;
-    void *mpUnknown20;
-};
 struct Entry_802D71D8 {
     int mId;
     union {
@@ -57,7 +48,7 @@ int fn_801BB608(void *, void *);
 int fn_801BB638(int, void *);
 int fn_801BB65C(int, void *);
 int fn_801BD910(void);
-void fn_801BB994(int);
+int fn_801BB994(int id);
 void fn_801BF5E8(int, int);
 void fn_801BF6AC(int, int, int);
 void fn_801BFCB0(void (*)(AnimFileFormat_t *,int,unsigned char *,unsigned int,unsigned int,int));
@@ -66,25 +57,24 @@ void *fn_801BFCC4(int, int);
 void fn_801BFD48(void *);
 void fn_80190E08(AnimFileFormat_t *,int,unsigned char *,unsigned int,unsigned int,int);
 void fn_80190DCC(AnimFileFormat_t *);
-void fn_801B9DEC(int);
-void fn_801BFEF8(float);
+int fn_801B9DEC(unsigned int mode);
+int fn_801BFEF8(float rate);
 void fn_801CC7FC(void *);
 void fn_801CC820(void *, int);
 void fn_801CC8AC(void *, int);
 void fn_801B9EEC(int (*)(void *,int,unsigned int), int (*)(void *,int,unsigned int));
 void fn_801BA848(void (*)(AnimFileFormat_t *));
 void fn_801BAEA4(void (*)(AnimFileFormat_t *));
-void fn_801BB2D8(Config_801BB2D8 *);
 void fn_801F0F18(int);
 void *fn_801BB570(int, int, int, int);
 void fn_801BB480(void);
-void fn_801BFF50(void);
-void fn_801B9E88(void);
+int fn_801BFF50(void);
+int fn_801B9E88(void);
 void fn_801BF2B0(int);
-void fn_801BDF90(int);
-void fn_801BDFF8(void);
+int fn_801BDF90(int count);
+int fn_801BDFF8(void);
 void fn_801BF648(void);
-void fn_801BF384(void);
+int fn_801BF384(void);
 void fn_8004AD3C(void *);
 void *fn_801D2BB0(int, int, int, int);
 int fn_801F0C50(void *, int);
@@ -93,7 +83,7 @@ extern int lbl_802D7154[];
 extern int lbl_802D71CC[];
 extern float lbl_803EA8B4,lbl_803EA8B8;
 Object_80041904 *fn_800400C4(Block_80170E64 *);
-int fn_801BA5A8(Object_8016D9B8 *,Record_800D81C8 *,unsigned short,int);
+int fn_801BA5A8(Object_801BA03C *,Record_800D81C8 *,unsigned short,int);
 int fn_801BA6B0(Record_800D81C8 *);
 void fn_800518E0(Object_80039F5C *);
 void fn_800C8688(Object_80039F5C *,Object_80039F5C *,int,int);

@@ -1,3 +1,4 @@
+#include "engine/cu_801B9F00.h"
 #include "game/fn_801248D4.h"
 #include "game/State_800FDA58.h"
 #include "game/fn_800B65A0.h"
@@ -171,7 +172,7 @@ int fn_8009A77C(Object_80039F5C *p);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_8009E9A4(void);
 void fn_8009E9EC(Object_80039F5C *p, int side, Point_8017886C *pOut);
-int fn_8009EAB0(Object_80039F5C *p, unsigned char a);
+int fn_8009EAB0(Object_80039F5C *p, int a);
 Object_80039F5C *fn_8009EC60(unsigned int index, Point_8017886C *pOut);
 int fn_8009EF6C(void *p);
 int fn_8009EFDC(int side);
@@ -244,8 +245,6 @@ float fn_80178A08(void);
 float fn_80178A2C(void);
 float fn_80178A44(void);
 void fn_80194C5C(int a, int b, int c);
-int fn_801BA568(void *pA, void *pB, int id);
-int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
 float fn_801CFB18(int angle);
 int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
@@ -1233,7 +1232,8 @@ extern "C" void fn_80114F64(Object_80039F5C *p, int angle)
     int otherIndex;
 
     float clamped = diff < -lbl_803EAFB0 ? -lbl_803EAFB0 : (diff > lbl_803EAFB0 ? lbl_803EAFB0 : diff);
-    scale *= (clamped + lbl_803EAFB0) / (lbl_803EAFB0 + lbl_803EAFB0);
+    diff = (clamped + lbl_803EAFB0) / (lbl_803EAFB0 + lbl_803EAFB0);
+    scale *= diff;
     if (scale < lbl_803EAFAC) {
         scale = lbl_803EAFAC;
     }
@@ -1380,7 +1380,8 @@ extern "C" float fn_80115248(Object_80039F5C *p, Object_80039F5C *pTarget, unsig
     if (fn_8009EC60(0, 0) == pTarget) {
         float dy = pTarget->mMotion.mPos.mY - fn_8009EC60(1, 0)->mMotion.mPos.mY;
 
-        part = dy < 4.0f ? 4.0f : (dy > part ? part : dy);
+        dy = dy < 4.0f ? 4.0f : (dy > part ? part : dy);
+        part = dy;
     }
     score += part;
     part = 0.0f;

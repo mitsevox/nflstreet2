@@ -6,8 +6,8 @@
 #include <dolphin/gx/GXTexture.h>
 #include <dolphin/gx/GXTransform.h>
 #include "engine/tmlib.h"
+#include "game/fn_801D2B7C.h"
 
-extern int fn_801D2BD0(void *p);
 extern void fn_8024EB28(GXCullMode mode);
 extern void fn_8025221C(GXBool dither);
 extern void fn_802520E0(GXBool compareEnable, GXCompare func, GXBool updateEnable);

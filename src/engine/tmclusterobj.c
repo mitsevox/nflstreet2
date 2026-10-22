@@ -1,8 +1,7 @@
 #include <dolphin/os/OSCache.h>
 #include "engine/tmlib.h"
+#include "game/fn_801D2B7C.h"
 
-extern void *fn_801D2B7C(int size, int a, int b);
-extern int fn_801D2BD0(void *p);
 extern u32 fn_80239FCC(void);
 extern void fn_80239FD8(u32 len);
 extern u32 fn_80239F20(void *pDest, void *pSrc, u32 size);

@@ -1,7 +1,6 @@
 #include "engine/tmlib.h"
+#include "game/fn_801D2B7C.h"
 
-extern void *fn_801D2B7C(int size, int a, int b);
-extern int fn_801D2BD0(void *p);
 
 void *fn_802127D0(int count, int size)
 {

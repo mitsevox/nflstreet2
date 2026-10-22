@@ -1,8 +1,8 @@
+#include "engine/fn_801F7BD4.h"
+
 extern void *fn_801C68FC(int a, int b, int count, int size, int (*compare)(const void *, const void *), int c);
 extern void fn_801C69E4(void *pPool);
 extern int fn_801F7ABC(void);
-extern void fn_801F7BD4(int err);
-extern int fn_801F7C88(void);
 
 extern unsigned char lbl_803EBE9C;
 extern void *lbl_803ECFAC;
