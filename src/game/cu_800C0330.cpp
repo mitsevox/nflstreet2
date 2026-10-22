@@ -25,7 +25,7 @@ extern "C" void fn_800C0330(void *p)
                 break;
             case 4:
                 fn_800BE944(i, fn_800B65A0(i), 133, 0.0f);
-                fn_800BEC1C(fn_800B65A0(i), i);
+                fn_800BEC1C(fn_800B65A0(i), (unsigned char)i);
                 fn_8003A3F4(0, i);
                 break;
             case 1:
