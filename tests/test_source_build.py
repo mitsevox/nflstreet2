@@ -237,6 +237,19 @@ class Placement(Fixture):
             self.plan(self.objects(symbols=[{"name": "fn_80003114", "value": 0, "shndx": 0}]))
         with self.assertRaisesRegex(ValueError, "outside the executable"):
             self.plan(self.objects(symbols=[{"name": "lbl_80004800", "value": 0, "shndx": 0}]))
+        # Only a configured external past the whole image may be linker-defined (absolute).
+        manifest = copy.deepcopy(self.manifest)
+        manifest["externals"] = {"_stack_addr": {"address": "0x80006000", "evidence": "x"},
+                                 "Gap": {"address": "0x80004800", "evidence": "x"}}
+        _, _, resolved = self.plan(self.objects(symbols=[{"name": "_stack_addr", "value": 0, "shndx": 0}]),
+                                   manifest)
+        self.assertEqual(resolved["_stack_addr"], 0x80006000)
+        self.assertIn("_stack_addr = 0x80006000;",
+                      sb.link_script(TARGET, self.sections, {s["name"]: [] for s in self.sections},
+                                     {"_stack_addr": 0x80006000}))
+        for name in ("Gap", "lbl_80006000"):
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, "outside the executable"):
+                self.plan(self.objects(symbols=[{"name": name, "value": 0, "shndx": 0}]), manifest)
         # A section's end address is still attributable to its final original piece.
         pieces, _, _ = self.plan(self.objects(symbols=[{"name": "lbl_80004020", "value": 0, "shndx": 0}]))
         self.assertEqual(pieces[".data2"][-1]["symbols"], [{"name": "lbl_80004020", "value": 0x14}])

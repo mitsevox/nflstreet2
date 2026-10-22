@@ -33,7 +33,7 @@ TRUSTED_TOOLS = ("tools/source_build.py", "tools/prodg_cc.py", "tools/sdk_cc.py"
 SHT_PROGBITS, SHT_SYMTAB, SHT_STRTAB, SHT_NOBITS = 1, 2, 3, 8
 SHF_WRITE, SHF_ALLOC, SHF_EXECINSTR = 1, 2, 4
 SHN_UNDEF, SHN_ABS, SHN_COMMON = 0, 0xFFF1, 0xFFF2
-STB_LOCAL, STB_GLOBAL = 0, 1
+STB_LOCAL, STB_GLOBAL, STB_WEAK = 0, 1, 2
 STT_OBJECT, STT_FUNC, STT_SECTION, STT_FILE = 1, 2, 3, 4
 
 
@@ -565,6 +565,10 @@ def plan(sections, units, objects, externals):
             if owner:
                 break
         if owner is None:
+            if name in externals and outside_image(sections, value):
+                # Configured linker-defined addresses past the loaded image (e.g. the SDK's
+                # _stack_addr) are given to the linker as absolute symbols; see link_script.
+                continue
             raise ValueError(f"External {name} at 0x{value:08X} is outside the executable sections")
         if "unit" in owner:
             raise ValueError(f"External {name} at 0x{value:08X} lies inside source unit {owner['unit']}; "
@@ -573,9 +577,15 @@ def plan(sections, units, objects, externals):
     return pieces, defined, resolved
 
 
-def link_script(target, sections, pieces):
+def outside_image(sections, value):
+    """Whether an address lies before or after every target section (not in a gap between them)."""
+    return value < min(s["start"] for s in sections) or value > max(s["end"] for s in sections)
+
+
+def link_script(target, sections, pieces, absolute=None):
     lines = ["ENTRY(__start)", "SECTIONS {", f"__start = {target['entry']};",
              f"_SDA_BASE_ = {target['sda_base']};", f"_SDA2_BASE_ = {target['sda2_base']};"]
+    lines += [f"{name} = 0x{value:08X};" for name, value in sorted((absolute or {}).items())]
     for section in sections:
         inputs = " ".join(f"*{piece['object'].name}({piece['input']})" for piece in pieces[section["name"]])
         lines.append(f"{section['output']} 0x{section['start']:08X} : {{ {inputs} }}")
@@ -698,7 +708,9 @@ def retained_layout(unit, compiler, wrapper):
             raise ValueError(f"{unit['source']}: unsupported native section type for link_roots")
     functions = {symbol["name"]: symbol for symbol in symbols if symbol["type"] == 2}
     roots = unit["link_roots"]["symbols"]
-    if any(name not in functions or functions[name]["bind"] != STB_GLOBAL
+    # SDK files define some entry points weak (e.g. OSReport) so a game can replace them;
+    # the target kept the SDK copy, so a weak definition is a valid root too.
+    if any(name not in functions or functions[name]["bind"] not in (STB_GLOBAL, STB_WEAK)
            or functions[name]["shndx"] != native_text["index"] for name in roots):
         raise ValueError(f"{unit['source']}: retention root is not a defined global function")
     keep = native.with_suffix(".keep")
@@ -881,7 +893,9 @@ def build(original, manifest_path, report_path):
     inputs = list(dict.fromkeys(inputs))
     check_basenames(inputs)
     script = BUILD / "link.ld"
-    script.write_text(link_script(target, sections, pieces))
+    absolute = {name: value for name, value in resolved.items()
+                if name in externals and outside_image(sections, value)}
+    script.write_text(link_script(target, sections, pieces, absolute))
     elf, output = BUILD / "main.elf", BUILD / "main.dol"
     linker_flags = []
     if strip_unused:

@@ -321,14 +321,15 @@ def generate(original, source_report, tool):
     externals = {name: int(e['address'], 16) for name, e in manifest['externals'].items()}
     accepted_objects = []
     for u in accepted:
-        # Only public definitions may resolve another file's undefined reference.
+        # Only public (global or weak) definitions may resolve another file's undefined reference.
         stem = re.sub(r'[^A-Za-z0-9]+', '_', u['source']).strip('_')
         index = accepted.index(u)
         native = root / 'build/source/obj' / f'unit{index:03d}_{stem}.o'
         if sb.sha256(native) != u['native_object_sha256']:
             raise ValueError('Accepted external object differs from verified compiler receipt')
         native_sections, native_symbols = sb.read_elf(native.read_bytes())
-        public = {s['name'] for s in native_symbols if s['bind'] == sb.STB_GLOBAL and s['shndx'] != sb.SHN_UNDEF}
+        public = {s['name'] for s in native_symbols
+                  if s['bind'] in (sb.STB_GLOBAL, sb.STB_WEAK) and s['shndx'] != sb.SHN_UNDEF}
         externals.update({f['symbol']: int(f['address'], 16) for f in u['functions'] if f['symbol'] in public})
         accepted_objects.append((u['sections'], native_sections, native_symbols))
     # Public data objects of accepted source resolve at their verified linked placements.
