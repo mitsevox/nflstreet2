@@ -1720,8 +1720,7 @@ public:
     virtual float vfn_03(Vector_80039F5C *pPoint, const float matrix[4][4],
                        Vector_80039F5C *pDelta, Vector_80039F5C *pNormal,
                        Vector_80039F5C *pOut, float *pDistance, float length);
-    float mUnknown0;
-    float mUnknown4;
+    char mUnknown4[4];
     int mUnknown8;
 };
 struct Collection_801E7034 { unsigned int mCount; };
@@ -2543,7 +2542,7 @@ void fn_80050964(void)
             fn_801E9BB4(pBody, &oldRotation);
             fn_802276B4(&direction, &a, &pBody->mUnknown100);
             float length = fn_802270D4(&direction);
-            if (length > 0.5f) fn_80227264(&direction, &direction, 0.06f / length);
+            if (!(length <= 0.5f)) fn_80227264(&direction, &direction, 0.06f / length);
             fn_80227264(&direction, &direction, 60.0f);
             velocity.mX = angles.mUnknown0 * 0.000021457672119140625f;
             velocity.mY = angles.mUnknown4 * 0.000021457672119140625f;
@@ -2706,7 +2705,7 @@ void fn_800518E0(Object_80039F5C *pPlayer)
                         fn_801E3710(pShape, &position, &delta, &normal, &direction, &point, &hit);
                     }
                     float distance = fn_8022785C(&position, &point);
-                    if (distance < nearest) {
+                    if (!(distance >= nearest)) {
                         nearest = distance;
                         nearestIndex = i;
                         shapeIndex = j;
