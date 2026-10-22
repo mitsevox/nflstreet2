@@ -9,7 +9,6 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_8022F478.h"
 
-#if defined(DECOMP_COMPARE)
 int lbl_802EADE4[16] = {
     0x44494754, 0x44494F54, 0x50595454, 0x44524F54, 0x45445254, 0x464F5254, 0x564F5254, 0x4C474C54,
     0x49524454, 0x31434D54, 0x32434D54, 0x33434D54, 0x4C445443, 0x414E5354, 0x414E4C54, 0x414E4454,
@@ -17,7 +16,6 @@ int lbl_802EADE4[16] = {
 char *lbl_802EAE24[3] = {"Story", "Story Team", "Story Team"};
 int lbl_802EAE30[10] = {0, 4, 1, 3, 2, 5, 6, 7, 8, 9};
 int lbl_802EAE58[7] = {0, 1, 2, 4, 8, 9, 13};
-#endif
 
 extern "C" {
 int fn_8022F358(int index);
@@ -74,7 +72,6 @@ void fn_8018B0BC(int source, int team, int index)
     if (cursor.mUnknown0) fn_801FCFA0(&cursor);
 }
 
-#if defined(DECOMP_COMPARE)
 int fn_8018B2A8(int source, int teamTable, int playerTable, int destination,
                 int rumt, int *pCount, int *pOriginalIds, int preserveOriginal)
 {
@@ -505,5 +502,4 @@ void fn_8018C230(int reset, int count)
         }
     }
 }
-#endif
 }
