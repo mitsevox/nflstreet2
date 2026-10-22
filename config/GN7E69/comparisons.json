@@ -28653,7 +28653,7 @@
     },
     {
       "source": "src/engine/cu_80226F9C.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv provisional unit row 0x80226F9C-0x80227F14 (src/engine/cu_80226F9C.c), its function and name rows and the exact .sdata data row 0x803EBF88-0x803EBF8C. Draft comparisons only; original assembly remains linked. The four functions that load .rodata constants have no draft body and no .rodata is registered.",
       "sections": [
         {
@@ -28992,7 +28992,7 @@
     },
     {
       "source": "src/engine/cu_8022F428.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv provisional unit row 0x8022F428-0x802355E4 (src/engine/cu_8022F428.c), its function and name rows and the cu_8022F428 source-form and compiler rows. The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {

@@ -459,7 +459,7 @@ int fn_8022F53C(int a)
         err = fn_801FCE10(0, lbl_802B5D88, fn_8022F3D4(fn_8022F4BC()), &key);
         if (key != fn_8022F4BC()) {
             if (fn_8022F384(key) == -1) {
-                lbl_802FB300[fn_8022F384(fn_8022F4BC())].mUnknown0 = key;
+                (lbl_802FB300 + fn_8022F384(fn_8022F4BC()))->mUnknown0 = key;
                 lbl_803EC0D4 = key;
             } else {
                 err = 1;

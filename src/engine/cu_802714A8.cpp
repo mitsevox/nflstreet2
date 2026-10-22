@@ -153,7 +153,7 @@ struct Struct_803A6C24 {
     short m16C;
     unsigned char mUnknown16E;
     unsigned char m16F;
-    unsigned int m170;
+    volatile unsigned int m170;
     unsigned char mUnknown174[0x58];
     Record_803A6DF0 *m1CC;
 };
@@ -166,7 +166,7 @@ struct Channel_803A8D60 {
     unsigned char m1F;
     unsigned char mUnknown20[4];
     unsigned char m24;
-    unsigned char m25;
+    volatile unsigned char m25;
     unsigned char mUnknown26[0x16];
     AXVPB *m3C;
 };
@@ -1783,12 +1783,13 @@ float *fn_802753F0(int index)
 
 void fn_80275404(void)
 {
-    int size = lbl_8030002C * 12;
+    int size = lbl_8030002C * sizeof(float *) + lbl_8030002C * sizeof(int) + lbl_8030002C * sizeof(float);
+    float **buffer = (float **)fn_8026B5D4(size);
 
-    lbl_803B4E24 = (float **)fn_8026B5D4(size);
-    lbl_803B4E34.m14 = (int *)(lbl_803B4E24 + lbl_8030002C);
+    lbl_803B4E24 = buffer;
+    lbl_803B4E34.m14 = (int *)(buffer + lbl_8030002C);
     lbl_803B4E34.m100 = (float *)(lbl_803B4E34.m14 + lbl_8030002C);
-    memset(lbl_803B4E24, 0, size);
+    memset(buffer, 0, size);
     lbl_803B4E20 = (Node_803B4E20 **)fn_8026B5D4(lbl_8030002C * 4);
     memset(lbl_803B4E20, 0, lbl_8030002C * 4);
     lbl_80300E98 = 1;
@@ -1801,9 +1802,9 @@ void fn_802754A8(void)
     if (lbl_80300E98 != 0) {
         fn_8026B7D8(lbl_803B4E24);
         for (i = 0; i < lbl_8030002C; i++) {
-            Node_803B4E20 *node = lbl_803B4E20[i];
+            if (lbl_803B4E20[i] != 0) {
+                Node_803B4E20 *node = lbl_803B4E20[i];
 
-            if (node != 0) {
                 do {
                     Node_803B4E20 *next = node->m0;
 
