@@ -52313,6 +52313,120 @@
           "end": "0x800E705C"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_800E705C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #1021 authorized MID round3. Normal comparison fragment for one complete untouched body and bounded original literal island; not original translation-unit boundaries. Full native emission retained, no exactness claim; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E705C",
+          "end": "0x800E7330"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DCD8",
+          "end": "0x8029DCE8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E705C",
+          "start": "0x800E705C",
+          "end": "0x800E7330"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800E7E78.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #1021 authorized MID round3. Normal comparison fragment for one complete untouched body and bounded original literal island; not original translation-unit boundaries. Full native emission retained, no exactness claim; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E7E78",
+          "end": "0x800E8098"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DD04",
+          "end": "0x8029DD18"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E7E78",
+          "start": "0x800E7E78",
+          "end": "0x800E8098"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800E815C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #1021 authorized MID round3. Normal comparison fragment for one complete untouched body and bounded original literal island; not original translation-unit boundaries. Full native emission retained, no exactness claim; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E815C",
+          "end": "0x800E8420"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DD1C",
+          "end": "0x8029DD38"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E815C",
+          "start": "0x800E815C",
+          "end": "0x800E8420"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8011FE0C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue1021 round3 HIGH; three whole previously missing bodies, provisional grouping, complete natural output and real12-byte pool; no original file boundary claim.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8011FE0C",
+          "end": "0x80120E98"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F35C",
+          "end": "0x8029F368"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8011FE0C",
+          "start": "0x8011FE0C",
+          "end": "0x80120384"
+        },
+        {
+          "symbol": "fn_80120384",
+          "start": "0x80120384",
+          "end": "0x8012055C"
+        },
+        {
+          "symbol": "fn_80120D98",
+          "start": "0x80120D98",
+          "end": "0x80120E98"
+        }
+      ]
     }
   ]
 }
