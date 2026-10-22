@@ -41146,6 +41146,2480 @@
           "end": "0x801C20A0"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_8020840C.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020840C-0x8020B564 (src/engine/cu_8020840C.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 8 drafted bodies, partial: 0x8020A660, 0x8020AD1C. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020840C",
+          "end": "0x8020B564"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_802087D4",
+          "start": "0x802087D4",
+          "end": "0x802088A8"
+        },
+        {
+          "symbol": "fn_802088A8",
+          "start": "0x802088A8",
+          "end": "0x802088FC"
+        },
+        {
+          "symbol": "fn_80209E40",
+          "start": "0x80209E40",
+          "end": "0x80209F34"
+        },
+        {
+          "symbol": "fn_8020A3A0",
+          "start": "0x8020A3A0",
+          "end": "0x8020A540"
+        },
+        {
+          "symbol": "fn_8020A540",
+          "start": "0x8020A540",
+          "end": "0x8020A5A8"
+        },
+        {
+          "symbol": "fn_8020A5A8",
+          "start": "0x8020A5A8",
+          "end": "0x8020A660"
+        },
+        {
+          "symbol": "fn_8020A660",
+          "start": "0x8020A660",
+          "end": "0x8020A908"
+        },
+        {
+          "symbol": "fn_8020AD1C",
+          "start": "0x8020AD1C",
+          "end": "0x8020AE88"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/t3db_table.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020B564-0x8020CCBC (src/engine/t3db_table.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 12 drafted bodies, partial: 0x8020B564, 0x8020C764. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020B564",
+          "end": "0x8020CCBC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020B564",
+          "start": "0x8020B564",
+          "end": "0x8020B710"
+        },
+        {
+          "symbol": "fn_8020B710",
+          "start": "0x8020B710",
+          "end": "0x8020B878"
+        },
+        {
+          "symbol": "fn_8020B878",
+          "start": "0x8020B878",
+          "end": "0x8020B97C"
+        },
+        {
+          "symbol": "fn_8020B97C",
+          "start": "0x8020B97C",
+          "end": "0x8020BA48"
+        },
+        {
+          "symbol": "fn_8020BA48",
+          "start": "0x8020BA48",
+          "end": "0x8020BA7C"
+        },
+        {
+          "symbol": "fn_8020BA7C",
+          "start": "0x8020BA7C",
+          "end": "0x8020BD90"
+        },
+        {
+          "symbol": "fn_8020BD90",
+          "start": "0x8020BD90",
+          "end": "0x8020BFA4"
+        },
+        {
+          "symbol": "fn_8020BFA4",
+          "start": "0x8020BFA4",
+          "end": "0x8020C3E4"
+        },
+        {
+          "symbol": "fn_8020C3E4",
+          "start": "0x8020C3E4",
+          "end": "0x8020C5C8"
+        },
+        {
+          "symbol": "fn_8020C5C8",
+          "start": "0x8020C5C8",
+          "end": "0x8020C6C8"
+        },
+        {
+          "symbol": "fn_8020C6C8",
+          "start": "0x8020C6C8",
+          "end": "0x8020C764"
+        },
+        {
+          "symbol": "fn_8020C764",
+          "start": "0x8020C764",
+          "end": "0x8020CCBC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/t3dbUtil.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020CCBC-0x8020CD2C (src/engine/t3dbUtil.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 1 drafted body. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020CCBC",
+          "end": "0x8020CD2C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020CCBC",
+          "start": "0x8020CCBC",
+          "end": "0x8020CD2C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/t3db_blob.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020CD2C-0x8020CEC4 (src/engine/t3db_blob.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 2 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020CD2C",
+          "end": "0x8020CEC4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020CD2C",
+          "start": "0x8020CD2C",
+          "end": "0x8020CD9C"
+        },
+        {
+          "symbol": "fn_8020CD9C",
+          "start": "0x8020CD9C",
+          "end": "0x8020CEC4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/t3db_data.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020CEC4-0x8020CFA0 (src/engine/t3db_data.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 2 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020CEC4",
+          "end": "0x8020CFA0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020CEC4",
+          "start": "0x8020CEC4",
+          "end": "0x8020CF34"
+        },
+        {
+          "symbol": "fn_8020CF34",
+          "start": "0x8020CF34",
+          "end": "0x8020CFA0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_8020CFA0.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020CFA0-0x8020D0CC (src/engine/cu_8020CFA0.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 4 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020CFA0",
+          "end": "0x8020D0CC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020CFA0",
+          "start": "0x8020CFA0",
+          "end": "0x8020CFB0"
+        },
+        {
+          "symbol": "fn_8020CFB0",
+          "start": "0x8020CFB0",
+          "end": "0x8020D048"
+        },
+        {
+          "symbol": "fn_8020D048",
+          "start": "0x8020D048",
+          "end": "0x8020D0A8"
+        },
+        {
+          "symbol": "fn_8020D0A8",
+          "start": "0x8020D0A8",
+          "end": "0x8020D0CC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tdbext.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020D0CC-0x8020D388 (src/engine/tdbext.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 9 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020D0CC",
+          "end": "0x8020D388"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020D0CC",
+          "start": "0x8020D0CC",
+          "end": "0x8020D158"
+        },
+        {
+          "symbol": "fn_8020D158",
+          "start": "0x8020D158",
+          "end": "0x8020D194"
+        },
+        {
+          "symbol": "fn_8020D194",
+          "start": "0x8020D194",
+          "end": "0x8020D1A8"
+        },
+        {
+          "symbol": "fn_8020D1A8",
+          "start": "0x8020D1A8",
+          "end": "0x8020D1B0"
+        },
+        {
+          "symbol": "fn_8020D1B0",
+          "start": "0x8020D1B0",
+          "end": "0x8020D204"
+        },
+        {
+          "symbol": "fn_8020D204",
+          "start": "0x8020D204",
+          "end": "0x8020D260"
+        },
+        {
+          "symbol": "fn_8020D260",
+          "start": "0x8020D260",
+          "end": "0x8020D2AC"
+        },
+        {
+          "symbol": "fn_8020D2AC",
+          "start": "0x8020D2AC",
+          "end": "0x8020D2D0"
+        },
+        {
+          "symbol": "fn_8020D2D0",
+          "start": "0x8020D2D0",
+          "end": "0x8020D388"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tdbiomem.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020D388-0x8020D534 (src/engine/tdbiomem.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 6 drafted bodies, partial: 0x8020D3F4, 0x8020D470. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020D388",
+          "end": "0x8020D534"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020D388",
+          "start": "0x8020D388",
+          "end": "0x8020D3C0"
+        },
+        {
+          "symbol": "fn_8020D3C0",
+          "start": "0x8020D3C0",
+          "end": "0x8020D3F4"
+        },
+        {
+          "symbol": "fn_8020D3F4",
+          "start": "0x8020D3F4",
+          "end": "0x8020D470"
+        },
+        {
+          "symbol": "fn_8020D470",
+          "start": "0x8020D470",
+          "end": "0x8020D4F0"
+        },
+        {
+          "symbol": "fn_8020D4F0",
+          "start": "0x8020D4F0",
+          "end": "0x8020D52C"
+        },
+        {
+          "symbol": "fn_8020D52C",
+          "start": "0x8020D52C",
+          "end": "0x8020D534"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tdbiores.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020D534-0x8020DB34 (src/engine/tdbiores.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 12 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020D534",
+          "end": "0x8020DB34"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020D534",
+          "start": "0x8020D534",
+          "end": "0x8020D5D8"
+        },
+        {
+          "symbol": "fn_8020D5D8",
+          "start": "0x8020D5D8",
+          "end": "0x8020D674"
+        },
+        {
+          "symbol": "fn_8020D674",
+          "start": "0x8020D674",
+          "end": "0x8020D750"
+        },
+        {
+          "symbol": "fn_8020D750",
+          "start": "0x8020D750",
+          "end": "0x8020D82C"
+        },
+        {
+          "symbol": "fn_8020D82C",
+          "start": "0x8020D82C",
+          "end": "0x8020D850"
+        },
+        {
+          "symbol": "fn_8020D850",
+          "start": "0x8020D850",
+          "end": "0x8020D858"
+        },
+        {
+          "symbol": "fn_8020D858",
+          "start": "0x8020D858",
+          "end": "0x8020D8B4"
+        },
+        {
+          "symbol": "fn_8020D8B4",
+          "start": "0x8020D8B4",
+          "end": "0x8020D924"
+        },
+        {
+          "symbol": "fn_8020D924",
+          "start": "0x8020D924",
+          "end": "0x8020D9D8"
+        },
+        {
+          "symbol": "fn_8020D9D8",
+          "start": "0x8020D9D8",
+          "end": "0x8020DA70"
+        },
+        {
+          "symbol": "fn_8020DA70",
+          "start": "0x8020DA70",
+          "end": "0x8020DB2C"
+        },
+        {
+          "symbol": "fn_8020DB2C",
+          "start": "0x8020DB2C",
+          "end": "0x8020DB34"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/texture.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020DB34-0x8020E7EC (src/engine/texture.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 19 drafted bodies, partial: 0x8020E2B0. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020DB34",
+          "end": "0x8020E7EC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020DB34",
+          "start": "0x8020DB34",
+          "end": "0x8020DC10"
+        },
+        {
+          "symbol": "fn_8020DC10",
+          "start": "0x8020DC10",
+          "end": "0x8020DD24"
+        },
+        {
+          "symbol": "fn_8020DD24",
+          "start": "0x8020DD24",
+          "end": "0x8020DDA8"
+        },
+        {
+          "symbol": "fn_8020DDA8",
+          "start": "0x8020DDA8",
+          "end": "0x8020DE8C"
+        },
+        {
+          "symbol": "fn_8020DE8C",
+          "start": "0x8020DE8C",
+          "end": "0x8020DF44"
+        },
+        {
+          "symbol": "fn_8020DF44",
+          "start": "0x8020DF44",
+          "end": "0x8020DFBC"
+        },
+        {
+          "symbol": "fn_8020DFBC",
+          "start": "0x8020DFBC",
+          "end": "0x8020DFD8"
+        },
+        {
+          "symbol": "fn_8020DFD8",
+          "start": "0x8020DFD8",
+          "end": "0x8020E064"
+        },
+        {
+          "symbol": "fn_8020E064",
+          "start": "0x8020E064",
+          "end": "0x8020E1B8"
+        },
+        {
+          "symbol": "fn_8020E1B8",
+          "start": "0x8020E1B8",
+          "end": "0x8020E258"
+        },
+        {
+          "symbol": "fn_8020E258",
+          "start": "0x8020E258",
+          "end": "0x8020E2B0"
+        },
+        {
+          "symbol": "fn_8020E2B0",
+          "start": "0x8020E2B0",
+          "end": "0x8020E51C"
+        },
+        {
+          "symbol": "fn_8020E51C",
+          "start": "0x8020E51C",
+          "end": "0x8020E524"
+        },
+        {
+          "symbol": "fn_8020E524",
+          "start": "0x8020E524",
+          "end": "0x8020E52C"
+        },
+        {
+          "symbol": "fn_8020E52C",
+          "start": "0x8020E52C",
+          "end": "0x8020E53C"
+        },
+        {
+          "symbol": "fn_8020E53C",
+          "start": "0x8020E53C",
+          "end": "0x8020E560"
+        },
+        {
+          "symbol": "fn_8020E560",
+          "start": "0x8020E560",
+          "end": "0x8020E5F8"
+        },
+        {
+          "symbol": "fn_8020E5F8",
+          "start": "0x8020E5F8",
+          "end": "0x8020E6A0"
+        },
+        {
+          "symbol": "fn_8020E6A0",
+          "start": "0x8020E6A0",
+          "end": "0x8020E7EC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_8020E7EC.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020E7EC-0x8020EA18 (src/engine/cu_8020E7EC.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 2 drafted bodies, partial: 0x8020E7EC. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020E7EC",
+          "end": "0x8020EA18"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020E7EC",
+          "start": "0x8020E7EC",
+          "end": "0x8020E9D0"
+        },
+        {
+          "symbol": "fn_8020E9D0",
+          "start": "0x8020E9D0",
+          "end": "0x8020EA18"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmmodelres.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020EA18-0x8020ED10 (src/engine/tmmodelres.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 8 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020EA18",
+          "end": "0x8020ED10"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020EA18",
+          "start": "0x8020EA18",
+          "end": "0x8020EA78"
+        },
+        {
+          "symbol": "fn_8020EA78",
+          "start": "0x8020EA78",
+          "end": "0x8020EB08"
+        },
+        {
+          "symbol": "fn_8020EB08",
+          "start": "0x8020EB08",
+          "end": "0x8020EB48"
+        },
+        {
+          "symbol": "fn_8020EB48",
+          "start": "0x8020EB48",
+          "end": "0x8020EB70"
+        },
+        {
+          "symbol": "fn_8020EB70",
+          "start": "0x8020EB70",
+          "end": "0x8020EB94"
+        },
+        {
+          "symbol": "fn_8020EB94",
+          "start": "0x8020EB94",
+          "end": "0x8020EBB0"
+        },
+        {
+          "symbol": "fn_8020EBB0",
+          "start": "0x8020EBB0",
+          "end": "0x8020EC50"
+        },
+        {
+          "symbol": "fn_8020EC50",
+          "start": "0x8020EC50",
+          "end": "0x8020ED10"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_8020ED10.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020ED10-0x8020F28C (src/engine/cu_8020ED10.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1BD8-0x802B1BE8. 9 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020ED10",
+          "end": "0x8020F28C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1BD8",
+          "end": "0x802B1BE8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020ED10",
+          "start": "0x8020ED10",
+          "end": "0x8020EDE4"
+        },
+        {
+          "symbol": "fn_8020EDE4",
+          "start": "0x8020EDE4",
+          "end": "0x8020EE38"
+        },
+        {
+          "symbol": "fn_8020EE38",
+          "start": "0x8020EE38",
+          "end": "0x8020EEE8"
+        },
+        {
+          "symbol": "fn_8020EEE8",
+          "start": "0x8020EEE8",
+          "end": "0x8020EFC8"
+        },
+        {
+          "symbol": "fn_8020EFC8",
+          "start": "0x8020EFC8",
+          "end": "0x8020F00C"
+        },
+        {
+          "symbol": "fn_8020F00C",
+          "start": "0x8020F00C",
+          "end": "0x8020F030"
+        },
+        {
+          "symbol": "fn_8020F08C",
+          "start": "0x8020F08C",
+          "end": "0x8020F178"
+        },
+        {
+          "symbol": "fn_8020F178",
+          "start": "0x8020F178",
+          "end": "0x8020F1D8"
+        },
+        {
+          "symbol": "fn_8020F1D8",
+          "start": "0x8020F1D8",
+          "end": "0x8020F28C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmmodel.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020F28C-0x8020FA38 (src/engine/tmmodel.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 12 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020F28C",
+          "end": "0x8020FA38"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020F28C",
+          "start": "0x8020F28C",
+          "end": "0x8020F2C4"
+        },
+        {
+          "symbol": "fn_8020F2C4",
+          "start": "0x8020F2C4",
+          "end": "0x8020F330"
+        },
+        {
+          "symbol": "fn_8020F330",
+          "start": "0x8020F330",
+          "end": "0x8020F4D0"
+        },
+        {
+          "symbol": "fn_8020F4D0",
+          "start": "0x8020F4D0",
+          "end": "0x8020F5F0"
+        },
+        {
+          "symbol": "fn_8020F5F0",
+          "start": "0x8020F5F0",
+          "end": "0x8020F76C"
+        },
+        {
+          "symbol": "fn_8020F76C",
+          "start": "0x8020F76C",
+          "end": "0x8020F78C"
+        },
+        {
+          "symbol": "fn_8020F78C",
+          "start": "0x8020F78C",
+          "end": "0x8020F824"
+        },
+        {
+          "symbol": "fn_8020F824",
+          "start": "0x8020F824",
+          "end": "0x8020F89C"
+        },
+        {
+          "symbol": "fn_8020F89C",
+          "start": "0x8020F89C",
+          "end": "0x8020F8E0"
+        },
+        {
+          "symbol": "fn_8020F8E0",
+          "start": "0x8020F8E0",
+          "end": "0x8020F92C"
+        },
+        {
+          "symbol": "fn_8020F92C",
+          "start": "0x8020F92C",
+          "end": "0x8020F96C"
+        },
+        {
+          "symbol": "fn_8020F96C",
+          "start": "0x8020F96C",
+          "end": "0x8020FA38"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmxform.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020FA38-0x8020FAAC (src/engine/tmxform.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 2 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020FA38",
+          "end": "0x8020FAAC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020FA38",
+          "start": "0x8020FA38",
+          "end": "0x8020FA8C"
+        },
+        {
+          "symbol": "fn_8020FA8C",
+          "start": "0x8020FA8C",
+          "end": "0x8020FAAC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmmaterial.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020FAAC-0x8020FF34 (src/engine/tmmaterial.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 10 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020FAAC",
+          "end": "0x8020FF34"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020FAAC",
+          "start": "0x8020FAAC",
+          "end": "0x8020FB14"
+        },
+        {
+          "symbol": "fn_8020FB14",
+          "start": "0x8020FB14",
+          "end": "0x8020FC1C"
+        },
+        {
+          "symbol": "fn_8020FC1C",
+          "start": "0x8020FC1C",
+          "end": "0x8020FCA0"
+        },
+        {
+          "symbol": "fn_8020FCA0",
+          "start": "0x8020FCA0",
+          "end": "0x8020FD40"
+        },
+        {
+          "symbol": "fn_8020FD40",
+          "start": "0x8020FD40",
+          "end": "0x8020FD48"
+        },
+        {
+          "symbol": "fn_8020FD48",
+          "start": "0x8020FD48",
+          "end": "0x8020FDAC"
+        },
+        {
+          "symbol": "fn_8020FDAC",
+          "start": "0x8020FDAC",
+          "end": "0x8020FE04"
+        },
+        {
+          "symbol": "fn_8020FE04",
+          "start": "0x8020FE04",
+          "end": "0x8020FE3C"
+        },
+        {
+          "symbol": "fn_8020FE3C",
+          "start": "0x8020FE3C",
+          "end": "0x8020FE78"
+        },
+        {
+          "symbol": "fn_8020FE78",
+          "start": "0x8020FE78",
+          "end": "0x8020FF34"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmmateriallist.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020FF34-0x80210298 (src/engine/tmmateriallist.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 10 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020FF34",
+          "end": "0x80210298"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8020FF34",
+          "start": "0x8020FF34",
+          "end": "0x8020FF90"
+        },
+        {
+          "symbol": "fn_8020FF90",
+          "start": "0x8020FF90",
+          "end": "0x8020FFE4"
+        },
+        {
+          "symbol": "fn_8020FFE4",
+          "start": "0x8020FFE4",
+          "end": "0x80210020"
+        },
+        {
+          "symbol": "fn_80210020",
+          "start": "0x80210020",
+          "end": "0x80210054"
+        },
+        {
+          "symbol": "fn_80210054",
+          "start": "0x80210054",
+          "end": "0x802100C0"
+        },
+        {
+          "symbol": "fn_802100C0",
+          "start": "0x802100C0",
+          "end": "0x80210114"
+        },
+        {
+          "symbol": "fn_80210114",
+          "start": "0x80210114",
+          "end": "0x80210184"
+        },
+        {
+          "symbol": "fn_80210184",
+          "start": "0x80210184",
+          "end": "0x802101B0"
+        },
+        {
+          "symbol": "fn_802101B0",
+          "start": "0x802101B0",
+          "end": "0x80210214"
+        },
+        {
+          "symbol": "fn_80210214",
+          "start": "0x80210214",
+          "end": "0x80210298"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmrender.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80210298-0x80210D30 (src/engine/tmrender.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1BF8-0x802B1BFC. 19 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80210298",
+          "end": "0x80210D30"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1BF8",
+          "end": "0x802B1BFC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80210298",
+          "start": "0x80210298",
+          "end": "0x802102E8"
+        },
+        {
+          "symbol": "fn_802102E8",
+          "start": "0x802102E8",
+          "end": "0x8021032C"
+        },
+        {
+          "symbol": "fn_8021032C",
+          "start": "0x8021032C",
+          "end": "0x80210368"
+        },
+        {
+          "symbol": "fn_80210368",
+          "start": "0x80210368",
+          "end": "0x80210388"
+        },
+        {
+          "symbol": "fn_80210388",
+          "start": "0x80210388",
+          "end": "0x802103DC"
+        },
+        {
+          "symbol": "fn_802103DC",
+          "start": "0x802103DC",
+          "end": "0x80210608"
+        },
+        {
+          "symbol": "fn_80210608",
+          "start": "0x80210608",
+          "end": "0x80210634"
+        },
+        {
+          "symbol": "fn_80210634",
+          "start": "0x80210634",
+          "end": "0x80210654"
+        },
+        {
+          "symbol": "fn_80210654",
+          "start": "0x80210654",
+          "end": "0x80210724"
+        },
+        {
+          "symbol": "fn_80210724",
+          "start": "0x80210724",
+          "end": "0x8021077C"
+        },
+        {
+          "symbol": "fn_8021077C",
+          "start": "0x8021077C",
+          "end": "0x80210814"
+        },
+        {
+          "symbol": "fn_80210814",
+          "start": "0x80210814",
+          "end": "0x80210970"
+        },
+        {
+          "symbol": "fn_80210970",
+          "start": "0x80210970",
+          "end": "0x80210B6C"
+        },
+        {
+          "symbol": "fn_80210B6C",
+          "start": "0x80210B6C",
+          "end": "0x80210BA4"
+        },
+        {
+          "symbol": "fn_80210BA4",
+          "start": "0x80210BA4",
+          "end": "0x80210BB0"
+        },
+        {
+          "symbol": "fn_80210BB0",
+          "start": "0x80210BB0",
+          "end": "0x80210BD8"
+        },
+        {
+          "symbol": "fn_80210BD8",
+          "start": "0x80210BD8",
+          "end": "0x80210CC4"
+        },
+        {
+          "symbol": "fn_80210CC4",
+          "start": "0x80210CC4",
+          "end": "0x80210D10"
+        },
+        {
+          "symbol": "fn_80210D10",
+          "start": "0x80210D10",
+          "end": "0x80210D30"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmrendergeom.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80210D30-0x80211638 (src/engine/tmrendergeom.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 7 drafted bodies, partial: 0x80211424. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80210D30",
+          "end": "0x80211638"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80210D30",
+          "start": "0x80210D30",
+          "end": "0x80210DCC"
+        },
+        {
+          "symbol": "fn_80211138",
+          "start": "0x80211138",
+          "end": "0x8021126C"
+        },
+        {
+          "symbol": "fn_8021126C",
+          "start": "0x8021126C",
+          "end": "0x802112DC"
+        },
+        {
+          "symbol": "fn_802112DC",
+          "start": "0x802112DC",
+          "end": "0x80211350"
+        },
+        {
+          "symbol": "fn_80211350",
+          "start": "0x80211350",
+          "end": "0x802113C0"
+        },
+        {
+          "symbol": "fn_802113C0",
+          "start": "0x802113C0",
+          "end": "0x80211424"
+        },
+        {
+          "symbol": "fn_80211424",
+          "start": "0x80211424",
+          "end": "0x80211638"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmshader.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80211638-0x80211774 (src/engine/tmshader.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 5 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80211638",
+          "end": "0x80211774"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80211638",
+          "start": "0x80211638",
+          "end": "0x80211730"
+        },
+        {
+          "symbol": "fn_80211730",
+          "start": "0x80211730",
+          "end": "0x8021175C"
+        },
+        {
+          "symbol": "fn_8021175C",
+          "start": "0x8021175C",
+          "end": "0x80211764"
+        },
+        {
+          "symbol": "fn_80211764",
+          "start": "0x80211764",
+          "end": "0x8021176C"
+        },
+        {
+          "symbol": "fn_8021176C",
+          "start": "0x8021176C",
+          "end": "0x80211774"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmshaderlib.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80211774-0x802119C4 (src/engine/tmshaderlib.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 10 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80211774",
+          "end": "0x802119C4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80211774",
+          "start": "0x80211774",
+          "end": "0x802117C8"
+        },
+        {
+          "symbol": "fn_802117C8",
+          "start": "0x802117C8",
+          "end": "0x802117F0"
+        },
+        {
+          "symbol": "fn_802117F0",
+          "start": "0x802117F0",
+          "end": "0x80211860"
+        },
+        {
+          "symbol": "fn_80211860",
+          "start": "0x80211860",
+          "end": "0x8021189C"
+        },
+        {
+          "symbol": "fn_8021189C",
+          "start": "0x8021189C",
+          "end": "0x802118F0"
+        },
+        {
+          "symbol": "fn_802118F0",
+          "start": "0x802118F0",
+          "end": "0x80211928"
+        },
+        {
+          "symbol": "fn_80211928",
+          "start": "0x80211928",
+          "end": "0x80211958"
+        },
+        {
+          "symbol": "fn_80211958",
+          "start": "0x80211958",
+          "end": "0x80211984"
+        },
+        {
+          "symbol": "fn_80211984",
+          "start": "0x80211984",
+          "end": "0x802119BC"
+        },
+        {
+          "symbol": "fn_802119BC",
+          "start": "0x802119BC",
+          "end": "0x802119C4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmtexlib.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802119C4-0x80212234 (src/engine/tmtexlib.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 22 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802119C4",
+          "end": "0x80212234"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_802119C4",
+          "start": "0x802119C4",
+          "end": "0x80211A74"
+        },
+        {
+          "symbol": "fn_80211A74",
+          "start": "0x80211A74",
+          "end": "0x80211AFC"
+        },
+        {
+          "symbol": "fn_80211AFC",
+          "start": "0x80211AFC",
+          "end": "0x80211B64"
+        },
+        {
+          "symbol": "fn_80211B64",
+          "start": "0x80211B64",
+          "end": "0x80211C08"
+        },
+        {
+          "symbol": "fn_80211C08",
+          "start": "0x80211C08",
+          "end": "0x80211D24"
+        },
+        {
+          "symbol": "fn_80211D24",
+          "start": "0x80211D24",
+          "end": "0x80211DA8"
+        },
+        {
+          "symbol": "fn_80211DA8",
+          "start": "0x80211DA8",
+          "end": "0x80211E08"
+        },
+        {
+          "symbol": "fn_80211E08",
+          "start": "0x80211E08",
+          "end": "0x80211EBC"
+        },
+        {
+          "symbol": "fn_80211EBC",
+          "start": "0x80211EBC",
+          "end": "0x80211EDC"
+        },
+        {
+          "symbol": "fn_80211EDC",
+          "start": "0x80211EDC",
+          "end": "0x80211EFC"
+        },
+        {
+          "symbol": "fn_80211EFC",
+          "start": "0x80211EFC",
+          "end": "0x80211F94"
+        },
+        {
+          "symbol": "fn_80211F94",
+          "start": "0x80211F94",
+          "end": "0x80211FC8"
+        },
+        {
+          "symbol": "fn_80211FC8",
+          "start": "0x80211FC8",
+          "end": "0x80211FF0"
+        },
+        {
+          "symbol": "fn_80211FF0",
+          "start": "0x80211FF0",
+          "end": "0x80212018"
+        },
+        {
+          "symbol": "fn_80212018",
+          "start": "0x80212018",
+          "end": "0x80212050"
+        },
+        {
+          "symbol": "fn_80212050",
+          "start": "0x80212050",
+          "end": "0x80212074"
+        },
+        {
+          "symbol": "fn_80212074",
+          "start": "0x80212074",
+          "end": "0x802120AC"
+        },
+        {
+          "symbol": "fn_802120AC",
+          "start": "0x802120AC",
+          "end": "0x802120E4"
+        },
+        {
+          "symbol": "fn_802120E4",
+          "start": "0x802120E4",
+          "end": "0x80212124"
+        },
+        {
+          "symbol": "fn_80212124",
+          "start": "0x80212124",
+          "end": "0x8021216C"
+        },
+        {
+          "symbol": "fn_8021216C",
+          "start": "0x8021216C",
+          "end": "0x802121D0"
+        },
+        {
+          "symbol": "fn_802121D0",
+          "start": "0x802121D0",
+          "end": "0x80212234"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmtexture.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80212234-0x802126C0 (src/engine/tmtexture.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1C10-0x802B1C28. 11 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80212234",
+          "end": "0x802126C0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1C10",
+          "end": "0x802B1C28"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80212234",
+          "start": "0x80212234",
+          "end": "0x80212310"
+        },
+        {
+          "symbol": "fn_80212310",
+          "start": "0x80212310",
+          "end": "0x8021234C"
+        },
+        {
+          "symbol": "fn_8021234C",
+          "start": "0x8021234C",
+          "end": "0x80212374"
+        },
+        {
+          "symbol": "fn_80212374",
+          "start": "0x80212374",
+          "end": "0x8021239C"
+        },
+        {
+          "symbol": "fn_8021239C",
+          "start": "0x8021239C",
+          "end": "0x8021242C"
+        },
+        {
+          "symbol": "fn_8021242C",
+          "start": "0x8021242C",
+          "end": "0x80212530"
+        },
+        {
+          "symbol": "fn_80212530",
+          "start": "0x80212530",
+          "end": "0x80212534"
+        },
+        {
+          "symbol": "fn_80212534",
+          "start": "0x80212534",
+          "end": "0x80212654"
+        },
+        {
+          "symbol": "fn_80212654",
+          "start": "0x80212654",
+          "end": "0x80212658"
+        },
+        {
+          "symbol": "fn_80212658",
+          "start": "0x80212658",
+          "end": "0x802126BC"
+        },
+        {
+          "symbol": "fn_802126BC",
+          "start": "0x802126BC",
+          "end": "0x802126C0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmname.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802126C0-0x802127D0 (src/engine/tmname.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1C38-0x802B1C3C. 3 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802126C0",
+          "end": "0x802127D0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1C38",
+          "end": "0x802B1C3C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_802126C0",
+          "start": "0x802126C0",
+          "end": "0x802126E8"
+        },
+        {
+          "symbol": "fn_802126E8",
+          "start": "0x802126E8",
+          "end": "0x8021272C"
+        },
+        {
+          "symbol": "fn_8021272C",
+          "start": "0x8021272C",
+          "end": "0x802127D0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmmemory.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802127D0-0x8021283C (src/engine/tmmemory.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 2 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802127D0",
+          "end": "0x8021283C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_802127D0",
+          "start": "0x802127D0",
+          "end": "0x80212814"
+        },
+        {
+          "symbol": "fn_80212814",
+          "start": "0x80212814",
+          "end": "0x8021283C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmregistry.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8021283C-0x80212CB4 (src/engine/tmregistry.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 14 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021283C",
+          "end": "0x80212CB4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8021283C",
+          "start": "0x8021283C",
+          "end": "0x80212850"
+        },
+        {
+          "symbol": "fn_80212850",
+          "start": "0x80212850",
+          "end": "0x802128A8"
+        },
+        {
+          "symbol": "fn_802128A8",
+          "start": "0x802128A8",
+          "end": "0x802128DC"
+        },
+        {
+          "symbol": "fn_802128DC",
+          "start": "0x802128DC",
+          "end": "0x80212940"
+        },
+        {
+          "symbol": "fn_80212940",
+          "start": "0x80212940",
+          "end": "0x8021295C"
+        },
+        {
+          "symbol": "fn_8021295C",
+          "start": "0x8021295C",
+          "end": "0x802129B8"
+        },
+        {
+          "symbol": "fn_802129B8",
+          "start": "0x802129B8",
+          "end": "0x80212A48"
+        },
+        {
+          "symbol": "fn_80212A48",
+          "start": "0x80212A48",
+          "end": "0x80212AB0"
+        },
+        {
+          "symbol": "fn_80212AB0",
+          "start": "0x80212AB0",
+          "end": "0x80212AEC"
+        },
+        {
+          "symbol": "fn_80212AEC",
+          "start": "0x80212AEC",
+          "end": "0x80212B1C"
+        },
+        {
+          "symbol": "fn_80212B1C",
+          "start": "0x80212B1C",
+          "end": "0x80212BDC"
+        },
+        {
+          "symbol": "fn_80212BDC",
+          "start": "0x80212BDC",
+          "end": "0x80212C60"
+        },
+        {
+          "symbol": "fn_80212C60",
+          "start": "0x80212C60",
+          "end": "0x80212CAC"
+        },
+        {
+          "symbol": "fn_80212CAC",
+          "start": "0x80212CAC",
+          "end": "0x80212CB4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmshaderdef.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80212CB4-0x80212D5C (src/engine/tmshaderdef.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 1 drafted body. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80212CB4",
+          "end": "0x80212D5C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80212CB4",
+          "start": "0x80212CB4",
+          "end": "0x80212D5C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmshaderstock.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80212D5C-0x80213214 (src/engine/tmshaderstock.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1C3C-0x802B1C44. 10 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80212D5C",
+          "end": "0x80213214"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1C3C",
+          "end": "0x802B1C44"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80212D5C",
+          "start": "0x80212D5C",
+          "end": "0x80212DAC"
+        },
+        {
+          "symbol": "fn_80212DAC",
+          "start": "0x80212DAC",
+          "end": "0x80212DFC"
+        },
+        {
+          "symbol": "fn_80212DFC",
+          "start": "0x80212DFC",
+          "end": "0x80212E4C"
+        },
+        {
+          "symbol": "fn_80212E4C",
+          "start": "0x80212E4C",
+          "end": "0x80212F3C"
+        },
+        {
+          "symbol": "fn_80212F3C",
+          "start": "0x80212F3C",
+          "end": "0x80212F88"
+        },
+        {
+          "symbol": "fn_80212F88",
+          "start": "0x80212F88",
+          "end": "0x80213054"
+        },
+        {
+          "symbol": "fn_80213054",
+          "start": "0x80213054",
+          "end": "0x80213128"
+        },
+        {
+          "symbol": "fn_80213128",
+          "start": "0x80213128",
+          "end": "0x80213160"
+        },
+        {
+          "symbol": "fn_80213160",
+          "start": "0x80213160",
+          "end": "0x802131D8"
+        },
+        {
+          "symbol": "fn_802131D8",
+          "start": "0x802131D8",
+          "end": "0x80213214"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmshaderparm.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213214-0x80213224 (src/engine/tmshaderparm.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 1 drafted body. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213214",
+          "end": "0x80213224"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80213214",
+          "start": "0x80213214",
+          "end": "0x80213224"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmshadercode.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213224-0x80213228 (src/engine/tmshadercode.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 1 drafted body. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213224",
+          "end": "0x80213228"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80213224",
+          "start": "0x80213224",
+          "end": "0x80213228"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmmaterialdef.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213228-0x80213384 (src/engine/tmmaterialdef.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 2 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213228",
+          "end": "0x80213384"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80213228",
+          "start": "0x80213228",
+          "end": "0x8021330C"
+        },
+        {
+          "symbol": "fn_8021330C",
+          "start": "0x8021330C",
+          "end": "0x80213384"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmclusterdef.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213384-0x80213444 (src/engine/tmclusterdef.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 2 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213384",
+          "end": "0x80213444"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80213384",
+          "start": "0x80213384",
+          "end": "0x802133B8"
+        },
+        {
+          "symbol": "fn_802133B8",
+          "start": "0x802133B8",
+          "end": "0x80213444"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmclusterobj.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213444-0x80213A38 (src/engine/tmclusterobj.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 6 drafted bodies, partial: 0x8021353C. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213444",
+          "end": "0x80213A38"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80213444",
+          "start": "0x80213444",
+          "end": "0x802134AC"
+        },
+        {
+          "symbol": "fn_802134AC",
+          "start": "0x802134AC",
+          "end": "0x802134D0"
+        },
+        {
+          "symbol": "fn_802134D0",
+          "start": "0x802134D0",
+          "end": "0x802134E8"
+        },
+        {
+          "symbol": "fn_802134E8",
+          "start": "0x802134E8",
+          "end": "0x80213504"
+        },
+        {
+          "symbol": "fn_80213504",
+          "start": "0x80213504",
+          "end": "0x8021353C"
+        },
+        {
+          "symbol": "fn_8021353C",
+          "start": "0x8021353C",
+          "end": "0x80213774"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmtev.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213A38-0x80213BCC (src/engine/tmtev.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 1 drafted body. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213A38",
+          "end": "0x80213BCC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80213A38",
+          "start": "0x80213A38",
+          "end": "0x80213BCC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmclip.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213BCC-0x80214554 (src/engine/tmclip.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1C88-0x802B1C94. 9 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213BCC",
+          "end": "0x80214554"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1C88",
+          "end": "0x802B1C94"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80213BCC",
+          "start": "0x80213BCC",
+          "end": "0x80213DB0"
+        },
+        {
+          "symbol": "fn_80214140",
+          "start": "0x80214140",
+          "end": "0x80214184"
+        },
+        {
+          "symbol": "fn_80214184",
+          "start": "0x80214184",
+          "end": "0x802141C4"
+        },
+        {
+          "symbol": "fn_802141C4",
+          "start": "0x802141C4",
+          "end": "0x80214238"
+        },
+        {
+          "symbol": "fn_80214238",
+          "start": "0x80214238",
+          "end": "0x802142B0"
+        },
+        {
+          "symbol": "fn_802142B0",
+          "start": "0x802142B0",
+          "end": "0x8021445C"
+        },
+        {
+          "symbol": "fn_8021445C",
+          "start": "0x8021445C",
+          "end": "0x802144AC"
+        },
+        {
+          "symbol": "fn_802144AC",
+          "start": "0x802144AC",
+          "end": "0x802144D8"
+        },
+        {
+          "symbol": "fn_802144D8",
+          "start": "0x802144D8",
+          "end": "0x80214554"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmbuffer.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80214554-0x802146C8 (src/engine/tmbuffer.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 7 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80214554",
+          "end": "0x802146C8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80214554",
+          "start": "0x80214554",
+          "end": "0x802145B0"
+        },
+        {
+          "symbol": "fn_802145B0",
+          "start": "0x802145B0",
+          "end": "0x802145F4"
+        },
+        {
+          "symbol": "fn_802145F4",
+          "start": "0x802145F4",
+          "end": "0x80214600"
+        },
+        {
+          "symbol": "fn_80214600",
+          "start": "0x80214600",
+          "end": "0x80214610"
+        },
+        {
+          "symbol": "fn_80214610",
+          "start": "0x80214610",
+          "end": "0x8021465C"
+        },
+        {
+          "symbol": "fn_8021465C",
+          "start": "0x8021465C",
+          "end": "0x80214680"
+        },
+        {
+          "symbol": "fn_80214680",
+          "start": "0x80214680",
+          "end": "0x802146C8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmlightdef.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802146C8-0x80214718 (src/engine/tmlightdef.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 1 drafted body. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802146C8",
+          "end": "0x80214718"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_802146C8",
+          "start": "0x802146C8",
+          "end": "0x80214718"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmblend.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80214718-0x80214D40 (src/engine/tmblend.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1C98-0x802B1C9C. 14 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80214718",
+          "end": "0x80214D40"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1C98",
+          "end": "0x802B1C9C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80214718",
+          "start": "0x80214718",
+          "end": "0x80214814"
+        },
+        {
+          "symbol": "fn_80214814",
+          "start": "0x80214814",
+          "end": "0x80214890"
+        },
+        {
+          "symbol": "fn_80214890",
+          "start": "0x80214890",
+          "end": "0x802148BC"
+        },
+        {
+          "symbol": "fn_802148BC",
+          "start": "0x802148BC",
+          "end": "0x802149D4"
+        },
+        {
+          "symbol": "fn_802149D4",
+          "start": "0x802149D4",
+          "end": "0x802149E8"
+        },
+        {
+          "symbol": "fn_802149E8",
+          "start": "0x802149E8",
+          "end": "0x80214A7C"
+        },
+        {
+          "symbol": "fn_80214A7C",
+          "start": "0x80214A7C",
+          "end": "0x80214AC8"
+        },
+        {
+          "symbol": "fn_80214AC8",
+          "start": "0x80214AC8",
+          "end": "0x80214B20"
+        },
+        {
+          "symbol": "fn_80214B20",
+          "start": "0x80214B20",
+          "end": "0x80214B44"
+        },
+        {
+          "symbol": "fn_80214B44",
+          "start": "0x80214B44",
+          "end": "0x80214B6C"
+        },
+        {
+          "symbol": "fn_80214B6C",
+          "start": "0x80214B6C",
+          "end": "0x80214C04"
+        },
+        {
+          "symbol": "fn_80214C04",
+          "start": "0x80214C04",
+          "end": "0x80214C10"
+        },
+        {
+          "symbol": "fn_80214C10",
+          "start": "0x80214C10",
+          "end": "0x80214CB4"
+        },
+        {
+          "symbol": "fn_80214CB4",
+          "start": "0x80214CB4",
+          "end": "0x80214D40"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmblendchannel.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80214D40-0x80214F58 (src/engine/tmblendchannel.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 9 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80214D40",
+          "end": "0x80214F58"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80214D40",
+          "start": "0x80214D40",
+          "end": "0x80214D6C"
+        },
+        {
+          "symbol": "fn_80214D6C",
+          "start": "0x80214D6C",
+          "end": "0x80214DB8"
+        },
+        {
+          "symbol": "fn_80214DB8",
+          "start": "0x80214DB8",
+          "end": "0x80214DCC"
+        },
+        {
+          "symbol": "fn_80214DCC",
+          "start": "0x80214DCC",
+          "end": "0x80214E3C"
+        },
+        {
+          "symbol": "fn_80214E3C",
+          "start": "0x80214E3C",
+          "end": "0x80214E80"
+        },
+        {
+          "symbol": "fn_80214E80",
+          "start": "0x80214E80",
+          "end": "0x80214EB4"
+        },
+        {
+          "symbol": "fn_80214EB4",
+          "start": "0x80214EB4",
+          "end": "0x80214ED0"
+        },
+        {
+          "symbol": "fn_80214ED0",
+          "start": "0x80214ED0",
+          "end": "0x80214F54"
+        },
+        {
+          "symbol": "fn_80214F54",
+          "start": "0x80214F54",
+          "end": "0x80214F58"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmblendop.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80214F58-0x80215804 (src/engine/tmblendop.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1CA0-0x802B1CB0. 15 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80214F58",
+          "end": "0x80215804"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1CA0",
+          "end": "0x802B1CB0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80214F58",
+          "start": "0x80214F58",
+          "end": "0x80214FB8"
+        },
+        {
+          "symbol": "fn_80214FB8",
+          "start": "0x80214FB8",
+          "end": "0x80215020"
+        },
+        {
+          "symbol": "fn_80215020",
+          "start": "0x80215020",
+          "end": "0x802150AC"
+        },
+        {
+          "symbol": "fn_802150AC",
+          "start": "0x802150AC",
+          "end": "0x802150F0"
+        },
+        {
+          "symbol": "fn_802150F0",
+          "start": "0x802150F0",
+          "end": "0x80215190"
+        },
+        {
+          "symbol": "fn_80215190",
+          "start": "0x80215190",
+          "end": "0x80215258"
+        },
+        {
+          "symbol": "fn_80215258",
+          "start": "0x80215258",
+          "end": "0x802152F0"
+        },
+        {
+          "symbol": "fn_802152F0",
+          "start": "0x802152F0",
+          "end": "0x8021535C"
+        },
+        {
+          "symbol": "fn_8021535C",
+          "start": "0x8021535C",
+          "end": "0x802153D0"
+        },
+        {
+          "symbol": "fn_802153D0",
+          "start": "0x802153D0",
+          "end": "0x8021546C"
+        },
+        {
+          "symbol": "fn_8021546C",
+          "start": "0x8021546C",
+          "end": "0x802154BC"
+        },
+        {
+          "symbol": "fn_802154BC",
+          "start": "0x802154BC",
+          "end": "0x80215554"
+        },
+        {
+          "symbol": "fn_80215554",
+          "start": "0x80215554",
+          "end": "0x80215694"
+        },
+        {
+          "symbol": "fn_80215694",
+          "start": "0x80215694",
+          "end": "0x8021574C"
+        },
+        {
+          "symbol": "fn_8021574C",
+          "start": "0x8021574C",
+          "end": "0x80215804"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmextentsdef.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215804-0x80215838 (src/engine/tmextentsdef.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 1 drafted body. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215804",
+          "end": "0x80215838"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80215804",
+          "start": "0x80215804",
+          "end": "0x80215838"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/TMTexXForm.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215838-0x8021592C (src/engine/TMTexXForm.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 2 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215838",
+          "end": "0x8021592C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80215838",
+          "start": "0x80215838",
+          "end": "0x802158A4"
+        },
+        {
+          "symbol": "fn_802158A4",
+          "start": "0x802158A4",
+          "end": "0x8021592C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmchannellist.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8021592C-0x80215B6C (src/engine/tmchannellist.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 3 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021592C",
+          "end": "0x80215B6C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8021592C",
+          "start": "0x8021592C",
+          "end": "0x80215A14"
+        },
+        {
+          "symbol": "fn_80215A14",
+          "start": "0x80215A14",
+          "end": "0x80215B00"
+        },
+        {
+          "symbol": "fn_80215B00",
+          "start": "0x80215B00",
+          "end": "0x80215B6C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/lltmviewport.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215B6C-0x80215B74 (src/engine/lltmviewport.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 2 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215B6C",
+          "end": "0x80215B74"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80215B6C",
+          "start": "0x80215B6C",
+          "end": "0x80215B70"
+        },
+        {
+          "symbol": "fn_80215B70",
+          "start": "0x80215B70",
+          "end": "0x80215B74"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmprof.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215B74-0x80215B7C (src/engine/tmprof.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 2 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215B74",
+          "end": "0x80215B7C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80215B74",
+          "start": "0x80215B74",
+          "end": "0x80215B78"
+        },
+        {
+          "symbol": "fn_80215B78",
+          "start": "0x80215B78",
+          "end": "0x80215B7C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmdebuginfo.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215B7C-0x80215C14 (src/engine/tmdebuginfo.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 1 drafted body. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215B7C",
+          "end": "0x80215C14"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80215B7C",
+          "start": "0x80215B7C",
+          "end": "0x80215C14"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/TmInstance.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215C14-0x80215DA4 (src/engine/TmInstance.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 2 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215C14",
+          "end": "0x80215DA4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80215C14",
+          "start": "0x80215C14",
+          "end": "0x80215CB0"
+        },
+        {
+          "symbol": "fn_80215CB0",
+          "start": "0x80215CB0",
+          "end": "0x80215DA4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/TMMorphAnim.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215DA4-0x80215E5C (src/engine/TMMorphAnim.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 2 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215DA4",
+          "end": "0x80215E5C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80215DA4",
+          "start": "0x80215DA4",
+          "end": "0x80215DC0"
+        },
+        {
+          "symbol": "fn_80215DC0",
+          "start": "0x80215DC0",
+          "end": "0x80215E5C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmskeleton.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215E5C-0x802160A0 (src/engine/tmskeleton.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 3 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215E5C",
+          "end": "0x802160A0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80215E5C",
+          "start": "0x80215E5C",
+          "end": "0x80215EE0"
+        },
+        {
+          "symbol": "fn_80215EE0",
+          "start": "0x80215EE0",
+          "end": "0x80215F78"
+        },
+        {
+          "symbol": "fn_80215F78",
+          "start": "0x80215F78",
+          "end": "0x802160A0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_802160A0.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802160A0-0x8021625C (src/engine/cu_802160A0.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 4 drafted bodies. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802160A0",
+          "end": "0x8021625C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_802160A0",
+          "start": "0x802160A0",
+          "end": "0x8021616C"
+        },
+        {
+          "symbol": "fn_8021616C",
+          "start": "0x8021616C",
+          "end": "0x80216190"
+        },
+        {
+          "symbol": "fn_80216190",
+          "start": "0x80216190",
+          "end": "0x802161D8"
+        },
+        {
+          "symbol": "fn_802161D8",
+          "start": "0x802161D8",
+          "end": "0x8021625C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_8021625C.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8021625C-0x802176E8 (src/engine/cu_8021625C.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1D10-0x802B1D40. 9 drafted bodies, partial: 0x802166F0. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021625C",
+          "end": "0x802176E8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1D10",
+          "end": "0x802B1D40"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8021625C",
+          "start": "0x8021625C",
+          "end": "0x802163F0"
+        },
+        {
+          "symbol": "fn_802163F0",
+          "start": "0x802163F0",
+          "end": "0x8021658C"
+        },
+        {
+          "symbol": "fn_8021658C",
+          "start": "0x8021658C",
+          "end": "0x802166F0"
+        },
+        {
+          "symbol": "fn_802166F0",
+          "start": "0x802166F0",
+          "end": "0x80216860"
+        },
+        {
+          "symbol": "fn_80216E34",
+          "start": "0x80216E34",
+          "end": "0x80216F3C"
+        },
+        {
+          "symbol": "fn_80216F3C",
+          "start": "0x80216F3C",
+          "end": "0x80217070"
+        },
+        {
+          "symbol": "fn_80217070",
+          "start": "0x80217070",
+          "end": "0x802171DC"
+        },
+        {
+          "symbol": "fn_802171DC",
+          "start": "0x802171DC",
+          "end": "0x8021743C"
+        },
+        {
+          "symbol": "fn_8021743C",
+          "start": "0x8021743C",
+          "end": "0x802176E8"
+        }
+      ]
     }
   ]
 }
