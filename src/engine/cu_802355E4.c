@@ -5,14 +5,11 @@
 #include <string.h>
 #include "engine/cu_80227F14.h"
 #include "engine/cu_801D03D0.h"
-#include "engine/Render_802353F8.h"
 #include "engine/vec.h"
+#include "game/cu_801CF5BC.h"
+#include "game/fn_801D2B7C.h"
 #include "game/fn_80238174.h"
-
-typedef struct Shader_80235630 {
-    char mUnknown0[16];
-    unsigned int mUnknown16;
-} Shader_80235630;
+#include "game/Object_80235588.h"
 
 typedef struct Library_80235B6C {
     unsigned int mUnknown0;
@@ -83,6 +80,11 @@ typedef struct Timer_80237780 {
     Counter_80237934 *mpUnknown12;
 } Timer_80237780;
 
+typedef struct TimerState_80237728 {
+    Timer_80237780 mUnknown0;
+    Counter_80237934 mUnknown16;
+} TimerState_80237728;
+
 extern char lbl_802B71A0[];
 extern float lbl_802FB458[3];
 extern Lights_803A2868 lbl_803A2868;
@@ -101,13 +103,9 @@ extern int lbl_803EC13C;
 extern int lbl_803ED028;
 extern int lbl_803ED02C;
 
-extern void *fn_801CF5BC(int type, int seed);
 extern int fn_801CF60C(void *pDst, void *pSrc);
 extern int fn_801CF664(void *pStream);
-extern int fn_801CF67C(void *pStream);
 extern unsigned int fn_801CF6D4(void *pStream, unsigned int range);
-extern void *fn_801D2B7C(int size, int a, int b);
-extern int fn_801D2BD0(void *p);
 extern void fn_8020EBB0(void *p);
 extern void fn_8020F28C(void *p);
 extern void fn_8020F4D0(void *p, void *pData);
@@ -122,7 +120,10 @@ extern void fn_802144AC(void *p);
 extern void *fn_8023816C(void *pHandle);
 extern int fn_80238278(const void *p, int size, int seed);
 
-void fn_80235788(Render_802353F8 *p, int handle, int a);
+void fn_802353D4(Object_80235588 *p, int flags);
+void fn_802353D8(Object_80235588 *p, int flags);
+void fn_802353E8(Object_80235588 *p, int flags);
+void fn_80235788(Object_80235588 *p, int handle, int a);
 Light_802362C4 *fn_802362C4(Scene_8023609C *pScene, int index);
 void fn_80236164(Scene_8023609C *pScene, GXLightObj *pLights, unsigned int *pColors);
 int fn_802365E8(LightSet_80236368 *pSet, float r, float g, float b);
@@ -143,54 +144,54 @@ void fn_802379CC(Counter_80237934 *p, int delta);
 int fn_802379DC(Counter_80237934 *p);
 int fn_80237A28(Counter_80237934 *p);
 
-void fn_802355E4(Render_802353F8 *p)
+void fn_802355E4(Object_80235588 *p)
 {
     if (p->mpUnknown88 != 0) {
         fn_80210114(p->mUnknown92);
         p->mpUnknown88 = 0;
     }
-    fn_8020F28C(p->mUnknown100);
+    fn_8020F28C(&p->mUnknown100);
 }
 
-void fn_80235630(Render_802353F8 *p, void *pData)
+void fn_80235630(Object_80235588 *p, void *pData)
 {
     if (p->mpUnknown84 != pData) {
         p->mpUnknown84 = pData;
-        fn_8020F28C(p->mUnknown100);
+        fn_8020F28C(&p->mUnknown100);
         if (pData != 0) {
-            fn_8020F4D0(p->mUnknown100, pData);
+            fn_8020F4D0(&p->mUnknown100, pData);
         }
         fn_802353E8(p, 0x8000);
         fn_802353E8(p, 0x10000);
-        if (p->mpUnknown108 != 0) {
-            if (p->mpUnknown108->mUnknown16 & 2) {
+        if (p->mUnknown100.mpUnknown8 != 0) {
+            if (p->mUnknown100.mpUnknown8->mUnknown16 & 2) {
                 fn_802353D8(p, 0x8000);
             }
-            if (p->mpUnknown108->mUnknown16 & 4) {
+            if (p->mUnknown100.mpUnknown8->mUnknown16 & 4) {
                 fn_802353D8(p, 0x10000);
             }
             fn_802144AC(p->mUnknown152);
-            fn_8020F96C(p->mUnknown100, p->mUnknown152, -1, -1);
+            fn_8020F96C(&p->mUnknown100, p->mUnknown152, -1, -1);
         }
     }
 }
 
-void fn_8023570C(Render_802353F8 *p, const char *pName)
+void fn_8023570C(Object_80235588 *p, const char *pName)
 {
     p->mUnknown184 = fn_80211984(pName);
 }
 
-void fn_80235740(Render_802353F8 *p, int handle)
+void fn_80235740(Object_80235588 *p, int handle)
 {
     fn_801D0F80(p->mUnknown8[0]);
 }
 
-void fn_80235764(Render_802353F8 *p, int handle)
+void fn_80235764(Object_80235588 *p, int handle)
 {
     fn_80235788(p, handle, 1);
 }
 
-void fn_80235B6C(Render_802353F8 *p, Element_80235B6C *pElement, int a)
+void fn_80235B6C(Object_80235588 *p, Element_80235B6C *pElement, int a)
 {
     Library_80235B6C *pLibrary;
 
@@ -216,26 +217,26 @@ void fn_80235B6C(Render_802353F8 *p, Element_80235B6C *pElement, int a)
     }
 }
 
-void fn_80235C24(Render_802353F8 *p, Element_80235B6C *pElement)
+void fn_80235C24(Object_80235588 *p, Element_80235B6C *pElement)
 {
     fn_80235B6C(p, pElement, 0);
 }
 
-void fn_80235C48(Render_802353F8 *p, int a)
+void fn_80235C48(Object_80235588 *p, int a)
 {
 }
 
-void fn_80235C4C(int a, Render_802353F8 *p, float value)
+void fn_80235C4C(int a, Object_80235588 *p, float value)
 {
     fn_802353D8(p, 0x80000);
     p->mUnknown72 = value;
 }
 
-void fn_80235D0C(Render_802353F8 *p, int a)
+void fn_80235D0C(Object_80235588 *p, int a)
 {
 }
 
-void fn_80235D74(Render_802353F8 *p, int a)
+void fn_80235D74(Object_80235588 *p, int a)
 {
 }
 
@@ -447,7 +448,6 @@ int fn_80237080(void *p, void *q)
 {
     Random_80236F78 *pA = p;
     Random_80236F78 *pB = q;
-
     int result;
 
     if (pB != 0) {
@@ -494,7 +494,7 @@ unsigned int fn_802372EC(int stream, unsigned int count)
     } else if (lbl_803EC130->mUnknown1 != 0 && count > 1) {
         lbl_803EC134 = value = 1 - lbl_803EC134;
         if (!(lbl_803EC130->mUnknown1 & 0x80)) {
-                value = count - 1 - value;
+            value = count - 1 - value;
         }
     }
     return value;
@@ -594,10 +594,10 @@ int fn_802375FC(void *p, void *q)
 int fn_80237728(void *p, void *pBuffer)
 {
     Timer_80237780 *pTimer = p;
-    Timer_80237780 *pIn = pBuffer;
+    TimerState_80237728 *pIn = pBuffer;
 
-    *pTimer = pIn[0];
-    *pTimer->mpUnknown12 = *(Counter_80237934 *)&pIn[1];
+    *pTimer = pIn->mUnknown0;
+    *pTimer->mpUnknown12 = pIn->mUnknown16;
     return 1;
 }
 
@@ -636,12 +636,11 @@ void fn_80237868(void)
 
 void fn_80237888(unsigned int time)
 {
-    Timer_80237780 *pTimer = lbl_803EC138;
-    unsigned int old = pTimer->mUnknown8;
+    unsigned int old = lbl_803EC138->mUnknown8;
 
     if (time > old) {
-        pTimer->mUnknown8 = time;
-        fn_802379CC(pTimer->mpUnknown12, time - old);
+        lbl_803EC138->mUnknown8 = time;
+        fn_802379CC(lbl_803EC138->mpUnknown12, time - old);
     }
 }
 

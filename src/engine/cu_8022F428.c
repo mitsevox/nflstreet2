@@ -5,12 +5,12 @@
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
 #include <string.h>
-#include "engine/Render_802353F8.h"
 #include "game/fn_8022F478.h"
 #include "game/fn_80233CBC.h"
 #include "game/fn_801FCE10.h"
 #include "game/Object_8020E52C.h"
 #include "game/Object_80233EAC.h"
+#include "game/Object_80235588.h"
 #include "game/QueryStatus.h"
 
 typedef struct Entry_802FB300 {
@@ -1753,21 +1753,21 @@ void fn_802353D0(void *p)
 {
 }
 
-void fn_802353D4(Render_802353F8 *p, int flags)
+void fn_802353D4(Object_80235588 *p, int flags)
 {
 }
 
-void fn_802353D8(Render_802353F8 *p, int flags)
+void fn_802353D8(Object_80235588 *p, int flags)
 {
     p->mUnknown0 |= flags;
 }
 
-void fn_802353E8(Render_802353F8 *p, int flags)
+void fn_802353E8(Object_80235588 *p, int flags)
 {
     p->mUnknown0 &= ~flags;
 }
 
-void fn_802353F8(Render_802353F8 *p, int flags)
+void fn_802353F8(Object_80235588 *p, int flags)
 {
     int old = p->mUnknown4;
 
@@ -1802,14 +1802,14 @@ void fn_802353F8(Render_802353F8 *p, int flags)
     if (old != p->mUnknown4) {
         fn_802144AC(p->mUnknown152);
         if (p->mUnknown4 == -1) {
-            fn_8020F96C(p->mUnknown100, p->mUnknown152, -1, -1);
+            fn_8020F96C(&p->mUnknown100, p->mUnknown152, -1, -1);
         } else {
-            fn_8020F96C(p->mUnknown100, p->mUnknown152, 0, p->mUnknown4);
+            fn_8020F96C(&p->mUnknown100, p->mUnknown152, 0, p->mUnknown4);
         }
     }
 }
 
-void fn_80235510(Render_802353F8 *p, int mode)
+void fn_80235510(Object_80235588 *p, int mode)
 {
     int old = p->mUnknown4;
 
@@ -1817,20 +1817,20 @@ void fn_80235510(Render_802353F8 *p, int mode)
     if (old != mode) {
         fn_802144AC(p->mUnknown152);
         if (p->mUnknown4 == -1) {
-            fn_8020F96C(p->mUnknown100, p->mUnknown152, -1, -1);
+            fn_8020F96C(&p->mUnknown100, p->mUnknown152, -1, -1);
         } else {
-            fn_8020F96C(p->mUnknown100, p->mUnknown152, 0, p->mUnknown4);
+            fn_8020F96C(&p->mUnknown100, p->mUnknown152, 0, p->mUnknown4);
         }
     }
 }
 
-void fn_80235588(Render_802353F8 *p, int a)
+void fn_80235588(Object_80235588 *p, int a)
 {
     p->mUnknown0 = 0x4000;
     p->mUnknown4 = -1;
     p->mpUnknown88 = 0;
     p->mpUnknown84 = 0;
     p->mUnknown184 = 0;
-    fn_8020F28C(p->mUnknown100);
+    fn_8020F28C(&p->mUnknown100);
     fn_80210054(p->mUnknown92, 0);
 }
