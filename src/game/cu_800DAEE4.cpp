@@ -1078,7 +1078,7 @@ struct Table_800DE51C { char mUnknown0[4]; unsigned short mCount; char mUnknown6
 extern "C" {
 Table_80089904 *fn_801BE72C(unsigned short, unsigned short);
 void fn_800CEDA4(Entry_800DE51C *, Pair_802270A4 *, int *, Object_80039F5C *, int);
-void fn_800D8140(State_800D8140 *, Object_80039F5C *, unsigned char);
+void fn_800D8140(State_800D8140 *, Object_80039F5C *, int);
 void fn_800D81C8(State_800D8140 *, Object_80039F5C *);
 void fn_800D84DC(State_800D8140 *, Object_80039F5C *);
 float fn_80114EE4(Object_80039F5C *, Object_80039F5C *);
