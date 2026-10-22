@@ -60,7 +60,7 @@ extern int sprintf(char *pDst, const char *pFormat, ...);
 
 extern void *fn_801D28A8(int a, int size, int ident, int flags);
 extern void *fn_801D2E5C(int a, void *pAddr, int size, int ident, int flags);
-extern char *fn_801C3284(char *pDst, const char *pSrc);
+extern char *fn_801C3284(char *pDst, const char *pSrc, int size);
 extern int fn_801F7ABC(void);
 extern int fn_801D2130(MemHeapParams *pParams);
 extern int fn_801D2570(int ident);
@@ -910,7 +910,7 @@ void fn_801D342C(int ident)
     }
 }
 
-void fn_801D3470(void *pAddr, char *pOut)
+void fn_801D3470(void *pAddr, char *pOut, int size)
 {
     MemBlock_801D134C *pBlock = (MemBlock_801D134C *)((char *)pAddr - 0xC);
     char *pDebug;
@@ -921,6 +921,6 @@ void fn_801D3470(void *pAddr, char *pOut)
         pDebug = 0;
     }
     if (pDebug != 0) {
-        fn_801C3284(pOut, pDebug + 0x3C);
+        fn_801C3284(pOut, pDebug + 0x3C, size);
     }
 }

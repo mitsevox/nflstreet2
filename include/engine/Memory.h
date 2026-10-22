@@ -65,5 +65,6 @@ typedef struct MemHeap_801D134C {
 int fn_801D26C4(int ident, int flags, const char *pMessage);
 void *fn_801D2478(int ident, int parentIdent, char *pStart, unsigned int size, int dataSize,
                   MemHeapFuncs_801D134C *pFuncs);
+void fn_801D3470(void *pAddr, char *pOut, int size);
 
 #endif
