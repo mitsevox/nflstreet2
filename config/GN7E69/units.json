@@ -12087,25 +12087,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C0E04.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801C0E04-0x801C10E0 (src/engine/cu_801C0E04.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C0E04",
-          "end": "0x801C10E0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEF08",
-          "end": "0x802AEF10"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801C1F54.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x801C1F54-0x801C1F94 (src/engine/cu_801C1F54.c) and its data rows; every function exact, promoted from comparison-only.",
@@ -12145,44 +12126,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C33E8.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C33E8-0x801C3A44 (src/engine/cu_801C33E8.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C33E8",
-          "end": "0x801C3A44"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF0B8",
-          "end": "0x802AF0C4"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801C3CE8.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C3CE8-0x801C3EFC (src/engine/cu_801C3CE8.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C3CE8",
-          "end": "0x801C3EFC"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF0DC",
-          "end": "0x802AF0EC"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801C4F64.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x801C4F64-0x801C5008 (src/engine/cu_801C4F64.c) and its data rows; every function exact, promoted from comparison-only.",
@@ -12192,25 +12135,6 @@
           "placement": ".text",
           "start": "0x801C4F64",
           "end": "0x801C5008"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801C5B9C.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801C5B9C-0x801C6584 (src/engine/cu_801C5B9C.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C5B9C",
-          "end": "0x801C6584"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF168",
-          "end": "0x802AF184"
         }
       ]
     },
@@ -12267,25 +12191,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CEC90.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CEC90-0x801CEE54 (src/engine/cu_801CEC90.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CEC90",
-          "end": "0x801CEE54"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF4E8",
-          "end": "0x802AF4F8"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801CEF48.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x801CEF48-0x801CEFF0 (src/engine/cu_801CEF48.c) and its data rows; every function exact, promoted from comparison-only.",
@@ -12295,63 +12200,6 @@
           "placement": ".text",
           "start": "0x801CEF48",
           "end": "0x801CEFF0"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801CF7CC.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CF7CC-0x801CF944 (src/engine/cu_801CF7CC.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CF7CC",
-          "end": "0x801CF944"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF540",
-          "end": "0x802AF544"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801CFF34.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CFF34-0x801CFFD0 (src/engine/cu_801CFF34.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CFF34",
-          "end": "0x801CFFD0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF5D0",
-          "end": "0x802AF5E8"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801CFFD0.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x801CFFD0-0x801D0110 (src/engine/cu_801CFFD0.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CFFD0",
-          "end": "0x801D0110"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF5E8",
-          "end": "0x802AF5F8"
         }
       ]
     },
@@ -12655,25 +12503,6 @@
       ]
     },
     {
-      "source": "src/engine/tmrender.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80210298-0x80210D30 (src/engine/tmrender.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80210298",
-          "end": "0x80210D30"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1BF8",
-          "end": "0x802B1BFC"
-        }
-      ]
-    },
-    {
       "source": "src/engine/tmshader.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x80211638-0x80211774 (src/engine/tmshader.c) and its data rows; every function exact, promoted from comparison-only.",
@@ -12713,44 +12542,6 @@
       ]
     },
     {
-      "source": "src/engine/tmtexture.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80212234-0x802126C0 (src/engine/tmtexture.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80212234",
-          "end": "0x802126C0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1C10",
-          "end": "0x802B1C28"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/tmname.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x802126C0-0x802127D0 (src/engine/tmname.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802126C0",
-          "end": "0x802127D0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1C38",
-          "end": "0x802B1C3C"
-        }
-      ]
-    },
-    {
       "source": "src/engine/tmmemory.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x802127D0-0x8021283C (src/engine/tmmemory.c) and its data rows; every function exact, promoted from comparison-only.",
@@ -12786,25 +12577,6 @@
           "placement": ".text",
           "start": "0x80212CB4",
           "end": "0x80212D5C"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/tmshaderstock.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80212D5C-0x80213214 (src/engine/tmshaderstock.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80212D5C",
-          "end": "0x80213214"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1C3C",
-          "end": "0x802B1C44"
         }
       ]
     },
@@ -12900,25 +12672,6 @@
       ]
     },
     {
-      "source": "src/engine/tmblend.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80214718-0x80214D40 (src/engine/tmblend.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80214718",
-          "end": "0x80214D40"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1C98",
-          "end": "0x802B1C9C"
-        }
-      ]
-    },
-    {
       "source": "src/engine/tmblendchannel.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x80214D40-0x80214F58 (src/engine/tmblendchannel.c) and its data rows; every function exact, promoted from comparison-only.",
@@ -12928,25 +12681,6 @@
           "placement": ".text",
           "start": "0x80214D40",
           "end": "0x80214F58"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/tmblendop.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80214F58-0x80215804 (src/engine/tmblendop.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80214F58",
-          "end": "0x80215804"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1CA0",
-          "end": "0x802B1CB0"
         }
       ]
     },
