@@ -13,11 +13,11 @@ extern unsigned char *lbl_803ECF6C;
 extern unsigned int lbl_803ED5EC;
 extern unsigned char lbl_803EBD6C[8];
 
-void fn_801C1FBC();
+void *fn_801C1FBC();
 void *fn_801D2BB0(int heap, unsigned int size, int a, int b);
 int fn_801D2BD0(void *p);
-void fn_801D34D0(void *p, unsigned int size, int value, int flags);
-void fn_801F7BD4(int err);
+int fn_801D34D0(void *p, unsigned int size, int value, int flags);
+int fn_801F7BD4(int err);
 int fn_801F7C88(void);
 void fn_801F7FA8(Lock_801EC1B4 *pLock);
 void fn_801F8014(Lock_801EC1B4 *pLock);

@@ -25,8 +25,8 @@ extern unsigned char *lbl_803ED65C;
 
 void *fn_801D2BB0(int heap, unsigned int size, int a, int b);
 int fn_801D2BD0(void *p);
-void fn_801D34D0(void *p, unsigned int size, int value, int flags);
-void fn_801F7BD4(int err);
+int fn_801D34D0(void *p, unsigned int size, int value, int flags);
+int fn_801F7BD4(int err);
 int fn_801F7C88(void);
 void fn_801F7FA8(Lock_801F8014 *pLock);
 void fn_801F8014(Lock_801F8014 *pLock);

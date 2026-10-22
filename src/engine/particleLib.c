@@ -1,5 +1,6 @@
 #include <string.h>
 #include "engine/particleLib.h"
+#include "game/cu_801CF5BC.h"
 
 /* Collision parameters read by fn_801DF578. */
 typedef struct Collision_801DF578 {
@@ -90,11 +91,8 @@ extern unsigned char lbl_803EBD58;
 extern float lbl_803ECF4C;
 
 void *fn_801C0D8C(char *pName);
-void *fn_801CF5BC(int a, int b);
-int fn_801CF67C(void *p);
 float fn_801CF69C(void *p);
 int fn_801CF6D4(void *p, int range);
-int fn_801CF7AC(void);
 void fn_801D04C4(void);
 void fn_801D0508(void);
 void fn_801D0544(void);
@@ -105,20 +103,20 @@ void fn_801D0ADC(int a);
 void fn_801D0C58(float (*m)[4]);
 void fn_801D0F80(float (*m)[4]);
 void fn_801D2130(ObjType_801DE1E0 *pType);
-void fn_801D2570(int a);
+int fn_801D2570(int a);
 int fn_801D2730(void);
 unsigned int fn_801D27F4(int heap);
 void *fn_801D2B7C(int size, int a, int b);
-void *fn_801D2BB0(int heap, int size, int a, int b);
+void *fn_801D2BB0(int heap, unsigned int size, int a, int b);
 int fn_801D2BD0(void *p);
-int fn_801D34D0(void *p, int size, int value, int width);
-void fn_801DCF0C(unsigned char heap, int size, int count, void (*pAdd)(), void (*pDel)());
-void fn_801DCF8C(unsigned char heap);
+int fn_801D34D0(void *p, unsigned int size, int value, int flags);
+int fn_801DCF0C(unsigned char heap, int size, int count, void (*pAdd)(), void (*pDel)());
+int fn_801DCF8C(unsigned char heap);
 void *fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);
 void fn_801DD0C8(void *pList, unsigned char heap, int slot, void *pFunc);
 void fn_801DD0E8(void *pList);
 PartObj_801DE1E0 *fn_801DD168(unsigned char heap, int a, Template_801DE1E0 *pTemplate);
-void fn_801DD200(void *pList, void *pObj);
+int fn_801DD200(void *pList, void *pObj);
 void fn_801DF3E4(unsigned char *pSrc, unsigned char *pDst, unsigned int size, int noSwap);
 void fn_801DFE0C(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
 void fn_801E0384(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
@@ -127,7 +125,7 @@ void fn_801E043C(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle);
 Ramp_801E052C *fn_801E098C(Ramp_801E052C *pSrc, Ramp_801E052C *pDst);
 float fn_802270D4(float *pVec);
 void fn_80227264(Vec3_801DE1E0 *pDst, Vec3_801DE1E0 *pSrc, float scale);
-void fn_80227C2C(Vec3_801DE1E0 *pSrc, Vec3_801DE1E0 *pDst);
+void fn_80227C2C(Vec3_801DE1E0 *pDst, Vec3_801DE1E0 *pSrc);
 
 void fn_801DD730(PartObj_801DE1E0 *pObj, unsigned short count, int step, int steps, float dt);
 void fn_801DDFB0(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, float dt);

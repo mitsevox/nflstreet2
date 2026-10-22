@@ -16,7 +16,7 @@ extern unsigned char lbl_803ED6E0[3];
 double fabs(double x);
 float fn_80260B1C(float x);
 void fn_801CFC14(int angle, float *pSin, float *pCos);
-void fn_801D0F80(float m[4][4]);
+void fn_801D0F80(float (*m)[4]);
 float fn_801CFFA0(float x);
 int fn_801CFE40(float y, float x);
 void fn_801CFCD0(int *pAngles, float *pSin, float *pCos);

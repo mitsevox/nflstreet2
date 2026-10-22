@@ -14,9 +14,9 @@ typedef struct JoyData_801E1D44 {
 extern int lbl_8039ADE4[4];
 extern char lbl_803E92CC[0x30];
 
-void fn_801C1F94();
-void fn_801C1FBC();
-void fn_801D34D0(void *p, unsigned int size, int value, int flags);
+void *fn_801C1F94();
+void *fn_801C1FBC();
+int fn_801D34D0(void *p, unsigned int size, int value, int flags);
 int fn_8025D574(unsigned int port);
 void *fn_801E1D04(unsigned int port);
 unsigned long fn_801E194C(void);
