@@ -1,21 +1,11 @@
 #include "game/fn_801D2B7C.h"
-
-typedef struct LLTexture_8020E7EC {
-    unsigned short mWidth;
-    unsigned short mHeight;
-    unsigned char mWrapS;
-    unsigned char mWrapT;
-    unsigned char mMinFilter;
-    unsigned char mMagFilter;
-    unsigned int mFormat;
-    unsigned char *mpImage;
-} LLTexture_8020E7EC;
+#include "engine/tmlib.h"
 
 extern int lbl_803EBEBC;
 extern void fn_801D34D0(void *p, unsigned int size, int c, int d);
 extern void fn_80239CEC(void *p, unsigned int size);
 
-void fn_8020E7EC(LLTexture_8020E7EC *pTex)
+void fn_8020E7EC(Texture_8020DB34 *pTex)
 {
     int bpp;
     int size;

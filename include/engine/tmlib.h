@@ -7,11 +7,34 @@ typedef struct Pool_801C750C Pool_801C750C;
 
 #include "game/Object_8020E52C.h"
 
+typedef struct Texture_8020DB34 {
+    unsigned short mWidth;
+    unsigned short mHeight;
+    unsigned char mWrapS;
+    unsigned char mWrapT;
+    unsigned char mMinFilter;
+    unsigned char mMagFilter;
+    unsigned int mFormat;
+    void *mpImage;
+    int mUnknown10;
+    void *mpPalette;
+    int mUnknown18;
+    unsigned char mbDirty;
+} Texture_8020DB34;
+
+typedef struct TexInfo_8020E2B0 {
+    int mUnknown00;
+    unsigned char *mpData;
+} TexInfo_8020E2B0;
+
 typedef struct TexHeader_8020E2B0 {
     char maTag[4];
     unsigned short mVersion;
     unsigned short mFlags;
-    unsigned char maUnknown8[4];
+    unsigned char mWrapS;
+    unsigned char mWrapT;
+    unsigned char mMinFilter;
+    unsigned char mMagFilter;
     unsigned short mNumMaterials;
     unsigned short mNumTextures;
     unsigned short mNumPalettes;
@@ -19,7 +42,7 @@ typedef struct TexHeader_8020E2B0 {
     Object_8020E560 *mpTextures;
     Object_8020E5F8 *mpPalettes;
     char (*mpNames)[16];
-    struct TexExtra_8020E2B0 *mpExtra;
+    TexInfo_8020E2B0 *mpInfo;
 } TexHeader_8020E2B0;
 
 /* texture.c */
