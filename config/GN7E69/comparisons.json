@@ -42419,26 +42419,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C1D54.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801C1D54-0x801C1D84 (src/engine/cu_801C1D54.c, start of auxram.c), function row and compiler row engine_c_fastmath; the end edge 0x801C1D84 is provisional. Comparison only; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C1D54",
-          "end": "0x801C1D84"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801C1D54",
-          "start": "0x801C1D54",
-          "end": "0x801C1D84"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801AE3E4.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row 0x801AE3E4-0x801B2AD4 (src/engine/cu_801AE3E4.cpp), its compiler, source-form, type and external rows, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through neutral external labels.",
@@ -43268,38 +43248,28 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C1D84.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit mapping, complete function extent and scoped source-form/compiler/data rows. Complete native comparison only; original bytes remain linked.",
+      "source": "src/engine/cu_801C1D54.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801C1D54-0x801C1D98 (src/engine/cu_801C1D54.c, auxram.c), function rows and compiler rows engine_c_fastmath (0x801B9D00-0x801C1D84 and 0x801C1D84-0x801C1D98); the transfer functions 0x801C1D98-0x801C1F54 are not registered. Comparison only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801C2030",
-          "end": "0x801C20A0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801C2030",
-          "start": "0x801C2030",
-          "end": "0x801C20A0"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801C1D88.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C1D88-0x801C1D98 (src/engine/cu_801C1D88.c), its compiler row and exact function rows. Draft comparisons only; the counter word 0x803ECEC8 stays external; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C1D88",
+          "start": "0x801C1D54",
           "end": "0x801C1D98"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_801C1D54",
+          "start": "0x801C1D54",
+          "end": "0x801C1D84"
+        },
+        {
+          "symbol": "fn_801C1D84",
+          "start": "0x801C1D84",
+          "end": "0x801C1D88"
+        },
         {
           "symbol": "fn_801C1D88",
           "start": "0x801C1D88",
@@ -43310,13 +43280,13 @@
     {
       "source": "src/engine/cu_801C1F54.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C1F54-0x801C2030 (src/engine/cu_801C1F54.c), its compiler row and exact function rows. Draft comparisons only; the character-class table 0x802AEF10 stays external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801C1F54-0x801C1F94 (src/engine/cu_801C1F54.c, ctype.c), its compiler row and function rows; the character-class table 0x802AEF10 stays external. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801C1F54",
-          "end": "0x801C2030"
+          "end": "0x801C1F94"
         }
       ],
       "functions": [
@@ -43329,7 +43299,22 @@
           "symbol": "fn_801C1F74",
           "start": "0x801C1F74",
           "end": "0x801C1F94"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C1D84.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801C1F94-0x801C20A0 (src/engine/cu_801C1D84.c, memory.c), its compiler row and function rows and the memmove source-form row. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C1F94",
+          "end": "0x801C20A0"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801C1F94",
           "start": "0x801C1F94",
@@ -43344,18 +43329,43 @@
           "symbol": "fn_801C1FEC",
           "start": "0x801C1FEC",
           "end": "0x801C2030"
+        },
+        {
+          "symbol": "fn_801C2030",
+          "start": "0x801C2030",
+          "end": "0x801C20A0"
         }
       ]
     },
     {
       "source": "src/engine/cu_801C20A0.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C20A0-0x801C289C (src/engine/cu_801C20A0.c), its compiler row, function rows and the exact data row for its .rodata 0x802AF018-0x802AF050. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801C20A0-0x801C20F0 (src/engine/cu_801C20A0.c, varargs stub), its compiler row and function rows. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801C20A0",
+          "end": "0x801C20F0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801C20A0",
+          "start": "0x801C20A0",
+          "end": "0x801C20F0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C20F0.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801C20F0-0x801C289C (src/engine/cu_801C20F0.c, sprintf.c), its compiler row and function rows and the exact data row for its .rodata 0x802AF018-0x802AF050. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C20F0",
           "end": "0x801C289C"
         },
         {
@@ -43366,11 +43376,6 @@
         }
       ],
       "functions": [
-        {
-          "symbol": "fn_801C20A0",
-          "start": "0x801C20A0",
-          "end": "0x801C20F0"
-        },
         {
           "symbol": "fn_801C20F0",
           "start": "0x801C20F0",
@@ -43401,13 +43406,13 @@
     {
       "source": "src/engine/cu_801C2EB4.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C2EB4-0x801C33E8 (src/engine/cu_801C2EB4.c), its compiler row and exact function rows. Draft comparisons only; the character-class table 0x802AEF10 stays external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801C2EB4-0x801C333C (src/engine/cu_801C2EB4.c, string.c), its compiler row and function rows; the character-class table 0x802AEF10 stays external. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801C2EB4",
-          "end": "0x801C33E8"
+          "end": "0x801C333C"
         }
       ],
       "functions": [
@@ -43475,7 +43480,22 @@
           "symbol": "fn_801C32CC",
           "start": "0x801C32CC",
           "end": "0x801C333C"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C333C.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801C333C-0x801C33E8 (src/engine/cu_801C333C.c, strmath.c), its compiler row and function rows; the character-class table 0x802AEF10 stays external. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C333C",
+          "end": "0x801C33E8"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801C333C",
           "start": "0x801C333C",
@@ -43845,19 +43865,13 @@
     {
       "source": "src/engine/cu_801C4F64.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C4F64-0x801C53A8 (src/engine/cu_801C4F64.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF100-0x802AF130. Draft comparisons only; the init flag 0x803EBBE8, the error reporter and PolynomialCalculateRoots stay external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801C4F64-0x801C5008 (src/engine/cu_801C4F64.c, Curve.c), its compiler row and function rows. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801C4F64",
-          "end": "0x801C53A8"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF100",
-          "end": "0x802AF130"
+          "end": "0x801C5008"
         }
       ],
       "functions": [
@@ -43870,7 +43884,28 @@
           "symbol": "fn_801C4FB8",
           "start": "0x801C4FB8",
           "end": "0x801C5008"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C5008.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801C5008-0x801C53A8 (src/engine/cu_801C5008.c, CurveList.c), its compiler row and function rows, its type row and the exact data row for its .rodata 0x802AF100-0x802AF130. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C5008",
+          "end": "0x801C53A8"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF100",
+          "end": "0x802AF130"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801C5008",
           "start": "0x801C5008",
@@ -45439,13 +45474,13 @@
     {
       "source": "src/engine/cu_801CEC90.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CEC90-0x801CEF48 (src/engine/cu_801CEC90.c), its compiler row, exact function rows and the exact data row for its .rodata 0x802AF4E8-0x802AF4F8. Draft comparisons only; the bin list/current bin/mark words 0x803EBC90/0x803EBC98/0x803EBCA0/0x803EBCA4 and all SDK callees stay external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801CEC90-0x801CEE54 (src/engine/cu_801CEC90.c, llrender.c), its compiler row and function rows and the exact data row for its .rodata 0x802AF4E8-0x802AF4F8. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801CEC90",
-          "end": "0x801CEF48"
+          "end": "0x801CEE54"
         },
         {
           "section": ".rodata",
@@ -45494,7 +45529,22 @@
           "symbol": "fn_801CEE50",
           "start": "0x801CEE50",
           "end": "0x801CEE54"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801CEE54.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801CEE54-0x801CEF48 (src/engine/cu_801CEE54.c, llrenderbin.c), its compiler row and function rows. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CEE54",
+          "end": "0x801CEF48"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801CEE54",
           "start": "0x801CEE54",
@@ -45515,19 +45565,13 @@
     {
       "source": "src/engine/cu_801CEF48.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CEF48-0x801CF7CC (src/engine/cu_801CEF48.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF4F8-0x802AF540. Draft comparisons only; the initialised flag 0x803EBCB0, the per-generator tables in .data 0x802F7AD0-0x802F7B0C (init/reset/copy/next function pointers and the stream sizes 8/0x8C/0xF0) and all callees stay external, so the generator functions are emitted as globals; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801CEF48-0x801CEFF0 (src/engine/cu_801CEF48.c, maths.c), its compiler row and function rows; the initialised flag 0x803EBCB0 stays external. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801CEF48",
-          "end": "0x801CF7CC"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF4F8",
-          "end": "0x802AF540"
+          "end": "0x801CEFF0"
         }
       ],
       "functions": [
@@ -45540,7 +45584,28 @@
           "symbol": "fn_801CEFA0",
           "start": "0x801CEFA0",
           "end": "0x801CEFF0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801CEFF0.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801CEFF0-0x801CF7CC (src/engine/cu_801CEFF0.c, rand.c), its compiler row and function rows, its type row and the exact data row for its .rodata 0x802AF4F8-0x802AF540; the per-generator tables in .data 0x802F7AD0-0x802F7B0C (init/reset/copy/next function pointers and the stream sizes 8/0x8C/0xF0) and all callees stay external, so the generator functions are emitted as globals. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CEFF0",
+          "end": "0x801CF7CC"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF4F8",
+          "end": "0x802AF540"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801CEFF0",
           "start": "0x801CEFF0",
@@ -45682,19 +45747,19 @@
     {
       "source": "src/engine/cu_801CF98C.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CF98C-0x801CFC58 (src/engine/cu_801CF98C.c), its compiler row, exact function rows and the exact data row for its .rodata 0x802AF548-0x802AF5B0. Draft comparisons only; the coefficient array 0x803847A0, the sine table 0x803E9288, the paired-single helper 0x801CF944 and the libm callees (powf 0x80260428, sinf 0x802610B0, cosf 0x80260EE8 by address) stay external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801CF98C-0x801CFF34 (src/engine/cu_801CF98C.c, llangle.c), its compiler row and function rows and the exact data row for its .rodata 0x802AF548-0x802AF5D0; the paired-single assembly routine 0x801CFC58-0x801CFCCC is a gap of this comparison. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801CF98C",
-          "end": "0x801CFC58"
+          "end": "0x801CFF34"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802AF548",
-          "end": "0x802AF5B0"
+          "end": "0x802AF5D0"
         }
       ],
       "functions": [
@@ -45732,28 +45797,7 @@
           "symbol": "fn_801CFC14",
           "start": "0x801CFC14",
           "end": "0x801CFC58"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801CFCCC.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CFCCC-0x801D0110 (src/engine/cu_801CFCCC.c), its compiler row, exact function rows and the exact data row for its .rodata 0x802AF5B0-0x802AF5F8. Draft comparisons only; the arctangent coefficient table in .data 0x802F7B0C and the libm callees (by address) stay external; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CFCCC",
-          "end": "0x801D0110"
         },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF5B0",
-          "end": "0x802AF5F8"
-        }
-      ],
-      "functions": [
         {
           "symbol": "fn_801CFCCC",
           "start": "0x801CFCCC",
@@ -45793,7 +45837,28 @@
           "symbol": "fn_801CFE40",
           "start": "0x801CFE40",
           "end": "0x801CFF34"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801CFF34.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801CFF34-0x801CFFD0 (src/engine/cu_801CFF34.c, llmath.c), its compiler row and function rows and the exact data row for its .rodata 0x802AF5D0-0x802AF5E8. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CFF34",
+          "end": "0x801CFFD0"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF5D0",
+          "end": "0x802AF5E8"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801CFF34",
           "start": "0x801CFF34",
@@ -45808,7 +45873,28 @@
           "symbol": "fn_801CFFA0",
           "start": "0x801CFFA0",
           "end": "0x801CFFD0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801CFFD0.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801CFFD0-0x801D0110 (src/engine/cu_801CFFD0.c, angle.c), its compiler row and function rows and the exact data row for its .rodata 0x802AF5E8-0x802AF5F8. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CFFD0",
+          "end": "0x801D0110"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF5E8",
+          "end": "0x802AF5F8"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801CFFD0",
           "start": "0x801CFFD0",
@@ -45824,19 +45910,13 @@
     {
       "source": "src/engine/cu_801D0110.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801D0110-0x801D134C (src/engine/cu_801D0110.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF5F8-0x802AF624. Draft comparisons only; the stack table/count/current-stack words 0x803EBCB4-0x803EBCC0, the matrix slots 0x803847C0, the matrix-concatenate routine 0x8024AA18 and the vector/quaternion helpers stay external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801D0110-0x801D03D0 (src/engine/cu_801D0110.c, matrix.c), its compiler row and function rows and the type row of include/engine/cu_801D0110.h. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801D0110",
-          "end": "0x801D134C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF5F8",
-          "end": "0x802AF624"
+          "end": "0x801D03D0"
         }
       ],
       "functions": [
@@ -45869,7 +45949,28 @@
           "symbol": "fn_801D0370",
           "start": "0x801D0370",
           "end": "0x801D03D0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801D03D0.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801D03D0-0x801D134C (src/engine/cu_801D03D0.c, llmatrix.c), its compiler row and function rows and the exact data row for its .rodata 0x802AF5F8-0x802AF624. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D03D0",
+          "end": "0x801D134C"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF5F8",
+          "end": "0x802AF624"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801D03D0",
           "start": "0x801D03D0",

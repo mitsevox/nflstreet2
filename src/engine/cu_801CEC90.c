@@ -1,29 +1,10 @@
-/* Render bins: bin list registration, per-frame viewport setup and bin initialisation. */
+/* Render bins: bin list registration and per-frame viewport setup. */
 #include "engine/cu_801CE1F8.h"
-
-typedef struct RenderBin_801CEC90 {
-    unsigned char mUnk0[0x24];
-    unsigned char mActive;
-    int mUnk28;
-    int mUnk2C;
-    int mUnk30;
-    struct RenderBin_801CEC90 *mpNext;
-    int mUnk38;
-    int mUnk3C;
-    void *mpMark;
-    int mUnk44;
-    int mUnk48;
-    unsigned char mUnk4C[0x30];
-} RenderBin_801CEC90;
+#include "engine/cu_801CEC90.h"
 
 typedef struct RenderMark_801CEC90 {
     int mWords[4];
 } RenderMark_801CEC90;
-
-typedef struct Chunk_801CEC90 {
-    int mType;
-    int mSize;
-} Chunk_801CEC90;
 
 extern RenderBin_801CEC90 *lbl_803EBC90;
 extern RenderMark_801CEC90 *lbl_803EBC98;
@@ -98,46 +79,4 @@ void fn_801CED3C(GlibState_801CE1F8 *pMode)
 
 void fn_801CEE50(void)
 {
-}
-
-static void fn_801CEE54(RenderBin_801CEC90 *pBin)
-{
-    pBin->mUnk28 = 0;
-    pBin->mUnk30 = 0;
-    pBin->mpNext = 0;
-    pBin->mpMark = 0;
-    pBin->mUnk38 = 0;
-    pBin->mUnk44 = 0;
-    pBin->mUnk3C = 0;
-    pBin->mUnk48 = 0;
-    pBin->mActive = 1;
-}
-
-void fn_801CEE84(RenderBin_801CEC90 *pBins, unsigned int numBins)
-{
-    unsigned int i;
-
-    for (i = 0; i < numBins; i++) {
-        fn_801CEE54(&pBins[i]);
-        pBins[i].mpNext = &pBins[i + 1];
-    }
-    pBins[i - 1].mpNext = 0;
-}
-
-Chunk_801CEC90 *fn_801CEEF4(Chunk_801CEC90 *pChunk, int type, int endType, int index)
-{
-    int count = 0;
-    Chunk_801CEC90 *pFound = 0;
-
-    while (pChunk->mType != endType) {
-        if (pChunk->mType == type) {
-            if (count == index) {
-                pFound = pChunk;
-                break;
-            }
-            count++;
-        }
-        pChunk = (Chunk_801CEC90 *)((char *)pChunk + pChunk->mSize);
-    }
-    return pFound;
 }
