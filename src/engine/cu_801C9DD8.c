@@ -1,3 +1,11 @@
+#include <dolphin/gx/GXManage.h>
+#include <dolphin/pad.h>
+#include <dolphin/dvd.h>
+#include <dolphin/gx/GXCull.h>
+#include <dolphin/gx/GXGeometry.h>
+#include <dolphin/gx/GXLighting.h>
+#include <dolphin/gx/GXTev.h>
+#include <dolphin/gx/GXTransform.h>
 #include <dolphin/gx/GXStruct.h>
 #include "engine/cu_801C665C.h"
 #include "engine/cu_801C8F14.h"
@@ -13,6 +21,10 @@ typedef struct FontPos_801C9DD8 {
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
+#include "engine/cu_801C2EB4.h"
+#include "engine/cu_801CE1F8.h"
+#include "engine/cu_801D03D0.h"
+#include "engine/cu_80227F14.h"
 
 extern FileEntry_801C8F14 *lbl_803EBC24;
 extern Lock_801F8014 *lbl_803EBC28;
@@ -35,8 +47,6 @@ extern unsigned char lbl_802F4AC0[];
 void fn_801F8768(void);
 int fn_801F7ABC(void);
 void fn_801F7AD4(int level);
-char *fn_801C2EB4(char *pDest, const char *pSource);
-int fn_801C3180(const char *pString);
 void fn_801C92B8(char *pDst, const char *pPath, const char *pName, int flags);
 FileDevTable_801C8F14 *fn_801C9D64(void);
 int fn_801CB2E0(int unused, int numFiles, int unused2, void (*pReadDone)(int));
@@ -63,37 +73,11 @@ int fn_801CBC40(int handle, int offset, int whence);
 int fn_801CBC48(int handle);
 void fn_801CEA7C(unsigned char clear);
 void fn_801CE908(unsigned char enable);
-void fn_801CE2B8(int enable);
 void fn_801CE82C(void);
-void fn_801D0470(unsigned int index);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D0D94(float x, float y, float z);
-int fn_80228668(void);
-int fn_8024151C(void);
-void fn_8024E450(void);
-void fn_802476F8(int a, int b);
 void fn_8024A9EC(float (*pMtx)[4]);
-void fn_802523A4(float (*pMtx)[4], int a);
-void fn_8025251C(float (*pMtx)[4], int a);
-void fn_8025256C(float (*pMtx)[4], int a);
-void fn_802525BC(int a);
-void fn_802525F0(float (*pMtx)[4], int a, int b);
-void fn_8025278C(float x, float y, float w, float h, float n, float f);
-void fn_8024EB6C(int a);
-void fn_8024EB28(int a);
-void fn_802527F8(int x, int y, int w, int h);
-void fn_8024FC48(int a);
-void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_8024FA68(int a, GXColor color);
-void fn_8024FB58(int a, GXColor color);
-void fn_8024D418(void);
-void fn_8024CB90(int a, int b);
-void fn_8024D450(int a, int b, int c, int d, int e);
-void fn_8024DF64(int a);
-void fn_80251CC4(int a);
+void fn_802523A4(float (*pMtx)[4], int type);
 
-int fn_801CA180(int devType);
+static int fn_801CA180(int devType);
 int fn_801CA530(int handle, int pos, void *pBuffer, int size);
 int fn_801CA648(int handle, int pos, void *pBuffer, int size);
 int fn_801CA504(const char *pName);
@@ -215,7 +199,7 @@ static int fn_801CA020(FileAsync_801C8F14 *pAsync)
     return result;
 }
 
-int fn_801CA180(int devType)
+static int fn_801CA180(int devType)
 {
     int found = 0;
     FileAsync_801C8F14 *pAsync;
@@ -519,40 +503,40 @@ void fn_801CAB30(void)
     int current;
     int level;
 
-    status = fn_8024151C();
+    status = DVDGetDriveStatus();
     if ((unsigned int)(status - 4) <= 2 || status == 11 || status == -1) {
         level = fn_801F7ABC();
-        fn_8024E450();
-        fn_802476F8(0, 2);
-        fn_802476F8(1, 2);
-        fn_802476F8(2, 2);
-        fn_802476F8(3, 2);
+        GXDrawDone();
+        PADControlMotor(0, 2);
+        PADControlMotor(1, 2);
+        PADControlMotor(2, 2);
+        PADControlMotor(3, 2);
         fn_8024A9EC(mtx);
         fn_802523A4(mtx, 0);
-        fn_8025251C(mtx, 0);
-        fn_8025256C(mtx, 0);
-        fn_802525BC(0);
-        fn_802525F0(mtx, 0x3C, 0);
-        fn_8025278C(0.0f, 0.0f, 640.0f, 448.0f, 0.0f, 1.0f);
-        fn_8024EB6C(0);
-        fn_8024EB28(0);
-        fn_802527F8(0, 0, 640, 448);
-        fn_8024FC48(0);
-        fn_8024FC84(4, 0, 0, 1, 0, 0, 2);
-        fn_8024FA68(4, black);
-        fn_8024FB58(4, white);
-        fn_8024FC84(5, 0, 0, 1, 0, 0, 2);
-        fn_8024FA68(5, black);
-        fn_8024FB58(5, white);
-        fn_8024D418();
-        fn_8024CB90(9, 1);
-        fn_8024CB90(11, 1);
-        fn_8024CB90(13, 1);
-        fn_8024D450(0, 9, 1, 4, 0);
-        fn_8024D450(0, 11, 1, 5, 0);
-        fn_8024D450(0, 13, 1, 4, 0);
-        fn_8024DF64(0);
-        fn_80251CC4(1);
+        GXLoadPosMtxImm(mtx, 0);
+        GXLoadNrmMtxImm(mtx, 0);
+        GXSetCurrentMtx(0);
+        GXLoadTexMtxImm(mtx, 0x3C, 0);
+        GXSetViewport(0.0f, 0.0f, 640.0f, 448.0f, 0.0f, 1.0f);
+        GXSetCoPlanar(0);
+        GXSetCullMode(0);
+        GXSetScissor(0, 0, 640, 448);
+        GXSetNumChans(0);
+        GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
+        GXSetChanAmbColor(4, black);
+        GXSetChanMatColor(4, white);
+        GXSetChanCtrl(5, 0, 0, 1, 0, 0, 2);
+        GXSetChanAmbColor(5, black);
+        GXSetChanMatColor(5, white);
+        GXClearVtxDesc();
+        GXSetVtxDesc(9, 1);
+        GXSetVtxDesc(11, 1);
+        GXSetVtxDesc(13, 1);
+        GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+        GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+        GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+        GXSetNumTexGens(0);
+        GXSetNumTevStages(1);
         fn_801CEA7C(1);
         fn_801CE908(0);
         fn_801CE2B8(0);
@@ -563,7 +547,7 @@ void fn_801CAB30(void)
             if (status != -1) {
                 fn_801F8768();
             }
-            current = fn_8024151C();
+            current = DVDGetDriveStatus();
             fn_801CD2A4();
             fn_801CD308(0, lbl_802F4A74);
             fn_801CDD18();

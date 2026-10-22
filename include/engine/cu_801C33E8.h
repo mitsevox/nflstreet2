@@ -1,23 +1,13 @@
 #ifndef ENGINE_CU_801C33E8_H
 #define ENGINE_CU_801C33E8_H
 
-typedef struct CamViewport_801C33E8 {
-    unsigned char mUnk0[0xE8];
-    float mNear;
-    float mFar;
-} CamViewport_801C33E8;
+#include "game/CameraHeader_8013F628.h"
+#include "game/Object_80228224.h"
 
 /* Common camera header; each camera type extends it. */
 typedef struct Cam_801C33E8 {
-    unsigned char mUnk0;
-    unsigned char mType;
-    unsigned char mUnk2[2];
-    float mPos[3];
-    unsigned char mUnk10[4];
-    int mAngle[3];
-    float mFov;
-    float mAspect;
-    CamViewport_801C33E8 *mpViewport;
+    CameraHeader_8013F628 mHeader;
+    Object_80228224 *mpViewport;
 } Cam_801C33E8;
 
 int fn_801C370C(int *pAngle, int *pSpeed, int dest, int maxSpeed, int accel);

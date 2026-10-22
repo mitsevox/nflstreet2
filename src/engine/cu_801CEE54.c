@@ -6,7 +6,7 @@ typedef struct Chunk_801CEE54 {
     int mSize;
 } Chunk_801CEE54;
 
-static void fn_801CEE54(RenderBin_801CEC90 *pBin)
+void fn_801CEE54(RenderBin_801CEC90 *pBin)
 {
     pBin->mUnk28 = 0;
     pBin->mUnk30 = 0;

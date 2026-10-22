@@ -1,3 +1,5 @@
+#include "engine/cu_801C1F54.h"
+
 extern const unsigned char lbl_802AEF10[];
 
 #define CTYPE(c) ((lbl_802AEF10 + 1)[(unsigned char)(c)])

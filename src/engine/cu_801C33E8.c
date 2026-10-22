@@ -1,12 +1,15 @@
 /* Camera manager: typed cameras in an object pool, attached to viewports, with angle and value easing helpers. */
 
 #include "engine/cu_801C33E8.h"
+#include "engine/cu_80227F14.h"
 #include "engine/fn_801F7BD4.h"
+#include "game/fn_801C3660.h"
+#include "engine/cu_801D03D0.h"
 
 typedef struct CamFuncs_801C33E8 {
     void (*mpAdd)(Cam_801C33E8 *pCam);
     void (*mpDelete)(Cam_801C33E8 *pCam);
-    void (*mpProcess)(CamViewport_801C33E8 *pViewport, Cam_801C33E8 *pCam);
+    void (*mpProcess)(Object_80228224 *pViewport, Cam_801C33E8 *pCam);
 } CamFuncs_801C33E8;
 
 typedef struct CamType_801C33E8 {
@@ -21,22 +24,10 @@ extern unsigned char lbl_803ECECD;
 extern CamType_801C33E8 *lbl_803ECED0;
 extern float lbl_803ECED4;
 
-void fn_801D0470(unsigned int index);
-void fn_801D0494(void);
-void fn_801D08FC(int angle);
-void fn_801D09EC(int angle);
-void fn_801D0ADC(int angle);
-void fn_801D0C58(float *pPos);
 int fn_801DCF0C(int type, unsigned int size, int count, void (*pAdd)(Cam_801C33E8 *), void (*pDelete)(Cam_801C33E8 *));
 int fn_801DCF8C(int type);
 Cam_801C33E8 *fn_801DD168(int type, int a, int b);
 void fn_801DD2B8(Cam_801C33E8 *pCam);
-int fn_80228668(void);
-void fn_802286A8(CamViewport_801C33E8 *pViewport, void (*fn)(CamViewport_801C33E8 *, Cam_801C33E8 *), void *arg);
-Cam_801C33E8 *fn_802286B4(CamViewport_801C33E8 *pViewport);
-void fn_802286BC(CamViewport_801C33E8 *pViewport);
-void fn_802286D8(CamViewport_801C33E8 *pViewport, float fovy, float aspect, float n, float f);
-void fn_80228780(CamViewport_801C33E8 *pViewport, float scale);
 
 void fn_801C3990(Cam_801C33E8 *pCam, float fov, float aspect);
 
@@ -47,23 +38,25 @@ static inline int fn_801C33E8_Mul(int a, int b)
 
 static void fn_801C33E8(Cam_801C33E8 *pCam)
 {
-    lbl_803ECED0[pCam->mType].mpFuncs->mpAdd(pCam);
-    pCam->mFov = 45.0f;
-    pCam->mAspect = lbl_803ECED4;
+    lbl_803ECED0[pCam->mHeader.mType].mpFuncs->mpAdd(pCam);
+    pCam->mHeader.mUnknown20 = 45.0f;
+    pCam->mHeader.mUnknown24 = lbl_803ECED4;
     pCam->mpViewport = 0;
 }
 
 static void fn_801C3448(Cam_801C33E8 *pCam)
 {
-    lbl_803ECED0[pCam->mType].mpFuncs->mpDelete(pCam);
+    lbl_803ECED0[pCam->mHeader.mType].mpFuncs->mpDelete(pCam);
 }
 
-static void fn_801C3480(CamViewport_801C33E8 *pViewport, Cam_801C33E8 *pCam)
+static void fn_801C3480(Object_80228224 *pViewport, void *pArg)
 {
-    if (lbl_803ECED0[pCam->mType].mpPreProcess) {
-        lbl_803ECED0[pCam->mType].mpPreProcess(pCam);
+    Cam_801C33E8 *pCam = pArg;
+
+    if (lbl_803ECED0[pCam->mHeader.mType].mpPreProcess) {
+        lbl_803ECED0[pCam->mHeader.mType].mpPreProcess(pCam);
     }
-    lbl_803ECED0[pCam->mType].mpFuncs->mpProcess(pViewport, pCam);
+    lbl_803ECED0[pCam->mHeader.mType].mpFuncs->mpProcess(pViewport, pCam);
 }
 
 int fn_801C34F8(int count, int numTypes, CamType_801C33E8 *pTypes, int type)
@@ -115,14 +108,16 @@ void fn_801C3640(Cam_801C33E8 *pCam)
     fn_801DD2B8(pCam);
 }
 
-void fn_801C3660(CamViewport_801C33E8 *pViewport, Cam_801C33E8 *pCam)
+void fn_801C3660(Object_80228224 *pViewport, void *pArg)
 {
+    Cam_801C33E8 *pCam = pArg;
+
     fn_802286A8(pViewport, fn_801C3480, pCam);
     pCam->mpViewport = pViewport;
-    fn_801C3990(pCam, pCam->mFov, pCam->mAspect);
+    fn_801C3990(pCam, pCam->mHeader.mUnknown20, pCam->mHeader.mUnknown24);
 }
 
-void fn_801C36B0(CamViewport_801C33E8 *pViewport, Cam_801C33E8 *pCam)
+void fn_801C36B0(Object_80228224 *pViewport, Cam_801C33E8 *pCam)
 {
     if (pCam || (pCam = fn_802286B4(pViewport))) {
         if (pCam == fn_802286B4(pViewport)) {
@@ -217,28 +212,28 @@ void fn_801C3918(void *pUnused, Cam_801C33E8 *pCam)
 
     fn_801D0470(fn_80228668());
     fn_801D0494();
-    fn_801D08FC(pCam->mAngle[0]);
-    fn_801D09EC(pCam->mAngle[1]);
-    fn_801D0ADC(pCam->mAngle[2]);
-    pos[0] = -pCam->mPos[0];
-    pos[1] = -pCam->mPos[1];
-    pos[2] = -pCam->mPos[2];
+    fn_801D08FC(pCam->mHeader.mUnknown14[0]);
+    fn_801D09EC(pCam->mHeader.mUnknown14[1]);
+    fn_801D0ADC(pCam->mHeader.mUnknown14[2]);
+    pos[0] = -pCam->mHeader.mUnknown04[0];
+    pos[1] = -pCam->mHeader.mUnknown04[1];
+    pos[2] = -pCam->mHeader.mUnknown04[2];
     fn_801D0C58(pos);
 }
 
 void fn_801C3990(Cam_801C33E8 *pCam, float fov, float aspect)
 {
-    pCam->mFov = fov;
-    pCam->mAspect = aspect;
+    pCam->mHeader.mUnknown20 = fov;
+    pCam->mHeader.mUnknown24 = aspect;
     if (pCam->mpViewport) {
-        fn_802286D8(pCam->mpViewport, fov, aspect, pCam->mpViewport->mNear, pCam->mpViewport->mFar);
+        fn_802286D8(pCam->mpViewport, fov, aspect, pCam->mpViewport->mUnknown232, pCam->mpViewport->mUnknown236);
     }
 }
 
 void fn_801C39D0(Cam_801C33E8 *pCam, float n)
 {
     if (pCam->mpViewport) {
-        fn_802286D8(pCam->mpViewport, pCam->mFov, pCam->mAspect, n, pCam->mpViewport->mFar);
+        fn_802286D8(pCam->mpViewport, pCam->mHeader.mUnknown20, pCam->mHeader.mUnknown24, n, pCam->mpViewport->mUnknown236);
     }
 }
 

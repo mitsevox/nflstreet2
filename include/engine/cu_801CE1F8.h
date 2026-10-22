@@ -18,19 +18,7 @@ typedef struct GlibConfig_801CE1F8 {
 
 /* Video render mode (the GX layout, 0x3C bytes) followed by the FIFO and frame-buffer state. */
 typedef struct GlibState_801CE1F8 {
-    unsigned int mViTvMode;
-    unsigned short mFbWidth;
-    unsigned short mEfbHeight;
-    unsigned short mXfbHeight;
-    unsigned short mViXOrigin;
-    unsigned short mViYOrigin;
-    unsigned short mViWidth;
-    unsigned short mViHeight;
-    unsigned int mXfbMode;
-    unsigned char mFieldRendering;
-    unsigned char mAa;
-    unsigned char mSamplePattern[12][2];
-    unsigned char mVFilter[7];
+    GXRenderModeObj mMode;
     int mFifoSize;
     void *mpFifo;
     void *mpFifoBuffer;
@@ -40,5 +28,15 @@ typedef struct GlibState_801CE1F8 {
     short mLog2Height;
     unsigned char mFrame;
 } GlibState_801CE1F8;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void fn_801CE2B8(int enable);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

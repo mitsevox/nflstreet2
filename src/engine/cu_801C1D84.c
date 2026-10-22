@@ -1,4 +1,5 @@
 #include "unresolved.h"
+#include "game/fn_801C1F94.h"
 
 void *fn_801C1F94(void *pDst, int value, int size)
 {

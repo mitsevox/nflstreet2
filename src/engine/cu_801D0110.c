@@ -3,19 +3,17 @@
 #include "engine/cu_801D0110.h"
 #include "engine/fn_801F7BD4.h"
 #include "game/fn_801D2B7C.h"
+#include "engine/cu_801D03D0.h"
 
 extern unsigned char lbl_803EBCB4;
 extern MatStack_801D0110 *lbl_803EBCB8;
 extern unsigned int lbl_803EBCBC;
 
-void fn_802277DC(float *pDst, float *pA, float *pB);
-void fn_802271F0(float *pDst, float *pSrc);
+void fn_802277DC(float *pOut, float *pA, float *pB);
+void fn_802271F0(float *pOut, float *p);
 int fn_80227040(float *pA, float *pB);
 
 int fn_801D0310(unsigned int index);
-void fn_801D03D0(float *pMatrix);
-void fn_801D070C(void);
-void fn_801D0710(float *pAxis, int angle);
 
 MatStack_801D0110 *fn_801D0110(unsigned int index)
 {

@@ -1,5 +1,7 @@
 /* Random-number streams (linear congruential, shuffled minimal-standard and subtractive generators). */
 
+#include <dolphin/os.h>
+#include "game/cu_801CF5BC.h"
 #include "game/fn_801D2B7C.h"
 
 typedef struct RandStream_801CEFF0 {
@@ -31,13 +33,12 @@ extern int (*lbl_802F7AE8[])(RandStream_801CEFF0 *pDst, RandStream_801CEFF0 *pSr
 extern float (*lbl_802F7AF4[])(RandStream_801CEFF0 *pStream);
 extern int lbl_802F7B00[];
 
-int fn_8023E7AC(void);
 
-void fn_801CF040(RandFast_801CEFF0 *pStream, unsigned int seed);
-void fn_801CF12C(RandSlow_801CEFF0 *pStream, int seed);
-void fn_801CF358(RandSub_801CEFF0 *pStream, int seed);
+static void fn_801CF040(RandFast_801CEFF0 *pStream, unsigned int seed);
+static void fn_801CF12C(RandSlow_801CEFF0 *pStream, int seed);
+static void fn_801CF358(RandSub_801CEFF0 *pStream, int seed);
 
-RandFast_801CEFF0 *fn_801CEFF0(unsigned int seed)
+static RandFast_801CEFF0 *fn_801CEFF0(unsigned int seed)
 {
     RandFast_801CEFF0 *pStream = fn_801D2B7C(sizeof(RandFast_801CEFF0), 0, 0);
 
@@ -47,12 +48,12 @@ RandFast_801CEFF0 *fn_801CEFF0(unsigned int seed)
     return pStream;
 }
 
-void fn_801CF040(RandFast_801CEFF0 *pStream, unsigned int seed)
+static void fn_801CF040(RandFast_801CEFF0 *pStream, unsigned int seed)
 {
     pStream->mSeed = seed;
 }
 
-int fn_801CF048(RandFast_801CEFF0 *pDst, RandFast_801CEFF0 *pSrc)
+static int fn_801CF048(RandFast_801CEFF0 *pDst, RandFast_801CEFF0 *pSrc)
 {
     int result = 0x40003;
 
@@ -63,7 +64,7 @@ int fn_801CF048(RandFast_801CEFF0 *pDst, RandFast_801CEFF0 *pSrc)
     return result;
 }
 
-float fn_801CF074(RandFast_801CEFF0 *pStream)
+static float fn_801CF074(RandFast_801CEFF0 *pStream)
 {
     float value;
 
@@ -75,7 +76,7 @@ float fn_801CF074(RandFast_801CEFF0 *pStream)
     return value;
 }
 
-RandSlow_801CEFF0 *fn_801CF0DC(int seed)
+static RandSlow_801CEFF0 *fn_801CF0DC(int seed)
 {
     RandSlow_801CEFF0 *pStream = fn_801D2B7C(sizeof(RandSlow_801CEFF0), 0, 0);
 
@@ -85,7 +86,7 @@ RandSlow_801CEFF0 *fn_801CF0DC(int seed)
     return pStream;
 }
 
-void fn_801CF12C(RandSlow_801CEFF0 *pStream, int seed)
+static void fn_801CF12C(RandSlow_801CEFF0 *pStream, int seed)
 {
     int i;
     int k;
@@ -106,7 +107,7 @@ void fn_801CF12C(RandSlow_801CEFF0 *pStream, int seed)
     pStream->mY = pStream->mTable[0];
 }
 
-int fn_801CF1B0(RandSlow_801CEFF0 *pDst, RandSlow_801CEFF0 *pSrc)
+static int fn_801CF1B0(RandSlow_801CEFF0 *pDst, RandSlow_801CEFF0 *pSrc)
 {
     int result = 0x40003;
 
@@ -117,7 +118,7 @@ int fn_801CF1B0(RandSlow_801CEFF0 *pDst, RandSlow_801CEFF0 *pSrc)
     return result;
 }
 
-float fn_801CF240(RandSlow_801CEFF0 *pStream)
+static float fn_801CF240(RandSlow_801CEFF0 *pStream)
 {
     int seed = pStream->mSeed;
     int k;
@@ -140,7 +141,7 @@ float fn_801CF240(RandSlow_801CEFF0 *pStream)
     return value;
 }
 
-RandSub_801CEFF0 *fn_801CF308(int seed)
+static RandSub_801CEFF0 *fn_801CF308(int seed)
 {
     RandSub_801CEFF0 *pStream = fn_801D2B7C(sizeof(RandSub_801CEFF0), 0, 0);
 
@@ -150,7 +151,7 @@ RandSub_801CEFF0 *fn_801CF308(int seed)
     return pStream;
 }
 
-void fn_801CF358(RandSub_801CEFF0 *pStream, int seed)
+static void fn_801CF358(RandSub_801CEFF0 *pStream, int seed)
 {
     int mj;
     int mk;
@@ -187,7 +188,7 @@ void fn_801CF358(RandSub_801CEFF0 *pStream, int seed)
     pStream->mInit = 1;
 }
 
-int fn_801CF498(RandSub_801CEFF0 *pDst, RandSub_801CEFF0 *pSrc)
+static int fn_801CF498(RandSub_801CEFF0 *pDst, RandSub_801CEFF0 *pSrc)
 {
     int result = 0x40003;
 
@@ -198,7 +199,7 @@ int fn_801CF498(RandSub_801CEFF0 *pDst, RandSub_801CEFF0 *pSrc)
     return result;
 }
 
-float fn_801CF504(RandSub_801CEFF0 *pStream)
+static float fn_801CF504(RandSub_801CEFF0 *pStream)
 {
     int mj;
     float value;
@@ -221,7 +222,7 @@ float fn_801CF504(RandSub_801CEFF0 *pStream)
     return value;
 }
 
-RandStream_801CEFF0 *fn_801CF5BC(int type, int seed)
+void *fn_801CF5BC(int type, int seed)
 {
     RandStream_801CEFF0 *pStream = lbl_802F7AD0[type](seed);
 
@@ -247,7 +248,7 @@ int fn_801CF664(RandStream_801CEFF0 *pStream)
     return lbl_802F7B00[pStream->mType];
 }
 
-int fn_801CF67C(RandStream_801CEFF0 *pStream)
+int fn_801CF67C(void *pStream)
 {
     return fn_801D2BD0(pStream);
 }
@@ -269,5 +270,5 @@ unsigned int fn_801CF6D4(RandStream_801CEFF0 *pStream, unsigned int range)
 
 int fn_801CF7AC(void)
 {
-    return fn_8023E7AC();
+    return OSGetTick();
 }

@@ -1,4 +1,8 @@
 /* Render bins: bin list registration and per-frame viewport setup. */
+#include <dolphin/gx/GXGeometry.h>
+#include <dolphin/gx/GXTexture.h>
+#include <dolphin/gx/GXTransform.h>
+#include <dolphin/vi/vifuncs.h>
 #include "engine/cu_801CE1F8.h"
 #include "engine/cu_801CEC90.h"
 
@@ -11,11 +15,6 @@ extern RenderMark_801CEC90 *lbl_803EBC98;
 extern RenderBin_801CEC90 *lbl_803EBCA0;
 extern int lbl_803EBCA4;
 
-void fn_8024DCD4(void);
-void fn_8025089C(void);
-int fn_80244AC4(void);
-void fn_80252734(float left, float top, float width, float height, float nearZ, float farZ, int field);
-void fn_8025278C(float left, float top, float width, float height, float nearZ, float farZ);
 
 void fn_801CEE50(void);
 
@@ -66,15 +65,15 @@ void fn_801CED3C(GlibState_801CE1F8 *pMode)
     float width;
     float height;
 
-    fn_8025089C();
-    if (pMode->mFieldRendering) {
-        width = (unsigned int)pMode->mFbWidth;
-        height = (unsigned int)pMode->mXfbHeight;
-        fn_80252734(0.0f, 0.0f, width, height, 0.0f, 1.0f, fn_80244AC4());
+    GXInvalidateTexAll();
+    if (pMode->mMode.field_rendering) {
+        width = (unsigned int)pMode->mMode.fbWidth;
+        height = (unsigned int)pMode->mMode.xfbHeight;
+        GXSetViewportJitter(0.0f, 0.0f, width, height, 0.0f, 1.0f, VIGetNextField());
     } else {
-        fn_8025278C(0.0f, 0.0f, (unsigned int)pMode->mFbWidth, (unsigned int)pMode->mXfbHeight, 0.0f, 1.0f);
+        GXSetViewport(0.0f, 0.0f, (unsigned int)pMode->mMode.fbWidth, (unsigned int)pMode->mMode.xfbHeight, 0.0f, 1.0f);
     }
-    fn_8024DCD4();
+    GXInvalidateVtxCache();
 }
 
 void fn_801CEE50(void)

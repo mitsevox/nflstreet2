@@ -1,8 +1,9 @@
 /* The integer, float, scientific, hex and string field writers used by vsnprintf. */
 
-int fn_801C3180(const char *pString);
+#include "engine/cu_801C2EB4.h"
 
-char *fn_801C20F0(unsigned int value, char *pOut, char *pEnd, char pad, int width, int isSigned)
+
+static char *fn_801C20F0(unsigned int value, char *pOut, char *pEnd, char pad, int width, int isSigned)
 {
     char buf[16];
     int count = 0;
@@ -33,7 +34,7 @@ char *fn_801C20F0(unsigned int value, char *pOut, char *pEnd, char pad, int widt
     return pOut;
 }
 
-char *fn_801C21D0(float value, char *pOut, char *pEnd, int width, int precision)
+static char *fn_801C21D0(float value, char *pOut, char *pEnd, int width, int precision)
 {
     char buf[64];
     int count = 0;
@@ -87,7 +88,7 @@ char *fn_801C21D0(float value, char *pOut, char *pEnd, int width, int precision)
     return pOut;
 }
 
-char *fn_801C2428(float value, char *pOut, char *pEnd, int width, int precision, int caseOffset, int isExponent)
+static char *fn_801C2428(float value, char *pOut, char *pEnd, int width, int precision, int caseOffset, int isExponent)
 {
     int exponent = 0;
     int negative;
@@ -169,7 +170,7 @@ char *fn_801C2428(float value, char *pOut, char *pEnd, int width, int precision,
     return pOut;
 }
 
-char *fn_801C2728(unsigned int value, char *pOut, char *pEnd, int width, char pad, int caseOffset)
+static char *fn_801C2728(unsigned int value, char *pOut, char *pEnd, int width, char pad, int caseOffset)
 {
     char buf[16];
     int count = 0;
@@ -195,7 +196,7 @@ char *fn_801C2728(unsigned int value, char *pOut, char *pEnd, int width, char pa
     return pOut;
 }
 
-char *fn_801C27D0(const char *pString, char *pOut, char *pEnd, int width, int precision, int leftAlign)
+static char *fn_801C27D0(const char *pString, char *pOut, char *pEnd, int width, int precision, int leftAlign)
 {
     int count = 0;
     int length;

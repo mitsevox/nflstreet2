@@ -1,6 +1,8 @@
 /* Focus camera: orbits a target point at an eased distance and eased angles. */
 
 #include "engine/cu_801C33E8.h"
+#include "engine/cu_801D03D0.h"
+#include "engine/cu_80227F14.h"
 
 typedef struct CamFocus_801C3A44 {
     Cam_801C33E8 mCam;
@@ -18,14 +20,7 @@ typedef struct CamFocus_801C3A44 {
     int mAngleAccel[2];
 } CamFocus_801C3A44;
 
-void fn_801D0470(unsigned int index);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D08FC(int angle);
-void fn_801D0ADC(int angle);
-void fn_801D0C58(float *pPos);
 void fn_80227CC0(float *pOut, float *p);
-int fn_80228668(void);
 
 static inline void fn_801C3A44_ZeroF(float *pVec)
 {
@@ -58,19 +53,19 @@ static void fn_801C3A44(CamFocus_801C3A44 *pCam)
     focus[1] = pCam->mFocus[1];
     focus[2] = pCam->mFocus[2];
     fn_801D0C58(focus);
-    fn_801D0ADC(-pCam->mCam.mAngle[2]);
-    fn_801D08FC(-pCam->mCam.mAngle[0]);
+    fn_801D0ADC(-pCam->mCam.mHeader.mUnknown14[2]);
+    fn_801D08FC(-pCam->mCam.mHeader.mUnknown14[0]);
     offset[0] = 0.0f;
     offset[1] = 0.0f;
     offset[2] = pCam->mCurDist;
-    fn_80227CC0(pCam->mCam.mPos, offset);
+    fn_80227CC0(pCam->mCam.mHeader.mUnknown04, offset);
     fn_801D0544();
 }
 
 void fn_801C3AD8(CamFocus_801C3A44 *pCam)
 {
-    fn_801C3A44_ZeroF(pCam->mCam.mPos);
-    fn_801C3A44_ZeroI(pCam->mCam.mAngle);
+    fn_801C3A44_ZeroF(pCam->mCam.mHeader.mUnknown04);
+    fn_801C3A44_ZeroI(pCam->mCam.mHeader.mUnknown14);
     pCam->mDist = pCam->mCurDist = 4.0f;
     fn_801C3A44_ZeroI2(pCam->mDestAngle);
     pCam->mMaxSpeed[3] = pCam->mMaxSpeed[2] = pCam->mMaxSpeed[1] = pCam->mMaxSpeed[0] = 0.2f;
@@ -90,9 +85,9 @@ void fn_801C3B78(CamFocus_801C3A44 *pCam)
         fn_801C384C(&pCam->mFocus[1], &pCam->mFocusSpeed[1], pCam->mpTarget[1], pCam->mMaxSpeed[1], pCam->mAccel[1]);
         fn_801C384C(&pCam->mFocus[2], &pCam->mFocusSpeed[2], pCam->mpTarget[2], pCam->mMaxSpeed[2], pCam->mAccel[2]);
         fn_801C384C(&pCam->mCurDist, &pCam->mDistSpeed, pCam->mDist, pCam->mMaxSpeed[3], pCam->mAccel[3]);
-        fn_801C370C(&pCam->mCam.mAngle[0], &pCam->mAngleSpeed[0], pCam->mDestAngle[0], pCam->mMaxAngleSpeed[0],
+        fn_801C370C(&pCam->mCam.mHeader.mUnknown14[0], &pCam->mAngleSpeed[0], pCam->mDestAngle[0], pCam->mMaxAngleSpeed[0],
                     pCam->mAngleAccel[0]);
-        fn_801C370C(&pCam->mCam.mAngle[2], &pCam->mAngleSpeed[1], pCam->mDestAngle[1], pCam->mMaxAngleSpeed[1],
+        fn_801C370C(&pCam->mCam.mHeader.mUnknown14[2], &pCam->mAngleSpeed[1], pCam->mDestAngle[1], pCam->mMaxAngleSpeed[1],
                     pCam->mAngleAccel[1]);
         fn_801C3A44(pCam);
     }
@@ -121,8 +116,8 @@ void fn_801C3C80(CamFocus_801C3A44 *pCam)
         pCam->mFocus[1] = pCam->mpTarget[1];
         pCam->mFocus[2] = pCam->mpTarget[2];
         pCam->mCurDist = pCam->mDist;
-        pCam->mCam.mAngle[0] = pCam->mDestAngle[0];
-        pCam->mCam.mAngle[2] = pCam->mDestAngle[1];
+        pCam->mCam.mHeader.mUnknown14[0] = pCam->mDestAngle[0];
+        pCam->mCam.mHeader.mUnknown14[2] = pCam->mDestAngle[1];
         fn_801C3A44_ZeroF(pCam->mFocusSpeed);
         pCam->mDistSpeed = 0.0f;
         fn_801C3A44_ZeroI2(pCam->mAngleSpeed);

@@ -1,7 +1,11 @@
 /* Disc file client: up to N open files, one asynchronous read in flight at a time. */
 
+#include <dolphin/os/OSCache.h>
+#include <dolphin/os/OSSemaphore.h>
+#include <dolphin/os/OSThread.h>
 #include <dolphin/dvd.h>
 #include "game/fn_801D2B7C.h"
+#include "engine/cu_801C1F54.h"
 
 typedef struct FsClient_801CB1BC {
     int mNumFiles;
@@ -16,24 +20,12 @@ typedef struct FsClient_801CB1BC {
 extern FsClient_801CB1BC lbl_803D55E0;
 extern unsigned char lbl_803D5600[];
 extern int lbl_803EBC34;
-extern unsigned char lbl_8037F8C0[];
+extern OSThread lbl_8037F8C0;
 extern unsigned char lbl_8037FC00[0x2000];
-extern unsigned char lbl_80381C00[];
-extern unsigned char lbl_80381C0C[];
+extern OSSemaphore lbl_80381C00;
+extern OSSemaphore lbl_80381C0C;
 
-void OSInitSemaphore(void *sem, int count);
-int OSWaitSemaphore(void *sem);
-int OSSignalSemaphore(void *sem);
-int OSResumeThread(void *thread);
-unsigned char fn_8023DBB8(void *thread, void *(*func)(void *), void *param, void *stack, unsigned int stackSize,
-                int priority, unsigned short attr);
-void fn_80239CEC(void *addr, unsigned int size);
-int fn_8023F094(const char *fileName, DVDFileInfo *fileInfo);
-int fn_8023F15C(DVDFileInfo *fileInfo);
-int fn_8023F3A4(DVDFileInfo *fileInfo, void *addr, int length, int offset,
-                void (*callback)(int, DVDFileInfo *), int prio);
-void fn_801D34D0(void *p, int size, int value, int a);
-int fn_801C1F54(int c);
+int fn_801D34D0(void *pDest, int size, int value, int width);
 void *fn_801C1FBC();
 
 static DVDFileInfo *fn_801CB1BC(void)
@@ -48,20 +40,20 @@ static DVDFileInfo *fn_801CB1BC(void)
     return 0;
 }
 
-static void fn_801CB240(int result, DVDFileInfo *pFileInfo)
+static void fn_801CB240(s32 result, DVDFileInfo *pFileInfo)
 {
     if (result >= 0) {
-        OSSignalSemaphore(lbl_80381C0C);
+        OSSignalSemaphore(&lbl_80381C0C);
     }
 }
 
 static void *fn_801CB270(void *pParam)
 {
     for (;;) {
-        OSWaitSemaphore(lbl_80381C0C);
+        OSWaitSemaphore(&lbl_80381C0C);
         fn_801C1FBC(lbl_803D55E0.mpReadDst, lbl_803D5600, lbl_803D55E0.mReadSize);
-        fn_80239CEC(lbl_803D55E0.mpReadDst, lbl_803D55E0.mReadSize);
-        OSSignalSemaphore(lbl_80381C00);
+        DCFlushRange(lbl_803D55E0.mpReadDst, lbl_803D55E0.mReadSize);
+        OSSignalSemaphore(&lbl_80381C00);
         if (lbl_803D55E0.mpReadDone) {
             lbl_803D55E0.mpReadDone(1);
         }
@@ -78,13 +70,13 @@ int fn_801CB2E0(int unused, int numFiles, int unused2, void (*pReadDone)(int))
     lbl_803D55E0.mpFiles = pFiles;
     fn_801D34D0(pFiles, size, 0, 4);
     lbl_803D55E0.mNumFiles = numFiles;
-    OSInitSemaphore(lbl_80381C0C, 10);
-    OSInitSemaphore(lbl_80381C00, 10);
-    if (fn_8023DBB8(lbl_8037F8C0, fn_801CB270, 0, lbl_8037FC00 + sizeof(lbl_8037FC00), 0x2000, 12, 1)) {
-        OSResumeThread(lbl_8037F8C0);
+    OSInitSemaphore(&lbl_80381C0C, 10);
+    OSInitSemaphore(&lbl_80381C00, 10);
+    if (OSCreateThread(&lbl_8037F8C0, fn_801CB270, 0, lbl_8037FC00 + sizeof(lbl_8037FC00), 0x2000, 12, 1)) {
+        OSResumeThread(&lbl_8037F8C0);
     }
     lbl_803D55E0.mpReadDone = pReadDone;
-    OSSignalSemaphore(lbl_80381C00);
+    OSSignalSemaphore(&lbl_80381C00);
     return lbl_803D55E0.mNumFiles;
 }
 
@@ -109,7 +101,7 @@ int fn_801CB3D0(const char *pName, int unused, int *pHandle)
     pFileInfo = fn_801CB1BC();
     if (pFileInfo) {
         *pHandle = pFileInfo - lbl_803D55E0.mpFiles + 1;
-        fn_8023F094(path, pFileInfo);
+        DVDOpen(path, pFileInfo);
         result = 1;
     } else {
         *pHandle = 0;
@@ -122,7 +114,7 @@ int fn_801CB4A0(int handle)
 {
     DVDFileInfo *pFileInfo = &lbl_803D55E0.mpFiles[handle - 1];
 
-    fn_8023F15C(pFileInfo);
+    DVDClose(pFileInfo);
     pFileInfo->length = 0;
     return 0;
 }
@@ -134,12 +126,12 @@ int fn_801CB4EC(int handle, void *pDst, int offset, int size)
     if (size > (int)(pFileInfo->length - offset) || size <= 0 || offset < 0) {
         size = pFileInfo->length - offset;
     }
-    OSWaitSemaphore(lbl_80381C00);
+    OSWaitSemaphore(&lbl_80381C00);
     lbl_803D55E0.mpReadDst = pDst;
     lbl_803D55E0.mpReadFile = pFileInfo;
     lbl_803D55E0.mReadOffset = offset;
     lbl_803D55E0.mReadSize = size;
-    fn_8023F3A4(pFileInfo, lbl_803D5600, (size + 0x1F) & ~0x1F, offset, fn_801CB240, 2);
+    DVDReadAsyncPrio(pFileInfo, lbl_803D5600, (size + 0x1F) & ~0x1F, offset, fn_801CB240, 2);
     return size;
 }
 

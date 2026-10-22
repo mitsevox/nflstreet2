@@ -1,20 +1,13 @@
 #include "engine/cu_801C4960.h"
+#include "engine/cu_801C2EB4.h"
+#include "engine/cu_801D03D0.h"
+#include "game/fn_801EBC18.h"
 
-void fn_801D04C4(void);
-void fn_801D0544(void);
-void fn_801D08FC(int angle);
-void fn_801D09EC(int angle);
-void fn_801D0ADC(int angle);
-void fn_801D0C58(float *pPos);
-void fn_801D0F80(float *pMatrix);
-void fn_801D0FB8(float *pPos);
 void fn_801EB660(float *pDst, float *pA, float *pB);
 void fn_801EB814(float *pMatrix, float *pQuat);
 void fn_801EBA64(float *pQuat);
 void fn_801EBAA0(float *pDst, float *pVec, float *pQuat);
-void fn_801EBC18(int *pAngles, float *pQuat);
 void fn_801EBEF8(float *pQuat, int z, int y, int x);
-int fn_801C2FE4(const char *pString1, const char *pString2);
 
 int fn_801C4D3C(SkelNode_801C4960 *pNode, void (*callback)(SkelNode_801C4960 *, void *), void *pContext);
 
@@ -75,14 +68,14 @@ static void fn_801C4B1C(Skel_801C4960 *pSkel, void *pUnused, SkelPose_801C4960 *
 {
     SkelEuler_801C4960 *pEulers = pPose->mpLocal;
     float (*pQuats)[4] = pPose->mpOutput;
-    int angles[3];
+    Angles_801EBC18 angles;
     int i;
 
     for (i = 0; i < pSkel->mNumJoints; i++) {
-        fn_801EBC18(angles, pQuats[i]);
-        pEulers[i].x = angles[0];
-        pEulers[i].y = angles[1];
-        pEulers[i].z = angles[2];
+        fn_801EBC18(&angles, pQuats[i]);
+        pEulers[i].x = angles.mUnknown0;
+        pEulers[i].y = angles.mUnknown4;
+        pEulers[i].z = angles.mUnknown8;
     }
 }
 

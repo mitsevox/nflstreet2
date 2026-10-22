@@ -6,6 +6,9 @@
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
+#include "game/fn_801EEB44.h"
+#include "game/fn_801EF390.h"
+#include "engine/cu_801C2EB4.h"
 
 typedef struct FontParams_801CCA64 {
     int mMaxFonts;
@@ -36,11 +39,6 @@ extern FontRenderState_801CCA64 lbl_803E7600;
 extern unsigned char lbl_803EBC58;
 
 void *fn_801C1F94();
-int fn_801C3180(const char *pString);
-int fn_801EEB44(const char *pName, int mode);
-int fn_801EEFAC(int handle);
-void *fn_801EF390(void *pFile, int handle, int heap);
-int fn_801F010C(void *pFile, int handle);
 
 
 static int fn_801CCAB8(FontEntry_801CCA64 *pEntry, int *pId, FontEntry_801CCA64 **ppResult);
@@ -175,12 +173,12 @@ int fn_801CCDA4(const char *pName, int mode)
 {
     int handle = 0;
     int error = 0;
-    int result;
+    void *result;
 
     if (!lbl_803EBC58) {
         error = 0x110002;
     } else if (result = fn_801EEB44(pName, mode)) {
-        handle = result;
+        handle = (int)result;
     } else {
         error = fn_801F7C88();
     }
@@ -195,7 +193,7 @@ int fn_801CCE10(int handle)
     if (!lbl_803EBC58) {
         error = 0x110002;
     } else {
-        error = fn_801EEFAC(handle);
+        error = fn_801EEFAC((void *)handle);
     }
     fn_801F7BD4(error);
     return error;
@@ -216,7 +214,7 @@ int fn_801CCE60(void *pFile, int id)
         if (!(pEntry = fn_801C6A20(lbl_80383CF0.mpList))) {
             error = fn_801F7C88();
         } else {
-            if (pData = fn_801EF390(pFile, id, lbl_80383CF0.mHeap)) {
+            if (pData = (FontHeader_801CCA64 *)fn_801EF390(pFile, id, lbl_80383CF0.mHeap)) {
                 pEntry->mHandle = id;
                 pEntry->mId = id;
                 pEntry->mpFile = pFile;

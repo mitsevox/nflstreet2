@@ -163,9 +163,9 @@ extern "C" void fn_8013E5C8(ScriptCamera_8013E514 *p)
     s->mTarget.mY = target->mResult.mY;
     s->mTarget.mZ = target->mResult.mZ;
     int yaw = 0x400000 - fn_801CFE40(v.mY, v.mX);
-    p->mHeader.mUnknown1C = yaw;
+    p->mHeader.mUnknown14[2] = yaw;
     fn_80227490(&v, &v, yaw, 0, 0);
-    p->mHeader.mUnknown14 = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
+    p->mHeader.mUnknown14[0] = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
     fn_801C3990(p, fov->mValue, p->mHeader.mUnknown24);
     fn_802270D4(&v);
 }
@@ -198,9 +198,9 @@ extern "C" void fn_8013E7D8(ScriptCamera_8013E514 *p)
     fn_802276B4(&v, target, p->mHeader.mUnknown04);
     s->mTarget.mX = target->mX; s->mTarget.mY = target->mY; s->mTarget.mZ = target->mZ;
     int yaw = 0x400000 - fn_801CFE40(v.mY, v.mX);
-    p->mHeader.mUnknown1C = yaw;
+    p->mHeader.mUnknown14[2] = yaw;
     fn_80227490(&v, &v, yaw, 0, 0);
-    p->mHeader.mUnknown14 = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
+    p->mHeader.mUnknown14[0] = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
     fn_802270D4(&v);
     fn_801C3990(p, fov->mValue, p->mHeader.mUnknown24);
 }

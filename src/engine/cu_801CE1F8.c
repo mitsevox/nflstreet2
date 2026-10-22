@@ -1,4 +1,11 @@
 /* Low-level graphics: video/GX setup, frame-buffer swapping and screen queries. */
+#include <dolphin/gx/GXFifo.h>
+#include <dolphin/gx/GXFrameBuffer.h>
+#include <dolphin/gx/GXManage.h>
+#include <dolphin/gx/GXPixel.h>
+#include <dolphin/gx/GXTransform.h>
+#include <dolphin/os/OSCache.h>
+#include <dolphin/vi/vifuncs.h>
 #include "engine/cu_801CE1F8.h"
 #include "game/fn_801D2B7C.h"
 
@@ -17,57 +24,22 @@ extern unsigned char lbl_803ECF0C;
 extern int lbl_803ED634;
 extern int lbl_803ED638;
 extern int lbl_803ED63C;
-extern unsigned char lbl_802F7A4C[];
-extern unsigned char lbl_802F7A88[];
-extern unsigned char lbl_802FE350[];
-extern unsigned char lbl_802FE38C[];
-extern unsigned char lbl_802FE3C8[];
-extern unsigned char lbl_802FE404[];
-extern unsigned char lbl_802FE440[];
-extern unsigned char lbl_802FE47C[];
-extern unsigned char lbl_802FE4B8[];
+extern GXRenderModeObj lbl_802F7A4C;
+extern GXRenderModeObj lbl_802F7A88;
 
 void *fn_801C1F94();
 void *fn_801C1FBC();
 void fn_801F7B04(void);
-void fn_80239CC0(void *addr, int size);
-void fn_80243384(void (*callback)(void));
-void fn_80243B18(void);
-void fn_80243FE0(GlibState_801CE1F8 *pMode);
-void fn_80244808(void);
-void fn_80244938(void *pXfb);
-void fn_802449A4(int black);
-void *fn_8024AF70(void *pFifo, int size);
-int fn_8024C4F4(int a, int *pB, int *pC);
-void fn_8024C5D0(int a);
-void fn_8024C65C(void);
-int fn_8024C8D8(void);
-void fn_8024E034(void);
-void fn_8024E36C(void);
-void fn_8024E404(void);
-void fn_8024E450(void);
-void fn_8024E4D0(void);
-void fn_8024E750(void (*callback)(void));
-void fn_8024EBC4(void *pSrc, GlibState_801CE1F8 *pDst, int hor, int ver);
-void fn_8024ECE4(int left, int top, int width, int height);
-void fn_8024EDDC(int width, int height);
 void fn_8024EFBC(float scale);
-void fn_8024F088(GXColor color, int z);
 void fn_8024F100(int aa, unsigned char (*pPattern)[2], int filter, unsigned char *pVFilter);
-void fn_8024F31C(void *pDst, int clear);
-void fn_80252088(int enable);
 void fn_802520E0(int enable, int func, int update);
-void fn_80252148(int format, int zFormat);
-void fn_8025278C(float left, float top, float width, float height, float nearZ, float farZ);
-void fn_802527F8(int left, int top, int width, int height);
-void fn_802523A4(void *pMatrix, int type);
+void fn_802523A4(float (*pMtx)[4], int type);
 void fn_801CED3C(GlibState_801CE1F8 *pMode);
 void fn_802103DC(void);
 void fn_80210634(void);
 extern unsigned char lbl_80383DA0[];
 
 int fn_801CE7D0(int a);
-void fn_801CE2B8(int enable);
 void fn_801CE95C(void);
 void fn_801CEA44(int enable);
 static void fn_801CEC08(void);
@@ -116,14 +88,14 @@ static void fn_801CE250(void)
     lbl_803ED638 = -lbl_803ED634;
 }
 
-static void fn_801CE260(void)
+static void fn_801CE260(u32 retraceCount)
 {
     fn_801F7B04();
     if (lbl_803EBC74) {
         lbl_803EBC74();
     }
     if (lbl_803EBC87) {
-        fn_8024C65C();
+        GXDisableBreakPt();
     }
     if (lbl_803EBC78) {
         lbl_803EBC78();
@@ -133,9 +105,9 @@ static void fn_801CE260(void)
 void fn_801CE2B8(int enable)
 {
     if (enable) {
-        fn_80243384(fn_801CE260);
+        VISetPostRetraceCallback(fn_801CE260);
     } else {
-        fn_80243384(0);
+        VISetPostRetraceCallback(0);
     }
 }
 
@@ -143,7 +115,7 @@ int fn_801CE2F4(GlibConfig_801CE1F8 *pConfig)
 {
     GlibConfig_801CE1F8 *pCfg;
     GlibState_801CE1F8 *pMode;
-    void *pSrcMode = 0;
+    GXRenderModeObj *pSrcMode = 0;
     void *pFifo;
 
     lbl_803E91F8 = *pConfig;
@@ -152,79 +124,79 @@ int fn_801CE2F4(GlibConfig_801CE1F8 *pConfig)
     lbl_803ECF05 = 0;
     switch (pCfg->mTvMode) {
     case 0:
-        pSrcMode = lbl_802FE350;
+        pSrcMode = &GXNtsc240Ds;
         break;
     case 1:
-        pSrcMode = lbl_802FE38C;
+        pSrcMode = &GXNtsc240DsAa;
         break;
     case 2:
-        pSrcMode = lbl_802FE3C8;
+        pSrcMode = &GXNtsc240Int;
         break;
     case 3:
-        pSrcMode = lbl_802FE404;
+        pSrcMode = &GXNtsc240IntAa;
         break;
     case 4:
-        pSrcMode = lbl_802FE440;
+        pSrcMode = &GXNtsc480IntDf;
         break;
     case 5:
-        pSrcMode = lbl_802FE47C;
+        pSrcMode = &GXNtsc480Int;
         break;
     case 6:
-        pSrcMode = lbl_802FE4B8;
+        pSrcMode = &GXNtsc480IntAa;
         break;
     case 7:
-        pSrcMode = lbl_802F7A4C;
+        pSrcMode = &lbl_802F7A4C;
         lbl_803ECF05 = 1;
         break;
     case 8:
-        pSrcMode = lbl_802F7A88;
+        pSrcMode = &lbl_802F7A88;
         break;
     }
     fn_801C1F94(pMode, 0, 0x3C);
     if (pCfg->mTvMode == 7) {
-        fn_8024EBC4(pSrcMode, pMode, 0, 16);
+        GXAdjustForOverscan(pSrcMode, &pMode->mMode, 0, 16);
     } else if (pCfg->mTvMode == 8) {
-        fn_8024EBC4(pSrcMode, pMode, 0, 16);
+        GXAdjustForOverscan(pSrcMode, &pMode->mMode, 0, 16);
     } else {
-        fn_8024EBC4(pSrcMode, pMode, 0, 16);
+        GXAdjustForOverscan(pSrcMode, &pMode->mMode, 0, 16);
     }
-    lbl_803ECF00 = ((pMode->mFbWidth + 15) & 0xFFF0) * pMode->mXfbHeight * 2;
+    lbl_803ECF00 = ((pMode->mMode.fbWidth + 15) & 0xFFF0) * pMode->mMode.xfbHeight * 2;
     pMode->mpXfb[1] = pMode->mpXfb[0] = fn_801D2B7C(lbl_803ECF00, 0, 0);
     pMode->mFrame = 0;
     lbl_803ECF04 = 0;
-    fn_80243FE0(pMode);
-    fn_80244938(pMode->mpXfb[pMode->mFrame]);
+    VIConfigure(&pMode->mMode);
+    VISetNextFrameBuffer(pMode->mpXfb[pMode->mFrame]);
     pMode->mLog2Width = fn_801CE1F8(pCfg->mWidth);
     pMode->mLog2Height = fn_801CE1F8(pCfg->mHeight);
     pFifo = fn_801D2B7C(pCfg->mFifoSize, 0, 0);
-    fn_80239CC0(pFifo, pCfg->mFifoSize);
+    DCInvalidateRange(pFifo, pCfg->mFifoSize);
     pMode->mpFifoBuffer = pFifo;
-    pMode->mpFifo = fn_8024AF70(pFifo, pCfg->mFifoSize);
+    pMode->mpFifo = GXInit(pFifo, pCfg->mFifoSize);
     pMode->mFifoSize = pCfg->mFifoSize;
-    fn_8024F088(pCfg->mClearColor, 0xFFFFFF);
-    fn_8025278C(0.0f, 0.0f, (unsigned int)pMode->mFbWidth, (unsigned int)pMode->mXfbHeight, 0.0f, 1.0f);
-    fn_802527F8(0, 0, pMode->mFbWidth, pMode->mEfbHeight);
-    fn_8024ECE4(0, 0, pMode->mFbWidth, pMode->mEfbHeight);
-    fn_8024EDDC(pMode->mFbWidth, pMode->mXfbHeight);
-    fn_8024EFBC((float)(unsigned int)pMode->mXfbHeight / (float)(unsigned int)pMode->mEfbHeight);
+    GXSetCopyClear(pCfg->mClearColor, 0xFFFFFF);
+    GXSetViewport(0.0f, 0.0f, (unsigned int)pMode->mMode.fbWidth, (unsigned int)pMode->mMode.xfbHeight, 0.0f, 1.0f);
+    GXSetScissor(0, 0, pMode->mMode.fbWidth, pMode->mMode.efbHeight);
+    GXSetDispCopySrc(0, 0, pMode->mMode.fbWidth, pMode->mMode.efbHeight);
+    GXSetDispCopyDst(pMode->mMode.fbWidth, pMode->mMode.xfbHeight);
+    fn_8024EFBC((float)(unsigned int)pMode->mMode.xfbHeight / (float)(unsigned int)pMode->mMode.efbHeight);
     fn_801CEA44(1);
-    if (pMode->mAa) {
-        fn_80252148(2, 0);
+    if (pMode->mMode.aa) {
+        GXSetPixelFmt(2, 0);
     } else {
-        fn_80252148(0, 0);
+        GXSetPixelFmt(0, 0);
     }
-    fn_802449A4(1);
-    fn_80244808();
-    fn_8024F31C(lbl_803E9224.mpXfb[pMode->mFrame], 1);
-    fn_80244808();
-    fn_8024F31C(lbl_803E9224.mpXfb[pMode->mFrame], 1);
-    fn_80244808();
+    VISetBlack(1);
+    VIFlush();
+    GXCopyDisp(lbl_803E9224.mpXfb[pMode->mFrame], 1);
+    VIFlush();
+    GXCopyDisp(lbl_803E9224.mpXfb[pMode->mFrame], 1);
+    VIFlush();
     fn_801CE7D0(0);
-    if (pMode->mViTvMode & 1) {
-        fn_80243B18();
+    if (pMode->mMode.viTVmode & 1) {
+        VIWaitForRetrace();
     }
-    fn_802449A4(0);
-    fn_8024E750(fn_801CE250);
+    VISetBlack(0);
+    GXSetDrawDoneCallback(fn_801CE250);
     fn_801CE2B8(1);
     fn_801CEC0C(pCfg);
     lbl_803EBC68 = 1;
@@ -238,13 +210,13 @@ int fn_801CE718(void)
 
 void fn_801CE720(void)
 {
-    int a;
-    int b;
+    void *a;
+    void *b;
 
     if (lbl_803ECF0C) {
-        fn_8024E034();
-        fn_8024C4F4(fn_8024C8D8(), &a, &b);
-        fn_8024C5D0(b);
+        GXFlush();
+        GXGetFifoPtrs(GXGetCPUFifo(), &a, &b);
+        GXEnableBreakPt(b);
     }
     fn_801CED3C(&lbl_803E9224);
     fn_802103DC();
@@ -252,7 +224,7 @@ void fn_801CE720(void)
 
 static inline void sync_801CE774(int count)
 {
-    fn_8024E404();
+    GXWaitDrawDone();
     lbl_803ED63C = count;
 }
 
@@ -262,54 +234,54 @@ void fn_801CE774(void)
         fn_801CE95C();
     }
     fn_80210634();
-    fn_8024E36C();
-    fn_8024E034();
+    GXSetDrawDone();
+    GXFlush();
     if (lbl_803ECF0C) {
-        fn_8024C65C();
+        GXDisableBreakPt();
         sync_801CE774(0);
     }
 }
 
 int fn_801CE7D0(int a)
 {
-    fn_80243B18();
+    VIWaitForRetrace();
     return 0;
 }
 
 static void fn_801CE7F4(void)
 {
-    int a;
-    int b;
+    void *a;
+    void *b;
 
-    fn_8024E034();
-    fn_8024C4F4(fn_8024C8D8(), &a, &b);
-    fn_8024C5D0(b);
+    GXFlush();
+    GXGetFifoPtrs(GXGetCPUFifo(), &a, &b);
+    GXEnableBreakPt(b);
 }
 
 void fn_801CE82C(void)
 {
     if (lbl_803ECF04) {
-        fn_80244938(lbl_803E9224.mpXfb[lbl_803E9224.mFrame]);
-        fn_80244808();
-        fn_80243B18();
+        VISetNextFrameBuffer(lbl_803E9224.mpXfb[lbl_803E9224.mFrame]);
+        VIFlush();
+        VIWaitForRetrace();
         lbl_803E9224.mFrame ^= 1;
         fn_801CEC08();
     } else {
-        fn_8024E450();
+        GXDrawDone();
         fn_801CE228();
-        fn_80244938(lbl_803E9224.mpXfb[0]);
-        fn_80244808();
+        VISetNextFrameBuffer(lbl_803E9224.mpXfb[0]);
+        VIFlush();
         if (lbl_803EBC88) {
             fn_801CE7F4();
             lbl_803EBC87 = 1;
         } else {
-            fn_80243B18();
+            VIWaitForRetrace();
         }
         lbl_803ED634 = 0;
-        fn_80252088(1);
+        GXSetColorUpdate(1);
         fn_802520E0(1, 3, 1);
-        fn_8024F31C(lbl_803E9224.mpXfb[0], lbl_803EBC68);
-        fn_8024E4D0();
+        GXCopyDisp(lbl_803E9224.mpXfb[0], lbl_803EBC68);
+        GXPixModeSync();
         lbl_803E9224.mFrame = 0;
     }
 }
@@ -321,7 +293,7 @@ void fn_801CE908(unsigned char enable)
 
 void fn_801CE910(void)
 {
-    fn_8024E450();
+    GXDrawDone();
 }
 
 unsigned char fn_801CE930(void)
@@ -343,13 +315,13 @@ void fn_801CE95C(void)
 {
     GlibState_801CE1F8 *pMode = &lbl_803E9224;
 
-    fn_80252088(0);
+    GXSetColorUpdate(0);
     fn_802520E0(0, 0, 1);
-    fn_8024EDDC(0, 0);
-    fn_8024F31C(lbl_80383DA0, 1);
-    fn_80252088(1);
+    GXSetDispCopyDst(0, 0);
+    GXCopyDisp(lbl_80383DA0, 1);
+    GXSetColorUpdate(1);
     fn_802520E0(1, 3, 1);
-    fn_8024EDDC(pMode->mFbWidth, pMode->mXfbHeight);
+    GXSetDispCopyDst(pMode->mMode.fbWidth, pMode->mMode.xfbHeight);
 }
 
 void fn_801CE9E0(int enable)
@@ -374,7 +346,7 @@ void fn_801CEA20(void *pMatrix)
 
 void fn_801CEA44(int enable)
 {
-    fn_8024F100(lbl_803E9224.mAa, lbl_803E9224.mSamplePattern, enable, lbl_803E9224.mVFilter);
+    fn_8024F100(lbl_803E9224.mMode.aa, lbl_803E9224.mMode.sample_pattern, enable, lbl_803E9224.mMode.vfilter);
 }
 
 void fn_801CEA7C(unsigned char clear)
@@ -386,9 +358,9 @@ void fn_801CEA84(void)
 {
     GlibState_801CE1F8 *pMode = &lbl_803E9224;
 
-    fn_80244938(pMode->mpXfb[0]);
-    fn_80244808();
-    fn_80243B18();
+    VISetNextFrameBuffer(pMode->mpXfb[0]);
+    VIFlush();
+    VIWaitForRetrace();
     fn_801D2BD0(pMode->mpXfb[1]);
     lbl_803ECF04 = 0;
     pMode->mFrame = 0;
@@ -420,20 +392,20 @@ void fn_801CEB58(int progressive)
 {
     if (lbl_803ECF05 != progressive) {
         lbl_803ECF05 = progressive;
-        fn_802449A4(1);
+        VISetBlack(1);
         if (progressive) {
-            fn_8024EBC4(lbl_802F7A4C, &lbl_803E9224, 0, 16);
+            GXAdjustForOverscan(&lbl_802F7A4C, &lbl_803E9224.mMode, 0, 16);
         } else {
-            fn_8024EBC4(lbl_802FE440, &lbl_803E9224, 0, 16);
+            GXAdjustForOverscan(&GXNtsc480IntDf, &lbl_803E9224.mMode, 0, 16);
         }
-        fn_80243FE0(&lbl_803E9224);
-        fn_80244808();
-        fn_80243B18();
-        fn_80243B18();
-        fn_80243B18();
-        fn_802449A4(0);
-        fn_80244808();
-        fn_80243B18();
+        VIConfigure(&lbl_803E9224.mMode);
+        VIFlush();
+        VIWaitForRetrace();
+        VIWaitForRetrace();
+        VIWaitForRetrace();
+        VISetBlack(0);
+        VIFlush();
+        VIWaitForRetrace();
     }
 }
 
@@ -443,12 +415,12 @@ static void fn_801CEC08(void)
 
 static void fn_801CEC0C(GlibConfig_801CE1F8 *pConfig)
 {
-    fn_802527F8(0, 0, pConfig->mWidth - 1, pConfig->mHeight - 1);
+    GXSetScissor(0, 0, pConfig->mWidth - 1, pConfig->mHeight - 1);
 }
 
 void fn_801CEC48(int left, int width, int top, int height)
 {
-    fn_802527F8(left, top, width, height);
+    GXSetScissor(left, top, width, height);
 }
 
 int fn_801CEC74(void)
@@ -463,5 +435,5 @@ int fn_801CEC7C(void)
 
 unsigned short fn_801CEC84(void)
 {
-    return lbl_803E9224.mXfbHeight;
+    return lbl_803E9224.mMode.xfbHeight;
 }

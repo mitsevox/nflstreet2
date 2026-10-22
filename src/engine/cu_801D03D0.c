@@ -2,6 +2,7 @@
  * rotation/translation/scale builders. */
 
 #include "engine/cu_801D0110.h"
+#include "engine/cu_801D03D0.h"
 
 extern MatStack_801D0110 *lbl_803EBCC0;
 
@@ -16,7 +17,6 @@ float fn_801CFFA0(float x);
 
 extern Mtx_801D0110 lbl_803847C0[];
 
-void fn_801D0F80(float *pMatrix);
 
 void fn_801D03D0(float *pMatrix)
 {

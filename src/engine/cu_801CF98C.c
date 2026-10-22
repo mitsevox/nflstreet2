@@ -1,6 +1,8 @@
 /* Low-level angle code: Taylor coefficients for the sine approximation, 24-bit-angle
  * sine/cosine entry points, tangent and inverse trigonometry in 24-bit angles. */
 
+#include "cmath.h"
+
 extern float lbl_803847A0[7];
 extern float lbl_803E9288[9];
 extern float lbl_802F7B0C[9];
@@ -8,7 +10,6 @@ extern float lbl_802F7B0C[9];
 float fn_801CF944(float *pTable, float angle, float scale);
 float fn_80260428(float x, float y);
 float fn_802610B0(float x);
-float fn_80260EE8(float x);
 float fn_8025FDE8(float x);
 float fn_80260034(float x);
 float fn_80260C14(float x);
@@ -56,7 +57,7 @@ float fn_801CFB94(int angle)
 
 float fn_801CFBF4(float x)
 {
-    return fn_80260EE8(x);
+    return cosf(x);
 }
 
 void fn_801CFC14(int angle, float *pSin, float *pCos)

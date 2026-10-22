@@ -3,6 +3,7 @@
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
+#include "game/fn_801C1F94.h"
 
 typedef struct ConEntry_801C5B9C {
     unsigned int mId;
@@ -35,7 +36,6 @@ extern char *lbl_803ECEE0;
 extern int lbl_803ED624;
 extern Lock_801F8014 lbl_8037F860;
 
-void *fn_801C1F94(void *pDst, int value, int size);
 int fn_801D34D0(void *pDest, int size, int value, int width);
 
 static void fn_801C5B9C(unsigned int channel)

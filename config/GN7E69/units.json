@@ -2149,6 +2149,82 @@
     "gTutorialGame": {
       "address": "0x80307470",
       "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gTutorialGame. InGame dependency pointer written at 0x80032B7C."
+    },
+    "OSCreateThread": {
+      "address": "0x8023DBB8",
+      "evidence": "evidence.tsv external row OSCreateThread: target REL24 call at 0x801CB394 and the SDK OSThread.c comparison unit."
+    },
+    "DVDOpen": {
+      "address": "0x8023F094",
+      "evidence": "evidence.tsv external row DVDOpen: target REL24 call at 0x801CB478 and the SDK dvdfs.c comparison unit."
+    },
+    "DVDClose": {
+      "address": "0x8023F15C",
+      "evidence": "evidence.tsv external row DVDClose: target REL24 call at 0x801CB4C8 and the SDK dvdfs.c comparison unit."
+    },
+    "DVDReadAsyncPrio": {
+      "address": "0x8023F3A4",
+      "evidence": "evidence.tsv external row DVDReadAsyncPrio: target REL24 call at 0x801CB58C and the SDK dvdfs.c comparison unit."
+    },
+    "PADControlMotor": {
+      "address": "0x802476F8",
+      "evidence": "evidence.tsv external row PADControlMotor: target REL24 calls at 0x801CABC0, 0x801CABD0, 0x801CABE0, 0x801CABEC and the SDK Pad.c comparison unit."
+    },
+    "GXInit": {
+      "address": "0x8024AF70",
+      "evidence": "evidence.tsv external row GXInit: target REL24 call at 0x801CE558 and the SDK GXInit.c comparison unit."
+    },
+    "GXGetCPUFifo": {
+      "address": "0x8024C8D8",
+      "evidence": "evidence.tsv external row GXGetCPUFifo: target REL24 calls at 0x801CE73C, 0x801CE804 and the SDK GXFifo.c comparison unit."
+    },
+    "GXSetDrawDone": {
+      "address": "0x8024E36C",
+      "evidence": "evidence.tsv external row GXSetDrawDone: target REL24 call at 0x801CE798 and the SDK GXMisc.c comparison unit."
+    },
+    "GXWaitDrawDone": {
+      "address": "0x8024E404",
+      "evidence": "evidence.tsv external row GXWaitDrawDone: target REL24 call at 0x801CE7B4 and the SDK GXMisc.c comparison unit."
+    },
+    "GXDrawDone": {
+      "address": "0x8024E450",
+      "evidence": "evidence.tsv external row GXDrawDone: target REL24 calls at 0x801CABAC, 0x801CE880, 0x801CE91C and the SDK GXMisc.c comparison unit."
+    },
+    "GXPixModeSync": {
+      "address": "0x8024E4D0",
+      "evidence": "evidence.tsv external row GXPixModeSync: target REL24 call at 0x801CE8EC and the SDK GXMisc.c comparison unit."
+    },
+    "GXAdjustForOverscan": {
+      "address": "0x8024EBC4",
+      "evidence": "evidence.tsv external row GXAdjustForOverscan: target REL24 calls at 0x801CE498, 0x801CE4B0, 0x801CEBA4, 0x801CEBC4 and the SDK GXFrameBuf.c comparison unit."
+    },
+    "GXSetTevColorIn": {
+      "address": "0x80251690",
+      "evidence": "evidence.tsv external row GXSetTevColorIn: target REL24 call at 0x801CDDB0 and the SDK GXTev.c comparison unit."
+    },
+    "GXSetTevColorOp": {
+      "address": "0x80251718",
+      "evidence": "evidence.tsv external row GXSetTevColorOp: target REL24 call at 0x801CDDCC and the SDK GXTev.c comparison unit."
+    },
+    "GXSetViewportJitter": {
+      "address": "0x80252734",
+      "evidence": "evidence.tsv external row GXSetViewportJitter: target REL24 call at 0x801CEDCC and the SDK GXTransform.c comparison unit."
+    },
+    "CARDProbe": {
+      "address": "0x80255D04",
+      "evidence": "evidence.tsv external row CARDProbe: target REL24 call at 0x801CB6C4 and the SDK CARDMount.c comparison unit."
+    },
+    "CARDMount": {
+      "address": "0x802565A0",
+      "evidence": "evidence.tsv external row CARDMount: target REL24 call at 0x801CB6E4 and the SDK CARDMount.c comparison unit."
+    },
+    "CARDFastOpen": {
+      "address": "0x80257388",
+      "evidence": "evidence.tsv external row CARDFastOpen: target REL24 call at 0x801CB83C and the SDK CARDOpen.c comparison unit."
+    },
+    "CARDClose": {
+      "address": "0x8025748C",
+      "evidence": "evidence.tsv external row CARDClose: target REL24 call at 0x801CB8FC and the SDK CARDOpen.c comparison unit."
     }
   },
   "units": [

@@ -1,16 +1,12 @@
 #include "engine/cu_801CB5D4.h"
 #include "engine/fn_801F7BD4.h"
+#include "engine/cu_801C2EB4.h"
 
 extern MCFile_801CB5D4 lbl_80381C40;
 extern unsigned char lbl_803DD600[];
 
-int fn_80255D04(int chan);
-int fn_802565A0(int chan, void *workArea, CARDCallback_801CB5D4 detachCallback);
-int fn_80257388(int chan, int fileNo, CARDFileInfo_801CB5D4 *fileInfo);
-int fn_8025748C(CARDFileInfo_801CB5D4 *fileInfo);
 void fn_801F8758(int a);
 void fn_801F8768(void);
-int fn_801C2FE4(const char *pString1, const char *pString2);
 void *fn_801C1F94();
 void *fn_801C1FBC();
 
@@ -64,15 +60,15 @@ int fn_801CB678(unsigned int device)
 
 int fn_801CB698(int chan, int unused, const char *pName, int unused2, int create, unsigned int size)
 {
-    CARDStat_801CB5D4 stat;
-    int bytesFree = 0;
-    int filesFree = 0;
+    CARDStat stat;
+    s32 bytesFree = 0;
+    s32 filesFree = 0;
     int fileNo;
     int result;
 
     fileNo = -1;
-    if (fn_80255D04(chan)) {
-        result = fn_802565A0(chan, lbl_803DD600, 0);
+    if (CARDProbe(chan)) {
+        result = CARDMount(chan, lbl_803DD600, 0);
         if (result == 0 || result == -6) {
             result = CARDCheck(chan);
         }
@@ -104,7 +100,7 @@ int fn_801CB698(int chan, int unused, const char *pName, int unused2, int create
                     }
                 }
                 if (fileNo < 127) {
-                    if (fn_80257388(chan, fileNo, &lbl_80381C40.mFileInfo) == 0) {
+                    if (CARDFastOpen(chan, fileNo, &lbl_80381C40.mFileInfo) == 0) {
                         fn_801F8758(0);
                         fileNo = lbl_80381C40.mFileInfo.fileNo;
                         CARDGetStatus(chan, fileNo, &lbl_80381C40.mStat);
@@ -127,7 +123,7 @@ void fn_801CB8C8(int fileNo)
 {
     fn_801CBBAC();
     CARDSetStatus(lbl_80381C40.mChan, fileNo, &lbl_80381C40.mStat);
-    fn_8025748C(&lbl_80381C40.mFileInfo);
+    CARDClose(&lbl_80381C40.mFileInfo);
     CARDUnmount(lbl_80381C40.mChan);
     lbl_80381C40.mChan = -1;
     fn_801F8758(1);

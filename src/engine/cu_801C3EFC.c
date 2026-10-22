@@ -2,6 +2,9 @@
 
 #include "engine/cu_801C4960.h"
 #include "game/fn_801D2B7C.h"
+#include "engine/cu_801D03D0.h"
+#include "game/fn_801EBC18.h"
+#include "game/fn_802270D4.h"
 
 typedef struct Limit_801C3EFC {
     int mRange[3][2];
@@ -40,32 +43,15 @@ extern float lbl_803EBBE4;
 extern float lbl_802F489C[3];
 extern float lbl_802F48A8[3];
 
-void fn_801D03D0(float *pMatrix);
-void fn_801D04C4(void);
-void fn_801D0508(void);
-void fn_801D0544(void);
-void fn_801D0558(void);
-void fn_801D0664(float *pMatrix);
-void fn_801D06D4(float *pMatrix);
-void fn_801D09EC(int angle);
-void fn_801D0BCC(int z, int y, int x);
-void fn_801D0C58(float *pPos);
-void fn_801D0C0C(float *pMatrix, float *pX, float *pY, float *pZ);
-void fn_801D0E94(void);
-void fn_801D0F80(float *pMatrix);
-void fn_801D0FB8(float *pPos);
-void fn_801D0FFC(int *pAngles, float *pMatrix);
 int fn_801CFD78(float x);
 void fn_801EB660(float *pDst, float *pA, float *pB);
 void fn_801EBBA4(float *pQuat, float *pAxis, int angle);
-void fn_801EBC18(int *pAngles, float *pQuat);
 void fn_801EBEF8(float *pQuat, int z, int y, int x);
-void fn_802271F0(float *pDst, float *pSrc);
+void fn_802271F0(float *pOut, float *p);
 void fn_80227490(float *pOut, float *p, int x, int y, int z);
-void fn_802276B4(float *pOut, float *pA, float *pB);
 float fn_80227704(float *pA, float *pB);
 float fn_8022772C(float *pA, float *pB);
-void fn_802277DC(float *pDst, float *pA, float *pB);
+void fn_802277DC(float *pOut, float *pA, float *pB);
 void fn_80227C2C(float *pOut, float *p);
 
 int fn_801C3EFC(int *pLimits, int turns, int *pAngle)
@@ -118,7 +104,7 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     float q[4];
     float cur[4];
     int angles[32][3];
-    int euler[3];
+    Angles_801EBC18 euler;
     Skel_801C4960 *pSkel;
     SkelEuler_801C4960 *pRest;
     Limit_801C3EFC *pLimit;
@@ -162,10 +148,10 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
                 fn_801EBBA4(q, axis, rot[0]);
                 fn_801EBEF8(cur, angles[bone][2], angles[bone][1], angles[bone][0]);
                 fn_801EB660(q, cur, q);
-                fn_801EBC18(euler, q);
-                rot[0] = (euler[0] << 8) >> 8;
-                rot[1] = (euler[1] << 8) >> 8;
-                rot[2] = (euler[2] << 8) >> 8;
+                fn_801EBC18(&euler, q);
+                rot[0] = (euler.mUnknown0 << 8) >> 8;
+                rot[1] = (euler.mUnknown4 << 8) >> 8;
+                rot[2] = (euler.mUnknown8 << 8) >> 8;
                 pRest = &pSkel->mRest[bone];
                 pLimit = &pLimits[bone];
                 if (lbl_803EBBD9) {

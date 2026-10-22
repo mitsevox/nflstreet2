@@ -1,6 +1,8 @@
 #ifndef ENGINE_CU_801CCA64_H
 #define ENGINE_CU_801CCA64_H
 
+#include <dolphin/gx/GXStruct.h>
+
 /* Font file header; glyph, kerning and texture data follow at the given offsets. */
 typedef struct FontHeader_801CCA64 {
     int mMagic;
@@ -60,7 +62,7 @@ typedef struct Font_801CCA64 {
     FontKernTable_801CCA64 *mpKern;
     FontTexHeader_801CCA64 *mpTex;
     unsigned char mUnk14[4];
-    void *mpTexObj;
+    GXTexObj *mpTexObj;
     unsigned char mUnk1C[0xC];
 } Font_801CCA64;
 

@@ -1,8 +1,10 @@
+#include "engine/cu_801C1F54.h"
+#include "engine/cu_801C2EB4.h"
+
 extern const unsigned char lbl_802AEF10[];
 
 #define CTYPE(c) ((lbl_802AEF10 + 1)[(unsigned char)(c)])
 
-int fn_801C1F54(int c);
 
 char *fn_801C2EB4(char *pDest, const char *pSource)
 {

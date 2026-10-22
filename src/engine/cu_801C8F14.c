@@ -4,6 +4,7 @@
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
+#include "engine/cu_801C2EB4.h"
 
 typedef struct FileWaitResult_801C8F14 {
     int mCount;
@@ -29,10 +30,7 @@ extern Lock_801F8014 lbl_803D55C0;
 extern FileDevTable_801C8F14 lbl_802F4A50;
 
 void fn_801F81AC(void);
-void fn_801D34D0(void *p, int size, int value, int a);
-char *fn_801C2EB4(char *pDest, const char *pSource);
-char *fn_801C2F2C(char *pDest, const char *pSource);
-int fn_801C3180(const char *pString);
+int fn_801D34D0(void *pDest, int size, int value, int width);
 int fn_801CA760(FileAsync_801C8F14 *pAsync);
 void fn_801CA834(int handle);
 int fn_801CA364(const char *pName, int device, const char *pPrefix);
@@ -93,7 +91,7 @@ static inline FileAsync_801C8F14 *fn_801C8FE4_Try(void)
     return pAsync;
 }
 
-static FileAsync_801C8F14 *fn_801C8FE4(void)
+FileAsync_801C8F14 *fn_801C8FE4(void)
 {
     FileAsync_801C8F14 *pAsync;
 
@@ -103,7 +101,7 @@ static FileAsync_801C8F14 *fn_801C8FE4(void)
     return pAsync;
 }
 
-static int fn_801C903C(int unused, int arg, FileReq_801C8F14 *pReq)
+int fn_801C903C(int unused, int arg, FileReq_801C8F14 *pReq)
 {
     int done = 0;
     FileAsync_801C8F14 *pAsync = pReq->mpAsync;
@@ -138,7 +136,7 @@ static int fn_801C903C(int unused, int arg, FileReq_801C8F14 *pReq)
     return done;
 }
 
-static FileReq_801C8F14 *fn_801C9174(FileReq_801C8F14 *pSrc, int type)
+FileReq_801C8F14 *fn_801C9174(FileReq_801C8F14 *pSrc, int type)
 {
     FileReq_801C8F14 *pReq = fn_801C8F44();
     FileAsync_801C8F14 *pAsync;
