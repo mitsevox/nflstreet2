@@ -12035,25 +12035,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BA2A8.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BA2A8-0x801BA818 (src/engine/cu_801BA2A8.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801BA2A8",
-          "end": "0x801BA818"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEDB0",
-          "end": "0x802AEDB8"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801BF5E8.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BF5E8-0x801BF94C (src/engine/cu_801BF5E8.c) and its data rows; every function exact, promoted from comparison-only.",
@@ -12121,19 +12102,6 @@
           "placement": ".data3",
           "start": "0x802AEF08",
           "end": "0x802AEF10"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801C1D54.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801C1D54-0x801C1D98 (src/engine/cu_801C1D54.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C1D54",
-          "end": "0x801C1D98"
         }
       ]
     },
@@ -12544,19 +12512,6 @@
       ]
     },
     {
-      "source": "src/engine/T3DB_Lexer.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x802009B0-0x80200DD4 (src/engine/T3DB_Lexer.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802009B0",
-          "end": "0x80200DD4"
-        }
-      ]
-    },
-    {
       "source": "src/engine/t3db_bitdata.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x80201D94-0x80201EC8 (src/engine/t3db_bitdata.c) and its data rows; every function exact, promoted from comparison-only.",
@@ -12566,32 +12521,6 @@
           "placement": ".text",
           "start": "0x80201D94",
           "end": "0x80201EC8"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/t3db_query.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x80205754-0x80205DB8 (src/engine/t3db_query.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80205754",
-          "end": "0x80205DB8"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_802075F4.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x802075F4-0x8020840C (src/engine/cu_802075F4.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802075F4",
-          "end": "0x8020840C"
         }
       ]
     },
@@ -13148,63 +13077,6 @@
           "placement": ".text",
           "start": "0x802160A0",
           "end": "0x8021625C"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_80228E44.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80228E44-0x80228F78 (src/engine/cu_80228E44.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80228E44",
-          "end": "0x80228F78"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EBFA8",
-          "end": "0x803EBFB8"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_80228F78.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80228F78-0x80229084 (src/engine/cu_80228F78.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80228F78",
-          "end": "0x80229084"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EBFB8",
-          "end": "0x803EBFC4"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_80229094.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80229094-0x80229270 (src/engine/cu_80229094.c) and its data rows; every function exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80229094",
-          "end": "0x80229270"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EBFC8",
-          "end": "0x803EBFD8"
         }
       ]
     }
