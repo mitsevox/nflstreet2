@@ -65,10 +65,15 @@ extern Struct_803EBD20 *lbl_803EBD20;
 extern int lbl_803EBD24;
 extern Struct_801D4848 *lbl_803EBD28;
 extern Struct_803EBD2C *lbl_803EBD2C;
-extern int lbl_803EBD30;
-extern int lbl_803EBD34;
-extern int lbl_803EBD38;
-extern int lbl_803EBD3C;
+typedef int (*Func_803EBD30)(char *pBuffer, int size, void *pComment);
+typedef void (*Func_803EBD34)(void);
+typedef void (*Func_803EBD38)(int arg0, unsigned char **ppData, unsigned int *pSize);
+typedef void (*Func_803EBD3C)(int arg0);
+
+extern Func_803EBD30 lbl_803EBD30;
+extern Func_803EBD34 lbl_803EBD34;
+extern Func_803EBD38 lbl_803EBD38;
+extern Func_803EBD3C lbl_803EBD3C;
 extern int lbl_803ECF14;
 extern Struct_803ECF18 **lbl_803ECF18;
 extern Struct_80398DE0 lbl_80398DE0;
@@ -369,7 +374,7 @@ char *fn_801D6918(void)
     return lbl_80398DFC.mLastAction;
 }
 
-void fn_801D6924(int a, int b, int c, int d)
+void fn_801D6924(Func_803EBD30 a, Func_803EBD34 b, Func_803EBD38 c, Func_803EBD3C d)
 {
     lbl_803EBD30 = a;
     lbl_803EBD34 = b;
