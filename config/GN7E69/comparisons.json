@@ -8858,7 +8858,7 @@
     {
       "source": "src/game/cu_800FE03C.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x800FE03C-0x800FE41C with their own literal-pool slice 0x8029E4E8-0x8029E4FC. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x800FE03C-0x800FE41C with their own literal-pool slice 0x8029E4E8-0x8029E500, including the trailing zero pad word at 0x8029E4FC that the fragment's .rodata emits. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
       "sections": [
         {
           "section": ".text",
@@ -8870,7 +8870,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029E4E8",
-          "end": "0x8029E4FC"
+          "end": "0x8029E500"
         }
       ],
       "functions": [
@@ -10841,7 +10841,7 @@
     {
       "source": "src/game/cu_801260D4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained inferred twenty-nine-function grouping (provisional/open edges); individual name and source-form rows for the reconstructed bodies 0x8012623C, 0x80126DD4-0x801297F8 (0x801274D4 and 0x80129098 measured fuzzy partials), 0x8012A384 and 0x8012A38C, compiler rows 0x8012623C-0x801262B8, 0x80126DD4-0x801297F8, 0x8012A384-0x8012A38C and 0x8012A38C-0x8012A3B0, and exact data row 0x8029F6B8-0x8029F858 for the compiled literal pools of 0x80126DD4-0x8012A384 and 0x8012A3B0-0x8012A6B0; function rows 0x801297F8 and 0x8012A3B0. The bodies 0x801260D4, 0x801262B8 and 0x801269B8, their literals 0x8029F674-0x8029F6B8 and all static data remain original and unmeasured; the entire original assembly stays linked.",
+      "evidence": "evidence.tsv retained inferred twenty-nine-function grouping (provisional/open edges); individual name and source-form rows for the reconstructed bodies 0x8012623C, 0x80126DD4-0x801297F8 (0x80129098 a measured fuzzy partial), 0x8012A384 and 0x8012A38C, compiler rows 0x8012623C-0x801262B8, 0x80126DD4-0x801297F8, 0x8012A384-0x8012A38C and 0x8012A38C-0x8012A3B0, and exact data row 0x8029F6B8-0x8029F858 for the compiled literal pools of 0x80126DD4-0x8012A384 and 0x8012A3B0-0x8012A6B0; function rows 0x801297F8 and 0x8012A3B0 (0x8012A3B0 a measured fuzzy partial). The bodies 0x801260D4, 0x801262B8 and 0x801269B8, their literals 0x8029F674-0x8029F6B8 and all static data remain original and unmeasured; the entire original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -14724,19 +14724,19 @@
     {
       "source": "src/game/cu_80169F80.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80169F80-0x8016BAD8 for src/game/cu_80169F80.cpp, its 40 exact function extents, the exact data rows for the three initialized placements and the linker row for the three discarded functions (Xbox 0x120CD0, 0x120D60, 0x120DE0); they are compiled with the file but not measured. Draft comparisons only; the original assembly remains linked.",
+      "evidence": "evidence.tsv unit row 0x80169F80-0x8016BAD8 for src/game/cu_80169F80.cpp, its 29 exact function extents 0x80169F80-0x8016B438 and the exact data rows for the three initialized placements; the bodies from 0x8016B438 and the three discarded functions are compared in the fragment src/game/cu_8016B438.cpp. Draft comparisons only; the original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80169F80",
-          "end": "0x8016BAD8"
+          "end": "0x8016B438"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A49A0",
-          "end": "0x802A4BA0"
+          "end": "0x802A4B10"
         },
         {
           "section": ".data",
@@ -14896,7 +14896,28 @@
           "symbol": "fn_8016B364",
           "start": "0x8016B364",
           "end": "0x8016B438"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8016B438.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the provisional unit cu_80169F80 (evidence.tsv unit row 0x80169F80-0x8016BAD8): its 11 exact function extents 0x8016B438-0x8016BAD8, the exact .rodata row 0x802A4B58-0x802A4BA0 and the linker row for the three discarded functions (Xbox 0x120CD0, 0x120D60, 0x120DE0), compiled with the fragment but not measured. The split lets this pool be placed after the unreferenced query strings 0x802A4B10-0x802A4B58 that no body forms; it is not a recovered original file boundary. Draft comparisons only; the original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8016B438",
+          "end": "0x8016BAD8"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4B58",
+          "end": "0x802A4BA0"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8016B438",
           "start": "0x8016B438",
@@ -32318,13 +32339,25 @@
     {
       "source": "src/engine/cu_801B8C18.cpp",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv provisional unit row 0x801B8C18-0x801B91A0, shared/private type and source-form rows, and compiler row engine_cpp_nosda. All sixteen complete functions measured, including six partial bodies. External data ownership remains unclaimed; original bytes stay linked.",
+      "evidence": "evidence.tsv unit rows 0x801B8C18-0x801B91A0 and 0x801B91A0-0x801B9D00 (one translation unit, src/engine/cu_801B8C18.cpp), function rows, data rows for the .ctors word 0x80289B44 and the registry object 0x8037E820, compiler and type rows. Shared types live in include/engine/cu_801B8C18.h. Comparison only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B8C18",
-          "end": "0x801B91A0"
+          "end": "0x801B9D00"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037E820",
+          "end": "0x8037E824"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B44",
+          "end": "0x80289B48"
         }
       ],
       "functions": [
@@ -32407,6 +32440,136 @@
           "symbol": "fn_801B9174",
           "start": "0x801B9174",
           "end": "0x801B91A0"
+        },
+        {
+          "symbol": "fn_801B91A0",
+          "start": "0x801B91A0",
+          "end": "0x801B9328"
+        },
+        {
+          "symbol": "fn_801B9328",
+          "start": "0x801B9328",
+          "end": "0x801B9410"
+        },
+        {
+          "symbol": "fn_801B9410",
+          "start": "0x801B9410",
+          "end": "0x801B9484"
+        },
+        {
+          "symbol": "fn_801B9484",
+          "start": "0x801B9484",
+          "end": "0x801B94CC"
+        },
+        {
+          "symbol": "fn_801B94CC",
+          "start": "0x801B94CC",
+          "end": "0x801B9530"
+        },
+        {
+          "symbol": "fn_801B9530",
+          "start": "0x801B9530",
+          "end": "0x801B95AC"
+        },
+        {
+          "symbol": "fn_801B95AC",
+          "start": "0x801B95AC",
+          "end": "0x801B95FC"
+        },
+        {
+          "symbol": "fn_801B95FC",
+          "start": "0x801B95FC",
+          "end": "0x801B96E4"
+        },
+        {
+          "symbol": "fn_801B96E4",
+          "start": "0x801B96E4",
+          "end": "0x801B9724"
+        },
+        {
+          "symbol": "fn_801B9724",
+          "start": "0x801B9724",
+          "end": "0x801B97B8"
+        },
+        {
+          "symbol": "fn_801B97B8",
+          "start": "0x801B97B8",
+          "end": "0x801B97C8"
+        },
+        {
+          "symbol": "fn_801B97C8",
+          "start": "0x801B97C8",
+          "end": "0x801B97E0"
+        },
+        {
+          "symbol": "fn_801B97E0",
+          "start": "0x801B97E0",
+          "end": "0x801B983C"
+        },
+        {
+          "symbol": "fn_801B983C",
+          "start": "0x801B983C",
+          "end": "0x801B9884"
+        },
+        {
+          "symbol": "fn_801B9884",
+          "start": "0x801B9884",
+          "end": "0x801B98A8"
+        },
+        {
+          "symbol": "fn_801B98A8",
+          "start": "0x801B98A8",
+          "end": "0x801B990C"
+        },
+        {
+          "symbol": "fn_801B990C",
+          "start": "0x801B990C",
+          "end": "0x801B9988"
+        },
+        {
+          "symbol": "fn_801B9988",
+          "start": "0x801B9988",
+          "end": "0x801B99C4"
+        },
+        {
+          "symbol": "fn_801B99C4",
+          "start": "0x801B99C4",
+          "end": "0x801B9A5C"
+        },
+        {
+          "symbol": "fn_801B9A5C",
+          "start": "0x801B9A5C",
+          "end": "0x801B9A98"
+        },
+        {
+          "symbol": "fn_801B9A98",
+          "start": "0x801B9A98",
+          "end": "0x801B9B30"
+        },
+        {
+          "symbol": "fn_801B9B30",
+          "start": "0x801B9B30",
+          "end": "0x801B9BB8"
+        },
+        {
+          "symbol": "fn_801B9BB8",
+          "start": "0x801B9BB8",
+          "end": "0x801B9C30"
+        },
+        {
+          "symbol": "fn_801B9C30",
+          "start": "0x801B9C30",
+          "end": "0x801B9CAC"
+        },
+        {
+          "symbol": "__static_initialization_and_destruction_0",
+          "start": "0x801B9CAC",
+          "end": "0x801B9CD4"
+        },
+        {
+          "symbol": "_GLOBAL_.I.fn_801B8C18",
+          "start": "0x801B9CD4",
+          "end": "0x801B9D00"
         }
       ]
     },
@@ -32959,7 +33122,7 @@
     {
       "source": "src/game/cu_800FE444.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only31-body CPU/player geometry fragment within retained provisional cu_800EFC68 grouping. No older body moves or original file-end claim. Full580-byte surrounding readonly context retains unknown leading/internalzero ownership and all native mismatches. Original callback records stay external-owned.",
+      "evidence": "Comparison-only31-body CPU/player geometry fragment within retained provisional cu_800EFC68 grouping. No older body moves or original file-end claim. Full576-byte surrounding readonly context 0x8029E500-0x8029E740 retains unknown internalzero ownership and all native mismatches. Original callback records stay external-owned.",
       "sections": [
         {
           "section": ".text",
@@ -32970,7 +33133,7 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029E4FC",
+          "start": "0x8029E500",
           "end": "0x8029E740"
         }
       ],
@@ -40295,6 +40458,1983 @@
           "symbol": "fn_801A854C",
           "start": "0x801A854C",
           "end": "0x801A8620"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801AA640.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x801AA640-0x801AC6B0 (src/engine/cu_801AA640.c), layout rows 0x801AA634-0x801AA640 and 0x801AC6A8-0x801AC6B0, assembly and compiler rows 0x801AA640-0x801AC6B0, and the function rows for each registered extent. Only functions whose function rows have exact start and end edges are registered; 0x801AA81C, 0x801AAA6C, 0x801ABD9C, 0x801ABF30, 0x801ABFBC and 0x801AC074 (an end or start resting on layout, with no reference to the start of 0x801AAA6C, 0x801ABF30 or 0x801AC074) stay in the asm source without a comparison entry. Hand-written libsn runtime as top-level asm; the .text placement includes the section end padding 0x801AC6A8-0x801AC6B0. Comparison-only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AA640",
+          "end": "0x801AC6B0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801AA640",
+          "start": "0x801AA640",
+          "end": "0x801AA6B8"
+        },
+        {
+          "symbol": "fn_801AA6B8",
+          "start": "0x801AA6B8",
+          "end": "0x801AA6C8"
+        },
+        {
+          "symbol": "fn_801AA6C8",
+          "start": "0x801AA6C8",
+          "end": "0x801AA7B8"
+        },
+        {
+          "symbol": "EnableMetroTRKInterrupts",
+          "start": "0x801AA7B8",
+          "end": "0x801AA81C"
+        },
+        {
+          "symbol": "fn_801AAA80",
+          "start": "0x801AAA80",
+          "end": "0x801AAB6C"
+        },
+        {
+          "symbol": "fn_801AAB6C",
+          "start": "0x801AAB6C",
+          "end": "0x801AAB94"
+        },
+        {
+          "symbol": "fn_801AAB94",
+          "start": "0x801AAB94",
+          "end": "0x801AAB98"
+        },
+        {
+          "symbol": "fn_801AAB98",
+          "start": "0x801AAB98",
+          "end": "0x801AABD8"
+        },
+        {
+          "symbol": "fn_801AABD8",
+          "start": "0x801AABD8",
+          "end": "0x801AAC18"
+        },
+        {
+          "symbol": "fn_801AAC18",
+          "start": "0x801AAC18",
+          "end": "0x801AAC68"
+        },
+        {
+          "symbol": "fn_801AAC68",
+          "start": "0x801AAC68",
+          "end": "0x801AAD04"
+        },
+        {
+          "symbol": "fn_801AAD04",
+          "start": "0x801AAD04",
+          "end": "0x801AADF4"
+        },
+        {
+          "symbol": "fn_801AADF4",
+          "start": "0x801AADF4",
+          "end": "0x801AAE3C"
+        },
+        {
+          "symbol": "fn_801AAE3C",
+          "start": "0x801AAE3C",
+          "end": "0x801AAEDC"
+        },
+        {
+          "symbol": "fn_801AAEDC",
+          "start": "0x801AAEDC",
+          "end": "0x801AB004"
+        },
+        {
+          "symbol": "fn_801AB004",
+          "start": "0x801AB004",
+          "end": "0x801AB020"
+        },
+        {
+          "symbol": "fn_801AB020",
+          "start": "0x801AB020",
+          "end": "0x801AB034"
+        },
+        {
+          "symbol": "fn_801AB034",
+          "start": "0x801AB034",
+          "end": "0x801AB05C"
+        },
+        {
+          "symbol": "fn_801AB05C",
+          "start": "0x801AB05C",
+          "end": "0x801AB074"
+        },
+        {
+          "symbol": "fn_801AB074",
+          "start": "0x801AB074",
+          "end": "0x801AB088"
+        },
+        {
+          "symbol": "fn_801AB088",
+          "start": "0x801AB088",
+          "end": "0x801AB14C"
+        },
+        {
+          "symbol": "fn_801AB14C",
+          "start": "0x801AB14C",
+          "end": "0x801AB1A4"
+        },
+        {
+          "symbol": "fn_801AB1A4",
+          "start": "0x801AB1A4",
+          "end": "0x801AB1D4"
+        },
+        {
+          "symbol": "fn_801AB1D4",
+          "start": "0x801AB1D4",
+          "end": "0x801AB2AC"
+        },
+        {
+          "symbol": "fn_801AB2AC",
+          "start": "0x801AB2AC",
+          "end": "0x801AB35C"
+        },
+        {
+          "symbol": "fn_801AB35C",
+          "start": "0x801AB35C",
+          "end": "0x801AB388"
+        },
+        {
+          "symbol": "fn_801AB388",
+          "start": "0x801AB388",
+          "end": "0x801AB3EC"
+        },
+        {
+          "symbol": "fn_801AB3EC",
+          "start": "0x801AB3EC",
+          "end": "0x801AB430"
+        },
+        {
+          "symbol": "fn_801AB430",
+          "start": "0x801AB430",
+          "end": "0x801AB5F0"
+        },
+        {
+          "symbol": "fn_801AB5F0",
+          "start": "0x801AB5F0",
+          "end": "0x801AB7B0"
+        },
+        {
+          "symbol": "fn_801AB7B0",
+          "start": "0x801AB7B0",
+          "end": "0x801AB9C4"
+        },
+        {
+          "symbol": "fn_801AB9C4",
+          "start": "0x801AB9C4",
+          "end": "0x801ABA18"
+        },
+        {
+          "symbol": "fn_801ABA18",
+          "start": "0x801ABA18",
+          "end": "0x801ABAC8"
+        },
+        {
+          "symbol": "fn_801ABAC8",
+          "start": "0x801ABAC8",
+          "end": "0x801ABB9C"
+        },
+        {
+          "symbol": "fn_801ABB9C",
+          "start": "0x801ABB9C",
+          "end": "0x801ABD9C"
+        },
+        {
+          "symbol": "fn_801ABF48",
+          "start": "0x801ABF48",
+          "end": "0x801ABF64"
+        },
+        {
+          "symbol": "fn_801ABF64",
+          "start": "0x801ABF64",
+          "end": "0x801ABFBC"
+        },
+        {
+          "symbol": "fn_801AC084",
+          "start": "0x801AC084",
+          "end": "0x801AC1AC"
+        },
+        {
+          "symbol": "fn_801AC1AC",
+          "start": "0x801AC1AC",
+          "end": "0x801AC2D8"
+        },
+        {
+          "symbol": "fn_801AC2D8",
+          "start": "0x801AC2D8",
+          "end": "0x801AC310"
+        },
+        {
+          "symbol": "fn_801AC310",
+          "start": "0x801AC310",
+          "end": "0x801AC6A8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801AC6B0.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x801AC6B0-0x801AD424 (src/engine/cu_801AC6B0.c), layout row 0x801AC6A8-0x801AC6B0, assembly and compiler rows 0x801AC6B0-0x801AD424, and the function rows for each registered extent. Only functions whose function rows have exact start and end edges are registered; the twelve file-server entries 0x801AC9A0-0x801AC9F8 (provisional/open rows that say not to count them independently) and 0x801AD244, 0x801AD2A8 and 0x801AD318 (ends or starts resting on layout) stay in the asm source without a comparison entry, as does 0x801AC8B0, whose lis/ori pairs address the twelve entries (a registered function may not reference an unregistered same-file function). Hand-written libsn runtime as top-level asm. Comparison-only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AC6B0",
+          "end": "0x801AD424"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801AC6B0",
+          "start": "0x801AC6B0",
+          "end": "0x801AC8B0"
+        },
+        {
+          "symbol": "fn_801AC974",
+          "start": "0x801AC974",
+          "end": "0x801AC9A0"
+        },
+        {
+          "symbol": "fn_801ACA00",
+          "start": "0x801ACA00",
+          "end": "0x801ACB54"
+        },
+        {
+          "symbol": "fn_801ACB54",
+          "start": "0x801ACB54",
+          "end": "0x801ACB9C"
+        },
+        {
+          "symbol": "fn_801ACB9C",
+          "start": "0x801ACB9C",
+          "end": "0x801ACC24"
+        },
+        {
+          "symbol": "fn_801ACC24",
+          "start": "0x801ACC24",
+          "end": "0x801ACDE0"
+        },
+        {
+          "symbol": "fn_801ACDE0",
+          "start": "0x801ACDE0",
+          "end": "0x801ACF78"
+        },
+        {
+          "symbol": "fn_801ACF78",
+          "start": "0x801ACF78",
+          "end": "0x801ACF7C"
+        },
+        {
+          "symbol": "fn_801ACF7C",
+          "start": "0x801ACF7C",
+          "end": "0x801ACF80"
+        },
+        {
+          "symbol": "fn_801ACF80",
+          "start": "0x801ACF80",
+          "end": "0x801ACFD4"
+        },
+        {
+          "symbol": "fn_801ACFD4",
+          "start": "0x801ACFD4",
+          "end": "0x801ACFEC"
+        },
+        {
+          "symbol": "fn_801ACFEC",
+          "start": "0x801ACFEC",
+          "end": "0x801AD000"
+        },
+        {
+          "symbol": "fn_801AD000",
+          "start": "0x801AD000",
+          "end": "0x801AD028"
+        },
+        {
+          "symbol": "fn_801AD028",
+          "start": "0x801AD028",
+          "end": "0x801AD03C"
+        },
+        {
+          "symbol": "fn_801AD03C",
+          "start": "0x801AD03C",
+          "end": "0x801AD07C"
+        },
+        {
+          "symbol": "fn_801AD07C",
+          "start": "0x801AD07C",
+          "end": "0x801AD0B0"
+        },
+        {
+          "symbol": "fn_801AD0B0",
+          "start": "0x801AD0B0",
+          "end": "0x801AD0EC"
+        },
+        {
+          "symbol": "fn_801AD0EC",
+          "start": "0x801AD0EC",
+          "end": "0x801AD11C"
+        },
+        {
+          "symbol": "fn_801AD11C",
+          "start": "0x801AD11C",
+          "end": "0x801AD16C"
+        },
+        {
+          "symbol": "fn_801AD16C",
+          "start": "0x801AD16C",
+          "end": "0x801AD1DC"
+        },
+        {
+          "symbol": "fn_801AD1DC",
+          "start": "0x801AD1DC",
+          "end": "0x801AD244"
+        },
+        {
+          "symbol": "fn_801AD380",
+          "start": "0x801AD380",
+          "end": "0x801AD424"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801AD424.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x801AD424-0x801AD488 (src/engine/cu_801AD424.c), function rows, data row 0x802AE9F8-0x802AEA00, compiler and source-form rows. __cvt_fp2unsigned is a partial C body; the seven branch stubs are hand-written assembly. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AD424",
+          "end": "0x801AD488"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE9F8",
+          "end": "0x802AEA00"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__cvt_fp2unsigned",
+          "start": "0x801AD424",
+          "end": "0x801AD46C"
+        },
+        {
+          "symbol": "__shr2u",
+          "start": "0x801AD46C",
+          "end": "0x801AD470"
+        },
+        {
+          "symbol": "__div2i",
+          "start": "0x801AD470",
+          "end": "0x801AD474"
+        },
+        {
+          "symbol": "__shl2i",
+          "start": "0x801AD474",
+          "end": "0x801AD478"
+        },
+        {
+          "symbol": "fn_801AD478",
+          "start": "0x801AD478",
+          "end": "0x801AD47C"
+        },
+        {
+          "symbol": "__shr2i",
+          "start": "0x801AD47C",
+          "end": "0x801AD480"
+        },
+        {
+          "symbol": "fn_801AD480",
+          "start": "0x801AD480",
+          "end": "0x801AD484"
+        },
+        {
+          "symbol": "fn_801AD484",
+          "start": "0x801AD484",
+          "end": "0x801AD488"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801AD488.c",
+      "profile": "dolphin_dvd_release",
+      "evidence": "evidence.tsv unit row 0x801AD488-0x801AD57C (src/engine/cu_801AD488.c), function row and compiler row (CodeWarrior GC/1.2.5n -O4,p, signed plain char). Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AD488",
+          "end": "0x801AD57C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801AD488",
+          "start": "0x801AD488",
+          "end": "0x801AD57C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801AD57C.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x801AD57C-0x801AE3E4 (src/engine/cu_801AD57C.c), function rows, data row 0x802AEA00-0x802AEA18, compiler and source-form rows. State globals 0x802CC580-0x802CC651 and 0x802C2A5C stay external. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AD57C",
+          "end": "0x801AE3E4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEA00",
+          "end": "0x802AEA18"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801AD57C",
+          "start": "0x801AD57C",
+          "end": "0x801AD584"
+        },
+        {
+          "symbol": "fn_801AD584",
+          "start": "0x801AD584",
+          "end": "0x801AD610"
+        },
+        {
+          "symbol": "fn_801AD610",
+          "start": "0x801AD610",
+          "end": "0x801AD66C"
+        },
+        {
+          "symbol": "fn_801AD66C",
+          "start": "0x801AD66C",
+          "end": "0x801AD6F8"
+        },
+        {
+          "symbol": "fn_801AD6F8",
+          "start": "0x801AD6F8",
+          "end": "0x801AD79C"
+        },
+        {
+          "symbol": "fn_801AD79C",
+          "start": "0x801AD79C",
+          "end": "0x801AD83C"
+        },
+        {
+          "symbol": "fn_801AD83C",
+          "start": "0x801AD83C",
+          "end": "0x801AD9C0"
+        },
+        {
+          "symbol": "fn_801AD9C0",
+          "start": "0x801AD9C0",
+          "end": "0x801ADA68"
+        },
+        {
+          "symbol": "fn_801ADA68",
+          "start": "0x801ADA68",
+          "end": "0x801ADB40"
+        },
+        {
+          "symbol": "fn_801ADB40",
+          "start": "0x801ADB40",
+          "end": "0x801ADB94"
+        },
+        {
+          "symbol": "fn_801ADB94",
+          "start": "0x801ADB94",
+          "end": "0x801ADC08"
+        },
+        {
+          "symbol": "fn_801ADC08",
+          "start": "0x801ADC08",
+          "end": "0x801ADD44"
+        },
+        {
+          "symbol": "fn_801ADD44",
+          "start": "0x801ADD44",
+          "end": "0x801ADDB4"
+        },
+        {
+          "symbol": "fn_801ADDB4",
+          "start": "0x801ADDB4",
+          "end": "0x801ADDD4"
+        },
+        {
+          "symbol": "fn_801ADDD4",
+          "start": "0x801ADDD4",
+          "end": "0x801ADDF8"
+        },
+        {
+          "symbol": "fn_801ADDF8",
+          "start": "0x801ADDF8",
+          "end": "0x801ADE80"
+        },
+        {
+          "symbol": "fn_801ADE80",
+          "start": "0x801ADE80",
+          "end": "0x801ADEC4"
+        },
+        {
+          "symbol": "fn_801ADEC4",
+          "start": "0x801ADEC4",
+          "end": "0x801ADF44"
+        },
+        {
+          "symbol": "fn_801ADF44",
+          "start": "0x801ADF44",
+          "end": "0x801ADF64"
+        },
+        {
+          "symbol": "fn_801ADF64",
+          "start": "0x801ADF64",
+          "end": "0x801AE004"
+        },
+        {
+          "symbol": "fn_801AE004",
+          "start": "0x801AE004",
+          "end": "0x801AE018"
+        },
+        {
+          "symbol": "fn_801AE018",
+          "start": "0x801AE018",
+          "end": "0x801AE28C"
+        },
+        {
+          "symbol": "fn_801AE28C",
+          "start": "0x801AE28C",
+          "end": "0x801AE2AC"
+        },
+        {
+          "symbol": "fn_801AE2AC",
+          "start": "0x801AE2AC",
+          "end": "0x801AE328"
+        },
+        {
+          "symbol": "fn_801AE328",
+          "start": "0x801AE328",
+          "end": "0x801AE3E4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801B9D00.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801B9D00-0x801B9F00 (src/engine/cu_801B9D00.c, anim.c in the NASCAR 2005 symbol table), function rows, compiler row engine_c_fastmath 0x801B9D00-0x801C1D84 and source-form row for the animation library file map. Small-data globals stay external. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B9D00",
+          "end": "0x801B9F00"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801B9D00",
+          "start": "0x801B9D00",
+          "end": "0x801B9D50"
+        },
+        {
+          "symbol": "fn_801B9D50",
+          "start": "0x801B9D50",
+          "end": "0x801B9D84"
+        },
+        {
+          "symbol": "fn_801B9D84",
+          "start": "0x801B9D84",
+          "end": "0x801B9DA8"
+        },
+        {
+          "symbol": "fn_801B9DA8",
+          "start": "0x801B9DA8",
+          "end": "0x801B9DCC"
+        },
+        {
+          "symbol": "fn_801B9DCC",
+          "start": "0x801B9DCC",
+          "end": "0x801B9DDC"
+        },
+        {
+          "symbol": "fn_801B9DDC",
+          "start": "0x801B9DDC",
+          "end": "0x801B9DEC"
+        },
+        {
+          "symbol": "fn_801B9DEC",
+          "start": "0x801B9DEC",
+          "end": "0x801B9E88"
+        },
+        {
+          "symbol": "fn_801B9E88",
+          "start": "0x801B9E88",
+          "end": "0x801B9EDC"
+        },
+        {
+          "symbol": "fn_801B9EDC",
+          "start": "0x801B9EDC",
+          "end": "0x801B9EEC"
+        },
+        {
+          "symbol": "fn_801B9EEC",
+          "start": "0x801B9EEC",
+          "end": "0x801B9EF8"
+        },
+        {
+          "symbol": "fn_801B9EF8",
+          "start": "0x801B9EF8",
+          "end": "0x801B9F00"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801B9F00.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801B9F00-0x801BA2A8 (src/engine/cu_801B9F00.c, head of animchan.c), function rows, data row 0x802AED98-0x802AEDA4, compiler row engine_c_fastmath and source-form row for the split at 0x801BA154 (not reconstructed; it owns .rodata 0x802AEDA4-0x802AEDB0, so this file and cu_801BA2A8.c cannot be one comparison unit). Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B9F00",
+          "end": "0x801BA154"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AED98",
+          "end": "0x802AEDA4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801B9F00",
+          "start": "0x801B9F00",
+          "end": "0x801B9FEC"
+        },
+        {
+          "symbol": "fn_801B9FEC",
+          "start": "0x801B9FEC",
+          "end": "0x801BA03C"
+        },
+        {
+          "symbol": "fn_801BA03C",
+          "start": "0x801BA03C",
+          "end": "0x801BA154"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BA2A8.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BA2A8-0x801BA818 (src/engine/cu_801BA2A8.c, tail of animchan.c), function rows, data row 0x802AEDB0-0x802AEDB8, compiler row engine_c_fastmath and source-form row for the split at 0x801BA154. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BA2A8",
+          "end": "0x801BA818"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEDB0",
+          "end": "0x802AEDB8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BA2A8",
+          "start": "0x801BA2A8",
+          "end": "0x801BA2D0"
+        },
+        {
+          "symbol": "fn_801BA2D0",
+          "start": "0x801BA2D0",
+          "end": "0x801BA360"
+        },
+        {
+          "symbol": "fn_801BA360",
+          "start": "0x801BA360",
+          "end": "0x801BA384"
+        },
+        {
+          "symbol": "fn_801BA384",
+          "start": "0x801BA384",
+          "end": "0x801BA398"
+        },
+        {
+          "symbol": "fn_801BA398",
+          "start": "0x801BA398",
+          "end": "0x801BA418"
+        },
+        {
+          "symbol": "fn_801BA418",
+          "start": "0x801BA418",
+          "end": "0x801BA568"
+        },
+        {
+          "symbol": "fn_801BA568",
+          "start": "0x801BA568",
+          "end": "0x801BA5A8"
+        },
+        {
+          "symbol": "fn_801BA5A8",
+          "start": "0x801BA5A8",
+          "end": "0x801BA60C"
+        },
+        {
+          "symbol": "fn_801BA60C",
+          "start": "0x801BA60C",
+          "end": "0x801BA650"
+        },
+        {
+          "symbol": "fn_801BA650",
+          "start": "0x801BA650",
+          "end": "0x801BA6B0"
+        },
+        {
+          "symbol": "fn_801BA6B0",
+          "start": "0x801BA6B0",
+          "end": "0x801BA6BC"
+        },
+        {
+          "symbol": "fn_801BA6BC",
+          "start": "0x801BA6BC",
+          "end": "0x801BA720"
+        },
+        {
+          "symbol": "fn_801BA720",
+          "start": "0x801BA720",
+          "end": "0x801BA784"
+        },
+        {
+          "symbol": "fn_801BA784",
+          "start": "0x801BA784",
+          "end": "0x801BA818"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BA818.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BA818-0x801BAD98 (src/engine/cu_801BA818.c, animemot.c in the NASCAR 2005 symbol table), function rows and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BA818",
+          "end": "0x801BAD98"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BA818",
+          "start": "0x801BA818",
+          "end": "0x801BA848"
+        },
+        {
+          "symbol": "fn_801BA848",
+          "start": "0x801BA848",
+          "end": "0x801BA850"
+        },
+        {
+          "symbol": "fn_801BA850",
+          "start": "0x801BA850",
+          "end": "0x801BAB24"
+        },
+        {
+          "symbol": "fn_801BAB24",
+          "start": "0x801BAB24",
+          "end": "0x801BAB2C"
+        },
+        {
+          "symbol": "fn_801BAB2C",
+          "start": "0x801BAB2C",
+          "end": "0x801BAB34"
+        },
+        {
+          "symbol": "fn_801BAB34",
+          "start": "0x801BAB34",
+          "end": "0x801BAB48"
+        },
+        {
+          "symbol": "fn_801BAB48",
+          "start": "0x801BAB48",
+          "end": "0x801BAB88"
+        },
+        {
+          "symbol": "fn_801BAB88",
+          "start": "0x801BAB88",
+          "end": "0x801BAC1C"
+        },
+        {
+          "symbol": "fn_801BAC1C",
+          "start": "0x801BAC1C",
+          "end": "0x801BAC9C"
+        },
+        {
+          "symbol": "fn_801BAC9C",
+          "start": "0x801BAC9C",
+          "end": "0x801BACB0"
+        },
+        {
+          "symbol": "fn_801BACB0",
+          "start": "0x801BACB0",
+          "end": "0x801BACBC"
+        },
+        {
+          "symbol": "fn_801BACBC",
+          "start": "0x801BACBC",
+          "end": "0x801BACD0"
+        },
+        {
+          "symbol": "fn_801BACD0",
+          "start": "0x801BACD0",
+          "end": "0x801BAD70"
+        },
+        {
+          "symbol": "fn_801BAD70",
+          "start": "0x801BAD70",
+          "end": "0x801BAD98"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BAD98.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BAD98-0x801BC65C (src/engine/cu_801BAD98.c, animfile.c), function rows, compiler row engine_c_fastmath, external row for the animfile state. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BAD98",
+          "end": "0x801BC65C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BAD98",
+          "start": "0x801BAD98",
+          "end": "0x801BAE08"
+        },
+        {
+          "symbol": "fn_801BAE08",
+          "start": "0x801BAE08",
+          "end": "0x801BAEA4"
+        },
+        {
+          "symbol": "fn_801BAEA4",
+          "start": "0x801BAEA4",
+          "end": "0x801BAEAC"
+        },
+        {
+          "symbol": "fn_801BAEAC",
+          "start": "0x801BAEAC",
+          "end": "0x801BB164"
+        },
+        {
+          "symbol": "fn_801BB164",
+          "start": "0x801BB164",
+          "end": "0x801BB2D8"
+        },
+        {
+          "symbol": "fn_801BB2D8",
+          "start": "0x801BB2D8",
+          "end": "0x801BB480"
+        },
+        {
+          "symbol": "fn_801BB480",
+          "start": "0x801BB480",
+          "end": "0x801BB544"
+        },
+        {
+          "symbol": "fn_801BB544",
+          "start": "0x801BB544",
+          "end": "0x801BB570"
+        },
+        {
+          "symbol": "fn_801BB570",
+          "start": "0x801BB570",
+          "end": "0x801BB608"
+        },
+        {
+          "symbol": "fn_801BB608",
+          "start": "0x801BB608",
+          "end": "0x801BB638"
+        },
+        {
+          "symbol": "fn_801BB638",
+          "start": "0x801BB638",
+          "end": "0x801BB65C"
+        },
+        {
+          "symbol": "fn_801BB65C",
+          "start": "0x801BB65C",
+          "end": "0x801BB74C"
+        },
+        {
+          "symbol": "fn_801BB74C",
+          "start": "0x801BB74C",
+          "end": "0x801BB878"
+        },
+        {
+          "symbol": "fn_801BB878",
+          "start": "0x801BB878",
+          "end": "0x801BB948"
+        },
+        {
+          "symbol": "fn_801BB948",
+          "start": "0x801BB948",
+          "end": "0x801BB994"
+        },
+        {
+          "symbol": "fn_801BB994",
+          "start": "0x801BB994",
+          "end": "0x801BBA18"
+        },
+        {
+          "symbol": "fn_801BBA18",
+          "start": "0x801BBA18",
+          "end": "0x801BBB54"
+        },
+        {
+          "symbol": "fn_801BBB54",
+          "start": "0x801BBB54",
+          "end": "0x801BBC3C"
+        },
+        {
+          "symbol": "fn_801BBC3C",
+          "start": "0x801BBC3C",
+          "end": "0x801BBCC8"
+        },
+        {
+          "symbol": "fn_801BBCC8",
+          "start": "0x801BBCC8",
+          "end": "0x801BBD5C"
+        },
+        {
+          "symbol": "fn_801BBD5C",
+          "start": "0x801BBD5C",
+          "end": "0x801BBDCC"
+        },
+        {
+          "symbol": "fn_801BBDCC",
+          "start": "0x801BBDCC",
+          "end": "0x801BBE5C"
+        },
+        {
+          "symbol": "fn_801BBE5C",
+          "start": "0x801BBE5C",
+          "end": "0x801BBEC0"
+        },
+        {
+          "symbol": "fn_801BBEC0",
+          "start": "0x801BBEC0",
+          "end": "0x801BBF44"
+        },
+        {
+          "symbol": "fn_801BBF44",
+          "start": "0x801BBF44",
+          "end": "0x801BBFE4"
+        },
+        {
+          "symbol": "fn_801BBFE4",
+          "start": "0x801BBFE4",
+          "end": "0x801BC044"
+        },
+        {
+          "symbol": "fn_801BC044",
+          "start": "0x801BC044",
+          "end": "0x801BC060"
+        },
+        {
+          "symbol": "fn_801BC060",
+          "start": "0x801BC060",
+          "end": "0x801BC084"
+        },
+        {
+          "symbol": "fn_801BC084",
+          "start": "0x801BC084",
+          "end": "0x801BC0C0"
+        },
+        {
+          "symbol": "fn_801BC0C0",
+          "start": "0x801BC0C0",
+          "end": "0x801BC0E8"
+        },
+        {
+          "symbol": "fn_801BC0E8",
+          "start": "0x801BC0E8",
+          "end": "0x801BC440"
+        },
+        {
+          "symbol": "fn_801BC440",
+          "start": "0x801BC440",
+          "end": "0x801BC57C"
+        },
+        {
+          "symbol": "fn_801BC57C",
+          "start": "0x801BC57C",
+          "end": "0x801BC64C"
+        },
+        {
+          "symbol": "fn_801BC64C",
+          "start": "0x801BC64C",
+          "end": "0x801BC654"
+        },
+        {
+          "symbol": "fn_801BC654",
+          "start": "0x801BC654",
+          "end": "0x801BC65C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BC65C.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BC65C-0x801BC7C0 (src/engine/cu_801BC65C.c, head of animmot.c), function rows, compiler row engine_c_fastmath and source-form row for the split at 0x801BC7C0 (not reconstructed; it owns .rodata 0x802AEDB8-0x802AEDC0). Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BC65C",
+          "end": "0x801BC7C0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BC65C",
+          "start": "0x801BC65C",
+          "end": "0x801BC67C"
+        },
+        {
+          "symbol": "fn_801BC67C",
+          "start": "0x801BC67C",
+          "end": "0x801BC780"
+        },
+        {
+          "symbol": "fn_801BC780",
+          "start": "0x801BC780",
+          "end": "0x801BC7C0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BCA74.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/cu_801BCA74.c, tail of animmot.c), function rows, data row 0x802AEDC0-0x802AEDC8, compiler row engine_c_fastmath and source-form row for the split at 0x801BC7C0. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BCA74",
+          "end": "0x801BCF40"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEDC0",
+          "end": "0x802AEDC8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BCA74",
+          "start": "0x801BCA74",
+          "end": "0x801BCCAC"
+        },
+        {
+          "symbol": "fn_801BCCAC",
+          "start": "0x801BCCAC",
+          "end": "0x801BCEEC"
+        },
+        {
+          "symbol": "fn_801BCEEC",
+          "start": "0x801BCEEC",
+          "end": "0x801BCF40"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BCF40.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BCF40-0x801BDA30 (src/engine/cu_801BCF40.c, animseq.c), function rows, data row 0x802AEDC8-0x802AEE38 and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BCF40",
+          "end": "0x801BDA30"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEDC8",
+          "end": "0x802AEE38"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BCF40",
+          "start": "0x801BCF40",
+          "end": "0x801BCF98"
+        },
+        {
+          "symbol": "fn_801BCF98",
+          "start": "0x801BCF98",
+          "end": "0x801BD26C"
+        },
+        {
+          "symbol": "fn_801BD26C",
+          "start": "0x801BD26C",
+          "end": "0x801BD3BC"
+        },
+        {
+          "symbol": "fn_801BD3BC",
+          "start": "0x801BD3BC",
+          "end": "0x801BD4C0"
+        },
+        {
+          "symbol": "fn_801BD4C0",
+          "start": "0x801BD4C0",
+          "end": "0x801BD4E4"
+        },
+        {
+          "symbol": "fn_801BD4E4",
+          "start": "0x801BD4E4",
+          "end": "0x801BD60C"
+        },
+        {
+          "symbol": "fn_801BD60C",
+          "start": "0x801BD60C",
+          "end": "0x801BD640"
+        },
+        {
+          "symbol": "fn_801BD640",
+          "start": "0x801BD640",
+          "end": "0x801BD660"
+        },
+        {
+          "symbol": "fn_801BD660",
+          "start": "0x801BD660",
+          "end": "0x801BD690"
+        },
+        {
+          "symbol": "fn_801BD690",
+          "start": "0x801BD690",
+          "end": "0x801BD6D4"
+        },
+        {
+          "symbol": "fn_801BD6D4",
+          "start": "0x801BD6D4",
+          "end": "0x801BD6DC"
+        },
+        {
+          "symbol": "fn_801BD6DC",
+          "start": "0x801BD6DC",
+          "end": "0x801BD710"
+        },
+        {
+          "symbol": "fn_801BD710",
+          "start": "0x801BD710",
+          "end": "0x801BD758"
+        },
+        {
+          "symbol": "fn_801BD758",
+          "start": "0x801BD758",
+          "end": "0x801BD81C"
+        },
+        {
+          "symbol": "fn_801BD81C",
+          "start": "0x801BD81C",
+          "end": "0x801BD910"
+        },
+        {
+          "symbol": "fn_801BD910",
+          "start": "0x801BD910",
+          "end": "0x801BD934"
+        },
+        {
+          "symbol": "fn_801BD934",
+          "start": "0x801BD934",
+          "end": "0x801BDA30"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BDA30.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/cu_801BDA30.c, animst.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; fn_801BE3C0 is not reconstructed (it loads no literal). Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BDA30",
+          "end": "0x801BE82C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEE38",
+          "end": "0x802AEE68"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BDA30",
+          "start": "0x801BDA30",
+          "end": "0x801BDAC0"
+        },
+        {
+          "symbol": "fn_801BDAC0",
+          "start": "0x801BDAC0",
+          "end": "0x801BDBD4"
+        },
+        {
+          "symbol": "fn_801BDBD4",
+          "start": "0x801BDBD4",
+          "end": "0x801BDC3C"
+        },
+        {
+          "symbol": "fn_801BDC3C",
+          "start": "0x801BDC3C",
+          "end": "0x801BDF38"
+        },
+        {
+          "symbol": "fn_801BDF38",
+          "start": "0x801BDF38",
+          "end": "0x801BDF90"
+        },
+        {
+          "symbol": "fn_801BDF90",
+          "start": "0x801BDF90",
+          "end": "0x801BDFF8"
+        },
+        {
+          "symbol": "fn_801BDFF8",
+          "start": "0x801BDFF8",
+          "end": "0x801BE030"
+        },
+        {
+          "symbol": "fn_801BE030",
+          "start": "0x801BE030",
+          "end": "0x801BE040"
+        },
+        {
+          "symbol": "fn_801BE040",
+          "start": "0x801BE040",
+          "end": "0x801BE068"
+        },
+        {
+          "symbol": "fn_801BE068",
+          "start": "0x801BE068",
+          "end": "0x801BE3C0"
+        },
+        {
+          "symbol": "fn_801BE420",
+          "start": "0x801BE420",
+          "end": "0x801BE594"
+        },
+        {
+          "symbol": "fn_801BE594",
+          "start": "0x801BE594",
+          "end": "0x801BE5D0"
+        },
+        {
+          "symbol": "fn_801BE5D0",
+          "start": "0x801BE5D0",
+          "end": "0x801BE60C"
+        },
+        {
+          "symbol": "fn_801BE60C",
+          "start": "0x801BE60C",
+          "end": "0x801BE648"
+        },
+        {
+          "symbol": "fn_801BE648",
+          "start": "0x801BE648",
+          "end": "0x801BE67C"
+        },
+        {
+          "symbol": "fn_801BE67C",
+          "start": "0x801BE67C",
+          "end": "0x801BE72C"
+        },
+        {
+          "symbol": "fn_801BE72C",
+          "start": "0x801BE72C",
+          "end": "0x801BE760"
+        },
+        {
+          "symbol": "fn_801BE760",
+          "start": "0x801BE760",
+          "end": "0x801BE798"
+        },
+        {
+          "symbol": "fn_801BE798",
+          "start": "0x801BE798",
+          "end": "0x801BE7C8"
+        },
+        {
+          "symbol": "fn_801BE7C8",
+          "start": "0x801BE7C8",
+          "end": "0x801BE82C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BE82C.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BE82C-0x801BF090 (src/engine/cu_801BE82C.c, animtran.c), function rows, data row 0x802AEE68-0x802AEEA8 and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BE82C",
+          "end": "0x801BF090"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEE68",
+          "end": "0x802AEEA8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BE82C",
+          "start": "0x801BE82C",
+          "end": "0x801BE860"
+        },
+        {
+          "symbol": "fn_801BE860",
+          "start": "0x801BE860",
+          "end": "0x801BE910"
+        },
+        {
+          "symbol": "fn_801BE910",
+          "start": "0x801BE910",
+          "end": "0x801BE99C"
+        },
+        {
+          "symbol": "fn_801BE99C",
+          "start": "0x801BE99C",
+          "end": "0x801BEFA4"
+        },
+        {
+          "symbol": "fn_801BEFA4",
+          "start": "0x801BEFA4",
+          "end": "0x801BF090"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BF090.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BF090-0x801BF5E8 (src/engine/cu_801BF090.c, animwgt.c), function rows, data row 0x802AEEA8-0x802AEEE0 and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BF090",
+          "end": "0x801BF5E8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEEA8",
+          "end": "0x802AEEE0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BF090",
+          "start": "0x801BF090",
+          "end": "0x801BF094"
+        },
+        {
+          "symbol": "fn_801BF094",
+          "start": "0x801BF094",
+          "end": "0x801BF11C"
+        },
+        {
+          "symbol": "fn_801BF11C",
+          "start": "0x801BF11C",
+          "end": "0x801BF140"
+        },
+        {
+          "symbol": "fn_801BF140",
+          "start": "0x801BF140",
+          "end": "0x801BF2B0"
+        },
+        {
+          "symbol": "fn_801BF2B0",
+          "start": "0x801BF2B0",
+          "end": "0x801BF384"
+        },
+        {
+          "symbol": "fn_801BF384",
+          "start": "0x801BF384",
+          "end": "0x801BF3C8"
+        },
+        {
+          "symbol": "fn_801BF3C8",
+          "start": "0x801BF3C8",
+          "end": "0x801BF434"
+        },
+        {
+          "symbol": "fn_801BF434",
+          "start": "0x801BF434",
+          "end": "0x801BF46C"
+        },
+        {
+          "symbol": "fn_801BF46C",
+          "start": "0x801BF46C",
+          "end": "0x801BF4A8"
+        },
+        {
+          "symbol": "fn_801BF4A8",
+          "start": "0x801BF4A8",
+          "end": "0x801BF530"
+        },
+        {
+          "symbol": "fn_801BF530",
+          "start": "0x801BF530",
+          "end": "0x801BF5E8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BF5E8.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BF5E8-0x801BF94C (src/engine/cu_801BF5E8.c, animcache.c), function rows and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BF5E8",
+          "end": "0x801BF94C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BF5E8",
+          "start": "0x801BF5E8",
+          "end": "0x801BF648"
+        },
+        {
+          "symbol": "fn_801BF648",
+          "start": "0x801BF648",
+          "end": "0x801BF6AC"
+        },
+        {
+          "symbol": "fn_801BF6AC",
+          "start": "0x801BF6AC",
+          "end": "0x801BF748"
+        },
+        {
+          "symbol": "fn_801BF748",
+          "start": "0x801BF748",
+          "end": "0x801BF7BC"
+        },
+        {
+          "symbol": "fn_801BF7BC",
+          "start": "0x801BF7BC",
+          "end": "0x801BF870"
+        },
+        {
+          "symbol": "fn_801BF870",
+          "start": "0x801BF870",
+          "end": "0x801BF8DC"
+        },
+        {
+          "symbol": "fn_801BF8DC",
+          "start": "0x801BF8DC",
+          "end": "0x801BF94C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BF94C.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BF94C-0x801BFEF8 (src/engine/cu_801BF94C.c, animframecache.c), function rows and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BF94C",
+          "end": "0x801BFEF8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BF94C",
+          "start": "0x801BF94C",
+          "end": "0x801BF9A0"
+        },
+        {
+          "symbol": "fn_801BF9A0",
+          "start": "0x801BF9A0",
+          "end": "0x801BFA50"
+        },
+        {
+          "symbol": "fn_801BFA50",
+          "start": "0x801BFA50",
+          "end": "0x801BFAEC"
+        },
+        {
+          "symbol": "fn_801BFAEC",
+          "start": "0x801BFAEC",
+          "end": "0x801BFB20"
+        },
+        {
+          "symbol": "fn_801BFB20",
+          "start": "0x801BFB20",
+          "end": "0x801BFC34"
+        },
+        {
+          "symbol": "fn_801BFC34",
+          "start": "0x801BFC34",
+          "end": "0x801BFCB0"
+        },
+        {
+          "symbol": "fn_801BFCB0",
+          "start": "0x801BFCB0",
+          "end": "0x801BFCB8"
+        },
+        {
+          "symbol": "fn_801BFCB8",
+          "start": "0x801BFCB8",
+          "end": "0x801BFCC4"
+        },
+        {
+          "symbol": "fn_801BFCC4",
+          "start": "0x801BFCC4",
+          "end": "0x801BFD48"
+        },
+        {
+          "symbol": "fn_801BFD48",
+          "start": "0x801BFD48",
+          "end": "0x801BFD8C"
+        },
+        {
+          "symbol": "fn_801BFD8C",
+          "start": "0x801BFD8C",
+          "end": "0x801BFE4C"
+        },
+        {
+          "symbol": "fn_801BFE4C",
+          "start": "0x801BFE4C",
+          "end": "0x801BFEF8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BFEF8.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BFEF8-0x801BFFA8 (src/engine/cu_801BFEF8.c, AnimSequencer.c), function rows and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BFEF8",
+          "end": "0x801BFFA8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BFEF8",
+          "start": "0x801BFEF8",
+          "end": "0x801BFF50"
+        },
+        {
+          "symbol": "fn_801BFF50",
+          "start": "0x801BFF50",
+          "end": "0x801BFFA0"
+        },
+        {
+          "symbol": "fn_801BFFA0",
+          "start": "0x801BFFA0",
+          "end": "0x801BFFA8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BFFA8.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BFFA8-0x801C01DC (src/engine/cu_801BFFA8.c, AnimSeqCamera.c), function rows and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BFFA8",
+          "end": "0x801C01DC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801BFFA8",
+          "start": "0x801BFFA8",
+          "end": "0x801BFFC4"
+        },
+        {
+          "symbol": "fn_801BFFC4",
+          "start": "0x801BFFC4",
+          "end": "0x801BFFD8"
+        },
+        {
+          "symbol": "fn_801BFFD8",
+          "start": "0x801BFFD8",
+          "end": "0x801C001C"
+        },
+        {
+          "symbol": "fn_801C001C",
+          "start": "0x801C001C",
+          "end": "0x801C009C"
+        },
+        {
+          "symbol": "fn_801C009C",
+          "start": "0x801C009C",
+          "end": "0x801C00F8"
+        },
+        {
+          "symbol": "fn_801C00F8",
+          "start": "0x801C00F8",
+          "end": "0x801C01B8"
+        },
+        {
+          "symbol": "fn_801C01B8",
+          "start": "0x801C01B8",
+          "end": "0x801C01C4"
+        },
+        {
+          "symbol": "fn_801C01C4",
+          "start": "0x801C01C4",
+          "end": "0x801C01DC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C01DC.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801C01DC-0x801C06E8 (src/engine/cu_801C01DC.c, animseqncr.c), function rows, data row 0x802AEEE0-0x802AEEE8 and compiler row engine_c_fastmath; fn_801C065C is not reconstructed (it loads no literal). Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C01DC",
+          "end": "0x801C06E8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEEE0",
+          "end": "0x802AEEE8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801C01DC",
+          "start": "0x801C01DC",
+          "end": "0x801C01E4"
+        },
+        {
+          "symbol": "fn_801C01E4",
+          "start": "0x801C01E4",
+          "end": "0x801C029C"
+        },
+        {
+          "symbol": "fn_801C029C",
+          "start": "0x801C029C",
+          "end": "0x801C02C4"
+        },
+        {
+          "symbol": "fn_801C02C4",
+          "start": "0x801C02C4",
+          "end": "0x801C02CC"
+        },
+        {
+          "symbol": "fn_801C02CC",
+          "start": "0x801C02CC",
+          "end": "0x801C02DC"
+        },
+        {
+          "symbol": "fn_801C02DC",
+          "start": "0x801C02DC",
+          "end": "0x801C02EC"
+        },
+        {
+          "symbol": "fn_801C02EC",
+          "start": "0x801C02EC",
+          "end": "0x801C065C"
+        },
+        {
+          "symbol": "fn_801C06A0",
+          "start": "0x801C06A0",
+          "end": "0x801C06E8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C06E8.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801C06E8-0x801C0E04 (src/engine/cu_801C06E8.c, animTexLib.c), function rows, data row 0x802AEEE8-0x802AEF08 and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C06E8",
+          "end": "0x801C0E04"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEEE8",
+          "end": "0x802AEF08"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801C06E8",
+          "start": "0x801C06E8",
+          "end": "0x801C07DC"
+        },
+        {
+          "symbol": "fn_801C07DC",
+          "start": "0x801C07DC",
+          "end": "0x801C089C"
+        },
+        {
+          "symbol": "fn_801C089C",
+          "start": "0x801C089C",
+          "end": "0x801C0928"
+        },
+        {
+          "symbol": "fn_801C0928",
+          "start": "0x801C0928",
+          "end": "0x801C09B8"
+        },
+        {
+          "symbol": "fn_801C09B8",
+          "start": "0x801C09B8",
+          "end": "0x801C09F8"
+        },
+        {
+          "symbol": "fn_801C09F8",
+          "start": "0x801C09F8",
+          "end": "0x801C0A38"
+        },
+        {
+          "symbol": "fn_801C0A38",
+          "start": "0x801C0A38",
+          "end": "0x801C0BA8"
+        },
+        {
+          "symbol": "fn_801C0BA8",
+          "start": "0x801C0BA8",
+          "end": "0x801C0C14"
+        },
+        {
+          "symbol": "fn_801C0C14",
+          "start": "0x801C0C14",
+          "end": "0x801C0CCC"
+        },
+        {
+          "symbol": "fn_801C0CCC",
+          "start": "0x801C0CCC",
+          "end": "0x801C0D8C"
+        },
+        {
+          "symbol": "fn_801C0D8C",
+          "start": "0x801C0D8C",
+          "end": "0x801C0E04"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C0E04.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801C0E04-0x801C10E0 (src/engine/cu_801C0E04.c, llanimtexlib.c), function rows, data row 0x802AEF08-0x802AEF10 and compiler row engine_c_fastmath. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C0E04",
+          "end": "0x801C10E0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEF08",
+          "end": "0x802AEF10"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801C0E04",
+          "start": "0x801C0E04",
+          "end": "0x801C0F64"
+        },
+        {
+          "symbol": "fn_801C0F64",
+          "start": "0x801C0F64",
+          "end": "0x801C0F84"
+        },
+        {
+          "symbol": "fn_801C0F84",
+          "start": "0x801C0F84",
+          "end": "0x801C0FA4"
+        },
+        {
+          "symbol": "fn_801C0FA4",
+          "start": "0x801C0FA4",
+          "end": "0x801C1054"
+        },
+        {
+          "symbol": "fn_801C1054",
+          "start": "0x801C1054",
+          "end": "0x801C10A4"
+        },
+        {
+          "symbol": "fn_801C10A4",
+          "start": "0x801C10A4",
+          "end": "0x801C10D8"
+        },
+        {
+          "symbol": "fn_801C10D8",
+          "start": "0x801C10D8",
+          "end": "0x801C10DC"
+        },
+        {
+          "symbol": "fn_801C10DC",
+          "start": "0x801C10DC",
+          "end": "0x801C10E0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C10E0.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801C10E0-0x801C1D54 (src/engine/cu_801C10E0.c, asynchronous loader with no NASCAR 2005 counterpart), function rows, compiler row engine_c_fastmath and source-form rows for the volatile loader state; fn_801C1C98 is not reconstructed. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C10E0",
+          "end": "0x801C1D54"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801C10E0",
+          "start": "0x801C10E0",
+          "end": "0x801C1198"
+        },
+        {
+          "symbol": "fn_801C1198",
+          "start": "0x801C1198",
+          "end": "0x801C1218"
+        },
+        {
+          "symbol": "fn_801C1218",
+          "start": "0x801C1218",
+          "end": "0x801C1260"
+        },
+        {
+          "symbol": "fn_801C1260",
+          "start": "0x801C1260",
+          "end": "0x801C1448"
+        },
+        {
+          "symbol": "fn_801C1448",
+          "start": "0x801C1448",
+          "end": "0x801C1564"
+        },
+        {
+          "symbol": "fn_801C1564",
+          "start": "0x801C1564",
+          "end": "0x801C1654"
+        },
+        {
+          "symbol": "fn_801C1654",
+          "start": "0x801C1654",
+          "end": "0x801C1710"
+        },
+        {
+          "symbol": "fn_801C1710",
+          "start": "0x801C1710",
+          "end": "0x801C17BC"
+        },
+        {
+          "symbol": "fn_801C17BC",
+          "start": "0x801C17BC",
+          "end": "0x801C1870"
+        },
+        {
+          "symbol": "fn_801C1870",
+          "start": "0x801C1870",
+          "end": "0x801C1950"
+        },
+        {
+          "symbol": "fn_801C1950",
+          "start": "0x801C1950",
+          "end": "0x801C1A60"
+        },
+        {
+          "symbol": "fn_801C1A60",
+          "start": "0x801C1A60",
+          "end": "0x801C1B1C"
+        },
+        {
+          "symbol": "fn_801C1B1C",
+          "start": "0x801C1B1C",
+          "end": "0x801C1B90"
+        },
+        {
+          "symbol": "fn_801C1B90",
+          "start": "0x801C1B90",
+          "end": "0x801C1C1C"
+        },
+        {
+          "symbol": "fn_801C1C1C",
+          "start": "0x801C1C1C",
+          "end": "0x801C1C98"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C1D54.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801C1D54-0x801C1D84 (src/engine/cu_801C1D54.c, start of auxram.c), function row and compiler row engine_c_fastmath; the end edge 0x801C1D84 is provisional. Comparison only; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C1D54",
+          "end": "0x801C1D84"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801C1D54",
+          "start": "0x801C1D54",
+          "end": "0x801C1D84"
         }
       ]
     },

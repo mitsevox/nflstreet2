@@ -65,7 +65,7 @@ void fn_8009BD2C(Object_80039F5C *,int *);
 void fn_8012430C(float *,int,Object_80039F5C *);
 unsigned char fn_801243E0(float *,int);
 float fn_801242E0(float *,unsigned int);
-int fn_801BE648(void *);
+unsigned short fn_801BE648(void *p);
 int fn_801BE068(void *,void *,void *,unsigned short,void *,float);
 void fn_801BE67C(void *,void *,void *,void *);
 int fn_8010A2DC(Object_80039F5C *,int,int);

@@ -50,7 +50,7 @@ struct Particle_80196564 {
 };
 
 extern "C" {
-void fn_801C0A38(Texture_80196564 *pTexture, int a, int b, int c, float *pCoords);
+void fn_801C0A38(Texture_80196564 *pTexture, unsigned int a, unsigned int b, unsigned int c, float *pCoords);
 void fn_801D04C4(void);
 void fn_801D0508(void);
 void fn_801D0544(void);
