@@ -16266,8 +16266,8 @@ struct Record_800B4DE4 {
 extern "C" {
 char *fn_801C2EB4(char *pDest, const char *pSource);
 char *fn_801C32CC(char *pString);
-extern float lbl_802E821C[][2];
-extern float lbl_802E826C[][2];
+extern float lbl_802D821C[][2];
+extern float lbl_802D826C[][2];
 float fn_80237260(int stream);
 void fn_800476CC(Item_800476DC *p, const char *name);
 void fn_8013AA00(Object_80137ABC *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
@@ -16280,10 +16280,10 @@ extern "C" short fn_800ABE10(int team, int index, short value)
     } else {
         switch (fn_800ABDA4(team)) {
         case 1:
-            value = (short)(lbl_802E826C[index][0] * 255.0f + lbl_802E826C[index][1] * value);
+            value = (short)(lbl_802D826C[index][0] * 255.0f + lbl_802D826C[index][1] * value);
             break;
         case 2:
-            value = (short)(lbl_802E821C[index][0] * 255.0f + lbl_802E821C[index][1] * value);
+            value = (short)(lbl_802D821C[index][0] * 255.0f + lbl_802D821C[index][1] * value);
             break;
         }
     }
