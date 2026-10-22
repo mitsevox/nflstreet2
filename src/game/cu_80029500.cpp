@@ -53,7 +53,7 @@ extern char lbl_802EBE50[];
 void fn_801D646C(void);
 void fn_801D6938(SaveFileDesc *, int);
 void fn_801D6924(int (*)(char *, int, Comment_80193CEC *), void (*)(void), void (*)(int, unsigned char **, unsigned int *), void (*)(int));
-void fn_801D5824(int, int);
+int fn_801D5824(int, int);
 void fn_801D6904(int, int);
 void fn_801D64EC(void);
 int fn_801F0C50(void *, int);

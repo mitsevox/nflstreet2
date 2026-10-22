@@ -21,14 +21,6 @@ void fn_8026EF88(int handle, void *pStatus);
 void fn_8026D0EC(void);
 int fn_8026CAA8(void);
 Decoder_801D86B4 *fn_801D9654(void *pMem, CodecIData_801D9634 *pIData);
-int fn_801DA4F8(int id);
-int fn_801DC9E0(int id);
-int fn_801DC9C8(int id);
-/* Defined with C++ linkage in cu_801D94A0.cpp; referenced here by their neutral labels,
-   which are the names the comparison link resolves until that unit is accepted. */
-int fn_801D95E4(void *pInfo, void *pChunk);
-void fn_801D94A0(Shape_801D94A0 *pShape);
-void fn_801D9538(Shape_801D94A0 *pShape, int type);
 }
 
 
@@ -38,23 +30,6 @@ extern Codec_801D9634 *(*lbl_803EBD48)(void);
 
 extern "C" void fn_801D8CD8(Audio_801D86B4 *pAudio);
 
-/* Low memory globals: the bus clock is at 0x800000F8. */
-typedef struct LowMem_801D86B4 {
-    char mPad[0xF8];
-    unsigned int mBusClock;
-} LowMem_801D86B4;
-
-#define TIMER_CLOCK_801D86B4 (((LowMem_801D86B4 *)0x80000000)->mBusClock / 4)
-
-static inline unsigned int fn_801D86B4_le32(unsigned char *p)
-{
-    return p[3] << 24 | p[2] << 16 | p[1] << 8 | p[0];
-}
-
-static inline int fn_801D86B4_busy(Decoder_801D86B4 *pDecoder)
-{
-    return pDecoder->mpCodec != 0;
-}
 
 void *fn_801D86B4(const char *pName, int size, int a, int b, int flags)
 {
@@ -121,16 +96,16 @@ void fn_801D8778(Decoder_801D86B4 *pDecoder, Info_801D86B4 **ppStreamer, Chunk_8
                 *ppChunk = pChunk;
                 pChunk->mpHeader = pHeader;
                 if (codec == 2) {
-                    pChunk->mSize = fn_801D86B4_le32(pHeader + 4);
+                    pChunk->mSize = (pHeader[7] << 24 | pHeader[6] << 16 | pHeader[5] << 8 | pHeader[4]);
                     pChunk->mpData = pHeader;
                 } else if (codec == 4 || codec == 5) {
-                    pChunk->mSize = fn_801D86B4_le32(pHeader + 4);
+                    pChunk->mSize = (pHeader[7] << 24 | pHeader[6] << 16 | pHeader[5] << 8 | pHeader[4]);
                     pChunk->mpData = pHeader;
                 } else {
-                    pChunk->mSize = fn_801D86B4_le32(pHeader + 4);
+                    pChunk->mSize = (pHeader[7] << 24 | pHeader[6] << 16 | pHeader[5] << 8 | pHeader[4]);
                     pChunk->mpData = pHeader + 8;
                 }
-                if (fn_801D86B4_busy(pDecoder)) {
+                if (pDecoder->mpCodec != 0) {
                     return;
                 }
                 if (codec == 2 && lbl_803EBD44 != 0) {
@@ -241,11 +216,11 @@ void fn_801D8CD8(Audio_801D86B4 *pAudio)
     pAudio->mSync = pAudio->mHandle >= 0;
     switch (fn_801CE1E8()) {
     case 1:
-        pAudio->mStartTime = OSGetTime() * 60 / (TIMER_CLOCK_801D86B4) * 1000 / 50;
+        pAudio->mStartTime = OSGetTime() * 60 / OS_TIMER_CLOCK * 1000 / 50;
         break;
     case 0:
     default:
-        pAudio->mStartTime = OSGetTime() * 60 / (TIMER_CLOCK_801D86B4) * 1000 / 60;
+        pAudio->mStartTime = OSGetTime() * 60 / OS_TIMER_CLOCK * 1000 / 60;
         break;
     }
     pAudio->mDrift = pAudio->mLastTime = 0;
@@ -260,11 +235,11 @@ int fn_801D8DE8(Info_801D86B4 *pInfo)
 
     switch (fn_801CE1E8()) {
     case 1:
-        now = OSGetTime() * 60 / (TIMER_CLOCK_801D86B4) * 1000 / 50;
+        now = OSGetTime() * 60 / OS_TIMER_CLOCK * 1000 / 50;
         break;
     case 0:
     default:
-        now = OSGetTime() * 60 / (TIMER_CLOCK_801D86B4) * 1000 / 60;
+        now = OSGetTime() * 60 / OS_TIMER_CLOCK * 1000 / 60;
         break;
     }
     time = now - pAudio->mStartTime;
@@ -305,11 +280,11 @@ int fn_801D900C(Info_801D86B4 *pInfo)
         if (goal > pInfo->mpVideo->mCurFrame + 2) {
             switch (fn_801CE1E8()) {
             case 1:
-                pInfo->mpAudio->mStartTime = OSGetTime() * 60 / (TIMER_CLOCK_801D86B4) * 1000 / 50 - pInfo->mpAudio->mLastTime;
+                pInfo->mpAudio->mStartTime = OSGetTime() * 60 / OS_TIMER_CLOCK * 1000 / 50 - pInfo->mpAudio->mLastTime;
                 break;
             case 0:
             default:
-                pInfo->mpAudio->mStartTime = OSGetTime() * 60 / (TIMER_CLOCK_801D86B4) * 1000 / 60 - pInfo->mpAudio->mLastTime;
+                pInfo->mpAudio->mStartTime = OSGetTime() * 60 / OS_TIMER_CLOCK * 1000 / 60 - pInfo->mpAudio->mLastTime;
                 break;
             }
             goal = fn_801D8DE8(pInfo);

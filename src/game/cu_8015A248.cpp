@@ -95,7 +95,7 @@ void *fn_801C1F94(void *, int, unsigned int);
 void fn_8012CB98(int, int, int, void *);
 int fn_8012CB50(void *);
 int fn_801DCF0C(int, int, int, void (*)(Object_8015C244 *), void (*)(Object_8015C244 *));
-void fn_801DCF8C(int);
+int fn_801DCF8C(int);
 void fn_801DD0C8(int, int, int, int (*)(Object_8015C244 *));
 Object_8015C244 *fn_801DD268(int, int, int, void *);
 void fn_801DD3AC(int, Object_8015C244 *, int);

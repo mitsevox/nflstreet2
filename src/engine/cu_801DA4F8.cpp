@@ -1,3 +1,5 @@
+#include "engine/cu_801D86B4.h"
+
 /* Chunk identifiers handled by the MAD codec: 'MADm', 'MADe', 'MADk'. */
 static const int lbl_802B0054[3] = { 0x4D41446D, 0x4D414465, 0x4D41446B };
 

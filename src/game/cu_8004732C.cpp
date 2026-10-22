@@ -32,7 +32,7 @@ void fn_801D1258(int which, float (*pMatrix)[4]);
 void fn_801D1288(int which, float (*pMatrix)[4]);
 void fn_801D12BC(int a);
 int fn_801DCF0C(int a, int b, int c, void (*pA)(Item_800476DC *), void (*pB)(Item_800476DC *));
-void fn_801DCF8C(int a);
+int fn_801DCF8C(int a);
 void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Item_800476DC *));
 int fn_801DD268(int handle, int a, int b, int *pInit);
 void fn_801DD320(int handle, Item_800476DC *pInstance);

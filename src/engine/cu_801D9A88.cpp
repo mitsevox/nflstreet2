@@ -1,5 +1,6 @@
 #include "engine/cu_801D86B4.h"
 #include "engine/llmemory.h"
+#include "engine/cu_801DA52C.h"
 
 /* Intrusive doubly linked list node; a list head is a node that points at itself when empty. */
 struct Node_801D9A88 {
@@ -76,28 +77,11 @@ public:
 
 extern "C" {
 MadCodec_801D9A88 *fn_801D9BC8(void *pMem);
-/* maddec.cpp (C++ linkage there); referenced by neutral label for the comparison link. */
-void fn_801DABE0(const unsigned short *pData, int frame, int quant);
-void fn_801DAD20(const unsigned char *pRefY, const unsigned char *pRefU, const unsigned char *pRefV,
-                 unsigned char *pDstY, unsigned char *pDstU, unsigned char *pDstV, int stride);
 }
 
 extern Alloc_801D86B4 lbl_80399100;
 extern const char lbl_802AFFA8[];
 extern const char lbl_802AFFAC[];
-
-static inline unsigned char *fn_801D9A88_planes(Shape_801D94A0 *pShape)
-{
-    if (pShape->mFlags & 0x10000000) {
-        return (unsigned char *)pShape + pShape->mOffset;
-    }
-    return (unsigned char *)&pShape->mOffset;
-}
-
-static inline unsigned int fn_801D9A88_le32(unsigned char *p)
-{
-    return p[3] << 24 | p[2] << 16 | p[1] << 8 | p[0];
-}
 
 unsigned int fn_801D9A88(Chunk_801D86B4 *pChunk)
 {
@@ -165,7 +149,13 @@ MadFrame_801D9A88 *MadCodec_801D9A88::fn_801D9E40(Chunk_801D86B4 *pChunk)
     int y;
 
     if (mpLast != 0) {
-        pRefY = fn_801D9A88_planes(mpLast->mpShape);
+        Shape_801D94A0 *pShape = mpLast->mpShape;
+
+        if (pShape->mFlags & 0x10000000) {
+            pRefY = (unsigned char *)pShape + pShape->mOffset;
+        } else {
+            pRefY = (unsigned char *)&pShape->mOffset;
+        }
         pRefU = pRefY + mWidth * mHeight;
         pRefV = pRefY + mWidth * 5 * mHeight / 4;
     }
@@ -173,7 +163,7 @@ MadFrame_801D9A88 *MadCodec_801D9A88::fn_801D9E40(Chunk_801D86B4 *pChunk)
         int i;
         int count;
 
-        mRate = fn_801D9A88_le32(pHeader + 0xC);
+        mRate = (pHeader[0xF] << 24 | pHeader[0xE] << 16 | pHeader[0xD] << 8 | pHeader[0xC]);
         mFrameRate = 1000.0f / (mRate * 1.5259022e-05f);
         mWidth = pHeader[0x11] << 8 | pHeader[0x10];
         mHeight = pHeader[0x13] << 8 | pHeader[0x12];
@@ -201,7 +191,11 @@ MadFrame_801D9A88 *MadCodec_801D9A88::fn_801D9E40(Chunk_801D86B4 *pChunk)
         pFrame = fn_801DA3A8();
         fn_801DABE0((const unsigned short *)(pHeader + 0x18), 1, (signed char)pHeader[0x15]);
     }
-    pY = fn_801D9A88_planes(pFrame->mpShape);
+    if (pFrame->mpShape->mFlags & 0x10000000) {
+        pY = (unsigned char *)pFrame->mpShape + pFrame->mpShape->mOffset;
+    } else {
+        pY = (unsigned char *)&pFrame->mpShape->mOffset;
+    }
     pU = pY + mWidth * mHeight;
     pV = pY + mWidth * 5 * mHeight / 4;
     for (y = 0; y < mHeight; y += 16) {

@@ -48,7 +48,7 @@ void fn_801D0CFC(float a);
 int fn_801DCF0C(int type, int size, int count,
                 void (*pCreate)(Object_80163358 *, int *),
                 void (*pDestroy)(Object_80163358 *));
-void fn_801DCF8C(int type);
+int fn_801DCF8C(int type);
 void fn_801DD0C8(int handle, int type, int a, int (*pCallback)(Object_80163358 *));
 int fn_801DD268(int handle, int type, int a, int *pDesc);
 void fn_801DD320(int handle, Object_80163358 *pObject);

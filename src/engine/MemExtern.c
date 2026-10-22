@@ -1,6 +1,6 @@
 #include "engine/Memory.h"
 
-typedef struct ExternHeap {
+typedef struct Struct_801D3B0C {
     int mIdent;
     unsigned char mKind;
     char *mBase;
@@ -15,7 +15,7 @@ typedef struct ExternHeap {
     int mUnknown2C;
     int mUnknown30;
     unsigned int mBlocks[1];
-} ExternHeap;
+} Struct_801D3B0C;
 
 #define BLOCK_FREE 0x80000000
 #define BLOCK_SIZE(block) ((block) & 0x7FFFFFFF)
@@ -32,7 +32,7 @@ static int fn_801D36EC(void *pHeapData, int flags)
 
 static int fn_801D36F4(void *pHeapData)
 {
-    ExternHeap *pHeap = pHeapData;
+    Struct_801D3B0C *pHeap = pHeapData;
     unsigned int *pBlock;
     unsigned int total = 0;
 
@@ -48,7 +48,7 @@ static int fn_801D36F4(void *pHeapData)
 
 static int fn_801D3768(void *pHeapData, void *pAddr)
 {
-    ExternHeap *pHeap = pHeapData;
+    Struct_801D3B0C *pHeap = pHeapData;
     unsigned int *pBlock = pHeap->mBlocks;
     int offset = (char *)pAddr - pHeap->mBase;
 
@@ -64,7 +64,7 @@ static int fn_801D3768(void *pHeapData, void *pAddr)
 
 static int fn_801D37AC(void *pHeapData, int what)
 {
-    ExternHeap *pHeap = pHeapData;
+    Struct_801D3B0C *pHeap = pHeapData;
     unsigned int *pBlock;
     unsigned int largest;
 
@@ -88,7 +88,7 @@ static int fn_801D37AC(void *pHeapData, int what)
 
 static void *fn_801D3820(void *pHeapData, int size, int align, int flags)
 {
-    ExternHeap *pHeap = pHeapData;
+    Struct_801D3B0C *pHeap = pHeapData;
     unsigned int *pBlock;
     unsigned int *pScan;
     unsigned int want;
@@ -149,7 +149,7 @@ static void *fn_801D3820(void *pHeapData, int size, int align, int flags)
 
 static int fn_801D399C(void *pHeapData, void *pAddr)
 {
-    ExternHeap *pHeap = pHeapData;
+    Struct_801D3B0C *pHeap = pHeapData;
     unsigned int *pBlock = pHeap->mBlocks;
     unsigned int *pOut;
     int offset = (char *)pAddr - pHeap->mBase;
@@ -191,7 +191,7 @@ static int fn_801D3ABC(void *pHeapData, void *pAddr, int size)
 
 static int fn_801D3AC4(void *pHeapData, void *pAddr)
 {
-    ExternHeap *pHeap = pHeapData;
+    Struct_801D3B0C *pHeap = pHeapData;
     unsigned int *pBlock = pHeap->mBlocks;
     int offset = (char *)pAddr - pHeap->mBase;
 
@@ -213,16 +213,16 @@ static MemHeapFuncs_801D134C lbl_802F7B40 = {
 int fn_801D3B0C(int ident, int parentIdent, char *pStart, unsigned int size, unsigned int maxBlocks,
                 unsigned int align)
 {
-    ExternHeap *pHeap;
+    Struct_801D3B0C *pHeap;
 
     if (maxBlocks < 8) {
         maxBlocks = 8;
     }
-    pHeap = fn_801D2478(ident, parentIdent, pStart, size, maxBlocks * 8 + sizeof(ExternHeap), &lbl_802F7B40);
+    pHeap = fn_801D2478(ident, parentIdent, pStart, size, maxBlocks * 8 + sizeof(Struct_801D3B0C), &lbl_802F7B40);
     if (pHeap == 0) {
         return 0;
     }
-    memset(pHeap, 0, sizeof(ExternHeap));
+    memset(pHeap, 0, sizeof(Struct_801D3B0C));
     pHeap->mBlocks[1] = BLOCK_END;
     pHeap->mAlign = align;
     pHeap->mIdent = ident;

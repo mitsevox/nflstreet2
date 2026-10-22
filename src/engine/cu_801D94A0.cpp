@@ -1,8 +1,8 @@
 #include "engine/cu_801D86B4.h"
 #include "engine/cu_801DB7D4.h"
+#include "engine/fn_801CEA08.h"
 
 extern "C" {
-int fn_801CEA08(void);
 int fn_801CEC84(void);
 int DVDGetDriveStatus(void);
 }

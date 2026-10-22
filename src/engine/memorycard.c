@@ -1,84 +1,19 @@
 #include "game/fn_801D2B7C.h"
 #include "engine/memorycard.h"
+#include <dolphin/card.h>
+#include <string.h>
+#include <stdio.h>
 
-typedef void (*CARDCallback)(int chan, int result);
+typedef void (*DeviceFunc_803EBCFC)(int added, int removed);
 
-typedef struct CARDFileInfo {
-    int chan;
-    int fileNo;
-    int offset;
-    int length;
-    unsigned short iBlock;
-} CARDFileInfo;
-
-typedef struct CARDStat {
-    char fileName[32];
-    unsigned int length;
-    unsigned int time;
-    unsigned char gameName[4];
-    unsigned char company[2];
-    unsigned char bannerFormat;
-    unsigned int iconAddr;
-    unsigned short iconFormat;
-    unsigned short iconSpeed;
-    unsigned int commentAddr;
-    unsigned int offsetBanner;
-    unsigned int offsetBannerTlut;
-    unsigned int offsetIcon[8];
-    unsigned int offsetIconTlut;
-    unsigned int offsetData;
-} CARDStat;
-
-#define CARD_STAT_ICON_RGB5A3 2
-#define CARD_STAT_ICON_MASK 3
-#define CARD_STAT_BANNER_NONE 0
-#define CARD_STAT_BANNER_MASK 3
-#define CARD_STAT_ANIM_LOOP 0x00
-#define CARD_STAT_ANIM_MASK 0x04
-#define CARD_STAT_SPEED_END 0
-#define CARD_STAT_SPEED_SLOW 3
-#define CARD_STAT_SPEED_MASK 3
-
-#define CARDSetBannerFormat(stat, f) \
-    ((stat)->bannerFormat = (unsigned char)(((stat)->bannerFormat & ~CARD_STAT_BANNER_MASK) | (f)))
-#define CARDSetIconAnim(stat, f) \
-    ((stat)->bannerFormat = (unsigned char)(((stat)->bannerFormat & ~CARD_STAT_ANIM_MASK) | (f)))
-#define CARDSetIconFormat(stat, n, f) \
-    ((stat)->iconFormat = \
-         (unsigned short)(((stat)->iconFormat & ~(CARD_STAT_ICON_MASK << (2 * (n)))) | ((f) << (2 * (n)))))
-#define CARDSetIconSpeed(stat, n, f) \
-    ((stat)->iconSpeed = \
-         (unsigned short)(((stat)->iconSpeed & ~(CARD_STAT_SPEED_MASK << (2 * (n)))) | ((f) << (2 * (n)))))
-#define CARDSetIconAddress(stat, addr) ((stat)->iconAddr = (unsigned int)(addr))
-#define CARDSetCommentAddress(stat, addr) ((stat)->commentAddr = (unsigned int)(addr))
-#define CARDGetFileNo(fileInfo) ((fileInfo)->fileNo)
-
-#define CARD_RESULT_READY 0
-#define CARD_RESULT_BUSY -1
-#define CARD_RESULT_WRONGDEVICE -2
-#define CARD_RESULT_NOCARD -3
-#define CARD_RESULT_NOFILE -4
-#define CARD_RESULT_BROKEN -6
-#define CARD_RESULT_NOPERM -10
-#define CARD_RESULT_NOENT -8
-#define CARD_RESULT_FATAL_ERROR -128
-
-extern void CARDInit(void);
-extern int CARDUnmount(int chan);
-extern int CARDCheckAsync(int chan, CARDCallback callback);
-extern int CARDFreeBlocks(int chan, int *byteNotUsed, int *filesNotUsed);
-extern int CARDGetStatus(int chan, int fileNo, CARDStat *stat);
-
-typedef void (*MemCDeviceCallback)(int added, int removed);
-
-typedef struct MemCDevices {
+typedef struct Struct_80384CC0 {
     int mMounted;
     int mPresent;
     int mAdded;
     int mRemoved;
-} MemCDevices;
+} Struct_80384CC0;
 
-typedef struct MemCOp {
+typedef struct Struct_80384CD0 {
     int mPort;
     int mHandle;
     int mState;
@@ -102,50 +37,32 @@ typedef struct MemCOp {
     char *mPendingRead;
     char *mPendingWrite;
     int mPendingLength;
-} MemCOp;
+} Struct_80384CD0;
 
-typedef struct MemCCard {
+typedef struct Struct_80384DB8 {
     int mType;
-    int mMemSize;
-    int mSectorSize;
-    int mFreeBytes;
-    int mFreeFiles;
+    s32 mMemSize;
+    s32 mSectorSize;
+    s32 mFreeBytes;
+    s32 mFreeFiles;
     int mUnknown14;
     unsigned int mNumEntries;
-} MemCCard;
+} Struct_80384DB8;
 
 
-extern MemCDevices lbl_80384CC0;
-extern MemCOp lbl_80384CD0;
-extern MemCCard lbl_80384DB8;
+extern Struct_80384CC0 lbl_80384CC0;
+extern Struct_80384CD0 lbl_80384CD0;
+extern Struct_80384DB8 lbl_80384DB8;
 extern char lbl_80384DE0[2][0xA000];
-extern MemCDeviceCallback lbl_803EBCFC;
+extern DeviceFunc_803EBCFC lbl_803EBCFC;
 extern int lbl_803EBCF8;
 
-extern int fn_80255D3C(int chan, int *memSize, int *sectorSize);
-extern int fn_80256400(int chan, void *workArea, CARDCallback detachCallback, CARDCallback attachCallback);
-extern int CARDFormatAsync(int chan, CARDCallback callback);
-extern unsigned int strlen(const char *pString);
-extern char *strncpy(char *pDst, const char *pSrc, unsigned int count);
-extern int strncmp(const char *pA, const char *pB, unsigned int count);
 extern const char lbl_802AFCF8[];
 extern const char lbl_802AFCFC[];
 extern const char lbl_802AFE50[];
 extern const char lbl_802AFE5C[];
 extern const char lbl_802AFE6C[];
-extern int sprintf(char *pBuffer, const char *pFormat, ...);
-extern int memcmp(const void *pA, const void *pB, unsigned int count);
-extern void *memcpy();
-extern int CARDCreateAsync(int chan, const char *fileName, unsigned int size, CARDFileInfo *fileInfo,
-                           CARDCallback callback);
-extern int CARDFastDelete(int chan, int fileNo);
-extern int CARDFastDeleteAsync(int chan, int fileNo, CARDCallback callback);
-extern int fn_80257388(int chan, int fileNo, CARDFileInfo *fileInfo);
-extern int fn_8025748C(CARDFileInfo *fileInfo);
-extern int CARDReadAsync(CARDFileInfo *fileInfo, void *buf, int length, int offset, CARDCallback callback);
-extern int CARDWriteAsync(CARDFileInfo *fileInfo, void *buf, int length, int offset, CARDCallback callback);
 extern int fn_8027EFAC(int year);
-extern int CARDSetStatusAsync(int chan, int fileNo, CARDStat *stat, CARDCallback callback);
 
 
 static void fn_801D3C68(int *pOffset, int *pChunkSize)
@@ -160,7 +77,7 @@ static void fn_801D3C68(int *pOffset, int *pChunkSize)
     *pChunkSize = chunk;
 }
 
-static void fn_801D3CA4(int chan, int result)
+static void fn_801D3CA4(s32 chan, s32 result)
 {
     CARDUnmount(chan);
     lbl_80384CC0.mRemoved |= 1 << chan;
@@ -221,7 +138,7 @@ static int fn_801D3D98(const char *pPattern, const char *pName)
     return match;
 }
 
-static void fn_801D3E6C(MemCDirEntry *pEntry, unsigned int seconds)
+static void fn_801D3E6C(Struct_801D4848 *pEntry, unsigned int seconds)
 {
     unsigned char daysInMonth[13] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     unsigned int days;
@@ -369,7 +286,7 @@ int fn_801D444C(int port)
     lbl_80384CD0.mBusy = 1;
     lbl_80384CD0.mResult = -99;
     lbl_80384CD0.mState = 1;
-    status = fn_80255D3C(fn_801D4204(port), &lbl_80384DB8.mMemSize, &lbl_80384DB8.mSectorSize);
+    status = CARDProbeEx(fn_801D4204(port), &lbl_80384DB8.mMemSize, &lbl_80384DB8.mSectorSize);
     lbl_80384CD0.mResult = status;
     switch (status) {
     case CARD_RESULT_READY:
@@ -429,7 +346,7 @@ int fn_801D45DC(int port)
     lbl_80384CD0.mState = 2;
     lbl_80384CD0.mResult = -99;
     lbl_80384CD0.mBusy = 1;
-    status = fn_80256400(port, lbl_80384DE0[port], fn_801D3CA4, 0);
+    status = CARDMountAsync(port, lbl_80384DE0[port], fn_801D3CA4, 0);
     lbl_80384CD0.mResult = status;
     if (status == CARD_RESULT_READY) {
         lbl_80384CD0.mBusy = 1;
@@ -464,7 +381,7 @@ int fn_801D46C0(int port)
     return 0;
 }
 
-int fn_801D46E8(void)
+int fn_801D46E8(int slot)
 {
     return 0;
 }
@@ -513,7 +430,7 @@ int fn_801D47E0(int port)
     return 0;
 }
 
-int fn_801D4848(int port, const char *pGameCode, const char *pPattern, MemCDirEntry *pEntries,
+int fn_801D4848(int port, const char *pGameCode, const char *pPattern, Struct_801D4848 *pEntries,
                 unsigned int maxEntries)
 {
     CARDStat stat;
@@ -528,7 +445,7 @@ int fn_801D4848(int port, const char *pGameCode, const char *pPattern, MemCDirEn
     lbl_80384CD0.mState = 12;
     lbl_80384CD0.mBusy = 1;
     lbl_80384DB8.mNumEntries = 0;
-    for (fileNo = 0; fileNo < maxEntries; fileNo++) {
+    for (fileNo = 0; fileNo <= 126 && lbl_80384DB8.mNumEntries < maxEntries; fileNo++) {
         status = CARDGetStatus(port, fileNo, &stat);
         if (status == CARD_RESULT_READY) {
             strncpy(code, (char *)stat.gameName, 4);
@@ -557,19 +474,13 @@ int fn_801D4848(int port, const char *pGameCode, const char *pPattern, MemCDirEn
             lbl_80384CD0.mResult = status;
             break;
         }
-        if (fileNo + 1 > 126) {
-            break;
-        }
-        if (lbl_80384DB8.mNumEntries >= maxEntries) {
-            break;
-        }
     }
     lbl_80384CD0.mBusy = 0;
     return 0;
 }
 
-static void fn_801D4D08(int chan, int result);
-static void fn_801D4D90(int chan, int result);
+static void fn_801D4D08(s32 chan, s32 result);
+static void fn_801D4D90(s32 chan, s32 result);
 
 int fn_801D4A3C(int port, const char *pName, int unused, int flags, int size)
 {
@@ -647,7 +558,7 @@ int fn_801D4A3C(int port, const char *pName, int unused, int flags, int size)
         if (lbl_80384CD0.mResult != CARD_RESULT_NOFILE) {
             if (memcmp(lbl_80384CD0.mStat.company, lbl_802AFCF8, 2) == 0
                 && strncmp(lbl_80384CD0.mStat.fileName, pName, 32) == 0) {
-                lbl_80384CD0.mResult = fn_80257388(port, fileNo, &lbl_80384CD0.mFileInfo);
+                lbl_80384CD0.mResult = CARDFastOpen(port, fileNo, &lbl_80384CD0.mFileInfo);
                 if (lbl_80384CD0.mResult == CARD_RESULT_READY) {
                     lbl_80384CD0.mResult = fileNo;
                     lbl_80384CD0.mLength = lbl_80384CD0.mStat.length;
@@ -662,7 +573,7 @@ int fn_801D4A3C(int port, const char *pName, int unused, int flags, int size)
     return 0;
 }
 
-static void fn_801D4D08(int chan, int result)
+static void fn_801D4D08(s32 chan, s32 result)
 {
     if (result == CARD_RESULT_NOFILE || result == CARD_RESULT_READY) {
         lbl_80384CD0.mResult = CARDCreateAsync(chan, lbl_80384CD0.mName, lbl_80384CD0.mSize,
@@ -677,7 +588,7 @@ static void fn_801D4D08(int chan, int result)
     }
 }
 
-static void fn_801D4D90(int chan, int result)
+static void fn_801D4D90(s32 chan, s32 result)
 {
     int fileNo = 0;
 
@@ -755,7 +666,7 @@ int fn_801D4F58(int handle)
     lbl_80384CD0.mHandle = handle;
     lbl_80384CD0.mBusy = 1;
     lbl_80384CD0.mResult = -99;
-    lbl_80384CD0.mResult = fn_8025748C(&lbl_80384CD0.mFileInfo);
+    lbl_80384CD0.mResult = CARDClose(&lbl_80384CD0.mFileInfo);
     lbl_80384CD0.mBusy = 0;
     return 0;
 }
@@ -1042,9 +953,9 @@ void fn_801D5764(int type, char *pBuffer, int size)
     }
 }
 
-void fn_801D57E0(int port, char *pBuffer)
+int fn_801D57E0(int port, char *pBuffer, int size)
 {
-    sprintf(pBuffer, lbl_802AFE6C, fn_801D4204(port) + 'A');
+    return sprintf(pBuffer, lbl_802AFE6C, fn_801D4204(port) + 'A');
 }
 
 int fn_801D5824(int enable, int size)

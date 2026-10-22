@@ -1,6 +1,7 @@
 #include "game/fn_801D2B7C.h"
 #include "engine/Memory.h"
 #include "engine/llmemory.h"
+#include "game/fn_801C3284.h"
 #include "engine/fn_801F8014.h"
 
 typedef struct MemRange_801D134C {
@@ -10,7 +11,7 @@ typedef struct MemRange_801D134C {
     MemHeap_801D134C *mpHeap;
 } MemRange_801D134C;
 
-typedef struct MemDebugInfo {
+typedef struct Struct_801D1ED8 {
     char mUnknown0[0x4];
     int mSerial;
     char mUnknown8[0xC - 0x8];
@@ -19,20 +20,20 @@ typedef struct MemDebugInfo {
     char mName[16];
     char mGuard[16];
     int mExtra;
-} MemDebugInfo;
+} Struct_801D1ED8;
 
-typedef struct MemHeapParams {
+typedef struct Struct_801D2130 {
     char mName[8];
     int mId;
     char *mStart;
     unsigned int mSize;
     unsigned short mAlign;
-} MemHeapParams;
+} Struct_801D2130;
 
-typedef struct MemInitParams {
+typedef struct Struct_801D2054 {
     char mUnknown0[0x40];
-    MemHeapParams *mpHeap;
-} MemInitParams;
+    Struct_801D2130 *mpHeap;
+} Struct_801D2054;
 
 extern int lbl_803EBCC4;
 extern void (*lbl_803EBCD4)(void);
@@ -60,9 +61,8 @@ extern int sprintf(char *pDst, const char *pFormat, ...);
 
 extern void *fn_801D28A8(int a, int size, int ident, int flags);
 extern void *fn_801D2E5C(int a, void *pAddr, int size, int ident, int flags);
-extern char *fn_801C3284(char *pDst, const char *pSrc, int size);
 extern int fn_801F7ABC(void);
-extern int fn_801D2130(MemHeapParams *pParams);
+extern int fn_801D2130(Struct_801D2130 *pParams);
 extern int fn_801D2570(int ident);
 
 static MemHeap_801D134C *fn_801D134C(int id)
@@ -172,7 +172,7 @@ static void fn_801D1588(MemHeap_801D134C *pHeap, MemNode_801D134C *pNode)
 static void fn_801D1620(MemHeap_801D134C *pHeap, MemNode_801D134C *pNode)
 {
     MemNode_801D134C *pParent;
-    MemNode_801D134C *pSucc;
+    MemNode_801D134C *pPred;
 
     pHeap->mFreeBytes -= pNode->mSize;
     pHeap->mNumFree--;
@@ -207,25 +207,25 @@ static void fn_801D1620(MemHeap_801D134C *pHeap, MemNode_801D134C *pNode)
         }
         pNode->mpLeft->mpParent = pNode->mpParent;
     } else {
-        pSucc = pNode->mpLeft;
+        pPred = pNode->mpLeft;
         do {
-            pSucc = pSucc->mpRight;
-        } while (pSucc->mpRight);
-        pSucc->mpParent->mpRight = pSucc->mpLeft;
-        if (pSucc->mpLeft) {
-            pSucc->mpLeft->mpParent = pSucc->mpParent;
+            pPred = pPred->mpRight;
+        } while (pPred->mpRight);
+        pPred->mpParent->mpRight = pPred->mpLeft;
+        if (pPred->mpLeft) {
+            pPred->mpLeft->mpParent = pPred->mpParent;
         }
         pParent = pNode->mpParent;
         if (pParent->mpLeft == pNode) {
-            pParent->mpLeft = pSucc;
+            pParent->mpLeft = pPred;
         } else {
-            pParent->mpRight = pSucc;
+            pParent->mpRight = pPred;
         }
-        pSucc->mpParent = pNode->mpParent;
-        pSucc->mpLeft = pNode->mpLeft;
-        pSucc->mpRight = pNode->mpRight;
-        pSucc->mpLeft->mpParent = pSucc;
-        pSucc->mpRight->mpParent = pSucc;
+        pPred->mpParent = pNode->mpParent;
+        pPred->mpLeft = pNode->mpLeft;
+        pPred->mpRight = pNode->mpRight;
+        pPred->mpLeft->mpParent = pPred;
+        pPred->mpRight->mpParent = pPred;
     }
 }
 
@@ -279,11 +279,6 @@ static int fn_801D177C(MemBlock_801D134C *pBlock, int size)
     return size;
 }
 
-static inline unsigned int fn_801D134C_Mod(char *pAddr, int offset, unsigned int align)
-{
-    return ((unsigned int)pAddr + offset) % align;
-}
-
 static MemBlock_801D134C *fn_801D18A0(MemBlock_801D134C *pBlock, int align, int offset, int size)
 {
     char *pStart;
@@ -326,7 +321,7 @@ static MemBlock_801D134C *fn_801D18A0(MemBlock_801D134C *pBlock, int align, int 
     }
     pHeap = pBlock->mpHeap;
     n = pHeap ? pHeap->mDebugSize : 0;
-    rem = fn_801D134C_Mod(pStart + n + 12, offset, align);
+    rem = ((unsigned int)(pStart + n + 12) + offset) % (unsigned int)align;
     if (rem) {
         extra = align - rem;
         if (n == 0 && extra < 2) {
@@ -487,7 +482,7 @@ static MemBlock_801D134C *fn_801D1C14(MemBlock_801D134C *pBlock, int align, int 
         return 0;
     }
     n = pHeap ? pHeap->mDebugSize : 0;
-    rem = fn_801D134C_Mod(pStart, n + 12, 16);
+    rem = ((unsigned int)pStart + (n + 12)) % 16u;
     if (rem) {
         extra = 16 - rem;
         if (n == 0 && extra < 2) {
@@ -550,7 +545,7 @@ static MemBlock_801D134C *fn_801D1E30(MemHeap_801D134C *pHeap, int align, int of
     return 0;
 }
 
-static void fn_801D1ED8(MemDebugInfo *pInfo, const char *pFile, unsigned int line, const char *pLabel,
+static void fn_801D1ED8(Struct_801D1ED8 *pInfo, const char *pFile, unsigned int line, const char *pLabel,
                         const char *pName, int extra)
 {
     int i;
@@ -590,7 +585,7 @@ static void fn_801D2050(void)
 {
 }
 
-int fn_801D2054(MemInitParams *pParams)
+int fn_801D2054(Struct_801D2054 *pParams)
 {
     int result = 0;
 
@@ -811,7 +806,7 @@ void *fn_801D310C(void *pAddr, int size, int ident, int flags)
 int fn_801D3148(int a, void *pAddr)
 {
     MemHeap_801D134C *pHeap = fn_801D13A4(pAddr);
-    MemBlock_801D134C *pBlock;
+    void **pTail;
     int size;
 
     if (pHeap == 0) {
@@ -824,8 +819,8 @@ int fn_801D3148(int a, void *pAddr)
         fn_801D2874(a, pAddr);
     }
     fn_801F8014(&lbl_803E92AC);
-    pBlock = ((void **)pAddr)[-1];
-    size = (char *)pBlock - (char *)*(void **)pBlock - 4;
+    pTail = ((void ***)pAddr)[-1];
+    size = (char *)pTail - (char *)*pTail - 4;
     fn_801F809C(&lbl_803E92AC);
     return size;
 }

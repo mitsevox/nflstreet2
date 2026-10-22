@@ -1316,7 +1316,7 @@ void fn_802276B4(void *, void *, void *);
 void fn_80227490(void *, void *, int, int, int);
 int fn_801CFFD0(int, int);
 int fn_801DCF0C(int, int, int, void *, void *);
-void fn_801DCF8C(int);
+int fn_801DCF8C(int);
 void fn_801DD0C8(int, int, int, int (*)(Child_801A9430 *));
 Child_801A9430 *fn_801DD268(int, int, int, Desc_800408E4 *);
 void fn_801DD320(int, Child_801A9430 *);

@@ -1,7 +1,8 @@
+#include "engine/cu_801DA52C.h"
+
 extern "C" {
 void fn_801DB21C(int *pIn, int *pOut);
 void fn_801DB490(int *pIn, int *pOut);
-void fn_801DB670(int *pOut, int stride);
 }
 
 extern int lbl_8039AB10[64];

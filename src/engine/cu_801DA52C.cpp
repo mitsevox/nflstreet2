@@ -1,3 +1,5 @@
+#include "engine/cu_801DA52C.h"
+
 extern unsigned char *lbl_803ECF1C;
 extern unsigned int lbl_803ECF20;
 extern int lbl_803ECF24;
@@ -112,9 +114,6 @@ void fn_801DA52C(void)
 extern int lbl_8039A310[256];
 extern int lbl_8039A710[64];
 extern int lbl_8039A810[64];
-
-extern "C" int fn_801DB0B0(void);
-extern "C" void fn_801DB670(int *pOut, int stride);
 
 void fn_801DA7E8(int count)
 {

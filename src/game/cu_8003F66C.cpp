@@ -64,7 +64,7 @@ struct Init_8003F768 {
 extern "C" {
 void fn_8019CEE8(Object_8003F768 *p);
 void fn_8019CFD0(Object_8003F768 *p);
-void fn_801DCF8C(int type);
+int fn_801DCF8C(int type);
 void fn_801DD320(int handle, int item);
 }
 

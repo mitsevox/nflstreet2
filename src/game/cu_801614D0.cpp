@@ -6,7 +6,7 @@ extern "C" {
 void *fn_800A336C(void);
 int fn_800A338C(void);
 int fn_801DCF0C(int type, int size, int count, void *pCreate, void *pDestroy);
-void fn_801DCF8C(int type);
+int fn_801DCF8C(int type);
 void fn_801DD0C8(int handle, int type, int a, int (*pCallback)(Instance_801614D0 *, int));
 int fn_801DD268(int handle, int type, int a, void *pInit);
 void fn_801DD320(int handle, int item);

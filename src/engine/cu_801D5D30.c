@@ -1,38 +1,39 @@
 #include "game/fn_801D2B7C.h"
 #include "engine/memorycard.h"
+#include "game/fn_801C3284.h"
 
-typedef struct MCSType {
+typedef struct Struct_803EBD20 {
     int mMaxFiles;
     int mUnknown4;
     char mCode[8];
     char *mPrefix;
-} MCSType;
+} Struct_803EBD20;
 
-typedef struct MCSSlot {
+typedef struct Struct_803ECF18 {
     unsigned char mUsed;
     unsigned char mFlag;
     char mName[18];
     int mIndex;
-    MemCDirEntry *mEntry;
-} MCSSlot;
+    Struct_801D4848 *mEntry;
+} Struct_803ECF18;
 
-typedef struct MCSTypeSlots {
+typedef struct Struct_803EBD2C {
     signed char mCount;
-    MCSSlot *mSlots;
-} MCSTypeSlots;
+    Struct_803ECF18 *mSlots;
+} Struct_803EBD2C;
 
-typedef struct MCSCardInfo {
+typedef struct Struct_80398DE0 {
     int mUnknown0;
     int mUnknown4;
     int mCardType[2];
     char mTypeName[12];
-} MCSCardInfo;
+} Struct_80398DE0;
 
-typedef struct MCSInfoBlock {
+typedef struct Struct_801D676C {
     char mData[0x40];
-} MCSInfoBlock;
+} Struct_801D676C;
 
-typedef struct MCSFile {
+typedef struct Struct_80398DFC {
     int mHandle;
     int mUnknown4;
     int mUnknown8;
@@ -50,7 +51,7 @@ typedef struct MCSFile {
     unsigned char mUnknownEE;
     unsigned char mUnknownEF;
     unsigned char mUnknownF0;
-} MCSFile;
+} Struct_80398DFC;
 
 extern unsigned int lbl_803EBD00;
 extern int lbl_803EBD04;
@@ -60,18 +61,18 @@ extern unsigned char lbl_803EBD10;
 extern unsigned char lbl_803EBD18;
 extern unsigned char lbl_803EBD19;
 extern int lbl_803EBD1C;
-extern MCSType *lbl_803EBD20;
+extern Struct_803EBD20 *lbl_803EBD20;
 extern int lbl_803EBD24;
-extern MemCDirEntry *lbl_803EBD28;
-extern MCSTypeSlots *lbl_803EBD2C;
+extern Struct_801D4848 *lbl_803EBD28;
+extern Struct_803EBD2C *lbl_803EBD2C;
 extern int lbl_803EBD30;
 extern int lbl_803EBD34;
 extern int lbl_803EBD38;
 extern int lbl_803EBD3C;
 extern int lbl_803ECF14;
-extern MCSSlot **lbl_803ECF18;
-extern MCSCardInfo lbl_80398DE0;
-extern MCSFile lbl_80398DFC;
+extern Struct_803ECF18 **lbl_803ECF18;
+extern Struct_80398DE0 lbl_80398DE0;
+extern Struct_80398DFC lbl_80398DFC;
 extern char lbl_80398F00[0x200];
 extern int lbl_802F7B64[];
 extern const char lbl_802AFED0[];
@@ -86,7 +87,6 @@ extern int strcmp(const char *pA, const char *pB);
 extern int strncmp(const char *pA, const char *pB, unsigned int count);
 extern int memcmp(const void *pA, const void *pB, unsigned int count);
 extern int sprintf(char *pBuffer, const char *pFormat, ...);
-extern char *fn_801C3284(char *pDst, const char *pSrc, int count);
 extern void fn_801F8758(int value);
 
 void fn_801D5D30(int state);
@@ -182,7 +182,7 @@ void fn_801D63E8(int size)
     fn_801D4A3C(lbl_803ECF14, lbl_80398DFC.mFileName, 4, 1, size);
 }
 
-unsigned int fn_801D6420(MemCDirEntry *pEntry)
+unsigned int fn_801D6420(Struct_801D4848 *pEntry)
 {
     return ((pEntry->mYear - 2000) << 26) | ((pEntry->mMonth & 0xF) << 22) | ((pEntry->mDay & 0x1F) << 17)
          | ((pEntry->mHour & 0x1F) << 12) | ((pEntry->mMinute & 0x3F) << 6) | (pEntry->mSecond & 0x3F);
@@ -312,10 +312,10 @@ void fn_801D6760(int value)
     lbl_80398DFC.mUnknown8 = value;
 }
 
-void fn_801D676C(MCSInfoBlock *pInfo)
+void fn_801D676C(Struct_801D676C *pInfo)
 {
     if (pInfo != 0) {
-        *(MCSInfoBlock *)lbl_80398DFC.mInfo = *pInfo;
+        *(Struct_801D676C *)lbl_80398DFC.mInfo = *pInfo;
     }
 }
 
@@ -350,7 +350,7 @@ void fn_801D685C(const char *pCode, int flag)
     lbl_80398DFC.mUnknownEE = flag;
 }
 
-void fn_801D689C(const char *pSuffix, const char *pPrefix, int unused, int type, char *pOut)
+void fn_801D689C(const char *pSuffix, const char *pPrefix, int unused, int type, char *pOut, int size)
 {
     char name[32];
 
@@ -377,7 +377,7 @@ void fn_801D6924(int a, int b, int c, int d)
     lbl_803EBD3C = d;
 }
 
-void fn_801D6938(MCSType *pTypes, int count)
+void fn_801D6938(Struct_803EBD20 *pTypes, int count)
 {
     int i;
 
@@ -405,12 +405,12 @@ void fn_801D6938(MCSType *pTypes, int count)
     for (i = 0; i < count; i++) {
         lbl_803EBD24 += pTypes[i].mMaxFiles;
     }
-    lbl_803EBD28 = fn_801D2B7C(lbl_803EBD24 * sizeof(MemCDirEntry), 0, 0);
-    lbl_803ECF18 = fn_801D2B7C(lbl_803EBD24 * sizeof(MCSSlot *), 0, 0);
-    lbl_803EBD2C = fn_801D2B7C(lbl_803EBD1C * sizeof(MCSTypeSlots), 0, 0);
-    memset(lbl_803EBD28, 0, lbl_803EBD24 * sizeof(MemCDirEntry));
-    memset(lbl_803ECF18, 0, lbl_803EBD24 * sizeof(MCSSlot *));
-    memset(lbl_803EBD2C, 0, lbl_803EBD1C * sizeof(MCSTypeSlots));
+    lbl_803EBD28 = fn_801D2B7C(lbl_803EBD24 * sizeof(Struct_801D4848), 0, 0);
+    lbl_803ECF18 = fn_801D2B7C(lbl_803EBD24 * sizeof(Struct_803ECF18 *), 0, 0);
+    lbl_803EBD2C = fn_801D2B7C(lbl_803EBD1C * sizeof(Struct_803EBD2C), 0, 0);
+    memset(lbl_803EBD28, 0, lbl_803EBD24 * sizeof(Struct_801D4848));
+    memset(lbl_803ECF18, 0, lbl_803EBD24 * sizeof(Struct_803ECF18 *));
+    memset(lbl_803EBD2C, 0, lbl_803EBD1C * sizeof(Struct_803EBD2C));
 }
 
 int fn_801D6AC8(int type)
@@ -433,12 +433,12 @@ int fn_801D6B14(int type)
     return lbl_803EBD20[type].mMaxFiles;
 }
 
-void fn_801D6B24(char *pDst)
+void fn_801D6B24(char *pDst, int size)
 {
     strcpy(pDst, lbl_80398DFC.mTitle);
 }
 
-void fn_801D6B4C(char *pDst)
+void fn_801D6B4C(char *pDst, int size)
 {
     strcpy(pDst, lbl_80398DFC.mDescription);
 }
@@ -560,7 +560,7 @@ int fn_801D84B8(const char *pA, const char *pB)
     return memcmp(pA, pB, 8);
 }
 
-int fn_801D85A8(void)
+int fn_801D85A8(int unused)
 {
     return 1;
 }
