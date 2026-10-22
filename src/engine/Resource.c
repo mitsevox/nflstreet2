@@ -1,61 +1,6 @@
+#include "engine/Resource.h"
+#include "engine/system.h"
 #include "game/fn_801C68FC.h"
-
-typedef struct ResBlock_801F10B0 {
-    unsigned int mUnk0;
-    unsigned int mUnk4;
-} ResBlock_801F10B0;
-
-typedef struct ResHash_801F0A8C {
-    int mType;
-    int mUnk4;
-    unsigned int mWidth;
-} ResHash_801F0A8C;
-
-typedef struct Res_801EDC2C {
-    int mFile;
-    char *pName;
-    int mUnk8;
-    int mUnkC;
-    unsigned short mUnk10;
-    unsigned char mUnk12;
-    unsigned char mUnk13;
-    unsigned short mNumRes;
-    unsigned short mAlignment;
-    unsigned int mDirTag;
-    int mHashCount;
-    unsigned char mCompressed;
-    unsigned char mUnk21;
-    unsigned short mVersion;
-    unsigned int mDirSize;
-    unsigned int mCompSize;
-    unsigned int mHashSize;
-    unsigned int mDirOffset;
-    unsigned int mCompOffset;
-    unsigned int mHashOffset;
-    unsigned int mBaseOffset;
-    ResBlock_801F10B0 *pDir;
-    ResHash_801F0A8C *pHash;
-    unsigned int *pHashParams;
-    void *pHashTable;
-    void **pSlots;
-    ResBlock_801F10B0 *pBlocks;
-    unsigned short mState;
-    unsigned short mNumLocked;
-    unsigned int mDataSize;
-    int mHeap;
-    unsigned int mBaseAddr;
-    void *pExtra;
-    unsigned int mIndex;
-    int mMode;
-    unsigned int *pAddrs;
-    volatile unsigned char *pFlags;
-    char mUnk7C[8];
-    int mCacheHandle;
-    int mUnk88;
-    unsigned int mFlags;
-    int mOpenCount;
-    char mUnk94[0x10];
-} Res_801EDC2C;
 
 typedef struct ResRequest_801F12B4 {
     void (*pCallback)(Res_801EDC2C *pRes, int index, int a, int b, int c);
@@ -65,7 +10,7 @@ typedef struct ResRequest_801F12B4 {
     int mUnk10;
     int mUnk14;
     int mUnk18;
-    char mUnk1C[4];
+    int mUnk1C;
     int mNoStore;
     unsigned short mRaw;
     char mUnk26[2];
@@ -88,20 +33,23 @@ typedef struct ResEvent_801F12B4 {
     unsigned int mNow;
 } ResEvent_801F12B4;
 
-typedef struct ResLock_803E931C {
-    char mUnk0[0x20];
-} ResLock_803E931C;
-
+/* Codec stream buffer (0x1C bytes). */
 typedef struct ResBuf_801EC914 {
     void *pData;
     unsigned int mSize;
-    char mUnk8[0x14];
+    unsigned int mPos;
+    char mUnkC[0xC];
+    unsigned char mDone;
 } ResBuf_801EC914;
+
+typedef struct Decomp_801EC760 {
+    ResBuf_801EC914 *pSrc;
+} Decomp_801EC760;
 
 typedef void (*ResDone_801EFAD8)(Res_801EDC2C *pRes, unsigned int index, unsigned int buffer, int err, void *pUser);
 
-extern ResLock_803E931C lbl_803E92FC;
-extern ResLock_803E931C lbl_803E931C;
+extern SysCriticalSection_8039B3F8 lbl_803E92FC;
+extern SysCriticalSection_8039B3F8 lbl_803E931C;
 extern unsigned char lbl_803EBD80;
 extern int lbl_803EBD84;
 extern int lbl_803EBD88;
@@ -116,6 +64,11 @@ extern int lbl_803EBDA4;
 extern int lbl_803EBDA8;
 extern int lbl_803EBDB0;
 extern void *lbl_803ECF7C;
+extern ResBuf_801EC914 lbl_8039AE14;
+extern ResBuf_801EC914 lbl_8039AE30;
+extern Decomp_801EC760 *lbl_803ECF70;
+extern int lbl_803ECF74;
+extern ResRequest_801F12B4 *lbl_803ECF78;
 extern ResRequest_801F12B4 *lbl_8039AE4C[16];
 extern void *lbl_803ED668;
 extern char lbl_802B17F0[];
@@ -124,57 +77,44 @@ extern unsigned int strlen(const char *s);
 extern char *strcpy(char *pDst, const char *pSrc);
 extern int sprintf(char *s, const char *format, ...);
 
-extern Res_801EDC2C *fn_801C6B4C(void *pPool, Res_801EDC2C *pStart);
-extern Res_801EDC2C *fn_801C6C84(void *pPool, Res_801EDC2C *pCur);
-extern Res_801EDC2C *fn_801C6A20(void *pPool);
-extern void fn_801C6C0C(void *pPool, Res_801EDC2C *pRes);
-extern int fn_801C6DCC(void *pPool, void *pStart, char *pName, Res_801EDC2C **ppFound, int (*pCompare)());
+extern void *fn_801C6B4C(void *pPool, int mode);
+extern void *fn_801C6C84(void *pPool, void *pItem);
+extern void *fn_801C6A20(void *pPool);
+extern void fn_801C6C0C(void *pPool, void *pItem);
+extern int fn_801C6DCC(void *pPool, void *pStart, void *pKey, void *pFound, int (*pMatch)(void *, void *, void *));
 extern char *fn_801C3284(char *pDst, const char *pSrc, int n);
-extern int fn_801CA648(int file, unsigned int offset, void *pBuffer);
-extern void fn_801CA834(int file);
+extern int fn_801CA648(int file, int offset, void *pBuffer, int size);
+extern void fn_801CA834(int handle);
 extern int fn_801CB120(void);
-extern int fn_801C96E4(char *pName, int mode);
-extern void fn_801C97F0(int file);
-extern int fn_801C9960(int file, void *pBuffer, int size, int flags);
-extern void *fn_801D2BB0(int heap, unsigned int size, int memFlags, int b);
+extern int fn_801C96E4(const char *pName, int device);
+extern int fn_801C97F0(int handle);
+extern int fn_801C9960(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
+extern void *fn_801D2BB0(int heap, int size, int ident, int flags);
 extern int fn_801D2BD0(void *p);
-extern int fn_801EC8AC(void *pA, void *pB);
-extern int fn_801EC8D4();
+void fn_801D3318(int ident, const char *pLabel);
+void fn_801D339C(int ident);
+void fn_801D342C(int ident);
+void fn_801D3470(void *pAddr, char *pOut, int size);
+int fn_801C2FE4(const char *pA, const char *pB);
+void *fn_801C9B94(int file, char *pBuffer, int size, int priority, void (*pDone)(int, int, void *), void *pArg,
+                  void (*pBlock)(int, char *, int, void *), int blockSize);
+Decomp_801EC760 *fn_8027F7B0(int codec, int mode, ResBuf_801EC914 *pIn, ResBuf_801EC914 *pOut);
+unsigned int fn_8027F880(Decomp_801EC760 *pDecomp);
+void fn_8027F910(Decomp_801EC760 *pDecomp);
 extern int fn_801ECC70(Res_801EDC2C *pRes, unsigned int index, unsigned int *pBuffer);
 extern int fn_801ED634(Res_801EDC2C *pRes, unsigned int index, unsigned int buffer, int heap, int a, ResDone_801EFAD8 pDone, void *pUser, int mode);
 extern int fn_801EDDF8(Res_801EDC2C *pRes, char *pName);
-extern void fn_801EC650(Res_801EDC2C *pRes, int index, unsigned int *pOffset, unsigned int *pPrevSize,
-                        unsigned int *pSize);
-extern unsigned int fn_801EC6C4(Res_801EDC2C *pRes, int index);
 extern int fn_801EE38C(Res_801EDC2C *pRes, char *pName, unsigned int size);
 int fn_801EEFAC(Res_801EDC2C *pRes);
-extern void fn_801F3104(Res_801EDC2C *pRes);
-extern void fn_801F30CC(Res_801EDC2C *pRes);
-extern int fn_801F1B6C(Res_801EDC2C *pRes);
 int fn_801F08FC(Res_801EDC2C *pRes);
 void fn_801EE91C(Res_801EDC2C *pRes);
-extern int fn_801F1538(char *pString, unsigned int length, unsigned int *pParams);
-extern int fn_801F155C(unsigned char *pData, unsigned int length, unsigned int *pParams);
-extern int fn_801F33F0(Res_801EDC2C *pRes, unsigned int index, unsigned int *pSize);
-extern void fn_801F2ED8(int mode);
-extern void fn_801F2EE0(Res_801EDC2C *pRes, char *pName);
 extern void *memset();
 extern void *memcpy();
-extern unsigned int fn_801F7B14(void);
-extern void fn_801F7BD4(int err);
-extern int fn_801F7C88(void);
-extern void fn_801F7FA8(ResLock_803E931C *pLock);
-extern void fn_801F8014(ResLock_803E931C *pLock);
-extern void fn_801F809C(ResLock_803E931C *pLock);
-extern void fn_801F80D0(ResLock_803E931C *pLock);
-extern void fn_801F81AC(void);
 extern int fn_8027F0DC(int a);
-extern int fn_8027F77C(unsigned int codec);
-extern void fn_8027FAB8(char *pName);
-extern void fn_8027F3A4(unsigned int codec, ResBuf_801EC914 *pSrc, ResBuf_801EC914 *pDst);
+extern int fn_8027F77C(int codec);
+extern void fn_8027FAB8(const char *pName);
+extern void fn_8027F3A4(int codec, ResBuf_801EC914 *pSrc, ResBuf_801EC914 *pDst);
 extern void fn_80239CEC(void *p, unsigned int size);
-extern void fn_801F318C(Res_801EDC2C *pRes, int index, int offset, int data, int size);
-extern void fn_801F23DC(unsigned int type, void *pData);
 extern char lbl_802F9508[];
 extern int fn_8027F21C(void);
 extern int fn_8027F2C0(void);
@@ -186,6 +126,111 @@ int fn_801F010C(Res_801EDC2C *pRes, unsigned int index);
 void fn_801F1488(Res_801EDC2C *pRes, int index);
 unsigned int fn_801EF390(Res_801EDC2C *pRes, unsigned int index, int heap);
 unsigned int fn_801F0C50(Res_801EDC2C *pRes, unsigned int index);
+
+static void fn_801EC760(int size, char *pData, int unused, void *pArg);
+
+static void fn_801EC650(Res_801EDC2C *pRes, int index, unsigned int *pOffset, unsigned int *pPrevSize,
+                        unsigned int *pSize)
+{
+    *pPrevSize = 0;
+    if (pRes->mDirTag == 0x44495231) {
+        *pOffset = pRes->pDir[index].mUnk0;
+        *pSize = pRes->pDir[index].mUnk4;
+    } else {
+        *pOffset = 0;
+        *pSize = 0;
+    }
+    if (pRes->pBlocks != 0) {
+        *pPrevSize = *pSize;
+        *pSize = pRes->pBlocks[index].mUnk4;
+    }
+}
+
+static unsigned int fn_801EC6C4(Res_801EDC2C *pRes, int index)
+{
+    unsigned int offset;
+    unsigned int prevSize;
+    unsigned int size;
+
+    if (!(pRes->pFlags[index] & 8)) {
+        fn_801EC650(pRes, index, &offset, &prevSize, &size);
+    } else {
+        offset = ((unsigned int *)pRes->pExtra)[index];
+    }
+    return offset;
+}
+
+static void fn_801EC718(int file, int unused, int priority, void (*pDone)(int, int, void *), ResRequest_801F12B4 *pReq)
+{
+    fn_801C9B94(file, lbl_803ECF7C, pReq->mUnk10, priority, pDone, pReq, fn_801EC760, 0x8000);
+}
+
+static void fn_801EC760(int size, char *pData, int unused, void *pArg)
+{
+    ResRequest_801F12B4 *pReq = pArg;
+    Res_801EDC2C *pRes = pReq->pRes;
+    int index = pReq->mIndex;
+    char info[0x14];
+
+    if (lbl_803ECF70 == 0) {
+        lbl_8039AE14.pData = pData;
+        lbl_8039AE14.mSize = size;
+        lbl_8039AE14.mPos = 0;
+        lbl_8039AE14.mDone = 0;
+        lbl_803ECF74 = 0;
+        lbl_8039AE30.mSize = pReq->mUnk14;
+        lbl_8039AE30.mPos = 0;
+        lbl_8039AE30.mDone = 1;
+        lbl_8039AE30.pData = (void *)pReq->mUnk18;
+        fn_801D3470((void *)pReq->mUnk18, info, sizeof(info));
+        fn_801D339C(pReq->mUnk1C);
+        fn_801D3318(pReq->mUnk1C, info);
+        lbl_803ECF70 = fn_8027F7B0(pRes->pBlocks[index].mUnk0, 1, &lbl_8039AE14, &lbl_8039AE30);
+        fn_801D342C(pReq->mUnk1C);
+        lbl_803ECF78 = pReq;
+    }
+    lbl_803ECF74 += size;
+    if (lbl_803ECF74 == pReq->mUnk10) {
+        lbl_803ECF70->pSrc->mDone = 1;
+    }
+    lbl_803ECF70->pSrc->mSize = size;
+    lbl_803ECF70->pSrc->mPos = 0;
+    fn_8027F880(lbl_803ECF70);
+    if (lbl_803ECF70->pSrc->mDone) {
+        fn_8027F910(lbl_803ECF70);
+        lbl_803ECF70 = 0;
+    }
+}
+
+static unsigned int fn_801EC894(unsigned int size, unsigned int align)
+{
+    unsigned int rem = size % align;
+
+    if (rem != 0) {
+        rem = align - rem;
+    }
+    return rem;
+}
+
+static int fn_801EC8AC(void *pA, void *pB)
+{
+    Res_801EDC2C *pResA = pA;
+    Res_801EDC2C *pResB = pB;
+
+    return fn_801C2FE4(pResA->pName, pResB->pName);
+}
+
+static int fn_801EC8D4(void *pItem, void *pKey, void *pFound)
+{
+    Res_801EDC2C *pRes = pItem;
+    Res_801EDC2C **ppFound = pFound;
+    int cmp = fn_801C2FE4(pRes->pName, pKey);
+
+    if (cmp == 0) {
+        *ppFound = pRes;
+    }
+    return cmp;
+}
 
 void fn_801EC914(int result, int arg, ResRequest_801F12B4 *pReq)
 {
@@ -225,7 +270,7 @@ void fn_801EC914(int result, int arg, ResRequest_801F12B4 *pReq)
             codec = 0;
         }
         if (lbl_803EBD9C != 0 && pReq->pRes->mCacheHandle >= 0 && pReq->mCache != 0) {
-            fn_801F318C(pReq->pRes, pReq->mIndex, pReq->mUnk28, pReq->mUnk18, pReq->mUnk10);
+            fn_801F318C(pReq->pRes, pReq->mIndex, pReq->mUnk28, (void *)pReq->mUnk18, pReq->mUnk10);
         }
         if (codec != 0 && fn_8027F77C(codec) == 0) {
             memset((void *)&src, 0, 0x1C);
@@ -902,7 +947,7 @@ int fn_801EF92C(Res_801EDC2C *pRes, unsigned int index, void *pBuffer)
             if (size != prevSize) {
                 err = 0xF000C;
             } else if (pRes->mState != 2 && pRes->mState != 3) {
-                err = fn_801CA648(pRes->mFile, offset + pRes->mBaseOffset, pBuffer);
+                err = fn_801CA648(pRes->mFile, offset + pRes->mBaseOffset, pBuffer, size);
             } else {
                 memcpy((void *)(pRes->mBaseAddr + pRes->mBaseOffset + fn_801EC6C4(pRes, index)), pBuffer, size);
             }

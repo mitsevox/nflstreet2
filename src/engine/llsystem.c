@@ -1,35 +1,15 @@
 #include <dolphin/os.h>
 #include <dolphin/vi.h>
 #include <dolphin/gx.h>
+#include "engine/system.h"
 
 typedef int (*SysResetCallback_801F8868)(void);
 
-typedef struct SysTimer_801F7B1C {
-    void *pFunc;
-    unsigned int mType;
-    unsigned int mElapsed;
-    unsigned short mFlags;
-    int mUnknown10;
-    char mUnknown14[8];
-    int mUnknown1C;
-    unsigned int mCount;
-} SysTimer_801F7B1C;
-
-typedef struct SysCriticalSection_8039B3F8 {
+struct SysCriticalSection_8039B3F8 {
     OSMutex mMutex;
     int mOwner;
     int mCount;
-} SysCriticalSection_8039B3F8;
-
-typedef struct SysTime_8039B430 {
-    unsigned char mSeconds;
-    unsigned char mMinutes;
-    unsigned char mHours;
-    unsigned char mDays;
-    unsigned char mMonth;
-    unsigned short mYear;
-    unsigned int mHundredths;
-} SysTime_8039B430;
+};
 
 extern void fn_8024E1FC(void);
 extern BOOL fn_8023E628(OSThread *thread, OSPriority priority);
@@ -38,12 +18,11 @@ extern void fn_8023C0F8(int reset, u32 resetCode, BOOL forceMenu);
 extern void fn_801CE2B8(int a);
 extern void *fn_801D2B7C(int size, int a, int b);
 extern int fn_801D2BD0(void *p);
-extern int fn_801CAB30(void);
+extern void fn_801CAB30(void);
 extern void fn_80239ED4(void);
 extern void fn_80247030(unsigned int mask);
 extern void fn_802476F8(int chan, int command);
 extern void fn_8024A67C(void);
-extern void fn_801F7AE8(void);
 extern int fn_801CE1E8(void);
 extern int fn_8027EFAC(int year);
 
@@ -59,7 +38,6 @@ extern unsigned int lbl_803EBE5C;
 extern OSMutex lbl_8039B418;
 extern SysTime_8039B430 lbl_8039B430;
 
-int fn_801F81D4(void);
 void fn_801F8574(void);
 void fn_801F8768(void);
 void fn_801F87FC(int code);

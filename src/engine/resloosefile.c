@@ -1,22 +1,19 @@
-typedef struct ResLooseFile_801F3308 {
-    int mUnknown0;
-    char *pName;
-} ResLooseFile_801F3308;
+#include "engine/Resource.h"
 
 extern int sprintf(char *buffer, const char *format, ...);
-extern int fn_801C96E4(char *name, int mode);
+extern int fn_801C96E4(const char *pName, int device);
 extern int fn_801C97F0(int handle);
-extern int fn_801C9910(char *name, int mode);
+extern int fn_801C9910(const char *pName, int device);
 extern int fn_801C9D18(int handle);
 
 extern char lbl_802B19AC[];
 extern char lbl_802B19B0[];
 extern char lbl_802B19B8[];
 extern char lbl_803E933C[];
-extern ResLooseFile_801F3308 *lbl_803EBDE8;
+extern Res_801EDC2C *lbl_803EBDE8;
 extern int lbl_803EBDEC;
 
-static void fn_801F3308(ResLooseFile_801F3308 *pFile, int index)
+static void fn_801F3308(Res_801EDC2C *pFile, int index)
 {
     char name[5];
     char *p;
@@ -33,13 +30,13 @@ static void fn_801F3308(ResLooseFile_801F3308 *pFile, int index)
     lbl_803EBDEC = index;
 }
 
-int fn_801F33B8(ResLooseFile_801F3308 *pFile, int index)
+int fn_801F33B8(Res_801EDC2C *pFile, int index)
 {
     fn_801F3308(pFile, index);
     return fn_801C9910(lbl_803E933C, 0x2C) == 0;
 }
 
-int fn_801F33F0(ResLooseFile_801F3308 *pFile, int index, int *pSize)
+int fn_801F33F0(Res_801EDC2C *pFile, unsigned int index, unsigned int *pSize)
 {
     int result = 1;
     int handle;
@@ -59,7 +56,7 @@ int fn_801F33F0(ResLooseFile_801F3308 *pFile, int index, int *pSize)
     return result;
 }
 
-int fn_801F346C(ResLooseFile_801F3308 *pFile, int index)
+int fn_801F346C(Res_801EDC2C *pFile, int index)
 {
     int handle;
 

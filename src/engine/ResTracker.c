@@ -1,6 +1,8 @@
+#include "engine/Resource.h"
+#include "engine/system.h"
+
 extern int sprintf(char *s, const char *format, ...);
-extern void *fn_801D2BB0(int heap, int size, int c, int d);
-extern int fn_801F7ABC(void);
+extern void *fn_801D2BB0(int heap, int size, int ident, int flags);
 
 extern int lbl_803EBDB8;
 extern char *lbl_803EBDBC;
@@ -11,18 +13,13 @@ extern int lbl_803EBDCC;
 extern unsigned char lbl_803EBDD0;
 extern unsigned char lbl_803EBDD1;
 
-typedef struct ResTrackRes_801F23DC {
-    int mUnk0;
-    char *pName;
-} ResTrackRes_801F23DC;
-
 typedef struct ResTrackOpen_801F23DC {
     char *pName;
     char mMode;
 } ResTrackOpen_801F23DC;
 
 typedef struct ResTrackLoad_801F23DC {
-    ResTrackRes_801F23DC *pRes;
+    Res_801EDC2C *pRes;
     int mIndex;
     int mOffset;
     int mDiskSize;
@@ -83,7 +80,7 @@ void fn_801F23B8(int heap, int size)
 void fn_801F23DC(unsigned int type, void *pData)
 {
     ResTrackLoad_801F23DC *pLoad;
-    ResTrackRes_801F23DC *pRes;
+    Res_801EDC2C *pRes;
     char *pMem;
     char *pName;
     int index;

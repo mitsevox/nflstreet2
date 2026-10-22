@@ -1,3 +1,5 @@
+#include "engine/Resource.h"
+
 extern unsigned int strlen(const char *s);
 extern void *fn_801D2B7C(int size, int a, int b);
 extern int fn_801F34C0(char *pString, int multiplier);

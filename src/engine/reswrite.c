@@ -1,38 +1,11 @@
-typedef struct ResWriteEntry_801F201C {
-    unsigned int mOffset;
-    unsigned int mSize;
-} ResWriteEntry_801F201C;
+#include "engine/Resource.h"
 
-typedef struct ResWrite_801F1B6C {
-    int mHandle;
-    char mUnknown4[4];
-    unsigned int mEndPad;
-    unsigned int mPosition;
-    unsigned short mNumWritten;
-    char mUnknown12;
-    unsigned char mBigEndian;
-    unsigned short mNumResources;
-    char mUnknown16[2];
-    unsigned int mDirType;
-    char mUnknown1C[8];
-    unsigned int mDirSize;
-    unsigned int mCompSize;
-    char mUnknown2C[4];
-    int mDirOffset;
-    int mCompOffset;
-    char mUnknown38[4];
-    int mDataOffset;
-    ResWriteEntry_801F201C *pDirEntries;
-    char mUnknown44[16];
-    ResWriteEntry_801F201C *pCompEntries;
-} ResWrite_801F1B6C;
-
-extern int fn_801C9844(int handle, int offset, int mode);
-extern int fn_801C9A3C(int handle, void *pBuffer, int size, int a);
+extern int fn_801C9844(int handle, int offset, unsigned int whence);
+extern int fn_801C9A3C(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
 extern int fn_801C9D2C(int handle);
 extern int fn_801F1838(int a, int b, int c, int d, int e, int f, int g);
-extern int fn_801F1D20(ResWrite_801F1B6C *pWrite);
-extern void fn_801F1F30(ResWrite_801F1B6C *pWrite);
+extern int fn_801F1D20(Res_801EDC2C *pWrite);
+extern void fn_801F1F30(Res_801EDC2C *pWrite);
 
 void fn_801F21B4(int handle, unsigned char value);
 unsigned int fn_801F21E4(int handle, unsigned char value, unsigned int count);
@@ -58,21 +31,21 @@ int fn_801F1B44(int a, int b, int c, int d, int e)
     return fn_801F1838(a, b, c, d, e, 0, 0);
 }
 
-int fn_801F1B6C(ResWrite_801F1B6C *pWrite)
+int fn_801F1B6C(Res_801EDC2C *pWrite)
 {
     int size;
 
-    if (pWrite->mNumResources != pWrite->mNumWritten) {
+    if (pWrite->mNumRes != pWrite->mNumWritten) {
         return 0xF0011;
     }
-    size = fn_801C9D2C(pWrite->mHandle);
+    size = fn_801C9D2C(pWrite->mFile);
     if (pWrite->mPosition < pWrite->mEndPad && pWrite->mEndPad != -1) {
-        fn_801F21E4(pWrite->mHandle, 0, pWrite->mEndPad - pWrite->mPosition);
+        fn_801F21E4(pWrite->mFile, 0, pWrite->mEndPad - pWrite->mPosition);
     }
-    size -= pWrite->mDataOffset;
-    fn_801C9844(pWrite->mHandle, pWrite->mDataOffset, 0);
-    fn_801F2294(pWrite->mHandle, 0x44415441, 0);
-    fn_801F2294(pWrite->mHandle, size, pWrite->mBigEndian);
+    size -= pWrite->mBaseOffset;
+    fn_801C9844(pWrite->mFile, pWrite->mBaseOffset, 0);
+    fn_801F2294(pWrite->mFile, 0x44415441, 0);
+    fn_801F2294(pWrite->mFile, size, pWrite->mBigEndian);
     if (fn_801F1D20(pWrite) == 0) {
         return 0xF0012;
     }
@@ -125,7 +98,7 @@ unsigned int fn_801F1CF8(unsigned int size, unsigned int alignment)
     return pad;
 }
 
-int fn_801F201C(ResWrite_801F1B6C *pWrite)
+int fn_801F201C(Res_801EDC2C *pWrite)
 {
     unsigned int size;
     unsigned int i;
@@ -137,29 +110,29 @@ int fn_801F201C(ResWrite_801F1B6C *pWrite)
         return 1;
     }
     i = 0;
-    position = fn_801C9D2C(pWrite->mHandle);
-    fn_801C9844(pWrite->mHandle, pWrite->mCompOffset, 0);
-    fn_801F2294(pWrite->mHandle, 0x434F4D50, 0);
-    fn_801F2294(pWrite->mHandle, size, pWrite->mBigEndian);
-    for (; i < pWrite->mNumResources; i++) {
-        fn_801F2294(pWrite->mHandle, pWrite->pCompEntries[i].mOffset, pWrite->mBigEndian);
-        fn_801F2294(pWrite->mHandle, pWrite->pCompEntries[i].mSize, pWrite->mBigEndian);
+    position = fn_801C9D2C(pWrite->mFile);
+    fn_801C9844(pWrite->mFile, pWrite->mCompOffset, 0);
+    fn_801F2294(pWrite->mFile, 0x434F4D50, 0);
+    fn_801F2294(pWrite->mFile, size, pWrite->mBigEndian);
+    for (; i < pWrite->mNumRes; i++) {
+        fn_801F2294(pWrite->mFile, pWrite->pBlocks[i].mUnk0, pWrite->mBigEndian);
+        fn_801F2294(pWrite->mFile, pWrite->pBlocks[i].mUnk4, pWrite->mBigEndian);
     }
-    written = fn_801C9D2C(pWrite->mHandle) - pWrite->mCompOffset;
-    fn_801F21E4(pWrite->mHandle, 0, pWrite->mCompSize - written);
-    fn_801C9844(pWrite->mHandle, position, 0);
+    written = fn_801C9D2C(pWrite->mFile) - pWrite->mCompOffset;
+    fn_801F21E4(pWrite->mFile, 0, pWrite->mCompSize - written);
+    fn_801C9844(pWrite->mFile, position, 0);
     return 1;
 }
 
-int fn_801F2120(ResWrite_801F1B6C *pWrite, int index, unsigned int offset, unsigned int size)
+int fn_801F2120(Res_801EDC2C *pWrite, int index, unsigned int offset, unsigned int size)
 {
-    fn_801C9844(pWrite->mHandle, pWrite->mDirOffset + 8, 0);
-    if (pWrite->mDirType != 0x44495231) {
+    fn_801C9844(pWrite->mFile, pWrite->mDirOffset + 8, 0);
+    if (pWrite->mDirTag != 0x44495231) {
         return 0;
     }
-    fn_801C9844(pWrite->mHandle, index * 8, 1);
-    fn_801F2294(pWrite->mHandle, offset, pWrite->mBigEndian);
-    fn_801F2294(pWrite->mHandle, size, pWrite->mBigEndian);
+    fn_801C9844(pWrite->mFile, index * 8, 1);
+    fn_801F2294(pWrite->mFile, offset, pWrite->mBigEndian);
+    fn_801F2294(pWrite->mFile, size, pWrite->mBigEndian);
     return 1;
 }
 

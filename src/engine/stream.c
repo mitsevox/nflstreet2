@@ -1,3 +1,6 @@
+#include "engine/Resource.h"
+#include "engine/system.h"
+
 #define STREAM_MAGIC 0x5354524D
 
 #define CHUNK_WRAP -1
@@ -9,7 +12,7 @@ typedef struct StreamChunk_801F5D84 {
 } StreamChunk_801F5D84;
 
 typedef struct StreamFile_801F6D54 {
-    void *pRes;
+    Res_801EDC2C *pRes;
     unsigned int mIndex;
 } StreamFile_801F6D54;
 
@@ -20,8 +23,8 @@ typedef struct StreamRequest_801F5EA4 {
     struct StreamRequest_801F5EA4 *pNext;
     int mType;
     StreamFile_801F6D54 mFile;
-    int mFileSize;
-    int mFileOffset;
+    unsigned int mFileSize;
+    unsigned int mFileOffset;
     int mFileHandle;
     char *pMem;
     int mSize;
@@ -44,7 +47,7 @@ typedef struct StreamTap_801F5DA4 {
 
 typedef struct Stream_801F5DA4 {
     int mMagic;
-    void *pMutex;
+    struct OSMutex *pMutex;
     StreamRequest_801F5EA4 *pRequests;
     int mNumRequests;
     StreamFilter_801F6074 *pFilters;
@@ -77,7 +80,7 @@ typedef struct Stream_801F5DA4 {
     int mBlockSize;
 } Stream_801F5DA4;
 
-extern int fn_801C9844(int handle, int offset, int mode);
+extern int fn_801C9844(int handle, int offset, unsigned int whence);
 extern int fn_801C9B18(int handle, char *pBuffer, int size, int priority,
                        void (*pCallback)(int, int, void *), void *pContext);
 extern int fn_801C9C88(int readHandle, int priority);
@@ -85,18 +88,13 @@ extern void fn_801C9D78(void);
 extern void fn_801C9DA0(void);
 extern void fn_801CAF24(void);
 extern int fn_801CB120(void);
-extern void fn_801F10B0(void *pRes, unsigned int index, int *pSize, int *pOffset, int *pHandle);
 extern StreamFile_801F6D54 *fn_801F5000(StreamFile_801F6D54 *pFile);
-extern void *fn_801F773C(void);
-extern void fn_801F7764(void *mutex);
-extern void fn_801F778C(void *mutex);
-extern void fn_801F77B4(void *mutex);
-extern void fn_801F7FA8(void *pCriticalSection);
-extern void fn_801F8014(void *pCriticalSection);
-extern void fn_801F809C(void *pCriticalSection);
-extern void fn_801F80D0(void *pCriticalSection);
+extern struct OSMutex *fn_801F773C(void);
+extern void fn_801F7764(struct OSMutex *pMutex);
+extern void fn_801F778C(struct OSMutex *pMutex);
+extern void fn_801F77B4(struct OSMutex *pMutex);
 
-extern char lbl_8039B3D8[];
+extern SysCriticalSection_8039B3F8 lbl_8039B3D8;
 
 extern unsigned int lbl_803ECFA0;
 
@@ -473,10 +471,10 @@ static void fn_801F6540(Stream_801F5DA4 *s, int priority)
             s->mReadSize = s->mFileSize - s->mFilePos;
         }
         fn_801C9D78();
-        fn_801F8014(lbl_8039B3D8);
+        fn_801F8014(&lbl_8039B3D8);
         fn_801C9844(s->mFileHandle, s->mFileOffset + s->mFilePos, 0);
         s->mReadHandle = fn_801C9B18(s->mFileHandle, s->pWrite, s->mReadSize, priority, fn_801F63EC, s);
-        fn_801F809C(lbl_8039B3D8);
+        fn_801F809C(&lbl_8039B3D8);
         fn_801C9DA0();
     }
 }
@@ -529,7 +527,7 @@ StreamTap_801F5DA4 *fn_801F687C(int numRequests, int numFilters, int numTaps, vo
     s->pCurrent = 0;
     s->pLast = 0;
     s->pFree = pRequests;
-    s->mFile.pRes = (void *)-1;
+    s->mFile.pRes = (Res_801EDC2C *)-1;
     s->mFile.mIndex = -1;
     s->mFileSize = 0;
     if (bufferSize <= 0x3FFF) {
@@ -952,10 +950,10 @@ int fn_801F76A0(StreamTap_801F5DA4 *h)
 
 void fn_801F76E8(void)
 {
-    fn_801F7FA8(lbl_8039B3D8);
+    fn_801F7FA8(&lbl_8039B3D8);
 }
 
 void fn_801F7710(void)
 {
-    fn_801F80D0(lbl_8039B3D8);
+    fn_801F80D0(&lbl_8039B3D8);
 }

@@ -1,3 +1,6 @@
+#include "engine/Resource.h"
+#include "game/fn_801C68FC.h"
+
 typedef struct ResQuickloadChunk_801F284C {
     unsigned int mID;
     int mSize;
@@ -47,21 +50,17 @@ typedef struct ResQuickloadAlias_801F2D60 {
 } ResQuickloadAlias_801F2D60;
 
 extern int strcmp(const char *a, const char *b);
-extern void *fn_801C68FC(int a, int b, int count, int size, int c, int d);
-extern void fn_801C69E4(void *pPool);
 extern void *fn_801C6A20(void *pPool);
-extern void fn_801C6AA4(void *pPool, void *pItem, int mode);
 extern void *fn_801C6B4C(void *pPool, int mode);
 extern void fn_801C6C0C(void *pPool, void *pItem);
 extern void *fn_801C6C84(void *pPool, void *pItem);
-extern int fn_801C96E4(char *name, int mode);
+extern int fn_801C96E4(const char *pName, int device);
 extern int fn_801C97F0(int handle);
-extern int fn_801C9844(int handle, int offset, int mode);
-extern int fn_801C9960(int handle, void *pBuffer, int size, int a);
+extern int fn_801C9844(int handle, int offset, unsigned int whence);
+extern int fn_801C9960(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
 extern int fn_801C9D2C(int handle);
 extern int fn_801D2BD0(void *p);
-extern void *fn_801D2BB0(int heap, int size, int label, int b);
-extern int fn_801F1530(void);
+extern void *fn_801D2BB0(int heap, int size, int ident, int flags);
 extern void *fn_802623A8(const void *pKey, const void *pBase, int count, int size,
                          int (*pCompare)(const void *, const void *));
 

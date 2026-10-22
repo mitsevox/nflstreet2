@@ -1,4 +1,4 @@
-extern void *fn_801D2BB0(int a, int size, int c, int d);
+extern void *fn_801D2BB0(int heap, int size, int ident, int flags);
 extern int fn_801D2BD0(void *p);
 extern void fn_801F522C(int type, void (*pSort)(void *pBase, unsigned int count, int size,
                                                 int (*pCompare)(void *, void *),

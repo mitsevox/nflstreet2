@@ -41148,737 +41148,242 @@
       ]
     },
     {
-      "source": "src/engine/sort.c",
+      "source": "src/engine/Resource.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F5100-0x801F524C (src/engine/sort.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "evidence": "evidence.tsv provisional unit row 0x801EC650-0x801F1538 (src/engine/Resource.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801F5100",
-          "end": "0x801F524C"
+          "start": "0x801EC650",
+          "end": "0x801F1538"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_801F5100",
-          "start": "0x801F5100",
-          "end": "0x801F512C"
-        },
-        {
-          "symbol": "fn_801F512C",
-          "start": "0x801F512C",
-          "end": "0x801F518C"
-        },
-        {
-          "symbol": "fn_801F518C",
-          "start": "0x801F518C",
-          "end": "0x801F51DC"
-        },
-        {
-          "symbol": "fn_801F51DC",
-          "start": "0x801F51DC",
-          "end": "0x801F522C"
-        },
-        {
-          "symbol": "fn_801F522C",
-          "start": "0x801F522C",
-          "end": "0x801F524C"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/bubble.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F524C-0x801F5458 (src/engine/bubble.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801F524C",
-          "end": "0x801F5458"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801F524C",
-          "start": "0x801F524C",
-          "end": "0x801F53A0"
-        },
-        {
-          "symbol": "fn_801F53A0",
-          "start": "0x801F53A0",
-          "end": "0x801F542C"
-        },
-        {
-          "symbol": "fn_801F542C",
-          "start": "0x801F542C",
-          "end": "0x801F5458"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/quick.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F5458-0x801F5760 (src/engine/quick.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801F5458",
-          "end": "0x801F5760"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801F5458",
-          "start": "0x801F5458",
-          "end": "0x801F5614"
-        },
-        {
-          "symbol": "fn_801F5614",
-          "start": "0x801F5614",
-          "end": "0x801F56A8"
-        },
-        {
-          "symbol": "fn_801F56A8",
-          "start": "0x801F56A8",
-          "end": "0x801F5734"
-        },
-        {
-          "symbol": "fn_801F5734",
-          "start": "0x801F5734",
-          "end": "0x801F5760"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/mutex.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F7738-0x801F77DC (src/engine/mutex.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801F7738",
-          "end": "0x801F77DC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801F7738",
-          "start": "0x801F7738",
-          "end": "0x801F773C"
-        },
-        {
-          "symbol": "fn_801F773C",
-          "start": "0x801F773C",
-          "end": "0x801F7764"
-        },
-        {
-          "symbol": "fn_801F7764",
-          "start": "0x801F7764",
-          "end": "0x801F778C"
-        },
-        {
-          "symbol": "fn_801F778C",
-          "start": "0x801F778C",
-          "end": "0x801F77B4"
-        },
-        {
-          "symbol": "fn_801F77B4",
-          "start": "0x801F77B4",
-          "end": "0x801F77DC"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/system.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F77DC-0x801F7DF4 (src/engine/system.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801F77DC",
-          "end": "0x801F7DF4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801F77DC",
-          "start": "0x801F77DC",
-          "end": "0x801F77EC"
-        },
-        {
-          "symbol": "fn_801F77EC",
-          "start": "0x801F77EC",
-          "end": "0x801F7824"
-        },
-        {
-          "symbol": "fn_801F7824",
-          "start": "0x801F7824",
-          "end": "0x801F79C0"
-        },
-        {
-          "symbol": "fn_801F79C0",
-          "start": "0x801F79C0",
-          "end": "0x801F7ABC"
-        },
-        {
-          "symbol": "fn_801F7ABC",
-          "start": "0x801F7ABC",
-          "end": "0x801F7AD4"
-        },
-        {
-          "symbol": "fn_801F7AD4",
-          "start": "0x801F7AD4",
-          "end": "0x801F7AE8"
-        },
-        {
-          "symbol": "fn_801F7AE8",
-          "start": "0x801F7AE8",
-          "end": "0x801F7B04"
-        },
-        {
-          "symbol": "fn_801F7B04",
-          "start": "0x801F7B04",
-          "end": "0x801F7B14"
-        },
-        {
-          "symbol": "fn_801F7B14",
-          "start": "0x801F7B14",
-          "end": "0x801F7B1C"
-        },
-        {
-          "symbol": "fn_801F7B1C",
-          "start": "0x801F7B1C",
-          "end": "0x801F7B9C"
-        },
-        {
-          "symbol": "fn_801F7B9C",
-          "start": "0x801F7B9C",
-          "end": "0x801F7BD4"
-        },
-        {
-          "symbol": "fn_801F7BD4",
-          "start": "0x801F7BD4",
-          "end": "0x801F7C88"
-        },
-        {
-          "symbol": "fn_801F7C88",
-          "start": "0x801F7C88",
-          "end": "0x801F7D34"
-        },
-        {
-          "symbol": "fn_801F7D34",
-          "start": "0x801F7D34",
-          "end": "0x801F7DF4"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/llsystem.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F7DF4-0x801F8878 (src/engine/llsystem.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801F7DF4",
-          "end": "0x801F8878"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801F7DF4",
-          "start": "0x801F7DF4",
-          "end": "0x801F7E18"
-        },
-        {
-          "symbol": "fn_801F7E18",
-          "start": "0x801F7E18",
-          "end": "0x801F7E90"
-        },
-        {
-          "symbol": "fn_801F7E90",
-          "start": "0x801F7E90",
-          "end": "0x801F7ED0"
-        },
-        {
-          "symbol": "fn_801F7ED0",
-          "start": "0x801F7ED0",
-          "end": "0x801F7EF8"
-        },
-        {
-          "symbol": "fn_801F7F60",
-          "start": "0x801F7F60",
-          "end": "0x801F7FA8"
-        },
-        {
-          "symbol": "fn_801F7FA8",
-          "start": "0x801F7FA8",
-          "end": "0x801F8014"
-        },
-        {
-          "symbol": "fn_801F8014",
-          "start": "0x801F8014",
-          "end": "0x801F809C"
-        },
-        {
-          "symbol": "fn_801F809C",
-          "start": "0x801F809C",
-          "end": "0x801F80D0"
-        },
-        {
-          "symbol": "fn_801F80D0",
-          "start": "0x801F80D0",
-          "end": "0x801F80E8"
-        },
-        {
-          "symbol": "fn_801F80E8",
-          "start": "0x801F80E8",
-          "end": "0x801F8128"
-        },
-        {
-          "symbol": "fn_801F8128",
-          "start": "0x801F8128",
-          "end": "0x801F8150"
-        },
-        {
-          "symbol": "fn_801F8150",
-          "start": "0x801F8150",
-          "end": "0x801F8174"
-        },
-        {
-          "symbol": "fn_801F8174",
-          "start": "0x801F8174",
-          "end": "0x801F81AC"
-        },
-        {
-          "symbol": "fn_801F81AC",
-          "start": "0x801F81AC",
-          "end": "0x801F81D4"
-        },
-        {
-          "symbol": "fn_801F81D4",
-          "start": "0x801F81D4",
-          "end": "0x801F81F4"
-        },
-        {
-          "symbol": "fn_801F81F4",
-          "start": "0x801F81F4",
-          "end": "0x801F8248"
-        },
-        {
-          "symbol": "fn_801F8574",
-          "start": "0x801F8574",
-          "end": "0x801F8758"
-        },
-        {
-          "symbol": "fn_801F8758",
-          "start": "0x801F8758",
-          "end": "0x801F8768"
-        },
-        {
-          "symbol": "fn_801F8768",
-          "start": "0x801F8768",
-          "end": "0x801F87FC"
-        },
-        {
-          "symbol": "fn_801F87FC",
-          "start": "0x801F87FC",
-          "end": "0x801F8838"
-        },
-        {
-          "symbol": "fn_801F8838",
-          "start": "0x801F8838",
-          "end": "0x801F8868"
+          "symbol": "fn_801EC650",
+          "start": "0x801EC650",
+          "end": "0x801EC6C4"
         },
         {
-          "symbol": "fn_801F8868",
-          "start": "0x801F8868",
-          "end": "0x801F8878"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/stream.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F5D84-0x801F7738 (src/engine/stream.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801F5D84",
-          "end": "0x801F7738"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801F5D84",
-          "start": "0x801F5D84",
-          "end": "0x801F5DA4"
-        },
-        {
-          "symbol": "fn_801F5DA4",
-          "start": "0x801F5DA4",
-          "end": "0x801F5DE4"
-        },
-        {
-          "symbol": "fn_801F5DE4",
-          "start": "0x801F5DE4",
-          "end": "0x801F5E24"
-        },
-        {
-          "symbol": "fn_801F5E24",
-          "start": "0x801F5E24",
-          "end": "0x801F5EA4"
-        },
-        {
-          "symbol": "fn_801F5EA4",
-          "start": "0x801F5EA4",
-          "end": "0x801F5F28"
-        },
-        {
-          "symbol": "fn_801F5F28",
-          "start": "0x801F5F28",
-          "end": "0x801F5FA4"
-        },
-        {
-          "symbol": "fn_801F5FA4",
-          "start": "0x801F5FA4",
-          "end": "0x801F5FF4"
-        },
-        {
-          "symbol": "fn_801F5FF4",
-          "start": "0x801F5FF4",
-          "end": "0x801F6074"
-        },
-        {
-          "symbol": "fn_801F6074",
-          "start": "0x801F6074",
-          "end": "0x801F60F0"
+          "symbol": "fn_801EC6C4",
+          "start": "0x801EC6C4",
+          "end": "0x801EC718"
         },
         {
-          "symbol": "fn_801F60F0",
-          "start": "0x801F60F0",
-          "end": "0x801F62F0"
+          "symbol": "fn_801EC718",
+          "start": "0x801EC718",
+          "end": "0x801EC760"
         },
         {
-          "symbol": "fn_801F62F0",
-          "start": "0x801F62F0",
-          "end": "0x801F63EC"
+          "symbol": "fn_801EC760",
+          "start": "0x801EC760",
+          "end": "0x801EC894"
         },
         {
-          "symbol": "fn_801F63EC",
-          "start": "0x801F63EC",
-          "end": "0x801F6410"
+          "symbol": "fn_801EC894",
+          "start": "0x801EC894",
+          "end": "0x801EC8AC"
         },
         {
-          "symbol": "fn_801F6410",
-          "start": "0x801F6410",
-          "end": "0x801F6540"
+          "symbol": "fn_801EC8AC",
+          "start": "0x801EC8AC",
+          "end": "0x801EC8D4"
         },
         {
-          "symbol": "fn_801F6540",
-          "start": "0x801F6540",
-          "end": "0x801F685C"
+          "symbol": "fn_801EC8D4",
+          "start": "0x801EC8D4",
+          "end": "0x801EC914"
         },
         {
-          "symbol": "fn_801F685C",
-          "start": "0x801F685C",
-          "end": "0x801F687C"
+          "symbol": "fn_801EC914",
+          "start": "0x801EC914",
+          "end": "0x801ECBE4"
         },
         {
-          "symbol": "fn_801F687C",
-          "start": "0x801F687C",
-          "end": "0x801F6AC8"
+          "symbol": "fn_801ECBE4",
+          "start": "0x801ECBE4",
+          "end": "0x801ECC70"
         },
         {
-          "symbol": "fn_801F6AC8",
-          "start": "0x801F6AC8",
-          "end": "0x801F6B84"
+          "symbol": "fn_801EDC2C",
+          "start": "0x801EDC2C",
+          "end": "0x801EDCD0"
         },
         {
-          "symbol": "fn_801F6B84",
-          "start": "0x801F6B84",
-          "end": "0x801F6C04"
+          "symbol": "fn_801EDCD0",
+          "start": "0x801EDCD0",
+          "end": "0x801EDD68"
         },
         {
-          "symbol": "fn_801F6C04",
-          "start": "0x801F6C04",
-          "end": "0x801F6C78"
+          "symbol": "fn_801EDD68",
+          "start": "0x801EDD68",
+          "end": "0x801EDDB0"
         },
         {
-          "symbol": "fn_801F6C78",
-          "start": "0x801F6C78",
-          "end": "0x801F6CE8"
+          "symbol": "fn_801EDDB0",
+          "start": "0x801EDDB0",
+          "end": "0x801EDDF8"
         },
         {
-          "symbol": "fn_801F6CE8",
-          "start": "0x801F6CE8",
-          "end": "0x801F6D54"
+          "symbol": "fn_801EE700",
+          "start": "0x801EE700",
+          "end": "0x801EE91C"
         },
         {
-          "symbol": "fn_801F6D54",
-          "start": "0x801F6D54",
-          "end": "0x801F6E9C"
+          "symbol": "fn_801EE91C",
+          "start": "0x801EE91C",
+          "end": "0x801EE970"
         },
         {
-          "symbol": "fn_801F6E9C",
-          "start": "0x801F6E9C",
-          "end": "0x801F6FA0"
+          "symbol": "fn_801EE970",
+          "start": "0x801EE970",
+          "end": "0x801EEA60"
         },
         {
-          "symbol": "fn_801F6FA0",
-          "start": "0x801F6FA0",
-          "end": "0x801F7208"
+          "symbol": "fn_801EEA60",
+          "start": "0x801EEA60",
+          "end": "0x801EEB44"
         },
         {
-          "symbol": "fn_801F7208",
-          "start": "0x801F7208",
-          "end": "0x801F73D4"
+          "symbol": "fn_801EEB44",
+          "start": "0x801EEB44",
+          "end": "0x801EECD0"
         },
         {
-          "symbol": "fn_801F73D4",
-          "start": "0x801F73D4",
-          "end": "0x801F74D4"
+          "symbol": "fn_801EECD0",
+          "start": "0x801EECD0",
+          "end": "0x801EEFAC"
         },
         {
-          "symbol": "fn_801F74D4",
-          "start": "0x801F74D4",
-          "end": "0x801F75C4"
+          "symbol": "fn_801EEFAC",
+          "start": "0x801EEFAC",
+          "end": "0x801EF390"
         },
         {
-          "symbol": "fn_801F75C4",
-          "start": "0x801F75C4",
-          "end": "0x801F7604"
+          "symbol": "fn_801EF390",
+          "start": "0x801EF390",
+          "end": "0x801EF548"
         },
         {
-          "symbol": "fn_801F7604",
-          "start": "0x801F7604",
-          "end": "0x801F7644"
+          "symbol": "fn_801EF548",
+          "start": "0x801EF548",
+          "end": "0x801EF7BC"
         },
         {
-          "symbol": "fn_801F7644",
-          "start": "0x801F7644",
-          "end": "0x801F76A0"
+          "symbol": "fn_801EF7BC",
+          "start": "0x801EF7BC",
+          "end": "0x801EF92C"
         },
         {
-          "symbol": "fn_801F76A0",
-          "start": "0x801F76A0",
-          "end": "0x801F76E8"
+          "symbol": "fn_801EF92C",
+          "start": "0x801EF92C",
+          "end": "0x801EFAD8"
         },
-        {
-          "symbol": "fn_801F76E8",
-          "start": "0x801F76E8",
-          "end": "0x801F7710"
-        },
-        {
-          "symbol": "fn_801F7710",
-          "start": "0x801F7710",
-          "end": "0x801F7738"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/resloosefile.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F3308-0x801F34C0 (src/engine/resloosefile.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801F3308",
-          "end": "0x801F34C0"
-        }
-      ],
-      "functions": [
         {
-          "symbol": "fn_801F3308",
-          "start": "0x801F3308",
-          "end": "0x801F33B8"
+          "symbol": "fn_801EFAD8",
+          "start": "0x801EFAD8",
+          "end": "0x801EFD2C"
         },
         {
-          "symbol": "fn_801F33B8",
-          "start": "0x801F33B8",
-          "end": "0x801F33F0"
+          "symbol": "fn_801EFD2C",
+          "start": "0x801EFD2C",
+          "end": "0x801EFF80"
         },
         {
-          "symbol": "fn_801F33F0",
-          "start": "0x801F33F0",
-          "end": "0x801F346C"
+          "symbol": "fn_801EFF80",
+          "start": "0x801EFF80",
+          "end": "0x801F010C"
         },
         {
-          "symbol": "fn_801F346C",
-          "start": "0x801F346C",
-          "end": "0x801F34C0"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/hash.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F34C0-0x801F3524 (src/engine/hash.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801F34C0",
-          "end": "0x801F3524"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801F34C0",
-          "start": "0x801F34C0",
-          "end": "0x801F3524"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/llsound.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F5034-0x801F5100 (src/engine/llsound.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801F5034",
-          "end": "0x801F5100"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801F5034",
-          "start": "0x801F5034",
-          "end": "0x801F50C8"
+          "symbol": "fn_801F010C",
+          "start": "0x801F010C",
+          "end": "0x801F02AC"
         },
         {
-          "symbol": "fn_801F50C8",
-          "start": "0x801F50C8",
-          "end": "0x801F50F8"
+          "symbol": "fn_801F08FC",
+          "start": "0x801F08FC",
+          "end": "0x801F0A8C"
         },
         {
-          "symbol": "fn_801F50F8",
-          "start": "0x801F50F8",
-          "end": "0x801F5100"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/rescache.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F2E54-0x801F3308 (src/engine/rescache.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801F2E54",
-          "end": "0x801F3308"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801F2E54",
-          "start": "0x801F2E54",
-          "end": "0x801F2ED8"
+          "symbol": "fn_801F0A8C",
+          "start": "0x801F0A8C",
+          "end": "0x801F0C50"
         },
         {
-          "symbol": "fn_801F2ED8",
-          "start": "0x801F2ED8",
-          "end": "0x801F2EE0"
+          "symbol": "fn_801F0C50",
+          "start": "0x801F0C50",
+          "end": "0x801F0D34"
         },
         {
-          "symbol": "fn_801F2EE0",
-          "start": "0x801F2EE0",
-          "end": "0x801F30CC"
+          "symbol": "fn_801F0D34",
+          "start": "0x801F0D34",
+          "end": "0x801F0DB8"
         },
         {
-          "symbol": "fn_801F30CC",
-          "start": "0x801F30CC",
-          "end": "0x801F3104"
+          "symbol": "fn_801F0DB8",
+          "start": "0x801F0DB8",
+          "end": "0x801F0E68"
         },
         {
-          "symbol": "fn_801F3104",
-          "start": "0x801F3104",
-          "end": "0x801F318C"
+          "symbol": "fn_801F0E68",
+          "start": "0x801F0E68",
+          "end": "0x801F0F18"
         },
-        {
-          "symbol": "fn_801F318C",
-          "start": "0x801F318C",
-          "end": "0x801F3308"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/resquickload.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801F284C-0x801F2E54 (src/engine/resquickload.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801F284C",
-          "end": "0x801F2E54"
-        }
-      ],
-      "functions": [
         {
-          "symbol": "fn_801F284C",
-          "start": "0x801F284C",
-          "end": "0x801F2934"
+          "symbol": "fn_801F0F18",
+          "start": "0x801F0F18",
+          "end": "0x801F0F9C"
         },
         {
-          "symbol": "fn_801F2934",
-          "start": "0x801F2934",
-          "end": "0x801F2954"
+          "symbol": "fn_801F0F9C",
+          "start": "0x801F0F9C",
+          "end": "0x801F1008"
         },
         {
-          "symbol": "fn_801F2954",
-          "start": "0x801F2954",
-          "end": "0x801F29F0"
+          "symbol": "fn_801F1008",
+          "start": "0x801F1008",
+          "end": "0x801F10B0"
         },
         {
-          "symbol": "fn_801F29F0",
-          "start": "0x801F29F0",
-          "end": "0x801F2A4C"
+          "symbol": "fn_801F10B0",
+          "start": "0x801F10B0",
+          "end": "0x801F11AC"
         },
         {
-          "symbol": "fn_801F2A4C",
-          "start": "0x801F2A4C",
-          "end": "0x801F2B94"
+          "symbol": "fn_801F11AC",
+          "start": "0x801F11AC",
+          "end": "0x801F1230"
         },
         {
-          "symbol": "fn_801F2B94",
-          "start": "0x801F2B94",
-          "end": "0x801F2BAC"
+          "symbol": "fn_801F1230",
+          "start": "0x801F1230",
+          "end": "0x801F12B4"
         },
         {
-          "symbol": "fn_801F2BAC",
-          "start": "0x801F2BAC",
-          "end": "0x801F2BF0"
+          "symbol": "fn_801F12B4",
+          "start": "0x801F12B4",
+          "end": "0x801F1488"
         },
         {
-          "symbol": "fn_801F2BF0",
-          "start": "0x801F2BF0",
-          "end": "0x801F2C54"
+          "symbol": "fn_801F1488",
+          "start": "0x801F1488",
+          "end": "0x801F149C"
         },
         {
-          "symbol": "fn_801F2C54",
-          "start": "0x801F2C54",
-          "end": "0x801F2CD4"
+          "symbol": "fn_801F149C",
+          "start": "0x801F149C",
+          "end": "0x801F1520"
         },
         {
-          "symbol": "fn_801F2CD4",
-          "start": "0x801F2CD4",
-          "end": "0x801F2D60"
+          "symbol": "fn_801F1520",
+          "start": "0x801F1520",
+          "end": "0x801F1530"
         },
         {
-          "symbol": "fn_801F2D60",
-          "start": "0x801F2D60",
-          "end": "0x801F2E54"
+          "symbol": "fn_801F1530",
+          "start": "0x801F1530",
+          "end": "0x801F1538"
         }
       ]
     },
@@ -42044,6 +41549,176 @@
           "symbol": "fn_801F283C",
           "start": "0x801F283C",
           "end": "0x801F284C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/resquickload.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801F284C-0x801F2E54 (src/engine/resquickload.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F284C",
+          "end": "0x801F2E54"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801F284C",
+          "start": "0x801F284C",
+          "end": "0x801F2934"
+        },
+        {
+          "symbol": "fn_801F2934",
+          "start": "0x801F2934",
+          "end": "0x801F2954"
+        },
+        {
+          "symbol": "fn_801F2954",
+          "start": "0x801F2954",
+          "end": "0x801F29F0"
+        },
+        {
+          "symbol": "fn_801F29F0",
+          "start": "0x801F29F0",
+          "end": "0x801F2A4C"
+        },
+        {
+          "symbol": "fn_801F2A4C",
+          "start": "0x801F2A4C",
+          "end": "0x801F2B94"
+        },
+        {
+          "symbol": "fn_801F2B94",
+          "start": "0x801F2B94",
+          "end": "0x801F2BAC"
+        },
+        {
+          "symbol": "fn_801F2BAC",
+          "start": "0x801F2BAC",
+          "end": "0x801F2BF0"
+        },
+        {
+          "symbol": "fn_801F2BF0",
+          "start": "0x801F2BF0",
+          "end": "0x801F2C54"
+        },
+        {
+          "symbol": "fn_801F2C54",
+          "start": "0x801F2C54",
+          "end": "0x801F2CD4"
+        },
+        {
+          "symbol": "fn_801F2CD4",
+          "start": "0x801F2CD4",
+          "end": "0x801F2D60"
+        },
+        {
+          "symbol": "fn_801F2D60",
+          "start": "0x801F2D60",
+          "end": "0x801F2E54"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/rescache.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801F2E54-0x801F3308 (src/engine/rescache.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F2E54",
+          "end": "0x801F3308"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801F2E54",
+          "start": "0x801F2E54",
+          "end": "0x801F2ED8"
+        },
+        {
+          "symbol": "fn_801F2ED8",
+          "start": "0x801F2ED8",
+          "end": "0x801F2EE0"
+        },
+        {
+          "symbol": "fn_801F2EE0",
+          "start": "0x801F2EE0",
+          "end": "0x801F30CC"
+        },
+        {
+          "symbol": "fn_801F30CC",
+          "start": "0x801F30CC",
+          "end": "0x801F3104"
+        },
+        {
+          "symbol": "fn_801F3104",
+          "start": "0x801F3104",
+          "end": "0x801F318C"
+        },
+        {
+          "symbol": "fn_801F318C",
+          "start": "0x801F318C",
+          "end": "0x801F3308"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/resloosefile.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801F3308-0x801F34C0 (src/engine/resloosefile.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F3308",
+          "end": "0x801F34C0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801F3308",
+          "start": "0x801F3308",
+          "end": "0x801F33B8"
+        },
+        {
+          "symbol": "fn_801F33B8",
+          "start": "0x801F33B8",
+          "end": "0x801F33F0"
+        },
+        {
+          "symbol": "fn_801F33F0",
+          "start": "0x801F33F0",
+          "end": "0x801F346C"
+        },
+        {
+          "symbol": "fn_801F346C",
+          "start": "0x801F346C",
+          "end": "0x801F34C0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/hash.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801F34C0-0x801F3524 (src/engine/hash.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F34C0",
+          "end": "0x801F3524"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801F34C0",
+          "start": "0x801F34C0",
+          "end": "0x801F3524"
         }
       ]
     },
@@ -42318,6 +41993,141 @@
       ]
     },
     {
+      "source": "src/engine/llsound.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801F5034-0x801F5100 (src/engine/llsound.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F5034",
+          "end": "0x801F5100"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801F5034",
+          "start": "0x801F5034",
+          "end": "0x801F50C8"
+        },
+        {
+          "symbol": "fn_801F50C8",
+          "start": "0x801F50C8",
+          "end": "0x801F50F8"
+        },
+        {
+          "symbol": "fn_801F50F8",
+          "start": "0x801F50F8",
+          "end": "0x801F5100"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sort.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801F5100-0x801F524C (src/engine/sort.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F5100",
+          "end": "0x801F524C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801F5100",
+          "start": "0x801F5100",
+          "end": "0x801F512C"
+        },
+        {
+          "symbol": "fn_801F512C",
+          "start": "0x801F512C",
+          "end": "0x801F518C"
+        },
+        {
+          "symbol": "fn_801F518C",
+          "start": "0x801F518C",
+          "end": "0x801F51DC"
+        },
+        {
+          "symbol": "fn_801F51DC",
+          "start": "0x801F51DC",
+          "end": "0x801F522C"
+        },
+        {
+          "symbol": "fn_801F522C",
+          "start": "0x801F522C",
+          "end": "0x801F524C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/bubble.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801F524C-0x801F5458 (src/engine/bubble.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F524C",
+          "end": "0x801F5458"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801F524C",
+          "start": "0x801F524C",
+          "end": "0x801F53A0"
+        },
+        {
+          "symbol": "fn_801F53A0",
+          "start": "0x801F53A0",
+          "end": "0x801F542C"
+        },
+        {
+          "symbol": "fn_801F542C",
+          "start": "0x801F542C",
+          "end": "0x801F5458"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/quick.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801F5458-0x801F5760 (src/engine/quick.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F5458",
+          "end": "0x801F5760"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801F5458",
+          "start": "0x801F5458",
+          "end": "0x801F5614"
+        },
+        {
+          "symbol": "fn_801F5614",
+          "start": "0x801F5614",
+          "end": "0x801F56A8"
+        },
+        {
+          "symbol": "fn_801F56A8",
+          "start": "0x801F56A8",
+          "end": "0x801F5734"
+        },
+        {
+          "symbol": "fn_801F5734",
+          "start": "0x801F5734",
+          "end": "0x801F5760"
+        }
+      ]
+    },
+    {
       "source": "src/engine/Speech.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row 0x801F5760-0x801F5D84 (src/engine/Speech.cpp), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
@@ -42379,6 +42189,436 @@
           "symbol": "fn_801F5D0C",
           "start": "0x801F5D0C",
           "end": "0x801F5D2C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/stream.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801F5D84-0x801F7738 (src/engine/stream.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F5D84",
+          "end": "0x801F7738"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801F5D84",
+          "start": "0x801F5D84",
+          "end": "0x801F5DA4"
+        },
+        {
+          "symbol": "fn_801F5DA4",
+          "start": "0x801F5DA4",
+          "end": "0x801F5DE4"
+        },
+        {
+          "symbol": "fn_801F5DE4",
+          "start": "0x801F5DE4",
+          "end": "0x801F5E24"
+        },
+        {
+          "symbol": "fn_801F5E24",
+          "start": "0x801F5E24",
+          "end": "0x801F5EA4"
+        },
+        {
+          "symbol": "fn_801F5EA4",
+          "start": "0x801F5EA4",
+          "end": "0x801F5F28"
+        },
+        {
+          "symbol": "fn_801F5F28",
+          "start": "0x801F5F28",
+          "end": "0x801F5FA4"
+        },
+        {
+          "symbol": "fn_801F5FA4",
+          "start": "0x801F5FA4",
+          "end": "0x801F5FF4"
+        },
+        {
+          "symbol": "fn_801F5FF4",
+          "start": "0x801F5FF4",
+          "end": "0x801F6074"
+        },
+        {
+          "symbol": "fn_801F6074",
+          "start": "0x801F6074",
+          "end": "0x801F60F0"
+        },
+        {
+          "symbol": "fn_801F60F0",
+          "start": "0x801F60F0",
+          "end": "0x801F62F0"
+        },
+        {
+          "symbol": "fn_801F62F0",
+          "start": "0x801F62F0",
+          "end": "0x801F63EC"
+        },
+        {
+          "symbol": "fn_801F63EC",
+          "start": "0x801F63EC",
+          "end": "0x801F6410"
+        },
+        {
+          "symbol": "fn_801F6410",
+          "start": "0x801F6410",
+          "end": "0x801F6540"
+        },
+        {
+          "symbol": "fn_801F6540",
+          "start": "0x801F6540",
+          "end": "0x801F685C"
+        },
+        {
+          "symbol": "fn_801F685C",
+          "start": "0x801F685C",
+          "end": "0x801F687C"
+        },
+        {
+          "symbol": "fn_801F687C",
+          "start": "0x801F687C",
+          "end": "0x801F6AC8"
+        },
+        {
+          "symbol": "fn_801F6AC8",
+          "start": "0x801F6AC8",
+          "end": "0x801F6B84"
+        },
+        {
+          "symbol": "fn_801F6B84",
+          "start": "0x801F6B84",
+          "end": "0x801F6C04"
+        },
+        {
+          "symbol": "fn_801F6C04",
+          "start": "0x801F6C04",
+          "end": "0x801F6C78"
+        },
+        {
+          "symbol": "fn_801F6C78",
+          "start": "0x801F6C78",
+          "end": "0x801F6CE8"
+        },
+        {
+          "symbol": "fn_801F6CE8",
+          "start": "0x801F6CE8",
+          "end": "0x801F6D54"
+        },
+        {
+          "symbol": "fn_801F6D54",
+          "start": "0x801F6D54",
+          "end": "0x801F6E9C"
+        },
+        {
+          "symbol": "fn_801F6E9C",
+          "start": "0x801F6E9C",
+          "end": "0x801F6FA0"
+        },
+        {
+          "symbol": "fn_801F6FA0",
+          "start": "0x801F6FA0",
+          "end": "0x801F7208"
+        },
+        {
+          "symbol": "fn_801F7208",
+          "start": "0x801F7208",
+          "end": "0x801F73D4"
+        },
+        {
+          "symbol": "fn_801F73D4",
+          "start": "0x801F73D4",
+          "end": "0x801F74D4"
+        },
+        {
+          "symbol": "fn_801F74D4",
+          "start": "0x801F74D4",
+          "end": "0x801F75C4"
+        },
+        {
+          "symbol": "fn_801F75C4",
+          "start": "0x801F75C4",
+          "end": "0x801F7604"
+        },
+        {
+          "symbol": "fn_801F7604",
+          "start": "0x801F7604",
+          "end": "0x801F7644"
+        },
+        {
+          "symbol": "fn_801F7644",
+          "start": "0x801F7644",
+          "end": "0x801F76A0"
+        },
+        {
+          "symbol": "fn_801F76A0",
+          "start": "0x801F76A0",
+          "end": "0x801F76E8"
+        },
+        {
+          "symbol": "fn_801F76E8",
+          "start": "0x801F76E8",
+          "end": "0x801F7710"
+        },
+        {
+          "symbol": "fn_801F7710",
+          "start": "0x801F7710",
+          "end": "0x801F7738"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/mutex.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801F7738-0x801F77DC (src/engine/mutex.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F7738",
+          "end": "0x801F77DC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801F7738",
+          "start": "0x801F7738",
+          "end": "0x801F773C"
+        },
+        {
+          "symbol": "fn_801F773C",
+          "start": "0x801F773C",
+          "end": "0x801F7764"
+        },
+        {
+          "symbol": "fn_801F7764",
+          "start": "0x801F7764",
+          "end": "0x801F778C"
+        },
+        {
+          "symbol": "fn_801F778C",
+          "start": "0x801F778C",
+          "end": "0x801F77B4"
+        },
+        {
+          "symbol": "fn_801F77B4",
+          "start": "0x801F77B4",
+          "end": "0x801F77DC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/system.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801F77DC-0x801F7DF4 (src/engine/system.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F77DC",
+          "end": "0x801F7DF4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801F77DC",
+          "start": "0x801F77DC",
+          "end": "0x801F77EC"
+        },
+        {
+          "symbol": "fn_801F77EC",
+          "start": "0x801F77EC",
+          "end": "0x801F7824"
+        },
+        {
+          "symbol": "fn_801F7824",
+          "start": "0x801F7824",
+          "end": "0x801F79C0"
+        },
+        {
+          "symbol": "fn_801F79C0",
+          "start": "0x801F79C0",
+          "end": "0x801F7ABC"
+        },
+        {
+          "symbol": "fn_801F7ABC",
+          "start": "0x801F7ABC",
+          "end": "0x801F7AD4"
+        },
+        {
+          "symbol": "fn_801F7AD4",
+          "start": "0x801F7AD4",
+          "end": "0x801F7AE8"
+        },
+        {
+          "symbol": "fn_801F7AE8",
+          "start": "0x801F7AE8",
+          "end": "0x801F7B04"
+        },
+        {
+          "symbol": "fn_801F7B04",
+          "start": "0x801F7B04",
+          "end": "0x801F7B14"
+        },
+        {
+          "symbol": "fn_801F7B14",
+          "start": "0x801F7B14",
+          "end": "0x801F7B1C"
+        },
+        {
+          "symbol": "fn_801F7B1C",
+          "start": "0x801F7B1C",
+          "end": "0x801F7B9C"
+        },
+        {
+          "symbol": "fn_801F7B9C",
+          "start": "0x801F7B9C",
+          "end": "0x801F7BD4"
+        },
+        {
+          "symbol": "fn_801F7BD4",
+          "start": "0x801F7BD4",
+          "end": "0x801F7C88"
+        },
+        {
+          "symbol": "fn_801F7C88",
+          "start": "0x801F7C88",
+          "end": "0x801F7D34"
+        },
+        {
+          "symbol": "fn_801F7D34",
+          "start": "0x801F7D34",
+          "end": "0x801F7DF4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/llsystem.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801F7DF4-0x801F8878 (src/engine/llsystem.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F7DF4",
+          "end": "0x801F8878"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801F7DF4",
+          "start": "0x801F7DF4",
+          "end": "0x801F7E18"
+        },
+        {
+          "symbol": "fn_801F7E18",
+          "start": "0x801F7E18",
+          "end": "0x801F7E90"
+        },
+        {
+          "symbol": "fn_801F7E90",
+          "start": "0x801F7E90",
+          "end": "0x801F7ED0"
+        },
+        {
+          "symbol": "fn_801F7ED0",
+          "start": "0x801F7ED0",
+          "end": "0x801F7EF8"
+        },
+        {
+          "symbol": "fn_801F7F60",
+          "start": "0x801F7F60",
+          "end": "0x801F7FA8"
+        },
+        {
+          "symbol": "fn_801F7FA8",
+          "start": "0x801F7FA8",
+          "end": "0x801F8014"
+        },
+        {
+          "symbol": "fn_801F8014",
+          "start": "0x801F8014",
+          "end": "0x801F809C"
+        },
+        {
+          "symbol": "fn_801F809C",
+          "start": "0x801F809C",
+          "end": "0x801F80D0"
+        },
+        {
+          "symbol": "fn_801F80D0",
+          "start": "0x801F80D0",
+          "end": "0x801F80E8"
+        },
+        {
+          "symbol": "fn_801F80E8",
+          "start": "0x801F80E8",
+          "end": "0x801F8128"
+        },
+        {
+          "symbol": "fn_801F8128",
+          "start": "0x801F8128",
+          "end": "0x801F8150"
+        },
+        {
+          "symbol": "fn_801F8150",
+          "start": "0x801F8150",
+          "end": "0x801F8174"
+        },
+        {
+          "symbol": "fn_801F8174",
+          "start": "0x801F8174",
+          "end": "0x801F81AC"
+        },
+        {
+          "symbol": "fn_801F81AC",
+          "start": "0x801F81AC",
+          "end": "0x801F81D4"
+        },
+        {
+          "symbol": "fn_801F81D4",
+          "start": "0x801F81D4",
+          "end": "0x801F81F4"
+        },
+        {
+          "symbol": "fn_801F81F4",
+          "start": "0x801F81F4",
+          "end": "0x801F8248"
+        },
+        {
+          "symbol": "fn_801F8574",
+          "start": "0x801F8574",
+          "end": "0x801F8758"
+        },
+        {
+          "symbol": "fn_801F8758",
+          "start": "0x801F8758",
+          "end": "0x801F8768"
+        },
+        {
+          "symbol": "fn_801F8768",
+          "start": "0x801F8768",
+          "end": "0x801F87FC"
+        },
+        {
+          "symbol": "fn_801F87FC",
+          "start": "0x801F87FC",
+          "end": "0x801F8838"
+        },
+        {
+          "symbol": "fn_801F8838",
+          "start": "0x801F8838",
+          "end": "0x801F8868"
+        },
+        {
+          "symbol": "fn_801F8868",
+          "start": "0x801F8868",
+          "end": "0x801F8878"
         }
       ]
     },
@@ -42639,211 +42879,6 @@
           "symbol": "fn_801FA844",
           "start": "0x801FA844",
           "end": "0x801FA870"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/Resource.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801EC914-0x801F1538 (src/engine/Resource.c), its compiler row, exact function rows and NASCAR 2005 candidate name rows. Draft comparisons only; original assembly remains linked; data is referenced through neutral external labels.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801EC914",
-          "end": "0x801F1538"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801EC914",
-          "start": "0x801EC914",
-          "end": "0x801ECBE4"
-        },
-        {
-          "symbol": "fn_801ECBE4",
-          "start": "0x801ECBE4",
-          "end": "0x801ECC70"
-        },
-        {
-          "symbol": "fn_801EDC2C",
-          "start": "0x801EDC2C",
-          "end": "0x801EDCD0"
-        },
-        {
-          "symbol": "fn_801EDCD0",
-          "start": "0x801EDCD0",
-          "end": "0x801EDD68"
-        },
-        {
-          "symbol": "fn_801EDD68",
-          "start": "0x801EDD68",
-          "end": "0x801EDDB0"
-        },
-        {
-          "symbol": "fn_801EDDB0",
-          "start": "0x801EDDB0",
-          "end": "0x801EDDF8"
-        },
-        {
-          "symbol": "fn_801EE700",
-          "start": "0x801EE700",
-          "end": "0x801EE91C"
-        },
-        {
-          "symbol": "fn_801EE91C",
-          "start": "0x801EE91C",
-          "end": "0x801EE970"
-        },
-        {
-          "symbol": "fn_801EE970",
-          "start": "0x801EE970",
-          "end": "0x801EEA60"
-        },
-        {
-          "symbol": "fn_801EEA60",
-          "start": "0x801EEA60",
-          "end": "0x801EEB44"
-        },
-        {
-          "symbol": "fn_801EEB44",
-          "start": "0x801EEB44",
-          "end": "0x801EECD0"
-        },
-        {
-          "symbol": "fn_801EECD0",
-          "start": "0x801EECD0",
-          "end": "0x801EEFAC"
-        },
-        {
-          "symbol": "fn_801EEFAC",
-          "start": "0x801EEFAC",
-          "end": "0x801EF390"
-        },
-        {
-          "symbol": "fn_801EF390",
-          "start": "0x801EF390",
-          "end": "0x801EF548"
-        },
-        {
-          "symbol": "fn_801EF548",
-          "start": "0x801EF548",
-          "end": "0x801EF7BC"
-        },
-        {
-          "symbol": "fn_801EF7BC",
-          "start": "0x801EF7BC",
-          "end": "0x801EF92C"
-        },
-        {
-          "symbol": "fn_801EF92C",
-          "start": "0x801EF92C",
-          "end": "0x801EFAD8"
-        },
-        {
-          "symbol": "fn_801EFAD8",
-          "start": "0x801EFAD8",
-          "end": "0x801EFD2C"
-        },
-        {
-          "symbol": "fn_801EFD2C",
-          "start": "0x801EFD2C",
-          "end": "0x801EFF80"
-        },
-        {
-          "symbol": "fn_801EFF80",
-          "start": "0x801EFF80",
-          "end": "0x801F010C"
-        },
-        {
-          "symbol": "fn_801F010C",
-          "start": "0x801F010C",
-          "end": "0x801F02AC"
-        },
-        {
-          "symbol": "fn_801F08FC",
-          "start": "0x801F08FC",
-          "end": "0x801F0A8C"
-        },
-        {
-          "symbol": "fn_801F0A8C",
-          "start": "0x801F0A8C",
-          "end": "0x801F0C50"
-        },
-        {
-          "symbol": "fn_801F0C50",
-          "start": "0x801F0C50",
-          "end": "0x801F0D34"
-        },
-        {
-          "symbol": "fn_801F0D34",
-          "start": "0x801F0D34",
-          "end": "0x801F0DB8"
-        },
-        {
-          "symbol": "fn_801F0DB8",
-          "start": "0x801F0DB8",
-          "end": "0x801F0E68"
-        },
-        {
-          "symbol": "fn_801F0E68",
-          "start": "0x801F0E68",
-          "end": "0x801F0F18"
-        },
-        {
-          "symbol": "fn_801F0F18",
-          "start": "0x801F0F18",
-          "end": "0x801F0F9C"
-        },
-        {
-          "symbol": "fn_801F0F9C",
-          "start": "0x801F0F9C",
-          "end": "0x801F1008"
-        },
-        {
-          "symbol": "fn_801F1008",
-          "start": "0x801F1008",
-          "end": "0x801F10B0"
-        },
-        {
-          "symbol": "fn_801F10B0",
-          "start": "0x801F10B0",
-          "end": "0x801F11AC"
-        },
-        {
-          "symbol": "fn_801F11AC",
-          "start": "0x801F11AC",
-          "end": "0x801F1230"
-        },
-        {
-          "symbol": "fn_801F1230",
-          "start": "0x801F1230",
-          "end": "0x801F12B4"
-        },
-        {
-          "symbol": "fn_801F12B4",
-          "start": "0x801F12B4",
-          "end": "0x801F1488"
-        },
-        {
-          "symbol": "fn_801F1488",
-          "start": "0x801F1488",
-          "end": "0x801F149C"
-        },
-        {
-          "symbol": "fn_801F149C",
-          "start": "0x801F149C",
-          "end": "0x801F1520"
-        },
-        {
-          "symbol": "fn_801F1520",
-          "start": "0x801F1520",
-          "end": "0x801F1530"
-        },
-        {
-          "symbol": "fn_801F1530",
-          "start": "0x801F1530",
-          "end": "0x801F1538"
         }
       ]
     }

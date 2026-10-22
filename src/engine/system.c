@@ -1,18 +1,11 @@
+#include "engine/system.h"
+#include "game/fn_801C68FC.h"
+
 typedef struct SysInitParms_801F7824 {
     unsigned char mNumTimers;
     unsigned char mNumCallbacks;
     unsigned char mNumThreads;
 } SysInitParms_801F7824;
-
-typedef struct SysTimer_801F7B1C {
-    void *pFunc;
-    int mUnknown4;
-    int mUnknown8;
-    unsigned short mUnknownC;
-    int mUnknown10;
-    char mUnknown14[12];
-    unsigned int mCount;
-} SysTimer_801F7B1C;
 
 typedef struct SysCallback_801F77DC {
     unsigned short mUnknown0;
@@ -30,34 +23,12 @@ typedef struct SysError_801F77EC {
     int mThreadID;
 } SysError_801F77EC;
 
-typedef struct SysTime_801F7D34 {
-    unsigned char mSeconds;
-    unsigned char mMinutes;
-    unsigned char mHours;
-    unsigned char mDays;
-    unsigned char mMonth;
-    unsigned short mYear;
-    unsigned int mHundredths;
-} SysTime_801F7D34;
-
 #define SYS_ERROR_UNUSED 0x8000FFFF
 
-extern void *fn_801C68FC(int a, int b, int count, int size, int (*cmp)(void *, void *), void *storage);
-extern int fn_801C69E4(void *pool);
-extern void *fn_801C6A20(void *pool);
-extern void *fn_801C6AA4(void *pool, void *item, int c);
-extern void *fn_801C6B4C(void *pool, int mode);
-extern void fn_801C6C0C(void *pool, void *item);
-extern int fn_801C6D34(void *pool, int b, int ctx, void *pData, int (*fn)(void *, int, void *), int f);
-extern int fn_801F7E90(void);
-extern int fn_801F7ED0(void);
-extern int fn_801F7EF8(SysTimer_801F7B1C *pTimer);
-extern void fn_801F7F60(SysTimer_801F7B1C *pTimer);
-extern void fn_801F7FA8(void *pCriticalSection);
-extern void fn_801F8014(void *pCriticalSection);
-extern void fn_801F809C(void *pCriticalSection);
-extern void fn_801F80D0(void *pCriticalSection);
-extern int fn_801F81D4(void);
+extern void *fn_801C6A20(void *pPool);
+extern void *fn_801C6B4C(void *pPool, int mode);
+extern void fn_801C6C0C(void *pPool, void *pItem);
+extern int fn_801C6D34(void *pPool, int start, void *pKey, void *pOut, int (*pFunc)(void *, void *, void *), int count);
 extern int fn_8027F000(int year);
 extern int fn_8027F030(int month, int year);
 
@@ -70,27 +41,27 @@ extern SysTimer_801F7B1C *lbl_803EBE44;
 extern unsigned int lbl_803EBE48;
 extern void *lbl_803ECFA4;
 extern void *lbl_803ECFA8;
-extern char lbl_8039B3F8[];
+extern SysCriticalSection_8039B3F8 lbl_8039B3F8;
 
 SysTimer_801F7B1C *fn_801F7B1C(void *pFunc, int a);
 void fn_801F7B9C(SysTimer_801F7B1C *pTimer);
-int fn_801F7BD4(int err);
 
 static int fn_801F77DC(void *pA, void *pB)
 {
     return ((SysCallback_801F77DC *)pA)->mPriority - ((SysCallback_801F77DC *)pB)->mPriority;
 }
 
-static int fn_801F77EC(void *pItem, int threadID, void *pData)
+static int fn_801F77EC(void *pItem, void *pKey, void *pOut)
 {
     SysError_801F77EC *pError = pItem;
+    SysError_801F77EC **ppFound = pOut;
 
-    if (pError->mThreadID == threadID) {
-        *(SysError_801F77EC **)pData = pError;
+    if (pError->mThreadID == (int)pKey) {
+        *ppFound = pError;
         return 0;
     }
     if (pError->mError == SYS_ERROR_UNUSED) {
-        *(SysError_801F77EC **)pData = pError;
+        *ppFound = pError;
     }
     return 1;
 }
@@ -126,7 +97,7 @@ int fn_801F7824(SysInitParms_801F7824 *pParms)
             }
             lbl_803EBE38 = pPool;
         }
-        fn_801F7FA8(lbl_8039B3F8);
+        fn_801F7FA8(&lbl_8039B3F8);
     } else {
         err = 0x20001;
     }
@@ -165,7 +136,7 @@ int fn_801F79C0(void)
             fn_801C69E4(p);
         }
         err = fn_801F7ED0();
-        fn_801F80D0(lbl_8039B3F8);
+        fn_801F80D0(&lbl_8039B3F8);
         lbl_803EBE30 = 0;
     } else {
         err = 0x20002;
@@ -213,10 +184,10 @@ SysTimer_801F7B1C *fn_801F7B1C(void *pFunc, int a)
 
     if (pTimer) {
         pTimer->pFunc = pFunc;
-        pTimer->mUnknown4 = a;
-        pTimer->mUnknown8 = err;
+        pTimer->mType = a;
+        pTimer->mElapsed = err;
         pTimer->mUnknown10 = err;
-        pTimer->mUnknownC = 1;
+        pTimer->mFlags = 1;
         fn_801C6AA4(lbl_803ECFA4, pTimer, 0);
     } else {
         err = 0x20003;
@@ -239,15 +210,15 @@ int fn_801F7BD4(int err)
     if (lbl_803EBE38) {
         pError = 0;
         threadID = fn_801F81D4();
-        fn_801F8014(lbl_8039B3F8);
-        fn_801C6D34(lbl_803EBE38, 0, threadID, &pError, fn_801F77EC, 1);
+        fn_801F8014(&lbl_8039B3F8);
+        fn_801C6D34(lbl_803EBE38, 0, (void *)threadID, &pError, fn_801F77EC, 1);
         if (pError) {
             if (pError->mError == SYS_ERROR_UNUSED) {
                 pError->mThreadID = threadID;
             }
             pError->mError = err;
         }
-        fn_801F809C(lbl_8039B3F8);
+        fn_801F809C(&lbl_8039B3F8);
     } else {
         lbl_803EBE34 = err;
     }
@@ -264,18 +235,18 @@ int fn_801F7C88(void)
         pError = 0;
         err = 0;
         threadID = fn_801F81D4();
-        fn_801F8014(lbl_8039B3F8);
-        fn_801C6D34(lbl_803EBE38, 0, threadID, &pError, fn_801F77EC, 1);
+        fn_801F8014(&lbl_8039B3F8);
+        fn_801C6D34(lbl_803EBE38, 0, (void *)threadID, &pError, fn_801F77EC, 1);
         if (pError && pError->mError != SYS_ERROR_UNUSED) {
             err = pError->mError;
         }
-        fn_801F809C(lbl_8039B3F8);
+        fn_801F809C(&lbl_8039B3F8);
         return err;
     }
     return lbl_803EBE34;
 }
 
-unsigned long long fn_801F7D34(SysTime_801F7D34 *pTime)
+unsigned long long fn_801F7D34(SysTime_8039B430 *pTime)
 {
     unsigned int monthDays = fn_8027F030(pTime->mMonth, pTime->mYear);
     unsigned int yearDays = fn_8027F000(pTime->mYear);
