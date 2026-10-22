@@ -1,6 +1,6 @@
 /* Members of the C++ classes whose constructors are 0x8027D6E8 (vtable
    0x802C2618) and 0x8027DAE4 (vtable 0x802C23C8) and of the class with the
-   vtable 0x802C24F0, and of the small class with the vtables 0x802C27A0 and
+   vtable 0x802C24F0, and of the small class with the vtables 0x802C2798 and
    0x802C27E8. Only bodies that need no class declaration are reconstructed
    here; they use neutral C-linkage labels. */
 
@@ -21,15 +21,26 @@ typedef struct Object_8027D6E8 {
     int m38;
     unsigned char mUnknown3C[0x18];
     int m54;
-    int m58;
-    unsigned char mUnknown5C[0x10];
+    unsigned char mUnknown58[0x14];
     Record_8027D9FC m6C;
     unsigned char mUnknown7C[0x98];
     int m114;
-    unsigned char mUnknown118[0xC];
+} Object_8027D6E8;
+
+/* Member of the class built by 0x8027DAE4 (vtable 0x802C23C8); partial
+   layout, size unknown. */
+typedef struct Object_8027DAE4 {
+    unsigned char mUnknown0[0x58];
+    int m58;
+} Object_8027DAE4;
+
+/* Members of the class built by 0x8027E518 (vtable 0x802C24F0); partial
+   layout, size unknown. */
+typedef struct Object_8027E518 {
+    unsigned char mUnknown0[0x124];
     int m124;
     int m128;
-} Object_8027D6E8;
+} Object_8027E518;
 
 /* Partial layout of the object whose members 0x8027EF94-0x8027EFA4 store
    their argument; size unknown. */
@@ -94,7 +105,7 @@ void fn_8027DAC4(void *p)
     fn_801B2C94(p);
 }
 
-int fn_8027E0AC(Object_8027D6E8 *p, int index)
+int fn_8027E0AC(Object_8027DAE4 *p, int index)
 {
     if (index == 0) {
         return p->m58;
@@ -112,7 +123,7 @@ void fn_8027E4F8(void *p)
     fn_801B2C94(p);
 }
 
-void fn_8027EAB4(Object_8027D6E8 *p, int a, int b)
+void fn_8027EAB4(Object_8027E518 *p, int a, int b)
 {
     p->m124 = a;
     p->m128 = b;
