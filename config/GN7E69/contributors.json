@@ -23039,6 +23039,423 @@
         "commit": "11d79aa975402f76afb716932eeef7319c42b57e",
         "introduced_blob": "4f1138e3f9946fa8e140a89537dbccec78ab96d5"
       }
+    },
+    {
+      "source": "src/engine/particleLib.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801DD498",
+        "0x801DD534",
+        "0x801DD57C",
+        "0x801DD6B8",
+        "0x801DDCC4",
+        "0x801DDD00",
+        "0x801DDE08",
+        "0x801DE010",
+        "0x801DE114",
+        "0x801DE1B8",
+        "0x801DE4F8",
+        "0x801DE540",
+        "0x801DE564",
+        "0x801DE7F4",
+        "0x801DE918",
+        "0x801DE968",
+        "0x801DE9A0",
+        "0x801DEA50",
+        "0x801DEA90",
+        "0x801DECFC",
+        "0x801DEEF8",
+        "0x801DEF18",
+        "0x801DF184",
+        "0x801DF1A0",
+        "0x801DF1E4",
+        "0x801DF228",
+        "0x801DF26C",
+        "0x801DF2AC",
+        "0x801DF338",
+        "0x801DF428",
+        "0x801DF578",
+        "0x801DFD34",
+        "0x801DFD40",
+        "0x801DFD4C",
+        "0x801DFDB8",
+        "0x801DFDE0"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "ac2215751a6dbccf7e8ed4aa284c2b91946a9c44",
+        "introduced_blob": "e374ff374a24f30f8cdf39d5e1ae9d4bddb4a892"
+      }
+    },
+    {
+      "source": "src/engine/psysEmitter.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801DFE0C",
+        "0x801DFF10"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "ac2215751a6dbccf7e8ed4aa284c2b91946a9c44",
+        "introduced_blob": "a9873e85e415ca94c9761aab17954cb6e0133e0b"
+      }
+    },
+    {
+      "source": "src/engine/psysCollision.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801E01FC",
+        "0x801E02A4",
+        "0x801E03F4",
+        "0x801E043C",
+        "0x801E0520"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "ac2215751a6dbccf7e8ed4aa284c2b91946a9c44",
+        "introduced_blob": "843d7373d298eb8ec6bed0a2c555b88346efea21"
+      }
+    },
+    {
+      "source": "src/engine/colorRamp.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801E052C",
+        "0x801E05B0",
+        "0x801E05F8",
+        "0x801E06B0",
+        "0x801E06DC",
+        "0x801E071C",
+        "0x801E079C",
+        "0x801E0984",
+        "0x801E098C"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "ac2215751a6dbccf7e8ed4aa284c2b91946a9c44",
+        "introduced_blob": "25cb7c1045f3a5fb6786c3ecdbc96aadce0aa345"
+      }
+    },
+    {
+      "source": "src/engine/cu_801E0A1C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801E0A1C",
+        "0x801E0A3C",
+        "0x801E0A5C",
+        "0x801E0AE4",
+        "0x801E0AEC",
+        "0x801E0BE4",
+        "0x801E0CA8",
+        "0x801E0D68",
+        "0x801E0DF0",
+        "0x801E0EF8",
+        "0x801E0F7C",
+        "0x801E0F9C",
+        "0x801E0FBC",
+        "0x801E0FE0",
+        "0x801E1004",
+        "0x801E1028",
+        "0x801E1048",
+        "0x801E1084",
+        "0x801E10BC",
+        "0x801E10F0",
+        "0x801E1168",
+        "0x801E118C",
+        "0x801E1194",
+        "0x801E119C"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "ac2215751a6dbccf7e8ed4aa284c2b91946a9c44",
+        "introduced_blob": "5459422565fc1f7bad6fca81d8b59c2155b9a50d"
+      }
+    },
+    {
+      "source": "src/engine/periph.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801E11D0",
+        "0x801E11E8",
+        "0x801E12CC",
+        "0x801E1444",
+        "0x801E1478",
+        "0x801E153C",
+        "0x801E15B8",
+        "0x801E173C",
+        "0x801E17D0",
+        "0x801E1884",
+        "0x801E1940",
+        "0x801E194C",
+        "0x801E1954",
+        "0x801E195C",
+        "0x801E19B4"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "cf8f67bf3b3eeeaff3e356cd855b645537dc53d4",
+        "introduced_blob": "2c64ecbee15def1787c22e55fda04cbab6bb43ab"
+      }
+    },
+    {
+      "source": "src/engine/llperiph.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801E1A20",
+        "0x801E1A80",
+        "0x801E1AB4",
+        "0x801E1B08",
+        "0x801E1B94",
+        "0x801E1BE8",
+        "0x801E1C38",
+        "0x801E1CE0",
+        "0x801E1D04",
+        "0x801E1D3C"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "ac2215751a6dbccf7e8ed4aa284c2b91946a9c44",
+        "introduced_blob": "18534cade80e6eeffd0fbcade86a8c4327c3946d"
+      }
+    },
+    {
+      "source": "src/engine/PJoyDrvr.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801E1D44",
+        "0x801E1E34",
+        "0x801E25DC",
+        "0x801E2658",
+        "0x801E26FC"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "ac2215751a6dbccf7e8ed4aa284c2b91946a9c44",
+        "introduced_blob": "9f29d69202aa2171d87dc81cb8eab48aa00b2657"
+      }
+    },
+    {
+      "source": "src/engine/cu_801E274C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801E274C",
+        "0x801E2768",
+        "0x801E279C",
+        "0x801E27A4",
+        "0x801E2818",
+        "0x801E2870",
+        "0x801E2878",
+        "0x801E28FC",
+        "0x801E2A28",
+        "0x801E2A60",
+        "0x801E2AF4",
+        "0x801E2C3C",
+        "0x801E2C64"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "cf8f67bf3b3eeeaff3e356cd855b645537dc53d4",
+        "introduced_blob": "73cf629515cf4be84f16fd456354f57a951a6d56"
+      }
+    },
+    {
+      "source": "src/engine/cu_801E8478.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801E8478",
+        "0x801E84CC",
+        "0x801E850C"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "ac2215751a6dbccf7e8ed4aa284c2b91946a9c44",
+        "introduced_blob": "01902ffda1f297061cdfcf305d5c165e3da4bf0c"
+      }
+    },
+    {
+      "source": "src/engine/cu_801E8798.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801E8798",
+        "0x801E87B8",
+        "0x801E87D8",
+        "0x801E896C",
+        "0x801E89D8",
+        "0x801E8A68",
+        "0x801E8B10",
+        "0x801E8C00",
+        "0x801E8C3C"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "ac2215751a6dbccf7e8ed4aa284c2b91946a9c44",
+        "introduced_blob": "03abc7f7071f0f1a7021283f14fbd79389d86b29"
+      }
+    },
+    {
+      "source": "src/engine/cu_801E8E04.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801E8E04",
+        "0x801E8EA4",
+        "0x801E8F1C",
+        "0x801E8FD4",
+        "0x801E90A8",
+        "0x801E90CC",
+        "0x801E90F0",
+        "0x801E9168",
+        "0x801E91E0",
+        "0x801E9248"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "cf8f67bf3b3eeeaff3e356cd855b645537dc53d4",
+        "introduced_blob": "0b1f88ed5d4e0d5e69a2a59410a3f88bab4b51d0"
+      }
+    },
+    {
+      "source": "src/engine/cu_801E9F70.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801E9F70",
+        "0x801EA100",
+        "0x801EA1D8",
+        "0x801EA284",
+        "0x801EA428",
+        "0x801EA470",
+        "0x801EA480",
+        "0x801EA5C0",
+        "0x801EA6C0",
+        "0x801EA708",
+        "0x801EA818",
+        "0x801EA8A0",
+        "0x801EA908",
+        "0x801EAA5C",
+        "0x801EAC98",
+        "0x801EACF0",
+        "0x801EAD00",
+        "0x801EAD50",
+        "0x801EAD6C",
+        "0x801EADBC"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "ac2215751a6dbccf7e8ed4aa284c2b91946a9c44",
+        "introduced_blob": "28255452ca4d15a9601ffafeb30c817c35e1a852"
+      }
+    },
+    {
+      "source": "src/engine/cu_801EADD8.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801EADD8",
+        "0x801EAE10",
+        "0x801EAE44",
+        "0x801EAE7C",
+        "0x801EAEB4",
+        "0x801EAF60",
+        "0x801EB134"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "ac2215751a6dbccf7e8ed4aa284c2b91946a9c44",
+        "introduced_blob": "94f8f9407175b04b9fafa0ee433d0a7b470301a0"
+      }
+    },
+    {
+      "source": "src/engine/llquat.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801EB488",
+        "0x801EB4AC",
+        "0x801EB4EC",
+        "0x801EB52C",
+        "0x801EB56C",
+        "0x801EB5A0",
+        "0x801EB61C",
+        "0x801EB660",
+        "0x801EB700",
+        "0x801EB780",
+        "0x801EB7B4",
+        "0x801EB814",
+        "0x801EBA64",
+        "0x801EBAA0",
+        "0x801EBBA4",
+        "0x801EBC18",
+        "0x801EBD8C",
+        "0x801EBEF8",
+        "0x801EBFA0",
+        "0x801EC048"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "ac2215751a6dbccf7e8ed4aa284c2b91946a9c44",
+        "introduced_blob": "d9a8404e6605162b9b6911f182f23b98b8a24b9d"
+      }
+    },
+    {
+      "source": "src/engine/remap.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801EC1B4",
+        "0x801EC298",
+        "0x801EC314",
+        "0x801EC3B8",
+        "0x801EC418"
+      ],
+      "provenance": {
+        "pull_request": 1010,
+        "merged_via": 1010,
+        "commit": "ac2215751a6dbccf7e8ed4aa284c2b91946a9c44",
+        "introduced_blob": "7c1ec78b4d1e3899cf3264137d4241a30cd400f2"
+      }
     }
   ],
   "target": "GN7E69",

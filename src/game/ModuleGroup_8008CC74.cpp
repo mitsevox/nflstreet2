@@ -5,21 +5,13 @@
 #include "game/Record_802CC680.h"
 #include "game/cu_80026BB0.h"
 #include "game/cu_8015D3EC.h"
+#include "engine/periph.h"
+#include "engine/remap.h"
 
 /* Argument of fn_801F8A0C and fn_801F8A54. */
 struct Desc_801F8A0C {
     int mUnknown0;
     int mUnknown4[9];
-};
-
-/* Argument of fn_801E1478. */
-struct Desc_801E1478 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int (*mpUnknown12)();
-    void **mpUnknown16;
-    int *mpUnknown20;
 };
 
 /* Argument of fn_80228E44. */
@@ -33,7 +25,7 @@ extern char lbl_802DBD7C[];
 extern char lbl_802EBE24[];
 extern char lbl_802EBE34[];
 extern char lbl_802EBE40[];
-extern char lbl_802F94D0[];
+extern Driver_801E11E8 lbl_802F94D0;
 extern char lbl_8030A60C[];
 
 void fn_800296B0(void);
@@ -68,10 +60,6 @@ int fn_801C5F9C(void);
 int fn_801C6280(int a, int b, int c);
 int fn_801CEF48(void);
 int fn_801CEFA0(void);
-int fn_801E1478(Desc_801E1478 *pDesc);
-int fn_801E153C(void);
-int fn_801EC1B4(int a, int b, int c);
-int fn_801EC298(void);
 int fn_801F512C(void);
 int fn_801F518C(void);
 void fn_801F8A0C(Desc_801F8A0C *pDesc);
@@ -381,8 +369,8 @@ int MemCard::Shutdown()
     return 1;
 }
 
-/* Null-terminated list read by fn_801E11E8 through Desc_801E1478::mpUnknown16. */
-static void *sPeriphEntries[] = { lbl_802F94D0, 0 };
+/* Null-terminated list read by fn_801E11E8 through Desc_801E1478::mppDrivers. */
+static Driver_801E11E8 *sPeriphEntries[] = { &lbl_802F94D0, 0 };
 static int sPeriphCounter = 0;
 
 extern "C" {
