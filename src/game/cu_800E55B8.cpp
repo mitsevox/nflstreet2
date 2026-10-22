@@ -77,7 +77,7 @@ void fn_800E55B8(Object_80039F5C *p)
 
 int fn_800E6984(Object_80039F5C *p)
 {
-    int angle = (int)(((0x1000000 - (p->mMotion.mFacing - p->mUnknown512.mUnknown4)) & 0xFFFFFF)
+    int angle = (int)(((0x1000000 - (p->mUnknown512.mUnknown4 - p->mMotion.mFacing)) & 0xFFFFFF)
                      * 0.000021457672119140625f);
     if (angle <= 179) {
         angle = angle < 0 ? 0 : angle > 135 ? 135 : angle;
