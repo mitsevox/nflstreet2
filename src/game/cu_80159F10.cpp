@@ -28,7 +28,7 @@ void fn_801D0ADC(int a);
 void fn_801D0C58(void *a);
 void fn_801D0CFC(float a);
 int fn_801DCF0C(int a, int b, int c, void (*pA)(Instance_80159F10 *, const Init_80159F10 *), void (*pB)(void));
-void fn_801DCF8C(int a);
+int fn_801DCF8C(int a);
 void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Instance_80159F10 *));
 int fn_801DD268(int handle, int a, int b, Init_80159F10 *pInit);
 void fn_801DD320(int handle, int a);

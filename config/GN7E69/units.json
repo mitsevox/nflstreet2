@@ -498,6 +498,62 @@
       "address": "0x8025E250",
       "evidence": "evidence.tsv external row for 0x8025E250 (__ashrdi3)."
     },
+    "__divdi3": {
+      "address": "0x8025E290",
+      "evidence": "evidence.tsv external row for 0x8025E290 (__divdi3)."
+    },
+    "CARDProbeEx": {
+      "address": "0x80255D3C",
+      "evidence": "evidence.tsv function row 0x80255D3C-0x80255EB8 (CARDProbeEx); called by name from src/engine/memorycard.c, whose SDK unit is not accepted for comparison."
+    },
+    "CARDMountAsync": {
+      "address": "0x80256400",
+      "evidence": "evidence.tsv function row 0x80256400-0x802565A0 (CARDMountAsync); called by name from src/engine/memorycard.c, whose SDK unit is not accepted for comparison."
+    },
+    "CARDFastOpen": {
+      "address": "0x80257388",
+      "evidence": "evidence.tsv function row 0x80257388-0x8025748C (CARDFastOpen); called by name from src/engine/memorycard.c, whose SDK unit is not accepted for comparison."
+    },
+    "CARDClose": {
+      "address": "0x8025748C",
+      "evidence": "evidence.tsv function row 0x8025748C-0x802574E0 (CARDClose); called by name from src/engine/memorycard.c, whose SDK unit is not accepted for comparison."
+    },
+    "__OSBusClock": {
+      "address": "0x800000F8",
+      "evidence": "evidence.tsv external row for 0x800000F8 (__OSBusClock)."
+    },
+    "fn_801D94A0__FP14Shape_801D94A0": {
+      "address": "0x801D94A0",
+      "evidence": "evidence.tsv external row for 0x801D94A0 (fn_801D94A0__FP14Shape_801D94A0)."
+    },
+    "fn_801D9538__FP14Shape_801D94A0i": {
+      "address": "0x801D9538",
+      "evidence": "evidence.tsv external row for 0x801D9538 (fn_801D9538__FP14Shape_801D94A0i)."
+    },
+    "fn_801D95E4__FPvT0": {
+      "address": "0x801D95E4",
+      "evidence": "evidence.tsv external row for 0x801D95E4 (fn_801D95E4__FPvT0)."
+    },
+    "fn_801DA4F8__Fi": {
+      "address": "0x801DA4F8",
+      "evidence": "evidence.tsv external row for 0x801DA4F8 (fn_801DA4F8__Fi)."
+    },
+    "fn_801DABE0__FPCUsii": {
+      "address": "0x801DABE0",
+      "evidence": "evidence.tsv external row for 0x801DABE0 (fn_801DABE0__FPCUsii)."
+    },
+    "fn_801DAD20__FPCUcN20PUcN23i": {
+      "address": "0x801DAD20",
+      "evidence": "evidence.tsv external row for 0x801DAD20 (fn_801DAD20__FPCUcN20PUcN23i)."
+    },
+    "fn_801DC9C8__Fi": {
+      "address": "0x801DC9C8",
+      "evidence": "evidence.tsv external row for 0x801DC9C8 (fn_801DC9C8__Fi)."
+    },
+    "fn_801DC9E0__Fi": {
+      "address": "0x801DC9E0",
+      "evidence": "evidence.tsv external row for 0x801DC9E0 (fn_801DC9E0__Fi)."
+    },
     "__lshrdi3": {
       "address": "0x8025EB14",
       "evidence": "evidence.tsv external row for 0x8025EB14 (__lshrdi3)."

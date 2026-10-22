@@ -73,7 +73,8 @@ OSThread* __gUnkThread1 AT_ADDRESS(OS_BASE_CACHED | 0x00D8);
 int __gUnknown800030C0[2] AT_ADDRESS(OS_BASE_CACHED | 0x30C0);
 u8 __gUnknown800030E3 AT_ADDRESS(OS_BASE_CACHED | 0x30E3);
 #else
-#define __OSBusClock  (*(u32 *)(OS_BASE_CACHED | 0x00F8))
+/* Low-memory word placed by the linker at 0x800000F8, outside the small-data area. */
+extern u32 __OSBusClock __attribute__((section(".lowmem")));
 #define __OSCoreClock (*(u32 *)(OS_BASE_CACHED | 0x00FC))
 #endif
 

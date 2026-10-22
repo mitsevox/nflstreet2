@@ -51,7 +51,7 @@ void fn_801D0544(void);
 void fn_801D0C58(void *p);
 void fn_801D0F80(float (*pMatrix)[4]);
 int fn_801DCF0C(int type, int size, int count, void (*a)(Item_800469EC *), void (*b)(Item_800469EC *));
-void fn_801DCF8C(int type);
+int fn_801DCF8C(int type);
 void fn_801DD0C8(int handle, int type, int a, int (*callback)(Item_800469EC *));
 Item_800469EC *fn_801DD268(int handle, int type, int a, int *pInit);
 void fn_801DD320(int handle, Item_800469EC *p);

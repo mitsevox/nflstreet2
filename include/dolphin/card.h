@@ -194,6 +194,10 @@ typedef struct CARDStat {
 #define CARD_STAT_BANNER_RGB5A3 2
 #define CARD_STAT_BANNER_MASK 3
 
+#define CARD_STAT_ANIM_LOOP 0x00
+#define CARD_STAT_ANIM_BOUNCE 0x04
+#define CARD_STAT_ANIM_MASK 0x04
+
 #define CARD_ENCODE_ANSI 0
 #define CARD_ENCODE_SJIS 1
 
@@ -264,6 +268,7 @@ s32 CARDEraseAsync(CARDFileInfo* fileInfo, s32 length, s32 offset, CARDCallback 
 s32 CARDErase(CARDFileInfo* fileInfo, s32 length, s32 offset);
 
 // CARDFormat
+s32 CARDFormatAsync(s32 chan, CARDCallback callback);
 s32 CARDFormat(s32 chan);
 
 // CARDMount

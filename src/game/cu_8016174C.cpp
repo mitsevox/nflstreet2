@@ -70,7 +70,7 @@ void fn_80235DB8(int);
 int fn_80039F8C(Object_80039F5C *);
 int fn_801784C4(void);
 int fn_801DCF0C(int, int, int, void (*)(Object_801618D8 *, Desc_801618D8 *), void (*)(Object_801618D8 *));
-void fn_801DCF8C(int);
+int fn_801DCF8C(int);
 int fn_801DD0C8(void *, int, int, int (*)(Object_801618D8 *));
 int fn_801DD268(void *, int, int, void *);
 void fn_801DD3AC(void *, int, int);

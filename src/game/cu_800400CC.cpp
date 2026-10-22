@@ -50,7 +50,7 @@ char *fn_801C310C(char *pText, const char *pPattern);
 int fn_801C9DC8(int value);
 int fn_801DCF0C(int type, int size, int count, void (*pInit)(Object_80040818 *, Desc_800408E4 *),
                 void (*pRelease)(Object_80040818 *));
-void fn_801DCF8C(int type);
+int fn_801DCF8C(int type);
 void fn_801DD0C8(int handle, int type, int a, int (*pCallback)(Object_80040818 *));
 Object_80040818 *fn_801DD268(int handle, int type, int a, Desc_800408E4 *pDesc);
 void fn_801DD320(int handle, Object_80040818 *pObject);

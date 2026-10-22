@@ -18,7 +18,7 @@ void fn_801D0ADC(int);
 void fn_801D0C58(void *);
 void fn_801D0D94(float, float, float);
 int fn_801DCF0C(int, int, int, void (*)(Object_80163788 *, Desc_80163788 *), void (*)(Object_80163788 *));
-void fn_801DCF8C(int);
+int fn_801DCF8C(int);
 int fn_801DD0C8(void *, int, int, int (*)(Object_80163788 *, int));
 void fn_80234DFC(int, void *, int, int, const char *, int);
 void fn_80234EA0(void *, int);

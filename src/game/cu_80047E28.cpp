@@ -100,7 +100,7 @@ int fn_801486A0(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C302C(const char *s1, const char *s2, int n);
 int fn_801DCF0C(int a, int b, int c, void (*pA)(Object_8003DEC4 *, Init_8004A040 *), void (*pB)(Object_8003DEC4 *));
-void fn_801DCF8C(int a);
+int fn_801DCF8C(int a);
 void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Object_8003DEC4 *, int));
 }
 

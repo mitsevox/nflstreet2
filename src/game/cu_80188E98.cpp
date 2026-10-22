@@ -90,7 +90,7 @@ float fn_801CFD28(int a);
 void fn_801D339C(int a);
 void fn_801D342C(int a);
 int fn_801DCF0C(int a, int b, int c, void (*pA)(), void (*pB)());
-void fn_801DCF8C(int a);
+int fn_801DCF8C(int a);
 int fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);
 void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(int, int));
 void fn_801DD0E8(int handle);
