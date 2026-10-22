@@ -1,7 +1,10 @@
 """Compare draft bodies in normal source files without putting them in the game build."""
+import bisect
+import concurrent.futures
 import copy
 import json
 import math
+import os
 import re
 import shutil
 import struct
@@ -337,8 +340,7 @@ def generate(original, source_report, tool):
     if work.exists():
         shutil.rmtree(work)
     work.mkdir(parents=True)
-    result = []
-    for index, unit in enumerate(units):
+    def measure(index, unit):
         folder = work / str(index)
         folder.mkdir()
         unit['object'] = folder / 'native.o'
@@ -459,11 +461,18 @@ def generate(original, source_report, tool):
                 pairs.append(dict(row, output_symbol=data_symbol, path=data_output.relative_to(root).as_posix(), sha256=sb.sha256(data_output)))
         if sb.sha256(unit['object']) != native_hash:
             raise ValueError('Diagnostic linker modified native compiler input')
-        result.append({'source': unit['source'], 'sha256': sb.sha256(unit['path']),
-            'dependencies': unit['dependencies'], 'object': unit['object'].relative_to(root).as_posix(),
-            'object_sha256': native_hash, 'depfile': unit['depfile'].relative_to(root).as_posix(),
-            'depfile_sha256': sb.sha256(unit['depfile']), 'entries': entries, 'pairs': pairs})
-    return result
+        return {'source': unit['source'], 'sha256': sb.sha256(unit['path']),
+                'dependencies': unit['dependencies'], 'object': unit['object'].relative_to(root).as_posix(),
+                'object_sha256': native_hash, 'depfile': unit['depfile'].relative_to(root).as_posix(),
+                'depfile_sha256': sb.sha256(unit['depfile']), 'entries': entries, 'pairs': pairs}
+
+    # Each unit compiles, links and scores in its own folder; staging links are shared, so
+    # create them first. Results keep configuration order.
+    for unit in units:
+        if unit['compile_path']:
+            sb.stage(unit)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=os.cpu_count() or 1) as pool:
+        return list(pool.map(measure, range(len(units)), units))
 
 
 def check_follows(binary, placement, code, align):
@@ -492,6 +501,19 @@ def load(receipts, binary, root):
         raise ValueError('Comparison receipt omits configured draft source')
     accepted = json.loads((root / 'build/source/report.json').read_text())['units']
     linked_bounds = [(int(s['start'], 16), int(s['end'], 16)) for u in accepted for s in u['sections']]
+    # Sorted starts with a running maximum end answer "inside" and "overlaps" by bisection.
+    bound_starts = sorted(a for a, _ in linked_bounds)
+    reach = []
+    for _, b in sorted(linked_bounds):
+        reach.append(max(b, reach[-1]) if reach else b)
+
+    def inside_linked(start, end):
+        at = bisect.bisect_right(bound_starts, start)
+        return start < end and at > 0 and reach[at - 1] >= end
+
+    def overlaps_linked(start, end):
+        at = bisect.bisect_left(bound_starts, end)
+        return at > 0 and reach[at - 1] > start
     accepted_linked = linked_ranges(accepted, sb.address)
     result = []
     for receipt, unit in zip(receipts, units):
@@ -504,8 +526,8 @@ def load(receipts, binary, root):
         if sb.dependencies(root / receipt['depfile'], root) != receipt['dependencies']:
             raise ValueError('Comparison dependencies differ from compiler receipt')
         native_sections, _ = sb.read_elf((root / receipt['object']).read_bytes())
-        expected_rows = {(r['symbol'], r['start'], r['end']) for r in unit['functions'] if not any(
-            a <= sb.address(r['start']) < sb.address(r['end']) <= b for a, b in linked_bounds)}
+        expected_rows = {(r['symbol'], r['start'], r['end']) for r in unit['functions']
+                         if not inside_linked(sb.address(r['start']), sb.address(r['end']))}
         # Recompute the measured data slices from build/source/report.json, independently of the
         # generator: each must be credited exactly once and no linked byte may be credited.
         placements = {s['section']: s for s in unit['sections'] if measured_data(s)}
@@ -517,8 +539,7 @@ def load(receipts, binary, root):
         actual_rows = [(e['symbol'], e['start'], e['end']) for e in receipt['entries']]
         if len(set(actual_rows)) != len(actual_rows):
             raise ValueError('Comparison receipt credits an extent more than once')
-        if any(left < sb.address(e['end']) and sb.address(e['start']) < right
-               for e in receipt['entries'] for left, right in linked_bounds):
+        if any(overlaps_linked(sb.address(e['start']), sb.address(e['end'])) for e in receipt['entries']):
             raise ValueError('Comparison receipt credits linked source bytes')
         if set(actual_rows) != expected_rows:
             raise ValueError('Comparison receipt omits configured functions or data slices')
