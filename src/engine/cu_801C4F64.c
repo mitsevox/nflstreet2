@@ -1,5 +1,7 @@
 /* Curve lists: keyed Hermite and Bezier curves evaluated over a time range, with clamp or wrap past the end. */
 
+#include "engine/fn_801F7BD4.h"
+
 typedef struct CurveKey_801C4F64 {
     unsigned int mFlags;
     float mValue;
@@ -32,7 +34,6 @@ typedef struct CurveList_801C4F64 {
 
 extern unsigned char lbl_803EBBE8;
 
-void fn_801F7BD4(int error);
 int fn_801C5740(float *pCoef, int degree, int includeLo, int includeHi, float *pRoots, float lo, float hi);
 
 float fn_801C52CC(float t, float t0, float a, float b, float c, float d);

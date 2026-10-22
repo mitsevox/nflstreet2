@@ -1,6 +1,7 @@
 /* Camera manager: typed cameras in an object pool, attached to viewports, with angle and value easing helpers. */
 
 #include "engine/cu_801C33E8.h"
+#include "engine/fn_801F7BD4.h"
 
 typedef struct CamFuncs_801C33E8 {
     void (*mpAdd)(Cam_801C33E8 *pCam);
@@ -30,7 +31,6 @@ int fn_801DCF0C(int type, unsigned int size, int count, void (*pAdd)(Cam_801C33E
 int fn_801DCF8C(int type);
 Cam_801C33E8 *fn_801DD168(int type, int a, int b);
 void fn_801DD2B8(Cam_801C33E8 *pCam);
-void fn_801F7BD4(int error);
 int fn_80228668(void);
 void fn_802286A8(CamViewport_801C33E8 *pViewport, void (*fn)(CamViewport_801C33E8 *, Cam_801C33E8 *), void *arg);
 Cam_801C33E8 *fn_802286B4(CamViewport_801C33E8 *pViewport);

@@ -1,6 +1,7 @@
 /* Disc file client: up to N open files, one asynchronous read in flight at a time. */
 
 #include <dolphin/dvd.h>
+#include "game/fn_801D2B7C.h"
 
 typedef struct FsClient_801CB1BC {
     int mNumFiles;
@@ -31,7 +32,6 @@ int fn_8023F094(const char *fileName, DVDFileInfo *fileInfo);
 int fn_8023F15C(DVDFileInfo *fileInfo);
 int fn_8023F3A4(DVDFileInfo *fileInfo, void *addr, int length, int offset,
                 void (*callback)(int, DVDFileInfo *), int prio);
-void *fn_801D2BB0(int heap, int size, int a, int b);
 void fn_801D34D0(void *p, int size, int value, int a);
 int fn_801C1F54(int c);
 void *fn_801C1FBC();

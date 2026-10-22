@@ -1,6 +1,9 @@
 #include "engine/cu_801C665C.h"
 #include "engine/cu_801C8F14.h"
 #include "game/fn_801C68FC.h"
+#include "engine/fn_801F7BD4.h"
+#include "engine/fn_801F8014.h"
+#include "game/fn_801D2B7C.h"
 
 typedef struct FileWaitResult_801C8F14 {
     int mCount;
@@ -9,7 +12,7 @@ typedef struct FileWaitResult_801C8F14 {
 
 extern unsigned char lbl_803EBC18;
 extern FileEntry_801C8F14 *lbl_803EBC24;
-extern unsigned char *lbl_803EBC28;
+extern Lock_801F8014 *lbl_803EBC28;
 extern int lbl_803EBC2C;
 extern FileDevTable_801C8F14 *lbl_803EBC30;
 extern int lbl_803EBC34;
@@ -18,23 +21,15 @@ extern unsigned int lbl_803EBC14;
 extern void *lbl_803ED628;
 extern void *lbl_803ED62C;
 extern unsigned char lbl_803ED630;
-extern unsigned char lbl_803D5168[];
-extern unsigned char lbl_803D5188[];
+extern Lock_801F8014 lbl_803D5168;
+extern Lock_801F8014 lbl_803D5188;
 extern FileConfig_801C8F14 lbl_803D51A8;
 extern unsigned char lbl_803D55B4[9];
-extern unsigned char lbl_803D55C0[];
+extern Lock_801F8014 lbl_803D55C0;
 extern FileDevTable_801C8F14 lbl_802F4A50;
 
-void fn_801F8014(void *pMutex);
-void fn_801F809C(void *pMutex);
 void fn_801F81AC(void);
-void fn_801F7FA8(void *pMutex);
-void fn_801F80D0(void *pMutex);
-void fn_801F7BD4(int error);
-int fn_801F7C88(void);
-void *fn_801D2B7C(int size, int a, int b);
 void fn_801D34D0(void *p, int size, int value, int a);
-void fn_801D2BD0(void *p);
 char *fn_801C2EB4(char *pDest, const char *pSource);
 char *fn_801C2F2C(char *pDest, const char *pSource);
 int fn_801C3180(const char *pString);
@@ -65,9 +60,9 @@ static inline FileReq_801C8F14 *fn_801C8F44_Try(void)
 {
     FileReq_801C8F14 *pReq;
 
-    fn_801F8014(lbl_803D5168);
+    fn_801F8014(&lbl_803D5168);
     pReq = fn_801C75F0(lbl_803ED628);
-    fn_801F809C(lbl_803D5168);
+    fn_801F809C(&lbl_803D5168);
     return pReq;
 }
 
@@ -83,18 +78,18 @@ static FileReq_801C8F14 *fn_801C8F44(void)
 
 static void fn_801C8F9C(FileReq_801C8F14 *pReq)
 {
-    fn_801F8014(lbl_803D5168);
+    fn_801F8014(&lbl_803D5168);
     fn_801C7650(lbl_803ED628, pReq);
-    fn_801F809C(lbl_803D5168);
+    fn_801F809C(&lbl_803D5168);
 }
 
 static inline FileAsync_801C8F14 *fn_801C8FE4_Try(void)
 {
     FileAsync_801C8F14 *pAsync;
 
-    fn_801F8014(lbl_803D5188);
+    fn_801F8014(&lbl_803D5188);
     pAsync = fn_801C6A20(lbl_803ED62C);
-    fn_801F809C(lbl_803D5188);
+    fn_801F809C(&lbl_803D5188);
     return pAsync;
 }
 
@@ -231,15 +226,15 @@ int fn_801C93D0(FileConfig_801C8F14 *pConfig)
         for (j = 0; j < 9; j++) {
             lbl_803D55B4[j] = 0;
         }
-        fn_801F7FA8(lbl_803D55C0);
+        fn_801F7FA8(&lbl_803D55C0);
         for (i = 0; i < lbl_803D51A8.mNumFiles; i++) {
-            fn_801F7FA8(lbl_803EBC28 + i * 0x20);
+            fn_801F7FA8(&lbl_803EBC28[i]);
         }
         lbl_803ED62C = fn_801C68FC(1, 0, 0x40, sizeof(FileAsync_801C8F14), (int (*)(void *, void *))fn_801C8F14, 0);
-        fn_801F7FA8(lbl_803D5188);
+        fn_801F7FA8(&lbl_803D5188);
         lbl_803ED630 = 0;
         lbl_803ED628 = fn_801C750C(1, 0x40, sizeof(FileReq_801C8F14), 0);
-        fn_801F7FA8(lbl_803D5168);
+        fn_801F7FA8(&lbl_803D5168);
         fn_801CB00C(&lbl_803D51A8);
         lbl_803EBC10 = 0;
         lbl_803EBC34 = 0;
@@ -262,13 +257,13 @@ int fn_801C95C4(void)
             if (i >= 0 && i < lbl_803D51A8.mNumFiles && lbl_803EBC24[i].mInUse) {
                 fn_801CA834(i);
             }
-            fn_801F80D0(lbl_803EBC28 + i * 0x20);
+            fn_801F80D0(&lbl_803EBC28[i]);
         }
         fn_801C69E4(lbl_803ED62C);
-        fn_801F80D0(lbl_803D5188);
-        fn_801F80D0(lbl_803D55C0);
+        fn_801F80D0(&lbl_803D5188);
+        fn_801F80D0(&lbl_803D55C0);
         fn_801C75B8(lbl_803ED628);
-        fn_801F80D0(lbl_803D5168);
+        fn_801F80D0(&lbl_803D5168);
         fn_801D2BD0(lbl_803EBC24);
         fn_801D2BD0(lbl_803EBC28);
         lbl_803EBC24 = 0;
@@ -510,7 +505,7 @@ FileReq_801C8F14 *fn_801C9C0C(int handle, char *pBuffer, int size, int priority,
 FileReq_801C8F14 *fn_801C9C88(FileReq_801C8F14 *pReq, int priority)
 {
     if (pReq) {
-        fn_801F8014(lbl_803D5188);
+        fn_801F8014(&lbl_803D5188);
         if (pReq->mpAsync) {
             pReq->mPriority = priority;
             if (pReq->mpAsync->mState == 0) {
@@ -521,7 +516,7 @@ FileReq_801C8F14 *fn_801C9C88(FileReq_801C8F14 *pReq, int priority)
                 pReq->mpAsync->mPriority = priority;
             }
         }
-        fn_801F809C(lbl_803D5188);
+        fn_801F809C(&lbl_803D5188);
     }
     return pReq;
 }
@@ -559,12 +554,12 @@ int fn_801C9D6C(int device)
 
 void fn_801C9D78(void)
 {
-    fn_801F8014(lbl_803D5188);
+    fn_801F8014(&lbl_803D5188);
 }
 
 void fn_801C9DA0(void)
 {
-    fn_801F809C(lbl_803D5188);
+    fn_801F809C(&lbl_803D5188);
 }
 
 int fn_801C9DC8(int flags)

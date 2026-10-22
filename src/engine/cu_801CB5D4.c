@@ -1,4 +1,5 @@
 #include "engine/cu_801CB5D4.h"
+#include "engine/fn_801F7BD4.h"
 
 extern MCFile_801CB5D4 lbl_80381C40;
 extern unsigned char lbl_803DD600[];
@@ -7,7 +8,6 @@ int fn_80255D04(int chan);
 int fn_802565A0(int chan, void *workArea, CARDCallback_801CB5D4 detachCallback);
 int fn_80257388(int chan, int fileNo, CARDFileInfo_801CB5D4 *fileInfo);
 int fn_8025748C(CARDFileInfo_801CB5D4 *fileInfo);
-void fn_801F7BD4(int error);
 void fn_801F8758(int a);
 void fn_801F8768(void);
 int fn_801C2FE4(const char *pString1, const char *pString2);

@@ -1,6 +1,7 @@
 /* Skeleton joint chains: build a chain between two joints, pose it and clamp joint angles. */
 
 #include "engine/cu_801C4960.h"
+#include "game/fn_801D2B7C.h"
 
 typedef struct Limit_801C3EFC {
     int mRange[3][2];
@@ -55,7 +56,6 @@ void fn_801D0F80(float *pMatrix);
 void fn_801D0FB8(float *pPos);
 void fn_801D0FFC(int *pAngles, float *pMatrix);
 int fn_801CFD78(float x);
-void *fn_801D2BB0(int heap, int size, int a, int b);
 void fn_801EB660(float *pDst, float *pA, float *pB);
 void fn_801EBBA4(float *pQuat, float *pAxis, int angle);
 void fn_801EBC18(int *pAngles, float *pQuat);

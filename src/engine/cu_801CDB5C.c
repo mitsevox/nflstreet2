@@ -1,6 +1,8 @@
 /* Low-level font rendering: per-string draw with optional shadow pass, GX state setup, palettes and textures. */
 
 #include "engine/cu_801CCA64.h"
+#include "engine/fn_801F7BD4.h"
+#include "game/fn_801D2B7C.h"
 
 typedef struct FontTexInfo_801CDB5C {
     unsigned short mWidth;
@@ -25,9 +27,6 @@ void fn_801D04C4(void);
 void fn_801D0544(void);
 void fn_801D0C58(float *pPos);
 void fn_801D0F80(float *pMatrix);
-void *fn_801D2B7C(int size, int a, int b);
-int fn_801D2BD0(void *p);
-void fn_801F7BD4(int error);
 int fn_80228668(void);
 void fn_80239CEC(void *addr, unsigned int size);
 void fn_8024CB90(int attr, int type);

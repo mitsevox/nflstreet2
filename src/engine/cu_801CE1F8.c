@@ -1,5 +1,6 @@
 /* Low-level graphics: video/GX setup, frame-buffer swapping and screen queries. */
 #include "engine/cu_801CE1F8.h"
+#include "game/fn_801D2B7C.h"
 
 extern GlibConfig_801CE1F8 lbl_803E91F8;
 extern GlibState_801CE1F8 lbl_803E9224;
@@ -28,8 +29,6 @@ extern unsigned char lbl_802FE4B8[];
 
 void *fn_801C1F94();
 void *fn_801C1FBC();
-void *fn_801D2B7C(int size, int a, int b);
-void fn_801D2BD0(void *p);
 void fn_801F7B04(void);
 void fn_80239CC0(void *addr, int size);
 void fn_80243384(void (*callback)(void));

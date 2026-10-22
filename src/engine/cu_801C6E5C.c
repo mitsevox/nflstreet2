@@ -1,7 +1,7 @@
 #include "engine/cu_801C665C.h"
+#include "game/fn_801D2B7C.h"
 
 void *fn_801C1F94(void *pDst, int value, int size);
-int fn_801D2BD0(void *p);
 
 typedef int (*TraverseFn_801C7188)(void *, int, int);
 typedef int (*SearchFn_801C7234)(void *, void *, void *);

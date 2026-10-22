@@ -10,9 +10,12 @@ typedef struct FontPos_801C9DD8 {
     float z;
 } FontPos_801C9DD8;
 #include "game/fn_801C68FC.h"
+#include "engine/fn_801F7BD4.h"
+#include "engine/fn_801F8014.h"
+#include "game/fn_801D2B7C.h"
 
 extern FileEntry_801C8F14 *lbl_803EBC24;
-extern unsigned char *lbl_803EBC28;
+extern Lock_801F8014 *lbl_803EBC28;
 extern int lbl_803EBC34;
 extern FileAsync_801C8F14 *lbl_803EBC3C;
 extern unsigned char lbl_803EBC40;
@@ -23,21 +26,15 @@ extern void *lbl_803ED62C;
 extern int lbl_803ECEE8;
 extern int lbl_803ECEF4;
 extern Font_801CCA64 *lbl_803ECEF8;
-extern unsigned char lbl_803D5188[];
+extern Lock_801F8014 lbl_803D5188;
 extern FileConfig_801C8F14 lbl_803D51A8;
-extern unsigned char lbl_803D55C0[];
+extern Lock_801F8014 lbl_803D55C0;
 extern FontColor_801CCA64 lbl_802F4A74;
 extern unsigned char lbl_802F4AC0[];
 
-void fn_801F8014(void *pMutex);
-void fn_801F809C(void *pMutex);
-void fn_801F7BD4(int error);
-int fn_801F7C88(void);
 void fn_801F8768(void);
 int fn_801F7ABC(void);
 void fn_801F7AD4(int level);
-void *fn_801D2BB0(int heap, int size, int flags, int a);
-void fn_801D2BD0(void *p);
 char *fn_801C2EB4(char *pDest, const char *pSource);
 int fn_801C3180(const char *pString);
 void fn_801C92B8(char *pDst, const char *pPath, const char *pName, int flags);
@@ -223,7 +220,7 @@ int fn_801CA180(int devType)
     int found = 0;
     FileAsync_801C8F14 *pAsync;
 
-    fn_801F8014(lbl_803D5188);
+    fn_801F8014(&lbl_803D5188);
     for (pAsync = fn_801C6B4C(lbl_803ED62C, 0); pAsync; pAsync = fn_801C6C84(lbl_803ED62C, pAsync)) {
         if (lbl_803EBC24[pAsync->mHandle].mDevType == devType && pAsync->mState == 0) {
             found = 1;
@@ -233,7 +230,7 @@ int fn_801CA180(int devType)
     if (found) {
         fn_801CA020(pAsync);
     }
-    fn_801F809C(lbl_803D5188);
+    fn_801F809C(&lbl_803D5188);
     return found;
 }
 
@@ -246,7 +243,7 @@ void fn_801CA224(FileAsync_801C8F14 *pAsync)
     if (pAsync->mpStep) {
         done = pAsync->mpStep(pAsync->mSize, 0, pAsync->mpReq);
     }
-    fn_801F8014(lbl_803D5188);
+    fn_801F8014(&lbl_803D5188);
     if (done) {
         pAsync->mState = 2;
         pAsync->mpReq->mpAsync = 0;
@@ -263,15 +260,15 @@ void fn_801CA224(FileAsync_801C8F14 *pAsync)
     if (!busy) {
         fn_801CA180(devType);
     }
-    fn_801F809C(lbl_803D5188);
+    fn_801F809C(&lbl_803D5188);
 }
 
 static void fn_801CA31C(int result)
 {
-    fn_801F8014(lbl_803D5188);
+    fn_801F8014(&lbl_803D5188);
     lbl_803EBC40 = 1;
     fn_801CA224(lbl_803EBC3C);
-    fn_801F809C(lbl_803D5188);
+    fn_801F809C(&lbl_803D5188);
 }
 
 int fn_801CA364(const char *pName, int device, const char *pPrefix)
@@ -385,7 +382,7 @@ int fn_801CA648(int handle, int pos, void *pBuffer, int size)
     int result = 0;
     int error;
 
-    fn_801F8014(lbl_803EBC28 + handle * 0x20);
+    fn_801F8014(&lbl_803EBC28[handle]);
     error = 0;
     switch (lbl_803EBC24[handle].mDevType) {
     case 1:
@@ -405,7 +402,7 @@ int fn_801CA648(int handle, int pos, void *pBuffer, int size)
         }
         break;
     }
-    fn_801F809C(lbl_803EBC28 + handle * 0x20);
+    fn_801F809C(&lbl_803EBC28[handle]);
     if (error) {
         result = -1;
     }
@@ -418,8 +415,8 @@ int fn_801CA760(FileAsync_801C8F14 *pAsync)
     int busy = 0;
     FileAsync_801C8F14 *pNode;
 
-    fn_801F8014(lbl_803D5188);
-    fn_801F8014(lbl_803D55C0);
+    fn_801F8014(&lbl_803D5188);
+    fn_801F8014(&lbl_803D55C0);
     fn_801C6AA4(lbl_803ED62C, pAsync, 0);
     for (pNode = fn_801C6B4C(lbl_803ED62C, 0); pNode; pNode = fn_801C6C84(lbl_803ED62C, pNode)) {
         if (pNode->mState == 1) {
@@ -433,8 +430,8 @@ int fn_801CA760(FileAsync_801C8F14 *pAsync)
             fn_801CA180(lbl_803ECEE8);
         }
     }
-    fn_801F809C(lbl_803D55C0);
-    fn_801F809C(lbl_803D5188);
+    fn_801F809C(&lbl_803D55C0);
+    fn_801F809C(&lbl_803D5188);
     fn_801F7BD4(0);
     return 0;
 }
@@ -449,7 +446,7 @@ void fn_801CA834(int handle)
         fn_801F8768();
         busy = 0;
         fn_801CAB30();
-        fn_801F8014(lbl_803D5188);
+        fn_801F8014(&lbl_803D5188);
         for (pAsync = fn_801C6B4C(lbl_803ED62C, 0); pAsync; pAsync = pNext) {
             pNext = fn_801C6C84(lbl_803ED62C, pAsync);
             if (pAsync->mHandle == handle && pAsync->mState != 2) {
@@ -460,7 +457,7 @@ void fn_801CA834(int handle)
         if (busy) {
             fn_801CAF24();
         }
-        fn_801F809C(lbl_803D5188);
+        fn_801F809C(&lbl_803D5188);
     } while (busy);
 }
 
@@ -602,7 +599,7 @@ void fn_801CAF24(void)
     int found = 0;
     FileAsync_801C8F14 *pAsync;
 
-    fn_801F8014(lbl_803D5188);
+    fn_801F8014(&lbl_803D5188);
     for (pAsync = fn_801C6B4C(lbl_803ED62C, 0); pAsync; pAsync = fn_801C6C84(lbl_803ED62C, pAsync)) {
         if (pAsync->mState == 1) {
             if (lbl_803EBC24[pAsync->mHandle].mDevType == 4) {
@@ -618,7 +615,7 @@ void fn_801CAF24(void)
     if (!found && pFirst && pFirst->mState == 0 && lbl_803EBC24[pFirst->mHandle].mDevType == 4) {
         fn_801CA180(4);
     }
-    fn_801F809C(lbl_803D5188);
+    fn_801F809C(&lbl_803D5188);
 }
 
 void fn_801CB00C(FileConfig_801C8F14 *pConfig)

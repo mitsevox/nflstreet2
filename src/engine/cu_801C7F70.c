@@ -1,8 +1,7 @@
 #include "engine/cu_801C665C.h"
+#include "game/fn_801D2B7C.h"
 
 void *fn_801C1F94(void *pDst, int value, int size);
-void *fn_801D2BB0(int heap, int size, int a, int b);
-int fn_801D2BD0(void *p);
 
 typedef int (*VisitFn_801C7F70)(void *, int, int);
 

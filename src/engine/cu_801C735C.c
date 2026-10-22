@@ -1,8 +1,7 @@
 #include "engine/cu_801C665C.h"
+#include "engine/fn_801F7BD4.h"
+#include "game/fn_801D2B7C.h"
 
-void *fn_801D2BB0(int heap, int size, int a, int b);
-int fn_801D2BD0(void *p);
-void fn_801F7BD4(int error);
 
 int fn_801C735C(unsigned int count, int size, int *pStackOffset, int *pNodeOffset);
 int fn_801C73C0(NodePool_801C750C *pPool);

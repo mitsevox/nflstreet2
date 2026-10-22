@@ -1,6 +1,9 @@
 /* Math library init/shutdown and the random-number streams (linear congruential,
  * shuffled minimal-standard and subtractive generators). */
 
+#include "engine/fn_801F7BD4.h"
+#include "game/fn_801D2B7C.h"
+
 typedef struct RandStream_801CEF48 {
     int mType;
 } RandStream_801CEF48;
@@ -32,9 +35,6 @@ extern float (*lbl_802F7AF4[])(RandStream_801CEF48 *pStream);
 extern int lbl_802F7B00[];
 
 void fn_801CFF34(void);
-void fn_801F7BD4(int error);
-void *fn_801D2B7C(int size, int a, int b);
-void fn_801D2BD0(void *p);
 int fn_8023E7AC(void);
 
 void fn_801CF040(RandFast_801CEF48 *pStream, unsigned int seed);

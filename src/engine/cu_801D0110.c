@@ -1,6 +1,9 @@
 /* Matrix stacks: indexed stacks of 4x4 float matrices with a current stack,
  * plus rotation/translation/scale builders. */
 
+#include "engine/fn_801F7BD4.h"
+#include "game/fn_801D2B7C.h"
+
 typedef float Mtx_801D0110[16];
 
 typedef struct MatStack_801D0110 {
@@ -14,10 +17,6 @@ extern MatStack_801D0110 *lbl_803EBCB8;
 extern unsigned int lbl_803EBCBC;
 extern MatStack_801D0110 *lbl_803EBCC0;
 
-void *fn_801D2BB0(int heap, int size, int a, int b);
-int fn_801D2BD0(void *p);
-int fn_801F7C88(void);
-void fn_801F7BD4(int error);
 void fn_8024AA18(float *pA, float *pB, float *pDst);
 void fn_802277DC(float *pDst, float *pA, float *pB);
 void fn_802271F0(float *pDst, float *pSrc);

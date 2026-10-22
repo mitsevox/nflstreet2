@@ -1,11 +1,11 @@
 #include "engine/cu_801C665C.h"
 #include "game/fn_801C68FC.h"
+#include "engine/fn_801F7BD4.h"
+#include "game/fn_801D2B7C.h"
 
 void fn_801C72D0(void);
 void fn_801C7EE4(void);
 void fn_801C8E88(void);
-void *fn_801D2BB0(int heap, int size, int a, int b);
-void fn_801F7BD4(int a);
 
 static int fn_801C665C(int type, int size)
 {

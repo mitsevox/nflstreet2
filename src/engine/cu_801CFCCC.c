@@ -1,11 +1,12 @@
 /* Low-level angle code: tangent, inverse trigonometry in 24-bit angles,
  * reciprocal helpers and angle interpolation. */
 
+#include "engine/fn_801F7BD4.h"
+
 extern float lbl_802F7B0C[9];
 
 void fn_801CFC14(int angle, float *pSin, float *pCos);
 void fn_801CF998(void);
-void fn_801F7BD4(int error);
 float fn_8025FDE8(float x);
 float fn_80260034(float x);
 float fn_80260B1C(float x);

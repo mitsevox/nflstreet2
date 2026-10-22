@@ -3,6 +3,9 @@
 #include "engine/cu_801C665C.h"
 #include "engine/cu_801CCA64.h"
 #include "game/fn_801C68FC.h"
+#include "engine/fn_801F7BD4.h"
+#include "engine/fn_801F8014.h"
+#include "game/fn_801D2B7C.h"
 
 typedef struct FontParams_801CCA64 {
     int mMaxFonts;
@@ -27,25 +30,17 @@ typedef struct FontState_801CCA64 {
     void *mpPalette2;
 } FontState_801CCA64;
 
-extern unsigned char lbl_80383CD0[];
+extern Lock_801F8014 lbl_80383CD0;
 extern FontState_801CCA64 lbl_80383CF0;
 extern FontRenderState_801CCA64 lbl_803E7600;
 extern unsigned char lbl_803EBC58;
 
 void *fn_801C1F94();
 int fn_801C3180(const char *pString);
-void *fn_801D2BB0(int heap, int size, int a, int b);
-int fn_801D2BD0(void *p);
 int fn_801EEB44(const char *pName, int mode);
 int fn_801EEFAC(int handle);
 void *fn_801EF390(void *pFile, int handle, int heap);
 int fn_801F010C(void *pFile, int handle);
-void fn_801F7BD4(int error);
-int fn_801F7C88(void);
-void fn_801F7FA8(void *pMutex);
-void fn_801F8014(void *pMutex);
-void fn_801F809C(void *pMutex);
-void fn_801F80D0(void *pMutex);
 
 
 static int fn_801CCAB8(FontEntry_801CCA64 *pEntry, int *pId, FontEntry_801CCA64 **ppResult);
@@ -136,8 +131,8 @@ int fn_801CCC24(FontParams_801CCA64 *pParams)
     int error = 0;
 
     if (!lbl_803EBC58) {
-        fn_801F7FA8(lbl_80383CD0);
-        fn_801F8014(lbl_80383CD0);
+        fn_801F7FA8(&lbl_80383CD0);
+        fn_801F8014(&lbl_80383CD0);
         lbl_80383CF0.mNumFonts = 0;
         lbl_80383CF0.mpList = fn_801C68FC(pParams->mHeap, 0, pParams->mMaxFonts, sizeof(FontEntry_801CCA64), 0, 0);
         lbl_80383CF0.mUnk10 = pParams->mUnk4;
@@ -149,7 +144,7 @@ int fn_801CCC24(FontParams_801CCA64 *pParams)
         lbl_80383CF0.mpBuffer = fn_801D2BB0(lbl_80383CF0.mHeap, 0x100, 0, 0);
         fn_801CD2A4();
         lbl_803EBC58 = 1;
-        fn_801F809C(lbl_80383CD0);
+        fn_801F809C(&lbl_80383CD0);
     } else {
         error = 0x110001;
     }
@@ -162,10 +157,10 @@ int fn_801CCD0C(void)
     int error = 0;
 
     if (lbl_803EBC58) {
-        fn_801F8014(lbl_80383CD0);
+        fn_801F8014(&lbl_80383CD0);
         fn_801C69E4(lbl_80383CF0.mpList);
-        fn_801F809C(lbl_80383CD0);
-        fn_801F80D0(lbl_80383CD0);
+        fn_801F809C(&lbl_80383CD0);
+        fn_801F80D0(&lbl_80383CD0);
         lbl_803EBC58 = 0;
         fn_801D2BD0(lbl_80383CF0.mpBuffer);
         fn_801C1F94(&lbl_80383CF0, 0, sizeof(FontState_801CCA64));

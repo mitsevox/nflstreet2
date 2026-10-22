@@ -1,13 +1,13 @@
 /* Graphics library front end: init/shutdown guards and a context word. */
 
 #include "engine/cu_801CE1F8.h"
+#include "engine/fn_801F7BD4.h"
 
 extern unsigned char lbl_803EBC60;
 extern int lbl_803EBC64;
 
 int fn_801CE2F4(GlibConfig_801CE1F8 *pConfig);
 int fn_801CE718(void);
-void fn_801F7BD4(int error);
 
 int fn_801CE138(GlibConfig_801CE1F8 *pConfig)
 {

@@ -1,12 +1,12 @@
 /* Data-structure library module: init/shutdown and the shared size alignment. */
 
 #include "engine/cu_801C665C.h"
+#include "engine/fn_801F7BD4.h"
 
 extern unsigned char lbl_803EBC00;
 extern int lbl_803EBC04;
 
 void fn_801C6760(void);
-void fn_801F7BD4(int error);
 
 int fn_801C6634(int alignment);
 

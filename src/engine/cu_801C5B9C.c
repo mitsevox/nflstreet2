@@ -1,5 +1,9 @@
 /* Controller context: channels of mapped input buffers, processed through dead-zone entry tables into callbacks. */
 
+#include "engine/fn_801F7BD4.h"
+#include "engine/fn_801F8014.h"
+#include "game/fn_801D2B7C.h"
+
 typedef struct ConEntry_801C5B9C {
     unsigned int mId;
     unsigned short mFlags;
@@ -29,18 +33,10 @@ extern unsigned int lbl_803ECED8;
 extern unsigned int lbl_803ECEDC;
 extern char *lbl_803ECEE0;
 extern int lbl_803ED624;
-extern unsigned char lbl_8037F860[];
+extern Lock_801F8014 lbl_8037F860;
 
 void *fn_801C1F94(void *pDst, int value, int size);
-void *fn_801D2BB0(int heap, int size, int a, int b);
-int fn_801D2BD0(void *p);
 int fn_801D34D0(void *pDest, int size, int value, int width);
-void fn_801F7BD4(int error);
-int fn_801F7C88(void);
-void fn_801F7FA8(void *pMutex);
-void fn_801F8014(void *pMutex);
-void fn_801F809C(void *pMutex);
-void fn_801F80D0(void *pMutex);
 
 static void fn_801C5B9C(unsigned int channel)
 {
@@ -128,8 +124,8 @@ int fn_801C5E24(unsigned int count, int size)
     unsigned int i;
 
     if (!lbl_803EBBEC) {
-        fn_801F7FA8(lbl_8037F860);
-        fn_801F8014(lbl_8037F860);
+        fn_801F7FA8(&lbl_8037F860);
+        fn_801F8014(&lbl_8037F860);
         lbl_803EBBF4 = 0;
         lbl_803ECED8 = count;
         lbl_803EBBF0 = fn_801D2BB0(1, count * sizeof(ConChannel_801C5B9C), 0, 0);
@@ -156,7 +152,7 @@ int fn_801C5E24(unsigned int count, int size)
                 lbl_803EBBEC = 1;
             }
         }
-        fn_801F809C(lbl_8037F860);
+        fn_801F809C(&lbl_8037F860);
     } else {
         error = 0x1A0001;
     }
@@ -169,12 +165,12 @@ int fn_801C5F9C(void)
     int error = 0;
 
     if (lbl_803EBBEC) {
-        fn_801F8014(lbl_8037F860);
+        fn_801F8014(&lbl_8037F860);
         fn_801D2BD0(lbl_803ECEE0);
         fn_801D2BD0(lbl_803EBBF0);
         lbl_803EBBF0 = 0;
-        fn_801F809C(lbl_8037F860);
-        fn_801F80D0(lbl_8037F860);
+        fn_801F809C(&lbl_8037F860);
+        fn_801F80D0(&lbl_8037F860);
         lbl_803EBBEC = 0;
     } else {
         error = 0x1A0002;
