@@ -6,6 +6,7 @@
 #include <dolphin/gx/GXCull.h>
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXVert.h>
+#include <dolphin/gx/GXTev.h>
 
 /* 48-byte element; fn_8019F508 fills one per entry of the handler set. */
 struct Element_8019F508 {
@@ -51,17 +52,9 @@ void fn_80210388(void);
 void fn_80210814(int a, int b, int c);
 void fn_80210CC4(float a, float b);
 int fn_80236EC0(int a);
-void fn_8024CB90(int a, int b);
-void fn_8024D418(void);
-void fn_8024D450(int a, int b, int c, int d, int e);
-void fn_8024DCE4(int a, int b, int c, int d, int e, int f);
-void fn_8024DF64(int a);
 void fn_8024FB58(int a, GXColor color);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_80251604(int a, int b);
-void fn_80251B28(int a, int b, int c, int d);
-void fn_80251CC4(int a);
 void fn_8025251C(Mtx44 m, int a);
 void fn_802525BC(int a);
 void fn_801D04C4(void);
@@ -135,19 +128,19 @@ void fn_8019F6CC(int index)
     GXSetZCompLoc(GX_DISABLE);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_DISABLE);
     fn_80210CC4(0.01f, 0.01f);
-    fn_8024D418();
-    fn_8024CB90(9, 1);
-    fn_8024D450(0, 9, 1, 4, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     fn_8024FB58(4, color);
     fn_8024FC48(1);
     fn_8024FC84(4, 0, 0, 0, 1, 2, 1);
-    fn_8024CB90(13, 1);
-    fn_8024D450(0, 13, 1, 4, 0);
-    fn_80251604(0, 0);
-    fn_8024DF64(1);
-    fn_8024DCE4(0, 1, 4, 60, 0, 125);
-    fn_80251CC4(1);
-    fn_80251B28(0, 0, 0, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
 }
 
 void fn_8019F82C(int index)

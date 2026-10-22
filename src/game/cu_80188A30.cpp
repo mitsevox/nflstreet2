@@ -3,6 +3,7 @@
 #include "game/fn_801C1F94.h"
 
 #include <string.h>
+#include <dolphin/gx/GXManage.h>
 
 /* Record returned by fn_80221BAC. */
 struct Record_80221BAC {
@@ -42,7 +43,6 @@ int fn_8021E2B4(void *pObject, int a, int b);
 char *fn_80220BFC(int a, int b);
 Record_80221BAC *fn_80221BAC(void *pObject, int a, int b);
 void fn_80239D1C(char *p, int size);
-void fn_8024E034(void);
 }
 
 static Pending_80362F64 sPending[2];
@@ -55,7 +55,7 @@ int fn_80188DD0(int index);
 void fn_80188A30(int id, char *p)
 {
     fn_80239D1C(p, 0x200);
-    fn_8024E034();
+    GXFlush();
 }
 
 void fn_80188A5C(void)

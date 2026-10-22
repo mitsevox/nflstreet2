@@ -11,6 +11,9 @@
 #include <dolphin/gx/GXCull.h>
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXVert.h>
+#include <dolphin/gx/GXCpu2Efb.h>
+#include <dolphin/gx/GXManage.h>
+#include <dolphin/gx/GXTev.h>
 
 typedef float Matrix_80198C54[4][4];
 
@@ -75,23 +78,11 @@ void fn_80234CAC(Object_80234A30 *pObject, void *p);
 void fn_80234CF0(Object_80234A30 *pObject, int a, Object_8023488C *p);
 void fn_80234DC0(Object_80234A30 *pObject, int a);
 int fn_80236B98(int a, float x, float y, float z);
-void fn_8024CB90(int a, int b);
-void fn_8024D418(void);
-void fn_8024D450(int a, int b, int c, int d, int e);
-void fn_8024DCE4(int a, int b, int c, int d, int e, int f);
-void fn_8024DF64(int a);
-void fn_8024E450(void);
-void fn_8024E63C(unsigned short x, unsigned short y, unsigned int *pColor);
-void fn_8024E660(unsigned short x, unsigned short y, unsigned int *pDepth);
 void fn_8024FB58(int a, GXColor color);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 extern "C" void GXInitTexObj(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
 extern "C" void GXLoadTexObj(GXTexObj *pObj, int a);
-void fn_80251604(int a, int b);
-void fn_80251A58(int a, int b, int c, int d, int e);
-void fn_80251B28(int a, int b, int c, int d);
-void fn_80251CC4(int a);
 void fn_802523A4(Matrix_80198C54 m, int a);
 void fn_802524D4(float *p);
 void fn_8025251C(Matrix_80198C54 m, int a);
@@ -300,22 +291,22 @@ void fn_8019930C(Object_8008A9F8 *pObject)
     unsigned int *pOut;
     unsigned int y;
     unsigned int x;
-    unsigned int color;
-    unsigned int depth;
+    u32 color;
+    u32 depth;
 
-    fn_8024E450();
+    GXDrawDone();
     pOut = (unsigned int *)lbl_803ECBE4;
     for (y = 160; y < 288; y++) {
         for (x = 256; x < 384; x++) {
-            fn_8024E63C(x, y, &color);
-            fn_8024E660(x, y, &depth);
+            GXPeekARGB(x, y, &color);
+            GXPeekZ(x, y, &depth);
             if (depth > 0xFF0000) {
                 color = 0xFF00FF00;
             }
             *pOut++ = color;
         }
     }
-    fn_8024E450();
+    GXDrawDone();
 }
 
 void fn_801993B8(int textured, unsigned int color, GXTexObj *pTexture, float alpha)
@@ -344,30 +335,30 @@ void fn_801993B8(int textured, unsigned int color, GXTexObj *pTexture, float alp
     fn_8024FB58(4, fill);
     fn_8024FC84(4, 0, 0, 0, 1, 0, 2);
     if (textured) {
-        fn_80251CC4(1);
-        fn_80251B28(0, 0, 0, 4);
-        fn_80251604(0, 0);
-        fn_8024DF64(1);
-        fn_8024DCE4(0, 0, 4, 60, 0, 125);
-        fn_8024D418();
-        fn_8024CB90(9, 1);
-        fn_8024CB90(13, 1);
-        fn_8024D450(0, 9, 1, 4, 4);
-        fn_8024D450(0, 13, 1, 4, 0);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+        GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 4);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
         GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
         GXSetCullMode(GX_CULL_NONE);
         fn_802528B0(1);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
         GXLoadTexObj(pTexture, 0);
     } else {
-        fn_80251CC4(1);
-        fn_80251B28(0, 0, 0, 4);
-        fn_80251604(0, 4);
-        fn_8024DF64(0);
-        fn_8024DCE4(0, 0, 4, 60, 0, 125);
-        fn_8024D418();
-        fn_8024CB90(9, 1);
-        fn_8024D450(0, 9, 1, 4, 4);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+        GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+        GXSetNumTexGens(0);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 4);
         GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
         GXSetCullMode(GX_CULL_NONE);
         fn_802528B0(1);
@@ -430,11 +421,11 @@ void fn_80199838(Object_8008A9F8 *pObject)
     fn_8024FB58(4, white);
     fn_8024FC48(1);
     fn_8024FC84(4, 1, 0, 0, mask, 2, 2);
-    fn_80251A58(7, 0, 0, 7, 0);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetCullMode(GX_CULL_FRONT);
     fn_80210BD8(1);
     fn_80234BF4(0, &pObject->mUnknown620[0], 0);
-    fn_80251A58(4, 0, 0, 7, 0);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
     fn_80210BD8(2);
     fn_80210CC4(0.0f, lbl_803EB774);
     fn_80234BF4(0, &pObject->mUnknown620[1], 0);

@@ -1,6 +1,6 @@
+#include <dolphin/os.h>
 extern "C" {
 void *memset(void *pDest, int value, unsigned int size);
-void fn_8023DB7C(void);
 void fn_80089668(void);
 void fn_800896A8(void *pData, unsigned int size);
 void fn_800896EC(unsigned int *pResult);
@@ -48,7 +48,7 @@ extern "C" {
 static void fn_80023E08(void)
 {
     if (++sPollCount > 2) {
-        fn_8023DB7C();
+        OSYieldThread();
         sPollCount = 0;
     }
 }

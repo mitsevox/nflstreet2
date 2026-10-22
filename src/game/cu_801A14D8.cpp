@@ -8,6 +8,8 @@
 
 #include <dolphin/gx/GXVert.h>
 #include <string.h>
+#include <dolphin/gx/GXGeometry.h>
+#include <dolphin/gx/GXTev.h>
 
 /* Per-player draw slot (0x30 bytes), one of the fourteen entries of
    lbl_80365AB4 handed out by fn_801A3284 and filled by fn_801A3C40. */
@@ -287,20 +289,11 @@ void fn_80234DC0(Part_8003DEC4 *p, int a);
 int fn_80236B98(int a, float r, float g, float b);
 void fn_80236C10(int a, Vector_801A1650 *pScale, void *p);
 int fn_80236EC0(int a);
-void fn_8024CB90(int attr, int type);
-void fn_8024D418(void);
-void fn_8024D450(int fmt, int attr, int cnt, int type, int frac);
-void fn_8024DCE4(int a, int b, int c, int d, int e, int f);
-void fn_8024DF64(int a);
 void fn_8024E908(int type, int fmt, int count);
 void fn_8024EB28(int a);
 void fn_8024FB58(int chan, Color_8024FB58 color);
 void fn_8024FC48(int n);
 void fn_8024FC84(int chan, int enable, int amb, int mat, int lights, int diff, int attn);
-void fn_80251604(int a, int b);
-void fn_80251A58(int comp0, int ref0, int op, int comp1, int ref1);
-void fn_80251B28(int a, int b, int c, int d);
-void fn_80251CC4(int a);
 void fn_80252034(int type, int src, int dst, int op);
 void fn_802520E0(int enable, int func, int update);
 void fn_80252114(int a);
@@ -461,7 +454,7 @@ void fn_801A1978(Object_8003DEC4 *pPlayer, unsigned int flags)
     fn_8024FC48(1);
     fn_8024FC84(0, 1, 0, 0, light, 2, 2);
     fn_8024FC84(2, 0, 0, 0, light, 0, 2);
-    fn_80251A58(7, 0, 0, 7, 0);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     fn_8024EB28(1);
     fn_80210BD8(1);
     fn_80234BF4(0, &pPlayer->mUnknown1164[0], 0);
@@ -470,7 +463,7 @@ void fn_801A1978(Object_8003DEC4 *pPlayer, unsigned int flags)
     fn_80234BF4(0, &pPlayer->mUnknown1164[3], 0);
     fn_80210CC4(0.0f, depth);
     fn_80234BF4(0, &pPlayer->mUnknown1164[7], 0);
-    fn_80251A58(4, 0, 0, 7, 0);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
     fn_80210BD8(2);
     fn_801A1D80(pPlayer, light);
     fn_80234BF4(0, &pPlayer->mUnknown1164[11], 0);
@@ -518,12 +511,12 @@ int fn_801A1C10(Object_8003DEC4 *pPlayer)
         fn_8024EB28(0);
         fn_801A3300(pPlayer, a, b);
         fn_801A32AC(30, 1.0f, 1.0f, b[0], b[1]);
-        fn_8024DCE4(0, 1, 4, 30, 0, 125);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
         fn_802113C0(2, 0);
         fn_801A32AC(30, 1.0f, 1.0f, a[0], a[1]);
-        fn_8024DCE4(0, 1, 4, 30, 0, 125);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
         fn_802113C0(3, 0);
-        fn_8024DCE4(0, 1, 4, 60, 0, 125);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
         fn_802113C0(1, 0);
     } else {
         fn_80234BF4(0, &pPlayer->mUnknown1164[4], 0);
@@ -562,7 +555,7 @@ void fn_801A1DEC(Object_8003DEC4 *pPlayer, Slot_801A3284 *pSlot, unsigned int co
     fn_8024FC84(0, 1, 0, 0, light, 2, 2);
     fn_8024FC84(2, 0, 0, 0, light, 0, 2);
     fn_80210BD8(2);
-    fn_80251A58(4, 0, 0, 7, 0);
+    GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_ALWAYS, 0);
     fn_8024EB28(1);
     index = pPlayer->mUnknown5188.mUnknown554;
     for (i = 0; i < pPlayer->mUnknown5188.mUnknown558; i++) {
@@ -1318,20 +1311,20 @@ void fn_801A3FFC(void)
     fn_80252114(0);
     fn_802520E0(1, 3, 0);
     fn_80210CC4(0.01f, 0.01f);
-    fn_8024D418();
-    fn_8024CB90(9, 1);
-    fn_8024D450(0, 9, 1, 4, 0);
-    fn_8024CB90(11, 1);
-    fn_8024D450(0, 11, 1, 5, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     fn_8024FC48(1);
     fn_8024FC84(4, 0, 1, 1, 0, 0, 2);
-    fn_8024CB90(13, 1);
-    fn_8024D450(0, 13, 1, 4, 0);
-    fn_80251604(0, 0);
-    fn_8024DF64(1);
-    fn_8024DCE4(0, 1, 4, 60, 0, 125);
-    fn_80251CC4(1);
-    fn_80251B28(0, 0, 0, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     fn_80210814(0, lbl_803ECC08, lbl_803ECC0C);
     fn_801D0F80(m);
     fn_8025251C(m, 0);
@@ -1378,20 +1371,20 @@ void fn_801A42D4(void)
     fn_80252034(1, 4, 5, 5);
     fn_80252114(0);
     fn_802520E0(1, 3, 0);
-    fn_8024D418();
-    fn_8024CB90(9, 1);
-    fn_8024D450(0, 9, 1, 4, 0);
-    fn_8024CB90(11, 1);
-    fn_8024D450(0, 11, 1, 5, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     fn_8024FC48(1);
     fn_8024FC84(4, 0, 1, 1, 0, 0, 2);
-    fn_8024CB90(13, 1);
-    fn_8024D450(0, 13, 1, 4, 0);
-    fn_80251604(0, 0);
-    fn_8024DF64(1);
-    fn_8024DCE4(0, 1, 4, 60, 0, 125);
-    fn_80251CC4(1);
-    fn_80251B28(0, 0, 0, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     fn_80210814(0, lbl_803ECC08, lbl_803ECC0C);
     fn_801D0F80(m);
     fn_8025251C(m, 0);

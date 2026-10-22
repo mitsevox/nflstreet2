@@ -7,6 +7,9 @@
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXVert.h>
 #include <string.h>
+#include <dolphin/gx/GXGeometry.h>
+#include <dolphin/gx/GXManage.h>
+#include <dolphin/gx/GXTev.h>
 
 struct Texture_80194108 {
     unsigned char mUnknown0[0x54];
@@ -42,22 +45,13 @@ void fn_80211EFC(Element_80194108 *);
 Texture_80194108 *fn_802120E4(Element_80194108 *, int);
 Palette_80194108 *fn_80212124(Element_80194108 *, int, int);
 extern "C" void GXPreLoadEntireTexture(Texture_80194108 *, GXTexRegion *);
-void fn_8024E450(void);
 extern "C" void GXLoadTlut(GXTlutObj *, int);
 extern "C" void GXInitTexObjTlut(Texture_80194108 *, int);
 extern "C" void GXLoadTexObjPreLoaded(Texture_80194108 *, GXTexRegion *, int);
-void fn_80251604(int, int);
 void fn_8024E908(int, int, int);
 void fn_8024FB58(int, GXColor);
 void fn_8024FC48(int);
 void fn_8024FC84(int,int,int,int,int,int,int);
-void fn_80251CC4(int);
-void fn_80251B28(int,int,int,int);
-void fn_8024DF64(int);
-void fn_8024DCE4(int,int,int,int,int,int);
-void fn_8024D418(void);
-void fn_8024CB90(int,int);
-void fn_8024D450(int,int,int,int,int);
 void fn_802520E0(int,int,int);
 void fn_8024EB28(int);
 void fn_802528B0(int);
@@ -86,7 +80,6 @@ int fn_801CE930(void);
 int fn_801CE944(int);
 void GXCopyDisp(int,int);
 void fn_8024E4D0(void);
-void fn_8024E034(void);
 
 void fn_80194508(int);
 void fn_8019471C(void);
@@ -118,7 +111,7 @@ void fn_80194060(void)
         fn_8019471C();
         GXCopyDisp(fn_801CE944((unsigned char)fn_801CE930()), 1);
         fn_8024E4D0();
-        fn_8024E034();
+        GXFlush();
     }
 }
 void fn_80194108(int index, Texture_80194108 *out, int region)
@@ -129,7 +122,7 @@ void fn_80194108(int index, Texture_80194108 *out, int region)
     Palette_80194108 *palette = fn_80212124(&element, 0xFF000000, 0);
     out->mUnknown54 = &lbl_80365038[region];
     GXPreLoadEntireTexture(texture, out->mUnknown54);
-    fn_8024E450();
+    GXDrawDone();
     if (palette) {
         GXLoadTlut(&palette->mUnknown4, region + 4);
         GXInitTexObjTlut(texture, region + 4);
@@ -162,9 +155,9 @@ void fn_80194314(Quad_8019424C *quad)
 {
     if (quad->mUnknown0) {
         GXLoadTexObjPreLoaded(quad->mUnknown0, quad->mUnknown0->mUnknown54, 0);
-        fn_80251604(0, 0);
+        GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     } else {
-        fn_80251604(0, 4);
+        GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
     }
     fn_8024E908(0x98, 0, 4);
     for (int i = 0; i < 4; ++i) {
@@ -177,7 +170,7 @@ void fn_801943D4(void)
     GXColor color = {255, 0, 0, 255};
     fn_8024FB58(4, color);
     GXLoadTexObjPreLoaded(lbl_80364FB0.mUnknown0, lbl_80364FB0.mUnknown0->mUnknown54, 0);
-    fn_80251604(0, 4);
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
     fn_8024E908(0x98, 0, 4);
     float x = lbl_803ECB9C.mX;
     float y = lbl_803ECB9C.mY;
@@ -200,16 +193,16 @@ void fn_80194508(int alpha)
     fn_8024FC48(1);
     fn_8024FB58(4, color);
     fn_8024FC84(4,0,0,0,1,0,2);
-    fn_80251CC4(1);
-    fn_80251B28(0,0,0,4);
-    fn_80251604(0,0);
-    fn_8024DF64(1);
-    fn_8024DCE4(0,0,4,60,0,125);
-    fn_8024D418();
-    fn_8024CB90(9,1);
-    fn_8024CB90(13,1);
-    fn_8024D450(0,9,1,4,0);
-    fn_8024D450(0,13,1,4,0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     fn_802520E0(0,7,0);
     fn_8024EB28(0);
     fn_802528B0(1);
@@ -319,7 +312,7 @@ void fn_80194AEC(int a)
     fn_8019471C();
     GXCopyDisp(fn_801CE944((unsigned char)fn_801CE930()),a);
     fn_8024E4D0();
-    fn_8024E034();
+    GXFlush();
     fn_801946C4();
     fn_801CEA7C(1);
     fn_80194248(&lbl_80364F58);

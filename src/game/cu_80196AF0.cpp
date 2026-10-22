@@ -6,6 +6,7 @@
 #include <dolphin/gx/GXCull.h>
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXVert.h>
+#include <dolphin/gx/GXTev.h>
 
 struct Entry_80196B24 {
     void *mpUnknown0;
@@ -25,18 +26,10 @@ void *fn_801D2BB0(int a, int size, int c, int d);
 void fn_801EF7BC(void *a, int b, void *p);
 int fn_801F0C50(void *a, int b);
 void fn_8020FA38(int a, void *b);
-void fn_8024CB90(int a, int b);
-void fn_8024D418(void);
-void fn_8024D450(int a, int b, int c, int d, int e);
-void fn_8024DCE4(int a, int b, int c, int d, int e, int f);
-void fn_8024DF64(int a);
 void fn_8024FA68(int a, GXColor color);
 void fn_8024FB58(int a, GXColor color);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_80251604(int a, int b);
-void fn_80251B28(int a, int b, int c, int d);
-void fn_80251CC4(int a);
 void fn_802523A4(Mtx44 m, int a);
 void fn_80252448(float *p);
 void fn_802524D4(float *p);
@@ -103,14 +96,14 @@ void fn_80196C2C(unsigned int color, int mode, float alpha)
     fn_8024FA68(4, black);
     fn_8024FB58(4, fill);
     fn_8024FC84(4, 0, 0, 0, 1, 0, 2);
-    fn_80251CC4(1);
-    fn_80251B28(0, 0, 0, 4);
-    fn_80251604(0, 4);
-    fn_8024DF64(0);
-    fn_8024DCE4(0, 0, 4, 60, 0, 125);
-    fn_8024D418();
-    fn_8024CB90(9, 1);
-    fn_8024D450(0, 9, 1, 4, 4);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+    GXSetNumTexGens(0);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 4);
     GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
     GXSetCullMode(GX_CULL_NONE);
     fn_802528B0(1);

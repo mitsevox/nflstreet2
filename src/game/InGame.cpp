@@ -15,6 +15,7 @@
 #include "game/fn_80191804.h"
 #include "game/fn_80218FC4.h"
 #include "game/cu_80067C10.h"
+#include <dolphin/os.h>
 
 extern "C" {
 double fabs(double);
@@ -115,7 +116,6 @@ void fn_802345C4(struct Desc_802345C4 *pDesc, int count);
 void fn_80236F34(void);
 void fn_80237830(int a);
 unsigned int fn_802378C8(void);
-int fn_802399F8(void);
 void fn_80239CEC(int a, int b);
 }
 
@@ -306,7 +306,7 @@ int InGame::Init()
         fn_801C6280(-1, 2, (void *)fn_80028140);
     }
     fn_80194AEC(0);
-    fn_80239CEC(0x80000000, fn_802399F8() + 0x80000000);
+    fn_80239CEC(0x80000000, (u32)OSGetArenaHi() + 0x80000000);
     Desc_802345C4 desc = { 4, 14 };
     fn_802345C4(&desc, 2);
     fn_8018A6C4(1, 3);

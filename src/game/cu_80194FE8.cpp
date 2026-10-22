@@ -7,6 +7,7 @@
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXVert.h>
+#include <dolphin/gx/GXTev.h>
 
 struct State_80194FE8 {
     int mUnknown0;
@@ -33,14 +34,6 @@ int fn_801CEC74(void);
 void fn_8024FC48(int);
 void fn_8024FB58(int, GXColor);
 void fn_8024FC84(int, int, int, int, int, int, int);
-void fn_80251CC4(int);
-void fn_80251B28(int, int, int, int);
-void fn_80251604(int, int);
-void fn_8024DF64(int);
-void fn_8024DCE4(int, int, int, int, int, int);
-void fn_8024D418(void);
-void fn_8024CB90(int, int);
-void fn_8024D450(int, int, int, int, int);
 void fn_802520E0(int, int, int);
 void fn_8024EB28(int);
 void fn_802528B0(int);
@@ -291,30 +284,30 @@ void fn_80195B28(int textured, unsigned int value, float alpha) {
     fn_8024FB58(4, color);
     fn_8024FC84(4, 0, 0, 0, 1, 0, 2);
     if (textured) {
-        fn_80251CC4(1);
-        fn_80251B28(0, 0, 0, 4);
-        fn_80251604(0, 0);
-        fn_8024DF64(1);
-        fn_8024DCE4(0, 0, 4, 60, 0, 125);
-        fn_8024D418();
-        fn_8024CB90(9, 1);
-        fn_8024CB90(13, 1);
-        fn_8024D450(0, 9, 1, 4, 4);
-        fn_8024D450(0, 13, 1, 4, 0);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+        GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 4);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
         fn_802520E0(0, 7, 0);
         fn_8024EB28(0);
         fn_802528B0(1);
         fn_80252034(1, 4, 5, 5);
         GXLoadTexObj(&lbl_80365168, 0);
     } else {
-        fn_80251CC4(1);
-        fn_80251B28(0, 0, 0, 4);
-        fn_80251604(0, 4);
-        fn_8024DF64(0);
-        fn_8024DCE4(0, 0, 4, 60, 0, 125);
-        fn_8024D418();
-        fn_8024CB90(9, 1);
-        fn_8024D450(0, 9, 1, 4, 4);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+        GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+        GXSetNumTexGens(0);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 4);
         fn_802520E0(0, 7, 0);
         fn_8024EB28(0);
         fn_802528B0(1);

@@ -7,6 +7,8 @@
 #include "engine/cu_80227F14.h"
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXVert.h>
+#include <dolphin/gx/GXGeometry.h>
+#include <dolphin/gx/GXTev.h>
 
 /* The pool allocates 0x128 bytes. Only observed fields are exposed. */
 struct Item_800469EC {
@@ -65,19 +67,11 @@ int fn_802120E4(void *p, unsigned int key);
 int fn_80212124(void *p, unsigned int key, int a);
 void fn_80234D00(Bounds_80234D00 *pIn, Bounds_80234D00 *pOut);
 int fn_80236EC0(int a);
-void fn_8024CB90(int a, int b);
-void fn_8024D418(void);
-void fn_8024D450(int a, int b, int c, int d, int e);
-void fn_8024DCE4(int a, int b, int c, int d, int e, int f);
-void fn_8024DF64(int a);
 void fn_8024E908(int a, int b, int c);
 void fn_8024EB28(int a);
 void fn_8024FB58(int a, GXColor color);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_80251604(int a, int b);
-void fn_80251B28(int a, int b, int c, int d);
-void fn_80251CC4(int a);
 void fn_80252034(int a, int b, int c, int d);
 void fn_802520E0(int a, int b, int c);
 void fn_80252114(int a);
@@ -127,9 +121,9 @@ int fn_800469EC(Item_800469EC *p)
             fn_80252114(0);
             fn_802520E0(0, 3, 0);
             fn_80210CC4(zero, 1.0f);
-            fn_8024D418();
-            fn_8024CB90(9, 1);
-            fn_8024D450(0, 9, 1, 4, 0);
+            GXClearVtxDesc();
+            GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
             GXColor color;
             color.r = (unsigned char)(int)(p->mUnknownD8 * 255.0f);
             color.g = (unsigned char)(int)(p->mUnknownDC * 255.0f);
@@ -138,13 +132,13 @@ int fn_800469EC(Item_800469EC *p)
             fn_8024FB58(4, color);
             fn_8024FC48(1);
             fn_8024FC84(4, 0, 0, 0, 1, 2, 1);
-            fn_8024CB90(13, 1);
-            fn_8024D450(0, 13, 1, 4, 0);
-            fn_80251604(0, 0);
-            fn_8024DF64(1);
-            fn_8024DCE4(0, 1, 4, 60, 0, 125);
-            fn_80251CC4(1);
-            fn_80251B28(0, 0, 0, 4);
+            GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+            GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+            GXSetNumTexGens(1);
+            GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+            GXSetNumTevStages(1);
+            GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
             fn_80210814(0, p->mUnknown120, p->mUnknown124);
             fn_801D04C4();
             fn_801D0C58(&p->mUnknown4);
