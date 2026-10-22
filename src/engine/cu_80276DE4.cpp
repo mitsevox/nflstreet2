@@ -245,7 +245,7 @@ void fn_8027C04C(void *p);
 void *fn_8027CF9C(void *memory);
 int fn_8027CFCC(void *handle, void *data, int size, int count);
 int fn_8027D05C(void *handle, float **dst, int count);
-void fn_8027D284(Format_8027D284 *format, void *handle);
+Format_8027D284 fn_8027D284(void *handle);
 void fn_8027D2C4(void *handle, Format_8027D284 *format, int flags);
 void fn_8027D2E0(void *handle, int mode);
 void fn_8027A21C(State_8027A248 *state);
@@ -966,7 +966,6 @@ void fn_8027AC08(Node_80279D90 *node, Params_80275F80 *params)
 {
     Decoder_8027AC08 *decoder;
     Format_8027D284 format;
-    Format_8027D284 info;
 
     decoder = (Decoder_8027AC08 *)node;
     node->m0 = fn_8027AB4C;
@@ -976,8 +975,7 @@ void fn_8027AC08(Node_80279D90 *node, Params_80275F80 *params)
     params->m28 = fn_8027AB44;
     node->m4 = fn_8027ABDC;
     decoder->m28 = fn_8027CF9C(fn_8027C020(3432));
-    fn_8027D284(&info, decoder->m28);
-    format = info;
+    format = fn_8027D284(decoder->m28);
     format.m8 = 1;
     fn_8027D2C4(decoder->m28, &format, 0);
     if (decoder->m24 <= 2) {
@@ -1032,7 +1030,6 @@ void fn_8027AE04(Node_80279D90 *node, Params_80275F80 *params)
 {
     Decoder_8027AE04 *decoder;
     Format_8027D284 format;
-    Format_8027D284 info;
 
     decoder = (Decoder_8027AE04 *)node;
     node->m0 = fn_8027AD10;
@@ -1042,8 +1039,7 @@ void fn_8027AE04(Node_80279D90 *node, Params_80275F80 *params)
     decoder->m24 = params->m10;
     decoder->m28 = params->m14;
     decoder->m1C = fn_8027CF9C(fn_8027C020(3432));
-    fn_8027D284(&info, decoder->m1C);
-    format = info;
+    format = fn_8027D284(decoder->m1C);
     format.m8 = 1;
     fn_8027D2C4(decoder->m1C, &format, 0);
     fn_8027CFCC(decoder->m1C, (void *)params->m0, decoder->m24 * 4, decoder->m24);
@@ -1054,7 +1050,6 @@ int fn_8027AEE4(Node_80279D90 *node, int count, float *a, float *b, int flag)
 {
     Decoder_8027B168 *decoder;
     Format_8027D284 format;
-    Format_8027D284 info;
     int last;
     int total;
     int n;
@@ -1078,26 +1073,22 @@ int fn_8027AEE4(Node_80279D90 *node, int count, float *a, float *b, int flag)
                 decoder->m2C = 0;
                 if (decoder->m30 <= 2) {
                     if (last == 0) {
-                        fn_8027D284(&info, decoder->m34);
-                        format = info;
+                        format = fn_8027D284(decoder->m34);
                         format.m8 = 1;
                         fn_8027D2C4(decoder->m34, &format, 0);
                     } else {
-                        fn_8027D284(&info, decoder->m34);
-                        format = info;
+                        format = fn_8027D284(decoder->m34);
                         format.m8 = 0;
                         fn_8027D2C4(decoder->m34, &format, 0);
                     }
                     fn_8027D2E0(decoder->m34, 0);
                 } else {
                     if (last == 0) {
-                        fn_8027D284(&info, decoder->m34);
-                        format = info;
+                        format = fn_8027D284(decoder->m34);
                         format.m4 = 0;
                         format.m8 = 1;
                     } else {
-                        fn_8027D284(&info, decoder->m34);
-                        format = info;
+                        format = fn_8027D284(decoder->m34);
                         format.m8 = 0;
                     }
                     fn_8027D2C4(decoder->m34, &format, 0);

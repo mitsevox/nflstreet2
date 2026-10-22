@@ -1005,6 +1005,7 @@ void fn_80273040(int index, Stream_802743A0 *stream, Record_803A6DF0 *record)
     }
 }
 
+
 int fn_80273458(void)
 {
     Params_803A6C40 params = lbl_803A6C24.m1C;
@@ -1646,6 +1647,7 @@ void fn_8027555C(void)
     lbl_803B503C = fn_80276278;
     lbl_803B5040 = fn_80276A84;
 }
+
 
 void fn_80275948(float value)
 {
