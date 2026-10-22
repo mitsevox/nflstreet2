@@ -16000,3 +16000,150 @@ extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
     }
     return result;
 }
+
+struct PoseCompare_8009C220 {
+    char mUnknown0[20];
+    Vector_80039F5C *mpUnknown20;
+    char mUnknown24[40];
+};
+
+struct Animation_8009C630 {
+    char mUnknown0[4];
+    unsigned short mUnknown4;
+    char mUnknown6[74];
+    float mUnknown80;
+    char mUnknown84[16];
+};
+
+extern "C" {
+float fn_801CFB18(int angle);
+float fn_801CFB94(int angle);
+int fn_801CFDD0(float value);
+void fn_800A6F04(int team);
+}
+
+extern "C" void fn_8009C0B8(Object_80039F5C *p, const Object_80039F5C *pOther)
+{
+    p->mId = pOther->mId;
+    memcpy(&p->mUnknown8, &pOther->mUnknown8, 8);
+    memcpy((char *)p + 292, (const char *)pOther + 292, 524);
+    p->mUnknown1008Word = pOther->mUnknown1008Word;
+    memcpy(p->mUnknown1012, pOther->mUnknown1012, 4);
+}
+
+extern "C" int fn_8009C220(void *pA, void *pB)
+{
+    PoseCompare_8009C220 *p = (PoseCompare_8009C220 *)pA;
+    PoseCompare_8009C220 *pOther = (PoseCompare_8009C220 *)pB;
+    int result = 0;
+    for (int i = 0; i < 3; i++) {
+        result |= fn_80238258(&p[i], &pOther[i], 20);
+        if (p[i].mpUnknown20 && pOther[i].mpUnknown20) {
+            result |= p[i].mpUnknown20->mX != pOther[i].mpUnknown20->mX;
+            result |= p[i].mpUnknown20->mY != pOther[i].mpUnknown20->mY;
+            result |= p[i].mpUnknown20->mZ != pOther[i].mpUnknown20->mZ;
+        } else {
+            result |= p[i].mpUnknown20 != pOther[i].mpUnknown20;
+        }
+    }
+    return result;
+}
+
+extern "C" float fn_8009C630(Object_80039F5C *p, int id)
+{
+    float result = 0.0f;
+    for (unsigned int i = 0; i <= 3; i++) {
+        Animation_8009C630 *pAnimation = &((Animation_8009C630 *)p->mpUnknown792)[i];
+        if (pAnimation->mUnknown4 == id) {
+            result = pAnimation->mUnknown80;
+            break;
+        }
+    }
+    return result;
+}
+
+extern "C" float fn_8009F168(Pair_802270A4 *p, Pair_802270A4 *pVelocity,
+                              Pair_802270A4 *pOther, float speed)
+{
+    Pair_802270A4 delta;
+    fn_802276B4(&delta, pOther, p);
+    float distance = fn_802270A4(&delta);
+    float velocity = fn_802270A4(pVelocity);
+    int angle = fn_801CFE40(pVelocity->mUnknown4, pVelocity->mUnknown0);
+    angle = fn_801CFE40(delta.mUnknown4, delta.mUnknown0) - angle;
+    float sine = fn_801CFB18(angle);
+    int correction = fn_801CFDD0(velocity * sine / speed);
+    float closing = speed * fn_801CFB94(correction) + velocity * fn_801CFB94(angle);
+    float time = distance / closing;
+    if (time <= 0.0f || !(time <= 5.0f)) {
+        time = distance / speed;
+    }
+    return time;
+}
+
+extern "C" void fn_800A02FC(void)
+{
+    for (int team = 0; team <= 1; team++) {
+        int count = fn_80178D18((unsigned char)team);
+        for (int i = 0; i < count; i++) {
+            Object_80039F5C *p = fn_80039F5C((unsigned char)team, (unsigned short)i);
+            fn_800B49EC((Record_800B49EC *)p->mRatings,
+                         (const Record_800B49EC *)p->mUnknown3020);
+            fn_800B4798(p->mRatings, (unsigned char)team, (unsigned char)i, &p->mUnknown2900);
+        }
+        fn_800A6F04((unsigned char)team);
+    }
+}
+
+extern "C" {
+void fn_80173D10(void);
+void fn_800271D4(void *p);
+int fn_801C6280(int a, int b, void *p);
+void fn_8006F0C8(int value);
+void fn_80074DF8(int value);
+void fn_80074E90(int value);
+void fn_80074F28(int value);
+void fn_80076D4C(int value);
+void fn_80076D5C(int value);
+void fn_80076D6C(int value);
+void fn_80076D7C(int value);
+void fn_80076D8C(int value);
+void fn_80076D9C(int value);
+void fn_80075058(int value);
+void fn_800750F0(int value);
+void fn_80075188(int value);
+void fn_80076DAC(int value);
+extern void *lbl_803EA9E8;
+extern char lbl_802FC880[];
+}
+
+void Class_80297AB8::vfn_03()
+{
+    if (!fn_80177F70()) {
+        fn_80173D10();
+    }
+    fn_800B6408();
+    fn_800B8608();
+    fn_80194F1C(1);
+    fn_800CC448();
+    int selection;
+    memcpy(&selection, fn_8016871C(fn_80178308())->mUnknown1C[1], sizeof(selection));
+    fn_800996FC(selection);
+    fn_800271D4(lbl_803EA9E8);
+    fn_801C6280(-1, 3, lbl_802FC880);
+    fn_8006F0C8(127);
+    fn_80074DF8(0);
+    fn_80074E90(0);
+    fn_80074F28(0);
+    fn_80076D4C(0);
+    fn_80076D5C(0);
+    fn_80076D6C(0);
+    fn_80076D7C(0);
+    fn_80076D8C(0);
+    fn_80076D9C(0);
+    fn_80075058(0);
+    fn_800750F0(0);
+    fn_80075188(0);
+    fn_80076DAC(0);
+    fn_800A2184();
+}
