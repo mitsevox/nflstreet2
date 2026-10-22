@@ -34187,16 +34187,21 @@
     {
       "source": "src/game/cu_8014C868.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #786; sixteen complete bodies in 0x8014C868-0x8014D024 inside the retained provisional cu_801485B4 survey group, after the cu_8014BC98.cpp fragment: four handler bodies held by the .rodata dispatch tables 0x802A2200 and 0x802A2490, eleven entries of the vtable 0x802A2C90 installed by the constructor 0x8014C630, and the stats query fn_8014CCE8 (called from 0x8005CB68). fn_8014CB30 (0x8014CB30-0x8014CCE8) is not registered: it writes the base Class_80148A58 bytes at +0x10, which the shared header keeps opaque. 0x8014C808 is excluded because it shares the literal 0x802A0B74 emitted by src/game/cu_8014AB64.cpp. No initialized data of its own. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "Issues #786 and #1025; seventeen complete bodies in 0x8014C808-0x8014D024 inside the retained provisional cu_801485B4 survey group, after the cu_8014BC98.cpp fragment: four handler bodies held by the .rodata dispatch tables 0x802A2200 and 0x802A2490, eleven entries of the vtable 0x802A2C90 installed by the constructor 0x8014C630, and the stats query fn_8014CCE8 (called from 0x8005CB68). fn_8014CB30 (0x8014CB30-0x8014CCE8) is not registered: it writes the base Class_80148A58 bytes at +0x10, which the shared header keeps opaque. Issue #1025 adds complete slot 6 of table 0x802A2490, 0x8014C808-0x8014C868. Title 0x802A0CEC, shared button text 0x802A0B74 and format pointer word 0x803EB2B8 remain external original-owned in their existing full measured contexts; no readonly ownership transfer or new native pool. No initialized data of its own. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8014C868",
+          "start": "0x8014C808",
           "end": "0x8014D024"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_8014C808",
+          "start": "0x8014C808",
+          "end": "0x8014C868"
+        },
         {
           "symbol": "fn_8014C868",
           "start": "0x8014C868",
@@ -34372,7 +34377,7 @@
     {
       "source": "src/game/cu_8014E220.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #791; six complete handler bodies in 0x8014E220-0x8014E534 inside the retained provisional cu_801485B4 survey group, held by the .rodata dispatch tables 0x802A20C8 (Class_80297BF8-derived) and 0x802A2058 (Class_80297CE8-derived). 0x8014E2DC (0x8014E2DC-0x8014E31C) is not registered because its text argument is the literal 0x802A0B74 emitted by src/game/cu_8014AB64.cpp. Native literal 2.5f at 0x802A0E70 (fn_8014E244); readonly context 0x802A0E70-0x802A0E88 is measured here, including the unresolved trailing context after the native 4-byte emission (follow-up #805 measures 0x802A0E88-0x802A11F4 with src/game/cu_8014E534.cpp). Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "Issues #791 and #1025; seven complete handler bodies in 0x8014E220-0x8014E534 inside the retained provisional cu_801485B4 survey group, held by the .rodata dispatch tables 0x802A20C8 (Class_80297BF8-derived) and 0x802A2058 (Class_80297CE8-derived). Issue #1025 adds complete slot 6 at 0x8014E2DC-0x8014E31C; shared button text 0x802A0B74 and pointer word 0x803EB2D4 remain external original-owned. Native literal 2.5f at 0x802A0E70 (fn_8014E244); readonly context 0x802A0E70-0x802A0E88 is measured here, including the naturally emitted title Crush the Carrier after the existing float (follow-up #805 measures 0x802A0E88-0x802A11F4 with src/game/cu_8014E534.cpp). Original file boundaries and nominal identity unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -34402,6 +34407,11 @@
           "symbol": "fn_8014E290",
           "start": "0x8014E290",
           "end": "0x8014E2DC"
+        },
+        {
+          "symbol": "fn_8014E2DC",
+          "start": "0x8014E2DC",
+          "end": "0x8014E31C"
         },
         {
           "symbol": "fn_8014E31C",
