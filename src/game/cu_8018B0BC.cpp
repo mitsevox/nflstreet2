@@ -5,6 +5,7 @@
 #include "game/Table_8007E020.h"
 #include "game/fn_8018BE68.h"
 #include "game/fn_801C1F94.h"
+#include "game/fn_801F9908.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_8022F478.h"
 
@@ -21,8 +22,6 @@ int lbl_802EAE58[7] = {0, 1, 2, 4, 8, 9, 13};
 extern "C" {
 int fn_8022F358(int index);
 int fn_8022F3D4(int handle);
-int fn_801F9908(int handle, Table_8007E020 *pTables, Object_80023BBC *pFilter,
-                QueryResult *pResult, int flags);
 int fn_801F9980(int handle, int *pTable);
 int fn_801F967C(int handle, int table);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);

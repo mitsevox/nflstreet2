@@ -1,58 +1,7 @@
 #ifndef GAME_OBJECT_800D81C8_H
 #define GAME_OBJECT_800D81C8_H
 
-struct Pair_802270A4 {
-    float mUnknown0;
-    float mUnknown4;
-};
-
-struct Block_801BD6D4 {
-    void *mpUnknown0;
-    float mUnknown4;
-    float mUnknown8;
-};
-
-struct Block_801BF3C8 {
-    float mUnknown0;
-};
-
-struct Record_800D81C8 {
-    union {
-        char mUnknown0[2];
-        struct {
-            char mUnknown0Byte;
-            unsigned char mUnknown1;
-        };
-    };
-    unsigned short mUnknown2;
-    char mUnknown4[2];
-    unsigned char mUnknown6;
-    char mUnknown7[1];
-    unsigned short mUnknown8;
-    char mUnknownA[2];
-    int mUnknownC;
-    char mUnknown10[12];
-    int mUnknown1C;
-    union {
-        char mUnknown20[8];
-        struct {
-            int mUnknown20Word;
-            float mUnknown24;
-        };
-    };
-    float mUnknown28;
-    float mUnknown44;
-    Block_801BF3C8 mUnknown30;
-    char mUnknown34[20];
-    float mUnknown48;
-    Block_801BD6D4 mUnknown4C;
-    char mUnknown58[12];
-    unsigned short mUnknown64;
-    unsigned short mUnknown66;
-    char mUnknown68[2];
-    unsigned char mUnknown6A;
-    char mUnknown6B[17];
-};
+#include "engine/Record_800D81C8.h"
 
 /* Partial view of the object that fn_8009BCE8 decodes a packed reference to. */
 struct Object_800D81C8 {

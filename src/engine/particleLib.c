@@ -1,6 +1,7 @@
 #include <string.h>
 #include "engine/particleLib.h"
 #include "game/cu_801CF5BC.h"
+#include "game/fn_801D2B7C.h"
 
 /* Collision parameters read by fn_801DF578. */
 typedef struct Collision_801DF578 {
@@ -106,9 +107,6 @@ void fn_801D2130(ObjType_801DE1E0 *pType);
 int fn_801D2570(int a);
 int fn_801D2730(void);
 unsigned int fn_801D27F4(int heap);
-void *fn_801D2B7C(int size, int a, int b);
-void *fn_801D2BB0(int heap, unsigned int size, int a, int b);
-int fn_801D2BD0(void *p);
 int fn_801D34D0(void *p, unsigned int size, int value, int flags);
 int fn_801DCF0C(unsigned char heap, int size, int count, void (*pAdd)(), void (*pDel)());
 int fn_801DCF8C(unsigned char heap);

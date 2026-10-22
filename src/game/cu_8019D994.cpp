@@ -1,7 +1,8 @@
 #include "game/Frame_8019D3B8.h"
 
+#include <string.h>
+
 extern "C" {
-void fn_801C1FBC(void *destination, void *source, unsigned int size);
 extern float lbl_802F26FC[];
 extern int lbl_802F2708[];
 
@@ -114,9 +115,8 @@ extern "C" void fn_8019E00C(Pose_80041930 *pose, BlendEntry_8019EDDC *entry, int
     int special = entry->mUnknown8 & 4;
     short *samples;
     if (context) {
-        samples = pose->mUnknown48;
         short *encodedSamples = fn_8019D3B8(&frame, entry->mpUnknown40);
-        fn_8019D514(samples, encodedSamples, context, 0);
+        fn_8019D514(pose->mUnknown48, encodedSamples, context, 0);
         samples = pose->mUnknown48;
     } else {
         samples = fn_8019D3B8(&frame, entry->mpUnknown40);
@@ -187,7 +187,7 @@ extern "C" void fn_8019E00C(Pose_80041930 *pose, BlendEntry_8019EDDC *entry, int
         pose->mUnknown36[2] = lbl_802F2708[2] << 8;
     }
     if (!context)
-        fn_801C1FBC(pose->mUnknown48, samples, count * 6);
+        memcpy(pose->mUnknown48, samples, count * 6);
     Pair_8019D800 *pair = &context->mUnknown4;
     entry->mUnknown12[0] = fn_8019D800(samples[0], 0, 0, context, pair) << 8;
     entry->mUnknown12[1] = frame.word2 << 8;

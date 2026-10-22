@@ -45,7 +45,7 @@ extern "C" void fn_80119B98(void)
             if (fn_8011A994(p, pB) && fn_80227890(&p->mMotion.mPos, &pB->mMotion.mPos) < 25.0f
                 && fn_801248D4(p, 0, &pB->mMotion.mPos, 0, 0.0f, 0.5f, 0, pA)) {
                 Query_800CE770 query;
-                int done = 0;
+                int done;
 
                 fn_800CE770(&query);
                 query.mUnknown52 = 243;
@@ -55,6 +55,7 @@ extern "C" void fn_80119B98(void)
                 query.mpUnknown4Entries[0] = pA;
                 query.mpUnknown4Entries[1] = pB;
                 query.mUnknown44 = 0.45f;
+                done = 0;
                 fn_8011E1A8(p, 2);
                 if (fn_800CE4A8(&query)) {
                     done = 1;

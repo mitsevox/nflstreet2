@@ -1,4 +1,5 @@
 #include "game/Step_800C4460.h"
+#include "game/fn_801BA2A8.h"
 #include "game/Block_8030E6E8.h"
 #include "game/Record_800A0624.h"
 #include "game/Command_800CEE74.h"
@@ -87,15 +88,14 @@ int fn_800CAE28(Object_80039F5C *p, Info_80089904 *pInfo, int angle);
 void fn_800CB484(Point_8017886C *pOut, Point_8017886C *pFrom, Point_8017886C *pTo, int flip, int angle, float scale);
 int fn_80177F70(void);
 Point_8017886C fn_80177FFC(int team);
-int fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
 int fn_801BA6B0(Record_800D81C8 *pRecord);
 void fn_801BA6BC(Record_800D81C8 *pRecord, int value);
 float fn_801BD660(void *p, int key);
 void fn_801BD81C(void *p, float value);
 int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
 Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
-int fn_801BE648(void *p);
-void fn_801BE760(void *p, unsigned short key, int a);
+unsigned short fn_801BE648(void *p);
+void fn_801BE760(void *p, unsigned short key, unsigned short flags);
 int fn_801C4E98(void *p, const char *pName);
 int fn_801CFE40(float y, float x);
 float fn_801CFFA0(float value);
@@ -389,13 +389,13 @@ extern "C" int fn_800CAC54(Object_80039F5C *p)
 
     for (i = 0; i < 10; i++) {
         pRecord = &p->mpUnknown800[i];
-        if (pRecord->mUnknown8 == 74 && pRecord->mUnknown1 == 2 && pRecord->mUnknown66 <= 16) {
+        if (pRecord->mUnknown8 == 74 && pRecord->mUnknown1 == 2 && pRecord->mUnknown4C.mUnknown1A <= 16) {
             break;
         }
         pRecord = 0;
     }
     if (pRecord != 0) {
-        switch (pRecord->mUnknown64) {
+        switch (pRecord->mUnknown4C.mUnknown18) {
         case 4:
         case 5:
         case 12:
@@ -460,7 +460,7 @@ extern "C" void fn_800CAF4C(Object_80039F5C *p, int key, Record_800D81C8 *pRecor
     if (lbl_803EAC4C != 0) {
         fn_801BA6BC(&pRecords[index], 1);
     }
-    pRecords[index].mUnknown44 = 1.0f;
+    pRecords[index].mUnknown2C = 1.0f;
     fn_801BD81C(&pRecords[index].mUnknown4C, fn_801CFFA0(lbl_803EAC68));
     infoAngle = pInfo->mUnknown56;
     facing = p->mMotion.mFacing;
@@ -507,7 +507,7 @@ extern "C" void fn_800CB080(Object_80039F5C *p, int key, Record_800D81C8 *pRecor
     if (lbl_803EAC4C != 0) {
         fn_801BA6BC(&pRecords[index], 1);
     }
-    pRecords[index].mUnknown44 = lbl_803EAC60;
+    pRecords[index].mUnknown2C = lbl_803EAC60;
     fn_801BD81C(&pRecords[index].mUnknown4C, fn_801CFFA0(lbl_803EAC6C));
     pTurn->mScale = lbl_803EAC6C;
     infoAngle = pInfo->mUnknown56;
@@ -851,12 +851,12 @@ extern "C" int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pOw
                     remaining = fn_801BD660(pRecord->mUnknown4C.mpUnknown0, 0xC004) * (1.0f / pTurn->mScale)
                                 - pRecord->mUnknown4C.mUnknown8;
                     pTurn->mUnknown10 = frames;
-                    origin.mX = pRecord->mUnknown24;
-                    origin.mY = pRecord->mUnknown28;
+                    origin.mX = pRecord->mUnknown24.mUnknown0;
+                    origin.mY = pRecord->mUnknown24.mUnknown4;
                     step.mX = pTurn->mpInfo->mUnknown20Float;
                     step.mY = pTurn->mpInfo->mUnknown24;
                     fn_800CB484(&end, &origin, &step, fn_801BA6B0(pRecord),
-                                p->mpUnknown800[pTurn->mRecord].mUnknownC, pRecord->mUnknown44);
+                                p->mpUnknown800[pTurn->mRecord].mUnknownC, pRecord->mUnknown2C);
                     fn_80227638(&end, &p->mMotion.mPos, &end);
                     fn_80227690(&delta, &pTurn->mTarget, &end);
                     pTurn->mSteps = (int)(remaining / lbl_803EAC70);

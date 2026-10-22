@@ -1,4 +1,7 @@
 #include "engine/periph.h"
+#include "engine/fn_801F7BD4.h"
+#include "engine/fn_801F8014.h"
+#include "game/fn_801D2B7C.h"
 
 /* Descriptor passed to PerInit (sPeriphDesc). */
 typedef struct Desc_801E1478 {
@@ -10,10 +13,6 @@ typedef struct Desc_801E1478 {
     void *mpUnknown14;
 } Desc_801E1478;
 
-typedef struct Lock_801F8014 {
-    char mUnknown00[0x20];
-} Lock_801F8014;
-
 extern Lock_801F8014 lbl_8039ADC4;
 extern unsigned char lbl_803EBD68;
 extern int lbl_803ECF50;
@@ -23,15 +22,7 @@ extern unsigned int lbl_803ED650;
 extern unsigned int lbl_803ED654;
 extern unsigned char *lbl_803ED65C;
 
-void *fn_801D2BB0(int heap, unsigned int size, int a, int b);
-int fn_801D2BD0(void *p);
 int fn_801D34D0(void *p, unsigned int size, int value, int flags);
-int fn_801F7BD4(int err);
-int fn_801F7C88(void);
-void fn_801F7FA8(Lock_801F8014 *pLock);
-void fn_801F8014(Lock_801F8014 *pLock);
-void fn_801F809C(Lock_801F8014 *pLock);
-void fn_801F80D0(Lock_801F8014 *pLock);
 int fn_801E1A20(void *pData);
 int fn_801E1A80(void);
 int fn_801E1AB4(void);

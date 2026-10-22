@@ -1,9 +1,9 @@
-typedef struct Lock_801EC1B4 {
-    char mData[0x20];
-} Lock_801EC1B4;
+#include "engine/fn_801F7BD4.h"
+#include "engine/fn_801F8014.h"
+#include "game/fn_801D2B7C.h"
 
 extern unsigned char lbl_803EBD7C;
-extern Lock_801EC1B4 lbl_8039ADF4;
+extern Lock_801F8014 lbl_8039ADF4;
 extern unsigned int lbl_803ECF58;
 extern unsigned int lbl_803ECF5C;
 extern unsigned int lbl_803ECF60;
@@ -14,15 +14,7 @@ extern unsigned int lbl_803ED5EC;
 extern unsigned char lbl_803EBD6C[8];
 
 void *fn_801C1FBC();
-void *fn_801D2BB0(int heap, unsigned int size, int a, int b);
-int fn_801D2BD0(void *p);
 int fn_801D34D0(void *p, unsigned int size, int value, int flags);
-int fn_801F7BD4(int err);
-int fn_801F7C88(void);
-void fn_801F7FA8(Lock_801EC1B4 *pLock);
-void fn_801F8014(Lock_801EC1B4 *pLock);
-void fn_801F809C(Lock_801EC1B4 *pLock);
-void fn_801F80D0(Lock_801EC1B4 *pLock);
 
 int fn_801EC1B4(unsigned int numTables, unsigned int numEntries, unsigned int numInputs)
 {

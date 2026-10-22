@@ -1,9 +1,8 @@
 #include "engine/periph.h"
+#include "game/fn_801D2B7C.h"
 
 extern void *lbl_803ED664;
 
-void *fn_801D2BB0(int heap, unsigned int size, int a, int b);
-int fn_801D2BD0(void *p);
 void fn_801CE234(void (*pCallback)(void));
 void fn_80247134(void);
 void fn_802856D8(void);

@@ -1,4 +1,6 @@
 #include "game/fn_801C68FC.h"
+#include "game/fn_801D2B7C.h"
+#include "game/fn_801EF390.h"
 
 /* Playing stream (pool lbl_8039ADB8.mpPlaying, 0x10 bytes). */
 struct Play_801E0A1C {
@@ -48,8 +50,6 @@ struct Desc_801E0DF0 {
 struct Info_801E1084;
 
 extern "C" {
-void *fn_801D2BB0(int heap, unsigned int size, int a, int b);
-int fn_801D2BD0(void *p);
 void *fn_801C6A20(void *pool);
 void *fn_801C6B4C(void *pool, void *item);
 void fn_801C6C0C(void *pool, void *item);
@@ -117,8 +117,6 @@ void fn_801B5AB0(int a, unsigned char b);
 int fn_801B5BCC(int id, Info_801E1084 *pInfo);
 void fn_801B5CD0(int a);
 int fn_801B5FC0(int id, int a);
-unsigned int fn_801EF390(void *pData, int a, int b);
-int fn_801F010C(void *pData, int a);
 void *fn_801F44A4(void);
 void fn_801F50C8(void *pEntries, int index);
 void fn_8027D3AC(void);

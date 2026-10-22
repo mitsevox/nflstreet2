@@ -1,4 +1,5 @@
 #include "game/fn_801248D4.h"
+#include "game/fn_801BA2A8.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
 #include <math.h>
@@ -87,7 +88,6 @@ void fn_801BD81C(void *p, float value);
 float fn_801CFFA0(float value);
 extern float lbl_803EA2C4;
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);
-int fn_801BA2A8(void *a, void *b, unsigned short c, unsigned short d, unsigned short e, void *p, float f);
 float fn_801CFB94(int angle);
 }
 
