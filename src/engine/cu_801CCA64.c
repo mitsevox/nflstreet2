@@ -14,8 +14,8 @@ typedef struct FontParams_801CCA64 {
     int mMaxFonts;
     int mUnk4;
     int mHeap;
-    unsigned short mWidth;
-    unsigned short mHeight;
+    unsigned short mUnkC;
+    unsigned short mUnkE;
 } FontParams_801CCA64;
 
 typedef struct FontState_801CCA64 {
@@ -24,10 +24,10 @@ typedef struct FontState_801CCA64 {
     void *mpBuffer;
     int mHeap;
     int mUnk10;
-    unsigned short mWidth;
-    unsigned short mHeight;
-    unsigned short mWidth2;
-    unsigned short mHeight2;
+    unsigned short mUnk14;
+    unsigned short mUnk16;
+    unsigned short mUnk18;
+    unsigned short mUnk1A;
     void *mpPalette0;
     void *mpPalette1;
     void *mpPalette2;
@@ -47,7 +47,7 @@ static FontEntry_801CCA64 *fn_801CCA64(int id)
 {
     FontEntry_801CCA64 *pEntry;
 
-    if (fn_801C6DCC(lbl_80383CF0.mpList, 0, &id, &pEntry, (int (*)(void *, void *, void *))fn_801CCAB8) != 2) {
+    if (fn_801C6DCC(lbl_80383CF0.mpList, 0, &id, &pEntry, (ListSearchFn_801C6DCC)fn_801CCAB8) != 2) {
         pEntry = 0;
     }
     return pEntry;
@@ -135,10 +135,10 @@ int fn_801CCC24(FontParams_801CCA64 *pParams)
         lbl_80383CF0.mpList = fn_801C68FC(pParams->mHeap, 0, pParams->mMaxFonts, sizeof(FontEntry_801CCA64), 0, 0);
         lbl_80383CF0.mUnk10 = pParams->mUnk4;
         lbl_80383CF0.mHeap = pParams->mHeap;
-        lbl_80383CF0.mWidth = pParams->mWidth;
-        lbl_80383CF0.mHeight = pParams->mHeight;
-        lbl_80383CF0.mWidth2 = pParams->mWidth;
-        lbl_80383CF0.mHeight2 = pParams->mHeight;
+        lbl_80383CF0.mUnk14 = pParams->mUnkC;
+        lbl_80383CF0.mUnk16 = pParams->mUnkE;
+        lbl_80383CF0.mUnk18 = pParams->mUnkC;
+        lbl_80383CF0.mUnk1A = pParams->mUnkE;
         lbl_80383CF0.mpBuffer = fn_801D2BB0(lbl_80383CF0.mHeap, 0x100, 0, 0);
         fn_801CD2A4();
         lbl_803EBC58 = 1;

@@ -187,7 +187,7 @@ void fn_801C72D0(void)
                 (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C6F88,
                 (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C70A8,
                 (void (*)(List_801C68FC *, Node_801C6A20 *))fn_801C7128,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, int, int, int, int))fn_801C7188,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, void *))fn_801C7234,
+                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, int, ListVisitFn_801C6D34, int))fn_801C7188,
+                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC))fn_801C7234,
                 (void (*)(List_801C68FC *))fn_801C72C8, sizeof(LinkList_801C6E5C), sizeof(LinkNode_801C6E5C));
 }

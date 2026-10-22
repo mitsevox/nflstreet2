@@ -422,7 +422,8 @@ static void fn_801C8AB4(BinTree_801C7F70 *pTree, BinNode_801C7F70 *pNode)
     BinNode_801C7F70 *pNext = fn_801C81E0(pNode);
     BinNode_801C7F70 *pParent = fn_801C8224(pTree, pNode);
 
-    /* pNext becomes the node that takes pNode's place, pPrev the first node. */
+    /* pNext becomes the replacement node, or the parent when a leaf is removed; pPrev is reused for the
+       first node only when the root is removed. */
     if (!(pNode->mFlags & BIN_LEFT_THREAD)) {
         pNext = fn_801C850C(pTree, pNode, pParent, pPrev, pNext);
     } else if (!(pNode->mFlags & BIN_RIGHT_THREAD)) {
@@ -531,7 +532,7 @@ void fn_801C8E88(void)
                 (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C8834,
                 (Node_801C6A20 * (*)(List_801C68FC *, Node_801C6A20 *, int)) fn_801C89D4,
                 (void (*)(List_801C68FC *, Node_801C6A20 *))fn_801C8AB4,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, int, int, int, int))fn_801C8C44,
-                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, void *))fn_801C8C84,
+                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, int, ListVisitFn_801C6D34, int))fn_801C8C44,
+                (int (*)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC))fn_801C8C84,
                 (void (*)(List_801C68FC *))fn_801C8D38, sizeof(BinTree_801C7F70), sizeof(BinNode_801C7F70));
 }

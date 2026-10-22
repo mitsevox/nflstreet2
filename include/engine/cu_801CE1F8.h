@@ -34,6 +34,7 @@ extern "C" {
 #endif
 
 void fn_801CE2B8(int enable);
+void fn_801CEA20(float (*pMatrix)[4]);
 
 #ifdef __cplusplus
 }

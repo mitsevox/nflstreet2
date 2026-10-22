@@ -44,8 +44,8 @@ void fn_801C67AC(int type, void (*init)(List_801C68FC *), int (*del)(List_801C68
                  Node_801C6A20 *(*add)(List_801C68FC *, Node_801C6A20 *, int),
                  Node_801C6A20 *(*get)(List_801C68FC *, Node_801C6A20 *, int),
                  void (*remove)(List_801C68FC *, Node_801C6A20 *),
-                 int (*traverse)(List_801C68FC *, Node_801C6A20 *, int, int, int, int),
-                 int (*search)(List_801C68FC *, Node_801C6A20 *, void *, void *, void *),
+                 int (*traverse)(List_801C68FC *, Node_801C6A20 *, void *, int, ListVisitFn_801C6D34, int),
+                 int (*search)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC),
                  void (*optimize)(List_801C68FC *), int headerSize, int nodeSize)
 {
     lbl_803D4FB8[type].mDelete = del;
@@ -186,24 +186,25 @@ void *fn_801C6C84(List_801C68FC *pList, void *item)
     return 0;
 }
 
-int fn_801C6D34(List_801C68FC *pList, int mode, int a, int b, int c, int d)
+/* pStart is a get selector (0-4: first, last, ...) or an item, as for the type's get function. */
+int fn_801C6D34(List_801C68FC *pList, void *pStart, void *pCtx, int arg, ListVisitFn_801C6D34 fn, int direction)
 {
     Node_801C6A20 *pNode;
 
-    pNode = lbl_803D4FB8[pList->mType].mGet(pList, (Node_801C6A20 *)mode, mode);
+    pNode = lbl_803D4FB8[pList->mType].mGet(pList, pStart, (int)pStart);
     if (pNode == 0) {
         return 1;
     }
-    return lbl_803D4FB8[pList->mType].mTraverse(pList, pNode, a, b, c, d);
+    return lbl_803D4FB8[pList->mType].mTraverse(pList, pNode, pCtx, arg, fn, direction);
 }
 
-int fn_801C6DCC(List_801C68FC *pList, int mode, void *a, void *b, void *c)
+int fn_801C6DCC(List_801C68FC *pList, void *pStart, void *pKey, void *pResult, ListSearchFn_801C6DCC fn)
 {
     Node_801C6A20 *pNode;
 
-    pNode = lbl_803D4FB8[pList->mType].mGet(pList, (Node_801C6A20 *)mode, mode);
+    pNode = lbl_803D4FB8[pList->mType].mGet(pList, pStart, (int)pStart);
     if (pNode == 0) {
         return 1;
     }
-    return lbl_803D4FB8[pList->mType].mSearch(pList, pNode, a, b, c);
+    return lbl_803D4FB8[pList->mType].mSearch(pList, pNode, pKey, pResult, fn);
 }

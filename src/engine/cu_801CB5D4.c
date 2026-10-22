@@ -234,7 +234,7 @@ int fn_801CBBAC(void)
         if (result != 0) {
             return -1;
         }
-        lbl_80381C40.mDirty = result;
+        lbl_80381C40.mDirty = 0;
         lbl_80381C40.mSector += 0x2000;
     }
     return 0;

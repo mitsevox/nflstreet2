@@ -332,7 +332,7 @@ int fn_801CA530(int handle, int pos, void *pBuffer, int size)
 
     switch (lbl_803EBC24[handle].mDevType) {
     case 1:
-        lbl_803EBC40 = result;
+        lbl_803EBC40 = 0;
         result = fn_801CB4EC(lbl_803EBC24[handle].mDevHandle, pBuffer, pos, size);
         if (result != size) {
             error = 0xA0007;

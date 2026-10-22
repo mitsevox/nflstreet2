@@ -26,7 +26,7 @@ static void fn_801C4964(Skel_801C4960 *pSkel, void *pUnused, SkelPose_801C4960 *
     }
 }
 
-static int fn_801C49D8(SkelVec_801C4960 *pOffsets, SkelNode_801C4960 *pNode, SkelEuler_801C4960 *pEulers,
+static int fn_801C49D8(Skel_801C4960 *pSkel, SkelNode_801C4960 *pNode, SkelEuler_801C4960 *pEulers,
                        float (*pMatrices)[16])
 {
     int last;
@@ -37,7 +37,7 @@ static int fn_801C49D8(SkelVec_801C4960 *pOffsets, SkelNode_801C4960 *pNode, Ske
     fn_801D04C4();
     for (last = -1; last < pNode->mId; pNode = pNode->mpChildren[0]) {
         joint = pNode->mJoint;
-        fn_801D0C58(pOffsets[joint + 1].v);
+        fn_801D0C58(pSkel->mPos[joint]);
         pEuler = &pEulers[joint];
         fn_801D0ADC(pEuler->z);
         fn_801D09EC(pEuler->y);
@@ -45,7 +45,7 @@ static int fn_801C49D8(SkelVec_801C4960 *pOffsets, SkelNode_801C4960 *pNode, Ske
         fn_801D0F80(pMatrices[joint]);
         if (pNode->mNumChildren > 1) {
             for (i = 0; i < pNode->mNumChildren; i++) {
-                last = fn_801C49D8(pOffsets, pNode->mpChildren[i], pEulers, pMatrices);
+                last = fn_801C49D8(pSkel, pNode->mpChildren[i], pEulers, pMatrices);
             }
         } else {
             last = pNode->mId;
@@ -55,12 +55,12 @@ static int fn_801C49D8(SkelVec_801C4960 *pOffsets, SkelNode_801C4960 *pNode, Ske
     return last;
 }
 
-static void fn_801C4AC0(SkelVec_801C4960 *pOffsets, SkelNode_801C4960 *pNode, SkelPose_801C4960 *pPose)
+static void fn_801C4AC0(Skel_801C4960 *pSkel, SkelNode_801C4960 *pNode, SkelPose_801C4960 *pPose)
 {
     fn_801D04C4();
     fn_801D0C58(pPose->mPos);
     fn_801D09EC(pPose->mRotY);
-    fn_801C49D8(pOffsets, pNode, pPose->mpLocal, pPose->mpOutput);
+    fn_801C49D8(pSkel, pNode, pPose->mpLocal, pPose->mpOutput);
     fn_801D0544();
 }
 
@@ -79,7 +79,7 @@ static void fn_801C4B1C(Skel_801C4960 *pSkel, void *pUnused, SkelPose_801C4960 *
     }
 }
 
-static int fn_801C4BA0(SkelVec_801C4960 *pOffsets, SkelNode_801C4960 *pNode, SkelXform_801C4960 *pXform,
+static int fn_801C4BA0(Skel_801C4960 *pSkel, SkelNode_801C4960 *pNode, SkelXform_801C4960 *pXform,
                        float (*pQuats)[4], float (*pMatrices)[16])
 {
     int last = -1;
@@ -88,7 +88,7 @@ static int fn_801C4BA0(SkelVec_801C4960 *pOffsets, SkelNode_801C4960 *pNode, Ske
 
     while (last < pNode->mId) {
         joint = pNode->mJoint;
-        fn_801EBAA0(pXform->mPos, pOffsets[joint + 1].v, pXform->mQuat);
+        fn_801EBAA0(pXform->mPos, pSkel->mPos[joint], pXform->mQuat);
         fn_801EB660(pXform->mQuat, pXform->mQuat, pQuats[joint]);
         pMatrices[joint][3] = pXform->mPos[0];
         pMatrices[joint][7] = pXform->mPos[1];
@@ -96,7 +96,7 @@ static int fn_801C4BA0(SkelVec_801C4960 *pOffsets, SkelNode_801C4960 *pNode, Ske
         fn_801EB814(pMatrices[joint], pXform->mQuat);
         if (pNode->mNumChildren > 1) {
             for (i = 0; i < pNode->mNumChildren; i++) {
-                last = fn_801C4BA0(pOffsets, pNode, pXform, pQuats, pMatrices);
+                last = fn_801C4BA0(pSkel, pNode, pXform, pQuats, pMatrices);
             }
         } else {
             last = pNode->mId;
@@ -106,13 +106,13 @@ static int fn_801C4BA0(SkelVec_801C4960 *pOffsets, SkelNode_801C4960 *pNode, Ske
     return last;
 }
 
-static void fn_801C4CA0(SkelVec_801C4960 *pOffsets, SkelNode_801C4960 *pNode, SkelPose_801C4960 *pPose)
+static void fn_801C4CA0(Skel_801C4960 *pSkel, SkelNode_801C4960 *pNode, SkelPose_801C4960 *pPose)
 {
     SkelXform_801C4960 xform;
 
     fn_801EBA64(xform.mQuat);
     fn_801D0FB8(xform.mPos);
-    fn_801C4BA0(pOffsets, pNode, &xform, pPose->mpLocal, pPose->mpOutput);
+    fn_801C4BA0(pSkel, pNode, &xform, pPose->mpLocal, pPose->mpOutput);
 }
 
 static void fn_801C4CF8(SkelNode_801C4960 *pNode, void *pBase)

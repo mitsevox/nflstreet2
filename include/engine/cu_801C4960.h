@@ -33,10 +33,6 @@ typedef struct Skel_801C4960 {
     SkelEuler_801C4960 mRest[1];
 } Skel_801C4960;
 
-typedef struct SkelVec_801C4960 {
-    float v[4];
-} SkelVec_801C4960;
-
 typedef struct SkelPose_801C4960 {
     int mUnk0[2];
     float mPos[4];

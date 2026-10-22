@@ -30,9 +30,6 @@ extern GXRenderModeObj lbl_802F7A88;
 void *fn_801C1F94();
 void *fn_801C1FBC();
 void fn_801F7B04(void);
-void fn_8024EFBC(float scale);
-void fn_8024F100(int aa, unsigned char (*pPattern)[2], int filter, unsigned char *pVFilter);
-void fn_802520E0(int enable, int func, int update);
 void fn_802523A4(float (*pMtx)[4], int type);
 void fn_801CED3C(GlibState_801CE1F8 *pMode);
 void fn_802103DC(void);
@@ -41,7 +38,7 @@ extern unsigned char lbl_80383DA0[];
 
 int fn_801CE7D0(int a);
 void fn_801CE95C(void);
-void fn_801CEA44(int enable);
+void fn_801CEA44(GXBool enable);
 static void fn_801CEC08(void);
 static void fn_801CEC0C(GlibConfig_801CE1F8 *pConfig);
 
@@ -178,7 +175,7 @@ int fn_801CE2F4(GlibConfig_801CE1F8 *pConfig)
     GXSetScissor(0, 0, pMode->mMode.fbWidth, pMode->mMode.efbHeight);
     GXSetDispCopySrc(0, 0, pMode->mMode.fbWidth, pMode->mMode.efbHeight);
     GXSetDispCopyDst(pMode->mMode.fbWidth, pMode->mMode.xfbHeight);
-    fn_8024EFBC((float)(unsigned int)pMode->mMode.xfbHeight / (float)(unsigned int)pMode->mMode.efbHeight);
+    GXSetDispCopyYScale((float)(unsigned int)pMode->mMode.xfbHeight / (float)(unsigned int)pMode->mMode.efbHeight);
     fn_801CEA44(1);
     if (pMode->mMode.aa) {
         GXSetPixelFmt(2, 0);
@@ -279,7 +276,7 @@ void fn_801CE82C(void)
         }
         lbl_803ED634 = 0;
         GXSetColorUpdate(1);
-        fn_802520E0(1, 3, 1);
+        GXSetZMode(1, 3, 1);
         GXCopyDisp(lbl_803E9224.mpXfb[0], lbl_803EBC68);
         GXPixModeSync();
         lbl_803E9224.mFrame = 0;
@@ -316,17 +313,17 @@ void fn_801CE95C(void)
     GlibState_801CE1F8 *pMode = &lbl_803E9224;
 
     GXSetColorUpdate(0);
-    fn_802520E0(0, 0, 1);
+    GXSetZMode(0, 0, 1);
     GXSetDispCopyDst(0, 0);
     GXCopyDisp(lbl_80383DA0, 1);
     GXSetColorUpdate(1);
-    fn_802520E0(1, 3, 1);
+    GXSetZMode(1, 3, 1);
     GXSetDispCopyDst(pMode->mMode.fbWidth, pMode->mMode.xfbHeight);
 }
 
-void fn_801CE9E0(int enable)
+void fn_801CE9E0(GXBool enable)
 {
-    fn_802520E0(enable, 3, 1);
+    GXSetZMode(enable, 3, 1);
 }
 
 int fn_801CEA08(void)
@@ -339,14 +336,14 @@ int fn_801CEA14(void)
     return lbl_803E91F8.mHeight;
 }
 
-void fn_801CEA20(void *pMatrix)
+void fn_801CEA20(float (*pMatrix)[4])
 {
     fn_802523A4(pMatrix, 0);
 }
 
-void fn_801CEA44(int enable)
+void fn_801CEA44(GXBool enable)
 {
-    fn_8024F100(lbl_803E9224.mMode.aa, lbl_803E9224.mMode.sample_pattern, enable, lbl_803E9224.mMode.vfilter);
+    GXSetCopyFilter(lbl_803E9224.mMode.aa, lbl_803E9224.mMode.sample_pattern, enable, lbl_803E9224.mMode.vfilter);
 }
 
 void fn_801CEA7C(unsigned char clear)

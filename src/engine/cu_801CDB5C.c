@@ -40,7 +40,7 @@ int fn_801CDB5C(Font_801CCA64 *pFont, const char *pText, unsigned int flags, flo
     unsigned int count;
     int state = 0;
 
-    count = state;
+    count = 0;
     fn_801CD3E4(pFont, pText, flags, maxWidth, pQuads, &count);
     if (count) {
         fn_801D0470(fn_80228668());

@@ -15,6 +15,11 @@ typedef struct List_801C68FC {
     void *mpNodes;
 } List_801C68FC;
 
+/* Visit callback of 0x801C6D34: item and the caller's context. */
+typedef int (*ListVisitFn_801C6D34)(void *pItem, void *pCtx);
+/* Search callback of 0x801C6DCC: item, key and result pointer. */
+typedef int (*ListSearchFn_801C6DCC)(void *pItem, void *pKey, void *pResult);
+
 typedef struct ListType_803D4FB8 {
     void (*mInit)(List_801C68FC *);
     int (*mDelete)(List_801C68FC *);
@@ -22,8 +27,8 @@ typedef struct ListType_803D4FB8 {
     Node_801C6A20 *(*mAdd)(List_801C68FC *, Node_801C6A20 *, int);
     Node_801C6A20 *(*mGet)(List_801C68FC *, Node_801C6A20 *, int);
     void (*mRemove)(List_801C68FC *, Node_801C6A20 *);
-    int (*mTraverse)(List_801C68FC *, Node_801C6A20 *, int, int, int, int);
-    int (*mSearch)(List_801C68FC *, Node_801C6A20 *, void *, void *, void *);
+    int (*mTraverse)(List_801C68FC *, Node_801C6A20 *, void *, int, ListVisitFn_801C6D34, int);
+    int (*mSearch)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC);
     void (*mOptimize)(List_801C68FC *);
     int mHeaderSize;
     int mNodeSize;
@@ -97,8 +102,8 @@ void fn_801C67AC(int type, void (*init)(List_801C68FC *), int (*del)(List_801C68
                  Node_801C6A20 *(*add)(List_801C68FC *, Node_801C6A20 *, int),
                  Node_801C6A20 *(*get)(List_801C68FC *, Node_801C6A20 *, int),
                  void (*remove)(List_801C68FC *, Node_801C6A20 *),
-                 int (*traverse)(List_801C68FC *, Node_801C6A20 *, int, int, int, int),
-                 int (*search)(List_801C68FC *, Node_801C6A20 *, void *, void *, void *),
+                 int (*traverse)(List_801C68FC *, Node_801C6A20 *, void *, int, ListVisitFn_801C6D34, int),
+                 int (*search)(List_801C68FC *, Node_801C6A20 *, void *, void *, ListSearchFn_801C6DCC),
                  void (*optimize)(List_801C68FC *), int headerSize, int nodeSize);
 
 void *fn_801C6A20(void *pool);
@@ -106,7 +111,8 @@ void *fn_801C6B4C(List_801C68FC *pList, int mode);
 void fn_801C6BC0(List_801C68FC *pList, void *item);
 void fn_801C6C0C(List_801C68FC *pList, void *item);
 void *fn_801C6C84(List_801C68FC *pList, void *item);
-int fn_801C6DCC(List_801C68FC *pList, int mode, void *a, void *b, void *c);
+int fn_801C6D34(List_801C68FC *pList, void *pStart, void *pCtx, int arg, ListVisitFn_801C6D34 fn, int direction);
+int fn_801C6DCC(List_801C68FC *pList, void *pStart, void *pKey, void *pResult, ListSearchFn_801C6DCC fn);
 int fn_801C74A0(unsigned int count, int size);
 unsigned int fn_801C74C8(NodePool_801C750C *pPool, unsigned int stat);
 NodePool_801C750C *fn_801C750C(int heap, unsigned int count, int size, NodePool_801C750C *pPool);

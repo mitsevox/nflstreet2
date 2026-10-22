@@ -54,10 +54,10 @@ float fn_8022772C(float *pA, float *pB);
 void fn_802277DC(float *pOut, float *pA, float *pB);
 void fn_80227C2C(float *pOut, float *p);
 
-int fn_801C3EFC(int *pLimits, int turns, int *pAngle)
+int fn_801C3EFC(int *pLimits, int rest, int *pAngle)
 {
     int clamped = 0;
-    int angle = *pAngle - (turns << 12);
+    int angle = *pAngle - (rest << 12);
 
     if (angle > pLimits[1]) {
         angle = pLimits[1];
@@ -66,7 +66,7 @@ int fn_801C3EFC(int *pLimits, int turns, int *pAngle)
         angle = pLimits[0];
         clamped = 1;
     }
-    *pAngle = angle + (turns << 12);
+    *pAngle = angle + (rest << 12);
     return clamped;
 }
 

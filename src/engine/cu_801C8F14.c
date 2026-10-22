@@ -54,21 +54,17 @@ static void fn_801C8F2C(int count, int error, FileWaitResult_801C8F14 *pResult)
     pResult->mDone = 1;
 }
 
-static inline FileReq_801C8F14 *fn_801C8F44_Try(void)
-{
-    FileReq_801C8F14 *pReq;
-
-    fn_801F8014(&lbl_803D5168);
-    pReq = fn_801C75F0(lbl_803ED628);
-    fn_801F809C(&lbl_803D5168);
-    return pReq;
-}
-
 static FileReq_801C8F14 *fn_801C8F44(void)
 {
     FileReq_801C8F14 *pReq;
 
-    while (!(pReq = fn_801C8F44_Try())) {
+    for (;;) {
+        fn_801F8014(&lbl_803D5168);
+        pReq = fn_801C75F0(lbl_803ED628);
+        fn_801F809C(&lbl_803D5168);
+        if (pReq) {
+            break;
+        }
         fn_801F81AC();
     }
     return pReq;
@@ -81,21 +77,17 @@ static void fn_801C8F9C(FileReq_801C8F14 *pReq)
     fn_801F809C(&lbl_803D5168);
 }
 
-static inline FileAsync_801C8F14 *fn_801C8FE4_Try(void)
-{
-    FileAsync_801C8F14 *pAsync;
-
-    fn_801F8014(&lbl_803D5188);
-    pAsync = fn_801C6A20(lbl_803ED62C);
-    fn_801F809C(&lbl_803D5188);
-    return pAsync;
-}
-
 FileAsync_801C8F14 *fn_801C8FE4(void)
 {
     FileAsync_801C8F14 *pAsync;
 
-    while (!(pAsync = fn_801C8FE4_Try())) {
+    for (;;) {
+        fn_801F8014(&lbl_803D5188);
+        pAsync = fn_801C6A20(lbl_803ED62C);
+        fn_801F809C(&lbl_803D5188);
+        if (pAsync) {
+            break;
+        }
         fn_801F81AC();
     }
     return pAsync;

@@ -1,5 +1,7 @@
 #include <dolphin/mtx.h>
 #include "engine/cu_80227F14.h"
+#include "engine/cu_801C665C.h"
+#include "engine/cu_801D03D0.h"
 #include "game/fn_801C68FC.h"
 
 typedef struct Entry_80228474 {
@@ -15,9 +17,6 @@ typedef struct Match_80228474 {
     int mUnknown8;
 } Match_80228474;
 
-extern void *fn_801C6A20(void *pool);
-extern void fn_801C6C0C(void *pool, void *item);
-extern int fn_801C6D34(void *pool, int b, void *ctx, int d, int (*fn)(void *, void *), int f);
 extern void fn_801CAB30(void);
 extern void fn_801CE720(void);
 extern void fn_801CE774(void);
@@ -26,9 +25,6 @@ extern float fn_801CFD28(int angle);
 extern void fn_801CEC48(int a, int b, int c, int d);
 extern int fn_801D0290(unsigned int a, unsigned int b);
 extern int fn_801D0310(unsigned int a);
-extern void fn_801D0470(unsigned int a);
-extern void fn_801D0494(void);
-extern void fn_801D0F80(Mtx44 m);
 extern void fn_801DD140(int handle, int a, int b);
 extern void fn_801F7BD4(int err);
 extern int fn_801F7C88(void);
@@ -295,7 +291,7 @@ int fn_80228668(void)
 void fn_80228670(Object_80228224 *pObject)
 {
     fn_801D0470(lbl_803ED670);
-    fn_801D0F80(pObject->mUnknown76);
+    fn_801D0F80(pObject->mUnknown76[0]);
 }
 
 void fn_802286A8(Object_80228224 *pObject, Callback_80228224 fn, void *arg)
