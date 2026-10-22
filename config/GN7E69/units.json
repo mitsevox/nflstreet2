@@ -12020,6 +12020,799 @@
           "end": "0x8028D73C"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801AD488.c",
+      "profile": "dolphin_dvd_release",
+      "evidence": "evidence.tsv unit row 0x801AD488-0x801AD57C (src/engine/cu_801AD488.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801AD488",
+          "end": "0x801AD57C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BF5E8.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BF5E8-0x801BF94C (src/engine/cu_801BF5E8.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BF5E8",
+          "end": "0x801BF94C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BF94C.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BF94C-0x801BFEF8 (src/engine/cu_801BF94C.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BF94C",
+          "end": "0x801BFEF8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BFEF8.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BFEF8-0x801BFFA8 (src/engine/cu_801BFEF8.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BFEF8",
+          "end": "0x801BFFA8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801BFFA8.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BFFA8-0x801C01DC (src/engine/cu_801BFFA8.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BFFA8",
+          "end": "0x801C01DC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C1F54.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C1F54-0x801C1F94 (src/engine/cu_801C1F54.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C1F54",
+          "end": "0x801C1F94"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C20A0.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C20A0-0x801C20F0 (src/engine/cu_801C20A0.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C20A0",
+          "end": "0x801C20F0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C333C.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C333C-0x801C33E8 (src/engine/cu_801C333C.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C333C",
+          "end": "0x801C33E8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C4F64.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C4F64-0x801C5008 (src/engine/cu_801C4F64.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C4F64",
+          "end": "0x801C5008"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C6584.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C6584-0x801C665C (src/engine/cu_801C6584.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C6584",
+          "end": "0x801C665C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C6E5C.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C6E5C-0x801C735C (src/engine/cu_801C6E5C.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C6E5C",
+          "end": "0x801C735C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801CBC1C.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801CBC1C-0x801CBC50 (src/engine/cu_801CBC1C.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CBC1C",
+          "end": "0x801CBC50"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801CE138.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801CE138-0x801CE1F8 (src/engine/cu_801CE138.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CE138",
+          "end": "0x801CE1F8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801CEF48.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801CEF48-0x801CEFF0 (src/engine/cu_801CEF48.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CEF48",
+          "end": "0x801CEFF0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801D0110.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801D0110-0x801D03D0 (src/engine/cu_801D0110.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D0110",
+          "end": "0x801D03D0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/llmemory.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801D34C4-0x801D36E8 (src/engine/llmemory.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D34C4",
+          "end": "0x801D36E8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801DB058.cpp",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801DB058-0x801DB21C (src/engine/cu_801DB058.cpp) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801DB058",
+          "end": "0x801DB21C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801DB7D4.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801DB7D4-0x801DB900 (src/engine/cu_801DB7D4.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801DB7D4",
+          "end": "0x801DB900"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/terfhash.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801F1538-0x801F17E0 (src/engine/terfhash.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F1538",
+          "end": "0x801F17E0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/resloosefile.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801F3308-0x801F34C0 (src/engine/resloosefile.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F3308",
+          "end": "0x801F34C0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/hash.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801F34C0-0x801F3524 (src/engine/hash.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F34C0",
+          "end": "0x801F3524"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/llsound.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801F5034-0x801F5100 (src/engine/llsound.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F5034",
+          "end": "0x801F5100"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/sort.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801F5100-0x801F524C (src/engine/sort.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F5100",
+          "end": "0x801F524C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/bubble.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801F524C-0x801F5458 (src/engine/bubble.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F524C",
+          "end": "0x801F5458"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/quick.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801F5458-0x801F5760 (src/engine/quick.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F5458",
+          "end": "0x801F5760"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/mutex.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801F7738-0x801F77DC (src/engine/mutex.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F7738",
+          "end": "0x801F77DC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/t3db_bitdata.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x80201D94-0x80201EC8 (src/engine/t3db_bitdata.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80201D94",
+          "end": "0x80201EC8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/t3dbUtil.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x8020CCBC-0x8020CD2C (src/engine/t3dbUtil.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020CCBC",
+          "end": "0x8020CD2C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/t3db_blob.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x8020CD2C-0x8020CEC4 (src/engine/t3db_blob.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020CD2C",
+          "end": "0x8020CEC4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/t3db_data.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x8020CEC4-0x8020CFA0 (src/engine/t3db_data.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020CEC4",
+          "end": "0x8020CFA0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_8020CFA0.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020CFA0-0x8020D0CC (src/engine/cu_8020CFA0.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020CFA0",
+          "end": "0x8020D0CC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tdbext.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020D0CC-0x8020D388 (src/engine/tdbext.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020D0CC",
+          "end": "0x8020D388"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmmodelres.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020EA18-0x8020ED10 (src/engine/tmmodelres.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020EA18",
+          "end": "0x8020ED10"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmmodel.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020F28C-0x8020FA38 (src/engine/tmmodel.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020F28C",
+          "end": "0x8020FA38"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmxform.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020FA38-0x8020FAAC (src/engine/tmxform.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020FA38",
+          "end": "0x8020FAAC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmmaterial.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020FAAC-0x8020FF34 (src/engine/tmmaterial.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020FAAC",
+          "end": "0x8020FF34"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmmateriallist.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8020FF34-0x80210298 (src/engine/tmmateriallist.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020FF34",
+          "end": "0x80210298"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmshader.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80211638-0x80211774 (src/engine/tmshader.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80211638",
+          "end": "0x80211774"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmshaderlib.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80211774-0x802119C4 (src/engine/tmshaderlib.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80211774",
+          "end": "0x802119C4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmtexlib.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802119C4-0x80212234 (src/engine/tmtexlib.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802119C4",
+          "end": "0x80212234"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmmemory.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802127D0-0x8021283C (src/engine/tmmemory.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802127D0",
+          "end": "0x8021283C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmregistry.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8021283C-0x80212CB4 (src/engine/tmregistry.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021283C",
+          "end": "0x80212CB4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmshaderdef.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80212CB4-0x80212D5C (src/engine/tmshaderdef.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80212CB4",
+          "end": "0x80212D5C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmshaderparm.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213214-0x80213224 (src/engine/tmshaderparm.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213214",
+          "end": "0x80213224"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmshadercode.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213224-0x80213228 (src/engine/tmshadercode.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213224",
+          "end": "0x80213228"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmmaterialdef.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213228-0x80213384 (src/engine/tmmaterialdef.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213228",
+          "end": "0x80213384"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmclusterdef.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213384-0x80213444 (src/engine/tmclusterdef.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213384",
+          "end": "0x80213444"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmtev.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213A38-0x80213BCC (src/engine/tmtev.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213A38",
+          "end": "0x80213BCC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmbuffer.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80214554-0x802146C8 (src/engine/tmbuffer.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80214554",
+          "end": "0x802146C8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmlightdef.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802146C8-0x80214718 (src/engine/tmlightdef.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802146C8",
+          "end": "0x80214718"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmblendchannel.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80214D40-0x80214F58 (src/engine/tmblendchannel.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80214D40",
+          "end": "0x80214F58"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmextentsdef.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215804-0x80215838 (src/engine/tmextentsdef.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215804",
+          "end": "0x80215838"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/TMTexXForm.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215838-0x8021592C (src/engine/TMTexXForm.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215838",
+          "end": "0x8021592C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmchannellist.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8021592C-0x80215B6C (src/engine/tmchannellist.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021592C",
+          "end": "0x80215B6C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/lltmviewport.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215B6C-0x80215B74 (src/engine/lltmviewport.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215B6C",
+          "end": "0x80215B74"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmprof.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215B74-0x80215B7C (src/engine/tmprof.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215B74",
+          "end": "0x80215B7C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmdebuginfo.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215B7C-0x80215C14 (src/engine/tmdebuginfo.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215B7C",
+          "end": "0x80215C14"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/TmInstance.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215C14-0x80215DA4 (src/engine/TmInstance.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215C14",
+          "end": "0x80215DA4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/TMMorphAnim.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215DA4-0x80215E5C (src/engine/TMMorphAnim.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215DA4",
+          "end": "0x80215E5C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmskeleton.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80215E5C-0x802160A0 (src/engine/tmskeleton.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80215E5C",
+          "end": "0x802160A0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/tmswappart.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802160A0-0x8021625C (src/engine/tmswappart.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802160A0",
+          "end": "0x8021625C"
+        }
+      ]
     }
   ]
 }
