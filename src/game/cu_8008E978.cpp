@@ -8565,7 +8565,7 @@ extern "C" void fn_800AB3B0(Class_80297B90 *p, float dt)
                     lbl_803EAA88->mUnknown16 = pRow->mCsos;
                 }
             }
-            if (!(lbl_803EAA88->mUnknown16 & 0x80)) {
+            if (lbl_803EAA88->mUnknown16 >= 0) {
                 fn_800A9F64();
                 fn_80094608(1);
                 if (fn_801784C4() != 0) {

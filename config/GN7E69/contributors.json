@@ -22589,6 +22589,24 @@
         "commit": "a7dde67244652b4779f602ade45acbf6d514c611",
         "introduced_blob": "d99ea3194f2e2f2c79efc5377f225729af9b7e06"
       }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800AB3B0"
+      ],
+      "provenance": {
+        "pull_request": 880,
+        "merged_via": 918,
+        "commit": "41a1fe72a3b530f7da10f7a7cd475336a02dcc37",
+        "introduced_blob": "925df7b9e8974a4e985df186b5bfd8a89b59cc2b",
+        "original_commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
+        "original_blob": "c5a04c0d9d3f88fb0054ac07d0777f70184a34a8",
+        "integration_adjustment": "Preserve the original contributor and PR of this pre-existing comparison body; PR 1004 refines it in place to an exact match, and that refinement does not transfer original source credit."
+      }
     }
   ],
   "target": "GN7E69",
