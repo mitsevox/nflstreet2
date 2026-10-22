@@ -279,9 +279,9 @@ int fn_801CF664(RandStream_801CEF48 *pStream)
     return lbl_802F7B00[pStream->mType];
 }
 
-void fn_801CF67C(RandStream_801CEF48 *pStream)
+int fn_801CF67C(RandStream_801CEF48 *pStream)
 {
-    fn_801D2BD0(pStream);
+    return fn_801D2BD0(pStream);
 }
 
 float fn_801CF69C(RandStream_801CEF48 *pStream)

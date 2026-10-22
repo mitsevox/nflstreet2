@@ -9,7 +9,7 @@ extern int fn_801CEA14(void);
 extern void fn_801CEA20(Mtx44 m);
 extern float fn_801CFD28(int angle);
 extern void fn_801D0424(void *p, Mtx44 m);
-extern void fn_801D0470(int a);
+extern void fn_801D0470(unsigned int a);
 extern void fn_801D04C4(void);
 extern void fn_801D0508(void);
 extern void fn_801D0544(void);
