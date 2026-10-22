@@ -1,6 +1,5 @@
-#include "engine/tmlib.h"
-
-extern void fn_80201D94(void *pRecord, int bitOffset, int bitSize, void *pValue, int bSigned);
+#include <string.h>
+#include "engine/t3db_table.h"
 
 void fn_8020CD2C(HuffNode_8020CD2C *pTree, unsigned char *pBits, int count, unsigned char *pOut)
 {
@@ -25,27 +24,27 @@ void fn_8020CD2C(HuffNode_8020CD2C *pTree, unsigned char *pBits, int count, unsi
     } while (count != i);
 }
 
-void fn_8020CD9C(TDbTable_8020B564 *pTable, TDbField_8020B564 *pField, void *pRecord, unsigned char *pOut)
+void fn_8020CD9C(TDbTable_801FAA00 *pTable, TDbColumn_801FAA00 *pColumn, void *pRow, unsigned char *pOut)
 {
     int offset;
     unsigned int len;
 
-    fn_80201D94(pRecord, pField->mOffset, 32, &offset, 0);
+    fn_80201D94(pRow, pColumn->mBitOffset, 32, (unsigned int *)&offset, 0);
     len = 0;
     if (offset != -1) {
-        switch (pField->mType) {
+        switch (pColumn->mType) {
         case 15:
-            len = pTable->mpBlob[offset++] << 24;
-            len |= pTable->mpBlob[offset++] << 16;
+            len = pTable->mUnknown18[offset++] << 24;
+            len |= pTable->mUnknown18[offset++] << 16;
         case 14:
-            len |= pTable->mpBlob[offset++] << 8;
+            len |= pTable->mUnknown18[offset++] << 8;
         case 13:
-            len |= pTable->mpBlob[offset++];
+            len |= pTable->mUnknown18[offset++];
         }
         if (pTable->mFlags & 0x40) {
-            fn_8020CD2C((HuffNode_8020CD2C *)pTable->mpBlob, pTable->mpBlob + offset, len, pOut);
+            fn_8020CD2C((HuffNode_8020CD2C *)pTable->mUnknown18, pTable->mUnknown18 + offset, len, pOut);
         } else {
-            memcpy(pOut, pTable->mpBlob + offset, len);
+            memcpy(pOut, pTable->mUnknown18 + offset, len);
         }
     }
     pOut[len] = 0;

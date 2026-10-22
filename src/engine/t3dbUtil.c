@@ -1,15 +1,10 @@
-typedef struct T3dbField_8020CCBC {
-    int mUnknown0;
-    unsigned int mHigh;
-    unsigned int mLow;
-    int mUnknownC;
-} T3dbField_8020CCBC;
+#include "engine/t3db.h"
 
-void fn_8020CCBC(T3dbField_8020CCBC *pFields, unsigned long long *pOut)
+void fn_8020CCBC(TDbLitRef_80205754 *pLits, unsigned long long *pOut)
 {
     unsigned char i = 0;
 
     do {
-        pOut[i] = ((unsigned long long)pFields[i].mHigh << 32) | pFields[i].mLow;
-    } while (pFields[i++].mLow != -1);
+        pOut[i] = ((unsigned long long)pLits[i].mTableId << 32) | (unsigned int)pLits[i].mId;
+    } while (pLits[i++].mId != -1);
 }

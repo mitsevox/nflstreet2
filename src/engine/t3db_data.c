@@ -1,24 +1,25 @@
-#include "engine/tmlib.h"
+#include <string.h>
+#include "engine/t3db_table.h"
 
-void fn_8020CEC4(unsigned char *pRecord, unsigned int bitOffset, unsigned int bitSize, void *pSrc, unsigned int len)
+void fn_8020CEC4(unsigned char *pRow, unsigned int bitOffset, unsigned int bitCount, void *pSrc, unsigned int len)
 {
     unsigned int n;
 
-    pRecord += bitOffset >> 3;
-    n = bitSize >> 3;
+    pRow += bitOffset >> 3;
+    n = bitCount >> 3;
     if (len < n) {
         n = len;
     }
-    memcpy(pRecord, pSrc, n);
-    if (n < bitSize >> 3) {
-        memset(pRecord + n, 0, (bitSize >> 3) - n);
+    memcpy(pRow, pSrc, n);
+    if (n < bitCount >> 3) {
+        memset(pRow + n, 0, (bitCount >> 3) - n);
     }
 }
 
-void fn_8020CF34(unsigned char *pRecord, unsigned int bitOffset, unsigned int bitSize, unsigned char *pDst, unsigned int len)
+void fn_8020CF34(unsigned char *pRow, unsigned int bitOffset, unsigned int bitCount, unsigned char *pDst, unsigned int len)
 {
-    unsigned char *pSrc = pRecord + (bitOffset >> 3);
-    unsigned int n = bitSize >> 3;
+    unsigned char *pSrc = pRow + (bitOffset >> 3);
+    unsigned int n = bitCount >> 3;
 
     if (len < n) {
         n = len;

@@ -1,4 +1,4 @@
-#include "engine/tmlib.h"
+#include "engine/t3db_table.h"
 #include "game/fn_801D2B7C.h"
 
 typedef struct TdbExtParams_8020D0CC {
@@ -25,7 +25,7 @@ extern int fn_801F9134(void *pDb, TdbExtFile_8020D2D0 *pFile, int flags, char *p
 extern int fn_801EEFAC(void *pStream);
 
 extern TdbExtParams_8020D0CC lbl_8039B498;
-extern int lbl_803EBEA8;
+extern void *lbl_803EBEA8;
 extern unsigned char lbl_803EBEAC;
 extern unsigned char lbl_803EBEAD;
 extern int lbl_803EBEB0;
@@ -61,42 +61,42 @@ int fn_8020D1A8(void)
     return 0;
 }
 
-int fn_8020D1B0(int heap, unsigned int size, unsigned char **ppData)
+int fn_8020D1B0(void *pHeap, int size, void *ppMem)
 {
-    unsigned char *pData;
+    void *pMem;
 
     if (lbl_803EBEA8 != 0) {
-        heap = lbl_803EBEA8;
+        pHeap = lbl_803EBEA8;
     }
-    pData = fn_801D2BB0(heap, size, lbl_803EBEB0, 0);
-    *ppData = pData;
-    return pData ? 0 : 2;
+    pMem = fn_801D2BB0((int)pHeap, size, lbl_803EBEB0, 0);
+    *(void **)ppMem = pMem;
+    return pMem ? 0 : 2;
 }
 
-int fn_8020D204(int heap, unsigned int size, unsigned char **ppData)
+int fn_8020D204(void *pHeap, int size, void *ppMem)
 {
-    unsigned char *pData;
+    void *pMem;
     int flags = lbl_803EBEB0;
 
     if (lbl_803EBEA8 != 0) {
-        heap = lbl_803EBEA8;
+        pHeap = lbl_803EBEA8;
     }
-    pData = fn_801D2BB0(heap, size, (flags & ~4) | 2, 0);
-    *ppData = pData;
-    return pData ? 0 : 2;
+    pMem = fn_801D2BB0((int)pHeap, size, (flags & ~4) | 2, 0);
+    *(void **)ppMem = pMem;
+    return pMem ? 0 : 2;
 }
 
-int fn_8020D260(int heap, unsigned char *pOld, unsigned int oldSize, unsigned int newSize, unsigned char **ppData)
+int fn_8020D260(void *pHeap, void *pOld, int oldSize, int newSize, void *ppMem)
 {
-    unsigned char *pData = fn_801D310C(pOld, newSize, lbl_803EBEB0, 0);
+    void *pMem = fn_801D310C(pOld, newSize, lbl_803EBEB0, 0);
 
-    *ppData = pData;
-    return pData ? 0 : 2;
+    *(void **)ppMem = pMem;
+    return pMem ? 0 : 2;
 }
 
-void fn_8020D2AC(int heap, void *pData, unsigned int size)
+void fn_8020D2AC(void *pHeap, void *pMem, int size)
 {
-    fn_801D2BD0(pData);
+    fn_801D2BD0(pMem);
 }
 
 int fn_8020D2D0(void *pDb, void *pPath, int mode, int flags)
