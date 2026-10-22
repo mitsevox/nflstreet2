@@ -1,9 +1,6 @@
 #include "engine/cu_801C06E8.h"
 #include "game/fn_801D2B7C.h"
 
-extern void fn_8020DFD8(int data, Image_8020DFD8 *image);
-extern int fn_8020E258(Image_8020DFD8 *image);
-
 void fn_801C0E04(Texture_801C0928 *texture)
 {
     TextureGX_801C0E04 *gx = &texture->mGX;
@@ -26,12 +23,12 @@ void fn_801C0E04(Texture_801C0928 *texture)
     }
 }
 
-void fn_801C0F64(int data, Image_8020DFD8 *image)
+void fn_801C0F64(int data, Texture_8020DB34 *image)
 {
-    fn_8020DFD8(data, image);
+    fn_8020DFD8((void *)data, image);
 }
 
-void fn_801C0F84(Image_8020DFD8 *image)
+void fn_801C0F84(Texture_8020DB34 *image)
 {
     fn_8020E258(image);
 }
@@ -44,11 +41,11 @@ void fn_801C0FA4(Texture_801C0928 *texture)
         if (texture->mImage.mFormat == GX_TF_C4)
             entries = 16;
         GXInitTlutObj(&texture->mGX.mTlutObj, texture->mImage.mpPalette,
-                      texture->mImage.mPaletteFormat, entries);
-        GXInitTexObjCI(&texture->mGX.mTexObj, texture->mImage.mpPixels, texture->mImage.mWidth,
+                      texture->mImage.mTlutFormat, entries);
+        GXInitTexObjCI(&texture->mGX.mTexObj, texture->mImage.mpImage, texture->mImage.mWidth,
                        texture->mImage.mHeight, texture->mImage.mFormat, GX_CLAMP, GX_CLAMP, 0, 0);
     } else {
-        GXInitTexObj(&texture->mGX.mTexObj, texture->mImage.mpPixels, texture->mImage.mWidth,
+        GXInitTexObj(&texture->mGX.mTexObj, texture->mImage.mpImage, texture->mImage.mWidth,
                      texture->mImage.mHeight, texture->mImage.mFormat, GX_CLAMP, GX_CLAMP, 0);
     }
     fn_801C0E04(texture);

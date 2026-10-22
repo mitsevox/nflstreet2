@@ -1,14 +1,6 @@
 #include <string.h>
+#include "engine/cu_8027EFAC.h"
 #include "game/fn_801C68FC.h"
-
-/* Byte buffer read and written by the codec functions; only the accessed fields are declared. */
-typedef struct Buffer_8027F9AC {
-    unsigned char *mpData;
-    unsigned int mSize;
-    unsigned int mPos;
-    unsigned char mUnknownC[12];
-    unsigned char mUnknown18;
-} Buffer_8027F9AC;
 
 typedef void *(*CodecInit_8027F2D8)(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst);
 typedef int (*CodecRun_8027F2D8)(Buffer_8027F9AC *pSrc, Buffer_8027F9AC *pDst, void *pState);

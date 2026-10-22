@@ -104,7 +104,7 @@ void fn_8019AD5C(Object_8019AD5C *pObject, int *pArgs)
         pObject->mUnknown4AC[i] = fn_8019AD24(pObject->mpUnknown14, pObject->mUnknown18[i]);
         fn_80234DFC(pObject->mUnknown4AC[i], &pObject->mUnknown4C0[i], 0, 0, lbl_802EE948[i].mpName,
                     lbl_802EE948[i].mUnknown4);
-        fn_8021216C(&pObject->mUnknown4C0[i], &lbl_802EE9E4);
+        fn_8021216C((TexLib_802119C4 *)&pObject->mUnknown4C0[i], &lbl_802EE9E4);
         fn_80235588(&pObject->mUnknown2C[i], 6);
         fn_80235630(&pObject->mUnknown2C[i], pObject->mUnknown4AC[i]);
         fn_80235B6C(&pObject->mUnknown2C[i], &pObject->mUnknown4C0[i], 1);

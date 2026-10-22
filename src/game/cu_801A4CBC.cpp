@@ -118,8 +118,8 @@ void fn_801A4E9C(void)
     lbl_803EB834 = 0;
     lbl_803EB83C = 1;
     lbl_803ECC18 = 1;
-    GXInitTexObj(&lbl_80366680, lbl_80366640[0].mpUnknown14, lbl_80366640[0].mUnknown8,
-                lbl_80366640[0].mUnknownA, lbl_80366640[0].mUnknown10, 0, 0, 0);
+    GXInitTexObj(&lbl_80366680, lbl_80366640[0].mTexture.mpImage, lbl_80366640[0].mTexture.mWidth,
+                lbl_80366640[0].mTexture.mHeight, lbl_80366640[0].mTexture.mFormat, 0, 0, 0);
 }
 
 void fn_801A4FB0(void)

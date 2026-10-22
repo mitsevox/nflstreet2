@@ -2300,11 +2300,11 @@
     },
     "GXSetTevColorIn": {
       "address": "0x80251690",
-      "evidence": "evidence.tsv external row GXSetTevColorIn: target REL24 call at 0x801CDDB0 and the SDK GXTev.c comparison unit."
+      "evidence": "evidence.tsv external row GXSetTevColorIn: target REL24 call at 0x801CDDB0 and the SDK GXTev.c comparison unit. evidence.tsv external row GXSetTevColorIn: name of the registered src/dolphin/gx/GXTev.c comparison function at this address; REL24 calls from 0x80212ED8 and 0x80213AB4."
     },
     "GXSetTevColorOp": {
       "address": "0x80251718",
-      "evidence": "evidence.tsv external row GXSetTevColorOp: target REL24 call at 0x801CDDCC and the SDK GXTev.c comparison unit."
+      "evidence": "evidence.tsv external row GXSetTevColorOp: target REL24 call at 0x801CDDCC and the SDK GXTev.c comparison unit. evidence.tsv external row GXSetTevColorOp: name of the registered src/dolphin/gx/GXTev.c comparison function at this address; REL24 calls from 0x80212EF4 and 0x80213B98."
     },
     "GXSetViewportJitter": {
       "address": "0x80252734",
@@ -2317,6 +2317,42 @@
     "CARDMount": {
       "address": "0x802565A0",
       "evidence": "evidence.tsv external row CARDMount: target REL24 call at 0x801CB6E4 and the SDK CARDMount.c comparison unit."
+    },
+    "GXSetTevAlphaIn": {
+      "address": "0x802516D4",
+      "evidence": "evidence.tsv external row GXSetTevAlphaIn: name of the registered src/dolphin/gx/GXTev.c comparison function at this address; REL24 calls from 0x80212F0C and 0x80213ACC."
+    },
+    "GXSetTevAlphaOp": {
+      "address": "0x80251780",
+      "evidence": "evidence.tsv external row GXSetTevAlphaOp: name of the registered src/dolphin/gx/GXTev.c comparison function at this address; REL24 calls from 0x80212F28 and 0x80213BB4."
+    },
+    "GXSetTevColor": {
+      "address": "0x802517E8",
+      "evidence": "evidence.tsv external row GXSetTevColor: name of the registered src/dolphin/gx/GXTev.c comparison function at this address; REL24 call from 0x80210A78."
+    },
+    "GXSetTevKColor": {
+      "address": "0x80251864",
+      "evidence": "evidence.tsv external row GXSetTevKColor: name of the registered src/dolphin/gx/GXTev.c comparison function at this address; REL24 call from 0x80210A90."
+    },
+    "LCStoreData": {
+      "address": "0x80239F20",
+      "evidence": "evidence.tsv external row LCStoreData: SDK OSCache body inside the provisional sdk.json OSCache.c range; REL24 calls from 0x80213748 and 0x80213A08."
+    },
+    "LCQueueLength": {
+      "address": "0x80239FCC",
+      "evidence": "evidence.tsv external row LCQueueLength: SDK OSCache body (mfspr HID2, rlwinm 8,28,31, blr); REL24 calls from 0x80213570 and 0x802137B8."
+    },
+    "LCQueueWait": {
+      "address": "0x80239FD8",
+      "evidence": "evidence.tsv external row LCQueueWait: SDK OSCache body (HID2 queue-length spin against r3); REL24 calls from 0x80213580 and 0x802137C8."
+    },
+    "PSMTXConcat": {
+      "address": "0x8024AA18",
+      "evidence": "evidence.tsv external row PSMTXConcat: SDK mtx.c paired-single body inside the provisional sdk.json mtx.c range; REL24 calls from 0x80213720 and 0x802139D0."
+    },
+    "GXGetViewportv": {
+      "address": "0x802527D4",
+      "evidence": "evidence.tsv external row GXGetViewportv: SDK GXTransform.c body copying the six viewport floats from gx+0x4F4; REL24 call from 0x80210620."
     }
   },
   "units": [
