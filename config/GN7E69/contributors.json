@@ -27260,6 +27260,7 @@
         "0x80238984",
         "0x802389AC",
         "0x80238AD4",
+        "0x80238B10",
         "0x80238EE8",
         "0x80239190",
         "0x802391AC",
@@ -27273,7 +27274,7 @@
         "introduced_blob": "82c59bf4b586cc0883c706706ed839e7767997ec",
         "original_commit": "513cea7088efd02b94f589ba17ffefcfe8f3e78a",
         "original_blob": "626561042165ed874aef87dc61ddcd7fd301c2c2",
-        "integration_adjustment": "Newly exact pre-existing bodies (OSGetConsoleType, ClearArena, InquiryCallback, OSExceptionInit, __OSSetExceptionHandler, __OSGetExceptionHandler, __OSGetDIConfig, OSRegisterVersion) originate in contribution 567; the PR 1028 change that makes them exact restores the file's original hand-written assembly routines ahead of them and leaves these C bodies unchanged, so it does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1028 file for squash-history verification."
+        "integration_adjustment": "Newly exact pre-existing bodies (OSGetConsoleType, ClearArena, InquiryCallback, OSExceptionInit, __OSSetExceptionHandler, __OSGetExceptionHandler, __OSGetDIConfig, OSRegisterVersion) originate in contribution 567; the PR 1028 change that makes them exact restores the file's original hand-written assembly routines ahead of them and leaves these C bodies unchanged, so it does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1028 file for squash-history verification. OSInit is also unchanged from the original contribution; restoring the original assembly context and correcting signed-address constants makes its full984-byte extent exact. Credit remains with the original contributor."
       }
     },
     {
