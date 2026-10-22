@@ -171,7 +171,7 @@ void fn_801F6B84(struct StreamTap_801F5DA4 *h);
 struct StreamTap_801F5DA4 *fn_801F6CE8(struct StreamTap_801F5DA4 *h, int tap);
 int fn_801F6D54(struct StreamTap_801F5DA4 *h, StreamFile_801F6D54 *pFile, int offset,
                 unsigned int endMarker);
-void fn_801DC86C(Uint8 *pY, Uint8 *pU, Uint8 *pV, Int32 a, Int32 b, Int32 c, void *pDst,
+int fn_801DC86C(Uint8 *pY, Uint8 *pU, Uint8 *pV, Int32 a, Int32 b, Int32 c, void *pDst,
                  Int32 Stride, Int32 d);
 
 void fn_80221294(void *p);
@@ -306,8 +306,7 @@ Uint32 fn_802215B0(Uint32 x)
     Int32 i = 0;
 
     while (x & (x - 1)) {
-        Int32 bit = 1 << i;
-        x = (x + bit - 1) & -bit;
+        x = (x + (1 << i) - 1) & -(1 << i);
         i++;
     }
     return x;
@@ -954,7 +953,7 @@ Int32 fn_80226570(Object_8021E688 *pObject, Object_802268D4 *pMovie, Sub_802268D
     if (pSub->pStream != NULL) {
         if (pSub->pFrame != NULL) {
             fn_801D9290(&pSub->Info, pSub->pFrame);
-            pSub->pFrame = pFrame;
+            pSub->pFrame = NULL;
         }
         pFrame = fn_801D923C(&pSub->Info, fn_801D9224(&pSub->Info));
         pSub->pFrame = pFrame;
@@ -994,15 +993,15 @@ void fn_8022666C(Object_8021E688 *pObject, Object_802268D4 *pMovie)
                         if (fn_80226570(pObject, pMovie, pSub)) {
                             fn_802264E8(pSub, 1);
                             fn_80226570(pObject, pMovie, pSub);
-                            fn_80226D20(pMovie->Sub.unk_00, pSub->unk_04, pSub->unk_1C);
-                            DCStoreRange(pSub->unk_1C, pMovie->Sub.unk_00 * pSub->unk_04 * 4);
+                            fn_80226D20(pSub->unk_00, pSub->unk_04, pSub->unk_1C);
+                            DCStoreRange(pSub->unk_1C, pSub->unk_00 * pSub->unk_04 * 4);
                         }
                     }
                 } else {
                     fn_802264E8(pSub, 0);
                     fn_80226570(pObject, pMovie, pSub);
-                    fn_80226D20(pMovie->Sub.unk_00, pSub->unk_04, pSub->unk_1C);
-                    DCStoreRange(pSub->unk_1C, pMovie->Sub.unk_00 * pSub->unk_04 * 4);
+                    fn_80226D20(pSub->unk_00, pSub->unk_04, pSub->unk_1C);
+                    DCStoreRange(pSub->unk_1C, pSub->unk_00 * pSub->unk_04 * 4);
                 }
             }
         }
@@ -1030,10 +1029,10 @@ Object_802268D4 *fn_802268D4(Object_8021E688 *pObject, Int16 a, Int16 b)
     fn_8021EF34();
     pMovie->Flags = 0;
     pSub->unk_04 = 240;
-    pMovie->Sub.unk_00 = 320;
+    pSub->unk_00 = 320;
     pSub->unk_1C = fn_801D2BB0(Heap, 0x4B000, 0, 0);
     memset(pSub->unk_1C, 0, 0x4B000);
-    DCStoreRange(pSub->unk_1C, pMovie->Sub.unk_00 * pSub->unk_04 * 4);
+    DCStoreRange(pSub->unk_1C, pSub->unk_00 * pSub->unk_04 * 4);
     fn_802267D8(pMovie, 320, 240);
     pMovie->unk_40 = b;
     pMovie->unk_3C = a;
@@ -1076,7 +1075,7 @@ void fn_80226A68(Object_8021E688 *pObject, Object_802268D4 *pMovie)
     if (pSub->unk_1C == NULL) {
         pSub->unk_1C = fn_801D2BB0(Heap, 0x4B000, 0, 0);
         memset(pSub->unk_1C, 0, 0x4B000);
-        DCStoreRange(pSub->unk_1C, pMovie->Sub.unk_00 * pSub->unk_04 * 4);
+        DCStoreRange(pSub->unk_1C, pSub->unk_00 * pSub->unk_04 * 4);
     }
     pSub->unk_08 = fn_801D2BB0(Heap, 0x4B000, 0, 0);
     pSub->pStream = fn_801F687C(2, 2, 2, pSub->unk_08, 0x4B000);
@@ -1118,7 +1117,7 @@ void fn_80226C40(Object_8021E688 *pObject, Object_802268D4 *pMovie)
     pSub = &pMovie->Sub;
     if (pSub->pStream != NULL) {
         if (fn_8022638C() && pSub->pTap != (struct StreamTap_801F5DA4 *)-1) {
-            fn_801D8C84(&pMovie->Sub.Info);
+            fn_801D8C84(&pSub->Info);
         }
         fn_801D8B54(&pSub->Info);
         fn_801F6B84(pSub->pStream);
