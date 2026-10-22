@@ -1720,7 +1720,8 @@ public:
     virtual float vfn_03(Vector_80039F5C *pPoint, const float matrix[4][4],
                        Vector_80039F5C *pDelta, Vector_80039F5C *pNormal,
                        Vector_80039F5C *pOut, float *pDistance, float length);
-    char mUnknown4[4];
+    float mUnknown0;
+    float mUnknown4;
     int mUnknown8;
 };
 struct Collection_801E7034 { unsigned int mCount; };
@@ -1766,7 +1767,7 @@ extern int lbl_803EA520;
 extern int lbl_803EA524;
 extern int lbl_803EA528;
 extern int lbl_803EA52C;
-extern int lbl_803EA530;
+extern unsigned int lbl_803EA530;
 extern Body_801E9538 *lbl_803EC7E0;
 extern Body_801E9538 *lbl_803EC7E4;
 void fn_801A9184(Object_801A8620 *);
