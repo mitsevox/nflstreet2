@@ -272,7 +272,7 @@ extern "C" void fn_80142110(Camera_8013F738 *camera,int event,int argument)
         if (argument!=-1) {
             Camera_8013F738 *other=fn_8013FA04(argument);
             fn_801C3EA4(camera,other->mHeader.mUnknown04[0],other->mHeader.mUnknown04[1],other->mHeader.mUnknown04[2]);
-            fn_801C3ED0(camera,other->mHeader.mUnknown14,other->mHeader.mUnknown18,other->mHeader.mUnknown1C);
+            fn_801C3ED0(camera,other->mHeader.mUnknown14[0],other->mHeader.mUnknown14[1],other->mHeader.mUnknown14[2]);
             fn_8013C384(camera,0,0,0);
         }
         break;

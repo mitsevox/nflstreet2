@@ -6,16 +6,8 @@
 
 #include <string.h>
 
-/* Two words passed by address to fn_802121D0, which hands them to
-   fn_80212374 for each of its elements. */
-struct Pair_802121D0 {
-    int mUnknown0;
-    int mUnknown4;
-};
-
 extern "C" {
 Desc_802347EC *fn_8016102C(int player);
-void fn_802121D0(void *p, Pair_802121D0 *pPair);
 Desc_802347EC *fn_802345F8(Desc_802347EC *pDescs, const char *pName);
 void fn_80234844(Desc_802347EC *pDesc);
 void fn_80239D1C(void *p, unsigned int size);
@@ -111,11 +103,11 @@ void fn_801A4C1C(Desc_802347EC *pDescs, Entry_802F3488 *pEntries)
         Desc_802347EC *pDesc = fn_802345F8(pDescs, pEntries[i].mpName);
 
         if (pEntries[i].mUnknown4) {
-            Pair_802121D0 pair = { 0, 0 };
+            TexWrapDesc_80212374 pair = { 0, 0 };
 
-            fn_802121D0(pDesc->mpUnknown24, &pair);
+            fn_802121D0((TexLib_802119C4 *)pDesc->mpUnknown24, &pair);
         }
-        fn_8021216C(pDesc->mpUnknown24, &pEntries[i].mUnknown8);
+        fn_8021216C((TexLib_802119C4 *)pDesc->mpUnknown24, &pEntries[i].mUnknown8);
     }
 }
 }

@@ -498,6 +498,62 @@
       "address": "0x8025E250",
       "evidence": "evidence.tsv external row for 0x8025E250 (__ashrdi3)."
     },
+    "__divdi3": {
+      "address": "0x8025E290",
+      "evidence": "evidence.tsv external row for 0x8025E290 (__divdi3)."
+    },
+    "CARDProbeEx": {
+      "address": "0x80255D3C",
+      "evidence": "evidence.tsv function row 0x80255D3C-0x80255EB8 (CARDProbeEx); called by name from src/engine/memorycard.c, whose SDK unit is not accepted for comparison."
+    },
+    "CARDMountAsync": {
+      "address": "0x80256400",
+      "evidence": "evidence.tsv function row 0x80256400-0x802565A0 (CARDMountAsync); called by name from src/engine/memorycard.c, whose SDK unit is not accepted for comparison."
+    },
+    "CARDFastOpen": {
+      "address": "0x80257388",
+      "evidence": "evidence.tsv function row 0x80257388-0x8025748C (CARDFastOpen); called by name from src/engine/memorycard.c, whose SDK unit is not accepted for comparison. evidence.tsv external row CARDFastOpen: target REL24 call at 0x801CB83C and the SDK CARDOpen.c comparison unit."
+    },
+    "CARDClose": {
+      "address": "0x8025748C",
+      "evidence": "evidence.tsv function row 0x8025748C-0x802574E0 (CARDClose); called by name from src/engine/memorycard.c, whose SDK unit is not accepted for comparison. evidence.tsv external row CARDClose: target REL24 call at 0x801CB8FC and the SDK CARDOpen.c comparison unit."
+    },
+    "__OSBusClock": {
+      "address": "0x800000F8",
+      "evidence": "evidence.tsv external row for 0x800000F8 (__OSBusClock)."
+    },
+    "fn_801D94A0__FP14Shape_801D94A0": {
+      "address": "0x801D94A0",
+      "evidence": "evidence.tsv external row for 0x801D94A0 (fn_801D94A0__FP14Shape_801D94A0)."
+    },
+    "fn_801D9538__FP14Shape_801D94A0i": {
+      "address": "0x801D9538",
+      "evidence": "evidence.tsv external row for 0x801D9538 (fn_801D9538__FP14Shape_801D94A0i)."
+    },
+    "fn_801D95E4__FPvT0": {
+      "address": "0x801D95E4",
+      "evidence": "evidence.tsv external row for 0x801D95E4 (fn_801D95E4__FPvT0)."
+    },
+    "fn_801DA4F8__Fi": {
+      "address": "0x801DA4F8",
+      "evidence": "evidence.tsv external row for 0x801DA4F8 (fn_801DA4F8__Fi)."
+    },
+    "fn_801DABE0__FPCUsii": {
+      "address": "0x801DABE0",
+      "evidence": "evidence.tsv external row for 0x801DABE0 (fn_801DABE0__FPCUsii)."
+    },
+    "fn_801DAD20__FPCUcN20PUcN23i": {
+      "address": "0x801DAD20",
+      "evidence": "evidence.tsv external row for 0x801DAD20 (fn_801DAD20__FPCUcN20PUcN23i)."
+    },
+    "fn_801DC9C8__Fi": {
+      "address": "0x801DC9C8",
+      "evidence": "evidence.tsv external row for 0x801DC9C8 (fn_801DC9C8__Fi)."
+    },
+    "fn_801DC9E0__Fi": {
+      "address": "0x801DC9E0",
+      "evidence": "evidence.tsv external row for 0x801DC9E0 (fn_801DC9E0__Fi)."
+    },
     "__lshrdi3": {
       "address": "0x8025EB14",
       "evidence": "evidence.tsv external row for 0x8025EB14 (__lshrdi3)."
@@ -2149,6 +2205,154 @@
     "gTutorialGame": {
       "address": "0x80307470",
       "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gTutorialGame. InGame dependency pointer written at 0x80032B7C."
+    },
+    "fn_801E279C__14Class_801E274CP14Class_801E8E04": {
+      "address": "0x801E279C",
+      "evidence": "evidence.tsv external row for 0x801E279C (fn_801E279C__14Class_801E274CP14Class_801E8E04) and function row 0x801E279C (comparison unit; original assembly remains linked)."
+    },
+    "fn_801E2C3C__14Class_801E27A4": {
+      "address": "0x801E2C3C",
+      "evidence": "evidence.tsv external row for 0x801E2C3C (fn_801E2C3C__14Class_801E27A4) and function row 0x801E2C3C (comparison unit; original assembly remains linked)."
+    },
+    "fn_801E2C64__14Class_801E27A4PP13Node_801E2878": {
+      "address": "0x801E2C64",
+      "evidence": "evidence.tsv external row for 0x801E2C64 (fn_801E2C64__14Class_801E27A4PP13Node_801E2878) and function row 0x801E2C64 (comparison unit; original assembly remains linked)."
+    },
+    "fn_801E90A8__14Class_801E8E04P14Class_801E27A4P14Class_801E2878": {
+      "address": "0x801E90A8",
+      "evidence": "evidence.tsv external row for 0x801E90A8 (fn_801E90A8__14Class_801E8E04P14Class_801E27A4P14Class_801E2878) and function row 0x801E90A8 (comparison unit; original assembly remains linked)."
+    },
+    "fn_801E90CC__14Class_801E8E04P14Class_801E27A4P14Class_801E2878": {
+      "address": "0x801E90CC",
+      "evidence": "evidence.tsv external row for 0x801E90CC (fn_801E90CC__14Class_801E8E04P14Class_801E27A4P14Class_801E2878) and function row 0x801E90CC (comparison unit; original assembly remains linked)."
+    },
+    "GXAbortFrame": {
+      "address": "0x8024E1FC",
+      "evidence": "evidence.tsv function/name rows for 0x8024E1FC (target extent, related SDK name)."
+    },
+    "OSSetThreadPriority": {
+      "address": "0x8023E628",
+      "evidence": "evidence.tsv function/name rows for 0x8023E628 (target extent, related SDK name)."
+    },
+    "OSYieldThread": {
+      "address": "0x8023DB7C",
+      "evidence": "evidence.tsv function/name rows for 0x8023DB7C (target extent, related SDK name)."
+    },
+    "OSResetSystem": {
+      "address": "0x8023C0F8",
+      "evidence": "evidence.tsv function/name rows for 0x8023C0F8 (target extent, related SDK name)."
+    },
+    "PADRecalibrate": {
+      "address": "0x80247030",
+      "evidence": "evidence.tsv function row for 0x80247030 (target extent, related SDK name)."
+    },
+    "PADControlMotor": {
+      "address": "0x802476F8",
+      "evidence": "evidence.tsv function row for 0x802476F8 (target extent, related SDK name). evidence.tsv external row PADControlMotor: target REL24 calls at 0x801CABC0, 0x801CABD0, 0x801CABE0, 0x801CABEC and the SDK Pad.c comparison unit."
+    },
+    "AIReset": {
+      "address": "0x8024A67C",
+      "evidence": "evidence.tsv function row for 0x8024A67C (target extent, related SDK name)."
+    },
+    "OSCreateThread": {
+      "address": "0x8023DBB8",
+      "evidence": "evidence.tsv external row OSCreateThread: target REL24 call at 0x801CB394 and the SDK OSThread.c comparison unit."
+    },
+    "DVDOpen": {
+      "address": "0x8023F094",
+      "evidence": "evidence.tsv external row DVDOpen: target REL24 call at 0x801CB478 and the SDK dvdfs.c comparison unit."
+    },
+    "DVDClose": {
+      "address": "0x8023F15C",
+      "evidence": "evidence.tsv external row DVDClose: target REL24 call at 0x801CB4C8 and the SDK dvdfs.c comparison unit."
+    },
+    "DVDReadAsyncPrio": {
+      "address": "0x8023F3A4",
+      "evidence": "evidence.tsv external row DVDReadAsyncPrio: target REL24 call at 0x801CB58C and the SDK dvdfs.c comparison unit."
+    },
+    "GXInit": {
+      "address": "0x8024AF70",
+      "evidence": "evidence.tsv external row GXInit: target REL24 call at 0x801CE558 and the SDK GXInit.c comparison unit."
+    },
+    "GXGetCPUFifo": {
+      "address": "0x8024C8D8",
+      "evidence": "evidence.tsv external row GXGetCPUFifo: target REL24 calls at 0x801CE73C, 0x801CE804 and the SDK GXFifo.c comparison unit."
+    },
+    "GXSetDrawDone": {
+      "address": "0x8024E36C",
+      "evidence": "evidence.tsv external row GXSetDrawDone: target REL24 call at 0x801CE798 and the SDK GXMisc.c comparison unit."
+    },
+    "GXWaitDrawDone": {
+      "address": "0x8024E404",
+      "evidence": "evidence.tsv external row GXWaitDrawDone: target REL24 call at 0x801CE7B4 and the SDK GXMisc.c comparison unit."
+    },
+    "GXDrawDone": {
+      "address": "0x8024E450",
+      "evidence": "evidence.tsv external row GXDrawDone: target REL24 calls at 0x801CABAC, 0x801CE880, 0x801CE91C and the SDK GXMisc.c comparison unit."
+    },
+    "GXPixModeSync": {
+      "address": "0x8024E4D0",
+      "evidence": "evidence.tsv external row GXPixModeSync: target REL24 call at 0x801CE8EC and the SDK GXMisc.c comparison unit."
+    },
+    "GXAdjustForOverscan": {
+      "address": "0x8024EBC4",
+      "evidence": "evidence.tsv external row GXAdjustForOverscan: target REL24 calls at 0x801CE498, 0x801CE4B0, 0x801CEBA4, 0x801CEBC4 and the SDK GXFrameBuf.c comparison unit."
+    },
+    "GXSetTevColorIn": {
+      "address": "0x80251690",
+      "evidence": "evidence.tsv external row GXSetTevColorIn: target REL24 call at 0x801CDDB0 and the SDK GXTev.c comparison unit. evidence.tsv external row GXSetTevColorIn: name of the registered src/dolphin/gx/GXTev.c comparison function at this address; REL24 calls from 0x80212ED8 and 0x80213AB4."
+    },
+    "GXSetTevColorOp": {
+      "address": "0x80251718",
+      "evidence": "evidence.tsv external row GXSetTevColorOp: target REL24 call at 0x801CDDCC and the SDK GXTev.c comparison unit. evidence.tsv external row GXSetTevColorOp: name of the registered src/dolphin/gx/GXTev.c comparison function at this address; REL24 calls from 0x80212EF4 and 0x80213B98."
+    },
+    "GXSetViewportJitter": {
+      "address": "0x80252734",
+      "evidence": "evidence.tsv external row GXSetViewportJitter: target REL24 call at 0x801CEDCC and the SDK GXTransform.c comparison unit."
+    },
+    "CARDProbe": {
+      "address": "0x80255D04",
+      "evidence": "evidence.tsv external row CARDProbe: target REL24 call at 0x801CB6C4 and the SDK CARDMount.c comparison unit."
+    },
+    "CARDMount": {
+      "address": "0x802565A0",
+      "evidence": "evidence.tsv external row CARDMount: target REL24 call at 0x801CB6E4 and the SDK CARDMount.c comparison unit."
+    },
+    "GXSetTevAlphaIn": {
+      "address": "0x802516D4",
+      "evidence": "evidence.tsv external row GXSetTevAlphaIn: name of the registered src/dolphin/gx/GXTev.c comparison function at this address; REL24 calls from 0x80212F0C and 0x80213ACC."
+    },
+    "GXSetTevAlphaOp": {
+      "address": "0x80251780",
+      "evidence": "evidence.tsv external row GXSetTevAlphaOp: name of the registered src/dolphin/gx/GXTev.c comparison function at this address; REL24 calls from 0x80212F28 and 0x80213BB4."
+    },
+    "GXSetTevColor": {
+      "address": "0x802517E8",
+      "evidence": "evidence.tsv external row GXSetTevColor: name of the registered src/dolphin/gx/GXTev.c comparison function at this address; REL24 call from 0x80210A78."
+    },
+    "GXSetTevKColor": {
+      "address": "0x80251864",
+      "evidence": "evidence.tsv external row GXSetTevKColor: name of the registered src/dolphin/gx/GXTev.c comparison function at this address; REL24 call from 0x80210A90."
+    },
+    "LCStoreData": {
+      "address": "0x80239F20",
+      "evidence": "evidence.tsv external row LCStoreData: SDK OSCache body inside the provisional sdk.json OSCache.c range; REL24 calls from 0x80213748 and 0x80213A08."
+    },
+    "LCQueueLength": {
+      "address": "0x80239FCC",
+      "evidence": "evidence.tsv external row LCQueueLength: SDK OSCache body (mfspr HID2, rlwinm 8,28,31, blr); REL24 calls from 0x80213570 and 0x802137B8."
+    },
+    "LCQueueWait": {
+      "address": "0x80239FD8",
+      "evidence": "evidence.tsv external row LCQueueWait: SDK OSCache body (HID2 queue-length spin against r3); REL24 calls from 0x80213580 and 0x802137C8."
+    },
+    "PSMTXConcat": {
+      "address": "0x8024AA18",
+      "evidence": "evidence.tsv external row PSMTXConcat: SDK mtx.c paired-single body inside the provisional sdk.json mtx.c range; REL24 calls from 0x80213720 and 0x802139D0."
+    },
+    "GXGetViewportv": {
+      "address": "0x802527D4",
+      "evidence": "evidence.tsv external row GXGetViewportv: SDK GXTransform.c body copying the six viewport floats from gx+0x4F4; REL24 call from 0x80210620."
     }
   },
   "units": [

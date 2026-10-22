@@ -41,6 +41,9 @@ u16 GXGetTlutObjNumEntries(const GXTlutObj* tlut_obj);
 void GXGetTexRegionAll(const GXTexRegion* region, u8* is_cached, u8* is_32b_mipmap, u32* tmem_even, u32* size_even, u32* tmem_odd, u32* size_odd);
 void GXGetTlutRegionAll(const GXTlutRegion* region, u32* tmem_addr, GXTlutSize* tlut_size);
 
+// Transform
+void GXGetViewportv(f32* viewport);
+
 #ifdef __cplusplus
 }
 #endif

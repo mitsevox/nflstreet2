@@ -2,17 +2,7 @@
 #define ENGINE_CU_801C06E8_H
 
 #include <dolphin/gx/GXTexture.h>
-
-typedef struct Image_8020DFD8 {
-    unsigned short mWidth;
-    unsigned short mHeight;
-    unsigned char mUnknown4[4];
-    unsigned int mFormat;
-    void *mpPixels;
-    unsigned int mPaletteFormat;
-    void *mpPalette;
-    unsigned char mUnknown18[8];
-} Image_8020DFD8;
+#include "engine/texture.h"
 
 typedef struct TextureFrame_801C0E04 {
     float mU0;
@@ -32,7 +22,7 @@ typedef struct Texture_801C0928 {
     char mName[32];
     int mIndex;
     unsigned char mUnknown24[4];
-    Image_8020DFD8 mImage;
+    Texture_8020DB34 mImage;
     unsigned char mAnimated;
     unsigned char mLoaded;
     unsigned short mFrameCount;
@@ -93,9 +83,10 @@ void fn_801C0A38(Texture_801C0928 *texture, unsigned int time, unsigned int fram
 Texture_801C0928 *fn_801C0BA8(TextureFile_801C0BA8 *file, int load);
 Texture_801C0928 *fn_801C0C14(TextureDesc_801C0928 *desc, int *pData, int load);
 void fn_801C0CCC(Texture_801C0928 *texture);
+Texture_801C0928 *fn_801C0D8C(const char *name);
 void fn_801C0E04(Texture_801C0928 *texture);
-void fn_801C0F64(int data, Image_8020DFD8 *image);
-void fn_801C0F84(Image_8020DFD8 *image);
+void fn_801C0F64(int data, Texture_8020DB34 *image);
+void fn_801C0F84(Texture_8020DB34 *image);
 void fn_801C0FA4(Texture_801C0928 *texture);
 void fn_801C1054(Texture_801C0928 *texture);
 void fn_801C10A4(Texture_801C0928 *texture);

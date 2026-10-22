@@ -18,7 +18,7 @@ typedef struct Object_8020E560 {
     unsigned short mWidth;
     unsigned short mHeight;
     unsigned short mFormat;
-    char mUnknown6[2];
+    unsigned short mType;
     unsigned int mUnknown8;
     unsigned char *mpUnknownC;
 } Object_8020E560;
@@ -26,7 +26,7 @@ typedef struct Object_8020E560 {
 /* Result of fn_8020E5F8, a 12-byte entry of the table at +0x1C of the data:
    +4 is the byte size of the block at +8. */
 typedef struct Object_8020E5F8 {
-    char mUnknown0[2];
+    unsigned short mFormat;
     unsigned short mUnknown2;
     unsigned int mUnknown4;
     unsigned char *mpUnknown8;

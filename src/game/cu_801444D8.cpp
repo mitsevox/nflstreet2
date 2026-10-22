@@ -92,7 +92,7 @@ void fn_801D0664(Mtx44 m);
 void fn_801D0F80(Mtx44 m);
 void *fn_801D2BB0(int a, int size, int c, int d);
 int fn_801DCF0C(int type, int size, int count, void *pCreate, void *pDestroy);
-void fn_801DCF8C(int type);
+int fn_801DCF8C(int type);
 void fn_801DD0C8(int handle, int type, int a, int (*pCallback)(void *));
 int fn_801DD268(int handle, int type, int a, void *pInit);
 void fn_801DD320(int handle, int item);

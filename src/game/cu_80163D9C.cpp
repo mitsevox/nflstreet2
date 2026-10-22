@@ -3,7 +3,7 @@
 extern "C" {
 void fn_80146DC4(int a);
 int fn_801DCF0C(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
-void fn_801DCF8C(int a);
+int fn_801DCF8C(int a);
 void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(void *));
 int fn_801DD268(int handle, int a, int b, int *pDesc);
 void fn_801DD320(int handle, int item);

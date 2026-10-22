@@ -250,7 +250,7 @@ void fn_80214A7C(void *p);
 void fn_80214AC8(void);
 void fn_80214B20(void);
 void fn_80214B6C(Record_8020F2C4 *pDst, Record_8020F2C4 *pSrc);
-void fn_80214CB4(void);
+int fn_80214CB4(void);
 void fn_80227930(Vector_801A1650 *pOut, float *pA, float *pB, float t);
 void fn_802336C4(void *p, void *q, int a);
 void fn_80233728(void *p);

@@ -1,24 +1,10 @@
 #include <dolphin/mtx.h>
 #include "engine/cu_80227F14.h"
 #include <dolphin/gx/GXTransform.h>
+#include "engine/cu_801CE1F8.h"
+#include "engine/cu_801D03D0.h"
 
-extern int fn_801CE93C(void);
-extern void fn_801CE910(void);
-extern int fn_801CEA08(void);
-extern int fn_801CEA14(void);
-extern void fn_801CEA20(Mtx44 m);
 extern float fn_801CFD28(int angle);
-extern void fn_801D0424(void *p, Mtx44 m);
-extern void fn_801D0470(int a);
-extern void fn_801D04C4(void);
-extern void fn_801D0508(void);
-extern void fn_801D0544(void);
-extern void fn_801D0664(Mtx44 m);
-extern void fn_801D0F80(Mtx44 m);
-extern void fn_801D1258(int a, Mtx44 m);
-extern void fn_801D12BC(int a);
-extern void fn_801D12EC(int a);
-extern void fn_801D131C(int a);
 extern int fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);
 extern void fn_801DD0E8(int handle);
 extern int fn_801DD200(int handle, int b);
@@ -104,15 +90,15 @@ void fn_80228B74(Object_80228224 *pObject)
         fn_802289FC(projection, pObject->mUnknown216, pObject->mUnknown220, pObject->mUnknown228,
                     pObject->mUnknown224, pObject->mUnknown232, pObject->mUnknown236, pObject->mUnknown240);
     }
-    fn_801D0424(pObject->mUnknown140, projection);
+    fn_801D0424((float *)pObject->mUnknown140, projection[0]);
     fn_801CEA20(projection);
     GXSetViewport(pObject->mUnknown4, pObject->mUnknown8, pObject->mUnknown20, pObject->mUnknown24, 0.0f, 1.0f);
-    fn_801D1258(2, projection);
-    fn_801D1258(1, viewport);
+    fn_801D1258(2, projection[0]);
+    fn_801D1258(1, viewport[0]);
     fn_801D0470(fn_80228668());
-    fn_801D0F80(m);
+    fn_801D0F80(m[0]);
     fn_801D0508();
-    fn_801D0664(m);
+    fn_801D0664(m[0]);
     fn_801D12EC(3);
     fn_801D0544();
     fn_801D12BC(3);

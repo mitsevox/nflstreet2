@@ -21,7 +21,7 @@ void fn_80196F20(int a, unsigned int color, float value);
 int fn_801CECCC(int index);
 int fn_801DCF0C(int a, int size, int c, void (*pInit)(Object_80147AE4 *, int *),
                 void (*pRelease)(Object_80147AE4 *));
-void fn_801DCF8C(int a);
+int fn_801DCF8C(int a);
 void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(Object_80147AE4 *));
 int fn_801DD268(int handle, int a, int b, int *pDesc);
 void fn_801DD320(int handle, Object_80147AE4 *pObject);

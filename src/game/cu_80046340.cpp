@@ -31,7 +31,7 @@ void fn_801A5CA4(Object_80046340 *pObject);
 int fn_801A5D0C(void *pObject);
 int fn_801A5E90(void *pObject);
 int fn_801DCF0C(int a, int size, int c, void (*pInit)(void *), void (*pRelease)(void *));
-void fn_801DCF8C(int a);
+int fn_801DCF8C(int a);
 void fn_801DD0C8(int handle, int a, int b, int (*pCallback)(void *));
 int fn_801DD268(int handle, int a, int b, int *pDesc);
 void fn_801DD320(int handle, void *pItem);

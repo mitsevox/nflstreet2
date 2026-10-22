@@ -6,7 +6,7 @@ void *operator new(unsigned int size, int unknown);
 
 extern "C" {
 int fn_801DCF0C(int a, int b, int c, void (*pA)(), void (*pB)());
-void fn_801DCF8C(int a);
+int fn_801DCF8C(int a);
 int fn_801DCFF0(int a, int b, int c, int d, int e, int f, int g, int h);
 void fn_801DD0C8(int handle, int a, int b, int (*pCallback)());
 void fn_801DD0E8(int handle);
