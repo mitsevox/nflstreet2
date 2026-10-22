@@ -57,7 +57,7 @@ typedef struct File_80285808
 {
     int mHandle;
     int mPosition;
-    const char *mName;
+    const void *mUnknown08;
 } File_80285808;
 
 typedef struct Struct_80285A24
@@ -1141,19 +1141,19 @@ void fn_802857D8(void)
         OSSignalCond(&lbl_803ED4BC);
 }
 
-int fn_80285808(File_80285808 *pFile, const char *pName, const char *pPath, int write)
+int fn_80285808(File_80285808 *pFile, const void *pValue, const char *pName, int write)
 {
     int handle;
 
     if (write)
-        handle = fn_801C96E4(pPath, 44);
+        handle = fn_801C96E4(pName, 44);
     else
-        handle = fn_801C96E4(pPath, 36);
+        handle = fn_801C96E4(pName, 36);
     if (handle < 0)
         return 36;
     pFile->mHandle = handle;
     pFile->mPosition = 0;
-    pFile->mName = pName;
+    pFile->mUnknown08 = pValue;
     return 0;
 }
 
