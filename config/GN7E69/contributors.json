@@ -21180,10 +21180,10 @@
       "provenance": {
         "pull_request": 775,
         "merged_via": 996,
-        "commit": "faa178e7995ca8d43d60fd5fae3a18f64939964b",
-        "introduced_blob": "f7064ba24150c891de6d1098c3513a61010c28a5",
+        "commit": "e7aa82b0c4a985944ac5c76e73211232d956a161",
+        "introduced_blob": "eb69dcf1541634ef5c2a26bab4322b923527c0b1",
         "original_blob": "182af85ca2924d68b2d5f52971492d24254dec94",
-        "integration_adjustment": "Hostile-review fixes in PR775: canonical Object_80233EAC.h and Object_8020E52C.h layouts and declarations, caller-supported unused parameters and one declaration form per address; function bodies, the 117 exact addresses and the original contributor are unchanged. PR 1039 moves the shared Render_802353F8 layout into include/engine/Render_802353F8.h and retypes the 0x802353D4/0x802353D8/0x802353E8 parameters with a byte-identical object; this declaration change does not transfer original source credit.",
+        "integration_adjustment": "Hostile-review fixes in PR775: canonical Object_80233EAC.h and Object_8020E52C.h layouts and declarations, caller-supported unused parameters and one declaration form per address; function bodies, the 117 exact addresses and the original contributor are unchanged. PR 1039 moves the shared 0xC0-byte layout into include/game/Object_80235588.h and retypes the 0x802353D4/0x802353D8/0x802353E8 parameters with a byte-identical object; this declaration change does not transfer original source credit.",
         "original_commit": "b6c89f8dc0e79b43e249aa22e6c26f68ce2d601e"
       }
     },
@@ -26718,8 +26718,8 @@
       "provenance": {
         "pull_request": 1039,
         "merged_via": 1039,
-        "commit": "faa178e7995ca8d43d60fd5fae3a18f64939964b",
-        "introduced_blob": "7ac6839cb233c31db692394817c0e6c4ac34b7dc"
+        "commit": "e7aa82b0c4a985944ac5c76e73211232d956a161",
+        "introduced_blob": "31fc4e33ad3f55e459debaf6fb20aa39c21afa35"
       }
     }
   ],
