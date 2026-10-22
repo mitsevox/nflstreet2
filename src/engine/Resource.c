@@ -4,8 +4,8 @@
 #include "game/fn_801D2B7C.h"
 
 typedef struct ResRequest_801F12B4 {
-    void (*pCallback)(Res_801EDC2C *pRes, int index, void *pBuffer, int b, int c);
-    int mUnk4;
+    ResDone_801EFAD8 pCallback;
+    void *pUser;
     Res_801EDC2C *pRes;
     int mIndex;
     int mUnk10;
@@ -99,7 +99,7 @@ Decomp_801EC760 *fn_8027F7B0(int codec, int mode, ResBuf_801EC914 *pIn, ResBuf_8
 unsigned int fn_8027F880(Decomp_801EC760 *pDecomp);
 void fn_8027F910(Decomp_801EC760 *pDecomp);
 extern int fn_801ECC70(Res_801EDC2C *pRes, unsigned int index, unsigned int *pBuffer);
-extern int fn_801ED634(Res_801EDC2C *pRes, unsigned int index, unsigned int buffer, int heap, int a, ResDone_801EFAD8 pDone, void *pUser, int mode);
+extern int fn_801ED634(Res_801EDC2C *pRes, unsigned int index, void *pBuffer, int heap, int a, ResDone_801EFAD8 pDone, void *pUser, int mode);
 extern int fn_801EDDF8(Res_801EDC2C *pRes, char *pName);
 extern int fn_801EE38C(Res_801EDC2C *pRes, char *pName, unsigned int size);
 int fn_801EEFAC(Res_801EDC2C *pRes);
@@ -287,7 +287,7 @@ static void fn_801EC914(int result, int arg, ResRequest_801F12B4 *pReq)
         fn_801EC650(pRes, index, &offset, &prevSize, &size);
         fn_80239CEC(pReq->pBuffer, size);
         if (pReq->pCallback != 0 && pReq->mTime == 0) {
-            pReq->pCallback(pRes, index, pReq->pBuffer, 0, pReq->mUnk4);
+            pReq->pCallback(pRes, index, pReq->pBuffer, 0, pReq->pUser);
         }
     }
     if (pReq->mTime != 0) {
@@ -859,7 +859,7 @@ unsigned int fn_801EF548(Res_801EDC2C *pRes, unsigned int index, int heap, int a
             p = fn_801EE700(pRes, index, heap, &buffer, 1);
             if (buffer != 0) {
                 pRes->pFlags[index] |= 0x11;
-                err = fn_801ED634(pRes, index, buffer, heap, a, pDone, pUser, 0);
+                err = fn_801ED634(pRes, index, (void *)buffer, heap, a, pDone, pUser, 0);
             } else {
                 err = fn_801F7C88();
             }
@@ -872,7 +872,7 @@ unsigned int fn_801EF548(Res_801EDC2C *pRes, unsigned int index, int heap, int a
         } else {
             buffer = fn_801EDC2C(pRes, index);
             if (pDone != 0) {
-                pDone(pRes, index, buffer, 0, pUser);
+                pDone(pRes, index, (void *)buffer, 0, pUser);
             }
         }
         if (lbl_803EBD88 > 0 && !(pRes->mFlags & 4)) {
@@ -884,8 +884,9 @@ unsigned int fn_801EF548(Res_801EDC2C *pRes, unsigned int index, int heap, int a
     return buffer;
 }
 
-unsigned int fn_801EF7BC(Res_801EDC2C *pRes, unsigned int index, unsigned int buffer)
+unsigned int fn_801EF7BC(Res_801EDC2C *pRes, unsigned int index, void *pBuffer)
 {
+    unsigned int buffer = (unsigned int)pBuffer;
     int err;
 
     fn_801F8014(&lbl_803E931C);
@@ -952,7 +953,7 @@ int fn_801EF92C(Res_801EDC2C *pRes, unsigned int index, void *pBuffer)
     return err;
 }
 
-unsigned int fn_801EFAD8(Res_801EDC2C *pRes, unsigned int index, int heap, unsigned int buffer, int a,
+unsigned int fn_801EFAD8(Res_801EDC2C *pRes, unsigned int index, int heap, void *pBuffer, int a,
                          ResDone_801EFAD8 pDone, void *pUser)
 {
     unsigned int offset;
@@ -971,19 +972,19 @@ unsigned int fn_801EFAD8(Res_801EDC2C *pRes, unsigned int index, int heap, unsig
         WaitLoad_801EF390(pRes, index, 1);
         if (!(pRes->pFlags[index] & 2)) {
             fn_801EC650(pRes, index, &offset, &prevSize, &size);
-            if (buffer != 0) {
+            if (pBuffer != 0) {
                 pRes->pFlags[index] |= 0x10;
-                err = fn_801ED634(pRes, index, buffer, heap, a, pDone, pUser, 0);
+                err = fn_801ED634(pRes, index, pBuffer, heap, a, pDone, pUser, 0);
             } else {
                 err = fn_801F7C88();
             }
             if (err != 0) {
-                buffer = 0;
+                pBuffer = 0;
             }
         } else {
-            buffer = fn_801EDC2C(pRes, index);
+            pBuffer = (void *)fn_801EDC2C(pRes, index);
             err = 0xF0007;
-            pDone(pRes, index, buffer, 0xF0007, pUser);
+            pDone(pRes, index, pBuffer, 0xF0007, pUser);
         }
         if (lbl_803EBD88 > 0 && !(pRes->mFlags & 4)) {
             WaitLoad_801EF390(pRes, index, 1);
@@ -991,10 +992,10 @@ unsigned int fn_801EFAD8(Res_801EDC2C *pRes, unsigned int index, int heap, unsig
     }
     fn_801F809C(&lbl_803E931C);
     fn_801F7BD4(err);
-    return buffer;
+    return (unsigned int)pBuffer;
 }
 
-unsigned int fn_801EFD2C(Res_801EDC2C *pRes, unsigned int index, int heap, unsigned int buffer, int a,
+unsigned int fn_801EFD2C(Res_801EDC2C *pRes, unsigned int index, int heap, void *pBuffer, int a,
                          ResDone_801EFAD8 pDone, void *pUser)
 {
     unsigned int offset;
@@ -1013,19 +1014,19 @@ unsigned int fn_801EFD2C(Res_801EDC2C *pRes, unsigned int index, int heap, unsig
         WaitLoad_801EF390(pRes, index, 1);
         if (!(pRes->pFlags[index] & 2)) {
             fn_801EC650(pRes, index, &offset, &prevSize, &size);
-            if (buffer != 0) {
+            if (pBuffer != 0) {
                 pRes->pFlags[index] |= 0x10;
-                err = fn_801ED634(pRes, index, buffer, heap, a, pDone, pUser, 1);
+                err = fn_801ED634(pRes, index, pBuffer, heap, a, pDone, pUser, 1);
             } else {
                 err = fn_801F7C88();
             }
             if (err != 0) {
-                buffer = 0;
+                pBuffer = 0;
             }
         } else {
-            buffer = fn_801EDC2C(pRes, index);
+            pBuffer = (void *)fn_801EDC2C(pRes, index);
             err = 0xF0007;
-            pDone(pRes, index, buffer, 0xF0007, pUser);
+            pDone(pRes, index, pBuffer, 0xF0007, pUser);
         }
         if (lbl_803EBD88 > 0 && !(pRes->mFlags & 4)) {
             WaitLoad_801EF390(pRes, index, 1);
@@ -1033,11 +1034,12 @@ unsigned int fn_801EFD2C(Res_801EDC2C *pRes, unsigned int index, int heap, unsig
     }
     fn_801F809C(&lbl_803E931C);
     fn_801F7BD4(err);
-    return buffer;
+    return (unsigned int)pBuffer;
 }
 
-int fn_801EFF80(Res_801EDC2C *pRes, unsigned int index, unsigned int buffer)
+int fn_801EFF80(Res_801EDC2C *pRes, unsigned int index, void *pBuffer)
 {
+    unsigned int buffer = (unsigned int)pBuffer;
     unsigned int offset;
     unsigned int prevSize;
     unsigned int size;
@@ -1452,7 +1454,7 @@ void fn_801F12B4(unsigned int time)
             event.mNow = lbl_803EBDA0;
             lbl_803EBD8C(pReq->pRes, pReq->mIndex, &event, 0, lbl_803EBD90);
         }
-        pReq->pCallback(pReq->pRes, pReq->mIndex, pReq->pBuffer, pReq->mUnk30, pReq->mUnk4);
+        pReq->pCallback(pReq->pRes, pReq->mIndex, pReq->pBuffer, pReq->mUnk30, pReq->pUser);
         fn_801D2BD0(pReq);
     }
     fn_801F809C(&lbl_803E931C);

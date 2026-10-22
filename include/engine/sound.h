@@ -15,9 +15,7 @@ typedef struct StreamFile_801F6D54 {
     unsigned int mIndex;
 } StreamFile_801F6D54;
 
-/* Sound bank list item of sound.cpp (NASCAR 2005 mangled names call the type
-   SndBankInfo_t). +0x14 is the sound library's bank index: fn_8026A9F4 and
-   fn_8026A980 multiply it by 12 to index their bank table. */
+/* Sound bank list item; +0x14 is the sound library's bank index. */
 typedef struct SndBankInfo_801F3524 {
     unsigned int mFlags;
     Res_801EDC2C *pRes;

@@ -66,14 +66,14 @@ typedef struct Res_801EDC2C {
     char mUnk94[0x10];
 } Res_801EDC2C;
 
-typedef void (*ResDone_801EFAD8)(Res_801EDC2C *pRes, unsigned int index, unsigned int buffer, int err, void *pUser);
+typedef void (*ResDone_801EFAD8)(void *pRes, unsigned int index, void *pBuffer, unsigned int err, void *pUser);
 
 /* Resource.c */
 unsigned int fn_801EF390(Res_801EDC2C *pRes, unsigned int index, int heap);
-unsigned int fn_801EF7BC(Res_801EDC2C *pRes, unsigned int index, unsigned int buffer);
-unsigned int fn_801EFAD8(Res_801EDC2C *pRes, unsigned int index, int heap, unsigned int buffer, int a,
+unsigned int fn_801EF7BC(Res_801EDC2C *pRes, unsigned int index, void *pBuffer);
+unsigned int fn_801EFAD8(Res_801EDC2C *pRes, unsigned int index, int heap, void *pBuffer, int a,
                          ResDone_801EFAD8 pDone, void *pUser);
-int fn_801EFF80(Res_801EDC2C *pRes, unsigned int index, unsigned int buffer);
+int fn_801EFF80(Res_801EDC2C *pRes, unsigned int index, void *pBuffer);
 int fn_801F010C(Res_801EDC2C *pRes, unsigned int index);
 unsigned int fn_801F0C50(Res_801EDC2C *pRes, unsigned int index);
 int fn_801F10B0(Res_801EDC2C *pRes, unsigned int index, unsigned int *pSize, unsigned int *pOffset, int *pFile);

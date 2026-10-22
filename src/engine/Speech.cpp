@@ -38,9 +38,6 @@ void fn_801F5CEC(void *pFunc);
 void fn_801F5D0C(void);
 }
 
-/* Leading-underscore NASCAR 2005 names with no reference from outside this
-   unit: file-local, with the C++ linkage their mangled NASCAR names show. */
-
 static void fn_801F5760(const char *pFormat, ...)
 {
 }

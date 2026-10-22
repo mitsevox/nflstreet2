@@ -192,10 +192,6 @@ int fn_801F4F28(SndAemsBankInfo_801F4D00 *pBank);
 char *fn_801F4F98(StreamFile_801F6D54 *pFile);
 }
 
-/* Functions with leading-underscore NASCAR 2005 names that nothing outside this
-   unit references are file-local; their NASCAR names are C++-mangled, so they
-   have C++ linkage here. The public API keeps the extern "C" declarations above. */
-
 static int fn_801F3524(void *pNode, void *pState, void *pOut)
 {
     if (((SndBankInfo_801F3524 *)pNode)->mState == (int)pState) {
@@ -246,8 +242,7 @@ static void fn_801F35B4(void)
             if (pData[0] != 'B' || pData[1] != 'N' || pData[2] != 'K' || pData[3] != 'b') {
                 fn_801F010C(pBank->pRes, pBank->mIndex);
                 pBank->mState = 1;
-                fn_801EFAD8(pBank->pRes, pBank->mIndex, 1, (unsigned int)pData, 100, (ResDone_801EFAD8)fn_801F35A8,
-                            pBank);
+                fn_801EFAD8(pBank->pRes, pBank->mIndex, 1, pData, 100, fn_801F35A8, pBank);
             } else {
                 fn_801F50C8(lbl_8039AE8C.pBankTable, pBank->mBank);
                 fn_8026A870(&pBank->mHandle, pBank->pData);
@@ -274,7 +269,7 @@ static SndBankInfo_801F3524 *fn_801F3728(void *pRes, unsigned int index, unsigne
     length = fn_801F0C50((Res_801EDC2C *)pRes, index);
     pBank->pData = pData;
     DCFlushRange(pData, length);
-    fn_801EFF80((Res_801EDC2C *)pRes, index, (unsigned int)pData);
+    fn_801EFF80((Res_801EDC2C *)pRes, index, pData);
     fn_801F50C8(lbl_8039AE8C.pBankTable, pBank->mBank);
     DCFlushRange(pData, length);
     fn_8026A4D4(&pBank->mHandle, pData);
@@ -303,7 +298,7 @@ static void fn_801F3834(void *pRes, SndBankInfo_801F3524 **ppBank, unsigned int 
         pBank->mIndex = index;
         pBank->pData = pData;
         *ppBank = pBank;
-        fn_801EFAD8((Res_801EDC2C *)pRes, index, 1, (unsigned int)pData, 100, (ResDone_801EFAD8)fn_801F35A8, pBank);
+        fn_801EFAD8((Res_801EDC2C *)pRes, index, 1, pData, 100, fn_801F35A8, pBank);
     }
 }
 
@@ -533,7 +528,7 @@ SndSeqInfo_801F438C *fn_801F438C(Res_801EDC2C *pRes, unsigned int index)
     pSeq->pRes = pRes;
     pSeq->mIndex = index;
     pData = fn_801D2B7C(fn_801F0C50(pRes, index), 0, 0);
-    fn_801EFF80(pRes, index, (unsigned int)pData);
+    fn_801EFF80(pRes, index, pData);
     pSeq->mLoaded = 1;
     pSeq->pData = pData;
     pSeq->mUnk8 = -1;
@@ -710,10 +705,10 @@ int fn_801F4B88(Res_801EDC2C *pRes, unsigned int index, int bank)
     if (SND_READY()) {
         fn_801F50C8(lbl_8039AE8C.pBankTable, bank);
         lbl_8039AE8C.pAemsSystem = fn_801D2B7C(fn_801F0C50(pRes, index), 0, 0);
-        fn_801EF7BC(pRes, index, (unsigned int)lbl_8039AE8C.pAemsSystem);
+        fn_801EF7BC(pRes, index, lbl_8039AE8C.pAemsSystem);
         result = fn_801B91A0(lbl_8039AE8C.pAemsSystem);
         lbl_8039AE8C.pAemsStreams = fn_801D2B7C(fn_801F0C50(pRes, index + 1), 0, 0);
-        fn_801EF7BC(pRes, index + 1, (unsigned int)lbl_8039AE8C.pAemsStreams);
+        fn_801EF7BC(pRes, index + 1, lbl_8039AE8C.pAemsStreams);
         fn_8026B124(lbl_8039AE8C.pAemsStreams);
     }
     return result;
@@ -786,7 +781,7 @@ SndAemsBankInfo_801F4D00 *fn_801F4DD8(Res_801EDC2C *pRes, unsigned int index, Re
         size = fn_801F0C50(pRes, index);
         pBank->pData = fn_801D2BB0(1, size, 0, 0);
         DCFlushRange(pBank->pData, size);
-        fn_801EF7BC(pRes, index, (unsigned int)pBank->pData);
+        fn_801EF7BC(pRes, index, pBank->pData);
         DCFlushRange(pBank->pData, size);
         if (pStreamRes != (Res_801EDC2C *)-1 && streamIndex != (unsigned int)-1) {
             pBank->mFile.pRes = pStreamRes;
