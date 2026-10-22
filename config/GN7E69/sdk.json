@@ -405,7 +405,8 @@
           "end": "0x802FC3EC",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "First732 diagnostic bytes completely byte-identical, all16 ADDR32 jump-table entries resolved from native __OSUnhandledException symbol-relative positions to target8023AF0C and match target tablewords. Entire796-byte pool validated without touching output."
+          "evidence": "First732 diagnostic bytes completely byte-identical, all16 ADDR32 jump-table entries resolved from native __OSUnhandledException symbol-relative positions to target8023AF0C and match target tablewords. Entire796-byte pool validated without touching output. The __OSUnhandledException jump table occupies 0x802FC3AC..0x802FC3EC inside this allocation; retain its analysis symbol rather than injecting an overlapping aggregate object symbol.",
+          "object_seed": false
         },
         {
           "section": ".data5",
@@ -664,7 +665,7 @@
       "name": "src/dolphin/os/OSThread.c",
       "source": "src/dolphin/os/OSThread.c",
       "library": "OS",
-      "evidence": "Complete related SDK source with22 exact unlinked measured target functions4892code; current headers reused,17 extra emitted helpers remain genuine source without target identities. Original archive boundaries provisional; full promotion deferred for genuine outside-DOL stack linker constants.",
+      "evidence": "Complete related SDK source, linked in the source build: the 22 target functions (4892 code bytes) are kept and the 17 other SDK functions, which have no code in the target, are dropped by the linker (link_roots). Current headers reused; _stack_addr is a linker-defined address past the image. Original archive boundaries provisional.",
       "sections": [
         {
           "section": ".text",
@@ -672,7 +673,7 @@
           "end": "0x8023E794",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Registered complete target interval contains 22 exact unlinked functions, 4892 bytes with actual operands resolved. Seventeen other emitted donor bodies remain genuine source without target identities; the full emitted native code is not claimed as this target interval. Archive edges remain provisional."
+          "evidence": "Registered complete target interval contains the 22 target functions, 4892 bytes, linked from source; the linker drops the 17 other SDK functions, which have no code in the target. Archive edges remain provisional."
         },
         {
           "section": ".bss",
@@ -680,7 +681,7 @@
           "end": "0x803A4510",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete native .bss allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional.",
+          "evidence": "Complete native .bss allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Linked in the source build; original archive ownership provisional.",
           "object_seed": true
         },
         {
@@ -689,7 +690,7 @@
           "end": "0x802FCC8D",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete native .data allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional.",
+          "evidence": "Complete native .data allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Linked in the source build; original archive ownership provisional.",
           "object_seed": true
         },
         {
@@ -698,7 +699,7 @@
           "end": "0x803ED0DC",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete native .sbss allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional.",
+          "evidence": "Complete native .sbss allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Linked in the source build; original archive ownership provisional.",
           "object_seed": true
         },
         {
@@ -707,7 +708,7 @@
           "end": "0x803EC16D",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete native .sdata allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Source stays comparison-only; original archive ownership provisional.",
+          "evidence": "Complete native .sdata allocation, all actual operands resolved; initialized bytes fully compared, NOBITS reference/allocation only. Linked in the source build; original archive ownership provisional.",
           "object_seed": true
         }
       ]
@@ -1874,7 +1875,7 @@
           "end": "0x8024CB90",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Sixteen independently reviewed functions span8024C038..8024C7D8 (1952bytes) and are linked from complete BFBB source. Remaining8024C7D8..8024CB90 is only a provisional GX family/file partition; no remaining body or dSDK Clean tail is promoted or claimed reconstructed."
+          "evidence": "All 21 target functions 8024C038..8024CB90 (2904 bytes) are linked from the complete source: the sixteen BFBB functions to 8024C7D8 and the tail __GXCleanGPFifo, GXGetCPUFifo, GXGetGPFifo, GXRedirectWriteGatherPipe and GXRestoreWriteGatherPipe. Original archive edges remain provisional."
         }
       ]
     },
@@ -1916,7 +1917,7 @@
       "name": "src/dolphin/gx/GXMisc.c",
       "source": "src/dolphin/gx/GXMisc.c",
       "library": "GX",
-      "evidence": "Combined independently reviewed BFBB, OOT GameCube and TP C forms register 24 complete target functions spanning 2280 code bytes in the retained provisional grouping. Original-file ownership remains unresolved; unassigned donor APIs receive no credit. Accepted ordinary output, native 20-byte callback/draw-finish SBSS allocation, compiler profile and existing source attribution are preserved. No whole-file promotion or initialized-storage credit is claimed by this code coverage.",
+      "evidence": "Combined independently reviewed BFBB, OOT GameCube and TP C forms give 24 complete target functions spanning 2280 code bytes. The source is the whole SDK GXMisc.c in target order: those 24 functions plus GXSetDrawSync and GXReadDrawSync, which have no code in the target and are dropped by the linker. Linked in the source build; original archive edges remain provisional.",
       "sections": [
         {
           "section": ".text",
@@ -1924,7 +1925,7 @@
           "end": "0x8024E888",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Combined independently reviewed BFBB, OOT GameCube and TP C forms register 24 complete target functions spanning 2280 code bytes in the retained provisional grouping. Original-file ownership remains unresolved; unassigned donor APIs receive no credit. Accepted ordinary output, native 20-byte callback/draw-finish SBSS allocation, compiler profile and existing source attribution are preserved. No whole-file promotion or initialized-storage credit is claimed by this code coverage."
+          "evidence": "Combined independently reviewed BFBB, OOT GameCube and TP C forms give 24 complete target functions spanning 2280 code bytes. The source is the whole SDK GXMisc.c in target order: those 24 functions plus GXSetDrawSync and GXReadDrawSync, which have no code in the target and are dropped by the linker. Linked in the source build; original archive edges remain provisional."
         },
         {
           "section": ".sbss",
@@ -1932,7 +1933,7 @@
           "end": "0x803ED3B4",
           "start_boundary": "exact",
           "end_boundary": "exact",
-          "evidence": "Actual original operands bind TokenCB pointer+0, DrawDoneCB pointer+4, DrawDone u8+8 and aligned OSThreadQueue two pointers+12. Complete native20 allocation; natural alignment, no invented padding. Unlinked NOBITS placement receives no initialized-byte/source-storage credit. Seed the independently proven complete20-byte native allocation; do not extend it to neighboring inferred DTK labels.",
+          "evidence": "Actual original operands bind TokenCB pointer+0, DrawDoneCB pointer+4, DrawDone u8+8 and aligned OSThreadQueue two pointers+12. Complete native20 allocation; natural alignment, no invented padding. NOBITS placement, linked in the source build; no initialized bytes. Seed the independently proven complete20-byte native allocation; do not extend it to neighboring inferred DTK labels.",
           "object_seed": true
         }
       ]
