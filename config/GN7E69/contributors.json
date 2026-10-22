@@ -26445,21 +26445,6 @@
       }
     },
     {
-      "source": "src/game/cu_80150710.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x801507E0"
-      ],
-      "provenance": {
-        "pull_request": 1023,
-        "merged_via": 1023,
-        "commit": "8b60e3336d788b99986bdb3d01683e8b03142616",
-        "introduced_blob": "ec19fb09720f560d104b07479c3348db34a06150"
-      }
-    },
-    {
       "source": "src/game/cu_80153844.cpp",
       "contributors": [
         "mitsevox"
