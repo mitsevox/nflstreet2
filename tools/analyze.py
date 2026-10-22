@@ -220,6 +220,11 @@ def main():
         f"size:0x{int(item['end'], 16) - int(item['start'], 16):X}\n"
         for key, kind in (("data_ranges", "object"), ("function_seeds", "function"))
         for item in plan[key]
+    ) + "".join(
+        # Addresses outside every section (the unaligned end of .bss) must be seeded as
+        # absolute, or dtk 1.8.4 sizes a per-section table by the 0xFFFFFFFF sentinel.
+        f"{name} = ABS:{address}; // type:label\n"
+        for name, address in plan["absolute_symbols"].items()
     )
     section_text = section_description(plan["section_kinds"])
     symbols.write_text(seed_text)

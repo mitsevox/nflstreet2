@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Measure bounded compiled source with objdiff, without granting linked-build credit."""
 import argparse
+import bisect
 import csv
 import hashlib
 import json
@@ -30,6 +31,9 @@ def score_pair(tool, expected, actual, symbols, kind, directory):
     size = len(expected)
     if not actual or not size:
         raise ValueError('Comparison requires a complete bounded range')
+    if expected == actual:
+        # Identical bytes score full credit either way; objdiff only grades the differences.
+        return {'matched': size, 'fuzzy': size}
     if kind == 'data':
         symbols = [{'name': 'data', 'value': 0, 'size': size, 'shndx': 1, 'type': 1}]
     section = {'name': '.text' if kind == 'code' else '.data', 'flags': 6 if kind == 'code' else 3,
@@ -217,6 +221,28 @@ def apply(data, measurement):
     """Roll up unlinked comparison credit without changing ownership or linked credit."""
     accepted = {u['source'] for u in json.loads((ROOT / 'config/GN7E69/units.json').read_text())['units']}
     entries = [e for e in measurement['entries'] if not e.get('linked', e['source'] in accepted)]
+    # Index entries by kind and start so each map leaf visits only the entries near it.
+    by_kind = {}
+    for order, entry in enumerate(entries):
+        by_kind.setdefault(entry['kind'], []).append((int(entry['start'],16), order, entry))
+    index = {}
+    for kind, rows in by_kind.items():
+        rows.sort(key=lambda row: row[:2])
+        index[kind] = ([row[0] for row in rows], rows,
+                       max(int(row[2]['end'],16) - row[0] for row in rows))
+
+    def nearby(kind, spans, function_address):
+        if kind not in index:
+            return []
+        starts, rows, longest = index[kind]
+        found = set()
+        for a, b in spans:
+            found.update(range(bisect.bisect_left(starts, a - longest), bisect.bisect_left(starts, b)))
+        if function_address is not None:
+            at = int(function_address,16)
+            found.update(range(bisect.bisect_left(starts, at), bisect.bisect_right(starts, at)))
+        # Keep the original entry order so floating-point sums are unchanged.
+        return [rows[i][2] for i in sorted(found, key=lambda i: rows[i][1])]
 
     def subtract(spans, cuts):
         for left, right in cuts:
@@ -243,10 +269,10 @@ def apply(data, measurement):
                 item[field] = sum(child[field] for child in item['children'])
         else:
             matched = fuzzy = item['linked']
+            if item['kind'] in index:
+                fuzzy = float(fuzzy)  # Same float type as summing every entry of this kind.
             item.pop('comparison_source', None)
-            for entry in entries:
-                if entry['kind'] != item['kind']:
-                    continue
+            for entry in nearby(item['kind'], spans, item.get('function_address')):
                 start,end = int(entry['start'],16),int(entry['end'],16)
                 if item.get('type') == 'function' and entry.get('type') == 'function' \
                         and item.get('function_address') == entry['start'] \
@@ -280,8 +306,9 @@ def apply(data, measurement):
                             if row['kind']=='function' and row['start_boundary']==row['end_boundary']=='exact'}
         candidate_exact = {(int(e['start'],16),int(e['end'],16)) for e in entries
                            if e.get('type')=='function' and e['matched']==int(e['end'],16)-int(e['start'],16)}
+        credited_exact = candidate_exact & exact_bounds
         additional_exact = sum((int(c['address'],16),int(c['address'],16)+c['size']) in
-                               (candidate_exact & exact_bounds) and c['linked']<c['size'] and c['matched']==c['size']
+                               credited_exact and c['linked']<c['size'] and c['matched']==c['size']
                                for s in data['sections'] if s['kind']=='code'
                                for c in s['children'] if 'address' in c)
         previous = data.get('comparison',{}).get('additional_exact_functions',0)
