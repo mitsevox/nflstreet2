@@ -1,14 +1,14 @@
 #ifndef ENGINE_SYSTEM_H
 #define ENGINE_SYSTEM_H
 
+#include "engine/fn_801F7BD4.h"
+#include "engine/fn_801F8014.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 struct OSMutex;
-
-/* Recursive critical section (defined in llsystem.c). */
-typedef struct SysCriticalSection_8039B3F8 SysCriticalSection_8039B3F8;
 
 typedef struct SysTimer_801F7B1C {
     void *pFunc;
@@ -35,18 +35,12 @@ typedef struct SysTime_8039B430 {
 unsigned int fn_801F7ABC(void);
 void fn_801F7AE8(void);
 unsigned int fn_801F7B14(void);
-int fn_801F7BD4(int err);
-int fn_801F7C88(void);
 
 /* llsystem.c */
 int fn_801F7E90(void);
 int fn_801F7ED0(void);
 int fn_801F7EF8(SysTimer_801F7B1C *pTimer);
 int fn_801F7F60(SysTimer_801F7B1C *pTimer);
-void fn_801F7FA8(SysCriticalSection_8039B3F8 *pSection);
-void fn_801F8014(SysCriticalSection_8039B3F8 *pSection);
-void fn_801F809C(SysCriticalSection_8039B3F8 *pSection);
-void fn_801F80D0(SysCriticalSection_8039B3F8 *pSection);
 void fn_801F80E8(struct OSMutex **ppMutex);
 int fn_801F8128(struct OSMutex **ppMutex);
 void fn_801F8150(struct OSMutex **ppMutex);

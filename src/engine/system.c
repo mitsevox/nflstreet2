@@ -41,7 +41,7 @@ extern SysTimer_801F7B1C *lbl_803EBE44;
 extern unsigned int lbl_803EBE48;
 extern void *lbl_803ECFA4;
 extern void *lbl_803ECFA8;
-extern SysCriticalSection_8039B3F8 lbl_8039B3F8;
+extern Lock_801F8014 lbl_8039B3F8;
 
 SysTimer_801F7B1C *fn_801F7B1C(void *pFunc, int a);
 void fn_801F7B9C(SysTimer_801F7B1C *pTimer);

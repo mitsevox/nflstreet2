@@ -1,6 +1,7 @@
 #include "engine/Resource.h"
 #include "engine/system.h"
 #include "game/fn_801C68FC.h"
+#include "game/fn_801D2B7C.h"
 
 typedef struct ResRequest_801F12B4 {
     void (*pCallback)(Res_801EDC2C *pRes, int index, int a, int b, int c);
@@ -48,8 +49,8 @@ typedef struct Decomp_801EC760 {
 
 typedef void (*ResDone_801EFAD8)(Res_801EDC2C *pRes, unsigned int index, unsigned int buffer, int err, void *pUser);
 
-extern SysCriticalSection_8039B3F8 lbl_803E92FC;
-extern SysCriticalSection_8039B3F8 lbl_803E931C;
+extern Lock_801F8014 lbl_803E92FC;
+extern Lock_801F8014 lbl_803E931C;
 extern unsigned char lbl_803EBD80;
 extern int lbl_803EBD84;
 extern int lbl_803EBD88;
@@ -89,8 +90,6 @@ extern int fn_801CB120(void);
 extern int fn_801C96E4(const char *pName, int device);
 extern int fn_801C97F0(int handle);
 extern int fn_801C9960(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
-extern void *fn_801D2BB0(int heap, int size, int ident, int flags);
-extern int fn_801D2BD0(void *p);
 void fn_801D3318(int ident, const char *pLabel);
 void fn_801D339C(int ident);
 void fn_801D342C(int ident);

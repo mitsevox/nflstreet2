@@ -1,4 +1,5 @@
 #include "engine/Resource.h"
+#include "game/fn_801D2B7C.h"
 
 typedef struct ResCacheWrite_801F2E54 {
     Res_801EDC2C *pFile;
@@ -20,8 +21,6 @@ extern void fn_801CA834(int handle);
 extern int fn_801CB148(char handle);
 extern int fn_801CB1AC(int device);
 extern int fn_801CB1B4(int handle, int value);
-extern void *fn_801D2BB0(int heap, int size, int ident, int flags);
-extern int fn_801D2BD0(void *p);
 
 extern char lbl_802B19A4[];
 extern unsigned char lbl_803EBDE0;

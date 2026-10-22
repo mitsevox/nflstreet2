@@ -1,3 +1,5 @@
+#include "game/fn_801D2B7C.h"
+
 struct SndBankInfo_801F3524 {
     unsigned int mFlags;
     int mFile;
@@ -119,9 +121,6 @@ void fn_801C6C0C(void *pList, void *pNode);
 int fn_801C6D34(void *pPool, int start, void *pKey, void *pOut, SndTraverse_801C6D34 pFunc, int count);
 int fn_801CB120(void);
 void fn_801CAF24(void);
-void *fn_801D2B7C(int size, int a, int b);
-void *fn_801D2BB0(int heap, int size, int ident, int flags);
-int fn_801D2BD0(void *p);
 void *fn_801D310C(void *pAddr, int size, int ident, int flags);
 void fn_801EF7BC(int file, int entry, void *pDest);
 void fn_801EFAD8(int file, int entry, int b, void *pDest, int priority, SndLoadCallback_801F35A8 func, void *pUser);

@@ -1,5 +1,5 @@
-extern void *fn_801D2BB0(int heap, int size, int ident, int flags);
-extern int fn_801D2BD0(void *p);
+#include "game/fn_801D2B7C.h"
+
 extern void fn_801F522C(int type, void (*pSort)(void *pBase, unsigned int count, int size,
                                                 int (*pCompare)(void *, void *),
                                                 void (*pSwap)(void *, void *), void *pTemp, int flags));

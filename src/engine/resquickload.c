@@ -1,5 +1,6 @@
 #include "engine/Resource.h"
 #include "game/fn_801C68FC.h"
+#include "game/fn_801D2B7C.h"
 
 typedef struct ResQuickloadChunk_801F284C {
     unsigned int mID;
@@ -59,8 +60,6 @@ extern int fn_801C97F0(int handle);
 extern int fn_801C9844(int handle, int offset, unsigned int whence);
 extern int fn_801C9960(int handle, void *pBuffer, int size, void (*pCallback)(int, int, int));
 extern int fn_801C9D2C(int handle);
-extern int fn_801D2BD0(void *p);
-extern void *fn_801D2BB0(int heap, int size, int ident, int flags);
 extern void *fn_802623A8(const void *pKey, const void *pBase, int count, int size,
                          int (*pCompare)(const void *, const void *));
 

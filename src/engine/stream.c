@@ -94,7 +94,7 @@ extern void fn_801F7764(struct OSMutex *pMutex);
 extern void fn_801F778C(struct OSMutex *pMutex);
 extern void fn_801F77B4(struct OSMutex *pMutex);
 
-extern SysCriticalSection_8039B3F8 lbl_8039B3D8;
+extern Lock_801F8014 lbl_8039B3D8;
 
 extern unsigned int lbl_803ECFA0;
 

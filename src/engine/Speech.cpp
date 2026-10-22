@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include "engine/system.h"
+#include "game/fn_801D2B7C.h"
 
 struct SpchLogEvent_8039AEF8 {
     int mType;
@@ -21,7 +22,6 @@ extern void *lbl_803ECF90;
 extern unsigned char lbl_803EBE28;
 
 void *memset(void *dst, int value, size_t n);
-int fn_801D2BD0(void *p);
 void *fn_801EF390(int file, int entry, int c);
 void fn_801AF060(void);
 void fn_801AF5E4(int (*pA)(void), void (*pB)(void));

@@ -1,7 +1,7 @@
 #include "engine/Resource.h"
+#include "game/fn_801D2B7C.h"
 
 extern unsigned int strlen(const char *s);
-extern void *fn_801D2B7C(int size, int a, int b);
 extern int fn_801F34C0(char *pString, int multiplier);
 
 int fn_801F1538(char *pString, unsigned int length, unsigned int *pParams)

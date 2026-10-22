@@ -1,3 +1,5 @@
+#include "game/fn_801D2B7C.h"
+
 typedef struct SndBank_801F5034 {
     char mUnknown0[12];
     void *pData;
@@ -11,8 +13,6 @@ typedef struct SndBankEntry_801F50C8 {
     int mUnknown8;
 } SndBankEntry_801F50C8;
 
-extern void *fn_801D2BB0(int heap, int size, int ident, int flags);
-extern int fn_801D2BD0(void *p);
 extern void *fn_801D310C(void *pAddr, int size, int ident, int flags);
 extern void fn_8026A980(void *pDest, void *pBank);
 extern int fn_8026A9F4(void *pBank);

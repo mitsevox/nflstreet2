@@ -1,8 +1,8 @@
 #include "engine/Resource.h"
 #include "engine/system.h"
+#include "game/fn_801D2B7C.h"
 
 extern int sprintf(char *s, const char *format, ...);
-extern void *fn_801D2BB0(int heap, int size, int ident, int flags);
 
 extern int lbl_803EBDB8;
 extern char *lbl_803EBDBC;

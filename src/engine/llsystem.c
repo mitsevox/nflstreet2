@@ -2,22 +2,16 @@
 #include <dolphin/vi.h>
 #include <dolphin/gx.h>
 #include "engine/system.h"
+#include "game/fn_801D2B7C.h"
 
 typedef int (*SysResetCallback_801F8868)(void);
 
-struct SysCriticalSection_8039B3F8 {
-    OSMutex mMutex;
-    int mOwner;
-    int mCount;
-};
 
 extern void fn_8024E1FC(void);
 extern BOOL fn_8023E628(OSThread *thread, OSPriority priority);
 extern void fn_8023DB7C(void);
 extern void fn_8023C0F8(int reset, u32 resetCode, BOOL forceMenu);
 extern void fn_801CE2B8(int a);
-extern void *fn_801D2B7C(int size, int a, int b);
-extern int fn_801D2BD0(void *p);
 extern void fn_801CAB30(void);
 extern void fn_80239ED4(void);
 extern void fn_80247030(unsigned int mask);
@@ -91,7 +85,7 @@ int fn_801F7F60(SysTimer_801F7B1C *pTimer)
     return 0;
 }
 
-void fn_801F7FA8(SysCriticalSection_8039B3F8 *pSection)
+void fn_801F7FA8(Lock_801F8014 *pSection)
 {
     if (lbl_803EBE68) {
         lbl_803EBE68 = 0;
@@ -103,7 +97,7 @@ void fn_801F7FA8(SysCriticalSection_8039B3F8 *pSection)
     pSection->mCount = 0;
 }
 
-void fn_801F8014(SysCriticalSection_8039B3F8 *pSection)
+void fn_801F8014(Lock_801F8014 *pSection)
 {
     int owner;
 
@@ -120,14 +114,14 @@ void fn_801F8014(SysCriticalSection_8039B3F8 *pSection)
     }
 }
 
-void fn_801F809C(SysCriticalSection_8039B3F8 *pSection)
+void fn_801F809C(Lock_801F8014 *pSection)
 {
     if (--pSection->mCount == 0) {
         OSUnlockMutex(&pSection->mMutex);
     }
 }
 
-void fn_801F80D0(SysCriticalSection_8039B3F8 *pSection)
+void fn_801F80D0(Lock_801F8014 *pSection)
 {
     pSection->mOwner = 0;
     lbl_803EBE50--;
