@@ -1,14 +1,9 @@
 #include <string.h>
 #include "engine/particleLib.h"
+#include "engine/cu_801C06E8.h"
 #include "game/cu_801CF5BC.h"
 #include "game/fn_801D2B7C.h"
-
-/* Collision parameters read by fn_801DF578. */
-typedef struct Collision_801DF578 {
-    Vec3_801DE1E0 mUnknown00;
-    Vec3_801DE1E0 mUnknown0C;
-    Vec3_801DE1E0 mUnknown18;
-} Collision_801DF578;
+#include "game/fn_802270D4.h"
 
 /* Pool of particle systems created from one template (0x6E4 bytes). */
 typedef struct Pool_801DE1E0 {
@@ -19,7 +14,7 @@ typedef struct Pool_801DE1E0 {
     Template_801DE1E0 mTemplate;
 } Pool_801DE1E0;
 
-/* Descriptor passed to ParticleLibInit (lbl_802DCFF8 in the game). */
+/* Descriptor passed to fn_801DE1E0 (lbl_802DCFF8 in the game). */
 typedef struct Desc_801DE1E0 {
     int mUnknown00;
     unsigned short mUnknown04;
@@ -91,7 +86,6 @@ extern Vec3_801DE1E0 lbl_802F94C4;
 extern unsigned char lbl_803EBD58;
 extern float lbl_803ECF4C;
 
-void *fn_801C0D8C(char *pName);
 float fn_801CF69C(void *p);
 int fn_801CF6D4(void *p, int range);
 void fn_801D04C4(void);
@@ -101,7 +95,7 @@ void fn_801D0558(void);
 void fn_801D08FC(int a);
 void fn_801D09EC(int a);
 void fn_801D0ADC(int a);
-void fn_801D0C58(float (*m)[4]);
+void fn_801D0C58(Vec3_801DE1E0 *pPos);
 void fn_801D0F80(float (*m)[4]);
 void fn_801D2130(ObjType_801DE1E0 *pType);
 int fn_801D2570(int a);
@@ -116,30 +110,22 @@ void fn_801DD0E8(void *pList);
 PartObj_801DE1E0 *fn_801DD168(unsigned char heap, int a, Template_801DE1E0 *pTemplate);
 int fn_801DD200(void *pList, void *pObj);
 void fn_801DF3E4(unsigned char *pSrc, unsigned char *pDst, unsigned int size, int noSwap);
-void fn_801DFE0C(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
-void fn_801E0384(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
-void fn_801E03F4(PartObj_801DE1E0 *pObj);
-void fn_801E043C(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle);
-Ramp_801E052C *fn_801E098C(Ramp_801E052C *pSrc, Ramp_801E052C *pDst);
-float fn_802270D4(float *pVec);
-void fn_80227264(Vec3_801DE1E0 *pDst, Vec3_801DE1E0 *pSrc, float scale);
-void fn_80227C2C(Vec3_801DE1E0 *pDst, Vec3_801DE1E0 *pSrc);
 
 void fn_801DD730(PartObj_801DE1E0 *pObj, unsigned short count, int step, int steps, float dt);
-void fn_801DDFB0(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, float dt);
-void fn_801DE04C(PartObj_801DE1E0 *pObj);
-void fn_801DE114(PartObj_801DE1E0 *pObj);
+static void fn_801DDFB0(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, float dt);
+static void fn_801DE04C(PartObj_801DE1E0 *pObj);
+static void fn_801DE114(PartObj_801DE1E0 *pObj);
 void fn_801DE564(PartObj_801DE1E0 *pDst, Template_801DE1E0 *pSrc);
 void fn_801DE794(PartObj_801DE1E0 *pObj);
-void fn_801DE968(PartObj_801DE1E0 *pObj, void *pTex);
+void fn_801DE968(PartObj_801DE1E0 *pObj, Texture_801C0928 *pTex);
 void fn_801DE9A0(PartObj_801DE1E0 *pObj, Vec3_801DE1E0 *pPos, Vec3_801DE1E0 *pRot);
 int fn_801DEA90(PartObj_801DE1E0 *pObj, int steps);
-void fn_801DE7F4(PartObj_801DE1E0 *pObj, Template_801DE1E0 *pTemplate);
-void fn_801DEA50(PartObj_801DE1E0 *pObj);
+static void fn_801DE7F4(PartObj_801DE1E0 *pObj, Template_801DE1E0 *pTemplate);
+static void fn_801DEA50(PartObj_801DE1E0 *pObj);
 void fn_801DEF18(PartObj_801DE1E0 *pObj);
 void fn_801DFD4C(void);
 
-void fn_801DD498(void)
+static void fn_801DD498(void)
 {
     fn_801D34D0(&lbl_8039ADAC, sizeof(lbl_8039ADAC), 0, 1);
     lbl_8039ADAC.mpUsed = fn_801D2B7C(lbl_8039AD10.mPoolCount, 0, 0);
@@ -148,7 +134,7 @@ void fn_801DD498(void)
     fn_801D34D0(lbl_8039ADAC.mpPools, lbl_8039AD10.mPoolCount * sizeof(Pool_801DE1E0), 0, 1);
 }
 
-void fn_801DD534(void)
+static void fn_801DD534(void)
 {
     fn_801D2BD0(lbl_8039ADAC.mpUsed);
     lbl_8039ADAC.mpUsed = 0;
@@ -156,7 +142,7 @@ void fn_801DD534(void)
     lbl_8039ADAC.mpPools = 0;
 }
 
-PartObj_801DE1E0 *fn_801DD57C(unsigned short handle)
+static PartObj_801DE1E0 *fn_801DD57C(unsigned short handle)
 {
     Pool_801DE1E0 *pPool = &lbl_8039ADAC.mpPools[handle];
     PartObj_801DE1E0 *pObj;
@@ -195,7 +181,7 @@ fail:
     return 0;
 }
 
-void fn_801DD6B8(PartObj_801DE1E0 *pObj)
+static void fn_801DD6B8(PartObj_801DE1E0 *pObj)
 {
     int i;
     int last = pObj->mCount - 1;
@@ -217,7 +203,7 @@ void fn_801DD6B8(PartObj_801DE1E0 *pObj)
     }
 }
 
-void fn_801DDCC4(PartObj_801DE1E0 *pObj)
+static void fn_801DDCC4(PartObj_801DE1E0 *pObj)
 {
     unsigned int i;
 
@@ -226,7 +212,7 @@ void fn_801DDCC4(PartObj_801DE1E0 *pObj)
     }
 }
 
-void fn_801DDD00(PartObj_801DE1E0 *pObj, float dt)
+static void fn_801DDD00(PartObj_801DE1E0 *pObj, float dt)
 {
     if (pObj->mUnknown0C8 != 0.0f) {
         float value = pObj->mUnknown0C8 * dt + pObj->mUnknown0B0;
@@ -263,7 +249,7 @@ void fn_801DDD00(PartObj_801DE1E0 *pObj, float dt)
     }
 }
 
-void fn_801DDE08(PartObj_801DE1E0 *pObj, float dt)
+static void fn_801DDE08(PartObj_801DE1E0 *pObj, float dt)
 {
     unsigned short i;
 
@@ -287,7 +273,7 @@ void fn_801DDE08(PartObj_801DE1E0 *pObj, float dt)
     }
 }
 
-void fn_801DDFB0(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, float dt)
+static void fn_801DDFB0(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, float dt)
 {
     float scale = pObj->mUnknown2B0 * dt;
 
@@ -299,7 +285,7 @@ void fn_801DDFB0(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, float dt)
     pParticle->mPos.z = pParticle->mVel.z * dt + pParticle->mPrevPos.z;
 }
 
-void fn_801DE010(PartObj_801DE1E0 *pObj)
+static void fn_801DE010(PartObj_801DE1E0 *pObj)
 {
     switch (pObj->mForceType) {
     case 1:
@@ -311,7 +297,7 @@ void fn_801DE010(PartObj_801DE1E0 *pObj)
     }
 }
 
-void fn_801DE04C(PartObj_801DE1E0 *pObj)
+static void fn_801DE04C(PartObj_801DE1E0 *pObj)
 {
     Vec3_801DE1E0 force;
     unsigned int i;
@@ -333,7 +319,7 @@ void fn_801DE04C(PartObj_801DE1E0 *pObj)
     }
 }
 
-void fn_801DE114(PartObj_801DE1E0 *pObj)
+static void fn_801DE114(PartObj_801DE1E0 *pObj)
 {
     Vec3_801DE1E0 force;
     unsigned short i;
@@ -551,10 +537,10 @@ void fn_801DE794(PartObj_801DE1E0 *pObj)
     pObj->mUnknown2B0 = 1.0f / pObj->mUnknown090;
 }
 
-void fn_801DE7F4(PartObj_801DE1E0 *pObj, Template_801DE1E0 *pTemplate)
+static void fn_801DE7F4(PartObj_801DE1E0 *pObj, Template_801DE1E0 *pTemplate)
 {
     unsigned short i;
-    void *pTex;
+    Texture_801C0928 *pTex;
 
     if (pTemplate->mObj.mUnknown03F) {
         pObj->mMax = pTemplate->mObj.mUnknown0B4;
@@ -587,18 +573,18 @@ PartObj_801DE1E0 *fn_801DE918(Template_801DE1E0 *pTemplate)
     return pObj;
 }
 
-void fn_801DE968(PartObj_801DE1E0 *pObj, void *pTex)
+void fn_801DE968(PartObj_801DE1E0 *pObj, Texture_801C0928 *pTex)
 {
     pObj->mUnknown045 = 1;
     pObj->mpUnknown2AC = pTex;
-    strcpy(pObj->mUnknown28C, pTex);
+    strcpy(pObj->mUnknown28C, pTex->mName);
 }
 
 void fn_801DE9A0(PartObj_801DE1E0 *pObj, Vec3_801DE1E0 *pPos, Vec3_801DE1E0 *pRot)
 {
     fn_801D0508();
     if (pPos) {
-        fn_801D0C58((float (*)[4])pPos);
+        fn_801D0C58(pPos);
     }
     if (pRot) {
         fn_801D0ADC((int)(pRot->z * 46603.38f));
@@ -609,7 +595,7 @@ void fn_801DE9A0(PartObj_801DE1E0 *pObj, Vec3_801DE1E0 *pPos, Vec3_801DE1E0 *pRo
     fn_801D0544();
 }
 
-void fn_801DEA50(PartObj_801DE1E0 *pObj)
+static void fn_801DEA50(PartObj_801DE1E0 *pObj)
 {
     fn_801D2BD0(pObj->mppParticles);
     if (pObj->mpParticles) {
@@ -691,11 +677,6 @@ int fn_801DEA90(PartObj_801DE1E0 *pObj, int steps)
     return 0;
 }
 
-PartObj_801DE1E0 *fn_801DEEF8(unsigned short handle)
-{
-    return fn_801DD57C(handle);
-}
-
 unsigned short fn_801DECFC(unsigned short count, Template_801DE1E0 *pTemplate)
 {
     unsigned short index;
@@ -731,6 +712,11 @@ unsigned short fn_801DECFC(unsigned short count, Template_801DE1E0 *pTemplate)
     lbl_8039ADAC.mpPools[index].mTemplate = *pTemplate;
     fn_801E098C(&pTemplate->mRamp, &lbl_8039ADAC.mpPools[index].mTemplate.mRamp);
     return index;
+}
+
+PartObj_801DE1E0 *fn_801DEEF8(unsigned short handle)
+{
+    return fn_801DD57C(handle);
 }
 
 void fn_801DEF18(PartObj_801DE1E0 *pObj)
@@ -808,7 +794,7 @@ void fn_801DF2AC(unsigned char **ppData, Vec3_801DE1E0 *pDst, int noSwap)
     *ppData += 4;
 }
 
-void fn_801DF338(unsigned char **ppData, Vec4_801DE1E0 *pDst, int noSwap)
+static void fn_801DF338(unsigned char **ppData, Vec4_801DE1E0 *pDst, int noSwap)
 {
     fn_801DF3E4(*ppData, (unsigned char *)&pDst->x, 4, noSwap);
     *ppData += 4;
@@ -820,37 +806,37 @@ void fn_801DF338(unsigned char **ppData, Vec4_801DE1E0 *pDst, int noSwap)
     *ppData += 4;
 }
 
-void fn_801DF428(unsigned char **ppData, Shape_801DF428 *pDst, unsigned int type, int noSwap)
+static void fn_801DF428(unsigned char **ppData, Emitter_801DFE0C *pDst, unsigned int type, int noSwap)
 {
     unsigned char *pData = *ppData;
 
     switch (type) {
     case 0:
-        fn_801DF2AC(&pData, &pDst->mUnknown00, noSwap);
+        fn_801DF2AC(&pData, &pDst->mPoint, noSwap);
         break;
     case 1:
-        fn_801DF2AC(&pData, &pDst->mUnknown00, noSwap);
-        fn_801DF2AC(&pData, &pDst->mUnknown0C, noSwap);
+        fn_801DF2AC(&pData, &pDst->mLine.mUnknown00, noSwap);
+        fn_801DF2AC(&pData, &pDst->mLine.mUnknown0C, noSwap);
         break;
     case 2:
-        fn_801DF2AC(&pData, &pDst->mUnknown00, noSwap);
-        fn_801DF228(&pData, &pDst->mUnknown0C, noSwap);
+        fn_801DF2AC(&pData, &pDst->mSphere.mUnknown00, noSwap);
+        fn_801DF228(&pData, &pDst->mSphere.mUnknown0C, noSwap);
         break;
     case 3:
-        fn_801DF2AC(&pData, &pDst->mUnknown00, noSwap);
-        fn_801DF2AC(&pData, &pDst->mUnknown0C, noSwap);
-        fn_801DF2AC(&pData, &pDst->mUnknown18, noSwap);
-        fn_801DF228(&pData, &pDst->mUnknown24, noSwap);
-        fn_801DF228(&pData, &pDst->mUnknown28, noSwap);
-        fn_801DF2AC(&pData, &pDst->mUnknown2C, noSwap);
-        fn_801DF2AC(&pData, &pDst->mUnknown38, noSwap);
-        fn_801DF228(&pData, &pDst->mUnknown44, noSwap);
+        fn_801DF2AC(&pData, &pDst->mBox.mUnknown00, noSwap);
+        fn_801DF2AC(&pData, &pDst->mBox.mUnknown0C, noSwap);
+        fn_801DF2AC(&pData, &pDst->mBox.mUnknown18, noSwap);
+        fn_801DF228(&pData, &pDst->mBox.mUnknown24, noSwap);
+        fn_801DF228(&pData, &pDst->mBox.mUnknown28, noSwap);
+        fn_801DF2AC(&pData, &pDst->mBox.mUnknown2C, noSwap);
+        fn_801DF2AC(&pData, &pDst->mBox.mUnknown38, noSwap);
+        fn_801DF228(&pData, &pDst->mBox.mUnknown44, noSwap);
         break;
     }
     *ppData += 0x100;
 }
 
-void fn_801DF578(unsigned char **ppData, Collision_801DF578 *pDst, unsigned int type, int noSwap)
+static void fn_801DF578(unsigned char **ppData, Collision_801E0384 *pDst, unsigned int type, int noSwap)
 {
     unsigned char *pData = *ppData;
 
@@ -858,12 +844,12 @@ void fn_801DF578(unsigned char **ppData, Collision_801DF578 *pDst, unsigned int 
     case 0:
         break;
     case 1:
-        fn_801DF228(&pData, &pDst->mUnknown00, noSwap);
+        fn_801DF228(&pData, &pDst->mGround.mHeight, noSwap);
         break;
     case 2:
-        fn_801DF2AC(&pData, &pDst->mUnknown00, noSwap);
-        fn_801DF2AC(&pData, &pDst->mUnknown0C, noSwap);
-        fn_801DF2AC(&pData, &pDst->mUnknown18, noSwap);
+        fn_801DF2AC(&pData, &pDst->mParm[0], noSwap);
+        fn_801DF2AC(&pData, &pDst->mParm[1], noSwap);
+        fn_801DF2AC(&pData, &pDst->mParm[2], noSwap);
         break;
     }
     *ppData += 0x80;

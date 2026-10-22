@@ -1,29 +1,9 @@
 #include "game/fn_801C68FC.h"
-
-/* Member object of a group (defined in another file). */
-struct Member_801E8E04;
+#include "engine/Class_801E27A4.h"
 
 /* Pool entry: one pointer. */
 struct Node_801E8E04 {
     void *mpItem;
-};
-
-/* Group of members (defined in another file). */
-struct Group_801E8E04;
-
-/* Observer told when members enter or leave the world (defined in another file). */
-class Class_801E90F0 {
-public:
-    virtual void vfn_01(Member_801E8E04 *pMember);
-    virtual void vfn_02(Member_801E8E04 *pMember);
-    virtual void vfn_03(Member_801E8E04 *pMember);
-};
-
-/* Second observer (defined in another file). */
-class Class_801E9114 {
-public:
-    virtual void vfn_01(Member_801E8E04 *pMember);
-    virtual void vfn_02(Member_801E8E04 *pMember);
 };
 
 extern "C" {
@@ -32,31 +12,7 @@ void *fn_801C6B4C(void *pool, void *item);
 void fn_801C6BC0(void *pool, void *item);
 void fn_801C6C0C(void *pool, void *item);
 void *fn_801C6C84(void *pool, void *item);
-void fn_801E279C(Group_801E8E04 *pGroup, void *pOwner);
-Node_801E8E04 *fn_801E2C3C(Group_801E8E04 *pGroup);
-Member_801E8E04 *fn_801E2C64(Group_801E8E04 *pGroup, Node_801E8E04 **ppNode);
 }
-
-/* Set of member groups and other objects, with two observers. */
-class Class_801E8E04 {
-public:
-    Class_801E8E04(int groupCount, int objectCount, Class_801E90F0 *pObserverA,
-                   Class_801E9114 *pObserverB);
-    virtual ~Class_801E8E04();
-    int fn_801E8F1C(Group_801E8E04 *pGroup);
-    int fn_801E8FD4(Group_801E8E04 *pGroup);
-    void fn_801E90A8(Group_801E8E04 *pGroup, Member_801E8E04 *pMember);
-    void fn_801E90CC(Group_801E8E04 *pGroup, Member_801E8E04 *pMember);
-    void fn_801E90F0(Member_801E8E04 *pMember);
-    void fn_801E9168(Member_801E8E04 *pMember);
-    int fn_801E91E0(void *pObject);
-    int fn_801E9248(void *pObject);
-
-    Class_801E90F0 *mpObserverA;
-    Class_801E9114 *mpObserverB;
-    void *mpGroups;
-    void *mpObjects;
-};
 
 Class_801E8E04::Class_801E8E04(int groupCount, int objectCount, Class_801E90F0 *pObserverA,
                                Class_801E9114 *pObserverB)
@@ -83,11 +39,11 @@ Class_801E8E04::~Class_801E8E04()
     mpObserverA = 0;
 }
 
-int Class_801E8E04::fn_801E8F1C(Group_801E8E04 *pGroup)
+int Class_801E8E04::fn_801E8F1C(Class_801E27A4 *pGroup)
 {
     Node_801E8E04 *pNode = (Node_801E8E04 *)fn_801C6A20(mpGroups);
-    Node_801E8E04 *pIter;
-    Member_801E8E04 *pMember;
+    Node_801E2878 *pIter;
+    Class_801E2878 *pMember;
 
     pNode->mpItem = pGroup;
     if (fn_801C6AA4(mpGroups, pNode, 1) != pNode) {
@@ -103,11 +59,11 @@ int Class_801E8E04::fn_801E8F1C(Group_801E8E04 *pGroup)
     return 1;
 }
 
-int Class_801E8E04::fn_801E8FD4(Group_801E8E04 *pGroup)
+int Class_801E8E04::fn_801E8FD4(Class_801E27A4 *pGroup)
 {
     Node_801E8E04 *pNode;
-    Node_801E8E04 *pIter;
-    Member_801E8E04 *pMember;
+    Node_801E2878 *pIter;
+    Class_801E2878 *pMember;
 
     for (pNode = (Node_801E8E04 *)fn_801C6B4C(mpGroups, 0); pNode;
          pNode = (Node_801E8E04 *)fn_801C6C84(mpGroups, pNode)) {
@@ -129,17 +85,17 @@ int Class_801E8E04::fn_801E8FD4(Group_801E8E04 *pGroup)
     return 0;
 }
 
-void Class_801E8E04::fn_801E90A8(Group_801E8E04 *pGroup, Member_801E8E04 *pMember)
+void Class_801E8E04::fn_801E90A8(Class_801E27A4 *pGroup, Class_801E2878 *pMember)
 {
     fn_801E90F0(pMember);
 }
 
-void Class_801E8E04::fn_801E90CC(Group_801E8E04 *pGroup, Member_801E8E04 *pMember)
+void Class_801E8E04::fn_801E90CC(Class_801E27A4 *pGroup, Class_801E2878 *pMember)
 {
     fn_801E9168(pMember);
 }
 
-void Class_801E8E04::fn_801E90F0(Member_801E8E04 *pMember)
+void Class_801E8E04::fn_801E90F0(Class_801E2878 *pMember)
 {
     if (mpObserverA) {
         mpObserverA->vfn_02(pMember);
@@ -149,7 +105,7 @@ void Class_801E8E04::fn_801E90F0(Member_801E8E04 *pMember)
     }
 }
 
-void Class_801E8E04::fn_801E9168(Member_801E8E04 *pMember)
+void Class_801E8E04::fn_801E9168(Class_801E2878 *pMember)
 {
     if (mpObserverA) {
         mpObserverA->vfn_03(pMember);

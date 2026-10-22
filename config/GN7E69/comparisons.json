@@ -44052,7 +44052,7 @@
           "end": "0x801E279C"
         },
         {
-          "symbol": "fn_801E279C__14Class_801E274CP14Owner_801E90A8",
+          "symbol": "fn_801E279C__14Class_801E274CP14Class_801E8E04",
           "start": "0x801E279C",
           "end": "0x801E27A4"
         },
@@ -44138,7 +44138,7 @@
       ],
       "functions": [
         {
-          "symbol": "__14Class_801E8478P13Body_801E850CT1P12Vec_801E850CT3",
+          "symbol": "__14Class_801E8478P13Body_801E9538T1P13Vec3_801DE1E0T3",
           "start": "0x801E8478",
           "end": "0x801E84CC"
         },
@@ -44179,22 +44179,22 @@
           "end": "0x801E87B8"
         },
         {
-          "symbol": "vfn_01__14Class_801E8798P13Body_801E8798",
+          "symbol": "vfn_01__14Class_801E8798P13Body_801E9538",
           "start": "0x801E87B8",
           "end": "0x801E87D8"
         },
         {
-          "symbol": "vfn_02__14Class_801E8798P13Body_801E8798",
+          "symbol": "vfn_02__14Class_801E8798P13Body_801E9538",
           "start": "0x801E87D8",
           "end": "0x801E87E4"
         },
         {
-          "symbol": "vfn_03__14Class_801E8798P13Body_801E8798f",
+          "symbol": "vfn_03__14Class_801E8798P13Body_801E9538f",
           "start": "0x801E87E4",
           "end": "0x801E896C"
         },
         {
-          "symbol": "fn_801E896C__14Class_801E8798P13Body_801E8798",
+          "symbol": "fn_801E896C__14Class_801E8798P13Body_801E9538",
           "start": "0x801E896C",
           "end": "0x801E89D8"
         },
@@ -44255,32 +44255,32 @@
           "end": "0x801E8F1C"
         },
         {
-          "symbol": "fn_801E8F1C__14Class_801E8E04P14Group_801E8E04",
+          "symbol": "fn_801E8F1C__14Class_801E8E04P14Class_801E27A4",
           "start": "0x801E8F1C",
           "end": "0x801E8FD4"
         },
         {
-          "symbol": "fn_801E8FD4__14Class_801E8E04P14Group_801E8E04",
+          "symbol": "fn_801E8FD4__14Class_801E8E04P14Class_801E27A4",
           "start": "0x801E8FD4",
           "end": "0x801E90A8"
         },
         {
-          "symbol": "fn_801E90A8__14Class_801E8E04P14Group_801E8E04P15Member_801E8E04",
+          "symbol": "fn_801E90A8__14Class_801E8E04P14Class_801E27A4P14Class_801E2878",
           "start": "0x801E90A8",
           "end": "0x801E90CC"
         },
         {
-          "symbol": "fn_801E90CC__14Class_801E8E04P14Group_801E8E04P15Member_801E8E04",
+          "symbol": "fn_801E90CC__14Class_801E8E04P14Class_801E27A4P14Class_801E2878",
           "start": "0x801E90CC",
           "end": "0x801E90F0"
         },
         {
-          "symbol": "fn_801E90F0__14Class_801E8E04P15Member_801E8E04",
+          "symbol": "fn_801E90F0__14Class_801E8E04P14Class_801E2878",
           "start": "0x801E90F0",
           "end": "0x801E9168"
         },
         {
-          "symbol": "fn_801E9168__14Class_801E8E04P15Member_801E8E04",
+          "symbol": "fn_801E9168__14Class_801E8E04P14Class_801E2878",
           "start": "0x801E9168",
           "end": "0x801E91E0"
         },
@@ -44457,17 +44457,17 @@
           "end": "0x801EAE44"
         },
         {
-          "symbol": "fn_801EAE44__14Class_801EADD8P12Vec_801EADD8T1",
+          "symbol": "fn_801EAE44__14Class_801EADD8P13Vec3_801DE1E0T1",
           "start": "0x801EAE44",
           "end": "0x801EAE7C"
         },
         {
-          "symbol": "fn_801EAE7C__14Class_801EADD8P12Vec_801EADD8",
+          "symbol": "fn_801EAE7C__14Class_801EADD8P13Vec3_801DE1E0",
           "start": "0x801EAE7C",
           "end": "0x801EAEB4"
         },
         {
-          "symbol": "fn_801EAEB4__14Class_801EADD8P12Vec_801EADD8",
+          "symbol": "fn_801EAEB4__14Class_801EADD8P13Vec3_801DE1E0",
           "start": "0x801EAEB4",
           "end": "0x801EAF60"
         },
@@ -44484,21 +44484,21 @@
       ]
     },
     {
-      "source": "src/engine/cu_801EB488.c",
+      "source": "src/engine/llquat.c",
       "profile": "engine_c",
-      "evidence": "E3 lane draft of a quaternion helper group over 0x801EB488-0x801EB814 (no NASCAR match; neutral file name); evidence.tsv function rows and the cu_801EB488 compiler row, plus exact data row 0x802B1748-0x802B1754. The 0x801EB488 file start is an observable anchor (preceding code is C++ with its own .rodata record ending at 0x802B1748). Draft comparisons only; original assembly remains linked.",
+      "evidence": "E3 lane draft of llquat.c over 0x801EB488-0x801EC1B4 (NASCAR 2005 symbol-table size/order match from QuatMultiply at 0x801EB660 through the llquat.c run; see the llquat.c name rows); evidence.tsv function rows and the llquat.c compiler row, plus exact data row 0x802B1748-0x802B179C. The 0x801EB488 file start is an observable anchor (preceding code is C++ with its own .rodata record ending at 0x802B1748). Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801EB488",
-          "end": "0x801EB814"
+          "end": "0x801EC1B4"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B1748",
-          "end": "0x802B1754"
+          "end": "0x802B179C"
         }
       ],
       "functions": [
@@ -44556,28 +44556,7 @@
           "symbol": "fn_801EB7B4",
           "start": "0x801EB7B4",
           "end": "0x801EB814"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/llquat.c",
-      "profile": "engine_c",
-      "evidence": "E3 lane draft of llquat.c over 0x801EB814-0x801EC1B4 (NASCAR 2005 symbol-table size/order match; see the llquat.c name rows); evidence.tsv function rows and the compiler row for this range, plus exact data rows 0x802B1754-0x802B179C. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801EB814",
-          "end": "0x801EC1B4"
         },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1754",
-          "end": "0x802B179C"
-        }
-      ],
-      "functions": [
         {
           "symbol": "fn_801EB814",
           "start": "0x801EB814",

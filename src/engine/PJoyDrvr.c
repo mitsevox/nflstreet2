@@ -40,27 +40,27 @@ int fn_801E1D44(Device_801E12F8 *pDevice, unsigned char *pPort)
         pJoy = fn_801E1D04(port);
         fn_801C1F94(pJoy, 0, sizeof(JoyData_801E1D44));
         pJoy->mPort = port;
-        pJoy->mUnknown02 = result;
-        pJoy->mUnknown04 = result;
+        pJoy->mUnknown02 = 0;
+        pJoy->mUnknown04 = 0;
         for (i = 0; i < 1; i++) {
             pJoy->mUnknown0D[i] = 0xFF;
             pJoy->mUnknown0E[i] = 0;
         }
         pDevice->mpUnknown08 = pJoy;
-        pDevice->mConnected = 1;
+        pDevice->mStatus = 1;
         pDevice->mType = 0;
         pDevice->mUnknown14 = sizeof(JoyData_801E1D44);
         pDevice->mUnknown16 = 4;
         return 1;
     }
-    pDevice->mConnected = 0;
+    pDevice->mStatus = 0;
     return result;
 }
 
 int fn_801E1E34(Device_801E12F8 *pDevice)
 {
     pDevice->mpUnknown08 = 0;
-    pDevice->mConnected = 0;
+    pDevice->mStatus = 0;
     pDevice->mType = 0;
     return 1;
 }
@@ -69,7 +69,7 @@ int fn_801E25DC(Device_801E12F8 *pDevice, void *pBuffer)
 {
     int result = 0;
 
-    if ((unsigned int)pDevice->mConnected <= 1) {
+    if ((unsigned int)pDevice->mStatus <= 1) {
         fn_801D34D0(pDevice->mpData, fn_801E194C(), 0, 4);
     } else {
         result = 1;
@@ -84,7 +84,7 @@ int fn_801E2658(Device_801E12F8 *pDevice, unsigned char *pBuffer)
     int result = 0;
     short port = pJoy->mPort;
 
-    if (pDevice->mConnected != 0) {
+    if (pDevice->mStatus != 0) {
         if (pDevice->mType & 0x200) {
             pJoy->mUnknown0E[0] = pBuffer[9] != 0 ? pBuffer[9] : pBuffer[8];
             if (pJoy->mUnknown0E[0] != 0) {

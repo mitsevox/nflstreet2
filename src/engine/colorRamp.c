@@ -1,7 +1,6 @@
 #include "engine/particleLib.h"
 
 float fn_801CFB94(int angle);
-void fn_80227930(Vec3_801DE1E0 *pOut, Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB, float t);
 
 void fn_801E0984(Ramp_801E052C *pRamp, int interp);
 unsigned short fn_801E079C(Ramp_801E052C *pRamp, float t, Vec3_801DE1E0 *pColor);

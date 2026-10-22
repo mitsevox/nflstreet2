@@ -7,10 +7,6 @@ void fn_801CE234(void (*pCallback)(void));
 void fn_80247134(void);
 void fn_802856D8(void);
 int fn_8025D574(unsigned int port);
-int fn_801E19B4(unsigned int index);
-int fn_801E1688(unsigned int index);
-void fn_801E26FC(void);
-int fn_801E1AB4(void);
 int fn_801E1B08(unsigned char port);
 int fn_801E1B94(void);
 void fn_801E1C38(unsigned char port);
@@ -91,20 +87,20 @@ void fn_801E1C38(unsigned char port)
     }
     type = fn_801E19B4(port);
     if (status == 8) {
-        if (lbl_803ED658[port].mConnected != 0 && !(type & 0x800)) {
+        if (lbl_803ED658[port].mStatus != 0 && !(type & 0x800)) {
             fn_801E1688(port);
             lbl_803ED658[port].mpDriver = 0;
-            lbl_803ED658[port].mConnected = 0;
+            lbl_803ED658[port].mStatus = 0;
             lbl_803ED658[port].mType = 0;
         }
-    } else if (lbl_803ED658[port].mConnected == 0) {
+    } else if (lbl_803ED658[port].mStatus == 0) {
         fn_801E1B08(port);
     }
 }
 
 int fn_801E1CE0(unsigned int port)
 {
-    if (lbl_803ED658[port].mConnected == 0) {
+    if (lbl_803ED658[port].mStatus == 0) {
         return 0;
     }
     return 1;

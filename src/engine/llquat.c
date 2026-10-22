@@ -1,3 +1,7 @@
+#include "engine/Record_800D81C8.h"
+#include "engine/vec.h"
+#include "game/fn_801EBC18.h"
+
 typedef struct Quat_801EB814 {
     float x;
     float y;
@@ -5,24 +9,103 @@ typedef struct Quat_801EB814 {
     float w;
 } Quat_801EB814;
 
-typedef struct Vec3_801EBAA0 {
-    float x;
-    float y;
-    float z;
-} Vec3_801EBAA0;
-
 extern unsigned char lbl_803ED6E0[3];
 
 double fabs(double x);
 float fn_80260B1C(float x);
 void fn_801CFC14(int angle, float *pSin, float *pCos);
-void fn_801D0F80(float (*m)[4]);
-float fn_801CFFA0(float x);
-int fn_801CFE40(float y, float x);
 void fn_801CFCD0(int *pAngles, float *pSin, float *pCos);
 float fn_801CFB74(float x);
 float fn_801CFDB0(float x);
-float fn_801EB7B4(Quat_801EB814 *pA, Quat_801EB814 *pB);
+int fn_801CFE40(float y, float x);
+float fn_801CFF54(float x);
+float fn_801CFFA0(float x);
+void fn_801D0F80(float (*m)[4]);
+float fn_801EB4EC(Quat_801EB814 *q);
+void fn_801EB56C(Quat_801EB814 *pOut, Quat_801EB814 *q, float scale);
+
+void fn_801EB488(Quat_801EB814 *q)
+{
+    q->x = q->y = q->z = 0.0f;
+    q->w = 1.0f;
+}
+
+float fn_801EB4AC(Quat_801EB814 *q)
+{
+    return fn_80260B1C(q->x * q->x + q->y * q->y + q->z * q->z + q->w * q->w);
+}
+
+float fn_801EB4EC(Quat_801EB814 *q)
+{
+    return fn_801CFF54(q->x * q->x + q->y * q->y + q->z * q->z + q->w * q->w);
+}
+
+void fn_801EB52C(Quat_801EB814 *pOut, Quat_801EB814 *q)
+{
+    fn_801EB56C(pOut, q, fn_801EB4EC(q));
+}
+
+void fn_801EB56C(Quat_801EB814 *pOut, Quat_801EB814 *q, float scale)
+{
+    pOut->x = q->x * scale;
+    pOut->y = q->y * scale;
+    pOut->z = q->z * scale;
+    pOut->w = q->w * scale;
+}
+
+int fn_801EB5A0(Quat_801EB814 *pA, Quat_801EB814 *pB, float epsilon)
+{
+    float dx = fabs(pA->x - pB->x);
+    float dy = fabs(pA->y - pB->y);
+    float dz = fabs(pA->z - pB->z);
+    float dw = fabs(pA->w - pB->w);
+    int equal = 0;
+
+    if (!(dx >= epsilon) && !(dy >= epsilon) && !(dz >= epsilon)) {
+        equal = dw < epsilon;
+    }
+    return equal;
+}
+
+void fn_801EB61C(Quat_801EB814 *pOut, Quat_801EB814 *pA, Quat_801EB814 *pB)
+{
+    pOut->x = pA->x - pB->x;
+    pOut->y = pA->y - pB->y;
+    pOut->z = pA->z - pB->z;
+    pOut->w = pA->w - pB->w;
+}
+
+void fn_801EB660(Quat_801EB814 *pOut, Quat_801EB814 *pA, Quat_801EB814 *pB)
+{
+    Quat_801EB814 q;
+
+    q.x = pA->w * pB->x + pA->x * pB->w + pA->y * pB->z - pA->z * pB->y;
+    q.y = pA->w * pB->y + pA->y * pB->w + pA->z * pB->x - pA->x * pB->z;
+    q.z = pA->w * pB->z + pA->z * pB->w + pA->x * pB->y - pA->y * pB->x;
+    q.w = pA->w * pB->w - pA->x * pB->x - pA->y * pB->y - pA->z * pB->z;
+    pOut->x = q.x;
+    pOut->y = q.y;
+    pOut->z = q.z;
+    pOut->w = q.w;
+}
+
+void fn_801EB700(Quat_801EB814 *pOut, Quat_801EB814 *q)
+{
+    fn_801EB56C(pOut, q, 1.0f / (q->w * q->w + q->x * q->x + q->y * q->y + q->z * q->z));
+    pOut->x = -q->x;
+    pOut->y = -q->y;
+    pOut->z = -q->z;
+}
+
+float fn_801EB780(Quat_801EB814 *pA, Quat_801EB814 *pB)
+{
+    return pA->x * pB->x + pA->y * pB->y + pA->z * pB->z + pA->w * pB->w;
+}
+
+float fn_801EB7B4(Quat_801EB814 *pA, Quat_801EB814 *pB)
+{
+    return fn_801EB780(pA, pB) * (fn_801EB4EC(pA) * fn_801EB4EC(pB));
+}
 
 void fn_801EB814(float m[4][4], Quat_801EB814 *q)
 {
@@ -90,7 +173,7 @@ void fn_801EBA64(float *q)
     fn_801EB8B4(q, m[0]);
 }
 
-void fn_801EBAA0(Vec3_801EBAA0 *pOut, Vec3_801EBAA0 *v, Quat_801EB814 *q)
+void fn_801EBAA0(Vec3_801DE1E0 *pOut, Vec3_801DE1E0 *v, Quat_801EB814 *q)
 {
     float x2 = q->x + q->x;
     float y2 = q->y + q->y;
@@ -114,7 +197,7 @@ void fn_801EBAA0(Vec3_801EBAA0 *pOut, Vec3_801EBAA0 *v, Quat_801EB814 *q)
     pOut->z += rz;
 }
 
-void fn_801EBBA4(Quat_801EB814 *q, Vec3_801EBAA0 *pAxis, int angle)
+void fn_801EBBA4(Quat_801EB814 *q, Vec3_801DE1E0 *pAxis, int angle)
 {
     float s;
     float c;
@@ -126,12 +209,12 @@ void fn_801EBBA4(Quat_801EB814 *q, Vec3_801EBAA0 *pAxis, int angle)
     q->w = c;
 }
 
-void fn_801EBC18(int *pAngles, Quat_801EB814 *q)
+void fn_801EBC18(Angles_801EBC18 *pOut, float *pRot)
 {
-    float x = q->x;
-    float y = q->y;
-    float z = q->z;
-    float w = q->w;
+    float x = pRot[0];
+    float y = pRot[1];
+    float z = pRot[2];
+    float w = pRot[3];
     float xx = x * x;
     float yy = y * y;
     float zz = z * z;
@@ -156,12 +239,12 @@ void fn_801EBC18(int *pAngles, Quat_801EB814 *q)
         sinZ = 0.0f;
         cosZ = 1.0f;
     }
-    pAngles[0] = fn_801CFE40(sinX, cosX);
-    pAngles[1] = fn_801CFE40(sinY, cosY);
-    pAngles[2] = fn_801CFE40(sinZ, cosZ);
+    pOut->mUnknown0 = fn_801CFE40(sinX, cosX);
+    pOut->mUnknown4 = fn_801CFE40(sinY, cosY);
+    pOut->mUnknown8 = fn_801CFE40(sinZ, cosZ);
 }
 
-void fn_801EBD8C(int *pAngles, Quat_801EB814 *q)
+void fn_801EBD8C(Triple_801BCA74 *pOut, Quat_801EB814 *q)
 {
     float x = q->x;
     float y = q->y;
@@ -191,9 +274,9 @@ void fn_801EBD8C(int *pAngles, Quat_801EB814 *q)
         sinY = 0.0f;
         cosY = 1.0f;
     }
-    pAngles[0] = fn_801CFE40(sinX, cosX);
-    pAngles[1] = fn_801CFE40(sinY, cosY);
-    pAngles[2] = fn_801CFE40(sinZ, cosZ);
+    pOut->mUnknown0 = fn_801CFE40(sinX, cosX);
+    pOut->mUnknown4 = fn_801CFE40(sinY, cosY);
+    pOut->mUnknown8 = fn_801CFE40(sinZ, cosZ);
 }
 
 void fn_801EBEF8(Quat_801EB814 *q, int x, int y, int z)

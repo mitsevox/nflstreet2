@@ -1,30 +1,7 @@
-struct Vec_801E8798 {
-    float x;
-    float y;
-    float z;
-};
-
-/* Rigid body (defined in another file). */
-struct Body_801E8798 {
-    char mUnknown000[0x48];
-    float mUnknown048;
-    char mUnknown04C[0x7C - 0x4C];
-    Vec_801E8798 mUnknown07C;
-    char mUnknown088[0x108 - 0x88];
-    Vec_801E8798 mUnknown108;
-    Vec_801E8798 mUnknown114;
-    char mUnknown120[0x138 - 0x120];
-    int mState;
-    int mUnknown13C;
-    int mUserData;
-};
+#include "engine/Body_801E9538.h"
 
 extern "C" {
-float fn_80227120(Vec_801E8798 *pV);
-void fn_80227264(Vec_801E8798 *pOut, Vec_801E8798 *pV, float scale);
 float fn_80260B1C(float x);
-void fn_801E9C1C(Body_801E8798 *pBody, Vec_801E8798 *pVel);
-void fn_801E9F0C(Body_801E8798 *pBody, int state);
 float fn_801E8DBC(void *p);
 }
 
@@ -66,25 +43,25 @@ public:
 /* Decides whether a body may change its sleep state. */
 class Class_801E88BC {
 public:
-    virtual int vfn_01(Body_801E8798 *pBody, int wake) = 0;
+    virtual int vfn_01(Body_801E9538 *pBody, int wake) = 0;
 };
 
 /* Body controller interface. */
 class Class_801E87B8 {
 public:
-    virtual void vfn_01(Body_801E8798 *pBody) = 0;
-    virtual void vfn_02(Body_801E8798 *pBody) = 0;
-    virtual void vfn_03(Body_801E8798 *pBody, float dt) = 0;
+    virtual void vfn_01(Body_801E9538 *pBody) = 0;
+    virtual void vfn_02(Body_801E9538 *pBody) = 0;
+    virtual void vfn_03(Body_801E9538 *pBody, float dt) = 0;
 };
 
 /* Puts slow bodies to sleep and wakes moving ones. */
 class Class_801E8798 : public Class_801E87B8 {
 public:
     Class_801E8798(float sleepTime, float maxSpeed, Class_801E88BC *pFilter);
-    virtual void vfn_01(Body_801E8798 *pBody);
-    virtual void vfn_02(Body_801E8798 *pBody);
-    virtual void vfn_03(Body_801E8798 *pBody, float dt);
-    int fn_801E896C(Body_801E8798 *pBody);
+    virtual void vfn_01(Body_801E9538 *pBody);
+    virtual void vfn_02(Body_801E9538 *pBody);
+    virtual void vfn_03(Body_801E9538 *pBody, float dt);
+    int fn_801E896C(Body_801E9538 *pBody);
 
     float mSleepTime;
     float mMaxSpeed;
@@ -96,24 +73,24 @@ Class_801E8798::Class_801E8798(float sleepTime, float maxSpeed, Class_801E88BC *
 {
 }
 
-void Class_801E8798::vfn_01(Body_801E8798 *pBody)
+void Class_801E8798::vfn_01(Body_801E9538 *pBody)
 {
     float time = 0.0f;
 
     pBody->mUserData = *(int *)&time;
 }
 
-void Class_801E8798::vfn_02(Body_801E8798 *pBody)
+void Class_801E8798::vfn_02(Body_801E9538 *pBody)
 {
     pBody->mUserData = 0;
 }
 
-void Class_801E8798::vfn_03(Body_801E8798 *pBody, float dt)
+void Class_801E8798::vfn_03(Body_801E9538 *pBody, float dt)
 {
     int state = pBody->mState;
     float time = 0.0f;
-    Vec_801E8798 vel;
-    float speed;
+    Vec3_801DE1E0 vel;
+    float speedSq;
     float maxSpeed;
     float target;
 
@@ -125,11 +102,11 @@ void Class_801E8798::vfn_03(Body_801E8798 *pBody, float dt)
                 time = 0.0f;
             }
         } else {
-            speed = fn_80227120(&pBody->mUnknown114);
+            speedSq = fn_80227120(&pBody->mUnknown114);
             maxSpeed = mMaxSpeed;
-            if (speed > maxSpeed * maxSpeed) {
+            if (speedSq > maxSpeed * maxSpeed) {
                 target = maxSpeed * 0.95f;
-                fn_80227264(&vel, &pBody->mUnknown07C, target / fn_80260B1C(speed));
+                fn_80227264(&vel, &pBody->mUnknown07C, target / fn_80260B1C(speedSq));
                 fn_801E9C1C(pBody, &vel);
             }
         }
@@ -142,13 +119,13 @@ void Class_801E8798::vfn_03(Body_801E8798 *pBody, float dt)
     }
 }
 
-int Class_801E8798::fn_801E896C(Body_801E8798 *pBody)
+int Class_801E8798::fn_801E896C(Body_801E9538 *pBody)
 {
     float limit = pBody->mUnknown048;
-    float linear = fn_80227120(&pBody->mUnknown108);
-    float angular = fn_80227120(&pBody->mUnknown114);
+    float linearSq = fn_80227120(&pBody->mUnknown108);
+    float angularSq = fn_80227120(&pBody->mUnknown114);
 
-    if (linear <= limit && angular <= limit) {
+    if (linearSq <= limit && angularSq <= limit) {
         return 1;
     }
     return 0;

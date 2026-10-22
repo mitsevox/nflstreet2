@@ -1,9 +1,5 @@
 #include "engine/particleLib.h"
 
-int fn_801DFD40(void);
-void fn_80227264(Vec3_801DE1E0 *pDst, Vec3_801DE1E0 *pSrc, float scale);
-void fn_8022765C(Vec3_801DE1E0 *pDst, Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB);
-float fn_80227704(Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB);
 
 static void fn_801E01FC(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, float height)
 {

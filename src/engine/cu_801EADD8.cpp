@@ -1,17 +1,10 @@
-struct Vec_801EADD8 {
-    float x;
-    float y;
-    float z;
-};
+#include "engine/vec.h"
 
 extern "C" {
 void fn_801D04C4(void);
 void fn_801D0544(void);
 void fn_801D06D4(float (*m)[4]);
-void fn_80227264(Vec_801EADD8 *pOut, Vec_801EADD8 *pV, float scale);
-void fn_8022765C(Vec_801EADD8 *pOut, Vec_801EADD8 *pA, Vec_801EADD8 *pB);
-void fn_80227CC0(Vec_801EADD8 *pOut, Vec_801EADD8 *pIn);
-void fn_801E736C(Vec_801EADD8 *pA, Vec_801EADD8 *pB, int a, int b, int c);
+void fn_801E736C(Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB, int a, int b, int c);
 }
 
 /* Axis-aligned box. */
@@ -19,19 +12,19 @@ class Class_801EADD8 {
 public:
     Class_801EADD8();
     virtual ~Class_801EADD8();
-    void fn_801EAE44(Vec_801EADD8 *pMin, Vec_801EADD8 *pMax);
-    void fn_801EAE7C(Vec_801EADD8 *pPoint);
-    void fn_801EAEB4(Vec_801EADD8 *pPoint);
+    void fn_801EAE44(Vec3_801DE1E0 *pMin, Vec3_801DE1E0 *pMax);
+    void fn_801EAE7C(Vec3_801DE1E0 *pPoint);
+    void fn_801EAEB4(Vec3_801DE1E0 *pPoint);
     void fn_801EAF60(float (*m)[4], Class_801EADD8 *pOut);
     void fn_801EB134(int a, int b, int c);
 
-    Vec_801EADD8 mMin;
-    Vec_801EADD8 mMax;
+    Vec3_801DE1E0 mMin;
+    Vec3_801DE1E0 mMax;
 };
 
 Class_801EADD8::Class_801EADD8()
 {
-    Vec_801EADD8 *pMax = &mMax;
+    Vec3_801DE1E0 *pMax = &mMax;
 
     mMin.x = mMin.y = mMin.z = 0.0f;
     pMax->x = pMax->y = pMax->z = 0.0f;
@@ -41,19 +34,19 @@ Class_801EADD8::~Class_801EADD8()
 {
 }
 
-void Class_801EADD8::fn_801EAE44(Vec_801EADD8 *pMin, Vec_801EADD8 *pMax)
+void Class_801EADD8::fn_801EAE44(Vec3_801DE1E0 *pMin, Vec3_801DE1E0 *pMax)
 {
     mMin = *pMin;
     mMax = *pMax;
 }
 
-void Class_801EADD8::fn_801EAE7C(Vec_801EADD8 *pPoint)
+void Class_801EADD8::fn_801EAE7C(Vec3_801DE1E0 *pPoint)
 {
     mMin = *pPoint;
     mMax = *pPoint;
 }
 
-void Class_801EADD8::fn_801EAEB4(Vec_801EADD8 *pPoint)
+void Class_801EADD8::fn_801EAEB4(Vec3_801DE1E0 *pPoint)
 {
     mMin.x = pPoint->x <= mMin.x ? pPoint->x : mMin.x;
     mMin.y = pPoint->y <= mMin.y ? pPoint->y : mMin.y;
@@ -65,11 +58,11 @@ void Class_801EADD8::fn_801EAEB4(Vec_801EADD8 *pPoint)
 
 void Class_801EADD8::fn_801EAF60(float (*m)[4], Class_801EADD8 *pOut)
 {
-    Vec_801EADD8 axisX;
-    Vec_801EADD8 axisY;
-    Vec_801EADD8 axisZ;
-    Vec_801EADD8 corner;
-    Vec_801EADD8 point;
+    Vec3_801DE1E0 axisX;
+    Vec3_801DE1E0 axisY;
+    Vec3_801DE1E0 axisZ;
+    Vec3_801DE1E0 corner;
+    Vec3_801DE1E0 point;
     float sizeX;
     float sizeY;
     float sizeZ;
@@ -112,12 +105,12 @@ void Class_801EADD8::fn_801EAF60(float (*m)[4], Class_801EADD8 *pOut)
 
 void Class_801EADD8::fn_801EB134(int a, int b, int c)
 {
-    Vec_801EADD8 axisX;
-    Vec_801EADD8 axisY;
-    Vec_801EADD8 axisZ;
-    Vec_801EADD8 corner;
-    Vec_801EADD8 point;
-    Vec_801EADD8 corners[8];
+    Vec3_801DE1E0 axisX;
+    Vec3_801DE1E0 axisY;
+    Vec3_801DE1E0 axisZ;
+    Vec3_801DE1E0 corner;
+    Vec3_801DE1E0 point;
+    Vec3_801DE1E0 corners[8];
     float sizeX = mMax.x - mMin.x;
     float sizeY = mMax.y - mMin.y;
     float sizeZ = mMax.z - mMin.z;

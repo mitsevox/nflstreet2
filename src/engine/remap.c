@@ -1,5 +1,6 @@
 #include "engine/fn_801F7BD4.h"
 #include "engine/fn_801F8014.h"
+#include "engine/remap.h"
 #include "game/fn_801D2B7C.h"
 
 extern unsigned char lbl_803EBD7C;

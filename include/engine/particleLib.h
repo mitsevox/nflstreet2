@@ -1,18 +1,7 @@
 #ifndef ENGINE_PARTICLELIB_H
 #define ENGINE_PARTICLELIB_H
 
-typedef struct Vec3_801DE1E0 {
-    float x;
-    float y;
-    float z;
-} Vec3_801DE1E0;
-
-typedef struct Vec4_801DE1E0 {
-    float x;
-    float y;
-    float z;
-    float w;
-} Vec4_801DE1E0;
+#include "engine/vec.h"
 
 /* Colour ramp key (16 bytes). */
 typedef struct RampNode_801E052C {
@@ -75,9 +64,13 @@ typedef struct Ground_801E0384 {
     float mHeight;
 } Ground_801E0384;
 
+/* Collision parameters (0x24 bytes at +0x208 of a particle system). A
+   parameter file holds three vectors for a plane (read by fn_801DF578); at
+   run time the distance computed by fn_801E03F4 replaces the third. */
 typedef union Collision_801E0384 {
     Ground_801E0384 mGround;
     Plane_801E0384 mPlane;
+    Vec3_801DE1E0 mParm[3];
 } Collision_801E0384;
 
 /* Extra collision entry (0x14 bytes at +0x2B8 of a particle system). */
@@ -173,7 +166,7 @@ typedef struct PartObj_801DE1E0 {
     float mUnknown200;
     unsigned int mCollisionType;
     Collision_801E0384 mCollision;
-    char mPad224[0x288 - 0x224];
+    char mPad22C[0x288 - 0x22C];
     float mUnknown288;
     char mUnknown28C[0x20];
     void *mpUnknown2AC;
@@ -208,5 +201,14 @@ typedef struct Template_801DE1E0 {
     PartObj_801DE1E0 mObj;
     Ramp_801E052C mRamp;
 } Template_801DE1E0;
+
+/* Calls between the files of the particle library. */
+float fn_801DE1B8(void);
+int fn_801DFD40(void);
+void fn_801DFE0C(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
+void fn_801E0384(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
+void fn_801E03F4(PartObj_801DE1E0 *pObj);
+void fn_801E043C(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle);
+Ramp_801E052C *fn_801E098C(Ramp_801E052C *pSrc, Ramp_801E052C *pDst);
 
 #endif

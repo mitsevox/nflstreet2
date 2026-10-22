@@ -1,4 +1,5 @@
 #include "engine/particleLib.h"
+#include "game/fn_802270D4.h"
 
 float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
@@ -6,12 +7,6 @@ int fn_801CFD78(float value);
 void fn_801D0508(void);
 void fn_801D0544(void);
 void fn_801D0710(Vec3_801DE1E0 *pAxis, int angle);
-float fn_801DE1B8(void);
-void fn_802271F0(Vec3_801DE1E0 *pDst, Vec3_801DE1E0 *pSrc);
-void fn_802276B4(Vec3_801DE1E0 *pDst, Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB);
-void fn_802277DC(Vec3_801DE1E0 *pDst, Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB);
-void fn_80227930(Vec3_801DE1E0 *pOut, Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB, float t);
-void fn_80227C2C(Vec3_801DE1E0 *pDst, Vec3_801DE1E0 *pSrc);
 
 void fn_801DFE0C(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc)
 {

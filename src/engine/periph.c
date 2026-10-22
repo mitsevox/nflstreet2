@@ -3,19 +3,9 @@
 #include "engine/fn_801F8014.h"
 #include "game/fn_801D2B7C.h"
 
-/* Descriptor passed to PerInit (sPeriphDesc). */
-typedef struct Desc_801E1478 {
-    unsigned int mNumDevices;
-    unsigned int mUnknown04;
-    unsigned int mUnknown08;
-    int mUnknown0C;
-    Driver_801E11E8 **mppDrivers;
-    void *mpUnknown14;
-} Desc_801E1478;
-
 extern Lock_801F8014 lbl_8039ADC4;
 extern unsigned char lbl_803EBD68;
-extern int lbl_803ECF50;
+extern int (*lbl_803ECF50)();
 extern unsigned long lbl_803ECF54;
 extern unsigned int lbl_803ED5EC;
 extern unsigned int lbl_803ED650;
@@ -23,11 +13,7 @@ extern unsigned int lbl_803ED654;
 extern unsigned char *lbl_803ED65C;
 
 int fn_801D34D0(void *p, unsigned int size, int value, int flags);
-int fn_801E1A20(void *pData);
-int fn_801E1A80(void);
-int fn_801E1AB4(void);
 int fn_801E15B8(void);
-int fn_801E1688(unsigned int index);
 int fn_801E173C(void);
 
 static unsigned int fn_801E11D0(unsigned int size, unsigned int align)
@@ -108,7 +94,7 @@ static int fn_801E12F8(unsigned int numDevices, unsigned int numBits, unsigned i
             pDevice->mpData = pData;
             pDevice->mIndex = i;
             *(unsigned int *)pData = i;
-            pDevice->mConnected = 0;
+            pDevice->mStatus = 0;
             pDevice++;
             pData += size;
         }
@@ -139,7 +125,7 @@ int fn_801E1478(Desc_801E1478 *pDesc)
                 lbl_803ED660 = pDesc->mNumDevices;
                 err = fn_801E1A20(pDesc->mpUnknown14);
                 if (err == 0) {
-                    lbl_803ECF50 = pDesc->mUnknown0C;
+                    lbl_803ECF50 = pDesc->mpUnknown0C;
                     lbl_803EBD68 = 1;
                     err = fn_801E1AB4();
                 }
@@ -190,7 +176,7 @@ int fn_801E15D0(unsigned int index)
         connected = 0;
         if (index < lbl_803ED660) {
             pDevice = &lbl_803ED658[index];
-            connected = pDevice->mConnected ? 1 : 0;
+            connected = pDevice->mStatus ? 1 : 0;
             if (connected && !pDevice->mpDriver->mpPoll(pDevice, lbl_803ECF50)) {
                 err = 0x180004;
             }
@@ -215,7 +201,7 @@ int fn_801E1688(unsigned int index)
         connected = 0;
         if (index < lbl_803ED660) {
             pDevice = &lbl_803ED658[index];
-            connected = pDevice->mConnected ? 1 : 0;
+            connected = pDevice->mStatus ? 1 : 0;
             if (connected && !pDevice->mpDriver->mpRelease(pDevice)) {
                 err = 0x180005;
             }
@@ -237,7 +223,7 @@ int fn_801E173C(void)
         err = 0x180002;
     } else {
         for (i = 0; i < lbl_803ED660; i++) {
-            if (lbl_803ED658[i].mConnected) {
+            if (lbl_803ED658[i].mStatus) {
                 err = fn_801E1688(i);
             }
         }
@@ -257,7 +243,7 @@ int fn_801E17D0(unsigned int index, void *pBuffer)
     } else if (pBuffer != 0) {
         if (index < lbl_803ED660) {
             pDevice = &lbl_803ED658[index];
-            connected = pDevice->mConnected ? 1 : 0;
+            connected = pDevice->mStatus ? 1 : 0;
             if (connected && !pDevice->mpDriver->mpGetData(pDevice, pBuffer)) {
                 err = 0x180006;
             }
@@ -282,7 +268,7 @@ int fn_801E1884(unsigned int index, void *pBuffer)
     } else if (pBuffer != 0) {
         if (index < lbl_803ED660) {
             pDevice = &lbl_803ED658[index];
-            connected = pDevice->mConnected ? 1 : 0;
+            connected = pDevice->mStatus ? 1 : 0;
             if (connected && pDevice->mpDriver->mpSendData && !pDevice->mpDriver->mpSendData(pDevice, pBuffer)) {
                 err = 0x180006;
             }
@@ -314,7 +300,7 @@ unsigned int fn_801E1954(void)
 int fn_801E195C(unsigned int index)
 {
     if (index < lbl_803ED660 && fn_801E15B8()) {
-        return lbl_803ED658[index].mConnected;
+        return lbl_803ED658[index].mStatus;
     }
     return 0;
 }
@@ -327,7 +313,7 @@ int fn_801E19B4(unsigned int index)
 
     if (index < lbl_803ED660) {
         pDevice = &lbl_803ED658[index];
-        if (pDevice->mConnected) {
+        if (pDevice->mStatus) {
             type = pDevice->mType;
         }
     } else {
