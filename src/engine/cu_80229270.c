@@ -1,6 +1,9 @@
 /* Partial source for the engine range 0x80229270-0x8022F428 (neutral file name). */
 
 #include "engine/Funcs_802FB3BC.h"
+#include "engine/llmemory.h"
+#include "game/cu_801CF5BC.h"
+#include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
 #include "game/QueryStatus.h"
 
@@ -20,19 +23,12 @@ typedef struct Node_8022CC6C {
     unsigned char mUnknown2;
     char mUnknown3[5];
     unsigned short mUnknown8;
-    char mUnknownA[2];
+    char mUnknown10[2];
     struct Node_8022CC6C *mpUnknown12;
     struct Node_8022CC6C *mpUnknown16;
 } Node_8022CC6C;
 
-extern void *fn_801CF5BC(int type, int seed);
-extern int fn_801CF67C(void *pStream);
 extern unsigned int fn_801CF6D4(void *pStream, unsigned int range);
-extern int fn_801CF7AC(void);
-extern void *fn_801D2B7C(int size, int a, int b);
-extern void *fn_801D2BB0(int a, int size, int ident, int flags);
-extern int fn_801D2BD0(void *p);
-extern int fn_801D34D0(char *pDst, unsigned int size, int value, unsigned int width);
 extern int fn_8022A624(Object_8022A59C *p, struct QueryCursor cursor, int a, int b);
 extern int fn_802303B4(int key, unsigned short *pId);
 extern int fn_80230CC8(unsigned short id);
@@ -83,7 +79,7 @@ extern int (*lbl_803EBFFC)(void **ppData, void *p);
 extern int (*lbl_803EC000)(int a, int b);
 extern int (*lbl_803EC004)(void);
 extern int (*lbl_803EC008)(void);
-extern int lbl_803EC020[2];
+extern int lbl_803EC020;
 extern int (*lbl_803EC028)(int a, int b, int c, int d);
 extern int (*lbl_803EC02C)(int a);
 extern unsigned char lbl_803EC030;
@@ -135,7 +131,7 @@ int fn_80229270(void)
     int b;
     int c;
     unsigned char i;
-    int err = 0;
+    int err;
 
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
@@ -415,7 +411,7 @@ int fn_8022A59C(int a, Object_8022A59C **ppOut)
 int fn_8022AB6C(Object_8022A59C *p, int a, int b)
 {
     struct QueryCursor cursor;
-    int err = 0;
+    int err;
 
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
@@ -470,7 +466,7 @@ int fn_8022BF68(void)
         }
     }
     if (err == 0) {
-        err = fn_801FCE10(0, lbl_802B35D4, lbl_803EC020[0]);
+        err = fn_801FCE10(0, lbl_802B35D4, lbl_803EC020);
     }
     if (err == 0) {
         err = fn_801FCE10(0, lbl_802B35E4);
