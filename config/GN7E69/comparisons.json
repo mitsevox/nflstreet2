@@ -13597,6 +13597,31 @@
           "end": "0x800504EC"
         },
         {
+          "symbol": "fn_800508A0",
+          "start": "0x800508A0",
+          "end": "0x80050960"
+        },
+        {
+          "symbol": "fn_80050964",
+          "start": "0x80050964",
+          "end": "0x80050CCC"
+        },
+        {
+          "symbol": "fn_80050CCC",
+          "start": "0x80050CCC",
+          "end": "0x80050DA0"
+        },
+        {
+          "symbol": "fn_80050DA0",
+          "start": "0x80050DA0",
+          "end": "0x80050F14"
+        },
+        {
+          "symbol": "fn_80050F14",
+          "start": "0x80050F14",
+          "end": "0x8005122C"
+        },
+        {
           "symbol": "fn_8005164C",
           "start": "0x8005164C",
           "end": "0x80051680"
@@ -13632,9 +13657,19 @@
           "end": "0x800518E0"
         },
         {
+          "symbol": "fn_800518E0",
+          "start": "0x800518E0",
+          "end": "0x80051B3C"
+        },
+        {
           "symbol": "fn_80051B3C",
           "start": "0x80051B3C",
           "end": "0x80051B88"
+        },
+        {
+          "symbol": "fn_80051B88",
+          "start": "0x80051B88",
+          "end": "0x80051D0C"
         },
         {
           "symbol": "fn_80051DB4",
@@ -27035,6 +27070,36 @@
           "symbol": "fn_800CB484",
           "start": "0x800CB484",
           "end": "0x800CB504"
+        },
+        {
+          "symbol": "fn_8009C0B8",
+          "start": "0x8009C0B8",
+          "end": "0x8009C158"
+        },
+        {
+          "symbol": "fn_8009C220",
+          "start": "0x8009C220",
+          "end": "0x8009C328"
+        },
+        {
+          "symbol": "fn_8009C630",
+          "start": "0x8009C630",
+          "end": "0x8009C684"
+        },
+        {
+          "symbol": "fn_8009F168",
+          "start": "0x8009F168",
+          "end": "0x8009F258"
+        },
+        {
+          "symbol": "fn_800A02FC",
+          "start": "0x800A02FC",
+          "end": "0x800A039C"
+        },
+        {
+          "symbol": "vfn_03__14Class_80297AB8",
+          "start": "0x800A042C",
+          "end": "0x800A050C"
         }
       ]
     },
@@ -33920,13 +33985,13 @@
     {
       "source": "src/game/cu_8014AB64.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A0CE0 is measured here, including the unresolved trailing context after the native 0x54-byte emission (follow-up #784 measures 0x802A0CE0-0x802A11F4 with src/game/cu_8014BC98.cpp). Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked.",
+      "evidence": "Issue #780; twenty complete state-handler bodies 0x8014AB64-0x8014B498 inside the retained provisional cu_801485B4 survey group, after the cu_80149014.cpp fragment. Each body's address is held by the .rodata dispatch tables 0x802A2500-0x802A27C0 (fn_8014ABE4 is also called from 0x8014B638). Native literals start at 0x802A0B50 (20.0f loaded by fn_8014AC88); readonly context 0x802A0B50-0x802A0CE0 is measured here, including the unresolved trailing context after the native 0x54-byte emission (follow-up #784 measures 0x802A0CE0-0x802A11F4 with src/game/cu_8014BC98.cpp). Original file boundaries and nominal identity unresolved; constructor/destructor 0x8014B498/0x8014B4E8 and later bodies excluded; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion. The widened provisional comparison hull includes only explicit whole functions; shared target literal |^Done at802A0B74 gives the source-grouping reason. Existing readonly target context802A0B50\u2013802A0CE0 remains unchanged. Complete natural native pool grows84 to104 bytes and is compared without clipping against400 target bytes. Done pools correctly at native+0x24; new Jump Ball Battle native+0x54 resolves802A0BA4, differing from actual802A130C. No data exactness, original-unit or adjacent-storage ownership claim.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8014AB64",
-          "end": "0x8014B498"
+          "end": "0x80150820"
         },
         {
           "section": ".rodata",
@@ -34035,6 +34100,11 @@
           "symbol": "fn_8014B38C",
           "start": "0x8014B38C",
           "end": "0x8014B498"
+        },
+        {
+          "symbol": "fn_801507E0",
+          "start": "0x801507E0",
+          "end": "0x80150820"
         }
       ]
     },
@@ -34619,7 +34689,7 @@
     {
       "source": "src/game/cu_80150710.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #817; three complete slot bodies of the table 0x802A1DC8 (derived from the engine table 0x80297BF8, include/game/Class_80297BF8.h) inside the retained provisional cu_801485B4 survey group: slot 4 (0x80150710, word 0x802A1DEC), slot 7 (0x80150820, word 0x802A1E04) and slot 11 (0x80150824, word 0x802A1E24). Slots 5 and 6 (0x8015076C-0x80150820) are not registered: 0x8015076C does not yet match, and 0x801507E0 forms 0x802A0B74 inside readonly context measured with src/game/cu_8014AB64.cpp and 0x802A130C, which no fragment registers, and reads the .sdata word 0x803EB2E4. No literal or data word is referenced, so no other range is registered. Original file boundaries and nominal identity unresolved; 0x801503BC-0x80150710 and 0x80150848 onward excluded; original bytes stay linked.",
+      "evidence": "Issue #817; three complete slot bodies of the table 0x802A1DC8 (derived from the engine table 0x80297BF8, include/game/Class_80297BF8.h) inside the retained provisional cu_801485B4 survey group: slot 4 (0x80150710, word 0x802A1DEC), slot 7 (0x80150820, word 0x802A1E04) and slot 11 (0x80150824, word 0x802A1E24). Slots 5 and 6 (0x8015076C-0x80150820) are not registered: 0x8015076C does not yet match, and 0x801507E0 forms 0x802A0B74 inside readonly context measured with src/game/cu_8014AB64.cpp and 0x802A130C, which no fragment registers, and reads the .sdata word 0x803EB2E4. No literal or data word is referenced, so no other range is registered. Original file boundaries and nominal identity unresolved; 0x801503BC-0x80150710 and 0x80150848 onward excluded; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion.",
       "sections": [
         {
           "section": ".text",
@@ -34633,6 +34703,11 @@
           "symbol": "fn_80150710",
           "start": "0x80150710",
           "end": "0x8015076C"
+        },
+        {
+          "symbol": "fn_8015076C",
+          "start": "0x8015076C",
+          "end": "0x801507E0"
         },
         {
           "symbol": "fn_80150820",
@@ -36392,12 +36467,12 @@
     {
       "source": "src/game/cu_80151D9C.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #967; one complete function inside the retained provisional cu_801485B4 survey group: 0x80151D9C-0x80152068, called only from 0x80150DB4 with the .bss object 0x8031BDD4, which ends a round of the table-0x802A2918 object: it announces sudden death, or eliminates the trailing entries through 0x80151CCC (src/game/cu_80151CCC.cpp) and either finishes through 0x801502B4 or starts the next round and resets the per-round scores. Owns the .rodata strings 0x802A13AC-0x802A13E8 it forms. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "Issue #967; one complete function inside the retained provisional cu_801485B4 survey group: 0x80151D9C-0x80152068, called only from 0x80150DB4 with the .bss object 0x8031BDD4, which ends a round of the table-0x802A2918 object: it announces sudden death, or eliminates the trailing entries through 0x80151CCC (src/game/cu_80151CCC.cpp) and either finishes through 0x801502B4 or starts the next round and resets the per-round scores. Owns the .rodata strings 0x802A13AC-0x802A13E8 it forms. Original file boundaries and nominal identity unresolved; original bytes stay linked. Issue #1021 adds previously missing complete bodies, retained as natural fuzzy source. Original source grouping unresolved; no linked promotion. The comparison code-placement hull expands only to locate the new body in the same retained survey grouping; only explicit whole-function ranges are measured.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80151D9C",
+          "start": "0x801502B4",
           "end": "0x80152068"
         },
         {
@@ -36408,6 +36483,11 @@
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_801502B4",
+          "start": "0x801502B4",
+          "end": "0x8015034C"
+        },
         {
           "symbol": "fn_80151D9C",
           "start": "0x80151D9C",
@@ -52062,6 +52142,57 @@
           "symbol": "fn_8021743C",
           "start": "0x8021743C",
           "end": "0x802176E8"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8014FDD0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #1021; two complete whole-function bodies in retained provisional cu_801485B4 grouping. Natural partial comparisons; no original translation-unit claim, no linked promotion. Source shares identical established Record_8014F104/Block_8014F104/Class_802A2B68 header views with unchanged F104/F57C consumers.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014FDD0",
+          "end": "0x8014FFC4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8014FDD0",
+          "start": "0x8014FDD0",
+          "end": "0x8014FF2C"
+        },
+        {
+          "symbol": "fn_8014FF34",
+          "start": "0x8014FF34",
+          "end": "0x8014FFC4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8014FFC4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue #1021; complete coordinate helper at existing whole-function extent. Original source grouping unresolved; natural constants 6,20,40 map to target readonly 802A12BC\u2013802A12C8. Partial comparison only; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8014FFC4",
+          "end": "0x8015005C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A12BC",
+          "end": "0x802A12C8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8014FFC4",
+          "start": "0x8014FFC4",
+          "end": "0x8015005C"
         }
       ]
     }
