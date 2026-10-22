@@ -21419,6 +21419,170 @@
         "original_blob": "0f979da160943d5ec87c31c06d35b4e8a4eae317",
         "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 991 refines them in place to exact matches, and that refinement does not transfer original source credit."
       }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800A3D70"
+      ],
+      "provenance": {
+        "pull_request": 682,
+        "merged_via": 697,
+        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
+        "introduced_blob": "30aa3e57cc204d83799251d2d77e7347dc264b7f",
+        "original_commit": "7161cbabdc857c8f8d8b82edc2f7d2ac8909fea8",
+        "original_blob": "29b3052aba027bb73c804b8e76e61b4e34399967",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800AA124",
+        "0x800ABA0C"
+      ],
+      "provenance": {
+        "pull_request": 605,
+        "merged_via": 696,
+        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
+        "introduced_blob": "30aa3e57cc204d83799251d2d77e7347dc264b7f",
+        "original_commit": "d2460efbb069fdedeb7c928a2676529bb8345b84",
+        "original_blob": "2ba0d5765908ee54d68c13ba11da69508d000cee",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8009EDD4"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 918,
+        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
+        "introduced_blob": "30aa3e57cc204d83799251d2d77e7347dc264b7f",
+        "original_commit": "358b89fb6ea5623609a79bd0e2eec7cd3e1a450e",
+        "original_blob": "fd61617d65f120110d03476a670d4861a54ef024",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800ADB34",
+        "0x800ADDFC"
+      ],
+      "provenance": {
+        "pull_request": 880,
+        "merged_via": 918,
+        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
+        "introduced_blob": "30aa3e57cc204d83799251d2d77e7347dc264b7f",
+        "original_commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
+        "original_blob": "c5a04c0d9d3f88fb0054ac07d0777f70184a34a8",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800B76E8"
+      ],
+      "provenance": {
+        "pull_request": 853,
+        "merged_via": 918,
+        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
+        "introduced_blob": "30aa3e57cc204d83799251d2d77e7347dc264b7f",
+        "original_commit": "39da91b7cdf62cf795d7b3ab163f96d5ab48a4e8",
+        "original_blob": "3039f627c1900db473fdd35758c3d2464e1c6f7f",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_8009A344.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8009A8F0"
+      ],
+      "provenance": {
+        "pull_request": 886,
+        "merged_via": 918,
+        "commit": "74680c62f247d88b1184902d07891ff6b9f9f348",
+        "introduced_blob": "d590196ea58bccfc9bde16c1022eb2a7359f151a",
+        "original_commit": "43bd1f53116b8ff3406d17c7f1efe069cdcf4822",
+        "original_blob": "2cc395c091da4aed2442761de8f814bf68a65e0b",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_800ACB8C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800AD204"
+      ],
+      "provenance": {
+        "pull_request": 880,
+        "merged_via": 918,
+        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
+        "introduced_blob": "0faefbaed9df3ab08c13e7398f89534ad7975fa4",
+        "original_commit": "9e41e6bd04126dab2c4b3ae5730c295b4daadaf4",
+        "original_blob": "e0344fcd98b11e44ab14628a0e003c6aadb3fca5",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_800AF95C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800AF95C"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 918,
+        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
+        "introduced_blob": "a30627385f036cef11adbff0b04007acd218744c",
+        "original_commit": "358b89fb6ea5623609a79bd0e2eec7cd3e1a450e",
+        "original_blob": "fbdd6c8f2383e7e29fa51d6d5ace1dfd20339840",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+      }
+    },
+    {
+      "source": "src/game/cu_800BBA2C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800BBA2C"
+      ],
+      "provenance": {
+        "pull_request": 853,
+        "merged_via": 918,
+        "commit": "f5702c70142c5b4a7bf7f98ac8deecadc46880bc",
+        "introduced_blob": "357f9aa110394a90cf9c6f827e7e54735af41abd",
+        "original_commit": "39da91b7cdf62cf795d7b3ab163f96d5ab48a4e8",
+        "original_blob": "d6645652905b92244ad21c77995b8c1facbbe1de",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 992 refines them in place to exact matches, and that refinement does not transfer original source credit."
+      }
     }
   ],
   "target": "GN7E69",

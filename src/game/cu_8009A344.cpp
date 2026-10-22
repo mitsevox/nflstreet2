@@ -150,6 +150,7 @@ extern "C" void fn_8009A8F0(void)
         score1 = fn_800D41F8(1);
         scale = 100000.0f;
         break;
+    case 2:
     default:
         return;
     }
