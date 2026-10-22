@@ -175,7 +175,7 @@ static ResQuickloadEntry_801F2A4C *fn_801F2A4C(ResQuickloadDetails_801F2A4C *pDe
     return pEntry;
 }
 
-int fn_801F2B94(void)
+static int fn_801F2B94(void)
 {
     if (lbl_803EBDD8 == 0) {
         return 0;

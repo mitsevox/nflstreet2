@@ -1,22 +1,16 @@
 #include <dolphin/os.h>
 #include <dolphin/vi.h>
 #include <dolphin/gx.h>
+#include <dolphin/pad.h>
+#include <dolphin/ai.h>
 #include "engine/system.h"
 #include "game/fn_801D2B7C.h"
 
 typedef int (*SysResetCallback_801F8868)(void);
 
-
-extern void fn_8024E1FC(void);
-extern BOOL fn_8023E628(OSThread *thread, OSPriority priority);
-extern void fn_8023DB7C(void);
-extern void fn_8023C0F8(int reset, u32 resetCode, BOOL forceMenu);
 extern void fn_801CE2B8(int a);
 extern void fn_801CAB30(void);
 extern void fn_80239ED4(void);
-extern void fn_80247030(unsigned int mask);
-extern void fn_802476F8(int chan, int command);
-extern void fn_8024A67C(void);
 extern int fn_801CE1E8(void);
 extern int fn_8027EFAC(int year);
 
@@ -46,13 +40,13 @@ static void fn_801F7E18(void)
 {
     fn_801CE2B8(0);
     fn_80239ED4();
-    fn_80247030(0xF0000000);
-    fn_802476F8(0, 2);
-    fn_802476F8(1, 2);
-    fn_802476F8(2, 2);
-    fn_802476F8(3, 2);
-    fn_8024A67C();
-    fn_8024E1FC();
+    PADRecalibrate(0xF0000000);
+    PADControlMotor(0, 2);
+    PADControlMotor(1, 2);
+    PADControlMotor(2, 2);
+    PADControlMotor(3, 2);
+    AIReset();
+    GXAbortFrame();
     VISetBlack(TRUE);
     VIFlush();
     VIWaitForRetrace();
@@ -61,7 +55,7 @@ static void fn_801F7E18(void)
 int fn_801F7E90(void)
 {
     lbl_803EBE54 = fn_801F81D4();
-    fn_8023E628((OSThread *)lbl_803EBE54, 22);
+    OSSetThreadPriority((OSThread *)lbl_803EBE54, 22);
     VISetPreRetraceCallback(fn_801F7DF4);
     return 0;
 }
@@ -78,7 +72,7 @@ int fn_801F7F60(SysTimer_801F7B1C *pTimer)
         if (pTimer->mFlags & 2) {
             pTimer->mFlags &= ~2;
         } else {
-            pTimer->mElapsed += 1 - pTimer->mCount;
+            pTimer->mUnk8 += 1 - pTimer->mCount;
         }
         pTimer->mFlags &= ~4;
     }
@@ -156,7 +150,7 @@ void fn_801F81AC(void)
 {
     fn_801F8768();
     fn_801CAB30();
-    fn_8023DB7C();
+    OSYieldThread();
 }
 
 int fn_801F81D4(void)
@@ -268,13 +262,13 @@ void fn_801F8768(void)
 void fn_801F87FC(int code)
 {
     fn_801F7E18();
-    fn_8023C0F8(0, 1, code);
+    OSResetSystem(0, 1, code);
 }
 
 void fn_801F8838(void)
 {
     fn_801F7E18();
-    fn_8023C0F8(1, 1, 1);
+    OSResetSystem(1, 1, 1);
 }
 
 SysResetCallback_801F8868 fn_801F8868(SysResetCallback_801F8868 pCallback)

@@ -1,11 +1,12 @@
 #include <stddef.h>
+#include "engine/Resource.h"
 #include "engine/system.h"
 #include "game/fn_801D2B7C.h"
 
 struct SpchLogEvent_8039AEF8 {
-    int mType;
+    int mUnk0;
     int mNumArgs;
-    int mTime;
+    int mUnk8;
     unsigned int mArgs[36];
 };
 
@@ -22,7 +23,6 @@ extern void *lbl_803ECF90;
 extern unsigned char lbl_803EBE28;
 
 void *memset(void *dst, int value, size_t n);
-void *fn_801EF390(int file, int entry, int c);
 void fn_801AF060(void);
 void fn_801AF5E4(int (*pA)(void), void (*pB)(void));
 void fn_801AF630(void *pFunc);
@@ -30,16 +30,27 @@ void fn_801AF718(void);
 void fn_801B2A08(void *pData);
 void fn_80266CB8(void *pData, int a);
 
-void fn_801F5760(const char *pFormat, ...)
+void fn_801F5C34(void);
+void fn_801F5C6C(Res_801EDC2C *pRes, unsigned int index);
+void fn_801F5C94(Res_801EDC2C *pRes, unsigned int index, int a);
+void fn_801F5CCC(int (*pA)(void), void (*pB)(void));
+void fn_801F5CEC(void *pFunc);
+void fn_801F5D0C(void);
+}
+
+/* Leading-underscore NASCAR 2005 names with no reference from outside this
+   unit: file-local, with the C++ linkage their mangled NASCAR names show. */
+
+static void fn_801F5760(const char *pFormat, ...)
 {
 }
 
-int fn_801F57AC(void)
+static int fn_801F57AC(void)
 {
     return fn_801F7ABC();
 }
 
-void fn_801F57CC(void)
+static void fn_801F57CC(void)
 {
     unsigned int i;
 
@@ -50,14 +61,14 @@ void fn_801F57CC(void)
     }
 }
 
-void fn_801F5828(int type, int time, int numArgs, unsigned int *pArgs)
+static void fn_801F5828(int type, int time, int numArgs, unsigned int *pArgs)
 {
     SpchLogEvent_8039AEF8 *pEvent;
     int i;
 
     pEvent = &lbl_8039AEF0.mEvents[lbl_8039AEF0.mNext];
-    pEvent->mType = type;
-    pEvent->mTime = time;
+    pEvent->mUnk0 = type;
+    pEvent->mUnk8 = time;
     pEvent->mNumArgs = numArgs;
     for (i = 0; i < 36; i++) {
         if (i < numArgs) {
@@ -78,14 +89,14 @@ void fn_801F5C34(void)
     lbl_803EBE28 = 0;
 }
 
-void fn_801F5C6C(int file, int entry)
+void fn_801F5C6C(Res_801EDC2C *pRes, unsigned int index)
 {
-    fn_801B2A08(fn_801EF390(file, entry, 1));
+    fn_801B2A08((void *)fn_801EF390(pRes, index, 1));
 }
 
-void fn_801F5C94(int file, int entry, int a)
+void fn_801F5C94(Res_801EDC2C *pRes, unsigned int index, int a)
 {
-    fn_80266CB8(fn_801EF390(file, entry, 1), a);
+    fn_80266CB8((void *)fn_801EF390(pRes, index, 1), a);
 }
 
 void fn_801F5CCC(int (*pA)(void), void (*pB)(void))
@@ -101,5 +112,4 @@ void fn_801F5CEC(void *pFunc)
 void fn_801F5D0C(void)
 {
     fn_801AF060();
-}
 }

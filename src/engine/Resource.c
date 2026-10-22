@@ -4,20 +4,20 @@
 #include "game/fn_801D2B7C.h"
 
 typedef struct ResRequest_801F12B4 {
-    void (*pCallback)(Res_801EDC2C *pRes, int index, int a, int b, int c);
+    void (*pCallback)(Res_801EDC2C *pRes, int index, void *pBuffer, int b, int c);
     int mUnk4;
     Res_801EDC2C *pRes;
     int mIndex;
     int mUnk10;
     int mUnk14;
-    int mUnk18;
+    void *pBuffer;
     int mUnk1C;
     int mNoStore;
     unsigned short mRaw;
     char mUnk26[2];
     int mUnk28;
     unsigned char mCache;
-    unsigned char mCancelled;
+    unsigned char mDone;
     char mUnk2E[2];
     int mUnk30;
     unsigned int mTime;
@@ -27,7 +27,7 @@ typedef struct ResEvent_801F12B4 {
     int mType;
     char *pName;
     unsigned int mFlags;
-    int mUnkC;
+    void *pBuffer;
     int mUnk10;
     int mUnk14;
     unsigned int mTime;
@@ -46,8 +46,6 @@ typedef struct ResBuf_801EC914 {
 typedef struct Decomp_801EC760 {
     ResBuf_801EC914 *pSrc;
 } Decomp_801EC760;
-
-typedef void (*ResDone_801EFAD8)(Res_801EDC2C *pRes, unsigned int index, unsigned int buffer, int err, void *pUser);
 
 extern Lock_801F8014 lbl_803E92FC;
 extern Lock_801F8014 lbl_803E931C;
@@ -106,7 +104,7 @@ extern int fn_801EDDF8(Res_801EDC2C *pRes, char *pName);
 extern int fn_801EE38C(Res_801EDC2C *pRes, char *pName, unsigned int size);
 int fn_801EEFAC(Res_801EDC2C *pRes);
 int fn_801F08FC(Res_801EDC2C *pRes);
-void fn_801EE91C(Res_801EDC2C *pRes);
+static void fn_801EE91C(Res_801EDC2C *pRes);
 extern void *memset();
 extern void *memcpy();
 extern int fn_8027F0DC(int a);
@@ -121,10 +119,7 @@ extern int fn_8027F2C0(void);
 void fn_801F1230(Res_801EDC2C *pRes, unsigned int flags);
 void fn_801F12B4(unsigned int time);
 int fn_801F0D34(Res_801EDC2C *pRes);
-int fn_801F010C(Res_801EDC2C *pRes, unsigned int index);
 void fn_801F1488(Res_801EDC2C *pRes, int index);
-unsigned int fn_801EF390(Res_801EDC2C *pRes, unsigned int index, int heap);
-unsigned int fn_801F0C50(Res_801EDC2C *pRes, unsigned int index);
 
 static void fn_801EC760(int size, char *pData, int unused, void *pArg);
 
@@ -180,8 +175,8 @@ static void fn_801EC760(int size, char *pData, int unused, void *pArg)
         lbl_8039AE30.mSize = pReq->mUnk14;
         lbl_8039AE30.mPos = 0;
         lbl_8039AE30.mDone = 1;
-        lbl_8039AE30.pData = (void *)pReq->mUnk18;
-        fn_801D3470((void *)pReq->mUnk18, info, sizeof(info));
+        lbl_8039AE30.pData = pReq->pBuffer;
+        fn_801D3470(pReq->pBuffer, info, sizeof(info));
         fn_801D339C(pReq->mUnk1C);
         fn_801D3318(pReq->mUnk1C, info);
         lbl_803ECF70 = fn_8027F7B0(pRes->pBlocks[index].mUnk0, 1, &lbl_8039AE14, &lbl_8039AE30);
@@ -231,7 +226,7 @@ static int fn_801EC8D4(void *pItem, void *pKey, void *pFound)
     return cmp;
 }
 
-void fn_801EC914(int result, int arg, ResRequest_801F12B4 *pReq)
+static void fn_801EC914(int result, int arg, ResRequest_801F12B4 *pReq)
 {
     Res_801EDC2C *pRes;
     int index;
@@ -252,7 +247,7 @@ void fn_801EC914(int result, int arg, ResRequest_801F12B4 *pReq)
         event.mType = 2;
         event.pName = pRes->pName;
         event.mFlags = pRes->mFlags;
-        event.mUnkC = pReq->mUnk18;
+        event.pBuffer = pReq->pBuffer;
         event.mUnk14 = result;
         event.mTime = pReq->mTime;
         event.mNow = lbl_803EBDA0;
@@ -260,7 +255,7 @@ void fn_801EC914(int result, int arg, ResRequest_801F12B4 *pReq)
     }
     if (result < pReq->mUnk10) {
         err = fn_801F7C88();
-        fn_801D2BD0((void *)pReq->mUnk18);
+        fn_801D2BD0(pReq->pBuffer);
         pRes->pFlags[index] &= ~0x10;
     } else {
         if (pRes->pBlocks != 0 && pReq->mRaw == 0) {
@@ -269,35 +264,35 @@ void fn_801EC914(int result, int arg, ResRequest_801F12B4 *pReq)
             codec = 0;
         }
         if (lbl_803EBD9C != 0 && pReq->pRes->mCacheHandle >= 0 && pReq->mCache != 0) {
-            fn_801F318C(pReq->pRes, pReq->mIndex, pReq->mUnk28, (void *)pReq->mUnk18, pReq->mUnk10);
+            fn_801F318C(pReq->pRes, pReq->mIndex, pReq->mUnk28, pReq->pBuffer, pReq->mUnk10);
         }
         if (codec != 0 && fn_8027F77C(codec) == 0) {
             memset((void *)&src, 0, 0x1C);
             memset((void *)&dst, 0, 0x1C);
             src.mSize = pReq->mUnk10;
             src.pData = fn_801D2BB0(1, src.mSize, 0, 0);
-            memcpy(src.pData, (void *)pReq->mUnk18, src.mSize);
+            memcpy(src.pData, pReq->pBuffer, src.mSize);
             dst.mSize = pReq->mUnk14;
-            dst.pData = (void *)pReq->mUnk18;
+            dst.pData = pReq->pBuffer;
             fn_8027FAB8(lbl_802F9508);
             fn_8027F3A4(codec, &src, &dst);
             fn_8027FAB8(0);
             fn_801D2BD0(src.pData);
         }
         if (pReq->mNoStore == 0) {
-            pRes->pAddrs[index] = pReq->mUnk18;
+            pRes->pAddrs[index] = (unsigned int)pReq->pBuffer;
             pRes->pFlags[index] |= 6;
         }
         pRes->pFlags[index] &= ~0x10;
         fn_801EC650(pRes, index, &offset, &prevSize, &size);
-        fn_80239CEC((void *)pReq->mUnk18, size);
+        fn_80239CEC(pReq->pBuffer, size);
         if (pReq->pCallback != 0 && pReq->mTime == 0) {
-            pReq->pCallback(pRes, index, pReq->mUnk18, 0, pReq->mUnk4);
+            pReq->pCallback(pRes, index, pReq->pBuffer, 0, pReq->mUnk4);
         }
     }
     if (pReq->mTime != 0) {
         pReq->mUnk30 = err;
-        pReq->mCancelled = 1;
+        pReq->mDone = 1;
     } else {
         fn_801D2BD0(pReq);
     }
@@ -309,7 +304,7 @@ void fn_801EC914(int result, int arg, ResRequest_801F12B4 *pReq)
     fn_801F809C(&lbl_803E92FC);
 }
 
-int fn_801ECBE4(unsigned int tag, int count)
+static int fn_801ECBE4(unsigned int tag, int count)
 {
     int size;
 
@@ -361,7 +356,7 @@ static inline void Find_801EEB44(char *pName, Res_801EDC2C **ppRes)
     fn_801C6DCC(lbl_803ED668, 0, pName, ppRes, fn_801EC8D4);
 }
 
-unsigned int fn_801EDC2C(Res_801EDC2C *pRes, int index)
+static unsigned int fn_801EDC2C(Res_801EDC2C *pRes, int index)
 {
     if (!(pRes->pFlags[index] & 4)) {
         if (!(pRes->pFlags[index] & 8)) {
@@ -375,7 +370,7 @@ unsigned int fn_801EDC2C(Res_801EDC2C *pRes, int index)
     return pRes->pAddrs[index];
 }
 
-unsigned int fn_801EDCD0(Res_801EDC2C *pRes, int index)
+static unsigned int fn_801EDCD0(Res_801EDC2C *pRes, int index)
 {
     if (pRes->pFlags[index] & 4) {
         if (pRes->pFlags[index] & 1) {
@@ -393,7 +388,7 @@ unsigned int fn_801EDCD0(Res_801EDC2C *pRes, int index)
     return pRes->pAddrs[index];
 }
 
-int fn_801EDD68(int file, void *pBuffer)
+static int fn_801EDD68(int file, void *pBuffer)
 {
     int err;
 
@@ -404,7 +399,7 @@ int fn_801EDD68(int file, void *pBuffer)
     return err;
 }
 
-int fn_801EDDB0(int file, void *pBuffer, int size)
+static int fn_801EDDB0(int file, void *pBuffer, int size)
 {
     int err;
 
@@ -415,7 +410,7 @@ int fn_801EDDB0(int file, void *pBuffer, int size)
     return err;
 }
 
-void *fn_801EE700(Res_801EDC2C *pRes, unsigned int index, int heap, unsigned int *pBuffer, int noFlags)
+static void *fn_801EE700(Res_801EDC2C *pRes, unsigned int index, int heap, unsigned int *pBuffer, int noFlags)
 {
     char name[0x10];
     unsigned int size;
@@ -464,7 +459,7 @@ void *fn_801EE700(Res_801EDC2C *pRes, unsigned int index, int heap, unsigned int
     return pBuffer;
 }
 
-void fn_801EE91C(Res_801EDC2C *pRes)
+static void fn_801EE91C(Res_801EDC2C *pRes)
 {
     int i;
     int count;
@@ -1441,7 +1436,7 @@ void fn_801F12B4(unsigned int time)
     }
     while (lbl_803EBDA8 != lbl_803EBDA4 && time >= lbl_8039AE4C[lbl_803EBDA8]->mTime) {
         pReq = lbl_8039AE4C[lbl_803EBDA8];
-        if (pReq->mCancelled == 0) {
+        if (pReq->mDone == 0) {
             pRes = pReq->pRes;
             index = pReq->mIndex;
             WaitLoad_801EF390(pRes, index, 1);
@@ -1452,12 +1447,12 @@ void fn_801F12B4(unsigned int time)
             event.pName = pReq->pRes->pName;
             event.mFlags = pReq->pRes->mFlags;
             event.mUnk14 = pReq->mUnk14;
-            event.mUnkC = pReq->mUnk18;
+            event.pBuffer = pReq->pBuffer;
             event.mTime = pReq->mTime;
             event.mNow = lbl_803EBDA0;
             lbl_803EBD8C(pReq->pRes, pReq->mIndex, &event, 0, lbl_803EBD90);
         }
-        pReq->pCallback(pReq->pRes, pReq->mIndex, pReq->mUnk18, pReq->mUnk30, pReq->mUnk4);
+        pReq->pCallback(pReq->pRes, pReq->mIndex, pReq->pBuffer, pReq->mUnk30, pReq->mUnk4);
         fn_801D2BD0(pReq);
     }
     fn_801F809C(&lbl_803E931C);

@@ -53,7 +53,7 @@ extern char lbl_802B1944[];
 extern char lbl_802B1954[];
 extern char lbl_802B1994[];
 
-int fn_801F2310(void)
+static int fn_801F2310(void)
 {
     if (lbl_803EBDCC > 0) {
         return 1;

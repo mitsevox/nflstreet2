@@ -184,8 +184,8 @@ SysTimer_801F7B1C *fn_801F7B1C(void *pFunc, int a)
 
     if (pTimer) {
         pTimer->pFunc = pFunc;
-        pTimer->mType = a;
-        pTimer->mElapsed = err;
+        pTimer->mUnk4 = a;
+        pTimer->mUnk8 = err;
         pTimer->mUnknown10 = err;
         pTimer->mFlags = 1;
         fn_801C6AA4(lbl_803ECFA4, pTimer, 0);

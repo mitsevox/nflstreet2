@@ -2149,6 +2149,34 @@
     "gTutorialGame": {
       "address": "0x80307470",
       "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gTutorialGame. InGame dependency pointer written at 0x80032B7C."
+    },
+    "GXAbortFrame": {
+      "address": "0x8024E1FC",
+      "evidence": "evidence.tsv function/name rows for 0x8024E1FC (target extent, related SDK name)."
+    },
+    "OSSetThreadPriority": {
+      "address": "0x8023E628",
+      "evidence": "evidence.tsv function/name rows for 0x8023E628 (target extent, related SDK name)."
+    },
+    "OSYieldThread": {
+      "address": "0x8023DB7C",
+      "evidence": "evidence.tsv function/name rows for 0x8023DB7C (target extent, related SDK name)."
+    },
+    "OSResetSystem": {
+      "address": "0x8023C0F8",
+      "evidence": "evidence.tsv function/name rows for 0x8023C0F8 (target extent, related SDK name)."
+    },
+    "PADRecalibrate": {
+      "address": "0x80247030",
+      "evidence": "evidence.tsv function row for 0x80247030 (target extent, related SDK name)."
+    },
+    "PADControlMotor": {
+      "address": "0x802476F8",
+      "evidence": "evidence.tsv function row for 0x802476F8 (target extent, related SDK name)."
+    },
+    "AIReset": {
+      "address": "0x8024A67C",
+      "evidence": "evidence.tsv function row for 0x8024A67C (target extent, related SDK name)."
     }
   },
   "units": [

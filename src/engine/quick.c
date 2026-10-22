@@ -1,8 +1,5 @@
+#include "engine/sort.h"
 #include "game/fn_801D2B7C.h"
-
-extern void fn_801F522C(int type, void (*pSort)(void *pBase, unsigned int count, int size,
-                                                int (*pCompare)(void *, void *),
-                                                void (*pSwap)(void *, void *), void *pTemp, int flags));
 
 static void fn_801F56A8(void *pA, void *pB, void *pTemp, int size);
 

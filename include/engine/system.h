@@ -8,12 +8,10 @@
 extern "C" {
 #endif
 
-struct OSMutex;
-
 typedef struct SysTimer_801F7B1C {
     void *pFunc;
-    unsigned int mType;
-    unsigned int mElapsed;
+    unsigned int mUnk4;
+    unsigned int mUnk8;
     unsigned short mFlags;
     int mUnknown10;
     char mUnknown14[8];
@@ -35,6 +33,12 @@ typedef struct SysTime_8039B430 {
 unsigned int fn_801F7ABC(void);
 void fn_801F7AE8(void);
 unsigned int fn_801F7B14(void);
+
+/* mutex.c */
+struct OSMutex *fn_801F773C(void);
+void fn_801F7764(struct OSMutex *pMutex);
+void fn_801F778C(struct OSMutex *pMutex);
+void fn_801F77B4(struct OSMutex *pMutex);
 
 /* llsystem.c */
 int fn_801F7E90(void);

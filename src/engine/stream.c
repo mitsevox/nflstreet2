@@ -1,4 +1,4 @@
-#include "engine/Resource.h"
+#include "engine/sound.h"
 #include "engine/system.h"
 
 #define STREAM_MAGIC 0x5354524D
@@ -11,11 +11,6 @@ typedef struct StreamChunk_801F5D84 {
     unsigned int mSize;
 } StreamChunk_801F5D84;
 
-typedef struct StreamFile_801F6D54 {
-    Res_801EDC2C *pRes;
-    unsigned int mIndex;
-} StreamFile_801F6D54;
-
 typedef struct StreamRequest_801F5EA4 {
     int mID;
     int mState;
@@ -27,7 +22,8 @@ typedef struct StreamRequest_801F5EA4 {
     unsigned int mFileOffset;
     int mFileHandle;
     char *pMem;
-    int mSize;
+    /* Byte count of a memory request; start offset in the file for a file request. */
+    int mUnk2C;
     unsigned int mEndMarker;
     char *pStart;
 } StreamRequest_801F5EA4;
@@ -88,11 +84,6 @@ extern void fn_801C9D78(void);
 extern void fn_801C9DA0(void);
 extern void fn_801CAF24(void);
 extern int fn_801CB120(void);
-extern StreamFile_801F6D54 *fn_801F5000(StreamFile_801F6D54 *pFile);
-extern struct OSMutex *fn_801F773C(void);
-extern void fn_801F7764(struct OSMutex *pMutex);
-extern void fn_801F778C(struct OSMutex *pMutex);
-extern void fn_801F77B4(struct OSMutex *pMutex);
 
 extern Lock_801F8014 lbl_8039B3D8;
 
@@ -317,7 +308,7 @@ static void fn_801F62F0(Stream_801F5DA4 *s)
     int found;
 
     if (req->mType == 1) {
-        end = s->mReadSize + s->mFilePos >= req->mSize;
+        end = s->mReadSize + s->mFilePos >= req->mUnk2C;
     } else {
         end = (unsigned int)(s->mReadSize + s->mFilePos) >= s->mFileSize;
     }
@@ -373,7 +364,7 @@ static void fn_801F6410(Stream_801F5DA4 *s, int priority)
         if (req->mType == 1) {
             s->mFilePos = 0;
         } else {
-            s->mFilePos = req->mSize;
+            s->mFilePos = req->mUnk2C;
             if (req->mFile.pRes != s->mFile.pRes || req->mFile.mIndex != s->mFile.mIndex) {
                 s->mFile.pRes = req->mFile.pRes;
                 s->mFile.mIndex = req->mFile.mIndex;
@@ -457,8 +448,8 @@ static void fn_801F6540(Stream_801F5DA4 *s, int priority)
     }
     req = s->pCurrent;
     if (req->mType == 1) {
-        if (s->mFilePos + avail > req->mSize) {
-            s->mReadSize = req->mSize - s->mFilePos;
+        if (s->mFilePos + avail > req->mUnk2C) {
+            s->mReadSize = req->mUnk2C - s->mFilePos;
         } else {
             s->mReadSize = avail;
         }
@@ -639,8 +630,9 @@ int fn_801F6D54(StreamTap_801F5DA4 *h, StreamFile_801F6D54 *pFile, int offset, u
     StreamRequest_801F5EA4 *req;
     int state;
 
+    /* The sound code passes an "AEMSnn" descriptor name here in place of a file entry. */
     if (((char *)pFile)[0] == 'A' && ((char *)pFile)[1] == 'E' && ((char *)pFile)[2] == 'M' && ((char *)pFile)[3] == 'S') {
-        pFile = fn_801F5000(pFile);
+        pFile = fn_801F5000((const char *)pFile);
     }
     if (fn_801F5DA4(h, &s, &t) != 0) {
         return 0;
@@ -653,7 +645,7 @@ int fn_801F6D54(StreamTap_801F5DA4 *h, StreamFile_801F6D54 *pFile, int offset, u
     req->mFile.pRes = pFile->pRes;
     req->mFile.mIndex = pFile->mIndex;
     fn_801F10B0(pFile->pRes, pFile->mIndex, &req->mFileSize, &req->mFileOffset, &req->mFileHandle);
-    req->mSize = offset;
+    req->mUnk2C = offset;
     req->mEndMarker = endMarker;
     fn_801F5F28(s, req);
     fn_801F778C(s->pMutex);
@@ -697,7 +689,7 @@ int fn_801F6E9C(StreamTap_801F5DA4 *h, char *pMem, int size, unsigned int endMar
         size += fn_801F5D84(c->mSize);
     }
     req->pMem = pMem;
-    req->mSize = size;
+    req->mUnk2C = size;
     req->mEndMarker = endMarker;
     req->mType = 1;
     fn_801F5F28(s, req);

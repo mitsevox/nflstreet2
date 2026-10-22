@@ -33,7 +33,7 @@ typedef struct TDbTbl_801F88F0 {
     char mUnk20[8];
     unsigned int mFlags;
     char mUnk2C[0x14];
-    unsigned short mMaxRows;
+    unsigned short mUnk40;
     unsigned short mUnk42;
     unsigned short mUnk44;
     unsigned short mUnk46;
@@ -66,12 +66,12 @@ typedef struct TDbStrFuncs_801F8A54 {
 
 typedef struct TDbInitParms_801F8A0C {
     int mHeapSize;
-    int mDbMax;
-    int mDbGrow;
-    int mTblMax;
-    int mTblGrow;
-    int mQryMax;
-    int mQryGrow;
+    int mPool0Max;
+    int mPool0Grow;
+    int mPool1Max;
+    int mPool1Grow;
+    int mPool2Max;
+    int mPool2Grow;
     int mIdxMax;
     int mIdxGrow;
     TDbStrFuncs_801F8A54 *pStrFuncs;
@@ -266,7 +266,7 @@ static inline TDbDb_801F88F0 *FindDb_801F88F0(int db)
     return pDb;
 }
 
-int fn_801F8878(int tbl)
+static int fn_801F8878(int tbl)
 {
     int i;
     int db;
@@ -324,7 +324,7 @@ int fn_801F88F0(int db, int tbl, TDbDb_801F88F0 **ppDb, TDbTbl_801F88F0 **ppTbl)
     return err;
 }
 
-int fn_801F89B8(void)
+static int fn_801F89B8(void)
 {
     TDbQry_801F89B8 *pHead;
     TDbQry_801F89B8 *pQry;
@@ -352,12 +352,12 @@ void fn_801F8A0C(TDbInitParms_801F8A0C *pParms)
 {
     if (pParms != 0) {
         pParms->mHeapSize = 0;
-        pParms->mDbMax = 100;
-        pParms->mDbGrow = 20;
-        pParms->mTblMax = 10;
-        pParms->mTblGrow = 10;
-        pParms->mQryMax = 5;
-        pParms->mQryGrow = 5;
+        pParms->mPool0Max = 100;
+        pParms->mPool0Grow = 20;
+        pParms->mPool1Max = 10;
+        pParms->mPool1Grow = 10;
+        pParms->mPool2Max = 5;
+        pParms->mPool2Grow = 5;
         pParms->mIdxMax = 100;
         pParms->mIdxGrow = 20;
         pParms->pStrFuncs = 0;
@@ -379,10 +379,10 @@ int fn_801F8A54(TDbInitParms_801F8A0C *pParms)
     err = fn_8020D194(-1, pParms->mHeapSize, &lbl_803EBE8C);
     if (err == 0) {
         Notify_801F8A54(err, -1, -1);
-        err = fn_80203444(&lbl_803E9654, lbl_803EBE8C, 0x28, pParms->mDbMax, pParms->mDbGrow);
+        err = fn_80203444(&lbl_803E9654, lbl_803EBE8C, 0x28, pParms->mPool0Max, pParms->mPool0Grow);
         if (err == 0) {
-            if (fn_80203444(&lbl_803E9670, lbl_803EBE8C, 0x1C, pParms->mTblMax, pParms->mTblGrow) == 0) {
-                if (fn_80203444(&lbl_803E968C, lbl_803EBE8C, 0x134, pParms->mQryMax, pParms->mQryGrow) == 0) {
+            if (fn_80203444(&lbl_803E9670, lbl_803EBE8C, 0x1C, pParms->mPool1Max, pParms->mPool1Grow) == 0) {
+                if (fn_80203444(&lbl_803E968C, lbl_803EBE8C, 0x134, pParms->mPool2Max, pParms->mPool2Grow) == 0) {
                     goto pools_done;
                 }
                 fn_8020353C(&lbl_803E9670);
@@ -753,24 +753,24 @@ int fn_801F95C8(void)
     return db;
 }
 
-int fn_801F9608(int db, int tbl, unsigned char *pOn, unsigned short *pMax)
+int fn_801F9608(int db, int tbl, unsigned char *pFlag, unsigned short *pValue)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *pTbl;
-    unsigned short max;
+    unsigned short value;
     int err;
 
     err = fn_801F88F0(db, tbl, &pDb, &pTbl);
     if (err == 0) {
         if (pTbl->mFlags & 8) {
-            *pOn = 1;
-            max = pTbl->mMaxRows;
+            *pFlag = 1;
+            value = pTbl->mUnk40;
         } else {
-            *pOn = 0;
-            max = 0;
+            *pFlag = 0;
+            value = 0;
         }
-        if (pMax != 0) {
-            *pMax = max;
+        if (pValue != 0) {
+            *pValue = value;
         }
     }
     return err;

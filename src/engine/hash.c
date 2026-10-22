@@ -1,3 +1,5 @@
+#include "engine/Resource.h"
+
 extern unsigned int strlen(const char *s);
 extern int fn_801C1F54(int c);
 

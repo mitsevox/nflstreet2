@@ -1,20 +1,9 @@
+#include "engine/sound.h"
 #include "game/fn_801D2B7C.h"
 
-struct SndBankInfo_801F3524 {
-    unsigned int mFlags;
-    int mFile;
-    int mEntry;
-    char *pData;
-    int mBank;
-    int mHandle;
-    void (*pCallback)(SndBankInfo_801F3524 *pBank);
-    unsigned char mLoaded;
-    int mState;
-};
-
 struct SndSeqInfo_801F438C {
-    int mFile;
-    int mEntry;
+    Res_801EDC2C *pRes;
+    unsigned int mIndex;
     int mUnk8;
     void *pData;
     unsigned char mLoaded;
@@ -25,17 +14,12 @@ struct SndStream_801F44B0 {
     void *pBuffer;
 };
 
-struct SndAemsFile_801F4F98 {
-    int mUnk0;
-    int mUnk4;
-};
-
 struct SndAemsBankInfo_801F4D00 {
     int mHandle;
     int mSize;
     void *pData;
     int mBank;
-    SndAemsFile_801F4F98 mFile;
+    StreamFile_801F6D54 mFile;
 };
 
 struct Desc_801F393C {
@@ -86,7 +70,7 @@ struct SndState_8039AE8C {
     void *pAemsBankList;
     void *pSeqList;
     void *pStreamList;
-    void *pBankTable;
+    SndBankEntry_801F50C8 *pBankTable;
     void *pAemsSystem;
     void *pAemsStreams;
     int mUnk28;
@@ -95,7 +79,7 @@ struct SndState_8039AE8C {
     void (*pMemLabelCallback)(unsigned char label);
     SndStatus_8039AEC4 mStatus;
     unsigned char mUnk3C;
-    SndAemsFile_801F4F98 *apFileDesc[4];
+    StreamFile_801F6D54 *apFileDesc[4];
     int mUnk50;
 };
 
@@ -105,7 +89,6 @@ struct SndState_8039AE8C {
 #define SND_UNLOCK() if (lbl_8039AE8C.mStatus.mFlags.mNoLock == 0) fn_8026D0EC()
 
 typedef int (*SndTraverse_801C6D34)(void *pNode, void *pKey, void *pOut);
-typedef void (*SndLoadCallback_801F35A8)(void *a, unsigned int b, void *c, unsigned int d, void *pUser);
 
 extern "C" {
 extern SndState_8039AE8C lbl_8039AE8C;
@@ -122,13 +105,6 @@ int fn_801C6D34(void *pPool, int start, void *pKey, void *pOut, SndTraverse_801C
 int fn_801CB120(void);
 void fn_801CAF24(void);
 void *fn_801D310C(void *pAddr, int size, int ident, int flags);
-void fn_801EF7BC(int file, int entry, void *pDest);
-void fn_801EFAD8(int file, int entry, int b, void *pDest, int priority, SndLoadCallback_801F35A8 func, void *pUser);
-void fn_801EFF80(int file, int entry, void *pDest);
-void fn_801F010C(int file, int entry);
-int fn_801F0C50(int file, int entry);
-void fn_801F5034(SndBankInfo_801F3524 *pBank, int b);
-void fn_801F50C8(void *pTable, int index);
 int fn_801B91A0(void *p);
 void fn_801B9328(void *p);
 unsigned long fn_8023CEE0(void);
@@ -173,17 +149,54 @@ void fn_8026F1E8(int handle, int *pStatus);
 void fn_802703A0(void);
 void fn_802714A8(int handle, int value);
 
-void fn_801F3544(SndBankInfo_801F3524 *pBank);
-void fn_801F35B4(void);
+int fn_801F3B4C(Desc_801F393C *pDesc);
+void fn_801F3C14(void);
+unsigned char fn_801F3E28(void);
+unsigned char fn_801F3E34(void);
+SndBankInfo_801F3524 *fn_801F3E40(Res_801EDC2C *pRes, unsigned int index, unsigned int bank);
+void fn_801F3ED8(Res_801EDC2C *pRes, SndBankInfo_801F3524 **ppBank, unsigned int index, unsigned int bank,
+                 void (*pCallback)(SndBankInfo_801F3524 *pBank));
 void fn_801F3F74(SndBankInfo_801F3524 *pBank);
+unsigned char fn_801F4024(SndBankInfo_801F3524 *pBank);
+int fn_801F4050(SndBankInfo_801F3524 *pBank, int patch, void *pOpts);
+void fn_801F40F4(SndPatchOpts_801F40F4 *pOpts);
+void fn_801F4130(int handle);
+int fn_801F41A0(int handle);
+void fn_801F421C(int handle, int value);
+void fn_801F4294(int handle, int a, int value);
+void fn_801F4314(int handle, int value);
+SndSeqInfo_801F438C *fn_801F438C(Res_801EDC2C *pRes, unsigned int index);
 void fn_801F4448(SndSeqInfo_801F438C *pSeq);
+void *fn_801F44A4(void);
+SndStream_801F44B0 *fn_801F44B0(int extra, int a, int b, int bank);
+int fn_801F4580(SndStream_801F44B0 *pStream, void *pFile, int a, int b);
+void fn_801F45D4(SndStream_801F44B0 *pStream);
+void fn_801F4638(SndStream_801F44B0 *pStream);
+void fn_801F4678(SndStream_801F44B0 *pStream, int a, int b);
+void fn_801F46F8(SndStream_801F44B0 *pStream, int a);
+void fn_801F4834(SndStream_801F44B0 *pStream, int *pStatus);
+int fn_801F48B8(SndStream_801F44B0 *pStream);
+int fn_801F4934(int a, int b);
+void fn_801F49B8(SndStream_801F44B0 *pStream, int a, int b);
+void fn_801F4A38(SndStream_801F44B0 *pStream, int a);
+void fn_801F4AB0(int a, int b);
+void fn_801F4AEC(int a, int b);
+void fn_801F4AF8(void (*pCallback)(int a, int b));
 void fn_801F4B20(void);
+int fn_801F4B88(Res_801EDC2C *pRes, unsigned int index, int bank);
 int fn_801F4C5C(void);
-SndAemsBankInfo_801F4D00 *fn_801F4DD8(int file, int entry, int stream0, int stream1, int bank);
+SndAemsBankInfo_801F4D00 *fn_801F4DAC(Res_801EDC2C *pRes, unsigned int index, int bank);
+SndAemsBankInfo_801F4D00 *fn_801F4DD8(Res_801EDC2C *pRes, unsigned int index, Res_801EDC2C *pStreamRes,
+                                      unsigned int streamIndex, int bank);
 int fn_801F4F28(SndAemsBankInfo_801F4D00 *pBank);
-char *fn_801F4F98(SndAemsFile_801F4F98 *pFile);
+char *fn_801F4F98(StreamFile_801F6D54 *pFile);
+}
 
-int fn_801F3524(void *pNode, void *pState, void *pOut)
+/* Functions with leading-underscore NASCAR 2005 names that nothing outside this
+   unit references are file-local; their NASCAR names are C++-mangled, so they
+   have C++ linkage here. The public API keeps the extern "C" declarations above. */
+
+static int fn_801F3524(void *pNode, void *pState, void *pOut)
 {
     if (((SndBankInfo_801F3524 *)pNode)->mState == (int)pState) {
         *(SndBankInfo_801F3524 **)pOut = (SndBankInfo_801F3524 *)pNode;
@@ -192,7 +205,7 @@ int fn_801F3524(void *pNode, void *pState, void *pOut)
     return 1;
 }
 
-void fn_801F3544(SndBankInfo_801F3524 *pBank)
+static void fn_801F3544(SndBankInfo_801F3524 *pBank)
 {
     pBank->mState = 0;
     if (!(pBank->mFlags & 2)) {
@@ -204,12 +217,12 @@ void fn_801F3544(SndBankInfo_801F3524 *pBank)
     }
 }
 
-void fn_801F35A8(void *a, unsigned int b, void *c, unsigned int d, void *pUser)
+static void fn_801F35A8(void *pRes, unsigned int index, void *pBuffer, unsigned int err, void *pUser)
 {
     ((SndBankInfo_801F3524 *)pUser)->mState = 2;
 }
 
-void fn_801F35B4(void)
+static void fn_801F35B4(void)
 {
     SndBankInfo_801F3524 *pBank;
     char *pData;
@@ -229,11 +242,12 @@ void fn_801F35B4(void)
         fn_801C6D34(lbl_8039AE8C.pBankList, 0, (void *)2, &pBank, fn_801F3524, 1);
         if (pBank != 0 && pBank->mState == 2) {
             pBank->mState = 3;
-            pData = pBank->pData;
+            pData = (char *)pBank->pData;
             if (pData[0] != 'B' || pData[1] != 'N' || pData[2] != 'K' || pData[3] != 'b') {
-                fn_801F010C(pBank->mFile, pBank->mEntry);
+                fn_801F010C(pBank->pRes, pBank->mIndex);
                 pBank->mState = 1;
-                fn_801EFAD8(pBank->mFile, pBank->mEntry, 1, pData, 100, fn_801F35A8, pBank);
+                fn_801EFAD8(pBank->pRes, pBank->mIndex, 1, (unsigned int)pData, 100, (ResDone_801EFAD8)fn_801F35A8,
+                            pBank);
             } else {
                 fn_801F50C8(lbl_8039AE8C.pBankTable, pBank->mBank);
                 fn_8026A870(&pBank->mHandle, pBank->pData);
@@ -242,7 +256,8 @@ void fn_801F35B4(void)
     }
 }
 
-SndBankInfo_801F3524 *fn_801F3728(int file, int entry, int bank, char *pData, unsigned int size, unsigned int flags)
+static SndBankInfo_801F3524 *fn_801F3728(void *pRes, unsigned int index, unsigned int bank, void *pData, unsigned int size,
+                                          unsigned int flags)
 {
     SndBankInfo_801F3524 *pBank;
     int length;
@@ -254,12 +269,12 @@ SndBankInfo_801F3524 *fn_801F3728(int file, int entry, int bank, char *pData, un
     fn_801C6AA4(lbl_8039AE8C.pBankList, pBank, 0);
     pBank->mBank = bank;
     pBank->mFlags = flags;
-    pBank->mFile = file;
-    pBank->mEntry = entry;
-    length = fn_801F0C50(file, entry);
+    pBank->pRes = (Res_801EDC2C *)pRes;
+    pBank->mIndex = index;
+    length = fn_801F0C50((Res_801EDC2C *)pRes, index);
     pBank->pData = pData;
     DCFlushRange(pData, length);
-    fn_801EFF80(file, entry, pData);
+    fn_801EFF80((Res_801EDC2C *)pRes, index, (unsigned int)pData);
     fn_801F50C8(lbl_8039AE8C.pBankTable, pBank->mBank);
     DCFlushRange(pData, length);
     fn_8026A4D4(&pBank->mHandle, pData);
@@ -271,8 +286,8 @@ SndBankInfo_801F3524 *fn_801F3728(int file, int entry, int bank, char *pData, un
     return pBank;
 }
 
-void fn_801F3834(int file, SndBankInfo_801F3524 **ppBank, int entry, int bank, char *pData, unsigned int size,
-                 unsigned int flags, void (*pCallback)(SndBankInfo_801F3524 *pBank))
+static void fn_801F3834(void *pRes, SndBankInfo_801F3524 **ppBank, unsigned int index, unsigned int bank, void *pData,
+                        unsigned int size, unsigned int flags, void (*pCallback)(SndBankInfo_801F3524 *pBank))
 {
     SndBankInfo_801F3524 *pBank;
 
@@ -284,19 +299,19 @@ void fn_801F3834(int file, SndBankInfo_801F3524 **ppBank, int entry, int bank, c
         pBank->mLoaded = 0;
         pBank->pCallback = pCallback;
         pBank->mState = 1;
-        pBank->mFile = file;
-        pBank->mEntry = entry;
+        pBank->pRes = (Res_801EDC2C *)pRes;
+        pBank->mIndex = index;
         pBank->pData = pData;
         *ppBank = pBank;
-        fn_801EFAD8(file, entry, 1, pData, 100, fn_801F35A8, pBank);
+        fn_801EFAD8((Res_801EDC2C *)pRes, index, 1, (unsigned int)pData, 100, (ResDone_801EFAD8)fn_801F35A8, pBank);
     }
 }
 
-void fn_801F3904(const char *pMessage)
+static void fn_801F3904(const char *pMessage)
 {
 }
 
-void fn_801F3908(unsigned char label)
+static void fn_801F3908(unsigned char label)
 {
     if (lbl_8039AE8C.pMemLabelCallback != 0) {
         lbl_8039AE8C.pMemLabelCallback(label);
@@ -382,25 +397,25 @@ unsigned char fn_801F3E34(void)
     return lbl_8039AE8C.mStatus.mFlags.mActive;
 }
 
-SndBankInfo_801F3524 *fn_801F3E40(int file, int entry, int bank)
+SndBankInfo_801F3524 *fn_801F3E40(Res_801EDC2C *pRes, unsigned int index, unsigned int bank)
 {
     unsigned int size;
 
     if (!lbl_8039AE8C.mStatus.mFlags.mActive || !lbl_8039AE8C.mStatus.mFlags.mEnabled) {
         return 0;
     }
-    size = fn_801F0C50(file, entry);
-    return fn_801F3728(file, entry, bank, (char *)fn_801D2BB0(1, size, 0, 0), size, 0);
+    size = fn_801F0C50(pRes, index);
+    return fn_801F3728(pRes, index, bank, fn_801D2BB0(1, size, 0, 0), size, 0);
 }
 
-void fn_801F3ED8(int file, SndBankInfo_801F3524 **ppBank, int entry, int bank,
+void fn_801F3ED8(Res_801EDC2C *pRes, SndBankInfo_801F3524 **ppBank, unsigned int index, unsigned int bank,
                  void (*pCallback)(SndBankInfo_801F3524 *pBank))
 {
     unsigned int size;
 
     if (lbl_8039AE8C.mStatus.mFlags.mActive && lbl_8039AE8C.mStatus.mFlags.mEnabled) {
-        size = fn_801F0C50(file, entry);
-        fn_801F3834(file, ppBank, entry, bank, (char *)fn_801D2BB0(1, size, 0, 0), size, 0, pCallback);
+        size = fn_801F0C50(pRes, index);
+        fn_801F3834(pRes, ppBank, index, bank, fn_801D2BB0(1, size, 0, 0), size, 0, pCallback);
     }
 }
 
@@ -415,7 +430,7 @@ void fn_801F3F74(SndBankInfo_801F3524 *pBank)
         }
         fn_8026AB88(pBank->mHandle);
         if (pBank->mFlags & 1) {
-            fn_801F010C(pBank->mFile, pBank->mEntry);
+            fn_801F010C(pBank->pRes, pBank->mIndex);
         }
         if (!(pBank->mFlags & 2)) {
             fn_801D2BD0(pBank->pData);
@@ -505,7 +520,7 @@ void fn_801F4314(int handle, int value)
     }
 }
 
-SndSeqInfo_801F438C *fn_801F438C(int file, int entry)
+SndSeqInfo_801F438C *fn_801F438C(Res_801EDC2C *pRes, unsigned int index)
 {
     SndSeqInfo_801F438C *pSeq;
     void *pData;
@@ -515,10 +530,10 @@ SndSeqInfo_801F438C *fn_801F438C(int file, int entry)
     }
     pSeq = (SndSeqInfo_801F438C *)fn_801C6A20(lbl_8039AE8C.pSeqList);
     fn_801C6AA4(lbl_8039AE8C.pSeqList, pSeq, 0);
-    pSeq->mFile = file;
-    pSeq->mEntry = entry;
-    pData = fn_801D2B7C(fn_801F0C50(file, entry), 0, 0);
-    fn_801EFF80(file, entry, pData);
+    pSeq->pRes = pRes;
+    pSeq->mIndex = index;
+    pData = fn_801D2B7C(fn_801F0C50(pRes, index), 0, 0);
+    fn_801EFF80(pRes, index, (unsigned int)pData);
     pSeq->mLoaded = 1;
     pSeq->pData = pData;
     pSeq->mUnk8 = -1;
@@ -687,18 +702,18 @@ void fn_801F4B20(void)
     }
 }
 
-int fn_801F4B88(int file, int entry, int bank)
+int fn_801F4B88(Res_801EDC2C *pRes, unsigned int index, int bank)
 {
     int result;
 
     result = 0;
     if (SND_READY()) {
         fn_801F50C8(lbl_8039AE8C.pBankTable, bank);
-        lbl_8039AE8C.pAemsSystem = fn_801D2B7C(fn_801F0C50(file, entry), 0, 0);
-        fn_801EF7BC(file, entry, lbl_8039AE8C.pAemsSystem);
+        lbl_8039AE8C.pAemsSystem = fn_801D2B7C(fn_801F0C50(pRes, index), 0, 0);
+        fn_801EF7BC(pRes, index, (unsigned int)lbl_8039AE8C.pAemsSystem);
         result = fn_801B91A0(lbl_8039AE8C.pAemsSystem);
-        lbl_8039AE8C.pAemsStreams = fn_801D2B7C(fn_801F0C50(file, entry + 1), 0, 0);
-        fn_801EF7BC(file, entry + 1, lbl_8039AE8C.pAemsStreams);
+        lbl_8039AE8C.pAemsStreams = fn_801D2B7C(fn_801F0C50(pRes, index + 1), 0, 0);
+        fn_801EF7BC(pRes, index + 1, (unsigned int)lbl_8039AE8C.pAemsStreams);
         fn_8026B124(lbl_8039AE8C.pAemsStreams);
     }
     return result;
@@ -724,7 +739,7 @@ int fn_801F4C5C(void)
     return result;
 }
 
-int fn_801F4CE0(void *pNode, void *pData, void *pOut)
+static int fn_801F4CE0(void *pNode, void *pData, void *pOut)
 {
     if (((SndAemsBankInfo_801F4D00 *)pNode)->pData == pData) {
         *(SndAemsBankInfo_801F4D00 **)pOut = (SndAemsBankInfo_801F4D00 *)pNode;
@@ -733,7 +748,7 @@ int fn_801F4CE0(void *pNode, void *pData, void *pOut)
     return 1;
 }
 
-void *fn_801F4D00(void *pData, int size, int c)
+static void *fn_801F4D00(void *pData, int size, int c)
 {
     SndAemsBankInfo_801F4D00 *pBank;
 
@@ -745,17 +760,18 @@ void *fn_801F4D00(void *pData, int size, int c)
     return pData;
 }
 
-void fn_801F4D6C(SndAemsBankInfo_801F4D00 *pBank)
+static void fn_801F4D6C(SndAemsBankInfo_801F4D00 *pBank)
 {
     pBank->pData = fn_801D310C(pBank->pData, pBank->mSize, 0, 0);
 }
 
-SndAemsBankInfo_801F4D00 *fn_801F4DAC(int file, int entry, int bank)
+SndAemsBankInfo_801F4D00 *fn_801F4DAC(Res_801EDC2C *pRes, unsigned int index, int bank)
 {
-    return fn_801F4DD8(file, entry, -1, -1, bank);
+    return fn_801F4DD8(pRes, index, (Res_801EDC2C *)-1, (unsigned int)-1, bank);
 }
 
-SndAemsBankInfo_801F4D00 *fn_801F4DD8(int file, int entry, int stream0, int stream1, int bank)
+SndAemsBankInfo_801F4D00 *fn_801F4DD8(Res_801EDC2C *pRes, unsigned int index, Res_801EDC2C *pStreamRes,
+                                      unsigned int streamIndex, int bank)
 {
     SndAemsBankInfo_801F4D00 *pBank;
     unsigned int size;
@@ -767,14 +783,14 @@ SndAemsBankInfo_801F4D00 *fn_801F4DD8(int file, int entry, int stream0, int stre
         fn_801C6AA4(lbl_8039AE8C.pAemsBankList, pBank, 0);
         pBank->mBank = bank;
         fn_801F50C8(lbl_8039AE8C.pBankTable, bank);
-        size = fn_801F0C50(file, entry);
+        size = fn_801F0C50(pRes, index);
         pBank->pData = fn_801D2BB0(1, size, 0, 0);
         DCFlushRange(pBank->pData, size);
-        fn_801EF7BC(file, entry, pBank->pData);
+        fn_801EF7BC(pRes, index, (unsigned int)pBank->pData);
         DCFlushRange(pBank->pData, size);
-        if (stream0 != -1 && stream1 != -1) {
-            pBank->mFile.mUnk0 = stream0;
-            pBank->mFile.mUnk4 = stream1;
+        if (pStreamRes != (Res_801EDC2C *)-1 && streamIndex != (unsigned int)-1) {
+            pBank->mFile.pRes = pStreamRes;
+            pBank->mFile.mIndex = streamIndex;
             pName = fn_801F4F98(&pBank->mFile);
             pBank->mHandle = fn_802697D8(pBank->pData, pName, 0, fn_801F4D00);
             fn_801F4D6C(pBank);
@@ -799,7 +815,7 @@ int fn_801F4F28(SndAemsBankInfo_801F4D00 *pBank)
     return result;
 }
 
-char *fn_801F4F98(SndAemsFile_801F4F98 *pFile)
+char *fn_801F4F98(StreamFile_801F6D54 *pFile)
 {
     int i;
 
@@ -813,8 +829,7 @@ char *fn_801F4F98(SndAemsFile_801F4F98 *pFile)
     return lbl_803ECF80;
 }
 
-SndAemsFile_801F4F98 *fn_801F5000(const char *pName)
+StreamFile_801F6D54 *fn_801F5000(const char *pName)
 {
     return lbl_8039AE8C.apFileDesc[(pName[4] - '0') * 10 + (pName[5] - '0')];
-}
 }

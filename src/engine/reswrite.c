@@ -7,12 +7,13 @@ extern int fn_801F1838(int a, int b, int c, int d, int e, int f, int g);
 extern int fn_801F1D20(Res_801EDC2C *pWrite);
 extern void fn_801F1F30(Res_801EDC2C *pWrite);
 
-void fn_801F21B4(int handle, unsigned char value);
-unsigned int fn_801F21E4(int handle, unsigned char value, unsigned int count);
-void fn_801F2244(int handle, unsigned short value, int bigEndian);
-void fn_801F2294(int handle, unsigned int value, int bigEndian);
+static void fn_801F21B4(int handle, unsigned char value);
+static unsigned int fn_801F21E4(int handle, unsigned char value, unsigned int count);
+static void fn_801F2244(int handle, unsigned short value, int bigEndian);
+static void fn_801F2294(int handle, unsigned int value, int bigEndian);
+static int fn_801F201C(Res_801EDC2C *pWrite);
 
-int fn_801F17E0(unsigned int id)
+static int fn_801F17E0(unsigned int id)
 {
     switch (id) {
     case 0x48534831:
@@ -54,7 +55,7 @@ int fn_801F1B6C(Res_801EDC2C *pWrite)
     return 0;
 }
 
-unsigned int fn_801F1C48(unsigned int type, unsigned int count)
+static unsigned int fn_801F1C48(unsigned int type, unsigned int count)
 {
     unsigned int size;
 
@@ -79,12 +80,12 @@ unsigned int fn_801F1C48(unsigned int type, unsigned int count)
     return size;
 }
 
-unsigned int fn_801F1CD4(unsigned int type, unsigned int count)
+static unsigned int fn_801F1CD4(unsigned int type, unsigned int count)
 {
     return fn_801F1C48(type, count) + 8;
 }
 
-unsigned int fn_801F1CF8(unsigned int size, unsigned int alignment)
+static unsigned int fn_801F1CF8(unsigned int size, unsigned int alignment)
 {
     unsigned int pad;
 
@@ -98,7 +99,7 @@ unsigned int fn_801F1CF8(unsigned int size, unsigned int alignment)
     return pad;
 }
 
-int fn_801F201C(Res_801EDC2C *pWrite)
+static int fn_801F201C(Res_801EDC2C *pWrite)
 {
     unsigned int size;
     unsigned int i;
@@ -124,7 +125,7 @@ int fn_801F201C(Res_801EDC2C *pWrite)
     return 1;
 }
 
-int fn_801F2120(Res_801EDC2C *pWrite, int index, unsigned int offset, unsigned int size)
+static int fn_801F2120(Res_801EDC2C *pWrite, int index, unsigned int offset, unsigned int size)
 {
     fn_801C9844(pWrite->mFile, pWrite->mDirOffset + 8, 0);
     if (pWrite->mDirTag != 0x44495231) {
@@ -136,12 +137,12 @@ int fn_801F2120(Res_801EDC2C *pWrite, int index, unsigned int offset, unsigned i
     return 1;
 }
 
-void fn_801F21B4(int handle, unsigned char value)
+static void fn_801F21B4(int handle, unsigned char value)
 {
     fn_801C9A3C(handle, &value, 1, 0);
 }
 
-unsigned int fn_801F21E4(int handle, unsigned char value, unsigned int count)
+static unsigned int fn_801F21E4(int handle, unsigned char value, unsigned int count)
 {
     unsigned int i;
 
@@ -151,7 +152,7 @@ unsigned int fn_801F21E4(int handle, unsigned char value, unsigned int count)
     return count;
 }
 
-void fn_801F2244(int handle, unsigned short value, int bigEndian)
+static void fn_801F2244(int handle, unsigned short value, int bigEndian)
 {
     unsigned short out;
 
@@ -163,7 +164,7 @@ void fn_801F2244(int handle, unsigned short value, int bigEndian)
     fn_801C9A3C(handle, &out, 2, 0);
 }
 
-void fn_801F2294(int handle, unsigned int value, int bigEndian)
+static void fn_801F2294(int handle, unsigned int value, int bigEndian)
 {
     unsigned char out[4];
 

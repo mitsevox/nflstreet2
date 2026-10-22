@@ -43876,42 +43876,42 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801F3524",
+          "symbol": "fn_801F3524__FPvN20",
           "start": "0x801F3524",
           "end": "0x801F3544"
         },
         {
-          "symbol": "fn_801F3544",
+          "symbol": "fn_801F3544__FP20SndBankInfo_801F3524",
           "start": "0x801F3544",
           "end": "0x801F35A8"
         },
         {
-          "symbol": "fn_801F35A8",
+          "symbol": "fn_801F35A8__FPvUiT0UiT0",
           "start": "0x801F35A8",
           "end": "0x801F35B4"
         },
         {
-          "symbol": "fn_801F35B4",
+          "symbol": "fn_801F35B4__Fv",
           "start": "0x801F35B4",
           "end": "0x801F3728"
         },
         {
-          "symbol": "fn_801F3728",
+          "symbol": "fn_801F3728__FPvUiUiT0UiUi",
           "start": "0x801F3728",
           "end": "0x801F3834"
         },
         {
-          "symbol": "fn_801F3834",
+          "symbol": "fn_801F3834__FPvPP20SndBankInfo_801F3524UiUiT0UiUiPFP20SndBankInfo_801F3524_v",
           "start": "0x801F3834",
           "end": "0x801F3904"
         },
         {
-          "symbol": "fn_801F3904",
+          "symbol": "fn_801F3904__FPCc",
           "start": "0x801F3904",
           "end": "0x801F3908"
         },
         {
-          "symbol": "fn_801F3908",
+          "symbol": "fn_801F3908__FUc",
           "start": "0x801F3908",
           "end": "0x801F393C"
         },
@@ -44091,17 +44091,17 @@
           "end": "0x801F4CE0"
         },
         {
-          "symbol": "fn_801F4CE0",
+          "symbol": "fn_801F4CE0__FPvN20",
           "start": "0x801F4CE0",
           "end": "0x801F4D00"
         },
         {
-          "symbol": "fn_801F4D00",
+          "symbol": "fn_801F4D00__FPvii",
           "start": "0x801F4D00",
           "end": "0x801F4D6C"
         },
         {
-          "symbol": "fn_801F4D6C",
+          "symbol": "fn_801F4D6C__FP24SndAemsBankInfo_801F4D00",
           "start": "0x801F4D6C",
           "end": "0x801F4DAC"
         },
@@ -44281,22 +44281,22 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801F5760",
+          "symbol": "fn_801F5760__FPCce",
           "start": "0x801F5760",
           "end": "0x801F57AC"
         },
         {
-          "symbol": "fn_801F57AC",
+          "symbol": "fn_801F57AC__Fv",
           "start": "0x801F57AC",
           "end": "0x801F57CC"
         },
         {
-          "symbol": "fn_801F57CC",
+          "symbol": "fn_801F57CC__Fv",
           "start": "0x801F57CC",
           "end": "0x801F5828"
         },
         {
-          "symbol": "fn_801F5828",
+          "symbol": "fn_801F5828__FiiiPUi",
           "start": "0x801F5828",
           "end": "0x801F58B8"
         },

@@ -1,15 +1,10 @@
+#include "engine/sort.h"
 #include "engine/system.h"
-
-typedef void (*SortFunc_801F51DC)(void *pBase, unsigned int count, int size, int (*pCompare)(void *, void *),
-                                  void (*pSwap)(void *, void *), void *pTemp, int flags);
 
 typedef struct SortType_803E943C {
     SortFunc_801F51DC pSort;
     unsigned char bActive;
 } SortType_803E943C;
-
-extern void fn_801F542C(void);
-extern void fn_801F5734(void);
 
 extern SortType_803E943C lbl_803E943C[2];
 extern unsigned char lbl_803EBE20;
