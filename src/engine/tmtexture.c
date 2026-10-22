@@ -41,23 +41,23 @@ void fn_80212374(Texture_80212234 *pTexture, TexWrapDesc_80212374 *pDesc)
     fn_8021234C(pTexture, pDesc->mWrapS, pDesc->mWrapT);
 }
 
-void fn_8021239C(Texture_80212234 *pTexture, void *pData, int width, int height, int format, int numMips, void *pBuffer, Clut_80212534 *pClut)
+void fn_8021239C(Texture_80212234 *pTexture, void *pData, int width, int height, int format, int numMips, unsigned int size, Clut_80212534 *pClut)
 {
-    fn_8021242C(pTexture, pData, width, height, format, numMips, pBuffer, pClut);
+    fn_8021242C(pTexture, pData, width, height, format, numMips, size, pClut);
     fn_80212234(pTexture, GX_LIN_MIP_LIN, GX_LINEAR, 0.0f, 0, 0, 0);
     fn_8021234C(pTexture, (width & (width - 1)) == 0, (height & (height - 1)) == 0);
-    pTexture->mpData = pBuffer;
+    pTexture->mSize = size;
     pTexture->mWidth = width;
     pTexture->mHeight = height;
 }
 
-void fn_8021242C(Texture_80212234 *pTexture, void *pData, int width, int height, int format, int numMips, void *pBuffer, Clut_80212534 *pClut)
+void fn_8021242C(Texture_80212234 *pTexture, void *pData, int width, int height, int format, int numMips, unsigned int size, Clut_80212534 *pClut)
 {
     GXBool bMipmap;
 
     bMipmap = numMips > 1;
     pTexture->mWidth = width;
-    pTexture->mpData = pBuffer;
+    pTexture->mSize = size;
     pTexture->mNumMips = numMips;
     pTexture->mHeight = height;
     DCStoreRange(pData, GXGetTexBufferSize(width, height, format, bMipmap, numMips));

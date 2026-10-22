@@ -8,16 +8,16 @@ int fn_802126C0(const char *pName, const char *pOther)
     return strcmp(pName, pOther) == 0;
 }
 
-int fn_802126E8(const char *pName, const char *pPattern)
+int fn_802126E8(const char *pPattern, const char *pName)
 {
-    while (*pName == *pPattern) {
-        if (*pName == '\0') {
+    while (*pPattern == *pName) {
+        if (*pPattern == '\0') {
             return 1;
         }
-        pName++;
         pPattern++;
+        pName++;
     }
-    return *pName == '*';
+    return *pPattern == '*';
 }
 
 void fn_8021272C(const char *pPath, char *pDir, char *pFile)

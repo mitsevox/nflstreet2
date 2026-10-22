@@ -4,7 +4,7 @@ extern BlendSource_80214E80 lbl_8039B720;
 extern BlendChannel_80214D40 lbl_8039B730[];
 extern unsigned char lbl_8039B7E0[];
 
-static void *fn_80214D40(SwapAttr_8020ED10 *pAttr, int index)
+static void *fn_80214D40(GeomAttr_8020ED10 *pAttr, int index)
 {
     void **ppInputs = lbl_8039B720.mppInputs;
 
@@ -33,7 +33,7 @@ BlendChannel_80214D40 *fn_80214DB8(int id)
 int fn_80214DCC(int id, int index)
 {
     BlendChannel_80214D40 *pChannel = fn_80214DB8(id);
-    SwapAttr_8020ED10 *pAttr = &lbl_8039B720.mpAttrs[index];
+    GeomAttr_8020ED10 *pAttr = &lbl_8039B720.mpAttrs[index];
     int size;
 
     pChannel->mpAttr = pAttr;
@@ -55,7 +55,7 @@ unsigned char *fn_80214E3C(int id, unsigned char *pData, int size)
     return pData + size;
 }
 
-void fn_80214E80(SwapAttr_8020ED10 *pAttrs, void **ppInputs, void **ppOutputs, int numAttrs)
+void fn_80214E80(GeomAttr_8020ED10 *pAttrs, void **ppInputs, void **ppOutputs, int numAttrs)
 {
     lbl_8039B720.mNumAttrs = numAttrs;
     if (numAttrs != 0) {

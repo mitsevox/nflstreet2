@@ -5,7 +5,7 @@ extern unsigned char *lbl_803EBED0;
 extern unsigned char *lbl_803EBED4;
 extern unsigned char *lbl_803EBED8;
 
-static void fn_8020ED10(Extent_802144AC *pExtent, short *pPoints, int count)
+void fn_8020ED10(Extent_802144AC *pExtent, short *pPoints, int count)
 {
     float scale = 1.0f / 32768.0f;
 
@@ -15,7 +15,7 @@ static void fn_8020ED10(Extent_802144AC *pExtent, short *pPoints, int count)
     }
 }
 
-static void fn_8020EDE4(Extent_802144AC *pExtent, float *pPoints, int count)
+void fn_8020EDE4(Extent_802144AC *pExtent, float *pPoints, int count)
 {
     for (; count > 0; count--) {
         fn_802144D8(pExtent, pPoints[0], pPoints[1], pPoints[2]);
@@ -23,10 +23,10 @@ static void fn_8020EDE4(Extent_802144AC *pExtent, float *pPoints, int count)
     }
 }
 
-static int fn_8020EE38(SwapPart_8020ED10 *pPart, SwapNode_8020ED10 *pNodeA, SwapNode_8020ED10 *pNodeB)
+static int fn_8020EE38(Geom_8020ED10 *pPart, GeomNode_8020ED10 *pNodeA, GeomNode_8020ED10 *pNodeB)
 {
-    SwapAttr_8020ED10 *pAttrA;
-    SwapAttr_8020ED10 *pAttrB;
+    GeomAttr_8020ED10 *pAttrA;
+    GeomAttr_8020ED10 *pAttrB;
     int i;
 
     if (pNodeA->mNumAttrs != pNodeB->mNumAttrs) {
@@ -51,10 +51,10 @@ static int fn_8020EE38(SwapPart_8020ED10 *pPart, SwapNode_8020ED10 *pNodeA, Swap
     return 1;
 }
 
-static void fn_8020EEE8(SwapPart_8020ED10 *pPart)
+static void fn_8020EEE8(Geom_8020ED10 *pPart)
 {
-    SwapNode_8020ED10 *apFormats[32];
-    SwapNode_8020ED10 *pNode;
+    GeomNode_8020ED10 *apFormats[32];
+    GeomNode_8020ED10 *pNode;
     unsigned int i;
     int numFormats;
     int j;
@@ -97,19 +97,19 @@ void fn_8020F00C(void)
     fn_801D2BD0(lbl_803EBED0);
 }
 
-void fn_8020F08C(SwapPart_8020ED10 *pPart, void *pOldBase, void *pNewBase)
+void fn_8020F08C(Geom_8020ED10 *pPart, void *pOldBase, void *pNewBase)
 {
     unsigned int i;
 
     pPart->mpNodes = fn_8020EB94(pPart->mpNodes, pOldBase, pNewBase);
     pPart->mpAttrs = fn_8020EB94(pPart->mpAttrs, pOldBase, pNewBase);
     for (i = 0; i < pPart->mNumNodes; i++) {
-        SwapNode_8020ED10 *pNode = &pPart->mpNodes[i];
+        GeomNode_8020ED10 *pNode = &pPart->mpNodes[i];
 
         pNode->mpData = fn_8020EB94(pNode->mpData, pOldBase, pNewBase);
     }
     for (i = 0; i < pPart->mNumAttrs; i++) {
-        SwapAttr_8020ED10 *pAttr = &pPart->mpAttrs[i];
+        GeomAttr_8020ED10 *pAttr = &pPart->mpAttrs[i];
 
         pAttr->mpData = fn_8020EB94(pAttr->mpData, pOldBase, pNewBase);
     }
@@ -117,9 +117,9 @@ void fn_8020F08C(SwapPart_8020ED10 *pPart, void *pOldBase, void *pNewBase)
     fn_8020EEE8(pPart);
 }
 
-void fn_8020F178(SwapPart_8020ED10 *pPart, unsigned short *pRemap, int numMaterials)
+void fn_8020F178(Geom_8020ED10 *pPart, unsigned short *pRemap, int numMaterials)
 {
-    SwapNode_8020ED10 *pNode;
+    GeomNode_8020ED10 *pNode;
     unsigned int i;
 
     for (i = 0; i < pPart->mNumNodes; i++) {
@@ -132,10 +132,10 @@ void fn_8020F178(SwapPart_8020ED10 *pPart, unsigned short *pRemap, int numMateri
     }
 }
 
-void fn_8020F1D8(SwapPart_8020ED10 *pPart, int nodeIndex, Extent_802144AC *pExtent)
+void fn_8020F1D8(Geom_8020ED10 *pPart, int nodeIndex, Extent_802144AC *pExtent)
 {
-    SwapNode_8020ED10 *pNode;
-    SwapAttr_8020ED10 *pAttr;
+    GeomNode_8020ED10 *pNode;
+    GeomAttr_8020ED10 *pAttr;
     int i;
 
     pNode = &pPart->mpNodes[nodeIndex];

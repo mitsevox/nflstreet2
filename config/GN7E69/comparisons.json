@@ -43289,7 +43289,7 @@
     },
     {
       "source": "src/engine/cu_8020840C.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x8020840C-0x8020B564 (src/engine/cu_8020840C.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 8 drafted bodies, partial: 0x8020A660. Comparison only; original assembly stays linked.",
       "sections": [
         {
@@ -43344,7 +43344,7 @@
     },
     {
       "source": "src/engine/t3db_table.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x8020B564-0x8020CCBC (src/engine/t3db_table.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 12 drafted bodies, partial: 0x8020B564, 0x8020C764. Comparison only; original assembly stays linked.",
       "sections": [
         {
@@ -43419,7 +43419,7 @@
     },
     {
       "source": "src/engine/t3dbUtil.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x8020CCBC-0x8020CD2C (src/engine/t3dbUtil.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 1 drafted body. Comparison only; original assembly stays linked.",
       "sections": [
         {
@@ -43439,7 +43439,7 @@
     },
     {
       "source": "src/engine/t3db_blob.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x8020CD2C-0x8020CEC4 (src/engine/t3db_blob.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 2 drafted bodies. Comparison only; original assembly stays linked.",
       "sections": [
         {
@@ -43464,7 +43464,7 @@
     },
     {
       "source": "src/engine/t3db_data.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x8020CEC4-0x8020CFA0 (src/engine/t3db_data.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 2 drafted bodies. Comparison only; original assembly stays linked.",
       "sections": [
         {
@@ -43893,9 +43893,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_8020ED10.c",
+      "source": "src/engine/tmgeometry.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8020ED10-0x8020F28C (src/engine/cu_8020ED10.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1BD8-0x802B1BE8. 9 drafted bodies. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x8020ED10-0x8020F28C (src/engine/tmgeometry.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1BD8-0x802B1BE8. 9 drafted bodies. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -45661,9 +45661,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_802160A0.c",
+      "source": "src/engine/tmswappart.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x802160A0-0x8021625C (src/engine/cu_802160A0.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 4 drafted bodies. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x802160A0-0x8021625C (src/engine/tmswappart.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 4 drafted bodies. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",

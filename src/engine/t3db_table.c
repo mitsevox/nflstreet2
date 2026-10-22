@@ -78,7 +78,7 @@ void fn_8020B710(TDbTable_801FAA00 *pTable, int record)
                 do {
                     TDbReadColumn_8020A3A0(pTable, &pTable->mColumns[i], pTable->mRows + pTable->mRowSize * record, pValue);
                     if (pTable->mColumns[i].mType == 0) {
-                        ((unsigned char *)(char *)pValue->mUnknown0)[(unsigned int)pTable->mColumns[i].mBitCount >> 3] = 0;
+                        ((unsigned char *)pValue->mUnknown0)[pTable->mColumns[i].mBitCount >> 3] = 0;
                     }
                     pValue->mId = pTable->mColumns[i].mUnknown8;
                     pValue++;
@@ -100,7 +100,7 @@ void fn_8020B878(TDbTable_801FAA00 *pTable, int record, TDbLitRef_80205754 *pVal
     do {
         TDbReadColumn_8020A3A0(pTable, &pTable->mColumns[i], pRecord, pValue);
         if (pTable->mColumns[i].mType == 0) {
-            ((unsigned char *)(char *)pValue->mUnknown0)[(unsigned int)pTable->mColumns[i].mBitCount >> 3] = 0;
+            ((unsigned char *)pValue->mUnknown0)[pTable->mColumns[i].mBitCount >> 3] = 0;
         }
         pValue->mId = pTable->mColumns[i].mUnknown8;
         pValue++;
@@ -150,16 +150,16 @@ unsigned char fn_8020B97C(TDbTable_801FAA00 *pTable, int id)
     return result;
 }
 
-TDbTable_801FAA00 *fn_8020BA48(TDbTable_801FAA00 *pTable, int id)
+TDbTable_801FAA00 *fn_8020BA48(TDbDatabase_801FAA00 *pDb, int id)
 {
-    TDbTable_801FAA00 *pNext;
+    TDbTable_801FAA00 *pTable;
 
-    for (pNext = pTable->mNext; pNext != 0; pNext = pNext->mNext) {
-        if (id == pNext->mUnknown1C) {
+    for (pTable = pDb->mTables; pTable != 0; pTable = pTable->mNext) {
+        if (id == pTable->mUnknown1C) {
             break;
         }
     }
-    return pNext;
+    return pTable;
 }
 
 int fn_8020BA7C(TDbDatabase_801FAA00 *pOwner, int tableId, TDbColumn_801FAA00 *pDefs, int capacity)
@@ -287,7 +287,7 @@ int fn_8020BD90(TDbTable_801FAA00 *pTable)
 
         do {
             if ((unsigned int)pTable->mColumns[i].mType <= 1) {
-                size += 1 + ((unsigned int)pTable->mColumns[i].mBitCount >> 3);
+                size += 1 + (pTable->mColumns[i].mBitCount >> 3);
             }
             i++;
         } while (i < pTable->mColumnCount);
@@ -539,7 +539,7 @@ int fn_8020C764(TDbTable_801FAA00 *pSrc, TDbTable_801FAA00 *pDst, TDbResult_8020
             unsigned int type = pSrc->mColumns[map[i]].mType;
 
             if (type - 13 <= 2 || type <= 1) {
-                if ((unsigned int)pSrc->mColumns[map[i]].mBitCount > maxBits) {
+                if (pSrc->mColumns[map[i]].mBitCount > maxBits) {
                     maxBits = pSrc->mColumns[map[i]].mBitCount;
                 }
             }

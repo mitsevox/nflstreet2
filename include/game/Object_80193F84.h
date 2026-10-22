@@ -1,15 +1,12 @@
 #ifndef GAME_OBJECT_80193F84_H
 #define GAME_OBJECT_80193F84_H
 
+#include "engine/texture.h"
+
 struct Object_80193F84 {
     int mUnknown0;
     int mUnknown4;
-    unsigned short mUnknown8;
-    unsigned short mUnknownA;
-    char mUnknownC[4];
-    int mUnknown10;
-    void *mpUnknown14;
-    char mUnknown18[16];
+    Texture_8020DB34 mTexture;
     unsigned char mUnknown28;
     int mUnknown2C;
     int mUnknown30;

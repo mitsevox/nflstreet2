@@ -8,23 +8,26 @@
 typedef struct Texture_8020DB34 {
     unsigned short mWidth;
     unsigned short mHeight;
-    unsigned char mWrapS;
-    unsigned char mWrapT;
-    unsigned char mMinFilter;
-    unsigned char mMagFilter;
+    unsigned char mUnknown4;
+    unsigned char mUnknown5;
+    unsigned char mUnknown6;
+    unsigned char mUnknown7;
     unsigned int mFormat;
     unsigned char *mpImage;
     unsigned int mTlutFormat;
     unsigned short *mpPalette;
     int mUnknown18;
-    unsigned char mbDirty;
+    unsigned char mUnknown1C;
 } Texture_8020DB34;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+int fn_8020DE8C(int heap, int count, int unknown);
+int fn_8020DF44(void);
 int fn_8020DFD8(void *pSrc, Texture_8020DB34 *pTex);
 int fn_8020E258(Texture_8020DB34 *pTex);
+void fn_8020E7EC(Texture_8020DB34 *pTex);
 #ifdef __cplusplus
 }
 #endif

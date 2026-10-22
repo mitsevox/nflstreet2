@@ -6,11 +6,11 @@ static void fn_8021283C(RegistryEntry_8021283C *pDst, RegistryEntry_8021283C *pS
     pDst->mpData = pSrc->mpData;
 }
 
-void fn_80212850(Registry_8021283C *pRegistry, int maxEntries, int bFixed, int bPaths)
+void fn_80212850(Registry_8021283C *pRegistry, int maxEntries, int bAppend, int bPaths)
 {
     pRegistry->mMaxEntries = maxEntries;
     pRegistry->mpEntries = fn_802127D0(maxEntries, sizeof(RegistryEntry_8021283C));
-    pRegistry->mbFixed = bFixed;
+    pRegistry->mbAppend = bAppend;
     pRegistry->mbPaths = bPaths;
     fn_802128DC(pRegistry);
 }
@@ -30,7 +30,7 @@ void fn_802128DC(Registry_8021283C *pRegistry)
         pRegistry->mpEntries[i].mpName = 0;
         pRegistry->mpEntries[i].mpData = 0;
     }
-    if (pRegistry->mbFixed) {
+    if (pRegistry->mbAppend) {
         pRegistry->mNumEntries = 0;
     } else {
         pRegistry->mNumEntries = pRegistry->mMaxEntries;
@@ -77,7 +77,7 @@ void fn_80212A48(Registry_8021283C *pRegistry, int index)
 {
     pRegistry->mpEntries[index].mpName = 0;
     pRegistry->mpEntries[index].mpData = 0;
-    if (pRegistry->mbFixed) {
+    if (pRegistry->mbAppend) {
         pRegistry->mNumEntries--;
         fn_8021283C(&pRegistry->mpEntries[index], &pRegistry->mpEntries[pRegistry->mNumEntries]);
     }

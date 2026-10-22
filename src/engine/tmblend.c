@@ -3,7 +3,7 @@
 
 extern BlendState_80214718 lbl_8039B600;
 
-static unsigned int fn_80214718(SwapNode_8020ED10 *pNode, int baseIndex, short *pWeights, unsigned int numWeights, BlendItem_80214718 *pItems, unsigned int maxItems)
+static unsigned int fn_80214718(GeomNode_8020ED10 *pNode, int baseIndex, short *pWeights, unsigned int numWeights, BlendItem_80214718 *pItems, unsigned int maxItems)
 {
     unsigned int numItems;
     int i;
@@ -174,7 +174,7 @@ int fn_80214C10(int nodeIndex)
 {
     BlendItem_80214718 aItems[128];
     int result = 0;
-    SwapNode_8020ED10 *pNode;
+    GeomNode_8020ED10 *pNode;
     unsigned int numItems;
 
     if (lbl_8039B600.mpGeom != 0) {
@@ -195,7 +195,7 @@ int fn_80214C10(int nodeIndex)
 int fn_80214CB4(void)
 {
     int total = 0;
-    SwapPart_8020ED10 *pGeom = lbl_8039B600.mpGeom;
+    Geom_8020ED10 *pGeom = lbl_8039B600.mpGeom;
     int numNodes;
     int i;
 
@@ -204,7 +204,7 @@ int fn_80214CB4(void)
     }
     numNodes = pGeom->mNumNodes;
     for (i = 0; i < numNodes; i++) {
-        SwapNode_8020ED10 *pNode = &pGeom->mpNodes[i];
+        GeomNode_8020ED10 *pNode = &pGeom->mpNodes[i];
 
         if (pNode->mNumLods != 0) {
             total += fn_80214C10(i);

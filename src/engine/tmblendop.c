@@ -238,7 +238,7 @@ unsigned int fn_80215554(int dstId, int srcId, int weight)
 {
     BlendChannel_80214D40 *pSrc = fn_80214DB8(srcId);
     BlendChannel_80214D40 *pDst = fn_80214DB8(dstId);
-    SwapAttr_8020ED10 *pAttr = pSrc->mpAttr;
+    GeomAttr_8020ED10 *pAttr = pSrc->mpAttr;
 
     if (pAttr->mbDelta) {
         switch (pAttr->mCompType) {
@@ -276,7 +276,7 @@ void fn_80215694(int dstId, int srcId)
 {
     BlendChannel_80214D40 *pSrc = fn_80214DB8(srcId);
     BlendChannel_80214D40 *pDst = fn_80214DB8(dstId);
-    SwapAttr_8020ED10 *pAttr = pSrc->mpAttr;
+    GeomAttr_8020ED10 *pAttr = pSrc->mpAttr;
 
     switch (pAttr->mCompType) {
     case 4:
@@ -296,7 +296,7 @@ void fn_8021574C(int dstId, int srcId)
 {
     BlendChannel_80214D40 *pSrc = fn_80214DB8(srcId);
     BlendChannel_80214D40 *pDst = fn_80214DB8(dstId);
-    SwapAttr_8020ED10 *pAttr = pDst->mpAttr;
+    GeomAttr_8020ED10 *pAttr = pDst->mpAttr;
 
     switch (pAttr->mCompType) {
     case 4:

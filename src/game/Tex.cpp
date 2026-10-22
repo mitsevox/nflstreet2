@@ -1,10 +1,5 @@
+#include "engine/texture.h"
 #include "game/Module.h"
-
-extern "C" {
-
-int fn_8020DE8C(int, int, int);
-int fn_8020DF44(void);
-}
 
 static ModuleDependency sDependencies[] = { &gSys, &gGLIB, 0 };
 Tex gTex;

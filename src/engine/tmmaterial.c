@@ -5,7 +5,7 @@ extern int fn_801C74C8(Pool_801C750C *pPool, int a);
 extern Pool_801C750C *lbl_803E96C4[9];
 extern Material_8020FAAC *lbl_803EBEE0;
 
-int fn_8020FAAC(Material_8020FAAC *pMaterial, const char *pName)
+static int fn_8020FAAC(Material_8020FAAC *pMaterial, const char *pName)
 {
     int index;
 
@@ -23,7 +23,7 @@ int fn_8020FAAC(Material_8020FAAC *pMaterial, const char *pName)
     return index;
 }
 
-void fn_8020FB14(Material_8020FAAC *pMaterial)
+static void fn_8020FB14(Material_8020FAAC *pMaterial)
 {
     MaterialParm_8020FAAC *pParms = 0;
     int numParms = 0;
@@ -78,7 +78,7 @@ void fn_8020FCA0(Material_8020FAAC *pMaterial)
         pMaterial->mpParms[i].mpClut = 0;
     }
     for (i = 3; i >= 0; i--) {
-        pMaterial->maUnknown14[i] = 0;
+        pMaterial->maConsts[i].mWord = 0;
     }
 }
 

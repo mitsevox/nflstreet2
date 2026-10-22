@@ -237,23 +237,23 @@ void fn_80210970(Material_8020FAAC *pMaterial)
             }
             for (j = 0; j < pShader->mNumConsts; j++) {
                 ShaderParmDef_80211638 *pParm = &pShader->mpFirstConst[j];
-                void **pValue = &pMaterial->maUnknown14[pParm->mUnknown11];
+                MaterialConst_8020FAAC *pValue = &pMaterial->maConsts[pParm->mUnknown11];
 
                 switch (pParm->mType) {
                 case 2:
-                    GXSetTevColor(pParm->mIndex + 1, *(GXColor *)pValue);
+                    GXSetTevColor(pParm->mIndex + 1, pValue->mColor);
                     break;
                 case 3:
-                    GXSetTevKColor(pParm->mIndex, *(GXColor *)pValue);
+                    GXSetTevKColor(pParm->mIndex, pValue->mColor);
                     break;
                 case 4:
-                    GXSetChanMatColor(pParm->mIndex, *(GXColor *)pValue);
+                    GXSetChanMatColor(pParm->mIndex, pValue->mColor);
                     break;
                 case 5:
-                    GXSetChanAmbColor(pParm->mIndex, *(GXColor *)pValue);
+                    GXSetChanAmbColor(pParm->mIndex, pValue->mColor);
                     break;
                 case 6: {
-                    float *pScale = (float *)pValue;
+                    float *pScale = &pValue->mFloat;
                     f32 mtx[4][4];
 
                     mtx[0][0] = pScale[0];

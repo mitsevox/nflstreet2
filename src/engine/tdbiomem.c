@@ -1,3 +1,4 @@
+#include <string.h>
 typedef struct MemFile_8020D388 {
     unsigned char *mpData;
     unsigned int mPos;

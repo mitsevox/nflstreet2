@@ -1,7 +1,7 @@
 #include <dolphin/gx/GXGeometry.h>
 #include "engine/tmlib.h"
 
-void fn_8021592C(ChannelList_8021592C *pList, SwapNode_8020ED10 *pNode, SwapAttr_8020ED10 *pAttrs, void **ppChannels)
+void fn_8021592C(ChannelList_8021592C *pList, GeomNode_8020ED10 *pNode, GeomAttr_8020ED10 *pAttrs, void **ppChannels)
 {
     unsigned int count = pNode->mNumAttrs;
     unsigned int i;
@@ -44,7 +44,7 @@ void fn_80215A14(ChannelList_8021592C *pList)
     GXClearVtxDesc();
     count = pList->mCount;
     for (i = 0; i < count; i++) {
-        SwapAttr_8020ED10 *pAttr = pList->mapAttrs[i];
+        GeomAttr_8020ED10 *pAttr = pList->mapAttrs[i];
         unsigned char compType;
         unsigned char stride;
         unsigned char frac;
@@ -76,7 +76,7 @@ void fn_80215B00(ChannelList_8021592C *pList)
     int i;
 
     for (i = 0; i < count; i++) {
-        SwapAttr_8020ED10 *pAttr = pList->mapAttrs[i];
+        GeomAttr_8020ED10 *pAttr = pList->mapAttrs[i];
         int stride = pList->maStride[i];
 
         if (stride == 0xFF) {

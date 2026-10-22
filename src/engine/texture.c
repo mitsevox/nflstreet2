@@ -17,10 +17,10 @@ typedef struct TexDesc_8020DB34 {
     unsigned short mHeight;
     unsigned short mFormat;
     unsigned short mTlutFormat;
-    unsigned char mWrapS;
-    unsigned char mWrapT;
-    unsigned char mMinFilter;
-    unsigned char mMagFilter;
+    unsigned char mUnknown10;
+    unsigned char mUnknown11;
+    unsigned char mUnknown12;
+    unsigned char mUnknown13;
     int mStream;
 } TexDesc_8020DB34;
 
@@ -117,9 +117,9 @@ static int fn_8020DC10(Texture_8020DB34 *pTex, TexHeader_8020E2B0 *pFile, unsign
             if (pEntries[index].mUnknown0 != 0) {
                 Object_8020E5F8 *pPalette = fn_8020E5F8(pFile, pEntry->mUnknown8);
 
-                unsigned int bpp = lbl_802F7A10[pPalette->mFormat];
+                unsigned int numEntries = lbl_802F7A10[pPalette->mFormat];
 
-                memcpy(pTex->mpPalette, pPalette->mpUnknown8, (bpp * lbl_803EBC80[pPalette->mUnknown2]) >> 3);
+                memcpy(pTex->mpPalette, pPalette->mpUnknown8, (numEntries * lbl_803EBC80[pPalette->mUnknown2]) >> 3);
             } else {
                 err = 0x100004;
             }
@@ -134,11 +134,11 @@ static int fn_8020DD24(TexDesc_8020DB34 *pDesc, Texture_8020DB34 *pTex)
 {
     int result = fn_8020E064(pTex, pDesc->mWidth, pDesc->mHeight, pDesc->mFormat, pDesc->mTlutFormat);
 
-    pTex->mWrapS = pDesc->mWrapS;
-    pTex->mWrapT = pDesc->mWrapT;
-    pTex->mMinFilter = pDesc->mMinFilter;
-    pTex->mMagFilter = pDesc->mMagFilter;
-    pTex->mbDirty = 1;
+    pTex->mUnknown4 = pDesc->mUnknown10;
+    pTex->mUnknown5 = pDesc->mUnknown11;
+    pTex->mUnknown6 = pDesc->mUnknown12;
+    pTex->mUnknown7 = pDesc->mUnknown13;
+    pTex->mUnknown1C = 1;
     if (result == 0) {
         result = fn_8020E1B8(pDesc, pTex, 0);
     }
@@ -171,18 +171,18 @@ static int fn_8020DDA8(TexHeader_8020E2B0 *pFile, Texture_8020DB34 *pTex)
         }
     }
     result = fn_8020E064(pTex, pImage->mWidth, pImage->mHeight, format, tlutFormat);
-    pTex->mWrapS = pFile->mWrapS;
-    pTex->mWrapT = pFile->mWrapT;
-    pTex->mMinFilter = pFile->mMinFilter;
-    pTex->mMagFilter = pFile->mMagFilter;
-    pTex->mbDirty = 1;
+    pTex->mUnknown4 = pFile->mUnknown8;
+    pTex->mUnknown5 = pFile->mUnknown9;
+    pTex->mUnknown6 = pFile->mUnknownA;
+    pTex->mUnknown7 = pFile->mUnknownB;
+    pTex->mUnknown1C = 1;
     if (result == 0) {
         result = fn_8020E1B8(pFile, pTex, 0);
     }
     return result;
 }
 
-int fn_8020DE8C(int heap, int count)
+int fn_8020DE8C(int heap, int count, int unknown)
 {
     int err = 0;
 
@@ -280,11 +280,11 @@ int fn_8020E064(Texture_8020DB34 *pTex, unsigned short width, unsigned short hei
             err = fn_801F7C88();
         }
     }
-    pTex->mWrapS = 0;
-    pTex->mWrapT = 1;
-    pTex->mMinFilter = 2;
-    pTex->mMagFilter = 3;
-    pTex->mbDirty = 1;
+    pTex->mUnknown4 = 0;
+    pTex->mUnknown5 = 1;
+    pTex->mUnknown6 = 2;
+    pTex->mUnknown7 = 3;
+    pTex->mUnknown1C = 1;
     return err;
 }
 
@@ -298,7 +298,7 @@ int fn_8020E1B8(void *pSrc, Texture_8020DB34 *pTex, int flags)
 
         if (*(int *)pSrc == pHandler->mId) {
             result = pHandler->mpInit(pTex, pSrc, flags);
-            pTex->mbDirty = 1;
+            pTex->mUnknown1C = 1;
         }
     }
     return result;

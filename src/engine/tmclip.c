@@ -10,7 +10,7 @@ extern unsigned int fn_80213F18(void *pPoints, int numPoints, f32 (*pMtx)[4], Ex
 extern unsigned int fn_80213DB0(void *pPoints, int numPoints, f32 (*pMtx)[4], void *pArg);
 
 extern f32 lbl_8039B580[4][4];
-extern f32 lbl_8039B5C0[3][4];
+extern Mtx44 lbl_8039B5C0;
 extern f32 lbl_802F9D8C[3];
 
 static inline void fn_80213BCC_Row(Extent_802144AC *pBox, f32 (*pMtx)[4], f32 (*pOut)[3], int r)

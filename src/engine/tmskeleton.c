@@ -12,7 +12,7 @@ void fn_80215E5C(Skeleton_80215E5C *pSkel, void *pOldBase, void *pNewBase)
     }
 }
 
-short *fn_80215EE0(Skeleton_80215E5C *pSkel, Skeleton_80215E5C *pOther)
+short *fn_80215EE0(Skeleton_80215E5C *pSkel, void *pOther)
 {
     short *pRemap = 0;
     unsigned int i;

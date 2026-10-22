@@ -39,7 +39,7 @@ static void fn_80211A74(TexLib_802119C4 *pLib, TexHeader_8020E2B0 *pTex, int cou
     }
 }
 
-static void fn_80211AFC(TexLib_802119C4 *pLib, Object_8020E5F8 *pPalette, int clutIndex, Clut_80212534 *pClut)
+void fn_80211AFC(TexLib_802119C4 *pLib, Object_8020E5F8 *pPalette, int clutIndex, Clut_80212534 *pClut)
 {
     int numEntries;
 
@@ -54,7 +54,7 @@ static void fn_80211AFC(TexLib_802119C4 *pLib, Object_8020E5F8 *pPalette, int cl
     }
 }
 
-static void fn_80211B64(TexHeader_8020E2B0 *pTex, TexLib_802119C4 *pLib, int materialIndex, Object_8020E560 *pTexture, int textureIndex, int clutIndex)
+void fn_80211B64(TexHeader_8020E2B0 *pTex, TexLib_802119C4 *pLib, int materialIndex, Object_8020E560 *pTexture, int textureIndex, int clutIndex)
 {
     Object_8020E52C *pMaterial;
     Clut_80212534 *pClut;
@@ -67,7 +67,7 @@ static void fn_80211B64(TexHeader_8020E2B0 *pTex, TexLib_802119C4 *pLib, int mat
     } else {
         pClut = 0;
     }
-    fn_8021242C(&pLib->mpTextures[textureIndex], pTexture->mpUnknownC, pTexture->mWidth, pTexture->mHeight, pTexture->mFormat, pMaterial->mUnknown2, (void *)pTexture->mUnknown8, pClut);
+    fn_8021242C(&pLib->mpTextures[textureIndex], pTexture->mpUnknownC, pTexture->mWidth, pTexture->mHeight, pTexture->mFormat, pMaterial->mUnknown2, pTexture->mUnknown8, pClut);
     fn_802126BC(&pLib->mpTextures[textureIndex], pName);
 }
 
@@ -89,9 +89,9 @@ static void fn_80211C08(TexLib_802119C4 *pLib, TexHeader_8020E2B0 *pTex, int cou
             pClut = 0;
         }
         if (bInit) {
-            fn_8021239C(&pLib->mpTextures[i], pTexture->mpUnknownC, pTexture->mWidth, pTexture->mHeight, pTexture->mFormat, pMaterial->mUnknown2, (void *)pTexture->mUnknown8, pClut);
+            fn_8021239C(&pLib->mpTextures[i], pTexture->mpUnknownC, pTexture->mWidth, pTexture->mHeight, pTexture->mFormat, pMaterial->mUnknown2, pTexture->mUnknown8, pClut);
         } else {
-            fn_8021242C(&pLib->mpTextures[i], pTexture->mpUnknownC, pTexture->mWidth, pTexture->mHeight, pTexture->mFormat, pMaterial->mUnknown2, (void *)pTexture->mUnknown8, pClut);
+            fn_8021242C(&pLib->mpTextures[i], pTexture->mpUnknownC, pTexture->mWidth, pTexture->mHeight, pTexture->mFormat, pMaterial->mUnknown2, pTexture->mUnknown8, pClut);
         }
         fn_802126BC(&pLib->mpTextures[i], pName);
     }

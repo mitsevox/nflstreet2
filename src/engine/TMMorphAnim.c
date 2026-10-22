@@ -1,6 +1,6 @@
 #include "engine/tmlib.h"
 
-static void *fn_80215DA4(void *p, void *pOldBase, void *pNewBase)
+void *fn_80215DA4(void *p, void *pOldBase, void *pNewBase)
 {
     void *pResult = 0;
 

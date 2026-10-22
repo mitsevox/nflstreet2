@@ -139,10 +139,10 @@ void fn_8020F78C(Model_8020F28C *pModel, MaterialLib_80213228 *pMatLib)
     pModel->mpMatl = pMatLib;
 }
 
-void fn_8020F824(Model_8020F28C *pModel, Skeleton_80215E5C *pSkel)
+void fn_8020F824(Model_8020F28C *pModel, void *pOther)
 {
     if (pModel->mpSkel != 0 && pModel->mpClst != 0) {
-        short *pRemap = fn_80215EE0(pModel->mpSkel, pSkel);
+        short *pRemap = fn_80215EE0(pModel->mpSkel, pOther);
 
         if (pRemap != 0) {
             fn_802133B8(pModel->mpClst, pRemap);
@@ -155,7 +155,7 @@ void fn_8020F824(Model_8020F28C *pModel, Skeleton_80215E5C *pSkel)
 
 void fn_8020F89C(Model_8020F28C *pModel)
 {
-    SwapPart_8020ED10 *pGeom = pModel->mpGeom;
+    Geom_8020ED10 *pGeom = pModel->mpGeom;
     int i;
 
     if (pGeom != 0) {
@@ -183,7 +183,7 @@ void fn_8020F92C(Model_8020F28C *pModel)
 
 void fn_8020F96C(Model_8020F28C *pModel, Extent_802144AC *pExtent, int state, int arg)
 {
-    SwapPart_8020ED10 *pGeom = pModel->mpGeom;
+    Geom_8020ED10 *pGeom = pModel->mpGeom;
     Swap_802160A0 *pSwap = pModel->mpSwap;
 
     if (state == -1 || pSwap == 0) {

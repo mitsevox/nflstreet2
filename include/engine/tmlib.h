@@ -2,6 +2,7 @@
 #define ENGINE_TMLIB_H
 
 #include <dolphin/gx/GXStruct.h>
+#include <dolphin/mtx.h>
 
 typedef struct Pool_801C750C Pool_801C750C;
 
@@ -19,10 +20,10 @@ typedef struct TexHeader_8020E2B0 {
     char maTag[4];
     unsigned short mVersion;
     unsigned short mFlags;
-    unsigned char mWrapS;
-    unsigned char mWrapT;
-    unsigned char mMinFilter;
-    unsigned char mMagFilter;
+    unsigned char mUnknown8;
+    unsigned char mUnknown9;
+    unsigned char mUnknownA;
+    unsigned char mUnknownB;
     unsigned short mNumMaterials;
     unsigned short mNumTextures;
     unsigned short mNumPalettes;
@@ -40,7 +41,7 @@ const char *fn_8020E53C(TexHeader_8020E2B0 *pTex, unsigned short index);
 
 extern int lbl_803EBEBC;
 
-void fn_801D0F80(f32 mtx[3][4]);
+void fn_801D0F80(Mtx44 mtx);
 void fn_801D34D0(void *p, unsigned int size, int c, int d);
 
 Pool_801C750C *fn_801C750C(int a, int count, int size, void *pMemory);
@@ -57,7 +58,7 @@ typedef struct Registry_8021283C {
     int mMaxEntries;
     int mNumEntries;
     RegistryEntry_8021283C *mpEntries;
-    unsigned char mbFixed;
+    unsigned char mbAppend;
     unsigned char mbPaths;
 } Registry_8021283C;
 
@@ -97,7 +98,7 @@ typedef struct Texture_80212234 {
     unsigned short mUnknown22;
     unsigned short mWidth;
     unsigned short mHeight;
-    void *mpData;
+    unsigned int mSize;
 } Texture_80212234;
 
 typedef struct Clut_80212534 {
@@ -163,7 +164,7 @@ typedef struct Extent_802144AC {
     float mMax[3];
 } Extent_802144AC;
 
-typedef struct SwapAttr_8020ED10 {
+typedef struct GeomAttr_8020ED10 {
     void *mpData;
     unsigned short mCount;
     unsigned char mType;
@@ -174,9 +175,9 @@ typedef struct SwapAttr_8020ED10 {
     unsigned int mUnknownB : 3;
     unsigned int mbDelta : 1;
     unsigned char mDescType : 4;
-} SwapAttr_8020ED10;
+} GeomAttr_8020ED10;
 
-typedef struct SwapNode_8020ED10 {
+typedef struct GeomNode_8020ED10 {
     void *mpData;
     unsigned short mDisplayListSize;
     short mMaterial;
@@ -189,16 +190,16 @@ typedef struct SwapNode_8020ED10 {
     unsigned char mUnknown13;
     unsigned char mNumLods;
     unsigned char maUnknown15[3];
-} SwapNode_8020ED10;
+} GeomNode_8020ED10;
 
-typedef struct SwapPart_8020ED10 {
-    SwapNode_8020ED10 *mpNodes;
+typedef struct Geom_8020ED10 {
+    GeomNode_8020ED10 *mpNodes;
     unsigned int mNumNodes;
-    SwapAttr_8020ED10 *mpAttrs;
+    GeomAttr_8020ED10 *mpAttrs;
     int mNumAttrs;
     unsigned int mFlags;
     void *mpUnknown14;
-} SwapPart_8020ED10;
+} Geom_8020ED10;
 
 typedef struct MaterialDef_80213228 {
     const char *mpName;
@@ -269,13 +270,19 @@ typedef struct MaterialParm_8020FAAC {
     int mXForm;
 } MaterialParm_8020FAAC;
 
+typedef union MaterialConst_8020FAAC {
+    GXColor mColor;
+    float mFloat;
+    unsigned int mWord;
+} MaterialConst_8020FAAC;
+
 typedef struct Material_8020FAAC {
     int mRefCount;
     MaterialDef_80213228 *mpDef;
     Shader_80211638 *mpShader;
     int mNumParms;
     MaterialParm_8020FAAC *mpParms;
-    void *maUnknown14[4];
+    MaterialConst_8020FAAC maConsts[4];
 } Material_8020FAAC;
 
 typedef struct MaterialList_8020FF34 {
@@ -286,7 +293,7 @@ typedef struct MaterialList_8020FF34 {
 typedef struct Model_8020F28C {
     void *mpInfo;
     void *mpExtn;
-    SwapPart_8020ED10 *mpGeom;
+    Geom_8020ED10 *mpGeom;
     ClusterDef_80213384 *mpClst;
     Skeleton_80215E5C *mpSkel;
     Swap_802160A0 *mpSwap;
@@ -307,12 +314,14 @@ void *fn_8020EB94(void *p, void *pOldBase, void *pNewBase);
 void fn_8020EBB0(ModelRes_8020EA18 *pRes);
 void *fn_8020EC50(ModelRes_8020EA18 *pRes, int tag, Chunk_8020EA18 **ppChunk);
 
-/* cu_8020ED10.c */
+/* tmgeometry.c */
+void fn_8020ED10(Extent_802144AC *pExtent, short *pPoints, int count);
+void fn_8020EDE4(Extent_802144AC *pExtent, float *pPoints, int count);
 void fn_8020EFC8(int size);
 void fn_8020F00C(void);
-void fn_8020F08C(SwapPart_8020ED10 *pPart, void *pOldBase, void *pNewBase);
-void fn_8020F178(SwapPart_8020ED10 *pPart, unsigned short *pRemap, int numMaterials);
-void fn_8020F1D8(SwapPart_8020ED10 *pPart, int nodeIndex, Extent_802144AC *pExtent);
+void fn_8020F08C(Geom_8020ED10 *pPart, void *pOldBase, void *pNewBase);
+void fn_8020F178(Geom_8020ED10 *pPart, unsigned short *pRemap, int numMaterials);
+void fn_8020F1D8(Geom_8020ED10 *pPart, int nodeIndex, Extent_802144AC *pExtent);
 
 /* tmshader.c */
 void fn_80211638(Shader_80211638 *pShader, ShaderDef_80211638 *pDef);
@@ -333,6 +342,8 @@ Shader_80211638 *fn_80211984(const char *pPath);
 void fn_802119BC(Shader_80211638 *pShader);
 
 /* tmtexlib.c */
+void fn_80211AFC(TexLib_802119C4 *pLib, Object_8020E5F8 *pPalette, int clutIndex, Clut_80212534 *pClut);
+void fn_80211B64(TexHeader_8020E2B0 *pTex, TexLib_802119C4 *pLib, int materialIndex, Object_8020E560 *pTexture, int textureIndex, int clutIndex);
 void fn_80211D24(TexLib_802119C4 *pLib, int numTexNodes, int numTextures, int numCluts);
 void fn_80211DA8(TexLib_802119C4 *pLib);
 void fn_80211E08(TexLib_802119C4 *pLib, TexHeader_8020E2B0 *pTex);
@@ -354,8 +365,8 @@ void fn_80212234(Texture_80212234 *pTexture, int minFilter, int magFilter, float
 void fn_80212310(Texture_80212234 *pTexture, Desc_802EE9E4 *pDesc);
 void fn_8021234C(Texture_80212234 *pTexture, int wrapS, int wrapT);
 void fn_80212374(Texture_80212234 *pTexture, TexWrapDesc_80212374 *pDesc);
-void fn_8021239C(Texture_80212234 *pTexture, void *pData, int width, int height, int format, int numMips, void *pBuffer, Clut_80212534 *pClut);
-void fn_8021242C(Texture_80212234 *pTexture, void *pData, int width, int height, int format, int numMips, void *pBuffer, Clut_80212534 *pClut);
+void fn_8021239C(Texture_80212234 *pTexture, void *pData, int width, int height, int format, int numMips, unsigned int size, Clut_80212534 *pClut);
+void fn_8021242C(Texture_80212234 *pTexture, void *pData, int width, int height, int format, int numMips, unsigned int size, Clut_80212534 *pClut);
 void fn_80212530(Texture_80212234 *pTexture);
 void fn_80212534(Clut_80212534 *pClut, void *pData, int format, int numEntries, unsigned int size);
 void fn_80212654(Clut_80212534 *pClut);
@@ -364,7 +375,7 @@ void fn_802126BC(Texture_80212234 *pTexture, const char *pName);
 
 /* tmname.c */
 int fn_802126C0(const char *pName, const char *pOther);
-int fn_802126E8(const char *pName, const char *pPattern);
+int fn_802126E8(const char *pPattern, const char *pName);
 void fn_8021272C(const char *pPath, char *pDir, char *pFile);
 
 /* tmmemory.c */
@@ -372,7 +383,7 @@ void *fn_802127D0(int count, int size);
 void fn_80212814(void *p);
 
 /* tmregistry.c */
-void fn_80212850(Registry_8021283C *pRegistry, int maxEntries, int bFixed, int bPaths);
+void fn_80212850(Registry_8021283C *pRegistry, int maxEntries, int bAppend, int bPaths);
 void fn_802128A8(Registry_8021283C *pRegistry);
 void fn_802128DC(Registry_8021283C *pRegistry);
 void fn_80212940(Registry_8021283C *pRegistry, int index, const char *pName, void *pData);
@@ -407,7 +418,7 @@ void fn_8020F4D0(Model_8020F28C *pModel, ModelRes_8020EA18 *pRes);
 void fn_8020F5F0(int maxChunkTypes);
 void fn_8020F76C(void);
 void fn_8020F78C(Model_8020F28C *pModel, MaterialLib_80213228 *pMatLib);
-void fn_8020F824(Model_8020F28C *pModel, Skeleton_80215E5C *pSkel);
+void fn_8020F824(Model_8020F28C *pModel, void *pOther);
 void fn_8020F89C(Model_8020F28C *pModel);
 void fn_8020F8E0(Model_8020F28C *pModel);
 void fn_8020F92C(Model_8020F28C *pModel);
@@ -426,8 +437,6 @@ void fn_8020FA38(u32 id, f32 (*pMtx)[4]);
 void fn_8020FA8C(u32 id);
 
 /* tmmaterial.c */
-int fn_8020FAAC(Material_8020FAAC *pMaterial, const char *pName);
-void fn_8020FB14(Material_8020FAAC *pMaterial);
 void fn_8020FC1C(int *pPoolSizes);
 void fn_8020FCA0(Material_8020FAAC *pMaterial);
 void fn_8020FD40(Material_8020FAAC *pMaterial);
@@ -482,7 +491,7 @@ typedef struct RenderViewport_80210298 {
 } RenderViewport_80210298;
 
 typedef struct RenderState_80210298 {
-    SwapPart_8020ED10 *mpGeom;
+    Geom_8020ED10 *mpGeom;
     ClusterObj_80210724 *mpClusterObj;
     Skeleton_80215E5C *mpSkel;
     Swap_802160A0 *mpSwap;
@@ -530,14 +539,14 @@ void fn_80210D10(GXBool compareEnable, GXCompare func, GXBool updateEnable);
 
 typedef struct ChannelList_8021592C {
     int mCount;
-    SwapAttr_8020ED10 *mapAttrs[8];
+    GeomAttr_8020ED10 *mapAttrs[8];
     void *mapData[8];
     unsigned char maCompType[8];
     unsigned char maStride[8];
     unsigned char maFrac[8];
 } ChannelList_8021592C;
 
-typedef void (*RenderHookFunc_80211138)(struct RenderHook_80211138 *pHook, SwapNode_8020ED10 *pNode,
+typedef void (*RenderHookFunc_80211138)(struct RenderHook_80211138 *pHook, GeomNode_8020ED10 *pNode,
                                         ChannelList_8021592C *pList);
 
 typedef struct RenderHook_80211138 {
@@ -546,7 +555,7 @@ typedef struct RenderHook_80211138 {
 } RenderHook_80211138;
 
 /* tmrendergeom.c */
-void fn_80210DCC(RenderState_80210298 *pState, SwapNode_8020ED10 *pNode);
+void fn_80210DCC(RenderState_80210298 *pState, GeomNode_8020ED10 *pNode);
 void fn_8021126C(void);
 void fn_802112DC(unsigned short *pIndices, unsigned int count);
 void fn_80211350(void);
@@ -562,11 +571,11 @@ void fn_80213504(ClusterObj_80210724 *pObj, int numMatrices);
 void fn_8021353C(ClusterObj_80210724 *pObj, Pose_8021353C *pPose, BoneList_8021353C *pBones, short (*pBlend)[3]);
 
 /* tmchannellist.c */
-void fn_8021592C(ChannelList_8021592C *pList, SwapNode_8020ED10 *pNode, SwapAttr_8020ED10 *pAttrs, void **ppChannels);
+void fn_8021592C(ChannelList_8021592C *pList, GeomNode_8020ED10 *pNode, GeomAttr_8020ED10 *pAttrs, void **ppChannels);
 void fn_80215A14(ChannelList_8021592C *pList);
 void fn_80215B00(ChannelList_8021592C *pList);
 
-/* cu_802160A0.c */
+/* tmswappart.c */
 void fn_802160A0(Swap_802160A0 *pSwap, void *pOldBase, void *pNewBase);
 SwapSlot_802160A0 *fn_8021616C(Swap_802160A0 *pSwap, int slot);
 SwapState_802160A0 *fn_80216190(Swap_802160A0 *pSwap, int slot, int state);
@@ -574,7 +583,7 @@ int fn_802161D8(Swap_802160A0 *pSwap, unsigned short *pNodes, int slot, int stat
 
 /* tmskeleton.c */
 void fn_80215E5C(Skeleton_80215E5C *pSkel, void *pOldBase, void *pNewBase);
-short *fn_80215EE0(Skeleton_80215E5C *pSkel, Skeleton_80215E5C *pOther);
+short *fn_80215EE0(Skeleton_80215E5C *pSkel, void *pOther);
 void fn_80215F78(Skeleton_80215E5C *pSkel, short *pRemap);
 
 /* tmclip.c */
@@ -612,7 +621,7 @@ void fn_802146C8(LightDef_802146C8 *pDef, void *pOldBase, void *pNewBase);
 
 /* tmblendchannel.c */
 typedef struct BlendChannel_80214D40 {
-    SwapAttr_8020ED10 *mpAttr;
+    GeomAttr_8020ED10 *mpAttr;
     unsigned char *mpCursor;
     int mSize;
     unsigned char *mpBase;
@@ -623,7 +632,7 @@ typedef struct BlendChannel_80214D40 {
 
 typedef struct BlendSource_80214E80 {
     int mNumAttrs;
-    SwapAttr_8020ED10 *mpAttrs;
+    GeomAttr_8020ED10 *mpAttrs;
     void **mppOutputs;
     void **mppInputs;
 } BlendSource_80214E80;
@@ -631,7 +640,7 @@ typedef struct BlendSource_80214E80 {
 BlendChannel_80214D40 *fn_80214DB8(int id);
 int fn_80214DCC(int id, int index);
 unsigned char *fn_80214E3C(int id, unsigned char *pData, int size);
-void fn_80214E80(SwapAttr_8020ED10 *pAttrs, void **ppInputs, void **ppOutputs, int numAttrs);
+void fn_80214E80(GeomAttr_8020ED10 *pAttrs, void **ppInputs, void **ppOutputs, int numAttrs);
 void fn_80214EB4(int index, void *pOutput);
 void fn_80214ED0(void);
 void fn_80214F54(void);
@@ -645,7 +654,7 @@ typedef struct BlendItem_80214718 {
 } BlendItem_80214718;
 
 typedef struct BlendState_80214718 {
-    SwapPart_8020ED10 *mpGeom;
+    Geom_8020ED10 *mpGeom;
     Buffer_80214554 *mpBuffer;
     int mFlushed;
     unsigned int mNumWeights;
@@ -694,7 +703,7 @@ void fn_80215838(TexXFormDef_80215838 *pDef, void *pOldBase, void *pNewBase);
 int fn_802158A4(const char *pName);
 
 /* lltmviewport.c, tmprof.c */
-void fn_80215B6C(void);
+void fn_80215B6C(int unknown);
 void fn_80215B70(void);
 void fn_80215B74(void);
 void fn_80215B78(void);
@@ -750,6 +759,7 @@ typedef struct MorphAnim_80215DA4 {
     MorphTarget_80215DA4 *mapTargets[1];
 } MorphAnim_80215DA4;
 
+void *fn_80215DA4(void *p, void *pOldBase, void *pNewBase);
 void fn_80215DC0(MorphAnim_80215DA4 *pAnim, void *pOldBase, void *pNewBase);
 
 #endif
