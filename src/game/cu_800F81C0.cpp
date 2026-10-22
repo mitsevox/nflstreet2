@@ -99,8 +99,8 @@ extern "C" void fn_800F81C0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         } else if (pOther->mMotion.mPos.mY < origin.mY + 6.0f) {
             pBlock->mUnknown8 = direction;
             pBlock->mUnknown4 = fn_801CFE40(toSpot.mY, toSpot.mX);
-            pBlock->mUnknown24 = 0;
             pBlock->mUnknown12 = 1.0f;
+            pBlock->mUnknown24 = 0;
         } else {
             fn_80227690(&toSpot, &spot, pPos);
             pBlock->mUnknown8 = pOther->mMotion.mUnknown32;

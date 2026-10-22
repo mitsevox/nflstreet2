@@ -15,7 +15,8 @@ struct Object_801618D8 {
     float mUnknown18, mUnknown1C;
     unsigned int mUnknown20;
     void *mUnknown24;
-    int mUnknown28, mUnknown2C, mUnknown30, mUnknown34;
+    unsigned int mUnknown28;
+    int mUnknown2C, mUnknown30, mUnknown34;
     float mUnknown38;
     unsigned char mUnknown3C[192];
     int mUnknownFC;
@@ -149,7 +150,7 @@ void fn_801618D8(Object_801618D8 *item, Desc_801618D8 *desc) {
 }
 void fn_80161A34(Object_801618D8 *item) {
     fn_802355E4(item->mUnknown3C);
-    if (!(item->mUnknown20 & 1) && item->mUnknownFC)
+    if ((item->mUnknown20 & 1) == 0 && item->mUnknownFC)
         fn_801F010C(item->mUnknown24, item->mUnknown28);
 }
 void fn_80161A88(Object_801618D8 *out, Object_801618D8 *in) {
@@ -197,8 +198,8 @@ int fn_80161B38(Object_801618D8 *item) {
                 float scale;
                 if (fn_8016295C(&item->mUnknown4, &point, &item->mUnknown14, &scale)) {
                     fn_801D0558();
-                    item->mUnknown18 = (scale + item->mUnknown18) * 0.5f;
-                    scale = item->mUnknown18;
+                    scale = (scale + item->mUnknown18) * 0.5f;
+                    item->mUnknown18 = scale;
                     fn_801D0C58(&point);
                     fn_801D0ADC(item->mUnknown14);
                     fn_801D08FC(0x400000);
@@ -278,7 +279,8 @@ int fn_80161ED4(void) {
 }
 void fn_80161EDC(Object_801618D8 *item, BitStream_t *stream) {
     if (item) {
-        fn_80191068(stream, (item->mUnknown20 >> 1) & 1, 1);
+        unsigned char active = (item->mUnknown20 >> 1) & 1;
+        fn_80191068(stream, active, 1);
         fn_80191068(stream, fn_80039F8C(item->mUnknown100), 5);
     } else
         fn_80191068(stream, 0, 6);
@@ -393,7 +395,7 @@ void fn_801624D0(void *arg) {
     void *data = fn_800C47C4();
     fn_8016239C(arg);
     Object_801618D8 *shared = 0;
-    for (int i = 0; i < 9; ++i) {
+    for (unsigned int i = 0; i < 9; ++i) {
         Object_801618D8 *item = fn_80162434(arg, i, shared, data, 6);
         item->mUnknown18 = 0.25f;
         lbl_802E97C8[i] = item;
@@ -402,7 +404,7 @@ void fn_801624D0(void *arg) {
     }
     lbl_803EB38C = fn_80162434(arg, 9, 0, data, 7);
     lbl_803EB38C->mUnknown18 = 1.0f;
-    for (int i = 0; i < 5; ++i) {
+    for (unsigned int i = 0; i < 5; ++i) {
         Object_801618D8 *item = fn_80162434(arg, i, lbl_803EB38C, data, 7);
         item->mUnknown18 = 1.0f;
         item->mUnknown20 &= ~2;
@@ -411,7 +413,7 @@ void fn_801624D0(void *arg) {
     lbl_803EB390 = fn_80162434(arg, 9, 0, data, 12);
     lbl_803EB390->mUnknown18 = 1.0f;
     shared = 0;
-    for (int i = 0; i < 9; ++i) {
+    for (unsigned int i = 0; i < 9; ++i) {
         Object_801618D8 *item = fn_80162434(arg, i, shared, data, 5);
         item->mUnknown18 = 1.0f;
         lbl_802E9780[i] = item;
@@ -419,7 +421,7 @@ void fn_801624D0(void *arg) {
             shared = item;
     }
     shared = 0;
-    for (int i = 0; i < 9; ++i) {
+    for (unsigned int i = 0; i < 9; ++i) {
         Object_801618D8 *item = fn_80162434(arg, i, shared, data, 11);
         item->mUnknown18 = 1.0f;
         lbl_802E97A4[i] = item;

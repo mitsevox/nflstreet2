@@ -5,7 +5,7 @@ extern "C" {
 int fn_80178308(void);
 int fn_80178320(void);
 void *fn_8011F4EC(void);
-int fn_8009EAB0(Object_80039F5C *p, unsigned char a);
+int fn_8009EAB0(Object_80039F5C *p, int a);
 int fn_8009EF6C(void *p);
 }
 

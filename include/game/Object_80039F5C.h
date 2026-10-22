@@ -222,15 +222,6 @@ struct State_80039F5C {
     unsigned char mUnknown3[1];
 };
 
-/* Object that +796 points to. */
-struct Object_8016D9B8 {
-    char mUnknown0[2];
-    unsigned short mUnknown2;
-    unsigned short mUnknown4;
-    char mUnknown6[2];
-    int mUnknown8;
-};
-
 /* Object that +3092 points to; its layout is declared where it is read. */
 struct Object_800EA284;
 /* Block at player +1072 (Block_8011E240 +40), passed to fn_8011DBC8. +52 is
@@ -379,7 +370,7 @@ struct Object_80039F5C {
     State_80039F5C *mpState;
     char mUnknown788[4];
     void *mpUnknown792;
-    Object_8016D9B8 *mpUnknown796;
+    Object_801BA03C *mpUnknown796;
     Record_800D81C8 *mpUnknown800;
     void *mpUnknown804;
     void *mpUnknown808;

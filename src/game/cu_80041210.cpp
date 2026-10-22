@@ -23,7 +23,7 @@ void fn_8004A8E8(Object_80040818 *pItem, void *a, int b, void *c);
 void fn_8004A908(Object_80041904 *pObject, int index);
 void fn_8004C684(void *pOwner, Object_80041904 *pObject);
 void fn_8004C7B8(Object_80041904 *pObject);
-void fn_801BA03C(void *a, void *b, Object_80041904 *pObject, float c);
+void fn_801BA03C(void *a, void *b, float c, Object_80041904 *pObject);
 int fn_801BC7C0(void *a, void *b, void *c);
 int fn_801BCA74(void *a, void *b, int c, void *d, int e, int f);
 int fn_801BCCAC(void *a, void *b, int c, void *d, int e, int f);
@@ -179,7 +179,7 @@ int fn_800416CC(float dt)
                 pExtra->mUnknown1708 |= 16;
             }
             fn_801BE420(pExtra->mUnknown1300, pExtra->mUnknown48, pExtra->mUnknown60, pObject, dt);
-            fn_801BA03C(pExtra->mUnknown48, pExtra->mUnknown60, pObject, dt);
+            fn_801BA03C(pExtra->mUnknown48, pExtra->mUnknown60, dt, pObject);
             a = fn_801BC7C0(pExtra->mUnknown48, pExtra->mUnknown60, pExtra->mUnknown1300);
             fn_8004A8C4(pExtra, fn_80040F18(i), a);
             pExtra->mUnknown32 = fn_801BCA74(pExtra->mUnknown48, pExtra->mUnknown60, a, pExtra->mUnknown36, 0xFFFF, 1);

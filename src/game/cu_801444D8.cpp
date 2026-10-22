@@ -7,20 +7,13 @@
 #include <string.h>
 #include "game/cu_801962CC.h"
 #include "game/fn_801D2B7C.h"
+#include "engine/cu_801C06E8.h"
 
 /* Header of the emitter list built by fn_801444D8 and filled by fn_80144EDC. */
 struct List_803EB230 {
     unsigned short mCount;
     unsigned short mCapacity;
     Object_80144CE0 **mppList;
-};
-
-/* Block passed to fn_801C06E8; the halfword +0 is read as a count there. */
-struct Config_803EB22A {
-    unsigned short mUnknown0;
-    unsigned short mUnknown2;
-    unsigned char mUnknown4;
-    unsigned char mUnknown5;
 };
 
 /* Snapshot of lbl_803EB240 taken by fn_801447E8 before it stores the new counts. */
@@ -91,8 +84,6 @@ void fn_801A762C(void);
 void fn_801A7778(void);
 void fn_801A7784(float rate);
 void fn_801A7880(void);
-void fn_801C06E8(Config_803EB22A *pConfig);
-void fn_801C07DC(void);
 void *fn_801C6B4C(void *pool, void *item);
 void *fn_801C6C84(void *pool, void *item);
 void fn_801D0508(void);
@@ -141,7 +132,7 @@ void fn_8014512C(void);
 }
 
 static unsigned char lbl_803EB228 = 0;
-static Config_803EB22A lbl_803EB22A = { 8, 0, 0, 0 };
+static TextureConfig_801C06E8 lbl_803EB22A = { 8, 0, 0, 0 };
 static List_803EB230 lbl_803EB230 = { 0, 0, 0 };
 static int lbl_803EB238 = 0;
 static unsigned char lbl_803EB23C = 1;

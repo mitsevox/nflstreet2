@@ -1,3 +1,4 @@
+#include "engine/cu_801B9F00.h"
 #include "game/fn_801248D4.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
@@ -47,7 +48,6 @@ struct State_8010D80C {
 };
 
 extern "C" {
-int fn_801BA5A8(void *pA, void *pB, unsigned short id, int index);
 int fn_801BA6B0(Entry_800EAC9C *pEntry);
 void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
