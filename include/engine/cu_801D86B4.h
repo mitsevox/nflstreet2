@@ -1,6 +1,8 @@
 #ifndef ENGINE_CU_801D86B4_H
 #define ENGINE_CU_801D86B4_H
 
+#include "engine/Info_801D86B4.h"
+
 /* Movie player records shared by 0x801D86B4-0x801D94A0 (NASCAR 2005 moviercmp.cpp)
    and 0x801D94A0-0x801D9634 (llmoviercmp.cpp). */
 
@@ -37,12 +39,6 @@ typedef struct Audio_801D86B4 {
     unsigned char mActive;
     char mPad21[3];
 } Audio_801D86B4;
-
-typedef struct Info_801D86B4 {
-    Video_801D86B4 *mpVideo;
-    Audio_801D86B4 *mpAudio;
-    int mCodec;
-} Info_801D86B4;
 
 /* Chunk handed to the decoder (0xC bytes). */
 typedef struct Chunk_801D86B4 {
