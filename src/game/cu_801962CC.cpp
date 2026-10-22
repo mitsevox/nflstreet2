@@ -5,6 +5,7 @@
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXVert.h>
+#include <dolphin/gx/GXTev.h>
 
 struct Table_80212850 {
     int mCapacity;
@@ -69,20 +70,10 @@ void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void fn_8022765C(float *pOut, float *pA, float *pB);
 void fn_80227C2C(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void fn_80227CC0(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
-void fn_8024CB90(int a, int b);
-void fn_8024D418(void);
-void fn_8024D450(int a, int b, int c, int d, int e);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 extern "C" void GXLoadTexObj(GXTexObj *pObj, int a);
 extern "C" void GXLoadTlut(GXTlutObj *pObject, int a);
-void fn_80251604(int a, int b);
-void fn_80251690(int a, int b, int c, int d, int e);
-void fn_802516D4(int a, int b, int c, int d, int e);
-void fn_80251718(int a, int b, int c, int d, int e, int f);
-void fn_80251780(int a, int b, int c, int d, int e, int f);
-void fn_80251B28(int a, int b, int c, int d);
-void fn_80251CC4(int a);
 
 static Vector_80039F5C lbl_802EDD74[4] = {
     { -1.0f, -1.0f, 0.0f },
@@ -125,21 +116,21 @@ void fn_8019634C(void)
 {
     fn_8024FC48(1);
     fn_8024FC84(4, 0, 0, 1, 0, 0, 2);
-    fn_80251CC4(1);
-    fn_80251B28(0, 0, 0, 4);
-    fn_80251690(0, 15, 8, 10, 15);
-    fn_80251718(0, 0, 0, 0, 1, 0);
-    fn_802516D4(0, 7, 4, 5, 7);
-    fn_80251780(0, 0, 0, 0, 1, 0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_RASC, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_TEXA, GX_CA_RASA, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
 }
 
 void fn_80196414(void)
 {
     fn_8024FC48(1);
     fn_8024FC84(4, 0, 0, 1, 0, 0, 2);
-    fn_80251CC4(1);
-    fn_80251B28(0, 255, 255, 4);
-    fn_80251604(0, 4);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
 }
 
 void fn_80196480(int a)
@@ -182,13 +173,13 @@ int fn_80196564(Object_80144CE0 *pEmitter, int mode)
             GXLoadTlut(&pTexture->mTlutObj, 0);
             GXLoadTexObj(&pTexture->mTexObj, 0);
             fn_8021077C(lbl_803EB744);
-            fn_8024D418();
-            fn_8024CB90(9, 1);
-            fn_8024CB90(11, 1);
-            fn_8024CB90(13, 1);
-            fn_8024D450(0, 9, 1, 4, 0);
-            fn_8024D450(0, 11, 1, 5, 0);
-            fn_8024D450(0, 13, 1, 4, 0);
+            GXClearVtxDesc();
+            GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+            GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+            GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
             GXBegin(GX_QUADS, GX_VTXFMT0, count * 4);
             for (i = 0; i < count; i++) {
                 pParticle = pEmitter->mppUnknown3C0[i];
@@ -223,11 +214,11 @@ int fn_80196564(Object_80144CE0 *pEmitter, int mode)
             }
         } else {
             fn_8021077C(lbl_803EB748);
-            fn_8024D418();
-            fn_8024CB90(9, 1);
-            fn_8024CB90(11, 1);
-            fn_8024D450(0, 9, 1, 4, 0);
-            fn_8024D450(0, 11, 1, 5, 0);
+            GXClearVtxDesc();
+            GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+            GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
             GXBegin(GX_QUADS, GX_VTXFMT0, count * 4);
             for (i = 0; i < count; i++) {
                 pParticle = pEmitter->mppUnknown3C0[i];

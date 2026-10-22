@@ -383,7 +383,6 @@ OSThread* GXSetCurrentGXThread(void)
     return prev;
 }
 
-#if defined(DECOMP_COMPARE)
 void* GXGetFifoBase(const GXFifoObj* obj) {
     __GXFifoObj* realFifo = (__GXFifoObj*)obj;
     return realFifo->base;
@@ -415,8 +414,6 @@ void __GXCleanGPFifo(void) {
     }
 }
 
-#endif
-
 GXFifoObj* GXGetCPUFifo(void)
 {
     return (GXFifoObj*)CPUFifo;
@@ -427,7 +424,6 @@ GXFifoObj* GXGetGPFifo(void)
     return (GXFifoObj*)GPFifo;
 }
 
-#if defined(DECOMP_COMPARE)
 extern void GXFlush(void);
 extern u32 PPCMfwpar(void);
 extern volatile void *GXRedirectWriteGatherPipe(void *);
@@ -499,5 +495,3 @@ void GXRestoreWriteGatherPipe(void) {
     PPCSync();
     OSRestoreInterrupts(enabled);
 }
-
-#endif

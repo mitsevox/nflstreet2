@@ -9,6 +9,7 @@
 #include <dolphin/os/OSResetSW.h>
 
 #include "game/Record_802CC680.h"
+#include <dolphin/os.h>
 
 extern "C" {
 extern char lbl_800034A0[];
@@ -59,8 +60,6 @@ void fn_801F87FC(int a);
 int fn_80219044(void *p, int a, int b, int c, struct Entry_80219044 **ppEntries);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
-int fn_802399F8(void);
-int fn_80239A00(void);
 void fn_80239CEC(int a, int b);
 int fn_8023CF60(void);
 void fn_8023CFD0(int a);
@@ -245,8 +244,8 @@ void fn_800246C0(void)
     Record_802CC680 *pUnload = fn_80025E50(0x40);
     Record_802CC680 *pSound = fn_80025E50(0x100);
     unsigned int limit = 0x1800000;
-    int lo = fn_80239A00();
-    int hi = fn_802399F8();
+    int lo = (int)OSGetArenaLo();
+    int hi = (int)OSGetArenaHi();
     unsigned int top = hi - 0x80000000;
     unsigned int end;
 

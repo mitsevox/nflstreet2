@@ -3,13 +3,13 @@
    colours or from other entries of the same table. */
 #include "game/DynClut_80044F20.h"
 #include "game/fn_801D2B7C.h"
+#include <dolphin/gx/GXManage.h>
 
 extern "C" {
 void *fn_80216BFC(void *pNode, const char *pName);
 void *fn_80216E34(void *pNode);
 int fn_80217070(void *pNode, const char *pName, int value);
 void fn_80239D1C(void *p, int size);
-void fn_8024E034(void);
 }
 
 static inline void UnpackColor(const unsigned short *pData, int index, PaletteColor *pColor, int format)
@@ -156,7 +156,7 @@ void fn_80045084(void *p, State_80045084 *pState)
 void fn_800450A8(void *p, State_80045084 *pState)
 {
     fn_80239D1C(pState->mpData, pState->mSize);
-    fn_8024E034();
+    GXFlush();
 }
 
 void fn_800450D8(ColorEntry *pEntry, State_80045084 *pState, Palettes_8004605C *pPalettes)

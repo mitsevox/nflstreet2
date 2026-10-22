@@ -666,6 +666,26 @@ class FileMapTests(ProgressBase):
                     {"section": ".init", "start": "0x80003100", "end": end}]}]
                 with self.assertRaisesRegex(ValueError, "conflicts"):
                     progress.file_map(sections, self.report_path, [], ownership)
+
+    def test_verified_source_may_span_adjacent_seeds_of_its_own_file(self):
+        self.write_inventory()
+        sections = [{"name": "Code", "kind": "code", "address": "0x80003100", "size": 16,
+                     "linked": 8, "matched": 8}]
+        def seeds(*extents):
+            return [{"name": source, "source": source, "sections": [
+                {"section": ".init", "start": start, "end": end} for start, end in group]}
+                for source, group in extents]
+        files = progress.file_map(sections, self.report_path, [], seeds(
+            ("src/unit.c", [("0x80003104", "0x80003108"), ("0x80003108", "0x8000310C")])))
+        owned = [item for item in files if item.get("source")]
+        self.assertEqual([(item["source"], item["matched"]) for item in owned], [("src/unit.c", 8)])
+        for extents in ((("src/unit.c", [("0x80003104", "0x80003108")]),
+                         ("src/other.c", [("0x80003108", "0x8000310C")])),
+                        (("src/unit.c", [("0x80003104", "0x80003106"), ("0x80003108", "0x8000310C")]),)):
+            with self.subTest(extents=extents):
+                with self.assertRaisesRegex(ValueError, "conflicts"):
+                    progress.file_map(sections, self.report_path, [], seeds(*extents))
+
     def test_file_map_groups_measured_functions_and_data(self):
         self.write_inventory()
         data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis)

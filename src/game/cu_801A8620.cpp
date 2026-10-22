@@ -15,6 +15,8 @@
 typedef float Mtx44[4][4];
 #include <dolphin/os/OSCache.h>
 #include <string.h>
+#include <dolphin/gx/GXGeometry.h>
+#include <dolphin/gx/GXTev.h>
 
 struct Texture_801A8D08 { unsigned char mUnknown0[16]; unsigned short mUnknown10; };
 struct Mesh_801A93C0 {
@@ -91,8 +93,8 @@ int fn_8004D4B0(int, const char *); int fn_8004D508(int, const char *);
 void fn_8004E090(Object_801A8620 *, int, int);
 int fn_801F0A8C(void *, const char *); char *fn_801C310C(char *, const char *);
 void fn_8024FB58(int, GXColor); void fn_8024FC48(int); void fn_8024FC84(int, int, int, int, int, int, int);
-void fn_80251A58(int, int, int, int, int); void fn_80252114(int); void fn_802520E0(int, int, int);
-void fn_8024EB28(int); void fn_8024DF64(int); void fn_80251CC4(int); void fn_80251B28(int, int, int, int);
+void fn_80252114(int); void fn_802520E0(int, int, int);
+void fn_8024EB28(int);
 void fn_802525BC(int); void fn_8025251C(Mtx44, int); void fn_8025256C(Mtx44, int);
 int fn_801A8B84(Object_801A8620 *); int fn_801A8C48(Child_801A9430 *);
 int fn_801A9430(Child_801A9430 *, int);
@@ -113,7 +115,7 @@ int fn_801A8620(Object_801A8620 *p, int arg)
     int value = fn_801A854C(&s->mUnknown108,p->mpUnknown14C);
     copy=color; fn_8024FB58(0,copy); fn_8024FC48(1);
     fn_8024FC84(0,1,0,0,value,2,2); fn_8024FC84(2,0,0,0,value,0,2);
-    fn_80251A58(6,16,0,7,0); fn_80252114(0); fn_802520E0(1,3,1); fn_8024EB28(1);
+    GXSetAlphaCompare(GX_GEQUAL, 16, GX_AOP_AND, GX_ALWAYS, 0); fn_80252114(0); fn_802520E0(1,3,1); fn_8024EB28(1);
     fn_80210BD8(2); fn_801D0470(fn_80228668()); fn_801D04C4(); fn_801D0508();
     fn_801D0C58(&p->mUnknown4); fn_801D0860(&p->mUnknown18); fn_801D08FC(0x400000);
     fn_801D0C58(&p->mUnknownB4); fn_801D09EC(p->mUnknownCC); fn_801D0F80(m1);
@@ -152,7 +154,7 @@ int fn_801A8620(Object_801A8620 *p, int arg)
                         fn_801D0544(); fn_8021126C();
                     }
                     fn_802525BC(0);fn_8025251C(m2,0);fn_8025256C(m2,0);
-                    fn_8024DF64(1);fn_80251CC4(1);fn_80251B28(0,0,0,4);
+                    GXSetNumTexGens(1);GXSetNumTevStages(1);GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
                     if(p->mUnknownE8.mWord&16) {
                         ModelRef_801A8620 *r=s->mUnknown4.mpUnknown4;
                         r->mpUnknown0->mpUnknown10->mpUnknown4+=p->mUnknownFC*40;
@@ -325,7 +327,7 @@ int fn_801A9430(Child_801A9430 *p,int arg)
                     if(!model->mUnknown1C)fn_8020F8E0(model);
                     fn_80210654(reinterpret_cast<Object_8023417C *>(model));fn_80210724(s->mUnknownC.mpUnknownE0);
                     fn_801D04C4();fn_801D0558();fn_802337D4(model,s->mUnknownFC,p->mpUnknown50->mpUnknownDC,0);
-                    fn_801D0544();fn_8021126C();fn_8024DF64(1);fn_80251CC4(1);fn_80251B28(0,0,0,4);
+                    fn_801D0544();fn_8021126C();GXSetNumTexGens(1);GXSetNumTevStages(1);GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
                 }
                 fn_802525BC(0);fn_8025251C(m2,0);fn_8025256C(m2,0);
                 if(p->mpUnknown50->mUnknownE8.mWord&16) {

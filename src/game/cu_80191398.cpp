@@ -7,24 +7,16 @@
 #include <dolphin/gx/GXVert.h>
 #include <dolphin/gx/GXBump.h>
 #include "game/cu_80191398.h"
+#include <dolphin/gx/GXTev.h>
 
 extern "C" {
 void fn_801D0F80(Mtx44 m);
 void fn_80210388(void);
-void fn_8024CB90(int a, int b);
-void fn_8024D418(void);
-void fn_8024D450(int a, int b, int c, int d, int e);
-void fn_8024DCE4(int a, int b, int c, int d, int e, int f);
-void fn_8024DF64(int a);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 extern "C" void GXInitTexObj(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
 extern "C" void GXInitTexObjLOD(GXTexObj *pObj, int a, int b, float c, float d, float e, int f, int g, int h);
 extern "C" void GXLoadTexObj(GXTexObj *pObj, int a);
-void fn_80251604(int a, int b);
-void fn_80251A58(int a, int b, int c, int d, int e);
-void fn_80251B28(int a, int b, int c, int d);
-void fn_80251CC4(int a);
 void fn_8025251C(Mtx44 m, int a);
 void fn_802525BC(int a);
 }
@@ -214,27 +206,27 @@ int fn_8019143C(int x, unsigned short y, int c, char *pText, int e)
 
         fn_80210388();
         count = 0;
-        fn_8024D418();
-        fn_8024CB90(9, 1);
-        fn_8024CB90(11, 1);
-        fn_8024CB90(13, 1);
-        fn_8024D450(0, 9, 1, 3, 0);
-        fn_8024D450(0, 13, 1, 4, 0);
-        fn_8024D450(0, 11, 1, 5, 0);
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+        GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
         fn_8024FC48(1);
         fn_8024FC84(4, 0, 1, 0, 1, 0, 2);
-        fn_80251CC4(1);
-        fn_80251B28(0, 0, 0, 4);
-        fn_80251604(0, 0);
-        fn_8024DF64(1);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+        GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+        GXSetNumTexGens(1);
         GXSetTevDirect(GX_TEVSTAGE0);
         GXSetNumIndStages(0);
-        fn_8024DCE4(0, 0, 4, 60, 0, 125);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
         GXSetCullMode(GX_CULL_NONE);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
         GXSetZCompLoc(GX_DISABLE);
         GXSetZMode(GX_DISABLE, GX_ALWAYS, GX_DISABLE);
-        fn_80251A58(4, 0, 0, 4, 0);
+        GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_GREATER, 0);
         fn_801D0F80(m);
         fn_8025251C(m, 0);
         fn_802525BC(0);

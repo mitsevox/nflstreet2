@@ -8,6 +8,7 @@
 #include <dolphin/gx/GXCull.h>
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXVert.h>
+#include <dolphin/gx/GXTev.h>
 
 struct Entry_801A5050 {
     int mUnknown0;
@@ -36,19 +37,11 @@ void fn_802271A4(Vector_80039F5C *pOut, Vector_80039F5C *p);
 void fn_80227384(Vector_80039F5C *pOut, Vector_80039F5C *p, int a);
 void *fn_80236384(int a);
 void fn_80236408(int a, Vector_80039F5C *pOut);
-void fn_8024CB90(int a, int b);
-void fn_8024D418(void);
-void fn_8024D450(int a, int b, int c, int d, int e);
-void fn_8024DCE4(int a, int b, int c, int d, int e, int f);
-void fn_8024DF64(int a);
 void fn_8024FB58(int a, GXColor color);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 extern "C" void GXInitTexObj(GXTexObj *pObj, void *p, int a, int b, int c, int d, int e, int f);
 extern "C" void GXLoadTexObj(GXTexObj *pObj, int a);
-void fn_80251604(int a, int b);
-void fn_80251B28(int a, int b, int c, int d);
-void fn_80251CC4(int a);
 void fn_8025251C(Mtx44 m, int a);
 void fn_802525BC(int a);
 }
@@ -171,20 +164,20 @@ void fn_801A5104(void)
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
         GXSetZCompLoc(GX_DISABLE);
         GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
-        fn_8024D418();
-        fn_8024CB90(9, 1);
-        fn_8024D450(0, 9, 1, 4, 0);
-        fn_8024CB90(11, 1);
-        fn_8024D450(0, 11, 1, 5, 0);
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+        GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
         fn_8024FC48(1);
         fn_8024FC84(4, 0, 1, 1, 0, 0, 2);
-        fn_8024CB90(13, 1);
-        fn_8024D450(0, 13, 1, 4, 0);
-        fn_80251604(0, 0);
-        fn_8024DF64(1);
-        fn_8024DCE4(0, 1, 4, 60, 0, 125);
-        fn_80251CC4(1);
-        fn_80251B28(0, 0, 0, 4);
+        GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+        GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+        GXSetNumTevStages(1);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
         fn_801D0470(fn_80228668());
         GXLoadTexObj(&lbl_80366680, 0);
         fn_801D04C4();

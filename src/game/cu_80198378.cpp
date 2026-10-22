@@ -5,6 +5,8 @@
 #include <dolphin/gx/GXTexture.h>
 #include <dolphin/gx/GXVert.h>
 #include <dolphin/mtx.h>
+#include <dolphin/gx/GXCpu2Efb.h>
+#include <dolphin/gx/GXTev.h>
 
 struct Entry_80146C4C;
 
@@ -30,19 +32,10 @@ struct Record_801987F4 {
 
 extern "C" {
 void fn_80210388(void);
-void fn_8024D418(void);
-void fn_8024CB90(int a, int b);
-void fn_8024D450(int a, int b, int c, int d, int e);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 void fn_8024FC48(int a);
-void fn_8024DF64(int a);
-void fn_8024DCE4(int a, int b, int c, int d, int e, int f);
 void fn_80210BD8(int a);
 void fn_80210CC4(float a, float b);
-void fn_80251B28(int a, int b, int c, int d);
-void fn_80251604(int a, int b);
-void fn_80251CC4(int a);
-void fn_80251A58(int a, int b, int c, int d, int e);
 void fn_801D0470(int a);
 void fn_801D0508(void);
 void fn_801D0544(void);
@@ -53,7 +46,6 @@ void fn_80227490(float *pOut, float *pIn, int a, int b, int c);
 void fn_8022765C(float *pOut, float *pA, float *pB);
 int fn_801CEA08(void);
 int fn_801CEA14(void);
-void fn_8024E660(unsigned short x, unsigned short y, unsigned int *pDepth);
 
 extern Record_801985FC lbl_802DD7AC[15];
 extern unsigned char lbl_803EB760;
@@ -169,22 +161,22 @@ void fn_8019837C(Element_8019837C *p, float *position, int angle)
 void fn_801985FC(void)
 {
     fn_80210388();
-    fn_8024D418();
-    fn_8024CB90(9, 1);
-    fn_8024CB90(11, 1);
-    fn_8024CB90(13, 1);
-    fn_8024D450(0, 9, 1, 4, 0);
-    fn_8024D450(0, 11, 1, 5, 0);
-    fn_8024D450(0, 13, 1, 4, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
     fn_8024FC84(4, 0, 1, 1, 0, 0, 2);
     fn_8024FC48(1);
-    fn_8024DF64(1);
-    fn_8024DCE4(0, 1, 4, 60, 0, 125);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     fn_80210BD8(2);
-    fn_80251B28(0, 0, 0, 4);
-    fn_80251604(0, 0);
-    fn_80251CC4(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+    GXSetNumTevStages(1);
     fn_801D0470(fn_80228668());
     fn_801D0508();
     fn_801D131C(3);
@@ -208,22 +200,22 @@ void fn_801987F4(void)
 {
     GXColor color = {128, 128, 128, 128};
     fn_80210388();
-    fn_8024D418();
-    fn_8024CB90(9, 1);
-    fn_8024CB90(11, 1);
-    fn_8024CB90(13, 1);
-    fn_8024D450(0, 9, 1, 4, 0);
-    fn_8024D450(0, 11, 1, 5, 0);
-    fn_8024D450(0, 13, 1, 4, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     fn_8024FC84(4, 0, 1, 1, 0, 0, 2);
     fn_8024FC48(1);
-    fn_8024DF64(1);
-    fn_8024DCE4(0, 1, 4, 60, 0, 125);
-    fn_80251B28(0, 0, 0, 4);
-    fn_80251604(0, 0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     fn_80210BD8(6);
-    fn_80251CC4(1);
-    fn_80251A58(7, 0, 0, 7, 0);
+    GXSetNumTevStages(1);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
     GXSetZCompLoc(GX_FALSE);
     fn_80210CC4(0.0f, 0.9999f);
@@ -257,12 +249,12 @@ void fn_801987F4(void)
 
 unsigned int fn_80198B24(float x, float y)
 {
-    unsigned int depth = 0;
+    u32 depth = 0;
     if (x <= -1.0f || y <= -1.0f || x >= 1.0f || y >= 1.0f)
         return depth;
     unsigned short screenX = (unsigned short)((x + 1.0f) * fn_801CEA08() * 0.5f);
     unsigned short screenY = (unsigned short)((1.0f - y) * fn_801CEA14() * 0.5f);
-    fn_8024E660(screenX, screenY, &depth);
+    GXPeekZ(screenX, screenY, &depth);
     return depth;
 }
 
