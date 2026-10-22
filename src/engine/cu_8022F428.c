@@ -5,6 +5,7 @@
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
 #include <string.h>
+#include "engine/Funcs_802FB3BC.h"
 #include "game/fn_8022F478.h"
 #include "game/fn_80233CBC.h"
 #include "game/fn_801FCE10.h"
@@ -16,10 +17,6 @@ typedef struct Entry_802FB300 {
     int mUnknown0;
     int mUnknown4;
 } Entry_802FB300;
-
-typedef struct Funcs_802FB3BC {
-    int mUnknown0[5];
-} Funcs_802FB3BC;
 
 typedef struct Block_80233588 {
     int mUnknown0;
@@ -337,8 +334,8 @@ extern int fn_8022942C(void);
 extern void fn_80229434(void);
 extern int fn_80229554(void);
 extern int fn_802296B4(int a, int b);
-extern int fn_80229718(Funcs_802FB3BC *pFuncs);
-extern int fn_80229744(void);
+extern void fn_80229718(Funcs_802FB3BC *pFuncs);
+extern void fn_80229744(void);
 extern int fn_80229760(void **ppData, void *p);
 extern int fn_80229788(int a, int b);
 extern int fn_802299FC(void);
@@ -353,7 +350,7 @@ extern int fn_8022C410(int a);
 extern int fn_8022C518(int a);
 extern void fn_8022C988(void *p);
 extern int fn_8022D154(void);
-extern void fn_8022D1B8(void);
+extern int fn_8022D1B8(void);
 extern int fn_8022D6E8(void);
 extern void fn_8022D6F0(void);
 extern int fn_8022DA90(int *p);
