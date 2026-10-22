@@ -49,7 +49,7 @@ int Class_801E27A4::fn_801E2878(Class_801E2878 *pMember)
         return 0;
     }
     if (mpOwner) {
-        fn_801E90A8(mpOwner, this, pMember);
+        mpOwner->fn_801E90A8(this, pMember);
     }
     return 1;
 }
@@ -68,7 +68,7 @@ int Class_801E27A4::fn_801E28FC(Class_801E2878 *pMember)
         fn_801C6BC0(mpNodes, pNode);
         fn_801C6C0C(mpNodes, pNode);
         if (mpOwner) {
-            fn_801E90CC(mpOwner, this, pMember);
+            mpOwner->fn_801E90CC(this, pMember);
         }
         return 1;
     }

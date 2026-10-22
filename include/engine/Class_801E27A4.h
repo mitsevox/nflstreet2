@@ -107,15 +107,4 @@ public:
     void *mpObjects;
 };
 
-/* Each file calls the other's methods through their address labels with the
-   object as the first argument (the same registers as the member call), as
-   unlinked comparison units resolve only fn_ labels across files. */
-extern "C" {
-void fn_801E279C(Class_801E274C *pContainer, Class_801E8E04 *pOwner);
-Node_801E2878 *fn_801E2C3C(Class_801E27A4 *pContainer);
-Class_801E2878 *fn_801E2C64(Class_801E27A4 *pContainer, Node_801E2878 **ppNode);
-void fn_801E90A8(Class_801E8E04 *pOwner, Class_801E27A4 *pGroup, Class_801E2878 *pMember);
-void fn_801E90CC(Class_801E8E04 *pOwner, Class_801E27A4 *pGroup, Class_801E2878 *pMember);
-}
-
 #endif

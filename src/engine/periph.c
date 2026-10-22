@@ -305,10 +305,10 @@ int fn_801E195C(unsigned int index)
     return 0;
 }
 
-int fn_801E19B4(unsigned int index)
+unsigned int fn_801E19B4(unsigned int index)
 {
     int err = 0;
-    int type = 0;
+    unsigned int type = 0;
     Device_801E12F8 *pDevice;
 
     if (index < lbl_803ED660) {

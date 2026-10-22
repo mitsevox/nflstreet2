@@ -2149,6 +2149,26 @@
     "gTutorialGame": {
       "address": "0x80307470",
       "evidence": "Existing ModuleGroup_8003450C.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gTutorialGame. InGame dependency pointer written at 0x80032B7C."
+    },
+    "fn_801E279C__14Class_801E274CP14Class_801E8E04": {
+      "address": "0x801E279C",
+      "evidence": "evidence.tsv external row for 0x801E279C (fn_801E279C__14Class_801E274CP14Class_801E8E04) and function row 0x801E279C (comparison unit; original assembly remains linked)."
+    },
+    "fn_801E2C3C__14Class_801E27A4": {
+      "address": "0x801E2C3C",
+      "evidence": "evidence.tsv external row for 0x801E2C3C (fn_801E2C3C__14Class_801E27A4) and function row 0x801E2C3C (comparison unit; original assembly remains linked)."
+    },
+    "fn_801E2C64__14Class_801E27A4PP13Node_801E2878": {
+      "address": "0x801E2C64",
+      "evidence": "evidence.tsv external row for 0x801E2C64 (fn_801E2C64__14Class_801E27A4PP13Node_801E2878) and function row 0x801E2C64 (comparison unit; original assembly remains linked)."
+    },
+    "fn_801E90A8__14Class_801E8E04P14Class_801E27A4P14Class_801E2878": {
+      "address": "0x801E90A8",
+      "evidence": "evidence.tsv external row for 0x801E90A8 (fn_801E90A8__14Class_801E8E04P14Class_801E27A4P14Class_801E2878) and function row 0x801E90A8 (comparison unit; original assembly remains linked)."
+    },
+    "fn_801E90CC__14Class_801E8E04P14Class_801E27A4P14Class_801E2878": {
+      "address": "0x801E90CC",
+      "evidence": "evidence.tsv external row for 0x801E90CC (fn_801E90CC__14Class_801E8E04P14Class_801E27A4P14Class_801E2878) and function row 0x801E90CC (comparison unit; original assembly remains linked)."
     }
   },
   "units": [

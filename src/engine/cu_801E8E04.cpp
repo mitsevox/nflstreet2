@@ -50,12 +50,12 @@ int Class_801E8E04::fn_801E8F1C(Class_801E27A4 *pGroup)
         fn_801C6C0C(mpGroups, pNode);
         return 0;
     }
-    pIter = fn_801E2C3C(pGroup);
-    for (pMember = fn_801E2C64(pGroup, &pIter); pMember;
-         pMember = fn_801E2C64(pGroup, &pIter)) {
+    pIter = pGroup->fn_801E2C3C();
+    for (pMember = pGroup->fn_801E2C64(&pIter); pMember;
+         pMember = pGroup->fn_801E2C64(&pIter)) {
         fn_801E90F0(pMember);
     }
-    fn_801E279C(pGroup, this);
+    pGroup->fn_801E279C(this);
     return 1;
 }
 
@@ -72,14 +72,14 @@ int Class_801E8E04::fn_801E8FD4(Class_801E27A4 *pGroup)
         }
     }
     if (pNode) {
-        pIter = fn_801E2C3C(pGroup);
-        for (pMember = fn_801E2C64(pGroup, &pIter); pMember;
-         pMember = fn_801E2C64(pGroup, &pIter)) {
+        pIter = pGroup->fn_801E2C3C();
+        for (pMember = pGroup->fn_801E2C64(&pIter); pMember;
+         pMember = pGroup->fn_801E2C64(&pIter)) {
             fn_801E9168(pMember);
         }
         fn_801C6BC0(mpGroups, pNode);
         fn_801C6C0C(mpGroups, pNode);
-        fn_801E279C(pGroup, 0);
+        pGroup->fn_801E279C(0);
         return 1;
     }
     return 0;
