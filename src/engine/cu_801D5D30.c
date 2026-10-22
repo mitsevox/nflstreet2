@@ -68,7 +68,7 @@ extern Struct_803EBD2C *lbl_803EBD2C;
 typedef int (*Func_803EBD30)(char *pBuffer, int size, void *pComment);
 typedef void (*Func_803EBD34)(void);
 typedef void (*Func_803EBD38)(int arg0, unsigned char **ppData, unsigned int *pSize);
-typedef void (*Func_803EBD3C)(int arg0);
+typedef void (*Func_803EBD3C)(int arg0, int arg1);
 
 extern Func_803EBD30 lbl_803EBD30;
 extern Func_803EBD34 lbl_803EBD34;
