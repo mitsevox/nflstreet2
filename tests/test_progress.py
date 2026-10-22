@@ -283,6 +283,80 @@ class FunctionInventoryTests(ProgressBase):
             "function\t0x8000310C\t0x80003110\tfn_8000310C\tinferred\tprovisional\topen\tfixture\n"
             "name\t0x80005008\t-\tDataName\trelated\t-\t-\tfixture\n")
 
+    def supplemental_fixture(self):
+        self.write_inventory()
+        symbols = self.analysis / "symbols.txt"
+        symbols.write_text("fn_80003104 = .text:0x80003104; // type:function size:0x8\n")
+        summary = json.loads((self.analysis / "summary.json").read_text())
+        summary.update(candidate_counts={"function": 1}, symbols_sha256=progress.digest(symbols))
+        (self.analysis / "summary.json").write_text(json.dumps(summary))
+        self.without_evidence_function("0x8000310C")
+        with (self.root / "config/GN7E69/evidence.tsv").open("a") as file:
+            file.write("function\t0x8000310C\t0x80003110\tfn_8000310C\ttarget\texact\texact\tfixture\n")
+        return {"type": "function", "kind": "code", "start": "0x8000310C", "end": "0x80003110"}
+
+    def inventory_with(self, entries, data_spans=()):
+        target = json.loads((self.root / "config/GN7E69/baseline.json").read_text())
+        return progress.function_inventory(target, [], self.analysis, data_spans=data_spans,
+                                           comparison_functions=entries)
+
+    def test_validated_comparison_supplements_full_neutral_extent_without_credit(self):
+        entry = self.supplemental_fixture()
+        counts, rows = self.inventory_with([entry])
+        self.assertEqual(counts, {"total": 2, "exact": 0, "named": 1, "basis": "provisional-analysis"})
+        self.assertEqual(rows[-1], {"name": "fn_8000310C", "kind": "code", "address": "0x8000310C",
+                                    "size": 4, "linked": 0, "matched": 0})
+        self.assertEqual(self.inventory_with([])[0]["total"], 1)
+
+    def test_supplemented_map_keeps_full_exact_or_fuzzy_measurement(self):
+        import matching
+        entry = self.supplemental_fixture()
+        for matched, fuzzy, exact_count in ((4, 4, 2), (0, 3, 1)):
+            measurement = {"objdiff": "test", "entries": [dict(entry, source="src/draft.c",
+                           linked=False, matched=matched, fuzzy=fuzzy)]}
+            with self.subTest(matched=matched), patch.object(matching, "ROOT", self.root), \
+                    patch.object(matching, "load", return_value=measurement) as load:
+                data = progress.report(self.binary, "a" * 40, self.report_path, self.analysis,
+                                       self.root / "comparison.json")
+            load.assert_called_once()
+            row = next(row for row in data["sections"][0]["children"]
+                       if row.get("address") == entry["start"])
+            self.assertEqual((row["size"], row["linked"], row["matched"], row["fuzzy"]),
+                             (4, 0, matched, fuzzy))
+            self.assertEqual(data["functions"]["exact"], exact_count)
+            self.assertEqual(data["measures"]["code"],
+                             {"total": 16, "linked": 8, "matched": 8 + matched, "fuzzy": 8 + fuzzy})
+
+    def test_supplement_requires_exact_agreeing_evidence(self):
+        entry = self.supplemental_fixture()
+        for end in ("0x80003114", "0x8000310E", "0x8000310C"):
+            with self.subTest(end=end), self.assertRaisesRegex(ValueError, "complete exact boundary"):
+                self.inventory_with([dict(entry, end=end)])
+        self.without_evidence_function("0x8000310C")
+        with self.assertRaisesRegex(ValueError, "complete exact boundary"):
+            self.inventory_with([entry])
+        with (self.root / "config/GN7E69/evidence.tsv").open("a") as file:
+            file.write("function\t0x8000310C\t0x80003110\tfn_8000310C\ttarget\tprovisional\topen\tfixture\n")
+        with self.assertRaisesRegex(ValueError, "complete exact boundary"):
+            self.inventory_with([entry])
+
+    def test_supplement_rejects_candidate_and_data_overlap(self):
+        entry = self.supplemental_fixture()
+        with self.assertRaisesRegex(ValueError, "overlaps function candidate"):
+            self.inventory_with([entry], [(0x8000310C, 0x80003110, "data")])
+        with (self.root / "config/GN7E69/evidence.tsv").open("a") as file:
+            file.write("function\t0x80003108\t0x80003110\tfn_80003108\ttarget\texact\texact\tfixture\n")
+        with self.assertRaisesRegex(ValueError, "overlaps an inventory candidate"):
+            self.inventory_with([dict(entry, start="0x80003108")])
+
+    def test_supplement_cannot_resize_existing_candidate_or_bypass_receipt(self):
+        entry = self.supplemental_fixture()
+        _, rows = self.inventory_with([dict(entry, start="0x80003104")])
+        self.assertEqual(rows[0]["size"], 8)
+        (self.analysis / "symbols.txt").write_text("changed")
+        with self.assertRaisesRegex(ValueError, "stale or unverified"):
+            self.inventory_with([entry])
+
     def add_follower(self):
         """Configure read-only data after the unit's code over 0x8000310C-0x80003110."""
         follower = {"section": ".rodata", "placement": ".init", "start": "0x8000310C", "end": "0x80003110",
