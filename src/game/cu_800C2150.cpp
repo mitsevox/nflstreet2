@@ -13,6 +13,8 @@
 #include "game/fn_80195EFC.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_802270D4.h"
+#include "game/cu_80136B1C.h"
+#include "game/fn_800AD9B4.h"
 
 /* 8-byte records of the three 50-entry lists at 0x8030FF40 (one per side
    plus a shared list), as fn_800C3130 fills them. */
@@ -23,7 +25,6 @@ struct Entry_800C3130 {
 };
 
 extern "C" {
-int fn_800AD9B4(void);
 int fn_800BA6F8(void);
 int fn_800C2FDC(Block_80170E64 *p, Block_80170E64 *pOther, float *pBest, int maxAngle, float range,
                 float radiusSq);
@@ -49,7 +50,6 @@ void fn_800545E8(void);
 void fn_80139204(void);
 void fn_8013F97C(int a);
 void fn_8013FA58(int a, int b);
-unsigned char fn_801374D4(void);
 void fn_80162780(int a, int b);
 void fn_8016DDDC(int team);
 void fn_80173BCC(void);

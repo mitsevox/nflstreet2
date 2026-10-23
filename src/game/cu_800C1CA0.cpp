@@ -1,11 +1,11 @@
 #include "game/cu_8002B8F8.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_8017F584.h"
+#include "game/fn_800AD9B4.h"
 
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
 
 extern "C" {
-int fn_800AD9B4(void);
 void fn_800BA7E8(float x, float y);
 Camera_8013F738 *fn_8013FA04(int index);
 void fn_80178370(void);

@@ -3,6 +3,8 @@
 #include "game/Object_8017886C.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_801BE60C.h"
+#include "game/cu_80136B1C.h"
+#include "game/fn_80177FE0.h"
 
 extern "C" {
 float fn_80237260(int stream);
@@ -14,9 +16,7 @@ int fn_800A851C(int team, Object_80039F5C *p);
 int fn_800C53D8(Object_80039F5C *p);
 int fn_800D0B90(Object_80039F5C *p);
 Object_80039F5C *fn_80114E7C(Object_80039F5C *p);
-Object_80039F5C *fn_80137B40(void);
 int fn_801486A0(void);
-Point_8017886C fn_80177FE0(void);
 float fn_80178A08(void);
 int fn_801CFFD0(int a, int b);
 

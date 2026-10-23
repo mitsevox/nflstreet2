@@ -7,6 +7,9 @@
 #include "game/fn_801BA2A8.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_802372EC.h"
+#include "game/Object_8017886C.h"
+#include "game/fn_80227638.h"
+#include "game/fn_8022781C.h"
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
@@ -21,12 +24,9 @@ extern "C" {
 int fn_800C36A8(Object_80039F5C *p, int skip, int key, int index, Command_800CEE74 *pRecord,
                 Vector_80039F5C *pPoint, int angle);
 int fn_800CD170(Point_8017886C *pA, Point_8017886C *pB, Point_8017886C *pC);
-int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
-void fn_80227638(void *pOut, void *pA, void *pB);
 void fn_80227690(void *pOut, void *pA, void *pB);
-float fn_8022781C(void *pA, void *pB);
 void fn_80227970(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC, Vector_80039F5C *pOut, float *pValue,
                  float *pOther);
 void fn_800C38C4(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key);
