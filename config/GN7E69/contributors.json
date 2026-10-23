@@ -29491,13 +29491,14 @@
       ],
       "functions": [
         "0x80094B34",
-        "0x8009B720"
+        "0x8009B720",
+        "0x8009FD7C"
       ],
       "provenance": {
         "pull_request": 1074,
         "merged_via": 1074,
-        "commit": "33bd801f9d71a40e0971004291e6d8f5a5279a72",
-        "introduced_blob": "019a0eef4e8321f780b63bef668268d863b81ca3"
+        "commit": "7bda29361da2dec99cf556a3b2b0a184d88e7ea0",
+        "introduced_blob": "aa9dd5c48bd2945f8bf7ec0dac8cbfd6c99b70db"
       }
     }
   ],
