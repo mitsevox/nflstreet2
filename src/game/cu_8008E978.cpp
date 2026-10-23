@@ -15732,7 +15732,7 @@ extern "C" {
 Table_80089904 *fn_801BE72C(unsigned short,unsigned short);
 Object_801BBD5C *fn_801BBD5C(unsigned short,unsigned short);
 int fn_800CEA7C(Group_800CC98C *, Command_800CEE74 *, Vector_80039F5C *, int *);
-void fn_800CEED8(int,int,Command_800CEE74 *,Object_80039F5C *,Vector_80039F5C *,int,Vector_80039F5C *,int *,unsigned char *);
+void fn_800CEED8(unsigned short,int,Command_800CEE74 *,Object_80039F5C *,Vector_80039F5C *,int,Vector_80039F5C *,int *,unsigned char *);
 }
 
 extern "C" Play_800CCEBC *fn_800CD3C0(Group_800CC98C *p, Play_800CCEBC *pOut, unsigned short *pKey)
@@ -15936,7 +15936,7 @@ extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
     return result;
 }
 
-extern "C" void fn_800CEED8(int key, int index, Command_800CEE74 *pRecord, Object_80039F5C *pPlayer,
+extern "C" void fn_800CEED8(unsigned short key, int index, Command_800CEE74 *pRecord, Object_80039F5C *pPlayer,
                             Vector_80039F5C *pPoint, int angle, Vector_80039F5C *pOut, int *pAngle, unsigned char *pValue)
 {
     Record_800C432C table;
@@ -15951,13 +15951,14 @@ extern "C" void fn_800CEED8(int key, int index, Command_800CEE74 *pRecord, Objec
         pOut->mY = -pOut->mY;
     }
     *pValue = (unsigned int)pInfo->mUnknown20Float;
+    unsigned int heading = angle & 0xFFFFFF;
     *pAngle = (*pAngle + pPlayer->mMotion.mFacing) & 0xFFFFFF;
     fn_80227384(pOut, pOut, pPlayer->mMotion.mFacing);
     fn_8022765C(pOut, pOut, &pPlayer->mMotion.mPos);
     Delta_800CC6A8 delta;
     fn_80227690(&delta, pPoint, &pRecord->mUnknown12);
     fn_80227638(pOut, pOut, &delta);
-    unsigned int difference = ((angle & 0xFFFFFF) - fn_801CFE40(pRecord->mVector0.mY, pRecord->mVector0.mX)) & 0xFFFFFF;
+    unsigned int difference = (heading - fn_801CFE40(pRecord->mVector0.mY, pRecord->mVector0.mX)) & 0xFFFFFF;
     *pAngle = (*pAngle + difference) & 0xFFFFFF;
     fn_80227690(pOut, pOut, pPoint);
     fn_80227384(pOut, pOut, difference);

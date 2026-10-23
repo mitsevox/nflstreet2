@@ -18,7 +18,7 @@ int fn_80178320(void);
 int fn_80099510(Object_80039F5C *p);
 int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, float range, Block_800997F4 *pBlock, int b, int c, int d, unsigned char e);
 void fn_800CEE74(Command_800CEE74 *pOut, Object_80039F5C *pA, Object_80039F5C *pB, void *pData, int angle, int key, int mirror);
-void fn_800CEED8(int key, int index, Command_800CEE74 *pRecord, Object_80039F5C *pPlayer, Vector_80039F5C *pPoint, int angle, Vector_80039F5C *pOut, int *pAngle, unsigned char *pValue);
+void fn_800CEED8(unsigned short key, int index, Command_800CEE74 *pRecord, Object_80039F5C *pPlayer, Vector_80039F5C *pPoint, int angle, Vector_80039F5C *pOut, int *pAngle, unsigned char *pValue);
 }
 
 extern "C" int fn_800997F4(Object_80039F5C *p, Object_80137ABC *pBall, float range, Block_800997F4 *pBlock, int a,
