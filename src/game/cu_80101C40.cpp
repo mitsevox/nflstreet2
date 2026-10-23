@@ -50,7 +50,7 @@ int fn_801CFFD0(int a, int b);
 float fn_801CFFA0(float value);
 void fn_801BD81C(void *p, float value);
 void fn_80156C78(int index, int value);
-void fn_80100AA0(Object_80039F5C *p, Vector_80039F5C *pPos, float *pX, float *pY);
+void fn_80100AA0(Object_80039F5C *p, int, float *a, float *b);
 }
 
 extern float lbl_803EA2C4;
@@ -189,7 +189,7 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
         case 1:
         case 6:
         case 7:
-            fn_80100AA0(p, &pOther->mMotion.mPos, &pRequest->mUnknown0, &pRequest->mUnknown4);
+            fn_80100AA0(p, (int)&pOther->mMotion.mPos, &pRequest->mUnknown0, &pRequest->mUnknown4);
             break;
         }
     } else {
