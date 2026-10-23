@@ -26130,11 +26130,6 @@
           "end": "0x800A9D84"
         },
         {
-          "symbol": "fn_800A9D84",
-          "start": "0x800A9D84",
-          "end": "0x800A9F4C"
-        },
-        {
           "symbol": "fn_800A9F64",
           "start": "0x800A9F64",
           "end": "0x800AA010"
@@ -26458,11 +26453,6 @@
           "symbol": "fn_800B4900",
           "start": "0x800B4900",
           "end": "0x800B49EC"
-        },
-        {
-          "symbol": "fn_800ABE10",
-          "start": "0x800ABE10",
-          "end": "0x800ABF00"
         },
         {
           "symbol": "fn_800B4DE4",
@@ -40657,19 +40647,19 @@
     {
       "source": "src/game/cu_800A8570.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Four target whole-function extents in 0x800A8570-0x800A9648 and their contiguous literal-pool slice 0x80296888-0x802968C0; the integer-only neighbours inside the span stay in cu_8008E978.cpp, and the twelve unreferenced readonly bytes 0x8029687C-0x80296888 before the slice remain unowned. This split permits independent compilation of the partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Five target whole-function extents in 0x800A8570-0x800A9F4C and their contiguous literal-pool slice 0x80296888-0x802968DC; the integer-only neighbours inside the span stay in cu_8008E978.cpp, and the twelve unreferenced readonly bytes 0x8029687C-0x80296888 before the slice remain unowned. This split permits independent compilation of the partial literal pool and does not claim an original file boundary or whole-unit promotion.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800A8570",
-          "end": "0x800A9648"
+          "end": "0x800A9F4C"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80296888",
-          "end": "0x802968C0"
+          "end": "0x802968DC"
         }
       ],
       "functions": [
@@ -40692,6 +40682,11 @@
           "symbol": "fn_800A9478",
           "start": "0x800A9478",
           "end": "0x800A9648"
+        },
+        {
+          "symbol": "fn_800A9D84",
+          "start": "0x800A9D84",
+          "end": "0x800A9F4C"
         }
       ]
     },
@@ -40750,19 +40745,19 @@
     {
       "source": "src/game/cu_800AB9EC.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the provisional cu_8008E978 grouping for a literal-using body; its literal-pool slice is compared independently and does not claim an original file boundary.",
+      "evidence": "Comparison source fragment of the provisional cu_8008E978 grouping for the three literal-using bodies 0x800AB9EC, 0x800ABAF0 and 0x800ABE10 and their contiguous literal-pool slice 0x802968E8-0x80296900; the integer-only neighbours inside the span stay in cu_8008E978.cpp. The slice starts 8-aligned so the conversion double of 0x800ABE10 keeps its target offset. It does not claim an original file boundary.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800AB9EC",
-          "end": "0x800ABA0C"
+          "end": "0x800ABF00"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802968E8",
-          "end": "0x802968EC"
+          "end": "0x80296900"
         }
       ],
       "functions": [
@@ -40770,32 +40765,16 @@
           "symbol": "fn_800AB9EC",
           "start": "0x800AB9EC",
           "end": "0x800ABA0C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800ABAF0.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the provisional cu_8008E978 grouping for a literal-using body; its literal-pool slice is compared independently and does not claim an original file boundary.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800ABAF0",
-          "end": "0x800ABC64"
         },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802968EC",
-          "end": "0x802968F4"
-        }
-      ],
-      "functions": [
         {
           "symbol": "fn_800ABAF0",
           "start": "0x800ABAF0",
           "end": "0x800ABC64"
+        },
+        {
+          "symbol": "fn_800ABE10",
+          "start": "0x800ABE10",
+          "end": "0x800ABF00"
         }
       ]
     },
