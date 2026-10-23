@@ -69,15 +69,16 @@ extern Type_803EA368 *lbl_803EA368;
    4 the same way; like 1, kind 1 counts as ready. 3: in those modes wait for
    fn_8005BFD4 to report 1, then go to 4. 4: set up the players and objects
    (fn_80091864, fn_80091AD0, fn_800916E0, fn_80090E4C, fn_80090BDC and the
-   rest), pass the team of the character's first player (fn_8008FF28) to
-   fn_800B9B64 when the block's +0xECF byte is set, and go to 5. 5: once
+   rest), and when the block's +0xECF byte is set pass fn_800B9B64 the team
+   of the character's first player (fn_8008FF28), or 2 when there is none or
+   fn_800B65A0 rejects it with 0xFF, then clear +0xECF; go to 5. 5: once
    fn_80091D34 is set or fn_80091C84 reports nothing left, hand over to 6 in
    those modes, else set 8 and return 0; until then, while fn_80091C84 reports
    a value under 15 it calls fn_8005BF98 and sets 0x803EA8C8. 6: wait for
    fn_8005BFD4 to report 1, then set 8 and return 0. States 5 and 6 return at
    once; 8's body runs on a later call. 8: for kinds up to 2 set bit 0 of the
    +0x14 word of the block at +4 of each of the 14 objects whose +0xB byte is
-   set, clear 0x803EA8BD and 0x803EA8C0, and end. On an end it calls
+   set; for every kind clear 0x803EA8BD and 0x803EA8C0 and end. On an end it calls
    fn_80067E3C(0x82, ...) when fn_800737B8 is set, runs fn_800941B8 and
    fn_800941EC, calls fn_80092380(character, 0) unless fn_800AD9B4 is 7, and
    calls fn_80028DD0(1.0f). */
