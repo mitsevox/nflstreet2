@@ -5783,20 +5783,17 @@ extern "C" void fn_800A9018(unsigned int step)
             int slot = fn_8008576C(p->mUnknown2908, isOffense);
 
             if (fn_801485D4() != 0 && fn_801486A0() == 4) {
-                unsigned int id;
-
                 if (lbl_8030F42C.mUnknown0 == 7) {
-                    id = lbl_802D8064[slot];
+                    fn_8009604C(fn_80096440(lbl_802D8064[slot]), (int)p);
                 } else if (lbl_8030F42C.mUnknown0 == 4) {
                     if (step > 1) {
-                        id = lbl_802D80D4[slot];
+                        fn_8009604C(fn_80096440(lbl_802D80D4[slot]), (int)p);
                     } else {
-                        id = lbl_802D809C[slot];
+                        fn_8009604C(fn_80096440(lbl_802D809C[slot]), (int)p);
                     }
                 } else {
-                    id = lbl_802D802C[slot];
+                    fn_8009604C(fn_80096440(lbl_802D802C[slot]), (int)p);
                 }
-                fn_8009604C(fn_80096440(id), (int)p);
             } else {
                 fn_8009604C(fn_80096440(lbl_802D7FF4[slot]), (int)p);
             }
