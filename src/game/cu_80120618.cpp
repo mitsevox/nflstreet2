@@ -82,6 +82,7 @@ int fn_801208C8(Vector_80039F5C *pA, Vector_80039F5C *pB, float speed, Vector_80
     int opposite;
     int wide;
     float ratio;
+    float minSpeed = speed;
     int turn;
 
     fn_80227690(&delta, pA, pB);
@@ -90,15 +91,16 @@ int fn_801208C8(Vector_80039F5C *pA, Vector_80039F5C *pB, float speed, Vector_80
     diff = fn_801CFFD0(dirAngle, toAngle);
     opposite = fn_801CFFD0(0x800000, diff);
     wide = diff > 0x400000;
-    if (speed < 1e-7f) {
-        speed = 1e-7f;
+    if (minSpeed < 1e-7f) {
+        minSpeed = 1e-7f;
     }
     if (wide) {
         ratio = fn_801CFB18(opposite);
     } else {
         ratio = fn_801CFB18(diff);
     }
-    ratio = ratio * dirLength / speed;
+    ratio *= dirLength;
+    ratio /= minSpeed;
     if (ratio > 1.0f) {
         Vector_80039F5C target;
         Point_8017886C toTarget;
@@ -119,12 +121,10 @@ int fn_80120A50(Point_8017886C *p, Point_8017886C *pA, Point_8017886C *pB, Point
     float d0 = p->mX * (pC->mY - pB->mY) + pC->mX * (pB->mY - p->mY) + pB->mX * (p->mY - pC->mY);
     float d1 = pB->mX * (p->mY - pA->mY) + p->mX * (pA->mY - pB->mY) + pA->mX * (pB->mY - p->mY);
     float d2 = pA->mX * (pB->mY - pC->mY) + pB->mX * (pC->mY - pA->mY) + pC->mX * (pA->mY - pB->mY);
-    float d3 = p->mX * (pC->mY - pA->mY) + pC->mX * (pA->mY - p->mY) + pA->mX * (p->mY - pC->mY);
+    float d3 = pC->mX * (pA->mY - p->mY) + pA->mX * (p->mY - pC->mY) + p->mX * (pC->mY - pA->mY);
 
-    if (d0 >= 0.0f && d1 >= 0.0f && d2 >= 0.0f && d3 >= 0.0f) {
-        return 1;
-    }
-    if (d0 <= 0.0f && d1 <= 0.0f && d2 <= 0.0f && d3 <= 0.0f) {
+    if ((d0 >= 0.0f && d1 >= 0.0f && d2 >= 0.0f && d3 >= 0.0f)
+        || (d0 <= 0.0f && d1 <= 0.0f && d2 <= 0.0f && d3 <= 0.0f)) {
         return 1;
     }
     return 0;

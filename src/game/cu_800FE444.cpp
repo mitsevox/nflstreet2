@@ -1,6 +1,7 @@
 #include <math.h>
 #include "game/Record_8011F4F8.h"
 #include "game/fn_801248D4.h"
+#include "game/Directions_8012430C.h"
 #include "game/Object_80039F5C.h"
 #include "game/Class_80297CE8.h"
 #include "game/Object_8017886C.h"
@@ -62,9 +63,9 @@ int fn_800A7F1C(unsigned char);
 unsigned int fn_80100B0C(void);
 int fn_80168E00(int,int,unsigned char *);
 void fn_8009BD2C(Object_80039F5C *,int *);
-void fn_8012430C(float *,int,Object_80039F5C *);
-unsigned char fn_801243E0(float *,int);
-float fn_801242E0(float *,unsigned int);
+void fn_8012430C(Directions_8012430C *,int,Object_80039F5C *);
+unsigned char fn_801243E0(Directions_8012430C *,int);
+float fn_801242E0(Directions_8012430C *,unsigned int);
 unsigned short fn_801BE648(void *p);
 int fn_801BE068(void *,void *,void *,unsigned short,void *,float);
 void fn_801BE67C(void *,void *,void *,void *);
@@ -621,22 +622,22 @@ void fn_80101064(Object_80039F5C *p)
 
 void fn_80101130(Object_80039F5C *p,Object_80039F5C *other,unsigned short *out)
 {
-    float values[8];fn_8012430C(values,3,p);
-    unsigned char best=fn_801243E0(values,-1);
+    Directions_8012430C values;fn_8012430C(&values,3,p);
+    unsigned char best=fn_801243E0(&values,-1);
     int motionAngle=p->mMotion.mUnknown32;
     Lookup_8012078C *lookup=fn_8012078C();
     Object_80039F5C *receiver=fn_80039F5C(fn_80178320(),lookup->mpUnknown4[1]);
     Point_8017886C delta;fn_80227690(&delta,&other->mMotion.mPos,&p->mMotion.mPos);
     unsigned int octant=((unsigned int)fn_801CFE40(delta.mY,delta.mX)+0x100000)>>21&7;
     int diff=fn_801CFFD0(motionAngle,0x400000);
-    int chosen=(values[best]==0.0f || values[(best+1)&7]==0.0f || values[(best+7)&7]==0.0f) &&
-        (values[octant]>=3.0f || values[(octant+1)&7]>=4.0f || !(values[(octant+7)&7]<4.0f)) && diff<0x4AAAAB;
+    int chosen=(values.mCost[best]==0.0f || values.mCost[(best+1)&7]==0.0f || values.mCost[(best+7)&7]==0.0f) &&
+        (values.mCost[octant]>=3.0f || values.mCost[(octant+1)&7]>=4.0f || !(values.mCost[(octant+7)&7]<4.0f)) && diff<0x4AAAAB;
     if(!chosen) {
         float a=fn_80178A5C(),b=fn_80178A08(),c=fn_80178A5C();
         float x=p->mMotion.mPos.mX;
         float d=fn_80178A5C(),e=fn_80178A08(),f=fn_80178A5C();
         float x2=p->mMotion.mPos.mX;
-        float left=fn_801242E0(values,0),right=fn_801242E0(values,4);
+        float left=fn_801242E0(&values,0),right=fn_801242E0(&values,4);
         chosen=((x2<-((e-f)*0.25f+d) && left>right*1.45f) || (x>(b-c)*0.25f+a && !(right<=left*1.45f))) && diff<0xE38E3;
         if(!chosen) {
             Point_8017886C goal=fn_80177FE0();

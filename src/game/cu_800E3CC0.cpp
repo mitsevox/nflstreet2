@@ -171,7 +171,7 @@ float fn_8022785C(Vector_80039F5C *pA, Vector_80039F5C *pB);
 int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
                 float range);
 int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
-Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, float *pOut, int b);
+Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
 void fn_8013AA00(Object_80137ABC *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 int fn_801C4E98(void *p, const char *pName);
 int fn_8013BA88(Object_80137ABC *pBall, void *pData, int value);
@@ -233,7 +233,7 @@ int fn_800A2178(void);
 int fn_8009FE24(Object_80039F5C *p);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 void fn_800E55B8(Object_80039F5C *p);
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
+Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 int fn_8011EAC0(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8011E8A4(Object_80039F5C *p);
 void fn_8011E8D8(Object_80039F5C *p);

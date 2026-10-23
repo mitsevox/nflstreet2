@@ -2,6 +2,7 @@
 #include "game/cu_80191398.h"
 #include "game/fn_801EEB44.h"
 #include "game/ModuleGroup_8008CC74.h"
+#include "game/SndgPathfinder.h"
 #include "game/Record_802CC680.h"
 #include "game/cu_80026BB0.h"
 #include "game/cu_8015D3EC.h"
@@ -26,7 +27,6 @@ extern char lbl_802EBE24[];
 extern char lbl_802EBE34[];
 extern char lbl_802EBE40[];
 extern Driver_801E11E8 lbl_802F94D0;
-extern char lbl_8030A60C[];
 
 void fn_800296B0(void);
 void fn_800297D0(void);
@@ -512,7 +512,7 @@ int VRAM::Shutdown()
     return 1;
 }
 
-static ModuleDependency sFMSndgMusicDependencies[] = { lbl_8030A60C, &gDbGame, 0 };
+static ModuleDependency sFMSndgMusicDependencies[] = { &gSndgPathfinder, &gDbGame, 0 };
 static void *sFMSndgMusicLinks[] = { 0 };
 FMSndgMusic gFMSndgMusic;
 

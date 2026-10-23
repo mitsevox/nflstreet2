@@ -15,7 +15,7 @@ float fn_800C495C(Object_80039F5C *p, float value);
 void fn_800CA8F4(Object_80039F5C *p);
 int fn_800DC080(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char b, int angle, float *pOut, int c);
+Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char b, int angle, float *pOut, int c);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 Object_80039F5C *fn_80137B40(void);
 void fn_8016BDCC(Object_80039F5C *p);

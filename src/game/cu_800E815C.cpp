@@ -10,7 +10,7 @@ int fn_800E7D80(Object_80039F5C *p);
 float fn_80178298(void);
 float fn_80178A2C(void);
 int fn_80178320(void);
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
+Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_802270A4(void *p);
 int fn_801CFE40(float y, float x);

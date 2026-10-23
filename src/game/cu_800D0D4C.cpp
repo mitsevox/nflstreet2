@@ -225,8 +225,8 @@ void fn_800A20D0(int, signed char);
 float fn_800A32B4(void);
 void fn_800A72B4(void);
 void fn_800A7B5C(void);
-Object_80039F5C *fn_801244F0(Object_80039F5C *, int, int, unsigned char, float *, int);
-Object_80039F5C *fn_801245DC(Object_80039F5C *, int, int, unsigned char, int, float *, int);
+Object_80039F5C *fn_801244F0(Object_80039F5C *, int, unsigned char, unsigned char, float *, int);
+Object_80039F5C *fn_801245DC(Object_80039F5C *, int, unsigned char, unsigned char, int, float *, int);
 float fn_80178A2C(void);
 Point_8017886C fn_80178070(void);
 int fn_801787DC(int);
@@ -344,6 +344,10 @@ void fn_800D391C(int a);
 void fn_800D3C00(int a);
 int fn_800D3C80(void);
 int fn_800D3CC0(void);
+}
+
+extern "C" void fn_800D0D48(int)
+{
 }
 
 extern "C" void fn_800D0D4C(int i) {
