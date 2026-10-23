@@ -15208,40 +15208,6 @@ extern "C" void fn_800BDA7C(void)
 
 
 
-extern "C" { extern float lbl_803EAC78; }
-extern "C" void fn_800CE770(Query_800CE770 *p)
-{
-    fn_801C1F94(p, 0, 64);
-    p->mUnknown32 = 0x800000;
-    p->mUnknown36 = 0x44444;
-    p->mUnknown40 = 0x155555;
-    p->mUnknown44 = 0.2f;
-    p->mUnknown48 = 4.0f;
-    p->mUnknown52 = -1;
-    p->mUnknown54 = 255;
-    p->mUnknown55 = 255;
-    p->mUnknown58 = 1;
-    p->mUnknown59 = 0;
-    p->mUnknown60 = 0;
-}
-
-extern "C" int fn_800CD170(Delta_800CC6A8 *pA, Delta_800CC6A8 *pB, Delta_800CC6A8 *pC)
-{
-    float a = pA->mX - pC->mX;
-    float b = pB->mX - pC->mX;
-    int result = 0;
-    if (!(a * b <= 0.0f) && !(__builtin_fabsf(a) <= lbl_803EAC78) && __builtin_fabsf(b) > lbl_803EAC78) {
-        result = 1;
-    } else {
-        a = pA->mY - pC->mY;
-        b = pB->mY - pC->mY;
-        if (!(a * b <= 0.0f) && !(__builtin_fabsf(a) <= lbl_803EAC78) && !(__builtin_fabsf(b) <= lbl_803EAC78)) {
-            result = 1;
-        }
-    }
-    return result;
-}
-
 extern "C" { unsigned char fn_80114DD8(Object_80039F5C *p); void fn_800CD978(Group_800CC98C *,Play_800CCEBC *,unsigned int); void fn_800CDB5C(Group_800CC98C *,Play_800CCEBC *,unsigned int); }
 extern "C" int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
 #include "game/Record_800CE608.h"
@@ -15284,23 +15250,6 @@ extern "C" int fn_800CE4A8(Query_800CE770 *p)
     return result;
 }
 
-extern "C" int fn_800CE510(Query_800CE770 *p)
-{
-    Play_800CCEBC play;
-    unsigned short index;
-    int result = 0;
-    p->mUnknown44 = 0.8f;
-    p->mUnknown36 = 0xE38E3;
-    if (fn_800CC98C(p, 0)) {
-        Play_800CCEBC *pFound = fn_800CD8BC(p, &play, &index);
-        if (pFound != 0) {
-            result = 1;
-            fn_800CDE50(p, pFound, index);
-        }
-    }
-    return result;
-}
-
 extern "C" int fn_800CE590(Group_800CC98C *p, Record_800CE608 *pA, Record_800CE608 *pB)
 {
     Play_800CCEBC play;
@@ -15331,15 +15280,6 @@ extern "C" void fn_800CDDDC(Group_800CC98C *p, Play_800CCEBC *pPlay, int index)
     fn_800CE158(p, pPlay, &a, &b, index);
     fn_800CE608(p->mpUnknown0, &a);
     fn_800CE608(p->mpUnknown4, &b);
-}
-
-extern "C" void fn_800CE608(Object_80039F5C *p, Record_800CE608 *pRecord)
-{
-    p->mUnknown1008.mUnknown0 = pRecord->mBytes10[1];
-    p->mUnknown1008.mUnknown1 = pRecord->mUnknown10 >> 8;
-    p->mUnknown1008.mUnknown2 = pRecord->mBytes12[1];
-    p->mUnknown1011 = pRecord->mUnknown12 >> 8;
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, pRecord->mUnknown8, p, 1.0f);
 }
 
 extern "C" { float fn_802270A4(void *); Play_800CCEBC *fn_800CD3C0(Group_800CC98C *,Play_800CCEBC *,unsigned short *); }
@@ -15401,6 +15341,10 @@ extern "C" void fn_800CE218(Group_800CC98C *p)
     }
 }
 
+extern "C" {
+extern float lbl_802DA6FC[];
+extern float lbl_803EAC78;
+}
 extern "C" int fn_801CFE08(float value);
 extern "C" int fn_800CC4B0(Object_80039F5C *p)
 {
@@ -15413,31 +15357,6 @@ extern "C" int fn_800CC4B0(Object_80039F5C *p)
     if (fn_800AD9B4() == 6) result = 1;
     if (fn_80177F70() == 0) result = 1;
     if (p != 0 && !(__builtin_fabsf(p->mMotion.mPos.mX) <= 26.666668f)) result = 0;
-    return result;
-}
-
-extern "C" int fn_800CD2B4(int mode, Object_80039F5C *p)
-{
-    int result = 0;
-    if (mode == 1) {
-        Record_800EA284 *pRecord = p->mpUnknown3092->mpUnknown32;
-        if (!(pRecord->mUnknown8 >= 1.5f)) {
-            float distance = fn_8022781C(&pRecord->mUnknown32, &pRecord->mUnknown16);
-            if (!(distance <= 0.0f)) {
-                result = fn_801CFE08(__builtin_fabsf(pRecord->mUnknown32.mZ - pRecord->mUnknown16.mZ) / distance) <= 0x18E38E;
-            }
-        }
-    }
-    return result;
-}
-
-extern "C" int fn_800CD35C(int mode, Object_80039F5C *p)
-{
-    int result = 0;
-    if (fn_800CD2B4(mode, p)) {
-        result = 2;
-        if (!(p->mpUnknown3092->mpUnknown32->mUnknown8 >= 1.2f)) result = 1;
-    }
     return result;
 }
 
@@ -15473,15 +15392,98 @@ extern "C" int fn_800CCD20(Group_800CC98C *p, Play_800CCEBC *pPlay)
     return result;
 }
 
-extern "C" {
-extern float lbl_802DA6FC[];
-extern float lbl_803ECB08;
-void fn_800CE218(Group_800CC98C *p);
+extern "C" int fn_800CD170(Delta_800CC6A8 *pA, Delta_800CC6A8 *pB, Delta_800CC6A8 *pC)
+{
+    float a = pA->mX - pC->mX;
+    float b = pB->mX - pC->mX;
+    int result = 0;
+    if (!(a * b <= 0.0f) && !(__builtin_fabsf(a) <= lbl_803EAC78) && __builtin_fabsf(b) > lbl_803EAC78) {
+        result = 1;
+    } else {
+        a = pA->mY - pC->mY;
+        b = pB->mY - pC->mY;
+        if (!(a * b <= 0.0f) && !(__builtin_fabsf(a) <= lbl_803EAC78) && !(__builtin_fabsf(b) <= lbl_803EAC78)) {
+            result = 1;
+        }
+    }
+    return result;
+}
+
+extern "C" int fn_800CD2B4(int mode, Object_80039F5C *p)
+{
+    int result = 0;
+    if (mode == 1) {
+        Record_800EA284 *pRecord = p->mpUnknown3092->mpUnknown32;
+        if (!(pRecord->mUnknown8 >= 1.5f)) {
+            float distance = fn_8022781C(&pRecord->mUnknown32, &pRecord->mUnknown16);
+            if (!(distance <= 0.0f)) {
+                result = fn_801CFE08(__builtin_fabsf(pRecord->mUnknown32.mZ - pRecord->mUnknown16.mZ) / distance) <= 0x18E38E;
+            }
+        }
+    }
+    return result;
+}
+
+extern "C" int fn_800CD35C(int mode, Object_80039F5C *p)
+{
+    int result = 0;
+    if (fn_800CD2B4(mode, p)) {
+        result = 2;
+        if (!(p->mpUnknown3092->mpUnknown32->mUnknown8 >= 1.2f)) result = 1;
+    }
+    return result;
+}
+
+extern "C" int fn_800CE510(Query_800CE770 *p)
+{
+    Play_800CCEBC play;
+    unsigned short index;
+    int result = 0;
+    p->mUnknown44 = 0.8f;
+    p->mUnknown36 = 0xE38E3;
+    if (fn_800CC98C(p, 0)) {
+        Play_800CCEBC *pFound = fn_800CD8BC(p, &play, &index);
+        if (pFound != 0) {
+            result = 1;
+            fn_800CDE50(p, pFound, index);
+        }
+    }
+    return result;
+}
+
+extern "C" void fn_800CE608(Object_80039F5C *p, Record_800CE608 *pRecord)
+{
+    p->mUnknown1008.mUnknown0 = pRecord->mBytes10[1];
+    p->mUnknown1008.mUnknown1 = pRecord->mUnknown10 >> 8;
+    p->mUnknown1008.mUnknown2 = pRecord->mBytes12[1];
+    p->mUnknown1011 = pRecord->mUnknown12 >> 8;
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, pRecord->mUnknown8, p, 1.0f);
 }
 
 extern "C" float fn_800CE73C(Object_800CE674 *p)
 {
     return lbl_802DA6FC[(signed char)p->mUnknown2 - 1] * (lbl_803ECB08 * 100621.1171875f);
+}
+
+extern "C" void fn_800CE770(Query_800CE770 *p)
+{
+    fn_801C1F94(p, 0, 64);
+    p->mUnknown32 = 0x800000;
+    p->mUnknown36 = 0x44444;
+    p->mUnknown40 = 0x155555;
+    p->mUnknown44 = 0.2f;
+    p->mUnknown48 = 4.0f;
+    p->mUnknown52 = -1;
+    p->mUnknown54 = 255;
+    p->mUnknown55 = 255;
+    p->mUnknown58 = 1;
+    p->mUnknown59 = 0;
+    p->mUnknown60 = 0;
+}
+
+extern "C" {
+extern float lbl_803ECB08;
+void fn_800CE218(Group_800CC98C *p);
 }
 
 extern "C" void fn_800CEDA4(Node_800CCEBC *p, Delta_800CC6A8 *pPoint, int *pAngle, Object_80039F5C *pPlayer, int mirror)
@@ -15854,6 +15856,80 @@ extern "C" void fn_800CE804(Command_800CEE74 *p, Table_80089904 *pTable, int ind
     delta.mX = 0.0f;
 }
 
+extern "C" {
+void fn_80227970(void *,void *,void *,void *,float *,float *);
+float fn_80227890(void *,void *);
+float fn_80260B1C(float);
+extern float lbl_803EAC74;
+extern float lbl_803EAC7C;
+extern unsigned char lbl_803EAC8C;
+extern float lbl_803EAC90;
+int fn_800CCF68(Group_800CC98C *, Command_800CEE74 *, Vector_80039F5C *, int);
+}
+extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_80039F5C *pOut, int *pAngle)
+{
+    Record_800C432C table;
+    int result = 0;
+    fn_801BBC3C(1, pRecord->mUnknown60, &table.mTable);
+    fn_800CE804(pRecord, &table.mTable, 0);
+    int direction = fn_801CFE40(pRecord->mVector0.mY, pRecord->mVector0.mX);
+    unsigned int count = (unsigned short)fn_80054130()->mUnknown136;
+    Record_80054130 *pRow = fn_80054130()->mUnknown140;
+    float height = pRecord->mUnknown12.mZ;
+    pRecord->mUnknown12.mZ = 0.0f;
+    for (unsigned char i = 0; i < count; i++, pRow++) {
+        if (lbl_803EA558[i].mUnknown0 <= 1.0f) continue;
+        int angle = fn_801784C4() ? lbl_803EA558[i].mUnknown8 : lbl_803EA558[i].mUnknown4;
+        if (fn_801CFFD0(angle, direction) >= (int)(lbl_803EAC74 * 46603.37890625f)) continue;
+        Vector_80039F5C a;
+        Vector_80039F5C b;
+        Vector_80039F5C point;
+        a.mZ = 0.0f;
+        b.mZ = 0.0f;
+        point.mZ = 0.0f;
+        fn_800541AC(pRow, &a, &b);
+        int difference = (angle - direction) & 0xFFFFFF;
+        if (difference > 0x800000) difference -= 0x1000000;
+        Vector_80039F5C delta;
+        Delta_800CC6A8 rotated;
+        fn_80227690(&delta, &pRecord->mUnknown12, &pRecord->mUnknown32);
+        fn_80227384(&rotated, &delta, difference);
+        fn_80227690(&delta, &rotated, &delta);
+        fn_80227638(&delta, &delta, &pRecord->mUnknown12);
+        if (fn_800CD170((Delta_800CC6A8 *)&a, (Delta_800CC6A8 *)&b, (Delta_800CC6A8 *)&delta)) continue;
+        delta.mZ = pRecord->mUnknown12.mZ;
+        float distance;
+        float factor;
+        fn_80227970(&a, &b, &delta, &point, &distance, &factor);
+        if (distance >= lbl_803EAC7C) continue;
+        if (fn_800CCF68(p, pRecord, &point, angle)) continue;
+        int valid = 1;
+        if (lbl_803EAC8C != 0) {
+            float current = fn_80227890(&delta, &pRecord->mUnknown32);
+            float chosen = fn_80227890(&point, &pRecord->mUnknown32);
+            if (!(current <= chosen)) {
+                float chosenLength = fn_80260B1C(chosen);
+                float currentLength = fn_80260B1C(current);
+                if (currentLength - chosenLength >= chosenLength * lbl_803EAC90) {
+                    valid = 0;
+                } else if (pRecord->mUnknown60 == 181 || pRecord->mUnknown60 == 186) {
+                    current = fn_80227890(&delta, &pRecord->mUnknown48);
+                    chosen = fn_80227890(&point, &pRecord->mUnknown48);
+                    if (!(chosen >= current)) valid = 0;
+                }
+            }
+        }
+        if (valid) {
+            point.mZ = height;
+            *pOut = point;
+            *pAngle = angle;
+            result = 1;
+            break;
+        }
+    }
+    return result;
+}
+
 extern "C" void fn_800CEED8(int key, int index, Command_800CEE74 *pRecord, Object_80039F5C *pPlayer,
                             Vector_80039F5C *pPoint, int angle, Vector_80039F5C *pOut, int *pAngle, unsigned char *pValue)
 {
@@ -15924,79 +16000,6 @@ extern "C" int fn_800CD0BC(Group_800CC98C *p, Play_800CCEBC *pPlay, int key)
         pA->mUnknown1160.mUnknown20 = resultPoint.mY;
         pA->mUnknown1160.mUnknown12Word = resultAngle;
         result = 1;
-    }
-    return result;
-}
-extern "C" {
-void fn_80227970(void *,void *,void *,void *,float *,float *);
-float fn_80227890(void *,void *);
-float fn_80260B1C(float);
-extern float lbl_803EAC74;
-extern float lbl_803EAC7C;
-extern unsigned char lbl_803EAC8C;
-extern float lbl_803EAC90;
-}
-
-extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_80039F5C *pOut, int *pAngle)
-{
-    Record_800C432C table;
-    int result = 0;
-    fn_801BBC3C(1, pRecord->mUnknown60, &table.mTable);
-    fn_800CE804(pRecord, &table.mTable, 0);
-    int direction = fn_801CFE40(pRecord->mVector0.mY, pRecord->mVector0.mX);
-    unsigned int count = (unsigned short)fn_80054130()->mUnknown136;
-    Record_80054130 *pRow = fn_80054130()->mUnknown140;
-    float height = pRecord->mUnknown12.mZ;
-    pRecord->mUnknown12.mZ = 0.0f;
-    for (unsigned char i = 0; i < count; i++, pRow++) {
-        if (lbl_803EA558[i].mUnknown0 <= 1.0f) continue;
-        int angle = fn_801784C4() ? lbl_803EA558[i].mUnknown8 : lbl_803EA558[i].mUnknown4;
-        if (fn_801CFFD0(angle, direction) >= (int)(lbl_803EAC74 * 46603.37890625f)) continue;
-        Vector_80039F5C a;
-        Vector_80039F5C b;
-        Vector_80039F5C point;
-        a.mZ = 0.0f;
-        b.mZ = 0.0f;
-        point.mZ = 0.0f;
-        fn_800541AC(pRow, &a, &b);
-        int difference = (angle - direction) & 0xFFFFFF;
-        if (difference > 0x800000) difference -= 0x1000000;
-        Vector_80039F5C delta;
-        Delta_800CC6A8 rotated;
-        fn_80227690(&delta, &pRecord->mUnknown12, &pRecord->mUnknown32);
-        fn_80227384(&rotated, &delta, difference);
-        fn_80227690(&delta, &rotated, &delta);
-        fn_80227638(&delta, &delta, &pRecord->mUnknown12);
-        if (fn_800CD170((Delta_800CC6A8 *)&a, (Delta_800CC6A8 *)&b, (Delta_800CC6A8 *)&delta)) continue;
-        delta.mZ = pRecord->mUnknown12.mZ;
-        float distance;
-        float factor;
-        fn_80227970(&a, &b, &delta, &point, &distance, &factor);
-        if (distance >= lbl_803EAC7C) continue;
-        if (fn_800CCF68(p, pRecord, &point, angle)) continue;
-        int valid = 1;
-        if (lbl_803EAC8C != 0) {
-            float current = fn_80227890(&delta, &pRecord->mUnknown32);
-            float chosen = fn_80227890(&point, &pRecord->mUnknown32);
-            if (!(current <= chosen)) {
-                float chosenLength = fn_80260B1C(chosen);
-                float currentLength = fn_80260B1C(current);
-                if (currentLength - chosenLength >= chosenLength * lbl_803EAC90) {
-                    valid = 0;
-                } else if (pRecord->mUnknown60 == 181 || pRecord->mUnknown60 == 186) {
-                    current = fn_80227890(&delta, &pRecord->mUnknown48);
-                    chosen = fn_80227890(&point, &pRecord->mUnknown48);
-                    if (!(chosen >= current)) valid = 0;
-                }
-            }
-        }
-        if (valid) {
-            point.mZ = height;
-            *pOut = point;
-            *pAngle = angle;
-            result = 1;
-            break;
-        }
     }
     return result;
 }
