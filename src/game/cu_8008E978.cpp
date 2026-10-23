@@ -7335,8 +7335,157 @@ int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, 
 int fn_800D9C80(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
 int fn_80093D20(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
 int fn_80089E70(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800A44C0(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800D8A24(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DA54C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DAF5C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DC36C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800E4264(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800EC674(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800F2CB4(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_80102A78(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_8010680C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_8010BC90(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_8010D834(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_80110C70(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
 
 extern Handler_800B4D7C lbl_8030FB60[248];
+}
+
+extern "C" void fn_800B4A88(void)
+{
+    fn_8009C604(lbl_8030FB60, 248);
+    lbl_8030FB60[74] = fn_800D9C80;
+    lbl_8030FB60[77] = fn_800DA54C;
+    lbl_8030FB60[73] = fn_800DC6F4;
+    lbl_8030FB60[84] = fn_800DC36C;
+    lbl_8030FB60[91] = fn_800DD69C;
+    lbl_8030FB60[203] = fn_800DDD24;
+    lbl_8030FB60[193] = fn_800D8A24;
+    lbl_8030FB60[157] = fn_800DCC14;
+    lbl_8030FB60[236] = fn_80102A78;
+    lbl_8030FB60[86] = fn_800DD2E8;
+    lbl_8030FB60[176] = fn_8010D834;
+    lbl_8030FB60[68] = fn_800F2CB4;
+    lbl_8030FB60[192] = fn_800D7E9C;
+    lbl_8030FB60[204] = fn_8010680C;
+    lbl_8030FB60[48] = fn_800EC674;
+    lbl_8030FB60[43] = fn_800D8A24;
+    lbl_8030FB60[44] = fn_800D8A24;
+    lbl_8030FB60[165] = fn_800D8A24;
+    lbl_8030FB60[160] = fn_800DCC14;
+    lbl_8030FB60[159] = fn_800DCC14;
+    lbl_8030FB60[67] = fn_8009A344;
+    lbl_8030FB60[227] = fn_8009A344;
+    lbl_8030FB60[69] = fn_80102A78;
+    lbl_8030FB60[178] = fn_80102A78;
+    lbl_8030FB60[85] = fn_800DD2E8;
+    lbl_8030FB60[37] = fn_8010D834;
+    lbl_8030FB60[100] = fn_800DE19C;
+    lbl_8030FB60[47] = fn_800DE19C;
+    lbl_8030FB60[70] = fn_800D7E9C;
+    lbl_8030FB60[207] = fn_800D7E9C;
+    lbl_8030FB60[116] = fn_800DE19C;
+    lbl_8030FB60[201] = fn_800DE19C;
+    lbl_8030FB60[82] = fn_800DE19C;
+    lbl_8030FB60[153] = fn_800DE19C;
+    lbl_8030FB60[188] = fn_80110C70;
+    lbl_8030FB60[185] = fn_800A44C0;
+    lbl_8030FB60[189] = fn_800E4264;
+    lbl_8030FB60[206] = fn_8010BC90;
+    lbl_8030FB60[239] = fn_800DE19C;
+    lbl_8030FB60[177] = fn_800DAF5C;
+    lbl_8030FB60[154] = fn_80110C70;
+    lbl_8030FB60[155] = fn_800A44C0;
+    lbl_8030FB60[217] = fn_800DE19C;
+    lbl_8030FB60[93] = fn_800DF1F4;
+    lbl_8030FB60[94] = fn_800DF1F4;
+    lbl_8030FB60[95] = fn_800DF1F4;
+    lbl_8030FB60[164] = fn_800DF1F4;
+    lbl_8030FB60[96] = fn_800DF1F4;
+    lbl_8030FB60[30] = fn_800DF1F4;
+    lbl_8030FB60[31] = fn_800DF1F4;
+    lbl_8030FB60[202] = fn_800DF1F4;
+    lbl_8030FB60[200] = fn_800DF1F4;
+    lbl_8030FB60[66] = fn_800DF1F4;
+    lbl_8030FB60[172] = fn_800DF1F4;
+    lbl_8030FB60[238] = fn_800DF1F4;
+    lbl_8030FB60[173] = fn_800DF1F4;
+    lbl_8030FB60[175] = fn_800DF1F4;
+    lbl_8030FB60[174] = fn_800DF1F4;
+    lbl_8030FB60[181] = fn_800DF1F4;
+    lbl_8030FB60[186] = fn_800DF1F4;
+    lbl_8030FB60[183] = fn_800DF1F4;
+    lbl_8030FB60[182] = fn_800DF1F4;
+    lbl_8030FB60[184] = fn_800DF1F4;
+    lbl_8030FB60[234] = fn_800DF1F4;
+    lbl_8030FB60[247] = fn_800DF1F4;
+    lbl_8030FB60[135] = fn_800DAF5C;
+    lbl_8030FB60[191] = fn_800DAF5C;
+    lbl_8030FB60[196] = fn_800C3A4C;
+    lbl_8030FB60[225] = fn_8009A344;
+    lbl_8030FB60[235] = fn_800C3A4C;
+    lbl_8030FB60[210] = fn_800C3A4C;
+    lbl_8030FB60[197] = fn_800C3A4C;
+    lbl_8030FB60[195] = fn_800C3A4C;
+    lbl_8030FB60[224] = fn_800C3A4C;
+    lbl_8030FB60[228] = fn_800C3A4C;
+    lbl_8030FB60[230] = fn_800C3A4C;
+    lbl_8030FB60[229] = fn_800C3A4C;
+    lbl_8030FB60[237] = fn_800C3A4C;
+    lbl_8030FB60[79] = fn_800DF1F4;
+    lbl_8030FB60[25] = fn_800DF1F4;
+    lbl_8030FB60[49] = fn_800DF1F4;
+    lbl_8030FB60[52] = fn_800DF1F4;
+    lbl_8030FB60[55] = fn_800DF1F4;
+    lbl_8030FB60[50] = fn_800DF1F4;
+    lbl_8030FB60[53] = fn_800DF1F4;
+    lbl_8030FB60[54] = fn_800DF1F4;
+    lbl_8030FB60[51] = fn_800DF1F4;
+    lbl_8030FB60[106] = fn_800DF1F4;
+    lbl_8030FB60[107] = fn_800DF1F4;
+    lbl_8030FB60[243] = fn_800DF1F4;
+    lbl_8030FB60[59] = fn_800DF1F4;
+    lbl_8030FB60[60] = fn_800DF1F4;
+    lbl_8030FB60[56] = fn_800DF1F4;
+    lbl_8030FB60[61] = fn_800DF1F4;
+    lbl_8030FB60[150] = fn_800DF1F4;
+    lbl_8030FB60[149] = fn_800DF1F4;
+    lbl_8030FB60[151] = fn_800DF1F4;
+    lbl_8030FB60[148] = fn_800DF1F4;
+    lbl_8030FB60[147] = fn_800DF1F4;
+    lbl_8030FB60[146] = fn_800DF1F4;
+    lbl_8030FB60[62] = fn_800DF1F4;
+    lbl_8030FB60[63] = fn_800DF1F4;
+    lbl_8030FB60[214] = fn_80089E70;
+    lbl_8030FB60[161] = fn_800DF1F4;
+    lbl_8030FB60[144] = fn_800CBBAC;
+    lbl_8030FB60[10] = fn_80093D20;
+    lbl_8030FB60[123] = fn_800DF1F4;
+    lbl_8030FB60[120] = fn_800DF1F4;
+    lbl_8030FB60[121] = fn_800DF1F4;
+    lbl_8030FB60[119] = fn_800DF1F4;
+    lbl_8030FB60[125] = fn_800DF1F4;
+    lbl_8030FB60[118] = fn_800DF1F4;
+    lbl_8030FB60[131] = fn_800DF1F4;
+    lbl_8030FB60[130] = fn_800DF1F4;
+    lbl_8030FB60[124] = fn_800DF1F4;
+    lbl_8030FB60[122] = fn_800DF1F4;
+    lbl_8030FB60[231] = fn_800DF1F4;
+    lbl_8030FB60[233] = fn_800DF1F4;
+    lbl_8030FB60[241] = fn_800DF1F4;
+    lbl_8030FB60[242] = fn_800DF1F4;
+    lbl_8030FB60[143] = fn_800CBBAC;
 }
 
 extern "C" void fn_800B4D7C(void)
@@ -13460,8 +13609,8 @@ int fn_801C6458(int a, int b);
 unsigned int fn_801E1954(void);
 int fn_801E195C(int a);
 void fn_800B5150(Object_80039F5C *p);
-short fn_800B51D8(Object_800670B4 *p, unsigned short index, int mode);
-void fn_800B5C68(Object_80039F5C *p, Vector_80039F5C *pVector, int *pA, int *pB);
+short fn_800B51D8(Object_800670B4 *p, int index, int mode);
+void fn_800B5C68(Object_80039F5C *p, Input_800B6D34 *pInput, int *pA, int *pB);
 int fn_800B5FEC(Object_80039F5C *p);
 void fn_800B64C4(void);
 Object_80039F5C *fn_800B6544(int index);
@@ -13509,12 +13658,14 @@ extern "C" int fn_800B51D0(Object_80039F5C *p)
     return 1;
 }
 
-extern "C" short fn_800B51D8(Object_800670B4 *p, unsigned short index, int mode)
+extern "C" short fn_800B51D8(Object_800670B4 *p, int index, int mode)
 {
     if (mode == 0) {
-        return fn_801642DC(p, index);
+        index = fn_801642DC(p, index);
+    } else {
+        index = fn_80164384(p, index);
     }
-    return fn_80164384(p, index);
+    return index;
 }
 
 extern "C" int fn_800B5224(void *p, int value)
@@ -13599,21 +13750,21 @@ extern "C" int fn_800B56C4(Object_80039F5C *p, Input_800B6D34 *pInput, int a)
     return result;
 }
 
-extern "C" int fn_800B5F94(Object_80039F5C *p, Vector_80039F5C *pVector)
+extern "C" int fn_800B5F94(Object_80039F5C *p, Input_800B6D34 *pInput)
 {
     int a;
     int b;
 
-    fn_800B5C68(p, pVector, &a, &b);
+    fn_800B5C68(p, pInput, &a, &b);
     return a;
 }
 
-extern "C" int fn_800B5FC0(Object_80039F5C *p, Vector_80039F5C *pVector)
+extern "C" int fn_800B5FC0(Object_80039F5C *p, Input_800B6D34 *pInput)
 {
     int a;
     int b;
 
-    fn_800B5C68(p, pVector, &a, &b);
+    fn_800B5C68(p, pInput, &a, &b);
     return b;
 }
 
@@ -17088,112 +17239,4 @@ extern "C" void fn_800B4628(BitStream_t *pStream0, BitStream_t *pStream1,
             }
         }
     }
-}
-
-#include "game/Item_800476DC.h"
-
-struct Record_800B4DE4 {
-    float mUnknown0;
-    float mUnknown4;
-    unsigned short mUnknown8;
-    char mUnknown10[2];
-    unsigned char mUnknown12;
-    unsigned char mUnknown13;
-    char mUnknown14[2];
-    unsigned char mUnknown16;
-    unsigned char mUnknown17;
-    unsigned char mUnknown18;
-    unsigned char mUnknown19;
-    unsigned char mUnknown20;
-    unsigned char mUnknown21;
-    unsigned char mUnknown22;
-    unsigned char mUnknown23;
-    unsigned char mUnknown24;
-    unsigned char mUnknown25;
-    unsigned char mUnknown26;
-    char mUnknown27[21];
-    char mUnknown48[21];
-    char mUnknown69[1];
-};
-
-extern "C" {
-char *fn_801C2EB4(char *pDest, const char *pSource);
-char *fn_801C32CC(char *pString);
-float fn_80237260(int stream);
-void fn_800476CC(Item_800476DC *p, const char *name);
-void fn_8013AA00(Object_80137ABC *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
-}
-
-extern "C" void fn_800B4DE4(QueryCursor cursor, int index, void *pData)
-{
-    Record_800B4DE4 *pOut = (Record_800B4DE4 *)pData;
-    int values[16];
-    cursor.mUnknown4 = index;
-    fn_801FCE10(0,
-        "fetch from \x8a 'ANFP' into \x88 and 'ANLP' into \x88 and 'NKNP' into \x88 and "
-        "'TGWP' into \x82 and 'TGHP' into \x82 and 'IKSP' into \x82 and 'NAHP' into \x82 and "
-        "'SOPP' into \x82 and 'DIGP' into \x82 and 'LCUP' into \x82 and 'LECP' into \x82 and "
-        "'1TGS' into \x82 and '2TGS' into \x82 and '3TGS' into \x82 and '4TGS' into \x82 and "
-        "'NSPP' into \x82 and 'TBYP' into \x82 and 'XELP' into \x82 and 'TLFP' into \x82\n",
-        &cursor, pOut->mUnknown27, pOut->mUnknown48, pOut->mUnknown69,
-        &values[0], &values[1], &values[2], &values[3], &values[4], &values[5],
-        &values[6], &values[7], &values[8], &values[9], &values[10], &values[11],
-        &values[12], &values[13], &values[14], &values[15]);
-    fn_801C2EB4(pOut->mUnknown69, pOut->mUnknown48);
-    pOut->mUnknown20 = values[13];
-    if (fn_8017F584() == 0) {
-        if (fn_80054D24(30) || fn_80054D24(34)) {
-            pOut->mUnknown0 = (float)values[1] * 0.33;
-        } else if (fn_80054D24(31)) {
-            pOut->mUnknown0 = (float)values[1] * 1.5;
-        } else if (fn_80054D24(44)) {
-            pOut->mUnknown0 = (float)values[1] * (fn_80237260(0) + 0.5f);
-        } else {
-            pOut->mUnknown0 = (float)values[1];
-        }
-    } else {
-        pOut->mUnknown0 = (float)values[1];
-    }
-    pOut->mUnknown4 = (float)values[0] + 160.0f;
-    pOut->mUnknown12 = values[2];
-    pOut->mUnknown13 = values[3];
-    pOut->mUnknown16 = values[4];
-    pOut->mUnknown8 = values[5];
-    pOut->mUnknown22 = values[14];
-    pOut->mUnknown17 = values[6];
-    pOut->mUnknown18 = values[7];
-    pOut->mUnknown19 = values[12];
-    pOut->mUnknown23 = values[8];
-    pOut->mUnknown24 = values[9];
-    pOut->mUnknown25 = values[10];
-    pOut->mUnknown26 = values[11];
-    pOut->mUnknown21 = values[15];
-}
-
-extern "C" void fn_800B5150(Object_80039F5C *p)
-{
-    if (p) {
-        Object_8003DEC4 *model = (Object_8003DEC4 *)p->mpUnknown4;
-        char name[21];
-        fn_801C2EB4(name, p->mUnknown2927 + 21);
-        fn_801C32CC(name);
-        fn_800476CC(model->mUnknown988, p->mUnknown2927 + 42);
-        float scale = p->mUnknown2900 * 0.013888889f;
-        if (scale == 0.0f) scale = 1.0f;
-        fn_8009BD88(p, scale);
-    }
-}
-
-extern "C" void fn_800B5764(Vector_80039F5C *pOut)
-{
-    pOut->mX = 0.0f;
-    pOut->mY = 0.0f;
-    Object_80039F5C *pOwner = fn_80137BEC();
-    float height;
-    if (pOwner) {
-        height = (pOwner->mUnknown2900 * 0.027777778f + 1.159353f) * 0.5f;
-    } else {
-        height = 1.65f;
-    }
-    fn_8013AA00(fn_801374BC(), height, 0, pOut);
 }
