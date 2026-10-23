@@ -15372,8 +15372,8 @@ extern "C" void fn_800C2FB8(Entry_800C3130 *pA, Entry_800C3130 *pB)
 
 extern "C" void fn_80227970(void *, void *, void *, void *, float *, float *);
 
-extern "C" int fn_800C2FDC(Block_80170E64 *p, Block_80170E64 *pOther, float range, float radiusSq,
-                           float *pBest, int maxAngle)
+extern "C" int fn_800C2FDC(Block_80170E64 *p, Block_80170E64 *pOther, float *pBest, int maxAngle,
+                           float range, float radiusSq)
 {
     Vector_80039F5C end;
     Vector_80039F5C closest;
