@@ -13762,7 +13762,7 @@ extern Entry_800C3130 lbl_8030FF40[3][50];
 extern Record_800C432C lbl_803103F0[10];
 }
 
-extern "C" void fn_800BE3E8(int a, int kind)
+extern "C" void fn_800BE3E8(int a, int kind, float value)
 {
     int team = fn_80178308();
     int other = fn_80178320();
@@ -13779,19 +13779,17 @@ extern "C" void fn_800BE3E8(int a, int kind)
         skip = found;
     }
     if (skip == 0) {
+        Object_80039F5C *p;
+
         switch (kind) {
-        case 6: {
-            Object_80039F5C *p = fn_800B6544(a);
-
-            fn_800B6868(p->mId >> 8, p->mId >> 16, p->mUnknown8, 0);
+        case 6:
+            p = fn_800B6544(a);
+            fn_800B6868((unsigned char)(p->mId >> 8), (unsigned char)(p->mId >> 16), p->mUnknown8, 0);
             break;
-        }
-        case 9: {
-            Object_80039F5C *p = fn_800B6544(a);
-
-            fn_800B6868(p->mId >> 8, p->mId >> 16, p->mUnknown8, 1);
+        case 9:
+            p = fn_800B6544(a);
+            fn_800B6868((unsigned char)(p->mId >> 8), (unsigned char)(p->mId >> 16), p->mUnknown8, 1);
             break;
-        }
         }
     }
 }
@@ -14232,7 +14230,7 @@ extern "C" void fn_800A7514(int team);
 extern "C" void fn_8017DBCC(void);
 extern "C" void fn_8016DB94(int team);
 
-extern "C" int fn_800BF8A8(void)
+extern "C" int fn_800BF8A8(Class_80297CE8 *p)
 {
     int result = fn_800A7FD8();
 
@@ -14266,7 +14264,7 @@ extern "C" int fn_800BF8A8(void)
     return result;
 }
 
-extern "C" void fn_800BF9DC(void)
+extern "C" void fn_800BF9DC(Class_80297CE8 *p)
 {
     if (lbl_803EABA8->mUnknownB4 > 60) {
         unsigned int i;
@@ -14295,6 +14293,15 @@ extern "C" void fn_800BFAB4(Class_80297CE8 *p)
     } else {
         lbl_803EABA4 = p;
     }
+}
+
+void Class_80297CE8::vfn_02()
+{
+    void *pHandle = fn_80238174(0, (void **)&lbl_803EABA8, sizeof(Block_800BFAD0), 0, 0x70726570);
+
+    fn_80238234(pHandle, 0, 0, 0, fn_800BF45C);
+    ((Block_800BFAD0 *)fn_8023816C(pHandle))->mUnknown40 = 0;
+    fn_802381E0(pHandle);
 }
 
 void Class_80297CE8::vfn_03()
@@ -14377,7 +14384,7 @@ extern "C" void fn_8017DD68(int index);
 extern "C" void fn_8017E01C(int index);
 extern "C" char lbl_802ED104[];
 
-extern "C" void fn_800C0488(int a, unsigned int kind)
+extern "C" void fn_800C0488(int a, unsigned int kind, float value)
 {
     int handled = 0;
     int team = fn_800B6644(a);

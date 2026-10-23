@@ -37,14 +37,15 @@ struct Block_800BFAD0 {
     Slot_800BFAD0 mSlots[2];
     int mUnknown40;
     int mUnknown44;
-    unsigned char mUnknown48[0x50];
+    void *mUnknown48[20];
     int mUnknown98;
     int mUnknown9C;
     int mUnknownA0;
     short mUnknownA4;
     short mUnknownA6;
     unsigned char mUnknownA8;
-    unsigned char mUnknownA9[2];
+    signed char mUnknownA9;
+    signed char mUnknownAA;
     unsigned char mUnknownAB;
     unsigned int mUnknownAC;
     int mUnknownB0;
