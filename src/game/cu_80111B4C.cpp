@@ -1020,10 +1020,8 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
 
                         aim.mX = 0.2f;
                         aim.mY = state->mUnknown12 - ball.mZ;
-                        if (aim.mY < 0.0f) {
-                            aim.mY = 0.0f;
-                        }
-                        angle = fn_801CFE40(aim.mY, aim.mX);
+                        aim.mY = aim.mY < 0.0f ? 0.0f : aim.mY;
+                        angle = aim.Heading();
                         pRecord->mUnknown10 = angle + fn_802372EC(0, 0xE38E3);
                         pRecord->mUnknown8 = (pRecord->mUnknown8 - 5) / 3 + 5;
                         pRecord->mUnknownC = state->mUnknown4 / (lbl_803ECB08 * 100621.12f);
