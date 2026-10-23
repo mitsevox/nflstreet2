@@ -9788,16 +9788,16 @@ struct Item_800AF13C {
 
 /* 6-byte records of the array that Mesh_800AF2AC +48 points to. */
 struct Vertex_800AF2AC {
-    unsigned short mUnknown0;
-    unsigned short mUnknown2;
-    unsigned short mUnknown4;
+    short mUnknown0;
+    short mUnknown2;
+    short mUnknown4;
 };
 
 /* 8-byte source records read by fn_800AF2AC; +6 indexes the destination. */
 struct Source_800AF2AC {
-    unsigned short mUnknown0;
-    unsigned short mUnknown2;
-    unsigned short mUnknown4;
+    short mUnknown0;
+    short mUnknown2;
+    short mUnknown4;
     unsigned short mUnknown6;
 };
 
@@ -9890,6 +9890,9 @@ int fn_801C6DCC(void *pool, void *pItem, void *pContext, void *pResult, int (*pM
 int fn_801C4E98(void *p, const char *pName);
 void *fn_801C47EC(void *p, int a, int b, int c);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
+void fn_801CF810(unsigned int *pOut, unsigned int *pA, unsigned int *pB, float t);
+void fn_801C4958(unsigned char enable);
+unsigned int fn_801F0C50(void *pRes, unsigned int index);
 Object_800670B4 *fn_80168708(int team);
 int fn_80164E30(Record_80067338 *pRecord, Object_800670B4 *pObject, Object_80039F5C *p, int value);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
@@ -9904,6 +9907,8 @@ void fn_800B0730(Object_80039F5C *p, int value);
 void fn_800B0BC0(void);
 int fn_800B0558(Object_80039F5C *p, Point_80167910 *pPoint);
 void fn_800B0DA4(void);
+void fn_800B0EB8(void);
+void fn_800B0F28(void);
 
 extern void *lbl_803EAB00;
 extern unsigned char lbl_803EAB04;
@@ -9914,6 +9919,7 @@ extern int lbl_803EAB18;
 extern int lbl_803EC974;
 extern Table_800AF71C *lbl_803EC978;
 extern Item_800AF82C *lbl_803EC97C;
+extern Item_800AF82C lbl_802D840C[];
 extern int lbl_803EC980;
 }
 
@@ -9981,6 +9987,50 @@ extern "C" void fn_800AF2AC(Count_800AF2AC *pCount, Mesh_800AF2AC *pMesh, Source
         pMesh->mpUnknown30[index].mUnknown4 = pSource->mUnknown4;
         pSource++;
     }
+}
+
+extern "C" void fn_800AF304(Count_800AF2AC *pCount, Mesh_800AF2AC *pMesh, Source_800AF2AC *pSource, float t)
+{
+    unsigned int count = pCount->mUnknown8;
+    unsigned int i;
+    unsigned int from[3];
+    unsigned int to[3];
+
+    for (i = 0; i < count; i++) {
+        int index = pSource[i].mUnknown6;
+
+        from[0] = pMesh->mpUnknown30[index].mUnknown0 << 8;
+        from[1] = pMesh->mpUnknown30[index].mUnknown2 << 8;
+        from[2] = pMesh->mpUnknown30[index].mUnknown4 << 8;
+        to[0] = pSource[i].mUnknown0 << 8;
+        to[1] = pSource[i].mUnknown2 << 8;
+        to[2] = pSource[i].mUnknown4 << 8;
+        fn_801CF810(to, to, from, t);
+        pMesh->mpUnknown30[index].mUnknown0 = to[0] >> 8;
+        pMesh->mpUnknown30[index].mUnknown2 = to[1] >> 8;
+        pMesh->mpUnknown30[index].mUnknown4 = to[2] >> 8;
+    }
+}
+
+extern "C" void fn_800AF630(void *pRes, unsigned int index, unsigned int count)
+{
+    unsigned int size;
+    Item_800AF82C *pItems;
+    unsigned int i;
+
+    lbl_803EAB04 = 1;
+    lbl_803EC978 = (Table_800AF71C *)fn_801D2B7C(sizeof(Table_800AF71C), 0, 0);
+    fn_801C1F94(lbl_803EC978, 0, sizeof(Table_800AF71C));
+    lbl_803EC978->mCount = 3;
+    size = fn_801F0C50(pRes, index);
+    lbl_803EC97C = (Item_800AF82C *)fn_801D2B7C(size * count, 0, 0);
+    pItems = lbl_803EC97C;
+    lbl_803EC980 = size / sizeof(Item_800AF82C);
+    for (i = 0; i < count; i++) {
+        memcpy(pItems, lbl_802D840C, lbl_803EC980 * sizeof(Item_800AF82C));
+        pItems += lbl_803EC980;
+    }
+    fn_801C4958(1);
 }
 
 extern "C" void fn_800AF71C(void)
@@ -10255,6 +10305,52 @@ extern "C" void fn_800B02CC(void)
                     lbl_803EAB14->mUnknown2D8 = group;
                     return;
                 }
+            }
+        }
+    }
+    lbl_803EAB14->mUnknown2E4 = 0;
+}
+
+extern "C" void fn_800B05F0(int index, unsigned char chance)
+{
+    int team = fn_80178308();
+    unsigned char i;
+    int ref;
+    unsigned char roll;
+
+    fn_80178D18(team);
+    roll = fn_802372EC(0, 4);
+    fn_8009BD2C(fn_80039F5C(team, index), &ref);
+    for (i = 0; i <= 4; i++) {
+        if (roll < chance) {
+            if (fn_800AFF20(1, i, ref) != 0) {
+                lbl_803EAB14->mUnknown2D4 = i;
+                lbl_803EAB14->mUnknown2D0 = ref;
+                lbl_803EAB14->mUnknown2D8 = 1;
+                fn_800B0F28();
+                return;
+            }
+            if (fn_800AFF20(0, i, ref) != 0) {
+                lbl_803EAB14->mUnknown2D4 = i;
+                lbl_803EAB14->mUnknown2D0 = ref;
+                lbl_803EAB14->mUnknown2D8 = 0;
+                fn_800B0EB8();
+                return;
+            }
+        } else {
+            if (fn_800AFF20(0, i, ref) != 0) {
+                lbl_803EAB14->mUnknown2D4 = i;
+                lbl_803EAB14->mUnknown2D0 = ref;
+                lbl_803EAB14->mUnknown2D8 = 0;
+                fn_800B0EB8();
+                return;
+            }
+            if (fn_800AFF20(1, i, ref) != 0) {
+                lbl_803EAB14->mUnknown2D4 = i;
+                lbl_803EAB14->mUnknown2D0 = ref;
+                lbl_803EAB14->mUnknown2D8 = 1;
+                fn_800B0F28();
+                return;
             }
         }
     }

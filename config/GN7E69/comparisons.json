@@ -26468,6 +26468,21 @@
           "symbol": "fn_800B5764",
           "start": "0x800B5764",
           "end": "0x800B57F4"
+        },
+        {
+          "symbol": "fn_800AF304",
+          "start": "0x800AF304",
+          "end": "0x800AF404"
+        },
+        {
+          "symbol": "fn_800AF630",
+          "start": "0x800AF630",
+          "end": "0x800AF71C"
+        },
+        {
+          "symbol": "fn_800B05F0",
+          "start": "0x800B05F0",
+          "end": "0x800B0730"
         }
       ]
     },
@@ -38927,6 +38942,42 @@
       ]
     },
     {
+      "source": "src/game/cu_800AF404.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Three literal-using target whole-function extents in 0x800AF404-0x800AF95C (0x800AF404, 0x800AF4A8, 0x800AF87C) and their contiguous literal-pool slice 0x80296A78-0x80296A98; the integer-only neighbours 0x800AF630-0x800AF87C stay in cu_8008E978.cpp. Unlinked; no original file boundary claim.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800AF404",
+          "end": "0x800AF95C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296A78",
+          "end": "0x80296A98"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800AF404",
+          "start": "0x800AF404",
+          "end": "0x800AF4A8"
+        },
+        {
+          "symbol": "fn_800AF4A8",
+          "start": "0x800AF4A8",
+          "end": "0x800AF630"
+        },
+        {
+          "symbol": "fn_800AF87C",
+          "start": "0x800AF87C",
+          "end": "0x800AF95C"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800AF95C.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. 1 target whole-function extent(s) and their literal-pool slice; this split permits independent compilation of a partial literal pool and does not claim an original file boundary or whole-unit promotion.",
@@ -40949,19 +41000,19 @@
     {
       "source": "src/game/cu_800AD9C0.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. One target whole-function extent and its literal-pool slice; split so the function's literals compile into their own pool. Unlinked; no original file boundary claim.",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Two contiguous target whole-function extents 0x800AD9C0-0x800ADB34 and their literal-pool slice 0x80296A20-0x80296A28; split so the functions' literals compile into their own pool. Unlinked; no original file boundary claim.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800AD9C0",
-          "end": "0x800ADA1C"
+          "end": "0x800ADB34"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80296A20",
-          "end": "0x80296A24"
+          "end": "0x80296A28"
         }
       ],
       "functions": [
@@ -40969,25 +41020,30 @@
           "symbol": "fn_800AD9C0",
           "start": "0x800AD9C0",
           "end": "0x800ADA1C"
+        },
+        {
+          "symbol": "fn_800ADA1C",
+          "start": "0x800ADA1C",
+          "end": "0x800ADB34"
         }
       ]
     },
     {
       "source": "src/game/cu_800ADEFC.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. One target whole-function extent and its literal-pool slice; split so the function's literals compile into their own pool. Unlinked; no original file boundary claim.",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Two contiguous target whole-function extents 0x800ADEFC-0x800AE0B8 and their literal-pool slice 0x80296A28-0x80296A48; split so the functions' literals compile into their own pool. Unlinked; no original file boundary claim.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800ADEFC",
-          "end": "0x800AE018"
+          "end": "0x800AE0B8"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80296A28",
-          "end": "0x80296A44"
+          "end": "0x80296A48"
         }
       ],
       "functions": [
@@ -40995,6 +41051,11 @@
           "symbol": "fn_800ADEFC",
           "start": "0x800ADEFC",
           "end": "0x800AE018"
+        },
+        {
+          "symbol": "fn_800AE018",
+          "start": "0x800AE018",
+          "end": "0x800AE0B8"
         }
       ]
     },
