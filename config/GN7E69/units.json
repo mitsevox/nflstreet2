@@ -606,13 +606,13 @@
       "address": "0x800B8A40",
       "evidence": "evidence.tsv external row for 0x800B8A40 (vfn_08__14Class_80297C60)."
     },
-    "vfn_09__14Class_80297C60": {
+    "vfn_09__14Class_80297C60Pc": {
       "address": "0x800B8E18",
-      "evidence": "evidence.tsv external row for 0x800B8E18 (vfn_09__14Class_80297C60)."
+      "evidence": "evidence.tsv external row for 0x800B8E18 (vfn_09__14Class_80297C60Pc)."
     },
-    "vfn_13__14Class_80297C60": {
+    "vfn_13__14Class_80297C60i": {
       "address": "0x800B8A6C",
-      "evidence": "evidence.tsv external row for 0x800B8A6C (vfn_13__14Class_80297C60)."
+      "evidence": "evidence.tsv external row for 0x800B8A6C (vfn_13__14Class_80297C60i)."
     },
     "vfn_15__14Class_80297C60": {
       "address": "0x800B8C8C",
@@ -690,17 +690,17 @@
       "address": "0x800BCC30",
       "evidence": "evidence.tsv external row for 0x800BCC30 (vfn_05__14Class_80297BF8)."
     },
-    "vfn_08__14Class_80297BF8": {
+    "vfn_08__14Class_80297BF8f": {
       "address": "0x800BC83C",
-      "evidence": "evidence.tsv external row for 0x800BC83C (vfn_08__14Class_80297BF8)."
+      "evidence": "evidence.tsv external row for 0x800BC83C (vfn_08__14Class_80297BF8f)."
     },
-    "vfn_09__14Class_80297BF8": {
+    "vfn_09__14Class_80297BF8f": {
       "address": "0x800BC8E0",
-      "evidence": "evidence.tsv external row for 0x800BC8E0 (vfn_09__14Class_80297BF8)."
+      "evidence": "evidence.tsv external row for 0x800BC8E0 (vfn_09__14Class_80297BF8f)."
     },
-    "vfn_10__14Class_80297BF8": {
+    "vfn_10__14Class_80297BF8f": {
       "address": "0x800BCA00",
-      "evidence": "evidence.tsv external row for 0x800BCA00 (vfn_10__14Class_80297BF8)."
+      "evidence": "evidence.tsv external row for 0x800BCA00 (vfn_10__14Class_80297BF8f)."
     },
     "vfn_01__14Class_802A6BB0iPi": {
       "address": "0x80182A80",

@@ -193,7 +193,7 @@ extern unsigned char lbl_803EABB4;
 extern Block_800BC538 *lbl_803EC98C;
 }
 
-extern "C" void fn_800BC83C(void)
+void Class_80297BF8::vfn_08(float dt)
 {
     lbl_803EABA2 = 0;
     lbl_803EABA3 = 0;
@@ -211,7 +211,7 @@ extern "C" void fn_800BC83C(void)
     }
 }
 
-extern "C" void fn_800BC8E0(void)
+void Class_80297BF8::vfn_09(float dt)
 {
     int busy = fn_800BAF30();
 
@@ -239,11 +239,11 @@ extern "C" void fn_800BC8E0(void)
     }
 }
 
-extern "C" void fn_800BCC30(Class_80297BF8 *pThis)
+void Class_80297BF8::vfn_05()
 {
     if (fn_800AE968(14) != 0 || fn_8002892C() != 0 || fn_8017F60C() != 0 ||
         fn_80156704() != 0 || fn_801485D4() != 0 || fn_8007F828(14) != 1) {
-        pThis->vfn_07();
+        vfn_07();
     }
     lbl_803EC98C->mUnknown32 = 0;
     fn_8004A230(1);

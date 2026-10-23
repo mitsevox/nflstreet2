@@ -23694,7 +23694,7 @@
           "end": "0x800BC470"
         },
         {
-          "symbol": "fn_800BC470",
+          "symbol": "vfn_06__14Class_80297BF8",
           "start": "0x800BC470",
           "end": "0x800BC4E0"
         },
@@ -25289,22 +25289,22 @@
           "end": "0x800B89C8"
         },
         {
-          "symbol": "fn_800B8A40",
+          "symbol": "vfn_08__14Class_80297C60",
           "start": "0x800B8A40",
           "end": "0x800B8A6C"
         },
         {
-          "symbol": "fn_800B8A6C",
+          "symbol": "vfn_13__14Class_80297C60i",
           "start": "0x800B8A6C",
           "end": "0x800B8B54"
         },
         {
-          "symbol": "fn_800B8B54",
+          "symbol": "vfn_14__14Class_80297C60f",
           "start": "0x800B8B54",
           "end": "0x800B8C8C"
         },
         {
-          "symbol": "fn_800B8C8C",
+          "symbol": "vfn_15__14Class_80297C60",
           "start": "0x800B8C8C",
           "end": "0x800B8C9C"
         },
@@ -25314,17 +25314,17 @@
           "end": "0x800B8D28"
         },
         {
-          "symbol": "fn_800B8D28",
+          "symbol": "vfn_10__14Class_80297C60f",
           "start": "0x800B8D28",
           "end": "0x800B8DB4"
         },
         {
-          "symbol": "fn_800B8DB4",
+          "symbol": "vfn_11__14Class_80297C60f",
           "start": "0x800B8DB4",
           "end": "0x800B8DF4"
         },
         {
-          "symbol": "fn_800B8DF4",
+          "symbol": "vfn_12__14Class_80297C60f",
           "start": "0x800B8DF4",
           "end": "0x800B8E18"
         },
@@ -25339,12 +25339,12 @@
           "end": "0x800B95B4"
         },
         {
-          "symbol": "fn_800B95B4",
+          "symbol": "vfn_01__14Class_80297C60",
           "start": "0x800B95B4",
           "end": "0x800B9630"
         },
         {
-          "symbol": "fn_800B9630",
+          "symbol": "vfn_02__14Class_80297C60",
           "start": "0x800B9630",
           "end": "0x800B9654"
         },
@@ -25354,7 +25354,7 @@
           "end": "0x800B9998"
         },
         {
-          "symbol": "fn_800B9998",
+          "symbol": "vfn_05__14Class_80297C60",
           "start": "0x800B9998",
           "end": "0x800B9A44"
         },
@@ -25364,7 +25364,7 @@
           "end": "0x800B9A68"
         },
         {
-          "symbol": "fn_800B9A68",
+          "symbol": "vfn_06__14Class_80297C60",
           "start": "0x800B9A68",
           "end": "0x800B9A6C"
         },
@@ -25814,22 +25814,22 @@
           "end": "0x800B4DE4"
         },
         {
-          "symbol": "fn_800BC4E0",
+          "symbol": "vfn_07__14Class_80297BF8",
           "start": "0x800BC4E0",
           "end": "0x800BC51C"
         },
         {
-          "symbol": "fn_800BC5B8",
+          "symbol": "vfn_02__14Class_80297BF8",
           "start": "0x800BC5B8",
           "end": "0x800BC5DC"
         },
         {
-          "symbol": "fn_800BCA00",
+          "symbol": "vfn_10__14Class_80297BF8f",
           "start": "0x800BCA00",
           "end": "0x800BCAF4"
         },
         {
-          "symbol": "fn_800BCAF4",
+          "symbol": "vfn_11__14Class_80297BF8f",
           "start": "0x800BCAF4",
           "end": "0x800BCB18"
         },
@@ -26711,7 +26711,7 @@
           "end": "0x800B8A40"
         },
         {
-          "symbol": "fn_800B8E18",
+          "symbol": "vfn_09__14Class_80297C60Pc",
           "start": "0x800B8E18",
           "end": "0x800B925C"
         },
@@ -26721,7 +26721,7 @@
           "end": "0x800B9540"
         },
         {
-          "symbol": "fn_800B9654",
+          "symbol": "vfn_03__14Class_80297C60f",
           "start": "0x800B9654",
           "end": "0x800B9830"
         },
@@ -26947,17 +26947,17 @@
       ],
       "functions": [
         {
-          "symbol": "fn_800BC83C",
+          "symbol": "vfn_08__14Class_80297BF8f",
           "start": "0x800BC83C",
           "end": "0x800BC8E0"
         },
         {
-          "symbol": "fn_800BC8E0",
+          "symbol": "vfn_09__14Class_80297BF8f",
           "start": "0x800BC8E0",
           "end": "0x800BCA00"
         },
         {
-          "symbol": "fn_800BCC30",
+          "symbol": "vfn_05__14Class_80297BF8",
           "start": "0x800BCC30",
           "end": "0x800BCF7C"
         },

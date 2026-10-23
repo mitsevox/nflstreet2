@@ -1,9 +1,8 @@
 #ifndef GAME_CLASS_80297B50_H
 #define GAME_CLASS_80297B50_H
 
-/* Polymorphic class with vtable 0x80297B50 in the cu_8008E978 candidate range.
-   Only the entries that its users override or call carry signatures; the
-   rest are placeholders. */
+/* Polymorphic class with vtable 0x80297B50; its members are defined in
+   cu_8008E978 and their signatures follow those bodies and their callers. */
 class Class_80297B50 {
 public:
     virtual void vfn_01();
