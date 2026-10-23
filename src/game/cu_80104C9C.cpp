@@ -1166,17 +1166,13 @@ extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74 *pBlock) {
             case 2:
             case 3:
                 if (ballTime > time - 5.0f || distance < 5.0f) {
+                    result = 3;
                     if (pBlock->mUnknown24 == pBlock->mUnknown20) {
                         if (pBlock->mUnknown54 == 0) {
                             result = 2;
-                        } else {
-                            result = 3;
                         }
-                    } else {
-                        result = 3;
-                        if (time < otherTime) {
-                            result = 2;
-                        }
+                    } else if (time < otherTime) {
+                        result = 2;
                     }
                 } else {
                     result = 1;
