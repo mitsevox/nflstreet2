@@ -40238,6 +40238,11 @@
       ],
       "functions": [
         {
+          "symbol": "fn_800A4980",
+          "start": "0x800A4980",
+          "end": "0x800A4E64"
+        },
+        {
           "symbol": "fn_800A4E8C",
           "start": "0x800A4E8C",
           "end": "0x800A506C"
@@ -40685,6 +40690,11 @@
           "symbol": "fn_800A72B4",
           "start": "0x800A72B4",
           "end": "0x800A7514"
+        },
+        {
+          "symbol": "fn_800A7514",
+          "start": "0x800A7514",
+          "end": "0x800A7A0C"
         }
       ]
     },

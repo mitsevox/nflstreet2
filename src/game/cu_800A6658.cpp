@@ -5,6 +5,12 @@
 #include "game/fn_80177FE0.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_80238174.h"
+#include "game/fn_800670B4.h"
+#include "game/fn_8021D7B8.h"
+#include "game/fn_800B65A0.h"
+#include "game/cu_80067C10.h"
+
+struct Record_800B49EC;
 
 extern "C" {
 int fn_801787DC(int team);
@@ -40,6 +46,27 @@ int fn_800A6590(int value);
 void fn_800AE798(int index, int team);
 void fn_800AE7F0(int index, int team, Object_80039F5C *p);
 void fn_800A7514(int team);
+void fn_800AE750(int index, int team);
+void fn_8017DA9C(int team);
+void fn_80156C78(int id, int value);
+void fn_800A9384(int mode);
+void fn_80073210(int frames);
+void fn_800D4164(int side, float t, int arg);
+void fn_800A6D5C(int team);
+int fn_80156704(void);
+Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
+void fn_8010B1FC(Object_80039F5C *p, int a, int b);
+void fn_80168908(int team, unsigned int index);
+void fn_80164940(int team);
+void fn_800B0DA4(void);
+void fn_800AEEDC(int team);
+void fn_8011F3A8(void);
+void fn_8003A3F4(int a, int team);
+void fn_8009FFD4(void);
+Object_800670B4 *fn_80168708(int team);
+void fn_80164430(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
+void fn_800B49EC(Record_800B49EC *pDst, const Record_800B49EC *pSrc);
+void fn_800B4798(short *pRatings, int team, int index, float *pOut);
 
 extern Block_800A70F4 *lbl_803EC954[2];
 extern int lbl_803EC95C;
@@ -48,6 +75,7 @@ extern unsigned char lbl_803EAA4F;
 extern unsigned char lbl_803EAA50;
 extern unsigned char lbl_803EAA51;
 extern int lbl_802D7EFC[][3];
+extern void *lbl_803EB688;
 extern Object_80039F5C *lbl_8030F404[2][2];
 extern void (*lbl_803EAA1C[2])(int team);
 extern void (*lbl_803EAA2C[2])(int team);
@@ -340,6 +368,99 @@ extern "C" void fn_800A72B4(void)
             fn_8007A3C4(&cursor);
             fn_8017DE54(team, fn_800D3F2C(team), 0, 0);
             fn_800AE7F0(fn_800A6590(fn_800A8408(team)), team, 0);
+        }
+    }
+}
+
+extern "C" void fn_800A7514(int team)
+{
+    int other = team == 0;
+
+    if (lbl_803EC954[team]->mUnknown6C == 1 || lbl_803EC954[team]->mUnknown6C == 2) {
+        fn_800AE750(fn_800A6590(fn_800A8408(team)), team);
+        fn_8017DA9C(team);
+        if (lbl_803EC954[team]->mUnknown68 == 0 && lbl_803EC954[other]->mUnknown68 != 2) {
+            float mine = fn_800D3F2C(team);
+            float theirs = fn_800D3F2C(other);
+
+            fn_80156C78(34, 1);
+            if (lbl_803EC954[team]->mUnknown6C == 2) {
+                fn_800A9384(fn_800A6DD0(team));
+                fn_80156C78(35, 1);
+                if (lbl_803EC954[other]->mUnknown68 != 0) {
+                    fn_80067DB8(11, 0, 0, 0, 0);
+                } else {
+                    fn_80067DB8(10, 0, team, 0, 0);
+                }
+            } else if (lbl_803EC954[other]->mUnknown68 == 0) {
+                fn_80067DB8(8, 0, team, 0, 0);
+                fn_80073210(120);
+            }
+            lbl_803EC954[team]->mUnknown68 = lbl_803EC954[team]->mUnknown6C;
+            lbl_803EC954[team]->mUnknown54 = mine * 2.0f * lbl_803EC954[team]->mUnknown10;
+            if (lbl_803EC954[other]->mUnknown68 != 0) {
+                if (theirs < mine) {
+                    mine -= theirs;
+                    theirs = 0.0f;
+                    lbl_803EC954[team]->mUnknown54 = mine * 2.0f * lbl_803EC954[team]->mUnknown10;
+                    fn_800D4164(team, mine, 0);
+                    fn_800A7A0C(other);
+                } else if (theirs > mine) {
+                    theirs -= mine;
+                    lbl_803EC954[other]->mUnknown54 = theirs * 2.0f * lbl_803EC954[other]->mUnknown10;
+                    fn_800D4164(other, theirs, 0);
+                    fn_800A7A0C(team);
+                } else {
+                    fn_800A7A0C(team);
+                    fn_800A7A0C(other);
+                }
+                if (theirs < 0.5f) {
+                    fn_8017DA9C(other);
+                }
+            }
+            fn_800A6D5C(team);
+        }
+        if (lbl_803EC954[team]->mUnknown68 != 0) {
+            int args[2];
+
+            lbl_803EAA1C[lbl_803EC954[team]->mUnknown8](team);
+            fn_800A65BC();
+            args[0] = team;
+            args[1] = 1;
+            fn_8021D7B8(lbl_803EB688, 0x80000016, 2, args);
+            if (fn_80156704() == 0 && team == fn_80178320() && fn_800B65A0(fn_80178308()) == 0xFF) {
+                Object_80039F5C *p = fn_80039FE8(fn_80178308(), 0, 0);
+                unsigned char side;
+
+                if (p == 0) {
+                    p = fn_80039F5C(fn_80178308(), 0);
+                }
+                fn_8010B1FC(p, 0, 0);
+                fn_80168908(fn_80178308(), 0);
+                fn_80164940(fn_80178308());
+                fn_800B0DA4();
+                fn_800AEEDC(fn_80178308());
+                fn_8011F3A8();
+                fn_8003A3F4(0, fn_80178308());
+                fn_8009FFD4();
+                for (side = 0; side <= 1; side++) {
+                    Object_800670B4 *pRoster = fn_80168708(side);
+                    unsigned int count = fn_80178D18(side);
+                    unsigned char i;
+
+                    for (i = 0; i < count; i++) {
+                        Object_80039F5C *pPlayer = fn_80039F5C(side, i);
+                        unsigned char level;
+                        unsigned char secondary;
+
+                        fn_80164430(pRoster, i, &level, &secondary);
+                        pPlayer->mUnknown2914 = level;
+                        fn_800B49EC((Record_800B49EC *)pPlayer->mRatings, (Record_800B49EC *)pPlayer->mUnknown3020);
+                        fn_800B4798(pPlayer->mRatings, side, i, &pPlayer->mUnknown2900);
+                    }
+                    fn_800A6F04(side);
+                }
+            }
         }
     }
 }

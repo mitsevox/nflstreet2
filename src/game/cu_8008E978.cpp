@@ -2513,7 +2513,6 @@ void fn_80162794(void);
 void fn_801635E8(void);
 void fn_8015C114(void);
 int fn_80178308(void);
-int fn_80178320(void);
 int fn_800A7F30(int team);
 int fn_800A851C(int team, Object_80039F5C *p);
 int fn_80170140(Object_80039F5C *p);
@@ -5454,7 +5453,6 @@ int fn_800A8444(int team);
 
 extern "C" {
 Object_80039F5C *fn_800A624C(int team);
-int fn_800B65D0(int team);
 unsigned char fn_801478F0(unsigned char a);
 void fn_8003E174(int a);
 void fn_800A87E8(void);
