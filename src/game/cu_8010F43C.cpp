@@ -452,14 +452,11 @@ extern "C" void fn_801100E8(Object_80039F5C *p)
     fn_8009BD60(p);
     switch (p->mpState->mUnknown2) {
     case 1:
+    default:
         side = 6;
         break;
     case 2:
         side = 3;
-        break;
-    case 0:
-    default:
-        side = 6;
         break;
     }
     if (p->mUnknown776 == 1) {
