@@ -26728,19 +26728,19 @@
     {
       "source": "src/game/cu_800BB458.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping. 2 whole-function extents from evidence.tsv and the exact .rodata slice their literals occupy; split so the fragment literal pool compiles in target order. No original file boundary or whole-unit promotion is claimed.",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping. 3 whole-function extents from evidence.tsv and the exact .rodata slice their literals occupy; split so the fragment literal pool compiles in target order. No original file boundary or whole-unit promotion is claimed.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800BB458",
-          "end": "0x800BB5DC"
+          "end": "0x800BB828"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029733C",
-          "end": "0x80297350"
+          "end": "0x80297354"
         }
       ],
       "functions": [
@@ -26753,6 +26753,11 @@
           "symbol": "fn_800BB504",
           "start": "0x800BB504",
           "end": "0x800BB5DC"
+        },
+        {
+          "symbol": "fn_800BB694",
+          "start": "0x800BB694",
+          "end": "0x800BB828"
         }
       ]
     },
