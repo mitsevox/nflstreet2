@@ -9923,7 +9923,7 @@ extern "C" void fn_800AEB9C(void)
 {
 }
 
-extern "C" int fn_800AED9C(void)
+extern "C" int fn_800AED9C(int unused)
 {
     int result = 0;
     Object_80039F5C *p = fn_800AEBA0();
@@ -14012,6 +14012,172 @@ extern Entry_800C3130 lbl_8030FF40[3][50];
 extern Record_800C432C lbl_803103F0[10];
 }
 
+extern "C" {
+int fn_80074638(void);
+void fn_8010B1FC(Object_80039F5C *p, int a, short b);
+void fn_80168A14(int team);
+int fn_80178E4C(void);
+void fn_8017DFA8(int index);
+Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
+void fn_80168908(int team, unsigned int index);
+void fn_80164940(int team);
+void fn_8011F3A8(void);
+void fn_80164430(Object_800670B4 *pObject, unsigned char index, unsigned char *pA, unsigned char *pB);
+void fn_800A7514(int team);
+void fn_8009FFD4(void);
+int fn_801C6280(int a, int b, void *p);
+extern char lbl_802ED3FC[];
+extern char lbl_802ECD44[];
+}
+
+extern "C" void fn_800BDFB4(int index, unsigned int msg)
+{
+    int team = fn_800B6644(index);
+    int home = fn_80178308();
+    int away = fn_80178320();
+    int owner = fn_800B65A0(team);
+    int practice = fn_801486A0() == 2;
+    unsigned int action;
+    int done;
+
+    if (owner != index) {
+        return;
+    }
+    action = 0xFF;
+    done = 0;
+    switch (msg) {
+    case 0x65:
+        action = 0;
+        break;
+    case 0x66:
+        action = 1;
+        break;
+    case 0x67:
+        if (!practice) {
+            action = 2;
+        }
+        break;
+    case 0x68:
+        if (!practice) {
+            action = 3;
+        }
+        break;
+    case 0x6A:
+        if (!practice) {
+            action = 0xFE;
+        }
+        break;
+    case 0x69:
+        if (team == home && fn_800AEBA0() != 0) {
+            action = 0xFD;
+        } else if (team == away) {
+            action = 0xFC;
+        }
+        break;
+    case 0x5B:
+        if (fn_800A8488(team) != 0) {
+            int blocked = 0;
+
+            if (fn_80156704() != 0) {
+                blocked = fn_80074638() == 0;
+            }
+            if (!blocked) {
+                done = 1;
+                fn_800A7514(team);
+                lbl_803EABA8->mUnknownB0 = team;
+                fn_800BD35C();
+            }
+        }
+        break;
+    }
+    if (action != 0xFF) {
+        unsigned char t;
+
+        lbl_803EABB4 = 1;
+        fn_8010B1FC(fn_800B6544(index), 0, 0);
+        if (action == 0xFE) {
+            fn_80168A14(team);
+            if (lbl_803EABA8->mUnknownC7 != 0) {
+                lbl_803EABA8->mUnknownC7 = 0;
+                fn_800AF088();
+            }
+        } else if (action == 0xFD) {
+            if (lbl_803EABA8->mUnknownC7 != 0) {
+                lbl_803EABA8->mUnknownC7 = 0;
+                fn_800AF088();
+            } else {
+                lbl_803EABA8->mUnknownC7 = 1;
+                fn_800AED9C(1);
+            }
+        } else if (action == 0xFC) {
+            if (fn_80178E4C() != 0) {
+                lbl_803EABA8->mSlots[team].mUnknown0 = 3;
+                fn_801C6280(index, 3, lbl_802ED3FC);
+                fn_8017DDDC(team);
+                fn_8017DFA8(team);
+                lbl_803EABB4 = 0;
+            }
+            return;
+        } else {
+            Object_80039F5C *p;
+
+            if (team != away) {
+                p = fn_80039FE8(team, 0, 0);
+                if (p != 0) {
+                    fn_80067DB8(0x74, &p->mMotion.mPos, home, 0, 0);
+                }
+            } else {
+                p = fn_80039F5C(team, fn_802372EC(1, fn_8003A06C()));
+                if (p != 0) {
+                    fn_80067DB8(0x74, &p->mMotion.mPos, home, 0, 0);
+                }
+            }
+            fn_80168908(team, action);
+        }
+        if (team == away) {
+            fn_800FBAA8();
+        }
+        fn_80164940(team);
+        if (team == home) {
+            fn_800B0DA4();
+            if (action != 0xFD) {
+                fn_800AEEDC(team);
+            }
+            fn_8011F3A8();
+        }
+        fn_8003A3F4(0, team);
+        fn_8009FFD4();
+        fn_80067D4C(0x18, 0);
+        for (t = 0; t <= 1; t++) {
+            Object_800670B4 *pTeam = fn_80168708(t);
+            unsigned int count = fn_80178D18(t);
+            unsigned char i;
+
+            for (i = 0; i < count; i++) {
+                Object_80039F5C *pPlayer = fn_80039F5C(t, i);
+                unsigned char a;
+                unsigned char b;
+
+                fn_80164430(pTeam, i, &a, &b);
+                pPlayer->mUnknown2914 = a;
+                fn_800B49EC((Record_800B49EC *)pPlayer->mRatings, (Record_800B49EC *)pPlayer->mUnknown3020);
+                fn_800B4798(pPlayer->mRatings, t, i, &pPlayer->mUnknown2900);
+            }
+            fn_800A6F04(t);
+        }
+        done = 1;
+    }
+    if (done) {
+        lbl_803EABA8->mSlots[team].mUnknown0 = 2;
+        fn_801C6280(index, 3, lbl_802ECD44);
+        fn_8017DDDC(team);
+        if (team == away) {
+            lbl_803EABA8->mUnknownAC = fn_800289A8();
+            lbl_803EABA8->mUnknownAB = 1;
+        }
+    }
+}
+
 extern "C" void fn_800BE3E8(int a, int kind)
 {
     int team = fn_80178308();
@@ -14084,7 +14250,6 @@ int Class_80297CE8::vfn_12()
 
 extern "C" void fn_800BD460(int index, int a);
 extern "C" void fn_8017DA9C(int team);
-extern "C" int fn_801C6280(int a, int b, void *p);
 extern "C" char lbl_802ECF88[];
 
 extern "C" void fn_800BE808(int a, unsigned char index)
@@ -14122,8 +14287,6 @@ extern "C" void fn_800BE8E4(int team)
 
 extern "C" void fn_8017D9D8(int team);
 extern "C" void fn_800BD568(int index);
-extern "C" int fn_801C6280(int a, int b, void *p);
-extern "C" char lbl_802ECD44[];
 
 extern "C" void fn_800BEC1C(int a, int index)
 {
@@ -14478,7 +14641,6 @@ extern "C" int fn_800BF824(void)
 
 extern "C" int fn_800A7FE0(void);
 extern "C" int fn_800A82FC(int team);
-extern "C" void fn_800A7514(int team);
 extern "C" void fn_8017DBCC(void);
 extern "C" void fn_8016DB94(int team);
 
@@ -14621,7 +14783,6 @@ extern "C" int fn_800C0464(void)
     return result;
 }
 
-extern "C" void fn_8009FFD4(void);
 extern "C" void fn_800A02FC(void);
 extern "C" void fn_8017DD68(int index);
 extern "C" void fn_8017E01C(int index);
