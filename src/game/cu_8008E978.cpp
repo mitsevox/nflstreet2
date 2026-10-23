@@ -1079,7 +1079,7 @@ extern "C" void fn_80094608(unsigned char value)
     lbl_803EA8D4 = value;
 }
 
-extern "C" int fn_80178348(void);
+extern "C" unsigned char fn_80178348(void);
 extern "C" int fn_800947C4(Object_8017886C *p);
 extern "C" int fn_800948E4(Object_8017886C *p);
 extern "C" int fn_80094698(int index, int operand, int value, unsigned short *pRow);
@@ -1876,8 +1876,8 @@ extern "C" void fn_800A2D2C(void)
     unsigned int j;
     unsigned char i;
 
-    for (i = 0; i < 30; i++) {
-        lbl_8030E6E8.mpUnknownBC[i] = 0;
+    for (unsigned char k = 0; k < 30; k++) {
+        lbl_8030E6E8.mpUnknownBC[k] = 0;
     }
     for (i = 0; i < 20; i++) {
         lbl_8030E6E8.mUnknown6C[i] = 0;
@@ -1888,9 +1888,8 @@ extern "C" void fn_800A2D2C(void)
     lbl_8030E6E8.mUnknown8B4[7] = 1;
     for (i = 0; i < lbl_803EA554->mUnknown48; i++) {
         unsigned char count = 0;
-        unsigned char k;
 
-        for (k = 0; k < lbl_803EA554->mUnknown96; k++) {
+        for (unsigned char k = 0; k < lbl_803EA554->mUnknown96; k++) {
             if (lbl_803EA554->mUnknown100[k].mUnknown24Bytes[1] == i) {
                 count++;
             }
@@ -10048,7 +10047,7 @@ void fn_800AE138(unsigned int index);
 int fn_800B6644(int index);
 int fn_80177C38(void);
 int fn_80178308(void);
-int fn_80178348(void);
+unsigned char fn_80178348(void);
 int fn_80178360(void);
 unsigned char fn_80194F24(void);
 void fn_80194F1C(unsigned char enabled);
