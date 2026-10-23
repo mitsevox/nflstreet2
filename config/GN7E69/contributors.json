@@ -27586,6 +27586,66 @@
         "commit": "eb962dc2a24781460145d107f4b2fe4eed6d9711",
         "introduced_blob": "f42674ffa28b2b80a393c71bd5453e53ba745901"
       }
+    },
+    {
+      "source": "src/game/SndgPathfinder.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8006DAA8"
+      ],
+      "provenance": {
+        "pull_request": 1047,
+        "merged_via": 1047,
+        "commit": "f22b53f2a81287cee577a06c46128a1621ce41ff",
+        "introduced_blob": "66384fb98b3fcd672ba37e209af436ab6064136a"
+      }
+    },
+    {
+      "source": "src/engine/cu_801C10E0.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801C1C98"
+      ],
+      "provenance": {
+        "pull_request": 1047,
+        "merged_via": 1047,
+        "commit": "f22b53f2a81287cee577a06c46128a1621ce41ff",
+        "introduced_blob": "34326069780de3de7d11cea33dfc7e12247e574e"
+      }
+    },
+    {
+      "source": "src/engine/cu_801DCA10.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801DCAF0"
+      ],
+      "provenance": {
+        "pull_request": 1047,
+        "merged_via": 1047,
+        "commit": "f22b53f2a81287cee577a06c46128a1621ce41ff",
+        "introduced_blob": "581200b1a1a9f12095657f069af4f81a65c55d42"
+      }
+    },
+    {
+      "source": "src/engine/cu_8027EFAC.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8027EFAC"
+      ],
+      "provenance": {
+        "pull_request": 1047,
+        "merged_via": 1047,
+        "commit": "f22b53f2a81287cee577a06c46128a1621ce41ff",
+        "introduced_blob": "593764efd490ebb850a979c0b30f023809cc1f46"
+      }
     }
   ],
   "target": "GN7E69",

@@ -55,14 +55,14 @@ void fn_801DCA44(ObjList_801DCA10 *pList, int time, int step, int func)
 void fn_801DCAF0(ObjList_801DCA10 *pList, int time, int step)
 {
     Obj_801DCA10 **pNode;
+    int first;
     int i;
-    ObjFunc_801DCA10 *pFuncs = pList->mFuncs;
 
     for (; time >= step; time -= step) {
         for (pNode = fn_801C6B4C(pList->mpList, 0); pNode != 0; pNode = fn_801C6C84(pList->mpList, pNode)) {
-            ObjFunc_801DCA10 *pFunc = pFuncs + (*pNode)->mType * pList->mFuncCount;
+            first = (*pNode)->mType * pList->mFuncCount;
             for (i = 0; i < pList->mFuncCount; i++) {
-                ObjFunc_801DCA10 fn = *pFunc++;
+                ObjFunc_801DCA10 fn = pList->mFuncs[first + i];
                 if (fn != 0) {
                     fn(*pNode, step);
                 }
