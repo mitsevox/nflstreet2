@@ -1925,6 +1925,10 @@
     "_vt.14Class_802A2A40": {
       "address": "0x802A2A40",
       "evidence": "evidence.tsv external row for 0x802A2A40 (_vt.14Class_802A2A40)."
+    },
+    "LCEnable": {
+      "address": "0x80239E9C",
+      "evidence": "evidence.tsv external row LCEnable: SDK OSCache body inside the provisional sdk.json OSCache.c range; REL24 call from 0x80236F18."
     }
   },
   "units": [
