@@ -45,6 +45,9 @@ int fn_8011EAC0(Object_80039F5C *p, Object_80039F5C *pOther);
 float fn_80178A08(void);
 float fn_80178A44(void);
 float fn_801CFB18(int angle);
+float fn_801CFB94(int angle);
+int fn_80121BE8(Point_8017886C *pA, Point_8017886C *pB, Point_8017886C *pTarget, int angle, int heading,
+                float distB, float distA);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_80227970(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC, Vector_80039F5C *pOut, float *pValue, float *pOther);
 extern float lbl_803ECB08;
@@ -119,6 +122,167 @@ void fn_8012327C(Directions_8012430C *pValues, Object_80039F5C *p);
 void fn_80125594(Object_80039F5C *p, State_80125594 *pState);
 void fn_80125708(Object_80039F5C *p, State_80125594 *pState);
 int fn_80125C28(Object_80039F5C *p, State_80125594 *);
+
+void fn_801227DC(Object_80039F5C *p, Plan_80121264 *pPlan, Entry_801230B8 *pEntry)
+{
+    Object_800B26B0 *pMotion = &p->mMotion;
+    Entry_80120E98 *pA = pEntry->mpUnknown0;
+    Entry_80120E98 *pB = pEntry->mpUnknown4;
+    int flagsA;
+    int flagsB;
+    int blocked = 0;
+    int open = 0;
+    int wide = 0;
+    int inside = pMotion->mPos.mX < pB->mUnknown8.mX + 0.25f && pMotion->mPos.mX > pA->mUnknown8.mX - 0.25f;
+    Point_8017886C delta;
+    int angle;
+    float value;
+
+    flagsA = pA->mUnknown36;
+    flagsB = pB->mUnknown36;
+    if ((flagsA & 1) && (flagsB & 1)) {
+        if (inside) {
+            open = 1;
+        }
+    } else if ((flagsA & 2) && (flagsB & 1) || (flagsA & 1) && (flagsB & 2)) {
+        open = 1;
+        if ((flagsA | flagsB) & 4) {
+            wide = 1;
+        }
+    } else if ((flagsA & 8) && (flagsB & 1) || (flagsA & 1) && (flagsB & 8)) {
+        if (inside) {
+            if (flagsA & 8) {
+                fn_80227690(&delta, (Point_8017886C *)&pMotion->mPos, &pA->mUnknown8);
+                angle = pA->mUnknown16;
+            } else {
+                fn_80227690(&delta, (Point_8017886C *)&pMotion->mPos, &pB->mUnknown8);
+                angle = pB->mUnknown16;
+            }
+            if (fn_801CFFD0(delta.Heading() & 0xFFFFFF, angle) > 0x400000) {
+                open = 1;
+            }
+        }
+    } else if ((flagsA & 0x40) && (flagsB & 1) || (flagsA & 1) && (flagsB & 0x40)) {
+        if (inside || (!fn_8011F1A4() || fn_8011F4C8() > 3) && !fn_801783AC(0)) {
+            open = 1;
+        } else {
+            blocked = 1;
+        }
+        if ((!fn_8011F1A4() || fn_8011F4C8() > 3) && !fn_801783AC(0) &&
+            fn_801CFFD0(pMotion->mFacing, pEntry->mUnknown16) <= 0x1FFFFF) {
+            pEntry->mUnknown28 += 1.0f;
+        }
+    } else if ((flagsA & 2) && (flagsB & 2)) {
+        if (inside) {
+            open = 1;
+        } else {
+            blocked = 1;
+        }
+        if ((flagsA | flagsB) & 4) {
+            wide = 1;
+        }
+    } else if ((flagsA & 8) && (flagsB & 2) || (flagsA & 2) && (flagsB & 8)) {
+        if (!inside) {
+            open = 1;
+        }
+    } else if ((flagsA & 0x40) && (flagsB & 2) || (flagsA & 2) && (flagsB & 0x40)) {
+        float distance;
+        open = 1;
+        if ((flagsA | flagsB) & 4) {
+            wide = 1;
+        }
+        if (flagsA & 2) {
+            value = pA->mUnknown28;
+        } else {
+            value = pB->mUnknown28;
+        }
+        if (value > 5.0f && (!fn_8011F1A4() || fn_8011F4C8() > 3) && !fn_801783AC(0) &&
+            fn_801CFFD0(pMotion->mFacing, pEntry->mUnknown16) <= 0x1FFFFF) {
+            pEntry->mUnknown28 += 1.0f;
+        } else {
+            blocked = 1;
+        }
+    } else if ((flagsA & 8) && (flagsB & 8)) {
+    } else if ((flagsA & 0x40) && (flagsB & 8) || (flagsA & 8) && (flagsB & 0x40)) {
+        if (inside && pPlan->mUnknown2372 <= 2) {
+            fn_80227690(&delta, &pB->mUnknown8, (Point_8017886C *)&pMotion->mPos);
+            angle = delta.Heading() & 0xFFFFFF;
+            if ((pMotion->mFacing & 0xFFFFFF) > angle) {
+                fn_80227690(&delta, &pA->mUnknown8, (Point_8017886C *)&pMotion->mPos);
+                angle = delta.Heading() & 0xFFFFFF;
+                if ((pMotion->mFacing & 0xFFFFFF) < angle) {
+                    pEntry->mUnknown28 += 1.0f;
+                }
+            }
+        }
+    }
+
+    if (((flagsA | flagsB) & 8) && pEntry->mUnknown24 < 5.0f) {
+        value = 0.0f;
+
+        if ((flagsA & 0x18) == 8 && pA->mUnknown8.mY - pMotion->mPos.mY > 1.0f) {
+            value = fn_801CFB18(fn_801CFFD0(pA->mUnknown16, pEntry->mUnknown16) / 2) * 0.5f;
+        }
+        if ((flagsB & 0x18) == 8 && pB->mUnknown8.mY - pMotion->mPos.mY > 1.0f) {
+            value += fn_801CFB18(fn_801CFFD0(pB->mUnknown16, pEntry->mUnknown16) / 2) * 0.5f;
+            if (flagsA & 8) {
+                value *= 0.5f;
+            }
+        }
+        pEntry->mUnknown28 -= value;
+    }
+    if (open && pEntry->mUnknown24 > 3.0f && fn_801CFFD0(pMotion->mFacing, pEntry->mUnknown16) <= 0x1FFFFF) {
+        value = fn_801CFB94(fn_801CFFD0(pEntry->mUnknown16, pMotion->mFacing));
+
+        if (value < 0.0f) {
+            value = 0.0f;
+        }
+        if (pA->mpUnknown0 && pA->mpUnknown4 &&
+            (fn_80121BE8(pA->mpUnknown0, pA->mpUnknown4, 0, pA->mUnknown24, pA->mUnknown20, pA->mUnknown32, pA->mUnknown28) ||
+             fn_80121BE8(pA->mpUnknown0, pA->mpUnknown4, &pEntry->mUnknown8, pA->mUnknown24, pA->mUnknown20,
+                         pA->mUnknown32, pA->mUnknown28))) {
+            pEntry->mUnknown28 += value;
+        }
+        if (pB->mpUnknown0 && pB->mpUnknown4 &&
+            (fn_80121BE8(pB->mpUnknown0, pB->mpUnknown4, 0, pB->mUnknown24, pB->mUnknown20, pB->mUnknown32, pB->mUnknown28) ||
+             fn_80121BE8(pB->mpUnknown0, pB->mpUnknown4, &pEntry->mUnknown8, pB->mUnknown24, pB->mUnknown20,
+                         pB->mUnknown32, pB->mUnknown28))) {
+            pEntry->mUnknown28 += value;
+        }
+    }
+    if (wide) {
+        if (fn_8011F1A4() && fn_8011F4C8() <= 3 ||
+            fn_8011F1A4() && (fn_8011F4C8() & 1) == 0 && (flagsA & 4) ||
+            fn_8011F1A4() && (fn_8011F4C8() & 1) && (flagsB & 4)) {
+            pEntry->mUnknown28 += 1.0f;
+        }
+    }
+    if (inside) {
+        float width = pEntry->mUnknown24;
+        unsigned int degrees;
+
+        if (width > 12.0f) {
+            width = 12.0f;
+        }
+        value = width / 12.0f;
+        degrees = value * 90.0f;
+        angle = degrees * 46603.38f;
+        if (fn_801CFFD0(pEntry->mUnknown16, pMotion->mFacing) < angle) {
+            pEntry->mUnknown28 += value;
+        }
+    }
+    if (blocked && fn_801CFFD0(pMotion->mFacing, 0x400000) <= 0x1C71C6) {
+        fn_80227690(&delta, &pB->mUnknown8, (Point_8017886C *)&pMotion->mPos);
+        angle = delta.Heading() & 0xFFFFFF;
+        if ((pMotion->mFacing & 0xFFFFFF) > angle) {
+            fn_80227690(&delta, &pA->mUnknown8, (Point_8017886C *)&pMotion->mPos);
+            angle = delta.Heading() & 0xFFFFFF;
+            if ((pMotion->mFacing & 0xFFFFFF) < angle) {
+                pEntry->mUnknown28 += 0.25f;
+            }
+        }
+    }
+}
 
 Entry_801230B8 *fn_801230B8(Plan_80121264 *pPlan)
 {

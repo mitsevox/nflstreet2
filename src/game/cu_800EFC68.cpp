@@ -4719,12 +4719,6 @@ extern "C" void fn_8011893C(void)
             value = 0;
             fn_8011DBC0(p);
             switch (p->mUnknown1032) {
-            case 4:
-                fn_80143EBC(p, pOther);
-                mode = 2;
-                otherMode = 8;
-                fn_80143EBC(pOther, p);
-                break;
             case 3:
                 if (pOther != 0) {
                     mode = 1;
@@ -4736,6 +4730,12 @@ extern "C" void fn_8011893C(void)
                     otherMode = 0;
                     mode = 3;
                 }
+                break;
+            case 4:
+                fn_80143EBC(p, pOther);
+                mode = 2;
+                otherMode = 8;
+                fn_80143EBC(pOther, p);
                 break;
             default:
                 mode = p->mUnknown1032;
@@ -5888,12 +5888,62 @@ void fn_80120E98(Plan_80121264 *pPlan, int index)
     pPlan->mUnknown1440--;
 }
 
+void fn_80120EF8(Plan_80121264 *pPlan, Vector_80039F5C *pPos)
+{
+    unsigned int i;
+    int removed;
+
+    fn_80120B84(pPlan);
+    if (pPlan->mUnknown1440 > 4) {
+        for (i = 1; i < pPlan->mUnknown1440 - 1; i++) {
+            Entry_80120E98 *pEntry = &pPlan->mUnknown0[i];
+            Entry_80120E98 *pNext = &pPlan->mUnknown0[i + 1];
+
+            if (pEntry->mUnknown40 != pNext->mUnknown40 || pEntry->mUnknown44 != pNext->mUnknown44) {
+                unsigned int j;
+
+                for (j = i + 1; j < pPlan->mUnknown1440 - 1; j++) {
+                    Entry_80120E98 *pMatch = &pPlan->mUnknown0[j];
+
+                    if (pEntry->mUnknown40 == pMatch->mUnknown40 && pEntry->mUnknown44 == pMatch->mUnknown44
+                        && (pMatch != pNext || pNext->mUnknown8.mX < pEntry->mUnknown8.mX)) {
+                        Entry_80120E98 temp = *pNext;
+
+                        *pNext = *pMatch;
+                        *pMatch = temp;
+                        break;
+                    }
+                }
+            } else if (pEntry->mUnknown8.mX > pNext->mUnknown8.mX) {
+                Entry_80120E98 temp = *pNext;
+
+                *pNext = *pEntry;
+                *pEntry = temp;
+            }
+        }
+    }
+    do {
+        removed = 0;
+        if (pPlan->mUnknown1440 > 4) {
+            for (i = 3; i < pPlan->mUnknown1440 - 1; i += 2) {
+                if (pPlan->mUnknown0[i].mUnknown8.mX < pPlan->mUnknown0[i - 1].mUnknown8.mX
+                    && pPlan->mUnknown0[i].mUnknown8.mY > pPlan->mUnknown0[i - 1].mUnknown8.mY) {
+                    fn_80120E98(pPlan, i);
+                    fn_80120E98(pPlan, i);
+                    removed = 1;
+                    break;
+                }
+            }
+        }
+    } while (removed);
+}
+
 int fn_801218EC(Point_8017886C *pPos, Entry_80120E98 *pA, Entry_80120E98 *pB)
 {
     return pPos->mX < pB->mUnknown8.mX && pPos->mX > pA->mUnknown8.mX;
 }
 
-int fn_80121BE8(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pTarget, int angle, int heading,
+int fn_80121BE8(Point_8017886C *pA, Point_8017886C *pB, Point_8017886C *pTarget, int angle, int heading,
                 float distB, float distA)
 {
     if (pTarget) {
