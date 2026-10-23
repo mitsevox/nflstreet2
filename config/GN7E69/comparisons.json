@@ -3902,58 +3902,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8010BF5C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison-only fragment of the retained provisional cu_800EFC68 grouping: 1 target whole-function extent and the exact literal-pool slice 0x8029EBF4-0x8029EC24 they load. The split lets this partial literal pool compile independently; it does not claim an original file boundary or whole-unit promotion.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8010BF5C",
-          "end": "0x8010C864"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029EBF4",
-          "end": "0x8029EC24"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8010BF5C",
-          "start": "0x8010BF5C",
-          "end": "0x8010C864"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8010CEB8.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison-only fragment of the retained provisional cu_800EFC68 grouping: 1 target whole-function extent and the exact literal-pool slice 0x8029EC34-0x8029EC48 they load. The split lets this partial literal pool compile independently; it does not claim an original file boundary or whole-unit promotion.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8010CEB8",
-          "end": "0x8010CFD4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029EC34",
-          "end": "0x8029EC48"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8010CEB8",
-          "start": "0x8010CEB8",
-          "end": "0x8010CFD4"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_8010D090.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison-only fragment of the retained provisional cu_800EFC68 grouping: 1 target whole-function extent and the exact literal-pool slice 0x8029EC48-0x8029EC5C they load. The split lets this partial literal pool compile independently; it does not claim an original file boundary or whole-unit promotion.",
