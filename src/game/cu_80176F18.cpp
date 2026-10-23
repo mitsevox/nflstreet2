@@ -124,7 +124,7 @@ int fn_800A3444(void);
 void fn_800A8954(int event, int team, Object_80039F5C *p);
 void fn_800AD910(int a, float b);
 void fn_800B1584(int a, const float *pPos);
-void fn_800B2314(void);
+int fn_800B2314(void);
 int fn_800BA6F8(void);
 Point_8017886C fn_800BA7A0(void);
 int fn_800BAAB8(void);
@@ -352,7 +352,7 @@ extern "C" unsigned int fn_80176F18(const Point_8017886C *p)
             Negate(a);
             Negate(b);
         }
-        if (fabs(p->mX - a.mX) < lbl_803EB448 && fabs(p->mX - b.mX) < lbl_803EB448) {
+        if (fabsf(p->mX - a.mX) < lbl_803EB448 && fabsf(p->mX - b.mX) < lbl_803EB448) {
             if (a.mY > b.mY) {
                 if (p->mY >= b.mY && p->mY <= a.mY) {
                     if (p->mX > 0.0f) {
@@ -371,7 +371,7 @@ extern "C" unsigned int fn_80176F18(const Point_8017886C *p)
                 }
             }
         }
-        if (fabs(p->mY - a.mY) < lbl_803EB448 && fabs(p->mY - b.mY) < lbl_803EB448) {
+        if (fabsf(p->mY - a.mY) < lbl_803EB448 && fabsf(p->mY - b.mY) < lbl_803EB448) {
             if (a.mX > b.mX) {
                 if (p->mX >= b.mX && p->mX <= a.mX) {
                     if (p->mY > 0.0f) {
