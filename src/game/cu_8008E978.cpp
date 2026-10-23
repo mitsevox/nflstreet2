@@ -8778,6 +8778,7 @@ extern "C" int fn_800AAAC4(void)
 extern "C" void fn_800AAAFC(void)
 {
     unsigned int i;
+    int size;
 
     lbl_803EC960 = fn_800A9F4C(0);
     if (lbl_803EC960 != 0) {
@@ -8785,8 +8786,9 @@ extern "C" void fn_800AAAFC(void)
     } else {
         lbl_803EAA88->mUnknown14 = 0;
     }
+    size = 0x16000;
     for (i = 0; i <= 1; i++) {
-        lbl_803EC964[i] = lbl_803EC960 + i * 0x16000;
+        lbl_803EC964[i] = lbl_803EC960 + i * size;
     }
     fn_800AA010(0);
 }
