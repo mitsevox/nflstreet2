@@ -2,23 +2,7 @@
 #include "game/Block_801BE60C.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_801BA2A8.h"
-#include "game/Object_8003DEC4.h"
-#include "engine/Record_800D81C8.h"
-
-/* Player-like object the motion-phase callbacks of lbl_8030EFB4 receive.
-   Only the accessed fields are declared. */
-struct Object_800A3530 {
-    char mUnknown0[4];
-    Object_8003DEC4 *mpUnknown4;
-    char mUnknown8[0x31C];
-    void *mpUnknown324;
-    Object_801BA03C *mpUnknown328;
-    Record_800D81C8 *mpUnknown32C;
-    char mUnknown330[0xC4];
-    unsigned char mUnknown3F4;
-    unsigned char mUnknown3F5;
-    unsigned char mUnknown3F6;
-};
+#include "game/Object_800A3530.h"
 
 extern "C" {
 void fn_801BE3C0(void *p, unsigned short key, int type, float from, void *pSource, float to);
@@ -27,7 +11,6 @@ float fn_801BD6D4(Block_801BD6D4 *p);
 void fn_800425D4(Object_8003DEC4 *pObject);
 void fn_801BA384(Object_801BA03C *pList, Record_800D81C8 *pChannels, int index);
 void fn_801BE420(void *p, Object_801BA03C *pObject, Record_800D81C8 *pRecords, void *pOwner, float step);
-int fn_800A3B10(Object_800A3530 *p);
 void fn_800A3D68(int value);
 extern int lbl_803EC93C;
 extern int lbl_803EC940;

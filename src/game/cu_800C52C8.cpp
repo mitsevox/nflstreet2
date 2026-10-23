@@ -828,7 +828,7 @@ extern "C" int fn_800C73E0(Object_80039F5C *p, Object_80039F5C *pOther)
         if (pOther == fn_80137B40() || pOther->mpState->mId == 91 || pOther->mpState->mId == 25
             || (pOther->mpState->mId == 15 && fn_801045BC(pOther) < fn_80104610(pOther))
             || (pOther->mpState->mId == 27 && fn_8010CE2C(pOther))
-            || ((p->mFlags & 0x20000) && p->mUnknown1154 <= 1 && p->mUnknown1140 == pOther->mId)) {
+            || ((p->mFlags & 0x20000) && (unsigned short)p->mTarget.mMode <= 1 && p->mTarget.mRef == pOther->mId)) {
             return 1;
         }
         if (pOther->mpState->mId == 28 || pOther->mpState->mId == 23) {

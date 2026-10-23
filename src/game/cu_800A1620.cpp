@@ -60,7 +60,7 @@ extern "C" void fn_800A1738(Object_8017886C *out)
     case 0:
         if(out->mUnknown04==1) {
             if(out->mUnknown18&0x800)lbl_802D7C64[0].mUnknown0=10;
-            else if(fn_80177F70()==6)lbl_802D7C64[0].mUnknown0=mode;
+            else if(fn_80177F70()==6)lbl_802D7C64[0].mUnknown0=2;
             else if(fn_80178308()!=fn_80178348())lbl_802D7C64[0].mUnknown0=9;
             else if(out->mUnknown18&0x100)lbl_802D7C64[0].mUnknown0=9;
             else lbl_802D7C64[0].mUnknown0=3;

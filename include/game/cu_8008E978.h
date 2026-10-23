@@ -143,10 +143,27 @@ struct Object_800C6640 {
     unsigned char mUnknown55;
 };
 
+/* Stack block whose address fn_800A4E8C passes as the fourth argument of the
+   callbacks of the .data table 0x802D7E20; the word at +16 is the level
+   fn_800A481C switches on. */
+struct Params_800A4E8C {
+    int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    int mUnknownC;
+    unsigned int mUnknown10;
+};
+
 /* 8.24 fixed-point multiply used by the head/body turn easing. */
 static inline int FixedMul(int a, int b)
 {
     return (int)(((long long)a * b) >> 24);
+}
+
+/* Maps value in [0, range] linearly onto [from, to]. */
+static inline int Interpolate(int value, int range, int from, int to)
+{
+    return from + value * (to - from) / range;
 }
 
 #endif

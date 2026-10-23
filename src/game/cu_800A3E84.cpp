@@ -17,7 +17,7 @@ extern float lbl_803EAA08;
 extern float lbl_803EAA0C;
 }
 
-extern "C" int fn_800A3E84(Object_80039F5C *p, int angle)
+extern "C" int fn_800A3E84(Object_80039F5C *p, int angle, int unused)
 {
     float distance = 0.0f;
     int result = 0;
@@ -43,7 +43,7 @@ extern "C" int fn_800A3E84(Object_80039F5C *p, int angle)
             p->mUnknown1008.mUnknown1 = speed;
             p->mUnknown1008.mUnknown2 = angle >> 17;
             if (fn_801CFFD0(p->mMotion.mFacing, (p->mUnknown1008.mUnknown2 << 17) & 0xFFFFFF) > 0x1C71C7) {
-                p->mUnknown1156 = 1;
+                p->mTarget.mUnknown10 = 1;
                 if (distance > lbl_803EAA04 && distance < lbl_803EAA08
                     && turn < (int)(lbl_803EAA0C * 46603.38f)
                     && (pTarget->mMode == 4 || pTarget->mMode == 5))
@@ -66,7 +66,7 @@ extern "C" int fn_800A3E84(Object_80039F5C *p, int angle)
 }
 
 extern "C" {
-void fn_80227690(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB);
+void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
 int fn_80110C10(Object_80039F5C *p);
@@ -83,7 +83,7 @@ extern "C" unsigned short fn_800A414C(Table_80089904 *table, Object_80039F5C *p,
     else
         p->mUnknown1008.mUnknown0 = 1;
     Pair_802270A4 delta;
-    fn_80227690(&delta, (Pair_802270A4 *)&pOther->mMotion, (Pair_802270A4 *)&p->mMotion);
+    fn_80227690(&delta, &pOther->mMotion, &p->mMotion);
     int heading = fn_801CFE40(delta.mUnknown4, delta.mUnknown0) & 0xFFFFFF;
     int facing = p->mMotion.mUnknown32 & 0xFFFFFF;
     if (fn_801CFFD0(heading, facing) <= (int)(lbl_803EAA10 * 46603.38f)) {

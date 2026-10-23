@@ -28,7 +28,7 @@ void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Obje
 }
 
 extern "C" int fn_800A44C0(Table_80089904 *table, unsigned short key, void *record,
-                           Record_800D81C8 *entries, Object_80039F5C *p, int phase)
+                           Record_800D81C8 *entries, Object_80039F5C *p, unsigned int phase)
 {
     Block_801BE60C *block = fn_801BE60C(p->mpUnknown792, key);
     switch (phase) {

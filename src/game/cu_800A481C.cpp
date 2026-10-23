@@ -1,19 +1,10 @@
 #include "game/Object_80039F5C.h"
-
-/* Parameter block the .data callbacks at 0x802D7E20 receive; the word at
-   +16 selects the adjustment. */
-struct Params_800A481C {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknownC;
-    unsigned int mUnknown10;
-};
+#include "game/cu_8008E978.h"
 
 extern "C" float fn_8016B9B0(void);
 
 extern "C" void fn_800A481C(Object_80039F5C *p, Object_80039F5C *pOther, int index,
-                            Params_800A481C *pParams)
+                            Params_800A4E8C *pParams)
 {
     pParams->mUnknown4 += pParams->mUnknown4 / 2;
     pParams->mUnknown0 += pParams->mUnknown0 / 2;

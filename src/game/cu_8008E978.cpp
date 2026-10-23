@@ -100,6 +100,7 @@
 #include "game/Object_800785C0.h"
 #include "game/Block_800BFAD0.h"
 #include "game/Object_8007A334.h"
+#include "game/Object_800A3530.h"
 
 /* Data whose word +4 fn_80094374 returns and whose words from +8
    fn_80093BAC indexes; the bound of that array is not established. */
@@ -1728,16 +1729,6 @@ extern "C" void fn_80097564(void)
     }
 }
 
-/* Stack block whose address fn_800A4E8C passes as the fourth argument of the
-   callbacks of the .data table 0x802D7E20. */
-struct Params_800A4E8C {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknownC;
-    int mUnknown10;
-};
-
 /* Halfword pair of the array returned by fn_8011F50C; fn_800A554C passes one
    to the callbacks of the .data table 0x802D7E4C. */
 struct Pair_800A554C {
@@ -2136,7 +2127,7 @@ extern "C" int fn_800A432C(Key_80110630 *pA, Key_80110630 *pB)
 
 extern "C" int fn_801CFFD0(int a, int b);
 
-/* Candidate record selected by fn_800A4358. */
+/* The table entry record as fn_800A4358 reads it. */
 struct Entry_800A4358 {
     int mUnknown0;
     Key_80110630 mUnknown4;
@@ -2147,18 +2138,7 @@ struct Entry_800A4358 {
     float mUnknown18;
 };
 
-/* Halfword-counted table of candidates; each slot carries two halfword
-   keys and the record. */
-struct Table_800A4358 {
-    unsigned short mCount;
-    struct {
-        unsigned short mUnknown0;
-        unsigned short mUnknown2;
-        Entry_800A4358 *mpEntry;
-    } mSlots[1];
-};
-
-extern "C" unsigned short fn_800A4358(Table_800A4358 *pTable, Object_80039F5C *p, Block_801BE60C *pBlock)
+extern "C" unsigned short fn_800A4358(Table_80089904 *pTable, Object_80039F5C *p, Block_801BE60C *pBlock)
 {
     unsigned int index = 0;
     Entry_800A4358 *pBest = 0;
@@ -2166,7 +2146,7 @@ extern "C" unsigned short fn_800A4358(Table_800A4358 *pTable, Object_80039F5C *p
     int angle = fn_801CFFD0(p->mMotion.mFacing, (p->mUnknown1008.mUnknown2 << 17) & 0xFFFFFF);
 
     for (i = 0; i < pTable->mCount; i++) {
-        Entry_800A4358 *pEntry = pTable->mSlots[i].mpEntry;
+        Entry_800A4358 *pEntry = (Entry_800A4358 *)pTable->mEntries[i].mpInfo;
 
         if (fn_800A432C(&pEntry->mUnknown4, &p->mUnknown1008) && angle >= pEntry->mUnknown10
             && angle <= pEntry->mUnknown14) {
@@ -2282,39 +2262,15 @@ extern "C" void fn_800A5A88(Pair_800A554C *pPairs)
 {
 }
 
-/* Object whose word +0x328 points to a record with a halfword count at +4
-   and whose word +0x32C points to that many 124-byte entries, as
-   fn_800A3B10 reads them. Only these words are declared; the type is not
-   established. */
-struct Header_800A3B10 {
-    unsigned char mUnknown0[4];
-    unsigned short mUnknown4;
-};
-
-struct Entry_800A3B10 {
-    unsigned char mUnknown0;
-    unsigned char mUnknown1;
-    unsigned char mUnknown2[122];
-};
-
-struct Object_800A3B10 {
-    unsigned char mUnknown0[0x328];
-    Header_800A3B10 *mpUnknown328;
-    Entry_800A3B10 *mpUnknown32C;
-};
-
 extern "C" {
 Pair_800A554C *fn_8011F50C(void);
-void fn_800A3530(void);
-void fn_800A37D8(void);
-void fn_800A3898(void);
 
-extern void (*lbl_8030EFB4[11])(void);
+extern Callback_800A3530 lbl_8030EFB4[11];
 extern int (*lbl_802D7E4C[21])(Object_80039F5C *p, Object_80039F5C *pTarget,
                                 Object_80039F5C *pOther, Pair_800A554C *pPair);
 }
 
-extern "C" int fn_800A3B10(Object_800A3B10 *p)
+extern "C" int fn_800A3B10(Object_800A3530 *p)
 {
     int count = 0;
     int i;
@@ -2331,7 +2287,7 @@ extern "C" int fn_800A3B10(Object_800A3B10 *p)
 
 extern "C" void fn_800A3D70(void)
 {
-    void (**ppCallback)(void) = lbl_8030EFB4;
+    Callback_800A3530 *ppCallback = lbl_8030EFB4;
     int i;
 
     for (i = 0; i < 11; i++) {
@@ -2429,23 +2385,23 @@ extern "C" int fn_800A5C04(Object_80039F5C *p, int a, int b)
         Object_80039F5C *pTarget;
 
         if (p->mFlags & 0x4000) {
-            p->mUnknown1152 = 0;
+            p->mTarget.mUnknownC = 0;
         }
-        pTarget = fn_8009BCE8(&p->mUnknown1140);
-        if (--p->mUnknown1152 > 0) {
-            if (lbl_802D7E78[p->mUnknown1154Signed] != 0) {
-                result = lbl_802D7E78[p->mUnknown1154Signed](p, pTarget, &p->mUnknown1144);
+        pTarget = fn_8009BCE8(&p->mTarget.mRef);
+        if (--p->mTarget.mUnknownC > 0) {
+            if (lbl_802D7E78[p->mTarget.mMode] != 0) {
+                result = lbl_802D7E78[p->mTarget.mMode](p, pTarget, &p->mTarget.mUnknown4);
             } else {
                 result = fn_800A5A60(p, pTarget, 0);
             }
-            if (fn_800A3DC4((unsigned char)p->mUnknown1154Signed) && fn_800A3E84(p, a, b)) {
+            if (fn_800A3DC4((unsigned char)p->mTarget.mMode) && fn_800A3E84(p, a, b)) {
                 p->mUnknown512.mUnknown14 = 0;
                 result = 1;
-                p->mUnknown1152 = 0;
+                p->mTarget.mUnknownC = 0;
             }
         } else {
-            p->mUnknown1152 = 0;
-            if (p->mUnknown1156) {
+            p->mTarget.mUnknownC = 0;
+            if (p->mTarget.mUnknown10) {
                 if (p->mFlags & 4) {
                     p->mUnknown512.mUnknown14 = 1;
                     p->mFlags &= ~4;
@@ -2465,7 +2421,7 @@ extern "C" int fn_800A5C04(Object_80039F5C *p, int a, int b)
         if (p->mFlags & 0x20000) {
             p->mFlags &= ~0x20000;
         }
-        p->mUnknown1156 = result;
+        p->mTarget.mUnknown10 = result;
     }
     return result;
 }
@@ -4866,7 +4822,7 @@ extern Block_8030F42C lbl_8030F42C;
 
 extern "C" int fn_800A5DD0(Object_80039F5C *p)
 {
-    return p->mUnknown1156;
+    return p->mTarget.mUnknown10;
 }
 
 extern "C" void fn_800A5DD8(Object_80039F5C *p)
@@ -4890,7 +4846,7 @@ extern "C" void fn_800A5E20(Object_80039F5C *p)
 extern "C" void fn_800A5E68(Object_80039F5C *p)
 {
     if ((p->mFlags & 0x20000) && fn_800A3E00(p) == 0) {
-        p->mUnknown1156 = 0;
+        p->mTarget.mUnknown10 = 0;
         p->mFlags &= ~0x20000;
     }
 }
@@ -4911,13 +4867,11 @@ extern "C" int fn_800A5EB8(Object_80039F5C *a, Object_80039F5C *b)
 
 extern "C" unsigned char fn_800A5F20(Object_80039F5C *p)
 {
-    int range;
     short average;
 
     fn_80137B40();
-    range = 510;
     average = (p->mRatings[4] + p->mRatings[2]) / 2;
-    return (average + 168) * 20 / range + 20;
+    return Interpolate(average + 168, 510, 20, 40);
 }
 
 extern "C" int fn_800A5F80(void)
@@ -7317,37 +7271,64 @@ extern "C" void fn_800B4A18(int index, char *pDest, int size)
     fn_801C3284(pDest, lbl_802D87A4[index], size);
 }
 
-typedef int (*Handler_800B4D7C)(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC,
-                                unsigned int mode);
+typedef int (*Handler_800B4D7C)(Table_80089904 *pTable, unsigned short key, void *pRecord,
+                                Record_800D81C8 *pEntries, Object_80039F5C *p, unsigned int phase);
 
 extern "C" {
-int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800D9C80(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_80093D20(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_80089E70(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800A44C0(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800D8A24(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800DA54C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800DAF5C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800DC36C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800E4264(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800EC674(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_800F2CB4(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_80102A78(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_8010680C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_8010BC90(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_8010D834(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
-int fn_80110C70(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800D9C80(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_80093D20(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_80089E70(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800A44C0(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800D8A24(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800DA54C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800DAF5C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800DC36C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800E4264(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800EC674(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_800F2CB4(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_80102A78(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_8010680C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_8010BC90(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_8010D834(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
+int fn_80110C70(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries, Object_80039F5C *p,
+              unsigned int phase);
 
 extern Handler_800B4D7C lbl_8030FB60[248];
 }
