@@ -22,6 +22,7 @@
 #include "game/bitstream.h"
 
 #include "engine/vptmanager.h"
+#include "engine/cu_801B9F00.h"
 #include "game/Camera_8013F738.h"
 #include "game/Class_80148A58.h"
 #include "game/Class_80297BF8.h"
@@ -90,6 +91,7 @@
 #include "game/fn_802270D4.h"
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
+#include "game/cu_80026BB0.h"
 #include "game/fn_80094488.h"
 #include "game/cu_80164568.h"
 #include "game/Entry_802F394C.h"
@@ -722,6 +724,49 @@ extern "C" void fn_80091644(int index)
             Object_80041904 *pBall = fn_800400C4(fn_8013825C(fn_801374BC()));
 
             fn_80091578(pCharacter, &pActor->mpUnknown20[i], pBall);
+        }
+    }
+}
+
+extern "C" int fn_8004AF94(Object_80041904 *pBall, int a, int b, int c, unsigned char index);
+extern "C" void fn_8013B9C0(Object_80137ABC *pBall, int a, int b);
+
+extern "C" int fn_800916E0(int index)
+{
+    Character_80093BCC *pCharacter = fn_80093BCC(index);
+    unsigned int i = 0;
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+
+    for (; i < pActor->mUnknown6; i++) {
+        if (pActor->mpUnknown20[i].mId == 0x4A4D4100) {
+            Block_80170E64 *pBlock = fn_8013825C(fn_801374BC());
+
+            pBlock->mUnknown680 = fn_8004AF94(fn_800400C4(pBlock), pCharacter->mUnknown4, pCharacter->mUnknown0, 0, i);
+            fn_80138440(fn_801374BC(), 1);
+            fn_8013B9C0(fn_801374BC(), 8, 0);
+        }
+    }
+    return 1;
+}
+
+extern "C" void fn_800917A4(int index)
+{
+    Character_80093BCC *pCharacter = fn_80093BCC(index);
+    unsigned int i = 0;
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+
+    for (; i < pActor->mUnknown6; i++) {
+        if (pActor->mpUnknown20[i].mId == 0x4A4D4100) {
+            Block_80170E64 *pBlock = fn_8013825C(fn_801374BC());
+
+            if (pBlock->mUnknown680 != 0xFFFF) {
+                Extra_8004149C *pExtra = pBlock->mpUnknown676->mUnknown428;
+
+                fn_801BA384((Object_801BA03C *)pExtra->mUnknown48, (Record_800D81C8 *)pExtra->mUnknown60,
+                            pBlock->mUnknown680);
+                pBlock->mUnknown680 = 0xFFFF;
+            }
+            fn_8013B9C0(fn_801374BC(), 5, 0);
         }
     }
 }
@@ -11721,6 +11766,33 @@ extern "C" void fn_800A039C(Class_80297AB8 *pObject)
     }
 }
 
+extern "C" {
+void fn_80148154(void);
+
+extern void **lbl_803EA9E8;
+}
+
+void Class_80297AB8::vfn_01()
+{
+    void *handle = fn_80238174(0, (void **)&lbl_803EA9E8, 80, 0, 0x64706C79);
+
+    fn_8023816C(handle);
+    fn_802381E0(handle);
+}
+
+void Class_80297AB8::vfn_02()
+{
+    fn_800A039C(0);
+}
+
+void Class_80297AB8::vfn_05()
+{
+    fn_80148154();
+    fn_80027230(lbl_803EA9E8);
+    fn_80027358(-1);
+    fn_800A61A8();
+}
+
 extern "C" void fn_800A061C(int a, int *p, int value)
 {
     *p = value;
@@ -13779,7 +13851,6 @@ void fn_800B8028(void);
 void fn_800BAAE4(void);
 void fn_800C4460(Sequence_800C4460 *p);
 void fn_800C4568(Sequence_800C4460 *p);
-void fn_80148154(void);
 void fn_80179150(void);
 void fn_8017DBCC(void);
 
@@ -13912,7 +13983,6 @@ int fn_80178308(void);
 int fn_80178320(void);
 Object_80039F5C *fn_800B6544(int index);
 void fn_800B6868(int a, int b, int c, int d);
-void fn_80148154(void);
 void fn_80148108(int mode);
 int fn_801481B0(void);
 int fn_800744FC(void);
@@ -16249,7 +16319,6 @@ extern "C" void fn_800A02FC(void)
 
 extern "C" {
 void fn_80173D10(void);
-void fn_800271D4(void *p);
 int fn_801C6280(int a, int b, void *p);
 void fn_8006F0C8(int value);
 void fn_80074DF8(int value);
@@ -16265,7 +16334,6 @@ void fn_80075058(int value);
 void fn_800750F0(int value);
 void fn_80075188(int value);
 void fn_80076DAC(int value);
-extern void *lbl_803EA9E8;
 extern char lbl_802EC880[];
 }
 

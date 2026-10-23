@@ -12,8 +12,6 @@
 #include "game/cu_80136B1C.h"
 #include "game/Record_800A0624.h"
 #include "game/Block_8030E6E8.h"
-#include "game/fn_80238174.h"
-#include "game/cu_80026BB0.h"
 
 extern "C" {
 unsigned int fn_8009FFA4(void);
@@ -21,8 +19,6 @@ unsigned int fn_8009FFC4(void);
 void fn_8009FF94(unsigned int);
 int fn_80178320(void);
 void fn_8017D7C4(const char *);
-void *fn_8023816C(void *);
-void fn_800A039C(Class_80297AB8 *);
 int fn_800A937C(void);
 int fn_800A9680(void);
 void fn_800A9688(void);
@@ -39,10 +35,7 @@ void fn_800718A0(void);
 
 void fn_8016EC40(void);
 void fn_8003A3F4(int,int);
-void fn_80148154(void);
-void fn_800A61A8(void);
 extern unsigned char lbl_803EA9E0;
-extern void **lbl_803EA9E8;
 extern float lbl_80297D94[];
 extern float lbl_80297DBC[];
 extern float lbl_80297DE4[];
@@ -77,18 +70,6 @@ extern "C" void fn_800A02B4(void)
     }
 }
 
-void Class_80297AB8::vfn_01()
-{
-    void *handle=fn_80238174(0,(void **)&lbl_803EA9E8,80,0,0x64706C79);
-    fn_8023816C(handle);
-    fn_802381E0(handle);
-}
-
-void Class_80297AB8::vfn_02()
-{
-    fn_800A039C(0);
-}
-
 void Class_80297AB8::vfn_04(float dt)
 {
     if(fn_800A937C()) {
@@ -108,14 +89,6 @@ void Class_80297AB8::vfn_04(float dt)
     }
     fn_8003A3F4(0,0);
     fn_8003A3F4(0,1);
-}
-
-void Class_80297AB8::vfn_05()
-{
-    fn_80148154();
-    fn_80027230(lbl_803EA9E8);
-    fn_80027358(-1);
-    fn_800A61A8();
 }
 
 
