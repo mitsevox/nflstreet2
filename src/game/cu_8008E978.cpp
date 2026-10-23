@@ -13491,13 +13491,10 @@ extern "C" int fn_8009F7A4(Object_80039F5C *p, Object_80039F5C **ppOut)
 extern "C" int fn_8009FD7C(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     int result = 0;
-    int value = p->mRatings[8] - (pOther->mRatings[0] / 8 + pOther->mRatings[3] / 8);
+    short *pRatings = pOther->mRatings;
+    int value = p->mRatings[8] - (pRatings[0] / 8 + pRatings[3] / 8);
 
-    if (value < lbl_803EA9D4) {
-        value = lbl_803EA9D4;
-    } else if (value > lbl_803EA9D8) {
-        value = lbl_803EA9D8;
-    }
+    value = value < lbl_803EA9D4 ? lbl_803EA9D4 : (value > lbl_803EA9D8 ? lbl_803EA9D8 : value);
     if (fn_802372EC(0, lbl_803EA9D0) < value) {
         result = 1;
     }
