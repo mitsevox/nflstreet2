@@ -167,8 +167,8 @@ extern "C" int fn_800C3BEC(Object_80039F5C *p, Command_800CEE74 *pCommand, int *
                 entry = 0;
             }
             pInfo = pTable->mEntries[entry].mpInfo;
-            if (p->mUnknown1008.mUnknown0 == pInfo->mUnknown56 ||
-                (pInfo->mUnknown56 == 0 && p->mUnknown1008.mUnknown0 == 8)) {
+            if (p->mUnknown1008.mUnknown0 == pInfo->mUnknown56Byte ||
+                (pInfo->mUnknown56Byte == 0 && p->mUnknown1008.mUnknown0 == 8)) {
                 int direction;
                 unsigned int count;
                 Record_80054130 *pRow;

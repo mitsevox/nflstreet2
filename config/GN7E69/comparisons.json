@@ -39915,6 +39915,93 @@
       ]
     },
     {
+      "source": "src/game/cu_800C1CA0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment of the retained provisional cu_8008E978 grouping, split so that its literal-pool slice compiles independently. Bodies between its registered functions stay in src/game/cu_8008E978.cpp; no original file boundary is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800C1CA0",
+          "end": "0x800C2090"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802975D4",
+          "end": "0x802975E8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800C1CA0",
+          "start": "0x800C1CA0",
+          "end": "0x800C1E40"
+        },
+        {
+          "symbol": "fn_800C1E5C",
+          "start": "0x800C1E5C",
+          "end": "0x800C2090"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800C2150.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment of the retained provisional cu_8008E978 grouping, split so that its literal-pool slice compiles independently. Bodies between its registered functions stay in src/game/cu_8008E978.cpp; no original file boundary is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800C2150",
+          "end": "0x800C39E0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802975E8",
+          "end": "0x802976E8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800C2150",
+          "start": "0x800C2150",
+          "end": "0x800C2788"
+        },
+        {
+          "symbol": "fn_800C2884",
+          "start": "0x800C2884",
+          "end": "0x800C2EC0"
+        },
+        {
+          "symbol": "fn_800C31E4",
+          "start": "0x800C31E4",
+          "end": "0x800C3404"
+        },
+        {
+          "symbol": "fn_800C3404",
+          "start": "0x800C3404",
+          "end": "0x800C34B0"
+        },
+        {
+          "symbol": "fn_800C34B0",
+          "start": "0x800C34B0",
+          "end": "0x800C3610"
+        },
+        {
+          "symbol": "fn_800C36A8",
+          "start": "0x800C36A8",
+          "end": "0x800C38C4"
+        },
+        {
+          "symbol": "fn_800C38C4",
+          "start": "0x800C38C4",
+          "end": "0x800C39E0"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800C39E0.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison-only fragment of the retained provisional cu_8008E978 grouping, split so that its literal-pool slice compiles independently. Bodies between its registered functions stay in src/game/cu_8008E978.cpp; no original file boundary is claimed.",
@@ -39923,13 +40010,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800C39E0",
-          "end": "0x800C3A4C"
+          "end": "0x800C4184"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802976E8",
-          "end": "0x802976EC"
+          "end": "0x80297704"
         }
       ],
       "functions": [
@@ -39937,6 +40024,16 @@
           "symbol": "fn_800C39E0",
           "start": "0x800C39E0",
           "end": "0x800C3A4C"
+        },
+        {
+          "symbol": "fn_800C3A4C",
+          "start": "0x800C3A4C",
+          "end": "0x800C3BEC"
+        },
+        {
+          "symbol": "fn_800C3BEC",
+          "start": "0x800C3BEC",
+          "end": "0x800C4184"
         }
       ]
     },
@@ -39975,13 +40072,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800C47EC",
-          "end": "0x800C4A70"
+          "end": "0x800C4D54"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80297708",
-          "end": "0x80297718"
+          "end": "0x80297728"
         }
       ],
       "functions": [
@@ -39999,6 +40096,11 @@
           "symbol": "fn_800C4A2C",
           "start": "0x800C4A2C",
           "end": "0x800C4A70"
+        },
+        {
+          "symbol": "fn_800C4B6C",
+          "start": "0x800C4B6C",
+          "end": "0x800C4D54"
         }
       ]
     },
@@ -40011,13 +40113,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800C4D54",
-          "end": "0x800C4E18"
+          "end": "0x800C51DC"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80297728",
-          "end": "0x80297738"
+          "end": "0x80297750"
         }
       ],
       "functions": [
@@ -40025,6 +40127,11 @@
           "symbol": "fn_800C4D54",
           "start": "0x800C4D54",
           "end": "0x800C4E18"
+        },
+        {
+          "symbol": "fn_800C4EE8",
+          "start": "0x800C4EE8",
+          "end": "0x800C51DC"
         }
       ]
     },

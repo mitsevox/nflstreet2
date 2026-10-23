@@ -29,8 +29,7 @@ struct Info_80089904 {
     Vector_80039F5C mUnknown40;
     unsigned char mUnknown52;
     char mUnknown53[3];
-    unsigned char mUnknown56;
-    char mUnknown57[3];
+    union { int mUnknown56; unsigned char mUnknown56Byte; };
 };
 
 struct Entry_80089904 {
