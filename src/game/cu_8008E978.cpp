@@ -17634,17 +17634,17 @@ extern "C" void fn_800BD568(int team)
 
 extern "C" int fn_800BD608(Stick_800BD608 *pStick, int team);
 
-extern "C" void fn_800BD774(int team, int kind)
+extern "C" void fn_800BD774(int index, int kind)
 {
     fn_8013FA04(5);
     if (kind == 5) {
-        if (lbl_803EABA8->mSlots[team].mUnknown8 < 0) {
-            lbl_803EABA8->mSlots[team].mUnknown0 = lbl_803EABA8->mSlots[team].mUnknown4;
+        if (lbl_803EABA8->mSlots[index].mUnknown8 < 0) {
+            lbl_803EABA8->mSlots[index].mUnknown0 = lbl_803EABA8->mSlots[index].mUnknown4;
         }
-        lbl_803EABA8->mSlots[team].mUnknown8--;
-    } else if (lbl_803EABA8->mSlots[team].mStick.mUnknownA != 0 &&
-               fn_800BD608(&lbl_803EABA8->mSlots[team].mStick, team) == 0 && kind == 4) {
-        fn_800BEC1C(fn_800B65A0(team), team);
+        lbl_803EABA8->mSlots[index].mUnknown8--;
+    } else if (lbl_803EABA8->mSlots[index].mStick.mUnknownA != 0 &&
+               fn_800BD608(&lbl_803EABA8->mSlots[index].mStick, index) == 0 && kind == 4) {
+        fn_800BEC1C(fn_800B65A0(index), index);
     }
 }
 

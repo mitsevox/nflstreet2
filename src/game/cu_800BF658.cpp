@@ -13,7 +13,7 @@ extern "C" {
 void fn_800BE808(int a, unsigned char index);
 void fn_800BE944(int index, int a, unsigned int msg, float value);
 void fn_8003A3F4(int a, int index);
-void fn_800BD774(int team, int kind);
+void fn_800BD774(int index, int kind);
 void fn_800BED54(unsigned char index);
 void fn_800BEFAC(int index);
 void fn_800BD830(void);
