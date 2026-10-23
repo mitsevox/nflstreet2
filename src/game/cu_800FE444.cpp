@@ -1079,35 +1079,57 @@ void fn_80101064(Object_80039F5C *p)
     }
 }
 
-void fn_80101130(Object_80039F5C *p,Object_80039F5C *other,unsigned short *out)
+void fn_80101130(Object_80039F5C *p, Object_80039F5C *other, unsigned short *out)
 {
-    float values[8];fn_8012430C(values,3,p);
-    unsigned char best=fn_801243E0(values,-1);
-    int motionAngle=p->mMotion.mUnknown32;
-    Lookup_8012078C *lookup=fn_8012078C();
-    Object_80039F5C *receiver=fn_80039F5C(fn_80178320(),lookup->mpUnknown4[1]);
-    Point_8017886C delta;fn_80227690(&delta,&other->mMotion.mPos,&p->mMotion.mPos);
-    unsigned int octant=((unsigned int)fn_801CFE40(delta.mY,delta.mX)+0x100000)>>21&7;
-    int diff=fn_801CFFD0(motionAngle,0x400000);
-    int chosen=(values[best]==0.0f || values[(best+1)&7]==0.0f || values[(best+7)&7]==0.0f) &&
-        (values[octant]>=3.0f || values[(octant+1)&7]>=4.0f || !(values[(octant+7)&7]<4.0f)) && diff<0x4AAAAB;
-    if(!chosen) {
-        float a=fn_80178A5C(),b=fn_80178A08(),c=fn_80178A5C();
-        float x=p->mMotion.mPos.mX;
-        float d=fn_80178A5C(),e=fn_80178A08(),f=fn_80178A5C();
-        float x2=p->mMotion.mPos.mX;
-        float left=fn_801242E0(values,0),right=fn_801242E0(values,4);
-        chosen=((x2<-((e-f)*0.25f+d) && left>right*1.45f) || (x>(b-c)*0.25f+a && !(right<=left*1.45f))) && diff<0xE38E3;
-        if(!chosen) {
-            Point_8017886C goal=fn_80177FE0();
-            if(goal.mY<=p->mMotion.mPos.mY)return;
-            *out=12;return;
+    float values[8];
+    unsigned char best;
+    unsigned int facing;
+    Lookup_8012078C *lookup;
+    Object_80039F5C *receiver;
+    Point_8017886C delta;
+    unsigned int octant;
+    int difference;
+    float left = 0.0f;
+    float right = 0.0f;
+    int chosen = 0;
+    int forward = 0;
+
+    fn_8012430C(values, 3, p);
+    best = fn_801243E0(values, -1);
+    facing = ((unsigned int)p->mMotion.mUnknown32 + 0x100000) >> 21 & 7;
+    lookup = fn_8012078C();
+    receiver = fn_80039F5C(fn_80178320(), lookup->mpUnknown4[1]);
+    fn_80227690(&delta, &other->mMotion.mPos, &p->mMotion.mPos);
+    octant = ((unsigned int)fn_801CFE40(delta.mY, delta.mX) + 0x100000) >> 21 & 7;
+    difference = fn_801CFFD0(p->mMotion.mUnknown32, 0x400000);
+    if ((values[best] == 0.0f || values[(best + 1) & 7] == 0.0f || values[(best + 7) & 7] == 0.0f)
+        && (values[octant] >= 3.0f || values[(octant + 1) & 7] >= 4.0f || values[(octant + 7) & 7] >= 4.0f)
+        && difference < 0x4AAAAB) {
+        chosen = 1;
+    }
+    if (!chosen) {
+        int pastRight = p->mMotion.mPos.mX > fn_80178A5C() + (fn_80178A08() - fn_80178A5C()) * 0.25f;
+        int pastLeft = p->mMotion.mPos.mX < -(fn_80178A5C() + (fn_80178A08() - fn_80178A5C()) * 0.25f);
+        left = fn_801242E0(values, 0);
+        right = fn_801242E0(values, 4);
+
+        if (((pastLeft && left > right * 1.45f) || (pastRight && right > left * 1.45f)) && difference < 0xE38E3) {
+            chosen = 1;
         }
     }
-    if((((unsigned int)motionAngle+0x100000)>>21&7)!=2)return;
-    if(p->mMotion.mPos.mY<=receiver->mMotion.mPos.mY)return;
-    if(fn_80178A2C()-15.0f<=p->mMotion.mPos.mY)return;
-    *out=5;
+    if (!chosen) {
+        if (p->mMotion.mPos.mY < fn_80177FE0().mY) {
+            forward = 1;
+        }
+    }
+    if (chosen) {
+        if (facing == 2 && p->mMotion.mPos.mY > receiver->mMotion.mPos.mY
+            && p->mMotion.mPos.mY < fn_80178A2C() - 15.0f) {
+            *out = 5;
+        }
+    } else if (forward) {
+        *out = 12;
+    }
 }
 
 void fn_80101408(Object_80039F5C *p,Point_8017886C *point,unsigned int *angle)
