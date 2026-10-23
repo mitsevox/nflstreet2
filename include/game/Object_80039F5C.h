@@ -438,7 +438,9 @@ struct Object_80039F5C {
     unsigned char mUnknown2914;
     char mUnknown2915[1];
     unsigned char mUnknown2916;
-    char mUnknown2917[3];
+    char mUnknown2917[1];
+    unsigned char mUnknown2918;
+    unsigned char mUnknown2919;
     unsigned char mUnknown2920;
     unsigned char mUnknown2921;
     char mUnknown2922[1];
