@@ -5724,7 +5724,7 @@ void fn_8011FCA4(void)
     fn_801F51DC(1, lbl_803EB09C->mpUnknown8, count, sizeof(Entry_8011FBE0), fn_8011FB80, fn_8011FBBC, 0, 1);
 }
 
-int fn_8011FD64(unsigned char index)
+int fn_8011FD64(unsigned short index)
 {
     int result;
 

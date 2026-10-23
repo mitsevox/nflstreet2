@@ -39284,32 +39284,6 @@
       ]
     },
     {
-      "source": "src/game/cu_80116B98.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. Its target whole-function extents and literal-pool slice retain their evidence; this split permits independent compilation of a disjoint partial literal pool and does not claim an original file boundary or whole-unit promotion.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80116B98",
-          "end": "0x80116C34"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029F048",
-          "end": "0x8029F04C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80116B98",
-          "start": "0x80116B98",
-          "end": "0x80116C34"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_80117794.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. Its target whole-function extents and literal-pool slice retain their evidence; this split permits independent compilation of a disjoint partial literal pool and does not claim an original file boundary or whole-unit promotion.",
@@ -52794,22 +52768,27 @@
     {
       "source": "src/game/cu_80116C34.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #1021, round2 HIGH, owner scope comment6345941218. Three whole previously unregistered bodies in retained provisional cu_800EFC68 grouping. Source grouping/literal slice reflects comparison storage only, not original compilation boundaries. Complete natural code and readonly emissions compared without clipping; original bytes remain linked. State fields are access-compatible local views, original names unknown.",
+      "evidence": "Issue #1021, round2 HIGH, owner scope comment6345941218. Three whole previously unregistered bodies in retained provisional cu_800EFC68 grouping. Source grouping/literal slice reflects comparison storage only, not original compilation boundaries. Complete natural code and readonly emissions compared without clipping; original bytes remain linked. State fields are access-compatible local views, original names unknown. fn_80116B98 joins from the former src/game/cu_80116B98.cpp fragment so the pool starts at the 8-aligned 0x8029F048.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80116C34",
+          "start": "0x80116B98",
           "end": "0x80117794"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029F04C",
+          "start": "0x8029F048",
           "end": "0x8029F0A8"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_80116B98",
+          "start": "0x80116B98",
+          "end": "0x80116C34"
+        },
         {
           "symbol": "fn_80116C34",
           "start": "0x80116C34",

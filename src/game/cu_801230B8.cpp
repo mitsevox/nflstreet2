@@ -76,7 +76,7 @@ void fn_8012327C(Directions_8012430C *pValues, Object_80039F5C *p);
 extern float lbl_803EB0A0, lbl_803EB0A4, lbl_803EB0A8, lbl_803EB0AC;
 
 int fn_801485D4(void);
-extern const float lbl_8029F5A0[6][8];
+extern const Directions_8012430C lbl_8029F5A0[6];
 
 float fn_8016D9F4(Object_80039F5C *p, float a, float b);
 int fn_801208C8(Point_8017886C *pPos, Vector_80039F5C *pTarget, Vector_80039F5C *pVelocity, float speed);
@@ -322,7 +322,8 @@ int fn_80123254(void *pA, void *pB)
 
 void fn_8012327C(Directions_8012430C *pValues, Object_80039F5C *p)
 {
-    Point_8017886C point = fn_80177FE0();
+    Point_8017886C point;
+    point.mY = fn_80177FE0().mY;
     Point_8017886C *pPos = (Point_8017886C *)&p->mMotion.mPos;
     unsigned char mode;
     if (pPos->mY > point.mY - 1.5f || fn_80177C38()) {
@@ -337,7 +338,7 @@ void fn_8012327C(Directions_8012430C *pValues, Object_80039F5C *p)
                 Point_8017886C delta;
                 fn_80227690(&delta, &point, pPos);
                 unsigned int direction = (fn_801CFE40(delta.mY, delta.mX) + 0x100000) >> 21 & 7;
-                switch (fn_8011F4C8()) {
+                switch ((int)fn_8011F4C8()) {
                 case 6: case 8: case 10: case 12:
                     if (!(point.mX <= pPos->mX)) mode = 1;
                     else pValues->mCost[1] -= 5.0f;
@@ -356,9 +357,9 @@ void fn_8012327C(Directions_8012430C *pValues, Object_80039F5C *p)
             }
         }
     }
-    const float *pRow = lbl_8029F5A0[mode];
-    if (fn_801485D4() && fn_80148A58()->vfn_09(1)) pRow = fn_80148A58()->vfn_09(1);
-    for (unsigned char i = 0; i < 8; i++) pValues->mCost[i] += pRow[i];
+    const Directions_8012430C *pRow = &lbl_8029F5A0[mode];
+    if (fn_801485D4() && fn_80148A58()->vfn_09(1)) pRow = (Directions_8012430C *)fn_80148A58()->vfn_09(1);
+    for (unsigned char i = 0; i < 8; i++) pValues->mCost[i] += pRow->mCost[i];
 }
 
 void fn_80123594(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F5C *)
@@ -541,6 +542,7 @@ void fn_80123F48(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F
     int team = fn_80178320();
     unsigned int count = fn_80178D70(team);
     for (unsigned char i = 0; i < count; i++) {
+        float value = 0.0f;
         Object_80039F5C *pOther = fn_80039F5C(team, i);
         if (pOther == p) continue;
         Point_8017886C *pOtherPos = (Point_8017886C *)&pOther->mMotion.mPos;
@@ -550,8 +552,8 @@ void fn_80123F48(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F
             fn_80227690(&delta, pOtherPos, &pos);
             int angle = fn_801CFE40(delta.mY, delta.mX);
             unsigned int direction = (angle + 0x100000) >> 21 & 7;
-            float value = 0.0f;
             if (pOther->mIdBytes[2] == team) {
+                Object_80039F5C *pBlocker = 0;
                 value = 8.5f - distance;
                 if (!(value <= 7.0f)) value = 7.0f;
                 if (pOther->mFlags & 0x800) value -= 3.0f;
@@ -566,20 +568,25 @@ void fn_80123F48(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F
                     if (!(divisor >= 0.25f)) divisor = 0.25f;
                     value /= divisor * 4.0f;
                 }
-                Object_80039F5C *pBlocker = 0;
-                float penalty = !(distance >= 4.0f) ? 4.0f : 9.0f;
-                if ((pOther->mUnknown1032 >= 4 && pOther->mUnknown1032 <= 6)
-                    || pOther->mpState->mId == 32 || pOther->mpState->mId == 11 || pOther->mpState->mId == 17) value -= penalty;
-                fn_80124714(p, pOther, &pBlocker);
-                if (pBlocker && pBlocker->mIdBytes[2] == fn_80178308()) value -= penalty;
+                if (!(distance >= 4.0f)) {
+                    if ((pOther->mUnknown1032 >= 4 && pOther->mUnknown1032 <= 6)
+                        || pOther->mpState->mId == 32 || pOther->mpState->mId == 11 || pOther->mpState->mId == 17) value -= 4.0f;
+                    fn_80124714(p, pOther, &pBlocker);
+                    if (pBlocker && pBlocker->mIdBytes[2] == fn_80178308()) value -= 4.0f;
+                } else {
+                    if ((pOther->mUnknown1032 >= 4 && pOther->mUnknown1032 <= 6)
+                        || pOther->mpState->mId == 32 || pOther->mpState->mId == 11 || pOther->mpState->mId == 17) value -= 9.0f;
+                    fn_80124714(p, pOther, &pBlocker);
+                    if (pBlocker && pBlocker->mIdBytes[2] == fn_80178308()) value -= 9.0f;
+                }
             }
             if (!(value >= 0.0f)) value = 0.0f;
             float side = value * 0.5f;
             pValues->mCost[direction] += value;
             pValues->mCost[(direction + 1) % 8] += side;
-            pValues->mCost[(direction + 7) % 8] += side;
+            pValues->mCost[(direction - 1) % 8] += side;
             pValues->mCost[(direction + 3) % 8] -= side;
-            pValues->mCost[(direction + 5) % 8] -= side;
+            pValues->mCost[(direction - 3) % 8] -= side;
             pValues->mCost[(direction + 4) % 8] -= value;
         }
     }
@@ -700,6 +707,7 @@ int fn_801248D4(Object_80039F5C *p, Vector_80039F5C *pPos, Vector_80039F5C *pTar
     int result = 1;
     if (!pPos) pPos = &p->mMotion.mPos;
     pTarget->mZ = 0.0f;
+    Vector_80039F5C nearest;
     Vector_80039F5C delta;
     fn_802276B4(&delta, pTarget, pPos);
     int angle = fn_801CFE40(delta.mY, delta.mX);
@@ -709,19 +717,18 @@ int fn_801248D4(Object_80039F5C *p, Vector_80039F5C *pPos, Vector_80039F5C *pTar
     for (unsigned char team = 0; team < 2; team++) {
         unsigned int count = fn_80178D70(team);
         for (unsigned char i = 0; i < count; i++) {
-            Object_80039F5C *pOther = fn_80039F5C(team, i);
             int valid = 1;
+            Object_80039F5C *pOther = fn_80039F5C(team, i);
             if (pFilter) {
                 for (unsigned char j = 0; j < pFilter->mCount; j++) {
-                    if (pOther->mpState->mId == pFilter->mValues[j]) {valid = 0; break;}
+                    if (pOther->mpState->mId == *(pFilter->mValues + j)) {valid = 0; break;}
                 }
             }
-            if (pOther == p || !valid || pOther == pExclude) continue;
+            if (pOther == p || !valid || pExclude == pOther) continue;
             fn_802276B4(&delta, &pOther->mMotion.mPos, pPos);
             if (fn_801CFFD0(angle, fn_801CFE40(delta.mY, delta.mX)) <= 0x355554) {
                 float distance = fn_802270A4((Point_8017886C *)&delta);
                 if (!(distance >= length + margin) && !(distance >= minimum)) {
-                    Vector_80039F5C nearest;
                     float offset, unused;
                     fn_80227970(pPos, pTarget, &pOther->mMotion.mPos, &nearest, &offset, &unused);
                     if (!(offset >= width)) {
@@ -999,19 +1006,17 @@ void fn_80125708(Object_80039F5C *p, State_80125594 *pState)
         || (fn_801CFFD0(velocityAngle, 0x800000) <= 0xFA4F9 && target.mY > fn_80178A44() - 4.0f)
         || (fn_801CFFD0(velocityAngle, 0xC00000) <= 0xFA4F9 && target.mX < 4.0f - fn_80178A08())
         || (fn_801CFFD0(velocityAngle, 0) <= 0xFA4F9 && !(target.mY >= 4.0f - fn_80178A44()))) blockedA = 1;
-    if (!blockedA) {
-        if ((fn_801CFFD0(velocityAngle, 0xC00000) <= 0xFA4F9 && target.mX > fn_80178A08() - 4.0f)
-            || (fn_801CFFD0(velocityAngle, 0) <= 0xFA4F9 && target.mY > fn_80178A44() - 4.0f)
-            || (fn_801CFFD0(velocityAngle, 0x400000) <= 0xFA4F9 && target.mX < 4.0f - fn_80178A08())
-            || (fn_801CFFD0(velocityAngle, 0x800000) <= 0xFA4F9 && !(target.mY >= 4.0f - fn_80178A44()))) blockedB = 1;
-    }
+    else if ((fn_801CFFD0(velocityAngle, 0xC00000) <= 0xFA4F9 && target.mX > fn_80178A08() - 4.0f)
+        || (fn_801CFFD0(velocityAngle, 0) <= 0xFA4F9 && target.mY > fn_80178A44() - 4.0f)
+        || (fn_801CFFD0(velocityAngle, 0x400000) <= 0xFA4F9 && target.mX < 4.0f - fn_80178A08())
+        || (fn_801CFFD0(velocityAngle, 0x800000) <= 0xFA4F9 && !(target.mY >= 4.0f - fn_80178A44()))) blockedB = 1;
     int difference = (opposite - velocityAngle) & 0xFFFFFF;
     float offset = 0.0f;
     int side = 0;
     if (difference <= 0x7FFFFF) {
         if (!blockedB) {
-            offset = distance * fn_801CFB18(0x800000 - difference);
             side = 1;
+            offset = distance * fn_801CFB18(0x800000 - difference);
             offset += (fn_80237260(0) - 0.5f) * 3.0f;
         }
     } else if (!blockedA) {
@@ -1023,10 +1028,10 @@ void fn_80125708(Object_80039F5C *p, State_80125594 *pState)
         if (side) angle = (velocityAngle + 0x200000) & 0xFFFFFF;
         else angle = (velocityAngle - 0x200000) & 0xFFFFFF;
     } else angle = fn_801CFFF0(velocityAngle, toward, 0.05f);
-    if ((fn_801CFFD0(angle, 0) <= 0x3FFFFF && p->mMotion.mPos.mX > fn_80178A08() - 5.0f)
-        || (fn_801CFFD0(angle, 0x400000) <= 0x3FFFFF && p->mMotion.mPos.mY > fn_80178A44() - 5.0f)
-        || (fn_801CFFD0(angle, 0x800000) <= 0x3FFFFF && p->mMotion.mPos.mX < 5.0f - fn_80178A08())
-        || (fn_801CFFD0(angle, 0xC00000) <= 0x3FFFFF && !(p->mMotion.mPos.mY >= 5.0f - fn_80178A44()))) angle = toward;
+    if (fn_801CFFD0(angle, 0) <= 0x3FFFFF && p->mMotion.mPos.mX > fn_80178A08() - 5.0f) angle = toward;
+    else if (fn_801CFFD0(angle, 0x400000) <= 0x3FFFFF && p->mMotion.mPos.mY > fn_80178A44() - 5.0f) angle = toward;
+    else if (fn_801CFFD0(angle, 0x800000) <= 0x3FFFFF && p->mMotion.mPos.mX < 5.0f - fn_80178A08()) angle = toward;
+    else if (fn_801CFFD0(angle, 0xC00000) <= 0x3FFFFF && !(p->mMotion.mPos.mY >= 5.0f - fn_80178A44())) angle = toward;
     pState->mUnknown8 = 1;
     pState->mUnknown4 = 1.0f;
     pState->mUnknown4 -= fn_801CFFD0(p->mMotion.mFacing, angle) * 7.152557657263969e-8f;
@@ -1111,7 +1116,7 @@ void fn_80125F10(void)
 }
 
 Score_8012430C const lbl_8029F584[7] = {fn_80123594, fn_801237F4, fn_80123E2C, fn_80123E30, fn_80123F48, fn_8012368C, fn_80123C2C};
-extern const float lbl_8029F5A0[6][8] = {
+extern const Directions_8012430C lbl_8029F5A0[6] = {
     {24.0f, -2.0f, -3.0f, -2.0f, 24.0f, 30.0f, 40.0f, 30.0f},
     {0.0f, 0.0f, 4.0f, 15.0f, 45.0f, 30.0f, 40.0f, 30.0f},
     {45.0f, 15.0f, 4.0f, 0.0f, 0.0f, 45.0f, 60.0f, 45.0f},
