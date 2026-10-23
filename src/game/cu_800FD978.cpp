@@ -36,6 +36,7 @@
 #include "game/fn_80238174.h"
 #include "game/Record_800DB60C.h"
 #include "game/fn_801BE60C.h"
+#include "engine/cu_801B9F00.h"
 
 extern "C" {
 Point_8017886C fn_80177FFC(int team);
@@ -49,9 +50,38 @@ unsigned char fn_800C0658(void);
 void fn_800FF6D8(Object_80039F5C *p);
 void fn_800449B4(Object_80039F5C *p);
 void fn_80051B88(Object_800B26B0 *pMotion, float value);
+void fn_8009BD60(Object_80039F5C *p);
 }
 
 extern "C" int fn_800FD7D0(Object_80039F5C *p);
+
+extern "C" int fn_800FD828(Object_80039F5C *p)
+{
+    float speed = 0.0f;
+    int changed = 0;
+    int animation = fn_801BE648(p->mpUnknown792);
+    Point_8017886C point;
+    Point_8017886C base;
+
+    fn_800FE03C(p, &point);
+    base = fn_80177FFC(p->mIdBytes[2]);
+    if (animation == 86) {
+        fn_8009BD60(p);
+    } else if (animation == 85) {
+        fn_8009BD60(p);
+        p->mUnknown1008.mUnknown2 = p->mUnknown2914 == 4 ? 3 : 5;
+        if (fabsf(point.mY - base.mY) < 2.0f) {
+            p->mUnknown1008.mUnknown1 = 9;
+        }
+    }
+    if (animation != fn_801BE648(p->mpUnknown792)) {
+        changed = 1;
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, p, 1.0f);
+        p->mpUnknown800[fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0)].mUnknown2C = speed;
+        p->mFlags &= ~4;
+    }
+    return changed;
+}
 
 extern "C" void fn_800FD978(Object_80039F5C *p)
 {

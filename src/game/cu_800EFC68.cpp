@@ -532,6 +532,7 @@ int fn_8009FE24(Object_80039F5C *p);
 int fn_800F5AD4(Object_80039F5C *p);
 void fn_800F6AD8(float *p);
 Point_8017886C fn_800F97A8(Object_80039F5C *p);
+int fn_800F9CB4(void);
 void fn_800FBB70(void);
 unsigned char fn_800FC014(Object_80039F5C *p, Object_80039F5C *pOther);
 unsigned char fn_800FC0C4(Object_80039F5C *p);
@@ -567,6 +568,7 @@ void fn_8011BAE0(Pair_8011BAE0 *pOut);
 void fn_8011DBC0(Object_80039F5C *p);
 void fn_8011DBC4(Object_80039F5C *p);
 int fn_8011DC68(unsigned int id);
+unsigned int fn_8011E188(void);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value);
 int fn_8011E3F4(Object_80039F5C *p);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
@@ -1624,7 +1626,14 @@ extern "C" Object_80039F5C *fn_800F9BD8(int forward, Object_80039F5C *p) {
     return pResult;
 }
 
-extern "C" int fn_800F9CAC() {
+/* One 12-byte entry of the receiver list built by fn_800FAECC. */
+struct Entry_800FAECC {
+    Object_80039F5C *mpPlayer;
+    float mX;
+    unsigned char mKind;
+};
+
+extern "C" int fn_800F9CAC(Entry_800FAECC *pEntries, unsigned char index, unsigned char count, Object_80039F5C *p) {
     return 1;
 }
 
@@ -1641,12 +1650,140 @@ extern "C" void fn_800FA014(Object_80039F5C *p, int *pRef) {
     }
 }
 
+extern "C" int fn_800FA098() {
+    Point_8017886C goal;
+
+    goal = fn_80177FE0();
+    fn_801486A0();
+    fn_8011E188();
+    return 0;
+}
+
 extern "C" void fn_800FAD10(unsigned char *p) {
     unsigned char value = p[1];
     if (value != 0) {
         value = 6 - value;
     }
     p[1] = value;
+}
+
+extern "C" void fn_800FAECC(void) {
+    unsigned char taken[7];
+    unsigned char counts[3] = {0};
+    Entry_800FAECC entries[7];
+    int useAlt = 0;
+    int allowSingle = 1;
+    Record_8011F4E0 *pRecord;
+    int forward;
+    int team;
+    Record_80067338 *pInfoTeam;
+    Object_800670B4 *pTeam;
+    unsigned char count;
+    unsigned int n;
+
+    pRecord = fn_8011F4E0();
+    forward = fn_800F9CB4();
+    pRecord->mUnknown4 = 1;
+    if (pRecord->mUnknown5 == 0) {
+        fn_800FBB70();
+    }
+    for (unsigned char i = 0; i < 7; i++) {
+        pRecord->mUnknown32[i] = 0xFF;
+        taken[i] = 0;
+    }
+    pRecord->mUnknown6 = 0;
+    team = fn_80178320();
+    pInfoTeam = fn_8016871C(team);
+    pTeam = fn_80168708(team);
+    fn_8009F6B4();
+    for (unsigned char i = 0; i < 8; i++) {
+        pRecord->mUnknown40[i] = 0xFF;
+    }
+    if (pTeam->mUnknown8.mUnknownF == 1 && (pTeam->mUnknown8.mUnknown14 & 1) && (pInfoTeam->mUnknown18 & 1)) {
+        useAlt = 1;
+    }
+    count = 0;
+    n = fn_80178D18(team);
+    for (unsigned char i = 0; i < n; i++) {
+        Object_80039F5C *p = fn_80039F5C(team, i);
+        unsigned short index;
+        Message_800F01CC *pRoutes;
+        int slot;
+
+        if (!useAlt) {
+            index = p->mIdBytes[1];
+        } else {
+            index = fn_80163E94(pTeam, p->mIdBytes[1], 0)->mUnknownB;
+        }
+        pRoutes = (Message_800F01CC *)fn_800AEE20(fn_80039F5C(team, index));
+        if (!pRoutes) {
+            pRoutes = (Message_800F01CC *)fn_80164EC8(pInfoTeam, team, index);
+        }
+        slot = fn_800F06F4(0, pRoutes, 0x16, 0);
+        if (slot != 0xFFFF) {
+            unsigned char value = pRoutes[slot].mUnknown1[0];
+            if (value == 0) {
+                pRecord->mUnknown32[p->mIdBytes[1]] = value;
+            } else {
+                counts[value - 1]++;
+            }
+            entries[count].mpPlayer = p;
+            entries[count].mKind = fn_800F986C(p);
+            entries[count].mX = fn_800F97A8(p).mX;
+            count++;
+        } else {
+            pRecord->mUnknown16[p->mIdBytes[1]] = 0xFF;
+        }
+    }
+    for (unsigned char i = 0; i < count; i++) {
+        unsigned char j;
+        for (j = i + 1; j < count; j++) {
+            if (entries[j].mX > entries[i].mX) {
+                Entry_800FAECC t = entries[j];
+                entries[j] = entries[i];
+                entries[i] = t;
+            }
+        }
+    }
+    for (unsigned int i = 0; i < 3; i++) {
+        Object_80039F5C *pReceiver = fn_800F93D0(fn_80039F5C(fn_80178308(), pRecord->mUnknown8[i]));
+        if (pReceiver) {
+            pRecord->mUnknown32[pReceiver->mIdBytes[1]] = i + 1;
+            taken[pReceiver->mIdBytes[1]] = 1;
+        }
+    }
+    unsigned char i;
+    int next;
+
+    for (i = 0; i < count; i = next) {
+        unsigned char k;
+
+        if (forward) {
+            k = i;
+            next = k + 1;
+        } else {
+            next = i + 1;
+            k = count - next;
+        }
+        if (taken[entries[k].mpPlayer->mIdBytes[1]] == 0) {
+            unsigned char tries = 0;
+            if (entries[k].mKind > 1 || allowSingle) {
+                Object_80039F5C *pSlot = 0;
+                int done = 0;
+                while (!done && tries <= 2) {
+                    pSlot = fn_800F9BD8(forward, pSlot);
+                    tries++;
+                    if (!pSlot) {
+                        done = 1;
+                    } else if (fn_800F9CAC(entries, k, count, pSlot)) {
+                        pRecord->mUnknown32[entries[k].mpPlayer->mIdBytes[1]] = fn_800FC0C4(pSlot);
+                        taken[entries[k].mpPlayer->mIdBytes[1]] = 1;
+                        done = 1;
+                    }
+                }
+            }
+        }
+    }
 }
 
 extern "C" void fn_800FB768(void) {
