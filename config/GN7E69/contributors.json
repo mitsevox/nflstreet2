@@ -29031,6 +29031,230 @@
         "commit": "00fc75c24f4e7cd84958939d5ece85091e49ea77",
         "introduced_blob": "f2c479c61cfb720ace4485c5ae2eb82f8a36d8a8"
       }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8010B3A0"
+      ],
+      "provenance": {
+        "pull_request": 558,
+        "merged_via": 1052,
+        "commit": "6702848d2774cdae207555d560bc917273847317",
+        "introduced_blob": "64856d91866c165f0233d81babdd762f5b7560d9",
+        "original_commit": "fa2066a7feab31e4fe4bc6a0c3e0d9f24c8d09ab",
+        "original_blob": "471e72470a3864eff0f5f3bf4605dd90da2a9306",
+        "integration_adjustment": "Preserve the original contributor and PR of this pre-existing PR 558 comparison body; PR 1052 refines it in place to an exact match (statement placement only), and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents."
+      }
+    },
+    {
+      "source": "src/game/cu_80104C9C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80106580"
+      ],
+      "provenance": {
+        "pull_request": 558,
+        "merged_via": 1052,
+        "commit": "6702848d2774cdae207555d560bc917273847317",
+        "introduced_blob": "958562812be6362c5a2aa416d7f9e5443d11f97f",
+        "fragment_origin": {
+          "source": "src/game/cu_800EFC68.cpp",
+          "commit": "e0f8371db8dbd2bf352312949dc553dbe8c5cc43",
+          "blob": "b148e434c47fce30cecf0de141a415137a11bdbc"
+        },
+        "integration_adjustment": "Preserve the original contributor and PR of this pre-existing PR 558 comparison body; PR 1052 refines it in place to an exact match (statement placement only), and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents. fragment_origin keeps the original source location, commit and blob from before the PR 887 move into this fragment.",
+        "original_commit": "04bf057dc44353e06dd02fe2bde525bff1691da0",
+        "original_blob": "0d26081f4968dfb55bcfd4996ff3f423e3d4f200"
+      }
+    },
+    {
+      "source": "src/game/cu_801077D8.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80107A9C",
+        "0x80107D48"
+      ],
+      "provenance": {
+        "pull_request": 1052,
+        "merged_via": 1052,
+        "commit": "6702848d2774cdae207555d560bc917273847317",
+        "introduced_blob": "efaa316b198693d79c88ff1552cc1f42870731df"
+      }
+    },
+    {
+      "source": "src/game/cu_8010810C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8010810C"
+      ],
+      "provenance": {
+        "pull_request": 1052,
+        "merged_via": 1052,
+        "commit": "6702848d2774cdae207555d560bc917273847317",
+        "introduced_blob": "50e3610a11861196c5c7dd5ffb1f60bb222f3250"
+      }
+    },
+    {
+      "source": "src/game/cu_80108A94.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80108A94"
+      ],
+      "provenance": {
+        "pull_request": 1052,
+        "merged_via": 1052,
+        "commit": "6702848d2774cdae207555d560bc917273847317",
+        "introduced_blob": "1fd061bfa228bb9d7fdc7900c9a50dc442da6831"
+      }
+    },
+    {
+      "source": "src/game/cu_80109248.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80109248",
+        "0x801096D4"
+      ],
+      "provenance": {
+        "pull_request": 1052,
+        "merged_via": 1052,
+        "commit": "6702848d2774cdae207555d560bc917273847317",
+        "introduced_blob": "3e136aadb588343a311465b6cff440c90bd6ea55"
+      }
+    },
+    {
+      "source": "src/game/cu_80109968.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80109990",
+        "0x80109F34"
+      ],
+      "provenance": {
+        "pull_request": 1052,
+        "merged_via": 1052,
+        "commit": "6702848d2774cdae207555d560bc917273847317",
+        "introduced_blob": "0c8ed9eddbb9df81e0bd858541d3186e97f62049"
+      }
+    },
+    {
+      "source": "src/game/cu_8010A2DC.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8010A4E8"
+      ],
+      "provenance": {
+        "pull_request": 1052,
+        "merged_via": 1052,
+        "commit": "6702848d2774cdae207555d560bc917273847317",
+        "introduced_blob": "83057df40247b6f359609e829d24f76a3b78ddad"
+      }
+    },
+    {
+      "source": "src/game/cu_8010A640.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8010A640"
+      ],
+      "provenance": {
+        "pull_request": 1052,
+        "merged_via": 1052,
+        "commit": "6702848d2774cdae207555d560bc917273847317",
+        "introduced_blob": "2136bfd26f81d5a9ec7a45799b325ee979ab3e9a"
+      }
+    },
+    {
+      "source": "src/game/cu_8010AFB8.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8010AFB8"
+      ],
+      "provenance": {
+        "pull_request": 1052,
+        "merged_via": 1052,
+        "commit": "6702848d2774cdae207555d560bc917273847317",
+        "introduced_blob": "9d4a7ccdb1b3026307a59cd363e58343b4229642"
+      }
+    },
+    {
+      "source": "src/game/cu_8010D090.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8010D090"
+      ],
+      "provenance": {
+        "pull_request": 1052,
+        "merged_via": 1052,
+        "commit": "6702848d2774cdae207555d560bc917273847317",
+        "introduced_blob": "7b65a938db1b944a3063b26016b0b3cf1a65e1af"
+      }
+    },
+    {
+      "source": "src/game/cu_8010D508.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8010D508"
+      ],
+      "provenance": {
+        "pull_request": 1052,
+        "merged_via": 1052,
+        "commit": "6702848d2774cdae207555d560bc917273847317",
+        "introduced_blob": "82054184bfa778b8024a06c131a100b452ffddd5"
+      }
+    },
+    {
+      "source": "src/game/cu_8010E15C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8010E15C"
+      ],
+      "provenance": {
+        "pull_request": 1052,
+        "merged_via": 1052,
+        "commit": "6702848d2774cdae207555d560bc917273847317",
+        "introduced_blob": "cc86fafaa3e941e6466af2175f57fcc2e825e2ce"
+      }
+    },
+    {
+      "source": "src/game/cu_8010E59C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8010E59C"
+      ],
+      "provenance": {
+        "pull_request": 1052,
+        "merged_via": 1052,
+        "commit": "6702848d2774cdae207555d560bc917273847317",
+        "introduced_blob": "12ac3fd8ed99d7c3eaaae07b825a0bca98e1ed18"
+      }
     }
   ],
   "target": "GN7E69",

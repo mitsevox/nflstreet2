@@ -558,7 +558,7 @@ void fn_800D7A0C(Object_80039F5C *p, int a);
 int fn_800E815C(Object_80039F5C *p, int a, int b);
 int fn_800E98A4(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_800F2C1C(Object_80039F5C *p, int a);
-int fn_8010A2DC(Object_80039F5C *p, int a, int b);
+int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 int fn_80113088(Object_80039F5C *p);
 int fn_80113604(Object_80039F5C *p);
 Object_80039F5C *fn_80114E7C(Object_80039F5C *p);
@@ -3108,6 +3108,7 @@ extern "C" void fn_8010B1FC(Object_80039F5C *p, int a, short b) {
 extern "C" unsigned char fn_8010B3A0(Object_80039F5C *p, int kind) {
     unsigned char result = 0;
     unsigned char i;
+    Object_80039F5C *pOther;
 
     switch (kind) {
     case 5: {
@@ -3128,8 +3129,7 @@ extern "C" unsigned char fn_8010B3A0(Object_80039F5C *p, int kind) {
         break;
     }
     case 4: {
-        Object_80039F5C *pOther = fn_80137B40();
-
+        pOther = fn_80137B40();
         if (pOther != 0) {
             result = fn_8010B87C(p, pOther);
         }
@@ -3138,8 +3138,7 @@ extern "C" unsigned char fn_8010B3A0(Object_80039F5C *p, int kind) {
     case 3: {
         unsigned int count = fn_80178D18(p->mIdBytes[2]);
         for (i = 0; i < count; i++) {
-            Object_80039F5C *pOther = fn_80039F5C(p->mIdBytes[2] ^ 1, i);
-
+            pOther = fn_80039F5C(p->mIdBytes[2] ^ 1, i);
             if (pOther->mFlags & 0x800) {
                 result = fn_8010B87C(p, pOther);
             }

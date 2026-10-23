@@ -53,7 +53,10 @@ struct State_80105898 {
 extern float lbl_803EAEF4;
 
 struct Block_800F4A74 {
-    char mUnknown0[20];
+    unsigned short mUnknown0;
+    char mUnknown2[2];
+    Vector_80039F5C mUnknown4;
+    unsigned int mUnknown16;
     int mUnknown20;
     int mUnknown24;
     float mUnknown28;
@@ -77,7 +80,9 @@ struct Block_800F4A74 {
     unsigned char mUnknown62;
     unsigned char mUnknown63;
     unsigned char mUnknown64;
-    char mUnknown65[23];
+    unsigned char mUnknown65;
+    unsigned char mUnknown66;
+    char mUnknown67[21];
 };
 
 /* View of another player's +336 block read by fn_800F3344 while that player
@@ -832,10 +837,10 @@ extern "C" int fn_80106580(Object_80039F5C *p, int a) {
     Object_80039F5C *pTarget = fn_80105384(p, a, 0);
 
     if (pTarget != 0 && fn_80105E90(p, pTarget, 11) && fn_80106618(p)) {
-        result = 1;
         fn_80106678(fn_8011F518(), pTarget, 6, 11);
         fn_8010CEB8(pTarget, 11);
         fn_800D6914(0, p);
+        result = 1;
     }
     return result;
 }

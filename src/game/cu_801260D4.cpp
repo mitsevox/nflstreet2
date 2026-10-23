@@ -54,7 +54,7 @@ int fn_800D0B90(Object_80039F5C *p);
 int fn_800DC080(Object_80039F5C *p);
 int fn_800E1584(Object_80039F5C *p);
 int fn_800E96EC(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_8010A2DC(Object_80039F5C *p, int a, int b);
+int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 int fn_80110C10(Object_80039F5C *p);
 int fn_80110C68(Object_80039F5C *p);
 void fn_80111354(Object_80039F5C *p);
