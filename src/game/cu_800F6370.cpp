@@ -43,11 +43,11 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
 
     if (p == fn_80137B40()) {
         fn_8011E3EC(p, 0);
-        result = 1;
         fn_8011E240(p);
         fn_801C1F94(&message, 0, sizeof(message));
         message.mId = 1;
         fn_800F053C(0, p->mpState, &message, p);
+        result = 1;
     } else {
         fn_8010A2DC(p, 0, -1);
         fn_800F60BC(p);
@@ -71,11 +71,8 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
                         if (fn_801783AC(0) == 0) {
                             fn_8011E194(p, 1);
                         }
-                        int found = 1;
+                        int found = fn_800F06F4(0, p->mpState, 19, 0xFFFF) == 0xFFFF ? 0 : 1;
 
-                        if (fn_800F06F4(0, p->mpState, 19, 0xFFFF) == 0xFFFF) {
-                            found = 0;
-                        }
                         if (found) {
                             message.mUnknown1[0] = 32;
                             fn_800F05E4(0, p->mpState, &message, p);
@@ -132,11 +129,8 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
                     if (fn_801783AC(0) == 0) {
                         fn_8011E194(p, 1);
                     }
-                    int found = 1;
+                    int found = fn_800F06F4(0, p->mpState, 19, 0xFFFF) == 0xFFFF ? 0 : 1;
 
-                    if (fn_800F06F4(0, p->mpState, 19, 0xFFFF) == 0xFFFF) {
-                        found = 0;
-                    }
                     if (found) {
                         message.mUnknown1[0] = 32;
                         fn_800F05E4(0, p->mpState, &message, p);
