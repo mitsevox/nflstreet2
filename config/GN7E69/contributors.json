@@ -9816,7 +9816,7 @@
           "commit": "e6b7c753a0060b01801ed06f95f59d7fb84e5a04",
           "blob": "0e410b1f65f905bf8afa81738d6eafdcda114977"
         },
-        "integration_adjustment": "fn_80132630 from mitsevox's src/game/cu_80132630.cpp (PR 737, a measured fuzzy partial there) moved into its likely file src/game/cu_8013141C.cpp and made exact by writing fabsf(pPos->mX) in each of its three range tests instead of one local; parameters renamed to the file's pPos/pOther style, the rest of the body unchanged. fragment_origin keeps the original source location, commit and blob. The final file blob is pinned for squash publication; original_commit/original_blob record the commit that moved the body."
+        "integration_adjustment": "fn_80132630 from mitsevox's src/game/cu_80132630.cpp (PR 737, a measured fuzzy partial there) moved into its likely file src/game/cu_8013141C.cpp and made exact by writing fabsf(pPos->mX) in each of its three range tests instead of one local; parameters renamed to the file's pPos/pOther style, the angle factor written as 16777216.0f / 360.0f, and the rest of the body unchanged. fragment_origin keeps the original source location, commit and blob. The final file blob is pinned for squash publication; original_commit/original_blob record the commit that moved the body."
       }
     },
     {
