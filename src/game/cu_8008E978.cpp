@@ -213,8 +213,9 @@ int fn_80096074(Params_80092E54 *pRequest, int flag);
 void fn_80092538(void);
 int fn_80094B34(Table_800680A8 *pTable, int index);
 void fn_800A3B5C(Object_80039F5C *p);
-/* Returns a byte (lbz r3,0xb0 in the target body); fn_800A14E4 later in
-   this grouping only matches with the byte return. */
+/* Byte return: in the same grouping, fn_800A14E4 (lane L2, PR #1051)
+   matches only with this declaration; with int its caller adds a
+   clrlwi r30,r3,24 the target does not have. */
 unsigned char fn_80178348(void);
 int fn_80178360(void);
 int fn_8019623C(int id);
@@ -2012,9 +2013,11 @@ extern "C" void fn_80095370(unsigned int position, Object_80039F5C **ppOut, unsi
 
 /* Partial, not exact: the switch on the frame's four-character id compiles
    to a different comparison tree (the target tests the 'CH01' range
-   first), the BALC/FREC case uses different registers, and in the TNOR
-   case the target loads the player's +2 id byte before the fn_80178348
-   call where ours loads it after. */
+   first); in the BALC/FREC case the mIdBytes[3] == 1 test branches the
+   other way, with its blocks in a different order and different
+   registers; in the TNOR case the target loads the player's +2 id byte
+   before the fn_80178348 call where ours loads it after. Ours is 0x9C8
+   bytes against the target's 0xA00. */
 extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject,
                            Object_80039F5C **ppOut, unsigned short *pCount)
 {
