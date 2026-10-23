@@ -959,39 +959,50 @@ void fn_80100B34(Object_80039F5C *p,float *out,float *maximum,float a,float b,fl
     }
 }
 
-void fn_80100BF8(Object_80039F5C *p,Vector_80039F5C *point,Point_8017886C *offset,float,float factor,float skill)
+void fn_80100BF8(Object_80039F5C *p, Vector_80039F5C *point, Point_8017886C *offset, float, float factor, float skill)
 {
-    float error=0.0f,amount=0.0f,maximum=0.0f;
-    if(fn_800A7F1C(p->mIdBytes[2])==2)return;
+    float error = 0.0f;
+    float amount = 0.0f;
+    float maximum = 0.0f;
     Vector_80039F5C delta;
-    fn_802276B4(&delta,point,&p->mMotion.mPos);
-    float distance=fn_802270A4(&delta);
-    float length=factor*(lbl_803EAEB8-lbl_803EAEB4)+lbl_803EAEB4;
-    float ratio=distance/length;
-    length*=((float)fn_802372EC(0,7)*0.01f+1.0f);
-    if(!(ratio<=0.9f)) {
-        error=0.05f;
-        if(!(ratio<=1.0f)) {
-            error+=0.1f;
-            length*=1.0f-(fn_80237260(0)*error)*lbl_803EAEBC;
-            distance=length;
-            fn_80227538((Point_8017886C *)&delta,fn_801CFE40(delta.mY,delta.mX),length);
-            fn_80227638(point,&delta,&p->mMotion.mPos);
+    Point_8017886C combined;
+    Point_8017886C unused;
+    Point_8017886C final;
+    float distance;
+    float length;
+    float ratio;
+
+    if (fn_800A7F1C(p->mIdBytes[2]) == 2) {
+        return;
+    }
+    fn_802276B4(&delta, point, &p->mMotion.mPos);
+    distance = fn_802270A4(&delta);
+    length = factor * (lbl_803EAEB8 - lbl_803EAEB4) + lbl_803EAEB4;
+    ratio = distance / length;
+    length *= (float)fn_802372EC(0, 7) * 0.01f + 1.0f;
+    if (ratio > 0.9f) {
+        error = 0.05f;
+        if (ratio > 1.0f) {
+            error += 0.1f;
+            length *= 1.0f - fn_80237260(0) * error * lbl_803EAEBC;
+            distance = length;
+            fn_80227538((Point_8017886C *)&delta, fn_801CFE40(delta.mY, delta.mX), length);
+            fn_80227638(point, &delta, &p->mMotion.mPos);
         }
     }
-    fn_80100B34(p,&amount,&maximum,error,skill,distance);
-    fn_80227538((Point_8017886C *)&delta,fn_80100B0C(),amount);
-    Point_8017886C combined,unused;
-    fn_80227638(&combined,&delta,offset);fn_80227690(&unused,point,offset);
-    if(!(fn_802270A4(&combined)<=maximum) && !(amount<=fn_802270A4(offset))) {
-        fn_80227538((Point_8017886C *)&delta,fn_801CFE40(combined.mY,combined.mX),maximum);
-        fn_80227690(&delta,&delta,offset);
+    fn_80100B34(p, &amount, &maximum, error, skill, distance);
+    fn_80227538((Point_8017886C *)&delta, fn_80100B0C(), amount);
+    fn_80227638(&combined, &delta, offset);
+    fn_80227690(&unused, point, offset);
+    if (fn_802270A4(&combined) > maximum && amount > fn_802270A4(offset)) {
+        fn_80227538((Point_8017886C *)&delta, fn_801CFE40(combined.mY, combined.mX), maximum);
+        fn_80227690(&delta, &delta, offset);
     }
-    fn_80227638(point,&delta,point);
-    fn_80227690(&delta,point,&p->mMotion.mPos);
-    if(fn_802270A4(&delta)>length || !(ratio<=1.0f)) {
-        fn_80227538((Point_8017886C *)point,fn_801CFE40(delta.mY,delta.mX),length);
-        fn_80227638(point,point,&p->mMotion.mPos);
+    fn_80227638(point, &delta, point);
+    fn_80227690(&final, point, &p->mMotion.mPos);
+    if (fn_802270A4(&final) > length || ratio > 1.0f) {
+        fn_80227538((Point_8017886C *)point, fn_801CFE40(final.mY, final.mX), length);
+        fn_80227638(point, point, &p->mMotion.mPos);
     }
 }
 
