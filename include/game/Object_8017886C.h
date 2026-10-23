@@ -21,7 +21,7 @@ struct Object_8017886C {
     float mUnknown10;
     float mUnknown14;
     int mUnknown18;
-    char mUnknown1C;
+    unsigned char mUnknown1C;
     signed char mUnknown1D;
 };
 
