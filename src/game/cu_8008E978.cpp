@@ -60,6 +60,7 @@
 #include "game/Record_8011F518.h"
 #include "game/cu_80136B1C.h"
 #include "game/cu_8008E978.h"
+#include "game/DefPred.h"
 #include "game/fn_8007F828.h"
 #include "game/fn_800670B4.h"
 #include "game/fn_80096A58.h"
@@ -11434,46 +11435,34 @@ extern "C" int fn_8009FE24(Object_80039F5C *p)
     return result;
 }
 
-/* Eight-byte pair allocated by fn_8009FF0C. */
-struct Pair_8009FF0C {
-    int mUnknown0;
-    int mUnknown4;
-};
-
-/* Object passed to the vtable 0x80297AF0 entries; only +0x10 is typed. */
-struct Object_8009FF0C {
-    unsigned char mUnknown0[16];
-    Pair_8009FF0C *mpUnknown10;
-};
-
 void *operator new(unsigned int size, int unknown);
 
 extern "C" int lbl_803EA9DC;
 
-extern "C" void *fn_8009FEF0(void)
+ModuleDependency *DefPred::GetDependencies()
 {
-    return &lbl_803EA9DC;
+    return (ModuleDependency *)&lbl_803EA9DC;
 }
 
-extern "C" int fn_8009FEF8(void)
+ModuleDependency *DefPred::GetLinks()
 {
     return 0;
 }
 
-extern "C" int fn_8009FF0C(Object_8009FF0C *p)
+int DefPred::Init()
 {
-    Pair_8009FF0C *pPair = new (0) Pair_8009FF0C;
+    DefPredState *pState = new (0) DefPredState;
 
-    pPair->mUnknown0 = 0;
-    p->mpUnknown10 = pPair;
-    pPair->mUnknown4 = 0;
+    pState->mUnknown0 = 0;
+    mpState.mp = pState;
+    pState->mUnknown4 = 0;
     return 1;
 }
 
-extern "C" int fn_8009FF58(Object_8009FF0C *p)
+int DefPred::Shutdown()
 {
-    delete p->mpUnknown10;
-    p->mpUnknown10 = 0;
+    delete mpState.mp;
+    mpState.mp = 0;
     return 1;
 }
 
