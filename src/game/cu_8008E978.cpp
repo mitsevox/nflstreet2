@@ -5065,7 +5065,7 @@ extern "C" int fn_8009B718(void *p)
 
 extern "C" void fn_8009B720(void *pData)
 {
-    Block_8009B720 *pBlock = 0;
+    Block_8009B720 *pBlock;
     unsigned int i;
 
     lbl_803EA98C = 0;
@@ -13491,10 +13491,13 @@ extern "C" int fn_8009F7A4(Object_80039F5C *p, Object_80039F5C **ppOut)
 extern "C" int fn_8009FD7C(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     int result = 0;
-    short *pRatings = pOther->mRatings;
-    int value = p->mRatings[8] - (pRatings[0] / 8 + pRatings[3] / 8);
+    int value = p->mRatings[8] - (pOther->mRatings[0] / 8 + pOther->mRatings[3] / 8);
 
-    value = value < lbl_803EA9D4 ? lbl_803EA9D4 : (value > lbl_803EA9D8 ? lbl_803EA9D8 : value);
+    if (value < lbl_803EA9D4) {
+        value = lbl_803EA9D4;
+    } else if (value > lbl_803EA9D8) {
+        value = lbl_803EA9D8;
+    }
     if (fn_802372EC(0, lbl_803EA9D0) < value) {
         result = 1;
     }

@@ -1,6 +1,8 @@
 #include "game/cu_8008E978.h"
 #include "game/cu_8002B8F8.h"
 #include "game/Object_8003DEC4.h"
+#include "game/cu_80064864.h"
+#include "game/fn_800AD9B4.h"
 
 struct Class_80297C60;
 struct Sample_801C009C;
@@ -15,7 +17,6 @@ void fn_8005BF18(void);
 void fn_8005BF5C(void);
 void fn_8005BF98(void);
 int fn_8005BFD4(void);
-void fn_800655B8(void);
 void fn_80067E3C(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 int fn_800737B8(void);
 Object_80039F5C *fn_8008FF28(Params_80092E54 *pRequest, Actor_801C009C *pActor);
@@ -37,7 +38,6 @@ void fn_800941EC(void);
 int fn_80096304(int index);
 int fn_8009637C(int index);
 void fn_8009BA10(int value);
-int fn_800AD9B4(void);
 int fn_800B65A0(int team);
 void fn_800B9B64(Class_80297C60 *p, int enable, int value);
 void fn_8015A0D0(int value);
@@ -61,15 +61,16 @@ extern Type_803EA368 *lbl_803EA368;
    sequence ends or cannot start. 0: wait until fn_800927BC(index) reports
    ready, clear the frame counter 0x803EA8D0. 1: count frames, start
    fn_800655B8 once, then wait for fn_80096304 (kind 1 counts as ready) and,
-   when fn_800AD9B4 was 4 on entry, until the frame counter exceeds 120; drop
-   the +0xE0 selection when fn_801C009C finds no sample for it, then go to 2
+   when fn_800AD9B4 was 4 on entry, until the frame counter exceeds 120; when
+   fn_801C009C finds no sample for the +0xE0 selection, clear its two ids and
+   keep +0xE0 set only if fn_801C00F8 returns a fallback sample; then go to 2
    (flag 1, via fn_80091240), 3 (kind other than 1 with fn_800AD9B4 4, or
    fn_800AD9B4 2; starts fn_8005BE5C) or 4. 2: wait for fn_8009637C, then 3 or
    4 the same way; like 1, kind 1 counts as ready. 3: in those modes wait for
    fn_8005BFD4 to report 1, then go to 4. 4: set up the players and objects
    (fn_80091864, fn_80091AD0, fn_800916E0, fn_80090E4C, fn_80090BDC and the
    rest), pass the team of the character's first player (fn_8008FF28) to
-   fn_800B9B64 when the block's +0xE4F byte is set, and go to 5. 5: once
+   fn_800B9B64 when the block's +0xECF byte is set, and go to 5. 5: once
    fn_80091D34 is set or fn_80091C84 reports nothing left, hand over to 6 in
    those modes, else set 8 and return 0; until then, while fn_80091C84 reports
    a value under 15 it calls fn_8005BF98 and sets 0x803EA8C8. 6: wait for
@@ -79,8 +80,7 @@ extern Type_803EA368 *lbl_803EA368;
    set, clear 0x803EA8BD and 0x803EA8C0, and end. On an end it calls
    fn_80067E3C(0x82, ...) when fn_800737B8 is set, runs fn_800941B8 and
    fn_800941EC, calls fn_80092380(character, 0) unless fn_800AD9B4 is 7, and
-   calls fn_80028DD0(1.0f). Case 2 keeps its ready flag apart from the kind 1
-   override, as case 1 does with fn_80096304's result. */
+   calls fn_80028DD0(1.0f). */
 extern "C" int fn_80092830(int index)
 {
     Character_80093BCC *pCharacter = &lbl_803EC924->mUnknown80.mCharacters[index];
