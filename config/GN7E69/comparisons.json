@@ -28222,7 +28222,7 @@
     },
     {
       "source": "src/engine/cu_80226F9C.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv provisional unit row 0x80226F9C-0x80227F14 (src/engine/cu_80226F9C.c), its function and name rows and the exact .sdata data row 0x803EBF88-0x803EBF8C. Draft comparisons only; original assembly remains linked. The four functions that load .rodata constants have no draft body and no .rodata is registered.",
       "sections": [
         {
@@ -28981,7 +28981,7 @@
     },
     {
       "source": "src/engine/cu_8022F428.c",
-      "profile": "engine_c",
+      "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv provisional unit row 0x8022F428-0x802355E4 (src/engine/cu_8022F428.c), its function and name rows and the cu_8022F428 source-form and compiler rows. The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
@@ -35354,7 +35354,7 @@
     {
       "source": "src/game/cu_80156384.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #840; twelve complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 6, 7, 10 and 11 of the tables 0x802A1C30 (0x80156384-0x80156394), 0x802A19F0 (0x801563D0-0x801563E0) and 0x802A1860 (0x801563E8-0x801563F8), each derived from the engine table 0x80297B90 (include/game/Class_80297B90.h). The destructor 0x8015639C inside the range is not registered. No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80156350 before the range and 0x80156400 onward excluded; original bytes stay linked.",
+      "evidence": "Issue #840; twelve complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 6, 7, 10 and 11 of the tables 0x802A1C30 (0x80156384-0x80156394), 0x802A19F0 (0x801563D0-0x801563E0) and 0x802A1860 (0x801563E8-0x801563F8), each derived from the engine table 0x80297B90 (include/game/Class_80297B90.h). The destructor 0x8015639C inside the range is not registered. No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80156350 before the range is src/game/cu_8015631C.cpp and 0x80156400 onward excluded; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -35429,7 +35429,7 @@
     {
       "source": "src/game/cu_801562D0.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #844; six complete slot bodies of the table 0x802A1E38 (derived from the rule-set table 0x802A56E8, include/game/Class_802A56E8.h) inside the retained provisional cu_801485B4 survey group: slots 1, 4, 7, 8, 9 and 14 (0x801562D0-0x8015631C, words 0x802A1E44, 0x802A1E5C, 0x802A1E74, 0x802A1E7C, 0x802A1E84 and 0x802A1EAC). The .bss object 0x8031BDD4 is referenced as an extern. Original file boundaries and nominal identity unresolved; 0x8015629C before the range and 0x8015631C onward excluded; original bytes stay linked.",
+      "evidence": "Issue #844; six complete slot bodies of the table 0x802A1E38 (derived from the rule-set table 0x802A56E8, include/game/Class_802A56E8.h) inside the retained provisional cu_801485B4 survey group: slots 1, 4, 7, 8, 9 and 14 (0x801562D0-0x8015631C, words 0x802A1E44, 0x802A1E5C, 0x802A1E74, 0x802A1E7C, 0x802A1E84 and 0x802A1EAC). The .bss object 0x8031BDD4 is referenced as an extern. Original file boundaries and nominal identity unresolved; 0x8015629C before the range is src/game/cu_8015629C.cpp and 0x8015631C is src/game/cu_8015631C.cpp; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -35554,7 +35554,7 @@
     {
       "source": "src/game/cu_8015609C.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #848; five complete slot bodies inside the retained provisional cu_801485B4 survey group: slot 14 of the table 0x802A2560 (derived from the rule-set table 0x802A56E8, include/game/Class_802A56E8.h; 0x8015609C, word 0x802A25D4) and slots 6, 7, 10 and 11 of the table 0x802A24F8 (derived from the engine table 0x80297B90, include/game/Class_80297B90.h; 0x801560A4-0x801560B4, words 0x802A252C, 0x802A2534, 0x802A254C and 0x802A2554). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80156068 before the range and 0x801560BC onward excluded; original bytes stay linked.",
+      "evidence": "Issue #848; five complete slot bodies inside the retained provisional cu_801485B4 survey group: slot 14 of the table 0x802A2560 (derived from the rule-set table 0x802A56E8, include/game/Class_802A56E8.h; 0x8015609C, word 0x802A25D4) and slots 6, 7, 10 and 11 of the table 0x802A24F8 (derived from the engine table 0x80297B90, include/game/Class_80297B90.h; 0x801560A4-0x801560B4, words 0x802A252C, 0x802A2534, 0x802A254C and 0x802A2554). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x80156068 before the range is src/game/cu_80156068.cpp and 0x801560BC is src/game/cu_801560BC.cpp; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -35594,7 +35594,7 @@
     {
       "source": "src/game/cu_801560F0.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #857; four complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 6, 7, 10 and 11 of the table 0x802A2200 (derived from the engine table 0x80297B90, include/game/Class_80297B90.h; 0x801560F0, 0x801560F4, 0x801560F8 and 0x80156100, words 0x802A2234, 0x802A223C, 0x802A2254 and 0x802A225C). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x801560BC before the range and 0x80156108 onward excluded; original bytes stay linked.",
+      "evidence": "Issue #857; four complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 6, 7, 10 and 11 of the table 0x802A2200 (derived from the engine table 0x80297B90, include/game/Class_80297B90.h; 0x801560F0, 0x801560F4, 0x801560F8 and 0x80156100, words 0x802A2234, 0x802A223C, 0x802A2254 and 0x802A225C). No literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x801560BC before the range is src/game/cu_801560BC.cpp and 0x80156108 onward excluded; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -36756,6 +36756,91 @@
           "symbol": "fn_80148DFC",
           "start": "0x80148DFC",
           "end": "0x80149014"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80156068.cpp",
+      "profile": "game_cpp",
+      "evidence": "One complete destructor body inside the retained provisional cu_801485B4 survey group (0x80156068-0x8015609C): the destructor of the Class_80297CE8-derived table 0x802A26D8 (slot 1, word 0x802A26E4). The body is an empty destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. The original destructor was inline (the teardown 0x8014B7D4 stores 0x80297CE8 at +8 at 0x8014B86C and calls 0x801D3C18 at 0x8014B870 without calling it); the out-of-line definition is a stand-in for the emitted copy, accepted by the owner strictly as a comparison-only emitted-copy representation; actual inline class/vtable context must be recovered before promotion or reconstructed caller use. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80156068",
+          "end": "0x8015609C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "_._14Class_802A26D8",
+          "start": "0x80156068",
+          "end": "0x8015609C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801560BC.cpp",
+      "profile": "game_cpp",
+      "evidence": "One complete destructor body inside the retained provisional cu_801485B4 survey group (0x801560BC-0x801560F0): the destructor of the Class_80297CE8-derived table 0x802A23E0 (slot 1, word 0x802A23EC). The body is an empty destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. The original destructor was inline (the Block_802A21E8 destructor 0x80156108 stores 0x80297CE8 at +8 at 0x8015612C without calling it); the out-of-line definition is a stand-in for the emitted copy, accepted by the owner strictly as a comparison-only emitted-copy representation; actual inline class/vtable context must be recovered before promotion or reconstructed caller use. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801560BC",
+          "end": "0x801560F0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "_._14Class_802A23E0",
+          "start": "0x801560BC",
+          "end": "0x801560F0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8015629C.cpp",
+      "profile": "game_cpp",
+      "evidence": "One complete destructor body inside the retained provisional cu_801485B4 survey group (0x8015629C-0x801562D0): the destructor of the Class_802A56E8-derived table 0x802A1E38 (slot 22, word 0x802A1EEC). The body is an empty destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. The original destructor was inline (the teardown 0x80151A28 stores 0x802A1E38 at +32 at 0x80151AF0 and calls 0x801D3C18 at 0x80151B00 without calling it); the out-of-line definition is a stand-in for the emitted copy, accepted by the owner strictly as a comparison-only emitted-copy representation; actual inline class/vtable context must be recovered before promotion or reconstructed caller use. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015629C",
+          "end": "0x801562D0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "_._14Class_802A1E38",
+          "start": "0x8015629C",
+          "end": "0x801562D0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8015631C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Two complete destructor bodies inside the retained provisional cu_801485B4 survey group (0x8015631C-0x80156384): the destructor of the Class_80297BF8-derived table 0x802A1DC8 (slot 12, word 0x802A1E2C); the destructor of the Class_80297CE8-derived table 0x802A1D58 (slot 1, word 0x802A1D64). Each body is an empty destructor that calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; table addresses resolve through _vt externals. The original destructors were inline (the teardown 0x80151A28 stores 0x80297CE8 at +8 at 0x80151AF8 and 0x802A1DC8 at +0 at 0x80151AFC and calls 0x801D3C18 at 0x80151B00 without calling either); the out-of-line definitions are a stand-in for the emitted copies, accepted by the owner strictly as a comparison-only emitted-copy representation; actual inline class/vtable context must be recovered before promotion or reconstructed caller use. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015631C",
+          "end": "0x80156384"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "_._14Class_802A1DC8",
+          "start": "0x8015631C",
+          "end": "0x80156350"
+        },
+        {
+          "symbol": "_._14Class_802A1D58",
+          "start": "0x80156350",
+          "end": "0x80156384"
         }
       ]
     },
@@ -52610,6 +52695,41 @@
           "symbol": "fn_80120D98",
           "start": "0x80120D98",
           "end": "0x80120E98"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80155F98.cpp",
+      "profile": "game_cpp",
+      "evidence": "Four complete slot-35 destructor bodies inside the retained provisional cu_801485B4 survey group: the destructors of the Class_80148A58-derived tables 0x802A2C90, 0x802A2B68, 0x802A2A40 and 0x802A2918 (0x80155F98-0x80156068; words 0x802A2DAC, 0x802A2C84, 0x802A2B5C and 0x802A2A34). Each stores its own table at +24 and calls __builtin_delete (0x801D3C18) when bit 0 of r4 is set; the table addresses resolve through the _vt externals. The original destructors were inline (the static destroy path 0x80155E28 only stores the tables); the out-of-line definitions are a stand-in for the emitted copies, accepted by the owner strictly as a comparison-only emitted-copy representation; actual inline class/vtable context must be recovered before promotion or reconstructed caller use. No literal or data word is owned. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80155F98",
+          "end": "0x80156068"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "_._14Class_802A2C90",
+          "start": "0x80155F98",
+          "end": "0x80155FCC"
+        },
+        {
+          "symbol": "_._14Class_802A2B68",
+          "start": "0x80155FCC",
+          "end": "0x80156000"
+        },
+        {
+          "symbol": "_._14Class_802A2A40",
+          "start": "0x80156000",
+          "end": "0x80156034"
+        },
+        {
+          "symbol": "_._14Class_802A2918",
+          "start": "0x80156034",
+          "end": "0x80156068"
         }
       ]
     }
