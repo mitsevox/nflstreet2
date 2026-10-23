@@ -423,14 +423,14 @@ int fn_800FF094(Object_80039F5C *p)
         } else if (fn_801BE648(p->mpUnknown792) == 100) {
             if (s->mUnknown2 == 2) {
                 p->mUnknown512.mUnknown14 = 7;
-                p->mUnknown512.mUnknown0 = 1.5f;
                 p->mUnknown512.mUnknown4 = s->mUnknown4;
                 p->mUnknown512.mUnknown8 = s->mUnknown4;
+                p->mUnknown512.mUnknown0 = 1.5f;
             } else {
                 p->mUnknown512.mUnknown14 = 6;
-                p->mUnknown512.mUnknown0 = 1.0f;
                 p->mUnknown512.mUnknown4 = s->mUnknown4;
                 p->mUnknown512.mUnknown8 = s->mUnknown4;
+                p->mUnknown512.mUnknown0 = 1.0f;
             }
         } else {
             s->mUnknown2 = s->mUnknown3Byte;
@@ -457,9 +457,9 @@ int fn_800FF094(Object_80039F5C *p)
                 p->mUnknown512.mUnknown15 = 1;
             }
             p->mUnknown512.mUnknown14 = fn_80137C48(p) ? 1 : 9;
-            p->mUnknown512.mUnknown0 = speed;
-            p->mUnknown512.mUnknown4 = angle;
             p->mUnknown512.mUnknown8 = angle;
+            p->mUnknown512.mUnknown4 = angle;
+            p->mUnknown512.mUnknown0 = speed;
         }
         break;
     case 4:
@@ -467,9 +467,9 @@ int fn_800FF094(Object_80039F5C *p)
             if (fn_801CFFD0(p->mMotion.mFacing, s->mUnknown16) <= 0x155554) {
                 if (p->mpState[1].mId != 87) {
                     p->mUnknown512.mUnknown14 = 3;
-                    p->mUnknown512.mUnknown0 = 0.0f;
                     p->mUnknown512.mUnknown4 = s->mUnknown16;
                     p->mUnknown512.mUnknown8 = s->mUnknown16;
+                    p->mUnknown512.mUnknown0 = 0.0f;
                     break;
                 }
             } else {
