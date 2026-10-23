@@ -6880,6 +6880,25 @@
       }
     },
     {
+      "source": "src/game/cu_80176F18.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80176F18",
+        "0x8017BD70"
+      ],
+      "provenance": {
+        "pull_request": 353,
+        "merged_via": 356,
+        "commit": "5de333e724d6d424604ecc11669310ad322f0a0b",
+        "introduced_blob": "00cd14810389f118329eef78c2ee169c5debcbab",
+        "original_commit": "a30c66d3eb905c9749ee332d72de494cafb4b2ee",
+        "original_blob": "fcb0b7a66db79b59d63d9b0d0901fa0bfde2c249",
+        "integration_adjustment": "Newly exact pre-existing bodies (fn_80176F18, fn_8017BD70) originate in contribution 353; the PR 1060 source-form refinement (fabsf tolerance tests and the int declaration of fn_800B2314) that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
+    },
+    {
       "source": "src/game/cu_801260D4.cpp",
       "contributors": [
         "adampreddy"
