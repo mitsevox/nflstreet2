@@ -879,32 +879,68 @@ int fn_80100370(Object_80137ABC *ball, Object_80039F5C *p, Vector_80039F5C *out,
     return result;
 }
 
-void fn_801007A4(Object_80137ABC *ball,Object_80039F5C *p,Object_80039F5C *other,Vector_80039F5C *out,unsigned char *kind,float value)
+void fn_801007A4(Object_80137ABC *ball, Object_80039F5C *p, Object_80039F5C *other, Vector_80039F5C *out,
+                 unsigned char *kind, float value)
 {
-    int id=*kind;
-    if(id==1 || id==7) {
-        if(fn_80100370(ball,other,out,value))return;
-        *kind=*kind==1?0:6;return;
-    }
-    if(id!=0 && id!=4 && id!=6) {out->mX=out->mY=out->mZ=0.0f;return;}
-    Vector_80039F5C velocity={other->mMotion.mUnknown40,other->mMotion.mUnknown44,other->mMotion.mUnknown48};
-    Vector_80039F5C pos=other->mMotion.mPos;
-    State_80039F5C *state=other->mpState;
-    float speed=other->mMotion.mUnknown28;
-    if(state->mId==19) {
-        int left=fn_801CFFD0(other->mMotion.mUnknown32,0x800000),right=fn_801CFFD0(other->mMotion.mUnknown32,0);
-        if(!(pos.mY>=p->mMotion.mPos.mY-2.0f) && (left<=0x271C70 || right<0x271C71)) {
-            speed=fn_8016D9F4(other,1.0f,1.0f);fn_80227538((Point_8017886C *)&velocity,other->mMotion.mUnknown32,speed);
-            if(left>0x271C70)pos.mX+=3.0f;else pos.mX-=3.0f;
+    Object_800B26B0 *motion = &other->mMotion;
+
+    switch (*kind) {
+    case 1:
+    case 7:
+        if (!fn_80100370(ball, other, out, value)) {
+            if (*kind == 1) {
+                *kind = 0;
+            } else {
+                *kind = 6;
+            }
         }
-    } else if(state->mId==51) {
-        if(fn_800F06F4(0,state,19,0xFFFF)!=0xFFFF && !(pos.mY<p->mMotion.mPos.mY)) {
-            pos.mY+=2.5f;speed=fn_8016D9F4(other,1.0f,1.0f);fn_80227538((Point_8017886C *)&velocity,other->mMotion.mUnknown32,speed);
+        break;
+    case 0:
+    case 4:
+    case 6: {
+        Vector_80039F5C velocity = *(Vector_80039F5C *)&motion->mUnknown40;
+        Vector_80039F5C pos = motion->mPos;
+        float speed = motion->mUnknown28;
+        State_80039F5C *state = other->mpState;
+
+        switch (state->mId) {
+        case 52:
+            if ((unsigned int)(state->mUnknown1 - 4) < 2) {
+                pos.mY += 3.0f;
+                speed = fn_8016D9F4(other, 1.0f, 1.0f);
+                fn_80227538((Point_8017886C *)&velocity, motion->mUnknown32, speed);
+            }
+            break;
+        case 51:
+            if (fn_800F06F4(0, state, 19, 0xFFFF) != 0xFFFF && other->mMotion.mPos.mY >= p->mMotion.mPos.mY) {
+                pos.mY += 2.5f;
+                speed = fn_8016D9F4(other, 1.0f, 1.0f);
+                fn_80227538((Point_8017886C *)&velocity, motion->mUnknown32, speed);
+            }
+            break;
+        case 19: {
+            int towardNegative = fn_801CFFD0(motion->mUnknown32, 0x800000) <= 0x271C70;
+            int towardPositive = fn_801CFFD0(motion->mUnknown32, 0) <= 0x271C70;
+
+            if (motion->mPos.mY < p->mMotion.mPos.mY - 2.0f && (towardNegative || towardPositive)) {
+                speed = fn_8016D9F4(other, 1.0f, 1.0f);
+                fn_80227538((Point_8017886C *)&velocity, motion->mUnknown32, speed);
+                if (towardNegative) {
+                    pos.mX -= 3.0f;
+                } else {
+                    pos.mX += 3.0f;
+                }
+            }
+            break;
         }
-    } else if(state->mId==52 && (unsigned int)(state->mUnknown1-4)<2) {
-        pos.mY+=3.0f;speed=fn_8016D9F4(other,1.0f,1.0f);fn_80227538((Point_8017886C *)&velocity,other->mMotion.mUnknown32,speed);
+        }
+        fn_80103F80(ball, pos, velocity, motion->mUnknown32, out, other, speed, value);
+        break;
     }
-    fn_80103F80(ball,pos,velocity,other->mMotion.mUnknown32,out,other,speed,value);
+    default:
+        out->mX = out->mY = out->mZ = 0.0f;
+        break;
+    }
 }
 
 void fn_80100AA0(Object_80039F5C *p,int,float *a,float *b)
