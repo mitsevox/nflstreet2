@@ -632,7 +632,7 @@ extern "C" void fn_80091144(int index)
     }
 }
 
-extern "C" Actor_801C009C *fn_80091240(unsigned short index)
+extern "C" Actor_801C009C *fn_80091240(int index)
 {
     Character_80093BCC *pCharacter = fn_80093BCC(index);
 
@@ -1032,7 +1032,7 @@ extern "C" int fn_80092784(unsigned char index)
     return result;
 }
 
-extern "C" int fn_800927BC(int index)
+extern "C" int fn_800927BC(unsigned char index)
 {
     Character_80093BCC *pCharacter = &lbl_803EC924->mUnknown80.mCharacters[index];
     int result = 0;
@@ -2333,7 +2333,7 @@ extern "C" int fn_80096304(int index)
     return result;
 }
 
-extern "C" int fn_8009637C(unsigned short index)
+extern "C" int fn_8009637C(int index)
 {
     Character_80093BCC *pCharacter = fn_80093BCC(index);
     int result = 1;
@@ -6909,7 +6909,7 @@ extern "C" void fn_800A9384(int mode)
 
 extern "C" int fn_800A9648(void)
 {
-    return fn_800927BC((unsigned char)lbl_8030F42C.mUnknown14[lbl_8030F42C.mUnknownC]);
+    return fn_800927BC(lbl_8030F42C.mUnknown14[lbl_8030F42C.mUnknownC]);
 }
 
 extern "C" {
@@ -9956,7 +9956,7 @@ extern "C" int fn_800AAAC4(void)
     int result = 1;
 
     if (lbl_803EAA88->mUnknownC != -1) {
-        result = fn_800927BC((unsigned char)lbl_803EAA88->mUnknownC);
+        result = fn_800927BC(lbl_803EAA88->mUnknownC);
     }
     return result;
 }

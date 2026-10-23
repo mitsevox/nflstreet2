@@ -26506,6 +26506,32 @@
       ]
     },
     {
+      "source": "src/game/cu_80092830.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_80092830 and the literal-pool slice 0x802960EC-0x802960F4 they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80092830",
+          "end": "0x80092E54"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802960EC",
+          "end": "0x802960F4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80092830",
+          "start": "0x80092830",
+          "end": "0x80092E54"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80097160.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. 4 target whole-function extents and the literal-pool slice 0x80296198-0x802961B4 they reference retain their evidence; the split lets this pool compile independently of the parent unit's other literals and does not claim an original file boundary or whole-unit promotion.",
