@@ -40878,19 +40878,19 @@
     {
       "source": "src/game/cu_800A8570.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Five target whole-function extents in 0x800A8570-0x800A9F4C and their contiguous literal-pool slice 0x80296888-0x802968DC; the integer-only neighbours inside the span stay in cu_8008E978.cpp, and the twelve unreferenced readonly bytes 0x8029687C-0x80296888 before the slice remain unowned. This split permits independent compilation of the partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Four target whole-function extents in 0x800A8570-0x800A9648 and their contiguous literal-pool slice 0x80296888-0x802968C0; the integer-only neighbours inside the span stay in cu_8008E978.cpp, and the twelve unreferenced readonly bytes 0x8029687C-0x80296888 before the slice remain unowned. This split permits independent compilation of the partial literal pool and does not claim an original file boundary or whole-unit promotion.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800A8570",
-          "end": "0x800A9F4C"
+          "end": "0x800A9648"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80296888",
-          "end": "0x802968DC"
+          "end": "0x802968C0"
         }
       ],
       "functions": [
@@ -40913,7 +40913,28 @@
           "symbol": "fn_800A9478",
           "start": "0x800A9478",
           "end": "0x800A9648"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800A9D84.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: one complete body whose float literals form the readonly slice measured here, split from cu_800A8570.cpp so that fragment keeps its exact slice. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800A9D84",
+          "end": "0x800A9F4C"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802968C0",
+          "end": "0x802968DC"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_800A9D84",
           "start": "0x800A9D84",
