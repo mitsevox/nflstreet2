@@ -544,15 +544,15 @@ void fn_800FF598(State_800FDA58 *s, Object_80039F5C *p, Point_8017886C *point, i
     } else {
         s->mUnknown28 = value;
     }
-    s->mUnknown3Byte = 0;
-    s->mUnknown40 = 0.0f;
+    s->mUnknown4 = 0;
+    s->mUnknown2 = 0;
     s->mUnknown32.mY = 0.0f;
     s->mUnknown32.mX = 0.0f;
-    s->mUnknown2 = 0;
-    s->mUnknown4 = 0;
+    s->mUnknown40 = 0.0f;
+    s->mUnknown3Byte = 0;
     p->mUnknown512.mUnknown14 = 1;
-    p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
     p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+    p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
     p->mUnknown512.mUnknown0 = s->mUnknown24;
 }
 
