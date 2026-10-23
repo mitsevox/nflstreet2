@@ -47,6 +47,7 @@
 #include "game/Record_800B15FC.h"
 #include "game/Settings_800B4448.h"
 #include "game/Block_800B3660.h"
+#include "game/Block_800B0CFC.h"
 #include "game/Table_80089904.h"
 #include "game/Team_80167A8C.h"
 #include "game/cu_8002B8F8.h"
@@ -6602,6 +6603,55 @@ extern "C" void fn_800B31B0(int a)
     fn_80167880();
 }
 
+extern "C" {
+void fn_80168744(unsigned char team, unsigned char a, unsigned char b, unsigned char c);
+void fn_80167FF0(int team);
+void fn_800B3474(void);
+void fn_800B3498(void);
+unsigned char fn_801374D4(void);
+int fn_8016DD60(void);
+void fn_8009D888(int index, int value);
+void fn_8017D764(void);
+}
+
+extern "C" void fn_800B32A8(float dt)
+{
+    int other = fn_80178320();
+    int team = fn_80178308();
+
+    if (fn_800BA6F8() == 0
+        && (fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF || fn_800BA6F8() != 0)) {
+        if (fn_800B65A0(other) == 0xFF) {
+            fn_80168744(other, lbl_803EAB34->mUnknown34[0], lbl_803EAB34->mUnknown34[1],
+                        lbl_803EAB34->mUnknown34[2]);
+        }
+        if (fn_800B65A0(team) == 0xFF) {
+            fn_80168744(team, lbl_803EAB34->mUnknown34[0], lbl_803EAB34->mUnknown34[1],
+                        lbl_803EAB34->mUnknown34[2]);
+        }
+    }
+    if (lbl_803EAB34->mUnknown41 == 0) {
+        fn_800B2E54();
+        fn_80167FF0(0);
+        fn_80167FF0(1);
+        lbl_803EAB34->mUnknown41 = 1;
+        fn_800B3474();
+        fn_800B3498();
+    }
+    if (fn_800B65A0(other) != 0xFF || fn_800B65A0(team) != 0xFF) {
+        fn_8013F97C(0);
+        fn_8013FA58(1, fn_801374D4());
+        fn_8013C6F0(fn_8013FA04(5));
+    }
+    if (fn_8016DD60() != 0) {
+        fn_800AD910(2, dt);
+    }
+    fn_8009D888(0, 10);
+    if (fn_80177F70() == 6) {
+        fn_8017D764();
+    }
+}
+
 extern "C" void fn_800B3420(void)
 {
     int team = fn_80178320();
@@ -9960,38 +10010,6 @@ struct Context_800AFC5C {
     float mUnknown8;
 };
 
-/* Records that Entry_800B0CFC +0 points to; fn_800AFE8C tests one of the
-   two points against the player. */
-struct Zone_800AFE8C {
-    unsigned char mUnknown0[16];
-    Point_80167910 mUnknown10;
-    Point_80167910 mUnknown18;
-};
-
-/* 72-byte entries of Block_800B0CFC. */
-struct Entry_800B0CFC {
-    Zone_800AFE8C *mpUnknown0[5];
-    void *mpUnknown14[5];
-    int mUnknown28[5];
-    unsigned char mUnknown3C[5];
-    unsigned char mUnknown41[5];
-    unsigned char mUnknown46;
-    unsigned char mUnknown47;
-};
-
-/* 744-byte block allocated under the id 'mmot' (fn_800B0CFC). */
-struct Block_800B0CFC {
-    Entry_800B0CFC mEntries[2][5];
-    int mUnknown2D0;
-    int mUnknown2D4;
-    int mUnknown2D8;
-    int mUnknown2DC;
-    int mUnknown2E0;
-    unsigned char mUnknown2E4;
-    unsigned char mUnknown2E5;
-    unsigned char mUnknown2E6[2];
-};
-
 /* Three words passed by address to fn_80238388. */
 struct Args_800B1478 {
     int mUnknown0;
@@ -10032,7 +10050,6 @@ extern void *lbl_803EAB00;
 extern unsigned char lbl_803EAB04;
 extern Block_800AFCB8 *lbl_803EAB0C;
 extern unsigned char lbl_803EAB10[4];
-extern Block_800B0CFC *lbl_803EAB14;
 extern int lbl_803EAB18;
 extern int lbl_803EC974;
 extern Table_800AF71C *lbl_803EC978;

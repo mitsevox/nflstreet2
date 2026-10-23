@@ -26468,6 +26468,26 @@
           "symbol": "fn_800B5764",
           "start": "0x800B5764",
           "end": "0x800B57F4"
+        },
+        {
+          "symbol": "fn_800B2F40",
+          "start": "0x800B2F40",
+          "end": "0x800B3074"
+        },
+        {
+          "symbol": "fn_800B32A8",
+          "start": "0x800B32A8",
+          "end": "0x800B3420"
+        },
+        {
+          "symbol": "fn_800B3AF4",
+          "start": "0x800B3AF4",
+          "end": "0x800B3C54"
+        },
+        {
+          "symbol": "fn_800B3EFC",
+          "start": "0x800B3EFC",
+          "end": "0x800B4020"
         }
       ]
     },
@@ -39105,6 +39125,32 @@
           "symbol": "fn_800B2A14",
           "start": "0x800B2A14",
           "end": "0x800B2B90"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800B0A2C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. 1 target whole-function extent(s) and their literal-pool slice; this split permits independent compilation of a partial literal pool and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800B0A2C",
+          "end": "0x800B0BC0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296B00",
+          "end": "0x80296B0C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800B0A2C",
+          "start": "0x800B0A2C",
+          "end": "0x800B0BC0"
         }
       ]
     },
