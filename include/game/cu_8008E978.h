@@ -42,6 +42,44 @@ struct Character_80093BCC : Params_80092E54 {
     int mUnknown38C;
 };
 
+struct Table_800680A8;
+
+/* Data whose word +4 fn_80094374 returns and whose words from +8
+   fn_80093BAC indexes; the bound of that array is not established. */
+struct Table_80093BAC {
+    unsigned char mUnknown0[4];
+    int mUnknown4;
+    Actor_801C009C *mpUnknown8[1];
+};
+
+/* One of the six 20-byte entries at +4 of Block_800925F0. */
+struct Entry_80094238 {
+    Table_80093BAC *mpUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    int mUnknownC;
+    int mUnknown10;
+};
+
+/* The 3664 bytes at +128 of Block_800925F0 that fn_800920EC copies and
+   fn_80092168 compares. */
+struct Block_800920EC {
+    Character_80093BCC mCharacters[4];
+    short mUnknownE40[7];
+    unsigned char mUnknownE4E;
+    unsigned char mUnknownE4F[1];
+};
+
+/* Allocated through fn_80238174 under the id 'anms' (fn_800925F0). */
+struct Block_800925F0 {
+    Table_800680A8 *mpUnknown0;
+    Entry_80094238 mEntries[6];
+    void *mpUnknown7C;
+    Block_800920EC mUnknown80;
+};
+
+extern Block_800925F0 *lbl_803EC924;
+
 /* One of the two 48-byte records at +16 of the block fn_80096954
    allocates. */
 struct Playback_80096DA8 {

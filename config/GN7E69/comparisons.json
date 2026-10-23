@@ -26935,6 +26935,58 @@
       ]
     },
     {
+      "source": "src/game/cu_800921E8.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_800921E8 and the literal-pool slice 0x802960D0-0x802960D8 they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800921E8",
+          "end": "0x80092380"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802960D0",
+          "end": "0x802960D8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800921E8",
+          "start": "0x800921E8",
+          "end": "0x80092380"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80092380.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_80092380 and the literal-pool slice 0x802960D8-0x802960DC they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80092380",
+          "end": "0x80092538"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802960D8",
+          "end": "0x802960DC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80092380",
+          "start": "0x80092380",
+          "end": "0x80092538"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80093D20.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_80093D20 and the literal-pool slice 0x80296100-0x80296104 they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. No original file boundary or whole-unit promotion is claimed.",

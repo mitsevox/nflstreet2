@@ -99,42 +99,6 @@
 #include "game/Block_800BFAD0.h"
 #include "game/Object_8007A334.h"
 
-struct Table_800680A8;
-
-/* Data whose word +4 fn_80094374 returns and whose words from +8
-   fn_80093BAC indexes; the bound of that array is not established. */
-struct Table_80093BAC {
-    unsigned char mUnknown0[4];
-    int mUnknown4;
-    Actor_801C009C *mpUnknown8[1];
-};
-
-/* One of the six 20-byte entries at +4 of Block_800925F0. */
-struct Entry_80094238 {
-    Table_80093BAC *mpUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknownC;
-    int mUnknown10;
-};
-
-/* The 3664 bytes at +128 of Block_800925F0 that fn_800920EC copies and
-   fn_80092168 compares. */
-struct Block_800920EC {
-    Character_80093BCC mCharacters[4];
-    short mUnknownE40[7];
-    unsigned char mUnknownE4E;
-    unsigned char mUnknownE4F[1];
-};
-
-/* Allocated through fn_80238174 under the id 'anms' (fn_800925F0). */
-struct Block_800925F0 {
-    Table_800680A8 *mpUnknown0;
-    Entry_80094238 mEntries[6];
-    void *mpUnknown7C;
-    Block_800920EC mUnknown80;
-};
-
 /* 16-byte records of the .data tables used by fn_80093E38, fn_80093E4C,
    fn_80093EC0 and fn_800940D8. */
 struct Record_80093E4C {
@@ -277,7 +241,6 @@ int fn_800948E4(Object_8017886C *p);
 unsigned int fn_80094AE0(short *pValues, Object_8017886C *p, Table_800680A8 *pTable, unsigned short **ppOut, unsigned int max);
 void fn_80094B78(Header_80094B78 *p);
 
-extern Block_800925F0 *lbl_803EC924;
 extern unsigned char lbl_803EA8BC;
 extern unsigned char lbl_803EA8BD;
 extern unsigned char lbl_803EA8BE;
