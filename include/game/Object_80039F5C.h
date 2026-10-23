@@ -409,10 +409,16 @@ struct Object_80039F5C {
         Block_8011E240 mBlock1032;
     };
     int mUnknown1140;
-    char mUnknown1144[10];
-    unsigned short mUnknown1154;
+    int mUnknown1144;
+    float mUnknown1148;
+    short mUnknown1152;
+    union {
+        unsigned short mUnknown1154;
+        short mUnknown1154Signed;
+    };
     unsigned char mUnknown1156;
-    char mUnknown1157[3];
+    char mUnknown1157[1];
+    short mUnknown1158;
     Block_801718E8 mUnknown1160;
     char mUnknown1216[2];
     unsigned char mUnknown1218;
