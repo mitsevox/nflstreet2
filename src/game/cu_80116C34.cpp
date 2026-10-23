@@ -238,7 +238,8 @@ int fn_80117494(Object_80039F5C *p, Point_8017886C *out)
             if (first || second || fn_801783AC(0)) {
                 if (fn_801783AC(7) == 1 || fn_801783AC(8) == 1) state->mUnknown24 = 1;
                 if (!(distance >= lbl_803EAFEC)) {
-                    out->mY = (lbl_803EAFF0 * 0.5f) * (distance / lbl_803EAFEC) + centerY;
+                    float half = lbl_803EAFF0 * 0.5f;
+                    out->mY = half * (distance / lbl_803EAFEC) + centerY;
                     float threshold = fn_8016B974() * lbl_803EAFF8 + lbl_803EAFF4;
                     if (!(distance >= threshold) && carrier->mUnknown8 != 255) state->mUnknown24 = 1;
                     result = 1;
