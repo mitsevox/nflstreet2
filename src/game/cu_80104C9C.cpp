@@ -53,7 +53,10 @@ struct State_80105898 {
 extern float lbl_803EAEF4;
 
 struct Block_800F4A74 {
-    char mUnknown0[20];
+    unsigned short mUnknown0;
+    char mUnknown2[2];
+    Vector_80039F5C mUnknown4;
+    unsigned int mUnknown16;
     int mUnknown20;
     int mUnknown24;
     float mUnknown28;
@@ -77,7 +80,9 @@ struct Block_800F4A74 {
     unsigned char mUnknown62;
     unsigned char mUnknown63;
     unsigned char mUnknown64;
-    char mUnknown65[23];
+    unsigned char mUnknown65;
+    unsigned char mUnknown66;
+    char mUnknown67[21];
 };
 
 /* View of another player's +336 block read by fn_800F3344 while that player
