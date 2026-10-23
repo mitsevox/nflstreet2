@@ -38832,13 +38832,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800FAD2C",
-          "end": "0x800FAECC"
+          "end": "0x800FB768"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029E404",
-          "end": "0x8029E408"
+          "end": "0x8029E40C"
         }
       ],
       "functions": [
@@ -38846,6 +38846,11 @@
           "symbol": "fn_800FAD2C",
           "start": "0x800FAD2C",
           "end": "0x800FAECC"
+        },
+        {
+          "symbol": "fn_800FB314",
+          "start": "0x800FB314",
+          "end": "0x800FB768"
         }
       ]
     },
