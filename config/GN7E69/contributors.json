@@ -29436,6 +29436,70 @@
         "original_blob": "be4e092e4ae620394942ca8996ec3b34d132b5a3",
         "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
+    },
+    {
+      "source": "src/game/cu_800F5AD4.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800F5208",
+        "0x800F5CBC"
+      ],
+      "provenance": {
+        "pull_request": 1073,
+        "merged_via": 1073,
+        "commit": "78588d9af805fdcb77719897e172460111f33467",
+        "introduced_blob": "7fa196cf26db802f6f02388d26e381189d3f9e6d"
+      }
+    },
+    {
+      "source": "src/game/cu_800F7314.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800F7B64"
+      ],
+      "provenance": {
+        "pull_request": 1073,
+        "merged_via": 1073,
+        "commit": "78588d9af805fdcb77719897e172460111f33467",
+        "introduced_blob": "b4c86537e26e3a005bdec897b501aa5d8215af40"
+      }
+    },
+    {
+      "source": "src/game/cu_800F8D2C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800F9024"
+      ],
+      "provenance": {
+        "pull_request": 1073,
+        "merged_via": 1073,
+        "commit": "78588d9af805fdcb77719897e172460111f33467",
+        "introduced_blob": "56e32a5ba479eebe46b902d886dd0421732d2dd7"
+      }
+    },
+    {
+      "source": "src/game/cu_800FE444.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800FEDBC",
+        "0x800FF598",
+        "0x80100370",
+        "0x801007A4"
+      ],
+      "provenance": {
+        "pull_request": 1073,
+        "merged_via": 1073,
+        "commit": "78588d9af805fdcb77719897e172460111f33467",
+        "introduced_blob": "d8d9e1f33fa082eb54896843b22f0b56bbee0813"
+      }
     }
   ],
   "target": "GN7E69",
