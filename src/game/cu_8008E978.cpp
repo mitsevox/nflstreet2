@@ -13993,7 +13993,8 @@ extern "C" void fn_800B6868(int team, int index, int slot, int mode)
             mode -= 2;
         }
         do {
-            p = fn_80039F5C(team, index);
+            unsigned short id = index;
+            p = fn_80039F5C(team, id);
             if (p->mUnknown8 == 0xFF) {
                 pOther = fn_800B6544(slot);
                 if (pOther != 0) {
@@ -14002,7 +14003,7 @@ extern "C" void fn_800B6868(int team, int index, int slot, int mode)
                 fn_800B6714(p, (unsigned char)slot);
                 return;
             }
-            index = fn_800B51D8(pTeam, index, mode);
+            index = fn_800B51D8(pTeam, id, mode);
             tries--;
         } while (tries > 0);
     }

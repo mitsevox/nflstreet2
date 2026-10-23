@@ -318,10 +318,13 @@ extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPo
             if (fn_8011E9B4(p) == 0) {
                 if (pCarrier != 0) {
                     if (pos.mY < line.mY && (pCarrier->mFlags & 0x10000000)) {
-                        if (p->mpState->mId == 0x16) {
-                            fn_80227248(&offset, &offset, lbl_803EAB48);
-                        } else if (p->mpState->mId == 0x55) {
+                        switch (p->mpState->mId) {
+                        case 0x55:
                             fn_80227248(&offset, &offset, lbl_803EAB4C);
+                            break;
+                        case 0x16:
+                            fn_80227248(&offset, &offset, lbl_803EAB48);
+                            break;
                         }
                     }
                 } else if (pTarget == p) {
