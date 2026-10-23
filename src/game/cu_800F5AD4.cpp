@@ -65,6 +65,7 @@ extern "C" int fn_800F5208(Object_80039F5C *p, Record_800F4E88 *pRecord) {
     Point_8017886C delta;
     float distance;
     float reach;
+    int offense;
     int heading;
     int spread;
     int half;
@@ -163,7 +164,9 @@ extern "C" int fn_800F5208(Object_80039F5C *p, Record_800F4E88 *pRecord) {
         spread = 0x21C71C;
     }
     spread += fn_801CFFD0(fn_800C8BAC(p, 0) + pMotion->mFacing, pMotion->mFacing);
-    pTarget = fn_801245DC(p, fn_80178320(), 0, fn_80178D18(fn_80178320()), spread & 0xFFFFFF, &distance, 1);
+    offense = fn_80178320();
+    spread &= 0xFFFFFF;
+    pTarget = fn_801245DC(p, offense, 0, fn_80178D18(fn_80178320()), spread, &distance, 1);
     if (!pTarget || (pTarget->mFlags & 0x800)) {
         return 0;
     }
