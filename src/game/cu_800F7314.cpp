@@ -246,7 +246,12 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
                 int diff = fn_801CFFD0(angle, 0x400000);
 
                 if (diff < 0x200000) {
-                    side = (spot.mX <= p->mMotion.mPos.mX ? 1.0f : -1.0f) * fn_801CFB18(0x400000 - diff);
+                    if (p->mMotion.mPos.mX > pOther->mMotion.mPos.mX) {
+                            side = 1.0f;
+                        } else {
+                            side = -1.0f;
+                        }
+                        side *= fn_801CFB18(0x400000 - diff);
                     if ((angle < 0x355555 && side > 0.0f) || (angle > 0x4AAAAB && side < 0.0f)) {
                         side *= 0.25f;
                     }
@@ -254,7 +259,12 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
                 } else {
                     diff = fn_801CFFD0(angle, 0xC00000);
                     if (diff < 0x200000) {
-                        side = (spot.mX <= p->mMotion.mPos.mX ? 1.0f : -1.0f) * fn_801CFB18(0xC00000 - diff);
+                        if (p->mMotion.mPos.mX > pOther->mMotion.mPos.mX) {
+                            side = 1.0f;
+                        } else {
+                            side = -1.0f;
+                        }
+                        side *= fn_801CFB18(0xC00000 - diff);
                         if ((angle > 0xCE38E4 && side > 0.0f) || (angle < 0xB55556 && side < 0.0f)) {
                             side *= 0.25f;
                         }
@@ -265,7 +275,7 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
                 side = 0.0f;
                 lift = 2.0f;
             }
-            if (pOther->mMotion.mPos.mY <= p->mMotion.mPos.mY) {
+            if (p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {
                 pOut->mX = spot.mX - p->mMotion.mPos.mX + side;
                 pOut->mY = pOther->mMotion.mPos.mY - p->mMotion.mPos.mY + 1.0f + lift;
                 fn_800F6AD8(&pOut->mX);
@@ -283,11 +293,9 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
                 pOut->mY = pOther->mMotion.mPos.mY - p->mMotion.mPos.mY - 1.0f + lift;
                 fn_800F6AD8(&pOut->mX);
                 fn_800F6B2C(p, pOut);
-                angle = fn_801CFE40(pOut->mY, pOut->mX);
-                pBlock->mUnknown24 = 0;
-                pBlock->mUnknown4 = angle;
+                pBlock->mUnknown4 = pBlock->mUnknown8 = fn_801CFE40(pOut->mY, pOut->mX);
                 pBlock->mUnknown12 = 0.66f;
-                pBlock->mUnknown8 = angle;
+                pBlock->mUnknown24 = 0;
             }
         } else if (fn_801CFFD0(pOther->mMotion.mUnknown32, 0) < 0x1C71C7
                    || fn_801CFFD0(pOther->mMotion.mUnknown32, 0x800000) < 0x1C71C7) {
