@@ -180,9 +180,7 @@ void fn_80120384(void)
         lbl_803EB09C->mpUnknown12[lbl_803EB09C->mpUnknown8[i].mUnknown4] = 0;
     }
     for (i = 0; i < count; i++) {
-        if (lbl_803EB09C->mpUnknown8[i].mUnknown0 < 2.5f) {
-            lbl_803EB09C->mpUnknown12[lbl_803EB09C->mpUnknown8[i].mUnknown4] = 0;
-        } else if (lbl_803EB09C->mpUnknown8[i].mUnknown0 > 100.0f) {
+        if (lbl_803EB09C->mpUnknown8[i].mUnknown0 < 2.5f || lbl_803EB09C->mpUnknown8[i].mUnknown0 > 100.0f) {
             lbl_803EB09C->mpUnknown12[lbl_803EB09C->mpUnknown8[i].mUnknown4] = 0;
         }
     }

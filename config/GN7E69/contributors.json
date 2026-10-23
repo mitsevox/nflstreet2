@@ -29511,21 +29511,6 @@
         "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
         "introduced_blob": "0d11811d8eaf3e7e2ccfecc1be9b7b9e7f981206"
       }
-    },
-    {
-      "source": "src/game/cu_8011FE0C.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x80120384"
-      ],
-      "provenance": {
-        "pull_request": 1069,
-        "merged_via": 1069,
-        "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
-        "introduced_blob": "bd2e1a64162d6df2b88672a81d3da826a1ac47e1"
-      }
     }
   ],
   "target": "GN7E69",
