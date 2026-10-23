@@ -46,6 +46,7 @@
 #include "game/RecordList_8002E7C0.h"
 #include "game/Record_800B15FC.h"
 #include "game/Settings_800B4448.h"
+#include "game/Block_800B3660.h"
 #include "game/Table_80089904.h"
 #include "game/Team_80167A8C.h"
 #include "game/cu_8002B8F8.h"
@@ -6041,32 +6042,6 @@ extern "C" void fn_800AA010(int value)
     lbl_803EAA94 = 0;
 }
 
-/* 72-byte block allocated through fn_80238174 under the id 'pcal'. */
-struct Block_800B3660 {
-    unsigned char mUnknown0[8];
-    unsigned int mUnknown8;
-    int mUnknownC;
-    int mUnknown10;
-    int mUnknown14;
-    int mUnknown18;
-    unsigned char mUnknown1C;
-    unsigned char mUnknown1D;
-    unsigned char mUnknown1E;
-    unsigned char mUnknown1F;
-    int mUnknown20;
-    int mUnknown24;
-    int mUnknown28;
-    int mUnknown2C;
-    int mUnknown30;
-    unsigned char mUnknown34[12];
-    unsigned char mUnknown40;
-    unsigned char mUnknown41;
-    unsigned char mUnknown42;
-    unsigned char mUnknown43;
-    unsigned char mUnknown44;
-    unsigned char mUnknown45[3];
-};
-
 /* The two words of the step context that fn_800B2564 fills and
    fn_800B1A30 reads. */
 struct Args_800B1A30 {
@@ -6168,7 +6143,6 @@ extern Block_800B21D0 *lbl_803EAB20;
 extern int lbl_803EAB24;
 extern unsigned char lbl_803EAB2C;
 extern unsigned char lbl_803EAB2D;
-extern Block_800B3660 *lbl_803EAB34;
 extern Class_80297B50 lbl_803EC908;
 extern Block_800B21D0 lbl_8030FAFC;
 }
@@ -6537,6 +6511,35 @@ extern "C" void fn_800B2E54(void)
     fn_801688F4(3);
 }
 
+extern "C" int fn_800B2F40(void)
+{
+    int result = 0;
+    int team = fn_80178308();
+    int other = fn_80178320();
+
+    if (fn_800B65A0(team) == 0xFF) {
+        result = fn_800B65A0(other) == 0xFF;
+    }
+    if (fn_800BA6F8() != 0) {
+        int idle = fn_800BAA24() == 0;
+        if (fn_800B65A0(team) != 0xFF && fn_800B65A0(other) == 0xFF && !idle) {
+            result = (lbl_803EAB34->mUnknown8 >> 1) & 1;
+        } else {
+            unsigned int flags = lbl_803EAB34->mUnknown8 & 6;
+            result = flags == 6;
+        }
+    } else if (lbl_803EAB34->mUnknown8 & 2) {
+        if ((lbl_803EAB34->mUnknown8 & 4) || fn_800B65A0(other) == 0xFF) {
+            result = 1;
+        } else if (lbl_803EAB34->mUnknownC == 0 && fn_80177F70() != 0) {
+            result = 1;
+        }
+    } else if (fn_800B65A0(team) == 0xFF && (lbl_803EAB34->mUnknown8 & 4)) {
+        result = 1;
+    }
+    return result;
+}
+
 extern "C" void fn_800B3074(void)
 {
 }
@@ -6680,6 +6683,38 @@ extern "C" void fn_800B3EC0(int a, int b)
 {
     fn_80168640(a, 1);
     fn_80168640(b, 11);
+}
+
+extern "C" {
+void fn_8006CAEC(void);
+void fn_800B50E8(int team);
+QueryCursor fn_800C0750(unsigned char index, unsigned short *pValues);
+void fn_800C07C4(QueryCursor cursor);
+void fn_800C07F0(QueryCursor cursor, unsigned char index, unsigned short *pValues);
+}
+
+extern "C" void fn_800B3EFC(int team)
+{
+    unsigned short values[7];
+    QueryCursor cursor;
+    unsigned short ids[7];
+    unsigned char a;
+    unsigned char b;
+    int i = 0;
+
+    fn_8006CAEC();
+    Object_800670B4 *pTeam = fn_80168708(team);
+    int count = fn_80178D18(team);
+    for (; i < count; i++) {
+        Object_80039F5C *p = fn_80039F5C(team, i);
+        ids[i] = p->mUnknown2908;
+        fn_80164430(pTeam, i, &a, &b);
+        p->mUnknown2914 = a;
+    }
+    cursor = fn_800C0750(team, values);
+    fn_800C07F0(cursor, team, values);
+    fn_800C07C4(cursor);
+    fn_800B50E8(team);
 }
 
 extern "C" void fn_800B4020(void)
@@ -8441,7 +8476,6 @@ extern "C" int fn_800AB2FC(void *p, float dt)
 }
 
 extern "C" {
-void fn_8006CAEC(void);
 void fn_8004730C(unsigned char enabled);
 void fn_80072C90(unsigned int delay, int wait);
 void fn_800282DC(void);
