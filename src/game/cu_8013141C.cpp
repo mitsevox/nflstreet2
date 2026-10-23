@@ -168,7 +168,7 @@ extern "C" Object_80039F5C *fn_801316F0(Object_80039F5C *p, int angle, float max
     return pOther;
 }
 
-/* True when the spot is more than five yards short of the goal line
+/* True when the spot is more than 5.0f short of the goal line value
    fn_80178A2C returns. */
 static inline int IsShortOfGoal(Point_8017886C spot)
 {
