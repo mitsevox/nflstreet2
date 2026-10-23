@@ -13176,6 +13176,282 @@
           "end": "0x8021625C"
         }
       ]
+    },
+    {
+      "source": "src/game/SndgPathfinder.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80068154-0x8006F1F4 (src/game/SndgPathfinder.cpp), its 160 function rows, its .rodata/.data/.sdata/.bss/.sbss/.ctors/.dtors data rows and source-form rows; every function and data placement exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "fn_80068154",
+          "fn_80068418",
+          "fn_80068A04",
+          "fn_80068C1C",
+          "fn_80068E00",
+          "fn_80068ED0",
+          "fn_80068F70",
+          "fn_80068FE8",
+          "fn_800691E8",
+          "fn_80069398",
+          "fn_800695F0",
+          "fn_800696A4",
+          "fn_80069858",
+          "fn_800699C8",
+          "fn_80069B4C",
+          "fn_80069D00",
+          "fn_80069EB4",
+          "fn_8006A068",
+          "fn_8006A21C",
+          "fn_8006A38C",
+          "fn_8006A4D8",
+          "fn_8006A5C8",
+          "fn_8006A6B8",
+          "fn_8006A804",
+          "fn_8006A950",
+          "fn_8006AA9C",
+          "fn_8006ABE8",
+          "fn_8006ACD8",
+          "fn_8006B1CC",
+          "fn_8006B25C",
+          "fn_8006B2EC",
+          "fn_8006B37C",
+          "fn_8006B40C",
+          "fn_8006B49C",
+          "fn_8006B52C",
+          "fn_8006B5BC",
+          "fn_8006B64C",
+          "fn_8006B664",
+          "fn_8006B790",
+          "fn_8006B810",
+          "fn_8006B91C",
+          "fn_8006B9AC",
+          "fn_8006BA54",
+          "fn_8006BB44",
+          "fn_8006BBC4",
+          "fn_8006BC30",
+          "fn_8006BCC8",
+          "fn_8006BD24",
+          "fn_8006BD4C",
+          "fn_8006BDD8",
+          "fn_8006BE3C",
+          "fn_8006BE68",
+          "fn_8006BEBC",
+          "fn_8006BEC4",
+          "fn_8006BF08",
+          "fn_8006BF4C",
+          "fn_8006C040",
+          "fn_8006C074",
+          "fn_8006C120",
+          "fn_8006C1E8",
+          "fn_8006C22C",
+          "fn_8006C284",
+          "fn_8006C2C8",
+          "fn_8006C3C4",
+          "fn_8006C454",
+          "fn_8006C4D4",
+          "fn_8006C548",
+          "fn_8006C674",
+          "fn_8006C6EC",
+          "fn_8006C74C",
+          "fn_8006C78C",
+          "fn_8006C7F4",
+          "fn_8006C854",
+          "fn_8006C8A4",
+          "fn_8006C9D4",
+          "fn_8006CA18",
+          "fn_8006CA84",
+          "fn_8006CAEC",
+          "fn_8006CAF0",
+          "fn_8006CB40",
+          "fn_8006CC48",
+          "fn_8006CC54",
+          "fn_8006CC90",
+          "fn_8006CCA8",
+          "fn_8006CCD0",
+          "fn_8006CE84",
+          "fn_8006CEC8",
+          "fn_8006CF9C",
+          "fn_8006D0F8",
+          "fn_8006D188",
+          "fn_8006D268",
+          "fn_8006D2B4",
+          "fn_8006D2EC",
+          "fn_8006D314",
+          "fn_8006D338",
+          "fn_8006D358",
+          "fn_8006D408",
+          "fn_8006D540",
+          "fn_8006D5FC",
+          "fn_8006D65C",
+          "fn_8006D670",
+          "fn_8006D684",
+          "fn_8006D6F4",
+          "fn_8006D758",
+          "fn_8006D7CC",
+          "fn_8006D884",
+          "fn_8006D8DC",
+          "fn_8006D91C",
+          "fn_8006D98C",
+          "fn_8006D9FC",
+          "fn_8006DA6C",
+          "GetDependencies__14SndgPathfinder",
+          "GetLinks__14SndgPathfinder",
+          "GetName__14SndgPathfinder",
+          "Init__14SndgPathfinder",
+          "Shutdown__14SndgPathfinder",
+          "fn_8006DBF8",
+          "fn_8006DC4C",
+          "fn_8006DC98",
+          "fn_8006DD24",
+          "fn_8006DD70",
+          "fn_8006DDB4",
+          "fn_8006DE00",
+          "fn_8006DE54",
+          "fn_8006DEA8",
+          "fn_8006DEEC",
+          "fn_8006DF2C",
+          "fn_8006DF6C",
+          "fn_8006DFA8",
+          "fn_8006E010",
+          "fn_8006E08C",
+          "fn_8006E0DC",
+          "fn_8006E134",
+          "fn_8006E148",
+          "fn_8006E25C",
+          "fn_8006E2A8",
+          "fn_8006E308",
+          "fn_8006E370",
+          "fn_8006E3F0",
+          "fn_8006E548",
+          "fn_8006E5B4",
+          "fn_8006E6CC",
+          "fn_8006E710",
+          "fn_8006E760",
+          "fn_8006E78C",
+          "fn_8006E7CC",
+          "fn_8006E7D4",
+          "fn_8006E89C",
+          "fn_8006E918",
+          "fn_8006E924",
+          "fn_8006EA04",
+          "fn_8006EC24",
+          "fn_8006ECB4",
+          "fn_8006F0B8",
+          "fn_8006F0C8",
+          "fn_8006F0D8"
+        ],
+        "discarded": [
+          "UpdateGameSituation"
+        ],
+        "evidence": "evidence.tsv linker row 0x80068154-0x8006F1F4 (SndgPathfinder discarded UpdateGameSituation): the target keeps every listed function; the discarded UpdateGameSituation has no code in the target, while its 0.001f literal remains in .rodata at 0x802906E0."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80068154",
+          "end": "0x8006F1F4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802904C8",
+          "end": "0x80290AE8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D50A4",
+          "end": "0x802D6350"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA67C",
+          "end": "0x803EA6B8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030A518",
+          "end": "0x8030AA68"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC80C",
+          "end": "0x803EC818"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A94",
+          "end": "0x80289A98"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BD4",
+          "end": "0x80289BD8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C10E0.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801C10E0-0x801C1D54 (src/engine/cu_801C10E0.c, asynchronous loader with no NASCAR 2005 counterpart), function rows, compiler row engine_c_fastmath and source-form rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C10E0",
+          "end": "0x801C1D54"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801DCA10.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801DCA10-0x801DD498 (src/engine/cu_801DCA10.c, NASCAR 2005 object.c), compiler row and function rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801DCA10",
+          "end": "0x801DD498"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_8027EFAC.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8027EFAC-0x802805C4 (src/engine/cu_8027EFAC.c), its function and name rows and its .rodata/.sdata/.sbss data rows; every function and data placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027EFAC",
+          "end": "0x802805C4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C2838",
+          "end": "0x802C2848"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC570",
+          "end": "0x803EC578"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED410",
+          "end": "0x803ED414"
+        }
+      ]
     }
   ]
 }

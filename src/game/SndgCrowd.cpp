@@ -6,7 +6,6 @@
 void *operator new(unsigned int size, int unknown);
 
 extern "C" {
-extern char lbl_8030A60C[];
 extern char lbl_802EC018[];
 
 void *memset(void *pDest, int value, unsigned int size);
@@ -14,7 +13,7 @@ int fn_801F3E28(void);
 int fn_800A350C(void);
 }
 
-static ModuleDependency sDependencies[] = { lbl_8030A60C, 0 };
+static ModuleDependency sDependencies[] = { &gSndgPathfinder, 0 };
 static void *sLinks[] = { 0 };
 static unsigned char sUnknownByte = 100;
 static int sIds[2][16] = {
