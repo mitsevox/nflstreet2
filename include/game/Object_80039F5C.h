@@ -16,6 +16,13 @@ struct Block_800CC180 {
     char mUnknown20[4];
 };
 
+struct Link_800CDE50 {
+    int mRef;
+    char mUnknown4[11];
+    unsigned char mUnknown15;
+    char mUnknown16[8];
+};
+
 /* The player object returned by fn_80039F5C, with the blocks it contains or
    points to. */
 
@@ -320,6 +327,9 @@ struct Object_80039F5C {
             char mUnknown355[5];
         };
         Block_800CC180 mUnknown336Block;
+        /* State 17 keeps a packed player reference at +336 and a flag at +351
+           (fn_800CDE50). */
+        Link_800CDE50 mUnknown336Link;
         /* Per-state scratch: state 26 reads +344 as a word (fn_800C5BF0);
            state 58 keeps a player reference at +352 (fn_800C7D44). */
         struct {

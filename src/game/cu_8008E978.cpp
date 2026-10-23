@@ -15678,11 +15678,12 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
     if (pB->mpState->mId == 32 || pB->mpState->mId == 96) {
         fn_800F05E4(0, pB->mpState, &message, pB);
     } else if (pB->mpState->mId == 17) {
-        Object_80039F5C *pOther = fn_8009BCE8(&pB->mUnknown336);
+        Link_800CDE50 *pLink = &pB->mUnknown336Link;
+        Object_80039F5C *pOther = fn_8009BCE8(&pLink->mRef);
         pOther->mFlags |= 0x80000;
         fn_800E9528();
         fn_80143EBC(pOther, pB);
-        pB->mUnknown345[6] = 1;
+        pLink->mUnknown15 = 1;
         fn_800F05E4(0, pB->mpState, &message, pB);
         fn_80143EBC(pB, pOther);
         fn_8017D9B0(pOther->mId, pB->mId);
@@ -15704,11 +15705,12 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
         if (pC->mpState->mId == 32) {
             fn_800F05E4(0, pC->mpState, &message, pC);
         } else if (pC->mpState->mId == 17) {
-            Object_80039F5C *pOther = fn_8009BCE8(&pC->mUnknown336);
+            Link_800CDE50 *pLink = &pC->mUnknown336Link;
+        Object_80039F5C *pOther = fn_8009BCE8(&pLink->mRef);
             pOther->mFlags |= 0x80000;
             fn_800E9528();
             fn_80143EBC(pOther, pC);
-            pC->mUnknown345[6] = 1;
+            pLink->mUnknown15 = 1;
             fn_800F05E4(0, pC->mpState, &message, pC);
             fn_80143EBC(pC, pOther);
             fn_8017D9B0(pOther->mId, pC->mId);
@@ -15813,23 +15815,27 @@ extern float lbl_803EAC88;
 extern "C" void fn_800CE804(Command_800CEE74 *p, Table_80089904 *pTable, int index)
 {
     Anchor_800CE804 *pAnchor = 0;
+    short i;
+    Info_80089904 *pInfo;
     switch (p->mUnknown60) {
     case 195: case 196: case 197: case 210: case 224:
     case 228: case 229: case 230: case 235: case 237:
-        for (short i = 0; i < pTable->mCount; i++) {
+        for (i = 0; i < pTable->mCount; i++) {
             if (pTable->mEntries[i].mUnknown2 == index) {
-                Info_80089904 *pInfo = pTable->mEntries[i].mpInfo;
+                pInfo = pTable->mEntries[i].mpInfo;
                 p->mUnknown12 = pInfo->mUnknown28Vector;
                 p->mUnknown24 = pInfo->mUnknown24;
-                p->mVector0 = pInfo->mUnknown40;
-                pAnchor = &p->mAnchor28;
+                if (pAnchor == 0) {
+                    p->mVector0 = pInfo->mUnknown40;
+                    pAnchor = &p->mAnchor28;
+                }
                 break;
             }
         }
         break;
     default:
-        for (short i = 0; i < pTable->mCount; i++) {
-            Info_80089904 *pInfo = pTable->mEntries[i].mpInfo;
+        for (i = 0; i < pTable->mCount; i++) {
+            pInfo = pTable->mEntries[i].mpInfo;
             if (pInfo->mUnknown52 == 1) {
                 p->mUnknown12 = pInfo->mUnknown28Vector;
                 p->mUnknown24 = pInfo->mUnknown24;
