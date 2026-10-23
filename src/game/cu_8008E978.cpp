@@ -1094,6 +1094,30 @@ extern "C" int fn_80092E54(Params_80092E54 *pParams, void *pBuffer, int size)
     return slot;
 }
 
+extern "C" void fn_80092F98(int handle)
+{
+    if (handle != -1) {
+        Character_80093BCC *pCharacter = fn_80093BCC(handle);
+        unsigned char found;
+
+        fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+        if (fn_80096074(pCharacter, 0) != 0) {
+            fn_80093C70(pCharacter, 'BALL', 0, &found);
+            if (found == 0) {
+                lbl_803EC924->mUnknown80.mUnknownE4E = 0;
+                *(Params_80092E54 *)&lbl_803EC924->mUnknown80.mCharacters[handle] = *pCharacter;
+                fn_801C1F94(lbl_803EC924->mUnknown80.mCharacters[handle].mUnknownEC, 0, 0x1C);
+                lbl_803EC924->mUnknown80.mCharacters[handle].mUnknown38C = 0;
+            } else if (lbl_803EC924->mUnknown80.mUnknownE4E == 0) {
+                lbl_803EC924->mUnknown80.mUnknownE4E = 1;
+                *(Params_80092E54 *)&lbl_803EC924->mUnknown80.mCharacters[handle] = *pCharacter;
+                fn_801C1F94(lbl_803EC924->mUnknown80.mCharacters[handle].mUnknownEC, 0, 0x1C);
+                lbl_803EC924->mUnknown80.mCharacters[handle].mUnknown38C = 0;
+            }
+        }
+    }
+}
+
 extern "C" int fn_8009313C(Params_80092E54 *pRequest)
 {
     int invalid = -1;
