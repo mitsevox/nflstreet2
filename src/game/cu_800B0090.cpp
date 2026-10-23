@@ -40,24 +40,23 @@ extern "C" void fn_800B0090(void)
                 row = fn_801641E0(pObject, (unsigned char)i, names);
                 if (row != -1 && pEntry->mUnknown46 <= 4) {
                     Object_80039F5C *pPlayer = fn_80039F5C(team, i);
-                    Zone_800AFE8C *pZone;
-                    unsigned int n;
+                    Entry_8006719C *pZone;
 
                     pEntry->mUnknown3C[pEntry->mUnknown46] = row;
-                    pZone = (Zone_800AFE8C *)&pObject->mUnknown8.mUnknown84[row][i];
+                    pZone = &pObject->mUnknown8.mUnknown84[row][i];
                     pEntry->mpUnknown0[pEntry->mUnknown46] = pZone;
                     fn_8009BD2C(pPlayer, &pEntry->mUnknown28[pEntry->mUnknown46]);
                     names[0] = "Norm";
                     row = fn_801641E0(pObject, (unsigned char)i, names);
                     pEntry->mUnknown41[pEntry->mUnknown46] = row;
-                    pEntry->mpUnknown14[pEntry->mUnknown46] = (Zone_800AFE8C *)&pObject->mUnknown8.mUnknown84[row][i];
-                    if (pEntry->mpUnknown0[0] != 0 && (pZone->mUnknownE & 1) && (n = pEntry->mUnknown46) != 0) {
-                        Zone_800AFE8C *pSwap;
+                    pEntry->mpUnknown14[pEntry->mUnknown46] = &pObject->mUnknown8.mUnknown84[row][i];
+                    if (pEntry->mpUnknown0[0] != 0 && (pZone->mUnknownE & 1) && pEntry->mUnknown46 != 0) {
+                        Entry_8006719C *pSwap;
                         int ref;
 
                         pSwap = pEntry->mpUnknown0[0];
-                        pEntry->mpUnknown0[0] = pEntry->mpUnknown0[n];
-                        pEntry->mpUnknown0[n] = pSwap;
+                        pEntry->mpUnknown0[0] = pEntry->mpUnknown0[pEntry->mUnknown46];
+                        pEntry->mpUnknown0[pEntry->mUnknown46] = pSwap;
                         ref = pEntry->mUnknown28[0];
                         pEntry->mUnknown28[0] = pEntry->mUnknown28[pEntry->mUnknown46];
                         pEntry->mUnknown28[pEntry->mUnknown46] = ref;
@@ -79,7 +78,7 @@ extern "C" void fn_800B0090(void)
     fn_800B0004();
 }
 
-extern "C" int fn_800B0558(Object_80039F5C *p, Point_80167910 *pPoint)
+extern "C" int fn_800B0558(Object_80039F5C *p, Point_8017886C *pPoint)
 {
     Point_8017886C spot;
     Point_8017886C target;

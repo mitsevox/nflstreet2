@@ -129,10 +129,7 @@ struct Entry_800AF82C {
     void *mpUnknown8;
     float mUnknownC;
     float mUnknown10;
-    union {
-        int mUnknown14;
-        Vector_80039F5C *mpUnknown14;
-    };
+    Vector_80039F5C *mpUnknown14;
     Vector_80039F5C mUnknown18;
     Vector_80039F5C mUnknown24;
     int mUnknown30[3];
@@ -192,6 +189,45 @@ struct Object_800C6640 {
     unsigned char mUnknown53;
     unsigned char mUnknown54;
     unsigned char mUnknown55;
+};
+
+/* Header that Entry_800AF82C +8 points to; byte +8 is the number of
+   records the solver wrote, which fn_800AF2AC and fn_800AF304 copy. */
+struct Chain_800AF404 {
+    void *mpUnknown0;
+    unsigned char mType;
+    unsigned char mUnknown5;
+    unsigned char mUnknown6;
+    unsigned char mUnknown7;
+    unsigned char mUnknown8;
+};
+
+/* 8-byte source records read by fn_800AF2AC; +6 indexes the destination. */
+struct Source_800AF2AC {
+    short mUnknown0;
+    short mUnknown2;
+    short mUnknown4;
+    unsigned short mUnknown6;
+};
+
+/* One of the 12-byte entries of the array at +0 of Block_800B62D8. */
+struct Entry_800B5224 {
+    unsigned char mUnknown0;
+    unsigned char mUnknown1;
+    unsigned char mUnknown2[2];
+    int mUnknown4;
+    unsigned char mUnknown8;
+    unsigned char mUnknown9[3];
+};
+
+/* Allocated through fn_80238174 under the id 'pctl' (fn_800B62D8). */
+struct Block_800B62D8 {
+    Entry_800B5224 *mpEntries;
+    unsigned char mCount;
+    unsigned char mUnknown5;
+    unsigned char mUnknown6[2];
+    unsigned char mUnknown8[10];
+    unsigned char mUnknown12[10];
 };
 
 /* Stack block whose address fn_800A4E8C passes as the fourth argument of the

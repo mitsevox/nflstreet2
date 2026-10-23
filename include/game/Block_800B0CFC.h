@@ -2,20 +2,12 @@
 #define GAME_BLOCK_800B0CFC_H
 
 #include "game/Team_80167A8C.h"
-
-/* Records that Entry_800B0CFC +0 points to; fn_800AFE8C tests one of the
-   two points against the player. */
-struct Zone_800AFE8C {
-    unsigned char mUnknown0[14];
-    unsigned short mUnknownE;
-    Point_80167910 mUnknown10;
-    Point_80167910 mUnknown18;
-};
+#include "game/fn_800670B4.h"
 
 /* 72-byte entries of Block_800B0CFC. */
 struct Entry_800B0CFC {
-    Zone_800AFE8C *mpUnknown0[5];
-    Zone_800AFE8C *mpUnknown14[5];
+    Entry_8006719C *mpUnknown0[5];
+    Entry_8006719C *mpUnknown14[5];
     int mUnknown28[5];
     unsigned char mUnknown3C[5];
     unsigned char mUnknown41[5];
