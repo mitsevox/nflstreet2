@@ -51447,6 +51447,42 @@
           "end": "0x80156068"
         }
       ]
+    },
+    {
+      "source": "src/game/cu_801260D4_initial.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue1062 MID3. Three complete untouched bodies in existing provisional cu801260D4 grouping; comparison storage fragment only, not original file boundary. Complete natural code/data emitted and measured; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801260D4",
+          "end": "0x80126DD4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F674",
+          "end": "0x8029F6B8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801260D4",
+          "start": "0x801260D4",
+          "end": "0x8012623C"
+        },
+        {
+          "symbol": "fn_801262B8",
+          "start": "0x801262B8",
+          "end": "0x801269B8"
+        },
+        {
+          "symbol": "fn_801269B8",
+          "start": "0x801269B8",
+          "end": "0x80126DD4"
+        }
+      ]
     }
   ]
 }
