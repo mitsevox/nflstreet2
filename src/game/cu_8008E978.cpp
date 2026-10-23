@@ -16007,18 +16007,7 @@ struct PoseCompare_8009C220 {
     char mUnknown24[40];
 };
 
-struct Animation_8009C630 {
-    char mUnknown0[4];
-    unsigned short mUnknown4;
-    char mUnknown6[74];
-    float mUnknown80;
-    char mUnknown84[16];
-};
-
 extern "C" {
-float fn_801CFB18(int angle);
-float fn_801CFB94(int angle);
-int fn_801CFDD0(float value);
 void fn_800A6F04(int team);
 }
 
@@ -16047,38 +16036,6 @@ extern "C" int fn_8009C220(void *pA, void *pB)
         }
     }
     return result;
-}
-
-extern "C" float fn_8009C630(Object_80039F5C *p, int id)
-{
-    float result = 0.0f;
-    for (unsigned int i = 0; i <= 3; i++) {
-        Animation_8009C630 *pAnimation = &((Animation_8009C630 *)p->mpUnknown792)[i];
-        if (pAnimation->mUnknown4 == id) {
-            result = pAnimation->mUnknown80;
-            break;
-        }
-    }
-    return result;
-}
-
-extern "C" float fn_8009F168(Vector_80039F5C *p, Pair_802270A4 *pVelocity,
-                              Vector_80039F5C *pOther, float speed)
-{
-    Vector_80039F5C delta;
-    fn_802276B4(&delta, pOther, p);
-    float distance = fn_802270A4(&delta);
-    float velocity = fn_802270A4(pVelocity);
-    int angle = fn_801CFE40(pVelocity->mUnknown4, pVelocity->mUnknown0);
-    angle = angle - fn_801CFE40(delta.mY, delta.mX);
-    float sine = fn_801CFB18(angle);
-    int correction = fn_801CFDD0(velocity * sine / speed);
-    float closing = speed * fn_801CFB94(correction) + velocity * fn_801CFB94(angle);
-    float time = distance / closing;
-    if (time <= 0.0f || !(time <= 5.0f)) {
-        time = distance / speed;
-    }
-    return time;
 }
 
 extern "C" void fn_800A02FC(void)
