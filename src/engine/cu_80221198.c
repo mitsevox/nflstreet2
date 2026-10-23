@@ -447,9 +447,9 @@ void fn_80222E54(Buffer_80222E54 *pDst, Buffer_80222E54 *pSrc)
     char *pText = pSrc->pText;
     char *pDstText = pDst->pText;
     Uint32 Size = pDst->Size;
-    Uint32 Length = fn_801C3180(pText) + 1;
+    Uint32 Length;
 
-    if (Size + 1 < Length) {
+    if (Size + 1 < (Length = fn_801C3180(pText) + 1)) {
         memcpy(pDstText, pText, Size);
     } else {
         memcpy(pDstText, pText, Length);
