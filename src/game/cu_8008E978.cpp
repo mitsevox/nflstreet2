@@ -100,8 +100,8 @@
 #include "game/Object_800785C0.h"
 #include "game/Block_800BFAD0.h"
 #include "game/Object_8007A334.h"
-#include "game/Object_800A3530.h"
-#include "game/Player_800ADA1C.h"
+#include "game/fn_800A3530.h"
+#include "game/Player_8003877C.h"
 
 /* Data whose word +4 fn_80094374 returns and whose words from +8
    fn_80093BAC indexes; the bound of that array is not established. */
@@ -2128,29 +2128,18 @@ extern "C" int fn_800A432C(Key_80110630 *pA, Key_80110630 *pB)
 
 extern "C" int fn_801CFFD0(int a, int b);
 
-/* The table entry record as fn_800A4358 reads it. */
-struct Entry_800A4358 {
-    int mUnknown0;
-    Key_80110630 mUnknown4;
-    int mUnknown8;
-    int mUnknownC;
-    int mUnknown10;
-    int mUnknown14;
-    float mUnknown18;
-};
-
 extern "C" unsigned short fn_800A4358(Table_80089904 *pTable, Object_80039F5C *p, Block_801BE60C *pBlock)
 {
     unsigned int index = 0;
-    Entry_800A4358 *pBest = 0;
+    Info_80089904 *pBest = 0;
     unsigned int i;
     int angle = fn_801CFFD0(p->mMotion.mFacing, (p->mUnknown1008.mUnknown2 << 17) & 0xFFFFFF);
 
     for (i = 0; i < pTable->mCount; i++) {
-        Entry_800A4358 *pEntry = (Entry_800A4358 *)pTable->mEntries[i].mpInfo;
+        Info_80089904 *pEntry = pTable->mEntries[i].mpInfo;
 
-        if (fn_800A432C(&pEntry->mUnknown4, &p->mUnknown1008) && angle >= pEntry->mUnknown10
-            && angle <= pEntry->mUnknown14) {
+        if (fn_800A432C(&pEntry->mKey, &p->mUnknown1008) && angle >= pEntry->mUnknown16
+            && angle <= pEntry->mUnknown20) {
             if (pBest == 0 || fn_802372EC(0, 100) <= 49) {
                 pBest = pEntry;
                 index = i;
@@ -2158,7 +2147,7 @@ extern "C" unsigned short fn_800A4358(Table_80089904 *pTable, Object_80039F5C *p
         }
     }
     if (pBest != 0 && index < pTable->mCount) {
-        int target = pBest->mUnknownC & 0xFFFFFF;
+        int target = pBest->mUnknown12 & 0xFFFFFF;
 
         if (p->mUnknown1008.mUnknown0 == 6) {
             target = 0x1000000 - target;
@@ -2171,7 +2160,7 @@ extern "C" unsigned short fn_800A4358(Table_80089904 *pTable, Object_80039F5C *p
         } else if (((target - angle) & 0xFFFFFF) <= 0x7FFFFF) {
             pBlock->mUnknownCWord = -pBlock->mUnknownCWord;
         }
-        pBlock->mUnknown4 = pBest->mUnknown18 / pBlock->mUnknown8;
+        pBlock->mUnknown4 = pBest->mUnknown24 / pBlock->mUnknown8;
     } else {
         index = 0;
     }
@@ -2271,14 +2260,14 @@ extern int (*lbl_802D7E4C[21])(Object_80039F5C *p, Object_80039F5C *pTarget,
                                 Object_80039F5C *pOther, Pair_800A554C *pPair);
 }
 
-extern "C" int fn_800A3B10(Object_800A3530 *p)
+extern "C" int fn_800A3B10(Object_80039F5C *p)
 {
     int count = 0;
     int i;
 
-    if (p->mpUnknown328 != 0) {
-        for (i = 0; i < p->mpUnknown328->mUnknown4; i++) {
-            if (p->mpUnknown32C[i].mUnknown1 == 2) {
+    if (p->mpUnknown808 != 0) {
+        for (i = 0; i < p->mpUnknown808->mUnknown4; i++) {
+            if (p->mpUnknown812[i].mUnknown1 == 2) {
                 count++;
             }
         }
@@ -9968,7 +9957,7 @@ extern "C" void fn_800A3C14(void)
 }
 
 extern "C" {
-void fn_800AE018(Player_800ADA1C *p, int side, unsigned short key);
+void fn_800AE018(Player_8003877C *p, int side, unsigned short key);
 
 extern unsigned char lbl_803EAADC[4];
 }
@@ -9980,7 +9969,7 @@ extern "C" void fn_800AE0B8(Object_80039F5C *p)
 
     key = fn_801BD910();
     if (p != 0) {
-        fn_800AE018((Player_800ADA1C *)p, index, key);
+        fn_800AE018((Player_8003877C *)p, index, key);
     }
 }
 
@@ -10007,7 +9996,7 @@ struct Block_800AEB1C {
 
 extern "C" {
 int fn_800ADA1C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
-                Player_800ADA1C *p, unsigned int phase);
+                Player_8003877C *p, unsigned int phase);
 void fn_800AE138(unsigned int index);
 int fn_800B6644(int index);
 int fn_80177C38(void);
@@ -10026,7 +10015,7 @@ void fn_8011E240(Object_80039F5C *p);
 Object_80039F5C *fn_800AEBA0(void);
 
 extern int (*lbl_8030F51C[6])(Table_80089904 *pTable, unsigned short key, void *pRecord,
-                              Record_800D81C8 *pEntries, Player_800ADA1C *p, unsigned int phase);
+                              Record_800D81C8 *pEntries, Player_8003877C *p, unsigned int phase);
 extern unsigned char lbl_8030F9DC[15];
 extern unsigned char lbl_8030F9EC[15];
 extern Record_802D82E0 lbl_802D82E0[15];

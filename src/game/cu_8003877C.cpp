@@ -1,5 +1,6 @@
 #include <math.h>
 #include "game/Object_80039F5C.h"
+#include "game/Player_8003877C.h"
 #include "game/Message_800F01CC.h"
 #include "game/cu_8003EC04.h"
 #include "game/fn_80178D18.h"
@@ -21,19 +22,6 @@
 #include "game/fn_8016871C.h"
 #include "game/fn_80177FE0.h"
 #include "game/fn_80227638.h"
-
-/* Player slot of the array that lbl_803EA3F8 points to: the shared player
-   object followed by bytes not declared there, padded to the 5336-byte
-   stride used by every walk of the array. */
-struct Player_8003877C {
-    Object_80039F5C mObject;
-    char mUnknown3096[12];
-    char mUnknown3108[496];
-    char mUnknown3604[404];
-    char mUnknown4008[2][12];
-    char mUnknown4032[2][248];
-    char mUnknown4528[2][404];
-};
 
 /* Block that +4 of the manager points to (28 bytes). */
 struct Block_8003877C {
@@ -324,7 +312,7 @@ extern "C" int fn_80038650(Manager_803EA3F8 *pManager, int flags)
 
                 for (j = 0; j <= 1; j++) {
                     if (pObject->mUnknown20 & 32) {
-                        fn_80042508(pObject, fn_801BC7C0(pPlayer->mUnknown4008[j], pPlayer->mUnknown4032[j],
+                        fn_80042508(pObject, fn_801BC7C0(&pPlayer->mUnknown4008[j], pPlayer->mUnknown4032[j],
                                                          pPlayer->mUnknown4528[j]), j);
                     } else {
                         fn_80042508(pObject, fn_800ADEFC(pObject->mUnknown116, j), j);
@@ -470,7 +458,7 @@ extern "C" void fn_80038E80(Object_80039F5C *p, Player_8003877C *pPlayer, unsign
     p->mpUnknown796 = (Object_801BA03C *)pPlayer->mObject.mUnknown1244;
     p->mpUnknown800 = (Record_800D81C8 *)(pPlayer->mObject.mUnknown1244 + 12);
     p->mpUnknown804 = pPlayer->mUnknown3604;
-    p->mpUnknown808 = pPlayer->mUnknown3096;
+    p->mpUnknown808 = &pPlayer->mUnknown3096;
     p->mpUnknown812 = pPlayer->mUnknown3108;
     fn_800AF804(p->mUnknown816);
     p->mUnknown512.mUnknown14 = 1;
@@ -551,9 +539,9 @@ extern "C" void fn_800392DC(Object_80039F5C *p, Block_8003A1EC *pBlock, float f)
 {
     Player_8003877C *pPlayer = (Player_8003877C *)p;
 
-    fn_801BE420(pPlayer->mUnknown3604, pPlayer->mUnknown3096, pPlayer->mUnknown3108, p, f);
-    fn_801BA03C(pPlayer->mUnknown3096, pPlayer->mUnknown3108, f, p);
-    fn_80042530(pBlock, fn_801BC7C0(pPlayer->mUnknown3096, pPlayer->mUnknown3108, pPlayer->mUnknown3604));
+    fn_801BE420(pPlayer->mUnknown3604, &pPlayer->mUnknown3096, pPlayer->mUnknown3108, p, f);
+    fn_801BA03C(&pPlayer->mUnknown3096, pPlayer->mUnknown3108, f, p);
+    fn_80042530(pBlock, fn_801BC7C0(&pPlayer->mUnknown3096, pPlayer->mUnknown3108, pPlayer->mUnknown3604));
 }
 
 extern "C" void fn_80039364(Object_80039F5C *p, Block_8003A1EC *pBlock, float f)
@@ -563,9 +551,9 @@ extern "C" void fn_80039364(Object_80039F5C *p, Block_8003A1EC *pBlock, float f)
 
     for (i = 0; i <= 1; i++) {
         if (pBlock->mFlags & 32) {
-            fn_801BE420(pPlayer->mUnknown4528[i], pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], p, f);
-            fn_801BA03C(pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], f, p);
-            fn_80042508(pBlock, fn_801BC7C0(pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], pPlayer->mUnknown4528[i]), i);
+            fn_801BE420(pPlayer->mUnknown4528[i], &pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], p, f);
+            fn_801BA03C(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], f, p);
+            fn_80042508(pBlock, fn_801BC7C0(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], pPlayer->mUnknown4528[i]), i);
         } else if (fn_800ADD7C(pBlock->mUnknown116, i) != 0) {
             fn_80042508(pBlock, fn_800ADEFC(pBlock->mUnknown116, i), i);
         }
@@ -1266,12 +1254,12 @@ extern "C" void fn_8003AB40(Object_80039F5C *p)
     fn_801B9EDC(p->mUnknown1244, 0, 1, 10);
     fn_801B9FEC(p->mUnknown1244, p->mUnknown1244 + 12);
     fn_801BE040(p->mUnknown1244 + 1252);
-    fn_801B9EDC(pPlayer->mUnknown3096, 2, 3, 4);
-    fn_801B9FEC(pPlayer->mUnknown3096, pPlayer->mUnknown3108);
+    fn_801B9EDC(&pPlayer->mUnknown3096, 2, 3, 4);
+    fn_801B9FEC(&pPlayer->mUnknown3096, pPlayer->mUnknown3108);
     fn_801BE040(pPlayer->mUnknown3604);
     for (i = 0; i <= 1; i++) {
-        fn_801B9EDC(pPlayer->mUnknown4008[i], 0, 4, 2);
-        fn_801B9FEC(pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i]);
+        fn_801B9EDC(&pPlayer->mUnknown4008[i], 0, 4, 2);
+        fn_801B9FEC(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i]);
         fn_801BE040(pPlayer->mUnknown4528[i]);
     }
 }

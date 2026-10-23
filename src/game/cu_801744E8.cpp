@@ -33,7 +33,7 @@ extern Table_801744E8 lbl_802E9A04[];
 extern float lbl_803ECB08;
 int fn_80178308(void);
 int fn_80178320(void);
-int fn_80178348(void);
+unsigned char fn_80178348(void);
 int fn_801783AC(int);
 void fn_801783D0(int, int);
 float fn_80178A2C(void);

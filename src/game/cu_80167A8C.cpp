@@ -8,6 +8,7 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/fn_800B65A0.h"
+#include "game/fn_80177FE0.h"
 
 #include "game/Team_80167A8C.h"
 
@@ -46,7 +47,6 @@ int fn_8016BAD8(int team);
 int fn_801485D4(void);
 int fn_801486A0(void);
 int fn_80177F70(void);
-Point_80167910 fn_80177FE0(void);
 int fn_80178308(void);
 float fn_80178A2C(void);
 int fn_80178E10(void);
@@ -491,7 +491,7 @@ void fn_801687E4(int team, int a, int b, int c)
 
         if (mode == 4 || mode == 6) {
             State_80167A8C *pState = &lbl_803ECAF4->mUnknown4[team].mUnknown20;
-            Point_80167910 point;
+            Point_8017886C point;
 
             point = fn_80177FE0();
 

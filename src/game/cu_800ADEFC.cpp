@@ -1,6 +1,6 @@
 #include "game/Frame_8019D3B8.h"
 #include "game/fn_801BE60C.h"
-#include "game/Player_800ADA1C.h"
+#include "game/Player_8003877C.h"
 
 extern "C" {
 float fn_801CFB94(int angle);
@@ -29,7 +29,7 @@ extern "C" Blend_8019EDDC *fn_800ADEFC(Element_80041BF8 *pElements, unsigned int
     return pBlend;
 }
 
-extern "C" void fn_800AE018(Player_800ADA1C *p, int side, unsigned short key)
+extern "C" void fn_800AE018(Player_8003877C *p, int side, unsigned short key)
 {
     if (p->mObject.mIdBytes[3] == 1) {
         p->mObject.mUnknown1008.mUnknown0 = key;

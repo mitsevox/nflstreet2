@@ -39,7 +39,7 @@ void fn_800A65BC(void);
 int fn_800A8408(int team);
 int fn_800A8444(int team);
 void fn_800A61E8(int value);
-int fn_80178348(void);
+unsigned char fn_80178348(void);
 float fn_800D3F2C(int team);
 void fn_8017DE54(int a, float t, int b, int direct);
 int fn_800A6590(int value);
