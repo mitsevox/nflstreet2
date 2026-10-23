@@ -163,12 +163,12 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
                 fn_80067E3C(0x32, &p->mMotion.mPos, p->mId, 0, 0, 0);
                 fn_800A2190(0);
             } else {
-                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0xB2, p, 1.0f);
+                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0xB2, 1.0f, p);
                 anim = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 0xB2, 0);
                 fn_80156C78(0x19, 1);
             }
         } else {
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0xB2, p, 1.0f);
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0xB2, 1.0f, p);
             anim = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 0xB2, 0);
             fn_80156C78(0x19, 1);
         }
@@ -176,7 +176,7 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
             anim = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 0x45, 0);
         }
     } else {
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0x45, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0x45, 1.0f, p);
         anim = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 0x45, 0);
     }
     pChannels = p->mpUnknown800;
