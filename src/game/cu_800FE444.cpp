@@ -703,14 +703,23 @@ void fn_800FFB4C(Object_80039F5C *p, Object_80039F5C *other, float *value, Point
     fn_80227638(out, &other->mMotion.mPos, &delta);
 }
 
-void fn_800FFD2C(Object_80039F5C *p,Point_8017886C *point)
+void fn_800FFD2C(Object_80039F5C *p, Point_8017886C *point)
 {
-    fn_80137B40();Point_8017886C delta;fn_80227690(&delta,point,&p->mMotion.mPos);
-    int angle=fn_801CFE40(delta.mY,delta.mX);
-    float speed=(fn_802270A4(&delta)-0.3f)*0.5f;
-    if(speed<0.0f)speed=0.0f;else if(!(speed<=1.0f))speed=1.0f;
-    p->mUnknown512.mUnknown4=p->mUnknown512.mUnknown8=angle;p->mUnknown512.mUnknown14=1;p->mUnknown512.mUnknown0=speed;
-    if(!(speed<=0.72f))p->mUnknown512.mUnknown15=1;
+    Point_8017886C delta;
+    int angle;
+    float speed;
+
+    fn_80137B40();
+    fn_80227690(&delta, point, &p->mMotion.mPos);
+    angle = fn_801CFE40(delta.mY, delta.mX);
+    speed = (fn_802270A4(&delta) - 0.3f) * 0.5f;
+    speed = speed < 0.0f ? 0.0f : (speed > 1.0f ? 1.0f : speed);
+    p->mUnknown512.mUnknown14 = 1;
+    p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = angle;
+    p->mUnknown512.mUnknown0 = speed;
+    if (speed > 0.72f) {
+        p->mUnknown512.mUnknown15 = 1;
+    }
 }
 
 
