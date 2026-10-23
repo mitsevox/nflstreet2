@@ -4788,6 +4788,32 @@
       ]
     },
     {
+      "source": "src/game/cu_8010D508.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment of the retained provisional cu_800EFC68 grouping: 1 target whole-function extent and the exact literal-pool slice 0x8029EC60-0x8029EC64 they load. The split lets this partial literal pool compile independently; it does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8010D508",
+          "end": "0x8010D6D4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029EC60",
+          "end": "0x8029EC64"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8010D508",
+          "start": "0x8010D508",
+          "end": "0x8010D6D4"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80125F3C.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv open/open unit row 0x80125F3C-0x801260D4 for src/game/cu_80125F3C.cpp, exact whole-function rows, inferred name rows and the exact .rodata data row 0x8029F660-0x8029F674. Original bytes remain linked.",
