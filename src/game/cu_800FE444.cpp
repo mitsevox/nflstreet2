@@ -55,7 +55,7 @@ int fn_8012CAAC(Object_80039F5C *);
 int fn_8012CAA4(Object_80039F5C *);
 void fn_8012CD4C(Object_80039F5C *,Vector_80039F5C *);
 float fn_8012CD60(Object_80039F5C *,float);
-void fn_80103F80(Object_80137ABC *,Vector_80039F5C,Vector_80039F5C,int,Vector_80039F5C *,Object_80039F5C *,float,float);
+void fn_80103F80(Object_80137ABC *,Vector_80039F5C,Vector_80039F5C,float,int,float,Vector_80039F5C *,Object_80039F5C *);
 void fn_80104328(Object_80039F5C *,unsigned int,int *,Vector_80039F5C *,int *);
 float fn_80103DD8(Object_80039F5C *,Object_80039F5C *,short *,float);
 int fn_8011E9B4(Object_80039F5C *);
@@ -794,7 +794,7 @@ void fn_8010016C(Object_80039F5C *p, Point_8017886C *point, Object_80039F5C *oth
     }
 }
 
-int fn_80100370(Object_80137ABC *ball, Object_80039F5C *p, Vector_80039F5C *out, float value)
+int fn_80100370(Object_80137ABC *ball, Object_80039F5C *p, float value, Vector_80039F5C *out)
 {
     Vector_80039F5C pos;
     Vector_80039F5C velocity = *(Vector_80039F5C *)&p->mMotion.mUnknown40;
@@ -832,7 +832,7 @@ int fn_80100370(Object_80137ABC *ball, Object_80039F5C *p, Vector_80039F5C *out,
         }
         break;
     }
-    fn_80103F80(ball, pos, velocity, angle, out, p, speed, value);
+    fn_80103F80(ball, pos, velocity, speed, angle, value, out, p);
     switch (p->mpState->mId) {
     case 10:
     case 51:
@@ -865,7 +865,7 @@ int fn_80100370(Object_80137ABC *ball, Object_80039F5C *p, Vector_80039F5C *out,
                         }
                         fn_80227538((Point_8017886C *)&velocity, angle, speed);
                         result = 1;
-                        fn_80103F80(ball, pos, velocity, angle, out, p, speed, value);
+                        fn_80103F80(ball, pos, velocity, speed, angle, value, out, p);
                     }
                 }
             }
@@ -875,15 +875,15 @@ int fn_80100370(Object_80137ABC *ball, Object_80039F5C *p, Vector_80039F5C *out,
     return result;
 }
 
-void fn_801007A4(Object_80137ABC *ball, Object_80039F5C *p, Object_80039F5C *other, Vector_80039F5C *out,
-                 unsigned char *kind, float value)
+void fn_801007A4(Object_80137ABC *ball, Object_80039F5C *p, Object_80039F5C *other, float value,
+                 Vector_80039F5C *out, unsigned char *kind)
 {
     Object_800B26B0 *motion = &other->mMotion;
 
     switch (*kind) {
     case 1:
     case 7:
-        if (!fn_80100370(ball, other, out, value)) {
+        if (!fn_80100370(ball, other, value, out)) {
             if (*kind == 1) {
                 *kind = 0;
             } else {
@@ -930,7 +930,7 @@ void fn_801007A4(Object_80137ABC *ball, Object_80039F5C *p, Object_80039F5C *oth
             break;
         }
         }
-        fn_80103F80(ball, pos, velocity, motion->mUnknown32, out, other, speed, value);
+        fn_80103F80(ball, pos, velocity, speed, motion->mUnknown32, value, out, other);
         break;
     }
     default:
@@ -1167,7 +1167,7 @@ void fn_80101568(Object_80039F5C *p, unsigned char *kind, Point_8017886C *point,
             speed = fn_80103DD8(p, other, &record->mUnknown8, 0.9f);
         }
         if (ball) {
-            fn_801007A4(ball, p, other, &target, kind, speed);
+            fn_801007A4(ball, p, other, speed, &target, kind);
         } else {
             target.mX = other->mMotion.mPos.mX;
             target.mY = other->mMotion.mPos.mY;
