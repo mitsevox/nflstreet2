@@ -169,7 +169,7 @@ extern "C" int fn_8010BA90(Object_80039F5C *p) {
         pBlock->mUnknown1--;
     } else {
         if (fn_801BE648(p->mpUnknown792) != 206) {
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 206, p, 1.0f);
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 206, 1.0f, p);
             if (fn_802372EC(0, 10) <= 4) {
                 switch (pBlock->mUnknown2) {
                 case 1:

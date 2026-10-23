@@ -14,7 +14,7 @@ struct State_800E4120 {
 extern "C" {
 void fn_8009BD60(Object_80039F5C *p);
 Point_8017886C fn_80177FFC(int team);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *e, float f);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, float f, void *e);
 }
 
 extern "C" void fn_800E4120(Object_80039F5C *p, State_800E4120 *pState, int heading, float speed)
@@ -32,7 +32,7 @@ extern "C" void fn_800E4120(Object_80039F5C *p, State_800E4120 *pState, int head
         p->mUnknown1008.mUnknown1 = 6;
     }
     p->mFlags &= ~4;
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 28, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 28, 1.0f, p);
     if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 28)) {
         int index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 28, 0);
         float rate = speed * 1.025641f;

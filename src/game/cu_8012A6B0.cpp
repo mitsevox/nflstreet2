@@ -610,7 +610,7 @@ extern "C" int fn_8012B654(Object_80039F5C *p)
                 && !state->mUnknown40 && fn_802372EC(0, state->mUnknown32) < state->mUnknown36) {
                 p->mUnknown512.mUnknown14 = 0;
                 fn_8009BD60(p);
-                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 152, p, 1.0f);
+                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 152, 1.0f, p);
                 state->mUnknown39 = 1;
             }
         } else {
@@ -851,13 +851,13 @@ extern "C" void fn_8012C3A4(Object_80039F5C *p)
     p->mUnknown1008.mUnknown0 = p->mpState->mUnknown1;
     p->mUnknown1008.mUnknown1 = p->mpState->mUnknown2;
     if (p->mpState->mUnknown3[0] == 1) {
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 198, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 198, 1.0f, p);
     } else if (p->mpState->mUnknown3[0] == 2) {
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 199, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 199, 1.0f, p);
     } else if (fn_800B83F4(p)) {
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 239, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 239, 1.0f, p);
     } else {
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 153, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 153, 1.0f, p);
     }
     p->mUnknown512.mUnknown14 = 0;
     p->mFlags &= ~1;

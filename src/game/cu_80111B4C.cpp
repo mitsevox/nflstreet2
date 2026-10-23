@@ -779,7 +779,7 @@ extern "C" int fn_80113680(Object_80039F5C *p)
     fn_800CE684(&p->mUnknown1240);
     fn_8011E8D8(p);
     pState = p->mpState;
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, (pState->mUnknown1 << 8) | pState->mUnknown2, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, (pState->mUnknown1 << 8) | pState->mUnknown2, 1.0f, p);
     p->mUnknown512.mUnknown14 = 0;
     p->mFlags &= ~4;
     return 0;
@@ -919,7 +919,7 @@ extern "C" int fn_80113C20(Object_80039F5C *p)
             state->mUnknown12 = state->mUnknown8 = pos.mZ;
         }
     }
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, 1.0f, p);
     p->mUnknown512.mUnknown14 = 0;
     p->mFlags &= ~0x1005;
     if (state->mUnknown30 == 1) {

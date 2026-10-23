@@ -5,7 +5,7 @@
 #include "game/Item_80097440.h"
 
 extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Object_80137ABC *pBall, float *pOut, short *pValue);
-extern "C" int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
+extern "C" int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 extern "C" int fn_801BA6B0(Record_800D81C8 *entry);
 extern "C" void fn_801BA6BC(Record_800D81C8 *entry, int value);
 extern "C" void fn_801BD81C(void *p, float value);
@@ -64,7 +64,7 @@ extern "C" int fn_80099F04(Object_80039F5C *p, int handle, int kind)
             }
         }
         p->mUnknown9[0] = 1;
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, lbl_8030C2B8[index].mUnknown0, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, lbl_8030C2B8[index].mUnknown0, 1.0f, p);
         pRecords = p->mpUnknown800;
         entry = fn_801BA5A8(p->mpUnknown796, pRecords, lbl_8030C2B8[index].mUnknown0, 0);
         if (handle < 0) {

@@ -47,13 +47,13 @@ extern "C" int fn_800A3E84(Object_80039F5C *p, int angle, int unused)
                 if (distance > lbl_803EAA04 && distance < lbl_803EAA08
                     && turn < (int)(lbl_803EAA0C * 46603.38f)
                     && (pTarget->mMode == 4 || pTarget->mMode == 5))
-                    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 185, p, 1.0f);
+                    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 185, 1.0f, p);
                 else if (pTarget->mMode == 2 && fn_80137B40() != 0
                          && fn_8022781C(&p->mMotion, &fn_80137B40()->mMotion) < 6.0f
                          && (p->mpState->mId == 2 || p->mpState->mId == 30))
-                    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 185, p, 1.0f);
+                    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 185, 1.0f, p);
                 else
-                    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 155, p, 1.0f);
+                    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 155, 1.0f, p);
                 result = 1;
                 fn_800A3B58(p, 10, 0);
                 p->mUnknown512.mUnknown14 = 0;

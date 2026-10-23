@@ -64,7 +64,7 @@ void fn_8010BE54(Object_80039F5C *p);
 int fn_801486A0(void);
 float fn_80178A08(void);
 float fn_80178A2C(void);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 void fn_802276B4(void *pOut, void *pA, void *pB);
 }
 
@@ -131,7 +131,7 @@ extern "C" int fn_8010A4E8(Object_80039F5C *p) {
         pBlock->mUnknown52Mode = 0;
         pBlock->mUnknown52Rest = pBlock->mUnknown48 = 0;
         if (fn_801BE648(p->mpUnknown792) != 0x4A && fn_801BE648(p->mpUnknown792) != 0xCB && fn_800A5DD0(p) == 0) {
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0x4A, p, 1.0f);
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0x4A, 1.0f, p);
         }
         p->mFlags &= ~0x10;
     } else {

@@ -67,7 +67,7 @@ void fn_8012430C(Directions_8012430C *,int,Object_80039F5C *);
 unsigned char fn_801243E0(Directions_8012430C *,int);
 float fn_801242E0(Directions_8012430C *,unsigned int);
 unsigned short fn_801BE648(void *p);
-int fn_801BE068(void *,void *,void *,unsigned short,void *,float);
+int fn_801BE068(void *,void *,void *,unsigned short,float,void *);
 void fn_801BE67C(void *,void *,void *,void *);
 int fn_8010A2DC(Object_80039F5C *, int, short);
 void fn_8010CEB8(Object_80039F5C *,int);
@@ -578,7 +578,7 @@ void fn_800FF6D8(Object_80039F5C *p)
     s->mUnknown32.mY = 0.0f;
     s->mUnknown40 = 0.0f;
     p->mUnknown512.mUnknown14=0;
-    fn_801BE068(p->mpUnknown792,p->mpUnknown796,p->mpUnknown800,74,p,1.0f);
+    fn_801BE068(p->mpUnknown792,p->mpUnknown796,p->mpUnknown800,74,1.0f,p);
     fn_801BE67C(p->mpUnknown792,p->mpUnknown796,p->mpUnknown800,p);
     p->mUnknown9[0]=1;
 }

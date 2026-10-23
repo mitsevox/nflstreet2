@@ -6,7 +6,7 @@
 #include "game/fn_800A3530.h"
 
 extern "C" {
-void fn_801BE3C0(void *p, unsigned short key, int type, float from, void *pSource, float to);
+void fn_801BE3C0(void *p, unsigned short key, float from, int type, float to, void *pSource);
 float fn_801BD660(void *pScript, int key);
 float fn_801BD6D4(Block_801BD6D4 *p);
 void fn_800425D4(Object_8003DEC4 *pObject);
@@ -39,8 +39,8 @@ extern "C" int fn_800A3530(Table_80089904 *table, unsigned short key, void *reco
             Data1_801BF4A8 data;
             data.mUnknown4 = 1;
             data.mUnknown0 = 1.0f;
-            fn_801BE3C0(p->mpUnknown804, key, 1, 1.0f, &data, 0.0f);
-            fn_801BE068(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, 2, p, 1.0f);
+            fn_801BE3C0(p->mpUnknown804, key, 1.0f, 1, 0.0f, &data);
+            fn_801BE068(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, 2, 1.0f, p);
         }
         break;
     case 2:
@@ -50,8 +50,8 @@ extern "C" int fn_800A3530(Table_80089904 *table, unsigned short key, void *reco
             Data1_801BF4A8 data;
             data.mUnknown4 = 8;
             data.mUnknown0 = 1.0f;
-            fn_801BE3C0(p->mpUnknown804, key, 1, 1.0f, &data, 0.0f);
-            fn_801BE068(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, 2, p, 1.0f);
+            fn_801BE3C0(p->mpUnknown804, key, 1.0f, 1, 0.0f, &data);
+            fn_801BE068(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, 2, 1.0f, p);
         }
         break;
     case 3:
@@ -112,8 +112,8 @@ extern "C" int fn_800A3898(Table_80089904 *table, unsigned short key, void *reco
             Data1_801BF4A8 data;
                 data.mUnknown4 = 8;
                 data.mUnknown0 = 1.0f;
-                fn_801BE3C0(p->mpUnknown804, key, 1, 1.0f, &data, 0.0f);
-                fn_801BE068(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, 2, p, 1.0f);
+                fn_801BE3C0(p->mpUnknown804, key, 1.0f, 1, 0.0f, &data);
+                fn_801BE068(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, 2, 1.0f, p);
             }
         }
         break;
@@ -122,8 +122,8 @@ extern "C" int fn_800A3898(Table_80089904 *table, unsigned short key, void *reco
             Data1_801BF4A8 data;
             data.mUnknown4 = 1;
             data.mUnknown0 = 1.0f;
-            fn_801BE3C0(p->mpUnknown804, key, 1, 1.0f, &data, 0.0f);
-            fn_801BE068(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, 2, p, 1.0f);
+            fn_801BE3C0(p->mpUnknown804, key, 1.0f, 1, 0.0f, &data);
+            fn_801BE068(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, 2, 1.0f, p);
         }
         break;
     case 3:

@@ -36,9 +36,9 @@ extern "C" void fn_800AE018(Player_8003877C *p, int side, unsigned short key)
         p->mObject.mUnknown1008.mUnknown1 = key >> 8;
         p->mObject.mUnknown1008.mUnknown2 = side;
         if (side == 1) {
-            fn_801BE068(p->mUnknown4528[1], &p->mUnknown4008[1], p->mUnknown4032[1], 2, p, 1.0f);
+            fn_801BE068(p->mUnknown4528[1], &p->mUnknown4008[1], p->mUnknown4032[1], 2, 1.0f, p);
         } else {
-            fn_801BE068(p->mUnknown4528[side], &p->mUnknown4008[side], p->mUnknown4032[side], 3, p, 1.0f);
+            fn_801BE068(p->mUnknown4528[side], &p->mUnknown4008[side], p->mUnknown4032[side], 3, 1.0f, p);
         }
     }
 }
