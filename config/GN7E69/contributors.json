@@ -27966,6 +27966,21 @@
         "original_blob": "12f86e7935d1ce7ba73a75a0f836ff2a66a1c29e",
         "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 1050 refines them in place to exact matches (declaration types, parameter order or statement form, and 8-aligned literal-pool placement of src/game/cu_801230B8.cpp and src/game/cu_80116C34.cpp), and that refinement does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1050 file for squash-history verification."
       }
+    },
+    {
+      "source": "src/game/cu_8014FFC4.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8014FFC4"
+      ],
+      "provenance": {
+        "commit": "74f0e64c43eedc6250524bd1720092b223c36936",
+        "introduced_blob": "34b8d91fa175c737d1704e5402b5c0f4d09e9f6d",
+        "pull_request": 1063,
+        "merged_via": 1063
+      }
     }
   ],
   "target": "GN7E69",
