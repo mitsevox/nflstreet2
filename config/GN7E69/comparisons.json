@@ -26904,6 +26904,58 @@
       ]
     },
     {
+      "source": "src/game/cu_80091AD0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_80091AD0 and the literal-pool slice 0x802960A8-0x802960AC they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80091AD0",
+          "end": "0x80091C84"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802960A8",
+          "end": "0x802960AC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80091AD0",
+          "start": "0x80091AD0",
+          "end": "0x80091C84"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_80093D20.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_80093D20 and the literal-pool slice 0x80296100-0x80296104 they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80093D20",
+          "end": "0x80093E38"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296100",
+          "end": "0x80296104"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80093D20",
+          "start": "0x80093D20",
+          "end": "0x80093E38"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80097160.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. 4 target whole-function extents and the literal-pool slice 0x80296198-0x802961B4 they reference retain their evidence; the split lets this pool compile independently of the parent unit's other literals and does not claim an original file boundary or whole-unit promotion.",
@@ -36982,6 +37034,58 @@
           "symbol": "_._14Class_802A1D58",
           "start": "0x80156350",
           "end": "0x80156384"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8009E9EC.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_8009E9EC and the literal-pool slice 0x80296464-0x80296468 they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8009E9EC",
+          "end": "0x8009EAB0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296464",
+          "end": "0x80296468"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8009E9EC",
+          "start": "0x8009E9EC",
+          "end": "0x8009EAB0"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8009EC60.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_8009EC60 and the literal-pool slice 0x80296470-0x80296474 they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8009EC60",
+          "end": "0x8009EDD4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296470",
+          "end": "0x80296474"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8009EC60",
+          "start": "0x8009EC60",
+          "end": "0x8009EDD4"
         }
       ]
     },
