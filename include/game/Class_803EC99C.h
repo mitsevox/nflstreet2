@@ -8,7 +8,7 @@ public:
     virtual void fn_800CFFC4(float f);
     virtual void fn_800D0394();
     void fn_800CFEFC();
-    bool fn_800D0408();
+    int fn_800D0408();
 };
 
 extern Class_803EC99C *lbl_803EAC9C;

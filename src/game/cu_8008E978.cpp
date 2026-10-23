@@ -7125,9 +7125,9 @@ extern "C" void fn_800B3EC0(int a, int b)
 extern "C" {
 void fn_8006CAEC(void);
 void fn_800B50E8(int team);
-QueryCursor fn_800C0750(unsigned char index, unsigned short *pValues);
+QueryCursor fn_800C0750(int index, unsigned short *pValues);
 void fn_800C07C4(QueryCursor cursor);
-void fn_800C07F0(QueryCursor cursor, unsigned char index, unsigned short *pValues);
+void fn_800C07F0(QueryCursor cursor, int index, unsigned short *pValues);
 }
 
 extern "C" void fn_800B3EFC(int team)
@@ -9762,7 +9762,9 @@ extern "C" void fn_800AD888(float dt)
 
 extern "C" void fn_800AD910(int mode, float dt)
 {
-    if (!lbl_803EAC9C->fn_800D0408()) {
+    unsigned char busy = lbl_803EAC9C->fn_800D0408();
+
+    if (!busy) {
         void (*pExit)(float) = lbl_80297FC8[lbl_803EAAD4->mUnknown0].mpExit;
         void (*pEnter)(float);
 
@@ -14794,7 +14796,7 @@ int fn_800AE980(void);
 void fn_8017CBFC(int a);
 short fn_8017CD44(unsigned char index);
 void fn_8017CD20(void);
-QueryCursor fn_800C0698(unsigned char index, unsigned short *pValues);
+QueryCursor fn_800C0698(int index, unsigned short *pValues);
 State_8011F4EC *fn_8011F4EC(void);
 int fn_801787A0(void);
 int fn_80168E00(int team, int index, unsigned char *pOut);
@@ -15521,7 +15523,7 @@ extern "C" unsigned short fn_800C0660(unsigned short *p, int value)
     return i;
 }
 
-extern "C" QueryCursor fn_800C0750(unsigned char index, unsigned short *pValues)
+extern "C" QueryCursor fn_800C0750(int index, unsigned short *pValues)
 {
     int i;
 
