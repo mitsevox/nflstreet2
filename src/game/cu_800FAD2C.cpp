@@ -167,7 +167,7 @@ extern "C" void fn_800FB314(void) {
                             behind--;
                         }
                     }
-                    if (ahead < behind || (ahead <= behind && p->mMotion.mPos.mX <= fn_80177FE0().mX)) {
+                    if (ahead < behind || (ahead <= behind && p->mMotion.mPos.mX > fn_80177FE0().mX)) {
                         slot = ahead;
                     } else {
                         slot = count - behind - 1;
