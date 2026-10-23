@@ -9789,11 +9789,11 @@
       "provenance": {
         "pull_request": 474,
         "merged_via": 1066,
-        "commit": "d82a457071ebd0f90c55f6347ebac114fec380d8",
-        "introduced_blob": "c36c5980610b530d2c1f39004c9781ae534d46a3",
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "a4936d4b515cfc7f268ce80367b41a4cc301f499",
         "original_commit": "57349faa1a85aec9e958340e0d8d9466c6e4a89b",
         "original_blob": "66f80c7e7e5d34683aefb3071a3ff781b9a95f67",
-        "integration_adjustment": "fn_801317F8 from adampreddy's src/game/cu_8013141C.cpp (PR 474, a measured fuzzy partial there) made exact by moving its goal-distance test into a file-local inline helper that takes the fn_80177FE0() point by value, with the fn_8013141C call as a nested if; the rest of the body is unchanged."
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     },
     {
@@ -20812,11 +20812,11 @@
       "provenance": {
         "pull_request": 905,
         "merged_via": 1066,
-        "commit": "ce89125a3ec3de49711acf7160a6ff3b691885bc",
-        "introduced_blob": "2f6d406e6bd2d32e0513e5f5f6d7dd1c397a71cf",
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "7e2f8b0c2c6b4327b17e9000a1988fbba916cc9c",
         "original_commit": "d26274ca59ea5bcb3d3cf910e0f423c5453171f2",
         "original_blob": "fe2e034517fb8a0625257657a47c60f3414c8f94",
-        "integration_adjustment": "fn_8012A3B0 from mitsevox's src/game/cu_801260D4.cpp (PR 905, a measured fuzzy partial there) made exact by testing if (pOther == 0 || fn_80124714(...)) with a pOther != 0 && guard on the first inner test, which emits no instruction of its own and lets a null pOther reach the existing else if (pOther == 0 || same team) re-test that the target performs at 0x8012A45C; the rest of the body is unchanged."
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     },
     {
@@ -28069,8 +28069,11 @@
       "provenance": {
         "pull_request": 1039,
         "merged_via": 1039,
-        "commit": "e7aa82b0c4a985944ac5c76e73211232d956a161",
-        "introduced_blob": "31fc4e33ad3f55e459debaf6fb20aa39c21afa35"
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "839c70c6cc4e257795c5bec1b0adbc7abfae52d0",
+        "original_commit": "e7aa82b0c4a985944ac5c76e73211232d956a161",
+        "original_blob": "31fc4e33ad3f55e459debaf6fb20aa39c21afa35",
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     },
     {
@@ -28188,8 +28191,11 @@
       "provenance": {
         "pull_request": 1053,
         "merged_via": 1053,
-        "commit": "9ecb74bc3e1e08a6fde0367add053092c5839efc",
-        "introduced_blob": "9a5df8828fab37f7c56fe46fd71d523e284aadea"
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "d7a222505859ae76ef399347042773079e48e3b2",
+        "original_commit": "9ecb74bc3e1e08a6fde0367add053092c5839efc",
+        "original_blob": "9a5df8828fab37f7c56fe46fd71d523e284aadea",
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     },
     {
@@ -28648,8 +28654,11 @@
       "provenance": {
         "pull_request": 1051,
         "merged_via": 1051,
-        "commit": "9ecb74bc3e1e08a6fde0367add053092c5839efc",
-        "introduced_blob": "9a5df8828fab37f7c56fe46fd71d523e284aadea"
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "d7a222505859ae76ef399347042773079e48e3b2",
+        "original_commit": "9ecb74bc3e1e08a6fde0367add053092c5839efc",
+        "original_blob": "9a5df8828fab37f7c56fe46fd71d523e284aadea",
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     },
     {
@@ -28755,8 +28764,11 @@
       "provenance": {
         "pull_request": 1051,
         "merged_via": 1051,
-        "commit": "1badfb6ab4e4a71e9e3928924a13587ad87cda87",
-        "introduced_blob": "19cdcb736c3df39c9f7bbe43f1fc0db71a4f0c7a"
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "fc1155b78a2674fb1277bc9f73bcfb7819938b71",
+        "original_commit": "1badfb6ab4e4a71e9e3928924a13587ad87cda87",
+        "original_blob": "19cdcb736c3df39c9f7bbe43f1fc0db71a4f0c7a",
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     },
     {
@@ -28817,8 +28829,11 @@
       "provenance": {
         "pull_request": 1054,
         "merged_via": 1054,
-        "commit": "9ecb74bc3e1e08a6fde0367add053092c5839efc",
-        "introduced_blob": "9a5df8828fab37f7c56fe46fd71d523e284aadea"
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "d7a222505859ae76ef399347042773079e48e3b2",
+        "original_commit": "9ecb74bc3e1e08a6fde0367add053092c5839efc",
+        "original_blob": "9a5df8828fab37f7c56fe46fd71d523e284aadea",
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     },
     {
@@ -28834,8 +28849,11 @@
       "provenance": {
         "pull_request": 750,
         "merged_via": 1054,
-        "commit": "9ecb74bc3e1e08a6fde0367add053092c5839efc",
-        "introduced_blob": "9a5df8828fab37f7c56fe46fd71d523e284aadea"
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "d7a222505859ae76ef399347042773079e48e3b2",
+        "original_commit": "9ecb74bc3e1e08a6fde0367add053092c5839efc",
+        "original_blob": "9a5df8828fab37f7c56fe46fd71d523e284aadea",
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     },
     {
@@ -29044,8 +29062,11 @@
       "provenance": {
         "pull_request": 1054,
         "merged_via": 1054,
-        "commit": "e3c948a61b5f99ab9fe8edab495be70f83d14de5",
-        "introduced_blob": "bde5b98239ad0f45e6972f830d0058984c2929c2"
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "9e9965722b92c818e89dfd5bd3598ed38b36483a",
+        "original_commit": "e3c948a61b5f99ab9fe8edab495be70f83d14de5",
+        "original_blob": "bde5b98239ad0f45e6972f830d0058984c2929c2",
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     },
     {
@@ -29134,11 +29155,11 @@
       "provenance": {
         "pull_request": 558,
         "merged_via": 1052,
-        "commit": "6702848d2774cdae207555d560bc917273847317",
-        "introduced_blob": "64856d91866c165f0233d81babdd762f5b7560d9",
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "2feb5cdf29651e373f569e00d6bc63baba73aedd",
         "original_commit": "fa2066a7feab31e4fe4bc6a0c3e0d9f24c8d09ab",
         "original_blob": "471e72470a3864eff0f5f3bf4605dd90da2a9306",
-        "integration_adjustment": "Preserve the original contributor and PR of this pre-existing PR 558 comparison body; PR 1052 refines it in place to an exact match (statement placement only), and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents."
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     },
     {
@@ -29206,8 +29227,11 @@
       "provenance": {
         "pull_request": 1052,
         "merged_via": 1052,
-        "commit": "6702848d2774cdae207555d560bc917273847317",
-        "introduced_blob": "1fd061bfa228bb9d7fdc7900c9a50dc442da6831"
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "ad10be355c39930f66086f948c3f9331bfc82e02",
+        "original_commit": "6702848d2774cdae207555d560bc917273847317",
+        "original_blob": "1fd061bfa228bb9d7fdc7900c9a50dc442da6831",
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     },
     {
@@ -29222,8 +29246,11 @@
       "provenance": {
         "pull_request": 1052,
         "merged_via": 1052,
-        "commit": "6702848d2774cdae207555d560bc917273847317",
-        "introduced_blob": "3e136aadb588343a311465b6cff440c90bd6ea55"
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "b4672697cd72ec31ee125dd590064b0a8dcf4144",
+        "original_commit": "6702848d2774cdae207555d560bc917273847317",
+        "original_blob": "3e136aadb588343a311465b6cff440c90bd6ea55",
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     },
     {
@@ -29253,8 +29280,11 @@
       "provenance": {
         "pull_request": 1052,
         "merged_via": 1052,
-        "commit": "6702848d2774cdae207555d560bc917273847317",
-        "introduced_blob": "83057df40247b6f359609e829d24f76a3b78ddad"
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "4e1c1a9d20231dfd2fd5a0596d7d599adb82235a",
+        "original_commit": "6702848d2774cdae207555d560bc917273847317",
+        "original_blob": "83057df40247b6f359609e829d24f76a3b78ddad",
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     },
     {
@@ -29313,8 +29343,11 @@
       "provenance": {
         "pull_request": 1052,
         "merged_via": 1052,
-        "commit": "6702848d2774cdae207555d560bc917273847317",
-        "introduced_blob": "82054184bfa778b8024a06c131a100b452ffddd5"
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "5c5bf3085116fa67351f9e14fba297d3292b796e",
+        "original_commit": "6702848d2774cdae207555d560bc917273847317",
+        "original_blob": "82054184bfa778b8024a06c131a100b452ffddd5",
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     },
     {
@@ -29328,8 +29361,11 @@
       "provenance": {
         "pull_request": 1052,
         "merged_via": 1052,
-        "commit": "6702848d2774cdae207555d560bc917273847317",
-        "introduced_blob": "cc86fafaa3e941e6466af2175f57fcc2e825e2ce"
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "2f538442ff6325c8ef267e6319864a6daf7e40a5",
+        "original_commit": "6702848d2774cdae207555d560bc917273847317",
+        "original_blob": "cc86fafaa3e941e6466af2175f57fcc2e825e2ce",
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     },
     {
@@ -29394,8 +29430,11 @@
       "provenance": {
         "pull_request": 1064,
         "merged_via": 1064,
-        "commit": "0cbceb89ebb5a551b7721dc3ff6cb4113e1fd81b",
-        "introduced_blob": "be4e092e4ae620394942ca8996ec3b34d132b5a3"
+        "commit": "4d58722cf0bb90407b9e93806a60056ff22b2868",
+        "introduced_blob": "29c066a435337d3af5fe534912958449d452bcce",
+        "original_commit": "0cbceb89ebb5a551b7721dc3ff6cb4113e1fd81b",
+        "original_blob": "be4e092e4ae620394942ca8996ec3b34d132b5a3",
+        "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
       }
     }
   ],
