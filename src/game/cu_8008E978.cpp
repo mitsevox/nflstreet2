@@ -2911,6 +2911,11 @@ extern "C" int fn_800C7720(Object_80039F5C *pOther, Object_80039F5C *p)
     return result;
 }
 
+extern "C" void fn_800C8688(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b)
+{
+    float matrix[12];
+}
+
 extern "C" {
 void fn_80156C78(int id, int value);
 }
@@ -12211,7 +12216,7 @@ extern "C" void fn_800CCB04(Set_800CCBA0 *pSet, Entry_800CCBA0 **pOut, int kind,
     }
 }
 
-extern "C" unsigned short fn_800CCBA0(Set_800CCBA0 *pSet, int kind)
+extern "C" int fn_800CCBA0(Set_800CCBA0 *pSet, int kind)
 {
     unsigned short second = 0;
     unsigned short first = 0;
@@ -15726,55 +15731,89 @@ void fn_800CEED8(unsigned short,int,Command_800CEE74 *,Object_80039F5C *,Vector_
 
 extern "C" Play_800CCEBC *fn_800CD3C0(Group_800CC98C *p, Play_800CCEBC *pOut, unsigned short *pKey)
 {
+    Players_800CD3C0 selected;
+    Players_800CD3C0 available;
+    Candidate_800CD3C0 candidates[12];
     Object_80039F5C *pA = p->mpUnknown0;
     Play_800CCEBC *result = 0;
-    Candidate_800CD3C0 candidates[12];
+    unsigned int i;
     unsigned short count = 0;
+    unsigned short key;
+    int complete = 0;
+    Table_80089904 *pTable;
+
     pOut->mPoint8.mX = pA->mMotion.mPos.mX;
     pOut->mPoint8.mY = pA->mMotion.mPos.mY;
     pOut->mUnknown28 = pA->mMotion.mFacing;
     pOut->mUnknown36 = pOut->mUnknown28 + fn_800C8BAC(pA, 0);
-    Table_80089904 *pTable = fn_801BE72C(pA->mpUnknown796->mUnknown2, p->mUnknown52Unsigned);
+    pTable = fn_801BE72C(pA->mpUnknown796->mUnknown2, p->mUnknown52Unsigned);
     pOut->mUnknown41 = fn_800CF090(pA);
-    for (unsigned int i = 0; i < pTable->mCount; i++) {
-        Entry_80089904 *pEntry = &pTable->mEntries[i];
-        if (p->mUnknown55 != 255 && p->mUnknown55 != i) continue;
-        if (p->mUnknown54 != 255 && p->mUnknown54 != pEntry->mpInfo->mValue) continue;
-        unsigned short key = pEntry->mUnknown0;
-        unsigned short id = pEntry->mUnknown2 & 0x7FFF;
-        Play_800CCEBC *pPlay = (Play_800CCEBC *)fn_801BBD5C(id, pA->mpUnknown796->mUnknown2);
-        unsigned short size = fn_800CCBA0(&pPlay->mSet, 0);
-        if (size > 1) fn_800CCB04(&pPlay->mSet, &pOut->mpUnknown16, 1, 1);
-        else fn_800CCA40(&pPlay->mSet, &pOut->mpUnknown16, 1, 0);
-        Players_800CD3C0 selected;
-        Players_800CD3C0 available;
-        fn_801C1F94(&selected, 0, 28);
-        for (int n = 0; n < 7; n++) available.mPlayers[n] = p->mpUnknown4Entries[n];
-        int complete = 0;
-        for (unsigned short slot = 0; slot < size; slot++) {
+    for (i = 0; i < pTable->mCount; i++) {
+        Info_80089904 *pInfo;
+        unsigned short id;
+        Play_800CCEBC *pPlay;
+        unsigned short size;
+        unsigned short slot;
+
+        if (p->mUnknown55 != 255 && p->mUnknown55 != i) {
+            continue;
+        }
+        pInfo = pTable->mEntries[i].mpInfo;
+        if (p->mUnknown54 != 255 && p->mUnknown54 != pInfo->mValue) {
+            continue;
+        }
+        key = pTable->mEntries[i].mUnknown0;
+        id = pTable->mEntries[i].mUnknown2 & 0x7FFF;
+        pPlay = (Play_800CCEBC *)fn_801BBD5C(id, pA->mpUnknown796->mUnknown2);
+        size = fn_800CCBA0(&pPlay->mSet, 0);
+        if (size > 1) {
+            fn_800CCB04(&pPlay->mSet, &pOut->mpUnknown16, 1, 1);
+        } else {
+            fn_800CCA40(&pPlay->mSet, &pOut->mpUnknown16, 1, 0);
+        }
+        fn_801C1F94(&selected, 0, sizeof(selected));
+        available = *(Players_800CD3C0 *)p->mpUnknown4Entries;
+        for (slot = 0; slot < size; slot++) {
+            unsigned short n;
+
             complete = 0;
-            if (size > 1) fn_800CCB04(&pPlay->mSet, &pOut->mpUnknown20, 0, (unsigned char)(slot + 1));
-            else fn_800CCA40(&pPlay->mSet, &pOut->mpUnknown20, 0, slot);
-            for (unsigned short n = 0; n <= 6; n++) {
+            if (size > 1) {
+                fn_800CCB04(&pPlay->mSet, &pOut->mpUnknown20, 0, (unsigned char)(slot + 1));
+            } else {
+                fn_800CCA40(&pPlay->mSet, &pOut->mpUnknown20, 0, slot);
+            }
+            for (n = 0; n <= 6; n++) {
                 Object_80039F5C *pB = available.mPlayers[n];
-                if (pB == 0) continue;
-                if (p->mUnknown52Unsigned == 247 && slot == 0 && fn_80114E7C(pA) != pB) continue;
+
+                if (pB == 0) {
+                    continue;
+                }
+                if (p->mUnknown52Unsigned == 247 && slot == 0 && fn_80114E7C(pA) != pB) {
+                    continue;
+                }
                 pOut->mPoint0.mX = pB->mMotion.mPos.mX;
                 pOut->mPoint0.mY = pB->mMotion.mPos.mY;
                 pOut->mUnknown24 = pB->mMotion.mFacing;
                 pOut->mUnknown32 = pOut->mUnknown24 + fn_800C8BAC(pB, 0);
-                if (pB->mpState->mId == 12 || pB->mpState->mId == 94) pOut->mUnknown40 = fn_800CD35C(p->mUnknown58, pB);
-                else pOut->mUnknown40 = 0;
+                if (pB->mpState->mId == 12 || pB->mpState->mId == 94) {
+                    pOut->mUnknown40 = fn_800CD35C(p->mUnknown58, pB);
+                } else {
+                    pOut->mUnknown40 = 0;
+                }
                 if (fn_800CD21C(p, pOut, id)) {
                     selected.mPlayers[slot] = pB;
                     available.mPlayers[n] = 0;
                     break;
                 }
             }
-            if (selected.mPlayers[slot] == 0) break;
+            if (selected.mPlayers[slot] == 0) {
+                break;
+            }
             complete = 1;
         }
-        if (available.mPlayers[0] != 0) complete = 0;
+        if (available.mPlayers[0] != 0) {
+            complete = 0;
+        }
         if (complete && count < 12) {
             candidates[count].mpPlay = pPlay;
             candidates[count].mKey = key;
@@ -15785,10 +15824,11 @@ extern "C" Play_800CCEBC *fn_800CD3C0(Group_800CC98C *p, Play_800CCEBC *pOut, un
     }
     if (count != 0) {
         int chosen = fn_802372EC(0, count);
+
         result = candidates[chosen].mpPlay;
         *pKey = candidates[chosen].mKey;
         pA->mUnknown1160.mSnapshot12 = candidates[chosen].mSnapshot;
-        for (int n = 0; n < 7; n++) p->mpUnknown4Entries[n] = candidates[chosen].mPlayers.mPlayers[n];
+        *(Players_800CD3C0 *)p->mpUnknown4Entries = candidates[chosen].mPlayers;
     }
     return result;
 }
@@ -15958,25 +15998,42 @@ extern "C" { int fn_800E0F48(void *,void *,void *,void *); }
 extern "C" int fn_800CCF68(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_80039F5C *pPoint, int angle)
 {
     Record_800C432C table;
-    fn_801BBC3C(1, pRecord->mUnknown60, &table.mTable);
-    Object_80039F5C *pA = p->mpUnknown0;
-    Play_800CCEBC *pPlay = (Play_800CCEBC *)fn_801BBD5C(pRecord->mUnknown60, pA->mpUnknown796->mUnknown2);
-    unsigned char index = 0;
-    while (index < pPlay->mSet.mCount && table.mTable.mEntries[index].mpInfo->mUnknown52 != 1) index++;
-    Vector_80039F5C start = pA->mMotion.mPos;
+    Vector_80039F5C start;
     Vector_80039F5C end;
-    int outAngle;
     unsigned char value;
-    fn_800CEED8(pRecord->mUnknown60, index, pRecord, pA, pPoint, angle, &end, &outAngle, &value);
-    unsigned int count = (unsigned char)fn_80054130()->mUnknown136;
-    Record_80054130 *pRows = fn_80054130()->mUnknown140;
-    for (unsigned char i = 0; i < count; i++, pRows++) {
-        Vector_80039F5C a;
-        Vector_80039F5C b;
-        fn_800541AC(pRows, &a, &b);
-        if (fn_800E0F48(&start, &end, &a, &b)) return 1;
+    int outAngle;
+    Point_8017886C a;
+    Point_8017886C b;
+    Object_80039F5C *pA;
+    Play_800CCEBC *pPlay;
+    Record_80054130 *pRows;
+    unsigned int count;
+    unsigned char index;
+    unsigned char i;
+    int result = 0;
+
+    fn_801BBC3C(1, pRecord->mUnknown60, &table.mTable);
+    pA = p->mpUnknown0;
+    pPlay = (Play_800CCEBC *)fn_801BBD5C(pRecord->mUnknown60, pA->mpUnknown796->mUnknown2);
+    for (index = 0; index < pPlay->mSet.mCount; index++) {
+        if (table.mTable.mEntries[index].mpInfo->mUnknown52 == 1) {
+            break;
+        }
     }
-    return 0;
+    start.mX = pA->mMotion.mPos.mX;
+    start.mY = pA->mMotion.mPos.mY;
+    start.mZ = pA->mMotion.mPos.mZ;
+    fn_800CEED8(pRecord->mUnknown60, index, pRecord, pA, pPoint, angle, &end, &outAngle, &value);
+    count = (unsigned char)fn_80054130()->mUnknown136;
+    pRows = fn_80054130()->mUnknown140;
+    for (i = 0; i < count; i++, pRows++) {
+        fn_800541AC(pRows, &a, &b);
+        if (fn_800E0F48(&start, &end, &a, &b)) {
+            result = 1;
+            break;
+        }
+    }
+    return result;
 }
 
 extern "C" int fn_800CD0BC(Group_800CC98C *p, Play_800CCEBC *pPlay, int key)
