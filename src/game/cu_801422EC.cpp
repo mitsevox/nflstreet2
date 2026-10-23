@@ -153,6 +153,8 @@ void fn_801423D0(Camera_801422EC *pCamera)
     speed = 24.0f;
     lag = 0.0f;
     switch (pCamera->mUnknownA0) {
+    case 0:
+        break;
     case 1:
         if (pPlayer) {
             fn_80142884(pPlayer, (Vector_80039F5C *)&pCamera->mUnknownF8.mUnknown54, pState->mUnknown30);
@@ -218,8 +220,6 @@ void fn_801423D0(Camera_801422EC *pCamera)
             mode = 0;
             speed = 50.0f;
         }
-        break;
-    case 0:
         break;
     }
     if (pState->mUnknown50 != mode || lbl_803EB200) {

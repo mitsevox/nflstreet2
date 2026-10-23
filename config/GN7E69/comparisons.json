@@ -12984,7 +12984,7 @@
     {
       "source": "src/game/cu_801422EC.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801422EC-0x80142B0C (src/game/cu_801422EC.cpp), its function rows and data rows. Draft comparison: 6 of 8 functions exact; original bytes remain linked until every function matches.",
+      "evidence": "evidence.tsv unit row 0x801422EC-0x80142B0C (src/game/cu_801422EC.cpp), its function rows and data rows. Draft comparison: 7 of 8 functions exact; original bytes remain linked until every function matches.",
       "sections": [
         {
           "section": ".text",
