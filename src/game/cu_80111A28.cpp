@@ -5,7 +5,12 @@
    cu_800EFC68 grouping. When fn_801CFFD0(angle, +0x1C8 word) is nonzero,
    length drops by 30 (not below 0). fn_80227538 builds a pair from angle and
    the +0x1C4 float, fn_80227248 scales it by length into pOut, and half the
-   sum of the "rwrist" and "lwrist" joint positions is added to pOut. */
+   sum of the "rwrist" and "lwrist" joint positions is added to pOut.
+   Not registered in comparisons.json: its two joint-name strings sit at
+   0x8029E8F4-0x8029E904, inside the pool slice of cu_80104C9C.cpp that
+   fn_80105168 shares, so this body can only be measured once the whole
+   cu_800EFC68 file links. fcmp compiles its .text byte-identical
+   (relocations masked). */
 
 extern "C" {
 int fn_801CFFD0(int a, int b);
