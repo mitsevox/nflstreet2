@@ -27624,6 +27624,24 @@
         "original_blob": "ffe1a742805fe96bbaf31b71801ea9463f158ca1",
         "integration_adjustment": "Newly exact pre-existing body (fn_80285A24) originates in contribution 1040; the PR 1059 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
       }
+    },
+    {
+      "source": "src/engine/cu_80221198.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80222E54"
+      ],
+      "provenance": {
+        "pull_request": 1030,
+        "merged_via": 1044,
+        "commit": "8b44bd7c051d86d03e19facc70e7c45ba99b2c40",
+        "introduced_blob": "c4b92f698d5d313fea55679a5a9e9d8176470dac",
+        "original_commit": "2f9c351e74cf28c046b83b1d53c7e2a6bc6dcbdc",
+        "original_blob": "8a38399cc85c27ae260bcacd60ea75721cb0eaf7",
+        "integration_adjustment": "Newly exact pre-existing body (fn_80222E54) originates in contribution 1030; the PR 1059 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
     }
   ],
   "target": "GN7E69",
