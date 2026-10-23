@@ -7705,6 +7705,11 @@
           "end": "0x800FAD2C"
         },
         {
+          "symbol": "fn_800FAECC",
+          "start": "0x800FAECC",
+          "end": "0x800FB314"
+        },
+        {
           "symbol": "fn_800FB768",
           "start": "0x800FB768",
           "end": "0x800FB824"
