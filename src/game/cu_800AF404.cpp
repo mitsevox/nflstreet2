@@ -1,20 +1,10 @@
 #include "game/cu_8008E978.h"
 
-/* IK chain header that Entry_800AF82C +8 points to. */
-struct Chain_800AF404 {
-    void *mpSkel;
-    unsigned char mType;
-    unsigned char mCount;
-    unsigned char mStart;
-    unsigned char mEnd;
-    unsigned char mSolved;
-};
-
 extern "C" {
 void fn_801C4010(Chain_800AF404 *pChain, void *pResult, Pose_80041930 *pPose, Item_800AF82C *pLimits,
-                 float *pTarget, int iterations);
+                 float *pTarget, int count);
 void fn_801C4550(Chain_800AF404 *pChain, void *pResult, Pose_80041930 *pPose, Item_800AF82C *pLimits,
-                 float *pTarget, int *pYaw);
+                 float *pTarget, int *pValue);
 
 extern int lbl_803EAB08;
 }
@@ -23,7 +13,7 @@ extern "C" void fn_800AF404(Entry_800AF82C *p, void *pResult, float *pTarget)
 {
     Chain_800AF404 *pChain = (Chain_800AF404 *)p->mpUnknown8;
 
-    pChain->mSolved = 0;
+    pChain->mUnknown8 = 0;
     switch (pChain->mType) {
     case 0:
         fn_801C4550(pChain, pResult, p->mpUnknown0, p->mpUnknown4, pTarget, p->mUnknown30);
@@ -35,11 +25,11 @@ extern "C" void fn_800AF404(Entry_800AF82C *p, void *pResult, float *pTarget)
 }
 
 extern "C" {
-void fn_800AF2AC(Chain_800AF404 *pChain, Pose_80041930 *pPose, void *pResult);
-void fn_800AF304(Chain_800AF404 *pChain, Pose_80041930 *pPose, void *pResult, float t);
+void fn_800AF2AC(Chain_800AF404 *pChain, Pose_80041930 *pPose, Source_800AF2AC *pSource);
+void fn_800AF304(Chain_800AF404 *pChain, Pose_80041930 *pPose, Source_800AF2AC *pSource, float t);
 int fn_801C384C(float *pValue, float *pSpeed, float dest, float maxSpeed, float accel);
 
-extern char lbl_8030F9FC[];
+extern Source_800AF2AC lbl_8030F9FC[];
 extern Vector_80039F5C lbl_802D870C[];
 extern Vector_80039F5C lbl_802D8730[];
 }

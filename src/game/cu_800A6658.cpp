@@ -55,7 +55,7 @@ void fn_800D4164(int side, float t, int arg);
 void fn_800A6D5C(int team);
 int fn_80156704(void);
 Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
-void fn_8010B1FC(Object_80039F5C *p, int a, int b);
+void fn_8010B1FC(Object_80039F5C *p, int a, short b);
 void fn_80168908(int team, unsigned int index);
 void fn_80164940(int team);
 void fn_800B0DA4(void);

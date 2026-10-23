@@ -12,39 +12,27 @@ short fn_800A8224(int team, int unused, int index, short value);
 float fn_800A0134(int team, int unused, int index);
 }
 
-static inline short Min_800B4798(short a, short b)
-{
-    return a > b ? b : a;
-}
-
-static inline short Clamp_800B4798(short value)
-{
-    short clamped;
-
-    if (value > 0) {
-        clamped = Min_800B4798(value, 255);
-    } else {
-        clamped = 1;
-    }
-    return clamped;
-}
-
 extern "C" void fn_800B4798(short *pRatings, int team, int index, float *pOut)
 {
     unsigned short id = *(unsigned short *)((char *)pOut + 8);
     unsigned short bonuses[10];
     float scale = 1.0f;
+
     fn_800497F4(team, id, bonuses);
     for (unsigned int i = 0; i <= 9; i++) {
-        short value = pRatings[i];
-        value += (short)bonuses[i];
-        value = fn_80157448(team, i, Clamp_800B4798(value));
+        short value = pRatings[i] + bonuses[i];
+
+        if (value <= 0) {
+            value = 1;
+        } else if (value > 255) {
+            value = 255;
+        }
+        value = fn_80157448(team, i, value);
         value = fn_80148698(team, i, value);
         value = fn_800ABE10(team, i, value);
         value = fn_8009AC18(team, i, value);
         value = fn_800A8224(team, index, i, value);
-        float factor = fn_800A0134(team, (unsigned char)id, i);
-        pRatings[i] = (short)(value * scale * factor);
+        pRatings[i] = (short)(value * scale * fn_800A0134(team, (unsigned char)id, i));
     }
 }
 

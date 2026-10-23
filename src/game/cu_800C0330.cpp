@@ -42,7 +42,7 @@ extern "C" void fn_800C0330(void *p)
     }
 }
 
-extern "C" QueryCursor fn_800C0698(unsigned char index, unsigned short *pValues)
+extern "C" QueryCursor fn_800C0698(int index, unsigned short *pValues)
 {
     int id = fn_800C8744(index);
     QueryCursor cursor;

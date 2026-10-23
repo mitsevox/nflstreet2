@@ -15,7 +15,7 @@ struct Input_800B2A14 {
 };
 
 extern "C" {
-void fn_80227538(Point_80167910 *pOut, int angle, float length);
+void fn_80227538(void *pOut, int angle, float length);
 void fn_80227690(void *pOut, void *pA, void *pB);
 
 extern float lbl_803ECB08;

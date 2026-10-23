@@ -4,9 +4,9 @@ extern "C" void fn_800AF95C(Entry_800AF82C *p, int index, unsigned int count)
 {
     Entry_800AF82C *pEntry = p + index;
 
-    if (pEntry->mUnknown14 != 0) {
+    if (pEntry->mpUnknown14 != 0) {
         pEntry->mUnknownC = pEntry->mUnknown10 = 1.0f / count;
         pEntry->mUnknown3C = 1;
-        pEntry->mUnknown14 = 0;
+        pEntry->mpUnknown14 = 0;
     }
 }

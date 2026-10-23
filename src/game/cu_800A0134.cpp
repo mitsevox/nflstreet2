@@ -127,7 +127,7 @@ int fn_8011F354(void);
 int fn_8011F1CC(void);
 int fn_8011F524(void);
 float fn_8011F4D4(void);
-unsigned char fn_8011F37C(void);
+int fn_8011F37C(void);
 Record_80067338 *fn_80168730(int);
 void fn_8016B144(int,int);
 void fn_8016B210(int,int);

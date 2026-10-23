@@ -15,7 +15,7 @@ int fn_8011F1CC(void);
 int fn_8011F1F4(void);
 int fn_8011F1A4(void);
 float fn_8011F4D4(void);
-int fn_8011F4C8(void);
+unsigned char fn_8011F4C8(void);
 void fn_800C02EC(void *p, short value);
 }
 
@@ -34,7 +34,7 @@ extern "C" int fn_800B1200(void)
 {
     float right = 0.0f;
     int team = fn_80178308();
-    float left = right;
+    float left = 0.0f;
 
     if (fn_800B65A0(team) != 0xFF || fn_8011F32C() != 0 || fn_8011F228() != 0) {
         return 1;
@@ -57,7 +57,8 @@ extern "C" int fn_800B1200(void)
             break;
         case 9:
             right = p->mMotion.mPos.mX;
-            break;        }
+            break;
+        }
     }
 
     float x = fn_8009BCE8(&lbl_803EAB14->mUnknown2D0)->mMotion.mPos.mX;

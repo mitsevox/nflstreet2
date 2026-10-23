@@ -9,26 +9,11 @@
 #include "game/Message_800F01CC.h"
 #include "game/Input_800B6D34.h"
 #include "game/fn_800AD9B4.h"
+#include "game/cu_8008E978.h"
+#include "game/fn_80178D18.h"
+#include "game/fn_80177FE0.h"
+#include "game/fn_802270D4.h"
 #include <string.h>
-
-/* Local views matching the definitions in cu_8008E978.cpp. */
-struct Entry_800B5224 {
-    unsigned char mUnknown0;
-    unsigned char mUnknown1;
-    unsigned char mUnknown2[2];
-    int mUnknown4;
-    unsigned char mUnknown8;
-    unsigned char mUnknown9[3];
-};
-
-struct Block_800B62D8 {
-    Entry_800B5224 *mpEntries;
-    unsigned char mCount;
-    unsigned char mUnknown5;
-    unsigned char mUnknown6[2];
-    unsigned char mUnknown8[10];
-    unsigned char mUnknown12[10];
-};
 
 extern "C" {
 void fn_800B44D4(BitStream_t *pStream);
@@ -85,33 +70,30 @@ int fn_800E815C(Object_80039F5C *p, int a, int b);
 int fn_800EF8E8(Object_80039F5C *p, int a);
 void fn_800D4948(void);
 float fn_80178A2C(void);
-unsigned int fn_80178D18(int team);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801486A0(void);
 void fn_80156C78(int index, int value);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 int fn_801783AC(int bit);
-void fn_80227264(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
-void fn_80227350(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
+void fn_80227264(void *pOut, void *pV, float scale);
+void fn_80227350(void *pOut, void *pV, float scale);
 void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 Object_80039F5C *fn_800B6544(int index);
 void fn_800B6658(Object_80039F5C *p);
 void fn_800B6714(Object_80039F5C *p, int index);
 int fn_800B5F94(Object_80039F5C *p, Input_800B6D34 *pInput);
 int fn_800B5FC0(Object_80039F5C *p, Input_800B6D34 *pInput);
-unsigned int fn_800289A8(void);
+int fn_800289A8(void);
 float fn_80178A68(Object_800B26B0 *pMotion);
 int fn_800F22D8(Object_80039F5C *p, int a, int b, int c);
 int fn_80110824(Object_80039F5C *p, int a, int b, int c);
 
-void fn_80227384(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
+void fn_80227384(void *pOut, void *pIn, int angle);
 void fn_8022732C(void *pPoint, void *pVelocity, float scale);
 void fn_80227248(void *pOut, void *pIn, float scale);
-float fn_802270A4(void *p);
 float fn_80260B1C(float x);
 int fn_801CFFF0(int a, int b, float t);
-Point_8017886C fn_80177FE0(void);
 Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 
@@ -130,7 +112,7 @@ extern Block_800B62D8 *lbl_803EAB60;
 extern "C" void fn_800B4DE4(QueryCursor cursor, int index, void *pData)
 {
     Record_800B4DE4 *pOut = (Record_800B4DE4 *)pData;
-    int values[18];
+    int values[16];
 
     cursor.mUnknown4 = index;
     fn_801FCE10(0,
@@ -140,37 +122,37 @@ extern "C" void fn_800B4DE4(QueryCursor cursor, int index, void *pData)
         "'1TGS' into \x82 and '2TGS' into \x82 and '3TGS' into \x82 and '4TGS' into \x82 and "
         "'NSPP' into \x82 and 'TBYP' into \x82 and 'XELP' into \x82 and 'TLFP' into \x82\n",
         &cursor, pOut->mUnknown27, pOut->mUnknown48, pOut->mUnknown69,
-        &values[2], &values[3], &values[4], &values[5], &values[6], &values[7], &values[9], &values[10],
-        &values[12], &values[13], &values[14], &values[15], &values[11], &values[16], &values[8], &values[17]);
+        &values[0], &values[1], &values[2], &values[3], &values[4], &values[5], &values[6], &values[7],
+        &values[8], &values[9], &values[10], &values[11], &values[12], &values[13], &values[14], &values[15]);
     fn_801C2EB4(pOut->mUnknown69, pOut->mUnknown48);
-    pOut->mUnknown20 = values[16];
+    pOut->mUnknown20 = values[13];
     if (fn_8017F584() == 0) {
         if (fn_80054D24(30) || fn_80054D24(34)) {
-            pOut->mUnknown0 = (float)values[3] * 0.33;
+            pOut->mUnknown0 = (float)values[1] * 0.33;
         } else if (fn_80054D24(31)) {
-            pOut->mUnknown0 = (float)values[3] * 1.5;
+            pOut->mUnknown0 = (float)values[1] * 1.5;
         } else if (fn_80054D24(44)) {
-            pOut->mUnknown0 = (float)values[3] * (fn_80237260(0) + 0.5f);
+            pOut->mUnknown0 = (float)values[1] * (fn_80237260(0) + 0.5f);
         } else {
-            pOut->mUnknown0 = (float)values[3];
+            pOut->mUnknown0 = (float)values[1];
         }
     } else {
-        pOut->mUnknown0 = (float)values[3];
+        pOut->mUnknown0 = (float)values[1];
     }
-    pOut->mUnknown4 = (float)values[2] + 160.0f;
-    pOut->mUnknown12 = values[4];
-    pOut->mUnknown13 = values[5];
-    pOut->mUnknown16 = values[6];
-    pOut->mUnknown8 = values[7];
-    pOut->mUnknown22 = values[8];
-    pOut->mUnknown17 = values[9];
-    pOut->mUnknown18 = values[10];
-    pOut->mUnknown19 = values[11];
-    pOut->mUnknown23 = values[12];
-    pOut->mUnknown24 = values[13];
-    pOut->mUnknown25 = values[14];
-    pOut->mUnknown26 = values[15];
-    pOut->mUnknown21 = values[17];
+    pOut->mUnknown4 = (float)values[0] + 160.0f;
+    pOut->mUnknown12 = values[2];
+    pOut->mUnknown13 = values[3];
+    pOut->mUnknown16 = values[4];
+    pOut->mUnknown8 = values[5];
+    pOut->mUnknown22 = values[14];
+    pOut->mUnknown17 = values[6];
+    pOut->mUnknown18 = values[7];
+    pOut->mUnknown19 = values[12];
+    pOut->mUnknown23 = values[8];
+    pOut->mUnknown24 = values[9];
+    pOut->mUnknown25 = values[10];
+    pOut->mUnknown26 = values[11];
+    pOut->mUnknown21 = values[15];
 }
 
 extern "C" void fn_800B5150(Object_80039F5C *p)

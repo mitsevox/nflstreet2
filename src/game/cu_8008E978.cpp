@@ -101,6 +101,7 @@
 #include "game/Block_800BFAD0.h"
 #include "game/Object_8007A334.h"
 #include "game/Object_800A3530.h"
+#include "game/Player_800ADA1C.h"
 
 /* Data whose word +4 fn_80094374 returns and whose words from +8
    fn_80093BAC indexes; the bound of that array is not established. */
@@ -243,7 +244,7 @@ void fn_800973AC(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void fn_800975EC(int id, int flag, int index);
 int fn_80097160(Object_80039F5C *p, float value);
 int fn_801CFE40(float y, float x);
-void fn_80227538(Point_80167910 *pOut, int angle, float length);
+void fn_80227538(void *pOut, int angle, float length);
 void fn_8009A5DC(int a, int b, void *pA, int *pB);
 int fn_8009A298(int handle);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -348,7 +349,7 @@ void fn_8009C370(Object_80039F5C *p);
 void fn_80042270(Object_80039F5C *p);
 int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, Object_80039F5C *pRecord, unsigned short c);
 signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *pValues);
-void fn_800AF87C(Entry_800AF82C *pEntries, int b, Vector_80039F5C *pVec, int c);
+void fn_800AF87C(Entry_800AF82C *pEntries, int index, Vector_80039F5C *pTarget, unsigned int count);
 void fn_800AF82C(Entry_800AF82C *pEntries, int b, Pose_80041930 *pPose, int d, int e);
 void fn_8009CE88(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a);
 int fn_8009C7B4(Vector_80039F5C *pVec);
@@ -6108,13 +6109,6 @@ extern "C" void fn_800AA010(int value)
     lbl_803EAA94 = 0;
 }
 
-/* The two words of the step context that fn_800B2564 fills and
-   fn_800B1A30 reads. */
-struct Args_800B1A30 {
-    int mUnknown0;
-    int mUnknown4;
-};
-
 /* 20-byte records copied whole by fn_800B49EC. */
 struct Record_800B49EC {
     int mUnknown0[5];
@@ -6149,7 +6143,7 @@ int fn_80177C38(void);
 int fn_80178308(void);
 int fn_80178320(void);
 int fn_801783AC(int bit);
-void fn_80227538(Point_80167910 *pOut, int angle, float length);
+void fn_80227538(void *pOut, int angle, float length);
 int fn_80177F70(void);
 void fn_8016DDDC(int team);
 Camera_8013F738 *fn_8013FA04(int index);
@@ -6163,7 +6157,7 @@ void fn_800B34BC(void);
 void fn_80238680(int handle, int value);
 unsigned char fn_80054D24(int index);
 void fn_801677F4(void);
-int fn_800B1C28(State_800B19E8 *pState, int a, int b);
+int fn_800B1C28(State_800B19E8 *pState, unsigned int count, Object_8017886C *pPlay);
 int fn_800B232C(int index);
 unsigned int fn_801765A8(int type);
 void fn_8017F430(int value);
@@ -6347,13 +6341,13 @@ extern "C" int fn_800B19E8(void *p, void *q)
 
 extern "C" int fn_800B1A30(void *p)
 {
-    Args_800B1A30 *pArgs = (Args_800B1A30 *)p;
-    int result = fn_800B1C28(&lbl_803EAB20->mUnknown4, 1, pArgs->mUnknown4);
+    Pair_800A14A8 *pPair = (Pair_800A14A8 *)p;
+    int result = fn_800B1C28(&lbl_803EAB20->mUnknown4, 1, pPair->mpSecond);
 
     if ((fn_801765A8(fn_800B232C(0)) & 4) || result != 0) {
         fn_8017F430(0);
     } else {
-        fn_8017F3C8(0, pArgs->mUnknown0, pArgs->mUnknown4);
+        fn_8017F3C8(0, (int)pPair->mpFirst, (int)pPair->mpSecond);
     }
     return 1;
 }
@@ -6990,10 +6984,6 @@ extern "C" void fn_800B3C54(void)
 
 extern "C" {
 int fn_80058688(void);
-int fn_800B35E4(void);
-void fn_800B2DF4(void);
-int fn_800B2F40(void);
-void fn_800B32A8(float dt);
 }
 
 void Class_80297B50::vfn_04(float dt)
@@ -8755,7 +8745,6 @@ extern "C" int fn_800AAAC4(void)
 extern "C" void fn_800AAAFC(void)
 {
     unsigned int i;
-    int size;
 
     lbl_803EC960 = fn_800A9F4C(0);
     if (lbl_803EC960 != 0) {
@@ -8763,9 +8752,8 @@ extern "C" void fn_800AAAFC(void)
     } else {
         lbl_803EAA88->mUnknown14 = 0;
     }
-    size = 0x16000;
     for (i = 0; i <= 1; i++) {
-        lbl_803EC964[i] = lbl_803EC960 + i * size;
+        lbl_803EC964[i] = lbl_803EC960 + i * 0x16000;
     }
     fn_800AA010(0);
 }
@@ -9980,7 +9968,7 @@ extern "C" void fn_800A3C14(void)
 }
 
 extern "C" {
-void fn_800AE018(Object_80039F5C *p, int index, unsigned short key);
+void fn_800AE018(Player_800ADA1C *p, int side, unsigned short key);
 
 extern unsigned char lbl_803EAADC[4];
 }
@@ -9992,7 +9980,7 @@ extern "C" void fn_800AE0B8(Object_80039F5C *p)
 
     key = fn_801BD910();
     if (p != 0) {
-        fn_800AE018(p, index, key);
+        fn_800AE018((Player_800ADA1C *)p, index, key);
     }
 }
 
@@ -10018,7 +10006,8 @@ struct Block_800AEB1C {
 };
 
 extern "C" {
-void fn_800ADA1C(void);
+int fn_800ADA1C(Table_80089904 *pTable, unsigned short key, void *pRecord, Record_800D81C8 *pEntries,
+                Player_800ADA1C *p, unsigned int phase);
 void fn_800AE138(unsigned int index);
 int fn_800B6644(int index);
 int fn_80177C38(void);
@@ -10036,7 +10025,8 @@ void fn_8011E3EC(Object_80039F5C *p, int a);
 void fn_8011E240(Object_80039F5C *p);
 Object_80039F5C *fn_800AEBA0(void);
 
-extern void (*lbl_8030F51C[6])(void);
+extern int (*lbl_8030F51C[6])(Table_80089904 *pTable, unsigned short key, void *pRecord,
+                              Record_800D81C8 *pEntries, Player_800ADA1C *p, unsigned int phase);
 extern unsigned char lbl_8030F9DC[15];
 extern unsigned char lbl_8030F9EC[15];
 extern Record_802D82E0 lbl_802D82E0[15];
@@ -10483,31 +10473,6 @@ struct Item_800AF13C {
     unsigned char mUnknownC[4];
 };
 
-/* 6-byte records of the array that Mesh_800AF2AC +48 points to. */
-struct Vertex_800AF2AC {
-    short mUnknown0;
-    short mUnknown2;
-    short mUnknown4;
-};
-
-/* 8-byte source records read by fn_800AF2AC; +6 indexes the destination. */
-struct Source_800AF2AC {
-    short mUnknown0;
-    short mUnknown2;
-    short mUnknown4;
-    unsigned short mUnknown6;
-};
-
-struct Count_800AF2AC {
-    unsigned char mUnknown0[8];
-    unsigned char mUnknown8;
-};
-
-struct Mesh_800AF2AC {
-    unsigned char mUnknown0[48];
-    Vertex_800AF2AC *mpUnknown30;
-};
-
 /* 24-byte block allocated by fn_800AF630 at lbl_803EC978. */
 struct Table_800AF71C {
     unsigned int mCount;
@@ -10570,7 +10535,7 @@ void fn_800B03A4(int value);
 int fn_800B0A2C(Object_80039F5C *p, int value);
 void fn_800B0730(Object_80039F5C *p, int value);
 void fn_800B0BC0(void);
-int fn_800B0558(Object_80039F5C *p, Point_80167910 *pPoint);
+int fn_800B0558(Object_80039F5C *p, Point_8017886C *pPoint);
 void fn_800B0DA4(void);
 void fn_800B0EB8(void);
 void fn_800B0F28(void);
@@ -10640,24 +10605,24 @@ extern "C" void fn_800AF264(int key)
     }
 }
 
-extern "C" void fn_800AF2AC(Count_800AF2AC *pCount, Mesh_800AF2AC *pMesh, Source_800AF2AC *pSource)
+extern "C" void fn_800AF2AC(Chain_800AF404 *pChain, Pose_80041930 *pPose, Source_800AF2AC *pSource)
 {
-    unsigned int count = pCount->mUnknown8;
+    unsigned int count = pChain->mUnknown8;
     unsigned int i;
 
     for (i = 0; i < count; i++) {
         int index = pSource->mUnknown6;
 
-        pMesh->mpUnknown30[index].mUnknown0 = pSource->mUnknown0;
-        pMesh->mpUnknown30[index].mUnknown2 = pSource->mUnknown2;
-        pMesh->mpUnknown30[index].mUnknown4 = pSource->mUnknown4;
+        pPose->mUnknown48[index * 3 + 0] = pSource->mUnknown0;
+        pPose->mUnknown48[index * 3 + 1] = pSource->mUnknown2;
+        pPose->mUnknown48[index * 3 + 2] = pSource->mUnknown4;
         pSource++;
     }
 }
 
-extern "C" void fn_800AF304(Count_800AF2AC *pCount, Mesh_800AF2AC *pMesh, Source_800AF2AC *pSource, float t)
+extern "C" void fn_800AF304(Chain_800AF404 *pChain, Pose_80041930 *pPose, Source_800AF2AC *pSource, float t)
 {
-    unsigned int count = pCount->mUnknown8;
+    unsigned int count = pChain->mUnknown8;
     unsigned int i;
     unsigned int from[3];
     unsigned int to[3];
@@ -10665,16 +10630,16 @@ extern "C" void fn_800AF304(Count_800AF2AC *pCount, Mesh_800AF2AC *pMesh, Source
     for (i = 0; i < count; i++) {
         int index = pSource[i].mUnknown6;
 
-        from[0] = pMesh->mpUnknown30[index].mUnknown0 << 8;
-        from[1] = pMesh->mpUnknown30[index].mUnknown2 << 8;
-        from[2] = pMesh->mpUnknown30[index].mUnknown4 << 8;
+        from[0] = pPose->mUnknown48[index * 3 + 0] << 8;
+        from[1] = pPose->mUnknown48[index * 3 + 1] << 8;
+        from[2] = pPose->mUnknown48[index * 3 + 2] << 8;
         to[0] = pSource[i].mUnknown0 << 8;
         to[1] = pSource[i].mUnknown2 << 8;
         to[2] = pSource[i].mUnknown4 << 8;
         fn_801CF810(to, to, from, t);
-        pMesh->mpUnknown30[index].mUnknown0 = to[0] >> 8;
-        pMesh->mpUnknown30[index].mUnknown2 = to[1] >> 8;
-        pMesh->mpUnknown30[index].mUnknown4 = to[2] >> 8;
+        pPose->mUnknown48[index * 3 + 0] = to[0] >> 8;
+        pPose->mUnknown48[index * 3 + 1] = to[1] >> 8;
+        pPose->mUnknown48[index * 3 + 2] = to[2] >> 8;
     }
 }
 
@@ -10731,7 +10696,7 @@ extern "C" void fn_800AF82C(Entry_800AF82C *p, int index, Pose_80041930 *pPose, 
 
     if (pEntry->mUnknown3C == 0) {
         pEntry->mpUnknown0 = pPose;
-        pEntry->mUnknown14 = 0;
+        pEntry->mpUnknown14 = 0;
         pEntry->mpUnknown4 = &lbl_803EC97C[b * lbl_803EC980];
         pEntry->mpUnknown8 = lbl_803EC978->mpUnknown4[index];
     }
@@ -10893,7 +10858,7 @@ extern "C" int fn_800AFE8C(int group, int index, int ref)
 
     if (p != 0) {
         Entry_800B0CFC *pEntry = &lbl_803EAB14->mEntries[group][index];
-        Point_80167910 *pPoint;
+        Point_8017886C *pPoint;
 
         if (fn_80168708(p->mIdBytes[2])->mUnknown8.mUnknownF == 1) {
             pPoint = &pEntry->mpUnknown0[0]->mUnknown18;
@@ -11137,9 +11102,9 @@ extern "C" void fn_800B0730(Object_80039F5C *p, int group)
         for (i = 0; i < pEntry->mUnknown46; i++) {
             p = fn_8009BCE8(&pEntry->mUnknown28[i]);
             if (fn_800AFF88(p)) {
-                Zone_800AFE8C *pZone;
+                Entry_8006719C *pZone;
                 unsigned char row;
-                Point_80167910 *pPoint;
+                Point_8017886C *pPoint;
 
                 if (alternate) {
                     pZone = pEntry->mpUnknown14[i];
@@ -11301,12 +11266,6 @@ extern "C" int fn_800B0F98(void)
     return lbl_803EAB14->mUnknown2D0;
 }
 
-static inline void CopyPoint(Point_8017886C *pDst, const Point_8017886C *pSrc)
-{
-    pDst->mX = pSrc->mX;
-    pDst->mY = pSrc->mY;
-}
-
 extern "C" void fn_800B0FA4(void)
 {
     fn_800B0090();
@@ -11339,10 +11298,8 @@ extern "C" void fn_800B0FA4(void)
                     break;
                 }
                 Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[0][index];
-                Point_8017886C pos;
-                Point_8017886C mirror;
-                CopyPoint(&pos, &pEntry->mUnknown10);
-                CopyPoint(&mirror, &pEntry->mUnknown18);
+                Point_8017886C pos = pEntry->mUnknown10;
+                Point_8017886C mirror = pEntry->mUnknown18;
                 if (pos.mX == mirror.mX && pos.mY == mirror.mY) {
                     mirror.mX = -mirror.mX;
                     for (unsigned char j = 0; j < count; j++) {
@@ -13507,26 +13464,6 @@ extern "C" void fn_800CF7BC(float dt)
 {
     lbl_803EAC9C->fn_800D0394();
 }
-
-/* One of the 12-byte entries of the array at +0 of Block_800B62D8. */
-struct Entry_800B5224 {
-    unsigned char mUnknown0;
-    unsigned char mUnknown1;
-    unsigned char mUnknown2[2];
-    int mUnknown4;
-    unsigned char mUnknown8;
-    unsigned char mUnknown9[3];
-};
-
-/* Allocated through fn_80238174 under the id 'pctl' (fn_800B62D8). */
-struct Block_800B62D8 {
-    Entry_800B5224 *mpEntries;
-    unsigned char mCount;
-    unsigned char mUnknown5;
-    unsigned char mUnknown6[2];
-    unsigned char mUnknown8[10];
-    unsigned char mUnknown12[10];
-};
 
 /* One of the 196-byte records of the array fn_800B8544 allocates. */
 struct Record_800B8544 {

@@ -1,5 +1,6 @@
 #include "game/Block_800B21D0.h"
 #include "game/Step_800C4460.h"
+#include "game/Object_80039F5C.h"
 
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 
@@ -9,7 +10,7 @@ unsigned char fn_8017F48C(void);
 void fn_8017F444(void);
 void fn_800B2630(void);
 int fn_801784E8(void);
-void fn_8009BD2C(void *p, int *pRef);
+void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8017C3E4(unsigned short team, short yards, int handle);
 
 extern Block_800B21D0 *lbl_803EAB20;
