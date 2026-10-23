@@ -27525,11 +27525,11 @@
       "provenance": {
         "pull_request": 775,
         "merged_via": 996,
-        "commit": "fe3327f1439d7a7cfff8251966dd1d44e097dd6e",
-        "introduced_blob": "061ba38500e814f13a626b7de1f865172188c067",
+        "commit": "ad8f2221532a7afcd6d4bc4a6fd45aee11c118e0",
+        "introduced_blob": "0f58935ff8265d0e8241f125d42ccab7f66e451f",
         "original_commit": "b6c89f8dc0e79b43e249aa22e6c26f68ce2d601e",
         "original_blob": "182af85ca2924d68b2d5f52971492d24254dec94",
-        "integration_adjustment": "Newly exact pre-existing bodies (fn_8022F53C, fn_80234098) originate in contribution 775; the PR 1029 source-form refinement and comparison-profile change (engine_c_fastmath) that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+        "integration_adjustment": "Newly exact pre-existing bodies (fn_8022F53C, fn_80234098) originate in contribution 775; the PR 1029 source-form refinement and comparison-profile change (engine_c_fastmath) that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution. Integration retains the current shared header extraction and canonical declarations from main; affected source is re-pinned without transferring original attribution."
       }
     },
     {
@@ -27546,11 +27546,11 @@
       "provenance": {
         "pull_request": 778,
         "merged_via": 804,
-        "commit": "fe3327f1439d7a7cfff8251966dd1d44e097dd6e",
-        "introduced_blob": "d4563a4f3e8db1769b4ab602fb32a6436f6d1d2e",
+        "commit": "ad8f2221532a7afcd6d4bc4a6fd45aee11c118e0",
+        "introduced_blob": "111ce6f0b233f029c500196a96eb07149eba3e4b",
         "original_commit": "ca1a271b46abf68ba0d549afc765fa24421fbf2a",
         "original_blob": "b7ab391a19d4591a130d67ea31ebc00e33ed5b51",
-        "integration_adjustment": "Newly exact pre-existing bodies (fn_80272990, fn_80272B7C, fn_80275404, fn_802754A8) originate in contribution 778; the PR 1029 source-form refinement that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+        "integration_adjustment": "Newly exact pre-existing bodies (fn_80272990, fn_80272B7C, fn_80275404, fn_802754A8) originate in contribution 778; the PR 1029 source-form refinement that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution. Integration retains the current shared header extraction and canonical declarations from main; affected source is re-pinned without transferring original attribution."
       }
     },
     {
