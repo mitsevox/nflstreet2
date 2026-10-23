@@ -9797,6 +9797,27 @@
       }
     },
     {
+      "source": "src/game/cu_8013141C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80132630"
+      ],
+      "provenance": {
+        "pull_request": 737,
+        "merged_via": 0,
+        "commit": "1763c494860d6ee57daab7e99155543c74518597",
+        "introduced_blob": "d0b22682d7afec961dc9285a4010c7c21f6a6adf",
+        "fragment_origin": {
+          "source": "src/game/cu_80132630.cpp",
+          "commit": "e6b7c753a0060b01801ed06f95f59d7fb84e5a04",
+          "blob": "0e410b1f65f905bf8afa81738d6eafdcda114977"
+        },
+        "integration_adjustment": "fn_80132630 from mitsevox's src/game/cu_80132630.cpp (PR 737, a measured fuzzy partial there) moved into its likely file src/game/cu_8013141C.cpp and made exact by writing fabsf(pPos->mX) in each of its three range tests instead of one local; parameters renamed to the file's pPos/pOther style, the rest of the body unchanged. fragment_origin keeps the original source location, commit and blob."
+      }
+    },
+    {
       "source": "src/game/cu_801A6870.cpp",
       "contributors": [
         "adampreddy"
