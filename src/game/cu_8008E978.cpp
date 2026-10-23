@@ -16419,3 +16419,31 @@ extern "C" void fn_800B5764(Vector_80039F5C *pOut)
     }
     fn_8013AA00(fn_801374BC(), height, 0, pOut);
 }
+
+extern float lbl_803EA2C4;
+
+DefPred gDefPred;
+
+Class_80297AB8 lbl_803EC900;
+Class_80297B90 lbl_803EC904;
+Class_80297B50 lbl_803EC908;
+Class_80297C60 lbl_803EC90C;
+Class_80297BF8 lbl_803EC910;
+Class_80297CE8 lbl_803EC914;
+
+float lbl_803EC918 = 100.0f / lbl_803EA2C4;
+
+unsigned int lbl_8030C084[12] = {
+    (unsigned int)(lbl_803EA2C4 * 5416666.5f),
+    200000000,
+    150000000,
+    150000000,
+    100000000,
+    100000000,
+    (unsigned int)(lbl_803EA2C4 * 5416666.5f),
+    0,
+    100000000,
+    200000000,
+    200000000,
+    75000000,
+};

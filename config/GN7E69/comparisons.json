@@ -24785,6 +24785,26 @@
           "end": "0x800CF100"
         },
         {
+          "symbol": "__static_initialization_and_destruction_0",
+          "start": "0x800CF100",
+          "end": "0x800CF2F0"
+        },
+        {
+          "symbol": "_._14Class_80297CE8",
+          "start": "0x800CF2F0",
+          "end": "0x800CF324"
+        },
+        {
+          "symbol": "vfn_08__14Class_80297CE8",
+          "start": "0x800CF324",
+          "end": "0x800CF32C"
+        },
+        {
+          "symbol": "_._7DefPred",
+          "start": "0x800CF32C",
+          "end": "0x800CF35C"
+        },
+        {
           "symbol": "fn_800CF35C",
           "start": "0x800CF35C",
           "end": "0x800CF394"
@@ -24888,6 +24908,16 @@
           "symbol": "fn_800CF7BC",
           "start": "0x800CF7BC",
           "end": "0x800CF7F4"
+        },
+        {
+          "symbol": "_GLOBAL_.I.fn_80090244",
+          "start": "0x800CF7F4",
+          "end": "0x800CF820"
+        },
+        {
+          "symbol": "_GLOBAL_.D.fn_80090244",
+          "start": "0x800CF820",
+          "end": "0x800CF84C"
         },
         {
           "symbol": "fn_800B508C",
