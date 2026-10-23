@@ -240,12 +240,12 @@ extern "C" void fn_800C2884(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, in
     dotSide = -fn_80227704(&acc, &side);
     dotBack = -fn_80227704(&acc, &back);
     v.mX = 0.0f;
-    v.mY = fn_801CFB18(pBlock->mUnknown28[0]);
-    v.mZ = -fn_801CFB94(pBlock->mUnknown28[0]);
+    v.mY = fn_801CFB18(pBlock->mUnknown40[3][0]);
+    v.mZ = -fn_801CFB94(pBlock->mUnknown40[3][0]);
     fn_80227C2C(&v, &v);
     pitch = -lbl_803EABCC * v.mZ;
-    v.mX = -fn_801CFB94(pBlock->mUnknown28[2] - 0x22D82D);
-    v.mY = fn_801CFB18(pBlock->mUnknown28[2] - 0x22D82D);
+    v.mX = -fn_801CFB94(pBlock->mUnknown40[3][2] - 0x22D82D);
+    v.mY = fn_801CFB18(pBlock->mUnknown40[3][2] - 0x22D82D);
     v.mZ = 0.0f;
     fn_80227C2C(&v, &v);
     roll = -lbl_803EABCC * v.mZ;
