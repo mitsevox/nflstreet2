@@ -11235,7 +11235,7 @@ int fn_8009679C(unsigned int index);
 void fn_8017CFB0(unsigned short a, unsigned short b, int c, int d);
 int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject, Object_80039F5C **ppOut,
                 unsigned short *pCount);
-int fn_80095284(Object_80039F5C *p, Character_80093BCC *pCharacter, unsigned int count);
+
 unsigned char fn_80194F24(void);
 void fn_80194F1C(unsigned char enabled);
 void fn_80194C5C(int a, int b, int c);
