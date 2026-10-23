@@ -600,34 +600,66 @@ void fn_800FF868(Object_80039F5C *p,State_800FFDFC *,Object_80039F5C *other)
     fn_800C89F0(p,fn_801CFE40(delta.mY,delta.mX)&0xFFFFFF,1,0,0.5f);fn_8009D284(p,other);
 }
 
-void fn_800FF8FC(Object_80039F5C *p,float *out)
+void fn_800FF8FC(Object_80039F5C *p, float *out)
 {
-    out[0]=(float)(signed char)p->mpState->mUnknown1*0.0625f;
-    out[1]=(float)(signed char)p->mpState->mUnknown2*0.0625f;
-    if(fn_801486A0()==2) {
-        Vector_80039F5C ball;fn_80137D58(fn_801374BC(),&ball);
-        if(!(p->mMotion.mPos.mX<=ball.mX+2.0f))out[0]=fabsf(out[0]);
-        else if(p->mMotion.mPos.mX<ball.mX-2.0f || fn_802372EC(0,100)>49)out[0]=-fabsf(out[0]);
-        else out[0]=fabsf(out[0]);
+    State_80039F5C *state = p->mpState;
+
+    out[0] = (float)(signed char)state->mUnknown1 * 0.0625f;
+    out[1] = (float)(signed char)state->mUnknown2 * 0.0625f;
+    if (fn_801486A0() == 2) {
+        Vector_80039F5C ball;
+
+        fn_80137D58(fn_801374BC(), &ball);
+        if (p->mMotion.mPos.mX > ball.mX + 2.0f) {
+            out[0] = fabsf(out[0]);
+        } else if (p->mMotion.mPos.mX < ball.mX - 2.0f) {
+            out[0] = -fabsf(out[0]);
+        } else if (fn_802372EC(0, 100) < 50) {
+            out[0] = fabsf(out[0]);
+        } else {
+            out[0] = -fabsf(out[0]);
+        }
     }
 }
 
-int fn_800FFA10(Object_80039F5C *p,Object_80039F5C *other)
+int fn_800FFA10(Object_80039F5C *p, Object_80039F5C *other)
 {
-    State_80039F5C *state=other->mpState;
-    if(state->mId==18)return 0;
-    if(state->mId==1) {
-        if(!(fn_8022781C(&p->mMotion.mPos,&other->mMotion.mPos)>9.0f) && p->mMotion.mPos.mY<=other->mMotion.mPos.mY)return 1;
-        if(fn_801486A0()==2 && !fn_801783AC(20))return 1;
-        Message_800F01CC message;fn_801C1F94(&message,0,4);message.mId=33;fn_800F053C(0,p->mpState,&message,p);return 0;
+    State_80039F5C *state = other->mpState;
+    int result = 1;
+
+    switch (state->mId) {
+    case 18:
+        result = 0;
+        break;
+    case 1:
+        if (fn_8022781C(&p->mMotion.mPos, &other->mMotion.mPos) > 9.0f
+            || p->mMotion.mPos.mY > other->mMotion.mPos.mY) {
+            if (fn_801486A0() != 2 || fn_801783AC(20) != 0) {
+                Message_800F01CC message;
+
+                result = 0;
+                fn_801C1F94(&message, 0, 4);
+                message.mId = 33;
+                fn_800F053C(0, p->mpState, &message, p);
+            }
+        }
+        break;
+    case 25:
+        if (state->mUnknown2 == 9) {
+            Message_800F01CC message;
+
+            fn_801C1F94(&message, 0, 4);
+            if (state->mUnknown1 == p->mIdBytes[1]) {
+                fn_8010CEB8(p, 9);
+            } else {
+                message.mId = 33;
+                fn_800F053C(0, p->mpState, &message, p);
+            }
+            result = 0;
+        }
+        break;
     }
-    if(state->mId==25 && state->mUnknown2==9) {
-        Message_800F01CC message;fn_801C1F94(&message,0,4);
-        if(state->mUnknown1==p->mIdBytes[1])fn_8010CEB8(p,9);
-        else {message.mId=33;fn_800F053C(0,p->mpState,&message,p);}
-        return 0;
-    }
-    return 1;
+    return result;
 }
 
 void fn_800FFB4C(Object_80039F5C *p,Object_80039F5C *other,float *value,Point_8017886C *out)
