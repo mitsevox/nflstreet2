@@ -2773,16 +2773,6 @@ extern "C" void fn_800975EC(unsigned short id, int flag, int index)
     }
 }
 
-/* Stack block whose address fn_800A4E8C passes as the fourth argument of the
-   callbacks of the .data table 0x802D7E20. */
-struct Params_800A4E8C {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknownC;
-    int mUnknown10;
-};
-
 /* Halfword pair of the array returned by fn_8011F50C; fn_800A554C passes one
    to the callbacks of the .data table 0x802D7E4C. */
 struct Pair_800A554C {
