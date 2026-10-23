@@ -98,7 +98,6 @@ void fn_8003AB28(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 Object_80039F5C *fn_800B6544(int index);
 void fn_800B6658(Object_80039F5C *p);
 void fn_800B6714(Object_80039F5C *p, int index);
-Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPos, Vector_80039F5C *pVel, int carried);
 int fn_800B5F94(Object_80039F5C *p, Input_800B6D34 *pInput);
 int fn_800B5FC0(Object_80039F5C *p, Input_800B6D34 *pInput);
 unsigned int fn_800289A8(void);
