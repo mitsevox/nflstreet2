@@ -54,7 +54,7 @@ int fn_8012CAAC(Object_80039F5C *);
 int fn_8012CAA4(Object_80039F5C *);
 void fn_8012CD4C(Object_80039F5C *,Vector_80039F5C *);
 float fn_8012CD60(Object_80039F5C *,float);
-void fn_80103F80(Object_80137ABC *,Vector_80039F5C *,Vector_80039F5C *,int,Vector_80039F5C *,Object_80039F5C *,float,float);
+void fn_80103F80(Object_80137ABC *,Vector_80039F5C,Vector_80039F5C,int,Vector_80039F5C *,Object_80039F5C *,float,float);
 void fn_80104328(Object_80039F5C *,unsigned char,int *,Vector_80039F5C *,int *);
 float fn_80103DD8(Object_80039F5C *,Object_80039F5C *,short *,float);
 int fn_8011E9B4(Object_80039F5C *);
@@ -798,43 +798,85 @@ void fn_8010016C(Object_80039F5C *p, Point_8017886C *point, Object_80039F5C *oth
     }
 }
 
-int fn_80100370(Object_80137ABC *ball,Object_80039F5C *p,Vector_80039F5C *out,float value)
+int fn_80100370(Object_80137ABC *ball, Object_80039F5C *p, Vector_80039F5C *out, float value)
 {
-    Vector_80039F5C velocity={p->mMotion.mUnknown40,p->mMotion.mUnknown44,p->mMotion.mUnknown48};
-    Vector_80039F5C pos=p->mMotion.mPos,ballPos;
-    State_80039F5C *queue=p->mpState,*state=p->mpState;
-    int angle=p->mMotion.mUnknown32;
-    float speed=p->mMotion.mUnknown28;
-    fn_80137D58(ball,&ballPos);
-    if(state->mId==19)speed=fn_8016D9F4(p,1.0f,1.0f);
-    else if(state->mId==20) {
-        if((unsigned int)(state->mUnknown2-8)<2)angle=fn_8012CAAC(p);else angle=fn_8012CAA4(p);
-        fn_8012CD4C(p,&pos);speed=fn_8012CD60(p,0.5f);fn_80227538((Point_8017886C *)&velocity,angle,speed);
-    } else if(state->mId==52 && (unsigned int)(state->mUnknown1-4)<2) {
-        pos.mY+=3.0f;speed=fn_8016D9F4(p,1.0f,0.72f);fn_80227538((Point_8017886C *)&velocity,angle,speed);
+    Vector_80039F5C pos;
+    Vector_80039F5C velocity = *(Vector_80039F5C *)&p->mMotion.mUnknown40;
+    Vector_80039F5C ballPos;
+    State_80039F5C *queue = p->mpState;
+    State_80039F5C *state;
+    Object_800B26B0 *motion = &p->mMotion;
+    int angle = motion->mUnknown32;
+    float speed = motion->mUnknown28;
+
+    pos = motion->mPos;
+    int result = 0;
+
+    fn_80137D58(ball, &ballPos);
+    state = p->mpState;
+    switch (state->mId) {
+    case 19:
+        speed = fn_8016D9F4(p, 1.0f, 1.0f);
+        break;
+    case 20:
+        if ((unsigned int)(state->mUnknown2 - 8) < 2) {
+            angle = fn_8012CAAC(p);
+        } else {
+            angle = fn_8012CAA4(p);
+        }
+        fn_8012CD4C(p, &pos);
+        speed = fn_8012CD60(p, 0.5f);
+        fn_80227538((Point_8017886C *)&velocity, angle, speed);
+        break;
+    case 52:
+        if ((unsigned int)(state->mUnknown1 - 4) < 2) {
+            pos.mY += 3.0f;
+            speed = fn_8016D9F4(p, 1.0f, 0.72f);
+            fn_80227538((Point_8017886C *)&velocity, angle, speed);
+        }
+        break;
     }
-    Vector_80039F5C localPos=pos,localVelocity=velocity;
-    fn_80103F80(ball,&localPos,&localVelocity,angle,out,p,speed,value);
-    int id=p->mpState->mId;
-    if(id==51 || id==52 || id==10 || id==58)return 0;
-    if(fn_800F06F4(0,queue,19,0xFFFF)==0xFFFF && fn_800F06F4(0,queue,20,0xFFFF)==0xFFFF)return 0;
-    unsigned int index=fn_800F06F4(0,queue,21,0xFFFF);
-    if(index==0xFFFF || index<=1)return 0;
-    if((unsigned int)(queue[index].mId-19)>1 && queue[index].mId!=51) {
-        do {--index;} while((unsigned int)(queue[index].mId-19)>1 && queue[index].mId!=51);
+    fn_80103F80(ball, pos, velocity, angle, out, p, speed, value);
+    switch (p->mpState->mId) {
+    case 10:
+    case 51:
+    case 52:
+    case 58:
+        break;
+    default:
+        if (fn_800F06F4(0, queue, 19, 0xFFFF) != 0xFFFF || fn_800F06F4(0, queue, 20, 0xFFFF) != 0xFFFF) {
+            unsigned int index = fn_800F06F4(0, queue, 21, 0xFFFF);
+
+            if (index != 0xFFFF && index > 1) {
+                while (queue[index].mId != 19 && queue[index].mId != 20 && queue[index].mId != 51) {
+                    index--;
+                }
+                if (index != 0) {
+                    float steps = fn_8022781C(out, &ballPos) / value;
+                    int count;
+
+                    steps = (float)(int)steps;
+                    count = (int)steps;
+                    float shortened;
+
+                    fn_80104328(p, (unsigned char)(index - 1), &count, &pos, &angle);
+                    shortened = (float)count;
+                    if (shortened < steps) {
+                        if (state->mId == 20) {
+                            speed = fn_8012CD60(p, 1.0f - shortened / steps);
+                        } else {
+                            speed = fn_8016D9F4(p, 1.0f - shortened / steps, 1.0f);
+                        }
+                        fn_80227538((Point_8017886C *)&velocity, angle, speed);
+                        result = 1;
+                        fn_80103F80(ball, pos, velocity, angle, out, p, speed, value);
+                    }
+                }
+            }
+        }
+        break;
     }
-    if(!index)return 0;
-    float steps=(float)(int)(fn_8022781C(out,&ballPos)/value);
-    int count=(int)steps;
-    fn_80104328(p,(unsigned char)(index-1),&count,&pos,&angle);
-    float shortened=(float)count;
-    if(!(shortened<steps))return 0;
-    if(state->mId==20)speed=fn_8012CD60(p,1.0f-shortened/steps);
-    else speed=fn_8016D9F4(p,1.0f-shortened/steps,1.0f);
-    fn_80227538((Point_8017886C *)&velocity,angle,speed);
-    localPos=pos;localVelocity=velocity;
-    fn_80103F80(ball,&localPos,&localVelocity,angle,out,p,speed,value);
-    return 1;
+    return result;
 }
 
 void fn_801007A4(Object_80137ABC *ball,Object_80039F5C *p,Object_80039F5C *other,Vector_80039F5C *out,unsigned char *kind,float value)
@@ -862,8 +904,7 @@ void fn_801007A4(Object_80137ABC *ball,Object_80039F5C *p,Object_80039F5C *other
     } else if(state->mId==52 && (unsigned int)(state->mUnknown1-4)<2) {
         pos.mY+=3.0f;speed=fn_8016D9F4(other,1.0f,1.0f);fn_80227538((Point_8017886C *)&velocity,other->mMotion.mUnknown32,speed);
     }
-    Vector_80039F5C localPos=pos,localVelocity=velocity;
-    fn_80103F80(ball,&localPos,&localVelocity,other->mMotion.mUnknown32,out,other,speed,value);
+    fn_80103F80(ball,pos,velocity,other->mMotion.mUnknown32,out,other,speed,value);
 }
 
 void fn_80100AA0(Object_80039F5C *p,int,float *a,float *b)
