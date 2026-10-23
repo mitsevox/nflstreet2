@@ -38694,6 +38694,37 @@
       ]
     },
     {
+      "source": "src/game/cu_800F8D2C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800F8D2C-0x800F930C as their own object so their literal pool 0x8029E344-0x8029E38C is placed exactly; it does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F8D2C",
+          "end": "0x800F930C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E344",
+          "end": "0x8029E38C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800F8D2C",
+          "start": "0x800F8D2C",
+          "end": "0x800F9024"
+        },
+        {
+          "symbol": "fn_800F9024",
+          "start": "0x800F9024",
+          "end": "0x800F930C"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800F930C.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800F930C-0x800FA300 as their own object so their literal pool 0x8029E38C-0x8029E3C8 is placed exactly; it does not claim an original file boundary.",
