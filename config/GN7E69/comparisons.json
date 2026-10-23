@@ -21439,9 +21439,19 @@
       ],
       "functions": [
         {
+          "symbol": "fn_8008FF44",
+          "start": "0x8008FF44",
+          "end": "0x80090244"
+        },
+        {
           "symbol": "fn_80090244",
           "start": "0x80090244",
           "end": "0x80090284"
+        },
+        {
+          "symbol": "fn_80090284",
+          "start": "0x80090284",
+          "end": "0x8009036C"
         },
         {
           "symbol": "fn_8009036C",
@@ -21472,6 +21482,31 @@
           "symbol": "fn_8009126C",
           "start": "0x8009126C",
           "end": "0x8009134C"
+        },
+        {
+          "symbol": "fn_8009134C",
+          "start": "0x8009134C",
+          "end": "0x800913E8"
+        },
+        {
+          "symbol": "fn_80091578",
+          "start": "0x80091578",
+          "end": "0x80091644"
+        },
+        {
+          "symbol": "fn_80091644",
+          "start": "0x80091644",
+          "end": "0x800916E0"
+        },
+        {
+          "symbol": "fn_800916E0",
+          "start": "0x800916E0",
+          "end": "0x800917A4"
+        },
+        {
+          "symbol": "fn_800917A4",
+          "start": "0x800917A4",
+          "end": "0x80091864"
         },
         {
           "symbol": "fn_80091DAC",
@@ -24609,6 +24644,16 @@
           "end": "0x800A03B8"
         },
         {
+          "symbol": "vfn_01__14Class_80297AB8",
+          "start": "0x800A03B8",
+          "end": "0x800A0408"
+        },
+        {
+          "symbol": "vfn_02__14Class_80297AB8",
+          "start": "0x800A0408",
+          "end": "0x800A042C"
+        },
+        {
           "symbol": "fn_800A061C",
           "start": "0x800A061C",
           "end": "0x800A0624"
@@ -26484,16 +26529,6 @@
           "end": "0x8009C328"
         },
         {
-          "symbol": "fn_8009C630",
-          "start": "0x8009C630",
-          "end": "0x8009C684"
-        },
-        {
-          "symbol": "fn_8009F168",
-          "start": "0x8009F168",
-          "end": "0x8009F258"
-        },
-        {
           "symbol": "fn_800A02FC",
           "start": "0x800A02FC",
           "end": "0x800A039C"
@@ -26502,6 +26537,11 @@
           "symbol": "vfn_03__14Class_80297AB8",
           "start": "0x800A042C",
           "end": "0x800A050C"
+        },
+        {
+          "symbol": "vfn_05__14Class_80297AB8",
+          "start": "0x800A05E8",
+          "end": "0x800A061C"
         },
         {
           "symbol": "fn_800B44D4",
@@ -27121,6 +27161,32 @@
           "symbol": "fn_8009C3F8",
           "start": "0x8009C3F8",
           "end": "0x8009C470"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8009C630.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_8009C630 and the literal-pool slice 0x80296400-0x80296404 they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8009C630",
+          "end": "0x8009C684"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296400",
+          "end": "0x80296404"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8009C630",
+          "start": "0x8009C630",
+          "end": "0x8009C684"
         }
       ]
     },
@@ -36909,6 +36975,32 @@
       ]
     },
     {
+      "source": "src/game/cu_8009F168.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_8009F168 and the literal-pool slice 0x80296474-0x8029647C they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8009F168",
+          "end": "0x8009F258"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296474",
+          "end": "0x8029647C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8009F168",
+          "start": "0x8009F168",
+          "end": "0x8009F258"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
       "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
@@ -36938,24 +37030,9 @@
           "end": "0x800A02FC"
         },
         {
-          "symbol": "vfn_01__14Class_80297AB8",
-          "start": "0x800A03B8",
-          "end": "0x800A0408"
-        },
-        {
-          "symbol": "vfn_02__14Class_80297AB8",
-          "start": "0x800A0408",
-          "end": "0x800A042C"
-        },
-        {
           "symbol": "vfn_04__14Class_80297AB8f",
           "start": "0x800A050C",
           "end": "0x800A05E8"
-        },
-        {
-          "symbol": "vfn_05__14Class_80297AB8",
-          "start": "0x800A05E8",
-          "end": "0x800A061C"
         },
         {
           "symbol": "fn_800A06F4",

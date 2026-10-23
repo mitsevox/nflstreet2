@@ -82,6 +82,7 @@ struct Block_80170E64 {
     Area_80054138 *mUnknown660;
     char mUnknown664[12];
     Object_80041904 *mpUnknown676;
+    int mUnknown680;
 };
 
 /* Motion block at +424, passed to fn_800B26B0, fn_800B26D0, fn_800B26E0,
