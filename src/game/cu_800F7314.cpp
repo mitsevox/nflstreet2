@@ -301,7 +301,6 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
 extern "C" void fn_800F7F68(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
         Vector_80039F5C *pPos = &p->mMotion.mPos;
-        Vector_80039F5C *pOtherPos = &pOther->mMotion.mPos;
         Point_8017886C toOther;
         Point_8017886C fromOther;
         Block_800F7314 *pBlock;
@@ -309,26 +308,26 @@ extern "C" void fn_800F7F68(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         Vector_80039F5C target;
         int angle;
 
-        fn_80227690(&toOther, pOtherPos, pPos);
-        fn_80227690(&fromOther, pPos, pOtherPos);
+        fn_80227690(&toOther, &pOther->mMotion.mPos, pPos);
+        fn_80227690(&fromOther, pPos, &pOther->mMotion.mPos);
         pBlock = (Block_800F7314 *)&p->mUnknown336;
         origin = fn_80177FE0();
         if ((fn_801CFFD0(pOther->mMotion.mUnknown32, fromOther.Heading()) < 0xE38E3 && fn_802270A4(&toOther) < 12.0f
-             && (pOther->mMotion.mUnknown28 < lbl_803ECB08 * 0.14f
+             && (pOther->mMotion.mUnknown28 >= lbl_803ECB08 * 0.14f
                  || fabsf(pOther->mMotion.mPos.mY - origin.mY) < 2.5f))
             || pOther->mpState->mId == 0x34) {
             pBlock->mUnknown8 = pOther->mMotion.mUnknown32;
             pBlock->mUnknown4 = toOther.Heading();
-            pBlock->mUnknown24 = 0;
             pBlock->mUnknown12 = 0.5f;
-            pOut->mX = pOut->mZ = pOut->mY = 0.0f;
+            pBlock->mUnknown24 = 0;
+            pOut->mX = pOut->mY = pOut->mZ = 0.0f;
             return;
         }
         fn_80227538(&target, (pOther->mMotion.mUnknown32 + 0x800000) & 0xFFFFFF, 1.0f);
         fn_800F6B2C(p, &target);
         target.mX += pOther->mMotion.mPos.mX;
-        target.mY += pOther->mMotion.mPos.mY;
         target.mZ = 0.0f;
+        target.mY += pOther->mMotion.mPos.mY;
         fn_80227690(pOut, &target, pPos);
         angle = fn_80120794(&p->mMotion, (Object_800B26B0 *)&target, &pOther->mMotion.mUnknown40,
                             p->mMotion.mUnknown28, pOther->mMotion.mUnknown28, pOther->mMotion.mUnknown32,
@@ -336,6 +335,10 @@ extern "C" void fn_800F7F68(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         pBlock->mUnknown8 = angle;
         pBlock->mUnknown12 = 1.0f;
         pBlock->mUnknown4 = angle;
-        pBlock->mUnknown24 = fn_801CFFD0(p->mMotion.mFacing, angle) < 0xAAAAA;
+        if (fn_801CFFD0(p->mMotion.mFacing, angle) < 0xAAAAA) {
+            pBlock->mUnknown24 = 1;
+        } else {
+            pBlock->mUnknown24 = 0;
+        }
     }
 }
