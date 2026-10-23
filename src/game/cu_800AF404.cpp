@@ -1,5 +1,4 @@
 #include "game/cu_8008E978.h"
-#include "engine/cu_801C33E8.h"
 
 /* IK chain header that Entry_800AF82C +8 points to. */
 struct Chain_800AF404 {
@@ -38,6 +37,7 @@ extern "C" void fn_800AF404(Entry_800AF82C *p, void *pResult, float *pTarget)
 extern "C" {
 void fn_800AF2AC(Chain_800AF404 *pChain, Pose_80041930 *pPose, void *pResult);
 void fn_800AF304(Chain_800AF404 *pChain, Pose_80041930 *pPose, void *pResult, float t);
+int fn_801C384C(float *pValue, float *pSpeed, float dest, float maxSpeed, float accel);
 
 extern char lbl_8030F9FC[];
 extern Vector_80039F5C lbl_802D870C[];
