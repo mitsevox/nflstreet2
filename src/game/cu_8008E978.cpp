@@ -13768,7 +13768,7 @@ extern Entry_800C3130 lbl_8030FF40[3][50];
 extern Record_800C432C lbl_803103F0[10];
 }
 
-extern "C" void fn_800BE3E8(int a, int kind)
+extern "C" void fn_800BE3E8(int a, int kind, float value)
 {
     int team = fn_80178308();
     int other = fn_80178320();
@@ -14390,7 +14390,7 @@ extern "C" void fn_8017DD68(int index);
 extern "C" void fn_8017E01C(int index);
 extern "C" char lbl_802ED104[];
 
-extern "C" void fn_800C0488(int a, unsigned int kind)
+extern "C" void fn_800C0488(int a, unsigned int kind, float value)
 {
     int handled = 0;
     int team = fn_800B6644(a);

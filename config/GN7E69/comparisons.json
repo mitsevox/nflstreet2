@@ -39858,6 +39858,37 @@
       ]
     },
     {
+      "source": "src/game/cu_800BE4C8.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment of the retained provisional cu_8008E978 grouping, split so that its literal-pool slice compiles independently. Bodies between its registered functions stay in src/game/cu_8008E978.cpp; no original file boundary is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800BE4C8",
+          "end": "0x800BEC1C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802973A0",
+          "end": "0x802973E8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800BE4C8",
+          "start": "0x800BE4C8",
+          "end": "0x800BE72C"
+        },
+        {
+          "symbol": "fn_800BE944",
+          "start": "0x800BE944",
+          "end": "0x800BEC1C"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800BF658.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison-only fragment of the retained provisional cu_8008E978 grouping, split so that its literal-pool slice compiles independently. Bodies between its registered functions stay in src/game/cu_8008E978.cpp; no original file boundary is claimed.",
