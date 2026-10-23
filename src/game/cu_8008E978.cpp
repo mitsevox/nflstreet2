@@ -213,7 +213,7 @@ int fn_80096074(Params_80092E54 *pRequest, int flag);
 void fn_80092538(void);
 int fn_80094B34(Table_800680A8 *pTable, int index);
 void fn_800A3B5C(Object_80039F5C *p);
-unsigned char fn_80178348(void);
+int fn_80178348(void);
 int fn_80178360(void);
 int fn_8019623C(int id);
 int fn_8009679C(unsigned int index);
@@ -399,10 +399,10 @@ struct Request_8008FF44 {
     Params_80092E54 mRequest;
 };
 
-/* Partial, not exact: register allocation differs (the zero lands in r26
-   instead of r28), the target reloads lbl_803EC924 around the byte stores,
-   and the lookup in the 16-byte table at 0x802D73B8 near the end is
-   scheduled differently. */
+/* Partial, not exact: register allocation differs, the lookup in the
+   16-byte table at 0x802D73B8 is scheduled differently, the +0xE4/+0xE8/
+   +0xEC stores come in a different order, and ours has an extra li r9,1
+   (0x304 bytes against the target's 0x300). */
 extern "C" int fn_8008FF44(int value, int *pData)
 {
     Request_8008FF44 *pRequest = (Request_8008FF44 *)pData;
@@ -2010,7 +2010,7 @@ extern "C" void fn_80095370(unsigned int position, Object_80039F5C **ppOut, unsi
 
 /* Partial, not exact: the switch on the frame's four-character id compiles
    to a different comparison tree (the target tests the 'CH01' range
-   first); the case bodies match. */
+   first), and the BALC/FREC case uses different registers. */
 extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject,
                            Object_80039F5C **ppOut, unsigned short *pCount)
 {
@@ -2471,9 +2471,9 @@ extern "C" int fn_80096794(void)
     return 0;
 }
 
-/* Partial, not exact: in the loop the target walks the playback records
-   with a running 0x30 offset from +0x10 and keeps the two -1 constants in
-   separate registers; ours addresses each record directly. */
+/* Partial, not exact: the target copies the fn_801EF390 result through r0
+   (mr r0,r3) before storing it, and in the loop it addresses each playback
+   record from a +0x10 base and stores +0x2A before +0x28. */
 extern "C" void fn_80096954(void *pData)
 {
     unsigned int i;
@@ -2732,8 +2732,10 @@ extern "C" void fn_80097564(void)
 }
 
 /* Partial, not exact: register allocation differs (ours saves r18-r31,
-   the target r20-r31) and the setup of the inner loop's addresses is
-   ordered differently. */
+   the target r20-r31), the target moves the 8-byte slot through a stack
+   temporary at sp+0x18, ours narrows id with clrlwi before fn_801BBC3C
+   (declared unsigned short in Table_80089904.h) where the target passes it
+   whole, and ours is 0x18 bytes shorter. */
 extern "C" void fn_800975EC(int id, int flag, int index)
 {
     if (lbl_8030C2B8[index].mUnknown0 != id) {
@@ -11741,7 +11743,6 @@ Message_800F01CC *fn_800AEE20(Object_80039F5C *p);
 int fn_801D34D0(void *pDest, int size, int value, int width);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int fn_80177F70(void);
-int fn_800B2320(void);
 int fn_800A1C50(void);
 void fn_800A1C74(Object_8017886C *a, Object_8017886C *b);
 void fn_80194F1C(unsigned char enabled);
@@ -14788,7 +14789,6 @@ int fn_800BA6F8(void);
 int fn_8013F9F8(void);
 Camera_8013F738 *fn_8013FA04(int index);
 void fn_8013C6F0(Camera_8013F738 *pCamera);
-int fn_8019623C(int id);
 int fn_800B6644(int index);
 int fn_800A937C(void);
 int fn_800A9648(void);

@@ -8,7 +8,7 @@ extern "C" int fn_8009313C(Params_80092E54 *pRequest);
    handle; flag 1 then turns the first player to the entry's angle in
    degrees, flag 2 moves it to the entry's spot. Returns whether a handle
    was granted. Partial: the target keeps a second copy of the first player
-   (r28) and a zero (r27) in saved registers; this source does not. */
+   in r28 and has a 0x120-byte frame; this source does not. */
 extern "C" int fn_80094C4C(Entry_80094BC4 *p)
 {
     Object_80039F5C *pFirst = fn_8009BCE8((int *)&p->mpUnknown0);
