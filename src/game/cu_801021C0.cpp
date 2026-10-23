@@ -100,7 +100,7 @@ extern "C" int fn_801021C0(Object_80039F5C *p)
                 p->mUnknown1008.mUnknown1 = 1;
                 p->mUnknown1008.mUnknown2 = 1;
                 p->mUnknown1011 = 6;
-                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 236, p, 1.0f);
+                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 236, 1.0f, p);
             } else {
                 if (kind == 4) {
                     p->mFlags &= ~0x2000;

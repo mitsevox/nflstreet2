@@ -192,7 +192,7 @@ extern "C" void fn_8008E424(Object_80039F5C *p)
         break;
     }
     if (fn_801BE648(p->mpUnknown792) != key) {
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, 1.0f, p);
     }
 }
 
@@ -208,7 +208,7 @@ extern "C" void fn_8008E510(Object_80039F5C *p)
 
     fn_801BE648(p->mpUnknown792);
     if (fn_801BE648(p->mpUnknown792) != 74) {
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
     }
 }
 
@@ -241,7 +241,7 @@ extern "C" void fn_8008E598(Object_80039F5C *p)
 
     if (fn_8008DFF8(p, key) == 0) {
         if (fn_801BE648(p->mpUnknown792) != key || changed) {
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, p, 1.0f);
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, 1.0f, p);
         }
     }
 }
@@ -319,7 +319,7 @@ extern "C" void fn_8008E6FC(Object_80039F5C *p)
     pNext->mUnknown8 = pCur->mUnknown8;
     pNext->mUnknown14 = pCur->mUnknown14;
     if (fn_801BE648(p->mpUnknown792) != key) {
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, 1.0f, p);
     }
 }
 
@@ -334,7 +334,7 @@ extern "C" void fn_8008E858(Object_80039F5C *p)
     pNext->mUnknown0 = pCur->mUnknown0;
 
     if (fn_801BE648(p->mpUnknown792) != 74) {
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
     }
 }
 
@@ -352,7 +352,7 @@ extern "C" void fn_8008E8D8(Object_80039F5C *p)
     case 1:
     case 2:
         if (fn_801BE648(p->mpUnknown792) != 100) {
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 100, p, 1.0f);
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 100, 1.0f, p);
         }
         break;
     default:

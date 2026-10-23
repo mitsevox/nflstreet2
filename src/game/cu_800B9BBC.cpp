@@ -346,23 +346,25 @@ extern "C" void fn_800BA3F0(void)
         p->mUnknown184 = 1;
         switch (fn_800B9CE4()) {
         case 0:
-            p->mUnknown185 = 0;
             p->mUnknown20 = 1;
+            p->mUnknown185 = 0;
             break;
         case 1:
-            p->mUnknown185 = 1;
             p->mUnknown20 = 1;
+            p->mUnknown185 = 1;
             break;
         case 2:
-            p->mUnknown185 = 0;
             p->mUnknown20 = 0;
+            p->mUnknown185 = 0;
             break;
         }
-        p->mpUnknown0 = p->mpUnknown4 = 0;
-        p->mpUnknown8 = p->mpUnknownC = 0;
+        p->mUnknown14 = 0;
+        p->mpUnknown0 = 0;
+        p->mpUnknown4 = 0;
+        p->mpUnknown8 = 0;
+        p->mpUnknownC = 0;
         p->mUnknown18.mX = 0.0f;
         p->mUnknown18.mY = 15.0f;
-        p->mUnknown14 = 0;
         pBall = fn_801374BC();
         fn_8013791C(pBall, 6, 0);
         pos.mX = p->mUnknown18.mX;

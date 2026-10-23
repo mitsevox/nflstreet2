@@ -224,7 +224,7 @@ int fn_80178308(void);
 int fn_80178320(void);
 int fn_801787A0(void);
 float fn_801BD660(void *p, int key);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *e, float f);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, float f, void *e);
 float fn_80178A08(void);
 float fn_80178A44(void);
 float fn_80178A68(Point_8017886C *pPos);
@@ -734,7 +734,7 @@ extern "C" int fn_800E8BE8(Object_80039F5C *p) {
         p->mUnknown512.mUnknown8 = state->mUnknown0;
         p->mUnknown512.mUnknown0 = state->mUnknown4;
         p->mFlags &= ~4;
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 100, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 100, 1.0f, p);
         state->mUnknown8 = 1;
     }
     p->mFlags &= ~0x40000;
@@ -1199,13 +1199,13 @@ extern "C" int fn_800E9E18(Object_80039F5C *p) {
         p->mUnknown1008.mUnknown0 = pState->mUnknown1;
         p->mUnknown1008.mUnknown1 = pState->mUnknown2;
         p->mUnknown1008.mUnknown2 = pState->mUnknown3[0] >> 4;
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 165, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 165, 1.0f, p);
     } else {
         p->mUnknown1008.mUnknown2 = pState->mUnknown1 & 15;
         p->mUnknown1011 = pState->mUnknown1 >> 4;
         p->mUnknown1008.mUnknown1 = pState->mUnknown3[0] & 15;
         p->mUnknown1008.mUnknown0 = pState->mUnknown2;
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 43, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 43, 1.0f, p);
     }
     p->mFlags &= ~4;
     p->mUnknown512.mUnknown14 = 0;
@@ -1593,7 +1593,7 @@ extern "C" int fn_800EAF34(Object_80039F5C *p, int a, int b, int c) {
         p->mUnknown1008.mUnknown0 = a;
         p->mUnknown1008.mUnknown1 = b;
         p->mUnknown1008.mUnknown2 = c;
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 48, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 48, 1.0f, p);
         result = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, 48, 0);
         p->mFlags &= ~4;
         p->mUnknown512.mUnknown14 = 0;
@@ -2269,7 +2269,7 @@ extern "C" void fn_800EC9E4(Object_80039F5C *p, int kind, int flag) {
         p->mUnknown1008.mUnknown0 = 1;
     else
         p->mUnknown1008.mUnknown0 = 2;
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, 1.0f, p);
     if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, animation)) {
         Record_800D81C8 *pEntries = p->mpUnknown800;
         int index = fn_801BA5A8(p->mpUnknown796, pEntries, animation, 0);
@@ -2514,7 +2514,7 @@ extern "C" void fn_800ED208(Object_80039F5C *p, State_800EDC68 *state, unsigned 
         else
             fn_800D7A0C(p, 2);
     }
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, 1.0f, p);
     unsigned char count = fn_801BA568(p->mpUnknown796, p->mpUnknown800, animation);
     for (unsigned char i = 0; i < count; i++)
         p->mpUnknown800[fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, i)].mUnknown20 = (int)(speed * 16777216.0f);
@@ -3089,7 +3089,7 @@ extern "C" void fn_800EE7DC(Object_80039F5C *p, State_800EE9AC *pState) {
     message.mUnknown1[1] = 1;
     fn_800F03D8(0, p->mpState, &message, p);
     if (fn_801BE648(p->mpUnknown792) != 74 && fn_801BE648(p->mpUnknown792) != 203)
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
     fn_801C1F94(&message, 0, 4);
     message.mId = 51;
     message.mUnknown1[0] = (int)(fn_80237260(0) * 32.0f);
@@ -3143,7 +3143,7 @@ extern "C" int fn_800EEA20(Object_80039F5C *p) {
         if (fn_800E1044(p, (Vector_80039F5C *)&state->mUnknown8)) {
             p->mUnknown1008Word = 26;
             if (fn_801BE648(p->mpUnknown792) != 203)
-                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 203, p, 1.0f);
+                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 203, 1.0f, p);
             state->mUnknown48 = 3;
             break;
         }
@@ -3290,7 +3290,7 @@ extern "C" int fn_800EF0FC(Object_80039F5C *p) {
             fn_800F00D4(0, p->mpState, &message, p);
             p->mUnknown512.mUnknown14 = 0;
         } else if (fn_801BE648(p->mpUnknown792) != 74 && fn_801BE648(p->mpUnknown792) != 203) {
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, p, 1.0f);
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
         }
         return 1;
     }
@@ -3299,7 +3299,7 @@ extern "C" int fn_800EF0FC(Object_80039F5C *p) {
 
 extern "C" int fn_800EF1C8(Object_80039F5C *p) {
     if (fn_801BE648(p->mpUnknown792) != 74)
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
     return 1;
 }
 
@@ -3391,7 +3391,7 @@ extern "C" void fn_800EF538(Object_80039F5C *p) {
             p->mUnknown1008.mUnknown2 = 2;
         else
             p->mUnknown1008.mUnknown2 = 3;
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 180, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 180, 1.0f, p);
         switch (p->mUnknown1008.mUnknown2) {
         case 1:
             if (p->mUnknown1008.mUnknown1 == 2)
@@ -3414,7 +3414,7 @@ extern "C" void fn_800EF538(Object_80039F5C *p) {
         }
     } else {
         fn_800D0C0C(p, 0);
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 24, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 24, 1.0f, p);
     }
     if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 24) || fn_801BA568(p->mpUnknown796, p->mpUnknown800, 180)) {
         Record_800D81C8 *pRecords = p->mpUnknown800;

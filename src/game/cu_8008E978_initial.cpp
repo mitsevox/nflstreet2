@@ -140,7 +140,7 @@ extern "C" void fn_8008E9B0(Object_80039F5C *p)
         next->mUnknown0=current->mUnknown0;
     }
     if(!fn_8008DFF8(p,key) && fn_801BE648(p->mpUnknown792)!=key)
-        fn_801BE068(p->mpUnknown792,p->mpUnknown796,p->mpUnknown800,key,p,1.0f);
+        fn_801BE068(p->mpUnknown792,p->mpUnknown796,p->mpUnknown800,key,1.0f,p);
 }
 
 extern "C" void fn_8008EB18(int id,int flag,void *data)
@@ -287,6 +287,7 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
 
 extern "C" int fn_8008F78C(void *,int event,unsigned int)
 {
+    int handled=0;
     switch(event) {
     case 0xC010:case 0xC012:case 0xC019:
         fn_801BD910();
@@ -301,9 +302,9 @@ extern "C" int fn_8008F78C(void *,int event,unsigned int)
     case 0xC007:case 0xC008:case 0xC00A:case 0xC00B:case 0xC00C:case 0xC018:
     case 0xC01C:case 0xC01D:case 0xC020:case 0xC028:
     case 0xD000:case 0xD001:case 0xD002:case 0xD003:case 0xD005:
-        return 1;
+        handled=1;
     }
-    return 0;
+    return handled;
 }
 
 extern "C" void fn_8008F940(void)
@@ -339,11 +340,11 @@ extern "C" void fn_8008FAA8(void)
 {
     void *archive=fn_801EEB44(lbl_802EBDBC,44);
     int size=0,largest=0;
-    for(Entry_802D71D8 *entry=lbl_802D71D8;entry->mId!=-1;++entry) {
-        int amount=fn_801F0C50(archive,entry->mId);
-        if(entry->mUnknown4) {
+    for(int i=0;lbl_802D71D8[i].mId!=-1;++i) {
+        int amount=fn_801F0C50(archive,lbl_802D71D8[i].mId);
+        if(lbl_802D71D8[i].mUnknown4) {
             if(amount<=largest) amount/=5;
-            else {int previous=largest;largest=amount;amount=largest/5+largest-previous;}
+            else {int previous=largest;largest=amount;amount=largest/5+(largest-previous);}
         }
         size+=amount+512;
     }
@@ -353,14 +354,15 @@ extern "C" void fn_8008FAA8(void)
 extern "C" void fn_8008FBA0(void)
 {
     fn_801B9DEC(1);fn_801BFEF8(60.0f);
-    fn_801CC7FC(&gAnimData);fn_801CC820(&gAnimData,0);
-    lbl_802D713C.mpArchive=gAnimData.fn_80033AF8();
+    AnimData *pModule=&gAnimData;
+    fn_801CC7FC(pModule);fn_801CC820(pModule,0);
+    lbl_802D713C.mpArchive=pModule->fn_80033AF8();
     fn_801B9EEC(fn_8008EBBC,fn_8008F78C);
     fn_801BA848(AnimExtnRelocateFile);fn_801BAEA4(fn_80190DCC);
     fn_801BB2D8(&lbl_802D713C);fn_801F0F18(0);
     if(lbl_803EA8B0) {fn_801D2BD0(lbl_803EA8B0);lbl_803EA8B0=0;}
-    for(Entry_802D71D8 *entry=lbl_802D71D8;entry->mId!=-1;++entry)
-        entry->mHandle=fn_801BB570(entry->mId,1,2,entry->mUnknown7);
+    for(int i=0;lbl_802D71D8[i].mId!=-1;++i)
+        lbl_802D71D8[i].mHandle=fn_801BB570(lbl_802D71D8[i].mId,1,2,lbl_802D71D8[i].mUnknown7);
     fn_801BB480();fn_801BFF50();fn_801B9E88();fn_801CC8AC(&gAnimData,0);
 }
 extern "C" void fn_8008FCB4(int flag)

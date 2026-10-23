@@ -53,7 +53,7 @@ extern "C" void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int
     p->mUnknown1008.mUnknown1 = (unsigned int)index >> 8;
     p->mUnknown1008.mUnknown2 = value;
     p->mUnknown1011 = (unsigned int)value >> 8;
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, a, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, a, 1.0f, p);
 }
 
 

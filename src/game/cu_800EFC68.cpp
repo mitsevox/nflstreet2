@@ -460,6 +460,7 @@ struct Record_800F4E88 {
     float mUnknown12;
     char mUnknown16[4];
     int mUnknown20;
+    unsigned char mUnknown24;
 };
 
 struct Object_800F4E14 {
@@ -674,7 +675,7 @@ void fn_800DBC4C(Object_80039F5C *p, int angle, float value);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float fn_8022710C(void *pV);
 Object_800670B4 *fn_80168708(int team);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 void fn_800FC290(Object_80039F5C *p, Block_800FCC24 *pBlock, Point_8017886C target);
 int fn_800FC648(Object_80039F5C *p, Block_800FCC24 *pBlock);
 int fn_800FCE58(Object_80039F5C *p, Block_800FCC24 *pBlock);
@@ -710,7 +711,7 @@ void fn_800D52F8(Object_80039F5C *p);
 int fn_800CE4A8(Query_800CE770 *pQuery);
 float fn_800C49A4(Object_80039F5C *p, float value);
 void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int a);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float e);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *p);
 Object_80039F5C *fn_8015286C(void *pSet, int index);
 int fn_8015310C(void *pSet);
 extern unsigned char lbl_803EAE20[8];
@@ -2187,7 +2188,7 @@ extern "C" int fn_800FC4A8(Object_80039F5C *p, Block_800FCC24 *pBlock, int mode)
     if (animation != fn_801BE648(p->mpUnknown792)) {
         int index;
 
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, 1.0f, p);
         index = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0);
         p->mpUnknown800[index].mUnknown2C = speed;
         return 1;
@@ -5667,9 +5668,9 @@ int fn_8011F524(void)
     return fn_80165098(fn_8016871C(fn_80178348()));
 }
 
-void fn_8011F54C(void)
+Object_80039F5C *fn_8011F54C(void)
 {
-    fn_8016444C(fn_80168708(fn_80178308()));
+    return fn_8016444C(fn_80168708(fn_80178308()));
 }
 
 void fn_8011F574(void)

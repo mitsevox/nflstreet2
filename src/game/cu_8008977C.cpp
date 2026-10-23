@@ -216,7 +216,7 @@ void fn_80089A84(Record_8036B55C *pRecord, unsigned int value)
             sTransitions[index][0].mType = 3;
         }
         fn_801BE068(pRecord->mUnknown792, pRecord->mUnknown796,
-                   pRecord->mUnknown800, 214, pRecord, 1.0f);
+                   pRecord->mUnknown800, 214, 1.0f, pRecord);
     }
 }
 
@@ -271,7 +271,7 @@ int fn_80089E70(Table_80089904 *pTable, unsigned short event, void *a, void *b,
                 sPending[index] = 0;
                 sTop[index] = -1;
                 fn_801BE068(pRecord->mUnknown792, pRecord->mUnknown796,
-                           pRecord->mUnknown800, event, pRecord, 1.0f);
+                           pRecord->mUnknown800, event, 1.0f, pRecord);
             }
         } else if (sWaiting != 0) {
             sWaiting = 0;
@@ -284,12 +284,12 @@ int fn_80089E70(Table_80089904 *pTable, unsigned short event, void *a, void *b,
                     ? 2 : sTransitions[index][sTop[index]].mValue;
                 --sTop[index];
                 fn_801BE068(pRecord->mUnknown792, pRecord->mUnknown796,
-                           pRecord->mUnknown800, event, pRecord, 1.0f);
+                           pRecord->mUnknown800, event, 1.0f, pRecord);
             } else {
                 sTop[index] = -1;
                 sCurrent[index] = 2;
                 fn_801BE068(pRecord->mUnknown792, pRecord->mUnknown796,
-                           pRecord->mUnknown800, event, pRecord, 1.0f);
+                           pRecord->mUnknown800, event, 1.0f, pRecord);
                 if (sCurrent[index] == 2) {
                     sWaiting = 0;
                 }

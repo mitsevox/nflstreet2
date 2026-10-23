@@ -192,9 +192,9 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
       Animation_800E2FE4 *animation =
           (Animation_800E2FE4 *)&player->mpUnknown792;
       fn_801BE068(animation->mUnknown0, animation->mUnknown4,
-                  animation->mUnknown8, 73, player, 1.0f);
+                  animation->mUnknown8, 73, 1.0f, player);
       fn_801BE068(animation->mUnknown0, animation->mUnknown4,
-                  animation->mUnknown8, 85, player, 1.0f);
+                  animation->mUnknown8, 85, 1.0f, player);
     }
     state->mUnknown1 = 0;
   }

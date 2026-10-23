@@ -96,7 +96,7 @@ Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsi
 int fn_80178308(void);
 float fn_80178A08(void);
 float fn_80178A44(void);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 void fn_80227248(Point_8017886C *pOut, Point_8017886C *pIn, float scale);
 extern float lbl_803EAF0C;
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -155,15 +155,13 @@ extern "C" int fn_80109A1C(Object_80039F5C *p, Point_8017886C *pOut) {
             }
         }
         if (!result) {
-            int team = p->mIdBytes[2];
-
-            pTarget = fn_801244F0(p, team, 0, fn_80178D18(team), &distance, 0);
+            pTarget = fn_801244F0(p, p->mIdBytes[2], 0, fn_80178D18(p->mIdBytes[2]), &distance, 0);
             if (pTarget != 0 && pTarget != p) {
                 if (distance < 0.75f) {
                     result = 1;
                 } else {
-                    team = p->mIdBytes[2] ^ 1;
-                    pTarget = fn_801244F0(p, team, 0, fn_80178D18(team), &distance, 0);
+                    pTarget = fn_801244F0(p, p->mIdBytes[2] ^ 1, 0, fn_80178D18(p->mIdBytes[2] ^ 1), &distance,
+                                          0);
                     if (pTarget != 0 && pTarget != p && distance < 1.25f) {
                         result = 1;
                     }
@@ -201,7 +199,7 @@ extern "C" void fn_80109CA0(Object_80039F5C *p, int animation, unsigned char a, 
         p->mUnknown1008.mUnknown2 = c;
     }
     if (animation != fn_801BE648(p->mpUnknown792)) {
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, 1.0f, p);
         pBlock->mUnknown50 = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0);
         p->mUnknown512.mUnknown14 = 0;
         p->mFlags &= ~4;

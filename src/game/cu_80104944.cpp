@@ -46,16 +46,19 @@ extern "C" void fn_80104B24(Vector_80039F5C *p) {
 
 extern "C" void fn_80104B3C(Object_80039F5C *p, Vector_80039F5C *pOut) {
     State_80039F5C *pState = p->mpState;
+    float speed;
 
     switch (pState->mId) {
     case 68:
     case 90:
-        fn_80227538((Point_8017886C *)pOut, (pState->mUnknown2 << 17) & 0xFFFFFF,
-                    pState->mUnknown3[0] / 255.0f * lbl_803ECB08 *
-                        ((1.0f - lbl_803ED6CC) * 0.75000006f + lbl_803ED6CC));
+        speed = pState->mUnknown3[0] / 255.0f;
+        speed *= lbl_803ECB08;
+        speed *= (1.0f - lbl_803ED6CC) * 0.75000006f + lbl_803ED6CC;
+        fn_80227538((Point_8017886C *)pOut, (pState->mUnknown2 << 17) & 0xFFFFFF, speed);
         fn_8022765C(pOut, pOut, &p->mMotion.mUnknown40);
         fn_80227264(pOut, pOut, 0.5f);
         break;
+    case 0:
     default:
         pOut->mX = p->mMotion.mUnknown40;
         pOut->mY = p->mMotion.mUnknown44;

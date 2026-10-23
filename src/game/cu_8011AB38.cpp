@@ -22,7 +22,7 @@ int fn_8011DCA8(unsigned int id);
 void fn_80067DB8(int type, Vector_80039F5C *pPos, int a, int b, int c);
 void fn_800D6C70(Object_80039F5C *p);
 unsigned short fn_801BE648(void *p);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 }
 
 /* View of the 108 bytes at player +1032 as fn_8011AB38 uses them. */
@@ -134,10 +134,10 @@ extern "C" void fn_8011AB38(void)
                         fn_80143E14(pOther, p);
                     } else {
                         if (fn_801BE648(p->mpUnknown792) != 74) {
-                            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, p, 1.0f);
+                            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
                         }
                         if (fn_801BE648(pOther->mpUnknown792) != 74) {
-                            fn_801BE068(pOther->mpUnknown792, pOther->mpUnknown796, pOther->mpUnknown800, 74, pOther, 1.0f);
+                            fn_801BE068(pOther->mpUnknown792, pOther->mpUnknown796, pOther->mpUnknown800, 74, 1.0f, pOther);
                         }
                     }
                 }

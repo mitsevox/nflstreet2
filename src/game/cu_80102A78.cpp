@@ -144,11 +144,11 @@ Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, int a, int team);
 void fn_80076D5C(int id);
 int fn_800A7F1C(int team);
 void fn_8010016C(Object_80039F5C *pTarget, Vector_80039F5C *pPos, Object_80039F5C *p, float speed);
-void fn_80100370(Object_80137ABC *pBall, Object_80039F5C *pTarget, Vector_80039F5C *pOut, float speed);
+int fn_80100370(Object_80137ABC *pBall, Object_80039F5C *pTarget, float speed, Vector_80039F5C *pOut);
 void fn_80100BF8(Object_80039F5C *p, Vector_80039F5C *pPos, int *pOut, float speed, float a, float b);
 void fn_80101130(Object_80039F5C *pTarget, Object_80039F5C *p, short *pCount);
-void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, int angle, Vector_80039F5C *pOut,
-                 Object_80039F5C *p, float speed, float ballSpeed);
+void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, float speed, int angle,
+                 float ballSpeed, Vector_80039F5C *pOut, Object_80039F5C *p);
 void fn_8013AC28(Object_80137ABC *pBall, Vector_80039F5C *pTarget, int mode, float speed, float spin, float side);
 void fn_80152068(int index, Vector_80039F5C *pOut);
 int fn_80156C8C(unsigned long long mask);
@@ -203,9 +203,9 @@ extern "C" int fn_8012CAAC(Object_80039F5C *p);
 
 extern "C" int fn_8012CB50(Message_800F01CC *pMessage);
 
-extern "C" void fn_8012CB98(int a, int b, int angle, Point_8017886C *pOut);
+extern "C" void fn_8012CB98(int a, unsigned char b, int angle, Point_8017886C *pOut);
 
-extern "C" int fn_8012CC04(int a);
+extern "C" int fn_8012CC04(unsigned char a);
 
 extern "C" int fn_8012CC50(Object_80039F5C *p);
 
@@ -251,7 +251,7 @@ extern "C" int fn_80102A78(List_801018B4 *pList, unsigned short animation, void 
         }
         if (failed) {
             fn_800D0BF4(p, 0, 0);
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 69, p, 1.0f);
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 69, 1.0f, p);
         } else if (index != -1) {
             fn_800D4EC0(pEntry->mUnknown7);
             pState->mUnknown20 = pEntry->mUnknown20;
@@ -397,7 +397,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
         float maximum;
 
         if (pRecord->mUnknown1D == 1 || pRecord->mUnknown1D == 7) {
-            fn_80100370(pBall, pTarget, &target, speed);
+            fn_80100370(pBall, pTarget, speed, &target);
         } else {
             Vector_80039F5C offset;
             int angle;
@@ -421,7 +421,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
             }
             fn_80227538((Point_8017886C *)&offset, angle, length);
             offset.mZ = 0.0f;
-            fn_80103F80(pBall, pMotion->mPos, offset, angle, &target, pTarget, length, speed);
+            fn_80103F80(pBall, pMotion->mPos, offset, length, angle, speed, &target, pTarget);
         }
         fn_8010016C(pTarget, &target, p, speed);
         limit = 1.0f - fn_80237260(0) * 2.5f;
@@ -669,8 +669,8 @@ extern "C" float fn_80103DD8(Object_80039F5C *p, Object_80039F5C *pOther, short 
     return result;
 }
 
-extern "C" void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, int angle,
-                            Vector_80039F5C *pOut, Object_80039F5C *p, float speed, float ballSpeed)
+extern "C" void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, float speed,
+                            int angle, float ballSpeed, Vector_80039F5C *pOut, Object_80039F5C *p)
 {
     Vector_80039F5C ball;
     Point_8017886C delta;
@@ -784,7 +784,7 @@ extern "C" void fn_80104328(Object_80039F5C *p, unsigned int count, int *pTime, 
         if (pEntry->mId == 20) {
             State_80039F5C *pPrev = &pQueue[i - 1];
             int kind = pEntry->mUnknown2;
-            unsigned char type = pEntry->mUnknown1;
+            int type = pEntry->mUnknown1;
 
             if (pPrev->mId == 19) {
                 fn_8012CB98(kind, type, pPrev->mUnknown2 << 17 & 0xFE0000, &offset);

@@ -54,9 +54,7 @@ int fn_800B7E60(Object_80039F5C *);
 int fn_800B7F34(Object_80039F5C *);
 void fn_800B6E68(Object_80039F5C *, Input_800B6D34 *);
 
-extern float lbl_803EB144, lbl_803EB148, lbl_803EB14C, lbl_803EB150;
 extern float lbl_803EB16C, lbl_803EB170, lbl_803EB174, lbl_803EB178, lbl_803EB17C, lbl_803EB180;
-extern float lbl_803EB154;
 extern unsigned char lbl_803EB160, lbl_803EB16B;
 void fn_8011E240(Object_80039F5C *);
 int fn_80177F70(void);
@@ -94,27 +92,6 @@ int fn_801788D8(int *);
 int fn_80178308(void);
 unsigned int fn_801787DC(int);
 Object_80039F5C *fn_80124E5C(Object_80039F5C *, int, float *, int, float, int, float);
-
-int fn_80132630(Object_80039F5C *p, Vector_80039F5C *point, Object_80039F5C *other)
-{
-    signed char line = (signed char)(int)fn_80178A2C();
-    signed char y = (signed char)(int)p->mMotion.mPos.mY;
-    int allowed = (float)(line - y) >= 1.5f;
-    if (point && other) {
-        if (fn_80177F70() > 2 && !(p->mMotion.mPos.mY <= fn_80178298()) && !(point->mY >= fn_80178298()))
-            allowed = 0;
-        if (other->mpState->mId != 90 && !(point->mY >= lbl_803EB150 - fn_80178A2C()))
-            allowed = 0;
-        float x = fabsf(point->mX);
-        if (!(x >= fabsf(fn_80178A08())) && !(x >= fabsf(other->mMotion.mPos.mX)) && !(x >= lbl_803EB148))
-            allowed = 0;
-        if (!(fn_8022781C(&p->mMotion.mPos, &other->mMotion.mPos) >= lbl_803EB144))
-            allowed = 0;
-        if (fn_801CFFD0(other->mMotion.mFacing, 0xC00000) < (int)(lbl_803EB14C * 46603.37890625f))
-            allowed = 0;
-    }
-    return allowed;
-}
 
 void fn_801327F4(Object_80039F5C *p, Object_80039F5C *other, Aim_801327F4 *aim, float *values)
 {

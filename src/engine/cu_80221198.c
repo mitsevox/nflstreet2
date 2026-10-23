@@ -379,7 +379,7 @@ void fn_80221BE8(Callback_803EBF60 *pCallback)
     lbl_803EBF60 = pCallback;
 }
 
-void fn_80221BF0(Text_80221BF0 *pText, Uint32 Offset, Int32 *pA, Int32 *pB)
+void fn_80221BF0(Text_80221BF0 *pText, Int32 Offset, Int32 *pA, Int32 *pB)
 {
     Font_801CCA64 **ppFont;
     Range_80221D30 *pRange = NULL;
@@ -447,9 +447,9 @@ void fn_80222E54(Buffer_80222E54 *pDst, Buffer_80222E54 *pSrc)
     char *pText = pSrc->pText;
     char *pDstText = pDst->pText;
     Uint32 Size = pDst->Size;
-    Uint32 Length = fn_801C3180(pText) + 1;
+    Uint32 Length;
 
-    if (Size + 1 < Length) {
+    if (Size + 1 < (Length = fn_801C3180(pText) + 1)) {
         memcpy(pDstText, pText, Size);
     } else {
         memcpy(pDstText, pText, Length);

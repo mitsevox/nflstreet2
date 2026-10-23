@@ -54,7 +54,7 @@ void fn_800F053C(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Obje
 void fn_8009BD60(Object_80039F5C *p);
 int fn_8011F1A4(void);
 unsigned char fn_8011F4C8(void);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 int fn_801CFE40(float y, float x);
 void fn_80227690(void *pOut, void *pA, void *pB);
 }
@@ -128,7 +128,7 @@ extern "C" void fn_8010C98C(Object_80039F5C *p) {
             }
         }
     }
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 78, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 78, 1.0f, p);
     p->mUnknown512.mUnknown14 = 0;
 }
 

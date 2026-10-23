@@ -92,7 +92,7 @@ int fn_801BA6B0(Record_800D81C8 *pRecord);
 void fn_801BA6BC(Record_800D81C8 *pRecord, int value);
 float fn_801BD660(void *p, int key);
 void fn_801BD81C(void *p, float value);
-int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
+int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
 unsigned short fn_801BE648(void *p);
 void fn_801BE760(void *p, unsigned short key, unsigned short flags);
@@ -683,6 +683,22 @@ extern "C" int fn_800CB708(Object_80039F5C *p, int *pIndex, Point_8017886C targe
 
         if (fn_801CFFD0(facing, angle) < 621378.0f && fn_801CFFD0(direction, facing) < 621378.0f) {
             switch (p->mUnknown2914) {
+            case 24:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+                allowed = 0;
+                break;
+            case 10:
+            case 11:
+            case 12:
+            case 16:
+            case 17:
+            case 18:
+                allowed = 0;
+                break;
             case 4:
                 if (kind == 86) {
                     allowed = 0;
@@ -698,22 +714,6 @@ extern "C" int fn_800CB708(Object_80039F5C *p, int *pIndex, Point_8017886C targe
                 if (kind == 85) {
                     allowed = 0;
                 }
-                break;
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-                allowed = 0;
-                break;
-            case 10:
-            case 11:
-            case 12:
-            case 16:
-            case 17:
-            case 18:
-            case 24:
-                allowed = 0;
                 break;
             }
         }
@@ -780,7 +780,7 @@ extern "C" int fn_800CBB00(Object_80039F5C *p, int index, Point_8017886C target,
     lbl_803EAC64 = beyond;
     lbl_803EAC50 = target;
     lbl_803EAC58 = angle;
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, lbl_803EAC48, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, lbl_803EAC48, 1.0f, p);
     return 1;
 }
 

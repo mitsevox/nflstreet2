@@ -415,16 +415,9 @@ int fn_8022F4C4(void)
 {
     int err = 0;
     unsigned int i;
-    int *p = lbl_803ED6E4;
 
-    for (i = 0; i <= 1; i++) {
-        int handle = *p++;
-
-        err = fn_801F8D60(handle, lbl_803EC0C8);
-        if (err != 0) {
-            break;
-        }
-        err = fn_8020D2D0(handle, lbl_803EC0CC, lbl_803EC0D0, 0);
+    for (i = 0; i <= 1 && (err = fn_801F8D60(lbl_803ED6E4[i], lbl_803EC0C8)) == 0; i++) {
+        err = fn_8020D2D0(lbl_803ED6E4[i], lbl_803EC0CC, lbl_803EC0D0, 0);
         if (err != 0) {
             break;
         }

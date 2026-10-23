@@ -464,6 +464,7 @@ struct Record_800F4E88 {
     float mUnknown12;
     char mUnknown16[4];
     int mUnknown20;
+    unsigned char mUnknown24;
 };
 
 struct Object_800F4E14 {
@@ -739,7 +740,7 @@ void fn_800DBC4C(Object_80039F5C *p, int angle, float value);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float fn_8022710C(void *pV);
 Object_800670B4 *fn_80168708(int team);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 void fn_800FC290(Object_80039F5C *p, Block_800FCC24 *pBlock, Point_8017886C target);
 int fn_800FC648(Object_80039F5C *p, Block_800FCC24 *pBlock);
 int fn_800FCE58(Object_80039F5C *p, Block_800FCC24 *pBlock);
@@ -775,7 +776,7 @@ void fn_800D52F8(Object_80039F5C *p);
 int fn_800CE4A8(Query_800CE770 *pQuery);
 float fn_800C49A4(Object_80039F5C *p, float value);
 void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int a);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float e);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *p);
 Object_80039F5C *fn_8015286C(void *pSet, int index);
 int fn_8015310C(void *pSet);
 extern unsigned char lbl_803EAE20[8];
@@ -881,7 +882,7 @@ extern "C" void fn_800F0960(Object_80039F5C *p, Block_800F0C6C *pBlock) {
         p->mUnknown512.mUnknown0 = 1.0f;
         break;
     }
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, mode, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, mode, 1.0f, p);
     p->mUnknown512.mUnknown14 = 0;
 }
 
@@ -1076,14 +1077,14 @@ extern "C" void fn_800F1858(Object_80039F5C *p) {
     found = fn_800D0B90(p);
     if (fn_800B83F4(p) != 0) {
         fn_800D0C0C(p, 0);
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 240, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 240, 1.0f, p);
     } else if (found != 0) {
         if (fn_802372EC(0, 100) < 50) {
             p->mUnknown1008.mUnknown2 = 1;
         } else {
             p->mUnknown1008.mUnknown2 = 2;
         }
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 179, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 179, 1.0f, p);
         switch (p->mUnknown1008.mUnknown2) {
         case 1:
             if (side == 3) {
@@ -1102,7 +1103,7 @@ extern "C" void fn_800F1858(Object_80039F5C *p) {
         }
     } else {
         fn_800D0C0C(p, 0);
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 22, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 22, 1.0f, p);
     }
     if (fn_801BA568(p->mpUnknown796, p->mpUnknown800, 22) != 0 || fn_801BA568(p->mpUnknown796, p->mpUnknown800, 179) != 0) {
         Entry_800EAC9C *pEntries = p->mpUnknown800;
@@ -1482,7 +1483,7 @@ extern "C" int fn_800F2AA0(Object_80039F5C *p) {
         pBlock->mUnknown0 = 0;
     }
     fn_8009BD60(p);
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 68, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 68, 1.0f, p);
     p->mFlags &= ~4;
     scaled = p->mRatings[0] / 255.0f;
     scaled = scaled <= 1.0f ? scaled : 1.0f;
