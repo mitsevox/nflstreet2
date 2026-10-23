@@ -521,7 +521,8 @@ extern "C" void fn_80105630(Object_80039F5C *p, Vector_80039F5C *pTarget, Reach_
         fn_80105168(pRecord->mUnknown5, pBall, p, pOther, fn_80104C9C(p, pOther), pTarget, 0);
         fn_802276B4(pTarget, pTarget, &shoulder);
         turn = ((fn_801CFE40(pTarget->mY, pTarget->mX) - p->mMotion.mFacing) << 8) >> 8;
-        fn_80227538((Point_8017886C *)pTarget, ((int)(turn * (1.0f - t)) + p->mMotion.mFacing) & 0xFFFFFF, 1.5f);
+        turn = (int)(turn * (1.0f - t));
+        fn_80227538((Point_8017886C *)pTarget, (turn + p->mMotion.mFacing) & 0xFFFFFF, 1.5f);
         pTarget->mZ = 0.4f;
         fn_8022765C(pTarget, pTarget, &shoulder);
     } else {
