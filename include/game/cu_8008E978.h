@@ -9,6 +9,8 @@ struct Object_80137ABC;
    fn_80096DA8. Their original identities and the contents of the opaque
    spans remain unknown. */
 struct Frame_80141210 { unsigned char mUnknown0[0x14]; int mUnknown14; unsigned char mUnknown18[0x18]; float mUnknown30, mUnknown34; unsigned char mUnknown38[4]; float mUnknown3C; };
+struct Frame_800DF7CC;
+
 /* One of the mUnknown6 48-byte entries at +32 of an Actor_801C009C;
    fn_80091644 looks for the id 'JMA'. */
 struct Entry_80091644 {
@@ -28,7 +30,7 @@ struct Actor_801C009C {
     unsigned int mUnknown8;
     unsigned char mUnknownC[12];
     Frame_80141210 *mUnknown18;
-    unsigned char mUnknown1C[4];
+    Frame_800DF7CC *mpUnknown1C;
     Entry_80091644 *mpUnknown20;
 };
 struct Selection_80141210 { unsigned char mUnknown0; unsigned char mUnknown1[3]; union { int mWord; unsigned short mParts[2]; } mUnknown4,mUnknown8; };

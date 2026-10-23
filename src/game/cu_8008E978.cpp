@@ -771,6 +771,82 @@ extern "C" void fn_800917A4(int index)
     }
 }
 
+extern "C" int fn_80091864(int index)
+{
+    Character_80093BCC *pCharacter = fn_80093BCC(index);
+    unsigned short i = 0;
+    int result = 1;
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+
+    for (; i < pActor->mUnknown4; i++) {
+        Frame_800DF7CC *pFrame = fn_801C029C(pActor, i);
+
+        switch (pFrame->mUnknown20) {
+        case 0x42414C4C:
+            if (fn_801383B0()) {
+                Object_80137ABC *pBall = pCharacter->mUnknown74[i];
+
+                if (pBall == 0) {
+                    Object_80039F5C *pCarrier = fn_80137B40();
+
+                    pBall = pCarrier != 0 ? fn_80137C48(pCarrier) : fn_801374BC();
+                }
+                if (pBall != 0) {
+                    pCharacter->mUnknown74[i] = pBall;
+                } else {
+                    result = 0;
+                }
+            } else {
+                Object_80039F5C *p = fn_8008FF28(pCharacter, pActor);
+
+                if (p != 0) {
+                    p->mFlags |= 0x40000;
+                }
+            }
+            break;
+        case 0x434C4950:
+            result = 0;
+            break;
+        case 0:
+        case 0x434F494E:
+        case 0x48454C4D:
+        case 0x4E4F4E45:
+        case 0x54504859:
+            break;
+        default:
+            pFrame->mUnknown20 = 0;
+            break;
+        }
+        if (!result) {
+            break;
+        }
+    }
+    return result;
+}
+
+extern "C" void fn_800919F0(int index)
+{
+    Character_80093BCC *pCharacter = fn_80093BCC(index);
+    unsigned short i = 0;
+    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+
+    for (; i < pActor->mUnknown4; i++) {
+        switch (fn_801C029C(pActor, i)->mUnknown20) {
+        case 0x434F494E:
+            break;
+        case 0x42414C4C:
+            if (fn_801383B0()) {
+                if (pCharacter->mUnknown74[i] != 0) {
+                    fn_8013791C(pCharacter->mUnknown74[i], 5, 0);
+                }
+            } else if (pCharacter->mUnknown14[0] != 0) {
+                pCharacter->mUnknown14[0]->mFlags &= ~0x40000;
+            }
+            break;
+        }
+    }
+}
+
 extern "C" int fn_80091D34(void)
 {
     unsigned char result = 0;
