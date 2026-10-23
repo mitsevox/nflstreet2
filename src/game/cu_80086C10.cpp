@@ -1,7 +1,6 @@
-#include <string.h>
-
 #include "game/Object_8007A334.h"
 #include "game/Table_8007E020.h"
+#include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
 
@@ -161,7 +160,7 @@ int fn_80086D0C(int index, int id, int byRow, int *pId, int *pPrice,
     if (result) {
         column = 0;
         if (pName) {
-            strncpy(pName, pBuffer, nameSize);
+            fn_801C3284(pName, pBuffer, nameSize);
             column++;
         }
         if (pId) {
