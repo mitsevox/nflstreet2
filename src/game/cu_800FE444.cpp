@@ -1132,7 +1132,7 @@ void fn_80101130(Object_80039F5C *p, Object_80039F5C *other, unsigned short *out
     }
 }
 
-void fn_80101408(Object_80039F5C *p,Point_8017886C *point,unsigned int *angle)
+void fn_80101408(Object_80039F5C *p,Point_8017886C *point,int *angle)
 {
     if(point && angle) {
         point->mX=fn_80178A08()+14.0f;
@@ -1143,7 +1143,7 @@ void fn_80101408(Object_80039F5C *p,Point_8017886C *point,unsigned int *angle)
     }
 }
 
-void fn_801014C8(Object_80039F5C *p,Point_8017886C *point,unsigned int *angle)
+void fn_801014C8(Object_80039F5C *p,Point_8017886C *point,int *angle)
 {
     if(point && angle) {
         Point_8017886C target;target.mX=0.0f;
@@ -1153,34 +1153,63 @@ void fn_801014C8(Object_80039F5C *p,Point_8017886C *point,unsigned int *angle)
     }
 }
 
-void fn_80101568(Object_80039F5C *p,unsigned char *kind,Point_8017886C *point,unsigned int *angle)
+void fn_80101568(Object_80039F5C *p, unsigned char *kind, Point_8017886C *point, int *angle)
 {
-    Vector_80039F5C target={0.0f,0.0f,0.0f};
-    if(point && angle && kind) {
-        Object_80137ABC *ball=fn_80137C48(p);
-        State_800FDA58 *state=(State_800FDA58 *)&p->mUnknown336;
-        Record_8011F4F8 *record=fn_8011F4F8(state->mUnknown3Byte);
-        Object_80039F5C *other=fn_80039F5C(p->mIdBytes[2],(unsigned char)record->mUnknownA[0]);
+    Vector_80039F5C target;
+
+    target.mX = target.mY = target.mZ = 0.0f;
+    if (point && angle && kind) {
+        State_800FDA58 *state = (State_800FDA58 *)&p->mUnknown336;
+        Object_80137ABC *ball = fn_80137C48(p);
+        Record_8011F4F8 *record = fn_8011F4F8(state->mUnknown3Byte);
+        Object_80039F5C *other = fn_80039F5C(p->mIdBytes[2], (unsigned char)record->mUnknownA[0]);
         float speed;
-        if(!state->mUnknown0Bytes[0])speed=fn_80103DD8(p,other,&record->mUnknown8,0.9f);
-        else speed=lbl_803EA2C4*0.3f;
-        if(!ball) {target.mX=other->mMotion.mPos.mX;target.mY=other->mMotion.mPos.mY;}
-        else fn_801007A4(ball,p,other,&target,kind,speed);
-        fn_80227690(point,&target,&p->mMotion.mPos);fn_801CFE40(point->mY,point->mX);
-        *angle=(fn_801CFE40(point->mY,point->mX)-p->mMotion.mFacing)&0xFFFFFF;
-        if(*angle>0x1000000)*angle-=0x1000000;
+
+        if (state->mUnknown0Bytes[0]) {
+            speed = lbl_803EA2C4 * 0.3f;
+        } else {
+            speed = fn_80103DD8(p, other, &record->mUnknown8, 0.9f);
+        }
+        if (ball) {
+            fn_801007A4(ball, p, other, &target, kind, speed);
+        } else {
+            target.mX = other->mMotion.mPos.mX;
+            target.mY = other->mMotion.mPos.mY;
+        }
+        fn_80227690(point, &target, &p->mMotion.mPos);
+        fn_801CFE40(point->mY, point->mX);
+        *angle = (fn_801CFE40(point->mY, point->mX) - p->mMotion.mFacing) & 0xFFFFFF;
+        if (*angle > 0x1000000) {
+            *angle -= 0x1000000;
+        }
     }
 }
 
-void fn_801016A4(Object_80039F5C *p,unsigned char *kind,Point_8017886C *point,unsigned int *angle)
+void fn_801016A4(Object_80039F5C *p, unsigned char *kind, Point_8017886C *point, int *angle)
 {
-    if(!p || !kind || !point || !angle)return;
-    *angle=0;point->mX=point->mY=0.0f;
-    switch(*kind) {
-    case 2:case 5:*angle=0;return;
-    case 3:fn_80101408(p,point,angle);return;
-    case 8:fn_801014C8(p,point,angle);return;
-    case 0:case 1:case 4:case 6:case 7:fn_80101568(p,kind,point,angle);return;
+    if (!p || !kind || !point || !angle) {
+        return;
+    }
+    *angle = 0;
+    point->mY = point->mX = 0.0f;
+    switch (*kind) {
+    case 2:
+    case 5:
+        *angle = 0;
+        break;
+    case 3:
+        fn_80101408(p, point, angle);
+        break;
+    case 8:
+        fn_801014C8(p, point, angle);
+        break;
+    case 0:
+    case 1:
+    case 4:
+    case 6:
+    case 7:
+        fn_80101568(p, kind, point, angle);
+        break;
     }
 }
 
