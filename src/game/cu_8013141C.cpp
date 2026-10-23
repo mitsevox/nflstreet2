@@ -8,6 +8,7 @@
 #include "game/fn_800670B4.h"
 #include "game/fn_80163E94.h"
 #include "game/fn_801C1F94.h"
+#include "game/fn_8022781C.h"
 #include "game/fn_80178D18.h"
 
 
@@ -52,7 +53,6 @@ int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_802276E8(Point_8017886C *pA, Point_8017886C *pB);
-float fn_8022781C(void *pA, void *pB);
 float fn_80237260(int stream);
 }
 
@@ -602,7 +602,7 @@ extern "C" int fn_80132630(Object_80039F5C *p, Vector_80039F5C *pPos, Object_800
             allowed = 0;
         if (!(fn_8022781C(&p->mMotion.mPos, &pOther->mMotion.mPos) >= lbl_803EB144))
             allowed = 0;
-        if (fn_801CFFD0(pOther->mMotion.mFacing, 0xC00000) < (int)(lbl_803EB14C * 46603.37890625f))
+        if (fn_801CFFD0(pOther->mMotion.mFacing, 0xC00000) < (int)(lbl_803EB14C * (16777216.0f / 360.0f)))
             allowed = 0;
     }
     return allowed;

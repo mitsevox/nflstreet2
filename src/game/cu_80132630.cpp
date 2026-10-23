@@ -55,7 +55,6 @@ int fn_800B7F34(Object_80039F5C *);
 void fn_800B6E68(Object_80039F5C *, Input_800B6D34 *);
 
 extern float lbl_803EB16C, lbl_803EB170, lbl_803EB174, lbl_803EB178, lbl_803EB17C, lbl_803EB180;
-extern float lbl_803EB154;
 extern unsigned char lbl_803EB160, lbl_803EB16B;
 void fn_8011E240(Object_80039F5C *);
 int fn_80177F70(void);
