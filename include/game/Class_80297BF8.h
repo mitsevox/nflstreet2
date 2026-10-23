@@ -13,9 +13,9 @@ public:
     virtual void vfn_05();
     virtual void vfn_06();
     virtual void vfn_07();
-    virtual void vfn_08();
-    virtual void vfn_09();
-    virtual void vfn_10();
+    virtual void vfn_08(float dt);
+    virtual void vfn_09(float dt);
+    virtual void vfn_10(float dt);
     virtual void vfn_11(float dt);
 };
 
