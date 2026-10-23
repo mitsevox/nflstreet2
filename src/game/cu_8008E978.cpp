@@ -7915,6 +7915,15 @@ Object_80039F5C *fn_800606CC(int type, int position);
 int fn_8014F448(Class_80148A58 *p);
 int fn_8015264C(void *p);
 int fn_801787DC(int team);
+int fn_80179138(void);
+void fn_80176CC8(int a, short b, int c, int d);
+void fn_800A20D0(int team, int delta);
+void fn_800A06F4(Record_800A0624 *pState, Object_8017886C *pResult);
+void fn_800A0EB8(Record_800A0624 *pState, Object_8017886C *pResult);
+void fn_800A1620(Object_8017886C *pResult);
+void fn_800A1738(Object_8017886C *pResult);
+void fn_80173794(void);
+int fn_800A2178(void);
 
 extern char lbl_8031BDD4[];
 }
@@ -11565,6 +11574,65 @@ extern "C" void fn_800A14A8(void *context)
     fn_80067D4C(124, 0);
 }
 
+extern "C" void fn_800A14E4(Object_8017886C *pResult, unsigned char update)
+{
+    unsigned char team = pResult->mUnknown1C;
+    signed char delta = pResult->mUnknown1D;
+
+    fn_80177FE0();
+    fn_80178A2C();
+    if (delta == 2) {
+        if (!(pResult->mUnknown18 & 4)) {
+            delta = 4;
+        } else if (fn_80179138() == 1) {
+            delta = 1;
+        }
+    }
+    if (fn_801486A0() == 3 && delta == 6) {
+        delta = 7;
+    }
+    if (fn_801486A0() == 4 && delta == -2) {
+        delta = 5;
+        team ^= 1;
+    }
+    if (fn_801486A0() != 3) {
+        if (delta < 0) {
+            delta = -delta;
+            team ^= 1;
+        }
+    } else {
+        team = fn_80178348();
+    }
+    fn_800A20D0(team, delta);
+    if (!update && pResult->mUnknown1D == -2) {
+        if (pResult->mUnknown00 == 0) {
+            fn_80176CC8(9, 0, (fn_80178320() & 0xFF) << 8 | 1, 0);
+        } else {
+            fn_80176CC8(9, 0, pResult->mUnknown00, 0);
+        }
+    }
+}
+
+extern "C" Object_8017886C *fn_800A16C8(Object_8017886C *pResult, Object_8017886C *pOther, unsigned char *pUpdate)
+{
+    unsigned char update = 1;
+    int flags = fn_800B2314();
+
+    if (flags & 1) {
+        fn_800B43B8();
+        if (flags & 2) {
+            pResult = pOther;
+            if (!(flags & 4)) {
+                update = 0;
+            }
+        }
+    }
+    if (pUpdate) {
+        *pUpdate = update;
+    }
+    return pResult;
+}
+
 extern "C" void fn_800A1A58(void)
 {
     lbl_803EA9EC = 0;
@@ -11577,6 +11645,48 @@ extern "C" void fn_800A1A80(void)
 {
 }
 
+extern "C" void fn_800A1A84(Object_8017886C *pResult, Object_8017886C *pSaved)
+{
+    Record_800A0624 state;
+
+    lbl_802D7C64[0].mUnknown4 = 0;
+    fn_800A0684((Record_800A0684 *)pResult);
+    fn_800A0624(&state);
+    fn_800A06F4(&state, pResult);
+    fn_800A0EB8(&state, pResult);
+    fn_800A1620(pResult);
+    if ((fn_80178348() != fn_80178308() && !(pResult->mUnknown18 & 4))
+        || (fn_80178348() == fn_80178308() && (pResult->mUnknown18 & 4))) {
+        pResult->mUnknown18 |= 8;
+    }
+    fn_80173794();
+    *pSaved = *pResult;
+    fn_800A1738(pResult);
+    switch (fn_800A2178()) {
+    case 0:
+        if (pResult->mUnknown18 & 0x8000) {
+            fn_800A8954(17, pResult->mUnknown1C, 0);
+        } else {
+            fn_800A8954(18, pResult->mUnknown1C, 0);
+        }
+        break;
+    case 11:
+        fn_800A8954(21, pResult->mUnknown1C, 0);
+        break;
+    case 1:
+    case 2:
+    case 15:
+        fn_800A8954(20, pResult->mUnknown1C, 0);
+        break;
+    case 14:
+        fn_800A8954(19, pResult->mUnknown1C, 0);
+        break;
+    }
+    if (fn_800A2178() == 0) {
+        fn_80156C78(33, 1);
+    }
+}
+
 extern "C" int fn_800A1C50(void)
 {
     fn_800B2320();
@@ -11585,9 +11695,10 @@ extern "C" int fn_800A1C50(void)
 
 extern "C" void fn_800A20D0(int team, int delta)
 {
-    int value = fn_800C8774(team) + delta;
+    int value = fn_800C8774(team);
 
     fn_801787DC(team);
+    value += delta;
     value = value < -254 ? -254 : (value > 255 ? 255 : value);
     fn_801787FC(team, (short)value);
     fn_800C87CC(team, value);
@@ -11620,6 +11731,11 @@ extern "C" void fn_800A2184(void)
 extern "C" void fn_800A2190(int bit)
 {
     lbl_803EA9EC |= 1 << bit;
+}
+
+extern "C" unsigned char fn_800A21A8(int bit)
+{
+    return lbl_803EA9EC & (1 << bit);
 }
 
 /* Two floats written by fn_80227690. */

@@ -24610,6 +24610,16 @@
           "end": "0x800A14E4"
         },
         {
+          "symbol": "fn_800A14E4",
+          "start": "0x800A14E4",
+          "end": "0x800A1620"
+        },
+        {
+          "symbol": "fn_800A16C8",
+          "start": "0x800A16C8",
+          "end": "0x800A1738"
+        },
+        {
           "symbol": "fn_800A1A58",
           "start": "0x800A1A58",
           "end": "0x800A1A80"
@@ -24618,6 +24628,11 @@
           "symbol": "fn_800A1A80",
           "start": "0x800A1A80",
           "end": "0x800A1A84"
+        },
+        {
+          "symbol": "fn_800A1A84",
+          "start": "0x800A1A84",
+          "end": "0x800A1C50"
         },
         {
           "symbol": "fn_800A1C50",
@@ -24653,6 +24668,11 @@
           "symbol": "fn_800A2190",
           "start": "0x800A2190",
           "end": "0x800A21A8"
+        },
+        {
+          "symbol": "fn_800A21A8",
+          "start": "0x800A21A8",
+          "end": "0x800A21BC"
         },
         {
           "symbol": "fn_800CA8EC",
@@ -36853,13 +36873,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800A0134",
-          "end": "0x800A233C"
+          "end": "0x800A1620"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80296594",
-          "end": "0x80296630"
+          "end": "0x802965CC"
         }
       ],
       "functions": [
@@ -36902,11 +36922,37 @@
           "symbol": "fn_800A0EB8",
           "start": "0x800A0EB8",
           "end": "0x800A1470"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800A1620.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: complete bodies 0x800A1620-0x800A233C whose float literals form the exact readonly slice 0x802965CC-0x80296630 measured here, split from src/game/cu_800A0134.cpp because that slice holds no double and starts 4 mod 8. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800A1620",
+          "end": "0x800A233C"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802965CC",
+          "end": "0x80296630"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_800A1620",
           "start": "0x800A1620",
           "end": "0x800A16C8"
+        },
+        {
+          "symbol": "fn_800A1738",
+          "start": "0x800A1738",
+          "end": "0x800A1A58"
         },
         {
           "symbol": "fn_800A1C74",
