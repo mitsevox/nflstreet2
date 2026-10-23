@@ -15,10 +15,10 @@ public:
     virtual void vfn_07();
     virtual void vfn_08();
     virtual int vfn_09(char *pText);
-    virtual void vfn_10();
-    virtual int vfn_11();
-    virtual int vfn_12();
-    virtual void vfn_13();
+    virtual void vfn_10(float dt);
+    virtual int vfn_11(float dt);
+    virtual int vfn_12(float dt);
+    virtual int vfn_13(int busy);
     virtual void vfn_14(float dt);
     virtual void vfn_15();
 };

@@ -79,7 +79,7 @@ extern unsigned int lbl_803EAB9C;
 extern Block_800BC538 *lbl_803EC98C;
 }
 
-extern "C" void fn_800BC5DC(Class_80297BF8 *pThis)
+void Class_80297BF8::vfn_03()
 {
     int practice;
     unsigned char i;
@@ -118,14 +118,14 @@ extern "C" void fn_800BC5DC(Class_80297BF8 *pThis)
     }
     if (fn_800C1E40() != 0) {
         fn_800BBA2C();
-        fn_800BBB4C(pThis);
+        fn_800BBB4C(this);
         lbl_803EAB94 = 1;
     }
     if (fn_80025708() != 0) {
-        fn_800BBB4C(pThis);
+        fn_800BBB4C(this);
     }
     if (practice) {
-        fn_800BBB4C(pThis);
+        fn_800BBB4C(this);
     }
     fn_800AFDD4(fn_800BB694);
     fn_8003E174(0);
@@ -145,7 +145,7 @@ extern "C" void fn_800BC5DC(Class_80297BF8 *pThis)
         }
     }
     fn_8017DC08();
-    pThis->vfn_06();
+    vfn_06();
     fn_801790D0(0, 0.0f, 0.0f);
     fn_801790D0(1, 0.0f, 0.0f);
     for (i = 0; i < lbl_803EC98C->mUnknown2B; i++) {
