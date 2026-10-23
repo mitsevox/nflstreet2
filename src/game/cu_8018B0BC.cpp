@@ -227,11 +227,11 @@ void fn_8018B8B0(Object_8008044C *pObject)
 
 extern char lbl_802EBE24[];
 
-void fn_8018B950(int index)
+void fn_8018B950(int id)
 {
     Object_8008044C object;
     fn_8008044C(&object, 0, 0x54415453);
-    if (fn_800809C4(&object, index, 0)) fn_8018B8B0(&object);
+    if (fn_800809C4(&object, id, 0)) fn_8018B8B0(&object);
     fn_8008056C(&object);
 }
 
