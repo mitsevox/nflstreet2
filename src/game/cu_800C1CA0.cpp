@@ -9,6 +9,7 @@
 #include "game/Table_80089904.h"
 #include "game/cu_80064864.h"
 #include "game/fn_8017F584.h"
+#include "game/fn_801BE60C.h"
 #include "game/fn_80195EFC.h"
 #include "game/fn_801FCE10.h"
 
@@ -101,7 +102,6 @@ void fn_8017F264(void);
 void fn_8017F284(void);
 int fn_8019623C(int id);
 Table_800DE51C *fn_801BBD5C(unsigned short key, unsigned short id);
-unsigned short fn_801BE648(void *p);
 Table_80089904 *fn_801BE72C(unsigned short type, unsigned short key);
 void fn_800DEAB0(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key, void *pData, int angle,
                  Entry_800DE51C *pRecord);

@@ -2,9 +2,9 @@
 #include "game/Block_800DE3B0.h"
 #include "game/Table_80089904.h"
 #include "game/fn_801BA2A8.h"
+#include "game/fn_801BE60C.h"
 
 extern "C" {
-int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
 void fn_800C38C4(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key);
 void fn_800D8140(State_800D8140 *pState, Object_80039F5C *p, int value);
 void fn_800D81C8(State_800D8140 *pState, Object_80039F5C *p);
@@ -13,9 +13,6 @@ void fn_800DF654(Object_80039F5C *p, Block_801BE60C *pRecord);
 int fn_801784C4(void);
 int fn_801BA6B0(Record_800D81C8 *pChannel);
 void fn_801BA6BC(Record_800D81C8 *pChannel, int enable);
-Block_801BE60C *fn_801BE60C(void *p, unsigned short key);
-unsigned short fn_801BE648(void *p);
-void fn_801BE760(void *p, unsigned short key, unsigned short flags);
 }
 
 extern "C" void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int flag)
