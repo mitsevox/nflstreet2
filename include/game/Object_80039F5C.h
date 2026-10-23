@@ -196,6 +196,19 @@ struct Block_801718E8 {
     char mUnknown55[1];
 };
 
+/* The +1160 block together with the bytes after it (+1216..+1223), as fn_800C8330 and
+   fn_800C6DF8 address them from one base. */
+struct Block_800C8330 {
+    Block_801718E8 mBlock;
+    char mUnknown56[2];
+    unsigned char mUnknown58;
+    unsigned char mUnknown59;
+    unsigned char mUnknown60;
+    unsigned char mUnknown61;
+    unsigned char mUnknown62;
+    char mUnknown63[1];
+};
+
 /* Three bytes at +1008, compared field by field by fn_80110630. */
 struct Key_80110630 {
     unsigned char mUnknown0;
@@ -441,14 +454,19 @@ struct Object_80039F5C {
         Block_8011E240 mBlock1032;
     };
     Target_800A3E84 mTarget;
-    Block_801718E8 mUnknown1160;
-    char mUnknown1216[2];
-    unsigned char mUnknown1218;
-    unsigned char mUnknown1219;
-    unsigned char mUnknown1220;
-    unsigned char mUnknown1221;
-    unsigned char mUnknown1222;
-    char mUnknown1223[1];
+    union {
+        struct {
+            Block_801718E8 mUnknown1160;
+            char mUnknown1216[2];
+            unsigned char mUnknown1218;
+            unsigned char mUnknown1219;
+            unsigned char mUnknown1220;
+            unsigned char mUnknown1221;
+            unsigned char mUnknown1222;
+            char mUnknown1223[1];
+        };
+        Block_800C8330 mUnknown1160Wide;
+    };
     Object_80039F5C *mpUnknown1224;
     Block_800D0B90 mUnknown1228;
     Object_800CE674 mUnknown1240;

@@ -9446,8 +9446,14 @@ extern "C" void fn_800BC190(int index, int value)
         other = side ^ 1;
         for (i = 0; i < pActor->mUnknown4; i++) {
             unsigned int position = fn_80096440(fn_801C029C(pActor, i)->mUnknown0);
+            int choice;
 
-            sides[i] = position > 6 ? other : side;
+            if (position > 6) {
+                choice = other;
+            } else {
+                choice = side;
+            }
+            sides[i] = choice;
         }
     } else {
         sides[0] = index & 1;
@@ -14397,21 +14403,24 @@ extern "C" int fn_800CC98C(Group_800CC98C *pGroup, int index)
 
 extern "C" void fn_800CCA40(Set_800CCBA0 *pSet, Entry_800CCBA0 **pOut, int kind, int index)
 {
-    unsigned short a = 0;
-    unsigned short b = 0;
+    unsigned short a;
+    unsigned short b;
     unsigned int i;
+
     *pOut = 0;
+    a = 0;
+    b = 0;
     for (i = 0; i < pSet->mCount; i++) {
         if (pSet->mEntries[i].mUnknown2 == 0) {
             if (a == index && kind == 0) {
                 *pOut = &pSet->mEntries[i];
-                return;
+                break;
             }
             a++;
         } else {
             if (b == index && kind == 1) {
                 *pOut = &pSet->mEntries[i];
-                return;
+                break;
             }
             b++;
         }
@@ -14420,17 +14429,17 @@ extern "C" void fn_800CCA40(Set_800CCBA0 *pSet, Entry_800CCBA0 **pOut, int kind,
 
 extern "C" void fn_800CCB04(Set_800CCBA0 *pSet, Entry_800CCBA0 **pOut, int kind, int key)
 {
+    unsigned int i;
     *pOut = 0;
-    for (unsigned int i = 0; i < pSet->mCount; i++) {
-        Entry_800CCBA0 *p = &pSet->mEntries[i];
-        if (p->mUnknown2 == 0) {
-            if (p->mUnknown16 == key && kind == 0) {
-                *pOut = p;
-                return;
+    for (i = 0; i < pSet->mCount; i++) {
+        if (pSet->mEntries[i].mUnknown2 == 0) {
+            if (pSet->mEntries[i].mUnknown16 == key && kind == 0) {
+                *pOut = &pSet->mEntries[i];
+                break;
             }
-        } else if (p->mUnknown16 == key && kind == 1) {
-            *pOut = p;
-            return;
+        } else if (pSet->mEntries[i].mUnknown16 == key && kind == 1) {
+            *pOut = &pSet->mEntries[i];
+            break;
         }
     }
 }
