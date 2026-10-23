@@ -27886,6 +27886,21 @@
         "commit": "a3bf87283d18e3fa498b22965a8fc9975b77502f",
         "introduced_blob": "e65241235a6ded93b9cd785e114909b5a14342e4"
       }
+    },
+    {
+      "source": "src/game/cu_80090BDC.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80090BDC"
+      ],
+      "provenance": {
+        "pull_request": 1054,
+        "merged_via": 1054,
+        "commit": "c3ae09da8177e4d0da36238d3610b8024c2f84a2",
+        "introduced_blob": "490b590939d9c8c3fb2fcba5892036443bd1a53a"
+      }
     }
   ],
   "target": "GN7E69",
