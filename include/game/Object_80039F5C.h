@@ -369,7 +369,9 @@ struct Object_80039F5C {
     Object_800B26B0 mMotion;
     float mUnknown488;
     float mUnknown492;
-    char mUnknown496[12];
+    char mUnknown496[4];
+    int mUnknown500;
+    float mUnknown504;
     float mUnknown508;
     Object_8016D8B0 mUnknown512;
     Object_8016D8B0 mUnknown528;
