@@ -64,7 +64,7 @@ extern "C" {
 int fn_800A5C04(Object_80039F5C *p, int a, int b);
 int fn_800AD9B4(void);
 int fn_800CB708(Object_80039F5C *p, int *pIndex, Point_8017886C target, int angle, int beyond);
-void fn_800CBB00(Object_80039F5C *p, int index, Point_8017886C target, int angle, int beyond);
+int fn_800CBB00(Object_80039F5C *p, int index, Point_8017886C target, int angle, int beyond);
 void fn_800CC388(Object_80039F5C *p);
 int fn_800E1044(Object_80039F5C *p, Vector_80039F5C *pTarget);
 int fn_800FF094(Object_80039F5C *p);

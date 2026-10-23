@@ -38,14 +38,19 @@
 #include "game/fn_801BE60C.h"
 #include "game/Block_801BE60C.h"
 
-/* View of the block at player +336 that fn_80108A94, fn_80108C34 and
-   fn_80108DF8 read. Partial layout; named as in src/game/cu_80104C9C.cpp. */
+/* The block at player +336 (88 bytes). The same layout is used in
+   src/game/cu_80108A94.cpp and cu_80109248.cpp; fields +36 to +64 are
+   named as in src/game/cu_80104C9C.cpp, and +0 to +16 hold the pass view
+   that fn_80108C34 and fn_80108DF8 read from the other player's block. */
 struct Block_800F4A74 {
     unsigned short mUnknown0;
     char mUnknown2[2];
     Vector_80039F5C mUnknown4;
     unsigned int mUnknown16;
-    char mUnknown20[16];
+    int mUnknown20;
+    int mUnknown24;
+    float mUnknown28;
+    float mUnknown32;
     int mUnknown36;
     int mUnknown40;
     float mUnknown44;
@@ -65,6 +70,9 @@ struct Block_800F4A74 {
     unsigned char mUnknown62;
     unsigned char mUnknown63;
     unsigned char mUnknown64;
+    unsigned char mUnknown65;
+    unsigned char mUnknown66;
+    char mUnknown67[21];
 };
 
 struct Sphere_80108DF8 {

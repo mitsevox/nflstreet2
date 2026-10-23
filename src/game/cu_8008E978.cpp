@@ -8710,7 +8710,7 @@ extern "C" int fn_800ABC64(Class_80297B90 *p)
         || value == 11 || value == 12 || value <= 15;
 }
 
-extern "C" int fn_800ABCC0(void)
+extern "C" int fn_800ABCC0(Class_80297B90 *p)
 {
     return lbl_803EAA88->mUnknown4 < 5 || lbl_803EAA88->mUnknown4 > 12;
 }

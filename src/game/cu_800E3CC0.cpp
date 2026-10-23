@@ -216,7 +216,7 @@ void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_8011E240(Object_80039F5C *p);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 int fn_8011E9D8(State_80039F5C *pState);
-int fn_8010A2DC(Object_80039F5C *p, int a, int b);
+int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 int fn_801486A0(void);
 void fn_80143EBC(Object_80039F5C *p, Object_80039F5C *pOther);

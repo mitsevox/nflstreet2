@@ -39,6 +39,7 @@
 #include "game/Block_801BE60C.h"
 
 #define MIN(a, b) ((a) > (b) ? (b) : (a))
+#define MAX(a, b) ((a) < (b) ? (b) : (a))
 
 /* Steering state fn_8010E59C keeps per player: a speed scale, the heading
    to run on, the heading to face, a countdown to the next update and two
@@ -150,9 +151,7 @@ extern "C" void fn_8010E59C(Object_80039F5C *p, Object_80039F5C *pTarget, Steer_
                                 side = toward.Heading();
                                 off = fn_801CFFD0(heading, side);
                                 if (off <= 0x671C71 && off > fn_801CFFD0(heading, pOut->mHeading)) {
-                                    int least = 0x18E38E;
-
-                                    if (off < least) off = least;
+                                    off = MAX(off, 0x18E38E);
                                     if (fn_801CFFD0(side, heading) < fn_801CFFD0(side, pOut->mHeading)) pOut->mHeading = heading;
                                     if (((side - heading) & 0xFFFFFF) > 0x800000) {
                                         pOut->mHeading -= off / 2;

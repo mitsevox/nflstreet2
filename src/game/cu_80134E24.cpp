@@ -83,7 +83,7 @@ void fn_8013FA8C(int);
 void fn_8015A0D0(int);
 void fn_800B8344(void);
 void fn_8013474C(Object_80039F5C *);
-void fn_8010A2DC(Object_80039F5C *, int, int);
+int fn_8010A2DC(Object_80039F5C *, int, short);
 void fn_80134C20(Object_80039F5C *, State_80134E24 *);
 void fn_8012430C(float *, int, Object_80039F5C *);
 void fn_801344F8(Object_80039F5C *, float *);

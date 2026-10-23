@@ -60,7 +60,7 @@ int fn_80178320(void);
 int fn_801783AC(int flag);
 int fn_801787A0(void);
 int fn_8011F1A4(void);
-int fn_8013BA58(Object_80137ABC *pBall, int which);
+int fn_8013BA58(Object_80137ABC *p, int *pArg);
 int fn_801CFFD0(int a, int b);
 void fn_80227538(Point_8017886C *pOut, int angle, float length);
 void fn_80227690(void *pOut, void *pA, void *pB);

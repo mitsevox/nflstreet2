@@ -26,7 +26,7 @@ void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Obje
 int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_801067D8(Object_80039F5C *p);
-int fn_8010A2DC(Object_80039F5C *p, int a, int b);
+int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 void fn_8011F45C(int a);

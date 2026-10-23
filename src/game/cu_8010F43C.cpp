@@ -135,7 +135,7 @@ void fn_800D6D08(Object_80039F5C *p);
 void fn_800DB520(void *pBlock, Object_80039F5C *p, Object_80039F5C *pOther, float value);
 int fn_800E815C(Object_80039F5C *p, int a, int b);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-int fn_8010A2DC(Object_80039F5C *p, int a, int b);
+int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 int fn_8010D8F4(Object_80039F5C *p);
 void fn_8010E59C(Object_80039F5C *p, Object_80039F5C *pOther, State_8010F43C *pState);
 void fn_8010EF40(Object_80039F5C *p);

@@ -186,17 +186,17 @@ extern "C" void fn_80107A9C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
                             Info_800F3A6C *pResult, Points_800F3A6C *pInfo, float *pScale) {
     Block_800F4A74 *pBlock = (Block_800F4A74 *)&p->mUnknown336;
     Object_80137ABC *pBall = fn_80137ABC(pBlock->mUnknown64);
-    Point_8017886C toBall;
+    Point_8017886C ballToOther;
     Point_8017886C offset;
     Point_8017886C delta;
 
     pA->mX = pInfo->mUnknown40.mX;
-    toBall.mX = toBall.mY = 0.0f;
+    ballToOther.mX = ballToOther.mY = 0.0f;
     pA->mY = pInfo->mUnknown40.mY;
     pB->mX = pA->mX;
     pB->mY = pA->mY;
     if (fn_801CFFD0(pOther->mMotion.mUnknown32, 0) != 0) {
-        fn_80227690(&toBall, &pOther->mMotion.mPos, &pBall->mState.mPos);
+        fn_80227690(&ballToOther, &pOther->mMotion.mPos, &pBall->mState.mPos);
     }
     if (fn_80178A08() - fabsf(pA->mX) < 5.0f && !fn_801783AC(12) && !fn_801783AC(11)) {
         pA->mY -= 6.0f;
@@ -204,7 +204,7 @@ extern "C" void fn_80107A9C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
     if (pOther->mpState->mId == 28 && fn_80137B40() != pOther) {
         Block_800F3344 *pPass = (Block_800F3344 *)&pOther->mUnknown336;
 
-        fn_80227538(&offset, toBall.Heading(), 0.5f);
+        fn_80227538(&offset, ballToOther.Heading(), 0.5f);
         if (pPass->mUnknown0 < pPass->mUnknown16) {
             pB->mX = pPass->mUnknown4.mX;
             pB->mY = pPass->mUnknown4.mY;
@@ -213,7 +213,7 @@ extern "C" void fn_80107A9C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
     } else {
         pBlock->mUnknown55 = 1;
         pBlock->mUnknown58 = 0;
-        fn_80227538(&offset, toBall.Heading(), 1.5f);
+        fn_80227538(&offset, ballToOther.Heading(), 1.5f);
         fn_80227690(pB, pA, &offset);
         fn_80227690(&delta, pB, &p->mMotion.mPos);
         if (fn_801CFFD0(delta.Heading(), p->mMotion.mUnknown32) > 0x471C72) {

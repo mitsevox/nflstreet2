@@ -102,7 +102,6 @@ extern "C" {
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 int fn_801783AC(int bit);
 float fn_801CFB94(int angle);
-int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 void fn_802271A4(Point_8017886C *pOut, Point_8017886C *pIn);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -116,8 +115,8 @@ extern "C" void fn_8010810C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
     Block_800F4A74 *pBlock = (Block_800F4A74 *)&p->mUnknown336;
     Point_8017886C toTarget;
     Point_8017886C ballToSpot;
-    Point_8017886C toOther = {0.0f, 0.0f};
-    Point_8017886C otherToMe;
+    Point_8017886C otherToSpot = {0.0f, 0.0f};
+    Point_8017886C meToOther;
     float otherTime = 0.0f;
     float ballTime;
     float myTime;
@@ -132,13 +131,13 @@ extern "C" void fn_8010810C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
     myTime = fn_802270A4(&toTarget) /
              (lbl_803ECB08 * (lbl_803ED6CC + (1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f)));
     if (pOther != 0) {
-        fn_80227690(&toOther, pA, &pOther->mMotion.mPos);
-        fn_80227690(&otherToMe, &pOther->mMotion.mPos, &p->mMotion.mPos);
-        otherTime = fn_802270A4(&toOther) /
+        fn_80227690(&otherToSpot, pA, &pOther->mMotion.mPos);
+        fn_80227690(&meToOther, &pOther->mMotion.mPos, &p->mMotion.mPos);
+        otherTime = fn_802270A4(&otherToSpot) /
                     (lbl_803ECB08 * (lbl_803ED6CC + (1.0f - lbl_803ED6CC) * (pOther->mRatings[4] / 255.0f)));
     } else {
-        toOther.mX = toOther.mY = 0.0f;
-        otherToMe.mX = otherToMe.mY = 0.0f;
+        otherToSpot.mX = otherToSpot.mY = 0.0f;
+        meToOther.mX = meToOther.mY = 0.0f;
     }
     if (pOther != 0 && pOther->mpState->mId == 28) {
         Block_800F3344 *pPass = (Block_800F3344 *)&pOther->mUnknown336;
@@ -160,7 +159,7 @@ extern "C" void fn_8010810C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
         time = ballTime * scale;
         break;
     case 2:
-        if (myTime < otherTime && fn_802270A4(&otherToMe) < 2.0f && fn_802270A4(&toTarget) < fn_802270A4(&toOther)) {
+        if (myTime < otherTime && fn_802270A4(&meToOther) < 2.0f && fn_802270A4(&toTarget) < fn_802270A4(&otherToSpot)) {
             time = myTime * (2.0f / 3.0f);
         } else {
             time = ballTime;
@@ -221,13 +220,13 @@ extern "C" void fn_8010810C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
                 }
             }
             if (fn_801CFFD0(p->mMotion.mUnknown32, 0x400000) <= 0x1C71C6 && factor > 0.9f &&
-                fn_802270A4(&otherToMe) < 5.0f && p->mMotion.mPos.mY < pOther->mMotion.mPos.mY + 5.0f &&
+                fn_802270A4(&meToOther) < 5.0f && p->mMotion.mPos.mY < pOther->mMotion.mPos.mY + 5.0f &&
                 fn_801CFFD0(pBlock->mUnknown40, 0x400000) <= 0x1C71C6) {
                 blocked = 0;
             }
             if (blocked != 0 && fn_801CFFD0(p->mMotion.mUnknown32, 0x400000) <= 0x1C71C6 &&
-                (fn_802270A4(&otherToMe) > 10.0f ||
-                 fn_801CFFD0(pOther->mMotion.mUnknown32, toOther.Heading()) > 0x155555)) {
+                (fn_802270A4(&meToOther) > 10.0f ||
+                 fn_801CFFD0(pOther->mMotion.mUnknown32, otherToSpot.Heading()) > 0x155555)) {
                 blocked = 0;
             }
         }

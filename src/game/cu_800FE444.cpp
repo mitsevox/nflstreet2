@@ -68,7 +68,7 @@ float fn_801242E0(float *,unsigned int);
 unsigned short fn_801BE648(void *p);
 int fn_801BE068(void *,void *,void *,unsigned short,void *,float);
 void fn_801BE67C(void *,void *,void *,void *);
-int fn_8010A2DC(Object_80039F5C *,int,int);
+int fn_8010A2DC(Object_80039F5C *, int, short);
 void fn_8010CEB8(Object_80039F5C *,int);
 void fn_800C89F0(Object_80039F5C *,int,int,int,float);
 void fn_8009D284(Object_80039F5C *,Object_80039F5C *);

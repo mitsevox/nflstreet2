@@ -24,7 +24,7 @@ struct State_80116C34 {
 };
 
 extern "C" {
-int fn_8010A2DC(Object_80039F5C *p, int a, int b);
+int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 int fn_800AC2C0(int team);
 signed char fn_8009AF00(int team, signed char value);
 int fn_801163B4(Object_80039F5C *p);

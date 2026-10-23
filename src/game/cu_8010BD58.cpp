@@ -43,7 +43,7 @@ int fn_800A2178(void);
 int fn_8010B224(Object_80039F5C *p);
 int fn_801485D4(void);
 int fn_80156704(void);
-int fn_80156D14(void);
+unsigned char fn_80156D14(void);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_80237260(int stream);
 extern float lbl_802DAB74[];
