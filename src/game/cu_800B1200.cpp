@@ -16,6 +16,7 @@ int fn_8011F1F4(void);
 int fn_8011F1A4(void);
 float fn_8011F4D4(void);
 int fn_8011F4C8(void);
+void fn_800C02EC(void *p, short value);
 }
 
 extern "C" int fn_800B1200(void)
@@ -75,7 +76,7 @@ extern "C" int fn_800B1200(void)
         if (play <= 2) {
             play = fn_802372EC(0, 2) + 3;
         }
-        lbl_803EABA4->fn_800C02EC(play);
+        fn_800C02EC(lbl_803EABA4, play);
         return 0;
     }
     return 1;
