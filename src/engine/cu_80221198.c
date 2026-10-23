@@ -379,7 +379,7 @@ void fn_80221BE8(Callback_803EBF60 *pCallback)
     lbl_803EBF60 = pCallback;
 }
 
-void fn_80221BF0(Text_80221BF0 *pText, Uint32 Offset, Int32 *pA, Int32 *pB)
+void fn_80221BF0(Text_80221BF0 *pText, Int32 Offset, Int32 *pA, Int32 *pB)
 {
     Font_801CCA64 **ppFont;
     Range_80221D30 *pRange = NULL;

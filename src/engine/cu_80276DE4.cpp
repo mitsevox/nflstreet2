@@ -571,7 +571,7 @@ int fn_802791D0(int index)
     Stream_803B5364 *stream;
 
     stream = lbl_803B5060.m304[index];
-    return stream->m48 + stream->m4C;
+    return stream->m4C + stream->m48;
 }
 
 int fn_802791F4(int index, int a, int b)
@@ -638,7 +638,7 @@ int fn_80279798(int range)
     } else if (range < 0) {
         range = 0;
     }
-    return (((fn_8026CB14() & 0x7FFF) - 0x4000) * range) >> 14;
+    return (((int)(fn_8026CB14() & 0x7FFF) - 0x4000) * range) >> 14;
 }
 
 void fn_802797F4(void *(*alloc)(int size))
