@@ -1,5 +1,6 @@
 #include "engine/cu_801B9F00.h"
 #include "game/Queue_800EFE0C.h"
+#include "game/Directions_8012430C.h"
 #include "game/fn_80177FE0.h"
 #include "game/Object_80039F5C.h"
 #include "game/Message_800F01CC.h"
@@ -85,7 +86,7 @@ void fn_800B8344(void);
 void fn_8013474C(Object_80039F5C *);
 void fn_8010A2DC(Object_80039F5C *, int, int);
 void fn_80134C20(Object_80039F5C *, State_80134E24 *);
-void fn_8012430C(float *, int, Object_80039F5C *);
+void fn_8012430C(Directions_8012430C *, int, Object_80039F5C *);
 void fn_801344F8(Object_80039F5C *, float *);
 float *fn_80134AD0(Object_80039F5C *, int *);
 int fn_801CFFD0(int, int);
@@ -245,9 +246,9 @@ int fn_80135200(Object_80039F5C *player) {
         if (player->mUnknown2914)
             state->mUnknown0 *= 2;
         int value = 0;
-        float values[8];
-        fn_8012430C(values, 4, player);
-        fn_801344F8(player, values);
+        Directions_8012430C values;
+        fn_8012430C(&values, 4, player);
+        fn_801344F8(player, values.mCost);
         Point_8017886C next = fn_80177FE0();
         if (player->mMotion.mPos.mY > next.mY - 1.5f)
             weights = lbl_802DB174;
@@ -261,16 +262,16 @@ int fn_80135200(Object_80039F5C *player) {
             float minimum = 1000.0f;
             for (int i = 0; i < 8; ++i) {
                 int angle = i * 0x200000;
-                if (values[i] > 3.0f) {
+                if (values.mCost[i] > 3.0f) {
                     state->mUnknown1 = -1;
                     value -= 20;
                 }
-                float sum = values[i] + weights[i];
+                float sum = values.mCost[i] + weights[i];
                 if (sum > state->mUnknown14) {
                     state->mUnknown14 = sum;
                     best = i;
                     state->mUnknownC = angle;
-                } else if (sum == state->mUnknown14 && values[i] > values[best]) {
+                } else if (sum == state->mUnknown14 && values.mCost[i] > values.mCost[best]) {
                     state->mUnknownC = angle;
                     best = i;
                 }
@@ -420,7 +421,7 @@ int fn_80135200(Object_80039F5C *player) {
                     fn_801024FC(player, 0, id, action, result);
                     return 1;
                 }
-            } else if (fn_80135D54(player, weights, values, indices))
+            } else if (fn_80135D54(player, weights, values.mCost, indices))
                 return 0;
         } else
             --state->mUnknown1;

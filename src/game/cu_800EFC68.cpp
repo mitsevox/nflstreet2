@@ -1,5 +1,6 @@
 #include "engine/cu_801B9F00.h"
 #include "game/fn_801248D4.h"
+#include "game/Directions_8012430C.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
 #include <math.h>
@@ -4861,7 +4862,7 @@ void fn_80122670(Object_80039F5C *p, Plan_80121264 *pPlan, int angle);
 void fn_801227DC(Object_80039F5C *p, Plan_80121264 *pPlan, Entry_801230B8 *pEntry);
 Entry_801230B8 *fn_801230B8(Plan_80121264 *pPlan);
 int fn_80123254(void *pA, void *pB);
-void fn_8012430C(float *pOut, int kind, Object_80039F5C *p);
+void fn_8012430C(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
 float fn_801CFB94(int angle);
 
 void fn_8011B6E8(Entry_8011AFCC *pEntries, Pair_8011BAE0 pair);
@@ -5940,13 +5941,13 @@ int fn_801231E4(Object_80039F5C *p, int angle)
     return angle;
 }
 
-void fn_80123E2C(float *, Object_80039F5C *, Object_80039F5C *)
+void fn_80123E2C(Directions_8012430C *, Object_80039F5C *, Object_80039F5C *)
 {
 }
 
-float fn_801242E0(float *pValues, unsigned int index)
+float fn_801242E0(Directions_8012430C *pValues, unsigned int index)
 {
-    return pValues[index] + pValues[(index + 7) % 8] + pValues[(index + 9) % 8];
+    return pValues->mCost[index] + pValues->mCost[(index + 7) % 8] + pValues->mCost[(index + 9) % 8];
 }
 
 float fn_80125004(Object_80039F5C *p, int kind, int index);
@@ -5958,11 +5959,11 @@ float fn_80124FE0(Object_80039F5C *p, int kind)
 
 float fn_80125004(Object_80039F5C *p, int kind, int index)
 {
-    float values[8];
+    Directions_8012430C values;
 
-    fn_8012430C(values, kind, p);
-    fn_801F51DC(0, values, 8, sizeof(float), fn_80123254, 0, 0, -2);
-    return values[index];
+    fn_8012430C(&values, kind, p);
+    fn_801F51DC(0, values.mCost, 8, sizeof(float), fn_80123254, 0, 0, -2);
+    return values.mCost[index];
 }
 
 int fn_801251FC(Object_80039F5C *p)

@@ -59,8 +59,8 @@ int fn_80110824(Object_80039F5C *p, int a, int b, int c);
 int fn_8011E9B4(Object_80039F5C *p);
 void fn_8012311C(Object_80039F5C *p, Plan_80121264 *pPlan, int angle);
 Entry_801230B8 *fn_80123174(Plan_80121264 *pPlan);
-void fn_8012430C(float *pOut, int kind, Object_80039F5C *p);
-int fn_801243E0(float *pValues, int a);
+void fn_8012430C(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
+unsigned char fn_801243E0(Directions_8012430C *pValues, int angle);
 void fn_8012B2E0(Object_80039F5C *p, Point_8017886C *pOut);
 void fn_8012C3A4(Object_80039F5C *p);
 void fn_8012CB98(int a, int b, int angle, Point_8017886C *pOut);
@@ -1185,7 +1185,7 @@ extern "C" void fn_8012CEF4(Object_80039F5C *p, Control_80132090 *pControl)
 #ifdef DECOMP_COMPARE
 extern "C" void fn_8012CFA0(Object_80039F5C *p)
 {
-    float *values = ((Control_80132090 *)&p->mUnknown336)->mValues;
+    float *values = ((Control_80132090 *)&p->mUnknown336)->mValues.mCost;
 
     if (fn_80177F70() == 0) {
         int team = fn_80178320();
@@ -1324,9 +1324,9 @@ extern "C" void fn_8012D4FC(Object_80039F5C *p, int mode)
     } else {
         float threshold = fn_801783AC(0) ? -8.0f : 0.0f;
 
-        if (!(control->mValues[index] < threshold)) {
-            float right = control->mValues[(index + 1) & 7];
-            float left = control->mValues[(index - 1) & 7];
+        if (!(control->mValues.mCost[index] < threshold)) {
+            float right = control->mValues.mCost[(index + 1) & 7];
+            float left = control->mValues.mCost[(index - 1) & 7];
 
             if (right == left) {
                 float distance;
@@ -1344,13 +1344,13 @@ extern "C" void fn_8012D4FC(Object_80039F5C *p, int mode)
                 }
             }
             if (!(right >= left)) {
-                float degrees = (right - control->mValues[index]) * 5.0f;
+                float degrees = (right - control->mValues.mCost[index]) * 5.0f;
 
                 if (!(degrees >= 90.0f)) {
                     change = (int)(fn_801CFB94((int)(degrees * 46603.37890625f)) * 0.5f * 2097152.0f);
                 }
             } else if (!(left >= right)) {
-                float degrees = (left - control->mValues[index]) * 5.0f;
+                float degrees = (left - control->mValues.mCost[index]) * 5.0f;
 
                 if (!(degrees >= 90.0f)) {
                     change = -(int)(fn_801CFB94((int)(degrees * 46603.37890625f)) * 0.5f * 2097152.0f);
@@ -2176,7 +2176,7 @@ extern "C" int fn_8012FF5C(Object_80039F5C *p)
     }
     if (!(p->mFlags & 0x4000)) {
         if (--pControl->mUnknown49 <= 0) {
-            float *pValues = pControl->mValues;
+            Directions_8012430C *pValues = &pControl->mValues;
             Entry_801230B8 *pEntry;
 
             pControl->mUnknown49 = (255 - ((p->mRatings[0] >> 1) + (p->mRatings[2] >> 1))) >> 4;
