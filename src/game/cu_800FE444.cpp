@@ -724,16 +724,23 @@ void fn_800FFD2C(Object_80039F5C *p, Point_8017886C *point)
 
 
 
-int fn_80100024(Object_80039F5C *p,int angle,int mode)
+int fn_80100024(Object_80039F5C *p, int angle, int mode)
 {
-    unsigned char filter[3]={2,10,11};
-    if(!(p->mFlags&0x4000) && mode==2) {
-        Vector_80039F5C point;point.mZ=0.0f;
-        fn_80227538((Point_8017886C *)&point,angle,lbl_803EAEA4);
-        fn_80227638(&point,&point,&p->mMotion.mPos);
-        if(!fn_801248D4(p,&p->mMotion.mPos,&point,0,0.0f,1.0f,(Filter_801248D4 *)filter,0))return 0;
+    Vector_80039F5C point;
+    unsigned char filter[3] = {2, 10, 11};
+    int result = 1;
+
+    if (!(p->mFlags & 0x4000)) {
+        point.mZ = 0.0f;
+        if (mode == 2) {
+            fn_80227538((Point_8017886C *)&point, angle, lbl_803EAEA4);
+            fn_80227638(&point, &point, &p->mMotion.mPos);
+            if (!fn_801248D4(p, &p->mMotion.mPos, &point, 0, 0.0f, 1.0f, (Filter_801248D4 *)filter, 0)) {
+                result = 0;
+            }
+        }
     }
-    return 1;
+    return result;
 }
 
 void fn_8010016C(Object_80039F5C *p,Point_8017886C *point,Object_80039F5C *other,float speed)
