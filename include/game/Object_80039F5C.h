@@ -16,6 +16,13 @@ struct Block_800CC180 {
     char mUnknown20[4];
 };
 
+struct Link_800CDE50 {
+    int mRef;
+    char mUnknown4[11];
+    unsigned char mUnknown15;
+    char mUnknown16[8];
+};
+
 /* The player object returned by fn_80039F5C, with the blocks it contains or
    points to. */
 
@@ -75,6 +82,12 @@ struct Block_80170E64 {
     Area_80054138 *mUnknown660;
     char mUnknown664[12];
     Object_80041904 *mpUnknown676;
+    int mUnknown680;
+    /* fn_80093410 reads a spot from +920/+936; the size is not established. */
+    char mUnknown684[236];
+    float mUnknown920;
+    char mUnknown924[12];
+    float mUnknown936;
 };
 
 /* Motion block at +424, passed to fn_800B26B0, fn_800B26D0, fn_800B26E0,
@@ -102,6 +115,7 @@ struct MotionTail_800B26B0 {
     float mUnknown68;
     float mUnknown72;
     int mUnknown76;
+    float mUnknown80;
 };
 
 /* 16-byte record cleared by fn_8016D8B0; the player object holds two of them
@@ -277,6 +291,19 @@ struct Turn_800C8AF0 {
     unsigned char mSettled;
 };
 
+/* Block at player +1140: the reference of the player being faced, the
+   facing mode at +14, a flag at +16 and a value at +18. */
+struct Target_800A3E84 {
+    int mRef;
+    int mUnknown4;
+    float mUnknown8;
+    short mUnknownC;
+    short mMode;
+    unsigned char mUnknown10;
+    char mUnknown11[1];
+    short mValue;
+};
+
 struct Object_80039F5C {
     /* Read both as a word and byte by byte (+1 index, +2 team). */
     union {
@@ -320,6 +347,9 @@ struct Object_80039F5C {
             char mUnknown355[5];
         };
         Block_800CC180 mUnknown336Block;
+        /* State 17 keeps a packed player reference at +336 and a flag at +351
+           (fn_800CDE50). */
+        Link_800CDE50 mUnknown336Link;
         /* Per-state scratch: state 26 reads +344 as a word (fn_800C5BF0);
            state 58 keeps a player reference at +352 (fn_800C7D44). */
         struct {
@@ -339,7 +369,9 @@ struct Object_80039F5C {
     Object_800B26B0 mMotion;
     float mUnknown488;
     float mUnknown492;
-    char mUnknown496[12];
+    char mUnknown496[4];
+    int mUnknown500;
+    float mUnknown504;
     float mUnknown508;
     Object_8016D8B0 mUnknown512;
     Object_8016D8B0 mUnknown528;
@@ -408,11 +440,7 @@ struct Object_80039F5C {
         };
         Block_8011E240 mBlock1032;
     };
-    int mUnknown1140;
-    char mUnknown1144[10];
-    unsigned short mUnknown1154;
-    unsigned char mUnknown1156;
-    char mUnknown1157[3];
+    Target_800A3E84 mTarget;
     Block_801718E8 mUnknown1160;
     char mUnknown1216[2];
     unsigned char mUnknown1218;
@@ -437,7 +465,9 @@ struct Object_80039F5C {
     unsigned char mUnknown2914;
     char mUnknown2915[1];
     unsigned char mUnknown2916;
-    char mUnknown2917[3];
+    char mUnknown2917[1];
+    unsigned char mUnknown2918;
+    unsigned char mUnknown2919;
     unsigned char mUnknown2920;
     unsigned char mUnknown2921;
     char mUnknown2922[1];

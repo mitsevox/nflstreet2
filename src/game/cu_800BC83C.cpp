@@ -1,3 +1,4 @@
+#include "game/Block_800BFAD0.h"
 #include "game/Class_80297BF8.h"
 #include "game/Object_800785C0.h"
 #include "game/cu_8002B8F8.h"
@@ -15,8 +16,14 @@
 
 struct Slot_800BAE7C {
     int mUnknown0;
-    unsigned char mUnknown4[3];
-    unsigned char mTeam;
+    /* Written as a word by fn_800BC190, read by its low byte. */
+    union {
+        int mTeamWord;
+        struct {
+            unsigned char mUnknown4[3];
+            unsigned char mTeam;
+        };
+    };
     Object_80039F5C *mpObject;
 };
 
@@ -51,52 +58,6 @@ struct Block_800BC538 {
     unsigned char mUnknown31;
     unsigned char mUnknown32;
     unsigned char mUnknown33;
-};
-
-struct Stick_800BD608 {
-    float mX;
-    float mY;
-    unsigned char mUnknown8;
-    unsigned char mUnknown9;
-    unsigned char mUnknownA;
-    unsigned char mUnknownB;
-};
-
-struct Slot_800BFAD0 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    Stick_800BD608 mStick;
-    unsigned char mUnknown18;
-    unsigned char mUnknown19;
-    unsigned char mUnknown1A[2];
-    unsigned char mUnknown1C;
-    unsigned char mUnknown1D[3];
-};
-
-struct Block_800BFAD0 {
-    Slot_800BFAD0 mSlots[2];
-    int mUnknown40;
-    int mUnknown44;
-    unsigned char mUnknown48[0x50];
-    int mUnknown98;
-    int mUnknown9C;
-    int mUnknownA0;
-    short mUnknownA4;
-    short mUnknownA6;
-    unsigned char mUnknownA8;
-    unsigned char mUnknownA9[2];
-    unsigned char mUnknownAB;
-    unsigned int mUnknownAC;
-    int mUnknownB0;
-    int mUnknownB4;
-    int mUnknownB8;
-    int mUnknownBC;
-    int mUnknownC0;
-    unsigned char mUnknownC4;
-    unsigned char mUnknownC5;
-    unsigned char mUnknownC6;
-    unsigned char mUnknownC7;
 };
 
 extern "C" {
@@ -146,7 +107,7 @@ void fn_800BD1C8(Record_800BAE7C *pRecords);
 void fn_800BD35C(void);
 void fn_800BD958(void);
 void fn_800BE808(int index, int team);
-void fn_800BE944(int team, int index, unsigned int msg, float value);
+void fn_800BE944(int index, int a, unsigned int msg, float value);
 unsigned char fn_800C0658(void);
 int fn_800C1E40(void);
 void fn_800CC560(int a);
@@ -182,12 +143,11 @@ extern unsigned char lbl_803EAB95;
 extern unsigned char lbl_803EABA0;
 extern unsigned char lbl_803EABA2;
 extern unsigned char lbl_803EABA3;
-extern Block_800BFAD0 *lbl_803EABA8;
 extern unsigned char lbl_803EABB4;
 extern Block_800BC538 *lbl_803EC98C;
 }
 
-extern "C" void fn_800BC83C(void)
+void Class_80297BF8::vfn_08(float dt)
 {
     lbl_803EABA2 = 0;
     lbl_803EABA3 = 0;
@@ -205,7 +165,7 @@ extern "C" void fn_800BC83C(void)
     }
 }
 
-extern "C" void fn_800BC8E0(void)
+void Class_80297BF8::vfn_09(float dt)
 {
     int busy = fn_800BAF30();
 
@@ -233,11 +193,11 @@ extern "C" void fn_800BC8E0(void)
     }
 }
 
-extern "C" void fn_800BCC30(Class_80297BF8 *pThis)
+void Class_80297BF8::vfn_05()
 {
     if (fn_800AE968(14) != 0 || fn_8002892C() != 0 || fn_8017F60C() != 0 ||
         fn_80156704() != 0 || fn_801485D4() != 0 || fn_8007F828(14) != 1) {
-        pThis->vfn_07();
+        vfn_07();
     }
     lbl_803EC98C->mUnknown32 = 0;
     fn_8004A230(1);
