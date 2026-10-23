@@ -28199,7 +28199,7 @@
       }
     },
     {
-      "source": "src/game/cu_800A1620.cpp",
+      "source": "src/game/cu_800A0134.cpp",
       "contributors": [
         "mitsevox"
       ],
@@ -28216,7 +28216,12 @@
         "pull_request": 1053,
         "merged_via": 1067,
         "commit": "7c4ed2994077cab90351e52b55d057da16b4ebaf",
-        "introduced_blob": "8959a274f54bb9d2bca9de8dd5fa1901e2324bce"
+        "introduced_blob": "8959a274f54bb9d2bca9de8dd5fa1901e2324bce",
+        "original_blob": "8959a274f54bb9d2bca9de8dd5fa1901e2324bce",
+        "original_source": "src/game/cu_800A1620.cpp",
+        "merged_source": true,
+        "migration_commit": "1d0b1f56121c4f26622a5735037b93c70a758117",
+        "merged_blob": "cae2c4a2ce48e35821b4abc9662cf41814ed612b"
       }
     },
     {
@@ -29070,7 +29075,7 @@
       }
     },
     {
-      "source": "src/game/cu_8009FFD4.cpp",
+      "source": "src/game/cu_800A0134.cpp",
       "contributors": [
         "mitsevox"
       ],
@@ -29081,7 +29086,12 @@
         "pull_request": 1054,
         "merged_via": 1067,
         "commit": "00fc75c24f4e7cd84958939d5ece85091e49ea77",
-        "introduced_blob": "78aa0a96dd57f7205b86b98486e589bd6e36675d"
+        "introduced_blob": "78aa0a96dd57f7205b86b98486e589bd6e36675d",
+        "original_blob": "78aa0a96dd57f7205b86b98486e589bd6e36675d",
+        "original_source": "src/game/cu_8009FFD4.cpp",
+        "merged_source": true,
+        "migration_commit": "1d0b1f56121c4f26622a5735037b93c70a758117",
+        "merged_blob": "cae2c4a2ce48e35821b4abc9662cf41814ed612b"
       }
     },
     {
@@ -29435,6 +29445,21 @@
         "original_commit": "0cbceb89ebb5a551b7721dc3ff6cb4113e1fd81b",
         "original_blob": "be4e092e4ae620394942ca8996ec3b34d132b5a3",
         "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
+      }
+    },
+    {
+      "source": "src/game/cu_800A0134.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800A050C"
+      ],
+      "provenance": {
+        "pull_request": 1075,
+        "merged_via": 1075,
+        "commit": "1d0b1f56121c4f26622a5735037b93c70a758117",
+        "introduced_blob": "cae2c4a2ce48e35821b4abc9662cf41814ed612b"
       }
     }
   ],
