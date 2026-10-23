@@ -14,6 +14,7 @@ extern "C" void fn_800A42BC(Object_80039F5C *p, Block_801BE60C *pBlock)
 #include "game/Table_80089904.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_801BA2A8.h"
+#include "game/fn_801C1F94.h"
 #include "game/Message_800F01CC.h"
 #include "engine/Record_800D81C8.h"
 
@@ -23,7 +24,6 @@ unsigned short fn_800A414C(Table_80089904 *table, Object_80039F5C *p, Block_801B
 unsigned short fn_800A4358(Table_80089904 *table, Object_80039F5C *p, Block_801BE60C *pBlock);
 float fn_801CFFA0(float value);
 void fn_801BD81C(Block_801BD6D4 *p, float scale);
-void fn_801C1F94(void *p, int value, unsigned int size);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 }
 
