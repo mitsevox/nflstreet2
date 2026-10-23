@@ -29533,55 +29533,6 @@
       }
     },
     {
-      "source": "src/game/cu_800A3530.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x800A3530",
-        "0x800A3898",
-        "0x800A3B5C",
-        "0x800A3E84",
-        "0x800A414C"
-      ],
-      "provenance": {
-        "pull_request": 1070,
-        "merged_via": 1070,
-        "commit": "78556994beb8a8381dadaf6e409a3351af6830a4",
-        "introduced_blob": "5e156b7fad141f3c885e9de78844f9d6cbd3bf9b"
-      }
-    },
-    {
-      "source": "src/game/cu_800A42BC.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x800A44C0"
-      ],
-      "provenance": {
-        "pull_request": 1070,
-        "merged_via": 1070,
-        "commit": "6fa3d2a8e0f0d4fd8044dd1360a0b135330a3e3f",
-        "introduced_blob": "bbcca4ac4dc5c5c77740864ddf107c3c855b6856"
-      }
-    },
-    {
-      "source": "src/game/cu_8008E978.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x800A9018"
-      ],
-      "provenance": {
-        "pull_request": 1070,
-        "merged_via": 1070,
-        "commit": "6fa3d2a8e0f0d4fd8044dd1360a0b135330a3e3f",
-        "introduced_blob": "6f8707c0e12889fd7c6a72286fe19ed450a51738"
-      }
-    },
-    {
       "source": "src/game/cu_80102A78.cpp",
       "contributors": [
         "mitsevox"
@@ -29592,11 +29543,11 @@
       "provenance": {
         "pull_request": 887,
         "merged_via": 1071,
-        "commit": "206aaca4f42d80f01c676a340ef1290f485519de",
-        "introduced_blob": "bc7bfbe739a5af506c562fb6ddfd9cf47592d570",
+        "commit": "283c949a27f406b86105ea56e95a89807a1edada",
+        "introduced_blob": "dd6adffcd6d82a6ab90e8641d52b7733a2c5184b",
         "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
         "original_blob": "3ce95b1986384778b18489da66427b2359d56583",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies (present at main db71d3d); PR 1071 refines them in place to exact matches, and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents."
+        "integration_adjustment": "Preserve original source contributor and contribution PR through the reviewed combined-file integration; pin the final source blob for squash publication."
       }
     },
     {
@@ -29628,11 +29579,11 @@
       "provenance": {
         "pull_request": 887,
         "merged_via": 1071,
-        "commit": "206aaca4f42d80f01c676a340ef1290f485519de",
-        "introduced_blob": "40f45bc10a6a74296978c878e8294197f2322a8f",
+        "commit": "283c949a27f406b86105ea56e95a89807a1edada",
+        "introduced_blob": "49f0623369c06f862ee3cc301dd5ad772d8c9952",
         "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
         "original_blob": "958562812be6362c5a2aa416d7f9e5443d11f97f",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies (present at main db71d3d); PR 1071 refines them in place to exact matches, and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents."
+        "integration_adjustment": "Preserve original source contributor and contribution PR through the reviewed combined-file integration; pin the final source blob for squash publication."
       }
     },
     {
@@ -29683,11 +29634,11 @@
       "provenance": {
         "pull_request": 902,
         "merged_via": 1071,
-        "commit": "206aaca4f42d80f01c676a340ef1290f485519de",
-        "introduced_blob": "5cb7a926e79c38a08379dd30c7d1be4e32e6eed0",
+        "commit": "283c949a27f406b86105ea56e95a89807a1edada",
+        "introduced_blob": "8d2498a39f718b5c278456378c5c05e85c212298",
         "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
         "original_blob": "0c8ed9eddbb9df81e0bd858541d3186e97f62049",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies (present at main db71d3d); PR 1071 refines them in place to exact matches, and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents."
+        "integration_adjustment": "Preserve original source contributor and contribution PR through the reviewed combined-file integration; pin the final source blob for squash publication."
       }
     },
     {
@@ -29738,11 +29689,11 @@
       "provenance": {
         "pull_request": 856,
         "merged_via": 1071,
-        "commit": "206aaca4f42d80f01c676a340ef1290f485519de",
-        "introduced_blob": "303905944b5a8a4f8d74a9f61efb1a81b8c24b1c",
+        "commit": "283c949a27f406b86105ea56e95a89807a1edada",
+        "introduced_blob": "efa3fe469fe09adbfcec9113d280d90bd653211c",
         "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
         "original_blob": "6184b69a419c772a5053083864bf2b41e0600b71",
-        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies (present at main db71d3d); PR 1071 refines them in place to exact matches, and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents."
+        "integration_adjustment": "Preserve original source contributor and contribution PR through the reviewed combined-file integration; pin the final source blob for squash publication."
       }
     },
     {
@@ -29773,8 +29724,11 @@
       "provenance": {
         "pull_request": 1072,
         "merged_via": 1072,
-        "commit": "269ac703e0c67fe3d709eb899b6b8351969a8209",
-        "introduced_blob": "3574df93f836109cc8b6d7b64b673bbf8c32e386"
+        "commit": "283c949a27f406b86105ea56e95a89807a1edada",
+        "introduced_blob": "a08bddd6dbdb3b766bd1af77ec5c561aaa9b2261",
+        "original_commit": "269ac703e0c67fe3d709eb899b6b8351969a8209",
+        "original_blob": "3574df93f836109cc8b6d7b64b673bbf8c32e386",
+        "integration_adjustment": "Preserve original source contributor and contribution PR through the reviewed combined-file integration; pin the final source blob for squash publication."
       }
     },
     {
@@ -29848,8 +29802,11 @@
       "provenance": {
         "pull_request": 1072,
         "merged_via": 1072,
-        "commit": "bbb5769b36715997686f7c62470bc6fcca5670f4",
-        "introduced_blob": "6be56f6183ecc5da6cc44bb80249bbd95cacb3d9"
+        "commit": "283c949a27f406b86105ea56e95a89807a1edada",
+        "introduced_blob": "b4f97ebd4c7861ced70a18edc4682f1ef6fed332",
+        "original_commit": "bbb5769b36715997686f7c62470bc6fcca5670f4",
+        "original_blob": "6be56f6183ecc5da6cc44bb80249bbd95cacb3d9",
+        "integration_adjustment": "Preserve original source contributor and contribution PR through the reviewed combined-file integration; pin the final source blob for squash publication."
       }
     },
     {
@@ -29912,8 +29869,11 @@
       "provenance": {
         "pull_request": 1073,
         "merged_via": 1073,
-        "commit": "78e478d223462c5689ad5bfcc916d9faf7a8f6ce",
-        "introduced_blob": "d8d9e1f33fa082eb54896843b22f0b56bbee0813"
+        "commit": "283c949a27f406b86105ea56e95a89807a1edada",
+        "introduced_blob": "bfe6c7a188953c0cf1a123917100a1e152a6aed5",
+        "original_commit": "78e478d223462c5689ad5bfcc916d9faf7a8f6ce",
+        "original_blob": "d8d9e1f33fa082eb54896843b22f0b56bbee0813",
+        "integration_adjustment": "Preserve original source contributor and contribution PR through the reviewed combined-file integration; pin the final source blob for squash publication."
       }
     },
     {
@@ -29932,50 +29892,143 @@
       }
     },
     {
-      "source": "src/game/cu_8008E978_initial.cpp",
+      "source": "src/game/cu_800A3530.cpp",
+      "functions": [
+        "0x800A3530",
+        "0x800A3898",
+        "0x800A3B5C"
+      ],
       "contributors": [
         "mitsevox"
       ],
+      "provenance": {
+        "pull_request": 1053,
+        "merged_via": 1070,
+        "commit": "283c949a27f406b86105ea56e95a89807a1edada",
+        "introduced_blob": "5e156b7fad141f3c885e9de78844f9d6cbd3bf9b",
+        "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+        "original_blob": "1e9de4c82cff475f0f26e1f02097a17ee88cb432",
+        "integration_adjustment": "Preserve the original contributor/source PR 1053 for these pre-existing partial bodies. PR 1070 refines them to exact without transferring original source credit; original accepted-main source and reviewed PR evidence retained. Current source will be re-pinned to the final integrated blob for squash verification."
+      }
+    },
+    {
+      "source": "src/game/cu_800A3530.cpp",
+      "functions": [
+        "0x800A3E84",
+        "0x800A414C"
+      ],
+      "contributors": [
+        "mitsevox"
+      ],
+      "provenance": {
+        "pull_request": 1053,
+        "merged_via": 1070,
+        "commit": "283c949a27f406b86105ea56e95a89807a1edada",
+        "introduced_blob": "5e156b7fad141f3c885e9de78844f9d6cbd3bf9b",
+        "original_commit": "040ee83f19893cb35c67dae34008e92668b6ccab",
+        "original_blob": "3f7e8bde78abca6052b996cb87019e6e1c34a1aa",
+        "integration_adjustment": "Preserve the original contributor/source PR 1053 for these pre-existing partial bodies. PR 1070 refines them to exact without transferring original source credit; original accepted-main source and reviewed PR evidence retained. Current source will be re-pinned to the final integrated blob for squash verification. fragment_origin preserves the real original authored path and blob. original_commit/original_blob identify the initial fold into the current path, before the reviewed declaration correction; this is not a whole-path rename claim.",
+        "fragment_origin": {
+          "source": "src/game/cu_800A3E84.cpp",
+          "commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+          "blob": "c82f0bd6dba4972722c71da32b4e260e4bbfa160",
+          "functions": [
+            "0x800A3E84",
+            "0x800A414C"
+          ]
+        }
+      }
+    },
+    {
+      "source": "src/game/cu_800A42BC.cpp",
+      "functions": [
+        "0x800A44C0"
+      ],
+      "contributors": [
+        "mitsevox"
+      ],
+      "provenance": {
+        "pull_request": 1053,
+        "merged_via": 1070,
+        "commit": "283c949a27f406b86105ea56e95a89807a1edada",
+        "introduced_blob": "bbcca4ac4dc5c5c77740864ddf107c3c855b6856",
+        "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+        "original_blob": "2d56ad33d0d8dd360da60d118c7365237c154276",
+        "integration_adjustment": "Preserve the original contributor/source PR 1053 for these pre-existing partial bodies. PR 1070 refines them to exact without transferring original source credit; original accepted-main source and reviewed PR evidence retained. Current source will be re-pinned to the final integrated blob for squash verification."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "functions": [
+        "0x800A9018"
+      ],
+      "contributors": [
+        "mitsevox"
+      ],
+      "provenance": {
+        "pull_request": 880,
+        "merged_via": 1070,
+        "commit": "283c949a27f406b86105ea56e95a89807a1edada",
+        "introduced_blob": "a08bddd6dbdb3b766bd1af77ec5c561aaa9b2261",
+        "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+        "original_blob": "79d87fc491d33753e8be42672d52c8462d70f673",
+        "integration_adjustment": "Preserve the original contributor/source PR 880 for these pre-existing partial bodies. PR 1070 refines them to exact without transferring original source credit; original accepted-main source and reviewed PR evidence retained. Current source will be re-pinned to the final integrated blob for squash verification."
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978_initial.cpp",
       "functions": [
         "0x8008F78C",
         "0x8008FAA8",
         "0x8008FBA0"
       ],
+      "contributors": [
+        "mitsevox"
+      ],
       "provenance": {
-        "pull_request": 1074,
+        "pull_request": 750,
         "merged_via": 1074,
-        "commit": "33bd801f9d71a40e0971004291e6d8f5a5279a72",
-        "introduced_blob": "39d3078c87762f7830085d3388ac400dbf3876e1"
+        "commit": "283c949a27f406b86105ea56e95a89807a1edada",
+        "introduced_blob": "dc3a41a5d269b4f38a611146dc2d53841d083c89",
+        "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+        "original_blob": "03294acf0e62320282f7d1720fc347182ce451e0",
+        "integration_adjustment": "Preserve the original contributor/source PR 750 for these pre-existing partial bodies. PR 1074 refines them to exact without transferring original source credit; original accepted-main source and reviewed PR evidence retained. Current source will be re-pinned to the final integrated blob for squash verification."
       }
     },
     {
       "source": "src/game/cu_80090E4C.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
       "functions": [
         "0x80090E4C"
       ],
+      "contributors": [
+        "mitsevox"
+      ],
       "provenance": {
-        "pull_request": 1074,
+        "pull_request": 1054,
         "merged_via": 1074,
-        "commit": "33bd801f9d71a40e0971004291e6d8f5a5279a72",
-        "introduced_blob": "8a65d91bb6bc8cdbcd69bc88b2b4a53ddc42a51c"
+        "commit": "283c949a27f406b86105ea56e95a89807a1edada",
+        "introduced_blob": "8a65d91bb6bc8cdbcd69bc88b2b4a53ddc42a51c",
+        "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+        "original_blob": "a35595a87a319df201fc8213a4b7e191806e10ef",
+        "integration_adjustment": "Preserve the original contributor/source PR 1054 for these pre-existing partial bodies. PR 1074 refines them to exact without transferring original source credit; original accepted-main source and reviewed PR evidence retained. Current source will be re-pinned to the final integrated blob for squash verification."
       }
     },
     {
       "source": "src/game/cu_8008E978.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
       "functions": [
         "0x80094B34"
       ],
+      "contributors": [
+        "mitsevox"
+      ],
       "provenance": {
-        "pull_request": 1074,
+        "pull_request": 902,
         "merged_via": 1074,
-        "commit": "d26fdc8494094bd9d4b0d3bac88164170c4282c5",
-        "introduced_blob": "0169b1cdab15c4c131e0231692f01ab30810f238"
+        "commit": "283c949a27f406b86105ea56e95a89807a1edada",
+        "introduced_blob": "a08bddd6dbdb3b766bd1af77ec5c561aaa9b2261",
+        "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+        "original_blob": "79d87fc491d33753e8be42672d52c8462d70f673",
+        "integration_adjustment": "Preserve the original contributor/source PR 902 for these pre-existing partial bodies. PR 1074 refines them to exact without transferring original source credit; original accepted-main source and reviewed PR evidence retained. Current source will be re-pinned to the final integrated blob for squash verification."
       }
     }
   ],
