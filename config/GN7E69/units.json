@@ -474,6 +474,30 @@
       "address": "0x800355FC",
       "evidence": "evidence.tsv external row for 0x800355FC (fn_800355FC__8PlayBook)."
     },
+    "GetName__7DefPred": {
+      "address": "0x8009FF00",
+      "evidence": "evidence.tsv external row for 0x8009FF00 (GetName__7DefPred)."
+    },
+    "vfn_03__14Class_80297B50": {
+      "address": "0x800B3718",
+      "evidence": "evidence.tsv external row for 0x800B3718 (vfn_03__14Class_80297B50)."
+    },
+    "vfn_04__14Class_80297B50f": {
+      "address": "0x800B3C68",
+      "evidence": "evidence.tsv external row for 0x800B3C68 (vfn_04__14Class_80297B50f)."
+    },
+    "_vt.14Class_80297C60": {
+      "address": "0x80297C60",
+      "evidence": "evidence.tsv external row for 0x80297C60 (_vt.14Class_80297C60)."
+    },
+    "_vt.14Class_80297AB8": {
+      "address": "0x80297AB8",
+      "evidence": "evidence.tsv external row for 0x80297AB8 (_vt.14Class_80297AB8)."
+    },
+    "_vt.14Class_80297BF8": {
+      "address": "0x80297BF8",
+      "evidence": "evidence.tsv external row for 0x80297BF8 (_vt.14Class_80297BF8)."
+    },
     "_vt.14Class_80297CE8": {
       "address": "0x80297CE8",
       "evidence": "evidence.tsv external row for 0x80297CE8 (_vt.14Class_80297CE8)."

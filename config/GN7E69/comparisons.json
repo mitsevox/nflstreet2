@@ -21411,6 +21411,30 @@
           "placement": ".data3",
           "start": "0x80297A40",
           "end": "0x80297D68"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030C070",
+          "end": "0x8030C0B4"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC900",
+          "end": "0x803EC91C"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289AD4",
+          "end": "0x80289AD8"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C14",
+          "end": "0x80289C18"
         }
       ],
       "functions": [
