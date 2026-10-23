@@ -9779,6 +9779,24 @@
       }
     },
     {
+      "source": "src/game/cu_8013141C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801317F8"
+      ],
+      "provenance": {
+        "pull_request": 474,
+        "merged_via": 474,
+        "commit": "3cbce223ff5887e7fcdaeb61c749a0c7dc67e077",
+        "introduced_blob": "6a36f8086e320e4cdacd93241421c9c833fd60d1",
+        "original_commit": "57349faa1a85aec9e958340e0d8d9466c6e4a89b",
+        "original_blob": "66f80c7e7e5d34683aefb3071a3ff781b9a95f67",
+        "integration_adjustment": "fn_801317F8 from adampreddy's src/game/cu_8013141C.cpp (PR 474, a measured fuzzy partial there) made exact by moving its goal-distance test into a file-local inline helper that takes the fn_80177FE0() point by value, with the fn_8013141C call as a nested if; the rest of the body is unchanged."
+      }
+    },
+    {
       "source": "src/game/cu_801A6870.cpp",
       "contributors": [
         "adampreddy"
