@@ -1006,25 +1006,61 @@ void fn_80100BF8(Object_80039F5C *p, Vector_80039F5C *point, Point_8017886C *off
     }
 }
 
-Object_80039F5C *fn_80100EA0(Object_80039F5C *p,int angle)
+Object_80039F5C *fn_80100EA0(Object_80039F5C *p, int angle)
 {
-    Object_80039F5C *players[3];float xmin=100.0f,ymin=100.0f,xmax=-100.0f,ymax=-100.0f;
-    for(unsigned char i=0;i<3;++i) {
-        unsigned char active;
-        unsigned int index=fn_80168E00(p->mIdBytes[2],i,&active);
-        if(index==255 || !active)players[i]=0;
-        else {
-            Object_80039F5C *other=fn_80039F5C(p->mIdBytes[2],(unsigned short)index);players[i]=other;
-            float x=other->mMotion.mPos.mX,y=other->mMotion.mPos.mY;
-            if(!(x>=xmin))xmin=x;if(!(y>=ymin))ymin=y;if(!(x<=xmax))xmax=x;if(!(y<=ymax))ymax=y;
+    Object_80039F5C *players[3];
+    unsigned char active;
+    Point_8017886C center;
+    Point_8017886C delta;
+    Point_8017886C minimum;
+    Point_8017886C maximum;
+    unsigned char i;
+    int best;
+    Object_80039F5C *result;
+
+    minimum.mX = 100.0f;
+    minimum.mY = 100.0f;
+    maximum.mX = -100.0f;
+    maximum.mY = -100.0f;
+    for (i = 0; i < 3; i++) {
+        unsigned int index = fn_80168E00(p->mIdBytes[2], i, &active);
+
+        if (index != 255 && active) {
+            Object_80039F5C *other = fn_80039F5C(p->mIdBytes[2], (unsigned short)index);
+            Vector_80039F5C *pos = &other->mMotion.mPos;
+
+            players[i] = other;
+            if (pos->mX < minimum.mX) {
+                minimum.mX = pos->mX;
+            }
+            if (pos->mY < minimum.mY) {
+                minimum.mY = pos->mY;
+            }
+            if (pos->mX > maximum.mX) {
+                maximum.mX = pos->mX;
+            }
+            if (pos->mY > maximum.mY) {
+                maximum.mY = pos->mY;
+            }
+        } else {
+            players[i] = 0;
         }
     }
-    Point_8017886C center={(xmax-xmin)*0.5f+xmin,(ymax-ymin)*0.5f+ymin};
-    int best=0x800000;Object_80039F5C *result=0;
-    for(unsigned char i=0;i<3;++i)if(players[i]) {
-        Point_8017886C delta;fn_80227690(&delta,&players[i]->mMotion.mPos,&center);
-        int difference=fn_801CFFD0(angle,fn_801CFE40(delta.mY,delta.mX));
-        if(difference<best) {result=players[i];best=difference;}
+    center.mX = (maximum.mX - minimum.mX) * 0.5f + minimum.mX;
+    center.mY = (maximum.mY - minimum.mY) * 0.5f + minimum.mY;
+    best = 0x800000;
+    result = 0;
+    for (i = 0; i < 3; i++) {
+        if (players[i]) {
+            int difference;
+
+            fn_80227690(&delta, &players[i]->mMotion.mPos, &center);
+            difference = fn_801CFFD0(angle, fn_801CFE40(delta.mY, delta.mX));
+            if (difference < best) {
+                result = players[i];
+                best = difference;
+            }
+        }
     }
     return result;
 }
