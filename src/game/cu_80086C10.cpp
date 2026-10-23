@@ -1,7 +1,6 @@
-#include <string.h>
-
 #include "game/Object_8007A334.h"
 #include "game/Table_8007E020.h"
+#include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_801FCE10.h"
 
@@ -19,6 +18,13 @@ struct Descriptor_80086CE8 {
 };
 
 struct Sort_80086D0C {
+    void Set(int table, int column, int mode)
+    {
+        mColumn = column;
+        mTable = table;
+        mMode = mode;
+    }
+
     int mTable;
     int mColumn;
     int mMode;
@@ -30,12 +36,8 @@ int fn_80087BA0(int index);
 int fn_801F967C(int handle, int table);
 void fn_801F9718(int handle, int table, ColumnValue_802D6424 *pList, int *pResult, int flags);
 int fn_801F9980(int handle, int *pTable);
-int fn_801F9D70(int handle, int table, Object_80023BBC *pFilter, unsigned short *pCount);
 int fn_801FA0BC(int handle, Table_8007E020 *pTables, Object_80023BBC *pFilter,
-                Sort_80086D0C *pSort, int *pCursor, QueryResult *pResult);
-int fn_801FA148(int cursor);
-int fn_801FA290(int handle, Table_8007E020 *pTables, Object_80023BBC *pFilter,
-                ColumnValue_802D6424 *pColumns);
+                void *pSort, int *pCursor, QueryResult *pResult);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022EF8C(int a, int tag);
@@ -63,6 +65,11 @@ static const signed char sDescriptorIndex[22] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 3, 4, 4, 4
 };
 static unsigned char sActive = 0;
+
+static inline unsigned long long MakeColumnKey(unsigned int table, unsigned int column)
+{
+    return ((unsigned long long)table << 32) | column;
+}
 
 extern "C" {
 
@@ -119,30 +126,26 @@ int fn_80086D0C(int index, int id, int byRow, int *pId, int *pPrice,
     }
     columns[column].SetEnd();
     if (byRow) {
-        priceFilter.SetUnknown32(6, ((unsigned long long)pDescriptor->mTable << 32) | pDescriptor->mPriceColumn, 2, 0x10004);
+        priceFilter.SetUnknown32(6, MakeColumnKey(pDescriptor->mTable, pDescriptor->mPriceColumn), 2, 0x10004);
         priceFilter.mUnknown16.mValue.mInt = 0;
         if (pDescriptor->mTable == 0x52414547) {
             pFilter = &both;
             both.Set(11, &priceFilter, &categoryFilter);
-            categoryFilter.Set(6, ((unsigned long long)pDescriptor->mTable << 32) | 0x49525453, 3, index);
+            categoryFilter.Set(6, MakeColumnKey(pDescriptor->mTable, 0x49525453), 3, index);
         } else if (pDescriptor->mTable == 0x4F544154) {
             int category = fn_80087BA0(index);
             pFilter = &both;
             both.Set(11, &priceFilter, &categoryFilter);
-            categoryFilter.Set(6, ((unsigned long long)pDescriptor->mTable << 32) | 0x4C544154, 3, category);
+            categoryFilter.Set(6, MakeColumnKey(pDescriptor->mTable, 0x4C544154), 3, category);
         }
     } else {
-        priceFilter.Set(6, ((unsigned long long)pDescriptor->mTable << 32) | pDescriptor->mIdColumn, 3, id);
+        priceFilter.Set(6, MakeColumnKey(pDescriptor->mTable, pDescriptor->mIdColumn), 3, id);
     }
     tables[0].Set(pDescriptor->mTable, 2, pFilter);
     tables[1].Set(-1);
     if (byRow) {
-        sort[0].mTable = pDescriptor->mTable;
-        sort[0].mColumn = pDescriptor->mSortColumn;
-        sort[0].mMode = 0;
-        sort[1].mTable = -1;
-        sort[1].mColumn = -1;
-        sort[1].mMode = 3;
+        sort[0].Set(pDescriptor->mTable, pDescriptor->mSortColumn, 0);
+        sort[1].Set(-1, -1, 3);
         if (fn_801FA0BC(0x54415453, tables, 0, sort, &cursor, &queryResult) == 0) {
             if (fn_801FA228(cursor, 1, id, columns) == 0) {
                 result = 1;
@@ -157,7 +160,7 @@ int fn_80086D0C(int index, int id, int byRow, int *pId, int *pPrice,
     if (result) {
         column = 0;
         if (pName) {
-            strncpy(pName, pBuffer, nameSize);
+            fn_801C3284(pName, pBuffer, nameSize);
             column++;
         }
         if (pId) {
@@ -182,17 +185,17 @@ int fn_80087128(int index)
     const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
     int result = 0;
     Object_80023BBC *pFilter = &priceFilter;
-    priceFilter.SetUnknown32(6, ((unsigned long long)pDescriptor->mTable << 32) | pDescriptor->mPriceColumn, 2, 0x10004);
+    priceFilter.SetUnknown32(6, MakeColumnKey(pDescriptor->mTable, pDescriptor->mPriceColumn), 2, 0x10004);
     priceFilter.mUnknown16.mValue.mInt = 0;
     if (pDescriptor->mTable == 0x52414547) {
         pFilter = &both;
         both.Set(11, &priceFilter, &categoryFilter);
-        categoryFilter.Set(6, ((unsigned long long)pDescriptor->mTable << 32) | 0x49525453, 3, index);
+        categoryFilter.Set(6, MakeColumnKey(pDescriptor->mTable, 0x49525453), 3, index);
     } else if (pDescriptor->mTable == 0x4F544154) {
         int category = fn_80087BA0(index);
         pFilter = &both;
         both.Set(11, &priceFilter, &categoryFilter);
-        categoryFilter.Set(6, ((unsigned long long)pDescriptor->mTable << 32) | 0x4C544154, 3, category);
+        categoryFilter.Set(6, MakeColumnKey(pDescriptor->mTable, 0x4C544154), 3, category);
     }
     if (fn_801F9D70(0x54415453, pDescriptor->mTable, pFilter, &count) == 0) {
         result = count;
