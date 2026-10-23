@@ -40662,19 +40662,19 @@
     {
       "source": "src/game/cu_801182C8.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. 5 target whole-function extents and literal-pool slice retain their evidence; this split permits independent compilation of disjoint partial literal pools and does not claim an original file boundary or whole-unit promotion.",
+      "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. 1 target whole-function extent and literal-pool slice retain their evidence; this split permits independent compilation of disjoint partial literal pools and does not claim an original file boundary or whole-unit promotion.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801182C8",
-          "end": "0x80119B98"
+          "end": "0x80118704"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029F0F8",
-          "end": "0x8029F15C"
+          "end": "0x8029F110"
         }
       ],
       "functions": [
@@ -40682,7 +40682,28 @@
           "symbol": "fn_801182C8",
           "start": "0x801182C8",
           "end": "0x80118704"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801187CC.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800EFC68 grouping. 4 target whole-function extents and literal-pool slice retain their evidence; this split permits independent compilation of disjoint partial literal pools and does not claim an original file boundary or whole-unit promotion.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801187CC",
+          "end": "0x80119B98"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F110",
+          "end": "0x8029F15C"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_801187CC",
           "start": "0x801187CC",
