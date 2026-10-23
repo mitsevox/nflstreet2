@@ -12,11 +12,11 @@ int fn_80027DF0(void);
 }
 
 /* Updates bit 0 of every player's +4 block flags. With active set, players
-   other than state 50 whose camera distance is within 0.5 of character
-   index's get it cleared; otherwise players with +11 set get it set. The
-   carrier's ball entry gets the same change in its word at +20, which this
-   function reads through the Block_80170E64 flag-word view because
-   State_80137ABC places mPos.mZ there and the real field is unknown. */
+   other than state 50 whose camera distance is at most character index's
+   distance + 0.5 get it cleared; otherwise players with +11 set get it set.
+   The fn_80137B40 player's fn_801374BC entry gets the same change (in the
+   set path even when +11 is clear) in its word at +0x14, written through
+   the Block_80170E64 view (whose +0x14 is that flags word). */
 extern "C" void fn_800921E8(int index, int active)
 {
     Camera_8013F738 *pCamera = 0;

@@ -5,7 +5,7 @@
 
 extern "C" {
 int fn_80093C64(void);
-Object_80137ABC *fn_80093C70(Character_80093BCC *pCharacter, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound);
+Object_80137ABC *fn_80093C70(Params_80092E54 *pRequest, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound);
 void fn_800D7A0C(Object_80039F5C *p, int a);
 void fn_80227264(void *pOut, void *pIn, float scale);
 void fn_80227538(Point_80167910 *pOut, int angle, float length);

@@ -5,7 +5,7 @@
 extern "C" {
 State_8011F4EC *fn_8011F4EC(void);
 int fn_80178308(void);
-void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, int a, int b);
+void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, unsigned int distance, int predict);
 }
 
 /* Rebuilds the play state's roster list from the flagged players (state id
@@ -39,7 +39,7 @@ extern "C" unsigned char fn_8009EAB0(Object_80039F5C *p, unsigned int index)
     for (i = 0; i < pState->mUnknown198; i++) {
         Object_80039F5C *pPlayer = fn_80039F5C(team, pState->mUnknown199[i]);
 
-        if ((unsigned int)(pPlayer->mpState->mId - 31) > 1 && pState->mUnknown19C[i] != 0) {
+        if (pPlayer->mpState->mId != 31 && pPlayer->mpState->mId != 32 && pState->mUnknown19C[i] != 0) {
             Point_8017886C at;
 
             fn_8009F928(pPlayer, &at, 5, 1);

@@ -14,8 +14,11 @@ void fn_80091EC0(Character_80093BCC *pCharacter, Actor_801C009C *pActor, Object_
    turn (or p copies pRef) and p's own spot is returned. Otherwise the start
    comes from fn_80091EC0, and a nonzero frameIndex takes that frame's
    offset and turn: flag 0x10 keeps p's spot, flag 0x20 turns the offset
-   through the matrix stack around the start. fn_801C029C returns the same
-   48-byte frame record as the actor's +0x18 pointer. */
+   through the matrix stack around the start. For index 0 fn_801C029C
+   returns the actor's +0x18 record; other indexes return 0x30-byte entries
+   of the array at actor +0x1C. Only fields below +0x30 (+0x18..+0x24) are
+   read from that frame, and those offsets line up in both, so the
+   Frame_80141210 view is used for it. */
 extern "C" int fn_80093814(Character_80093BCC *pCharacter, Object_80039F5C *p, Object_80039F5C *pRef,
                            unsigned short frameIndex, Vector_80039F5C *pOut, int *pAngle)
 {

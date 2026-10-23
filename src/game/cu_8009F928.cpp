@@ -23,9 +23,12 @@ extern float lbl_803EA9C4;
 extern float lbl_803EA9C8;
 extern float lbl_803EA9CC;
 
-/* p's spot projected ahead along its heading: for state 20 by the move
-   kind (predict set) or the fixed turn of the move kind, scaled by
-   fn_8012CD60; otherwise by p's speed rating. distance scales the step. */
+/* p's spot projected ahead. In state 20 the step length is
+   fn_8012CD60(p, scale) * distance: with predict set the angle comes from
+   fn_8012CAB4 and the move kind picks the scale; without it distance is
+   forced to 30 and the move kind picks a fixed angle (or p's motion
+   +32 heading). In other states the step follows that heading with a
+   length from rating 4, lbl_803ED6CC and lbl_803ECB08, times distance. */
 extern "C" void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, unsigned int distance, int predict)
 {
     if (p != 0) {
@@ -108,12 +111,12 @@ extern "C" void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, unsigned i
 }
 
 /* Rolls whether p reacts to a loose ball (ball state 4 with play bit 24, 11
-   or 12) within lbl_803EA9C4 of it: p's team rolls rating 8 against
-   lbl_803EA9C8 and sends message 24, the other team rolls rating 3 against
-   a distance-weighted chance and sends message 23 with the ball index.
-   Returns whether a message was sent. The code matches, but the target
-   pool holds this function's 1.0f before 255.0f and 2^31, which this
-   source emits in the opposite order. */
+   or 12) within lbl_803EA9C4 of it: a p on the fn_80178320() side rolls
+   rating 8 against lbl_803EA9C8 and sends message 24; otherwise p rolls
+   rating 3 against a distance-weighted chance and sends message 23 with
+   the ball index. Returns whether a message was sent. Partial: the target
+   pool holds this function's 1.0f before 255.0f and 2^31; this source
+   emits them in the opposite order. */
 extern "C" int fn_8009FB60(Object_80039F5C *p)
 {
     int sent = 0;

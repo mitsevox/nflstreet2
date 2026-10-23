@@ -28773,8 +28773,8 @@
       "provenance": {
         "pull_request": 1054,
         "merged_via": 1054,
-        "commit": "00fc75c24f4e7cd84958939d5ece85091e49ea77",
-        "introduced_blob": "4ea75ead653f0c50d04b5480829392df59989c56"
+        "commit": "e3c948a61b5f99ab9fe8edab495be70f83d14de5",
+        "introduced_blob": "0d53010106629de936dc09a766f659309bc5a014"
       }
     },
     {
@@ -28788,8 +28788,8 @@
       "provenance": {
         "pull_request": 1054,
         "merged_via": 1054,
-        "commit": "00fc75c24f4e7cd84958939d5ece85091e49ea77",
-        "introduced_blob": "eced209cb80670cf7a3ff58ddd79f31009348d1c"
+        "commit": "e3c948a61b5f99ab9fe8edab495be70f83d14de5",
+        "introduced_blob": "f6ec572df9392e9abe7afe199bcd8b41ff9bff78"
       }
     },
     {
@@ -28803,8 +28803,8 @@
       "provenance": {
         "pull_request": 1054,
         "merged_via": 1054,
-        "commit": "00fc75c24f4e7cd84958939d5ece85091e49ea77",
-        "introduced_blob": "1d2efbc48782899592e85f069c3bc871429e6ffd"
+        "commit": "9dbe22ed9f36bf2ccf81529f5d8eb146efb667a8",
+        "introduced_blob": "a2639cf038bce3ef7483fcc54efa64143fd2b586"
       }
     },
     {
@@ -28833,8 +28833,8 @@
       "provenance": {
         "pull_request": 1054,
         "merged_via": 1054,
-        "commit": "00fc75c24f4e7cd84958939d5ece85091e49ea77",
-        "introduced_blob": "ddf9d45dfb69b27c0ceb00b461f9201368ee4a7b"
+        "commit": "e3c948a61b5f99ab9fe8edab495be70f83d14de5",
+        "introduced_blob": "501d1084b253eaada6eabe904c31b35316c707f3"
       }
     },
     {
@@ -28863,7 +28863,7 @@
       "provenance": {
         "pull_request": 1054,
         "merged_via": 1054,
-        "commit": "a3bf87283d18e3fa498b22965a8fc9975b77502f",
+        "commit": "51952600796cb90408fab897569b39c4b7669851",
         "introduced_blob": "ce778f5e7eef5c3cd4e1e826dc96fdd84ec6a127"
       }
     },
@@ -28908,8 +28908,8 @@
       "provenance": {
         "pull_request": 1054,
         "merged_via": 1054,
-        "commit": "00fc75c24f4e7cd84958939d5ece85091e49ea77",
-        "introduced_blob": "616452af31525bcd3722cb5fb6fc8ceafd1398fd"
+        "commit": "e3c948a61b5f99ab9fe8edab495be70f83d14de5",
+        "introduced_blob": "f3fb10d3d0266714b2da2cba57ca1509fc07aef8"
       }
     },
     {
@@ -28923,23 +28923,8 @@
       "provenance": {
         "pull_request": 1054,
         "merged_via": 1054,
-        "commit": "00fc75c24f4e7cd84958939d5ece85091e49ea77",
-        "introduced_blob": "b111a857878bc68a9ffdf3106d50c8fe4e3baab0"
-      }
-    },
-    {
-      "source": "src/game/cu_8009F168.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x8009F168"
-      ],
-      "provenance": {
-        "pull_request": 1054,
-        "merged_via": 1054,
-        "commit": "00fc75c24f4e7cd84958939d5ece85091e49ea77",
-        "introduced_blob": "f2c479c61cfb720ace4485c5ae2eb82f8a36d8a8"
+        "commit": "e3c948a61b5f99ab9fe8edab495be70f83d14de5",
+        "introduced_blob": "04e6c636c0c52ecb52098130167fd49508945504"
       }
     },
     {
@@ -28968,8 +28953,8 @@
       "provenance": {
         "pull_request": 1054,
         "merged_via": 1054,
-        "commit": "00fc75c24f4e7cd84958939d5ece85091e49ea77",
-        "introduced_blob": "c7a4bfb47deb13af6d89f26670bc3a466f4f7639"
+        "commit": "e3c948a61b5f99ab9fe8edab495be70f83d14de5",
+        "introduced_blob": "bde5b98239ad0f45e6972f830d0058984c2929c2"
       }
     },
     {
@@ -28998,8 +28983,8 @@
       "provenance": {
         "pull_request": 1054,
         "merged_via": 1054,
-        "commit": "a3bf87283d18e3fa498b22965a8fc9975b77502f",
-        "introduced_blob": "8dda0ce4594ec8acd787055eb3fff1bd05cef256"
+        "commit": "e3c948a61b5f99ab9fe8edab495be70f83d14de5",
+        "introduced_blob": "8bbc3ad055323ef0903ce61e04f4527181b6bca1"
       }
     },
     {
@@ -29013,8 +28998,8 @@
       "provenance": {
         "pull_request": 1054,
         "merged_via": 1054,
-        "commit": "a3bf87283d18e3fa498b22965a8fc9975b77502f",
-        "introduced_blob": "e65241235a6ded93b9cd785e114909b5a14342e4"
+        "commit": "e3c948a61b5f99ab9fe8edab495be70f83d14de5",
+        "introduced_blob": "22f50ceedb4a4946cf448d4aaa929cf479d57bcf"
       }
     },
     {
@@ -29028,8 +29013,23 @@
       "provenance": {
         "pull_request": 1054,
         "merged_via": 1054,
-        "commit": "c3ae09da8177e4d0da36238d3610b8024c2f84a2",
-        "introduced_blob": "490b590939d9c8c3fb2fcba5892036443bd1a53a"
+        "commit": "e3c948a61b5f99ab9fe8edab495be70f83d14de5",
+        "introduced_blob": "f417aabe005a34d60d58b354041952260f8207ec"
+      }
+    },
+    {
+      "source": "src/game/cu_8009F168.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8009F168"
+      ],
+      "provenance": {
+        "pull_request": 1024,
+        "merged_via": 1054,
+        "commit": "00fc75c24f4e7cd84958939d5ece85091e49ea77",
+        "introduced_blob": "f2c479c61cfb720ace4485c5ae2eb82f8a36d8a8"
       }
     }
   ],
