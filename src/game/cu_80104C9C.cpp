@@ -1202,10 +1202,9 @@ extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74 *pBlock) {
 
             if (pMate != p) {
                 Point_8017886C gap;
-                Block_800F4A74 *pMateBlock;
+                Block_800F4A74 *pMateBlock = (Block_800F4A74 *)&pMate->mUnknown336;
 
                 fn_80227690(&gap, &pOther->mMotion.mPos, &pMate->mMotion.mPos);
-                pMateBlock = (Block_800F4A74 *)&pMate->mUnknown336;
                 if (pMateBlock->mUnknown49 == 3
                     && pMate->mMotion.mPos.mY > p->mMotion.mPos.mY && fn_802270A4(&gap) < 4.5f) {
                     result = 2;
@@ -1224,10 +1223,9 @@ extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74 *pBlock) {
 
             if (pMate != p) {
                 Point_8017886C gap;
-                Block_800F4A74 *pMateBlock;
+                Block_800F4A74 *pMateBlock = (Block_800F4A74 *)&pMate->mUnknown336;
 
                 fn_80227690(&gap, &pOther->mMotion.mPos, &pMate->mMotion.mPos);
-                pMateBlock = (Block_800F4A74 *)&pMate->mUnknown336;
                 if (pMateBlock->mUnknown49 == 2 && pMate->mMotion.mPos.mY < p->mMotion.mPos.mY
                     && fn_802270A4(&gap) < 3.5f) {
                     result = 3;
