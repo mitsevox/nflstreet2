@@ -952,8 +952,10 @@ void fn_80100AA0(Object_80039F5C *p,int,float *a,float *b)
 void fn_80100B34(Object_80039F5C *p,float *out,float *maximum,float a,float b,float c)
 {
     if(out && maximum) {
-        *maximum=c*(((1.0f-b)*0.2f)+(a+((1.0f-(float)p->mRatings[6]*0.00392156886f)*0.3f+0.05f)))*lbl_803EAEB0;
-        *out=fn_80237260(0)* *maximum;
+        a += (1.0f - (float)p->mRatings[6] * 0.00392156886f) * 0.3f + 0.05f;
+        a += (1.0f - b) * 0.2f;
+        *maximum = c * a * lbl_803EAEB0;
+        *out = fn_80237260(0) * *maximum;
     }
 }
 
