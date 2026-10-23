@@ -361,7 +361,7 @@ extern "C" int fn_8010FC40(Object_80039F5C *p)
         p->mUnknown9[0] = 1;
         p->mUnknown512.mUnknown14 = 0;
         fn_8009BD60(p);
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, 1.0f, p);
         if (!(p->mpState->mUnknown3[0] & 0x80)) {
             p->mFlags |= 1 << (p->mpState->mUnknown3[0] & 0x7F);
         }
@@ -422,7 +422,7 @@ extern "C" int fn_8010FE40(Object_80039F5C *p)
         if (fn_80137C48(p) == 0) {
             fn_8009BD60(p);
             key = p->mpState->mUnknown1;
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, p, 1.0f);
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, key, 1.0f, p);
             target = p->mpState->mUnknown2 << 16;
             if (fn_801CFFD0(target, p->mMotion.mFacing) > 0xB60B && fn_801BA568(p->mpUnknown796, p->mpUnknown800, key)) {
                 pEntries = p->mpUnknown800;
@@ -470,10 +470,10 @@ extern "C" void fn_801100E8(Object_80039F5C *p)
     p->mUnknown1008.mUnknown1 = side;
     if (fn_800D0B90(p)) {
         p->mUnknown1008.mUnknown2 = 1;
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 188, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 188, 1.0f, p);
         fn_80156C78(8, 1);
     } else {
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 154, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 154, 1.0f, p);
     }
 }
 
@@ -792,13 +792,13 @@ extern "C" int fn_801113DC(Object_80039F5C *p)
         p->mUnknown1008.mUnknown0 = pMessage->mUnknown1;
         p->mUnknown1008.mUnknown1 = pMessage->mUnknown2;
         p->mUnknown1008.mUnknown2 = pMessage->mUnknown3[0] >> 4;
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 193, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 193, 1.0f, p);
     } else {
         p->mUnknown1008.mUnknown2 = pMessage->mUnknown1 & 15;
         p->mUnknown1011 = pMessage->mUnknown1 >> 4;
         p->mUnknown1008.mUnknown1 = pMessage->mUnknown3[0];
         p->mUnknown1008.mUnknown0 = pMessage->mUnknown2;
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 44, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 44, 1.0f, p);
     }
     p->mFlags &= ~4;
     p->mUnknown512.mUnknown14 = 0;

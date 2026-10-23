@@ -96,7 +96,7 @@ Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsi
 int fn_80178308(void);
 float fn_80178A08(void);
 float fn_80178A44(void);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 void fn_80227248(Point_8017886C *pOut, Point_8017886C *pIn, float scale);
 extern float lbl_803EAF0C;
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -201,7 +201,7 @@ extern "C" void fn_80109CA0(Object_80039F5C *p, int animation, unsigned char a, 
         p->mUnknown1008.mUnknown2 = c;
     }
     if (animation != fn_801BE648(p->mpUnknown792)) {
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, 1.0f, p);
         pBlock->mUnknown50 = fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0);
         p->mUnknown512.mUnknown14 = 0;
         p->mFlags &= ~4;

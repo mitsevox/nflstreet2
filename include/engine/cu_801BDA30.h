@@ -54,7 +54,7 @@ void fn_801BDBD4(Collection_801BE594 *p, Object_801BA03C *pObject, Record_800D81
                  void *pOwner);
 unsigned short fn_801BDF38(Collection_801BE594 *p);
 int fn_801BE068(Collection_801BE594 *p, Object_801BA03C *pObject, Record_800D81C8 *pChannels, unsigned short key,
-                void *pOwner, float frames);
+                float frames, void *pOwner);
 struct Block_801BE60C *fn_801BE60C(Collection_801BE594 *p, unsigned short key);
 unsigned short fn_801BE648(Collection_801BE594 *p);
 void fn_801BE760(Collection_801BE594 *p, unsigned short key, unsigned short flags);

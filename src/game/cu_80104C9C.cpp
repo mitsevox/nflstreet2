@@ -345,7 +345,7 @@ extern "C" void fn_80104D98(Object_80039F5C *p)
         p->mUnknown512.mUnknown4 = facing;
         p->mUnknown1008.mUnknown0 = pRecord->mUnknown5;
     }
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, 1.0f, p);
     if (pRecord->mUnknown4 == 6 || pRecord->mUnknown4 == 7) {
         fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
     }

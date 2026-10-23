@@ -251,7 +251,7 @@ extern "C" int fn_80102A78(List_801018B4 *pList, unsigned short animation, void 
         }
         if (failed) {
             fn_800D0BF4(p, 0, 0);
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 69, p, 1.0f);
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 69, 1.0f, p);
         } else if (index != -1) {
             fn_800D4EC0(pEntry->mUnknown7);
             pState->mUnknown20 = pEntry->mUnknown20;

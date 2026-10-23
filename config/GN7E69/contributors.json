@@ -29531,6 +29531,55 @@
         "original_blob": "8a38399cc85c27ae260bcacd60ea75721cb0eaf7",
         "integration_adjustment": "Newly exact pre-existing body (fn_80222E54) originates in contribution 1030; the PR 1059 source-form refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
       }
+    },
+    {
+      "source": "src/game/cu_800A3530.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800A3530",
+        "0x800A3898",
+        "0x800A3B5C",
+        "0x800A3E84",
+        "0x800A414C"
+      ],
+      "provenance": {
+        "pull_request": 1070,
+        "merged_via": 1070,
+        "commit": "78556994beb8a8381dadaf6e409a3351af6830a4",
+        "introduced_blob": "5e156b7fad141f3c885e9de78844f9d6cbd3bf9b"
+      }
+    },
+    {
+      "source": "src/game/cu_800A42BC.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800A44C0"
+      ],
+      "provenance": {
+        "pull_request": 1070,
+        "merged_via": 1070,
+        "commit": "6fa3d2a8e0f0d4fd8044dd1360a0b135330a3e3f",
+        "introduced_blob": "bbcca4ac4dc5c5c77740864ddf107c3c855b6856"
+      }
+    },
+    {
+      "source": "src/game/cu_8008E978.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800A9018"
+      ],
+      "provenance": {
+        "pull_request": 1070,
+        "merged_via": 1070,
+        "commit": "6fa3d2a8e0f0d4fd8044dd1360a0b135330a3e3f",
+        "introduced_blob": "6f8707c0e12889fd7c6a72286fe19ed450a51738"
+      }
     }
   ],
   "target": "GN7E69",

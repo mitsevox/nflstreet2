@@ -76,7 +76,7 @@ extern "C" int fn_800FD828(Object_80039F5C *p)
     }
     if (animation != fn_801BE648(p->mpUnknown792)) {
         changed = 1;
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, animation, 1.0f, p);
         p->mpUnknown800[fn_801BA5A8(p->mpUnknown796, p->mpUnknown800, animation, 0)].mUnknown2C = speed;
         p->mFlags &= ~4;
     }

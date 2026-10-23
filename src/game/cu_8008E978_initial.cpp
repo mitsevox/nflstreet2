@@ -140,7 +140,7 @@ extern "C" void fn_8008E9B0(Object_80039F5C *p)
         next->mUnknown0=current->mUnknown0;
     }
     if(!fn_8008DFF8(p,key) && fn_801BE648(p->mpUnknown792)!=key)
-        fn_801BE068(p->mpUnknown792,p->mpUnknown796,p->mpUnknown800,key,p,1.0f);
+        fn_801BE068(p->mpUnknown792,p->mpUnknown796,p->mpUnknown800,key,1.0f,p);
 }
 
 extern "C" void fn_8008EB18(int id,int flag,void *data)

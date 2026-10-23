@@ -53669,19 +53669,19 @@
     {
       "source": "src/game/cu_800A3530.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: the motion-phase callbacks 0x800A3530-0x800A3B10 and the channel reset 0x800A3B5C, whose float and double literals form the readonly slice 0x80296718-0x80296754 measured here (8-aligned for the conversion doubles). fn_800A3B10 and fn_800A3B58 inside the text range stay in src/game/cu_8008E978.cpp. No original file boundary or whole-unit promotion is claimed.",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: the motion-phase callbacks 0x800A3530-0x800A3B10, the channel reset 0x800A3B5C and the target helpers 0x800A3E84-0x800A4294, whose float and double literals form the readonly slice 0x80296718-0x8029678C measured here (8-aligned for the conversion doubles). The slice also holds the pools of two functions the target linker discarded, Stripped_8029674C and Stripped_80296754, recovered from their Xbox prototype NFLBig.xbe counterparts 0x4FD30 and 0x4FF30 (evidence.tsv linker rows 0x8029674C-0x80296750 and 0x80296754-0x80296764); they are compiled but not registered or measured. fn_800A3B10, fn_800A3B58, fn_800A3C14, fn_800A3D68, fn_800A3D70, fn_800A3DC4 and fn_800A3E00 inside the text range stay in src/game/cu_8008E978.cpp. No original file boundary or whole-unit promotion is claimed.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800A3530",
-          "end": "0x800A3C14"
+          "end": "0x800A4294"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80296718",
-          "end": "0x80296754"
+          "end": "0x8029678C"
         }
       ],
       "functions": [
@@ -53704,28 +53704,7 @@
           "symbol": "fn_800A3B5C",
           "start": "0x800A3B5C",
           "end": "0x800A3C14"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800A3E84.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: the turn checks 0x800A3E84-0x800A4294 whose float and double literals lie in the readonly slice 0x80296760-0x8029678C measured here (8-aligned for the conversion double). No original file boundary or whole-unit promotion is claimed.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800A3E84",
-          "end": "0x800A4294"
         },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x80296760",
-          "end": "0x8029678C"
-        }
-      ],
-      "functions": [
         {
           "symbol": "fn_800A3E84",
           "start": "0x800A3E84",
@@ -53736,6 +53715,10 @@
           "start": "0x800A414C",
           "end": "0x800A4294"
         }
+      ],
+      "discarded": [
+        "Stripped_8029674C",
+        "Stripped_80296754"
       ]
     },
     {

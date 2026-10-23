@@ -6774,14 +6774,13 @@ extern "C" void fn_800A9018(unsigned int step)
 
     fn_8009601C();
     for (i = 0; i <= 1; i++) {
-        unsigned char team = i;
         int isOffense = i == fn_80178308();
         unsigned int j = 0;
-        unsigned int count = fn_80178D18(team);
+        unsigned int count = fn_80178D18((unsigned char)i);
 
-        fn_80085744(fn_80168EBC(team)->mUnknown20.mUnknown14.mUnknown8.mUnknown4, i);
+        fn_80085744(fn_80168EBC((unsigned char)i)->mUnknown20.mUnknown14.mUnknown8.mUnknown4, i);
         for (; j < count; j++) {
-            Object_80039F5C *p = fn_80039F5C(team, j);
+            Object_80039F5C *p = fn_80039F5C((unsigned char)i, j);
             int slot = fn_8008576C(p->mUnknown2908, isOffense);
 
             if (fn_801485D4() != 0 && fn_801486A0() == 4) {
@@ -9143,7 +9142,7 @@ extern "C" void fn_800BB24C(void)
 }
 
 extern "C" {
-int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
+int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 int fn_801F0F18(int a);
 }
 
@@ -17659,7 +17658,7 @@ extern "C" void fn_800BDA7C(void)
 
 
 extern "C" { unsigned char fn_80114DD8(Object_80039F5C *p); void fn_800CD978(Group_800CC98C *,Play_800CCEBC *,unsigned int); void fn_800CDB5C(Group_800CC98C *,Play_800CCEBC *,unsigned int); }
-extern "C" int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
+extern "C" int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 #include "game/Record_800CE608.h"
 extern "C" void fn_800CE608(Object_80039F5C *,Record_800CE608 *);
 
@@ -17907,7 +17906,7 @@ extern "C" void fn_800CE608(Object_80039F5C *p, Record_800CE608 *pRecord)
     p->mUnknown1008.mUnknown1 = pRecord->mUnknown10 >> 8;
     p->mUnknown1008.mUnknown2 = pRecord->mBytes12[1];
     p->mUnknown1011 = pRecord->mUnknown12 >> 8;
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, pRecord->mUnknown8, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, pRecord->mUnknown8, 1.0f, p);
 }
 
 extern "C" float fn_800CE73C(Object_800CE674 *p)
