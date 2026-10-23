@@ -743,29 +743,59 @@ int fn_80100024(Object_80039F5C *p, int angle, int mode)
     return result;
 }
 
-void fn_8010016C(Object_80039F5C *p,Point_8017886C *point,Object_80039F5C *other,float speed)
+void fn_8010016C(Object_80039F5C *p, Point_8017886C *point, Object_80039F5C *other, float speed)
 {
-    float chance=(float)other->mRatings[6]*0.00392156886f;
-    if(lbl_803EAEA0 && fn_80237260(0)>=chance)return;
-    Point_8017886C middle,delta;
-    fn_80227904(&middle,&p->mMotion.mPos,point,0.5f);
-    fn_80227690(&delta,point,&other->mMotion.mPos);
-    float time=fn_802270A4(&delta)/speed;
-    float best=3.4028235e38f;int replace=0;
-    int team=fn_80178320();unsigned int n=fn_80178D70(team);
-    for(unsigned int i=0;i<n;++i) {
-        Object_80039F5C *candidate=fn_80039F5C(team,(unsigned short)i);
-        if(fn_8011E9B4(candidate) || candidate->mFlags&0x800)continue;
-        Point_8017886C pos={candidate->mMotion.mPos.mX,candidate->mMotion.mPos.mY},future=pos;
-        fn_80227690(&delta,point,&pos);float now=fn_802270A4(&delta);
-        fn_8022732C(&future,&candidate->mMotion.mUnknown40,time);
-        fn_80227690(&delta,point,&future);float later=fn_802270A4(&delta);
-        if(!(later<=now))later=now;
-        if(!(later>=best)) {
-            fn_80227690(&delta,&middle,&pos);replace=now<fn_802270A4(&delta);best=later;
+    float chance = (float)other->mRatings[6] * 0.00392156886f;
+    Point_8017886C middle;
+    Point_8017886C delta;
+    float time;
+    float best;
+    int replace;
+    int team;
+    unsigned int count;
+    unsigned int i;
+
+    if (lbl_803EAEA0 && fn_80237260(0) >= chance) {
+        return;
+    }
+    fn_80227904(&middle, &p->mMotion.mPos, point, 0.5f);
+    fn_80227690(&delta, point, &other->mMotion.mPos);
+    time = fn_802270A4(&delta) / speed;
+    best = 3.4028235e38f;
+    replace = 0;
+    team = fn_80178320();
+    count = fn_80178D70(team);
+    for (i = 0; i < count; i++) {
+        Object_80039F5C *candidate = fn_80039F5C(team, (unsigned short)i);
+        Point_8017886C pos;
+        Point_8017886C offset;
+        Point_8017886C future;
+        float now;
+        float later;
+
+        if (fn_8011E9B4(candidate) || (candidate->mFlags & 0x800)) {
+            continue;
+        }
+        pos.mX = candidate->mMotion.mPos.mX;
+        pos.mY = candidate->mMotion.mPos.mY;
+        fn_80227690(&offset, point, &pos);
+        now = fn_802270A4(&offset);
+        future.mX = candidate->mMotion.mPos.mX;
+        future.mY = candidate->mMotion.mPos.mY;
+        fn_8022732C(&future, &candidate->mMotion.mUnknown40, time);
+        fn_80227690(&offset, point, &future);
+        later = fn_802270A4(&offset);
+        later = later > now ? now : later;
+        if (later < best) {
+            best = later;
+            fn_80227690(&offset, &middle, &pos);
+            replace = fn_802270A4(&offset) > now;
         }
     }
-    if(replace)*point=middle;
+    if (replace) {
+        point->mX = middle.mX;
+        point->mY = middle.mY;
+    }
 }
 
 int fn_80100370(Object_80137ABC *ball,Object_80039F5C *p,Vector_80039F5C *out,float value)
