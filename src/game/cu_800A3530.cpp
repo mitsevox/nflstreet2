@@ -29,7 +29,7 @@ void fn_801BA384(Object_801BA03C *pList, Record_800D81C8 *pChannels, int index);
 void fn_801BE420(void *p, Object_801BA03C *pObject, Record_800D81C8 *pRecords, void *pOwner, float step);
 int fn_800A3B10(Object_800A3530 *p);
 void fn_800A3D68(int value);
-extern unsigned short lbl_803EC93E;
+extern int lbl_803EC93C;
 extern int lbl_803EC940;
 }
 
@@ -86,7 +86,7 @@ extern "C" int fn_800A37D8(Table_80089904 *table, unsigned short key, void *reco
 {
     switch (phase) {
     case 0:
-        fn_801BA2A8(record, entries, lbl_803EC93E, lbl_803EC940, key, p, 1.0f);
+        fn_801BA2A8(record, entries, lbl_803EC93C, lbl_803EC940, key, p, 1.0f);
         p->mpUnknown4->mUnknown20 |= 0x10;
         break;
     case 1:
