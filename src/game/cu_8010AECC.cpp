@@ -48,7 +48,7 @@ struct Block_8010AF48 {
 
 extern "C" {
 void fn_8009BD60(Object_80039F5C *p);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 }
 
 extern "C" void fn_8010AECC(Object_80039F5C *p, unsigned char a, unsigned char b, unsigned char c) {
@@ -56,7 +56,7 @@ extern "C" void fn_8010AECC(Object_80039F5C *p, unsigned char a, unsigned char b
     p->mUnknown1008.mUnknown0 = a;
     p->mUnknown1008.mUnknown1 = b;
     p->mUnknown1008.mUnknown2 = c;
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 83, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 83, 1.0f, p);
     p->mUnknown512.mUnknown14 = 0;
     p->mFlags &= ~0x40000;
     p->mFlags &= ~4;
@@ -72,7 +72,7 @@ extern "C" int fn_8010AF48(Object_80039F5C *p) {
     pBlock->mUnknown8 = 0;
     pBlock->mUnknown7 = 0;
     if (!(p->mFlags & 0x40000)) {
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 91, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 91, 1.0f, p);
     }
     return 0;
 }

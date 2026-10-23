@@ -103,15 +103,19 @@ extern "C" void fn_8010DAB4(Object_80039F5C *p, Steer_8010DAB4 *pOut) {
             if (pMate->mMotion.mPos.mY < pCarrierMotion->mPos.mY) {
                 ahead = 0;
                 target.mY = pCarrierMotion->mPos.mY - 2.0f;
-            } else if (pMotion->mPos.mY < pCarrierMotion->mPos.mY) {
-                target.mY = pCarrierMotion->mPos.mY + 3.0f;
-                if (pCarrierMotion->mUnknown32 > 0x200000 && pCarrierMotion->mUnknown32 < 0x600000) {
-                    target.mY += 3.0f;
-                }
-            } else if (pCarrierMotion->mUnknown44 <= 0.0f && pCarrierMotion->mUnknown28 > 0.0f) {
-                target.mY = pMotion->mPos.mY - 3.0f;
             } else {
-                target.mY = pMotion->mPos.mY + 3.0f;
+                float y = pMotion->mPos.mY;
+
+                if (y < pCarrierMotion->mPos.mY) {
+                    target.mY = pCarrierMotion->mPos.mY + 3.0f;
+                    if (pCarrierMotion->mUnknown32 > 0x200000 && pCarrierMotion->mUnknown32 < 0x600000) {
+                        target.mY += 3.0f;
+                    }
+                } else if (pCarrierMotion->mUnknown44 <= 0.0f && pCarrierMotion->mUnknown28 > 0.0f) {
+                    target.mY = y - 3.0f;
+                } else {
+                    target.mY = y + 3.0f;
+                }
             }
             fn_80227690(&target, &target, &pMotion->mPos);
             pOut->mHeading = target.Heading();

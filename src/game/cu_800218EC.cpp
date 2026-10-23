@@ -439,7 +439,7 @@ void fn_80022580(int index, int a, int b)
     if (a == 82) {
         pRecord->mUnknown1008 = 6;
     }
-    fn_801BE068(pRecord->mUnknown792, pRecord->mUnknown796, pRecord->mUnknown800, a, pRecord, 1.0f);
+    fn_801BE068(pRecord->mUnknown792, pRecord->mUnknown796, pRecord->mUnknown800, a, 1.0f, pRecord);
 }
 
 void fn_800225F4(int index, unsigned int value)
@@ -647,8 +647,8 @@ void fn_80022D88(void)
     fn_800225F4(lbl_803ECE8C, 2);
     fn_800225F4(lbl_803ECE90, 2);
     fn_8008A248();
-    fn_801BE068(pFirst->mUnknown792, pFirst->mUnknown796, pFirst->mUnknown800, 214, pFirst, 1.0f);
-    fn_801BE068(pSecond->mUnknown792, pSecond->mUnknown796, pSecond->mUnknown800, 214, pSecond, 1.0f);
+    fn_801BE068(pFirst->mUnknown792, pFirst->mUnknown796, pFirst->mUnknown800, 214, 1.0f, pFirst);
+    fn_801BE068(pSecond->mUnknown792, pSecond->mUnknown796, pSecond->mUnknown800, 214, 1.0f, pSecond);
 }
 
 void fn_80022E40(int a, int b)

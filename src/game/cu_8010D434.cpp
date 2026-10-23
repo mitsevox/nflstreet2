@@ -50,15 +50,15 @@ struct State_8010D80C {
 extern "C" {
 int fn_801BA6B0(Entry_800EAC9C *pEntry);
 void fn_801BA6BC(Entry_800EAC9C *pEntry, int flag);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 }
 
 extern "C" void fn_8010D434(Object_80039F5C *p, State_8010D80C *pState) {
     p->mFlags &= ~4;
     if (p->mUnknown1008.mUnknown0 == 2) {
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 176, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 176, 1.0f, p);
     } else {
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 37, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 37, 1.0f, p);
     }
     if (pState->mUnknown27) {
         Record_800D81C8 *pEntries = p->mpUnknown800;

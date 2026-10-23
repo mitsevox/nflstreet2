@@ -131,6 +131,7 @@ extern "C" void fn_800C1E5C(int a, unsigned int b, float c)
     fn_80137D58(pBall, &pos);
     delta.mX = 0.0f;
     delta.mY = 0.0f;
+    const float step = 0.16f;
     switch (b) {
     case 0:
     case 7:
@@ -140,18 +141,18 @@ extern "C" void fn_800C1E5C(int a, unsigned int b, float c)
         }
         break;
     case 52:
-        delta.mY = c * -0.16f;
+        delta.mY = c * -step;
         break;
     case 53:
-        delta.mX = c * -0.16f;
+        delta.mX = c * -step;
         break;
     case 16:
     case 54:
-        delta.mX = c * 0.16f;
+        delta.mX = c * step;
         break;
     case 17:
     case 51:
-        delta.mY = c * 0.16f;
+        delta.mY = c * step;
         break;
     }
     if (fn_801784C4()) {

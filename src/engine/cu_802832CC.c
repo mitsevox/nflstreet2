@@ -1217,7 +1217,7 @@ int fn_80285A1C(void)
 
 void fn_80285A24(Struct_80285A24 *p)
 {
-    if (OSCreateThread(&lbl_803BA580, p->mUnknown10, p->mUnknown08, p->mUnknown14 + p->mUnknown04, p->mUnknown04, 22, 1))
+    if ((unsigned char)OSCreateThread(&lbl_803BA580, p->mUnknown10, p->mUnknown08, p->mUnknown14 + p->mUnknown04, p->mUnknown04, 22, 1))
         OSResumeThread(&lbl_803BA580);
 }
 

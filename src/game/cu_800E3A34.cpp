@@ -15,7 +15,7 @@ void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
 int fn_80178320(void);
 void fn_8009BD60(Object_80039F5C *p);
 Point_8017886C fn_80177FFC(int team);
-int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
+int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 }
 
 extern "C" int fn_800E3A34(Object_80039F5C *p, Point_8017886C *pTarget)
@@ -46,7 +46,7 @@ extern "C" void fn_800E3AE8(Object_80039F5C *p, int a, int b)
         p->mUnknown1008.mUnknown1 = 3;
     }
     p->mFlags &= ~4;
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 189, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 189, 1.0f, p);
 }
 
 extern "C" void fn_800E3B8C(Object_80039F5C *p)

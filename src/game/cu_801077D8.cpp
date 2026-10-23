@@ -163,13 +163,14 @@ extern "C" void fn_801079BC(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
         if (dx > 2.0f) {
             dx = 2.0f;
         }
+        pB->mX = x - dx;
     } else {
         dx *= 0.33333334f;
         if (dx < -2.0f) {
             dx = -2.0f;
         }
+        pB->mX = x - dx;
     }
-    pB->mX = x - dx;
     if (pOther != 0) {
         float y = pOther->mMotion.mPos.mY + 4.0f;
         float low = pInfo->mUnknown4.mY - 1.0f;

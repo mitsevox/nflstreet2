@@ -39,7 +39,7 @@ void fn_80093410(int handle);
 void fn_800940F0(int handle);
 Camera_8013F738 *fn_8013FA04(int index);
 void fn_8009BD60(Object_80039F5C *p);
-int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
+int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
 void fn_800A3B5C(Object_80039F5C *p);
 int fn_801F0F18(int a);
@@ -72,7 +72,7 @@ extern "C" void fn_800BB458(void)
             Object_80039F5C *p = fn_80039F5C(team, i);
 
             fn_8009BD60(p);
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, p, 1.0f);
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
             fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
             fn_800A3B5C(p);
         }

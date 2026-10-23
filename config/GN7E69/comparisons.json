@@ -8278,19 +8278,19 @@
     {
       "source": "src/game/cu_80101C40.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x80101C40-0x80101CB4 with their own literal-pool slice 0x8029E748-0x8029E74C. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 2 complete contiguous target bodies 0x80101C40-0x801021C0 with their own literal-pool slice 0x8029E748-0x8029E760. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80101C40",
-          "end": "0x80101CB4"
+          "end": "0x801021C0"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029E748",
-          "end": "0x8029E74C"
+          "end": "0x8029E760"
         }
       ],
       "functions": [
@@ -8298,6 +8298,11 @@
           "symbol": "fn_80101C40",
           "start": "0x80101C40",
           "end": "0x80101CB4"
+        },
+        {
+          "symbol": "fn_80101CB4",
+          "start": "0x80101CB4",
+          "end": "0x801021C0"
         }
       ]
     },
@@ -18591,139 +18596,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8013141C.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x8013141C-0x80132630 (src/game/cu_8013141C.cpp), its type and source-form rows, the 20 function extents, the exact .rodata row 0x8029FBB0-0x8029FC18, the exact .data row 0x802DB074-0x802DB0F4 and the exact .sdata row 0x803EB140-0x803EB144. Draft comparisons only; original assembly remains linked until a bounded replacement range passes the matching-integrity and complete-build requirements.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8013141C",
-          "end": "0x80132630"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029FBB0",
-          "end": "0x8029FC18"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802DB074",
-          "end": "0x802DB0F4"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EB140",
-          "end": "0x803EB144"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8013141C",
-          "start": "0x8013141C",
-          "end": "0x80131474"
-        },
-        {
-          "symbol": "fn_80131474",
-          "start": "0x80131474",
-          "end": "0x80131554"
-        },
-        {
-          "symbol": "fn_80131554",
-          "start": "0x80131554",
-          "end": "0x8013164C"
-        },
-        {
-          "symbol": "fn_8013164C",
-          "start": "0x8013164C",
-          "end": "0x801316F0"
-        },
-        {
-          "symbol": "fn_801316F0",
-          "start": "0x801316F0",
-          "end": "0x801317F8"
-        },
-        {
-          "symbol": "fn_801317F8",
-          "start": "0x801317F8",
-          "end": "0x80131B3C"
-        },
-        {
-          "symbol": "fn_80131B3C",
-          "start": "0x80131B3C",
-          "end": "0x80131C1C"
-        },
-        {
-          "symbol": "fn_80131C1C",
-          "start": "0x80131C1C",
-          "end": "0x80131D48"
-        },
-        {
-          "symbol": "fn_80131D48",
-          "start": "0x80131D48",
-          "end": "0x80131DB4"
-        },
-        {
-          "symbol": "fn_80131DB4",
-          "start": "0x80131DB4",
-          "end": "0x80131E08"
-        },
-        {
-          "symbol": "fn_80131E08",
-          "start": "0x80131E08",
-          "end": "0x80131E80"
-        },
-        {
-          "symbol": "fn_80131E80",
-          "start": "0x80131E80",
-          "end": "0x80131EA4"
-        },
-        {
-          "symbol": "fn_80131EA4",
-          "start": "0x80131EA4",
-          "end": "0x80131F90"
-        },
-        {
-          "symbol": "fn_80131F90",
-          "start": "0x80131F90",
-          "end": "0x80132038"
-        },
-        {
-          "symbol": "fn_80132038",
-          "start": "0x80132038",
-          "end": "0x80132090"
-        },
-        {
-          "symbol": "fn_80132090",
-          "start": "0x80132090",
-          "end": "0x80132164"
-        },
-        {
-          "symbol": "fn_80132164",
-          "start": "0x80132164",
-          "end": "0x8013217C"
-        },
-        {
-          "symbol": "fn_8013217C",
-          "start": "0x8013217C",
-          "end": "0x80132440"
-        },
-        {
-          "symbol": "fn_80132440",
-          "start": "0x80132440",
-          "end": "0x8013258C"
-        },
-        {
-          "symbol": "fn_8013258C",
-          "start": "0x8013258C",
-          "end": "0x80132630"
-        }
-      ]
-    },
-    {
       "source": "src/dolphin/gx/GXFrameBuf.c",
       "profile": "dolphin_release",
       "evidence": "Pinned faithful older donor GXAdjustForOverscan target-present variant mismatch, original body stays linked.",
@@ -26506,6 +26378,32 @@
       ]
     },
     {
+      "source": "src/game/cu_80092830.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_80092830 and the literal-pool slice 0x802960EC-0x802960F4 they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80092830",
+          "end": "0x80092E54"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802960EC",
+          "end": "0x802960F4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80092830",
+          "start": "0x80092830",
+          "end": "0x80092E54"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_80097160.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. 4 target whole-function extents and the literal-pool slice 0x80296198-0x802961B4 they reference retain their evidence; the split lets this pool compile independently of the parent unit's other literals and does not claim an original file boundary or whole-unit promotion.",
@@ -33060,18 +32958,18 @@
     {
       "source": "src/game/cu_80132630.cpp",
       "profile": "game_cpp",
-      "evidence": "Target32-body laneC explicit code/data/layout records, provisional source grouping; complete comparisons remain unlinked.",
+      "evidence": "Target32-body laneC explicit code/data/layout records, provisional source grouping; complete comparisons remain unlinked. fn_80132630 and its literals 0x8029FC18-0x8029FC28 moved to the linked src/game/cu_8013141C.cpp (evidence.tsv unit row 0x8013141C-0x801327F4); this grouping now starts at 0x801327F4.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80132630",
+          "start": "0x801327F4",
           "end": "0x80134E24"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029FC18",
+          "start": "0x8029FC28",
           "end": "0x8029FD88"
         },
         {
@@ -33082,11 +32980,6 @@
         }
       ],
       "functions": [
-        {
-          "symbol": "fn_80132630",
-          "start": "0x80132630",
-          "end": "0x801327F4"
-        },
         {
           "symbol": "fn_801327F4",
           "start": "0x801327F4",
@@ -38527,26 +38420,36 @@
     {
       "source": "src/game/cu_800F5AD4.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800F5AD4-0x800F5CBC as their own object so their literal pool 0x8029E19C-0x8029E1AC is placed exactly; it does not claim an original file boundary.",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800F5208-0x800F60BC as their own object so their literal pool 0x8029E178-0x8029E1D0 is placed exactly; the object starts at 0x800F5208 because the pool must begin on an 8-byte boundary for the 0x800F5CBC conversion double to land at 0x8029E1C8. It does not claim an original file boundary.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800F5AD4",
-          "end": "0x800F5CBC"
+          "start": "0x800F5208",
+          "end": "0x800F60BC"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029E19C",
-          "end": "0x8029E1AC"
+          "start": "0x8029E178",
+          "end": "0x8029E1D0"
         }
       ],
       "functions": [
         {
+          "symbol": "fn_800F5208",
+          "start": "0x800F5208",
+          "end": "0x800F5AD4"
+        },
+        {
           "symbol": "fn_800F5AD4",
           "start": "0x800F5AD4",
           "end": "0x800F5CBC"
+        },
+        {
+          "symbol": "fn_800F5CBC",
+          "start": "0x800F5CBC",
+          "end": "0x800F60BC"
         }
       ]
     },
@@ -38578,6 +38481,32 @@
           "symbol": "fn_800F6158",
           "start": "0x800F6158",
           "end": "0x800F62A4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800F6370.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using body of 0x800F6370-0x800F6790 as its own object so its literal pool 0x8029E1E8-0x8029E1F0 is placed exactly; it does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F6370",
+          "end": "0x800F6790"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E1E8",
+          "end": "0x8029E1F0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800F6370",
+          "start": "0x800F6370",
+          "end": "0x800F6790"
         }
       ]
     },
@@ -38643,6 +38572,47 @@
       ]
     },
     {
+      "source": "src/game/cu_800F7314.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800F7314-0x800F81C0 as their own object so their literal pool 0x8029E250-0x8029E2E0 is placed exactly; it does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F7314",
+          "end": "0x800F81C0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E250",
+          "end": "0x8029E2E0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800F7314",
+          "start": "0x800F7314",
+          "end": "0x800F7798"
+        },
+        {
+          "symbol": "fn_800F7798",
+          "start": "0x800F7798",
+          "end": "0x800F7B64"
+        },
+        {
+          "symbol": "fn_800F7B64",
+          "start": "0x800F7B64",
+          "end": "0x800F7F68"
+        },
+        {
+          "symbol": "fn_800F7F68",
+          "start": "0x800F7F68",
+          "end": "0x800F81C0"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800F81C0.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800F81C0-0x800F8D24 as their own object so their literal pool 0x8029E2E0-0x8029E344 is placed exactly; it does not claim an original file boundary.",
@@ -38690,6 +38660,37 @@
           "symbol": "fn_800F8A88",
           "start": "0x800F8A88",
           "end": "0x800F8D24"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800F8D2C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800F8D2C-0x800F930C as their own object so their literal pool 0x8029E344-0x8029E38C is placed exactly; it does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800F8D2C",
+          "end": "0x800F930C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029E344",
+          "end": "0x8029E38C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800F8D2C",
+          "start": "0x800F8D2C",
+          "end": "0x800F9024"
+        },
+        {
+          "symbol": "fn_800F9024",
+          "start": "0x800F9024",
+          "end": "0x800F930C"
         }
       ]
     },
@@ -53807,19 +53808,19 @@
     {
       "source": "src/game/cu_800A3530.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: the motion-phase callbacks 0x800A3530-0x800A3B10 and the channel reset 0x800A3B5C, whose float and double literals form the readonly slice 0x80296718-0x80296754 measured here (8-aligned for the conversion doubles). fn_800A3B10 and fn_800A3B58 inside the text range stay in src/game/cu_8008E978.cpp. No original file boundary or whole-unit promotion is claimed.",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: the motion-phase callbacks 0x800A3530-0x800A3B10, the channel reset 0x800A3B5C and the target helpers 0x800A3E84-0x800A4294, whose float and double literals form the readonly slice 0x80296718-0x8029678C measured here (8-aligned for the conversion doubles). The slice also holds the pools of two functions the target linker discarded, Stripped_8029674C and Stripped_80296754, recovered from their Xbox prototype NFLBig.xbe counterparts 0x4FD30 and 0x4FF30 (evidence.tsv linker rows 0x8029674C-0x80296750 and 0x80296754-0x80296764); they are compiled but not registered or measured. fn_800A3B10, fn_800A3B58, fn_800A3C14, fn_800A3D68, fn_800A3D70, fn_800A3DC4 and fn_800A3E00 inside the text range stay in src/game/cu_8008E978.cpp. No original file boundary or whole-unit promotion is claimed.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800A3530",
-          "end": "0x800A3C14"
+          "end": "0x800A4294"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80296718",
-          "end": "0x80296754"
+          "end": "0x8029678C"
         }
       ],
       "functions": [
@@ -53842,28 +53843,7 @@
           "symbol": "fn_800A3B5C",
           "start": "0x800A3B5C",
           "end": "0x800A3C14"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800A3E84.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: the turn checks 0x800A3E84-0x800A4294 whose float and double literals lie in the readonly slice 0x80296760-0x8029678C measured here (8-aligned for the conversion double). No original file boundary or whole-unit promotion is claimed.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800A3E84",
-          "end": "0x800A4294"
         },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x80296760",
-          "end": "0x8029678C"
-        }
-      ],
-      "functions": [
         {
           "symbol": "fn_800A3E84",
           "start": "0x800A3E84",
@@ -53874,6 +53854,10 @@
           "start": "0x800A414C",
           "end": "0x800A4294"
         }
+      ],
+      "discarded": [
+        "Stripped_8029674C",
+        "Stripped_80296754"
       ]
     },
     {

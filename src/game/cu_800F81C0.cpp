@@ -42,7 +42,7 @@ int fn_800F6878(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800F6B2C(Object_80039F5C *p, Vector_80039F5C *pDelta);
 int fn_8011E9D8(State_80039F5C *pState);
 unsigned int fn_800F67E8(Object_80039F5C *pTarget);
-int fn_8012CC04(int a);
+int fn_8012CC04(unsigned char a);
 int fn_8012CCA0(Object_80039F5C *p);
 float fn_80178A2C(void);
 void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, int a, int b);

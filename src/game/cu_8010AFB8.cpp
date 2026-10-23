@@ -55,7 +55,7 @@ void fn_8010B1FC(Object_80039F5C *p, int a, short b);
 int fn_801486A0(void);
 int fn_8016E928(void);
 Point_8017886C fn_80177FFC(int team);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *pRecord, float e);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *pRecord);
 float fn_80237260(int stream);
 }
 
@@ -68,7 +68,7 @@ extern "C" int fn_8010AFB8(Object_80039F5C *p) {
         if (p->mFlags & 4) {
             p->mFlags |= 0x40000;
             p->mFlags &= ~4;
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0x5B, p, 1.0f);
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 0x5B, 1.0f, p);
             if (pBlock->mUnknown6 != 0) {
                 pBlock->mUnknown6 = 0;
                 if (p->mpState[1].mId != 0) {

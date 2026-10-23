@@ -190,7 +190,7 @@ void fn_801BE040(Collection_801BE594 *p)
 }
 
 int fn_801BE068(Collection_801BE594 *p, Object_801BA03C *pObject, Record_800D81C8 *pRecords, unsigned short key,
-                void *pOwner, float frames)
+                float frames, void *pOwner)
 {
     unsigned short previous = fn_801BE648(p);
     unsigned short slot;

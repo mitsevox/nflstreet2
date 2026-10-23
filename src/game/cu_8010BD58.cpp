@@ -54,14 +54,16 @@ extern "C" int fn_8010BD58(Object_80039F5C *p) {
 
     if (fn_8010B224(p)) {
         Vector_80039F5C toBall;
+        float dist;
         float chance;
         float limit;
         int index;
 
         fn_80137D58(fn_801374BC(), &toBall);
         fn_80227690(&toBall, &toBall, &p->mMotion.mPos);
+        dist = fn_802270A4(&toBall);
         chance = 1.2f;
-        chance -= fn_802270A4(&toBall) * 0.15f;
+        chance -= dist * 0.15f;
         index = fn_800A2178();
         limit = lbl_802DAB74[index];
         if (fn_80156704() && !fn_801485D4()) {

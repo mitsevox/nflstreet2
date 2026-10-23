@@ -371,7 +371,9 @@ int fn_8022A490(unsigned int count)
         unsigned short i;
 
         for (i = 0; i < count; i++) {
-            if ((err = fn_8022A428(id++)) != 0) {
+            if ((err = fn_8022A428(id)) == 0) {
+                id++;
+            } else {
                 break;
             }
         }

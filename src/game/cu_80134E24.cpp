@@ -572,7 +572,7 @@ int fn_80136210(Object_80039F5C *p)
     State_80039F5C *m = p->mpState;
     State_80134E24 *s = (State_80134E24 *)&p->mUnknown336;
     fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800,
-               (m->mUnknown1 << 8) | m->mUnknown2, p, 1.0f);
+               (m->mUnknown1 << 8) | m->mUnknown2, 1.0f, p);
     p->mUnknown512.mUnknown14 = 0;
     p->mFlags &= ~4;
     m = p->mpState;

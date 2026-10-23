@@ -184,7 +184,7 @@ extern "C" {
 int fn_80238278(const void *p, int size, int seed);
 void fn_8015A0D0(int value);
 void fn_8015C254(int a);
-int fn_80092830(int handle);
+int fn_80092830(int index);
 float fn_80094454(int handle);
 unsigned char fn_801BC044(unsigned short index);
 unsigned char fn_801BC060(unsigned short index);
@@ -632,7 +632,7 @@ extern "C" void fn_80091144(int index)
     }
 }
 
-extern "C" Actor_801C009C *fn_80091240(unsigned short index)
+extern "C" Actor_801C009C *fn_80091240(int index)
 {
     Character_80093BCC *pCharacter = fn_80093BCC(index);
 
@@ -1032,7 +1032,7 @@ extern "C" int fn_80092784(unsigned char index)
     return result;
 }
 
-extern "C" int fn_800927BC(int index)
+extern "C" int fn_800927BC(unsigned char index)
 {
     Character_80093BCC *pCharacter = &lbl_803EC924->mUnknown80.mCharacters[index];
     int result = 0;
@@ -1695,7 +1695,8 @@ extern "C" int fn_80094B34(Table_800680A8 *pTable, int index)
     int result = -1;
 
     pRow += index * (pTable->mUnknownC + pTable->mUnknown10);
-    if (((Cell_80094B34 *)(pRow + pTable->mUnknownC))->mValue > 0) {
+    Cell_80094B34 *pCell = (Cell_80094B34 *)(pRow + pTable->mUnknownC);
+    if (pCell->mValue > 0) {
         result = pRow[0];
     }
     return result;
@@ -2333,7 +2334,7 @@ extern "C" int fn_80096304(int index)
     return result;
 }
 
-extern "C" int fn_8009637C(unsigned short index)
+extern "C" int fn_8009637C(int index)
 {
     Character_80093BCC *pCharacter = fn_80093BCC(index);
     int result = 1;
@@ -6774,14 +6775,13 @@ extern "C" void fn_800A9018(unsigned int step)
 
     fn_8009601C();
     for (i = 0; i <= 1; i++) {
-        unsigned char team = i;
         int isOffense = i == fn_80178308();
         unsigned int j = 0;
-        unsigned int count = fn_80178D18(team);
+        unsigned int count = fn_80178D18((unsigned char)i);
 
-        fn_80085744(fn_80168EBC(team)->mUnknown20.mUnknown14.mUnknown8.mUnknown4, i);
+        fn_80085744(fn_80168EBC((unsigned char)i)->mUnknown20.mUnknown14.mUnknown8.mUnknown4, i);
         for (; j < count; j++) {
-            Object_80039F5C *p = fn_80039F5C(team, j);
+            Object_80039F5C *p = fn_80039F5C((unsigned char)i, j);
             int slot = fn_8008576C(p->mUnknown2908, isOffense);
 
             if (fn_801485D4() != 0 && fn_801486A0() == 4) {
@@ -6909,7 +6909,7 @@ extern "C" void fn_800A9384(int mode)
 
 extern "C" int fn_800A9648(void)
 {
-    return fn_800927BC((unsigned char)lbl_8030F42C.mUnknown14[lbl_8030F42C.mUnknownC]);
+    return fn_800927BC(lbl_8030F42C.mUnknown14[lbl_8030F42C.mUnknownC]);
 }
 
 extern "C" {
@@ -9143,7 +9143,7 @@ extern "C" void fn_800BB24C(void)
 }
 
 extern "C" {
-int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
+int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 int fn_801F0F18(int a);
 }
 
@@ -9447,8 +9447,14 @@ extern "C" void fn_800BC190(int index, int value)
         other = side ^ 1;
         for (i = 0; i < pActor->mUnknown4; i++) {
             unsigned int position = fn_80096440(fn_801C029C(pActor, i)->mUnknown0);
+            int choice;
 
-            sides[i] = position > 6 ? other : side;
+            if (position > 6) {
+                choice = other;
+            } else {
+                choice = side;
+            }
+            sides[i] = choice;
         }
     } else {
         sides[0] = index & 1;
@@ -9956,7 +9962,7 @@ extern "C" int fn_800AAAC4(void)
     int result = 1;
 
     if (lbl_803EAA88->mUnknownC != -1) {
-        result = fn_800927BC((unsigned char)lbl_803EAA88->mUnknownC);
+        result = fn_800927BC(lbl_803EAA88->mUnknownC);
     }
     return result;
 }
@@ -14398,21 +14404,24 @@ extern "C" int fn_800CC98C(Group_800CC98C *pGroup, int index)
 
 extern "C" void fn_800CCA40(Set_800CCBA0 *pSet, Entry_800CCBA0 **pOut, int kind, int index)
 {
-    unsigned short a = 0;
-    unsigned short b = 0;
+    unsigned short a;
+    unsigned short b;
     unsigned int i;
+
     *pOut = 0;
+    a = 0;
+    b = 0;
     for (i = 0; i < pSet->mCount; i++) {
         if (pSet->mEntries[i].mUnknown2 == 0) {
             if (a == index && kind == 0) {
                 *pOut = &pSet->mEntries[i];
-                return;
+                break;
             }
             a++;
         } else {
             if (b == index && kind == 1) {
                 *pOut = &pSet->mEntries[i];
-                return;
+                break;
             }
             b++;
         }
@@ -14421,17 +14430,17 @@ extern "C" void fn_800CCA40(Set_800CCBA0 *pSet, Entry_800CCBA0 **pOut, int kind,
 
 extern "C" void fn_800CCB04(Set_800CCBA0 *pSet, Entry_800CCBA0 **pOut, int kind, int key)
 {
+    unsigned int i;
     *pOut = 0;
-    for (unsigned int i = 0; i < pSet->mCount; i++) {
-        Entry_800CCBA0 *p = &pSet->mEntries[i];
-        if (p->mUnknown2 == 0) {
-            if (p->mUnknown16 == key && kind == 0) {
-                *pOut = p;
-                return;
+    for (i = 0; i < pSet->mCount; i++) {
+        if (pSet->mEntries[i].mUnknown2 == 0) {
+            if (pSet->mEntries[i].mUnknown16 == key && kind == 0) {
+                *pOut = &pSet->mEntries[i];
+                break;
             }
-        } else if (p->mUnknown16 == key && kind == 1) {
-            *pOut = p;
-            return;
+        } else if (pSet->mEntries[i].mUnknown16 == key && kind == 1) {
+            *pOut = &pSet->mEntries[i];
+            break;
         }
     }
 }
@@ -17659,7 +17668,7 @@ extern "C" void fn_800BDA7C(void)
 
 
 extern "C" { unsigned char fn_80114DD8(Object_80039F5C *p); void fn_800CD978(Group_800CC98C *,Play_800CCEBC *,unsigned int); void fn_800CDB5C(Group_800CC98C *,Play_800CCEBC *,unsigned int); }
-extern "C" int fn_801BE068(void *, void *, void *, unsigned short, void *, float);
+extern "C" int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 #include "game/Record_800CE608.h"
 extern "C" void fn_800CE608(Object_80039F5C *,Record_800CE608 *);
 
@@ -17907,7 +17916,7 @@ extern "C" void fn_800CE608(Object_80039F5C *p, Record_800CE608 *pRecord)
     p->mUnknown1008.mUnknown1 = pRecord->mUnknown10 >> 8;
     p->mUnknown1008.mUnknown2 = pRecord->mBytes12[1];
     p->mUnknown1011 = pRecord->mUnknown12 >> 8;
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, pRecord->mUnknown8, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, pRecord->mUnknown8, 1.0f, p);
 }
 
 extern "C" float fn_800CE73C(Object_800CE674 *p)

@@ -428,7 +428,7 @@ Object_800670B4 *fn_80168708(int team);
 float fn_8016D9F4(Object_80039F5C *p, float a, float b);
 int fn_801783AC(int bit);
 void fn_801BD81C(void *p, float value);
-int fn_801BE068(void *a, void *b, void *c, unsigned short d, void *p, float value);
+int fn_801BE068(void *a, void *b, void *c, unsigned short d, float value, void *p);
 
 
 void fn_801BE760(void *p, unsigned short key, unsigned short flags);
@@ -487,7 +487,7 @@ extern "C" void fn_800DBC4C(Object_80039F5C *p, int angle, float value)
                     p->mUnknown512.mUnknown8 = p->mUnknown512.mUnknown4 = base;
                     p->mUnknown512.mUnknown14 = 6;
                     p->mUnknown512.mUnknown0 = 1.0f;
-                    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 217, p, 1.0f);
+                    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 217, 1.0f, p);
                     p->mUnknown512.mUnknown14 = 0;
                     p->mFlags &= ~4;
                 } else {
@@ -498,7 +498,7 @@ extern "C" void fn_800DBC4C(Object_80039F5C *p, int angle, float value)
                         } else {
                             p->mUnknown1008.mUnknown0 = 2;
                         }
-                        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 222, p, 1.0f);
+                        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 222, 1.0f, p);
                     }
                     p->mUnknown512.mUnknown14 = 0;
                 }
@@ -2308,7 +2308,7 @@ extern "C" int fn_800DFA00(Object_80039F5C *p, float *pValue)
     p->mUnknown1008.mUnknown1 = ((unsigned char *)pCharacter)[7];
     p->mUnknown1008.mUnknown2 = pBlock->mUnknown9;
     p->mUnknown1011 = pBlock->mUnknown10;
-    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 10, p, 1.0f);
+    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 10, 1.0f, p);
     if ((pView->mFlags & 32) || p->mIdBytes[3] == 3) fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
     if (pView->mFlags & 8) {
         unsigned char count = fn_801BA568(p->mpUnknown796, p->mpUnknown800, 10);
@@ -2328,7 +2328,7 @@ extern "C" int fn_800DFA00(Object_80039F5C *p, float *pValue)
             unsigned int key = fn_801BBCC8(0, other);
             p->mUnknown1012[1] = key >> 8;
             p->mUnknown1012[0] = key;
-            fn_801BE068(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, 0, p, 1.0f);
+            fn_801BE068(p->mpUnknown804, p->mpUnknown808, p->mpUnknown812, 0, 1.0f, p);
         }
     }
     p->mpUnknown4->mUnknown20 |= 16;
@@ -2369,11 +2369,11 @@ extern "C" int fn_800DFD90(Object_80039F5C *p)
             fn_8009BD60(p);
             p->mUnknown1008.mUnknown0 = 1;
             p->mUnknown1008Word = 6;
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 82, p, 1.0f);
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 82, 1.0f, p);
             fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
         } else if (p->mIdBytes[3] == 1) {
             int mode = fn_800AD9B4();
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, p, 1.0f);
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
             fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
             if (mode == 4) {
                 fn_8010A2DC(p, 0, -1);
@@ -2408,11 +2408,11 @@ extern "C" int fn_800DFED0(Object_80039F5C *p)
                 fn_8009BD60(p);
                 p->mUnknown1008.mUnknown0 = 1;
                 p->mUnknown1008Word = 6;
-                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 82, p, 1.0f);
+                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 82, 1.0f, p);
                 fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
             } else if (p->mIdBytes[3] == 1) {
                 int mode = fn_800AD9B4();
-                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, p, 1.0f);
+                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
                 fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
                 if (mode == 4) fn_8016DBE4(p);
                 p->mUnknown512.mUnknown14 = 1;
@@ -2581,7 +2581,7 @@ extern "C" void fn_800E0694(Object_80039F5C *p, int handle, int index)
             p->mUnknown1008.mUnknown0 = fn_8009A63C(handle)->mUnknown4;
             p->mUnknown1008.mUnknown1 = !(fn_80237260(0) >= lbl_803EAD30) ? 1 : 2;
             p->mUnknown1008.mUnknown2 = handle < 0 ? 2 : 1;
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 226, p, 1.0f);
+            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 226, 1.0f, p);
             return;
         }
     }
@@ -2866,7 +2866,7 @@ extern "C" int fn_800E1438(Object_80039F5C *p)
         p->mUnknown1008.mUnknown1 = 2;
         p->mUnknown1008.mUnknown2 = 10;
         p->mUnknown1011 = 1;
-        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 70, p, 1.0f);
+        fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 70, 1.0f, p);
     }
     if (pBlock->mUnknown8 == 0) {
         pBlock->mUnknown8 = fn_800E11C0(p);

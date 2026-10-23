@@ -142,10 +142,10 @@ extern "C" void fn_800B6E68(Object_80039F5C *p, Input_800B6D34 *pInput)
         if (mode == 1) {
             if (fn_801BE648(p->mpUnknown792) != 0x4A && fn_801BE648(p->mpUnknown792) != 0x54
                 && fn_801BE648(p->mpUnknown792) != 0xD9 && fn_801BE648(p->mpUnknown792) != 0xDE) {
-                p->mUnknown512.mUnknown0 = 0.0f;
                 p->mUnknown512.mUnknown14 = mode;
                 p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
                 p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
+                p->mUnknown512.mUnknown0 = 0.0f;
             } else {
                 fn_800DBC4C(p, p->mMotion.mFacing, 0.0f);
             }

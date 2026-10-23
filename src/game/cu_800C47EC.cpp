@@ -86,14 +86,14 @@ extern "C" int fn_800C4B6C(Object_80039F5C *p)
             result = 1;
         }
         if (result == 0 && (p->mpState->mId >= 34 && p->mpState->mId <= 36) && *pRating < lbl_803EABEA) {
-            chance = fn_80237260(0);
+            float roll = fn_80237260(0);
             value = *pRating * -lbl_803EABEC / lbl_803EABEA + lbl_803EABEC;
-            if (chance < value) {
+            if (roll < value) {
                 fn_800E9B84(p, kind);
                 result = 1;
             } else {
                 value = *pRating * -lbl_803EABF0 / lbl_803EABEA + lbl_803EABF0;
-                if (chance < value) {
+                if (roll < value) {
                     fn_800E99A8(p, kind);
                     result = 1;
                 }
