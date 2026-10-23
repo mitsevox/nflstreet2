@@ -65,7 +65,7 @@ int fn_800C8BAC(Object_80039F5C *p, int which);
 int fn_8011A994(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_8011A2C4(Object_80039F5C *p, Object_80039F5C *pOther, Pair_8011BAE0 pair, int a);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **ppBlocker);
-void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
+void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value);
 void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int a);
 void fn_801187CC(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80227690(void *pOut, void *pA, void *pB);
@@ -150,64 +150,64 @@ extern "C" int fn_80118B4C(Object_80039F5C *p, Pair_8011BAE0 *pPair)
         }
         if (fn_80227890(&p->mMotion.mPos, &pOther->mMotion.mPos) >= 12.25f) goto done;
         if (!fn_80124714(p, pOther, 0)) goto done;
-    count = 0;
-    roll = fn_80237260(0);
-    fn_8011A2C4(p, pOther, *pPair, 1);
-    if (pBlock->mUnknown20 != 1 || close) {
-        if (roll < pBlock->mUnknown52) {
-            if (roll < pBlock->mUnknown52 * 0.5f) {
-                moves[count++] = lbl_802DAC38[0];
-            } else {
-                moves[count++] = lbl_802DAC38[1];
-            }
-        } else if (roll < pOtherBlock->mUnknown52) {
-            int blocked = 0;
-            Object_80039F5C *pCarrier = fn_80137B40();
-            if (pCarrier) {
-                Vector_80039F5C toCarrier;
-                fn_802276B4(&toCarrier, &pCarrier->mMotion.mPos, &pOther->mMotion.mPos);
-                int heading = fn_801CFE40(toCarrier.mY, toCarrier.mX);
-                if (fn_80124714(pOther, fn_80137B40(), 0) && fn_802270D4(&toCarrier) < 6.0f) {
-                    blocked = fn_801CFFD0(heading, pOther->mMotion.mFacing + fn_800C8BAC(pOther, 0)) <= 0x555554;
+        count = 0;
+        roll = fn_80237260(0);
+        fn_8011A2C4(p, pOther, *pPair, 1);
+        if (pBlock->mUnknown20 != 1 || close) {
+            if (roll < pBlock->mUnknown52) {
+                if (roll < pBlock->mUnknown52 * 0.5f) {
+                    moves[count++] = lbl_802DAC38[0];
+                } else {
+                    moves[count++] = lbl_802DAC38[1];
+                }
+            } else if (roll < pOtherBlock->mUnknown52) {
+                int blocked = 0;
+                Object_80039F5C *pCarrier = fn_80137B40();
+                if (pCarrier) {
+                    Vector_80039F5C toCarrier;
+                    fn_802276B4(&toCarrier, &pCarrier->mMotion.mPos, &pOther->mMotion.mPos);
+                    int heading = fn_801CFE40(toCarrier.mY, toCarrier.mX);
+                    if (fn_80124714(pOther, fn_80137B40(), 0) && fn_802270D4(&toCarrier) < 6.0f) {
+                        blocked = fn_801CFFD0(heading, pOther->mMotion.mFacing + fn_800C8BAC(pOther, 0)) <= 0x555554;
+                    }
+                }
+                if (!blocked) {
+                    moves[count++] = lbl_802DAC38[2];
                 }
             }
-            if (!blocked) {
-                moves[count++] = lbl_802DAC38[2];
-            }
         }
-    }
 
-    fn_800CE770(&query);
-    query.mpUnknown0 = p;
-    query.mpUnknown4 = pOther;
-    if (p->mpState->mId == 96) {
-        query.mUnknown36 = 0x66666;
-        query.mUnknown44 = 0.45f;
-    } else {
-        query.mUnknown36 = 0xE38E3;
-        query.mUnknown44 = 0.4f;
-    }
-    for (unsigned char i = 0; i < count; i++) {
-        query.mUnknown52 = moves[i];
-        if (fn_800CE4A8(&query)) {
-            result = 1;
-            if (moves[i] == lbl_802DAC38[0] || moves[i] == lbl_802DAC38[2]) {
-                fn_8011E1BC(p, pOther, 0, 5);
-                fn_8011E33C(pOther, p, 5);
-                if (moves[i] == lbl_802DAC38[0]) {
-                    fn_801187CC(p, pOther);
-                }
-            } else {
-                fn_8011E1BC(p, pOther, 0, 6);
-                fn_8011E33C(pOther, p, 6);
-            }
-            fn_800CA5CC(p, 8, 1);
-            if (fn_800B65A0(pOther->mIdBytes[2]) != 255 || !fn_8011F1CC()) {
-                fn_800CA5CC(pOther, 8, 1);
-            }
-            break;
+        fn_800CE770(&query);
+        query.mpUnknown0 = p;
+        query.mpUnknown4 = pOther;
+        if (p->mpState->mId == 96) {
+            query.mUnknown36 = 0x66666;
+            query.mUnknown44 = 0.45f;
+        } else {
+            query.mUnknown36 = 0xE38E3;
+            query.mUnknown44 = 0.4f;
         }
-    }
+        for (unsigned char i = 0; i < count; i++) {
+            query.mUnknown52 = moves[i];
+            if (fn_800CE4A8(&query)) {
+                result = 1;
+                if (moves[i] == lbl_802DAC38[0] || moves[i] == lbl_802DAC38[2]) {
+                    fn_8011E1BC(p, pOther, 0, 5);
+                    fn_8011E33C(pOther, p, 5);
+                    if (moves[i] == lbl_802DAC38[0]) {
+                        fn_801187CC(p, pOther);
+                    }
+                } else {
+                    fn_8011E1BC(p, pOther, 0, 6);
+                    fn_8011E33C(pOther, p, 6);
+                }
+                fn_800CA5CC(p, 8, 1);
+                if (fn_800B65A0(pOther->mIdBytes[2]) != 255 || !fn_8011F1CC()) {
+                    fn_800CA5CC(pOther, 8, 1);
+                }
+                break;
+            }
+        }
     }
 done:
     return result;
@@ -256,10 +256,10 @@ extern "C" void fn_80119020(void)
                 }
             } else {
                 int late = 0;
-                if (!fn_801783AC(0)) {
-                    if (!(fn_80177FE0().mY - ball.mY > 2.0f)) {
-                        if (fn_8011E188() <= 59) late = 1;
-                    }
+                if (!fn_801783AC(0) && fn_80177FE0().mY - ball.mY > 2.0f) {
+                    late = 1;
+                } else if (fn_8011E188() <= 59) {
+                    late = 1;
                 }
                 if (late) diff = 0;
             }

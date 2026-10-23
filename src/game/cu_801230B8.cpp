@@ -69,7 +69,7 @@ int fn_80178308(void);
 int fn_80177C38(void);
 Point_8017886C fn_80177FE0(void);
 int fn_8011F1A4(void);
-unsigned int fn_8011F4C8(void);
+unsigned char fn_8011F4C8(void);
 float fn_8011F4D4(void);
 int fn_801783AC(int a);
 void fn_8012327C(Directions_8012430C *pValues, Object_80039F5C *p);
@@ -186,7 +186,6 @@ void fn_801227DC(Object_80039F5C *p, Plan_80121264 *pPlan, Entry_801230B8 *pEntr
             open = 1;
         }
     } else if ((flagsA & 0x40) && (flagsB & 2) || (flagsA & 2) && (flagsB & 0x40)) {
-        float distance;
         open = 1;
         if ((flagsA | flagsB) & 4) {
             wide = 1;
@@ -338,7 +337,7 @@ void fn_8012327C(Directions_8012430C *pValues, Object_80039F5C *p)
                 Point_8017886C delta;
                 fn_80227690(&delta, &point, pPos);
                 unsigned int direction = (fn_801CFE40(delta.mY, delta.mX) + 0x100000) >> 21 & 7;
-                switch ((int)fn_8011F4C8()) {
+                switch (fn_8011F4C8()) {
                 case 6: case 8: case 10: case 12:
                     if (!(point.mX <= pPos->mX)) mode = 1;
                     else pValues->mCost[1] -= 5.0f;

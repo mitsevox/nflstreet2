@@ -9,13 +9,13 @@ struct Pair_8011BAE0 {
     float mUnknown4;
 };
 
-/* 80-byte entry of the two lists fn_8011D9B8 builds; terminated by a null
-   player. +4 caches one score per opposing player index, with its valid byte. */
 struct Score_8011D0BC {
     float mValue;
     unsigned char mValid;
 };
 
+/* 80-byte entry of the two lists fn_8011D9B8 builds; terminated by a null
+   player. +4 caches one score per opposing player index, with its valid byte. */
 struct Entry_8011AFCC {
     Entry_8011AFCC *mpUnknown0;
     Score_8011D0BC mUnknown4[7];

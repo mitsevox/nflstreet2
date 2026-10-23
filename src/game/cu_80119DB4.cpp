@@ -1,16 +1,7 @@
+#include "game/Block_803EB028.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_80177FE0.h"
 #include <math.h>
-
-struct Block_803EB028 {
-    int mUnknown0;
-    char mUnknown4[80];
-    unsigned int mUnknown84;
-    unsigned char mUnknown88;
-    unsigned char mUnknown89;
-    unsigned char mUnknown90;
-    char mUnknown91[1];
-};
 
 struct Record_80118894 {
     char mUnknown0[64];
@@ -25,7 +16,7 @@ struct Pair_8011BAE0 {
 };
 
 /* View of the block at player +1072 as fn_80119DB4 and fn_8011A2C4 use it:
-   four values at +24..+36 (handed to fn_800ABF00) and their multipliers at
+   four values at +24..+36 (handed to fn_800ABF00) and three multipliers at
    +40..+48. */
 struct Block_80119DB4 {
     float mUnknown0;

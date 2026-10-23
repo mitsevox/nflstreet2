@@ -34,7 +34,7 @@ Object_80039F5C *fn_8009EC60(unsigned int index, Point_8017886C *pOut);
 Object_80039F5C *fn_8009EDD4(unsigned int index, int side, Point_8017886C *pOut);
 int fn_8009EFDC(int side);
 void fn_8009F928(Object_80039F5C *p, Point_8017886C *pSpot, int a, unsigned char flag);
-unsigned char fn_8009FD7C(Object_80039F5C *p, Object_80039F5C *pOther);
+int fn_8009FD7C(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_80168E00(int team, int index, unsigned char *pOut);
 int fn_801CFFD0(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);

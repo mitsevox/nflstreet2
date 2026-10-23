@@ -2,12 +2,12 @@
 #include "game/Object_80039F5C.h"
 #include "game/Object_8017886C.h"
 #include "game/fn_8022781C.h"
+#include "game/cu_80136B1C.h"
 
 extern "C" {
 
 int fn_801787A0(void);
 unsigned short fn_801BE648(void *p);
-void *fn_80137C48(Object_80039F5C *p);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_801CFFD0(int a, int b);
 int fn_800C8BAC(Object_80039F5C *p, int a);
