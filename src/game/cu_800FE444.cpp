@@ -335,7 +335,6 @@ float fn_800FEDBC(State_800FDA58 *s, Object_80039F5C *p, float distance)
     int mode;
     unsigned int minimum;
     float desired;
-    float difference;
     float result;
 
     goal = fn_80177FFC(p->mIdBytes[2]);
@@ -364,16 +363,12 @@ float fn_800FEDBC(State_800FDA58 *s, Object_80039F5C *p, float distance)
     if (mode == 1) {
         desired = 0.5f;
     }
-    difference = desired - s->mUnknown24;
-    if (difference < -0.01f) {
-        difference = -0.01f;
-    } else if (difference > 0.05f) {
-        difference = 0.05f;
-    }
-    s->mUnknown24 += difference;
+    result = desired - s->mUnknown24;
+    result = result < -0.01f ? -0.01f : (result > 0.05f ? 0.05f : result);
+    s->mUnknown24 += result;
     result = s->mUnknown24;
     if (distance < 3.0f) {
-        result = result * 0.33333334f * distance;
+        result = result * (distance * 0.33333334f);
         if (result < minimum * 0.00054901966f) {
             result = minimum * 0.00054901966f;
         }
