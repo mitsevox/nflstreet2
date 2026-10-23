@@ -5076,8 +5076,7 @@ extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
     int ref;
 
     if (fn_800A9680() != 0 || (mode != 3 && (mode != 2 || fn_800A7FD8() != 0))) {
-        ppOut[0] = 0;
-        ppOut[1] = 0;
+        ppOut[0] = ppOut[1] = 0;
         return;
     }
     if (fn_800B65A0(team) != 0xFF) {
@@ -5101,21 +5100,16 @@ extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
             pSecond = fn_8009BCE8(&ref);
         }
         if (fn_80178308() == team && fn_80137B40() != 0) {
-            Object_80039F5C *pCarrier = fn_80137B40();
-
-            ppOut[0] = pCarrier;
-            if (pFirst == 0 || pFirst == pCarrier) {
-                if (pSecond != 0 && pSecond != ppOut[0]) {
-                    ppOut[1] = pSecond;
-                } else {
-                    ppOut[1] = 0;
-                }
-            } else {
+            ppOut[0] = fn_80137B40();
+            if (pFirst != 0 && pFirst != ppOut[0]) {
                 ppOut[1] = pFirst;
+            } else if (pSecond != 0 && pSecond != ppOut[0]) {
+                ppOut[1] = pSecond;
+            } else {
+                ppOut[1] = 0;
             }
         } else if (pFirst == 0 && pSecond == 0) {
-            ppOut[0] = 0;
-            ppOut[1] = 0;
+            ppOut[0] = ppOut[1] = 0;
         } else if (pFirst == 0) {
             ppOut[0] = pSecond;
             ppOut[1] = pFirst;
@@ -5123,8 +5117,8 @@ extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
             ppOut[0] = pFirst;
             ppOut[1] = pSecond;
         } else {
-            Vector_80039F5C ballPos;
             Vector_80039F5C delta;
+            Vector_80039F5C ballPos;
             float distance;
 
             fn_80137D58(pBall, &ballPos);
@@ -5788,20 +5782,17 @@ extern "C" void fn_800A9018(unsigned int step)
             int slot = fn_8008576C(p->mUnknown2908, isOffense);
 
             if (fn_801485D4() != 0 && fn_801486A0() == 4) {
-                unsigned int id;
-
                 if (lbl_8030F42C.mUnknown0 == 7) {
-                    id = lbl_802D8064[slot];
+                    fn_8009604C(fn_80096440(lbl_802D8064[slot]), (int)p);
                 } else if (lbl_8030F42C.mUnknown0 == 4) {
                     if (step > 1) {
-                        id = lbl_802D80D4[slot];
+                        fn_8009604C(fn_80096440(lbl_802D80D4[slot]), (int)p);
                     } else {
-                        id = lbl_802D809C[slot];
+                        fn_8009604C(fn_80096440(lbl_802D809C[slot]), (int)p);
                     }
                 } else {
-                    id = lbl_802D802C[slot];
+                    fn_8009604C(fn_80096440(lbl_802D802C[slot]), (int)p);
                 }
-                fn_8009604C(fn_80096440(id), (int)p);
             } else {
                 fn_8009604C(fn_80096440(lbl_802D7FF4[slot]), (int)p);
             }
@@ -8783,6 +8774,7 @@ extern "C" int fn_800AAAC4(void)
 extern "C" void fn_800AAAFC(void)
 {
     unsigned int i;
+    int size;
 
     lbl_803EC960 = fn_800A9F4C(0);
     if (lbl_803EC960 != 0) {
@@ -8790,8 +8782,9 @@ extern "C" void fn_800AAAFC(void)
     } else {
         lbl_803EAA88->mUnknown14 = 0;
     }
+    size = 0x16000;
     for (i = 0; i <= 1; i++) {
-        lbl_803EC964[i] = lbl_803EC960 + i * 0x16000;
+        lbl_803EC964[i] = lbl_803EC960 + i * size;
     }
     fn_800AA010(0);
 }

@@ -114,11 +114,7 @@ extern "C" unsigned char fn_800A6658(int team)
     while (fn_80237260(0) < 0.3f) {
         count += step;
     }
-    if (count <= 0) {
-        count = 1;
-    } else if (count > 3) {
-        count = 3;
-    }
+    count = count > 0 ? (count > 3 ? 3 : count) : 1;
     return count;
 }
 
