@@ -9807,14 +9807,16 @@
       "provenance": {
         "pull_request": 737,
         "merged_via": 1068,
-        "commit": "1763c494860d6ee57daab7e99155543c74518597",
-        "introduced_blob": "d0b22682d7afec961dc9285a4010c7c21f6a6adf",
+        "commit": "fd0ad8f03ac26a11e643043a294281c96783302c",
+        "introduced_blob": "92d92189930947aa1ed17a04b7c9507dff1e3637",
+        "original_commit": "1763c494860d6ee57daab7e99155543c74518597",
+        "original_blob": "d0b22682d7afec961dc9285a4010c7c21f6a6adf",
         "fragment_origin": {
           "source": "src/game/cu_80132630.cpp",
           "commit": "e6b7c753a0060b01801ed06f95f59d7fb84e5a04",
           "blob": "0e410b1f65f905bf8afa81738d6eafdcda114977"
         },
-        "integration_adjustment": "fn_80132630 from mitsevox's src/game/cu_80132630.cpp (PR 737, a measured fuzzy partial there) moved into its likely file src/game/cu_8013141C.cpp and made exact by writing fabsf(pPos->mX) in each of its three range tests instead of one local; parameters renamed to the file's pPos/pOther style, the rest of the body unchanged. fragment_origin keeps the original source location, commit and blob."
+        "integration_adjustment": "fn_80132630 from mitsevox's src/game/cu_80132630.cpp (PR 737, a measured fuzzy partial there) moved into its likely file src/game/cu_8013141C.cpp and made exact by writing fabsf(pPos->mX) in each of its three range tests instead of one local; parameters renamed to the file's pPos/pOther style, the rest of the body unchanged. fragment_origin keeps the original source location, commit and blob. The final file blob is pinned for squash publication; original_commit/original_blob record the commit that moved the body."
       }
     },
     {
