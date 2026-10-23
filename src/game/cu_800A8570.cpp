@@ -130,7 +130,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
 
 extern "C" {
 int fn_8002C9A8(Type_803EA368 *p, int msg, int value);
-int fn_800927BC(int index);
+int fn_800927BC(unsigned char index);
 void fn_80094598(int index);
 void fn_80093410(int handle);
 int fn_80178508(Point_8017886C *pPos, float *pOut, int skipFlags);
@@ -169,7 +169,7 @@ extern "C" void fn_800A9478(int skipPlayerReset)
         }
         for (i = 0; i <= 1; i++) {
             if (lbl_8030F42C.mUnknown1C[i] != 0) {
-                if (fn_800927BC((unsigned char)lbl_8030F42C.mUnknown14[i]) == 0) {
+                if (fn_800927BC(lbl_8030F42C.mUnknown14[i]) == 0) {
                     fn_80094598((unsigned char)lbl_8030F42C.mUnknown14[i]);
                 }
                 fn_80093410(lbl_8030F42C.mUnknown14[i]);

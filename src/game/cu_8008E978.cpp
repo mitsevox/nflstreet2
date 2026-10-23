@@ -184,7 +184,7 @@ extern "C" {
 int fn_80238278(const void *p, int size, int seed);
 void fn_8015A0D0(int value);
 void fn_8015C254(int a);
-int fn_80092830(int handle);
+int fn_80092830(int index);
 float fn_80094454(int handle);
 unsigned char fn_801BC044(unsigned short index);
 unsigned char fn_801BC060(unsigned short index);
@@ -632,7 +632,7 @@ extern "C" void fn_80091144(int index)
     }
 }
 
-extern "C" Actor_801C009C *fn_80091240(unsigned short index)
+extern "C" Actor_801C009C *fn_80091240(int index)
 {
     Character_80093BCC *pCharacter = fn_80093BCC(index);
 
@@ -1032,7 +1032,7 @@ extern "C" int fn_80092784(unsigned char index)
     return result;
 }
 
-extern "C" int fn_800927BC(int index)
+extern "C" int fn_800927BC(unsigned char index)
 {
     Character_80093BCC *pCharacter = &lbl_803EC924->mUnknown80.mCharacters[index];
     int result = 0;
@@ -1695,7 +1695,8 @@ extern "C" int fn_80094B34(Table_800680A8 *pTable, int index)
     int result = -1;
 
     pRow += index * (pTable->mUnknownC + pTable->mUnknown10);
-    if (((Cell_80094B34 *)(pRow + pTable->mUnknownC))->mValue > 0) {
+    Cell_80094B34 *pCell = (Cell_80094B34 *)(pRow + pTable->mUnknownC);
+    if (pCell->mValue > 0) {
         result = pRow[0];
     }
     return result;
@@ -2333,7 +2334,7 @@ extern "C" int fn_80096304(int index)
     return result;
 }
 
-extern "C" int fn_8009637C(unsigned short index)
+extern "C" int fn_8009637C(int index)
 {
     Character_80093BCC *pCharacter = fn_80093BCC(index);
     int result = 1;
@@ -6908,7 +6909,7 @@ extern "C" void fn_800A9384(int mode)
 
 extern "C" int fn_800A9648(void)
 {
-    return fn_800927BC((unsigned char)lbl_8030F42C.mUnknown14[lbl_8030F42C.mUnknownC]);
+    return fn_800927BC(lbl_8030F42C.mUnknown14[lbl_8030F42C.mUnknownC]);
 }
 
 extern "C" {
@@ -9961,7 +9962,7 @@ extern "C" int fn_800AAAC4(void)
     int result = 1;
 
     if (lbl_803EAA88->mUnknownC != -1) {
-        result = fn_800927BC((unsigned char)lbl_803EAA88->mUnknownC);
+        result = fn_800927BC(lbl_803EAA88->mUnknownC);
     }
     return result;
 }
