@@ -180,7 +180,6 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             }
             pBlock->mUnknown4 = toBall.Heading();
             pBlock->mUnknown24 = 0;
-            return;
         } else if (fn_801CFFD0(direction, pOther->mMotion.mUnknown32) <= 0x3FFFFF) {
             int facing = pOther->mMotion.mUnknown32;
             Point_8017886C flat;
@@ -209,7 +208,6 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             } else {
                 pBlock->mUnknown24 = 0;
             }
-            return;
         } else {
             if (p->mMotion.mPos.mY - pOther->mMotion.mPos.mY < 7.0f) {
                 int facing = pOther->mMotion.mUnknown32;
@@ -220,9 +218,9 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             }
             pBlock->mUnknown24 = 0;
             pBlock->mUnknown8 = direction;
+            pBlock->mUnknown4 = 0xC00000;
+            pBlock->mUnknown12 = 0.66f;
         }
-        pBlock->mUnknown4 = 0xC00000;
-        pBlock->mUnknown12 = 0.66f;
     }
 }
 
