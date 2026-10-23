@@ -10214,7 +10214,7 @@
     {
       "source": "src/game/cu_801260D4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained inferred twenty-nine-function grouping (provisional/open edges); individual name and source-form rows for the reconstructed bodies 0x8012623C, 0x80126DD4-0x801297F8 (0x80129098 a measured fuzzy partial), 0x8012A384 and 0x8012A38C, compiler rows 0x8012623C-0x801262B8, 0x80126DD4-0x801297F8, 0x8012A384-0x8012A38C and 0x8012A38C-0x8012A3B0, and exact data row 0x8029F6B8-0x8029F858 for the compiled literal pools of 0x80126DD4-0x8012A384 and 0x8012A3B0-0x8012A6B0; function rows 0x801297F8 and 0x8012A3B0 (0x8012A3B0 a measured fuzzy partial). The bodies 0x801260D4, 0x801262B8 and 0x801269B8, their literals 0x8029F674-0x8029F6B8 and all static data remain original and unmeasured; the entire original assembly stays linked.",
+      "evidence": "evidence.tsv retained inferred twenty-nine-function grouping (provisional/open edges); individual name and source-form rows for the reconstructed bodies 0x8012623C, 0x80126DD4-0x801297F8 (0x80129098 a measured fuzzy partial), 0x8012A384 and 0x8012A38C, compiler rows 0x8012623C-0x801262B8, 0x80126DD4-0x801297F8, 0x8012A384-0x8012A38C and 0x8012A38C-0x8012A3B0, and exact data row 0x8029F6B8-0x8029F858 for the compiled literal pools of 0x80126DD4-0x8012A384 and 0x8012A3B0-0x8012A6B0; function rows 0x801297F8 and 0x8012A3B0 (0x8012A3B0 a measured fuzzy partial). The bodies 0x801260D4, 0x801262B8 and 0x801269B8 and their full 0x8029F674-0x8029F6B8 literal context are now measured in sibling comparison fragment src/game/cu_801260D4_initial.cpp. Other static data remains original and unmeasured; the entire original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -12467,7 +12467,7 @@
     {
       "source": "src/game/cu_8004A2F4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0\u20130x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of candidate cu_8004BA44): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns.",
+      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0\u20130x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of candidate cu_8004BA44): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names.",
       "sections": [
         {
           "section": ".text",
@@ -13048,6 +13048,16 @@
           "symbol": "fn_80051DB4",
           "start": "0x80051DB4",
           "end": "0x80051DBC"
+        },
+        {
+          "symbol": "fn_8005122C",
+          "start": "0x8005122C",
+          "end": "0x80051308"
+        },
+        {
+          "symbol": "_._13Time_801E8C78",
+          "start": "0x80051D60",
+          "end": "0x80051D94"
         }
       ]
     },
@@ -53869,6 +53879,42 @@
           "symbol": "fn_800A481C",
           "start": "0x800A481C",
           "end": "0x800A4950"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_801260D4_initial.cpp",
+      "profile": "game_cpp",
+      "evidence": "Issue1062 MID3. Three complete untouched bodies in existing provisional cu801260D4 grouping; comparison storage fragment only, not original file boundary. Complete natural code/data emitted and measured; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801260D4",
+          "end": "0x80126DD4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029F674",
+          "end": "0x8029F6B8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801260D4",
+          "start": "0x801260D4",
+          "end": "0x8012623C"
+        },
+        {
+          "symbol": "fn_801262B8",
+          "start": "0x801262B8",
+          "end": "0x801269B8"
+        },
+        {
+          "symbol": "fn_801269B8",
+          "start": "0x801269B8",
+          "end": "0x80126DD4"
         }
       ]
     }

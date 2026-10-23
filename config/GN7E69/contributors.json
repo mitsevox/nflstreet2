@@ -29255,6 +29255,21 @@
         "commit": "6702848d2774cdae207555d560bc917273847317",
         "introduced_blob": "12ac3fd8ed99d7c3eaaae07b825a0bca98e1ed18"
       }
+    },
+    {
+      "source": "src/game/cu_8014FFC4.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8014FFC4"
+      ],
+      "provenance": {
+        "commit": "74f0e64c43eedc6250524bd1720092b223c36936",
+        "introduced_blob": "34b8d91fa175c737d1704e5402b5c0f4d09e9f6d",
+        "pull_request": 1063,
+        "merged_via": 1063
+      }
     }
   ],
   "target": "GN7E69",
