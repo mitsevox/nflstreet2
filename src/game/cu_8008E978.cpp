@@ -2910,6 +2910,11 @@ extern "C" int fn_800C7720(Object_80039F5C *pOther, Object_80039F5C *p)
     return result;
 }
 
+extern "C" void fn_800C8688(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b)
+{
+    float matrix[12];
+}
+
 extern "C" {
 void fn_80156C78(int id, int value);
 }
