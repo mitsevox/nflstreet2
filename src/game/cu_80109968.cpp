@@ -155,15 +155,13 @@ extern "C" int fn_80109A1C(Object_80039F5C *p, Point_8017886C *pOut) {
             }
         }
         if (!result) {
-            int team = p->mIdBytes[2];
-
-            pTarget = fn_801244F0(p, team, 0, fn_80178D18(team), &distance, 0);
+            pTarget = fn_801244F0(p, p->mIdBytes[2], 0, fn_80178D18(p->mIdBytes[2]), &distance, 0);
             if (pTarget != 0 && pTarget != p) {
                 if (distance < 0.75f) {
                     result = 1;
                 } else {
-                    team = p->mIdBytes[2] ^ 1;
-                    pTarget = fn_801244F0(p, team, 0, fn_80178D18(team), &distance, 0);
+                    pTarget = fn_801244F0(p, p->mIdBytes[2] ^ 1, 0, fn_80178D18(p->mIdBytes[2] ^ 1), &distance,
+                                          0);
                     if (pTarget != 0 && pTarget != p && distance < 1.25f) {
                         result = 1;
                     }
