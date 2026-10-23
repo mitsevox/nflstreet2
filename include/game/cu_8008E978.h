@@ -87,8 +87,12 @@ struct Entry_800AF82C {
     void *mpUnknown8;
     float mUnknownC;
     float mUnknown10;
-    int mUnknown14;
-    unsigned char mUnknown18[24];
+    union {
+        int mUnknown14;
+        Vector_80039F5C *mpUnknown14;
+    };
+    Vector_80039F5C mUnknown18;
+    Vector_80039F5C mUnknown24;
     int mUnknown30[3];
     unsigned char mUnknown3C;
     unsigned char mUnknown3D;

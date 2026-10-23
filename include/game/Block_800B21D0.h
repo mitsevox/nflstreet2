@@ -8,7 +8,7 @@
 struct State_800B19E8 {
     Entry_800B206C mUnknown0[1];
     Entry_800B206C mUnknown24[1];
-    unsigned char mUnknown48[4];
+    float mUnknown48;
     short mUnknown4C;
     unsigned char mUnknown4E[12];
     unsigned char mUnknown5A;

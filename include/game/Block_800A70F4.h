@@ -4,13 +4,15 @@
 /* 164-byte block allocated for each team by fn_800A70F4; the two block
    pointers are the .sbss words lbl_803EC954. */
 struct Block_800A70F4 {
-    unsigned char mUnknown0[8];
+    int mUnknown0;
+    int mUnknown4;
     int mUnknown8;
     int mUnknownC;
     unsigned int mUnknown10;
     unsigned char mUnknown14[4];
     int mUnknown18;
-    unsigned char mUnknown1C[8];
+    int mUnknown1C;
+    unsigned char mUnknown20[4];
     short mUnknown24[10];
     short mUnknown38[10];
     unsigned char mUnknown4C[8];

@@ -110,6 +110,7 @@ struct MotionTail_800B26B0 {
     float mUnknown68;
     float mUnknown72;
     int mUnknown76;
+    float mUnknown80;
 };
 
 /* 16-byte record cleared by fn_8016D8B0; the player object holds two of them
@@ -285,6 +286,17 @@ struct Turn_800C8AF0 {
     unsigned char mSettled;
 };
 
+/* Block at player +1140: the reference of the player being faced, the
+   facing mode at +14, a flag at +16 and a value at +18. */
+struct Target_800A3E84 {
+    int mRef;
+    char mUnknown4[10];
+    short mMode;
+    unsigned char mUnknown10;
+    char mUnknown11[1];
+    short mValue;
+};
+
 struct Object_80039F5C {
     /* Read both as a word and byte by byte (+1 index, +2 team). */
     union {
@@ -419,11 +431,24 @@ struct Object_80039F5C {
         };
         Block_8011E240 mBlock1032;
     };
-    int mUnknown1140;
-    char mUnknown1144[10];
-    unsigned short mUnknown1154;
-    unsigned char mUnknown1156;
-    char mUnknown1157[3];
+    /* Block at +1140 whose first word is the player reference fn_8009BCE8
+       resolves; fn_800A3E84 and fn_800A414C address it through a pointer. */
+    union {
+        struct {
+            int mUnknown1140;
+            int mUnknown1144;
+            float mUnknown1148;
+            short mUnknown1152;
+            union {
+                unsigned short mUnknown1154;
+                short mUnknown1154Signed;
+            };
+            unsigned char mUnknown1156;
+            char mUnknown1157[1];
+            short mUnknown1158;
+        };
+        Target_800A3E84 mTarget;
+    };
     Block_801718E8 mUnknown1160;
     char mUnknown1216[2];
     unsigned char mUnknown1218;

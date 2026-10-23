@@ -8,19 +8,7 @@
 #include <math.h>
 #include "game/fn_8009D990.h"
 #include "game/fn_8013AD94.h"
-struct Input_80174868 {
-  float mUnknown0, mUnknown4, mUnknown8, mUnknownC;
-  int mUnknown10, mUnknown14, mUnknown18, mUnknown1C;
-  unsigned char mUnknown20, mUnknown21, mUnknown22, mUnknown23;
-  signed char mUnknown24;
-};
-struct Output_80174868 {
-  float mUnknown0, mUnknown4, mUnknown8, mUnknownC;
-  int mUnknown10;
-  signed char mUnknown14;
-  unsigned char mUnknown15;
-  unsigned char mUnknown16[2];
-};
+#include "game/Input_80174868.h"
 struct Table_801744E8 {
   unsigned short mUnknown0, mUnknown2;
   unsigned int mUnknown4;

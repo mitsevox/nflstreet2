@@ -22,8 +22,11 @@ struct Block_8030E6E8 {
     unsigned short mUnknown8;
     unsigned short mUnknownA;
     unsigned short mUnknownC;
-    unsigned char mUnknownE[2];
-    unsigned char mUnknown10[12];
+    unsigned short mUnknownE;
+    union {
+        unsigned char mUnknown10[12];
+        Vector_80039F5C mVector10;
+    };
     Vector_80039F5C mUnknown1C;
     float mUnknown28;
     float mUnknown2C;
@@ -31,21 +34,23 @@ struct Block_8030E6E8 {
     float mUnknown34;
     union {
         unsigned char mUnknown38[8];
-        struct { float mFloat38; unsigned char mOpaque3C[4]; };
+        struct { float mFloat38; unsigned char mUnknown3C; unsigned char mOpaque3D[3]; };
     };
     int mUnknown40;
-    unsigned char mUnknown44[4];
+    unsigned char mUnknown44;
+    unsigned char mUnknown45[3];
     int mUnknown48;
     float mUnknown4C;
     float mUnknown50;
-    unsigned char mUnknown54[8];
+    int mUnknown54;
+    float mUnknown58;
     int mUnknown5C;
     float mUnknown60;
     int mUnknown64;
-    unsigned char mUnknown68[4];
+    float mUnknown68;
     int mUnknown6C[20];
     Object_80144CE0 *mpUnknownBC[30];
-    unsigned char mUnknown134[1920];
+    float mUnknown134[30][4][4];
     unsigned char mUnknown8B4[8];
     unsigned char mUnknown8BC;
     unsigned char mUnknown8BD;
