@@ -78,6 +78,7 @@
 #include "game/fn_801C68FC.h"
 #include "game/fn_801C3284.h"
 #include "game/fn_801D2B7C.h"
+#include "game/Block_800B0CFC.h"
 #include "game/fn_801EBC18.h"
 #include "game/Block_801BE60C.h"
 #include "game/Item_80097440.h"
@@ -9837,38 +9838,6 @@ struct Context_800AFC5C {
     float mUnknown8;
 };
 
-/* Records that Entry_800B0CFC +0 points to; fn_800AFE8C tests one of the
-   two points against the player. */
-struct Zone_800AFE8C {
-    unsigned char mUnknown0[16];
-    Point_80167910 mUnknown10;
-    Point_80167910 mUnknown18;
-};
-
-/* 72-byte entries of Block_800B0CFC. */
-struct Entry_800B0CFC {
-    Zone_800AFE8C *mpUnknown0[5];
-    void *mpUnknown14[5];
-    int mUnknown28[5];
-    unsigned char mUnknown3C[5];
-    unsigned char mUnknown41[5];
-    unsigned char mUnknown46;
-    unsigned char mUnknown47;
-};
-
-/* 744-byte block allocated under the id 'mmot' (fn_800B0CFC). */
-struct Block_800B0CFC {
-    Entry_800B0CFC mEntries[2][5];
-    int mUnknown2D0;
-    int mUnknown2D4;
-    int mUnknown2D8;
-    int mUnknown2DC;
-    int mUnknown2E0;
-    unsigned char mUnknown2E4;
-    unsigned char mUnknown2E5;
-    unsigned char mUnknown2E6[2];
-};
-
 /* Three words passed by address to fn_80238388. */
 struct Args_800B1478 {
     int mUnknown0;
@@ -9914,7 +9883,6 @@ extern void *lbl_803EAB00;
 extern unsigned char lbl_803EAB04;
 extern Block_800AFCB8 *lbl_803EAB0C;
 extern unsigned char lbl_803EAB10[4];
-extern Block_800B0CFC *lbl_803EAB14;
 extern int lbl_803EAB18;
 extern int lbl_803EC974;
 extern Table_800AF71C *lbl_803EC978;
@@ -10309,6 +10277,69 @@ extern "C" void fn_800B02CC(void)
         }
     }
     lbl_803EAB14->mUnknown2E4 = 0;
+}
+
+extern "C" void fn_800B03A4(int direction)
+{
+    int ref;
+    int team;
+    Object_800670B4 *pObject;
+    unsigned int count;
+    Object_80039F5C *p;
+    Entry_800B0CFC *pEntry;
+
+    fn_8009BD2C(0, &ref);
+    if (lbl_803EAB14->mUnknown2D0 == ref) {
+        fn_800B02CC();
+        return;
+    }
+    team = fn_80178308();
+    pObject = fn_80168708(team);
+    count = fn_80178D18(team);
+    p = fn_8009BCE8(&lbl_803EAB14->mUnknown2D0);
+    pEntry = &lbl_803EAB14->mEntries[lbl_803EAB14->mUnknown2D8][lbl_803EAB14->mUnknown2D4];
+    if (p != 0 && fn_800B0558(p, pObject->mUnknown8.mUnknownF == 1 ? &pEntry->mpUnknown14[0]->mUnknown18
+                                                                    : &pEntry->mpUnknown14[0]->mUnknown10)) {
+        int step = 1;
+        int slot;
+        unsigned int tries;
+
+        if (direction == 1) {
+            step = -1;
+        }
+        slot = lbl_803EAB14->mUnknown2D4;
+        slot += step;
+        if (slot > 4) {
+            slot = 0;
+        }
+        if (slot < 0) {
+            slot = 4;
+        }
+        for (tries = 0; tries <= 4; tries++) {
+            unsigned short i;
+
+            for (i = 0; i < count; i++) {
+                unsigned int group;
+
+                fn_8009BD2C(fn_80039F5C(team, i), &ref);
+                for (group = 0; group <= 1; group++) {
+                    if (fn_800AFF20(group, slot, ref) != 0 && fn_800AFE8C(group, slot, ref) != 0) {
+                        lbl_803EAB14->mUnknown2D4 = slot;
+                        lbl_803EAB14->mUnknown2D0 = ref;
+                        lbl_803EAB14->mUnknown2D8 = group;
+                        return;
+                    }
+                }
+            }
+            slot += step;
+            if (slot > 4) {
+                slot = 0;
+            }
+            if (slot < 0) {
+                slot = 4;
+            }
+        }
+    }
 }
 
 extern "C" void fn_800B05F0(int index, unsigned char chance)
