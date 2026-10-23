@@ -14,7 +14,7 @@ struct Params_80092E54 {
     int mUnknown8,mUnknownC,mUnknown10;
     Object_80039F5C *mUnknown14[24];
     Object_80137ABC *mUnknown74[24];
-    unsigned char mUnknownD4[4];
+    int mUnknownD4;
     union { int mWord; unsigned short mParts[2]; } mUnknownD8;
     unsigned char mUnknownDC[4];
     Selection_80141210 mUnknownE0;

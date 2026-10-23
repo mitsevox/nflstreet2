@@ -14,7 +14,9 @@ extern float lbl_803EA938;
 /* fn_8009CD00 callback: puts pOut at the wrist joint of the side pData
    names (1 = right), raised by lbl_803EA938, and once pData's end time has
    passed calls fn_8009CE88 on that side's +200 (right) or +108 block. The
-   clamped progress t is computed but never used. */
+   clamped progress t is computed but never used. Partial: the target's
+   literal slice starts with an unreferenced zero word at 0x80296158 that
+   this unit does not emit, so the joint-name strings land 4 bytes early. */
 extern "C" void fn_80096E74(Object_80039F5C *p, Vector_80039F5C *pOut, Data_80096E74 *pData)
 {
     int done = 0;
