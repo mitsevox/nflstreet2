@@ -47,16 +47,15 @@ extern "C" int fn_80090E4C(int index)
                     fn_800A9D84((Point_8017886C *)&p->mMotion.mPos);
                     p->mMotion.mFacing = 0x400000;
                 } else if (kind != 0) {
-                    int facing;
                     float limit;
 
-                    facing = 0;
                     if (kind == 3 && (unsigned int)pCharacter->mUnknown0 <= 7) {
-                        facing = 0x400000;
+                        p->mMotion.mFacing = 0x400000;
                     } else if (p->mMotion.mPos.mX > 0.0f) {
-                        facing = 0x800000;
+                        p->mMotion.mFacing = 0x800000;
+                    } else {
+                        p->mMotion.mFacing = 0;
                     }
-                    p->mMotion.mFacing = facing;
                     limit = 1.0f;
                     if (p->mMotion.mPos.mX < -limit) {
                         p->mMotion.mPos.mX = -limit;
@@ -107,8 +106,7 @@ extern "C" int fn_80090E4C(int index)
             p->mMotion.mUnknown12.mX = spot.mX;
             p->mMotion.mUnknown12.mY = spot.mY;
             p->mMotion.mUnknown12.mZ = spot.mZ;
-            p->mMotion.mFacing = angle;
-            p->mpUnknown796->mUnknown8 = angle;
+            p->mpUnknown796->mUnknown8 = p->mMotion.mFacing = angle;
         }
     }
     fn_80091644(index);

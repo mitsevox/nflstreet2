@@ -1695,7 +1695,8 @@ extern "C" int fn_80094B34(Table_800680A8 *pTable, int index)
     int result = -1;
 
     pRow += index * (pTable->mUnknownC + pTable->mUnknown10);
-    if (((Cell_80094B34 *)(pRow + pTable->mUnknownC))->mValue > 0) {
+    Cell_80094B34 *pCell = (Cell_80094B34 *)(pRow + pTable->mUnknownC);
+    if (pCell->mValue > 0) {
         result = pRow[0];
     }
     return result;
@@ -5064,7 +5065,7 @@ extern "C" int fn_8009B718(void *p)
 
 extern "C" void fn_8009B720(void *pData)
 {
-    Block_8009B720 *pBlock;
+    Block_8009B720 *pBlock = 0;
     unsigned int i;
 
     lbl_803EA98C = 0;
