@@ -41127,6 +41127,32 @@
       ]
     },
     {
+      "source": "src/game/cu_800AEBA0.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. One literal-using target whole-function extent 0x800AEBA0-0x800AED9C and its literal-pool slice 0x80296A5C-0x80296A64; split so the function's literals compile into their own pool. Unlinked; no original file boundary claim.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800AEBA0",
+          "end": "0x800AED9C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296A5C",
+          "end": "0x80296A64"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800AEBA0",
+          "start": "0x800AEBA0",
+          "end": "0x800AED9C"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800C52C8.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Its 21 bodies are the literal-pool users between 0x800C52C8 and 0x800C8688; the fragment compiles their pool independently so it lines up with the target slice 0x80297750-0x80297850. Interleaved literal-free functions stay in src/game/cu_8008E978.cpp. This is a reconstruction storage split, not a recovered original file boundary.",
