@@ -683,8 +683,8 @@ extern "C" int fn_800C6CDC(Object_80039F5C *p, Object_80039F5C *pOther, int)
     return result;
 }
 
-extern "C" int fn_800C6DF8(Object_80039F5C *p, Object_80039F5C *pOther, int type, int angle, unsigned int chance,
-                           float distance)
+extern "C" int fn_800C6DF8(Object_80039F5C *p, Object_80039F5C *pOther, int type, float distance, int angle,
+                           unsigned int chance)
 {
     int result = 0;
     int count = 0;
@@ -738,9 +738,11 @@ extern "C" int fn_800C6DF8(Object_80039F5C *p, Object_80039F5C *pOther, int type
         }
     }
     if (result != 0) {
-        p->mUnknown1219 = 0;
-        p->mUnknown1216[1] = query.mUnknown54;
-        pOther->mUnknown1216[1] = p->mUnknown1216[1];
+        Block_800C8330 *pBlock = &p->mUnknown1160Wide;
+
+        pBlock->mUnknown59 = 0;
+        pBlock->mUnknown56[1] = query.mUnknown54;
+        pOther->mUnknown1216[1] = pBlock->mUnknown56[1];
     }
     return result;
 }
@@ -971,7 +973,7 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
         if (!result && !fn_800C53D8(pOther)) {
             if (!result) {
                 if (fn_800C4E30(p, pOther)) {
-                    result = fn_800C6DF8(pOther, p, 234, (int)(lbl_803ED6B4 * 2.0f), chance, lbl_803ED6BC * 2.0f);
+                    result = fn_800C6DF8(pOther, p, 234, lbl_803ED6BC * 2.0f, (int)(lbl_803ED6B4 * 2.0f), chance);
                 } else {
                     result = fn_800C6BD8(pOther, p, 0);
                     if (!result) {
@@ -981,11 +983,11 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
                         int reach = (int)(lbl_803ED6B4 * 1.5f);
                         float speed = lbl_803ED6BC * 1.5f;
 
-                        result = fn_800C6DF8(pOther, p, kindA, reach, chance, speed);
+                        result = fn_800C6DF8(pOther, p, kindA, speed, reach, chance);
                         if (!result && kindA == 94 && (p->mpState->mId == 12 || p->mpState->mId == 94)
                             && fn_800CD2B4(1, p)) {
                             fn_800C5F80(pOther, 31, &kindA, &kindB, &kindC);
-                            result = fn_800C6DF8(pOther, p, kindA, reach, chance, speed);
+                            result = fn_800C6DF8(pOther, p, kindA, speed, reach, chance);
                             fn_800C5F80(pOther, key, &kindA, &kindB, &kindC);
                         }
                     }
@@ -1051,8 +1053,8 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
         fn_800C5F80(p, p->mUnknown2914, &kindA, &kindB, &kindC);
         if (pOther != 0 && fn_800C6738(pOther, p)) {
             if (!result && fn_800C4E30(pOther, p)) {
-                result = fn_800C6DF8(p, pOther, 234, (int)(lbl_803ED6B4 * 2.0f * lbl_803EAC20), chance,
-                                     lbl_803ED6BC * 2.0f * lbl_803EAC20);
+                result = fn_800C6DF8(p, pOther, 234, lbl_803ED6BC * 2.0f * lbl_803EAC20,
+                                     (int)(lbl_803ED6B4 * 2.0f * lbl_803EAC20), chance);
             }
             if (!result) {
                 if (fn_800C4EE8(pOther, p, roll, chance)) {
@@ -1081,7 +1083,7 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
                         float speed = scale * 1.5f;
                         int reach = (int)(lbl_803ED6B4 * 1.5f);
 
-                        result = fn_800C6DF8(p, pOther, kindA, reach * count, chance, lbl_803ED6BC * speed);
+                        result = fn_800C6DF8(p, pOther, kindA, lbl_803ED6BC * speed, reach * count, chance);
                     }
                 }
             }
@@ -1157,25 +1159,25 @@ extern "C" void fn_800C82C0(Object_80039F5C *p)
 
 extern "C" void fn_800C8330(Object_80039F5C *p)
 {
-    Block_801718E8 *pBlock = &p->mUnknown1160;
+    Block_800C8330 *pBlock = &p->mUnknown1160Wide;
 
-    if (p->mUnknown1220 != 0) {
-        p->mUnknown1220--;
+    if (pBlock->mUnknown60 != 0) {
+        pBlock->mUnknown60--;
     }
-    if (pBlock->mUnknown0 != 0.0f) {
-        pBlock->mUnknown0 -= pBlock->mUnknown4;
-        if (--pBlock->mUnknown8 < 0) {
+    if (pBlock->mBlock.mUnknown0 != 0.0f) {
+        pBlock->mBlock.mUnknown0 -= pBlock->mBlock.mUnknown4;
+        if (--pBlock->mBlock.mUnknown8 < 0) {
             fn_800C8270(p);
         }
     }
-    if (pBlock->mUnknown53) {
+    if (pBlock->mBlock.mUnknown53) {
         if (fn_80137B40() != p) {
-            pBlock->mUnknown53 = 0;
-            pBlock->mUnknown54 = 0;
+            pBlock->mBlock.mUnknown53 = 0;
+            pBlock->mBlock.mUnknown54 = 0;
         }
         if (!fn_801383A0(fn_801374BC())) {
-            pBlock->mUnknown53 = 0;
-            pBlock->mUnknown54 = 0;
+            pBlock->mBlock.mUnknown53 = 0;
+            pBlock->mBlock.mUnknown54 = 0;
         }
     }
     switch (p->mpState->mId) {
