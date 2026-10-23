@@ -53,7 +53,6 @@ extern "C" int fn_800ACD04(Object_80039F5C *p)
 {
     int team = p->mIdBytes[2];
     int flag = 0;
-    int degrees;
 
     if (fn_800B65A0(team) != 255) {
         team ^= 1;
@@ -62,24 +61,18 @@ extern "C" int fn_800ACD04(Object_80039F5C *p)
     switch (fn_800ABDA4(team)) {
     case 0:
         if (flag != 0) {
-            degrees = lbl_803EAACC[0];
-        } else {
-            degrees = lbl_803EAACC[2];
+            return (int)(lbl_803EAACC[0] * 46603.378f);
         }
-        break;
+        return (int)(lbl_803EAACC[2] * 46603.378f);
     case 2:
         if (flag != 0) {
-            degrees = lbl_803EAACC[2];
-        } else {
-            degrees = lbl_803EAACC[0];
+            return (int)(lbl_803EAACC[2] * 46603.378f);
         }
-        break;
+        return (int)(lbl_803EAACC[0] * 46603.378f);
     case 1:
     default:
-        degrees = lbl_803EAACC[1];
-        break;
+        return (int)(lbl_803EAACC[1] * 46603.378f);
     }
-    return (int)(degrees * 46603.378f);
 }
 
 extern "C" void fn_800ACDE4(Object_80039F5C *p, float *pA, float *pB)
