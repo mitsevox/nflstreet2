@@ -14,10 +14,10 @@ int fn_801CFE40(float y, float x);
 int fn_800A46D8(Object_80039F5C *p, Object_80039F5C *pTarget, int flag);
 int fn_800A4790(Object_80039F5C *p, Object_80039F5C *pTarget);
 int fn_8011F1A4(void);
-int fn_8011F4C8(void);
+unsigned char fn_8011F4C8(void);
 Object_80039F5C *fn_80137B40(void);
 float fn_8016D9F4(Object_80039F5C *p, float a, float b);
-void fn_80227538(Point_8017886C *pOut, int angle, float length);
+void fn_80227538(void *pOut, int angle, float length);
 void fn_80227638(void *pOut, void *pA, void *pB);
 float fn_802270A4(void *pV);
 

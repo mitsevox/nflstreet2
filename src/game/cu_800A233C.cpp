@@ -171,8 +171,8 @@ void fn_801D03D0(float *pMatrix);
 void fn_801D0508(void);
 void fn_801D0544(void);
 void fn_801D0BCC(int z, int y, int x);
-void fn_801D0C58(float *pPos);
-void fn_801D0F80(float *pMatrix);
+void fn_801D0C58(void *p);
+void fn_801D0F80(float m[4][4]);
 unsigned char fn_80054D24(int index);
 unsigned int fn_8017F584(void);
 
@@ -328,7 +328,7 @@ extern "C" void fn_800A3170(void)
         fn_801D0C58(pEntry->mUnknown0);
         fn_801D0BCC((int)(pEntry->mUnknown0[5] * 46603.379f), (int)(pEntry->mUnknown0[4] * 46603.379f),
                     (int)(pEntry->mUnknown0[3] * 46603.379f));
-        fn_801D0F80(lbl_8030E6E8.mUnknown134[i][0]);
+        fn_801D0F80(lbl_8030E6E8.mUnknown134[i]);
         fn_801D0544();
         args.mUnknown04 = &lbl_8030E6E8.mUnknown134[i];
         args.mUnknown0C = 0;
