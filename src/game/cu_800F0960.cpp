@@ -464,6 +464,7 @@ struct Record_800F4E88 {
     float mUnknown12;
     char mUnknown16[4];
     int mUnknown20;
+    unsigned char mUnknown24;
 };
 
 struct Object_800F4E14 {

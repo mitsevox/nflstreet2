@@ -55,7 +55,7 @@ int fn_8012CAAC(Object_80039F5C *);
 int fn_8012CAA4(Object_80039F5C *);
 void fn_8012CD4C(Object_80039F5C *,Vector_80039F5C *);
 float fn_8012CD60(Object_80039F5C *,float);
-void fn_80103F80(Object_80137ABC *,Vector_80039F5C,Vector_80039F5C,int,Vector_80039F5C *,Object_80039F5C *,float,float);
+void fn_80103F80(Object_80137ABC *,Vector_80039F5C,Vector_80039F5C,float,int,float,Vector_80039F5C *,Object_80039F5C *);
 void fn_80104328(Object_80039F5C *,unsigned int,int *,Vector_80039F5C *,int *);
 float fn_80103DD8(Object_80039F5C *,Object_80039F5C *,short *,float);
 int fn_8011E9B4(Object_80039F5C *);
@@ -335,7 +335,6 @@ float fn_800FEDBC(State_800FDA58 *s, Object_80039F5C *p, float distance)
     int mode;
     unsigned int minimum;
     float desired;
-    float difference;
     float result;
 
     goal = fn_80177FFC(p->mIdBytes[2]);
@@ -364,16 +363,12 @@ float fn_800FEDBC(State_800FDA58 *s, Object_80039F5C *p, float distance)
     if (mode == 1) {
         desired = 0.5f;
     }
-    difference = desired - s->mUnknown24;
-    if (difference < -0.01f) {
-        difference = -0.01f;
-    } else if (difference > 0.05f) {
-        difference = 0.05f;
-    }
-    s->mUnknown24 += difference;
+    result = desired - s->mUnknown24;
+    result = result < -0.01f ? -0.01f : (result > 0.05f ? 0.05f : result);
+    s->mUnknown24 += result;
     result = s->mUnknown24;
     if (distance < 3.0f) {
-        result = result * 0.33333334f * distance;
+        result = result * (distance * 0.33333334f);
         if (result < minimum * 0.00054901966f) {
             result = minimum * 0.00054901966f;
         }
@@ -428,14 +423,14 @@ int fn_800FF094(Object_80039F5C *p)
         } else if (fn_801BE648(p->mpUnknown792) == 100) {
             if (s->mUnknown2 == 2) {
                 p->mUnknown512.mUnknown14 = 7;
-                p->mUnknown512.mUnknown0 = 1.5f;
                 p->mUnknown512.mUnknown4 = s->mUnknown4;
                 p->mUnknown512.mUnknown8 = s->mUnknown4;
+                p->mUnknown512.mUnknown0 = 1.5f;
             } else {
                 p->mUnknown512.mUnknown14 = 6;
-                p->mUnknown512.mUnknown0 = 1.0f;
                 p->mUnknown512.mUnknown4 = s->mUnknown4;
                 p->mUnknown512.mUnknown8 = s->mUnknown4;
+                p->mUnknown512.mUnknown0 = 1.0f;
             }
         } else {
             s->mUnknown2 = s->mUnknown3Byte;
@@ -462,9 +457,9 @@ int fn_800FF094(Object_80039F5C *p)
                 p->mUnknown512.mUnknown15 = 1;
             }
             p->mUnknown512.mUnknown14 = fn_80137C48(p) ? 1 : 9;
-            p->mUnknown512.mUnknown0 = speed;
-            p->mUnknown512.mUnknown4 = angle;
             p->mUnknown512.mUnknown8 = angle;
+            p->mUnknown512.mUnknown4 = angle;
+            p->mUnknown512.mUnknown0 = speed;
         }
         break;
     case 4:
@@ -472,13 +467,14 @@ int fn_800FF094(Object_80039F5C *p)
             if (fn_801CFFD0(p->mMotion.mFacing, s->mUnknown16) <= 0x155554) {
                 if (p->mpState[1].mId != 87) {
                     p->mUnknown512.mUnknown14 = 3;
-                    p->mUnknown512.mUnknown0 = 0.0f;
                     p->mUnknown512.mUnknown4 = s->mUnknown16;
                     p->mUnknown512.mUnknown8 = s->mUnknown16;
+                    p->mUnknown512.mUnknown0 = 0.0f;
                     break;
                 }
             } else {
                 float limit = p->mIdBytes[2] == fn_80178308() ? 8.0f : 2.0f;
+                float rate;
 
                 s->mUnknown4 = s->mUnknown16;
                 p->mFlags &= ~4;
@@ -486,14 +482,15 @@ int fn_800FF094(Object_80039F5C *p)
                     || fabsf(fn_80177FFC(p->mIdBytes[2]).mY - p->mMotion.mPos.mY) > limit) {
                     s->mUnknown2 = 1;
                     p->mUnknown512.mUnknown14 = 6;
-                    p->mUnknown512.mUnknown0 = 1.0f;
+                    rate = 1.0f;
                 } else {
                     s->mUnknown2 = 2;
                     p->mUnknown512.mUnknown14 = 7;
-                    p->mUnknown512.mUnknown0 = 1.5f;
+                    rate = 1.5f;
                 }
                 p->mUnknown512.mUnknown4 = s->mUnknown16;
                 p->mUnknown512.mUnknown8 = s->mUnknown16;
+                p->mUnknown512.mUnknown0 = rate;
                 s->mUnknown3Byte = 6;
                 break;
             }
@@ -544,15 +541,15 @@ void fn_800FF598(State_800FDA58 *s, Object_80039F5C *p, Point_8017886C *point, i
     } else {
         s->mUnknown28 = value;
     }
-    s->mUnknown3Byte = 0;
-    s->mUnknown40 = 0.0f;
+    s->mUnknown4 = 0;
+    s->mUnknown2 = 0;
     s->mUnknown32.mY = 0.0f;
     s->mUnknown32.mX = 0.0f;
-    s->mUnknown2 = 0;
-    s->mUnknown4 = 0;
+    s->mUnknown40 = 0.0f;
+    s->mUnknown3Byte = 0;
     p->mUnknown512.mUnknown14 = 1;
-    p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
     p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+    p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
     p->mUnknown512.mUnknown0 = s->mUnknown24;
 }
 
@@ -799,7 +796,7 @@ void fn_8010016C(Object_80039F5C *p, Point_8017886C *point, Object_80039F5C *oth
     }
 }
 
-int fn_80100370(Object_80137ABC *ball, Object_80039F5C *p, Vector_80039F5C *out, float value)
+int fn_80100370(Object_80137ABC *ball, Object_80039F5C *p, float value, Vector_80039F5C *out)
 {
     Vector_80039F5C pos;
     Vector_80039F5C velocity = *(Vector_80039F5C *)&p->mMotion.mUnknown40;
@@ -837,7 +834,7 @@ int fn_80100370(Object_80137ABC *ball, Object_80039F5C *p, Vector_80039F5C *out,
         }
         break;
     }
-    fn_80103F80(ball, pos, velocity, angle, out, p, speed, value);
+    fn_80103F80(ball, pos, velocity, speed, angle, value, out, p);
     switch (p->mpState->mId) {
     case 10:
     case 51:
@@ -870,7 +867,7 @@ int fn_80100370(Object_80137ABC *ball, Object_80039F5C *p, Vector_80039F5C *out,
                         }
                         fn_80227538((Point_8017886C *)&velocity, angle, speed);
                         result = 1;
-                        fn_80103F80(ball, pos, velocity, angle, out, p, speed, value);
+                        fn_80103F80(ball, pos, velocity, speed, angle, value, out, p);
                     }
                 }
             }
@@ -880,15 +877,15 @@ int fn_80100370(Object_80137ABC *ball, Object_80039F5C *p, Vector_80039F5C *out,
     return result;
 }
 
-void fn_801007A4(Object_80137ABC *ball, Object_80039F5C *p, Object_80039F5C *other, Vector_80039F5C *out,
-                 unsigned char *kind, float value)
+void fn_801007A4(Object_80137ABC *ball, Object_80039F5C *p, Object_80039F5C *other, float value,
+                 Vector_80039F5C *out, unsigned char *kind)
 {
     Object_800B26B0 *motion = &other->mMotion;
 
     switch (*kind) {
     case 1:
     case 7:
-        if (!fn_80100370(ball, other, out, value)) {
+        if (!fn_80100370(ball, other, value, out)) {
             if (*kind == 1) {
                 *kind = 0;
             } else {
@@ -935,7 +932,7 @@ void fn_801007A4(Object_80137ABC *ball, Object_80039F5C *p, Object_80039F5C *oth
             break;
         }
         }
-        fn_80103F80(ball, pos, velocity, motion->mUnknown32, out, other, speed, value);
+        fn_80103F80(ball, pos, velocity, speed, motion->mUnknown32, value, out, other);
         break;
     }
     default:
@@ -1172,7 +1169,7 @@ void fn_80101568(Object_80039F5C *p, unsigned char *kind, Point_8017886C *point,
             speed = fn_80103DD8(p, other, &record->mUnknown8, 0.9f);
         }
         if (ball) {
-            fn_801007A4(ball, p, other, &target, kind, speed);
+            fn_801007A4(ball, p, other, speed, &target, kind);
         } else {
             target.mX = other->mMotion.mPos.mX;
             target.mY = other->mMotion.mPos.mY;
