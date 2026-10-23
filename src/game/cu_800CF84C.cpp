@@ -165,9 +165,9 @@ void fn_800CFA00(int a, void *pBuffer, int size)
     params.mUnknown0 = a;
     params.mUnknown8 = 36;
     index = fn_802372EC(0, 3);
-    params.mUnknownE0 = 1;
-    params.mUnknownE4 = lbl_802DA864[index].mUnknown0;
-    params.mUnknownE8 = lbl_802DA864[index].mUnknown4;
+    params.mUnknownE0.mUnknown0 = 1;
+    params.mUnknownE0.mUnknown4.mWord = lbl_802DA864[index].mUnknown0;
+    params.mUnknownE0.mUnknown8.mWord = lbl_802DA864[index].mUnknown4;
     lbl_803EAC98->mUnknown24 = fn_80092E54(&params, pBuffer, size);
 }
 

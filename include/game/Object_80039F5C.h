@@ -83,6 +83,11 @@ struct Block_80170E64 {
     char mUnknown664[12];
     Object_80041904 *mpUnknown676;
     int mUnknown680;
+    /* fn_80093410 reads a spot from +920/+936; the size is not established. */
+    char mUnknown684[236];
+    float mUnknown920;
+    char mUnknown924[12];
+    float mUnknown936;
 };
 
 /* Motion block at +424, passed to fn_800B26B0, fn_800B26D0, fn_800B26E0,
@@ -473,7 +478,9 @@ struct Object_80039F5C {
     unsigned char mUnknown2914;
     char mUnknown2915[1];
     unsigned char mUnknown2916;
-    char mUnknown2917[3];
+    char mUnknown2917[1];
+    unsigned char mUnknown2918;
+    unsigned char mUnknown2919;
     unsigned char mUnknown2920;
     unsigned char mUnknown2921;
     char mUnknown2922[1];

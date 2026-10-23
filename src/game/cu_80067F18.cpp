@@ -8,7 +8,7 @@ struct Table_800680A8 {
     unsigned int mUnknown10;
 };
 
-typedef int (*Callback_800680A8)(int index, int operand, int value, unsigned short *pRow);
+typedef int (*Callback_800680A8)(unsigned int index, int operand, int value, unsigned short *pRow);
 
 static Callback_800680A8 lbl_803EA678 = 0;
 

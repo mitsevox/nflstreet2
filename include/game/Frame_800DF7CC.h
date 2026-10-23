@@ -10,7 +10,7 @@ struct Frame_800DF7CC {
     unsigned int mUnknown0;
     char mUnknown4[10]; unsigned short mUnknown14;
     char mUnknown16[3]; unsigned char mUnknown19;
-    unsigned int mUnknown20; char mUnknown24[18]; unsigned short mUnknown42;
+    unsigned int mUnknown20; char mUnknown24[4]; float mUnknown28, mUnknown32; char mUnknown36[6]; unsigned short mUnknown42;
     unsigned char mUnknown44[4];
 };
 
