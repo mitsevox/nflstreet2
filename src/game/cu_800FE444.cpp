@@ -1213,23 +1213,49 @@ void fn_801016A4(Object_80039F5C *p, unsigned char *kind, Point_8017886C *point,
     }
 }
 
-void fn_8010176C(Object_80039F5C *p,int mode,Point_8017886C *point)
+void fn_8010176C(Object_80039F5C *p, int mode, Point_8017886C *point)
 {
-    if(!p)return;
-    if(mode==4) {p->mUnknown1008.mUnknown1=fn_801BE648(p->mpUnknown792)==69?10:1;return;}
-    if(mode==2) {p->mUnknown1008.mUnknown1=3;return;}
-    if(mode==5) {p->mUnknown1008.mUnknown1=4;return;}
-    State_800FDA58 *state=(State_800FDA58 *)&p->mUnknown336;
-    Record_8011F4F8 *record=fn_8011F4F8(state->mUnknown3Byte);
-    Object_80039F5C *other=0;
-    if(record && (unsigned char)record->mUnknownA[0]!=15)other=fn_80039F5C(p->mIdBytes[2],(unsigned char)record->mUnknownA[0]);
-    float distance;
-    if(other) {
-        Point_8017886C goal=fn_80177FE0();
-        if(!(other->mMotion.mPos.mY>=goal.mY+24.0f) && fn_802270A4(point)<32.0f)distance=24.0f;
-        else distance=fn_802270A4(point);
-    } else distance=fn_802270A4(point);
-    p->mUnknown1008.mUnknown1=distance<=24.0f?5:1;
+    if (!p) {
+        return;
+    }
+    switch (mode) {
+    case 4:
+        if (fn_801BE648(p->mpUnknown792) == 69) {
+            p->mUnknown1008.mUnknown1 = 10;
+        } else {
+            p->mUnknown1008.mUnknown1 = 1;
+        }
+        break;
+    case 2:
+        p->mUnknown1008.mUnknown1 = 3;
+        break;
+    case 5:
+        p->mUnknown1008.mUnknown1 = 4;
+        break;
+    default: {
+        State_800FDA58 *state = (State_800FDA58 *)&p->mUnknown336;
+        Record_8011F4F8 *record = fn_8011F4F8(state->mUnknown3Byte);
+        Object_80039F5C *other = 0;
+        float distance;
+
+        if (record && (unsigned char)record->mUnknownA[0] != 15) {
+            other = fn_80039F5C(p->mIdBytes[2], (unsigned char)record->mUnknownA[0]);
+        }
+        if (other) {
+            int near = other->mMotion.mPos.mY < fn_80177FE0().mY + 24.0f && fn_802270A4(point) < 32.0f;
+
+            if (near) {
+                distance = 24.0f;
+            } else {
+                distance = fn_802270A4(point);
+            }
+        } else {
+            distance = fn_802270A4(point);
+        }
+        p->mUnknown1008.mUnknown1 = distance <= 24.0f ? 5 : 1;
+        break;
+    }
+    }
 }
 
 }
