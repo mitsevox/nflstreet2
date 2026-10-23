@@ -21374,9 +21374,11 @@
       "provenance": {
         "pull_request": 565,
         "merged_via": 1045,
-        "commit": "f81d5053240976b5f29e793bcd549f7794637715",
-        "introduced_blob": "32456af38f5ba4fa89a1e1e0f259b889e13d05ee",
-        "integration_adjustment": "The lone blr fn_800D0D48 from adampreddy's src/game/cu_800D0474.cpp (PR 565) moved unchanged to the head of src/game/cu_800D0D4C.cpp, whose code is its only caller (PR 1045 file-edge review); defined with the int parameter its callers pass."
+        "commit": "858165d566d41ce3bc4de7bb01af67e2ab63c7ee",
+        "introduced_blob": "e63bac2f7c7482894cc5e78289cf268dac9bc36d",
+        "integration_adjustment": "The lone blr fn_800D0D48 from adampreddy's src/game/cu_800D0474.cpp (PR 565) moved unchanged to the head of src/game/cu_800D0D4C.cpp, whose code is its only caller (PR 1045 file-edge review); defined with the int parameter its callers pass. The batch also retains the independently reviewed byte-index caller declarations from PR1050. The moved stub is unchanged; current integrated source is re-pinned while original attribution and prior source provenance are retained.",
+        "original_commit": "f81d5053240976b5f29e793bcd549f7794637715",
+        "original_blob": "32456af38f5ba4fa89a1e1e0f259b889e13d05ee"
       }
     },
     {
