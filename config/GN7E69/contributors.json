@@ -21382,6 +21382,61 @@
       }
     },
     {
+      "source": "src/game/cu_800D0D4C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D3CC0"
+      ],
+      "provenance": {
+        "pull_request": 548,
+        "merged_via": 578,
+        "commit": "3e9f671f174073c88643220e9bd94087e619cf66",
+        "introduced_blob": "4017c8b47a75ce0b4f2ffbeed92e8f0994e8ef67",
+        "original_commit": "ca89e6fd01ef78b313d10841c1dea8cb646ad8f1",
+        "original_blob": "bf9aaa788f936a42e1cd46fe7a3a91ddfb71f4df",
+        "integration_adjustment": "fn_800D3CC0 from adampreddy's src/game/cu_800D0D4C.cpp (PR 548, a measured fuzzy partial there) made exact by declaring the result local unsigned char, which gives the target's r3 -> r30 copy; the rest of the body is unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_800D0D4C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D5900"
+      ],
+      "provenance": {
+        "pull_request": 593,
+        "merged_via": 652,
+        "commit": "3e9f671f174073c88643220e9bd94087e619cf66",
+        "introduced_blob": "4017c8b47a75ce0b4f2ffbeed92e8f0994e8ef67",
+        "original_commit": "7a46ed88d5a831b8fd057ba90a132305d01a3b3e",
+        "original_blob": "e3a032c8bfa5655bce22ae0d40a7f58b11a64596",
+        "integration_adjustment": "fn_800D5900 from adampreddy's src/game/cu_800D0D4C.cpp (PR 593, a measured fuzzy partial there) made exact by writing the 4/5/2 test as separate else-if conditions with the same +0x1EE4 store, matching the target's separate cmpwi/beq tests; the rest of the body is unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_800D0D4C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800D5054",
+        "0x800D60BC"
+      ],
+      "provenance": {
+        "pull_request": 725,
+        "merged_via": 734,
+        "commit": "3e9f671f174073c88643220e9bd94087e619cf66",
+        "introduced_blob": "4017c8b47a75ce0b4f2ffbeed92e8f0994e8ef67",
+        "original_commit": "05f812159d575e967d087116306001b291688517",
+        "original_blob": "b7144eee495144be597210c6be4b45f6fca178fe",
+        "integration_adjustment": "fn_800D5054 and fn_800D60BC from mitsevox's src/game/cu_800D0D4C.cpp (PR 725, measured fuzzy partials there) made exact by writing the record gate as if/else if/else with its own accept = 1 per zero test; fn_800D60BC also resets accept after the 0x800AE7F0 call and passes the same-team id directly. The rest of both bodies is unchanged."
+      }
+    },
+    {
       "source": "src/game/cu_8010F43C.cpp",
       "contributors": [
         "mitsevox"
