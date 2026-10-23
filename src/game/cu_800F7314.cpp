@@ -73,8 +73,8 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         if (p->mMotion.mPos.mY >= fn_80178A44() - 5.0f && fn_801CFFD0(p->mMotion.mUnknown32, 0x400000) > 0x1C71C7
             && fn_802270A4(&toSpot) < 2.0f) {
             pOut->mY = 0.0f;
-            pBlock->mUnknown24 = 0;
             pBlock->mUnknown8 = fn_801CFE40(0.0f, pOut->mX);
+            pBlock->mUnknown24 = 0;
             pBlock->mUnknown4 = 0xC00000;
             pBlock->mUnknown12 = 0.66f;
         } else if (pOther->mMotion.mUnknown28 < lbl_803ECB08 * 0.14f) {
@@ -91,7 +91,7 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             int facing = pOther->mMotion.mUnknown32;
             Point_8017886C flat;
 
-            if (fn_801CFFD0(direction, facing) > 0x200000 && p->mMotion.mPos.mY < fn_80178A2C()) {
+            if (fn_801CFFD0(heading, facing) > 0x200000 && p->mMotion.mPos.mY < fn_80178A2C()) {
                 int delta = (facing - direction) & 0xFFFFFF;
                 direction = facing - 0x200000;
                 if (delta > 0x800000) {
@@ -100,8 +100,8 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             }
             pBlock->mUnknown4 = direction;
             pBlock->mUnknown8 = direction;
-            flat = toSpot;
             flat.mX = 0.0f;
+            flat.mY = toSpot.mY;
             speed = pOther->mMotion.mUnknown28
                 / (lbl_803ECB08 * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
             if (fn_802270A4(&flat) > 1.5f) {
@@ -166,8 +166,8 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         if (p->mMotion.mPos.mY >= fn_80178A44() - 5.0f && fn_801CFFD0(p->mMotion.mUnknown32, 0x400000) > 0x1C71C7
             && fn_802270A4(&toSpot) < 2.0f) {
             pOut->mY = 0.0f;
-            pBlock->mUnknown24 = 0;
             pBlock->mUnknown8 = fn_801CFE40(0.0f, pOut->mX);
+            pBlock->mUnknown24 = 0;
             pBlock->mUnknown4 = 0xC00000;
             pBlock->mUnknown12 = 0.66f;
         } else if (pOther->mMotion.mUnknown28 < lbl_803ECB08 * 0.14f) {
@@ -186,7 +186,7 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             Point_8017886C flat;
             float speed;
 
-            if (fn_801CFFD0(direction, facing) > 0x200000 && p->mMotion.mPos.mY < fn_80178A2C()) {
+            if (fn_801CFFD0(heading, facing) > 0x200000 && p->mMotion.mPos.mY < fn_80178A2C()) {
                 int delta = (facing - direction) & 0xFFFFFF;
                 direction = facing - 0x200000;
                 if (delta > 0x800000) {
@@ -195,7 +195,7 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             }
             pBlock->mUnknown4 = direction;
             pBlock->mUnknown8 = direction;
-            flat = toSpot;
+            flat.mX = toSpot.mX;
             flat.mY = 0.0f;
             speed = pOther->mMotion.mUnknown28
                 / (lbl_803ECB08 * ((1.0f - lbl_803ED6CC) * (p->mRatings[4] / 255.0f) + lbl_803ED6CC));
