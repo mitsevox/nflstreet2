@@ -1,5 +1,6 @@
+#include "game/DefPred.h"
 
-extern "C" const char *fn_8009FF00(void)
+const char *DefPred::GetName()
 {
     return "DefPred";
 }

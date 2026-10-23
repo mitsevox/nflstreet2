@@ -420,7 +420,7 @@ extern "C" int fn_800B89C8(void *pData)
     return 1;
 }
 
-extern "C" int fn_800B8E18(void *p, char *pText)
+int Class_80297C60::vfn_09(char *pText)
 {
     char firstDown[] = "1st Down";
     char turnover[] = "Turnover On Downs";
@@ -550,7 +550,7 @@ extern "C" void fn_800B925C(void *p, char *pText)
     }
 }
 
-extern "C" void fn_800B9654(Class_80297C60 *p, float dt)
+void Class_80297C60::vfn_03(float dt)
 {
     Vector_80039F5C pos;
 
@@ -562,7 +562,7 @@ extern "C" void fn_800B9654(Class_80297C60 *p, float dt)
     fn_801783D0(21, 0);
     fn_800C4438(&lbl_803EAB78->mSequence);
     if (fn_801486A0()) {
-        p->vfn_08();
+        vfn_08();
     }
     fn_800B24C8();
     if (fn_800BA6F8()) {
@@ -570,7 +570,7 @@ extern "C" void fn_800B9654(Class_80297C60 *p, float dt)
     }
     fn_800A1FEC(&lbl_803EAB78->mUnknown104, &lbl_803EAB78->mUnknown124);
     lbl_803EAB78->mUnknown151 = 0;
-    p->vfn_06();
+    vfn_06();
     fn_800C4460(&lbl_803EAB78->mSequence);
     if (fn_8002D060(lbl_803EA368) == 0) {
         fn_800AFDD4(fn_800B876C);
@@ -590,7 +590,7 @@ extern "C" void fn_800B9654(Class_80297C60 *p, float dt)
     lbl_803EAB78->mUnknown154 = 0;
     lbl_803EAB78->mUnknown160 = 1;
     lbl_803EAB78->mUnknown164 = 2;
-    p->vfn_07();
+    vfn_07();
     Desc_802345C4 desc = { 3, 14 };
     fn_802345C4(&desc, 2);
     fn_801789F8();

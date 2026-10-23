@@ -202,7 +202,7 @@ unsigned char IsShortOfLineToGain(float range, unsigned char *pWithinRange);
 int fn_80178308(void);
 int fn_80178320(void);
 void fn_8017833C(int value);
-int fn_80178348(void);
+unsigned char fn_80178348(void);
 void fn_80178354(int value);
 int fn_80178360(void);
 void fn_80178370(void);
@@ -964,7 +964,7 @@ extern "C" void fn_8017833C(int value)
     lbl_803EB444->mUnknown38 = value;
 }
 
-extern "C" int fn_80178348(void)
+extern "C" unsigned char fn_80178348(void)
 {
     return lbl_803EB444->mUnknownB0;
 }

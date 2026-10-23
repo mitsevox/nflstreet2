@@ -171,9 +171,9 @@ public:
     virtual void vfn_05();
     virtual void vfn_06();
     virtual void vfn_07();
-    virtual void vfn_10();
-    virtual int vfn_11();
-    virtual int vfn_12();
+    virtual void vfn_10(float dt);
+    virtual int vfn_11(float dt);
+    virtual int vfn_12(float dt);
     virtual void vfn_14(float dt);
     Class_802A3A48() : mUnknown8(0) {}
     virtual ~Class_802A3A48() {}
@@ -2154,17 +2154,17 @@ void Class_802A3A48::vfn_07()
 {
 }
 
-void Class_802A3A48::vfn_10()
+void Class_802A3A48::vfn_10(float dt)
 {
 }
 
-int Class_802A3A48::vfn_11()
+int Class_802A3A48::vfn_11(float dt)
 {
     fn_800AE988();
     return 0;
 }
 
-int Class_802A3A48::vfn_12()
+int Class_802A3A48::vfn_12(float dt)
 {
     fn_8009B924();
     return 0;

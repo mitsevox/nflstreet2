@@ -108,6 +108,13 @@ struct Entry_8009C684 {
     unsigned char mUnknown10[8];
 };
 
+/* The 8 bytes at +16 of Entry_8009C684 that fn_8009CD00 returns for the
+   fn_80096E74 callback. */
+struct Data_80096E74 {
+    unsigned int mUnknown0;
+    unsigned char mUnknown4;
+};
+
 /* Record passed to fn_8009C6F4, fn_8009C814 and fn_8009C88C. Only the
    accessed fields are declared; the size is unknown. */
 struct Block_8009C6F4 {

@@ -15,6 +15,7 @@ struct Info_80089904 {
             unsigned char mUnknown6;
             unsigned char mUnknown7;
         };
+        Key_80110630 mKey;
         float mUnknown4Float;
     };
     union { char mUnknown8[4]; float mUnknown8Float; };
@@ -29,7 +30,7 @@ struct Info_80089904 {
     Vector_80039F5C mUnknown40;
     unsigned char mUnknown52;
     char mUnknown53[3];
-    int mUnknown56;
+    union { int mUnknown56; unsigned char mUnknown56Byte; };
 };
 
 struct Entry_80089904 {

@@ -1,3 +1,4 @@
+#include "engine/cu_801B9F00.h"
 #include "game/fn_801248D4.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
@@ -37,56 +38,45 @@
 #include "game/fn_801BE60C.h"
 #include "game/Block_801BE60C.h"
 
-/* Input of fn_801076F0 and fn_80108074. Partial layout. */
-struct Input_801076F0 {
-    char mUnknown0[4];
-    Point_8017886C mUnknown4;
-    char mUnknown12[4];
-    Point_8017886C mUnknown16;
-    char mUnknown24[16];
-    Point_8017886C mUnknown40;
-};
-
 extern "C" {
-
+int fn_800A2178(void);
+int fn_8010B224(Object_80039F5C *p);
+int fn_801485D4(void);
+int fn_80156704(void);
+unsigned char fn_80156D14(void);
+void fn_80227690(void *pOut, void *pA, void *pB);
+float fn_80237260(int stream);
+extern float lbl_802DAB74[];
 }
 
-extern "C" void fn_801079BC(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pA, Point_8017886C *pB,
-                            Input_801076F0 *pIn) {
-    float x;
-    float dx;
+extern "C" int fn_8010BD58(Object_80039F5C *p) {
+    int result = 0;
 
-    x = pIn->mUnknown4.mX;
-    pA->mX = x;
-    pA->mY = pIn->mUnknown4.mY;
-    pB->mX = x;
-    pB->mY = pA->mY;
-    dx = pIn->mUnknown4.mX - p->mMotion.mPos.mX;
-    if (dx > 0.0f) {
-        dx *= 0.33333334f;
-        if (dx > 2.0f) {
-            dx = 2.0f;
-        }
-    } else {
-        dx *= 0.33333334f;
-        if (dx < -2.0f) {
-            dx = -2.0f;
-        }
-    }
-    pB->mX = x - dx;
-    if (pOther != 0) {
-        float y = pOther->mMotion.mPos.mY + 4.0f;
-        float low = pIn->mUnknown4.mY - 1.0f;
+    if (fn_8010B224(p)) {
+        Vector_80039F5C toBall;
+        float chance;
+        float limit;
+        int index;
 
-        if (y < low) {
-            y = low;
-        } else {
-            float high = pIn->mUnknown4.mY + 2.0f;
-
-            if (y > high) {
-                y = high;
+        fn_80137D58(fn_801374BC(), &toBall);
+        fn_80227690(&toBall, &toBall, &p->mMotion.mPos);
+        chance = 1.2f;
+        chance -= fn_802270A4(&toBall) * 0.15f;
+        index = fn_800A2178();
+        limit = lbl_802DAB74[index];
+        if (fn_80156704() && !fn_801485D4()) {
+            if (fn_80156D14()) {
+                limit = 1.0f;
+            } else {
+                limit = 0.75f;
             }
         }
-        pB->mY = y;
+        if (chance < limit) {
+            chance = limit;
+        }
+        if (fn_80237260(0) < chance) {
+            result = 1;
+        }
     }
+    return result;
 }

@@ -2726,3 +2726,35 @@ void fn_800518E0(Object_80039F5C *pPlayer)
 }
 
 }
+
+class Time_801E8C78 {
+public:
+    Time_801E8C78();
+    virtual ~Time_801E8C78() {}
+    void fn_801E8D14(float delta);
+
+    unsigned int mIntegral;
+    float mFraction;
+};
+
+extern "C" {
+extern Time_801E8C78 lbl_803084B8;
+extern unsigned char lbl_803EA534;
+void fn_801E92D0(void *pWorld, Time_801E8C78 *pOldTime, Time_801E8C78 *pNewTime);
+
+void fn_8005122C(float dt)
+{
+    Time_801E8C78 next;
+    fn_80050964();
+    fn_80050CCC();
+    if (!lbl_803EA534) {
+        next = lbl_803084B8;
+        next.fn_801E8D14(dt * (1.0f / 60.0f));
+        fn_801E92D0(lbl_803EA50C, &lbl_803084B8, &next);
+        lbl_803084B8 = next;
+    }
+    fn_800508A0();
+    if (lbl_803EA538) fn_80050F14();
+    fn_80050DA0();
+}
+}

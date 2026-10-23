@@ -5,6 +5,8 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_80178D18.h"
 #include "game/fn_801F40F4.h"
+#include "game/fn_80238174.h"
+#include "game/cu_8007C9D4.h"
 
 /* Four-byte entry of the stream read by fn_800B9F50. */
 struct Event_800B9F50 {
@@ -48,6 +50,8 @@ int fn_80178308(void);
 int fn_80178320(void);
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 float fn_80178A08(void);
+void *fn_8023816C(void *pHandle);
+void fn_8013A910(Object_80137ABC *pBall, int *pAngles);
 
 extern Block_800BA3F0 *lbl_803EAB88;
 }
@@ -316,4 +320,58 @@ extern "C" int fn_800B9F50(void)
         }
     }
     return done;
+}
+
+extern "C" void fn_800BA3F0(void)
+{
+    void *pHandle = fn_80238174(0, (void **)&lbl_803EAB88, sizeof(Block_800BA3F0), 0, 0x70726163);
+    Block_800BA3F0 *p = (Block_800BA3F0 *)fn_8023816C(pHandle);
+
+    p->mUnknown17C = fn_800B9BBC();
+    if (p->mUnknown17C == 1) {
+        p->mUnknown182 = 1;
+    } else {
+        p->mUnknown182 = 0;
+    }
+    if (p->mUnknown182) {
+        Object_80137ABC *pBall;
+        Vector_80039F5C pos;
+        int angles[3];
+
+        p->mUnknown180 = fn_8007CB6C(2);
+        p->mUnknown181[0] = p->mUnknown180 == 0;
+        fn_800B9C3C();
+        fn_800B9CB0();
+        p->mUnknown183 = 0;
+        p->mUnknown184 = 1;
+        switch (fn_800B9CE4()) {
+        case 0:
+            p->mUnknown185 = 0;
+            p->mUnknown20 = 1;
+            break;
+        case 1:
+            p->mUnknown185 = 1;
+            p->mUnknown20 = 1;
+            break;
+        case 2:
+            p->mUnknown185 = 0;
+            p->mUnknown20 = 0;
+            break;
+        }
+        p->mpUnknown0 = p->mpUnknown4 = 0;
+        p->mpUnknown8 = p->mpUnknownC = 0;
+        p->mUnknown18.mX = 0.0f;
+        p->mUnknown18.mY = 15.0f;
+        p->mUnknown14 = 0;
+        pBall = fn_801374BC();
+        fn_8013791C(pBall, 6, 0);
+        pos.mX = p->mUnknown18.mX;
+        pos.mY = p->mUnknown18.mY;
+        pos.mZ = 0.3f;
+        angles[0] = 0;
+        angles[1] = 0xFFC00000;
+        angles[2] = 0xFFC00000;
+        fn_8013A910(pBall, angles);
+    }
+    fn_802381E0(pHandle);
 }

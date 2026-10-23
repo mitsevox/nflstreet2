@@ -1357,7 +1357,7 @@ extern "C" int fn_800D3C80(void) {
 
 extern "C" int fn_800D3CC0(void) {
     Object_80039F5C *p = fn_8017876C();
-    int result = 0;
+    unsigned char result = 0;
     Object_80039F5C *pTarget = 0;
 
     if (!p) {
@@ -1850,11 +1850,15 @@ extern "C" void fn_800D5054(Object_80039F5C *p, int kind) {
             id = 42;
             break;
         }
-        if (lbl_803EACD4->mUnknown0[id].mUnknown24 != 0.0f && lbl_803EACD4->mUnknown0[id].mUnknown28 != 0) {
+        if (lbl_803EACD4->mUnknown0[id].mUnknown24 == 0.0f) {
+            accept = 1;
+        } else if (lbl_803EACD4->mUnknown0[id].mUnknown28 == 0) {
+            accept = 1;
+        } else {
             int team = p->mIdBytes[2] ^ 1;
             float distance;
             if (fn_801245DC(p, team, 0, fn_80178D18(team), (int)((float)(unsigned int)lbl_803EACD4->mUnknown0[id].mUnknown28 * 46603.37890625f), &distance, 0) && !(distance > lbl_803EACD4->mUnknown0[id].mUnknown24)) accept = 1;
-        } else accept = 1;
+        }
         if (accept == 0 && kind != 0) {
             if (fn_800D0B90(p) == 0) fn_80156C78(4, 1);
             lbl_803EACD4->mUnknown1EF5 = 1;
@@ -1948,11 +1952,15 @@ extern "C" void fn_800D5494(Object_80039F5C *p, int kind, unsigned char flag) {
             break;
         }
         lbl_803EACD4->mUnknown1F5E = flag;
-        if (lbl_803EACD4->mUnknown0[id].mUnknown24 != 0.0f && lbl_803EACD4->mUnknown0[id].mUnknown28 != 0) {
+        if (lbl_803EACD4->mUnknown0[id].mUnknown24 == 0.0f) {
+            accept = 1;
+        } else if (lbl_803EACD4->mUnknown0[id].mUnknown28 == 0) {
+            accept = 1;
+        } else {
             int team = p->mIdBytes[2] ^ 1;
             float distance;
             if (fn_801245DC(p, team, 0, fn_80178D18(team), (int)((float)(unsigned int)lbl_803EACD4->mUnknown0[id].mUnknown28 * 46603.37890625f), &distance, 0) && !(distance > lbl_803EACD4->mUnknown0[id].mUnknown24)) accept = 1;
-        } else accept = 1;
+        }
         if (accept == 0) {
             if (fn_800D0B90(p) == 0) fn_80156C78(7, 1);
             if (kind != 0) { lbl_803EACD4->mUnknown1EF5 = accept = 1; }
@@ -2032,7 +2040,11 @@ extern "C" void fn_800D5704(Object_80039F5C *p) {
 
 extern "C" void fn_800D5900(int value) {
     fn_800D0D48(27);
-    if (value == 4 || value == 5 || value == 2) {
+    if (value == 4) {
+        lbl_803EACD4->mUnknown1EE4 = 1;
+    } else if (value == 5) {
+        lbl_803EACD4->mUnknown1EE4 = 1;
+    } else if (value == 2) {
         lbl_803EACD4->mUnknown1EE4 = 1;
     } else if (value == 1 && lbl_803EACD4->mUnknown1EE5 != 0 && lbl_803EACD4->mUnknown1EE6 == 0) {
         fn_800D2378(12, fn_80178308(), 1);
@@ -2208,15 +2220,19 @@ extern "C" void fn_800D60BC(Object_80039F5C *p, int kind, unsigned char flag) {
         }
         lbl_803EACD4->mUnknown1F5D[0] = flag;
         fn_800AE7F0(12, p->mIdBytes[2], p);
-        if (lbl_803EACD4->mUnknown0[id].mUnknown24 != 0.0f && lbl_803EACD4->mUnknown0[id].mUnknown28 != 0) {
+        accept = 0;
+        if (lbl_803EACD4->mUnknown0[id].mUnknown24 == 0.0f) {
+            accept = 1;
+        } else if (lbl_803EACD4->mUnknown0[id].mUnknown28 == 0) {
+            accept = 1;
+        } else {
             float distance;
             int team = p->mIdBytes[2] ^ 1;
             if (fn_801245DC(p, team, 0, fn_80178D18(team), (int)((float)(unsigned int)lbl_803EACD4->mUnknown0[id].mUnknown28 * 46603.37890625f), &distance, 0) && !(distance > lbl_803EACD4->mUnknown0[id].mUnknown24)) accept = 1;
             if (accept == 0) {
-                team = p->mIdBytes[2];
-                if (fn_801245DC(p, team, 0, fn_80178D18(team), (int)((float)(unsigned int)lbl_803EACD4->mUnknown0[id].mUnknown28 * 46603.37890625f), &distance, 0) && !(distance > lbl_803EACD4->mUnknown0[id].mUnknown24)) accept = 1;
+                if (fn_801245DC(p, p->mIdBytes[2], 0, fn_80178D18(p->mIdBytes[2]), (int)((float)(unsigned int)lbl_803EACD4->mUnknown0[id].mUnknown28 * 46603.37890625f), &distance, 0) && !(distance > lbl_803EACD4->mUnknown0[id].mUnknown24)) accept = 1;
             }
-        } else accept = 1;
+        }
     }
     if (accept == 0) {
         if (fn_800D0B90(p) == 0) fn_80156C78(9, 1);

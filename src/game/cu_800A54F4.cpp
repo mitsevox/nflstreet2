@@ -14,7 +14,12 @@ int fn_801CFE40(float y, float x);
 int fn_800A46D8(Object_80039F5C *p, Object_80039F5C *pTarget, int flag);
 int fn_800A4790(Object_80039F5C *p, Object_80039F5C *pTarget);
 int fn_8011F1A4(void);
-int fn_8011F4C8(void);
+unsigned char fn_8011F4C8(void);
+Object_80039F5C *fn_80137B40(void);
+float fn_8016D9F4(Object_80039F5C *p, float a, float b);
+void fn_80227538(void *pOut, int angle, float length);
+void fn_80227638(void *pOut, void *pA, void *pB);
+float fn_802270A4(void *pV);
 
 extern unsigned int lbl_803EAA14;
 }
@@ -99,6 +104,64 @@ extern "C" int fn_800A57A4(Object_80039F5C *p, Object_80039F5C *pTarget, int *pS
             } else {
                 *pState = 0x800000;
             }
+        }
+    }
+    p->mUnknown512.mUnknown14 = 1;
+    p->mUnknown512.mUnknown8 = *pState;
+    p->mUnknown512.mUnknown4 = *pState;
+    p->mUnknown512.mUnknown0 = 1.0f;
+    return result;
+}
+
+extern "C" int fn_800A5844(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+{
+    int angle;
+    Point_8017886C delta;
+
+    if (p->mTarget.mUnknown4 == -1) {
+        if (p->mpState->mId == 2 || p->mpState->mId == 30) {
+            Object_80039F5C *pCarrier = fn_80137B40();
+
+            if (pCarrier != 0) {
+                fn_80227690(&delta, &pCarrier->mMotion.mPos, &p->mMotion.mPos);
+                angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+            } else {
+                angle = 0xC00000;
+            }
+            p->mTarget.mUnknown4 = angle;
+        } else {
+            Point_8017886C lead;
+            float speed = fn_8016D9F4(pTarget, 1.0f, 1.0f) * p->mTarget.mUnknownC;
+
+            fn_80227538(&lead, pTarget->mMotion.mUnknown32, speed);
+            fn_80227638(&lead, &lead, &pTarget->mMotion.mPos);
+            fn_80227690(&delta, &lead, &p->mMotion.mPos);
+            angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+            p->mTarget.mUnknown4 = angle;
+            speed = fn_8016D9F4(p, 1.0f, 1.0f) * p->mTarget.mUnknownC;
+            p->mTarget.mUnknown8 = fn_802270A4(&delta) / speed;
+            p->mTarget.mUnknown8 = p->mTarget.mUnknown8 > 1.0f ? 1.0f : p->mTarget.mUnknown8;
+            p->mTarget.mUnknown8 = p->mTarget.mUnknown8 < 1e-7f ? 1e-7f : p->mTarget.mUnknown8;
+        }
+    } else {
+        angle = p->mTarget.mUnknown4;
+    }
+    p->mUnknown512.mUnknown14 = 1;
+    p->mUnknown512.mUnknown8 = angle;
+    p->mUnknown512.mUnknown4 = angle;
+    p->mUnknown512.mUnknown0 = p->mTarget.mUnknown8;
+    return 1;
+}
+
+extern "C" int fn_800A5A04(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+{
+    int result = 1;
+
+    if (*pState == -1) {
+        if (pTarget->mpState->mId != 20) {
+            result = 0;
+        } else {
+            *pState = pTarget->mMotion.mUnknown32;
         }
     }
     p->mUnknown512.mUnknown14 = 1;
