@@ -11122,8 +11122,6 @@ extern "C" int fn_800B0F98(void)
     return lbl_803EAB14->mUnknown2D0;
 }
 
-extern "C" void fn_800B05F0(int index, int kind);
-
 extern "C" void fn_800B0FA4(void)
 {
     fn_800B0090();
