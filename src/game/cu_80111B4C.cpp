@@ -161,8 +161,8 @@ struct Field_8011569C {
 };
 
 extern "C" {
-int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
-                float range);
+int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, float range, void *pBlock, int b, int c,
+                int d, int e);
 int fn_800997F4(Object_80039F5C *p, Object_80137ABC *pBall, float range, void *pBlock, int a, int b, int c, int *pOutA,
                 int *pOutB);
 int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
@@ -509,7 +509,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
         target = fn_800997F4(p, pBall, range, state, 3, 0, 0, &value, &extra);
     }
     if (target == 0x1FFFFFFF) {
-        target = fn_80099734(p, pBall, 0, mode, state, 1, 0, 0, fn_8009A77C(p), range);
+        target = fn_80099734(p, pBall, 0, mode, range, state, 1, 0, 0, fn_8009A77C(p));
     }
     if (target != 0x1FFFFFFF) {
         int result;
@@ -539,7 +539,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
             }
             if (flag) {
                 found = 1;
-                target = fn_80099734(p, pBall, a, mode, state, 1, 0, 1, fn_8009A77C(p), range);
+                target = fn_80099734(p, pBall, a, mode, range, state, 1, 0, 1, fn_8009A77C(p));
                 if (target == 0x1FFFFFFF) {
                     found = 0;
                 }
