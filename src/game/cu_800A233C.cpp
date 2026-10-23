@@ -272,7 +272,7 @@ extern "C" void fn_800A2B40(void)
     }
 }
 
-extern "C" void fn_800A2E80(int index, unsigned int count)
+extern "C" void fn_800A2E80(int index, int count)
 {
     fn_80147D4C(0, 1);
     fn_80147D74(0, (lbl_802D7D90[index][2] << 16) + (lbl_802D7D90[index][1] << 8) | lbl_802D7D90[index][0],

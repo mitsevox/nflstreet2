@@ -2,18 +2,9 @@
 #include "game/fn_802372EC.h"
 #include "game/fn_800B65A0.h"
 #include "game/Object_8017886C.h"
+#include "game/cu_8008E978.h"
 
 #define MIN(a, b) ((a) > (b) ? (b) : (a))
-
-/* Stack block whose address fn_800A4E8C passes as the fourth argument of the
-   callbacks of the .data table 0x802D7E20. */
-struct Params_800A4E8C {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknownC;
-    int mUnknown10;
-};
 
 extern "C" {
 int fn_800AC87C(Object_80039F5C *p, int value);
@@ -97,28 +88,28 @@ extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind
                 skill = rating8;
             }
             if (fn_802372EC(0, params.mUnknown8) >= skill || fn_800A7ECC(p->mIdBytes[2]) == 0) {
-                p->mUnknown1140 = pOther->mId;
-                p->mUnknown1154 = kind;
+                p->mTarget.mRef = pOther->mId;
+                p->mTarget.mMode = kind;
                 if (fn_800A7ECC(p->mIdBytes[2]) == 0 && (kind == 4 || kind == 5)) {
-                    p->mUnknown1152 = params.mUnknown0;
+                    p->mTarget.mUnknownC = params.mUnknown0;
                 } else {
                     int spread;
 
-                    p->mUnknown1152 = fn_802372EC(0, params.mUnknown0 - params.mUnknown4);
+                    p->mTarget.mUnknownC = fn_802372EC(0, params.mUnknown0 - params.mUnknown4);
                     spread = 255 - p->mRatings[5];
                     if (spread < 0) {
                         spread = 0;
                     }
-                    p->mUnknown1152 = p->mUnknown1152 + fn_802372EC(0, spread / params.mUnknownC) + params.mUnknown4;
-                    p->mUnknown1152 = p->mUnknown1152 < params.mUnknown4 ? params.mUnknown4
-                                      : (p->mUnknown1152 > params.mUnknown0 ? params.mUnknown0 : p->mUnknown1152);
+                    p->mTarget.mUnknownC = p->mTarget.mUnknownC + fn_802372EC(0, spread / params.mUnknownC) + params.mUnknown4;
+                    p->mTarget.mUnknownC = p->mTarget.mUnknownC < params.mUnknown4 ? params.mUnknown4
+                                      : (p->mTarget.mUnknownC > params.mUnknown0 ? params.mUnknown0 : p->mTarget.mUnknownC);
                 }
                 p->mFlags |= 0x20000;
-                p->mUnknown1158 = p->mUnknown1152;
+                p->mTarget.mValue = p->mTarget.mUnknownC;
                 result = 1;
-                p->mUnknown1156 = 0;
-                p->mUnknown1144 = -1;
-                p->mUnknown1148 = 1.0f;
+                p->mTarget.mUnknown10 = 0;
+                p->mTarget.mUnknown4 = -1;
+                p->mTarget.mUnknown8 = 1.0f;
             }
         }
     }

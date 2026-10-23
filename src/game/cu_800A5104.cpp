@@ -2,6 +2,7 @@
 #include "game/Object_8017886C.h"
 #include "game/fn_8022781C.h"
 #include "game/fn_802372EC.h"
+#include "game/cu_8008E978.h"
 #include <math.h>
 
 /* Per-condition counters passed to the condition callbacks. */
@@ -20,12 +21,6 @@ int fn_801CFFD0(int a, int b);
 float fn_8016B9EC(void);
 int fn_800A7ECC(int team);
 int fn_800A54F4(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
-}
-
-/* Maps value in [0, range] linearly onto [from, to]. */
-static inline int Interpolate(int value, int range, int from, int to)
-{
-    return from + value * (to - from) / range;
 }
 
 extern "C" int fn_800A5104(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
