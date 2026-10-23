@@ -408,11 +408,13 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
 {
     int twoPlayer = fn_801486A0() == 2;
     Object_80039F5C *pObject = fn_800B6544(index);
-    int valid = pObject != 0 && pObject->mUnknown8 != 255;
+    int valid = pObject != 0 ? pObject->mUnknown8 != 255 : 0;
     int team;
     int other;
     int side;
     int involved;
+    Block_800BFAD0 *pBlock;
+    Object_80039F5C *p;
 
     team = fn_80178308();
     other = fn_80178320();
@@ -429,11 +431,12 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
             involved = 1;
         }
     }
+    pBlock = lbl_803EABA8;
     switch (msg) {
     case 0x59: {
         int ok = 0;
 
-        if (involved && side == team && lbl_803EABA8->mUnknownC5 != 0) {
+        if (involved && side == team && pBlock->mUnknownC5 != 0) {
             if (fn_800C0658() != 0) {
                 ok = 1;
             } else {
@@ -443,9 +446,8 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
         if (ok && fn_800B146C() != 0) {
             int ref = fn_800B0F98();
             Object_80039F5C *pCarrier = fn_8009BCE8(&ref);
-            Point_8017886C spot = fn_80177FE0();
 
-            if (!(__builtin_fabsf(pCarrier->mMotion.mPos.mX + spot.mX) >= 4.0f)) {
+            if (!(__builtin_fabsf(pCarrier->mMotion.mPos.mX + fn_80177FE0().mX) >= 4.0f)) {
                 ok = 0;
             }
         }
@@ -480,21 +482,22 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
         }
         break;
     case 6:
-        if (other == fn_800B6644(index) || !involved) {
-            Object_80039F5C *p = fn_800B6544(index);
-
+        if (other == fn_800B6644(index)) {
+            p = fn_800B6544(index);
+            fn_800B6868((unsigned char)(p->mId >> 8), (unsigned char)(p->mId >> 16), p->mUnknown8, 0);
+        } else if (!involved) {
+            p = fn_800B6544(index);
             fn_800B6868((unsigned char)(p->mId >> 8), (unsigned char)(p->mId >> 16), p->mUnknown8, 0);
         }
         break;
     case 9:
         if (other == fn_800B6644(index) || !involved) {
-            Object_80039F5C *p = fn_800B6544(index);
-
+            p = fn_800B6544(index);
             fn_800B6868((unsigned char)(p->mId >> 8), (unsigned char)(p->mId >> 16), p->mUnknown8, 1);
         }
         break;
     case 0x64:
-        if (team == side && involved && lbl_803EABA8->mUnknownC5 != 0) {
+        if (team == side && involved && pBlock->mUnknownC5 != 0) {
             if (fn_800B0F98() == 0) {
                 fn_800B0E68();
             }
@@ -506,7 +509,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
         }
         break;
     case 0x61:
-        if (team == side && (involved || (twoPlayer && valid)) && lbl_803EABA8->mUnknownC5 != 0) {
+        if (team == side && (involved || (twoPlayer && valid)) && pBlock->mUnknownC5 != 0) {
             if (fn_800B0F98() == 0) {
                 fn_800B0E68();
             }
@@ -514,7 +517,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
         }
         break;
     case 0x62:
-        if (team == side && (involved || (twoPlayer && valid)) && lbl_803EABA8->mUnknownC5 != 0) {
+        if (team == side && (involved || (twoPlayer && valid)) && pBlock->mUnknownC5 != 0) {
             if (fn_800B0F98() == 0) {
                 fn_800B0E68();
             }
