@@ -7290,7 +7290,6 @@ void fn_801780A8(Point_8017886C pos);
 int fn_80178308(void);
 int fn_80178320(void);
 void fn_8017833C(int value);
-void fn_80178370(void);
 
 extern Block_800BA3F0 *lbl_803EAB88;
 }
