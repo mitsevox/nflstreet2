@@ -26488,6 +26488,21 @@
           "symbol": "fn_800B3EFC",
           "start": "0x800B3EFC",
           "end": "0x800B4020"
+        },
+        {
+          "symbol": "fn_800B1F58",
+          "start": "0x800B1F58",
+          "end": "0x800B206C"
+        },
+        {
+          "symbol": "vfn_04__14Class_80297B50f",
+          "start": "0x800B3C68",
+          "end": "0x800B3EC0"
+        },
+        {
+          "symbol": "vfn_03__14Class_80297B50",
+          "start": "0x800B3718",
+          "end": "0x800B3AF4"
         }
       ]
     },

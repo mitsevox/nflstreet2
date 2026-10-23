@@ -11,7 +11,7 @@ public:
     virtual void vfn_03();
     virtual void vfn_04(float dt);
     virtual void vfn_05();
-    virtual void vfn_06();
+    virtual int vfn_06();
 };
 
 /* .sdata word whose initial value is the object at 0x803EC908, the .sbss word
