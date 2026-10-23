@@ -4,13 +4,6 @@
 #include "game/fn_802270D4.h"
 #include "game/Item_80097440.h"
 
-/* The 8 bytes at +16 of Entry_8009C684 that fn_8009CD00 returns for the
-   fn_80096E74 callback. */
-struct Data_80096E74 {
-    unsigned int mUnknown0;
-    unsigned char mUnknown4;
-};
-
 extern "C" {
 int fn_80097160(Object_80039F5C *p, float value);
 int fn_801CFE40(float y, float x);
