@@ -63,7 +63,7 @@ void fn_8012430C(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
 unsigned char fn_801243E0(Directions_8012430C *pValues, int angle);
 void fn_8012B2E0(Object_80039F5C *p, Point_8017886C *pOut);
 void fn_8012C3A4(Object_80039F5C *p);
-void fn_8012CB98(int a, int b, int angle, Point_8017886C *pOut);
+void fn_8012CB98(int a, unsigned char b, int angle, Point_8017886C *pOut);
 void fn_8012CEF4(Object_80039F5C *p, Control_80132090 *pControl);
 void fn_8012CFA0(Object_80039F5C *p);
 void fn_8012D258(Object_80039F5C *p);
@@ -226,8 +226,8 @@ int fn_8012CAA4(Object_80039F5C *p);
 int fn_8012CAAC(Object_80039F5C *p);
 int fn_8012CAB4(Object_80039F5C *p);
 int fn_8012CB50(Message_800F01CC *pMessage);
-void fn_8012CB98(int a, int b, int angle, Point_8017886C *pOut);
-int fn_8012CC04(int a);
+void fn_8012CB98(int a, unsigned char b, int angle, Point_8017886C *pOut);
+int fn_8012CC04(unsigned char a);
 int fn_8012CC50(Object_80039F5C *p);
 int fn_8012CCA0(Object_80039F5C *p);
 void fn_8012CD4C(Object_80039F5C *p, Point_8017886C *pOut);
@@ -1066,7 +1066,7 @@ extern "C" int fn_8012CB50(Message_800F01CC *pMessage)
 }
 
 #ifdef DECOMP_COMPARE
-extern "C" void fn_8012CB98(int a, int b, int angle, Point_8017886C *pOut)
+extern "C" void fn_8012CB98(int a, unsigned char b, int angle, Point_8017886C *pOut)
 {
     Point_8017886C point = {0.0f, 0.0f};
     Info_80089904 *pInfo = fn_8012C4B4(a, b);
@@ -1079,7 +1079,7 @@ extern "C" void fn_8012CB98(int a, int b, int angle, Point_8017886C *pOut)
 }
 #endif
 
-extern "C" int fn_8012CC04(int a)
+extern "C" int fn_8012CC04(unsigned char a)
 {
     int result = 0;
     Info_80089904 *pInfo = fn_8012C4B4(a, 1);

@@ -162,15 +162,16 @@ extern "C" int fn_80108C34(Object_80039F5C *p, Block_800F4A74 *pBlock, Points_80
     } else if (pInfo->mUnknown28.mZ < 0.0f && fn_802372EC(0, 0xFF) < (unsigned short)(p->mRatings[8] / 5)) {
         result = 1;
     }
-    if (pOther != 0) {
-        switch (fn_801BE648(pOther->mpUnknown792)) {
-        case 0xE0:
-        case 0xE1:
-            if (p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {
-                result = 0;
-            }
-            break;
+    if (pOther == 0) {
+        return result;
+    }
+    switch (fn_801BE648(pOther->mpUnknown792)) {
+    case 0xE0:
+    case 0xE1:
+        if (p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {
+            result = 0;
         }
+        break;
     }
     return result;
 }
@@ -183,7 +184,7 @@ extern "C" void fn_80108DF8(Object_80039F5C *p, Points_800F3A6C *pInfo, int quic
     int mode;
     float range;
     float height;
-    Object_80039F5C *pOther;
+    Object_80039F5C *pOther; /* teammate in the loop, then the 0x80137B88 player */
 
     if (fn_80108C34(p, pBlock, pInfo, fn_80137B88(pInfo->mpUnknown0)) == 0) {
         return;
@@ -204,8 +205,9 @@ extern "C" void fn_80108DF8(Object_80039F5C *p, Points_800F3A6C *pInfo, int quic
             int index = fn_80168E00(fn_80178308(), i, 0);
 
             if (index != 0xFF) {
-                Object_80039F5C *pMate = fn_80039F5C(fn_80178308(), index);
-                float mateTime = fn_8022781C(&pMate->mMotion.mPos, &pInfo->mUnknown40) / fn_8016D9F4(pMate, 1.0f, 1.0f);
+                pOther = fn_80039F5C(fn_80178308(), index);
+                float mateTime =
+                    fn_8022781C(&pOther->mMotion.mPos, &pInfo->mUnknown40) / fn_8016D9F4(pOther, 1.0f, 1.0f);
                 float time = fn_8022781C(&p->mMotion.mPos, &pInfo->mUnknown40) / fn_8016D9F4(p, 1.0f, 1.0f);
 
                 if (time > mateTime - 45.0f || pInfo->mUnknown48 > mateTime - 45.0f) {

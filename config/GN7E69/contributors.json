@@ -29580,6 +29580,170 @@
         "commit": "6fa3d2a8e0f0d4fd8044dd1360a0b135330a3e3f",
         "introduced_blob": "6f8707c0e12889fd7c6a72286fe19ed450a51738"
       }
+    },
+    {
+      "source": "src/game/cu_80102A78.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80104328"
+      ],
+      "provenance": {
+        "pull_request": 887,
+        "merged_via": 1071,
+        "commit": "206aaca4f42d80f01c676a340ef1290f485519de",
+        "introduced_blob": "bc7bfbe739a5af506c562fb6ddfd9cf47592d570",
+        "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+        "original_blob": "3ce95b1986384778b18489da66427b2359d56583",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies (present at main db71d3d); PR 1071 refines them in place to exact matches, and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents."
+      }
+    },
+    {
+      "source": "src/game/cu_80104944.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80104B3C"
+      ],
+      "provenance": {
+        "pull_request": 680,
+        "merged_via": 1071,
+        "commit": "206aaca4f42d80f01c676a340ef1290f485519de",
+        "introduced_blob": "2806319f26d13bea5167d2d0f0f4410c0daa0df7",
+        "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+        "original_blob": "8e5183f4e46c0d1b7c63dc30058aa76283d53969",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies (present at main db71d3d); PR 1071 refines them in place to exact matches, and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents."
+      }
+    },
+    {
+      "source": "src/game/cu_80104C9C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80105630"
+      ],
+      "provenance": {
+        "pull_request": 887,
+        "merged_via": 1071,
+        "commit": "206aaca4f42d80f01c676a340ef1290f485519de",
+        "introduced_blob": "40f45bc10a6a74296978c878e8294197f2322a8f",
+        "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+        "original_blob": "958562812be6362c5a2aa416d7f9e5443d11f97f",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies (present at main db71d3d); PR 1071 refines them in place to exact matches, and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents."
+      }
+    },
+    {
+      "source": "src/game/cu_801077D8.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801079BC"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 1071,
+        "commit": "206aaca4f42d80f01c676a340ef1290f485519de",
+        "introduced_blob": "6cc1249e5813667fd3fbc41ed869e27042e81925",
+        "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+        "original_blob": "efaa316b198693d79c88ff1552cc1f42870731df",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies (present at main db71d3d); PR 1071 refines them in place to exact matches, and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents."
+      }
+    },
+    {
+      "source": "src/game/cu_80108A94.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80108C34",
+        "0x80108DF8"
+      ],
+      "provenance": {
+        "pull_request": 1052,
+        "merged_via": 1071,
+        "commit": "206aaca4f42d80f01c676a340ef1290f485519de",
+        "introduced_blob": "f7ff5626792ddf010221baf1b9baf70466d9167f",
+        "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+        "original_blob": "ad10be355c39930f66086f948c3f9331bfc82e02",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies (present at main db71d3d); PR 1071 refines them in place to exact matches, and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents."
+      }
+    },
+    {
+      "source": "src/game/cu_80109968.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80109A1C"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 1071,
+        "commit": "206aaca4f42d80f01c676a340ef1290f485519de",
+        "introduced_blob": "5cb7a926e79c38a08379dd30c7d1be4e32e6eed0",
+        "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+        "original_blob": "0c8ed9eddbb9df81e0bd858541d3186e97f62049",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies (present at main db71d3d); PR 1071 refines them in place to exact matches, and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents."
+      }
+    },
+    {
+      "source": "src/game/cu_8010BD58.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8010BD58"
+      ],
+      "provenance": {
+        "pull_request": 1052,
+        "merged_via": 1071,
+        "commit": "206aaca4f42d80f01c676a340ef1290f485519de",
+        "introduced_blob": "6546f3265b6a8a31c270856505528e5fe47c24ee",
+        "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+        "original_blob": "237f50bac1cd79bc8c6148187693e04fea4f3961",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies (present at main db71d3d); PR 1071 refines them in place to exact matches, and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents."
+      }
+    },
+    {
+      "source": "src/game/cu_8010DAB4.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8010DAB4"
+      ],
+      "provenance": {
+        "pull_request": 1052,
+        "merged_via": 1071,
+        "commit": "206aaca4f42d80f01c676a340ef1290f485519de",
+        "introduced_blob": "3383824a341123e58f105007b303a6ab7743890a",
+        "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+        "original_blob": "342048518ed896a814f63d6cc0097909656b7cb4",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies (present at main db71d3d); PR 1071 refines them in place to exact matches, and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents."
+      }
+    },
+    {
+      "source": "src/game/cu_80111B4C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80111FBC",
+        "0x80114838"
+      ],
+      "provenance": {
+        "pull_request": 856,
+        "merged_via": 1071,
+        "commit": "206aaca4f42d80f01c676a340ef1290f485519de",
+        "introduced_blob": "303905944b5a8a4f8d74a9f61efb1a81b8c24b1c",
+        "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
+        "original_blob": "6184b69a419c772a5053083864bf2b41e0600b71",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies (present at main db71d3d); PR 1071 refines them in place to exact matches, and that refinement does not transfer original source credit. The current source is re-pinned for squash-history verification without changing comparison extents."
+      }
     }
   ],
   "target": "GN7E69",

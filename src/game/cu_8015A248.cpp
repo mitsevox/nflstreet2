@@ -92,7 +92,7 @@ void fn_80227690(void *, void *, void *);
 int fn_801CFE40(float, float);
 int fn_801CFFD0(int, int);
 void *fn_801C1F94(void *, int, unsigned int);
-void fn_8012CB98(int, int, int, void *);
+void fn_8012CB98(int, unsigned char, int, void *);
 int fn_8012CB50(void *);
 int fn_801DCF0C(int, int, int, void (*)(Object_8015C244 *), void (*)(Object_8015C244 *));
 int fn_801DCF8C(int);

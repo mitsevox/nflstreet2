@@ -203,9 +203,9 @@ extern "C" int fn_8012CAAC(Object_80039F5C *p);
 
 extern "C" int fn_8012CB50(Message_800F01CC *pMessage);
 
-extern "C" void fn_8012CB98(int a, int b, int angle, Point_8017886C *pOut);
+extern "C" void fn_8012CB98(int a, unsigned char b, int angle, Point_8017886C *pOut);
 
-extern "C" int fn_8012CC04(int a);
+extern "C" int fn_8012CC04(unsigned char a);
 
 extern "C" int fn_8012CC50(Object_80039F5C *p);
 
@@ -784,7 +784,7 @@ extern "C" void fn_80104328(Object_80039F5C *p, unsigned int count, int *pTime, 
         if (pEntry->mId == 20) {
             State_80039F5C *pPrev = &pQueue[i - 1];
             int kind = pEntry->mUnknown2;
-            unsigned char type = pEntry->mUnknown1;
+            int type = pEntry->mUnknown1;
 
             if (pPrev->mId == 19) {
                 fn_8012CB98(kind, type, pPrev->mUnknown2 << 17 & 0xFE0000, &offset);
