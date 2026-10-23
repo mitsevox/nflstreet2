@@ -9,7 +9,7 @@ void fn_80217A7C(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Value, Int32 Type, 
                  Int32 bAll);
 void fn_802180A0(UISInfoT *pInfo, UISScreenT *pScreen, void *pArg2, Int32 Arg3, Int32 Arg4,
                  Int32 Arg5, Int32 Arg6, Int32 *pArgs, Uint8 *pArg8);
-Uint8 fn_8021861C(void *pTarget);
+Int32 fn_8021861C(void *pTarget);
 Int32 fn_80218DDC(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 bArg3, Int32 Arg4,
                   Int32 *pArg5);
 void fn_8021956C(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 bProcess);
@@ -124,7 +124,7 @@ Int32 fn_80218CB8(UISInfoT *pInfo, void *pTarget)
 
     Result = 0;
     if (pTarget != 0) {
-        if (pTarget != pInfo->pCursor->pTarget && !fn_8021861C(pTarget)) {
+        if (pTarget != pInfo->pCursor->pTarget && !(Uint8)fn_8021861C(pTarget)) {
             pTarget = 0;
         }
         Result = 1;
@@ -152,19 +152,19 @@ Int32 fn_80218D20(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Arg3, 
     return 1;
 }
 
-Int32 fn_80218FC4(UISInfoT *pInfo, Int16 GroupID, Int16 ScreenID, Int32 Arg3, Int32 *pArg4)
+Int32 fn_80218FC4(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint8 Arg3, Int32 *pArg4)
 {
     UISThreadActionT Action;
 
-    if (!(pInfo->Flags & 2)) {
-        return fn_80218DDC(pInfo, GroupID, ScreenID, 0, Arg3, pArg4);
+    if (pInfo->Flags & 2) {
+        Action.s.GroupID = GroupID;
+        Action.s.ScreenID = ScreenID;
+        Action.s.unk_04 = -1;
+        Action.s.unk_06 = -1;
+        fn_8021D904(GroupID, ScreenID, pInfo, 0, &Action, Arg3, pArg4);
+        return 1;
     }
-    Action.s.GroupID = GroupID;
-    Action.s.ScreenID = ScreenID;
-    Action.s.unk_04 = -1;
-    Action.s.unk_06 = -1;
-    fn_8021D904(GroupID, ScreenID, pInfo, 0, &Action, Arg3, pArg4);
-    return 1;
+    return fn_80218DDC(pInfo, GroupID, ScreenID, 0, Arg3, pArg4);
 }
 
 Int32 fn_80219044(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Arg3, Int32 *pArg4)
@@ -246,10 +246,12 @@ void fn_80219854(UISInfoT *pInfo, UISRunStateT *pState, Int32 Arg2, Int32 Arg3, 
 void fn_80219A54(UISInfoT *pInfo, Int32 Arg1)
 {
     Int32 Screen;
+    Int32 NumScreens;
     Uint8 Done;
 
     fn_8021DDF4(pInfo, 0);
-    for (Screen = 0; Screen < pInfo->NumScreens; Screen++) {
+    NumScreens = pInfo->NumScreens;
+    for (Screen = 0; Screen < NumScreens; Screen++) {
         pInfo->Flags |= 2;
         Done = 0;
         fn_802180A0(pInfo, &pInfo->Screens[Screen], &pInfo->RunState, 0, Arg1, -10, 0, 0, &Done);
@@ -286,11 +288,13 @@ void *fn_80219AF8(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint16 Objec
 void fn_80219F84(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Type, void *pNode, Int32 bValue)
 {
     Int32 Current;
+    Int32 Value;
 
     if (pScreen != 0 && pScreen->pData != 0 && pNode != 0) {
         Current = fn_802178E4(pScreen, &pNode, 8, pScreen->pData->pControls);
-        if (Current != -1 && Current != (bValue ? 1 : 0)) {
-            fn_80217A7C(pInfo, pScreen, bValue ? 1 : 0, Type, pNode, 1);
+        Value = bValue ? 1 : 0;
+        if (Current != -1 && Current != Value) {
+            fn_80217A7C(pInfo, pScreen, Value, Type, pNode, 1);
         }
     }
 }

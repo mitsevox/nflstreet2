@@ -84,7 +84,7 @@ typedef struct Struct_803A6C24 {
     short m16C;
     unsigned char mUnknown16E;
     unsigned char m16F;
-    unsigned int m170;
+    volatile unsigned int m170;
     unsigned char mUnknown174[0x58];
     Record_803A6DF0 *m1CC;
     unsigned char mUnknown1D0[4];

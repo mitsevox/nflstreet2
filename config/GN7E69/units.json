@@ -1921,6 +1921,10 @@
     "GXGetViewportv": {
       "address": "0x802527D4",
       "evidence": "evidence.tsv external row GXGetViewportv: SDK GXTransform.c body copying the six viewport floats from gx+0x4F4; REL24 call from 0x80210620."
+    },
+    "_vt.14Class_802A2A40": {
+      "address": "0x802A2A40",
+      "evidence": "evidence.tsv external row for 0x802A2A40 (_vt.14Class_802A2A40)."
     }
   },
   "units": [
