@@ -148,8 +148,8 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
 extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
         Vector_80039F5C *pPos = &p->mMotion.mPos;
-        Block_800F7314 *pBlock = (Block_800F7314 *)&p->mUnknown336;
         Point_8017886C toBall;
+        Block_800F7314 *pBlock = (Block_800F7314 *)&p->mUnknown336;
         Point_8017886C spot;
         Point_8017886C toSpot;
         int heading;
@@ -166,8 +166,8 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         if (p->mMotion.mPos.mY >= fn_80178A44() - 5.0f && fn_801CFFD0(p->mMotion.mUnknown32, 0x400000) > 0x1C71C7
             && fn_802270A4(&toSpot) < 2.0f) {
             pOut->mY = 0.0f;
-            pBlock->mUnknown8 = fn_801CFE40(0.0f, pOut->mX);
             pBlock->mUnknown24 = 0;
+            pBlock->mUnknown8 = fn_801CFE40(0.0f, pOut->mX);
             pBlock->mUnknown4 = 0xC00000;
             pBlock->mUnknown12 = 0.66f;
         } else if (pOther->mMotion.mUnknown28 < lbl_803ECB08 * 0.14f) {
@@ -211,8 +211,12 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             }
             return;
         } else {
-            if (p->mMotion.mPos.mY - pOther->mMotion.mPos.mY < 7.0f && pOther->mMotion.mUnknown32 < 0x800000) {
-                direction = pOther->mMotion.mUnknown32;
+            if (p->mMotion.mPos.mY - pOther->mMotion.mPos.mY < 7.0f) {
+                int facing = pOther->mMotion.mUnknown32;
+
+                if (facing < 0x800000) {
+                    direction = facing;
+                }
             }
             pBlock->mUnknown24 = 0;
             pBlock->mUnknown8 = direction;
