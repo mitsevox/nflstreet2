@@ -886,7 +886,7 @@ int fn_80027DF0(void);
 void fn_8010A2DC(Object_80039F5C *p, int a, int b);
 void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
 void fn_8013AD04(Object_80137ABC *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
-Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, int facing, float a, float b);
+Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float a, float b, int facing);
 void fn_800ACDE4(Object_80039F5C *p, float *pChance, float *pAngle);
 int fn_80178348(void);
 float fn_80237260(int a);
@@ -2471,7 +2471,7 @@ extern "C" void fn_800E0230(Object_80039F5C *p, Block_800E0230 *pBlock)
 extern "C" float fn_800E02D0(Object_80039F5C *p)
 {
     float value;
-    if (fn_80124C28(p, &value, 0x355555, p->mMotion.mFacing, 5.0f, 0.5f)) {
+    if (fn_80124C28(p, &value, 0x355555, 5.0f, 0.5f, p->mMotion.mFacing)) {
         return (1.0f - value * 0.2f) * 0.5f + 0.5f;
     }
     return 0.5f;

@@ -34,7 +34,7 @@ extern "C" {
 void fn_801339E4(Object_80039F5C *, Object_80039F5C *, Aim_801327F4 *);
 int fn_8011E3F4(Object_80039F5C *);
 int fn_80124B1C(Object_80039F5C *, Object_80039F5C *, int, float, float);
-Object_80039F5C *fn_80124C28(Object_80039F5C *, float *, int, int, float, float);
+Object_80039F5C *fn_80124C28(Object_80039F5C *, float *, int, float, float, int);
 
 extern float lbl_803EB158, lbl_803EB15C, lbl_803ECB08;
 unsigned int fn_8011E188(void);
@@ -93,7 +93,7 @@ unsigned char fn_80168E00(int, unsigned char, unsigned char *);
 int fn_801788D8(int *);
 int fn_80178308(void);
 unsigned int fn_801787DC(int);
-Object_80039F5C *fn_80124E5C(Object_80039F5C *, int, float *, int, int, float, float);
+Object_80039F5C *fn_80124E5C(Object_80039F5C *, int, float *, int, float, int, float);
 
 int fn_80132630(Object_80039F5C *p, Vector_80039F5C *point, Object_80039F5C *other)
 {
@@ -351,7 +351,7 @@ void fn_80133044(Object_80039F5C *p, Object_80039F5C *other, Mode_80133C50 *s, f
             goto finish;
         }
         float interceptionDistance;
-        Object_80039F5C *interceptor = fn_80124C28(p, &interceptionDistance, 0x2E38E3, s->mUnknownC, distance, 0.2f);
+        Object_80039F5C *interceptor = fn_80124C28(p, &interceptionDistance, 0x2E38E3, distance, 0.2f, s->mUnknownC);
         if (!interceptor || interceptor == other) {
             fn_80227690(delta, &location, &p->mMotion.mPos);
             float ownDistance = fn_802270A4(delta);
@@ -720,7 +720,7 @@ int fn_801348F0(Object_80039F5C *p)
         }
     }
     float distance;
-    fn_80124E5C(p, fn_80178320(), &distance, (int)(lbl_803EB178 * 46603.37890625f), 0x400000, lbl_803EB17C, lbl_803EB180);
+    fn_80124E5C(p, fn_80178320(), &distance, (int)(lbl_803EB178 * 46603.37890625f), lbl_803EB17C, 0x400000, lbl_803EB180);
     if (!(distance <= limit)) {s->mUnknown18 = 1; return 1;}
     return 0;
 }

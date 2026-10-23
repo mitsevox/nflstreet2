@@ -38,7 +38,7 @@ void fn_800E4120(Object_80039F5C *, State_800E2FE4 *, int, float);
 void fn_800C89F0(Object_80039F5C *, int, int, int, float);
 int fn_80178320(void);
 int fn_80178308(void);
-int fn_80124CE4(Object_80039F5C *, int, void *, int, int, float, float);
+int fn_80124CE4(Object_80039F5C *, int, void *, int, float, int, float);
 int fn_800E1870(Object_80039F5C *);
 void fn_800E3AE8(Object_80039F5C *, int, int);
 int fn_800E3A34(Object_80039F5C *, Point_8017886C *);
@@ -147,8 +147,8 @@ void fn_800E2FE4(Object_80039F5C *player, Point_8017886C *target, int angle) {
     unsigned int count = fn_80178D18(fn_80178320());
     for (unsigned char i = 0; i < count; ++i) {
       int value;
-      if (fn_80124CE4(player, player->mIdBytes[2], &value, 0x155555, facing,
-                      5.0f, 1.0f)) {
+      if (fn_80124CE4(player, player->mIdBytes[2], &value, 0x155555, 5.0f,
+                      facing, 1.0f)) {
         if (fn_801CFFD0(facing, 0) <= 0x2AAAA9) {
           player->mUnknown512.mUnknown4 += (int)(lbl_803EAD48 * 46603.379f);
           break;

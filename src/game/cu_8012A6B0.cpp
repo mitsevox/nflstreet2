@@ -150,7 +150,7 @@ int fn_8012EAF8(Object_80039F5C *, Object_80039F5C *, int, int, int, float);
 extern int lbl_803EB118;
 extern float lbl_803EB11C, lbl_803EB120, lbl_803EB124;
 extern unsigned char lbl_802DB05C[21];
-Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, int facing, float a, float b);
+Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, float a, int facing, float b);
 extern float lbl_803ECB08;
 }
 
@@ -196,7 +196,7 @@ extern "C" int fn_8009E180(Object_80039F5C *p);
 extern "C" int fn_800F2C1C(Object_80039F5C *p, int a);
 extern "C" int fn_800E6AC8(Object_80039F5C *p, int a);
 
-extern "C" Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, int facing, float a, float b);
+extern "C" Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float a, float b, int facing);
 
 extern "C" int fn_80168E00(int team, int a, unsigned char *pOut);
 
@@ -1395,7 +1395,7 @@ extern "C" void fn_8012D8A8(Object_80039F5C *p, Control_80132090 *control, int *
         limit = 2.5f;
     }
     float distance;
-    Object_80039F5C *other = fn_80124C28(p, &distance, 0x355555, control->mUnknown44, limit, 0.35f);
+    Object_80039F5C *other = fn_80124C28(p, &distance, 0x355555, limit, 0.35f, control->mUnknown44);
     *pMode = (int)other;
     if (!other || distance >= limit) {
         return;
@@ -1649,7 +1649,7 @@ extern "C" int fn_8012E670(Object_80039F5C *p, Object_80039F5C *, int, int turn,
     unsigned char chance = ((p->mRatings[0] >> 2) + (p->mRatings[0] >> 3)) >> 1;
     chance = (unsigned char)(int)((float)chance
         - (float)facingDifference * 3.06538225913755e-7f * 0.8f * (float)chance);
-    Object_80039F5C *pOther = fn_80124CE4(p, p->mIdBytes[2] ^ 1, &distance, 0x271C71, facing, 10.0f, 1.0f);
+    Object_80039F5C *pOther = fn_80124CE4(p, p->mIdBytes[2] ^ 1, &distance, 0x271C71, 10.0f, facing, 1.0f);
     if (pOther && pOther->mIdBytes[2] != p->mIdBytes[2] && !fn_8011E9B4(pOther)) {
         Vector_80039F5C delta;
         fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
@@ -2106,7 +2106,7 @@ extern "C" int fn_8012FDDC(Object_80039F5C *p, Control_80132090 *pControl)
     if (p && pControl && fn_80137B40() == p) {
         float distance;
         Object_80039F5C *pOther = fn_80124CE4(p, p->mIdBytes[2], &distance, 0x200000,
-                                           p->mMotion.mFacing, 1.5f, 1.0f);
+                                           1.5f, p->mMotion.mFacing, 1.0f);
 
         if (pOther && fn_8011E9B4(pOther)
             && fn_801CFFD0(p->mMotion.mFacing, 0x400000) <= 0x200000) {

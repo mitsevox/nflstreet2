@@ -60,7 +60,7 @@ int fn_80125C28(Object_80039F5C *p, State_80125594 *pState);
 void fn_80125594(Object_80039F5C *p, State_80125594 *pState);
 void fn_80125708(Object_80039F5C *p, State_80125594 *pState);
 
-Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, int facing, float length, float width);
+Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, float length, int facing, float width);
 
 int fn_80178308(void);
 int fn_80177C38(void);
@@ -108,9 +108,9 @@ int fn_80125E20(Object_80039F5C *p);
 void fn_80125EC8(int a, int b);
 void fn_80125F10(void);
 int fn_80124B1C(Object_80039F5C *p, Object_80039F5C *pOther, int angle, float length, float width);
-Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, int facing, float length, float width);
-Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, int facing, float length, float width);
-Object_80039F5C *fn_80124E5C(Object_80039F5C *p, int team, float *pOut, int angle, int facing, float length, float width);
+Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float length, float width, int facing);
+Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, float length, int facing, float width);
+Object_80039F5C *fn_80124E5C(Object_80039F5C *p, int team, float *pOut, int angle, float length, int facing, float width);
 void fn_801237F4(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F5C *);
 void fn_80123C2C(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F5C *pExclude);
 void fn_80123E30(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F5C *);
@@ -597,19 +597,19 @@ int fn_80124B1C(Object_80039F5C *p, Object_80039F5C *pOther, int angle, float le
     return 0;
 }
 
-Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, int facing, float length, float width)
+Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float length, float width, int facing)
 {
     *pOut = 32767.0f;
     Object_80039F5C *pBest = 0;
     for (unsigned char team = 0; team < 2; team++) {
         float distance;
-        Object_80039F5C *pOther = fn_80124CE4(p, team, &distance, angle, facing, length, width);
+        Object_80039F5C *pOther = fn_80124CE4(p, team, &distance, angle, length, facing, width);
         if (pOther && !(distance >= *pOut)) { *pOut = distance; pBest = pOther; }
     }
     return pBest;
 }
 
-Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, int facing, float length, float width)
+Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, float length, int facing, float width)
 {
     *pOut = 32767.0f;
     float limit = width + width;
@@ -640,7 +640,7 @@ Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angl
     return pBest;
 }
 
-Object_80039F5C *fn_80124E5C(Object_80039F5C *p, int team, float *pOut, int angle, int facing, float length, float width)
+Object_80039F5C *fn_80124E5C(Object_80039F5C *p, int team, float *pOut, int angle, float length, int facing, float width)
 {
     *pOut = 32767.0f;
     float limit = width + width;
