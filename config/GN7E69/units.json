@@ -1965,6 +1965,37 @@
   },
   "units": [
     {
+      "source": "src/game/cu_8013141C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8013141C-0x801327F4 (src/game/cu_8013141C.cpp) and its function and data rows; every function exact, promoted from comparison-only. The edges are the researched likely file edges recorded in that row (owner rule 2026-10-22: researched likely boundaries count as file edges).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8013141C",
+          "end": "0x801327F4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029FBB0",
+          "end": "0x8029FC28"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DB074",
+          "end": "0x802DB0F4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB140",
+          "end": "0x803EB154"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_800D0474.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800D0474-0x800D0D48 (src/game/cu_800D0474.cpp) and its function rows; every function exact. Code and .rodata linked on researched edges; its .sdata bytes 0x803EACAB-0x803EACC0 stay original bytes because the .sdata object edge is unresolved.",
