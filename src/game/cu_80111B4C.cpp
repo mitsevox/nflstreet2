@@ -482,6 +482,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
         if (fn_80137AD0(pBall) == p) {
             message.mId = 1;
             fn_800F053C(0, p->mpState, &message, p);
+            return 1;
         }
         return 1;
     }
