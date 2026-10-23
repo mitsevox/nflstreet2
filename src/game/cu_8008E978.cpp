@@ -14236,7 +14236,7 @@ extern "C" void fn_800A7514(int team);
 extern "C" void fn_8017DBCC(void);
 extern "C" void fn_8016DB94(int team);
 
-extern "C" int fn_800BF8A8(void)
+extern "C" int fn_800BF8A8(Class_80297CE8 *p)
 {
     int result = fn_800A7FD8();
 
@@ -14270,7 +14270,7 @@ extern "C" int fn_800BF8A8(void)
     return result;
 }
 
-extern "C" void fn_800BF9DC(void)
+extern "C" void fn_800BF9DC(Class_80297CE8 *p)
 {
     if (lbl_803EABA8->mUnknownB4 > 60) {
         unsigned int i;
@@ -14301,7 +14301,7 @@ extern "C" void fn_800BFAB4(Class_80297CE8 *p)
     }
 }
 
-extern "C" void fn_800BFAD0(void)
+void Class_80297CE8::vfn_02()
 {
     void *pHandle = fn_80238174(0, (void **)&lbl_803EABA8, sizeof(Block_800BFAD0), 0, 0x70726570);
 
