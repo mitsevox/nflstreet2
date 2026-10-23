@@ -5,6 +5,8 @@
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/mtx.h>
 #include <math.h>
+#include <dolphin/gx/GXGeometry.h>
+#include <dolphin/gx/GXTev.h>
 
 struct Entry_801A69A8 {
   Vector_80039F5C mUnknown0;
@@ -65,11 +67,7 @@ void fn_801D04C4(void);
 void fn_801D0C58(void *);
 void fn_801D0ADC(int);
 void fn_80227CC0(void *, void *);
-void fn_8024DC48(int, void *, int);
 void fn_80252034(int, int, int, int);
-void fn_80251B28(int, int, int, int);
-void fn_80251604(int, int);
-void fn_80251CC4(int);
 float *fn_801D0444(void);
 void fn_8025251C(float *, int);
 float *fn_801D0EE4(void);
@@ -92,14 +90,8 @@ void fn_801D1288(int, void *);
 void fn_80214140(int);
 void fn_801D131C(int);
 void fn_801D0F80(void *);
-void fn_8024DCD4(void);
-void fn_8024D418(void);
-void fn_8024CB90(int, int);
-void fn_8024D450(int, int, int, int, int);
 void fn_8024FC48(int);
 void fn_8024FC84(int, int, int, int, int, int, int);
-void fn_8024DF64(int);
-void fn_8024DCE4(int, int, int, int, int, int);
 
 void fn_801A69A8(Entry_801A69A8 *entry, unsigned int count) {
   GXColor *color = &lbl_803ECC40;
@@ -170,27 +162,27 @@ void fn_801A6CF8(int mode) {
   if (lbl_803ECC50 == mode)
     return;
   if (mode == 0) {
-    fn_8024DC48(9, lbl_803667E0, 16);
-    fn_8024DC48(11, &lbl_803667E0[0].mUnknownC, 16);
-    fn_8024DC48(13, lbl_80366780, 8);
+    GXSetArray(GX_VA_POS, lbl_803667E0, 16);
+    GXSetArray(GX_VA_CLR0, &lbl_803667E0[0].mUnknownC, 16);
+    GXSetArray(GX_VA_TEX0, lbl_80366780, 8);
     if (lbl_803ECC34 == 2) {
       fn_80252034(0, 4, 5, 5);
-      fn_80251B28(0, 255, 255, 4);
-      fn_80251604(0, 4);
+      GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+      GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
     } else {
       fn_80252034(1, 4, 5, 5);
-      fn_80251B28(0, 0, 0, 4);
-      fn_80251604(0, 3);
+      GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+      GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
     }
-    fn_80251CC4(1);
+    GXSetNumTevStages(1);
   } else if (mode == 1) {
-    fn_8024DC48(9, lbl_80366DE0, 16);
-    fn_8024DC48(11, &lbl_80366DE0[0].mUnknownC, 16);
-    fn_8024DC48(13, lbl_80366780, 8);
+    GXSetArray(GX_VA_POS, lbl_80366DE0, 16);
+    GXSetArray(GX_VA_CLR0, &lbl_80366DE0[0].mUnknownC, 16);
+    GXSetArray(GX_VA_TEX0, lbl_80366780, 8);
     fn_80252034(1, 4, 5, 5);
-    fn_80251B28(0, 0, 0, 4);
-    fn_80251604(0, 0);
-    fn_80251CC4(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+    GXSetNumTevStages(1);
   }
   lbl_803ECC50 = mode;
 }
@@ -462,26 +454,26 @@ void fn_801A7880(void) {
   fn_801D0ADC(lbl_803EB850);
   fn_801D0F80(lbl_803667A0);
   fn_801D0544();
-  fn_8024DCD4();
-  fn_8024D418();
-  fn_8024CB90(0, 1);
-  fn_8024CB90(9, 2);
-  fn_8024CB90(11, 2);
-  fn_8024CB90(13, 2);
-  fn_8024D450(1, 11, 1, 5, 0);
-  fn_8024D450(1, 9, 1, 4, 0);
-  fn_8024D450(1, 13, 1, 4, 0);
+  GXInvalidateVtxCache();
+  GXClearVtxDesc();
+  GXSetVtxDesc(GX_VA_PNMTXIDX, GX_DIRECT);
+  GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+  GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+  GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+  GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+  GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+  GXSetVtxAttrFmt(GX_VTXFMT1, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
   fn_8024FC48(1);
   fn_8024FC84(4, 0, 1, 1, 0, 0, 2);
-  fn_8024DF64(1);
-  fn_8024DCE4(0, 1, 4, 60, 0, 125);
+  GXSetNumTexGens(1);
+  GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
   for (int z = minZ; z <= maxZ; ++z)
     for (int x = minX; x <= maxX; ++x)
       for (int y = minY; y <= maxY; ++y)
         if (lbl_803ECC2C <= 21)
           fn_801A74BC((float)(x * 16), (float)(y * 16), (float)(z * 8));
-  fn_80251604(0, 4);
+  GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
   fn_80252034(1, 4, 5, 5);
-  fn_80251B28(0, 0, 0, 255);
+  GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
 }
 }

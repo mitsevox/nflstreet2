@@ -19364,227 +19364,6 @@
       ]
     },
     {
-      "source": "src/dolphin/os/OSError.c",
-      "profile": "dolphin_release",
-      "evidence": "Comparison-only faithful SDK source; original code remains linked. Four exact target function extents; native data/handler table sections and external operands supported by target and pinned donor. Unit source-file boundary provisional.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8023AB48",
-          "end": "0x8023B1F4"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FC0D0",
-          "end": "0x802FC3EC"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A3A70",
-          "end": "0x803A3AB4"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EC160",
-          "end": "0x803EC166"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "OSReport",
-          "start": "0x8023AB48",
-          "end": "0x8023ABC8"
-        },
-        {
-          "symbol": "OSPanic",
-          "start": "0x8023ABC8",
-          "end": "0x8023ACF4"
-        },
-        {
-          "symbol": "OSSetErrorHandler",
-          "start": "0x8023ACF4",
-          "end": "0x8023AF0C"
-        },
-        {
-          "symbol": "__OSUnhandledException",
-          "start": "0x8023AF0C",
-          "end": "0x8023B1F4"
-        }
-      ]
-    },
-    {
-      "source": "src/dolphin/os/OSThread.c",
-      "profile": "dolphin_release",
-      "evidence": "Pinned clean pinned dolsdk complete source with canonical current headers; no profile/pragmas/assembly manipulation. Target actual 22 functions and complete native storage measured.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8023D478",
-          "end": "0x8023E794"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A3B18",
-          "end": "0x803A4510"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FC480",
-          "end": "0x802FCC8D"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ED0D0",
-          "end": "0x803ED0DC"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EC168",
-          "end": "0x803EC16D"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "DefaultSwitchThreadCallback",
-          "start": "0x8023D478",
-          "end": "0x8023D47C"
-        },
-        {
-          "symbol": "UnsetRun",
-          "start": "0x8023D670",
-          "end": "0x8023D6D8"
-        },
-        {
-          "symbol": "SetEffectivePriority",
-          "start": "0x8023D714",
-          "end": "0x8023D8D4"
-        },
-        {
-          "symbol": "SelectThread",
-          "start": "0x8023D924",
-          "end": "0x8023DB4C"
-        },
-        {
-          "symbol": "__OSThreadInit",
-          "start": "0x8023D47C",
-          "end": "0x8023D5D4"
-        },
-        {
-          "symbol": "OSInitThreadQueue",
-          "start": "0x8023D5D4",
-          "end": "0x8023D5E4"
-        },
-        {
-          "symbol": "OSClearStack",
-          "start": "0x8023E6E8",
-          "end": "0x8023E794"
-        },
-        {
-          "symbol": "OSGetCurrentThread",
-          "start": "0x8023D5E4",
-          "end": "0x8023D5F0"
-        },
-        {
-          "symbol": "OSDisableScheduler",
-          "start": "0x8023D5F0",
-          "end": "0x8023D630"
-        },
-        {
-          "symbol": "OSEnableScheduler",
-          "start": "0x8023D630",
-          "end": "0x8023D670"
-        },
-        {
-          "symbol": "__OSGetEffectivePriority",
-          "start": "0x8023D6D8",
-          "end": "0x8023D714"
-        },
-        {
-          "symbol": "__OSPromoteThread",
-          "start": "0x8023D8D4",
-          "end": "0x8023D924"
-        },
-        {
-          "symbol": "__OSReschedule",
-          "start": "0x8023DB4C",
-          "end": "0x8023DB7C"
-        },
-        {
-          "symbol": "OSYieldThread",
-          "start": "0x8023DB7C",
-          "end": "0x8023DBB8"
-        },
-        {
-          "symbol": "OSCreateThread",
-          "start": "0x8023DBB8",
-          "end": "0x8023DDA0"
-        },
-        {
-          "symbol": "OSExitThread",
-          "start": "0x8023DDA0",
-          "end": "0x8023DE84"
-        },
-        {
-          "symbol": "OSWakeupThread",
-          "start": "0x8023E524",
-          "end": "0x8023E628"
-        },
-        {
-          "symbol": "OSCancelThread",
-          "start": "0x8023DE84",
-          "end": "0x8023E040"
-        },
-        {
-          "symbol": "OSSleepThread",
-          "start": "0x8023E438",
-          "end": "0x8023E524"
-        },
-        {
-          "symbol": "OSResumeThread",
-          "start": "0x8023E040",
-          "end": "0x8023E2C8"
-        },
-        {
-          "symbol": "OSSuspendThread",
-          "start": "0x8023E2C8",
-          "end": "0x8023E438"
-        },
-        {
-          "symbol": "OSSetThreadPriority",
-          "start": "0x8023E628",
-          "end": "0x8023E6E8"
-        }
-      ],
-      "discarded": [
-        "__OSSwitchThread",
-        "__OSIsThreadActive",
-        "SetRun",
-        "UpdatePriority",
-        "CheckThreadQueue",
-        "IsMember",
-        "OSSetSwitchThreadCallback",
-        "OSIsThreadSuspended",
-        "OSIsThreadTerminated",
-        "OSJoinThread",
-        "OSDetachThread",
-        "OSGetThreadPriority",
-        "OSSetIdleFunction",
-        "OSGetIdleFunction",
-        "OSCheckActiveThreads",
-        "OSSetThreadSpecific",
-        "OSGetThreadSpecific"
-      ]
-    },
-    {
       "source": "src/dolphin/dvd/dvdfs.c",
       "profile": "dolphin_dvd_release",
       "evidence": "Complete BFBB 8fb1c232 source retains all 13 emitted bodies. Eight bounded target identities derive from actual API/call operands and match with dolphin_dvd_release signed plain char. Five extra bodies retain source without original target identities. No source casts, directives or body exclusions; original bytes remain linked.",
@@ -19713,154 +19492,6 @@
         "GXReadXfRasMetric",
         "GXReadClksPerVtx",
         "__GXSetBWDials"
-      ]
-    },
-    {
-      "source": "src/dolphin/dvd/fstload.c",
-      "profile": "dolphin_dvd_release",
-      "evidence": "Complete dolsdk2004 2328b416 two-body source and canonical headers unchanged. Under dolphin_dvd_release signed plain char, the 216-byte callback and complete 360-byte loader match; the former unsigned loader measured 336 bytes. No casts, directives or exclusions; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80242048",
-          "end": "0x80242288"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FD858",
-          "end": "0x802FD8C8"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EC1E0",
-          "end": "0x803EC1EB"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A55F8",
-          "end": "0x803A5668"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ED178",
-          "end": "0x803ED184"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "cb",
-          "start": "0x80242048",
-          "end": "0x80242120"
-        },
-        {
-          "symbol": "__fstLoad",
-          "start": "0x80242120",
-          "end": "0x80242288"
-        }
-      ]
-    },
-    {
-      "source": "src/dolphin/gx/GXTev.c",
-      "profile": "dolphin_release",
-      "evidence": "Complete pureC BFBB source; explicit unsupported release-only matchingtemporary removed using genuine directarrayindex sourcepath. All15targetbodies registered1768 plus116data; mismatch measured without sourcepromotion.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80251604",
-          "end": "0x80251CEC"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FEE08",
-          "end": "0x802FEE7C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "GXSetTevOp",
-          "start": "0x80251604",
-          "end": "0x80251690"
-        },
-        {
-          "symbol": "GXSetTevColorIn",
-          "start": "0x80251690",
-          "end": "0x802516D4"
-        },
-        {
-          "symbol": "GXSetTevAlphaIn",
-          "start": "0x802516D4",
-          "end": "0x80251718"
-        },
-        {
-          "symbol": "GXSetTevColorOp",
-          "start": "0x80251718",
-          "end": "0x80251780"
-        },
-        {
-          "symbol": "GXSetTevAlphaOp",
-          "start": "0x80251780",
-          "end": "0x802517E8"
-        },
-        {
-          "symbol": "GXSetTevColor",
-          "start": "0x802517E8",
-          "end": "0x80251864"
-        },
-        {
-          "symbol": "GXSetTevKColor",
-          "start": "0x80251864",
-          "end": "0x802518D8"
-        },
-        {
-          "symbol": "GXSetTevKColorSel",
-          "start": "0x802518D8",
-          "end": "0x80251934"
-        },
-        {
-          "symbol": "GXSetTevKAlphaSel",
-          "start": "0x80251934",
-          "end": "0x80251990"
-        },
-        {
-          "symbol": "GXSetTevSwapMode",
-          "start": "0x80251990",
-          "end": "0x802519D8"
-        },
-        {
-          "symbol": "GXSetTevSwapModeTable",
-          "start": "0x802519D8",
-          "end": "0x80251A58"
-        },
-        {
-          "symbol": "GXSetAlphaCompare",
-          "start": "0x80251A58",
-          "end": "0x80251A9C"
-        },
-        {
-          "symbol": "GXSetZTexture",
-          "start": "0x80251A9C",
-          "end": "0x80251B28"
-        },
-        {
-          "symbol": "GXSetTevOrder",
-          "start": "0x80251B28",
-          "end": "0x80251CC4"
-        },
-        {
-          "symbol": "GXSetNumTevStages",
-          "start": "0x80251CC4",
-          "end": "0x80251CEC"
-        }
-      ],
-      "discarded": [
-        "GXSetTevColorS10"
       ]
     },
     {
@@ -20016,452 +19647,6 @@
       ]
     },
     {
-      "source": "src/dolphin/dvd/dvdidutils.c",
-      "profile": "dolphin_dvd_release",
-      "evidence": "Complete pinned dolsdk2004 2328b4164b1a98422a2255d83ce9a5a7548990cc source, with canonical headers and dolphin_dvd_release signed plain char. Complete 248-byte DVDCompareDiskID matches independently; adjacent 48-byte wrapper ownership remains unresolved. Original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80241F20",
-          "end": "0x80242018"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "DVDCompareDiskID",
-          "start": "0x80241F20",
-          "end": "0x80242018"
-        }
-      ],
-      "discarded": [
-        "strnlen",
-        "DVDGenerateDiskID"
-      ]
-    },
-    {
-      "source": "src/dolphin/gx/GXAttr.c",
-      "profile": "dolphin_release",
-      "evidence": "Complete pinned dSDK seventeen-body source with conservative omission of explicit matching artifact and seven uninitialized no-effect expressions; ordinary current canonical headers. Fourteen full target bodies5136, SetVAT/Array version partial preserved without splicing.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8024CB90",
-          "end": "0x8024DFA0"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FE080",
-          "end": "0x802FE2F4"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EC260",
-          "end": "0x803EC26C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "GXSetVtxDesc",
-          "start": "0x8024CB90",
-          "end": "0x8024CDFC"
-        },
-        {
-          "symbol": "GXSetVtxDescv",
-          "start": "0x8024CDFC",
-          "end": "0x8024D084"
-        },
-        {
-          "symbol": "__GXSetVCD",
-          "start": "0x8024D084",
-          "end": "0x8024D140"
-        },
-        {
-          "symbol": "__GXCalculateVLim",
-          "start": "0x8024D140",
-          "end": "0x8024D264"
-        },
-        {
-          "symbol": "GXGetVtxDesc",
-          "start": "0x8024D264",
-          "end": "0x8024D418"
-        },
-        {
-          "symbol": "GXClearVtxDesc",
-          "start": "0x8024D418",
-          "end": "0x8024D450"
-        },
-        {
-          "symbol": "GXSetVtxAttrFmt",
-          "start": "0x8024D450",
-          "end": "0x8024D6AC"
-        },
-        {
-          "symbol": "GXSetVtxAttrFmtv",
-          "start": "0x8024D6AC",
-          "end": "0x8024D92C"
-        },
-        {
-          "symbol": "__GXSetVAT",
-          "start": "0x8024D92C",
-          "end": "0x8024D9C8"
-        },
-        {
-          "symbol": "GXGetVtxAttrFmt",
-          "start": "0x8024D9C8",
-          "end": "0x8024DC48"
-        },
-        {
-          "symbol": "GXSetArray",
-          "start": "0x8024DC48",
-          "end": "0x8024DCD4"
-        },
-        {
-          "symbol": "GXInvalidateVtxCache",
-          "start": "0x8024DCD4",
-          "end": "0x8024DCE4"
-        },
-        {
-          "symbol": "GXSetTexCoordGen2",
-          "start": "0x8024DCE4",
-          "end": "0x8024DF64"
-        },
-        {
-          "symbol": "GXSetNumTexGens",
-          "start": "0x8024DF64",
-          "end": "0x8024DFA0"
-        }
-      ],
-      "discarded": [
-        "__GXXfVtxSpecs",
-        "GXGetVtxDescv",
-        "GXGetVtxAttrFmtv"
-      ]
-    },
-    {
-      "source": "src/dolphin/os/OSArena.c",
-      "profile": "dolphin_release",
-      "evidence": "Complete6body donor source; actual4/32 target getters/setters and full4initializedsdata+4referenceSBSS. Existinggamecalls neutral integer-return view unresolved, comparison-only pending genuine caller ABI reconciliation. Helpers remain source, unassigned target identities.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802399F8",
-          "end": "0x80239A18"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EC158",
-          "end": "0x803EC15C"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ED080",
-          "end": "0x803ED084"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "OSGetArenaHi",
-          "start": "0x802399F8",
-          "end": "0x80239A00"
-        },
-        {
-          "symbol": "OSGetArenaLo",
-          "start": "0x80239A00",
-          "end": "0x80239A08"
-        },
-        {
-          "symbol": "OSSetArenaHi",
-          "start": "0x80239A08",
-          "end": "0x80239A10"
-        },
-        {
-          "symbol": "OSSetArenaLo",
-          "start": "0x80239A10",
-          "end": "0x80239A18"
-        }
-      ],
-      "discarded": [
-        "OSAllocFromArenaLo",
-        "OSAllocFromArenaHi"
-      ]
-    },
-    {
-      "source": "src/dolphin/card/CARDOpen.c",
-      "profile": "dolphin_card_release",
-      "evidence": "Existing coherent pinned dSDK2328 CARDOpen source retained unchanged. The complete14-file CARD library uses qualified dolphin_card_release signed-char working profile, including all12linked units and both comparison files. Both filename functions gain exact comparison results; target extsb/NUL/equality behavior and pinned default/recipes support a working reconstruction, not unique original flags. All previously exact functions preserved; linked promotion remains separate. See evidence.tsv compiler row.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80256F14",
-          "end": "0x802574E8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__CARDCompareFileName",
-          "start": "0x80256F14",
-          "end": "0x80256F7C"
-        },
-        {
-          "symbol": "__CARDAccess",
-          "start": "0x80256F7C",
-          "end": "0x80257010"
-        },
-        {
-          "symbol": "__CARDIsWritable",
-          "start": "0x80257010",
-          "end": "0x80257144"
-        },
-        {
-          "symbol": "__CARDIsReadable",
-          "start": "0x80257144",
-          "end": "0x80257238"
-        },
-        {
-          "symbol": "__CARDGetFileNo",
-          "start": "0x80257238",
-          "end": "0x80257388"
-        },
-        {
-          "symbol": "CARDFastOpen",
-          "start": "0x80257388",
-          "end": "0x8025748C"
-        },
-        {
-          "symbol": "CARDClose",
-          "start": "0x8025748C",
-          "end": "0x802574E0"
-        },
-        {
-          "symbol": "__CARDIsOpened",
-          "start": "0x802574E0",
-          "end": "0x802574E8"
-        }
-      ],
-      "discarded": [
-        "CARDOpen"
-      ]
-    },
-    {
-      "source": "src/dolphin/gx/GXMisc.c",
-      "profile": "dolphin_release",
-      "evidence": "evidence.tsv independently reviewed BFBB, OOT GameCube and TP source forms; combined registered complete target extents retain unchanged compiler settings, original source attribution and provisional ownership. All registered exact and partial measurements remain distinct from the accepted linked output; no whole-file promotion.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8024DFA0",
-          "end": "0x8024E888"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ED3A0",
-          "end": "0x803ED3B4"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "GXSetMisc",
-          "start": "0x8024DFA0",
-          "end": "0x8024E034"
-        },
-        {
-          "symbol": "GXFlush",
-          "start": "0x8024E034",
-          "end": "0x8024E090"
-        },
-        {
-          "symbol": "__GXAbort",
-          "start": "0x8024E090",
-          "end": "0x8024E1FC"
-        },
-        {
-          "symbol": "GXDrawDone",
-          "start": "0x8024E450",
-          "end": "0x8024E4D0"
-        },
-        {
-          "symbol": "GXPixModeSync",
-          "start": "0x8024E4D0",
-          "end": "0x8024E4F4"
-        },
-        {
-          "symbol": "GXPokeAlphaMode",
-          "start": "0x8024E518",
-          "end": "0x8024E52C"
-        },
-        {
-          "symbol": "GXPokeAlphaRead",
-          "start": "0x8024E52C",
-          "end": "0x8024E54C"
-        },
-        {
-          "symbol": "GXPokeAlphaUpdate",
-          "start": "0x8024E54C",
-          "end": "0x8024E564"
-        },
-        {
-          "symbol": "GXPokeBlendMode",
-          "start": "0x8024E564",
-          "end": "0x8024E5C8"
-        },
-        {
-          "symbol": "GXPokeColorUpdate",
-          "start": "0x8024E5C8",
-          "end": "0x8024E5E0"
-        },
-        {
-          "symbol": "GXPokeDstAlpha",
-          "start": "0x8024E5E0",
-          "end": "0x8024E604"
-        },
-        {
-          "symbol": "GXPokeDither",
-          "start": "0x8024E604",
-          "end": "0x8024E61C"
-        },
-        {
-          "symbol": "GXPokeZMode",
-          "start": "0x8024E61C",
-          "end": "0x8024E63C"
-        },
-        {
-          "symbol": "GXSetDrawSyncCallback",
-          "start": "0x8024E684",
-          "end": "0x8024E6C8"
-        },
-        {
-          "symbol": "GXTokenInterruptHandler",
-          "start": "0x8024E6C8",
-          "end": "0x8024E750"
-        },
-        {
-          "symbol": "GXSetDrawDoneCallback",
-          "start": "0x8024E750",
-          "end": "0x8024E794"
-        },
-        {
-          "symbol": "GXFinishInterruptHandler",
-          "start": "0x8024E794",
-          "end": "0x8024E814"
-        },
-        {
-          "symbol": "__GXPEInit",
-          "start": "0x8024E814",
-          "end": "0x8024E888"
-        },
-        {
-          "symbol": "GXAbortFrame",
-          "start": "0x8024E1FC",
-          "end": "0x8024E36C"
-        },
-        {
-          "symbol": "GXSetDrawDone",
-          "start": "0x8024E36C",
-          "end": "0x8024E404"
-        },
-        {
-          "symbol": "GXWaitDrawDone",
-          "start": "0x8024E404",
-          "end": "0x8024E450"
-        },
-        {
-          "symbol": "GXPeekZ",
-          "start": "0x8024E660",
-          "end": "0x8024E684"
-        },
-        {
-          "symbol": "GXTexModeSync",
-          "start": "0x8024E4F4",
-          "end": "0x8024E518"
-        },
-        {
-          "symbol": "GXPeekARGB",
-          "start": "0x8024E63C",
-          "end": "0x8024E660"
-        }
-      ],
-      "discarded": [
-        "GXSetDrawSync",
-        "GXReadDrawSync"
-      ]
-    },
-    {
-      "source": "src/dolphin/card/CARDMount.c",
-      "profile": "dolphin_card_release",
-      "evidence": "Coherent BFBB CARDMount source plus the complete dSDK2328 CARDProbe body (revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/card/CARDMount.c). Nine registered target bodies and both initialized tables remain comparison-only. The complete14-file CARD library uses the qualified dolphin_card_release signed-char working profile; original command line is not uniquely established. See evidence.tsv compiler/source/typed-function rows. No whole linked promotion.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80255C38",
-          "end": "0x80256730"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FF040",
-          "end": "0x802FF080"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "IsCard",
-          "start": "0x80255C38",
-          "end": "0x80255D04"
-        },
-        {
-          "symbol": "CARDProbe",
-          "start": "0x80255D04",
-          "end": "0x80255D3C"
-        },
-        {
-          "symbol": "CARDProbeEx",
-          "start": "0x80255D3C",
-          "end": "0x80255EB8"
-        },
-        {
-          "symbol": "DoMount",
-          "start": "0x80255EB8",
-          "end": "0x802562C8"
-        },
-        {
-          "symbol": "__CARDMountCallback",
-          "start": "0x802562C8",
-          "end": "0x80256400"
-        },
-        {
-          "symbol": "CARDMountAsync",
-          "start": "0x80256400",
-          "end": "0x802565A0"
-        },
-        {
-          "symbol": "CARDMount",
-          "start": "0x802565A0",
-          "end": "0x802565E8"
-        },
-        {
-          "symbol": "DoUnmount",
-          "start": "0x802565E8",
-          "end": "0x80256684"
-        },
-        {
-          "symbol": "CARDUnmount",
-          "start": "0x80256684",
-          "end": "0x80256730"
-        }
-      ]
-    },
-    {
       "source": "src/dolphin/dsp/dsp_task.c",
       "profile": "dolphin_release",
       "evidence": "Full coherent BFBB handler already imported clean; fixed comparison guard registers complete original extent; existing4 linkedhelpers unchanged.",
@@ -20484,26 +19669,6 @@
           "symbol": "__DSPHandler",
           "start": "0x80285DC8",
           "end": "0x802861EC"
-        }
-      ]
-    },
-    {
-      "source": "src/dolphin/dsp/dsp_debug.c",
-      "profile": "dolphin_release",
-      "evidence": "Coherent dSDK2328 full debug TU preserves unassigned getter.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80285D78",
-          "end": "0x80285DC8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__DSP_debug_printf",
-          "start": "0x80285D78",
-          "end": "0x80285DC8"
         }
       ]
     },
@@ -21108,6 +20273,11 @@
           "symbol": "__AI_SRC_INIT",
           "start": "0x8024A808",
           "end": "0x8024A9EC"
+        },
+        {
+          "symbol": "__AICallbackStackSwitch",
+          "start": "0x8024A7B0",
+          "end": "0x8024A808"
         }
       ]
     },
@@ -21128,6 +20298,16 @@
           "symbol": "__OSGetSystemTime",
           "start": "0x8023E7B4",
           "end": "0x8023E818"
+        },
+        {
+          "symbol": "OSGetTime",
+          "start": "0x8023E794",
+          "end": "0x8023E7AC"
+        },
+        {
+          "symbol": "OSGetTick",
+          "start": "0x8023E7AC",
+          "end": "0x8023E7B4"
         }
       ]
     },
@@ -21164,6 +20344,21 @@
           "symbol": "__OSInitMemoryProtection",
           "start": "0x8023BC38",
           "end": "0x8023BD50"
+        },
+        {
+          "symbol": "Config24MB",
+          "start": "0x8023BB20",
+          "end": "0x8023BBA0"
+        },
+        {
+          "symbol": "Config48MB",
+          "start": "0x8023BBA0",
+          "end": "0x8023BC20"
+        },
+        {
+          "symbol": "RealMode",
+          "start": "0x8023BC20",
+          "end": "0x8023BC38"
         }
       ]
     },
@@ -21205,6 +20400,46 @@
           "symbol": "__OSContextInit",
           "start": "0x8023AB00",
           "end": "0x8023AB48"
+        },
+        {
+          "symbol": "__OSLoadFPUContext",
+          "start": "0x8023A2D8",
+          "end": "0x8023A3FC"
+        },
+        {
+          "symbol": "__OSSaveFPUContext",
+          "start": "0x8023A3FC",
+          "end": "0x8023A524"
+        },
+        {
+          "symbol": "OSSaveFPUContext",
+          "start": "0x8023A524",
+          "end": "0x8023A52C"
+        },
+        {
+          "symbol": "OSSetCurrentContext",
+          "start": "0x8023A52C",
+          "end": "0x8023A588"
+        },
+        {
+          "symbol": "OSSaveContext",
+          "start": "0x8023A594",
+          "end": "0x8023A614"
+        },
+        {
+          "symbol": "OSGetStackPointer",
+          "start": "0x8023A6EC",
+          "end": "0x8023A6F4"
+        },
+        {
+          "symbol": "OSInitContext",
+          "start": "0x8023A718",
+          "end": "0x8023A7D4"
+        },
+        {
+          "symbol": "OSSwitchFPUContext",
+          "start": "0x8023AA7C",
+          "end": "0x8023AB00"
         }
       ]
     },
@@ -21241,6 +20476,81 @@
           "symbol": "__OSCacheInit",
           "start": "0x8023A1E4",
           "end": "0x8023A2D8"
+        },
+        {
+          "symbol": "DCEnable",
+          "start": "0x80239CAC",
+          "end": "0x80239CC0"
+        },
+        {
+          "symbol": "DCInvalidateRange",
+          "start": "0x80239CC0",
+          "end": "0x80239CEC"
+        },
+        {
+          "symbol": "DCFlushRange",
+          "start": "0x80239CEC",
+          "end": "0x80239D1C"
+        },
+        {
+          "symbol": "DCStoreRange",
+          "start": "0x80239D1C",
+          "end": "0x80239D4C"
+        },
+        {
+          "symbol": "DCFlushRangeNoSync",
+          "start": "0x80239D4C",
+          "end": "0x80239D78"
+        },
+        {
+          "symbol": "ICInvalidateRange",
+          "start": "0x80239D78",
+          "end": "0x80239DAC"
+        },
+        {
+          "symbol": "ICFlashInvalidate",
+          "start": "0x80239DAC",
+          "end": "0x80239DBC"
+        },
+        {
+          "symbol": "ICEnable",
+          "start": "0x80239DBC",
+          "end": "0x80239DD0"
+        },
+        {
+          "symbol": "__LCEnable",
+          "start": "0x80239DD0",
+          "end": "0x80239E9C"
+        },
+        {
+          "symbol": "LCEnable",
+          "start": "0x80239E9C",
+          "end": "0x80239ED4"
+        },
+        {
+          "symbol": "LCDisable",
+          "start": "0x80239ED4",
+          "end": "0x80239EFC"
+        },
+        {
+          "symbol": "LCStoreBlocks",
+          "start": "0x80239EFC",
+          "end": "0x80239F20"
+        },
+        {
+          "symbol": "LCStoreData",
+          "start": "0x80239F20",
+          "end": "0x80239FCC"
+        },
+        {
+          "symbol": "LCQueueLength",
+          "start": "0x80239FCC",
+          "end": "0x80239FD8"
+        },
+        {
+          "symbol": "LCQueueWait",
+          "start": "0x80239FD8",
+          "end": "0x80239FEC"
         }
       ]
     },
@@ -21278,6 +20588,11 @@
           "symbol": "__OSReboot",
           "start": "0x8023E93C",
           "end": "0x8023EC7C"
+        },
+        {
+          "symbol": "Run",
+          "start": "0x8023E920",
+          "end": "0x8023E930"
         }
       ]
     },
@@ -21319,6 +20634,11 @@
           "symbol": "OSGetResetCode",
           "start": "0x8023C3B0",
           "end": "0x8023C3E0"
+        },
+        {
+          "symbol": "Reset",
+          "start": "0x8023C040",
+          "end": "0x8023C0B0"
         }
       ]
     },
@@ -21381,6 +20701,156 @@
           "symbol": "__OSDispatchInterrupt",
           "start": "0x8023B6CC",
           "end": "0x8023BA10"
+        },
+        {
+          "symbol": "OSDisableInterrupts",
+          "start": "0x8023B1F4",
+          "end": "0x8023B208"
+        },
+        {
+          "symbol": "OSEnableInterrupts",
+          "start": "0x8023B208",
+          "end": "0x8023B21C"
+        },
+        {
+          "symbol": "OSRestoreInterrupts",
+          "start": "0x8023B21C",
+          "end": "0x8023B240"
+        },
+        {
+          "symbol": "ExternalInterruptHandler",
+          "start": "0x8023BA10",
+          "end": "0x8023BA60"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/base/PPCArch.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv function and assembly rows 0x8023873C-0x8023885C (src/dolphin/base/PPCArch.c); sdk.json mapping. Comparison-only source; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023873C",
+          "end": "0x8023885C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "PPCMfmsr",
+          "start": "0x8023873C",
+          "end": "0x80238744"
+        },
+        {
+          "symbol": "PPCMtmsr",
+          "start": "0x80238744",
+          "end": "0x8023874C"
+        },
+        {
+          "symbol": "PPCMfhid0",
+          "start": "0x8023874C",
+          "end": "0x80238754"
+        },
+        {
+          "symbol": "PPCMthid0",
+          "start": "0x80238754",
+          "end": "0x8023875C"
+        },
+        {
+          "symbol": "PPCMfl2cr",
+          "start": "0x8023875C",
+          "end": "0x80238764"
+        },
+        {
+          "symbol": "PPCMtl2cr",
+          "start": "0x80238764",
+          "end": "0x8023876C"
+        },
+        {
+          "symbol": "PPCMtdec",
+          "start": "0x8023876C",
+          "end": "0x80238774"
+        },
+        {
+          "symbol": "PPCSync",
+          "start": "0x80238774",
+          "end": "0x8023877C"
+        },
+        {
+          "symbol": "PPCHalt",
+          "start": "0x8023877C",
+          "end": "0x80238790"
+        },
+        {
+          "symbol": "PPCMtmmcr0",
+          "start": "0x80238790",
+          "end": "0x80238798"
+        },
+        {
+          "symbol": "PPCMtmmcr1",
+          "start": "0x80238798",
+          "end": "0x802387A0"
+        },
+        {
+          "symbol": "PPCMtpmc1",
+          "start": "0x802387A0",
+          "end": "0x802387A8"
+        },
+        {
+          "symbol": "PPCMtpmc2",
+          "start": "0x802387A8",
+          "end": "0x802387B0"
+        },
+        {
+          "symbol": "PPCMtpmc3",
+          "start": "0x802387B0",
+          "end": "0x802387B8"
+        },
+        {
+          "symbol": "PPCMtpmc4",
+          "start": "0x802387B8",
+          "end": "0x802387C0"
+        },
+        {
+          "symbol": "PPCMffpscr",
+          "start": "0x802387C0",
+          "end": "0x802387E0"
+        },
+        {
+          "symbol": "PPCMtfpscr",
+          "start": "0x802387E0",
+          "end": "0x80238808"
+        },
+        {
+          "symbol": "PPCMfhid2",
+          "start": "0x80238808",
+          "end": "0x80238810"
+        },
+        {
+          "symbol": "PPCMthid2",
+          "start": "0x80238810",
+          "end": "0x80238818"
+        },
+        {
+          "symbol": "PPCMfwpar",
+          "start": "0x80238818",
+          "end": "0x80238824"
+        },
+        {
+          "symbol": "PPCMtwpar",
+          "start": "0x80238824",
+          "end": "0x8023882C"
+        },
+        {
+          "symbol": "PPCDisableSpeculation",
+          "start": "0x8023882C",
+          "end": "0x80238854"
+        },
+        {
+          "symbol": "PPCSetFpNonIEEEMode",
+          "start": "0x80238854",
+          "end": "0x8023885C"
         }
       ]
     },
@@ -21465,26 +20935,36 @@
           "symbol": "OSExceptionInit",
           "start": "0x80238EE8",
           "end": "0x80239168"
-        }
-      ]
-    },
-    {
-      "source": "src/dolphin/os/OSLink.c",
-      "profile": "dolphin_release",
-      "evidence": "whole coherent pinned donor C retained bodies; original assembly providers preserved. Full mapped file denominator unchanged. No unsupported padding or match flags.",
-      "sections": [
+        },
         {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8023BA60",
-          "end": "0x8023BA78"
-        }
-      ],
-      "functions": [
+          "symbol": "__OSFPRInit",
+          "start": "0x8023885C",
+          "end": "0x80238984"
+        },
         {
-          "symbol": "__OSModuleInit",
-          "start": "0x8023BA60",
-          "end": "0x8023BA78"
+          "symbol": "__OSDBIntegrator",
+          "start": "0x80239168",
+          "end": "0x8023918C"
+        },
+        {
+          "symbol": "__OSDBJump",
+          "start": "0x8023918C",
+          "end": "0x80239190"
+        },
+        {
+          "symbol": "OSExceptionVector",
+          "start": "0x802391C0",
+          "end": "0x8023925C"
+        },
+        {
+          "symbol": "OSDefaultExceptionHandler",
+          "start": "0x8023925C",
+          "end": "0x802392B4"
+        },
+        {
+          "symbol": "__OSPSInit",
+          "start": "0x802392B4",
+          "end": "0x80239308"
         }
       ]
     },
@@ -21536,6 +21016,11 @@
           "symbol": "DecrementerExceptionCallback",
           "start": "0x80239778",
           "end": "0x802399A8"
+        },
+        {
+          "symbol": "DecrementerExceptionHandler",
+          "start": "0x802399A8",
+          "end": "0x802399F8"
         }
       ],
       "discarded": [
@@ -21908,153 +21393,6 @@
           "start": "0x803ED258",
           "end": "0x803ED25C"
         }
-      ]
-    },
-    {
-      "source": "src/dolphin/gba/GBA.c",
-      "profile": "dolphin_release",
-      "evidence": "complete pinnedPikmin2 related GBA C functions with actualtarget Init guard/version delta, canonicalreset callback; opaqueunaccessed fields, no uninitializedstoragecredit.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80289450",
-          "end": "0x802895E8"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x803060C0",
-          "end": "0x803060D0"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803D4260",
-          "end": "0x803D4760"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ED5E8",
-          "end": "0x803ED5EC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "ShortCommandProc",
-          "start": "0x80289450",
-          "end": "0x802894A4"
-        },
-        {
-          "symbol": "GBAInit",
-          "start": "0x802894A4",
-          "end": "0x80289548"
-        },
-        {
-          "symbol": "GBAGetStatus",
-          "start": "0x80289548",
-          "end": "0x802895D8"
-        },
-        {
-          "symbol": "OnReset",
-          "start": "0x802895D8",
-          "end": "0x802895E8"
-        }
-      ],
-      "discarded": [
-        "GBAGetStatusAsync",
-        "GBAResetAsync",
-        "GBAReset"
-      ]
-    },
-    {
-      "source": "src/dolphin/gba/GBAXfer.c",
-      "profile": "dolphin_release",
-      "evidence": "complete pinnedPikmin2 related GBA C functions with actualtarget Init guard/version delta, canonicalreset callback; opaqueunaccessed fields, no uninitializedstoragecredit.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802895E8",
-          "end": "0x802898FC"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__GBAHandler",
-          "start": "0x802895E8",
-          "end": "0x802896C4"
-        },
-        {
-          "symbol": "__GBASyncCallback",
-          "start": "0x802896C4",
-          "end": "0x802896F8"
-        },
-        {
-          "symbol": "__GBASync",
-          "start": "0x802896F8",
-          "end": "0x80289764"
-        },
-        {
-          "symbol": "TypeAndStatusCallback",
-          "start": "0x80289764",
-          "end": "0x80289888"
-        },
-        {
-          "symbol": "__GBATransfer",
-          "start": "0x80289888",
-          "end": "0x802898FC"
-        }
-      ]
-    },
-    {
-      "source": "src/dolphin/gx/GXFifo.c",
-      "profile": "dolphin_release",
-      "evidence": "Accepted BFBB source and native state preserved; complete OOT6e449e1748a02c12b4cb218453c529175b85364a cleanup C body and genuine base accessor use target-supported canonical FIFO layout and original getter/copy/reset calls. Three measured comparison bodies272bytes; original unregistered save/status ranges remain. Source ordering follows donor to preserve original calls; fixed comparison guard leaves accepted native output unchanged. No whole-file completion or promotion.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8024C038",
-          "end": "0x8024CB90"
-        },
-        {
-          "section": ".sbss",
-          "placement": ".sbss",
-          "start": "0x803ED380",
-          "end": "0x803ED3A0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__GXCleanGPFifo",
-          "start": "0x8024C7D8",
-          "end": "0x8024C8D8"
-        },
-        {
-          "symbol": "GXGetCPUFifo",
-          "start": "0x8024C8D8",
-          "end": "0x8024C8E0"
-        },
-        {
-          "symbol": "GXGetGPFifo",
-          "start": "0x8024C8E0",
-          "end": "0x8024C8E8"
-        },
-        {
-          "symbol": "GXRedirectWriteGatherPipe",
-          "start": "0x8024C8E8",
-          "end": "0x8024C9F0"
-        },
-        {
-          "symbol": "GXRestoreWriteGatherPipe",
-          "start": "0x8024C9F0",
-          "end": "0x8024CB90"
-        }
-      ],
-      "discarded": [
-        "GXSetCurrentGXThread"
       ]
     },
     {
@@ -28313,32 +27651,6 @@
       ]
     },
     {
-      "source": "src/dolphin/os/OSFont.c",
-      "profile": "dolphin_release",
-      "evidence": "Complete OOT small OSFont donor variant, unchanged body and canonical include-only integration; 88-byte target function and 2-byte initialized halfword evidenced individually. Original source-file/archive boundaries provisional; comparison-only, original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80285A90",
-          "end": "0x80285AE8"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EC5A8",
-          "end": "0x803EC5AA"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "OSGetFontEncode",
-          "start": "0x80285A90",
-          "end": "0x80285AE8"
-        }
-      ]
-    },
-    {
       "source": "src/dolphin/os/__ppc_eabi_init.c",
       "profile": "dolphin_release",
       "evidence": "Provisional mapped startup unit from frozen52fd scope; coherent OOT complete pure C wrappers independently resolved with actual target ctor/PPCHalt callees. Original names and exact whole-object boundaries unproven; original hardware/ctor/dtor bytes retained.",
@@ -28575,10 +27887,162 @@
           "symbol": "__DBIsExceptionMarked",
           "start": "0x8023ECFC",
           "end": "0x8023ED18"
+        },
+        {
+          "symbol": "__DBExceptionDestination",
+          "start": "0x8023ECEC",
+          "end": "0x8023ECFC"
         }
       ],
       "discarded": [
         "DBPrintf"
+      ]
+    },
+    {
+      "source": "src/dolphin/amcstubs/AmcExi2Stubs.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv provisional unit row 0x8025D6A0-0x8025D6C8 (src/dolphin/amcstubs/AmcExi2Stubs.c), its compiler, source-form, type, function and name rows; CREDITS.md for the source. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025D6A0",
+          "end": "0x8025D6C8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "EXI2_Init",
+          "start": "0x8025D6A0",
+          "end": "0x8025D6A4"
+        },
+        {
+          "symbol": "EXI2_EnableInterrupts",
+          "start": "0x8025D6A4",
+          "end": "0x8025D6A8"
+        },
+        {
+          "symbol": "EXI2_Poll",
+          "start": "0x8025D6A8",
+          "end": "0x8025D6B0"
+        },
+        {
+          "symbol": "EXI2_ReadN",
+          "start": "0x8025D6B0",
+          "end": "0x8025D6B8"
+        },
+        {
+          "symbol": "EXI2_WriteN",
+          "start": "0x8025D6B8",
+          "end": "0x8025D6C0"
+        },
+        {
+          "symbol": "EXI2_Reserve",
+          "start": "0x8025D6C0",
+          "end": "0x8025D6C4"
+        },
+        {
+          "symbol": "EXI2_Unreserve",
+          "start": "0x8025D6C4",
+          "end": "0x8025D6C8"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/cu_8025D6C8.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv provisional unit row 0x8025D6C8-0x8025E148 (src/dolphin/cu_8025D6C8.c), its compiler, source-form, type, function and name rows and the exact data rows 0x803EC320-0x803EC321 (.sdata) and 0x803ED3F8-0x803ED40D (.sbss). Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025D6C8",
+          "end": "0x8025E148"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC320",
+          "end": "0x803EC321"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED3F8",
+          "end": "0x803ED40D"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8025D6C8",
+          "start": "0x8025D6C8",
+          "end": "0x8025D6CC"
+        },
+        {
+          "symbol": "fn_8025D6CC",
+          "start": "0x8025D6CC",
+          "end": "0x8025D6D0"
+        },
+        {
+          "symbol": "fn_8025D6D0",
+          "start": "0x8025D6D0",
+          "end": "0x8025D930"
+        },
+        {
+          "symbol": "fn_8025D930",
+          "start": "0x8025D930",
+          "end": "0x8025D9BC"
+        },
+        {
+          "symbol": "fn_8025D9BC",
+          "start": "0x8025D9BC",
+          "end": "0x8025DA58"
+        },
+        {
+          "symbol": "fn_8025DA58",
+          "start": "0x8025DA58",
+          "end": "0x8025DAAC"
+        },
+        {
+          "symbol": "fn_8025DAAC",
+          "start": "0x8025DAAC",
+          "end": "0x8025DB24"
+        },
+        {
+          "symbol": "fn_8025DB24",
+          "start": "0x8025DB24",
+          "end": "0x8025DB64"
+        },
+        {
+          "symbol": "fn_8025DB64",
+          "start": "0x8025DB64",
+          "end": "0x8025DBA0"
+        },
+        {
+          "symbol": "fn_8025DBA0",
+          "start": "0x8025DBA0",
+          "end": "0x8025DC4C"
+        },
+        {
+          "symbol": "fn_8025DC4C",
+          "start": "0x8025DC4C",
+          "end": "0x8025DD28"
+        },
+        {
+          "symbol": "fn_8025DD28",
+          "start": "0x8025DD28",
+          "end": "0x8025DE04"
+        },
+        {
+          "symbol": "fn_8025DE04",
+          "start": "0x8025DE04",
+          "end": "0x8025DEB0"
+        },
+        {
+          "symbol": "fn_8025DEB0",
+          "start": "0x8025DEB0",
+          "end": "0x8025E148"
+        }
       ]
     },
     {
@@ -29092,6 +28556,426 @@
           "symbol": "fn_80229210",
           "start": "0x80229210",
           "end": "0x80229270"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80229270.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80229270-0x8022F428 (src/engine/cu_80229270.c), its function and name rows and the cu_80229270 compiler and source-form rows. The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80229270",
+          "end": "0x8022F428"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80229270",
+          "start": "0x80229270",
+          "end": "0x802293A8"
+        },
+        {
+          "symbol": "fn_802293A8",
+          "start": "0x802293A8",
+          "end": "0x802293B0"
+        },
+        {
+          "symbol": "fn_802293B0",
+          "start": "0x802293B0",
+          "end": "0x802293B4"
+        },
+        {
+          "symbol": "fn_802293B4",
+          "start": "0x802293B4",
+          "end": "0x802293FC"
+        },
+        {
+          "symbol": "fn_802293FC",
+          "start": "0x802293FC",
+          "end": "0x8022942C"
+        },
+        {
+          "symbol": "fn_8022942C",
+          "start": "0x8022942C",
+          "end": "0x80229434"
+        },
+        {
+          "symbol": "fn_80229434",
+          "start": "0x80229434",
+          "end": "0x80229438"
+        },
+        {
+          "symbol": "fn_80229438",
+          "start": "0x80229438",
+          "end": "0x80229470"
+        },
+        {
+          "symbol": "fn_80229470",
+          "start": "0x80229470",
+          "end": "0x80229494"
+        },
+        {
+          "symbol": "fn_80229494",
+          "start": "0x80229494",
+          "end": "0x802294D8"
+        },
+        {
+          "symbol": "fn_802294D8",
+          "start": "0x802294D8",
+          "end": "0x802294F4"
+        },
+        {
+          "symbol": "fn_802294F4",
+          "start": "0x802294F4",
+          "end": "0x802294FC"
+        },
+        {
+          "symbol": "fn_802294FC",
+          "start": "0x802294FC",
+          "end": "0x80229554"
+        },
+        {
+          "symbol": "fn_80229554",
+          "start": "0x80229554",
+          "end": "0x802295C0"
+        },
+        {
+          "symbol": "fn_802295C0",
+          "start": "0x802295C0",
+          "end": "0x802295F8"
+        },
+        {
+          "symbol": "fn_802295F8",
+          "start": "0x802295F8",
+          "end": "0x80229644"
+        },
+        {
+          "symbol": "fn_80229644",
+          "start": "0x80229644",
+          "end": "0x80229674"
+        },
+        {
+          "symbol": "fn_80229674",
+          "start": "0x80229674",
+          "end": "0x802296B4"
+        },
+        {
+          "symbol": "fn_802296B4",
+          "start": "0x802296B4",
+          "end": "0x80229718"
+        },
+        {
+          "symbol": "fn_80229718",
+          "start": "0x80229718",
+          "end": "0x80229744"
+        },
+        {
+          "symbol": "fn_80229744",
+          "start": "0x80229744",
+          "end": "0x80229760"
+        },
+        {
+          "symbol": "fn_80229760",
+          "start": "0x80229760",
+          "end": "0x80229788"
+        },
+        {
+          "symbol": "fn_80229788",
+          "start": "0x80229788",
+          "end": "0x802297B0"
+        },
+        {
+          "symbol": "fn_802297B0",
+          "start": "0x802297B0",
+          "end": "0x802297D8"
+        },
+        {
+          "symbol": "fn_80229E78",
+          "start": "0x80229E78",
+          "end": "0x80229E80"
+        },
+        {
+          "symbol": "fn_80229E80",
+          "start": "0x80229E80",
+          "end": "0x80229E88"
+        },
+        {
+          "symbol": "fn_8022A428",
+          "start": "0x8022A428",
+          "end": "0x8022A490"
+        },
+        {
+          "symbol": "fn_8022A490",
+          "start": "0x8022A490",
+          "end": "0x8022A508"
+        },
+        {
+          "symbol": "fn_8022A508",
+          "start": "0x8022A508",
+          "end": "0x8022A558"
+        },
+        {
+          "symbol": "fn_8022A558",
+          "start": "0x8022A558",
+          "end": "0x8022A59C"
+        },
+        {
+          "symbol": "fn_8022A59C",
+          "start": "0x8022A59C",
+          "end": "0x8022A624"
+        },
+        {
+          "symbol": "fn_8022AB6C",
+          "start": "0x8022AB6C",
+          "end": "0x8022AC80"
+        },
+        {
+          "symbol": "fn_8022AC80",
+          "start": "0x8022AC80",
+          "end": "0x8022ACEC"
+        },
+        {
+          "symbol": "fn_8022BF60",
+          "start": "0x8022BF60",
+          "end": "0x8022BF68"
+        },
+        {
+          "symbol": "fn_8022BF68",
+          "start": "0x8022BF68",
+          "end": "0x8022C02C"
+        },
+        {
+          "symbol": "fn_8022C02C",
+          "start": "0x8022C02C",
+          "end": "0x8022C098"
+        },
+        {
+          "symbol": "fn_8022C098",
+          "start": "0x8022C098",
+          "end": "0x8022C0E0"
+        },
+        {
+          "symbol": "fn_8022C3C8",
+          "start": "0x8022C3C8",
+          "end": "0x8022C410"
+        },
+        {
+          "symbol": "fn_8022C81C",
+          "start": "0x8022C81C",
+          "end": "0x8022C858"
+        },
+        {
+          "symbol": "fn_8022C858",
+          "start": "0x8022C858",
+          "end": "0x8022C894"
+        },
+        {
+          "symbol": "fn_8022C894",
+          "start": "0x8022C894",
+          "end": "0x8022C8C4"
+        },
+        {
+          "symbol": "fn_8022C8C4",
+          "start": "0x8022C8C4",
+          "end": "0x8022C8F0"
+        },
+        {
+          "symbol": "fn_8022C8F0",
+          "start": "0x8022C8F0",
+          "end": "0x8022C930"
+        },
+        {
+          "symbol": "fn_8022C930",
+          "start": "0x8022C930",
+          "end": "0x8022C938"
+        },
+        {
+          "symbol": "fn_8022C938",
+          "start": "0x8022C938",
+          "end": "0x8022C988"
+        },
+        {
+          "symbol": "fn_8022C988",
+          "start": "0x8022C988",
+          "end": "0x8022C9A8"
+        },
+        {
+          "symbol": "fn_8022C9A8",
+          "start": "0x8022C9A8",
+          "end": "0x8022C9B4"
+        },
+        {
+          "symbol": "fn_8022C9B4",
+          "start": "0x8022C9B4",
+          "end": "0x8022C9B8"
+        },
+        {
+          "symbol": "fn_8022CADC",
+          "start": "0x8022CADC",
+          "end": "0x8022CAEC"
+        },
+        {
+          "symbol": "fn_8022CC6C",
+          "start": "0x8022CC6C",
+          "end": "0x8022CC98"
+        },
+        {
+          "symbol": "fn_8022CC98",
+          "start": "0x8022CC98",
+          "end": "0x8022CCC4"
+        },
+        {
+          "symbol": "fn_8022CCC4",
+          "start": "0x8022CCC4",
+          "end": "0x8022CD0C"
+        },
+        {
+          "symbol": "fn_8022CD0C",
+          "start": "0x8022CD0C",
+          "end": "0x8022CD30"
+        },
+        {
+          "symbol": "fn_8022CD30",
+          "start": "0x8022CD30",
+          "end": "0x8022CD3C"
+        },
+        {
+          "symbol": "fn_8022CD3C",
+          "start": "0x8022CD3C",
+          "end": "0x8022CD40"
+        },
+        {
+          "symbol": "fn_8022CD40",
+          "start": "0x8022CD40",
+          "end": "0x8022CDA0"
+        },
+        {
+          "symbol": "fn_8022CDA0",
+          "start": "0x8022CDA0",
+          "end": "0x8022CDF8"
+        },
+        {
+          "symbol": "fn_8022CDF8",
+          "start": "0x8022CDF8",
+          "end": "0x8022CED8"
+        },
+        {
+          "symbol": "fn_8022D14C",
+          "start": "0x8022D14C",
+          "end": "0x8022D154"
+        },
+        {
+          "symbol": "fn_8022D154",
+          "start": "0x8022D154",
+          "end": "0x8022D1B8"
+        },
+        {
+          "symbol": "fn_8022D1B8",
+          "start": "0x8022D1B8",
+          "end": "0x8022D23C"
+        },
+        {
+          "symbol": "fn_8022D23C",
+          "start": "0x8022D23C",
+          "end": "0x8022D250"
+        },
+        {
+          "symbol": "fn_8022D250",
+          "start": "0x8022D250",
+          "end": "0x8022D25C"
+        },
+        {
+          "symbol": "fn_8022D25C",
+          "start": "0x8022D25C",
+          "end": "0x8022D268"
+        },
+        {
+          "symbol": "fn_8022D3AC",
+          "start": "0x8022D3AC",
+          "end": "0x8022D3D4"
+        },
+        {
+          "symbol": "fn_8022D3D4",
+          "start": "0x8022D3D4",
+          "end": "0x8022D418"
+        },
+        {
+          "symbol": "fn_8022D6E8",
+          "start": "0x8022D6E8",
+          "end": "0x8022D6F0"
+        },
+        {
+          "symbol": "fn_8022D6F0",
+          "start": "0x8022D6F0",
+          "end": "0x8022D6FC"
+        },
+        {
+          "symbol": "fn_8022D6FC",
+          "start": "0x8022D6FC",
+          "end": "0x8022D710"
+        },
+        {
+          "symbol": "fn_8022D864",
+          "start": "0x8022D864",
+          "end": "0x8022D86C"
+        },
+        {
+          "symbol": "fn_8022D86C",
+          "start": "0x8022D86C",
+          "end": "0x8022D874"
+        },
+        {
+          "symbol": "fn_8022DB08",
+          "start": "0x8022DB08",
+          "end": "0x8022DB20"
+        },
+        {
+          "symbol": "fn_8022DBF4",
+          "start": "0x8022DBF4",
+          "end": "0x8022DC38"
+        },
+        {
+          "symbol": "fn_8022DC38",
+          "start": "0x8022DC38",
+          "end": "0x8022DC7C"
+        },
+        {
+          "symbol": "fn_8022DC7C",
+          "start": "0x8022DC7C",
+          "end": "0x8022DCB0"
+        },
+        {
+          "symbol": "fn_8022DCB0",
+          "start": "0x8022DCB0",
+          "end": "0x8022DCE4"
+        },
+        {
+          "symbol": "fn_8022DCE4",
+          "start": "0x8022DCE4",
+          "end": "0x8022DD18"
+        },
+        {
+          "symbol": "fn_8022DD18",
+          "start": "0x8022DD18",
+          "end": "0x8022DD4C"
+        },
+        {
+          "symbol": "fn_8022DD4C",
+          "start": "0x8022DD4C",
+          "end": "0x8022DD80"
+        },
+        {
+          "symbol": "fn_8022DD80",
+          "start": "0x8022DD80",
+          "end": "0x8022DDB4"
+        },
+        {
+          "symbol": "fn_8022DDB4",
+          "start": "0x8022DDB4",
+          "end": "0x8022DDBC"
         }
       ]
     },
@@ -29835,6 +29719,243 @@
           "symbol": "fn_8025FB68",
           "start": "0x8025FB68",
           "end": "0x8025FBD4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_8025FBD4.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8025FBD4-0x80260B1C (src/engine/cu_8025FBD4.c), its compiler, source-form, type, function and name rows and the exact .sdata2 data row 0x803EDDC8-0x803EDDD8. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025FBD4",
+          "end": "0x80260B1C"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDDC8",
+          "end": "0x803EDDD8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8025FBD4",
+          "start": "0x8025FBD4",
+          "end": "0x8025FDE8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80260B1C.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80260B1C-0x802622DC (src/engine/cu_80260B1C.c), its compiler, source-form, type, function and name rows and the exact .sdata2 data row 0x803EDEDC-0x803EDEE4. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80260B1C",
+          "end": "0x802622DC"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDEDC",
+          "end": "0x803EDEE4"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80260B1C",
+          "start": "0x80260B1C",
+          "end": "0x80260C14"
+        },
+        {
+          "symbol": "fn_80260FC4",
+          "start": "0x80260FC4",
+          "end": "0x80260FE8"
+        },
+        {
+          "symbol": "fn_80261A24",
+          "start": "0x80261A24",
+          "end": "0x80261A58"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_802832CC.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x802832CC-0x80285A90 (src/engine/cu_802832CC.c), its compiler, source-form, type, function and name rows. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802832CC",
+          "end": "0x80285A90"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_802832CC",
+          "start": "0x802832CC",
+          "end": "0x80283660"
+        },
+        {
+          "symbol": "fn_80283660",
+          "start": "0x80283660",
+          "end": "0x80283E48"
+        },
+        {
+          "symbol": "fn_80283E48",
+          "start": "0x80283E48",
+          "end": "0x80284030"
+        },
+        {
+          "symbol": "fn_80284030",
+          "start": "0x80284030",
+          "end": "0x8028410C"
+        },
+        {
+          "symbol": "fn_8028410C",
+          "start": "0x8028410C",
+          "end": "0x80284700"
+        },
+        {
+          "symbol": "fn_80284700",
+          "start": "0x80284700",
+          "end": "0x8028490C"
+        },
+        {
+          "symbol": "fn_8028490C",
+          "start": "0x8028490C",
+          "end": "0x80284968"
+        },
+        {
+          "symbol": "fn_80284968",
+          "start": "0x80284968",
+          "end": "0x80284AEC"
+        },
+        {
+          "symbol": "fn_80284AEC",
+          "start": "0x80284AEC",
+          "end": "0x80284D1C"
+        },
+        {
+          "symbol": "fn_80284D1C",
+          "start": "0x80284D1C",
+          "end": "0x80284DD0"
+        },
+        {
+          "symbol": "fn_80284DD0",
+          "start": "0x80284DD0",
+          "end": "0x80284E70"
+        },
+        {
+          "symbol": "fn_80284E70",
+          "start": "0x80284E70",
+          "end": "0x80284F78"
+        },
+        {
+          "symbol": "fn_80284F78",
+          "start": "0x80284F78",
+          "end": "0x80284FB8"
+        },
+        {
+          "symbol": "fn_80284FB8",
+          "start": "0x80284FB8",
+          "end": "0x802851E8"
+        },
+        {
+          "symbol": "fn_802851E8",
+          "start": "0x802851E8",
+          "end": "0x80285304"
+        },
+        {
+          "symbol": "fn_80285304",
+          "start": "0x80285304",
+          "end": "0x80285394"
+        },
+        {
+          "symbol": "fn_80285394",
+          "start": "0x80285394",
+          "end": "0x80285458"
+        },
+        {
+          "symbol": "fn_80285458",
+          "start": "0x80285458",
+          "end": "0x802854D8"
+        },
+        {
+          "symbol": "fn_802854D8",
+          "start": "0x802854D8",
+          "end": "0x8028555C"
+        },
+        {
+          "symbol": "fn_8028555C",
+          "start": "0x8028555C",
+          "end": "0x802855EC"
+        },
+        {
+          "symbol": "fn_802855EC",
+          "start": "0x802855EC",
+          "end": "0x802856D8"
+        },
+        {
+          "symbol": "fn_802856D8",
+          "start": "0x802856D8",
+          "end": "0x8028572C"
+        },
+        {
+          "symbol": "fn_8028572C",
+          "start": "0x8028572C",
+          "end": "0x802857D8"
+        },
+        {
+          "symbol": "fn_802857D8",
+          "start": "0x802857D8",
+          "end": "0x80285808"
+        },
+        {
+          "symbol": "fn_80285808",
+          "start": "0x80285808",
+          "end": "0x80285878"
+        },
+        {
+          "symbol": "fn_80285878",
+          "start": "0x80285878",
+          "end": "0x802858BC"
+        },
+        {
+          "symbol": "fn_802858BC",
+          "start": "0x802858BC",
+          "end": "0x80285940"
+        },
+        {
+          "symbol": "fn_80285940",
+          "start": "0x80285940",
+          "end": "0x802859B4"
+        },
+        {
+          "symbol": "fn_802859B4",
+          "start": "0x802859B4",
+          "end": "0x80285A1C"
+        },
+        {
+          "symbol": "fn_80285A1C",
+          "start": "0x80285A1C",
+          "end": "0x80285A24"
+        },
+        {
+          "symbol": "fn_80285A24",
+          "start": "0x80285A24",
+          "end": "0x80285A8C"
+        },
+        {
+          "symbol": "fn_80285A8C",
+          "start": "0x80285A8C",
+          "end": "0x80285A90"
         }
       ]
     },
@@ -37683,6 +37804,192 @@
       ]
     },
     {
+      "source": "src/engine/cu_8027CF9C.cpp",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv provisional unit row 0x8027CF9C-0x8027D3AC (src/engine/cu_8027CF9C.cpp), its compiler row, function and name rows, and the exact data row 0x802C2368-0x802C2380 (.rodata). Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027CF9C",
+          "end": "0x8027D3AC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C2368",
+          "end": "0x802C2380"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8027CF9C",
+          "start": "0x8027CF9C",
+          "end": "0x8027CFCC"
+        },
+        {
+          "symbol": "fn_8027CFCC",
+          "start": "0x8027CFCC",
+          "end": "0x8027D05C"
+        },
+        {
+          "symbol": "fn_8027D05C",
+          "start": "0x8027D05C",
+          "end": "0x8027D284"
+        },
+        {
+          "symbol": "fn_8027D284",
+          "start": "0x8027D284",
+          "end": "0x8027D2C4"
+        },
+        {
+          "symbol": "fn_8027D2C4",
+          "start": "0x8027D2C4",
+          "end": "0x8027D2E0"
+        },
+        {
+          "symbol": "fn_8027D2E0",
+          "start": "0x8027D2E0",
+          "end": "0x8027D2E8"
+        },
+        {
+          "symbol": "fn_8027D2E8",
+          "start": "0x8027D2E8",
+          "end": "0x8027D3AC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_8027D3AC.cpp",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8027D3AC-0x8027EFAC (src/engine/cu_8027D3AC.cpp), its compiler row, function and name rows. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027D3AC",
+          "end": "0x8027EFAC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8027D5CC",
+          "start": "0x8027D5CC",
+          "end": "0x8027D5EC"
+        },
+        {
+          "symbol": "fn_8027D5EC",
+          "start": "0x8027D5EC",
+          "end": "0x8027D60C"
+        },
+        {
+          "symbol": "fn_8027D960",
+          "start": "0x8027D960",
+          "end": "0x8027D968"
+        },
+        {
+          "symbol": "fn_8027D968",
+          "start": "0x8027D968",
+          "end": "0x8027D970"
+        },
+        {
+          "symbol": "fn_8027D970",
+          "start": "0x8027D970",
+          "end": "0x8027D978"
+        },
+        {
+          "symbol": "fn_8027D9EC",
+          "start": "0x8027D9EC",
+          "end": "0x8027D9F4"
+        },
+        {
+          "symbol": "fn_8027D9F4",
+          "start": "0x8027D9F4",
+          "end": "0x8027D9FC"
+        },
+        {
+          "symbol": "fn_8027D9FC",
+          "start": "0x8027D9FC",
+          "end": "0x8027DA24"
+        },
+        {
+          "symbol": "fn_8027DAA4",
+          "start": "0x8027DAA4",
+          "end": "0x8027DAC4"
+        },
+        {
+          "symbol": "fn_8027DAC4",
+          "start": "0x8027DAC4",
+          "end": "0x8027DAE4"
+        },
+        {
+          "symbol": "fn_8027E0AC",
+          "start": "0x8027E0AC",
+          "end": "0x8027E0C4"
+        },
+        {
+          "symbol": "fn_8027E4D8",
+          "start": "0x8027E4D8",
+          "end": "0x8027E4F8"
+        },
+        {
+          "symbol": "fn_8027E4F8",
+          "start": "0x8027E4F8",
+          "end": "0x8027E518"
+        },
+        {
+          "symbol": "fn_8027EAB4",
+          "start": "0x8027EAB4",
+          "end": "0x8027EAC0"
+        },
+        {
+          "symbol": "fn_8027ED4C",
+          "start": "0x8027ED4C",
+          "end": "0x8027ED58"
+        },
+        {
+          "symbol": "fn_8027ED58",
+          "start": "0x8027ED58",
+          "end": "0x8027ED5C"
+        },
+        {
+          "symbol": "fn_8027ED5C",
+          "start": "0x8027ED5C",
+          "end": "0x8027ED64"
+        },
+        {
+          "symbol": "fn_8027ED64",
+          "start": "0x8027ED64",
+          "end": "0x8027ED6C"
+        },
+        {
+          "symbol": "fn_8027EF50",
+          "start": "0x8027EF50",
+          "end": "0x8027EF58"
+        },
+        {
+          "symbol": "fn_8027EF58",
+          "start": "0x8027EF58",
+          "end": "0x8027EF60"
+        },
+        {
+          "symbol": "fn_8027EF94",
+          "start": "0x8027EF94",
+          "end": "0x8027EF9C"
+        },
+        {
+          "symbol": "fn_8027EF9C",
+          "start": "0x8027EF9C",
+          "end": "0x8027EFA4"
+        },
+        {
+          "symbol": "fn_8027EFA4",
+          "start": "0x8027EFA4",
+          "end": "0x8027EFAC"
+        }
+      ]
+    },
+    {
       "source": "src/engine/cu_80264424.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80264424-0x80266A2C (src/engine/cu_80264424.c), its compiler and source-form rows, and exact whole-function rows and neutral name rows for the two draft bodies. The drafts define no static data. Draft comparisons only; original assembly remains linked.",
@@ -43212,6 +43519,123 @@
       ]
     },
     {
+      "source": "src/engine/cu_802805C4.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x802805C4-0x802821E8 (src/engine/cu_802805C4.c), its compiler row, function and name rows, and the exact data rows 0x803EC578-0x803EC584 (.sdata) and 0x803ED414-0x803ED420 (.sbss; no bytes, not measured). Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802805C4",
+          "end": "0x802821E8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC578",
+          "end": "0x803EC584"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED414",
+          "end": "0x803ED420"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_802805C4",
+          "start": "0x802805C4",
+          "end": "0x80280660"
+        },
+        {
+          "symbol": "fn_80280660",
+          "start": "0x80280660",
+          "end": "0x802806F8"
+        },
+        {
+          "symbol": "fn_802806F8",
+          "start": "0x802806F8",
+          "end": "0x80280780"
+        },
+        {
+          "symbol": "fn_80280780",
+          "start": "0x80280780",
+          "end": "0x802807F4"
+        },
+        {
+          "symbol": "fn_802807F4",
+          "start": "0x802807F4",
+          "end": "0x80280864"
+        },
+        {
+          "symbol": "fn_80280864",
+          "start": "0x80280864",
+          "end": "0x80280B94"
+        },
+        {
+          "symbol": "fn_80280B94",
+          "start": "0x80280B94",
+          "end": "0x80280E70"
+        },
+        {
+          "symbol": "fn_80280E70",
+          "start": "0x80280E70",
+          "end": "0x80280F38"
+        },
+        {
+          "symbol": "fn_80280F38",
+          "start": "0x80280F38",
+          "end": "0x80280FC4"
+        },
+        {
+          "symbol": "fn_80280FC4",
+          "start": "0x80280FC4",
+          "end": "0x80281090"
+        },
+        {
+          "symbol": "fn_80281090",
+          "start": "0x80281090",
+          "end": "0x8028113C"
+        },
+        {
+          "symbol": "fn_8028113C",
+          "start": "0x8028113C",
+          "end": "0x8028156C"
+        },
+        {
+          "symbol": "fn_8028156C",
+          "start": "0x8028156C",
+          "end": "0x80281590"
+        },
+        {
+          "symbol": "fn_80281590",
+          "start": "0x80281590",
+          "end": "0x80281938"
+        },
+        {
+          "symbol": "fn_80281938",
+          "start": "0x80281938",
+          "end": "0x80281940"
+        },
+        {
+          "symbol": "fn_80281C68",
+          "start": "0x80281C68",
+          "end": "0x80281C6C"
+        },
+        {
+          "symbol": "fn_80281C6C",
+          "start": "0x80281C6C",
+          "end": "0x80281C74"
+        },
+        {
+          "symbol": "fn_802821E4",
+          "start": "0x802821E4",
+          "end": "0x802821E8"
+        }
+      ]
+    },
+    {
       "source": "src/engine/cu_8021A438.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x8021A438-0x80221198 (src/engine/cu_8021A438.c), its exact whole-function rows and neutral name rows (UISGetActionPtrValue keeps its existing name row), and the file compiler row. The draft bodies use no compiled static data; the other functions of the range, its .rodata 0x802B1E78-0x802B1EF8 and its small data remain original and unmeasured.",
@@ -43503,6 +43927,396 @@
           "symbol": "fn_8021EFA4",
           "start": "0x8021EFA4",
           "end": "0x8021EFD8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80221198.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80221198-0x80226F9C (src/engine/cu_80221198.c), its function and name rows. Draft comparisons only; original assembly remains linked. The draft bodies compile no static data; the functions that load .rodata constants have no draft body and no data is registered.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80221198",
+          "end": "0x80226F9C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80221294",
+          "start": "0x80221294",
+          "end": "0x802212C8"
+        },
+        {
+          "symbol": "fn_802212C8",
+          "start": "0x802212C8",
+          "end": "0x80221314"
+        },
+        {
+          "symbol": "fn_80221314",
+          "start": "0x80221314",
+          "end": "0x80221374"
+        },
+        {
+          "symbol": "fn_80221374",
+          "start": "0x80221374",
+          "end": "0x802213F8"
+        },
+        {
+          "symbol": "fn_802213F8",
+          "start": "0x802213F8",
+          "end": "0x80221528"
+        },
+        {
+          "symbol": "fn_80221528",
+          "start": "0x80221528",
+          "end": "0x80221570"
+        },
+        {
+          "symbol": "fn_80221570",
+          "start": "0x80221570",
+          "end": "0x80221590"
+        },
+        {
+          "symbol": "fn_80221590",
+          "start": "0x80221590",
+          "end": "0x802215B0"
+        },
+        {
+          "symbol": "fn_802215B0",
+          "start": "0x802215B0",
+          "end": "0x802215EC"
+        },
+        {
+          "symbol": "fn_802215EC",
+          "start": "0x802215EC",
+          "end": "0x802215F0"
+        },
+        {
+          "symbol": "fn_80221738",
+          "start": "0x80221738",
+          "end": "0x8022179C"
+        },
+        {
+          "symbol": "fn_802218D4",
+          "start": "0x802218D4",
+          "end": "0x80221924"
+        },
+        {
+          "symbol": "fn_80221924",
+          "start": "0x80221924",
+          "end": "0x802219F0"
+        },
+        {
+          "symbol": "fn_80221BAC",
+          "start": "0x80221BAC",
+          "end": "0x80221BD8"
+        },
+        {
+          "symbol": "fn_80221BD8",
+          "start": "0x80221BD8",
+          "end": "0x80221BE0"
+        },
+        {
+          "symbol": "fn_80221BE0",
+          "start": "0x80221BE0",
+          "end": "0x80221BE8"
+        },
+        {
+          "symbol": "fn_80221BE8",
+          "start": "0x80221BE8",
+          "end": "0x80221BF0"
+        },
+        {
+          "symbol": "fn_80221BF0",
+          "start": "0x80221BF0",
+          "end": "0x80221D30"
+        },
+        {
+          "symbol": "fn_80221D30",
+          "start": "0x80221D30",
+          "end": "0x80221D5C"
+        },
+        {
+          "symbol": "fn_80221D5C",
+          "start": "0x80221D5C",
+          "end": "0x80221DB0"
+        },
+        {
+          "symbol": "fn_80222764",
+          "start": "0x80222764",
+          "end": "0x802227B0"
+        },
+        {
+          "symbol": "fn_80222E0C",
+          "start": "0x80222E0C",
+          "end": "0x80222E54"
+        },
+        {
+          "symbol": "fn_80222E54",
+          "start": "0x80222E54",
+          "end": "0x80222EC4"
+        },
+        {
+          "symbol": "fn_80223874",
+          "start": "0x80223874",
+          "end": "0x802239D0"
+        },
+        {
+          "symbol": "fn_802239D0",
+          "start": "0x802239D0",
+          "end": "0x80223A40"
+        },
+        {
+          "symbol": "fn_80223A40",
+          "start": "0x80223A40",
+          "end": "0x80223AA0"
+        },
+        {
+          "symbol": "fn_80223AA0",
+          "start": "0x80223AA0",
+          "end": "0x80223AD0"
+        },
+        {
+          "symbol": "fn_80223AD0",
+          "start": "0x80223AD0",
+          "end": "0x80223B00"
+        },
+        {
+          "symbol": "fn_80223C4C",
+          "start": "0x80223C4C",
+          "end": "0x80223CB8"
+        },
+        {
+          "symbol": "fn_80223CB8",
+          "start": "0x80223CB8",
+          "end": "0x80223E28"
+        },
+        {
+          "symbol": "fn_8022479C",
+          "start": "0x8022479C",
+          "end": "0x8022480C"
+        },
+        {
+          "symbol": "fn_8022480C",
+          "start": "0x8022480C",
+          "end": "0x8022482C"
+        },
+        {
+          "symbol": "fn_802254F8",
+          "start": "0x802254F8",
+          "end": "0x80225654"
+        },
+        {
+          "symbol": "fn_802258F8",
+          "start": "0x802258F8",
+          "end": "0x80225928"
+        },
+        {
+          "symbol": "fn_80225928",
+          "start": "0x80225928",
+          "end": "0x80225958"
+        },
+        {
+          "symbol": "fn_80225AAC",
+          "start": "0x80225AAC",
+          "end": "0x80225AE4"
+        },
+        {
+          "symbol": "fn_80225AE4",
+          "start": "0x80225AE4",
+          "end": "0x80225B50"
+        },
+        {
+          "symbol": "fn_80225B50",
+          "start": "0x80225B50",
+          "end": "0x80225CBC"
+        },
+        {
+          "symbol": "fn_80225D8C",
+          "start": "0x80225D8C",
+          "end": "0x80225D90"
+        },
+        {
+          "symbol": "fn_80225D90",
+          "start": "0x80225D90",
+          "end": "0x80225E10"
+        },
+        {
+          "symbol": "fn_80225E10",
+          "start": "0x80225E10",
+          "end": "0x80225E64"
+        },
+        {
+          "symbol": "fn_80225E64",
+          "start": "0x80225E64",
+          "end": "0x80225F10"
+        },
+        {
+          "symbol": "fn_80225F10",
+          "start": "0x80225F10",
+          "end": "0x80225F88"
+        },
+        {
+          "symbol": "fn_80225F88",
+          "start": "0x80225F88",
+          "end": "0x8022601C"
+        },
+        {
+          "symbol": "fn_8022601C",
+          "start": "0x8022601C",
+          "end": "0x802260B0"
+        },
+        {
+          "symbol": "fn_802260B0",
+          "start": "0x802260B0",
+          "end": "0x802260C0"
+        },
+        {
+          "symbol": "fn_802260C0",
+          "start": "0x802260C0",
+          "end": "0x802260D0"
+        },
+        {
+          "symbol": "fn_802260D0",
+          "start": "0x802260D0",
+          "end": "0x802260F8"
+        },
+        {
+          "symbol": "fn_802260F8",
+          "start": "0x802260F8",
+          "end": "0x8022615C"
+        },
+        {
+          "symbol": "fn_8022615C",
+          "start": "0x8022615C",
+          "end": "0x8022618C"
+        },
+        {
+          "symbol": "fn_8022618C",
+          "start": "0x8022618C",
+          "end": "0x802261D4"
+        },
+        {
+          "symbol": "fn_802261D4",
+          "start": "0x802261D4",
+          "end": "0x8022623C"
+        },
+        {
+          "symbol": "fn_8022623C",
+          "start": "0x8022623C",
+          "end": "0x802262C4"
+        },
+        {
+          "symbol": "fn_802262C4",
+          "start": "0x802262C4",
+          "end": "0x80226320"
+        },
+        {
+          "symbol": "fn_80226320",
+          "start": "0x80226320",
+          "end": "0x80226384"
+        },
+        {
+          "symbol": "fn_80226384",
+          "start": "0x80226384",
+          "end": "0x8022638C"
+        },
+        {
+          "symbol": "fn_8022638C",
+          "start": "0x8022638C",
+          "end": "0x802263D4"
+        },
+        {
+          "symbol": "fn_802263D4",
+          "start": "0x802263D4",
+          "end": "0x802263DC"
+        },
+        {
+          "symbol": "fn_802263DC",
+          "start": "0x802263DC",
+          "end": "0x80226448"
+        },
+        {
+          "symbol": "fn_80226448",
+          "start": "0x80226448",
+          "end": "0x80226498"
+        },
+        {
+          "symbol": "fn_80226498",
+          "start": "0x80226498",
+          "end": "0x802264A4"
+        },
+        {
+          "symbol": "fn_802264A4",
+          "start": "0x802264A4",
+          "end": "0x802264E8"
+        },
+        {
+          "symbol": "fn_802264E8",
+          "start": "0x802264E8",
+          "end": "0x80226570"
+        },
+        {
+          "symbol": "fn_80226570",
+          "start": "0x80226570",
+          "end": "0x8022666C"
+        },
+        {
+          "symbol": "fn_8022666C",
+          "start": "0x8022666C",
+          "end": "0x802267D0"
+        },
+        {
+          "symbol": "fn_802267D0",
+          "start": "0x802267D0",
+          "end": "0x802267D4"
+        },
+        {
+          "symbol": "fn_802267D4",
+          "start": "0x802267D4",
+          "end": "0x802267D8"
+        },
+        {
+          "symbol": "fn_802268D4",
+          "start": "0x802268D4",
+          "end": "0x802269C8"
+        },
+        {
+          "symbol": "fn_802269C8",
+          "start": "0x802269C8",
+          "end": "0x80226A68"
+        },
+        {
+          "symbol": "fn_80226A68",
+          "start": "0x80226A68",
+          "end": "0x80226C40"
+        },
+        {
+          "symbol": "fn_80226C40",
+          "start": "0x80226C40",
+          "end": "0x80226D20"
+        },
+        {
+          "symbol": "fn_80226D20",
+          "start": "0x80226D20",
+          "end": "0x80226E00"
+        },
+        {
+          "symbol": "fn_80226E00",
+          "start": "0x80226E00",
+          "end": "0x80226E4C"
+        },
+        {
+          "symbol": "fn_80226E4C",
+          "start": "0x80226E4C",
+          "end": "0x80226F34"
+        },
+        {
+          "symbol": "fn_80226F34",
+          "start": "0x80226F34",
+          "end": "0x80226F9C"
         }
       ]
     },
@@ -46282,41 +47096,6 @@
       ]
     },
     {
-      "source": "src/engine/TibNew.cpp",
-      "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv compiler row 0x801D3BD0-0x801D3C68 (src/engine/TibNew.cpp) and its function rows. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801D3BD0",
-          "end": "0x801D3C68"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "__nw__FUii",
-          "start": "0x801D3BD0",
-          "end": "0x801D3BF4"
-        },
-        {
-          "symbol": "__vn__FUii",
-          "start": "0x801D3BF4",
-          "end": "0x801D3C18"
-        },
-        {
-          "symbol": "__builtin_delete",
-          "start": "0x801D3C18",
-          "end": "0x801D3C40"
-        },
-        {
-          "symbol": "__builtin_vec_delete",
-          "start": "0x801D3C40",
-          "end": "0x801D3C68"
-        }
-      ]
-    },
-    {
       "source": "src/engine/memorycard.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv compiler row 0x801D3C68-0x801D5D30 (src/engine/memorycard.c), its function rows and the exact .rodata data row 0x802AFCC8-0x802AFCF8. Draft comparisons only; original assembly remains linked. The string constants after 0x802AFCF8 stay extern (lbl_), and MemCAsyncPoll 0x801D5840 has no draft yet.",
@@ -46974,36 +47753,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801D94A0.cpp",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D94A0-0x801D9634 (src/engine/cu_801D94A0.cpp) and its function rows. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file llmoviercmp.cpp (C++ linkage: MovieRcmpRenderInit__FP5SHAPE, MovieRcmpRenderShape__FP5SHAPE10CodeType_t, MovieRcmpHandleChunk__FP15MovieRcmpInfo_tP14STREAMCHUNKHDR). The flag byte 0x803EBD4C stays extern (lbl_).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801D94A0",
-          "end": "0x801D9634"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801D94A0__FP14Shape_801D94A0",
-          "start": "0x801D94A0",
-          "end": "0x801D9538"
-        },
-        {
-          "symbol": "fn_801D9538__FP14Shape_801D94A0i",
-          "start": "0x801D9538",
-          "end": "0x801D95E4"
-        },
-        {
-          "symbol": "fn_801D95E4__FPvT0",
-          "start": "0x801D95E4",
-          "end": "0x801D9634"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801D9634.cpp",
       "profile": "engine_c",
       "evidence": "evidence.tsv compiler row 0x801D9634-0x801D9A88 (src/engine/cu_801D9634.cpp) and its function rows. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file rcmpbase.cpp (RCMP::DECODER, RCMP::CHUNK, RCMP::CODEC_IDATA, RCMP::RCMP_SYSTEM). The decoder methods are drafted as C functions taking the decoder explicitly and the two record constructors as C functions returning the object; the RCMP_SYSTEM and DECODER constructors/destructors and the static initialisers (0x801D9634, 0x801D9654, 0x801D96C8, 0x801D99A8-0x801D9A88) have no draft because they store the virtual table addresses 0x802AFF78/0x802AFF90.",
@@ -47155,32 +47904,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801DA4F8.cpp",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801DA4F8-0x801DA52C (src/engine/cu_801DA4F8.cpp), its function row and the exact .rodata data row 0x802B0054-0x802B0060. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file rcmp_mad_codec_chunk_types.cpp (RCMP::MAD_CODEC_is_chunk_for_codec).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801DA4F8",
-          "end": "0x801DA52C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B0054",
-          "end": "0x802B0060"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801DA4F8__Fi",
-          "start": "0x801DA4F8",
-          "end": "0x801DA52C"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801DA52C.cpp",
       "profile": "engine_c",
       "evidence": "evidence.tsv compiler row 0x801DA52C-0x801DB058 (src/engine/cu_801DA52C.cpp) and its function rows. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file maddec.cpp (C++ linkage: madinit__Fv, discardbits__Fi, getluma__FPCUciPii, MAD_initdecode__FPCUsii, MAD_decodemacroblock__FPCUcN20PUcN23i ...). The bit-reader words 0x803ECF1C-0x803ECF2C, the tables 0x80399110-0x8039A910 and the code tables 0x802B0060/0x802B0650/0x802B0E50/0x802F7BA0 stay extern (lbl_).",
@@ -47262,31 +47985,6 @@
           "symbol": "fn_801DB670",
           "start": "0x801DB670",
           "end": "0x801DB7D4"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_801DC9C8.cpp",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801DC9C8-0x801DCA10 (src/engine/cu_801DC9C8.cpp) and its function rows. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file rcmp_vp6_codec_chunk_types.cpp (RCMP::VP6_CODEC_is_head_chunk_for_codec, RCMP::VP6_CODEC_is_chunk_for_codec).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801DC9C8",
-          "end": "0x801DCA10"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801DC9C8__Fi",
-          "start": "0x801DC9C8",
-          "end": "0x801DC9E0"
-        },
-        {
-          "symbol": "fn_801DC9E0__Fi",
-          "start": "0x801DC9E0",
-          "end": "0x801DCA10"
         }
       ]
     },

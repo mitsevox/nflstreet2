@@ -7,6 +7,7 @@
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXPixel.h>
 #include <dolphin/gx/GXVert.h>
+#include <dolphin/gx/GXTev.h>
 
 /* A trail of points drawn as a flat ribbon with an end piece selected by
    mType. The width and brightness are interpolated along the trail. */
@@ -46,17 +47,8 @@ int fn_802275D8(Vector_80039F5C *pA, Vector_80039F5C *pB, float epsilon);
 void fn_8022765C(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 void fn_80227930(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
 int fn_80236EC0(int a);
-void fn_8024CB90(int a, int b);
-void fn_8024D418(void);
-void fn_8024D450(int a, int b, int c, int d, int e);
-void fn_8024DCE4(int a, int b, int c, int d, int e, int f);
-void fn_8024DF64(int a);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
-void fn_80251604(int a, int b);
-void fn_80251A58(int a, int b, int c, int d, int e);
-void fn_80251B28(int a, int b, int c, int d);
-void fn_80251CC4(int a);
 void fn_8025251C(Mtx44 m, int a);
 void fn_802525BC(int a);
 
@@ -292,23 +284,23 @@ void fn_8019CBC0(Trail_8019CBC0 *pTrail)
     }
     fn_80210388();
     fn_8019CAC4(pTrail);
-    fn_8024D418();
-    fn_8024CB90(9, 1);
-    fn_8024CB90(11, 1);
-    fn_8024D450(0, 9, 1, 4, 0);
-    fn_8024D450(0, 11, 1, 5, 0);
-    fn_80251CC4(1);
-    fn_80251B28(0, 0xFF, 0xFF, 4);
-    fn_80251604(0, 4);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
     fn_8024FC48(1);
     fn_8024FC84(4, 0, 0, 1, 1, 2, 1);
-    fn_8024DF64(1);
-    fn_8024DCE4(0, 0, 4, 60, 0, 125);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     fn_801D0F80(view);
     fn_802525BC(0);
     fn_8025251C(view, 0);
     GXSetZCompLoc(GX_TRUE);
-    fn_80251A58(7, 0, 0, 7, 0);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetCullMode(GX_CULL_NONE);
     if (pTrail->mType == 3) {
         GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);

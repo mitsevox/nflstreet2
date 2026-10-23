@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "engine/cu_802714A8.h"
+#include "engine/cu_8027CF9C.h"
 
 typedef struct Object_80277404 {
     Node_80279D90 mNode;
@@ -89,12 +90,6 @@ typedef struct Struct_8027A4C0 {
     int m1C;
 } Struct_8027A4C0;
 
-typedef struct Format_8027D284 {
-    int m0;
-    int m4;
-    int m8;
-} Format_8027D284;
-
 typedef struct Pair_8027BFDC {
     float m0;
     float m4;
@@ -144,16 +139,16 @@ typedef struct Decoder_8027AC08 {
     unsigned int m1C;
     unsigned int m20;
     int m24;
-    void *m28;
+    Codec_8027CF9C *m28;
 } Decoder_8027AC08;
 
 typedef struct Decoder_8027AE04 {
     Node_80279D90 mNode;
-    void *m1C;
+    Codec_8027CF9C *m1C;
     int m20;
     int m24;
     int m28;
-    void *m2C;
+    unsigned char *m2C;
 } Decoder_8027AE04;
 
 typedef struct Decoder_8027B168 {
@@ -165,7 +160,7 @@ typedef struct Decoder_8027B168 {
     unsigned short m2C;
     unsigned char mUnknown2E[2];
     int m30;
-    void *m34;
+    Codec_8027CF9C *m34;
     unsigned char m38;
 } Decoder_8027B168;
 
@@ -220,7 +215,6 @@ extern "C" {
 
 extern Struct_803B5060 lbl_803B5060;
 extern Struct_803B53EC lbl_803B53EC;
-extern int (*lbl_80301000)(void *dst, void *src, int size);
 extern unsigned char lbl_80300EDC[];
 extern unsigned int lbl_80301428[];
 extern int lbl_803A772C;
@@ -242,12 +236,6 @@ int fn_8027BDE8(Struct_8027BE24 *p, char *data, int size, int count);
 int fn_8027BE24(Struct_8027BE24 *p, float **dst, int count);
 void *fn_8027C020(int size);
 void fn_8027C04C(void *p);
-void *fn_8027CF9C(void *memory);
-int fn_8027CFCC(void *handle, void *data, int size, int count);
-int fn_8027D05C(void *handle, float **dst, int count);
-Format_8027D284 fn_8027D284(void *handle);
-void fn_8027D2C4(void *handle, Format_8027D284 *format, int flags);
-void fn_8027D2E0(void *handle, int mode);
 void fn_8027A21C(State_8027A248 *state);
 void fn_8027A248(State_8027A248 *state, int count, float *in, float *out);
 int fn_8027B4F4(Node_80279D90 *node, int count, float *a, float *b, int flag);
@@ -983,7 +971,7 @@ void fn_8027AC08(Node_80279D90 *node, Params_80275F80 *params)
     } else {
         fn_8027D2E0(decoder->m28, 1);
     }
-    fn_8027CFCC(decoder->m28, (void *)params->m0, decoder->m1C * 4, decoder->m1C);
+    fn_8027CFCC(decoder->m28, (unsigned char *)params->m0, decoder->m1C * 4, decoder->m1C);
 }
 
 int fn_8027AD08(Node_80279D90 *node)
@@ -1034,7 +1022,7 @@ void fn_8027AE04(Node_80279D90 *node, Params_80275F80 *params)
     decoder = (Decoder_8027AE04 *)node;
     node->m0 = fn_8027AD10;
     node->m4 = fn_8027ADD8;
-    decoder->m2C = (void *)params->m4;
+    decoder->m2C = (unsigned char *)params->m4;
     decoder->m20 = 0;
     decoder->m24 = params->m10;
     decoder->m28 = params->m14;
@@ -1042,7 +1030,7 @@ void fn_8027AE04(Node_80279D90 *node, Params_80275F80 *params)
     format = fn_8027D284(decoder->m1C);
     format.m8 = 1;
     fn_8027D2C4(decoder->m1C, &format, 0);
-    fn_8027CFCC(decoder->m1C, (void *)params->m0, decoder->m24 * 4, decoder->m24);
+    fn_8027CFCC(decoder->m1C, (unsigned char *)params->m0, decoder->m24 * 4, decoder->m24);
     params->m28 = fn_8027AD08;
 }
 

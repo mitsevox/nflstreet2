@@ -8,6 +8,7 @@
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXVert.h>
+#include <dolphin/gx/GXTev.h>
 
 struct QuadPoint_801A0614 { float mX, mY; char mUnknown8[8]; };
 struct Resource_801A1240 { char mUnknown0[40]; };
@@ -47,21 +48,12 @@ Descriptor_801A1240 *fn_802120AC(Resource_801A1240 *, const char *);
 Palette_801A0088 *fn_80212074(Descriptor_801A1240 *, int);
 GXTexObj *fn_80212050(Descriptor_801A1240 *);
 int fn_80228668(void);
-void fn_8024D418(void);
-void fn_8024CB90(int, int);
 void fn_8024FC48(int);
 void fn_8024FC84(int, int, int, int, int, int, int);
 void fn_8024FA68(int, GXColor);
-void fn_80251CC4(int);
-void fn_80251604(int, int);
-void fn_8024DF64(int);
-void fn_8024DCE4(int, int, int, int, int, int);
 void fn_8024EB28(int);
-void fn_8024D450(int, int, int, int, int);
 void fn_80252114(int);
 void fn_802520E0(int, int, int);
-void fn_80251A58(int, int, int, int, int);
-void fn_80251B28(int, int, int, int);
 extern "C" void GXInitTexObjTlut(GXTexObj *, int);
 extern "C" void GXLoadTlut(GXTlutObj *, int);
 extern "C" void GXLoadTexObj(GXTexObj *, int);
@@ -71,7 +63,7 @@ void fn_80252034(int, int, int, int);
 
 extern "C" int fn_801A0088(int)
 {
-    fn_80251CC4(1);
+    GXSetNumTevStages(1);
     Entry_801A0088 *p = lbl_80365534;
     for (unsigned int i = 0; i <= 7; ++i, ++p) {
         if (p->mpPalette) { GXInitTexObjTlut(p->mpTexture, i); GXLoadTlut(&p->mpPalette->mUnknown4, i); }
@@ -135,7 +127,7 @@ extern "C" int fn_801A04D4(int, Point_80167094 *p, QuadPoint_801A0614 *uv, unsig
 }
 extern "C" int fn_801A0614(int, QuadPoint_801A0614 *p, Point_80167094 *uv, GXColor *c, int texture)
 {
-    fn_80251B28(0,0,texture,4);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, (GXTexMapID)texture, GX_COLOR0A0);
     GXBegin(GX_TRIANGLESTRIP,GX_VTXFMT0,4);
     GXPosition3f32(p[0].mX,p[0].mY,0.0f); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[0].mX,uv[0].mY);
     GXPosition3f32(p[1].mX,p[1].mY,0.0f); GXColor4u8(c->r,c->g,c->b,c->a); GXTexCoord2f32(uv[1].mX,uv[1].mY);
@@ -219,7 +211,7 @@ extern "C" int fn_801A0CA0(int a,State_80167094 *s,int)
         int start=s->mUnknown940[i];int n=s->mUnknown940[i+1]-start;
         if (n) {
             int next=s->mUnknown1E10[i][0];
-            if(mode!=next){mode=next;if(!mode){tiled=0;fn_80251B28(0,0,5,4);}else{tiled=1;fn_80251B28(0,0,6,4);}}
+            if(mode!=next){mode=next;if(!mode){tiled=0;GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP5, GX_COLOR0A0);}else{tiled=1;GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP6, GX_COLOR0A0);}}
             Point_80167094 *p=(Point_80167094 *)s+start;
             if(n==4){if(tiled)a=fn_801A0270(a,p,lbl_802F2894,&s->mUnknown2020[i]);else a=fn_801A0108(a,p,lbl_802F2894,&s->mUnknown2020[i]);}
             else {if(tiled)a=fn_801A04D4(a,p,lbl_802F2894,n,&s->mUnknown2020[i]);else a=fn_801A03E4(a,p,lbl_802F2894,n,&s->mUnknown2020[i]);}
@@ -230,10 +222,10 @@ extern "C" int fn_801A0CA0(int a,State_80167094 *s,int)
 extern "C" void fn_801A0E2C(void)
 {
     GXColor c={255,255,255,255};
-    fn_80210388();fn_8024D418();fn_8024CB90(9,1);fn_8024CB90(11,1);fn_8024CB90(13,1);fn_8024FC48(1);
+    fn_80210388();GXClearVtxDesc();GXSetVtxDesc(GX_VA_POS, GX_DIRECT);GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);fn_8024FC48(1);
     fn_8024FC84(0,1,0,1,0,0,2);fn_8024FC84(2,0,0,1,0,0,2);fn_8024FA68(0,c);
-    fn_80251CC4(1);fn_80251604(0,0);fn_8024DF64(1);fn_8024DCE4(0,0,4,60,0,125);fn_8024EB28(0);
-    fn_8024D450(0,9,1,4,0);fn_8024D450(0,11,1,5,0);fn_8024D450(0,13,1,4,0);fn_80252114(1);fn_802520E0(0,7,0);fn_80251A58(4,0,0,4,0);fn_801A0088(0);
+    GXSetNumTevStages(1);GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);GXSetNumTexGens(1);GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);fn_8024EB28(0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);fn_80252114(1);fn_802520E0(0,7,0);GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_GREATER, 0);fn_801A0088(0);
 }
 extern "C" void fn_801A0FAC(int a,State_80167094 *s,unsigned char mirror)
 {
@@ -247,7 +239,7 @@ extern "C" void fn_801A105C(float x,float y,void *input,unsigned char mirror)
     fn_801A0E2C();Point_8017886C point=fn_80177FE0();
     if(fn_80177F70()!=0&&fn_80177F70()!=6){float v=fn_80178298();if(v<fn_80178A2C()&&!fn_800BA6F8()&&!fn_80027DF0())fn_80178298();}
     fn_8024FA68(4,c);fn_801D0470(fn_80228668());fn_801D04C4();fn_801D0D94(1.0f,1.0f,0.0f);fn_801D0C58(pos);fn_801D0F80(m);fn_8025251C(m,0);
-    fn_80251604(0,3);fn_80252034(0,0,0,5);int a=fn_801A07A8(0,&point);fn_80251604(0,0);fn_80252034(1,4,5,5);
+    GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);fn_80252034(0,0,0,5);int a=fn_801A07A8(0,&point);GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);fn_80252034(1,4,5,5);
     fn_801D0F80(m);fn_8025251C(m,0);fn_8024FA68(4,c);fn_801A0FAC(a,s,mirror);fn_80252034(0,0,0,5);fn_801D0544();fn_801D0F80(m);fn_8025251C(m,0);
 }
 extern "C" void fn_801A1240(int resource)

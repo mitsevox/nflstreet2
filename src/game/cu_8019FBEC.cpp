@@ -5,6 +5,7 @@
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXStruct.h>
 #include <dolphin/gx/GXVert.h>
+#include <dolphin/gx/GXTev.h>
 
 struct Element_8019FBEC {
     char mUnknown0[0x28];
@@ -30,11 +31,6 @@ void fn_80211EFC(Element_8019FBEC *pElement);
 Texture_80365470 *fn_802120E4(Element_8019FBEC *pElement, int a);
 Palette_803654DC *fn_80212124(Element_8019FBEC *pElement, int a, int b);
 int fn_80236EC0(int a);
-void fn_8024CB90(int a, int b);
-void fn_8024D418(void);
-void fn_8024D450(int a, int b, int c, int d, int e);
-void fn_8024DCE4(int a, int b, int c, int d, int e, int f);
-void fn_8024DF64(int a);
 void fn_8024FC48(int a);
 void fn_8024FC84(int a, int b, int c, int d, int e, int f, int g);
 extern "C" void GXInitTexObjCI(GXTexObj *pObject, void *pData, int width, int height, int a, int b, int c, int d, int e);
@@ -45,10 +41,6 @@ extern "C" int GXGetTlutObjData(void *p);
 extern "C" int GXGetTlutObjFmt(void *p);
 extern "C" int GXGetTlutObjNumEntries(void *p);
 extern "C" void GXLoadTlut(GXTlutObj *pObject, int a);
-void fn_80251604(int a, int b);
-void fn_80251A58(int a, int b, int c, int d, int e);
-void fn_80251B28(int a, int b, int c, int d);
-void fn_80251CC4(int a);
 void fn_8025251C(Mtx44 m, int a);
 }
 
@@ -93,25 +85,25 @@ void fn_8019FD80(Instance_80159F10 *pInstance)
     int value = fn_80236EC0(0);
 
     fn_80210388();
-    fn_8024D418();
-    fn_8024CB90(9, 1);
-    fn_8024CB90(11, 1);
-    fn_8024CB90(13, 1);
-    fn_8024D450(0, 9, 1, 4, 0);
-    fn_8024D450(0, 11, 1, 5, 0);
-    fn_8024D450(0, 13, 1, 4, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     fn_8024FC84(4, 0, 1, 1, 0, 0, 2);
     fn_8024FC48(1);
-    fn_8024DF64(1);
-    fn_8024DCE4(0, 1, 4, 60, 0, 125);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
-    fn_80251B28(0, 0, 0, 4);
-    fn_80251604(0, 0);
-    fn_80251CC4(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+    GXSetNumTevStages(1);
     fn_8025251C(fn_801D0444(), 0);
     GXSetZCompLoc(GX_DISABLE);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
-    fn_80251A58(4, 32, 0, 4, 32);
+    GXSetAlphaCompare(GX_GREATER, 32, GX_AOP_AND, GX_GREATER, 32);
     GXLoadTlut(&lbl_803654E8[pInstance->mUnknown1D], 0);
     GXLoadTexObj(&lbl_8036547C[pInstance->mUnknown1C], 0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -127,7 +119,7 @@ void fn_8019FD80(Instance_80159F10 *pInstance)
     GXPosition3f32(-0.8f, 0.0f, 0.8f);
     GXColor4u8(255, 255, 255, pInstance->mUnknown20 * 255.0f);
     GXTexCoord2f32(0.0f, 0.0f);
-    fn_80251A58(7, 0, 0, 7, 0);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZCompLoc(GX_ENABLE);
     fn_80236EC0(value);
 }

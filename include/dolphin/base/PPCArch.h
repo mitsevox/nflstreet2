@@ -54,6 +54,8 @@ void PPCMtpmc4(u32 val);
 void PPCDisableSpeculation(void);
 void PPCSetFpNonIEEEMode(void);
 u32 PPCMfhid0(void);
+void PPCMthid0(u32 newHID0);
+u32 PPCMfwpar(void);
 u32 PPCMfl2cr(void);
 void PPCMtl2cr(u32 val);
 void PPCMtdec(u32 val);

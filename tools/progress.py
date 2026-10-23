@@ -274,8 +274,12 @@ def file_map(sections, source_report, functions, ownership=()):
         for start, end, source in measured:
             overlaps = [item for item in owned if start < item[1] and item[0] < end]
             if overlaps:
-                if len(overlaps) != 1 or not overlaps[0][0] <= start < end <= overlaps[0][1] \
-                        or overlaps[0][3] != source:
+                # One linked section may cover several adjacent seeds of its own file (e.g. two
+                # .bss arrays); together they must span the measured range without gaps.
+                overlaps.sort()
+                if any(item[3] != source for item in overlaps) \
+                        or any(a[1] != b[0] for a, b in zip(overlaps, overlaps[1:])) \
+                        or not overlaps[0][0] <= start < end <= overlaps[-1][1]:
                     raise ValueError("SDK ownership conflicts with a measured source range")
             else:
                 owned.append((start, end, source, source))
