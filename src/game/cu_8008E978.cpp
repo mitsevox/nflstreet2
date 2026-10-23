@@ -15924,10 +15924,10 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
     message.mUnknown1[2] = pB->mIdBytes[1];
     fn_800CCA40(&pPlay->mSet, &pEntry, 1, 0);
     unsigned short key = pEntry->mUnknown0;
-    pA->mUnknown1011 = index >> 8;
     pA->mUnknown1008.mUnknown0 = key;
     pA->mUnknown1008.mUnknown1 = key >> 8;
     pA->mUnknown1008.mUnknown2 = index;
+    pA->mUnknown1011 = index >> 8;
     if (pA->mpState->mId == 32 || pA->mpState->mId == 96) fn_800F05E4(0, pA->mpState, &message, pA);
     else fn_800F00D4(0, pA->mpState, &message, pA);
     fn_801C1F94(&message, 0, 4);
@@ -15937,9 +15937,9 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
     message.mUnknown1[2] = pA->mIdBytes[1];
     fn_800CCA40(&pPlay->mSet, &pEntry, 0, 0);
     key = pEntry->mUnknown0;
-    pB->mUnknown1008.mUnknown2 = index;
     pB->mUnknown1008.mUnknown0 = key;
     pB->mUnknown1008.mUnknown1 = key >> 8;
+    pB->mUnknown1008.mUnknown2 = index;
     pB->mUnknown1011 = index >> 8;
     if (pB->mpState->mId == 32 || pB->mpState->mId == 96) {
         fn_800F05E4(0, pB->mpState, &message, pB);
@@ -15964,15 +15964,15 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
         message.mUnknown1[2] = pA->mIdBytes[1];
         fn_800CCA40(&pPlay->mSet, &pEntry, 0, 1);
         key = pEntry->mUnknown0;
-        pC->mUnknown1008.mUnknown2 = index;
-        pC->mUnknown1008.mUnknown1 = key >> 8;
-        pC->mUnknown1011 = index >> 8;
         pC->mUnknown1008.mUnknown0 = key;
+        pC->mUnknown1008.mUnknown1 = key >> 8;
+        pC->mUnknown1008.mUnknown2 = index;
+        pC->mUnknown1011 = index >> 8;
         if (pC->mpState->mId == 32) {
             fn_800F05E4(0, pC->mpState, &message, pC);
         } else if (pC->mpState->mId == 17) {
             Link_800CDE50 *pLink = &pC->mUnknown336Link;
-        Object_80039F5C *pOther = fn_8009BCE8(&pLink->mRef);
+            Object_80039F5C *pOther = fn_8009BCE8(&pLink->mRef);
             pOther->mFlags |= 0x80000;
             fn_800E9528();
             fn_80143EBC(pOther, pC);
