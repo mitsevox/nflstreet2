@@ -474,6 +474,7 @@ int fn_800FF094(Object_80039F5C *p)
                 }
             } else {
                 float limit = p->mIdBytes[2] == fn_80178308() ? 8.0f : 2.0f;
+                float rate;
 
                 s->mUnknown4 = s->mUnknown16;
                 p->mFlags &= ~4;
@@ -481,14 +482,15 @@ int fn_800FF094(Object_80039F5C *p)
                     || fabsf(fn_80177FFC(p->mIdBytes[2]).mY - p->mMotion.mPos.mY) > limit) {
                     s->mUnknown2 = 1;
                     p->mUnknown512.mUnknown14 = 6;
-                    p->mUnknown512.mUnknown0 = 1.0f;
+                    rate = 1.0f;
                 } else {
                     s->mUnknown2 = 2;
                     p->mUnknown512.mUnknown14 = 7;
-                    p->mUnknown512.mUnknown0 = 1.5f;
+                    rate = 1.5f;
                 }
                 p->mUnknown512.mUnknown4 = s->mUnknown16;
                 p->mUnknown512.mUnknown8 = s->mUnknown16;
+                p->mUnknown512.mUnknown0 = rate;
                 s->mUnknown3Byte = 6;
                 break;
             }
