@@ -28,12 +28,13 @@ extern float lbl_803ECB08;
 
 extern "C" int fn_800C0910(Object_80039F5C *p, int kind, unsigned char *pLevel)
 {
-    Vector_80039F5C delta;
+    Point_8017886C delta;
     Point_8017886C target;
     Point_8017886C extra;
     float b, c, d;
     Point_8017886C goal;
-    Vector_80039F5C offset;
+    Point_8017886C offset;
+    int targetHeading, carrierHeading, heading;
     unsigned char level = 0;
     Object_80039F5C *pCarrier = fn_80137B40();
     int result = 0;
@@ -45,17 +46,13 @@ extern "C" int fn_800C0910(Object_80039F5C *p, int kind, unsigned char *pLevel)
             result = 2;
         } else {
             float dist;
-            int heading;
 
             fn_80227690(&delta, &p->mMotion.mPos, &pCarrier->mMotion.mPos);
             dist = fn_802270A4(&delta);
-            heading = fn_801CFE40(delta.mY, delta.mX);
-            if (dist <= 5.0f) {
-                result = 2;
-            } else {
+            heading = delta.Heading();
+            if (dist > 5.0f) {
                 float carrierDist, rate;
                 float targetDist;
-                int targetHeading, carrierHeading;
                 int team, count, i;
 
                 fn_800C146C(&target, pCarrier, p, kind, &extra, &b, &c, &d);
@@ -65,20 +62,21 @@ extern "C" int fn_800C0910(Object_80039F5C *p, int kind, unsigned char *pLevel)
                     return 2;
                 }
                 if (!(pCarrier->mFlags & 0x4000)) {
-                    float spread = (1.0f - pCarrier->mRatings[6] * (1.0f / 255.0f)) * 20.0f;
+                    float skill = pCarrier->mRatings[6] * (1.0f / 255.0f);
+                    float spread = (1.0f - skill) * 20.0f;
 
                     if (spread != 0.0f) {
                         spread *= fn_80237260(0);
                     }
                     fn_80227538(&offset, fn_802372EC(0, 0x1000000), spread);
-                    fn_80227638(&target, &target, &offset);
+                    fn_80227638(&target, &offset, &target);
                 }
                 fn_80227690(&delta, &target, &p->mMotion.mPos);
-                targetHeading = fn_801CFE40(delta.mY, delta.mX);
+                targetHeading = delta.Heading();
                 targetDist = fn_802270A4(&delta);
                 team = fn_80178320();
                 fn_80227690(&delta, &target, &pCarrier->mMotion.mPos);
-                carrierHeading = fn_801CFE40(delta.mY, delta.mX);
+                carrierHeading = delta.Heading();
                 carrierDist = fn_802270A4(&delta);
                 if (p->mIdBytes[3] == 1) {
                     rate = p->mRatings[4] * (1.0f / 255.0f);
@@ -100,21 +98,21 @@ extern "C" int fn_800C0910(Object_80039F5C *p, int kind, unsigned char *pLevel)
                     id = q->mpState->mId;
                     fn_80227690(&delta, &p->mMotion.mPos, &q->mMotion.mPos);
                     qdist = fn_802270A4(&delta);
-                    fn_801CFE40(delta.mY, delta.mX);
+                    delta.Heading();
                     if (id == 22 || id == 40 || id == 92 || id == 85) {
                         float toTarget, toCarrier, ratio;
                         int targetAngle, carrierAngle, leadAngle;
 
                         fn_80227690(&delta, &target, &q->mMotion.mPos);
                         toTarget = fn_802270A4(&delta);
-                        targetAngle = fn_801CFE40(delta.mY, delta.mX);
+                        targetAngle = delta.Heading();
                         fn_80227690(&delta, &q->mMotion.mPos, &pCarrier->mMotion.mPos);
-                        carrierAngle = fn_801CFE40(delta.mY, delta.mX);
+                        carrierAngle = delta.Heading();
                         toCarrier = fn_802270A4(&delta);
                         fn_80227248(&delta, &q->mMotion.mUnknown40, 0.0f);
                         fn_80227638(&delta, &delta, &q->mMotion.mPos);
                         fn_80227690(&delta, &delta, &pCarrier->mMotion.mPos);
-                        leadAngle = fn_801CFE40(delta.mY, delta.mX);
+                        leadAngle = delta.Heading();
                         fn_802270A4(&delta);
                         if (result == 2) {
                             break;
@@ -137,7 +135,11 @@ extern "C" int fn_800C0910(Object_80039F5C *p, int kind, unsigned char *pLevel)
                         }
                         if (result != 2 && toCarrier < carrierDist) {
                             int angle = fn_801CFFD0(carrierHeading, leadAngle);
-                            Vector_80039F5C point = {target.mX, target.mY, 0.0f};
+                            Vector_80039F5C point;
+
+                            point.mX = target.mX;
+                            point.mY = target.mY;
+                            point.mZ = 0.0f;
 
                             if (fn_80227B04(&pCarrier->mMotion.mPos, &point, &q->mMotion.mPos) < 5.0f) {
                                 if (angle <= 0xAAAA9) {
@@ -194,15 +196,22 @@ extern "C" int fn_800C0910(Object_80039F5C *p, int kind, unsigned char *pLevel)
                                q->mpState->mId != 17 && qdist < 5.0f) {
                         level += 2;
                     }
+                    if (result == 2) {
+                        break;
+                    }
                 }
+            } else {
+                result = 2;
             }
         }
-        if (result == 2) {
+        if (result != 2) {
+            if (level > 3) {
+                result = 2;
+            } else if (level != 0) {
+                result = 1;
+            }
+        } else {
             level = 0;
-        } else if (level > 3) {
-            result = 2;
-        } else if (level != 0) {
-            result = 1;
         }
     } else {
         result = 2;
