@@ -495,7 +495,7 @@ void Class_803EC99C::fn_800D0394()
     lbl_803EACA1 = 0;
 }
 
-bool Class_803EC99C::fn_800D0408()
+int Class_803EC99C::fn_800D0408()
 {
     return lbl_803EAC98->mUnknown10 == 1;
 }

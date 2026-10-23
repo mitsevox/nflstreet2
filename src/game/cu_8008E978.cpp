@@ -7124,9 +7124,9 @@ extern "C" void fn_800B3EC0(int a, int b)
 extern "C" {
 void fn_8006CAEC(void);
 void fn_800B50E8(int team);
-QueryCursor fn_800C0750(unsigned char index, unsigned short *pValues);
+QueryCursor fn_800C0750(int index, unsigned short *pValues);
 void fn_800C07C4(QueryCursor cursor);
-void fn_800C07F0(QueryCursor cursor, unsigned char index, unsigned short *pValues);
+void fn_800C07F0(QueryCursor cursor, int index, unsigned short *pValues);
 }
 
 extern "C" void fn_800B3EFC(int team)
@@ -9761,7 +9761,9 @@ extern "C" void fn_800AD888(float dt)
 
 extern "C" void fn_800AD910(int mode, float dt)
 {
-    if (!lbl_803EAC9C->fn_800D0408()) {
+    unsigned char busy = lbl_803EAC9C->fn_800D0408();
+
+    if (!busy) {
         void (*pExit)(float) = lbl_80297FC8[lbl_803EAAD4->mUnknown0].mpExit;
         void (*pEnter)(float);
 
@@ -11325,6 +11327,12 @@ extern "C" int fn_800B0F98(void)
     return lbl_803EAB14->mUnknown2D0;
 }
 
+static inline void CopyPoint(Point_8017886C *pDst, const Point_8017886C *pSrc)
+{
+    pDst->mX = pSrc->mX;
+    pDst->mY = pSrc->mY;
+}
+
 extern "C" void fn_800B0FA4(void)
 {
     fn_800B0090();
@@ -11359,10 +11367,8 @@ extern "C" void fn_800B0FA4(void)
                 Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[0][index];
                 Point_8017886C pos;
                 Point_8017886C mirror;
-                pos.mX = pEntry->mUnknown10.mX;
-                pos.mY = pEntry->mUnknown10.mY;
-                mirror.mX = pEntry->mUnknown18.mX;
-                mirror.mY = pEntry->mUnknown18.mY;
+                CopyPoint(&pos, &pEntry->mUnknown10);
+                CopyPoint(&mirror, &pEntry->mUnknown18);
                 if (pos.mX == mirror.mX && pos.mY == mirror.mY) {
                     mirror.mX = -mirror.mX;
                     for (unsigned char j = 0; j < count; j++) {
@@ -11370,8 +11376,8 @@ extern "C" void fn_800B0FA4(void)
                             continue;
                         }
                         pEntry = &pTeam->mUnknown8.mUnknown84[0][j];
-                        pos.mX = (pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown18 : pEntry->mUnknown10).mX;
-                        pos.mY = (pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown18 : pEntry->mUnknown10).mY;
+                        pos.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
+                        pos.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
                         if (pos.mX == mirror.mX && pos.mY == mirror.mY) {
                             index = j;
                             break;
@@ -14793,7 +14799,7 @@ int fn_800AE980(void);
 void fn_8017CBFC(int a);
 short fn_8017CD44(unsigned char index);
 void fn_8017CD20(void);
-QueryCursor fn_800C0698(unsigned char index, unsigned short *pValues);
+QueryCursor fn_800C0698(int index, unsigned short *pValues);
 State_8011F4EC *fn_8011F4EC(void);
 int fn_801787A0(void);
 int fn_80168E00(int team, int index, unsigned char *pOut);
@@ -15520,7 +15526,7 @@ extern "C" unsigned short fn_800C0660(unsigned short *p, int value)
     return i;
 }
 
-extern "C" QueryCursor fn_800C0750(unsigned char index, unsigned short *pValues)
+extern "C" QueryCursor fn_800C0750(int index, unsigned short *pValues)
 {
     int i;
 

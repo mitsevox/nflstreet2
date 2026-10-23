@@ -19,6 +19,17 @@ int fn_8011F4C8(void);
 void fn_800C02EC(void *p, short value);
 }
 
+static inline void PickPlay(void)
+{
+    short play = fn_8009D990(0) - 2;
+
+    play -= fn_802372EC(0, 3);
+    if (play <= 2) {
+        play = fn_802372EC(0, 2) + 3;
+    }
+    fn_800C02EC(lbl_803EABA4, play);
+}
+
 extern "C" int fn_800B1200(void)
 {
     float right = 0.0f;
@@ -39,44 +50,36 @@ extern "C" int fn_800B1200(void)
     for (unsigned short i = 0; i < count; i++) {
         Object_80039F5C *p = fn_80039F5C(team, i);
         switch (p->mUnknown2914) {
+        case 0:
+            break;
         case 5:
             left = p->mMotion.mPos.mX;
             break;
         case 9:
             right = p->mMotion.mPos.mX;
-            break;
-        }
+            break;        }
     }
 
     float x = fn_8009BCE8(&lbl_803EAB14->mUnknown2D0)->mMotion.mPos.mX;
     Point_8017886C los;
     los = fn_80177FE0();
-    int pick = 0;
 
     if ((fn_8011F1CC() != 0 || fn_8011F1F4() != 0) && !(x < left - 0.5f) && x <= right + 0.5f) {
-        pick = 1;
-    } else {
-        if (fn_8011F1A4() == 0) {
-            return 1;
-        }
-        if (!(x < fn_8011F4D4() - 0.5f) && x <= fn_8011F4D4() + 0.5f) {
-            return 1;
-        }
-        if (!(x < left - 0.5f) && !(x > right + 0.5f)) {
-            pick = 1;
-        } else if (fn_8011F1A4() != 0 && !(fn_8011F4C8() & 1) && x < los.mX) {
-            return 0;
-        } else if (fn_8011F1A4() != 0 && (fn_8011F4C8() & 1) && x > los.mX) {
-            return 0;
-        }
+        PickPlay();
+        return 0;
     }
-    if (pick) {
-        short play = fn_8009D990(0) - 2;
-        play -= fn_802372EC(0, 3);
-        if (play <= 2) {
-            play = fn_802372EC(0, 2) + 3;
-        }
-        fn_800C02EC(lbl_803EABA4, play);
+    if (fn_8011F1A4() == 0) {
+        return 1;
+    }
+    if (!(x < fn_8011F4D4() - 0.5f) && x <= fn_8011F4D4() + 0.5f) {
+        return 1;
+    }
+    if (!(x < left - 0.5f) && !(x > right + 0.5f)) {
+        PickPlay();
+        return 0;
+    }
+    if ((fn_8011F1A4() != 0 && (fn_8011F4C8() & 1) == 0 && x < los.mX)
+        || (fn_8011F1A4() != 0 && (fn_8011F4C8() & 1) != 0 && x > los.mX)) {
         return 0;
     }
     return 1;
