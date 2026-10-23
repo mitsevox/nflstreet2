@@ -23615,6 +23615,11 @@
           "end": "0x800BBF18"
         },
         {
+          "symbol": "fn_800BBF18",
+          "start": "0x800BBF18",
+          "end": "0x800BC190"
+        },
+        {
           "symbol": "fn_800BC190",
           "start": "0x800BC190",
           "end": "0x800BC3F0"

@@ -41,6 +41,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8003DEC4.h"
+#include "game/Object_80040818.h"
 #include "game/Object_8008044C.h"
 #include "game/Object_8017886C.h"
 #include "game/Query_800CE770.h"
@@ -7735,6 +7736,64 @@ extern "C" void fn_800BBE98(void)
     fn_800941B8();
     fn_8017CFB4(7);
     lbl_803EC98C->mUnknown0 = 2;
+}
+
+extern "C" {
+int fn_80040F10(void);
+void fn_80053B4C(Object_80040818 *pObject, int index, int apply);
+}
+
+extern "C" void fn_800BBF18(void)
+{
+    int playing = fn_80096B1C(lbl_803EC98C->mUnknown8);
+    Class_80148A58 *pMode;
+    int i;
+
+    if (playing == 0 && lbl_803EC98C->mUnknownC != -1
+        && ((pMode = fn_80148A58()) == 0 || pMode->vfn_21() != 0)) {
+        fn_80096D14(lbl_803EC98C->mUnknown8);
+        lbl_803EC98C->mUnknown8 = lbl_803EC98C->mUnknownC;
+        lbl_803EC98C->mUnknownC = -1;
+        playing = fn_80096B1C(lbl_803EC98C->mUnknown8);
+    }
+    if (playing != 0 && lbl_803EC98C->mUnknownC == -1 && lbl_803EC98C->mUnknown4 % 60 == 0
+        && ((pMode = fn_80148A58()) == 0 || pMode->vfn_21() != 0)) {
+        for (i = 0; i < fn_80040F10(); i++) {
+            Object_80040818 *pObject = fn_80040F18(i);
+
+            if (pObject->mUnknown472->mUnknown188 == 7) {
+                fn_80053B4C(pObject, lbl_803EC98C->mUnknown4 / 60 % 3, 1);
+            }
+        }
+    }
+    if (playing == 0) {
+        fn_80195EFC(1, 20, 0x808080, 0);
+        if (lbl_803EC98C->mUnknown8 != -1) {
+            fn_80096D14(lbl_803EC98C->mUnknown8);
+            lbl_803EC98C->mUnknown8 = -1;
+        }
+        if (lbl_803EC98C->mUnknownC != -1) {
+            fn_80096D14(lbl_803EC98C->mUnknownC);
+            lbl_803EC98C->mUnknownC = -1;
+        }
+        fn_8017CFB4(7);
+        lbl_803EAB94 = 1;
+        if (lbl_803EC98C->mUnknown29 == 0) {
+            fn_800BBE98();
+        } else {
+            fn_800BAF7C();
+        }
+        fn_800655D0();
+        if ((pMode = fn_80148A58()) == 0 || pMode->vfn_21() != 0) {
+            for (i = 0; i < fn_80040F10(); i++) {
+                Object_80040818 *pObject = fn_80040F18(i);
+
+                if (pObject->mUnknown472->mUnknown188 == 7) {
+                    fn_80053B4C(pObject, 2, 0);
+                }
+            }
+        }
+    }
 }
 
 extern "C" {
