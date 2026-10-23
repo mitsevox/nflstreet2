@@ -10752,6 +10752,68 @@ extern "C" int fn_800B0F98(void)
     return lbl_803EAB14->mUnknown2D0;
 }
 
+extern "C" void fn_800B05F0(int index, int kind);
+
+extern "C" void fn_800B0FA4(void)
+{
+    fn_800B0090();
+    unsigned char total = 0;
+    Object_800670B4 *pTeam = fn_80168708(fn_80178308());
+    Record_80067338 *pRecord = fn_8016871C(fn_80178308());
+    unsigned int count = fn_80178D18(fn_80178308());
+    unsigned int roll = fn_802372EC(0, 100);
+
+    for (unsigned char i = 0; i <= 4; i++) {
+        total += pRecord->mUnknown28[i][1];
+        int kind = pRecord->mUnknown28[i][2];
+        if (roll < total) {
+            int index = pRecord->mUnknown28[i][0];
+            if (pTeam->mUnknown8.mUnknownF != 0) {
+                switch (kind) {
+                case 0:
+                    kind = 4;
+                    break;
+                case 1:
+                    kind = 3;
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    kind = 1;
+                    break;
+                case 4:
+                    kind = 0;
+                    break;
+                }
+                Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[0][index];
+                Point_8017886C pos;
+                Point_8017886C mirror;
+                pos.mX = pEntry->mUnknown10.mX;
+                pos.mY = pEntry->mUnknown10.mY;
+                mirror.mX = pEntry->mUnknown18.mX;
+                mirror.mY = pEntry->mUnknown18.mY;
+                if (pos.mX == mirror.mX && pos.mY == mirror.mY) {
+                    mirror.mX = -mirror.mX;
+                    for (unsigned char j = 0; j < count; j++) {
+                        if (j == index) {
+                            continue;
+                        }
+                        pEntry = &pTeam->mUnknown8.mUnknown84[0][j];
+                        pos.mX = (pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown18 : pEntry->mUnknown10).mX;
+                        pos.mY = (pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown18 : pEntry->mUnknown10).mY;
+                        if (pos.mX == mirror.mX && pos.mY == mirror.mY) {
+                            index = j;
+                            break;
+                        }
+                    }
+                }
+            }
+            fn_800B05F0(index, kind);
+            return;
+        }
+    }
+}
+
 extern "C" int fn_800B119C(void)
 {
     Record_80067338 *pRecord = fn_8016871C(fn_80178308());

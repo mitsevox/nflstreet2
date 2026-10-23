@@ -26503,6 +26503,11 @@
           "symbol": "vfn_03__14Class_80297B50",
           "start": "0x800B3718",
           "end": "0x800B3AF4"
+        },
+        {
+          "symbol": "fn_800B0FA4",
+          "start": "0x800B0FA4",
+          "end": "0x800B119C"
         }
       ]
     },
