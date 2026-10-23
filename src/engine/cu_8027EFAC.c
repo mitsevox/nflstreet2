@@ -91,7 +91,7 @@ int fn_8027EFAC(int year)
         if (year % 100 != 0) {
             leap = 1;
         } else {
-            leap = year % 400 == 0;
+            leap = year == year / 400 * 400;
         }
     }
     return leap;

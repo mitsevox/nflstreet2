@@ -41558,7 +41558,7 @@
     {
       "source": "src/engine/cu_801C10E0.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801C10E0-0x801C1D54 (src/engine/cu_801C10E0.c, asynchronous loader with no NASCAR 2005 counterpart), function rows, compiler row engine_c_fastmath and source-form rows for the volatile loader state; fn_801C1C98 is not reconstructed. Comparison only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801C10E0-0x801C1D54 (src/engine/cu_801C10E0.c, asynchronous loader with no NASCAR 2005 counterpart), function rows, compiler row engine_c_fastmath and source-form rows for the volatile loader state. Comparison only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -41642,6 +41642,11 @@
           "symbol": "fn_801C1C1C",
           "start": "0x801C1C1C",
           "end": "0x801C1C98"
+        },
+        {
+          "symbol": "fn_801C1C98",
+          "start": "0x801C1C98",
+          "end": "0x801C1D54"
         }
       ]
     },
