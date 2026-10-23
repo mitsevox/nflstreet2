@@ -184,7 +184,7 @@ extern "C" {
 int fn_80238278(const void *p, int size, int seed);
 void fn_8015A0D0(int value);
 void fn_8015C254(int a);
-int fn_80092830(int handle);
+int fn_80092830(int index);
 float fn_80094454(int handle);
 unsigned char fn_801BC044(unsigned short index);
 unsigned char fn_801BC060(unsigned short index);
