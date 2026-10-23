@@ -56,7 +56,7 @@ int fn_8012CAA4(Object_80039F5C *);
 void fn_8012CD4C(Object_80039F5C *,Vector_80039F5C *);
 float fn_8012CD60(Object_80039F5C *,float);
 void fn_80103F80(Object_80137ABC *,Vector_80039F5C,Vector_80039F5C,int,Vector_80039F5C *,Object_80039F5C *,float,float);
-void fn_80104328(Object_80039F5C *,unsigned char,int *,Vector_80039F5C *,int *);
+void fn_80104328(Object_80039F5C *,unsigned int,int *,Vector_80039F5C *,int *);
 float fn_80103DD8(Object_80039F5C *,Object_80039F5C *,short *,float);
 int fn_8011E9B4(Object_80039F5C *);
 int fn_800A7F1C(unsigned char);
@@ -236,7 +236,7 @@ void fn_800FE9B4(Object_80039F5C *p, Point_8017886C *point, float *speed)
     s->mUnknown0 = lbl_803EAE76;
     s->mUnknown40 = 180.0f;
     s->mUnknown44 = 1000.0f;
-    s->mUnknown32.mX = direction->mY = 0.0f;
+    direction->mX = direction->mY = 0.0f;
     if (*speed == 0.0f) {
         return;
     }

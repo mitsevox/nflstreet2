@@ -33,7 +33,6 @@ Object_80039F5C *fn_800FBF74(Object_80039F5C *pTarget, Object_80039F5C *pOther);
 unsigned char fn_800FC128(Object_80039F5C *p);
 unsigned char fn_800FC1DC(Object_80039F5C *p);
 void fn_80104328(Object_80039F5C *p, unsigned int count, int *pTime, Vector_80039F5C *pPos, int *pAngle);
-Object_80039F5C *fn_80137B40(void);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 }
 

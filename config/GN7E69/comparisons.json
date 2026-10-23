@@ -37740,7 +37740,7 @@
     {
       "source": "src/game/cu_800FAD2C.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800FAD2C-0x800FAECC as their own object so their literal pool 0x8029E404-0x8029E408 is placed exactly; it does not claim an original file boundary.",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies 0x800FAD2C and 0x800FB314 as their own object so their literal pool 0x8029E404-0x8029E40C is placed exactly; 0x800FAECC, which lies between them and uses no literals, is compiled in src/game/cu_800EFC68.cpp. It does not claim an original file boundary.",
       "sections": [
         {
           "section": ".text",
