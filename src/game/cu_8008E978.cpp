@@ -6872,8 +6872,157 @@ int fn_800DDD24(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, 
 int fn_800D9C80(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
 int fn_80093D20(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
 int fn_80089E70(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800A44C0(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800CBBAC(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800D8A24(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DA54C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DAF5C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DC36C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DC6F4(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DCC14(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DD2E8(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DD69C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DE19C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800DF1F4(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800E4264(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800EC674(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_800F2CB4(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_80102A78(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_8010680C(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_8010BC90(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_8010D834(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
+int fn_80110C70(Table_80089904 *pTable, unsigned short key, void *pA, void *pB, Object_80039F5C *pC, unsigned int mode);
 
 extern Handler_800B4D7C lbl_8030FB60[248];
+}
+
+extern "C" void fn_800B4A88(void)
+{
+    fn_8009C604(lbl_8030FB60, 248);
+    lbl_8030FB60[74] = fn_800D9C80;
+    lbl_8030FB60[77] = fn_800DA54C;
+    lbl_8030FB60[73] = fn_800DC6F4;
+    lbl_8030FB60[84] = fn_800DC36C;
+    lbl_8030FB60[91] = fn_800DD69C;
+    lbl_8030FB60[203] = fn_800DDD24;
+    lbl_8030FB60[193] = fn_800D8A24;
+    lbl_8030FB60[157] = fn_800DCC14;
+    lbl_8030FB60[236] = fn_80102A78;
+    lbl_8030FB60[86] = fn_800DD2E8;
+    lbl_8030FB60[176] = fn_8010D834;
+    lbl_8030FB60[68] = fn_800F2CB4;
+    lbl_8030FB60[192] = fn_800D7E9C;
+    lbl_8030FB60[204] = fn_8010680C;
+    lbl_8030FB60[48] = fn_800EC674;
+    lbl_8030FB60[43] = fn_800D8A24;
+    lbl_8030FB60[44] = fn_800D8A24;
+    lbl_8030FB60[165] = fn_800D8A24;
+    lbl_8030FB60[160] = fn_800DCC14;
+    lbl_8030FB60[159] = fn_800DCC14;
+    lbl_8030FB60[67] = fn_8009A344;
+    lbl_8030FB60[227] = fn_8009A344;
+    lbl_8030FB60[69] = fn_80102A78;
+    lbl_8030FB60[178] = fn_80102A78;
+    lbl_8030FB60[85] = fn_800DD2E8;
+    lbl_8030FB60[37] = fn_8010D834;
+    lbl_8030FB60[100] = fn_800DE19C;
+    lbl_8030FB60[47] = fn_800DE19C;
+    lbl_8030FB60[70] = fn_800D7E9C;
+    lbl_8030FB60[207] = fn_800D7E9C;
+    lbl_8030FB60[116] = fn_800DE19C;
+    lbl_8030FB60[201] = fn_800DE19C;
+    lbl_8030FB60[82] = fn_800DE19C;
+    lbl_8030FB60[153] = fn_800DE19C;
+    lbl_8030FB60[188] = fn_80110C70;
+    lbl_8030FB60[185] = fn_800A44C0;
+    lbl_8030FB60[189] = fn_800E4264;
+    lbl_8030FB60[206] = fn_8010BC90;
+    lbl_8030FB60[239] = fn_800DE19C;
+    lbl_8030FB60[177] = fn_800DAF5C;
+    lbl_8030FB60[154] = fn_80110C70;
+    lbl_8030FB60[155] = fn_800A44C0;
+    lbl_8030FB60[217] = fn_800DE19C;
+    lbl_8030FB60[93] = fn_800DF1F4;
+    lbl_8030FB60[94] = fn_800DF1F4;
+    lbl_8030FB60[95] = fn_800DF1F4;
+    lbl_8030FB60[164] = fn_800DF1F4;
+    lbl_8030FB60[96] = fn_800DF1F4;
+    lbl_8030FB60[30] = fn_800DF1F4;
+    lbl_8030FB60[31] = fn_800DF1F4;
+    lbl_8030FB60[202] = fn_800DF1F4;
+    lbl_8030FB60[200] = fn_800DF1F4;
+    lbl_8030FB60[66] = fn_800DF1F4;
+    lbl_8030FB60[172] = fn_800DF1F4;
+    lbl_8030FB60[238] = fn_800DF1F4;
+    lbl_8030FB60[173] = fn_800DF1F4;
+    lbl_8030FB60[175] = fn_800DF1F4;
+    lbl_8030FB60[174] = fn_800DF1F4;
+    lbl_8030FB60[181] = fn_800DF1F4;
+    lbl_8030FB60[186] = fn_800DF1F4;
+    lbl_8030FB60[183] = fn_800DF1F4;
+    lbl_8030FB60[182] = fn_800DF1F4;
+    lbl_8030FB60[184] = fn_800DF1F4;
+    lbl_8030FB60[234] = fn_800DF1F4;
+    lbl_8030FB60[247] = fn_800DF1F4;
+    lbl_8030FB60[135] = fn_800DAF5C;
+    lbl_8030FB60[191] = fn_800DAF5C;
+    lbl_8030FB60[196] = fn_800C3A4C;
+    lbl_8030FB60[225] = fn_8009A344;
+    lbl_8030FB60[235] = fn_800C3A4C;
+    lbl_8030FB60[210] = fn_800C3A4C;
+    lbl_8030FB60[197] = fn_800C3A4C;
+    lbl_8030FB60[195] = fn_800C3A4C;
+    lbl_8030FB60[224] = fn_800C3A4C;
+    lbl_8030FB60[228] = fn_800C3A4C;
+    lbl_8030FB60[230] = fn_800C3A4C;
+    lbl_8030FB60[229] = fn_800C3A4C;
+    lbl_8030FB60[237] = fn_800C3A4C;
+    lbl_8030FB60[79] = fn_800DF1F4;
+    lbl_8030FB60[25] = fn_800DF1F4;
+    lbl_8030FB60[49] = fn_800DF1F4;
+    lbl_8030FB60[52] = fn_800DF1F4;
+    lbl_8030FB60[55] = fn_800DF1F4;
+    lbl_8030FB60[50] = fn_800DF1F4;
+    lbl_8030FB60[53] = fn_800DF1F4;
+    lbl_8030FB60[54] = fn_800DF1F4;
+    lbl_8030FB60[51] = fn_800DF1F4;
+    lbl_8030FB60[106] = fn_800DF1F4;
+    lbl_8030FB60[107] = fn_800DF1F4;
+    lbl_8030FB60[243] = fn_800DF1F4;
+    lbl_8030FB60[59] = fn_800DF1F4;
+    lbl_8030FB60[60] = fn_800DF1F4;
+    lbl_8030FB60[56] = fn_800DF1F4;
+    lbl_8030FB60[61] = fn_800DF1F4;
+    lbl_8030FB60[150] = fn_800DF1F4;
+    lbl_8030FB60[149] = fn_800DF1F4;
+    lbl_8030FB60[151] = fn_800DF1F4;
+    lbl_8030FB60[148] = fn_800DF1F4;
+    lbl_8030FB60[147] = fn_800DF1F4;
+    lbl_8030FB60[146] = fn_800DF1F4;
+    lbl_8030FB60[62] = fn_800DF1F4;
+    lbl_8030FB60[63] = fn_800DF1F4;
+    lbl_8030FB60[214] = fn_80089E70;
+    lbl_8030FB60[161] = fn_800DF1F4;
+    lbl_8030FB60[144] = fn_800CBBAC;
+    lbl_8030FB60[10] = fn_80093D20;
+    lbl_8030FB60[123] = fn_800DF1F4;
+    lbl_8030FB60[120] = fn_800DF1F4;
+    lbl_8030FB60[121] = fn_800DF1F4;
+    lbl_8030FB60[119] = fn_800DF1F4;
+    lbl_8030FB60[125] = fn_800DF1F4;
+    lbl_8030FB60[118] = fn_800DF1F4;
+    lbl_8030FB60[131] = fn_800DF1F4;
+    lbl_8030FB60[130] = fn_800DF1F4;
+    lbl_8030FB60[124] = fn_800DF1F4;
+    lbl_8030FB60[122] = fn_800DF1F4;
+    lbl_8030FB60[231] = fn_800DF1F4;
+    lbl_8030FB60[233] = fn_800DF1F4;
+    lbl_8030FB60[241] = fn_800DF1F4;
+    lbl_8030FB60[242] = fn_800DF1F4;
+    lbl_8030FB60[143] = fn_800CBBAC;
 }
 
 extern "C" void fn_800B4D7C(void)
@@ -12561,7 +12710,7 @@ unsigned int fn_801E1954(void);
 int fn_801E195C(int a);
 void fn_800B5150(Object_80039F5C *p);
 short fn_800B51D8(Object_800670B4 *p, int index, int mode);
-void fn_800B5C68(Object_80039F5C *p, Vector_80039F5C *pVector, int *pA, int *pB);
+void fn_800B5C68(Object_80039F5C *p, Input_800B6D34 *pInput, int *pA, int *pB);
 int fn_800B5FEC(Object_80039F5C *p);
 void fn_800B64C4(void);
 Object_80039F5C *fn_800B6544(int index);
@@ -12701,21 +12850,21 @@ extern "C" int fn_800B56C4(Object_80039F5C *p, Input_800B6D34 *pInput, int a)
     return result;
 }
 
-extern "C" int fn_800B5F94(Object_80039F5C *p, Vector_80039F5C *pVector)
+extern "C" int fn_800B5F94(Object_80039F5C *p, Input_800B6D34 *pInput)
 {
     int a;
     int b;
 
-    fn_800B5C68(p, pVector, &a, &b);
+    fn_800B5C68(p, pInput, &a, &b);
     return a;
 }
 
-extern "C" int fn_800B5FC0(Object_80039F5C *p, Vector_80039F5C *pVector)
+extern "C" int fn_800B5FC0(Object_80039F5C *p, Input_800B6D34 *pInput)
 {
     int a;
     int b;
 
-    fn_800B5C68(p, pVector, &a, &b);
+    fn_800B5C68(p, pInput, &a, &b);
     return b;
 }
 
