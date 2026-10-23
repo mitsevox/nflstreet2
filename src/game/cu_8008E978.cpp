@@ -669,7 +669,7 @@ extern "C" int fn_800926F4(void)
     return result;
 }
 
-extern "C" int fn_8009274C(int index)
+extern "C" int fn_8009274C(unsigned char index)
 {
     Character_80093BCC *pCharacter = &lbl_803EC924->mUnknown80.mCharacters[index];
     int result = 0;
