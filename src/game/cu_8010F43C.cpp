@@ -213,9 +213,9 @@ extern "C" int fn_8010F43C(Object_80039F5C *p)
         pState->mUnknown0 = p->mUnknown528.mUnknown0;
         pState->mUnknown4 = p->mMotion.mFacing;
         pState->mUnknown8 = p->mMotion.mFacing;
+        pState->mUnknown12 = 0;
         pState->mUnknown21 = 0;
         pState->mUnknown22 = p->mUnknown528.mUnknown15;
-        pState->mUnknown12 = 0;
         p->mUnknown512.mUnknown0 = p->mUnknown528.mUnknown0;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown14 = 1;
@@ -452,11 +452,14 @@ extern "C" void fn_801100E8(Object_80039F5C *p)
     fn_8009BD60(p);
     switch (p->mpState->mUnknown2) {
     case 1:
-    default:
         side = 6;
         break;
     case 2:
         side = 3;
+        break;
+    case 0:
+    default:
+        side = 6;
         break;
     }
     if (p->mUnknown776 == 1) {
@@ -652,10 +655,12 @@ extern "C" int fn_80110B00(Object_80039F5C *p)
         pState->mUnknown4 = (short)(pState->mUnknown4 - 1);
         if (pState->mUnknown4 > 0) {
             fn_800B6D34(p, &input);
-            if (input.mUnknown4 < 0.0f) {
-                p->mpState->mUnknown2 = 1;
-            } else if (input.mUnknown4 > 0.0f) {
-                p->mpState->mUnknown2 = 2;
+            if (input.mUnknown4 != 0.0f) {
+                if (input.mUnknown4 < 0.0f) {
+                    p->mpState->mUnknown2 = 1;
+                } else {
+                    p->mpState->mUnknown2 = 2;
+                }
             } else if (input.mUnknown0 & 4) {
                 p->mpState->mUnknown2 = 1;
             } else if (input.mUnknown0 & 8) {
