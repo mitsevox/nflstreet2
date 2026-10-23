@@ -119,12 +119,10 @@ int fn_80120A50(Point_8017886C *p, Point_8017886C *pA, Point_8017886C *pB, Point
     float d0 = p->mX * (pC->mY - pB->mY) + pC->mX * (pB->mY - p->mY) + pB->mX * (p->mY - pC->mY);
     float d1 = pB->mX * (p->mY - pA->mY) + p->mX * (pA->mY - pB->mY) + pA->mX * (pB->mY - p->mY);
     float d2 = pA->mX * (pB->mY - pC->mY) + pB->mX * (pC->mY - pA->mY) + pC->mX * (pA->mY - pB->mY);
-    float d3 = p->mX * (pC->mY - pA->mY) + pC->mX * (pA->mY - p->mY) + pA->mX * (p->mY - pC->mY);
+    float d3 = pC->mX * (pA->mY - p->mY) + pA->mX * (p->mY - pC->mY) + p->mX * (pC->mY - pA->mY);
 
-    if (d0 >= 0.0f && d1 >= 0.0f && d2 >= 0.0f && d3 >= 0.0f) {
-        return 1;
-    }
-    if (d0 <= 0.0f && d1 <= 0.0f && d2 <= 0.0f && d3 <= 0.0f) {
+    if ((d0 >= 0.0f && d1 >= 0.0f && d2 >= 0.0f && d3 >= 0.0f)
+        || (d0 <= 0.0f && d1 <= 0.0f && d2 <= 0.0f && d3 <= 0.0f)) {
         return 1;
     }
     return 0;
