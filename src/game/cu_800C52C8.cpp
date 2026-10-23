@@ -742,7 +742,7 @@ extern "C" int fn_800C6DF8(Object_80039F5C *p, Object_80039F5C *pOther, int type
 
         pBlock->mUnknown59 = 0;
         pBlock->mUnknown56[1] = query.mUnknown54;
-        pOther->mUnknown1216[1] = pBlock->mUnknown56[1];
+        pOther->mUnknown1160Wide.mUnknown56[1] = pBlock->mUnknown56[1];
     }
     return result;
 }

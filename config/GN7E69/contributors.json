@@ -29500,21 +29500,6 @@
       }
     },
     {
-      "source": "src/game/cu_800C2150.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x800C38C4"
-      ],
-      "provenance": {
-        "pull_request": 1072,
-        "merged_via": 1072,
-        "commit": "269ac703e0c67fe3d709eb899b6b8351969a8209",
-        "introduced_blob": "11c20019be79f6268b2af70f344cceca86a43382"
-      }
-    },
-    {
       "source": "src/game/cu_800C47EC.cpp",
       "contributors": [
         "mitsevox"
