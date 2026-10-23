@@ -109,6 +109,8 @@ extern "C" void fn_800BE944(int index, int a, unsigned int msg, float value)
 {
     if (fn_800B65A0(index) == a) {
         switch (msg) {
+        case 134:
+            break;
         case 132:
             fn_800BE8E4(index);
             lbl_803EABA8->mSlots[index].mUnknown10 = value;
@@ -117,8 +119,6 @@ extern "C" void fn_800BE944(int index, int a, unsigned int msg, float value)
             fn_800BE8E4(index);
             lbl_803EABA8->mSlots[index].mUnknown10 = value;
             lbl_803EABA8->mSlots[index].mUnknown14 = value == 1.0f && lbl_803EABA8->mSlots[index].mUnknown0 == 4;
-            break;
-        case 134:
             break;
         case 53:
             if (lbl_803EABA8->mSlots[index].mUnknown18 == 0 && lbl_803EABA8->mSlots[index].mUnknown19 == 0
