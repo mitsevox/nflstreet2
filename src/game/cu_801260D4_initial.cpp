@@ -217,13 +217,13 @@ void fn_801269B8(Object_80039F5C *p, State_801297F8 *state, float unusedDistance
             step = (int)((1.0f - weight) * 3728270.0f);
             if (mode && inside) {
                 int chosen = ((a - heading) & 0xFFFFFF) <= 0x7FFFFF ? a : b;
-                step += fn_801CFFD0(chosen, heading);
+                step += fn_801CFFD0(chosen, state->mUnknown8);
             }
         } else {
             step = (int)(-((1.0f - weight) * 3728270.0f));
             if (mode && inside) {
                 int chosen = ((a - heading) & 0xFFFFFF) > 0x800000 ? a : b;
-                step -= fn_801CFFD0(chosen, heading);
+                step -= fn_801CFFD0(chosen, state->mUnknown8);
             }
         }
         int difference = fn_801CFFD0(state->mUnknown8 + step, p->mMotion.mFacing);
