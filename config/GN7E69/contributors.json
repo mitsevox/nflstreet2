@@ -29448,8 +29448,8 @@
       "provenance": {
         "pull_request": 1074,
         "merged_via": 1074,
-        "commit": "2fe56d8d520718eddcc8e4103d5047bb18073bf2",
-        "introduced_blob": "5deb9121b6ba5f4447ae3931a8267492306780df"
+        "commit": "d26fdc8494094bd9d4b0d3bac88164170c4282c5",
+        "introduced_blob": "628f7691a6f2391578b78a01ac275cfd0fb1a1db"
       }
     },
     {
@@ -29490,15 +29490,13 @@
         "mitsevox"
       ],
       "functions": [
-        "0x80094B34",
-        "0x8009B720",
-        "0x8009FD7C"
+        "0x80094B34"
       ],
       "provenance": {
         "pull_request": 1074,
         "merged_via": 1074,
-        "commit": "2fe56d8d520718eddcc8e4103d5047bb18073bf2",
-        "introduced_blob": "ef92c02a1e112cd2054d0581e927821f6d7c4177"
+        "commit": "d26fdc8494094bd9d4b0d3bac88164170c4282c5",
+        "introduced_blob": "0169b1cdab15c4c131e0231692f01ab30810f238"
       }
     }
   ],
