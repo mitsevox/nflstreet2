@@ -2,6 +2,7 @@
 #include "game/Block_800DE3B0.h"
 #include "game/Class_80297C60.h"
 #include "game/Command_800CEE74.h"
+#include "game/Object_8003DEC4.h"
 #include "game/cu_8002B8F8.h"
 #include "game/cu_80136B1C.h"
 #include "game/Level_80054130.h"
@@ -30,6 +31,18 @@ int fn_800C2FDC(Block_80170E64 *p, Block_80170E64 *pOther, float *pBest, int max
                 float radiusSq);
 int fn_800CC4B0(Object_80039F5C *p);
 float fn_80178A08(void);
+int fn_800C210C(int *p, int offset, int *pValue);
+float fn_801CFB18(int angle);
+float fn_801CFB94(int angle);
+void fn_801D04C4(void);
+void fn_801D0544(void);
+void fn_801D0664(float m[4][4]);
+void fn_801D0FB8(Vector_80039F5C *pOut);
+void fn_801D11F4(int *pAngles, unsigned int order);
+float fn_802270D4(void *pV);
+void fn_802276B4(void *pOut, void *pA, void *pB);
+float fn_80227704(void *pA, void *pB);
+void fn_80227C2C(void *pOut, void *pIn);
 void fn_800BA7E8(float x, float y);
 Camera_8013F738 *fn_8013FA04(int index);
 void fn_80178370(void);
@@ -110,6 +123,11 @@ float fn_80260B1C(float);
 
 extern unsigned int lbl_802D9E90[3];
 extern Entry_800C3130 lbl_8030FF40[3][50];
+extern int lbl_802D9D10[9][3][2];
+extern int lbl_802D9DF8[2];
+extern float lbl_803EABBC;
+extern float lbl_803EABC0;
+extern float lbl_803EABC4;
 extern unsigned char lbl_803EABB8;
 extern unsigned char lbl_803EABB9;
 extern unsigned char lbl_803EABD5;
@@ -221,6 +239,117 @@ extern "C" void fn_800C1E5C(int a, unsigned int b, float c)
     pos.mX = CLAMP(pos.mX, -fn_80178A5C(), fn_80178A5C());
     pos.mY = CLAMP(pos.mY, 0.33f - fn_80178A2C(), fn_80178A2C() - 0.33f);
     fn_80137D74(pBall, &pos);
+}
+
+static const Vector_80039F5C lbl_802975E8 = { -1.0f, 0.0f, 0.0f };
+static const Vector_80039F5C lbl_802975F4 = { 0.0f, 0.0f, -1.0f };
+
+extern "C" void fn_800C2150(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, int a)
+{
+    Vector_80039F5C pos;
+    int dir[3];
+    Vector_80039F5C vel;
+    Vector_80039F5C acc;
+    Vector_80039F5C side = lbl_802975E8;
+    Vector_80039F5C back = lbl_802975F4;
+    int angles[3];
+    int target[3];
+    Vector_80039F5C v;
+    float speed;
+    float dotSide;
+    float dotBack;
+    float pitch;
+    float roll;
+    unsigned int i;
+
+    if (a == 0) {
+        pBlock->mUnknown2 = 0;
+        return;
+    }
+    fn_801D04C4();
+    fn_801D0664(pPlayer->mUnknown44.mUnknown52[pBlock->mUnknown1]);
+    fn_80227C2C(&back, &back);
+    fn_80227C2C(&side, &side);
+    fn_801D0FB8(&pos);
+    fn_801D11F4(dir, 0);
+    if (pBlock->mUnknown2 == 0) {
+        pBlock->mUnknown4[0] = pos.mX;
+        pBlock->mUnknown4[1] = pos.mY;
+        pBlock->mUnknown4[2] = pos.mZ;
+        pBlock->mUnknown28[0] = dir[0];
+        pBlock->mUnknown28[1] = dir[1];
+        pBlock->mUnknown28[2] = dir[2];
+    }
+    fn_802276B4(&vel, &pos, pBlock->mUnknown4);
+    if (pBlock->mUnknown2 == 0) {
+        pBlock->mUnknown16[0] = vel.mX;
+        pBlock->mUnknown16[1] = vel.mY;
+        pBlock->mUnknown16[2] = vel.mZ;
+    }
+    fn_802276B4(&acc, &vel, pBlock->mUnknown16);
+    speed = fn_802270D4(&acc);
+    dotSide = -fn_80227704(&acc, &side);
+    dotBack = -fn_80227704(&acc, &back);
+    v.mX = 0.0f;
+    v.mY = fn_801CFB18(pBlock->mUnknown28[0]);
+    v.mZ = -fn_801CFB94(pBlock->mUnknown28[0]);
+    fn_80227C2C(&v, &v);
+    pitch = -lbl_803EABC0 * v.mZ;
+    v.mX = -fn_801CFB94(pBlock->mUnknown28[2]);
+    v.mY = fn_801CFB18(pBlock->mUnknown28[2]);
+    v.mZ = 0.0f;
+    fn_80227C2C(&v, &v);
+    roll = -lbl_803EABC0 * v.mZ;
+    fn_801D0544();
+    target[0] = (int)(speed * dotBack * lbl_803EABBC * 46603.37890625f) + (int)(pitch * 46603.37890625f);
+    target[1] = 0;
+    target[2] = (int)(speed * dotSide * lbl_803EABBC * 46603.37890625f) + (int)(roll * 46603.37890625f);
+    for (i = 0; i < 9; i++) {
+        if (pBlock->mUnknown2 == 0) {
+            pBlock->mUnknown40[i][0] = (short)pBlock->mUnknown312->mUnknown1040[(i + 1) * 2][0] << 8;
+            pBlock->mUnknown40[i][1] = (short)pBlock->mUnknown312->mUnknown1040[(i + 1) * 2][1] << 8;
+            pBlock->mUnknown40[i][2] = (short)pBlock->mUnknown312->mUnknown1040[(i + 1) * 2][2] << 8;
+            pBlock->mUnknown148[i][0] = 0;
+            pBlock->mUnknown148[i][1] = 0;
+            pBlock->mUnknown148[i][2] = 0;
+        }
+        angles[0] = pBlock->mUnknown40[i][0] + pBlock->mUnknown148[i][0];
+        angles[1] = pBlock->mUnknown40[i][1] + pBlock->mUnknown148[i][1];
+        angles[2] = pBlock->mUnknown40[i][2] + pBlock->mUnknown148[i][2];
+        pBlock->mUnknown148[i][0] = (int)(pBlock->mUnknown148[i][0] * lbl_803EABC4 + target[0]);
+        pBlock->mUnknown148[i][1] = (int)(pBlock->mUnknown148[i][1] * lbl_803EABC4 + target[1]);
+        pBlock->mUnknown148[i][2] = (int)(pBlock->mUnknown148[i][2] * lbl_803EABC4 + target[2]);
+        fn_800C210C(lbl_802D9DF8, 0, &pBlock->mUnknown148[i][0]);
+        fn_800C210C(lbl_802D9DF8, 0, &pBlock->mUnknown148[i][1]);
+        fn_800C210C(lbl_802D9DF8, 0, &pBlock->mUnknown148[i][2]);
+        if (fn_800C210C(lbl_802D9D10[i][0], 0, &angles[0])) {
+            pBlock->mUnknown148[i][0] = 0;
+        }
+        if (fn_800C210C(lbl_802D9D10[i][1], 0, &angles[1])) {
+            pBlock->mUnknown148[i][1] = 0;
+        }
+        if (fn_800C210C(lbl_802D9D10[i][2], 0, &angles[2])) {
+            pBlock->mUnknown148[i][2] = 0;
+        }
+        pBlock->mUnknown256.mUnknown48[(i + 1) * 6 + 0] = angles[0] >> 8;
+        pBlock->mUnknown256.mUnknown48[(i + 1) * 6 + 1] = angles[1] >> 8;
+        pBlock->mUnknown256.mUnknown48[(i + 1) * 6 + 2] = angles[2] >> 8;
+        pBlock->mUnknown40[i][0] = angles[0];
+        pBlock->mUnknown40[i][1] = angles[1];
+        pBlock->mUnknown40[i][2] = angles[2];
+    }
+    pBlock->mUnknown16[0] = vel.mX;
+    pBlock->mUnknown16[1] = vel.mY;
+    pBlock->mUnknown16[2] = vel.mZ;
+    pBlock->mUnknown4[0] = pos.mX;
+    pBlock->mUnknown4[1] = pos.mY;
+    pBlock->mUnknown4[2] = pos.mZ;
+    pBlock->mUnknown28[0] = dir[0];
+    pBlock->mUnknown28[1] = dir[1];
+    pBlock->mUnknown28[2] = dir[2];
+    if (pBlock->mUnknown2 == 0) {
+        pBlock->mUnknown2 = 1;
+    }
 }
 
 extern "C" Entry_800C3130 *fn_800C31E4(Object_80039F5C *p, float *pDistance, int maxAngle, float range,
