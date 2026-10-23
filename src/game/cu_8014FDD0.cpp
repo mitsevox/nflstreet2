@@ -9,6 +9,7 @@ unsigned int fn_8014F474(Class_80148A58 *p, Object_80039F5C *pPlayer);
 int fn_8014FDD0(Class_802A2B68 *p, int kind, int team, int index,
                Object_80039F5C *pPlayer, int threshold, int mode)
 {
+    int answer = 0;
     int original = p->vfn_30(kind, team, index, pPlayer);
     int result = 0;
     bool found = false;
@@ -29,9 +30,9 @@ int fn_8014FDD0(Class_802A2B68 *p, int kind, int team, int index,
         }
     }
     if ((mode == 0 && result > threshold) || (mode == 1 && result < threshold)) {
-        return original == result;
+        answer = original == result;
     }
-    return 0;
+    return answer;
 }
 
 int fn_8014FF34(Class_802A2B68 *p)

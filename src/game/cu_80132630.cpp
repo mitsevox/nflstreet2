@@ -44,7 +44,7 @@ int fn_801787A0(void);
 int fn_8009FB60(Object_80039F5C *);
 int fn_8011F524(void);
 int fn_8011F2C4(void);
-int fn_8010A2DC(Object_80039F5C *, int, int);
+int fn_8010A2DC(Object_80039F5C *, int, short);
 int fn_80178C9C(void);
 int fn_800BA6F8(void);
 int fn_800BAA24(void);

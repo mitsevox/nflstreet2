@@ -11,6 +11,7 @@
 #include "game/fn_801FCE10.h"
 #include "game/Object_8020E52C.h"
 #include "game/Object_80233EAC.h"
+#include "game/Object_80235588.h"
 #include "game/QueryStatus.h"
 
 typedef struct Entry_802FB300 {
@@ -164,22 +165,6 @@ typedef struct Owner_80235328 {
     char mUnknown0[8];
     Source_80235328 *mpUnknown8;
 } Owner_80235328;
-
-typedef struct Flags_802353D8 {
-    int mUnknown0;
-} Flags_802353D8;
-
-typedef struct Render_802353F8 {
-    int mUnknown0;
-    int mUnknown4;
-    char mUnknown8[76];
-    int mUnknown84;
-    int mUnknown88;
-    char mUnknown92[8];
-    char mUnknown100[52];
-    char mUnknown152[32];
-    int mUnknown184;
-} Render_802353F8;
 
 typedef struct Cache_8022F8A8 {
     unsigned short mUnknown0;
@@ -1765,21 +1750,21 @@ void fn_802353D0(void *p)
 {
 }
 
-void fn_802353D4(void)
+void fn_802353D4(Object_80235588 *p, int flags)
 {
 }
 
-void fn_802353D8(Flags_802353D8 *p, int flags)
+void fn_802353D8(Object_80235588 *p, int flags)
 {
     p->mUnknown0 |= flags;
 }
 
-void fn_802353E8(Flags_802353D8 *p, int flags)
+void fn_802353E8(Object_80235588 *p, int flags)
 {
     p->mUnknown0 &= ~flags;
 }
 
-void fn_802353F8(Render_802353F8 *p, int flags)
+void fn_802353F8(Object_80235588 *p, int flags)
 {
     int old = p->mUnknown4;
 
@@ -1814,14 +1799,14 @@ void fn_802353F8(Render_802353F8 *p, int flags)
     if (old != p->mUnknown4) {
         fn_802144AC(p->mUnknown152);
         if (p->mUnknown4 == -1) {
-            fn_8020F96C(p->mUnknown100, p->mUnknown152, -1, -1);
+            fn_8020F96C(&p->mUnknown100, p->mUnknown152, -1, -1);
         } else {
-            fn_8020F96C(p->mUnknown100, p->mUnknown152, 0, p->mUnknown4);
+            fn_8020F96C(&p->mUnknown100, p->mUnknown152, 0, p->mUnknown4);
         }
     }
 }
 
-void fn_80235510(Render_802353F8 *p, int mode)
+void fn_80235510(Object_80235588 *p, int mode)
 {
     int old = p->mUnknown4;
 
@@ -1829,20 +1814,20 @@ void fn_80235510(Render_802353F8 *p, int mode)
     if (old != mode) {
         fn_802144AC(p->mUnknown152);
         if (p->mUnknown4 == -1) {
-            fn_8020F96C(p->mUnknown100, p->mUnknown152, -1, -1);
+            fn_8020F96C(&p->mUnknown100, p->mUnknown152, -1, -1);
         } else {
-            fn_8020F96C(p->mUnknown100, p->mUnknown152, 0, p->mUnknown4);
+            fn_8020F96C(&p->mUnknown100, p->mUnknown152, 0, p->mUnknown4);
         }
     }
 }
 
-void fn_80235588(Render_802353F8 *p, int a)
+void fn_80235588(Object_80235588 *p, int a)
 {
     p->mUnknown0 = 0x4000;
     p->mUnknown4 = -1;
-    p->mUnknown88 = 0;
-    p->mUnknown84 = 0;
+    p->mpUnknown88 = 0;
+    p->mpUnknown84 = 0;
     p->mUnknown184 = 0;
-    fn_8020F28C(p->mUnknown100);
+    fn_8020F28C(&p->mUnknown100);
     fn_80210054(p->mUnknown92, 0);
 }

@@ -26,7 +26,7 @@ void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Obje
 int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_801067D8(Object_80039F5C *p);
-int fn_8010A2DC(Object_80039F5C *p, int a, int b);
+int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 void fn_8011F45C(int a);
@@ -168,6 +168,13 @@ extern "C" Object_80039F5C *fn_801316F0(Object_80039F5C *p, int angle, float max
     return pOther;
 }
 
+/* True when the spot is more than 5.0f short of the goal line value
+   fn_80178A2C returns. */
+static inline int IsShortOfGoal(Point_8017886C spot)
+{
+    return spot.mY < fn_80178A2C() - 5.0f;
+}
+
 extern "C" int fn_801317F8(Object_80039F5C *p, Control_80132090 *pControl)
 {
     int result = 0;
@@ -206,13 +213,11 @@ extern "C" int fn_801317F8(Object_80039F5C *p, Control_80132090 *pControl)
             }
         } else {
             int flag = 0;
-            Point_8017886C spot;
-            float limit;
 
-            spot = fn_80177FE0();
-            limit = fn_80178A2C() - 5.0f;
-            if (spot.mY < limit && fn_8013141C(p)) {
-                flag = own < 12.0f;
+            if (IsShortOfGoal(fn_80177FE0())) {
+                if (fn_8013141C(p)) {
+                    flag = own < 12.0f;
+                }
             }
             if (flag) {
                 result = 6;

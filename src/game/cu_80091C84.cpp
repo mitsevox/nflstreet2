@@ -1,7 +1,7 @@
 #include "game/cu_8008E978.h"
 
 extern "C" {
-Object_80039F5C *fn_8008FF28(Character_80093BCC *pCharacter, Actor_801C009C *pActor);
+Object_80039F5C *fn_8008FF28(Params_80092E54 *pRequest, Actor_801C009C *pActor);
 int fn_800E0188(Object_80039F5C *p, float *pA, float *pB);
 }
 

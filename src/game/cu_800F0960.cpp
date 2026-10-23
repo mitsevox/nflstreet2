@@ -627,7 +627,7 @@ void fn_800D7A0C(Object_80039F5C *p, int a);
 int fn_800E815C(Object_80039F5C *p, int a, int b);
 int fn_800E98A4(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_800F2C1C(Object_80039F5C *p, int a);
-int fn_8010A2DC(Object_80039F5C *p, int a, int b);
+int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 int fn_80113088(Object_80039F5C *p);
 int fn_80113604(Object_80039F5C *p);
 Object_80039F5C *fn_80114E7C(Object_80039F5C *p);

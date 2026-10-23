@@ -8,6 +8,7 @@
 #include "game/fn_801FCE10.h"
 #include "game/fn_80238174.h"
 #include "game/fn_800B65A0.h"
+#include "game/fn_80177FE0.h"
 
 #include "game/Team_80167A8C.h"
 
@@ -35,9 +36,9 @@ unsigned char fn_80087DA4(Object_8007A334 *pCursor, int column);
 unsigned char fn_8008973C(int index);
 void fn_800B508C(unsigned char index);
 int fn_800BA6F8(void);
-QueryCursor fn_800C0750(unsigned char index, unsigned short *pValues);
+QueryCursor fn_800C0750(int index, unsigned short *pValues);
 void fn_800C07C4(QueryCursor cursor);
-void fn_800C07F0(QueryCursor cursor, unsigned char index, unsigned short *pValues);
+void fn_800C07F0(QueryCursor cursor, int index, unsigned short *pValues);
 int fn_80164ED8(Object_800670B4 *pObject, Record_80067338 *pRecord, int index, unsigned char *pOut, unsigned char flag);
 int fn_80165000(Object_800670B4 *pObject, Record_80067338 *pRecord, int index, unsigned char *pOut, unsigned char flag);
 void fn_80167794(signed char team, int a, int b);
@@ -46,7 +47,6 @@ int fn_8016BAD8(int team);
 int fn_801485D4(void);
 int fn_801486A0(void);
 int fn_80177F70(void);
-Point_80167910 fn_80177FE0(void);
 int fn_80178308(void);
 float fn_80178A2C(void);
 int fn_80178E10(void);
@@ -83,7 +83,7 @@ void fn_801684B8(int a);
 void fn_80168640(int team, int kind);
 Object_800670B4 *fn_80168708(int team);
 Record_80067338 *fn_80168730(int team);
-void fn_80168744(int team, unsigned int a, unsigned int b, unsigned int c);
+void fn_80168744(unsigned char team, unsigned char a, unsigned char b, unsigned char c);
 void fn_801687E4(int team, int a, int b, int c);
 unsigned int fn_80168898(int team);
 unsigned int fn_801688AC(int team);
@@ -462,7 +462,7 @@ Record_80067338 *fn_80168730(int team)
     return &lbl_803ECAF4->mUnknown4[team].mUnknown1E28.mUnknownCF8;
 }
 
-void fn_80168744(int team, unsigned int a, unsigned int b, unsigned int c)
+void fn_80168744(unsigned char team, unsigned char a, unsigned char b, unsigned char c)
 {
     State_80167A8C *pState = &lbl_803ECAF4->mUnknown4[team].mUnknown20;
 
@@ -491,7 +491,7 @@ void fn_801687E4(int team, int a, int b, int c)
 
         if (mode == 4 || mode == 6) {
             State_80167A8C *pState = &lbl_803ECAF4->mUnknown4[team].mUnknown20;
-            Point_80167910 point;
+            Point_8017886C point;
 
             point = fn_80177FE0();
 
@@ -642,8 +642,8 @@ void fn_80168C40(void)
         QueryCursor cursor;
 
         fn_801679F4(team, 1);
-        cursor = fn_800C0750(team, values);
-        fn_800C07F0(cursor, team, values);
+        cursor = fn_800C0750((unsigned char)team, values);
+        fn_800C07F0(cursor, (unsigned char)team, values);
         fn_800C07C4(cursor);
         fn_800B508C(team);
     }

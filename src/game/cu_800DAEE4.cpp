@@ -883,7 +883,7 @@ int fn_801CFE40(float y, float x);
 void fn_8003AB08(Object_80039F5C *p, int a);
 void fn_8003E174(int a);
 int fn_80027DF0(void);
-void fn_8010A2DC(Object_80039F5C *p, int a, int b);
+int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
 void fn_8013AD04(Object_80137ABC *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
 Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float a, float b, int facing);
