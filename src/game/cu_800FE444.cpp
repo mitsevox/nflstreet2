@@ -391,71 +391,130 @@ int fn_800FEFD4(Object_80039F5C *p)
 
 int fn_800FF094(Object_80039F5C *p)
 {
-    int mode=fn_800AD9B4(),special=mode==4;
-    State_800FDA58 *s=(State_800FDA58 *)&p->mUnknown336;
-    Point_8017886C point={s->mUnknown8,s->mUnknown12},delta;
-    fn_800FE444(p,s->mUnknown16,&point,s->mUnknown28);
-    float distance=fn_8022781C(&s->mUnknown8,&p->mMotion.mPos);
-    float speed=fn_800FEDBC(s,p,distance);
-    switch(s->mUnknown2) {
+    int mode = fn_800AD9B4();
+    int special = mode == 4;
+    State_800FDA58 *s = (State_800FDA58 *)&p->mUnknown336;
+    Point_8017886C point;
+    Point_8017886C delta;
+    float distance;
+    float speed;
+    float limit;
+    int angle;
+
+    point.mX = s->mUnknown8;
+    point.mY = s->mUnknown12;
+    fn_800FE444(p, s->mUnknown16, &point, s->mUnknown28);
+    distance = fn_8022781C(&s->mUnknown8, &p->mMotion.mPos);
+    speed = fn_800FEDBC(s, p, distance);
+    switch (s->mUnknown2) {
     case 0:
-        if(--s->mUnknown0<1) {
-            s->mUnknown0=0;fn_800FE9B4(p,&point,&s->mUnknown24);fn_800FEB60(p,&point,&s->mUnknown24);
-            fn_80227690(&delta,&point,&p->mMotion.mPos);fn_801CFE40(delta.mY,delta.mX);s->mUnknown2=3;
+        if (--s->mUnknown0 <= 0) {
+            s->mUnknown0 = 0;
+            fn_800FE9B4(p, &point, &s->mUnknown24);
+            fn_800FEB60(p, &point, &s->mUnknown24);
+            fn_80227690(&delta, &point, &p->mMotion.mPos);
+            fn_801CFE40(delta.mY, delta.mX);
+            s->mUnknown2 = 3;
         }
         break;
-    case 1:case 2:
-        if(p->mFlags&4) {
-            p->mFlags&=~4;p->mMotion.mUnknown28=0.0f;s->mUnknown2=s->mUnknown3Byte;s->mUnknown3Byte=0;
-        } else if(fn_801BE648(p->mpUnknown792)!=100) {
-            s->mUnknown2=s->mUnknown3Byte;s->mUnknown3Byte=0;
+    case 1:
+    case 2:
+        if (p->mFlags & 4) {
+            p->mFlags &= ~4;
+            p->mMotion.mUnknown28 = 0.0f;
+            s->mUnknown2 = s->mUnknown3Byte;
+            s->mUnknown3Byte = 0;
+        } else if (fn_801BE648(p->mpUnknown792) == 100) {
+            if (s->mUnknown2 == 2) {
+                p->mUnknown512.mUnknown14 = 7;
+                p->mUnknown512.mUnknown0 = 1.5f;
+                p->mUnknown512.mUnknown4 = s->mUnknown4;
+                p->mUnknown512.mUnknown8 = s->mUnknown4;
+            } else {
+                p->mUnknown512.mUnknown14 = 6;
+                p->mUnknown512.mUnknown0 = 1.0f;
+                p->mUnknown512.mUnknown4 = s->mUnknown4;
+                p->mUnknown512.mUnknown8 = s->mUnknown4;
+            }
         } else {
-            p->mUnknown512.mUnknown14=s->mUnknown2==2?7:6;
-            p->mUnknown512.mUnknown0=s->mUnknown2==2?1.5f:1.0f;
-            p->mUnknown512.mUnknown4=p->mUnknown512.mUnknown8=s->mUnknown4;
+            s->mUnknown2 = s->mUnknown3Byte;
+            s->mUnknown3Byte = 0;
         }
         break;
     case 3:
-        if(!(distance<=3.0f)) {
-            fn_800FE9B4(p,&point,&s->mUnknown24);fn_800FEB60(p,&point,&s->mUnknown24);speed=s->mUnknown24;
-        } else if(special && p->mUnknown560.mFlags.mBytes[0]) {
-            s->mUnknown8=p->mMotion.mPos.mX;s->mUnknown12=p->mMotion.mPos.mY;
+        if (distance > 3.0f) {
+            fn_800FE9B4(p, &point, &s->mUnknown24);
+            fn_800FEB60(p, &point, &s->mUnknown24);
+            speed = s->mUnknown24;
+        } else if (special && p->mUnknown560.mFlags.mBytes[0] != 0) {
+            s->mUnknown8 = p->mMotion.mPos.mX;
+            s->mUnknown12 = p->mMotion.mPos.mY;
         }
-        if(distance>=(special?lbl_803EAE84:0.05f)) {
-            fn_80227690(&delta,&point,&p->mMotion.mPos);
-            int angle=fn_801CFE40(delta.mY,delta.mX);
-            if(speed==1.0f)p->mUnknown512.mUnknown15=1;
-            p->mUnknown512.mUnknown14=fn_80137C48(p)?1:9;
-            p->mUnknown512.mUnknown0=speed;p->mUnknown512.mUnknown4=p->mUnknown512.mUnknown8=angle;
-        } else {p->mMotion.mUnknown28=0.0f;s->mUnknown2=4;}
+        limit = special == 1 ? lbl_803EAE84 : 0.05f;
+        if (distance < limit) {
+            p->mMotion.mUnknown28 = 0.0f;
+            s->mUnknown2 = 4;
+        } else {
+            fn_80227690(&delta, &point, &p->mMotion.mPos);
+            angle = fn_801CFE40(delta.mY, delta.mX);
+            if (speed == 1.0f) {
+                p->mUnknown512.mUnknown15 = 1;
+            }
+            p->mUnknown512.mUnknown14 = fn_80137C48(p) ? 1 : 9;
+            p->mUnknown512.mUnknown0 = speed;
+            p->mUnknown512.mUnknown4 = angle;
+            p->mUnknown512.mUnknown8 = angle;
+        }
         break;
     case 4:
-        if(!special && fn_801CFFD0(s->mUnknown16,p->mMotion.mFacing)>0xB60B) {
-            if(fn_801CFFD0(p->mMotion.mFacing,s->mUnknown16)>0x155554) {
-                float ylimit=p->mIdBytes[2]==fn_80178308()?8.0f:2.0f;
-                s->mUnknown4=s->mUnknown16;p->mFlags&=~4;
-                if(mode==4 || !fn_80177F70() || !(fabsf(fn_80177FFC(p->mIdBytes[2]).mY-p->mMotion.mPos.mY)<=ylimit)) {
-                    s->mUnknown2=1;p->mUnknown512.mUnknown14=6;p->mUnknown512.mUnknown0=1.0f;
-                } else {s->mUnknown2=2;p->mUnknown512.mUnknown14=7;p->mUnknown512.mUnknown0=1.5f;}
-                p->mUnknown512.mUnknown4=p->mUnknown512.mUnknown8=s->mUnknown16;s->mUnknown3Byte=6;
+        if (special != 1 && fn_801CFFD0(s->mUnknown16, p->mMotion.mFacing) > 0xB60B) {
+            if (fn_801CFFD0(p->mMotion.mFacing, s->mUnknown16) <= 0x155554) {
+                if (p->mpState[1].mId != 87) {
+                    p->mUnknown512.mUnknown14 = 3;
+                    p->mUnknown512.mUnknown0 = 0.0f;
+                    p->mUnknown512.mUnknown4 = s->mUnknown16;
+                    p->mUnknown512.mUnknown8 = s->mUnknown16;
+                    break;
+                }
+            } else {
+                float limit = p->mIdBytes[2] == fn_80178308() ? 8.0f : 2.0f;
+
+                s->mUnknown4 = s->mUnknown16;
+                p->mFlags &= ~4;
+                if (mode == 4 || !fn_80177F70()
+                    || fabsf(fn_80177FFC(p->mIdBytes[2]).mY - p->mMotion.mPos.mY) > limit) {
+                    s->mUnknown2 = 1;
+                    p->mUnknown512.mUnknown14 = 6;
+                    p->mUnknown512.mUnknown0 = 1.0f;
+                } else {
+                    s->mUnknown2 = 2;
+                    p->mUnknown512.mUnknown14 = 7;
+                    p->mUnknown512.mUnknown0 = 1.5f;
+                }
+                p->mUnknown512.mUnknown4 = s->mUnknown16;
+                p->mUnknown512.mUnknown8 = s->mUnknown16;
+                s->mUnknown3Byte = 6;
                 break;
             }
-            if(((unsigned char *)p->mpState)[4]!=87) {
-                p->mUnknown512.mUnknown14=3;p->mUnknown512.mUnknown0=0.0f;
-                p->mUnknown512.mUnknown4=p->mUnknown512.mUnknown8=s->mUnknown16;break;
-            }
         }
-        s->mUnknown2=5;break;
+        s->mUnknown2 = 5;
+        break;
     case 5:
-        if(distance<0.05f || special) {p->mMotion.mUnknown28=0.0f;s->mUnknown2=6;}
-        else {
-            fn_80227690(&delta,&point,&p->mMotion.mPos);
-            p->mUnknown512.mUnknown4=fn_801CFE40(delta.mY,delta.mX);
-            p->mUnknown512.mUnknown14=3;p->mUnknown512.mUnknown0=speed;p->mUnknown512.mUnknown8=s->mUnknown16;
+        if (distance < 0.05f || special == 1) {
+            p->mMotion.mUnknown28 = 0.0f;
+            s->mUnknown2 = 6;
+        } else {
+            fn_80227690(&delta, &point, &p->mMotion.mPos);
+            p->mUnknown512.mUnknown4 = fn_801CFE40(delta.mY, delta.mX);
+            p->mUnknown512.mUnknown14 = 3;
+            p->mUnknown512.mUnknown8 = s->mUnknown16;
+            p->mUnknown512.mUnknown0 = speed;
         }
         break;
+    case 6:
+        break;
     }
-    return s->mUnknown2==6;
+    return s->mUnknown2 == 6;
 }
 
 void fn_800FF598(State_800FDA58 *s,Object_80039F5C *p,Point_8017886C *point,int angle,float value)
