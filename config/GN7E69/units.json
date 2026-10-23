@@ -1925,6 +1925,14 @@
     "_vt.14Class_802A2A40": {
       "address": "0x802A2A40",
       "evidence": "evidence.tsv external row for 0x802A2A40 (_vt.14Class_802A2A40)."
+    },
+    "__13Time_801E8C78": {
+      "address": "0x801E8C78",
+      "evidence": "Target constructor initializes u32+0/f32+4 and vptr+8; inferred class contract."
+    },
+    "fn_801E8D14__13Time_801E8C78f": {
+      "address": "0x801E8D14",
+      "evidence": "Target member increments u32+0/f32+4 with f1 delta; inferred member contract."
     }
   },
   "units": [
