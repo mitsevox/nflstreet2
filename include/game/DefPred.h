@@ -23,7 +23,6 @@ public:
     virtual ModuleDependency *GetLinks();
     virtual const char *GetName();
 
-private:
     DefPredStatePtr mpState;
 };
 

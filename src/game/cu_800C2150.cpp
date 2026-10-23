@@ -34,7 +34,7 @@ int fn_800C210C(int *p, int offset, int *pValue);
 float fn_801CFB18(int angle);
 float fn_801CFB94(int angle);
 float fn_80178A44(void);
-void fn_800CEED8(int key, int index, Command_800CEE74 *pRecord, Object_80039F5C *pPlayer, Vector_80039F5C *pPoint,
+void fn_800CEED8(unsigned short key, int index, Command_800CEE74 *pRecord, Object_80039F5C *pPlayer, Vector_80039F5C *pPoint,
                  int angle, Vector_80039F5C *pOut, int *pAngle, unsigned char *pValue);
 int fn_800E0F48(Vector_80039F5C *p, Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC);
 void fn_80227970(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC, Vector_80039F5C *pOut, float *pValue,
@@ -368,8 +368,7 @@ extern "C" void fn_800C3404(Object_80039F5C *p)
             }
         case 3:
             if (fabsf(p->mMotion.mPos.mX) > fn_80178A08() - 1.0f) {
-                if (fn_800C31E4(p, &distance, 0x200000, 5.0f, 1.0f) != 0) {
-                }
+                fn_800C31E4(p, &distance, 0x200000, 5.0f, 1.0f);
             }
             break;
         }
@@ -385,6 +384,9 @@ extern "C" void fn_800C34B0(void)
     unsigned int rtqg;
 
     fn_8017F584();
+    /* The 'PNIG' and 'ELQG' query strings sit in the target pool between the
+       live strings, so the original made these queries on a path the compiler
+       removed; resume is never set in this body. */
     if (resume) {
         fn_801FCE10(0, "select 'PNIG' into \x82 from 'FNIG'\n", &pnig);
         fn_801FCE10(0, "select 'ELQG' into \x82 from 'FNIG'\n", &elqg);
@@ -423,7 +425,7 @@ extern "C" void fn_800C34B0(void)
     fn_8013FA58(1, fn_801374D4());
 }
 
-extern "C" int fn_800C36A8(Object_80039F5C *p, int skip, int key, int index, Command_800CEE74 *pRecord,
+extern "C" int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int index, Command_800CEE74 *pRecord,
                            Vector_80039F5C *pPoint, int angle)
 {
     int result = 0;

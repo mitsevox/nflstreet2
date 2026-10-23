@@ -60,6 +60,9 @@
 #include "game/Record_8011F518.h"
 #include "game/cu_80136B1C.h"
 #include "game/cu_8008E978.h"
+/* The compiler emits vtables in reverse class-definition order, so these
+   headers are included in reverse target vtable order (0x80297CE8 down to
+   0x80297AB8). */
 #include "game/Class_80297CE8.h"
 #include "game/Class_80297C60.h"
 #include "game/Class_80297BF8.h"
@@ -3260,7 +3263,8 @@ extern "C" int fn_800C7720(Object_80039F5C *pOther, Object_80039F5C *p)
 
 extern "C" void fn_800C8688(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b)
 {
-    float matrix[12];
+    /* The target frame is 0x38 bytes: a 48-byte local the body never uses. */
+    float local[12];
 }
 
 extern "C" {
@@ -12036,11 +12040,6 @@ extern "C" void fn_8009A5DC(int high, int low, void *pKind, int *pHandle)
 
 
 
-struct Block_8009FF94 {
-    unsigned int mUnknown0;
-    unsigned int mUnknown4;
-};
-
 extern "C" {
 unsigned int fn_801735C8(unsigned int mask);
 void fn_8009D964(int index, int value);
@@ -12086,7 +12085,6 @@ extern Block_8009D474 *lbl_803EA9A8;
 extern int lbl_803EA9D0;
 extern int lbl_803EA9D4;
 extern int lbl_803EA9D8;
-extern Block_8009FF94 *lbl_8030C080[];
 extern Class_80297AB8 *lbl_803EA9E4;
 extern Class_80297AB8 lbl_803EC900;
 extern Block_802D7C64 lbl_802D7C64[];
@@ -12817,8 +12815,8 @@ int DefPred::Init()
 {
     DefPredState *pState = new (0) DefPredState;
 
-    pState->mUnknown0 = 0;
     mpState.mp = pState;
+    pState->mUnknown0 = 0;
     pState->mUnknown4 = 0;
     return 1;
 }
@@ -12832,22 +12830,22 @@ int DefPred::Shutdown()
 
 extern "C" void fn_8009FF94(unsigned int value)
 {
-    lbl_8030C080[0]->mUnknown0 = value;
+    gDefPred.mpState.mp->mUnknown0 = value;
 }
 
 extern "C" unsigned int fn_8009FFA4(void)
 {
-    return lbl_8030C080[0]->mUnknown0;
+    return gDefPred.mpState.mp->mUnknown0;
 }
 
 extern "C" void fn_8009FFB4(unsigned int value)
 {
-    lbl_8030C080[0]->mUnknown4 = value;
+    gDefPred.mpState.mp->mUnknown4 = value;
 }
 
 extern "C" unsigned int fn_8009FFC4(void)
 {
-    return lbl_8030C080[0]->mUnknown4;
+    return gDefPred.mpState.mp->mUnknown4;
 }
 
 extern "C" void fn_800A0230(void)
@@ -15332,7 +15330,7 @@ extern char lbl_802ED3FC[];
 extern char lbl_802ECD44[];
 }
 
-extern "C" void fn_800BDFB4(int index, unsigned int msg)
+extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
 {
     int team = fn_800B6644(index);
     int home = fn_80178308();
@@ -16692,9 +16690,9 @@ void Class_80297BF8::vfn_10(float dt)
     }
 }
 
-void Class_80297BF8::vfn_11(float value)
+void Class_80297BF8::vfn_11(float dt)
 {
-    fn_800AD910(5, value);
+    fn_800AD910(5, dt);
 }
 
 void Class_80297BF8::vfn_04(float dt)
@@ -17472,7 +17470,6 @@ extern "C" {
 Table_80089904 *fn_801BE72C(unsigned short,unsigned short);
 Object_801BBD5C *fn_801BBD5C(unsigned short,unsigned short);
 int fn_800CEA7C(Group_800CC98C *, Command_800CEE74 *, Vector_80039F5C *, int *);
-void fn_800CEED8(unsigned short,int,Command_800CEE74 *,Object_80039F5C *,Vector_80039F5C *,int,Vector_80039F5C *,int *,unsigned char *);
 }
 
 extern "C" Play_800CCEBC *fn_800CD3C0(Group_800CC98C *p, Play_800CCEBC *pOut, unsigned short *pKey)
@@ -17634,6 +17631,8 @@ extern "C" void fn_800CE804(Command_800CEE74 *p, Table_80089904 *pTable, int ind
     if (pAnchor->mUnknown12 == 2) fn_80227264(&delta, &p->mVector0, lbl_803EAC88);
     else fn_80227264(&delta, &p->mVector0, lbl_803EAC84);
     fn_8022765C(&p->mUnknown12, &p->mUnknown12, &delta);
+    /* The target stores 0.0f to delta's X after the last call (stfs f0,8(r1)
+       at 0x800CEA64); the store survives because delta's address escapes. */
     delta.mX = 0.0f;
 }
 

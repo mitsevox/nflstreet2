@@ -63,7 +63,7 @@ extern "C" void fn_800BE4C8(int a, unsigned int msg, float value)
     if (fn_800A937C()) {
         return;
     }
-    if (__builtin_fabsf(value) > 0.99999f) {
+    if (__builtin_fabsf(value) > 0.9999999f) {
         if (team != 255) {
             if (fn_800BA6F8()) {
                 switch (msg) {

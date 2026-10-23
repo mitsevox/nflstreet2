@@ -21,7 +21,7 @@ struct Record_800C432C {
 };
 
 extern "C" {
-int fn_800C36A8(Object_80039F5C *p, int skip, int key, int index, Command_800CEE74 *pRecord,
+int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int index, Command_800CEE74 *pRecord,
                 Vector_80039F5C *pPoint, int angle);
 int fn_800CD170(Point_8017886C *pA, Point_8017886C *pB, Point_8017886C *pC);
 int fn_801CFFD0(int a, int b);

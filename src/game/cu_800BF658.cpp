@@ -11,9 +11,9 @@ struct Desc_802345C4 {
 
 extern "C" {
 void fn_800BE808(int a, unsigned char index);
-void fn_800BE944(unsigned char index, int team, int kind, float value);
+void fn_800BE944(int index, int a, unsigned int msg, float value);
 void fn_8003A3F4(int a, int index);
-void fn_800BD774(unsigned char index);
+void fn_800BD774(int team, int kind);
 void fn_800BED54(unsigned char index);
 void fn_800BEFAC(int index);
 void fn_800BD830(void);
@@ -105,7 +105,7 @@ extern "C" void fn_800BF658(int index)
 
     lbl_803EABA8->mSlots[index].mUnknown1C = 1;
     fn_800BE808(team, index);
-    fn_800BE944(index, team, 132, 1.0f);
+    fn_800BE944((unsigned char)index, team, 132, 1.0f);
     fn_8003A3F4(1, index);
 }
 
@@ -119,7 +119,7 @@ extern "C" void fn_800BF72C(Class_80297CE8 *p, float dt)
         switch (pSlot->mUnknown0) {
         case 4:
         case 5:
-            fn_800BD774(i);
+            fn_800BD774((unsigned char)i, pSlot->mUnknown0);
             break;
         case 8:
             lbl_803EABAC[i] -= dt;

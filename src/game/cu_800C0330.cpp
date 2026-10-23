@@ -5,7 +5,7 @@
 #include "game/Object_80039F5C.h"
 
 extern "C" {
-void fn_800BE944(unsigned char index, int team, int kind, float value);
+void fn_800BE944(int index, int a, unsigned int msg, float value);
 void fn_8003A3F4(int a, int index);
 void fn_8017DDDC(int index);
 void fn_8017E01C(int index);
@@ -14,7 +14,7 @@ int fn_800C8744(int team);
 unsigned short fn_800C0660(unsigned short *p, int value);
 void fn_800B4DE4(QueryCursor cursor, int index, void *pData);
 void fn_800B4900(QueryCursor cursor, int index, short *pRatings, void *pOut);
-void fn_800B4798(short *pRatings, int team, unsigned char index, float *pOut);
+void fn_800B4798(short *pRatings, int team, int index, float *pOut);
 void fn_800A6F04(int team);
 
 extern char lbl_802ECD44[];
@@ -30,7 +30,7 @@ extern "C" void fn_800C0330(void *p)
             case 0:
                 break;
             case 4:
-                fn_800BE944(i, fn_800B65A0(i), 133, 0.0f);
+                fn_800BE944((unsigned char)i, fn_800B65A0(i), 133, 0.0f);
                 fn_800BEC1C(fn_800B65A0(i), (unsigned char)i);
                 fn_8003A3F4(0, i);
                 break;
@@ -81,7 +81,7 @@ extern "C" void fn_800C07F0(QueryCursor cursor, unsigned char team, unsigned sho
             fn_800B4DE4(cursor, i, &p->mUnknown2900);
             p->mUnknown508 = p->mUnknown2904Float;
             fn_800B4900(cursor, i, p->mRatings, p->mUnknown3020);
-            fn_800B4798(p->mRatings, team, index, &p->mUnknown2900);
+            fn_800B4798(p->mRatings, team, (unsigned char)index, &p->mUnknown2900);
             i++;
         }
     }
