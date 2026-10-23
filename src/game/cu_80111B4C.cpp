@@ -161,8 +161,8 @@ struct Field_8011569C {
 };
 
 extern "C" {
-int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
-                float range);
+int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, float range, void *pBlock, int b, int c,
+                int d, int e);
 int fn_800997F4(Object_80039F5C *p, Object_80137ABC *pBall, float range, void *pBlock, int a, int b, int c, int *pOutA,
                 int *pOutB);
 int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
@@ -482,6 +482,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
         if (fn_80137AD0(pBall) == p) {
             message.mId = 1;
             fn_800F053C(0, p->mpState, &message, p);
+            return 1;
         }
         return 1;
     }
@@ -509,7 +510,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
         target = fn_800997F4(p, pBall, range, state, 3, 0, 0, &value, &extra);
     }
     if (target == 0x1FFFFFFF) {
-        target = fn_80099734(p, pBall, 0, mode, state, 1, 0, 0, fn_8009A77C(p), range);
+        target = fn_80099734(p, pBall, 0, mode, range, state, 1, 0, 0, fn_8009A77C(p));
     }
     if (target != 0x1FFFFFFF) {
         int result;
@@ -539,7 +540,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
             }
             if (flag) {
                 found = 1;
-                target = fn_80099734(p, pBall, a, mode, state, 1, 0, 1, fn_8009A77C(p), range);
+                target = fn_80099734(p, pBall, a, mode, range, state, 1, 0, 1, fn_8009A77C(p));
                 if (target == 0x1FFFFFFF) {
                     found = 0;
                 }
@@ -1020,10 +1021,8 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
 
                         aim.mX = 0.2f;
                         aim.mY = state->mUnknown12 - ball.mZ;
-                        if (aim.mY < 0.0f) {
-                            aim.mY = 0.0f;
-                        }
-                        angle = fn_801CFE40(aim.mY, aim.mX);
+                        aim.mY = aim.mY < 0.0f ? 0.0f : aim.mY;
+                        angle = aim.Heading();
                         pRecord->mUnknown10 = angle + fn_802372EC(0, 0xE38E3);
                         pRecord->mUnknown8 = (pRecord->mUnknown8 - 5) / 3 + 5;
                         pRecord->mUnknownC = state->mUnknown4 / (lbl_803ECB08 * 100621.12f);
@@ -1163,48 +1162,48 @@ extern "C" int fn_80114838(Object_80039F5C *p)
     fn_800B6D34(p, &input);
     if (fn_80137B40() == p && (input.mUnknown95 & 0x40)) {
         fn_800DB60C(&state->mUnknown32, p);
-        return 0;
-    }
-    if (state->mUnknown56 == 1) {
-        if (input.mUnknown95 & 0x10) {
-            done = 1;
-            state->mUnknown58++;
-        } else {
-            dir.mX = dir.mY = 0.0f;
-            if (input.mUnknown4 != 0.0f || input.mUnknown8 != 0.0f) {
-                dir.mX = input.mUnknown4;
-                dir.mY = input.mUnknown8;
+    } else {
+        if (state->mUnknown56 == 1) {
+            if (input.mUnknown95 & 0x10) {
+                done = 1;
+                state->mUnknown58++;
             } else {
-                if (input.mUnknown0 & 1) {
-                    dir.mY = 1.0f;
+                dir.mX = dir.mY = 0.0f;
+                if (input.mUnknown4 != 0.0f || input.mUnknown8 != 0.0f) {
+                    dir.mX = input.mUnknown4;
+                    dir.mY = input.mUnknown8;
+                } else {
+                    if (input.mUnknown0 & 1) {
+                        dir.mY = 1.0f;
+                    }
+                    if (input.mUnknown0 & 2) {
+                        dir.mY = -1.0f;
+                    }
+                    if (input.mUnknown0 & 4) {
+                        dir.mX = -1.0f;
+                    }
+                    if (input.mUnknown0 & 8) {
+                        dir.mX = 1.0f;
+                    }
                 }
-                if (input.mUnknown0 & 2) {
-                    dir.mY = -1.0f;
-                }
-                if (input.mUnknown0 & 4) {
-                    dir.mX = -1.0f;
-                }
-                if (input.mUnknown0 & 8) {
-                    dir.mX = 1.0f;
+                if (fabsf(dir.mY) > 1e-7f || fabsf(dir.mX) > 1e-7f) {
+                    int angle = fn_801CFE40(dir.mY, dir.mX) - input.mUnknown20;
+                    if (fn_801784C4() != 0) {
+                        angle -= 0x800000;
+                    }
+                    fn_80114F64(p, angle & 0xFFFFFF);
                 }
             }
-            if (fabsf(dir.mY) > 1e-7f || fabsf(dir.mX) > 1e-7f) {
-                int angle = fn_801CFE40(dir.mY, dir.mX) - input.mUnknown20;
-                if (fn_801784C4() != 0) {
-                    angle -= 0x800000;
-                }
-                fn_80114F64(p, angle & 0xFFFFFF);
+            if (p->mUnknown8 != 255) {
+                fn_80194C5C(p->mUnknown8, lbl_803EAF98, 10);
             }
         }
-        if (p->mUnknown8 != 255) {
-            fn_80194C5C(p->mUnknown8, lbl_803EAF98, 10);
-        }
-    }
-    if (done == 0) {
-        int mode = fn_800AD9B4();
-        if (p->mIdBytes[2] == fn_80178320() || mode == 3 ||
-            (mode == 2 && port != 255 && fn_800B6544(port) != p)) {
-            return fn_800B7FE8(p);
+        if (done == 0) {
+            int mode = fn_800AD9B4();
+            if (p->mIdBytes[2] == fn_80178320() || mode == 3 ||
+                (mode == 2 && port != 255 && fn_800B6544(port) != p)) {
+                return fn_800B7FE8(p);
+            }
         }
     }
     return 0;
