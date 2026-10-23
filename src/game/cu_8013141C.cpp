@@ -38,12 +38,13 @@ Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsi
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float fn_8012506C(Object_80039F5C *p, int kind);
 int fn_8012510C(Directions_8012430C *pValues);
-int fn_80132630(Object_80039F5C *p, Vector_80039F5C *pPos, int a);
 void fn_8013FA8C(int a);
 void fn_80148108(int mode);
 Object_800670B4 *fn_80168708(int team);
 Point_8017886C fn_80177FE0(void);
 int fn_80178308(void);
+int fn_80177F70(void);
+float fn_80178298(void);
 float fn_80178A08(void);
 float fn_80178A2C(void);
 int fn_801783AC(int bit);
@@ -51,6 +52,7 @@ int fn_801CFE40(float y, float x);
 int fn_801CFFD0(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_802276E8(Point_8017886C *pA, Point_8017886C *pB);
+float fn_8022781C(void *pA, void *pB);
 float fn_80237260(int stream);
 }
 
@@ -67,6 +69,12 @@ static float lbl_802DB0B4[2][8] = {
 };
 
 static int lbl_803EB140 = 0;
+static float lbl_803EB144 = 1.5f;
+static float lbl_803EB148 = 2.0f;
+static float lbl_803EB14C = 60.0f;
+static float lbl_803EB150 = 3.0f;
+
+extern "C" int fn_80132630(Object_80039F5C *p, Vector_80039F5C *pPos, Object_80039F5C *pOther);
 
 extern "C" int fn_8013141C(Object_80039F5C *p)
 {
@@ -577,4 +585,25 @@ extern "C" void fn_8013258C(Object_80039F5C *p)
             break;
         }
     }
+}
+
+extern "C" int fn_80132630(Object_80039F5C *p, Vector_80039F5C *pPos, Object_80039F5C *pOther)
+{
+    signed char line = (signed char)(int)fn_80178A2C();
+    signed char y = (signed char)(int)p->mMotion.mPos.mY;
+    int allowed = (float)(line - y) >= 1.5f;
+    if (pPos && pOther) {
+        if (fn_80177F70() > 2 && !(p->mMotion.mPos.mY <= fn_80178298()) && !(pPos->mY >= fn_80178298()))
+            allowed = 0;
+        if (pOther->mpState->mId != 90 && !(pPos->mY >= lbl_803EB150 - fn_80178A2C()))
+            allowed = 0;
+        if (!(fabsf(pPos->mX) >= fabsf(fn_80178A08())) && !(fabsf(pPos->mX) >= fabsf(pOther->mMotion.mPos.mX))
+            && !(fabsf(pPos->mX) >= lbl_803EB148))
+            allowed = 0;
+        if (!(fn_8022781C(&p->mMotion.mPos, &pOther->mMotion.mPos) >= lbl_803EB144))
+            allowed = 0;
+        if (fn_801CFFD0(pOther->mMotion.mFacing, 0xC00000) < (int)(lbl_803EB14C * 46603.37890625f))
+            allowed = 0;
+    }
+    return allowed;
 }
