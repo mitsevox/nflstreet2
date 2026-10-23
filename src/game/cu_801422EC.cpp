@@ -127,7 +127,7 @@ void fn_801423D0(Camera_801422EC *pCamera)
     CameraState_801422EC *pState = &pCamera->mUnknownF8;
     int a = 0;
     int replay = fn_800AD9B4() == 3;
-    int changed = 0;
+    int changed;
     Object_80137ABC *pBall;
     Object_80039F5C *pPlayer;
     Vector_80039F5C ballPos;
@@ -140,12 +140,13 @@ void fn_801423D0(Camera_801422EC *pCamera)
     float *pFrom;
 
     pBall = fn_801374BC();
-    mode = 0;
     fn_8013BA58(pBall, info);
     pPlayer = fn_80137AD0(pBall);
     fn_80177F70();
     fn_80137D58(pBall, &ballPos);
     lbl_803EB1FC = a;
+    changed = 0;
+    mode = 0;
     pState->mUnknown18[0] = 45.0f;
     pState->mUnknown18[1] = pState->mUnknown44;
     pState->mUnknown18[2] = 20.0f;
@@ -179,20 +180,15 @@ void fn_801423D0(Camera_801422EC *pCamera)
             }
         } else {
             float t;
-            Point_8017886C p1;
-            Point_8017886C p2;
-
             lbl_803EB204 = lbl_803EB204 + 1;
             t = (float)lbl_803EB204;
             lbl_8031B6C4[0] = t * lbl_803EB20C + 8.0f;
-            lbl_8031B6C4[2] = t * lbl_803EB214 + 0.5f;
             lbl_8031B6C4[1] = t * lbl_803EB210;
+            lbl_8031B6C4[2] = t * lbl_803EB214 + 0.5f;
             if (a != 0) {
                 mode = 4;
-                p1 = fn_80177FE0();
-                pState->mUnknown18[0] = lbl_8031B6C4[0] + p1.mX;
-                p2 = fn_80177FE0();
-                pState->mUnknown18[1] = lbl_8031B6C4[1] + p2.mY;
+                pState->mUnknown18[0] = lbl_8031B6C4[0] + fn_80177FE0().mX;
+                pState->mUnknown18[1] = lbl_8031B6C4[1] + fn_80177FE0().mY;
                 pState->mUnknown18[2] = lbl_8031B6C4[2];
                 if (fn_801784C4()) {
                     pState->mUnknown18[0] = -pState->mUnknown18[0];
@@ -201,21 +197,23 @@ void fn_801423D0(Camera_801422EC *pCamera)
             } else {
                 mode = 0;
             }
+            lag = 8.0f;
             pState->mUnknown54[0] = pState->mUnknown68.mX;
             pState->mUnknown54[1] = pState->mUnknown68.mY;
             pState->mUnknown54[2] = 1.3f;
-            lag = 8.0f;
         }
         lbl_803EB219 = 0;
         speed = 24.0f;
         break;
+    case 3:
+    case 4:
     default:
+        lbl_803EB208 = 75;
+        lbl_803EB204 = 0;
+        lbl_803EB218 = 0;
         pState->mUnknown54[0] = ballPos.mX;
         pState->mUnknown54[1] = ballPos.mY;
         pState->mUnknown54[2] = ballPos.mZ;
-        lbl_803EB208 = 75;
-        lbl_803EB218 = 0;
-        lbl_803EB204 = 0;
         if (lbl_803EB219) {
             mode = 0;
             speed = 50.0f;
