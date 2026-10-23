@@ -85,9 +85,10 @@ struct State_8010BF5C {
 };
 
 /* Partial reconstruction: the control flow, calls and stores follow the
-   target 0x8010BF5C-0x8010C864 and the size matches, but 7 words still
-   differ (register choice and one store order) and the literal pool does
-   not yet compile to the target slice. */
+   target 0x8010BF5C-0x8010C864, but the body is not byte-identical
+   (0x904 of 0x908 bytes, 135 differing words, mostly block placement of the
+   shared give-up exit and the kind tests) and the literal pool does not yet
+   compile to the target slice. */
 extern "C" int fn_8010BF5C(Object_80039F5C *p)
 {
     State_8010BF5C *pState = (State_8010BF5C *)&p->mUnknown336;
@@ -150,85 +151,83 @@ extern "C" int fn_8010BF5C(Object_80039F5C *p)
             if (fn_8013BA58(fn_801374BC(), 0) == 4) {
                 pTarget = fn_80137B64();
             }
-            if (pTarget == 0) {
-                goto apply;
-            }
         }
-        count = fn_80178D18(p->mIdBytes[2]);
-        for (i = 0; i < count; i++) {
-            unsigned int id = p->mId;
+        if (pTarget != 0) {
+            count = fn_80178D18(p->mIdBytes[2]);
+            for (i = 0; i < count; i++) {
+                unsigned int id = p->mId;
 
-            if (i != ((id >> 16) & 0xFF)) {
-                Object_80039F5C *pOther = fn_80039F5C((id >> 8) & 0xFF, i);
-                if (pOther->mpState->mId == 85) {
-                    if (pOther->mMotion.mPos.mX > p->mMotion.mPos.mX) {
-                        side = -lbl_803EAF44;
-                    } else {
-                        side = lbl_803EAF44;
-                    }
-                    if (((pTarget->mMotion.mPos.mX > ball.mX && p->mMotion.mPos.mX > pOther->mMotion.mPos.mX) ||
-                         (pTarget->mMotion.mPos.mX < ball.mX && p->mMotion.mPos.mX < pOther->mMotion.mPos.mX)) &&
-                        (pTarget->mFlags & 0x8000)) {
-                        goto give_up;
+                if (i != ((id >> 16) & 0xFF)) {
+                    Object_80039F5C *pOther = fn_80039F5C((id >> 8) & 0xFF, i);
+                    if (pOther->mpState->mId == 85) {
+                        if (pOther->mMotion.mPos.mX > p->mMotion.mPos.mX) {
+                            side = -lbl_803EAF44;
+                        } else {
+                            side = lbl_803EAF44;
+                        }
+                        if (((pTarget->mMotion.mPos.mX > ball.mX && p->mMotion.mPos.mX > pOther->mMotion.mPos.mX) ||
+                             (pTarget->mMotion.mPos.mX < ball.mX && p->mMotion.mPos.mX < pOther->mMotion.mPos.mX)) &&
+                            (pTarget->mFlags & 0x8000)) {
+                            goto give_up;
+                        }
                     }
                 }
             }
-        }
 
-        if (pState->mTicks > pState->mTickLimit && pState->mTickLimit != 0) {
-            goto give_up;
-        }
-        if ((pTarget->mFlags & 0x8000) && pState->mTicks > lbl_803EAF38 &&
-            ball.mY - pTarget->mMotion.mPos.mY < reach * lbl_803EAF3C) {
-            goto give_up;
-        }
-        if ((float)pState->mTicks > lbl_803EAF34 && (pTarget->mFlags & 0x8000) &&
-            ball.mY - pTarget->mMotion.mPos.mY < reach) {
-            goto give_up;
-        }
+            if (pState->mTicks > pState->mTickLimit && pState->mTickLimit != 0) {
+                goto give_up;
+            }
+            if ((pTarget->mFlags & 0x8000) && pState->mTicks > lbl_803EAF38 &&
+                ball.mY - pTarget->mMotion.mPos.mY < reach * lbl_803EAF3C) {
+                goto give_up;
+            }
+            if ((float)pState->mTicks > lbl_803EAF34 && (pTarget->mFlags & 0x8000) &&
+                ball.mY - pTarget->mMotion.mPos.mY < reach) {
+                goto give_up;
+            }
 
-        aim.mX = pTarget->mMotion.mPos.mX + side;
-        aim.mX = aim.mX < 2.0f - fn_80178A08()
-                     ? 2.0f - fn_80178A08()
-                     : (aim.mX > fn_80178A08() - 2.0f ? fn_80178A08() - 2.0f : aim.mX);
-        aim.mY = ball.mY + lbl_803EAF2C;
-        aim.mY = aim.mY > fn_80178A2C() + 2.0f ? fn_80178A2C() + 2.0f : aim.mY;
-        fn_80227690(&toAim, &aim, &pMotion->mPos);
-        dist = fn_802270A4(&toAim);
-        offset = fabsf(pMotion->mPos.mX - aim.mX);
-        nearLimit = lbl_803EAF24;
-        farLimit = lbl_803EAF28;
-        if (pMotion->mUnknown28 != 0.0f) {
-            nearLimit *= 0.5f;
-            farLimit *= 0.5f;
-        }
-        pState->mOffset = offset;
-        pState->mAim = aim;
-        pState->mFar = farLimit;
-        pState->mDist = dist;
-        pState->mNear = nearLimit;
-        pState->mTargetAngle = pTarget->mMotion.mUnknown32;
-        {
-            unsigned int angle = fn_801CFFD0(pTarget->mMotion.mUnknown32, 0x400000);
+            aim.mX = pTarget->mMotion.mPos.mX + side;
+            aim.mX = aim.mX < 2.0f - fn_80178A08()
+                         ? 2.0f - fn_80178A08()
+                         : (aim.mX > fn_80178A08() - 2.0f ? fn_80178A08() - 2.0f : aim.mX);
+            aim.mY = ball.mY + lbl_803EAF2C;
+            aim.mY = aim.mY > fn_80178A2C() + 2.0f ? fn_80178A2C() + 2.0f : aim.mY;
+            fn_80227690(&toAim, &aim, &pMotion->mPos);
+            dist = fn_802270A4(&toAim);
+            offset = fabsf(pMotion->mPos.mX - aim.mX);
+            nearLimit = lbl_803EAF24;
+            farLimit = lbl_803EAF28;
+            if (pMotion->mUnknown28 != 0.0f) {
+                nearLimit *= 0.5f;
+                farLimit *= 0.5f;
+            }
+            pState->mOffset = offset;
+            pState->mAim = aim;
+            pState->mFar = farLimit;
+            pState->mDist = dist;
+            pState->mNear = nearLimit;
+            pState->mTargetAngle = pTarget->mMotion.mUnknown32;
+            {
+                unsigned int angle = fn_801CFFD0(pTarget->mMotion.mUnknown32, 0x400000);
 
-            if ((offset > farLimit && (angle > 0x200000 && angle < 0x600000) && fn_800DC21C(pTarget) != 0) ||
-                offset > 2.0f * farLimit || (offset > 0.5f && pState->mScale == 1.0f)) {
-                pState->mHeading = fn_801CFE40(toAim.mY, toAim.mX) & 0xFFFFFF;
-                pState->mFacing = fn_801CFE40(toAim.mY, toAim.mX);
-                pState->mScale = 1.0f;
-            } else if (dist > nearLimit || offset > farLimit) {
-                pState->mHeading = fn_801CFE40(toAim.mY, toAim.mX) & 0xFFFFFF;
-                pState->mFacing = 0xC00000;
-                pState->mScale = 0.9f;
-            } else {
-                pState->mFacing = 0xC00000;
-                pState->mScale = 0.0f;
-                pState->mHeading = 0xC00000;
+                if ((offset > farLimit && (angle > 0x200000 && angle < 0x600000) && fn_800DC21C(pTarget) != 0) ||
+                    offset > 2.0f * farLimit || (offset > 0.5f && pState->mScale == 1.0f)) {
+                    pState->mHeading = fn_801CFE40(toAim.mY, toAim.mX) & 0xFFFFFF;
+                    pState->mFacing = fn_801CFE40(toAim.mY, toAim.mX);
+                    pState->mScale = 1.0f;
+                } else if (dist > nearLimit || offset > farLimit) {
+                    pState->mHeading = fn_801CFE40(toAim.mY, toAim.mX) & 0xFFFFFF;
+                    pState->mFacing = 0xC00000;
+                    pState->mScale = 0.9f;
+                } else {
+                    pState->mFacing = 0xC00000;
+                    pState->mScale = 0.0f;
+                    pState->mHeading = 0xC00000;
+                }
             }
         }
     }
 
-apply:
     if (fn_800A5C04(p, pState->mHeading, pState->mFacing) != 0) {
         return 0;
     }
@@ -239,15 +238,7 @@ apply:
             result = fn_8009F7A4(p, 0) == 1;
             kind = fn_8009E180(p);
             if (kind > 2) {
-                switch (kind) {
-                case 6:
-                    goto give_up;
-                default:
-                    if (fn_802372EC(0, 255) < (unsigned short)(p->mRatings[8] / 2)) {
-                        goto give_up;
-                    }
-                    break;
-                case 4: {
+                if (kind == 4) {
                     int pass = 0;
                     Object_80039F5C *pCarrier = fn_80137BEC();
 
@@ -287,14 +278,9 @@ apply:
                         fn_800F053C(0, p->mpState, &message, p);
                         return 1;
                     }
-                    break;
-                }
-                give_up:
-                    fn_801C1F94(&message, 0, 4);
-                    message.mId = 2;
-                    message.mUnknown1[0] = 1;
-                    fn_800F053C(0, p->mpState, &message, p);
-                    return 1;
+                } else if (kind == 6 ||
+                           fn_802372EC(0, 255) < (unsigned short)(p->mRatings[8] / 2)) {
+                    goto give_up;
                 }
             }
         }
@@ -307,4 +293,11 @@ apply:
         }
     }
     return result;
+
+give_up:
+    fn_801C1F94(&message, 0, 4);
+    message.mId = 2;
+    message.mUnknown1[0] = 1;
+    fn_800F053C(0, p->mpState, &message, p);
+    return 1;
 }
