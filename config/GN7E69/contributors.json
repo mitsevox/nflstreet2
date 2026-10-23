@@ -21420,20 +21420,20 @@
     {
       "source": "src/game/cu_800D0D4C.cpp",
       "contributors": [
-        "mitsevox"
+        "adampreddy"
       ],
       "functions": [
         "0x800D5054",
         "0x800D60BC"
       ],
       "provenance": {
-        "pull_request": 725,
-        "merged_via": 734,
+        "pull_request": 987,
+        "merged_via": 996,
         "commit": "3e9f671f174073c88643220e9bd94087e619cf66",
         "introduced_blob": "4017c8b47a75ce0b4f2ffbeed92e8f0994e8ef67",
-        "original_commit": "05f812159d575e967d087116306001b291688517",
-        "original_blob": "b7144eee495144be597210c6be4b45f6fca178fe",
-        "integration_adjustment": "fn_800D5054 and fn_800D60BC from mitsevox's src/game/cu_800D0D4C.cpp (PR 725, measured fuzzy partials there) made exact by writing the record gate as if/else if/else with its own accept = 1 per zero test; fn_800D60BC also resets accept after the 0x800AE7F0 call and passes the same-team id directly. The rest of both bodies is unchanged."
+        "original_commit": "12cdc6e253bb9974a49409eafb49e2a5b5e6e917",
+        "original_blob": "5d3396256ee08785c1e9377d489dbeabe03bc380",
+        "integration_adjustment": "fn_800D5054 and fn_800D60BC: bodies first written by mitsevox in PR 725 and reworked by adampreddy in PR 987 (the switch on kind with an empty case 0, the float limit local and, in fn_800D60BC, mUnknown1EF5 = accept = 1), the same rework that made fn_800D5494 exact and is credited to PR 987. Made exact here by writing the record gate as if/else if/else with its own accept = 1 per zero test; fn_800D60BC also resets accept after the 0x800AE7F0 call and passes the same-team id byte directly. The rest of both bodies is the PR 987 version."
       }
     },
     {
