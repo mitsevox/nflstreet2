@@ -87,14 +87,18 @@ extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind
         params.mUnknown8 = fn_800AC87C(p, params.mUnknown8);
         params.mUnknown8 = fn_8009AFE8(p->mIdBytes[2], params.mUnknown8);
         if (fn_800A7ECC(p->mIdBytes[2]) != 2) {
-            int skill = p->mRatings[8];
+            int skill;
+            int rating8 = p->mRatings[8];
+            int rating5 = p->mRatings[5];
 
-            if (p->mRatings[5] > skill) {
-                skill = p->mRatings[5];
+            if (rating5 > rating8) {
+                skill = rating5;
+            } else {
+                skill = rating8;
             }
             if (fn_802372EC(0, params.mUnknown8) >= skill || fn_800A7ECC(p->mIdBytes[2]) == 0) {
-                p->mUnknown1154 = kind;
                 p->mUnknown1140 = pOther->mId;
+                p->mUnknown1154 = kind;
                 if (fn_800A7ECC(p->mIdBytes[2]) == 0 && (kind == 4 || kind == 5)) {
                     p->mUnknown1152 = params.mUnknown0;
                 } else {

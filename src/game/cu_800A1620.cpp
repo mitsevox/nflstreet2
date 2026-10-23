@@ -133,10 +133,11 @@ void fn_800A14A8(void *);
 extern void *lbl_803EA368;
 }
 
-extern "C" void fn_800A1C74(Object_8017886C *value,Object_8017886C *input)
+extern "C" void fn_800A1C74(Object_8017886C *result,Object_8017886C *input)
 {
     unsigned char update=1;
-    Object_8017886C *result=fn_800A16C8(value,input,&update);
+    Object_8017886C *value=result;
+    result=fn_800A16C8(result,input,&update);
     if(lbl_802D7C64[0].mUnknown5==1) {
         fn_800B14E4();lbl_802D7C64[0].mUnknown5=0;
     } else {

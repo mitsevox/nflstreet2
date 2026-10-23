@@ -1333,7 +1333,7 @@ extern "C" void fn_80094608(unsigned char value)
     lbl_803EA8D4 = value;
 }
 
-extern "C" int fn_80178348(void);
+extern "C" unsigned char fn_80178348(void);
 extern "C" int fn_800947C4(Object_8017886C *p);
 extern "C" int fn_80094698(int index, int operand, int value, unsigned short *pRow);
 extern "C" unsigned int fn_800680A8(Table_800680A8 *pTable, short *pValues, unsigned short **ppOut, unsigned int max,
@@ -2129,8 +2129,8 @@ extern "C" void fn_800A2D2C(void)
     unsigned int j;
     unsigned char i;
 
-    for (i = 0; i < 30; i++) {
-        lbl_8030E6E8.mpUnknownBC[i] = 0;
+    for (unsigned char k = 0; k < 30; k++) {
+        lbl_8030E6E8.mpUnknownBC[k] = 0;
     }
     for (i = 0; i < 20; i++) {
         lbl_8030E6E8.mUnknown6C[i] = 0;
@@ -2141,9 +2141,8 @@ extern "C" void fn_800A2D2C(void)
     lbl_8030E6E8.mUnknown8B4[7] = 1;
     for (i = 0; i < lbl_803EA554->mUnknown48; i++) {
         unsigned char count = 0;
-        unsigned char k;
 
-        for (k = 0; k < lbl_803EA554->mUnknown96; k++) {
+        for (unsigned char k = 0; k < lbl_803EA554->mUnknown96; k++) {
             if (lbl_803EA554->mUnknown100[k].mUnknown24Bytes[1] == i) {
                 count++;
             }
@@ -5336,8 +5335,7 @@ extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
     int ref;
 
     if (fn_800A9680() != 0 || (mode != 3 && (mode != 2 || fn_800A7FD8() != 0))) {
-        ppOut[0] = 0;
-        ppOut[1] = 0;
+        ppOut[0] = ppOut[1] = 0;
         return;
     }
     if (fn_800B65A0(team) != 0xFF) {
@@ -5361,21 +5359,16 @@ extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
             pSecond = fn_8009BCE8(&ref);
         }
         if (fn_80178308() == team && fn_80137B40() != 0) {
-            Object_80039F5C *pCarrier = fn_80137B40();
-
-            ppOut[0] = pCarrier;
-            if (pFirst == 0 || pFirst == pCarrier) {
-                if (pSecond != 0 && pSecond != ppOut[0]) {
-                    ppOut[1] = pSecond;
-                } else {
-                    ppOut[1] = 0;
-                }
-            } else {
+            ppOut[0] = fn_80137B40();
+            if (pFirst != 0 && pFirst != ppOut[0]) {
                 ppOut[1] = pFirst;
+            } else if (pSecond != 0 && pSecond != ppOut[0]) {
+                ppOut[1] = pSecond;
+            } else {
+                ppOut[1] = 0;
             }
         } else if (pFirst == 0 && pSecond == 0) {
-            ppOut[0] = 0;
-            ppOut[1] = 0;
+            ppOut[0] = ppOut[1] = 0;
         } else if (pFirst == 0) {
             ppOut[0] = pSecond;
             ppOut[1] = pFirst;
@@ -5383,8 +5376,8 @@ extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
             ppOut[0] = pFirst;
             ppOut[1] = pSecond;
         } else {
-            Vector_80039F5C ballPos;
             Vector_80039F5C delta;
+            Vector_80039F5C ballPos;
             float distance;
 
             fn_80137D58(pBall, &ballPos);
@@ -6045,20 +6038,17 @@ extern "C" void fn_800A9018(unsigned int step)
             int slot = fn_8008576C(p->mUnknown2908, isOffense);
 
             if (fn_801485D4() != 0 && fn_801486A0() == 4) {
-                unsigned int id;
-
                 if (lbl_8030F42C.mUnknown0 == 7) {
-                    id = lbl_802D8064[slot];
+                    fn_8009604C(fn_80096440(lbl_802D8064[slot]), (int)p);
                 } else if (lbl_8030F42C.mUnknown0 == 4) {
                     if (step > 1) {
-                        id = lbl_802D80D4[slot];
+                        fn_8009604C(fn_80096440(lbl_802D80D4[slot]), (int)p);
                     } else {
-                        id = lbl_802D809C[slot];
+                        fn_8009604C(fn_80096440(lbl_802D809C[slot]), (int)p);
                     }
                 } else {
-                    id = lbl_802D802C[slot];
+                    fn_8009604C(fn_80096440(lbl_802D802C[slot]), (int)p);
                 }
-                fn_8009604C(fn_80096440(id), (int)p);
             } else {
                 fn_8009604C(fn_80096440(lbl_802D7FF4[slot]), (int)p);
             }
@@ -7381,9 +7371,9 @@ extern "C" void fn_800B3EC0(int a, int b)
 extern "C" {
 void fn_8006CAEC(void);
 void fn_800B50E8(int team);
-QueryCursor fn_800C0750(unsigned char index, unsigned short *pValues);
+QueryCursor fn_800C0750(int index, unsigned short *pValues);
 void fn_800C07C4(QueryCursor cursor);
-void fn_800C07F0(QueryCursor cursor, unsigned char index, unsigned short *pValues);
+void fn_800C07F0(QueryCursor cursor, int index, unsigned short *pValues);
 }
 
 extern "C" void fn_800B3EFC(int team)
@@ -9212,6 +9202,7 @@ extern "C" int fn_800AAAC4(void)
 extern "C" void fn_800AAAFC(void)
 {
     unsigned int i;
+    int size;
 
     lbl_803EC960 = fn_800A9F4C(0);
     if (lbl_803EC960 != 0) {
@@ -9219,8 +9210,9 @@ extern "C" void fn_800AAAFC(void)
     } else {
         lbl_803EAA88->mUnknown14 = 0;
     }
+    size = 0x16000;
     for (i = 0; i <= 1; i++) {
-        lbl_803EC964[i] = lbl_803EC960 + i * 0x16000;
+        lbl_803EC964[i] = lbl_803EC960 + i * size;
     }
     fn_800AA010(0);
 }
@@ -10189,7 +10181,9 @@ extern "C" void fn_800AD888(float dt)
 
 extern "C" void fn_800AD910(int mode, float dt)
 {
-    if (!lbl_803EAC9C->fn_800D0408()) {
+    unsigned char busy = lbl_803EAC9C->fn_800D0408();
+
+    if (!busy) {
         void (*pExit)(float) = lbl_80297FC8[lbl_803EAAD4->mUnknown0].mpExit;
         void (*pEnter)(float);
 
@@ -10475,7 +10469,7 @@ void fn_800AE138(unsigned int index);
 int fn_800B6644(int index);
 int fn_80177C38(void);
 int fn_80178308(void);
-int fn_80178348(void);
+unsigned char fn_80178348(void);
 int fn_80178360(void);
 unsigned char fn_80194F24(void);
 void fn_80194F1C(unsigned char enabled);
@@ -11753,6 +11747,12 @@ extern "C" int fn_800B0F98(void)
     return lbl_803EAB14->mUnknown2D0;
 }
 
+static inline void CopyPoint(Point_8017886C *pDst, const Point_8017886C *pSrc)
+{
+    pDst->mX = pSrc->mX;
+    pDst->mY = pSrc->mY;
+}
+
 extern "C" void fn_800B0FA4(void)
 {
     fn_800B0090();
@@ -11787,10 +11787,8 @@ extern "C" void fn_800B0FA4(void)
                 Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[0][index];
                 Point_8017886C pos;
                 Point_8017886C mirror;
-                pos.mX = pEntry->mUnknown10.mX;
-                pos.mY = pEntry->mUnknown10.mY;
-                mirror.mX = pEntry->mUnknown18.mX;
-                mirror.mY = pEntry->mUnknown18.mY;
+                CopyPoint(&pos, &pEntry->mUnknown10);
+                CopyPoint(&mirror, &pEntry->mUnknown18);
                 if (pos.mX == mirror.mX && pos.mY == mirror.mY) {
                     mirror.mX = -mirror.mX;
                     for (unsigned char j = 0; j < count; j++) {
@@ -11798,8 +11796,8 @@ extern "C" void fn_800B0FA4(void)
                             continue;
                         }
                         pEntry = &pTeam->mUnknown8.mUnknown84[0][j];
-                        pos.mX = (pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown18 : pEntry->mUnknown10).mX;
-                        pos.mY = (pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown18 : pEntry->mUnknown10).mY;
+                        pos.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
+                        pos.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
                         if (pos.mX == mirror.mX && pos.mY == mirror.mY) {
                             index = j;
                             break;
@@ -14423,7 +14421,8 @@ extern "C" void fn_800B6868(int team, int index, int slot, int mode)
             mode -= 2;
         }
         do {
-            p = fn_80039F5C(team, index);
+            unsigned short id = index;
+            p = fn_80039F5C(team, id);
             if (p->mUnknown8 == 0xFF) {
                 pOther = fn_800B6544(slot);
                 if (pOther != 0) {
@@ -14432,7 +14431,7 @@ extern "C" void fn_800B6868(int team, int index, int slot, int mode)
                 fn_800B6714(p, (unsigned char)slot);
                 return;
             }
-            index = fn_800B51D8(pTeam, index, mode);
+            index = fn_800B51D8(pTeam, id, mode);
             tries--;
         } while (tries > 0);
     }
@@ -15288,7 +15287,7 @@ int fn_800AE980(void);
 void fn_8017CBFC(int a);
 short fn_8017CD44(unsigned char index);
 void fn_8017CD20(void);
-QueryCursor fn_800C0698(unsigned char index, unsigned short *pValues);
+QueryCursor fn_800C0698(int index, unsigned short *pValues);
 State_8011F4EC *fn_8011F4EC(void);
 int fn_801787A0(void);
 int fn_80168E00(int team, int index, unsigned char *pOut);
@@ -16182,7 +16181,7 @@ extern "C" unsigned short fn_800C0660(unsigned short *p, int value)
     return i;
 }
 
-extern "C" QueryCursor fn_800C0750(unsigned char index, unsigned short *pValues)
+extern "C" QueryCursor fn_800C0750(int index, unsigned short *pValues)
 {
     int i;
 

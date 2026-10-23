@@ -40610,13 +40610,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800A233C",
-          "end": "0x800A32B4"
+          "end": "0x800A3360"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80296630",
-          "end": "0x8029670C"
+          "end": "0x80296710"
         }
       ],
       "functions": [
@@ -40694,28 +40694,7 @@
           "symbol": "fn_800A3170",
           "start": "0x800A3170",
           "end": "0x800A32B4"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800A32E4.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: complete bodies whose float, double or string literals form the exact readonly slice measured here. No original file boundary or whole-unit promotion is claimed.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800A32E4",
-          "end": "0x800A3360"
         },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029670C",
-          "end": "0x80296710"
-        }
-      ],
-      "functions": [
         {
           "symbol": "fn_800A32E4",
           "start": "0x800A32E4",

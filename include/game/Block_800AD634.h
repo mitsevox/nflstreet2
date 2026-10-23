@@ -18,6 +18,6 @@ struct Mode_80297FC8 {
     void (*mpExit)(float dt);
 };
 
-extern "C" Mode_80297FC8 lbl_80297FC8[12];
+extern "C" const Mode_80297FC8 lbl_80297FC8[12];
 
 #endif

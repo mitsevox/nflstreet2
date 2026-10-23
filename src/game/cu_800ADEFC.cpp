@@ -17,14 +17,14 @@ extern "C" Blend_8019EDDC *fn_800ADEFC(Element_80041BF8 *pElements, unsigned int
     Element_80041BF8 *p = &pElements[index];
     unsigned int length = p->mUnknown6 * 16;
     float t = (float)p->mUnknown8 / (float)length;
-    float s = fn_801CFB94((int)(t * 8388608.0f));
+    t = (1.0f - fn_801CFB94((int)(t * 8388608.0f))) * 0.5f;
 
     pBlend->mUnknown0 = 2;
     pBlend->mUnknown4[0].mUnknown4 = 1.0f;
     pBlend->mUnknown4[0].mUnknown8 = index == 0;
-    pBlend->mUnknown4[1].mUnknown8 = index == 0;
-    pBlend->mUnknown4[1].mUnknown4 = 1.0f - (1.0f - s) * 0.5f;
     pBlend->mUnknown4[0].mpUnknown40 = lbl_8030F958[(signed char)p->mUnknown5];
+    pBlend->mUnknown4[1].mUnknown4 = 1.0f - t;
+    pBlend->mUnknown4[1].mUnknown8 = index == 0;
     pBlend->mUnknown4[1].mpUnknown40 = lbl_8030F958[(signed char)p->mUnknown4];
     return pBlend;
 }
