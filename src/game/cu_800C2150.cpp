@@ -492,7 +492,7 @@ extern "C" void fn_800C38C4(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key)
     for (i = 0; i < pTable->mCount; i++) {
         Table_800DE51C *pRecords = fn_801BBD5C(fn_801BE648(p->mpUnknown792), p->mpUnknown796->mUnknown2);
 
-        if (pRecords->mEntries[i].mUnknown2 == 1 && pRecords->mEntries[i].mUnknown0 == (key & ~0x8000)) {
+        if (pRecords->mEntries[i].mUnknown2 == 1 && (pRecords->mEntries + i)->mUnknown0 == (key & ~0x8000)) {
             pRecord = &pRecords->mEntries[i];
             break;
         }
