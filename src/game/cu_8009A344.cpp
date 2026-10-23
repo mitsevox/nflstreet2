@@ -18,7 +18,7 @@ extern Block_8009AB34 *lbl_803EA948;
 extern float lbl_802D7BA8[];
 extern float lbl_802D7BD0[];
 extern Block_80099630 *lbl_803EC92C;
-float fn_80178A68(Vector_80039F5C *pPos);
+float fn_80178A68(Point_8017886C *pPos);
 int fn_801787DC(int team);
 int fn_800D41F8(int team);
 float fn_80260E24(float a);
@@ -85,7 +85,7 @@ extern "C" int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRe
 extern "C" int fn_8009A6EC(Object_80039F5C *p)
 {
     float distance;
-    int result = fn_80178A68(&p->mMotion.mPos) <= 5.0f;
+    int result = fn_80178A68((Point_8017886C *)&p->mMotion.mPos) <= 5.0f;
 
     fn_801380AC(fn_801374BC(), &distance);
     if (distance < 40.0f) {

@@ -2,7 +2,7 @@
 #include "game/Team_80167A8C.h"
 
 extern "C" {
-void fn_80227538(Point_80167910 *pOut, int angle, float length);
+void fn_80227538(void *pOut, int angle, float length);
 void fn_80227638(void *pOut, void *pA, void *pB);
 void fn_80227690(void *pOut, void *pA, void *pB);
 int fn_801CFE40(float y, float x);
