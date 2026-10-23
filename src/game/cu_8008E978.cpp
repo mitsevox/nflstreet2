@@ -5077,8 +5077,7 @@ extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
     int ref;
 
     if (fn_800A9680() != 0 || (mode != 3 && (mode != 2 || fn_800A7FD8() != 0))) {
-        ppOut[0] = 0;
-        ppOut[1] = 0;
+        ppOut[0] = ppOut[1] = 0;
         return;
     }
     if (fn_800B65A0(team) != 0xFF) {
@@ -5102,21 +5101,16 @@ extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
             pSecond = fn_8009BCE8(&ref);
         }
         if (fn_80178308() == team && fn_80137B40() != 0) {
-            Object_80039F5C *pCarrier = fn_80137B40();
-
-            ppOut[0] = pCarrier;
-            if (pFirst == 0 || pFirst == pCarrier) {
-                if (pSecond != 0 && pSecond != ppOut[0]) {
-                    ppOut[1] = pSecond;
-                } else {
-                    ppOut[1] = 0;
-                }
-            } else {
+            ppOut[0] = fn_80137B40();
+            if (pFirst != 0 && pFirst != ppOut[0]) {
                 ppOut[1] = pFirst;
+            } else if (pSecond != 0 && pSecond != ppOut[0]) {
+                ppOut[1] = pSecond;
+            } else {
+                ppOut[1] = 0;
             }
         } else if (pFirst == 0 && pSecond == 0) {
-            ppOut[0] = 0;
-            ppOut[1] = 0;
+            ppOut[0] = ppOut[1] = 0;
         } else if (pFirst == 0) {
             ppOut[0] = pSecond;
             ppOut[1] = pFirst;
@@ -5124,8 +5118,8 @@ extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
             ppOut[0] = pFirst;
             ppOut[1] = pSecond;
         } else {
-            Vector_80039F5C ballPos;
             Vector_80039F5C delta;
+            Vector_80039F5C ballPos;
             float distance;
 
             fn_80137D58(pBall, &ballPos);
