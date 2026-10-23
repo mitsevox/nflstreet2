@@ -68,14 +68,12 @@ extern "C" void fn_80093410(int handle)
                         p->mMotion.mPos.mY = -p->mMotion.mPos.mY;
                     }
                 }
-                {
-                    Frame_800DF7CC *pFrame = fn_801C029C(pActor, i);
-                    int id = fn_801BBE5C(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14);
+                Frame_800DF7CC *pFrame = fn_801C029C(pActor, i);
+                int id = fn_801BBE5C(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14);
 
-                    if (id != 0xFFFFFF && fn_801BBEC0(id, 0x400) != 0xFFFFFF) {
-                        fn_800A3B5C(p);
-                        fn_800A3B58(p, 2, 0);
-                    }
+                if (id != 0xFFFFFF && fn_801BBEC0(id, 0x400) != 0xFFFFFF) {
+                    fn_800A3B5C(p);
+                    fn_800A3B58(p, 2, 0);
                 }
             }
         }

@@ -8,7 +8,8 @@ int fn_80093AF0(Object_80039F5C *p);
 /* Start spot and 24-bit facing for character's actor: the spot is p's
    position unless the actor's first frame gives one (stored z, x, y).
    Character kind 5 takes the facing from the frame and, for sub-kinds 3, 5
-   and 7, a fixed spot written back to the frame. Actor flags 1/2 with a
+   and 7, a fixed spot written back to the frame; other sub-kinds take the
+   spot from frame +0x34 and -(+0x3C). Actor flags 1/2 with a
    negative x/y mirror the facing. */
 extern "C" void fn_80091EC0(Character_80093BCC *pCharacter, Actor_801C009C *pActor, Object_80039F5C *p,
                             Vector_80039F5C *pOut, int *pAngle)

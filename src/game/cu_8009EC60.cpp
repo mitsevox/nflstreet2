@@ -4,7 +4,7 @@
 extern "C" {
 State_8011F4EC *fn_8011F4EC(void);
 int fn_80178308(void);
-void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, int a, int b);
+void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, unsigned int distance, int predict);
 }
 
 /* Returns the index-th player of the play state's roster list after sorting

@@ -26171,7 +26171,7 @@
     {
       "source": "src/game/cu_800948E4.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_800948E4 and the literal-pool slice 0x80296108-0x80296114 they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. No original file boundary or whole-unit promotion is claimed.",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_800948E4 and the literal-pool slice 0x80296108-0x80296114 they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. The compiled .rodata is 0x10 bytes against this 0xC-byte slice: 8-byte alignment of the double adds a 4-byte tail pad (measured 85.7%), which in a linked build would overlap the cu_80094BC4 literal at 0x80296114. No original file boundary or whole-unit promotion is claimed.",
       "sections": [
         {
           "section": ".text",
@@ -36484,7 +36484,7 @@
     {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
-      "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context and natural foreign vtable emission disclosed",
+      "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context disclosed. The Class_80297AB8 vtable is no longer emitted here: its base entries (0x800A03B8, 0x800A0408, 0x800A05E8) now live in src/game/cu_8008E978.cpp, which emits _vt.14Class_80297AB8 at its compiled .rodata +0x310 instead of the target's +0x78",
       "sections": [
         {
           "section": ".text",

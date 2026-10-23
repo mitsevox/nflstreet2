@@ -196,7 +196,7 @@ int fn_800ABCDC(void);
 void fn_801C1FBC(void *pDest, void *pSrc, unsigned int size);
 void *fn_801C2030(void *pDest, const void *pSrc, unsigned int size);
 void fn_800973AC(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
-void fn_800975EC(unsigned short id, int flag, int index);
+void fn_800975EC(int id, int flag, int index);
 int fn_80097160(Object_80039F5C *p, float value);
 int fn_801CFE40(float y, float x);
 void fn_80227538(Point_80167910 *pOut, int angle, float length);
@@ -213,18 +213,18 @@ int fn_80096074(Params_80092E54 *pRequest, int flag);
 void fn_80092538(void);
 int fn_80094B34(Table_800680A8 *pTable, int index);
 void fn_800A3B5C(Object_80039F5C *p);
-int fn_80178348(void);
+unsigned char fn_80178348(void);
 int fn_80178360(void);
 int fn_8019623C(int id);
 int fn_8009679C(unsigned int index);
 void fn_8017CFB0(unsigned short a, unsigned short b, int c, int d);
 int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject, Object_80039F5C **ppOut,
                 unsigned short *pCount);
-int fn_80095284(Object_80039F5C *p, Character_80093BCC *pCharacter, unsigned int count);
+int fn_80095284(Object_80039F5C *p, Params_80092E54 *pRequest, unsigned int count);
 Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n);
 int fn_800B2320(void);
 Object_80039F5C *fn_800B2340(int index);
-Object_80137ABC *fn_80093C70(Character_80093BCC *pCharacter, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound);
+Object_80137ABC *fn_80093C70(Params_80092E54 *pRequest, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound);
 int fn_801C01C4(Actor_801C009C *pActor);
 void fn_800B9B64(Class_80297C60 *p, int enable, int value);
 Object_80039F5C *fn_8008FF28(Params_80092E54 *pRequest, Actor_801C009C *pActor);
@@ -391,12 +391,18 @@ extern int lbl_803EA9A0;
 }
 
 /* The callback data of the 'anms' entry 0x802D72C8 (fn_8008FF44 fills it):
-   the slot handle, then the request the character was started from. */
+   the slot handle, then the request the character was started from.
+   fn_8008FF44 clears 0xFF bytes of it, so the record is at least 255 bytes;
+   only these first 240 are known. */
 struct Request_8008FF44 {
     int mHandle;
     Params_80092E54 mRequest;
 };
 
+/* Partial, not exact: register allocation differs (the zero lands in r26
+   instead of r28), the target reloads lbl_803EC924 around the byte stores,
+   and the lookup in the 16-byte table at 0x802D73B8 near the end is
+   scheduled differently. */
 extern "C" int fn_8008FF44(int value, int *pData)
 {
     Request_8008FF44 *pRequest = (Request_8008FF44 *)pData;
@@ -820,6 +826,9 @@ extern "C" int fn_80091864(int index)
     return result;
 }
 
+/* Partial, not exact: the target's switch keeps the compare against the
+   empty 'COIN' case in its decision tree; ours drops it, which shifts the
+   register allocation by one. */
 extern "C" void fn_800919F0(int index)
 {
     Character_80093BCC *pCharacter = fn_80093BCC(index);
@@ -1082,9 +1091,9 @@ extern "C" int fn_8009313C(Params_80092E54 *pRequest)
         if (fn_80096074(pRequest, 0) && fn_80090390(pRequest, &slot)) {
             unsigned char found;
 
-            fn_80093C70((Character_80093BCC *)pRequest, 0x42414C4C /* 'BALL' */, 0, &found);
+            fn_80093C70(pRequest, 0x42414C4C /* 'BALL' */, 0, &found);
             if (!found) {
-                lbl_803EC924->mUnknown80.mUnknownE4E = found;
+                lbl_803EC924->mUnknown80.mUnknownE4E = 0;
                 *(Params_80092E54 *)&lbl_803EC924->mUnknown80.mCharacters[slot] = *pRequest;
                 fn_801C1F94(lbl_803EC924->mUnknown80.mCharacters[slot].mUnknownEC, 0, 28);
                 lbl_803EC924->mUnknown80.mCharacters[slot].mUnknown38C = 0;
@@ -1236,9 +1245,9 @@ extern "C" int fn_80093C64(void)
 }
 
 
-extern "C" Object_80137ABC *fn_80093C70(Character_80093BCC *pCharacter, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound)
+extern "C" Object_80137ABC *fn_80093C70(Params_80092E54 *pRequest, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound)
 {
-    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    Actor_801C009C *pActor = fn_80093BAC(pRequest->mUnknown0, pRequest->mUnknown4);
     Object_80137ABC *result = 0;
     int i;
 
@@ -1247,7 +1256,7 @@ extern "C" Object_80137ABC *fn_80093C70(Character_80093BCC *pCharacter, int id, 
         Frame_800DF7CC *pFrame = fn_801C029C(pActor, i);
 
         if (pFrame->mUnknown20 == id) {
-            result = pCharacter->mUnknown74[i];
+            result = pRequest->mUnknown74[i];
             *pFound = 1;
             if (ppFrame != 0) {
                 *ppFrame = pFrame;
@@ -1832,7 +1841,7 @@ extern "C" int fn_80095028(unsigned int id)
     return 1;
 }
 
-extern "C" int fn_80095078(int key, Character_80093BCC *pCharacter, Actor_801C009C *pActor, Object_80039F5C *pObject,
+extern "C" int fn_80095078(int key, Params_80092E54 *pRequest, Actor_801C009C *pActor, Object_80039F5C *pObject,
                            float range)
 {
     int result = 1;
@@ -1841,7 +1850,7 @@ extern "C" int fn_80095078(int key, Character_80093BCC *pCharacter, Actor_801C00
     for (i = 1; i < pActor->mUnknown4; i++) {
         Frame_800DF7CC *pFrame = fn_801C029C(pActor, i);
 
-        if (fn_80095028(pFrame->mUnknown0) == key && pCharacter->mUnknown14[i] == 0) {
+        if (fn_80095028(pFrame->mUnknown0) == key && pRequest->mUnknown14[i] == 0) {
             Object_80039F5C *pCandidates[24];
             unsigned short count;
             Point_80167910 target;
@@ -1857,7 +1866,7 @@ extern "C" int fn_80095078(int key, Character_80093BCC *pCharacter, Actor_801C00
             for (j = 0; j < count; j++) {
                 Object_80039F5C *p = pCandidates[j];
 
-                if (fn_80095284(p, pCharacter, pActor->mUnknown4) == 0) {
+                if (fn_80095284(p, pRequest, pActor->mUnknown4) == 0) {
                     float distance;
 
                     fn_80227690(&delta, &p->mMotion.mPos, &target);
@@ -1871,25 +1880,25 @@ extern "C" int fn_80095078(int key, Character_80093BCC *pCharacter, Actor_801C00
                             best = distance;
                         }
                         if (!found) {
-                            pCharacter->mUnknown8 |= 0x10;
+                            pRequest->mUnknown8 |= 0x10;
                         }
                     }
                 }
             }
-            pCharacter->mUnknown14[i] = pBest;
+            pRequest->mUnknown14[i] = pBest;
             if (pBest == 0) {
                 result = 0;
                 break;
             }
         }
-        if (pCharacter->mUnknown14[i] != 0) {
-            pFrame->mUnknown42 = pCharacter->mUnknown14[i]->mpUnknown796->mUnknown2;
+        if (pRequest->mUnknown14[i] != 0) {
+            pFrame->mUnknown42 = pRequest->mUnknown14[i]->mpUnknown796->mUnknown2;
         }
     }
     return result;
 }
 
-extern "C" int fn_80095284(Object_80039F5C *p, Character_80093BCC *pCharacter, unsigned int count)
+extern "C" int fn_80095284(Object_80039F5C *p, Params_80092E54 *pRequest, unsigned int count)
 {
     int result = 0;
     unsigned short i;
@@ -1899,7 +1908,7 @@ extern "C" int fn_80095284(Object_80039F5C *p, Character_80093BCC *pCharacter, u
     }
     if (result == 0) {
         for (i = 0; i < count; i++) {
-            if (pCharacter->mUnknown14[i] == p) {
+            if (pRequest->mUnknown14[i] == p) {
                 result = 1;
                 break;
             }
@@ -1999,6 +2008,9 @@ extern "C" void fn_80095370(unsigned int position, Object_80039F5C **ppOut, unsi
     *pCount = count;
 }
 
+/* Partial, not exact: the switch on the frame's four-character id compiles
+   to a different comparison tree (the target tests the 'CH01' range
+   first); the case bodies match. */
 extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject,
                            Object_80039F5C **ppOut, unsigned short *pCount)
 {
@@ -2459,6 +2471,9 @@ extern "C" int fn_80096794(void)
     return 0;
 }
 
+/* Partial, not exact: in the loop the target walks the playback records
+   with a running 0x30 offset from +0x10 and keeps the two -1 constants in
+   separate registers; ours addresses each record directly. */
 extern "C" void fn_80096954(void *pData)
 {
     unsigned int i;
@@ -2716,7 +2731,10 @@ extern "C" void fn_80097564(void)
     }
 }
 
-extern "C" void fn_800975EC(unsigned short id, int flag, int index)
+/* Partial, not exact: register allocation differs (ours saves r18-r31,
+   the target r20-r31) and the setup of the inner loop's addresses is
+   ordered differently. */
+extern "C" void fn_800975EC(int id, int flag, int index)
 {
     if (lbl_8030C2B8[index].mUnknown0 != id) {
         lbl_8030C2B8[index].mUnknown0 = id;
@@ -10402,15 +10420,6 @@ void fn_800ADA1C(void);
 void fn_800AE138(unsigned int index);
 int fn_800B6644(int index);
 int fn_80177C38(void);
-int fn_80178308(void);
-int fn_80178348(void);
-int fn_80178360(void);
-int fn_8019623C(int id);
-int fn_8009679C(unsigned int index);
-void fn_8017CFB0(unsigned short a, unsigned short b, int c, int d);
-int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject, Object_80039F5C **ppOut,
-                unsigned short *pCount);
-int fn_80095284(Object_80039F5C *p, Character_80093BCC *pCharacter, unsigned int count);
 unsigned char fn_80194F24(void);
 void fn_80194F1C(unsigned char enabled);
 void fn_80194C5C(int a, int b, int c);
@@ -12218,7 +12227,7 @@ float fn_80178A08(void);
 }
 
 extern "C" {
-void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, int a, int b);
+void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, unsigned int distance, int predict);
 int fn_8009EFDC(int index);
 }
 

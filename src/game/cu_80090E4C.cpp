@@ -10,7 +10,7 @@ void fn_80090558(Character_80093BCC *pCharacter, Actor_801C009C *pActor, Object_
 void fn_80091644(int index);
 int fn_80093814(Character_80093BCC *pCharacter, Object_80039F5C *p, Object_80039F5C *pRef, unsigned short frameIndex,
                 Vector_80039F5C *pOut, int *pAngle);
-Object_80137ABC *fn_80093C70(Character_80093BCC *pCharacter, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound);
+Object_80137ABC *fn_80093C70(Params_80092E54 *pRequest, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound);
 }
 
 extern int lbl_803EA8CC;
@@ -25,8 +25,7 @@ extern int lbl_803EA8CC;
    gets its frame spot and facing from fn_80093814 unless actor flag
    0x400 is set. Partial: the target sets the zero facing only on the
    x path (li after the compare) where this source sets it before the kind
-   3 test; every other form tried (else-branch zero, ternaries) turns the
-   x test into an mfcr bit extract. */
+   3 test. */
 extern "C" int fn_80090E4C(int index)
 {
     Character_80093BCC *pCharacter = fn_80093BCC(index);
