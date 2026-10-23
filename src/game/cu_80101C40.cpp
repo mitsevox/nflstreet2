@@ -124,11 +124,7 @@ extern "C" int fn_80101CB4(Object_80039F5C *p)
             case 0x54:
                 if (fn_801CFFD0(p->mMotion.mFacing, p->mMotion.mUnknown32) <= 0x3FFFFF
                     && p->mMotion.mUnknown32 > 0x238E39 && p->mMotion.mUnknown32 <= 0x58E38D) {
-                    if (hasBall) {
-                        mode = 2;
-                    } else {
-                        mode = 2;
-                    }
+                    mode = 2;
                 } else {
                     mode = 3;
                 }
