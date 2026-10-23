@@ -25,7 +25,7 @@ Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
 float fn_8011F4D4(void);
 int fn_8011F1CC(void);
 int fn_801783AC(int bit);
-int fn_8013BA58(Object_80137ABC *pHolder, int *pOut);
+int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 int fn_80178320(void);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 int fn_8011E9B4(Object_80039F5C *p);
