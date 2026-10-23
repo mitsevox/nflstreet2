@@ -9788,9 +9788,9 @@
       ],
       "provenance": {
         "pull_request": 474,
-        "merged_via": 474,
-        "commit": "3cbce223ff5887e7fcdaeb61c749a0c7dc67e077",
-        "introduced_blob": "6a36f8086e320e4cdacd93241421c9c833fd60d1",
+        "merged_via": 1066,
+        "commit": "d82a457071ebd0f90c55f6347ebac114fec380d8",
+        "introduced_blob": "c36c5980610b530d2c1f39004c9781ae534d46a3",
         "original_commit": "57349faa1a85aec9e958340e0d8d9466c6e4a89b",
         "original_blob": "66f80c7e7e5d34683aefb3071a3ff781b9a95f67",
         "integration_adjustment": "fn_801317F8 from adampreddy's src/game/cu_8013141C.cpp (PR 474, a measured fuzzy partial there) made exact by moving its goal-distance test into a file-local inline helper that takes the fn_80177FE0() point by value, with the fn_8013141C call as a nested if; the rest of the body is unchanged."
@@ -20875,12 +20875,12 @@
       ],
       "provenance": {
         "pull_request": 905,
-        "merged_via": 905,
+        "merged_via": 1066,
         "commit": "ce89125a3ec3de49711acf7160a6ff3b691885bc",
         "introduced_blob": "2f6d406e6bd2d32e0513e5f5f6d7dd1c397a71cf",
         "original_commit": "d26274ca59ea5bcb3d3cf910e0f423c5453171f2",
         "original_blob": "fe2e034517fb8a0625257657a47c60f3414c8f94",
-        "integration_adjustment": "fn_8012A3B0 from mitsevox's src/game/cu_801260D4.cpp (PR 905, a measured fuzzy partial there) made exact by restructuring its null test into if (pOther == 0 || fn_80124714(...)) with the inner pOther != 0 re-test the target performs; the rest of the body is unchanged."
+        "integration_adjustment": "fn_8012A3B0 from mitsevox's src/game/cu_801260D4.cpp (PR 905, a measured fuzzy partial there) made exact by testing if (pOther == 0 || fn_80124714(...)) with a pOther != 0 && guard on the first inner test, which emits no instruction of its own and lets a null pOther reach the existing else if (pOther == 0 || same team) re-test that the target performs at 0x8012A45C; the rest of the body is unchanged."
       }
     },
     {
