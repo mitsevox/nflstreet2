@@ -1,3 +1,4 @@
+#include "game/State_801297F8.h"
 #include "engine/cu_801B9F00.h"
 #include "game/cu_80125F3C.h"
 #include <math.h>
@@ -19,22 +20,6 @@
 #define MAX(a, b) ((a) < (b) ? (b) : (a))
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
 
-/* Partial overlay of the opaque player block at +336. */
-struct State_801297F8 {
-    float mUnknown0;
-    float mUnknown4;
-    int mUnknown8;
-    signed char mUnknown12;
-    signed char mUnknown13;
-    signed char mUnknown14;
-    signed char mUnknown15;
-    unsigned char mUnknown16;
-    char mUnknown17[3];
-    char mUnknown20[20];
-    unsigned char mUnknown40;
-    unsigned char mUnknown41;
-    unsigned char mUnknown42;
-};
 
 extern "C" {
 int fn_80099734(Object_80039F5C *p, Object_80137ABC *pBall, int a, int mode, void *pBlock, int b, int c, int d,
