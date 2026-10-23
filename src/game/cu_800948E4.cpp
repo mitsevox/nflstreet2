@@ -5,7 +5,7 @@ int fn_800947C4(Object_8017886C *p);
 int fn_8009481C(Object_8017886C *p);
 int fn_80093C50(int index);
 int fn_80178308(void);
-int fn_80178348(void);
+unsigned char fn_80178348(void);
 }
 
 /* Situation kind of p, from its +0x1D state and, for state 0, its flags,

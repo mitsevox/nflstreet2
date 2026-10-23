@@ -9,7 +9,7 @@ struct Object_80137ABC;
 /* Views of the records returned by fn_80093BAC, fn_80093BCC and
    fn_80096DA8. Their original identities and the contents of the opaque
    spans remain unknown. */
-struct Frame_80141210 { unsigned char mUnknown0[0x14]; int mUnknown14; unsigned char mUnknown18[4]; float mUnknown1C, mUnknown20, mUnknown24; unsigned char mUnknown28[8]; float mUnknown30, mUnknown34; unsigned char mUnknown38[4]; float mUnknown3C; };
+struct Frame_80141210 { unsigned char mUnknown0[0x14]; int mUnknown14; float mUnknown18, mUnknown1C, mUnknown20, mUnknown24; unsigned char mUnknown28[2]; unsigned short mUnknown2A; unsigned char mUnknown2C[4]; float mUnknown30, mUnknown34, mUnknown38, mUnknown3C; };
 struct Frame_800DF7CC;
 
 /* One of the mUnknown6 48-byte entries at +32 of an Actor_801C009C;
