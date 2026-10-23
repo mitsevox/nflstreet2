@@ -40,7 +40,7 @@ public:
 
 class Class_802A1A58 : public Class_80297C60 {
 public:
-    virtual void vfn_09();
+    virtual int vfn_09(char *pText);
 };
 
 class Class_802A1930 : public Class_802A56E8 {

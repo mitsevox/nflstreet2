@@ -7744,6 +7744,19 @@ extern "C" void fn_800BC51C(Class_80297BF8 *pObject)
     }
 }
 
+void Class_80297BF8::vfn_01()
+{
+    void *pHandle = fn_80238174(0, (void **)&lbl_803EC98C, sizeof(Block_800BC538), 0, 0x70726567);
+    Block_800BC538 *p = (Block_800BC538 *)fn_8023816C(pHandle);
+
+    fn_801C1F94(p, 0, sizeof(Block_800BC538));
+    p->mUnknown0 = 0;
+    p->mUnknown4 = 0;
+    p->mUnknown29 = 2;
+    p->mUnknown2C = 0x19000;
+    fn_802381E0(pHandle);
+}
+
 
 /* 8-byte block allocated under the id 'gskl' by fn_800ABD1C. */
 struct Block_800ABD1C {
@@ -12952,6 +12965,28 @@ extern "C" void fn_800B6868(int team, int index, int slot, int mode)
     }
 }
 
+extern "C" void fn_800B6B98(void)
+{
+    int team = fn_80178320();
+    int other = fn_80178308();
+    int restore = 1;
+    int i;
+
+    for (i = 0; i < lbl_803EAB60->mCount; i++) {
+        if (lbl_803EAB60->mpEntries[i].mUnknown0 != 0xFF) {
+            int index = 0xFF;
+
+            if (restore == 1 && lbl_803EAB60->mpEntries[i].mUnknown0 == team && lbl_803EAB60->mUnknown8[i] != 0xFF) {
+                index = lbl_803EAB60->mUnknown8[i];
+            } else if (restore == 1 && lbl_803EAB60->mpEntries[i].mUnknown0 == other && lbl_803EAB60->mUnknown12[i] != 0xFF) {
+                index = lbl_803EAB60->mUnknown12[i];
+            }
+            fn_800B6868(lbl_803EAB60->mpEntries[i].mUnknown0, index, i, 2);
+        }
+    }
+    lbl_803EAB60->mUnknown5 = 1;
+}
+
 extern "C" void fn_800B6C98(void)
 {
     int team = fn_80178320();
@@ -13548,6 +13583,16 @@ extern "C" int fn_800B8DF4(Class_80297C60 *p)
 extern "C" {
 void fn_800AE9A4(void);
 int fn_8017D064(int a);
+void fn_800B925C(void *p, char *pText);
+}
+
+void Class_80297C60::vfn_07()
+{
+    char text[32];
+
+    if (vfn_09(text) != 0) {
+        fn_800B925C(this, text);
+    }
 }
 
 extern "C" void fn_800B9598(Class_80297C60 *p)

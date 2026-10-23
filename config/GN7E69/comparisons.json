@@ -23625,6 +23625,11 @@
           "end": "0x800BC538"
         },
         {
+          "symbol": "vfn_01__14Class_80297BF8",
+          "start": "0x800BC538",
+          "end": "0x800BC5B8"
+        },
+        {
           "symbol": "fn_800AA124",
           "start": "0x800AA124",
           "end": "0x800AA1B0"
@@ -25030,6 +25035,11 @@
           "end": "0x800B6988"
         },
         {
+          "symbol": "fn_800B6B98",
+          "start": "0x800B6B98",
+          "end": "0x800B6C98"
+        },
+        {
           "symbol": "fn_800B6C98",
           "start": "0x800B6C98",
           "end": "0x800B6D34"
@@ -25198,6 +25208,11 @@
           "symbol": "fn_800B8DF4",
           "start": "0x800B8DF4",
           "end": "0x800B8E18"
+        },
+        {
+          "symbol": "vfn_07__14Class_80297C60",
+          "start": "0x800B9540",
+          "end": "0x800B9598"
         },
         {
           "symbol": "fn_800B9598",
@@ -26478,6 +26493,37 @@
           "symbol": "fn_800B5764",
           "start": "0x800B5764",
           "end": "0x800B57F4"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800B6D34.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping. 2 whole-function extents and the exact .rodata slice their literals occupy; split so the fragment literal pool compiles in target order. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800B6D34",
+          "end": "0x800B7248"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296F64",
+          "end": "0x80296F84"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800B6D34",
+          "start": "0x800B6D34",
+          "end": "0x800B6E68"
+        },
+        {
+          "symbol": "fn_800B6E68",
+          "start": "0x800B6E68",
+          "end": "0x800B7248"
         }
       ]
     },
