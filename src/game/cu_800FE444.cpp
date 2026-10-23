@@ -517,23 +517,44 @@ int fn_800FF094(Object_80039F5C *p)
     return s->mUnknown2 == 6;
 }
 
-void fn_800FF598(State_800FDA58 *s,Object_80039F5C *p,Point_8017886C *point,int angle,float value)
+void fn_800FF598(State_800FDA58 *s, Object_80039F5C *p, Point_8017886C *point, int angle, float value)
 {
-    s->mUnknown0=0;s->mUnknown8=point->mX;s->mUnknown12=point->mY;
-    s->mUnknown20Float=0.56f;s->mUnknown16=angle;s->mUnknown24=p->mMotion.mUnknown28/lbl_803ECB08;
-    if(value==-1.0f) {
-        if(!(fn_8022781C(&p->mMotion.mPos,point)<3.0f)) {
-            Point_8017886C delta;fn_80227690(&delta,point,&p->mMotion.mPos);
-            if(fn_801CFFD0(fn_801CFE40(delta.mY,delta.mX),angle)<0x3C71C8) {
-                float random=fn_80237260(0);value=random+random+2.0f;
-            } else value=0.0f;
-        } else value=0.0f;
+    s->mUnknown0 = 0;
+    s->mUnknown8 = point->mX;
+    s->mUnknown12 = point->mY;
+    s->mUnknown20Float = 0.56f;
+    s->mUnknown16 = angle;
+    s->mUnknown24 = p->mMotion.mUnknown28 / lbl_803ECB08;
+    if (value == -1.0f) {
+        Point_8017886C delta;
+
+        if (fn_8022781C(&p->mMotion.mPos, point) < 3.0f) {
+            s->mUnknown28 = 0.0f;
+        } else {
+            fn_80227690(&delta, point, &p->mMotion.mPos);
+            if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), angle) >= 0x3C71C8) {
+                s->mUnknown28 = 0.0f;
+            } else {
+                float random = fn_80237260(0);
+
+                s->mUnknown28 = random + random + 2.0f;
+            }
+        }
+    } else {
+        s->mUnknown28 = value;
     }
-    s->mUnknown28=value;s->mUnknown3Byte=0;s->mUnknown40=s->mUnknown32.mY=s->mUnknown32.mX=0.0f;
-    s->mUnknown4=0;s->mUnknown2=0;
-    p->mUnknown512.mUnknown14=1;p->mUnknown512.mUnknown4=p->mUnknown512.mUnknown8=p->mMotion.mFacing;
-    p->mUnknown512.mUnknown0=s->mUnknown24;
+    s->mUnknown3Byte = 0;
+    s->mUnknown40 = 0.0f;
+    s->mUnknown32.mY = 0.0f;
+    s->mUnknown32.mX = 0.0f;
+    s->mUnknown2 = 0;
+    s->mUnknown4 = 0;
+    p->mUnknown512.mUnknown14 = 1;
+    p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
+    p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+    p->mUnknown512.mUnknown0 = s->mUnknown24;
 }
+
 
 void fn_800FF6D8(Object_80039F5C *p)
 {
