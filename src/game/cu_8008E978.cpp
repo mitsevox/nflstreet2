@@ -15891,25 +15891,42 @@ extern "C" { int fn_800E0F48(void *,void *,void *,void *); }
 extern "C" int fn_800CCF68(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_80039F5C *pPoint, int angle)
 {
     Record_800C432C table;
-    fn_801BBC3C(1, pRecord->mUnknown60, &table.mTable);
-    Object_80039F5C *pA = p->mpUnknown0;
-    Play_800CCEBC *pPlay = (Play_800CCEBC *)fn_801BBD5C(pRecord->mUnknown60, pA->mpUnknown796->mUnknown2);
-    unsigned char index = 0;
-    while (index < pPlay->mSet.mCount && table.mTable.mEntries[index].mpInfo->mUnknown52 != 1) index++;
-    Vector_80039F5C start = pA->mMotion.mPos;
+    Vector_80039F5C start;
     Vector_80039F5C end;
-    int outAngle;
     unsigned char value;
-    fn_800CEED8(pRecord->mUnknown60, index, pRecord, pA, pPoint, angle, &end, &outAngle, &value);
-    unsigned int count = (unsigned char)fn_80054130()->mUnknown136;
-    Record_80054130 *pRows = fn_80054130()->mUnknown140;
-    for (unsigned char i = 0; i < count; i++, pRows++) {
-        Vector_80039F5C a;
-        Vector_80039F5C b;
-        fn_800541AC(pRows, &a, &b);
-        if (fn_800E0F48(&start, &end, &a, &b)) return 1;
+    int outAngle;
+    Point_8017886C a;
+    Point_8017886C b;
+    Object_80039F5C *pA;
+    Play_800CCEBC *pPlay;
+    Record_80054130 *pRows;
+    unsigned int count;
+    unsigned char index;
+    unsigned char i;
+    int result = 0;
+
+    fn_801BBC3C(1, pRecord->mUnknown60, &table.mTable);
+    pA = p->mpUnknown0;
+    pPlay = (Play_800CCEBC *)fn_801BBD5C(pRecord->mUnknown60, pA->mpUnknown796->mUnknown2);
+    for (index = 0; index < pPlay->mSet.mCount; index++) {
+        if (table.mTable.mEntries[index].mpInfo->mUnknown52 == 1) {
+            break;
+        }
     }
-    return 0;
+    start.mX = pA->mMotion.mPos.mX;
+    start.mY = pA->mMotion.mPos.mY;
+    start.mZ = pA->mMotion.mPos.mZ;
+    fn_800CEED8(pRecord->mUnknown60, index, pRecord, pA, pPoint, angle, &end, &outAngle, &value);
+    count = (unsigned char)fn_80054130()->mUnknown136;
+    pRows = fn_80054130()->mUnknown140;
+    for (i = 0; i < count; i++, pRows++) {
+        fn_800541AC(pRows, &a, &b);
+        if (fn_800E0F48(&start, &end, &a, &b)) {
+            result = 1;
+            break;
+        }
+    }
+    return result;
 }
 
 extern "C" int fn_800CD0BC(Group_800CC98C *p, Play_800CCEBC *pPlay, int key)
