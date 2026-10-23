@@ -38,7 +38,7 @@
 #include "game/Block_801BE60C.h"
 
 extern "C" {
-Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, int facing, float a, float b);
+Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float a, float b, int facing);
 int fn_801CFE40(float y, float x);
 void fn_80227690(void *pOut, void *pA, void *pB);
 }
@@ -46,7 +46,7 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 extern "C" int fn_8010A0A0(Object_80039F5C *p, int index) {
     if (index != 0xFFFF) {
         float distance;
-        Object_80039F5C *pOther = fn_80124C28(p, &distance, 0x2AAAAA, p->mMotion.mFacing, 3.0f, 1.0f);
+        Object_80039F5C *pOther = fn_80124C28(p, &distance, 0x2AAAAA, 3.0f, 1.0f, p->mMotion.mFacing);
 
         if (pOther != 0) {
             Point_8017886C delta;

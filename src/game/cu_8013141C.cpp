@@ -31,13 +31,13 @@ void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 void fn_8011F45C(int a);
 int fn_801231E4(Object_80039F5C *p, int angle);
-void fn_8012430C(float *pOut, int kind, Object_80039F5C *p);
-int fn_801243E0(float *pValues, int a);
-Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, float *pOut, int b);
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
+void fn_8012430C(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
+unsigned char fn_801243E0(Directions_8012430C *pValues, int angle);
+Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
+Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float fn_8012506C(Object_80039F5C *p, int kind);
-int fn_8012510C(float *pValues);
+int fn_8012510C(Directions_8012430C *pValues);
 int fn_80132630(Object_80039F5C *p, Vector_80039F5C *pPos, int a);
 void fn_8013FA8C(int a);
 void fn_80148108(int mode);
@@ -107,7 +107,7 @@ extern "C" int fn_80131474(Object_80039F5C *p, int a, int b)
     return result;
 }
 
-extern "C" void fn_80131554(Object_80039F5C *p, int index, int side, float *pValues)
+extern "C" void fn_80131554(Object_80039F5C *p, int index, int side, Directions_8012430C *pValues)
 {
     float *pA = 0;
     float *pB = 0;
@@ -122,10 +122,10 @@ extern "C" void fn_80131554(Object_80039F5C *p, int index, int side, float *pVal
     }
     for (i = 0; i < 8; i++) {
         if (pA != 0) {
-            pValues[i] += pA[i];
+            pValues->mCost[i] += pA[i];
         }
         if (pB != 0) {
-            pValues[i] += pB[i];
+            pValues->mCost[i] += pB[i];
         }
     }
 }
@@ -264,7 +264,7 @@ extern "C" int fn_80131B3C(Object_80039F5C *p, int kind, int arg)
     return result;
 }
 
-extern "C" void fn_80131C1C(Object_80039F5C *p, float *pValues, Control_80132090 *pControl)
+extern "C" void fn_80131C1C(Object_80039F5C *p, Directions_8012430C *pValues, Control_80132090 *pControl)
 {
     int angle;
 
@@ -295,7 +295,7 @@ extern "C" void fn_80131C1C(Object_80039F5C *p, float *pValues, Control_80132090
     fn_8012F5A0(p, 0, &pControl->mUnknown56);
 }
 
-extern "C" void fn_80131D48(Object_80039F5C *p, float *pValues, Control_80132090 *pControl)
+extern "C" void fn_80131D48(Object_80039F5C *p, Directions_8012430C *pValues, Control_80132090 *pControl)
 {
     pControl->mUnknown44 = fn_801243E0(pValues, -1) << 21;
     pControl->mUnknown40 = 0.72f;
@@ -429,17 +429,17 @@ extern "C" int fn_8013217C(Object_80039F5C *p)
     if (fn_8010A2DC(p, 0, -1)) {
         return 0;
     }
-    fn_80131554(p, pControl->mUnknown68, pControl->mUnknown81, pControl->mValues);
+    fn_80131554(p, pControl->mUnknown68, pControl->mUnknown81, &pControl->mValues);
     if (pControl->mUnknown76 > 0) {
         Object_80137ABC *pBall = fn_80137C48(p);
 
         if (!(p->mFlags & 0x4000) || pBall == 0) {
             if (pBall != 0) {
                 pControl->mUnknown72 = 0;
-                fn_80131C1C(p, pControl->mValues, pControl);
+                fn_80131C1C(p, &pControl->mValues, pControl);
             } else {
                 pControl->mUnknown72 = 1;
-                fn_80131D48(p, pControl->mValues, pControl);
+                fn_80131D48(p, &pControl->mValues, pControl);
             }
         }
         pControl->mUnknown76--;
@@ -460,10 +460,10 @@ extern "C" int fn_8013217C(Object_80039F5C *p)
                 break;
             }
         case 0:
-            fn_80131C1C(p, pControl->mValues, pControl);
+            fn_80131C1C(p, &pControl->mValues, pControl);
             break;
         case 1:
-            fn_80131D48(p, pControl->mValues, pControl);
+            fn_80131D48(p, &pControl->mValues, pControl);
             break;
         case 4:
             fn_80131DB4(p, pControl->mUnknown68, pControl->mUnknown80);
