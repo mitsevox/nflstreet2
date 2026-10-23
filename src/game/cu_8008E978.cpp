@@ -1065,7 +1065,7 @@ extern "C" void fn_80092F98(int handle)
 
         fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
         if (fn_80096074(pCharacter, 0) != 0) {
-            fn_80093C70(pCharacter, 'BALL', 0, &found);
+            fn_80093C70(pCharacter, 0x42414C4C /* 'BALL' */, 0, &found);
             if (found == 0) {
                 lbl_803EC924->mUnknown80.mUnknownE4E = 0;
                 *(Params_80092E54 *)&lbl_803EC924->mUnknown80.mCharacters[handle] = *pCharacter;
