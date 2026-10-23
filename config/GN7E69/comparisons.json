@@ -40109,13 +40109,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800A233C",
-          "end": "0x800A2760"
+          "end": "0x800A32B4"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x80296630",
-          "end": "0x802966C8"
+          "end": "0x8029670C"
         }
       ],
       "functions": [
@@ -40168,6 +40168,31 @@
           "symbol": "fn_800A26C4",
           "start": "0x800A26C4",
           "end": "0x800A2760"
+        },
+        {
+          "symbol": "fn_800A2848",
+          "start": "0x800A2848",
+          "end": "0x800A29AC"
+        },
+        {
+          "symbol": "fn_800A2B40",
+          "start": "0x800A2B40",
+          "end": "0x800A2D2C"
+        },
+        {
+          "symbol": "fn_800A2E80",
+          "start": "0x800A2E80",
+          "end": "0x800A2F3C"
+        },
+        {
+          "symbol": "fn_800A2F48",
+          "start": "0x800A2F48",
+          "end": "0x800A30B8"
+        },
+        {
+          "symbol": "fn_800A3170",
+          "start": "0x800A3170",
+          "end": "0x800A32B4"
         }
       ]
     },
