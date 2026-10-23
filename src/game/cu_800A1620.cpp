@@ -10,7 +10,7 @@
 
 extern "C" {
 int fn_80178308(void);
-int fn_80178348(void);
+unsigned char fn_80178348(void);
 float fn_80178A2C(void);
 float fn_80178A08(void);
 int fn_80177F70(void);

@@ -70,7 +70,7 @@ void fn_80227690(void *pOut, void *pA, void *pB);
 float fn_801CFB94(int angle);
 int fn_801CFE40(float y, float x);
 int fn_80110C10(Object_80039F5C *p);
-signed char fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
+signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *pValues);
 extern float lbl_803EAA10;
 }
 
@@ -103,5 +103,5 @@ extern "C" unsigned short fn_800A414C(Table_80089904 *table, Object_80039F5C *p,
         p->mUnknown1008.mUnknown1 = ((facing - heading) & 0xFFFFFF) <= 0x7FFFFF ? 7 : 2;
     }
     p->mUnknown1011 = pTarget->mValue;
-    return fn_8009C4B0(table, &p->mUnknown1008);
+    return fn_8009C4B0(table, (const unsigned char *)&p->mUnknown1008);
 }

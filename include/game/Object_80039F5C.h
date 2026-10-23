@@ -405,8 +405,8 @@ struct Object_80039F5C {
     Object_801BA03C *mpUnknown796;
     Record_800D81C8 *mpUnknown800;
     void *mpUnknown804;
-    void *mpUnknown808;
-    void *mpUnknown812;
+    Object_801BA03C *mpUnknown808;
+    Record_800D81C8 *mpUnknown812;
     char mUnknown816[192];
     union {
         int mUnknown1008Word;

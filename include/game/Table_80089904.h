@@ -15,6 +15,7 @@ struct Info_80089904 {
             unsigned char mUnknown6;
             unsigned char mUnknown7;
         };
+        Key_80110630 mKey;
         float mUnknown4Float;
     };
     union { char mUnknown8[4]; float mUnknown8Float; };

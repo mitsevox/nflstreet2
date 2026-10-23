@@ -93,7 +93,7 @@ void Class_80297AB8::vfn_04(float dt)
 
 
 extern "C" {
-int fn_80178348(void);
+unsigned char fn_80178348(void);
 int fn_80178308(void);
 int fn_80178360(void);
 int fn_8011F354(void);

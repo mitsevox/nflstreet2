@@ -85,7 +85,7 @@ void fn_800B6714(Object_80039F5C *p, int index);
 int fn_800B5F94(Object_80039F5C *p, Input_800B6D34 *pInput);
 int fn_800B5FC0(Object_80039F5C *p, Input_800B6D34 *pInput);
 int fn_800289A8(void);
-float fn_80178A68(Object_800B26B0 *pMotion);
+float fn_80178A68(Point_8017886C *pPos);
 int fn_800F22D8(Object_80039F5C *p, int a, int b, int c);
 int fn_80110824(Object_80039F5C *p, int a, int b, int c);
 
@@ -433,7 +433,7 @@ extern "C" int fn_800B6098(Object_80039F5C *p, Input_800B6D34 *pInput, int mode)
             if (lbl_803EAB60->mpEntries[p->mUnknown8].mUnknown8 == 0) {
                 unsigned int elapsed = fn_800289A8() - lbl_803EAB60->mpEntries[p->mUnknown8].mUnknown4;
 
-                if (mode == 4 && fn_80178A68(&p->mMotion) < 5.0f) {
+                if (mode == 4 && fn_80178A68((Point_8017886C *)&p->mMotion.mPos) < 5.0f) {
                     if (fn_800F22D8(p, 4, fn_800B5F94(p, pInput), 4)) {
                         result = 1;
                         p->mFlags |= 0x4000;

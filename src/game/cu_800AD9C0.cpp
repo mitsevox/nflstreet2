@@ -6,7 +6,7 @@
 #include "game/Block_801BE60C.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_801BA2A8.h"
-#include "game/Player_800ADA1C.h"
+#include "game/Player_8003877C.h"
 
 extern "C" {
 int fn_8002C9A8(Type_803EA368 *p, int msg, int value);
@@ -27,7 +27,7 @@ extern "C" void fn_800AD9C0(float value)
 }
 
 extern "C" int fn_800ADA1C(Table_80089904 *pTable, unsigned short key, void *pA,
-                           Record_800D81C8 *pRecords, Player_800ADA1C *p, unsigned int phase)
+                           Record_800D81C8 *pRecords, Player_8003877C *p, unsigned int phase)
 {
     int side;
     Object_8003DEC4 *pObject;
