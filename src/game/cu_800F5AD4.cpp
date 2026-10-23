@@ -18,7 +18,7 @@
 extern "C" {
 int fn_8011F1A4(void);
 unsigned char fn_8011F4C8(void);
-Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, int facing, float length, float width);
+Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float length, float width, int facing);
 void fn_8011E938(Object_80039F5C *p);
 Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
 }
@@ -35,7 +35,7 @@ extern "C" int fn_800F5AD4(Object_80039F5C *p) {
     } else {
         pos.mX += 1.5f;
     }
-    pNear = fn_80124C28(p, &distance, 0x355555, p->mMotion.mFacing, 2.75f, 0.5f);
+    pNear = fn_80124C28(p, &distance, 0x355555, 2.75f, 0.5f, p->mMotion.mFacing);
     flag = 0;
     if (fn_8011F1A4() && (fn_8011F4C8() & 1) && p->mMotion.mPos.mX > fn_80177FE0().mX) {
         flag = 1;

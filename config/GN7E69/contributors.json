@@ -6880,6 +6880,25 @@
       }
     },
     {
+      "source": "src/game/cu_80176F18.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80176F18",
+        "0x8017BD70"
+      ],
+      "provenance": {
+        "pull_request": 353,
+        "merged_via": 1061,
+        "commit": "5de333e724d6d424604ecc11669310ad322f0a0b",
+        "introduced_blob": "00cd14810389f118329eef78c2ee169c5debcbab",
+        "original_commit": "a30c66d3eb905c9749ee332d72de494cafb4b2ee",
+        "original_blob": "fcb0b7a66db79b59d63d9b0d0901fa0bfde2c249",
+        "integration_adjustment": "Newly exact pre-existing bodies (fn_80176F18, fn_8017BD70) originate in contribution 353; the PR 1060 source-form refinement (fabsf tolerance tests and the int declaration of fn_800B2314) that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
+    },
+    {
       "source": "src/game/cu_801260D4.cpp",
       "contributors": [
         "adampreddy"
@@ -15557,6 +15576,26 @@
       }
     },
     {
+      "source": "src/game/cu_8003877C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80038E80",
+        "0x80039F8C",
+        "0x8003A394"
+      ],
+      "provenance": {
+        "pull_request": 717,
+        "merged_via": 1061,
+        "commit": "006c4fde722a646cbdd619dc3907f67f27694b38",
+        "introduced_blob": "3dbfc814492effdc9f33f9b44c492a5f290c4ac5",
+        "original_commit": "c3f1c8ac140d6ac52b149794abedad37dd36dba3",
+        "original_blob": "d0e27c78477fb2fa593ecdf1b610a6cc9e7ae1ff",
+        "integration_adjustment": "Newly exact pre-existing bodies (fn_80038E80, fn_80039F8C, fn_8003A394) originate in contribution 717; the PR 1058 source-form refinement that makes them exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
+    },
+    {
       "source": "src/game/cu_8003BA10.cpp",
       "contributors": [
         "mitsevox"
@@ -19450,21 +19489,6 @@
       }
     },
     {
-      "source": "src/game/cu_80116B98.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x80116B98"
-      ],
-      "provenance": {
-        "pull_request": 902,
-        "merged_via": 918,
-        "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
-        "introduced_blob": "65b6ae52fd956680d0ddc97f9a245ef1f06b2651"
-      }
-    },
-    {
       "source": "src/game/cu_80117794.cpp",
       "contributors": [
         "mitsevox"
@@ -21337,6 +21361,24 @@
         "merged_via": 996,
         "commit": "12cdc6e253bb9974a49409eafb49e2a5b5e6e917",
         "introduced_blob": "5d3396256ee08785c1e9377d489dbeabe03bc380"
+      }
+    },
+    {
+      "source": "src/game/cu_800D0D4C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D0D48"
+      ],
+      "provenance": {
+        "pull_request": 565,
+        "merged_via": 1061,
+        "commit": "858165d566d41ce3bc4de7bb01af67e2ab63c7ee",
+        "introduced_blob": "e63bac2f7c7482894cc5e78289cf268dac9bc36d",
+        "integration_adjustment": "The lone blr fn_800D0D48 from adampreddy's src/game/cu_800D0474.cpp (PR 565) moved unchanged to the head of src/game/cu_800D0D4C.cpp, whose code is its only caller (PR 1045 file-edge review); defined with the int parameter its callers pass. The batch also retains the independently reviewed byte-index caller declarations from PR1050. The moved stub is unchanged; current integrated source is re-pinned while original attribution and prior source provenance are retained.",
+        "original_commit": "f81d5053240976b5f29e793bcd549f7794637715",
+        "original_blob": "32456af38f5ba4fa89a1e1e0f259b889e13d05ee"
       }
     },
     {
@@ -27569,6 +27611,360 @@
         "merged_via": 1046,
         "commit": "eb962dc2a24781460145d107f4b2fe4eed6d9711",
         "introduced_blob": "f42674ffa28b2b80a393c71bd5453e53ba745901"
+      }
+    },
+    {
+      "source": "src/game/SndgPathfinder.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8006DAA8"
+      ],
+      "provenance": {
+        "pull_request": 1047,
+        "merged_via": 1061,
+        "commit": "f22b53f2a81287cee577a06c46128a1621ce41ff",
+        "introduced_blob": "66384fb98b3fcd672ba37e209af436ab6064136a"
+      }
+    },
+    {
+      "source": "src/engine/cu_801C10E0.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801C1C98"
+      ],
+      "provenance": {
+        "pull_request": 1047,
+        "merged_via": 1061,
+        "commit": "f22b53f2a81287cee577a06c46128a1621ce41ff",
+        "introduced_blob": "34326069780de3de7d11cea33dfc7e12247e574e"
+      }
+    },
+    {
+      "source": "src/engine/cu_801DCA10.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801DCAF0"
+      ],
+      "provenance": {
+        "pull_request": 1047,
+        "merged_via": 1061,
+        "commit": "f22b53f2a81287cee577a06c46128a1621ce41ff",
+        "introduced_blob": "581200b1a1a9f12095657f069af4f81a65c55d42"
+      }
+    },
+    {
+      "source": "src/engine/cu_8027EFAC.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8027EFAC"
+      ],
+      "provenance": {
+        "pull_request": 1047,
+        "merged_via": 1061,
+        "commit": "f22b53f2a81287cee577a06c46128a1621ce41ff",
+        "introduced_blob": "593764efd490ebb850a979c0b30f023809cc1f46"
+      }
+    },
+    {
+      "source": "src/game/cu_80116C34.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80116B98"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 1061,
+        "commit": "f1d553842b6238a096a98cd7a92f7928ab557762",
+        "introduced_blob": "65b6ae52fd956680d0ddc97f9a245ef1f06b2651",
+        "original_source": "src/game/cu_80116B98.cpp",
+        "merged_source": true,
+        "migration_commit": "6c511aa517e95bf625169a0d7af2240ccd181796",
+        "merged_blob": "b819ed26f3da1d9128c1f76aa168657d3e8b5455"
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801242E0"
+      ],
+      "provenance": {
+        "pull_request": 559,
+        "merged_via": 1061,
+        "commit": "dd6d02dc54a9b9166ce75f14c710e7f8b1c0d21c",
+        "introduced_blob": "7fd4f5d59e4379f6f28079d10f0b31d31226fbdd",
+        "original_commit": "39035f390e8a6911806baea36eed9b8da94606d7",
+        "original_blob": "0f979da160943d5ec87c31c06d35b4e8a4eae317",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 1050 refines them in place to exact matches (declaration types, parameter order or statement form, and 8-aligned literal-pool placement of src/game/cu_801230B8.cpp and src/game/cu_80116C34.cpp), and that refinement does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1050 file for squash-history verification."
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80120EF8"
+      ],
+      "provenance": {
+        "pull_request": 1050,
+        "merged_via": 1061,
+        "commit": "dd6d02dc54a9b9166ce75f14c710e7f8b1c0d21c",
+        "introduced_blob": "7fd4f5d59e4379f6f28079d10f0b31d31226fbdd"
+      }
+    },
+    {
+      "source": "src/game/cu_80116C34.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80116C34",
+        "0x801170E8",
+        "0x80117494"
+      ],
+      "provenance": {
+        "pull_request": 1024,
+        "merged_via": 1061,
+        "commit": "dd6d02dc54a9b9166ce75f14c710e7f8b1c0d21c",
+        "introduced_blob": "b819ed26f3da1d9128c1f76aa168657d3e8b5455",
+        "original_commit": "894f119468d4218ada65416b33485b4b36ba7c41",
+        "original_blob": "f4e8b6db5db36c47ff38db030f872f0976dd69fa",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 1050 refines them in place to exact matches (declaration types, parameter order or statement form, and 8-aligned literal-pool placement of src/game/cu_801230B8.cpp and src/game/cu_80116C34.cpp), and that refinement does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1050 file for squash-history verification."
+      }
+    },
+    {
+      "source": "src/game/cu_801182C8.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801182C8"
+      ],
+      "provenance": {
+        "pull_request": 1050,
+        "merged_via": 1061,
+        "commit": "dd6d02dc54a9b9166ce75f14c710e7f8b1c0d21c",
+        "introduced_blob": "3f96410a2bf904eab6284ebccab3eb2558d11895"
+      }
+    },
+    {
+      "source": "src/game/cu_801187CC.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801187CC",
+        "0x80118B4C",
+        "0x801194F0"
+      ],
+      "provenance": {
+        "pull_request": 1050,
+        "merged_via": 1061,
+        "commit": "dd6d02dc54a9b9166ce75f14c710e7f8b1c0d21c",
+        "introduced_blob": "1844b4685e2c9b5d022fe43fd416b7b72dd2fe45"
+      }
+    },
+    {
+      "source": "src/game/cu_80119DB4.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80119DB4",
+        "0x8011A2C4"
+      ],
+      "provenance": {
+        "pull_request": 1050,
+        "merged_via": 1061,
+        "commit": "dd6d02dc54a9b9166ce75f14c710e7f8b1c0d21c",
+        "introduced_blob": "fb84a69845d5f0e08a0c16133ea6f80cc662e85b"
+      }
+    },
+    {
+      "source": "src/game/cu_8011AB38.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8011AB38"
+      ],
+      "provenance": {
+        "pull_request": 1050,
+        "merged_via": 1061,
+        "commit": "dd6d02dc54a9b9166ce75f14c710e7f8b1c0d21c",
+        "introduced_blob": "347f11f913dd995d3d26b1a6e6bb4964c5d1a3c3"
+      }
+    },
+    {
+      "source": "src/game/cu_8011BCDC.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8011C4E0",
+        "0x8011D0BC"
+      ],
+      "provenance": {
+        "pull_request": 1050,
+        "merged_via": 1061,
+        "commit": "dd6d02dc54a9b9166ce75f14c710e7f8b1c0d21c",
+        "introduced_blob": "cea4a98a7a6546d8fe6ab8a6b342cb3fe45dcff8"
+      }
+    },
+    {
+      "source": "src/game/cu_8011D558.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8011D558"
+      ],
+      "provenance": {
+        "pull_request": 854,
+        "merged_via": 1061,
+        "commit": "dd6d02dc54a9b9166ce75f14c710e7f8b1c0d21c",
+        "introduced_blob": "e86b456cfb66f3a39427246f5986dd2d40844b1f",
+        "original_commit": "f3ac0a3ae83618595e6a1e9c12ae6deda3d46e2b",
+        "original_blob": "73cec50c241e9f79ea98a4f8475dc8ec136f1ecb",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 1050 refines them in place to exact matches (declaration types, parameter order or statement form, and 8-aligned literal-pool placement of src/game/cu_801230B8.cpp and src/game/cu_80116C34.cpp), and that refinement does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1050 file for squash-history verification."
+      }
+    },
+    {
+      "source": "src/game/cu_8011EAC0.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8011EAC0"
+      ],
+      "provenance": {
+        "pull_request": 1050,
+        "merged_via": 1061,
+        "commit": "dd6d02dc54a9b9166ce75f14c710e7f8b1c0d21c",
+        "introduced_blob": "78c40a6bbe2e2f360a55eb71aa3e584bd929d80d"
+      }
+    },
+    {
+      "source": "src/game/cu_8011FE0C.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8011FE0C"
+      ],
+      "provenance": {
+        "pull_request": 1024,
+        "merged_via": 1061,
+        "commit": "dd6d02dc54a9b9166ce75f14c710e7f8b1c0d21c",
+        "introduced_blob": "f8e134cd2156449c75de3d1feb406f8d8598dc57",
+        "original_commit": "894f119468d4218ada65416b33485b4b36ba7c41",
+        "original_blob": "143bcd16b07c401560431f03006bd122af98b917",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 1050 refines them in place to exact matches (declaration types, parameter order or statement form, and 8-aligned literal-pool placement of src/game/cu_801230B8.cpp and src/game/cu_80116C34.cpp), and that refinement does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1050 file for squash-history verification."
+      }
+    },
+    {
+      "source": "src/game/cu_80120618.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80120A50"
+      ],
+      "provenance": {
+        "pull_request": 854,
+        "merged_via": 1061,
+        "commit": "dd6d02dc54a9b9166ce75f14c710e7f8b1c0d21c",
+        "introduced_blob": "c794632cd51bde8497063428438f2b17d65223d8",
+        "original_commit": "f3ac0a3ae83618595e6a1e9c12ae6deda3d46e2b",
+        "original_blob": "bcc66f4323496975b08664961601231923b3fbd8",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 1050 refines them in place to exact matches (declaration types, parameter order or statement form, and 8-aligned literal-pool placement of src/game/cu_801230B8.cpp and src/game/cu_80116C34.cpp), and that refinement does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1050 file for squash-history verification."
+      }
+    },
+    {
+      "source": "src/game/cu_80121264.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80121264"
+      ],
+      "provenance": {
+        "pull_request": 1050,
+        "merged_via": 1061,
+        "commit": "dd6d02dc54a9b9166ce75f14c710e7f8b1c0d21c",
+        "introduced_blob": "896f1600a9631bdf54cf77eb9c6ec0b306fb9a3a"
+      }
+    },
+    {
+      "source": "src/game/cu_801230B8.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8012327C",
+        "0x8012430C",
+        "0x80124374",
+        "0x801244F0",
+        "0x801245DC",
+        "0x801248D4",
+        "0x80124C28",
+        "0x8012506C",
+        "0x801250B8",
+        "0x80125594",
+        "0x80125708",
+        "0x80125EC8"
+      ],
+      "provenance": {
+        "pull_request": 737,
+        "merged_via": 1061,
+        "commit": "dd6d02dc54a9b9166ce75f14c710e7f8b1c0d21c",
+        "introduced_blob": "c1ac147099708f3f7c01a83147bf5ad912efbcad",
+        "original_commit": "aeb9a802d7ed930d460657219fe8a3d296369267",
+        "original_blob": "0d4d7c499901b24d8ba19ce43839a86624c67dcc",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 1050 refines them in place to exact matches (declaration types, parameter order or statement form, and 8-aligned literal-pool placement of src/game/cu_801230B8.cpp and src/game/cu_80116C34.cpp), and that refinement does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1050 file for squash-history verification."
+      }
+    },
+    {
+      "source": "src/game/cu_801230B8.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80123594",
+        "0x8012368C",
+        "0x801237F4",
+        "0x80123E30",
+        "0x80123F48",
+        "0x801243E0",
+        "0x80124714",
+        "0x80124CE4",
+        "0x80124E5C",
+        "0x80125214",
+        "0x801253A8",
+        "0x80125494",
+        "0x80125C28"
+      ],
+      "provenance": {
+        "pull_request": 985,
+        "merged_via": 1061,
+        "commit": "dd6d02dc54a9b9166ce75f14c710e7f8b1c0d21c",
+        "introduced_blob": "c1ac147099708f3f7c01a83147bf5ad912efbcad",
+        "original_commit": "f4725ff4f07124af5d1f1be262d287873621600e",
+        "original_blob": "12f86e7935d1ce7ba73a75a0f836ff2a66a1c29e",
+        "integration_adjustment": "Preserve the original contributor and PR of these pre-existing comparison bodies; PR 1050 refines them in place to exact matches (declaration types, parameter order or statement form, and 8-aligned literal-pool placement of src/game/cu_801230B8.cpp and src/game/cu_80116C34.cpp), and that refinement does not transfer original source credit. The original source commit/blob is retained for attribution; the source is re-pinned to the PR 1050 file for squash-history verification."
       }
     }
   ],

@@ -59,8 +59,8 @@ int fn_80110824(Object_80039F5C *p, int a, int b, int c);
 int fn_8011E9B4(Object_80039F5C *p);
 void fn_8012311C(Object_80039F5C *p, Plan_80121264 *pPlan, int angle);
 Entry_801230B8 *fn_80123174(Plan_80121264 *pPlan);
-void fn_8012430C(float *pOut, int kind, Object_80039F5C *p);
-int fn_801243E0(float *pValues, int a);
+void fn_8012430C(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
+unsigned char fn_801243E0(Directions_8012430C *pValues, int angle);
 void fn_8012B2E0(Object_80039F5C *p, Point_8017886C *pOut);
 void fn_8012C3A4(Object_80039F5C *p);
 void fn_8012CB98(int a, int b, int angle, Point_8017886C *pOut);
@@ -121,8 +121,8 @@ int fn_8013BA70(Object_80137ABC *p, int *pOut);
 int fn_8013BA58(Object_80137ABC *p, int *pOut);
 float fn_80260FE8(float a);
 float fn_80260E24(float a);
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
-Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, float *pOut, int b);
+Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
+Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
 int fn_8011F32C(void);
 int fn_80178308(void);
 int fn_80178BA4(int team);
@@ -150,7 +150,7 @@ int fn_8012EAF8(Object_80039F5C *, Object_80039F5C *, int, int, int, float);
 extern int lbl_803EB118;
 extern float lbl_803EB11C, lbl_803EB120, lbl_803EB124;
 extern unsigned char lbl_802DB05C[21];
-Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, int facing, float a, float b);
+Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, float a, int facing, float b);
 extern float lbl_803ECB08;
 }
 
@@ -196,7 +196,7 @@ extern "C" int fn_8009E180(Object_80039F5C *p);
 extern "C" int fn_800F2C1C(Object_80039F5C *p, int a);
 extern "C" int fn_800E6AC8(Object_80039F5C *p, int a);
 
-extern "C" Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, int facing, float a, float b);
+extern "C" Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float a, float b, int facing);
 
 extern "C" int fn_80168E00(int team, int a, unsigned char *pOut);
 
@@ -1185,7 +1185,7 @@ extern "C" void fn_8012CEF4(Object_80039F5C *p, Control_80132090 *pControl)
 #ifdef DECOMP_COMPARE
 extern "C" void fn_8012CFA0(Object_80039F5C *p)
 {
-    float *values = ((Control_80132090 *)&p->mUnknown336)->mValues;
+    float *values = ((Control_80132090 *)&p->mUnknown336)->mValues.mCost;
 
     if (fn_80177F70() == 0) {
         int team = fn_80178320();
@@ -1324,9 +1324,9 @@ extern "C" void fn_8012D4FC(Object_80039F5C *p, int mode)
     } else {
         float threshold = fn_801783AC(0) ? -8.0f : 0.0f;
 
-        if (!(control->mValues[index] < threshold)) {
-            float right = control->mValues[(index + 1) & 7];
-            float left = control->mValues[(index - 1) & 7];
+        if (!(control->mValues.mCost[index] < threshold)) {
+            float right = control->mValues.mCost[(index + 1) & 7];
+            float left = control->mValues.mCost[(index - 1) & 7];
 
             if (right == left) {
                 float distance;
@@ -1344,13 +1344,13 @@ extern "C" void fn_8012D4FC(Object_80039F5C *p, int mode)
                 }
             }
             if (!(right >= left)) {
-                float degrees = (right - control->mValues[index]) * 5.0f;
+                float degrees = (right - control->mValues.mCost[index]) * 5.0f;
 
                 if (!(degrees >= 90.0f)) {
                     change = (int)(fn_801CFB94((int)(degrees * 46603.37890625f)) * 0.5f * 2097152.0f);
                 }
             } else if (!(left >= right)) {
-                float degrees = (left - control->mValues[index]) * 5.0f;
+                float degrees = (left - control->mValues.mCost[index]) * 5.0f;
 
                 if (!(degrees >= 90.0f)) {
                     change = -(int)(fn_801CFB94((int)(degrees * 46603.37890625f)) * 0.5f * 2097152.0f);
@@ -1395,7 +1395,7 @@ extern "C" void fn_8012D8A8(Object_80039F5C *p, Control_80132090 *control, int *
         limit = 2.5f;
     }
     float distance;
-    Object_80039F5C *other = fn_80124C28(p, &distance, 0x355555, control->mUnknown44, limit, 0.35f);
+    Object_80039F5C *other = fn_80124C28(p, &distance, 0x355555, limit, 0.35f, control->mUnknown44);
     *pMode = (int)other;
     if (!other || distance >= limit) {
         return;
@@ -1649,7 +1649,7 @@ extern "C" int fn_8012E670(Object_80039F5C *p, Object_80039F5C *, int, int turn,
     unsigned char chance = ((p->mRatings[0] >> 2) + (p->mRatings[0] >> 3)) >> 1;
     chance = (unsigned char)(int)((float)chance
         - (float)facingDifference * 3.06538225913755e-7f * 0.8f * (float)chance);
-    Object_80039F5C *pOther = fn_80124CE4(p, p->mIdBytes[2] ^ 1, &distance, 0x271C71, facing, 10.0f, 1.0f);
+    Object_80039F5C *pOther = fn_80124CE4(p, p->mIdBytes[2] ^ 1, &distance, 0x271C71, 10.0f, facing, 1.0f);
     if (pOther && pOther->mIdBytes[2] != p->mIdBytes[2] && !fn_8011E9B4(pOther)) {
         Vector_80039F5C delta;
         fn_80227690(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
@@ -2106,7 +2106,7 @@ extern "C" int fn_8012FDDC(Object_80039F5C *p, Control_80132090 *pControl)
     if (p && pControl && fn_80137B40() == p) {
         float distance;
         Object_80039F5C *pOther = fn_80124CE4(p, p->mIdBytes[2], &distance, 0x200000,
-                                           p->mMotion.mFacing, 1.5f, 1.0f);
+                                           1.5f, p->mMotion.mFacing, 1.0f);
 
         if (pOther && fn_8011E9B4(pOther)
             && fn_801CFFD0(p->mMotion.mFacing, 0x400000) <= 0x200000) {
@@ -2176,7 +2176,7 @@ extern "C" int fn_8012FF5C(Object_80039F5C *p)
     }
     if (!(p->mFlags & 0x4000)) {
         if (--pControl->mUnknown49 <= 0) {
-            float *pValues = pControl->mValues;
+            Directions_8012430C *pValues = &pControl->mValues;
             Entry_801230B8 *pEntry;
 
             pControl->mUnknown49 = (255 - ((p->mRatings[0] >> 1) + (p->mRatings[2] >> 1))) >> 4;

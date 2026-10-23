@@ -6,6 +6,7 @@
 #include "game/ModuleGroup_80033A5C.h"
 #include "game/ModuleGroup_8008CC74.h"
 #include "game/SndgCrowd.h"
+#include "game/SndgPathfinder.h"
 #include "game/cu_8003EC04.h"
 #include "game/cu_80041210.h"
 #include "game/cu_80064864.h"
@@ -14,7 +15,6 @@
 #include "game/fn_801FCE10.h"
 
 extern "C" {
-extern char lbl_8030A60C[];
 extern char lbl_8030C070[];
 extern void *lbl_803EA368;
 extern void *lbl_803EA554;
@@ -1212,7 +1212,7 @@ int SimpShadow::Shutdown()
     return 1;
 }
 
-static ModuleDependency sSndgIGDependencies[] = { &gPractice, &gUIS, &gMonitor, lbl_8030A60C, &gSndgCrowd, &gMiniGame, 0 };
+static ModuleDependency sSndgIGDependencies[] = { &gPractice, &gUIS, &gMonitor, &gSndgPathfinder, &gSndgCrowd, &gMiniGame, 0 };
 SndgIG gSndgIG;
 
 ModuleDependency *SndgIG::GetDependencies() { return sSndgIGDependencies; }

@@ -29,7 +29,7 @@ void fn_800D8140(State_800D8140 *pState, Object_80039F5C *p, int value);
 void fn_800D81C8(State_800D8140 *pState, Object_80039F5C *p);
 void fn_8022765C(void *pOut, void *pA, void *pB);
 int fn_800ACF40(Object_80039F5C *p, signed char value);
-Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, float *pOut, int b);
+Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
 int fn_80177F70(void);
 int fn_80178308(void);
 int fn_800B65A0(int team);
