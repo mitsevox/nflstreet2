@@ -21318,6 +21318,61 @@
       }
     },
     {
+      "source": "src/game/cu_800D0D4C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D3CC0"
+      ],
+      "provenance": {
+        "pull_request": 548,
+        "merged_via": 1065,
+        "commit": "3e9f671f174073c88643220e9bd94087e619cf66",
+        "introduced_blob": "4017c8b47a75ce0b4f2ffbeed92e8f0994e8ef67",
+        "original_commit": "ca89e6fd01ef78b313d10841c1dea8cb646ad8f1",
+        "original_blob": "bf9aaa788f936a42e1cd46fe7a3a91ddfb71f4df",
+        "integration_adjustment": "fn_800D3CC0 from adampreddy's src/game/cu_800D0D4C.cpp (PR 548, a measured fuzzy partial there) made exact by declaring the result local unsigned char, which gives the target's r3 -> r30 copy; the rest of the body is unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_800D0D4C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D5900"
+      ],
+      "provenance": {
+        "pull_request": 593,
+        "merged_via": 1065,
+        "commit": "3e9f671f174073c88643220e9bd94087e619cf66",
+        "introduced_blob": "4017c8b47a75ce0b4f2ffbeed92e8f0994e8ef67",
+        "original_commit": "7a46ed88d5a831b8fd057ba90a132305d01a3b3e",
+        "original_blob": "e3a032c8bfa5655bce22ae0d40a7f58b11a64596",
+        "integration_adjustment": "fn_800D5900 from adampreddy's src/game/cu_800D0D4C.cpp (PR 593, a measured fuzzy partial there) made exact by writing the 4/5/2 test as separate else-if conditions with the same +0x1EE4 store, matching the target's separate cmpwi/beq tests; the rest of the body is unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_800D0D4C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D5054",
+        "0x800D60BC"
+      ],
+      "provenance": {
+        "pull_request": 987,
+        "merged_via": 1065,
+        "commit": "3e9f671f174073c88643220e9bd94087e619cf66",
+        "introduced_blob": "4017c8b47a75ce0b4f2ffbeed92e8f0994e8ef67",
+        "original_commit": "12cdc6e253bb9974a49409eafb49e2a5b5e6e917",
+        "original_blob": "5d3396256ee08785c1e9377d489dbeabe03bc380",
+        "integration_adjustment": "fn_800D5054 and fn_800D60BC: bodies first written by mitsevox in PR 725 and reworked by adampreddy in PR 987 (the switch on kind with an empty case 0, the float limit local and, in fn_800D60BC, mUnknown1EF5 = accept = 1), the same rework that made fn_800D5494 exact and is credited to PR 987. Made exact here by writing the record gate as if/else if/else with its own accept = 1 per zero test; fn_800D60BC also resets accept after the 0x800AE7F0 call and passes the same-team id byte directly. The rest of both bodies is the PR 987 version."
+      }
+    },
+    {
       "source": "src/game/cu_8010F43C.cpp",
       "contributors": [
         "mitsevox"
