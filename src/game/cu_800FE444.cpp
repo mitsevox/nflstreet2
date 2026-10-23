@@ -662,29 +662,45 @@ int fn_800FFA10(Object_80039F5C *p, Object_80039F5C *other)
     return result;
 }
 
-void fn_800FFB4C(Object_80039F5C *p,Object_80039F5C *other,float *value,Point_8017886C *out)
+static inline float MapRange(float v, float inLo, float inHi, float outLo, float outHi)
+{
+    return (v - inLo) * (outHi - outLo) / (inHi - inLo) + outLo;
+}
+
+void fn_800FFB4C(Object_80039F5C *p, Object_80039F5C *other, float *value, Point_8017886C *out)
 {
     float factor;
-    if(*value<=0.0f) {
-        factor=((fn_80178A08()+p->mMotion.mPos.mX-1.0f)*2.0f)/(4.5f-1.0f)-1.0f;
-        if(factor<-1.0f)factor=-1.0f;
-        else if(!(factor<=1.0f))factor=1.0f;
+
+    if (*value > 0.0f) {
+        factor = MapRange(fn_80178A08() - p->mMotion.mPos.mX, 1.0f, 4.5f, -1.0f, 1.0f);
+        factor = factor < -1.0f ? -1.0f : (factor > 1.0f ? 1.0f : factor);
     } else {
-        factor=((fn_80178A08()-p->mMotion.mPos.mX-1.0f)*2.0f)/(4.5f-1.0f)-1.0f;
-        if(!(factor>=-1.0f))factor=-1.0f;
-        else if(!(factor<=1.0f))factor=1.0f;
+        factor = MapRange(fn_80178A08() + p->mMotion.mPos.mX, 1.0f, 4.5f, -1.0f, 1.0f);
+        factor = factor < -1.0f ? -1.0f : (factor > 1.0f ? 1.0f : factor);
     }
-    Point_8017886C delta={value[0],value[1]};delta.mX*=factor;
-    if(fn_801CFFD0(other->mMotion.mUnknown32,0x400000)>0x200000) {
-        if(!(delta.mY>=0.0f)) {
-            delta.mY*=3.0f;if(!(delta.mY>=-3.0f))delta.mY=-3.0f;
+    Point_8017886C delta;
+
+    delta.mX = value[0];
+    delta.mY = value[1];
+    delta.mX *= factor;
+    if (fn_801CFFD0(other->mMotion.mUnknown32, 0x400000) > 0x200000) {
+        if (delta.mY < 0.0f) {
+            delta.mY *= 3.0f;
+            delta.mY = delta.mY < -3.0f ? -3.0f : delta.mY;
         }
     } else {
-        float d=3.0f-fabsf(p->mMotion.mPos.mX-other->mMotion.mPos.mX);
-        if(!(d>=0.0f))d=0.0f;
-        delta.mY*=d*0.333333343f*4.0f+1.0f;
+        float d = 3.0f - fabsf(p->mMotion.mPos.mX - other->mMotion.mPos.mX);
+
+        if (d < 0.0f) {
+            d = 0.0f;
+        }
+        {
+            float ratio = d / 3.0f;
+
+            delta.mY *= ratio * 4.0f + 1.0f;
+        }
     }
-    fn_80227638(out,&other->mMotion.mPos,&delta);
+    fn_80227638(out, &other->mMotion.mPos, &delta);
 }
 
 void fn_800FFD2C(Object_80039F5C *p,Point_8017886C *point)
