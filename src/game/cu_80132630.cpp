@@ -79,7 +79,7 @@ void fn_800C89F0(Object_80039F5C *, int, int, int, float);
 int fn_80124714(Object_80039F5C *, Object_80039F5C *, Object_80039F5C **);
 int fn_80178320(void);
 unsigned int fn_80178D18(int);
-Object_80039F5C *fn_801244F0(Object_80039F5C *, int, int, unsigned char, float *, int);
+Object_80039F5C *fn_801244F0(Object_80039F5C *, int, unsigned char, unsigned char, float *, int);
 int fn_801486A0(void);
 int fn_80156704(void);
 float fn_80124FE0(Object_80039F5C *, int);

@@ -112,7 +112,7 @@ void fn_800A02FC(void);
 int fn_801348F0(Object_80039F5C *);
 int fn_801486A0(void);
 unsigned char fn_800C13A0(Object_80039F5C *, unsigned char *, unsigned char *);
-Object_80039F5C *fn_801244F0(Object_80039F5C *, int, int, unsigned char, float *, int);
+Object_80039F5C *fn_801244F0(Object_80039F5C *, int, unsigned char, unsigned char, float *, int);
 int fn_80178308(void);
 void fn_8011E3EC(Object_80039F5C *, int);
 void fn_8011E240(Object_80039F5C *);

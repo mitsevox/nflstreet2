@@ -66,7 +66,7 @@ void fn_8009BD60(Object_80039F5C *p);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_80109990(Pair_80109990 *pOut);
 int fn_80109A1C(Object_80039F5C *p, Point_8017886C *pOut);
-Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, float *pOut, int b);
+Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
 int fn_80178308(void);
 float fn_80178A08(void);
 float fn_80178A44(void);

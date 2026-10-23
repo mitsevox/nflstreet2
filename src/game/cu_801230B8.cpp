@@ -91,8 +91,8 @@ void fn_8012368C(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F
 void fn_8012430C(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
 void fn_80124374(Directions_8012430C *pOut, int kind, Object_80039F5C *p, Object_80039F5C *a);
 unsigned char fn_801243E0(Directions_8012430C *pValues, int angle);
-Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, float *pOut, int b);
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
+Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
+Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float fn_8012506C(Object_80039F5C *p, int kind);
 float fn_801250B8(Object_80039F5C *p, Object_80039F5C *a, int kind);
@@ -458,12 +458,12 @@ unsigned char fn_801243E0(Directions_8012430C *pValues, int angle)
     return best;
 }
 
-Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, float *pOut, int b)
+Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b)
 {
     Point_8017886C *pPos = (Point_8017886C *)&p->mMotion.mPos;
     float minimum = 3.4028234663852886e38f;
     Object_80039F5C *pBest = 0;
-    for (unsigned int i = a; i < count; i = (unsigned char)(i + 1)) {
+    for (unsigned char i = a; i < count; i++) {
         Object_80039F5C *pOther = fn_80039F5C(team, i);
         if (pOther != p && (!b || !fn_8011E9B4(pOther))) {
             Point_8017886C delta;
@@ -476,15 +476,15 @@ Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char 
     return pBest;
 }
 
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b)
+Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b)
 {
     Point_8017886C *pPos = (Point_8017886C *)&p->mMotion.mPos;
     int facing = p->mMotion.mUnknown28 != 0.0f ? p->mMotion.mUnknown32 : p->mMotion.mFacing;
     float minimum = 32767.0f;
     Object_80039F5C *pBest = 0;
-    for (unsigned int i = a; i < count; i = (unsigned char)(i + 1)) {
+    for (unsigned char i = a; i < count; i++) {
         Object_80039F5C *pOther = fn_80039F5C(team, i);
-        if (pOther == p || (b && pOther->mUnknown1032 >= 4 && pOther->mUnknown1032 <= 6)) continue;
+        if (pOther == p || (b && (pOther->mUnknown1032 >= 4 && pOther->mUnknown1032 <= 6))) continue;
         Point_8017886C delta;
         fn_80227690(&delta, (Point_8017886C *)&pOther->mMotion.mPos, pPos);
         if (fn_801CFFD0(fn_801CFE40(delta.mY, delta.mX), facing) < angle) {
