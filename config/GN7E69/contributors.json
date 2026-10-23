@@ -20848,6 +20848,24 @@
       }
     },
     {
+      "source": "src/game/cu_801260D4.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8012A3B0"
+      ],
+      "provenance": {
+        "pull_request": 905,
+        "merged_via": 905,
+        "commit": "ce89125a3ec3de49711acf7160a6ff3b691885bc",
+        "introduced_blob": "2f6d406e6bd2d32e0513e5f5f6d7dd1c397a71cf",
+        "original_commit": "d26274ca59ea5bcb3d3cf910e0f423c5453171f2",
+        "original_blob": "fe2e034517fb8a0625257657a47c60f3414c8f94",
+        "integration_adjustment": "fn_8012A3B0 from mitsevox's src/game/cu_801260D4.cpp (PR 905, a measured fuzzy partial there) made exact by restructuring its null test into if (pOther == 0 || fn_80124714(...)) with the inner pOther != 0 re-test the target performs; the rest of the body is unchanged."
+      }
+    },
+    {
       "source": "src/game/cu_8017FB90.cpp",
       "contributors": [
         "mitsevox"
