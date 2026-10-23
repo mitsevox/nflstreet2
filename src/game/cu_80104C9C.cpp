@@ -1104,7 +1104,6 @@ extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74 *pBlock) {
         case 1:
             switch (pBlock->mUnknown24) {
             case 0:
-            case 4:
                 result = 3;
                 break;
             case 2:
@@ -1119,6 +1118,9 @@ extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74 *pBlock) {
                 if (time < otherTime && pBlock->mUnknown54 == 0) {
                     result = 0;
                 }
+                break;
+            case 4:
+                result = 3;
                 break;
             }
             break;
