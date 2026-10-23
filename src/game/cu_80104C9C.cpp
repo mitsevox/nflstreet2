@@ -832,10 +832,10 @@ extern "C" int fn_80106580(Object_80039F5C *p, int a) {
     Object_80039F5C *pTarget = fn_80105384(p, a, 0);
 
     if (pTarget != 0 && fn_80105E90(p, pTarget, 11) && fn_80106618(p)) {
-        result = 1;
         fn_80106678(fn_8011F518(), pTarget, 6, 11);
         fn_8010CEB8(pTarget, 11);
         fn_800D6914(0, p);
+        result = 1;
     }
     return result;
 }
