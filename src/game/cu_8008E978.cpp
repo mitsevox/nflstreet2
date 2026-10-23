@@ -109,14 +109,6 @@ struct Record_80093E4C {
     unsigned char mUnknownD[3];
 };
 
-/* 16-byte records of the two-entry table cleared by fn_8009418C. */
-struct Slot_8009418C {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknownC;
-};
-
 /* 12-byte records of the .data table searched by fn_80093FD4. */
 struct Record_80093FD4 {
     int mUnknown0;
@@ -268,7 +260,6 @@ extern Record_80093E4C lbl_802D77D8[];
 extern Record_80093E4C lbl_802D7808[];
 extern int lbl_802D7974[5][5];
 extern Vector_80039F5C lbl_8030C0B4[];
-extern Slot_8009418C lbl_8030C164[2];
 extern Params_80092E54 lbl_8030C184;
 extern float lbl_803EA2C4;
 /* -1-terminated roster slot lists fn_80095370 picks by position code. */
