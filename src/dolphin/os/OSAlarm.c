@@ -214,4 +214,10 @@ static void DecrementerExceptionCallback(register __OSException exception,
     OSLoadContext(context);
 }
 
-
+asm void DecrementerExceptionHandler(register __OSException exception, register OSContext* context)
+{
+    nofralloc
+    OS_EXCEPTION_SAVE_GPRS(context)
+    stwu r1, -8(r1)
+    b DecrementerExceptionCallback
+}

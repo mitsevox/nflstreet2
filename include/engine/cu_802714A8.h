@@ -183,6 +183,7 @@ extern "C" {
 
 extern void *(*lbl_803B53E4)(int size);
 extern void (*lbl_803B53E8)(void *p);
+extern int (*lbl_80301000)(void *dst, void *src, int size);
 extern Struct_803A6C24 lbl_803A6C24;
 extern Struct_803B4E34 lbl_803B4E34;
 

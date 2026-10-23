@@ -93,6 +93,48 @@ inline void KillThreads(void)
     }
 }
 
+asm void Reset(s32 resetCode)
+{
+    nofralloc
+    b L_jump_0
+L_hid0:
+    mfspr r8, HID0
+    ori r8, r8, 0x8
+    mtspr HID0, r8
+    isync
+    sync
+    nop
+    b L_wait
+L_jump_0:
+    b L_jump_1
+L_wait:
+    mftb r5, 268
+L_wait_loop:
+    mftb r6, 268
+    subf r7, r5, r6
+    cmplwi r7, 0x1124
+    blt L_wait_loop
+    nop
+    b L_reset
+L_jump_1:
+    b L_jump_2
+L_reset:
+    lis r8, 0xcc00
+    ori r8, r8, 0x3000
+    li r4, 0x3
+    stw r4, 0x24(r8)
+    stw r3, 0x24(r8)
+    nop
+    b L_halt
+L_jump_2:
+    b L_jump_3
+L_halt:
+    nop
+    b L_halt
+L_jump_3:
+    b L_hid0
+}
+
 void __OSDoHotReset(s32 arg0)
 {
     OSDisableInterrupts();

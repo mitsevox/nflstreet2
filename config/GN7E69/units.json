@@ -951,12 +951,12 @@
       "evidence": "Original OSReboot instruction0x8023EA38 loads signed32-bit cached mode flag from r13-21084; canonical OS.h BOOL declaration reused. Whole source streaming branch tests same flag."
     },
     "__ArenaLo": {
-      "address": "0x8040E4E0",
-      "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
+      "address": "0x803FE4E0",
+      "evidence": "Original OSInit lis/addi pair at 0x80238C20/0x80238C24: lis r3,0x8040 plus signed low displacement forms 0x803FE4E0; no storage definition claimed. Corrects the former +0x10000 address error."
     },
     "_db_stack_end": {
-      "address": "0x8040E4C0",
-      "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
+      "address": "0x803FE4C0",
+      "evidence": "Original OSInit lis/addi pair at 0x80238C58/0x80238C5C: lis r3,0x8040 plus signed low displacement forms 0x803FE4C0; no storage definition claimed. Corrects the former +0x10000 address error."
     },
     "__ArenaHi": {
       "address": "0x81780000",
