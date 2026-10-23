@@ -384,9 +384,9 @@ extern "C" void fn_800C34B0(void)
     unsigned int rtqg;
 
     fn_8017F584();
-    /* The 'PNIG' and 'ELQG' query strings sit in the target pool ahead of
-       this function's live strings, so the original made these queries on a
-       path the compiler removed; resume is never set in this body. */
+    
+
+
     if (resume) {
         fn_801FCE10(0, "select 'PNIG' into \x82 from 'FNIG'\n", &pnig);
         fn_801FCE10(0, "select 'ELQG' into \x82 from 'FNIG'\n", &elqg);

@@ -23,9 +23,9 @@ extern int lbl_803EA8CC;
    the rest face 0x800000 for positive x) are clamped to x in [-1, 1] and
    y within fn_80178A44() - 8. fn_80090558 then runs, and every player
    gets its frame spot and facing from fn_80093814 unless actor flag
-   0x400 is set. Partial: the target sets the zero facing only on the
-   x path (li after the compare) where this source sets it before the kind
-   3 test. */
+   0x400 is set. */
+
+
 extern "C" int fn_80090E4C(int index)
 {
     Character_80093BCC *pCharacter = fn_80093BCC(index);

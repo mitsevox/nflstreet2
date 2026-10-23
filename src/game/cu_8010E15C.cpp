@@ -58,9 +58,9 @@ int fn_801CFFD0(int a, int b);
 void fn_80227690(void *pOut, void *pA, void *pB);
 }
 
-/* The target compares the state against 4 with a greater-or-equal store
-   flag (0x8010E218), which only survives when the bound reaches the
-   comparison as an inlined argument; a literal is folded to "> 3". */
+
+
+
 static inline int InRange(int v, int lo, int hi) { return v <= hi && v >= lo; }
 
 /* Steers the player around the nearest other player ahead of its heading. */

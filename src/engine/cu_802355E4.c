@@ -1,4 +1,4 @@
-/* Partial source for the engine range 0x802355E4-0x8023873C (neutral file name). */
+
 
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/os/OSCache.h>

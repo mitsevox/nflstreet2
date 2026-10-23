@@ -1,9 +1,9 @@
 #ifndef GAME_CLASS_80297CE8_H
 #define GAME_CLASS_80297CE8_H
 
-/* Polymorphic class with vtable 0x80297CE8 in the cu_8008E978 candidate range.
-   Every slot is a member defined in src/game/cu_8008E978.cpp or one of its
-   comparison fragments; signatures follow the bodies and their callers. */
+/* Polymorphic class with vtable 0x80297CE8. */
+
+
 class Class_80297CE8 {
 public:
     virtual ~Class_80297CE8() {}

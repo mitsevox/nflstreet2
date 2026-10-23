@@ -60,9 +60,9 @@
 #include "game/Record_8011F518.h"
 #include "game/cu_80136B1C.h"
 #include "game/cu_8008E978.h"
-/* The compiler emits vtables in reverse class-definition order, so these
-   headers are included in reverse target vtable order (0x80297CE8 down to
-   0x80297AB8). */
+
+
+
 #include "game/Class_80297CE8.h"
 #include "game/Class_80297C60.h"
 #include "game/Class_80297BF8.h"
@@ -411,10 +411,10 @@ struct Request_8008FF44 {
     Params_80092E54 mRequest;
 };
 
-/* Partial, not exact: register allocation differs, the lookup in the
-   16-byte table at 0x802D73B8 is scheduled differently, the +0xE4/+0xE8/
-   +0xEC stores come in a different order, and ours has an extra li r9,1
-   (0x304 bytes against the target's 0x300). */
+
+
+
+
 extern "C" int fn_8008FF44(int value, int *pData)
 {
     Request_8008FF44 *pRequest = (Request_8008FF44 *)pData;
@@ -838,9 +838,9 @@ extern "C" int fn_80091864(int index)
     return result;
 }
 
-/* Partial, not exact: the target's switch keeps the compare against the
-   empty 'COIN' case in its decision tree; ours drops it, which shifts the
-   register allocation by one. */
+
+
+
 extern "C" void fn_800919F0(int index)
 {
     Character_80093BCC *pCharacter = fn_80093BCC(index);
@@ -2020,13 +2020,13 @@ extern "C" void fn_80095370(unsigned int position, Object_80039F5C **ppOut, unsi
     *pCount = count;
 }
 
-/* Partial, not exact: the switch on the frame's four-character id compiles
-   to a different comparison tree (the target tests the 'CH01' range
-   first); in the BALC/FREC case the mIdBytes[3] == 1 test branches the
-   other way, with its blocks in a different order and different
-   registers; in the TNOR case the target loads the player's +2 id byte
-   before the fn_80178348 call where ours loads it after. Ours is 0x9C8
-   bytes against the target's 0xA00. */
+
+
+
+
+
+
+
 extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject,
                            Object_80039F5C **ppOut, unsigned short *pCount)
 {
@@ -2487,9 +2487,9 @@ extern "C" int fn_80096794(void)
     return 0;
 }
 
-/* Partial, not exact: the target copies the fn_801EF390 result through r0
-   (mr r0,r3) before storing it, and in the loop it addresses each playback
-   record from a +0x10 base and stores +0x2A before +0x28. */
+
+
+
 extern "C" void fn_80096954(void *pData)
 {
     unsigned int i;
@@ -2747,11 +2747,11 @@ extern "C" void fn_80097564(void)
     }
 }
 
-/* Partial, not exact: register allocation differs (ours saves r18-r31,
-   the target r20-r31), the target moves the 8-byte slot through a stack
-   temporary at sp+0x18, ours narrows id with clrlwi before fn_801BBC3C
-   (declared unsigned short in Table_80089904.h) where the target passes it
-   whole, and ours is 0x18 bytes shorter. */
+
+
+
+
+
 extern "C" void fn_800975EC(int id, int flag, int index)
 {
     if (lbl_8030C2B8[index].mUnknown0 != id) {
@@ -4023,7 +4023,7 @@ extern "C" int fn_800C7720(Object_80039F5C *pOther, Object_80039F5C *p)
 
 extern "C" void fn_800C8688(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b)
 {
-    /* The target frame is 0x38 bytes: a 48-byte local the body never uses. */
+    
     float local[12];
 }
 
@@ -18342,8 +18342,8 @@ extern "C" void fn_800CE804(Command_800CEE74 *p, Table_80089904 *pTable, int ind
     if (pAnchor->mUnknown12 == 2) fn_80227264(&delta, &p->mVector0, lbl_803EAC88);
     else fn_80227264(&delta, &p->mVector0, lbl_803EAC84);
     fn_8022765C(&p->mUnknown12, &p->mUnknown12, &delta);
-    /* The target stores 0.0f to delta's X after the last call (stfs f0,8(r1)
-       at 0x800CEA64); the store survives because delta's address escapes. */
+    
+
     delta.mX = 0.0f;
 }
 

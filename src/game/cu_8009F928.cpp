@@ -114,9 +114,9 @@ extern "C" void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, unsigned i
    or 12) within lbl_803EA9C4 of it: a p on the fn_80178320() side rolls
    rating 8 against lbl_803EA9C8 and sends message 24; otherwise p rolls
    rating 3 against a distance-weighted chance and sends message 23 with
-   the ball index. Returns whether a message was sent. Partial: the target
-   pool holds this function's 1.0f before 255.0f and 2^31; this source
-   emits them in the opposite order. */
+   the ball index. Returns whether a message was sent. */
+
+
 extern "C" int fn_8009FB60(Object_80039F5C *p)
 {
     int sent = 0;

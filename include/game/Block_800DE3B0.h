@@ -3,8 +3,8 @@
 
 #include "game/Block_801BE60C.h"
 
-/* Records of the table fn_801BBD5C returns, as src/game/cu_800DAEE4.cpp
-   reads them. */
+/* Records of the table fn_801BBD5C returns. */
+
 struct Entry_800DE51C {
     unsigned short mUnknown0;
     unsigned char mUnknown2;
@@ -18,8 +18,8 @@ struct Table_800DE51C {
     Entry_800DE51C mEntries[1];
 };
 
-/* Per-key block that fn_801BE60C returns and fn_800DEAB0 fills (same layout
-   as the local definition in src/game/cu_800DAEE4.cpp). */
+/* Per-key block that fn_801BE60C returns and fn_800DEAB0 fills. */
+
 struct Block_800DE3B0 {
     float mUnknown0;
     Pair_802270A4 mUnknown4, mUnknownC;

@@ -40,9 +40,9 @@
 
 #define CLAMP(x, lo, hi) ((x) < (lo) ? (lo) : ((x) > (hi) ? (hi) : (x)))
 
-/* The block at player +336 (88 bytes), defined identically in each
-   cu_800EFC68 fragment that uses it. +0 to +16 hold the pass view that
+/* The 88-byte block at player +336. +0 to +16 hold the pass view that
    fn_80108C34 and fn_80108DF8 read from the other player's block. */
+
 struct Block_800F4A74 {
     unsigned short mUnknown0;
     char mUnknown2[2];

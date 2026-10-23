@@ -68,9 +68,9 @@ void fn_8010E15C(Object_80039F5C *p, Steer_8010DAB4 *pOut);
 extern float lbl_803ECB08;
 }
 
-/* Partial: one instruction off. The target loads the player's y straight
-   into f12 at 0x8010DC38; this source loads it into f0 and copies it with
-   fmr before the compare. Everything else matches. */
+
+
+
 extern "C" void fn_8010DAB4(Object_80039F5C *p, Steer_8010DAB4 *pOut) {
     Object_80039F5C *pCarrier = fn_80137B40();
     Object_800B26B0 *pMotion = &p->mMotion;

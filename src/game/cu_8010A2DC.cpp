@@ -72,8 +72,8 @@ extern "C" int fn_8010A2DC(Object_80039F5C *p, int a, short b) {
     int result = 0;
     int mode = fn_800AD9B4();
 
-    /* fn_800ABCC0's result is narrowed to unsigned char at the call (clrlwi), as fn_800AD418
-       stores fn_800ABC64's result in an unsigned char. */
+    
+
     if (fn_801486A0() != 0 && fn_801486A0() != 1 && (mode == 4 || (mode == 7 && (unsigned char)fn_800ABCC0(lbl_803EAA8C))) &&
         fn_801BE648(p->mpUnknown792) != 0xCB && p->mUnknown9[2] != 0) {
         if (*fn_8003AB38(p) != 62) {

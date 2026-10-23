@@ -100,8 +100,8 @@ extern "C" void fn_8010D508(Object_80039F5C *p) {
     pBlock->mUnknown16 = pInfo->mUnknown32;
     offset = pInfo->mUnknown8;
     pivot = pInfo->mUnknown20;
-    /* The target tests a register loaded with 0 (0x8010D5BC, 0x8010D5C4) before the two
-       negations, so the mirror flag is a local that nothing sets. */
+    
+
     if (flip) {
         offset.mY = -offset.mY;
         pivot.mY = -pivot.mY;

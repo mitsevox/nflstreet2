@@ -61,11 +61,11 @@ int fn_80178308(void);
 void fn_80227690(void *pOut, void *pA, void *pB);
 }
 
-/* Picks a spot past a teammate in a neighbouring slot to run to. Partial:
-   seven instruction words differ, all from one register choice. The
-   target keeps the slot index in r29 and copies its byte offset into r31
-   for the inner loop (0x80116580); this source puts the index in r31
-   itself. Everything else matches. */
+/* Picks a spot past a teammate in a neighbouring slot to run to. */
+
+
+
+
 extern "C" int fn_80116410(Object_80039F5C *p, Object_80039F5C *pOther, State_8011569C *pState, Point_8017886C *pTarget) {
     float best = -1000.0f;
     float extra = 0.0f;

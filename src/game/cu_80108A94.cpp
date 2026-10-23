@@ -38,9 +38,9 @@
 #include "game/fn_801BE60C.h"
 #include "game/Block_801BE60C.h"
 
-/* The block at player +336 (88 bytes), defined identically in each
-   cu_800EFC68 fragment that uses it. +0 to +16 hold the pass view that
+/* The 88-byte block at player +336. +0 to +16 hold the pass view that
    fn_80108C34 and fn_80108DF8 read from the other player's block. */
+
 struct Block_800F4A74 {
     unsigned short mUnknown0;
     char mUnknown2[2];
@@ -225,7 +225,7 @@ extern "C" void fn_80108DF8(Object_80039F5C *p, Points_800F3A6C *pInfo, int quic
             Block_800F4A74 *pOtherBlock = (Block_800F4A74 *)&pOther->mUnknown336;
 
             if (pOtherBlock->mUnknown0 < pOtherBlock->mUnknown16 && pBlock->mUnknown49 == 3) {
-                /* Built but never read in the target. */
+                
                 Sphere_80108DF8 sphere;
 
                 sphere.mCenter.mX = pOtherBlock->mUnknown4.mX;

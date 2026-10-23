@@ -8,9 +8,9 @@ struct Animation_8009C630 {
     char mUnknown84[16];
 };
 
-/* Partial, not exact: the target keeps the index * 0x64 offset and loads
-   the float with lfsx from base + 0x50; ours loads it from the element
-   address. Register allocation differs as a result. */
+
+
+
 extern "C" float fn_8009C630(Object_80039F5C *p, int id)
 {
     float result = 0.0f;
