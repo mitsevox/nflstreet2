@@ -8278,19 +8278,19 @@
     {
       "source": "src/game/cu_80101C40.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x80101C40-0x80101CB4 with their own literal-pool slice 0x8029E748-0x8029E74C. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 2 complete contiguous target bodies 0x80101C40-0x801021C0 with their own literal-pool slice 0x8029E748-0x8029E760. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80101C40",
-          "end": "0x80101CB4"
+          "end": "0x801021C0"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029E748",
-          "end": "0x8029E74C"
+          "end": "0x8029E760"
         }
       ],
       "functions": [
@@ -8298,6 +8298,11 @@
           "symbol": "fn_80101C40",
           "start": "0x80101C40",
           "end": "0x80101CB4"
+        },
+        {
+          "symbol": "fn_80101CB4",
+          "start": "0x80101CB4",
+          "end": "0x801021C0"
         }
       ]
     },
