@@ -98,8 +98,8 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
                     direction = facing + 0x200000;
                 }
             }
-            pBlock->mUnknown4 = direction;
             pBlock->mUnknown8 = direction;
+            pBlock->mUnknown4 = direction;
             flat.mX = 0.0f;
             flat.mY = toSpot.mY;
             speed = pOther->mMotion.mUnknown28
@@ -122,17 +122,17 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             near = fn_800F6878(p, pOther);
             if (near || fn_801CFFD0(direction, pOther->mMotion.mUnknown32) <= 0x3FFFFF) {
                 if (pBall->mState.mPos.mX > pOther->mMotion.mPos.mX) {
-                    pBlock->mUnknown4 = 0x31C71C;
                     pBlock->mUnknown8 = 0x31C71C;
+                    pBlock->mUnknown4 = 0x31C71C;
                 } else if (pBall->mState.mPos.mX < pOther->mMotion.mPos.mX) {
-                    pBlock->mUnknown4 = 0x4E38E3;
                     pBlock->mUnknown8 = 0x4E38E3;
+                    pBlock->mUnknown4 = 0x4E38E3;
                 }
                 pBlock->mUnknown24 = 1;
                 pBlock->mUnknown12 = 1.0f;
             } else {
                 if (fn_801CFFD0(pOther->mMotion.mUnknown32, 0x400000) <= 0x11C71B
-                    && p->mMotion.mPos.mX - pOther->mMotion.mPos.mX < lbl_803EAE2C
+                    && fabsf(p->mMotion.mPos.mX - pOther->mMotion.mPos.mX) < lbl_803EAE2C
                     && p->mMotion.mPos.mY > pOther->mMotion.mPos.mY + 2.0f) {
                     pBlock->mUnknown23 = 1;
                     pBlock->mUnknown22 = 2;
@@ -192,8 +192,8 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
                     direction = facing + 0x200000;
                 }
             }
-            pBlock->mUnknown4 = direction;
             pBlock->mUnknown8 = direction;
+            pBlock->mUnknown4 = direction;
             flat.mX = toSpot.mX;
             flat.mY = 0.0f;
             speed = pOther->mMotion.mUnknown28
