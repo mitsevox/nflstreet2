@@ -15,8 +15,14 @@
 
 struct Slot_800BAE7C {
     int mUnknown0;
-    unsigned char mUnknown4[3];
-    unsigned char mTeam;
+    /* Written as a word by fn_800BC190, read by its low byte. */
+    union {
+        int mTeamWord;
+        struct {
+            unsigned char mUnknown4[3];
+            unsigned char mTeam;
+        };
+    };
     Object_80039F5C *mpObject;
 };
 

@@ -23550,6 +23550,11 @@
           "end": "0x800BB24C"
         },
         {
+          "symbol": "fn_800BB24C",
+          "start": "0x800BB24C",
+          "end": "0x800BB458"
+        },
+        {
           "symbol": "fn_800BB5DC",
           "start": "0x800BB5DC",
           "end": "0x800BB694"
@@ -23608,6 +23613,11 @@
           "symbol": "fn_800BBE98",
           "start": "0x800BBE98",
           "end": "0x800BBF18"
+        },
+        {
+          "symbol": "fn_800BC190",
+          "start": "0x800BC190",
+          "end": "0x800BC3F0"
         },
         {
           "symbol": "fn_800BC3F0",
