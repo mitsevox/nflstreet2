@@ -559,10 +559,23 @@ void fn_800FF598(State_800FDA58 *s, Object_80039F5C *p, Point_8017886C *point, i
 void fn_800FF6D8(Object_80039F5C *p)
 {
     State_800FDA58 *s=(State_800FDA58 *)&p->mUnknown336;
-    p->mMotion.mPos.mX=s->mUnknown8;p->mMotion.mPos.mY=s->mUnknown12;
-    p->mMotion.mFacing=s->mUnknown16;p->mpUnknown796->mUnknown8=s->mUnknown16;
-    p->mMotion.mUnknown28=0.0f;s->mUnknown0=0;s->mUnknown40=0.0f;s->mUnknown4=0;s->mUnknown2=5;s->mUnknown3Byte=0;
-    s->mUnknown20Float=s->mUnknown24=s->mUnknown28=s->mUnknown32.mX=s->mUnknown32.mY=0.0f;
+    Object_800B26B0 *motion = &p->mMotion;
+
+    motion->mPos.mX = s->mUnknown8;
+    motion->mPos.mY = s->mUnknown12;
+    motion->mFacing = s->mUnknown16;
+    p->mpUnknown796->mUnknown8 = motion->mFacing;
+    motion->mUnknown28 = 0.0f;
+    s->mUnknown0 = 0;
+    s->mUnknown4 = 0;
+    s->mUnknown2 = 5;
+    s->mUnknown3Byte = 0;
+    s->mUnknown20Float = 0.0f;
+    s->mUnknown24 = 0.0f;
+    s->mUnknown28 = 0.0f;
+    s->mUnknown32.mX = 0.0f;
+    s->mUnknown32.mY = 0.0f;
+    s->mUnknown40 = 0.0f;
     p->mUnknown512.mUnknown14=0;
     fn_801BE068(p->mpUnknown792,p->mpUnknown796,p->mpUnknown800,74,p,1.0f);
     fn_801BE67C(p->mpUnknown792,p->mpUnknown796,p->mpUnknown800,p);
@@ -571,13 +584,14 @@ void fn_800FF6D8(Object_80039F5C *p)
 
 int fn_800FF7F4(Object_80039F5C *p)
 {
-    fn_8010A2DC(p,0,-1);
-    int result=p->mUnknown560.mUnknown53!=0;
-    if(result) {
-        p->mUnknown512.mUnknown14=1;p->mUnknown512.mUnknown0=0.0f;
-        p->mUnknown512.mUnknown4=p->mUnknown512.mUnknown8=p->mMotion.mFacing;
+    fn_8010A2DC(p, 0, -1);
+    if (p->mUnknown560.mUnknown53 != 0) {
+        p->mUnknown512.mUnknown14 = 1;
+        p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown0 = 0.0f;
+        return 1;
     }
-    return result;
+    return 0;
 }
 
 void fn_800FF868(Object_80039F5C *p,State_800FFDFC *,Object_80039F5C *other)
