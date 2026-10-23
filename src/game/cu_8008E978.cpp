@@ -8107,7 +8107,7 @@ extern "C" int fn_800AAAC4(void)
 
 extern "C" void fn_800AAAFC(void)
 {
-    int i;
+    unsigned int i;
 
     lbl_803EC960 = fn_800A9F4C(0);
     if (lbl_803EC960 != 0) {
@@ -9094,9 +9094,9 @@ extern "C" void fn_800AD910(int mode, float dt)
         if (pExit != 0) {
             pExit(dt);
         }
+        pEnter = lbl_80297FC8[mode].mpEnter;
         lbl_803EAAD4->mUnknown4 = lbl_803EAAD4->mUnknown0;
         lbl_803EAAD4->mUnknown0 = mode;
-        pEnter = lbl_80297FC8[mode].mpEnter;
         if (pEnter != 0) {
             pEnter(dt);
         }
