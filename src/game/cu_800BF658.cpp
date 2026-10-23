@@ -28,7 +28,9 @@ extern "C" void fn_800BF72C(float dt)
     unsigned int i;
 
     for (i = 0; i <= 1; i++) {
-        switch (lbl_803EABA8->mSlots[i].mUnknown0) {
+        Slot_800BFAD0 *pSlot = &lbl_803EABA8->mSlots[i];
+
+        switch (pSlot->mUnknown0) {
         case 4:
         case 5:
             fn_800BD774(i);
@@ -39,7 +41,7 @@ extern "C" void fn_800BF72C(float dt)
                 break;
             }
         case 2:
-            lbl_803EABA8->mSlots[i].mUnknown0 = 0;
+            pSlot->mUnknown0 = 0;
             break;
         case 6:
             fn_800BED54(i);

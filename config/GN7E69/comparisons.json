@@ -25385,6 +25385,11 @@
           "end": "0x800BFAD0"
         },
         {
+          "symbol": "fn_800BFAD0",
+          "start": "0x800BFAD0",
+          "end": "0x800BFB44"
+        },
+        {
           "symbol": "vfn_03__14Class_80297CE8",
           "start": "0x800BFB44",
           "end": "0x800BFB68"
@@ -39892,13 +39897,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800C0330",
-          "end": "0x800C0750"
+          "end": "0x800C0910"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802973FC",
-          "end": "0x802974B4"
+          "end": "0x802974D0"
         }
       ],
       "functions": [
@@ -39911,6 +39916,11 @@
           "symbol": "fn_800C0698",
           "start": "0x800C0698",
           "end": "0x800C0750"
+        },
+        {
+          "symbol": "fn_800C07F0",
+          "start": "0x800C07F0",
+          "end": "0x800C0910"
         }
       ]
     },

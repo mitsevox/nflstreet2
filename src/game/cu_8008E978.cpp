@@ -13785,19 +13785,17 @@ extern "C" void fn_800BE3E8(int a, int kind)
         skip = found;
     }
     if (skip == 0) {
+        Object_80039F5C *p;
+
         switch (kind) {
-        case 6: {
-            Object_80039F5C *p = fn_800B6544(a);
-
-            fn_800B6868(p->mId >> 8, p->mId >> 16, p->mUnknown8, 0);
+        case 6:
+            p = fn_800B6544(a);
+            fn_800B6868((unsigned char)(p->mId >> 8), (unsigned char)(p->mId >> 16), p->mUnknown8, 0);
             break;
-        }
-        case 9: {
-            Object_80039F5C *p = fn_800B6544(a);
-
-            fn_800B6868(p->mId >> 8, p->mId >> 16, p->mUnknown8, 1);
+        case 9:
+            p = fn_800B6544(a);
+            fn_800B6868((unsigned char)(p->mId >> 8), (unsigned char)(p->mId >> 16), p->mUnknown8, 1);
             break;
-        }
         }
     }
 }
@@ -14301,6 +14299,15 @@ extern "C" void fn_800BFAB4(Class_80297CE8 *p)
     } else {
         lbl_803EABA4 = p;
     }
+}
+
+extern "C" void fn_800BFAD0(void)
+{
+    void *pHandle = fn_80238174(0, (void **)&lbl_803EABA8, sizeof(Block_800BFAD0), 0, 0x70726570);
+
+    fn_80238234(pHandle, 0, 0, 0, fn_800BF45C);
+    ((Block_800BFAD0 *)fn_8023816C(pHandle))->mUnknown40 = 0;
+    fn_802381E0(pHandle);
 }
 
 void Class_80297CE8::vfn_03()
