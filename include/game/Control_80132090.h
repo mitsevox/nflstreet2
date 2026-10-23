@@ -2,6 +2,7 @@
 #define GAME_CONTROL_80132090_H
 
 #include "game/Object_80039F5C.h"
+#include "game/Directions_8012430C.h"
 
 /* Eight bytes at +56 of Control_80132090, passed to fn_8012F5A0 as one
    block. */
@@ -17,7 +18,7 @@ struct Block_8012F5A0 {
 
 struct Control_80132090 {
     int mUnknown0;
-    float mValues[8];
+    Directions_8012430C mValues;
     float mUnknown36;
     float mUnknown40;
     int mUnknown44;

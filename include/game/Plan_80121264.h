@@ -8,7 +8,11 @@ struct Entry_80120E98 {
     Point_8017886C *mpUnknown0;
     Point_8017886C *mpUnknown4;
     Point_8017886C mUnknown8;
-    char mUnknown16[20];
+    int mUnknown16;
+    int mUnknown20;
+    int mUnknown24;
+    float mUnknown28;
+    float mUnknown32;
     int mUnknown36;
     int mUnknown40;
     int mUnknown44;

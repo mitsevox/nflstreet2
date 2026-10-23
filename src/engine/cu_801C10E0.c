@@ -331,3 +331,23 @@ void fn_801C1C1C(int id)
     fn_801F809C(&lbl_803D4F98);
     fn_801C1564(loader);
 }
+
+void fn_801C1C98(int id)
+{
+    Loader_801C1260 *loader = &lbl_803EBBC4[id];
+
+    for (;;) {
+        if ((loader->mState & 2) || (loader->mState & 4))
+            continue;
+        fn_801F8014(&lbl_803D4F98);
+        if (loader->mRequests[0].mState == 0) {
+            loader->mState &= ~1;
+            fn_801C1654(loader);
+            fn_801F809C(&lbl_803D4F98);
+            break;
+        }
+        if (loader->mRequests[0].mState == 1 && fn_801C1218(loader) >= loader->mBufferCount)
+            fn_801C1A60(id);
+        fn_801F809C(&lbl_803D4F98);
+    }
+}

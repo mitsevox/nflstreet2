@@ -17,7 +17,7 @@ void fn_800D5494(Object_80039F5C *p, int a, int b);
 void fn_800D5A6C(int a, int b, int c);
 void fn_800D5F1C(Object_80039F5C *p, int a, int b);
 void fn_800D60BC(Object_80039F5C *p, int a, int b);
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
+Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 float fn_80124FE0(Object_80039F5C *p, int kind);
 int fn_801486A0(void);
 void fn_80156C78(int a, int b);
@@ -345,8 +345,4 @@ extern "C" int fn_800D0D1C(Object_80039F5C *p)
         result = 1;
     }
     return result;
-}
-
-extern "C" void fn_800D0D48(void)
-{
 }

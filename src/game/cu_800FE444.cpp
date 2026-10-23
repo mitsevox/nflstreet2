@@ -1,6 +1,7 @@
 #include <math.h>
 #include "game/Record_8011F4F8.h"
 #include "game/fn_801248D4.h"
+#include "game/Directions_8012430C.h"
 #include "game/Object_80039F5C.h"
 #include "game/Class_80297CE8.h"
 #include "game/Object_8017886C.h"
@@ -62,9 +63,9 @@ int fn_800A7F1C(unsigned char);
 unsigned int fn_80100B0C(void);
 int fn_80168E00(int,int,unsigned char *);
 void fn_8009BD2C(Object_80039F5C *,int *);
-void fn_8012430C(float *,int,Object_80039F5C *);
-unsigned char fn_801243E0(float *,int);
-float fn_801242E0(float *,unsigned int);
+void fn_8012430C(Directions_8012430C *,int,Object_80039F5C *);
+unsigned char fn_801243E0(Directions_8012430C *,int);
+float fn_801242E0(Directions_8012430C *,unsigned int);
 unsigned short fn_801BE648(void *p);
 int fn_801BE068(void *,void *,void *,unsigned short,void *,float);
 void fn_801BE67C(void *,void *,void *,void *);
@@ -1081,7 +1082,7 @@ void fn_80101064(Object_80039F5C *p)
 
 void fn_80101130(Object_80039F5C *p, Object_80039F5C *other, unsigned short *out)
 {
-    float values[8];
+    Directions_8012430C values;
     unsigned char best;
     unsigned int facing;
     Lookup_8012078C *lookup;
@@ -1094,24 +1095,24 @@ void fn_80101130(Object_80039F5C *p, Object_80039F5C *other, unsigned short *out
     int chosen = 0;
     int forward = 0;
 
-    fn_8012430C(values, 3, p);
-    best = fn_801243E0(values, -1);
+    fn_8012430C(&values, 3, p);
+    best = fn_801243E0(&values, -1);
     facing = ((unsigned int)p->mMotion.mUnknown32 + 0x100000) >> 21 & 7;
     lookup = fn_8012078C();
     receiver = fn_80039F5C(fn_80178320(), lookup->mpUnknown4[1]);
     fn_80227690(&delta, &other->mMotion.mPos, &p->mMotion.mPos);
     octant = ((unsigned int)fn_801CFE40(delta.mY, delta.mX) + 0x100000) >> 21 & 7;
     difference = fn_801CFFD0(p->mMotion.mUnknown32, 0x400000);
-    if ((values[best] == 0.0f || values[(best + 1) & 7] == 0.0f || values[(best + 7) & 7] == 0.0f)
-        && (values[octant] >= 3.0f || values[(octant + 1) & 7] >= 4.0f || values[(octant + 7) & 7] >= 4.0f)
+    if ((values.mCost[best] == 0.0f || values.mCost[(best + 1) & 7] == 0.0f || values.mCost[(best + 7) & 7] == 0.0f)
+        && (values.mCost[octant] >= 3.0f || values.mCost[(octant + 1) & 7] >= 4.0f || values.mCost[(octant + 7) & 7] >= 4.0f)
         && difference < 0x4AAAAB) {
         chosen = 1;
     }
     if (!chosen) {
         int pastRight = p->mMotion.mPos.mX > fn_80178A5C() + (fn_80178A08() - fn_80178A5C()) * 0.25f;
         int pastLeft = p->mMotion.mPos.mX < -(fn_80178A5C() + (fn_80178A08() - fn_80178A5C()) * 0.25f);
-        left = fn_801242E0(values, 0);
-        right = fn_801242E0(values, 4);
+        left = fn_801242E0(&values, 0);
+        right = fn_801242E0(&values, 4);
 
         if (((pastLeft && left > right * 1.45f) || (pastRight && right > left * 1.45f)) && difference < 0xE38E3) {
             chosen = 1;

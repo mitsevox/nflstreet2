@@ -1,5 +1,6 @@
 #include "engine/cu_801B9F00.h"
 #include "game/fn_801248D4.h"
+#include "game/Directions_8012430C.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/State_800FDA58.h"
 #include <math.h>
@@ -517,7 +518,7 @@ int fn_801101DC(Object_80039F5C *p);
 int fn_801102A4(Object_80039F5C *p);
 void fn_8011E240(Object_80039F5C *p);
 void fn_8011E3EC(Object_80039F5C *p, int a);
-Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, int a, unsigned char count, float *pOut, int b);
+Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
 float fn_801250B8(Object_80039F5C *p, Object_80039F5C *pExclude, int kind);
 int fn_80178308(void);
 int fn_80178320(void);
@@ -622,7 +623,7 @@ void fn_800F0FD0(Input_800B6D34 *pBlock, int index);
 int fn_800F1FDC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_800F21E0(Object_80039F5C *p, Object_80039F5C *pOther, float distance);
 int fn_800F2920(Object_80039F5C *p);
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
+Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 unsigned int fn_80178D18(int team);
 int fn_800B76E8(Object_80039F5C *p);
 int fn_800B7F34(Object_80039F5C *p);
@@ -4858,12 +4859,6 @@ extern "C" void fn_8011893C(void)
             value = 0;
             fn_8011DBC0(p);
             switch (p->mUnknown1032) {
-            case 4:
-                fn_80143EBC(p, pOther);
-                mode = 2;
-                otherMode = 8;
-                fn_80143EBC(pOther, p);
-                break;
             case 3:
                 if (pOther != 0) {
                     mode = 1;
@@ -4875,6 +4870,12 @@ extern "C" void fn_8011893C(void)
                     otherMode = 0;
                     mode = 3;
                 }
+                break;
+            case 4:
+                fn_80143EBC(p, pOther);
+                mode = 2;
+                otherMode = 8;
+                fn_80143EBC(pOther, p);
                 break;
             default:
                 mode = p->mUnknown1032;
@@ -5001,7 +5002,7 @@ void fn_80122670(Object_80039F5C *p, Plan_80121264 *pPlan, int angle);
 void fn_801227DC(Object_80039F5C *p, Plan_80121264 *pPlan, Entry_801230B8 *pEntry);
 Entry_801230B8 *fn_801230B8(Plan_80121264 *pPlan);
 int fn_80123254(void *pA, void *pB);
-void fn_8012430C(float *pOut, int kind, Object_80039F5C *p);
+void fn_8012430C(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
 float fn_801CFB94(int angle);
 
 void fn_8011B6E8(Entry_8011AFCC *pEntries, Pair_8011BAE0 pair);
@@ -5863,7 +5864,7 @@ void fn_8011FCA4(void)
     fn_801F51DC(1, lbl_803EB09C->mpUnknown8, count, sizeof(Entry_8011FBE0), fn_8011FB80, fn_8011FBBC, 0, 1);
 }
 
-int fn_8011FD64(unsigned char index)
+int fn_8011FD64(unsigned short index)
 {
     int result;
 
@@ -6027,12 +6028,62 @@ void fn_80120E98(Plan_80121264 *pPlan, int index)
     pPlan->mUnknown1440--;
 }
 
+void fn_80120EF8(Plan_80121264 *pPlan, Vector_80039F5C *pPos)
+{
+    unsigned int i;
+    int removed;
+
+    fn_80120B84(pPlan);
+    if (pPlan->mUnknown1440 > 4) {
+        for (i = 1; i < pPlan->mUnknown1440 - 1; i++) {
+            Entry_80120E98 *pEntry = &pPlan->mUnknown0[i];
+            Entry_80120E98 *pNext = &pPlan->mUnknown0[i + 1];
+
+            if (pEntry->mUnknown40 != pNext->mUnknown40 || pEntry->mUnknown44 != pNext->mUnknown44) {
+                unsigned int j;
+
+                for (j = i + 1; j < pPlan->mUnknown1440 - 1; j++) {
+                    Entry_80120E98 *pMatch = &pPlan->mUnknown0[j];
+
+                    if (pEntry->mUnknown40 == pMatch->mUnknown40 && pEntry->mUnknown44 == pMatch->mUnknown44
+                        && (pMatch != pNext || pNext->mUnknown8.mX < pEntry->mUnknown8.mX)) {
+                        Entry_80120E98 temp = *pNext;
+
+                        *pNext = *pMatch;
+                        *pMatch = temp;
+                        break;
+                    }
+                }
+            } else if (pEntry->mUnknown8.mX > pNext->mUnknown8.mX) {
+                Entry_80120E98 temp = *pNext;
+
+                *pNext = *pEntry;
+                *pEntry = temp;
+            }
+        }
+    }
+    do {
+        removed = 0;
+        if (pPlan->mUnknown1440 > 4) {
+            for (i = 3; i < pPlan->mUnknown1440 - 1; i += 2) {
+                if (pPlan->mUnknown0[i].mUnknown8.mX < pPlan->mUnknown0[i - 1].mUnknown8.mX
+                    && pPlan->mUnknown0[i].mUnknown8.mY > pPlan->mUnknown0[i - 1].mUnknown8.mY) {
+                    fn_80120E98(pPlan, i);
+                    fn_80120E98(pPlan, i);
+                    removed = 1;
+                    break;
+                }
+            }
+        }
+    } while (removed);
+}
+
 int fn_801218EC(Point_8017886C *pPos, Entry_80120E98 *pA, Entry_80120E98 *pB)
 {
     return pPos->mX < pB->mUnknown8.mX && pPos->mX > pA->mUnknown8.mX;
 }
 
-int fn_80121BE8(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pTarget, int angle, int heading,
+int fn_80121BE8(Point_8017886C *pA, Point_8017886C *pB, Point_8017886C *pTarget, int angle, int heading,
                 float distB, float distA)
 {
     if (pTarget) {
@@ -6080,13 +6131,13 @@ int fn_801231E4(Object_80039F5C *p, int angle)
     return angle;
 }
 
-void fn_80123E2C(float *, Object_80039F5C *, Object_80039F5C *)
+void fn_80123E2C(Directions_8012430C *, Object_80039F5C *, Object_80039F5C *)
 {
 }
 
-float fn_801242E0(float *pValues, unsigned int index)
+float fn_801242E0(Directions_8012430C *pValues, unsigned int index)
 {
-    return pValues[index] + pValues[(index + 7) % 8] + pValues[(index + 9) % 8];
+    return pValues->mCost[index] + pValues->mCost[(index + 7) % 8] + pValues->mCost[(index + 9) % 8];
 }
 
 float fn_80125004(Object_80039F5C *p, int kind, int index);
@@ -6098,11 +6149,11 @@ float fn_80124FE0(Object_80039F5C *p, int kind)
 
 float fn_80125004(Object_80039F5C *p, int kind, int index)
 {
-    float values[8];
+    Directions_8012430C values;
 
-    fn_8012430C(values, kind, p);
-    fn_801F51DC(0, values, 8, sizeof(float), fn_80123254, 0, 0, -2);
-    return values[index];
+    fn_8012430C(&values, kind, p);
+    fn_801F51DC(0, values.mCost, 8, sizeof(float), fn_80123254, 0, 0, -2);
+    return values.mCost[index];
 }
 
 int fn_801251FC(Object_80039F5C *p)
