@@ -15887,12 +15887,12 @@ extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
         if (lbl_803EA558[i].mUnknown0 <= 1.0f) continue;
         int angle = fn_801784C4() ? lbl_803EA558[i].mUnknown8 : lbl_803EA558[i].mUnknown4;
         if (fn_801CFFD0(angle, direction) >= (int)(lbl_803EAC74 * 46603.37890625f)) continue;
+        Vector_80039F5C point;
         Vector_80039F5C a;
         Vector_80039F5C b;
-        Vector_80039F5C point;
-        a.mZ = 0.0f;
-        b.mZ = 0.0f;
         point.mZ = 0.0f;
+        b.mZ = 0.0f;
+        a.mZ = 0.0f;
         fn_800541AC(pRow, &a, &b);
         int difference = (angle - direction) & 0xFFFFFF;
         if (difference > 0x800000) difference -= 0x1000000;
@@ -15906,10 +15906,10 @@ extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
         delta.mZ = pRecord->mUnknown12.mZ;
         float distance;
         float factor;
+        int valid = 1;
         fn_80227970(&a, &b, &delta, &point, &distance, &factor);
         if (distance >= lbl_803EAC7C) continue;
         if (fn_800CCF68(p, pRecord, &point, angle)) continue;
-        int valid = 1;
         if (lbl_803EAC8C != 0) {
             float current = fn_80227890(&delta, &pRecord->mUnknown32);
             float chosen = fn_80227890(&point, &pRecord->mUnknown32);
@@ -15919,9 +15919,9 @@ extern "C" int fn_800CEA7C(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_
                 if (currentLength - chosenLength >= chosenLength * lbl_803EAC90) {
                     valid = 0;
                 } else if (pRecord->mUnknown60 == 181 || pRecord->mUnknown60 == 186) {
-                    current = fn_80227890(&delta, &pRecord->mUnknown48);
-                    chosen = fn_80227890(&point, &pRecord->mUnknown48);
-                    if (!(chosen >= current)) valid = 0;
+                    float currentEnd = fn_80227890(&delta, &pRecord->mUnknown48);
+                    float chosenEnd = fn_80227890(&point, &pRecord->mUnknown48);
+                    if (!(chosenEnd >= currentEnd)) valid = 0;
                 }
             }
         }
