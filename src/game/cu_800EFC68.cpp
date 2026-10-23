@@ -566,6 +566,7 @@ void fn_8011BAE0(Pair_8011BAE0 *pOut);
 void fn_8011DBC0(Object_80039F5C *p);
 void fn_8011DBC4(Object_80039F5C *p);
 int fn_8011DC68(unsigned int id);
+unsigned int fn_8011E188(void);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value);
 int fn_8011E3F4(Object_80039F5C *p);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
@@ -1638,6 +1639,15 @@ extern "C" void fn_800FA014(Object_80039F5C *p, int *pRef) {
             }
         }
     }
+}
+
+extern "C" int fn_800FA098() {
+    Point_8017886C goal;
+
+    goal = fn_80177FE0();
+    fn_801486A0();
+    fn_8011E188();
+    return 0;
 }
 
 extern "C" void fn_800FAD10(unsigned char *p) {

@@ -7695,6 +7695,11 @@
           "end": "0x800FA098"
         },
         {
+          "symbol": "fn_800FA098",
+          "start": "0x800FA098",
+          "end": "0x800FA0DC"
+        },
+        {
           "symbol": "fn_800FAD10",
           "start": "0x800FAD10",
           "end": "0x800FAD2C"
@@ -8806,22 +8811,27 @@
     {
       "source": "src/game/cu_800FD978.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 1 complete contiguous target body 0x800FD978-0x800FDA58 with their own literal-pool slice 0x8029E4C8-0x8029E4D4. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping: 2 complete contiguous target bodies 0x800FD828-0x800FDA58 with their own literal-pool slice 0x8029E4BC-0x8029E4D4. The split keeps this literal pool from being concatenated onto the accepted 0x8029E410-0x8029E4B8 pool; it does not claim an original file boundary or whole-unit promotion.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800FD978",
+          "start": "0x800FD828",
           "end": "0x800FDA58"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029E4C8",
+          "start": "0x8029E4BC",
           "end": "0x8029E4D4"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_800FD828",
+          "start": "0x800FD828",
+          "end": "0x800FD978"
+        },
         {
           "symbol": "fn_800FD978",
           "start": "0x800FD978",
