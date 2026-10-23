@@ -39,8 +39,12 @@ struct Block_801BE60C {
     union {
         float mUnknown4;
         int mUnknown4Word;
+        unsigned int mUnknown4Unsigned;
     };
-    float mUnknown8;
+    union {
+        float mUnknown8;
+        unsigned char mUnknown8Byte;
+    };
     union {
         struct {
             float mUnknownC;

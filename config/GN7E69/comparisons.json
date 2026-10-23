@@ -22070,6 +22070,11 @@
           "end": "0x800A3B5C"
         },
         {
+          "symbol": "fn_800A3C14",
+          "start": "0x800A3C14",
+          "end": "0x800A3D68"
+        },
+        {
           "symbol": "fn_800A3D68",
           "start": "0x800A3D68",
           "end": "0x800A3D70"
@@ -40219,6 +40224,47 @@
           "symbol": "fn_800A32E4",
           "start": "0x800A32E4",
           "end": "0x800A3360"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800A3530.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: the motion-phase callbacks 0x800A3530-0x800A3B10 and the channel reset 0x800A3B5C, whose float and double literals form the readonly slice 0x80296718-0x80296754 measured here (8-aligned for the conversion doubles). fn_800A3B10 and fn_800A3B58 inside the text range stay in src/game/cu_8008E978.cpp. No original file boundary or whole-unit promotion is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800A3530",
+          "end": "0x800A3C14"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80296718",
+          "end": "0x80296754"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800A3530",
+          "start": "0x800A3530",
+          "end": "0x800A37D8"
+        },
+        {
+          "symbol": "fn_800A37D8",
+          "start": "0x800A37D8",
+          "end": "0x800A3898"
+        },
+        {
+          "symbol": "fn_800A3898",
+          "start": "0x800A3898",
+          "end": "0x800A3B10"
+        },
+        {
+          "symbol": "fn_800A3B5C",
+          "start": "0x800A3B5C",
+          "end": "0x800A3C14"
         }
       ]
     },

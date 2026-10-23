@@ -9348,6 +9348,52 @@ extern "C" void fn_800ADE6C(void)
     }
 }
 
+/* Key list returned by fn_801BAD70: a count followed by the keys. */
+struct Keys_800A3C14 {
+    unsigned short mCount;
+    unsigned short mKeys[1];
+};
+
+extern "C" {
+extern void *lbl_803EC938;
+extern int lbl_803EC93C;
+extern int lbl_803EC940;
+extern Keys_800A3C14 *lbl_803EC944;
+}
+
+extern "C" void fn_800A3C14(void)
+{
+    Listing_800ADE6C listing;
+    unsigned int i;
+    Object_801BC084 *pRecord;
+    Clip_800ADE6C *pClip;
+
+    lbl_803EC948 = 0;
+    fn_801BBC3C(3, 2, &listing.mTable);
+    for (i = 0; i < listing.mTable.mCount; i++) {
+        if (listing.mTable.mEntries[i].mpInfo->mValue == 1) {
+            int handle = listing.mTable.mEntries[i].mUnknown0;
+            int key = listing.mTable.mEntries[i].mUnknown2;
+            pRecord = fn_801BC084(handle);
+            pClip = (Clip_800ADE6C *)fn_801BAB34(pRecord, key);
+            for (unsigned int j = 0; j < 1; j++)
+                lbl_803EC938 = fn_801BAD70(pRecord, pClip->mUnknown2, handle, pClip->mKeys[j]);
+        } else {
+            lbl_803EC93C = listing.mTable.mEntries[i].mUnknown0;
+            lbl_803EC940 = listing.mTable.mEntries[i].mUnknown2;
+            pRecord = fn_801BC084(lbl_803EC93C);
+            pClip = (Clip_800ADE6C *)fn_801BAB34(pRecord, lbl_803EC940);
+            Keys_800A3C14 *pKeys =
+                (Keys_800A3C14 *)fn_801BAD70(pRecord, pClip->mUnknown2, lbl_803EC93C, pClip->mKeys[0]);
+            lbl_803EC944 = pKeys;
+            for (unsigned int j = 0; j < pKeys->mCount; j++) {
+                pKeys->mKeys[j] &= 0x3F;
+                pKeys->mKeys[j] |= 0x4000;
+            }
+        }
+    }
+}
+
 extern "C" {
 void fn_800AE018(Object_80039F5C *p, int index, unsigned short key);
 
