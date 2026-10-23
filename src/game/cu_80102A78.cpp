@@ -144,7 +144,7 @@ Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, int a, int team);
 void fn_80076D5C(int id);
 int fn_800A7F1C(int team);
 void fn_8010016C(Object_80039F5C *pTarget, Vector_80039F5C *pPos, Object_80039F5C *p, float speed);
-void fn_80100370(Object_80137ABC *pBall, Object_80039F5C *pTarget, float speed, Vector_80039F5C *pOut);
+int fn_80100370(Object_80137ABC *pBall, Object_80039F5C *pTarget, float speed, Vector_80039F5C *pOut);
 void fn_80100BF8(Object_80039F5C *p, Vector_80039F5C *pPos, int *pOut, float speed, float a, float b);
 void fn_80101130(Object_80039F5C *pTarget, Object_80039F5C *p, short *pCount);
 void fn_80103F80(Object_80137ABC *pBall, Vector_80039F5C pos, Vector_80039F5C velocity, float speed, int angle,

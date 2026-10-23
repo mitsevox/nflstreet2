@@ -25,7 +25,7 @@ Object_80039F5C *fn_8003A130(Vector_80039F5C *pPos, float *pOut, int team);
 float fn_8011F4D4(void);
 int fn_8011F1CC(void);
 int fn_801783AC(int bit);
-int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
+int fn_8013BA58(Object_80137ABC *pHolder, int *pOut);
 int fn_80178320(void);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 int fn_8011E9B4(Object_80039F5C *p);
@@ -45,8 +45,8 @@ float fn_801CFB94(int angle);
 void fn_80227690(void *pOut, void *pA, void *pB);
 }
 
-/* Record passed by the caller at 0x800F6548/0x800F6594 to fn_800F5208 and
-   fn_800F5CBC. Only the accessed members are declared; the size is unknown. */
+/* Record passed by the caller to fn_800F5208 (0x800F640C) and
+   fn_800F5CBC (0x800F643C/0x800F65C4). Only the accessed members are declared; the size is unknown. */
 struct Record_800F4E88 {
     Point_8017886C mUnknown0;
     float mUnknown8;
@@ -58,10 +58,10 @@ struct Record_800F4E88 {
 
 extern "C" int fn_800F5208(Object_80039F5C *p, Record_800F4E88 *pRecord) {
     Object_800B26B0 *pMotion = &p->mMotion;
-    Object_800B26B0 *pBallMotion;
+    Object_800B26B0 *pHolderMotion;
     Object_80039F5C *pTarget;
-    Object_80039F5C *pBall;
-    Object_80039F5C *pCarrier;
+    Object_80039F5C *pHolder;
+    Object_80039F5C *pTeamPlayer;
     Point_8017886C delta;
     float distance;
     float reach;
@@ -77,9 +77,7 @@ extern "C" int fn_800F5208(Object_80039F5C *p, Record_800F4E88 *pRecord) {
         }
         delta = fn_80177FE0();
         if (fabsf(p->mMotion.mPos.mX - delta.mX) > 4.0f) {
-            int team = fn_80178320();
-
-            pTarget = fn_801245DC(p, team, 0, fn_80178D18(fn_80178320()), 0x18E38E, &distance, 1);
+            pTarget = fn_801245DC(p, fn_80178320(), 0, fn_80178D18(fn_80178320()), 0x18E38E, &distance, 1);
             delta.mY = delta.mY >= pMotion->mPos.mY ? delta.mY : pMotion->mPos.mY;
             if (pTarget && pTarget->mMotion.mPos.mY - delta.mY < lbl_803EAE28 && distance < 5.0f
                 && fn_801CFFD0(pTarget->mMotion.mUnknown32, 0xC00000) <= 0x3FFFFF && !fn_8011E9B4(pTarget)
@@ -89,8 +87,8 @@ extern "C" int fn_800F5208(Object_80039F5C *p, Record_800F4E88 *pRecord) {
             }
         }
     }
-    pBall = fn_80137B40();
-    if (!pBall) {
+    pHolder = fn_80137B40();
+    if (!pHolder) {
         Vector_80039F5C velocity;
         Vector_80039F5C ballPos;
 
@@ -101,32 +99,32 @@ extern "C" int fn_800F5208(Object_80039F5C *p, Record_800F4E88 *pRecord) {
             if (fn_801CFFD0(fn_801CFE40(velocity.mY, velocity.mX), delta.Heading()) <= 0x1FFFFF) {
                 return 0;
             }
-            pBall = fn_80137BEC();
+            pHolder = fn_80137BEC();
         }
-        if (!pBall) {
+        if (!pHolder) {
             return 0;
         }
     }
-    if (fn_8011F1CC() && !(pBall->mFlags & 0x8000)) {
+    if (fn_8011F1CC() && !(pHolder->mFlags & 0x8000)) {
         if (p->mUnknown560.mFlags.mBytes[0] && (pTarget = fn_8009BCE8(&p->mUnknown560.mUnknown40)) != 0
             && fn_8011E9B4(pTarget) == 0) {
             return 1;
         }
         return 0;
     }
-    pCarrier = fn_8011F54C();
-    pBallMotion = &pBall->mMotion;
-    if (pBall->mpState->mId >= 0x19 && pBall->mpState->mId <= 0x1B) {
+    pTeamPlayer = fn_8011F54C();
+    pHolderMotion = &pHolder->mMotion;
+    if (pHolder->mpState->mId >= 0x19 && pHolder->mpState->mId <= 0x1B) {
         return 0;
     }
-    if (pBall != pCarrier && pBall->mUnknown2914 != 7 && pBall->mUnknown2914 != 0x18) {
-        if (pMotion->mPos.mY < pBallMotion->mPos.mY) {
+    if (pHolder != pTeamPlayer && pHolder->mUnknown2914 != 7 && pHolder->mUnknown2914 != 0x18) {
+        if (pMotion->mPos.mY < pHolderMotion->mPos.mY) {
             return 1;
         }
-        if (fn_801CFFD0(pMotion->mUnknown32, pBallMotion->mUnknown32) > 0x671C72) {
+        if (fn_801CFFD0(pMotion->mUnknown32, pHolderMotion->mUnknown32) > 0x671C72) {
             return 1;
         }
-        if (pBallMotion->mUnknown32 >= 0x98E38F && pBallMotion->mUnknown32 <= 0xE71C71 && !fn_8011F228()) {
+        if (pHolderMotion->mUnknown32 >= 0x98E38F && pHolderMotion->mUnknown32 <= 0xE71C71 && !fn_8011F228()) {
             return 1;
         }
         if (fn_8011F1A4() && fn_8011F4C8() > 3 && fn_801CFFD0(pMotion->mFacing, 0x400000) <= 0x155554
@@ -144,8 +142,8 @@ extern "C" int fn_800F5208(Object_80039F5C *p, Record_800F4E88 *pRecord) {
         && pMotion->mPos.mY > fn_80039F5C(fn_80178320(), *fn_8012078C()->mpUnknown4)->mMotion.mPos.mY) {
         return 1;
     }
-    if (fabsf(pMotion->mPos.mX - pBallMotion->mPos.mX) > 10.0f
-        || fabsf(pMotion->mPos.mY - pBallMotion->mPos.mY) > 10.0f) {
+    if (fabsf(pMotion->mPos.mX - pHolderMotion->mPos.mX) > 10.0f
+        || fabsf(pMotion->mPos.mY - pHolderMotion->mPos.mY) > 10.0f) {
         return 1;
     }
     flag = 0;
@@ -203,13 +201,9 @@ extern "C" int fn_800F5208(Object_80039F5C *p, Record_800F4E88 *pRecord) {
         }
     } else if (fn_8011F1A4() && (fn_8011F4C8() & 1) == 0) {
         if (fn_8011F1A4() && fn_8011F4C8() > 3 && pMotion->mPos.mX > fn_8011F4D4()) {
-            int level = fn_8011F4C8();
-
-            reach += level;
+            reach += fn_8011F4C8();
         } else {
-            int level = fn_8011F4C8();
-
-            reach += level / 3.0f;
+            reach += fn_8011F4C8() / 3.0f;
         }
     }
     if (fn_8011F1A4() && fn_8011F4C8() > 3) {
@@ -221,14 +215,7 @@ extern "C" int fn_800F5208(Object_80039F5C *p, Record_800F4E88 *pRecord) {
     if (pMotion->mPos.mY > fn_80177FE0().mY) {
         reach *= 2.0f;
     } else {
-        int ahead = 0;
-
-        if (pTarget->mMotion.mPos.mY > fn_80177FE0().mY) {
-            if (fn_8011E95C()) {
-                ahead = 1;
-            }
-        }
-        if (ahead) {
+        if (pTarget->mMotion.mPos.mY > fn_80177FE0().mY && fn_8011E95C()) {
             reach /= 3.0f;
         }
     }

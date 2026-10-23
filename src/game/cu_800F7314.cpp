@@ -37,7 +37,7 @@ void fn_800F6B2C(Object_80039F5C *p, Vector_80039F5C *pDelta);
 void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut);
 void fn_800F6E30(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut);
 void fn_800F70D0(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut);
-void fn_800F722C(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut);
+void fn_800F722C(Object_80039F5C *p, Object_80039F5C *pOther, float *pX, float *pOut);
 void fn_8009F928(Object_80039F5C *p, Point_8017886C *pOut, int a, int b);
 int fn_8012CAB4(Object_80039F5C *p);
 void fn_8012CD4C(Object_80039F5C *p, Point_8017886C *pOut);
@@ -159,7 +159,7 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         fn_8009F928(pOther, &spot, 5, pBlock->mUnknown21);
         fn_80227690(&toSpot, &spot, pPos);
         fn_800F70D0(p, pOther, &spot, pOut);
-        fn_800F722C(p, pOther, &spot, pOut);
+        fn_800F722C(p, pOther, &spot.mX, &pOut->mX);
         fn_800F6B2C(p, pOut);
         heading = fn_801CFE40(pOut->mY, pOut->mX);
         direction = heading & 0xFFFFFF;
@@ -226,7 +226,7 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
 
 extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut) {
     float lift = 0.0f;
-    float side = lift;
+    float side = 0.0f;
 
     if (p && pOther && pOut) {
         Point_8017886C toOther;
@@ -249,11 +249,11 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
 
                 if (diff < 0x200000) {
                     if (p->mMotion.mPos.mX > pOther->mMotion.mPos.mX) {
-                            side = 1.0f;
-                        } else {
-                            side = -1.0f;
-                        }
-                        side *= fn_801CFB18(0x400000 - diff);
+                        side = 1.0f;
+                    } else {
+                        side = -1.0f;
+                    }
+                    side *= fn_801CFB18(0x400000 - diff);
                     if ((angle < 0x355555 && side > 0.0f) || (angle > 0x4AAAAB && side < 0.0f)) {
                         side *= 0.25f;
                     }

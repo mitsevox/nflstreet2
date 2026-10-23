@@ -5668,9 +5668,9 @@ int fn_8011F524(void)
     return fn_80165098(fn_8016871C(fn_80178348()));
 }
 
-void fn_8011F54C(void)
+Object_80039F5C *fn_8011F54C(void)
 {
-    fn_8016444C(fn_80168708(fn_80178308()));
+    return fn_8016444C(fn_80168708(fn_80178308()));
 }
 
 void fn_8011F574(void)
