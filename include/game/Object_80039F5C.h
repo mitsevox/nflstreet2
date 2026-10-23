@@ -102,6 +102,7 @@ struct MotionTail_800B26B0 {
     float mUnknown68;
     float mUnknown72;
     int mUnknown76;
+    float mUnknown80;
 };
 
 /* 16-byte record cleared by fn_8016D8B0; the player object holds two of them

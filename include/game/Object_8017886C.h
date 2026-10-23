@@ -18,7 +18,7 @@ struct Object_8017886C {
     int mUnknown00;
     int mUnknown04;
     Point_8017886C mUnknown08;
-    char mUnknown10[4];
+    float mUnknown10;
     float mUnknown14;
     int mUnknown18;
     char mUnknown1C;
