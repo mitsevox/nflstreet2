@@ -2,6 +2,7 @@
 #define GAME_CU_8008E978_H
 
 #include "game/Object_80039F5C.h"
+#include "game/Params_80092E54.h"
 
 struct Object_80137ABC;
 
@@ -33,19 +34,10 @@ struct Actor_801C009C {
     Frame_800DF7CC *mpUnknown1C;
     Entry_80091644 *mpUnknown20;
 };
-struct Selection_80141210 { unsigned char mUnknown0; unsigned char mUnknown1[3]; union { int mWord; unsigned short mParts[2]; } mUnknown4,mUnknown8; };
 
 /* One of the four 912-byte records at +128 of the block fn_800925F0
    allocates. */
-struct Character_80093BCC {
-    int mUnknown0,mUnknown4;
-    int mUnknown8,mUnknownC,mUnknown10;
-    Object_80039F5C *mUnknown14[24];
-    Object_80137ABC *mUnknown74[24];
-    unsigned char mUnknownD4[4];
-    union { int mWord; unsigned short mParts[2]; } mUnknownD8;
-    unsigned char mUnknownDC[4];
-    Selection_80141210 mUnknownE0;
+struct Character_80093BCC : Params_80092E54 {
     unsigned char mUnknownEC[0x2A0];
     int mUnknown38C;
 };

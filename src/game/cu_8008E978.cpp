@@ -100,7 +100,6 @@
 #include "game/Object_8007A334.h"
 
 struct Table_800680A8;
-struct Request_8009313C;
 
 /* Data whose word +4 fn_80094374 returns and whose words from +8
    fn_80093BAC indexes; the bound of that array is not established. */
@@ -252,10 +251,12 @@ void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Obje
 unsigned char fn_801478F0(unsigned char a);
 void fn_8003E174(int a);
 int fn_80178308(void);
-int fn_8009313C(Request_8009313C *pRequest);
+int fn_8009313C(Params_80092E54 *pRequest);
+int fn_80096074(Params_80092E54 *pRequest, int flag);
+Object_80137ABC *fn_80093C70(Character_80093BCC *pCharacter, int id, Frame_800DF7CC **ppFrame, unsigned char *pFound);
 int fn_801C01C4(Actor_801C009C *pActor);
 void fn_800B9B64(Class_80297C60 *p, int enable, int value);
-Object_80039F5C *fn_8008FF28(Character_80093BCC *pCharacter, Actor_801C009C *pActor);
+Object_80039F5C *fn_8008FF28(Params_80092E54 *pRequest, Actor_801C009C *pActor);
 int fn_800944A4(int kind);
 int fn_800948E4(Object_8017886C *p);
 unsigned int fn_80094AE0(short *pValues, Object_8017886C *p, Table_800680A8 *pTable, unsigned short **ppOut, unsigned int max);
@@ -395,10 +396,10 @@ extern int lbl_803EA9A0;
 }
 
 /* The callback data of the 'anms' entry 0x802D72C8 (fn_8008FF44 fills it):
-   the slot handle, then the leading fields of the character it starts. */
+   the slot handle, then the request the character was started from. */
 struct Request_8008FF44 {
     int mHandle;
-    Character_80093BCC mCharacter;
+    Params_80092E54 mRequest;
 };
 
 extern "C" int fn_8008FF44(int value, int *pData)
@@ -416,7 +417,7 @@ extern "C" int fn_8008FF44(int value, int *pData)
     lbl_803EC924->mUnknown80.mUnknownE4E = 0;
     if (!fn_800BA6F8()) {
         fn_801C1F94(pRequest, 0, 0xFF);
-        pRequest->mCharacter.mUnknown4 = 3;
+        pRequest->mRequest.mUnknown4 = 3;
         kind = fn_800948E4((Object_8017886C *)value);
         count = fn_80094AE0(lbl_803EC924->mUnknown80.mUnknownE40, (Object_8017886C *)value,
                             lbl_803EC924->mpUnknown0, rows, 50);
@@ -448,27 +449,27 @@ extern "C" int fn_8008FF44(int value, int *pData)
             if (id != -1) {
                 Actor_801C009C *pActor;
 
-                pRequest->mCharacter.mUnknown8 = 1;
-                pRequest->mCharacter.mUnknown0 = lbl_802D73B8[id].mUnknown0;
-                pRequest->mCharacter.mUnknown4 = 3;
-                pRequest->mCharacter.mUnknownC = lbl_802D73B8[id].mUnknown4;
-                pRequest->mCharacter.mUnknown10 = rows[pick] != 0 ? (short)rows[pick][1] : -1;
-                pRequest->mHandle = fn_8009313C((Request_8009313C *)&pRequest->mCharacter);
+                pRequest->mRequest.mUnknown8 = 1;
+                pRequest->mRequest.mUnknown0 = lbl_802D73B8[id].mUnknown0;
+                pRequest->mRequest.mUnknown4 = 3;
+                pRequest->mRequest.mUnknownC = lbl_802D73B8[id].mUnknown4;
+                pRequest->mRequest.mUnknown10 = rows[pick] != 0 ? (short)rows[pick][1] : -1;
+                pRequest->mHandle = fn_8009313C(&pRequest->mRequest);
                 if (pRequest->mHandle != -1) {
-                    pActor = fn_80093BAC(pRequest->mCharacter.mUnknown0, pRequest->mCharacter.mUnknown4);
+                    pActor = fn_80093BAC(pRequest->mRequest.mUnknown0, pRequest->mRequest.mUnknown4);
                     if (pActor != 0) {
-                        Object_80039F5C *p = fn_8008FF28(&pRequest->mCharacter, pActor);
+                        Object_80039F5C *p = fn_8008FF28(&pRequest->mRequest, pActor);
 
-                        pRequest->mCharacter.mUnknownE0.mUnknown8.mWord = -1;
-                        pRequest->mCharacter.mUnknownE0.mUnknown0 = 0;
-                        pRequest->mCharacter.mUnknownE0.mUnknown4.mWord = -1;
+                        pRequest->mRequest.mUnknownE0.mUnknown8.mWord = -1;
+                        pRequest->mRequest.mUnknownE0.mUnknown0 = 0;
+                        pRequest->mRequest.mUnknownE0.mUnknown4.mWord = -1;
                         lbl_802D73B8[id].mUnknown8++;
                         if (fn_801C01C4(pActor) == 0) {
-                            pRequest->mCharacter.mUnknownE0.mUnknown8.mWord = 0;
-                            pRequest->mCharacter.mUnknownE0.mUnknown0 = 1;
-                            pRequest->mCharacter.mUnknownE0.mUnknown4.mWord = 1;
+                            pRequest->mRequest.mUnknownE0.mUnknown8.mWord = 0;
+                            pRequest->mRequest.mUnknownE0.mUnknown0 = 1;
+                            pRequest->mRequest.mUnknownE0.mUnknown4.mWord = 1;
                         }
-                        lbl_803EC924->mUnknown80.mCharacters[pRequest->mHandle].mUnknownE0 = pRequest->mCharacter.mUnknownE0;
+                        lbl_803EC924->mUnknown80.mCharacters[pRequest->mHandle].mUnknownE0 = pRequest->mRequest.mUnknownE0;
                         if (p != 0) {
                             int id = p->mId;
                             unsigned char type = id;
@@ -476,7 +477,7 @@ extern "C" int fn_8008FF44(int value, int *pData)
                             if (type == 1) {
                                 fn_800B9B64(lbl_803EAB84, 0, (unsigned char)(id >> 8));
                                 lbl_803EC924->mUnknown80.mUnknownE4F[0] = type;
-                                fn_80067E3C(128, &p->mMotion.mPos, p->mId, pRequest->mCharacter.mUnknownC, 0, 0);
+                                fn_80067E3C(128, &p->mMotion.mPos, p->mId, pRequest->mRequest.mUnknownC, 0, 0);
                             }
                         }
                     }
@@ -508,9 +509,9 @@ extern "C" void fn_80090284(int *pData)
     unsigned short i = 0;
 
     fn_80093410(pRequest->mHandle);
-    pActor = fn_80093BAC(pRequest->mCharacter.mUnknown0, pRequest->mCharacter.mUnknown4);
+    pActor = fn_80093BAC(pRequest->mRequest.mUnknown0, pRequest->mRequest.mUnknown4);
     for (; i < pActor->mUnknown4; i++) {
-        Object_80039F5C *p = pRequest->mCharacter.mUnknown14[i];
+        Object_80039F5C *p = pRequest->mRequest.mUnknown14[i];
 
         if (p->mIdBytes[3] == 1 && p->mUnknown9[2] != 0) {
             Message_800F01CC message;
@@ -538,16 +539,16 @@ extern "C" int fn_801BB74C(unsigned short slot, int id, Actor_801C009C *pActor);
 extern "C" int fn_8009439C(int index);
 extern "C" void fn_801BC440(Actor_801C009C *pActor, Actor_801C009C *pSource);
 
-extern "C" int fn_80090390(Character_80093BCC *pCharacter, int *pSlot)
+extern "C" int fn_80090390(Params_80092E54 *pRequest, int *pSlot)
 {
-    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    Actor_801C009C *pActor = fn_80093BAC(pRequest->mUnknown0, pRequest->mUnknown4);
     int load = 1;
     unsigned int i = 0;
-    int id = fn_8009439C(pCharacter->mUnknown4) + pActor->mUnknown2;
+    int id = fn_8009439C(pRequest->mUnknown4) + pActor->mUnknown2;
 
     for (i = 0; i < 2; i++) {
         if (lbl_8030C164[i].mUnknown0 == id) {
-            if (lbl_8030C164[i].mUnknown8 == pCharacter->mUnknown0) {
+            if (lbl_8030C164[i].mUnknown8 == pRequest->mUnknown0) {
                 load = 0;
                 lbl_8030C164[i].mUnknown4++;
             } else {
@@ -555,7 +556,7 @@ extern "C" int fn_80090390(Character_80093BCC *pCharacter, int *pSlot)
                 fn_801BC440(pActor, fn_80093BAC(lbl_8030C164[i].mUnknown8, lbl_8030C164[i].mUnknownC));
                 lbl_8030C164[i].mUnknown4++;
             }
-            pCharacter->mUnknownD8.mWord = i;
+            pRequest->mUnknownD8.mWord = i;
             break;
         }
     }
@@ -564,10 +565,10 @@ extern "C" int fn_80090390(Character_80093BCC *pCharacter, int *pSlot)
             if (lbl_8030C164[i].mUnknown4 == 0) {
                 fn_801BB74C(i, id, pActor);
                 lbl_8030C164[i].mUnknown0 = id;
-                lbl_8030C164[i].mUnknown8 = pCharacter->mUnknown0;
-                lbl_8030C164[i].mUnknownC = pCharacter->mUnknown4;
+                lbl_8030C164[i].mUnknown8 = pRequest->mUnknown0;
+                lbl_8030C164[i].mUnknownC = pRequest->mUnknown4;
                 lbl_8030C164[i].mUnknown4++;
-                pCharacter->mUnknownD8.mWord = i;
+                pRequest->mUnknownD8.mWord = i;
                 break;
             }
         }
@@ -578,14 +579,14 @@ extern "C" int fn_80090390(Character_80093BCC *pCharacter, int *pSlot)
     return i < 2;
 }
 
-extern "C" unsigned short fn_801BB878(int index, int a, int b, Actor_801C009C *pActor, int c);
+extern "C" unsigned short fn_801BB878(int id, void *pData, int size, Actor_801C009C *pActor, int flag);
 
-extern "C" int fn_800904D4(Character_80093BCC *pCharacter, int a, int b)
+extern "C" int fn_800904D4(Params_80092E54 *pRequest, void *pData, int size)
 {
-    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
-    int handle = fn_801BB878(fn_8009439C(pCharacter->mUnknown4) + pActor->mUnknown2, a, b, pActor, 0);
+    Actor_801C009C *pActor = fn_80093BAC(pRequest->mUnknown0, pRequest->mUnknown4);
+    int handle = fn_801BB878(fn_8009439C(pRequest->mUnknown4) + pActor->mUnknown2, pData, size, pActor, 0);
 
-    pCharacter->mUnknownD8.mWord = handle | 0x80000000;
+    pRequest->mUnknownD8.mWord = handle | 0x80000000;
     return handle != 0xFFFF;
 }
 
@@ -1026,6 +1027,61 @@ extern "C" int fn_800927BC(int index)
         result = 1;
     }
     return result;
+}
+
+extern "C" int fn_80092E54(Params_80092E54 *pParams, void *pBuffer, int size)
+{
+    int slot = fn_800926F4();
+
+    if (slot != -1) {
+        int started;
+
+        fn_80093BAC(pParams->mUnknown0, pParams->mUnknown4);
+        if (pBuffer != 0) {
+            started = fn_800904D4(pParams, pBuffer, size);
+        } else {
+            started = fn_80090390(pParams, &slot);
+        }
+        if (started) {
+            *(Params_80092E54 *)&lbl_803EC924->mUnknown80.mCharacters[slot] = *pParams;
+            fn_801C1F94(lbl_803EC924->mUnknown80.mCharacters[slot].mUnknownEC, 0, 28);
+            lbl_803EC924->mUnknown80.mCharacters[slot].mUnknown38C = 0;
+        } else {
+            slot = -1;
+        }
+    }
+    return slot;
+}
+
+int fn_8009313C(Params_80092E54 *pRequest)
+{
+    int invalid = -1;
+    int slot = fn_800926F4();
+
+    if (slot != invalid) {
+        fn_80093BAC(pRequest->mUnknown0, pRequest->mUnknown4);
+        if (fn_80096074(pRequest, 0) && fn_80090390(pRequest, &slot)) {
+            unsigned char found;
+
+            fn_80093C70((Character_80093BCC *)pRequest, 0x42414C4C /* 'BALL' */, 0, &found);
+            if (!found) {
+                lbl_803EC924->mUnknown80.mUnknownE4E = found;
+                *(Params_80092E54 *)&lbl_803EC924->mUnknown80.mCharacters[slot] = *pRequest;
+                fn_801C1F94(lbl_803EC924->mUnknown80.mCharacters[slot].mUnknownEC, 0, 28);
+                lbl_803EC924->mUnknown80.mCharacters[slot].mUnknown38C = 0;
+            } else if (lbl_803EC924->mUnknown80.mUnknownE4E == 0) {
+                lbl_803EC924->mUnknown80.mUnknownE4E = 1;
+                *(Params_80092E54 *)&lbl_803EC924->mUnknown80.mCharacters[slot] = *pRequest;
+                fn_801C1F94(lbl_803EC924->mUnknown80.mCharacters[slot].mUnknownEC, 0, 28);
+                lbl_803EC924->mUnknown80.mCharacters[slot].mUnknown38C = 0;
+            } else {
+                slot = invalid;
+            }
+        } else {
+            slot = invalid;
+        }
+    }
+    return slot;
 }
 
 extern "C" int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
@@ -5286,18 +5342,6 @@ extern "C" Object_80039F5C *fn_800A624C(int team)
 
 struct Record_800B49EC;
 
-/* 236-byte request passed to fn_8009313C. */
-struct Request_8009313C {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    unsigned char mUnknownC[212];
-    unsigned char mUnknownE0;
-    unsigned char mUnknownE1[3];
-    int mUnknownE4;
-    int mUnknownE8;
-};
-
 extern "C" {
 void fn_800B49EC(Record_800B49EC *pDst, const Record_800B49EC *pSrc);
 void fn_800B4798(short *pRatings, int team, int index, float *pOut);
@@ -5387,16 +5431,16 @@ extern "C" void fn_800A6C10(int team)
 
 extern "C" void fn_800A6CB0(int team)
 {
-    Request_8009313C request;
+    Params_80092E54 request;
     int none = 0;
 
     if (lbl_803EC95C == -1) {
         fn_801C1F94(&request, 0, sizeof(request));
         request.mUnknown0 = team;
         request.mUnknown8 = 100;
-        request.mUnknownE0 = 1;
-        request.mUnknownE4 = 1;
-        request.mUnknownE8 = none;
+        request.mUnknownE0.mUnknown0 = 1;
+        request.mUnknownE0.mUnknown4.mWord = 1;
+        request.mUnknownE0.mUnknown8.mWord = none;
         request.mUnknown4 = none;
         fn_8009604C(0, (int)fn_800A624C(fn_80178308()));
         fn_8009604C(1, (int)fn_800A624C(fn_80178320()));
@@ -5892,9 +5936,9 @@ extern "C" int fn_800A8FA0(int a, int b, char *pBuffer, int size)
     fn_801C1F94(&request, 0, sizeof(request));
     request.mUnknown0 = b;
     request.mUnknown8 = 0x24;
-    request.mUnknownE0 = 1;
-    request.mUnknownE4 = 0;
-    request.mUnknownE8 = 0;
+    request.mUnknownE0.mUnknown0 = 1;
+    request.mUnknownE0.mUnknown4.mWord = 0;
+    request.mUnknownE0.mUnknown8.mWord = 0;
     request.mUnknown4 = a;
     return fn_80092E54(&request, pBuffer, 0x19800);
 }
@@ -7822,7 +7866,6 @@ extern "C" void fn_800BB828(void)
 }
 
 extern "C" {
-int fn_80092E54(Params_80092E54 *pParams, void *pBuffer, int size);
 
 extern unsigned char lbl_803EAB96;
 }
@@ -7834,9 +7877,9 @@ extern "C" void fn_800BB840(int a, int b, int c)
     fn_801C1F94(&params, 0, sizeof(params));
     params.mUnknown0 = a;
     params.mUnknown8 = 36;
-    params.mUnknownE0 = 1;
-    params.mUnknownE4 = 1;
-    params.mUnknownE8 = lbl_803EAB96 & 1;
+    params.mUnknownE0.mUnknown0 = 1;
+    params.mUnknownE0.mUnknown4.mWord = 1;
+    params.mUnknownE0.mUnknown8.mWord = lbl_803EAB96 & 1;
     params.mUnknown4 = lbl_803EC98C->mUnknown14;
     lbl_803EAB96++;
     lbl_803EC98C->mUnknown1C = fn_80092E54(&params, (void *)b, c);
@@ -8198,9 +8241,9 @@ extern "C" void fn_800AA1B0(int a, int b)
     fn_801C1F94(&request, 0, sizeof(request));
     request.mUnknown0 = a;
     request.mUnknown8 = 0x24;
-    request.mUnknownE0 = 1;
-    request.mUnknownE4 = 1;
-    request.mUnknownE8 = 0;
+    request.mUnknownE0.mUnknown0 = 1;
+    request.mUnknownE0.mUnknown4.mWord = 1;
+    request.mUnknownE0.mUnknown8.mWord = 0;
     if (lbl_803EAA88->mUnknown16 >= 0) {
         request.mUnknown4 = 5;
     } else {
