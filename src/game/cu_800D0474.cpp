@@ -346,7 +346,3 @@ extern "C" int fn_800D0D1C(Object_80039F5C *p)
     }
     return result;
 }
-
-extern "C" void fn_800D0D48(void)
-{
-}

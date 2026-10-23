@@ -1929,6 +1929,84 @@
   },
   "units": [
     {
+      "source": "src/game/cu_800D0474.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x800D0474-0x800D0D48 (src/game/cu_800D0474.cpp) and its function rows; every function exact. Code and .rodata linked on researched edges; its .sdata bytes 0x803EACAB-0x803EACC0 stay original bytes because the .sdata object edge is unresolved.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800D0474",
+          "end": "0x800D0D48"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80298090",
+          "end": "0x80298098"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8018B0BC.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018B014-0x8018C344 (src/game/cu_8018B0BC.cpp) and its function rows; every function exact. Whole range linked; the edges are the researched likely file edges recorded in that row (owner rule 2026-10-22: researched likely boundaries count as file edges).",
+      "link_roots": {
+        "symbols": [
+          "fn_8018B014",
+          "fn_8018B0BC",
+          "fn_8018B2A8",
+          "fn_8018B5E4",
+          "fn_8018B66C",
+          "fn_8018B6F0",
+          "fn_8018B8B0",
+          "fn_8018B950",
+          "fn_8018B9D4",
+          "fn_8018BA2C",
+          "fn_8018BA4C",
+          "fn_8018BB24",
+          "fn_8018BD9C",
+          "fn_8018BDFC",
+          "fn_8018BE68",
+          "fn_8018BECC",
+          "fn_8018BF10",
+          "fn_8018BF3C",
+          "fn_8018C008",
+          "fn_8018C044",
+          "fn_8018C064",
+          "fn_8018C0E8",
+          "fn_8018C15C",
+          "fn_8018C1A8",
+          "fn_8018C1E0",
+          "fn_8018C230"
+        ],
+        "evidence": "The file defines 27 functions. The target keeps 26 of them at the placed range; the 27th, CopyRdrcPlayersToTeam (Xbox DEFAULT.xbe 0x172FF0), has no code in the target's .init/.text (masked byte search), so the linker drops it. Its literals at 0x802A9E74-0x802A9F80 stay in the placed .rodata, as in the original link.",
+        "discarded": [
+          "CopyRdrcPlayersToTeam"
+        ]
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018B014",
+          "end": "0x8018C344"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A98A0",
+          "end": "0x802AA0D0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EADE4",
+          "end": "0x802EAE74"
+        }
+      ]
+    },
+    {
       "source": "src/engine/TibNew.cpp",
       "profile": "engine_cpp_nosda",
       "evidence": "evidence.tsv unit row 0x801D3BD0-0x801D3C68 (src/engine/TibNew.cpp) and its function rows; every function exact, promoted from comparison-only.",
@@ -8817,25 +8895,6 @@
           "placement": ".data4",
           "start": "0x802CD190",
           "end": "0x802CEFF0"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_8018B0BC.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded team/player copy group; exact linked first two functions and native literal prefix. The four later bodies remain registered for comparison; original-file edges stay open.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018B014",
-          "end": "0x8018B2A8"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A98B4",
-          "end": "0x802A9A50"
         }
       ]
     },

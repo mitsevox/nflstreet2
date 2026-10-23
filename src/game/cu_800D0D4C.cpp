@@ -346,6 +346,10 @@ int fn_800D3C80(void);
 int fn_800D3CC0(void);
 }
 
+extern "C" void fn_800D0D48(int)
+{
+}
+
 extern "C" void fn_800D0D4C(int i) {
     fn_800D0D48(86);
     lbl_803EACD4->mUnknown1F88[i][0] = 0;

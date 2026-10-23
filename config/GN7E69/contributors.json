@@ -21340,6 +21340,22 @@
       }
     },
     {
+      "source": "src/game/cu_800D0D4C.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x800D0D48"
+      ],
+      "provenance": {
+        "pull_request": 565,
+        "merged_via": 1045,
+        "commit": "f81d5053240976b5f29e793bcd549f7794637715",
+        "introduced_blob": "32456af38f5ba4fa89a1e1e0f259b889e13d05ee",
+        "integration_adjustment": "The lone blr fn_800D0D48 from adampreddy's src/game/cu_800D0474.cpp (PR 565) moved unchanged to the head of src/game/cu_800D0D4C.cpp, whose code is its only caller (PR 1045 file-edge review); defined with the int parameter its callers pass."
+      }
+    },
+    {
       "source": "src/game/cu_8010F43C.cpp",
       "contributors": [
         "mitsevox"
