@@ -173,6 +173,8 @@ void fn_801D0544(void);
 void fn_801D0BCC(int z, int y, int x);
 void fn_801D0C58(float *pPos);
 void fn_801D0F80(float *pMatrix);
+unsigned char fn_80054D24(int index);
+unsigned int fn_8017F584(void);
 
 extern Level_80054130 *lbl_803EA554;
 
@@ -336,4 +338,15 @@ extern "C" void fn_800A3170(void)
         Source_80144CE0 *pSource = (Source_80144CE0 *)fn_80054138(pEntry->mUnknown0);
         lbl_8030E6E8.mpUnknownBC[i] = fn_80144CE0(&args, 0, pSource);
     }
+}
+
+extern "C" float fn_800A32E4(void)
+{
+    if (fn_80054D24(27) != 0 && fn_8017F584() == 0) {
+        return 10.0f;
+    }
+    if (fn_80054D24(26) != 0 && fn_8017F584() == 0) {
+        return lbl_8030E6E8.mUnknown2C * 2.0;
+    }
+    return lbl_8030E6E8.mFloat38;
 }
