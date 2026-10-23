@@ -40,13 +40,16 @@
 
 #define CLAMP(x, lo, hi) ((x) < (lo) ? (lo) : ((x) > (hi) ? (hi) : (x)))
 
-/* Steering output fn_8010DAB4 fills for fn_8010E59C: a speed scale, the
-   heading to run on, the heading to face and a flag byte at +22. */
+/* Steering state fn_8010E59C keeps per player: a speed scale, the heading
+   to run on, the heading to face, a countdown to the next update and two
+   flag bytes. fn_8010DAB4 and fn_8010E15C fill and adjust it. */
 struct Steer_8010DAB4 {
     float mSpeed;
     int mHeading;
     int mFacing;
-    char mUnknown12[10];
+    int mTimer;
+    char mUnknown16[5];
+    unsigned char mUnknown21;
     unsigned char mUnknown22;
 };
 
