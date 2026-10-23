@@ -1225,10 +1225,8 @@ extern "C" int fn_8012A3B0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_8
     int result = 0;
 
     *pOut = lbl_803EB0C8;
-    if (pOther == 0) {
-        result = 0;
-    } else if (fn_80124714(p, pOther, 0) != 0) {
-        if (pOther->mIdBytes[2] != p->mIdBytes[2] && (pOther->mFlags & 0x10000) != 0
+    if (pOther == 0 || fn_80124714(p, pOther, 0) != 0) {
+        if (pOther != 0 && pOther->mIdBytes[2] != p->mIdBytes[2] && (pOther->mFlags & 0x10000) != 0
             && distance < lbl_803EB0B0 * 0.5f && fn_801486A0() != 0) {
             result = 1;
             *pOut = fn_8012623C(pOther);
