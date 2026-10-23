@@ -11328,6 +11328,12 @@ extern "C" int fn_800B0F98(void)
     return lbl_803EAB14->mUnknown2D0;
 }
 
+static inline void CopyPoint(Point_8017886C *pDst, const Point_8017886C *pSrc)
+{
+    pDst->mX = pSrc->mX;
+    pDst->mY = pSrc->mY;
+}
+
 extern "C" void fn_800B0FA4(void)
 {
     fn_800B0090();
@@ -11362,10 +11368,8 @@ extern "C" void fn_800B0FA4(void)
                 Entry_8006719C *pEntry = &pTeam->mUnknown8.mUnknown84[0][index];
                 Point_8017886C pos;
                 Point_8017886C mirror;
-                pos.mX = pEntry->mUnknown10.mX;
-                pos.mY = pEntry->mUnknown10.mY;
-                mirror.mX = pEntry->mUnknown18.mX;
-                mirror.mY = pEntry->mUnknown18.mY;
+                CopyPoint(&pos, &pEntry->mUnknown10);
+                CopyPoint(&mirror, &pEntry->mUnknown18);
                 if (pos.mX == mirror.mX && pos.mY == mirror.mY) {
                     mirror.mX = -mirror.mX;
                     for (unsigned char j = 0; j < count; j++) {
@@ -11373,8 +11377,8 @@ extern "C" void fn_800B0FA4(void)
                             continue;
                         }
                         pEntry = &pTeam->mUnknown8.mUnknown84[0][j];
-                        pos.mX = (pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown18 : pEntry->mUnknown10).mX;
-                        pos.mY = (pTeam->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown18 : pEntry->mUnknown10).mY;
+                        pos.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
+                        pos.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
                         if (pos.mX == mirror.mX && pos.mY == mirror.mY) {
                             index = j;
                             break;
