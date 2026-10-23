@@ -147,7 +147,7 @@ void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, i
 void fn_8011E240(Object_80039F5C *p);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 int fn_8011F1CC(void);
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
+Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 int fn_8013BA58(Object_80137ABC *pBall, int *pOut);
 void fn_80143E14(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_80156C78(int a, int b);

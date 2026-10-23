@@ -585,7 +585,7 @@ int fn_801CFE40(float y, float x);
 unsigned int fn_801D27F4(int a);
 int fn_801D34D0(void *p, int size, int value, int align);
 int fn_801E0AE4(void);
-void fn_801E0AEC(Struct_801E0AEC *pDesc);
+int fn_801E0AEC(Struct_801E0AEC *pDesc);
 void fn_801E0BE4(void);
 int fn_801E0CA8(void *pData, int unknown, int c);
 int fn_801E0D68(int handle);

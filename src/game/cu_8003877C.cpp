@@ -474,16 +474,16 @@ extern "C" void fn_80038E80(Object_80039F5C *p, Player_8003877C *pPlayer, unsign
     p->mpUnknown812 = pPlayer->mUnknown3108;
     fn_800AF804(p->mUnknown816);
     p->mUnknown512.mUnknown14 = 1;
+    p->mpUnknown56 = &pObject->mUnknown44;
+    p->mpUnknown148 = &pObject->mUnknown44;
+    p->mpUnknown240 = &pObject->mUnknown44;
     p->mMotion.mPos.mX = 11 - index * 2;
     p->mMotion.mPos.mY = team * 10 - 5;
     p->mMotion.mPos.mZ = 0.0f;
     p->mUnknown508 = 170.0f;
-    p->mUnknown512.mUnknown0 = 0.0f;
-    p->mUnknown512.mUnknown4 = 0;
     p->mUnknown512.mUnknown8 = 0;
-    p->mpUnknown56 = &pObject->mUnknown44;
-    p->mpUnknown148 = &pObject->mUnknown44;
-    p->mpUnknown240 = &pObject->mUnknown44;
+    p->mUnknown512.mUnknown4 = 0;
+    p->mUnknown512.mUnknown0 = 0.0f;
     fn_800C8270(&pPlayer->mObject);
     fn_800C82C0(&pPlayer->mObject);
     fn_800CE674(pReset);
@@ -886,19 +886,18 @@ extern "C" Object_80039F5C *fn_80039F5C(int team, unsigned short index)
 
 extern "C" int fn_80039F8C(Object_80039F5C *p)
 {
-    Manager_803EA3F8 *pManager = lbl_803EA3F8;
-    int count = pManager->mCount;
+    int count = lbl_803EA3F8->mCount;
     int i;
 
     for (i = 0; i < count; i++) {
-        if (p == &pManager->mpPlayers[i].mObject) {
+        if (p == &lbl_803EA3F8->mpPlayers[i].mObject) {
             break;
         }
     }
-    if (i < count) {
-        return i;
+    if (i >= count) {
+        i = -1;
     }
-    return -1;
+    return i;
 }
 
 extern "C" Object_80039F5C *fn_80039FE8(int team, int a, unsigned char n)
@@ -982,12 +981,13 @@ extern "C" void fn_8003A1EC(int on, int team, int index)
             unsigned char slot = index;
             Object_800670B4 *pPlay = fn_80168708(side);
             Entry_8006719C *pEntry = (Entry_8006719C *)fn_80163E94(pPlay, slot, 0);
-            Point_8017886C offset = fn_80177FE0();
+            Point_8017886C offset;
             Point_8017886C pos;
             unsigned char flip;
             void *pRecord;
 
-            if (fn_80178308() == p->mIdBytes[2]) {
+            offset = fn_80177FE0();
+            if (fn_80178308() == ((p->mId >> 8) & 0xFF)) {
                 pos.mX = (pPlay->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
                 pos.mY = (pPlay->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
                 fn_80227638(&pos, &pos, &offset);
@@ -1019,10 +1019,12 @@ extern "C" void fn_8003A1EC(int on, int team, int index)
 
 extern "C" void fn_8003A394(int a, int team, int index)
 {
+    Object_80039F5C *p;
     Block_8003A1EC *pBlock;
 
     fn_8003A1EC(a, team, index);
-    pBlock = (Block_8003A1EC *)(lbl_803EA3F8->mpPlayers + (index + team * lbl_803EA3F8->mPerTeam))->mObject.mpUnknown4;
+    p = &lbl_803EA3F8->mpPlayers[index + team * lbl_803EA3F8->mPerTeam].mObject;
+    pBlock = (Block_8003A1EC *)p->mpUnknown4;
     if (pBlock->mpUnknown984 != 0) {
         fn_8015C244(pBlock->mpUnknown984);
     }
@@ -1110,7 +1112,7 @@ extern "C" void fn_8003A628(Record_8003EC04 *pRecord)
     pRecord->mUnknown10 = p->mMotion.mPos.mZ;
     pRecord->mUnknown14 = p->mMotion.mPos.mZ + 6.0f;
     fn_801D04C4();
-    fn_801D06D4(p->mUnknown628 + 12);
+    fn_801D06D4(p->mUnknown640);
     radius = 0.0f;
     int mode = fn_800AD9B4();
     if ((pRecord->mUnknown2C & 2) && (mode == 2 || mode == 6 || mode == 7) && !(p->mFlags & 0x4000)) {
@@ -1119,12 +1121,9 @@ extern "C" void fn_8003A628(Record_8003EC04 *pRecord)
 
         pRecord->mUnknown2F = 1;
         pOther = pRecord->mpUnknown24;
-        pSub->mUnknown10 = p->mMotion.mPos.mX;
-        pSub->mUnknown14 = p->mMotion.mPos.mY;
-        pSub->mUnknown18 = p->mMotion.mPos.mZ;
-        pSub->mUnknown20 = p->mMotion.mPos.mX;
-        pSub->mUnknown24 = p->mMotion.mPos.mY;
-        pSub->mUnknown28 = p->mMotion.mPos.mZ;
+        pSub->mUnknown10 = pSub->mUnknown20 = p->mMotion.mPos.mX;
+        pSub->mUnknown14 = pSub->mUnknown24 = p->mMotion.mPos.mY;
+        pSub->mUnknown18 = pSub->mUnknown28 = p->mMotion.mPos.mZ;
         pSub->mUnknown28 = p->mMotion.mPos.mZ + 1.5f;
         fn_80227930(pSub, &pSub->mUnknown10, &pSub->mUnknown20, 0.5f);
         pSub->mUnknownC = fn_8022785C(pSub, &pSub->mUnknown10) + pSub->mUnknown1C;
@@ -1216,18 +1215,32 @@ extern "C" void fn_8003A628(Record_8003EC04 *pRecord)
                 pSub->mUnknown1C = 0.2f;
                 break;
             case 1:
-            case 3:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
                 pSub->mUnknown1C = 0.1f;
                 break;
             case 2:
+                pSub->mUnknown1C = 0.06f;
+                break;
+            case 3:
+                pSub->mUnknown1C = 0.1f;
+                break;
             case 4:
                 pSub->mUnknown1C = 0.06f;
                 break;
+            case 5:
+                pSub->mUnknown1C = 0.1f;
+                break;
+            case 6:
+                pSub->mUnknown1C = 0.1f;
+                break;
+            case 7:
+                pSub->mUnknown1C = 0.1f;
+                break;
+            case 8:
+                pSub->mUnknown1C = 0.1f;
+                break;
             case 9:
+                pSub->mUnknown1C = 0.11f;
+                break;
             case 10:
                 pSub->mUnknown1C = 0.11f;
                 break;

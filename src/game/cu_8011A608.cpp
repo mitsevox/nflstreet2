@@ -2,6 +2,7 @@
 #include "game/Query_800CE770.h"
 #include "game/cu_80136B1C.h"
 #include "game/fn_8022781C.h"
+#include "game/Move_8011AB38.h"
 
 struct Pair_8011BAE0 {
     float mUnknown0;
@@ -24,7 +25,7 @@ extern float lbl_803EB080;
 extern float lbl_803EB084;
 extern float lbl_803EB08C;
 extern float lbl_803EB090;
-extern int lbl_802DAF8C[2][3][5];
+extern Move_8011AB38 *lbl_802DAF8C[2][3][5];
 int fn_80178320(void);
 int fn_8011F1A4(void);
 int fn_8011F1CC(void);
@@ -105,7 +106,7 @@ extern "C" int fn_8011A608(Object_80039F5C *p, Object_80039F5C *pOther)
     return result;
 }
 
-extern "C" int fn_8011A7B4(Object_80039F5C *p, Object_80039F5C *pOther)
+extern "C" Move_8011AB38 *fn_8011A7B4(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     Block_8011A608 *pBlock = (Block_8011A608 *)&p->mUnknown1072;
     Block_8011A608 *pOtherBlock = (Block_8011A608 *)&pOther->mUnknown1072;
