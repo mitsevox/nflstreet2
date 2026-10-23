@@ -4821,20 +4821,21 @@ extern "C" void fn_8011893C(void)
 {
     int team = fn_80178308();
     unsigned char i = 0;
+    unsigned short otherValue = 0;
     unsigned int count = fn_80178D70(team);
 
     for (; i < count; i++) {
         Object_80039F5C *p = fn_80039F5C(team, i);
-        int *pRef = &p->mUnknown1036;
         Object_80039F5C *pOther;
         unsigned short value;
         int mode;
         int otherMode;
 
         if (p->mUnknown1032 == 7) {
-            pRef = &p->mUnknown1040;
+            pOther = fn_8009BCE8(&p->mUnknown1040);
+        } else {
+            pOther = fn_8009BCE8(&p->mUnknown1036);
         }
-        pOther = fn_8009BCE8(pRef);
         if (fn_8011E3F4(p) != 0) {
             value = 0;
             switch (p->mUnknown1032) {
@@ -4855,6 +4856,12 @@ extern "C" void fn_8011893C(void)
             value = 0;
             fn_8011DBC0(p);
             switch (p->mUnknown1032) {
+            case 4:
+                fn_80143EBC(p, pOther);
+                mode = 2;
+                otherMode = 8;
+                fn_80143EBC(pOther, p);
+                break;
             case 3:
                 if (pOther != 0) {
                     mode = 1;
@@ -4867,12 +4874,7 @@ extern "C" void fn_8011893C(void)
                     mode = 3;
                 }
                 break;
-            case 4:
-                fn_80143EBC(p, pOther);
-                mode = 2;
-                otherMode = 8;
-                fn_80143EBC(pOther, p);
-                break;
+            case 2:
             default:
                 mode = p->mUnknown1032;
                 otherMode = pOther != 0 ? pOther->mUnknown1032 : 0;
@@ -4902,9 +4904,9 @@ extern "C" void fn_8011893C(void)
         }
         if (pOther != 0 && pOther->mUnknown1032 != otherMode) {
             pOther->mUnknown1032 = otherMode;
-            pOther->mUnknown1137 = 0;
-            pOther->mUnknown1134 = 0;
+            pOther->mUnknown1134 = otherValue;
             pOther->mUnknown1136 = 0;
+            pOther->mUnknown1137 = 0;
         }
     }
 }

@@ -232,10 +232,17 @@ extern "C" void fn_80119020(void)
         Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown1036);
         Block_80119020 *pOtherBlock = (Block_80119020 *)&pOther->mBlock1032;
         if (pBlock->mUnknown105 || !pOtherBlock->mUnknown102) {
-            int odds = p->mRatings[2] + p->mRatings[0] + (int)p->mUnknown2904Float + p->mRatings[7];
+            int odds = p->mRatings[2] + p->mRatings[0];
+            odds += (int)p->mUnknown2904Float;
+            if (p->mUnknown1052 == 1) {
+                odds += p->mRatings[7];
+            } else {
+                odds += p->mRatings[7];
+            }
             odds /= 4;
             odds += fn_802372EC(0, 75);
-            int diff = pOther->mRatings[2] + pOther->mRatings[4] + pOther->mRatings[5] + (int)pOther->mUnknown2904Float;
+            int diff = pOther->mRatings[2] + pOther->mRatings[4] + pOther->mRatings[5];
+            diff += (int)pOther->mUnknown2904Float;
             diff /= 4;
             diff += fn_802372EC(0, 75);
             diff -= odds;
