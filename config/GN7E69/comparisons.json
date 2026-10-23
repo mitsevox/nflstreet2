@@ -38532,26 +38532,36 @@
     {
       "source": "src/game/cu_800F5AD4.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800F5AD4-0x800F5CBC as their own object so their literal pool 0x8029E19C-0x8029E1AC is placed exactly; it does not claim an original file boundary.",
+      "evidence": "Comparison-only fragment within the retained provisional cu_800EFC68 grouping. It compiles the literal-using bodies of 0x800F5208-0x800F60BC as their own object so their literal pool 0x8029E178-0x8029E1D0 is placed exactly; the object starts at 0x800F5208 because the pool must begin on an 8-byte boundary for the 0x800F5CBC conversion double to land at 0x8029E1C8. It does not claim an original file boundary.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800F5AD4",
-          "end": "0x800F5CBC"
+          "start": "0x800F5208",
+          "end": "0x800F60BC"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029E19C",
-          "end": "0x8029E1AC"
+          "start": "0x8029E178",
+          "end": "0x8029E1D0"
         }
       ],
       "functions": [
         {
+          "symbol": "fn_800F5208",
+          "start": "0x800F5208",
+          "end": "0x800F5AD4"
+        },
+        {
           "symbol": "fn_800F5AD4",
           "start": "0x800F5AD4",
           "end": "0x800F5CBC"
+        },
+        {
+          "symbol": "fn_800F5CBC",
+          "start": "0x800F5CBC",
+          "end": "0x800F60BC"
         }
       ]
     },
