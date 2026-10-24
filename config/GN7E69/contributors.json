@@ -22297,6 +22297,24 @@
       }
     },
     {
+      "source": "src/engine/cu_801B9D00.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801B9DEC"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "159d014b6e3f47ddae5a9f6ff0d6da55d91e5077",
+        "introduced_blob": "7d6aae33bc8cc17d33dbcd535f9e4674c63dd07b",
+        "original_commit": "7e6343d3941ebfd1e5ecf968f5ae51715ff4b2ec",
+        "original_blob": "f26d782d4b6e43947557a5845e34675bc08b2f9c",
+        "integration_adjustment": "Newly exact pre-existing body (fn_801B9DEC) originates in contribution 1002; the PR 1096 store-order refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
+      }
+    },
+    {
       "source": "src/engine/cu_801B9F00.c",
       "contributors": [
         "mitsevox"
@@ -25134,6 +25152,24 @@
         "merged_via": 1015,
         "commit": "27e09c6ec8a35f8667919f5bced508495a7640b2",
         "introduced_blob": "d8bb6c617cdc5b4d6932ef7cdec8f8dce50a6da5"
+      }
+    },
+    {
+      "source": "src/engine/cu_801C9DD8.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801C9DD8"
+      ],
+      "provenance": {
+        "pull_request": 1013,
+        "merged_via": 1015,
+        "commit": "159d014b6e3f47ddae5a9f6ff0d6da55d91e5077",
+        "introduced_blob": "69aada9d36e4e818dc8619252faf6dfb23f72760",
+        "original_commit": "27e09c6ec8a35f8667919f5bced508495a7640b2",
+        "original_blob": "d8bb6c617cdc5b4d6932ef7cdec8f8dce50a6da5",
+        "integration_adjustment": "Newly exact pre-existing body (fn_801C9DD8) originates in contribution 1013; the PR 1096 store-order refinement that makes it exact does not transfer original source credit. The original source commit/blob is retained for attribution."
       }
     },
     {
