@@ -103,7 +103,7 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "OSInit forms 803A3A20 at 80238B30 and invalidates 32 bytes at 80238EAC..80238EB4. It passes that pointer to DVDInquiryAsync at 80238EC0..80238EC8; callee 802413DC/802413E8 sets the transfer length to 32. InquiryCallback reads the device-code halfword at +2. Both target sizes independently corroborate the donor DVDDriveInfo 32-byte ABI. DriveInfo: OSInit forms 0x803A3A20 at 0x80238B30, invalidates32 bytes at 0x80238EAC..0x80238EB4 and passes it to DVDInquiryAsync at 0x80238EC8; InquiryCallback reads the device halfword at+2. Native .bss offset 0, size 32, alignment 32 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED06C-0x803ED070); NOBITS is allocation evidence, not initialized-byte progress."
+          "evidence": "OSInit forms 803A3A20 at 80238B30 and invalidates 32 bytes at 80238EAC..80238EB4. It passes that pointer to DVDInquiryAsync at 80238EC0..80238EC8; callee 802413DC/802413E8 sets the transfer length to 32. InquiryCallback reads the device-code halfword at +2. Both target sizes independently corroborate the donor DVDDriveInfo 32-byte ABI. DriveInfo: OSInit forms 0x803A3A20 at 0x80238B30, invalidates32 bytes at 0x80238EAC..0x80238EB4 and passes it to DVDInquiryAsync at 0x80238EC8; InquiryCallback reads the device halfword at+2. Native .bss offset 0, size 32, alignment 32 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
         },
         {
           "section": ".sbss",
@@ -165,7 +165,7 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "DriveBlock: OSInit passes0x803A3A40 as the DVDCommandBlock to DVDInquiryAsync; InquiryCallback uses block word+12status. Canonical DVDCommandBlock is48 bytes. Native .bss offset 32, size 48, alignment 32 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED06C-0x803ED070); NOBITS is allocation evidence, not initialized-byte progress."
+          "evidence": "DriveBlock: OSInit passes0x803A3A40 as the DVDCommandBlock to DVDInquiryAsync; InquiryCallback uses block word+12status. Canonical DVDCommandBlock is48 bytes. Native .bss offset 32, size 48, alignment 32 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
         },
         {
           "section": ".sbss",
