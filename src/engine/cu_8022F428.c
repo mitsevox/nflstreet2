@@ -14,16 +14,24 @@
 #include "game/Object_80235588.h"
 #include "game/QueryStatus.h"
 
-typedef struct Entry_802FB300 {
-    int mUnknown0;
-    int mUnknown4;
-} Entry_802FB300;
+#include "engine/Entry_802FB300.h"
+
+#include "engine/Handlers_802294D8.h"
 
 typedef struct Block_80233588 {
     int mUnknown0;
     char *mpUnknown4;
     int mUnknown8;
 } Block_80233588;
+
+typedef struct Config_802329F0 {
+    int mUnknown0;
+    Block_80233588 mUnknown4;
+} Config_802329F0;
+
+extern Handlers_802294D8 lbl_802FB38C;
+int fn_80233588(Block_80233588 *p);
+int fn_802336BC(void);
 
 typedef struct Block_802336C4 {
     void *mpUnknown0;
@@ -659,6 +667,32 @@ int fn_80232998(void)
 int fn_802329D0(void)
 {
     return fn_801F9574();
+}
+
+int fn_802329F0(Config_802329F0 *p)
+{
+    int result;
+    fn_802294D8(&lbl_802FB38C);
+    result = fn_80233588(&p->mUnknown4);
+    if (result == 0) {
+        result = fn_80232998();
+        if (result == 0) {
+            result = fn_802336BC();
+            if (result == 0) {
+                result = fn_80230CEC(1023, 0x54415453, 1, 0x454D4147, 0x04000000, 0);
+                if (result == 0) {
+                    result = fn_802294FC(&p->mUnknown0);
+                    if (result == 0) {
+                        result = fn_802328A8();
+                        if (result == 0) {
+                            result = fn_80232DE0();
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return result;
 }
 
 int fn_80232A98(void)

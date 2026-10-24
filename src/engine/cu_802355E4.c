@@ -15,6 +15,12 @@
 #include "engine/llmemory.h"
 #include "game/fn_801C68FC.h"
 
+typedef struct Chunk_80237D5C {
+    unsigned int mWords[16];
+} Chunk_80237D5C;
+
+void fn_80237D5C(void *pDst, const void *pSrc, unsigned int size);
+
 typedef struct Group_80237CB0 {
     int mUnknown0;
     int mUnknown4;
@@ -41,12 +47,14 @@ typedef struct Handle_80237A40 {
     Group_80237CB0 *mpUnknown48;
 } Handle_80237A40;
 
+typedef void (*Callback_80238570)(void *p);
+
 typedef struct Entry_8023850C {
     unsigned int mUnknown0;
     int mUnknown4;
     int mUnknown8;
     unsigned int mUnknown12;
-    void *mpUnknown16[1];
+    Callback_80238570 mpUnknown16[1];
 } Entry_8023850C;
 
 typedef struct Table_802382F0 {
@@ -54,6 +62,9 @@ typedef struct Table_802382F0 {
     int mUnknown4;
     Entry_8023850C **mppUnknown8;
 } Table_802382F0;
+
+void fn_80237B84(Group_80237CB0 *p);
+void fn_80238034(Group_80237CB0 *p);
 
 extern List_801C68FC *lbl_803ED030;
 extern Table_802382F0 lbl_803A3A14;
@@ -285,6 +296,15 @@ void fn_80235C4C(int a, Object_80235588 *p, float value)
 {
     fn_802353D8(p, 0x80000);
     p->mUnknown72 = value;
+}
+
+void fn_80235C90(Object_80235588 *p, float r, float g, float b, float a)
+{
+    p->mUnknown0 |= 0x20000;
+    p->mUnknown76[0] = (unsigned char)(r * 255.0f);
+    p->mUnknown76[1] = (unsigned char)(g * 255.0f);
+    p->mUnknown76[2] = (unsigned char)(b * 255.0f);
+    p->mUnknown76[3] = (unsigned char)(a * 255.0f);
 }
 
 void fn_80235D0C(Object_80235588 *p, int a)
@@ -850,6 +870,21 @@ void fn_80237B34(Handle_80237A40 *p)
     fn_801D2BD0(p->mpUnknown44);
 }
 
+void fn_80237B84(Group_80237CB0 *p)
+{
+    Handle_80237A40 *pItem;
+    if (p->mpUnknown24 != 0) {
+        fn_80237D5C(fn_801D27B8(p->mUnknown16), p->mpUnknown24, p->mUnknown12);
+    }
+    pItem = fn_801C6B4C(p->mpUnknown20, 0);
+    while (pItem != 0) {
+        fn_80237ADC(pItem);
+        pItem = fn_801C6C84(p->mpUnknown20, pItem);
+    }
+    p->mUnknown4 = 2;
+    fn_80238034(p);
+}
+
 void fn_80237C0C(Group_80237CB0 *p)
 {
     Handle_80237A40 *pItem;
@@ -894,6 +929,19 @@ void fn_80237D24(Group_80237CB0 *p)
     fn_801C6C0C(lbl_803ED030, p);
 }
 
+void fn_80237D5C(void *pDst, const void *pSrc, unsigned int size)
+{
+    char *pOut = pDst;
+    const char *pIn = pSrc;
+    while (size >= sizeof(Chunk_80237D5C)) {
+        *(Chunk_80237D5C *)pOut = *(const Chunk_80237D5C *)pIn;
+        pOut += sizeof(Chunk_80237D5C);
+        pIn += sizeof(Chunk_80237D5C);
+        size -= sizeof(Chunk_80237D5C);
+    }
+    memcpy(pOut, pIn, size);
+}
+
 void fn_80237E3C(int count)
 {
     lbl_803ED030 = fn_801C68FC(1, 0, count, sizeof(Group_80237CB0), 0, 0);
@@ -918,6 +966,15 @@ void fn_80237F98(Group_80237CB0 *p)
     p->mUnknown4 = 0;
 }
 
+void fn_80237FA4(Group_80237CB0 *p)
+{
+    char *pData = fn_801D27B8(p->mUnknown16);
+    if (p->mpUnknown24 != 0) {
+        fn_80237D5C(p->mpUnknown24, pData, p->mUnknown12);
+    }
+    fn_80237C0C(p);
+}
+
 void fn_80237FF4(Group_80237CB0 *p)
 {
     if (p->mpUnknown24 != 0) {
@@ -935,10 +992,31 @@ void fn_80238034(Group_80237CB0 *p)
     }
 }
 
+Group_80237CB0 *fn_8023811C(Group_80237CB0 *p)
+{
+    Group_80237CB0 *pFound = fn_80237E9C(p->mUnknown0);
+    if (pFound != 0) {
+        fn_80237C0C(pFound);
+    }
+    fn_80237B84(p);
+    return pFound;
+}
+
 void *fn_8023816C(void *pHandle)
 {
     Handle_80237A40 *p = pHandle;
     return p->mpUnknown44;
+}
+
+void *fn_80238174(int a, void **ppData, int size, int b, unsigned int id)
+{
+    Group_80237CB0 *p = fn_80237E9C(a);
+    void *pResult = 0;
+    if (p != 0) {
+        fn_801D277C(p->mUnknown16);
+        pResult = fn_80237A40(p, ppData, size, b, id);
+    }
+    return pResult;
 }
 
 void fn_802381E0(void *pHandle)
@@ -1006,8 +1084,29 @@ void fn_80238358(void)
     lbl_803EC140 = 0;
 }
 
+int fn_80238388(const int *pDesc)
+{
+    int index = lbl_803A3A14.mUnknown0;
+    void *pHandle = fn_80238174(0, (void **)&lbl_803A3A14.mppUnknown8[index], pDesc[0] * pDesc[1] + 16 + pDesc[2] * 4, 0, 0x65766D6F);
+    fn_802382CC(fn_8023816C(pHandle), pDesc);
+    fn_802381E0(pHandle);
+    lbl_803A3A14.mUnknown0++;
+    return index;
+}
+
 void fn_80238420(void)
 {
+}
+
+int fn_80238424(const int *pDesc)
+{
+    int index = lbl_803A3A14.mUnknown0;
+    int size = pDesc[0] * pDesc[1] + 16 + pDesc[2] * 4;
+    lbl_803A3A14.mppUnknown8[index] = fn_801D2B7C(size, 0, 0);
+    memset(lbl_803A3A14.mppUnknown8[index], 0, size);
+    fn_802382CC((int *)lbl_803A3A14.mppUnknown8[index], pDesc);
+    lbl_803A3A14.mUnknown0++;
+    return index;
 }
 
 void fn_802384C4(int index)
@@ -1028,6 +1127,22 @@ void *fn_80238540(int index, int item)
     return (char *)p + 16 + p->mUnknown12 * 4 + p->mUnknown8 * item;
 }
 
+void fn_80238570(int index, int advance)
+{
+    Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
+    unsigned int i;
+    Callback_80238570 *pCallbacks = p->mpUnknown16;
+    for (i = 0; i < p->mUnknown12; i++) {
+        Callback_80238570 callback = *pCallbacks++;
+        if (callback != 0) {
+            callback(fn_8023850C(index));
+        }
+    }
+    if (advance != 0) {
+        p->mUnknown4++;
+    }
+}
+
 int fn_80238604(int index)
 {
     return lbl_803A3A14.mppUnknown8[index]->mUnknown4;
@@ -1038,4 +1153,21 @@ void fn_8023861C(int index)
     Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
     fn_801D34D0((char *)p + 16 + p->mUnknown12 * 4, p->mUnknown0 * p->mUnknown8, 0, 4);
     p->mUnknown4 = 0;
+}
+void fn_80238680(int index, Callback_80238570 callback)
+{
+    Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
+    unsigned int i;
+    for (i = 0; i < p->mUnknown12 && p->mpUnknown16[i] != 0; i++) {
+    }
+    p->mpUnknown16[i] = callback;
+}
+
+void fn_802386DC(int index, Callback_80238570 callback)
+{
+    Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
+    unsigned int i;
+    for (i = 0; i < p->mUnknown12 && p->mpUnknown16[i] != callback; i++) {
+    }
+    p->mpUnknown16[i] = 0;
 }
