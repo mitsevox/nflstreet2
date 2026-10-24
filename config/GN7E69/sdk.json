@@ -1598,7 +1598,7 @@
       "name": "src/dolphin/ai/ai.c",
       "source": "src/dolphin/ai/ai.c",
       "library": "AI",
-      "evidence": "Coherent pinned BFBB April 2003 C functions corroborate callback/DMA/stream/rate/SRC behavior. All eighteen C bodies measured, SRC routine partial; original twelve-byte flag-clear and eighty-eight-byte stack-switch routines remain unrecovered within unchanged complete mapped range. Stack-switch assembly provenance unresolved; no new assembly implementation or whole-unit promotion.",
+      "evidence": "Coherent pinned BFBB April 2003 C functions corroborate callback/DMA/stream/rate/SRC behavior. All twenty bodies over the complete mapped range, including the twelve-byte flag-clear AIReset and the eighty-eight-byte stack-switch assembly routine __AICallbackStackSwitch, are exact and linked in the source build.",
       "sections": [
         {
           "section": ".data4",
