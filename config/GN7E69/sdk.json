@@ -835,7 +835,7 @@
       "name": "src/dolphin/dvd/dvdfs.c",
       "source": "src/dolphin/dvd/dvdfs.c",
       "library": "DVD",
-      "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, six728bytes operand-proven exact and two partials. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
+      "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
       "sections": [
         {
           "start": "0x8023ED68",
@@ -843,7 +843,7 @@
           "section": ".text",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, six728bytes operand-proven exact and two partials. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional."
+          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional."
         },
         {
           "start": "0x802FCD08",
@@ -851,7 +851,7 @@
           "section": ".data4",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, six728bytes operand-proven exact and two partials. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
+          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
           "object_seed": true
         },
         {
@@ -860,7 +860,7 @@
           "section": ".data5",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, six728bytes operand-proven exact and two partials. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
+          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
           "object_seed": true
         },
         {
@@ -869,7 +869,7 @@
           "section": ".sbss",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, six728bytes operand-proven exact and two partials. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
+          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
           "object_seed": true
         }
       ]

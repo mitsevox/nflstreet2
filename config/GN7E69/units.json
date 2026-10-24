@@ -698,14 +698,6 @@
       "address": "0x80241974",
       "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration."
     },
-    "OSSetCurrentContext": {
-      "address": "0x8023A52C",
-      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration. evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
-    },
-    "OSClearContext": {
-      "address": "0x8023A6F4",
-      "evidence": "evidence.tsv DVDLow external row; target resolved call instruction and shared SDK declaration. evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
-    },
     "memmove": {
       "address": "0x801C2030",
       "evidence": "evidence.tsv EXIBios external/type rows: actual retained branch/load operands and pinned BFBB8fb1c232 declarations."
@@ -722,22 +714,6 @@
       "address": "0x802622DC",
       "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
     },
-    "OSGetStackPointer": {
-      "address": "0x8023A6EC",
-      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
-    },
-    "OSSaveFPUContext": {
-      "address": "0x8023A524",
-      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
-    },
-    "OSLoadContext": {
-      "address": "0x8023A614",
-      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
-    },
-    "OSDumpContext": {
-      "address": "0x8023A7D4",
-      "evidence": "OSError target actual retained operand binding; pinned dolsdk2004 declaration, external source remains original."
-    },
     "_stack_addr": {
       "address": "0x803FE4C0",
       "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; outside the image, so the linked source build defines it as an absolute link-script symbol; no object storage claimed."
@@ -745,22 +721,6 @@
     "_stack_end": {
       "address": "0x803EE4C0",
       "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; exactly the end of .sdata2, so the linked source build resolves it as the end of the last original piece there; no object storage claimed."
-    },
-    "OSGetCurrentContext": {
-      "address": "0x8023A588",
-      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
-    },
-    "OSSaveContext": {
-      "address": "0x8023A594",
-      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
-    },
-    "OSInitContext": {
-      "address": "0x8023A718",
-      "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; comparison-only external, no object storage claimed."
-    },
-    "tolower": {
-      "address": "0x801C1F74",
-      "evidence": "Original target ConvertPath callsites8023EFB4/8023EFC8 both actual branch destination801C1F74; genuine BFBB isSame uses tolower(int), shared canonical libc declaration. Target body semantics still independently reviewed, no linked source imported."
     },
     "__cpReg": {
       "address": "0x803ED35C",
@@ -822,14 +782,6 @@
       "address": "0x803EC2C0",
       "evidence": "Complete BFBB CARDMount native retained operand resolved against original target; source name corroborated by pinned donor declaration and actual call/access context."
     },
-    "__DVDFSInit": {
-      "address": "0x8023ED68",
-      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
-    },
-    "__DVDThreadQueue": {
-      "address": "0x803ED110",
-      "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
-    },
     "__DVDPrintFatalMessage": {
       "address": "0x80242018",
       "evidence": "Actual original retained native branch/reference operand; reuse accepted definitions where already owned."
@@ -844,10 +796,6 @@
     },
     "__ArenaHi": {
       "address": "0x81780000",
-      "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
-    },
-    "__DVDLongFileNameFlag": {
-      "address": "0x803ED10C",
       "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
     },
     "__PADSpec": {
@@ -869,10 +817,6 @@
     "DBPrintf": {
       "address": "0x8023ED18",
       "evidence": "Original complete OSExceptionInit call instruction0x80239150 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "OSSwitchFPUContext": {
-      "address": "0x8023AA7C",
-      "evidence": "Original assembly provider cut and original C address/call uses independently frozen by neutral review; no assembly source imported."
     },
     "ICEnable": {
       "address": "0x80239DBC",
@@ -941,10 +885,6 @@
     "OSGetResetCode": {
       "address": "0x8023C3B0",
       "evidence": "Original complete ClearArena call instruction0x802389BC identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
-    },
-    "__OSContextInit": {
-      "address": "0x8023AB00",
-      "evidence": "Original complete OSInit call instruction0x80238CB0 identifies provider; whole coherent pinned donor C ordered call sequence corroborates role. No source implementation or exact credit claimed."
     },
     "__OSCacheInit": {
       "address": "0x8023A1E4",
@@ -1617,18 +1557,6 @@
     "PADControlMotor": {
       "address": "0x802476F8",
       "evidence": "evidence.tsv function row for 0x802476F8 (target extent, related SDK name). evidence.tsv external row PADControlMotor: target REL24 calls at 0x801CABC0, 0x801CABD0, 0x801CABE0, 0x801CABEC and the SDK Pad.c comparison unit."
-    },
-    "DVDOpen": {
-      "address": "0x8023F094",
-      "evidence": "evidence.tsv external row DVDOpen: target REL24 call at 0x801CB478 and the SDK dvdfs.c comparison unit."
-    },
-    "DVDClose": {
-      "address": "0x8023F15C",
-      "evidence": "evidence.tsv external row DVDClose: target REL24 call at 0x801CB4C8 and the SDK dvdfs.c comparison unit."
-    },
-    "DVDReadAsyncPrio": {
-      "address": "0x8023F3A4",
-      "evidence": "evidence.tsv external row DVDReadAsyncPrio: target REL24 call at 0x801CB58C and the SDK dvdfs.c comparison unit."
     },
     "GXInit": {
       "address": "0x8024AF70",
@@ -3942,6 +3870,25 @@
       ]
     },
     {
+      "source": "src/dolphin/os/OSContext.c",
+      "profile": "dolphin_release",
+      "evidence": "sdk.json unit src/dolphin/os/OSContext.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023A2D8",
+          "end": "0x8023AB48"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FBEF8",
+          "end": "0x802FC0CF"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/os/OSError.c",
       "profile": "dolphin_release",
       "evidence": "sdk.json unit src/dolphin/os/OSError.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
@@ -4114,6 +4061,48 @@
           "placement": ".sbss",
           "start": "0x803ED0E0",
           "end": "0x803ED0EC"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/dvd/dvdfs.c",
+      "profile": "dolphin_dvd_release",
+      "evidence": "sdk.json unit src/dolphin/dvd/dvdfs.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "__DVDFSInit",
+          "DVDConvertPathToEntrynum",
+          "DVDOpen",
+          "DVDClose",
+          "DVDGetCurrentDir",
+          "DVDReadAsyncPrio"
+        ],
+        "evidence": "The target keeps this file's 8 exact function(s) at the placed range; the global ones are the roots and the file-local ones stay through their callers. The file's other global function(s) (DVDFastOpen, DVDReadPrio, DVDSeekAsyncPrio) have no code anywhere in the target's .init/.text (byte search with call and address fields masked), so the linker drops them as the original link did; the file-local callbacks cbForReadSync and cbForSeekAsync are referenced only by those functions and are dropped with them."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023ED68",
+          "end": "0x8023F494"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FCD08",
+          "end": "0x802FCE93"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC178",
+          "end": "0x803EC180"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED0F8",
+          "end": "0x803ED118"
         }
       ]
     },
