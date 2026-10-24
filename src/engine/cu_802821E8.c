@@ -404,7 +404,7 @@ void fn_80282D70(void)
     for (i = 0; i <= 29; i++) {
         b[i].mUnknown00 = 0;
     }
-    for (j = 0; j < (unsigned short)lbl_803ED45C; j++) {
+    for (j = 0; j < lbl_803ED45C; j++) {
         n = lbl_803ED454[j];
         d = lbl_803ED458[j];
         if (d != 0) {
@@ -441,7 +441,7 @@ int fn_80282F24(void)
     unsigned char n;
     unsigned char code;
     fn_80285458();
-    while ((unsigned int)lbl_803ED42C < (unsigned short)lbl_803ED45C) {
+    while ((unsigned int)lbl_803ED42C < lbl_803ED45C) {
         if (lbl_803ED490 == 0) {
             lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04;
             return 2;

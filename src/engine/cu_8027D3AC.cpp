@@ -22,7 +22,7 @@ typedef struct Record_8027E2D0 {
     unsigned char mUnknown20[4];
 } Record_8027E2D0;
 
-struct Base_8027D6E8 {
+struct Class_801B44BC {
     int m0;
     unsigned char mUnknown4[4];
     int m8;
@@ -37,37 +37,45 @@ struct Base_8027D6E8 {
     int m58;
     unsigned char mUnknown5C[8];
     Record_8027E2D0 *m64;
-    virtual ~Base_8027D6E8();
+    virtual ~Class_801B44BC();
     virtual void vfn_02();
     virtual void vfn_03();
-    virtual void vfn_04();
-    virtual void vfn_05();
+    virtual int vfn_04();
+    virtual int vfn_05(int flag);
     virtual void vfn_06();
     virtual void vfn_07();
     virtual void vfn_08();
-    virtual void vfn_09();
+    virtual int vfn_09(int index);
     virtual void vfn_10();
     virtual void vfn_11();
     virtual int vfn_12();
-    virtual void vfn_13();
+    virtual int vfn_13(int value);
     virtual void vfn_14();
-    virtual void vfn_15();
+    virtual int vfn_15(int value);
     virtual void vfn_16();
-    virtual void vfn_17();
+    virtual int vfn_17(int a, int b);
     virtual void vfn_18();
     virtual int vfn_19(int value);
     virtual void vfn_20();
     virtual void vfn_21();
     virtual void vfn_22();
-    virtual void vfn_23();
+    virtual void vfn_23(Record_8027EC7C *record);
     virtual void vfn_24();
-    virtual void vfn_25();
+    virtual int vfn_25(int value);
     virtual void vfn_26();
     virtual int vfn_27();
     virtual Record_8027E2D0 *vfn_28(int key);
+    virtual Record_8027E2D0 *vfn_29();
+    virtual int vfn_30(int key, void *data);
+    virtual int vfn_31(int key);
+    virtual int vfn_32(int key, int mode);
+    virtual int vfn_33(int key);
+    virtual int vfn_34(int value, int a);
+    virtual int vfn_35();
 };
 
-struct Object_8027D6E8 : Base_8027D6E8 {
+struct Object_8027D6E8 : Class_801B44BC {
+    virtual ~Object_8027D6E8();
     Record_8027D9FC m6C;
     Record_8027EC7C m7C;
     unsigned char mFC;
@@ -78,24 +86,25 @@ struct Object_8027D6E8 : Base_8027D6E8 {
     unsigned short m108;
     unsigned char mUnknown10A[0xA];
     int m114;
-    int fn_8027D978(int value);
-    int fn_8027DA24(int flag);
+    virtual int vfn_13(int value);
+    virtual int vfn_05(int flag);
 };
 
 struct Object_8027DAE4 : Object_8027D6E8 {
+    virtual ~Object_8027DAE4();
     unsigned char mUnknown118[0xC];
     int m124;
-    int fn_8027DF34(int value);
-    int fn_8027DF94(int value);
-    int fn_8027DFF4(int a, int b);
-    int fn_8027E05C(int value);
-    int fn_8027E1B0(void);
-    int fn_8027E21C(int key, void *data);
-    int fn_8027E27C(int key);
-    Record_8027E2D0 *fn_8027E2D0(int key);
-    Record_8027E2D0 *fn_8027E348(void);
-    int fn_8027E3BC(int key);
-    int fn_8027E448(int key, int mode);
+    virtual int vfn_13(int value);
+    virtual int vfn_15(int value);
+    virtual int vfn_17(int a, int b);
+    virtual int vfn_19(int value);
+    virtual int vfn_04(void);
+    virtual int vfn_30(int key, void *data);
+    virtual int vfn_31(int key);
+    virtual Record_8027E2D0 *vfn_28(int key);
+    virtual Record_8027E2D0 *vfn_29(void);
+    virtual int vfn_33(int key);
+    virtual int vfn_32(int key, int mode);
 };
 
 typedef struct Record_8027EAC0 {
@@ -106,30 +115,35 @@ typedef struct Record_8027EAC0 {
 } Record_8027EAC0;
 
 struct Object_8027E518 : Object_8027D6E8 {
+    virtual ~Object_8027E518();
     int m118;
     int m11C;
     Record_8027EAC0 *m120;
     int m124;
     int m128;
-    int fn_8027E660(int value, int a);
-    int fn_8027E690(void);
-    int fn_8027E97C(int value);
-    int fn_8027E9D8(int a, int b);
-    int fn_8027EA3C(int value);
-    int fn_8027EA64(int value);
-    int fn_8027EAC0(int index);
-    int fn_8027EC1C(void);
-    void fn_8027EC7C(Record_8027EC7C *record);
+    virtual int vfn_34(int value, int a);
+    virtual int vfn_35(void);
+    virtual int vfn_15(int value);
+    virtual int vfn_17(int a, int b);
+    virtual int vfn_25(int value);
+    virtual int vfn_19(int value);
+    virtual int vfn_09(int index);
+    virtual int vfn_04(void);
+    virtual void vfn_23(Record_8027EC7C *record);
 };
 
 /* Partial layout of the object whose members 0x8027EF94-0x8027EFA4 store
    their argument; size unknown. */
 typedef struct Object_8027EF94 {
+    virtual ~Object_8027EF94();
+    virtual void vfn_02();
+    virtual void vfn_03();
+    virtual void vfn_04();
     int m0;
     int m4;
     int m8;
-    int fn_8027EEE8(int value);
-    int fn_8027EF18(void);
+    virtual int vfn_05(void);
+    virtual int vfn_06(int value);
 } Object_8027EF94;
 
 extern "C" {
@@ -183,7 +197,7 @@ int fn_8027D970(Object_8027D6E8 *p)
 
 }
 
-int Object_8027D6E8::fn_8027D978(int value)
+int Object_8027D6E8::vfn_13(int value)
 {
     int current;
     if ((unsigned int)value > 127) {
@@ -215,7 +229,7 @@ void fn_8027D9FC(Object_8027D6E8 *p, Record_8027D9FC *record)
 
 }
 
-int Object_8027D6E8::fn_8027DA24(int flag)
+int Object_8027D6E8::vfn_05(int flag)
 {
     int arg = 0;
     int value = 0;
@@ -246,9 +260,9 @@ void fn_8027DAC4(void *p)
 
 }
 
-int Object_8027DAE4::fn_8027DF34(int value)
+int Object_8027DAE4::vfn_13(int value)
 {
-    int status = fn_8027D978(value);
+    int status = Object_8027D6E8::vfn_13(value);
     int result = 0;
     if (status == 0) {
         fn_8026D0AC();
@@ -260,7 +274,7 @@ int Object_8027DAE4::fn_8027DF34(int value)
     return result;
 }
 
-int Object_8027DAE4::fn_8027DF94(int value)
+int Object_8027DAE4::vfn_15(int value)
 {
     int status = fn_8027D9EC(this);
     int result = 0;
@@ -274,7 +288,7 @@ int Object_8027DAE4::fn_8027DF94(int value)
     return result;
 }
 
-int Object_8027DAE4::fn_8027DFF4(int a, int b)
+int Object_8027DAE4::vfn_17(int a, int b)
 {
     int status = fn_8027D9F4(this);
     int result = 0;
@@ -288,7 +302,7 @@ int Object_8027DAE4::fn_8027DFF4(int a, int b)
     return result;
 }
 
-int Object_8027DAE4::fn_8027E05C(int value)
+int Object_8027DAE4::vfn_19(int value)
 {
     int result;
     fn_8026D0AC();
@@ -311,7 +325,7 @@ int fn_8027E0AC(Object_8027DAE4 *p, int index)
 
 }
 
-int Object_8027DAE4::fn_8027E1B0(void)
+int Object_8027DAE4::vfn_04(void)
 {
     int result;
     fn_8026D0AC();
@@ -324,7 +338,7 @@ int Object_8027DAE4::fn_8027E1B0(void)
     return result;
 }
 
-int Object_8027DAE4::fn_8027E21C(int key, void *data)
+int Object_8027DAE4::vfn_30(int key, void *data)
 {
     int result = -8;
     Record_8027E2D0 *record = vfn_28(key);
@@ -334,7 +348,7 @@ int Object_8027DAE4::fn_8027E21C(int key, void *data)
     return result;
 }
 
-int Object_8027DAE4::fn_8027E27C(int key)
+int Object_8027DAE4::vfn_31(int key)
 {
     int result = 0;
     Record_8027E2D0 *record = vfn_28(key);
@@ -344,7 +358,7 @@ int Object_8027DAE4::fn_8027E27C(int key)
     return result;
 }
 
-Record_8027E2D0 *Object_8027DAE4::fn_8027E2D0(int key)
+Record_8027E2D0 *Object_8027DAE4::vfn_28(int key)
 {
     int i;
     Record_8027E2D0 *record;
@@ -357,7 +371,7 @@ Record_8027E2D0 *Object_8027DAE4::fn_8027E2D0(int key)
     return 0;
 }
 
-Record_8027E2D0 *Object_8027DAE4::fn_8027E348(void)
+Record_8027E2D0 *Object_8027DAE4::vfn_29(void)
 {
     int i;
     Record_8027E2D0 *record;
@@ -370,7 +384,7 @@ Record_8027E2D0 *Object_8027DAE4::fn_8027E348(void)
     return 0;
 }
 
-int Object_8027DAE4::fn_8027E3BC(int key)
+int Object_8027DAE4::vfn_33(int key)
 {
     int result = 0;
     Record_8027E2D0 *record = vfn_28(key);
@@ -385,7 +399,7 @@ int Object_8027DAE4::fn_8027E3BC(int key)
     return result;
 }
 
-int Object_8027DAE4::fn_8027E448(int key, int mode)
+int Object_8027DAE4::vfn_32(int key, int mode)
 {
     int result = -8;
     void *data;
@@ -416,7 +430,7 @@ void fn_8027E4F8(void *p)
 
 }
 
-int Object_8027E518::fn_8027E660(int value, int a)
+int Object_8027E518::vfn_34(int value, int a)
 {
     if (m0 >= 0) {
         return -18;
@@ -427,7 +441,7 @@ int Object_8027E518::fn_8027E660(int value, int a)
     return 0;
 }
 
-int Object_8027E518::fn_8027E690(void)
+int Object_8027E518::vfn_35(void)
 {
     int value = m0;
     if (value < 0) {
@@ -438,7 +452,7 @@ int Object_8027E518::fn_8027E690(void)
     return value;
 }
 
-int Object_8027E518::fn_8027E97C(int value)
+int Object_8027E518::vfn_15(int value)
 {
     int result = 0;
     if (fn_8027D9EC(this) == 0) {
@@ -450,7 +464,7 @@ int Object_8027E518::fn_8027E97C(int value)
     return result;
 }
 
-int Object_8027E518::fn_8027E9D8(int a, int b)
+int Object_8027E518::vfn_17(int a, int b)
 {
     int result = 0;
     if (fn_8027D9F4(this) == 0) {
@@ -462,12 +476,12 @@ int Object_8027E518::fn_8027E9D8(int a, int b)
     return result;
 }
 
-int Object_8027E518::fn_8027EA3C(int value)
+int Object_8027E518::vfn_25(int value)
 {
     return fn_8026ED1C(m120->m4, value);
 }
 
-int Object_8027E518::fn_8027EA64(int value)
+int Object_8027E518::vfn_19(int value)
 {
     int result;
     fn_8026D0AC();
@@ -488,7 +502,7 @@ void fn_8027EAB4(Object_8027E518 *p, int a, int b)
 
 }
 
-int Object_8027E518::fn_8027EAC0(int index)
+int Object_8027E518::vfn_09(int index)
 {
     Record_8027EAC0 *record;
     if (index < 0) {
@@ -503,7 +517,7 @@ int Object_8027E518::fn_8027EAC0(int index)
     return -8;
 }
 
-int Object_8027E518::fn_8027EC1C(void)
+int Object_8027E518::vfn_04(void)
 {
     int result;
     fn_8026D0AC();
@@ -514,7 +528,7 @@ int Object_8027E518::fn_8027EC1C(void)
     return result;
 }
 
-void Object_8027E518::fn_8027EC7C(Record_8027EC7C *record)
+void Object_8027E518::vfn_23(Record_8027EC7C *record)
 {
     m7C = *record;
 }
@@ -557,12 +571,12 @@ void fn_8027EE00(void *p)
 
 }
 
-int Object_8027EF94::fn_8027EEE8(int value)
+int Object_8027EF94::vfn_06(int value)
 {
     return fn_801F685C(value, 0, 0) + 6144;
 }
 
-int Object_8027EF94::fn_8027EF18(void)
+int Object_8027EF94::vfn_05(void)
 {
     return ((int)fn_801F7ABC() * 50) / 3;
 }
