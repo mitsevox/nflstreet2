@@ -299,9 +299,9 @@ extern "C" int fn_801B2B58(void)
         delete lbl_803EBB64;
         delete lbl_803EBB60;
         fn_8026D0EC();
-        lbl_803EBB64 = 0;
         lbl_803EBB60 = 0;
         lbl_803EBB68 = 0;
+        lbl_803EBB64 = 0;
         lbl_803EBB38 = 0;
     }
     return lbl_803EBB38 == 0;
