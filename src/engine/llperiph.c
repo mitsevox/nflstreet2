@@ -1,3 +1,4 @@
+#include <dolphin/si.h>
 #include "engine/periph.h"
 #include "game/fn_801D2B7C.h"
 
@@ -6,7 +7,6 @@ extern void *lbl_803ED664;
 void fn_801CE234(void (*pCallback)(void));
 void fn_80247134(void);
 void fn_802856D8(void);
-int fn_8025D574(unsigned int port);
 int fn_801E1B08(unsigned char port);
 int fn_801E1B94(void);
 void fn_801E1C38(unsigned char port);
@@ -81,7 +81,7 @@ void fn_801E1C38(unsigned char port)
     int status;
     int type;
 
-    status = fn_8025D574(port);
+    status = SIProbe(port);
     if (status == 0x80) {
         return;
     }
