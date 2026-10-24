@@ -12262,6 +12262,19 @@
       ]
     },
     {
+      "source": "src/engine/cu_801B9D00.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801B9D00-0x801B9F00 (src/engine/cu_801B9D00.c) and its data rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B9D00",
+          "end": "0x801B9F00"
+        }
+      ]
+    },
+    {
       "source": "src/engine/cu_801BF5E8.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BF5E8-0x801BF94C (src/engine/cu_801BF5E8.c) and its data rows; every function exact, promoted from comparison-only.",
@@ -12464,6 +12477,25 @@
           "placement": ".text",
           "start": "0x801C6E5C",
           "end": "0x801C735C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_801C9DD8.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x801C9DD8-0x801CB1BC (src/engine/cu_801C9DD8.c) and its data rows; every function and data placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C9DD8",
+          "end": "0x801CB1BC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF19C",
+          "end": "0x802AF358"
         }
       ]
     },
