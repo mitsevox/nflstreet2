@@ -46176,71 +46176,6 @@
       ]
     },
     {
-      "source": "src/engine/llperiph.c",
-      "profile": "engine_c",
-      "evidence": "E3 lane draft of llperiph.c over 0x801E1A20-0x801E1D44 (NASCAR 2005 symbol-table size/order match; see the llperiph.c name rows); evidence.tsv function rows and the compiler row for this range. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801E1A20",
-          "end": "0x801E1D44"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801E1A20",
-          "start": "0x801E1A20",
-          "end": "0x801E1A80"
-        },
-        {
-          "symbol": "fn_801E1A80",
-          "start": "0x801E1A80",
-          "end": "0x801E1AB4"
-        },
-        {
-          "symbol": "fn_801E1AB4",
-          "start": "0x801E1AB4",
-          "end": "0x801E1B08"
-        },
-        {
-          "symbol": "fn_801E1B08",
-          "start": "0x801E1B08",
-          "end": "0x801E1B94"
-        },
-        {
-          "symbol": "fn_801E1B94",
-          "start": "0x801E1B94",
-          "end": "0x801E1BE8"
-        },
-        {
-          "symbol": "fn_801E1BE8",
-          "start": "0x801E1BE8",
-          "end": "0x801E1C38"
-        },
-        {
-          "symbol": "fn_801E1C38",
-          "start": "0x801E1C38",
-          "end": "0x801E1CE0"
-        },
-        {
-          "symbol": "fn_801E1CE0",
-          "start": "0x801E1CE0",
-          "end": "0x801E1D04"
-        },
-        {
-          "symbol": "fn_801E1D04",
-          "start": "0x801E1D04",
-          "end": "0x801E1D3C"
-        },
-        {
-          "symbol": "fn_801E1D3C",
-          "start": "0x801E1D3C",
-          "end": "0x801E1D44"
-        }
-      ]
-    },
-    {
       "source": "src/engine/PJoyDrvr.c",
       "profile": "engine_c",
       "evidence": "E3 lane draft of PJoyDrvr.c over 0x801E1D44-0x801E274C (NASCAR 2005 symbol-table size/order match; see the PJoyDrvr.c name rows); evidence.tsv function rows and the compiler row for this range. Draft comparisons only; original assembly remains linked.",
@@ -46864,52 +46799,6 @@
           "symbol": "fn_801EC048",
           "start": "0x801EC048",
           "end": "0x801EC1B4"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/remap.c",
-      "profile": "engine_c",
-      "evidence": "E3 lane draft of remap.c over 0x801EC1B4-0x801EC650 (NASCAR 2005 symbol-table size/order match; see the remap.c name rows); evidence.tsv function rows and the compiler row for this range, plus exact data rows 0x802B17A0-0x802B17C0. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801EC1B4",
-          "end": "0x801EC650"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B17A0",
-          "end": "0x802B17C0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801EC1B4",
-          "start": "0x801EC1B4",
-          "end": "0x801EC298"
-        },
-        {
-          "symbol": "fn_801EC298",
-          "start": "0x801EC298",
-          "end": "0x801EC314"
-        },
-        {
-          "symbol": "fn_801EC314",
-          "start": "0x801EC314",
-          "end": "0x801EC3B8"
-        },
-        {
-          "symbol": "fn_801EC3B8",
-          "start": "0x801EC3B8",
-          "end": "0x801EC418"
-        },
-        {
-          "symbol": "fn_801EC418",
-          "start": "0x801EC418",
-          "end": "0x801EC650"
         }
       ]
     },

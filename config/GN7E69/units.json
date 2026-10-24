@@ -13582,6 +13582,38 @@
           "end": "0x803ED414"
         }
       ]
+    },
+    {
+      "source": "src/engine/llperiph.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801E1A20-0x801E1D44 (src/engine/llperiph.c), its compiler, function and name rows; every function exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E1A20",
+          "end": "0x801E1D44"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/remap.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801EC1B4-0x801EC650 (src/engine/remap.c), its compiler, function and name rows and the exact .rodata data row 0x802B17A0-0x802B17C0; every function and data placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801EC1B4",
+          "end": "0x801EC650"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B17A0",
+          "end": "0x802B17C0"
+        }
+      ]
     }
   ]
 }
