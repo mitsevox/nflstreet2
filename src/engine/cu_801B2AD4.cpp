@@ -5,7 +5,7 @@ struct Data_801B4548 {
     unsigned short mUnknown4;
 };
 
-struct Stream_801B58F0 {
+struct Record_801B58F0 {
     unsigned char mUnknown0[4];
     int mUnknown4;
     int mUnknown8;
@@ -42,7 +42,7 @@ public:
     virtual void vfn_25() = 0;
     virtual int fn_801B4548();
     virtual int fn_801B4564();
-    virtual Stream_801B58F0 *fn_801B456C(int index);
+    virtual Record_801B58F0 *fn_801B456C(int index);
     virtual int fn_801B4574();
     virtual int fn_801B457C();
     virtual int fn_801B4584();
@@ -580,7 +580,7 @@ int Class_801B44BC::fn_801B4548()
 int Class_801B44BC::fn_801B4564()
 { return mUnknown60; }
 
-Stream_801B58F0 *Class_801B44BC::fn_801B456C(int index)
+Record_801B58F0 *Class_801B44BC::fn_801B456C(int index)
 { return 0; }
 
 int Class_801B44BC::fn_801B4574()
@@ -648,10 +648,10 @@ extern "C" int fn_801B57C0(Node_801B3FE0 *p, int index)
 {
     if (index < 0 || index >= p->mUnknown100->fn_801B4548())
         return -8;
-    Stream_801B58F0 *entry = p->mUnknown100->fn_801B456C(index);
+    Record_801B58F0 *entry = p->mUnknown100->fn_801B456C(index);
     if (!entry)
         return -8;
-    Stream_801B58F0 saved = *entry;
+    Record_801B58F0 saved = *entry;
     fn_801B5DB4(p);
     int result = p->mUnknown100->fn_801B4594(index);
     p->mUnknown108 -= saved.mUnknown4;
@@ -664,7 +664,7 @@ extern "C" int fn_801B58F0(Node_801B3FE0 *p)
     int best = 0x07FFFFFF;
     int index = -1;
     for (int i = 0; i < p->mUnknown100->fn_801B4564(); ++i) {
-        Stream_801B58F0 *entry = p->mUnknown100->fn_801B456C(i);
+        Record_801B58F0 *entry = p->mUnknown100->fn_801B456C(i);
         if (entry && entry->mUnknown20 >= 0 && entry->mUnknown20 < best) {
             best = entry->mUnknown20;
             index = i;
