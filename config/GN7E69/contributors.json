@@ -30004,10 +30004,13 @@
         "0x80117AA4"
       ],
       "provenance": {
-        "pull_request": 1069,
+        "pull_request": 1050,
         "merged_via": 1069,
         "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
-        "introduced_blob": "8a01afa1cdc1c7ed6b5aed3a1dc9c8510e214668"
+        "introduced_blob": "8a01afa1cdc1c7ed6b5aed3a1dc9c8510e214668",
+        "original_commit": "bc4a556c2ab0c3ac147ad23951b944a025e77bf7",
+        "original_blob": "12eacc3b3cb3700955612481b92e1b11e7859330",
+        "integration_adjustment": "Preserve original source contribution PR 1050 for this pre-existing partial body; PR 1069 refines it to exact without transferring source credit. Original source commit/blob identifies a real definition at the current path; current refinement source pins remain intact."
       }
     },
     {
@@ -30019,25 +30022,31 @@
         "0x801180FC"
       ],
       "provenance": {
-        "pull_request": 1069,
+        "pull_request": 902,
         "merged_via": 1069,
         "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
-        "introduced_blob": "0415f27b19f82fb2e9149371642eeef452ee2c73"
+        "introduced_blob": "0415f27b19f82fb2e9149371642eeef452ee2c73",
+        "original_commit": "84f5f05f96a2ca3351703bc2ad478c33aa9e13af",
+        "original_blob": "e3e82b8234d9416dfaa909a8fece2d841ec44ce1",
+        "integration_adjustment": "Preserve original source contribution PR 902 for this pre-existing partial body; PR 1069 refines it to exact without transferring source credit. Original source commit/blob identifies a real definition at the current path; current refinement source pins remain intact."
       }
     },
     {
       "source": "src/game/cu_800EFC68.cpp",
       "contributors": [
-        "mitsevox"
+        "adampreddy"
       ],
       "functions": [
         "0x8011893C"
       ],
       "provenance": {
-        "pull_request": 1069,
+        "pull_request": 557,
         "merged_via": 1069,
-        "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
-        "introduced_blob": "e8fff618c8d2ec1659f36fe8479656de40fab9f0"
+        "commit": "209bcfaed34ad3e34a9acb8191ffdd906da2a83c",
+        "introduced_blob": "ee504b678d49b76d7b6bb441285e4fa46c17afc2",
+        "original_commit": "d40ff6e9c0cf611b978b9d84cc545d953845b977",
+        "original_blob": "e6c396e9cbd91bc07deab487974253d591d8c909",
+        "integration_adjustment": "Preserve original source contribution PR 557 for this pre-existing partial body; PR 1069 refines it to exact without transferring source credit. Original source commit/blob identifies a real definition at the current path; current refinement source pins remain intact. Final batch integration pins the resulting source blob; original source authorship and PR remain unchanged."
       }
     },
     {
@@ -30049,10 +30058,13 @@
         "0x80119020"
       ],
       "provenance": {
-        "pull_request": 1069,
+        "pull_request": 1050,
         "merged_via": 1069,
         "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
-        "introduced_blob": "fc33275c4668f1e80c216046b7ee8bd2ed26dbf8"
+        "introduced_blob": "fc33275c4668f1e80c216046b7ee8bd2ed26dbf8",
+        "original_commit": "bc4a556c2ab0c3ac147ad23951b944a025e77bf7",
+        "original_blob": "1844b4685e2c9b5d022fe43fd416b7b72dd2fe45",
+        "integration_adjustment": "Preserve original source contribution PR 1050 for this pre-existing partial body; PR 1069 refines it to exact without transferring source credit. Original source commit/blob identifies a real definition at the current path; current refinement source pins remain intact."
       }
     },
     {
@@ -30064,10 +30076,13 @@
         "0x8011CC10"
       ],
       "provenance": {
-        "pull_request": 1069,
+        "pull_request": 1050,
         "merged_via": 1069,
         "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
-        "introduced_blob": "0d11811d8eaf3e7e2ccfecc1be9b7b9e7f981206"
+        "introduced_blob": "0d11811d8eaf3e7e2ccfecc1be9b7b9e7f981206",
+        "original_commit": "bc4a556c2ab0c3ac147ad23951b944a025e77bf7",
+        "original_blob": "cea4a98a7a6546d8fe6ab8a6b342cb3fe45dcff8",
+        "integration_adjustment": "Preserve original source contribution PR 1050 for this pre-existing partial body; PR 1069 refines it to exact without transferring source credit. Original source commit/blob identifies a real definition at the current path; current refinement source pins remain intact."
       }
     },
     {
