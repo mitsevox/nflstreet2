@@ -231,7 +231,7 @@ extern "C" int fn_801B3234(int flags);
 extern "C" unsigned int fn_801B343C(void);
 extern "C" unsigned int fn_801B3480(unsigned int index, unsigned int flags);
 extern "C" int fn_801B34DC(unsigned int flags);
-extern "C" void fn_801B3568(void);
+extern "C" int fn_801B3568(void);
 extern "C" void fn_801B39B8(int mode);
 extern "C" void fn_801B3A88(void);
 extern "C" void fn_801B3AAC(void);
@@ -242,7 +242,7 @@ extern "C" Node_801B3FE0 *fn_801B4174(unsigned int flags);
 extern "C" void fn_801B421C(void);
 extern "C" int fn_801B42C0(unsigned int flags);
 extern "C" void fn_801B4334(Node_801B3FE0 *p, int state);
-extern "C" void fn_801B43CC(int state);
+extern "C" int fn_801B43CC(int state);
 extern "C" void fn_801B4824(Node_801B3FE0 *p, int value);
 extern "C" void fn_801B4960(Node_801B3FE0 *p, int a, int b, int c);
 extern "C" void fn_801B49C4(Node_801B3FE0 *p, int a, int b, int c);
@@ -265,7 +265,7 @@ extern "C" int fn_801B6CB4(Node_801B3FE0 *p);
 extern "C" int fn_801B6D20(int count, int value, Record_801B6D20 *entries);
 extern "C" int fn_801B7178(int index, int value);
 extern "C" unsigned int fn_801B7778(void);
-extern "C" void fn_801B845C(Event_801B845C *p, int state, Event_801B845C *end);
+extern "C" Event_801B845C *fn_801B845C(Event_801B845C *p, int state, Event_801B845C *end);
 extern "C" int fn_801B84E4(Event_801B845C *p, Sequence_801B84E4 *sequence);
 extern "C" int fn_801B8580(Node_801B3FE0 *p);
 
@@ -376,9 +376,10 @@ extern "C" int fn_801B34DC(unsigned int flags)
     return 0;
 }
 
-extern "C" void fn_801B3568(void)
+extern "C" int fn_801B3568(void)
 {
-    for (int i = 0; i < 4; ++i) {
+    int i = 0;
+    for (; i < 4; ++i) {
         if (lbl_802F47D0[i]) {
             for (int j = i + 1; j < 4; ++j) {
                 if (lbl_802F47D0[j] && lbl_802F47D0[i]->mUnknown14 > lbl_802F47D0[j]->mUnknown14) {
@@ -389,6 +390,7 @@ extern "C" void fn_801B3568(void)
             }
         }
     }
+    return i;
 }
 
 extern "C" void fn_801B39B8(int mode)
@@ -549,9 +551,10 @@ extern "C" void fn_801B4334(Node_801B3FE0 *p, int state)
         p->mUnknown8.bits.flag1 = 1;
 }
 
-extern "C" void fn_801B43CC(int state)
+extern "C" int fn_801B43CC(int state)
 {
-    for (int i = 0; i < 4; ++i) {
+    int i = 0;
+    for (; i < 4; ++i) {
         if (lbl_802F47D0[i] && fn_801B3480(i, 0xFFFFFFFF)) {
             for (int j = 0; j < 24; ++j) {
                 Node_801B3FE0 *p = lbl_803EBB28->mUnknown40[j];
@@ -564,6 +567,7 @@ extern "C" void fn_801B43CC(int state)
             }
         }
     }
+    return i;
 }
 
 int Class_801B44BC::fn_801B4548()
@@ -997,7 +1001,7 @@ extern "C" unsigned int fn_801B7778(void)
     return ++lbl_802F481C[0];
 }
 
-extern "C" void fn_801B845C(Event_801B845C *p, int state, Event_801B845C *end)
+extern "C" Event_801B845C *fn_801B845C(Event_801B845C *p, int state, Event_801B845C *end)
 {
     unsigned int value = (p->mUnknown4 >> 3) & 7;
     ++p;
@@ -1005,16 +1009,17 @@ extern "C" void fn_801B845C(Event_801B845C *p, int state, Event_801B845C *end)
         if (((p->mUnknown4 >> 3) & 7) == value) {
             if ((p->mUnknown4 & 0x00FE0E00) == 0x00020800) {
                 p->mUnknown4 |= 0x10000;
-                return;
+                return p;
             }
             if (!state)
-                return;
+                return p;
             state = 0;
         }
         if (!state)
             p->mUnknown4 |= 0x10000;
         ++p;
     }
+    return p;
 }
 
 extern "C" int fn_801B84E4(Event_801B845C *p, Sequence_801B84E4 *sequence)
