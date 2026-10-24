@@ -350,7 +350,7 @@ int fn_8028291C(void)
                 break;
             }
         }
-        bestPos = (pos - bestPos - 32768) & 0x7FFF;
+        bestPos = (pos - bestPos) & 0x7FFF;
         if (best > 3 || (best == 3 && bestPos <= 4096)) {
             lbl_803ED454[lbl_803ED45C] = best;
             lbl_803ED458[lbl_803ED45C++] = bestPos;
