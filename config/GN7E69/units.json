@@ -6447,7 +6447,7 @@
     {
       "source": "src/game/cu_8013CD58.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8013CD58-0x8013E514 (src/game/cu_8013CD58.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8013CC7C-0x8013E514 (src/game/cu_8013CD58.cpp; the linked unit starts at 0x8013CD58) and its data rows.",
       "sections": [
         {
           "section": ".text",
