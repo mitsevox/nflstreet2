@@ -5,6 +5,7 @@
 #include <dolphin/gx/GXLighting.h>
 #include <dolphin/gx/GXPixel.h>
 #include <dolphin/gx/GXTev.h>
+#include <dolphin/gx/GXTexture.h>
 #include <dolphin/gx/GXTransform.h>
 #include <dolphin/os/OSCache.h>
 #include "engine/Info_801D86B4.h"
@@ -24,27 +25,11 @@
 extern void *memset();
 extern void *memcpy();
 
-/* 60-byte object allocated by fn_802215F0: a Texture_8020DB34 followed by
-   further members; only the accessed members are declared. */
-typedef struct Node_802215F0 {
-    Texture_8020DB34 Texture; /* 0x00 */
-    Int32 unk_20;   /* 0x20 */
-    Int32 unk_24;   /* 0x24 */
-    Uint8 unk_28[0x14];
-} Node_802215F0;
-
 /* 4-byte element of the Text_80221BF0 array. */
 typedef struct Range_80221D30 {
     Uint16 unk_00;  /* 0x00 */
     Uint16 unk_02;  /* 0x02 */
 } Range_80221D30;
-
-/* Buffer descriptor read by fn_80222E54. */
-typedef struct Buffer_80222E54 {
-    Uint8 unk_00[0x04];
-    Uint32 Size;    /* 0x04 */
-    char *pText;    /* 0x08 */
-} Buffer_80222E54;
 
 /* Only the accessed members are declared; the size is not established. */
 typedef struct Text_80221BF0 {
@@ -61,33 +46,6 @@ typedef struct Text_80221BF0 {
         Range_80221D30 Ranges[1];
     } u;            /* 0x24: inline when NumRanges is at most 1 */
 } Text_80221BF0;
-
-/* Display-list reference: the list address is kept relative to the
-   reference itself while stored. */
-typedef struct DisplayList_802260D0 {
-    Uint32 Size;    /* 0x00 */
-    Int32 Offset;   /* 0x04 */
-} DisplayList_802260D0;
-
-/* Only the accessed members are declared; the size is not established. */
-typedef struct Node_80223874 {
-    Uint16 Flags;   /* 0x00 */
-    Uint16 unk_02;  /* 0x02 */
-    Int16 unk_04;   /* 0x04 */
-    Int16 unk_06;   /* 0x06 */
-    Int16 unk_08;   /* 0x08 */
-    Int16 unk_0A;   /* 0x0A */
-    Int16 unk_0C;   /* 0x0C */
-    Int16 unk_0E;   /* 0x0E */
-    DisplayList_802260D0 List; /* 0x10 */
-} Node_80223874;
-
-/* Only the two colours at +0x20 and +0x24 are accessed. */
-typedef struct Color_80223C4C {
-    Uint8 unk_00[0x20];
-    GXColor unk_20; /* 0x20 */
-    GXColor unk_24; /* 0x24 */
-} Color_80223C4C;
 
 /* 8-byte item allocated by fn_80225E64. */
 typedef struct Item_80225E64 {
@@ -124,6 +82,7 @@ typedef struct Object_802268D4 {
 } Object_802268D4;
 
 typedef void Callback_803EBF60(Int32 a, Uint32 b, void *p);
+typedef void Callback_8022482C(Node_80223874 *pNode, Int32 Index, Float32 *pCoord);
 
 extern Callback_803EBF60 *lbl_803EBF60;
 extern GXColor lbl_803EBF68;
@@ -138,20 +97,13 @@ extern void *lbl_803EBF80;
 extern Uint8 lbl_803EBF84;
 extern Uint8 lbl_803EBF85;
 extern GXLightObj lbl_803E9880;
+extern Float32 lbl_802F9FE0[3][4];
+extern Float32 lbl_803A0400[][2];
+extern GXColor lbl_803A1400[];
 
 void fn_80210388(void);
-void fn_80221118(void);
-void fn_80220CFC(Int32 a);
-void *fn_80220D34(void);
 void fn_80221198(void *p);
 void fn_801CE910(void);
-Int32 fn_8021E2B4(Object_8021E688 *pObject, Int32 a, Int32 b);
-void fn_8021E72C(Object_8021E688 *pObject, Int32 a, Int32 b);
-Int32 fn_8021EA54(Object_8021E688 *pObject, Int32 a, Int32 b);
-void fn_8021E244(Object_8021E688 *pObject, Int32 a, Int32 b);
-void fn_8021EE58(Object_8021E688 *pObject, Int32 a, Int32 b, Int32 c, Int32 d);
-void fn_80220C4C(Int32 a, Int32 b, Int32 c);
-void fn_80220CA4(Int32 a, Int32 b, Int32 c);
 void fn_8024F9EC(GXLightObj *pLight, GXLightID Light);
 int fn_801CCDA4(const char *pName, int mode);
 int fn_801CCE10(int handle);
@@ -175,16 +127,17 @@ int fn_801DC86C(Uint8 *pY, Uint8 *pU, Uint8 *pV, Int32 a, Int32 b, Int32 c, void
                  Int32 Stride, Int32 d);
 
 void fn_80221294(void *p);
-void fn_80221374(Object_8021E688 *pObject, Int16 a, Int16 b, Int32 c);
-void fn_802213F8(Object_8021E688 *pObject, Int16 *pA, Int16 *pB, Int16 c, Int16 d);
 void fn_802215EC(Int32 a, Int32 b);
 void fn_8022623C(Object_8021E688 *pObject, Int32 a, Int32 b, Int32 c, Int32 d);
-void fn_80225958(Node_80223874 *pNode, Int32 a);
+void fn_80225958(Node_80223874 *pNode, Int32 Item);
+void fn_8022482C(Node_80223874 *pNode, Float32 (*pCoords)[2], GXColor *pColors, Int32 *pSize,
+                 Int32 Count, Callback_8022482C *pVertex, Callback_8022482C *pEnd);
+void fn_80225AAC(Node_80223874 *pNode, Int32 a, Int32 Item);
+void fn_80225B50(Uint32 Flags);
+void fn_80225CBC(Node_80223874 *pNode, Int32 Index, Float32 *pCoord);
+void fn_80225D8C(Node_80223874 *pNode, Int32 Index, Float32 *pCoord);
 Node_802215F0 *fn_802215F0(Int32 a, Int32 b, Int32 c, Int32 d, Int32 e);
 void fn_80221738(Int32 a, Int32 b, Node_802215F0 *pNode);
-void fn_802218D4(Int32 a);
-void fn_80221924(Int32 a);
-void fn_802219F0(Int32 a, Int32 b);
 unsigned short *fn_80221BD8(Node_802215F0 *pNode);
 void fn_80221BE0(Node_802215F0 *pNode, unsigned short *pPalette);
 void fn_80221D5C(Text_80221BF0 *pText);
@@ -197,10 +150,6 @@ void fn_80223C4C(void);
 void fn_80225928(Node_80223874 *pNode);
 void fn_802258F8(Node_80223874 *pNode);
 void fn_80225AE4(void);
-void fn_802260B0(DisplayList_802260D0 *pList);
-void fn_802260C0(DisplayList_802260D0 *pList);
-void fn_802261D4(Object_8021E688 *pObject, Int32 a, Int32 b);
-void fn_80226320(Object_8021E688 *pObject, Int32 a, Int32 b);
 Uint8 fn_80226384(void);
 Int32 fn_8022638C(void);
 Int32 fn_802263D4(void);
@@ -252,7 +201,7 @@ void fn_80221314(Object_8021E688 *pObject, Int16 a, Int16 b)
     }
 }
 
-void fn_80221374(Object_8021E688 *pObject, Int16 a, Int16 b, Int32 c)
+void fn_80221374(Object_8021E688 *pObject, Int16 a, Int32 b, Int32 c)
 {
     Int32 Item = fn_8021E688(pObject, a, b);
 
@@ -291,9 +240,9 @@ void fn_80221528(Object_8021E688 *pObject, Int32 a, Int32 b, Int32 c)
     }
 }
 
-void fn_80221570(Node_802215F0 *pNode)
+unsigned short *fn_80221570(Node_802215F0 *pNode)
 {
-    fn_80221BD8(pNode);
+    return fn_80221BD8(pNode);
 }
 
 void fn_80221590(Node_802215F0 *pNode, unsigned short *pPalette)
@@ -514,14 +463,14 @@ void fn_80223A40(Node_80223874 *pNode)
 void fn_80223AA0(Node_80223874 *pNode)
 {
     if (pNode->Flags & 0x8000) {
-        fn_802260B0(&pNode->List);
+        fn_802260B0(&pNode->u.List);
     }
 }
 
 void fn_80223AD0(Node_80223874 *pNode)
 {
     if (pNode->Flags & 0x8000) {
-        fn_802260C0(&pNode->List);
+        fn_802260C0(&pNode->u.List);
     }
 }
 
@@ -618,21 +567,158 @@ void fn_802254F8(Node_80223874 *pNode)
     }
 }
 
+void fn_80225654(Node_80223874 *pNode, Uint32 Msg, Int32 a, void *pData)
+{
+    Int16 First;
+    Int16 Second;
+
+    switch (Msg) {
+    case -1:
+        fn_8022479C(pNode);
+        break;
+    case -2:
+        fn_802254F8(pNode);
+        break;
+    case -3:
+        fn_8022480C(pNode);
+        break;
+    case -4:
+        break;
+    }
+    if (!(pNode->Flags & 0x8000)) {
+        switch (Msg) {
+        case 0:
+            pNode->u.t.unk_3C[0] = ((Float32 *)pData)[0];
+            pNode->u.t.unk_3C[1] = ((Float32 *)pData)[1];
+            break;
+        case 1:
+            pNode->u.t.unk_24[0] = ((Float32 *)pData)[0];
+            pNode->u.t.unk_24[1] = ((Float32 *)pData)[1];
+            break;
+        case 2:
+            pNode->u.t.unk_2C[0] = ((Float32 *)pData)[0];
+            pNode->u.t.unk_2C[1] = ((Float32 *)pData)[1];
+            break;
+        case 3:
+            pNode->u.t.unk_34 = ((Float32 *)pData)[0];
+            break;
+        case 4:
+            pNode->u.t.unk_38 = ((Float32 *)pData)[0];
+            break;
+        case 5:
+            pNode->u.t.unk_1C[0] = ((Float32 *)pData)[0];
+            pNode->u.t.unk_1C[1] = ((Float32 *)pData)[1];
+            break;
+        case 6:
+            pNode->u.t.unk_14[0] = ((Int32 *)pData)[0];
+            pNode->u.t.unk_14[1] = ((Int32 *)pData)[1];
+            pNode->u.t.unk_14[2] = ((Int32 *)pData)[2];
+            pNode->u.t.unk_14[3] = ((Int32 *)pData)[3];
+            break;
+        case 7:
+            pNode->u.t.unk_18[0] = ((Int32 *)pData)[0];
+            pNode->u.t.unk_18[1] = ((Int32 *)pData)[1];
+            pNode->u.t.unk_18[2] = ((Int32 *)pData)[2];
+            pNode->u.t.unk_18[3] = ((Int32 *)pData)[3];
+            break;
+        case 8:
+            pNode->u.t.unk_10 = ((Int32 *)pData)[0];
+            break;
+        case 9:
+            Second = ((Int16 *)pData)[0];
+            pNode->unk_0E = Second;
+            pNode->unk_0C = ((Int16 *)pData)[1];
+            if (Second == 0) {
+                pNode->unk_0E = pNode->unk_06;
+            }
+            if (pNode->unk_0E == -1) {
+                pNode->unk_0E = pNode->unk_06;
+            }
+            if (pNode->unk_0C == -1) {
+                pNode->unk_0C = pNode->unk_04;
+            }
+            if (pNode->unk_0C != pNode->unk_04 || pNode->unk_0E != pNode->unk_06) {
+                fn_802213F8(fn_8021EA44(1), &pNode->unk_06, &pNode->unk_04, pNode->unk_0E,
+                            pNode->unk_0C);
+            }
+            break;
+        case 10:
+            if (pNode->unk_02 != ((Int32 *)pData)[0]) {
+                fn_80221528(fn_8021EA44(1), pNode->unk_06, pNode->unk_04,
+                            (Int16)((Int32 *)pData)[0]);
+            }
+            break;
+        case 11:
+            First = ((Int16 *)pData)[0];
+            Second = ((Int16 *)pData)[1];
+            if ((pNode->Flags & 0x100) || (First != -1 && Second != -1)) {
+                pNode->unk_08 = Second;
+                pNode->unk_0A = First;
+            }
+            break;
+        case 12:
+            pNode->u.t.unk_14[0] = ((Int32 *)pData)[0];
+            break;
+        case 13:
+            pNode->u.t.unk_18[0] = ((Int32 *)pData)[0];
+            break;
+        }
+    }
+}
+
 void fn_802258F8(Node_80223874 *pNode)
 {
     if (pNode->Flags & 0x8000) {
-        fn_802260C0(&pNode->List);
+        fn_802260C0(&pNode->u.List);
     }
 }
 
 void fn_80225928(Node_80223874 *pNode)
 {
     if (pNode->Flags & 0x8000) {
-        fn_802260B0(&pNode->List);
+        fn_802260B0(&pNode->u.List);
     }
 }
 
-void fn_80225AAC(Node_80223874 *pNode, Int32 a)
+void fn_80225958(Node_80223874 *pNode, Int32 Item)
+{
+    Int32 bTex = 0;
+    Int32 Count;
+    Int32 Size;
+
+    fn_80225B50(pNode->Flags);
+    if (pNode->Flags & 4) {
+        if (Item == 0) {
+            return;
+        }
+        lbl_802F9FE0[0][0] = ((Node_802215F0 *)Item)->unk_30;
+        lbl_802F9FE0[1][1] = ((Node_802215F0 *)Item)->unk_34;
+        GXLoadTexMtxImm(lbl_802F9FE0, GX_TEXMTX0, GX_MTX2x4);
+        fn_80225AAC(pNode, 0, Item);
+        bTex = fn_8022179C(Item);
+    }
+    if (pNode->Flags & 0x8000) {
+        fn_802260D0(&pNode->u.List);
+    } else {
+        Size = 512;
+        if (!(pNode->Flags & 4) && !(pNode->Flags & 1)) {
+            Count = pNode->u.t.unk_10 + 2;
+            GXBegin(GX_TRIANGLEFAN, GX_VTXFMT0, Count);
+        } else {
+            Count = pNode->u.t.unk_10 * 4;
+            GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, Count);
+        }
+        fn_8022482C(pNode, lbl_803A0400, lbl_803A1400, &Size, Count, fn_80225CBC, fn_80225D8C);
+    }
+    GXSetCullMode(GX_CULL_NONE);
+    if (bTex) {
+        GXSetNumIndStages(0);
+        GXSetTevDirect(GX_TEVSTAGE0);
+        GXSetTexCoordScaleManually(GX_TEXCOORD0, GX_FALSE, 0, 0);
+    }
+}
+
+void fn_80225AAC(Node_80223874 *pNode, Int32 a, Int32 Item)
 {
     Int32 First = 0;
     Int32 Second = 0;
@@ -690,7 +776,7 @@ void fn_80225B50(Uint32 Flags)
     GXSetAlphaCompare(GX_GREATER, 0, GX_AOP_AND, GX_GREATER, 0);
 }
 
-void fn_80225D8C(void)
+void fn_80225D8C(Node_80223874 *pNode, Int32 Index, Float32 *pCoord)
 {
 }
 
@@ -718,7 +804,7 @@ void fn_80225E10(Object_8021E688 *pObject, Int16 a)
     }
 }
 
-void fn_80225E64(Object_8021E688 *pObject, Int32 a, Int32 b)
+void fn_80225E64(Object_8021E688 *pObject, Int16 a, Int16 b, Int32 c)
 {
     Int32 Handle;
     Item_80225E64 *pItem;
