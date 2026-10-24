@@ -25356,14 +25356,18 @@
         "mitsevox"
       ],
       "functions": [
+        "0x801CEE54",
         "0x801CEE84",
         "0x801CEEF4"
       ],
       "provenance": {
         "pull_request": 1013,
         "merged_via": 1015,
-        "commit": "27e09c6ec8a35f8667919f5bced508495a7640b2",
-        "introduced_blob": "0e714b7404a742ab54604841d9b967d42e71a0cf"
+        "commit": "6101cda8e02e20c89e85218408397c3e7b28bcf7",
+        "introduced_blob": "26d910507d9d56909497f1f7f6cd4f06fcddbfcc",
+        "original_commit": "27e09c6ec8a35f8667919f5bced508495a7640b2",
+        "original_blob": "0e714b7404a742ab54604841d9b967d42e71a0cf",
+        "integration_adjustment": "PR 1090 refines the existing fn_801CEE54 initialization assignment order to an exact match and promotes the complete provisional grouping. Original source credit remains with mitsevox under PR 1013; refinement and promotion do not transfer credit."
       }
     },
     {
