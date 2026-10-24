@@ -30030,6 +30030,81 @@
         "original_blob": "79d87fc491d33753e8be42672d52c8462d70f673",
         "integration_adjustment": "Preserve the original contributor/source PR 902 for these pre-existing partial bodies. PR 1074 refines them to exact without transferring original source credit; original accepted-main source and reviewed PR evidence retained. Current source will be re-pinned to the final integrated blob for squash verification."
       }
+    },
+    {
+      "source": "src/game/cu_80117AA4.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80117AA4"
+      ],
+      "provenance": {
+        "pull_request": 1069,
+        "merged_via": 1069,
+        "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
+        "introduced_blob": "8a01afa1cdc1c7ed6b5aed3a1dc9c8510e214668"
+      }
+    },
+    {
+      "source": "src/game/cu_801180FC.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801180FC"
+      ],
+      "provenance": {
+        "pull_request": 1069,
+        "merged_via": 1069,
+        "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
+        "introduced_blob": "0415f27b19f82fb2e9149371642eeef452ee2c73"
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8011893C"
+      ],
+      "provenance": {
+        "pull_request": 1069,
+        "merged_via": 1069,
+        "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
+        "introduced_blob": "e8fff618c8d2ec1659f36fe8479656de40fab9f0"
+      }
+    },
+    {
+      "source": "src/game/cu_801187CC.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80119020"
+      ],
+      "provenance": {
+        "pull_request": 1069,
+        "merged_via": 1069,
+        "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
+        "introduced_blob": "fc33275c4668f1e80c216046b7ee8bd2ed26dbf8"
+      }
+    },
+    {
+      "source": "src/game/cu_8011BCDC.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8011CC10"
+      ],
+      "provenance": {
+        "pull_request": 1069,
+        "merged_via": 1069,
+        "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
+        "introduced_blob": "0d11811d8eaf3e7e2ccfecc1be9b7b9e7f981206"
+      }
     }
   ],
   "target": "GN7E69",

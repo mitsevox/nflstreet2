@@ -30,6 +30,8 @@ extern "C" void fn_801180FC(Object_80039F5C *p)
     Point_8017886C origin;
     Point_8017886C spot;
     Point_8017886C target;
+    float dx = 0.0f;
+    float dy = 0.0f;
 
     fn_80178308();
     pBlock = (Block_801180FC *)&p->mUnknown336;
@@ -39,14 +41,16 @@ extern "C" void fn_801180FC(Object_80039F5C *p)
     fn_8011F4EC();
     fn_80117AA4(p, &target, &pBlock->mUnknown12);
     fn_80227690(&target, &target, &p->mMotion.mPos);
-    pBlock->mUnknown8 = fn_801CFE40(target.mY, target.mX);
+    dx = target.mX;
+    dy = target.mY;
+    pBlock->mUnknown8 = fn_801CFE40(dy, dx);
     if ((p->mMotion.mUnknown28 != 0.0f && fn_802270A4(&target) < 0.5f)
         || (p->mMotion.mUnknown28 == 0.0f && fn_802270A4(&target) < 1.0f)) {
         pBlock->mUnknown12 = 0.0f;
-        p->mUnknown512.mUnknown0 = 0.0f;
         p->mUnknown512.mUnknown14 = 1;
-        p->mUnknown512.mUnknown4 = 0xC00000;
         p->mUnknown512.mUnknown8 = 0xC00000;
+        p->mUnknown512.mUnknown4 = 0xC00000;
+        p->mUnknown512.mUnknown0 = 0.0f;
     }
 }
 
