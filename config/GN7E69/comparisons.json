@@ -43817,9 +43817,24 @@
           "end": "0x801B0A18"
         },
         {
+          "symbol": "fn_801B0A18",
+          "start": "0x801B0A18",
+          "end": "0x801B0B18"
+        },
+        {
           "symbol": "fn_801B0B18",
           "start": "0x801B0B18",
           "end": "0x801B0B5C"
+        },
+        {
+          "symbol": "fn_801B0B5C",
+          "start": "0x801B0B5C",
+          "end": "0x801B0C7C"
+        },
+        {
+          "symbol": "fn_801B0C7C",
+          "start": "0x801B0C7C",
+          "end": "0x801B0D5C"
         },
         {
           "symbol": "fn_801B10AC",
