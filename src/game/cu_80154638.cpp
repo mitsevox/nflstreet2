@@ -1,4 +1,5 @@
 #include "game/Class_80148A58.h"
+#include "game/Object_80039F5C.h"
 #include "game/cu_8003E214.h"
 #include "game/fn_80178D18.h"
 
@@ -11,6 +12,14 @@ public:
 extern "C" {
 extern int lbl_802DEB08[];
 extern int lbl_802DEB40[];
+extern const char lbl_802A05C8[];
+
+int fn_80178EA0(int team);
+int fn_80178EE0(int team);
+int fn_80155130(Class_80148A58 *p, int team, unsigned char index);
+int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
+void fn_8017E17C(int slot, const char *pText0, const char *pText1,
+                 const char *pText2, int key);
 
 void fn_80154638(Class_802A27F0 *p, int value, int *pList, int *pIds, unsigned int count)
 {
@@ -77,6 +86,48 @@ void fn_80154638(Class_802A27F0 *p, int value, int *pList, int *pIds, unsigned i
                 pIds[lbl_802DEB08[8]] = second;
             }
         }
+    }
+}
+
+void fn_801548EC(Class_802A27F0 *p, int team, int showColors)
+{
+    char text[16];
+    int first = fn_80178EE0(team);
+    int color = 255;
+    int second = fn_80178EA0(team);
+
+    fn_801C2E18(text, "%d / %d", first, second);
+    if (p->mUnknown24 == 1) {
+        int slot = team == 1 ? 1 : 2;
+        Object_80039F5C *pPlayer = fn_80039F5C(team, 0);
+
+        if (showColors) {
+            color = fn_80155130(p, team, 0);
+            if (color == 255) {
+                color = 254;
+            }
+        }
+        fn_8017E17C(slot, pPlayer->mUnknown2927 + 21, text, lbl_802A05C8, color);
+    } else {
+        int slot = team == 1 ? 1 : 3;
+        Object_80039F5C *pPlayer = fn_80039F5C(team, 0);
+
+        if (showColors) {
+            color = fn_80155130(p, team, 0);
+            if (color == 255) {
+                color = 254;
+            }
+        }
+        fn_8017E17C(slot, pPlayer->mUnknown2927 + 21, text, lbl_802A05C8, color);
+        pPlayer = fn_80039F5C(team, 1);
+        if (showColors) {
+            color = fn_80155130(p, team, 1);
+            if (color == 255) {
+                color = 254;
+            }
+        }
+        fn_8017E17C(slot + 1, pPlayer->mUnknown2927 + 21, lbl_802A05C8,
+                   lbl_802A05C8, color);
     }
 }
 }

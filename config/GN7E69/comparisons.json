@@ -35102,7 +35102,7 @@
     {
       "source": "src/game/cu_80154520.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #833; three complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 5, 9 and 10 of the table 0x802A27F0 (derived from Class_80148A58, include/game/Class_80148A58.h, whose base table is 0x802A2EE0; 0x80154520, 0x80154588 and 0x801545D4, words 0x802A281C, 0x802A283C and 0x802A2844). Slot 7 (0x80154528, word 0x802A282C) is not registered: its outer two-way dispatch is not reproduced by the source forms tried. The .rodata table 0x802A3000 and the .data table 0x802DEB08 are referenced as externs. Original file boundaries and nominal identity unresolved; 0x80154638 onward and the constructor and slots 1 and 2 before 0x80154520 excluded; original bytes stay linked.",
+      "evidence": "Issues #833/#1084; four complete slot bodies 5, 7, 9 and 10 of table 0x802A27F0, inside retained provisional cu_801485B4 grouping. Full native output measured; canonical base view retained. External data tables remain original-owned. Original file/member identities unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -35116,6 +35116,11 @@
           "symbol": "fn_80154520",
           "start": "0x80154520",
           "end": "0x80154528"
+        },
+        {
+          "symbol": "fn_80154528",
+          "start": "0x80154528",
+          "end": "0x80154588"
         },
         {
           "symbol": "fn_80154588",
@@ -35132,13 +35137,19 @@
     {
       "source": "src/game/cu_80154638.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #835; the complete slot-11 body of the table 0x802A27F0 (derived from Class_80148A58, include/game/Class_80148A58.h, whose base table is 0x802A2EE0; 0x80154638, word 0x802A284C) inside the retained provisional cu_801485B4 survey group. The .data tables 0x802DEB08 and 0x802DEB40 are referenced as externs. Original file boundaries and nominal identity unresolved; 0x801548EC onward excluded; original bytes stay linked.",
+      "evidence": "Issues #835/#1084; complete slots 11 and 35 of table 0x802A27F0 inside retained provisional cu_801485B4 grouping. Format string 0x802A15FC-0x802A1604 measured in full; shared empty text 0x802A05C8 and permutation tables remain original-owned externals. Original file/member identities unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80154638",
-          "end": "0x801548EC"
+          "end": "0x80154A88"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A15FC",
+          "end": "0x802A1604"
         }
       ],
       "functions": [
@@ -35146,6 +35157,11 @@
           "symbol": "fn_80154638",
           "start": "0x80154638",
           "end": "0x801548EC"
+        },
+        {
+          "symbol": "fn_801548EC",
+          "start": "0x801548EC",
+          "end": "0x80154A88"
         }
       ]
     },
