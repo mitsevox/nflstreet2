@@ -231,6 +231,15 @@
           "evidence": "__OSInIPL: lwz at 0x80238CD8 accesses 0x803ED068; lwz at 0x80238E7C accesses 0x803ED068 Native .sbss offset 48, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
         },
         {
+          "section": ".sbss",
+          "start": "0x803ED06C",
+          "end": "0x803ED070",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "object_seed": false,
+          "evidence": "Unnamed native alignment space inside OS.c's compiled .sbss (offset 52, 4 bytes): __OSInIPL ends at offset 52 and the 8-byte-aligned __OSStartTime starts at offset 56. No target instruction addresses it and no storage is claimed; it is mapped so the file's seeds tile its linked native .sbss 0x803ED038-0x803ED078."
+        },
+        {
           "section": ".data4",
           "start": "0x802FB868",
           "end": "0x802FBA5F",
@@ -468,6 +477,15 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED092",
+          "end": "0x803ED098",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "object_seed": false,
+          "evidence": "Unnamed native alignment space inside OSInterrupt.c's compiled .sbss (offset 10, 6 bytes): the two-byte __OSLastInterrupt ends at offset 10 and the 8-byte-aligned __OSLastInterruptTime starts at offset 16. No target instruction addresses it and no storage is claimed; it is mapped so the file's seeds tile its linked native .sbss 0x803ED088-0x803ED0A0."
         },
         {
           "section": ".sbss",
@@ -835,7 +853,7 @@
       "name": "src/dolphin/dvd/dvdfs.c",
       "source": "src/dolphin/dvd/dvdfs.c",
       "library": "DVD",
-      "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, six728bytes operand-proven exact and two partials. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
+      "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
       "sections": [
         {
           "start": "0x8023ED68",
@@ -843,7 +861,7 @@
           "section": ".text",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, six728bytes operand-proven exact and two partials. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional."
+          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional."
         },
         {
           "start": "0x802FCD08",
@@ -851,7 +869,7 @@
           "section": ".data4",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, six728bytes operand-proven exact and two partials. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
+          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
           "object_seed": true
         },
         {
@@ -860,7 +878,7 @@
           "section": ".data5",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, six728bytes operand-proven exact and two partials. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
+          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
           "object_seed": true
         },
         {
@@ -869,7 +887,7 @@
           "section": ".sbss",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, six728bytes operand-proven exact and two partials. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
+          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
           "object_seed": true
         }
       ]
@@ -1598,7 +1616,7 @@
       "name": "src/dolphin/ai/ai.c",
       "source": "src/dolphin/ai/ai.c",
       "library": "AI",
-      "evidence": "Coherent pinned BFBB April 2003 C functions corroborate callback/DMA/stream/rate/SRC behavior. All eighteen C bodies measured, SRC routine partial; original twelve-byte flag-clear and eighty-eight-byte stack-switch routines remain unrecovered within unchanged complete mapped range. Stack-switch assembly provenance unresolved; no new assembly implementation or whole-unit promotion.",
+      "evidence": "Coherent pinned BFBB April 2003 C functions corroborate callback/DMA/stream/rate/SRC behavior. All twenty bodies over the complete mapped range, including the twelve-byte flag-clear AIReset and the eighty-eight-byte stack-switch assembly routine __AICallbackStackSwitch, are exact and linked in the source build.",
       "sections": [
         {
           "section": ".data4",
