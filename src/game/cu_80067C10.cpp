@@ -1,13 +1,10 @@
+#include "engine/Desc_80238424.h"
+#include "engine/fn_80238680.h"
 #include "game/cu_80067C10.h"
 #include "game/fn_8009D990.h"
 
 /* Descriptor passed to fn_80238424, which allocates mUnknown0 records of
    mUnknown4 bytes after mUnknown8 callback slots. */
-struct Desc_80238424 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-};
 
 typedef unsigned int (*Fn_803EA674)(int);
 
@@ -15,13 +12,10 @@ extern "C" {
 void fn_8006CE84(Record_80067CA8 *pRecord);
 void fn_800D70CC(Record_80067CA8 *pRecord);
 int fn_801D34D0(void *pDest, int size, int value, int width);
-int fn_80238424(Desc_80238424 *pDesc);
 void fn_802384C4(int handle);
 void *fn_8023850C(int handle);
 void fn_80238570(int handle, int unknown);
 void fn_8023861C(int handle);
-void fn_80238680(int handle, Callback_80067EC8 pCallback);
-void fn_802386DC(int handle, Callback_80067EC8 pCallback);
 }
 
 static Desc_80238424 lbl_802D5098 = { 50, sizeof(Record_80067CA8), 3 };

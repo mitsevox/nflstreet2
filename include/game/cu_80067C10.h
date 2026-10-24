@@ -17,7 +17,7 @@ struct Record_80067CA8 {
     unsigned short mType;
 };
 
-typedef void (*Callback_80067EC8)(Record_80067CA8 *pRecord);
+#include "engine/Callback_80238570.h"
 
 extern "C" {
 void fn_80067C10(void);

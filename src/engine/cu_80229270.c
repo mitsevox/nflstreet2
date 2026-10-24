@@ -1,3 +1,4 @@
+#include "engine/cu_80229270.h"
 /* Partial source for the engine range 0x80229270-0x8022F428 (neutral file name). */
 
 #include "engine/Funcs_802FB3BC.h"
@@ -36,7 +37,7 @@ extern int fn_801F967C(int db, int tbl);
 extern int fn_8020D2D0(int tag, char *pName, int a, int b);
 int fn_8022F384(int key);
 
-extern unsigned char lbl_802AEF11[];
+extern const unsigned char lbl_802AEF10[];
 extern int fn_802297D8(void *p, int tag);
 extern int fn_8022D8F8(int a, int *p, int c);
 extern int fn_8022DB20(void);
@@ -83,7 +84,7 @@ extern char lbl_802B48C4[];
 extern char lbl_802B4A54[];
 extern char lbl_802B4A9C[];
 extern char lbl_802B4AE0[];
-void fn_8022C9B8(void *pSettings);
+void fn_8022C9B8(void *pPairs);
 void fn_8022CED8(void);
 int fn_8022D5A4(int key, int mode);
 int fn_8022D710(int a, int b, int c, int row, int value);
@@ -575,9 +576,9 @@ int fn_8022AEFC(unsigned int value)
 {
     int c = value >> 24;
     int result = 255;
-    if (lbl_802AEF11[c] & 2) {
+    if ((lbl_802AEF10 + 1)[c] & 2) {
         result = 0;
-    } else if (lbl_802AEF11[c] & 1) {
+    } else if ((lbl_802AEF10 + 1)[c] & 1) {
         result = 3;
     } else if (c == '0') {
         result = 2;
@@ -587,7 +588,7 @@ int fn_8022AEFC(unsigned int value)
     return result;
 }
 
-int fn_8022AF54(void)
+int fn_8022AF54(int a, int b)
 {
     return 0;
 }
@@ -720,9 +721,9 @@ void fn_8022C9B4(void *p)
 {
 }
 
-void fn_8022C9B8(void *pSettings)
+void fn_8022C9B8(void *pPairs)
 {
-    unsigned char (*pValues)[2] = pSettings;
+    unsigned char (*pValues)[2] = pPairs;
     unsigned char i;
     for (i = 0; i <= 6; i++) {
         if (pValues[i][0] > 25) {
@@ -925,11 +926,11 @@ int fn_8022D25C(int (*pCallback)(int a))
     return 0;
 }
 
-int fn_8022D268(int a, int b, int c, void *pSettings, int action, int mode)
+int fn_8022D268(int a, int b, int c, void *pPairs, int action, int mode)
 {
     switch (action) {
     case 0:
-        fn_8022C9B8(pSettings);
+        fn_8022C9B8(pPairs);
         break;
     case 1:
         fn_8022D5A4(a, mode);
@@ -947,13 +948,13 @@ int fn_8022D268(int a, int b, int c, void *pSettings, int action, int mode)
     return 0;
 }
 
-int fn_8022D2F4(int a, int b, int c, void *pSettings, int mode)
+int fn_8022D2F4(int a, int b, int c, void *pPairs, int mode)
 {
-    fn_8022D268(a, b, c, pSettings, 0, mode);
-    fn_8022D268(a, b, c, pSettings, 1, mode);
-    fn_8022D268(a, b, c, pSettings, 2, mode);
-    fn_8022D268(a, b, c, pSettings, 3, mode);
-    fn_8022D268(a, b, c, pSettings, 4, mode);
+    fn_8022D268(a, b, c, pPairs, 0, mode);
+    fn_8022D268(a, b, c, pPairs, 1, mode);
+    fn_8022D268(a, b, c, pPairs, 2, mode);
+    fn_8022D268(a, b, c, pPairs, 3, mode);
+    fn_8022D268(a, b, c, pPairs, 4, mode);
     return 0;
 }
 
@@ -1082,9 +1083,8 @@ int fn_8022D874(int a, int b, int c, int key)
 {
     unsigned char i = 0;
     int value;
-    int result;
+    int result = 0;
     do {
-        result = 0;
         value = lbl_802FA8C0[i].mUnknown0;
         if (value == key) {
             result = fn_8022D710(a, b, c, lbl_802FA8C0[i].mUnknown4, lbl_802FA8C0[i].mUnknown8);
@@ -1417,7 +1417,7 @@ int fn_8022EB5C(struct CardStreamTarget *pTarget, struct StreamOps_8002ACB4 *pOp
     return fn_801F9134(0x45564153, (void **)pTarget, 0, pOps);
 }
 
-int fn_8022EB94(struct CardStreamTarget *pTarget, struct StreamOps_8002ACB4 *pOps)
+int fn_8022EB94(void *pTarget, struct StreamOps_8002ACB4 *pOps)
 {
     return fn_801F91AC(0x45564153, (int)pTarget, (int)pOps);
 }

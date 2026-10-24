@@ -8,12 +8,8 @@ extern char lbl_80306B34[];
 int fn_80033124(void *p);
 int fn_80033144(void *p);
 void fn_80237E3C(int a);
-void fn_80237E78(void);
 Object_80237EE8 *fn_80237EE8(int a, int b, int c, Record_802CC680 desc);
-void fn_80237F98(Object_80237EE8 *pObject);
-void fn_80237FA4(Object_80237EE8 *pObject);
 void fn_8023808C(Object_80237EE8 *pObject);
-void *fn_8023811C(Object_80237EE8 *pObject);
 void fn_802382F0(int a);
 void fn_80238358(void);
 }

@@ -1,3 +1,4 @@
+#include "engine/cu_80229270.h"
 #include "game/cu_8007F12C.h"
 #include "game/cu_80191398.h"
 #include "game/fn_801EEB44.h"
@@ -86,8 +87,6 @@ void fn_80229494(void);
 void fn_8022C930(int a);
 int fn_8022EA80(int a, const char *pName, int b);
 void fn_8022EAD8(void);
-void fn_8022EB10(void);
-void fn_8022EBC8(void);
 int fn_8022EBF0(int a, const char *pName, int b);
 void fn_8022EC48(void);
 int fn_8022EF14(const char *pName);
