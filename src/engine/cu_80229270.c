@@ -1094,6 +1094,25 @@ int fn_8022D874(int a, int b, int c, int key)
     return result;
 }
 
+int fn_8022D8F8(int a, int *p, int tag)
+{
+    fn_8022D874(tag, a, p[0], 0);
+    fn_8022D874(tag, a, p[1], 1);
+    fn_8022D874(tag, a, p[2], 2);
+    fn_8022D874(tag, a, p[3], 3);
+    fn_8022D874(tag, a, p[4], 4);
+    fn_8022D874(tag, a, p[5], 5);
+    fn_8022D874(tag, a, p[6], 6);
+    fn_8022D874(tag, a, p[7], 7);
+    fn_8022D874(tag, a, p[8], 8);
+    fn_8022D874(tag, a, p[9], 9);
+    fn_8022D874(tag, a, p[10], 10);
+    fn_8022D874(tag, a, p[11], 11);
+    fn_8022D874(tag, a, p[12], 12);
+    fn_8022D874(tag, a, p[13], 13);
+    return 0;
+}
+
 int fn_8022DA44(int a, int *b, int c, int *d, int e)
 {
     fn_8022D8F8(a, b, e);

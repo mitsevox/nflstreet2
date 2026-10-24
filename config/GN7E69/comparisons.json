@@ -28658,6 +28658,11 @@
           "end": "0x8022D8F8"
         },
         {
+          "symbol": "fn_8022D8F8",
+          "start": "0x8022D8F8",
+          "end": "0x8022DA44"
+        },
+        {
           "symbol": "fn_8022DA44",
           "start": "0x8022DA44",
           "end": "0x8022DA90"
