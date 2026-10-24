@@ -28222,27 +28222,6 @@
       }
     },
     {
-      "source": "src/game/cu_800A1620.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x800A1620",
-        "0x800A1738",
-        "0x800A1FEC",
-        "0x800A21BC",
-        "0x800A2228",
-        "0x800A227C",
-        "0x800A22E4"
-      ],
-      "provenance": {
-        "pull_request": 1053,
-        "merged_via": 1067,
-        "commit": "7c4ed2994077cab90351e52b55d057da16b4ebaf",
-        "introduced_blob": "8959a274f54bb9d2bca9de8dd5fa1901e2324bce"
-      }
-    },
-    {
       "source": "src/game/cu_800A233C.cpp",
       "contributors": [
         "mitsevox"
@@ -29090,21 +29069,6 @@
         "original_commit": "e3c948a61b5f99ab9fe8edab495be70f83d14de5",
         "original_blob": "bde5b98239ad0f45e6972f830d0058984c2929c2",
         "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
-      }
-    },
-    {
-      "source": "src/game/cu_8009FFD4.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x8009FFD4"
-      ],
-      "provenance": {
-        "pull_request": 1054,
-        "merged_via": 1067,
-        "commit": "00fc75c24f4e7cd84958939d5ece85091e49ea77",
-        "introduced_blob": "78aa0a96dd57f7205b86b98486e589bd6e36675d"
       }
     },
     {
@@ -30104,6 +30068,70 @@
         "merged_via": 1069,
         "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
         "introduced_blob": "0d11811d8eaf3e7e2ccfecc1be9b7b9e7f981206"
+      }
+    },
+    {
+      "source": "src/game/cu_800A0134.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800A1620",
+        "0x800A1738",
+        "0x800A1FEC",
+        "0x800A21BC",
+        "0x800A2228",
+        "0x800A227C",
+        "0x800A22E4"
+      ],
+      "provenance": {
+        "pull_request": 1053,
+        "merged_via": 1067,
+        "commit": "7c4ed2994077cab90351e52b55d057da16b4ebaf",
+        "introduced_blob": "8959a274f54bb9d2bca9de8dd5fa1901e2324bce",
+        "original_blob": "8959a274f54bb9d2bca9de8dd5fa1901e2324bce",
+        "original_source": "src/game/cu_800A1620.cpp",
+        "merged_source": true,
+        "migration_commit": "1d0b1f56121c4f26622a5735037b93c70a758117",
+        "merged_blob": "cae2c4a2ce48e35821b4abc9662cf41814ed612b"
+      }
+    },
+    {
+      "source": "src/game/cu_800A0134.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8009FFD4"
+      ],
+      "provenance": {
+        "pull_request": 1054,
+        "merged_via": 1067,
+        "commit": "00fc75c24f4e7cd84958939d5ece85091e49ea77",
+        "introduced_blob": "78aa0a96dd57f7205b86b98486e589bd6e36675d",
+        "original_blob": "78aa0a96dd57f7205b86b98486e589bd6e36675d",
+        "original_source": "src/game/cu_8009FFD4.cpp",
+        "merged_source": true,
+        "migration_commit": "1d0b1f56121c4f26622a5735037b93c70a758117",
+        "merged_blob": "cae2c4a2ce48e35821b4abc9662cf41814ed612b"
+      }
+    },
+    {
+      "source": "src/game/cu_800A0134.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800A050C"
+      ],
+      "provenance": {
+        "pull_request": 750,
+        "merged_via": 1075,
+        "commit": "1d0b1f56121c4f26622a5735037b93c70a758117",
+        "introduced_blob": "cae2c4a2ce48e35821b4abc9662cf41814ed612b",
+        "original_commit": "5067ec6c962e49725259a4d9c3670a2137fccbcb",
+        "original_blob": "4e8d425869f0249927194a1f5c2788cf5d1e0c45",
+        "integration_adjustment": "Pre-existing partial body from PR 750 becomes exact when PR 1075 compiles 0x8009FFD4-0x800A233C as one unit; the body is unchanged and the original source PR is retained."
       }
     }
   ],
