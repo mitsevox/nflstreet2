@@ -30148,6 +30148,27 @@
         "original_blob": "4e8d425869f0249927194a1f5c2788cf5d1e0c45",
         "integration_adjustment": "Pre-existing partial body from PR 750 becomes exact when PR 1075 compiles 0x8009FFD4-0x800A233C as one unit; the body is unchanged and the original source PR is retained."
       }
+    },
+    {
+      "source": "src/game/cu_80134E24.cpp",
+      "functions": [
+        "0x8013474C"
+      ],
+      "contributors": [
+        "mitsevox"
+      ],
+      "provenance": {
+        "pull_request": 737,
+        "merged_via": 1079,
+        "commit": "9f8ea92707de1ff0b440d49bf6a0778523c0b9d2",
+        "introduced_blob": "f09cd86ba23a655a0dc3e21a948cb6b7e81c3ef6",
+        "fragment_origin": {
+          "source": "src/game/cu_80132630.cpp",
+          "commit": "1d98609787d17b6ea93291fa204c02ea5668d677",
+          "blob": "0e410b1f65f905bf8afa81738d6eafdcda114977"
+        },
+        "integration_adjustment": "fn_8013474C from mitsevox's src/game/cu_80132630.cpp (PR 737, a measured fuzzy partial there) moved unchanged with fn_801344A0-fn_80134C20 into src/game/cu_80134E24.cpp, the file of the mapped edge 0x801344A0 (PR 1079); in its new place, with its float pool at 0x8029FD48, it compiles exact. fragment_origin keeps the original source location, commit and blob. The final file blob is pinned for squash publication."
+      }
     }
   ],
   "target": "GN7E69",
