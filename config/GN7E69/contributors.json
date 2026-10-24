@@ -30199,6 +30199,24 @@
         "commit": "b30bd29f2b7c34696458e28923c8fa29de586d0d",
         "introduced_blob": "6fd46f2dcc2183964f1707067ba91021c91aae6f"
       }
+    },
+    {
+      "source": "src/engine/cu_801BA818.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801BAB48"
+      ],
+      "provenance": {
+        "pull_request": 1002,
+        "merged_via": 1008,
+        "commit": "110ed9c9ca467f1a9bfd06cab9a79811e93c5e0a",
+        "introduced_blob": "95286736803e938eb5ed49e927a1a5c5db202ef2",
+        "original_commit": "a7dde67244652b4779f602ade45acbf6d514c611",
+        "original_blob": "e232ba28a2b5b7b33ac220c246ba407c2ff64f08",
+        "integration_adjustment": "Newly exact pre-existing body fn_801BAB48 originates in contribution 1002; the PR 1110 indexed state-span refinement does not transfer original source credit. The original source commit/blob is retained for attribution. The refined source is pinned for squash-history verification without changing the function extent."
+      }
     }
   ],
   "target": "GN7E69",
