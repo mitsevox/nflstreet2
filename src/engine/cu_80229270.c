@@ -7,6 +7,31 @@
 #include "game/fn_801FCE10.h"
 #include "game/QueryStatus.h"
 
+#include <string.h>
+extern char lbl_802B5C8C[];
+extern char lbl_803A1C60[];
+extern float lbl_803A20A4[][13];
+extern char *lbl_803EC0A4;
+extern int lbl_803EC0A8;
+extern int lbl_803EC0A0;
+extern char *lbl_803EC0B4;
+extern int lbl_803EC0B8;
+extern int lbl_803EC0B0;
+extern char *lbl_803EC0C0;
+extern int lbl_803EC0C8;
+extern char *lbl_803EC0CC;
+extern int lbl_803EC0D0;
+extern int lbl_803EC0D4;
+extern signed char lbl_803EC0D8;
+extern int lbl_802FB300[][2];
+extern int fn_801F8D60(int handle, int a);
+extern int fn_801F8EEC(int handle);
+extern int fn_801F9134(int handle, void **ppData, int a, void *b);
+extern int fn_801F91AC(int handle, int a, int b);
+extern int fn_801F967C(int db, int tbl);
+extern int fn_8020D2D0(int tag, char *pName, int a, int b);
+int fn_8022F384(int key);
+
 typedef struct Handlers_802294D8 {
     int (*mpUnknown0)(void);
     void *mpUnknown4;
@@ -347,6 +372,31 @@ int fn_802297B0(void)
     return lbl_803EC004();
 }
 
+int fn_80229A70(void)
+{
+    return fn_801D34D0(lbl_803A1C60, 1092, 0, 4);
+}
+
+float fn_80229C98(int index)
+{
+    return lbl_803A20A4[index][1];
+}
+
+float fn_80229CB0(int index)
+{
+    return lbl_803A20A4[index][0];
+}
+
+float fn_80229CC4(int index, int item)
+{
+    return lbl_803A20A4[index][item + 2];
+}
+
+float fn_80229CE4(int index)
+{
+    return lbl_803A20A4[index][12];
+}
+
 int fn_80229E78(void)
 {
     return 0;
@@ -449,6 +499,11 @@ int fn_8022AC80(Object_8022A59C *p)
     }
     fn_8022C988(p);
     return err;
+}
+
+int fn_8022AF54(void)
+{
+    return 0;
 }
 
 int fn_8022BF60(void)
@@ -852,4 +907,166 @@ int fn_8022DD80(int value)
 int fn_8022DDB4(int a, void *p)
 {
     return 0;
+}
+int fn_8022E558(void)
+{
+    return lbl_803EC07C;
+}
+
+int fn_8022E560(void)
+{
+    return lbl_803EC080;
+}
+
+int fn_8022EA74(void)
+{
+    return 0;
+}
+
+void fn_8022EA7C(void)
+{
+}
+
+int fn_8022EA80(int a, const char *pName, int b)
+{
+    lbl_803EC0A4 = fn_8022C938(strlen(pName) + 1, 1);
+    strcpy(lbl_803EC0A4, pName);
+    lbl_803EC0A8 = b;
+    return 0;
+}
+
+void fn_8022EAD8(void)
+{
+    fn_8022C988(lbl_803EC0A4);
+    lbl_803EC0A0 = 0;
+    lbl_803EC0A4 = 0;
+    lbl_803EC0A8 = -1;
+}
+
+int fn_8022EB10(void)
+{
+    int result = fn_801F8D60(0x45564153, lbl_803EC0A0);
+    if (result == 0) {
+        result = fn_8020D2D0(0x45564153, lbl_803EC0A4, lbl_803EC0A8, 0);
+    }
+    return result;
+}
+
+int fn_8022EB5C(void **ppData, void *p)
+{
+    return fn_801F9134(0x45564153, ppData, 0, p);
+}
+
+int fn_8022EB94(int a, int b)
+{
+    return fn_801F91AC(0x45564153, a, b);
+}
+
+int fn_8022EBC8(void)
+{
+    return fn_801F8EEC(0x45564153);
+}
+
+int fn_8022EBF0(int a, const char *pName, int b)
+{
+    lbl_803EC0B4 = fn_8022C938(strlen(pName) + 1, 1);
+    strcpy(lbl_803EC0B4, pName);
+    lbl_803EC0B8 = b;
+    return 0;
+}
+
+void fn_8022EC48(void)
+{
+    fn_8022C988(lbl_803EC0B4);
+    lbl_803EC0B0 = 0;
+    lbl_803EC0B4 = 0;
+    lbl_803EC0B8 = -1;
+}
+
+int fn_8022EC80(void)
+{
+    int result = fn_801F8D60(0x54415453, lbl_803EC0B0);
+    if (result == 0) {
+        result = fn_8020D2D0(0x54415453, lbl_803EC0B4, lbl_803EC0B8, 0);
+    }
+    return result;
+}
+
+int fn_8022ECCC(void)
+{
+    return fn_801F8EEC(0x54415453);
+}
+
+int fn_8022ECF4(int a, int b)
+{
+    return fn_801FCE10(0, lbl_802B5C8C, a, b, b);
+}
+
+int fn_8022ED30(int db, int tbl)
+{
+    return fn_801F967C(db, tbl);
+}
+
+int fn_8022EF14(const char *pName)
+{
+    lbl_803EC0C0 = fn_8022C938(strlen(pName) + 1, 1);
+    strcpy(lbl_803EC0C0, pName);
+    return 0;
+}
+
+void fn_8022EF60(void)
+{
+    fn_8022C988(lbl_803EC0C0);
+    lbl_803EC0C0 = 0;
+}
+
+int fn_8022EFBC(int db, int tbl)
+{
+    return fn_801F967C(db, tbl);
+}
+
+int fn_8022EFDC(void)
+{
+    int key;
+    do {
+        key = fn_8022C8F0(0, 0x7FFFFFFA) & 0x7FFFFFFF;
+    } while (fn_8022F384(key) != -1);
+    return key;
+}
+
+int fn_8022F34C(void)
+{
+    return lbl_803EC0D8;
+}
+
+int fn_8022F358(int index)
+{
+    int value = -1;
+    if (index < lbl_803EC0D8) {
+        value = lbl_802FB300[index][0];
+    }
+    return value;
+}
+
+int fn_8022F384(int key)
+{
+    signed char i;
+    for (i = 0; i < lbl_803EC0D8; i++) {
+        if (key == lbl_802FB300[i][0]) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int fn_8022F3D4(int key)
+{
+    int value = -1;
+    if (key != -1) {
+        int index = fn_8022F384(key);
+        if (index != -1) {
+            value = lbl_802FB300[index][1];
+        }
+    }
+    return value;
 }
