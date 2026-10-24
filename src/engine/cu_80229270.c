@@ -8,6 +8,9 @@
 #include "game/QueryStatus.h"
 
 #include <string.h>
+
+struct CardStreamTarget;
+struct StreamOps_8002ACB4;
 #include "engine/Entry_802FB300.h"
 extern char lbl_802B5C8C[];
 extern char lbl_803A1C60[];
@@ -1390,14 +1393,14 @@ int fn_8022EB10(void)
     return result;
 }
 
-int fn_8022EB5C(void **ppData, void *p)
+int fn_8022EB5C(struct CardStreamTarget *pTarget, struct StreamOps_8002ACB4 *pOps)
 {
-    return fn_801F9134(0x45564153, ppData, 0, p);
+    return fn_801F9134(0x45564153, (void **)pTarget, 0, pOps);
 }
 
-int fn_8022EB94(int a, int b)
+int fn_8022EB94(struct CardStreamTarget *pTarget, struct StreamOps_8002ACB4 *pOps)
 {
-    return fn_801F91AC(0x45564153, a, b);
+    return fn_801F91AC(0x45564153, (int)pTarget, (int)pOps);
 }
 
 int fn_8022EBC8(void)

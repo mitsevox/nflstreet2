@@ -332,7 +332,7 @@ extern void fn_80229744(void);
 extern int fn_80229760(void **ppData, void *p);
 extern int fn_80229788(int a, int b);
 extern int fn_802299FC(void);
-extern void fn_80229A70(void);
+extern int fn_80229A70(void);
 extern int fn_80229E88(void);
 extern void fn_8022A304(void);
 extern int fn_8022B02C(int a);
