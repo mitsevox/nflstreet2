@@ -5,6 +5,14 @@ struct Data_801B4548 {
     unsigned short mUnknown4;
 };
 
+struct Stream_801B58F0 {
+    unsigned char mUnknown0[4];
+    int mUnknown4;
+    int mUnknown8;
+    unsigned char mUnknownC[20];
+    int mUnknown20;
+};
+
 class Class_801B44BC {
 public:
     virtual ~Class_801B44BC();
@@ -34,12 +42,12 @@ public:
     virtual void vfn_25() = 0;
     virtual int fn_801B4548();
     virtual int fn_801B4564();
-    virtual int fn_801B456C();
+    virtual Stream_801B58F0 *fn_801B456C(int index);
     virtual int fn_801B4574();
     virtual int fn_801B457C();
     virtual int fn_801B4584();
     virtual int fn_801B458C();
-    virtual int fn_801B4594();
+    virtual int fn_801B4594(int index);
 
     int mUnknown0;
     unsigned char mUnknown4[4];
@@ -60,7 +68,6 @@ AllocParams lbl_8037E814;
 extern void (*lbl_803EBB2C)(int, int);
 extern void (*lbl_803EBB30)(int, int);
 extern void (*lbl_803EBB34)(int, int);
-void fn_801B39B8(int mode);
 
 }
 
@@ -102,7 +109,9 @@ struct Node_801B3FE0 {
     unsigned char mUnknownF4[12];
     Class_801B44BC *mUnknown100;
     short mUnknown104;
-    unsigned char mUnknown106[10];
+    unsigned char mUnknown106[2];
+    int mUnknown108;
+    int mUnknown10C;
     int mUnknown110;
 };
 
@@ -111,6 +120,8 @@ struct Record_801B6D20 {
     signed char mUnknown1;
     unsigned short mUnknown2;
 };
+
+struct Sequence_801B84E4;
 
 struct Bank_801B3480 {
     int mUnknown0;
@@ -128,6 +139,10 @@ struct Bank_801B3480 {
     unsigned char mUnknown38[4];
     unsigned int *mUnknown3C;
     Node_801B3FE0 *mUnknown40[24];
+    unsigned char mUnknownA0[32];
+    Sequence_801B84E4 *mUnknownC0[17];
+    unsigned char mUnknown104[4092];
+    int mUnknown1100;
 };
 
 class Class_803EBB60 {
@@ -154,17 +169,22 @@ extern int lbl_803EBB50;
 extern int lbl_803EBB54;
 extern Bank_801B3480 *lbl_802F47D0[4];
 extern Class_803EBB60 *lbl_803EBB60;
-void fn_801B43CC(int a);
 void fn_801B3724(void);
-void fn_801B421C(void);
 
 }struct Event_801B845C {
     unsigned char mUnknown0[4];
-    unsigned int mUnknown4;
+    union {
+        unsigned int mUnknown4;
+        struct { unsigned int mUnknown6:26, depth:3, mUnknown0:3; } mBits4;
+    };
     unsigned char mUnknown8[4];
 };
 struct Sequence_801B84E4 {
-    unsigned char mUnknown0[16];
+    unsigned int mUnknown0;
+    unsigned char mUnknown4[4];
+    unsigned int mUnknown8;
+    unsigned char mUnknownC[3];
+    unsigned char mUnknownF;
     unsigned char mUnknown10;
     unsigned char mUnknown11[3];
     Event_801B845C mUnknown14[1];
@@ -189,7 +209,21 @@ int fn_801B3FE0(int flags, Data_801E0DF0 *data);
 
 }
 
+extern "C" int fn_801B7880(Sequence_801B84E4 *p, Event_801B845C *entry);
+
+extern "C" unsigned int lbl_802F481C[6];
+
+class Class_803EBB64 {
+public:
+    virtual ~Class_803EBB64();
+};
+extern "C" Class_803EBB64 *lbl_803EBB64;
+extern "C" int fn_801B2F28(int flags);
+extern "C" void fn_8026D0AC(void);
+extern "C" void fn_8026D0EC(void);
+
 extern "C" int fn_801B2AD4(void);
+extern "C" int fn_801B2B58(void);
 extern "C" void *fn_801B2C40(int size);
 extern "C" void fn_801B2C94(void *p);
 extern "C" void fn_801B2F18(void (*a)(int, int), void (*b)(int, int), void (*c)(int, int));
@@ -197,6 +231,7 @@ extern "C" int fn_801B3234(int flags);
 extern "C" unsigned int fn_801B343C(void);
 extern "C" unsigned int fn_801B3480(unsigned int index, unsigned int flags);
 extern "C" int fn_801B34DC(unsigned int flags);
+extern "C" void fn_801B3568(void);
 extern "C" void fn_801B39B8(int mode);
 extern "C" void fn_801B3A88(void);
 extern "C" void fn_801B3AAC(void);
@@ -211,6 +246,8 @@ extern "C" void fn_801B43CC(int state);
 extern "C" void fn_801B4824(Node_801B3FE0 *p, int value);
 extern "C" void fn_801B4960(Node_801B3FE0 *p, int a, int b, int c);
 extern "C" void fn_801B49C4(Node_801B3FE0 *p, int a, int b, int c);
+extern "C" int fn_801B57C0(Node_801B3FE0 *p, int index);
+extern "C" int fn_801B58F0(Node_801B3FE0 *p);
 extern "C" int fn_801B59B0(int flags, int value);
 extern "C" void fn_801B5AB0(int flags, unsigned char value);
 extern "C" int fn_801B5BCC(int flags, Info_801E1084 *info);
@@ -218,12 +255,16 @@ extern "C" int fn_801B5C88(Node_801B3FE0 *p, void *info);
 extern "C" void fn_801B5CD0(int flags);
 extern "C" int fn_801B5DB4(Node_801B3FE0 *p);
 extern "C" void fn_801B5E10(const char *format, ...);
+extern "C" int fn_801B5E5C(int flags, Sequence_801B84E4 *sequence);
+extern "C" void fn_801B6334(Sequence_801B84E4 *p);
 extern "C" void fn_801B63F0(Entry_801B63F0 *p, int value);
 extern "C" void fn_801B6460(void);
+extern "C" int fn_801B64C0(int index);
 extern "C" int fn_801B6780(int index);
 extern "C" int fn_801B6CB4(Node_801B3FE0 *p);
 extern "C" int fn_801B6D20(int count, int value, Record_801B6D20 *entries);
 extern "C" int fn_801B7178(int index, int value);
+extern "C" unsigned int fn_801B7778(void);
 extern "C" void fn_801B845C(Event_801B845C *p, int state, Event_801B845C *end);
 extern "C" int fn_801B84E4(Event_801B845C *p, Sequence_801B84E4 *sequence);
 extern "C" int fn_801B8580(Node_801B3FE0 *p);
@@ -246,6 +287,24 @@ extern "C" int fn_801B2AD4(void)
     lbl_803EBB50 = 0;
     lbl_803EBB4C = 0;
     return 0;
+}
+
+extern "C" int fn_801B2B58(void)
+{
+    if (!lbl_803EBB38)
+        return -14;
+    fn_801B2F28(0x0F000000);
+    if (fn_801B42C0(0x0F000000) == 0) {
+        fn_8026D0AC();
+        delete lbl_803EBB64;
+        delete lbl_803EBB60;
+        fn_8026D0EC();
+        lbl_803EBB64 = 0;
+        lbl_803EBB60 = 0;
+        lbl_803EBB68 = 0;
+        lbl_803EBB38 = 0;
+    }
+    return lbl_803EBB38 == 0;
 }
 
 extern "C" void *fn_801B2C40(int size)
@@ -315,6 +374,21 @@ extern "C" int fn_801B34DC(unsigned int flags)
             return 1;
     }
     return 0;
+}
+
+extern "C" void fn_801B3568(void)
+{
+    for (int i = 0; i < 4; ++i) {
+        if (lbl_802F47D0[i]) {
+            for (int j = i + 1; j < 4; ++j) {
+                if (lbl_802F47D0[j] && lbl_802F47D0[i]->mUnknown14 > lbl_802F47D0[j]->mUnknown14) {
+                    Bank_801B3480 temp = *lbl_802F47D0[i];
+                    *lbl_802F47D0[i] = *lbl_802F47D0[j];
+                    *lbl_802F47D0[j] = temp;
+                }
+            }
+        }
+    }
 }
 
 extern "C" void fn_801B39B8(int mode)
@@ -506,7 +580,7 @@ int Class_801B44BC::fn_801B4548()
 int Class_801B44BC::fn_801B4564()
 { return mUnknown60; }
 
-int Class_801B44BC::fn_801B456C()
+Stream_801B58F0 *Class_801B44BC::fn_801B456C(int index)
 { return 0; }
 
 int Class_801B44BC::fn_801B4574()
@@ -521,7 +595,7 @@ int Class_801B44BC::fn_801B4584()
 int Class_801B44BC::fn_801B458C()
 { return -8; }
 
-int Class_801B44BC::fn_801B4594()
+int Class_801B44BC::fn_801B4594(int index)
 { return -8; }
 
 void Class_801B44BC::fn_801B459C(Data_801B4548 *p)
@@ -568,6 +642,37 @@ extern "C" void fn_801B49C4(Node_801B3FE0 *p, int a, int b, int c)
     p->mUnknown31 = c;
     p->mUnknown30 = p->mUnknown100->fn_801B45AC();
     p->mUnknown32 = a;
+}
+
+extern "C" int fn_801B57C0(Node_801B3FE0 *p, int index)
+{
+    if (index < 0 || index >= p->mUnknown100->fn_801B4548())
+        return -8;
+    Stream_801B58F0 *entry = p->mUnknown100->fn_801B456C(index);
+    if (!entry)
+        return -8;
+    Stream_801B58F0 saved = *entry;
+    fn_801B5DB4(p);
+    int result = p->mUnknown100->fn_801B4594(index);
+    p->mUnknown108 -= saved.mUnknown4;
+    p->mUnknown10C -= saved.mUnknown8;
+    return result;
+}
+
+extern "C" int fn_801B58F0(Node_801B3FE0 *p)
+{
+    int best = 0x07FFFFFF;
+    int index = -1;
+    for (int i = 0; i < p->mUnknown100->fn_801B4564(); ++i) {
+        Stream_801B58F0 *entry = p->mUnknown100->fn_801B456C(i);
+        if (entry && entry->mUnknown20 >= 0 && entry->mUnknown20 < best) {
+            best = entry->mUnknown20;
+            index = i;
+        }
+    }
+    if (index == -1)
+        return 0;
+    return fn_801B57C0(p, index);
 }
 
 extern "C" int fn_801B59B0(int flags, int value)
@@ -692,6 +797,66 @@ extern "C" int fn_801B5DB4(Node_801B3FE0 *p)
 extern "C" void fn_801B5E10(const char *format, ...)
 {}
 
+extern "C" int fn_801B5E5C(int flags, Sequence_801B84E4 *sequence)
+{
+    int result = -8;
+    Event_801B845C *entry = sequence->mUnknown14;
+    int depth = 0;
+    unsigned int high = flags & 0xFF000000;
+    for (unsigned int i = 0; i < sequence->mUnknownF; ++i, ++entry) {
+        if ((entry->mUnknown4 & 0x00FE0000) == 0x00020000) {
+            switch ((entry->mUnknown4 >> 9) & 7) {
+            case 0:
+            case 1:
+                entry->mBits4.depth = depth++;
+                break;
+            case 2:
+            case 3:
+                entry->mBits4.depth = depth - 1;
+                break;
+            case 4:
+                entry->mBits4.depth = --depth;
+                break;
+            default:
+                break;
+            }
+        } else {
+            entry->mBits4.depth = depth;
+        }
+    }
+    for (int i = 0; i < 4; ++i) {
+        if (lbl_802F47D0[i] && (lbl_802F47D0[i]->mUnknown14 & high) == lbl_802F47D0[i]->mUnknown14) {
+            int count = lbl_802F47D0[i]->mUnknown1100;
+            if (count > 15)
+                return -13;
+            result = 0;
+            unsigned int now = lbl_803EBB60->vfn_05();
+            sequence->mUnknown8 = now;
+            sequence->mUnknown0 = now;
+            lbl_802F47D0[i]->mUnknownC0[count++] = sequence;
+            lbl_802F47D0[i]->mUnknown1100 = count;
+        }
+    }
+    return result;
+}
+
+extern "C" void fn_801B6334(Sequence_801B84E4 *p)
+{
+    for (int i = 0; i < 4; ++i) {
+        Bank_801B3480 *bank = lbl_802F47D0[i];
+        if (bank) {
+            for (int j = 0; j <= 16; ++j) {
+                if (bank->mUnknownC0[j] == p) {
+                    bank->mUnknownC0[j] = 0;
+                    --bank->mUnknown1100;
+                    for (++j; j < 16; ++j)
+                        bank->mUnknownC0[j - 1] = bank->mUnknownC0[j];
+                }
+            }
+        }
+    }
+}
+
 extern "C" void fn_801B63F0(Entry_801B63F0 *p, int value)
 {
     Header_801B2CDC *base = lbl_803EBB28->mUnknown18;
@@ -716,6 +881,24 @@ extern "C" void fn_801B6460(void)
         if (entry)
             entry->mUnknown10.bits.flag4000 = 0;
     }
+}
+
+extern "C" int fn_801B64C0(int index)
+{
+    Sequence_801B84E4 *p = lbl_803EBB28->mUnknownC0[index];
+    int count = 0;
+    if (p->mUnknown8 > lbl_803EBB3C)
+        return 0;
+    unsigned int i = p->mUnknown10;
+    Event_801B845C *entry = &p->mUnknown14[i];
+    for (; i < p->mUnknownF; ++i, ++entry) {
+        if (!(entry->mUnknown4 & 0x10000) && !fn_801B7880(p, entry))
+            break;
+        ++count;
+        ++p->mUnknown10;
+        p->mUnknown8 = lbl_803EBB3C;
+    }
+    return count;
 }
 
 extern "C" int fn_801B6780(int index)
@@ -782,6 +965,36 @@ extern "C" int fn_801B7178(int index, int value)
         }
     }
     return value;
+}
+
+extern "C" unsigned int fn_801B7778(void)
+{
+    unsigned int sum = lbl_802F481C[5] + lbl_802F481C[4];
+    unsigned int carry = 0;
+    if (sum < lbl_802F481C[5] || sum < lbl_802F481C[4])
+        carry = 1;
+    unsigned int a = lbl_802F481C[3];
+    unsigned int b = lbl_802F481C[2];
+    unsigned int c = lbl_802F481C[1];
+    unsigned int e = lbl_802F481C[0];
+    lbl_802F481C[4] = sum;
+    sum = sum + a + carry;
+    lbl_802F481C[3] = sum;
+    carry = sum < a;
+    sum = sum + b + carry;
+    lbl_802F481C[2] = sum;
+    carry = sum < b;
+    sum = sum + c + carry;
+    lbl_802F481C[1] = sum;
+    carry = sum < c;
+    sum = sum + e + carry;
+    lbl_802F481C[0] = sum;
+    if (++lbl_802F481C[5]) return sum;
+    if (++lbl_802F481C[4]) return sum;
+    if (++lbl_802F481C[3]) return sum;
+    if (++lbl_802F481C[2]) return sum;
+    if (++lbl_802F481C[1]) return sum;
+    return ++lbl_802F481C[0];
 }
 
 extern "C" void fn_801B845C(Event_801B845C *p, int state, Event_801B845C *end)

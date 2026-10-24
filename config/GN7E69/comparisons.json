@@ -53948,6 +53948,11 @@
           "end": "0x801B2B58"
         },
         {
+          "symbol": "fn_801B2B58",
+          "start": "0x801B2B58",
+          "end": "0x801B2C18"
+        },
+        {
           "symbol": "fn_801B2C40",
           "start": "0x801B2C40",
           "end": "0x801B2C94"
@@ -53991,6 +53996,11 @@
           "symbol": "fn_801B34DC",
           "start": "0x801B34DC",
           "end": "0x801B3568"
+        },
+        {
+          "symbol": "fn_801B3568",
+          "start": "0x801B3568",
+          "end": "0x801B3724"
         },
         {
           "symbol": "fn_801B39B8",
@@ -54058,7 +54068,7 @@
           "end": "0x801B456C"
         },
         {
-          "symbol": "fn_801B456C__14Class_801B44BC",
+          "symbol": "fn_801B456C__14Class_801B44BCi",
           "start": "0x801B456C",
           "end": "0x801B4574"
         },
@@ -54083,7 +54093,7 @@
           "end": "0x801B4594"
         },
         {
-          "symbol": "fn_801B4594__14Class_801B44BC",
+          "symbol": "fn_801B4594__14Class_801B44BCi",
           "start": "0x801B4594",
           "end": "0x801B459C"
         },
@@ -54138,6 +54148,16 @@
           "end": "0x801B4A24"
         },
         {
+          "symbol": "fn_801B57C0",
+          "start": "0x801B57C0",
+          "end": "0x801B58F0"
+        },
+        {
+          "symbol": "fn_801B58F0",
+          "start": "0x801B58F0",
+          "end": "0x801B59B0"
+        },
+        {
           "symbol": "fn_801B59B0",
           "start": "0x801B59B0",
           "end": "0x801B5AB0"
@@ -54173,6 +54193,16 @@
           "end": "0x801B5E5C"
         },
         {
+          "symbol": "fn_801B5E5C",
+          "start": "0x801B5E5C",
+          "end": "0x801B5FC0"
+        },
+        {
+          "symbol": "fn_801B6334",
+          "start": "0x801B6334",
+          "end": "0x801B63F0"
+        },
+        {
           "symbol": "fn_801B63F0",
           "start": "0x801B63F0",
           "end": "0x801B6460"
@@ -54181,6 +54211,11 @@
           "symbol": "fn_801B6460",
           "start": "0x801B6460",
           "end": "0x801B64C0"
+        },
+        {
+          "symbol": "fn_801B64C0",
+          "start": "0x801B64C0",
+          "end": "0x801B6578"
         },
         {
           "symbol": "fn_801B6780",
@@ -54201,6 +54236,11 @@
           "symbol": "fn_801B7178",
           "start": "0x801B7178",
           "end": "0x801B721C"
+        },
+        {
+          "symbol": "fn_801B7778",
+          "start": "0x801B7778",
+          "end": "0x801B7880"
         },
         {
           "symbol": "fn_801B845C",

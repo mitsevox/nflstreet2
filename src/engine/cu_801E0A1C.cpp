@@ -111,7 +111,7 @@ extern Class_801E10BC *lbl_803EBD60;
 extern unsigned char lbl_803EBD64;
 
 void fn_801B2C18(Class_801E10BC *pAllocator, Config_801E0AEC *pConfig);
-void fn_801B2B58(void);
+int fn_801B2B58(void);
 int fn_801B2CDC(int a);
 int fn_801B2F28(int id);
 int fn_801B3234(int a);
