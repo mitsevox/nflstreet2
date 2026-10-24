@@ -39,7 +39,10 @@ typedef struct Text_80221BF0 {
     Uint8 unk_04[0x0B];
     Uint8 NumRanges; /* 0x0F */
     Uint8 unk_10;   /* 0x10 */
-    Uint8 unk_11[0x0F];
+    Uint8 unk_11[0x03];
+    Int16 unk_14;   /* 0x14 */
+    Int16 unk_16;   /* 0x16 */
+    Uint8 unk_18[0x08];
     Buffer_80222E54 *pBuffer; /* 0x20 */
     union {
         Range_80221D30 *pRanges;
@@ -97,6 +100,7 @@ extern void *lbl_803EBF80;
 extern Uint8 lbl_803EBF84;
 extern Uint8 lbl_803EBF85;
 extern GXLightObj lbl_803E9880;
+extern Range_80221D30 lbl_8039F9B8[];
 extern Float32 lbl_802F9FE0[3][4];
 extern Float32 lbl_803A0400[][2];
 extern GXColor lbl_803A1400[];
@@ -377,6 +381,156 @@ void fn_80221D5C(Text_80221BF0 *pText)
         pText->NumRanges = 0;
         pText->u.pRanges = NULL;
     }
+}
+
+void fn_80221DB0(Text_80221BF0 *pText)
+{
+    Font_801CCA64 **ppFont;
+    char *pString;
+    char *pLine;
+    Int16 Length;
+    Int16 Pos;
+    Int16 LineStart;
+    Int16 NumLines;
+    Int16 Line;
+    Int32 i;
+    Int32 LastSpace;
+    Int32 Width;
+    Int32 CharWidth;
+    Int32 bSpace;
+    char c;
+    char ch;
+
+    i = 0;
+    NumLines = 0;
+    ppFont = (Font_801CCA64 **)fn_8021E688(fn_8021EA44(1), pText->unk_03, pText->unk_02);
+    LineStart = 0;
+    pLine = NULL;
+    fn_80221D5C(pText);
+    if (!(pText->Flags & 0x100)) {
+        pText->unk_14 = 0;
+    }
+    pString = pText->pBuffer->pText;
+    Length = fn_801C3180(pString);
+    for (Pos = 0; Pos <= Length; Pos++) {
+        c = pString[Pos];
+        if (pLine == NULL) {
+            pLine = &pString[Pos];
+            LineStart = Pos;
+        }
+        if (c == '\n' || c == '\0') {
+            pString[Pos] = '\0';
+            if (pText->Flags & 0x100) {
+                Width = 0;
+                LastSpace = LineStart;
+                for (i = LineStart; i < Pos; i++) {
+                    ch = pString[i];
+                    CharWidth = fn_801CD750(*ppFont, ch);
+                    if (ch == ' ' || pString[LastSpace] == ' ') {
+                        LastSpace = i;
+                    }
+                    if (Width + CharWidth > pText->unk_14) {
+                        if (pText->Flags & 0x1000) {
+                            if (LastSpace != LineStart) {
+                                lbl_8039F9B8[NumLines].unk_00 = LineStart;
+                                bSpace = 0;
+                                if (pString[LastSpace - 1] == ' ') {
+                                    lbl_8039F9B8[NumLines].unk_02 = LastSpace - 1;
+                                    bSpace = 1;
+                                } else {
+                                    lbl_8039F9B8[NumLines].unk_02 = LastSpace;
+                                }
+                                NumLines++;
+                                if (!bSpace && pString[LastSpace] == ' ') {
+                                    LastSpace++;
+                                }
+                                LineStart = LastSpace;
+                                Width = 0;
+                                i = LineStart;
+                                LastSpace = LineStart;
+                            } else {
+                                if (i == LineStart) {
+                                    i = LineStart + 1;
+                                }
+                                lbl_8039F9B8[NumLines].unk_00 = LineStart;
+                                lbl_8039F9B8[NumLines].unk_02 = i;
+                                NumLines++;
+                                if (pString[i] == ' ') {
+                                    i++;
+                                }
+                                LineStart = i;
+                                Width = 0;
+                                LastSpace = LineStart;
+                            }
+                        } else if (pText->Flags & 0x2000) {
+                            if (i == LineStart) {
+                                i = LineStart + 1;
+                            }
+                            lbl_8039F9B8[NumLines].unk_00 = LineStart;
+                            NumLines++;
+                            LineStart = i;
+                            lbl_8039F9B8[NumLines - 1].unk_02 = i;
+                            LastSpace = LineStart;
+                            Width = 0;
+                        }
+                    }
+                    Width += CharWidth;
+                }
+                if (!(pText->Flags & 0x3000)) {
+                    if (pText->Flags & 2) {
+                        for (i = LineStart; i < Pos - 1 && Width > pText->unk_14; i++) {
+                            Width -= fn_801CD750(*ppFont, pString[i]);
+                        }
+                        lbl_8039F9B8[NumLines].unk_00 = i;
+                        lbl_8039F9B8[NumLines].unk_02 = Pos;
+                    } else if (pText->Flags & 1) {
+                        LastSpace = LineStart;
+                        for (i = Pos - 1; LastSpace < i && Width > pText->unk_14;) {
+                            Width -= fn_801CD750(*ppFont, pString[i--]);
+                            if (LastSpace < i && Width > pText->unk_14) {
+                                Width -= fn_801CD750(*ppFont, pString[LastSpace++]);
+                            }
+                        }
+                        lbl_8039F9B8[NumLines].unk_00 = LastSpace;
+                        lbl_8039F9B8[NumLines].unk_02 = i + 1;
+                    } else {
+                        for (i = Pos - 1; Width > pText->unk_14 && i > 1;) {
+                            Width -= fn_801CD750(*ppFont, pString[i--]);
+                        }
+                        lbl_8039F9B8[NumLines].unk_00 = LineStart;
+                        lbl_8039F9B8[NumLines].unk_02 = i + 1;
+                    }
+                } else {
+                    lbl_8039F9B8[NumLines].unk_02 = Pos;
+                    lbl_8039F9B8[NumLines].unk_00 = LineStart;
+                }
+                NumLines++;
+            } else {
+                lbl_8039F9B8[NumLines].unk_02 = Pos;
+                lbl_8039F9B8[NumLines].unk_00 = LineStart;
+                NumLines++;
+                Width = fn_801CD63C(*ppFont, &pString[LineStart], pText->Flags);
+                if (Width > pText->unk_14) {
+                    pText->unk_14 = Width;
+                }
+            }
+            pString[Pos] = c;
+            pLine = NULL;
+        }
+    }
+    if (NumLines > 1) {
+        fn_8021EF04(pText->unk_03, pText->unk_02);
+        pText->u.pRanges = fn_801D2B7C(NumLines * sizeof(Range_80221D30), 0, 0);
+        fn_8021EF34();
+    }
+    pText->NumRanges = NumLines;
+    for (Line = 0; Line < NumLines; Line++) {
+        *fn_80221D30(pText, Line) = lbl_8039F9B8[Line];
+    }
+    if (!(pText->Flags & 0x200)) {
+        pText->unk_16 = pText->NumRanges * fn_801CD790(*ppFont);
+    }
+    pText->Flags &= 0x7FFF;
 }
 
 void fn_80222764(Text_80221BF0 *pText)
