@@ -51165,36 +51165,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_801CEE54.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CEE54-0x801CEF48 (src/engine/cu_801CEE54.c, llrenderbin.c), its compiler row and function rows. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CEE54",
-          "end": "0x801CEF48"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801CEE54",
-          "start": "0x801CEE54",
-          "end": "0x801CEE84"
-        },
-        {
-          "symbol": "fn_801CEE84",
-          "start": "0x801CEE84",
-          "end": "0x801CEEF4"
-        },
-        {
-          "symbol": "fn_801CEEF4",
-          "start": "0x801CEEF4",
-          "end": "0x801CEF48"
-        }
-      ]
-    },
-    {
       "source": "src/engine/cu_801CEFF0.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x801CEFF0-0x801CF7CC (src/engine/cu_801CEFF0.c, rand.c), its compiler row and function rows, its type row and the exact data row for its .rodata 0x802AF4F8-0x802AF540; the per-generator tables in .data 0x802F7AD0-0x802F7B0C (init/reset/copy/next function pointers and the stream sizes 8/0x8C/0xF0) and all callees stay external, so the generator functions are emitted as globals. Draft comparisons only; original assembly remains linked.",

@@ -13582,6 +13582,19 @@
           "end": "0x803ED414"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801CEE54.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801CEE54-0x801CEF48 (src/engine/cu_801CEE54.c), its function and name rows; every function and allocated placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CEE54",
+          "end": "0x801CEF48"
+        }
+      ]
     }
   ]
 }
