@@ -35648,13 +35648,19 @@
     {
       "source": "src/game/cu_80155588.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #869; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 11 of the table 0x802A17A8 of src/game/cu_80155384.cpp (derived from the rule-set table 0x802A56E8, include/game/Class_802A56E8.h; 0x80155588-0x801555C4, word 0x802A1804). Calls the base slot 0x80177768 through its declaration Class_802A56E8::vfn_11, fn_80148A58 through include/game/Class_80148A58.h and 0x80155D7C as an extern; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x8015539C before the range (src/game/cu_8015539C.cpp) and 0x801555C4 onward excluded; original bytes stay linked.",
+      "evidence": "Bounded two-function comparison-only fragment within retained provisional cu_801485B4. Existing rule-set slot11 fn_80155588 (issue #869, table802A17A8 word802A1804) is preserved; issue #1082 adds fn_801555C4, slot3 of the separate table802A18C8 at word802A18E4, derived from the engine table80297BF8. Source grouping does not assert the two callbacks share a nominal class. Start follows cu_8015539C; end precedes cu_80155640. Complete18.0f literal802A178C-802A1790 is measured. Globals803EB2FC/FD stay external original-owned. Original file edges and signature spelling remain unresolved. Original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80155588",
-          "end": "0x801555C4"
+          "end": "0x80155640"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A178C",
+          "end": "0x802A1790"
         }
       ],
       "functions": [
@@ -35662,6 +35668,11 @@
           "symbol": "fn_80155588",
           "start": "0x80155588",
           "end": "0x801555C4"
+        },
+        {
+          "symbol": "fn_801555C4",
+          "start": "0x801555C4",
+          "end": "0x80155640"
         }
       ]
     },
@@ -35693,19 +35704,19 @@
     {
       "source": "src/game/cu_801551F8.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #873; one complete slot body inside the retained provisional cu_801485B4 survey group: slot 1 of the table 0x802A17A8 of src/game/cu_80155384.cpp (derived from the rule-set table 0x802A56E8, include/game/Class_802A56E8.h; 0x801551F8-0x801552C4, word 0x802A17B4). Calls 0x80177F70, 0x80178308 and 0x801787DC (registered by src/game/cu_80176F18.cpp), fn_800A8444 (registered by src/game/cu_8008E978.cpp) and 0x80237260 as externs. The .rodata slice 0x802A1770-0x802A1774 holds its 0.5f literal. Original file boundaries and nominal identity unresolved; 0x801551F0-0x801551F8 is src/game/cu_801551F0.cpp and 0x801552C4 onward is excluded; original bytes stay linked.",
+      "evidence": "Bounded two-function comparison-only fragment within retained provisional cu_801485B4. Existing slot 1 fn_801551F8 (issue #873, table word802A17B4) is preserved; issue #1082 adds slot20 fn_801552C4 (table word802A184C) of the same rule-set table802A17A8. Adjacent fn_801551F0 and fn_80155384 remain separate existing fragments; these are reconstruction extents, not recovered file edges. Full readonly context802A1770-802A178C includes0.5f, internal double alignment, conversion bias and10/18/1 floats. Native.rodata has four extra trailing alignment bytes, retained in full comparison and not claimed as original storage. Byte globals803EB2FC/FD remain external original-owned. Original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801551F8",
-          "end": "0x801552C4"
+          "end": "0x80155384"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A1770",
-          "end": "0x802A1774"
+          "end": "0x802A178C"
         }
       ],
       "functions": [
@@ -35713,6 +35724,11 @@
           "symbol": "fn_801551F8",
           "start": "0x801551F8",
           "end": "0x801552C4"
+        },
+        {
+          "symbol": "fn_801552C4",
+          "start": "0x801552C4",
+          "end": "0x80155384"
         }
       ]
     },
@@ -35930,13 +35946,19 @@
     {
       "source": "src/game/cu_80154F70.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue 890; two complete functions inside the retained provisional cu_801485B4 survey group: slot 30 of the table 0x802A27F0 of src/game/cu_80154520.cpp (Class_80148A58-derived, include/game/Class_80148A58.h; 0x80154F70-0x80154FC0, word 0x802A28E4) and 0x80154FC0 (called from 0x80154DEC in src/game/cu_80154A88.cpp). Calls the base slot 0x801499A8 through the symbol fn_801499A8 of src/game/cu_80149014.cpp, fn_80039F5C through include/game/Object_80039F5C.h and 0x8022B7A4 as an extern; reads the .sbss pair 0x803ECA24 as the extern lbl_803ECA24 (not claimed). No literal or data word is owned. Original file boundaries and nominal identity unresolved; 0x80154F70 follows src/game/cu_80154A88.cpp and 0x80155004 onward is not claimed; original bytes stay linked.",
+      "evidence": "Bounded three-function comparison-only fragment within retained provisional cu_801485B4. Prior slots 30/player lookup (80154F70,80154FC0; issue #890) are preserved; issue #1082 adds complete slot 20 fn_80155004, held at 802A2894 of table 802A27F0. Start remains after cu_80154A88; end is the existing fn_80155128 entry. Complete readonly strings 802A1604-802A1610 are measured, while shared format 802A0DDC and .sbss pair 803ECA24 stay external original-owned. Original file edges, class identity and signature spelling remain unresolved. Original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80154F70",
-          "end": "0x80155004"
+          "end": "0x80155128"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A1604",
+          "end": "0x802A1610"
         }
       ],
       "functions": [
@@ -35949,6 +35971,11 @@
           "symbol": "fn_80154FC0",
           "start": "0x80154FC0",
           "end": "0x80155004"
+        },
+        {
+          "symbol": "fn_80155004",
+          "start": "0x80155004",
+          "end": "0x80155128"
         }
       ]
     },

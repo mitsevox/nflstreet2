@@ -30169,6 +30169,21 @@
         },
         "integration_adjustment": "fn_8013474C from mitsevox's src/game/cu_80132630.cpp (PR 737, a measured fuzzy partial there) moved unchanged with fn_801344A0-fn_80134C20 into src/game/cu_80134E24.cpp, the file of the mapped edge 0x801344A0 (PR 1079); in its new place, with its float pool at 0x8029FD48, it compiles exact. fragment_origin keeps the original source location, commit and blob. The final file blob is pinned for squash publication."
       }
+    },
+    {
+      "source": "src/game/cu_801551F8.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x801552C4"
+      ],
+      "provenance": {
+        "pull_request": 1083,
+        "merged_via": 1083,
+        "commit": "e5709ae1e6e60f475cd2c8e440b864f8a57fa378",
+        "introduced_blob": "4af417926d1202f6c019e9e5b387dc2f044d00bf"
+      }
     }
   ],
   "target": "GN7E69",
