@@ -5884,63 +5884,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_80228E44.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80228E44-0x80228F78 (src/engine/cu_80228E44.c), its function and name rows and the exact .sdata data row 0x803EBFA8-0x803EBFB8; every function and data placement exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80228E44",
-          "end": "0x80228F78"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EBFA8",
-          "end": "0x803EBFB8"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_80228F78.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80228F78-0x80229084 (src/engine/cu_80228F78.c), its function and name rows and the exact .sdata data row 0x803EBFB8-0x803EBFC4; every function and data placement exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80228F78",
-          "end": "0x80229084"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EBFB8",
-          "end": "0x803EBFC4"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_80229094.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80229094-0x80229270 (src/engine/cu_80229094.c), its function and name rows and the exact .sdata data row 0x803EBFC8-0x803EBFD8; every function and data placement exact, promoted from comparison-only.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80229094",
-          "end": "0x80229270"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EBFC8",
-          "end": "0x803EBFD8"
-        }
-      ]
-    },
-    {
       "source": "src/dolphin/base/PPCArch.c",
       "profile": "dolphin_release",
       "evidence": "sdk.json unit src/dolphin/base/PPCArch.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
