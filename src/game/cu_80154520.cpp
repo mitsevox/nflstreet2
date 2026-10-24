@@ -20,6 +20,7 @@ class Class_802A27F0 : public Class_80148A58 {
 public:
     char mUnknown1C[8];
     unsigned char mUnknown24;
+    unsigned char mUnknown25;
 };
 
 extern "C" {
@@ -31,6 +32,29 @@ Rules_801531C4 *fn_80155128(Class_80148A58 *p);
 unsigned char fn_80154520(Class_802A27F0 *p)
 {
     return p->mUnknown24;
+}
+
+void fn_80154528(Class_802A27F0 *p, int kind, int value)
+{
+    switch (kind) {
+    case 0:
+        switch (value) {
+        case 0:
+            p->mUnknown0 = 8;
+            p->mUnknown4 = 7;
+            p->mUnknown24 = 2;
+            break;
+        case 1:
+            p->mUnknown0 = 6;
+            p->mUnknown4 = 5;
+            p->mUnknown24 = 1;
+            break;
+        }
+        break;
+    case 1:
+        p->mUnknown25 = value;
+        break;
+    }
 }
 
 const float *fn_80154588(Class_802A27F0 *p, int index)
