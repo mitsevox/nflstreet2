@@ -252,5 +252,5 @@ unsigned long long fn_801F7D34(SysTime_8039B430 *pTime)
     unsigned int yearDays = fn_8027F000(pTime->mYear);
 
     return pTime->mHundredths * 10 + pTime->mSeconds * 1000 + pTime->mMinutes * 60000 + pTime->mHours * 3600000 +
-           pTime->mDays * 86400000 + monthDays * 86400000 * pTime->mMonth + yearDays * 86400000 * pTime->mYear;
+           pTime->mDays * 86400000 + pTime->mMonth * 86400000 * monthDays + pTime->mYear * 86400000 * yearDays;
 }

@@ -13582,6 +13582,51 @@
           "end": "0x803ED414"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801CEE54.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801CEE54-0x801CEF48 (src/engine/cu_801CEE54.c), its function and name rows; every function and allocated placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CEE54",
+          "end": "0x801CEF48"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/ResTracker.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801F2310-0x801F284C (src/engine/ResTracker.c), its function and name rows; every function and allocated placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801F2310",
+          "end": "0x801F284C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/texture.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8020DB34-0x8020E7EC (src/engine/texture.c), its function and name rows; every function and allocated placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8020DB34",
+          "end": "0x8020E7EC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9BF0",
+          "end": "0x802F9C08"
+        }
+      ]
     }
   ]
 }
