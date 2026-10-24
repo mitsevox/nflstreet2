@@ -37409,6 +37409,12 @@
           "placement": ".text",
           "start": "0x80276DE4",
           "end": "0x8027CF9C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C21F0",
+          "end": "0x802C21F4"
         }
       ],
       "functions": [
@@ -37421,6 +37427,21 @@
           "symbol": "fn_80276F38",
           "start": "0x80276F38",
           "end": "0x80276FD4"
+        },
+        {
+          "symbol": "fn_80276FD4",
+          "start": "0x80276FD4",
+          "end": "0x802770F8"
+        },
+        {
+          "symbol": "fn_802770F8",
+          "start": "0x802770F8",
+          "end": "0x80277240"
+        },
+        {
+          "symbol": "fn_80277280",
+          "start": "0x80277280",
+          "end": "0x802773C0"
         },
         {
           "symbol": "fn_802773C0",
@@ -37621,6 +37642,16 @@
           "symbol": "fn_80279DF8",
           "start": "0x80279DF8",
           "end": "0x80279E74"
+        },
+        {
+          "symbol": "fn_8027A21C",
+          "start": "0x8027A21C",
+          "end": "0x8027A248"
+        },
+        {
+          "symbol": "fn_8027A248",
+          "start": "0x8027A248",
+          "end": "0x8027A308"
         },
         {
           "symbol": "fn_8027A4C0",
@@ -37924,6 +37955,11 @@
           "end": "0x8027D978"
         },
         {
+          "symbol": "fn_8027D978__15Object_8027D6E8i",
+          "start": "0x8027D978",
+          "end": "0x8027D9EC"
+        },
+        {
           "symbol": "fn_8027D9EC",
           "start": "0x8027D9EC",
           "end": "0x8027D9F4"
@@ -37939,6 +37975,11 @@
           "end": "0x8027DA24"
         },
         {
+          "symbol": "fn_8027DA24__15Object_8027D6E8i",
+          "start": "0x8027DA24",
+          "end": "0x8027DAA4"
+        },
+        {
           "symbol": "fn_8027DAA4",
           "start": "0x8027DAA4",
           "end": "0x8027DAC4"
@@ -37949,9 +37990,64 @@
           "end": "0x8027DAE4"
         },
         {
+          "symbol": "fn_8027DF34__15Object_8027DAE4i",
+          "start": "0x8027DF34",
+          "end": "0x8027DF94"
+        },
+        {
+          "symbol": "fn_8027DF94__15Object_8027DAE4i",
+          "start": "0x8027DF94",
+          "end": "0x8027DFF4"
+        },
+        {
+          "symbol": "fn_8027DFF4__15Object_8027DAE4ii",
+          "start": "0x8027DFF4",
+          "end": "0x8027E05C"
+        },
+        {
+          "symbol": "fn_8027E05C__15Object_8027DAE4i",
+          "start": "0x8027E05C",
+          "end": "0x8027E0AC"
+        },
+        {
           "symbol": "fn_8027E0AC",
           "start": "0x8027E0AC",
           "end": "0x8027E0C4"
+        },
+        {
+          "symbol": "fn_8027E1B0__15Object_8027DAE4",
+          "start": "0x8027E1B0",
+          "end": "0x8027E21C"
+        },
+        {
+          "symbol": "fn_8027E21C__15Object_8027DAE4iPv",
+          "start": "0x8027E21C",
+          "end": "0x8027E27C"
+        },
+        {
+          "symbol": "fn_8027E27C__15Object_8027DAE4i",
+          "start": "0x8027E27C",
+          "end": "0x8027E2D0"
+        },
+        {
+          "symbol": "fn_8027E2D0__15Object_8027DAE4i",
+          "start": "0x8027E2D0",
+          "end": "0x8027E348"
+        },
+        {
+          "symbol": "fn_8027E348__15Object_8027DAE4",
+          "start": "0x8027E348",
+          "end": "0x8027E3BC"
+        },
+        {
+          "symbol": "fn_8027E3BC__15Object_8027DAE4i",
+          "start": "0x8027E3BC",
+          "end": "0x8027E448"
+        },
+        {
+          "symbol": "fn_8027E448__15Object_8027DAE4ii",
+          "start": "0x8027E448",
+          "end": "0x8027E4D8"
         },
         {
           "symbol": "fn_8027E4D8",
@@ -37964,9 +38060,54 @@
           "end": "0x8027E518"
         },
         {
+          "symbol": "fn_8027E660__15Object_8027E518ii",
+          "start": "0x8027E660",
+          "end": "0x8027E690"
+        },
+        {
+          "symbol": "fn_8027E690__15Object_8027E518",
+          "start": "0x8027E690",
+          "end": "0x8027E6BC"
+        },
+        {
+          "symbol": "fn_8027E97C__15Object_8027E518i",
+          "start": "0x8027E97C",
+          "end": "0x8027E9D8"
+        },
+        {
+          "symbol": "fn_8027E9D8__15Object_8027E518ii",
+          "start": "0x8027E9D8",
+          "end": "0x8027EA3C"
+        },
+        {
+          "symbol": "fn_8027EA3C__15Object_8027E518i",
+          "start": "0x8027EA3C",
+          "end": "0x8027EA64"
+        },
+        {
+          "symbol": "fn_8027EA64__15Object_8027E518i",
+          "start": "0x8027EA64",
+          "end": "0x8027EAB4"
+        },
+        {
           "symbol": "fn_8027EAB4",
           "start": "0x8027EAB4",
           "end": "0x8027EAC0"
+        },
+        {
+          "symbol": "fn_8027EAC0__15Object_8027E518i",
+          "start": "0x8027EAC0",
+          "end": "0x8027EB04"
+        },
+        {
+          "symbol": "fn_8027EC1C__15Object_8027E518",
+          "start": "0x8027EC1C",
+          "end": "0x8027EC7C"
+        },
+        {
+          "symbol": "fn_8027EC7C__15Object_8027E518P15Record_8027EC7C",
+          "start": "0x8027EC7C",
+          "end": "0x8027ECD8"
         },
         {
           "symbol": "fn_8027ED4C",
@@ -37987,6 +38128,31 @@
           "symbol": "fn_8027ED64",
           "start": "0x8027ED64",
           "end": "0x8027ED6C"
+        },
+        {
+          "symbol": "fn_8027EDC0",
+          "start": "0x8027EDC0",
+          "end": "0x8027EDE0"
+        },
+        {
+          "symbol": "fn_8027EDE0",
+          "start": "0x8027EDE0",
+          "end": "0x8027EE00"
+        },
+        {
+          "symbol": "fn_8027EE00",
+          "start": "0x8027EE00",
+          "end": "0x8027EE20"
+        },
+        {
+          "symbol": "fn_8027EEE8__15Object_8027EF94i",
+          "start": "0x8027EEE8",
+          "end": "0x8027EF18"
+        },
+        {
+          "symbol": "fn_8027EF18__15Object_8027EF94",
+          "start": "0x8027EF18",
+          "end": "0x8027EF50"
         },
         {
           "symbol": "fn_8027EF50",
@@ -54019,6 +54185,26 @@
           "symbol": "fn_802828BC",
           "start": "0x802828BC",
           "end": "0x8028291C"
+        },
+        {
+          "symbol": "fn_8028291C",
+          "start": "0x8028291C",
+          "end": "0x80282D70"
+        },
+        {
+          "symbol": "fn_80282D70",
+          "start": "0x80282D70",
+          "end": "0x80282F24"
+        },
+        {
+          "symbol": "fn_80282F24",
+          "start": "0x80282F24",
+          "end": "0x802830F0"
+        },
+        {
+          "symbol": "fn_802830F0",
+          "start": "0x802830F0",
+          "end": "0x802832CC"
         }
       ]
     }

@@ -2,7 +2,7 @@
 #include "game/fn_801D2B7C.h"
 
 extern void *fn_801D310C(void *pAddr, int size, int ident, int flags);
-extern void fn_8026A980(void *pDest, int handle);
+extern int fn_8026A980(void *pDest, int handle);
 extern int fn_8026A9F4(int handle);
 extern void fn_8026B4D8(int a, int b);
 

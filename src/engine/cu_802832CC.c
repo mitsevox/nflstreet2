@@ -12,25 +12,6 @@ extern int fn_801C9960(int handle, void *pBuffer, int size, void (*pCallback)(in
 extern int fn_801CA648(int handle, int pos, void *pBuffer, int size);
 void *fn_801C1F94();
 
-typedef struct Code_802C2860
-{
-    unsigned short mUnknown00;
-    short mUnknown02;
-} Code_802C2860;
-
-typedef struct Leaf_802C2860
-{
-    short mUnknown00;
-    unsigned char mUnknown02;
-} Leaf_802C2860;
-
-typedef struct Desc_802C2860
-{
-    Code_802C2860 *mpCodes;
-    Leaf_802C2860 *mpLeaves;
-    short mCount;
-} Desc_802C2860;
-
 typedef struct Node_803B795C
 {
     short mUnknown00;
