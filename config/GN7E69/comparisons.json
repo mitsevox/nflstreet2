@@ -43732,6 +43732,11 @@
           "end": "0x801AFD04"
         },
         {
+          "symbol": "fn_801AFD04",
+          "start": "0x801AFD04",
+          "end": "0x801AFDFC"
+        },
+        {
           "symbol": "fn_801AFDFC",
           "start": "0x801AFDFC",
           "end": "0x801AFE58"
@@ -43805,6 +43810,11 @@
           "symbol": "fn_801B08DC",
           "start": "0x801B08DC",
           "end": "0x801B0974"
+        },
+        {
+          "symbol": "fn_801B0974",
+          "start": "0x801B0974",
+          "end": "0x801B0A18"
         },
         {
           "symbol": "fn_801B0B18",

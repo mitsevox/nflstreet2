@@ -176,7 +176,9 @@ extern unsigned short lbl_8037E794[32][2];
 extern int lbl_803EBB20;
 unsigned int fn_801B1934(void);
 int fn_801B22E0(Record_801AF75C *, int, int *, int *);
-int fn_801B24C8(Record_801AF75C *);
+int fn_801B2648(unsigned int, int *);
+int fn_801B26D8(unsigned int, unsigned int, int *);
+int fn_801B2798(int, unsigned int);
 
 unsigned int fn_801B2368(void);
 int fn_801B1C1C(int a, int b);
@@ -893,7 +895,7 @@ char *fn_801AF7B8(Record_801AF75C *p)
     int size = 0;
     char *result = fn_801AF780(p);
     if (p->mUnknown4 & 128) {
-        size = ((p->mUnknown5 + 7) >> 3) + 1;
+        size = (p->mUnknown5 + 7) / 8 + 1;
     }
     return result + size;
 }
@@ -1069,6 +1071,37 @@ int fn_801AFBD8(unsigned char *p, Record_801AF75C *record, int *event, unsigned 
     }
     return result;
 }
+int fn_801AFD04(Key_801AE658 *key, int *event, Result_801AFD04 *out)
+{
+    int mode = key->mUnknown3;
+    int index = key->mUnknown2;
+    int id = key->mId;
+    int value = -1;
+    out->mUnknown4 = -1;
+    out->mUnknown6 = -1;
+    out->mUnknown0 = -1;
+    switch (mode) {
+    case 0:
+        out->mUnknown4 = fn_801B2648(id, &value);
+        out->mUnknown0 = (short)value;
+        break;
+    case 1:
+        out->mUnknown4 = fn_801B26D8(id, ((unsigned short *)event)[index * 2 + 1], &value);
+        out->mUnknown0 = value;
+        break;
+    case 2:
+        {
+            int slot = fn_801B2648(id, &value);
+            if (fn_801B2798(slot, event[index])) out->mUnknown6 = ((unsigned short *)event)[index * 2 + 1];
+            else value = -1;
+            out->mUnknown4 = slot;
+            out->mUnknown0 = value;
+        }
+        break;
+    }
+    return out->mUnknown0 >= 0;
+}
+
 void fn_801AFDFC(Record_801AF75C *p, int i)
 {
     int index = i / 8 + 1;
@@ -1231,6 +1264,30 @@ void fn_801B08DC(unsigned char *p, Work_801B10AC *work)
             n--;
         }
     }
+}
+
+int fn_801B0974(unsigned char *p, Work_801B10AC *work)
+{
+    int result = 0;
+    int index = fn_801AF85C(p) - 1;
+    int done = 0;
+    WorkEntry_801B0B18 *entry = &work->mEntries[index];
+    int end = entry->mUnknown8 + entry->mUnknown9;
+    do {
+        entry->mUnknownA++;
+        if (entry->mUnknownA < end) {
+            done = 1;
+        } else {
+            entry->mUnknownA = entry->mUnknown8;
+            if (--index < 0) {
+                done = 1;
+                result = 1;
+            }
+            entry = &work->mEntries[index];
+            end = entry->mUnknown8 + entry->mUnknown9;
+        }
+    } while (!done);
+    return result;
 }
 
 int fn_801B0B18(WorkEntry_801B0B18 *p)
@@ -1402,8 +1459,8 @@ int fn_801B1A90(int value, int count, int id)
 void fn_801B1B34(int value, int id)
 {
     if (++lbl_803EBB20 > 31) lbl_803EBB20 = 0;
-    lbl_8037E794[lbl_803EBB20][1] = id;
     lbl_8037E794[lbl_803EBB20][0] = value;
+    lbl_8037E794[lbl_803EBB20][1] = id;
 }
 
 void fn_801B1B70(int seed)
@@ -1577,23 +1634,23 @@ char *fn_801B23FC(Record_801AF75C *p)
     int size = 0;
     char *result = fn_801B23C4(p);
     if (p->mUnknown4 & 128) {
-        size = ((p->mUnknown5 + 7) >> 3) + 1;
+        size = (p->mUnknown5 + 7) / 8 + 1;
     }
     return result + size;
 }
 
 void fn_801B2450(void)
 {
-    lbl_803EBB04 = 0;
     lbl_803EBB00 = 0;
+    lbl_803EBB04 = 0;
     lbl_803EBB08 = 0;
     lbl_803EBB0C = 0;
 }
 
 void fn_801B2468(void)
 {
-    lbl_803EBB04 = 0;
     lbl_803EBB00 = 0;
+    lbl_803EBB04 = 0;
     lbl_803EBB08 = 0;
     lbl_803EBB0C = 0;
 }
