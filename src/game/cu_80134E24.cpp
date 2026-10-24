@@ -1,3 +1,4 @@
+#include <math.h>
 #include "engine/cu_801B9F00.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/Directions_8012430C.h"
@@ -18,6 +19,15 @@
 
 #include "game/State_80134E24.h"
 
+static float data_802DB0F4[7][8] = {
+    {0, .75f, 1, .75f, 0, 2, 3, 2},
+    {-1, 0, 0, 0, -1, 2, 3, 2},
+    {0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 55, 60, 55},
+    {1, 0, -1, 0, 1, 2, 3, 2},
+    {7, 4, 0, -2, -1, 4, 12, 10},
+    {-1, -2, 0, 4, 7, 10, 12, 4},
+};
 struct Key_802DB1D4 { unsigned short mUnknown0, mKey; };
 static Key_802DB1D4 keys_802DB1D4[43] = {
     {0, 55},
@@ -67,7 +77,7 @@ static Key_802DB1D4 keys_802DB1D4[43] = {
 extern "C" float lbl_803EB188, lbl_803EB18C, lbl_803ECB08;
 extern "C" Queue_800EFE0C lbl_803EB190, lbl_803EB198;
 extern "C" unsigned char lbl_803EB168, lbl_803EB16A;
-extern "C" float lbl_803EB184, lbl_802DB174[];
+extern "C" float lbl_803EB184;
 extern "C" unsigned char lbl_803EB169;
 extern "C" {
 Object_80039F5C *fn_80137B40(void);
@@ -83,15 +93,10 @@ void fn_80148108(int);
 void fn_8013FA8C(int);
 void fn_8015A0D0(int);
 void fn_800B8344(void);
-void fn_8013474C(Object_80039F5C *);
 int fn_8010A2DC(Object_80039F5C *, int, short);
-void fn_80134C20(Object_80039F5C *, State_80134E24 *);
 void fn_8012430C(Directions_8012430C *, int, Object_80039F5C *);
-void fn_801344F8(Object_80039F5C *, float *);
-float *fn_80134AD0(Object_80039F5C *, int *);
 int fn_801CFFD0(int, int);
 unsigned char fn_80135F14(Object_80039F5C *, Object_80039F5C *, int *, int, unsigned char *, unsigned char *);
-int fn_801347D4(Object_80039F5C *, State_80134E24 *, Object_80039F5C **, unsigned char *, unsigned char *);
 int fn_80177F70(void);
 void fn_800C146C(Point_80167910 *, Object_80039F5C *, Object_80039F5C *, int, int, int, int, int);
 int fn_80156704(void);
@@ -103,13 +108,11 @@ void fn_80227690(void *, void *, void *);
 int fn_80104688(Object_80039F5C *);
 void fn_801024FC(Object_80039F5C *, int, int, int, int);
 int fn_80135D54(Object_80039F5C *, float *, float *, unsigned char *);
-int fn_801344A0(void);
 void fn_800DBC4C(Object_80039F5C *, int, float);
 int fn_801783AC(int);
 void fn_800A02B4(void);
 void fn_800A02FC(void);
 
-int fn_801348F0(Object_80039F5C *);
 int fn_801486A0(void);
 unsigned char fn_800C13A0(Object_80039F5C *, unsigned char *, unsigned char *);
 Object_80039F5C *fn_801244F0(Object_80039F5C *, int, unsigned char, unsigned char, float *, int);
@@ -133,6 +136,170 @@ int fn_800B7F34(Object_80039F5C *);
 void fn_8003AB08(Object_80039F5C *, int);
 void fn_801360D4(Object_80039F5C *);
 void fn_80136134(Object_80039F5C *, unsigned int);
+void fn_8006F0B8(int);
+unsigned int fn_800ABDA4(int);
+Object_80039F5C *fn_80124E5C(Object_80039F5C *, int, float *, int, float, int, float);
+float fn_80124FE0(Object_80039F5C *, int);
+float fn_80125004(Object_80039F5C *, int, int);
+float fn_80178298(void);
+int fn_801787DC(int);
+int fn_801788D8(int *);
+float fn_80178A08(void);
+float fn_80178A44(void);
+float fn_80237260(int);
+extern unsigned char lbl_803EB16B;
+extern float lbl_803EB16C, lbl_803EB170, lbl_803EB174, lbl_803EB178, lbl_803EB17C, lbl_803EB180;
+
+int fn_801344A0(void)
+{
+    int mode = fn_801486A0();
+    int result = mode <= 4 && mode >= 3;
+    if (fn_80156704()) result = 1;
+    return result;
+}
+
+void fn_801344F8(Object_80039F5C *p, float *values)
+{
+    int team = fn_80178320();
+    unsigned char count = fn_80178D18(fn_80178320());
+    float distance;
+    fn_801244F0(p, team, 0, count, &distance, 0);
+    State_80134E24 *s = (State_80134E24 *)&p->mUnknown336;
+    s->mUnknown3 = 0;
+    if (values[0] > 2.0f || values[1] > 2.0f || values[2] > 2.0f || values[3] > 2.0f ||
+        values[4] > 2.0f || values[5] > 2.0f || values[6] > 2.0f || !(values[7] <= 2.0f)) {
+        s->mUnknown6 = 10;
+        s->mUnknown3 = 1;
+        Point_8017886C point = fn_80177FE0();
+        if (!(p->mMotion.mPos.mY >= point.mY - 13.0f)) {
+            values[5] += 3.0f;
+            values[7] += 3.0f;
+            values[6] += 4.0f;
+        } else if (!(fabsf(p->mMotion.mPos.mY) <= fn_80178A44() - 4.0f)) {
+            values[5] += 3.0f;
+            values[6] += 4.0f;
+            values[7] += 3.0f;
+        }
+    } else {
+        s->mUnknown6 = 10;
+        unsigned int n = fn_80178D18(fn_80178320());
+        for (unsigned short i = 0; i < n; ++i) {
+            Object_80039F5C *other = fn_80039F5C(fn_80178320(), i);
+            float delta[2];
+            fn_80227690(delta, &other->mMotion.mPos, &p->mMotion.mPos);
+            if (!(fn_802270A4(delta) >= 3.0f)) {
+                int angle = fn_801CFE40(delta[1], delta[0]);
+                values[((angle + 0x100000) >> 21) & 7] += 4.0f;
+                s->mUnknown3 = 1;
+            }
+        }
+    }
+    if (s->mUnknown4 <= 0) s->mUnknown3 = 1;
+}
+
+void fn_8013474C(Object_80039F5C *p)
+{
+    float a = fn_80124FE0(p, 3);
+    float b = fn_80125004(p, 3, 1);
+    if (a > 7.0f || (!(a <= 5.0f) && !(b <= 5.0f)))
+        fn_8006F0B8(16);
+}
+
+int fn_801347D4(Object_80039F5C *p, State_80134E24 *s,
+               Object_80039F5C **out, unsigned char *choice, unsigned char *indexes)
+{
+    if (lbl_803EB16B) {
+        float threshold = (float)p->mRatings[6] * 0.003921568859368563f;
+        if (!fn_800ABDA4(p->mIdBytes[2])) threshold *= 0.5f;
+        if (!(fn_80237260(0) <= threshold)) {
+            *out = 0;
+            for (;;) {
+                unsigned int n = fn_802372EC(0, 3);
+                if (indexes[n] != 255 && s->mUnknown30[n]) {
+                    *out = fn_80039F5C(p->mIdBytes[2], indexes[n]);
+                    *choice = s->mUnknown23[n];
+                    return 1;
+                }
+                if (*out) return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+int fn_801348F0(Object_80039F5C *p)
+{
+    State_80134E24 *s = (State_80134E24 *)&p->mUnknown336;
+    if (fn_801783AC(0)) return 1;
+    unsigned int kind = p->mUnknown2914;
+    if (fn_801344A0() || !(kind <= 1 || kind == 3)) return 0;
+    float threshold = ((float)p->mRatings[4] * lbl_803EB16C + (float)p->mRatings[0] * lbl_803EB170) * 0.003921568859368563f;
+    if (fn_80237260(0) > threshold) return 0;
+    int mode = fn_80177F70();
+    Point_8017886C point = fn_80177FE0();
+    float remaining = 2.0f - threshold;
+    float limit = (lbl_803EB174 + point.mY - p->mMotion.mPos.mY) * remaining;
+    if (mode == 4 || mode == 6) {
+        limit = (fn_80178298() - p->mMotion.mPos.mY) * remaining;
+        if (mode == 6) {
+            int time;
+            if (!fn_801788D8(&time)) {
+                time -= fn_801787DC(fn_80178308());
+                if ((unsigned int)time <= 24 && !((time - 2) & 7)) return 0;
+            }
+        }
+    }
+    float distance;
+    fn_80124E5C(p, fn_80178320(), &distance, (int)(lbl_803EB178 * 46603.37890625f), lbl_803EB17C, 0x400000, lbl_803EB180);
+    if (!(distance <= limit)) {s->mUnknown18 = 1; return 1;}
+    return 0;
+}
+
+float *fn_80134AD0(Object_80039F5C *p, int *count)
+{
+    State_80134E24 *s = (State_80134E24 *)&p->mUnknown336;
+    float *values = (s->mUnknown1 & 0x80) ? (s->mUnknown1C == 29 ? data_802DB0F4[1] : data_802DB0F4[0]) : data_802DB0F4[2];
+    if (!(p->mMotion.mPos.mY >= -(fn_80178A2C() + 6.5f))) {
+        values = data_802DB0F4[3];
+        *count = -20;
+        if (!(p->mMotion.mPos.mY >= -(fn_80178A2C() + 8.0f))) *count = -10;
+    }
+    if (!(p->mMotion.mPos.mX <= fn_80178A08() - 5.0f) && !(p->mMotion.mUnknown40 <= 0.0f))
+        values = data_802DB0F4[5];
+    else if (!(p->mMotion.mPos.mX >= 5.0f - fn_80178A08()) && !(p->mMotion.mUnknown40 >= 0.0f))
+        values = data_802DB0F4[6];
+    return values;
+}
+
+void fn_80134C20(Object_80039F5C *p, State_80134E24 *s)
+{
+    if (!p || !s) return;
+    unsigned char indexes[3];
+    for (unsigned char i = 0; i <= 2; ++i) indexes[i] = fn_80168E00(p->mIdBytes[2], i, 0);
+    for (unsigned char i = 0; i <= 2; ++i) {
+        if (!s->mUnknown30[i] || indexes[i] == 255) continue;
+        Object_80039F5C *other = fn_80039F5C(p->mIdBytes[2], indexes[i]);
+        int disabled = 0;
+        switch (other->mpState->mId) {
+        case 3: case 51:
+            if (fn_800F06F4(0, other->mpState, 31, 0xFFFF) != 0xFFFF) disabled = 1;
+            break;
+        case 10: case 11: case 16: case 31: case 32: disabled = 1; break;
+        }
+        if (other->mFlags & 0x800) disabled = 1;
+        if (!(p->mMotion.mPos.mY <= other->mMotion.mPos.mY) &&
+            !(fabsf(p->mMotion.mPos.mX - other->mMotion.mPos.mX) >= 3.0f) && fn_800B65A0(p->mIdBytes[2]) == 255)
+            disabled = 1;
+        if (s->mUnknown2D[i] && disabled) {
+            s->mUnknown2D[i] = 0;
+            fn_80168E54(p->mIdBytes[2], indexes[i], 0);
+        } else if (s->mUnknown30[i] && !s->mUnknown2D[i] &&
+                   (other->mpState->mId == 19 || other->mpState->mId == 21)) {
+            s->mUnknown2D[i] = s->mUnknown30[i];
+            fn_80168E54(p->mIdBytes[2], indexes[i], s->mUnknown30[i]);
+        }
+    }
+}
 
 int fn_80134E24(Object_80039F5C *player) {
     unsigned int count = 0;
@@ -251,7 +418,7 @@ int fn_80135200(Object_80039F5C *player) {
         fn_801344F8(player, values.mCost);
         Point_8017886C next = fn_80177FE0();
         if (player->mMotion.mPos.mY > next.mY - 1.5f)
-            weights = lbl_802DB174;
+            weights = data_802DB0F4[4];
         else
             weights = fn_80134AD0(player, &value);
         if (state->mUnknown3 == 1) {

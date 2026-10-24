@@ -6,6 +6,10 @@ public:
 };
 
 extern "C" {
+extern unsigned char lbl_803EB2FC;
+extern unsigned char lbl_803EB2FD;
+float fn_80178A2C(void);
+void fn_80178E88(float value);
 int fn_80177F70(void);
 int fn_80178308(void);
 int fn_801787DC(int team);
@@ -34,5 +38,20 @@ int fn_801551F8(Class_802A17A8 *p)
         result = (otherScore < score ? score : otherScore) + 8;
     }
     return result;
+}
+
+void fn_801552C4(Class_802A17A8 *p, int flip)
+{
+    if (!lbl_803EB2FC) {
+        float distance = fn_80178A2C() * 2.0f -
+                         ((lbl_803EB2FD / 2) * 10.0f + 18.0f);
+        if (!(distance >= 1.0f)) {
+            distance = 1.0f;
+        }
+        fn_80178E88(distance);
+        lbl_803EB2FC = 1;
+        ++lbl_803EB2FD;
+    }
+    p->Class_802A56E8::vfn_20(flip);
 }
 }
