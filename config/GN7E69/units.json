@@ -12264,7 +12264,7 @@
     {
       "source": "src/engine/cu_801B9D00.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801B9D00-0x801B9F00 (src/engine/cu_801B9D00.c) and its data rows; every function exact, promoted from comparison-only.",
+      "evidence": "evidence.tsv unit row 0x801B9D00-0x801B9F00 (src/engine/cu_801B9D00.c), its function rows and the compiler row 0x801B9D00-0x801C1D84; every function exact, promoted from comparison-only.",
       "sections": [
         {
           "section": ".text",
