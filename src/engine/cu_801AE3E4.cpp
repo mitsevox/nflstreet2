@@ -170,7 +170,6 @@ extern int lbl_803EBB08;
 extern int lbl_803EBB0C;
 extern Slot_801B2450 *lbl_803EBB00;
 extern int lbl_802F475C[8];
-extern unsigned int (*lbl_802F4758)(int);
 extern Channel_801B118C lbl_8037E294[8];
 extern unsigned int lbl_802F477C[6];
 extern unsigned short lbl_8037E794[32][2];
@@ -1558,14 +1557,6 @@ int fn_801B22E0(Record_801AF75C *p, int i, int *a, int *b)
         *a = start;
         *b = end * scale - start;
         result = 1;
-    }
-    return result;
-}
-unsigned int fn_801B2368(void)
-{
-    unsigned int result = 0;
-    if (lbl_802F4758) {
-        result = lbl_802F4758(0);
     }
     return result;
 }
