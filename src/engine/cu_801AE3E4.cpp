@@ -12,15 +12,25 @@ struct Entry_801AF84C {
 };
 
 struct Record_801AF75C {
-    unsigned char mUnknown0[4];
+    unsigned char mUnknown0[2];
+    unsigned char mUnknown2;
+    unsigned char mUnknown3;
+    signed char mUnknown4;
+    unsigned char mUnknown5[3];
+    Entry_801AF84C mEntries[1];
+};
+
+struct RowBank_801AFE90 {
+    unsigned short mUnknown0;
+    unsigned short mUnknown2;
     unsigned char mUnknown4;
     unsigned char mUnknown5;
     unsigned char mUnknown6;
     unsigned char mUnknown7;
-    Entry_801AF84C mEntries[1];
+    unsigned short mUnknown8;
+    unsigned short mUnknownA;
+    unsigned char mRows[1];
 };
-
-
 
 struct Result_801AFD04 {
     int mUnknown0;
@@ -36,7 +46,7 @@ struct Buffer_801AFF74 {
 
 struct Slot_801B2450 {
     int mUnknown0;
-    unsigned char *mUnknown4;
+    RowBank_801AFE90 *mUnknown4;
 };
 
 struct WorkEntry_801B0B18 {
@@ -80,6 +90,12 @@ struct Key_801AE658 {
     unsigned short mId;
     unsigned char mUnknown2;
     unsigned char mUnknown3;
+};
+
+union EventWord_801AFBD8 {
+    int mWord;
+    Key_801AE658 mKey;
+    unsigned short mHalfwords[2];
 };
 
 struct Item_801AE3F4 {
@@ -175,9 +191,9 @@ extern unsigned int lbl_802F477C[6];
 extern unsigned short lbl_8037E794[32][2];
 extern int lbl_803EBB20;
 unsigned int fn_801B1934(void);
-int fn_801B22E0(Record_801AF75C *, int, int *, int *);
+int fn_801B22E0(RowBank_801AFE90 *, int, int *, int *);
 int fn_801B05E4(Work_801B10AC *, unsigned char *);
-char *fn_801B22B0(Record_801AF75C *, int);
+char *fn_801B22B0(RowBank_801AFE90 *, int);
 int fn_801B2648(unsigned int, int *);
 int fn_801B26D8(unsigned int, unsigned int, int *);
 int fn_801B2798(int, unsigned int);
@@ -881,18 +897,18 @@ void fn_801AF718(void)
 }
 
 
-char *fn_801AF75C(Record_801AF75C *p)
+char *fn_801AF75C(RowBank_801AFE90 *p)
 {
     return (char *)p + ((p->mUnknown5 * ((p->mUnknown4 & 127) + 2) + 15) & ~3);
 }
 
-char *fn_801AF780(Record_801AF75C *p)
+char *fn_801AF780(RowBank_801AFE90 *p)
 {
     char *result = fn_801AF75C(p);
     return result + (p->mUnknown4 & 127) * 4;
 }
 
-char *fn_801AF7B8(Record_801AF75C *p)
+char *fn_801AF7B8(RowBank_801AFE90 *p)
 {
     int size = 0;
     char *result = fn_801AF780(p);
@@ -902,7 +918,7 @@ char *fn_801AF7B8(Record_801AF75C *p)
     return result + size;
 }
 
-char *fn_801AF80C(Record_801AF75C *p)
+char *fn_801AF80C(RowBank_801AFE90 *p)
 {
     char *result = fn_801AF7B8(p);
     int size = p->mUnknown6;
@@ -1018,7 +1034,7 @@ void fn_801AFABC(Object_80266AF8 *p, int *a, int *b)
 void fn_801AFAD0(unsigned char *p, Record_801AF75C *record, unsigned char *values)
 {
     int *words = (int *)fn_801AF8B0(p);
-    int count = (signed char)record->mUnknown4;
+    int count = record->mUnknown4;
     for (int i = 0; i < count; i++) {
         if (fn_801AF84C(record, i)->mUnknown4 == 254) {
             int flags = fn_801AF84C(record, i)->mUnknown6;
@@ -1032,7 +1048,7 @@ void fn_801AFAD0(unsigned char *p, Record_801AF75C *record, unsigned char *value
 int fn_801AFB70(Record_801AF75C *record)
 {
     int found = 0;
-    int count = (signed char)record->mUnknown4;
+    int count = record->mUnknown4;
     for (int i = 0; i < count; i++) {
         if (fn_801AF84C(record, i)->mUnknown4 == 254) {
             found = 1;
@@ -1042,9 +1058,9 @@ int fn_801AFB70(Record_801AF75C *record)
     return found;
 }
 
-int fn_801AFBD8(unsigned char *p, Record_801AF75C *record, int *event, unsigned char *values)
+int fn_801AFBD8(unsigned char *p, Record_801AF75C *record, EventWord_801AFBD8 *event, unsigned char *values)
 {
-    int count = (signed char)record->mUnknown4;
+    int count = record->mUnknown4;
     int result = 1;
     for (int i = 0; i < count; i++) {
         int value = values[i];
@@ -1061,19 +1077,19 @@ int fn_801AFBD8(unsigned char *p, Record_801AF75C *record, int *event, unsigned 
                     int *words = (int *)fn_801AF8B0(p);
                     if (words[flags & 127] & mask) result = 1;
                 } else {
-                    Key_801AE658 key = *(Key_801AE658 *)event;
+                    Key_801AE658 key = event[0].mKey;
                     char *text;
                     if (fn_801AE7B4(&key, &text) && (unsigned char)text[flags] == value) result = 1;
                 }
             } else {
-                if (event[id] & mask) result = 1;
+                if (event[id].mWord & mask) result = 1;
             }
         }
         if (!result) break;
     }
     return result;
 }
-int fn_801AFD04(Key_801AE658 *key, int *event, Result_801AFD04 *out)
+int fn_801AFD04(Key_801AE658 *key, EventWord_801AFBD8 *event, Result_801AFD04 *out)
 {
     int mode = key->mUnknown3;
     int index = key->mUnknown2;
@@ -1088,13 +1104,13 @@ int fn_801AFD04(Key_801AE658 *key, int *event, Result_801AFD04 *out)
         out->mUnknown0 = (short)value;
         break;
     case 1:
-        out->mUnknown4 = fn_801B26D8(id, ((unsigned short *)event)[index * 2 + 1], &value);
+        out->mUnknown4 = fn_801B26D8(id, event[index].mHalfwords[1], &value);
         out->mUnknown0 = value;
         break;
     case 2:
         {
             int slot = fn_801B2648(id, &value);
-            if (fn_801B2798(slot, event[index])) out->mUnknown6 = ((unsigned short *)event)[index * 2 + 1];
+            if (fn_801B2798(slot, event[index].mWord)) out->mUnknown6 = event[index].mHalfwords[1];
             else value = -1;
             out->mUnknown4 = slot;
             out->mUnknown0 = value;
@@ -1104,7 +1120,7 @@ int fn_801AFD04(Key_801AE658 *key, int *event, Result_801AFD04 *out)
     return out->mUnknown0 >= 0;
 }
 
-void fn_801AFDFC(Record_801AF75C *p, int i)
+void fn_801AFDFC(RowBank_801AFE90 *p, int i)
 {
     int index = i / 8 + 1;
     unsigned char mask = ~(1 << (i % 8));
@@ -1118,18 +1134,18 @@ int fn_801AFE58(unsigned char *bits, int i)
     return bits[i / 8] & mask;
 }
 
-int fn_801AFE90(Result_801AFD04 *result, Record_801AF75C *p, int i)
+int fn_801AFE90(Result_801AFD04 *result, RowBank_801AFE90 *p, int i)
 {
     int index = result->mUnknown6;
     int found = 0;
-    if (((unsigned short *)p)[5] > index) {
+    if (p->mUnknownA > index) {
         i += p->mUnknown5 * index;
         found = fn_801AFE58((unsigned char *)fn_801AF80C(p), i);
     }
     return found;
 }
 
-int fn_801AFEE8(Result_801AFD04 *result, Record_801AF75C *p, int i)
+int fn_801AFEE8(Result_801AFD04 *result, RowBank_801AFE90 *p, int i)
 {
     int found = 1;
     if (i > p->mUnknown5) {
@@ -1156,7 +1172,7 @@ int fn_801AFF74(Buffer_801AFF74 *p, int value)
     return result;
 }
 
-int fn_801AFFA4(Record_801AF75C *a, Record_801AF75C *b, int *values)
+int fn_801AFFA4(Record_801AF75C *a, RowBank_801AFE90 *b, int *values)
 {
     int *words = (int *)fn_801AF75C(b);
     int count = b->mUnknown4 & 127;
@@ -1188,7 +1204,7 @@ int fn_801B0208(unsigned char *p, Work_801B10AC *work)
     int count = fn_801AF85C(p);
     for (int i = 0; i < count; i++) {
         int index = work->mEntries[i].mUnknown4;
-        Record_801AF75C *record = (Record_801AF75C *)lbl_803EBB00[index].mUnknown4;
+        RowBank_801AFE90 *record = lbl_803EBB00[index].mUnknown4;
         int a, b;
         if (fn_801B22E0(record, work->mValues[work->mEntries[i].mUnknownA], &a, &b)) {
             total += b;
@@ -1235,7 +1251,7 @@ void fn_801B04D4(unsigned char *p)
 
 int fn_801B052C(unsigned char *p, Record_801AF75C *record)
 {
-    int count = (signed char)record->mUnknown4;
+    int count = record->mUnknown4;
     int result = 1;
     for (int i = 0; i < count; i++) {
         if (fn_801AF84C(record, i)->mUnknown4 == 255) {
@@ -1325,11 +1341,11 @@ void fn_801B0B5C(Key_801AE658 *key, Work_801B10AC *work, unsigned char *p)
         int count = fn_801AF85C(p);
         for (int i = 0; i < count; i++) {
             Record_801AF75C *record = (Record_801AF75C *)fn_801AF928((char *)p, p + 8, i);
-            for (int j = 0; j < (signed char)record->mUnknown4; j++) {
+            for (int j = 0; j < record->mUnknown4; j++) {
                 if (fn_801AF84C(record, j)->mUnknown4 == 254) {
                     if (!(fn_801AF84C(record, j)->mUnknown6 & 128)) {
                         int slot = work->mEntries[i].mUnknown4;
-                        Record_801AF75C *bank = (Record_801AF75C *)lbl_803EBB00[slot].mUnknown4;
+                        RowBank_801AFE90 *bank = lbl_803EBB00[slot].mUnknown4;
                         char *values = fn_801B22B0(bank, work->mValues[work->mEntries[i].mUnknownA]);
                         if (values) {
                             int index = fn_801AF84C(record, j)->mUnknown6;
@@ -1612,14 +1628,14 @@ int fn_801B1DAC(unsigned char *p, int value)
     int result = 0;
     int count = fn_801B1D0C(p);
     for (int i = 0; i < count; i++) {
-        unsigned char *record = (unsigned char *)fn_801B1D20((char *)p, p + 8, i);
-        if (record[2] == value) {
+        Record_801AF75C *record = (Record_801AF75C *)fn_801B1D20((char *)p, p + 8, i);
+        if (record->mUnknown2 == value) {
             result = 1;
             break;
         }
-        int n = (signed char)record[4];
+        int n = record->mUnknown4;
         for (int j = 0; j < n; j++) {
-            if (fn_801B1CFC((Record_801AF75C *)record, j)->mUnknown4 == value) {
+            if (fn_801B1CFC(record, j)->mUnknown4 == value) {
                 result = 1;
                 break;
             }
@@ -1655,27 +1671,27 @@ int fn_801B2250(Item_801AE3F4 *item, int index, unsigned int value, unsigned int
     return value == a;
 }
 
-char *fn_801B22B0(Record_801AF75C *p, int i)
+char *fn_801B22B0(RowBank_801AFE90 *p, int i)
 {
     char *result = 0;
     if (i < p->mUnknown5) {
-        result = (char *)p + i * ((p->mUnknown4 & 127) + 2) + 14;
+        result = (char *)p->mRows + i * ((p->mUnknown4 & 127) + 2) + 2;
     }
     return result;
 }
 
-int fn_801B22E0(Record_801AF75C *p, int i, int *a, int *b)
+int fn_801B22E0(RowBank_801AFE90 *p, int i, int *a, int *b)
 {
     int result = 0;
     int count = p->mUnknown5;
     if (i < count) {
         int stride = (p->mUnknown4 & 127) + 2;
-        unsigned char *record = (unsigned char *)p + 12 + i * stride;
+        unsigned char *record = p->mRows + i * stride;
         int scale = (p->mUnknown7 + 1) << 8;
         int start = ((record[0] << 8) + record[1]) * scale;
         unsigned char *next = record + stride;
         int end;
-        if (i + 1 >= count) end = ((unsigned short *)p)[4];
+        if (i + 1 >= count) end = p->mUnknown8;
         else end = (next[0] << 8) + next[1];
         *a = start;
         *b = end * scale - start;
@@ -1684,18 +1700,18 @@ int fn_801B22E0(Record_801AF75C *p, int i, int *a, int *b)
     return result;
 }
 
-char *fn_801B23A0(Record_801AF75C *p)
+char *fn_801B23A0(RowBank_801AFE90 *p)
 {
     return (char *)p + ((p->mUnknown5 * ((p->mUnknown4 & 127) + 2) + 15) & ~3);
 }
 
-char *fn_801B23C4(Record_801AF75C *p)
+char *fn_801B23C4(RowBank_801AFE90 *p)
 {
     char *result = fn_801B23A0(p);
     return result + (p->mUnknown4 & 127) * 4;
 }
 
-char *fn_801B23FC(Record_801AF75C *p)
+char *fn_801B23FC(RowBank_801AFE90 *p)
 {
     int size = 0;
     char *result = fn_801B23C4(p);
@@ -1745,12 +1761,12 @@ int fn_801B2648(unsigned int id, int *out)
     if (lbl_803EBB00 && lbl_803EBB0C) {
         while (low <= high) {
             int mid = (low + high) / 2;
-            unsigned short *p = (unsigned short *)lbl_803EBB00[mid].mUnknown4;
-            if (id == p[0]) {
+            RowBank_801AFE90 *p = lbl_803EBB00[mid].mUnknown4;
+            if (id == p->mUnknown0) {
                 *out = lbl_803EBB00[mid].mUnknown0;
                 return (short)mid;
             }
-            if (id > p[0]) low = mid + 1;
+            if (id > p->mUnknown0) low = mid + 1;
             else high = mid - 1;
         }
     }
@@ -1764,12 +1780,12 @@ int fn_801B26D8(unsigned int id, unsigned int key, int *out)
     if (lbl_803EBB00 && lbl_803EBB0C) {
         while (low <= high) {
             int mid = (low + high) / 2;
-            unsigned short *p = (unsigned short *)lbl_803EBB00[mid].mUnknown4;
-            if (id == p[0] && key == p[1]) {
+            RowBank_801AFE90 *p = lbl_803EBB00[mid].mUnknown4;
+            if (id == p->mUnknown0 && key == p->mUnknown2) {
                 *out = lbl_803EBB00[mid].mUnknown0;
                 return (short)mid;
             }
-            if (id > p[0] || (id == p[0] && key > p[1])) low = mid + 1;
+            if (id > p->mUnknown0 || (id == p->mUnknown0 && key > p->mUnknown2)) low = mid + 1;
             else high = mid - 1;
         }
     }
@@ -1779,7 +1795,7 @@ int fn_801B2798(int i, unsigned int value)
 {
     int result = 0;
     if (lbl_803EBB00 && i >= 0) {
-        int limit = ((unsigned short *)lbl_803EBB00[i].mUnknown4)[5];
+        int limit = lbl_803EBB00[i].mUnknown4->mUnknownA;
         if (limit != 65535) {
             result = value < (unsigned int)limit;
         }
@@ -1797,15 +1813,15 @@ int fn_801B27E4(int id)
     return -1;
 }
 
-void fn_801B2828(Record_801AF75C *p, int value)
+void fn_801B2828(RowBank_801AFE90 *p, int value)
 {
     if (p->mUnknown6) {
         unsigned char *history = (unsigned char *)fn_801B23FC(p);
-        unsigned int index = history[0];
+        unsigned char index = history[0];
         if (index < p->mUnknown6) {
             history[index + 1] = value;
         }
-        index = (unsigned char)(index + 1);
+        index++;
         if (index >= p->mUnknown6) {
             index = 0;
         }
@@ -1813,7 +1829,7 @@ void fn_801B2828(Record_801AF75C *p, int value)
     }
 }
 
-int fn_801B2898(Record_801AF75C *p, int value)
+int fn_801B2898(RowBank_801AFE90 *p, int value)
 {
     int count = p->mUnknown6;
     int result = 0;
@@ -1844,7 +1860,7 @@ unsigned int fn_801B2918(unsigned int a, int b, int c)
 }
 
 
-void fn_801B2944(Record_801AF75C *p)
+void fn_801B2944(RowBank_801AFE90 *p)
 {
     unsigned char *bits = (unsigned char *)fn_801B23C4(p);
     int count = bits[0];
