@@ -3,6 +3,7 @@
 #include <dolphin/os.h>
 #include <dolphin/gba.h>
 #include <engine/fn_801F8014.h>
+#include "engine/cu_802821E8.h"
 
 extern int fn_801C96E4(const char *pName, int device);
 extern int fn_801C97F0(int handle);
@@ -35,15 +36,6 @@ typedef struct Node_803B795C
     short mUnknown00;
     unsigned short mUnknown02;
 } Node_803B795C;
-
-typedef struct Struct_803ED474
-{
-    char mUnknown00[4];
-    int mUnknown04;
-    int mUnknown08;
-    char mUnknown0C[12];
-    unsigned char mUnknown18;
-} Struct_803ED474;
 
 typedef struct Struct_803E990C
 {
