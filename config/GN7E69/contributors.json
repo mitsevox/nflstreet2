@@ -30148,6 +30148,21 @@
         "original_blob": "4e8d425869f0249927194a1f5c2788cf5d1e0c45",
         "integration_adjustment": "Pre-existing partial body from PR 750 becomes exact when PR 1075 compiles 0x8009FFD4-0x800A233C as one unit; the body is unchanged and the original source PR is retained."
       }
+    },
+    {
+      "source": "src/game/cu_80154638.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x801548EC"
+      ],
+      "provenance": {
+        "pull_request": 1085,
+        "merged_via": 1085,
+        "commit": "b30bd29f2b7c34696458e28923c8fa29de586d0d",
+        "introduced_blob": "6fd46f2dcc2183964f1707067ba91021c91aae6f"
+      }
     }
   ],
   "target": "GN7E69",
