@@ -95,9 +95,11 @@ Anim_801BAB34 *fn_801BAB34(AnimFileFormat_t *pFile, int anim)
 int fn_801BAB48(AnimFileFormat_t *pFile, int state)
 {
     unsigned int i;
+    unsigned int count = pFile->states->mCount;
+    State_801BAB48 *pState = pFile->states->mStates;
 
-    for (i = 0; i < pFile->states->mCount; i++) {
-        if (pFile->states->mStates[i].mId == state)
+    for (i = 0; i < count; i++) {
+        if (pState[i].mId == state)
             return i;
     }
     return -1;
