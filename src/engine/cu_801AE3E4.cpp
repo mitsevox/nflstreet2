@@ -1708,17 +1708,17 @@ char *fn_801B23FC(Record_801AF75C *p)
 void fn_801B2450(void)
 {
     lbl_803EBB00 = 0;
-    lbl_803EBB04 = 0;
     lbl_803EBB08 = 0;
     lbl_803EBB0C = 0;
+    lbl_803EBB04 = 0;
 }
 
 void fn_801B2468(void)
 {
     lbl_803EBB00 = 0;
-    lbl_803EBB04 = 0;
     lbl_803EBB08 = 0;
     lbl_803EBB0C = 0;
+    lbl_803EBB04 = 0;
 }
 
 int fn_801B2480(int count)
