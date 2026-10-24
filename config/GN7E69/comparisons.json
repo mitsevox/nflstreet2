@@ -16163,28 +16163,63 @@
     {
       "source": "src/game/cu_80134E24.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv source unit, overlay, storage and behavior rows for cu_80134E24; author-only scoped comparisons, original assembly retained.",
+      "evidence": "evidence.tsv source unit, overlay, storage and behavior rows for cu_80134E24; author-only scoped comparisons, original assembly retained. Now starts at 0x801344A0: fn_801344A0-fn_80134C20, .rodata 0x8029FD38-0x8029FD88 and the .data table 0x802DB0F4-0x802DB1D4 moved here from src/game/cu_80132630.cpp (evidence.tsv unit row 0x801344A0-0x80136B1C).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80134E24",
+          "start": "0x801344A0",
           "end": "0x80136B1C"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029FD88",
+          "start": "0x8029FD38",
           "end": "0x8029FE28"
         },
         {
           "section": ".data",
           "placement": ".data4",
-          "start": "0x802DB1D4",
+          "start": "0x802DB0F4",
           "end": "0x802DB280"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_801344A0",
+          "start": "0x801344A0",
+          "end": "0x801344F8"
+        },
+        {
+          "symbol": "fn_801344F8",
+          "start": "0x801344F8",
+          "end": "0x8013474C"
+        },
+        {
+          "symbol": "fn_8013474C",
+          "start": "0x8013474C",
+          "end": "0x801347D4"
+        },
+        {
+          "symbol": "fn_801347D4",
+          "start": "0x801347D4",
+          "end": "0x801348F0"
+        },
+        {
+          "symbol": "fn_801348F0",
+          "start": "0x801348F0",
+          "end": "0x80134AD0"
+        },
+        {
+          "symbol": "fn_80134AD0",
+          "start": "0x80134AD0",
+          "end": "0x80134C20"
+        },
+        {
+          "symbol": "fn_80134C20",
+          "start": "0x80134C20",
+          "end": "0x80134E24"
+        },
         {
           "symbol": "fn_80134E24",
           "start": "0x80134E24",
@@ -32958,25 +32993,19 @@
     {
       "source": "src/game/cu_80132630.cpp",
       "profile": "game_cpp",
-      "evidence": "Target32-body laneC explicit code/data/layout records, provisional source grouping; complete comparisons remain unlinked. fn_80132630 and its literals 0x8029FC18-0x8029FC28 moved to the linked src/game/cu_8013141C.cpp (evidence.tsv unit row 0x8013141C-0x801327F4); this grouping now starts at 0x801327F4.",
+      "evidence": "Target32-body laneC explicit code/data/layout records, provisional source grouping; complete comparisons remain unlinked. fn_80132630 and its literals 0x8029FC18-0x8029FC28 moved to the linked src/game/cu_8013141C.cpp (evidence.tsv unit row 0x8013141C-0x801327F4); this grouping now starts at 0x801327F4. fn_801344A0-fn_80134C20, their .rodata 0x8029FD38-0x8029FD88 and the .data table 0x802DB0F4-0x802DB1D4 moved to src/game/cu_80134E24.cpp (evidence.tsv unit row 0x801344A0-0x80136B1C); this grouping now ends at 0x801344A0.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801327F4",
-          "end": "0x80134E24"
+          "end": "0x801344A0"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x8029FC28",
-          "end": "0x8029FD88"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802DB0F4",
-          "end": "0x802DB1D4"
+          "end": "0x8029FD38"
         }
       ],
       "functions": [
@@ -33034,41 +33063,6 @@
           "symbol": "fn_801343AC",
           "start": "0x801343AC",
           "end": "0x801344A0"
-        },
-        {
-          "symbol": "fn_801344A0",
-          "start": "0x801344A0",
-          "end": "0x801344F8"
-        },
-        {
-          "symbol": "fn_801344F8",
-          "start": "0x801344F8",
-          "end": "0x8013474C"
-        },
-        {
-          "symbol": "fn_8013474C",
-          "start": "0x8013474C",
-          "end": "0x801347D4"
-        },
-        {
-          "symbol": "fn_801347D4",
-          "start": "0x801347D4",
-          "end": "0x801348F0"
-        },
-        {
-          "symbol": "fn_801348F0",
-          "start": "0x801348F0",
-          "end": "0x80134AD0"
-        },
-        {
-          "symbol": "fn_80134AD0",
-          "start": "0x80134AD0",
-          "end": "0x80134C20"
-        },
-        {
-          "symbol": "fn_80134C20",
-          "start": "0x80134C20",
-          "end": "0x80134E24"
         }
       ]
     },
