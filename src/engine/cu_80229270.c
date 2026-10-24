@@ -38,7 +38,7 @@ int fn_8022F384(int key);
 
 extern unsigned char lbl_802AEF11[];
 extern int fn_802297D8(void *p, int tag);
-extern int fn_8022D8F8(int a, int b, int c);
+extern int fn_8022D8F8(int a, int *p, int c);
 extern int fn_8022DB20(void);
 extern int fn_8022F428(int key);
 extern char lbl_802B56F4[];
@@ -1094,7 +1094,7 @@ int fn_8022D874(int a, int b, int c, int key)
     return result;
 }
 
-int fn_8022DA44(int a, int b, int c, int d, int e)
+int fn_8022DA44(int a, int *b, int c, int *d, int e)
 {
     fn_8022D8F8(a, b, e);
     fn_8022D8F8(c, d, e);

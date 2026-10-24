@@ -298,7 +298,7 @@ void fn_80235C4C(int a, Object_80235588 *p, float value)
     p->mUnknown72 = value;
 }
 
-void fn_80235C90(Object_80235588 *p, float r, float g, float b, float a)
+void fn_80235C90(Object_80235588 *p, int unused, float r, float g, float b, float a)
 {
     p->mUnknown0 |= 0x20000;
     p->mUnknown76[0] = (unsigned char)(r * 255.0f);
@@ -1094,7 +1094,7 @@ int fn_80238388(const int *pDesc)
     return index;
 }
 
-void fn_80238420(void)
+void fn_80238420(int index)
 {
 }
 
@@ -1143,7 +1143,7 @@ void fn_80238570(int index, int advance)
     }
 }
 
-int fn_80238604(int index)
+unsigned int fn_80238604(int index)
 {
     return lbl_803A3A14.mppUnknown8[index]->mUnknown4;
 }
