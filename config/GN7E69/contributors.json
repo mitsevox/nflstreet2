@@ -24501,8 +24501,8 @@
       "provenance": {
         "pull_request": 1012,
         "merged_via": 1015,
-        "commit": "acc635718483d984b4b61189de5eb499297e7a3d",
-        "introduced_blob": "0e9011bc496e5bd13c00c188fbd16f8426d5b7a0",
+        "commit": "66673c70c607f10a80392d872458ed8fe12fcd4c",
+        "introduced_blob": "a5caa408f0e48dcb16b6f114938d3b807bcba07b",
         "original_commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
         "original_blob": "a77d5e49d3a39ec1823d4c3067e6627a906849a3",
         "integration_adjustment": "PR 1090 refines existing source to exact and preserves original contributor credit; promotion and handler-table completion do not transfer source authorship."
