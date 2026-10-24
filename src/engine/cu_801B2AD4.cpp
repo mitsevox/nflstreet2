@@ -62,15 +62,6 @@ public:
     unsigned char mUnknown64[4];
 };
 
-extern "C" {
-extern Allocator *lbl_803EBB68;
-AllocParams lbl_8037E814;
-extern void (*lbl_803EBB2C)(int, int);
-extern void (*lbl_803EBB30)(int, int);
-extern void (*lbl_803EBB34)(int, int);
-
-}
-
 struct Header_801B2CDC {
     unsigned char mUnknown0[15];
     unsigned char mUnknownF;
@@ -155,23 +146,7 @@ public:
     unsigned char mUnknown0[12];
 };
 
-extern "C" {
-extern int lbl_803EBB24;
-extern Bank_801B3480 *lbl_803EBB28;
-extern unsigned char lbl_803EBB38;
-extern unsigned char lbl_803EBB39;
-extern unsigned char lbl_803EBB3B;
-extern unsigned int lbl_803EBB3C;
-extern int lbl_803EBB40;
-extern int lbl_803EBB48;
-extern int lbl_803EBB4C;
-extern int lbl_803EBB50;
-extern int lbl_803EBB54;
-extern Bank_801B3480 *lbl_802F47D0[4];
-extern Class_803EBB60 *lbl_803EBB60;
-void fn_801B3724(void);
-
-}struct Event_801B845C {
+struct Event_801B845C {
     unsigned char mUnknown0[4];
     union {
         unsigned int mUnknown4;
@@ -204,70 +179,86 @@ struct Record_801B6780 {
     short mUnknown0;
 };
 struct Data_801E0DF0;
-extern "C" {
-int fn_801B3FE0(int flags, Data_801E0DF0 *data);
-
-}
-
-extern "C" int fn_801B7880(Sequence_801B84E4 *p, Event_801B845C *entry);
-
-extern "C" unsigned int lbl_802F481C[6];
 
 class Class_803EBB64 {
 public:
     virtual ~Class_803EBB64();
 };
-extern "C" Class_803EBB64 *lbl_803EBB64;
-extern "C" int fn_801B2F28(int flags);
-extern "C" void fn_8026D0AC(void);
-extern "C" void fn_8026D0EC(void);
 
-extern "C" int fn_801B2AD4(void);
-extern "C" int fn_801B2B58(void);
-extern "C" void *fn_801B2C40(int size);
-extern "C" void fn_801B2C94(void *p);
-extern "C" void fn_801B2F18(void (*a)(int, int), void (*b)(int, int), void (*c)(int, int));
-extern "C" int fn_801B3234(int flags);
-extern "C" unsigned int fn_801B343C(void);
-extern "C" unsigned int fn_801B3480(unsigned int index, unsigned int flags);
-extern "C" int fn_801B34DC(unsigned int flags);
-extern "C" int fn_801B3568(void);
-extern "C" void fn_801B39B8(int mode);
-extern "C" void fn_801B3A88(void);
-extern "C" void fn_801B3AAC(void);
-extern "C" int fn_801B3AD0(int flags, Data_801E0DF0 *data, int value);
-extern "C" int fn_801B3D28(int flags, Data_801E0DF0 *data, int value);
-extern "C" int fn_801B3F6C(int flags, Data_801E0DF0 *data);
-extern "C" Node_801B3FE0 *fn_801B4174(unsigned int flags);
-extern "C" void fn_801B421C(void);
-extern "C" int fn_801B42C0(unsigned int flags);
-extern "C" void fn_801B4334(Node_801B3FE0 *p, int state);
-extern "C" int fn_801B43CC(int state);
-extern "C" void fn_801B4824(Node_801B3FE0 *p, int value);
-extern "C" void fn_801B4960(Node_801B3FE0 *p, int a, int b, int c);
-extern "C" void fn_801B49C4(Node_801B3FE0 *p, int a, int b, int c);
-extern "C" int fn_801B57C0(Node_801B3FE0 *p, int index);
-extern "C" int fn_801B58F0(Node_801B3FE0 *p);
-extern "C" int fn_801B59B0(int flags, int value);
-extern "C" void fn_801B5AB0(int flags, unsigned char value);
-extern "C" int fn_801B5BCC(int flags, Info_801E1084 *info);
-extern "C" int fn_801B5C88(Node_801B3FE0 *p, void *info);
-extern "C" void fn_801B5CD0(int flags);
-extern "C" int fn_801B5DB4(Node_801B3FE0 *p);
-extern "C" void fn_801B5E10(const char *format, ...);
-extern "C" int fn_801B5E5C(int flags, Sequence_801B84E4 *sequence);
-extern "C" void fn_801B6334(Sequence_801B84E4 *p);
-extern "C" void fn_801B63F0(Entry_801B63F0 *p, int value);
-extern "C" void fn_801B6460(void);
-extern "C" int fn_801B64C0(int index);
-extern "C" int fn_801B6780(int index);
-extern "C" int fn_801B6CB4(Node_801B3FE0 *p);
-extern "C" int fn_801B6D20(int count, int value, Record_801B6D20 *entries);
-extern "C" int fn_801B7178(int index, int value);
-extern "C" unsigned int fn_801B7778(void);
-extern "C" Event_801B845C *fn_801B845C(Event_801B845C *p, int state, Event_801B845C *end);
-extern "C" int fn_801B84E4(Event_801B845C *p, Sequence_801B84E4 *sequence);
-extern "C" int fn_801B8580(Node_801B3FE0 *p);
+extern "C" {
+extern Allocator *lbl_803EBB68;
+AllocParams lbl_8037E814;
+extern void (*lbl_803EBB2C)(int, int);
+extern void (*lbl_803EBB30)(int, int);
+extern void (*lbl_803EBB34)(int, int);
+extern int lbl_803EBB24;
+extern Bank_801B3480 *lbl_803EBB28;
+extern unsigned char lbl_803EBB38;
+extern unsigned char lbl_803EBB39;
+extern unsigned char lbl_803EBB3B;
+extern unsigned int lbl_803EBB3C;
+extern int lbl_803EBB40;
+extern int lbl_803EBB48;
+extern int lbl_803EBB4C;
+extern int lbl_803EBB50;
+extern int lbl_803EBB54;
+extern Bank_801B3480 *lbl_802F47D0[4];
+extern Class_803EBB60 *lbl_803EBB60;
+void fn_801B3724(void);
+int fn_801B3FE0(int flags, Data_801E0DF0 *data);
+int fn_801B7880(Sequence_801B84E4 *p, Event_801B845C *entry);
+extern unsigned int lbl_802F481C[6];
+extern Class_803EBB64 *lbl_803EBB64;
+int fn_801B2F28(int flags);
+void fn_8026D0AC(void);
+void fn_8026D0EC(void);
+int fn_801B2AD4(void);
+int fn_801B2B58(void);
+void *fn_801B2C40(int size);
+void fn_801B2C94(void *p);
+void fn_801B2F18(void (*a)(int, int), void (*b)(int, int), void (*c)(int, int));
+int fn_801B3234(int flags);
+unsigned int fn_801B343C(void);
+unsigned int fn_801B3480(unsigned int index, unsigned int flags);
+int fn_801B34DC(unsigned int flags);
+int fn_801B3568(void);
+void fn_801B39B8(int mode);
+void fn_801B3A88(void);
+void fn_801B3AAC(void);
+int fn_801B3AD0(int flags, Data_801E0DF0 *data, int value);
+int fn_801B3D28(int flags, Data_801E0DF0 *data, int value);
+int fn_801B3F6C(int flags, Data_801E0DF0 *data);
+Node_801B3FE0 *fn_801B4174(unsigned int flags);
+void fn_801B421C(void);
+int fn_801B42C0(unsigned int flags);
+void fn_801B4334(Node_801B3FE0 *p, int state);
+int fn_801B43CC(int state);
+void fn_801B4824(Node_801B3FE0 *p, int value);
+void fn_801B4960(Node_801B3FE0 *p, int a, int b, int c);
+void fn_801B49C4(Node_801B3FE0 *p, int a, int b, int c);
+int fn_801B57C0(Node_801B3FE0 *p, int index);
+int fn_801B58F0(Node_801B3FE0 *p);
+int fn_801B59B0(int flags, int value);
+void fn_801B5AB0(int flags, unsigned char value);
+int fn_801B5BCC(int flags, Info_801E1084 *info);
+int fn_801B5C88(Node_801B3FE0 *p, void *info);
+void fn_801B5CD0(int flags);
+int fn_801B5DB4(Node_801B3FE0 *p);
+void fn_801B5E10(const char *format, ...);
+int fn_801B5E5C(int flags, Sequence_801B84E4 *sequence);
+void fn_801B6334(Sequence_801B84E4 *p);
+void fn_801B63F0(Entry_801B63F0 *p, int value);
+void fn_801B6460(void);
+int fn_801B64C0(int index);
+int fn_801B6780(int index);
+int fn_801B6CB4(Node_801B3FE0 *p);
+int fn_801B6D20(int count, int value, Record_801B6D20 *entries);
+int fn_801B7178(int index, int value);
+unsigned int fn_801B7778(void);
+Event_801B845C *fn_801B845C(Event_801B845C *p, int state, Event_801B845C *end);
+int fn_801B84E4(Event_801B845C *p, Sequence_801B84E4 *sequence);
+int fn_801B8580(Node_801B3FE0 *p);
+}
 
 extern "C" int fn_801B2AD4(void)
 {
@@ -746,13 +737,11 @@ extern "C" int fn_801B5BCC(int flags, Info_801E1084 *info)
     if (!acquired)
         return -18;
     int result = -8;
-    {
-        Node_801B3FE0 *p = fn_801B4174(flags);
-        if (p && fn_801B34DC(flags))
-            result = fn_801B5C88(p, info);
-        lbl_803EBB28 = 0;
-        --lbl_803EBB24;
-    }
+    Node_801B3FE0 *p = fn_801B4174(flags);
+    if (p && fn_801B34DC(flags))
+        result = fn_801B5C88(p, info);
+    lbl_803EBB28 = 0;
+    --lbl_803EBB24;
     return result;
 }
 

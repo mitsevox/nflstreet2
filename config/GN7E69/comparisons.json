@@ -53920,7 +53920,7 @@
     {
       "source": "src/engine/cu_801B2AD4.cpp",
       "profile": "engine_c",
-      "evidence": "Partial source within the retained provisional pathauthor survey grouping; complete registered bodies and naturally emitted allocator-configuration initialization/storage are measured. Original bytes remain linked; no original translation-unit boundary is claimed.",
+      "evidence": "Partial source within the retained provisional pathauthor survey grouping; complete registered bodies and naturally emitted allocator-configuration initialization/storage are measured. Original bytes remain linked. The static-init pair 0x801B33DC-0x801B343C and .ctors word 0x80289B40 establish 0x801B343C as an observed original-file-end anchor (P52). The survey extent contains at least two original translation units. The configuration object and .ctors word belong to the part ending at 0x801B343C. One survey source is retained; the internal edge 0x801B343C is provisional; redo with neighbours (P55). The alternative is to split the comparison source at 0x801B343C and assign the configuration storage and .ctors placement to the first part.",
       "sections": [
         {
           "section": ".text",
