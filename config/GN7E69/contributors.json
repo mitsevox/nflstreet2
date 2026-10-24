@@ -30030,6 +30030,21 @@
         "original_blob": "79d87fc491d33753e8be42672d52c8462d70f673",
         "integration_adjustment": "Preserve the original contributor/source PR 902 for these pre-existing partial bodies. PR 1074 refines them to exact without transferring original source credit; original accepted-main source and reviewed PR evidence retained. Current source will be re-pinned to the final integrated blob for squash verification."
       }
+    },
+    {
+      "source": "src/game/cu_801551F8.cpp",
+      "contributors": [
+        "lifewillbeokay"
+      ],
+      "functions": [
+        "0x801552C4"
+      ],
+      "provenance": {
+        "pull_request": 1083,
+        "merged_via": 1083,
+        "commit": "e5709ae1e6e60f475cd2c8e440b864f8a57fa378",
+        "introduced_blob": "4af417926d1202f6c019e9e5b387dc2f044d00bf"
+      }
     }
   ],
   "target": "GN7E69",
