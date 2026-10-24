@@ -12487,7 +12487,7 @@
     {
       "source": "src/game/cu_8004A2F4.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0\u20130x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of candidate cu_8004BA44): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names.",
+      "evidence": "evidence.tsv unit row src/game/cu_8004A2F4.cpp and animation continuation type/source-form/data rows. In-place unlinked full-body comparisons retain the original drafting prefix, add30 bodies through0x8004DF68 and measure the complete provisional parent readonlycontext0x8028D7A0\u20130x8028DD70, including unrecovered suffix storage. Original assembly remains linked; neutral identifiers and contextual bounds do not establish original source ownership. Physics continuation 0x8004DF68-0x800504EC: 25 complete ordinary bodies; original foreign constructors and external storage remain linked. Complete provisional surrounding readonly context retained, including unrecovered and cross-file items. Physics tail 0x800504EC-0x80051E14 (rest of former candidate cu_8004BA44, now part of the src/game/cu_8004A2F4.cpp unit row): sixteen complete ordinary bodies, including the seven previously unregistered bodies from issue #1021; remaining bodies stay original. The associated source-form rows record the added contracts and retained unknowns. Issue #1062 adds the ordinary time update and its required naturally emitted deleting destructor. Genuine compiler-emitted table and literal placement remain measured within the complete existing data context; external constructor/member bindings are inferred, not recovered names.",
       "sections": [
         {
           "section": ".text",
@@ -36726,22 +36726,27 @@
     {
       "source": "src/game/cu_800A0134.cpp",
       "profile": "game_cpp",
-      "evidence": "#746 scoped complete excluded bodies; original source grouping provisional; full readonly literal context disclosed. The Class_80297AB8 vtable is no longer emitted here: its base entries (0x800A03B8, 0x800A0408, 0x800A05E8) now live in src/game/cu_8008E978.cpp, which emits _vt.14Class_80297AB8 at its compiled .rodata +0x310 instead of the target's +0x78",
+      "evidence": "One comparison unit of the provisional cu_8008E978 grouping (one original file) for the complete bodies 0x8009FFD4-0x800A233C, merged from the former fragments src/game/cu_8009FFD4.cpp, cu_800A0134.cpp (#746 scoped complete excluded bodies) and cu_800A1620.cpp: compiled together their readonly slice 0x802964F0-0x80296630 measures exact, with the unsigned-conversion double at its target 8-byte boundary 0x802965B0. The Class_80297AB8 vtable is not emitted here: its base entries (0x800A03B8, 0x800A0408, 0x800A05E8) live in src/game/cu_8008E978.cpp, which emits _vt.14Class_80297AB8 at its compiled .rodata +0x310 instead of the target's +0x78. No original file edge is claimed at either end.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800A0134",
-          "end": "0x800A1620"
+          "start": "0x8009FFD4",
+          "end": "0x800A233C"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x80296594",
-          "end": "0x802965CC"
+          "start": "0x802964F0",
+          "end": "0x80296630"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_8009FFD4",
+          "start": "0x8009FFD4",
+          "end": "0x800A0134"
+        },
         {
           "symbol": "fn_800A0134",
           "start": "0x800A0134",
@@ -36766,6 +36771,46 @@
           "symbol": "fn_800A0EB8",
           "start": "0x800A0EB8",
           "end": "0x800A1470"
+        },
+        {
+          "symbol": "fn_800A1620",
+          "start": "0x800A1620",
+          "end": "0x800A16C8"
+        },
+        {
+          "symbol": "fn_800A1738",
+          "start": "0x800A1738",
+          "end": "0x800A1A58"
+        },
+        {
+          "symbol": "fn_800A1C74",
+          "start": "0x800A1C74",
+          "end": "0x800A1FEC"
+        },
+        {
+          "symbol": "fn_800A1FEC",
+          "start": "0x800A1FEC",
+          "end": "0x800A20D0"
+        },
+        {
+          "symbol": "fn_800A21BC",
+          "start": "0x800A21BC",
+          "end": "0x800A2228"
+        },
+        {
+          "symbol": "fn_800A2228",
+          "start": "0x800A2228",
+          "end": "0x800A227C"
+        },
+        {
+          "symbol": "fn_800A227C",
+          "start": "0x800A227C",
+          "end": "0x800A22E4"
+        },
+        {
+          "symbol": "fn_800A22E4",
+          "start": "0x800A22E4",
+          "end": "0x800A233C"
         }
       ]
     },
@@ -43229,7 +43274,7 @@
     {
       "source": "src/engine/cu_801C1D54.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801C1D54-0x801C1D98 (src/engine/cu_801C1D54.c, auxram.c), function rows and compiler rows engine_c_fastmath (0x801B9D00-0x801C1D84 and 0x801C1D84-0x801C1D98); the transfer functions 0x801C1D98-0x801C1F54 are not registered. Comparison only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801C1D54-0x801C1F54 (src/engine/cu_801C1D54.c, auxram.c), function rows and compiler rows engine_c_fastmath (0x801B9D00-0x801C1D84 and 0x801C1D84-0x801C1D98); the transfer functions 0x801C1D98-0x801C1F54 are not registered. Comparison only; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -44387,7 +44432,7 @@
     {
       "source": "src/engine/t3db_io.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801FA870-0x801FB0F8 (src/engine/t3db_io.c): first run of the original t3db_io.c (NASCAR 2005 symbol table), _TDbIOInitCRCTable .. _TDbIOReadTableRow, and its .data CRC table 0x802F9548-0x802F9948. Stops before 0x801FB0F8 (_TDbIOReadTableNew, no source yet). Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x801FA870-0x801FC9D4 (src/engine/t3db_io.c): first run of the original t3db_io.c (NASCAR 2005 symbol table), _TDbIOInitCRCTable .. _TDbIOReadTableRow, and its .data CRC table 0x802F9548-0x802F9948. Stops before 0x801FB0F8 (_TDbIOReadTableNew, no source yet). Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -44438,7 +44483,7 @@
     {
       "source": "src/engine/cu_801FB9D0.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801FB9D0-0x801FBFEC (src/engine/cu_801FB9D0.c): second run of the original t3db_io.c (NASCAR 2005 symbol table), _TDbIOReadExprNode .. _TDbIOWriteTable, split because 0x801FB0F8 and 0x801FB5C0 before it and 0x801FBFEC after it have no source yet. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x801FA870-0x801FC9D4 (src/engine/t3db_io.c; this source covers 0x801FB9D0-0x801FBFEC as src/engine/cu_801FB9D0.c): second run of the original t3db_io.c (NASCAR 2005 symbol table), _TDbIOReadExprNode .. _TDbIOWriteTable, split because 0x801FB0F8 and 0x801FB5C0 before it and 0x801FBFEC after it have no source yet. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -44473,7 +44518,7 @@
     {
       "source": "src/engine/cu_801FC5FC.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801FC5FC-0x801FC9D4 (src/engine/cu_801FC5FC.c): last run of the original t3db_io.c (NASCAR 2005 symbol table), _TDbIOSaveDatabase and _TDbIOCRC32, ending where T3DB_Compiler.c begins; split because 0x801FBFEC (_TDbIOLoadDatabase) has no source yet. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x801FA870-0x801FC9D4 (src/engine/t3db_io.c; this source covers 0x801FC5FC-0x801FC9D4 as src/engine/cu_801FC5FC.c): last run of the original t3db_io.c (NASCAR 2005 symbol table), _TDbIOSaveDatabase and _TDbIOCRC32, ending where T3DB_Compiler.c begins; split because 0x801FBFEC (_TDbIOLoadDatabase) has no source yet. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -44693,7 +44738,7 @@
     {
       "source": "src/engine/T3DB_Lexer.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x802009B0-0x80200DD4 (src/engine/T3DB_Lexer.c): first function of the original T3DB_Lexer.c (NASCAR 2005 symbol table), T3DB_Lexer_GetTokens. Stops before 0x80200DD4 (T3DB_Lexer_Number, no source yet). Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x802009B0-0x80201D94 (src/engine/T3DB_Lexer.c): first function of the original T3DB_Lexer.c (NASCAR 2005 symbol table), T3DB_Lexer_GetTokens. Stops before 0x80200DD4 (T3DB_Lexer_Number, no source yet). Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -44713,7 +44758,7 @@
     {
       "source": "src/engine/cu_80201C70.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x80201C70-0x80201D94 (src/engine/cu_80201C70.c): last function of the original T3DB_Lexer.c (NASCAR 2005 symbol table), T3DB_Lexer_StringLiteral, split from src/engine/T3DB_Lexer.c because 0x80200DD4 and 0x80201030 have no source yet. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x802009B0-0x80201D94 (src/engine/T3DB_Lexer.c; this source covers 0x80201C70-0x80201D94 as src/engine/cu_80201C70.c): last function of the original T3DB_Lexer.c (NASCAR 2005 symbol table), T3DB_Lexer_StringLiteral, split from src/engine/T3DB_Lexer.c because 0x80200DD4 and 0x80201030 have no source yet. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -44873,7 +44918,7 @@
     {
       "source": "src/engine/t3db_expr.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x80203754-0x80204EF8 (src/engine/t3db_expr.c): first run of the original t3db_expr.c (NASCAR 2005 symbol table), its .rodata 0x802B1AF8-0x802B1B90 and .data operator grid 0x802F9948-0x802F9B78. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x80203754-0x80205754 (src/engine/t3db_expr.c): first run of the original t3db_expr.c (NASCAR 2005 symbol table), its .rodata 0x802B1AF8-0x802B1B90 and .data operator grid 0x802F9948-0x802F9B78. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -45275,7 +45320,7 @@
     {
       "source": "src/engine/cu_802055CC.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x802055CC-0x80205754 (src/engine/cu_802055CC.c): last two functions of the original t3db_expr.c (NASCAR 2005 symbol table), split from src/engine/t3db_expr.c because 0x80204EF8 has no source yet. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x80203754-0x80205754 (src/engine/t3db_expr.c; this source covers 0x802055CC-0x80205754 as src/engine/cu_802055CC.c): last two functions of the original t3db_expr.c (NASCAR 2005 symbol table), split from src/engine/t3db_expr.c because 0x80204EF8 has no source yet. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -45300,7 +45345,7 @@
     {
       "source": "src/engine/t3db_query.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x80205754-0x80205DB8 (src/engine/t3db_query.c): first six functions of the original t3db_query.c (NASCAR 2005 symbol table); 0x80205DB8 has no source yet. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x80205754-0x8020B564 (src/engine/t3db_query.c): first six functions of the original t3db_query.c (NASCAR 2005 symbol table); 0x80205DB8 has no source yet. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -45345,7 +45390,7 @@
     {
       "source": "src/engine/cu_8020651C.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x8020651C-0x80207448 (src/engine/cu_8020651C.c): ten functions of the original t3db_query.c (NASCAR 2005 symbol table) between _TDbQryPrepComplexFilter 0x80205DB8 and _TDbQryFindJoinColumn 0x80207448, which have no source yet, plus the file's 32-byte .rodata 0x802B1B90-0x802B1BB0 (default column definitions copied by 0x80206EB8). 0x802067D4 is a same-size partial. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x80205754-0x8020B564 (src/engine/t3db_query.c; this source covers 0x8020651C-0x80207448 as src/engine/cu_8020651C.c): ten functions of the original t3db_query.c (NASCAR 2005 symbol table) between _TDbQryPrepComplexFilter 0x80205DB8 and _TDbQryFindJoinColumn 0x80207448, which have no source yet, plus the file's 32-byte .rodata 0x802B1B90-0x802B1BB0 (default column definitions copied by 0x80206EB8). 0x802067D4 is a same-size partial. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -45416,7 +45461,7 @@
     {
       "source": "src/engine/cu_802075F4.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x802075F4-0x8020840C (src/engine/cu_802075F4.c): the last seven E5 functions of the original t3db_query.c (NASCAR 2005 symbol table), after _TDbQryFindJoinColumn 0x80207448, which has no source yet; the file continues into the E6 range. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x80205754-0x8020B564 (src/engine/t3db_query.c; this source covers 0x802075F4-0x8020840C as src/engine/cu_802075F4.c): the last seven E5 functions of the original t3db_query.c (NASCAR 2005 symbol table), after _TDbQryFindJoinColumn 0x80207448, which has no source yet; the file continues into the E6 range. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -49469,7 +49514,7 @@
     {
       "source": "src/engine/cu_801C20F0.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C20F0-0x801C289C (src/engine/cu_801C20F0.c, sprintf.c), its compiler row and function rows and the exact data row for its .rodata 0x802AF018-0x802AF050. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801C20F0-0x801C2EB4 (src/engine/cu_801C20F0.c, sprintf.c), its compiler row and function rows and the exact data row for its .rodata 0x802AF018-0x802AF050. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -50813,7 +50858,7 @@
     {
       "source": "src/engine/cu_801CDB5C.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CDB5C-0x801CE138 (src/engine/cu_801CDB5C.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF4D0-0x802AF4D4. Draft comparisons only; the LLFont statics 0x801CD79C/0x801CD964, the render state 0x803E7600, the quad buffer 0x803E763C, the TLUT tables 0x80383D20/0x80383D40 and objects 0x80383D60/0x80383D80, and the matrix/GX/heap helpers stay external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801CD79C-0x801CE138 (src/engine/cu_801CDB5C.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF4D0-0x802AF4D4. Draft comparisons only; the LLFont statics 0x801CD79C/0x801CD964, the render state 0x803E7600, the quad buffer 0x803E763C, the TLUT tables 0x80383D20/0x80383D40 and objects 0x80383D60/0x80383D80, and the matrix/GX/heap helpers stay external; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -51231,7 +51276,7 @@
     {
       "source": "src/engine/cu_801CF98C.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CF98C-0x801CFF34 (src/engine/cu_801CF98C.c, llangle.c), its compiler row and function rows and the exact data row for its .rodata 0x802AF548-0x802AF5D0; the paired-single assembly routine 0x801CFC58-0x801CFCCC is a gap of this comparison. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801CF944-0x801CFF34 (src/engine/cu_801CF98C.c, llangle.c), its compiler row and function rows and the exact data row for its .rodata 0x802AF548-0x802AF5D0; the paired-single assembly routine 0x801CFC58-0x801CFCCC is a gap of this comparison. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -51538,7 +51583,7 @@
     {
       "source": "src/engine/cu_8020840C.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x8020840C-0x8020B564 (src/engine/cu_8020840C.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 8 drafted bodies, partial: 0x8020A660. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x80205754-0x8020B564 (src/engine/t3db_query.c; this source covers 0x8020840C-0x8020B564 as src/engine/cu_8020840C.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows. 8 drafted bodies, partial: 0x8020A660. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -53125,32 +53170,6 @@
       ]
     },
     {
-      "source": "src/game/cu_8009FFD4.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_8009FFD4 and the literal-pool slice 0x802964F0-0x80296594 they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. No original file boundary or whole-unit promotion is claimed.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8009FFD4",
-          "end": "0x800A0134"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802964F0",
-          "end": "0x80296594"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8009FFD4",
-          "start": "0x8009FFD4",
-          "end": "0x800A0134"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_800AF404.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Three literal-using target whole-function extents in 0x800AF404-0x800AF95C (0x800AF404, 0x800AF4A8, 0x800AF87C) and their contiguous literal-pool slice 0x80296A78-0x80296A98; the integer-only neighbours 0x800AF630-0x800AF87C stay in cu_8008E978.cpp. Unlinked; no original file boundary claim.",
@@ -53741,67 +53760,6 @@
           "symbol": "fn_800B4900",
           "start": "0x800B4900",
           "end": "0x800B49EC"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800A1620.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison-only literal-pool fragment of the retained provisional cu_8008E978 grouping: complete bodies 0x800A1620-0x800A233C whose float literals form the exact readonly slice 0x802965CC-0x80296630 measured here, split from src/game/cu_800A0134.cpp because that slice holds no double and starts 4 mod 8. No original file boundary or whole-unit promotion is claimed.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800A1620",
-          "end": "0x800A233C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802965CC",
-          "end": "0x80296630"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_800A1620",
-          "start": "0x800A1620",
-          "end": "0x800A16C8"
-        },
-        {
-          "symbol": "fn_800A1738",
-          "start": "0x800A1738",
-          "end": "0x800A1A58"
-        },
-        {
-          "symbol": "fn_800A1C74",
-          "start": "0x800A1C74",
-          "end": "0x800A1FEC"
-        },
-        {
-          "symbol": "fn_800A1FEC",
-          "start": "0x800A1FEC",
-          "end": "0x800A20D0"
-        },
-        {
-          "symbol": "fn_800A21BC",
-          "start": "0x800A21BC",
-          "end": "0x800A2228"
-        },
-        {
-          "symbol": "fn_800A2228",
-          "start": "0x800A2228",
-          "end": "0x800A227C"
-        },
-        {
-          "symbol": "fn_800A227C",
-          "start": "0x800A227C",
-          "end": "0x800A22E4"
-        },
-        {
-          "symbol": "fn_800A22E4",
-          "start": "0x800A22E4",
-          "end": "0x800A233C"
         }
       ]
     },

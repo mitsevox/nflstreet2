@@ -428,8 +428,8 @@ float fn_8011CC10(Entry_8011AFCC *pEntry, Entry_8011AFCC *pOther, Pair_8011BAE0 
     }
     fn_80227690(&delta, pPos, pOtherPos);
     distance = fn_802270A4(&delta);
-    score = distance;
     angle = fn_801CFE40(delta.mY, delta.mX);
+    score = distance;
     if (score > 88.0f) {
         score = 88.0f;
     }
@@ -438,6 +438,8 @@ float fn_8011CC10(Entry_8011AFCC *pEntry, Entry_8011AFCC *pOther, Pair_8011BAE0 
         score *= 1.2f;
     }
     switch (pEntry->mpUnknown60->mUnknown1052) {
+    case 0:
+        break;
     case 1:
         score = fn_8011BCDC(pEntry, pOther, pair, ball, bit, c, score);
         break;

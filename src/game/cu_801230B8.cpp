@@ -862,19 +862,20 @@ float fn_801250B8(Object_80039F5C *p, Object_80039F5C *a, int kind)
 int fn_8012510C(Directions_8012430C *pValues)
 {
     unsigned int best = fn_801243E0(pValues, -1);
+    int angle = best << 21;
     float next = pValues->mCost[(best + 1) % 8];
     float previous = pValues->mCost[(best - 1) % 8];
     float scale = pValues->mCost[best];
-    float lower = next;
-    int offset = 0x100000;
-    if (!(next < previous)) {
-        lower = previous;
-        offset = -0x100000;
+    float lower = previous;
+    int offset = -0x100000;
+    if (next < previous) {
+        lower = next;
+        offset = 0x100000;
     }
     if (!(scale <= 0.0f)) scale /= lower;
     else if (!(scale >= 0.0f) && !(lower >= 0.0f)) scale = lower / scale;
     else scale = 0.0f;
-    return ((best << 21) + (int)(offset * scale)) & 0xFFFFFF;
+    return (angle + (int)(offset * scale)) & 0xFFFFFF;
 }
 
 int fn_80125214(Object_80039F5C *p, Object_80039F5C *pTarget)

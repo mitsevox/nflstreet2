@@ -52,6 +52,10 @@ extern unsigned short lbl_803EAFE0;
 
 extern "C" void fn_80117AA4(Object_80039F5C *p, Point_8017886C *pOut, float *pSpeed)
 {
+    float high = 0.0f;
+    float low = 0.0f;
+    float top = 0.0f;
+    float bottom = 0.0f;
     float speed = 0.6f;
     State_80117AA4 *pState = (State_80117AA4 *)&p->mUnknown336;
     Point_8017886C zone;
@@ -67,10 +71,10 @@ extern "C" void fn_80117AA4(Object_80039F5C *p, Point_8017886C *pOut, float *pSp
     side = p->mpState->mUnknown1 + 14;
     fn_8009E9EC(p, side, &zone);
     Zone_8011569C *pZone = &((Field_8011569C *)fn_8011F4EC())->mZones[side];
-    float high = pZone->mHigh;
-    float low = pZone->mLow;
-    float top = pZone->mUnknown0;
-    float bottom = pZone->mUnknown4;
+    high = pZone->mHigh;
+    low = pZone->mLow;
+    top = pZone->mUnknown0;
+    bottom = pZone->mUnknown4;
     pOut->mX = p->mMotion.mPos.mX;
     pOut->mY = p->mMotion.mPos.mY;
     if (p == 0 || pOut == 0) return;
@@ -167,16 +171,18 @@ extern "C" void fn_80117AA4(Object_80039F5C *p, Point_8017886C *pOut, float *pSp
         }
         Point_8017886C delta;
         fn_80227690(&delta, &p->mMotion.mPos, pOut);
-        if (fn_801CFFD0(delta.Heading(), pOther->mMotion.mUnknown32) > (int)(lbl_803EAFE0 * 46603.38f)) {
-            speed = 0.8f;
-        } else if (delta.mY <= 0.0f) {
-            pOut->mX = p->mMotion.mPos.mX;
-            speed = 0.8f;
-        } else {
-            pOut->mY = p->mMotion.mPos.mY;
-            if (fn_80227890(&p->mMotion.mPos, pOut) < lbl_803EAFDC) {
-                pOut->mY += 2.0f;
+        if (fn_801CFFD0(delta.Heading(), pOther->mMotion.mUnknown32) <= (int)(lbl_803EAFE0 * 46603.38f)) {
+            if (delta.mY > 0.0f) {
+                pOut->mY = p->mMotion.mPos.mY;
+                if (fn_80227890(&p->mMotion.mPos, pOut) < lbl_803EAFDC) {
+                    pOut->mY += 2.0f;
+                }
+                speed = 0.8f;
+            } else {
+                pOut->mX = p->mMotion.mPos.mX;
+                speed = 0.8f;
             }
+        } else {
             speed = 0.8f;
         }
         pOut->mX = pOut->mX < low + lbl_803EAFD8 ? low + lbl_803EAFD8

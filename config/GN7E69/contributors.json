@@ -28222,27 +28222,6 @@
       }
     },
     {
-      "source": "src/game/cu_800A1620.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x800A1620",
-        "0x800A1738",
-        "0x800A1FEC",
-        "0x800A21BC",
-        "0x800A2228",
-        "0x800A227C",
-        "0x800A22E4"
-      ],
-      "provenance": {
-        "pull_request": 1053,
-        "merged_via": 1067,
-        "commit": "7c4ed2994077cab90351e52b55d057da16b4ebaf",
-        "introduced_blob": "8959a274f54bb9d2bca9de8dd5fa1901e2324bce"
-      }
-    },
-    {
       "source": "src/game/cu_800A233C.cpp",
       "contributors": [
         "mitsevox"
@@ -29090,21 +29069,6 @@
         "original_commit": "e3c948a61b5f99ab9fe8edab495be70f83d14de5",
         "original_blob": "bde5b98239ad0f45e6972f830d0058984c2929c2",
         "integration_adjustment": "Retain original contributor and source PR through the reviewed combined-file integration and comment-only cleanup; pin the final historical source blob for squash publication."
-      }
-    },
-    {
-      "source": "src/game/cu_8009FFD4.cpp",
-      "contributors": [
-        "mitsevox"
-      ],
-      "functions": [
-        "0x8009FFD4"
-      ],
-      "provenance": {
-        "pull_request": 1054,
-        "merged_via": 1067,
-        "commit": "00fc75c24f4e7cd84958939d5ece85091e49ea77",
-        "introduced_blob": "78aa0a96dd57f7205b86b98486e589bd6e36675d"
       }
     },
     {
@@ -30029,6 +29993,160 @@
         "original_commit": "db71d3d5da024d318aa3d40f583f12d4bdeed632",
         "original_blob": "79d87fc491d33753e8be42672d52c8462d70f673",
         "integration_adjustment": "Preserve the original contributor/source PR 902 for these pre-existing partial bodies. PR 1074 refines them to exact without transferring original source credit; original accepted-main source and reviewed PR evidence retained. Current source will be re-pinned to the final integrated blob for squash verification."
+      }
+    },
+    {
+      "source": "src/game/cu_80117AA4.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80117AA4"
+      ],
+      "provenance": {
+        "pull_request": 1050,
+        "merged_via": 1080,
+        "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
+        "introduced_blob": "8a01afa1cdc1c7ed6b5aed3a1dc9c8510e214668",
+        "original_commit": "bc4a556c2ab0c3ac147ad23951b944a025e77bf7",
+        "original_blob": "12eacc3b3cb3700955612481b92e1b11e7859330",
+        "integration_adjustment": "Preserve original source contribution PR 1050 for this pre-existing partial body; PR 1069 refines it to exact without transferring source credit. Original source commit/blob identifies a real definition at the current path; current refinement source pins remain intact."
+      }
+    },
+    {
+      "source": "src/game/cu_801180FC.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801180FC"
+      ],
+      "provenance": {
+        "pull_request": 902,
+        "merged_via": 1080,
+        "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
+        "introduced_blob": "0415f27b19f82fb2e9149371642eeef452ee2c73",
+        "original_commit": "84f5f05f96a2ca3351703bc2ad478c33aa9e13af",
+        "original_blob": "e3e82b8234d9416dfaa909a8fece2d841ec44ce1",
+        "integration_adjustment": "Preserve original source contribution PR 902 for this pre-existing partial body; PR 1069 refines it to exact without transferring source credit. Original source commit/blob identifies a real definition at the current path; current refinement source pins remain intact."
+      }
+    },
+    {
+      "source": "src/game/cu_800EFC68.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8011893C"
+      ],
+      "provenance": {
+        "pull_request": 557,
+        "merged_via": 1080,
+        "commit": "209bcfaed34ad3e34a9acb8191ffdd906da2a83c",
+        "introduced_blob": "ee504b678d49b76d7b6bb441285e4fa46c17afc2",
+        "original_commit": "d40ff6e9c0cf611b978b9d84cc545d953845b977",
+        "original_blob": "e6c396e9cbd91bc07deab487974253d591d8c909",
+        "integration_adjustment": "Preserve original source contribution PR 557 for this pre-existing partial body; PR 1069 refines it to exact without transferring source credit. Original source commit/blob identifies a real definition at the current path; current refinement source pins remain intact. Final batch integration pins the resulting source blob; original source authorship and PR remain unchanged."
+      }
+    },
+    {
+      "source": "src/game/cu_801187CC.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x80119020"
+      ],
+      "provenance": {
+        "pull_request": 1050,
+        "merged_via": 1080,
+        "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
+        "introduced_blob": "fc33275c4668f1e80c216046b7ee8bd2ed26dbf8",
+        "original_commit": "bc4a556c2ab0c3ac147ad23951b944a025e77bf7",
+        "original_blob": "1844b4685e2c9b5d022fe43fd416b7b72dd2fe45",
+        "integration_adjustment": "Preserve original source contribution PR 1050 for this pre-existing partial body; PR 1069 refines it to exact without transferring source credit. Original source commit/blob identifies a real definition at the current path; current refinement source pins remain intact."
+      }
+    },
+    {
+      "source": "src/game/cu_8011BCDC.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8011CC10"
+      ],
+      "provenance": {
+        "pull_request": 1050,
+        "merged_via": 1080,
+        "commit": "9fa684a1ce18c0456ac50afdb45abbfcd3e14d00",
+        "introduced_blob": "0d11811d8eaf3e7e2ccfecc1be9b7b9e7f981206",
+        "original_commit": "bc4a556c2ab0c3ac147ad23951b944a025e77bf7",
+        "original_blob": "cea4a98a7a6546d8fe6ab8a6b342cb3fe45dcff8",
+        "integration_adjustment": "Preserve original source contribution PR 1050 for this pre-existing partial body; PR 1069 refines it to exact without transferring source credit. Original source commit/blob identifies a real definition at the current path; current refinement source pins remain intact."
+      }
+    },
+    {
+      "source": "src/game/cu_800A0134.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800A1620",
+        "0x800A1738",
+        "0x800A1FEC",
+        "0x800A21BC",
+        "0x800A2228",
+        "0x800A227C",
+        "0x800A22E4"
+      ],
+      "provenance": {
+        "pull_request": 1053,
+        "merged_via": 1080,
+        "commit": "7c4ed2994077cab90351e52b55d057da16b4ebaf",
+        "introduced_blob": "8959a274f54bb9d2bca9de8dd5fa1901e2324bce",
+        "original_blob": "8959a274f54bb9d2bca9de8dd5fa1901e2324bce",
+        "original_source": "src/game/cu_800A1620.cpp",
+        "merged_source": true,
+        "migration_commit": "1d0b1f56121c4f26622a5735037b93c70a758117",
+        "merged_blob": "cae2c4a2ce48e35821b4abc9662cf41814ed612b"
+      }
+    },
+    {
+      "source": "src/game/cu_800A0134.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x8009FFD4"
+      ],
+      "provenance": {
+        "pull_request": 1054,
+        "merged_via": 1080,
+        "commit": "00fc75c24f4e7cd84958939d5ece85091e49ea77",
+        "introduced_blob": "78aa0a96dd57f7205b86b98486e589bd6e36675d",
+        "original_blob": "78aa0a96dd57f7205b86b98486e589bd6e36675d",
+        "original_source": "src/game/cu_8009FFD4.cpp",
+        "merged_source": true,
+        "migration_commit": "1d0b1f56121c4f26622a5735037b93c70a758117",
+        "merged_blob": "cae2c4a2ce48e35821b4abc9662cf41814ed612b"
+      }
+    },
+    {
+      "source": "src/game/cu_800A0134.cpp",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x800A050C"
+      ],
+      "provenance": {
+        "pull_request": 750,
+        "merged_via": 1080,
+        "commit": "1d0b1f56121c4f26622a5735037b93c70a758117",
+        "introduced_blob": "cae2c4a2ce48e35821b4abc9662cf41814ed612b",
+        "original_commit": "5067ec6c962e49725259a4d9c3670a2137fccbcb",
+        "original_blob": "4e8d425869f0249927194a1f5c2788cf5d1e0c45",
+        "integration_adjustment": "Pre-existing partial body from PR 750 becomes exact when PR 1075 compiles 0x8009FFD4-0x800A233C as one unit; the body is unchanged and the original source PR is retained."
       }
     }
   ],

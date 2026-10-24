@@ -6447,7 +6447,7 @@
     {
       "source": "src/game/cu_8013CD58.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8013CD58-0x8013E514 (src/game/cu_8013CD58.cpp) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x8013CC7C-0x8013E514 (src/game/cu_8013CD58.cpp; the linked unit starts at 0x8013CD58) and its data rows.",
       "sections": [
         {
           "section": ".text",
@@ -11857,7 +11857,7 @@
     {
       "source": "src/game/cu_80164568.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80164568-0x80164B78 (src/game/cu_80164568.cpp), its function rows and data rows 0x802A4610-0x802A4624 and 0x803EB3B0-0x803EB3B8.",
+      "evidence": "evidence.tsv unit row 0x80164568-0x801660A0 (src/game/cu_80164568.cpp), its function rows and data rows 0x802A4610-0x802A4624 and 0x803EB3B0-0x803EB3B8.",
       "sections": [
         {
           "section": ".text",
