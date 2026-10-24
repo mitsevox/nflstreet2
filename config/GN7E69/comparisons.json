@@ -53916,6 +53916,126 @@
           "end": "0x80126DD4"
         }
       ]
+    },
+    {
+      "source": "src/engine/cu_801B2AD4.cpp",
+      "profile": "engine_c",
+      "evidence": "Partial source within the retained provisional pathauthor_801B2AD4 survey grouping; original bytes remain linked. No original translation-unit boundary or data ownership is claimed.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B2AD4",
+          "end": "0x801B8C18"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_801B2C40",
+          "start": "0x801B2C40",
+          "end": "0x801B2C94"
+        },
+        {
+          "symbol": "fn_801B2C94",
+          "start": "0x801B2C94",
+          "end": "0x801B2CDC"
+        },
+        {
+          "symbol": "fn_801B2F18",
+          "start": "0x801B2F18",
+          "end": "0x801B2F28"
+        },
+        {
+          "symbol": "fn_801B3A88",
+          "start": "0x801B3A88",
+          "end": "0x801B3AAC"
+        },
+        {
+          "symbol": "fn_801B3AAC",
+          "start": "0x801B3AAC",
+          "end": "0x801B3AD0"
+        },
+        {
+          "symbol": "fn_801B4548__14Class_801B44BC",
+          "start": "0x801B4548",
+          "end": "0x801B4564"
+        },
+        {
+          "symbol": "fn_801B4564__14Class_801B44BC",
+          "start": "0x801B4564",
+          "end": "0x801B456C"
+        },
+        {
+          "symbol": "fn_801B456C__14Class_801B44BC",
+          "start": "0x801B456C",
+          "end": "0x801B4574"
+        },
+        {
+          "symbol": "fn_801B4574__14Class_801B44BC",
+          "start": "0x801B4574",
+          "end": "0x801B457C"
+        },
+        {
+          "symbol": "fn_801B457C__14Class_801B44BC",
+          "start": "0x801B457C",
+          "end": "0x801B4584"
+        },
+        {
+          "symbol": "fn_801B4584__14Class_801B44BC",
+          "start": "0x801B4584",
+          "end": "0x801B458C"
+        },
+        {
+          "symbol": "fn_801B458C__14Class_801B44BC",
+          "start": "0x801B458C",
+          "end": "0x801B4594"
+        },
+        {
+          "symbol": "fn_801B4594__14Class_801B44BC",
+          "start": "0x801B4594",
+          "end": "0x801B459C"
+        },
+        {
+          "symbol": "fn_801B459C__14Class_801B44BCP13Data_801B4548",
+          "start": "0x801B459C",
+          "end": "0x801B45A4"
+        },
+        {
+          "symbol": "fn_801B45A4__14Class_801B44BC",
+          "start": "0x801B45A4",
+          "end": "0x801B45AC"
+        },
+        {
+          "symbol": "fn_801B45AC__14Class_801B44BC",
+          "start": "0x801B45AC",
+          "end": "0x801B45B4"
+        },
+        {
+          "symbol": "fn_801B45B4__14Class_801B44BC",
+          "start": "0x801B45B4",
+          "end": "0x801B45BC"
+        },
+        {
+          "symbol": "fn_801B45BC__14Class_801B44BC",
+          "start": "0x801B45BC",
+          "end": "0x801B45C4"
+        },
+        {
+          "symbol": "fn_801B45C4__14Class_801B44BC",
+          "start": "0x801B45C4",
+          "end": "0x801B45CC"
+        },
+        {
+          "symbol": "fn_801B45CC__14Class_801B44BC",
+          "start": "0x801B45CC",
+          "end": "0x801B45D0"
+        },
+        {
+          "symbol": "fn_801B5E10",
+          "start": "0x801B5E10",
+          "end": "0x801B5E5C"
+        }
+      ]
     }
   ]
 }
