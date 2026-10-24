@@ -231,6 +231,15 @@
           "evidence": "__OSInIPL: lwz at 0x80238CD8 accesses 0x803ED068; lwz at 0x80238E7C accesses 0x803ED068 Native .sbss offset 48, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
         },
         {
+          "section": ".sbss",
+          "start": "0x803ED06C",
+          "end": "0x803ED070",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "object_seed": false,
+          "evidence": "Unnamed native alignment space inside OS.c's compiled .sbss (offset 52, 4 bytes): __OSInIPL ends at offset 52 and the 8-byte-aligned __OSStartTime starts at offset 56. No target instruction addresses it and no storage is claimed; it is mapped so the file's seeds tile its linked native .sbss 0x803ED038-0x803ED078."
+        },
+        {
           "section": ".data4",
           "start": "0x802FB868",
           "end": "0x802FBA5F",
@@ -468,6 +477,15 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED092",
+          "end": "0x803ED098",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "object_seed": false,
+          "evidence": "Unnamed native alignment space inside OSInterrupt.c's compiled .sbss (offset 10, 6 bytes): the two-byte __OSLastInterrupt ends at offset 10 and the 8-byte-aligned __OSLastInterruptTime starts at offset 16. No target instruction addresses it and no storage is claimed; it is mapped so the file's seeds tile its linked native .sbss 0x803ED088-0x803ED0A0."
         },
         {
           "section": ".sbss",
