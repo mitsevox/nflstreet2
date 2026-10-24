@@ -18,7 +18,7 @@ public:
     virtual ~Class_801B44BC();
     virtual void fn_801B459C(Data_801B4548 *p);
     virtual void vfn_03() = 0;
-    virtual int vfn_04() = 0;
+    virtual void vfn_04() = 0;
     virtual void vfn_05(int value) = 0;
     virtual void vfn_06() = 0;
     virtual int vfn_07(void *p) = 0;
