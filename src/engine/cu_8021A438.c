@@ -54,7 +54,7 @@ extern Color_80223C4C *lbl_803EBF50;
 extern Int32 lbl_803EBF54;
 extern Int32 lbl_803EBF58;
 extern Uint8 lbl_803EBF5C;
-extern Float32 lbl_802F9FA0[3][4];
+extern Float32 lbl_802F9FA0[4][4];
 extern Uint32 lbl_803ECFF0;
 extern Uint32 lbl_803ECFF4;
 extern Int32 lbl_803ECFF8;

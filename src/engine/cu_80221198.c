@@ -101,7 +101,7 @@ extern Uint8 lbl_803EBF84;
 extern Uint8 lbl_803EBF85;
 extern GXLightObj lbl_803E9880;
 extern Range_80221D30 lbl_8039F9B8[];
-extern Float32 lbl_802F9FE0[3][4];
+extern Float32 lbl_802F9FE0[4][4];
 extern Float32 lbl_803A0400[][2];
 extern GXColor lbl_803A1400[];
 
@@ -721,12 +721,13 @@ void fn_802254F8(Node_80223874 *pNode)
     }
 }
 
-void fn_80225654(Node_80223874 *pNode, Uint32 Msg, Int32 a, void *pData)
+void fn_80225654(Node_80223874 *pNode, Uint32 Action, Int32 a, void *pData)
 {
     Int16 First;
     Int16 Second;
+    Int16 Value;
 
-    switch (Msg) {
+    switch (Action) {
     case -1:
         fn_8022479C(pNode);
         break;
@@ -740,7 +741,7 @@ void fn_80225654(Node_80223874 *pNode, Uint32 Msg, Int32 a, void *pData)
         break;
     }
     if (!(pNode->Flags & 0x8000)) {
-        switch (Msg) {
+        switch (Action) {
         case 0:
             pNode->u.t.unk_3C[0] = ((Float32 *)pData)[0];
             pNode->u.t.unk_3C[1] = ((Float32 *)pData)[1];
@@ -779,10 +780,10 @@ void fn_80225654(Node_80223874 *pNode, Uint32 Msg, Int32 a, void *pData)
             pNode->u.t.unk_10 = ((Int32 *)pData)[0];
             break;
         case 9:
-            Second = ((Int16 *)pData)[0];
-            pNode->unk_0E = Second;
+            Value = ((Int16 *)pData)[0];
+            pNode->unk_0E = Value;
             pNode->unk_0C = ((Int16 *)pData)[1];
-            if (Second == 0) {
+            if (Value == 0) {
                 pNode->unk_0E = pNode->unk_06;
             }
             if (pNode->unk_0E == -1) {
