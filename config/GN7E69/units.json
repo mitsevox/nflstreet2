@@ -1961,6 +1961,14 @@
     "fn_801E8D14__13Time_801E8C78f": {
       "address": "0x801E8D14",
       "evidence": "Target member increments u32+0/f32+4 with f1 delta; inferred member contract."
+    },
+    "fn_800C02D4__14Class_80297CE8s": {
+      "address": "0x800C02D4",
+      "evidence": "Issue #1116; evidence.tsv external row for the canonical Class_80297CE8 short setter at 0x800C02D4."
+    },
+    "fn_800C02EC__14Class_80297CE8s": {
+      "address": "0x800C02EC",
+      "evidence": "Issue #1116; evidence.tsv external row for the canonical Class_80297CE8 short setter at 0x800C02EC."
     }
   },
   "units": [
