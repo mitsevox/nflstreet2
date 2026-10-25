@@ -30813,6 +30813,97 @@
         "commit": "65d7b33de8e18e53361750d5a60182586fd204e7",
         "introduced_blob": "47dde747f76654f07c4aa14dc3decfaa0288ec11"
       }
+    },
+    {
+      "source": "src/engine/cu_80221154.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80221154"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1127,
+        "commit": "02a1dd0257b43a0246837abb740ec6b3c2d80354",
+        "introduced_blob": "544e81a7b1b62225b849e25dae221d728b75ab65"
+      }
+    },
+    {
+      "source": "src/engine/cu_80222EC4.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80222EC4",
+        "0x80222F8C"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1127,
+        "commit": "02a1dd0257b43a0246837abb740ec6b3c2d80354",
+        "introduced_blob": "43e448a4a205b1ca4c2f19d3f6530ba5c276343f"
+      }
+    },
+    {
+      "source": "src/engine/cu_8022772C.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8022772C"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1127,
+        "commit": "02a1dd0257b43a0246837abb740ec6b3c2d80354",
+        "introduced_blob": "9112b1c5463c73b947c0cdad6c928487ec7d254a"
+      }
+    },
+    {
+      "source": "src/engine/cu_80227970.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80227970"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1127,
+        "commit": "02a1dd0257b43a0246837abb740ec6b3c2d80354",
+        "introduced_blob": "c8afbe8caa3052cc207aafb8d2bc250f70b1e062"
+      }
+    },
+    {
+      "source": "src/engine/cu_80227D6C.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80227D6C"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1127,
+        "commit": "02a1dd0257b43a0246837abb740ec6b3c2d80354",
+        "introduced_blob": "18b4c5edc784c783aeb8f350b876535e4f4884f7"
+      }
+    },
+    {
+      "source": "src/engine/cu_80229270.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8022CAEC"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1127,
+        "commit": "02a1dd0257b43a0246837abb740ec6b3c2d80354",
+        "introduced_blob": "65db8236f263a6466f299c72970d4c0d6bf49a30"
+      }
     }
   ],
   "target": "GN7E69",
