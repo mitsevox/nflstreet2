@@ -187,7 +187,7 @@ jobs:
       - name: Verify activity and live receipts on the host
         if: steps.validation.outputs.full == 'true'
         env:
-          # A PR proof that main may publish (it reused no measurements) keeps the full re-check.
+          # A PR proof that main may publish (it reused no cached object or measurement) keeps the full re-check.
           LIVE_RECEIPTS: ${{ steps.validation.outputs.receipts == 'true' || steps.measure.outputs.reused == '0' }}
         run: |
           command -v git

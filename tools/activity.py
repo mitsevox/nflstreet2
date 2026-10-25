@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Export linked-build history and exact-function credits from recorded evidence."""
 import argparse
+import concurrent.futures
 from datetime import datetime
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -167,8 +169,17 @@ def _batch_objects(root, queries):
 def _tree_objects(root, queries):
     """`cat-file --batch-check` answers for REV:path queries, read from trees alone.
 
-    Checking an object's existence would make a blobless fetch download each blob singly;
-    the entry's name in its parent tree is all an attribution check compares."""
+    Only trees are read, so the answers need no blob in the repository: provenance commits
+    are fetched without blobs, and no Git version can fetch them one at a time here."""
+    def literal(path):
+        return all(part not in ('', '.', '..') for part in path.split('/'))
+    unusual = [query for query in queries if not literal(query.split(':', 1)[1])]
+    if unusual:
+        # Leave every path Git might normalise to Git itself.
+        answers = dict(zip(unusual, _batch_objects(root, unusual)))
+        usual = [query for query in queries if query not in answers]
+        answers.update(zip(usual, _tree_objects(root, usual) if usual else []))
+        return [answers[query] for query in queries]
     parents = {}
     for query in queries:
         revision, path = query.split(':', 1)
@@ -208,7 +219,7 @@ def _tree_objects(root, queries):
 
 
 def _linear_path_history(root, revision, sources):
-    """Map each source path to `git rev-list revision -- path`, from one tree walk.
+    """Map each literal source path to `git rev-list revision -- path`, from one tree walk.
 
     Without merges, history simplification keeps exactly the commits whose diff against
     their parent (or the empty tree, for the root) touches the path, in rev-list order."""
@@ -218,14 +229,18 @@ def _linear_path_history(root, revision, sources):
     commits = subprocess.check_output(['git', 'rev-list', revision], cwd=root, text=True).split()
     output = subprocess.run(['git', 'diff-tree', '--stdin', '-r', '--root', '--always', '--name-only',
                              '--no-renames', '-z'], cwd=root, input=''.join(c + '\n' for c in commits),
-                            capture_output=True, text=True, check=True).stdout
+                            capture_output=True, text=True, errors='surrogateescape', check=True).stdout
     history = {source: [] for source in sources}
     position, current = 0, None
     for token in output.split('\0'):
         if position < len(commits) and token == commits[position]:
             current, position = token, position + 1
-        elif token in history and current is not None:
-            history[token].append(current)
+        elif current is not None:
+            # A path that was once a directory also names every file that was under it.
+            parts = token.split('/')
+            for prefix in ('/'.join(parts[:end]) for end in range(1, len(parts) + 1)):
+                if prefix in history and history[prefix][-1:] != [current]:
+                    history[prefix].append(current)
     if position != len(commits):
         raise ValueError('Invalid Git historical source response')
     return history
@@ -285,6 +300,15 @@ def prefetch(root, ledger, revision, fetch_missing=False):
                      if (str(root), revision, source) not in _HISTORICAL_BLOBS_CACHE)
     history = _linear_path_history(root, revision, sources) if sources else None
     if history is None:
+        # Merge history keeps Git's own simplification: one rev-list per path, run together.
+        # A failure is left for the entry loop to raise in order.
+        def lookup(source):
+            try:
+                historical_source_blobs(root, revision, source)
+            except ValueError:
+                pass
+        with concurrent.futures.ThreadPoolExecutor(max_workers=os.cpu_count() or 1) as pool:
+            list(pool.map(lookup, sources))
         return
     queries = [commit + ':' + source for source in sources for commit in history[source]]
     rows = iter(_batch_objects(root, queries) if queries else [])
@@ -457,9 +481,9 @@ def squash_preflight(root, ledger, build, revision, base, exact_inventory=None, 
 def ledger_preflight(root, revision, fetch_missing=False, squash_base=None):
     """Every attribution check that needs only Git and the ledger, before anything is built."""
     ledger = json.loads((root/'config/GN7E69/contributors.json').read_text())
-    if squash_base:
-        revision = squash_commit(root, revision, squash_base)
     contributors(root, ledger, None, revision, fetch_missing)
+    if squash_base:
+        contributors(root, ledger, None, squash_commit(root, revision, squash_base), fetch_missing)
 
 
 def export(root, site, source_report, previous=None, append=False, fetch_missing=False, squash_base=None):
@@ -503,12 +527,10 @@ def _export_verified(root, site, source_report, previous=None, append=False, fet
         check_ancestor(root, row['revision'], site['revision'])
     exact = exact_functions(site)
     ledger = json.loads((root/'config/GN7E69/contributors.json').read_text())
+    credits = contributors(root, ledger, build, site['revision'], fetch_missing, exact)
     if squash_base:
-        # Only the squashed tree lands on main, and credits depend on the tree, not on
-        # which history proves it, so the squashed history is the one worth checking.
-        credits = squash_preflight(root, ledger, build, site['revision'], squash_base, exact, fetch_missing)
-    else:
-        credits = contributors(root, ledger, build, site['revision'], fetch_missing, exact)
+        if squash_preflight(root, ledger, build, site['revision'], squash_base, exact) != credits:
+            raise ValueError('Squash preflight changes original source attribution')
     return {'schema':1, 'target':'GN7E69', 'target_sha1':site['target_sha1'],
             'revision':site['revision'], 'snapshots':history,
             'contribution_basis':'exact-functions', 'credited_functions':len(exact),

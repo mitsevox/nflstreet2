@@ -138,6 +138,12 @@ class CompileCacheTests(unittest.TestCase):
         (self.root / 'include/types.h').write_text('typedef short s32;\n')
         self.assertFalse(self.compile('use')[1])
 
+    def test_a_new_or_changed_symlink_misses(self):
+        self.compile('audit')
+        (self.root / 'alt').mkdir()
+        (self.root / 'src/game/linked').symlink_to('../../alt', target_is_directory=True)
+        self.assertFalse(self.compile('use')[1])
+
     def test_source_flags_and_tools_are_part_of_the_key(self):
         cache = sb.CompileCache(self.root / 'build/cache/objects', 'use')
         unit = self.unit()

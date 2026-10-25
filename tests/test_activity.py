@@ -136,10 +136,25 @@ class ContributorTests(unittest.TestCase):
         head=self.commit_source('int function(void) { return 4; }')
         queries=[f'{revision}:{path}' for revision in (head, head+'^', self.commit, 'c'*40)
                  for path in ('src/test.c','top.c','src/deep/inner.c','src/deep','src/test.c/x',
-                              'src/absent.c','absent/test.c')]
+                              'src/absent.c','absent/test.c','src//test.c','src/deep/','src/./test.c',
+                              'src/deep/../test.c','./src/test.c')]
         expected=subprocess.run(['git','cat-file','--batch-check=%(objectname)'],cwd=self.root,
                                 input=''.join(q+'\n' for q in queries),capture_output=True,text=True).stdout.splitlines()
         self.assertEqual(activity._tree_objects(self.root,queries),expected)
+
+    def test_path_history_walk_matches_rev_list_for_former_directories(self):
+        (self.root/'src/test.c').unlink()
+        (self.root/'src/test.c').mkdir()
+        (self.root/'src/test.c/inner.c').write_text('int inner;')
+        self.git('add','-A')
+        self.git('-c','user.name=Test','-c','user.email=test@example.invalid','commit','-qm','Directory')
+        (self.root/'src/test.c/inner.c').write_text('int inner2;')
+        self.git('add','-A')
+        self.git('-c','user.name=Test','-c','user.email=test@example.invalid','commit','-qm','Edit')
+        revision=self.git('rev-parse','HEAD')
+        walked=activity._linear_path_history(self.root,revision,['src/test.c','src/test.c/inner.c'])
+        for path in walked:
+            self.assertEqual(walked[path],self.git('rev-list',revision,'--',path).split())
 
     def test_prefetch_matches_one_by_one_answers(self):
         self.commit_source('int function(void) { return 5; }')

@@ -655,20 +655,27 @@ class CompileCache:
         self.lock = threading.Lock()
         self.tools = {path: sha256(ROOT / path) for path in self.TOOLS}
         self.digests = {}
-        self.names = {}
+        self.names, self.links = {}, []
         for directory_path, directories, files in os.walk(ROOT):
             if Path(directory_path) == ROOT:
                 directories[:] = [d for d in directories if d not in (".git", "build")]
-            for name in files:
-                relative = (Path(directory_path) / name).relative_to(ROOT).as_posix()
-                self.names.setdefault(name.lower(), []).append(relative)
+            for name in files + directories:
+                path = Path(directory_path) / name
+                relative = path.relative_to(ROOT).as_posix()
+                if path.is_symlink():
+                    # A link can make files reachable under new names; any change misses.
+                    self.links.append((relative, os.readlink(path)))
+                elif name in files:
+                    self.names.setdefault(name.lower(), []).append(relative)
+        self.links.sort()
         if mode == "audit":
             if self.fresh.exists():
                 shutil.rmtree(self.fresh)
             self.fresh.mkdir(parents=True)
 
     def key(self, unit, includes, workdir, source, comparison):
-        material = {"schema": 1, "tools": self.tools, "comparison": comparison, "source": unit["source"],
+        material = {"schema": 1, "tools": self.tools, "links": self.links, "comparison": comparison,
+                    "source": unit["source"],
                     "source_sha256": sha256(unit["path"]), "compiler": unit["compiler"], "flags": unit["flags"],
                     "includes": [Path(d).resolve().relative_to(ROOT.resolve()).as_posix() for d in includes],
                     "workdir": Path(workdir).resolve().relative_to(ROOT.resolve()).as_posix(),
@@ -961,14 +968,29 @@ def build(original, manifest_path, report_path, cache=None):
         stem = re.sub(r"[^A-Za-z0-9]+", "_", unit["source"]).strip("_")
         unit["object"] = BUILD / "obj" / f"unit{index:03d}_{stem}.o"
         unit["depfile"] = unit["object"].with_suffix(".d")
-        if unit["compile_path"]:
-            stage(unit)
     # Each compile writes only its own object, depfile and temporary folder, and the shared
-    # staging links exist already, so compiles run together; everything after stays in order.
-    with concurrent.futures.ThreadPoolExecutor(max_workers=os.cpu_count() or 1) as pool:
-        list(pool.map(lambda unit: compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs,
-                                                cache=cache), units))
+    # staging links exist once staged, so compiles run together. Their failures are raised in
+    # manifest order, each just before that unit would link, as one compile at a time would.
+    failures = {}
     for unit in units:
+        if unit["compile_path"]:
+            try:
+                stage(unit)
+            except (ValueError, RuntimeError, OSError) as error:
+                failures[unit["source"]] = error
+
+    def attempt(unit):
+        if unit["source"] in failures:
+            return
+        try:
+            compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs, cache=cache)
+        except (ValueError, RuntimeError, OSError) as error:
+            failures[unit["source"]] = error
+    with concurrent.futures.ThreadPoolExecutor(max_workers=os.cpu_count() or 1) as pool:
+        list(pool.map(attempt, units))
+    for unit in units:
+        if unit["source"] in failures:
+            raise failures[unit["source"]]
         unit["native_object_sha256"] = sha256(unit["object"])
         link_object(unit)
         objects[unit["source"]] = (retained_layout(dict(unit, object=unit["link_object"]), compiler, wrapper)
