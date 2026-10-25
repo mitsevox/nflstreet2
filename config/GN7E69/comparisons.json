@@ -36994,6 +36994,12 @@
           "placement": ".text",
           "start": "0x80276DE4",
           "end": "0x8027CF9C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C21F0",
+          "end": "0x802C21F4"
         }
       ],
       "functions": [
@@ -37001,6 +37007,26 @@
           "symbol": "fn_80276DE4",
           "start": "0x80276DE4",
           "end": "0x80276F38"
+        },
+        {
+          "symbol": "fn_80276F38",
+          "start": "0x80276F38",
+          "end": "0x80276FD4"
+        },
+        {
+          "symbol": "fn_80276FD4",
+          "start": "0x80276FD4",
+          "end": "0x802770F8"
+        },
+        {
+          "symbol": "fn_802770F8",
+          "start": "0x802770F8",
+          "end": "0x80277240"
+        },
+        {
+          "symbol": "fn_80277280",
+          "start": "0x80277280",
+          "end": "0x802773C0"
         },
         {
           "symbol": "fn_802773C0",
@@ -37083,6 +37109,16 @@
           "end": "0x802788B4"
         },
         {
+          "symbol": "fn_802789E0",
+          "start": "0x802789E0",
+          "end": "0x80278A68"
+        },
+        {
+          "symbol": "fn_80278A68",
+          "start": "0x80278A68",
+          "end": "0x80278ABC"
+        },
+        {
           "symbol": "fn_80278ABC",
           "start": "0x80278ABC",
           "end": "0x80278AC8"
@@ -37091,6 +37127,11 @@
           "symbol": "fn_80278AC8",
           "start": "0x80278AC8",
           "end": "0x80278AFC"
+        },
+        {
+          "symbol": "fn_80279170",
+          "start": "0x80279170",
+          "end": "0x802791D0"
         },
         {
           "symbol": "fn_802791D0",
@@ -37153,6 +37194,11 @@
           "end": "0x80279910"
         },
         {
+          "symbol": "fn_80279910",
+          "start": "0x80279910",
+          "end": "0x80279960"
+        },
+        {
           "symbol": "fn_80279BC0",
           "start": "0x80279BC0",
           "end": "0x80279C20"
@@ -37176,6 +37222,21 @@
           "symbol": "fn_80279D90",
           "start": "0x80279D90",
           "end": "0x80279DF8"
+        },
+        {
+          "symbol": "fn_80279DF8",
+          "start": "0x80279DF8",
+          "end": "0x80279E74"
+        },
+        {
+          "symbol": "fn_8027A21C",
+          "start": "0x8027A21C",
+          "end": "0x8027A248"
+        },
+        {
+          "symbol": "fn_8027A248",
+          "start": "0x8027A248",
+          "end": "0x8027A308"
         },
         {
           "symbol": "fn_8027A4C0",
@@ -37479,6 +37540,11 @@
           "end": "0x8027D978"
         },
         {
+          "symbol": "vfn_13__15Object_8027D6E8i",
+          "start": "0x8027D978",
+          "end": "0x8027D9EC"
+        },
+        {
           "symbol": "fn_8027D9EC",
           "start": "0x8027D9EC",
           "end": "0x8027D9F4"
@@ -37494,6 +37560,11 @@
           "end": "0x8027DA24"
         },
         {
+          "symbol": "vfn_05__15Object_8027D6E8i",
+          "start": "0x8027DA24",
+          "end": "0x8027DAA4"
+        },
+        {
           "symbol": "fn_8027DAA4",
           "start": "0x8027DAA4",
           "end": "0x8027DAC4"
@@ -37504,9 +37575,64 @@
           "end": "0x8027DAE4"
         },
         {
+          "symbol": "vfn_13__15Object_8027DAE4i",
+          "start": "0x8027DF34",
+          "end": "0x8027DF94"
+        },
+        {
+          "symbol": "vfn_15__15Object_8027DAE4i",
+          "start": "0x8027DF94",
+          "end": "0x8027DFF4"
+        },
+        {
+          "symbol": "vfn_17__15Object_8027DAE4ii",
+          "start": "0x8027DFF4",
+          "end": "0x8027E05C"
+        },
+        {
+          "symbol": "vfn_19__15Object_8027DAE4i",
+          "start": "0x8027E05C",
+          "end": "0x8027E0AC"
+        },
+        {
           "symbol": "fn_8027E0AC",
           "start": "0x8027E0AC",
           "end": "0x8027E0C4"
+        },
+        {
+          "symbol": "vfn_04__15Object_8027DAE4",
+          "start": "0x8027E1B0",
+          "end": "0x8027E21C"
+        },
+        {
+          "symbol": "vfn_30__15Object_8027DAE4iPv",
+          "start": "0x8027E21C",
+          "end": "0x8027E27C"
+        },
+        {
+          "symbol": "vfn_31__15Object_8027DAE4i",
+          "start": "0x8027E27C",
+          "end": "0x8027E2D0"
+        },
+        {
+          "symbol": "vfn_28__15Object_8027DAE4i",
+          "start": "0x8027E2D0",
+          "end": "0x8027E348"
+        },
+        {
+          "symbol": "vfn_29__15Object_8027DAE4",
+          "start": "0x8027E348",
+          "end": "0x8027E3BC"
+        },
+        {
+          "symbol": "vfn_33__15Object_8027DAE4i",
+          "start": "0x8027E3BC",
+          "end": "0x8027E448"
+        },
+        {
+          "symbol": "vfn_32__15Object_8027DAE4ii",
+          "start": "0x8027E448",
+          "end": "0x8027E4D8"
         },
         {
           "symbol": "fn_8027E4D8",
@@ -37519,9 +37645,54 @@
           "end": "0x8027E518"
         },
         {
+          "symbol": "vfn_34__15Object_8027E518ii",
+          "start": "0x8027E660",
+          "end": "0x8027E690"
+        },
+        {
+          "symbol": "vfn_35__15Object_8027E518",
+          "start": "0x8027E690",
+          "end": "0x8027E6BC"
+        },
+        {
+          "symbol": "vfn_15__15Object_8027E518i",
+          "start": "0x8027E97C",
+          "end": "0x8027E9D8"
+        },
+        {
+          "symbol": "vfn_17__15Object_8027E518ii",
+          "start": "0x8027E9D8",
+          "end": "0x8027EA3C"
+        },
+        {
+          "symbol": "vfn_25__15Object_8027E518i",
+          "start": "0x8027EA3C",
+          "end": "0x8027EA64"
+        },
+        {
+          "symbol": "vfn_19__15Object_8027E518i",
+          "start": "0x8027EA64",
+          "end": "0x8027EAB4"
+        },
+        {
           "symbol": "fn_8027EAB4",
           "start": "0x8027EAB4",
           "end": "0x8027EAC0"
+        },
+        {
+          "symbol": "vfn_09__15Object_8027E518i",
+          "start": "0x8027EAC0",
+          "end": "0x8027EB04"
+        },
+        {
+          "symbol": "vfn_04__15Object_8027E518",
+          "start": "0x8027EC1C",
+          "end": "0x8027EC7C"
+        },
+        {
+          "symbol": "vfn_23__15Object_8027E518P15Record_8027EC7C",
+          "start": "0x8027EC7C",
+          "end": "0x8027ECD8"
         },
         {
           "symbol": "fn_8027ED4C",
@@ -37542,6 +37713,31 @@
           "symbol": "fn_8027ED64",
           "start": "0x8027ED64",
           "end": "0x8027ED6C"
+        },
+        {
+          "symbol": "fn_8027EDC0",
+          "start": "0x8027EDC0",
+          "end": "0x8027EDE0"
+        },
+        {
+          "symbol": "fn_8027EDE0",
+          "start": "0x8027EDE0",
+          "end": "0x8027EE00"
+        },
+        {
+          "symbol": "fn_8027EE00",
+          "start": "0x8027EE00",
+          "end": "0x8027EE20"
+        },
+        {
+          "symbol": "vfn_06__15Object_8027EF94i",
+          "start": "0x8027EEE8",
+          "end": "0x8027EF18"
+        },
+        {
+          "symbol": "vfn_05__15Object_8027EF94",
+          "start": "0x8027EF18",
+          "end": "0x8027EF50"
         },
         {
           "symbol": "fn_8027EF50",
@@ -53319,6 +53515,101 @@
           "symbol": "fn_801B8580",
           "start": "0x801B8580",
           "end": "0x801B864C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_802821E8.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x802821E8-0x802832CC, individual function and name rows. Partial source; original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802821E8",
+          "end": "0x802832CC"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_802821E8",
+          "start": "0x802821E8",
+          "end": "0x80282260"
+        },
+        {
+          "symbol": "fn_80282260",
+          "start": "0x80282260",
+          "end": "0x802822E0"
+        },
+        {
+          "symbol": "fn_802822E0",
+          "start": "0x802822E0",
+          "end": "0x8028243C"
+        },
+        {
+          "symbol": "fn_8028243C",
+          "start": "0x8028243C",
+          "end": "0x802824A8"
+        },
+        {
+          "symbol": "fn_802824A8",
+          "start": "0x802824A8",
+          "end": "0x8028257C"
+        },
+        {
+          "symbol": "fn_8028257C",
+          "start": "0x8028257C",
+          "end": "0x802825C8"
+        },
+        {
+          "symbol": "fn_802825C8",
+          "start": "0x802825C8",
+          "end": "0x80282624"
+        },
+        {
+          "symbol": "fn_80282624",
+          "start": "0x80282624",
+          "end": "0x80282654"
+        },
+        {
+          "symbol": "fn_80282654",
+          "start": "0x80282654",
+          "end": "0x80282740"
+        },
+        {
+          "symbol": "fn_80282740",
+          "start": "0x80282740",
+          "end": "0x80282800"
+        },
+        {
+          "symbol": "fn_80282800",
+          "start": "0x80282800",
+          "end": "0x802828BC"
+        },
+        {
+          "symbol": "fn_802828BC",
+          "start": "0x802828BC",
+          "end": "0x8028291C"
+        },
+        {
+          "symbol": "fn_8028291C",
+          "start": "0x8028291C",
+          "end": "0x80282D70"
+        },
+        {
+          "symbol": "fn_80282D70",
+          "start": "0x80282D70",
+          "end": "0x80282F24"
+        },
+        {
+          "symbol": "fn_80282F24",
+          "start": "0x80282F24",
+          "end": "0x802830F0"
+        },
+        {
+          "symbol": "fn_802830F0",
+          "start": "0x802830F0",
+          "end": "0x802832CC"
         }
       ]
     }

@@ -5,7 +5,10 @@
 
 typedef struct Object_80277404 {
     Node_80279D90 mNode;
-    unsigned char mUnknown1C[0x10];
+    unsigned char *m1C;
+    int m20;
+    float m24;
+    float m28;
     int m2C;
     int m30;
     int m34;
@@ -15,7 +18,7 @@ typedef struct Object_80277404 {
     float m838[1020];
     float *m1828;
     int m182C;
-    unsigned char mUnknown1830[4];
+    int m1830;
 } Object_80277404;
 
 typedef struct Struct_80278894 {
@@ -47,13 +50,18 @@ typedef struct List_80278714 {
 } List_80278714;
 
 typedef struct Stream_803B5364 {
-    unsigned char mUnknown0[0x42];
+    int m0;
+    unsigned char mUnknown4[0x30];
+    short m34[6];
+    short m40;
     signed char m42;
     unsigned char mUnknown43[5];
     int m48;
     int m4C;
     unsigned char mUnknown50[8];
     void (*m58)(int index, int value, void *context);
+    unsigned char mUnknown5C[6];
+    unsigned char m62;
 } Stream_803B5364;
 
 typedef struct Event_803B5064 {
@@ -77,7 +85,13 @@ typedef struct Struct_803B53EC {
 } Struct_803B53EC;
 
 typedef struct State_8027A248 {
-    unsigned char mUnknown0[0x3C];
+    float m0[8];
+    float m20;
+    float m24;
+    float m28;
+    float m2C;
+    float m30;
+    unsigned char mUnknown34[8];
 } State_8027A248;
 
 typedef struct Struct_80279C38 {
@@ -228,6 +242,9 @@ void fn_8026D0AC(void);
 void fn_8026D0EC(void);
 void fn_80276B7C(float *a, float *b, float *c, int count, int n);
 int fn_802789E0(int handle);
+int fn_80276C98(int count, unsigned char **data, float *value, float scale);
+void fn_80279648(void **buffer, int *capacity, int size, int elementSize);
+int fn_802791D0(int index);
 void fn_80277EC4(int index);
 void *fn_8027BD68(int size);
 void fn_8027BD94(void *p);
@@ -274,6 +291,143 @@ void fn_80276DE4(Object_80277404 *p, float **buffer, int n)
     }
     p->m34 = 0;
     p->m3C = 0;
+}
+
+int fn_80276F38(Object_80277404 *p, int *count, float **buffer)
+{
+    float *src = &p->m838[p->m3C];
+    float *dst = *buffer;
+    int n;
+    if (*count > p->m38) {
+        n = p->m38;
+    } else {
+        n = *count;
+    }
+    fn_8026B2E0(dst, src, n * 4);
+    p->m3C += n;
+    p->m38 -= n;
+    *count -= n;
+    *buffer += n;
+    return n;
+}
+
+int fn_80276FD4(Object_80277404 *p, int count)
+{
+    unsigned char *data;
+    float value;
+    int total;
+    int remaining;
+    int n;
+    int used;
+    int produced;
+    if (count > p->m38) {
+        data = p->m1C;
+        value = p->m28;
+        total = 0;
+        n = 0;
+        count -= p->m38;
+        remaining = p->m30;
+        while (count > 0 && remaining >= p->m2C) {
+            if (remaining < p->m2C * 2) {
+                n = 0;
+            } else {
+                n = fn_80276C98(p->m2C, &data, &value, p->m24);
+            }
+            if (n >= 0) {
+                used = p->m2C;
+                produced = used + n;
+            } else {
+                used = p->m2C * 2;
+                produced = used + n;
+            }
+            remaining -= used;
+            total += used;
+            if (count <= produced) {
+                count = 0;
+            } else {
+                count -= produced;
+            }
+        }
+        if (n > 0) {
+            total += p->m2C;
+        }
+        if (count > 0) {
+            if (count > remaining) {
+                total += remaining;
+            } else {
+                total += count;
+            }
+        }
+        if (total > p->m34) {
+            return total - p->m34;
+        }
+    }
+    return 0;
+}
+
+int fn_802770F8(Object_80277404 *p, int count, float *src, float *dst)
+{
+    int total = fn_80276F38(p, &count, &dst);
+    int n;
+    if (count == 0) {
+        return total;
+    }
+    n = 0;
+    while (count > 0 && p->m30 >= p->m2C) {
+        if (p->m30 < p->m2C * 2) {
+            n = 0;
+        } else {
+            n = fn_80276C98(p->m2C, &p->m1C, &p->m28, p->m24);
+        }
+        fn_80276DE4(p, &src, n);
+        total += fn_80276F38(p, &count, &dst);
+    }
+    if (n > 0) {
+        fn_8026B2E0(p->m40, src, p->m2C * 4);
+        p->m34 = p->m2C;
+        src += p->m2C;
+    }
+    if (count > 0) {
+        n = count;
+        if (n > p->m30) {
+            n = p->m30;
+        }
+        fn_8026B2E0(dst, src, n * 4);
+        total += n;
+        p->m30 -= n;
+    }
+    return total;
+}
+
+int fn_80277280(Node_80279D90 *node, int count, float *a, float *b, int flag)
+{
+    Object_80277404 *p = (Object_80277404 *)node;
+    int n;
+    int result;
+    if (p->m30 == 0) {
+        return node->m8->m0(node->m8, 200, b, a, node->m1A);
+    }
+    n = fn_80276FD4(p, count);
+    if (p->m20 >= 0 && n > fn_802791D0(p->m20)) {
+        return 0;
+    }
+    if (n > 0) {
+        if (n * 4 > p->m1830) {
+            if (p->m182C < (n & ~63) + 64) {
+                fn_80279648((void **)&p->m1828, &p->m182C, (n & ~63) + 64, 4);
+            }
+            a = p->m1828 + 2;
+        }
+        result = node->m8->m0(node->m8, n, b, a, node->m1A);
+        if (result <= 0) {
+            return result;
+        }
+    }
+    result = fn_802770F8(p, count, a, b);
+    if (result < count) {
+        memset(b + result, 0, (count - result) * 4);
+    }
+    return count;
 }
 
 void fn_802773C0(Object_80277404 *p)
@@ -556,6 +710,31 @@ int fn_80278894(void)
     return (p->m8 - p->m10) * 100 / p->m8;
 }
 
+int fn_802789E0(int handle)
+{
+    int i;
+    for (i = 0; i < lbl_803A6C24.m1C.m22; i++) {
+        if (lbl_803B5060.m304[i] != 0 && fn_8026A288(lbl_803B5060.m304[i]->m0) == handle) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int fn_80278A68(int index, int count)
+{
+    int i;
+    int value = -1;
+    int result = -1;
+    for (i = 0; i < count; i++) {
+        if (lbl_803A6C24.m1CC[index].m4[i] > value) {
+            value = lbl_803A6C24.m1CC[index].m4[i];
+            result = i;
+        }
+    }
+    return result;
+}
+
 int fn_80278ABC(int count)
 {
     return count * 32 + 156;
@@ -564,6 +743,19 @@ int fn_80278ABC(int count)
 int fn_80278AC8(int count)
 {
     return fn_80278ABC(count) + fn_80274398();
+}
+
+int fn_80279170(int index)
+{
+    Stream_803B5364 *stream = lbl_803B5060.m304[index];
+    int value = 0;
+    int i;
+    for (i = 0; i < stream->m62; i++) {
+        if (stream->m34[i] >= value) {
+            value = stream->m34[i];
+        }
+    }
+    return stream->m40 - value - 1;
 }
 
 int fn_802791D0(int index)
@@ -690,6 +882,19 @@ void fn_802798C0(void)
     }
 }
 
+void fn_80279910(unsigned int *start, unsigned int *length)
+{
+    unsigned int old = *start;
+    unsigned int lower = lbl_803B53EC.m4;
+    if (old < lower) {
+        *start = lower;
+        *length -= lower - old;
+    }
+    if (*start + *length > lbl_803B53EC.m8) {
+        *length = lbl_803B53EC.m8 - *start;
+    }
+}
+
 int fn_80279BC0(Node_80279D90 *node, int count, float *a, float *b, int flag)
 {
     int i;
@@ -765,6 +970,60 @@ void fn_80279D90(Node_80279D90 **list, Node_80279D90 *node)
     } else {
         prev->m8 = node;
         node->m10 = prev;
+    }
+}
+
+void fn_80279DF8(Node_80279D90 **list, Node_80279D90 *node)
+{
+    Node_80279D90 *prev = *list;
+    Node_80279D90 *cur;
+    if (node == prev) {
+        *list = prev->m8;
+        return;
+    }
+    cur = prev->m8;
+    while (cur != 0 && cur != node) {
+        prev = cur;
+        cur = prev->m8;
+    }
+    if (cur != 0 && cur == node) {
+        node = node->m8;
+        if (node != 0) {
+            node->m10 = prev;
+        }
+        prev->m8 = prev->m8->m8;
+    }
+}
+
+void fn_8027A21C(State_8027A248 *state)
+{
+    state->m0[0] = 0.0f;
+    state->m0[1] = 0.0f;
+    state->m0[2] = 0.0f;
+    state->m0[3] = 0.0f;
+    state->m0[4] = 0.0f;
+    state->m0[5] = 0.0f;
+    state->m0[6] = 0.0f;
+    state->m0[7] = 0.0f;
+}
+
+void fn_8027A248(State_8027A248 *state, int count, float *in, float *out)
+{
+    int i;
+    for (i = 0; i < count; i++) {
+        out[i] = state->m20 * (in[i] + state->m0[7]) +
+                 state->m24 * (state->m0[0] + state->m0[6]) +
+                 state->m28 * (state->m0[1] + state->m0[5]) +
+                 state->m2C * (state->m0[2] + state->m0[4]) +
+                 state->m30 * state->m0[3];
+        state->m0[7] = state->m0[6];
+        state->m0[6] = state->m0[5];
+        state->m0[5] = state->m0[4];
+        state->m0[4] = state->m0[3];
+        state->m0[3] = state->m0[2];
+        state->m0[2] = state->m0[1];
+        state->m0[1] = state->m0[0];
+        state->m0[0] = in[i];
     }
 }
 
