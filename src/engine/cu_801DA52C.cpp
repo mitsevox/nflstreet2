@@ -128,7 +128,7 @@ void fn_801DA7E8(int count)
 
 int fn_801DA840(void)
 {
-    int code = lbl_8039A110[lbl_803ECF20 >> 24];
+    int code = lbl_8039A110[lbl_803ECF20 >> 26];
 
     fn_801DA7E8(code & 0xFF);
     return code >> 22;

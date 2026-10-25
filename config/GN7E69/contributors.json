@@ -23944,6 +23944,7 @@
       ],
       "functions": [
         "0x801DA7E8",
+        "0x801DA840",
         "0x801DA884",
         "0x801DA8E0",
         "0x801DA980",
@@ -23955,8 +23956,11 @@
       "provenance": {
         "pull_request": 1011,
         "merged_via": 1015,
-        "commit": "832970315fe393a6f8c32e8699a4629fd3f46d8a",
-        "introduced_blob": "b8deefaa98a83abcb7d39494e8d507f1806716b4"
+        "commit": "acc635718483d984b4b61189de5eb499297e7a3d",
+        "introduced_blob": "bf675c8b752c7a7173290d00154295f143bb9b67",
+        "original_commit": "832970315fe393a6f8c32e8699a4629fd3f46d8a",
+        "original_blob": "b8deefaa98a83abcb7d39494e8d507f1806716b4",
+        "integration_adjustment": "PR 1090 refines existing source to exact and preserves original contributor credit; promotion and handler-table completion do not transfer source authorship."
       }
     },
     {
@@ -24166,6 +24170,7 @@
         "0x801F2310",
         "0x801F2328",
         "0x801F23B8",
+        "0x801F23DC",
         "0x801F2694",
         "0x801F2790",
         "0x801F2798",
@@ -24175,8 +24180,11 @@
       "provenance": {
         "pull_request": 1012,
         "merged_via": 1015,
-        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
-        "introduced_blob": "7442af94409bc14ba1f26f2df299b5acb6385db5"
+        "commit": "acc635718483d984b4b61189de5eb499297e7a3d",
+        "introduced_blob": "12808332232cb4232ad407b52908d6cd1cb4b2f5",
+        "original_commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "original_blob": "7442af94409bc14ba1f26f2df299b5acb6385db5",
+        "integration_adjustment": "PR 1090 refines existing source to exact and preserves original contributor credit; promotion and handler-table completion do not transfer source authorship."
       }
     },
     {
@@ -24487,13 +24495,17 @@
         "0x801F7B1C",
         "0x801F7B9C",
         "0x801F7BD4",
-        "0x801F7C88"
+        "0x801F7C88",
+        "0x801F7D34"
       ],
       "provenance": {
         "pull_request": 1012,
         "merged_via": 1015,
-        "commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
-        "introduced_blob": "a77d5e49d3a39ec1823d4c3067e6627a906849a3"
+        "commit": "66673c70c607f10a80392d872458ed8fe12fcd4c",
+        "introduced_blob": "a5caa408f0e48dcb16b6f114938d3b807bcba07b",
+        "original_commit": "bbfa4079158ba44df2470a5e2c07ddb05cca8b6f",
+        "original_blob": "a77d5e49d3a39ec1823d4c3067e6627a906849a3",
+        "integration_adjustment": "PR 1090 refines existing source to exact and preserves original contributor credit; promotion and handler-table completion do not transfer source authorship."
       }
     },
     {
@@ -25228,14 +25240,18 @@
         "0x801CD398",
         "0x801CD3B0",
         "0x801CD3C8",
+        "0x801CD63C",
         "0x801CD750",
         "0x801CD790"
       ],
       "provenance": {
         "pull_request": 1013,
         "merged_via": 1015,
-        "commit": "27e09c6ec8a35f8667919f5bced508495a7640b2",
-        "introduced_blob": "ee6fd6eb14367e229aa945e1012459b9cb603d91"
+        "commit": "acc635718483d984b4b61189de5eb499297e7a3d",
+        "introduced_blob": "9ca3c444cd54071497c3801c94b33c560faa5177",
+        "original_commit": "27e09c6ec8a35f8667919f5bced508495a7640b2",
+        "original_blob": "ee6fd6eb14367e229aa945e1012459b9cb603d91",
+        "integration_adjustment": "PR 1090 refines existing source to exact and preserves original contributor credit; promotion and handler-table completion do not transfer source authorship."
       }
     },
     {
@@ -25356,14 +25372,18 @@
         "mitsevox"
       ],
       "functions": [
+        "0x801CEE54",
         "0x801CEE84",
         "0x801CEEF4"
       ],
       "provenance": {
         "pull_request": 1013,
         "merged_via": 1015,
-        "commit": "27e09c6ec8a35f8667919f5bced508495a7640b2",
-        "introduced_blob": "0e714b7404a742ab54604841d9b967d42e71a0cf"
+        "commit": "6101cda8e02e20c89e85218408397c3e7b28bcf7",
+        "introduced_blob": "26d910507d9d56909497f1f7f6cd4f06fcddbfcc",
+        "original_commit": "27e09c6ec8a35f8667919f5bced508495a7640b2",
+        "original_blob": "0e714b7404a742ab54604841d9b967d42e71a0cf",
+        "integration_adjustment": "PR 1090 refines the existing fn_801CEE54 initialization assignment order to an exact match and promotes the complete provisional grouping. Original source credit remains with mitsevox under PR 1013; refinement and promotion do not transfer credit."
       }
     },
     {
@@ -25756,6 +25776,7 @@
         "0x8020E064",
         "0x8020E1B8",
         "0x8020E258",
+        "0x8020E2B0",
         "0x8020E51C",
         "0x8020E524",
         "0x8020E52C",
@@ -25767,8 +25788,11 @@
       "provenance": {
         "pull_request": 1014,
         "merged_via": 1015,
-        "commit": "ecb52e48f2b93b4aa537302be4f5ee756fd4b0c8",
-        "introduced_blob": "7124290648b120eda649eb2bb3952b2bd103d03e"
+        "commit": "acc635718483d984b4b61189de5eb499297e7a3d",
+        "introduced_blob": "99176b7e5b68267884ac6b0735646d4aad9c8612",
+        "original_commit": "ecb52e48f2b93b4aa537302be4f5ee756fd4b0c8",
+        "original_blob": "7124290648b120eda649eb2bb3952b2bd103d03e",
+        "integration_adjustment": "PR 1090 refines existing source to exact and preserves original contributor credit; promotion and handler-table completion do not transfer source authorship."
       }
     },
     {

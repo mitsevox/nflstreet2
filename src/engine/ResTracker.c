@@ -84,7 +84,6 @@ void fn_801F23DC(unsigned int type, void *pData)
     char *pMem;
     char *pName;
     int index;
-    char mode;
 
     if (lbl_803EBDD0 == 1 && lbl_803EBDD1 == 1) {
         pMem = lbl_803EBDBC;
@@ -106,12 +105,13 @@ void fn_801F23DC(unsigned int type, void *pData)
                     break;
                 }
                 if (pName != 0) {
-                    lbl_803EBDBC += sprintf(pMem, lbl_802B1854, pName, index, lbl_803EBDC4, fn_801F7ABC());
+                    lbl_803EBDBC += sprintf(lbl_803EBDBC, lbl_802B1854, pName, index, lbl_803EBDC4, fn_801F7ABC());
                 }
             } else {
                 pLoad = pData;
                 switch (type) {
-                case 0:
+                case 0: {
+                    char mode;
                     if (fn_801F2310() == 0) {
                         mode = ((ResTrackOpen_801F23DC *)pData)->mMode;
                     } else {
@@ -119,11 +119,13 @@ void fn_801F23DC(unsigned int type, void *pData)
                     }
                     lbl_803EBDBC += sprintf(pMem, lbl_802B1864, mode, fn_801F7ABC(), ((ResTrackOpen_801F23DC *)pData)->pName);
                     break;
+                }
                 case 1:
                     pRes = pLoad->pRes;
                     lbl_803EBDBC += sprintf(pMem, lbl_802B1874, fn_801F7ABC(), pRes->pName, pLoad->mIndex, pLoad->mIndex);
                     break;
-                case 2:
+                case 2: {
+                    char mode;
                     pRes = pLoad->pRes;
                     if (fn_801F2310() == 0) {
                         mode = pLoad->mMode;
@@ -139,6 +141,7 @@ void fn_801F23DC(unsigned int type, void *pData)
                     lbl_803EBDBC += sprintf(lbl_803EBDBC, lbl_802B18AC, pLoad->mDiskSize, pLoad->mFullSize,
                                             pLoad->mAsync ? lbl_802B18BC : lbl_802B18C4, pLoad->mOffset);
                     break;
+                }
                 case 3:
                     pRes = pLoad->pRes;
                     lbl_803EBDBC += sprintf(pMem, lbl_802B18CC, fn_801F7ABC(), pRes->pName);
