@@ -44512,6 +44512,68 @@
       ]
     },
     {
+      "source": "src/engine/cu_8021F77C.c",
+      "profile": "engine_c",
+      "evidence": "Comparison source fragment of src/engine/cu_8021A438.c (evidence.tsv unit row 0x8021A438-0x80221198): the target function extents 0x8021F77C-0x8021F8DC and their literal-pool slice 0x802B1F10-0x802B1F28 (exact data row). The partition's constants lie in pools of functions without drafts, so these functions are compiled with their own pools; the split does not claim an original file boundary. Original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021F77C",
+          "end": "0x8021F8DC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1F10",
+          "end": "0x802B1F28"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8021F77C",
+          "start": "0x8021F77C",
+          "end": "0x8021F82C"
+        },
+        {
+          "symbol": "fn_8021F82C",
+          "start": "0x8021F82C",
+          "end": "0x8021F8DC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80220D3C.c",
+      "profile": "engine_c",
+      "evidence": "Comparison source fragment of src/engine/cu_8021A438.c (evidence.tsv unit row 0x8021A438-0x80221198): the target function extents 0x80220D3C-0x80221118 and their literal-pool slice 0x802B1F58-0x802B1F6C (exact data row). The partition's constants lie in pools of functions without drafts, so these functions are compiled with their own pools; the split does not claim an original file boundary. Original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80220D3C",
+          "end": "0x80221118"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1F58",
+          "end": "0x802B1F6C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80220D3C",
+          "start": "0x80220D3C",
+          "end": "0x80220DA4"
+        },
+        {
+          "symbol": "fn_80220DA4",
+          "start": "0x80220DA4",
+          "end": "0x80221118"
+        }
+      ]
+    },
+    {
       "source": "src/engine/cu_80221154.c",
       "profile": "engine_c",
       "evidence": "Comparison source fragment of src/engine/cu_8021A438.c (evidence.tsv unit row 0x8021A438-0x80221198): the target function extents 0x80221154-0x80221198 and their literal-pool slice 0x802B1F6C-0x802B1F70 (exact data row). The partition's constants lie in pools of functions without drafts, so these functions are compiled with their own pools; the split does not claim an original file boundary. Original assembly stays linked.",
@@ -44540,16 +44602,27 @@
     {
       "source": "src/engine/cu_80221198.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80221198-0x80226F9C (src/engine/cu_80221198.c), its function and name rows. Draft comparisons only; original assembly remains linked. The draft bodies compile no static data; the functions that load .rodata constants have no draft body and no data is registered.",
+      "evidence": "evidence.tsv provisional unit row 0x80221198-0x80226F9C (src/engine/cu_80221198.c), its function and name rows, and the exact data row 0x802B1F70-0x802B1F74 (the literal of fn_80221198, the only draft body that loads a constant). Draft comparisons only; original assembly remains linked. The other functions that load .rodata constants have no draft body here (0x80222EC4-0x80223460 are compared in comparison fragments).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80221198",
           "end": "0x80226F9C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1F70",
+          "end": "0x802B1F74"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_80221198",
+          "start": "0x80221198",
+          "end": "0x80221294"
+        },
         {
           "symbol": "fn_80221294",
           "start": "0x80221294",
@@ -46031,13 +46104,13 @@
     {
       "source": "src/engine/cu_8020651C.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x80205754-0x8020B564 (src/engine/t3db_query.c; this source covers 0x8020651C-0x80207448 as src/engine/cu_8020651C.c): ten functions of the original t3db_query.c (NASCAR 2005 symbol table) between _TDbQryPrepComplexFilter 0x80205DB8 and _TDbQryFindJoinColumn 0x80207448, which have no source yet, plus the file's 32-byte .rodata 0x802B1B90-0x802B1BB0 (default column definitions copied by 0x80206EB8). 0x802067D4 is a same-size partial. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x80205754-0x8020B564 (src/engine/t3db_query.c; this source covers 0x8020651C-0x802075F4 as src/engine/cu_8020651C.c): eleven functions of the original t3db_query.c (NASCAR 2005 symbol table) after _TDbQryPrepComplexFilter 0x80205DB8, which has no source yet, through _TDbQryFindJoinColumn 0x80207448, plus the file's 32-byte .rodata 0x802B1B90-0x802B1BB0 (default column definitions copied by 0x80206EB8). 0x802067D4 is a same-size partial. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8020651C",
-          "end": "0x80207448"
+          "end": "0x802075F4"
         },
         {
           "section": ".rodata",
@@ -46096,13 +46169,18 @@
           "symbol": "fn_802072E8",
           "start": "0x802072E8",
           "end": "0x80207448"
+        },
+        {
+          "symbol": "fn_80207448",
+          "start": "0x80207448",
+          "end": "0x802075F4"
         }
       ]
     },
     {
       "source": "src/engine/cu_802075F4.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x80205754-0x8020B564 (src/engine/t3db_query.c; this source covers 0x802075F4-0x8020840C as src/engine/cu_802075F4.c): the last seven E5 functions of the original t3db_query.c (NASCAR 2005 symbol table), after _TDbQryFindJoinColumn 0x80207448, which has no source yet; the file continues into the E6 range. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x80205754-0x8020B564 (src/engine/t3db_query.c; this source covers 0x802075F4-0x8020840C as src/engine/cu_802075F4.c): the last seven E5 functions of the original t3db_query.c (NASCAR 2005 symbol table), after _TDbQryFindJoinColumn 0x80207448 (compared in src/engine/cu_8020651C.c); the file continues into the E6 range. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",

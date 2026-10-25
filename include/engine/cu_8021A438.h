@@ -146,8 +146,10 @@ void fn_80220CA4(Int32 a, Int32 b, Int32 c);
 void fn_80220CDC(Int32 a);
 Int32 fn_80220CE4(void);
 void fn_80220CFC(Int32 a);
+void fn_80220DA4(Float32 *pMul, Float32 *pScale);
 void *fn_80220D34(void);
 void fn_80221118(void);
+long long fn_80221154(Float32 *pV);
 
 /* src/engine/cu_80221198.c */
 void fn_80221314(Object_8021E688 *pObject, Int16 a, Int16 b);
