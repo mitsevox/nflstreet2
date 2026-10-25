@@ -48928,6 +48928,16 @@
           "end": "0x801F1D20"
         },
         {
+          "symbol": "fn_801F1D20",
+          "start": "0x801F1D20",
+          "end": "0x801F1F30"
+        },
+        {
+          "symbol": "fn_801F1F30",
+          "start": "0x801F1F30",
+          "end": "0x801F201C"
+        },
+        {
           "symbol": "fn_801F201C",
           "start": "0x801F201C",
           "end": "0x801F2120"
@@ -49084,6 +49094,12 @@
           "placement": ".text",
           "start": "0x801F3524",
           "end": "0x801F5034"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1A18",
+          "end": "0x802B1A28"
         }
       ],
       "functions": [
@@ -49246,6 +49262,11 @@
           "symbol": "fn_801F46F8",
           "start": "0x801F46F8",
           "end": "0x801F4770"
+        },
+        {
+          "symbol": "fn_801F4770",
+          "start": "0x801F4770",
+          "end": "0x801F4834"
         },
         {
           "symbol": "fn_801F4834",
