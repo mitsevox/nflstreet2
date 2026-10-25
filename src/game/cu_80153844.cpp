@@ -130,8 +130,10 @@ void fn_801539A0(Class_802A1B58 *p, float dt)
         fn_8017D7C4("Playoff Round!");
     }
     if ((unsigned int)fn_80178D70(0) > 1) {
-        lbl_803EABA4->fn_800C02D4(fn_8009D990(0) - 2);
-        lbl_803EABA4->fn_800C02EC(fn_8009D990(0) - 4);
+        unsigned int value = fn_8009D990(0);
+        lbl_803EABA4->fn_800C02D4(value - 2);
+        value = fn_8009D990(0);
+        lbl_803EABA4->fn_800C02EC(value - 4);
     } else {
         lbl_803EABA4->fn_800C02EC(39);
     }
