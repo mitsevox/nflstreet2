@@ -52378,7 +52378,7 @@
     {
       "source": "src/game/cu_800E55B8.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue1021 bounded fragment; full natural48byte native pool measured against earlier unclaimed contextDC34\u2013DCD8; natural mismatches retained. Original source boundaries unresolved; no linked promotion. fn_800E586C (PR 1123) is added in address order; its four literals 0x8029DC3C-0x8029DC4C follow the pool of fn_800E55B8 inside the same context.",
+      "evidence": "Issue1021 bounded fragment; full natural48byte native pool measured against earlier unclaimed contextDC34\u2013DCD8; natural mismatches retained. Original source boundaries unresolved; no linked promotion. fn_800E586C, fn_800E5C00 and fn_800E5EA4 (PR 1123) are added in address order; their literals 0x8029DC3C-0x8029DC70 follow the pool of fn_800E55B8 inside the same context.",
       "sections": [
         {
           "section": ".text",
@@ -52403,6 +52403,16 @@
           "symbol": "fn_800E586C",
           "start": "0x800E586C",
           "end": "0x800E5B04"
+        },
+        {
+          "symbol": "fn_800E5C00",
+          "start": "0x800E5C00",
+          "end": "0x800E5EA4"
+        },
+        {
+          "symbol": "fn_800E5EA4",
+          "start": "0x800E5EA4",
+          "end": "0x800E6328"
         },
         {
           "symbol": "fn_800E6984",

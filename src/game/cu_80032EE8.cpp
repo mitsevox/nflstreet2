@@ -24,11 +24,18 @@ void fn_80187C5C(unsigned char a);
 int fn_801CBFA0(Class_801CBC50 *pTable);
 int fn_801CC4F4(Class_801CC350 *pGroup);
 int fn_801CC4FC(Class_801CC350 *pGroup);
+extern const char lbl_8028ADDC[];
+extern Record_802CCBAC lbl_802CCBF4[];
+extern Record_803EA3A8 lbl_802CCC34[];
+extern ModuleDependency lbl_80306B58[];
+extern ModuleDependency lbl_80306B84[];
+extern ModuleDependency lbl_80306B98[];
+extern ModuleDependency lbl_80306BF4[];
+extern ModuleDependency lbl_80306C4C[];
+extern ModuleDependency lbl_80306C58[];
 }
 
-void fn_80026BA4();
-
-static Record_802CCBAC lbl_802CCBF4[] = {
+Record_802CCBAC lbl_802CCBF4[] = {
     { 9, "FE Loading" },
     { 7, "FE FirstStart" },
     { 8, "FE FirstStartComplete" },
@@ -39,7 +46,7 @@ static Record_802CCBAC lbl_802CCBF4[] = {
     { -1, 0 },
 };
 
-static Record_803EA3A8 lbl_802CCC34[] = {
+Record_803EA3A8 lbl_802CCC34[] = {
     { 7, 8 },
     { 8, 9 },
     { 9, 10 },
@@ -51,6 +58,10 @@ static Record_803EA3A8 lbl_802CCC34[] = {
     { 11, 12 },
     { -1, -1 },
 };
+
+const char lbl_8028ADDC[] = "MainFE Group";
+
+void fn_80026BA4();
 
 extern LoadingFE gLoadingFE;
 extern FEDLL gFEDLL;
@@ -64,7 +75,7 @@ extern FEPlyr gFEPlyr;
 
 MainFEGroup lbl_80306B34;
 
-static ModuleDependency lbl_80306B58[] = {
+ModuleDependency lbl_80306B58[] = {
     &gQkl,
     &gGRender,
     &gFEDLL,
@@ -78,7 +89,7 @@ static ModuleDependency lbl_80306B58[] = {
     0,
 };
 
-static ModuleDependency lbl_80306B84[] = {
+ModuleDependency lbl_80306B84[] = {
     &gQkl,
     &gGRender,
     &gFEDLL,
@@ -86,7 +97,7 @@ static ModuleDependency lbl_80306B84[] = {
     0,
 };
 
-static ModuleDependency lbl_80306B98[] = {
+ModuleDependency lbl_80306B98[] = {
     &gGRender,
     &gLoadingFE,
     &gFEDLL,
@@ -112,7 +123,7 @@ static ModuleDependency lbl_80306B98[] = {
     0,
 };
 
-static ModuleDependency lbl_80306BF4[] = {
+ModuleDependency lbl_80306BF4[] = {
     &gGRender,
     &gFEDLL,
     &gFELoop,
@@ -137,19 +148,19 @@ static ModuleDependency lbl_80306BF4[] = {
     0,
 };
 
-static ModuleDependency lbl_80306C4C[] = {
+ModuleDependency lbl_80306C4C[] = {
     &gMemAudit,
     &gFEDLL,
     0,
 };
 
-static ModuleDependency lbl_80306C58[] = {
+ModuleDependency lbl_80306C58[] = {
     &gFEDLL,
     &gMemAudit,
     0,
 };
 
-const char *MainFEGroup::GetName() { return "MainFE Group"; }
+const char *MainFEGroup::GetName() { return lbl_8028ADDC; }
 Record_802CCBAC *MainFEGroup::vfn_04() { return lbl_802CCBF4; }
 Record_803EA3A8 *MainFEGroup::vfn_05() { return lbl_802CCC34; }
 
