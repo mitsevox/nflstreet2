@@ -30757,6 +30757,62 @@
         "original_blob": "3f333bcd4356b016d36bfc21cbd8c0dcc06445fa",
         "integration_adjustment": "Preserve original adampreddy source contribution PR 763 for fn_801B1368 and fn_801B1C1C, actual partial definitions already present in the original reviewed source and accepted via PR 996. PR 1109 refines them to exact without transferring original source credit; current refinement pins are preserved separately from the original source blob."
       }
+    },
+    {
+      "source": "src/engine/cu_80213DB0.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80213DB0",
+        "0x80213F18"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1127,
+        "commit": "65d7b33de8e18e53361750d5a60182586fd204e7",
+        "introduced_blob": "af87b449ea5035cd3386d2a0b1f2cfdf7dba6e5a"
+      }
+    },
+    {
+      "source": "src/engine/cu_80229084.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80229084",
+        "0x8022908C"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1127,
+        "commit": "65d7b33de8e18e53361750d5a60182586fd204e7",
+        "introduced_blob": "34dbf9ac2606a0e1355b1ab63374042c8e0795c0"
+      }
+    },
+    {
+      "source": "src/engine/cu_80229270.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8022A304",
+        "0x8022AD64",
+        "0x8022B200",
+        "0x8022C0E0",
+        "0x8022C214",
+        "0x8022C410",
+        "0x8022C518",
+        "0x8022EF8C",
+        "0x8022F0D4",
+        "0x8022F294"
+      ],
+      "provenance": {
+        "pull_request": 1127,
+        "merged_via": 1127,
+        "commit": "65d7b33de8e18e53361750d5a60182586fd204e7",
+        "introduced_blob": "47dde747f76654f07c4aa14dc3decfaa0288ec11"
+      }
     }
   ],
   "target": "GN7E69",
