@@ -30602,12 +30602,10 @@
         "0x801B052C",
         "0x801B0B18",
         "0x801B0B5C",
-        "0x801B1368",
         "0x801B1474",
         "0x801B15E4",
         "0x801B192C",
         "0x801B1B34",
-        "0x801B1C1C",
         "0x801B1D0C",
         "0x801B1D18",
         "0x801B1D20",
@@ -30739,6 +30737,25 @@
         "merged_via": 1115,
         "commit": "0e12b107e4982280ecac92e877c0d8c8586c6f40",
         "introduced_blob": "f0e7c11f1db55a1d898e30d51288bfe05038c079"
+      }
+    },
+    {
+      "source": "src/engine/cu_801AE3E4.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801B1368",
+        "0x801B1C1C"
+      ],
+      "provenance": {
+        "pull_request": 763,
+        "merged_via": 1109,
+        "commit": "e0ef18b6ec872c3532ff7cb106e960292bb8e70a",
+        "introduced_blob": "baadc6d8fa6e5da4eb1356b07ce6a2ac784cbf9e",
+        "original_commit": "ada6b8fb87145a04f6a21315d8dabfe778f8efb9",
+        "original_blob": "3f333bcd4356b016d36bfc21cbd8c0dcc06445fa",
+        "integration_adjustment": "Preserve original adampreddy source contribution PR 763 for fn_801B1368 and fn_801B1C1C, actual partial definitions already present in the original reviewed source and accepted via PR 996. PR 1109 refines them to exact without transferring original source credit; current refinement pins are preserved separately from the original source blob."
       }
     }
   ],
