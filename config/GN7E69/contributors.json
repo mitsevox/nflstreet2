@@ -30648,6 +30648,68 @@
         "original_blob": "e232ba28a2b5b7b33ac220c246ba407c2ff64f08",
         "integration_adjustment": "Newly exact pre-existing body fn_801BAB48 originates in contribution 1002; the PR 1110 indexed state-span refinement does not transfer original source credit. The original source commit/blob is retained for attribution. The refined source is pinned for squash-history verification without changing the function extent."
       }
+    },
+    {
+      "source": "src/engine/cu_8021A438.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8021D1FC",
+        "0x8021DEFC",
+        "0x8021DF9C",
+        "0x8021E050",
+        "0x8021E0B0",
+        "0x8021E160",
+        "0x8021E244",
+        "0x8021E2B4",
+        "0x8021E504",
+        "0x8021E72C",
+        "0x8021E9AC",
+        "0x8021EA54",
+        "0x8021EBB4",
+        "0x8021EE58",
+        "0x8021F550",
+        "0x8021F5C0",
+        "0x8021F71C",
+        "0x8021F8DC",
+        "0x8021F954",
+        "0x80220988",
+        "0x80220A08",
+        "0x80220AD0",
+        "0x80220BE0",
+        "0x80220BFC",
+        "0x80220C4C",
+        "0x80220CA4",
+        "0x80220CDC",
+        "0x80220CE4",
+        "0x80220CFC",
+        "0x80220D04",
+        "0x80220D34",
+        "0x80221118"
+      ],
+      "provenance": {
+        "pull_request": 1111,
+        "merged_via": 1111,
+        "commit": "acd98353fbb9221b149543eb1b7e55dfdb2022a8",
+        "introduced_blob": "79d3b8258136eee2c6877048224e452968611ab2"
+      }
+    },
+    {
+      "source": "src/engine/cu_80221198.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80225654",
+        "0x80225958"
+      ],
+      "provenance": {
+        "pull_request": 1111,
+        "merged_via": 1111,
+        "commit": "acd98353fbb9221b149543eb1b7e55dfdb2022a8",
+        "introduced_blob": "38baeba0313df3b9304b004cada98e08be4a09f7"
+      }
     }
   ],
   "target": "GN7E69",
