@@ -30757,6 +30757,147 @@
         "original_blob": "3f333bcd4356b016d36bfc21cbd8c0dcc06445fa",
         "integration_adjustment": "Preserve original adampreddy source contribution PR 763 for fn_801B1368 and fn_801B1C1C, actual partial definitions already present in the original reviewed source and accepted via PR 996. PR 1109 refines them to exact without transferring original source credit; current refinement pins are preserved separately from the original source blob."
       }
+    },
+    {
+      "source": "src/dolphin/os/__ppc_eabi_init.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8023E838",
+        "0x8023E88C",
+        "0x8023E8AC"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1124,
+        "commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
+        "introduced_blob": "d3c60a3c1b15cd45cf2181a40d5a9d9954c09827"
+      }
+    },
+    {
+      "source": "src/dolphin/mtx/mtx.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8024A9EC",
+        "0x8024AA18"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1124,
+        "commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
+        "introduced_blob": "b2ee7a085e0819e800f228d835fc6e81347c490a"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXLight.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8024F9EC"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1124,
+        "commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
+        "introduced_blob": "0e481f6011d811f005e80cba2b335676a5305ccd"
+      }
+    },
+    {
+      "source": "src/dolphin/gx/GXTransform.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x802523A4",
+        "0x80252448",
+        "0x802524D4",
+        "0x8025251C",
+        "0x8025256C",
+        "0x802525F0",
+        "0x802527D4"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1124,
+        "commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
+        "introduced_blob": "1dbc854a93382c6062dfde1a01cdb948c8806dba"
+      }
+    },
+    {
+      "source": "src/engine/cu_8022F428.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x8023424C",
+        "0x80234394"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1124,
+        "commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
+        "introduced_blob": "da70feb3a4e38c6ee448e85d4b9e6dac546a92fa"
+      }
+    },
+    {
+      "source": "src/engine/cu_802355E4.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80235D10",
+        "0x80235DD8",
+        "0x80235EB4",
+        "0x80235F58",
+        "0x80236164",
+        "0x80236408",
+        "0x802364B4",
+        "0x802368D0",
+        "0x80236B4C",
+        "0x80237EE8",
+        "0x8023808C"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1124,
+        "commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
+        "introduced_blob": "54dc43dcd9450e8e51601fd324d158522ac32572"
+      }
+    },
+    {
+      "source": "src/engine/cu_80266A2C.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x80266D00"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1124,
+        "commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
+        "introduced_blob": "ec5a81ceb264f4421c71f88efa4363a686e8cfd9"
+      }
+    },
+    {
+      "source": "src/engine/cu_802898FC.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x802898FC",
+        "0x80289928"
+      ],
+      "provenance": {
+        "pull_request": 1124,
+        "merged_via": 1124,
+        "commit": "df4ac1d1b786e062161b768fff67a426bf98c767",
+        "introduced_blob": "bd639994c88e8e7ce05c142f1d3ff2d8ab60af9c"
+      }
     }
   ],
   "target": "GN7E69",
