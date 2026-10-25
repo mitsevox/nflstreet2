@@ -4,9 +4,6 @@
 extern "C" {
 
 void fn_80023048(void);
-void fn_801CBCD0(void *pObject);
-void fn_801CBFA8(void *pObject);
-void fn_801CC054(void *pObject, int a);
 int fn_801CC7FC(void *pObject);
 int fn_801CC820(void *pObject, int a);
 int fn_801CC8AC(void *pObject, int a);

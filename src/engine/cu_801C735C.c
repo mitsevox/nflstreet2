@@ -3,8 +3,37 @@
 #include "game/fn_801D2B7C.h"
 
 
-int fn_801C735C(unsigned int count, int size, int *pStackOffset, int *pNodeOffset);
-int fn_801C73C0(NodePool_801C750C *pPool);
+static int fn_801C735C(unsigned int count, int size, int *pStackOffset, int *pNodeOffset)
+{
+    int entrySize;
+    int offset;
+
+    entrySize = count <= 0xFF ? 1 : 2;
+    offset = 24;
+    *pStackOffset = offset;
+    offset += count * entrySize;
+    offset = fn_801C6644(offset);
+    *pNodeOffset = offset;
+    offset += count * size;
+    return offset;
+}
+
+static int fn_801C73C0(NodePool_801C750C *pPool)
+{
+    int result;
+
+    if (pPool->mFree != 0) {
+        pPool->mFree--;
+        if (pPool->mCount <= 0xFF) {
+            result = ((unsigned char *)pPool->mpStack)[pPool->mFree];
+        } else {
+            result = ((unsigned short *)pPool->mpStack)[pPool->mFree];
+        }
+    } else {
+        result = -1;
+    }
+    return result;
+}
 
 static void fn_801C7408(NodePool_801C750C *pPool, int index)
 {
@@ -60,22 +89,25 @@ NodePool_801C750C *fn_801C750C(int heap, unsigned int count, int size, NodePool_
     int stackOffset;
     int nodeOffset;
     int memSize;
+    NodePool_801C750C *pResult;
 
     memSize = fn_801C735C(count, size, &stackOffset, &nodeOffset);
     if (pPool == 0) {
         pPool = fn_801D2BB0(heap, memSize, 0, 0);
-        if (pPool == 0) {
-            return 0;
-        }
     }
-    pPool->mCount = count;
-    pPool->mNodeSize = size;
-    pPool->mHeap = heap;
-    pPool->mpStack = (char *)pPool + stackOffset;
-    pPool->mpNodes = (char *)pPool + nodeOffset;
-    fn_801C7444(pPool);
-    fn_801F7BD4(0);
-    return pPool;
+    if (pPool != 0) {
+        pResult = pPool;
+        pPool->mCount = count;
+        pPool->mNodeSize = size;
+        pPool->mHeap = heap;
+        pPool->mpStack = (char *)pPool + stackOffset;
+        pPool->mpNodes = (char *)pPool + nodeOffset;
+        fn_801C7444(pPool);
+        fn_801F7BD4(0);
+    } else {
+        pResult = 0;
+    }
+    return pResult;
 }
 
 int fn_801C75B8(NodePool_801C750C *pPool)
