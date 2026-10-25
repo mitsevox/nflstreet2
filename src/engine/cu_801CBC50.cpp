@@ -59,7 +59,6 @@ int Class_801CBC50::fn_801CBD80(int a, int b)
 {
     int result;
     ModuleDependency *pDeps;
-
     int id;
 
     if (b == -1) {

@@ -2,8 +2,7 @@
 #include <dolphin/os.h>
 #include <dolphin/os/OSCache.h>
 
-/* The target reads the bus clock through the absolute low-memory address (lis 0x8000, lwz 0xF8). */
-#define BUS_CLOCK_801C1D54 (*(u32 *)0x800000F8)
+#define BUS_CLOCK_801C1D54 (*(u32 *)(OS_BASE_CACHED | 0x00F8))
 
 extern u32 lbl_803ECEC4;
 extern volatile int lbl_803ECEC8;
