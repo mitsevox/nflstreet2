@@ -30757,6 +30757,133 @@
         "original_blob": "3f333bcd4356b016d36bfc21cbd8c0dcc06445fa",
         "integration_adjustment": "Preserve original adampreddy source contribution PR 763 for fn_801B1368 and fn_801B1C1C, actual partial definitions already present in the original reviewed source and accepted via PR 996. PR 1109 refines them to exact without transferring original source credit; current refinement pins are preserved separately from the original source blob."
       }
+    },
+    {
+      "source": "src/engine/cu_801CBC50.cpp",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801CBC50",
+        "0x801CBC9C",
+        "0x801CBCD0",
+        "0x801CBD80",
+        "0x801CBE24",
+        "0x801CBE9C",
+        "0x801CBEC8",
+        "0x801CBEF4",
+        "0x801CBFA0",
+        "0x801CBFA8",
+        "0x801CC054",
+        "0x801CC05C",
+        "0x801CC0D0",
+        "0x801CC1DC",
+        "0x801CC280",
+        "0x801CC2E8",
+        "0x801CC350",
+        "0x801CC38C",
+        "0x801CC3C0",
+        "0x801CC490",
+        "0x801CC4DC",
+        "0x801CC4F4",
+        "0x801CC4FC",
+        "0x801CC518",
+        "0x801CC524",
+        "0x801CC558",
+        "0x801CC5B4",
+        "0x801CC604",
+        "0x801CC654",
+        "0x801CC6C4",
+        "0x801CC6F8",
+        "0x801CC6FC",
+        "0x801CC700",
+        "0x801CC740",
+        "0x801CC7FC",
+        "0x801CC820",
+        "0x801CC8AC",
+        "0x801CC96C",
+        "0x801CC974",
+        "0x801CC9A8",
+        "0x801CC9DC",
+        "0x801CC9E4",
+        "0x801CC9E8",
+        "0x801CC9EC",
+        "0x801CCA20"
+      ],
+      "provenance": {
+        "pull_request": 1125,
+        "merged_via": 1125,
+        "commit": "f3793021d111c9ac176453291e98a9a94e73df90",
+        "introduced_blob": "d539da03c8f7fbe12a33d705c4c914f603b88259"
+      }
+    },
+    {
+      "source": "src/engine/cu_801C735C.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801C735C",
+        "0x801C73C0"
+      ],
+      "provenance": {
+        "pull_request": 1125,
+        "merged_via": 1125,
+        "commit": "f3793021d111c9ac176453291e98a9a94e73df90",
+        "introduced_blob": "fbed1091111d1918ce9dea2ae55b09ba08c2b3b0"
+      }
+    },
+    {
+      "source": "src/engine/cu_801C7F70.c",
+      "contributors": [
+        "adampreddy"
+      ],
+      "functions": [
+        "0x801C8298",
+        "0x801C87C0"
+      ],
+      "provenance": {
+        "pull_request": 1125,
+        "merged_via": 1125,
+        "commit": "f3793021d111c9ac176453291e98a9a94e73df90",
+        "introduced_blob": "6c6e7088cc95c4bb12ec971dfba170e749f6f3d6"
+      }
+    },
+    {
+      "source": "src/engine/cu_801C735C.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801C750C"
+      ],
+      "provenance": {
+        "pull_request": 1013,
+        "merged_via": 1015,
+        "commit": "f3793021d111c9ac176453291e98a9a94e73df90",
+        "introduced_blob": "fbed1091111d1918ce9dea2ae55b09ba08c2b3b0",
+        "original_commit": "27e09c6ec8a35f8667919f5bced508495a7640b2",
+        "original_blob": "c9cf1ef659dc4ad4c26263ac08fc5029a9be7435",
+        "integration_adjustment": "Newly exact pre-existing body fn_801C750C originates in contribution 1013; the PR 1125 refinement does not transfer original source credit. The original source commit/blob is retained for attribution. The refined source is pinned for squash-history verification without changing the function extent."
+      }
+    },
+    {
+      "source": "src/engine/cu_801C7F70.c",
+      "contributors": [
+        "mitsevox"
+      ],
+      "functions": [
+        "0x801C8D38"
+      ],
+      "provenance": {
+        "pull_request": 1013,
+        "merged_via": 1015,
+        "commit": "f3793021d111c9ac176453291e98a9a94e73df90",
+        "introduced_blob": "6c6e7088cc95c4bb12ec971dfba170e749f6f3d6",
+        "original_commit": "a879bb1682bfa22071d08c96b4ec3b32c63ba002",
+        "original_blob": "baa70910c70657b533d46accb5117063affe0487",
+        "integration_adjustment": "Newly exact pre-existing body fn_801C8D38 originates in contribution 1013; the PR 1125 refinement does not transfer original source credit. The original source commit/blob is retained for attribution. The refined source is pinned for squash-history verification without changing the function extent."
+      }
     }
   ],
   "target": "GN7E69",
