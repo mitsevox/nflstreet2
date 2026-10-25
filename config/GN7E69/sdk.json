@@ -109,7 +109,7 @@
           "section": ".sbss",
           "start": "0x803ED038",
           "end": "0x803ED03C",
-          "evidence": "Native BootInfo storage slot4 bytes referenced consistently by matching targetfunction(s), e.g OSGetConsoleType at0x80238984. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. BootInfo: lwz at 0x80238984 accesses 0x803ED038; stw at 0x80238BA0 accesses 0x803ED038; lwz at 0x80238C0C accesses 0x803ED038; lwz at 0x80238C30 accesses 0x803ED038 Native .sbss offset 0, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
+          "evidence": "Native BootInfo storage slot4 bytes referenced consistently by matching targetfunction(s), e.g OSGetConsoleType at0x80238984. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. BootInfo: lwz at 0x80238984 accesses 0x803ED038; stw at 0x80238BA0 accesses 0x803ED038; lwz at 0x80238C0C accesses 0x803ED038; lwz at 0x80238C30 accesses 0x803ED038 Native .sbss offset 0, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED06C-0x803ED070); NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -118,7 +118,7 @@
           "section": ".sbss",
           "start": "0x803ED03C",
           "end": "0x803ED040",
-          "evidence": "Native BI2DebugFlag storage slot4 bytes referenced consistently by matching targetfunction(s), e.g OSExceptionInit at0x80238FB4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. BI2DebugFlag: stw at 0x80238B9C accesses 0x803ED03C; stw at 0x80238BB8 accesses 0x803ED03C; lwz at 0x80238BC0 accesses 0x803ED03C; stw at 0x80238BFC accesses 0x803ED03C Native .sbss offset 4, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
+          "evidence": "Native BI2DebugFlag storage slot4 bytes referenced consistently by matching targetfunction(s), e.g OSExceptionInit at0x80238FB4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. BI2DebugFlag: stw at 0x80238B9C accesses 0x803ED03C; stw at 0x80238BB8 accesses 0x803ED03C; lwz at 0x80238BC0 accesses 0x803ED03C; stw at 0x80238BFC accesses 0x803ED03C Native .sbss offset 4, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED06C-0x803ED070); NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -127,7 +127,7 @@
           "section": ".sbss",
           "start": "0x803ED048",
           "end": "0x803ED050",
-          "evidence": "Native ZeroF storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSFPRInit at0x802388FC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. ZeroF: lfd at 0x802388FC accesses 0x803ED048 Native .sbss offset 16, size 8, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
+          "evidence": "Native ZeroF storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSFPRInit at0x802388FC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. ZeroF: lfd at 0x802388FC accesses 0x803ED048 Native .sbss offset 16, size 8, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED06C-0x803ED070); NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -136,7 +136,7 @@
           "section": ".sbss",
           "start": "0x803ED050",
           "end": "0x803ED058",
-          "evidence": "Native ZeroPS storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSFPRInit at0x80238878. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. ZeroPS: __OSFPRInit forms 0x803ED050 at 0x80238878 and loads paired-single zeros with psq_l at 0x8023887C; eight-byte source buffer. Native .sbss offset 24, size 8, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
+          "evidence": "Native ZeroPS storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSFPRInit at0x80238878. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. ZeroPS: __OSFPRInit forms 0x803ED050 at 0x80238878 and loads paired-single zeros with psq_l at 0x8023887C; eight-byte source buffer. Native .sbss offset 24, size 8, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED06C-0x803ED070); NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -145,7 +145,7 @@
           "section": ".sbss",
           "start": "0x803ED05C",
           "end": "0x803ED060",
-          "evidence": "Native OSExceptionTable storage slot4 bytes referenced consistently by matching targetfunction(s), e.g OSExceptionInit at0x8023910C. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. OSExceptionTable: stw at 0x8023910C accesses 0x803ED05C; lwz at 0x80239194 accesses 0x803ED05C; lwz at 0x802391B0 accesses 0x803ED05C Native .sbss offset 36, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
+          "evidence": "Native OSExceptionTable storage slot4 bytes referenced consistently by matching targetfunction(s), e.g OSExceptionInit at0x8023910C. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. OSExceptionTable: stw at 0x8023910C accesses 0x803ED05C; lwz at 0x80239194 accesses 0x803ED05C; lwz at 0x802391B0 accesses 0x803ED05C Native .sbss offset 36, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED06C-0x803ED070); NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -174,7 +174,7 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "BI2DebugFlagHolder: stw at 0x80238BF8 accesses 0x803ED040 Native .sbss offset 8, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+          "evidence": "BI2DebugFlagHolder: stw at 0x80238BF8 accesses 0x803ED040 Native .sbss offset 8, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED06C-0x803ED070); NOBITS is allocation evidence, not initialized-byte progress."
         },
         {
           "section": ".sbss",
@@ -183,7 +183,7 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "AreWeInitialized: lwz at 0x80238B28 accesses 0x803ED058; stw at 0x80238B48 accesses 0x803ED058 Native .sbss offset 32, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+          "evidence": "AreWeInitialized: lwz at 0x80238B28 accesses 0x803ED058; stw at 0x80238B48 accesses 0x803ED058 Native .sbss offset 32, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED06C-0x803ED070); NOBITS is allocation evidence, not initialized-byte progress."
         },
         {
           "section": ".sbss",
@@ -192,7 +192,7 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "__OSIsGcam: lwz at 0x80238E8C accesses 0x803ED044 Native .sbss offset 12, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+          "evidence": "__OSIsGcam: lwz at 0x80238E8C accesses 0x803ED044 Native .sbss offset 12, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED06C-0x803ED070); NOBITS is allocation evidence, not initialized-byte progress."
         },
         {
           "section": ".sbss",
@@ -201,7 +201,7 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "__OSSavedRegionStart: stw at 0x802389D0 accesses 0x803ED064; stw at 0x80238A0C accesses 0x803ED064; lwz at 0x80238A40 accesses 0x803ED064; lwz at 0x80238A50 accesses 0x803ED064 Native .sbss offset 44, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+          "evidence": "__OSSavedRegionStart: stw at 0x802389D0 accesses 0x803ED064; stw at 0x80238A0C accesses 0x803ED064; lwz at 0x80238A40 accesses 0x803ED064; lwz at 0x80238A50 accesses 0x803ED064 Native .sbss offset 44, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED06C-0x803ED070); NOBITS is allocation evidence, not initialized-byte progress."
         },
         {
           "section": ".sbss",
@@ -210,7 +210,7 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "__OSSavedRegionEnd: stw at 0x802389D4 accesses 0x803ED060; stw at 0x80238A10 accesses 0x803ED060; lwz at 0x80238AA0 accesses 0x803ED060 Native .sbss offset 40, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+          "evidence": "__OSSavedRegionEnd: stw at 0x802389D4 accesses 0x803ED060; stw at 0x80238A10 accesses 0x803ED060; lwz at 0x80238AA0 accesses 0x803ED060 Native .sbss offset 40, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED06C-0x803ED070); NOBITS is allocation evidence, not initialized-byte progress."
         },
         {
           "section": ".sbss",
@@ -219,7 +219,7 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "__OSStartTime: stw at 0x80238B50 accesses 0x803ED074; stw at 0x80238B54 accesses 0x803ED070 Native .sbss offset 56, size 8, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+          "evidence": "__OSStartTime: stw at 0x80238B50 accesses 0x803ED074; stw at 0x80238B54 accesses 0x803ED070 Native .sbss offset 56, size 8, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED06C-0x803ED070); NOBITS is allocation evidence, not initialized-byte progress."
         },
         {
           "section": ".sbss",
@@ -228,7 +228,16 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true,
-          "evidence": "__OSInIPL: lwz at 0x80238CD8 accesses 0x803ED068; lwz at 0x80238E7C accesses 0x803ED068 Native .sbss offset 48, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress."
+          "evidence": "__OSInIPL: lwz at 0x80238CD8 accesses 0x803ED068; lwz at 0x80238E7C accesses 0x803ED068 Native .sbss offset 48, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED06C-0x803ED070); NOBITS is allocation evidence, not initialized-byte progress."
+        },
+        {
+          "section": ".sbss",
+          "start": "0x803ED06C",
+          "end": "0x803ED070",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "object_seed": false,
+          "evidence": "Unnamed native alignment space inside OS.c's compiled .sbss (offset 52, 4 bytes): __OSInIPL ends at offset 52 and the 8-byte-aligned __OSStartTime starts at offset 56. No target instruction addresses it and no storage is claimed; it is mapped so the file's seeds tile its linked native .sbss 0x803ED038-0x803ED078."
         },
         {
           "section": ".data4",
@@ -446,7 +455,7 @@
           "section": ".sbss",
           "start": "0x803ED088",
           "end": "0x803ED08C",
-          "evidence": "Native InterruptHandlerTable storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSSetInterruptHandler at0x8023B244. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. InterruptHandlerTable: lwz at 0x8023B244 accesses 0x803ED088; lwz at 0x8023B260 accesses 0x803ED088; stw at 0x8023B288 accesses 0x803ED088; lwz at 0x8023B294 accesses 0x803ED088 Native .sbss offset 0, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
+          "evidence": "Native InterruptHandlerTable storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSSetInterruptHandler at0x8023B244. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. InterruptHandlerTable: lwz at 0x8023B244 accesses 0x803ED088; lwz at 0x8023B260 accesses 0x803ED088; stw at 0x8023B288 accesses 0x803ED088; lwz at 0x8023B294 accesses 0x803ED088 Native .sbss offset 0, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED092-0x803ED098); NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -455,7 +464,7 @@
           "section": ".sbss",
           "start": "0x803ED08C",
           "end": "0x803ED090",
-          "evidence": "Native __OSLastInterruptSrr0 storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSDispatchInterrupt at0x8023B9C0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. __OSLastInterruptSrr0: stw at 0x8023B9C0 accesses 0x803ED08C Native .sbss offset 4, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
+          "evidence": "Native __OSLastInterruptSrr0 storage slot4 bytes referenced consistently by matching targetfunction(s), e.g __OSDispatchInterrupt at0x8023B9C0. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. __OSLastInterruptSrr0: stw at 0x8023B9C0 accesses 0x803ED08C Native .sbss offset 4, size 4, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED092-0x803ED098); NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -464,16 +473,25 @@
           "section": ".sbss",
           "start": "0x803ED090",
           "end": "0x803ED092",
-          "evidence": "Native __OSLastInterrupt storage slot2 bytes referenced consistently by matching targetfunction(s), e.g __OSDispatchInterrupt at0x8023B9AC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. __OSLastInterrupt: sth at 0x8023B9AC accesses 0x803ED090 Native .sbss offset 8, size 2, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
+          "evidence": "Native __OSLastInterrupt storage slot2 bytes referenced consistently by matching targetfunction(s), e.g __OSDispatchInterrupt at0x8023B9AC. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. __OSLastInterrupt: sth at 0x8023B9AC accesses 0x803ED090 Native .sbss offset 8, size 2, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED092-0x803ED098); NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
         },
         {
           "section": ".sbss",
+          "start": "0x803ED092",
+          "end": "0x803ED098",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "object_seed": false,
+          "evidence": "Unnamed native alignment space inside OSInterrupt.c's compiled .sbss (offset 10, 6 bytes): the two-byte __OSLastInterrupt ends at offset 10 and the 8-byte-aligned __OSLastInterruptTime starts at offset 16. No target instruction addresses it and no storage is claimed; it is mapped so the file's seeds tile its linked native .sbss 0x803ED088-0x803ED0A0."
+        },
+        {
+          "section": ".sbss",
           "start": "0x803ED098",
           "end": "0x803ED0A0",
-          "evidence": "Native __OSLastInterruptTime storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSDispatchInterrupt at0x8023B9B4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. __OSLastInterruptTime: stw at 0x8023B9B4 accesses 0x803ED09C; stw at 0x8023B9B8 accesses 0x803ED098 Native .sbss offset 16, size 8, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. Natural alignment gaps are unclaimed; NOBITS is allocation evidence, not initialized-byte progress.",
+          "evidence": "Native __OSLastInterruptTime storage slot8 bytes referenced consistently by matching targetfunction(s), e.g __OSDispatchInterrupt at0x8023B9B4. Target accesses corroborate slotwidth; original-file ownership remainsprovisional. __OSLastInterruptTime: stw at 0x8023B9B4 accesses 0x803ED09C; stw at 0x8023B9B8 accesses 0x803ED098 Native .sbss offset 16, size 8, alignment 8 corroborates related BFBB 8fb1c232addcacf44932c10c4cede41b43f98f40 declaration. The natural alignment gap inside this native .sbss is mapped separately as a non-object seed (0x803ED092-0x803ED098); NOBITS is allocation evidence, not initialized-byte progress.",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "object_seed": true
@@ -835,7 +853,7 @@
       "name": "src/dolphin/dvd/dvdfs.c",
       "source": "src/dolphin/dvd/dvdfs.c",
       "library": "DVD",
-      "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, six728bytes operand-proven exact and two partials. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
+      "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
       "sections": [
         {
           "start": "0x8023ED68",
@@ -843,7 +861,7 @@
           "section": ".text",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, six728bytes operand-proven exact and two partials. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional."
+          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional."
         },
         {
           "start": "0x802FCD08",
@@ -851,7 +869,7 @@
           "section": ".data4",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, six728bytes operand-proven exact and two partials. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
+          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
           "object_seed": true
         },
         {
@@ -860,7 +878,7 @@
           "section": ".data5",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, six728bytes operand-proven exact and two partials. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
+          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
           "object_seed": true
         },
         {
@@ -869,7 +887,7 @@
           "section": ".sbss",
           "start_boundary": "provisional",
           "end_boundary": "provisional",
-          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, six728bytes operand-proven exact and two partials. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
+          "evidence": "Complete pinned BFBB thirteen-body source retained; eight target functions1836bytes registered, all exact and linked in the source build. Full395data+8sdata initialized pools and32SBSS native allocation supported; archive ownership provisional.",
           "object_seed": true
         }
       ]
@@ -1598,7 +1616,7 @@
       "name": "src/dolphin/ai/ai.c",
       "source": "src/dolphin/ai/ai.c",
       "library": "AI",
-      "evidence": "Coherent pinned BFBB April 2003 C functions corroborate callback/DMA/stream/rate/SRC behavior. All eighteen C bodies measured, SRC routine partial; original twelve-byte flag-clear and eighty-eight-byte stack-switch routines remain unrecovered within unchanged complete mapped range. Stack-switch assembly provenance unresolved; no new assembly implementation or whole-unit promotion.",
+      "evidence": "Coherent pinned BFBB April 2003 C functions corroborate callback/DMA/stream/rate/SRC behavior. All twenty bodies over the complete mapped range, including the twelve-byte flag-clear AIReset and the eighty-eight-byte stack-switch assembly routine __AICallbackStackSwitch, are exact and linked in the source build.",
       "sections": [
         {
           "section": ".data4",
