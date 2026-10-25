@@ -5,6 +5,11 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      audit_build_cache:
+        description: Seed or audit build caches with a fresh main build
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -62,7 +67,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_publication.py -v
       - name: Select verified final-integration reports
         id: publication
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && !(github.event_name == 'workflow_dispatch' && inputs.audit_build_cache == true)
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 tools/publication.py select
@@ -222,7 +227,7 @@ jobs:
             build/analysis/symbols.txt
           key: ${{ steps.inventory-cache.outputs.cache-primary-key }}
       - name: Save audited build caches
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.validation.outputs.full == 'true'
+        if: github.ref == 'refs/heads/main' && steps.validation.outputs.full == 'true' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.audit_build_cache == true))
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: build/cache
