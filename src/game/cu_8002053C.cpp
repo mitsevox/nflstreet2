@@ -36,6 +36,8 @@ void fn_8002053C(int control)
         case 1:
             lbl_803EBAA0 = (lbl_803EBAA0 + 1) % count;
             break;
+        case 0:
+            break;
         }
     }
 }

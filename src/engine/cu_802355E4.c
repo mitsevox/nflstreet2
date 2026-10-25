@@ -1,3 +1,6 @@
+#include "engine/Object_80237EE8.h"
+#include "engine/Desc_80238424.h"
+#include "engine/fn_80238680.h"
 
 
 #include <dolphin/gx/GXLighting.h>
@@ -10,6 +13,63 @@
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80238174.h"
 #include "game/Object_80235588.h"
+
+#include "engine/cu_801C665C.h"
+#include "engine/llmemory.h"
+#include "game/fn_801C68FC.h"
+
+typedef struct Chunk_80237D5C {
+    unsigned int mWords[16];
+} Chunk_80237D5C;
+
+void fn_80237D5C(void *pDst, const void *pSrc, unsigned int size);
+
+
+typedef struct Handle_80237A40 {
+    void **mppUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    unsigned int mUnknown12;
+    Callback_80238234 mpUnknown16;
+    Callback_80238234 mpUnknown20;
+    Callback_80238234 mpUnknown24;
+    Callback1C_80238234 mpUnknown28;
+    Callback20_80238248 mpUnknown32;
+    Callback24_80238248 mpUnknown36;
+    Callback28_80238248 mpUnknown40;
+    void *mpUnknown44;
+    Object_80237EE8 *mpUnknown48;
+} Handle_80237A40;
+
+
+
+typedef struct Entry_8023850C {
+    unsigned int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    unsigned int mUnknown12;
+    Callback_80067EC8 mpUnknown16[1];
+} Entry_8023850C;
+
+typedef struct Table_802382F0 {
+    int mUnknown0;
+    int mUnknown4;
+    Entry_8023850C **mppUnknown8;
+} Table_802382F0;
+
+void fn_80237B84(Object_80237EE8 *p);
+void fn_80238034(Object_80237EE8 *p);
+
+extern List_801C68FC *lbl_803ED030;
+extern Table_802382F0 lbl_803A3A14;
+extern unsigned char lbl_803EC140;
+extern unsigned int lbl_802FB464[256];
+extern void fn_801D277C(int ident);
+extern char *fn_801D27B8(int ident);
+void fn_80237C0C(Object_80237EE8 *p);
+void fn_80237FF4(Object_80237EE8 *p);
+Object_80237EE8 *fn_80237E9C(int key);
+Handle_80237A40 *fn_80237A40(Object_80237EE8 *pGroup, void **ppData, int size, int a, unsigned int id);
 
 typedef struct Library_80235B6C {
     unsigned int mUnknown0;
@@ -230,6 +290,15 @@ void fn_80235C4C(int a, Object_80235588 *p, float value)
 {
     fn_802353D8(p, 0x80000);
     p->mUnknown72 = value;
+}
+
+void fn_80235C90(Object_80235588 *p, int unused, float r, float g, float b, float a)
+{
+    p->mUnknown0 |= 0x20000;
+    p->mUnknown76[0] = (unsigned char)(r * 255.0f);
+    p->mUnknown76[1] = (unsigned char)(g * 255.0f);
+    p->mUnknown76[2] = (unsigned char)(b * 255.0f);
+    p->mUnknown76[3] = (unsigned char)(a * 255.0f);
 }
 
 void fn_80235D0C(Object_80235588 *p, int a)
@@ -459,6 +528,22 @@ int fn_80237080(void *p, void *q)
     return pA->mUnknown12;
 }
 
+int fn_802370E8(void *p, void *pBuffer)
+{
+    Random_80236F78 *pRandom = p;
+    memcpy(pBuffer, pRandom, sizeof(Random_80236F78));
+    fn_801CF60C((char *)pBuffer + 24, pRandom->mpUnknown20[0]);
+    return 1;
+}
+
+int fn_80237138(void *p, void *pBuffer)
+{
+    Random_80236F78 *pRandom = p;
+    memcpy(pRandom, pBuffer, sizeof(Random_80236F78));
+    fn_801CF60C(pRandom->mpUnknown20[0], (char *)pBuffer + 24);
+    return 1;
+}
+
 int fn_80237180(void *p)
 {
     return fn_801CF664(lbl_803EC130->mpUnknown20[0]) + sizeof(Random_80236F78);
@@ -589,6 +674,15 @@ int fn_802375FC(void *p, void *q)
         result = fn_80238278(pA->mpUnknown12, sizeof(Counter_80237934), result);
     }
     return result;
+}
+
+int fn_802376D8(void *p, void *pBuffer)
+{
+    Timer_80237780 *pTimer = p;
+    TimerState_80237728 *pOut = pBuffer;
+    pOut->mUnknown0 = *pTimer;
+    *(Counter_80237934 *)((char *)pBuffer + 64) = *pTimer->mpUnknown12;
+    return 1;
 }
 
 int fn_80237728(void *p, void *pBuffer)
@@ -728,4 +822,346 @@ int fn_80237A28(Counter_80237934 *p)
 int fn_80237A30(Counter_80237934 *pA, Counter_80237934 *pB)
 {
     return pB->mUnknown8 - pA->mUnknown8;
+}
+Handle_80237A40 *fn_80237A40(Object_80237EE8 *pGroup, void **ppData, int size, int a, unsigned int id)
+{
+    Handle_80237A40 *p = fn_801C6A20(pGroup->mpUnknown20);
+    memset(p, 0, sizeof(Handle_80237A40));
+    p->mppUnknown0 = ppData;
+    p->mUnknown8 = a;
+    p->mUnknown12 = id;
+    p->mUnknown4 = size;
+    p->mpUnknown48 = pGroup;
+    p->mpUnknown44 = fn_801D2B7C(size, 0, 0);
+    memset(p->mpUnknown44, 0, size);
+    fn_801C6AA4(pGroup->mpUnknown20, p, 0);
+    return p;
+}
+
+void fn_80237ADC(Handle_80237A40 *p)
+{
+    *p->mppUnknown0 = p->mpUnknown44;
+}
+
+void fn_80237AEC(Handle_80237A40 *p)
+{
+    *p->mppUnknown0 = 0;
+}
+
+void fn_80237AFC(Handle_80237A40 *p)
+{
+    if (p->mpUnknown24 != 0) {
+        p->mpUnknown24(p->mpUnknown44, 0);
+    }
+}
+
+void fn_80237B34(Handle_80237A40 *p)
+{
+    fn_80237AEC(p);
+    if (p->mpUnknown20 != 0) {
+        p->mpUnknown20(p->mpUnknown44, 0);
+    }
+    fn_801D2BD0(p->mpUnknown44);
+}
+
+void fn_80237B84(Object_80237EE8 *p)
+{
+    Handle_80237A40 *pItem;
+    if (p->mpUnknown24 != 0) {
+        fn_80237D5C(fn_801D27B8(p->mUnknown16), p->mpUnknown24, p->mUnknown12);
+    }
+    pItem = fn_801C6B4C(p->mpUnknown20, 0);
+    while (pItem != 0) {
+        fn_80237ADC(pItem);
+        pItem = fn_801C6C84(p->mpUnknown20, pItem);
+    }
+    p->mUnknown4 = 2;
+    fn_80238034(p);
+}
+
+void fn_80237C0C(Object_80237EE8 *p)
+{
+    Handle_80237A40 *pItem;
+    if (p->mUnknown4 != 1) {
+        pItem = fn_801C6B4C(p->mpUnknown20, 0);
+        while (pItem != 0) {
+            fn_80237AEC(pItem);
+            pItem = fn_801C6C84(p->mpUnknown20, pItem);
+        }
+        p->mUnknown4 = 1;
+    }
+}
+
+int fn_80237C78(void *p, void *pKey, void *pOut)
+{
+    Object_80237EE8 *pGroup = p;
+    int *pValue = pKey;
+    Object_80237EE8 **ppResult = pOut;
+    if (pGroup->mUnknown0 == *pValue && (pGroup->mUnknown4 == 2 || pGroup->mUnknown4 == 0)) {
+        *ppResult = pGroup;
+        return 0;
+    }
+    return -1;
+}
+
+Object_80237EE8 *fn_80237CB0(int key, int a, int b, int c)
+{
+    Object_80237EE8 *p = fn_801C6A20(lbl_803ED030);
+    p->mUnknown0 = key;
+    p->mUnknown8 = a;
+    p->mUnknown16 = c;
+    p->mUnknown12 = b;
+    p->mUnknown4 = 1;
+    p->mpUnknown24 = 0;
+    fn_801C6AA4(lbl_803ED030, p, 0);
+    return p;
+}
+
+void fn_80237D24(Object_80237EE8 *p)
+{
+    fn_80237FF4(p);
+    fn_801C6C0C(lbl_803ED030, p);
+}
+
+void fn_80237D5C(void *pDst, const void *pSrc, unsigned int size)
+{
+    char *pOut = pDst;
+    const char *pIn = pSrc;
+    while (size >= sizeof(Chunk_80237D5C)) {
+        *(Chunk_80237D5C *)pOut = *(const Chunk_80237D5C *)pIn;
+        pOut += sizeof(Chunk_80237D5C);
+        pIn += sizeof(Chunk_80237D5C);
+        size -= sizeof(Chunk_80237D5C);
+    }
+    memcpy(pOut, pIn, size);
+}
+
+void fn_80237E3C(int count)
+{
+    lbl_803ED030 = fn_801C68FC(1, 0, count, sizeof(Object_80237EE8), 0, 0);
+}
+
+int fn_80237E78(void)
+{
+    return fn_801C69E4(lbl_803ED030);
+}
+
+Object_80237EE8 *fn_80237E9C(int key)
+{
+    Object_80237EE8 *pResult;
+    if (fn_801C6DCC(lbl_803ED030, 0, &key, &pResult, fn_80237C78) == 2) {
+        return pResult;
+    }
+    return 0;
+}
+
+void fn_80237F98(Object_80237EE8 *p)
+{
+    p->mUnknown4 = 0;
+}
+
+void fn_80237FA4(Object_80237EE8 *p)
+{
+    char *pData = fn_801D27B8(p->mUnknown16);
+    if (p->mpUnknown24 != 0) {
+        fn_80237D5C(p->mpUnknown24, pData, p->mUnknown12);
+    }
+    fn_80237C0C(p);
+}
+
+void fn_80237FF4(Object_80237EE8 *p)
+{
+    if (p->mpUnknown24 != 0) {
+        fn_801D2BD0(p->mpUnknown24);
+        p->mpUnknown24 = 0;
+    }
+}
+
+void fn_80238034(Object_80237EE8 *p)
+{
+    Handle_80237A40 *pItem = fn_801C6B4C(p->mpUnknown20, 0);
+    while (pItem != 0) {
+        fn_80237AFC(pItem);
+        pItem = fn_801C6C84(p->mpUnknown20, pItem);
+    }
+}
+
+Object_80237EE8 *fn_8023811C(Object_80237EE8 *p)
+{
+    Object_80237EE8 *pFound = fn_80237E9C(p->mUnknown0);
+    if (pFound != 0) {
+        fn_80237C0C(pFound);
+    }
+    fn_80237B84(p);
+    return pFound;
+}
+
+void *fn_8023816C(void *pHandle)
+{
+    Handle_80237A40 *p = pHandle;
+    return p->mpUnknown44;
+}
+
+void *fn_80238174(int a, void **ppData, int size, int b, unsigned int id)
+{
+    Object_80237EE8 *p = fn_80237E9C(a);
+    void *pResult = 0;
+    if (p != 0) {
+        fn_801D277C(p->mUnknown16);
+        pResult = fn_80237A40(p, ppData, size, b, id);
+    }
+    return pResult;
+}
+
+void fn_802381E0(void *pHandle)
+{
+    Handle_80237A40 *p = pHandle;
+    if (p->mpUnknown16 != 0) {
+        p->mpUnknown16(p->mpUnknown44, 0);
+    }
+    fn_80237ADC(p);
+    fn_801D277C(1);
+}
+
+void fn_80238234(void *pHandle, Callback_80238234 pCallback10, Callback_80238234 pCallback14, Callback_80238234 pCallback18, Callback1C_80238234 pCallback1C)
+{
+    Handle_80237A40 *p = pHandle;
+    p->mpUnknown16 = pCallback10;
+    p->mpUnknown20 = pCallback14;
+    p->mpUnknown24 = pCallback18;
+    p->mpUnknown28 = pCallback1C;
+}
+
+void fn_80238248(void *pHandle, Callback28_80238248 pCallback28, Callback24_80238248 pCallback24, Callback20_80238248 pCallback20)
+{
+    Handle_80237A40 *p = pHandle;
+    p->mpUnknown32 = pCallback20;
+    p->mpUnknown36 = pCallback24;
+    p->mpUnknown40 = pCallback28;
+}
+
+int fn_80238258(const void *pA, const void *pB, unsigned int size)
+{
+    return memcmp(pA, pB, size);
+}
+
+int fn_80238278(const void *p, int size, int seed)
+{
+    const unsigned char *pBytes = p;
+    unsigned int value = ~seed;
+    while (size-- != 0) {
+        value = lbl_802FB464[(value ^ *pBytes++) & 255] ^ (value >> 8);
+    }
+    return ~value;
+}
+
+void fn_802382CC(int *p, const Desc_80238424 *q)
+{
+    p[0] = q->mUnknown0;
+    p[1] = 0;
+    p[2] = q->mUnknown4;
+    p[3] = q->mUnknown8;
+}
+
+void fn_802382F0(int count)
+{
+    lbl_803A3A14.mUnknown0 = 0;
+    lbl_803A3A14.mUnknown4 = count;
+    lbl_803A3A14.mppUnknown8 = fn_801D2B7C(count * 4, 0, 0);
+    fn_801D34D0((char *)lbl_803A3A14.mppUnknown8, count * 4, 0, 4);
+    lbl_803EC140 = 1;
+}
+
+void fn_80238358(void)
+{
+    fn_801D2BD0(lbl_803A3A14.mppUnknown8);
+    lbl_803EC140 = 0;
+}
+
+int fn_80238388(const Desc_80238424 *pDesc)
+{
+    int index = lbl_803A3A14.mUnknown0;
+    void *pHandle = fn_80238174(0, (void **)&lbl_803A3A14.mppUnknown8[index], pDesc->mUnknown0 * pDesc->mUnknown4 + 16 + pDesc->mUnknown8 * 4, 0, 0x65766D6F);
+    fn_802382CC(fn_8023816C(pHandle), pDesc);
+    fn_802381E0(pHandle);
+    lbl_803A3A14.mUnknown0++;
+    return index;
+}
+
+void fn_80238420(int index)
+{
+}
+
+int fn_80238424(const Desc_80238424 *pDesc)
+{
+    int index = lbl_803A3A14.mUnknown0;
+    int size = pDesc->mUnknown0 * pDesc->mUnknown4 + 16 + pDesc->mUnknown8 * 4;
+    lbl_803A3A14.mppUnknown8[index] = fn_801D2B7C(size, 0, 0);
+    memset(lbl_803A3A14.mppUnknown8[index], 0, size);
+    fn_802382CC((int *)lbl_803A3A14.mppUnknown8[index], pDesc);
+    lbl_803A3A14.mUnknown0++;
+    return index;
+}
+
+void fn_802384C4(int index)
+{
+    fn_801D2BD0(lbl_803A3A14.mppUnknown8[index]);
+    lbl_803A3A14.mppUnknown8[index] = 0;
+}
+
+void *fn_8023850C(int index)
+{
+    Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
+    return (char *)p + 16 + p->mUnknown12 * 4 + p->mUnknown8 * p->mUnknown4;
+}
+
+void *fn_80238540(int index, int item)
+{
+    Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
+    return (char *)p + 16 + p->mUnknown12 * 4 + p->mUnknown8 * item;
+}
+
+void fn_80238570(int index, int advance)
+{
+    Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
+    unsigned int i;
+    Callback_80067EC8 *pCallbacks = p->mpUnknown16;
+    for (i = 0; i < p->mUnknown12; i++) {
+        Callback_80067EC8 callback = *pCallbacks++;
+        if (callback != 0) {
+            callback(fn_8023850C(index));
+        }
+    }
+    if (advance != 0) {
+        p->mUnknown4++;
+    }
+}
+
+unsigned int fn_80238604(int index)
+{
+    return lbl_803A3A14.mppUnknown8[index]->mUnknown4;
+}
+
+void fn_8023861C(int index)
+{
+    Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
+    fn_801D34D0((char *)p + 16 + p->mUnknown12 * 4, p->mUnknown0 * p->mUnknown8, 0, 4);
+    p->mUnknown4 = 0;
+}
+void fn_80238680(int index, Callback_80067EC8 callback)
+{
+    Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
+    unsigned int i;
+    for (i = 0; i < p->mUnknown12 && p->mpUnknown16[i] != 0; i++) {
+    }
+    p->mpUnknown16[i] = callback;
+}
+
+void fn_802386DC(int index, Callback_80067EC8 callback)
+{
+    Entry_8023850C *p = lbl_803A3A14.mppUnknown8[index];
+    unsigned int i;
+    for (i = 0; i < p->mUnknown12 && p->mpUnknown16[i] != callback; i++) {
+    }
+    p->mpUnknown16[i] = 0;
 }

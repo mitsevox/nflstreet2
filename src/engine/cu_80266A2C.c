@@ -1,6 +1,7 @@
 /* Partial source for the inferred partition 0x80266A2C-0x8026A664 (neutral file name). */
 
 #include "engine/fn_80266AD8.h"
+#include "engine/Object_80266AF8.h"
 #include <string.h>
 
 typedef struct Entry_80266D20 {
@@ -8,15 +9,6 @@ typedef struct Entry_80266D20 {
     signed char mUnknownB;
 } Entry_80266D20;
 
-typedef struct Object_80266AF8 {
-    unsigned int mUnknown0;
-    unsigned char mUnknown4[4];
-    unsigned char mUnknown8;
-    unsigned char mUnknown9;
-    unsigned char mUnknownA[6];
-    unsigned short mUnknown10;
-    unsigned char mUnknown12;
-} Object_80266AF8;
 
 typedef struct Slot_8037E0B4 {
     Object_80266AF8 *mObject;
@@ -249,7 +241,6 @@ extern short lbl_803A6C04[];
 
 extern int fn_801AC9C8(int fd, void *buf, int len);
 extern void *fn_801AE6BC(int *key);
-extern void fn_801AFABC(Object_80266AF8 *p, int *a, int *b);
 extern int fn_801AEAEC(int *block);
 extern int *fn_801AF4A8(int size);
 extern void fn_801AF500(int *block);

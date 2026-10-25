@@ -1,3 +1,4 @@
+#include "engine/cu_80229270.h"
 #include "game/fn_801D2B7C.h"
 #include "game/cu_800034A0.h"
 #include "game/cu_8002ACB4.h"
@@ -8,10 +9,8 @@ int fn_8018A854(void);
 void fn_80228474(int a, int b, void *c, int d);
 void fn_8002A478(int *pType, void *pSlot);
 int fn_80029890(int type);
-void fn_8022F358(signed char slot);
 void fn_8022F478(void);
 int fn_8022F698(Request_8002AD64 *pRequest, StreamOps_8002ACB4 *pOps);
-int fn_8022EB94(CardStreamTarget *pTarget, StreamOps_8002ACB4 *pOps);
 void fn_8002A5A0(int *pType, void *pSlot);
 int fn_8002A2A4(int a, int b);
 void fn_8022F1BC(void);
@@ -33,8 +32,6 @@ void fn_80029CE0(int a, int b);
 int fn_801D6844(void);
 void fn_801D6DE0(int a, int b);
 void fn_8006EC24(void);
-void fn_8022EBC8(void);
-void fn_8022EB10(void);
 void fn_8007F328(int a);
 void fn_8007F374(void);
 int fn_800298E8(int a, int b);

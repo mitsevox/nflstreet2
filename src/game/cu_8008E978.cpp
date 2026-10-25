@@ -1,3 +1,4 @@
+#include "engine/Desc_80238424.h"
 #include "game/Step_800C4460.h"
 #include "game/Block_8030E6E8.h"
 #include "game/Record_800A0624.h"
@@ -11728,11 +11729,7 @@ struct Context_800AFC5C {
 };
 
 /* Three words passed by address to fn_80238388. */
-struct Args_800B1478 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-};
+typedef Desc_80238424 Args_800B1478;
 
 extern "C" {
 int fn_801D27A0(void);
@@ -11754,7 +11751,6 @@ unsigned int fn_801F0C50(void *pRes, unsigned int index);
 Object_800670B4 *fn_80168708(int team);
 int fn_80164E30(Record_80067338 *pRecord, Object_800670B4 *pObject, Object_80039F5C *p, int value);
 int fn_80238258(const void *pA, const void *pB, unsigned int size);
-int fn_80238388(Args_800B1478 *pArgs);
 int fn_800AF198(void *pItem, void *pContext, void *pResult);
 void fn_800AF264(int key);
 void fn_800AF4A8(Entry_800AF82C *p);

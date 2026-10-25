@@ -1,3 +1,4 @@
+#include "engine/cu_80229270.h"
 #include "game/fn_8021D7B8.h"
 #include "game/fn_801FCE10.h"
 #include "game/Object_80039F5C.h"
@@ -389,7 +390,6 @@ char * fn_801C2EF0(char *pDest, const char *pSource, int count);
 unsigned int fn_801C3180(const char *pText);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
-void fn_8022DA44(int a, int *pA, int b, int *pB, int tag);
 void fn_801564DC(int index, int value);
 void fn_8015651C(void);
 void fn_801566DC(unsigned char value);

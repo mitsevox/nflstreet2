@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-void *fn_80003C94(void);
+void fn_80003C94(void);
 int fn_80003CC4(void);
 
 #ifdef __cplusplus

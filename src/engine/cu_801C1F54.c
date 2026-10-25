@@ -1,4 +1,5 @@
 #include "engine/cu_801C1F54.h"
+#include <ctype.h>
 
 extern const unsigned char lbl_802AEF10[];
 
@@ -12,7 +13,7 @@ int fn_801C1F54(int c)
     return c;
 }
 
-int fn_801C1F74(int c)
+int tolower(int c)
 {
     if (CTYPE(c) & 1) {
         c += 'a' - 'A';

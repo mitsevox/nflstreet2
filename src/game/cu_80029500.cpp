@@ -1,3 +1,4 @@
+#include "engine/cu_80229270.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -59,9 +60,7 @@ void fn_801D64EC(void);
 int fn_801F0C50(void *, int);
 int fn_801D8618(int, unsigned int, int);
 int fn_801D8658(int, unsigned int, int);
-int fn_8022F358(int index);
 void fn_8022F698(Request_8002AD64 *, StreamOps_8002ACB4 *);
-void fn_8022EB94(int *, StreamOps_8002ACB4 *);
 int fn_801D6844(void);
 void fn_801D6B4C(char *, int);
 int fn_801D673C(int);

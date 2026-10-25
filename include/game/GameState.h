@@ -5,7 +5,7 @@
 #include "game/Record_802CC680.h"
 
 /* Object returned by fn_80237EE8. */
-struct Object_80237EE8;
+#include "engine/Object_80237EE8.h"
 
 struct GameStateData {
     Object_80237EE8 *mpObject;

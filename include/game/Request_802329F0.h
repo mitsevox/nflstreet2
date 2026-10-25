@@ -9,6 +9,12 @@ struct Request_802329F0 {
     int mCount;
 };
 
-extern "C" void fn_802329F0(Request_802329F0 *pRequest);
+#ifdef __cplusplus
+extern "C" {
+#endif
+int fn_802329F0(struct Request_802329F0 *pRequest);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

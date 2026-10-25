@@ -75,7 +75,6 @@ GXRenderModeObj GXEurgb60Hz480Int = {20, 640, 480, 480, 40, 0, 640, 480, 1, 0, 0
 GXRenderModeObj GXEurgb60Hz480IntAa = {20, 640, 242, 480, 40, 0, 640, 480, 1, 0, 1, { 3, 2, 9, 6, 3, 10, 3, 2, 9, 6, 3, 10, 9, 2, 3, 6, 9, 10, 9, 2, 3, 6, 9, 10 }, { 4, 8, 12, 16, 12, 8, 4 } };
 GXRenderModeObj GXRmHW = {1, 320, 240, 240, 40, 0, 640, 480, 0, 0, 0, { 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 }, { 0, 0, 21, 22, 21, 0, 0 } };
 
-#if defined(DECOMP_COMPARE)
 // clang-format on
 
 void GXAdjustForOverscan(const GXRenderModeObj *rIn, GXRenderModeObj *rOut, u16 horiz, u16 vert) {
@@ -104,7 +103,6 @@ void GXAdjustForOverscan(const GXRenderModeObj *rIn, GXRenderModeObj *rOut, u16 
   rOut->viXOrigin = rIn->viXOrigin + horiz;
   rOut->viYOrigin = rIn->viYOrigin + vert;
 }
-#endif
 
 void GXSetDispCopySrc(u16 left, u16 top, u16 wd, u16 ht) {
     CHECK_GXBEGIN(1235, "GXSetDispCopySrc");

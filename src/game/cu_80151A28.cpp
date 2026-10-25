@@ -79,6 +79,9 @@ struct Object_8015005C {
 class Class_802A2918 : public Class_80148A58 {
 public:
     Object_8015005C *mpUnknown1C;
+    unsigned int mUnknown32;
+    int mUnknown36;
+    int mUnknown40;
 };
 
 extern "C" {
@@ -111,5 +114,28 @@ void fn_80151A28(Class_802A2918 *p)
     }
     delete p->mpUnknown1C;
     p->mpUnknown1C = 0;
+}
+
+int fn_80151B20(Class_802A2918 *p)
+{
+    if (p->mUnknown40 == 0) {
+        Entry_8015005C *pFirst = &p->mpUnknown1C->mpUnknown36->mEntries[0];
+        Entry_8015005C *pSecond = pFirst + 1;
+
+        return pFirst->mUnknown10 + pFirst->mUnknown8 * 2 ==
+               pSecond->mUnknown10 + pSecond->mUnknown8 * 2;
+    } else {
+        Table_8015005C *pTable = p->mpUnknown1C->mpUnknown36;
+        int lower = 0;
+        unsigned int score = pTable->mEntries[0].mUnknown10 + pTable->mEntries[0].mUnknown8 * 2;
+        unsigned int i;
+
+        for (i = 1; i < pTable->mCount; i++) {
+            if (pTable->mEntries[i].mUnknown10 + pTable->mEntries[i].mUnknown8 * 2 < score) {
+                lower = 1;
+            }
+        }
+        return !lower;
+    }
 }
 }

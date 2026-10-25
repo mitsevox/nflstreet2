@@ -7,7 +7,6 @@ extern "C" {
 #endif
 
 int fn_801C1F54(int c);
-int fn_801C1F74(int c);
 
 #ifdef __cplusplus
 }

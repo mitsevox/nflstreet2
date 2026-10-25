@@ -482,7 +482,7 @@ int fn_801CD63C(Font_801CCA64 *pFont, const char *pText, unsigned int flags)
 {
     int error = 0;
     int maxWidth = 0;
-    int kern;
+    unsigned char kern;
     unsigned int i;
     unsigned int len;
     int prev;
