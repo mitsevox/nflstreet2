@@ -30765,8 +30765,7 @@
       ],
       "functions": [
         "0x8023E838",
-        "0x8023E88C",
-        "0x8023E8AC"
+        "0x8023E88C"
       ],
       "provenance": {
         "pull_request": 1124,

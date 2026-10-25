@@ -21,6 +21,7 @@ static void __init_cpp(void) {
         (*constructor)();
     }
 }
+#pragma peephole reset
 
 static void __fini_cpp(void) {
     voidfunctionptr* destructor;
@@ -36,6 +37,5 @@ void exit(int status) {
     __fini_cpp();
     _ExitProcess();
 }
-#pragma peephole reset
 
 void _ExitProcess(void) { PPCHalt(); }

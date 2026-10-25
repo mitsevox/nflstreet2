@@ -26463,6 +26463,46 @@
       ]
     },
     {
+      "source": "src/dolphin/os/__ppc_eabi_init.c",
+      "profile": "dolphin_release",
+      "evidence": "Provisional mapped startup unit from frozen52fd scope; coherent OOT complete pure C wrappers independently resolved with actual target ctor/PPCHalt callees. Original names and exact whole-object boundaries unproven; original hardware/ctor/dtor bytes retained.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023E818",
+          "end": "0x8023E920"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "__init_user",
+          "start": "0x8023E818",
+          "end": "0x8023E838"
+        },
+        {
+          "symbol": "_ExitProcess",
+          "start": "0x8023E900",
+          "end": "0x8023E920"
+        },
+        {
+          "symbol": "__init_cpp",
+          "start": "0x8023E838",
+          "end": "0x8023E88C"
+        },
+        {
+          "symbol": "abort",
+          "start": "0x8023E88C",
+          "end": "0x8023E8AC"
+        },
+        {
+          "symbol": "exit",
+          "start": "0x8023E8AC",
+          "end": "0x8023E900"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/vmbase/VMBase.c",
       "profile": "dolphin_release",
       "evidence": "Six existing complete C helpers retain their exact comparisons; fifteen additional complete donor-guided C bodies from MVP 1a61d5adf81a14bef749c0b2b7e803aabc2f98b3 src/dolphin/vmbase/VMBase.c remain measured partials under the unchanged dolphin_release profile. Target reverse-table arena increment is0x4000. Native20-byte .sbss consists of four established pointer cells16 bytes plus the accessed32-bit initialization guard4 bytes; original declaration order is not uniquely established. NOBITS allocation gives no initialized-data or linked credit. Four original-provider helpers remain external and receive no source credit; original instructions remain linked for all comparison-only bodies.",
@@ -26631,7 +26671,7 @@
     {
       "source": "src/dolphin/gx/GXLight.c",
       "profile": "dolphin_release",
-      "evidence": "Complete related C channel bodies, canonical target layouts, fixed comparison guard; unsupported124-byte light loader omitted and remains original. No original source names or entire archive ownership claimed.",
+      "evidence": "Complete related C channel bodies and the dolsdk2004 light loader GXLoadLightObjImm with its PushLight paired-single helper, canonical target layouts, fixed comparison guard; the loader and channel tail remain comparison-only. No original source names or entire archive ownership claimed.",
       "sections": [
         {
           "section": ".text",
