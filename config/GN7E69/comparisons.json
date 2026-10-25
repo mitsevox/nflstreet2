@@ -34519,19 +34519,19 @@
     {
       "source": "src/game/cu_80153844.cpp",
       "profile": "game_cpp",
-      "evidence": "Issues #1022 and the prior fragment claim; evidence.tsv retains complete function extents and provisional source grouping. Adds slot 6 of table 0x802A1BC8 (word 0x802A1BFC), 0x8015395C-0x8015399C, in its normal source file. Measures the entire native readonly slice 0x802A1588-0x802A15A0; shared button text at 0x802A0B74 and pointer word 0x803EB2F0 stay external original-owned. Existing bodies and complete comparisons retained. Original nominal class identity, member spelling and original file boundaries remain unresolved; original bytes stay linked.",
+      "evidence": "Issues #1022 and #1116 and the prior fragment claim; evidence.tsv retains complete function extents and provisional source grouping. Adds slots 4 and 10 of table 0x802A1B58 (words 0x802A1B7C and 0x802A1BAC), 0x801539A0-0x80153DB8, in the existing normal source file. Measures the entire native readonly slice against 0x802A1588-0x802A15B0, including the Playoff Round! literal at 0x802A15A0. Shared button text at 0x802A0B74 and pointer word 0x803EB2F0 remain external original-owned. Existing five bodies and complete comparisons retained. Original nominal class identity, member spelling and original file boundaries remain unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80153844",
-          "end": "0x801539A0"
+          "end": "0x80153DB8"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A1588",
-          "end": "0x802A15A0"
+          "end": "0x802A15B0"
         }
       ],
       "functions": [
@@ -34559,6 +34559,16 @@
           "symbol": "fn_8015399C",
           "start": "0x8015399C",
           "end": "0x801539A0"
+        },
+        {
+          "symbol": "fn_801539A0",
+          "start": "0x801539A0",
+          "end": "0x80153BBC"
+        },
+        {
+          "symbol": "fn_80153BBC",
+          "start": "0x80153BBC",
+          "end": "0x80153DB8"
         }
       ]
     },
