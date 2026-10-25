@@ -36,5 +36,6 @@ void exit(int status) {
     __fini_cpp();
     _ExitProcess();
 }
+#pragma peephole reset
 
 void _ExitProcess(void) { PPCHalt(); }

@@ -403,10 +403,10 @@ void fn_80235DD8(float m[4][4], float *pDir)
 
 void fn_80235EB4(float m[4][4], int angle, float scale)
 {
-    float s;
-    float c;
+    float first;
+    float second;
 
-    fn_801CFC14(angle, &s, &c);
+    fn_801CFC14(angle, &first, &second);
     m[0][0] = 1.0f;
     m[1][0] = 0.0f;
     m[2][0] = 0.0f;
@@ -415,8 +415,8 @@ void fn_80235EB4(float m[4][4], int angle, float scale)
     m[1][1] = 1.0f;
     m[2][1] = 0.0f;
     m[3][1] = 0.0f;
-    m[0][2] = c * scale;
-    m[1][2] = s * scale;
+    m[0][2] = second * scale;
+    m[1][2] = first * scale;
     m[2][2] = 0.0f;
     m[3][2] = 0.0f;
     m[0][3] = 0.0f;
