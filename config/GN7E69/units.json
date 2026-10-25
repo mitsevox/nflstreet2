@@ -1605,6 +1605,44 @@
   },
   "units": [
     {
+      "source": "src/game/cu_80003C94.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x80003C94-0x80003CF0 (src/game/cu_80003C94.cpp), its function and name rows and its .sdata data row 0x803EB8D8-0x803EB8DC; every function and data placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80003C94",
+          "end": "0x80003CF0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB8D8",
+          "end": "0x803EB8DC"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_8002053C.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x8002053C-0x80020A34 (src/game/cu_8002053C.cpp), its function and name rows and its .sdata data row 0x803EBAA0-0x803EBAA4; every function and data placement exact, promoted from comparison-only.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8002053C",
+          "end": "0x80020A34"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBAA0",
+          "end": "0x803EBAA4"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8013141C.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8013141C-0x801327F4 (src/game/cu_8013141C.cpp) and its function and data rows; every function exact, promoted from comparison-only. The edges are the researched likely file edges recorded in that row (owner rule 2026-10-22: researched likely boundaries count as file edges).",
