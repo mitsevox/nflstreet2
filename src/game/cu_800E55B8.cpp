@@ -6,6 +6,9 @@
 #include "game/fn_80163E94.h"
 #include "game/fn_8016871C.h"
 #include "game/fn_802372EC.h"
+#include "game/Object_8017886C.h"
+#include "game/fn_80178D18.h"
+#include <math.h>
 
 extern "C" {
 void fn_800E3C30(Object_80039F5C *p);
@@ -21,6 +24,8 @@ int fn_800B146C(void);
 Object_800670B4 *fn_80168708(int team);
 float fn_80237260(int stream);
 extern float lbl_803EA2C4;
+int fn_80178320(void);
+Point_8017886C fn_80177FE0(void);
 
 void fn_800E55B8(Object_80039F5C *p)
 {
@@ -72,6 +77,47 @@ void fn_800E55B8(Object_80039F5C *p)
     default:
         fn_800E1778(p);
         break;
+    }
+}
+
+void fn_800E586C(Object_80039F5C *p, float *pX)
+{
+    float best = 0.0f;
+    int team = fn_80178320();
+    signed char found = -1;
+    unsigned char count = fn_80178D18(team);
+
+    for (unsigned char i = 0; i < count; i++) {
+        Object_80039F5C *pOther = fn_80039F5C(team, i);
+        if (pOther->mMotion.mPos.mY < p->mMotion.mPos.mY) {
+            if (*pX > 0.0f) {
+                int inside = pOther->mMotion.mPos.mX > fn_80177FE0().mX &&
+                             pOther->mMotion.mPos.mX < fn_80177FE0().mX + 4.0f;
+                if (inside && pOther->mMotion.mPos.mX + fn_80177FE0().mX > best) {
+                    found = i;
+                    best = pOther->mMotion.mPos.mX + fn_80177FE0().mX;
+                }
+            } else {
+                int inside = pOther->mMotion.mPos.mX < fn_80177FE0().mX &&
+                             pOther->mMotion.mPos.mX > fn_80177FE0().mX + -4.0f;
+                if (inside && fabsf(pOther->mMotion.mPos.mX - fn_80177FE0().mX) > best) {
+                    found = i;
+                    best = fabsf(pOther->mMotion.mPos.mX + fn_80177FE0().mX);
+                }
+            }
+        }
+    }
+    if (found > -1 && best > 0.0f) {
+        Object_80039F5C *pOther = fn_80039F5C(team, found);
+        if (*pX > fn_80177FE0().mX) {
+            if (*pX > pOther->mMotion.mPos.mX && *pX < pOther->mMotion.mPos.mX + 1.75f) {
+                *pX = pOther->mMotion.mPos.mX + 1.75f;
+            }
+        } else {
+            if (*pX < pOther->mMotion.mPos.mX && *pX > pOther->mMotion.mPos.mX - 1.75f) {
+                *pX = pOther->mMotion.mPos.mX - 1.75f;
+            }
+        }
     }
 }
 

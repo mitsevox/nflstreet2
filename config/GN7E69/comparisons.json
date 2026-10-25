@@ -3830,6 +3830,58 @@
       ]
     },
     {
+      "source": "src/game/cu_800E4EE4.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800E3CC0 grouping: target whole-function extent of 0x800E4EE4 and its literal-pool slice 0x8029DBF0-0x8029DC14; the split permits independent compilation of a partial literal pool and does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E4EE4",
+          "end": "0x800E513C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DBF0",
+          "end": "0x8029DC14"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E4EE4",
+          "start": "0x800E4EE4",
+          "end": "0x800E513C"
+        }
+      ]
+    },
+    {
+      "source": "src/game/cu_800E513C.cpp",
+      "profile": "game_cpp",
+      "evidence": "Comparison source fragment of the retained provisional cu_800E3CC0 grouping: target whole-function extent of 0x800E513C and its literal-pool slice 0x8029DC14-0x8029DC34; the split permits independent compilation of a partial literal pool and does not claim an original file boundary.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800E513C",
+          "end": "0x800E55B8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029DC14",
+          "end": "0x8029DC34"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_800E513C",
+          "start": "0x800E513C",
+          "end": "0x800E55B8"
+        }
+      ]
+    },
+    {
       "source": "src/game/cu_8010810C.cpp",
       "profile": "game_cpp",
       "evidence": "Comparison-only fragment of the retained provisional cu_800EFC68 grouping: 1 target whole-function extent and the exact literal-pool slice 0x8029EA88-0x8029EAE8 they load. The split lets this partial literal pool compile independently; it does not claim an original file boundary or whole-unit promotion.",
@@ -52326,7 +52378,7 @@
     {
       "source": "src/game/cu_800E55B8.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue1021 bounded fragment; full natural48byte native pool measured against earlier unclaimed contextDC34\u2013DCD8; natural mismatches retained. Original source boundaries unresolved; no linked promotion.",
+      "evidence": "Issue1021 bounded fragment; full natural48byte native pool measured against earlier unclaimed contextDC34\u2013DCD8; natural mismatches retained. Original source boundaries unresolved; no linked promotion. fn_800E586C (PR 1123) is added in address order; its four literals 0x8029DC3C-0x8029DC4C follow the pool of fn_800E55B8 inside the same context.",
       "sections": [
         {
           "section": ".text",
@@ -52346,6 +52398,11 @@
           "symbol": "fn_800E55B8",
           "start": "0x800E55B8",
           "end": "0x800E579C"
+        },
+        {
+          "symbol": "fn_800E586C",
+          "start": "0x800E586C",
+          "end": "0x800E5B04"
         },
         {
           "symbol": "fn_800E6984",
@@ -52906,13 +52963,13 @@
     {
       "source": "src/game/cu_80096E74.cpp",
       "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extent(s) fn_80096E74 and the literal-pool slice 0x80296158-0x80296198 they reference; split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. No original file boundary or whole-unit promotion is claimed.",
+      "evidence": "Comparison source fragment of the retained provisional cu_8008E978 grouping. Whole target function extents fn_80096E74 and fn_8009CD00 and the literal-pool slice 0x80296158-0x80296198 they reference (fn_8009CD00 passes the lwrist/rwrist names of that slice); split out so these literals compile at their target placement and do not shift the parent unit's measured .rodata placement. The .text placement spans both registered extents and the unregistered bodies between them. No original file boundary or whole-unit promotion is claimed.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80096E74",
-          "end": "0x80097028"
+          "end": "0x8009CDEC"
         },
         {
           "section": ".rodata",
@@ -52926,6 +52983,11 @@
           "symbol": "fn_80096E74",
           "start": "0x80096E74",
           "end": "0x80097028"
+        },
+        {
+          "symbol": "fn_8009CD00",
+          "start": "0x8009CD00",
+          "end": "0x8009CDEC"
         }
       ]
     },
