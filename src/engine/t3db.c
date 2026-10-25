@@ -108,12 +108,7 @@ typedef struct TDbResult_801F9718 {
     int mUnkC;
 } TDbResult_801F9718;
 
-typedef struct TDbCol_801F9718 {
-    int mUnk0;
-    int mUnk4;
-    int mCol;
-    int mIdx;
-} TDbCol_801F9718;
+#include "engine/t3db_cols.h"
 
 typedef struct TDbTerm_801FA4B0 {
     char mUnk0[0x28];
@@ -160,12 +155,6 @@ typedef struct TDbSelCol_801FA4B0 {
     int mCol;
 } TDbSelCol_801FA4B0;
 
-typedef struct TDbColInfo_801F9AB8 {
-    int mType;
-    int mUnk4;
-    int mCol;
-    int mSize;
-} TDbColInfo_801F9AB8;
 
 typedef struct TDbEvent_801F8A54 {
     int mType;
@@ -937,7 +926,7 @@ int fn_801F9A90(int db, int tbl)
     return fn_801F88F0(db, tbl, &pDb, &pTbl);
 }
 
-int fn_801F9AB8(int db, int tbl, TDbColInfo_801F9AB8 *pCols, int *pCount)
+int fn_801F9AB8(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCount)
 {
     TDbDb_801F88F0 *pDb;
     TDbTbl_801F88F0 *pTbl;

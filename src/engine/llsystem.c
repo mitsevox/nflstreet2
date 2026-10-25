@@ -13,6 +13,9 @@ extern void fn_801CAB30(void);
 extern void fn_80239ED4(void);
 extern int fn_801CE1E8(void);
 extern int fn_8027EFAC(int year);
+extern int fn_8027F000(int year);
+extern int fn_8027F030(int month, int year);
+extern float fn_80260FE8(float x);
 
 extern int lbl_803EBE50;
 extern int lbl_803EBE54;
@@ -63,6 +66,36 @@ int fn_801F7E90(void)
 int fn_801F7ED0(void)
 {
     VISetPreRetraceCallback(0);
+    return 0;
+}
+
+int fn_801F7EF8(SysTimer_801F7B1C *pTimer)
+{
+    if (!(pTimer->mFlags & 4)) {
+        if (pTimer->pFunc == 0) {
+            pTimer->mCount = 1;
+            pTimer->mFlags |= 4;
+        } else {
+            switch (pTimer->mUnk4) {
+            case 0:
+                pTimer->mUnknown1C = 1;
+                break;
+            case 1:
+                pTimer->mUnknown1C = 1;
+                break;
+            case 2:
+                pTimer->mUnknown1C = 1;
+                break;
+            case 3:
+                pTimer->mUnknown1C = 1;
+                break;
+            default:
+                pTimer->mUnknown1C = 1;
+                break;
+            }
+            pTimer->mFlags |= 6;
+        }
+    }
     return 0;
 }
 
@@ -163,6 +196,51 @@ void fn_801F81F4(SysTime_8039B430 *pTime)
     unsigned char enabled = OSDisableInterrupts();
 
     *pTime = lbl_8039B430;
+    OSRestoreInterrupts(enabled);
+}
+
+void fn_801F8248(void)
+{
+    unsigned char aDays[13] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    long long secs;
+    long long days;
+    unsigned char enabled;
+    unsigned int daysInYear;
+    unsigned short month;
+    int year;
+    int m;
+
+    secs = OSTicksToSeconds(OSGetTime());
+    enabled = OSDisableInterrupts();
+    lbl_8039B430.mSeconds = secs % 60;
+    lbl_8039B430.mMinutes = (long long)fn_80260FE8(secs * (1.0f / 60.0f)) % 60;
+    lbl_8039B430.mHours = (long long)fn_80260FE8(secs * (1.0f / 3600.0f)) % 24;
+    days = fn_80260FE8(secs * (1.0f / 86400.0f));
+    lbl_8039B430.mYear = 0;
+    daysInYear = 366;
+    while (days >= daysInYear) {
+        days -= daysInYear;
+        lbl_8039B430.mYear++;
+        daysInYear = fn_8027EFAC(lbl_8039B430.mYear) ? 366 : 365;
+    }
+    lbl_8039B430.mYear += 2000;
+    aDays[2] = fn_8027EFAC(lbl_8039B430.mYear) ? 29 : 28;
+    month = 1;
+    while (days >= aDays[month]) {
+        days -= aDays[month++];
+    }
+    lbl_8039B430.mMonth = month;
+    lbl_8039B430.mDays = days + 1;
+    lbl_8039B430.mHundredths = 0;
+    lbl_803EBE58 = 0;
+    lbl_803EBE5C = 0;
+    for (year = 1970; year < lbl_8039B430.mYear; year++) {
+        lbl_803EBE5C += fn_8027F000(year) * 86400;
+    }
+    for (m = 1; m < lbl_8039B430.mMonth; m++) {
+        lbl_803EBE5C += fn_8027F030(m, lbl_8039B430.mYear) * 86400;
+    }
+    lbl_803EBE5C = lbl_803EBE5C + (lbl_8039B430.mDays - 1) * 86400 + lbl_8039B430.mHours * 3600 + lbl_8039B430.mMinutes * 60 + lbl_8039B430.mSeconds;
     OSRestoreInterrupts(enabled);
 }
 

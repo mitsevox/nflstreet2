@@ -27233,6 +27233,31 @@
       ]
     },
     {
+      "source": "src/engine/cu_80229084.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80229084-0x80229094 (src/engine/cu_80229084.c), its compiler row and function and name rows. Draft comparisons only; original assembly remains linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80229084",
+          "end": "0x80229094"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80229084",
+          "start": "0x80229084",
+          "end": "0x8022908C"
+        },
+        {
+          "symbol": "fn_8022908C",
+          "start": "0x8022908C",
+          "end": "0x80229094"
+        }
+      ]
+    },
+    {
       "source": "src/engine/cu_80229094.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x80229094-0x80229270 (src/engine/cu_80229094.c), its function and name rows and the exact .sdata data row 0x803EBFC8-0x803EBFD8. Draft comparisons only; original assembly remains linked.",
@@ -27293,6 +27318,12 @@
           "placement": ".text",
           "start": "0x80229270",
           "end": "0x8022F428"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B5078",
+          "end": "0x802B5080"
         }
       ],
       "functions": [
@@ -27457,6 +27488,11 @@
           "end": "0x80229E88"
         },
         {
+          "symbol": "fn_8022A304",
+          "start": "0x8022A304",
+          "end": "0x8022A428"
+        },
+        {
           "symbol": "fn_8022A428",
           "start": "0x8022A428",
           "end": "0x8022A490"
@@ -27492,6 +27528,16 @@
           "end": "0x8022ACEC"
         },
         {
+          "symbol": "fn_8022ACEC",
+          "start": "0x8022ACEC",
+          "end": "0x8022AD64"
+        },
+        {
+          "symbol": "fn_8022AD64",
+          "start": "0x8022AD64",
+          "end": "0x8022AEFC"
+        },
+        {
           "symbol": "fn_8022AEFC",
           "start": "0x8022AEFC",
           "end": "0x8022AF54"
@@ -27500,6 +27546,21 @@
           "symbol": "fn_8022AF54",
           "start": "0x8022AF54",
           "end": "0x8022AF5C"
+        },
+        {
+          "symbol": "fn_8022AF5C",
+          "start": "0x8022AF5C",
+          "end": "0x8022B02C"
+        },
+        {
+          "symbol": "fn_8022B02C",
+          "start": "0x8022B02C",
+          "end": "0x8022B200"
+        },
+        {
+          "symbol": "fn_8022B200",
+          "start": "0x8022B200",
+          "end": "0x8022B2CC"
         },
         {
           "symbol": "fn_8022BF60",
@@ -27522,9 +27583,34 @@
           "end": "0x8022C0E0"
         },
         {
+          "symbol": "fn_8022C0E0",
+          "start": "0x8022C0E0",
+          "end": "0x8022C214"
+        },
+        {
+          "symbol": "fn_8022C214",
+          "start": "0x8022C214",
+          "end": "0x8022C3C8"
+        },
+        {
           "symbol": "fn_8022C3C8",
           "start": "0x8022C3C8",
           "end": "0x8022C410"
+        },
+        {
+          "symbol": "fn_8022C410",
+          "start": "0x8022C410",
+          "end": "0x8022C518"
+        },
+        {
+          "symbol": "fn_8022C518",
+          "start": "0x8022C518",
+          "end": "0x8022C628"
+        },
+        {
+          "symbol": "fn_8022C628",
+          "start": "0x8022C628",
+          "end": "0x8022C81C"
         },
         {
           "symbol": "fn_8022C81C",
@@ -27682,6 +27768,11 @@
           "end": "0x8022D418"
         },
         {
+          "symbol": "fn_8022D418",
+          "start": "0x8022D418",
+          "end": "0x8022D540"
+        },
+        {
           "symbol": "fn_8022D540",
           "start": "0x8022D540",
           "end": "0x8022D5A4"
@@ -27750,6 +27841,11 @@
           "symbol": "fn_8022DB08",
           "start": "0x8022DB08",
           "end": "0x8022DB20"
+        },
+        {
+          "symbol": "fn_8022DB20",
+          "start": "0x8022DB20",
+          "end": "0x8022DBF4"
         },
         {
           "symbol": "fn_8022DBF4",
@@ -27932,6 +28028,11 @@
           "end": "0x8022ED50"
         },
         {
+          "symbol": "fn_8022ED50",
+          "start": "0x8022ED50",
+          "end": "0x8022EF14"
+        },
+        {
           "symbol": "fn_8022EF14",
           "start": "0x8022EF14",
           "end": "0x8022EF60"
@@ -27940,6 +28041,11 @@
           "symbol": "fn_8022EF60",
           "start": "0x8022EF60",
           "end": "0x8022EF8C"
+        },
+        {
+          "symbol": "fn_8022EF8C",
+          "start": "0x8022EF8C",
+          "end": "0x8022EFBC"
         },
         {
           "symbol": "fn_8022EFBC",
@@ -27960,6 +28066,21 @@
           "symbol": "fn_8022F094",
           "start": "0x8022F094",
           "end": "0x8022F0D4"
+        },
+        {
+          "symbol": "fn_8022F0D4",
+          "start": "0x8022F0D4",
+          "end": "0x8022F1BC"
+        },
+        {
+          "symbol": "fn_8022F1BC",
+          "start": "0x8022F1BC",
+          "end": "0x8022F294"
+        },
+        {
+          "symbol": "fn_8022F294",
+          "start": "0x8022F294",
+          "end": "0x8022F34C"
         },
         {
           "symbol": "fn_8022F34C",
@@ -49283,6 +49404,12 @@
           "placement": ".text",
           "start": "0x801F7DF4",
           "end": "0x801F8878"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1AD0",
+          "end": "0x802B1AEC"
         }
       ],
       "functions": [
@@ -49305,6 +49432,11 @@
           "symbol": "fn_801F7ED0",
           "start": "0x801F7ED0",
           "end": "0x801F7EF8"
+        },
+        {
+          "symbol": "fn_801F7EF8",
+          "start": "0x801F7EF8",
+          "end": "0x801F7F60"
         },
         {
           "symbol": "fn_801F7F60",
@@ -49365,6 +49497,11 @@
           "symbol": "fn_801F81F4",
           "start": "0x801F81F4",
           "end": "0x801F8248"
+        },
+        {
+          "symbol": "fn_801F8248",
+          "start": "0x801F8248",
+          "end": "0x801F8574"
         },
         {
           "symbol": "fn_801F8574",
@@ -51834,7 +51971,7 @@
     {
       "source": "src/engine/tmgeometry.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8020ED10-0x8020F28C (src/engine/tmgeometry.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1BD8-0x802B1BE8. 9 drafted bodies. Comparison only; original assembly stays linked.",
+      "evidence": "evidence.tsv unit row 0x8020ED10-0x8020F28C (src/engine/tmgeometry.c), its compiler row, the source-form row 0x8020840C-0x802176E8 and the exact function rows, plus the exact data row for .rodata 0x802B1BD8-0x802B1BE8. 10 drafted bodies, partial: 0x8020F030. Comparison only; original assembly stays linked.",
       "sections": [
         {
           "section": ".text",
@@ -51879,6 +52016,11 @@
           "symbol": "fn_8020F00C",
           "start": "0x8020F00C",
           "end": "0x8020F030"
+        },
+        {
+          "symbol": "fn_8020F030",
+          "start": "0x8020F030",
+          "end": "0x8020F08C"
         },
         {
           "symbol": "fn_8020F08C",
@@ -52055,6 +52197,37 @@
           "symbol": "fn_802144D8",
           "start": "0x802144D8",
           "end": "0x80214554"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_80213DB0.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80213BCC-0x80214554 (src/engine/tmclip.c; this source covers 0x80213DB0-0x80214140 as src/engine/cu_80213DB0.c), its compiler and source-form rows, the function rows of 0x80213DB0 and 0x80213F18 and the exact data row for .rodata 0x802B1C58-0x802B1C78. Split from src/engine/tmclip.c because the unaddressed constant block 0x802B1C78-0x802B1C88 separates these two pools from tmclip.c's tail pool. Comparison only; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80213DB0",
+          "end": "0x80214140"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1C58",
+          "end": "0x802B1C78"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_80213DB0",
+          "start": "0x80213DB0",
+          "end": "0x80213F18"
+        },
+        {
+          "symbol": "fn_80213F18",
+          "start": "0x80213F18",
+          "end": "0x80214140"
         }
       ]
     },

@@ -402,6 +402,14 @@
       "address": "0x8025E290",
       "evidence": "evidence.tsv external row for 0x8025E290 (__divdi3)."
     },
+    "__fixsfdi": {
+      "address": "0x8025E80C",
+      "evidence": "evidence.tsv external row for 0x8025E80C (__fixsfdi)."
+    },
+    "__moddi3": {
+      "address": "0x8025EB54",
+      "evidence": "evidence.tsv external row for 0x8025EB54 (__moddi3)."
+    },
     "__OSBusClock": {
       "address": "0x800000F8",
       "evidence": "evidence.tsv external row for 0x800000F8 (__OSBusClock)."
