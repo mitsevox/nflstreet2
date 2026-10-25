@@ -976,7 +976,7 @@ def build(original, manifest_path, report_path, cache=None):
         if unit["compile_path"]:
             try:
                 stage(unit)
-            except (ValueError, RuntimeError, OSError) as error:
+            except Exception as error:
                 failures[unit["source"]] = error
 
     def attempt(unit):
@@ -984,7 +984,7 @@ def build(original, manifest_path, report_path, cache=None):
             return
         try:
             compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs, cache=cache)
-        except (ValueError, RuntimeError, OSError) as error:
+        except Exception as error:
             failures[unit["source"]] = error
     with concurrent.futures.ThreadPoolExecutor(max_workers=os.cpu_count() or 1) as pool:
         list(pool.map(attempt, units))

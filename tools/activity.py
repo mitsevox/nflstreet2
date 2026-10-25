@@ -305,7 +305,7 @@ def prefetch(root, ledger, revision, fetch_missing=False):
         def lookup(source):
             try:
                 historical_source_blobs(root, revision, source)
-            except ValueError:
+            except (ValueError, subprocess.CalledProcessError):
                 pass
         with concurrent.futures.ThreadPoolExecutor(max_workers=os.cpu_count() or 1) as pool:
             list(pool.map(lookup, sources))
