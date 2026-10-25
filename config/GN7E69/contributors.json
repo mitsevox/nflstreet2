@@ -30210,6 +30210,7 @@
       ],
       "provenance": {
         "pull_request": 1115,
+        "merged_via": 1115,
         "commit": "0e12b107e4982280ecac92e877c0d8c8586c6f40",
         "introduced_blob": "f0e7c11f1db55a1d898e30d51288bfe05038c079"
       }
