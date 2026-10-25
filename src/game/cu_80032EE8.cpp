@@ -1,6 +1,9 @@
 #include "game/Class_801CC350.h"
 #include "game/Class_801CBC50.h"
 #include "game/FELoop.h"
+#include "game/FMCAPPORT.h"
+#include "game/GameState.h"
+#include "game/ModuleGroup_80033A5C.h"
 
 class MainFEGroup : public Class_801CC350 {
 public:
@@ -15,25 +18,138 @@ public:
 extern "C" {
 void fn_800245DC(void);
 void fn_80024628(void);
-void fn_80026BA4(void);
 void fn_80072C90(unsigned int delay, int wait);
 void fn_80072D98(unsigned int delay);
 void fn_80187C5C(unsigned char a);
 int fn_801CBFA0(Class_801CBC50 *pTable);
 int fn_801CC4F4(Class_801CC350 *pGroup);
 int fn_801CC4FC(Class_801CC350 *pGroup);
-extern const char lbl_8028ADDC[];
-extern Record_802CCBAC lbl_802CCBF4[];
-extern Record_803EA3A8 lbl_802CCC34[];
-extern ModuleDependency lbl_80306B58[];
-extern ModuleDependency lbl_80306B84[];
-extern ModuleDependency lbl_80306B98[];
-extern ModuleDependency lbl_80306BF4[];
-extern ModuleDependency lbl_80306C4C[];
-extern ModuleDependency lbl_80306C58[];
 }
 
-const char *MainFEGroup::GetName() { return lbl_8028ADDC; }
+void fn_80026BA4();
+
+static Record_802CCBAC lbl_802CCBF4[] = {
+    { 9, "FE Loading" },
+    { 7, "FE FirstStart" },
+    { 8, "FE FirstStartComplete" },
+    { 10, "FE MainMenu" },
+    { 11, "FE Online" },
+    { 12, "FE ExitToInGame" },
+    { 14, "FE ExitProgram" },
+    { -1, 0 },
+};
+
+static Record_803EA3A8 lbl_802CCC34[] = {
+    { 7, 8 },
+    { 8, 9 },
+    { 9, 10 },
+    { 9, 11 },
+    { 10, 12 },
+    { 10, 14 },
+    { 10, 11 },
+    { 11, 9 },
+    { 11, 12 },
+    { -1, -1 },
+};
+
+extern LoadingFE gLoadingFE;
+extern FEDLL gFEDLL;
+extern UIListener gUIListener;
+extern DbColPal gDbColPal;
+extern FMMainFEInit gFMMainFEInit;
+extern Timg gTimg;
+extern FESnd gFESnd;
+extern StatGen gStatGen;
+extern FEPlyr gFEPlyr;
+
+MainFEGroup lbl_80306B34;
+
+static ModuleDependency lbl_80306B58[] = {
+    &gQkl,
+    &gGRender,
+    &gFEDLL,
+    &gUIListener,
+    &gGameState,
+    &gTimg,
+    &gGRand,
+    &gGameStateActivate,
+    &gFESnd,
+    &gUIS,
+    0,
+};
+
+static ModuleDependency lbl_80306B84[] = {
+    &gQkl,
+    &gGRender,
+    &gFEDLL,
+    &gUIListener,
+    0,
+};
+
+static ModuleDependency lbl_80306B98[] = {
+    &gGRender,
+    &gLoadingFE,
+    &gFEDLL,
+    &gQkl,
+    &gUIListener,
+    &gDbColPal,
+    &gFMMainFEInit,
+    &gMemAudit,
+    &gGameState,
+    &gTimg,
+    &gGRand,
+    &gScrmRule,
+    &gFEPlyBk,
+    &gAnmsCelebration,
+    &gAudmon,
+    &gGameStateActivate,
+    &gFESnd,
+    &gStatGen,
+    &gFEPlyr,
+    &gRumble,
+    &gUIS,
+    &gFMCAPPORT,
+    0,
+};
+
+static ModuleDependency lbl_80306BF4[] = {
+    &gGRender,
+    &gFEDLL,
+    &gFELoop,
+    &gUIListener,
+    &gDbColPal,
+    &gFMMainFEInit,
+    &gMemAudit,
+    &gGameState,
+    &gTimg,
+    &gGRand,
+    &gScrmRule,
+    &gFEPlyBk,
+    &gAnmsCelebration,
+    &gAudmon,
+    &gGameStateActivate,
+    &gFESnd,
+    &gStatGen,
+    &gFEPlyr,
+    &gRumble,
+    &gUIS,
+    &gFMCAPPORT,
+    0,
+};
+
+static ModuleDependency lbl_80306C4C[] = {
+    &gMemAudit,
+    &gFEDLL,
+    0,
+};
+
+static ModuleDependency lbl_80306C58[] = {
+    &gFEDLL,
+    &gMemAudit,
+    0,
+};
+
+const char *MainFEGroup::GetName() { return "MainFE Group"; }
 Record_802CCBAC *MainFEGroup::vfn_04() { return lbl_802CCBF4; }
 Record_803EA3A8 *MainFEGroup::vfn_05() { return lbl_802CCC34; }
 
@@ -120,8 +236,3 @@ extern "C" int fn_80033144(Class_801CC350 *pGroup)
     }
     return result;
 }
-
-extern "C" void fn_8003319C(int initialize, int priority);
-
-extern "C" void fn_80033438() { fn_8003319C(1, 65535); }
-extern "C" void fn_80033464() { fn_8003319C(0, 65535); }
