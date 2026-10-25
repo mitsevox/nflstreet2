@@ -136,10 +136,10 @@ static int fn_801C9DD8(int device, const char *pName, int mode)
                 } else {
                     fn_801C2EB4(pCopy, pName);
                     lbl_803EBC24[i].mInUse = 1;
-                    lbl_803EBC24[i].mPos = 0;
                     lbl_803EBC24[i].mDevHandle = handle;
-                    lbl_803EBC24[i].mpName = pCopy;
                     lbl_803EBC24[i].mAsyncPos = 0;
+                    lbl_803EBC24[i].mPos = 0;
+                    lbl_803EBC24[i].mpName = pCopy;
                     found = 1;
                     lbl_803EBC24[i].mMode = mode;
                     lbl_803EBC24[i].mLength = size;

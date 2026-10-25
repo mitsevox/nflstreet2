@@ -51,8 +51,8 @@ int fn_801B9DEC(unsigned int mode)
         lbl_803EBB78 = 1;
     else
         err = 0x140001;
-    lbl_803ECEB5 = -1;
     lbl_803ECEB4 = -1;
+    lbl_803ECEB5 = -1;
     fn_801BA848(0);
     switch (mode) {
     case 0:
