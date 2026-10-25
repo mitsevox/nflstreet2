@@ -2,7 +2,7 @@
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) before working. It defines the contribution passes, [investigation and escalation](CONTRIBUTING.md#investigation-and-escalation), matching integrity, source comments, and approval process. Consult the [README](README.md) for the target and build entry point.
 
-- Work within the assigned scope on a dedicated branch and your own checkout or worktree. Preserve unrelated changes; coordinate shared-file edits with the other contributors.
+- Follow [work coordination](CONTRIBUTING.md#work-coordination): reserve only a bounded active batch, not a subsystem backlog. Work on a dedicated branch and your own checkout or worktree. Preserve unrelated changes and coordinate live overlaps and shared-file edits; old blanket claims do not reserve code.
 - Use authorized reference material when relevant. Keep raw binaries, complete debug exports, and trial output out of public Git. If required evidence or tools are unavailable, report the gap rather than invent a result.
 - Keep contribution branches, PRs, and reviews in this repository. Use the pinned, owner-approved build environment; do not alter supporting dependencies or their access controls. Report dependency problems here for the owner's decision.
 - Keep recovered facts, hypotheses, function-level matches, combined-build results, and review verdicts distinct. Report what was actually checked and on which revision.

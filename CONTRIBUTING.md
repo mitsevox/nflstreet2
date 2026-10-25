@@ -20,15 +20,25 @@ python3 tools/baseline.py --original /path/to/main.dol
 python3 tools/baseline.py --original /path/to/main.dol --sn-linker build/toolchain/ProDG/3.9.3/ngcld.exe --wrapper build/toolchain/wibo
 ```
 
-The supported hosts and target hash are in the README. macOS requires existing Rosetta support for Wibo. Missing reference access is a setup issue for the owner, not a reason to change supporting dependencies. Claim your scope in an issue or draft PR before editing shared files; identify dependency branches and coordinate overlapping changes there.
+The supported hosts and target hash are in the README. macOS requires existing Rosetta support for Wibo. Missing reference access is a setup issue for the owner, not a reason to change supporting dependencies. Reserve a bounded active task under [work coordination](#work-coordination); identify dependency branches and coordinate overlapping edits before starting.
 
 Contribution branches, PRs, reviews, and required CI checks belong in this repository. Use the owner-approved build environment at its pinned version. Supporting build dependencies are maintained by the owner; contributors and agents must not change them to accommodate a patch. Report missing inputs or tooling problems in an issue here for the owner's decision.
 
 **Only the project owner authorizes and performs merges into `main`.** Contributors and agents may prepare branches, submit PRs, and review changes. A reviewer verdict or passing CI never grants merge authority. Contributors must not push directly to `main` or enable automatic merging.
 
+## Work coordination
+
+Backlog and research issues do not reserve code. Older subsystem or address-range claims are backlog references, not exclusive reservations; retain only the batch currently being worked on.
+
+Before starting, check open PRs and active branches, then record a bounded reservation in an issue or draft PR: the specific functions or unit action, your branch, and shared-file dependencies. Reserve current work, not an entire subsystem or future batches. Existing partial source is open to improvement and promotion unless that scope is actively reserved; preserve original contribution credit.
+
+A reservation expires after 48 hours without a meaningful progress update. Renew it with a link to pushed work, concrete findings, or an explicit handoff. Release scope you pause or abandon, and check existing branches and PRs before taking over expired work so useful work is preserved rather than duplicated.
+
+Coordinate shared source files, headers, types, tables and compilation-group changes even when function scopes differ. Record how overlapping edits will be separated or integrated. An old claim alone does not require permission to proceed; a live overlap requires coordination. These reservations prevent conflicting edits, not ownership of the source. Review, matching-integrity exceptions and merge authority are unchanged.
+
 ## Work and review passes
 
-1. **Claim a bounded task.** Use an issue or draft PR to state the unit, scope, and shared-file dependencies. Work on a dedicated branch from current `main`, in your own checkout or worktree. Coordinate overlapping changes before starting.
+1. **Reserve active work.** Follow [work coordination](#work-coordination), state the bounded batch and shared-file dependencies, and work on a dedicated branch from current `main` in your own checkout or worktree. Coordinate live overlaps before editing.
 2. **Establish boundaries and types.** Inspect the target and reference evidence before reconstructing the unit. Before declaring a shared address, search existing headers and accepted units and reuse the established declaration. Reconcile dependency names and ownership with current `main`; do not retain duplicate layouts or stale claims that an accepted symbol is unrecovered. Record unknowns explicitly. Bounded unit mappings must appear in both progress exports; mapping changes require the export checks, without increasing source credit. A related build is corroboration, not proof of the target layout.
 3. **Reconstruct and match.** Recover source in the original codebase's style. Compile, compare instructions and data, and use the [investigation loop](#investigation-and-escalation) when needed. Keep discarded trial variants local; retain useful partial reconstruction in the contribution branch. Per-function comparisons measure reconstruction progress; the combined build checks the bytes selected for linking.
 4. **Name and explain.** Include provenance for recovered names, types, fields, and boundaries in reviewed metadata using the [evidence format](config/README.md). Cite the actual loads, stores and relevant caller/callee behavior for inferred field widths and signatures; related subsystem accesses do not establish a declaration. Keep unaccessed regions opaque and unsupported meanings unresolved. Keep readable names distinct from claims of original names. Record supported names for compiled methods and generated lifecycle functions individually; unresolved functions retain neutral address labels. Comments follow the standard below.
