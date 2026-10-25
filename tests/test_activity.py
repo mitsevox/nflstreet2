@@ -128,6 +128,32 @@ class ContributorTests(unittest.TestCase):
         self.git('-c','user.name=Test','-c','user.email=test@example.invalid','commit','-qm','Integration')
         return self.git('rev-parse','HEAD')
 
+    def test_tree_lookup_answers_exactly_like_batch_check(self):
+        (self.root/'top.c').write_text('int top;')
+        (self.root/'src/deep').mkdir()
+        (self.root/'src/deep/inner.c').write_text('int inner;')
+        self.git('add','top.c','src/deep/inner.c')
+        head=self.commit_source('int function(void) { return 4; }')
+        queries=[f'{revision}:{path}' for revision in (head, head+'^', self.commit, 'c'*40)
+                 for path in ('src/test.c','top.c','src/deep/inner.c','src/deep','src/test.c/x',
+                              'src/absent.c','absent/test.c')]
+        expected=subprocess.run(['git','cat-file','--batch-check=%(objectname)'],cwd=self.root,
+                                input=''.join(q+'\n' for q in queries),capture_output=True,text=True).stdout.splitlines()
+        self.assertEqual(activity._tree_objects(self.root,queries),expected)
+
+    def test_prefetch_matches_one_by_one_answers(self):
+        self.commit_source('int function(void) { return 5; }')
+        revision=self.git('rev-parse','HEAD')
+        activity.prefetch(self.root,self.ledger,revision)
+        batched=(set(activity._VERIFIED_COMMITS_CACHE),dict(activity._SOURCE_BLOB_CACHE),
+                 dict(activity._HISTORICAL_BLOBS_CACHE))
+        activity.clear_cache()
+        activity.provenance_commit(self.root,self.commit)
+        activity.source_blob(self.root,self.commit,'src/test.c')
+        activity.historical_source_blobs(self.root,revision,'src/test.c')
+        self.assertEqual(batched,(set(activity._VERIFIED_COMMITS_CACHE),dict(activity._SOURCE_BLOB_CACHE),
+                                  dict(activity._HISTORICAL_BLOBS_CACHE)))
+
     def test_squash_preserves_original_credit_with_dual_source_proof(self):
         original=self.commit
         tree=self.git('rev-parse',original+'^{tree}')

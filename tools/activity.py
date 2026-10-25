@@ -164,6 +164,49 @@ def _batch_objects(root, queries):
     return rows
 
 
+def _tree_objects(root, queries):
+    """`cat-file --batch-check` answers for REV:path queries, read from trees alone.
+
+    Checking an object's existence would make a blobless fetch download each blob singly;
+    the entry's name in its parent tree is all an attribution check compares."""
+    parents = {}
+    for query in queries:
+        revision, path = query.split(':', 1)
+        directory, _, name = path.rpartition('/')
+        parents.setdefault(revision + (':' + directory if directory else '^{tree}'), set()).add(name)
+    requests = sorted(parents)
+    output = subprocess.run(['git', 'cat-file', '--batch'], cwd=root,
+                            input=''.join(request + '\n' for request in requests).encode(),
+                            capture_output=True, check=True).stdout
+    trees, at = {}, 0
+    for request in requests:
+        end = output.index(b'\n', at)
+        header = output[at:end].decode()
+        at = end + 1
+        if header == request + ' missing':
+            continue
+        oid, kind, size = header.split(' ')
+        if not SHA.fullmatch(oid) or not size.isdigit():
+            raise ValueError('Invalid Git historical source response')
+        content, at = output[at:at + int(size)], at + int(size) + 1
+        if kind != 'tree':
+            continue
+        entries, cursor = {}, 0
+        while cursor < len(content):
+            space = content.index(b' ', cursor)
+            nul = content.index(b'\0', space)
+            entries[content[space + 1:nul].decode('utf-8', 'surrogateescape')] = content[nul + 1:nul + 21].hex()
+            cursor = nul + 21
+        trees[request] = entries
+    rows = []
+    for query in queries:
+        revision, path = query.split(':', 1)
+        directory, _, name = path.rpartition('/')
+        entry = trees.get(revision + (':' + directory if directory else '^{tree}'), {}).get(name)
+        rows.append(entry or query + ' missing')
+    return rows
+
+
 def _linear_path_history(root, revision, sources):
     """Map each source path to `git rev-list revision -- path`, from one tree walk.
 
@@ -216,7 +259,8 @@ def prefetch(root, ledger, revision, fetch_missing=False):
     if fetch_missing and unverified():
         # One request for every pinned object instead of one per commit; leftovers fall
         # back to provenance_commit(), which fetches them singly and fails closed.
-        subprocess.run(['git', 'fetch', '--no-tags', 'origin', *unverified()], cwd=root,
+        # Commits and trees only: every check reads tree entries, never blob contents.
+        subprocess.run(['git', 'fetch', '--no-tags', '--filter=blob:none', 'origin', *unverified()], cwd=root,
                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
         verify(unverified())
     blobs = set()
@@ -234,7 +278,7 @@ def prefetch(root, ledger, revision, fetch_missing=False):
             if isinstance(pinned, str) and (str(root), pinned) in _VERIFIED_COMMITS_CACHE:
                 blobs.add((pinned, historical))
     blobs = sorted(blobs - {(c, s) for (r, c, s) in _SOURCE_BLOB_CACHE if r == str(root)})
-    for (commit, source), row in zip(blobs, _batch_objects(root, [c + ':' + s for c, s in blobs])):
+    for (commit, source), row in zip(blobs, _tree_objects(root, [c + ':' + s for c, s in blobs])):
         if SHA.fullmatch(row):
             _SOURCE_BLOB_CACHE[(str(root), commit, source)] = row
     sources = sorted(source for source in sources
@@ -266,10 +310,7 @@ def merged_source(root, revision, historical_source, source, migration_commit, m
     for commit in [migration_commit, *commits]:
         queries += [commit + ':' + source, commit + '^:' + source,
                     commit + ':' + historical_source, commit + '^:' + historical_source]
-    result = subprocess.run(['git', 'cat-file', '--batch-check=%(objectname)'], cwd=root,
-                            input=''.join(query + '\n' for query in queries),
-                            capture_output=True, text=True, check=True)
-    rows = result.stdout.splitlines()
+    rows = _tree_objects(root, queries)
     if len(rows) != len(queries) or any(
             not SHA.fullmatch(row) and row != query + ' missing'
             for query, row in zip(queries, rows)):

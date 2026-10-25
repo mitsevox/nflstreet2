@@ -6,6 +6,8 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))
 import function_compare
+import source_build as sb
+from unittest.mock import patch
 
 
 class MeasurementCacheTests(unittest.TestCase):
@@ -90,6 +92,75 @@ class MeasurementCacheTests(unittest.TestCase):
     def test_invalid_mode_fails_closed(self):
         with self.assertRaisesRegex(ValueError, 'use or audit'):
             function_compare.MeasurementCache(self.cache, 'write')
+
+
+class CompileCacheTests(unittest.TestCase):
+    def setUp(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.root = Path(directory.name).resolve()
+        for path in sb.CompileCache.TOOLS:
+            (self.root / path).parent.mkdir(parents=True, exist_ok=True)
+            (self.root / path).write_text(path)
+        (self.root / 'src/game').mkdir(parents=True)
+        (self.root / 'include').mkdir()
+        (self.root / 'src/game/a.c').write_text('#include "types.h"\n')
+        (self.root / 'include/types.h').write_text('typedef int s32;\n')
+        (self.root / 'build/obj').mkdir(parents=True)
+        patcher = patch.object(sb, 'ROOT', self.root)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def unit(self):
+        return {'source': 'src/game/a.c', 'path': self.root / 'src/game/a.c', 'compiler': 'prodg',
+                'flags': ['-O2'], 'object': self.root / 'build/obj/a.o', 'depfile': self.root / 'build/obj/a.d'}
+
+    def compile(self, mode, data=b'object'):
+        cache = sb.CompileCache(self.root / 'build/cache/objects', mode)
+        unit = self.unit()
+        key = cache.key(unit, [self.root / 'include'], self.root, str(unit['path']), False)
+        if cache.restore(key, unit):
+            return cache, True
+        unit['object'].write_bytes(data)
+        unit['depfile'].write_text('a.o: src/game/a.c include/types.h\n')
+        unit['dependencies'] = sb.dependencies(unit['depfile'], self.root)
+        cache.record(key, unit)
+        cache.finish()
+        return cache, False
+
+    def test_reuse_needs_unchanged_dependencies_and_no_new_same_named_file(self):
+        self.compile('audit')
+        self.assertTrue(self.compile('use')[1])
+        (self.root / 'src/game/Types.h').write_text('typedef long s32;\n')
+        self.assertFalse(self.compile('use')[1])
+        (self.root / 'src/game/Types.h').unlink()
+        self.assertTrue(self.compile('use')[1])
+        (self.root / 'include/types.h').write_text('typedef short s32;\n')
+        self.assertFalse(self.compile('use')[1])
+
+    def test_source_flags_and_tools_are_part_of_the_key(self):
+        cache = sb.CompileCache(self.root / 'build/cache/objects', 'use')
+        unit = self.unit()
+        key = cache.key(unit, [self.root / 'include'], self.root, str(unit['path']), False)
+        self.assertNotEqual(key, cache.key(unit, [self.root / 'include'], self.root, str(unit['path']), True))
+        self.assertNotEqual(key, cache.key(dict(unit, flags=['-O1']), [self.root / 'include'], self.root,
+                                           str(unit['path']), False))
+        (self.root / 'src/game/a.c').write_text('#include "types.h"\nint x;\n')
+        self.assertNotEqual(key, cache.key(unit, [self.root / 'include'], self.root, str(unit['path']), False))
+        (self.root / 'tools/prodg_cc.py').write_text('changed')
+        other = sb.CompileCache(self.root / 'build/cache/objects', 'use')
+        self.assertNotEqual(cache.key(unit, [self.root / 'include'], self.root, str(unit['path']), False),
+                            other.key(unit, [self.root / 'include'], self.root, str(unit['path']), False))
+
+    def test_audit_rejects_a_cached_object_that_differs_from_a_fresh_compile(self):
+        self.compile('audit')
+        self.assertEqual(self.compile('audit')[0].audited, 1)
+        with self.assertRaisesRegex(ValueError, 'disagrees with a fresh compile'):
+            self.compile('audit', b'different object')
+
+    def test_use_mode_never_writes_the_cache(self):
+        self.compile('use')
+        self.assertFalse((self.root / 'build/cache/objects').exists())
 
 
 if __name__ == '__main__':

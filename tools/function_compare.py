@@ -1,7 +1,6 @@
 """Compare draft bodies in normal source files without putting them in the game build."""
 import bisect
 import concurrent.futures
-import copy
 import hashlib
 import json
 import math
@@ -266,7 +265,8 @@ def configured(root, binary):
             raise ValueError('Comparison source belongs in its normal src/ location')
         if not isinstance(candidate['functions'], list) or not candidate['functions']:
             raise ValueError('Comparison units require explicit target functions')
-        compiled = copy.deepcopy(accepted)
+        # load_manifest only reads the manifest, so the accepted profiles can be shared.
+        compiled = dict(accepted)
         compiled['units'] = [{k: v for k, v in candidate.items() if k not in ('functions', 'storage', 'discarded')}]
         validated, _, _ = sb.load_manifest(compiled, sections, accepted['compiler'])
         unit = validated[0]
@@ -354,12 +354,14 @@ class MeasurementCache:
                 self.misses += 1
             return None
         cached = json.loads((entry / 'measurement.json').read_text())
-        for pair in cached['pairs']:
-            relative = Path(pair['path'])
+        for relative in dict.fromkeys(Path(pair['path']) for pair in cached['pairs']):
             if relative.is_absolute() or '..' in relative.parts:
                 raise ValueError('Invalid cached comparison output path')
             (folder / relative).parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(entry / 'files' / relative, folder / relative)
+            try:
+                os.link(entry / 'files' / relative, folder / relative)
+            except OSError:
+                shutil.copyfile(entry / 'files' / relative, folder / relative)
         with self.lock:
             self.hits += 1
         prefix = folder.relative_to(root).as_posix() + '/'
@@ -393,7 +395,7 @@ class MeasurementCache:
         return {'mode': self.mode, 'hits': self.hits, 'misses': self.misses, 'audited': self.audited}
 
 
-def generate(original, source_report, tool, cache=None):
+def generate(original, source_report, tool, cache=None, compile_cache=None):
     import matching
     root = sb.ROOT
     binary = original.read_bytes()
@@ -438,7 +440,7 @@ def generate(original, source_report, tool, cache=None):
                     'depfile_sha256': sb.sha256(unit['depfile']), 'entries': entries, 'pairs': pairs}
         unit['object'] = folder / 'native.o'
         unit['depfile'] = folder / 'native.d'
-        sb.compile_unit(unit, compiler, wrapper, sdk, manifest['include_dirs'], comparison=True)
+        sb.compile_unit(unit, compiler, wrapper, sdk, manifest['include_dirs'], comparison=True, cache=compile_cache)
         # compile_unit has checked the raw compiler dependencies against this checkout.
         # Keep that file for diagnostics; bind a repository-relative copy so the same
         # receipt can be validated on the CI host after compilation inside /work.

@@ -13,6 +13,7 @@ import shutil
 import struct
 import subprocess
 import sys
+import threading
 from pathlib import Path
 
 import baseline
@@ -632,6 +633,99 @@ def dependencies(depfile, base):
     return dict(sorted(result.items()))
 
 
+class CompileCache:
+    """Compiler outputs reused by content; only main writes and audits them.
+
+    A unit's lookup key binds its compiler, flags, include path, compile directory,
+    source bytes and the pinned compiler and driver files. An entry is used only while
+    every dependency the compiler read still has its recorded bytes and no repository
+    file with the same name (ignoring case) appeared or vanished, so a new header cannot
+    shadow a cached include. In 'use' mode a hit restores the object and depfile; in
+    'audit' mode every unit compiles fresh, a cached entry valid for the same inputs must
+    hold identical bytes, and the fresh set replaces the cache."""
+    TOOLS = ("tools/compiler-tools.json", "tools/prodg_cc.py", "tools/sdk_cc.py", "tools/setup_compiler.py",
+             "tools/source_build.py")
+
+    def __init__(self, directory, mode):
+        if mode not in ("use", "audit"):
+            raise ValueError("Compile cache mode is use or audit")
+        self.directory, self.mode = Path(directory), mode
+        self.fresh = self.directory.with_name(self.directory.name + ".fresh")
+        self.hits = self.misses = self.audited = 0
+        self.lock = threading.Lock()
+        self.tools = {path: sha256(ROOT / path) for path in self.TOOLS}
+        self.digests = {}
+        self.names = {}
+        for directory_path, directories, files in os.walk(ROOT):
+            if Path(directory_path) == ROOT:
+                directories[:] = [d for d in directories if d not in (".git", "build")]
+            for name in files:
+                relative = (Path(directory_path) / name).relative_to(ROOT).as_posix()
+                self.names.setdefault(name.lower(), []).append(relative)
+        if mode == "audit":
+            if self.fresh.exists():
+                shutil.rmtree(self.fresh)
+            self.fresh.mkdir(parents=True)
+
+    def key(self, unit, includes, workdir, source, comparison):
+        material = {"schema": 1, "tools": self.tools, "comparison": comparison, "source": unit["source"],
+                    "source_sha256": sha256(unit["path"]), "compiler": unit["compiler"], "flags": unit["flags"],
+                    "includes": [Path(d).resolve().relative_to(ROOT.resolve()).as_posix() for d in includes],
+                    "workdir": Path(workdir).resolve().relative_to(ROOT.resolve()).as_posix(),
+                    "compile_source": str(Path(source).relative_to(ROOT)) if Path(source).is_absolute() else source}
+        return hashlib.sha256(json.dumps(material, sort_keys=True).encode()).hexdigest()
+
+    def shadows(self, dependencies):
+        return {name: sorted(self.names.get(name, []))
+                for name in sorted({Path(path).name.lower() for path in dependencies})}
+
+    def valid(self, entry):
+        meta = json.loads((entry / "meta.json").read_text())
+        return meta if all(self.digest(path) == digest for path, digest in meta["dependencies"].items()) \
+            and self.shadows(meta["dependencies"]) == meta["names"] else None
+
+    def digest(self, path):
+        if path not in self.digests:
+            self.digests[path] = sha256(ROOT / path) if (ROOT / path).is_file() else None
+        return self.digests[path]
+
+    def restore(self, key, unit):
+        entry = self.directory / key
+        if self.mode != "use" or not (entry / "meta.json").is_file() or self.valid(entry) is None:
+            with self.lock:
+                self.misses += 1
+            return False
+        shutil.copyfile(entry / "object.o", unit["object"])
+        shutil.copyfile(entry / "depfile.d", unit["depfile"])
+        with self.lock:
+            self.hits += 1
+        return True
+
+    def record(self, key, unit):
+        if self.mode != "audit":
+            return
+        meta = {"dependencies": unit["dependencies"], "names": self.shadows(unit["dependencies"])}
+        files = {"object.o": unit["object"].read_bytes(), "depfile.d": unit["depfile"].read_bytes()}
+        previous = self.directory / key
+        if (previous / "meta.json").is_file() and self.valid(previous) is not None:
+            if any((previous / name).read_bytes() != data for name, data in files.items()):
+                raise ValueError(f"Compile cache disagrees with a fresh compile of {unit['source']}")
+            with self.lock:
+                self.audited += 1
+        entry = self.fresh / key
+        entry.mkdir(parents=True, exist_ok=True)
+        for name, data in files.items():
+            (entry / name).write_bytes(data)
+        (entry / "meta.json").write_text(json.dumps(meta, sort_keys=True) + "\n")
+
+    def finish(self):
+        if self.mode == "audit":
+            if self.directory.exists():
+                shutil.rmtree(self.directory)
+            self.fresh.rename(self.directory)
+        return {"mode": self.mode, "hits": self.hits, "misses": self.misses, "audited": self.audited}
+
+
 def run(label, command, log):
     """Run a stage; any non-zero exit or warning/error diagnostic fails the build."""
     with log.open("w") as output:
@@ -807,13 +901,17 @@ def retained_layout(unit, compiler, wrapper):
 
 # Build ------------------------------------------------------------------------------------
 
-def compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs, comparison=False):
+def compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs, comparison=False, cache=None):
     if any("DECOMP_COMPARE" in flag for flag in unit["flags"]):
         raise ValueError("DECOMP_COMPARE is a reserved global build mode")
     workdir, source = ROOT, str(unit["path"])
     if unit["compile_path"]:
         workdir, source = stage(unit), unit["compile_path"]
     includes = [ROOT / directory for directory in include_dirs + unit["include_dirs"]]
+    key = cache.key(unit, includes, workdir, source, comparison) if cache is not None else None
+    if cache is not None and cache.restore(key, unit):
+        unit["dependencies"] = dependencies(unit["depfile"], workdir)
+        return
     if unit["compiler"] == "mwcc":
         sdk_cc.compile(sdk_directory, wrapper, source, unit["object"], unit["depfile"],
                        unit["flags"], includes, workdir, comparison=comparison)
@@ -829,9 +927,11 @@ def compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs, compariso
         if result.returncode or not unit["object"].is_file():
             raise RuntimeError(f"Compilation failed for {unit['source']}")
     unit["dependencies"] = dependencies(unit["depfile"], workdir)
+    if cache is not None:
+        cache.record(key, unit)
 
 
-def build(original, manifest_path, report_path):
+def build(original, manifest_path, report_path, cache=None):
     report_path.unlink(missing_ok=True)
     target = json.loads((ROOT / "config/GN7E69/baseline.json").read_text())
     binary = original.read_bytes()
@@ -866,7 +966,8 @@ def build(original, manifest_path, report_path):
     # Each compile writes only its own object, depfile and temporary folder, and the shared
     # staging links exist already, so compiles run together; everything after stays in order.
     with concurrent.futures.ThreadPoolExecutor(max_workers=os.cpu_count() or 1) as pool:
-        list(pool.map(lambda unit: compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs), units))
+        list(pool.map(lambda unit: compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs,
+                                                cache=cache), units))
     for unit in units:
         unit["native_object_sha256"] = sha256(unit["object"])
         link_object(unit)
@@ -1081,8 +1182,19 @@ def main():
     parser.add_argument("--original", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, default=ROOT / "config/GN7E69/units.json")
     parser.add_argument("--report", type=Path, default=BUILD / "report.json")
+    parser.add_argument("--compile-cache", type=Path, help="Compiler output cache directory (written only by main)")
+    parser.add_argument("--cache-mode", choices=("use", "audit"),
+                        help="use: reuse cached objects; audit: compile fresh, verify and replace the cache")
     args = parser.parse_args()
-    report = build(args.original.resolve(), args.manifest.resolve(), args.report.resolve())
+    if (args.compile_cache is None) != (args.cache_mode is None):
+        parser.error("--compile-cache and --cache-mode go together")
+    cache = CompileCache(args.compile_cache.resolve(), args.cache_mode) if args.cache_mode else None
+    report = build(args.original.resolve(), args.manifest.resolve(), args.report.resolve(), cache)
+    if cache is not None:
+        stats = cache.finish()
+        (BUILD / "compile-cache.json").write_text(json.dumps(stats) + "\n")
+        print(f"Compile cache ({stats['mode']}): {stats['hits']} reused, {stats['misses']} compiled, "
+              f"{stats['audited']} audited against fresh objects")
     code, data = report["totals"]["code"], report["totals"]["data"]
     print(f"Source build verified: {len(report['units'])} unit(s), output SHA-1 {report['output_sha1']}")
     print(f"Source code bytes linked/matched: {code['linked']}/{code['matched']}; "
