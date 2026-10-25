@@ -34178,7 +34178,7 @@
     {
       "source": "src/game/cu_8014F104.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #809; ten complete member bodies in 0x8014F104-0x8014F57C of the class whose vtable 0x802A2B68 the constructor 0x8014EDC4 stores at +0x18, inside the retained provisional cu_801485B4 survey group: the block accessor 0x8014F104, vtable slots 5, 10, 11 and 13, the .sdata setter 0x8014F3DC and the record helpers 0x8014F3E4-0x8014F57C. Slot 12 (0x8014F19C-0x8014F36C) is not registered because its query strings lie in the readonly context measured with src/game/cu_8014E534.cpp. No literal is loaded, so no readonly range is registered. Original file boundaries and nominal identity unresolved; 0x8014EDC4-0x8014F104 and 0x8014F57C onward excluded; original bytes stay linked.",
+      "evidence": "Issues #809/#1126; eleven complete bodies inside the retained provisional cu_801485B4 grouping. Fills the existing 0x8014F19C-0x8014F36C slot-12 gap of table 0x802A2B68 (word 0x802A2BCC); existing ten bodies and full native comparisons retained. Five query strings at 0x802A0E98, 0x802A0F24, 0x802A0F34, 0x802A0F74 and 0x802A1074 stay external original-owned within the existing readonly context measured by src/game/cu_8014E534.cpp. No data placement changes here. Canonical query/record declarations reused; original names and file boundaries unresolved. Original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
@@ -34207,6 +34207,11 @@
           "symbol": "fn_8014F168",
           "start": "0x8014F168",
           "end": "0x8014F19C"
+        },
+        {
+          "symbol": "fn_8014F19C",
+          "start": "0x8014F19C",
+          "end": "0x8014F36C"
         },
         {
           "symbol": "fn_8014F36C",
@@ -35613,13 +35618,19 @@
     {
       "source": "src/game/cu_80152400.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #896; two complete slot bodies inside the retained provisional cu_801485B4 survey group: slots 10 and 11 of the table 0x802A2918 of src/game/cu_80152FFC.cpp (Class_80148A58-derived, include/game/Class_80148A58.h; 0x80152400-0x80152448 and 0x80152448-0x8015247C, words 0x802A296C and 0x802A2974). Slot 11 calls slot 10 through the vtable; no literal or data word is referenced. Original file boundaries and nominal identity unresolved; 0x8015228C before and 0x8015247C onward are not claimed; original bytes stay linked.",
+      "evidence": "Issues #896/#1126; three complete slot bodies inside retained provisional cu_801485B4: slots 10, 11 and 12 of table 0x802A2918 (words 0x802A296C, 0x802A2974 and 0x802A297C). Adds complete 0x8015247C-0x8015264C body in the existing file; both old bodies retained. Entire native readonly output measured against 0x802A1424-0x802A14EC, containing the new cursor and update query strings. Shared strings at 0x802A0F24/0x802A0F34/0x802A0F74 stay external original-owned in the readonly context of src/game/cu_8014E534.cpp. Original names and file boundaries unresolved; original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80152400",
-          "end": "0x8015247C"
+          "end": "0x8015264C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A1424",
+          "end": "0x802A14EC"
         }
       ],
       "functions": [
@@ -35632,6 +35643,11 @@
           "symbol": "fn_80152448",
           "start": "0x80152448",
           "end": "0x8015247C"
+        },
+        {
+          "symbol": "fn_8015247C",
+          "start": "0x8015247C",
+          "end": "0x8015264C"
         }
       ]
     },
