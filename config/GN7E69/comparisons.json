@@ -36222,19 +36222,19 @@
     {
       "source": "src/game/cu_80152068.cpp",
       "profile": "game_cpp",
-      "evidence": "Issue #971; one complete function inside the retained provisional cu_801485B4 survey group: 0x80152068-0x801520C4, called only from 0x80103944, which copies the two floats at +92 and +96 plus eight times the index of the table returned by 0x801530FC into an output vector and sets its third word to 0.0. Owns the .rodata literal 0x802A13E8-0x802A13EC. Original file boundaries and nominal identity unresolved; original bytes stay linked.",
+      "evidence": "Issues #971/#1114; complete vector-output helper 0x80152068-0x801520C4 and two complete ball-selection helpers 0x801520C4-0x80152400 inside retained provisional cu_801485B4 group. Existing player, ball and vector declarations reused. Directly referenced readonly literals occupy 0x802A13E8-0x802A1424; complete native data including any end padding is measured. Original file boundaries and nominal identities unresolved; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80152068",
-          "end": "0x801520C4"
+          "end": "0x80152400"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A13E8",
-          "end": "0x802A13EC"
+          "end": "0x802A1424"
         }
       ],
       "functions": [
@@ -36242,6 +36242,16 @@
           "symbol": "fn_80152068",
           "start": "0x80152068",
           "end": "0x801520C4"
+        },
+        {
+          "symbol": "fn_801520C4",
+          "start": "0x801520C4",
+          "end": "0x8015228C"
+        },
+        {
+          "symbol": "fn_8015228C",
+          "start": "0x8015228C",
+          "end": "0x80152400"
         }
       ]
     },
