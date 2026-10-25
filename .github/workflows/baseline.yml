@@ -67,7 +67,18 @@ jobs:
         id: validation
         run: |
           python3 tools/ci_policy.py --reused "${{ steps.publication.outputs.reused || 'false' }}" \
-            --cache-hit "${{ steps.inventory-cache.outputs.cache-hit || 'false' }}"
+            --cache-hit "${{ steps.inventory-cache.outputs.cache-hit || 'false' }}" \
+            --pull-request "${{ github.event_name == 'pull_request' }}"
+      - name: Verify contributor ledger provenance before building
+        if: steps.validation.outputs.full == 'true'
+        env:
+          SQUASH_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || '' }}
+        run: |
+          ledger_args=(--ledger-only "$GITHUB_SHA" --fetch-provenance)
+          if [ -n "$SQUASH_BASE" ]; then
+            ledger_args+=(--squash-base "$SQUASH_BASE")
+          fi
+          python3 tools/activity.py "${ledger_args[@]}"
       - name: Verify review clearance logic
         if: steps.validation.outputs.full == 'true'
         run: node --test tests/review_gate.mjs
@@ -154,6 +165,8 @@ jobs:
           python3 tools/export_progress.py "${export_args[@]}"
       - name: Verify activity and live receipts on the host
         if: steps.validation.outputs.full == 'true'
+        env:
+          LIVE_RECEIPTS: ${{ steps.validation.outputs.receipts }}
         run: |
           command -v git
           python3 -m unittest discover -s tests -p test_activity.py -v

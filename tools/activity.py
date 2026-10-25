@@ -152,6 +152,102 @@ def historical_source_blobs(root, revision, source):
     return blobs
 
 
+def _batch_objects(root, queries):
+    result = subprocess.run(['git', 'cat-file', '--batch-check=%(objectname)'], cwd=root,
+                            input=''.join(query + '\n' for query in queries),
+                            capture_output=True, text=True, check=True)
+    rows = result.stdout.splitlines()
+    if len(rows) != len(queries) or any(
+            not SHA.fullmatch(row) and row != query + ' missing'
+            for query, row in zip(queries, rows)):
+        raise ValueError('Invalid Git historical source response')
+    return rows
+
+
+def _linear_path_history(root, revision, sources):
+    """Map each source path to `git rev-list revision -- path`, from one tree walk.
+
+    Without merges, history simplification keeps exactly the commits whose diff against
+    their parent (or the empty tree, for the root) touches the path, in rev-list order."""
+    if subprocess.check_output(['git', 'rev-list', '--min-parents=2', '--max-count=1', revision],
+                               cwd=root, text=True).strip():
+        return None
+    commits = subprocess.check_output(['git', 'rev-list', revision], cwd=root, text=True).split()
+    output = subprocess.run(['git', 'diff-tree', '--stdin', '-r', '--root', '--always', '--name-only',
+                             '--no-renames', '-z'], cwd=root, input=''.join(c + '\n' for c in commits),
+                            capture_output=True, text=True, check=True).stdout
+    history = {source: [] for source in sources}
+    position, current = 0, None
+    for token in output.split('\0'):
+        if position < len(commits) and token == commits[position]:
+            current, position = token, position + 1
+        elif token in history and current is not None:
+            history[token].append(current)
+    if position != len(commits):
+        raise ValueError('Invalid Git historical source response')
+    return history
+
+
+def prefetch(root, ledger, revision, fetch_missing=False):
+    """Answer every per-entry Git question of contributors() with a few batched commands.
+
+    Only fills the memo tables; anything not proven here is re-asked one by one, so
+    every error keeps its original message and order."""
+    entries = [entry for entry in ledger.get('entries', []) if isinstance(entry, dict)
+               and isinstance(entry.get('provenance'), dict)]
+    def clean(path):
+        return isinstance(path, str) and path.startswith('src/') and \
+            not any(character in path for character in ('\r', '\n', '\0'))
+    commits = set()
+    for entry in entries:
+        provenance = entry['provenance']
+        for key in ('commit', 'original_commit', 'migration_commit'):
+            if isinstance(provenance.get(key), str) and SHA.fullmatch(provenance[key]):
+                commits.add(provenance[key])
+    def unverified():
+        return sorted(commit for commit in commits if (str(root), commit) not in _VERIFIED_COMMITS_CACHE)
+    def verify(candidates):
+        rows = _batch_objects(root, [commit + '^{commit}' for commit in candidates])
+        for commit, row in zip(candidates, rows):
+            if SHA.fullmatch(row):
+                _VERIFIED_COMMITS_CACHE.add((str(root), commit))
+    if unverified():
+        verify(unverified())
+    if fetch_missing and unverified():
+        # One request for every pinned object instead of one per commit; leftovers fall
+        # back to provenance_commit(), which fetches them singly and fails closed.
+        subprocess.run(['git', 'fetch', '--no-tags', 'origin', *unverified()], cwd=root,
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+        verify(unverified())
+    blobs = set()
+    sources = set()
+    for entry in entries:
+        provenance = entry['provenance']
+        historical = provenance.get('original_source', entry.get('source'))
+        if not clean(historical):
+            continue
+        sources.add(historical)
+        if 'merged_source' not in provenance and historical != entry.get('source') and clean(entry.get('source')):
+            sources.add(entry['source'])
+        commit = provenance.get('commit')
+        for pinned in (commit, provenance.get('original_commit', commit)):
+            if isinstance(pinned, str) and (str(root), pinned) in _VERIFIED_COMMITS_CACHE:
+                blobs.add((pinned, historical))
+    blobs = sorted(blobs - {(c, s) for (r, c, s) in _SOURCE_BLOB_CACHE if r == str(root)})
+    for (commit, source), row in zip(blobs, _batch_objects(root, [c + ':' + s for c, s in blobs])):
+        if SHA.fullmatch(row):
+            _SOURCE_BLOB_CACHE[(str(root), commit, source)] = row
+    sources = sorted(source for source in sources
+                     if (str(root), revision, source) not in _HISTORICAL_BLOBS_CACHE)
+    history = _linear_path_history(root, revision, sources) if sources else None
+    if history is None:
+        return
+    queries = [commit + ':' + source for source in sources for commit in history[source]]
+    rows = iter(_batch_objects(root, queries) if queries else [])
+    for source in sources:
+        _HISTORICAL_BLOBS_CACHE[(str(root), revision, source)] = {next(rows) for _ in history[source]}
+
+
 def historical_source_blob(root, revision, source, blob):
     return blob in historical_source_blobs(root, revision, source)
 
@@ -192,19 +288,24 @@ def merged_source(root, revision, historical_source, source, migration_commit, m
 
 
 def contributors(root, ledger, build, revision, fetch_missing=False, exact_inventory=None):
-    if ledger.get('schema') != 1 or ledger.get('target') != 'GN7E69' or build.get('complete') != 'identical':
+    """Credit exact functions; with build=None, run only the ledger and Git checks."""
+    if ledger.get('schema') != 1 or ledger.get('target') != 'GN7E69' or \
+            build is not None and build.get('complete') != 'identical':
         raise ValueError('Function credit requires the verified source build')
     profiles = ledger.get('contributors', {})
     for login, profile in profiles.items():
         if not LOGIN.fullmatch(login) or type(profile.get('id')) is not int or profile['id'] <= 0:
             raise ValueError('Invalid contributor identity')
-    inventory = {(u['source'], f['address']) for u in build['units'] for f in u['functions']}
-    if sum(len(u['functions']) for u in build['units']) != len(inventory):
-        raise ValueError('Compiler inventory duplicates a function')
-    if exact_inventory is not None:
-        if not inventory <= exact_inventory:
-            raise ValueError('Exact inventory omits a verified linked function')
-        inventory = exact_inventory
+    inventory = None
+    if build is not None:
+        inventory = {(u['source'], f['address']) for u in build['units'] for f in u['functions']}
+        if sum(len(u['functions']) for u in build['units']) != len(inventory):
+            raise ValueError('Compiler inventory duplicates a function')
+        if exact_inventory is not None:
+            if not inventory <= exact_inventory:
+                raise ValueError('Exact inventory omits a verified linked function')
+            inventory = exact_inventory
+    prefetch(root, ledger, revision, fetch_missing)
     counts = {login:set() for login in profiles}
     references = {login:set() for login in profiles}
     seen = set()
@@ -263,11 +364,13 @@ def contributors(root, ledger, build, revision, fetch_missing=False, exact_inven
             if key in seen:
                 raise ValueError('Function credited more than once')
             seen.add(key)
-            if key not in inventory:
+            if inventory is None or key not in inventory:
                 continue  # Retired functions keep their historical record, but no current credit.
             for login in people:
                 counts[login].add(key)
                 references[login].add(provenance['pull_request'])
+    if inventory is None:
+        return None
     missing = inventory - seen
     if missing:
         source, address = sorted(missing)[0]
@@ -297,14 +400,25 @@ def exact_functions(site):
     return inventory
 
 
-def squash_preflight(root, ledger, build, revision, base, exact_inventory=None):
+def squash_commit(root, revision, base):
     # Model the repository's squash merge: no contribution-branch ancestors survive.
     check_ancestor(root, base, revision)
     tree = subprocess.check_output(['git','rev-parse',revision+'^{tree}'], cwd=root, text=True).strip()
-    squashed = subprocess.check_output(
+    return subprocess.check_output(
         ['git','-c','user.name=Attribution preflight','-c','user.email=preflight@example.invalid',
          'commit-tree',tree,'-p',base], cwd=root, input='Private attribution squash preflight\n', text=True).strip()
-    return contributors(root, ledger, build, squashed, exact_inventory=exact_inventory)
+
+
+def squash_preflight(root, ledger, build, revision, base, exact_inventory=None, fetch_missing=False):
+    return contributors(root, ledger, build, squash_commit(root, revision, base), fetch_missing, exact_inventory)
+
+
+def ledger_preflight(root, revision, fetch_missing=False, squash_base=None):
+    """Every attribution check that needs only Git and the ledger, before anything is built."""
+    ledger = json.loads((root/'config/GN7E69/contributors.json').read_text())
+    if squash_base:
+        revision = squash_commit(root, revision, squash_base)
+    contributors(root, ledger, None, revision, fetch_missing)
 
 
 def export(root, site, source_report, previous=None, append=False, fetch_missing=False, squash_base=None):
@@ -348,10 +462,12 @@ def _export_verified(root, site, source_report, previous=None, append=False, fet
         check_ancestor(root, row['revision'], site['revision'])
     exact = exact_functions(site)
     ledger = json.loads((root/'config/GN7E69/contributors.json').read_text())
-    credits = contributors(root, ledger, build, site['revision'], fetch_missing, exact)
     if squash_base:
-        if squash_preflight(root, ledger, build, site['revision'], squash_base, exact) != credits:
-            raise ValueError('Squash preflight changes original source attribution')
+        # Only the squashed tree lands on main, and credits depend on the tree, not on
+        # which history proves it, so the squashed history is the one worth checking.
+        credits = squash_preflight(root, ledger, build, site['revision'], squash_base, exact, fetch_missing)
+    else:
+        credits = contributors(root, ledger, build, site['revision'], fetch_missing, exact)
     return {'schema':1, 'target':'GN7E69', 'target_sha1':site['target_sha1'],
             'revision':site['revision'], 'snapshots':history,
             'contribution_basis':'exact-functions', 'credited_functions':len(exact),
@@ -368,7 +484,13 @@ def main():
     parser.add_argument('--fetch-provenance', action='store_true',
                         help='Fetch unavailable pinned source provenance commits from origin (CI host only)')
     parser.add_argument('--squash-base', help='Verify attribution after a synthetic squash onto the actual PR base SHA')
+    parser.add_argument('--ledger-only', metavar='REVISION',
+                        help='Before building: run only the ledger and Git attribution checks for REVISION')
     args = parser.parse_args()
+    if args.ledger_only:
+        ledger_preflight(ROOT, args.ledger_only, args.fetch_provenance, args.squash_base)
+        print(f'Verified contributor ledger provenance at {args.ledger_only}')
+        return
     site = json.loads(args.site.read_text())
     previous = json.loads(args.previous.read_text()) if args.previous else None
     if args.append_current and previous is None:

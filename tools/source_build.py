@@ -2,9 +2,11 @@
 """Link compiled source units in place of their configured original ranges and verify the target."""
 
 import argparse
+import concurrent.futures
 import csv
 import hashlib
 import json
+import os
 import platform
 import re
 import shutil
@@ -859,7 +861,13 @@ def build(original, manifest_path, report_path):
         stem = re.sub(r"[^A-Za-z0-9]+", "_", unit["source"]).strip("_")
         unit["object"] = BUILD / "obj" / f"unit{index:03d}_{stem}.o"
         unit["depfile"] = unit["object"].with_suffix(".d")
-        compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs)
+        if unit["compile_path"]:
+            stage(unit)
+    # Each compile writes only its own object, depfile and temporary folder, and the shared
+    # staging links exist already, so compiles run together; everything after stays in order.
+    with concurrent.futures.ThreadPoolExecutor(max_workers=os.cpu_count() or 1) as pool:
+        list(pool.map(lambda unit: compile_unit(unit, compiler, wrapper, sdk_directory, include_dirs), units))
+    for unit in units:
         unit["native_object_sha256"] = sha256(unit["object"])
         link_object(unit)
         objects[unit["source"]] = (retained_layout(dict(unit, object=unit["link_object"]), compiler, wrapper)

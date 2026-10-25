@@ -9,15 +9,20 @@ import ci_policy
 
 class ValidationLanes(unittest.TestCase):
     def test_successful_proof_with_warm_cache_requires_neither_rebuild(self):
-        self.assertEqual(ci_policy.lanes(True, True), {'full':False, 'inventory':False})
+        self.assertEqual(ci_policy.lanes(True, True), {'full':False, 'inventory':False, 'receipts':False})
 
     def test_successful_proof_with_cold_cache_requires_only_inventory(self):
-        self.assertEqual(ci_policy.lanes(True, False), {'full':False, 'inventory':True})
+        self.assertEqual(ci_policy.lanes(True, False), {'full':False, 'inventory':True, 'receipts':False})
 
     def test_cache_can_never_substitute_for_missing_execution_proof(self):
         for hit in (True, False):
             with self.subTest(hit=hit):
-                self.assertEqual(ci_policy.lanes(False, hit), {'full':True, 'inventory':True})
+                self.assertEqual(ci_policy.lanes(False, hit), {'full':True, 'inventory':True, 'receipts':True})
+
+    def test_pull_requests_skip_only_the_repeated_host_receipt_export(self):
+        for hit in (True, False):
+            with self.subTest(hit=hit):
+                self.assertEqual(ci_policy.lanes(False, hit, True), {'full':True, 'inventory':True, 'receipts':False})
 
     def test_invalid_decisions_fail_closed(self):
         for value in ('', 'TRUE', '1', 'yes'):
@@ -26,6 +31,8 @@ class ValidationLanes(unittest.TestCase):
         for value in ('false', 0, None):
             with self.subTest(value=value), self.assertRaises(ValueError):
                 ci_policy.lanes(value, True)
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                ci_policy.lanes(False, True, value)
         self.assertTrue(ci_policy.boolean('true'))
         self.assertFalse(ci_policy.boolean('false'))
 

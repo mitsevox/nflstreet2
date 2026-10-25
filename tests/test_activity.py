@@ -1,5 +1,6 @@
 import copy
 import json
+import os
 import io
 import tarfile
 import zipfile
@@ -664,6 +665,8 @@ class LiveReceiptTests(unittest.TestCase):
         site_path = root/'build/site/progress.json'
         if not report.exists() or not site_path.exists():
             self.skipTest('Integration export step supplies the verified build and public map')
+        if os.environ.get('LIVE_RECEIPTS') == 'false':
+            self.skipTest('CI policy runs this second export of the same receipts on main only')
         site = json.loads(site_path.read_text())
         # Validate the actual receipts and inventory once; corruption cases use bound fixtures.
         result = activity.export(root, site, report)
