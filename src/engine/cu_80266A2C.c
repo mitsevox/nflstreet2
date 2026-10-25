@@ -238,6 +238,7 @@ extern void (*lbl_802FFB6C[])(Object_80268480 *params, int value);
 extern Object_803A6BCC lbl_803A6BCC;
 extern Object_803A6C24 lbl_803A6C24;
 extern short lbl_803A6C04[];
+extern unsigned char lbl_802F4750[];
 
 extern int fn_801AC9C8(int fd, void *buf, int len);
 extern void *fn_801AE6BC(int *key);
@@ -339,6 +340,11 @@ int fn_80266CB8(Object_80266AF8 *p, unsigned int key)
         fn_80266DAC(p);
     }
     return result;
+}
+
+void *fn_80266D00(void)
+{
+    return lbl_802F4750;
 }
 
 unsigned short *fn_80266D0C(void *base, unsigned short *offsets, int index)

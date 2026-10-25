@@ -41,6 +41,18 @@ typedef struct Handle_80237A40 {
     Object_80237EE8 *mpUnknown48;
 } Handle_80237A40;
 
+/* 24-byte block copied to 0x803A39FC by 0x80237EE8; only +8 is read here. */
+typedef struct Config_80237EE8 {
+    int mUnknown0;
+    int mUnknown4;
+    int mUnknown8;
+    int mUnknown12;
+    int mUnknown16;
+    int mUnknown20;
+} Config_80237EE8;
+
+extern Config_80237EE8 lbl_803A39FC;
+
 
 
 typedef struct Entry_8023850C {
@@ -66,6 +78,8 @@ extern unsigned char lbl_803EC140;
 extern unsigned int lbl_802FB464[256];
 extern void fn_801D277C(int ident);
 extern char *fn_801D27B8(int ident);
+extern void fn_801D2130(void *pConfig);
+extern void fn_801D2570(int ident);
 void fn_80237C0C(Object_80237EE8 *p);
 void fn_80237FF4(Object_80237EE8 *p);
 Object_80237EE8 *fn_80237E9C(int key);
@@ -1243,6 +1257,18 @@ Object_80237EE8 *fn_80237E9C(int key)
     return 0;
 }
 
+Object_80237EE8 *fn_80237EE8(int key, int count, int size, Config_80237EE8 *pConfig)
+{
+    Object_80237EE8 *p;
+
+    lbl_803A39FC = *pConfig;
+    fn_801D2130(&lbl_803A39FC);
+    p = fn_80237CB0(key, count, size, lbl_803A39FC.mUnknown8);
+    p->mpUnknown20 = fn_801C68FC(lbl_803A39FC.mUnknown8, 0, count, sizeof(Handle_80237A40),
+                                 (int (*)(void *, void *))fn_80237A30, 0);
+    return p;
+}
+
 void fn_80237F98(Object_80237EE8 *p)
 {
     p->mUnknown4 = 0;
@@ -1272,6 +1298,25 @@ void fn_80238034(Object_80237EE8 *p)
         fn_80237AFC(pItem);
         pItem = fn_801C6C84(p->mpUnknown20, pItem);
     }
+}
+
+void fn_8023808C(Object_80237EE8 *p)
+{
+    Handle_80237A40 *pItem;
+    Handle_80237A40 *pNext;
+
+    fn_801D277C(p->mUnknown16);
+    pItem = fn_801C6B4C(p->mpUnknown20, 0);
+    while (pItem != 0) {
+        fn_80237B34(pItem);
+        pNext = fn_801C6C84(p->mpUnknown20, pItem);
+        fn_801C6C0C(p->mpUnknown20, pItem);
+        pItem = pNext;
+    }
+    fn_801C69E4(p->mpUnknown20);
+    fn_801D277C(1);
+    fn_801D2570(p->mUnknown16);
+    fn_80237D24(p);
 }
 
 Object_80237EE8 *fn_8023811C(Object_80237EE8 *p)

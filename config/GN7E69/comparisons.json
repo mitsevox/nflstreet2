@@ -29335,6 +29335,16 @@
           "symbol": "fn_80236C10",
           "start": "0x80236C10",
           "end": "0x80236DD8"
+        },
+        {
+          "symbol": "fn_80237EE8",
+          "start": "0x80237EE8",
+          "end": "0x80237F98"
+        },
+        {
+          "symbol": "fn_8023808C",
+          "start": "0x8023808C",
+          "end": "0x8023811C"
         }
       ]
     },
@@ -29675,6 +29685,31 @@
           "symbol": "fn_80285A8C",
           "start": "0x80285A8C",
           "end": "0x80285A90"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/cu_802898FC.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802898FC-0x80289A20: neutral partial file for the inferred grouping; both functions registered; original assembly stays linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802898FC",
+          "end": "0x80289A20"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_802898FC",
+          "start": "0x802898FC",
+          "end": "0x80289928"
+        },
+        {
+          "symbol": "fn_80289928",
+          "start": "0x80289928",
+          "end": "0x80289A04"
         }
       ]
     },
@@ -37601,6 +37636,11 @@
           "symbol": "fn_8027C0D8",
           "start": "0x8027C0D8",
           "end": "0x8027C120"
+        },
+        {
+          "symbol": "fn_80277CF0",
+          "start": "0x80277CF0",
+          "end": "0x80277D88"
         }
       ]
     },
@@ -37922,6 +37962,11 @@
           "symbol": "fn_8027EFA4",
           "start": "0x8027EFA4",
           "end": "0x8027EFAC"
+        },
+        {
+          "symbol": "vfn_34__15Object_8027DAE4ii",
+          "start": "0x8027DC14",
+          "end": "0x8027DCB4"
         }
       ]
     },
@@ -38322,6 +38367,11 @@
           "symbol": "fn_8026A40C",
           "start": "0x8026A40C",
           "end": "0x8026A4D4"
+        },
+        {
+          "symbol": "fn_80266D00",
+          "start": "0x80266D00",
+          "end": "0x80266D0C"
         }
       ]
     },

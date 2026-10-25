@@ -29,7 +29,7 @@ typedef struct Record_803A6DF0 {
     unsigned char mUnknown0[4];
     short m4[8];
     int m14;
-    unsigned char mUnknown18[4];
+    int m18;
     unsigned short m1C;
     short m1E;
     unsigned short m20;
@@ -47,7 +47,8 @@ typedef struct Record_803A6DF0 {
     unsigned char mUnknown69[3];
     unsigned char m6C;
     unsigned char m6D;
-    unsigned char mUnknown6E[0xA];
+    unsigned short m6E;
+    unsigned char mUnknown70[8];
     signed char *m78;
     unsigned char mUnknown7C[4];
     signed char *m80;
