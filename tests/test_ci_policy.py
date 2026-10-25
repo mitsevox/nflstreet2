@@ -82,5 +82,12 @@ class HostedCacheBootstrap(unittest.TestCase):
         self.assertEqual(ci_policy.lanes(False, True),
                          {'full': True, 'inventory': True, 'receipts': True})
 
+    def test_each_audit_run_saves_under_its_own_key(self):
+        block = self.workflow.split('      - name: Save audited build caches\n', 1)[1].split('      - ', 1)[0]
+        key = re.search(r'^          key: (.+)$', block, re.M).group(1)
+        self.assertTrue(key.startswith('build-cache-v1-'))
+        for part in ('${{ github.sha }}', '${{ github.run_id }}', '${{ github.run_attempt }}'):
+            self.assertIn(part, key)
+
 
 if __name__ == '__main__': unittest.main()
