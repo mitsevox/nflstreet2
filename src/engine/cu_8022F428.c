@@ -64,10 +64,26 @@ typedef struct Model_80233BE4 {
 typedef struct Box_80234070 {
     float mUnknown0;
     float mUnknown4;
-    char mUnknown8[8];
+    float mUnknown8;
+    char mUnknown12[4];
     float mUnknown16;
     float mUnknown20;
+    char mUnknown24[8];
 } Box_80234070;
+
+/* Record updated by 0x8023424C and searched by 0x80234394; partial layout. */
+typedef struct Instance_8023424C {
+    int mUnknown0;
+    float mUnknown4;
+    float mUnknown8;
+    float mUnknown12;
+    float mUnknown16;
+    unsigned int mUnknown20;
+    Object_80233EAC *mpUnknown24;
+    float *mpUnknown28;
+    void *mpUnknown32;
+    void *mpUnknown36;
+} Instance_8023424C;
 
 typedef struct Desc_802345F8 {
     const char *mpUnknown0;
@@ -375,6 +391,8 @@ int fn_80233694(void);
 int fn_80233BE4(short *pOut, Model_80233BE4 *pModel, Values_80233C7C *pValues);
 void fn_80233C7C(Values_80233C7C *pValues);
 float fn_80234070(Box_80234070 *pBox);
+unsigned int fn_80234D4C(float *pBox, void *m, void *p, void *q);
+extern int fn_802142B0(float *pNdc, float *pClip, float *pPos);
 void fn_80234094(Box_80234070 *pBox);
 int fn_80234098(Object_80233EAC *pObject, float value);
 Desc_802345F8 *fn_802345F8(Desc_802345F8 *pDescs, const char *pName);
@@ -1416,6 +1434,58 @@ void fn_802341E8(void *p)
             break;
         }
     }
+}
+
+void fn_8023424C(Instance_8023424C *p, int *pCounts, Box_80234070 *pClip)
+{
+    Box_80234070 box;
+    float ndc[3];
+
+    p->mUnknown4 = 0.0f;
+    p->mUnknown12 = 0.0f;
+    if (p->mpUnknown28 != 0 && p->mpUnknown32 != 0) {
+        p->mUnknown20 = fn_80234D4C(p->mpUnknown28, p->mpUnknown32, p->mpUnknown36, &box);
+        fn_802142B0(ndc, 0, 0);
+        p->mUnknown16 = ndc[2];
+        if (pClip != 0
+            && (box.mUnknown0 > pClip->mUnknown16 || box.mUnknown16 < pClip->mUnknown0
+                || box.mUnknown4 > pClip->mUnknown20 || box.mUnknown20 < pClip->mUnknown4)) {
+            p->mUnknown20 |= 0x3F;
+        }
+        if ((p->mUnknown20 & 0x3F) == 0) {
+            p->mUnknown4 = fn_80234070(&box);
+            fn_80234094(&box);
+            p->mUnknown12 = fn_80234070(&box);
+        } else {
+            p->mUnknown4 = 0.0f;
+        }
+        p->mUnknown8 = -box.mUnknown8;
+    }
+    if (p->mpUnknown24 != 0) {
+        p->mUnknown0 = fn_80234098(p->mpUnknown24, p->mUnknown4);
+        pCounts[p->mUnknown0]++;
+    }
+}
+
+int fn_80234394(Instance_8023424C **ppList, unsigned int count, int key)
+{
+    unsigned int i;
+    int best = -1;
+    float bestValue = 10000.0f;
+
+    for (i = 0; i < count; i++) {
+        Instance_8023424C *p = ppList[i];
+
+        if (p->mpUnknown24 != 0 && p->mUnknown0 == key && p->mUnknown4 < bestValue) {
+            bestValue = p->mUnknown4;
+            best = i;
+        }
+    }
+    if (best >= 0) {
+        ppList[best]->mUnknown0++;
+        return 1;
+    }
+    return 0;
 }
 
 void fn_802345BC(void *p)

@@ -1050,10 +1050,6 @@
       "address": "0x80245A84",
       "evidence": "Complete original target C call/typed operand and related pinned donor source, independently scoped reviewed; original provider retained. See SDK final-batch evidence rows for VM."
     },
-    "__init_cpp": {
-      "address": "0x8023E838",
-      "evidence": "Actual complete startup C call at8023E824 reaches original84-byte ctor-table loop entry8023E838, known table802CC668. Logical SDK spelling from coherent OOT6e449e; void(void) call signature. Original target debug name not claimed; original body remains linked, no fake definition."
-    },
     "__DBExceptionDestination": {
       "address": "0x8023ECEC",
       "evidence": "DBInit actual codepointer stored at fixed interface+8;16byte original entry branches to Caux. Unsupported assembly source remains external/target original."
@@ -1609,6 +1605,18 @@
     "fn_800C02EC__14Class_80297CE8s": {
       "address": "0x800C02EC",
       "evidence": "Issue #1116; evidence.tsv external row for the canonical Class_80297CE8 short setter at 0x800C02EC."
+    },
+    "_ctors": {
+      "address": "0x802CC668",
+      "evidence": "evidence.tsv external row 0x802CC668: constructor table formed by lis/addi at 0x8023E848/0x8023E84C in __init_cpp."
+    },
+    "_dtors": {
+      "address": "0x802CC670",
+      "evidence": "evidence.tsv external row 0x802CC670: destructor table formed by lis/addi at 0x8023E8BC/0x8023E8C0 in exit."
+    },
+    "GXLoadLightObjImm": {
+      "address": "0x8024F9EC",
+      "evidence": "evidence.tsv external row GXLoadLightObjImm: REL24 calls from 0x80236850, 0x8023686C and 0x80236DC0 reach the light loader body 0x8024F9EC registered for comparison in src/dolphin/gx/GXLight.c."
     }
   },
   "units": [
@@ -13636,6 +13644,28 @@
           "placement": ".text",
           "start": "0x801BA818",
           "end": "0x801BAD98"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/__ppc_eabi_init.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv __ppc_eabi_init.c unit, function, linker and external rows: every retained function exact, promoted from comparison-only; original file ownership remains provisional.",
+      "link_roots": {
+        "symbols": [
+          "__init_user",
+          "abort",
+          "exit",
+          "_ExitProcess"
+        ],
+        "evidence": "evidence.tsv __ppc_eabi_init.c linker row: the five target functions 0x8023E818-0x8023E920 are retained; the out-of-line copy of the static __fini_cpp, inlined into exit, is removed by ordinary SN retention."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8023E818",
+          "end": "0x8023E920"
         }
       ]
     }
