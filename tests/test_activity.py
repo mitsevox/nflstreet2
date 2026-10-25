@@ -1,5 +1,6 @@
 import copy
 import json
+import os
 import io
 import tarfile
 import zipfile
@@ -126,6 +127,47 @@ class ContributorTests(unittest.TestCase):
         self.git('add','src/test.c')
         self.git('-c','user.name=Test','-c','user.email=test@example.invalid','commit','-qm','Integration')
         return self.git('rev-parse','HEAD')
+
+    def test_tree_lookup_answers_exactly_like_batch_check(self):
+        (self.root/'top.c').write_text('int top;')
+        (self.root/'src/deep').mkdir()
+        (self.root/'src/deep/inner.c').write_text('int inner;')
+        self.git('add','top.c','src/deep/inner.c')
+        head=self.commit_source('int function(void) { return 4; }')
+        queries=[f'{revision}:{path}' for revision in (head, head+'^', self.commit, 'c'*40)
+                 for path in ('src/test.c','top.c','src/deep/inner.c','src/deep','src/test.c/x',
+                              'src/absent.c','absent/test.c','src//test.c','src/deep/','src/./test.c',
+                              'src/deep/../test.c','./src/test.c')]
+        expected=subprocess.run(['git','cat-file','--batch-check=%(objectname)'],cwd=self.root,
+                                input=''.join(q+'\n' for q in queries),capture_output=True,text=True).stdout.splitlines()
+        self.assertEqual(activity._tree_objects(self.root,queries),expected)
+
+    def test_path_history_walk_matches_rev_list_for_former_directories(self):
+        (self.root/'src/test.c').unlink()
+        (self.root/'src/test.c').mkdir()
+        (self.root/'src/test.c/inner.c').write_text('int inner;')
+        self.git('add','-A')
+        self.git('-c','user.name=Test','-c','user.email=test@example.invalid','commit','-qm','Directory')
+        (self.root/'src/test.c/inner.c').write_text('int inner2;')
+        self.git('add','-A')
+        self.git('-c','user.name=Test','-c','user.email=test@example.invalid','commit','-qm','Edit')
+        revision=self.git('rev-parse','HEAD')
+        walked=activity._linear_path_history(self.root,revision,['src/test.c','src/test.c/inner.c'])
+        for path in walked:
+            self.assertEqual(walked[path],self.git('rev-list',revision,'--',path).split())
+
+    def test_prefetch_matches_one_by_one_answers(self):
+        self.commit_source('int function(void) { return 5; }')
+        revision=self.git('rev-parse','HEAD')
+        activity.prefetch(self.root,self.ledger,revision)
+        batched=(set(activity._VERIFIED_COMMITS_CACHE),dict(activity._SOURCE_BLOB_CACHE),
+                 dict(activity._HISTORICAL_BLOBS_CACHE))
+        activity.clear_cache()
+        activity.provenance_commit(self.root,self.commit)
+        activity.source_blob(self.root,self.commit,'src/test.c')
+        activity.historical_source_blobs(self.root,revision,'src/test.c')
+        self.assertEqual(batched,(set(activity._VERIFIED_COMMITS_CACHE),dict(activity._SOURCE_BLOB_CACHE),
+                                  dict(activity._HISTORICAL_BLOBS_CACHE)))
 
     def test_squash_preserves_original_credit_with_dual_source_proof(self):
         original=self.commit
@@ -664,6 +706,8 @@ class LiveReceiptTests(unittest.TestCase):
         site_path = root/'build/site/progress.json'
         if not report.exists() or not site_path.exists():
             self.skipTest('Integration export step supplies the verified build and public map')
+        if os.environ.get('LIVE_RECEIPTS') == 'false':
+            self.skipTest('CI policy runs this second export of the same receipts on main only')
         site = json.loads(site_path.read_text())
         # Validate the actual receipts and inventory once; corruption cases use bound fixtures.
         result = activity.export(root, site, report)
